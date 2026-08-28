@@ -1,0 +1,81 @@
+{
+ "task": "cap_wall_v2 落板校验（B+A 裁决执行，独立解析板文件）",
+ "board": "/tmp/opencode/boards/k2_v6.kicad_pcb",
+ "board_pre_backup": "/tmp/opencode/apply_backup/apply_20260827_094638/k2_v6.kicad_pcb",
+ "board_sha256_pre": "aa8b3f07883c49a00cdfc1b06ccde5feed160199a84d389b0e74d90d538d2173",
+ "board_sha256_post": "9b6e28c31444149bd749395beda6bd1f18ea15031575a0cf96b503fa4b5110ff",
+ "timestamp": "2026-08-27T09:48:44",
+ "checks": {
+  "exactly_32_moved": {
+   "expect": 32,
+   "actual": 32,
+   "pass": true,
+   "moved_refs": [
+    "C17",
+    "C18",
+    "C19",
+    "C20",
+    "C21",
+    "C22",
+    "C23",
+    "C24",
+    "C25",
+    "C26",
+    "C27",
+    "C28",
+    "C29",
+    "C30",
+    "C31",
+    "C32",
+    "C49",
+    "C50",
+    "C51",
+    "C52",
+    "C53",
+    "C54",
+    "C55",
+    "C56",
+    "C57",
+    "C58",
+    "C59",
+    "C60",
+    "C61",
+    "C62",
+    "C63",
+    "C64"
+   ]
+  },
+  "net_names_unchanged": {
+   "pass": true,
+   "detail": "32 颗逐颗 pad1/pad2 net 前后一致"
+  },
+  "rotation_zero_change": {
+   "pass": true,
+   "rots_post": [
+    0.0
+   ],
+   "detail": "32 颗 rot 前后逐颗相等（均为 0）"
+  },
+  "component_count_101": {
+   "expect": 101,
+   "actual": 101,
+   "pre": 101,
+   "pass": true
+  },
+  "no_other_footprint_touched": {
+   "pass": true,
+   "detail": "apply 断言：板 diff 仅 32 处 at（括号平衡+构造性核对，回读复验通过）；本校验再核 32 颗目标外 at 未动"
+  }
+ },
+ "escape_spec": {
+  "stubs_for_32_caps": {
+   "count": 64,
+   "expect": 64,
+   "pass": true
+  },
+  "ac_caps_synced": {
+   "count": 32,
+   "pass": true
+  }
+ }
+}

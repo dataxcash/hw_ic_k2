@@ -1,0 +1,206 @@
+{
+ "base": "PCIE_DN5",
+ "input_fp": "87b66fbb6074e89048741b73d3de2ac30b82bd1d2f77266ceed0177c1eec51cf",
+ "solve_time_s": 15.985,
+ "result": {
+  "base": "DN5",
+  "status": "INFEASIBLE",
+  "segments": [
+   {
+    "status": "INFEASIBLE",
+    "reason": "右逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(133.825,60.600) → cv=(131.450,64.320) dir=-1 flip=True pn_dist=2.425）",
+    "name": "input",
+    "esc": {
+     "status": "INFEASIBLE",
+     "reason": "对级对称逃逸无净空（M=(133.825,60.600) → cv=(131.450,64.320) dir=-1 flip=True pn_dist=2.425）"
+    },
+    "flip": true
+   },
+   {
+    "name": "out_U3",
+    "status": "SOLVED",
+    "corridor": "U_TO_MCIO",
+    "track_y": 64.32,
+    "layer": "F.Cu",
+    "flip": true,
+    "P": {
+     "net": "PCIE_DN_OUT5_P_U3",
+     "path": [
+      [
+       85.75,
+       62.0
+      ],
+      [
+       86.53532501147876,
+       62.33449669138123
+      ],
+      [
+       86.21199290954375,
+       62.3364121147666
+      ],
+      [
+       86.22417023329568,
+       64.39199925791772
+      ],
+      [
+       87.35,
+       64.13
+      ],
+      [
+       88.17,
+       64.13
+      ],
+      [
+       88.17,
+       64.5
+      ],
+      [
+       88.825,
+       64.5
+      ]
+     ],
+     "layers": [
+      "F.Cu",
+      "In2.Cu",
+      "In2.Cu",
+      "In2.Cu",
+      "F.Cu",
+      "F.Cu",
+      "F.Cu"
+     ],
+     "length": 6.2335,
+     "solve_ref": "3c384088ddf5267a7ca85395c3513eaceff1453a879f1c88dfe042f6b3ab660a"
+    },
+    "N": {
+     "net": "PCIE_DN_OUT5_N_U3",
+     "path": [
+      [
+       87.05,
+       62.0
+      ],
+      [
+       86.72482122176721,
+       62.78922884665104
+      ],
+      [
+       86.58787943704756,
+       62.33641133432593
+      ],
+      [
+       86.57582976670433,
+       64.24800074208227
+      ],
+      [
+       87.35,
+       64.50999999999999
+      ],
+      [
+       88.17,
+       64.50999999999999
+      ],
+      [
+       88.55,
+       64.50999999999999
+      ],
+      [
+       88.55,
+       64.9
+      ],
+      [
+       88.825,
+       64.9
+      ]
+     ],
+     "layers": [
+      "F.Cu",
+      "In2.Cu",
+      "In2.Cu",
+      "In2.Cu",
+      "F.Cu",
+      "F.Cu",
+      "F.Cu",
+      "F.Cu"
+     ],
+     "length": 5.9206,
+     "solve_ref": "cdfaa94a0e46585d18aa2d0a2bf5a02db602f7ebbe0a1e811eab3c00173ea0d1"
+    },
+    "skew": 0.3129,
+    "skew_ok": false,
+    "width": 0.205,
+    "input_fp": "87b66fbb6074e89048741b73d3de2ac30b82bd1d2f77266ceed0177c1eec51cf",
+    "vias": [
+     [
+      86.535,
+      62.334
+     ],
+     [
+      87.35,
+      64.13
+     ],
+     [
+      86.725,
+      62.789
+     ],
+     [
+      87.35,
+      64.51
+     ]
+    ],
+    "escape": {
+     "layer": "In2.Cu",
+     "segments": {
+      "left": {
+       "P": {
+        "kind": "L-H-V",
+        "n_nodes": 0,
+        "length": 4.3885,
+        "via": [
+         86.53532501147876,
+         62.33449669138123
+        ]
+       },
+       "N": {
+        "kind": "L-H-V",
+        "n_nodes": 0,
+        "length": 4.0556,
+        "via": [
+         86.72482122176721,
+         62.78922884665104
+        ]
+       }
+      },
+      "right": {
+       "P": {
+        "kind": "DIRECT",
+        "n_nodes": 0,
+        "length": 1.025,
+        "via": null
+       },
+       "N": {
+        "kind": "DIRECT",
+        "n_nodes": 0,
+        "length": 1.045,
+        "via": null
+       }
+      }
+     }
+    }
+   },
+   {
+    "status": "INFEASIBLE",
+    "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(56.800,61.450) → cv=(67.300,64.320) dir=1 flip=True pn_dist=0.600）",
+    "name": "out_MCIO",
+    "esc": {
+     "status": "INFEASIBLE",
+     "reason": "对级对称逃逸无净空（M=(56.800,61.450) → cv=(67.300,64.320) dir=1 flip=True pn_dist=0.600）"
+    },
+    "flip": true
+   }
+  ],
+  "lenP": 6.2335,
+  "lenN": 5.9206,
+  "skew": null,
+  "skew_ok": false,
+  "input_fp": "87b66fbb6074e89048741b73d3de2ac30b82bd1d2f77266ceed0177c1eec51cf"
+ }
+}

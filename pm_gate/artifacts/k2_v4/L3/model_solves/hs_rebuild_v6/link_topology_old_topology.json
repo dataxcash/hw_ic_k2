@@ -1,0 +1,2221 @@
+{
+ "probe": "link_topology",
+ "version": "1.0",
+ "input_fp": "87b66fbb6074e89048741b73d3de2ac30b82bd1d2f77266ceed0177c1eec51cf",
+ "thresholds": {
+  "cross_tol_mm": 9.0,
+  "align_bands": {
+   "U3": {
+    "in": {
+     "min": 58.1,
+     "max": 66.5,
+     "span": 8.4,
+     "count": 8
+    },
+    "out": {
+     "min": 58.5,
+     "max": 66.9,
+     "span": 8.4,
+     "count": 8
+    }
+   },
+   "U7": {
+    "in": {
+     "min": 40.9,
+     "max": 49.3,
+     "span": 8.4,
+     "count": 8
+    },
+    "out": {
+     "min": 40.5,
+     "max": 48.9,
+     "span": 8.4,
+     "count": 8
+    }
+   }
+  }
+ },
+ "links": {
+  "DN0": {
+   "base": "DN0",
+   "segments": [
+    {
+     "segname": "input",
+     "net_p": "PCIE_DN0_P",
+     "net_n": "PCIE_DN0_N",
+     "end_left": {
+      "x": 98.825,
+      "y": 58.1,
+      "class": "chip",
+      "ref": "U3"
+     },
+     "end_right": {
+      "x": 132.65,
+      "y": 54.3,
+      "class": "conn",
+      "ref": "J2"
+     },
+     "y_delta": 3.8,
+     "chip_end": {
+      "ref": "U3",
+      "direction": "in",
+      "y": 58.1,
+      "x": 98.825
+     },
+     "other_end": {
+      "class": "conn",
+      "ref": "J2",
+      "y": 54.3,
+      "x": 132.65
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "parallel_run_len_mm": 33.825,
+     "verdict": "ALIGNED"
+    },
+    {
+     "segname": "out_U3",
+     "net_p": "PCIE_DN_OUT0_P_U3",
+     "net_n": "PCIE_DN_OUT0_N_U3",
+     "end_left": {
+      "x": 75.475,
+      "y": 66.0,
+      "class": "mid",
+      "ref": null
+     },
+     "end_right": {
+      "x": 88.825,
+      "y": 58.5,
+      "class": "chip",
+      "ref": "U3"
+     },
+     "y_delta": 7.5,
+     "chip_end": {
+      "ref": "U3",
+      "direction": "out",
+      "y": 58.5,
+      "x": 88.825
+     },
+     "other_end": {
+      "class": "mid",
+      "ref": null,
+      "y": 66.0,
+      "x": 75.475
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "parallel_run_len_mm": 13.35,
+     "verdict": "ALIGNED"
+    },
+    {
+     "segname": "out_MCIO",
+     "net_p": "PCIE_DN_OUT0_P_MCIO",
+     "net_n": "PCIE_DN_OUT0_N_MCIO",
+     "end_left": {
+      "x": 64.3,
+      "y": 45.75,
+      "class": "conn",
+      "ref": "J3"
+     },
+     "end_right": {
+      "x": 76.175,
+      "y": 66.0,
+      "class": "mid",
+      "ref": null
+     },
+     "verdict": "CROSSING",
+     "y_delta": 12.35,
+     "parallel_run_len_mm": 11.875,
+     "chip_end": {
+      "ref": "U3",
+      "direction": "chain",
+      "y": 58.1,
+      "x": 98.825
+     },
+     "other_end": {
+      "class": "conn",
+      "ref": "J3",
+      "y": 45.75,
+      "x": 64.3
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "obstacle": {
+      "devices": [
+       {
+        "ref": "U7",
+        "cat": "redriver",
+        "bbox": [
+         88.83,
+         98.83,
+         41.95,
+         47.45
+        ]
+       }
+      ],
+      "capacitor_wall": {
+       "side": "mcio",
+       "band": "upper",
+       "x_range": [
+        75.0,
+        90.0
+       ],
+       "y_range": [
+        44.0,
+        47.0
+       ]
+      }
+     }
+    }
+   ],
+   "verdict": "CROSSING",
+   "crossing_segments": [
+    "out_MCIO"
+   ],
+   "nearest_pair_pitch_mm": 1.2,
+   "parallel_warn": true,
+   "cap_wall": {
+    "hit": true,
+    "side": "mcio",
+    "x_range": [
+     75.0,
+     90.0
+    ]
+   },
+   "plane_continuity": {
+    "status": "not_applicable",
+    "reason": "平面分割槽数据未接入输入（SPEC stackup 无分割定义），缝合电容/地过孔要求待平面数据接入后启用"
+   }
+  },
+  "DN1": {
+   "base": "DN1",
+   "segments": [
+    {
+     "segname": "input",
+     "net_p": "PCIE_DN1_P",
+     "net_n": "PCIE_DN1_N",
+     "end_left": {
+      "x": 98.825,
+      "y": 59.3,
+      "class": "chip",
+      "ref": "U3"
+     },
+     "end_right": {
+      "x": 135.0,
+      "y": 54.9,
+      "class": "conn",
+      "ref": "J2"
+     },
+     "y_delta": 4.4,
+     "chip_end": {
+      "ref": "U3",
+      "direction": "in",
+      "y": 59.3,
+      "x": 98.825
+     },
+     "other_end": {
+      "class": "conn",
+      "ref": "J2",
+      "y": 54.9,
+      "x": 135.0
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "parallel_run_len_mm": 36.175,
+     "verdict": "ALIGNED"
+    },
+    {
+     "segname": "out_U3",
+     "net_p": "PCIE_DN_OUT1_P_U3",
+     "net_n": "PCIE_DN_OUT1_N_U3",
+     "end_left": {
+      "x": 75.475,
+      "y": 60.05,
+      "class": "mid",
+      "ref": null
+     },
+     "end_right": {
+      "x": 88.825,
+      "y": 59.7,
+      "class": "chip",
+      "ref": "U3"
+     },
+     "y_delta": 0.35,
+     "chip_end": {
+      "ref": "U3",
+      "direction": "out",
+      "y": 59.7,
+      "x": 88.825
+     },
+     "other_end": {
+      "class": "mid",
+      "ref": null,
+      "y": 60.05,
+      "x": 75.475
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "parallel_run_len_mm": 13.35,
+     "verdict": "ALIGNED"
+    },
+    {
+     "segname": "out_MCIO",
+     "net_p": "PCIE_DN_OUT1_P_MCIO",
+     "net_n": "PCIE_DN_OUT1_N_MCIO",
+     "end_left": {
+      "x": 62.5,
+      "y": 45.75,
+      "class": "conn",
+      "ref": "J3"
+     },
+     "end_right": {
+      "x": 76.175,
+      "y": 60.05,
+      "class": "mid",
+      "ref": null
+     },
+     "verdict": "CROSSING",
+     "y_delta": 13.55,
+     "parallel_run_len_mm": 13.675,
+     "chip_end": {
+      "ref": "U3",
+      "direction": "chain",
+      "y": 59.3,
+      "x": 98.825
+     },
+     "other_end": {
+      "class": "conn",
+      "ref": "J3",
+      "y": 45.75,
+      "x": 62.5
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "obstacle": {
+      "devices": [
+       {
+        "ref": "U7",
+        "cat": "redriver",
+        "bbox": [
+         88.83,
+         98.83,
+         41.95,
+         47.45
+        ]
+       }
+      ],
+      "capacitor_wall": {
+       "side": "mcio",
+       "band": "upper",
+       "x_range": [
+        75.0,
+        90.0
+       ],
+       "y_range": [
+        44.0,
+        47.0
+       ]
+      }
+     }
+    }
+   ],
+   "verdict": "CROSSING",
+   "crossing_segments": [
+    "out_MCIO"
+   ],
+   "nearest_pair_pitch_mm": 1.2,
+   "parallel_warn": true,
+   "cap_wall": {
+    "hit": true,
+    "side": "mcio",
+    "x_range": [
+     75.0,
+     90.0
+    ]
+   },
+   "plane_continuity": {
+    "status": "not_applicable",
+    "reason": "平面分割槽数据未接入输入（SPEC stackup 无分割定义），缝合电容/地过孔要求待平面数据接入后启用"
+   }
+  },
+  "DN2": {
+   "base": "DN2",
+   "segments": [
+    {
+     "segname": "input",
+     "net_p": "PCIE_DN2_P",
+     "net_n": "PCIE_DN2_N",
+     "end_left": {
+      "x": 98.825,
+      "y": 60.5,
+      "class": "chip",
+      "ref": "U3"
+     },
+     "end_right": {
+      "x": 132.65,
+      "y": 57.9,
+      "class": "conn",
+      "ref": "J2"
+     },
+     "y_delta": 2.6,
+     "chip_end": {
+      "ref": "U3",
+      "direction": "in",
+      "y": 60.5,
+      "x": 98.825
+     },
+     "other_end": {
+      "class": "conn",
+      "ref": "J2",
+      "y": 57.9,
+      "x": 132.65
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "parallel_run_len_mm": 33.825,
+     "verdict": "ALIGNED"
+    },
+    {
+     "segname": "out_U3",
+     "net_p": "PCIE_DN_OUT2_P_U3",
+     "net_n": "PCIE_DN_OUT2_N_U3",
+     "end_left": {
+      "x": 78.075,
+      "y": 60.05,
+      "class": "mid",
+      "ref": null
+     },
+     "end_right": {
+      "x": 88.825,
+      "y": 60.9,
+      "class": "chip",
+      "ref": "U3"
+     },
+     "y_delta": 0.85,
+     "chip_end": {
+      "ref": "U3",
+      "direction": "out",
+      "y": 60.9,
+      "x": 88.825
+     },
+     "other_end": {
+      "class": "mid",
+      "ref": null,
+      "y": 60.05,
+      "x": 78.075
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "parallel_run_len_mm": 10.75,
+     "verdict": "ALIGNED"
+    },
+    {
+     "segname": "out_MCIO",
+     "net_p": "PCIE_DN_OUT2_P_MCIO",
+     "net_n": "PCIE_DN_OUT2_N_MCIO",
+     "end_left": {
+      "x": 57.1,
+      "y": 45.75,
+      "class": "conn",
+      "ref": "J3"
+     },
+     "end_right": {
+      "x": 78.775,
+      "y": 60.05,
+      "class": "mid",
+      "ref": null
+     },
+     "verdict": "CROSSING",
+     "y_delta": 14.75,
+     "parallel_run_len_mm": 21.675,
+     "chip_end": {
+      "ref": "U3",
+      "direction": "chain",
+      "y": 60.5,
+      "x": 98.825
+     },
+     "other_end": {
+      "class": "conn",
+      "ref": "J3",
+      "y": 45.75,
+      "x": 57.1
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "obstacle": {
+      "devices": [
+       {
+        "ref": "U7",
+        "cat": "redriver",
+        "bbox": [
+         88.83,
+         98.83,
+         41.95,
+         47.45
+        ]
+       }
+      ],
+      "capacitor_wall": {
+       "side": "mcio",
+       "band": "upper",
+       "x_range": [
+        75.0,
+        90.0
+       ],
+       "y_range": [
+        44.0,
+        47.0
+       ]
+      }
+     }
+    }
+   ],
+   "verdict": "CROSSING",
+   "crossing_segments": [
+    "out_MCIO"
+   ],
+   "nearest_pair_pitch_mm": 1.2,
+   "parallel_warn": true,
+   "cap_wall": {
+    "hit": true,
+    "side": "mcio",
+    "x_range": [
+     75.0,
+     90.0
+    ]
+   },
+   "plane_continuity": {
+    "status": "not_applicable",
+    "reason": "平面分割槽数据未接入输入（SPEC stackup 无分割定义），缝合电容/地过孔要求待平面数据接入后启用"
+   }
+  },
+  "DN3": {
+   "base": "DN3",
+   "segments": [
+    {
+     "segname": "input",
+     "net_p": "PCIE_DN3_P",
+     "net_n": "PCIE_DN3_N",
+     "end_left": {
+      "x": 98.825,
+      "y": 61.7,
+      "class": "chip",
+      "ref": "U3"
+     },
+     "end_right": {
+      "x": 135.0,
+      "y": 58.5,
+      "class": "conn",
+      "ref": "J2"
+     },
+     "y_delta": 3.2,
+     "chip_end": {
+      "ref": "U3",
+      "direction": "in",
+      "y": 61.7,
+      "x": 98.825
+     },
+     "other_end": {
+      "class": "conn",
+      "ref": "J2",
+      "y": 58.5,
+      "x": 135.0
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "parallel_run_len_mm": 36.175,
+     "verdict": "ALIGNED"
+    },
+    {
+     "segname": "out_U3",
+     "net_p": "PCIE_DN_OUT3_P_U3",
+     "net_n": "PCIE_DN_OUT3_N_U3",
+     "end_left": {
+      "x": 80.675,
+      "y": 60.05,
+      "class": "mid",
+      "ref": null
+     },
+     "end_right": {
+      "x": 88.825,
+      "y": 62.1,
+      "class": "chip",
+      "ref": "U3"
+     },
+     "y_delta": 2.05,
+     "chip_end": {
+      "ref": "U3",
+      "direction": "out",
+      "y": 62.1,
+      "x": 88.825
+     },
+     "other_end": {
+      "class": "mid",
+      "ref": null,
+      "y": 60.05,
+      "x": 80.675
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "parallel_run_len_mm": 8.15,
+     "verdict": "ALIGNED"
+    },
+    {
+     "segname": "out_MCIO",
+     "net_p": "PCIE_DN_OUT3_P_MCIO",
+     "net_n": "PCIE_DN_OUT3_N_MCIO",
+     "end_left": {
+      "x": 55.3,
+      "y": 45.75,
+      "class": "conn",
+      "ref": "J3"
+     },
+     "end_right": {
+      "x": 81.375,
+      "y": 60.05,
+      "class": "mid",
+      "ref": null
+     },
+     "verdict": "CROSSING",
+     "y_delta": 15.95,
+     "parallel_run_len_mm": 26.075,
+     "chip_end": {
+      "ref": "U3",
+      "direction": "chain",
+      "y": 61.7,
+      "x": 98.825
+     },
+     "other_end": {
+      "class": "conn",
+      "ref": "J3",
+      "y": 45.75,
+      "x": 55.3
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "obstacle": {
+      "devices": [
+       {
+        "ref": "U7",
+        "cat": "redriver",
+        "bbox": [
+         88.83,
+         98.83,
+         41.95,
+         47.45
+        ]
+       }
+      ],
+      "capacitor_wall": {
+       "side": "mcio",
+       "band": "upper",
+       "x_range": [
+        75.0,
+        90.0
+       ],
+       "y_range": [
+        44.0,
+        47.0
+       ]
+      }
+     }
+    }
+   ],
+   "verdict": "CROSSING",
+   "crossing_segments": [
+    "out_MCIO"
+   ],
+   "nearest_pair_pitch_mm": 1.2,
+   "parallel_warn": true,
+   "cap_wall": {
+    "hit": true,
+    "side": "mcio",
+    "x_range": [
+     75.0,
+     90.0
+    ]
+   },
+   "plane_continuity": {
+    "status": "not_applicable",
+    "reason": "平面分割槽数据未接入输入（SPEC stackup 无分割定义），缝合电容/地过孔要求待平面数据接入后启用"
+   }
+  },
+  "DN4": {
+   "base": "DN4",
+   "segments": [
+    {
+     "segname": "input",
+     "net_p": "PCIE_DN4_P",
+     "net_n": "PCIE_DN4_N",
+     "end_left": {
+      "x": 98.825,
+      "y": 62.9,
+      "class": "chip",
+      "ref": "U3"
+     },
+     "end_right": {
+      "x": 132.65,
+      "y": 59.7,
+      "class": "conn",
+      "ref": "J2"
+     },
+     "y_delta": 3.2,
+     "chip_end": {
+      "ref": "U3",
+      "direction": "in",
+      "y": 62.9,
+      "x": 98.825
+     },
+     "other_end": {
+      "class": "conn",
+      "ref": "J2",
+      "y": 59.7,
+      "x": 132.65
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "parallel_run_len_mm": 33.825,
+     "verdict": "ALIGNED"
+    },
+    {
+     "segname": "out_U3",
+     "net_p": "PCIE_DN_OUT4_P_U3",
+     "net_n": "PCIE_DN_OUT4_N_U3",
+     "end_left": {
+      "x": 83.15,
+      "y": 62.0,
+      "class": "mid",
+      "ref": null
+     },
+     "end_right": {
+      "x": 88.825,
+      "y": 63.3,
+      "class": "chip",
+      "ref": "U3"
+     },
+     "y_delta": 1.3,
+     "chip_end": {
+      "ref": "U3",
+      "direction": "out",
+      "y": 63.3,
+      "x": 88.825
+     },
+     "other_end": {
+      "class": "mid",
+      "ref": null,
+      "y": 62.0,
+      "x": 83.15
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "parallel_run_len_mm": 5.675,
+     "verdict": "ALIGNED"
+    },
+    {
+     "segname": "out_MCIO",
+     "net_p": "PCIE_DN_OUT4_P_MCIO",
+     "net_n": "PCIE_DN_OUT4_N_MCIO",
+     "end_left": {
+      "x": 54.7,
+      "y": 61.45,
+      "class": "conn",
+      "ref": "J4"
+     },
+     "end_right": {
+      "x": 82.45,
+      "y": 62.0,
+      "class": "mid",
+      "ref": null
+     },
+     "verdict": "ALIGNED",
+     "y_delta": 1.45,
+     "parallel_run_len_mm": 27.75,
+     "chip_end": {
+      "ref": "U3",
+      "direction": "chain",
+      "y": 62.9,
+      "x": 98.825
+     },
+     "other_end": {
+      "class": "conn",
+      "ref": "J4",
+      "y": 61.45,
+      "x": 54.7
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0
+    }
+   ],
+   "verdict": "ALIGNED",
+   "crossing_segments": [],
+   "nearest_pair_pitch_mm": 1.2,
+   "parallel_warn": true,
+   "cap_wall": {
+    "hit": true,
+    "side": "mcio",
+    "x_range": [
+     75.0,
+     90.0
+    ]
+   },
+   "plane_continuity": {
+    "status": "not_applicable",
+    "reason": "平面分割槽数据未接入输入（SPEC stackup 无分割定义），缝合电容/地过孔要求待平面数据接入后启用"
+   }
+  },
+  "DN5": {
+   "base": "DN5",
+   "segments": [
+    {
+     "segname": "input",
+     "net_p": "PCIE_DN5_P",
+     "net_n": "PCIE_DN5_N",
+     "end_left": {
+      "x": 98.825,
+      "y": 64.1,
+      "class": "chip",
+      "ref": "U3"
+     },
+     "end_right": {
+      "x": 135.0,
+      "y": 60.3,
+      "class": "conn",
+      "ref": "J2"
+     },
+     "y_delta": 3.8,
+     "chip_end": {
+      "ref": "U3",
+      "direction": "in",
+      "y": 64.1,
+      "x": 98.825
+     },
+     "other_end": {
+      "class": "conn",
+      "ref": "J2",
+      "y": 60.3,
+      "x": 135.0
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "parallel_run_len_mm": 36.175,
+     "verdict": "ALIGNED"
+    },
+    {
+     "segname": "out_U3",
+     "net_p": "PCIE_DN_OUT5_P_U3",
+     "net_n": "PCIE_DN_OUT5_N_U3",
+     "end_left": {
+      "x": 85.75,
+      "y": 62.0,
+      "class": "mid",
+      "ref": null
+     },
+     "end_right": {
+      "x": 88.825,
+      "y": 64.5,
+      "class": "chip",
+      "ref": "U3"
+     },
+     "y_delta": 2.5,
+     "chip_end": {
+      "ref": "U3",
+      "direction": "out",
+      "y": 64.5,
+      "x": 88.825
+     },
+     "other_end": {
+      "class": "mid",
+      "ref": null,
+      "y": 62.0,
+      "x": 85.75
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "parallel_run_len_mm": 3.075,
+     "verdict": "ALIGNED"
+    },
+    {
+     "segname": "out_MCIO",
+     "net_p": "PCIE_DN_OUT5_P_MCIO",
+     "net_n": "PCIE_DN_OUT5_N_MCIO",
+     "end_left": {
+      "x": 56.5,
+      "y": 61.45,
+      "class": "conn",
+      "ref": "J4"
+     },
+     "end_right": {
+      "x": 85.05,
+      "y": 62.0,
+      "class": "mid",
+      "ref": null
+     },
+     "verdict": "ALIGNED",
+     "y_delta": 2.65,
+     "parallel_run_len_mm": 28.55,
+     "chip_end": {
+      "ref": "U3",
+      "direction": "chain",
+      "y": 64.1,
+      "x": 98.825
+     },
+     "other_end": {
+      "class": "conn",
+      "ref": "J4",
+      "y": 61.45,
+      "x": 56.5
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0
+    }
+   ],
+   "verdict": "ALIGNED",
+   "crossing_segments": [],
+   "nearest_pair_pitch_mm": 1.2,
+   "parallel_warn": true,
+   "cap_wall": {
+    "hit": true,
+    "side": "mcio",
+    "x_range": [
+     75.0,
+     90.0
+    ]
+   },
+   "plane_continuity": {
+    "status": "not_applicable",
+    "reason": "平面分割槽数据未接入输入（SPEC stackup 无分割定义），缝合电容/地过孔要求待平面数据接入后启用"
+   }
+  },
+  "DN6": {
+   "base": "DN6",
+   "segments": [
+    {
+     "segname": "input",
+     "net_p": "PCIE_DN6_P",
+     "net_n": "PCIE_DN6_N",
+     "end_left": {
+      "x": 98.825,
+      "y": 65.3,
+      "class": "chip",
+      "ref": "U3"
+     },
+     "end_right": {
+      "x": 132.65,
+      "y": 63.3,
+      "class": "conn",
+      "ref": "J2"
+     },
+     "y_delta": 2.0,
+     "chip_end": {
+      "ref": "U3",
+      "direction": "in",
+      "y": 65.3,
+      "x": 98.825
+     },
+     "other_end": {
+      "class": "conn",
+      "ref": "J2",
+      "y": 63.3,
+      "x": 132.65
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "parallel_run_len_mm": 33.825,
+     "verdict": "ALIGNED"
+    },
+    {
+     "segname": "out_U3",
+     "net_p": "PCIE_DN_OUT6_P_U3",
+     "net_n": "PCIE_DN_OUT6_N_U3",
+     "end_left": {
+      "x": 83.15,
+      "y": 65.0,
+      "class": "mid",
+      "ref": null
+     },
+     "end_right": {
+      "x": 88.825,
+      "y": 65.7,
+      "class": "chip",
+      "ref": "U3"
+     },
+     "y_delta": 0.7,
+     "chip_end": {
+      "ref": "U3",
+      "direction": "out",
+      "y": 65.7,
+      "x": 88.825
+     },
+     "other_end": {
+      "class": "mid",
+      "ref": null,
+      "y": 65.0,
+      "x": 83.15
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "parallel_run_len_mm": 5.675,
+     "verdict": "ALIGNED"
+    },
+    {
+     "segname": "out_MCIO",
+     "net_p": "PCIE_DN_OUT6_P_MCIO",
+     "net_n": "PCIE_DN_OUT6_N_MCIO",
+     "end_left": {
+      "x": 61.9,
+      "y": 61.45,
+      "class": "conn",
+      "ref": "J4"
+     },
+     "end_right": {
+      "x": 82.45,
+      "y": 65.0,
+      "class": "mid",
+      "ref": null
+     },
+     "verdict": "ALIGNED",
+     "y_delta": 3.85,
+     "parallel_run_len_mm": 20.55,
+     "chip_end": {
+      "ref": "U3",
+      "direction": "chain",
+      "y": 65.3,
+      "x": 98.825
+     },
+     "other_end": {
+      "class": "conn",
+      "ref": "J4",
+      "y": 61.45,
+      "x": 61.9
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0
+    }
+   ],
+   "verdict": "ALIGNED",
+   "crossing_segments": [],
+   "nearest_pair_pitch_mm": 1.2,
+   "parallel_warn": true,
+   "cap_wall": {
+    "hit": true,
+    "side": "mcio",
+    "x_range": [
+     75.0,
+     90.0
+    ]
+   },
+   "plane_continuity": {
+    "status": "not_applicable",
+    "reason": "平面分割槽数据未接入输入（SPEC stackup 无分割定义），缝合电容/地过孔要求待平面数据接入后启用"
+   }
+  },
+  "DN7": {
+   "base": "DN7",
+   "segments": [
+    {
+     "segname": "input",
+     "net_p": "PCIE_DN7_P",
+     "net_n": "PCIE_DN7_N",
+     "end_left": {
+      "x": 98.825,
+      "y": 66.5,
+      "class": "chip",
+      "ref": "U3"
+     },
+     "end_right": {
+      "x": 135.0,
+      "y": 63.9,
+      "class": "conn",
+      "ref": "J2"
+     },
+     "y_delta": 2.6,
+     "chip_end": {
+      "ref": "U3",
+      "direction": "in",
+      "y": 66.5,
+      "x": 98.825
+     },
+     "other_end": {
+      "class": "conn",
+      "ref": "J2",
+      "y": 63.9,
+      "x": 135.0
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "parallel_run_len_mm": 36.175,
+     "verdict": "ALIGNED"
+    },
+    {
+     "segname": "out_U3",
+     "net_p": "PCIE_DN_OUT7_P_U3",
+     "net_n": "PCIE_DN_OUT7_N_U3",
+     "end_left": {
+      "x": 85.75,
+      "y": 65.0,
+      "class": "mid",
+      "ref": null
+     },
+     "end_right": {
+      "x": 88.825,
+      "y": 66.9,
+      "class": "chip",
+      "ref": "U3"
+     },
+     "y_delta": 1.9,
+     "chip_end": {
+      "ref": "U3",
+      "direction": "out",
+      "y": 66.9,
+      "x": 88.825
+     },
+     "other_end": {
+      "class": "mid",
+      "ref": null,
+      "y": 65.0,
+      "x": 85.75
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "parallel_run_len_mm": 3.075,
+     "verdict": "ALIGNED"
+    },
+    {
+     "segname": "out_MCIO",
+     "net_p": "PCIE_DN_OUT7_P_MCIO",
+     "net_n": "PCIE_DN_OUT7_N_MCIO",
+     "end_left": {
+      "x": 63.7,
+      "y": 61.45,
+      "class": "conn",
+      "ref": "J4"
+     },
+     "end_right": {
+      "x": 85.05,
+      "y": 65.0,
+      "class": "mid",
+      "ref": null
+     },
+     "verdict": "ALIGNED",
+     "y_delta": 5.05,
+     "parallel_run_len_mm": 21.35,
+     "chip_end": {
+      "ref": "U3",
+      "direction": "chain",
+      "y": 66.5,
+      "x": 98.825
+     },
+     "other_end": {
+      "class": "conn",
+      "ref": "J4",
+      "y": 61.45,
+      "x": 63.7
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0
+    }
+   ],
+   "verdict": "ALIGNED",
+   "crossing_segments": [],
+   "nearest_pair_pitch_mm": 1.2,
+   "parallel_warn": true,
+   "cap_wall": {
+    "hit": true,
+    "side": "mcio",
+    "x_range": [
+     75.0,
+     90.0
+    ]
+   },
+   "plane_continuity": {
+    "status": "not_applicable",
+    "reason": "平面分割槽数据未接入输入（SPEC stackup 无分割定义），缝合电容/地过孔要求待平面数据接入后启用"
+   }
+  },
+  "REFCLK0": {
+   "base": "REFCLK0",
+   "segments": [
+    {
+     "segname": "input",
+     "net_p": "PCIE_REFCLK0_P",
+     "net_n": "PCIE_REFCLK0_N",
+     "end_left": {
+      "x": 58.9,
+      "y": 45.75,
+      "class": "conn",
+      "ref": "J3"
+     },
+     "end_right": {
+      "x": 132.65,
+      "y": 45.9,
+      "class": "conn",
+      "ref": "J2"
+     },
+     "verdict": "EVIDENCE_ONLY",
+     "y_delta": 0.15,
+     "parallel_run_len_mm": 73.75
+    }
+   ],
+   "verdict": "ALIGNED",
+   "crossing_segments": [],
+   "nearest_pair_pitch_mm": 1.2,
+   "parallel_warn": false,
+   "cap_wall": {
+    "hit": true,
+    "side": "mcio",
+    "x_range": [
+     75.0,
+     90.0
+    ]
+   },
+   "plane_continuity": {
+    "status": "not_applicable",
+    "reason": "平面分割槽数据未接入输入（SPEC stackup 无分割定义），缝合电容/地过孔要求待平面数据接入后启用"
+   }
+  },
+  "REFCLK1": {
+   "base": "REFCLK1",
+   "segments": [
+    {
+     "segname": "input",
+     "net_p": "PCIE_REFCLK1_P",
+     "net_n": "PCIE_REFCLK1_N",
+     "end_left": {
+      "x": 60.1,
+      "y": 61.45,
+      "class": "conn",
+      "ref": "J4"
+     },
+     "end_right": {
+      "x": 132.65,
+      "y": 51.3,
+      "class": "conn",
+      "ref": "J2"
+     },
+     "verdict": "EVIDENCE_ONLY",
+     "y_delta": 10.15,
+     "parallel_run_len_mm": 72.55
+    }
+   ],
+   "verdict": "ALIGNED",
+   "crossing_segments": [],
+   "nearest_pair_pitch_mm": 1.2,
+   "parallel_warn": false,
+   "cap_wall": {
+    "hit": true,
+    "side": "mcio",
+    "x_range": [
+     75.0,
+     90.0
+    ]
+   },
+   "plane_continuity": {
+    "status": "not_applicable",
+    "reason": "平面分割槽数据未接入输入（SPEC stackup 无分割定义），缝合电容/地过孔要求待平面数据接入后启用"
+   }
+  },
+  "UP0": {
+   "base": "UP0",
+   "segments": [
+    {
+     "segname": "input",
+     "net_p": "PCIE_UP0_P",
+     "net_n": "PCIE_UP0_N",
+     "end_left": {
+      "x": 64.3,
+      "y": 43.25,
+      "class": "conn",
+      "ref": "J3"
+     },
+     "end_right": {
+      "x": 88.825,
+      "y": 49.3,
+      "class": "chip",
+      "ref": "U7"
+     },
+     "y_delta": 6.05,
+     "chip_end": {
+      "ref": "U7",
+      "direction": "in",
+      "y": 49.3,
+      "x": 88.825
+     },
+     "other_end": {
+      "class": "conn",
+      "ref": "J3",
+      "y": 43.25,
+      "x": 64.3
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "parallel_run_len_mm": 24.525,
+     "verdict": "ALIGNED"
+    },
+    {
+     "segname": "out_U7",
+     "net_p": "PCIE_UP_OUT0_P_U7",
+     "net_n": "PCIE_UP_OUT0_N_U7",
+     "end_left": {
+      "x": 98.825,
+      "y": 48.9,
+      "class": "chip",
+      "ref": "U7"
+     },
+     "end_right": {
+      "x": 127.475,
+      "y": 53.1,
+      "class": "conn",
+      "ref": "J2"
+     },
+     "y_delta": 4.2,
+     "chip_end": {
+      "ref": "U7",
+      "direction": "out",
+      "y": 48.9,
+      "x": 98.825
+     },
+     "other_end": {
+      "class": "conn",
+      "ref": "J2",
+      "y": 53.1,
+      "x": 127.475
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "parallel_run_len_mm": 28.65,
+     "verdict": "ALIGNED"
+    },
+    {
+     "segname": "out_J2",
+     "net_p": "PCIE_UP_OUT0_P_J2",
+     "net_n": "PCIE_UP_OUT0_N_J2",
+     "end_left": {
+      "x": 128.175,
+      "y": 53.1,
+      "class": "conn",
+      "ref": "J2"
+     },
+     "end_right": {
+      "x": 135.0,
+      "y": 42.9,
+      "class": "conn",
+      "ref": "J2"
+     },
+     "verdict": "EVIDENCE_ONLY",
+     "y_delta": 10.2,
+     "parallel_run_len_mm": 6.825,
+     "chain_note": "J2 收拢侧段（引脚重排保证，不判交叉）"
+    }
+   ],
+   "verdict": "ALIGNED",
+   "crossing_segments": [],
+   "nearest_pair_pitch_mm": 1.2,
+   "parallel_warn": true,
+   "cap_wall": {
+    "hit": true,
+    "side": "mcio",
+    "x_range": [
+     75.0,
+     90.0
+    ]
+   },
+   "plane_continuity": {
+    "status": "not_applicable",
+    "reason": "平面分割槽数据未接入输入（SPEC stackup 无分割定义），缝合电容/地过孔要求待平面数据接入后启用"
+   }
+  },
+  "UP1": {
+   "base": "UP1",
+   "segments": [
+    {
+     "segname": "input",
+     "net_p": "PCIE_UP1_P",
+     "net_n": "PCIE_UP1_N",
+     "end_left": {
+      "x": 62.5,
+      "y": 43.25,
+      "class": "conn",
+      "ref": "J3"
+     },
+     "end_right": {
+      "x": 88.825,
+      "y": 48.1,
+      "class": "chip",
+      "ref": "U7"
+     },
+     "y_delta": 4.85,
+     "chip_end": {
+      "ref": "U7",
+      "direction": "in",
+      "y": 48.1,
+      "x": 88.825
+     },
+     "other_end": {
+      "class": "conn",
+      "ref": "J3",
+      "y": 43.25,
+      "x": 62.5
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "parallel_run_len_mm": 26.325,
+     "verdict": "ALIGNED"
+    },
+    {
+     "segname": "out_U7",
+     "net_p": "PCIE_UP_OUT1_P_U7",
+     "net_n": "PCIE_UP_OUT1_N_U7",
+     "end_left": {
+      "x": 98.825,
+      "y": 47.7,
+      "class": "chip",
+      "ref": "U7"
+     },
+     "end_right": {
+      "x": 121.475,
+      "y": 51.9,
+      "class": "conn",
+      "ref": "J2"
+     },
+     "y_delta": 4.2,
+     "chip_end": {
+      "ref": "U7",
+      "direction": "out",
+      "y": 47.7,
+      "x": 98.825
+     },
+     "other_end": {
+      "class": "conn",
+      "ref": "J2",
+      "y": 51.9,
+      "x": 121.475
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "parallel_run_len_mm": 22.65,
+     "verdict": "ALIGNED"
+    },
+    {
+     "segname": "out_J2",
+     "net_p": "PCIE_UP_OUT1_P_J2",
+     "net_n": "PCIE_UP_OUT1_N_J2",
+     "end_left": {
+      "x": 122.175,
+      "y": 51.9,
+      "class": "conn",
+      "ref": "J2"
+     },
+     "end_right": {
+      "x": 132.65,
+      "y": 44.1,
+      "class": "conn",
+      "ref": "J2"
+     },
+     "verdict": "EVIDENCE_ONLY",
+     "y_delta": 7.8,
+     "parallel_run_len_mm": 10.475,
+     "chain_note": "J2 收拢侧段（引脚重排保证，不判交叉）"
+    }
+   ],
+   "verdict": "ALIGNED",
+   "crossing_segments": [],
+   "nearest_pair_pitch_mm": 1.2,
+   "parallel_warn": true,
+   "cap_wall": {
+    "hit": true,
+    "side": "mcio",
+    "x_range": [
+     75.0,
+     90.0
+    ]
+   },
+   "plane_continuity": {
+    "status": "not_applicable",
+    "reason": "平面分割槽数据未接入输入（SPEC stackup 无分割定义），缝合电容/地过孔要求待平面数据接入后启用"
+   }
+  },
+  "UP2": {
+   "base": "UP2",
+   "segments": [
+    {
+     "segname": "input",
+     "net_p": "PCIE_UP2_P",
+     "net_n": "PCIE_UP2_N",
+     "end_left": {
+      "x": 57.1,
+      "y": 43.25,
+      "class": "conn",
+      "ref": "J3"
+     },
+     "end_right": {
+      "x": 88.825,
+      "y": 46.9,
+      "class": "chip",
+      "ref": "U7"
+     },
+     "y_delta": 3.65,
+     "chip_end": {
+      "ref": "U7",
+      "direction": "in",
+      "y": 46.9,
+      "x": 88.825
+     },
+     "other_end": {
+      "class": "conn",
+      "ref": "J3",
+      "y": 43.25,
+      "x": 57.1
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "parallel_run_len_mm": 31.725,
+     "verdict": "ALIGNED"
+    },
+    {
+     "segname": "out_U7",
+     "net_p": "PCIE_UP_OUT2_P_U7",
+     "net_n": "PCIE_UP_OUT2_N_U7",
+     "end_left": {
+      "x": 98.825,
+      "y": 46.5,
+      "class": "chip",
+      "ref": "U7"
+     },
+     "end_right": {
+      "x": 119.475,
+      "y": 49.5,
+      "class": "conn",
+      "ref": "J2"
+     },
+     "y_delta": 3.0,
+     "chip_end": {
+      "ref": "U7",
+      "direction": "out",
+      "y": 46.5,
+      "x": 98.825
+     },
+     "other_end": {
+      "class": "conn",
+      "ref": "J2",
+      "y": 49.5,
+      "x": 119.475
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "parallel_run_len_mm": 20.65,
+     "verdict": "ALIGNED"
+    },
+    {
+     "segname": "out_J2",
+     "net_p": "PCIE_UP_OUT2_P_J2",
+     "net_n": "PCIE_UP_OUT2_N_J2",
+     "end_left": {
+      "x": 120.175,
+      "y": 49.5,
+      "class": "conn",
+      "ref": "J2"
+     },
+     "end_right": {
+      "x": 135.0,
+      "y": 46.5,
+      "class": "conn",
+      "ref": "J2"
+     },
+     "verdict": "EVIDENCE_ONLY",
+     "y_delta": 3.0,
+     "parallel_run_len_mm": 14.825,
+     "chain_note": "J2 收拢侧段（引脚重排保证，不判交叉）"
+    }
+   ],
+   "verdict": "ALIGNED",
+   "crossing_segments": [],
+   "nearest_pair_pitch_mm": 1.2,
+   "parallel_warn": true,
+   "cap_wall": {
+    "hit": true,
+    "side": "mcio",
+    "x_range": [
+     75.0,
+     90.0
+    ]
+   },
+   "plane_continuity": {
+    "status": "not_applicable",
+    "reason": "平面分割槽数据未接入输入（SPEC stackup 无分割定义），缝合电容/地过孔要求待平面数据接入后启用"
+   }
+  },
+  "UP3": {
+   "base": "UP3",
+   "segments": [
+    {
+     "segname": "input",
+     "net_p": "PCIE_UP3_P",
+     "net_n": "PCIE_UP3_N",
+     "end_left": {
+      "x": 55.3,
+      "y": 43.25,
+      "class": "conn",
+      "ref": "J3"
+     },
+     "end_right": {
+      "x": 88.825,
+      "y": 45.7,
+      "class": "chip",
+      "ref": "U7"
+     },
+     "y_delta": 2.45,
+     "chip_end": {
+      "ref": "U7",
+      "direction": "in",
+      "y": 45.7,
+      "x": 88.825
+     },
+     "other_end": {
+      "class": "conn",
+      "ref": "J3",
+      "y": 43.25,
+      "x": 55.3
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "parallel_run_len_mm": 33.525,
+     "verdict": "ALIGNED"
+    },
+    {
+     "segname": "out_U7",
+     "net_p": "PCIE_UP_OUT3_P_U7",
+     "net_n": "PCIE_UP_OUT3_N_U7",
+     "end_left": {
+      "x": 98.825,
+      "y": 45.3,
+      "class": "chip",
+      "ref": "U7"
+     },
+     "end_right": {
+      "x": 113.475,
+      "y": 48.3,
+      "class": "mid",
+      "ref": null
+     },
+     "y_delta": 3.0,
+     "chip_end": {
+      "ref": "U7",
+      "direction": "out",
+      "y": 45.3,
+      "x": 98.825
+     },
+     "other_end": {
+      "class": "mid",
+      "ref": null,
+      "y": 48.3,
+      "x": 113.475
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "parallel_run_len_mm": 14.65,
+     "verdict": "ALIGNED"
+    },
+    {
+     "segname": "out_J2",
+     "net_p": "PCIE_UP_OUT3_P_J2",
+     "net_n": "PCIE_UP_OUT3_N_J2",
+     "end_left": {
+      "x": 114.175,
+      "y": 48.3,
+      "class": "mid",
+      "ref": null
+     },
+     "end_right": {
+      "x": 132.65,
+      "y": 47.7,
+      "class": "conn",
+      "ref": "J2"
+     },
+     "verdict": "EVIDENCE_ONLY",
+     "y_delta": 0.6,
+     "parallel_run_len_mm": 18.475,
+     "chain_note": "J2 收拢侧段（引脚重排保证，不判交叉）"
+    }
+   ],
+   "verdict": "ALIGNED",
+   "crossing_segments": [],
+   "nearest_pair_pitch_mm": 1.2,
+   "parallel_warn": true,
+   "cap_wall": {
+    "hit": true,
+    "side": "mcio",
+    "x_range": [
+     75.0,
+     90.0
+    ]
+   },
+   "plane_continuity": {
+    "status": "not_applicable",
+    "reason": "平面分割槽数据未接入输入（SPEC stackup 无分割定义），缝合电容/地过孔要求待平面数据接入后启用"
+   }
+  },
+  "UP4": {
+   "base": "UP4",
+   "segments": [
+    {
+     "segname": "input",
+     "net_p": "PCIE_UP4_P",
+     "net_n": "PCIE_UP4_N",
+     "end_left": {
+      "x": 54.7,
+      "y": 63.95,
+      "class": "conn",
+      "ref": "J4"
+     },
+     "end_right": {
+      "x": 88.825,
+      "y": 44.5,
+      "class": "chip",
+      "ref": "U7"
+     },
+     "y_delta": 19.45,
+     "chip_end": {
+      "ref": "U7",
+      "direction": "in",
+      "y": 44.5,
+      "x": 88.825
+     },
+     "other_end": {
+      "class": "conn",
+      "ref": "J4",
+      "y": 63.95,
+      "x": 54.7
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "parallel_run_len_mm": 34.125,
+     "verdict": "CROSSING",
+     "obstacle": {
+      "devices": [
+       {
+        "ref": "U3",
+        "cat": "redriver",
+        "bbox": [
+         88.83,
+         98.83,
+         59.95,
+         65.45
+        ]
+       }
+      ],
+      "capacitor_wall": {
+       "side": "mcio",
+       "band": "upper",
+       "x_range": [
+        75.0,
+        90.0
+       ],
+       "y_range": [
+        44.0,
+        47.0
+       ]
+      }
+     }
+    },
+    {
+     "segname": "out_U7",
+     "net_p": "PCIE_UP_OUT4_P_U7",
+     "net_n": "PCIE_UP_OUT4_N_U7",
+     "end_left": {
+      "x": 98.825,
+      "y": 44.1,
+      "class": "chip",
+      "ref": "U7"
+     },
+     "end_right": {
+      "x": 111.475,
+      "y": 47.7,
+      "class": "mid",
+      "ref": null
+     },
+     "y_delta": 3.6,
+     "chip_end": {
+      "ref": "U7",
+      "direction": "out",
+      "y": 44.1,
+      "x": 98.825
+     },
+     "other_end": {
+      "class": "mid",
+      "ref": null,
+      "y": 47.7,
+      "x": 111.475
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "parallel_run_len_mm": 12.65,
+     "verdict": "ALIGNED"
+    },
+    {
+     "segname": "out_J2",
+     "net_p": "PCIE_UP_OUT4_P_J2",
+     "net_n": "PCIE_UP_OUT4_N_J2",
+     "end_left": {
+      "x": 112.175,
+      "y": 47.7,
+      "class": "mid",
+      "ref": null
+     },
+     "end_right": {
+      "x": 135.0,
+      "y": 48.3,
+      "class": "conn",
+      "ref": "J2"
+     },
+     "verdict": "EVIDENCE_ONLY",
+     "y_delta": 0.6,
+     "parallel_run_len_mm": 22.825,
+     "chain_note": "J2 收拢侧段（引脚重排保证，不判交叉）"
+    }
+   ],
+   "verdict": "CROSSING",
+   "crossing_segments": [
+    "input"
+   ],
+   "nearest_pair_pitch_mm": 1.2,
+   "parallel_warn": false,
+   "cap_wall": {
+    "hit": true,
+    "side": "mcio",
+    "x_range": [
+     75.0,
+     90.0
+    ]
+   },
+   "plane_continuity": {
+    "status": "not_applicable",
+    "reason": "平面分割槽数据未接入输入（SPEC stackup 无分割定义），缝合电容/地过孔要求待平面数据接入后启用"
+   }
+  },
+  "UP5": {
+   "base": "UP5",
+   "segments": [
+    {
+     "segname": "input",
+     "net_p": "PCIE_UP5_P",
+     "net_n": "PCIE_UP5_N",
+     "end_left": {
+      "x": 56.5,
+      "y": 63.95,
+      "class": "conn",
+      "ref": "J4"
+     },
+     "end_right": {
+      "x": 88.825,
+      "y": 43.3,
+      "class": "chip",
+      "ref": "U7"
+     },
+     "y_delta": 20.65,
+     "chip_end": {
+      "ref": "U7",
+      "direction": "in",
+      "y": 43.3,
+      "x": 88.825
+     },
+     "other_end": {
+      "class": "conn",
+      "ref": "J4",
+      "y": 63.95,
+      "x": 56.5
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "parallel_run_len_mm": 32.325,
+     "verdict": "CROSSING",
+     "obstacle": {
+      "devices": [
+       {
+        "ref": "U3",
+        "cat": "redriver",
+        "bbox": [
+         88.83,
+         98.83,
+         59.95,
+         65.45
+        ]
+       }
+      ],
+      "capacitor_wall": {
+       "side": "mcio",
+       "band": "upper",
+       "x_range": [
+        75.0,
+        90.0
+       ],
+       "y_range": [
+        44.0,
+        47.0
+       ]
+      }
+     }
+    },
+    {
+     "segname": "out_U7",
+     "net_p": "PCIE_UP_OUT5_P_U7",
+     "net_n": "PCIE_UP_OUT5_N_U7",
+     "end_left": {
+      "x": 98.825,
+      "y": 42.9,
+      "class": "chip",
+      "ref": "U7"
+     },
+     "end_right": {
+      "x": 105.475,
+      "y": 46.5,
+      "class": "mid",
+      "ref": null
+     },
+     "y_delta": 3.6,
+     "chip_end": {
+      "ref": "U7",
+      "direction": "out",
+      "y": 42.9,
+      "x": 98.825
+     },
+     "other_end": {
+      "class": "mid",
+      "ref": null,
+      "y": 46.5,
+      "x": 105.475
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "parallel_run_len_mm": 6.65,
+     "verdict": "ALIGNED"
+    },
+    {
+     "segname": "out_J2",
+     "net_p": "PCIE_UP_OUT5_P_J2",
+     "net_n": "PCIE_UP_OUT5_N_J2",
+     "end_left": {
+      "x": 106.175,
+      "y": 46.5,
+      "class": "mid",
+      "ref": null
+     },
+     "end_right": {
+      "x": 132.65,
+      "y": 49.5,
+      "class": "conn",
+      "ref": "J2"
+     },
+     "verdict": "EVIDENCE_ONLY",
+     "y_delta": 3.0,
+     "parallel_run_len_mm": 26.475,
+     "chain_note": "J2 收拢侧段（引脚重排保证，不判交叉）"
+    }
+   ],
+   "verdict": "CROSSING",
+   "crossing_segments": [
+    "input"
+   ],
+   "nearest_pair_pitch_mm": 1.2,
+   "parallel_warn": false,
+   "cap_wall": {
+    "hit": true,
+    "side": "mcio",
+    "x_range": [
+     75.0,
+     90.0
+    ]
+   },
+   "plane_continuity": {
+    "status": "not_applicable",
+    "reason": "平面分割槽数据未接入输入（SPEC stackup 无分割定义），缝合电容/地过孔要求待平面数据接入后启用"
+   }
+  },
+  "UP6": {
+   "base": "UP6",
+   "segments": [
+    {
+     "segname": "input",
+     "net_p": "PCIE_UP6_P",
+     "net_n": "PCIE_UP6_N",
+     "end_left": {
+      "x": 61.9,
+      "y": 63.95,
+      "class": "conn",
+      "ref": "J4"
+     },
+     "end_right": {
+      "x": 88.825,
+      "y": 42.1,
+      "class": "chip",
+      "ref": "U7"
+     },
+     "y_delta": 21.85,
+     "chip_end": {
+      "ref": "U7",
+      "direction": "in",
+      "y": 42.1,
+      "x": 88.825
+     },
+     "other_end": {
+      "class": "conn",
+      "ref": "J4",
+      "y": 63.95,
+      "x": 61.9
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "parallel_run_len_mm": 26.925,
+     "verdict": "CROSSING",
+     "obstacle": {
+      "devices": [
+       {
+        "ref": "U3",
+        "cat": "redriver",
+        "bbox": [
+         88.83,
+         98.83,
+         59.95,
+         65.45
+        ]
+       }
+      ],
+      "capacitor_wall": {
+       "side": "mcio",
+       "band": "upper",
+       "x_range": [
+        75.0,
+        90.0
+       ],
+       "y_range": [
+        44.0,
+        47.0
+       ]
+      }
+     }
+    },
+    {
+     "segname": "out_U7",
+     "net_p": "PCIE_UP_OUT6_P_U7",
+     "net_n": "PCIE_UP_OUT6_N_U7",
+     "end_left": {
+      "x": 98.825,
+      "y": 41.7,
+      "class": "chip",
+      "ref": "U7"
+     },
+     "end_right": {
+      "x": 103.475,
+      "y": 44.1,
+      "class": "mid",
+      "ref": null
+     },
+     "y_delta": 2.4,
+     "chip_end": {
+      "ref": "U7",
+      "direction": "out",
+      "y": 41.7,
+      "x": 98.825
+     },
+     "other_end": {
+      "class": "mid",
+      "ref": null,
+      "y": 44.1,
+      "x": 103.475
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "parallel_run_len_mm": 4.65,
+     "verdict": "ALIGNED"
+    },
+    {
+     "segname": "out_J2",
+     "net_p": "PCIE_UP_OUT6_P_J2",
+     "net_n": "PCIE_UP_OUT6_N_J2",
+     "end_left": {
+      "x": 104.175,
+      "y": 44.1,
+      "class": "mid",
+      "ref": null
+     },
+     "end_right": {
+      "x": 135.0,
+      "y": 51.9,
+      "class": "conn",
+      "ref": "J2"
+     },
+     "verdict": "EVIDENCE_ONLY",
+     "y_delta": 7.8,
+     "parallel_run_len_mm": 30.825,
+     "chain_note": "J2 收拢侧段（引脚重排保证，不判交叉）"
+    }
+   ],
+   "verdict": "CROSSING",
+   "crossing_segments": [
+    "input"
+   ],
+   "nearest_pair_pitch_mm": 1.2,
+   "parallel_warn": false,
+   "cap_wall": {
+    "hit": true,
+    "side": "mcio",
+    "x_range": [
+     75.0,
+     90.0
+    ]
+   },
+   "plane_continuity": {
+    "status": "not_applicable",
+    "reason": "平面分割槽数据未接入输入（SPEC stackup 无分割定义），缝合电容/地过孔要求待平面数据接入后启用"
+   }
+  },
+  "UP7": {
+   "base": "UP7",
+   "segments": [
+    {
+     "segname": "input",
+     "net_p": "PCIE_UP7_P",
+     "net_n": "PCIE_UP7_N",
+     "end_left": {
+      "x": 63.7,
+      "y": 63.95,
+      "class": "conn",
+      "ref": "J4"
+     },
+     "end_right": {
+      "x": 88.825,
+      "y": 40.9,
+      "class": "chip",
+      "ref": "U7"
+     },
+     "y_delta": 23.05,
+     "chip_end": {
+      "ref": "U7",
+      "direction": "in",
+      "y": 40.9,
+      "x": 88.825
+     },
+     "other_end": {
+      "class": "conn",
+      "ref": "J4",
+      "y": 63.95,
+      "x": 63.7
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "parallel_run_len_mm": 25.125,
+     "verdict": "CROSSING",
+     "obstacle": {
+      "devices": [
+       {
+        "ref": "U3",
+        "cat": "redriver",
+        "bbox": [
+         88.83,
+         98.83,
+         59.95,
+         65.45
+        ]
+       }
+      ],
+      "capacitor_wall": {
+       "side": "mcio",
+       "band": "upper",
+       "x_range": [
+        75.0,
+        90.0
+       ],
+       "y_range": [
+        44.0,
+        47.0
+       ]
+      }
+     }
+    },
+    {
+     "segname": "out_U7",
+     "net_p": "PCIE_UP_OUT7_P_U7",
+     "net_n": "PCIE_UP_OUT7_N_U7",
+     "end_left": {
+      "x": 98.825,
+      "y": 40.5,
+      "class": "chip",
+      "ref": "U7"
+     },
+     "end_right": {
+      "x": 100.45,
+      "y": 42.9,
+      "class": "chip",
+      "ref": "U7"
+     },
+     "y_delta": 2.4,
+     "chip_end": {
+      "ref": "U7",
+      "direction": "out",
+      "y": 40.5,
+      "x": 98.825
+     },
+     "other_end": {
+      "class": "chip",
+      "ref": "U7",
+      "y": 42.9,
+      "x": 100.45
+     },
+     "align_tol": 8.4,
+     "cross_tol": 9.0,
+     "parallel_run_len_mm": 1.625,
+     "verdict": "ALIGNED"
+    },
+    {
+     "segname": "out_J2",
+     "net_p": "PCIE_UP_OUT7_P_J2",
+     "net_n": "PCIE_UP_OUT7_N_J2",
+     "end_left": {
+      "x": 101.15,
+      "y": 42.9,
+      "class": "mid",
+      "ref": null
+     },
+     "end_right": {
+      "x": 132.65,
+      "y": 53.1,
+      "class": "conn",
+      "ref": "J2"
+     },
+     "verdict": "EVIDENCE_ONLY",
+     "y_delta": 10.2,
+     "parallel_run_len_mm": 31.5,
+     "chain_note": "J2 收拢侧段（引脚重排保证，不判交叉）"
+    }
+   ],
+   "verdict": "CROSSING",
+   "crossing_segments": [
+    "input"
+   ],
+   "nearest_pair_pitch_mm": 1.2,
+   "parallel_warn": false,
+   "cap_wall": {
+    "hit": true,
+    "side": "mcio",
+    "x_range": [
+     75.0,
+     90.0
+    ]
+   },
+   "plane_continuity": {
+    "status": "not_applicable",
+    "reason": "平面分割槽数据未接入输入（SPEC stackup 无分割定义），缝合电容/地过孔要求待平面数据接入后启用"
+   }
+  }
+ },
+ "verdict": "CROSSING_FOUND",
+ "crossing_links": [
+  "DN0",
+  "DN1",
+  "DN2",
+  "DN3",
+  "UP4",
+  "UP5",
+  "UP6",
+  "UP7"
+ ]
+}

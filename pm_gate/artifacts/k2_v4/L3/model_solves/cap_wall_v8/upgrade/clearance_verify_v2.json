@@ -1,0 +1,3642 @@
+{
+ "task": "净空校验 v2：逐颗轨净空 + 逐颗桩净空数值（落板后独立解析）",
+ "board": "/tmp/opencode/boards/k2_v6.kicad_pcb",
+ "timestamp": "2026-08-27T09:48:44",
+ "formula": {
+  "track_margin": "|cap_y - track_y| - row_excl(0.7175) > 0; row_excl = 轨半带0.19 + 线半宽0.1025 + 净距0.175 + cap半高0.25",
+  "stub_via_margin": "min(距障碍/垫/桩via/轨带 - 各自需求值) > 0; 轨带需求 via_excl=0.45249999999999996 seg_excl=0.38"
+ },
+ "walls_tracks": {
+  "dn": [
+   58.7,
+   59.9,
+   61.1,
+   62.3,
+   63.5,
+   64.7,
+   65.9,
+   67.1,
+   40.7,
+   41.9,
+   43.1,
+   44.3,
+   45.5,
+   46.7,
+   47.9,
+   49.1
+  ],
+  "up": [
+   58.3,
+   59.5,
+   60.7,
+   61.9,
+   63.1,
+   64.3,
+   65.5,
+   66.7,
+   40.3,
+   41.5,
+   42.7,
+   43.9,
+   45.1,
+   46.3,
+   47.5,
+   48.7
+  ]
+ },
+ "verdict": "PASS",
+ "worst_track_margin": {
+  "ref": "C17",
+  "value": 0.1825
+ },
+ "worst_stub_clear": {
+  "ref": "C17",
+  "value": 0.025
+ },
+ "per_cap": {
+  "C17": {
+   "x": 76.8,
+   "y": 57.8,
+   "rot": 0.0,
+   "track_margins": [
+    {
+     "track": "U_TO_MCIO/lower/0",
+     "track_y": 58.7,
+     "margin": 0.1825
+    },
+    {
+     "track": "U_TO_MCIO/lower/1",
+     "track_y": 59.9,
+     "margin": 1.3825
+    },
+    {
+     "track": "U_TO_MCIO/lower/2",
+     "track_y": 61.1,
+     "margin": 2.5825
+    },
+    {
+     "track": "U_TO_MCIO/lower/3",
+     "track_y": 62.3,
+     "margin": 3.7825
+    },
+    {
+     "track": "U_TO_MCIO/lower/4",
+     "track_y": 63.5,
+     "margin": 4.9825
+    },
+    {
+     "track": "U_TO_MCIO/lower/5",
+     "track_y": 64.7,
+     "margin": 6.1825
+    },
+    {
+     "track": "U_TO_MCIO/lower/6",
+     "track_y": 65.9,
+     "margin": 7.3825
+    },
+    {
+     "track": "U_TO_MCIO/lower/7",
+     "track_y": 67.1,
+     "margin": 8.5825
+    },
+    {
+     "track": "U_TO_MCIO/upper/0",
+     "track_y": 40.7,
+     "margin": 16.3825
+    },
+    {
+     "track": "U_TO_MCIO/upper/1",
+     "track_y": 41.9,
+     "margin": 15.1825
+    },
+    {
+     "track": "U_TO_MCIO/upper/2",
+     "track_y": 43.1,
+     "margin": 13.9825
+    },
+    {
+     "track": "U_TO_MCIO/upper/3",
+     "track_y": 44.3,
+     "margin": 12.7825
+    },
+    {
+     "track": "U_TO_MCIO/upper/4",
+     "track_y": 45.5,
+     "margin": 11.5825
+    },
+    {
+     "track": "U_TO_MCIO/upper/5",
+     "track_y": 46.7,
+     "margin": 10.3825
+    },
+    {
+     "track": "U_TO_MCIO/upper/6",
+     "track_y": 47.9,
+     "margin": 9.1825
+    },
+    {
+     "track": "U_TO_MCIO/upper/7",
+     "track_y": 49.1,
+     "margin": 7.9825
+    }
+   ],
+   "track_margin_min": 0.1825,
+   "stubs": [
+    {
+     "net": "PCIE_DN_OUT0_P_U3",
+     "pad_num": "1",
+     "via": [
+      76.45,
+      57.1
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    },
+    {
+     "net": "PCIE_DN_OUT0_P_MCIO",
+     "pad_num": "2",
+     "via": [
+      77.15,
+      57.1
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    }
+   ],
+   "stub_clear_min": 0.025,
+   "pass": true
+  },
+  "C18": {
+   "x": 75.5,
+   "y": 57.8,
+   "rot": 0.0,
+   "track_margins": [
+    {
+     "track": "U_TO_MCIO/lower/0",
+     "track_y": 58.7,
+     "margin": 0.1825
+    },
+    {
+     "track": "U_TO_MCIO/lower/1",
+     "track_y": 59.9,
+     "margin": 1.3825
+    },
+    {
+     "track": "U_TO_MCIO/lower/2",
+     "track_y": 61.1,
+     "margin": 2.5825
+    },
+    {
+     "track": "U_TO_MCIO/lower/3",
+     "track_y": 62.3,
+     "margin": 3.7825
+    },
+    {
+     "track": "U_TO_MCIO/lower/4",
+     "track_y": 63.5,
+     "margin": 4.9825
+    },
+    {
+     "track": "U_TO_MCIO/lower/5",
+     "track_y": 64.7,
+     "margin": 6.1825
+    },
+    {
+     "track": "U_TO_MCIO/lower/6",
+     "track_y": 65.9,
+     "margin": 7.3825
+    },
+    {
+     "track": "U_TO_MCIO/lower/7",
+     "track_y": 67.1,
+     "margin": 8.5825
+    },
+    {
+     "track": "U_TO_MCIO/upper/0",
+     "track_y": 40.7,
+     "margin": 16.3825
+    },
+    {
+     "track": "U_TO_MCIO/upper/1",
+     "track_y": 41.9,
+     "margin": 15.1825
+    },
+    {
+     "track": "U_TO_MCIO/upper/2",
+     "track_y": 43.1,
+     "margin": 13.9825
+    },
+    {
+     "track": "U_TO_MCIO/upper/3",
+     "track_y": 44.3,
+     "margin": 12.7825
+    },
+    {
+     "track": "U_TO_MCIO/upper/4",
+     "track_y": 45.5,
+     "margin": 11.5825
+    },
+    {
+     "track": "U_TO_MCIO/upper/5",
+     "track_y": 46.7,
+     "margin": 10.3825
+    },
+    {
+     "track": "U_TO_MCIO/upper/6",
+     "track_y": 47.9,
+     "margin": 9.1825
+    },
+    {
+     "track": "U_TO_MCIO/upper/7",
+     "track_y": 49.1,
+     "margin": 7.9825
+    }
+   ],
+   "track_margin_min": 0.1825,
+   "stubs": [
+    {
+     "net": "PCIE_DN_OUT0_N_U3",
+     "pad_num": "1",
+     "via": [
+      72.65,
+      57.8
+     ],
+     "min_via_margin": 0.4475,
+     "min_seg_margin": 0.125
+    },
+    {
+     "net": "PCIE_DN_OUT0_N_MCIO",
+     "pad_num": "2",
+     "via": [
+      75.85,
+      57.1
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    }
+   ],
+   "stub_clear_min": 0.025,
+   "pass": true
+  },
+  "C19": {
+   "x": 79.4,
+   "y": 57.8,
+   "rot": 0.0,
+   "track_margins": [
+    {
+     "track": "U_TO_MCIO/lower/0",
+     "track_y": 58.7,
+     "margin": 0.1825
+    },
+    {
+     "track": "U_TO_MCIO/lower/1",
+     "track_y": 59.9,
+     "margin": 1.3825
+    },
+    {
+     "track": "U_TO_MCIO/lower/2",
+     "track_y": 61.1,
+     "margin": 2.5825
+    },
+    {
+     "track": "U_TO_MCIO/lower/3",
+     "track_y": 62.3,
+     "margin": 3.7825
+    },
+    {
+     "track": "U_TO_MCIO/lower/4",
+     "track_y": 63.5,
+     "margin": 4.9825
+    },
+    {
+     "track": "U_TO_MCIO/lower/5",
+     "track_y": 64.7,
+     "margin": 6.1825
+    },
+    {
+     "track": "U_TO_MCIO/lower/6",
+     "track_y": 65.9,
+     "margin": 7.3825
+    },
+    {
+     "track": "U_TO_MCIO/lower/7",
+     "track_y": 67.1,
+     "margin": 8.5825
+    },
+    {
+     "track": "U_TO_MCIO/upper/0",
+     "track_y": 40.7,
+     "margin": 16.3825
+    },
+    {
+     "track": "U_TO_MCIO/upper/1",
+     "track_y": 41.9,
+     "margin": 15.1825
+    },
+    {
+     "track": "U_TO_MCIO/upper/2",
+     "track_y": 43.1,
+     "margin": 13.9825
+    },
+    {
+     "track": "U_TO_MCIO/upper/3",
+     "track_y": 44.3,
+     "margin": 12.7825
+    },
+    {
+     "track": "U_TO_MCIO/upper/4",
+     "track_y": 45.5,
+     "margin": 11.5825
+    },
+    {
+     "track": "U_TO_MCIO/upper/5",
+     "track_y": 46.7,
+     "margin": 10.3825
+    },
+    {
+     "track": "U_TO_MCIO/upper/6",
+     "track_y": 47.9,
+     "margin": 9.1825
+    },
+    {
+     "track": "U_TO_MCIO/upper/7",
+     "track_y": 49.1,
+     "margin": 7.9825
+    }
+   ],
+   "track_margin_min": 0.1825,
+   "stubs": [
+    {
+     "net": "PCIE_DN_OUT1_P_U3",
+     "pad_num": "1",
+     "via": [
+      79.05,
+      57.1
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    },
+    {
+     "net": "PCIE_DN_OUT1_P_MCIO",
+     "pad_num": "2",
+     "via": [
+      79.75,
+      57.1
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    }
+   ],
+   "stub_clear_min": 0.025,
+   "pass": true
+  },
+  "C20": {
+   "x": 78.1,
+   "y": 57.8,
+   "rot": 0.0,
+   "track_margins": [
+    {
+     "track": "U_TO_MCIO/lower/0",
+     "track_y": 58.7,
+     "margin": 0.1825
+    },
+    {
+     "track": "U_TO_MCIO/lower/1",
+     "track_y": 59.9,
+     "margin": 1.3825
+    },
+    {
+     "track": "U_TO_MCIO/lower/2",
+     "track_y": 61.1,
+     "margin": 2.5825
+    },
+    {
+     "track": "U_TO_MCIO/lower/3",
+     "track_y": 62.3,
+     "margin": 3.7825
+    },
+    {
+     "track": "U_TO_MCIO/lower/4",
+     "track_y": 63.5,
+     "margin": 4.9825
+    },
+    {
+     "track": "U_TO_MCIO/lower/5",
+     "track_y": 64.7,
+     "margin": 6.1825
+    },
+    {
+     "track": "U_TO_MCIO/lower/6",
+     "track_y": 65.9,
+     "margin": 7.3825
+    },
+    {
+     "track": "U_TO_MCIO/lower/7",
+     "track_y": 67.1,
+     "margin": 8.5825
+    },
+    {
+     "track": "U_TO_MCIO/upper/0",
+     "track_y": 40.7,
+     "margin": 16.3825
+    },
+    {
+     "track": "U_TO_MCIO/upper/1",
+     "track_y": 41.9,
+     "margin": 15.1825
+    },
+    {
+     "track": "U_TO_MCIO/upper/2",
+     "track_y": 43.1,
+     "margin": 13.9825
+    },
+    {
+     "track": "U_TO_MCIO/upper/3",
+     "track_y": 44.3,
+     "margin": 12.7825
+    },
+    {
+     "track": "U_TO_MCIO/upper/4",
+     "track_y": 45.5,
+     "margin": 11.5825
+    },
+    {
+     "track": "U_TO_MCIO/upper/5",
+     "track_y": 46.7,
+     "margin": 10.3825
+    },
+    {
+     "track": "U_TO_MCIO/upper/6",
+     "track_y": 47.9,
+     "margin": 9.1825
+    },
+    {
+     "track": "U_TO_MCIO/upper/7",
+     "track_y": 49.1,
+     "margin": 7.9825
+    }
+   ],
+   "track_margin_min": 0.1825,
+   "stubs": [
+    {
+     "net": "PCIE_DN_OUT1_N_U3",
+     "pad_num": "1",
+     "via": [
+      77.75,
+      57.1
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    },
+    {
+     "net": "PCIE_DN_OUT1_N_MCIO",
+     "pad_num": "2",
+     "via": [
+      78.45,
+      57.1
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    }
+   ],
+   "stub_clear_min": 0.025,
+   "pass": true
+  },
+  "C21": {
+   "x": 82.0,
+   "y": 57.8,
+   "rot": 0.0,
+   "track_margins": [
+    {
+     "track": "U_TO_MCIO/lower/0",
+     "track_y": 58.7,
+     "margin": 0.1825
+    },
+    {
+     "track": "U_TO_MCIO/lower/1",
+     "track_y": 59.9,
+     "margin": 1.3825
+    },
+    {
+     "track": "U_TO_MCIO/lower/2",
+     "track_y": 61.1,
+     "margin": 2.5825
+    },
+    {
+     "track": "U_TO_MCIO/lower/3",
+     "track_y": 62.3,
+     "margin": 3.7825
+    },
+    {
+     "track": "U_TO_MCIO/lower/4",
+     "track_y": 63.5,
+     "margin": 4.9825
+    },
+    {
+     "track": "U_TO_MCIO/lower/5",
+     "track_y": 64.7,
+     "margin": 6.1825
+    },
+    {
+     "track": "U_TO_MCIO/lower/6",
+     "track_y": 65.9,
+     "margin": 7.3825
+    },
+    {
+     "track": "U_TO_MCIO/lower/7",
+     "track_y": 67.1,
+     "margin": 8.5825
+    },
+    {
+     "track": "U_TO_MCIO/upper/0",
+     "track_y": 40.7,
+     "margin": 16.3825
+    },
+    {
+     "track": "U_TO_MCIO/upper/1",
+     "track_y": 41.9,
+     "margin": 15.1825
+    },
+    {
+     "track": "U_TO_MCIO/upper/2",
+     "track_y": 43.1,
+     "margin": 13.9825
+    },
+    {
+     "track": "U_TO_MCIO/upper/3",
+     "track_y": 44.3,
+     "margin": 12.7825
+    },
+    {
+     "track": "U_TO_MCIO/upper/4",
+     "track_y": 45.5,
+     "margin": 11.5825
+    },
+    {
+     "track": "U_TO_MCIO/upper/5",
+     "track_y": 46.7,
+     "margin": 10.3825
+    },
+    {
+     "track": "U_TO_MCIO/upper/6",
+     "track_y": 47.9,
+     "margin": 9.1825
+    },
+    {
+     "track": "U_TO_MCIO/upper/7",
+     "track_y": 49.1,
+     "margin": 7.9825
+    }
+   ],
+   "track_margin_min": 0.1825,
+   "stubs": [
+    {
+     "net": "PCIE_DN_OUT2_P_U3",
+     "pad_num": "1",
+     "via": [
+      81.65,
+      57.1
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    },
+    {
+     "net": "PCIE_DN_OUT2_P_MCIO",
+     "pad_num": "2",
+     "via": [
+      82.35,
+      57.1
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    }
+   ],
+   "stub_clear_min": 0.025,
+   "pass": true
+  },
+  "C22": {
+   "x": 80.7,
+   "y": 57.8,
+   "rot": 0.0,
+   "track_margins": [
+    {
+     "track": "U_TO_MCIO/lower/0",
+     "track_y": 58.7,
+     "margin": 0.1825
+    },
+    {
+     "track": "U_TO_MCIO/lower/1",
+     "track_y": 59.9,
+     "margin": 1.3825
+    },
+    {
+     "track": "U_TO_MCIO/lower/2",
+     "track_y": 61.1,
+     "margin": 2.5825
+    },
+    {
+     "track": "U_TO_MCIO/lower/3",
+     "track_y": 62.3,
+     "margin": 3.7825
+    },
+    {
+     "track": "U_TO_MCIO/lower/4",
+     "track_y": 63.5,
+     "margin": 4.9825
+    },
+    {
+     "track": "U_TO_MCIO/lower/5",
+     "track_y": 64.7,
+     "margin": 6.1825
+    },
+    {
+     "track": "U_TO_MCIO/lower/6",
+     "track_y": 65.9,
+     "margin": 7.3825
+    },
+    {
+     "track": "U_TO_MCIO/lower/7",
+     "track_y": 67.1,
+     "margin": 8.5825
+    },
+    {
+     "track": "U_TO_MCIO/upper/0",
+     "track_y": 40.7,
+     "margin": 16.3825
+    },
+    {
+     "track": "U_TO_MCIO/upper/1",
+     "track_y": 41.9,
+     "margin": 15.1825
+    },
+    {
+     "track": "U_TO_MCIO/upper/2",
+     "track_y": 43.1,
+     "margin": 13.9825
+    },
+    {
+     "track": "U_TO_MCIO/upper/3",
+     "track_y": 44.3,
+     "margin": 12.7825
+    },
+    {
+     "track": "U_TO_MCIO/upper/4",
+     "track_y": 45.5,
+     "margin": 11.5825
+    },
+    {
+     "track": "U_TO_MCIO/upper/5",
+     "track_y": 46.7,
+     "margin": 10.3825
+    },
+    {
+     "track": "U_TO_MCIO/upper/6",
+     "track_y": 47.9,
+     "margin": 9.1825
+    },
+    {
+     "track": "U_TO_MCIO/upper/7",
+     "track_y": 49.1,
+     "margin": 7.9825
+    }
+   ],
+   "track_margin_min": 0.1825,
+   "stubs": [
+    {
+     "net": "PCIE_DN_OUT2_N_U3",
+     "pad_num": "1",
+     "via": [
+      80.35,
+      57.1
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    },
+    {
+     "net": "PCIE_DN_OUT2_N_MCIO",
+     "pad_num": "2",
+     "via": [
+      81.05,
+      57.1
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    }
+   ],
+   "stub_clear_min": 0.025,
+   "pass": true
+  },
+  "C23": {
+   "x": 84.6,
+   "y": 57.8,
+   "rot": 0.0,
+   "track_margins": [
+    {
+     "track": "U_TO_MCIO/lower/0",
+     "track_y": 58.7,
+     "margin": 0.1825
+    },
+    {
+     "track": "U_TO_MCIO/lower/1",
+     "track_y": 59.9,
+     "margin": 1.3825
+    },
+    {
+     "track": "U_TO_MCIO/lower/2",
+     "track_y": 61.1,
+     "margin": 2.5825
+    },
+    {
+     "track": "U_TO_MCIO/lower/3",
+     "track_y": 62.3,
+     "margin": 3.7825
+    },
+    {
+     "track": "U_TO_MCIO/lower/4",
+     "track_y": 63.5,
+     "margin": 4.9825
+    },
+    {
+     "track": "U_TO_MCIO/lower/5",
+     "track_y": 64.7,
+     "margin": 6.1825
+    },
+    {
+     "track": "U_TO_MCIO/lower/6",
+     "track_y": 65.9,
+     "margin": 7.3825
+    },
+    {
+     "track": "U_TO_MCIO/lower/7",
+     "track_y": 67.1,
+     "margin": 8.5825
+    },
+    {
+     "track": "U_TO_MCIO/upper/0",
+     "track_y": 40.7,
+     "margin": 16.3825
+    },
+    {
+     "track": "U_TO_MCIO/upper/1",
+     "track_y": 41.9,
+     "margin": 15.1825
+    },
+    {
+     "track": "U_TO_MCIO/upper/2",
+     "track_y": 43.1,
+     "margin": 13.9825
+    },
+    {
+     "track": "U_TO_MCIO/upper/3",
+     "track_y": 44.3,
+     "margin": 12.7825
+    },
+    {
+     "track": "U_TO_MCIO/upper/4",
+     "track_y": 45.5,
+     "margin": 11.5825
+    },
+    {
+     "track": "U_TO_MCIO/upper/5",
+     "track_y": 46.7,
+     "margin": 10.3825
+    },
+    {
+     "track": "U_TO_MCIO/upper/6",
+     "track_y": 47.9,
+     "margin": 9.1825
+    },
+    {
+     "track": "U_TO_MCIO/upper/7",
+     "track_y": 49.1,
+     "margin": 7.9825
+    }
+   ],
+   "track_margin_min": 0.1825,
+   "stubs": [
+    {
+     "net": "PCIE_DN_OUT3_P_U3",
+     "pad_num": "1",
+     "via": [
+      84.25,
+      57.1
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    },
+    {
+     "net": "PCIE_DN_OUT3_P_MCIO",
+     "pad_num": "2",
+     "via": [
+      84.95,
+      57.1
+     ],
+     "min_via_margin": 0.15,
+     "min_seg_margin": 0.125
+    }
+   ],
+   "stub_clear_min": 0.025,
+   "pass": true
+  },
+  "C24": {
+   "x": 83.3,
+   "y": 57.8,
+   "rot": 0.0,
+   "track_margins": [
+    {
+     "track": "U_TO_MCIO/lower/0",
+     "track_y": 58.7,
+     "margin": 0.1825
+    },
+    {
+     "track": "U_TO_MCIO/lower/1",
+     "track_y": 59.9,
+     "margin": 1.3825
+    },
+    {
+     "track": "U_TO_MCIO/lower/2",
+     "track_y": 61.1,
+     "margin": 2.5825
+    },
+    {
+     "track": "U_TO_MCIO/lower/3",
+     "track_y": 62.3,
+     "margin": 3.7825
+    },
+    {
+     "track": "U_TO_MCIO/lower/4",
+     "track_y": 63.5,
+     "margin": 4.9825
+    },
+    {
+     "track": "U_TO_MCIO/lower/5",
+     "track_y": 64.7,
+     "margin": 6.1825
+    },
+    {
+     "track": "U_TO_MCIO/lower/6",
+     "track_y": 65.9,
+     "margin": 7.3825
+    },
+    {
+     "track": "U_TO_MCIO/lower/7",
+     "track_y": 67.1,
+     "margin": 8.5825
+    },
+    {
+     "track": "U_TO_MCIO/upper/0",
+     "track_y": 40.7,
+     "margin": 16.3825
+    },
+    {
+     "track": "U_TO_MCIO/upper/1",
+     "track_y": 41.9,
+     "margin": 15.1825
+    },
+    {
+     "track": "U_TO_MCIO/upper/2",
+     "track_y": 43.1,
+     "margin": 13.9825
+    },
+    {
+     "track": "U_TO_MCIO/upper/3",
+     "track_y": 44.3,
+     "margin": 12.7825
+    },
+    {
+     "track": "U_TO_MCIO/upper/4",
+     "track_y": 45.5,
+     "margin": 11.5825
+    },
+    {
+     "track": "U_TO_MCIO/upper/5",
+     "track_y": 46.7,
+     "margin": 10.3825
+    },
+    {
+     "track": "U_TO_MCIO/upper/6",
+     "track_y": 47.9,
+     "margin": 9.1825
+    },
+    {
+     "track": "U_TO_MCIO/upper/7",
+     "track_y": 49.1,
+     "margin": 7.9825
+    }
+   ],
+   "track_margin_min": 0.1825,
+   "stubs": [
+    {
+     "net": "PCIE_DN_OUT3_N_U3",
+     "pad_num": "1",
+     "via": [
+      82.95,
+      57.1
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    },
+    {
+     "net": "PCIE_DN_OUT3_N_MCIO",
+     "pad_num": "2",
+     "via": [
+      83.65,
+      57.1
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    }
+   ],
+   "stub_clear_min": 0.025,
+   "pass": true
+  },
+  "C25": {
+   "x": 76.8,
+   "y": 68.0,
+   "rot": 0.0,
+   "track_margins": [
+    {
+     "track": "U_TO_MCIO/lower/0",
+     "track_y": 58.7,
+     "margin": 8.5825
+    },
+    {
+     "track": "U_TO_MCIO/lower/1",
+     "track_y": 59.9,
+     "margin": 7.3825
+    },
+    {
+     "track": "U_TO_MCIO/lower/2",
+     "track_y": 61.1,
+     "margin": 6.1825
+    },
+    {
+     "track": "U_TO_MCIO/lower/3",
+     "track_y": 62.3,
+     "margin": 4.9825
+    },
+    {
+     "track": "U_TO_MCIO/lower/4",
+     "track_y": 63.5,
+     "margin": 3.7825
+    },
+    {
+     "track": "U_TO_MCIO/lower/5",
+     "track_y": 64.7,
+     "margin": 2.5825
+    },
+    {
+     "track": "U_TO_MCIO/lower/6",
+     "track_y": 65.9,
+     "margin": 1.3825
+    },
+    {
+     "track": "U_TO_MCIO/lower/7",
+     "track_y": 67.1,
+     "margin": 0.1825
+    },
+    {
+     "track": "U_TO_MCIO/upper/0",
+     "track_y": 40.7,
+     "margin": 26.5825
+    },
+    {
+     "track": "U_TO_MCIO/upper/1",
+     "track_y": 41.9,
+     "margin": 25.3825
+    },
+    {
+     "track": "U_TO_MCIO/upper/2",
+     "track_y": 43.1,
+     "margin": 24.1825
+    },
+    {
+     "track": "U_TO_MCIO/upper/3",
+     "track_y": 44.3,
+     "margin": 22.9825
+    },
+    {
+     "track": "U_TO_MCIO/upper/4",
+     "track_y": 45.5,
+     "margin": 21.7825
+    },
+    {
+     "track": "U_TO_MCIO/upper/5",
+     "track_y": 46.7,
+     "margin": 20.5825
+    },
+    {
+     "track": "U_TO_MCIO/upper/6",
+     "track_y": 47.9,
+     "margin": 19.3825
+    },
+    {
+     "track": "U_TO_MCIO/upper/7",
+     "track_y": 49.1,
+     "margin": 18.1825
+    }
+   ],
+   "track_margin_min": 0.1825,
+   "stubs": [
+    {
+     "net": "PCIE_DN_OUT4_P_U3",
+     "pad_num": "1",
+     "via": [
+      76.45,
+      68.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    },
+    {
+     "net": "PCIE_DN_OUT4_P_MCIO",
+     "pad_num": "2",
+     "via": [
+      77.15,
+      68.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    }
+   ],
+   "stub_clear_min": 0.025,
+   "pass": true
+  },
+  "C26": {
+   "x": 75.5,
+   "y": 68.0,
+   "rot": 0.0,
+   "track_margins": [
+    {
+     "track": "U_TO_MCIO/lower/0",
+     "track_y": 58.7,
+     "margin": 8.5825
+    },
+    {
+     "track": "U_TO_MCIO/lower/1",
+     "track_y": 59.9,
+     "margin": 7.3825
+    },
+    {
+     "track": "U_TO_MCIO/lower/2",
+     "track_y": 61.1,
+     "margin": 6.1825
+    },
+    {
+     "track": "U_TO_MCIO/lower/3",
+     "track_y": 62.3,
+     "margin": 4.9825
+    },
+    {
+     "track": "U_TO_MCIO/lower/4",
+     "track_y": 63.5,
+     "margin": 3.7825
+    },
+    {
+     "track": "U_TO_MCIO/lower/5",
+     "track_y": 64.7,
+     "margin": 2.5825
+    },
+    {
+     "track": "U_TO_MCIO/lower/6",
+     "track_y": 65.9,
+     "margin": 1.3825
+    },
+    {
+     "track": "U_TO_MCIO/lower/7",
+     "track_y": 67.1,
+     "margin": 0.1825
+    },
+    {
+     "track": "U_TO_MCIO/upper/0",
+     "track_y": 40.7,
+     "margin": 26.5825
+    },
+    {
+     "track": "U_TO_MCIO/upper/1",
+     "track_y": 41.9,
+     "margin": 25.3825
+    },
+    {
+     "track": "U_TO_MCIO/upper/2",
+     "track_y": 43.1,
+     "margin": 24.1825
+    },
+    {
+     "track": "U_TO_MCIO/upper/3",
+     "track_y": 44.3,
+     "margin": 22.9825
+    },
+    {
+     "track": "U_TO_MCIO/upper/4",
+     "track_y": 45.5,
+     "margin": 21.7825
+    },
+    {
+     "track": "U_TO_MCIO/upper/5",
+     "track_y": 46.7,
+     "margin": 20.5825
+    },
+    {
+     "track": "U_TO_MCIO/upper/6",
+     "track_y": 47.9,
+     "margin": 19.3825
+    },
+    {
+     "track": "U_TO_MCIO/upper/7",
+     "track_y": 49.1,
+     "margin": 18.1825
+    }
+   ],
+   "track_margin_min": 0.1825,
+   "stubs": [
+    {
+     "net": "PCIE_DN_OUT4_N_U3",
+     "pad_num": "1",
+     "via": [
+      72.65,
+      68.0
+     ],
+     "min_via_margin": 0.4475,
+     "min_seg_margin": 0.125
+    },
+    {
+     "net": "PCIE_DN_OUT4_N_MCIO",
+     "pad_num": "2",
+     "via": [
+      75.85,
+      68.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    }
+   ],
+   "stub_clear_min": 0.025,
+   "pass": true
+  },
+  "C27": {
+   "x": 79.4,
+   "y": 68.0,
+   "rot": 0.0,
+   "track_margins": [
+    {
+     "track": "U_TO_MCIO/lower/0",
+     "track_y": 58.7,
+     "margin": 8.5825
+    },
+    {
+     "track": "U_TO_MCIO/lower/1",
+     "track_y": 59.9,
+     "margin": 7.3825
+    },
+    {
+     "track": "U_TO_MCIO/lower/2",
+     "track_y": 61.1,
+     "margin": 6.1825
+    },
+    {
+     "track": "U_TO_MCIO/lower/3",
+     "track_y": 62.3,
+     "margin": 4.9825
+    },
+    {
+     "track": "U_TO_MCIO/lower/4",
+     "track_y": 63.5,
+     "margin": 3.7825
+    },
+    {
+     "track": "U_TO_MCIO/lower/5",
+     "track_y": 64.7,
+     "margin": 2.5825
+    },
+    {
+     "track": "U_TO_MCIO/lower/6",
+     "track_y": 65.9,
+     "margin": 1.3825
+    },
+    {
+     "track": "U_TO_MCIO/lower/7",
+     "track_y": 67.1,
+     "margin": 0.1825
+    },
+    {
+     "track": "U_TO_MCIO/upper/0",
+     "track_y": 40.7,
+     "margin": 26.5825
+    },
+    {
+     "track": "U_TO_MCIO/upper/1",
+     "track_y": 41.9,
+     "margin": 25.3825
+    },
+    {
+     "track": "U_TO_MCIO/upper/2",
+     "track_y": 43.1,
+     "margin": 24.1825
+    },
+    {
+     "track": "U_TO_MCIO/upper/3",
+     "track_y": 44.3,
+     "margin": 22.9825
+    },
+    {
+     "track": "U_TO_MCIO/upper/4",
+     "track_y": 45.5,
+     "margin": 21.7825
+    },
+    {
+     "track": "U_TO_MCIO/upper/5",
+     "track_y": 46.7,
+     "margin": 20.5825
+    },
+    {
+     "track": "U_TO_MCIO/upper/6",
+     "track_y": 47.9,
+     "margin": 19.3825
+    },
+    {
+     "track": "U_TO_MCIO/upper/7",
+     "track_y": 49.1,
+     "margin": 18.1825
+    }
+   ],
+   "track_margin_min": 0.1825,
+   "stubs": [
+    {
+     "net": "PCIE_DN_OUT5_P_U3",
+     "pad_num": "1",
+     "via": [
+      79.05,
+      68.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    },
+    {
+     "net": "PCIE_DN_OUT5_P_MCIO",
+     "pad_num": "2",
+     "via": [
+      79.75,
+      68.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    }
+   ],
+   "stub_clear_min": 0.025,
+   "pass": true
+  },
+  "C28": {
+   "x": 78.1,
+   "y": 68.0,
+   "rot": 0.0,
+   "track_margins": [
+    {
+     "track": "U_TO_MCIO/lower/0",
+     "track_y": 58.7,
+     "margin": 8.5825
+    },
+    {
+     "track": "U_TO_MCIO/lower/1",
+     "track_y": 59.9,
+     "margin": 7.3825
+    },
+    {
+     "track": "U_TO_MCIO/lower/2",
+     "track_y": 61.1,
+     "margin": 6.1825
+    },
+    {
+     "track": "U_TO_MCIO/lower/3",
+     "track_y": 62.3,
+     "margin": 4.9825
+    },
+    {
+     "track": "U_TO_MCIO/lower/4",
+     "track_y": 63.5,
+     "margin": 3.7825
+    },
+    {
+     "track": "U_TO_MCIO/lower/5",
+     "track_y": 64.7,
+     "margin": 2.5825
+    },
+    {
+     "track": "U_TO_MCIO/lower/6",
+     "track_y": 65.9,
+     "margin": 1.3825
+    },
+    {
+     "track": "U_TO_MCIO/lower/7",
+     "track_y": 67.1,
+     "margin": 0.1825
+    },
+    {
+     "track": "U_TO_MCIO/upper/0",
+     "track_y": 40.7,
+     "margin": 26.5825
+    },
+    {
+     "track": "U_TO_MCIO/upper/1",
+     "track_y": 41.9,
+     "margin": 25.3825
+    },
+    {
+     "track": "U_TO_MCIO/upper/2",
+     "track_y": 43.1,
+     "margin": 24.1825
+    },
+    {
+     "track": "U_TO_MCIO/upper/3",
+     "track_y": 44.3,
+     "margin": 22.9825
+    },
+    {
+     "track": "U_TO_MCIO/upper/4",
+     "track_y": 45.5,
+     "margin": 21.7825
+    },
+    {
+     "track": "U_TO_MCIO/upper/5",
+     "track_y": 46.7,
+     "margin": 20.5825
+    },
+    {
+     "track": "U_TO_MCIO/upper/6",
+     "track_y": 47.9,
+     "margin": 19.3825
+    },
+    {
+     "track": "U_TO_MCIO/upper/7",
+     "track_y": 49.1,
+     "margin": 18.1825
+    }
+   ],
+   "track_margin_min": 0.1825,
+   "stubs": [
+    {
+     "net": "PCIE_DN_OUT5_N_U3",
+     "pad_num": "1",
+     "via": [
+      77.75,
+      68.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    },
+    {
+     "net": "PCIE_DN_OUT5_N_MCIO",
+     "pad_num": "2",
+     "via": [
+      78.45,
+      68.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    }
+   ],
+   "stub_clear_min": 0.025,
+   "pass": true
+  },
+  "C29": {
+   "x": 82.0,
+   "y": 68.0,
+   "rot": 0.0,
+   "track_margins": [
+    {
+     "track": "U_TO_MCIO/lower/0",
+     "track_y": 58.7,
+     "margin": 8.5825
+    },
+    {
+     "track": "U_TO_MCIO/lower/1",
+     "track_y": 59.9,
+     "margin": 7.3825
+    },
+    {
+     "track": "U_TO_MCIO/lower/2",
+     "track_y": 61.1,
+     "margin": 6.1825
+    },
+    {
+     "track": "U_TO_MCIO/lower/3",
+     "track_y": 62.3,
+     "margin": 4.9825
+    },
+    {
+     "track": "U_TO_MCIO/lower/4",
+     "track_y": 63.5,
+     "margin": 3.7825
+    },
+    {
+     "track": "U_TO_MCIO/lower/5",
+     "track_y": 64.7,
+     "margin": 2.5825
+    },
+    {
+     "track": "U_TO_MCIO/lower/6",
+     "track_y": 65.9,
+     "margin": 1.3825
+    },
+    {
+     "track": "U_TO_MCIO/lower/7",
+     "track_y": 67.1,
+     "margin": 0.1825
+    },
+    {
+     "track": "U_TO_MCIO/upper/0",
+     "track_y": 40.7,
+     "margin": 26.5825
+    },
+    {
+     "track": "U_TO_MCIO/upper/1",
+     "track_y": 41.9,
+     "margin": 25.3825
+    },
+    {
+     "track": "U_TO_MCIO/upper/2",
+     "track_y": 43.1,
+     "margin": 24.1825
+    },
+    {
+     "track": "U_TO_MCIO/upper/3",
+     "track_y": 44.3,
+     "margin": 22.9825
+    },
+    {
+     "track": "U_TO_MCIO/upper/4",
+     "track_y": 45.5,
+     "margin": 21.7825
+    },
+    {
+     "track": "U_TO_MCIO/upper/5",
+     "track_y": 46.7,
+     "margin": 20.5825
+    },
+    {
+     "track": "U_TO_MCIO/upper/6",
+     "track_y": 47.9,
+     "margin": 19.3825
+    },
+    {
+     "track": "U_TO_MCIO/upper/7",
+     "track_y": 49.1,
+     "margin": 18.1825
+    }
+   ],
+   "track_margin_min": 0.1825,
+   "stubs": [
+    {
+     "net": "PCIE_DN_OUT6_P_U3",
+     "pad_num": "1",
+     "via": [
+      81.65,
+      68.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    },
+    {
+     "net": "PCIE_DN_OUT6_P_MCIO",
+     "pad_num": "2",
+     "via": [
+      82.35,
+      68.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    }
+   ],
+   "stub_clear_min": 0.025,
+   "pass": true
+  },
+  "C30": {
+   "x": 80.7,
+   "y": 68.0,
+   "rot": 0.0,
+   "track_margins": [
+    {
+     "track": "U_TO_MCIO/lower/0",
+     "track_y": 58.7,
+     "margin": 8.5825
+    },
+    {
+     "track": "U_TO_MCIO/lower/1",
+     "track_y": 59.9,
+     "margin": 7.3825
+    },
+    {
+     "track": "U_TO_MCIO/lower/2",
+     "track_y": 61.1,
+     "margin": 6.1825
+    },
+    {
+     "track": "U_TO_MCIO/lower/3",
+     "track_y": 62.3,
+     "margin": 4.9825
+    },
+    {
+     "track": "U_TO_MCIO/lower/4",
+     "track_y": 63.5,
+     "margin": 3.7825
+    },
+    {
+     "track": "U_TO_MCIO/lower/5",
+     "track_y": 64.7,
+     "margin": 2.5825
+    },
+    {
+     "track": "U_TO_MCIO/lower/6",
+     "track_y": 65.9,
+     "margin": 1.3825
+    },
+    {
+     "track": "U_TO_MCIO/lower/7",
+     "track_y": 67.1,
+     "margin": 0.1825
+    },
+    {
+     "track": "U_TO_MCIO/upper/0",
+     "track_y": 40.7,
+     "margin": 26.5825
+    },
+    {
+     "track": "U_TO_MCIO/upper/1",
+     "track_y": 41.9,
+     "margin": 25.3825
+    },
+    {
+     "track": "U_TO_MCIO/upper/2",
+     "track_y": 43.1,
+     "margin": 24.1825
+    },
+    {
+     "track": "U_TO_MCIO/upper/3",
+     "track_y": 44.3,
+     "margin": 22.9825
+    },
+    {
+     "track": "U_TO_MCIO/upper/4",
+     "track_y": 45.5,
+     "margin": 21.7825
+    },
+    {
+     "track": "U_TO_MCIO/upper/5",
+     "track_y": 46.7,
+     "margin": 20.5825
+    },
+    {
+     "track": "U_TO_MCIO/upper/6",
+     "track_y": 47.9,
+     "margin": 19.3825
+    },
+    {
+     "track": "U_TO_MCIO/upper/7",
+     "track_y": 49.1,
+     "margin": 18.1825
+    }
+   ],
+   "track_margin_min": 0.1825,
+   "stubs": [
+    {
+     "net": "PCIE_DN_OUT6_N_U3",
+     "pad_num": "1",
+     "via": [
+      80.35,
+      68.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    },
+    {
+     "net": "PCIE_DN_OUT6_N_MCIO",
+     "pad_num": "2",
+     "via": [
+      81.05,
+      68.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    }
+   ],
+   "stub_clear_min": 0.025,
+   "pass": true
+  },
+  "C31": {
+   "x": 84.6,
+   "y": 68.0,
+   "rot": 0.0,
+   "track_margins": [
+    {
+     "track": "U_TO_MCIO/lower/0",
+     "track_y": 58.7,
+     "margin": 8.5825
+    },
+    {
+     "track": "U_TO_MCIO/lower/1",
+     "track_y": 59.9,
+     "margin": 7.3825
+    },
+    {
+     "track": "U_TO_MCIO/lower/2",
+     "track_y": 61.1,
+     "margin": 6.1825
+    },
+    {
+     "track": "U_TO_MCIO/lower/3",
+     "track_y": 62.3,
+     "margin": 4.9825
+    },
+    {
+     "track": "U_TO_MCIO/lower/4",
+     "track_y": 63.5,
+     "margin": 3.7825
+    },
+    {
+     "track": "U_TO_MCIO/lower/5",
+     "track_y": 64.7,
+     "margin": 2.5825
+    },
+    {
+     "track": "U_TO_MCIO/lower/6",
+     "track_y": 65.9,
+     "margin": 1.3825
+    },
+    {
+     "track": "U_TO_MCIO/lower/7",
+     "track_y": 67.1,
+     "margin": 0.1825
+    },
+    {
+     "track": "U_TO_MCIO/upper/0",
+     "track_y": 40.7,
+     "margin": 26.5825
+    },
+    {
+     "track": "U_TO_MCIO/upper/1",
+     "track_y": 41.9,
+     "margin": 25.3825
+    },
+    {
+     "track": "U_TO_MCIO/upper/2",
+     "track_y": 43.1,
+     "margin": 24.1825
+    },
+    {
+     "track": "U_TO_MCIO/upper/3",
+     "track_y": 44.3,
+     "margin": 22.9825
+    },
+    {
+     "track": "U_TO_MCIO/upper/4",
+     "track_y": 45.5,
+     "margin": 21.7825
+    },
+    {
+     "track": "U_TO_MCIO/upper/5",
+     "track_y": 46.7,
+     "margin": 20.5825
+    },
+    {
+     "track": "U_TO_MCIO/upper/6",
+     "track_y": 47.9,
+     "margin": 19.3825
+    },
+    {
+     "track": "U_TO_MCIO/upper/7",
+     "track_y": 49.1,
+     "margin": 18.1825
+    }
+   ],
+   "track_margin_min": 0.1825,
+   "stubs": [
+    {
+     "net": "PCIE_DN_OUT7_P_U3",
+     "pad_num": "1",
+     "via": [
+      84.25,
+      68.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    },
+    {
+     "net": "PCIE_DN_OUT7_P_MCIO",
+     "pad_num": "2",
+     "via": [
+      84.95,
+      68.7
+     ],
+     "min_via_margin": 0.15,
+     "min_seg_margin": 0.125
+    }
+   ],
+   "stub_clear_min": 0.025,
+   "pass": true
+  },
+  "C32": {
+   "x": 83.3,
+   "y": 68.0,
+   "rot": 0.0,
+   "track_margins": [
+    {
+     "track": "U_TO_MCIO/lower/0",
+     "track_y": 58.7,
+     "margin": 8.5825
+    },
+    {
+     "track": "U_TO_MCIO/lower/1",
+     "track_y": 59.9,
+     "margin": 7.3825
+    },
+    {
+     "track": "U_TO_MCIO/lower/2",
+     "track_y": 61.1,
+     "margin": 6.1825
+    },
+    {
+     "track": "U_TO_MCIO/lower/3",
+     "track_y": 62.3,
+     "margin": 4.9825
+    },
+    {
+     "track": "U_TO_MCIO/lower/4",
+     "track_y": 63.5,
+     "margin": 3.7825
+    },
+    {
+     "track": "U_TO_MCIO/lower/5",
+     "track_y": 64.7,
+     "margin": 2.5825
+    },
+    {
+     "track": "U_TO_MCIO/lower/6",
+     "track_y": 65.9,
+     "margin": 1.3825
+    },
+    {
+     "track": "U_TO_MCIO/lower/7",
+     "track_y": 67.1,
+     "margin": 0.1825
+    },
+    {
+     "track": "U_TO_MCIO/upper/0",
+     "track_y": 40.7,
+     "margin": 26.5825
+    },
+    {
+     "track": "U_TO_MCIO/upper/1",
+     "track_y": 41.9,
+     "margin": 25.3825
+    },
+    {
+     "track": "U_TO_MCIO/upper/2",
+     "track_y": 43.1,
+     "margin": 24.1825
+    },
+    {
+     "track": "U_TO_MCIO/upper/3",
+     "track_y": 44.3,
+     "margin": 22.9825
+    },
+    {
+     "track": "U_TO_MCIO/upper/4",
+     "track_y": 45.5,
+     "margin": 21.7825
+    },
+    {
+     "track": "U_TO_MCIO/upper/5",
+     "track_y": 46.7,
+     "margin": 20.5825
+    },
+    {
+     "track": "U_TO_MCIO/upper/6",
+     "track_y": 47.9,
+     "margin": 19.3825
+    },
+    {
+     "track": "U_TO_MCIO/upper/7",
+     "track_y": 49.1,
+     "margin": 18.1825
+    }
+   ],
+   "track_margin_min": 0.1825,
+   "stubs": [
+    {
+     "net": "PCIE_DN_OUT7_N_U3",
+     "pad_num": "1",
+     "via": [
+      82.95,
+      68.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    },
+    {
+     "net": "PCIE_DN_OUT7_N_MCIO",
+     "pad_num": "2",
+     "via": [
+      83.65,
+      68.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    }
+   ],
+   "stub_clear_min": 0.025,
+   "pass": true
+  },
+  "C49": {
+   "x": 100.8,
+   "y": 39.4,
+   "rot": 0.0,
+   "track_margins": [
+    {
+     "track": "J2_TO_U/lower/0",
+     "track_y": 58.3,
+     "margin": 18.1825
+    },
+    {
+     "track": "J2_TO_U/lower/1",
+     "track_y": 59.5,
+     "margin": 19.3825
+    },
+    {
+     "track": "J2_TO_U/lower/2",
+     "track_y": 60.7,
+     "margin": 20.5825
+    },
+    {
+     "track": "J2_TO_U/lower/3",
+     "track_y": 61.9,
+     "margin": 21.7825
+    },
+    {
+     "track": "J2_TO_U/lower/4",
+     "track_y": 63.1,
+     "margin": 22.9825
+    },
+    {
+     "track": "J2_TO_U/lower/5",
+     "track_y": 64.3,
+     "margin": 24.1825
+    },
+    {
+     "track": "J2_TO_U/lower/6",
+     "track_y": 65.5,
+     "margin": 25.3825
+    },
+    {
+     "track": "J2_TO_U/lower/7",
+     "track_y": 66.7,
+     "margin": 26.5825
+    },
+    {
+     "track": "J2_TO_U/upper/0",
+     "track_y": 40.3,
+     "margin": 0.1825
+    },
+    {
+     "track": "J2_TO_U/upper/1",
+     "track_y": 41.5,
+     "margin": 1.3825
+    },
+    {
+     "track": "J2_TO_U/upper/2",
+     "track_y": 42.7,
+     "margin": 2.5825
+    },
+    {
+     "track": "J2_TO_U/upper/3",
+     "track_y": 43.9,
+     "margin": 3.7825
+    },
+    {
+     "track": "J2_TO_U/upper/4",
+     "track_y": 45.1,
+     "margin": 4.9825
+    },
+    {
+     "track": "J2_TO_U/upper/5",
+     "track_y": 46.3,
+     "margin": 6.1825
+    },
+    {
+     "track": "J2_TO_U/upper/6",
+     "track_y": 47.5,
+     "margin": 7.3825
+    },
+    {
+     "track": "J2_TO_U/upper/7",
+     "track_y": 48.7,
+     "margin": 8.5825
+    }
+   ],
+   "track_margin_min": 0.1825,
+   "stubs": [
+    {
+     "net": "PCIE_UP_OUT0_P_U7",
+     "pad_num": "1",
+     "via": [
+      100.45,
+      38.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    },
+    {
+     "net": "PCIE_UP_OUT0_P_J2",
+     "pad_num": "2",
+     "via": [
+      101.15,
+      38.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    }
+   ],
+   "stub_clear_min": 0.025,
+   "pass": true
+  },
+  "C50": {
+   "x": 99.5,
+   "y": 39.4,
+   "rot": 0.0,
+   "track_margins": [
+    {
+     "track": "J2_TO_U/lower/0",
+     "track_y": 58.3,
+     "margin": 18.1825
+    },
+    {
+     "track": "J2_TO_U/lower/1",
+     "track_y": 59.5,
+     "margin": 19.3825
+    },
+    {
+     "track": "J2_TO_U/lower/2",
+     "track_y": 60.7,
+     "margin": 20.5825
+    },
+    {
+     "track": "J2_TO_U/lower/3",
+     "track_y": 61.9,
+     "margin": 21.7825
+    },
+    {
+     "track": "J2_TO_U/lower/4",
+     "track_y": 63.1,
+     "margin": 22.9825
+    },
+    {
+     "track": "J2_TO_U/lower/5",
+     "track_y": 64.3,
+     "margin": 24.1825
+    },
+    {
+     "track": "J2_TO_U/lower/6",
+     "track_y": 65.5,
+     "margin": 25.3825
+    },
+    {
+     "track": "J2_TO_U/lower/7",
+     "track_y": 66.7,
+     "margin": 26.5825
+    },
+    {
+     "track": "J2_TO_U/upper/0",
+     "track_y": 40.3,
+     "margin": 0.1825
+    },
+    {
+     "track": "J2_TO_U/upper/1",
+     "track_y": 41.5,
+     "margin": 1.3825
+    },
+    {
+     "track": "J2_TO_U/upper/2",
+     "track_y": 42.7,
+     "margin": 2.5825
+    },
+    {
+     "track": "J2_TO_U/upper/3",
+     "track_y": 43.9,
+     "margin": 3.7825
+    },
+    {
+     "track": "J2_TO_U/upper/4",
+     "track_y": 45.1,
+     "margin": 4.9825
+    },
+    {
+     "track": "J2_TO_U/upper/5",
+     "track_y": 46.3,
+     "margin": 6.1825
+    },
+    {
+     "track": "J2_TO_U/upper/6",
+     "track_y": 47.5,
+     "margin": 7.3825
+    },
+    {
+     "track": "J2_TO_U/upper/7",
+     "track_y": 48.7,
+     "margin": 8.5825
+    }
+   ],
+   "track_margin_min": 0.1825,
+   "stubs": [
+    {
+     "net": "PCIE_UP_OUT0_N_U7",
+     "pad_num": "1",
+     "via": [
+      96.65,
+      39.4
+     ],
+     "min_via_margin": 1.1415,
+     "min_seg_margin": 0.075
+    },
+    {
+     "net": "PCIE_UP_OUT0_N_J2",
+     "pad_num": "2",
+     "via": [
+      99.85,
+      38.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    }
+   ],
+   "stub_clear_min": 0.025,
+   "pass": true
+  },
+  "C51": {
+   "x": 103.4,
+   "y": 39.4,
+   "rot": 0.0,
+   "track_margins": [
+    {
+     "track": "J2_TO_U/lower/0",
+     "track_y": 58.3,
+     "margin": 18.1825
+    },
+    {
+     "track": "J2_TO_U/lower/1",
+     "track_y": 59.5,
+     "margin": 19.3825
+    },
+    {
+     "track": "J2_TO_U/lower/2",
+     "track_y": 60.7,
+     "margin": 20.5825
+    },
+    {
+     "track": "J2_TO_U/lower/3",
+     "track_y": 61.9,
+     "margin": 21.7825
+    },
+    {
+     "track": "J2_TO_U/lower/4",
+     "track_y": 63.1,
+     "margin": 22.9825
+    },
+    {
+     "track": "J2_TO_U/lower/5",
+     "track_y": 64.3,
+     "margin": 24.1825
+    },
+    {
+     "track": "J2_TO_U/lower/6",
+     "track_y": 65.5,
+     "margin": 25.3825
+    },
+    {
+     "track": "J2_TO_U/lower/7",
+     "track_y": 66.7,
+     "margin": 26.5825
+    },
+    {
+     "track": "J2_TO_U/upper/0",
+     "track_y": 40.3,
+     "margin": 0.1825
+    },
+    {
+     "track": "J2_TO_U/upper/1",
+     "track_y": 41.5,
+     "margin": 1.3825
+    },
+    {
+     "track": "J2_TO_U/upper/2",
+     "track_y": 42.7,
+     "margin": 2.5825
+    },
+    {
+     "track": "J2_TO_U/upper/3",
+     "track_y": 43.9,
+     "margin": 3.7825
+    },
+    {
+     "track": "J2_TO_U/upper/4",
+     "track_y": 45.1,
+     "margin": 4.9825
+    },
+    {
+     "track": "J2_TO_U/upper/5",
+     "track_y": 46.3,
+     "margin": 6.1825
+    },
+    {
+     "track": "J2_TO_U/upper/6",
+     "track_y": 47.5,
+     "margin": 7.3825
+    },
+    {
+     "track": "J2_TO_U/upper/7",
+     "track_y": 48.7,
+     "margin": 8.5825
+    }
+   ],
+   "track_margin_min": 0.1825,
+   "stubs": [
+    {
+     "net": "PCIE_UP_OUT1_P_U7",
+     "pad_num": "1",
+     "via": [
+      103.05,
+      38.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    },
+    {
+     "net": "PCIE_UP_OUT1_P_J2",
+     "pad_num": "2",
+     "via": [
+      103.75,
+      38.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    }
+   ],
+   "stub_clear_min": 0.025,
+   "pass": true
+  },
+  "C52": {
+   "x": 102.1,
+   "y": 39.4,
+   "rot": 0.0,
+   "track_margins": [
+    {
+     "track": "J2_TO_U/lower/0",
+     "track_y": 58.3,
+     "margin": 18.1825
+    },
+    {
+     "track": "J2_TO_U/lower/1",
+     "track_y": 59.5,
+     "margin": 19.3825
+    },
+    {
+     "track": "J2_TO_U/lower/2",
+     "track_y": 60.7,
+     "margin": 20.5825
+    },
+    {
+     "track": "J2_TO_U/lower/3",
+     "track_y": 61.9,
+     "margin": 21.7825
+    },
+    {
+     "track": "J2_TO_U/lower/4",
+     "track_y": 63.1,
+     "margin": 22.9825
+    },
+    {
+     "track": "J2_TO_U/lower/5",
+     "track_y": 64.3,
+     "margin": 24.1825
+    },
+    {
+     "track": "J2_TO_U/lower/6",
+     "track_y": 65.5,
+     "margin": 25.3825
+    },
+    {
+     "track": "J2_TO_U/lower/7",
+     "track_y": 66.7,
+     "margin": 26.5825
+    },
+    {
+     "track": "J2_TO_U/upper/0",
+     "track_y": 40.3,
+     "margin": 0.1825
+    },
+    {
+     "track": "J2_TO_U/upper/1",
+     "track_y": 41.5,
+     "margin": 1.3825
+    },
+    {
+     "track": "J2_TO_U/upper/2",
+     "track_y": 42.7,
+     "margin": 2.5825
+    },
+    {
+     "track": "J2_TO_U/upper/3",
+     "track_y": 43.9,
+     "margin": 3.7825
+    },
+    {
+     "track": "J2_TO_U/upper/4",
+     "track_y": 45.1,
+     "margin": 4.9825
+    },
+    {
+     "track": "J2_TO_U/upper/5",
+     "track_y": 46.3,
+     "margin": 6.1825
+    },
+    {
+     "track": "J2_TO_U/upper/6",
+     "track_y": 47.5,
+     "margin": 7.3825
+    },
+    {
+     "track": "J2_TO_U/upper/7",
+     "track_y": 48.7,
+     "margin": 8.5825
+    }
+   ],
+   "track_margin_min": 0.1825,
+   "stubs": [
+    {
+     "net": "PCIE_UP_OUT1_N_U7",
+     "pad_num": "1",
+     "via": [
+      101.75,
+      38.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    },
+    {
+     "net": "PCIE_UP_OUT1_N_J2",
+     "pad_num": "2",
+     "via": [
+      102.45,
+      38.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    }
+   ],
+   "stub_clear_min": 0.025,
+   "pass": true
+  },
+  "C53": {
+   "x": 106.0,
+   "y": 39.4,
+   "rot": 0.0,
+   "track_margins": [
+    {
+     "track": "J2_TO_U/lower/0",
+     "track_y": 58.3,
+     "margin": 18.1825
+    },
+    {
+     "track": "J2_TO_U/lower/1",
+     "track_y": 59.5,
+     "margin": 19.3825
+    },
+    {
+     "track": "J2_TO_U/lower/2",
+     "track_y": 60.7,
+     "margin": 20.5825
+    },
+    {
+     "track": "J2_TO_U/lower/3",
+     "track_y": 61.9,
+     "margin": 21.7825
+    },
+    {
+     "track": "J2_TO_U/lower/4",
+     "track_y": 63.1,
+     "margin": 22.9825
+    },
+    {
+     "track": "J2_TO_U/lower/5",
+     "track_y": 64.3,
+     "margin": 24.1825
+    },
+    {
+     "track": "J2_TO_U/lower/6",
+     "track_y": 65.5,
+     "margin": 25.3825
+    },
+    {
+     "track": "J2_TO_U/lower/7",
+     "track_y": 66.7,
+     "margin": 26.5825
+    },
+    {
+     "track": "J2_TO_U/upper/0",
+     "track_y": 40.3,
+     "margin": 0.1825
+    },
+    {
+     "track": "J2_TO_U/upper/1",
+     "track_y": 41.5,
+     "margin": 1.3825
+    },
+    {
+     "track": "J2_TO_U/upper/2",
+     "track_y": 42.7,
+     "margin": 2.5825
+    },
+    {
+     "track": "J2_TO_U/upper/3",
+     "track_y": 43.9,
+     "margin": 3.7825
+    },
+    {
+     "track": "J2_TO_U/upper/4",
+     "track_y": 45.1,
+     "margin": 4.9825
+    },
+    {
+     "track": "J2_TO_U/upper/5",
+     "track_y": 46.3,
+     "margin": 6.1825
+    },
+    {
+     "track": "J2_TO_U/upper/6",
+     "track_y": 47.5,
+     "margin": 7.3825
+    },
+    {
+     "track": "J2_TO_U/upper/7",
+     "track_y": 48.7,
+     "margin": 8.5825
+    }
+   ],
+   "track_margin_min": 0.1825,
+   "stubs": [
+    {
+     "net": "PCIE_UP_OUT2_P_U7",
+     "pad_num": "1",
+     "via": [
+      105.65,
+      38.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    },
+    {
+     "net": "PCIE_UP_OUT2_P_J2",
+     "pad_num": "2",
+     "via": [
+      106.35,
+      38.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    }
+   ],
+   "stub_clear_min": 0.025,
+   "pass": true
+  },
+  "C54": {
+   "x": 104.7,
+   "y": 39.4,
+   "rot": 0.0,
+   "track_margins": [
+    {
+     "track": "J2_TO_U/lower/0",
+     "track_y": 58.3,
+     "margin": 18.1825
+    },
+    {
+     "track": "J2_TO_U/lower/1",
+     "track_y": 59.5,
+     "margin": 19.3825
+    },
+    {
+     "track": "J2_TO_U/lower/2",
+     "track_y": 60.7,
+     "margin": 20.5825
+    },
+    {
+     "track": "J2_TO_U/lower/3",
+     "track_y": 61.9,
+     "margin": 21.7825
+    },
+    {
+     "track": "J2_TO_U/lower/4",
+     "track_y": 63.1,
+     "margin": 22.9825
+    },
+    {
+     "track": "J2_TO_U/lower/5",
+     "track_y": 64.3,
+     "margin": 24.1825
+    },
+    {
+     "track": "J2_TO_U/lower/6",
+     "track_y": 65.5,
+     "margin": 25.3825
+    },
+    {
+     "track": "J2_TO_U/lower/7",
+     "track_y": 66.7,
+     "margin": 26.5825
+    },
+    {
+     "track": "J2_TO_U/upper/0",
+     "track_y": 40.3,
+     "margin": 0.1825
+    },
+    {
+     "track": "J2_TO_U/upper/1",
+     "track_y": 41.5,
+     "margin": 1.3825
+    },
+    {
+     "track": "J2_TO_U/upper/2",
+     "track_y": 42.7,
+     "margin": 2.5825
+    },
+    {
+     "track": "J2_TO_U/upper/3",
+     "track_y": 43.9,
+     "margin": 3.7825
+    },
+    {
+     "track": "J2_TO_U/upper/4",
+     "track_y": 45.1,
+     "margin": 4.9825
+    },
+    {
+     "track": "J2_TO_U/upper/5",
+     "track_y": 46.3,
+     "margin": 6.1825
+    },
+    {
+     "track": "J2_TO_U/upper/6",
+     "track_y": 47.5,
+     "margin": 7.3825
+    },
+    {
+     "track": "J2_TO_U/upper/7",
+     "track_y": 48.7,
+     "margin": 8.5825
+    }
+   ],
+   "track_margin_min": 0.1825,
+   "stubs": [
+    {
+     "net": "PCIE_UP_OUT2_N_U7",
+     "pad_num": "1",
+     "via": [
+      104.35,
+      38.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    },
+    {
+     "net": "PCIE_UP_OUT2_N_J2",
+     "pad_num": "2",
+     "via": [
+      105.05,
+      38.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    }
+   ],
+   "stub_clear_min": 0.025,
+   "pass": true
+  },
+  "C55": {
+   "x": 108.6,
+   "y": 39.4,
+   "rot": 0.0,
+   "track_margins": [
+    {
+     "track": "J2_TO_U/lower/0",
+     "track_y": 58.3,
+     "margin": 18.1825
+    },
+    {
+     "track": "J2_TO_U/lower/1",
+     "track_y": 59.5,
+     "margin": 19.3825
+    },
+    {
+     "track": "J2_TO_U/lower/2",
+     "track_y": 60.7,
+     "margin": 20.5825
+    },
+    {
+     "track": "J2_TO_U/lower/3",
+     "track_y": 61.9,
+     "margin": 21.7825
+    },
+    {
+     "track": "J2_TO_U/lower/4",
+     "track_y": 63.1,
+     "margin": 22.9825
+    },
+    {
+     "track": "J2_TO_U/lower/5",
+     "track_y": 64.3,
+     "margin": 24.1825
+    },
+    {
+     "track": "J2_TO_U/lower/6",
+     "track_y": 65.5,
+     "margin": 25.3825
+    },
+    {
+     "track": "J2_TO_U/lower/7",
+     "track_y": 66.7,
+     "margin": 26.5825
+    },
+    {
+     "track": "J2_TO_U/upper/0",
+     "track_y": 40.3,
+     "margin": 0.1825
+    },
+    {
+     "track": "J2_TO_U/upper/1",
+     "track_y": 41.5,
+     "margin": 1.3825
+    },
+    {
+     "track": "J2_TO_U/upper/2",
+     "track_y": 42.7,
+     "margin": 2.5825
+    },
+    {
+     "track": "J2_TO_U/upper/3",
+     "track_y": 43.9,
+     "margin": 3.7825
+    },
+    {
+     "track": "J2_TO_U/upper/4",
+     "track_y": 45.1,
+     "margin": 4.9825
+    },
+    {
+     "track": "J2_TO_U/upper/5",
+     "track_y": 46.3,
+     "margin": 6.1825
+    },
+    {
+     "track": "J2_TO_U/upper/6",
+     "track_y": 47.5,
+     "margin": 7.3825
+    },
+    {
+     "track": "J2_TO_U/upper/7",
+     "track_y": 48.7,
+     "margin": 8.5825
+    }
+   ],
+   "track_margin_min": 0.1825,
+   "stubs": [
+    {
+     "net": "PCIE_UP_OUT3_P_U7",
+     "pad_num": "1",
+     "via": [
+      108.25,
+      38.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    },
+    {
+     "net": "PCIE_UP_OUT3_P_J2",
+     "pad_num": "2",
+     "via": [
+      108.95,
+      38.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    }
+   ],
+   "stub_clear_min": 0.025,
+   "pass": true
+  },
+  "C56": {
+   "x": 107.3,
+   "y": 39.4,
+   "rot": 0.0,
+   "track_margins": [
+    {
+     "track": "J2_TO_U/lower/0",
+     "track_y": 58.3,
+     "margin": 18.1825
+    },
+    {
+     "track": "J2_TO_U/lower/1",
+     "track_y": 59.5,
+     "margin": 19.3825
+    },
+    {
+     "track": "J2_TO_U/lower/2",
+     "track_y": 60.7,
+     "margin": 20.5825
+    },
+    {
+     "track": "J2_TO_U/lower/3",
+     "track_y": 61.9,
+     "margin": 21.7825
+    },
+    {
+     "track": "J2_TO_U/lower/4",
+     "track_y": 63.1,
+     "margin": 22.9825
+    },
+    {
+     "track": "J2_TO_U/lower/5",
+     "track_y": 64.3,
+     "margin": 24.1825
+    },
+    {
+     "track": "J2_TO_U/lower/6",
+     "track_y": 65.5,
+     "margin": 25.3825
+    },
+    {
+     "track": "J2_TO_U/lower/7",
+     "track_y": 66.7,
+     "margin": 26.5825
+    },
+    {
+     "track": "J2_TO_U/upper/0",
+     "track_y": 40.3,
+     "margin": 0.1825
+    },
+    {
+     "track": "J2_TO_U/upper/1",
+     "track_y": 41.5,
+     "margin": 1.3825
+    },
+    {
+     "track": "J2_TO_U/upper/2",
+     "track_y": 42.7,
+     "margin": 2.5825
+    },
+    {
+     "track": "J2_TO_U/upper/3",
+     "track_y": 43.9,
+     "margin": 3.7825
+    },
+    {
+     "track": "J2_TO_U/upper/4",
+     "track_y": 45.1,
+     "margin": 4.9825
+    },
+    {
+     "track": "J2_TO_U/upper/5",
+     "track_y": 46.3,
+     "margin": 6.1825
+    },
+    {
+     "track": "J2_TO_U/upper/6",
+     "track_y": 47.5,
+     "margin": 7.3825
+    },
+    {
+     "track": "J2_TO_U/upper/7",
+     "track_y": 48.7,
+     "margin": 8.5825
+    }
+   ],
+   "track_margin_min": 0.1825,
+   "stubs": [
+    {
+     "net": "PCIE_UP_OUT3_N_U7",
+     "pad_num": "1",
+     "via": [
+      106.95,
+      38.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    },
+    {
+     "net": "PCIE_UP_OUT3_N_J2",
+     "pad_num": "2",
+     "via": [
+      107.65,
+      38.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    }
+   ],
+   "stub_clear_min": 0.025,
+   "pass": true
+  },
+  "C57": {
+   "x": 111.2,
+   "y": 39.4,
+   "rot": 0.0,
+   "track_margins": [
+    {
+     "track": "J2_TO_U/lower/0",
+     "track_y": 58.3,
+     "margin": 18.1825
+    },
+    {
+     "track": "J2_TO_U/lower/1",
+     "track_y": 59.5,
+     "margin": 19.3825
+    },
+    {
+     "track": "J2_TO_U/lower/2",
+     "track_y": 60.7,
+     "margin": 20.5825
+    },
+    {
+     "track": "J2_TO_U/lower/3",
+     "track_y": 61.9,
+     "margin": 21.7825
+    },
+    {
+     "track": "J2_TO_U/lower/4",
+     "track_y": 63.1,
+     "margin": 22.9825
+    },
+    {
+     "track": "J2_TO_U/lower/5",
+     "track_y": 64.3,
+     "margin": 24.1825
+    },
+    {
+     "track": "J2_TO_U/lower/6",
+     "track_y": 65.5,
+     "margin": 25.3825
+    },
+    {
+     "track": "J2_TO_U/lower/7",
+     "track_y": 66.7,
+     "margin": 26.5825
+    },
+    {
+     "track": "J2_TO_U/upper/0",
+     "track_y": 40.3,
+     "margin": 0.1825
+    },
+    {
+     "track": "J2_TO_U/upper/1",
+     "track_y": 41.5,
+     "margin": 1.3825
+    },
+    {
+     "track": "J2_TO_U/upper/2",
+     "track_y": 42.7,
+     "margin": 2.5825
+    },
+    {
+     "track": "J2_TO_U/upper/3",
+     "track_y": 43.9,
+     "margin": 3.7825
+    },
+    {
+     "track": "J2_TO_U/upper/4",
+     "track_y": 45.1,
+     "margin": 4.9825
+    },
+    {
+     "track": "J2_TO_U/upper/5",
+     "track_y": 46.3,
+     "margin": 6.1825
+    },
+    {
+     "track": "J2_TO_U/upper/6",
+     "track_y": 47.5,
+     "margin": 7.3825
+    },
+    {
+     "track": "J2_TO_U/upper/7",
+     "track_y": 48.7,
+     "margin": 8.5825
+    }
+   ],
+   "track_margin_min": 0.1825,
+   "stubs": [
+    {
+     "net": "PCIE_UP_OUT4_P_U7",
+     "pad_num": "1",
+     "via": [
+      110.85,
+      38.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    },
+    {
+     "net": "PCIE_UP_OUT4_P_J2",
+     "pad_num": "2",
+     "via": [
+      111.55,
+      38.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    }
+   ],
+   "stub_clear_min": 0.025,
+   "pass": true
+  },
+  "C58": {
+   "x": 109.9,
+   "y": 39.4,
+   "rot": 0.0,
+   "track_margins": [
+    {
+     "track": "J2_TO_U/lower/0",
+     "track_y": 58.3,
+     "margin": 18.1825
+    },
+    {
+     "track": "J2_TO_U/lower/1",
+     "track_y": 59.5,
+     "margin": 19.3825
+    },
+    {
+     "track": "J2_TO_U/lower/2",
+     "track_y": 60.7,
+     "margin": 20.5825
+    },
+    {
+     "track": "J2_TO_U/lower/3",
+     "track_y": 61.9,
+     "margin": 21.7825
+    },
+    {
+     "track": "J2_TO_U/lower/4",
+     "track_y": 63.1,
+     "margin": 22.9825
+    },
+    {
+     "track": "J2_TO_U/lower/5",
+     "track_y": 64.3,
+     "margin": 24.1825
+    },
+    {
+     "track": "J2_TO_U/lower/6",
+     "track_y": 65.5,
+     "margin": 25.3825
+    },
+    {
+     "track": "J2_TO_U/lower/7",
+     "track_y": 66.7,
+     "margin": 26.5825
+    },
+    {
+     "track": "J2_TO_U/upper/0",
+     "track_y": 40.3,
+     "margin": 0.1825
+    },
+    {
+     "track": "J2_TO_U/upper/1",
+     "track_y": 41.5,
+     "margin": 1.3825
+    },
+    {
+     "track": "J2_TO_U/upper/2",
+     "track_y": 42.7,
+     "margin": 2.5825
+    },
+    {
+     "track": "J2_TO_U/upper/3",
+     "track_y": 43.9,
+     "margin": 3.7825
+    },
+    {
+     "track": "J2_TO_U/upper/4",
+     "track_y": 45.1,
+     "margin": 4.9825
+    },
+    {
+     "track": "J2_TO_U/upper/5",
+     "track_y": 46.3,
+     "margin": 6.1825
+    },
+    {
+     "track": "J2_TO_U/upper/6",
+     "track_y": 47.5,
+     "margin": 7.3825
+    },
+    {
+     "track": "J2_TO_U/upper/7",
+     "track_y": 48.7,
+     "margin": 8.5825
+    }
+   ],
+   "track_margin_min": 0.1825,
+   "stubs": [
+    {
+     "net": "PCIE_UP_OUT4_N_U7",
+     "pad_num": "1",
+     "via": [
+      109.55,
+      38.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    },
+    {
+     "net": "PCIE_UP_OUT4_N_J2",
+     "pad_num": "2",
+     "via": [
+      110.25,
+      38.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    }
+   ],
+   "stub_clear_min": 0.025,
+   "pass": true
+  },
+  "C59": {
+   "x": 113.8,
+   "y": 39.4,
+   "rot": 0.0,
+   "track_margins": [
+    {
+     "track": "J2_TO_U/lower/0",
+     "track_y": 58.3,
+     "margin": 18.1825
+    },
+    {
+     "track": "J2_TO_U/lower/1",
+     "track_y": 59.5,
+     "margin": 19.3825
+    },
+    {
+     "track": "J2_TO_U/lower/2",
+     "track_y": 60.7,
+     "margin": 20.5825
+    },
+    {
+     "track": "J2_TO_U/lower/3",
+     "track_y": 61.9,
+     "margin": 21.7825
+    },
+    {
+     "track": "J2_TO_U/lower/4",
+     "track_y": 63.1,
+     "margin": 22.9825
+    },
+    {
+     "track": "J2_TO_U/lower/5",
+     "track_y": 64.3,
+     "margin": 24.1825
+    },
+    {
+     "track": "J2_TO_U/lower/6",
+     "track_y": 65.5,
+     "margin": 25.3825
+    },
+    {
+     "track": "J2_TO_U/lower/7",
+     "track_y": 66.7,
+     "margin": 26.5825
+    },
+    {
+     "track": "J2_TO_U/upper/0",
+     "track_y": 40.3,
+     "margin": 0.1825
+    },
+    {
+     "track": "J2_TO_U/upper/1",
+     "track_y": 41.5,
+     "margin": 1.3825
+    },
+    {
+     "track": "J2_TO_U/upper/2",
+     "track_y": 42.7,
+     "margin": 2.5825
+    },
+    {
+     "track": "J2_TO_U/upper/3",
+     "track_y": 43.9,
+     "margin": 3.7825
+    },
+    {
+     "track": "J2_TO_U/upper/4",
+     "track_y": 45.1,
+     "margin": 4.9825
+    },
+    {
+     "track": "J2_TO_U/upper/5",
+     "track_y": 46.3,
+     "margin": 6.1825
+    },
+    {
+     "track": "J2_TO_U/upper/6",
+     "track_y": 47.5,
+     "margin": 7.3825
+    },
+    {
+     "track": "J2_TO_U/upper/7",
+     "track_y": 48.7,
+     "margin": 8.5825
+    }
+   ],
+   "track_margin_min": 0.1825,
+   "stubs": [
+    {
+     "net": "PCIE_UP_OUT5_P_U7",
+     "pad_num": "1",
+     "via": [
+      113.45,
+      38.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    },
+    {
+     "net": "PCIE_UP_OUT5_P_J2",
+     "pad_num": "2",
+     "via": [
+      114.15,
+      38.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    }
+   ],
+   "stub_clear_min": 0.025,
+   "pass": true
+  },
+  "C60": {
+   "x": 112.5,
+   "y": 39.4,
+   "rot": 0.0,
+   "track_margins": [
+    {
+     "track": "J2_TO_U/lower/0",
+     "track_y": 58.3,
+     "margin": 18.1825
+    },
+    {
+     "track": "J2_TO_U/lower/1",
+     "track_y": 59.5,
+     "margin": 19.3825
+    },
+    {
+     "track": "J2_TO_U/lower/2",
+     "track_y": 60.7,
+     "margin": 20.5825
+    },
+    {
+     "track": "J2_TO_U/lower/3",
+     "track_y": 61.9,
+     "margin": 21.7825
+    },
+    {
+     "track": "J2_TO_U/lower/4",
+     "track_y": 63.1,
+     "margin": 22.9825
+    },
+    {
+     "track": "J2_TO_U/lower/5",
+     "track_y": 64.3,
+     "margin": 24.1825
+    },
+    {
+     "track": "J2_TO_U/lower/6",
+     "track_y": 65.5,
+     "margin": 25.3825
+    },
+    {
+     "track": "J2_TO_U/lower/7",
+     "track_y": 66.7,
+     "margin": 26.5825
+    },
+    {
+     "track": "J2_TO_U/upper/0",
+     "track_y": 40.3,
+     "margin": 0.1825
+    },
+    {
+     "track": "J2_TO_U/upper/1",
+     "track_y": 41.5,
+     "margin": 1.3825
+    },
+    {
+     "track": "J2_TO_U/upper/2",
+     "track_y": 42.7,
+     "margin": 2.5825
+    },
+    {
+     "track": "J2_TO_U/upper/3",
+     "track_y": 43.9,
+     "margin": 3.7825
+    },
+    {
+     "track": "J2_TO_U/upper/4",
+     "track_y": 45.1,
+     "margin": 4.9825
+    },
+    {
+     "track": "J2_TO_U/upper/5",
+     "track_y": 46.3,
+     "margin": 6.1825
+    },
+    {
+     "track": "J2_TO_U/upper/6",
+     "track_y": 47.5,
+     "margin": 7.3825
+    },
+    {
+     "track": "J2_TO_U/upper/7",
+     "track_y": 48.7,
+     "margin": 8.5825
+    }
+   ],
+   "track_margin_min": 0.1825,
+   "stubs": [
+    {
+     "net": "PCIE_UP_OUT5_N_U7",
+     "pad_num": "1",
+     "via": [
+      112.15,
+      38.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    },
+    {
+     "net": "PCIE_UP_OUT5_N_J2",
+     "pad_num": "2",
+     "via": [
+      112.85,
+      38.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    }
+   ],
+   "stub_clear_min": 0.025,
+   "pass": true
+  },
+  "C61": {
+   "x": 116.4,
+   "y": 39.4,
+   "rot": 0.0,
+   "track_margins": [
+    {
+     "track": "J2_TO_U/lower/0",
+     "track_y": 58.3,
+     "margin": 18.1825
+    },
+    {
+     "track": "J2_TO_U/lower/1",
+     "track_y": 59.5,
+     "margin": 19.3825
+    },
+    {
+     "track": "J2_TO_U/lower/2",
+     "track_y": 60.7,
+     "margin": 20.5825
+    },
+    {
+     "track": "J2_TO_U/lower/3",
+     "track_y": 61.9,
+     "margin": 21.7825
+    },
+    {
+     "track": "J2_TO_U/lower/4",
+     "track_y": 63.1,
+     "margin": 22.9825
+    },
+    {
+     "track": "J2_TO_U/lower/5",
+     "track_y": 64.3,
+     "margin": 24.1825
+    },
+    {
+     "track": "J2_TO_U/lower/6",
+     "track_y": 65.5,
+     "margin": 25.3825
+    },
+    {
+     "track": "J2_TO_U/lower/7",
+     "track_y": 66.7,
+     "margin": 26.5825
+    },
+    {
+     "track": "J2_TO_U/upper/0",
+     "track_y": 40.3,
+     "margin": 0.1825
+    },
+    {
+     "track": "J2_TO_U/upper/1",
+     "track_y": 41.5,
+     "margin": 1.3825
+    },
+    {
+     "track": "J2_TO_U/upper/2",
+     "track_y": 42.7,
+     "margin": 2.5825
+    },
+    {
+     "track": "J2_TO_U/upper/3",
+     "track_y": 43.9,
+     "margin": 3.7825
+    },
+    {
+     "track": "J2_TO_U/upper/4",
+     "track_y": 45.1,
+     "margin": 4.9825
+    },
+    {
+     "track": "J2_TO_U/upper/5",
+     "track_y": 46.3,
+     "margin": 6.1825
+    },
+    {
+     "track": "J2_TO_U/upper/6",
+     "track_y": 47.5,
+     "margin": 7.3825
+    },
+    {
+     "track": "J2_TO_U/upper/7",
+     "track_y": 48.7,
+     "margin": 8.5825
+    }
+   ],
+   "track_margin_min": 0.1825,
+   "stubs": [
+    {
+     "net": "PCIE_UP_OUT6_P_U7",
+     "pad_num": "1",
+     "via": [
+      116.05,
+      38.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    },
+    {
+     "net": "PCIE_UP_OUT6_P_J2",
+     "pad_num": "2",
+     "via": [
+      116.75,
+      38.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    }
+   ],
+   "stub_clear_min": 0.025,
+   "pass": true
+  },
+  "C62": {
+   "x": 115.1,
+   "y": 39.4,
+   "rot": 0.0,
+   "track_margins": [
+    {
+     "track": "J2_TO_U/lower/0",
+     "track_y": 58.3,
+     "margin": 18.1825
+    },
+    {
+     "track": "J2_TO_U/lower/1",
+     "track_y": 59.5,
+     "margin": 19.3825
+    },
+    {
+     "track": "J2_TO_U/lower/2",
+     "track_y": 60.7,
+     "margin": 20.5825
+    },
+    {
+     "track": "J2_TO_U/lower/3",
+     "track_y": 61.9,
+     "margin": 21.7825
+    },
+    {
+     "track": "J2_TO_U/lower/4",
+     "track_y": 63.1,
+     "margin": 22.9825
+    },
+    {
+     "track": "J2_TO_U/lower/5",
+     "track_y": 64.3,
+     "margin": 24.1825
+    },
+    {
+     "track": "J2_TO_U/lower/6",
+     "track_y": 65.5,
+     "margin": 25.3825
+    },
+    {
+     "track": "J2_TO_U/lower/7",
+     "track_y": 66.7,
+     "margin": 26.5825
+    },
+    {
+     "track": "J2_TO_U/upper/0",
+     "track_y": 40.3,
+     "margin": 0.1825
+    },
+    {
+     "track": "J2_TO_U/upper/1",
+     "track_y": 41.5,
+     "margin": 1.3825
+    },
+    {
+     "track": "J2_TO_U/upper/2",
+     "track_y": 42.7,
+     "margin": 2.5825
+    },
+    {
+     "track": "J2_TO_U/upper/3",
+     "track_y": 43.9,
+     "margin": 3.7825
+    },
+    {
+     "track": "J2_TO_U/upper/4",
+     "track_y": 45.1,
+     "margin": 4.9825
+    },
+    {
+     "track": "J2_TO_U/upper/5",
+     "track_y": 46.3,
+     "margin": 6.1825
+    },
+    {
+     "track": "J2_TO_U/upper/6",
+     "track_y": 47.5,
+     "margin": 7.3825
+    },
+    {
+     "track": "J2_TO_U/upper/7",
+     "track_y": 48.7,
+     "margin": 8.5825
+    }
+   ],
+   "track_margin_min": 0.1825,
+   "stubs": [
+    {
+     "net": "PCIE_UP_OUT6_N_U7",
+     "pad_num": "1",
+     "via": [
+      114.75,
+      38.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    },
+    {
+     "net": "PCIE_UP_OUT6_N_J2",
+     "pad_num": "2",
+     "via": [
+      115.45,
+      38.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    }
+   ],
+   "stub_clear_min": 0.025,
+   "pass": true
+  },
+  "C63": {
+   "x": 119.0,
+   "y": 39.4,
+   "rot": 0.0,
+   "track_margins": [
+    {
+     "track": "J2_TO_U/lower/0",
+     "track_y": 58.3,
+     "margin": 18.1825
+    },
+    {
+     "track": "J2_TO_U/lower/1",
+     "track_y": 59.5,
+     "margin": 19.3825
+    },
+    {
+     "track": "J2_TO_U/lower/2",
+     "track_y": 60.7,
+     "margin": 20.5825
+    },
+    {
+     "track": "J2_TO_U/lower/3",
+     "track_y": 61.9,
+     "margin": 21.7825
+    },
+    {
+     "track": "J2_TO_U/lower/4",
+     "track_y": 63.1,
+     "margin": 22.9825
+    },
+    {
+     "track": "J2_TO_U/lower/5",
+     "track_y": 64.3,
+     "margin": 24.1825
+    },
+    {
+     "track": "J2_TO_U/lower/6",
+     "track_y": 65.5,
+     "margin": 25.3825
+    },
+    {
+     "track": "J2_TO_U/lower/7",
+     "track_y": 66.7,
+     "margin": 26.5825
+    },
+    {
+     "track": "J2_TO_U/upper/0",
+     "track_y": 40.3,
+     "margin": 0.1825
+    },
+    {
+     "track": "J2_TO_U/upper/1",
+     "track_y": 41.5,
+     "margin": 1.3825
+    },
+    {
+     "track": "J2_TO_U/upper/2",
+     "track_y": 42.7,
+     "margin": 2.5825
+    },
+    {
+     "track": "J2_TO_U/upper/3",
+     "track_y": 43.9,
+     "margin": 3.7825
+    },
+    {
+     "track": "J2_TO_U/upper/4",
+     "track_y": 45.1,
+     "margin": 4.9825
+    },
+    {
+     "track": "J2_TO_U/upper/5",
+     "track_y": 46.3,
+     "margin": 6.1825
+    },
+    {
+     "track": "J2_TO_U/upper/6",
+     "track_y": 47.5,
+     "margin": 7.3825
+    },
+    {
+     "track": "J2_TO_U/upper/7",
+     "track_y": 48.7,
+     "margin": 8.5825
+    }
+   ],
+   "track_margin_min": 0.1825,
+   "stubs": [
+    {
+     "net": "PCIE_UP_OUT7_P_U7",
+     "pad_num": "1",
+     "via": [
+      118.65,
+      38.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    },
+    {
+     "net": "PCIE_UP_OUT7_P_J2",
+     "pad_num": "2",
+     "via": [
+      119.35,
+      38.7
+     ],
+     "min_via_margin": 0.15,
+     "min_seg_margin": 0.125
+    }
+   ],
+   "stub_clear_min": 0.025,
+   "pass": true
+  },
+  "C64": {
+   "x": 117.7,
+   "y": 39.4,
+   "rot": 0.0,
+   "track_margins": [
+    {
+     "track": "J2_TO_U/lower/0",
+     "track_y": 58.3,
+     "margin": 18.1825
+    },
+    {
+     "track": "J2_TO_U/lower/1",
+     "track_y": 59.5,
+     "margin": 19.3825
+    },
+    {
+     "track": "J2_TO_U/lower/2",
+     "track_y": 60.7,
+     "margin": 20.5825
+    },
+    {
+     "track": "J2_TO_U/lower/3",
+     "track_y": 61.9,
+     "margin": 21.7825
+    },
+    {
+     "track": "J2_TO_U/lower/4",
+     "track_y": 63.1,
+     "margin": 22.9825
+    },
+    {
+     "track": "J2_TO_U/lower/5",
+     "track_y": 64.3,
+     "margin": 24.1825
+    },
+    {
+     "track": "J2_TO_U/lower/6",
+     "track_y": 65.5,
+     "margin": 25.3825
+    },
+    {
+     "track": "J2_TO_U/lower/7",
+     "track_y": 66.7,
+     "margin": 26.5825
+    },
+    {
+     "track": "J2_TO_U/upper/0",
+     "track_y": 40.3,
+     "margin": 0.1825
+    },
+    {
+     "track": "J2_TO_U/upper/1",
+     "track_y": 41.5,
+     "margin": 1.3825
+    },
+    {
+     "track": "J2_TO_U/upper/2",
+     "track_y": 42.7,
+     "margin": 2.5825
+    },
+    {
+     "track": "J2_TO_U/upper/3",
+     "track_y": 43.9,
+     "margin": 3.7825
+    },
+    {
+     "track": "J2_TO_U/upper/4",
+     "track_y": 45.1,
+     "margin": 4.9825
+    },
+    {
+     "track": "J2_TO_U/upper/5",
+     "track_y": 46.3,
+     "margin": 6.1825
+    },
+    {
+     "track": "J2_TO_U/upper/6",
+     "track_y": 47.5,
+     "margin": 7.3825
+    },
+    {
+     "track": "J2_TO_U/upper/7",
+     "track_y": 48.7,
+     "margin": 8.5825
+    }
+   ],
+   "track_margin_min": 0.1825,
+   "stubs": [
+    {
+     "net": "PCIE_UP_OUT7_N_U7",
+     "pad_num": "1",
+     "via": [
+      117.35,
+      38.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    },
+    {
+     "net": "PCIE_UP_OUT7_N_J2",
+     "pad_num": "2",
+     "via": [
+      118.05,
+      38.7
+     ],
+     "min_via_margin": 0.05,
+     "min_seg_margin": 0.025
+    }
+   ],
+   "stub_clear_min": 0.025,
+   "pass": true
+  }
+ }
+}

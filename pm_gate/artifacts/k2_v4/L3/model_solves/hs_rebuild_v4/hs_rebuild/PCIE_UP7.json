@@ -1,0 +1,156 @@
+{
+ "base": "PCIE_UP7",
+ "input_fp": "87b66fbb6074e89048741b73d3de2ac30b82bd1d2f77266ceed0177c1eec51cf",
+ "solve_time_s": 15.985,
+ "result": {
+  "base": "UP7",
+  "status": "INFEASIBLE",
+  "segments": [
+   {
+    "status": "INFEASIBLE",
+    "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(64.000,63.950) → cv=(64.900,40.920) dir=1 flip=True pn_dist=0.600）",
+    "name": "input",
+    "esc": {
+     "status": "INFEASIBLE",
+     "reason": "对级对称逃逸无净空（M=(64.000,63.950) → cv=(64.900,40.920) dir=1 flip=True pn_dist=0.600）"
+    },
+    "flip": true
+   },
+   {
+    "name": "out_U7",
+    "status": "SOLVED",
+    "corridor": null,
+    "track_y": null,
+    "layer": null,
+    "short": true,
+    "kind": "IN2",
+    "P": {
+     "net": "PCIE_UP_OUT7_P_U7",
+     "path": [
+      [
+       98.825,
+       40.5
+      ],
+      [
+       100.775,
+       40.5
+      ],
+      [
+       100.775,
+       43.5
+      ],
+      [
+       100.45,
+       42.9
+      ]
+     ],
+     "layers": [
+      "F.Cu",
+      "In2.Cu",
+      "F.Cu"
+     ],
+     "length": 5.6324,
+     "solve_ref": "93c1652439f15081a851d257351eb036e53df02cd944b922c1cb0b64b0d8efef"
+    },
+    "N": {
+     "net": "PCIE_UP_OUT7_N_U7",
+     "path": [
+      [
+       98.825,
+       40.1
+      ],
+      [
+       99.425,
+       40.1
+      ],
+      [
+       99.425,
+       44.35
+      ],
+      [
+       99.47500000000001,
+       43.6
+      ]
+     ],
+     "layers": [
+      "F.Cu",
+      "In2.Cu",
+      "F.Cu"
+     ],
+     "length": 5.6017,
+     "solve_ref": "fe52d230da718983212895758e2e58924d92e2e516fe7a4fb038eda93da22118"
+    },
+    "skew": 0.0307,
+    "skew_ok": true,
+    "width": 0.205,
+    "input_fp": "87b66fbb6074e89048741b73d3de2ac30b82bd1d2f77266ceed0177c1eec51cf",
+    "vias": [
+     [
+      100.775,
+      40.5
+     ],
+     [
+      100.775,
+      43.5
+     ],
+     [
+      99.425,
+      40.1
+     ],
+     [
+      99.425,
+      44.35
+     ]
+    ],
+    "escape": {
+     "layer": "In2.Cu",
+     "segments": {
+      "left": {
+       "P": {
+        "kind": "IN2",
+        "n_nodes": 0,
+        "length": 0,
+        "via": null
+       },
+       "N": {
+        "kind": "IN2",
+        "n_nodes": 0,
+        "length": 0,
+        "via": null
+       }
+      },
+      "right": {
+       "P": {
+        "kind": "IN2",
+        "n_nodes": 0,
+        "length": 0,
+        "via": null
+       },
+       "N": {
+        "kind": "IN2",
+        "n_nodes": 0,
+        "length": 0,
+        "via": null
+       }
+      }
+     }
+    }
+   },
+   {
+    "status": "INFEASIBLE",
+    "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(100.662,43.250) → cv=(101.150,40.920) dir=1 flip=True pn_dist=1.200）",
+    "name": "out_J2",
+    "esc": {
+     "status": "INFEASIBLE",
+     "reason": "对级对称逃逸无净空（M=(100.662,43.250) → cv=(101.150,40.920) dir=1 flip=True pn_dist=1.200）"
+    },
+    "flip": true
+   }
+  ],
+  "lenP": 5.6324,
+  "lenN": 5.6017,
+  "skew": null,
+  "skew_ok": false,
+  "input_fp": "87b66fbb6074e89048741b73d3de2ac30b82bd1d2f77266ceed0177c1eec51cf"
+ }
+}

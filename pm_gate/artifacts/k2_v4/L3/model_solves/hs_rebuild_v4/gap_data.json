@@ -1,0 +1,7237 @@
+{
+ "solved": [
+  "PCIE_DN2",
+  "PCIE_DN4",
+  "PCIE_REFCLK0",
+  "PCIE_REFCLK1",
+  "PCIE_UP3",
+  "PCIE_UP6"
+ ],
+ "shared_seg_count": 324,
+ "infeasible": {
+  "PCIE_UP0": {
+   "lenP": 50.7365,
+   "lenN": 50.882,
+   "segments": [
+    {
+     "name": "input",
+     "status": "SOLVED",
+     "reason": ""
+    },
+    {
+     "name": "out_U7",
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(98.825,48.700) → cv=(116.825,48.480) dir=1 flip=True pn_dist=0.400）"
+    },
+    {
+     "name": "out_J2",
+     "status": "SOLVED",
+     "reason": ""
+    }
+   ],
+   "probes": [
+    {
+     "segname": "input",
+     "status": "BLOCKED",
+     "corridor": "U_TO_MCIO",
+     "track_y": 48.48,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.6,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": true,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.30912451882138947,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP3_P",
+          "desc": "seg:PCIE_UP3_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": true,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.3091245188213755,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP3_P",
+          "desc": "seg:PCIE_UP3_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": true,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.3091245188213755,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP3_P",
+          "desc": "seg:PCIE_UP3_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": true,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.3091245188213755,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP3_P",
+          "desc": "seg:PCIE_UP3_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.4,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "VREG1_U7",
+          "desc": "pad:VREG1_U7 (F.Cu)",
+          "dist": 0.17320348588404072,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_EQ0_1_U7",
+          "desc": "via:STRAP_EQ0_1_U7 (In2.Cu)",
+          "dist": 2.3652055368555573,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "VREG1_U7",
+          "desc": "pad:VREG1_U7 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_EQ0_1_U7",
+          "desc": "via:STRAP_EQ0_1_U7 (In2.Cu)",
+          "dist": 2.2925117730367135,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "VREG1_U7",
+          "desc": "pad:VREG1_U7 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_EQ0_1_U7",
+          "desc": "via:STRAP_EQ0_1_U7 (In2.Cu)",
+          "dist": 2.078552463379078,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "VREG1_U7",
+          "desc": "pad:VREG1_U7 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_EQ0_1_U7",
+          "desc": "via:STRAP_EQ0_1_U7 (In2.Cu)",
+          "dist": 1.885403248425745,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "segname": "out_U7",
+     "status": "BLOCKED",
+     "corridor": "J2_TO_U",
+     "track_y": 48.48,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.4,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.17003098573301684,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "ALL_DONE_N_U7",
+          "desc": "via:ALL_DONE_N_U7 (In2.Cu)",
+          "dist": 3.757915793507024,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "ALL_DONE_N_U7",
+          "desc": "via:ALL_DONE_N_U7 (In2.Cu)",
+          "dist": 3.757864154863144,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "ALL_DONE_N_U7",
+          "desc": "via:ALL_DONE_N_U7 (In2.Cu)",
+          "dist": 3.7578509530476936,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT1_P_U7",
+          "desc": "pad:PCIE_UP_OUT1_P_U7 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "ALL_DONE_N_U7",
+          "desc": "via:ALL_DONE_N_U7 (In2.Cu)",
+          "dist": 3.757844913583006,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 2.022,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 1.672,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT0_P_J2",
+          "desc": "pad:PCIE_UP_OUT0_P_J2 (F.Cu)",
+          "dist": 0.032814005870874255,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_P_J2",
+          "desc": "seg:PCIE_UP_OUT6_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 1.672,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT0_P_J2",
+          "desc": "pad:PCIE_UP_OUT0_P_J2 (F.Cu)",
+          "dist": 0.032814005870874255,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_P_J2",
+          "desc": "seg:PCIE_UP_OUT6_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 1.672,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT0_P_J2",
+          "desc": "pad:PCIE_UP_OUT0_P_J2 (F.Cu)",
+          "dist": 0.032814005870874255,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_P_J2",
+          "desc": "seg:PCIE_UP_OUT6_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 1.672,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT0_P_J2",
+          "desc": "pad:PCIE_UP_OUT0_P_J2 (F.Cu)",
+          "dist": 0.032814005870874255,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_P_J2",
+          "desc": "seg:PCIE_UP_OUT6_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "segname": "out_J2",
+     "status": "BLOCKED",
+     "corridor": "J2_TO_U",
+     "track_y": 48.48,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 2.022,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 1.672,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT0_P_U7",
+          "desc": "pad:PCIE_UP_OUT0_P_U7 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_N_J2",
+          "desc": "seg:PCIE_UP_OUT3_N_J2 (In2.Cu)",
+          "dist": 2.7435902723876664,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 1.672,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT0_P_U7",
+          "desc": "pad:PCIE_UP_OUT0_P_U7 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_N_J2",
+          "desc": "seg:PCIE_UP_OUT3_N_J2 (In2.Cu)",
+          "dist": 2.74039378702283,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 1.672,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT0_P_U7",
+          "desc": "pad:PCIE_UP_OUT0_P_U7 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_N_J2",
+          "desc": "seg:PCIE_UP_OUT3_N_J2 (In2.Cu)",
+          "dist": 2.7371300147339093,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 1.672,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT0_P_U7",
+          "desc": "pad:PCIE_UP_OUT0_P_U7 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_N_J2",
+          "desc": "seg:PCIE_UP_OUT3_N_J2 (In2.Cu)",
+          "dist": 2.7337968086496485,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 2.425,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 2.075,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_P_J2",
+          "desc": "seg:PCIE_UP_OUT3_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 2.075,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_P_J2",
+          "desc": "seg:PCIE_UP_OUT3_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 2.075,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_P_J2",
+          "desc": "seg:PCIE_UP_OUT3_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 2.075,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_P_J2",
+          "desc": "seg:PCIE_UP_OUT3_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  "PCIE_UP1": {
+   "lenP": 53.8587,
+   "lenN": 53.591,
+   "segments": [
+    {
+     "name": "input",
+     "status": "SOLVED",
+     "reason": ""
+    },
+    {
+     "name": "out_U7",
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(98.825,47.500) → cv=(112.625,47.400) dir=1 flip=True pn_dist=0.400）"
+    },
+    {
+     "name": "out_J2",
+     "status": "SOLVED",
+     "reason": ""
+    }
+   ],
+   "probes": [
+    {
+     "segname": "input",
+     "status": "BLOCKED",
+     "corridor": "U_TO_MCIO",
+     "track_y": 47.4,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.6,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.11132561848556695,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP3_P",
+          "desc": "seg:PCIE_UP3_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.11132561848556309,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP3_P",
+          "desc": "seg:PCIE_UP3_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.11132561848556309,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP3_P",
+          "desc": "seg:PCIE_UP3_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.11132561848556309,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP3_P",
+          "desc": "seg:PCIE_UP3_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.4,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "P3V3",
+          "desc": "pad:P3V3 (F.Cu)",
+          "dist": 0.17277772260272,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_EQ0_1_U7",
+          "desc": "via:STRAP_EQ0_1_U7 (In2.Cu)",
+          "dist": 1.68662076824555,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "P3V3",
+          "desc": "pad:P3V3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_EQ0_1_U7",
+          "desc": "via:STRAP_EQ0_1_U7 (In2.Cu)",
+          "dist": 1.5947870549218168,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "P3V3",
+          "desc": "pad:P3V3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_EQ0_1_U7",
+          "desc": "via:STRAP_EQ0_1_U7 (In2.Cu)",
+          "dist": 1.5047871594882536,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "P3V3",
+          "desc": "pad:P3V3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_EQ0_1_U7",
+          "desc": "via:STRAP_EQ0_1_U7 (In2.Cu)",
+          "dist": 1.4632765895215496,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "segname": "out_U7",
+     "status": "BLOCKED",
+     "corridor": "J2_TO_U",
+     "track_y": 47.4,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.4,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "P3V3",
+          "desc": "pad:P3V3 (F.Cu)",
+          "dist": 0.16446407389775003,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "ALL_DONE_N_U7",
+          "desc": "via:ALL_DONE_N_U7 (In2.Cu)",
+          "dist": 3.8570822976901704,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "P3V3",
+          "desc": "pad:P3V3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "ALL_DONE_N_U7",
+          "desc": "via:ALL_DONE_N_U7 (In2.Cu)",
+          "dist": 3.8570822976901704,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "P3V3",
+          "desc": "pad:P3V3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "ALL_DONE_N_U7",
+          "desc": "via:ALL_DONE_N_U7 (In2.Cu)",
+          "dist": 3.8570822976901704,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT2_P_U7",
+          "desc": "pad:PCIE_UP_OUT2_P_U7 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "ALL_DONE_N_U7",
+          "desc": "via:ALL_DONE_N_U7 (In2.Cu)",
+          "dist": 3.8570822976901704,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 2.088,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 1.738,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT1_P_J2",
+          "desc": "pad:PCIE_UP_OUT1_P_J2 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_P_J2",
+          "desc": "seg:PCIE_UP_OUT6_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 1.738,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT1_P_J2",
+          "desc": "pad:PCIE_UP_OUT1_P_J2 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_P_J2",
+          "desc": "seg:PCIE_UP_OUT6_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 1.738,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT1_P_J2",
+          "desc": "pad:PCIE_UP_OUT1_P_J2 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_P_J2",
+          "desc": "seg:PCIE_UP_OUT6_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 1.738,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT1_P_J2",
+          "desc": "pad:PCIE_UP_OUT1_P_J2 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_P_J2",
+          "desc": "seg:PCIE_UP_OUT6_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "segname": "out_J2",
+     "status": "BLOCKED",
+     "corridor": "J2_TO_U",
+     "track_y": 47.4,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 2.088,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 1.738,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT1_P_U7",
+          "desc": "pad:PCIE_UP_OUT1_P_U7 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_N_J2",
+          "desc": "seg:PCIE_UP_OUT3_N_J2 (In2.Cu)",
+          "dist": 2.2650875120720904,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 1.738,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT1_P_U7",
+          "desc": "pad:PCIE_UP_OUT1_P_U7 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_N_J2",
+          "desc": "seg:PCIE_UP_OUT3_N_J2 (In2.Cu)",
+          "dist": 2.2621732655014237,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 1.738,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT1_P_U7",
+          "desc": "pad:PCIE_UP_OUT1_P_U7 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_N_J2",
+          "desc": "seg:PCIE_UP_OUT3_N_J2 (In2.Cu)",
+          "dist": 2.2591815733622544,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 1.738,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT1_P_U7",
+          "desc": "pad:PCIE_UP_OUT1_P_U7 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_N_J2",
+          "desc": "seg:PCIE_UP_OUT3_N_J2 (In2.Cu)",
+          "dist": 2.2561093071909206,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 2.35,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 2.0,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_P_J2",
+          "desc": "seg:PCIE_UP_OUT3_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 2.0,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_P_J2",
+          "desc": "seg:PCIE_UP_OUT3_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 2.0,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_P_J2",
+          "desc": "seg:PCIE_UP_OUT3_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 2.0,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_P_J2",
+          "desc": "seg:PCIE_UP_OUT3_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  "PCIE_UP2": {
+   "lenP": 57.4973,
+   "lenN": 59.1068,
+   "segments": [
+    {
+     "name": "input",
+     "status": "SOLVED",
+     "reason": ""
+    },
+    {
+     "name": "out_U7",
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(98.825,46.300) → cv=(106.625,46.320) dir=1 flip=True pn_dist=0.400）"
+    },
+    {
+     "name": "out_J2",
+     "status": "SOLVED",
+     "reason": ""
+    }
+   ],
+   "probes": [
+    {
+     "segname": "input",
+     "status": "BLOCKED",
+     "corridor": "U_TO_MCIO",
+     "track_y": 46.32,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.6,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP3_P",
+          "desc": "seg:PCIE_UP3_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP3_P",
+          "desc": "seg:PCIE_UP3_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP3_P",
+          "desc": "seg:PCIE_UP3_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP3_P",
+          "desc": "seg:PCIE_UP3_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.4,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.17208758983760503,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_EQ0_1_U7",
+          "desc": "via:STRAP_EQ0_1_U7 (In2.Cu)",
+          "dist": 1.480462365958878,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_EQ0_1_U7",
+          "desc": "via:STRAP_EQ0_1_U7 (In2.Cu)",
+          "dist": 1.480462365958878,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_EQ0_1_U7",
+          "desc": "via:STRAP_EQ0_1_U7 (In2.Cu)",
+          "dist": 1.480462365958878,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "seg",
+          "net": "PCIE_UP3_P",
+          "desc": "seg:PCIE_UP3_P (F.Cu)",
+          "dist": -0.104211892955678,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_EQ0_1_U7",
+          "desc": "via:STRAP_EQ0_1_U7 (In2.Cu)",
+          "dist": 1.480462365958878,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "segname": "out_U7",
+     "status": "BLOCKED",
+     "corridor": "J2_TO_U",
+     "track_y": 46.32,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.4,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "P3V3",
+          "desc": "pad:P3V3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_N_U7",
+          "desc": "seg:PCIE_UP_OUT6_N_U7 (In2.Cu)",
+          "dist": 4.02123602624016,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "P3V3",
+          "desc": "pad:P3V3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_N_U7",
+          "desc": "seg:PCIE_UP_OUT6_N_U7 (In2.Cu)",
+          "dist": 4.02123602624016,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "P3V3",
+          "desc": "pad:P3V3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_N_U7",
+          "desc": "seg:PCIE_UP_OUT6_N_U7 (In2.Cu)",
+          "dist": 4.02123602624016,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "P3V3",
+          "desc": "pad:P3V3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_N_U7",
+          "desc": "seg:PCIE_UP_OUT6_N_U7 (In2.Cu)",
+          "dist": 4.02123602624016,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 2.022,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 1.672,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT2_P_J2",
+          "desc": "pad:PCIE_UP_OUT2_P_J2 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_P_J2",
+          "desc": "seg:PCIE_UP_OUT6_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 1.672,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT2_P_J2",
+          "desc": "pad:PCIE_UP_OUT2_P_J2 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_P_J2",
+          "desc": "seg:PCIE_UP_OUT6_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 1.672,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT2_P_J2",
+          "desc": "pad:PCIE_UP_OUT2_P_J2 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_P_J2",
+          "desc": "seg:PCIE_UP_OUT6_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 1.672,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT2_P_J2",
+          "desc": "pad:PCIE_UP_OUT2_P_J2 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_P_J2",
+          "desc": "seg:PCIE_UP_OUT6_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "segname": "out_J2",
+     "status": "BLOCKED",
+     "corridor": "J2_TO_U",
+     "track_y": 46.32,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 2.022,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 1.672,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT2_P_U7",
+          "desc": "pad:PCIE_UP_OUT2_P_U7 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_N_J2",
+          "desc": "seg:PCIE_UP_OUT3_N_J2 (In2.Cu)",
+          "dist": 0.40879754240660804,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 1.672,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT2_P_U7",
+          "desc": "pad:PCIE_UP_OUT2_P_U7 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_N_J2",
+          "desc": "seg:PCIE_UP_OUT3_N_J2 (In2.Cu)",
+          "dist": 0.4025665542311916,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 1.672,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT2_P_U7",
+          "desc": "pad:PCIE_UP_OUT2_P_U7 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_N_J2",
+          "desc": "seg:PCIE_UP_OUT3_N_J2 (In2.Cu)",
+          "dist": 0.3961524337115735,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 1.672,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT2_P_U7",
+          "desc": "pad:PCIE_UP_OUT2_P_U7 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_N_J2",
+          "desc": "seg:PCIE_UP_OUT3_N_J2 (In2.Cu)",
+          "dist": 0.38954698938922006,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 2.425,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 2.075,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_N_J2",
+          "desc": "seg:PCIE_UP_OUT3_N_J2 (F.Cu)",
+          "dist": 0.06376679153746419,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_P_J2",
+          "desc": "seg:PCIE_UP_OUT3_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 2.075,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_N_J2",
+          "desc": "seg:PCIE_UP_OUT3_N_J2 (F.Cu)",
+          "dist": 0.06376679153746419,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_P_J2",
+          "desc": "seg:PCIE_UP_OUT3_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 2.075,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_N_J2",
+          "desc": "seg:PCIE_UP_OUT3_N_J2 (F.Cu)",
+          "dist": 0.06376679153746419,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_P_J2",
+          "desc": "seg:PCIE_UP_OUT3_P_J2 (In2.Cu)",
+          "dist": 0.0007827208371390115,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 2.075,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_REFCLK0_P",
+          "desc": "pad:PCIE_REFCLK0_P (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_P_J2",
+          "desc": "seg:PCIE_UP_OUT3_P_J2 (In2.Cu)",
+          "dist": 0.28062469905023196,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  "PCIE_UP4": {
+   "lenP": 88.6745,
+   "lenN": 89.909,
+   "segments": [
+    {
+     "name": "input",
+     "status": "SOLVED",
+     "reason": ""
+    },
+    {
+     "name": "out_U7",
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(98.825,43.900) → cv=(104.825,44.160) dir=1 flip=True pn_dist=0.400）"
+    },
+    {
+     "name": "out_J2",
+     "status": "SOLVED",
+     "reason": ""
+    }
+   ],
+   "probes": [
+    {
+     "segname": "input",
+     "status": "BLOCKED",
+     "corridor": "U_TO_MCIO",
+     "track_y": 44.16,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.6,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.3750000000000014,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP3_P",
+          "desc": "seg:PCIE_UP3_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.3750000000000014,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP3_P",
+          "desc": "seg:PCIE_UP3_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.3750000000000014,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP3_P",
+          "desc": "seg:PCIE_UP3_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.3750000000000014,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP3_P",
+          "desc": "seg:PCIE_UP3_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.4,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "VREG2_U7",
+          "desc": "pad:VREG2_U7 (F.Cu)",
+          "dist": 0.1673249016575255,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_EQ1_1_U7",
+          "desc": "via:STRAP_EQ1_1_U7 (In2.Cu)",
+          "dist": 2.628350221915335,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "VREG2_U7",
+          "desc": "pad:VREG2_U7 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_EQ1_1_U7",
+          "desc": "via:STRAP_EQ1_1_U7 (In2.Cu)",
+          "dist": 2.628350221915335,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "VREG2_U7",
+          "desc": "pad:VREG2_U7 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_EQ1_1_U7",
+          "desc": "via:STRAP_EQ1_1_U7 (In2.Cu)",
+          "dist": 2.628350221915335,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "VREG2_U7",
+          "desc": "pad:VREG2_U7 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_EQ1_1_U7",
+          "desc": "via:STRAP_EQ1_1_U7 (In2.Cu)",
+          "dist": 2.628350221915335,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "segname": "out_U7",
+     "status": "BLOCKED",
+     "corridor": "J2_TO_U",
+     "track_y": 44.16,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.4,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_N_U7",
+          "desc": "seg:PCIE_UP_OUT6_N_U7 (In2.Cu)",
+          "dist": 2.919853563922031,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_N_U7",
+          "desc": "seg:PCIE_UP_OUT6_N_U7 (In2.Cu)",
+          "dist": 2.919853563922031,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_N_U7",
+          "desc": "seg:PCIE_UP_OUT3_N_U7 (F.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_N_U7",
+          "desc": "seg:PCIE_UP_OUT6_N_U7 (In2.Cu)",
+          "dist": 2.919853563922031,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_P_U7",
+          "desc": "seg:PCIE_UP_OUT3_P_U7 (F.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_N_U7",
+          "desc": "seg:PCIE_UP_OUT6_N_U7 (In2.Cu)",
+          "dist": 2.919853563922031,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 2.022,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 1.672,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT4_P_J2",
+          "desc": "pad:PCIE_UP_OUT4_P_J2 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_P_J2",
+          "desc": "seg:PCIE_UP_OUT3_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 1.672,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT4_P_J2",
+          "desc": "pad:PCIE_UP_OUT4_P_J2 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_P_J2",
+          "desc": "seg:PCIE_UP_OUT3_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 1.672,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT4_P_J2",
+          "desc": "pad:PCIE_UP_OUT4_P_J2 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_P_J2",
+          "desc": "seg:PCIE_UP_OUT3_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 1.672,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_P_U7",
+          "desc": "seg:PCIE_UP_OUT3_P_U7 (F.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_P_J2",
+          "desc": "seg:PCIE_UP_OUT3_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "segname": "out_J2",
+     "status": "BLOCKED",
+     "corridor": "J2_TO_U",
+     "track_y": 44.16,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 2.022,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 1.672,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT4_P_U7",
+          "desc": "pad:PCIE_UP_OUT4_P_U7 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_N_J2",
+          "desc": "seg:PCIE_UP_OUT6_N_J2 (In2.Cu)",
+          "dist": 1.1362257456432925,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 1.672,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT4_P_U7",
+          "desc": "pad:PCIE_UP_OUT4_P_U7 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_N_J2",
+          "desc": "seg:PCIE_UP_OUT6_N_J2 (In2.Cu)",
+          "dist": 1.1319578883654016,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 1.672,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT4_P_U7",
+          "desc": "pad:PCIE_UP_OUT4_P_U7 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_N_J2",
+          "desc": "seg:PCIE_UP_OUT6_N_J2 (In2.Cu)",
+          "dist": 1.127485418716551,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 1.672,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT4_P_U7",
+          "desc": "pad:PCIE_UP_OUT4_P_U7 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_N_J2",
+          "desc": "seg:PCIE_UP_OUT6_N_J2 (In2.Cu)",
+          "dist": 1.122793280188921,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 2.425,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 2.075,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT3_N_J2",
+          "desc": "pad:PCIE_UP_OUT3_N_J2 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_P_J2",
+          "desc": "seg:PCIE_UP_OUT3_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 2.075,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT3_N_J2",
+          "desc": "pad:PCIE_UP_OUT3_N_J2 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_P_J2",
+          "desc": "seg:PCIE_UP_OUT3_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 2.075,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_P_J2",
+          "desc": "seg:PCIE_UP_OUT3_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 2.075,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_P_J2",
+          "desc": "seg:PCIE_UP_OUT3_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  "PCIE_UP5": {
+   "lenP": 92.7939,
+   "lenN": 96.044,
+   "segments": [
+    {
+     "name": "input",
+     "status": "SOLVED",
+     "reason": ""
+    },
+    {
+     "name": "out_U7",
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(98.825,42.700) → cv=(101.830,43.080) dir=1 flip=True pn_dist=0.400）"
+    },
+    {
+     "name": "out_J2",
+     "status": "SOLVED",
+     "reason": ""
+    }
+   ],
+   "probes": [
+    {
+     "segname": "input",
+     "status": "BLOCKED",
+     "corridor": "U_TO_MCIO",
+     "track_y": 43.08,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.6,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": true,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.3750000000000014,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP3_P",
+          "desc": "seg:PCIE_UP3_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": true,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.3750000000000014,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP3_P",
+          "desc": "seg:PCIE_UP3_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": true,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.3750000000000014,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP3_P",
+          "desc": "seg:PCIE_UP3_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": true,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.3750000000000014,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP3_P",
+          "desc": "seg:PCIE_UP3_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.4,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "P3V3",
+          "desc": "pad:P3V3 (F.Cu)",
+          "dist": 0.13836901466231238,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_EQ1_1_U7",
+          "desc": "via:STRAP_EQ1_1_U7 (In2.Cu)",
+          "dist": 3.4609702235399387,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "P3V3",
+          "desc": "pad:P3V3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_EQ1_1_U7",
+          "desc": "via:STRAP_EQ1_1_U7 (In2.Cu)",
+          "dist": 3.4609702235399387,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "P3V3",
+          "desc": "pad:P3V3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_EQ1_1_U7",
+          "desc": "via:STRAP_EQ1_1_U7 (In2.Cu)",
+          "dist": 3.4609702235399387,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "P3V3",
+          "desc": "pad:P3V3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_EQ1_1_U7",
+          "desc": "via:STRAP_EQ1_1_U7 (In2.Cu)",
+          "dist": 3.4609702235399387,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "segname": "out_U7",
+     "status": "BLOCKED",
+     "corridor": "J2_TO_U",
+     "track_y": 43.08,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.4,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_N_U7",
+          "desc": "seg:PCIE_UP_OUT6_N_U7 (In2.Cu)",
+          "dist": 2.7369957997868974,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_N_U7",
+          "desc": "seg:PCIE_UP_OUT6_N_U7 (In2.Cu)",
+          "dist": 2.7369957997868974,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_N_U7",
+          "desc": "seg:PCIE_UP_OUT6_N_U7 (In2.Cu)",
+          "dist": 2.7369957997868974,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_N_U7",
+          "desc": "seg:PCIE_UP_OUT6_N_U7 (In2.Cu)",
+          "dist": 2.7369957997868974,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 2.088,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 1.738,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT5_P_J2",
+          "desc": "pad:PCIE_UP_OUT5_P_J2 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_P_J2",
+          "desc": "seg:PCIE_UP_OUT3_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 1.738,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT5_P_J2",
+          "desc": "pad:PCIE_UP_OUT5_P_J2 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_P_J2",
+          "desc": "seg:PCIE_UP_OUT3_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 1.738,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT5_P_J2",
+          "desc": "pad:PCIE_UP_OUT5_P_J2 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_P_J2",
+          "desc": "seg:PCIE_UP_OUT3_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 1.738,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT5_P_J2",
+          "desc": "pad:PCIE_UP_OUT5_P_J2 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_P_J2",
+          "desc": "seg:PCIE_UP_OUT3_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "segname": "out_J2",
+     "status": "BLOCKED",
+     "corridor": "J2_TO_U",
+     "track_y": 43.08,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 2.088,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 1.738,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT5_P_U7",
+          "desc": "pad:PCIE_UP_OUT5_P_U7 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_N_U7",
+          "desc": "seg:PCIE_UP_OUT6_N_U7 (In2.Cu)",
+          "dist": 0.7633293183704435,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 1.738,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT5_P_U7",
+          "desc": "pad:PCIE_UP_OUT5_P_U7 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_N_U7",
+          "desc": "seg:PCIE_UP_OUT6_N_U7 (In2.Cu)",
+          "dist": 0.7626837796067363,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 1.738,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT5_P_U7",
+          "desc": "pad:PCIE_UP_OUT5_P_U7 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_N_U7",
+          "desc": "seg:PCIE_UP_OUT6_N_U7 (In2.Cu)",
+          "dist": 0.7619815583407747,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 1.738,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT5_P_U7",
+          "desc": "pad:PCIE_UP_OUT5_P_U7 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_N_U7",
+          "desc": "seg:PCIE_UP_OUT6_N_U7 (In2.Cu)",
+          "dist": 0.7612148462733408,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 2.35,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 2.0,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT4_N_J2",
+          "desc": "pad:PCIE_UP_OUT4_N_J2 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_P_J2",
+          "desc": "seg:PCIE_UP_OUT3_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 2.0,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT4_N_J2",
+          "desc": "pad:PCIE_UP_OUT4_N_J2 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_P_J2",
+          "desc": "seg:PCIE_UP_OUT3_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 2.0,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_P_J2",
+          "desc": "seg:PCIE_UP_OUT3_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 2.0,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_P_J2",
+          "desc": "seg:PCIE_UP_OUT3_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  "PCIE_UP7": {
+   "lenP": 5.6324,
+   "lenN": 5.6017,
+   "segments": [
+    {
+     "name": "input",
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(64.000,63.950) → cv=(64.900,40.920) dir=1 flip=True pn_dist=0.600）"
+    },
+    {
+     "name": "out_U7",
+     "status": "SOLVED",
+     "reason": ""
+    },
+    {
+     "name": "out_J2",
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(100.662,43.250) → cv=(101.150,40.920) dir=1 flip=True pn_dist=1.200）"
+    }
+   ],
+   "probes": [
+    {
+     "segname": "input",
+     "status": "BLOCKED",
+     "corridor": "U_TO_MCIO",
+     "track_y": 40.92,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.6,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": true,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.3750000000000014,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP3_P",
+          "desc": "seg:PCIE_UP3_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": true,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.3750000000000014,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP3_P",
+          "desc": "seg:PCIE_UP3_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": true,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.3750000000000014,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP3_P",
+          "desc": "seg:PCIE_UP3_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": true,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.3750000000000014,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP3_P",
+          "desc": "seg:PCIE_UP3_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.4,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "NO_CONNECT",
+          "desc": "via:NO_CONNECT (In2.Cu)",
+          "dist": 4.178106254371052,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP6_N",
+          "desc": "pad:PCIE_UP6_N (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "NO_CONNECT",
+          "desc": "via:NO_CONNECT (In2.Cu)",
+          "dist": 4.178106254371052,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "seg",
+          "net": "PCIE_UP6_N",
+          "desc": "seg:PCIE_UP6_N (F.Cu)",
+          "dist": -0.10182287571738283,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "NO_CONNECT",
+          "desc": "via:NO_CONNECT (In2.Cu)",
+          "dist": 4.178106254371052,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "seg",
+          "net": "PCIE_UP6_N",
+          "desc": "seg:PCIE_UP6_N (F.Cu)",
+          "dist": -0.10182287571738283,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "NO_CONNECT",
+          "desc": "via:NO_CONNECT (In2.Cu)",
+          "dist": 4.178106254371052,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "segname": "out_U7",
+     "status": "BLOCKED",
+     "corridor": "J2_TO_U",
+     "track_y": 40.92,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.4,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "VREG2_U7",
+          "desc": "pad:VREG2_U7 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_P_U7",
+          "desc": "seg:PCIE_UP_OUT6_P_U7 (In2.Cu)",
+          "dist": 2.6160601236083942,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "VREG2_U7",
+          "desc": "pad:VREG2_U7 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_P_U7",
+          "desc": "seg:PCIE_UP_OUT6_P_U7 (In2.Cu)",
+          "dist": 2.587694178638137,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_N_U7",
+          "desc": "seg:PCIE_UP_OUT6_N_U7 (F.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_P_U7",
+          "desc": "seg:PCIE_UP_OUT6_P_U7 (In2.Cu)",
+          "dist": 2.5368585575692046,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_P_U7",
+          "desc": "seg:PCIE_UP_OUT6_P_U7 (F.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_P_U7",
+          "desc": "seg:PCIE_UP_OUT6_P_U7 (In2.Cu)",
+          "dist": 2.5193535240332343,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 1.2,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.85,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT7_P_J2",
+          "desc": "pad:PCIE_UP_OUT7_P_J2 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_P_U7",
+          "desc": "seg:PCIE_UP_OUT6_P_U7 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.85,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT7_P_J2",
+          "desc": "pad:PCIE_UP_OUT7_P_J2 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_P_U7",
+          "desc": "seg:PCIE_UP_OUT6_P_U7 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.85,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT7_P_J2",
+          "desc": "pad:PCIE_UP_OUT7_P_J2 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_P_U7",
+          "desc": "seg:PCIE_UP_OUT6_P_U7 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.85,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT7_P_J2",
+          "desc": "pad:PCIE_UP_OUT7_P_J2 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_P_U7",
+          "desc": "seg:PCIE_UP_OUT6_P_U7 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "segname": "out_J2",
+     "status": "BLOCKED",
+     "corridor": "J2_TO_U",
+     "track_y": 40.92,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 1.2,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.85,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_N_U7",
+          "desc": "seg:PCIE_UP_OUT6_N_U7 (F.Cu)",
+          "dist": 0.1025500073934157,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_N_U7",
+          "desc": "seg:PCIE_UP_OUT6_N_U7 (In2.Cu)",
+          "dist": 0.6225069492293392,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.85,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_N_U7",
+          "desc": "seg:PCIE_UP_OUT6_N_U7 (F.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_N_U7",
+          "desc": "seg:PCIE_UP_OUT6_N_U7 (In2.Cu)",
+          "dist": 0.7739265067911775,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.85,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_N_U7",
+          "desc": "seg:PCIE_UP_OUT6_N_U7 (F.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_P_U7",
+          "desc": "seg:PCIE_UP_OUT6_P_U7 (In2.Cu)",
+          "dist": 0.9671995966331515,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.85,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_P_U7",
+          "desc": "seg:PCIE_UP_OUT6_P_U7 (F.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT6_P_U7",
+          "desc": "seg:PCIE_UP_OUT6_P_U7 (In2.Cu)",
+          "dist": 1.1490851652834444,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 2.35,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 2.0,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT6_N_J2",
+          "desc": "pad:PCIE_UP_OUT6_N_J2 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_P_J2",
+          "desc": "seg:PCIE_UP_OUT3_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 2.0,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_UP_OUT6_N_J2",
+          "desc": "pad:PCIE_UP_OUT6_N_J2 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_P_J2",
+          "desc": "seg:PCIE_UP_OUT3_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 2.0,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_P_J2",
+          "desc": "seg:PCIE_UP_OUT3_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 2.0,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP_OUT3_P_J2",
+          "desc": "seg:PCIE_UP_OUT3_P_J2 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  "PCIE_DN0": {
+   "lenP": 61.7114,
+   "lenN": 65.1003,
+   "segments": [
+    {
+     "name": "input",
+     "status": "SOLVED",
+     "reason": ""
+    },
+    {
+     "name": "out_U3",
+     "status": "SOLVED",
+     "reason": ""
+    },
+    {
+     "name": "out_MCIO",
+     "status": "INFEASIBLE",
+     "reason": "右逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(76.825,66.000) → cv=(74.975,60.000) dir=-1 flip=True pn_dist=1.300）"
+    }
+   ],
+   "probes": [
+    {
+     "segname": "input",
+     "status": "BLOCKED",
+     "corridor": "J2_TO_U",
+     "track_y": 60.0,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.4,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "VREG1_U3",
+          "desc": "pad:VREG1_U3 (F.Cu)",
+          "dist": 0.17434061989364408,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_READ_EN_U3",
+          "desc": "via:STRAP_READ_EN_U3 (In2.Cu)",
+          "dist": 1.8978776930670418,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "VREG1_U3",
+          "desc": "pad:VREG1_U3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_READ_EN_U3",
+          "desc": "via:STRAP_READ_EN_U3 (In2.Cu)",
+          "dist": 1.8980208527522913,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "VREG1_U3",
+          "desc": "pad:VREG1_U3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_READ_EN_U3",
+          "desc": "via:STRAP_READ_EN_U3 (In2.Cu)",
+          "dist": 1.8982446164990487,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "VREG1_U3",
+          "desc": "pad:VREG1_U3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_READ_EN_U3",
+          "desc": "via:STRAP_READ_EN_U3 (In2.Cu)",
+          "dist": 1.906066257194357,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 2.35,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 2.0,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN4_P",
+          "desc": "seg:PCIE_DN4_P (In2.Cu)",
+          "dist": 0.41483266386172335,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 2.0,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN4_P",
+          "desc": "seg:PCIE_DN4_P (In2.Cu)",
+          "dist": 0.41483266386172335,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 2.0,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN4_P",
+          "desc": "seg:PCIE_DN4_P (In2.Cu)",
+          "dist": 0.41483266386172335,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 2.0,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN4_P",
+          "desc": "seg:PCIE_DN4_P (In2.Cu)",
+          "dist": 0.41483266386172335,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "segname": "out_U3",
+     "status": "BLOCKED",
+     "corridor": "U_TO_MCIO",
+     "track_y": 60.0,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 1.3,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT0_P_MCIO",
+          "desc": "pad:PCIE_DN_OUT0_P_MCIO (F.Cu)",
+          "dist": 0.4249999999999858,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP6_P",
+          "desc": "seg:PCIE_UP6_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT0_P_MCIO",
+          "desc": "pad:PCIE_DN_OUT0_P_MCIO (F.Cu)",
+          "dist": 0.4249999999999858,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP6_P",
+          "desc": "seg:PCIE_UP6_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT0_P_MCIO",
+          "desc": "pad:PCIE_DN_OUT0_P_MCIO (F.Cu)",
+          "dist": 0.4249999999999858,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP6_P",
+          "desc": "seg:PCIE_UP6_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT0_P_MCIO",
+          "desc": "pad:PCIE_DN_OUT0_P_MCIO (F.Cu)",
+          "dist": 0.4249999999999858,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP6_P",
+          "desc": "seg:PCIE_UP6_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.4,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.17413869618134753,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "ALL_DONE_N_U3",
+          "desc": "via:ALL_DONE_N_U3 (In2.Cu)",
+          "dist": 4.104939321976159,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "ALL_DONE_N_U3",
+          "desc": "via:ALL_DONE_N_U3 (In2.Cu)",
+          "dist": 4.2312697642712935,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "ALL_DONE_N_U3",
+          "desc": "via:ALL_DONE_N_U3 (In2.Cu)",
+          "dist": 4.373641519652005,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT1_P_U3",
+          "desc": "pad:PCIE_DN_OUT1_P_U3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "ALL_DONE_N_U3",
+          "desc": "via:ALL_DONE_N_U3 (In2.Cu)",
+          "dist": 4.530621623212595,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "segname": "out_MCIO",
+     "status": "BLOCKED",
+     "corridor": "U_TO_MCIO",
+     "track_y": 60.0,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.6,
+       "n_ok": 4,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": true,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.35204386268339494,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT2_N_MCIO",
+          "desc": "seg:PCIE_DN_OUT2_N_MCIO (In2.Cu)",
+          "dist": 0.5988379477633542,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": true,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.35204386268339494,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT2_N_MCIO",
+          "desc": "seg:PCIE_DN_OUT2_N_MCIO (In2.Cu)",
+          "dist": 0.5988379477633542,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": true,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.35204386268339494,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT2_N_MCIO",
+          "desc": "seg:PCIE_DN_OUT2_N_MCIO (In2.Cu)",
+          "dist": 0.5988379477633542,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": true,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.3520438626833954,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT2_N_MCIO",
+          "desc": "seg:PCIE_DN_OUT2_N_MCIO (In2.Cu)",
+          "dist": 0.5988379477633542,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 1.3,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT0_N_U3",
+          "desc": "pad:PCIE_DN_OUT0_N_U3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT4_P_U3",
+          "desc": "seg:PCIE_DN_OUT4_P_U3 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT0_N_U3",
+          "desc": "pad:PCIE_DN_OUT0_N_U3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT4_P_U3",
+          "desc": "seg:PCIE_DN_OUT4_P_U3 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT0_N_U3",
+          "desc": "pad:PCIE_DN_OUT0_N_U3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT4_P_U3",
+          "desc": "seg:PCIE_DN_OUT4_P_U3 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT0_N_U3",
+          "desc": "pad:PCIE_DN_OUT0_N_U3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT4_P_U3",
+          "desc": "seg:PCIE_DN_OUT4_P_U3 (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  "PCIE_DN1": {
+   "lenP": 56.2272,
+   "lenN": 57.9787,
+   "segments": [
+    {
+     "name": "input",
+     "status": "SOLVED",
+     "reason": ""
+    },
+    {
+     "name": "out_U3",
+     "status": "SOLVED",
+     "reason": ""
+    },
+    {
+     "name": "out_MCIO",
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(62.200,45.750) → cv=(75.700,58.920) dir=1 flip=True pn_dist=0.600）"
+    }
+   ],
+   "probes": [
+    {
+     "segname": "input",
+     "status": "BLOCKED",
+     "corridor": "J2_TO_U",
+     "track_y": 58.92,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.4,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "VREG1_U3",
+          "desc": "pad:VREG1_U3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_READ_EN_U3",
+          "desc": "via:STRAP_READ_EN_U3 (In2.Cu)",
+          "dist": 1.9045533179756688,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN0_N",
+          "desc": "pad:PCIE_DN0_N (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_READ_EN_U3",
+          "desc": "via:STRAP_READ_EN_U3 (In2.Cu)",
+          "dist": 1.9045533179756688,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN0_N",
+          "desc": "pad:PCIE_DN0_N (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_READ_EN_U3",
+          "desc": "via:STRAP_READ_EN_U3 (In2.Cu)",
+          "dist": 1.9045533179756688,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN0_P",
+          "desc": "pad:PCIE_DN0_P (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_READ_EN_U3",
+          "desc": "via:STRAP_READ_EN_U3 (In2.Cu)",
+          "dist": 1.9045533179756688,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 2.425,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 2.075,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "I2C1_SDA",
+          "desc": "via:I2C1_SDA (In2.Cu)",
+          "dist": -0.11198614784257642,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 2.075,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "I2C1_SDA",
+          "desc": "via:I2C1_SDA (In2.Cu)",
+          "dist": -0.176722233653327,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 2.075,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "via",
+          "net": "I2C1_SDA",
+          "desc": "via:I2C1_SDA (F.Cu)",
+          "dist": -0.24907719681338425,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "I2C1_SDA",
+          "desc": "via:I2C1_SDA (In2.Cu)",
+          "dist": -0.2459731816058049,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 2.075,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "via",
+          "net": "I2C1_SDA",
+          "desc": "via:I2C1_SDA (F.Cu)",
+          "dist": -0.24907719681341134,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "I2C1_SDA",
+          "desc": "via:I2C1_SDA (In2.Cu)",
+          "dist": 0.053921056649680124,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "segname": "out_U3",
+     "status": "BLOCKED",
+     "corridor": "U_TO_MCIO",
+     "track_y": 58.92,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 1.3,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT1_P_MCIO",
+          "desc": "pad:PCIE_DN_OUT1_P_MCIO (F.Cu)",
+          "dist": 0.4249999999999858,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP6_P",
+          "desc": "seg:PCIE_UP6_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT1_P_MCIO",
+          "desc": "pad:PCIE_DN_OUT1_P_MCIO (F.Cu)",
+          "dist": 0.4249999999999858,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP6_P",
+          "desc": "seg:PCIE_UP6_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT1_P_MCIO",
+          "desc": "pad:PCIE_DN_OUT1_P_MCIO (F.Cu)",
+          "dist": 0.4249999999999858,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP6_P",
+          "desc": "seg:PCIE_UP6_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT1_P_MCIO",
+          "desc": "pad:PCIE_DN_OUT1_P_MCIO (F.Cu)",
+          "dist": 0.4249999999999858,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP6_P",
+          "desc": "seg:PCIE_UP6_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.4,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "ALL_DONE_N_U3",
+          "desc": "via:ALL_DONE_N_U3 (In2.Cu)",
+          "dist": 4.178106254371052,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "ALL_DONE_N_U3",
+          "desc": "via:ALL_DONE_N_U3 (In2.Cu)",
+          "dist": 4.122295267082163,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "ALL_DONE_N_U3",
+          "desc": "via:ALL_DONE_N_U3 (In2.Cu)",
+          "dist": 4.007984086055549,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "ALL_DONE_N_U3",
+          "desc": "via:ALL_DONE_N_U3 (In2.Cu)",
+          "dist": 3.9121978631073793,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "segname": "out_MCIO",
+     "status": "BLOCKED",
+     "corridor": "U_TO_MCIO",
+     "track_y": 58.92,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.6,
+       "n_ok": 4,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": true,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.295539334577706,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP3_N",
+          "desc": "seg:PCIE_UP3_N (In2.Cu)",
+          "dist": 0.8601854523701279,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": true,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.2955393345777005,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP6_N",
+          "desc": "seg:PCIE_UP6_N (In2.Cu)",
+          "dist": 0.9342776047511425,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": true,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.2955393345777005,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP6_N",
+          "desc": "seg:PCIE_UP6_N (In2.Cu)",
+          "dist": 0.9342776047511425,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": true,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.2955393345777005,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP6_N",
+          "desc": "seg:PCIE_UP6_N (In2.Cu)",
+          "dist": 0.9342776047511425,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 1.3,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT1_N_U3",
+          "desc": "pad:PCIE_DN_OUT1_N_U3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT2_P_MCIO",
+          "desc": "seg:PCIE_DN_OUT2_P_MCIO (In2.Cu)",
+          "dist": -0.07579596681442209,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT1_N_U3",
+          "desc": "pad:PCIE_DN_OUT1_N_U3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT2_P_MCIO",
+          "desc": "seg:PCIE_DN_OUT2_P_MCIO (In2.Cu)",
+          "dist": -0.08171542955060618,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT1_N_U3",
+          "desc": "pad:PCIE_DN_OUT1_N_U3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT2_P_MCIO",
+          "desc": "seg:PCIE_DN_OUT2_P_MCIO (In2.Cu)",
+          "dist": -0.08794187312927203,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT2_P_MCIO",
+          "desc": "seg:PCIE_DN_OUT2_P_MCIO (F.Cu)",
+          "dist": -0.11808544339629151,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT2_N_MCIO",
+          "desc": "seg:PCIE_DN_OUT2_N_MCIO (In2.Cu)",
+          "dist": -0.052428682844297816,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  "PCIE_DN3": {
+   "lenP": 40.1653,
+   "lenN": 40.6671,
+   "segments": [
+    {
+     "name": "input",
+     "status": "SOLVED",
+     "reason": ""
+    },
+    {
+     "name": "out_U3",
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(81.325,60.050) → cv=(84.975,62.160) dir=1 flip=True pn_dist=1.300）"
+    },
+    {
+     "name": "out_MCIO",
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(55.000,45.750) → cv=(65.500,62.160) dir=1 flip=True pn_dist=0.600）"
+    }
+   ],
+   "probes": [
+    {
+     "segname": "input",
+     "status": "BLOCKED",
+     "corridor": "J2_TO_U",
+     "track_y": 62.16,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.4,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.17077634523689084,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "PD1_U3",
+          "desc": "via:PD1_U3 (In2.Cu)",
+          "dist": 2.8189403708773844,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "PD1_U3",
+          "desc": "via:PD1_U3 (In2.Cu)",
+          "dist": 2.7601533448125015,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "PD1_U3",
+          "desc": "via:PD1_U3 (In2.Cu)",
+          "dist": 2.528386570853381,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "seg",
+          "net": "PCIE_DN4_P",
+          "desc": "seg:PCIE_DN4_P (F.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "PD1_U3",
+          "desc": "via:PD1_U3 (In2.Cu)",
+          "dist": 2.3108281306856426,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 2.425,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 2.075,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN4_P",
+          "desc": "seg:PCIE_DN4_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 2.075,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN4_P",
+          "desc": "seg:PCIE_DN4_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 2.075,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN4_P",
+          "desc": "seg:PCIE_DN4_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 2.075,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "seg",
+          "net": "PCIE_DN4_N",
+          "desc": "seg:PCIE_DN4_N (F.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN4_P",
+          "desc": "seg:PCIE_DN4_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "segname": "out_U3",
+     "status": "BLOCKED",
+     "corridor": "U_TO_MCIO",
+     "track_y": 62.16,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 1.3,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT2_N_MCIO",
+          "desc": "pad:PCIE_DN_OUT2_N_MCIO (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP6_P",
+          "desc": "seg:PCIE_UP6_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT2_N_MCIO",
+          "desc": "pad:PCIE_DN_OUT2_N_MCIO (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP6_P",
+          "desc": "seg:PCIE_UP6_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT2_N_U3",
+          "desc": "pad:PCIE_DN_OUT2_N_U3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP6_P",
+          "desc": "seg:PCIE_UP6_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT2_N_U3",
+          "desc": "seg:PCIE_DN_OUT2_N_U3 (F.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP6_P",
+          "desc": "seg:PCIE_UP6_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.4,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "VREG1_U3",
+          "desc": "pad:VREG1_U3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT4_P_U3",
+          "desc": "seg:PCIE_DN_OUT4_P_U3 (In2.Cu)",
+          "dist": 4.315583388912891,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "VREG1_U3",
+          "desc": "pad:VREG1_U3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT4_P_U3",
+          "desc": "seg:PCIE_DN_OUT4_P_U3 (In2.Cu)",
+          "dist": 4.315583388912891,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT2_N_U3",
+          "desc": "seg:PCIE_DN_OUT2_N_U3 (F.Cu)",
+          "dist": -0.09144677559009065,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT4_P_U3",
+          "desc": "seg:PCIE_DN_OUT4_P_U3 (In2.Cu)",
+          "dist": 4.315583388912891,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT2_N_U3",
+          "desc": "seg:PCIE_DN_OUT2_N_U3 (F.Cu)",
+          "dist": -0.09144677559010486,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT4_P_U3",
+          "desc": "seg:PCIE_DN_OUT4_P_U3 (In2.Cu)",
+          "dist": 4.315583388912891,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "segname": "out_MCIO",
+     "status": "BLOCKED",
+     "corridor": "U_TO_MCIO",
+     "track_y": 62.16,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.6,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.1295131923486013,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT2_P_MCIO",
+          "desc": "seg:PCIE_DN_OUT2_P_MCIO (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.1295131923486013,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT2_P_MCIO",
+          "desc": "seg:PCIE_DN_OUT2_P_MCIO (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.1295131923486013,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT2_P_MCIO",
+          "desc": "seg:PCIE_DN_OUT2_P_MCIO (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.1295131923486013,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT2_P_MCIO",
+          "desc": "seg:PCIE_DN_OUT2_P_MCIO (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 1.3,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT3_N_U3",
+          "desc": "pad:PCIE_DN_OUT3_N_U3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT4_P_U3",
+          "desc": "seg:PCIE_DN_OUT4_P_U3 (In2.Cu)",
+          "dist": 1.2324950619075459,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT3_N_U3",
+          "desc": "pad:PCIE_DN_OUT3_N_U3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT4_P_U3",
+          "desc": "seg:PCIE_DN_OUT4_P_U3 (In2.Cu)",
+          "dist": 1.2321872024044371,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT3_N_U3",
+          "desc": "pad:PCIE_DN_OUT3_N_U3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT4_P_U3",
+          "desc": "seg:PCIE_DN_OUT4_P_U3 (In2.Cu)",
+          "dist": 1.2318515036435913,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT3_N_U3",
+          "desc": "pad:PCIE_DN_OUT3_N_U3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT4_P_U3",
+          "desc": "seg:PCIE_DN_OUT4_P_U3 (In2.Cu)",
+          "dist": 1.2314840106169203,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  "PCIE_DN5": {
+   "lenP": 6.2335,
+   "lenN": 5.9206,
+   "segments": [
+    {
+     "name": "input",
+     "status": "INFEASIBLE",
+     "reason": "右逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(133.825,60.600) → cv=(131.450,64.320) dir=-1 flip=True pn_dist=2.425）"
+    },
+    {
+     "name": "out_U3",
+     "status": "SOLVED",
+     "reason": ""
+    },
+    {
+     "name": "out_MCIO",
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(56.800,61.450) → cv=(67.300,64.320) dir=1 flip=True pn_dist=0.600）"
+    }
+   ],
+   "probes": [
+    {
+     "segname": "input",
+     "status": "BLOCKED",
+     "corridor": "J2_TO_U",
+     "track_y": 64.32,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.4,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "P3V3",
+          "desc": "pad:P3V3 (F.Cu)",
+          "dist": 0.13836901466227686,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "PD1_U3",
+          "desc": "via:PD1_U3 (In2.Cu)",
+          "dist": 1.5621808187929282,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "P3V3",
+          "desc": "pad:P3V3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "PD1_U3",
+          "desc": "via:PD1_U3 (In2.Cu)",
+          "dist": 1.5621808187929282,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "P3V3",
+          "desc": "pad:P3V3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "PD1_U3",
+          "desc": "via:PD1_U3 (In2.Cu)",
+          "dist": 1.5621808187929282,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "P3V3",
+          "desc": "pad:P3V3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "PD1_U3",
+          "desc": "via:PD1_U3 (In2.Cu)",
+          "dist": 1.5621808187929282,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 2.425,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 2.075,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN4_P",
+          "desc": "seg:PCIE_DN4_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 2.075,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN4_P",
+          "desc": "seg:PCIE_DN4_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 2.075,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN4_P",
+          "desc": "seg:PCIE_DN4_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 2.075,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN4_P",
+          "desc": "seg:PCIE_DN4_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "segname": "out_U3",
+     "status": "BLOCKED",
+     "corridor": "U_TO_MCIO",
+     "track_y": 64.32,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 1.3,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT5_P_MCIO",
+          "desc": "pad:PCIE_DN_OUT5_P_MCIO (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT4_N_MCIO",
+          "desc": "seg:PCIE_DN_OUT4_N_MCIO (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT5_P_MCIO",
+          "desc": "pad:PCIE_DN_OUT5_P_MCIO (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT4_N_MCIO",
+          "desc": "seg:PCIE_DN_OUT4_N_MCIO (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT5_P_MCIO",
+          "desc": "pad:PCIE_DN_OUT5_P_MCIO (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT4_N_MCIO",
+          "desc": "seg:PCIE_DN_OUT4_N_MCIO (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT4_N_U3",
+          "desc": "seg:PCIE_DN_OUT4_N_U3 (F.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT4_N_MCIO",
+          "desc": "seg:PCIE_DN_OUT4_N_MCIO (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.4,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "PD0_U3",
+          "desc": "via:PD0_U3 (In2.Cu)",
+          "dist": 3.0381757860552554,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "PD0_U3",
+          "desc": "via:PD0_U3 (In2.Cu)",
+          "dist": 3.0381757860552554,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT4_N_U3",
+          "desc": "seg:PCIE_DN_OUT4_N_U3 (F.Cu)",
+          "dist": -0.10947459530378525,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "PD0_U3",
+          "desc": "via:PD0_U3 (In2.Cu)",
+          "dist": 3.0381757860552554,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT4_N_U3",
+          "desc": "seg:PCIE_DN_OUT4_N_U3 (F.Cu)",
+          "dist": -0.10947459530378525,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "PD0_U3",
+          "desc": "via:PD0_U3 (In2.Cu)",
+          "dist": 3.0381757860552554,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "segname": "out_MCIO",
+     "status": "BLOCKED",
+     "corridor": "U_TO_MCIO",
+     "track_y": 64.32,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.6,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.3750000000000014,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP6_P",
+          "desc": "seg:PCIE_UP6_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.1660021890188631,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP6_P",
+          "desc": "seg:PCIE_UP6_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.05422829787500459,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP6_P",
+          "desc": "seg:PCIE_UP6_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.05422829787500459,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP6_P",
+          "desc": "seg:PCIE_UP6_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 1.3,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT5_P_U3",
+          "desc": "pad:PCIE_DN_OUT5_P_U3 (F.Cu)",
+          "dist": 0.02189270573884748,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT4_P_U3",
+          "desc": "seg:PCIE_DN_OUT4_P_U3 (In2.Cu)",
+          "dist": 1.1681939285443308,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT5_P_U3",
+          "desc": "pad:PCIE_DN_OUT5_P_U3 (F.Cu)",
+          "dist": 0.021892705738841778,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT4_P_U3",
+          "desc": "seg:PCIE_DN_OUT4_P_U3 (In2.Cu)",
+          "dist": 1.3045127825730534,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT5_P_U3",
+          "desc": "pad:PCIE_DN_OUT5_P_U3 (F.Cu)",
+          "dist": 0.021892705738833312,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT4_P_U3",
+          "desc": "seg:PCIE_DN_OUT4_P_U3 (In2.Cu)",
+          "dist": 1.4859357826169675,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT5_P_U3",
+          "desc": "pad:PCIE_DN_OUT5_P_U3 (F.Cu)",
+          "dist": 0.02189270573884748,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT4_P_U3",
+          "desc": "seg:PCIE_DN_OUT4_P_U3 (In2.Cu)",
+          "dist": 1.6990169894932448,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  "PCIE_DN6": {
+   "lenP": 37.8066,
+   "lenN": 38.0773,
+   "segments": [
+    {
+     "name": "input",
+     "status": "SOLVED",
+     "reason": ""
+    },
+    {
+     "name": "out_U3",
+     "status": "INFEASIBLE",
+     "reason": "短段直连无净空（F.Cu 直连 + In2 错开 via 均失败）"
+    },
+    {
+     "name": "out_MCIO",
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(62.200,61.450) → cv=(78.100,65.400) dir=1 flip=True pn_dist=0.600）"
+    }
+   ],
+   "probes": [
+    {
+     "segname": "input",
+     "status": "BLOCKED",
+     "corridor": "J2_TO_U",
+     "track_y": 65.4,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.4,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "P3V3",
+          "desc": "pad:P3V3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_EQ1_1_U3",
+          "desc": "via:STRAP_EQ1_1_U3 (In2.Cu)",
+          "dist": 1.2115402833996698,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN5_N",
+          "desc": "pad:PCIE_DN5_N (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_EQ1_1_U3",
+          "desc": "via:STRAP_EQ1_1_U3 (In2.Cu)",
+          "dist": 1.2115402833996698,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN5_N",
+          "desc": "pad:PCIE_DN5_N (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_EQ1_1_U3",
+          "desc": "via:STRAP_EQ1_1_U3 (In2.Cu)",
+          "dist": 1.2115402833996698,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN5_P",
+          "desc": "pad:PCIE_DN5_P (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_EQ1_1_U3",
+          "desc": "via:STRAP_EQ1_1_U3 (In2.Cu)",
+          "dist": 1.2115402833996698,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 2.35,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 2.0,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN4_N",
+          "desc": "seg:PCIE_DN4_N (In2.Cu)",
+          "dist": 0.4518579288039917,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 2.0,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN4_N",
+          "desc": "seg:PCIE_DN4_N (In2.Cu)",
+          "dist": 0.7096607461679588,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 2.0,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN4_N",
+          "desc": "seg:PCIE_DN4_N (In2.Cu)",
+          "dist": 0.9674635635319331,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 2.0,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN4_N",
+          "desc": "seg:PCIE_DN4_N (In2.Cu)",
+          "dist": 1.2252663808959001,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "segname": "out_U3",
+     "status": "BLOCKED",
+     "corridor": "U_TO_MCIO",
+     "track_y": 65.4,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 1.3,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT6_P_MCIO",
+          "desc": "pad:PCIE_DN_OUT6_P_MCIO (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP6_P",
+          "desc": "seg:PCIE_UP6_P (In2.Cu)",
+          "dist": 1.4324186164134451,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT6_P_MCIO",
+          "desc": "pad:PCIE_DN_OUT6_P_MCIO (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP6_P",
+          "desc": "seg:PCIE_UP6_P (In2.Cu)",
+          "dist": 1.4324186164134451,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT6_P_MCIO",
+          "desc": "pad:PCIE_DN_OUT6_P_MCIO (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP6_P",
+          "desc": "seg:PCIE_UP6_P (In2.Cu)",
+          "dist": 1.4324186164134451,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT6_P_MCIO",
+          "desc": "pad:PCIE_DN_OUT6_P_MCIO (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP6_P",
+          "desc": "seg:PCIE_UP6_P (In2.Cu)",
+          "dist": 1.4324186164134451,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.4,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "P3V3",
+          "desc": "pad:P3V3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "PD0_U3",
+          "desc": "via:PD0_U3 (In2.Cu)",
+          "dist": 2.6544965140278705,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "P3V3",
+          "desc": "pad:P3V3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "PD0_U3",
+          "desc": "via:PD0_U3 (In2.Cu)",
+          "dist": 2.6544965140278705,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "P3V3",
+          "desc": "pad:P3V3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "PD0_U3",
+          "desc": "via:PD0_U3 (In2.Cu)",
+          "dist": 2.6544965140278705,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "P3V3",
+          "desc": "pad:P3V3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "PD0_U3",
+          "desc": "via:PD0_U3 (In2.Cu)",
+          "dist": 2.6544965140278705,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "segname": "out_MCIO",
+     "status": "BLOCKED",
+     "corridor": "U_TO_MCIO",
+     "track_y": 65.4,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.6,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.3750000000000014,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP6_P",
+          "desc": "seg:PCIE_UP6_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.3750000000000014,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP6_P",
+          "desc": "seg:PCIE_UP6_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.3750000000000014,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP6_P",
+          "desc": "seg:PCIE_UP6_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.3750000000000014,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP6_P",
+          "desc": "seg:PCIE_UP6_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 1.3,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT6_P_U3",
+          "desc": "pad:PCIE_DN_OUT6_P_U3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT4_P_MCIO",
+          "desc": "seg:PCIE_DN_OUT4_P_MCIO (In2.Cu)",
+          "dist": 1.56675539425174,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT6_P_U3",
+          "desc": "pad:PCIE_DN_OUT6_P_U3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT4_N_MCIO",
+          "desc": "seg:PCIE_DN_OUT4_N_MCIO (In2.Cu)",
+          "dist": 1.6086806052772584,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT6_P_U3",
+          "desc": "pad:PCIE_DN_OUT6_P_U3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT4_N_U3",
+          "desc": "seg:PCIE_DN_OUT4_N_U3 (In2.Cu)",
+          "dist": 1.6057986325970843,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT6_P_U3",
+          "desc": "pad:PCIE_DN_OUT6_P_U3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT4_N_U3",
+          "desc": "seg:PCIE_DN_OUT4_N_U3 (In2.Cu)",
+          "dist": 1.5983075276252414,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  "PCIE_DN7": {
+   "lenP": 44.9559,
+   "lenN": 44.8854,
+   "segments": [
+    {
+     "name": "input",
+     "status": "SOLVED",
+     "reason": ""
+    },
+    {
+     "name": "out_U3",
+     "status": "SOLVED",
+     "reason": ""
+    },
+    {
+     "name": "out_MCIO",
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(64.000,61.450) → cv=(78.100,66.480) dir=1 flip=True pn_dist=0.600）"
+    }
+   ],
+   "probes": [
+    {
+     "segname": "input",
+     "status": "BLOCKED",
+     "corridor": "J2_TO_U",
+     "track_y": 66.48,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.4,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_EQ1_1_U3",
+          "desc": "via:STRAP_EQ1_1_U3 (In2.Cu)",
+          "dist": 1.104093135817721,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN6_N",
+          "desc": "pad:PCIE_DN6_N (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_EQ1_1_U3",
+          "desc": "via:STRAP_EQ1_1_U3 (In2.Cu)",
+          "dist": 1.106583874341122,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN6_N",
+          "desc": "pad:PCIE_DN6_N (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_EQ1_1_U3",
+          "desc": "via:STRAP_EQ1_1_U3 (In2.Cu)",
+          "dist": 1.1078169342077742,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN6_P",
+          "desc": "pad:PCIE_DN6_P (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "STRAP_EQ1_1_U3",
+          "desc": "via:STRAP_EQ1_1_U3 (In2.Cu)",
+          "dist": 1.1085528181280218,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 2.425,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 2.075,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN4_N",
+          "desc": "seg:PCIE_DN4_N (In2.Cu)",
+          "dist": 1.2715955702841448,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 2.075,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN4_N",
+          "desc": "seg:PCIE_DN4_N (In2.Cu)",
+          "dist": 1.4573871384311436,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 2.075,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN4_N",
+          "desc": "seg:PCIE_DN4_N (In2.Cu)",
+          "dist": 1.674369565541481,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 2.075,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN4_N",
+          "desc": "seg:PCIE_DN4_N (In2.Cu)",
+          "dist": 1.912578188162765,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "segname": "out_U3",
+     "status": "BLOCKED",
+     "corridor": "U_TO_MCIO",
+     "track_y": 66.48,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 1.3,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT7_P_MCIO",
+          "desc": "pad:PCIE_DN_OUT7_P_MCIO (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT4_N_U3",
+          "desc": "seg:PCIE_DN_OUT4_N_U3 (In2.Cu)",
+          "dist": 1.5431806189118726,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT7_P_MCIO",
+          "desc": "pad:PCIE_DN_OUT7_P_MCIO (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT4_N_U3",
+          "desc": "seg:PCIE_DN_OUT4_N_U3 (In2.Cu)",
+          "dist": 1.5397971916874826,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT6_N_U3",
+          "desc": "pad:PCIE_DN_OUT6_N_U3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT4_N_U3",
+          "desc": "seg:PCIE_DN_OUT4_N_U3 (In2.Cu)",
+          "dist": 1.536311193141869,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT6_N_U3",
+          "desc": "pad:PCIE_DN_OUT6_N_U3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT4_N_U3",
+          "desc": "seg:PCIE_DN_OUT4_N_U3 (In2.Cu)",
+          "dist": 1.5511399002803492,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.4,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "VREG2_U3",
+          "desc": "pad:VREG2_U3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "PD0_U3",
+          "desc": "via:PD0_U3 (In2.Cu)",
+          "dist": 2.61981603050099,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "VREG2_U3",
+          "desc": "pad:VREG2_U3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "PD0_U3",
+          "desc": "via:PD0_U3 (In2.Cu)",
+          "dist": 2.59923337935016,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "VREG2_U3",
+          "desc": "pad:VREG2_U3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "PD0_U3",
+          "desc": "via:PD0_U3 (In2.Cu)",
+          "dist": 2.597834939200214,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.05,
+         "pn_via_gap_ok": false,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "VREG2_U3",
+          "desc": "pad:VREG2_U3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.2
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "PD0_U3",
+          "desc": "via:PD0_U3 (In2.Cu)",
+          "dist": 2.597259189450998,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "segname": "out_MCIO",
+     "status": "BLOCKED",
+     "corridor": "U_TO_MCIO",
+     "track_y": 66.48,
+     "layer": "F.Cu",
+     "ends": {
+      "left": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 0.6,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": true,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.3750000000000014,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP6_P",
+          "desc": "seg:PCIE_UP6_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": true,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.3750000000000014,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP6_P",
+          "desc": "seg:PCIE_UP6_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": true,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.3750000000000014,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP6_P",
+          "desc": "seg:PCIE_UP6_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.25,
+         "pn_via_gap_ok": true,
+         "fcu_ok": true,
+         "esc_ok": false,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "GND",
+          "desc": "pad:GND (F.Cu)",
+          "dist": 0.3750000000000014,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_UP6_P",
+          "desc": "seg:PCIE_UP6_P (In2.Cu)",
+          "dist": -0.12,
+          "req": 0.175
+         }
+        }
+       ]
+      },
+      "right": {
+       "conclusion": "BLOCKED",
+       "pn_pad_center_dist": 1.3,
+       "n_ok": 0,
+       "corridor_ok": false,
+       "candidates": [
+        {
+         "k": 1,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT7_P_U3",
+          "desc": "pad:PCIE_DN_OUT7_P_U3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT4_N_U3",
+          "desc": "seg:PCIE_DN_OUT4_N_U3 (In2.Cu)",
+          "dist": 2.023965392678779,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 2,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT7_P_U3",
+          "desc": "pad:PCIE_DN_OUT7_P_U3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT4_N_U3",
+          "desc": "seg:PCIE_DN_OUT4_N_U3 (In2.Cu)",
+          "dist": 2.281523494343859,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 3,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT7_P_U3",
+          "desc": "pad:PCIE_DN_OUT7_P_U3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "seg",
+          "net": "PCIE_DN_OUT4_N_U3",
+          "desc": "seg:PCIE_DN_OUT4_N_U3 (In2.Cu)",
+          "dist": 2.547966001051523,
+          "req": 0.175
+         }
+        },
+        {
+         "k": 4,
+         "pn_via_edge": 0.95,
+         "pn_via_gap_ok": true,
+         "fcu_ok": false,
+         "esc_ok": true,
+         "nearest_fcu": {
+          "kind": "pad",
+          "net": "PCIE_DN_OUT7_P_U3",
+          "desc": "pad:PCIE_DN_OUT7_P_U3 (F.Cu)",
+          "dist": -0.075,
+          "req": 0.175
+         },
+         "nearest_esc": {
+          "kind": "via",
+          "net": "PD0_U3",
+          "desc": "via:PD0_U3 (In2.Cu)",
+          "dist": 2.6470502239346914,
+          "req": 0.175
+         }
+        }
+       ]
+      }
+     }
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,237 @@
+{
+ "base": "PCIE_DN6",
+ "input_fp": "87b66fbb6074e89048741b73d3de2ac30b82bd1d2f77266ceed0177c1eec51cf",
+ "solve_time_s": 39.57,
+ "result": {
+  "base": "DN6",
+  "status": "INFEASIBLE",
+  "segments": [
+   {
+    "status": "INFEASIBLE",
+    "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(98.825,65.500) → cv=(99.430,65.400) dir=1 flip=True pn_dist=0.400）",
+    "name": "input",
+    "esc": {
+     "status": "INFEASIBLE",
+     "reason": "对级对称逃逸无净空（M=(98.825,65.500) → cv=(99.430,65.400) dir=1 flip=True pn_dist=0.400）",
+     "nearest": {
+      "kind": "pad",
+      "net": "P3V3",
+      "desc": "pad:P3V3 (F.Cu)",
+      "dist": 0.3569491361025953,
+      "req": 0.2
+     }
+    },
+    "flip": true
+   },
+   {
+    "status": "INFEASIBLE",
+    "reason": "短段直连无净空（F.Cu 直连 + In2 错开 via 均失败）",
+    "name": "out_U3",
+    "nearest": {
+     "kind": "pad",
+     "net": "PCIE_DN_OUT6_N_MCIO",
+     "desc": "pad:PCIE_DN_OUT6_N_MCIO (F.Cu)",
+     "dist": -0.075,
+     "req": 0.175
+    }
+   },
+   {
+    "name": "out_MCIO",
+    "status": "SOLVED",
+    "corridor": "U_TO_MCIO",
+    "track_y": 65.4,
+    "layer": "F.Cu",
+    "flip": false,
+    "P": {
+     "net": "PCIE_DN_OUT6_P_MCIO",
+     "path": [
+      [
+       61.9,
+       61.45
+      ],
+      [
+       61.9,
+       62.1
+      ],
+      [
+       62.2,
+       61.64
+      ],
+      [
+       78.05419115645755,
+       61.634395091727804
+      ],
+      [
+       78.1,
+       65.59
+      ],
+      [
+       82.45,
+       65.59
+      ],
+      [
+       82.25230859987222,
+       65.82616413188512
+      ],
+      [
+       82.45,
+       65.0
+      ]
+     ],
+     "layers": [
+      "F.Cu",
+      "In2.Cu",
+      "In2.Cu",
+      "In2.Cu",
+      "F.Cu",
+      "In2.Cu",
+      "F.Cu"
+     ],
+     "length": 26.5167,
+     "solve_ref": "3a41b24ecb256bcb10bd336be12a182ae5121e2d93ce1bc2b54ab6fa24afd80d"
+    },
+    "N": {
+     "net": "PCIE_DN_OUT6_N_MCIO",
+     "path": [
+      [
+       62.5,
+       61.45
+      ],
+      [
+       62.5,
+       62.1
+      ],
+      [
+       62.500295220605004,
+       61.260105552950165
+      ],
+      [
+       78.14580884354244,
+       61.2656049082722
+      ],
+      [
+       78.1,
+       65.21000000000001
+      ],
+      [
+       82.45,
+       65.21000000000001
+      ],
+      [
+       82.89271936248431,
+       65.4177905726311
+      ],
+      [
+       83.55230859987222,
+       65.82616413188512
+      ],
+      [
+       83.75,
+       65.0
+      ]
+     ],
+     "layers": [
+      "F.Cu",
+      "In2.Cu",
+      "In2.Cu",
+      "In2.Cu",
+      "F.Cu",
+      "In2.Cu",
+      "In2.Cu",
+      "F.Cu"
+     ],
+     "length": 27.5444,
+     "solve_ref": "00262511dc8fdd3560e2121681907f08276c02516f4a9237fcc5d91b34f547a6"
+    },
+    "skew": 1.0277,
+    "skew_ok": false,
+    "width": 0.205,
+    "input_fp": "87b66fbb6074e89048741b73d3de2ac30b82bd1d2f77266ceed0177c1eec51cf",
+    "vias": [
+     [
+      61.9,
+      62.1
+     ],
+     [
+      78.1,
+      65.59
+     ],
+     [
+      82.45,
+      65.59
+     ],
+     [
+      82.252,
+      65.826
+     ],
+     [
+      62.5,
+      62.1
+     ],
+     [
+      78.1,
+      65.21
+     ],
+     [
+      82.45,
+      65.21
+     ],
+     [
+      83.552,
+      65.826
+     ]
+    ],
+    "escape": {
+     "layer": "In2.Cu",
+     "segments": {
+      "left": {
+       "P": {
+        "kind": "LONG",
+        "n_nodes": 0,
+        "length": 21.0092,
+        "via": [
+         61.9,
+         62.1
+        ]
+       },
+       "N": {
+        "kind": "LONG",
+        "n_nodes": 0,
+        "length": 21.0801,
+        "via": [
+         62.5,
+         62.1
+        ]
+       }
+      },
+      "right": {
+       "P": {
+        "kind": "L-H-V",
+        "n_nodes": 0,
+        "length": 1.1575,
+        "via": [
+         82.25230859987222,
+         65.82616413188512
+        ]
+       },
+       "N": {
+        "kind": "L-H-V",
+        "n_nodes": 0,
+        "length": 2.1143,
+        "via": [
+         83.55230859987222,
+         65.82616413188512
+        ]
+       }
+      }
+     }
+    }
+   }
+  ],
+  "lenP": 26.5167,
+  "lenN": 27.5444,
+  "skew": null,
+  "skew_ok": false,
+  "input_fp": "87b66fbb6074e89048741b73d3de2ac30b82bd1d2f77266ceed0177c1eec51cf"
+ }
+}

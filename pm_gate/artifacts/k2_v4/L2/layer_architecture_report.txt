@@ -1,0 +1,162 @@
+# L2 层架构方案 — K2 (卡2-K2, k2_v4, 120x38mm)
+> 冻结物, 2026-08-19 (v4: In2 换层段 = 冻结确定性折线, 零搜索, 迷宫作废)。
+> 本文件是 LAYOUT 层归属的唯一权威: 路由执行器只按本方案执行,
+> 禁止运行时选层/换层/fallback 设计决策 (LAYOUT_CONSTITUTION 第九章)。
+> 方案依据: escape_closure_analysis.md (64/64 FEASIBLE) + 方案阶段确定性几何
+> 规划 (199 逃逸孔场 6 网同时在场净距+互不冲突验收) (2026-08-19)。
+> 原则 (用户裁决 2026-08-19): "PCB 不需要迷宫" — 过孔/走线坐标在方案阶段
+> 全部定死, 施工只按坐标直落; 迷宫 (BFS 寻路) 是 EDA 芯片 APR 的误导,
+> 其"顺序敏感 6/6"恰证明运行时寻路依赖前序布局, 方案未定死, 违宪。
+
+## 0. 裁决背景
+- 用户裁决 (2026-08-19): "你可以灵活换层啊。我们是6层板啊；而且各层是如何应用的，
+  本来就应该是你在方案的时候就应该确定下来的；你现在遇到的问题，都是方案不完善的后果，
+  你应该先把方案完善了" → 本文件即"方案完善"产物。
+- 用户裁决 (2026-08-19, 迷宫): "你做方案的实施，过孔位置，走线位置等坐标信息早就
+  已经确定了。你用走迷宫的解决路线从根上就是错误的。那个是EDA做芯片产生的误导，
+  在PCB这里是完全不需要走迷宫的" → v4 将 In2 换层段全部改为冻结确定性折线。
+- vias.high_speed 基准 (2026-08-16 PM 裁决): 每线 ≤2 过孔 = 单次换层 F→In2→F,
+  受控过孔 + JLC 背钻消残桩, gnd_stitch_via, no_via_in_pad, pad_edge_clearance 0.3mm。
+
+## 1. Per-Layer Zone Map (叠层角色, 与 SPEC_k2_v4.json stackup 对齐)
+| Layer | 角色 | PCIe 用途 | 低速/电源 |
+|---|---|---|---|
+| F.Cu | 主路由面 | PCIe 差分 18 对 100% F.Cu 全程 (26 网) + 6 网逃逸 stub + 换层孔 | - |
+| In1.Cu | GND_PLANE | - | - |
+| In2.Cu | **PCIe 受控换层走廊 + LOW_SPEED_ROUTE** | 6 网单次换层跨接段 (85Ω 0.205mm) | 低速边带 (I2C/GPIO/USB2/PERST#) |
+| In3.Cu | GND_PLANE | - | - |
+| In4.Cu | POWER_PLANE | - | P3V3/P3V3_AUX/MCU_VDD 分区 |
+| B.Cu | LOW_SPEED_ROUTE + POWER_POUR | - | 低速 + 电源铺铜 |
+
+> SPEC stackup 的 In2.Cu 原值 "LOW_SPEED_ROUTE" 需同步更新为
+> "PCIe 受控换层走廊 + LOW_SPEED_ROUTE" (见 SPEC 修订项, 本方案先行)。
+
+## 2. 芯片侧 32 网逐网层归属 (实证, via→via 口径)
+分类方法: escape_first 预埋逃逸孔后, 对每个网做 (a) F.Cu 直连 (b) In2 换层 双通道实证。
+- F_CU_FULL (26): F.Cu 直连 OK, 不需要换层。
+- IN2_CROSS (4): F.Cu 结构性不可布 (U7 相邻 pin 逃逸 stub 封死 x>99.05 垂直通道),
+  双侧逃逸孔已由 escape_first 预埋, In2 换层 OK → 方案授权 In2 单次换层。
+- NEED_VIA (2): 一侧孔缺失 (电容墙侧), `_find_via_spot` 宽探针确定补孔位,
+  In2 换层 OK → 方案授权补孔 + In2 单次换层。
+- FAIL (0)。
+
+### 2.1 In2 换层网 (6) — 冻结换层孔位 + 冻结确定性折线 (v4, 零搜索)
+> **执行方式**: 冻结折线直落 (via1→via2 的 in2_path 坐标, 线宽 in2_width_mm=0.205)。
+> **零搜索**: 施工阶段按 SPEC layer_plan in2_path 坐标直落 + 碰撞校验,
+> 校验失败 = 方案缺陷上报重规划, 禁止运行时寻路/换候选。
+> **顺序无关**: 6 网折线在方案阶段 199 逃逸孔场同时在场净距+互不冲突验收通过
+> (最小净距 0.310mm > 0.1975mm 要求), 施工顺序任意。
+> v3 迷宫方案 (顺序 A 6/6 其余 4/6~5/6) 作废: 顺序敏感 = 运行时寻路依赖
+> 前序线布局, 恰证明方案未定死坐标, 违宪 (用户裁决)。
+
+| # | Net | via1 (x,y) | via2 (x,y) | 孔来源 | 折线验收 |
+|---|---|---|---|---|---|
+| 1 | PCIE_DN_OUT2_N_U3 | (79.38,59.08) | (87.45,61.30) | escape_first 双侧 | OK (11 pts) |
+| 2 | PCIE_DN_OUT4_N_U3 | (84.58,59.08) | (87.16,63.70) | escape_first 双侧 | OK (17 pts) |
+| 3 | PCIE_UP_OUT7_P_U7 | (100.45,42.53) | (100.50,40.50) | escape_first 双侧 | OK (5 pts) |
+| 4 | PCIE_UP_OUT6_N_U7 | (99.89,41.30) | (101.10,44.40) | escape_first 双侧 | OK (7 pts) |
+| 5 | PCIE_DN_OUT6_P_U3 | (87.76,65.70) | (89.47,62.30) 补孔 | NEED_VIA | OK (7 pts) |
+| 6 | PCIE_UP_OUT7_N_U7 | (99.39,40.10) | (97.97,42.60) 补孔 | NEED_VIA | OK (3 pts) |
+
+> 折线坐标全量冻结于 SPEC_k2_v4.json layer_plan.in2_crossing_nets[].in2_path
+> (方案阶段规划产物, 机器可读, 施工直落)。
+> In2 段线宽冻结为 0.205mm (85Ω, 与 F.Cu 相同)。禁止 0.227/0.10 降级。
+> v2 折线作废记录: v2 折线 (手工) 在 199 孔场实测 5/6 撞孔 (30 孔假板 "1/6 FAIL"
+> 为伪结论) — 因 v2 未对全孔场 via 阵做净距校验; v4 由方案阶段规划器
+> 在真实 199 孔场生成并验收, 与 v2 本质不同 (v4 全量净距合规)。
+
+### 2.2 NEED_VIA 补孔位 (方案冻结, `_find_via_spot` 结果)
+| Net | 芯片 | 已有孔 | 缺失端 | 补孔位 (x,y) | 近旁电容 | stub 目标 |
+|---|---|---|---|---|---|---|
+| PCIE_DN_OUT6_P_U3 | U3 | (87.76, 65.70) | C29 侧 | **(89.47, 62.30)** | C29 | C29 焊盘 |
+| PCIE_UP_OUT7_N_U7 | U7 | (99.39, 40.10) | C64 侧 | **(97.97, 42.60)** | C64 | C64 焊盘 |
+
+## 3. Corridor Capacity Matrix (走廊容量, region_manager 实测口径)
+> 走廊容量断言 (4 < 需求 33-41) 按 AGENTS.md §3.5 仅审计告警, 不硬中断;
+> 芯片侧断点已由 100% 逃逸闭合 (escape_closure 64/64) + In2 走廊分流解决, 不受 x 向走廊容量限制。
+- J2↔U x 向通道: 39.99mm (走廊容量待 k2_v4 布线重测, 旧 4 线口径不适用)
+- U↔MCIO x 向通道: 34.33mm
+- 芯片侧逃逸走廊: 每 pin 窗口 ≥0.13mm (escape_closure_analysis.md §2 引脚矩阵, 64/64 FEASIBLE)
+- In2.Cu 新增 PCIe 走廊: 6 网 × 0.205mm 宽 + 0.075mm 净距 (In2 换层段用 escape_clearance),
+  与低速共享 (低速不占 PCIe 走廊)
+
+## 4. Staggered Via Array (换层孔阵列)
+- 逃逸孔 (escape_first): 奇 pin 0.8mm / 偶 pin 2.0~3.0mm 阶梯扇出, In2 过孔物理间距 ≥0.8mm
+- 换层孔: 每线 ≤2 (单次换层 F→In2→F), 差分对内对称, GND 伴行孔, JLC 背钻消残桩
+- 补孔位 (NEED_VIA): 与既有孔保持 ≥0.8mm 间距 (DN_OUT6_P_U3: (87.76,65.7)→(89.47,62.3) 距 3.69mm OK;
+  UP_OUT7_N_U7: (99.39,40.1)→(97.97,42.6) 距 2.83mm OK)
+- 严禁 <0.5mm² 焊盘内部下孔 (no_via_in_pad), pad_edge_clearance 0.3mm
+
+## 5. 执行契约 (下层只执行, 不做设计决策)
+1. FcuRouter: 26 个 F_CU_FULL 网 F.Cu 布线; 6 个换层网仅布 F.Cu stub (逃逸孔→连接器侧) 不跨墙。
+   禁运行时 B.Cu 下沉 (PCIe 层归属已在 L2 冻结)。
+2. In2 换层段 (6 网): **Phase 2.5 紧跟 escape_first 执行** (必须在 FcuRouter 之前 —
+   k2_v5 回放实证: fallback 在 Phase3 运行时冻结补孔位被 F.Cu 走线占, 2/6 FAIL)。
+   按 SPEC layer_plan in2_crossing_nets[].in2_path 坐标直落 + 碰撞校验
+   (校验失败 = 方案缺陷上报重规划, 零搜索); 缺孔端 (2 网) 按 §2.2 补孔位
+   先落孔再折线 (禁止 _dogbone_via 失败即弃线); 禁止 0.227/0.10 降级;
+   线宽 in2_width_mm 0.205; 顺序无关。
+3. lock_high_speed_tracks: F.Cu 全程 + **In2 换层段** 全量 locked (S2 gate 放行条件)。
+4. S2 gate: PCIe 非 F.Cu 段仅允许 In2 白名单网且须 locked (state_machine.py
+   check_s2_locked 按 SPEC layer_plan 白名单判定, 方案授权换层非"运行时兜底")。
+5. 本方案数据落 /tmp/opencode/layer_class.json + SPEC_k2_v4.json (机器可读),
+   路由器从 SPEC/配置读取, 零单板特判。
+
+## 6. 验证状态 (2026-08-19 v4)
+- 32 网分类: 26 F_CU_FULL / 4 IN2_CROSS / 2 NEED_VIA / 0 FAIL ✓
+- 6 网 In2 冻结折线: 方案阶段 199 孔场规划, 全量净距 vs 异网 via 合规 ✓
+- 6 网折线同时在场互不冲突: 最小净距 0.310mm > 0.1975mm ✓ (顺序无关)
+- 执行器 (按坐标直落+校验) 真实 config: 6/6 ✓
+- v3 迷宫方案作废记录: 顺序敏感 (A 6/6 其余 4/6~5/6) = 运行时寻路依赖前序布局,
+  方案未定死坐标 → 违宪弃用 (用户裁决)
+- v2 手工折线作废记录: 199 孔场 5/6 撞孔 (30 孔假板 "1/6 FAIL" 伪结论) — v4 规划器
+  全量净距验收修复
+- 待完整管线回放: 32/32 芯片侧网全通 + S2 gate PASS (k2_v6 进行中)
+════════════════════════════════════════════════════════════════════
+## 7. 8 层叠层修订 (v5, 2026-08-19 用户裁决定案)
+> 用户决策: 6 层 → 8 层 (F/G/S/G/P/G/S/B)。本附录为 v4 基础上 J2 侧的 8 层修订,
+> 芯片侧 (U3/U7 6 网 In2 换层) 保持 v4 已验证方案不变。
+
+### 7.1 叠层映射 (与 SPEC_k2_v4.json stackup 对齐)
+| KiCad 层 | L# | 角色 | 8 层用途 |
+|---|---|---|---|
+| F.Cu | L1 | 信号 | PCIe 差分 18 对 + J2 逃逸 stub (80 段) |
+| In1.Cu | L2 | GND_PLANE | 参考面 |
+| In2.Cu | L3 | **信号·完美带状线** | PCIe 受控换层走廊 (44 段, 双 GND 参考) |
+| In3.Cu | L4 | GND_PLANE | 参考面 |
+| In4.Cu | L5 | POWER_PLANE | P3V3 一区 / P3V3_AUX+MCU_VDD 一区 |
+| In5.Cu | L6 | GND_PLANE | 参考面 |
+| In6.Cu | L7 | 信号 | 低速边带 + REFCLK 独立层 (6 段, 包地) |
+| B.Cu | L8 | 信号 | 低速 + 电源铺铜 (PCIe 载荷清零) |
+
+### 7.2 J2 侧 36 网层归属 (v25 求解器, 36/36 真实路由验证)
+- **UP_OUT 16 网**: 全部 F→In2→F 单内层换层 (降解 v4 的 F-I-B-F 三层跳跃)。
+  段层: F.Cu 逃逸 → In2 走廊 (44 段) → F.Cu 目标 stub。B.Cu 不再承载 UP_OUT。
+- **DN 16 网**: 内列 8 网 F.Cu 全程 (xa=100.2+0.38k); 外列 8 网 F+In2 (列间隙 133.83)。
+- **REFCLK 4 网**: 全部走 In6.Cu 独立层 (L7, refclk_isolated + 两侧 GND 包地),
+  目标侧 F.Cu 短 stub。不再占用 B.Cu。
+- **换层 via 统计**: 56 个 (每网 1.56), 分布 F→I 24 + I→F 24 + F→I6 4 + I6→F 4。
+  6 层 v24 为 57 个 (每网 1.58, 含 B.Cu 兜底 23 段) → 8 层净减 + B.Cu 释放。
+
+### 7.3 GND 伴行孔 (硬性落实, 用户决策)
+- 差分换层处 (F→In2 及 F→In6) 每换层点补 ≥1 GND 伴行 via (via_drill 0.2 / outer 0.35)。
+- 伴行孔坐标候选: /tmp/opencode/j2_via_gnd_stitch_v8.json (56 换层点, 机器可读)。
+- 施工: Phase 2.5 escape_first 之后、In2 折线直落同时落 GND 伴行孔 (连 In1/In3/In5 GND 平面)。
+- REFCLK In6 层两侧: 包地走线 + GND via 间距 ≤2mm (refclk_isolated)。
+
+### 7.4 PDN 平面拆分 (用户决策)
+- In4.Cu (L5) 一分为二: **P3V3 区** (东侧) / **P3V3_AUX+MCU_VDD 区** (西侧)。
+- GND 平面 3 个 (In1/In3/In5) 提供完整回流面。
+- 电源脚 Via-to-Plane 直连, 打通后电源/地 Unconnected == 0 (S3 gate)。
+
+### 7.5 低速边带隔离 (用户决策)
+- I2C/GPIO/USB2/PERST# 全部走 In6.Cu (L7), 独占层, 与 PCIe 走廊 (In2) 物理隔离。
+- B.Cu 保留低速 + 电源铺铜, 零 PCIe 载荷。
+
+### 7.6 验证状态 (v5, 2026-08-19)
+- J2 侧 36 网 8 层求解: 36/36 真实路由验证通过 (F.Cu rf._seg_clear / In2 rb._path_ok_in2 /
+  In6 _in6_seg_ok, 同 v24 权威口径) ✓
+- UP_OUT 16 网全部单内层换层 (F→In2→F), 零 B.Cu 兜底 ✓
+- REFCLK 4 网 In6 独立层 + 包地 ✓
+- 换层 via 56 个 (每网 1.56), 全部差分换层点 GND 伴行 ✓
+- 待完整管线回放: k2_v8 输入板全链 (S1→S2→S3) + drc.json 归零

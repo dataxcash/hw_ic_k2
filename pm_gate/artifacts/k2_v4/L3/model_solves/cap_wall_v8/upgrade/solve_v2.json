@@ -1,0 +1,1267 @@
+{
+  "task": "K2 电容墙复摆 v2（B+A 裁决执行）：轨道感知摆位 + x 平移自由度，DN(C17-C32) 先解注入 → UP(C49-C64) 后解",
+  "contract": "每墙恰一次确定性求解（完整输入一次求解即契约）；失败→原样记录工具证据停机，禁改参重跑",
+  "tool": "cap_wall_solver.solve_cap_wall v2（源码升级：带外窗口枚举 + x 滑动 + 单行优先/确定性拆行；CLI/数据契约形态不变）",
+  "board": "/tmp/opencode/boards/k2_v6.kicad_pcb",
+  "board_sha256_pre": "aa8b3f07883c49a00cdfc1b06ccde5feed160199a84d389b0e74d90d538d2173",
+  "timestamp": "2026-08-27T09:45:28",
+  "verdict": "SOLVED_32/32",
+  "gate_pre_apply": {
+    "all_placed": true,
+    "per_cap_track_margin_min": 0.18249999999999855,
+    "per_cap_track_margin_worst_ref": "C49",
+    "all_track_margins_positive": true,
+    "formula": "margin = |cap_y - track_y| - row_excl; row_excl = 轨半带0.19 + 线半宽0.1025 + 净距0.175 + cap半高0.25 = 0.7175"
+  },
+  "per_cap_track_margin_pre_apply": {
+    "C17": 0.1825,
+    "C18": 0.1825,
+    "C19": 0.1825,
+    "C20": 0.1825,
+    "C21": 0.1825,
+    "C22": 0.1825,
+    "C23": 0.1825,
+    "C24": 0.1825,
+    "C25": 0.1825,
+    "C26": 0.1825,
+    "C27": 0.1825,
+    "C28": 0.1825,
+    "C29": 0.1825,
+    "C30": 0.1825,
+    "C31": 0.1825,
+    "C32": 0.1825,
+    "C49": 0.1825,
+    "C50": 0.1825,
+    "C51": 0.1825,
+    "C52": 0.1825,
+    "C53": 0.1825,
+    "C54": 0.1825,
+    "C55": 0.1825,
+    "C56": 0.1825,
+    "C57": 0.1825,
+    "C58": 0.1825,
+    "C59": 0.1825,
+    "C60": 0.1825,
+    "C61": 0.1825,
+    "C62": 0.1825,
+    "C63": 0.1825,
+    "C64": 0.1825
+  },
+  "walls": {
+    "down": {
+      "side": "down",
+      "input": {
+        "side": "down",
+        "wall_refs": [
+          "C17",
+          "C18",
+          "C19",
+          "C20",
+          "C21",
+          "C22",
+          "C23",
+          "C24",
+          "C25",
+          "C26",
+          "C27",
+          "C28",
+          "C29",
+          "C30",
+          "C31",
+          "C32"
+        ],
+        "net_order": [
+          "PCIE_DN_OUT0_N_MCIO",
+          "PCIE_DN_OUT0_P_MCIO",
+          "PCIE_DN_OUT1_N_MCIO",
+          "PCIE_DN_OUT1_P_MCIO",
+          "PCIE_DN_OUT2_N_MCIO",
+          "PCIE_DN_OUT2_P_MCIO",
+          "PCIE_DN_OUT3_N_MCIO",
+          "PCIE_DN_OUT3_P_MCIO",
+          "PCIE_DN_OUT4_N_MCIO",
+          "PCIE_DN_OUT4_P_MCIO",
+          "PCIE_DN_OUT5_N_MCIO",
+          "PCIE_DN_OUT5_P_MCIO",
+          "PCIE_DN_OUT6_N_MCIO",
+          "PCIE_DN_OUT6_P_MCIO",
+          "PCIE_DN_OUT7_N_MCIO",
+          "PCIE_DN_OUT7_P_MCIO"
+        ],
+        "cap_of_net": {
+          "PCIE_DN_OUT0_N_MCIO": "C18",
+          "PCIE_DN_OUT0_P_MCIO": "C17",
+          "PCIE_DN_OUT1_N_MCIO": "C20",
+          "PCIE_DN_OUT1_P_MCIO": "C19",
+          "PCIE_DN_OUT2_N_MCIO": "C22",
+          "PCIE_DN_OUT2_P_MCIO": "C21",
+          "PCIE_DN_OUT3_N_MCIO": "C24",
+          "PCIE_DN_OUT3_P_MCIO": "C23",
+          "PCIE_DN_OUT4_N_MCIO": "C26",
+          "PCIE_DN_OUT4_P_MCIO": "C25",
+          "PCIE_DN_OUT5_N_MCIO": "C28",
+          "PCIE_DN_OUT5_P_MCIO": "C27",
+          "PCIE_DN_OUT6_N_MCIO": "C30",
+          "PCIE_DN_OUT6_P_MCIO": "C29",
+          "PCIE_DN_OUT7_N_MCIO": "C32",
+          "PCIE_DN_OUT7_P_MCIO": "C31"
+        },
+        "u3_pad_y": {
+          "PCIE_DN_OUT0_N_MCIO": 58.900000000000006,
+          "PCIE_DN_OUT0_P_MCIO": 58.5,
+          "PCIE_DN_OUT1_N_MCIO": 60.1,
+          "PCIE_DN_OUT1_P_MCIO": 59.7,
+          "PCIE_DN_OUT2_N_MCIO": 61.300000000000004,
+          "PCIE_DN_OUT2_P_MCIO": 60.900000000000006,
+          "PCIE_DN_OUT3_N_MCIO": 62.5,
+          "PCIE_DN_OUT3_P_MCIO": 62.1,
+          "PCIE_DN_OUT4_N_MCIO": 63.7,
+          "PCIE_DN_OUT4_P_MCIO": 63.300000000000004,
+          "PCIE_DN_OUT5_N_MCIO": 64.9,
+          "PCIE_DN_OUT5_P_MCIO": 64.5,
+          "PCIE_DN_OUT6_N_MCIO": 66.10000000000001,
+          "PCIE_DN_OUT6_P_MCIO": 65.7,
+          "PCIE_DN_OUT7_N_MCIO": 67.3,
+          "PCIE_DN_OUT7_P_MCIO": 66.9
+        },
+        "cap_nets": {
+          "C17": [
+            "PCIE_DN_OUT0_P_U3",
+            "PCIE_DN_OUT0_P_MCIO"
+          ],
+          "C18": [
+            "PCIE_DN_OUT0_N_U3",
+            "PCIE_DN_OUT0_N_MCIO"
+          ],
+          "C19": [
+            "PCIE_DN_OUT1_P_U3",
+            "PCIE_DN_OUT1_P_MCIO"
+          ],
+          "C20": [
+            "PCIE_DN_OUT1_N_U3",
+            "PCIE_DN_OUT1_N_MCIO"
+          ],
+          "C21": [
+            "PCIE_DN_OUT2_P_U3",
+            "PCIE_DN_OUT2_P_MCIO"
+          ],
+          "C22": [
+            "PCIE_DN_OUT2_N_U3",
+            "PCIE_DN_OUT2_N_MCIO"
+          ],
+          "C23": [
+            "PCIE_DN_OUT3_P_U3",
+            "PCIE_DN_OUT3_P_MCIO"
+          ],
+          "C24": [
+            "PCIE_DN_OUT3_N_U3",
+            "PCIE_DN_OUT3_N_MCIO"
+          ],
+          "C25": [
+            "PCIE_DN_OUT4_P_U3",
+            "PCIE_DN_OUT4_P_MCIO"
+          ],
+          "C26": [
+            "PCIE_DN_OUT4_N_U3",
+            "PCIE_DN_OUT4_N_MCIO"
+          ],
+          "C27": [
+            "PCIE_DN_OUT5_P_U3",
+            "PCIE_DN_OUT5_P_MCIO"
+          ],
+          "C28": [
+            "PCIE_DN_OUT5_N_U3",
+            "PCIE_DN_OUT5_N_MCIO"
+          ],
+          "C29": [
+            "PCIE_DN_OUT6_P_U3",
+            "PCIE_DN_OUT6_P_MCIO"
+          ],
+          "C30": [
+            "PCIE_DN_OUT6_N_U3",
+            "PCIE_DN_OUT6_N_MCIO"
+          ],
+          "C31": [
+            "PCIE_DN_OUT7_P_U3",
+            "PCIE_DN_OUT7_P_MCIO"
+          ],
+          "C32": [
+            "PCIE_DN_OUT7_N_U3",
+            "PCIE_DN_OUT7_N_MCIO"
+          ]
+        },
+        "rows": null,
+        "row_policy": "单行优先 → 放不下确定性拆双行(pad-y 对半)",
+        "rot": 0.0,
+        "x_corridor": [
+          75.0,
+          90.0
+        ],
+        "escape_spec": "/home/fila/jqdDev_2025/ic_hw/strix-halo-ioconvert/revA/pcb/pm_gate/artifacts/k2_v4/L2/escape_spec.json",
+        "spec": "/home/fila/jqdDev_2025/ic_hw/strix-halo-ioconvert/revA/pcb/pm_gate/artifacts/L3/SPEC_k2_v4.json",
+        "alloc": "/home/fila/jqdDev_2025/ic_hw/strix-halo-ioconvert/revA/pcb/pm_gate/artifacts/k2_v4/L3/model_solves/channel_alloc_v4/channel_alloc.json",
+        "drc_rules": "/home/fila/jqdDev_2025/ic_hw/_shared/eda_core/drc_rules.json",
+        "board": "/tmp/opencode/boards/k2_v6.kicad_pcb",
+        "min_pitch": 1.3,
+        "min_row_sep": 2.5,
+        "injected_obstacles": 0,
+        "input_fp": "30226e2f942a8cbc"
+      },
+      "layout": {
+        "C17": {
+          "x": 76.8,
+          "y": 57.8,
+          "rot": 0.0,
+          "stubs": [
+            {
+              "net": "PCIE_DN_OUT0_P_U3",
+              "chip_ref": "C17",
+              "pad_num": "1",
+              "px": 76.45,
+              "py": 57.8,
+              "vx": 76.45,
+              "vy": 57.1
+            },
+            {
+              "net": "PCIE_DN_OUT0_P_MCIO",
+              "chip_ref": "C17",
+              "pad_num": "2",
+              "px": 77.15,
+              "py": 57.8,
+              "vx": 77.15,
+              "vy": 57.1
+            }
+          ]
+        },
+        "C18": {
+          "x": 75.5,
+          "y": 57.8,
+          "rot": 0.0,
+          "stubs": [
+            {
+              "net": "PCIE_DN_OUT0_N_U3",
+              "chip_ref": "C18",
+              "pad_num": "1",
+              "px": 75.15,
+              "py": 57.8,
+              "vx": 72.65,
+              "vy": 57.8
+            },
+            {
+              "net": "PCIE_DN_OUT0_N_MCIO",
+              "chip_ref": "C18",
+              "pad_num": "2",
+              "px": 75.85,
+              "py": 57.8,
+              "vx": 75.85,
+              "vy": 57.1
+            }
+          ]
+        },
+        "C19": {
+          "x": 79.4,
+          "y": 57.8,
+          "rot": 0.0,
+          "stubs": [
+            {
+              "net": "PCIE_DN_OUT1_P_U3",
+              "chip_ref": "C19",
+              "pad_num": "1",
+              "px": 79.05,
+              "py": 57.8,
+              "vx": 79.05,
+              "vy": 57.1
+            },
+            {
+              "net": "PCIE_DN_OUT1_P_MCIO",
+              "chip_ref": "C19",
+              "pad_num": "2",
+              "px": 79.75,
+              "py": 57.8,
+              "vx": 79.75,
+              "vy": 57.1
+            }
+          ]
+        },
+        "C20": {
+          "x": 78.1,
+          "y": 57.8,
+          "rot": 0.0,
+          "stubs": [
+            {
+              "net": "PCIE_DN_OUT1_N_U3",
+              "chip_ref": "C20",
+              "pad_num": "1",
+              "px": 77.75,
+              "py": 57.8,
+              "vx": 77.75,
+              "vy": 57.1
+            },
+            {
+              "net": "PCIE_DN_OUT1_N_MCIO",
+              "chip_ref": "C20",
+              "pad_num": "2",
+              "px": 78.45,
+              "py": 57.8,
+              "vx": 78.45,
+              "vy": 57.1
+            }
+          ]
+        },
+        "C21": {
+          "x": 82.0,
+          "y": 57.8,
+          "rot": 0.0,
+          "stubs": [
+            {
+              "net": "PCIE_DN_OUT2_P_U3",
+              "chip_ref": "C21",
+              "pad_num": "1",
+              "px": 81.65,
+              "py": 57.8,
+              "vx": 81.65,
+              "vy": 57.1
+            },
+            {
+              "net": "PCIE_DN_OUT2_P_MCIO",
+              "chip_ref": "C21",
+              "pad_num": "2",
+              "px": 82.35,
+              "py": 57.8,
+              "vx": 82.35,
+              "vy": 57.1
+            }
+          ]
+        },
+        "C22": {
+          "x": 80.7,
+          "y": 57.8,
+          "rot": 0.0,
+          "stubs": [
+            {
+              "net": "PCIE_DN_OUT2_N_U3",
+              "chip_ref": "C22",
+              "pad_num": "1",
+              "px": 80.35,
+              "py": 57.8,
+              "vx": 80.35,
+              "vy": 57.1
+            },
+            {
+              "net": "PCIE_DN_OUT2_N_MCIO",
+              "chip_ref": "C22",
+              "pad_num": "2",
+              "px": 81.05,
+              "py": 57.8,
+              "vx": 81.05,
+              "vy": 57.1
+            }
+          ]
+        },
+        "C23": {
+          "x": 84.6,
+          "y": 57.8,
+          "rot": 0.0,
+          "stubs": [
+            {
+              "net": "PCIE_DN_OUT3_P_U3",
+              "chip_ref": "C23",
+              "pad_num": "1",
+              "px": 84.25,
+              "py": 57.8,
+              "vx": 84.25,
+              "vy": 57.1
+            },
+            {
+              "net": "PCIE_DN_OUT3_P_MCIO",
+              "chip_ref": "C23",
+              "pad_num": "2",
+              "px": 84.95,
+              "py": 57.8,
+              "vx": 84.95,
+              "vy": 57.1
+            }
+          ]
+        },
+        "C24": {
+          "x": 83.3,
+          "y": 57.8,
+          "rot": 0.0,
+          "stubs": [
+            {
+              "net": "PCIE_DN_OUT3_N_U3",
+              "chip_ref": "C24",
+              "pad_num": "1",
+              "px": 82.95,
+              "py": 57.8,
+              "vx": 82.95,
+              "vy": 57.1
+            },
+            {
+              "net": "PCIE_DN_OUT3_N_MCIO",
+              "chip_ref": "C24",
+              "pad_num": "2",
+              "px": 83.65,
+              "py": 57.8,
+              "vx": 83.65,
+              "vy": 57.1
+            }
+          ]
+        },
+        "C25": {
+          "x": 76.8,
+          "y": 68.0,
+          "rot": 0.0,
+          "stubs": [
+            {
+              "net": "PCIE_DN_OUT4_P_U3",
+              "chip_ref": "C25",
+              "pad_num": "1",
+              "px": 76.45,
+              "py": 68.0,
+              "vx": 76.45,
+              "vy": 68.7
+            },
+            {
+              "net": "PCIE_DN_OUT4_P_MCIO",
+              "chip_ref": "C25",
+              "pad_num": "2",
+              "px": 77.15,
+              "py": 68.0,
+              "vx": 77.15,
+              "vy": 68.7
+            }
+          ]
+        },
+        "C26": {
+          "x": 75.5,
+          "y": 68.0,
+          "rot": 0.0,
+          "stubs": [
+            {
+              "net": "PCIE_DN_OUT4_N_U3",
+              "chip_ref": "C26",
+              "pad_num": "1",
+              "px": 75.15,
+              "py": 68.0,
+              "vx": 72.65,
+              "vy": 68.0
+            },
+            {
+              "net": "PCIE_DN_OUT4_N_MCIO",
+              "chip_ref": "C26",
+              "pad_num": "2",
+              "px": 75.85,
+              "py": 68.0,
+              "vx": 75.85,
+              "vy": 68.7
+            }
+          ]
+        },
+        "C27": {
+          "x": 79.4,
+          "y": 68.0,
+          "rot": 0.0,
+          "stubs": [
+            {
+              "net": "PCIE_DN_OUT5_P_U3",
+              "chip_ref": "C27",
+              "pad_num": "1",
+              "px": 79.05,
+              "py": 68.0,
+              "vx": 79.05,
+              "vy": 68.7
+            },
+            {
+              "net": "PCIE_DN_OUT5_P_MCIO",
+              "chip_ref": "C27",
+              "pad_num": "2",
+              "px": 79.75,
+              "py": 68.0,
+              "vx": 79.75,
+              "vy": 68.7
+            }
+          ]
+        },
+        "C28": {
+          "x": 78.1,
+          "y": 68.0,
+          "rot": 0.0,
+          "stubs": [
+            {
+              "net": "PCIE_DN_OUT5_N_U3",
+              "chip_ref": "C28",
+              "pad_num": "1",
+              "px": 77.75,
+              "py": 68.0,
+              "vx": 77.75,
+              "vy": 68.7
+            },
+            {
+              "net": "PCIE_DN_OUT5_N_MCIO",
+              "chip_ref": "C28",
+              "pad_num": "2",
+              "px": 78.45,
+              "py": 68.0,
+              "vx": 78.45,
+              "vy": 68.7
+            }
+          ]
+        },
+        "C29": {
+          "x": 82.0,
+          "y": 68.0,
+          "rot": 0.0,
+          "stubs": [
+            {
+              "net": "PCIE_DN_OUT6_P_U3",
+              "chip_ref": "C29",
+              "pad_num": "1",
+              "px": 81.65,
+              "py": 68.0,
+              "vx": 81.65,
+              "vy": 68.7
+            },
+            {
+              "net": "PCIE_DN_OUT6_P_MCIO",
+              "chip_ref": "C29",
+              "pad_num": "2",
+              "px": 82.35,
+              "py": 68.0,
+              "vx": 82.35,
+              "vy": 68.7
+            }
+          ]
+        },
+        "C30": {
+          "x": 80.7,
+          "y": 68.0,
+          "rot": 0.0,
+          "stubs": [
+            {
+              "net": "PCIE_DN_OUT6_N_U3",
+              "chip_ref": "C30",
+              "pad_num": "1",
+              "px": 80.35,
+              "py": 68.0,
+              "vx": 80.35,
+              "vy": 68.7
+            },
+            {
+              "net": "PCIE_DN_OUT6_N_MCIO",
+              "chip_ref": "C30",
+              "pad_num": "2",
+              "px": 81.05,
+              "py": 68.0,
+              "vx": 81.05,
+              "vy": 68.7
+            }
+          ]
+        },
+        "C31": {
+          "x": 84.6,
+          "y": 68.0,
+          "rot": 0.0,
+          "stubs": [
+            {
+              "net": "PCIE_DN_OUT7_P_U3",
+              "chip_ref": "C31",
+              "pad_num": "1",
+              "px": 84.25,
+              "py": 68.0,
+              "vx": 84.25,
+              "vy": 68.7
+            },
+            {
+              "net": "PCIE_DN_OUT7_P_MCIO",
+              "chip_ref": "C31",
+              "pad_num": "2",
+              "px": 84.95,
+              "py": 68.0,
+              "vx": 84.95,
+              "vy": 68.7
+            }
+          ]
+        },
+        "C32": {
+          "x": 83.3,
+          "y": 68.0,
+          "rot": 0.0,
+          "stubs": [
+            {
+              "net": "PCIE_DN_OUT7_N_U3",
+              "chip_ref": "C32",
+              "pad_num": "1",
+              "px": 82.95,
+              "py": 68.0,
+              "vx": 82.95,
+              "vy": 68.7
+            },
+            {
+              "net": "PCIE_DN_OUT7_N_MCIO",
+              "chip_ref": "C32",
+              "pad_num": "2",
+              "px": 83.65,
+              "py": 68.0,
+              "vx": 83.65,
+              "vy": 68.7
+            }
+          ]
+        }
+      },
+      "report": [
+        "固定障碍: 279 个（VREG via + 芯片/冻结 cap 桩 seg + 冻结 pad + in2_crossing 段），排除决策变量 ['C17', 'C18', 'C19', 'C20', 'C21', 'C22', 'C23', 'C24', 'C25', 'C26', 'C27', 'C28', 'C29', 'C30', 'C31', 'C32']",
+        "轨道净空参数(数据驱动 drc_rules.json): 轨半带=0.19 线半宽=0.1025 净距=0.175 cap半高=0.25 → row_excl=0.7175",
+        "排除轨道 16 条（走廊 x 相交 ∩ F.Cu）: U_TO_MCIO/lower/0@58.7, U_TO_MCIO/lower/1@59.9, U_TO_MCIO/lower/2@61.1, U_TO_MCIO/lower/3@62.3, U_TO_MCIO/lower/4@63.5, U_TO_MCIO/lower/5@64.7, U_TO_MCIO/lower/6@65.9, U_TO_MCIO/lower/7@67.1, U_TO_MCIO/upper/0@40.7, U_TO_MCIO/upper/1@41.9, U_TO_MCIO/upper/2@43.1, U_TO_MCIO/upper/3@44.3, U_TO_MCIO/upper/4@45.5, U_TO_MCIO/upper/5@46.7, U_TO_MCIO/upper/6@47.9, U_TO_MCIO/upper/7@49.1",
+        "带外合法窗口（板内[33.0,71.0]）: [33.0000,39.9825], [49.8175,57.9825], [67.8175,71.0000]",
+        "行结构: 双行(pad-y 对半)（2 行）",
+        "行1 @y=57.800 (base 60.500): C18=75.50, C17=76.80, C20=78.10, C19=79.40, C22=80.70, C21=82.00, C24=83.30, C23=84.60",
+        "行2 @y=68.000 (base 65.300): C26=75.50, C25=76.80, C28=78.10, C27=79.40, C30=80.70, C29=82.00, C32=83.30, C31=84.60",
+        "--- 容量断言: 16/16 cap, x∈[75.500,84.600] ⊂ 走廊 (75.0, 90.0): PASS, 行间距≥2.5mm: PASS, 逐颗轨净空>0: PASS（最差 C17 margin=0.1825 vs U_TO_MCIO/lower/0）",
+        "--- 桩落位（确定性阶梯 first-clear-wins）---",
+        "C17 PCIE_DN_OUT0_P_U3            pad1 @(76.450,57.800) via@(76.450,57.100) dir=-y0.7",
+        "C17 PCIE_DN_OUT0_P_MCIO          pad2 @(77.150,57.800) via@(77.150,57.100) dir=-y0.7",
+        "C18 PCIE_DN_OUT0_N_U3            pad1 @(75.150,57.800) via@(72.650,57.800) dir=-x2.5",
+        "C18 PCIE_DN_OUT0_N_MCIO          pad2 @(75.850,57.800) via@(75.850,57.100) dir=-y0.7",
+        "C19 PCIE_DN_OUT1_P_U3            pad1 @(79.050,57.800) via@(79.050,57.100) dir=-y0.7",
+        "C19 PCIE_DN_OUT1_P_MCIO          pad2 @(79.750,57.800) via@(79.750,57.100) dir=-y0.7",
+        "C20 PCIE_DN_OUT1_N_U3            pad1 @(77.750,57.800) via@(77.750,57.100) dir=-y0.7",
+        "C20 PCIE_DN_OUT1_N_MCIO          pad2 @(78.450,57.800) via@(78.450,57.100) dir=-y0.7",
+        "C21 PCIE_DN_OUT2_P_U3            pad1 @(81.650,57.800) via@(81.650,57.100) dir=-y0.7",
+        "C21 PCIE_DN_OUT2_P_MCIO          pad2 @(82.350,57.800) via@(82.350,57.100) dir=-y0.7",
+        "C22 PCIE_DN_OUT2_N_U3            pad1 @(80.350,57.800) via@(80.350,57.100) dir=-y0.7",
+        "C22 PCIE_DN_OUT2_N_MCIO          pad2 @(81.050,57.800) via@(81.050,57.100) dir=-y0.7",
+        "C23 PCIE_DN_OUT3_P_U3            pad1 @(84.250,57.800) via@(84.250,57.100) dir=-y0.7",
+        "C23 PCIE_DN_OUT3_P_MCIO          pad2 @(84.950,57.800) via@(84.950,57.100) dir=-y0.7",
+        "C24 PCIE_DN_OUT3_N_U3            pad1 @(82.950,57.800) via@(82.950,57.100) dir=-y0.7",
+        "C24 PCIE_DN_OUT3_N_MCIO          pad2 @(83.650,57.800) via@(83.650,57.100) dir=-y0.7",
+        "C25 PCIE_DN_OUT4_P_U3            pad1 @(76.450,68.000) via@(76.450,68.700) dir=+y0.7",
+        "C25 PCIE_DN_OUT4_P_MCIO          pad2 @(77.150,68.000) via@(77.150,68.700) dir=+y0.7",
+        "C26 PCIE_DN_OUT4_N_U3            pad1 @(75.150,68.000) via@(72.650,68.000) dir=-x2.5",
+        "C26 PCIE_DN_OUT4_N_MCIO          pad2 @(75.850,68.000) via@(75.850,68.700) dir=+y0.7",
+        "C27 PCIE_DN_OUT5_P_U3            pad1 @(79.050,68.000) via@(79.050,68.700) dir=+y0.7",
+        "C27 PCIE_DN_OUT5_P_MCIO          pad2 @(79.750,68.000) via@(79.750,68.700) dir=+y0.7",
+        "C28 PCIE_DN_OUT5_N_U3            pad1 @(77.750,68.000) via@(77.750,68.700) dir=+y0.7",
+        "C28 PCIE_DN_OUT5_N_MCIO          pad2 @(78.450,68.000) via@(78.450,68.700) dir=+y0.7",
+        "C29 PCIE_DN_OUT6_P_U3            pad1 @(81.650,68.000) via@(81.650,68.700) dir=+y0.7",
+        "C29 PCIE_DN_OUT6_P_MCIO          pad2 @(82.350,68.000) via@(82.350,68.700) dir=+y0.7",
+        "C30 PCIE_DN_OUT6_N_U3            pad1 @(80.350,68.000) via@(80.350,68.700) dir=+y0.7",
+        "C30 PCIE_DN_OUT6_N_MCIO          pad2 @(81.050,68.000) via@(81.050,68.700) dir=+y0.7",
+        "C31 PCIE_DN_OUT7_P_U3            pad1 @(84.250,68.000) via@(84.250,68.700) dir=+y0.7",
+        "C31 PCIE_DN_OUT7_P_MCIO          pad2 @(84.950,68.000) via@(84.950,68.700) dir=+y0.7",
+        "C32 PCIE_DN_OUT7_N_U3            pad1 @(82.950,68.000) via@(82.950,68.700) dir=+y0.7",
+        "C32 PCIE_DN_OUT7_N_MCIO          pad2 @(83.650,68.000) via@(83.650,68.700) dir=+y0.7"
+      ],
+      "solved_count": 16,
+      "expect": 16,
+      "tool": "cap_wall_solver.solve_cap_wall v2（轨道感知窗口 + x 平移）"
+    },
+    "up": {
+      "side": "up",
+      "input": {
+        "side": "up",
+        "wall_refs": [
+          "C49",
+          "C50",
+          "C51",
+          "C52",
+          "C53",
+          "C54",
+          "C55",
+          "C56",
+          "C57",
+          "C58",
+          "C59",
+          "C60",
+          "C61",
+          "C62",
+          "C63",
+          "C64"
+        ],
+        "net_order": [
+          "PCIE_UP_OUT0_N_J2",
+          "PCIE_UP_OUT0_P_J2",
+          "PCIE_UP_OUT1_N_J2",
+          "PCIE_UP_OUT1_P_J2",
+          "PCIE_UP_OUT2_N_J2",
+          "PCIE_UP_OUT2_P_J2",
+          "PCIE_UP_OUT3_N_J2",
+          "PCIE_UP_OUT3_P_J2",
+          "PCIE_UP_OUT4_N_J2",
+          "PCIE_UP_OUT4_P_J2",
+          "PCIE_UP_OUT5_N_J2",
+          "PCIE_UP_OUT5_P_J2",
+          "PCIE_UP_OUT6_N_J2",
+          "PCIE_UP_OUT6_P_J2",
+          "PCIE_UP_OUT7_N_J2",
+          "PCIE_UP_OUT7_P_J2"
+        ],
+        "cap_of_net": {
+          "PCIE_UP_OUT0_N_J2": "C50",
+          "PCIE_UP_OUT0_P_J2": "C49",
+          "PCIE_UP_OUT1_N_J2": "C52",
+          "PCIE_UP_OUT1_P_J2": "C51",
+          "PCIE_UP_OUT2_N_J2": "C54",
+          "PCIE_UP_OUT2_P_J2": "C53",
+          "PCIE_UP_OUT3_N_J2": "C56",
+          "PCIE_UP_OUT3_P_J2": "C55",
+          "PCIE_UP_OUT4_N_J2": "C58",
+          "PCIE_UP_OUT4_P_J2": "C57",
+          "PCIE_UP_OUT5_N_J2": "C60",
+          "PCIE_UP_OUT5_P_J2": "C59",
+          "PCIE_UP_OUT6_N_J2": "C62",
+          "PCIE_UP_OUT6_P_J2": "C61",
+          "PCIE_UP_OUT7_N_J2": "C64",
+          "PCIE_UP_OUT7_P_J2": "C63"
+        },
+        "u3_pad_y": {
+          "PCIE_UP_OUT0_N_J2": 48.5,
+          "PCIE_UP_OUT0_P_J2": 48.900000000000006,
+          "PCIE_UP_OUT1_N_J2": 47.300000000000004,
+          "PCIE_UP_OUT1_P_J2": 47.7,
+          "PCIE_UP_OUT2_N_J2": 46.1,
+          "PCIE_UP_OUT2_P_J2": 46.5,
+          "PCIE_UP_OUT3_N_J2": 44.900000000000006,
+          "PCIE_UP_OUT3_P_J2": 45.300000000000004,
+          "PCIE_UP_OUT4_N_J2": 43.7,
+          "PCIE_UP_OUT4_P_J2": 44.1,
+          "PCIE_UP_OUT5_N_J2": 42.5,
+          "PCIE_UP_OUT5_P_J2": 42.900000000000006,
+          "PCIE_UP_OUT6_N_J2": 41.300000000000004,
+          "PCIE_UP_OUT6_P_J2": 41.7,
+          "PCIE_UP_OUT7_N_J2": 40.1,
+          "PCIE_UP_OUT7_P_J2": 40.5
+        },
+        "cap_nets": {
+          "C49": [
+            "PCIE_UP_OUT0_P_U7",
+            "PCIE_UP_OUT0_P_J2"
+          ],
+          "C50": [
+            "PCIE_UP_OUT0_N_U7",
+            "PCIE_UP_OUT0_N_J2"
+          ],
+          "C51": [
+            "PCIE_UP_OUT1_P_U7",
+            "PCIE_UP_OUT1_P_J2"
+          ],
+          "C52": [
+            "PCIE_UP_OUT1_N_U7",
+            "PCIE_UP_OUT1_N_J2"
+          ],
+          "C53": [
+            "PCIE_UP_OUT2_P_U7",
+            "PCIE_UP_OUT2_P_J2"
+          ],
+          "C54": [
+            "PCIE_UP_OUT2_N_U7",
+            "PCIE_UP_OUT2_N_J2"
+          ],
+          "C55": [
+            "PCIE_UP_OUT3_P_U7",
+            "PCIE_UP_OUT3_P_J2"
+          ],
+          "C56": [
+            "PCIE_UP_OUT3_N_U7",
+            "PCIE_UP_OUT3_N_J2"
+          ],
+          "C57": [
+            "PCIE_UP_OUT4_P_U7",
+            "PCIE_UP_OUT4_P_J2"
+          ],
+          "C58": [
+            "PCIE_UP_OUT4_N_U7",
+            "PCIE_UP_OUT4_N_J2"
+          ],
+          "C59": [
+            "PCIE_UP_OUT5_P_U7",
+            "PCIE_UP_OUT5_P_J2"
+          ],
+          "C60": [
+            "PCIE_UP_OUT5_N_U7",
+            "PCIE_UP_OUT5_N_J2"
+          ],
+          "C61": [
+            "PCIE_UP_OUT6_P_U7",
+            "PCIE_UP_OUT6_P_J2"
+          ],
+          "C62": [
+            "PCIE_UP_OUT6_N_U7",
+            "PCIE_UP_OUT6_N_J2"
+          ],
+          "C63": [
+            "PCIE_UP_OUT7_P_U7",
+            "PCIE_UP_OUT7_P_J2"
+          ],
+          "C64": [
+            "PCIE_UP_OUT7_N_U7",
+            "PCIE_UP_OUT7_N_J2"
+          ]
+        },
+        "rows": null,
+        "row_policy": "单行优先 → 放不下确定性拆双行(pad-y 对半)",
+        "rot": 0.0,
+        "x_corridor": [
+          99.0,
+          128.0
+        ],
+        "escape_spec": "/home/fila/jqdDev_2025/ic_hw/strix-halo-ioconvert/revA/pcb/pm_gate/artifacts/k2_v4/L2/escape_spec.json",
+        "spec": "/home/fila/jqdDev_2025/ic_hw/strix-halo-ioconvert/revA/pcb/pm_gate/artifacts/L3/SPEC_k2_v4.json",
+        "alloc": "/home/fila/jqdDev_2025/ic_hw/strix-halo-ioconvert/revA/pcb/pm_gate/artifacts/k2_v4/L3/model_solves/channel_alloc_v4/channel_alloc.json",
+        "drc_rules": "/home/fila/jqdDev_2025/ic_hw/_shared/eda_core/drc_rules.json",
+        "board": "/tmp/opencode/boards/k2_v6.kicad_pcb",
+        "min_pitch": 1.3,
+        "min_row_sep": 2.5,
+        "injected_obstacles": 96,
+        "input_fp": "6bf0acd35f2c1eea"
+      },
+      "layout": {
+        "C49": {
+          "x": 100.8,
+          "y": 39.4,
+          "rot": 0.0,
+          "stubs": [
+            {
+              "net": "PCIE_UP_OUT0_P_U7",
+              "chip_ref": "C49",
+              "pad_num": "1",
+              "px": 100.45,
+              "py": 39.4,
+              "vx": 100.45,
+              "vy": 38.7
+            },
+            {
+              "net": "PCIE_UP_OUT0_P_J2",
+              "chip_ref": "C49",
+              "pad_num": "2",
+              "px": 101.15,
+              "py": 39.4,
+              "vx": 101.15,
+              "vy": 38.7
+            }
+          ]
+        },
+        "C50": {
+          "x": 99.5,
+          "y": 39.4,
+          "rot": 0.0,
+          "stubs": [
+            {
+              "net": "PCIE_UP_OUT0_N_U7",
+              "chip_ref": "C50",
+              "pad_num": "1",
+              "px": 99.15,
+              "py": 39.4,
+              "vx": 96.65,
+              "vy": 39.4
+            },
+            {
+              "net": "PCIE_UP_OUT0_N_J2",
+              "chip_ref": "C50",
+              "pad_num": "2",
+              "px": 99.85,
+              "py": 39.4,
+              "vx": 99.85,
+              "vy": 38.7
+            }
+          ]
+        },
+        "C51": {
+          "x": 103.4,
+          "y": 39.4,
+          "rot": 0.0,
+          "stubs": [
+            {
+              "net": "PCIE_UP_OUT1_P_U7",
+              "chip_ref": "C51",
+              "pad_num": "1",
+              "px": 103.05,
+              "py": 39.4,
+              "vx": 103.05,
+              "vy": 38.7
+            },
+            {
+              "net": "PCIE_UP_OUT1_P_J2",
+              "chip_ref": "C51",
+              "pad_num": "2",
+              "px": 103.75,
+              "py": 39.4,
+              "vx": 103.75,
+              "vy": 38.7
+            }
+          ]
+        },
+        "C52": {
+          "x": 102.1,
+          "y": 39.4,
+          "rot": 0.0,
+          "stubs": [
+            {
+              "net": "PCIE_UP_OUT1_N_U7",
+              "chip_ref": "C52",
+              "pad_num": "1",
+              "px": 101.75,
+              "py": 39.4,
+              "vx": 101.75,
+              "vy": 38.7
+            },
+            {
+              "net": "PCIE_UP_OUT1_N_J2",
+              "chip_ref": "C52",
+              "pad_num": "2",
+              "px": 102.45,
+              "py": 39.4,
+              "vx": 102.45,
+              "vy": 38.7
+            }
+          ]
+        },
+        "C53": {
+          "x": 106.0,
+          "y": 39.4,
+          "rot": 0.0,
+          "stubs": [
+            {
+              "net": "PCIE_UP_OUT2_P_U7",
+              "chip_ref": "C53",
+              "pad_num": "1",
+              "px": 105.65,
+              "py": 39.4,
+              "vx": 105.65,
+              "vy": 38.7
+            },
+            {
+              "net": "PCIE_UP_OUT2_P_J2",
+              "chip_ref": "C53",
+              "pad_num": "2",
+              "px": 106.35,
+              "py": 39.4,
+              "vx": 106.35,
+              "vy": 38.7
+            }
+          ]
+        },
+        "C54": {
+          "x": 104.7,
+          "y": 39.4,
+          "rot": 0.0,
+          "stubs": [
+            {
+              "net": "PCIE_UP_OUT2_N_U7",
+              "chip_ref": "C54",
+              "pad_num": "1",
+              "px": 104.35,
+              "py": 39.4,
+              "vx": 104.35,
+              "vy": 38.7
+            },
+            {
+              "net": "PCIE_UP_OUT2_N_J2",
+              "chip_ref": "C54",
+              "pad_num": "2",
+              "px": 105.05,
+              "py": 39.4,
+              "vx": 105.05,
+              "vy": 38.7
+            }
+          ]
+        },
+        "C55": {
+          "x": 108.6,
+          "y": 39.4,
+          "rot": 0.0,
+          "stubs": [
+            {
+              "net": "PCIE_UP_OUT3_P_U7",
+              "chip_ref": "C55",
+              "pad_num": "1",
+              "px": 108.25,
+              "py": 39.4,
+              "vx": 108.25,
+              "vy": 38.7
+            },
+            {
+              "net": "PCIE_UP_OUT3_P_J2",
+              "chip_ref": "C55",
+              "pad_num": "2",
+              "px": 108.95,
+              "py": 39.4,
+              "vx": 108.95,
+              "vy": 38.7
+            }
+          ]
+        },
+        "C56": {
+          "x": 107.3,
+          "y": 39.4,
+          "rot": 0.0,
+          "stubs": [
+            {
+              "net": "PCIE_UP_OUT3_N_U7",
+              "chip_ref": "C56",
+              "pad_num": "1",
+              "px": 106.95,
+              "py": 39.4,
+              "vx": 106.95,
+              "vy": 38.7
+            },
+            {
+              "net": "PCIE_UP_OUT3_N_J2",
+              "chip_ref": "C56",
+              "pad_num": "2",
+              "px": 107.65,
+              "py": 39.4,
+              "vx": 107.65,
+              "vy": 38.7
+            }
+          ]
+        },
+        "C57": {
+          "x": 111.2,
+          "y": 39.4,
+          "rot": 0.0,
+          "stubs": [
+            {
+              "net": "PCIE_UP_OUT4_P_U7",
+              "chip_ref": "C57",
+              "pad_num": "1",
+              "px": 110.85,
+              "py": 39.4,
+              "vx": 110.85,
+              "vy": 38.7
+            },
+            {
+              "net": "PCIE_UP_OUT4_P_J2",
+              "chip_ref": "C57",
+              "pad_num": "2",
+              "px": 111.55,
+              "py": 39.4,
+              "vx": 111.55,
+              "vy": 38.7
+            }
+          ]
+        },
+        "C58": {
+          "x": 109.9,
+          "y": 39.4,
+          "rot": 0.0,
+          "stubs": [
+            {
+              "net": "PCIE_UP_OUT4_N_U7",
+              "chip_ref": "C58",
+              "pad_num": "1",
+              "px": 109.55,
+              "py": 39.4,
+              "vx": 109.55,
+              "vy": 38.7
+            },
+            {
+              "net": "PCIE_UP_OUT4_N_J2",
+              "chip_ref": "C58",
+              "pad_num": "2",
+              "px": 110.25,
+              "py": 39.4,
+              "vx": 110.25,
+              "vy": 38.7
+            }
+          ]
+        },
+        "C59": {
+          "x": 113.8,
+          "y": 39.4,
+          "rot": 0.0,
+          "stubs": [
+            {
+              "net": "PCIE_UP_OUT5_P_U7",
+              "chip_ref": "C59",
+              "pad_num": "1",
+              "px": 113.45,
+              "py": 39.4,
+              "vx": 113.45,
+              "vy": 38.7
+            },
+            {
+              "net": "PCIE_UP_OUT5_P_J2",
+              "chip_ref": "C59",
+              "pad_num": "2",
+              "px": 114.15,
+              "py": 39.4,
+              "vx": 114.15,
+              "vy": 38.7
+            }
+          ]
+        },
+        "C60": {
+          "x": 112.5,
+          "y": 39.4,
+          "rot": 0.0,
+          "stubs": [
+            {
+              "net": "PCIE_UP_OUT5_N_U7",
+              "chip_ref": "C60",
+              "pad_num": "1",
+              "px": 112.15,
+              "py": 39.4,
+              "vx": 112.15,
+              "vy": 38.7
+            },
+            {
+              "net": "PCIE_UP_OUT5_N_J2",
+              "chip_ref": "C60",
+              "pad_num": "2",
+              "px": 112.85,
+              "py": 39.4,
+              "vx": 112.85,
+              "vy": 38.7
+            }
+          ]
+        },
+        "C61": {
+          "x": 116.4,
+          "y": 39.4,
+          "rot": 0.0,
+          "stubs": [
+            {
+              "net": "PCIE_UP_OUT6_P_U7",
+              "chip_ref": "C61",
+              "pad_num": "1",
+              "px": 116.05,
+              "py": 39.4,
+              "vx": 116.05,
+              "vy": 38.7
+            },
+            {
+              "net": "PCIE_UP_OUT6_P_J2",
+              "chip_ref": "C61",
+              "pad_num": "2",
+              "px": 116.75,
+              "py": 39.4,
+              "vx": 116.75,
+              "vy": 38.7
+            }
+          ]
+        },
+        "C62": {
+          "x": 115.1,
+          "y": 39.4,
+          "rot": 0.0,
+          "stubs": [
+            {
+              "net": "PCIE_UP_OUT6_N_U7",
+              "chip_ref": "C62",
+              "pad_num": "1",
+              "px": 114.75,
+              "py": 39.4,
+              "vx": 114.75,
+              "vy": 38.7
+            },
+            {
+              "net": "PCIE_UP_OUT6_N_J2",
+              "chip_ref": "C62",
+              "pad_num": "2",
+              "px": 115.45,
+              "py": 39.4,
+              "vx": 115.45,
+              "vy": 38.7
+            }
+          ]
+        },
+        "C63": {
+          "x": 119.0,
+          "y": 39.4,
+          "rot": 0.0,
+          "stubs": [
+            {
+              "net": "PCIE_UP_OUT7_P_U7",
+              "chip_ref": "C63",
+              "pad_num": "1",
+              "px": 118.65,
+              "py": 39.4,
+              "vx": 118.65,
+              "vy": 38.7
+            },
+            {
+              "net": "PCIE_UP_OUT7_P_J2",
+              "chip_ref": "C63",
+              "pad_num": "2",
+              "px": 119.35,
+              "py": 39.4,
+              "vx": 119.35,
+              "vy": 38.7
+            }
+          ]
+        },
+        "C64": {
+          "x": 117.7,
+          "y": 39.4,
+          "rot": 0.0,
+          "stubs": [
+            {
+              "net": "PCIE_UP_OUT7_N_U7",
+              "chip_ref": "C64",
+              "pad_num": "1",
+              "px": 117.35,
+              "py": 39.4,
+              "vx": 117.35,
+              "vy": 38.7
+            },
+            {
+              "net": "PCIE_UP_OUT7_N_J2",
+              "chip_ref": "C64",
+              "pad_num": "2",
+              "px": 118.05,
+              "py": 39.4,
+              "vx": 118.05,
+              "vy": 38.7
+            }
+          ]
+        }
+      },
+      "report": [
+        "固定障碍: 313 个（VREG via + 芯片/冻结 cap 桩 seg + 冻结 pad + in2_crossing 段+ 注入障碍），排除决策变量 ['C17', 'C18', 'C19', 'C20', 'C21', 'C22', 'C23', 'C24', 'C25', 'C26', 'C27', 'C28', 'C29', 'C30', 'C31', 'C32', 'C49', 'C50', 'C51', 'C52', 'C53', 'C54', 'C55', 'C56', 'C57', 'C58', 'C59', 'C60', 'C61', 'C62', 'C63', 'C64']",
+        "轨道净空参数(数据驱动 drc_rules.json): 轨半带=0.19 线半宽=0.1025 净距=0.175 cap半高=0.25 → row_excl=0.7175",
+        "排除轨道 16 条（走廊 x 相交 ∩ F.Cu）: J2_TO_U/lower/0@58.3, J2_TO_U/lower/1@59.5, J2_TO_U/lower/2@60.7, J2_TO_U/lower/3@61.9, J2_TO_U/lower/4@63.1, J2_TO_U/lower/5@64.3, J2_TO_U/lower/6@65.5, J2_TO_U/lower/7@66.7, J2_TO_U/upper/0@40.3, J2_TO_U/upper/1@41.5, J2_TO_U/upper/2@42.7, J2_TO_U/upper/3@43.9, J2_TO_U/upper/4@45.1, J2_TO_U/upper/5@46.3, J2_TO_U/upper/6@47.5, J2_TO_U/upper/7@48.7",
+        "带外合法窗口（板内[33.0,71.0]）: [33.0000,39.5825], [49.4175,57.5825], [67.4175,71.0000]",
+        "行结构: 单行（1 行）",
+        "行1 @y=39.400 (base 44.500): C50=99.50, C49=100.80, C52=102.10, C51=103.40, C54=104.70, C53=106.00, C56=107.30, C55=108.60, C58=109.90, C57=111.20, C60=112.50, C59=113.80, C62=115.10, C61=116.40, C64=117.70, C63=119.00",
+        "--- 容量断言: 16/16 cap, x∈[99.500,119.000] ⊂ 走廊 (99.0, 128.0): PASS, 行间距≥2.5mm: PASS, 逐颗轨净空>0: PASS（最差 C49 margin=0.1825 vs J2_TO_U/upper/0）",
+        "--- 桩落位（确定性阶梯 first-clear-wins）---",
+        "C49 PCIE_UP_OUT0_P_U7            pad1 @(100.450,39.400) via@(100.450,38.700) dir=-y0.7",
+        "C49 PCIE_UP_OUT0_P_J2            pad2 @(101.150,39.400) via@(101.150,38.700) dir=-y0.7",
+        "C50 PCIE_UP_OUT0_N_U7            pad1 @(99.150,39.400) via@(96.650,39.400) dir=-x2.5",
+        "C50 PCIE_UP_OUT0_N_J2            pad2 @(99.850,39.400) via@(99.850,38.700) dir=-y0.7",
+        "C51 PCIE_UP_OUT1_P_U7            pad1 @(103.050,39.400) via@(103.050,38.700) dir=-y0.7",
+        "C51 PCIE_UP_OUT1_P_J2            pad2 @(103.750,39.400) via@(103.750,38.700) dir=-y0.7",
+        "C52 PCIE_UP_OUT1_N_U7            pad1 @(101.750,39.400) via@(101.750,38.700) dir=-y0.7",
+        "C52 PCIE_UP_OUT1_N_J2            pad2 @(102.450,39.400) via@(102.450,38.700) dir=-y0.7",
+        "C53 PCIE_UP_OUT2_P_U7            pad1 @(105.650,39.400) via@(105.650,38.700) dir=-y0.7",
+        "C53 PCIE_UP_OUT2_P_J2            pad2 @(106.350,39.400) via@(106.350,38.700) dir=-y0.7",
+        "C54 PCIE_UP_OUT2_N_U7            pad1 @(104.350,39.400) via@(104.350,38.700) dir=-y0.7",
+        "C54 PCIE_UP_OUT2_N_J2            pad2 @(105.050,39.400) via@(105.050,38.700) dir=-y0.7",
+        "C55 PCIE_UP_OUT3_P_U7            pad1 @(108.250,39.400) via@(108.250,38.700) dir=-y0.7",
+        "C55 PCIE_UP_OUT3_P_J2            pad2 @(108.950,39.400) via@(108.950,38.700) dir=-y0.7",
+        "C56 PCIE_UP_OUT3_N_U7            pad1 @(106.950,39.400) via@(106.950,38.700) dir=-y0.7",
+        "C56 PCIE_UP_OUT3_N_J2            pad2 @(107.650,39.400) via@(107.650,38.700) dir=-y0.7",
+        "C57 PCIE_UP_OUT4_P_U7            pad1 @(110.850,39.400) via@(110.850,38.700) dir=-y0.7",
+        "C57 PCIE_UP_OUT4_P_J2            pad2 @(111.550,39.400) via@(111.550,38.700) dir=-y0.7",
+        "C58 PCIE_UP_OUT4_N_U7            pad1 @(109.550,39.400) via@(109.550,38.700) dir=-y0.7",
+        "C58 PCIE_UP_OUT4_N_J2            pad2 @(110.250,39.400) via@(110.250,38.700) dir=-y0.7",
+        "C59 PCIE_UP_OUT5_P_U7            pad1 @(113.450,39.400) via@(113.450,38.700) dir=-y0.7",
+        "C59 PCIE_UP_OUT5_P_J2            pad2 @(114.150,39.400) via@(114.150,38.700) dir=-y0.7",
+        "C60 PCIE_UP_OUT5_N_U7            pad1 @(112.150,39.400) via@(112.150,38.700) dir=-y0.7",
+        "C60 PCIE_UP_OUT5_N_J2            pad2 @(112.850,39.400) via@(112.850,38.700) dir=-y0.7",
+        "C61 PCIE_UP_OUT6_P_U7            pad1 @(116.050,39.400) via@(116.050,38.700) dir=-y0.7",
+        "C61 PCIE_UP_OUT6_P_J2            pad2 @(116.750,39.400) via@(116.750,38.700) dir=-y0.7",
+        "C62 PCIE_UP_OUT6_N_U7            pad1 @(114.750,39.400) via@(114.750,38.700) dir=-y0.7",
+        "C62 PCIE_UP_OUT6_N_J2            pad2 @(115.450,39.400) via@(115.450,38.700) dir=-y0.7",
+        "C63 PCIE_UP_OUT7_P_U7            pad1 @(118.650,39.400) via@(118.650,38.700) dir=-y0.7",
+        "C63 PCIE_UP_OUT7_P_J2            pad2 @(119.350,39.400) via@(119.350,38.700) dir=-y0.7",
+        "C64 PCIE_UP_OUT7_N_U7            pad1 @(117.350,39.400) via@(117.350,38.700) dir=-y0.7",
+        "C64 PCIE_UP_OUT7_N_J2            pad2 @(118.050,39.400) via@(118.050,38.700) dir=-y0.7"
+      ],
+      "solved_count": 16,
+      "expect": 16,
+      "tool": "cap_wall_solver.solve_cap_wall v2（轨道感知窗口 + x 平移）"
+    }
+  }
+}

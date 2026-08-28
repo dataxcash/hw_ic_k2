@@ -1,0 +1,59 @@
+{
+  "project": "k2_v4",
+  "description": "K2 模型输入契约 — 严格镜像 ls_route_model.build_field / hs_route_model / channel_alloc 的 K2 现状读取语义（字节级不变）",
+  "ls_route_model": {
+    "escape_entries_path": "low_speed_escape.entries",
+    "obstacle_segs": [
+      {
+        "mode": "concat_entries",
+        "path": "layer_plan",
+        "keys": ["wp1_escape_nets", "j2_escape_nets"],
+        "seg_key": "segments",
+        "pts_key": "pts",
+        "layer_key": "layer",
+        "filter_layer": "B.Cu"
+      },
+      {
+        "mode": "entries",
+        "path": "layer_plan.wp6_single_nets.nets",
+        "seg_key": "segments",
+        "pts_key": "pts",
+        "layer_key": "layer",
+        "filter_layer": "B.Cu"
+      }
+    ],
+    "obstacle_vias": [
+      {
+        "mode": "concat_entries",
+        "path": "layer_plan",
+        "keys": ["wp1_escape_nets", "j2_escape_nets"],
+        "via_key": "vias"
+      },
+      {
+        "mode": "entries",
+        "path": "layer_plan.in2_crossing_nets",
+        "via_keys": ["via1", "via2"]
+      },
+      {
+        "mode": "entries",
+        "path": "layer_plan.wp6_single_nets.nets",
+        "via_key": "vias"
+      }
+    ]
+  },
+  "hs_route_model": {
+    "hs_prefixes": ["PCIE", "REFCLK"],
+    "pdn_yield_prefixes": ["GND", "P3V3", "MCU_", "VREG", "PWR_5V"],
+    "hs_layer": "F.Cu",
+    "chain_in_pattern": "PCIE_{base}",
+    "chain_out_suffixes": ["_U7", "_J2", "_U3", "_MCIO"],
+    "chain_out_pattern": "PCIE_{stem}_OUT{num}_{pn}{suf}",
+    "channel_fallback_prefixes": ["PCIE_UP_OUT", "PCIE_DN_OUT"],
+    "skew_limit": 0.15
+  },
+  "channel_alloc": {
+    "corridors_path": "corridors",
+    "default_layer": "F.Cu",
+    "pitch_fallback": 1.08
+  }
+}

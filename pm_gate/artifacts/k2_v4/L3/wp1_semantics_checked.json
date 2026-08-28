@@ -1,0 +1,483 @@
+{
+  "metadata": {
+    "plan_task": 1,
+    "date": "2026-08-22T15:01:39.664551+00:00",
+    "ecn005": "ruled direction b",
+    "expected_post_freeze": "26/26 PASS after re-freeze (Task 11)",
+    "spec_path": "/home/fila/jqdDev_2025/ic_hw/strix-halo-ioconvert/revA/pcb/pm_gate/artifacts/L3/SPEC_k2_v4.json",
+    "board_path": "/home/fila/jqdDev_2025/ic_hw/strix-halo-ioconvert/revA/pcb/k2_v4.kicad_pcb",
+    "check": "pm_gate.wp1_semantics_check.check_spec",
+    "tolerance_mm": 0.01,
+    "note": "BASELINE defect evidence: OLD SPEC polylines use swapped A/B semantics. Do NOT fix SPEC in Task 1."
+  },
+  "nets": [
+    {
+      "net": "PCIE_UP3_P",
+      "status": "FAIL",
+      "authoritative": {
+        "ref": "J3",
+        "pad_name": "B17",
+        "expected_xy": [
+          55.3,
+          43.25
+        ]
+      },
+      "actual_xy": [
+        55.3,
+        45.75
+      ],
+      "deviation_mm": 2.5,
+      "reason": "MCIO 端坐标偏差超容差(>0.01mm)，三源推导 J3/TX3_P→pin34→B17"
+    },
+    {
+      "net": "PCIE_UP2_P",
+      "status": "FAIL",
+      "authoritative": {
+        "ref": "J3",
+        "pad_name": "B14",
+        "expected_xy": [
+          57.1,
+          43.25
+        ]
+      },
+      "actual_xy": [
+        57.1,
+        45.75
+      ],
+      "deviation_mm": 2.5,
+      "reason": "MCIO 端坐标偏差超容差(>0.01mm)，三源推导 J3/TX2_P→pin28→B14"
+    },
+    {
+      "net": "PCIE_UP1_N",
+      "status": "FAIL",
+      "authoritative": {
+        "ref": "J3",
+        "pad_name": "B6",
+        "expected_xy": [
+          61.9,
+          43.25
+        ]
+      },
+      "actual_xy": [
+        61.9,
+        45.75
+      ],
+      "deviation_mm": 2.5,
+      "reason": "MCIO 端坐标偏差超容差(>0.01mm)，三源推导 J3/TX1_N→pin12→B6"
+    },
+    {
+      "net": "PCIE_UP1_P",
+      "status": "FAIL",
+      "authoritative": {
+        "ref": "J3",
+        "pad_name": "B5",
+        "expected_xy": [
+          62.5,
+          43.25
+        ]
+      },
+      "actual_xy": [
+        62.5,
+        45.75
+      ],
+      "deviation_mm": 2.5,
+      "reason": "MCIO 端坐标偏差超容差(>0.01mm)，三源推导 J3/TX1_P→pin10→B5"
+    },
+    {
+      "net": "PCIE_UP0_N",
+      "status": "FAIL",
+      "authoritative": {
+        "ref": "J3",
+        "pad_name": "B3",
+        "expected_xy": [
+          63.7,
+          43.25
+        ]
+      },
+      "actual_xy": [
+        63.7,
+        45.75
+      ],
+      "deviation_mm": 2.5,
+      "reason": "MCIO 端坐标偏差超容差(>0.01mm)，三源推导 J3/TX0_N→pin6→B3"
+    },
+    {
+      "net": "PCIE_UP0_P",
+      "status": "FAIL",
+      "authoritative": {
+        "ref": "J3",
+        "pad_name": "B2",
+        "expected_xy": [
+          64.3,
+          43.25
+        ]
+      },
+      "actual_xy": [
+        64.3,
+        45.75
+      ],
+      "deviation_mm": 2.5,
+      "reason": "MCIO 端坐标偏差超容差(>0.01mm)，三源推导 J3/TX0_P→pin4→B2"
+    },
+    {
+      "net": "PCIE_DN_OUT1_P_MCIO",
+      "status": "FAIL",
+      "authoritative": {
+        "ref": "J3",
+        "pad_name": "A5",
+        "expected_xy": [
+          62.5,
+          45.75
+        ]
+      },
+      "actual_xy": [
+        62.5,
+        43.25
+      ],
+      "deviation_mm": 2.5,
+      "reason": "MCIO 端坐标偏差超容差(>0.01mm)，三源推导 J3/RX1_P→pin9→A5"
+    },
+    {
+      "net": "PCIE_DN_OUT1_N_MCIO",
+      "status": "FAIL",
+      "authoritative": {
+        "ref": "J3",
+        "pad_name": "A6",
+        "expected_xy": [
+          61.9,
+          45.75
+        ]
+      },
+      "actual_xy": [
+        61.9,
+        43.25
+      ],
+      "deviation_mm": 2.5,
+      "reason": "MCIO 端坐标偏差超容差(>0.01mm)，三源推导 J3/RX1_N→pin11→A6"
+    },
+    {
+      "net": "PCIE_DN_OUT2_P_MCIO",
+      "status": "FAIL",
+      "authoritative": {
+        "ref": "J3",
+        "pad_name": "A14",
+        "expected_xy": [
+          57.1,
+          45.75
+        ]
+      },
+      "actual_xy": [
+        57.1,
+        43.25
+      ],
+      "deviation_mm": 2.5,
+      "reason": "MCIO 端坐标偏差超容差(>0.01mm)，三源推导 J3/RX2_P→pin27→A14"
+    },
+    {
+      "net": "PCIE_DN_OUT2_N_MCIO",
+      "status": "FAIL",
+      "authoritative": {
+        "ref": "J3",
+        "pad_name": "A15",
+        "expected_xy": [
+          56.5,
+          45.75
+        ]
+      },
+      "actual_xy": [
+        56.5,
+        43.25
+      ],
+      "deviation_mm": 2.5,
+      "reason": "MCIO 端坐标偏差超容差(>0.01mm)，三源推导 J3/RX2_N→pin29→A15"
+    },
+    {
+      "net": "PCIE_DN_OUT3_P_MCIO",
+      "status": "FAIL",
+      "authoritative": {
+        "ref": "J3",
+        "pad_name": "A17",
+        "expected_xy": [
+          55.3,
+          45.75
+        ]
+      },
+      "actual_xy": [
+        55.3,
+        43.25
+      ],
+      "deviation_mm": 2.5,
+      "reason": "MCIO 端坐标偏差超容差(>0.01mm)，三源推导 J3/RX3_P→pin33→A17"
+    },
+    {
+      "net": "PCIE_DN_OUT3_N_MCIO",
+      "status": "FAIL",
+      "authoritative": {
+        "ref": "J3",
+        "pad_name": "A18",
+        "expected_xy": [
+          54.7,
+          45.75
+        ]
+      },
+      "actual_xy": [
+        54.7,
+        43.25
+      ],
+      "deviation_mm": 2.5,
+      "reason": "MCIO 端坐标偏差超容差(>0.01mm)，三源推导 J3/RX3_N→pin35→A18"
+    },
+    {
+      "net": "PCIE_UP7_N",
+      "status": "FAIL",
+      "authoritative": {
+        "ref": "J4",
+        "pad_name": "B18",
+        "expected_xy": [
+          64.3,
+          63.95
+        ]
+      },
+      "actual_xy": [
+        64.3,
+        61.45
+      ],
+      "deviation_mm": 2.5,
+      "reason": "MCIO 端坐标偏差超容差(>0.01mm)，三源推导 J4/TX3_N→pin36→B18"
+    },
+    {
+      "net": "PCIE_UP7_P",
+      "status": "FAIL",
+      "authoritative": {
+        "ref": "J4",
+        "pad_name": "B17",
+        "expected_xy": [
+          63.7,
+          63.95
+        ]
+      },
+      "actual_xy": [
+        63.7,
+        61.45
+      ],
+      "deviation_mm": 2.5,
+      "reason": "MCIO 端坐标偏差超容差(>0.01mm)，三源推导 J4/TX3_P→pin34→B17"
+    },
+    {
+      "net": "PCIE_UP6_N",
+      "status": "FAIL",
+      "authoritative": {
+        "ref": "J4",
+        "pad_name": "B15",
+        "expected_xy": [
+          62.5,
+          63.95
+        ]
+      },
+      "actual_xy": [
+        62.5,
+        61.45
+      ],
+      "deviation_mm": 2.5,
+      "reason": "MCIO 端坐标偏差超容差(>0.01mm)，三源推导 J4/TX2_N→pin30→B15"
+    },
+    {
+      "net": "PCIE_UP6_P",
+      "status": "FAIL",
+      "authoritative": {
+        "ref": "J4",
+        "pad_name": "B14",
+        "expected_xy": [
+          61.9,
+          63.95
+        ]
+      },
+      "actual_xy": [
+        61.9,
+        61.45
+      ],
+      "deviation_mm": 2.5,
+      "reason": "MCIO 端坐标偏差超容差(>0.01mm)，三源推导 J4/TX2_P→pin28→B14"
+    },
+    {
+      "net": "PCIE_UP5_N",
+      "status": "FAIL",
+      "authoritative": {
+        "ref": "J4",
+        "pad_name": "B6",
+        "expected_xy": [
+          57.1,
+          63.95
+        ]
+      },
+      "actual_xy": [
+        57.1,
+        61.45
+      ],
+      "deviation_mm": 2.5,
+      "reason": "MCIO 端坐标偏差超容差(>0.01mm)，三源推导 J4/TX1_N→pin12→B6"
+    },
+    {
+      "net": "PCIE_UP4_N",
+      "status": "FAIL",
+      "authoritative": {
+        "ref": "J4",
+        "pad_name": "B3",
+        "expected_xy": [
+          55.3,
+          63.95
+        ]
+      },
+      "actual_xy": [
+        55.3,
+        61.45
+      ],
+      "deviation_mm": 2.5,
+      "reason": "MCIO 端坐标偏差超容差(>0.01mm)，三源推导 J4/TX0_N→pin6→B3"
+    },
+    {
+      "net": "PCIE_DN_OUT4_P_MCIO",
+      "status": "FAIL",
+      "authoritative": {
+        "ref": "J4",
+        "pad_name": "A2",
+        "expected_xy": [
+          54.7,
+          61.45
+        ]
+      },
+      "actual_xy": [
+        54.7,
+        63.95
+      ],
+      "deviation_mm": 2.5,
+      "reason": "MCIO 端坐标偏差超容差(>0.01mm)，三源推导 J4/RX0_P→pin3→A2"
+    },
+    {
+      "net": "PCIE_DN_OUT4_N_MCIO",
+      "status": "FAIL",
+      "authoritative": {
+        "ref": "J4",
+        "pad_name": "A3",
+        "expected_xy": [
+          55.3,
+          61.45
+        ]
+      },
+      "actual_xy": [
+        55.3,
+        63.95
+      ],
+      "deviation_mm": 2.5,
+      "reason": "MCIO 端坐标偏差超容差(>0.01mm)，三源推导 J4/RX0_N→pin5→A3"
+    },
+    {
+      "net": "PCIE_DN_OUT7_P_MCIO",
+      "status": "FAIL",
+      "authoritative": {
+        "ref": "J4",
+        "pad_name": "A17",
+        "expected_xy": [
+          63.7,
+          61.45
+        ]
+      },
+      "actual_xy": [
+        63.7,
+        63.95
+      ],
+      "deviation_mm": 2.5,
+      "reason": "MCIO 端坐标偏差超容差(>0.01mm)，三源推导 J4/RX3_P→pin33→A17"
+    },
+    {
+      "net": "PCIE_DN_OUT7_N_MCIO",
+      "status": "FAIL",
+      "authoritative": {
+        "ref": "J4",
+        "pad_name": "A18",
+        "expected_xy": [
+          64.3,
+          61.45
+        ]
+      },
+      "actual_xy": [
+        64.3,
+        63.95
+      ],
+      "deviation_mm": 2.5,
+      "reason": "MCIO 端坐标偏差超容差(>0.01mm)，三源推导 J4/RX3_N→pin35→A18"
+    },
+    {
+      "net": "PCIE_DN_OUT5_P_MCIO",
+      "status": "FAIL",
+      "authoritative": {
+        "ref": "J4",
+        "pad_name": "A5",
+        "expected_xy": [
+          56.5,
+          61.45
+        ]
+      },
+      "actual_xy": [
+        56.5,
+        63.95
+      ],
+      "deviation_mm": 2.5,
+      "reason": "MCIO 端坐标偏差超容差(>0.01mm)，三源推导 J4/RX1_P→pin9→A5"
+    },
+    {
+      "net": "PCIE_DN_OUT6_N_MCIO",
+      "status": "FAIL",
+      "authoritative": {
+        "ref": "J4",
+        "pad_name": "A15",
+        "expected_xy": [
+          62.5,
+          61.45
+        ]
+      },
+      "actual_xy": [
+        62.5,
+        63.95
+      ],
+      "deviation_mm": 2.5,
+      "reason": "MCIO 端坐标偏差超容差(>0.01mm)，三源推导 J4/RX2_N→pin29→A15"
+    },
+    {
+      "net": "PCIE_DN_OUT5_N_MCIO",
+      "status": "FAIL",
+      "authoritative": {
+        "ref": "J4",
+        "pad_name": "A6",
+        "expected_xy": [
+          57.1,
+          61.45
+        ]
+      },
+      "actual_xy": [
+        57.1,
+        63.95
+      ],
+      "deviation_mm": 2.5,
+      "reason": "MCIO 端坐标偏差超容差(>0.01mm)，三源推导 J4/RX1_N→pin11→A6"
+    },
+    {
+      "net": "PCIE_DN_OUT6_P_MCIO",
+      "status": "FAIL",
+      "authoritative": {
+        "ref": "J4",
+        "pad_name": "A14",
+        "expected_xy": [
+          61.9,
+          61.45
+        ]
+      },
+      "actual_xy": [
+        61.9,
+        63.95
+      ],
+      "deviation_mm": 2.5,
+      "reason": "MCIO 端坐标偏差超容差(>0.01mm)，三源推导 J4/RX2_P→pin27→A14"
+    }
+  ]
+}

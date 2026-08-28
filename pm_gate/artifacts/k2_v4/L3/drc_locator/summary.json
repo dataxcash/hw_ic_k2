@@ -1,0 +1,7064 @@
+{
+ "baseline": "k2_m9demo.kicad_pcb",
+ "total_violations": 867,
+ "coverage": {
+  "total_violations": 867,
+  "total_items": 1734,
+  "unknown_kind_items": 0,
+  "unknown_rule": 0,
+  "unclassified_family": 0,
+  "unmapped_uuid_items": 0,
+  "high_risk_severe": 78
+ },
+ "by_domain": {
+  "hs": 294,
+  "hs+pwr": 181,
+  "pwr+ls": 162,
+  "ls": 146,
+  "pwr": 45,
+  "hs+ls": 39
+ },
+ "by_type": {
+  "clearance": 500,
+  "hole_clearance": 171,
+  "shorting_items": 89,
+  "solder_mask_bridge": 58,
+  "tracks_crossing": 46,
+  "zones_intersect": 2,
+  "diff_pair_gap_out_of_range": 1
+ },
+ "n_clusters": 117,
+ "cluster_counts": [
+  {
+   "domain": "hs",
+   "region": "中-U3U7/下",
+   "type": "clearance",
+   "family": "via_clearance",
+   "count": 82
+  },
+  {
+   "domain": "hs",
+   "region": "中-U3U7/上",
+   "type": "clearance",
+   "family": "via_clearance",
+   "count": 42
+  },
+  {
+   "domain": "hs",
+   "region": "中-U3U7/下",
+   "type": "clearance",
+   "family": "seg_clearance",
+   "count": 35
+  },
+  {
+   "domain": "ls",
+   "region": "中-U3U7/下",
+   "type": "hole_clearance",
+   "family": "via_via_hole",
+   "count": 29
+  },
+  {
+   "domain": "hs+pwr",
+   "region": "中-U3U7/下",
+   "type": "clearance",
+   "family": "pad_clearance",
+   "count": 24
+  },
+  {
+   "domain": "hs+pwr",
+   "region": "中-U3U7/上",
+   "type": "clearance",
+   "family": "pad_clearance",
+   "count": 24
+  },
+  {
+   "domain": "ls",
+   "region": "中-U3U7/下",
+   "type": "hole_clearance",
+   "family": "via_hole",
+   "count": 23
+  },
+  {
+   "domain": "hs+pwr",
+   "region": "中-U3U7/下",
+   "type": "solder_mask_bridge",
+   "family": "smd_mask_bridge",
+   "count": 22
+  },
+  {
+   "domain": "hs",
+   "region": "中-U3U7/下",
+   "type": "clearance",
+   "family": "pad_clearance",
+   "count": 21
+  },
+  {
+   "domain": "hs+pwr",
+   "region": "中-U3U7/上",
+   "type": "solder_mask_bridge",
+   "family": "smd_mask_bridge",
+   "count": 20
+  },
+  {
+   "domain": "hs",
+   "region": "中-U3U7/上",
+   "type": "clearance",
+   "family": "seg_clearance",
+   "count": 19
+  },
+  {
+   "domain": "hs",
+   "region": "右-SlimSAS/上",
+   "type": "clearance",
+   "family": "via_clearance",
+   "count": 18
+  },
+  {
+   "domain": "hs",
+   "region": "右-SlimSAS/上",
+   "type": "clearance",
+   "family": "via_via_layer_dup",
+   "count": 16
+  },
+  {
+   "domain": "pwr+ls",
+   "region": "左-MCIO/下",
+   "type": "shorting_items",
+   "family": "via_short",
+   "count": 16
+  },
+  {
+   "domain": "pwr+ls",
+   "region": "右-SlimSAS/上",
+   "type": "shorting_items",
+   "family": "via_short",
+   "count": 16
+  },
+  {
+   "domain": "ls",
+   "region": "中-U3U7/上",
+   "type": "hole_clearance",
+   "family": "via_hole",
+   "count": 15
+  },
+  {
+   "domain": "ls",
+   "region": "中-U3U7/上",
+   "type": "hole_clearance",
+   "family": "via_via_hole",
+   "count": 15
+  },
+  {
+   "domain": "hs+pwr",
+   "region": "中-U3U7/下",
+   "type": "clearance",
+   "family": "via_clearance",
+   "count": 14
+  },
+  {
+   "domain": "pwr+ls",
+   "region": "左-MCIO/上",
+   "type": "shorting_items",
+   "family": "via_short",
+   "count": 14
+  },
+  {
+   "domain": "pwr",
+   "region": "左-MCIO/下",
+   "type": "clearance",
+   "family": "via_via_layer_dup",
+   "count": 14
+  },
+  {
+   "domain": "pwr+ls",
+   "region": "左-MCIO/下",
+   "type": "clearance",
+   "family": "via_via_layer_dup",
+   "count": 13
+  },
+  {
+   "domain": "hs+pwr",
+   "region": "右-SlimSAS/上",
+   "type": "hole_clearance",
+   "family": "via_via_hole",
+   "count": 12
+  },
+  {
+   "domain": "hs+pwr",
+   "region": "中-U3U7/下",
+   "type": "clearance",
+   "family": "seg_clearance",
+   "count": 11
+  },
+  {
+   "domain": "hs",
+   "region": "左-MCIO/下",
+   "type": "clearance",
+   "family": "via_clearance",
+   "count": 11
+  },
+  {
+   "domain": "ls",
+   "region": "中-U3U7/下",
+   "type": "tracks_crossing",
+   "family": "seg_crossing",
+   "count": 10
+  },
+  {
+   "domain": "ls",
+   "region": "左-MCIO/下",
+   "type": "hole_clearance",
+   "family": "via_hole",
+   "count": 10
+  },
+  {
+   "domain": "pwr+ls",
+   "region": "左-MCIO/上",
+   "type": "clearance",
+   "family": "via_clearance",
+   "count": 10
+  },
+  {
+   "domain": "ls",
+   "region": "中-U3U7/上",
+   "type": "tracks_crossing",
+   "family": "seg_crossing",
+   "count": 9
+  },
+  {
+   "domain": "hs+ls",
+   "region": "中-U3U7/下",
+   "type": "clearance",
+   "family": "via_clearance",
+   "count": 9
+  },
+  {
+   "domain": "hs",
+   "region": "中-U3U7/上",
+   "type": "clearance",
+   "family": "pad_clearance",
+   "count": 9
+  },
+  {
+   "domain": "pwr+ls",
+   "region": "中-U3U7/下",
+   "type": "hole_clearance",
+   "family": "via_hole",
+   "count": 9
+  },
+  {
+   "domain": "ls",
+   "region": "中-U3U7/下",
+   "type": "solder_mask_bridge",
+   "family": "smd_mask_bridge",
+   "count": 9
+  },
+  {
+   "domain": "ls",
+   "region": "左-MCIO/上",
+   "type": "tracks_crossing",
+   "family": "seg_crossing",
+   "count": 8
+  },
+  {
+   "domain": "hs",
+   "region": "右-SlimSAS/下",
+   "type": "clearance",
+   "family": "via_clearance",
+   "count": 8
+  },
+  {
+   "domain": "pwr",
+   "region": "中-U3U7/下",
+   "type": "clearance",
+   "family": "via_via_layer_dup",
+   "count": 8
+  },
+  {
+   "domain": "pwr+ls",
+   "region": "左-MCIO/上",
+   "type": "hole_clearance",
+   "family": "via_hole",
+   "count": 8
+  },
+  {
+   "domain": "pwr+ls",
+   "region": "中-U3U7/上",
+   "type": "hole_clearance",
+   "family": "via_via_hole",
+   "count": 8
+  },
+  {
+   "domain": "ls",
+   "region": "中-U3U7/下",
+   "type": "shorting_items",
+   "family": "seg_seg_edge0_short",
+   "count": 7
+  },
+  {
+   "domain": "hs",
+   "region": "右-SlimSAS/下",
+   "type": "clearance",
+   "family": "via_via_layer_dup",
+   "count": 7
+  },
+  {
+   "domain": "hs+pwr",
+   "region": "中-U3U7/上",
+   "type": "clearance",
+   "family": "via_clearance",
+   "count": 7
+  },
+  {
+   "domain": "pwr+ls",
+   "region": "中-U3U7/上",
+   "type": "shorting_items",
+   "family": "via_short",
+   "count": 7
+  },
+  {
+   "domain": "hs",
+   "region": "中-U3U7/上",
+   "type": "clearance",
+   "family": "via_via_layer_dup",
+   "count": 7
+  },
+  {
+   "domain": "hs+pwr",
+   "region": "中-U3U7/上",
+   "type": "hole_clearance",
+   "family": "via_via_hole",
+   "count": 7
+  },
+  {
+   "domain": "ls",
+   "region": "左-MCIO/下",
+   "type": "tracks_crossing",
+   "family": "seg_crossing",
+   "count": 6
+  },
+  {
+   "domain": "pwr+ls",
+   "region": "左-MCIO/下",
+   "type": "clearance",
+   "family": "pad_clearance",
+   "count": 6
+  },
+  {
+   "domain": "hs",
+   "region": "左-MCIO/上",
+   "type": "clearance",
+   "family": "via_clearance",
+   "count": 6
+  },
+  {
+   "domain": "pwr+ls",
+   "region": "中-U3U7/下",
+   "type": "clearance",
+   "family": "via_via_layer_dup",
+   "count": 6
+  },
+  {
+   "domain": "pwr+ls",
+   "region": "中-U3U7/下",
+   "type": "shorting_items",
+   "family": "via_short",
+   "count": 6
+  },
+  {
+   "domain": "hs+pwr",
+   "region": "中-U3U7/下",
+   "type": "clearance",
+   "family": "via_via_layer_dup",
+   "count": 6
+  },
+  {
+   "domain": "hs+pwr",
+   "region": "右-SlimSAS/上",
+   "type": "clearance",
+   "family": "via_clearance",
+   "count": 5
+  },
+  {
+   "domain": "hs+pwr",
+   "region": "中-U3U7/上",
+   "type": "clearance",
+   "family": "seg_clearance",
+   "count": 5
+  },
+  {
+   "domain": "hs+ls",
+   "region": "中-U3U7/上",
+   "type": "tracks_crossing",
+   "family": "seg_crossing",
+   "count": 5
+  },
+  {
+   "domain": "pwr+ls",
+   "region": "中-U3U7/上",
+   "type": "clearance",
+   "family": "via_clearance",
+   "count": 5
+  },
+  {
+   "domain": "hs+ls",
+   "region": "中-U3U7/上",
+   "type": "clearance",
+   "family": "via_clearance",
+   "count": 5
+  },
+  {
+   "domain": "pwr+ls",
+   "region": "左-MCIO/下",
+   "type": "hole_clearance",
+   "family": "via_hole",
+   "count": 5
+  },
+  {
+   "domain": "hs+pwr",
+   "region": "右-SlimSAS/上",
+   "type": "hole_clearance",
+   "family": "via_hole",
+   "count": 5
+  },
+  {
+   "domain": "hs+pwr",
+   "region": "中-U3U7/下",
+   "type": "hole_clearance",
+   "family": "via_hole",
+   "count": 5
+  },
+  {
+   "domain": "hs+pwr",
+   "region": "右-SlimSAS/下",
+   "type": "clearance",
+   "family": "via_clearance",
+   "count": 4
+  },
+  {
+   "domain": "hs+ls",
+   "region": "右-SlimSAS/上",
+   "type": "shorting_items",
+   "family": "via_short",
+   "count": 4
+  },
+  {
+   "domain": "pwr+ls",
+   "region": "左-MCIO/下",
+   "type": "clearance",
+   "family": "via_clearance",
+   "count": 4
+  },
+  {
+   "domain": "pwr",
+   "region": "左-MCIO/上",
+   "type": "clearance",
+   "family": "via_via_layer_dup",
+   "count": 4
+  },
+  {
+   "domain": "pwr+ls",
+   "region": "中-U3U7/下",
+   "type": "clearance",
+   "family": "pad_clearance",
+   "count": 3
+  },
+  {
+   "domain": "hs+ls",
+   "region": "左-MCIO/上",
+   "type": "tracks_crossing",
+   "family": "seg_crossing",
+   "count": 3
+  },
+  {
+   "domain": "hs+ls",
+   "region": "右-SlimSAS/上",
+   "type": "clearance",
+   "family": "via_clearance",
+   "count": 3
+  },
+  {
+   "domain": "ls",
+   "region": "中-U3U7/下",
+   "type": "shorting_items",
+   "family": "pad_short",
+   "count": 3
+  },
+  {
+   "domain": "hs",
+   "region": "右-SlimSAS/上",
+   "type": "clearance",
+   "family": "seg_clearance",
+   "count": 3
+  },
+  {
+   "domain": "pwr+ls",
+   "region": "左-MCIO/下",
+   "type": "tracks_crossing",
+   "family": "seg_crossing",
+   "count": 3
+  },
+  {
+   "domain": "pwr+ls",
+   "region": "中-U3U7/下",
+   "type": "clearance",
+   "family": "via_clearance",
+   "count": 3
+  },
+  {
+   "domain": "pwr+ls",
+   "region": "中-U3U7/上",
+   "type": "hole_clearance",
+   "family": "via_hole",
+   "count": 3
+  },
+  {
+   "domain": "pwr",
+   "region": "左-MCIO/上",
+   "type": "hole_clearance",
+   "family": "via_via_hole",
+   "count": 3
+  },
+  {
+   "domain": "pwr",
+   "region": "中-U3U7/下",
+   "type": "hole_clearance",
+   "family": "via_hole",
+   "count": 3
+  },
+  {
+   "domain": "hs+ls",
+   "region": "左-MCIO/上",
+   "type": "clearance",
+   "family": "via_clearance",
+   "count": 2
+  },
+  {
+   "domain": "pwr+ls",
+   "region": "左-MCIO/上",
+   "type": "clearance",
+   "family": "pad_clearance",
+   "count": 2
+  },
+  {
+   "domain": "hs",
+   "region": "右-SlimSAS/下",
+   "type": "clearance",
+   "family": "pad_clearance",
+   "count": 2
+  },
+  {
+   "domain": "hs+pwr",
+   "region": "右-SlimSAS/下",
+   "type": "clearance",
+   "family": "seg_clearance",
+   "count": 2
+  },
+  {
+   "domain": "hs",
+   "region": "右-SlimSAS/上",
+   "type": "clearance",
+   "family": "pad_clearance",
+   "count": 2
+  },
+  {
+   "domain": "pwr+ls",
+   "region": "左-MCIO/下",
+   "type": "shorting_items",
+   "family": "pad_short",
+   "count": 2
+  },
+  {
+   "domain": "ls",
+   "region": "左-MCIO/上",
+   "type": "hole_clearance",
+   "family": "via_hole",
+   "count": 2
+  },
+  {
+   "domain": "pwr+ls",
+   "region": "左-MCIO/下",
+   "type": "shorting_items",
+   "family": "seg_seg_edge0_short",
+   "count": 2
+  },
+  {
+   "domain": "hs+ls",
+   "region": "左-MCIO/上",
+   "type": "shorting_items",
+   "family": "seg_seg_edge0_short",
+   "count": 2
+  },
+  {
+   "domain": "pwr",
+   "region": "中-U3U7/下",
+   "type": "clearance",
+   "family": "via_clearance",
+   "count": 2
+  },
+  {
+   "domain": "hs+pwr",
+   "region": "右-SlimSAS/上",
+   "type": "clearance",
+   "family": "via_via_layer_dup",
+   "count": 2
+  },
+  {
+   "domain": "pwr",
+   "region": "左-MCIO/下",
+   "type": "hole_clearance",
+   "family": "via_hole",
+   "count": 2
+  },
+  {
+   "domain": "hs",
+   "region": "右-SlimSAS/上",
+   "type": "hole_clearance",
+   "family": "via_hole",
+   "count": 2
+  },
+  {
+   "domain": "pwr",
+   "region": "左-MCIO/上",
+   "type": "zones_intersect",
+   "family": "zone_multi_poly_overlap",
+   "count": 2
+  },
+  {
+   "domain": "pwr+ls",
+   "region": "中-U3U7/下",
+   "type": "solder_mask_bridge",
+   "family": "smd_mask_bridge",
+   "count": 2
+  },
+  {
+   "domain": "pwr+ls",
+   "region": "中-U3U7/上",
+   "type": "solder_mask_bridge",
+   "family": "smd_mask_bridge",
+   "count": 2
+  },
+  {
+   "domain": "pwr",
+   "region": "中-U3U7/上",
+   "type": "clearance",
+   "family": "pad_clearance",
+   "count": 1
+  },
+  {
+   "domain": "hs+pwr",
+   "region": "右-SlimSAS/下",
+   "type": "shorting_items",
+   "family": "via_short",
+   "count": 1
+  },
+  {
+   "domain": "pwr+ls",
+   "region": "左-MCIO/上",
+   "type": "clearance",
+   "family": "seg_clearance",
+   "count": 1
+  },
+  {
+   "domain": "pwr+ls",
+   "region": "左-MCIO/上",
+   "type": "shorting_items",
+   "family": "pad_short",
+   "count": 1
+  },
+  {
+   "domain": "hs+ls",
+   "region": "中-U3U7/下",
+   "type": "tracks_crossing",
+   "family": "seg_crossing",
+   "count": 1
+  },
+  {
+   "domain": "hs+ls",
+   "region": "左-MCIO/下",
+   "type": "clearance",
+   "family": "pad_clearance",
+   "count": 1
+  },
+  {
+   "domain": "hs+ls",
+   "region": "左-MCIO/下",
+   "type": "shorting_items",
+   "family": "via_short",
+   "count": 1
+  },
+  {
+   "domain": "hs+ls",
+   "region": "左-MCIO/下",
+   "type": "tracks_crossing",
+   "family": "seg_crossing",
+   "count": 1
+  },
+  {
+   "domain": "hs+ls",
+   "region": "左-MCIO/下",
+   "type": "clearance",
+   "family": "via_clearance",
+   "count": 1
+  },
+  {
+   "domain": "hs+ls",
+   "region": "左-MCIO/下",
+   "type": "clearance",
+   "family": "seg_clearance",
+   "count": 1
+  },
+  {
+   "domain": "hs+pwr",
+   "region": "左-MCIO/上",
+   "type": "clearance",
+   "family": "via_clearance",
+   "count": 1
+  },
+  {
+   "domain": "pwr+ls",
+   "region": "左-MCIO/上",
+   "type": "shorting_items",
+   "family": "seg_seg_edge0_short",
+   "count": 1
+  },
+  {
+   "domain": "hs",
+   "region": "左-MCIO/下",
+   "type": "clearance",
+   "family": "seg_clearance",
+   "count": 1
+  },
+  {
+   "domain": "hs+pwr",
+   "region": "左-MCIO/下",
+   "type": "shorting_items",
+   "family": "via_short",
+   "count": 1
+  },
+  {
+   "domain": "hs+pwr",
+   "region": "中-U3U7/下",
+   "type": "shorting_items",
+   "family": "via_short",
+   "count": 1
+  },
+  {
+   "domain": "pwr",
+   "region": "左-MCIO/下",
+   "type": "clearance",
+   "family": "via_clearance",
+   "count": 1
+  },
+  {
+   "domain": "pwr",
+   "region": "左-MCIO/上",
+   "type": "shorting_items",
+   "family": "via_short",
+   "count": 1
+  },
+  {
+   "domain": "pwr",
+   "region": "左-MCIO/下",
+   "type": "shorting_items",
+   "family": "via_short",
+   "count": 1
+  },
+  {
+   "domain": "hs+pwr",
+   "region": "右-SlimSAS/上",
+   "type": "shorting_items",
+   "family": "via_short",
+   "count": 1
+  },
+  {
+   "domain": "pwr",
+   "region": "左-MCIO/上",
+   "type": "clearance",
+   "family": "via_clearance",
+   "count": 1
+  },
+  {
+   "domain": "hs+pwr",
+   "region": "中-U3U7/上",
+   "type": "hole_clearance",
+   "family": "via_hole",
+   "count": 1
+  },
+  {
+   "domain": "pwr",
+   "region": "中-U3U7/上",
+   "type": "hole_clearance",
+   "family": "via_hole",
+   "count": 1
+  },
+  {
+   "domain": "pwr+ls",
+   "region": "右-SlimSAS/上",
+   "type": "hole_clearance",
+   "family": "via_hole",
+   "count": 1
+  },
+  {
+   "domain": "pwr",
+   "region": "左-MCIO/上",
+   "type": "shorting_items",
+   "family": "seg_seg_edge0_short",
+   "count": 1
+  },
+  {
+   "domain": "hs",
+   "region": "中-U3U7/下",
+   "type": "hole_clearance",
+   "family": "via_hole",
+   "count": 1
+  },
+  {
+   "domain": "hs",
+   "region": "中-U3U7/上",
+   "type": "hole_clearance",
+   "family": "via_hole",
+   "count": 1
+  },
+  {
+   "domain": "pwr+ls",
+   "region": "左-MCIO/下",
+   "type": "solder_mask_bridge",
+   "family": "smd_mask_bridge",
+   "count": 1
+  },
+  {
+   "domain": "pwr+ls",
+   "region": "左-MCIO/下",
+   "type": "solder_mask_bridge",
+   "family": "tht_mask_wildcard",
+   "count": 1
+  },
+  {
+   "domain": "pwr+ls",
+   "region": "左-MCIO/上",
+   "type": "solder_mask_bridge",
+   "family": "smd_mask_bridge",
+   "count": 1
+  },
+  {
+   "domain": "hs",
+   "region": "中-U3U7/上",
+   "type": "diff_pair_gap_out_of_range",
+   "family": "diff_pair_intra_gap",
+   "count": 1
+  }
+ ],
+ "high_risk_severe": [
+  {
+   "index": 4,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1750 mm; 实际 0.0250 mm)",
+   "actual": 0.025,
+   "required": 0.175,
+   "band": "severe",
+   "ratio": 0.1429,
+   "domain": "hs+pwr",
+   "region": "中-U3U7/下",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "pad_clearance",
+    "detail": "焊盘 vs 异网元素铜净距不足"
+   },
+   "path": "E_SCHEME",
+   "nets": [
+    "GND",
+    "PCIE_DN6_N"
+   ],
+   "items": [
+    {
+     "kind": "seg",
+     "net": "GND",
+     "layer": "F.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      98.825,
+      66.099999
+     ],
+     "uuid": "323e69d8-9808-4877-b356-40c8bec49892",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "GND",
+      "layer": "F.Cu",
+      "width": 0.5,
+      "a": [
+       98.825,
+       66.099999
+      ],
+      "b": [
+       98.125,
+       66.099999
+      ]
+     }
+    },
+    {
+     "kind": "pad",
+     "net": "PCIE_DN6_N",
+     "layer": "F.Cu",
+     "ref": "U3",
+     "padnum": "20",
+     "pos": [
+      98.825,
+      65.7
+     ],
+     "uuid": "8c3bce67-a5fc-45bd-99d5-be18a1165db1",
+     "elem_cls": "Pad",
+     "elem": {
+      "net": "PCIE_DN6_N",
+      "shape": "rect",
+      "size": [
+       0.45,
+       0.25
+      ],
+      "pos": [
+       98.825,
+       65.7
+      ],
+      "rot": 180.0,
+      "drill": null,
+      "is_tht": false,
+      "layers": [
+       "F.Cu",
+       "F.Mask",
+       "F.Paste"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 9,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1750 mm; 实际 0.0250 mm)",
+   "actual": 0.025,
+   "required": 0.175,
+   "band": "severe",
+   "ratio": 0.1429,
+   "domain": "hs+pwr",
+   "region": "中-U3U7/上",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "pad_clearance",
+    "detail": "焊盘 vs 异网元素铜净距不足"
+   },
+   "path": "E_SCHEME",
+   "nets": [
+    "GND",
+    "PCIE_UP_OUT5_P_U7"
+   ],
+   "items": [
+    {
+     "kind": "seg",
+     "net": "GND",
+     "layer": "F.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      98.825,
+      43.3
+     ],
+     "uuid": "21453147-f1a2-4747-8beb-523d08b4495c",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "GND",
+      "layer": "F.Cu",
+      "width": 0.5,
+      "a": [
+       98.825,
+       43.3
+      ],
+      "b": [
+       98.125,
+       43.3
+      ]
+     }
+    },
+    {
+     "kind": "pad",
+     "net": "PCIE_UP_OUT5_P_U7",
+     "layer": "F.Cu",
+     "ref": "U7",
+     "padnum": "40",
+     "pos": [
+      98.825,
+      42.9
+     ],
+     "uuid": "a0697383-f2a6-4252-83f4-3d9df64e5710",
+     "elem_cls": "Pad",
+     "elem": {
+      "net": "PCIE_UP_OUT5_P_U7",
+      "shape": "rect",
+      "size": [
+       0.45,
+       0.25
+      ],
+      "pos": [
+       98.825,
+       42.900000000000006
+      ],
+      "rot": 0.0,
+      "drill": null,
+      "is_tht": false,
+      "layers": [
+       "F.Cu",
+       "F.Mask",
+       "F.Paste"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 18,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1750 mm; 实际 0.0475 mm)",
+   "actual": 0.0475,
+   "required": 0.175,
+   "band": "severe",
+   "ratio": 0.2714,
+   "domain": "hs+pwr",
+   "region": "中-U3U7/上",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "seg_clearance",
+    "detail": "走线段 vs 异网元素铜净距不足"
+   },
+   "path": "E_SCHEME",
+   "nets": [
+    "GND",
+    "PCIE_UP6_N"
+   ],
+   "items": [
+    {
+     "kind": "seg",
+     "net": "GND",
+     "layer": "F.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      88.825,
+      41.3
+     ],
+     "uuid": "13bf590b-fa94-43ad-9d33-a763962de26c",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "GND",
+      "layer": "F.Cu",
+      "width": 0.5,
+      "a": [
+       88.825,
+       41.3
+      ],
+      "b": [
+       89.525,
+       41.3
+      ]
+     }
+    },
+    {
+     "kind": "seg",
+     "net": "PCIE_UP6_N",
+     "layer": "F.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      88.825,
+      41.7
+     ],
+     "uuid": "262f9530-c27d-471a-9e0d-a8dd0bbfe287",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "PCIE_UP6_N",
+      "layer": "F.Cu",
+      "width": 0.205,
+      "a": [
+       88.825,
+       41.7
+      ],
+      "b": [
+       86.325,
+       41.7
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 48,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1750 mm; 实际 0.0750 mm)",
+   "actual": 0.075,
+   "required": 0.175,
+   "band": "severe",
+   "ratio": 0.4286,
+   "domain": "hs",
+   "region": "中-U3U7/下",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "pad_clearance",
+    "detail": "焊盘 vs 异网元素铜净距不足"
+   },
+   "path": "E_SCHEME",
+   "nets": [
+    "PCIE_DN_OUT2_P_MCIO",
+    "PCIE_DN_OUT2_P_U3"
+   ],
+   "items": [
+    {
+     "kind": "pad",
+     "net": "PCIE_DN_OUT2_P_U3",
+     "layer": "F.Cu",
+     "ref": "C21",
+     "padnum": "1",
+     "pos": [
+      78.075,
+      60.05
+     ],
+     "uuid": "630c8c44-c6d7-48ec-bcdc-2e770d7e2401",
+     "elem_cls": "Pad",
+     "elem": {
+      "net": "PCIE_DN_OUT2_P_U3",
+      "shape": "rect",
+      "size": [
+       0.4,
+       0.5
+      ],
+      "pos": [
+       78.075,
+       60.05
+      ],
+      "rot": 0.0,
+      "drill": null,
+      "is_tht": false,
+      "layers": [
+       "F.Cu",
+       "F.Mask",
+       "F.Paste"
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "PCIE_DN_OUT2_P_MCIO",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      78.28,
+      59.55
+     ],
+     "uuid": "97110328-f8eb-4de2-b03e-cb56ac4d9c48",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "PCIE_DN_OUT2_P_MCIO",
+      "pos": [
+       78.28,
+       59.55
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 49,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1750 mm; 实际 0.0778 mm)",
+   "actual": 0.0778,
+   "required": 0.175,
+   "band": "severe",
+   "ratio": 0.4446,
+   "domain": "hs",
+   "region": "中-U3U7/下",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "pad_clearance",
+    "detail": "焊盘 vs 异网元素铜净距不足"
+   },
+   "path": "E_SCHEME",
+   "nets": [
+    "PCIE_DN_OUT2_P_MCIO",
+    "PCIE_DN_OUT2_P_U3"
+   ],
+   "items": [
+    {
+     "kind": "pad",
+     "net": "PCIE_DN_OUT2_P_U3",
+     "layer": "F.Cu",
+     "ref": "C21",
+     "padnum": "1",
+     "pos": [
+      78.075,
+      60.05
+     ],
+     "uuid": "630c8c44-c6d7-48ec-bcdc-2e770d7e2401",
+     "elem_cls": "Pad",
+     "elem": {
+      "net": "PCIE_DN_OUT2_P_U3",
+      "shape": "rect",
+      "size": [
+       0.4,
+       0.5
+      ],
+      "pos": [
+       78.075,
+       60.05
+      ],
+      "rot": 0.0,
+      "drill": null,
+      "is_tht": false,
+      "layers": [
+       "F.Cu",
+       "F.Mask",
+       "F.Paste"
+      ]
+     }
+    },
+    {
+     "kind": "seg",
+     "net": "PCIE_DN_OUT2_P_MCIO",
+     "layer": "F.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      78.28,
+      59.55
+     ],
+     "uuid": "e90b04d1-f400-4254-82c4-143f07d002a6",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "PCIE_DN_OUT2_P_MCIO",
+      "layer": "F.Cu",
+      "width": 0.205,
+      "a": [
+       78.28,
+       59.55
+      ],
+      "b": [
+       78.78,
+       60.05
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 60,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1750 mm; 实际 0.0700 mm)",
+   "actual": 0.07,
+   "required": 0.175,
+   "band": "severe",
+   "ratio": 0.4,
+   "domain": "hs+ls",
+   "region": "右-SlimSAS/上",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_clearance",
+    "detail": "过孔 vs 异网元素铜净距不足"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "I2C1_SDA",
+    "PCIE_REFCLK0_N"
+   ],
+   "items": [
+    {
+     "kind": "seg",
+     "net": "I2C1_SDA",
+     "layer": "B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      134.62,
+      38.5
+     ],
+     "uuid": "cb04a385-8be4-467e-849a-560797211304",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "I2C1_SDA",
+      "layer": "B.Cu",
+      "width": 0.15,
+      "a": [
+       134.62,
+       38.5
+      ],
+      "b": [
+       134.62,
+       56.1
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "PCIE_REFCLK0_N",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      134.3,
+      45.9
+     ],
+     "uuid": "f0095f4c-ed66-405d-9e05-6ec90204158c",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "PCIE_REFCLK0_N",
+      "pos": [
+       134.3,
+       45.9
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 75,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.2000 mm; 实际 0.0799 mm)",
+   "actual": 0.0799,
+   "required": 0.2,
+   "band": "severe",
+   "ratio": 0.3995,
+   "domain": "hs+pwr",
+   "region": "中-U3U7/下",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "pad_clearance",
+    "detail": "焊盘 vs 异网元素铜净距不足"
+   },
+   "path": "E_SCHEME",
+   "nets": [
+    "P3V3",
+    "PCIE_DN_OUT4_N_U3"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "PCIE_DN_OUT4_N_U3",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      90.2,
+      63.7
+     ],
+     "uuid": "5581ddef-b1d1-4140-a85d-d57ab861b9d2",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "PCIE_DN_OUT4_N_U3",
+      "pos": [
+       90.2,
+       63.7
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "pad",
+     "net": "P3V3",
+     "layer": "F.Cu",
+     "ref": "C82",
+     "padnum": "1",
+     "pos": [
+      90.65,
+      64.0
+     ],
+     "uuid": "b361cc7d-29cf-4760-8f9f-c546bf7881f7",
+     "elem_cls": "Pad",
+     "elem": {
+      "net": "P3V3",
+      "shape": "rect",
+      "size": [
+       0.4,
+       0.5
+      ],
+      "pos": [
+       90.65,
+       64.0
+      ],
+      "rot": 0.0,
+      "drill": null,
+      "is_tht": false,
+      "layers": [
+       "F.Cu",
+       "F.Mask",
+       "F.Paste"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 114,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1750 mm; 实际 0.0475 mm)",
+   "actual": 0.0475,
+   "required": 0.175,
+   "band": "severe",
+   "ratio": 0.2714,
+   "domain": "hs+pwr",
+   "region": "中-U3U7/下",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "seg_clearance",
+    "detail": "走线段 vs 异网元素铜净距不足"
+   },
+   "path": "E_SCHEME",
+   "nets": [
+    "GND",
+    "PCIE_DN7_P"
+   ],
+   "items": [
+    {
+     "kind": "seg",
+     "net": "GND",
+     "layer": "F.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      98.825,
+      66.099999
+     ],
+     "uuid": "323e69d8-9808-4877-b356-40c8bec49892",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "GND",
+      "layer": "F.Cu",
+      "width": 0.5,
+      "a": [
+       98.825,
+       66.099999
+      ],
+      "b": [
+       98.125,
+       66.099999
+      ]
+     }
+    },
+    {
+     "kind": "seg",
+     "net": "PCIE_DN7_P",
+     "layer": "F.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      99.6,
+      66.5
+     ],
+     "uuid": "8ba41f4c-f831-4735-85e7-33da40006724",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "PCIE_DN7_P",
+      "layer": "F.Cu",
+      "width": 0.205,
+      "a": [
+       99.6,
+       66.5
+      ],
+      "b": [
+       98.825,
+       66.5
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 117,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1750 mm; 实际 0.0475 mm)",
+   "actual": 0.0475,
+   "required": 0.175,
+   "band": "severe",
+   "ratio": 0.2714,
+   "domain": "hs+pwr",
+   "region": "中-U3U7/下",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "seg_clearance",
+    "detail": "走线段 vs 异网元素铜净距不足"
+   },
+   "path": "E_SCHEME",
+   "nets": [
+    "GND",
+    "PCIE_DN6_N"
+   ],
+   "items": [
+    {
+     "kind": "seg",
+     "net": "GND",
+     "layer": "F.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      98.825,
+      66.099999
+     ],
+     "uuid": "323e69d8-9808-4877-b356-40c8bec49892",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "GND",
+      "layer": "F.Cu",
+      "width": 0.5,
+      "a": [
+       98.825,
+       66.099999
+      ],
+      "b": [
+       98.125,
+       66.099999
+      ]
+     }
+    },
+    {
+     "kind": "seg",
+     "net": "PCIE_DN6_N",
+     "layer": "F.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      99.6,
+      65.7
+     ],
+     "uuid": "fb9812e7-efd4-4ff7-8a40-24c855eea384",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "PCIE_DN6_N",
+      "layer": "F.Cu",
+      "width": 0.205,
+      "a": [
+       99.6,
+       65.7
+      ],
+      "b": [
+       98.825,
+       65.7
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 120,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1750 mm; 实际 0.0475 mm)",
+   "actual": 0.0475,
+   "required": 0.175,
+   "band": "severe",
+   "ratio": 0.2714,
+   "domain": "hs+pwr",
+   "region": "中-U3U7/下",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "seg_clearance",
+    "detail": "走线段 vs 异网元素铜净距不足"
+   },
+   "path": "E_SCHEME",
+   "nets": [
+    "GND",
+    "PCIE_DN6_N"
+   ],
+   "items": [
+    {
+     "kind": "seg",
+     "net": "GND",
+     "layer": "F.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      98.825,
+      66.099999
+     ],
+     "uuid": "323e69d8-9808-4877-b356-40c8bec49892",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "GND",
+      "layer": "F.Cu",
+      "width": 0.5,
+      "a": [
+       98.825,
+       66.099999
+      ],
+      "b": [
+       98.125,
+       66.099999
+      ]
+     }
+    },
+    {
+     "kind": "seg",
+     "net": "PCIE_DN6_N",
+     "layer": "F.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      98.825,
+      65.7
+     ],
+     "uuid": "771c1ac2-52b7-456b-b05a-fdee0aaed130",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "PCIE_DN6_N",
+      "layer": "F.Cu",
+      "width": 0.205,
+      "a": [
+       98.825,
+       65.7
+      ],
+      "b": [
+       101.325,
+       65.7
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 125,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.2000 mm; 实际 0.0475 mm)",
+   "actual": 0.0475,
+   "required": 0.2,
+   "band": "severe",
+   "ratio": 0.2375,
+   "domain": "hs+pwr",
+   "region": "中-U3U7/下",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "seg_clearance",
+    "detail": "走线段 vs 异网元素铜净距不足"
+   },
+   "path": "E_SCHEME",
+   "nets": [
+    "P3V3",
+    "PCIE_DN6_P"
+   ],
+   "items": [
+    {
+     "kind": "seg",
+     "net": "PCIE_DN6_P",
+     "layer": "F.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      98.825,
+      65.3
+     ],
+     "uuid": "2921583f-e22c-41e1-abe9-04c37eee41aa",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "PCIE_DN6_P",
+      "layer": "F.Cu",
+      "width": 0.205,
+      "a": [
+       98.825,
+       65.3
+      ],
+      "b": [
+       96.325,
+       65.3
+      ]
+     }
+    },
+    {
+     "kind": "seg",
+     "net": "P3V3",
+     "layer": "F.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      98.825,
+      64.9
+     ],
+     "uuid": "55e97603-7fef-41de-9c87-3a2dd4625dd5",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "P3V3",
+      "layer": "F.Cu",
+      "width": 0.5,
+      "a": [
+       98.825,
+       64.9
+      ],
+      "b": [
+       99.525,
+       64.9
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 126,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.2000 mm; 实际 0.0475 mm)",
+   "actual": 0.0475,
+   "required": 0.2,
+   "band": "severe",
+   "ratio": 0.2375,
+   "domain": "hs+pwr",
+   "region": "右-SlimSAS/下",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "seg_clearance",
+    "detail": "走线段 vs 异网元素铜净距不足"
+   },
+   "path": "E_SCHEME",
+   "nets": [
+    "P3V3",
+    "PCIE_DN6_P"
+   ],
+   "items": [
+    {
+     "kind": "seg",
+     "net": "PCIE_DN6_P",
+     "layer": "F.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      102.48,
+      65.3
+     ],
+     "uuid": "0d8d2135-1a39-4187-8696-687e13846396",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "PCIE_DN6_P",
+      "layer": "F.Cu",
+      "width": 0.205,
+      "a": [
+       102.48,
+       65.3
+      ],
+      "b": [
+       98.825,
+       65.3
+      ]
+     }
+    },
+    {
+     "kind": "seg",
+     "net": "P3V3",
+     "layer": "F.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      98.825,
+      64.9
+     ],
+     "uuid": "55e97603-7fef-41de-9c87-3a2dd4625dd5",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "P3V3",
+      "layer": "F.Cu",
+      "width": 0.5,
+      "a": [
+       98.825,
+       64.9
+      ],
+      "b": [
+       99.525,
+       64.9
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 128,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.2000 mm; 实际 0.0475 mm)",
+   "actual": 0.0475,
+   "required": 0.2,
+   "band": "severe",
+   "ratio": 0.2375,
+   "domain": "hs+pwr",
+   "region": "右-SlimSAS/下",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "seg_clearance",
+    "detail": "走线段 vs 异网元素铜净距不足"
+   },
+   "path": "E_SCHEME",
+   "nets": [
+    "P3V3",
+    "PCIE_DN5_N"
+   ],
+   "items": [
+    {
+     "kind": "seg",
+     "net": "P3V3",
+     "layer": "F.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      98.825,
+      64.9
+     ],
+     "uuid": "55e97603-7fef-41de-9c87-3a2dd4625dd5",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "P3V3",
+      "layer": "F.Cu",
+      "width": 0.5,
+      "a": [
+       98.825,
+       64.9
+      ],
+      "b": [
+       99.525,
+       64.9
+      ]
+     }
+    },
+    {
+     "kind": "seg",
+     "net": "PCIE_DN5_N",
+     "layer": "F.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      102.1,
+      64.5
+     ],
+     "uuid": "6be460cd-dbda-4912-af78-1bc55687906a",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "PCIE_DN5_N",
+      "layer": "F.Cu",
+      "width": 0.205,
+      "a": [
+       102.1,
+       64.5
+      ],
+      "b": [
+       98.825,
+       64.5
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 131,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.2000 mm; 实际 0.0475 mm)",
+   "actual": 0.0475,
+   "required": 0.2,
+   "band": "severe",
+   "ratio": 0.2375,
+   "domain": "hs+pwr",
+   "region": "中-U3U7/下",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "seg_clearance",
+    "detail": "走线段 vs 异网元素铜净距不足"
+   },
+   "path": "E_SCHEME",
+   "nets": [
+    "P3V3",
+    "PCIE_DN5_N"
+   ],
+   "items": [
+    {
+     "kind": "seg",
+     "net": "PCIE_DN5_N",
+     "layer": "F.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      98.825,
+      64.5
+     ],
+     "uuid": "31356c54-e511-49c2-ac7a-7728d0acac6e",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "PCIE_DN5_N",
+      "layer": "F.Cu",
+      "width": 0.205,
+      "a": [
+       98.825,
+       64.5
+      ],
+      "b": [
+       96.325,
+       64.5
+      ]
+     }
+    },
+    {
+     "kind": "seg",
+     "net": "P3V3",
+     "layer": "F.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      98.825,
+      64.9
+     ],
+     "uuid": "55e97603-7fef-41de-9c87-3a2dd4625dd5",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "P3V3",
+      "layer": "F.Cu",
+      "width": 0.5,
+      "a": [
+       98.825,
+       64.9
+      ],
+      "b": [
+       99.525,
+       64.9
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 142,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1750 mm; 实际 0.0781 mm)",
+   "actual": 0.0781,
+   "required": 0.175,
+   "band": "severe",
+   "ratio": 0.4463,
+   "domain": "hs+pwr",
+   "region": "右-SlimSAS/下",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_clearance",
+    "detail": "过孔 vs 异网元素铜净距不足"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "GND",
+    "PCIE_DN4_N"
+   ],
+   "items": [
+    {
+     "kind": "seg",
+     "net": "PCIE_DN4_N",
+     "layer": "In2.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      133.83,
+      59.7
+     ],
+     "uuid": "1344d78b-8372-494a-a0fa-b772517c2ebe",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "PCIE_DN4_N",
+      "layer": "In2.Cu",
+      "width": 0.205,
+      "a": [
+       133.83,
+       59.7
+      ],
+      "b": [
+       99.6,
+       63.3
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "GND",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      131.525,
+      60.3
+     ],
+     "uuid": "a25f9d1f-9cda-47f7-92b9-bc3b4a18ae94",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "GND",
+      "pos": [
+       131.525,
+       60.3
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 174,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1750 mm; 实际 0.0750 mm)",
+   "actual": 0.075,
+   "required": 0.175,
+   "band": "severe",
+   "ratio": 0.4286,
+   "domain": "hs",
+   "region": "中-U3U7/上",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "pad_clearance",
+    "detail": "焊盘 vs 异网元素铜净距不足"
+   },
+   "path": "E_SCHEME",
+   "nets": [
+    "PCIE_UP_OUT4_P_U7",
+    "PCIE_UP_OUT7_N_U7"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "PCIE_UP_OUT4_P_U7",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      99.625,
+      44.1
+     ],
+     "uuid": "9f24b151-7bb6-498b-8878-d835577acc1c",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "PCIE_UP_OUT4_P_U7",
+      "pos": [
+       99.625,
+       44.1
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "pad",
+     "net": "PCIE_UP_OUT7_N_U7",
+     "layer": "F.Cu",
+     "ref": "C64",
+     "padnum": "1",
+     "pos": [
+      99.475,
+      43.6
+     ],
+     "uuid": "e5cc49cb-5bea-43d9-8cdf-ce95807ed527",
+     "elem_cls": "Pad",
+     "elem": {
+      "net": "PCIE_UP_OUT7_N_U7",
+      "shape": "rect",
+      "size": [
+       0.4,
+       0.5
+      ],
+      "pos": [
+       99.47500000000001,
+       43.6
+      ],
+      "rot": 0.0,
+      "drill": null,
+      "is_tht": false,
+      "layers": [
+       "F.Cu",
+       "F.Mask",
+       "F.Paste"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 306,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1750 mm; 实际 0.0750 mm)",
+   "actual": 0.075,
+   "required": 0.175,
+   "band": "severe",
+   "ratio": 0.4286,
+   "domain": "hs+pwr",
+   "region": "中-U3U7/下",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "pad_clearance",
+    "detail": "焊盘 vs 异网元素铜净距不足"
+   },
+   "path": "E_SCHEME",
+   "nets": [
+    "GND",
+    "PCIE_DN_OUT5_P_U3"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "PCIE_DN_OUT5_P_U3",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      91.325,
+      64.5
+     ],
+     "uuid": "085043fc-e95b-45ec-99b3-95d1d047f387",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "PCIE_DN_OUT5_P_U3",
+      "pos": [
+       91.325,
+       64.5
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "pad",
+     "net": "GND",
+     "layer": "F.Cu",
+     "ref": "C82",
+     "padnum": "2",
+     "pos": [
+      91.35,
+      64.0
+     ],
+     "uuid": "183d58db-a75a-44c6-b873-c7c8681527d7",
+     "elem_cls": "Pad",
+     "elem": {
+      "net": "GND",
+      "shape": "rect",
+      "size": [
+       0.4,
+       0.5
+      ],
+      "pos": [
+       91.35,
+       64.0
+      ],
+      "rot": 0.0,
+      "drill": null,
+      "is_tht": false,
+      "layers": [
+       "F.Cu",
+       "F.Mask",
+       "F.Paste"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 343,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.2000 mm; 实际 0.0750 mm)",
+   "actual": 0.075,
+   "required": 0.2,
+   "band": "severe",
+   "ratio": 0.375,
+   "domain": "pwr+ls",
+   "region": "左-MCIO/下",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "pad_clearance",
+    "detail": "焊盘 vs 异网元素铜净距不足"
+   },
+   "path": "E_SCHEME",
+   "nets": [
+    "P3V3",
+    "STRAP_READ_EN_U7"
+   ],
+   "items": [
+    {
+     "kind": "pad",
+     "net": "P3V3",
+     "layer": "F.Cu",
+     "ref": "R9",
+     "padnum": "2",
+     "pos": [
+      53.95,
+      54.0
+     ],
+     "uuid": "0eeb9e7b-d00e-4881-bda3-757b17ac5945",
+     "elem_cls": "Pad",
+     "elem": {
+      "net": "P3V3",
+      "shape": "rect",
+      "size": [
+       0.6,
+       0.7
+      ],
+      "pos": [
+       53.95,
+       54.0
+      ],
+      "rot": 0.0,
+      "drill": null,
+      "is_tht": false,
+      "layers": [
+       "F.Cu",
+       "F.Mask",
+       "F.Paste"
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "STRAP_READ_EN_U7",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      53.4,
+      53.75
+     ],
+     "uuid": "25482d84-929f-444c-8c02-d58197d4ae68",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "STRAP_READ_EN_U7",
+      "pos": [
+       53.4,
+       53.75
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 367,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.2000 mm; 实际 0.0250 mm)",
+   "actual": 0.025,
+   "required": 0.2,
+   "band": "severe",
+   "ratio": 0.125,
+   "domain": "pwr+ls",
+   "region": "左-MCIO/上",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_clearance",
+    "detail": "过孔 vs 异网元素铜净距不足"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "P3V3",
+    "PWR_BTN_ISO"
+   ],
+   "items": [
+    {
+     "kind": "seg",
+     "net": "PWR_BTN_ISO",
+     "layer": "B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      54.55,
+      35.5
+     ],
+     "uuid": "e16e6d7d-9217-4c81-8d83-7f580edbbca4",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "PWR_BTN_ISO",
+      "layer": "B.Cu",
+      "width": 0.15,
+      "a": [
+       54.55,
+       35.5
+      ],
+      "b": [
+       39.0,
+       35.5
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "P3V3",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      40.0,
+      35.225
+     ],
+     "uuid": "e735ea03-d2e6-4cbc-adac-421585f03271",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "P3V3",
+      "pos": [
+       40.0,
+       35.225
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 377,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.2000 mm; 实际 0.0975 mm)",
+   "actual": 0.0975,
+   "required": 0.2,
+   "band": "severe",
+   "ratio": 0.4875,
+   "domain": "hs+pwr",
+   "region": "中-U3U7/上",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_clearance",
+    "detail": "过孔 vs 异网元素铜净距不足"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "P3V3",
+    "PCIE_UP0_N"
+   ],
+   "items": [
+    {
+     "kind": "seg",
+     "net": "PCIE_UP0_N",
+     "layer": "B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      86.7,
+      39.65
+     ],
+     "uuid": "57487827-9875-4d00-8943-82f0651966e5",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "PCIE_UP0_N",
+      "layer": "B.Cu",
+      "width": 0.205,
+      "a": [
+       86.7,
+       39.65
+      ],
+      "b": [
+       86.7,
+       44.5
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "P3V3",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      86.325,
+      42.5
+     ],
+     "uuid": "71e67f49-df05-41cc-bd15-ff371f633ae9",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "P3V3",
+      "pos": [
+       86.325,
+       42.5
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 378,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.2000 mm; 实际 0.0725 mm)",
+   "actual": 0.0725,
+   "required": 0.2,
+   "band": "severe",
+   "ratio": 0.3625,
+   "domain": "hs+pwr",
+   "region": "中-U3U7/下",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_clearance",
+    "detail": "过孔 vs 异网元素铜净距不足"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "P3V3",
+    "PCIE_DN_OUT5_P_U3"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "P3V3",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      89.525,
+      60.5
+     ],
+     "uuid": "8c3f17ea-02f6-47d6-9ee1-4af2c6bee358",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "P3V3",
+      "pos": [
+       89.525,
+       60.5
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "seg",
+     "net": "PCIE_DN_OUT5_P_U3",
+     "layer": "In6.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      85.9,
+      60.85
+     ],
+     "uuid": "8ec57332-5e45-4e02-b8f7-157f3c7c1848",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "PCIE_DN_OUT5_P_U3",
+      "layer": "In6.Cu",
+      "width": 0.205,
+      "a": [
+       85.9,
+       60.85
+      ],
+      "b": [
+       91.35,
+       60.85
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 381,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.2000 mm; 实际 0.0250 mm)",
+   "actual": 0.025,
+   "required": 0.2,
+   "band": "severe",
+   "ratio": 0.125,
+   "domain": "hs+pwr",
+   "region": "中-U3U7/上",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "pad_clearance",
+    "detail": "焊盘 vs 异网元素铜净距不足"
+   },
+   "path": "E_SCHEME",
+   "nets": [
+    "P3V3",
+    "PCIE_UP_OUT1_N_U7"
+   ],
+   "items": [
+    {
+     "kind": "pad",
+     "net": "PCIE_UP_OUT1_N_U7",
+     "layer": "F.Cu",
+     "ref": "U7",
+     "padnum": "51",
+     "pos": [
+      98.825,
+      47.3
+     ],
+     "uuid": "eb8be123-aa56-44a6-ab07-d3049a6d3013",
+     "elem_cls": "Pad",
+     "elem": {
+      "net": "PCIE_UP_OUT1_N_U7",
+      "shape": "rect",
+      "size": [
+       0.45,
+       0.25
+      ],
+      "pos": [
+       98.825,
+       47.300000000000004
+      ],
+      "rot": 0.0,
+      "drill": null,
+      "is_tht": false,
+      "layers": [
+       "F.Cu",
+       "F.Mask",
+       "F.Paste"
+      ]
+     }
+    },
+    {
+     "kind": "seg",
+     "net": "P3V3",
+     "layer": "F.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      98.825,
+      46.9
+     ],
+     "uuid": "fe7a2be0-cf2a-4054-922e-9f8b0336855d",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "P3V3",
+      "layer": "F.Cu",
+      "width": 0.5,
+      "a": [
+       98.825,
+       46.9
+      ],
+      "b": [
+       99.525,
+       46.9
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 382,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.2000 mm; 实际 0.0100 mm)",
+   "actual": 0.01,
+   "required": 0.2,
+   "band": "severe",
+   "ratio": 0.05,
+   "domain": "pwr+ls",
+   "region": "中-U3U7/上",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_clearance",
+    "detail": "过孔 vs 异网元素铜净距不足"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "P3V3",
+    "STRAP_EQ1_U7"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "P3V3",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      89.975,
+      41.0
+     ],
+     "uuid": "2f53637f-dd69-450a-8878-58d2a5db7152",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "P3V3",
+      "pos": [
+       89.975,
+       41.0
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "seg",
+     "net": "STRAP_EQ1_U7",
+     "layer": "B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      86.7,
+      41.26
+     ],
+     "uuid": "3efd08bc-277c-43ae-906a-11b21029fd83",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "STRAP_EQ1_U7",
+      "layer": "B.Cu",
+      "width": 0.15,
+      "a": [
+       86.7,
+       41.26
+      ],
+      "b": [
+       94.03,
+       41.26
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 384,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.2000 mm; 实际 0.0250 mm)",
+   "actual": 0.025,
+   "required": 0.2,
+   "band": "severe",
+   "ratio": 0.125,
+   "domain": "hs+pwr",
+   "region": "中-U3U7/上",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "pad_clearance",
+    "detail": "焊盘 vs 异网元素铜净距不足"
+   },
+   "path": "E_SCHEME",
+   "nets": [
+    "P3V3",
+    "PCIE_UP6_P"
+   ],
+   "items": [
+    {
+     "kind": "pad",
+     "net": "PCIE_UP6_P",
+     "layer": "F.Cu",
+     "ref": "U7",
+     "padnum": "19",
+     "pos": [
+      88.825,
+      42.1
+     ],
+     "uuid": "f36c69d3-992c-4236-b03a-50603631db4e",
+     "elem_cls": "Pad",
+     "elem": {
+      "net": "PCIE_UP6_P",
+      "shape": "rect",
+      "size": [
+       0.45,
+       0.25
+      ],
+      "pos": [
+       88.825,
+       42.1
+      ],
+      "rot": 0.0,
+      "drill": null,
+      "is_tht": false,
+      "layers": [
+       "F.Cu",
+       "F.Mask",
+       "F.Paste"
+      ]
+     }
+    },
+    {
+     "kind": "seg",
+     "net": "P3V3",
+     "layer": "F.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      88.825,
+      42.5
+     ],
+     "uuid": "f6bc7330-0f0d-48ea-a97e-c4cdde96e10d",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "P3V3",
+      "layer": "F.Cu",
+      "width": 0.5,
+      "a": [
+       88.825,
+       42.5
+      ],
+      "b": [
+       89.525,
+       42.5
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 385,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.2000 mm; 实际 0.0250 mm)",
+   "actual": 0.025,
+   "required": 0.2,
+   "band": "severe",
+   "ratio": 0.125,
+   "domain": "hs+pwr",
+   "region": "中-U3U7/下",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "pad_clearance",
+    "detail": "焊盘 vs 异网元素铜净距不足"
+   },
+   "path": "E_SCHEME",
+   "nets": [
+    "P3V3",
+    "PCIE_DN_OUT2_P_U3"
+   ],
+   "items": [
+    {
+     "kind": "pad",
+     "net": "PCIE_DN_OUT2_P_U3",
+     "layer": "F.Cu",
+     "ref": "U3",
+     "padnum": "49",
+     "pos": [
+      88.825,
+      60.9
+     ],
+     "uuid": "6db5aed5-51f0-4e7e-b68e-4a5bf7bead01",
+     "elem_cls": "Pad",
+     "elem": {
+      "net": "PCIE_DN_OUT2_P_U3",
+      "shape": "rect",
+      "size": [
+       0.45,
+       0.25
+      ],
+      "pos": [
+       88.825,
+       60.900000000000006
+      ],
+      "rot": 180.0,
+      "drill": null,
+      "is_tht": false,
+      "layers": [
+       "F.Cu",
+       "F.Mask",
+       "F.Paste"
+      ]
+     }
+    },
+    {
+     "kind": "seg",
+     "net": "P3V3",
+     "layer": "F.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      88.825,
+      60.5
+     ],
+     "uuid": "efe79b5a-fdbe-47b2-94fc-ffd563018e77",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "P3V3",
+      "layer": "F.Cu",
+      "width": 0.5,
+      "a": [
+       88.825,
+       60.5
+      ],
+      "b": [
+       89.525,
+       60.5
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 387,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.2000 mm; 实际 0.0475 mm)",
+   "actual": 0.0475,
+   "required": 0.2,
+   "band": "severe",
+   "ratio": 0.2375,
+   "domain": "hs+pwr",
+   "region": "中-U3U7/下",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "seg_clearance",
+    "detail": "走线段 vs 异网元素铜净距不足"
+   },
+   "path": "E_SCHEME",
+   "nets": [
+    "P3V3",
+    "PCIE_DN_OUT6_P_U3"
+   ],
+   "items": [
+    {
+     "kind": "seg",
+     "net": "PCIE_DN_OUT6_P_U3",
+     "layer": "F.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      88.825,
+      65.7
+     ],
+     "uuid": "67c06d3e-d726-46cf-bc82-19190c765d5b",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "PCIE_DN_OUT6_P_U3",
+      "layer": "F.Cu",
+      "width": 0.205,
+      "a": [
+       88.825,
+       65.7
+      ],
+      "b": [
+       86.325,
+       65.7
+      ]
+     }
+    },
+    {
+     "kind": "seg",
+     "net": "P3V3",
+     "layer": "F.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      88.825,
+      65.3
+     ],
+     "uuid": "b82b67a1-7c60-4d98-a30a-df8510daba32",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "P3V3",
+      "layer": "F.Cu",
+      "width": 0.5,
+      "a": [
+       88.825,
+       65.3
+      ],
+      "b": [
+       88.125,
+       65.3
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 388,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.2000 mm; 实际 0.0250 mm)",
+   "actual": 0.025,
+   "required": 0.2,
+   "band": "severe",
+   "ratio": 0.125,
+   "domain": "hs+pwr",
+   "region": "中-U3U7/上",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "pad_clearance",
+    "detail": "焊盘 vs 异网元素铜净距不足"
+   },
+   "path": "E_SCHEME",
+   "nets": [
+    "P3V3",
+    "PCIE_UP1_N"
+   ],
+   "items": [
+    {
+     "kind": "seg",
+     "net": "P3V3",
+     "layer": "F.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      88.825,
+      47.3
+     ],
+     "uuid": "90b6a367-9a0d-464f-845d-b8451d57fabb",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "P3V3",
+      "layer": "F.Cu",
+      "width": 0.5,
+      "a": [
+       88.825,
+       47.3
+      ],
+      "b": [
+       89.525,
+       47.3
+      ]
+     }
+    },
+    {
+     "kind": "pad",
+     "net": "PCIE_UP1_N",
+     "layer": "F.Cu",
+     "ref": "U7",
+     "padnum": "5",
+     "pos": [
+      88.825,
+      47.7
+     ],
+     "uuid": "b98455e0-c047-478c-8d22-7e566a9b6948",
+     "elem_cls": "Pad",
+     "elem": {
+      "net": "PCIE_UP1_N",
+      "shape": "rect",
+      "size": [
+       0.45,
+       0.25
+      ],
+      "pos": [
+       88.825,
+       47.7
+      ],
+      "rot": 0.0,
+      "drill": null,
+      "is_tht": false,
+      "layers": [
+       "F.Cu",
+       "F.Mask",
+       "F.Paste"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 389,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.2000 mm; 实际 0.0250 mm)",
+   "actual": 0.025,
+   "required": 0.2,
+   "band": "severe",
+   "ratio": 0.125,
+   "domain": "hs+pwr",
+   "region": "中-U3U7/上",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "pad_clearance",
+    "detail": "焊盘 vs 异网元素铜净距不足"
+   },
+   "path": "E_SCHEME",
+   "nets": [
+    "P3V3",
+    "PCIE_UP_OUT6_P_U7"
+   ],
+   "items": [
+    {
+     "kind": "pad",
+     "net": "PCIE_UP_OUT6_P_U7",
+     "layer": "F.Cu",
+     "ref": "U7",
+     "padnum": "37",
+     "pos": [
+      98.825,
+      41.7
+     ],
+     "uuid": "3359bd58-a961-4eb1-9ebe-3a90610fa262",
+     "elem_cls": "Pad",
+     "elem": {
+      "net": "PCIE_UP_OUT6_P_U7",
+      "shape": "rect",
+      "size": [
+       0.45,
+       0.25
+      ],
+      "pos": [
+       98.825,
+       41.7
+      ],
+      "rot": 0.0,
+      "drill": null,
+      "is_tht": false,
+      "layers": [
+       "F.Cu",
+       "F.Mask",
+       "F.Paste"
+      ]
+     }
+    },
+    {
+     "kind": "seg",
+     "net": "P3V3",
+     "layer": "F.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      98.825,
+      42.1
+     ],
+     "uuid": "7b7970ea-7ec7-4434-b5b3-d44c9917f324",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "P3V3",
+      "layer": "F.Cu",
+      "width": 0.5,
+      "a": [
+       98.825,
+       42.1
+      ],
+      "b": [
+       99.525,
+       42.1
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 391,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.2000 mm; 实际 0.0250 mm)",
+   "actual": 0.025,
+   "required": 0.2,
+   "band": "severe",
+   "ratio": 0.125,
+   "domain": "hs+pwr",
+   "region": "中-U3U7/下",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "pad_clearance",
+    "detail": "焊盘 vs 异网元素铜净距不足"
+   },
+   "path": "E_SCHEME",
+   "nets": [
+    "P3V3",
+    "PCIE_DN6_P"
+   ],
+   "items": [
+    {
+     "kind": "seg",
+     "net": "P3V3",
+     "layer": "F.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      98.825,
+      64.9
+     ],
+     "uuid": "55e97603-7fef-41de-9c87-3a2dd4625dd5",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "P3V3",
+      "layer": "F.Cu",
+      "width": 0.5,
+      "a": [
+       98.825,
+       64.9
+      ],
+      "b": [
+       99.525,
+       64.9
+      ]
+     }
+    },
+    {
+     "kind": "pad",
+     "net": "PCIE_DN6_P",
+     "layer": "F.Cu",
+     "ref": "U3",
+     "padnum": "19",
+     "pos": [
+      98.825,
+      65.3
+     ],
+     "uuid": "ad57755d-419d-478d-952b-016232581263",
+     "elem_cls": "Pad",
+     "elem": {
+      "net": "PCIE_DN6_P",
+      "shape": "rect",
+      "size": [
+       0.45,
+       0.25
+      ],
+      "pos": [
+       98.825,
+       65.3
+      ],
+      "rot": 180.0,
+      "drill": null,
+      "is_tht": false,
+      "layers": [
+       "F.Cu",
+       "F.Mask",
+       "F.Paste"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 393,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.2000 mm; 实际 0.0475 mm)",
+   "actual": 0.0475,
+   "required": 0.2,
+   "band": "severe",
+   "ratio": 0.2375,
+   "domain": "hs+pwr",
+   "region": "中-U3U7/下",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "seg_clearance",
+    "detail": "走线段 vs 异网元素铜净距不足"
+   },
+   "path": "E_SCHEME",
+   "nets": [
+    "P3V3",
+    "PCIE_DN2_P"
+   ],
+   "items": [
+    {
+     "kind": "seg",
+     "net": "P3V3",
+     "layer": "F.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      98.825,
+      60.1
+     ],
+     "uuid": "1789edc6-3155-49a4-989c-670c9572bf8f",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "P3V3",
+      "layer": "F.Cu",
+      "width": 0.5,
+      "a": [
+       98.825,
+       60.1
+      ],
+      "b": [
+       99.525,
+       60.1
+      ]
+     }
+    },
+    {
+     "kind": "seg",
+     "net": "PCIE_DN2_P",
+     "layer": "F.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      100.96,
+      60.5
+     ],
+     "uuid": "417977f7-1615-44d3-9b69-156243269ffd",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "PCIE_DN2_P",
+      "layer": "F.Cu",
+      "width": 0.205,
+      "a": [
+       100.96,
+       60.5
+      ],
+      "b": [
+       98.825,
+       60.5
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 503,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1750 mm; 实际 0.0700 mm)",
+   "actual": 0.07,
+   "required": 0.175,
+   "band": "severe",
+   "ratio": 0.4,
+   "domain": "hs+ls",
+   "region": "右-SlimSAS/上",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_clearance",
+    "detail": "过孔 vs 异网元素铜净距不足"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "I2C1_SDA",
+    "PCIE_REFCLK1_N"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "PCIE_REFCLK1_N",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      134.3,
+      51.3
+     ],
+     "uuid": "550a8dfb-645f-4f1b-82a7-73974070c170",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "PCIE_REFCLK1_N",
+      "pos": [
+       134.3,
+       51.3
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "seg",
+     "net": "I2C1_SDA",
+     "layer": "B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      134.62,
+      38.5
+     ],
+     "uuid": "cb04a385-8be4-467e-849a-560797211304",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "I2C1_SDA",
+      "layer": "B.Cu",
+      "width": 0.15,
+      "a": [
+       134.62,
+       38.5
+      ],
+      "b": [
+       134.62,
+       56.1
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 518,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.2000 mm; 实际 0.0500 mm)",
+   "actual": 0.05,
+   "required": 0.2,
+   "band": "severe",
+   "ratio": 0.25,
+   "domain": "pwr+ls",
+   "region": "左-MCIO/上",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_clearance",
+    "detail": "过孔 vs 异网元素铜净距不足"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "I2C1_SCL",
+    "P3V3_AUX"
+   ],
+   "items": [
+    {
+     "kind": "seg",
+     "net": "I2C1_SCL",
+     "layer": "B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      55.9,
+      37.45
+     ],
+     "uuid": "187045db-d2d7-4d17-8551-8452830b7c4e",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "I2C1_SCL",
+      "layer": "B.Cu",
+      "width": 0.15,
+      "a": [
+       55.9,
+       37.45
+      ],
+      "b": [
+       55.9,
+       64.9
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "P3V3_AUX",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      56.2,
+      50.0
+     ],
+     "uuid": "906c1452-fca4-471a-ab13-17c6b391c6cb",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "P3V3_AUX",
+      "pos": [
+       56.2,
+       50.0
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 521,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.2000 mm; 实际 0.0500 mm)",
+   "actual": 0.05,
+   "required": 0.2,
+   "band": "severe",
+   "ratio": 0.25,
+   "domain": "pwr+ls",
+   "region": "左-MCIO/上",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_clearance",
+    "detail": "过孔 vs 异网元素铜净距不足"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "I2C1_SCL",
+    "P3V3_AUX"
+   ],
+   "items": [
+    {
+     "kind": "seg",
+     "net": "I2C1_SCL",
+     "layer": "B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      55.9,
+      37.45
+     ],
+     "uuid": "187045db-d2d7-4d17-8551-8452830b7c4e",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "I2C1_SCL",
+      "layer": "B.Cu",
+      "width": 0.15,
+      "a": [
+       55.9,
+       37.45
+      ],
+      "b": [
+       55.9,
+       64.9
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "P3V3_AUX",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      56.2,
+      62.7
+     ],
+     "uuid": "6cd537de-6b62-4973-8b5f-8952cc9207b5",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "P3V3_AUX",
+      "pos": [
+       56.2,
+       62.7
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 575,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1750 mm; 实际 0.0866 mm)",
+   "actual": 0.0866,
+   "required": 0.175,
+   "band": "severe",
+   "ratio": 0.4949,
+   "domain": "hs",
+   "region": "中-U3U7/上",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_via_layer_dup",
+    "detail": "via-via 对按铜层重复报告（贯穿过孔 8 层 → 同一物理违规多行，对齐报告 §3.2）"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "PCIE_UP_OUT0_N_U7",
+    "PCIE_UP_OUT0_P_U7"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "PCIE_UP_OUT0_P_U7",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      99.45,
+      48.9
+     ],
+     "uuid": "26bbc231-0422-4d68-85c1-991bce1105f0",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "PCIE_UP_OUT0_P_U7",
+      "pos": [
+       99.45,
+       48.9
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "PCIE_UP_OUT0_N_U7",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      99.625,
+      48.5
+     ],
+     "uuid": "3827b1b0-c5e0-409d-9baa-46284e450ca0",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "PCIE_UP_OUT0_N_U7",
+      "pos": [
+       99.625,
+       48.5
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 576,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1750 mm; 实际 0.0866 mm)",
+   "actual": 0.0866,
+   "required": 0.175,
+   "band": "severe",
+   "ratio": 0.4949,
+   "domain": "hs",
+   "region": "中-U3U7/上",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_via_layer_dup",
+    "detail": "via-via 对按铜层重复报告（贯穿过孔 8 层 → 同一物理违规多行，对齐报告 §3.2）"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "PCIE_UP_OUT0_N_U7",
+    "PCIE_UP_OUT0_P_U7"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "PCIE_UP_OUT0_P_U7",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      99.45,
+      48.9
+     ],
+     "uuid": "26bbc231-0422-4d68-85c1-991bce1105f0",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "PCIE_UP_OUT0_P_U7",
+      "pos": [
+       99.45,
+       48.9
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "PCIE_UP_OUT0_N_U7",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      99.625,
+      48.5
+     ],
+     "uuid": "3827b1b0-c5e0-409d-9baa-46284e450ca0",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "PCIE_UP_OUT0_N_U7",
+      "pos": [
+       99.625,
+       48.5
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 585,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1750 mm; 实际 0.0866 mm)",
+   "actual": 0.0866,
+   "required": 0.175,
+   "band": "severe",
+   "ratio": 0.4949,
+   "domain": "hs",
+   "region": "中-U3U7/上",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_via_layer_dup",
+    "detail": "via-via 对按铜层重复报告（贯穿过孔 8 层 → 同一物理违规多行，对齐报告 §3.2）"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "PCIE_UP_OUT0_N_U7",
+    "PCIE_UP_OUT0_P_U7"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "PCIE_UP_OUT0_P_U7",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      99.45,
+      48.9
+     ],
+     "uuid": "26bbc231-0422-4d68-85c1-991bce1105f0",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "PCIE_UP_OUT0_P_U7",
+      "pos": [
+       99.45,
+       48.9
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "PCIE_UP_OUT0_N_U7",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      99.625,
+      48.5
+     ],
+     "uuid": "3827b1b0-c5e0-409d-9baa-46284e450ca0",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "PCIE_UP_OUT0_N_U7",
+      "pos": [
+       99.625,
+       48.5
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 586,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1750 mm; 实际 0.0866 mm)",
+   "actual": 0.0866,
+   "required": 0.175,
+   "band": "severe",
+   "ratio": 0.4949,
+   "domain": "hs",
+   "region": "中-U3U7/上",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_via_layer_dup",
+    "detail": "via-via 对按铜层重复报告（贯穿过孔 8 层 → 同一物理违规多行，对齐报告 §3.2）"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "PCIE_UP_OUT0_N_U7",
+    "PCIE_UP_OUT0_P_U7"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "PCIE_UP_OUT0_P_U7",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      99.45,
+      48.9
+     ],
+     "uuid": "26bbc231-0422-4d68-85c1-991bce1105f0",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "PCIE_UP_OUT0_P_U7",
+      "pos": [
+       99.45,
+       48.9
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "PCIE_UP_OUT0_N_U7",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      99.625,
+      48.5
+     ],
+     "uuid": "3827b1b0-c5e0-409d-9baa-46284e450ca0",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "PCIE_UP_OUT0_N_U7",
+      "pos": [
+       99.625,
+       48.5
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 587,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1750 mm; 实际 0.0866 mm)",
+   "actual": 0.0866,
+   "required": 0.175,
+   "band": "severe",
+   "ratio": 0.4949,
+   "domain": "hs",
+   "region": "中-U3U7/上",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_via_layer_dup",
+    "detail": "via-via 对按铜层重复报告（贯穿过孔 8 层 → 同一物理违规多行，对齐报告 §3.2）"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "PCIE_UP_OUT0_N_U7",
+    "PCIE_UP_OUT0_P_U7"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "PCIE_UP_OUT0_P_U7",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      99.45,
+      48.9
+     ],
+     "uuid": "26bbc231-0422-4d68-85c1-991bce1105f0",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "PCIE_UP_OUT0_P_U7",
+      "pos": [
+       99.45,
+       48.9
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "PCIE_UP_OUT0_N_U7",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      99.625,
+      48.5
+     ],
+     "uuid": "3827b1b0-c5e0-409d-9baa-46284e450ca0",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "PCIE_UP_OUT0_N_U7",
+      "pos": [
+       99.625,
+       48.5
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 588,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1750 mm; 实际 0.0866 mm)",
+   "actual": 0.0866,
+   "required": 0.175,
+   "band": "severe",
+   "ratio": 0.4949,
+   "domain": "hs",
+   "region": "中-U3U7/上",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_via_layer_dup",
+    "detail": "via-via 对按铜层重复报告（贯穿过孔 8 层 → 同一物理违规多行，对齐报告 §3.2）"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "PCIE_UP_OUT0_N_U7",
+    "PCIE_UP_OUT0_P_U7"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "PCIE_UP_OUT0_P_U7",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      99.45,
+      48.9
+     ],
+     "uuid": "26bbc231-0422-4d68-85c1-991bce1105f0",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "PCIE_UP_OUT0_P_U7",
+      "pos": [
+       99.45,
+       48.9
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "PCIE_UP_OUT0_N_U7",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      99.625,
+      48.5
+     ],
+     "uuid": "3827b1b0-c5e0-409d-9baa-46284e450ca0",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "PCIE_UP_OUT0_N_U7",
+      "pos": [
+       99.625,
+       48.5
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 591,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1750 mm; 实际 0.0866 mm)",
+   "actual": 0.0866,
+   "required": 0.175,
+   "band": "severe",
+   "ratio": 0.4949,
+   "domain": "hs",
+   "region": "中-U3U7/上",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_via_layer_dup",
+    "detail": "via-via 对按铜层重复报告（贯穿过孔 8 层 → 同一物理违规多行，对齐报告 §3.2）"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "PCIE_UP_OUT0_N_U7",
+    "PCIE_UP_OUT0_P_U7"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "PCIE_UP_OUT0_P_U7",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      99.45,
+      48.9
+     ],
+     "uuid": "26bbc231-0422-4d68-85c1-991bce1105f0",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "PCIE_UP_OUT0_P_U7",
+      "pos": [
+       99.45,
+       48.9
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "PCIE_UP_OUT0_N_U7",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      99.625,
+      48.5
+     ],
+     "uuid": "3827b1b0-c5e0-409d-9baa-46284e450ca0",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "PCIE_UP_OUT0_N_U7",
+      "pos": [
+       99.625,
+       48.5
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 611,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.2000 mm; 实际 0.0952 mm)",
+   "actual": 0.0952,
+   "required": 0.2,
+   "band": "severe",
+   "ratio": 0.476,
+   "domain": "pwr",
+   "region": "左-MCIO/下",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_clearance",
+    "detail": "过孔 vs 异网元素铜净距不足"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "GND",
+    "P3V3_AUX"
+   ],
+   "items": [
+    {
+     "kind": "seg",
+     "net": "P3V3_AUX",
+     "layer": "In6.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      56.2,
+      50.0
+     ],
+     "uuid": "917b83a3-a1ea-49cb-baab-41522af05942",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "P3V3_AUX",
+      "layer": "In6.Cu",
+      "width": 0.5,
+      "a": [
+       56.2,
+       50.0
+      ],
+      "b": [
+       56.2,
+       62.7
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "GND",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      55.9,
+      63.125
+     ],
+     "uuid": "e539d105-4fd5-45ee-bc7c-eef5f563d84d",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "GND",
+      "pos": [
+       55.9,
+       63.125
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 628,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1750 mm; 实际 0.0475 mm)",
+   "actual": 0.0475,
+   "required": 0.175,
+   "band": "severe",
+   "ratio": 0.2714,
+   "domain": "hs+pwr",
+   "region": "中-U3U7/下",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_clearance",
+    "detail": "过孔 vs 异网元素铜净距不足"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "GND",
+    "PCIE_DN_OUT5_P_U3"
+   ],
+   "items": [
+    {
+     "kind": "seg",
+     "net": "PCIE_DN_OUT5_P_U3",
+     "layer": "In6.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      85.9,
+      60.85
+     ],
+     "uuid": "8ec57332-5e45-4e02-b8f7-157f3c7c1848",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "PCIE_DN_OUT5_P_U3",
+      "layer": "In6.Cu",
+      "width": 0.205,
+      "a": [
+       85.9,
+       60.85
+      ],
+      "b": [
+       91.35,
+       60.85
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "GND",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      90.15,
+      60.525
+     ],
+     "uuid": "d0402944-d61d-4d22-a7b7-9935202e4777",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "GND",
+      "pos": [
+       90.15,
+       60.525
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 632,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1000 mm; 实际 0.0250 mm)",
+   "actual": 0.025,
+   "required": 0.1,
+   "band": "severe",
+   "ratio": 0.25,
+   "domain": "pwr+ls",
+   "region": "左-MCIO/下",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_via_layer_dup",
+    "detail": "via-via 对按铜层重复报告（贯穿过孔 8 层 → 同一物理违规多行，对齐报告 §3.2）"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "GND",
+    "I2C2_SDA"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "GND",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      53.95,
+      69.825
+     ],
+     "uuid": "b36b2f0c-a288-4dd7-a307-cccaf043ba09",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "GND",
+      "pos": [
+       53.95,
+       69.825
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "I2C2_SDA",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      53.65,
+      69.6
+     ],
+     "uuid": "cdc7ca70-4435-4395-b8bf-34d4ff1a43fc",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "I2C2_SDA",
+      "pos": [
+       53.65,
+       69.6
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 634,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1000 mm; 实际 0.0250 mm)",
+   "actual": 0.025,
+   "required": 0.1,
+   "band": "severe",
+   "ratio": 0.25,
+   "domain": "pwr+ls",
+   "region": "左-MCIO/上",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_clearance",
+    "detail": "过孔 vs 异网元素铜净距不足"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "GND",
+    "UART_RX"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "GND",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      32.575,
+      51.25
+     ],
+     "uuid": "ac9c8950-d37f-434e-9ae6-d2cd2ae23f6d",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "GND",
+      "pos": [
+       32.575,
+       51.25
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "seg",
+     "net": "UART_RX",
+     "layer": "B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      32.299999,
+      50.25
+     ],
+     "uuid": "f06e639a-eab0-4285-8717-c3b4b335ffdd",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "UART_RX",
+      "layer": "B.Cu",
+      "width": 0.15,
+      "a": [
+       32.299999,
+       50.25
+      ],
+      "b": [
+       32.299999,
+       54.69
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 635,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1000 mm; 实际 0.0250 mm)",
+   "actual": 0.025,
+   "required": 0.1,
+   "band": "severe",
+   "ratio": 0.25,
+   "domain": "pwr+ls",
+   "region": "左-MCIO/下",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_via_layer_dup",
+    "detail": "via-via 对按铜层重复报告（贯穿过孔 8 层 → 同一物理违规多行，对齐报告 §3.2）"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "GND",
+    "I2C2_SDA"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "GND",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      53.95,
+      69.825
+     ],
+     "uuid": "b36b2f0c-a288-4dd7-a307-cccaf043ba09",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "GND",
+      "pos": [
+       53.95,
+       69.825
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "I2C2_SDA",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      53.65,
+      69.6
+     ],
+     "uuid": "cdc7ca70-4435-4395-b8bf-34d4ff1a43fc",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "I2C2_SDA",
+      "pos": [
+       53.65,
+       69.6
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 636,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1000 mm; 实际 0.0250 mm)",
+   "actual": 0.025,
+   "required": 0.1,
+   "band": "severe",
+   "ratio": 0.25,
+   "domain": "pwr+ls",
+   "region": "左-MCIO/下",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_via_layer_dup",
+    "detail": "via-via 对按铜层重复报告（贯穿过孔 8 层 → 同一物理违规多行，对齐报告 §3.2）"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "GND",
+    "I2C2_SDA"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "GND",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      53.95,
+      69.825
+     ],
+     "uuid": "b36b2f0c-a288-4dd7-a307-cccaf043ba09",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "GND",
+      "pos": [
+       53.95,
+       69.825
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "I2C2_SDA",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      53.65,
+      69.6
+     ],
+     "uuid": "cdc7ca70-4435-4395-b8bf-34d4ff1a43fc",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "I2C2_SDA",
+      "pos": [
+       53.65,
+       69.6
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 637,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1000 mm; 实际 0.0250 mm)",
+   "actual": 0.025,
+   "required": 0.1,
+   "band": "severe",
+   "ratio": 0.25,
+   "domain": "pwr+ls",
+   "region": "左-MCIO/下",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_via_layer_dup",
+    "detail": "via-via 对按铜层重复报告（贯穿过孔 8 层 → 同一物理违规多行，对齐报告 §3.2）"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "GND",
+    "I2C2_SDA"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "GND",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      53.95,
+      69.825
+     ],
+     "uuid": "b36b2f0c-a288-4dd7-a307-cccaf043ba09",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "GND",
+      "pos": [
+       53.95,
+       69.825
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "I2C2_SDA",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      53.65,
+      69.6
+     ],
+     "uuid": "cdc7ca70-4435-4395-b8bf-34d4ff1a43fc",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "I2C2_SDA",
+      "pos": [
+       53.65,
+       69.6
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 638,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1000 mm; 实际 0.0250 mm)",
+   "actual": 0.025,
+   "required": 0.1,
+   "band": "severe",
+   "ratio": 0.25,
+   "domain": "pwr+ls",
+   "region": "左-MCIO/下",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_via_layer_dup",
+    "detail": "via-via 对按铜层重复报告（贯穿过孔 8 层 → 同一物理违规多行，对齐报告 §3.2）"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "GND",
+    "I2C2_SDA"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "GND",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      53.95,
+      69.825
+     ],
+     "uuid": "b36b2f0c-a288-4dd7-a307-cccaf043ba09",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "GND",
+      "pos": [
+       53.95,
+       69.825
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "I2C2_SDA",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      53.65,
+      69.6
+     ],
+     "uuid": "cdc7ca70-4435-4395-b8bf-34d4ff1a43fc",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "I2C2_SDA",
+      "pos": [
+       53.65,
+       69.6
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 640,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1000 mm; 实际 0.0250 mm)",
+   "actual": 0.025,
+   "required": 0.1,
+   "band": "severe",
+   "ratio": 0.25,
+   "domain": "pwr+ls",
+   "region": "左-MCIO/下",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_via_layer_dup",
+    "detail": "via-via 对按铜层重复报告（贯穿过孔 8 层 → 同一物理违规多行，对齐报告 §3.2）"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "GND",
+    "I2C2_SDA"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "GND",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      53.95,
+      69.825
+     ],
+     "uuid": "b36b2f0c-a288-4dd7-a307-cccaf043ba09",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "GND",
+      "pos": [
+       53.95,
+       69.825
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "I2C2_SDA",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      53.65,
+      69.6
+     ],
+     "uuid": "cdc7ca70-4435-4395-b8bf-34d4ff1a43fc",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "I2C2_SDA",
+      "pos": [
+       53.65,
+       69.6
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 641,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1000 mm; 实际 0.0250 mm)",
+   "actual": 0.025,
+   "required": 0.1,
+   "band": "severe",
+   "ratio": 0.25,
+   "domain": "pwr+ls",
+   "region": "左-MCIO/下",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_via_layer_dup",
+    "detail": "via-via 对按铜层重复报告（贯穿过孔 8 层 → 同一物理违规多行，对齐报告 §3.2）"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "GND",
+    "I2C2_SDA"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "GND",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      53.95,
+      69.825
+     ],
+     "uuid": "b36b2f0c-a288-4dd7-a307-cccaf043ba09",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "GND",
+      "pos": [
+       53.95,
+       69.825
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "I2C2_SDA",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      53.65,
+      69.6
+     ],
+     "uuid": "cdc7ca70-4435-4395-b8bf-34d4ff1a43fc",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "I2C2_SDA",
+      "pos": [
+       53.65,
+       69.6
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 652,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1000 mm; 实际 0.0100 mm)",
+   "actual": 0.01,
+   "required": 0.1,
+   "band": "severe",
+   "ratio": 0.1,
+   "domain": "pwr+ls",
+   "region": "中-U3U7/上",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_clearance",
+    "detail": "过孔 vs 异网元素铜净距不足"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "GND",
+    "STRAP_EQ1_U7"
+   ],
+   "items": [
+    {
+     "kind": "seg",
+     "net": "STRAP_EQ1_U7",
+     "layer": "B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      86.7,
+      41.26
+     ],
+     "uuid": "3efd08bc-277c-43ae-906a-11b21029fd83",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "STRAP_EQ1_U7",
+      "layer": "B.Cu",
+      "width": 0.15,
+      "a": [
+       86.7,
+       41.26
+      ],
+      "b": [
+       94.03,
+       41.26
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "GND",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      92.025,
+      41.0
+     ],
+     "uuid": "880689a1-b366-44a1-978c-2f7acf257c29",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "GND",
+      "pos": [
+       92.025,
+       41.0
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 657,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1750 mm; 实际 0.0275 mm)",
+   "actual": 0.0275,
+   "required": 0.175,
+   "band": "severe",
+   "ratio": 0.1571,
+   "domain": "hs+pwr",
+   "region": "中-U3U7/下",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_clearance",
+    "detail": "过孔 vs 异网元素铜净距不足"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "GND",
+    "PCIE_UP6_P"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "GND",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      88.125,
+      64.099999
+     ],
+     "uuid": "837db41d-5e5a-4fce-9fed-728829a20e95",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "GND",
+      "pos": [
+       88.125,
+       64.099999
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "seg",
+     "net": "PCIE_UP6_P",
+     "layer": "B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      88.43,
+      64.93
+     ],
+     "uuid": "f32b0248-ec1e-4ace-bce6-fed97a4bdcd8",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "PCIE_UP6_P",
+      "layer": "B.Cu",
+      "width": 0.205,
+      "a": [
+       88.43,
+       64.93
+      ],
+      "b": [
+       88.43,
+       42.43
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 666,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1000 mm; 实际 0.0110 mm)",
+   "actual": 0.011,
+   "required": 0.1,
+   "band": "severe",
+   "ratio": 0.11,
+   "domain": "pwr+ls",
+   "region": "左-MCIO/下",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_clearance",
+    "detail": "过孔 vs 异网元素铜净距不足"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "GND",
+    "STRAP_EQ1_1_U7"
+   ],
+   "items": [
+    {
+     "kind": "seg",
+     "net": "STRAP_EQ1_1_U7",
+     "layer": "B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      51.8,
+      68.0
+     ],
+     "uuid": "51b7c9c1-4861-4214-8eb8-1c218e016c61",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "STRAP_EQ1_1_U7",
+      "layer": "B.Cu",
+      "width": 0.15,
+      "a": [
+       51.8,
+       68.0
+      ],
+      "b": [
+       51.8,
+       68.75
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "GND",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      51.725,
+      69.0
+     ],
+     "uuid": "6a8256b1-d558-43f3-b397-dc5e0c3f76dc",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "GND",
+      "pos": [
+       51.725,
+       69.0
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 678,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1000 mm; 实际 0.0445 mm)",
+   "actual": 0.0445,
+   "required": 0.1,
+   "band": "severe",
+   "ratio": 0.445,
+   "domain": "pwr+ls",
+   "region": "左-MCIO/下",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_clearance",
+    "detail": "过孔 vs 异网元素铜净距不足"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "GND",
+    "UART_RX"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "GND",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      32.525,
+      54.5
+     ],
+     "uuid": "5b186964-1e25-42b2-9f84-5759eb5f09e2",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "GND",
+      "pos": [
+       32.525,
+       54.5
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "seg",
+     "net": "UART_RX",
+     "layer": "B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      32.299999,
+      54.69
+     ],
+     "uuid": "f7bc1ae7-e093-46a4-8cfa-25aa77550035",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "UART_RX",
+      "layer": "B.Cu",
+      "width": 0.15,
+      "a": [
+       32.299999,
+       54.69
+      ],
+      "b": [
+       26.5,
+       54.69
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 689,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1750 mm; 实际 0.0475 mm)",
+   "actual": 0.0475,
+   "required": 0.175,
+   "band": "severe",
+   "ratio": 0.2714,
+   "domain": "hs+pwr",
+   "region": "中-U3U7/下",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_clearance",
+    "detail": "过孔 vs 异网元素铜净距不足"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "GND",
+    "PCIE_DN_OUT6_P_U3"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "GND",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      89.525,
+      62.9
+     ],
+     "uuid": "50219dce-98a0-4874-8fd9-8ee02c2d8c4f",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "GND",
+      "pos": [
+       89.525,
+       62.9
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "seg",
+     "net": "PCIE_DN_OUT6_P_U3",
+     "layer": "In2.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      89.2,
+      65.7
+     ],
+     "uuid": "e6867b0a-383b-4b7a-912f-fd396b80a79c",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "PCIE_DN_OUT6_P_U3",
+      "layer": "In2.Cu",
+      "width": 0.205,
+      "a": [
+       89.2,
+       65.7
+      ],
+      "b": [
+       89.2,
+       62.3
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 694,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.2000 mm; 实际 0.0750 mm)",
+   "actual": 0.075,
+   "required": 0.2,
+   "band": "severe",
+   "ratio": 0.375,
+   "domain": "pwr",
+   "region": "左-MCIO/上",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_clearance",
+    "detail": "过孔 vs 异网元素铜净距不足"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "GND",
+    "MCU_VDD"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "GND",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      37.25,
+      48.575
+     ],
+     "uuid": "4541b5d0-361d-417a-8067-8bb9691ddd58",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "GND",
+      "pos": [
+       37.25,
+       48.575
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "seg",
+     "net": "MCU_VDD",
+     "layer": "F.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      36.75,
+      49.3
+     ],
+     "uuid": "a1e4e783-c0b6-4347-9f67-a69143153c6f",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "MCU_VDD",
+      "layer": "F.Cu",
+      "width": 0.5,
+      "a": [
+       36.75,
+       49.3
+      ],
+      "b": [
+       36.75,
+       48.575
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 695,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1750 mm; 实际 0.0794 mm)",
+   "actual": 0.0794,
+   "required": 0.175,
+   "band": "severe",
+   "ratio": 0.4537,
+   "domain": "hs+pwr",
+   "region": "中-U3U7/下",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_clearance",
+    "detail": "过孔 vs 异网元素铜净距不足"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "GND",
+    "PCIE_DN_OUT5_N_MCIO"
+   ],
+   "items": [
+    {
+     "kind": "seg",
+     "net": "PCIE_DN_OUT5_N_MCIO",
+     "layer": "In2.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      75.7,
+      59.6
+     ],
+     "uuid": "3730cf2d-b9cd-4ba6-afa6-08d10995c5af",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "PCIE_DN_OUT5_N_MCIO",
+      "layer": "In2.Cu",
+      "width": 0.205,
+      "a": [
+       75.7,
+       59.6
+      ],
+      "b": [
+       75.7,
+       58.9
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "GND",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      75.77,
+      58.55
+     ],
+     "uuid": "4a378168-0504-43a6-a3ef-b2ee78f1eb52",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "GND",
+      "pos": [
+       75.77,
+       58.55
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 698,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1750 mm; 实际 0.0373 mm)",
+   "actual": 0.0373,
+   "required": 0.175,
+   "band": "severe",
+   "ratio": 0.2131,
+   "domain": "hs+pwr",
+   "region": "右-SlimSAS/下",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_clearance",
+    "detail": "过孔 vs 异网元素铜净距不足"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "GND",
+    "PCIE_DN0_N"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "GND",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      131.525,
+      54.9
+     ],
+     "uuid": "4580782f-29eb-4868-9a89-d9ce0596b048",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "GND",
+      "pos": [
+       131.525,
+       54.9
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "seg",
+     "net": "PCIE_DN0_N",
+     "layer": "In2.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      133.83,
+      54.3
+     ],
+     "uuid": "8de345ae-ef04-41d6-a970-7ebd6774a784",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "PCIE_DN0_N",
+      "layer": "In2.Cu",
+      "width": 0.205,
+      "a": [
+       133.83,
+       54.3
+      ],
+      "b": [
+       99.6,
+       58.5
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 707,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1750 mm; 实际 0.0300 mm)",
+   "actual": 0.03,
+   "required": 0.175,
+   "band": "severe",
+   "ratio": 0.1714,
+   "domain": "hs+pwr",
+   "region": "右-SlimSAS/上",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_via_layer_dup",
+    "detail": "via-via 对按铜层重复报告（贯穿过孔 8 层 → 同一物理违规多行，对齐报告 §3.2）"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "GND",
+    "PCIE_UP_OUT6_N_J2"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "GND",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      129.419999,
+      52.5
+     ],
+     "uuid": "4420e636-325a-4cfd-bda6-01aff74dd5d8",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "GND",
+      "pos": [
+       129.419999,
+       52.5
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "PCIE_UP_OUT6_N_J2",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      129.8,
+      52.5
+     ],
+     "uuid": "f863aa65-e808-4ae7-90ae-0e969978f1d0",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "PCIE_UP_OUT6_N_J2",
+      "pos": [
+       129.8,
+       52.5
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 708,
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1750 mm; 实际 0.0300 mm)",
+   "actual": 0.03,
+   "required": 0.175,
+   "band": "severe",
+   "ratio": 0.1714,
+   "domain": "hs+pwr",
+   "region": "右-SlimSAS/上",
+   "rule": {
+    "key": "clearance",
+    "decl": "铜边缘净距规则。required(a,b) = max(netclass(a).clearance, netclass(b).clearance, board_min)。违规判定: 实际铜边缘净距 < required (经验 epsilon≈0, 基线实测最小 margin 0.0014)。"
+   },
+   "root_cause": {
+    "family": "via_via_layer_dup",
+    "detail": "via-via 对按铜层重复报告（贯穿过孔 8 层 → 同一物理违规多行，对齐报告 §3.2）"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "GND",
+    "PCIE_UP_OUT6_N_J2"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "GND",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      129.419999,
+      52.5
+     ],
+     "uuid": "4420e636-325a-4cfd-bda6-01aff74dd5d8",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "GND",
+      "pos": [
+       129.419999,
+       52.5
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "PCIE_UP_OUT6_N_J2",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      129.8,
+      52.5
+     ],
+     "uuid": "f863aa65-e808-4ae7-90ae-0e969978f1d0",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "PCIE_UP_OUT6_N_J2",
+      "pos": [
+       129.8,
+       52.5
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 713,
+   "type": "hole_clearance",
+   "desc": "孔间距违规 (<电路板配置> 中的 \"孔\" 约束 间距 0.2500 mm; 实际 0.1050 mm)",
+   "actual": 0.105,
+   "required": 0.25,
+   "band": "severe",
+   "ratio": 0.42,
+   "domain": "hs+pwr",
+   "region": "右-SlimSAS/上",
+   "rule": {
+    "key": "hole_clearance",
+    "decl": "钻孔边缘-铜边缘净距规则 (min_hole_clearance)。检查过孔/THT 焊盘的钻孔边缘 vs 异网铜元素边缘。违规判定: 实际 < 0.25。"
+   },
+   "root_cause": {
+    "family": "via_via_hole",
+    "detail": "过孔互距不足 0.25（钻孔-钻孔边缘净距，171 系统性）"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "GND",
+    "PCIE_UP_OUT6_N_J2"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "GND",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      129.419999,
+      52.5
+     ],
+     "uuid": "4420e636-325a-4cfd-bda6-01aff74dd5d8",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "GND",
+      "pos": [
+       129.419999,
+       52.5
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "PCIE_UP_OUT6_N_J2",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      129.8,
+      52.5
+     ],
+     "uuid": "f863aa65-e808-4ae7-90ae-0e969978f1d0",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "PCIE_UP_OUT6_N_J2",
+      "pos": [
+       129.8,
+       52.5
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 716,
+   "type": "hole_clearance",
+   "desc": "孔间距违规 (<电路板配置> 中的 \"孔\" 约束 间距 0.2500 mm; 实际 0.1050 mm)",
+   "actual": 0.105,
+   "required": 0.25,
+   "band": "severe",
+   "ratio": 0.42,
+   "domain": "hs+pwr",
+   "region": "右-SlimSAS/上",
+   "rule": {
+    "key": "hole_clearance",
+    "decl": "钻孔边缘-铜边缘净距规则 (min_hole_clearance)。检查过孔/THT 焊盘的钻孔边缘 vs 异网铜元素边缘。违规判定: 实际 < 0.25。"
+   },
+   "root_cause": {
+    "family": "via_via_hole",
+    "detail": "过孔互距不足 0.25（钻孔-钻孔边缘净距，171 系统性）"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "GND",
+    "PCIE_UP_OUT6_N_J2"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "GND",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      129.419999,
+      52.5
+     ],
+     "uuid": "4420e636-325a-4cfd-bda6-01aff74dd5d8",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "GND",
+      "pos": [
+       129.419999,
+       52.5
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "PCIE_UP_OUT6_N_J2",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      129.8,
+      52.5
+     ],
+     "uuid": "f863aa65-e808-4ae7-90ae-0e969978f1d0",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "PCIE_UP_OUT6_N_J2",
+      "pos": [
+       129.8,
+       52.5
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 719,
+   "type": "hole_clearance",
+   "desc": "孔间距违规 (<电路板配置> 中的 \"孔\" 约束 间距 0.2500 mm; 实际 0.1050 mm)",
+   "actual": 0.105,
+   "required": 0.25,
+   "band": "severe",
+   "ratio": 0.42,
+   "domain": "hs+pwr",
+   "region": "右-SlimSAS/上",
+   "rule": {
+    "key": "hole_clearance",
+    "decl": "钻孔边缘-铜边缘净距规则 (min_hole_clearance)。检查过孔/THT 焊盘的钻孔边缘 vs 异网铜元素边缘。违规判定: 实际 < 0.25。"
+   },
+   "root_cause": {
+    "family": "via_via_hole",
+    "detail": "过孔互距不足 0.25（钻孔-钻孔边缘净距，171 系统性）"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "GND",
+    "PCIE_UP_OUT6_N_J2"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "GND",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      129.419999,
+      52.5
+     ],
+     "uuid": "4420e636-325a-4cfd-bda6-01aff74dd5d8",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "GND",
+      "pos": [
+       129.419999,
+       52.5
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "PCIE_UP_OUT6_N_J2",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      129.8,
+      52.5
+     ],
+     "uuid": "f863aa65-e808-4ae7-90ae-0e969978f1d0",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "PCIE_UP_OUT6_N_J2",
+      "pos": [
+       129.8,
+       52.5
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 725,
+   "type": "hole_clearance",
+   "desc": "孔间距违规 (<电路板配置> 中的 \"孔\" 约束 间距 0.2500 mm; 实际 0.1050 mm)",
+   "actual": 0.105,
+   "required": 0.25,
+   "band": "severe",
+   "ratio": 0.42,
+   "domain": "hs+pwr",
+   "region": "右-SlimSAS/上",
+   "rule": {
+    "key": "hole_clearance",
+    "decl": "钻孔边缘-铜边缘净距规则 (min_hole_clearance)。检查过孔/THT 焊盘的钻孔边缘 vs 异网铜元素边缘。违规判定: 实际 < 0.25。"
+   },
+   "root_cause": {
+    "family": "via_via_hole",
+    "detail": "过孔互距不足 0.25（钻孔-钻孔边缘净距，171 系统性）"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "GND",
+    "PCIE_UP_OUT6_N_J2"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "GND",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      129.419999,
+      52.5
+     ],
+     "uuid": "4420e636-325a-4cfd-bda6-01aff74dd5d8",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "GND",
+      "pos": [
+       129.419999,
+       52.5
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "PCIE_UP_OUT6_N_J2",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      129.8,
+      52.5
+     ],
+     "uuid": "f863aa65-e808-4ae7-90ae-0e969978f1d0",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "PCIE_UP_OUT6_N_J2",
+      "pos": [
+       129.8,
+       52.5
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 728,
+   "type": "hole_clearance",
+   "desc": "孔间距违规 (<电路板配置> 中的 \"孔\" 约束 间距 0.2500 mm; 实际 0.1050 mm)",
+   "actual": 0.105,
+   "required": 0.25,
+   "band": "severe",
+   "ratio": 0.42,
+   "domain": "hs+pwr",
+   "region": "右-SlimSAS/上",
+   "rule": {
+    "key": "hole_clearance",
+    "decl": "钻孔边缘-铜边缘净距规则 (min_hole_clearance)。检查过孔/THT 焊盘的钻孔边缘 vs 异网铜元素边缘。违规判定: 实际 < 0.25。"
+   },
+   "root_cause": {
+    "family": "via_via_hole",
+    "detail": "过孔互距不足 0.25（钻孔-钻孔边缘净距，171 系统性）"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "GND",
+    "PCIE_UP_OUT6_N_J2"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "GND",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      129.419999,
+      52.5
+     ],
+     "uuid": "4420e636-325a-4cfd-bda6-01aff74dd5d8",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "GND",
+      "pos": [
+       129.419999,
+       52.5
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "PCIE_UP_OUT6_N_J2",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      129.8,
+      52.5
+     ],
+     "uuid": "f863aa65-e808-4ae7-90ae-0e969978f1d0",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "PCIE_UP_OUT6_N_J2",
+      "pos": [
+       129.8,
+       52.5
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 756,
+   "type": "hole_clearance",
+   "desc": "孔间距违规 (<电路板配置> 中的 \"孔\" 约束 间距 0.2500 mm; 实际 0.1050 mm)",
+   "actual": 0.105,
+   "required": 0.25,
+   "band": "severe",
+   "ratio": 0.42,
+   "domain": "hs+pwr",
+   "region": "右-SlimSAS/上",
+   "rule": {
+    "key": "hole_clearance",
+    "decl": "钻孔边缘-铜边缘净距规则 (min_hole_clearance)。检查过孔/THT 焊盘的钻孔边缘 vs 异网铜元素边缘。违规判定: 实际 < 0.25。"
+   },
+   "root_cause": {
+    "family": "via_via_hole",
+    "detail": "过孔互距不足 0.25（钻孔-钻孔边缘净距，171 系统性）"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "GND",
+    "PCIE_UP_OUT3_P_J2"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "GND",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      130.18,
+      47.7
+     ],
+     "uuid": "0d32a012-4683-4e4b-804c-b51cad7f80b3",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "GND",
+      "pos": [
+       130.18,
+       47.7
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "PCIE_UP_OUT3_P_J2",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      130.56,
+      47.7
+     ],
+     "uuid": "4b3fc560-fab6-499e-8b67-b5182648c3fd",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "PCIE_UP_OUT3_P_J2",
+      "pos": [
+       130.56,
+       47.7
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 759,
+   "type": "hole_clearance",
+   "desc": "孔间距违规 (<电路板配置> 中的 \"孔\" 约束 间距 0.2500 mm; 实际 0.1050 mm)",
+   "actual": 0.105,
+   "required": 0.25,
+   "band": "severe",
+   "ratio": 0.42,
+   "domain": "hs+pwr",
+   "region": "右-SlimSAS/上",
+   "rule": {
+    "key": "hole_clearance",
+    "decl": "钻孔边缘-铜边缘净距规则 (min_hole_clearance)。检查过孔/THT 焊盘的钻孔边缘 vs 异网铜元素边缘。违规判定: 实际 < 0.25。"
+   },
+   "root_cause": {
+    "family": "via_via_hole",
+    "detail": "过孔互距不足 0.25（钻孔-钻孔边缘净距，171 系统性）"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "GND",
+    "PCIE_UP_OUT3_P_J2"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "GND",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      130.18,
+      47.7
+     ],
+     "uuid": "0d32a012-4683-4e4b-804c-b51cad7f80b3",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "GND",
+      "pos": [
+       130.18,
+       47.7
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "PCIE_UP_OUT3_P_J2",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      130.56,
+      47.7
+     ],
+     "uuid": "4b3fc560-fab6-499e-8b67-b5182648c3fd",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "PCIE_UP_OUT3_P_J2",
+      "pos": [
+       130.56,
+       47.7
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 760,
+   "type": "hole_clearance",
+   "desc": "孔间距违规 (<电路板配置> 中的 \"孔\" 约束 间距 0.2500 mm; 实际 0.1050 mm)",
+   "actual": 0.105,
+   "required": 0.25,
+   "band": "severe",
+   "ratio": 0.42,
+   "domain": "hs+pwr",
+   "region": "右-SlimSAS/上",
+   "rule": {
+    "key": "hole_clearance",
+    "decl": "钻孔边缘-铜边缘净距规则 (min_hole_clearance)。检查过孔/THT 焊盘的钻孔边缘 vs 异网铜元素边缘。违规判定: 实际 < 0.25。"
+   },
+   "root_cause": {
+    "family": "via_via_hole",
+    "detail": "过孔互距不足 0.25（钻孔-钻孔边缘净距，171 系统性）"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "GND",
+    "PCIE_UP_OUT3_P_J2"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "GND",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      130.18,
+      47.7
+     ],
+     "uuid": "0d32a012-4683-4e4b-804c-b51cad7f80b3",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "GND",
+      "pos": [
+       130.18,
+       47.7
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "PCIE_UP_OUT3_P_J2",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      130.56,
+      47.7
+     ],
+     "uuid": "4b3fc560-fab6-499e-8b67-b5182648c3fd",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "PCIE_UP_OUT3_P_J2",
+      "pos": [
+       130.56,
+       47.7
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 765,
+   "type": "hole_clearance",
+   "desc": "孔间距违规 (<电路板配置> 中的 \"孔\" 约束 间距 0.2500 mm; 实际 0.1050 mm)",
+   "actual": 0.105,
+   "required": 0.25,
+   "band": "severe",
+   "ratio": 0.42,
+   "domain": "hs+pwr",
+   "region": "右-SlimSAS/上",
+   "rule": {
+    "key": "hole_clearance",
+    "decl": "钻孔边缘-铜边缘净距规则 (min_hole_clearance)。检查过孔/THT 焊盘的钻孔边缘 vs 异网铜元素边缘。违规判定: 实际 < 0.25。"
+   },
+   "root_cause": {
+    "family": "via_via_hole",
+    "detail": "过孔互距不足 0.25（钻孔-钻孔边缘净距，171 系统性）"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "GND",
+    "PCIE_UP_OUT3_P_J2"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "GND",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      130.18,
+      47.7
+     ],
+     "uuid": "0d32a012-4683-4e4b-804c-b51cad7f80b3",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "GND",
+      "pos": [
+       130.18,
+       47.7
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "PCIE_UP_OUT3_P_J2",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      130.56,
+      47.7
+     ],
+     "uuid": "4b3fc560-fab6-499e-8b67-b5182648c3fd",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "PCIE_UP_OUT3_P_J2",
+      "pos": [
+       130.56,
+       47.7
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 766,
+   "type": "hole_clearance",
+   "desc": "孔间距违规 (<电路板配置> 中的 \"孔\" 约束 间距 0.2500 mm; 实际 0.1050 mm)",
+   "actual": 0.105,
+   "required": 0.25,
+   "band": "severe",
+   "ratio": 0.42,
+   "domain": "hs+pwr",
+   "region": "右-SlimSAS/上",
+   "rule": {
+    "key": "hole_clearance",
+    "decl": "钻孔边缘-铜边缘净距规则 (min_hole_clearance)。检查过孔/THT 焊盘的钻孔边缘 vs 异网铜元素边缘。违规判定: 实际 < 0.25。"
+   },
+   "root_cause": {
+    "family": "via_via_hole",
+    "detail": "过孔互距不足 0.25（钻孔-钻孔边缘净距，171 系统性）"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "GND",
+    "PCIE_UP_OUT3_P_J2"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "GND",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      130.18,
+      47.7
+     ],
+     "uuid": "0d32a012-4683-4e4b-804c-b51cad7f80b3",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "GND",
+      "pos": [
+       130.18,
+       47.7
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "PCIE_UP_OUT3_P_J2",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      130.56,
+      47.7
+     ],
+     "uuid": "4b3fc560-fab6-499e-8b67-b5182648c3fd",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "PCIE_UP_OUT3_P_J2",
+      "pos": [
+       130.56,
+       47.7
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 768,
+   "type": "hole_clearance",
+   "desc": "孔间距违规 (<电路板配置> 中的 \"孔\" 约束 间距 0.2500 mm; 实际 0.1028 mm)",
+   "actual": 0.1028,
+   "required": 0.25,
+   "band": "severe",
+   "ratio": 0.4112,
+   "domain": "pwr+ls",
+   "region": "中-U3U7/上",
+   "rule": {
+    "key": "hole_clearance",
+    "decl": "钻孔边缘-铜边缘净距规则 (min_hole_clearance)。检查过孔/THT 焊盘的钻孔边缘 vs 异网铜元素边缘。违规判定: 实际 < 0.25。"
+   },
+   "root_cause": {
+    "family": "via_hole",
+    "detail": "过孔钻孔 vs 异网铜元素净距不足"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "GND",
+    "STRAP_EQ1_1_U7"
+   ],
+   "items": [
+    {
+     "kind": "seg",
+     "net": "GND",
+     "layer": "F.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      93.975,
+      50.2
+     ],
+     "uuid": "ff3c2289-9180-4884-b53a-97c445891469",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "GND",
+      "layer": "F.Cu",
+      "width": 0.5,
+      "a": [
+       93.975,
+       50.2
+      ],
+      "b": [
+       93.975,
+       49.475
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "STRAP_EQ1_1_U7",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      94.025,
+      49.025
+     ],
+     "uuid": "dec93c2d-5480-4328-ab5e-08cd1daa97df",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "STRAP_EQ1_1_U7",
+      "pos": [
+       94.025,
+       49.025
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 769,
+   "type": "hole_clearance",
+   "desc": "孔间距违规 (<电路板配置> 中的 \"孔\" 约束 间距 0.2500 mm; 实际 0.1050 mm)",
+   "actual": 0.105,
+   "required": 0.25,
+   "band": "severe",
+   "ratio": 0.42,
+   "domain": "hs+pwr",
+   "region": "右-SlimSAS/上",
+   "rule": {
+    "key": "hole_clearance",
+    "decl": "钻孔边缘-铜边缘净距规则 (min_hole_clearance)。检查过孔/THT 焊盘的钻孔边缘 vs 异网铜元素边缘。违规判定: 实际 < 0.25。"
+   },
+   "root_cause": {
+    "family": "via_via_hole",
+    "detail": "过孔互距不足 0.25（钻孔-钻孔边缘净距，171 系统性）"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "GND",
+    "PCIE_UP_OUT3_P_J2"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "GND",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      130.18,
+      47.7
+     ],
+     "uuid": "0d32a012-4683-4e4b-804c-b51cad7f80b3",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "GND",
+      "pos": [
+       130.18,
+       47.7
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "PCIE_UP_OUT3_P_J2",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      130.56,
+      47.7
+     ],
+     "uuid": "4b3fc560-fab6-499e-8b67-b5182648c3fd",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "PCIE_UP_OUT3_P_J2",
+      "pos": [
+       130.56,
+       47.7
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 770,
+   "type": "hole_clearance",
+   "desc": "孔间距违规 (<电路板配置> 中的 \"孔\" 约束 间距 0.2500 mm; 实际 0.1050 mm)",
+   "actual": 0.105,
+   "required": 0.25,
+   "band": "severe",
+   "ratio": 0.42,
+   "domain": "hs+pwr",
+   "region": "右-SlimSAS/上",
+   "rule": {
+    "key": "hole_clearance",
+    "decl": "钻孔边缘-铜边缘净距规则 (min_hole_clearance)。检查过孔/THT 焊盘的钻孔边缘 vs 异网铜元素边缘。违规判定: 实际 < 0.25。"
+   },
+   "root_cause": {
+    "family": "via_via_hole",
+    "detail": "过孔互距不足 0.25（钻孔-钻孔边缘净距，171 系统性）"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "GND",
+    "PCIE_UP_OUT3_P_J2"
+   ],
+   "items": [
+    {
+     "kind": "via",
+     "net": "GND",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      130.18,
+      47.7
+     ],
+     "uuid": "0d32a012-4683-4e4b-804c-b51cad7f80b3",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "GND",
+      "pos": [
+       130.18,
+       47.7
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "PCIE_UP_OUT3_P_J2",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      130.56,
+      47.7
+     ],
+     "uuid": "4b3fc560-fab6-499e-8b67-b5182648c3fd",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "PCIE_UP_OUT3_P_J2",
+      "pos": [
+       130.56,
+       47.7
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 784,
+   "type": "hole_clearance",
+   "desc": "孔间距违规 (<电路板配置> 中的 \"孔\" 约束 间距 0.2500 mm; 实际 0.1110 mm)",
+   "actual": 0.111,
+   "required": 0.25,
+   "band": "severe",
+   "ratio": 0.444,
+   "domain": "pwr",
+   "region": "中-U3U7/下",
+   "rule": {
+    "key": "hole_clearance",
+    "decl": "钻孔边缘-铜边缘净距规则 (min_hole_clearance)。检查过孔/THT 焊盘的钻孔边缘 vs 异网铜元素边缘。违规判定: 实际 < 0.25。"
+   },
+   "root_cause": {
+    "family": "via_hole",
+    "detail": "过孔钻孔 vs 异网铜元素净距不足"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "GND",
+    "P3V3"
+   ],
+   "items": [
+    {
+     "kind": "seg",
+     "net": "GND",
+     "layer": "F.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      88.825,
+      58.1
+     ],
+     "uuid": "63d87c4f-5d5e-42d6-980e-a25faffe67aa",
+     "elem_cls": "Segment",
+     "elem": {
+      "net": "GND",
+      "layer": "F.Cu",
+      "width": 0.5,
+      "a": [
+       88.825,
+       58.1
+      ],
+      "b": [
+       89.525,
+       58.1
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "P3V3",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      89.975,
+      58.0
+     ],
+     "uuid": "55a25865-672d-4c17-812b-87077b910e8a",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "P3V3",
+      "pos": [
+       89.975,
+       58.0
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 785,
+   "type": "hole_clearance",
+   "desc": "孔间距违规 (<电路板配置> 中的 \"孔\" 约束 间距 0.2500 mm; 实际 0.0500 mm)",
+   "actual": 0.05,
+   "required": 0.25,
+   "band": "severe",
+   "ratio": 0.2,
+   "domain": "pwr+ls",
+   "region": "左-MCIO/下",
+   "rule": {
+    "key": "hole_clearance",
+    "decl": "钻孔边缘-铜边缘净距规则 (min_hole_clearance)。检查过孔/THT 焊盘的钻孔边缘 vs 异网铜元素边缘。违规判定: 实际 < 0.25。"
+   },
+   "root_cause": {
+    "family": "via_hole",
+    "detail": "过孔钻孔 vs 异网铜元素净距不足"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "MCU_VDD",
+    "STRAP_EQ1_1_U3"
+   ],
+   "items": [
+    {
+     "kind": "pad",
+     "net": "STRAP_EQ1_1_U3",
+     "layer": "F.Cu",
+     "ref": "R18",
+     "padnum": "1",
+     "pos": [
+      50.05,
+      69.0
+     ],
+     "uuid": "22a0db42-3b79-49b5-ba0b-639ca3d8823f",
+     "elem_cls": "Pad",
+     "elem": {
+      "net": "STRAP_EQ1_1_U3",
+      "shape": "rect",
+      "size": [
+       0.6,
+       0.7
+      ],
+      "pos": [
+       50.05,
+       69.0
+      ],
+      "rot": 0.0,
+      "drill": null,
+      "is_tht": false,
+      "layers": [
+       "F.Cu",
+       "F.Mask",
+       "F.Paste"
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "MCU_VDD",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      50.2,
+      69.5
+     ],
+     "uuid": "631bd8e9-de34-4953-81f1-dede933130a1",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "MCU_VDD",
+      "pos": [
+       50.2,
+       69.5
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 791,
+   "type": "hole_clearance",
+   "desc": "孔间距违规 (<电路板配置> 中的 \"孔\" 约束 间距 0.2500 mm; 实际 0.0000 mm)",
+   "actual": 0.0,
+   "required": 0.25,
+   "band": "severe",
+   "ratio": 0.0,
+   "domain": "pwr+ls",
+   "region": "左-MCIO/上",
+   "rule": {
+    "key": "hole_clearance",
+    "decl": "钻孔边缘-铜边缘净距规则 (min_hole_clearance)。检查过孔/THT 焊盘的钻孔边缘 vs 异网铜元素边缘。违规判定: 实际 < 0.25。"
+   },
+   "root_cause": {
+    "family": "via_hole",
+    "detail": "过孔钻孔 vs 异网铜元素净距不足"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "MCU_VDD",
+    "SWCLK_BOOT0"
+   ],
+   "items": [
+    {
+     "kind": "pad",
+     "net": "SWCLK_BOOT0",
+     "layer": "F.Cu",
+     "ref": "R28",
+     "padnum": "1",
+     "pos": [
+      50.05,
+      41.0
+     ],
+     "uuid": "29cfe02e-181e-403b-a323-3ad4412c722b",
+     "elem_cls": "Pad",
+     "elem": {
+      "net": "SWCLK_BOOT0",
+      "shape": "rect",
+      "size": [
+       0.6,
+       0.7
+      ],
+      "pos": [
+       50.05,
+       41.0
+      ],
+      "rot": 0.0,
+      "drill": null,
+      "is_tht": false,
+      "layers": [
+       "F.Cu",
+       "F.Mask",
+       "F.Paste"
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "MCU_VDD",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      50.2,
+      41.0
+     ],
+     "uuid": "fdebbc16-9f68-45e5-867e-5989e969173b",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "MCU_VDD",
+      "pos": [
+       50.2,
+       41.0
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 797,
+   "type": "hole_clearance",
+   "desc": "孔间距违规 (<电路板配置> 中的 \"孔\" 约束 间距 0.2500 mm; 实际 0.0750 mm)",
+   "actual": 0.075,
+   "required": 0.25,
+   "band": "severe",
+   "ratio": 0.3,
+   "domain": "ls",
+   "region": "中-U3U7/下",
+   "rule": {
+    "key": "hole_clearance",
+    "decl": "钻孔边缘-铜边缘净距规则 (min_hole_clearance)。检查过孔/THT 焊盘的钻孔边缘 vs 异网铜元素边缘。违规判定: 实际 < 0.25。"
+   },
+   "root_cause": {
+    "family": "via_hole",
+    "detail": "过孔钻孔 vs 异网铜元素净距不足"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "STRAP_EQ0_1_U3",
+    "STRAP_EQ0_U3"
+   ],
+   "items": [
+    {
+     "kind": "pad",
+     "net": "STRAP_EQ0_1_U3",
+     "layer": "F.Cu",
+     "ref": "U3",
+     "padnum": "27",
+     "pos": [
+      94.425,
+      59.7
+     ],
+     "uuid": "002111fa-79c7-45ba-8471-e883d034758b",
+     "elem_cls": "Pad",
+     "elem": {
+      "net": "STRAP_EQ0_1_U3",
+      "shape": "rect",
+      "size": [
+       0.25,
+       0.45
+      ],
+      "pos": [
+       94.425,
+       59.7
+      ],
+      "rot": 180.0,
+      "drill": null,
+      "is_tht": false,
+      "layers": [
+       "F.Cu",
+       "F.Mask",
+       "F.Paste"
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "STRAP_EQ0_U3",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      94.42,
+      60.1
+     ],
+     "uuid": "f83cca84-8039-406d-853b-510ead91191c",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "STRAP_EQ0_U3",
+      "pos": [
+       94.42,
+       60.1
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "index": 800,
+   "type": "hole_clearance",
+   "desc": "孔间距违规 (<电路板配置> 中的 \"孔\" 约束 间距 0.2500 mm; 实际 0.0000 mm)",
+   "actual": 0.0,
+   "required": 0.25,
+   "band": "severe",
+   "ratio": 0.0,
+   "domain": "ls",
+   "region": "中-U3U7/下",
+   "rule": {
+    "key": "hole_clearance",
+    "decl": "钻孔边缘-铜边缘净距规则 (min_hole_clearance)。检查过孔/THT 焊盘的钻孔边缘 vs 异网铜元素边缘。违规判定: 实际 < 0.25。"
+   },
+   "root_cause": {
+    "family": "via_hole",
+    "detail": "过孔钻孔 vs 异网铜元素净距不足"
+   },
+   "path": "C_VIA",
+   "nets": [
+    "STRAP_EQ1_1_U3",
+    "STRAP_MODE_U3"
+   ],
+   "items": [
+    {
+     "kind": "pad",
+     "net": "STRAP_EQ1_1_U3",
+     "layer": "F.Cu",
+     "ref": "U3",
+     "padnum": "29",
+     "pos": [
+      93.625,
+      59.7
+     ],
+     "uuid": "9dcc4156-7c43-41a3-aa3d-75ee9cc5117a",
+     "elem_cls": "Pad",
+     "elem": {
+      "net": "STRAP_EQ1_1_U3",
+      "shape": "rect",
+      "size": [
+       0.25,
+       0.45
+      ],
+      "pos": [
+       93.625,
+       59.7
+      ],
+      "rot": 180.0,
+      "drill": null,
+      "is_tht": false,
+      "layers": [
+       "F.Cu",
+       "F.Mask",
+       "F.Paste"
+      ]
+     }
+    },
+    {
+     "kind": "via",
+     "net": "STRAP_MODE_U3",
+     "layer": "F.Cu - B.Cu",
+     "ref": "",
+     "padnum": "",
+     "pos": [
+      93.62,
+      59.8
+     ],
+     "uuid": "67b6271d-2e08-402b-b5ef-4b04de52a862",
+     "elem_cls": "Via",
+     "elem": {
+      "net": "STRAP_MODE_U3",
+      "pos": [
+       93.62,
+       59.8
+      ],
+      "od": 0.35,
+      "drill": 0.2,
+      "layers": [
+       "F.Cu",
+       "B.Cu"
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

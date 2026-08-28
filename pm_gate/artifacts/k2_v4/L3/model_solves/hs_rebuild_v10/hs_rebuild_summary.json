@@ -1,0 +1,1884 @@
+{
+ "model": "hs_route_model",
+ "version": "4.0",
+ "input_fp": "9b6e28c31444149bd749395beda6bd1f18ea15031575a0cf96b503fa4b5110ff",
+ "results": {
+  "PCIE_UP0": {
+   "base": "UP0",
+   "status": "INFEASIBLE",
+   "segments": [
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (64.321,43.389)）",
+     "name": "input",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (64.321,43.389)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        64.321,
+        43.389
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "pad",
+       "net": "GND",
+       "desc": "pad:GND (F.Cu)",
+       "dist": -0.056371848729917975,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    },
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(98.825,48.700) → cv=(98.825,48.700) dir=1 flip=True pn_dist=0.400）",
+     "name": "out_U7",
+     "esc": {
+      "status": "INFEASIBLE",
+      "reason": "对级对称逃逸无净空（M=(98.825,48.700) → cv=(98.825,48.700) dir=1 flip=True pn_dist=0.400）",
+      "nearest": {
+       "kind": "pad",
+       "net": "GND",
+       "desc": "pad:GND (F.Cu)",
+       "dist": 0.4000000000000014,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    },
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (100.994,39.314)）",
+     "name": "out_J2",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (100.994,39.314)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        100.994,
+        39.314
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "pad",
+       "net": "PCIE_UP_OUT0_P_U7",
+       "desc": "pad:PCIE_UP_OUT0_P_U7 (F.Cu)",
+       "dist": -0.075,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    }
+   ],
+   "lenP": 0,
+   "lenN": 0,
+   "skew": null,
+   "skew_ok": false,
+   "input_fp": "9b6e28c31444149bd749395beda6bd1f18ea15031575a0cf96b503fa4b5110ff"
+  },
+  "PCIE_UP1": {
+   "base": "UP1",
+   "status": "INFEASIBLE",
+   "segments": [
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (62.521,43.387)）",
+     "name": "input",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (62.521,43.387)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        62.521,
+        43.387
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "pad",
+       "net": "PCIE_DN_OUT0_P_MCIO",
+       "desc": "pad:PCIE_DN_OUT0_P_MCIO (F.Cu)",
+       "dist": -0.075,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    },
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(98.825,47.500) → cv=(98.825,47.500) dir=1 flip=True pn_dist=0.400）",
+     "name": "out_U7",
+     "esc": {
+      "status": "INFEASIBLE",
+      "reason": "对级对称逃逸无净空（M=(98.825,47.500) → cv=(98.825,47.500) dir=1 flip=True pn_dist=0.400）",
+      "nearest": {
+       "kind": "pad",
+       "net": "P3V3",
+       "desc": "pad:P3V3 (F.Cu)",
+       "dist": 0.3999999999999943,
+       "req": 0.2
+      }
+     },
+     "flip": true
+    },
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (103.595,39.313)）",
+     "name": "out_J2",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (103.595,39.313)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        103.595,
+        39.313
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "pad",
+       "net": "PCIE_UP_OUT1_P_U7",
+       "desc": "pad:PCIE_UP_OUT1_P_U7 (F.Cu)",
+       "dist": -0.075,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    }
+   ],
+   "lenP": 0,
+   "lenN": 0,
+   "skew": null,
+   "skew_ok": false,
+   "input_fp": "9b6e28c31444149bd749395beda6bd1f18ea15031575a0cf96b503fa4b5110ff"
+  },
+  "PCIE_UP2": {
+   "base": "UP2",
+   "status": "INFEASIBLE",
+   "segments": [
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (57.519,43.737)）",
+     "name": "input",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (57.519,43.737)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        57.519,
+        43.737
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "pad",
+       "net": "PCIE_DN_OUT0_N_MCIO",
+       "desc": "pad:PCIE_DN_OUT0_N_MCIO (F.Cu)",
+       "dist": -0.075,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    },
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(98.825,46.300) → cv=(98.825,46.300) dir=1 flip=True pn_dist=0.400）",
+     "name": "out_U7",
+     "esc": {
+      "status": "INFEASIBLE",
+      "reason": "对级对称逃逸无净空（M=(98.825,46.300) → cv=(98.825,46.300) dir=1 flip=True pn_dist=0.400）",
+      "nearest": {
+       "kind": "pad",
+       "net": "GND",
+       "desc": "pad:GND (F.Cu)",
+       "dist": 0.37500000000000283,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    },
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (106.483,40.233)）",
+     "name": "out_J2",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (106.483,40.233)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        106.483,
+        40.233
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "pad",
+       "net": "PCIE_UP_OUT2_P_U7",
+       "desc": "pad:PCIE_UP_OUT2_P_U7 (F.Cu)",
+       "dist": -0.075,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    }
+   ],
+   "lenP": 0,
+   "lenN": 0,
+   "skew": null,
+   "skew_ok": false,
+   "input_fp": "9b6e28c31444149bd749395beda6bd1f18ea15031575a0cf96b503fa4b5110ff"
+  },
+  "PCIE_UP3": {
+   "base": "UP3",
+   "status": "INFEASIBLE",
+   "segments": [
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (55.300,43.060)）",
+     "name": "input",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (55.300,43.060)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        55.3,
+        43.06
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "pad",
+       "net": "GND",
+       "desc": "pad:GND (F.Cu)",
+       "dist": -0.075,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    },
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(98.825,45.100) → cv=(98.825,45.100) dir=1 flip=True pn_dist=0.400）",
+     "name": "out_U7",
+     "esc": {
+      "status": "INFEASIBLE",
+      "reason": "对级对称逃逸无净空（M=(98.825,45.100) → cv=(98.825,45.100) dir=1 flip=True pn_dist=0.400）",
+      "nearest": {
+       "kind": "pad",
+       "net": "VREG1_U7",
+       "desc": "pad:VREG1_U7 (F.Cu)",
+       "dist": 0.3999999999999943,
+       "req": 0.2
+      }
+     },
+     "flip": true
+    },
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (109.089,40.229)）",
+     "name": "out_J2",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (109.089,40.229)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        109.089,
+        40.229
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "pad",
+       "net": "PCIE_UP_OUT3_P_U7",
+       "desc": "pad:PCIE_UP_OUT3_P_U7 (F.Cu)",
+       "dist": -0.075,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    }
+   ],
+   "lenP": 0,
+   "lenN": 0,
+   "skew": null,
+   "skew_ok": false,
+   "input_fp": "9b6e28c31444149bd749395beda6bd1f18ea15031575a0cf96b503fa4b5110ff"
+  },
+  "PCIE_UP4": {
+   "base": "UP4",
+   "status": "INFEASIBLE",
+   "segments": [
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (55.193,63.212)）",
+     "name": "input",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (55.193,63.212)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        55.193,
+        63.212
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "pad",
+       "net": "GND",
+       "desc": "pad:GND (F.Cu)",
+       "dist": -0.075,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    },
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(98.825,43.900) → cv=(98.825,43.900) dir=1 flip=True pn_dist=0.400）",
+     "name": "out_U7",
+     "esc": {
+      "status": "INFEASIBLE",
+      "reason": "对级对称逃逸无净空（M=(98.825,43.900) → cv=(98.825,43.900) dir=1 flip=True pn_dist=0.400）",
+      "nearest": {
+       "kind": "pad",
+       "net": "GND",
+       "desc": "pad:GND (F.Cu)",
+       "dist": 0.3999999999999943,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    },
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (111.697,40.224)）",
+     "name": "out_J2",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (111.697,40.224)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        111.697,
+        40.224
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "pad",
+       "net": "PCIE_UP_OUT4_P_U7",
+       "desc": "pad:PCIE_UP_OUT4_P_U7 (F.Cu)",
+       "dist": -0.075,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    }
+   ],
+   "lenP": 0,
+   "lenN": 0,
+   "skew": null,
+   "skew_ok": false,
+   "input_fp": "9b6e28c31444149bd749395beda6bd1f18ea15031575a0cf96b503fa4b5110ff"
+  },
+  "PCIE_UP5": {
+   "base": "UP5",
+   "status": "INFEASIBLE",
+   "segments": [
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (56.911,63.201)）",
+     "name": "input",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (56.911,63.201)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        56.911,
+        63.201
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "pad",
+       "net": "PCIE_DN_OUT0_P_MCIO",
+       "desc": "pad:PCIE_DN_OUT0_P_MCIO (F.Cu)",
+       "dist": -0.075,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    },
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(98.825,42.700) → cv=(98.825,42.700) dir=1 flip=True pn_dist=0.400）",
+     "name": "out_U7",
+     "esc": {
+      "status": "INFEASIBLE",
+      "reason": "对级对称逃逸无净空（M=(98.825,42.700) → cv=(98.825,42.700) dir=1 flip=True pn_dist=0.400）",
+      "nearest": {
+       "kind": "pad",
+       "net": "P3V3",
+       "desc": "pad:P3V3 (F.Cu)",
+       "dist": 0.4000000000000014,
+       "req": 0.2
+      }
+     },
+     "flip": true
+    },
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (114.276,40.235)）",
+     "name": "out_J2",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (114.276,40.235)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        114.276,
+        40.235
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "pad",
+       "net": "PCIE_UP_OUT5_P_U7",
+       "desc": "pad:PCIE_UP_OUT5_P_U7 (F.Cu)",
+       "dist": -0.075,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    }
+   ],
+   "lenP": 0,
+   "lenN": 0,
+   "skew": null,
+   "skew_ok": false,
+   "input_fp": "9b6e28c31444149bd749395beda6bd1f18ea15031575a0cf96b503fa4b5110ff"
+  },
+  "PCIE_UP6": {
+   "base": "UP6",
+   "status": "INFEASIBLE",
+   "segments": [
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (62.219,63.209)）",
+     "name": "input",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (62.219,63.209)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        62.219,
+        63.209
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "pad",
+       "net": "GND",
+       "desc": "pad:GND (F.Cu)",
+       "dist": -0.075,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    },
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(98.825,41.500) → cv=(98.825,41.500) dir=1 flip=True pn_dist=0.400）",
+     "name": "out_U7",
+     "esc": {
+      "status": "INFEASIBLE",
+      "reason": "对级对称逃逸无净空（M=(98.825,41.500) → cv=(98.825,41.500) dir=1 flip=True pn_dist=0.400）",
+      "nearest": {
+       "kind": "pad",
+       "net": "VREG2_U7",
+       "desc": "pad:VREG2_U7 (F.Cu)",
+       "dist": 0.3999999999999943,
+       "req": 0.2
+      }
+     },
+     "flip": true
+    },
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (116.883,39.976)）",
+     "name": "out_J2",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (116.883,39.976)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        116.883,
+        39.976
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "pad",
+       "net": "PCIE_UP_OUT6_P_U7",
+       "desc": "pad:PCIE_UP_OUT6_P_U7 (F.Cu)",
+       "dist": -0.075,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    }
+   ],
+   "lenP": 0,
+   "lenN": 0,
+   "skew": null,
+   "skew_ok": false,
+   "input_fp": "9b6e28c31444149bd749395beda6bd1f18ea15031575a0cf96b503fa4b5110ff"
+  },
+  "PCIE_UP7": {
+   "base": "UP7",
+   "status": "INFEASIBLE",
+   "segments": [
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (64.017,63.209)）",
+     "name": "input",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (64.017,63.209)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        64.017,
+        63.209
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "pad",
+       "net": "PCIE_DN_OUT7_N_MCIO",
+       "desc": "pad:PCIE_DN_OUT7_N_MCIO (F.Cu)",
+       "dist": -0.075,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    },
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(98.825,40.300) → cv=(98.825,40.300) dir=1 flip=True pn_dist=0.400）",
+     "name": "out_U7",
+     "esc": {
+      "status": "INFEASIBLE",
+      "reason": "对级对称逃逸无净空（M=(98.825,40.300) → cv=(98.825,40.300) dir=1 flip=True pn_dist=0.400）",
+      "nearest": {
+       "kind": "pad",
+       "net": "VREG2_U7",
+       "desc": "pad:VREG2_U7 (F.Cu)",
+       "dist": 0.4000000000000085,
+       "req": 0.2
+      }
+     },
+     "flip": true
+    },
+    {
+     "status": "INFEASIBLE",
+     "reason": "右逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (129.470,40.302)）",
+     "name": "out_J2",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (129.470,40.302)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        129.47,
+        40.302
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "pad",
+       "net": "GND",
+       "desc": "pad:GND (F.Cu)",
+       "dist": -0.075,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    }
+   ],
+   "lenP": 0,
+   "lenN": 0,
+   "skew": null,
+   "skew_ok": false,
+   "input_fp": "9b6e28c31444149bd749395beda6bd1f18ea15031575a0cf96b503fa4b5110ff"
+  },
+  "PCIE_DN0": {
+   "base": "DN0",
+   "status": "INFEASIBLE",
+   "segments": [
+    {
+     "status": "INFEASIBLE",
+     "reason": "右逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (131.629,54.448)）",
+     "name": "input",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (131.629,54.448)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        131.629,
+        54.448
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "pad",
+       "net": "PCIE_DN1_N",
+       "desc": "pad:PCIE_DN1_N (F.Cu)",
+       "dist": -0.075,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    },
+    {
+     "name": "out_U3",
+     "status": "SOLVED",
+     "corridor": "U_TO_MCIO",
+     "track_y": 58.7,
+     "layer": "F.Cu",
+     "flip": true,
+     "P": {
+      "net": "PCIE_DN_OUT0_P_U3",
+      "path": [
+       [
+        76.45,
+        57.8
+       ],
+       [
+        76.81286826148799,
+        58.302432977444916
+       ],
+       [
+        76.45,
+        58.510000000000005
+       ],
+       [
+        88.825,
+        58.510000000000005
+       ]
+      ],
+      "layers": [
+       "F.Cu",
+       "In2.Cu",
+       "F.Cu"
+      ],
+      "length": 13.4128,
+      "solve_ref": "d7fe129758ae409b82d87803ef95b86dfba24ef054a2cee7a329cc7cfc0c73a6"
+     },
+     "N": {
+      "net": "PCIE_DN_OUT0_N_U3",
+      "path": [
+       [
+        75.15,
+        57.8
+       ],
+       [
+        75.512868261488,
+        58.302432977444916
+       ],
+       [
+        75.92451671440813,
+        58.83852750767724
+       ],
+       [
+        76.45,
+        58.89
+       ],
+       [
+        88.825,
+        58.89
+       ]
+      ],
+      "layers": [
+       "F.Cu",
+       "In2.Cu",
+       "In2.Cu",
+       "F.Cu"
+      ],
+      "length": 14.1987,
+      "solve_ref": "22b640dbc294e71bbedd79342348653b391052169fede1d1cc99a150b7955462"
+     },
+     "skew": 0.7859,
+     "skew_ok": false,
+     "width": 0.205,
+     "input_fp": "9b6e28c31444149bd749395beda6bd1f18ea15031575a0cf96b503fa4b5110ff",
+     "vias": [
+      [
+       76.813,
+       58.302
+      ],
+      [
+       76.45,
+       58.51
+      ],
+      [
+       75.513,
+       58.302
+      ],
+      [
+       76.45,
+       58.89
+      ]
+     ],
+     "escape": {
+      "layer": "In2.Cu",
+      "segments": {
+       "left": {
+        "P": {
+         "kind": "L-H-V",
+         "n_nodes": 0,
+         "length": 1.0378,
+         "via": [
+          76.81286826148799,
+          58.302432977444916
+         ]
+        },
+        "N": {
+         "kind": "L-H-V",
+         "n_nodes": 0,
+         "length": 1.8237,
+         "via": [
+          75.512868261488,
+          58.302432977444916
+         ]
+        }
+       }
+      }
+     }
+    },
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (64.364,45.596)）",
+     "name": "out_MCIO",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (64.364,45.596)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        64.364,
+        45.596
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "pad",
+       "net": "GND",
+       "desc": "pad:GND (F.Cu)",
+       "dist": 0.629747547760016,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    }
+   ],
+   "lenP": 13.4128,
+   "lenN": 14.1987,
+   "skew": null,
+   "skew_ok": false,
+   "input_fp": "9b6e28c31444149bd749395beda6bd1f18ea15031575a0cf96b503fa4b5110ff"
+  },
+  "PCIE_DN1": {
+   "base": "DN1",
+   "status": "INFEASIBLE",
+   "segments": [
+    {
+     "status": "INFEASIBLE",
+     "reason": "右逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (132.295,59.493)）",
+     "name": "input",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (132.295,59.493)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        132.295,
+        59.493
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "pad",
+       "net": "I2C1_SCL",
+       "desc": "pad:I2C1_SCL (F.Cu)",
+       "dist": -0.075,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    },
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (79.183,58.376)）",
+     "name": "out_U3",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (79.183,58.376)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        79.183,
+        58.376
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "pad",
+       "net": "PCIE_DN_OUT1_N_MCIO",
+       "desc": "pad:PCIE_DN_OUT1_N_MCIO (F.Cu)",
+       "dist": -0.075,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    },
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (62.522,45.574)）",
+     "name": "out_MCIO",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (62.522,45.574)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        62.522,
+        45.574
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "pad",
+       "net": "GND",
+       "desc": "pad:GND (F.Cu)",
+       "dist": 0.5759076497841887,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    }
+   ],
+   "lenP": 0,
+   "lenN": 0,
+   "skew": null,
+   "skew_ok": false,
+   "input_fp": "9b6e28c31444149bd749395beda6bd1f18ea15031575a0cf96b503fa4b5110ff"
+  },
+  "PCIE_DN2": {
+   "base": "DN2",
+   "status": "INFEASIBLE",
+   "segments": [
+    {
+     "name": "input",
+     "status": "SOLVED",
+     "corridor": "J2_TO_U",
+     "track_y": 60.7,
+     "layer": "F.Cu",
+     "flip": true,
+     "P": {
+      "net": "PCIE_DN2_P",
+      "path": [
+       [
+        98.83,
+        60.510000000000005
+       ],
+       [
+        125.5,
+        60.510000000000005
+       ],
+       [
+        131.78895250315622,
+        58.38683800277185
+       ],
+       [
+        131.63319534559471,
+        57.92547454241897
+       ],
+       [
+        132.64999999999998,
+        57.900000000000006
+       ]
+      ],
+      "layers": [
+       "F.Cu",
+       "In2.Cu",
+       "In2.Cu",
+       "F.Cu"
+      ],
+      "length": 34.8117,
+      "solve_ref": "256302d045b85848308d026e2c8e6aeeee7da4a9a8701b65e6c8d2ae327f7f1e"
+     },
+     "N": {
+      "net": "PCIE_DN2_N",
+      "path": [
+       [
+        98.83,
+        60.89
+       ],
+       [
+        125.5,
+        60.89
+       ],
+       [
+        131.90859159622582,
+        58.74255077833311
+       ],
+       [
+        133.98319534559474,
+        57.92547454241897
+       ],
+       [
+        135.0,
+        57.900000000000006
+       ]
+      ],
+      "layers": [
+       "F.Cu",
+       "In2.Cu",
+       "In2.Cu",
+       "F.Cu"
+      ],
+      "length": 36.6756,
+      "solve_ref": "42710def297988cddadca21d57a2f5d974463700776227fd1c147b9cbd0b8252"
+     },
+     "skew": 1.8639,
+     "skew_ok": false,
+     "width": 0.205,
+     "input_fp": "9b6e28c31444149bd749395beda6bd1f18ea15031575a0cf96b503fa4b5110ff",
+     "vias": [
+      [
+       125.5,
+       60.51
+      ],
+      [
+       131.633,
+       57.925
+      ],
+      [
+       125.5,
+       60.89
+      ],
+      [
+       133.983,
+       57.925
+      ]
+     ],
+     "escape": {
+      "layer": "In2.Cu",
+      "segments": {
+       "right": {
+        "P": {
+         "kind": "L-DIAG",
+         "n_nodes": 0,
+         "length": 8.1417,
+         "via": [
+          131.63319534559471,
+          57.92547454241897
+         ]
+        },
+        "N": {
+         "kind": "L-DIAG",
+         "n_nodes": 0,
+         "length": 10.0056,
+         "via": [
+          133.98319534559474,
+          57.92547454241897
+         ]
+        }
+       }
+      }
+     }
+    },
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (81.981,58.474)）",
+     "name": "out_U3",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (81.981,58.474)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        81.981,
+        58.474
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "pad",
+       "net": "PCIE_DN_OUT2_N_MCIO",
+       "desc": "pad:PCIE_DN_OUT2_N_MCIO (F.Cu)",
+       "dist": -0.075,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    },
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (57.105,45.563)）",
+     "name": "out_MCIO",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (57.105,45.563)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        57.105,
+        45.563
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "pad",
+       "net": "GND",
+       "desc": "pad:GND (F.Cu)",
+       "dist": 0.3164917495963347,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    }
+   ],
+   "lenP": 34.8117,
+   "lenN": 36.6756,
+   "skew": null,
+   "skew_ok": false,
+   "input_fp": "9b6e28c31444149bd749395beda6bd1f18ea15031575a0cf96b503fa4b5110ff"
+  },
+  "PCIE_DN3": {
+   "base": "DN3",
+   "status": "INFEASIBLE",
+   "segments": [
+    {
+     "status": "INFEASIBLE",
+     "reason": "右逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (132.631,61.891)）",
+     "name": "input",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (132.631,61.891)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        132.631,
+        61.891
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "pad",
+       "net": "PCIE_DN4_P",
+       "desc": "pad:PCIE_DN4_P (F.Cu)",
+       "dist": -0.075,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    },
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (84.416,58.337)）",
+     "name": "out_U3",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (84.416,58.337)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        84.416,
+        58.337
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "pad",
+       "net": "PCIE_DN_OUT3_N_MCIO",
+       "desc": "pad:PCIE_DN_OUT3_N_MCIO (F.Cu)",
+       "dist": -0.075,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    },
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (55.304,45.563)）",
+     "name": "out_MCIO",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (55.304,45.563)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        55.304,
+        45.563
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "pad",
+       "net": "GND",
+       "desc": "pad:GND (F.Cu)",
+       "dist": -0.075,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    }
+   ],
+   "lenP": 0,
+   "lenN": 0,
+   "skew": null,
+   "skew_ok": false,
+   "input_fp": "9b6e28c31444149bd749395beda6bd1f18ea15031575a0cf96b503fa4b5110ff"
+  },
+  "PCIE_DN4": {
+   "base": "DN4",
+   "status": "INFEASIBLE",
+   "segments": [
+    {
+     "name": "input",
+     "status": "SOLVED",
+     "corridor": "J2_TO_U",
+     "track_y": 63.1,
+     "layer": "F.Cu",
+     "flip": true,
+     "P": {
+      "net": "PCIE_DN4_P",
+      "path": [
+       [
+        98.83,
+        62.910000000000004
+       ],
+       [
+        123.7,
+        62.910000000000004
+       ],
+       [
+        131.78829793201444,
+        60.18555043307148
+       ],
+       [
+        131.63316451590816,
+        59.72499307722607
+       ],
+       [
+        132.64999999999998,
+        59.7
+       ]
+      ],
+      "layers": [
+       "F.Cu",
+       "In2.Cu",
+       "In2.Cu",
+       "F.Cu"
+      ],
+      "length": 34.9079,
+      "solve_ref": "75759857e69e980b527179074ee6f97c39db600c6568e1d63b23d2862918d58d"
+     },
+     "N": {
+      "net": "PCIE_DN4_N",
+      "path": [
+       [
+        98.83,
+        63.29
+       ],
+       [
+        123.7,
+        63.29
+       ],
+       [
+        131.90803600953822,
+        60.54212344806316
+       ],
+       [
+        133.9831645159082,
+        59.72499307722607
+       ],
+       [
+        135.0,
+        59.7
+       ]
+      ],
+      "layers": [
+       "F.Cu",
+       "In2.Cu",
+       "In2.Cu",
+       "F.Cu"
+      ],
+      "length": 36.7731,
+      "solve_ref": "c09c9d490f3a45b4ccaf037a0eec7d2007bdf5d8f9d3c38a75f656e43c993fd2"
+     },
+     "skew": 1.8652,
+     "skew_ok": false,
+     "width": 0.205,
+     "input_fp": "9b6e28c31444149bd749395beda6bd1f18ea15031575a0cf96b503fa4b5110ff",
+     "vias": [
+      [
+       123.7,
+       62.91
+      ],
+      [
+       131.633,
+       59.725
+      ],
+      [
+       123.7,
+       63.29
+      ],
+      [
+       133.983,
+       59.725
+      ]
+     ],
+     "escape": {
+      "layer": "In2.Cu",
+      "segments": {
+       "right": {
+        "P": {
+         "kind": "L-DIAG",
+         "n_nodes": 0,
+         "length": 10.0379,
+         "via": [
+          131.63316451590816,
+          59.72499307722607
+         ]
+        },
+        "N": {
+         "kind": "L-DIAG",
+         "n_nodes": 0,
+         "length": 11.9031,
+         "via": [
+          133.9831645159082,
+          59.72499307722607
+         ]
+        }
+       }
+      }
+     }
+    },
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (75.988,63.570)）",
+     "name": "out_U3",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (75.988,63.570)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        75.988,
+        63.57
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "pad",
+       "net": "PCIE_DN_OUT4_N_MCIO",
+       "desc": "pad:PCIE_DN_OUT4_N_MCIO (F.Cu)",
+       "dist": -0.075,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    },
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (55.300,61.640)）",
+     "name": "out_MCIO",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (55.300,61.640)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        55.3,
+        61.64
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "pad",
+       "net": "GND",
+       "desc": "pad:GND (F.Cu)",
+       "dist": -0.075,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    }
+   ],
+   "lenP": 34.9079,
+   "lenN": 36.7731,
+   "skew": null,
+   "skew_ok": false,
+   "input_fp": "9b6e28c31444149bd749395beda6bd1f18ea15031575a0cf96b503fa4b5110ff"
+  },
+  "PCIE_DN5": {
+   "base": "DN5",
+   "status": "INFEASIBLE",
+   "segments": [
+    {
+     "status": "INFEASIBLE",
+     "reason": "右逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (132.542,64.292)）",
+     "name": "input",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (132.542,64.292)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        132.542,
+        64.292
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "pad",
+       "net": "NO_CONNECT",
+       "desc": "pad:NO_CONNECT (F.Cu)",
+       "dist": -0.075,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    },
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (78.586,64.764)）",
+     "name": "out_U3",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (78.586,64.764)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        78.586,
+        64.764
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "pad",
+       "net": "PCIE_DN_OUT5_N_MCIO",
+       "desc": "pad:PCIE_DN_OUT5_N_MCIO (F.Cu)",
+       "dist": -0.075,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    },
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (61.008,64.699)）",
+     "name": "out_MCIO",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (61.008,64.699)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        61.008,
+        64.699
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "pad",
+       "net": "GND",
+       "desc": "pad:GND (F.Cu)",
+       "dist": -0.075,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    }
+   ],
+   "lenP": 0,
+   "lenN": 0,
+   "skew": null,
+   "skew_ok": false,
+   "input_fp": "9b6e28c31444149bd749395beda6bd1f18ea15031575a0cf96b503fa4b5110ff"
+  },
+  "PCIE_DN6": {
+   "base": "DN6",
+   "status": "INFEASIBLE",
+   "segments": [
+    {
+     "name": "input",
+     "status": "SOLVED",
+     "corridor": "J2_TO_U",
+     "track_y": 65.5,
+     "layer": "F.Cu",
+     "flip": true,
+     "P": {
+      "net": "PCIE_DN6_P",
+      "path": [
+       [
+        98.83,
+        65.31
+       ],
+       [
+        131.5,
+        65.31
+       ],
+       [
+        131.54595458629512,
+        65.31108877789939
+       ],
+       [
+        131.58939567377146,
+        63.47754935326991
+       ],
+       [
+        132.64999999999998,
+        63.300000000000004
+       ]
+      ],
+      "layers": [
+       "F.Cu",
+       "In2.Cu",
+       "In2.Cu",
+       "F.Cu"
+      ],
+      "length": 35.6254,
+      "solve_ref": "d19161011d68663d332fe33e0fd70f7cca91c3bf44d2aa35166435206a1942ca"
+     },
+     "N": {
+      "net": "PCIE_DN6_N",
+      "path": [
+       [
+        98.83,
+        65.69
+       ],
+       [
+        131.5,
+        65.69
+       ],
+       [
+        132.08286660957725,
+        65.67765924149889
+       ],
+       [
+        133.9393956737715,
+        63.47754935326991
+       ],
+       [
+        135.0,
+        63.300000000000004
+       ]
+      ],
+      "layers": [
+       "F.Cu",
+       "In2.Cu",
+       "In2.Cu",
+       "F.Cu"
+      ],
+      "length": 37.2071,
+      "solve_ref": "172158a366e586e00900ed7ba5875fc3ec6ac26a771ec0dc84bd16218d5d75ab"
+     },
+     "skew": 1.5817,
+     "skew_ok": false,
+     "width": 0.205,
+     "input_fp": "9b6e28c31444149bd749395beda6bd1f18ea15031575a0cf96b503fa4b5110ff",
+     "vias": [
+      [
+       131.5,
+       65.31
+      ],
+      [
+       131.589,
+       63.478
+      ],
+      [
+       131.5,
+       65.69
+      ],
+      [
+       133.939,
+       63.478
+      ]
+     ],
+     "escape": {
+      "layer": "In2.Cu",
+      "segments": {
+       "right": {
+        "P": {
+         "kind": "L-H-V",
+         "n_nodes": 0,
+         "length": 2.9554,
+         "via": [
+          131.58939567377146,
+          63.47754935326991
+         ]
+        },
+        "N": {
+         "kind": "L-H-V",
+         "n_nodes": 0,
+         "length": 4.5371,
+         "via": [
+          133.9393956737715,
+          63.47754935326991
+         ]
+        }
+       }
+      }
+     }
+    },
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (81.187,65.953)）",
+     "name": "out_U3",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (81.187,65.953)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        81.187,
+        65.953
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "pad",
+       "net": "PCIE_DN_OUT6_N_MCIO",
+       "desc": "pad:PCIE_DN_OUT6_N_MCIO (F.Cu)",
+       "dist": -0.075,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    },
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (63.436,65.891)）",
+     "name": "out_MCIO",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (63.436,65.891)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        63.436,
+        65.891
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "pad",
+       "net": "PCIE_UP7_P",
+       "desc": "pad:PCIE_UP7_P (F.Cu)",
+       "dist": -0.075,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    }
+   ],
+   "lenP": 35.6254,
+   "lenN": 37.2071,
+   "skew": null,
+   "skew_ok": false,
+   "input_fp": "9b6e28c31444149bd749395beda6bd1f18ea15031575a0cf96b503fa4b5110ff"
+  },
+  "PCIE_DN7": {
+   "base": "DN7",
+   "status": "INFEASIBLE",
+   "segments": [
+    {
+     "status": "INFEASIBLE",
+     "reason": "右逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (132.878,66.689)）",
+     "name": "input",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (132.878,66.689)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        132.878,
+        66.689
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "pad",
+       "net": "GND",
+       "desc": "pad:GND (F.Cu)",
+       "dist": 0.39456920078824964,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    },
+    {
+     "status": "INFEASIBLE",
+     "reason": "短段直连无净空（F.Cu 直连 + In2 错开 via 均失败）",
+     "name": "out_U3",
+     "nearest": {
+      "kind": "pad",
+      "net": "PCIE_DN_OUT7_P_MCIO",
+      "desc": "pad:PCIE_DN_OUT7_P_MCIO (F.Cu)",
+      "dist": -0.075,
+      "req": 0.175
+     }
+    },
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (64.324,67.077)）",
+     "name": "out_MCIO",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (64.324,67.077)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        64.324,
+        67.077
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "pad",
+       "net": "GND",
+       "desc": "pad:GND (F.Cu)",
+       "dist": -0.075,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    }
+   ],
+   "lenP": 0,
+   "lenN": 0,
+   "skew": null,
+   "skew_ok": false,
+   "input_fp": "9b6e28c31444149bd749395beda6bd1f18ea15031575a0cf96b503fa4b5110ff"
+  },
+  "PCIE_REFCLK0": {
+   "base": "REFCLK0",
+   "status": "SOLVED",
+   "segments": [
+    {
+     "name": "input",
+     "status": "SOLVED",
+     "corridor": "J2_TO_U",
+     "track_y": 45.7,
+     "layer": "In6.Cu",
+     "flip": false,
+     "P": {
+      "net": "PCIE_REFCLK0_P",
+      "path": [
+       [
+        58.599999999999994,
+        45.89
+       ],
+       [
+        131.5,
+        45.89
+       ],
+       [
+        131.66515505167467,
+        45.889949989992274
+       ],
+       [
+        131.66522362096592,
+        46.11639596255342
+       ],
+       [
+        132.64999999999998,
+        45.900000000000006
+       ]
+      ],
+      "layers": [
+       "In6.Cu",
+       "In6.Cu",
+       "In6.Cu",
+       "F.Cu"
+      ],
+      "length": 74.2999,
+      "solve_ref": "b0df0f6a60d182e18015912ef44b0248c52a4dfe6852f03e93df3b3861e4c14d"
+     },
+     "N": {
+      "net": "PCIE_REFCLK0_N",
+      "path": [
+       [
+        58.599999999999994,
+        45.510000000000005
+       ],
+       [
+        131.5,
+        45.510000000000005
+       ],
+       [
+        131.9499786253119,
+        45.510134361046774
+       ],
+       [
+        134.01522362096594,
+        46.11639596255342
+       ],
+       [
+        135.0,
+        45.900000000000006
+       ]
+      ],
+      "layers": [
+       "In6.Cu",
+       "In6.Cu",
+       "In6.Cu",
+       "F.Cu"
+      ],
+      "length": 76.5106,
+      "solve_ref": "4a6058ca1a1ade9f98620d7bb01a365174091c3e629873f50c2655f96cce8941"
+     },
+     "skew": 2.2108,
+     "skew_ok": false,
+     "width": 0.205,
+     "input_fp": "9b6e28c31444149bd749395beda6bd1f18ea15031575a0cf96b503fa4b5110ff",
+     "vias": [
+      [
+       131.665,
+       46.116
+      ],
+      [
+       134.015,
+       46.116
+      ]
+     ],
+     "escape": {
+      "layer": "In6.Cu",
+      "segments": {
+       "right": {
+        "P": {
+         "kind": "L-H-V",
+         "n_nodes": 0,
+         "length": 1.3999,
+         "via": [
+          131.66522362096592,
+          46.11639596255342
+         ]
+        },
+        "N": {
+         "kind": "L-H-V",
+         "n_nodes": 0,
+         "length": 3.6106,
+         "via": [
+          134.01522362096594,
+          46.11639596255342
+         ]
+        }
+       }
+      }
+     }
+    }
+   ],
+   "lenP": 74.2999,
+   "lenN": 76.5106,
+   "skew": 2.2107,
+   "skew_ok": false,
+   "input_fp": "9b6e28c31444149bd749395beda6bd1f18ea15031575a0cf96b503fa4b5110ff"
+  },
+  "PCIE_REFCLK1": {
+   "base": "REFCLK1",
+   "status": "INFEASIBLE",
+   "segments": [
+    {
+     "status": "INFEASIBLE",
+     "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (60.544,60.707)）",
+     "name": "input",
+     "esc": {
+      "status": "INFEASIBLE",
+      "kind": "VIA",
+      "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (60.544,60.707)）",
+      "cross_evidence": {
+       "min_edge": -0.205,
+       "point": [
+        60.544,
+        60.707
+       ],
+       "req": 0.175
+      },
+      "nearest": {
+       "kind": "seg",
+       "net": "PCIE_REFCLK0_P",
+       "desc": "seg:PCIE_REFCLK0_P (In6.Cu)",
+       "dist": 4.489999999999999,
+       "req": 0.175
+      }
+     },
+     "flip": true
+    }
+   ],
+   "lenP": 0,
+   "lenN": 0,
+   "skew": null,
+   "skew_ok": false,
+   "input_fp": "9b6e28c31444149bd749395beda6bd1f18ea15031575a0cf96b503fa4b5110ff"
+  }
+ },
+ "shared_seg_count": 8,
+ "shared_via_count": 2,
+ "solve_time_s": 30.755
+}

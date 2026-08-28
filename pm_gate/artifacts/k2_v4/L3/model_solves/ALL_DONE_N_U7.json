@@ -1,0 +1,57 @@
+{
+ "status": "INFEASIBLE",
+ "proof_type": "disconnected",
+ "fv": [
+  94.825,
+  48.725
+ ],
+ "cv_candidates": [],
+ "fv_component": {
+  "node_count": 2,
+  "bbox": [
+   94.67,
+   48.725,
+   94.825,
+   52.5
+  ],
+  "sample_nodes": [
+   [
+    94.67,
+    52.5
+   ],
+   [
+    94.825,
+    48.725
+   ]
+  ]
+ },
+ "cv_reachable": [],
+ "boundary_obstacles": [
+  "STRAP_EQ1_1_U3 B.Cu (49.4, 54.1)-(97.48, 54.1) (min_d=1.600)",
+  "STRAP_READ_EN_U7 B.Cu (95.22, 42.35)-(95.22, 53.75) (min_d=0.395)",
+  "STRAP_READ_EN_U7 B.Cu (53.4, 53.75)-(95.22, 53.75) (min_d=1.250)",
+  "STRAP_EQ0_U7 B.Cu (53.05, 52.5)-(94.42, 52.5) (min_d=0.250)",
+  "STRAP_EQ0_U7 B.Cu (94.42, 42.35)-(94.42, 52.5) (min_d=0.250)",
+  "PD1_U7 B.Cu (92.83, 47.65)-(92.83, 52.1) (min_d=1.883)",
+  "PD1_U7 B.Cu (53.05, 52.1)-(92.83, 52.1) (min_d=1.883)",
+  "STRAP_EQ1_1_U7 B.Cu (94.03, 46.35)-(94.03, 47.65) (min_d=1.337)",
+  "STRAP_MODE_U7 B.Cu (54.85, 53.4)-(93.62, 53.4) (min_d=1.383)",
+  "STRAP_MODE_U7 B.Cu (93.62, 42.35)-(93.62, 53.4) (min_d=1.050)",
+  "STRAP_EQ0_1_U3 B.Cu (93.2, 52.85)-(93.2, 66.8) (min_d=1.511)",
+  "STRAP_EQ0_1_U3 B.Cu (50.65, 52.85)-(93.2, 52.85) (min_d=1.511)",
+  "GND via (95.825,47.7) (min_d=1.432)",
+  "GND via (93.975,49.475) (min_d=1.134)",
+  "STRAP_EQ0_1_U7 via (93.225,48.5) (min_d=1.616)",
+  "STRAP_EQ1_1_U7 via (94.025,48.5) (min_d=0.831)",
+  "STRAP_EQ1_1_U7 via (94.03,47.65) (min_d=1.337)",
+  "STRAP_EQ0_1_U7 via (93.225,48.725) (min_d=1.600)",
+  "STRAP_EQ1_1_U7 via (94.025,49.025) (min_d=0.854)"
+ ],
+ "proof": "fv 所在连通分量（2 节点, bbox x∈[94.670,94.825] y∈[48.725,52.500]）不含任何走廊端点（cv_reachable=[]）；边界由 19 个异网障碍围合。在可见性图完备性下（胶囊端顶点/pad 角/via 切点全采样），不存在从 fv 出发的净空路径。",
+ "segments": [],
+ "net": "ALL_DONE_N_U7",
+ "solve_id": "276b07dcd28f8c9b1985908a68ac60f936abe032b45dd03bd81e0e78efe7a312",
+ "model": "ls_route_model",
+ "version": "1.0",
+ "input_fp": "80b1a7a33655a20a5aa6b7ed07d690070b113fc41d40241f8f2683f8767d324b"
+}

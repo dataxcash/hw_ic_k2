@@ -1,0 +1,140 @@
+{
+ "base": "PCIE_REFCLK0",
+ "input_fp": "87b66fbb6074e89048741b73d3de2ac30b82bd1d2f77266ceed0177c1eec51cf",
+ "solve_time_s": 15.985,
+ "result": {
+  "base": "REFCLK0",
+  "status": "SOLVED",
+  "segments": [
+   {
+    "name": "input",
+    "status": "SOLVED",
+    "corridor": "J2_TO_U",
+    "track_y": 45.7,
+    "layer": "In6.Cu",
+    "flip": false,
+    "P": {
+     "net": "PCIE_REFCLK0_P",
+     "path": [
+      [
+       58.599999999999994,
+       45.89
+      ],
+      [
+       59.1,
+       46.14
+      ],
+      [
+       59.6,
+       45.64
+      ],
+      [
+       132.65,
+       45.89
+      ],
+      [
+       131.59292731784242,
+       46.328702391516686
+      ],
+      [
+       132.64999999999998,
+       45.900000000000006
+      ]
+     ],
+     "layers": [
+      "In6.Cu",
+      "In6.Cu",
+      "In6.Cu",
+      "In6.Cu",
+      "F.Cu"
+     ],
+     "length": 76.6018,
+     "solve_ref": "616b91a41bd12f487410457a2ba0a8b46e702d571526b7e4daf778becc39db0b"
+    },
+    "N": {
+     "net": "PCIE_REFCLK0_N",
+     "path": [
+      [
+       58.599999999999994,
+       45.510000000000005
+      ],
+      [
+       132.65,
+       45.510000000000005
+      ],
+      [
+       132.97347466022566,
+       45.51072205370855
+      ],
+      [
+       134.14428653550047,
+       45.14571698777573
+      ],
+      [
+       135.0,
+       45.900000000000006
+      ]
+     ],
+     "layers": [
+      "In6.Cu",
+      "In6.Cu",
+      "In6.Cu",
+      "F.Cu"
+     ],
+     "length": 76.7406,
+     "solve_ref": "9fad325536f4d9228bc9956a6c70a2ae0b462eff9094f60d9b9a414aef0d3ca9"
+    },
+    "skew": 0.4054,
+    "skew_ok": false,
+    "width": 0.205,
+    "input_fp": "87b66fbb6074e89048741b73d3de2ac30b82bd1d2f77266ceed0177c1eec51cf",
+    "vias": [
+     [
+      131.593,
+      46.329
+     ],
+     [
+      134.144,
+      45.146
+     ]
+    ],
+    "escape": {
+     "layer": "In6.Cu",
+     "segments": {
+      "right": {
+       "P": {
+        "kind": "L-H-V",
+        "n_nodes": 0,
+        "length": 2.2852,
+        "via": [
+         131.59292731784242,
+         46.328702391516686
+        ]
+       },
+       "N": {
+        "kind": "L-H-V",
+        "n_nodes": 0,
+        "length": 2.6906,
+        "via": [
+         134.14428653550047,
+         45.14571698777573
+        ]
+       }
+      }
+     }
+    },
+    "snake": {
+     "applied": true,
+     "amp": 0.25,
+     "waves": 1,
+     "gain": 0.2666
+    }
+   }
+  ],
+  "lenP": 76.6018,
+  "lenN": 76.7406,
+  "skew": 0.1388,
+  "skew_ok": true,
+  "input_fp": "87b66fbb6074e89048741b73d3de2ac30b82bd1d2f77266ceed0177c1eec51cf"
+ }
+}

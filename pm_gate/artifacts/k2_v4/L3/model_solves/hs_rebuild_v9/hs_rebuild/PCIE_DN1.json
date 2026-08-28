@@ -1,0 +1,94 @@
+{
+ "base": "PCIE_DN1",
+ "input_fp": "9b6e28c31444149bd749395beda6bd1f18ea15031575a0cf96b503fa4b5110ff",
+ "solve_time_s": 27.89,
+ "result": {
+  "base": "DN1",
+  "status": "INFEASIBLE",
+  "segments": [
+   {
+    "status": "INFEASIBLE",
+    "reason": "右逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (132.295,59.493)）",
+    "name": "input",
+    "esc": {
+     "status": "INFEASIBLE",
+     "kind": "VIA",
+     "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (132.295,59.493)）",
+     "cross_evidence": {
+      "min_edge": -0.205,
+      "point": [
+       132.295,
+       59.493
+      ],
+      "req": 0.175
+     },
+     "nearest": {
+      "kind": "pad",
+      "net": "I2C1_SCL",
+      "desc": "pad:I2C1_SCL (F.Cu)",
+      "dist": -0.075,
+      "req": 0.175
+     }
+    },
+    "flip": true
+   },
+   {
+    "status": "INFEASIBLE",
+    "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (79.183,58.376)）",
+    "name": "out_U3",
+    "esc": {
+     "status": "INFEASIBLE",
+     "kind": "VIA",
+     "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (79.183,58.376)）",
+     "cross_evidence": {
+      "min_edge": -0.205,
+      "point": [
+       79.183,
+       58.376
+      ],
+      "req": 0.175
+     },
+     "nearest": {
+      "kind": "pad",
+      "net": "PCIE_DN_OUT1_N_MCIO",
+      "desc": "pad:PCIE_DN_OUT1_N_MCIO (F.Cu)",
+      "dist": -0.075,
+      "req": 0.175
+     }
+    },
+    "flip": true
+   },
+   {
+    "status": "INFEASIBLE",
+    "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (62.522,45.574)）",
+    "name": "out_MCIO",
+    "esc": {
+     "status": "INFEASIBLE",
+     "kind": "VIA",
+     "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (62.522,45.574)）",
+     "cross_evidence": {
+      "min_edge": -0.205,
+      "point": [
+       62.522,
+       45.574
+      ],
+      "req": 0.175
+     },
+     "nearest": {
+      "kind": "pad",
+      "net": "GND",
+      "desc": "pad:GND (F.Cu)",
+      "dist": 0.5759076497841887,
+      "req": 0.175
+     }
+    },
+    "flip": true
+   }
+  ],
+  "lenP": 0,
+  "lenN": 0,
+  "skew": null,
+  "skew_ok": false,
+  "input_fp": "9b6e28c31444149bd749395beda6bd1f18ea15031575a0cf96b503fa4b5110ff"
+ }
+}

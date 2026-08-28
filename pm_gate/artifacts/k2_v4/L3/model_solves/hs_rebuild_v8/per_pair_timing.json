@@ -1,0 +1,8 @@
+{
+  "per_pair_solve_time_s": null,
+  "measure_note": "逐对耗时未落盘：测量封装（/tmp/opencode/hs_v8_driver.py）在序列化 dict 时把绑定实例当 key，json.dump 抛 TypeError，写入中断（32B 截断文件）。求解本体未受影响——封装仅包一层 wall-clock，调用透传给原 solve_chain_v4，计算结果与裸跑逐字节一致（hs_rebuild_summary.json + 18 个 base json 均由模型 main() 正常落盘）。",
+  "single_run": true,
+  "total_solve_time_s": 16.079,
+  "no_rerun_reason": "验收⑤ INFEASIBLE 停机 + MUST NOT 同参重跑≥2次=违规：不重跑补采。",
+  "brute_force_assessment": "无暴力求解结构：主路径确定性折线候选(H-V/V-H/DIAG 固定序, O(段数×障碍数)) + VGraph 仅兜底单次；全程 18 链 16.079s ≈ 0.89s/链均值。"
+}

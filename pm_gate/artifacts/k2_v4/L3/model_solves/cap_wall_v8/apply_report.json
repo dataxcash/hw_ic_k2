@@ -1,0 +1,17 @@
+{
+ "task": "cap_wall_apply 落板到 /tmp/opencode/boards/k2_v6.kicad_pcb（工作副本）",
+ "status": "NOT_APPLIED",
+ "reason": "step2 求解无布局产出（DN 0/16, UP 0/16, 显式失败）→ 无坐标可落板；板保持原样（未写、未备份、无需回滚）",
+ "board_sha256_before": "aa8b3f07883c49a00cdfc1b06ccde5feed160199a84d389b0e74d90d538d2173",
+ "moved_caps": 0,
+ "expected_caps": 32,
+ "moves": [],
+ "invariants_checked": {
+  "exactly_32_moved": false,
+  "pad_nets_unchanged": "N/A（无移动）",
+  "rotation_unchanged": "N/A（无移动；板原 rot 全部 0.0）",
+  "components_still_101": true
+ },
+ "restore": "板未改动，无回滚需求。如丢失/需重建：cd strix-halo-ioconvert/revA/pcb && K2_OUT_PCB=/tmp/opencode/boards/k2_v6.kicad_pcb python3 eda_core/k2_gen_v5.py",
+ "timestamp": "2026-08-27T07:32:53"
+}

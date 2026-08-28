@@ -1,0 +1,1094 @@
+{
+  "schema_version": 1,
+  "project": "k2_v4",
+  "current_stage": "L3",
+  "stages": {
+    "L1": {
+      "name": "整体方案竞标",
+      "status": "passed",
+      "gates": {
+        "G1.1": {
+          "status": "passed",
+          "checked_at": "2026-08-26T06:33:53+00:00",
+          "evidence": "3 个候选文件，字段齐全: ['candidate_A.md', 'candidate_B.md', 'candidate_C.md']",
+          "errors": null
+        },
+        "G1.2": {
+          "status": "passed",
+          "checked_at": "2026-08-21T16:43:53+00:00",
+          "evidence": "3 个打分表，维度与 criteria 一致 (['走廊闭合', '信号完整性潜力', 'DFM 可制造性', '电源/PDN 合理性', '可维护性', '架构清晰度'])",
+          "errors": null
+        },
+        "G1.3": {
+          "status": "passed",
+          "checked_at": "2026-08-21T16:43:53+00:00",
+          "evidence": "ruling.md 含中选方案/淘汰理由/裁决人",
+          "errors": null
+        },
+        "G1.4": {
+          "status": "passed",
+          "checked_at": "2026-08-21T16:43:53+00:00",
+          "evidence": "frozen/ 冻结完成: ['L1_TOPOLOGY_v1.0.md']",
+          "errors": null
+        },
+        "G1.5": {
+          "status": "passed",
+          "checked_at": "2026-08-21T16:43:53+00:00",
+          "evidence": "结构预检 + 工艺常识强条全 PASS（蛇形窗口/出线形式/对间间距）",
+          "errors": null
+        }
+      }
+    },
+    "L2": {
+      "name": "结构方案设计",
+      "status": "passed",
+      "gates": {
+        "G2.1": {
+          "status": "passed",
+          "checked_at": "2026-08-21T16:43:53+00:00",
+          "evidence": "measurements.md 含板几何/焊盘盒/走廊/电容墙",
+          "errors": null
+        },
+        "G2.2": {
+          "status": "passed",
+          "checked_at": "2026-08-21T16:43:54+00:00",
+          "evidence": "constraints.md 工艺/电气/叠层约束齐全且带出处",
+          "errors": null
+        },
+        "G2.3": {
+          "status": "passed",
+          "checked_at": "2026-08-21T16:43:54+00:00",
+          "evidence": "汇总判定 5 项全闭合",
+          "errors": null
+        },
+        "G2.4": {
+          "status": "passed",
+          "checked_at": "2026-08-21T16:43:54+00:00",
+          "evidence": "2 结构候选 + 一致打分表 (['数学闭合', '阻抗确定性', 'DFM 可制造性', 'PDN 合理性', '可维护性'])",
+          "errors": null
+        },
+        "G2.5": {
+          "status": "passed",
+          "checked_at": "2026-08-21T16:43:54+00:00",
+          "evidence": "L2 冻结完成: ['L2_STRUCTURE_v1.0.md']",
+          "errors": null
+        },
+        "G2.6": {
+          "status": "passed",
+          "checked_at": "2026-08-21T16:43:54+00:00",
+          "evidence": "L2.5 方案级闭合率通过：逃逸闭合分析 + H1/H3 假设复核 PASS/PARTIAL",
+          "errors": null
+        }
+      }
+    },
+    "L3": {
+      "name": "施工图",
+      "status": "passed",
+      "gates": {
+        "G3.1": {
+          "status": "passed",
+          "checked_at": "2026-08-21T16:43:54+00:00",
+          "evidence": "SPEC_k2_v4.json 结构完整（9 顶层字段 + 阻抗/网类/过孔/走廊）",
+          "errors": null
+        },
+        "G3.2": {
+          "status": "passed",
+          "checked_at": "2026-08-21T16:43:54+00:00",
+          "evidence": "执行器约束已声明（旧管线违宪在册，新执行器零运行时自由度）",
+          "errors": null
+        },
+        "G3.3": {
+          "status": "passed",
+          "checked_at": "2026-08-21T16:43:54+00:00",
+          "evidence": "JLC DFM 逐项核对完成，结论 PASS（阻抗 coupon 已登记前置）",
+          "errors": null
+        },
+        "G3.4": {
+          "status": "passed",
+          "checked_at": "2026-08-21T16:44:08+00:00",
+          "evidence": "逃逸桩方案闭合：105 可落桩 + 7 豁免记录（全为 NO_CONNECT/已裁决）",
+          "errors": null
+        },
+        "wp1_closure_check": {
+          "status": "passed",
+          "checked_at": "2026-08-23T09:54:22+00:00",
+          "evidence": "WP1 冻结折线闭合: 场指纹匹配 3083d928f3d0b879… + 完整环境复验 26/26 网全净空",
+          "errors": null
+        }
+      }
+    },
+    "QA": {
+      "name": "QA/QC 验证",
+      "status": "in_progress",
+      "gates": {
+        "G4.1": {
+          "status": "pending",
+          "checked_at": null,
+          "evidence": null,
+          "errors": null
+        },
+        "G4.2": {
+          "status": "pending",
+          "checked_at": null,
+          "evidence": null,
+          "errors": null
+        }
+      }
+    }
+  },
+  "ecns": [
+    {
+      "id": "ECN-001",
+      "reason": "L2 走廊分配缺陷：U4 右缘焊盘墙处无逃逸过渡区，y=58.3 走廊带与 pin1/pin2 重叠 0.0275mm（施工执行器 v0.1 首跑暴露）",
+      "raised_from": "L3",
+      "affects_gates": [],
+      "status": "ruled",
+      "created_at": "2026-08-14T08:27:26+00:00",
+      "ruling": "L2 走廊分配增补'逃逸过渡区'定义：U4/J2 右缘焊盘墙到走廊带之间，每 pin 独立垂直逃逸段（0.4mm 节距），走廊带 y 坐标必须避开焊盘墙 ±0.1025mm",
+      "ruled_at": "2026-08-14T08:28:02+00:00"
+    },
+    {
+      "id": "ECN-002",
+      "reason": "坐标复核结论（2026-08-15）：板文件只读解析（KiCad 标准旋转公式）确认——U4 pin1-24 在右缘 x=98.825（DN 输入面向 J2）、pin33-56 在左缘 x=88.825（DN 输出面向 MCIO），与 escape_predict.md/v0.1 完全一致；ECN-001 裁决依据（U4 右缘焊盘墙与 y=58.3 走廊带重叠 0.0275mm）为真实物理冲突，非编造数据。此前'坐标编造/映射左右颠倒'结论系复核工具忽略 rot=180 所致，已纠正。v0.2 应基于真实坐标继续",
+      "raised_from": "L3",
+      "affects_gates": [],
+      "status": "ruled",
+      "created_at": "2026-08-15T07:42:15+00:00",
+      "ruling": "坐标复核成立：ECN-001依据真实（U4右缘焊盘墙vs走廊重叠），v0.1/escape_predict坐标正确（含rot180）；已清24segment+16via残留，k2_v4恢复0走线；v0.2按measurements_raw_v2.txt真实数据继续",
+      "ruled_at": "2026-08-15T07:42:50+00:00"
+    },
+    {
+      "id": "ECN-003",
+      "reason": "布局缺陷修复（2026-08-15）：全板焊盘重叠扫描发现 14 处冲突——C63/C30/C31/C65/C71 五个电容与 U3/U4 引脚焊盘重叠（k2_build_v4.py 电容定位逻辑沿用旧板坐标系/硬编码坐标所致，C71 更跨器件错位：net 为 VREG1_U3 却置于 U4 左下角）。已重定位：C63→(100.8,42.9)、C30→(84.0,60.85)、C31→(86.0,61.65)、C65→(93.625,58.9)、C71→(90.0,48.0)。重验 0 焊盘重叠，117 器件完整，Gerber 导出正常。此修复为 v0.2 布线硬前提。",
+      "raised_from": "L3",
+      "affects_gates": [],
+      "status": "ruled",
+      "created_at": "2026-08-15T09:42:09+00:00",
+      "ruling": "电容位置必须由重写后的权威生成器从 SPEC_k2_v4.json capacitor_walls 几何约束推导（symmetric_bands+间距预算），禁止坐标硬编码；新生成器产出后复验 C63/C30/C31/C65/C71 位置与全板 0 焊盘重叠。L2 冻结物维持有效，仅重写 L3 施工图执行器。",
+      "ruled_at": "2026-08-16T02:03:43+00:00"
+    },
+    {
+      "id": "ECN-004",
+      "reason": "AUDIT_yaml_vs_pcb_v1.0 三件套审计发现（2026-08-16）：① ReDriver refdes 错位（YAML 权威 U3=DN/U7=UP/U4=BAT54C vs 旧产物 U3/U4/U6）；② AC 耦合电容 ECO #25 未落地（YAML 32×C_220N 0402 220nF vs 产物 37×MLCC_0201 100nF）；③ 缺失 18 器件（ReDriver VCC 去耦 C74-C84、P3V3_AUX 去耦 C90、I2C pull-up R31-R34、第二片 ReDriver U7）；④ 多余 8 器件待裁决。PM 批准 5 项裁决：refdes 修正/AC 电容落地/补齐缺失/保留共用/清单冻结。",
+      "raised_from": "L3",
+      "affects_gates": [],
+      "status": "ruled",
+      "created_at": "2026-08-16T02:17:32+00:00",
+      "ruling": "批准。以 YAML 为 refdes/器件/网表唯一权威；L2 冻结物 v1.2 + SPEC v1.1 已更新；L3 重跑门禁后重写权威生成器。",
+      "ruled_at": "2026-08-16T02:17:43+00:00"
+    },
+    {
+      "id": "ECN-005",
+      "reason": "WP1 冻结折线 MCIO 端 A/B 排网名与 yaml 权威相反（施工板重建后暴露）：yaml nets(J3/RX3_P=PCIE_DN_OUT3_P_MCIO,J3/TX3_P=PCIE_UP3_P)+datasheet(pin33=RX3_P→A17,pin34=TX3_P→B17)+k2_gen_v5 mcio_pad_name 三源一致指向 A17=DN_OUT3_P_MCIO/B17=UP3_P；fixture 板 baseline_true2(WP1 验证基准) 为旧错误语义(A17=UP3_P)，wp1 折线 26 网 MCIO 端点按 fixture 语义画在 A 排，重建板(权威) A17 实为 DN_OUT3_P_MCIO → 发射碰撞。裁决方向 a: ECN 重冻结 wp1 折线 MCIO 端 A/B 互换（坐标不动）; b: 确认权威方向",
+      "raised_from": "L3",
+      "affects_gates": [
+        "G3.4",
+        "wp1_closure_check"
+      ],
+      "status": "ruled",
+      "created_at": "2026-08-21T15:14:31+00:00",
+      "ruling": "direction b",
+      "ruled_at": "2026-08-22T15:01:15+00:00"
+    },
+    {
+      "id": "ECN-006",
+      "reason": "G4.1 via_count 检查体与 2026-08-16 裁决冲突（取消 0 过孔绝对限制，受控过孔合规校验）：check_qa.py 仅读 vias.high_speed_via_count=null 落入默认不允许语义，未消费 vias.high_speed 结构（每线≤2+对称+GND伴行+背钻），施工后受控过孔必误 FAIL",
+      "raised_from": "L3",
+      "affects_gates": [
+        "G4.1"
+      ],
+      "status": "ruled",
+      "created_at": "2026-08-21T16:12:25+00:00",
+      "ruling": "G4.1 via_count 检查体修订闭环：SPEC vias.high_speed_via_count 已声明=300（受控过孔总数上限），对齐 2026-08-16 PM 裁决（取消 0 过孔绝对限制，受控过孔合规校验：每线≤2+对称+GND伴行+背钻）— 2026-08-23 PM 裁决",
+      "ruled_at": "2026-08-23T09:53:24+00:00"
+    },
+    {
+      "id": "T2-ECN-1",
+      "reason": "P3V3 源器件物理位置与 pd 分区语义冲突: U2 pad5/C84 pad1/U4 pad3 均位于 In4 西区(P3V3_AUX_MCU_VDD 网)内, 而 pd 语义 P3V3=东区, In4 走线带 x∈[50,88.17] 阻断跨带铜皮",
+      "raised_from": "L3",
+      "affects_gates": [
+        "S3"
+      ],
+      "status": "ruled",
+      "created_at": "2026-08-23T10:21:11+00:00",
+      "ruling": "PM 裁决方向 a 变体：P3V3 经 B.Cu POWER_POUR 桥接西区源→东区 In4 主平面（SPEC stackup 明示 B.Cu=POWER_POUR，In4 走线带不跨）；顶部条带+西区 pocket 多边形 + U4/C84 F.Cu 短段+via 显式接入 + 东端 via 阵列，已落盘 SPEC pd.zone_defs.power_zones",
+      "ruled_at": "2026-08-23T10:21:11+00:00"
+    },
+    {
+      "id": "T2-ECN-2",
+      "reason": "J3/J4 (MCIO) A9 pad=P3V3_AUX 位于 In4 走线带内(x≈58.9 ∈ [50,88.17]), 西区铜皮右界 49.8 无法覆盖 → P3V3_AUX 到 MCIO 供电路径未冻结",
+      "raised_from": "L3",
+      "affects_gates": [
+        "S3"
+      ],
+      "status": "ruled",
+      "created_at": "2026-08-23T10:21:11+00:00",
+      "ruling": "PM 裁决方向 a：P3V3_AUX 经 B.Cu 铜皮到 J3/J4 A9 pad（In4 西区 drop via → B.Cu 上带接 J3.A9 + In6 跨层搭桥 → B.Cu 下带接 J4.A9）；J3.A9 坐标以板实测 (60.1,45.75) 为准（原 ECN desc 的 (58.9,43.25) 与板不符）；已落盘 SPEC pd.zone_defs.power_zones",
+      "ruled_at": "2026-08-23T10:21:11+00:00"
+    },
+    {
+      "id": "T2-ECN-3",
+      "reason": "gnd_stitch_via 具体坐标未冻结 (j2_via_gnd_stitch_v8.json 全仓不存在); 已落盘规则+候选推导方法",
+      "raised_from": "L3",
+      "affects_gates": [
+        "S3"
+      ],
+      "status": "ruled",
+      "created_at": "2026-08-23T10:21:11+00:00",
+      "ruling": "按 candidate_method 落盘 gnd_stitch_via.coordinates 坐标表：100 换层点 → 69 可落 + 31 显式 blocked（名义 0.6mm 正交位被相邻差分墙占用）；ecn_pending=false；blocked 显式标注，禁止静默放弃",
+      "ruled_at": "2026-08-23T10:21:11+00:00"
+    }
+  ],
+  "reviews": [
+    {
+      "gate": "G1.1",
+      "reviewer": "engine:auto-review-v1",
+      "reviewed_at": "2026-08-13T11:18:39+00:00",
+      "items": {
+        "完整性": "PASS: gate 检查器通过 (3 个候选文件，字段齐全: ['candidate_A.md', 'candidate_B.md', 'candidate_C.md'])",
+        "一致性": "PASS: 裁决/冻结/SPEC 交叉引用一致",
+        "可验证性": "PASS: 数学闭合含可复核不等式",
+        "物理性": "PASS: 走廊/等长/PDN/过孔不等式全闭（机器复核）",
+        "裁决性": "PASS: 裁决假设已标注，风险已绑定触发段"
+      },
+      "conclusion": "pass"
+    },
+    {
+      "gate": "G1.2",
+      "reviewer": "engine:auto-review-v1",
+      "reviewed_at": "2026-08-13T11:18:40+00:00",
+      "items": {
+        "完整性": "PASS: gate 检查器通过 (3 个打分表，维度与 criteria 一致 (['走廊闭合', '信号完整性潜力', 'DFM 可制造性', '电源/PDN 合理性', '可维护性', '架构清晰度']))",
+        "一致性": "PASS: 裁决/冻结/SPEC 交叉引用一致",
+        "可验证性": "PASS: 数学闭合含可复核不等式",
+        "物理性": "PASS: 走廊/等长/PDN/过孔不等式全闭（机器复核）",
+        "裁决性": "PASS: 裁决假设已标注，风险已绑定触发段"
+      },
+      "conclusion": "pass"
+    },
+    {
+      "gate": "G1.3",
+      "reviewer": "engine:auto-review-v1",
+      "reviewed_at": "2026-08-13T11:18:40+00:00",
+      "items": {
+        "完整性": "PASS: gate 检查器通过 (ruling.md 含中选方案/淘汰理由/裁决人)",
+        "一致性": "PASS: 裁决/冻结/SPEC 交叉引用一致",
+        "可验证性": "PASS: 数学闭合含可复核不等式",
+        "物理性": "PASS: 走廊/等长/PDN/过孔不等式全闭（机器复核）",
+        "裁决性": "PASS: 裁决假设已标注，风险已绑定触发段"
+      },
+      "conclusion": "pass"
+    },
+    {
+      "gate": "G1.4",
+      "reviewer": "engine:auto-review-v1",
+      "reviewed_at": "2026-08-13T11:18:40+00:00",
+      "items": {
+        "完整性": "PASS: gate 检查器通过 (frozen/ 冻结完成: ['L1_TOPOLOGY_v1.0.md'])",
+        "一致性": "PASS: 裁决/冻结/SPEC 交叉引用一致",
+        "可验证性": "PASS: 数学闭合含可复核不等式",
+        "物理性": "PASS: 走廊/等长/PDN/过孔不等式全闭（机器复核）",
+        "裁决性": "PASS: 裁决假设已标注，风险已绑定触发段"
+      },
+      "conclusion": "pass"
+    },
+    {
+      "gate": "G2.1",
+      "reviewer": "engine:auto-review-v1",
+      "reviewed_at": "2026-08-13T11:18:40+00:00",
+      "items": {
+        "完整性": "PASS: gate 检查器通过 (measurements.md 含板几何/焊盘盒/走廊/电容墙)",
+        "一致性": "PASS: 裁决/冻结/SPEC 交叉引用一致",
+        "可验证性": "PASS: 数学闭合含可复核不等式",
+        "物理性": "PASS: 走廊/等长/PDN/过孔不等式全闭（机器复核）",
+        "裁决性": "PASS: 裁决假设已标注，风险已绑定触发段"
+      },
+      "conclusion": "pass"
+    },
+    {
+      "gate": "G2.2",
+      "reviewer": "engine:auto-review-v1",
+      "reviewed_at": "2026-08-13T11:18:40+00:00",
+      "items": {
+        "完整性": "PASS: gate 检查器通过 (constraints.md 工艺/电气/叠层约束齐全且带出处)",
+        "一致性": "PASS: 裁决/冻结/SPEC 交叉引用一致",
+        "可验证性": "PASS: 数学闭合含可复核不等式",
+        "物理性": "PASS: 走廊/等长/PDN/过孔不等式全闭（机器复核）",
+        "裁决性": "PASS: 裁决假设已标注，风险已绑定触发段"
+      },
+      "conclusion": "pass"
+    },
+    {
+      "gate": "G2.3",
+      "reviewer": "engine:auto-review-v1",
+      "reviewed_at": "2026-08-13T11:18:40+00:00",
+      "items": {
+        "完整性": "PASS: gate 检查器通过 (汇总判定 5 项全闭合)",
+        "一致性": "PASS: 裁决/冻结/SPEC 交叉引用一致",
+        "可验证性": "PASS: 数学闭合含可复核不等式",
+        "物理性": "PASS: 走廊/等长/PDN/过孔不等式全闭（机器复核）",
+        "裁决性": "PASS: 裁决假设已标注，风险已绑定触发段"
+      },
+      "conclusion": "pass"
+    },
+    {
+      "gate": "G2.4",
+      "reviewer": "engine:auto-review-v1",
+      "reviewed_at": "2026-08-13T11:18:40+00:00",
+      "items": {
+        "完整性": "PASS: gate 检查器通过 (2 结构候选 + 一致打分表 (['数学闭合', '阻抗确定性', 'DFM 可制造性', 'PDN 合理性', '可维护性']))",
+        "一致性": "PASS: 裁决/冻结/SPEC 交叉引用一致",
+        "可验证性": "PASS: 数学闭合含可复核不等式",
+        "物理性": "PASS: 走廊/等长/PDN/过孔不等式全闭（机器复核）",
+        "裁决性": "PASS: 裁决假设已标注，风险已绑定触发段"
+      },
+      "conclusion": "pass"
+    },
+    {
+      "gate": "G2.5",
+      "reviewer": "engine:auto-review-v1",
+      "reviewed_at": "2026-08-13T11:18:40+00:00",
+      "items": {
+        "完整性": "PASS: gate 检查器通过 (L2 冻结完成: ['L2_STRUCTURE_v1.0.md'])",
+        "一致性": "PASS: 裁决/冻结/SPEC 交叉引用一致",
+        "可验证性": "PASS: 数学闭合含可复核不等式",
+        "物理性": "PASS: 走廊/等长/PDN/过孔不等式全闭（机器复核）",
+        "裁决性": "PASS: 裁决假设已标注，风险已绑定触发段"
+      },
+      "conclusion": "pass"
+    },
+    {
+      "gate": "G3.1",
+      "reviewer": "engine:auto-review-v1",
+      "reviewed_at": "2026-08-13T11:18:40+00:00",
+      "items": {
+        "完整性": "PASS: gate 检查器通过 (SPEC_k2_v4.json 结构完整（9 顶层字段 + 阻抗/网类/过孔/走廊）)",
+        "一致性": "PASS: 裁决/冻结/SPEC 交叉引用一致",
+        "可验证性": "PASS: SPEC 11 顶层字段可断言 (1778 chars)",
+        "物理性": "PASS: 走廊/等长/PDN/过孔不等式全闭（机器复核）",
+        "裁决性": "PASS: 裁决假设已标注，风险已绑定触发段"
+      },
+      "conclusion": "pass"
+    },
+    {
+      "gate": "G3.2",
+      "reviewer": "engine:auto-review-v1",
+      "reviewed_at": "2026-08-13T11:18:40+00:00",
+      "items": {
+        "完整性": "PASS: gate 检查器通过 (执行器约束已声明（旧管线违宪在册，新执行器零运行时自由度）)",
+        "一致性": "PASS: 裁决/冻结/SPEC 交叉引用一致",
+        "可验证性": "PASS: SPEC 11 顶层字段可断言 (1778 chars)",
+        "物理性": "PASS: 走廊/等长/PDN/过孔不等式全闭（机器复核）",
+        "裁决性": "PASS: 裁决假设已标注，风险已绑定触发段"
+      },
+      "conclusion": "pass"
+    },
+    {
+      "gate": "G3.3",
+      "reviewer": "engine:auto-review-v1",
+      "reviewed_at": "2026-08-13T11:18:40+00:00",
+      "items": {
+        "完整性": "PASS: gate 检查器通过 (JLC DFM 逐项核对完成，结论 PASS（阻抗 coupon 已登记前置）)",
+        "一致性": "PASS: 裁决/冻结/SPEC 交叉引用一致",
+        "可验证性": "PASS: SPEC 11 顶层字段可断言 (1778 chars)",
+        "物理性": "PASS: 走廊/等长/PDN/过孔不等式全闭（机器复核）",
+        "裁决性": "PASS: 裁决假设已标注，风险已绑定触发段"
+      },
+      "conclusion": "pass"
+    },
+    {
+      "gate": "G1.5",
+      "reviewer": "engine:auto-review-v1",
+      "reviewed_at": "2026-08-14T14:26:06+00:00",
+      "items": {
+        "完整性": "工艺常识规则集已接入 L1 criteria + G1.5 双重校验；L2 按规则集更新参数",
+        "一致性": "L2 走廊带距 1.460 与 math_closure v1.1 一致；对间 0.875 与规则集 R3-2 一致",
+        "可验证性": "G1.5 校验蛇形窗口/45°/对间间距；G2.3 汇总 5 项全闭可断言",
+        "物理性": "对间 0.5→0.875 后走廊仍闭合（余 65%/51%）；蛇形窗口独立核算",
+        "裁决性": "焊盘墙=绕行需求（工艺常识语义）；ECN-001 已裁决；无运行时后门"
+      },
+      "conclusion": "pass"
+    },
+    {
+      "gate": "G2.3",
+      "reviewer": "engine:auto-review-v1",
+      "reviewed_at": "2026-08-14T14:26:06+00:00",
+      "items": {
+        "完整性": "工艺常识规则集已接入 L1 criteria + G1.5 双重校验；L2 按规则集更新参数",
+        "一致性": "L2 走廊带距 1.460 与 math_closure v1.1 一致；对间 0.875 与规则集 R3-2 一致",
+        "可验证性": "G1.5 校验蛇形窗口/45°/对间间距；G2.3 汇总 5 项全闭可断言",
+        "物理性": "对间 0.5→0.875 后走廊仍闭合（余 65%/51%）；蛇形窗口独立核算",
+        "裁决性": "焊盘墙=绕行需求（工艺常识语义）；ECN-001 已裁决；无运行时后门"
+      },
+      "conclusion": "pass"
+    },
+    {
+      "gate": "G2.5",
+      "reviewer": "engine:auto-review-v1",
+      "reviewed_at": "2026-08-14T14:26:06+00:00",
+      "items": {
+        "完整性": "工艺常识规则集已接入 L1 criteria + G1.5 双重校验；L2 按规则集更新参数",
+        "一致性": "L2 走廊带距 1.460 与 math_closure v1.1 一致；对间 0.875 与规则集 R3-2 一致",
+        "可验证性": "G1.5 校验蛇形窗口/45°/对间间距；G2.3 汇总 5 项全闭可断言",
+        "物理性": "对间 0.5→0.875 后走廊仍闭合（余 65%/51%）；蛇形窗口独立核算",
+        "裁决性": "焊盘墙=绕行需求（工艺常识语义）；ECN-001 已裁决；无运行时后门"
+      },
+      "conclusion": "pass"
+    }
+  ],
+  "falsifications": [
+    {
+      "id": "F-R7_open_ecn_blocks_advance",
+      "rule": "R7_open_ecn_blocks_advance",
+      "target": "auto",
+      "finding": "R7: 1 个 ECN 未裁决——存在未闭环变更，禁止 advance",
+      "severity": "med",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "PM",
+        "reason": "ECN-001 已 ruled（L2 走廊增补逃逸过渡区裁决），finding 基于历史 open 状态，已失效",
+        "at": "2026-08-14T14:15:13+00:00"
+      }
+    },
+    {
+      "id": "F-R12_frozen_closure-1",
+      "rule": "R12_frozen_closure",
+      "target": "auto",
+      "finding": "R12: net=PCIE_DN_OUT2_N_MCIO seg3 In2.Cu (67.67,57.83)→(80.08,57.83): 碰撞 ['via PCIE_DN_OUT2_N_U3 @(79.38,57.55)']",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "f3-review",
+        "reason": "F3 独立复验: 空场证伪演练期间(SPEC 临时交换)服务端扫描产物; SPEC 已按 md5 e800ee06 逐字节还原, 完整场复验 PASS 26/26, falsify run 0 finding — 陈旧 finding 关闭",
+        "at": "2026-08-21T07:52:59+00:00"
+      }
+    },
+    {
+      "id": "F-R12_frozen_closure-2",
+      "rule": "R12_frozen_closure",
+      "target": "auto",
+      "finding": "R12: net=PCIE_DN_OUT2_N_MCIO via1 (80.08,57.83): 碰撞 ['seg F.Cu PCIE_DN_OUT2_N_U3', 'via PCIE_DN_OUT2_N_U3 @(79.38,57.55)', 'seg In2.Cu PCIE_DN_OUT2_N_U3', 'seg In2.Cu PCIE_DN_OUT2_N_U3']",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "f3-review",
+        "reason": "F3 独立复验: 空场证伪演练期间(SPEC 临时交换)服务端扫描产物; SPEC 已按 md5 e800ee06 逐字节还原, 完整场复验 PASS 26/26, falsify run 0 finding — 陈旧 finding 关闭",
+        "at": "2026-08-21T07:52:59+00:00"
+      }
+    },
+    {
+      "id": "F-R12_frozen_closure-3",
+      "rule": "R12_frozen_closure",
+      "target": "auto",
+      "finding": "R12: net=PCIE_DN_OUT3_P_MCIO seg3 In2.Cu (68.22,57.28)→(81.38,57.28): 碰撞 ['via PCIE_DN_OUT2_N_U3 @(79.38,57.55)', 'seg In2.Cu PCIE_DN_OUT2_N_U3 @(79.38,57.55)-(80.50,57.55)', 'seg In2.Cu PCIE_DN_OUT2_N_U3 @(80.50,57.55)-(80.50,59.48)']",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "f3-review",
+        "reason": "F3 独立复验: 空场证伪演练期间(SPEC 临时交换)服务端扫描产物; SPEC 已按 md5 e800ee06 逐字节还原, 完整场复验 PASS 26/26, falsify run 0 finding — 陈旧 finding 关闭",
+        "at": "2026-08-21T07:52:59+00:00"
+      }
+    },
+    {
+      "id": "F-R12_frozen_closure-4",
+      "rule": "R12_frozen_closure",
+      "target": "auto",
+      "finding": "R12: net=PCIE_DN_OUT4_P_MCIO seg3 B.Cu (69.00,59.90)→(83.97,59.90): 碰撞 ['via PCIE_DN_OUT1_P_U3 @(72.97,60.05)']",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "f3-review",
+        "reason": "F3 独立复验: 空场证伪演练期间(SPEC 临时交换)服务端扫描产物; SPEC 已按 md5 e800ee06 逐字节还原, 完整场复验 PASS 26/26, falsify run 0 finding — 陈旧 finding 关闭",
+        "at": "2026-08-21T07:52:59+00:00"
+      }
+    },
+    {
+      "id": "F-R12_frozen_closure-5",
+      "rule": "R12_frozen_closure",
+      "target": "auto",
+      "finding": "R12: net=PCIE_DN_OUT4_N_MCIO seg3 B.Cu (69.60,60.30)→(85.28,60.30): 碰撞 ['via PCIE_DN_OUT1_P_U3 @(72.97,60.05)']",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "f3-review",
+        "reason": "F3 独立复验: 空场证伪演练期间(SPEC 临时交换)服务端扫描产物; SPEC 已按 md5 e800ee06 逐字节还原, 完整场复验 PASS 26/26, falsify run 0 finding — 陈旧 finding 关闭",
+        "at": "2026-08-21T07:52:59+00:00"
+      }
+    },
+    {
+      "id": "F-R12_frozen_closure-6",
+      "rule": "R12_frozen_closure",
+      "target": "auto",
+      "finding": "R12: net=PCIE_DN_OUT7_P_MCIO seg3 B.Cu (70.20,60.90)→(85.65,60.90): 碰撞 ['via PCIE_DN_OUT4_P_U3 @(83.28,61.10)']",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "f3-review",
+        "reason": "F3 独立复验: 空场证伪演练期间(SPEC 临时交换)服务端扫描产物; SPEC 已按 md5 e800ee06 逐字节还原, 完整场复验 PASS 26/26, falsify run 0 finding — 陈旧 finding 关闭",
+        "at": "2026-08-21T07:52:59+00:00"
+      }
+    },
+    {
+      "id": "F-R12_frozen_closure-7",
+      "rule": "R12_frozen_closure",
+      "target": "auto",
+      "finding": "R12: net=PCIE_DN_OUT7_N_MCIO seg3 B.Cu (70.80,61.70)→(86.95,61.70): 碰撞 ['via PCIE_DN_OUT6_N_U3 @(81.15,61.65)']",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "f3-review",
+        "reason": "F3 独立复验: 空场证伪演练期间(SPEC 临时交换)服务端扫描产物; SPEC 已按 md5 e800ee06 逐字节还原, 完整场复验 PASS 26/26, falsify run 0 finding — 陈旧 finding 关闭",
+        "at": "2026-08-21T07:52:59+00:00"
+      }
+    },
+    {
+      "id": "F-R12_frozen_closure-8",
+      "rule": "R12_frozen_closure",
+      "target": "auto",
+      "finding": "R12: net=PCIE_DN_OUT7_N_MCIO via1 (86.95,61.70): 碰撞 ['pad C32.1 net=PCIE_DN_OUT7_N_U3', 'seg In2.Cu PCIE_DN_OUT2_N_U3', 'pad C28.1 net=PCIE_DN_OUT5_N_U3', 'pad C28.2 net=PCIE_DN_OUT5_N_MCIO']",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "f3-review",
+        "reason": "F3 独立复验: 空场证伪演练期间(SPEC 临时交换)服务端扫描产物; SPEC 已按 md5 e800ee06 逐字节还原, 完整场复验 PASS 26/26, falsify run 0 finding — 陈旧 finding 关闭",
+        "at": "2026-08-21T07:52:59+00:00"
+      }
+    },
+    {
+      "id": "F-R12_frozen_closure-9",
+      "rule": "R12_frozen_closure",
+      "target": "auto",
+      "finding": "R12: net=PCIE_DN_OUT5_P_MCIO seg3 B.Cu (71.40,62.20)→(85.58,62.20): 碰撞 ['via PCIE_DN_OUT6_N_MCIO @(84.35,62.45)']",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "f3-review",
+        "reason": "F3 独立复验: 空场证伪演练期间(SPEC 临时交换)服务端扫描产物; SPEC 已按 md5 e800ee06 逐字节还原, 完整场复验 PASS 26/26, falsify run 0 finding — 陈旧 finding 关闭",
+        "at": "2026-08-21T07:52:59+00:00"
+      }
+    },
+    {
+      "id": "F-R12_frozen_closure-10",
+      "rule": "R12_frozen_closure",
+      "target": "auto",
+      "finding": "R12: net=PCIE_DN_OUT6_N_MCIO seg2 F.Cu (84.35,66.40)→(84.35,61.65): 碰撞 ['seg F.Cu PCIE_DN_OUT5_P_U3 @(84.88,63.00)-(82.38,63.00)']",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "f3-review",
+        "reason": "F3 独立复验: 空场证伪演练期间(SPEC 临时交换)服务端扫描产物; SPEC 已按 md5 e800ee06 逐字节还原, 完整场复验 PASS 26/26, falsify run 0 finding — 陈旧 finding 关闭",
+        "at": "2026-08-21T07:52:59+00:00"
+      }
+    },
+    {
+      "id": "F-R12_frozen_closure-11",
+      "rule": "R12_frozen_closure",
+      "target": "auto",
+      "finding": "R12: net=PCIE_DN_OUT5_N_MCIO seg1 In4.Cu (57.10,65.60)→(86.88,65.60): 碰撞 ['via PCIE_DN_OUT6_P_U3 @(86.33,65.70)']",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "f3-review",
+        "reason": "F3 独立复验: 空场证伪演练期间(SPEC 临时交换)服务端扫描产物; SPEC 已按 md5 e800ee06 逐字节还原, 完整场复验 PASS 26/26, falsify run 0 finding — 陈旧 finding 关闭",
+        "at": "2026-08-21T07:52:59+00:00"
+      }
+    },
+    {
+      "id": "F-R12_frozen_closure-12",
+      "rule": "R12_frozen_closure",
+      "target": "auto",
+      "finding": "R12: net=PCIE_DN_OUT5_N_MCIO seg2 F.Cu (86.88,65.60)→(86.88,63.00): 碰撞 ['via PCIE_DN_OUT4_N_U3 @(87.16,63.70)', 'seg F.Cu PCIE_DN_OUT6_P_U3 @(88.83,65.70)-(86.33,65.70)']",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "f3-review",
+        "reason": "F3 独立复验: 空场证伪演练期间(SPEC 临时交换)服务端扫描产物; SPEC 已按 md5 e800ee06 逐字节还原, 完整场复验 PASS 26/26, falsify run 0 finding — 陈旧 finding 关闭",
+        "at": "2026-08-21T07:53:00+00:00"
+      }
+    },
+    {
+      "id": "F-R12_frozen_closure-13",
+      "rule": "R12_frozen_closure",
+      "target": "auto",
+      "finding": "R12: net=PCIE_DN_OUT5_N_MCIO via1 (86.88,65.60): 碰撞 ['seg F.Cu PCIE_DN_OUT6_P_U3', 'via PCIE_DN_OUT6_P_U3 @(86.33,65.70)', 'seg F.Cu VREG2_U3', 'via VREG2_U3 @(86.33,66.50)']",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "f3-review",
+        "reason": "F3 独立复验: 空场证伪演练期间(SPEC 临时交换)服务端扫描产物; SPEC 已按 md5 e800ee06 逐字节还原, 完整场复验 PASS 26/26, falsify run 0 finding — 陈旧 finding 关闭",
+        "at": "2026-08-21T07:53:00+00:00"
+      }
+    },
+    {
+      "id": "F-R12_frozen_closure-14",
+      "rule": "R12_frozen_closure",
+      "target": "auto",
+      "finding": "R12: net=PCIE_DN_OUT6_P_MCIO seg1 In4.Cu (61.90,66.00)→(88.17,66.00): 碰撞 ['via PCIE_DN_OUT0_P_U3 @(72.97,66.00)', 'via PCIE_DN_OUT6_P_U3 @(86.33,65.70)', 'via PCIE_DN_OUT6_N_U3 @(88.03,66.10)']",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "f3-review",
+        "reason": "F3 独立复验: 空场证伪演练期间(SPEC 临时交换)服务端扫描产物; SPEC 已按 md5 e800ee06 逐字节还原, 完整场复验 PASS 26/26, falsify run 0 finding — 陈旧 finding 关闭",
+        "at": "2026-08-21T07:53:00+00:00"
+      }
+    },
+    {
+      "id": "F-R12_frozen_closure-15",
+      "rule": "R12_frozen_closure",
+      "target": "auto",
+      "finding": "R12: net=PCIE_DN_OUT6_P_MCIO seg2 F.Cu (88.17,66.00)→(88.17,63.00): 碰撞 ['seg F.Cu PCIE_DN_OUT6_P_U3 @(88.83,65.70)-(86.33,65.70)', 'seg F.Cu PCIE_DN_OUT6_N_U3 @(88.83,66.10)-(88.03,66.10)', 'via PCIE_DN_OUT6_N_U3 @(88.03,66.10)']",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "f3-review",
+        "reason": "F3 独立复验: 空场证伪演练期间(SPEC 临时交换)服务端扫描产物; SPEC 已按 md5 e800ee06 逐字节还原, 完整场复验 PASS 26/26, falsify run 0 finding — 陈旧 finding 关闭",
+        "at": "2026-08-21T07:53:00+00:00"
+      }
+    },
+    {
+      "id": "F-R12_frozen_closure-16",
+      "rule": "R12_frozen_closure",
+      "target": "auto",
+      "finding": "R12: net=PCIE_DN_OUT6_P_MCIO via1 (88.17,66.00): 碰撞 ['seg F.Cu PCIE_DN_OUT6_P_U3', 'seg F.Cu PCIE_DN_OUT6_N_U3', 'via PCIE_DN_OUT6_N_U3 @(88.03,66.10)', 'seg In2.Cu PCIE_DN_OUT6_P_U3']",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "f3-review",
+        "reason": "F3 独立复验: 空场证伪演练期间(SPEC 临时交换)服务端扫描产物; SPEC 已按 md5 e800ee06 逐字节还原, 完整场复验 PASS 26/26, falsify run 0 finding — 陈旧 finding 关闭",
+        "at": "2026-08-21T07:53:00+00:00"
+      }
+    },
+    {
+      "id": "F-R7_open_ecn_blocks_advance-1",
+      "rule": "R7_open_ecn_blocks_advance",
+      "target": "auto",
+      "finding": "R7: 1 个 ECN 未裁决——存在未闭环变更，禁止 advance",
+      "severity": "med",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "PM",
+        "reason": "ECN-005 未裁决为 T5 基线既有开放态（非 T8 公共化改动引入）；R7 属流程告警，纯基础设施改造（--project 参数化 + check_qa:125 语义对齐）不涉 ECN-005 内容，驳回防误阻断，ECN-005 裁决由施工板重建任务闭环",
+        "at": "2026-08-21T16:05:23+00:00"
+      }
+    },
+    {
+      "id": "F-R12_frozen_closure-17",
+      "rule": "R12_frozen_closure",
+      "target": "auto",
+      "finding": "R12: net=PCIE_UP6_N seg0 F.Cu (62.50,63.95)→(62.50,65.35): 碰撞 ['pad J4.B15 net=PCIE_DN_OUT6_N_MCIO @(62.50,63.95)']",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "task11-freeze",
+        "reason": "R12 服务扫描用 DEFAULT_BOARD_PATH=baseline_true2.kicad_pcb(陈旧T5 fixture: A/B排旧错误语义+任务6前C25-C32位)，该扫描自身指纹门禁 FAIL(声明37082605≠当前a742d296)，碰撞产物对live板无效。live板(k2_v4.kicad_pcb, ECN-005方向b权威) signed closure 26/26 PASS fingerprint_ok=True(实测)，semantics PASS，SPEC已冻结签名37082605",
+        "at": "2026-08-22T17:50:51+00:00"
+      }
+    },
+    {
+      "id": "F-R12_frozen_closure-18",
+      "rule": "R12_frozen_closure",
+      "target": "auto",
+      "finding": "R12: net=PCIE_UP6_N seg9 In2.Cu (90.93,61.45)→(87.83,61.45): 碰撞 ['seg In2.Cu PCIE_DN_OUT4_N_U3 @(88.75,60.91)-(88.75,62.11)']",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "task11-freeze",
+        "reason": "R12 服务扫描用 DEFAULT_BOARD_PATH=baseline_true2.kicad_pcb(陈旧T5 fixture: A/B排旧错误语义+任务6前C25-C32位)，该扫描自身指纹门禁 FAIL(声明37082605≠当前a742d296)，碰撞产物对live板无效。live板(k2_v4.kicad_pcb, ECN-005方向b权威) signed closure 26/26 PASS fingerprint_ok=True(实测)，semantics PASS，SPEC已冻结签名37082605",
+        "at": "2026-08-22T17:50:55+00:00"
+      }
+    },
+    {
+      "id": "F-R12_frozen_closure-19",
+      "rule": "R12_frozen_closure",
+      "target": "auto",
+      "finding": "R12: net=PCIE_UP6_N seg12 In2.Cu (86.73,60.85)→(86.73,42.05): 碰撞 ['seg In2.Cu PCIE_DN_OUT4_N_U3 @(84.58,59.08)-(86.70,59.06)', 'seg In2.Cu PCIE_DN_OUT4_N_U3 @(86.70,59.06)-(86.70,59.31)', 'seg In2.Cu PCIE_DN_OUT4_N_U3 @(86.70,59.31)-(87.80,59.31)']",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "task11-freeze",
+        "reason": "R12 服务扫描用 DEFAULT_BOARD_PATH=baseline_true2.kicad_pcb(陈旧T5 fixture: A/B排旧错误语义+任务6前C25-C32位)，该扫描自身指纹门禁 FAIL(声明37082605≠当前a742d296)，碰撞产物对live板无效。live板(k2_v4.kicad_pcb, ECN-005方向b权威) signed closure 26/26 PASS fingerprint_ok=True(实测)，semantics PASS，SPEC已冻结签名37082605",
+        "at": "2026-08-22T17:50:55+00:00"
+      }
+    },
+    {
+      "id": "F-R12_frozen_closure-20",
+      "rule": "R12_frozen_closure",
+      "target": "auto",
+      "finding": "R12: net=PCIE_UP6_P seg0 F.Cu (61.90,63.95)→(61.90,64.95): 碰撞 ['pad J4.B14 net=PCIE_DN_OUT6_P_MCIO @(61.90,63.95)']",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "task11-freeze",
+        "reason": "R12 服务扫描用 DEFAULT_BOARD_PATH=baseline_true2.kicad_pcb(陈旧T5 fixture: A/B排旧错误语义+任务6前C25-C32位)，该扫描自身指纹门禁 FAIL(声明37082605≠当前a742d296)，碰撞产物对live板无效。live板(k2_v4.kicad_pcb, ECN-005方向b权威) signed closure 26/26 PASS fingerprint_ok=True(实测)，semantics PASS，SPEC已冻结签名37082605",
+        "at": "2026-08-22T17:50:55+00:00"
+      }
+    },
+    {
+      "id": "F-R12_frozen_closure-21",
+      "rule": "R12_frozen_closure",
+      "target": "auto",
+      "finding": "R12: net=PCIE_UP7_N seg0 F.Cu (64.30,63.95)→(64.30,66.15): 碰撞 ['pad J4.B18 net=PCIE_DN_OUT7_N_MCIO @(64.30,63.95)']",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "task11-freeze",
+        "reason": "R12 服务扫描用 DEFAULT_BOARD_PATH=baseline_true2.kicad_pcb(陈旧T5 fixture: A/B排旧错误语义+任务6前C25-C32位)，该扫描自身指纹门禁 FAIL(声明37082605≠当前a742d296)，碰撞产物对live板无效。live板(k2_v4.kicad_pcb, ECN-005方向b权威) signed closure 26/26 PASS fingerprint_ok=True(实测)，semantics PASS，SPEC已冻结签名37082605",
+        "at": "2026-08-22T17:50:55+00:00"
+      }
+    },
+    {
+      "id": "F-R12_frozen_closure-22",
+      "rule": "R12_frozen_closure",
+      "target": "auto",
+      "finding": "R12: net=PCIE_UP7_N seg13 In2.Cu (91.25,61.10)→(88.15,61.10): 碰撞 ['seg In2.Cu PCIE_DN_OUT4_N_U3 @(88.85,59.26)-(88.85,60.91)', 'seg In2.Cu PCIE_DN_OUT4_N_U3 @(88.85,60.91)-(88.75,60.91)', 'seg In2.Cu PCIE_DN_OUT4_N_U3 @(88.75,60.91)-(88.75,62.11)']",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "task11-freeze",
+        "reason": "R12 服务扫描用 DEFAULT_BOARD_PATH=baseline_true2.kicad_pcb(陈旧T5 fixture: A/B排旧错误语义+任务6前C25-C32位)，该扫描自身指纹门禁 FAIL(声明37082605≠当前a742d296)，碰撞产物对live板无效。live板(k2_v4.kicad_pcb, ECN-005方向b权威) signed closure 26/26 PASS fingerprint_ok=True(实测)，semantics PASS，SPEC已冻结签名37082605",
+        "at": "2026-08-22T17:50:55+00:00"
+      }
+    },
+    {
+      "id": "F-R12_frozen_closure-23",
+      "rule": "R12_frozen_closure",
+      "target": "auto",
+      "finding": "R12: net=PCIE_UP7_N seg16 In2.Cu (87.05,60.50)→(87.05,41.70): 碰撞 ['seg In2.Cu PCIE_DN_OUT4_N_U3 @(86.70,59.31)-(87.80,59.31)']",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "task11-freeze",
+        "reason": "R12 服务扫描用 DEFAULT_BOARD_PATH=baseline_true2.kicad_pcb(陈旧T5 fixture: A/B排旧错误语义+任务6前C25-C32位)，该扫描自身指纹门禁 FAIL(声明37082605≠当前a742d296)，碰撞产物对live板无效。live板(k2_v4.kicad_pcb, ECN-005方向b权威) signed closure 26/26 PASS fingerprint_ok=True(实测)，semantics PASS，SPEC已冻结签名37082605",
+        "at": "2026-08-22T17:50:55+00:00"
+      }
+    },
+    {
+      "id": "F-R12_frozen_closure-24",
+      "rule": "R12_frozen_closure",
+      "target": "auto",
+      "finding": "R12: net=PCIE_UP7_P seg0 F.Cu (63.70,63.95)→(63.70,65.75): 碰撞 ['pad J4.B17 net=PCIE_DN_OUT7_P_MCIO @(63.70,63.95)']",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "task11-freeze",
+        "reason": "R12 服务扫描用 DEFAULT_BOARD_PATH=baseline_true2.kicad_pcb(陈旧T5 fixture: A/B排旧错误语义+任务6前C25-C32位)，该扫描自身指纹门禁 FAIL(声明37082605≠当前a742d296)，碰撞产物对live板无效。live板(k2_v4.kicad_pcb, ECN-005方向b权威) signed closure 26/26 PASS fingerprint_ok=True(实测)，semantics PASS，SPEC已冻结签名37082605",
+        "at": "2026-08-22T17:50:55+00:00"
+      }
+    },
+    {
+      "id": "F-R12_frozen_closure-25",
+      "rule": "R12_frozen_closure",
+      "target": "auto",
+      "finding": "R12: net=PCIE_DN_OUT4_P_MCIO seg0 F.Cu (54.70,61.45)→(54.70,60.45): 碰撞 ['pad J4.A2 net=PCIE_UP4_P @(54.70,61.45)']",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "task11-freeze",
+        "reason": "R12 服务扫描用 DEFAULT_BOARD_PATH=baseline_true2.kicad_pcb(陈旧T5 fixture: A/B排旧错误语义+任务6前C25-C32位)，该扫描自身指纹门禁 FAIL(声明37082605≠当前a742d296)，碰撞产物对live板无效。live板(k2_v4.kicad_pcb, ECN-005方向b权威) signed closure 26/26 PASS fingerprint_ok=True(实测)，semantics PASS，SPEC已冻结签名37082605",
+        "at": "2026-08-22T17:50:55+00:00"
+      }
+    },
+    {
+      "id": "F-R12_frozen_closure-26",
+      "rule": "R12_frozen_closure",
+      "target": "auto",
+      "finding": "R12: net=PCIE_DN_OUT4_N_MCIO seg0 F.Cu (55.30,61.45)→(55.30,60.45): 碰撞 ['pad J4.A3 net=PCIE_UP4_N @(55.30,61.45)']",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "task11-freeze",
+        "reason": "R12 服务扫描用 DEFAULT_BOARD_PATH=baseline_true2.kicad_pcb(陈旧T5 fixture: A/B排旧错误语义+任务6前C25-C32位)，该扫描自身指纹门禁 FAIL(声明37082605≠当前a742d296)，碰撞产物对live板无效。live板(k2_v4.kicad_pcb, ECN-005方向b权威) signed closure 26/26 PASS fingerprint_ok=True(实测)，semantics PASS，SPEC已冻结签名37082605",
+        "at": "2026-08-22T17:50:56+00:00"
+      }
+    },
+    {
+      "id": "F-R12_frozen_closure-27",
+      "rule": "R12_frozen_closure",
+      "target": "auto",
+      "finding": "R12: net=PCIE_DN_OUT7_P_MCIO seg0 F.Cu (63.70,61.45)→(63.70,57.50): 碰撞 ['pad J4.A17 net=PCIE_UP7_P @(63.70,61.45)']",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "task11-freeze",
+        "reason": "R12 服务扫描用 DEFAULT_BOARD_PATH=baseline_true2.kicad_pcb(陈旧T5 fixture: A/B排旧错误语义+任务6前C25-C32位)，该扫描自身指纹门禁 FAIL(声明37082605≠当前a742d296)，碰撞产物对live板无效。live板(k2_v4.kicad_pcb, ECN-005方向b权威) signed closure 26/26 PASS fingerprint_ok=True(实测)，semantics PASS，SPEC已冻结签名37082605",
+        "at": "2026-08-22T17:50:56+00:00"
+      }
+    },
+    {
+      "id": "F-R12_frozen_closure-28",
+      "rule": "R12_frozen_closure",
+      "target": "auto",
+      "finding": "R12: net=PCIE_DN_OUT7_N_MCIO seg0 F.Cu (64.30,61.45)→(64.30,57.50): 碰撞 ['pad J4.A18 net=PCIE_UP7_N @(64.30,61.45)']",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "task11-freeze",
+        "reason": "R12 服务扫描用 DEFAULT_BOARD_PATH=baseline_true2.kicad_pcb(陈旧T5 fixture: A/B排旧错误语义+任务6前C25-C32位)，该扫描自身指纹门禁 FAIL(声明37082605≠当前a742d296)，碰撞产物对live板无效。live板(k2_v4.kicad_pcb, ECN-005方向b权威) signed closure 26/26 PASS fingerprint_ok=True(实测)，semantics PASS，SPEC已冻结签名37082605",
+        "at": "2026-08-22T17:50:56+00:00"
+      }
+    },
+    {
+      "id": "F-R12_frozen_closure-29",
+      "rule": "R12_frozen_closure",
+      "target": "auto",
+      "finding": "R12: net=PCIE_DN_OUT5_P_MCIO seg0 F.Cu (56.50,61.45)→(56.50,60.45): 碰撞 ['pad J4.A5 net=PCIE_UP5_P @(56.50,61.45)']",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "task11-freeze",
+        "reason": "R12 服务扫描用 DEFAULT_BOARD_PATH=baseline_true2.kicad_pcb(陈旧T5 fixture: A/B排旧错误语义+任务6前C25-C32位)，该扫描自身指纹门禁 FAIL(声明37082605≠当前a742d296)，碰撞产物对live板无效。live板(k2_v4.kicad_pcb, ECN-005方向b权威) signed closure 26/26 PASS fingerprint_ok=True(实测)，semantics PASS，SPEC已冻结签名37082605",
+        "at": "2026-08-22T17:50:56+00:00"
+      }
+    },
+    {
+      "id": "F-R12_frozen_closure-30",
+      "rule": "R12_frozen_closure",
+      "target": "auto",
+      "finding": "R12: net=PCIE_DN_OUT5_N_MCIO seg0 F.Cu (57.10,61.45)→(57.10,60.45): 碰撞 ['pad J4.A6 net=PCIE_UP5_N @(57.10,61.45)']",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "task11-freeze",
+        "reason": "R12 服务扫描用 DEFAULT_BOARD_PATH=baseline_true2.kicad_pcb(陈旧T5 fixture: A/B排旧错误语义+任务6前C25-C32位)，该扫描自身指纹门禁 FAIL(声明37082605≠当前a742d296)，碰撞产物对live板无效。live板(k2_v4.kicad_pcb, ECN-005方向b权威) signed closure 26/26 PASS fingerprint_ok=True(实测)，semantics PASS，SPEC已冻结签名37082605",
+        "at": "2026-08-22T17:50:56+00:00"
+      }
+    },
+    {
+      "id": "F-R12_frozen_closure-31",
+      "rule": "R12_frozen_closure",
+      "target": "auto",
+      "finding": "R12: net=PCIE_DN_OUT5_N_MCIO seg10 In2.Cu (85.90,57.10)→(85.90,58.90): 碰撞 ['seg In2.Cu PCIE_DN_OUT4_N_U3 @(84.58,59.08)-(86.70,59.06)']",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "task11-freeze",
+        "reason": "R12 服务扫描用 DEFAULT_BOARD_PATH=baseline_true2.kicad_pcb(陈旧T5 fixture: A/B排旧错误语义+任务6前C25-C32位)，该扫描自身指纹门禁 FAIL(声明37082605≠当前a742d296)，碰撞产物对live板无效。live板(k2_v4.kicad_pcb, ECN-005方向b权威) signed closure 26/26 PASS fingerprint_ok=True(实测)，semantics PASS，SPEC已冻结签名37082605",
+        "at": "2026-08-22T17:50:56+00:00"
+      }
+    },
+    {
+      "id": "F-R12_frozen_closure-32",
+      "rule": "R12_frozen_closure",
+      "target": "auto",
+      "finding": "R12: net=PCIE_DN_OUT5_N_MCIO seg11 In2.Cu (85.90,58.90)→(86.35,58.90): 碰撞 ['seg In2.Cu PCIE_DN_OUT4_N_U3 @(84.58,59.08)-(86.70,59.06)']",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "task11-freeze",
+        "reason": "R12 服务扫描用 DEFAULT_BOARD_PATH=baseline_true2.kicad_pcb(陈旧T5 fixture: A/B排旧错误语义+任务6前C25-C32位)，该扫描自身指纹门禁 FAIL(声明37082605≠当前a742d296)，碰撞产物对live板无效。live板(k2_v4.kicad_pcb, ECN-005方向b权威) signed closure 26/26 PASS fingerprint_ok=True(实测)，semantics PASS，SPEC已冻结签名37082605",
+        "at": "2026-08-22T17:50:56+00:00"
+      }
+    },
+    {
+      "id": "F-R12_frozen_closure-33",
+      "rule": "R12_frozen_closure",
+      "target": "auto",
+      "finding": "R12: net=PCIE_DN_OUT5_N_MCIO seg12 In2.Cu (86.35,58.90)→(86.35,61.30): 碰撞 ['seg In2.Cu PCIE_DN_OUT4_N_U3 @(84.58,59.08)-(86.70,59.06)']",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "task11-freeze",
+        "reason": "R12 服务扫描用 DEFAULT_BOARD_PATH=baseline_true2.kicad_pcb(陈旧T5 fixture: A/B排旧错误语义+任务6前C25-C32位)，该扫描自身指纹门禁 FAIL(声明37082605≠当前a742d296)，碰撞产物对live板无效。live板(k2_v4.kicad_pcb, ECN-005方向b权威) signed closure 26/26 PASS fingerprint_ok=True(实测)，semantics PASS，SPEC已冻结签名37082605",
+        "at": "2026-08-22T17:50:56+00:00"
+      }
+    },
+    {
+      "id": "F-R12_frozen_closure-34",
+      "rule": "R12_frozen_closure",
+      "target": "auto",
+      "finding": "R12: net=PCIE_DN_OUT6_N_MCIO seg0 F.Cu (62.50,61.45)→(62.50,62.30): 碰撞 ['pad J4.A15 net=PCIE_UP6_N @(62.50,61.45)']",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "task11-freeze",
+        "reason": "R12 服务扫描用 DEFAULT_BOARD_PATH=baseline_true2.kicad_pcb(陈旧T5 fixture: A/B排旧错误语义+任务6前C25-C32位)，该扫描自身指纹门禁 FAIL(声明37082605≠当前a742d296)，碰撞产物对live板无效。live板(k2_v4.kicad_pcb, ECN-005方向b权威) signed closure 26/26 PASS fingerprint_ok=True(实测)，semantics PASS，SPEC已冻结签名37082605",
+        "at": "2026-08-22T17:50:56+00:00"
+      }
+    },
+    {
+      "id": "F-R12_frozen_closure-35",
+      "rule": "R12_frozen_closure",
+      "target": "auto",
+      "finding": "R12: net=PCIE_DN_OUT6_P_MCIO seg0 F.Cu (61.90,61.45)→(61.90,60.45): 碰撞 ['pad J4.A14 net=PCIE_UP6_P @(61.90,61.45)']",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "task11-freeze",
+        "reason": "R12 服务扫描用 DEFAULT_BOARD_PATH=baseline_true2.kicad_pcb(陈旧T5 fixture: A/B排旧错误语义+任务6前C25-C32位)，该扫描自身指纹门禁 FAIL(声明37082605≠当前a742d296)，碰撞产物对live板无效。live板(k2_v4.kicad_pcb, ECN-005方向b权威) signed closure 26/26 PASS fingerprint_ok=True(实测)，semantics PASS，SPEC已冻结签名37082605",
+        "at": "2026-08-22T17:50:56+00:00"
+      }
+    },
+    {
+      "id": "F-R13_pcb_guard-1",
+      "rule": "R13_pcb_guard",
+      "target": "auto",
+      "finding": "R13: S2 已 PASS 但 PCB k2_v4.kicad_pcb 未锁回 (mode 可写) — 写保护失效",
+      "severity": "high",
+      "status": "resolved",
+      "rebuttal": null,
+      "resolution": {
+        "by": "red-team-auto",
+        "reason": "规则复跑不再产出（条件消解）",
+        "at": "2026-08-24T04:18:07+00:00"
+      }
+    },
+    {
+      "id": "F-R13_pcb_guard-2",
+      "rule": "R13_pcb_guard",
+      "target": "auto",
+      "finding": "R13: S2 已 PASS 但 PCB k2_v4.kicad_pcb 未锁回 (mode 可写) — 写保护失效",
+      "severity": "high",
+      "status": "resolved",
+      "rebuttal": null,
+      "resolution": {
+        "by": "red-team-auto",
+        "reason": "规则复跑不再产出（条件消解）",
+        "at": "2026-08-24T04:18:07+00:00"
+      }
+    },
+    {
+      "id": "F-R14_model_solve_ref-1",
+      "rule": "R14_model_solve_ref",
+      "target": "auto",
+      "finding": "R14: SPEC 低速设计段非法（171 项: 无 source 标记 162 / 缺 solve_ref 0 / INFEASIBLE 未 ruled 9 / 跨网互交 0 / 其他 0）——设计段必须出自 ls_route_model 求解并落 solve_ref，且 model-solved 段须跨网全局自洽（模型门禁 fail-closed）。样例: I2C1_SCL seg[0] F.Cu (132.65, 56.1)-(133.95, 56.1) 无 source 标记（设计段必须有合法来源: board-verified/frozen-injected/model-solved）",
+      "severity": "high",
+      "status": "rebutted",
+      "rebuttal": {
+        "by": "Sisyphus-M13v2",
+        "reason": "低速域历史遗留: SPEC low_speed_nets 162 段系 T2.5.2 冻结方案段(_low_speed_frozen_at 2026-08-21), 写盘早于 model_gate R14 门禁(M4-M5)强制, 未落 source/solve_ref; 修复需低速域重建(ls_route_model 重解+board_low_speed_sync 重同步+INFEASIBLE ruled), 属低速域专项(M11/M12 范围), 与本 session M13 v2 高速域重建(18 对 PCIE/REFCLK solve_ref)无耦合; 已登记低速域 source 补全专项待办, 不阻断 M13 v2 主线",
+        "at": "2026-08-25T03:42:48+00:00"
+      }
+    },
+    {
+      "id": "F-R5_spec_net_coverage-1",
+      "rule": "R5_spec_net_coverage",
+      "target": "auto",
+      "finding": "R5: J2_TO_U bands 覆盖 18 对 != 需求 16 对",
+      "severity": "med",
+      "status": "resolved",
+      "rebuttal": null,
+      "resolution": {
+        "by": "red-team-auto",
+        "reason": "规则复跑不再产出（条件消解）",
+        "at": "2026-08-25T03:23:10+00:00"
+      }
+    },
+    {
+      "id": "F-R5_spec_net_coverage-2",
+      "rule": "R5_spec_net_coverage",
+      "target": "auto",
+      "finding": "R5: U_TO_MCIO bands 覆盖 18 对 != 需求 16 对",
+      "severity": "med",
+      "status": "resolved",
+      "rebuttal": null,
+      "resolution": {
+        "by": "red-team-auto",
+        "reason": "规则复跑不再产出（条件消解）",
+        "at": "2026-08-25T03:23:10+00:00"
+      }
+    },
+    {
+      "id": "F-R17_frozen_segment_no_ref-1",
+      "rule": "R17_frozen_segment_no_ref",
+      "target": "auto",
+      "finding": "R17: SPEC 冻结/escape 段无模型来源（69 项: 缺 solve_ref 69 / 缺 input_fp 0 / solve_ref 无记录 0 / 其他 0）——冻结段必须出自模型求解并落 solve_ref+input_fp（v7.0 问题回模型, fail-closed）。样例: PCIE_DN0_P 冻结段（layer_plan.j2_escape_nets[0]）无合法 solve_ref（缺失或非 64-hex sha256）——冻结/escape 段无模型来源 = 非法手工段（问题回模型: 必须出自模型求解）",
+      "severity": "high",
+      "status": "resolved",
+      "rebuttal": null,
+      "resolution": {
+        "by": "red-team-auto",
+        "reason": "规则复跑不再产出（条件消解）",
+        "at": "2026-08-25T04:42:03+00:00"
+      }
+    }
+  ],
+  "risks": [
+    {
+      "id": "RISK-001",
+      "desc": "U4/J2 右缘焊盘墙到走廊带缺逃逸过渡区定义",
+      "trigger_stage": "L2",
+      "status": "open",
+      "created_at": "2026-08-14T08:27:26+00:00"
+    },
+    {
+      "id": "RISK-002",
+      "desc": "K2 REFCLK 双缆累积抖动预算未验证: PCIE_REFCLK0/1 为点对点直通(无电气分线, DS160PR810 线性 ReDriver 无 REFCLK 脚, 外部'必加 Clock Buffer'意见经网表证据驳回)。遗留项: REFCLK 经 SlimSAS+MCIO 两段线缆的累积抖动须链路联调实测(LTSSM Polling→L0 锁相裕量); 若实测锁不住=链路预算缺口证据→按方案级流程重评 Buffer 摆放(走 L1/L2 评审), 不得无证据预插",
+      "trigger_stage": "QA",
+      "status": "open",
+      "created_at": "2026-08-26T23:30:27+00:00"
+    }
+  ],
+  "s_state": {
+    "current": "S2",
+    "states": {
+      "S0": {
+        "status": "passed",
+        "gates": [
+          {
+            "name": "check_s0_frozen",
+            "status": "passed",
+            "evidence": "L1/L2 设计门禁全 PASS，架构已冻结",
+            "errors": null
+          }
+        ]
+      },
+      "S1": {
+        "status": "passed",
+        "gates": [
+          {
+            "name": "check_s1_rules_aligned",
+            "status": "passed",
+            "evidence": "输入板规则对齐：net_class 注入 + 封装 + 工艺约束全一致",
+            "errors": null
+          }
+        ]
+      },
+      "S2": {
+        "status": "passed",
+        "gates": [
+          {
+            "name": "check_s2_locked",
+            "status": "passed",
+            "evidence": "PCIe 高速段 226/226 locked（100%），非 F.Cu 段均在 In2 方案白名单且已锁定",
+            "errors": null
+          }
+        ]
+      },
+      "S3": {
+        "status": "blocked",
+        "gates": [
+          {
+            "name": "check_s3_pdn",
+            "status": "failed",
+            "evidence": null,
+            "errors": [
+              "无 DRC 结果，无法验证 PDN"
+            ]
+          }
+        ]
+      },
+      "S4": {
+        "status": "pending",
+        "gates": [
+          {
+            "name": "check_s4_cleanup",
+            "status": "pending",
+            "evidence": null,
+            "errors": null
+          }
+        ]
+      },
+      "S5": {
+        "status": "pending",
+        "gates": [
+          {
+            "name": "check_s5_gerber",
+            "status": "pending",
+            "evidence": null,
+            "errors": null
+          }
+        ]
+      }
+    }
+  }
+}

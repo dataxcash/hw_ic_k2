@@ -1,0 +1,1423 @@
+{
+ "probe": "capacity_map",
+ "version": "1.0",
+ "input_fp": "f6b83dfb8b332428414a95c6662b97dfe149f78334f5f1e9dc7daaa2726340dd",
+ "regions": {
+  "J2_region": {
+   "probe": "region_capacity",
+   "version": "1.0",
+   "type": "connector",
+   "id": "J2_region",
+   "corridor_id": "J2_TO_U",
+   "segname": "out_J2",
+   "side": "right",
+   "demand": 4,
+   "bases": [
+    "UP0",
+    "UP1",
+    "UP2",
+    "UP3"
+   ],
+   "pairs": {
+    "UP0": {
+     "net_p": "PCIE_UP_OUT0_P_J2",
+     "net_n": "PCIE_UP_OUT0_N_J2",
+     "track_y": 48.7,
+     "layer": "F.Cu",
+     "side": "right",
+     "segname": "out_J2",
+     "pair_center": [
+      133.825,
+      43.2
+     ],
+     "pn_pad_center_dist": 2.425,
+     "flip_usable": true,
+     "status": "CAPACITY_OK",
+     "form": {
+      "flip": false,
+      "kind": "L-H-V",
+      "corr_x": 129.05,
+      "pn_via_center": [
+       133.9842548605469,
+       43.15475322885674
+      ]
+     }
+    },
+    "UP1": {
+     "net_p": "PCIE_UP_OUT1_P_J2",
+     "net_n": "PCIE_UP_OUT1_N_J2",
+     "track_y": 47.5,
+     "layer": "F.Cu",
+     "side": "right",
+     "segname": "out_J2",
+     "pair_center": [
+      133.825,
+      44.1
+     ],
+     "pn_pad_center_dist": 2.35,
+     "flip_usable": true,
+     "status": "CAPACITY_OK",
+     "form": {
+      "flip": false,
+      "kind": "L-H-V",
+      "corr_x": 130.85,
+      "pn_via_center": [
+       131.63231853001884,
+       44.351909181744055
+      ]
+     }
+    },
+    "UP2": {
+     "net_p": "PCIE_UP_OUT2_P_J2",
+     "net_n": "PCIE_UP_OUT2_N_J2",
+     "track_y": 46.3,
+     "layer": "F.Cu",
+     "side": "right",
+     "segname": "out_J2",
+     "pair_center": [
+      133.825,
+      46.8
+     ],
+     "pn_pad_center_dist": 2.425,
+     "flip_usable": true,
+     "status": "CAPACITY_OK",
+     "form": {
+      "flip": false,
+      "kind": "L-H-V",
+      "corr_x": 131.75,
+      "pn_via_center": [
+       133.98388567799185,
+       46.56373982802441
+      ]
+     }
+    },
+    "UP3": {
+     "net_p": "PCIE_UP_OUT3_P_J2",
+     "net_n": "PCIE_UP_OUT3_N_J2",
+     "track_y": 45.1,
+     "layer": "F.Cu",
+     "side": "right",
+     "segname": "out_J2",
+     "pair_center": [
+      133.825,
+      47.7
+     ],
+     "pn_pad_center_dist": 2.35,
+     "flip_usable": true,
+     "status": "CAPACITY_OK",
+     "form": {
+      "flip": false,
+      "kind": "L-H-V",
+      "corr_x": 131.45,
+      "pn_via_center": [
+       131.62186382283906,
+       47.46409145622389
+      ]
+     }
+    }
+   },
+   "capacity": 4,
+   "status": "CAPACITY_OK",
+   "conflict_sets": [],
+   "geometry_evidence": {
+    "corridor_x_range": [
+     98.83,
+     132.65
+    ],
+    "pair_half_pitch": 0.19,
+    "width_mm": 0.205,
+    "pn_edge_clearance": 0.175,
+    "demand_pairs": 4,
+    "allocated_tracks": 4
+   }
+  },
+  "MCIO_region": {
+   "probe": "region_capacity",
+   "version": "1.0",
+   "type": "connector",
+   "id": "MCIO_region",
+   "corridor_id": "U_TO_MCIO",
+   "segname": "out_MCIO",
+   "side": "right",
+   "demand": 4,
+   "bases": [
+    "DN0",
+    "DN1",
+    "DN2",
+    "DN3"
+   ],
+   "pairs": {
+    "DN0": {
+     "net_p": "PCIE_DN_OUT0_P_MCIO",
+     "net_n": "PCIE_DN_OUT0_N_MCIO",
+     "track_y": 44.3,
+     "layer": "F.Cu",
+     "side": "right",
+     "segname": "out_MCIO",
+     "pair_center": [
+      76.825,
+      66.0
+     ],
+     "pn_pad_center_dist": 1.3,
+     "flip_usable": true,
+     "status": "CAPACITY_OK",
+     "form": {
+      "flip": false,
+      "kind": "L-H-V",
+      "corr_x": 88.83,
+      "pn_via_center": [
+       75.94797609416287,
+       65.17091056742109
+      ]
+     }
+    },
+    "DN1": {
+     "net_p": "PCIE_DN_OUT1_P_MCIO",
+     "net_n": "PCIE_DN_OUT1_N_MCIO",
+     "track_y": 43.1,
+     "layer": "F.Cu",
+     "side": "right",
+     "segname": "out_MCIO",
+     "pair_center": [
+      76.825,
+      60.05
+     ],
+     "pn_pad_center_dist": 1.3,
+     "flip_usable": false,
+     "status": "BLOCKED",
+     "reason": "对级对称逃逸无净空（M=(76.825,60.050) → cv=(88.830,43.100) dir=-1 flip=True pn_dist=1.300）",
+     "nearest": {
+      "kind": "pad",
+      "net": "VREG2_U7",
+      "desc": "pad:VREG2_U7 (F.Cu)",
+      "dist": 0.011847042105418384,
+      "req": 0.2
+     },
+     "fail_forms": {
+      "flip_False": {
+       "reason": "对级对称逃逸无净空（M=(76.825,60.050) → cv=(88.830,43.100) dir=-1 flip=False pn_dist=1.300）",
+       "nearest": {
+        "kind": "pad",
+        "net": "VREG2_U7",
+        "desc": "pad:VREG2_U7 (F.Cu)",
+        "dist": 0.011847042105418384,
+        "req": 0.2
+       }
+      },
+      "flip_True": {
+       "reason": "对级对称逃逸无净空（M=(76.825,60.050) → cv=(88.830,43.100) dir=-1 flip=True pn_dist=1.300）",
+       "nearest": {
+        "kind": "pad",
+        "net": "VREG2_U7",
+        "desc": "pad:VREG2_U7 (F.Cu)",
+        "dist": 0.011847042105418384,
+        "req": 0.2
+       }
+      }
+     }
+    },
+    "DN2": {
+     "net_p": "PCIE_DN_OUT2_P_MCIO",
+     "net_n": "PCIE_DN_OUT2_N_MCIO",
+     "track_y": 41.9,
+     "layer": "F.Cu",
+     "side": "right",
+     "segname": "out_MCIO",
+     "pair_center": [
+      79.425,
+      60.05
+     ],
+     "pn_pad_center_dist": 1.3,
+     "flip_usable": true,
+     "status": "CAPACITY_OK",
+     "form": {
+      "flip": false,
+      "kind": "L-H-V",
+      "corr_x": 88.83,
+      "pn_via_center": [
+       78.52475738676777,
+       59.22880769715326
+      ]
+     }
+    },
+    "DN3": {
+     "net_p": "PCIE_DN_OUT3_P_MCIO",
+     "net_n": "PCIE_DN_OUT3_N_MCIO",
+     "track_y": 40.7,
+     "layer": "F.Cu",
+     "side": "right",
+     "segname": "out_MCIO",
+     "pair_center": [
+      82.025,
+      60.05
+     ],
+     "pn_pad_center_dist": 1.3,
+     "flip_usable": true,
+     "status": "CAPACITY_OK",
+     "form": {
+      "flip": false,
+      "kind": "L-H-V",
+      "corr_x": 88.83,
+      "pn_via_center": [
+       81.00876660286747,
+       59.282856160229244
+      ]
+     }
+    }
+   },
+   "capacity": 3,
+   "status": "INSUFFICIENT",
+   "conflict_sets": [
+    {
+     "pairs": [
+      "DN1"
+     ],
+     "obstacle": {
+      "kind": "pad",
+      "net": "VREG2_U7",
+      "desc": "pad:VREG2_U7 (F.Cu)",
+      "dist": 0.011847042105418384,
+      "req": 0.2
+     },
+     "dist": 0.011847042105418384,
+     "reason": "对级对称逃逸无净空（M=(76.825,60.050) → cv=(88.830,43.100) dir=-1 flip=True pn_dist=1.300）"
+    }
+   ],
+   "geometry_evidence": {
+    "corridor_x_range": [
+     64.9,
+     88.83
+    ],
+    "pair_half_pitch": 0.19,
+    "width_mm": 0.205,
+    "pn_edge_clearance": 0.175,
+    "demand_pairs": 4,
+    "allocated_tracks": 4
+   }
+  },
+  "U3_region": {
+   "probe": "region_capacity",
+   "version": "1.0",
+   "type": "pin_region",
+   "id": "U3_region",
+   "corridor_id": "U_TO_MCIO",
+   "segname": "out_U3",
+   "side": "left",
+   "demand": 4,
+   "bases": [
+    "DN0",
+    "DN1",
+    "DN2",
+    "DN3"
+   ],
+   "pairs": {
+    "DN0": {
+     "net_p": "PCIE_DN_OUT0_P_U3",
+     "net_n": "PCIE_DN_OUT0_N_U3",
+     "track_y": 44.3,
+     "layer": "F.Cu",
+     "side": "left",
+     "segname": "out_U3",
+     "pair_center": [
+      76.125,
+      66.0
+     ],
+     "pn_pad_center_dist": 1.3,
+     "flip_usable": true,
+     "status": "CAPACITY_OK",
+     "form": {
+      "flip": false,
+      "kind": "L-H-V",
+      "corr_x": 64.9,
+      "pn_via_center": [
+       74.66000241419535,
+       65.73036609957626
+      ]
+     }
+    },
+    "DN1": {
+     "net_p": "PCIE_DN_OUT1_P_U3",
+     "net_n": "PCIE_DN_OUT1_N_U3",
+     "track_y": 43.1,
+     "layer": "F.Cu",
+     "side": "left",
+     "segname": "out_U3",
+     "pair_center": [
+      76.125,
+      60.05
+     ],
+     "pn_pad_center_dist": 1.3,
+     "flip_usable": true,
+     "status": "CAPACITY_OK",
+     "form": {
+      "flip": false,
+      "kind": "L-H-V",
+      "corr_x": 65.5,
+      "pn_via_center": [
+       74.63836382241145,
+       59.845003606145546
+      ]
+     }
+    },
+    "DN2": {
+     "net_p": "PCIE_DN_OUT2_P_U3",
+     "net_n": "PCIE_DN_OUT2_N_U3",
+     "track_y": 41.9,
+     "layer": "F.Cu",
+     "side": "left",
+     "segname": "out_U3",
+     "pair_center": [
+      78.725,
+      60.05
+     ],
+     "pn_pad_center_dist": 1.3,
+     "flip_usable": true,
+     "status": "CAPACITY_OK",
+     "form": {
+      "flip": false,
+      "kind": "L-H-V",
+      "corr_x": 64.9,
+      "pn_via_center": [
+       77.22197054417384,
+       59.920299846989494
+      ]
+     }
+    },
+    "DN3": {
+     "net_p": "PCIE_DN_OUT3_P_U3",
+     "net_n": "PCIE_DN_OUT3_N_U3",
+     "track_y": 40.7,
+     "layer": "F.Cu",
+     "side": "left",
+     "segname": "out_U3",
+     "pair_center": [
+      81.325,
+      60.05
+     ],
+     "pn_pad_center_dist": 1.3,
+     "flip_usable": true,
+     "status": "CAPACITY_OK",
+     "form": {
+      "flip": false,
+      "kind": "L-H-V",
+      "corr_x": 64.9,
+      "pn_via_center": [
+       79.81633768825787,
+       59.96559077022256
+      ]
+     }
+    }
+   },
+   "capacity": 4,
+   "status": "CAPACITY_OK",
+   "conflict_sets": [],
+   "geometry_evidence": {
+    "corridor_x_range": [
+     64.9,
+     88.83
+    ],
+    "pair_half_pitch": 0.19,
+    "width_mm": 0.205,
+    "pn_edge_clearance": 0.175,
+    "demand_pairs": 4,
+    "allocated_tracks": 4
+   }
+  },
+  "U7_region": {
+   "probe": "region_capacity",
+   "version": "1.0",
+   "type": "pin_region",
+   "id": "U7_region",
+   "corridor_id": "J2_TO_U",
+   "segname": "out_U7",
+   "side": "left",
+   "demand": 4,
+   "bases": [
+    "UP0",
+    "UP1",
+    "UP2",
+    "UP3"
+   ],
+   "pairs": {
+    "UP0": {
+     "net_p": "PCIE_UP_OUT0_P_U7",
+     "net_n": "PCIE_UP_OUT0_N_U7",
+     "track_y": 48.7,
+     "layer": "F.Cu",
+     "side": "left",
+     "segname": "out_U7",
+     "pair_center": [
+      98.825,
+      48.7
+     ],
+     "pn_pad_center_dist": 0.4,
+     "flip_usable": false,
+     "status": "BLOCKED",
+     "reason": "对级对称逃逸无净空（M=(98.825,48.700) → cv=(98.830,48.700) dir=1 flip=True pn_dist=0.400）",
+     "nearest": {
+      "kind": "pad",
+      "net": "GND",
+      "desc": "pad:GND (F.Cu)",
+      "dist": 0.4000000000000014,
+      "req": 0.175
+     },
+     "fail_forms": {
+      "flip_False": {
+       "reason": "对级对称逃逸无净空（M=(98.825,48.700) → cv=(98.830,48.700) dir=1 flip=False pn_dist=0.400）",
+       "nearest": {
+        "kind": "pad",
+        "net": "GND",
+        "desc": "pad:GND (F.Cu)",
+        "dist": 0.4000000000000014,
+        "req": 0.175
+       }
+      },
+      "flip_True": {
+       "reason": "对级对称逃逸无净空（M=(98.825,48.700) → cv=(98.830,48.700) dir=1 flip=True pn_dist=0.400）",
+       "nearest": {
+        "kind": "pad",
+        "net": "GND",
+        "desc": "pad:GND (F.Cu)",
+        "dist": 0.4000000000000014,
+        "req": 0.175
+       }
+      }
+     }
+    },
+    "UP1": {
+     "net_p": "PCIE_UP_OUT1_P_U7",
+     "net_n": "PCIE_UP_OUT1_N_U7",
+     "track_y": 47.5,
+     "layer": "F.Cu",
+     "side": "left",
+     "segname": "out_U7",
+     "pair_center": [
+      98.825,
+      47.5
+     ],
+     "pn_pad_center_dist": 0.4,
+     "flip_usable": true,
+     "status": "CAPACITY_OK",
+     "form": {
+      "flip": false,
+      "kind": "DIRECT",
+      "corr_x": 99.48,
+      "pn_via_center": null
+     }
+    },
+    "UP2": {
+     "net_p": "PCIE_UP_OUT2_P_U7",
+     "net_n": "PCIE_UP_OUT2_N_U7",
+     "track_y": 46.3,
+     "layer": "F.Cu",
+     "side": "left",
+     "segname": "out_U7",
+     "pair_center": [
+      98.825,
+      46.3
+     ],
+     "pn_pad_center_dist": 0.4,
+     "flip_usable": false,
+     "status": "BLOCKED",
+     "reason": "对级对称逃逸无净空（M=(98.825,46.300) → cv=(98.830,46.300) dir=1 flip=True pn_dist=0.400）",
+     "nearest": {
+      "kind": "pad",
+      "net": "GND",
+      "desc": "pad:GND (F.Cu)",
+      "dist": 0.37500000000000283,
+      "req": 0.175
+     },
+     "fail_forms": {
+      "flip_False": {
+       "reason": "对级对称逃逸无净空（M=(98.825,46.300) → cv=(98.830,46.300) dir=1 flip=False pn_dist=0.400）",
+       "nearest": {
+        "kind": "pad",
+        "net": "GND",
+        "desc": "pad:GND (F.Cu)",
+        "dist": 0.37500000000000283,
+        "req": 0.175
+       }
+      },
+      "flip_True": {
+       "reason": "对级对称逃逸无净空（M=(98.825,46.300) → cv=(98.830,46.300) dir=1 flip=True pn_dist=0.400）",
+       "nearest": {
+        "kind": "pad",
+        "net": "GND",
+        "desc": "pad:GND (F.Cu)",
+        "dist": 0.37500000000000283,
+        "req": 0.175
+       }
+      }
+     }
+    },
+    "UP3": {
+     "net_p": "PCIE_UP_OUT3_P_U7",
+     "net_n": "PCIE_UP_OUT3_N_U7",
+     "track_y": 45.1,
+     "layer": "F.Cu",
+     "side": "left",
+     "segname": "out_U7",
+     "pair_center": [
+      98.825,
+      45.1
+     ],
+     "pn_pad_center_dist": 0.4,
+     "flip_usable": false,
+     "status": "BLOCKED",
+     "reason": "对级对称逃逸无净空（M=(98.825,45.100) → cv=(98.830,45.100) dir=1 flip=True pn_dist=0.400）",
+     "nearest": {
+      "kind": "pad",
+      "net": "VREG1_U7",
+      "desc": "pad:VREG1_U7 (F.Cu)",
+      "dist": 0.3999999999999943,
+      "req": 0.2
+     },
+     "fail_forms": {
+      "flip_False": {
+       "reason": "对级对称逃逸无净空（M=(98.825,45.100) → cv=(98.830,45.100) dir=1 flip=False pn_dist=0.400）",
+       "nearest": {
+        "kind": "pad",
+        "net": "VREG1_U7",
+        "desc": "pad:VREG1_U7 (F.Cu)",
+        "dist": 0.3999999999999943,
+        "req": 0.2
+       }
+      },
+      "flip_True": {
+       "reason": "对级对称逃逸无净空（M=(98.825,45.100) → cv=(98.830,45.100) dir=1 flip=True pn_dist=0.400）",
+       "nearest": {
+        "kind": "pad",
+        "net": "VREG1_U7",
+        "desc": "pad:VREG1_U7 (F.Cu)",
+        "dist": 0.3999999999999943,
+        "req": 0.2
+       }
+      }
+     }
+    }
+   },
+   "capacity": 1,
+   "status": "INSUFFICIENT",
+   "conflict_sets": [
+    {
+     "pairs": [
+      "UP0"
+     ],
+     "obstacle": {
+      "kind": "pad",
+      "net": "GND",
+      "desc": "pad:GND (F.Cu)",
+      "dist": 0.4000000000000014,
+      "req": 0.175
+     },
+     "dist": 0.4000000000000014,
+     "reason": "对级对称逃逸无净空（M=(98.825,48.700) → cv=(98.830,48.700) dir=1 flip=True pn_dist=0.400）"
+    },
+    {
+     "pairs": [
+      "UP2"
+     ],
+     "obstacle": {
+      "kind": "pad",
+      "net": "GND",
+      "desc": "pad:GND (F.Cu)",
+      "dist": 0.37500000000000283,
+      "req": 0.175
+     },
+     "dist": 0.37500000000000283,
+     "reason": "对级对称逃逸无净空（M=(98.825,46.300) → cv=(98.830,46.300) dir=1 flip=True pn_dist=0.400）"
+    },
+    {
+     "pairs": [
+      "UP3"
+     ],
+     "obstacle": {
+      "kind": "pad",
+      "net": "VREG1_U7",
+      "desc": "pad:VREG1_U7 (F.Cu)",
+      "dist": 0.3999999999999943,
+      "req": 0.2
+     },
+     "dist": 0.3999999999999943,
+     "reason": "对级对称逃逸无净空（M=(98.825,45.100) → cv=(98.830,45.100) dir=1 flip=True pn_dist=0.400）"
+    }
+   ],
+   "geometry_evidence": {
+    "corridor_x_range": [
+     98.83,
+     132.65
+    ],
+    "pair_half_pitch": 0.19,
+    "width_mm": 0.205,
+    "pn_edge_clearance": 0.175,
+    "demand_pairs": 4,
+    "allocated_tracks": 4
+   }
+  }
+ },
+ "corridors": {
+  "J2_TO_U_upper": {
+   "probe": "region_capacity",
+   "type": "corridor",
+   "id": "J2_TO_U_upper",
+   "corridor_id": "J2_TO_U",
+   "band": "upper",
+   "demand": 8,
+   "x_range": [
+    99.025,
+    132.65
+   ],
+   "track_count": 8,
+   "tracks": [
+    {
+     "track_y": 40.3,
+     "layer": "F.Cu",
+     "ok": true,
+     "entry_x": 99.025,
+     "nearest": {
+      "kind": "pad",
+      "net": "VREG2_U7",
+      "desc": "pad:VREG2_U7 (F.Cu)",
+      "dist": 0.2100000000000108,
+      "req": 0.2
+     }
+    },
+    {
+     "track_y": 41.5,
+     "layer": "F.Cu",
+     "ok": true,
+     "entry_x": 99.025,
+     "nearest": {
+      "kind": "pad",
+      "net": "P3V3",
+      "desc": "pad:P3V3 (F.Cu)",
+      "dist": 0.21000000000000368,
+      "req": 0.2
+     }
+    },
+    {
+     "track_y": 42.7,
+     "layer": "F.Cu",
+     "ok": false,
+     "entry_x": null,
+     "nearest": {
+      "kind": "pad",
+      "net": "GND",
+      "desc": "pad:GND (F.Cu)",
+      "dist": -0.075,
+      "req": 0.1
+     }
+    },
+    {
+     "track_y": 43.9,
+     "layer": "F.Cu",
+     "ok": true,
+     "entry_x": 99.025,
+     "nearest": {
+      "kind": "pad",
+      "net": "GND",
+      "desc": "pad:GND (F.Cu)",
+      "dist": 0.21000000000000368,
+      "req": 0.1
+     }
+    },
+    {
+     "track_y": 45.1,
+     "layer": "F.Cu",
+     "ok": false,
+     "entry_x": null,
+     "nearest": {
+      "kind": "pad",
+      "net": "GND",
+      "desc": "pad:GND (F.Cu)",
+      "dist": -0.075,
+      "req": 0.1
+     }
+    },
+    {
+     "track_y": 46.3,
+     "layer": "F.Cu",
+     "ok": false,
+     "entry_x": null,
+     "nearest": {
+      "kind": "pad",
+      "net": "GND",
+      "desc": "pad:GND (F.Cu)",
+      "dist": -0.075,
+      "req": 0.1
+     }
+    },
+    {
+     "track_y": 47.5,
+     "layer": "F.Cu",
+     "ok": true,
+     "entry_x": 99.025,
+     "nearest": {
+      "kind": "pad",
+      "net": "GND",
+      "desc": "pad:GND (F.Cu)",
+      "dist": 0.21000000000000368,
+      "req": 0.1
+     }
+    },
+    {
+     "track_y": 48.7,
+     "layer": "F.Cu",
+     "ok": false,
+     "entry_x": null,
+     "nearest": {
+      "kind": "pad",
+      "net": "GND",
+      "desc": "pad:GND (F.Cu)",
+      "dist": 0.21000000000000368,
+      "req": 0.1
+     }
+    }
+   ],
+   "capacity": 4,
+   "status": "INSUFFICIENT",
+   "conflict_sets": [
+    {
+     "pairs": [
+      42.7,
+      45.1,
+      46.3,
+      48.7
+     ],
+     "obstacle": {
+      "kind": "pad",
+      "net": "GND",
+      "desc": "pad:GND (F.Cu)",
+      "dist": -0.075,
+      "req": 0.1
+     },
+     "dist": -0.075
+    },
+    {
+     "pairs": [
+      42.7,
+      45.1,
+      46.3,
+      48.7
+     ],
+     "obstacle": {
+      "kind": "pad",
+      "net": "GND",
+      "desc": "pad:GND (F.Cu)",
+      "dist": -0.075,
+      "req": 0.1
+     },
+     "dist": -0.075
+    },
+    {
+     "pairs": [
+      42.7,
+      45.1,
+      46.3,
+      48.7
+     ],
+     "obstacle": {
+      "kind": "pad",
+      "net": "GND",
+      "desc": "pad:GND (F.Cu)",
+      "dist": -0.075,
+      "req": 0.1
+     },
+     "dist": -0.075
+    },
+    {
+     "pairs": [
+      42.7,
+      45.1,
+      46.3,
+      48.7
+     ],
+     "obstacle": {
+      "kind": "pad",
+      "net": "GND",
+      "desc": "pad:GND (F.Cu)",
+      "dist": 0.21000000000000368,
+      "req": 0.1
+     },
+     "dist": 0.21000000000000368
+    }
+   ],
+   "geometry_evidence": {
+    "x_range": [
+     99.025,
+     132.65
+    ],
+    "pair_half_pitch": 0.19,
+    "pitch": 1.08,
+    "width_mm": 0.205,
+    "pn_edge_clearance": 0.175
+   }
+  },
+  "J2_TO_U_lower": {
+   "probe": "region_capacity",
+   "type": "corridor",
+   "id": "J2_TO_U_lower",
+   "corridor_id": "J2_TO_U",
+   "band": "lower",
+   "demand": 8,
+   "x_range": [
+    99.025,
+    132.65
+   ],
+   "track_count": 8,
+   "tracks": [
+    {
+     "track_y": 58.3,
+     "layer": "F.Cu",
+     "ok": false,
+     "entry_x": null,
+     "nearest": {
+      "kind": "pad",
+      "net": "GND",
+      "desc": "pad:GND (F.Cu)",
+      "dist": -0.075,
+      "req": 0.1
+     }
+    },
+    {
+     "track_y": 59.5,
+     "layer": "F.Cu",
+     "ok": true,
+     "entry_x": 99.025,
+     "nearest": {
+      "kind": "pad",
+      "net": "P3V3",
+      "desc": "pad:P3V3 (F.Cu)",
+      "dist": 0.21000000000000368,
+      "req": 0.2
+     }
+    },
+    {
+     "track_y": 60.7,
+     "layer": "F.Cu",
+     "ok": false,
+     "entry_x": null,
+     "nearest": {
+      "kind": "pad",
+      "net": "GND",
+      "desc": "pad:GND (F.Cu)",
+      "dist": 0.21000000000000368,
+      "req": 0.1
+     }
+    },
+    {
+     "track_y": 61.9,
+     "layer": "F.Cu",
+     "ok": false,
+     "entry_x": null,
+     "nearest": {
+      "kind": "pad",
+      "net": "GND",
+      "desc": "pad:GND (F.Cu)",
+      "dist": -0.075,
+      "req": 0.1
+     }
+    },
+    {
+     "track_y": 63.1,
+     "layer": "F.Cu",
+     "ok": false,
+     "entry_x": null,
+     "nearest": {
+      "kind": "pad",
+      "net": "VREG2_U3",
+      "desc": "pad:VREG2_U3 (F.Cu)",
+      "dist": 0.21000000000000368,
+      "req": 0.2
+     }
+    },
+    {
+     "track_y": 64.3,
+     "layer": "F.Cu",
+     "ok": false,
+     "entry_x": null,
+     "nearest": {
+      "kind": "pad",
+      "net": "P3V3",
+      "desc": "pad:P3V3 (F.Cu)",
+      "dist": 0.2100000000000108,
+      "req": 0.2
+     }
+    },
+    {
+     "track_y": 65.5,
+     "layer": "F.Cu",
+     "ok": true,
+     "entry_x": 99.025,
+     "nearest": {
+      "kind": "pad",
+      "net": "GND",
+      "desc": "pad:GND (F.Cu)",
+      "dist": 0.2100000000000108,
+      "req": 0.1
+     }
+    },
+    {
+     "track_y": 66.7,
+     "layer": "F.Cu",
+     "ok": true,
+     "entry_x": 99.025,
+     "nearest": {
+      "kind": "pad",
+      "net": "GND",
+      "desc": "pad:GND (F.Cu)",
+      "dist": 0.20999999999999658,
+      "req": 0.1
+     }
+    }
+   ],
+   "capacity": 3,
+   "status": "INSUFFICIENT",
+   "conflict_sets": [
+    {
+     "pairs": [
+      58.3,
+      60.7,
+      61.9,
+      63.1,
+      64.3
+     ],
+     "obstacle": {
+      "kind": "pad",
+      "net": "GND",
+      "desc": "pad:GND (F.Cu)",
+      "dist": -0.075,
+      "req": 0.1
+     },
+     "dist": -0.075
+    },
+    {
+     "pairs": [
+      58.3,
+      60.7,
+      61.9,
+      63.1,
+      64.3
+     ],
+     "obstacle": {
+      "kind": "pad",
+      "net": "GND",
+      "desc": "pad:GND (F.Cu)",
+      "dist": 0.21000000000000368,
+      "req": 0.1
+     },
+     "dist": 0.21000000000000368
+    },
+    {
+     "pairs": [
+      58.3,
+      60.7,
+      61.9,
+      63.1,
+      64.3
+     ],
+     "obstacle": {
+      "kind": "pad",
+      "net": "GND",
+      "desc": "pad:GND (F.Cu)",
+      "dist": -0.075,
+      "req": 0.1
+     },
+     "dist": -0.075
+    },
+    {
+     "pairs": [
+      58.3,
+      60.7,
+      61.9,
+      63.1,
+      64.3
+     ],
+     "obstacle": {
+      "kind": "pad",
+      "net": "VREG2_U3",
+      "desc": "pad:VREG2_U3 (F.Cu)",
+      "dist": 0.21000000000000368,
+      "req": 0.2
+     },
+     "dist": 0.21000000000000368
+    },
+    {
+     "pairs": [
+      58.3,
+      60.7,
+      61.9,
+      63.1,
+      64.3
+     ],
+     "obstacle": {
+      "kind": "pad",
+      "net": "P3V3",
+      "desc": "pad:P3V3 (F.Cu)",
+      "dist": 0.2100000000000108,
+      "req": 0.2
+     },
+     "dist": 0.2100000000000108
+    }
+   ],
+   "geometry_evidence": {
+    "x_range": [
+     99.025,
+     132.65
+    ],
+    "pair_half_pitch": 0.19,
+    "pitch": 1.08,
+    "width_mm": 0.205,
+    "pn_edge_clearance": 0.175
+   }
+  },
+  "J2_TO_U_refclk": {
+   "probe": "region_capacity",
+   "type": "corridor",
+   "id": "J2_TO_U_refclk",
+   "corridor_id": "J2_TO_U",
+   "band": "refclk",
+   "demand": 2,
+   "x_range": [
+    99.025,
+    132.65
+   ],
+   "track_count": 2,
+   "tracks": [
+    {
+     "track_y": 45.7,
+     "layer": "In6.Cu",
+     "ok": true,
+     "entry_x": 99.025,
+     "nearest": null
+    },
+    {
+     "track_y": 50.5,
+     "layer": "In6.Cu",
+     "ok": true,
+     "entry_x": 99.025,
+     "nearest": null
+    }
+   ],
+   "capacity": 2,
+   "status": "CAPACITY_OK",
+   "conflict_sets": [],
+   "geometry_evidence": {
+    "x_range": [
+     99.025,
+     132.65
+    ],
+    "pair_half_pitch": 0.19,
+    "pitch": 1.08,
+    "width_mm": 0.205,
+    "pn_edge_clearance": 0.175
+   }
+  },
+  "U_TO_MCIO_upper": {
+   "probe": "region_capacity",
+   "type": "corridor",
+   "id": "U_TO_MCIO_upper",
+   "corridor_id": "U_TO_MCIO",
+   "band": "upper",
+   "demand": 8,
+   "x_range": [
+    64.9,
+    88.625
+   ],
+   "track_count": 8,
+   "tracks": [
+    {
+     "track_y": 40.7,
+     "layer": "F.Cu",
+     "ok": true,
+     "entry_x": 64.9,
+     "nearest": {
+      "kind": "pad",
+      "net": "GND",
+      "desc": "pad:GND (F.Cu)",
+      "dist": 0.21000000000000368,
+      "req": 0.1
+     }
+    },
+    {
+     "track_y": 41.9,
+     "layer": "F.Cu",
+     "ok": true,
+     "entry_x": 64.9,
+     "nearest": {
+      "kind": "pad",
+      "net": "P3V3",
+      "desc": "pad:P3V3 (F.Cu)",
+      "dist": 0.21000000000000368,
+      "req": 0.2
+     }
+    },
+    {
+     "track_y": 43.1,
+     "layer": "F.Cu",
+     "ok": true,
+     "entry_x": 65.5,
+     "nearest": {
+      "kind": "pad",
+      "net": "GND",
+      "desc": "pad:GND (F.Cu)",
+      "dist": -0.075,
+      "req": 0.1
+     }
+    },
+    {
+     "track_y": 44.3,
+     "layer": "F.Cu",
+     "ok": true,
+     "entry_x": 64.9,
+     "nearest": {
+      "kind": "pad",
+      "net": "GND",
+      "desc": "pad:GND (F.Cu)",
+      "dist": 0.2100000000000108,
+      "req": 0.1
+     }
+    },
+    {
+     "track_y": 45.5,
+     "layer": "F.Cu",
+     "ok": true,
+     "entry_x": 65.5,
+     "nearest": {
+      "kind": "pad",
+      "net": "GND",
+      "desc": "pad:GND (F.Cu)",
+      "dist": -0.075,
+      "req": 0.1
+     }
+    },
+    {
+     "track_y": 46.7,
+     "layer": "F.Cu",
+     "ok": true,
+     "entry_x": 64.9,
+     "nearest": {
+      "kind": "pad",
+      "net": "P3V3",
+      "desc": "pad:P3V3 (F.Cu)",
+      "dist": 0.21000000000000368,
+      "req": 0.2
+     }
+    },
+    {
+     "track_y": 47.9,
+     "layer": "F.Cu",
+     "ok": true,
+     "entry_x": 64.9,
+     "nearest": {
+      "kind": "pad",
+      "net": "VREG1_U7",
+      "desc": "pad:VREG1_U7 (F.Cu)",
+      "dist": 0.21000000000000368,
+      "req": 0.2
+     }
+    },
+    {
+     "track_y": 49.1,
+     "layer": "F.Cu",
+     "ok": true,
+     "entry_x": 64.9,
+     "nearest": {
+      "kind": "pad",
+      "net": "VREG1_U7",
+      "desc": "pad:VREG1_U7 (F.Cu)",
+      "dist": 0.5899999999999992,
+      "req": 0.2
+     }
+    }
+   ],
+   "capacity": 8,
+   "status": "CAPACITY_OK",
+   "conflict_sets": [],
+   "geometry_evidence": {
+    "x_range": [
+     64.9,
+     88.625
+    ],
+    "pair_half_pitch": 0.19,
+    "pitch": 1.08,
+    "width_mm": 0.205,
+    "pn_edge_clearance": 0.175
+   }
+  },
+  "U_TO_MCIO_lower": {
+   "probe": "region_capacity",
+   "type": "corridor",
+   "id": "U_TO_MCIO_lower",
+   "corridor_id": "U_TO_MCIO",
+   "band": "lower",
+   "demand": 8,
+   "x_range": [
+    64.9,
+    88.625
+   ],
+   "track_count": 8,
+   "tracks": [
+    {
+     "track_y": 58.7,
+     "layer": "F.Cu",
+     "ok": true,
+     "entry_x": 64.9,
+     "nearest": {
+      "kind": "pad",
+      "net": "GND",
+      "desc": "pad:GND (F.Cu)",
+      "dist": 0.21000000000000368,
+      "req": 0.1
+     }
+    },
+    {
+     "track_y": 59.9,
+     "layer": "F.Cu",
+     "ok": true,
+     "entry_x": 64.9,
+     "nearest": {
+      "kind": "pad",
+      "net": "P3V3",
+      "desc": "pad:P3V3 (F.Cu)",
+      "dist": 0.21000000000000368,
+      "req": 0.2
+     }
+    },
+    {
+     "track_y": 61.1,
+     "layer": "F.Cu",
+     "ok": true,
+     "entry_x": 65.5,
+     "nearest": {
+      "kind": "pad",
+      "net": "GND",
+      "desc": "pad:GND (F.Cu)",
+      "dist": -0.075,
+      "req": 0.1
+     }
+    },
+    {
+     "track_y": 62.3,
+     "layer": "F.Cu",
+     "ok": true,
+     "entry_x": 64.9,
+     "nearest": {
+      "kind": "pad",
+      "net": "GND",
+      "desc": "pad:GND (F.Cu)",
+      "dist": 0.2100000000000108,
+      "req": 0.1
+     }
+    },
+    {
+     "track_y": 63.5,
+     "layer": "F.Cu",
+     "ok": true,
+     "entry_x": 65.5,
+     "nearest": {
+      "kind": "pad",
+      "net": "GND",
+      "desc": "pad:GND (F.Cu)",
+      "dist": -0.075,
+      "req": 0.1
+     }
+    },
+    {
+     "track_y": 64.7,
+     "layer": "F.Cu",
+     "ok": true,
+     "entry_x": 64.9,
+     "nearest": {
+      "kind": "pad",
+      "net": "P3V3",
+      "desc": "pad:P3V3 (F.Cu)",
+      "dist": 0.20999999999999658,
+      "req": 0.2
+     }
+    },
+    {
+     "track_y": 65.9,
+     "layer": "F.Cu",
+     "ok": true,
+     "entry_x": 64.9,
+     "nearest": {
+      "kind": "pad",
+      "net": "VREG2_U3",
+      "desc": "pad:VREG2_U3 (F.Cu)",
+      "dist": 0.20999999999999658,
+      "req": 0.2
+     }
+    },
+    {
+     "track_y": 67.1,
+     "layer": "F.Cu",
+     "ok": true,
+     "entry_x": 64.9,
+     "nearest": {
+      "kind": "pad",
+      "net": "VREG2_U3",
+      "desc": "pad:VREG2_U3 (F.Cu)",
+      "dist": 0.5899999999999921,
+      "req": 0.2
+     }
+    }
+   ],
+   "capacity": 8,
+   "status": "CAPACITY_OK",
+   "conflict_sets": [],
+   "geometry_evidence": {
+    "x_range": [
+     64.9,
+     88.625
+    ],
+    "pair_half_pitch": 0.19,
+    "pitch": 1.08,
+    "width_mm": 0.205,
+    "pn_edge_clearance": 0.175
+   }
+  },
+  "U_TO_MCIO_refclk": {
+   "probe": "region_capacity",
+   "type": "corridor",
+   "id": "U_TO_MCIO_refclk",
+   "corridor_id": "U_TO_MCIO",
+   "band": "refclk",
+   "demand": 2,
+   "x_range": [
+    64.9,
+    88.625
+   ],
+   "track_count": 2,
+   "tracks": [
+    {
+     "track_y": 45.7,
+     "layer": "In6.Cu",
+     "ok": true,
+     "entry_x": 64.9,
+     "nearest": null
+    },
+    {
+     "track_y": 50.5,
+     "layer": "In6.Cu",
+     "ok": true,
+     "entry_x": 64.9,
+     "nearest": null
+    }
+   ],
+   "capacity": 2,
+   "status": "CAPACITY_OK",
+   "conflict_sets": [],
+   "geometry_evidence": {
+    "x_range": [
+     64.9,
+     88.625
+    ],
+    "pair_half_pitch": 0.19,
+    "pitch": 1.08,
+    "width_mm": 0.205,
+    "pn_edge_clearance": 0.175
+   }
+  }
+ }
+}

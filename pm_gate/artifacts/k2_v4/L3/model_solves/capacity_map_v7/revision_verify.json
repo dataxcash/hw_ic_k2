@@ -1,0 +1,172 @@
+{
+ "probe": "revision_verify",
+ "note": "内存副本 SPEC corridors.x_range 修订验证（未落盘主链）",
+ "revision": {
+  "U_TO_MCIO": {
+   "from": [
+    64.9,
+    88.83
+   ],
+   "to": [
+    65.5,
+    88.83
+   ],
+   "reason": "x0 撞 J3/J4 GND 脚列(64.75-65.05)，自由净空自 x≈65.33"
+  },
+  "J2_TO_U": {
+   "from": [
+    98.83,
+    132.65
+   ],
+   "to": [
+    98.83,
+    131.5
+   ],
+   "reason": "x1 撞 J2 GND 脚列(132-133.3)，自由净空至 x≈131.72"
+  }
+ },
+ "capacity_map": {
+  "regions": {
+   "MCIO_region": "CAPACITY_OK",
+   "U3_region": "CAPACITY_OK",
+   "J2_region": "CAPACITY_OK",
+   "U7_region": "CAPACITY_OK"
+  },
+  "corridors": {
+   "J2_TO_U_upper": "CAPACITY_OK",
+   "J2_TO_U_lower": "CAPACITY_OK",
+   "J2_TO_U_refclk": "CAPACITY_OK",
+   "U_TO_MCIO_upper": "CAPACITY_OK",
+   "U_TO_MCIO_lower": "CAPACITY_OK",
+   "U_TO_MCIO_refclk": "CAPACITY_OK"
+  }
+ },
+ "cross_region": {
+  "J4_input_escape_UP4-7": "CAPACITY_OK",
+  "J3_output_escape_DN0-3": "CAPACITY_OK",
+  "J3_input_escape_UP0-3": "CAPACITY_OK",
+  "J4_output_escape_DN4-7": "CAPACITY_OK"
+ },
+ "solved_forms": {
+  "J4_input_escape_UP4-7/UP4": {
+   "flip": false,
+   "kind": "DIRECT",
+   "corr_x": 88.17,
+   "pn_via_center": null
+  },
+  "J4_input_escape_UP4-7/UP5": {
+   "flip": false,
+   "kind": "DIRECT",
+   "corr_x": 88.17,
+   "pn_via_center": null
+  },
+  "J4_input_escape_UP4-7/UP6": {
+   "flip": false,
+   "kind": "DIRECT",
+   "corr_x": 88.17,
+   "pn_via_center": null
+  },
+  "J4_input_escape_UP4-7/UP7": {
+   "flip": false,
+   "kind": "DIRECT",
+   "corr_x": 88.17,
+   "pn_via_center": null
+  },
+  "J3_output_escape_DN0-3/DN0": {
+   "flip": false,
+   "kind": "L-H-V",
+   "corr_x": 88.83,
+   "pn_via_center": [
+    77.70997492953039,
+    57.239277825503045
+   ]
+  },
+  "J3_output_escape_DN0-3/DN1": {
+   "flip": false,
+   "kind": "L-H-V",
+   "corr_x": 88.83,
+   "pn_via_center": [
+    80.41248323952482,
+    57.329166616069564
+   ]
+  },
+  "J3_output_escape_DN0-3/DN2": {
+   "flip": false,
+   "kind": "L-H-V",
+   "corr_x": 88.83,
+   "pn_via_center": [
+    83.13427976209846,
+    57.50184222923531
+   ]
+  },
+  "J3_output_escape_DN0-3/DN3": {
+   "flip": false,
+   "kind": "L-H-V",
+   "corr_x": 88.83,
+   "pn_via_center": [
+    85.81134952248856,
+    57.809922112154624
+   ]
+  },
+  "J3_input_escape_UP0-3/UP0": {
+   "flip": false,
+   "kind": "DIRECT",
+   "corr_x": 88.17,
+   "pn_via_center": null
+  },
+  "J3_input_escape_UP0-3/UP1": {
+   "flip": false,
+   "kind": "DIRECT",
+   "corr_x": 88.17,
+   "pn_via_center": null
+  },
+  "J3_input_escape_UP0-3/UP2": {
+   "flip": false,
+   "kind": "DIRECT",
+   "corr_x": 88.17,
+   "pn_via_center": null
+  },
+  "J3_input_escape_UP0-3/UP3": {
+   "flip": false,
+   "kind": "DIRECT",
+   "corr_x": 88.17,
+   "pn_via_center": null
+  },
+  "J4_output_escape_DN4-7/DN4": {
+   "flip": false,
+   "kind": "L-H-V",
+   "corr_x": 88.83,
+   "pn_via_center": [
+    77.48311920495682,
+    67.2397129079455
+   ]
+  },
+  "J4_output_escape_DN4-7/DN5": {
+   "flip": false,
+   "kind": "L-H-V",
+   "corr_x": 88.83,
+   "pn_via_center": [
+    80.09680246122049,
+    67.24881021808991
+   ]
+  },
+  "J4_output_escape_DN4-7/DN6": {
+   "flip": false,
+   "kind": "L-H-V",
+   "corr_x": 88.83,
+   "pn_via_center": [
+    82.7200494311041,
+    67.26552604339139
+   ]
+  },
+  "J4_output_escape_DN4-7/DN7": {
+   "flip": false,
+   "kind": "L-H-V",
+   "corr_x": 88.83,
+   "pn_via_center": [
+    85.36751699271124,
+    67.30532261999846
+   ]
+  }
+ }
+}

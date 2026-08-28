@@ -1,0 +1,3151 @@
+{
+  "project_board": "/home/fila/jqdDev_2025/ic_hw/strix-halo-ioconvert/revA/pcb/k2_v4.kicad_pcb",
+  "date": "2026-08-18",
+  "config": {
+    "THRESHOLD_FC_DIRECT_MM": 3.0,
+    "MIN_WINDOW_MM": 0.13,
+    "VIA_MAX_ESCAPE_MM": 5.0,
+    "chips": [
+      "U3",
+      "U7"
+    ]
+  },
+  "summary": {
+    "total_pins": 64,
+    "feasible": 64,
+    "blocked": 0,
+    "unknown": 0,
+    "closure_rate_pct": 100.0,
+    "chips_analyzed": [
+      "U7",
+      "U3"
+    ],
+    "chips_analyzed_note": "修正 2026-08-19: 真实板 U7=UP@44.7 / U3=DN@62.7 (U4 为 ORing 非 ReDriver); 旧文件误标 UP→U3, DN→U4",
+    "low_speed_pins": 18,
+    "low_speed_closure_rate_pct": 100.0
+  },
+  "chips": {
+    "U7": {
+      "pos": [
+        93.825,
+        44.7
+      ],
+      "direction": "UP"
+    },
+    "U3": {
+      "pos": [
+        93.825,
+        62.7
+      ],
+      "direction": "DN"
+    }
+  },
+  "ac_caps": [
+    {
+      "ref": "C60",
+      "at": [
+        112.5,
+        39.4
+      ],
+      "pcie_nets": [
+        "PCIE_UP_OUT5_N_U3",
+        "PCIE_UP_OUT5_N_J2"
+      ]
+    },
+    {
+      "ref": "C51",
+      "at": [
+        103.4,
+        39.4
+      ],
+      "pcie_nets": [
+        "PCIE_UP_OUT1_P_U3",
+        "PCIE_UP_OUT1_P_J2"
+      ]
+    },
+    {
+      "ref": "C52",
+      "at": [
+        102.1,
+        39.4
+      ],
+      "pcie_nets": [
+        "PCIE_UP_OUT1_N_U3",
+        "PCIE_UP_OUT1_N_J2"
+      ]
+    },
+    {
+      "ref": "C22",
+      "at": [
+        80.7,
+        57.8
+      ],
+      "pcie_nets": [
+        "PCIE_DN_OUT2_N_U4",
+        "PCIE_DN_OUT2_N_MCIO"
+      ]
+    },
+    {
+      "ref": "C57",
+      "at": [
+        111.2,
+        39.4
+      ],
+      "pcie_nets": [
+        "PCIE_UP_OUT4_P_U3",
+        "PCIE_UP_OUT4_P_J2"
+      ]
+    },
+    {
+      "ref": "C27",
+      "at": [
+        79.4,
+        68.0
+      ],
+      "pcie_nets": [
+        "PCIE_DN_OUT5_P_U4",
+        "PCIE_DN_OUT5_P_MCIO"
+      ]
+    },
+    {
+      "ref": "C55",
+      "at": [
+        108.6,
+        39.4
+      ],
+      "pcie_nets": [
+        "PCIE_UP_OUT3_P_U3",
+        "PCIE_UP_OUT3_P_J2"
+      ]
+    },
+    {
+      "ref": "C63",
+      "at": [
+        119.0,
+        39.4
+      ],
+      "pcie_nets": [
+        "PCIE_UP_OUT7_P_U3",
+        "PCIE_UP_OUT7_P_J2"
+      ]
+    },
+    {
+      "ref": "C26",
+      "at": [
+        75.5,
+        68.0
+      ],
+      "pcie_nets": [
+        "PCIE_DN_OUT4_N_U4",
+        "PCIE_DN_OUT4_N_MCIO"
+      ]
+    },
+    {
+      "ref": "C23",
+      "at": [
+        84.6,
+        57.8
+      ],
+      "pcie_nets": [
+        "PCIE_DN_OUT3_P_U4",
+        "PCIE_DN_OUT3_P_MCIO"
+      ]
+    },
+    {
+      "ref": "C17",
+      "at": [
+        76.8,
+        57.8
+      ],
+      "pcie_nets": [
+        "PCIE_DN_OUT0_P_U4",
+        "PCIE_DN_OUT0_P_MCIO"
+      ]
+    },
+    {
+      "ref": "C30",
+      "at": [
+        80.7,
+        68.0
+      ],
+      "pcie_nets": [
+        "PCIE_DN_OUT6_N_U4",
+        "PCIE_DN_OUT6_N_MCIO"
+      ]
+    },
+    {
+      "ref": "C19",
+      "at": [
+        79.4,
+        57.8
+      ],
+      "pcie_nets": [
+        "PCIE_DN_OUT1_P_U4",
+        "PCIE_DN_OUT1_P_MCIO"
+      ]
+    },
+    {
+      "ref": "C24",
+      "at": [
+        83.3,
+        57.8
+      ],
+      "pcie_nets": [
+        "PCIE_DN_OUT3_N_U4",
+        "PCIE_DN_OUT3_N_MCIO"
+      ]
+    },
+    {
+      "ref": "C56",
+      "at": [
+        107.3,
+        39.4
+      ],
+      "pcie_nets": [
+        "PCIE_UP_OUT3_N_U3",
+        "PCIE_UP_OUT3_N_J2"
+      ]
+    },
+    {
+      "ref": "C29",
+      "at": [
+        82.0,
+        68.0
+      ],
+      "pcie_nets": [
+        "PCIE_DN_OUT6_P_U4",
+        "PCIE_DN_OUT6_P_MCIO"
+      ]
+    },
+    {
+      "ref": "C59",
+      "at": [
+        113.8,
+        39.4
+      ],
+      "pcie_nets": [
+        "PCIE_UP_OUT5_P_U3",
+        "PCIE_UP_OUT5_P_J2"
+      ]
+    },
+    {
+      "ref": "C54",
+      "at": [
+        104.7,
+        39.4
+      ],
+      "pcie_nets": [
+        "PCIE_UP_OUT2_N_U3",
+        "PCIE_UP_OUT2_N_J2"
+      ]
+    },
+    {
+      "ref": "C31",
+      "at": [
+        84.6,
+        68.0
+      ],
+      "pcie_nets": [
+        "PCIE_DN_OUT7_P_U4",
+        "PCIE_DN_OUT7_P_MCIO"
+      ]
+    },
+    {
+      "ref": "C53",
+      "at": [
+        106.0,
+        39.4
+      ],
+      "pcie_nets": [
+        "PCIE_UP_OUT2_P_U3",
+        "PCIE_UP_OUT2_P_J2"
+      ]
+    },
+    {
+      "ref": "C21",
+      "at": [
+        82.0,
+        57.8
+      ],
+      "pcie_nets": [
+        "PCIE_DN_OUT2_P_U4",
+        "PCIE_DN_OUT2_P_MCIO"
+      ]
+    },
+    {
+      "ref": "C61",
+      "at": [
+        116.4,
+        39.4
+      ],
+      "pcie_nets": [
+        "PCIE_UP_OUT6_P_U3",
+        "PCIE_UP_OUT6_P_J2"
+      ]
+    },
+    {
+      "ref": "C25",
+      "at": [
+        76.8,
+        68.0
+      ],
+      "pcie_nets": [
+        "PCIE_DN_OUT4_P_U4",
+        "PCIE_DN_OUT4_P_MCIO"
+      ]
+    },
+    {
+      "ref": "C32",
+      "at": [
+        83.3,
+        68.0
+      ],
+      "pcie_nets": [
+        "PCIE_DN_OUT7_N_U4",
+        "PCIE_DN_OUT7_N_MCIO"
+      ]
+    },
+    {
+      "ref": "C20",
+      "at": [
+        78.1,
+        57.8
+      ],
+      "pcie_nets": [
+        "PCIE_DN_OUT1_N_U4",
+        "PCIE_DN_OUT1_N_MCIO"
+      ]
+    },
+    {
+      "ref": "C58",
+      "at": [
+        109.9,
+        39.4
+      ],
+      "pcie_nets": [
+        "PCIE_UP_OUT4_N_U3",
+        "PCIE_UP_OUT4_N_J2"
+      ]
+    },
+    {
+      "ref": "C64",
+      "at": [
+        117.7,
+        39.4
+      ],
+      "pcie_nets": [
+        "PCIE_UP_OUT7_N_U3",
+        "PCIE_UP_OUT7_N_J2"
+      ]
+    },
+    {
+      "ref": "C18",
+      "at": [
+        75.5,
+        57.8
+      ],
+      "pcie_nets": [
+        "PCIE_DN_OUT0_N_U4",
+        "PCIE_DN_OUT0_N_MCIO"
+      ]
+    },
+    {
+      "ref": "C62",
+      "at": [
+        115.1,
+        39.4
+      ],
+      "pcie_nets": [
+        "PCIE_UP_OUT6_N_U3",
+        "PCIE_UP_OUT6_N_J2"
+      ]
+    },
+    {
+      "ref": "C49",
+      "at": [
+        100.8,
+        39.4
+      ],
+      "pcie_nets": [
+        "PCIE_UP_OUT0_P_U3",
+        "PCIE_UP_OUT0_P_J2"
+      ]
+    },
+    {
+      "ref": "C50",
+      "at": [
+        99.5,
+        39.4
+      ],
+      "pcie_nets": [
+        "PCIE_UP_OUT0_N_U3",
+        "PCIE_UP_OUT0_N_J2"
+      ]
+    },
+    {
+      "ref": "C28",
+      "at": [
+        78.1,
+        68.0
+      ],
+      "pcie_nets": [
+        "PCIE_DN_OUT5_N_U4",
+        "PCIE_DN_OUT5_N_MCIO"
+      ]
+    }
+  ],
+  "pins": [
+    {
+      "net": "PCIE_UP0_P",
+      "chip_ref": "U7",
+      "direction": "UP",
+      "pad_num": "1",
+      "pin_xy": [
+        88.825,
+        49.3
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": null,
+      "nearest_cap_xy": null,
+      "window_mm": 34.657,
+      "feasible": "FEASIBLE",
+      "decision": "INPUT 侧 F.Cu 直连到 J3（34.657mm，无电容墙阻挡）"
+    },
+    {
+      "net": "PCIE_UP0_N",
+      "chip_ref": "U7",
+      "direction": "UP",
+      "pad_num": "2",
+      "pin_xy": [
+        88.825,
+        48.9
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": null,
+      "nearest_cap_xy": null,
+      "window_mm": 33.998,
+      "feasible": "FEASIBLE",
+      "decision": "INPUT 侧 F.Cu 直连到 J3（33.998mm，无电容墙阻挡）"
+    },
+    {
+      "net": "PCIE_UP1_P",
+      "chip_ref": "U7",
+      "direction": "UP",
+      "pad_num": "4",
+      "pin_xy": [
+        88.825,
+        48.1
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": null,
+      "nearest_cap_xy": null,
+      "window_mm": 32.687,
+      "feasible": "FEASIBLE",
+      "decision": "INPUT 侧 F.Cu 直连到 J3（32.687mm，无电容墙阻挡）"
+    },
+    {
+      "net": "PCIE_UP1_N",
+      "chip_ref": "U7",
+      "direction": "UP",
+      "pad_num": "5",
+      "pin_xy": [
+        88.825,
+        47.7
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": null,
+      "nearest_cap_xy": null,
+      "window_mm": 32.036,
+      "feasible": "FEASIBLE",
+      "decision": "INPUT 侧 F.Cu 直连到 J3（32.036mm，无电容墙阻挡）"
+    },
+    {
+      "net": "PCIE_UP2_P",
+      "chip_ref": "U7",
+      "direction": "UP",
+      "pad_num": "7",
+      "pin_xy": [
+        88.825,
+        46.9
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": null,
+      "nearest_cap_xy": null,
+      "window_mm": 27.171,
+      "feasible": "FEASIBLE",
+      "decision": "INPUT 侧 F.Cu 直连到 J3（27.171mm，无电容墙阻挡）"
+    },
+    {
+      "net": "PCIE_UP2_N",
+      "chip_ref": "U7",
+      "direction": "UP",
+      "pad_num": "8",
+      "pin_xy": [
+        88.825,
+        46.5
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": null,
+      "nearest_cap_xy": null,
+      "window_mm": 26.525,
+      "feasible": "FEASIBLE",
+      "decision": "INPUT 侧 F.Cu 直连到 J3（26.525mm，无电容墙阻挡）"
+    },
+    {
+      "net": "PCIE_UP3_P",
+      "chip_ref": "U7",
+      "direction": "UP",
+      "pad_num": "10",
+      "pin_xy": [
+        88.825,
+        45.7
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": null,
+      "nearest_cap_xy": null,
+      "window_mm": 25.244,
+      "feasible": "FEASIBLE",
+      "decision": "INPUT 侧 F.Cu 直连到 J3（25.244mm，无电容墙阻挡）"
+    },
+    {
+      "net": "PCIE_UP3_N",
+      "chip_ref": "U7",
+      "direction": "UP",
+      "pad_num": "11",
+      "pin_xy": [
+        88.825,
+        45.3
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": null,
+      "nearest_cap_xy": null,
+      "window_mm": 24.611,
+      "feasible": "FEASIBLE",
+      "decision": "INPUT 侧 F.Cu 直连到 J3（24.611mm，无电容墙阻挡）"
+    },
+    {
+      "net": "PCIE_UP4_P",
+      "chip_ref": "U7",
+      "direction": "UP",
+      "pad_num": "13",
+      "pin_xy": [
+        88.825,
+        44.5
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": null,
+      "nearest_cap_xy": null,
+      "window_mm": 38.103,
+      "feasible": "FEASIBLE",
+      "decision": "INPUT 侧 F.Cu 直连到 J4（38.103mm，无电容墙阻挡）"
+    },
+    {
+      "net": "PCIE_UP4_N",
+      "chip_ref": "U7",
+      "direction": "UP",
+      "pad_num": "14",
+      "pin_xy": [
+        88.825,
+        44.1
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": null,
+      "nearest_cap_xy": null,
+      "window_mm": 37.748,
+      "feasible": "FEASIBLE",
+      "decision": "INPUT 侧 F.Cu 直连到 J4（37.748mm，无电容墙阻挡）"
+    },
+    {
+      "net": "PCIE_UP5_P",
+      "chip_ref": "U7",
+      "direction": "UP",
+      "pad_num": "16",
+      "pin_xy": [
+        88.825,
+        43.3
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": null,
+      "nearest_cap_xy": null,
+      "window_mm": 37.072,
+      "feasible": "FEASIBLE",
+      "decision": "INPUT 侧 F.Cu 直连到 J4（37.072mm，无电容墙阻挡）"
+    },
+    {
+      "net": "PCIE_UP5_N",
+      "chip_ref": "U7",
+      "direction": "UP",
+      "pad_num": "17",
+      "pin_xy": [
+        88.825,
+        42.9
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": null,
+      "nearest_cap_xy": null,
+      "window_mm": 36.75,
+      "feasible": "FEASIBLE",
+      "decision": "INPUT 侧 F.Cu 直连到 J4（36.750mm，无电容墙阻挡）"
+    },
+    {
+      "net": "PCIE_UP6_P",
+      "chip_ref": "U7",
+      "direction": "UP",
+      "pad_num": "19",
+      "pin_xy": [
+        88.825,
+        42.1
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": null,
+      "nearest_cap_xy": null,
+      "window_mm": 33.157,
+      "feasible": "FEASIBLE",
+      "decision": "INPUT 侧 F.Cu 直连到 J4（33.157mm，无电容墙阻挡）"
+    },
+    {
+      "net": "PCIE_UP6_N",
+      "chip_ref": "U7",
+      "direction": "UP",
+      "pad_num": "20",
+      "pin_xy": [
+        88.825,
+        41.7
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": null,
+      "nearest_cap_xy": null,
+      "window_mm": 32.91,
+      "feasible": "FEASIBLE",
+      "decision": "INPUT 侧 F.Cu 直连到 J4（32.910mm，无电容墙阻挡）"
+    },
+    {
+      "net": "PCIE_UP7_P",
+      "chip_ref": "U7",
+      "direction": "UP",
+      "pad_num": "22",
+      "pin_xy": [
+        88.825,
+        40.9
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": null,
+      "nearest_cap_xy": null,
+      "window_mm": 32.459,
+      "feasible": "FEASIBLE",
+      "decision": "INPUT 侧 F.Cu 直连到 J4（32.459mm，无电容墙阻挡）"
+    },
+    {
+      "net": "PCIE_UP7_N",
+      "chip_ref": "U7",
+      "direction": "UP",
+      "pad_num": "23",
+      "pin_xy": [
+        88.825,
+        40.5
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": null,
+      "nearest_cap_xy": null,
+      "window_mm": 32.255,
+      "feasible": "FEASIBLE",
+      "decision": "INPUT 侧 F.Cu 直连到 J4（32.255mm，无电容墙阻挡）"
+    },
+    {
+      "net": "PCIE_UP_OUT7_N_U3",
+      "chip_ref": "U7",
+      "direction": "UP",
+      "pad_num": "33",
+      "pin_xy": [
+        98.825,
+        40.1
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": "C64",
+      "nearest_cap_xy": [
+        99.475,
+        43.5
+      ],
+      "window_mm": 2.987,
+      "feasible": "FEASIBLE",
+      "decision": "OUTPUT 侧 F.Cu 直走到电容 2.987mm（走廊容量由 L2 math_closure 论证）"
+    },
+    {
+      "net": "PCIE_UP_OUT7_P_U3",
+      "chip_ref": "U7",
+      "direction": "UP",
+      "pad_num": "34",
+      "pin_xy": [
+        98.825,
+        40.5
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": "C63",
+      "nearest_cap_xy": [
+        100.45,
+        42.9
+      ],
+      "window_mm": 2.423,
+      "feasible": "FEASIBLE",
+      "decision": "OUTPUT 侧 F.Cu 直走到电容 2.423mm（走廊容量由 L2 math_closure 论证）"
+    },
+    {
+      "net": "PCIE_UP_OUT6_N_U3",
+      "chip_ref": "U7",
+      "direction": "UP",
+      "pad_num": "36",
+      "pin_xy": [
+        98.825,
+        41.3
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": "C62",
+      "nearest_cap_xy": [
+        101.475,
+        44.4
+      ],
+      "window_mm": 3.603,
+      "feasible": "FEASIBLE",
+      "decision": "OUTPUT 侧 F.Cu 直走到电容 3.603mm（走廊容量由 L2 math_closure 论证）"
+    },
+    {
+      "net": "PCIE_UP_OUT6_P_U3",
+      "chip_ref": "U7",
+      "direction": "UP",
+      "pad_num": "37",
+      "pin_xy": [
+        98.825,
+        41.7
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": "C61",
+      "nearest_cap_xy": [
+        103.475,
+        44.1
+      ],
+      "window_mm": 4.758,
+      "feasible": "FEASIBLE",
+      "decision": "OUTPUT 侧 F.Cu 直走到电容 4.758mm（走廊容量由 L2 math_closure 论证）"
+    },
+    {
+      "net": "PCIE_UP_OUT5_N_U3",
+      "chip_ref": "U7",
+      "direction": "UP",
+      "pad_num": "39",
+      "pin_xy": [
+        98.825,
+        42.5
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": "C60",
+      "nearest_cap_xy": [
+        107.475,
+        47.1
+      ],
+      "window_mm": 9.322,
+      "feasible": "FEASIBLE",
+      "decision": "OUTPUT 侧 F.Cu 直走到电容 9.322mm（走廊容量由 L2 math_closure 论证）"
+    },
+    {
+      "net": "PCIE_UP_OUT5_P_U3",
+      "chip_ref": "U7",
+      "direction": "UP",
+      "pad_num": "40",
+      "pin_xy": [
+        98.825,
+        42.9
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": "C59",
+      "nearest_cap_xy": [
+        105.475,
+        46.5
+      ],
+      "window_mm": 7.087,
+      "feasible": "FEASIBLE",
+      "decision": "OUTPUT 侧 F.Cu 直走到电容 7.087mm（走廊容量由 L2 math_closure 论证）"
+    },
+    {
+      "net": "PCIE_UP_OUT4_N_U3",
+      "chip_ref": "U7",
+      "direction": "UP",
+      "pad_num": "42",
+      "pin_xy": [
+        98.825,
+        43.7
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": "C58",
+      "nearest_cap_xy": [
+        109.475,
+        48.0
+      ],
+      "window_mm": 11.01,
+      "feasible": "FEASIBLE",
+      "decision": "OUTPUT 侧 F.Cu 直走到电容 11.010mm（走廊容量由 L2 math_closure 论证）"
+    },
+    {
+      "net": "PCIE_UP_OUT4_P_U3",
+      "chip_ref": "U7",
+      "direction": "UP",
+      "pad_num": "43",
+      "pin_xy": [
+        98.825,
+        44.1
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": "C57",
+      "nearest_cap_xy": [
+        111.475,
+        47.7
+      ],
+      "window_mm": 12.677,
+      "feasible": "FEASIBLE",
+      "decision": "OUTPUT 侧 F.Cu 直走到电容 12.677mm（走廊容量由 L2 math_closure 论证）"
+    },
+    {
+      "net": "PCIE_UP_OUT3_N_U3",
+      "chip_ref": "U7",
+      "direction": "UP",
+      "pad_num": "45",
+      "pin_xy": [
+        98.825,
+        44.9
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": "C56",
+      "nearest_cap_xy": [
+        115.475,
+        48.9
+      ],
+      "window_mm": 16.649,
+      "feasible": "FEASIBLE",
+      "decision": "OUTPUT 侧 F.Cu 直走到电容 16.649mm（走廊容量由 L2 math_closure 论证）"
+    },
+    {
+      "net": "PCIE_UP_OUT3_P_U3",
+      "chip_ref": "U7",
+      "direction": "UP",
+      "pad_num": "46",
+      "pin_xy": [
+        98.825,
+        45.3
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": "C55",
+      "nearest_cap_xy": [
+        113.475,
+        48.3
+      ],
+      "window_mm": 14.479,
+      "feasible": "FEASIBLE",
+      "decision": "OUTPUT 侧 F.Cu 直走到电容 14.479mm（走廊容量由 L2 math_closure 论证）"
+    },
+    {
+      "net": "PCIE_UP_OUT2_N_U3",
+      "chip_ref": "U7",
+      "direction": "UP",
+      "pad_num": "48",
+      "pin_xy": [
+        98.825,
+        46.1
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": "C54",
+      "nearest_cap_xy": [
+        117.475,
+        49.8
+      ],
+      "window_mm": 18.538,
+      "feasible": "FEASIBLE",
+      "decision": "OUTPUT 侧 F.Cu 直走到电容 18.538mm（走廊容量由 L2 math_closure 论证）"
+    },
+    {
+      "net": "PCIE_UP_OUT2_P_U3",
+      "chip_ref": "U7",
+      "direction": "UP",
+      "pad_num": "49",
+      "pin_xy": [
+        98.825,
+        46.5
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": "C53",
+      "nearest_cap_xy": [
+        119.475,
+        49.5
+      ],
+      "window_mm": 20.392,
+      "feasible": "FEASIBLE",
+      "decision": "OUTPUT 侧 F.Cu 直走到电容 20.392mm（走廊容量由 L2 math_closure 论证）"
+    },
+    {
+      "net": "PCIE_UP_OUT1_N_U3",
+      "chip_ref": "U7",
+      "direction": "UP",
+      "pad_num": "51",
+      "pin_xy": [
+        98.825,
+        47.3
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": "C52",
+      "nearest_cap_xy": [
+        123.475,
+        52.5
+      ],
+      "window_mm": 24.718,
+      "feasible": "FEASIBLE",
+      "decision": "OUTPUT 侧 F.Cu 直走到电容 24.718mm（走廊容量由 L2 math_closure 论证）"
+    },
+    {
+      "net": "PCIE_UP_OUT1_P_U3",
+      "chip_ref": "U7",
+      "direction": "UP",
+      "pad_num": "52",
+      "pin_xy": [
+        98.825,
+        47.7
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": "C51",
+      "nearest_cap_xy": [
+        121.475,
+        51.9
+      ],
+      "window_mm": 22.561,
+      "feasible": "FEASIBLE",
+      "decision": "OUTPUT 侧 F.Cu 直走到电容 22.561mm（走廊容量由 L2 math_closure 论证）"
+    },
+    {
+      "net": "PCIE_UP_OUT0_N_U3",
+      "chip_ref": "U7",
+      "direction": "UP",
+      "pad_num": "54",
+      "pin_xy": [
+        98.825,
+        48.5
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": "C50",
+      "nearest_cap_xy": [
+        125.475,
+        53.4
+      ],
+      "window_mm": 26.622,
+      "feasible": "FEASIBLE",
+      "decision": "OUTPUT 侧 F.Cu 直走到电容 26.622mm（走廊容量由 L2 math_closure 论证）"
+    },
+    {
+      "net": "PCIE_UP_OUT0_P_U3",
+      "chip_ref": "U7",
+      "direction": "UP",
+      "pad_num": "55",
+      "pin_xy": [
+        98.825,
+        48.9
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": "C49",
+      "nearest_cap_xy": [
+        127.475,
+        53.1
+      ],
+      "window_mm": 28.481,
+      "feasible": "FEASIBLE",
+      "decision": "OUTPUT 侧 F.Cu 直走到电容 28.481mm（走廊容量由 L2 math_closure 论证）"
+    },
+    {
+      "net": "PCIE_DN0_P",
+      "chip_ref": "U3",
+      "direction": "DN",
+      "pad_num": "1",
+      "pin_xy": [
+        88.825,
+        67.3
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": null,
+      "nearest_cap_xy": null,
+      "window_mm": 46.3,
+      "feasible": "FEASIBLE",
+      "decision": "INPUT 侧 F.Cu 直连到 J2（46.300mm，无电容墙阻挡）"
+    },
+    {
+      "net": "PCIE_DN0_N",
+      "chip_ref": "U3",
+      "direction": "DN",
+      "pad_num": "2",
+      "pin_xy": [
+        88.825,
+        66.9
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": null,
+      "nearest_cap_xy": null,
+      "window_mm": 43.891,
+      "feasible": "FEASIBLE",
+      "decision": "INPUT 侧 F.Cu 直连到 J2（43.891mm，无电容墙阻挡）"
+    },
+    {
+      "net": "PCIE_DN1_P",
+      "chip_ref": "U3",
+      "direction": "DN",
+      "pad_num": "4",
+      "pin_xy": [
+        88.825,
+        66.1
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": null,
+      "nearest_cap_xy": null,
+      "window_mm": 43.914,
+      "feasible": "FEASIBLE",
+      "decision": "INPUT 侧 F.Cu 直连到 J2（43.914mm，无电容墙阻挡）"
+    },
+    {
+      "net": "PCIE_DN1_N",
+      "chip_ref": "U3",
+      "direction": "DN",
+      "pad_num": "5",
+      "pin_xy": [
+        88.825,
+        65.7
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": null,
+      "nearest_cap_xy": null,
+      "window_mm": 46.237,
+      "feasible": "FEASIBLE",
+      "decision": "INPUT 侧 F.Cu 直连到 J2（46.237mm，无电容墙阻挡）"
+    },
+    {
+      "net": "PCIE_DN2_P",
+      "chip_ref": "U3",
+      "direction": "DN",
+      "pad_num": "7",
+      "pin_xy": [
+        88.825,
+        64.9
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": null,
+      "nearest_cap_xy": null,
+      "window_mm": 46.404,
+      "feasible": "FEASIBLE",
+      "decision": "INPUT 侧 F.Cu 直连到 J2（46.404mm，无电容墙阻挡）"
+    },
+    {
+      "net": "PCIE_DN2_N",
+      "chip_ref": "U3",
+      "direction": "DN",
+      "pad_num": "8",
+      "pin_xy": [
+        88.825,
+        64.5
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": null,
+      "nearest_cap_xy": null,
+      "window_mm": 43.973,
+      "feasible": "FEASIBLE",
+      "decision": "INPUT 侧 F.Cu 直连到 J2（43.973mm，无电容墙阻挡）"
+    },
+    {
+      "net": "PCIE_DN3_P",
+      "chip_ref": "U3",
+      "direction": "DN",
+      "pad_num": "10",
+      "pin_xy": [
+        88.825,
+        63.7
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": null,
+      "nearest_cap_xy": null,
+      "window_mm": 44.007,
+      "feasible": "FEASIBLE",
+      "decision": "INPUT 侧 F.Cu 直连到 J2（44.007mm，无电容墙阻挡）"
+    },
+    {
+      "net": "PCIE_DN3_N",
+      "chip_ref": "U3",
+      "direction": "DN",
+      "pad_num": "11",
+      "pin_xy": [
+        88.825,
+        63.3
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": null,
+      "nearest_cap_xy": null,
+      "window_mm": 46.315,
+      "feasible": "FEASIBLE",
+      "decision": "INPUT 侧 F.Cu 直连到 J2（46.315mm，无电容墙阻挡）"
+    },
+    {
+      "net": "PCIE_DN4_P",
+      "chip_ref": "U3",
+      "direction": "DN",
+      "pad_num": "13",
+      "pin_xy": [
+        88.825,
+        62.5
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": null,
+      "nearest_cap_xy": null,
+      "window_mm": 46.348,
+      "feasible": "FEASIBLE",
+      "decision": "INPUT 侧 F.Cu 直连到 J2（46.348mm，无电容墙阻挡）"
+    },
+    {
+      "net": "PCIE_DN4_N",
+      "chip_ref": "U3",
+      "direction": "DN",
+      "pad_num": "14",
+      "pin_xy": [
+        88.825,
+        62.1
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": null,
+      "nearest_cap_xy": null,
+      "window_mm": 43.928,
+      "feasible": "FEASIBLE",
+      "decision": "INPUT 侧 F.Cu 直连到 J2（43.928mm，无电容墙阻挡）"
+    },
+    {
+      "net": "PCIE_DN5_P",
+      "chip_ref": "U3",
+      "direction": "DN",
+      "pad_num": "16",
+      "pin_xy": [
+        88.825,
+        61.3
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": null,
+      "nearest_cap_xy": null,
+      "window_mm": 43.957,
+      "feasible": "FEASIBLE",
+      "decision": "INPUT 侧 F.Cu 直连到 J2（43.957mm，无电容墙阻挡）"
+    },
+    {
+      "net": "PCIE_DN5_N",
+      "chip_ref": "U3",
+      "direction": "DN",
+      "pad_num": "17",
+      "pin_xy": [
+        88.825,
+        60.9
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": null,
+      "nearest_cap_xy": null,
+      "window_mm": 46.272,
+      "feasible": "FEASIBLE",
+      "decision": "INPUT 侧 F.Cu 直连到 J2（46.272mm，无电容墙阻挡）"
+    },
+    {
+      "net": "PCIE_DN6_P",
+      "chip_ref": "U3",
+      "direction": "DN",
+      "pad_num": "19",
+      "pin_xy": [
+        88.825,
+        60.1
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": null,
+      "nearest_cap_xy": null,
+      "window_mm": 46.467,
+      "feasible": "FEASIBLE",
+      "decision": "INPUT 侧 F.Cu 直连到 J2（46.467mm，无电容墙阻挡）"
+    },
+    {
+      "net": "PCIE_DN6_N",
+      "chip_ref": "U3",
+      "direction": "DN",
+      "pad_num": "20",
+      "pin_xy": [
+        88.825,
+        59.7
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": null,
+      "nearest_cap_xy": null,
+      "window_mm": 44.026,
+      "feasible": "FEASIBLE",
+      "decision": "INPUT 侧 F.Cu 直连到 J2（44.026mm，无电容墙阻挡）"
+    },
+    {
+      "net": "PCIE_DN7_P",
+      "chip_ref": "U3",
+      "direction": "DN",
+      "pad_num": "22",
+      "pin_xy": [
+        88.825,
+        58.9
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": null,
+      "nearest_cap_xy": null,
+      "window_mm": 44.066,
+      "feasible": "FEASIBLE",
+      "decision": "INPUT 侧 F.Cu 直连到 J2（44.066mm，无电容墙阻挡）"
+    },
+    {
+      "net": "PCIE_DN7_N",
+      "chip_ref": "U3",
+      "direction": "DN",
+      "pad_num": "23",
+      "pin_xy": [
+        88.825,
+        58.5
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": null,
+      "nearest_cap_xy": null,
+      "window_mm": 46.366,
+      "feasible": "FEASIBLE",
+      "decision": "INPUT 侧 F.Cu 直连到 J2（46.366mm，无电容墙阻挡）"
+    },
+    {
+      "net": "PCIE_DN_OUT7_N_U4",
+      "chip_ref": "U3",
+      "direction": "DN",
+      "pad_num": "33",
+      "pin_xy": [
+        98.825,
+        58.1
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": "C32",
+      "nearest_cap_xy": [
+        86.75,
+        61.65
+      ],
+      "window_mm": 12.111,
+      "feasible": "FEASIBLE",
+      "decision": "OUTPUT 侧 F.Cu 直走到电容 12.111mm（走廊容量由 L2 math_closure 论证）"
+    },
+    {
+      "net": "PCIE_DN_OUT7_P_U4",
+      "chip_ref": "U3",
+      "direction": "DN",
+      "pad_num": "34",
+      "pin_xy": [
+        98.825,
+        58.5
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": "C31",
+      "nearest_cap_xy": [
+        85.55,
+        61.65
+      ],
+      "window_mm": 13.169,
+      "feasible": "FEASIBLE",
+      "decision": "OUTPUT 侧 F.Cu 直走到电容 13.169mm（走廊容量由 L2 math_closure 论证）"
+    },
+    {
+      "net": "PCIE_DN_OUT6_N_U4",
+      "chip_ref": "U3",
+      "direction": "DN",
+      "pad_num": "36",
+      "pin_xy": [
+        98.825,
+        59.3
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": "C30",
+      "nearest_cap_xy": [
+        84.35,
+        61.65
+      ],
+      "window_mm": 14.19,
+      "feasible": "FEASIBLE",
+      "decision": "OUTPUT 侧 F.Cu 直走到电容 14.190mm（走廊容量由 L2 math_closure 论证）"
+    },
+    {
+      "net": "PCIE_DN_OUT6_P_U4",
+      "chip_ref": "U3",
+      "direction": "DN",
+      "pad_num": "37",
+      "pin_xy": [
+        98.825,
+        59.7
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": "C29",
+      "nearest_cap_xy": [
+        87.975,
+        59.35
+      ],
+      "window_mm": 10.381,
+      "feasible": "FEASIBLE",
+      "decision": "OUTPUT 侧 F.Cu 直走到电容 10.381mm（走廊容量由 L2 math_closure 论证）"
+    },
+    {
+      "net": "PCIE_DN_OUT5_N_U4",
+      "chip_ref": "U3",
+      "direction": "DN",
+      "pad_num": "39",
+      "pin_xy": [
+        98.825,
+        60.5
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": "C28",
+      "nearest_cap_xy": [
+        86.775,
+        59.35
+      ],
+      "window_mm": 11.63,
+      "feasible": "FEASIBLE",
+      "decision": "OUTPUT 侧 F.Cu 直走到电容 11.630mm（走廊容量由 L2 math_closure 论证）"
+    },
+    {
+      "net": "PCIE_DN_OUT5_P_U4",
+      "chip_ref": "U3",
+      "direction": "DN",
+      "pad_num": "40",
+      "pin_xy": [
+        98.825,
+        60.9
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": "C27",
+      "nearest_cap_xy": [
+        85.575,
+        59.35
+      ],
+      "window_mm": 12.865,
+      "feasible": "FEASIBLE",
+      "decision": "OUTPUT 侧 F.Cu 直走到电容 12.865mm（走廊容量由 L2 math_closure 论证）"
+    },
+    {
+      "net": "PCIE_DN_OUT4_N_U4",
+      "chip_ref": "U3",
+      "direction": "DN",
+      "pad_num": "42",
+      "pin_xy": [
+        98.825,
+        61.7
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": "C26",
+      "nearest_cap_xy": [
+        84.575,
+        60.05
+      ],
+      "window_mm": 13.87,
+      "feasible": "FEASIBLE",
+      "decision": "OUTPUT 侧 F.Cu 直走到电容 13.870mm（走廊容量由 L2 math_closure 论证）"
+    },
+    {
+      "net": "PCIE_DN_OUT4_P_U4",
+      "chip_ref": "U3",
+      "direction": "DN",
+      "pad_num": "43",
+      "pin_xy": [
+        98.825,
+        62.1
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": "C25",
+      "nearest_cap_xy": [
+        83.375,
+        60.05
+      ],
+      "window_mm": 15.11,
+      "feasible": "FEASIBLE",
+      "decision": "OUTPUT 侧 F.Cu 直走到电容 15.110mm（走廊容量由 L2 math_closure 论证）"
+    },
+    {
+      "net": "PCIE_DN_OUT3_N_U4",
+      "chip_ref": "U3",
+      "direction": "DN",
+      "pad_num": "45",
+      "pin_xy": [
+        98.825,
+        62.9
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": "C24",
+      "nearest_cap_xy": [
+        82.175,
+        60.05
+      ],
+      "window_mm": 16.417,
+      "feasible": "FEASIBLE",
+      "decision": "OUTPUT 侧 F.Cu 直走到电容 16.417mm（走廊容量由 L2 math_closure 论证）"
+    },
+    {
+      "net": "PCIE_DN_OUT3_P_U4",
+      "chip_ref": "U3",
+      "direction": "DN",
+      "pad_num": "46",
+      "pin_xy": [
+        98.825,
+        63.3
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": "C23",
+      "nearest_cap_xy": [
+        80.975,
+        60.05
+      ],
+      "window_mm": 17.668,
+      "feasible": "FEASIBLE",
+      "decision": "OUTPUT 侧 F.Cu 直走到电容 17.668mm（走廊容量由 L2 math_closure 论证）"
+    },
+    {
+      "net": "PCIE_DN_OUT2_N_U4",
+      "chip_ref": "U3",
+      "direction": "DN",
+      "pad_num": "48",
+      "pin_xy": [
+        98.825,
+        64.1
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": "C22",
+      "nearest_cap_xy": [
+        79.775,
+        60.05
+      ],
+      "window_mm": 19.001,
+      "feasible": "FEASIBLE",
+      "decision": "OUTPUT 侧 F.Cu 直走到电容 19.001mm（走廊容量由 L2 math_closure 论证）"
+    },
+    {
+      "net": "PCIE_DN_OUT2_P_U4",
+      "chip_ref": "U3",
+      "direction": "DN",
+      "pad_num": "49",
+      "pin_xy": [
+        98.825,
+        64.5
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": "C21",
+      "nearest_cap_xy": [
+        78.575,
+        60.05
+      ],
+      "window_mm": 20.258,
+      "feasible": "FEASIBLE",
+      "decision": "OUTPUT 侧 F.Cu 直走到电容 20.258mm（走廊容量由 L2 math_closure 论证）"
+    },
+    {
+      "net": "PCIE_DN_OUT1_N_U4",
+      "chip_ref": "U3",
+      "direction": "DN",
+      "pad_num": "51",
+      "pin_xy": [
+        98.825,
+        65.3
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": "C20",
+      "nearest_cap_xy": [
+        77.375,
+        60.05
+      ],
+      "window_mm": 21.608,
+      "feasible": "FEASIBLE",
+      "decision": "OUTPUT 侧 F.Cu 直走到电容 21.608mm（走廊容量由 L2 math_closure 论证）"
+    },
+    {
+      "net": "PCIE_DN_OUT1_P_U4",
+      "chip_ref": "U3",
+      "direction": "DN",
+      "pad_num": "52",
+      "pin_xy": [
+        98.825,
+        65.7
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": "C19",
+      "nearest_cap_xy": [
+        76.175,
+        60.05
+      ],
+      "window_mm": 22.869,
+      "feasible": "FEASIBLE",
+      "decision": "OUTPUT 侧 F.Cu 直走到电容 22.869mm（走廊容量由 L2 math_closure 论证）"
+    },
+    {
+      "net": "PCIE_DN_OUT0_N_U4",
+      "chip_ref": "U3",
+      "direction": "DN",
+      "pad_num": "54",
+      "pin_xy": [
+        98.825,
+        66.5
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": "C18",
+      "nearest_cap_xy": [
+        77.375,
+        66.05
+      ],
+      "window_mm": 20.98,
+      "feasible": "FEASIBLE",
+      "decision": "OUTPUT 侧 F.Cu 直走到电容 20.980mm（走廊容量由 L2 math_closure 论证）"
+    },
+    {
+      "net": "PCIE_DN_OUT0_P_U4",
+      "chip_ref": "U3",
+      "direction": "DN",
+      "pad_num": "55",
+      "pin_xy": [
+        98.825,
+        66.9
+      ],
+      "escape_layer": "F.Cu",
+      "nearest_cap_ref": "C17",
+      "nearest_cap_xy": [
+        76.175,
+        66.05
+      ],
+      "window_mm": 22.191,
+      "feasible": "FEASIBLE",
+      "decision": "OUTPUT 侧 F.Cu 直走到电容 22.191mm（走廊容量由 L2 math_closure 论证）"
+    }
+  ],
+  "stubs": [
+    {
+      "net": "PCIE_DN0_P",
+      "chip_ref": "U3",
+      "pad_num": "1",
+      "px": 98.825,
+      "py": 58.1,
+      "vx": 96.325,
+      "vy": 58.1
+    },
+    {
+      "net": "PCIE_DN0_N",
+      "chip_ref": "U3",
+      "pad_num": "2",
+      "px": 98.825,
+      "py": 58.5,
+      "vx": 99.625,
+      "vy": 58.5
+    },
+    {
+      "net": "VREG1_U3",
+      "chip_ref": "U3",
+      "pad_num": "3",
+      "px": 98.825,
+      "py": 58.9,
+      "vx": 96.325,
+      "vy": 58.9
+    },
+    {
+      "net": "PCIE_DN1_P",
+      "chip_ref": "U3",
+      "pad_num": "4",
+      "px": 98.825,
+      "py": 59.3,
+      "vx": 99.625,
+      "vy": 59.3
+    },
+    {
+      "net": "PCIE_DN1_N",
+      "chip_ref": "U3",
+      "pad_num": "5",
+      "px": 98.825,
+      "py": 59.7,
+      "vx": 96.325,
+      "vy": 59.7
+    },
+    {
+      "net": "P3V3",
+      "chip_ref": "U3",
+      "pad_num": "6",
+      "px": 98.825,
+      "py": 60.1,
+      "vx": 99.625,
+      "vy": 60.1
+    },
+    {
+      "net": "PCIE_DN2_P",
+      "chip_ref": "U3",
+      "pad_num": "7",
+      "px": 98.825,
+      "py": 60.5,
+      "vx": 96.325,
+      "vy": 60.5
+    },
+    {
+      "net": "PCIE_DN2_N",
+      "chip_ref": "U3",
+      "pad_num": "8",
+      "px": 98.825,
+      "py": 60.9,
+      "vx": 99.625,
+      "vy": 60.9
+    },
+    {
+      "net": "PCIE_DN3_P",
+      "chip_ref": "U3",
+      "pad_num": "10",
+      "px": 98.825,
+      "py": 61.7,
+      "vx": 99.625,
+      "vy": 61.7
+    },
+    {
+      "net": "PCIE_DN3_N",
+      "chip_ref": "U3",
+      "pad_num": "11",
+      "px": 98.825,
+      "py": 62.1,
+      "vx": 101.325,
+      "vy": 62.1
+    },
+    {
+      "net": "PCIE_DN4_P",
+      "chip_ref": "U3",
+      "pad_num": "13",
+      "px": 98.825,
+      "py": 62.9,
+      "vx": 96.325,
+      "vy": 62.9
+    },
+    {
+      "net": "PCIE_DN4_N",
+      "chip_ref": "U3",
+      "pad_num": "14",
+      "px": 98.825,
+      "py": 63.3,
+      "vx": 101.325,
+      "vy": 63.3
+    },
+    {
+      "net": "VREG2_U3",
+      "chip_ref": "U3",
+      "pad_num": "15",
+      "px": 98.825,
+      "py": 63.7,
+      "vx": 96.325,
+      "vy": 63.7
+    },
+    {
+      "net": "PCIE_DN5_P",
+      "chip_ref": "U3",
+      "pad_num": "16",
+      "px": 98.825,
+      "py": 64.1,
+      "vx": 101.325,
+      "vy": 64.1
+    },
+    {
+      "net": "PCIE_DN5_N",
+      "chip_ref": "U3",
+      "pad_num": "17",
+      "px": 98.825,
+      "py": 64.5,
+      "vx": 96.325,
+      "vy": 64.5
+    },
+    {
+      "net": "P3V3",
+      "chip_ref": "U3",
+      "pad_num": "18",
+      "px": 98.825,
+      "py": 64.9,
+      "vx": 101.325,
+      "vy": 64.9
+    },
+    {
+      "net": "PCIE_DN6_P",
+      "chip_ref": "U3",
+      "pad_num": "19",
+      "px": 98.825,
+      "py": 65.3,
+      "vx": 96.325,
+      "vy": 65.3
+    },
+    {
+      "net": "PCIE_DN6_N",
+      "chip_ref": "U3",
+      "pad_num": "20",
+      "px": 98.825,
+      "py": 65.7,
+      "vx": 101.325,
+      "vy": 65.7
+    },
+    {
+      "net": "PCIE_DN7_P",
+      "chip_ref": "U3",
+      "pad_num": "22",
+      "px": 98.825,
+      "py": 66.5,
+      "vx": 101.325,
+      "vy": 66.5
+    },
+    {
+      "net": "ALL_DONE_N_U3",
+      "chip_ref": "U3",
+      "pad_num": "31",
+      "px": 92.825,
+      "py": 59.7,
+      "vx": 92.825,
+      "vy": 57.2
+    },
+    {
+      "net": "STRAP_EQ0_1_U3",
+      "chip_ref": "U3",
+      "pad_num": "27",
+      "px": 94.425,
+      "py": 59.7,
+      "vx": 94.425,
+      "vy": 57.2
+    },
+    {
+      "net": "PD1_U3",
+      "chip_ref": "U3",
+      "pad_num": "26",
+      "px": 94.825,
+      "py": 59.7,
+      "vx": 94.825,
+      "vy": 58.9
+    },
+    {
+      "net": "PD0_U3",
+      "chip_ref": "U3",
+      "pad_num": "25",
+      "px": 95.225,
+      "py": 59.7,
+      "vx": 95.225,
+      "vy": 57.2
+    },
+    {
+      "net": "PCIE_DN_OUT0_P_U3",
+      "chip_ref": "U3",
+      "pad_num": "55",
+      "px": 88.825,
+      "py": 58.5,
+      "vx": 86.325,
+      "vy": 58.5
+    },
+    {
+      "net": "PCIE_DN_OUT0_N_U3",
+      "chip_ref": "U3",
+      "pad_num": "54",
+      "px": 88.825,
+      "py": 58.9,
+      "vx": 88.025,
+      "vy": 58.9
+    },
+    {
+      "net": "PCIE_DN_OUT4_N_U3",
+      "chip_ref": "U3",
+      "pad_num": "42",
+      "px": 88.825,
+      "py": 63.7,
+      "vx": 90.2,
+      "vy": 63.7,
+      "ruled": true,
+      "ruling": "PM 裁决 2026-08-20 v5.1: 桩轨同水平行 (90.20,63.7) — BcuRouter 实测唯一可落 (避开 GND pad x90.45 + 下行 stub 竖列)"
+    },
+    {
+      "net": "PCIE_DN_OUT5_P_U3",
+      "chip_ref": "U3",
+      "pad_num": "40",
+      "px": 88.825,
+      "py": 64.5,
+      "vx": 91.325,
+      "vy": 64.5
+    },
+    {
+      "net": "PCIE_DN_OUT5_N_U3",
+      "chip_ref": "U3",
+      "pad_num": "39",
+      "px": 88.825,
+      "py": 64.9,
+      "vx": 89.625,
+      "vy": 64.9
+    },
+    {
+      "net": "P3V3",
+      "chip_ref": "U3",
+      "pad_num": "38",
+      "px": 88.825,
+      "py": 65.3,
+      "vx": 91.325,
+      "vy": 65.3
+    },
+    {
+      "net": "PCIE_DN_OUT6_P_U3",
+      "chip_ref": "U3",
+      "pad_num": "37",
+      "px": 88.825,
+      "py": 65.7,
+      "vx": 86.325,
+      "vy": 65.7
+    },
+    {
+      "net": "PCIE_DN_OUT6_N_U3",
+      "chip_ref": "U3",
+      "pad_num": "36",
+      "px": 88.825,
+      "py": 66.1,
+      "vx": 88.025,
+      "vy": 66.1
+    },
+    {
+      "net": "VREG2_U3",
+      "chip_ref": "U3",
+      "pad_num": "35",
+      "px": 88.825,
+      "py": 66.5,
+      "vx": 86.325,
+      "vy": 66.5
+    },
+    {
+      "net": "PCIE_DN_OUT7_P_U3",
+      "chip_ref": "U3",
+      "pad_num": "34",
+      "px": 88.825,
+      "py": 66.9,
+      "vx": 88.025,
+      "vy": 66.9
+    },
+    {
+      "net": "PCIE_DN_OUT7_N_U3",
+      "chip_ref": "U3",
+      "pad_num": "33",
+      "px": 88.825,
+      "py": 67.3,
+      "vx": 86.325,
+      "vy": 67.3
+    },
+    {
+      "net": "STRAP_READ_EN_U3",
+      "chip_ref": "U3",
+      "pad_num": "57",
+      "px": 92.425,
+      "py": 65.7,
+      "vx": 92.425,
+      "vy": 68.2
+    },
+    {
+      "net": "NO_CONNECT",
+      "chip_ref": "U3",
+      "pad_num": "58",
+      "px": 92.825,
+      "py": 65.7,
+      "vx": 92.825,
+      "vy": 66.5
+    },
+    {
+      "net": "STRAP_EQ0_U3",
+      "chip_ref": "U3",
+      "pad_num": "59",
+      "px": 93.225,
+      "py": 65.7,
+      "vx": 93.225,
+      "vy": 68.2
+    },
+    {
+      "net": "STRAP_EQ1_U3",
+      "chip_ref": "U3",
+      "pad_num": "60",
+      "px": 93.625,
+      "py": 65.7,
+      "vx": 93.625,
+      "vy": 66.5
+    },
+    {
+      "net": "STRAP_MODE_U3",
+      "chip_ref": "U3",
+      "pad_num": "61",
+      "px": 94.025,
+      "py": 65.7,
+      "vx": 94.025,
+      "vy": 68.2
+    },
+    {
+      "net": "NO_CONNECT",
+      "chip_ref": "U3",
+      "pad_num": "62",
+      "px": 94.425,
+      "py": 65.7,
+      "vx": 94.425,
+      "vy": 66.5
+    },
+    {
+      "net": "NO_CONNECT",
+      "chip_ref": "U3",
+      "pad_num": "63",
+      "px": 94.825,
+      "py": 65.7,
+      "vx": 94.825,
+      "vy": 68.2
+    },
+    {
+      "net": "PCIE_UP7_N",
+      "chip_ref": "U7",
+      "pad_num": "23",
+      "px": 88.825,
+      "py": 40.5,
+      "vx": 86.325,
+      "vy": 40.5
+    },
+    {
+      "net": "PCIE_UP7_P",
+      "chip_ref": "U7",
+      "pad_num": "22",
+      "px": 88.825,
+      "py": 40.9,
+      "vx": 88.025,
+      "vy": 40.9
+    },
+    {
+      "net": "PCIE_UP6_N",
+      "chip_ref": "U7",
+      "pad_num": "20",
+      "px": 88.825,
+      "py": 41.7,
+      "vx": 86.325,
+      "vy": 41.7
+    },
+    {
+      "net": "PCIE_UP6_P",
+      "chip_ref": "U7",
+      "pad_num": "19",
+      "px": 88.825,
+      "py": 42.1,
+      "vx": 88.025,
+      "vy": 42.1
+    },
+    {
+      "net": "P3V3",
+      "chip_ref": "U7",
+      "pad_num": "18",
+      "px": 88.825,
+      "py": 42.5,
+      "vx": 86.325,
+      "vy": 42.5
+    },
+    {
+      "net": "PCIE_UP5_N",
+      "chip_ref": "U7",
+      "pad_num": "17",
+      "px": 88.825,
+      "py": 42.9,
+      "vx": 88.025,
+      "vy": 42.9
+    },
+    {
+      "net": "PCIE_UP5_P",
+      "chip_ref": "U7",
+      "pad_num": "16",
+      "px": 88.825,
+      "py": 43.3,
+      "vx": 86.325,
+      "vy": 43.3
+    },
+    {
+      "net": "VREG2_U7",
+      "chip_ref": "U7",
+      "pad_num": "15",
+      "px": 88.825,
+      "py": 43.7,
+      "vx": 88.025,
+      "vy": 43.7
+    },
+    {
+      "net": "PCIE_UP4_N",
+      "chip_ref": "U7",
+      "pad_num": "14",
+      "px": 88.825,
+      "py": 44.1,
+      "vx": 86.325,
+      "vy": 44.1
+    },
+    {
+      "net": "PCIE_UP4_P",
+      "chip_ref": "U7",
+      "pad_num": "13",
+      "px": 88.825,
+      "py": 44.5,
+      "vx": 88.025,
+      "vy": 44.5
+    },
+    {
+      "net": "PCIE_UP1_P",
+      "chip_ref": "U7",
+      "pad_num": "4",
+      "px": 88.825,
+      "py": 48.1,
+      "vx": 86.325,
+      "vy": 48.1
+    },
+    {
+      "net": "VREG1_U7",
+      "chip_ref": "U7",
+      "pad_num": "3",
+      "px": 88.825,
+      "py": 48.5,
+      "vx": 88.025,
+      "vy": 48.5
+    },
+    {
+      "net": "PCIE_UP0_N",
+      "chip_ref": "U7",
+      "pad_num": "2",
+      "px": 88.825,
+      "py": 48.9,
+      "vx": 86.325,
+      "vy": 48.9
+    },
+    {
+      "net": "PCIE_UP0_P",
+      "chip_ref": "U7",
+      "pad_num": "1",
+      "px": 88.825,
+      "py": 49.3,
+      "vx": 88.025,
+      "vy": 49.3
+    },
+    {
+      "net": "PD0_U7",
+      "chip_ref": "U7",
+      "pad_num": "25",
+      "px": 92.425,
+      "py": 47.7,
+      "vx": 92.425,
+      "vy": 48.5
+    },
+    {
+      "net": "STRAP_EQ0_1_U7",
+      "chip_ref": "U7",
+      "pad_num": "27",
+      "px": 93.225,
+      "py": 47.7,
+      "vx": 93.225,
+      "vy": 48.5
+    },
+    {
+      "net": "STRAP_EQ1_1_U7",
+      "chip_ref": "U7",
+      "pad_num": "29",
+      "px": 94.025,
+      "py": 47.7,
+      "vx": 94.025,
+      "vy": 48.5
+    },
+    {
+      "net": "ALL_DONE_N_U7",
+      "chip_ref": "U7",
+      "pad_num": "31",
+      "px": 94.825,
+      "py": 47.7,
+      "vx": 94.825,
+      "vy": 48.5
+    },
+    {
+      "net": "PCIE_UP_OUT7_N_U7",
+      "chip_ref": "U7",
+      "pad_num": "33",
+      "px": 98.825,
+      "py": 40.1,
+      "vx": 99.625,
+      "vy": 40.1
+    },
+    {
+      "net": "PCIE_UP_OUT4_P_U7",
+      "chip_ref": "U7",
+      "pad_num": "43",
+      "px": 98.825,
+      "py": 44.1,
+      "vx": 99.625,
+      "vy": 44.1
+    },
+    {
+      "net": "PCIE_UP_OUT3_N_U7",
+      "chip_ref": "U7",
+      "pad_num": "45",
+      "px": 98.825,
+      "py": 44.9,
+      "vx": 99.625,
+      "vy": 44.9
+    },
+    {
+      "net": "PCIE_UP_OUT0_N_U7",
+      "chip_ref": "U7",
+      "pad_num": "54",
+      "px": 98.825,
+      "py": 48.5,
+      "vx": 99.625,
+      "vy": 48.5
+    },
+    {
+      "net": "NO_CONNECT",
+      "chip_ref": "U7",
+      "pad_num": "63",
+      "px": 92.825,
+      "py": 41.7,
+      "vx": 92.825,
+      "vy": 39.2
+    },
+    {
+      "net": "NO_CONNECT",
+      "chip_ref": "U7",
+      "pad_num": "62",
+      "px": 93.225,
+      "py": 41.7,
+      "vx": 93.225,
+      "vy": 39.2
+    },
+    {
+      "net": "STRAP_MODE_U7",
+      "chip_ref": "U7",
+      "pad_num": "61",
+      "px": 93.625,
+      "py": 41.7,
+      "vx": 93.625,
+      "vy": 40.9
+    },
+    {
+      "net": "STRAP_EQ1_U7",
+      "chip_ref": "U7",
+      "pad_num": "60",
+      "px": 94.025,
+      "py": 41.7,
+      "vx": 94.025,
+      "vy": 39.2
+    },
+    {
+      "net": "STRAP_EQ0_U7",
+      "chip_ref": "U7",
+      "pad_num": "59",
+      "px": 94.425,
+      "py": 41.7,
+      "vx": 94.425,
+      "vy": 40.9
+    },
+    {
+      "net": "NO_CONNECT",
+      "chip_ref": "U7",
+      "pad_num": "58",
+      "px": 94.825,
+      "py": 41.7,
+      "vx": 94.825,
+      "vy": 39.2
+    },
+    {
+      "net": "STRAP_READ_EN_U7",
+      "chip_ref": "U7",
+      "pad_num": "57",
+      "px": 95.225,
+      "py": 41.7,
+      "vx": 95.225,
+      "vy": 40.9
+    },
+    {
+      "net": "PCIE_DN7_N",
+      "chip_ref": "U3",
+      "pad_num": "23",
+      "px": 98.825,
+      "py": 66.9,
+      "vx": 101.55,
+      "vy": 66.9
+    },
+    {
+      "net": "STRAP_EQ1_1_U3",
+      "chip_ref": "U3",
+      "pad_num": "29",
+      "px": 93.625,
+      "py": 59.7,
+      "vx": 93.62,
+      "vy": 60.43
+    },
+    {
+      "net": "PCIE_DN_OUT4_P_U3",
+      "chip_ref": "U3",
+      "pad_num": "43",
+      "px": 88.825,
+      "py": 63.3,
+      "vx": 89.85,
+      "vy": 63.3
+    },
+    {
+      "net": "PD1_U7",
+      "chip_ref": "U7",
+      "pad_num": "26",
+      "px": 92.825,
+      "py": 47.7,
+      "vx": 92.83,
+      "vy": 47.08
+    },
+    {
+      "net": "PCIE_UP_OUT7_P_U7",
+      "chip_ref": "U7",
+      "pad_num": "34",
+      "px": 98.825,
+      "py": 40.5,
+      "vx": 101.75,
+      "vy": 40.5
+    },
+    {
+      "net": "PCIE_UP_OUT0_P_U7",
+      "chip_ref": "U7",
+      "pad_num": "55",
+      "px": 98.825,
+      "py": 48.9,
+      "vx": 99.45,
+      "vy": 48.9
+    },
+    {
+      "net": "PCIE_DN_OUT0_P_U3",
+      "chip_ref": "C17",
+      "pad_num": "1",
+      "px": 76.45,
+      "py": 57.8,
+      "vx": 76.45,
+      "vy": 57.1
+    },
+    {
+      "net": "PCIE_DN_OUT0_P_MCIO",
+      "chip_ref": "C17",
+      "pad_num": "2",
+      "px": 77.15,
+      "py": 57.8,
+      "vx": 77.15,
+      "vy": 57.1
+    },
+    {
+      "net": "PCIE_DN_OUT0_N_U3",
+      "chip_ref": "C18",
+      "pad_num": "1",
+      "px": 75.15,
+      "py": 57.8,
+      "vx": 72.65,
+      "vy": 57.8
+    },
+    {
+      "net": "PCIE_DN_OUT0_N_MCIO",
+      "chip_ref": "C18",
+      "pad_num": "2",
+      "px": 75.85,
+      "py": 57.8,
+      "vx": 75.85,
+      "vy": 57.1
+    },
+    {
+      "net": "PCIE_DN_OUT1_P_U3",
+      "chip_ref": "C19",
+      "pad_num": "1",
+      "px": 79.05,
+      "py": 57.8,
+      "vx": 79.05,
+      "vy": 57.1
+    },
+    {
+      "net": "PCIE_DN_OUT1_P_MCIO",
+      "chip_ref": "C19",
+      "pad_num": "2",
+      "px": 79.75,
+      "py": 57.8,
+      "vx": 79.75,
+      "vy": 57.1
+    },
+    {
+      "net": "PCIE_DN_OUT1_N_U3",
+      "chip_ref": "C20",
+      "pad_num": "1",
+      "px": 77.75,
+      "py": 57.8,
+      "vx": 77.75,
+      "vy": 57.1
+    },
+    {
+      "net": "PCIE_DN_OUT1_N_MCIO",
+      "chip_ref": "C20",
+      "pad_num": "2",
+      "px": 78.45,
+      "py": 57.8,
+      "vx": 78.45,
+      "vy": 57.1
+    },
+    {
+      "net": "PCIE_DN_OUT2_P_U3",
+      "chip_ref": "C21",
+      "pad_num": "1",
+      "px": 81.65,
+      "py": 57.8,
+      "vx": 81.65,
+      "vy": 57.1
+    },
+    {
+      "net": "PCIE_DN_OUT2_P_MCIO",
+      "chip_ref": "C21",
+      "pad_num": "2",
+      "px": 82.35,
+      "py": 57.8,
+      "vx": 82.35,
+      "vy": 57.1
+    },
+    {
+      "net": "PCIE_DN_OUT2_N_U3",
+      "chip_ref": "C22",
+      "pad_num": "1",
+      "px": 80.35,
+      "py": 57.8,
+      "vx": 80.35,
+      "vy": 57.1
+    },
+    {
+      "net": "PCIE_DN_OUT2_N_MCIO",
+      "chip_ref": "C22",
+      "pad_num": "2",
+      "px": 81.05,
+      "py": 57.8,
+      "vx": 81.05,
+      "vy": 57.1
+    },
+    {
+      "net": "PCIE_DN_OUT3_P_U3",
+      "chip_ref": "C23",
+      "pad_num": "1",
+      "px": 84.25,
+      "py": 57.8,
+      "vx": 84.25,
+      "vy": 57.1
+    },
+    {
+      "net": "PCIE_DN_OUT3_P_MCIO",
+      "chip_ref": "C23",
+      "pad_num": "2",
+      "px": 84.95,
+      "py": 57.8,
+      "vx": 84.95,
+      "vy": 57.1
+    },
+    {
+      "net": "PCIE_DN_OUT3_N_U3",
+      "chip_ref": "C24",
+      "pad_num": "1",
+      "px": 82.95,
+      "py": 57.8,
+      "vx": 82.95,
+      "vy": 57.1
+    },
+    {
+      "net": "PCIE_DN_OUT3_N_MCIO",
+      "chip_ref": "C24",
+      "pad_num": "2",
+      "px": 83.65,
+      "py": 57.8,
+      "vx": 83.65,
+      "vy": 57.1
+    },
+    {
+      "net": "PCIE_DN_OUT4_P_U3",
+      "chip_ref": "C25",
+      "pad_num": "1",
+      "px": 76.45,
+      "py": 68.0,
+      "vx": 76.45,
+      "vy": 68.7
+    },
+    {
+      "net": "PCIE_DN_OUT4_P_MCIO",
+      "chip_ref": "C25",
+      "pad_num": "2",
+      "px": 77.15,
+      "py": 68.0,
+      "vx": 77.15,
+      "vy": 68.7
+    },
+    {
+      "net": "PCIE_DN_OUT4_N_U3",
+      "chip_ref": "C26",
+      "pad_num": "1",
+      "px": 75.15,
+      "py": 68.0,
+      "vx": 72.65,
+      "vy": 68.0
+    },
+    {
+      "net": "PCIE_DN_OUT4_N_MCIO",
+      "chip_ref": "C26",
+      "pad_num": "2",
+      "px": 75.85,
+      "py": 68.0,
+      "vx": 75.85,
+      "vy": 68.7
+    },
+    {
+      "net": "PCIE_DN_OUT5_P_U3",
+      "chip_ref": "C27",
+      "pad_num": "1",
+      "px": 79.05,
+      "py": 68.0,
+      "vx": 79.05,
+      "vy": 68.7
+    },
+    {
+      "net": "PCIE_DN_OUT5_P_MCIO",
+      "chip_ref": "C27",
+      "pad_num": "2",
+      "px": 79.75,
+      "py": 68.0,
+      "vx": 79.75,
+      "vy": 68.7
+    },
+    {
+      "net": "PCIE_DN_OUT5_N_U3",
+      "chip_ref": "C28",
+      "pad_num": "1",
+      "px": 77.75,
+      "py": 68.0,
+      "vx": 77.75,
+      "vy": 68.7
+    },
+    {
+      "net": "PCIE_DN_OUT5_N_MCIO",
+      "chip_ref": "C28",
+      "pad_num": "2",
+      "px": 78.45,
+      "py": 68.0,
+      "vx": 78.45,
+      "vy": 68.7
+    },
+    {
+      "net": "PCIE_DN_OUT6_P_U3",
+      "chip_ref": "C29",
+      "pad_num": "1",
+      "px": 81.65,
+      "py": 68.0,
+      "vx": 81.65,
+      "vy": 68.7
+    },
+    {
+      "net": "PCIE_DN_OUT6_P_MCIO",
+      "chip_ref": "C29",
+      "pad_num": "2",
+      "px": 82.35,
+      "py": 68.0,
+      "vx": 82.35,
+      "vy": 68.7
+    },
+    {
+      "net": "PCIE_DN_OUT6_N_U3",
+      "chip_ref": "C30",
+      "pad_num": "1",
+      "px": 80.35,
+      "py": 68.0,
+      "vx": 80.35,
+      "vy": 68.7
+    },
+    {
+      "net": "PCIE_DN_OUT6_N_MCIO",
+      "chip_ref": "C30",
+      "pad_num": "2",
+      "px": 81.05,
+      "py": 68.0,
+      "vx": 81.05,
+      "vy": 68.7
+    },
+    {
+      "net": "PCIE_DN_OUT7_P_U3",
+      "chip_ref": "C31",
+      "pad_num": "1",
+      "px": 84.25,
+      "py": 68.0,
+      "vx": 84.25,
+      "vy": 68.7
+    },
+    {
+      "net": "PCIE_DN_OUT7_P_MCIO",
+      "chip_ref": "C31",
+      "pad_num": "2",
+      "px": 84.95,
+      "py": 68.0,
+      "vx": 84.95,
+      "vy": 68.7
+    },
+    {
+      "net": "PCIE_DN_OUT7_N_U3",
+      "chip_ref": "C32",
+      "pad_num": "1",
+      "px": 82.95,
+      "py": 68.0,
+      "vx": 82.95,
+      "vy": 68.7
+    },
+    {
+      "net": "PCIE_DN_OUT7_N_MCIO",
+      "chip_ref": "C32",
+      "pad_num": "2",
+      "px": 83.65,
+      "py": 68.0,
+      "vx": 83.65,
+      "vy": 68.7
+    },
+    {
+      "net": "PCIE_UP_OUT0_P_U7",
+      "chip_ref": "C49",
+      "pad_num": "1",
+      "px": 100.45,
+      "py": 39.4,
+      "vx": 100.45,
+      "vy": 38.7
+    },
+    {
+      "net": "PCIE_UP_OUT0_P_J2",
+      "chip_ref": "C49",
+      "pad_num": "2",
+      "px": 101.15,
+      "py": 39.4,
+      "vx": 101.15,
+      "vy": 38.7
+    },
+    {
+      "net": "PCIE_UP_OUT0_N_U7",
+      "chip_ref": "C50",
+      "pad_num": "1",
+      "px": 99.15,
+      "py": 39.4,
+      "vx": 96.65,
+      "vy": 39.4
+    },
+    {
+      "net": "PCIE_UP_OUT0_N_J2",
+      "chip_ref": "C50",
+      "pad_num": "2",
+      "px": 99.85,
+      "py": 39.4,
+      "vx": 99.85,
+      "vy": 38.7
+    },
+    {
+      "net": "PCIE_UP_OUT1_P_U7",
+      "chip_ref": "C51",
+      "pad_num": "1",
+      "px": 103.05,
+      "py": 39.4,
+      "vx": 103.05,
+      "vy": 38.7
+    },
+    {
+      "net": "PCIE_UP_OUT1_P_J2",
+      "chip_ref": "C51",
+      "pad_num": "2",
+      "px": 103.75,
+      "py": 39.4,
+      "vx": 103.75,
+      "vy": 38.7
+    },
+    {
+      "net": "PCIE_UP_OUT1_N_U7",
+      "chip_ref": "C52",
+      "pad_num": "1",
+      "px": 101.75,
+      "py": 39.4,
+      "vx": 101.75,
+      "vy": 38.7
+    },
+    {
+      "net": "PCIE_UP_OUT1_N_J2",
+      "chip_ref": "C52",
+      "pad_num": "2",
+      "px": 102.45,
+      "py": 39.4,
+      "vx": 102.45,
+      "vy": 38.7
+    },
+    {
+      "net": "PCIE_UP_OUT2_P_U7",
+      "chip_ref": "C53",
+      "pad_num": "1",
+      "px": 105.65,
+      "py": 39.4,
+      "vx": 105.65,
+      "vy": 38.7
+    },
+    {
+      "net": "PCIE_UP_OUT2_P_J2",
+      "chip_ref": "C53",
+      "pad_num": "2",
+      "px": 106.35,
+      "py": 39.4,
+      "vx": 106.35,
+      "vy": 38.7
+    },
+    {
+      "net": "PCIE_UP_OUT2_N_U7",
+      "chip_ref": "C54",
+      "pad_num": "1",
+      "px": 104.35,
+      "py": 39.4,
+      "vx": 104.35,
+      "vy": 38.7
+    },
+    {
+      "net": "PCIE_UP_OUT2_N_J2",
+      "chip_ref": "C54",
+      "pad_num": "2",
+      "px": 105.05,
+      "py": 39.4,
+      "vx": 105.05,
+      "vy": 38.7
+    },
+    {
+      "net": "PCIE_UP_OUT3_P_U7",
+      "chip_ref": "C55",
+      "pad_num": "1",
+      "px": 108.25,
+      "py": 39.4,
+      "vx": 108.25,
+      "vy": 38.7
+    },
+    {
+      "net": "PCIE_UP_OUT3_P_J2",
+      "chip_ref": "C55",
+      "pad_num": "2",
+      "px": 108.95,
+      "py": 39.4,
+      "vx": 108.95,
+      "vy": 38.7
+    },
+    {
+      "net": "PCIE_UP_OUT3_N_U7",
+      "chip_ref": "C56",
+      "pad_num": "1",
+      "px": 106.95,
+      "py": 39.4,
+      "vx": 106.95,
+      "vy": 38.7
+    },
+    {
+      "net": "PCIE_UP_OUT3_N_J2",
+      "chip_ref": "C56",
+      "pad_num": "2",
+      "px": 107.65,
+      "py": 39.4,
+      "vx": 107.65,
+      "vy": 38.7
+    },
+    {
+      "net": "PCIE_UP_OUT4_P_U7",
+      "chip_ref": "C57",
+      "pad_num": "1",
+      "px": 110.85,
+      "py": 39.4,
+      "vx": 110.85,
+      "vy": 38.7
+    },
+    {
+      "net": "PCIE_UP_OUT4_P_J2",
+      "chip_ref": "C57",
+      "pad_num": "2",
+      "px": 111.55,
+      "py": 39.4,
+      "vx": 111.55,
+      "vy": 38.7
+    },
+    {
+      "net": "PCIE_UP_OUT4_N_U7",
+      "chip_ref": "C58",
+      "pad_num": "1",
+      "px": 109.55,
+      "py": 39.4,
+      "vx": 109.55,
+      "vy": 38.7
+    },
+    {
+      "net": "PCIE_UP_OUT4_N_J2",
+      "chip_ref": "C58",
+      "pad_num": "2",
+      "px": 110.25,
+      "py": 39.4,
+      "vx": 110.25,
+      "vy": 38.7
+    },
+    {
+      "net": "PCIE_UP_OUT5_P_U7",
+      "chip_ref": "C59",
+      "pad_num": "1",
+      "px": 113.45,
+      "py": 39.4,
+      "vx": 113.45,
+      "vy": 38.7
+    },
+    {
+      "net": "PCIE_UP_OUT5_P_J2",
+      "chip_ref": "C59",
+      "pad_num": "2",
+      "px": 114.15,
+      "py": 39.4,
+      "vx": 114.15,
+      "vy": 38.7
+    },
+    {
+      "net": "PCIE_UP_OUT5_N_U7",
+      "chip_ref": "C60",
+      "pad_num": "1",
+      "px": 112.15,
+      "py": 39.4,
+      "vx": 112.15,
+      "vy": 38.7
+    },
+    {
+      "net": "PCIE_UP_OUT5_N_J2",
+      "chip_ref": "C60",
+      "pad_num": "2",
+      "px": 112.85,
+      "py": 39.4,
+      "vx": 112.85,
+      "vy": 38.7
+    },
+    {
+      "net": "PCIE_UP_OUT6_P_U7",
+      "chip_ref": "C61",
+      "pad_num": "1",
+      "px": 116.05,
+      "py": 39.4,
+      "vx": 116.05,
+      "vy": 38.7
+    },
+    {
+      "net": "PCIE_UP_OUT6_P_J2",
+      "chip_ref": "C61",
+      "pad_num": "2",
+      "px": 116.75,
+      "py": 39.4,
+      "vx": 116.75,
+      "vy": 38.7
+    },
+    {
+      "net": "PCIE_UP_OUT6_N_U7",
+      "chip_ref": "C62",
+      "pad_num": "1",
+      "px": 114.75,
+      "py": 39.4,
+      "vx": 114.75,
+      "vy": 38.7
+    },
+    {
+      "net": "PCIE_UP_OUT6_N_J2",
+      "chip_ref": "C62",
+      "pad_num": "2",
+      "px": 115.45,
+      "py": 39.4,
+      "vx": 115.45,
+      "vy": 38.7
+    },
+    {
+      "net": "PCIE_UP_OUT7_P_U7",
+      "chip_ref": "C63",
+      "pad_num": "1",
+      "px": 118.65,
+      "py": 39.4,
+      "vx": 118.65,
+      "vy": 38.7
+    },
+    {
+      "net": "PCIE_UP_OUT7_P_J2",
+      "chip_ref": "C63",
+      "pad_num": "2",
+      "px": 119.35,
+      "py": 39.4,
+      "vx": 119.35,
+      "vy": 38.7
+    },
+    {
+      "net": "PCIE_UP_OUT7_N_U7",
+      "chip_ref": "C64",
+      "pad_num": "1",
+      "px": 117.35,
+      "py": 39.4,
+      "vx": 117.35,
+      "vy": 38.7
+    },
+    {
+      "net": "PCIE_UP_OUT7_N_J2",
+      "chip_ref": "C64",
+      "pad_num": "2",
+      "px": 118.05,
+      "py": 39.4,
+      "vx": 118.05,
+      "vy": 38.7
+    }
+  ],
+  "frozen_refs": [
+    "C17",
+    "C18",
+    "C19",
+    "C20",
+    "C21",
+    "C22",
+    "C23",
+    "C24",
+    "C25",
+    "C26",
+    "C27",
+    "C28",
+    "C29",
+    "C30",
+    "C31",
+    "C32",
+    "C49",
+    "C50",
+    "C51",
+    "C52",
+    "C53",
+    "C54",
+    "C55",
+    "C56",
+    "C57",
+    "C58",
+    "C59",
+    "C60",
+    "C61",
+    "C62",
+    "C63",
+    "C64",
+    "U3",
+    "U7"
+  ],
+  "stub_width_mm": 0.205,
+  "stub_layer": "F.Cu",
+  "stub_note": "确定性冻结桩方案层重规划（eda_core/escape_stub_replanner）: 105 可落桩（原 105 + 重规划 0）；7 条豁免（NO_CONNECT 免桩 / 物理不可行待裁决）。施工按坐标直落, 禁活选位。",
+  "broken_stubs": [
+    {
+      "net": "PCIE_UP_OUT7_N_U7",
+      "px": 99.475,
+      "py": 43.6,
+      "vx": 96.975,
+      "vy": 43.6,
+      "reason": "all 104 deterministic candidates blocked",
+      "ruled": true,
+      "ruled_by": "PM 方案裁决 2026-08-20: escape_stub_replanner 固定候选序穷尽仍不可落, 物理不可行; 该脚 Phase 3 布线时按折线直出或专项方案处理"
+    },
+    {
+      "net": "NO_CONNECT",
+      "px": 93.225,
+      "py": 59.7,
+      "vx": 93.225,
+      "vy": 58.9,
+      "reason": "NO_CONNECT (无信号网, 免逃逸桩)"
+    },
+    {
+      "net": "NO_CONNECT",
+      "px": 94.025,
+      "py": 59.7,
+      "vx": 94.025,
+      "vy": 58.9,
+      "reason": "NO_CONNECT (无信号网, 免逃逸桩)"
+    },
+    {
+      "net": "PCIE_UP3_N",
+      "px": 88.825,
+      "py": 45.3,
+      "vx": 88.825,
+      "vy": 47.8,
+      "reason": "all 104 deterministic candidates blocked",
+      "ruled": true,
+      "ruled_by": "PM 方案裁决 2026-08-20: escape_stub_replanner 固定候选序穷尽仍不可落, 物理不可行; 该脚 Phase 3 布线时按折线直出或专项方案处理"
+    },
+    {
+      "net": "NO_CONNECT",
+      "px": 93.625,
+      "py": 47.7,
+      "vx": 93.625,
+      "vy": 46.9,
+      "reason": "NO_CONNECT (无信号网, 免逃逸桩)"
+    },
+    {
+      "net": "NO_CONNECT",
+      "px": 94.425,
+      "py": 47.7,
+      "vx": 94.425,
+      "vy": 46.9,
+      "reason": "NO_CONNECT (无信号网, 免逃逸桩)"
+    },
+    {
+      "net": "PCIE_UP_OUT3_P_U7",
+      "px": 98.825,
+      "py": 45.3,
+      "vx": 98.825,
+      "vy": 47.8,
+      "reason": "all 104 deterministic candidates blocked",
+      "ruled": true,
+      "ruled_by": "PM 方案裁决 2026-08-20: escape_stub_replanner 固定候选序穷尽仍不可落, 物理不可行; 该脚 Phase 3 布线时按折线直出或专项方案处理"
+    }
+  ],
+  "low_speed_escape": {
+    "rule": "低速 strap 网 U3/U7 侧逃逸冻结: 每引脚引出短段 via 精确位置; stagger_via 奇偶交错 (奇0.8/偶2.5, 障碍降级固定序); 规划器/执行器只消费本表 (E6), 禁运行时选位",
+    "frozen_at": "escape_low_speed_freeze (E3)",
+    "chips": [
+      "U3",
+      "U7"
+    ],
+    "nets": [
+      "ALL_DONE_N_U3",
+      "ALL_DONE_N_U7",
+      "PD0_U3",
+      "PD0_U7",
+      "PD1_U3",
+      "PD1_U7",
+      "STRAP_EQ0_1_U3",
+      "STRAP_EQ0_1_U7",
+      "STRAP_EQ0_U3",
+      "STRAP_EQ0_U7",
+      "STRAP_EQ1_1_U3",
+      "STRAP_EQ1_1_U7",
+      "STRAP_EQ1_U3",
+      "STRAP_EQ1_U7",
+      "STRAP_MODE_U3",
+      "STRAP_MODE_U7",
+      "STRAP_READ_EN_U3",
+      "STRAP_READ_EN_U7"
+    ],
+    "min_via_via": 0.5,
+    "entries": [
+      {
+        "net": "ALL_DONE_N_U3",
+        "chip_ref": "U3",
+        "pad_num": "31",
+        "px": 92.825,
+        "py": 59.7,
+        "vx": 92.825,
+        "vy": 58.375,
+        "offset": 1.1,
+        "direction": "up",
+        "feasible": "FEASIBLE",
+        "decision": "stagger_via 方案层冻结 (奇偶交错 off=1.1, 方向 up)"
+      },
+      {
+        "net": "STRAP_EQ1_1_U3",
+        "chip_ref": "U3",
+        "pad_num": "29",
+        "px": 93.625,
+        "py": 59.7,
+        "vx": 93.625,
+        "vy": 56.975,
+        "offset": 2.5,
+        "direction": "up",
+        "feasible": "FEASIBLE",
+        "decision": "stagger_via 方案层冻结 (奇偶交错 off=2.5, 方向 up)"
+      },
+      {
+        "net": "STRAP_EQ0_1_U3",
+        "chip_ref": "U3",
+        "pad_num": "27",
+        "px": 94.425,
+        "py": 59.7,
+        "vx": 94.425,
+        "vy": 58.375,
+        "offset": 1.1,
+        "direction": "up",
+        "feasible": "FEASIBLE",
+        "decision": "stagger_via 方案层冻结 (奇偶交错 off=1.1, 方向 up)"
+      },
+      {
+        "net": "PD1_U3",
+        "chip_ref": "U3",
+        "pad_num": "26",
+        "px": 94.825,
+        "py": 59.7,
+        "vx": 94.825,
+        "vy": 56.975,
+        "offset": 2.5,
+        "direction": "up",
+        "feasible": "FEASIBLE",
+        "decision": "stagger_via 方案层冻结 (奇偶交错 off=2.5, 方向 up)"
+      },
+      {
+        "net": "PD0_U3",
+        "chip_ref": "U3",
+        "pad_num": "25",
+        "px": 95.225,
+        "py": 59.7,
+        "vx": 95.225,
+        "vy": 58.675,
+        "offset": 0.8,
+        "direction": "up",
+        "feasible": "FEASIBLE",
+        "decision": "stagger_via 方案层冻结 (奇偶交错 off=0.8, 方向 up)"
+      },
+      {
+        "net": "STRAP_READ_EN_U3",
+        "chip_ref": "U3",
+        "pad_num": "57",
+        "px": 92.425,
+        "py": 65.7,
+        "vx": 92.425,
+        "vy": 66.725,
+        "offset": 0.8,
+        "direction": "down",
+        "feasible": "FEASIBLE",
+        "decision": "stagger_via 方案层冻结 (奇偶交错 off=0.8, 方向 down)"
+      },
+      {
+        "net": "STRAP_EQ0_U3",
+        "chip_ref": "U3",
+        "pad_num": "59",
+        "px": 93.225,
+        "py": 65.7,
+        "vx": 93.225,
+        "vy": 68.425,
+        "offset": 2.5,
+        "direction": "down",
+        "feasible": "FEASIBLE",
+        "decision": "stagger_via 方案层冻结 (奇偶交错 off=2.5, 方向 down)"
+      },
+      {
+        "net": "STRAP_EQ1_U3",
+        "chip_ref": "U3",
+        "pad_num": "60",
+        "px": 93.625,
+        "py": 65.7,
+        "vx": 93.625,
+        "vy": 66.725,
+        "offset": 0.8,
+        "direction": "down",
+        "feasible": "FEASIBLE",
+        "decision": "stagger_via 方案层冻结 (奇偶交错 off=0.8, 方向 down)"
+      },
+      {
+        "net": "STRAP_MODE_U3",
+        "chip_ref": "U3",
+        "pad_num": "61",
+        "px": 94.025,
+        "py": 65.7,
+        "vx": 94.025,
+        "vy": 68.425,
+        "offset": 2.5,
+        "direction": "down",
+        "feasible": "FEASIBLE",
+        "decision": "stagger_via 方案层冻结 (奇偶交错 off=2.5, 方向 down)"
+      },
+      {
+        "net": "STRAP_MODE_U7",
+        "chip_ref": "U7",
+        "pad_num": "61",
+        "px": 93.625,
+        "py": 41.7,
+        "vx": 93.625,
+        "vy": 40.675,
+        "offset": 0.8,
+        "direction": "up",
+        "feasible": "FEASIBLE",
+        "decision": "stagger_via 方案层冻结 (奇偶交错 off=0.8, 方向 up)"
+      },
+      {
+        "net": "STRAP_EQ1_U7",
+        "chip_ref": "U7",
+        "pad_num": "60",
+        "px": 94.025,
+        "py": 41.7,
+        "vx": 94.025,
+        "vy": 38.975,
+        "offset": 2.5,
+        "direction": "up",
+        "feasible": "FEASIBLE",
+        "decision": "stagger_via 方案层冻结 (奇偶交错 off=2.5, 方向 up)"
+      },
+      {
+        "net": "STRAP_EQ0_U7",
+        "chip_ref": "U7",
+        "pad_num": "59",
+        "px": 94.425,
+        "py": 41.7,
+        "vx": 94.425,
+        "vy": 40.675,
+        "offset": 0.8,
+        "direction": "up",
+        "feasible": "FEASIBLE",
+        "decision": "stagger_via 方案层冻结 (奇偶交错 off=0.8, 方向 up)"
+      },
+      {
+        "net": "STRAP_READ_EN_U7",
+        "chip_ref": "U7",
+        "pad_num": "57",
+        "px": 95.225,
+        "py": 41.7,
+        "vx": 95.225,
+        "vy": 38.975,
+        "offset": 2.5,
+        "direction": "up",
+        "feasible": "FEASIBLE",
+        "decision": "stagger_via 方案层冻结 (奇偶交错 off=2.5, 方向 up)"
+      },
+      {
+        "net": "PD0_U7",
+        "chip_ref": "U7",
+        "pad_num": "25",
+        "px": 92.425,
+        "py": 47.7,
+        "vx": 92.425,
+        "vy": 48.725,
+        "offset": 0.8,
+        "direction": "down",
+        "feasible": "FEASIBLE",
+        "decision": "stagger_via 方案层冻结 (奇偶交错 off=0.8, 方向 down)"
+      },
+      {
+        "net": "PD1_U7",
+        "chip_ref": "U7",
+        "pad_num": "26",
+        "px": 92.825,
+        "py": 47.7,
+        "vx": 92.825,
+        "vy": 49.025,
+        "offset": 1.1,
+        "direction": "down",
+        "feasible": "FEASIBLE",
+        "decision": "stagger_via 方案层冻结 (奇偶交错 off=1.1, 方向 down)"
+      },
+      {
+        "net": "STRAP_EQ0_1_U7",
+        "chip_ref": "U7",
+        "pad_num": "27",
+        "px": 93.225,
+        "py": 47.7,
+        "vx": 93.225,
+        "vy": 48.725,
+        "offset": 0.8,
+        "direction": "down",
+        "feasible": "FEASIBLE",
+        "decision": "stagger_via 方案层冻结 (奇偶交错 off=0.8, 方向 down)"
+      },
+      {
+        "net": "STRAP_EQ1_1_U7",
+        "chip_ref": "U7",
+        "pad_num": "29",
+        "px": 94.025,
+        "py": 47.7,
+        "vx": 94.025,
+        "vy": 49.025,
+        "offset": 1.1,
+        "direction": "down",
+        "feasible": "FEASIBLE",
+        "decision": "stagger_via 方案层冻结 (奇偶交错 off=1.1, 方向 down)"
+      },
+      {
+        "net": "ALL_DONE_N_U7",
+        "chip_ref": "U7",
+        "pad_num": "31",
+        "px": 94.825,
+        "py": 47.7,
+        "vx": 94.825,
+        "vy": 48.725,
+        "offset": 0.8,
+        "direction": "down",
+        "feasible": "FEASIBLE",
+        "decision": "stagger_via 方案层冻结 (奇偶交错 off=0.8, 方向 down)"
+      }
+    ]
+  }
+}

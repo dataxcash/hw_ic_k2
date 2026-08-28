@@ -1,0 +1,403 @@
+{
+ "task": "K2 电容墙复摆 C17-C32(DN)+C49-C64(UP) 按 channel_alloc_v4 轨道错开重摆",
+ "contract": "cap_wall_solver 每墙一次确定性求解（完整输入一次求解即契约）；失败→原样记录工具证据停机，禁改参重跑",
+ "tool": "cap_wall_solver.solve_cap_wall（源码零改动；驱动 /tmp/opencode/cap_wall_v8_solve.py 运行时注入 cap_nets，因工具内部 place_stubs 缺省 cap_nets=CAP_NETS 硬编码旧 8 颗墙 C25-C32）",
+ "board": "/tmp/opencode/boards/k2_v6.kicad_pcb",
+ "escape_spec": "revA/pcb/pm_gate/artifacts/k2_v4/L2/escape_spec.json",
+ "spec": "revA/pcb/pm_gate/artifacts/L3/SPEC_k2_v4.json",
+ "alloc": "revA/pcb/pm_gate/artifacts/k2_v4/L3/model_solves/channel_alloc_v4/channel_alloc.json",
+ "timestamp": "2026-08-27T07:32:36",
+ "verdict": "BOTH_INFEASIBLE — 两面墙求解均显式失败（0/16），无布局产出，未落板，板未改动",
+ "walls": {
+  "dn": {
+   "side": "down",
+   "input": {
+    "side": "down",
+    "wall_refs": [
+     "C17",
+     "C18",
+     "C19",
+     "C20",
+     "C21",
+     "C22",
+     "C23",
+     "C24",
+     "C25",
+     "C26",
+     "C27",
+     "C28",
+     "C29",
+     "C30",
+     "C31",
+     "C32"
+    ],
+    "net_order": [
+     "PCIE_DN_OUT0_N_MCIO",
+     "PCIE_DN_OUT0_P_MCIO",
+     "PCIE_DN_OUT1_N_MCIO",
+     "PCIE_DN_OUT1_P_MCIO",
+     "PCIE_DN_OUT2_N_MCIO",
+     "PCIE_DN_OUT2_P_MCIO",
+     "PCIE_DN_OUT3_N_MCIO",
+     "PCIE_DN_OUT3_P_MCIO",
+     "PCIE_DN_OUT4_N_MCIO",
+     "PCIE_DN_OUT4_P_MCIO",
+     "PCIE_DN_OUT5_N_MCIO",
+     "PCIE_DN_OUT5_P_MCIO",
+     "PCIE_DN_OUT6_N_MCIO",
+     "PCIE_DN_OUT6_P_MCIO",
+     "PCIE_DN_OUT7_N_MCIO",
+     "PCIE_DN_OUT7_P_MCIO"
+    ],
+    "cap_of_net": {
+     "PCIE_DN_OUT0_N_MCIO": "C18",
+     "PCIE_DN_OUT0_P_MCIO": "C17",
+     "PCIE_DN_OUT1_N_MCIO": "C20",
+     "PCIE_DN_OUT1_P_MCIO": "C19",
+     "PCIE_DN_OUT2_N_MCIO": "C22",
+     "PCIE_DN_OUT2_P_MCIO": "C21",
+     "PCIE_DN_OUT3_N_MCIO": "C24",
+     "PCIE_DN_OUT3_P_MCIO": "C23",
+     "PCIE_DN_OUT4_N_MCIO": "C26",
+     "PCIE_DN_OUT4_P_MCIO": "C25",
+     "PCIE_DN_OUT5_N_MCIO": "C28",
+     "PCIE_DN_OUT5_P_MCIO": "C27",
+     "PCIE_DN_OUT6_N_MCIO": "C30",
+     "PCIE_DN_OUT6_P_MCIO": "C29",
+     "PCIE_DN_OUT7_N_MCIO": "C32",
+     "PCIE_DN_OUT7_P_MCIO": "C31"
+    },
+    "u3_pad_y": {
+     "PCIE_DN_OUT0_N_MCIO": 58.900000000000006,
+     "PCIE_DN_OUT0_P_MCIO": 58.5,
+     "PCIE_DN_OUT1_N_MCIO": 60.1,
+     "PCIE_DN_OUT1_P_MCIO": 59.7,
+     "PCIE_DN_OUT2_N_MCIO": 61.300000000000004,
+     "PCIE_DN_OUT2_P_MCIO": 60.900000000000006,
+     "PCIE_DN_OUT3_N_MCIO": 62.5,
+     "PCIE_DN_OUT3_P_MCIO": 62.1,
+     "PCIE_DN_OUT4_N_MCIO": 63.7,
+     "PCIE_DN_OUT4_P_MCIO": 63.300000000000004,
+     "PCIE_DN_OUT5_N_MCIO": 64.9,
+     "PCIE_DN_OUT5_P_MCIO": 64.5,
+     "PCIE_DN_OUT6_N_MCIO": 66.10000000000001,
+     "PCIE_DN_OUT6_P_MCIO": 65.7,
+     "PCIE_DN_OUT7_N_MCIO": 67.3,
+     "PCIE_DN_OUT7_P_MCIO": 66.9
+    },
+    "cap_nets": {
+     "C17": [
+      "PCIE_DN_OUT0_P_U3",
+      "PCIE_DN_OUT0_P_MCIO"
+     ],
+     "C18": [
+      "PCIE_DN_OUT0_N_U3",
+      "PCIE_DN_OUT0_N_MCIO"
+     ],
+     "C19": [
+      "PCIE_DN_OUT1_P_U3",
+      "PCIE_DN_OUT1_P_MCIO"
+     ],
+     "C20": [
+      "PCIE_DN_OUT1_N_U3",
+      "PCIE_DN_OUT1_N_MCIO"
+     ],
+     "C21": [
+      "PCIE_DN_OUT2_P_U3",
+      "PCIE_DN_OUT2_P_MCIO"
+     ],
+     "C22": [
+      "PCIE_DN_OUT2_N_U3",
+      "PCIE_DN_OUT2_N_MCIO"
+     ],
+     "C23": [
+      "PCIE_DN_OUT3_P_U3",
+      "PCIE_DN_OUT3_P_MCIO"
+     ],
+     "C24": [
+      "PCIE_DN_OUT3_N_U3",
+      "PCIE_DN_OUT3_N_MCIO"
+     ],
+     "C25": [
+      "PCIE_DN_OUT4_P_U3",
+      "PCIE_DN_OUT4_P_MCIO"
+     ],
+     "C26": [
+      "PCIE_DN_OUT4_N_U3",
+      "PCIE_DN_OUT4_N_MCIO"
+     ],
+     "C27": [
+      "PCIE_DN_OUT5_P_U3",
+      "PCIE_DN_OUT5_P_MCIO"
+     ],
+     "C28": [
+      "PCIE_DN_OUT5_N_U3",
+      "PCIE_DN_OUT5_N_MCIO"
+     ],
+     "C29": [
+      "PCIE_DN_OUT6_P_U3",
+      "PCIE_DN_OUT6_P_MCIO"
+     ],
+     "C30": [
+      "PCIE_DN_OUT6_N_U3",
+      "PCIE_DN_OUT6_N_MCIO"
+     ],
+     "C31": [
+      "PCIE_DN_OUT7_P_U3",
+      "PCIE_DN_OUT7_P_MCIO"
+     ],
+     "C32": [
+      "PCIE_DN_OUT7_N_U3",
+      "PCIE_DN_OUT7_N_MCIO"
+     ]
+    },
+    "rows": [
+     [
+      "PCIE_DN_OUT0_N_MCIO",
+      "PCIE_DN_OUT0_P_MCIO",
+      "PCIE_DN_OUT1_N_MCIO",
+      "PCIE_DN_OUT1_P_MCIO",
+      "PCIE_DN_OUT2_N_MCIO",
+      "PCIE_DN_OUT2_P_MCIO",
+      "PCIE_DN_OUT3_N_MCIO",
+      "PCIE_DN_OUT3_P_MCIO"
+     ],
+     [
+      "PCIE_DN_OUT4_N_MCIO",
+      "PCIE_DN_OUT4_P_MCIO",
+      "PCIE_DN_OUT5_N_MCIO",
+      "PCIE_DN_OUT5_P_MCIO",
+      "PCIE_DN_OUT6_N_MCIO",
+      "PCIE_DN_OUT6_P_MCIO",
+      "PCIE_DN_OUT7_N_MCIO",
+      "PCIE_DN_OUT7_P_MCIO"
+     ]
+    ],
+    "band_y": [
+     60.0,
+     66.0
+    ],
+    "x_corridor": [
+     75.0,
+     90.0
+    ],
+    "escape_spec": "/home/fila/jqdDev_2025/ic_hw/strix-halo-ioconvert/revA/pcb/pm_gate/artifacts/k2_v4/L2/escape_spec.json",
+    "spec": "/home/fila/jqdDev_2025/ic_hw/strix-halo-ioconvert/revA/pcb/pm_gate/artifacts/L3/SPEC_k2_v4.json",
+    "board": "/tmp/opencode/boards/k2_v6.kicad_pcb",
+    "min_pitch": 1.3,
+    "min_row_sep": 2.5,
+    "input_fp": "0c7da7bb00e35ae8"
+   },
+   "layout": {},
+   "report": [
+    "固定障碍: 279 个（VREG via + U3/U7/冻结 cap 桩 seg + 冻结 pad + in2_crossing 段），排除决策变量 ['C17', 'C18', 'C19', 'C20', 'C21', 'C22', 'C23', 'C24', 'C25', 'C26', 'C27', 'C28', 'C29', 'C30', 'C31', 'C32']",
+    "!! 显式失败：band 内无 stub 可行的完整 8/8 布局（无解网/卡死障碍见上方行报告）——绝不降级 7/8"
+   ],
+   "solved_count": 0,
+   "expect": 16,
+   "tool": "cap_wall_solver.solve_cap_wall (未改源码, 驱动运行时注入 cap_nets)"
+  },
+  "up": {
+   "side": "up",
+   "input": {
+    "side": "up",
+    "wall_refs": [
+     "C49",
+     "C50",
+     "C51",
+     "C52",
+     "C53",
+     "C54",
+     "C55",
+     "C56",
+     "C57",
+     "C58",
+     "C59",
+     "C60",
+     "C61",
+     "C62",
+     "C63",
+     "C64"
+    ],
+    "net_order": [
+     "PCIE_UP_OUT0_N_J2",
+     "PCIE_UP_OUT0_P_J2",
+     "PCIE_UP_OUT1_N_J2",
+     "PCIE_UP_OUT1_P_J2",
+     "PCIE_UP_OUT2_N_J2",
+     "PCIE_UP_OUT2_P_J2",
+     "PCIE_UP_OUT3_N_J2",
+     "PCIE_UP_OUT3_P_J2",
+     "PCIE_UP_OUT4_N_J2",
+     "PCIE_UP_OUT4_P_J2",
+     "PCIE_UP_OUT5_N_J2",
+     "PCIE_UP_OUT5_P_J2",
+     "PCIE_UP_OUT6_N_J2",
+     "PCIE_UP_OUT6_P_J2",
+     "PCIE_UP_OUT7_N_J2",
+     "PCIE_UP_OUT7_P_J2"
+    ],
+    "cap_of_net": {
+     "PCIE_UP_OUT0_N_J2": "C50",
+     "PCIE_UP_OUT0_P_J2": "C49",
+     "PCIE_UP_OUT1_N_J2": "C52",
+     "PCIE_UP_OUT1_P_J2": "C51",
+     "PCIE_UP_OUT2_N_J2": "C54",
+     "PCIE_UP_OUT2_P_J2": "C53",
+     "PCIE_UP_OUT3_N_J2": "C56",
+     "PCIE_UP_OUT3_P_J2": "C55",
+     "PCIE_UP_OUT4_N_J2": "C58",
+     "PCIE_UP_OUT4_P_J2": "C57",
+     "PCIE_UP_OUT5_N_J2": "C60",
+     "PCIE_UP_OUT5_P_J2": "C59",
+     "PCIE_UP_OUT6_N_J2": "C62",
+     "PCIE_UP_OUT6_P_J2": "C61",
+     "PCIE_UP_OUT7_N_J2": "C64",
+     "PCIE_UP_OUT7_P_J2": "C63"
+    },
+    "u3_pad_y": {
+     "PCIE_UP_OUT0_N_J2": 48.5,
+     "PCIE_UP_OUT0_P_J2": 48.900000000000006,
+     "PCIE_UP_OUT1_N_J2": 47.300000000000004,
+     "PCIE_UP_OUT1_P_J2": 47.7,
+     "PCIE_UP_OUT2_N_J2": 46.1,
+     "PCIE_UP_OUT2_P_J2": 46.5,
+     "PCIE_UP_OUT3_N_J2": 44.900000000000006,
+     "PCIE_UP_OUT3_P_J2": 45.300000000000004,
+     "PCIE_UP_OUT4_N_J2": 43.7,
+     "PCIE_UP_OUT4_P_J2": 44.1,
+     "PCIE_UP_OUT5_N_J2": 42.5,
+     "PCIE_UP_OUT5_P_J2": 42.900000000000006,
+     "PCIE_UP_OUT6_N_J2": 41.300000000000004,
+     "PCIE_UP_OUT6_P_J2": 41.7,
+     "PCIE_UP_OUT7_N_J2": 40.1,
+     "PCIE_UP_OUT7_P_J2": 40.5
+    },
+    "cap_nets": {
+     "C49": [
+      "PCIE_UP_OUT0_P_U7",
+      "PCIE_UP_OUT0_P_J2"
+     ],
+     "C50": [
+      "PCIE_UP_OUT0_N_U7",
+      "PCIE_UP_OUT0_N_J2"
+     ],
+     "C51": [
+      "PCIE_UP_OUT1_P_U7",
+      "PCIE_UP_OUT1_P_J2"
+     ],
+     "C52": [
+      "PCIE_UP_OUT1_N_U7",
+      "PCIE_UP_OUT1_N_J2"
+     ],
+     "C53": [
+      "PCIE_UP_OUT2_P_U7",
+      "PCIE_UP_OUT2_P_J2"
+     ],
+     "C54": [
+      "PCIE_UP_OUT2_N_U7",
+      "PCIE_UP_OUT2_N_J2"
+     ],
+     "C55": [
+      "PCIE_UP_OUT3_P_U7",
+      "PCIE_UP_OUT3_P_J2"
+     ],
+     "C56": [
+      "PCIE_UP_OUT3_N_U7",
+      "PCIE_UP_OUT3_N_J2"
+     ],
+     "C57": [
+      "PCIE_UP_OUT4_P_U7",
+      "PCIE_UP_OUT4_P_J2"
+     ],
+     "C58": [
+      "PCIE_UP_OUT4_N_U7",
+      "PCIE_UP_OUT4_N_J2"
+     ],
+     "C59": [
+      "PCIE_UP_OUT5_P_U7",
+      "PCIE_UP_OUT5_P_J2"
+     ],
+     "C60": [
+      "PCIE_UP_OUT5_N_U7",
+      "PCIE_UP_OUT5_N_J2"
+     ],
+     "C61": [
+      "PCIE_UP_OUT6_P_U7",
+      "PCIE_UP_OUT6_P_J2"
+     ],
+     "C62": [
+      "PCIE_UP_OUT6_N_U7",
+      "PCIE_UP_OUT6_N_J2"
+     ],
+     "C63": [
+      "PCIE_UP_OUT7_P_U7",
+      "PCIE_UP_OUT7_P_J2"
+     ],
+     "C64": [
+      "PCIE_UP_OUT7_N_U7",
+      "PCIE_UP_OUT7_N_J2"
+     ]
+    },
+    "rows": [
+     [
+      "PCIE_UP_OUT4_N_J2",
+      "PCIE_UP_OUT4_P_J2",
+      "PCIE_UP_OUT5_N_J2",
+      "PCIE_UP_OUT5_P_J2",
+      "PCIE_UP_OUT6_N_J2",
+      "PCIE_UP_OUT6_P_J2",
+      "PCIE_UP_OUT7_N_J2",
+      "PCIE_UP_OUT7_P_J2"
+     ],
+     [
+      "PCIE_UP_OUT0_N_J2",
+      "PCIE_UP_OUT0_P_J2",
+      "PCIE_UP_OUT1_N_J2",
+      "PCIE_UP_OUT1_P_J2",
+      "PCIE_UP_OUT2_N_J2",
+      "PCIE_UP_OUT2_P_J2",
+      "PCIE_UP_OUT3_N_J2",
+      "PCIE_UP_OUT3_P_J2"
+     ]
+    ],
+    "band_y": [
+     44.0,
+     47.0
+    ],
+    "x_corridor": [
+     99.0,
+     128.0
+    ],
+    "escape_spec": "/home/fila/jqdDev_2025/ic_hw/strix-halo-ioconvert/revA/pcb/pm_gate/artifacts/k2_v4/L2/escape_spec.json",
+    "spec": "/home/fila/jqdDev_2025/ic_hw/strix-halo-ioconvert/revA/pcb/pm_gate/artifacts/L3/SPEC_k2_v4.json",
+    "board": "/tmp/opencode/boards/k2_v6.kicad_pcb",
+    "min_pitch": 1.3,
+    "min_row_sep": 2.5,
+    "input_fp": "9e887094e7c44ced"
+   },
+   "layout": {},
+   "report": [
+    "固定障碍: 293 个（VREG via + U3/U7/冻结 cap 桩 seg + 冻结 pad + in2_crossing 段），排除决策变量 ['C49', 'C50', 'C51', 'C52', 'C53', 'C54', 'C55', 'C56', 'C57', 'C58', 'C59', 'C60', 'C61', 'C62', 'C63', 'C64']",
+    "!! 显式失败：band 内无 stub 可行的完整 8/8 布局（无解网/卡死障碍见上方行报告）——绝不降级 7/8"
+   ],
+   "solved_count": 0,
+   "expect": 16,
+   "tool": "cap_wall_solver.solve_cap_wall (未改源码, 驱动运行时注入 cap_nets)"
+  }
+ },
+ "forensics": {
+  "dn": {
+   "row1_y_candidate": 60.5,
+   "pad_clear": "PASS（8/8）",
+   "stub_fail": "C23(PCIE_DN_OUT3_P_MCIO) pad2 @(84.250,60.500) 方向阶梯全部碰撞",
+   "blocker": "固定 U3 芯片侧逃逸桩段 PCIE_DN_OUT2_N_U3 seg(84.51,59.48)->(84.51,61.08)：竖向 ±0.7 桩 via 距 0.26 < 0.375(需求)；-x 撞邻 pad；+x2.5 撞 U3 桩扇出",
+   "root_cause": "SPEC mcio_side_x[75,90] 走廊右端 x=84.6 槽位与 U3 TX 逃逸桩扇出（达 x=84.51）重叠；求解器 x 网格固定 x_corridor[0]+0.5+1.3i，无法平移避让，且 8/8 全部落桩才放行 → 显式失败"
+  },
+  "up": {
+   "row1_y_candidate": 44.2,
+   "pad_clear": "FAIL：C58(PCIE_UP_OUT4_N_J2) x=99.50 y=44.20 → PCIE_UP_OUT4_P_U7 seg d=0.246（需求 ≥0.5 = CAP_PAD_HALF0.2+seg半宽0.1025+clearance0.2）",
+   "root_cause": "UP 墙最左列 x=99.5（x_corridor[0]+0.5，x_corridor=(99,128)）落入 U7 TX 逃逸桩扇出带（U7 芯片侧桩从 x=98.825 水平/竖向展开）；另 band[44,47] 内 2 行 ≥2.5 间距与 J2_TO_U upper 轨带(40.3..48.7) 的错开窗口（[44.34,44.66]∪[45.54,45.86]∪[46.74,47.06]）在 0.3 步进网格上无两行可行组合"
+  }
+ }
+}
