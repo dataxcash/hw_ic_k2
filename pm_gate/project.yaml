@@ -1,0 +1,34 @@
+# k2 项目配置（pm_gate 项目侧 yaml，REPO 拆分阶段 2 yaml 化）
+# 框架 (ic_hw_eda/pm_gate) 零项目特判，全部项目维度配置经本文件注入。
+project: k2_v4
+board_path: k2_v4.kicad_pcb
+spec_name: SPEC_k2_v4.json
+# C1（ECN-004）：U4 陈旧名 → U7（G1.5 逃逸边章节名，与 structural_predict.md 章节同步改名）
+l1_escape_edges:
+  - U3 左缘
+  - U3 右缘
+  - U7 左缘
+  - U7 右缘
+  - J3 上排
+  - J3 下排
+  - J4 上排
+  - J4 下排
+# G1.1 候选必填字段（K2 = 电容墙构型策略实例命名）
+l1_candidate_fields:
+  - 器件分区
+  - 接口朝向
+  - 信号流向
+  - 电源域划分
+  - 电容墙构型
+  - 走廊预检
+  - 等长预算
+# G1.5 结构预检报告契约（K2 = 单文件 structural_predict.md，
+# 章节/候选关键词与现行判定一致，零行为变化）
+l1_g15:
+  report_path: structural_predict.md
+  sections:
+    - 焊盘墙穿透检查
+    - 汇总判定
+  candidate_keywords:
+    - 蛇形
+    - "45"
