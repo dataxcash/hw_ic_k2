@@ -1,0 +1,43 @@
+{
+ "task": "卡 0.5 修订版：k2_gen_v5 权威生成器迁移 + uuid 确定性化 + 工程内重生成复摆落位",
+ "decision": "停机报告 2 裁决：A1（补 k2_sch.yaml 输入）+ B1（uuid 确定性化，放弃 sha=9b6e28c3 字节复现，改三条件验收）",
+ "input_fp_legacy": "9b6e28c31444149bd749395beda6bd1f18ea15031575a0cf96b503fa4b5110ff",
+ "input_fp_legacy_note": "旧锚点 = k2_gen_v5 随机 uuid4 时代的单次快照，不可复现（含随机 uuid），弃用为字节锚点；结构语义仍有效（见 checks）",
+ "input_fp_new": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+ "board": "k2/k2_v4.kicad_pcb",
+ "board_pre_landing_backup": "/tmp/opencode/k2_landing_backup/k2_v4_pre_landing.kicad_pcb",
+ "board_pre_landing_sha256": "87b66fbb6074e89048741b73d3de2ac30b82bd1d2f77266ceed0177c1eec51cf",
+ "generator": "k2/tools/k2_gen_v5.py",
+ "generator_head": "k2_gen_v5",
+ "migration": {
+  "k2_gen_v5_py": "strix-halo-ioconvert/revA/pcb/eda_core/k2_gen_v5.py -> k2/tools/k2_gen_v5.py",
+  "k2_jlc_template": "strix-halo-ioconvert/revA/pcb/eda_core/k2_jlc_template.kicad_pro -> k2/tools/k2_jlc_template.kicad_pro",
+  "path_adapt": "ROOT=基于脚本位置推导(k2/); YAML=boards/k2_sch.yaml; SPEC=pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json; PCB_REF=k2_v4.kicad_pcb",
+  "uuid_determinism": "7 处 uuid.uuid4() -> uuid5(NAMESPACE_DNS, kind:ref[:pad][:net])（fp/refprop/valprop/pad/edge 分前缀，全局唯一+确定性），零其他行为改动",
+  "yaml_fix": "k2/boards/k2_sch.yaml 补 C88/C89 placements(card=2) + 12V_IN+GND nets 补 pin + 新建 PWR_5V_KEY(C89/A)；C_1U/C_4R7 symbols 已存在未动"
+ },
+ "acceptance": {
+  "c1_determinism": {
+   "pass": true,
+   "detail": "同输入两次运行 k2/tools/k2_gen_v5.py -> 字节级一致，sha 均 004612c1c20177382e4fc70db04754430d48ad2be5b1019636c3a7a588afc1a6"
+  },
+  "c2_structure_alignment": {
+   "pass": true,
+   "detail": "落位板 vs 历史 k2_v6(9b6e28c3)：101 器件坐标 0 差异 / rot 0 差异 / footprint 0 差异；非 uuid 行 0 差异（唯一差异=确定性 uuid 改造，属预期）"
+  },
+  "c3_capwall_solve_v2": {
+   "pass": true,
+   "detail": "32 颗 at(含 rot) 与 cap_wall_v8/upgrade/solve_v2.json 布局逐字节一致 32/32"
+  },
+  "c3_sha_landed": {
+   "pass": true,
+   "detail": "新 input_fp = 6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24（确定性可复现，取代不可复现的 9b6e28c3）"
+  }
+ },
+ "checks_legacy_semantics_retained": {
+  "exactly_32_moved": "落位板 32/32 移动（复摆），旋转零改",
+  "stubs_for_32_caps": "escape_spec stubs 64 条重生成，ac_caps at 同步 32 颗",
+  "component_count_101": "101 器件保持"
+ },
+ "timestamp": "2026-08-29T11:23:00+08:00"
+}

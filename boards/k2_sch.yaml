@@ -2629,6 +2629,7 @@ nets:
   - U2/VIN
   - U2/EN
   - L1/A
+  - C88/A
   GND:
   - J3/GND
   - J4/GND
@@ -2700,6 +2701,8 @@ nets:
   - C87/B
   - C90/B
   - R41/B
+  - C88/B
+  - C89/B
   PD0_U3:
   - U3/PD0
   - R22/A
@@ -2737,6 +2740,8 @@ nets:
   - U2/FB
   - R40/B
   - R41/A
+  PWR_5V_KEY:
+  - C89/A
 sheets:
 - title: Connectors
   paper: A2
@@ -3106,6 +3111,12 @@ sheets:
     card: '2'
   - ref: R41
     symbol: R_5K6
+    card: '2'
+  - ref: C88
+    symbol: C_1U
+    card: '2'
+  - ref: C89
+    symbol: C_4R7
     card: '2'
 strap_intents:
 - ref: U3
