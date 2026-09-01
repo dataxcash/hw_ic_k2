@@ -51,6 +51,16 @@ OUT_DIR = L3 / "p3_real_board_e2e"
 
 J2_X_LO, J2_X_HI = 132.0, 136.0          # 真板 J2 列簇区间（只读探针，非引擎字面量）
 
+# 逃逸落点区窗口（D1 多区，Phase B）：真板 pad 聚类只读探针（J2 双列 132.65/
+# 135.0；MCIO 连接器 x∈[54,65] + 直通 x∈[75,85]；U7/U3 芯片 x∈[97,119]/[74,90]）。
+# 每区独立 pad 堆/候选序（config.escape_landing.regions 声明，代码零坐标特判）。
+REGION_WINDOWS = {
+    "J2": (132.0, 136.0),
+    "MCIO": (50.0, 90.0),
+    "U7": (97.0, 119.0),
+    "U3": (74.0, 90.0),
+}
+
 
 def _r3(v: float) -> float:
     return round(float(v), 3)
@@ -61,17 +71,16 @@ def load(path: Path):
         return json.load(f)
 
 
-def extract_j2_pads(board_path: Path) -> list:
-    """真板 k2_v4.kicad_pcb → J2 pad 堆（74 pad，{net,ref,x,y,w,h,tht,layers}）。
-
-    真板只读（BoardParser.parse 纯解析不改文件）。J2 列簇 = x∈[132.0,136.0]
-    （真板实测 132.65/135.0 双列，SMD 1.3x0.35，37 行）。"""
+def extract_region_pads(board_path: Path, x_lo: float, x_hi: float,
+                        ref: str) -> list:
+    """真板 → 区 pad 堆（{net,ref,x,y,w,h,tht,layers}，x 窗口过滤，y/x 排序）。
+    真板只读（BoardParser.parse 纯解析不改文件）。"""
     b = BoardParser(str(board_path)).parse()
     pads = []
     for p in b.pads:
-        if not (J2_X_LO <= p.pos[0] <= J2_X_HI):
+        if not (x_lo <= p.pos[0] <= x_hi):
             continue
-        pads.append({"net": p.net, "ref": "J2",
+        pads.append({"net": p.net, "ref": ref,
                      "x": _r3(p.pos[0]), "y": _r3(p.pos[1]),
                      "w": _r3(p.size[0]), "h": _r3(p.size[1]),
                      "tht": p.is_tht, "layers": list(p.layers)})
@@ -79,20 +88,42 @@ def extract_j2_pads(board_path: Path) -> list:
     return pads
 
 
+def extract_j2_pads(board_path: Path) -> list:
+    """真板 k2_v4.kicad_pcb → J2 pad 堆（74 pad，{net,ref,x,y,w,h,tht,layers}）。
+
+    真板只读（BoardParser.parse 纯解析不改文件）。J2 列簇 = x∈[132.0,136.0]
+    （真板实测 132.65/135.0 双列，SMD 1.3x0.35，37 行）。"""
+    return extract_region_pads(board_path, J2_X_LO, J2_X_HI, "J2")
+
+
 def derive_landing_demands(j2_pads: list) -> list:
     """真板 J2 pad 网 → 18 对 landing 需求（base/segname/net_p/net_n/pad_p/pad_n）。
 
     base 提取：PCIE_UP_OUT{k}_{P|N}_J2 → PCIE_UP{k}；PCIE_DN{k}_{P|N} → PCIE_DN{k}；
     PCIE_REFCLK{k}_{P|N} → PCIE_REFCLK{k}。segname=out_J2（右端连接器逃逸段）。"""
+    return derive_region_demands_from_pads(j2_pads, "J2", "out_J2")
+
+
+def derive_region_demands_from_pads(pads: list, suffix: str,
+                                    segname: str) -> list:
+    """区 pad 网 → 差分对需求（base/segname/net_p/net_n/pad_p/pad_n）。
+
+    base 提取：PCIE_UP_OUT{k}/PCIE_DN_OUT{k} → PCIE_UP{k}/PCIE_DN{k}；
+    PCIE_REFCLK{k} → PCIE_REFCLK{k}。确定性：同 stem 同极性多 pad（跨簇）
+    → 取 x 最大（右端逃逸消费端）；base 排序。"""
     by_pol: dict = {}
-    for p in j2_pads:
+    for p in pads:
         n = p["net"]
         if not n.startswith(("PCIE", "REFCLK")):
             continue
-        raw = n[:-3] if n.endswith("_J2") else n     # 剥 _J2 后缀 → PCIE_UP_OUT0_P
-        pol = raw[-1]                                 # P / N
-        stem = raw[:-2]                               # PCIE_UP_OUT0 / PCIE_DN0 / PCIE_REFCLK0
-        by_pol.setdefault(stem, {})[pol] = p
+        raw = n[:-(len(suffix) + 1)] if n.endswith("_" + suffix) else n
+        if not (raw.endswith("_P") or raw.endswith("_N")):
+            continue
+        pol = raw[-1]
+        stem = raw[:-2]
+        prev = by_pol.setdefault(stem, {}).get(pol)
+        if prev is None or p["x"] > prev["x"]:
+            by_pol[stem][pol] = p
     demands = []
     for stem in sorted(by_pol):
         rec = by_pol[stem]
@@ -100,10 +131,55 @@ def derive_landing_demands(j2_pads: list) -> list:
             continue
         if stem.startswith("PCIE_UP_OUT"):
             base = "PCIE_UP" + stem[len("PCIE_UP_OUT"):]
+        elif stem.startswith("PCIE_DN_OUT"):
+            base = "PCIE_DN" + stem[len("PCIE_DN_OUT"):]
         else:
             base = stem
         demands.append({
-            "base": base, "segname": "out_J2",
+            "base": base, "segname": segname,
+            "net_p": rec["P"]["net"], "net_n": rec["N"]["net"],
+            "pad_p": [rec["P"]["x"], rec["P"]["y"]],
+            "pad_n": [rec["N"]["x"], rec["N"]["y"]],
+        })
+    return sorted(demands, key=lambda d: d["base"])
+
+
+def derive_region_demands(real_board: Path, suffix: str,
+                          suffix_only: bool = False) -> list:
+    """真板 → 区差分对需求（按 REGION_WINDOWS 窗口 pad + net 后缀匹配）。
+
+    suffix_only=True（MCIO/U7/U3）：只收该区专属后缀网（PCIE_DN_OUT*_MCIO 等）
+    ——各网唯一不跨区碰撞（LandingTable.allocation[net] 契约）；False（J2）：
+    含窗内全部 PCIE 网（含 DN/REFCLK 输入网，其右端逃逸在 J2 连接器侧）。"""
+    x_lo, x_hi = REGION_WINDOWS[suffix]
+    pads = extract_region_pads(real_board, x_lo, x_hi, suffix)
+    if not suffix_only:
+        return derive_region_demands_from_pads(pads, suffix, f"out_{suffix}")
+    by_pol: dict = {}
+    for p in pads:
+        n = p["net"]
+        if not n.endswith("_" + suffix):
+            continue
+        raw = n[:-(len(suffix) + 1)]
+        if not (raw.endswith("_P") or raw.endswith("_N")):
+            continue
+        pol = raw[-1]
+        stem = raw[:-2]
+        prev = by_pol.setdefault(stem, {}).get(pol)
+        if prev is None or p["x"] > prev["x"]:
+            by_pol[stem][pol] = p
+    demands = []
+    for stem in sorted(by_pol):
+        rec = by_pol[stem]
+        if "P" not in rec or "N" not in rec:
+            continue
+        base = stem
+        if stem.startswith("PCIE_UP_OUT"):
+            base = "PCIE_UP" + stem[len("PCIE_UP_OUT"):]
+        elif stem.startswith("PCIE_DN_OUT"):
+            base = "PCIE_DN" + stem[len("PCIE_DN_OUT"):]
+        demands.append({
+            "base": base, "segname": f"out_{suffix}",
             "net_p": rec["P"]["net"], "net_n": rec["N"]["net"],
             "pad_p": [rec["P"]["x"], rec["P"]["y"]],
             "pad_n": [rec["N"]["x"], rec["N"]["y"]],
@@ -186,7 +262,11 @@ def derive_cap_walls(spec: dict) -> list:
 
 
 def build_config(base_cfg: dict) -> dict:
-    """route_model_config.json + 声明段（路径注入，非引擎硬编码）。"""
+    """route_model_config.json + 声明段（路径注入，非引擎硬编码）。
+
+    escape_landing 已由 base config 声明 regions（J2/MCIO/U7/U3，D1 多区）+
+    band_polarity（D3 极性硬约束）；旧单区键（demands_path/board_edge_x/
+    corridor_bound_x）保留为兜底（加性，旧消费路径不破）。"""
     cfg = json.loads(json.dumps(base_cfg))
     ca = cfg.setdefault("channel_alloc", {})
     ca["channels_from_spec"] = True                      # corridors → RouteInput.channels
@@ -196,11 +276,10 @@ def build_config(base_cfg: dict) -> dict:
         "via_zones_path": "derived.via_zones",
         "cap_walls_path": "derived.cap_walls",
     }
-    cfg["escape_landing"] = {
-        "demands_path": "derived.landing_demands",
-        "board_edge_x": 143.0,                            # SPEC board.outline_x[1]
-        "corridor_bound_x": 131.5,                        # SPEC corridors J2_TO_U.x_range[1]
-    }
+    el = cfg.setdefault("escape_landing", {})
+    el.setdefault("demands_path", "derived.landing_demands")
+    el.setdefault("board_edge_x", 143.0)                 # SPEC board.outline_x[1]
+    el.setdefault("corridor_bound_x", 131.5)             # SPEC corridors J2_TO_U.x_range[1]
     return cfg
 
 
@@ -219,6 +298,15 @@ def main() -> int:
     # 3. 真板 → J2 pad 堆 + 派生段（从真板 + SPEC 生成）
     j2_pads = extract_j2_pads(REAL_BOARD)
     landing_demands = derive_landing_demands(j2_pads)
+    # D1 多区（Phase B）：MCIO/U7/U3 区 pad 堆 + 需求（config.escape_landing.
+    # regions 声明，derived.* 路径填充）
+    region_pads: dict = {}
+    region_demands: dict = {}
+    for rid in ("J2", "MCIO", "U7", "U3"):
+        x_lo, x_hi = REGION_WINDOWS[rid]
+        region_pads[rid] = extract_region_pads(REAL_BOARD, x_lo, x_hi, rid)
+        region_demands[rid] = derive_region_demands(REAL_BOARD, rid,
+                                                    suffix_only=(rid != "J2"))
     corridors = spec.get("corridors") or []
     capacity_demands = derive_capacity_demands(spec, corridors)
     nets = sorted({d["base"] for d in capacity_demands})   # 18 base（去重排序，确定性）
@@ -227,6 +315,11 @@ def main() -> int:
     spec["derived"] = {
         "nets": nets,
         "landing_demands": landing_demands,
+        "landing_pads": region_pads,
+        "landing_demands_J2": region_demands["J2"],
+        "landing_demands_MCIO": region_demands["MCIO"],
+        "landing_demands_U7": region_demands["U7"],
+        "landing_demands_U3": region_demands["U3"],
         "capacity_demands": capacity_demands,
         "via_zones": via_zones,
         "cap_walls": cap_walls,
@@ -264,6 +357,10 @@ def main() -> int:
             },
             "derived": {
                 "landing_demands": len(landing_demands),
+                "landing_regions": {rid: {
+                    "pads": len(region_pads[rid]),
+                    "demands": len(region_demands[rid]),
+                } for rid in ("J2", "MCIO", "U7", "U3")},
                 "capacity_demands": len(capacity_demands),
                 "via_zones": [z["id"] for z in via_zones],
                 "cap_walls": cap_walls,
@@ -310,9 +407,16 @@ def main() -> int:
                                      and "无通道分配" in (x.get("reason") or "")
                                      and "U_TO_MCIO" in (x.get("reason") or "")
                                      for x in r["segments"]))
-    pn_cross = [b for b, r in base_reasons.items()
-                if any("相向交叉" in (x.get("reason") or "")
-                       for x in r["segments"])]
+    # P/N 相向交叉归因（Phase B）：区分落点驱动（D1/D3 已闭环，fail-closed 可归因）
+    # vs 芯片侧左逃逸自搜（层4 形态卡边界，D4 触发条件 (a)——landing 已提供且
+    # polarity_consistent=true 仍报交叉 → _escape_pair 形态缺口）
+    landing_cross = [b for b, r in base_reasons.items()
+                     if any("落点驱动逃逸 P/N 相向交叉" in (x.get("reason") or "")
+                            for x in r["segments"])]
+    selfsearch_cross = [b for b, r in base_reasons.items()
+                        if any("相向交叉" in (x.get("reason") or "")
+                               and "落点驱动逃逸" not in (x.get("reason") or "")
+                               for x in r["segments"])]
     if u_to_mcio_broken:
         report["gaps"].append({
             "stage": "solve", "verdict": "INFEASIBLE",
@@ -331,20 +435,33 @@ def main() -> int:
                         "回上层 ECO：③ 需产出段级 seg_tracks 或 _track_y_for 按廊道独立解析",
             },
         })
-    if pn_cross:
+    if landing_cross:
         report["gaps"].append({
             "stage": "solve", "verdict": "INFEASIBLE",
-            "reason": "REFCLK1 落点驱动逃逸 P/N 相向交叉（min 边缘距 -0.2050 < 0.175）——"
-                      "escape_landing 逐信号独立锚定无 P/N 对级对称约束（已知 skew 缺口同源，handoff §3）",
+            "reason": "落点驱动逃逸 P/N 相向交叉（landing 已提供且 polarity_consistent="
+                      "true 仍交叉）——落点 fail-closed 证据可归因（D1/D3 已闭环，"
+                      "剩余属落点几何/层4 消费边界）",
             "evidence": {
-                "bases_affected": pn_cross,
+                "bases_affected": landing_cross,
                 "cross_evidence": next(
                     (x for r in base_reasons.values()
                      for x in r["segments"]
                      if x.get("status") == "INFEASIBLE"
-                     and "相向交叉" in (x.get("reason") or "")),
+                     and "落点驱动逃逸 P/N 相向交叉" in (x.get("reason") or "")),
                     None),
-                "root": "escape_landing 需 P/N 对级对称约束（同 region/镜像列），回上层 ECO",
+                "root": "落点 fail-closed 证据（非 landing 缺口）：落点几何消费边界，"
+                        "D4 触发条件 (a) 候选",
+            },
+        })
+    if selfsearch_cross:
+        report["gaps"].append({
+            "stage": "solve", "verdict": "INFEASIBLE",
+            "reason": "芯片侧左逃逸自搜 P/N 相向交叉（landing 已提供且 polarity_consistent="
+                      "true，solve 仍报『对级对称逃逸无净空/via 换层 P/N 极性不一致』）——"
+                      "层4 形态卡边界（D4 触发条件 (a)：_escape_pair 形态缺口，本卡不做）",
+            "evidence": {
+                "bases_affected": selfsearch_cross,
+                "root": "层4 引擎形态卡（D4 触发条件 (a)），Phase C 重跑后按 D4 另卡处理",
             },
         })
     # 阶段⑤ C3 归因：走廊段无净空窗口（D2 段廊道窗口验证闭环后应消失）
@@ -361,23 +478,45 @@ def main() -> int:
                 {"base": b, "segname": s, "reason": rn}
                 for b, s, rn in c3_segments]},
         })
-    # 阶段⑤ 逃逸/形态归因（非 C3：对级逃逸净空/via 极性/短段直连）——层4 形态卡边界
-    # （D4 触发条件），阶段 B/D 范围，非本卡（Phase A C3 闭环）
+    # 阶段⑤ 逃逸/形态归因（非 C3）——Phase B（D1 多区 + D3 极性硬约束）验收证据：
+    #   C1「对级对称逃逸无净空」/ C2「via 换层 P/N 极性不一致」自搜 reason 应归零
+    #   （或仅余落点驱动逃逸 fail-closed 落点证据可归因）；C4「短段直连」= 层4
+    #   形态卡边界（D4 触发条件，本卡不做）。
     esc_segments = sorted(
         (b, x.get("segname"), x.get("reason"))
         for b, r in base_reasons.items()
         for x in r["segments"]
         if x.get("status") == "INFEASIBLE"
         and "走廊段无净空窗口" not in (x.get("reason") or ""))
+    c1_c2_segments = [(b, s, rn) for b, s, rn in esc_segments
+                      if any(k in (rn or "") for k in
+                             ("对级对称逃逸无净空", "via 换层 P/N 极性不一致"))]
+    landing_driven = [(b, s, rn) for b, s, rn in esc_segments
+                      if any(k in (rn or "") for k in
+                             ("落点驱动逃逸", "落点净空校验失败"))]
+    c4_short = [(b, s, rn) for b, s, rn in esc_segments
+                if "短段直连无净空" in (rn or "")]
     if esc_segments:
         report["gaps"].append({
             "stage": "solve", "verdict": "INFEASIBLE",
-            "reason": "逃逸/形态段 INFEASIBLE（对级逃逸净空/via 极性/短段直连）——"
-                      "层3 段廊道验证已闭环（C3 消除）；剩余属层4 形态卡边界（D4 触发条件），阶段 B/D",
-            "evidence": {"segments": [
-                {"base": b, "segname": s, "reason": rn}
-                for b, s, rn in esc_segments],
-                "c3_eliminated": not c3_segments},
+            "reason": "逃逸/形态段 INFEASIBLE——Phase B 验收归因：C1/C2 自搜 reason "
+                      "归零证据 + 落点 fail-closed 可归因 + 层4 形态边界（D4 触发）",
+            "evidence": {
+                "segments": [{"base": b, "segname": s, "reason": rn}
+                             for b, s, rn in esc_segments],
+                "c1_c2_count": len(c1_c2_segments),
+                "c1_c2_segments": [{"base": b, "segname": s}
+                                   for b, s, _ in c1_c2_segments],
+                "landing_driven_count": len(landing_driven),
+                "landing_driven_segments": [{"base": b, "segname": s}
+                                            for b, s, _ in landing_driven],
+                "c4_short_count": len(c4_short),
+                "c4_short_segments": [{"base": b, "segname": s}
+                                      for b, s, _ in c4_short],
+                "c3_eliminated": not c3_segments,
+                "phase_b": {"d1_multi_region": True, "d3_polarity_hard": True,
+                            "layer4_form_boundary": "D4 触发条件，另卡处理"},
+            },
         })
     if base_reasons:
         report["solve_base_reasons"] = base_reasons
@@ -422,6 +561,10 @@ def main() -> int:
                 ("verdict", "resource_ok", "polarity_ok", "solved",
                  "infeasible", "bottleneck_stage", "solved_pairs")}
         print(f"[{s:>11}] {json.dumps({k: v for k, v in keys.items() if v is not None}, sort_keys=True)}")
+    # Phase B 验收证据：landing 多区记录 + 极性硬约束摘要（stages.landing.evidence）
+    lnd_ev = getattr(ctx["landing"], "evidence", {})
+    print(f"landing regions: {json.dumps({k: {'verdict': v.get('verdict'), 'n_assigned': v.get('n_assigned'), 'used': v.get('used'), 'unassigned': v.get('unassigned')} for k, v in (lnd_ev.get('regions') or {}).items()}, sort_keys=True, ensure_ascii=False)}")
+    print(f"landing polarity: {json.dumps(lnd_ev.get('polarity'), sort_keys=True)}")
     print(f"trace        : {json.dumps(pipe.trace, sort_keys=True)}")
     print(f"report       : {out_path}")
     return 0

@@ -55,5 +55,54 @@
     "corridors_path": "corridors",
     "default_layer": "F.Cu",
     "pitch_fallback": 1.08
+  },
+  "band_polarity": {
+    "upper": "P_BOTTOM",
+    "lower": "P_BOTTOM",
+    "refclk": "P_BOTTOM"
+  },
+  "escape_landing": {
+    "regions": [
+      {
+        "id": "J2",
+        "kind": "CONN",
+        "side": "RIGHT",
+        "corridor_id": "J2_TO_U",
+        "pads_path": "derived.landing_pads.J2",
+        "demands_path": "derived.landing_demands_J2",
+        "board_edge_x": 143.0,
+        "corridor_bound_x": 131.5
+      },
+      {
+        "id": "MCIO",
+        "kind": "CONN",
+        "side": "LEFT",
+        "corridor_id": "U_TO_MCIO",
+        "pads_path": "derived.landing_pads.MCIO",
+        "demands_path": "derived.landing_demands_MCIO",
+        "board_edge_x": 90.0,
+        "corridor_bound_x": 65.5
+      },
+      {
+        "id": "U7",
+        "kind": "CHIP",
+        "side": "LEFT",
+        "corridor_id": null,
+        "pads_path": "derived.landing_pads.U7",
+        "demands_path": "derived.landing_demands_U7",
+        "board_edge_x": 119.0,
+        "corridor_bound_x": 88.83
+      },
+      {
+        "id": "U3",
+        "kind": "CHIP",
+        "side": "LEFT",
+        "corridor_id": null,
+        "pads_path": "derived.landing_pads.U3",
+        "demands_path": "derived.landing_demands_U3",
+        "board_edge_x": 89.0,
+        "corridor_bound_x": 88.83
+      }
+    ]
   }
 }
