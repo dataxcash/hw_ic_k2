@@ -1,0 +1,5544 @@
+{
+ "assembly": {
+  "config_declared": {
+   "capacity_audit": {
+    "cap_walls_path": "derived.cap_walls",
+    "demands_path": "derived.capacity_demands",
+    "via_zones_path": "derived.via_zones"
+   },
+   "channel_alloc": {
+    "channels_from_spec": true,
+    "corridors_path": "corridors",
+    "default_layer": "F.Cu",
+    "nets_path": "derived.nets",
+    "pitch_fallback": 1.08
+   },
+   "escape_landing": {
+    "board_edge_x": 143.0,
+    "corridor_bound_x": 131.5,
+    "demands_path": "derived.landing_demands"
+   }
+  },
+  "derived": {
+   "cap_walls": [
+    {
+     "ac_coupling_count": 32,
+     "id": "AC_CAP_WALL",
+     "min_pitch_mm": 1.3,
+     "side_spans_mm": [
+      15.0,
+      35.0
+     ]
+    }
+   ],
+   "capacity_demands": 36,
+   "landing_demands": 18,
+   "via_zones": [
+    "J2_ESCAPE",
+    "MCIO_ESCAPE",
+    "U3_ESCAPE",
+    "U7_ESCAPE"
+   ]
+  },
+  "route_input": {
+   "channels": 36,
+   "escape_entries": 18,
+   "obstacle_pads": 74,
+   "obstacle_segs": 93,
+   "obstacle_vias": 83,
+   "source": "spec_to_route_input(SPEC, escape_spec, J2_pads(真板), config)"
+  },
+  "rules": "/home/fila/jqdDev_2025/ic_hw/_shared/eda_core/drc_rules.json",
+  "spec": "/home/fila/jqdDev_2025/ic_hw/k2/pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json"
+ },
+ "board": {
+  "path": "/home/fila/jqdDev_2025/ic_hw/k2/k2_v4.kicad_pcb",
+  "sha256": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+  "sha_expected": "6c387dff"
+ },
+ "gaps": [
+  {
+   "evidence": {
+    "bases_affected": [
+     "PCIE_DN0",
+     "PCIE_DN1",
+     "PCIE_DN2",
+     "PCIE_DN3",
+     "PCIE_DN4",
+     "PCIE_DN5",
+     "PCIE_DN6",
+     "PCIE_DN7",
+     "PCIE_UP0",
+     "PCIE_UP1",
+     "PCIE_UP2",
+     "PCIE_UP3",
+     "PCIE_UP4",
+     "PCIE_UP5",
+     "PCIE_UP6",
+     "PCIE_UP7"
+    ],
+    "count": 16,
+    "j2_to_u_upper_tracks": [
+     40.3,
+     41.5,
+     42.7,
+     43.9,
+     45.1,
+     46.3,
+     47.5,
+     48.7
+    ],
+    "offset_mm": 0.4,
+    "refclk_tracks_identical": [
+     45.7,
+     50.5
+    ],
+    "root": "channel_alloc 无 seg_tracks 产出（M13 v5 曾有，现版本无）；回上层 ECO：③ 需产出段级 seg_tracks 或 _track_y_for 按廊道独立解析",
+    "u_to_mcio_upper_tracks": [
+     40.7,
+     41.9,
+     43.1,
+     44.3,
+     45.5,
+     46.7,
+     47.9,
+     49.1
+    ]
+   },
+   "reason": "阶段③→⑤ 数据流断层：channel_alloc 产物每网单 track_y（落 J2_TO_U 带内），无 seg_tracks；hs_route_model._track_y_for 假定两廊道 bands 完全相同直接复用，但真板 SPEC upper/lower 两廊道轨道偏移 0.4mm（J2_TO_U 40.3/58.3… vs U_TO_MCIO 40.7/58.7…）→ 段在 U_TO_MCIO 全部无通道分配（INFRA_ERROR）",
+   "stage": "solve",
+   "verdict": "INFEASIBLE"
+  },
+  {
+   "evidence": {
+    "bases_affected": [
+     "PCIE_REFCLK1",
+     "PCIE_UP4"
+    ],
+    "cross_evidence": {
+     "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸 P/N 相向交叉（min 边缘距 -0.2050 < 0.175）",
+     "segname": "input",
+     "status": "INFEASIBLE"
+    },
+    "root": "escape_landing 需 P/N 对级对称约束（同 region/镜像列），回上层 ECO"
+   },
+   "reason": "REFCLK1 落点驱动逃逸 P/N 相向交叉（min 边缘距 -0.2050 < 0.175）——escape_landing 逐信号独立锚定无 P/N 对级对称约束（已知 skew 缺口同源，handoff §3）",
+   "stage": "solve",
+   "verdict": "INFEASIBLE"
+  },
+  {
+   "evidence": {
+    "bases_affected": [
+     "PCIE_UP0",
+     "PCIE_UP1",
+     "PCIE_UP2",
+     "PCIE_UP3",
+     "PCIE_UP4",
+     "PCIE_UP5",
+     "PCIE_UP6",
+     "PCIE_UP7"
+    ],
+    "blocked_track_y": 40.3,
+    "count": 8,
+    "segment": "out_U7"
+   },
+   "reason": "UP out_U7 段走廊无净空窗口（通道 y 被低速/引脚占位，track_y=40.3）——8 对 UP 的 U7→J2 段全部被占",
+   "stage": "solve",
+   "verdict": "INFEASIBLE"
+  },
+  {
+   "evidence": {
+    "container_shared_head": "b48d3f4",
+    "k2_shared_head": "84b613d"
+   },
+   "reason": "k2/_shared 子模块(84b613d)落后容器 _shared(b48d3f4)：前者 hs_route_model 无 landing 参数、solve_pipeline 3 桩。运行以容器 _shared 为真源（handoff §1 口径）",
+   "stage": "env",
+   "verdict": "WARN"
+  },
+  {
+   "evidence": {
+    "channel_input_nets_type": "list (SPEC band.nets)",
+    "declared_field_type": "str",
+    "first_run_nets": [
+     "['PCIE_DN0', 'PCIE_DN1', ...]",
+     "['PCIE_REFCLK']",
+     "['PCIE_UP0', ...]"
+    ],
+    "workaround": "config.channel_alloc.nets_path -> derived.nets (18 base 字符串)"
+   },
+   "reason": "SPEC corridors band.nets 为列表 vs ChannelInput.nets 声明 str：_alloc_nets 会把列表字符串化成伪网名（首跑 alloc 3 伪网全 INFEASIBLE）。本卡经 nets_path 显式声明规避，底层形状错配记录回上层 ECO",
+   "stage": "env",
+   "verdict": "WARN"
+  }
+ ],
+ "input_fp": "dbf083b1cd9e8b47894256cbe5b63670ed4bfea2c92458698d72006ac5cc0112",
+ "solve_base_reasons": {
+  "PCIE_DN0": {
+   "segments": [
+    {
+     "reason": null,
+     "segname": "input",
+     "status": "SOLVED"
+    },
+    {
+     "reason": "PCIE_DN_OUT0_P_U3 无通道分配（corridor=U_TO_MCIO seg=out_U3）",
+     "segname": "out_U3",
+     "status": "INFRA_ERROR"
+    },
+    {
+     "reason": "PCIE_DN_OUT0_P_MCIO 无通道分配（corridor=U_TO_MCIO seg=out_MCIO）",
+     "segname": "out_MCIO",
+     "status": "INFRA_ERROR"
+    }
+   ],
+   "status": "INFEASIBLE"
+  },
+  "PCIE_DN1": {
+   "segments": [
+    {
+     "reason": null,
+     "segname": "input",
+     "status": "SOLVED"
+    },
+    {
+     "reason": "PCIE_DN_OUT1_P_U3 无通道分配（corridor=U_TO_MCIO seg=out_U3）",
+     "segname": "out_U3",
+     "status": "INFRA_ERROR"
+    },
+    {
+     "reason": "PCIE_DN_OUT1_P_MCIO 无通道分配（corridor=U_TO_MCIO seg=out_MCIO）",
+     "segname": "out_MCIO",
+     "status": "INFRA_ERROR"
+    }
+   ],
+   "status": "INFEASIBLE"
+  },
+  "PCIE_DN2": {
+   "segments": [
+    {
+     "reason": null,
+     "segname": "input",
+     "status": "SOLVED"
+    },
+    {
+     "reason": "PCIE_DN_OUT2_P_U3 无通道分配（corridor=U_TO_MCIO seg=out_U3）",
+     "segname": "out_U3",
+     "status": "INFRA_ERROR"
+    },
+    {
+     "reason": "PCIE_DN_OUT2_P_MCIO 无通道分配（corridor=U_TO_MCIO seg=out_MCIO）",
+     "segname": "out_MCIO",
+     "status": "INFRA_ERROR"
+    }
+   ],
+   "status": "INFEASIBLE"
+  },
+  "PCIE_DN3": {
+   "segments": [
+    {
+     "reason": null,
+     "segname": "input",
+     "status": "SOLVED"
+    },
+    {
+     "reason": "PCIE_DN_OUT3_P_U3 无通道分配（corridor=U_TO_MCIO seg=out_U3）",
+     "segname": "out_U3",
+     "status": "INFRA_ERROR"
+    },
+    {
+     "reason": "PCIE_DN_OUT3_P_MCIO 无通道分配（corridor=U_TO_MCIO seg=out_MCIO）",
+     "segname": "out_MCIO",
+     "status": "INFRA_ERROR"
+    }
+   ],
+   "status": "INFEASIBLE"
+  },
+  "PCIE_DN4": {
+   "segments": [
+    {
+     "reason": null,
+     "segname": "input",
+     "status": "SOLVED"
+    },
+    {
+     "reason": "PCIE_DN_OUT4_P_U3 无通道分配（corridor=U_TO_MCIO seg=out_U3）",
+     "segname": "out_U3",
+     "status": "INFRA_ERROR"
+    },
+    {
+     "reason": "PCIE_DN_OUT4_P_MCIO 无通道分配（corridor=U_TO_MCIO seg=out_MCIO）",
+     "segname": "out_MCIO",
+     "status": "INFRA_ERROR"
+    }
+   ],
+   "status": "INFEASIBLE"
+  },
+  "PCIE_DN5": {
+   "segments": [
+    {
+     "reason": null,
+     "segname": "input",
+     "status": "SOLVED"
+    },
+    {
+     "reason": "PCIE_DN_OUT5_P_U3 无通道分配（corridor=U_TO_MCIO seg=out_U3）",
+     "segname": "out_U3",
+     "status": "INFRA_ERROR"
+    },
+    {
+     "reason": "PCIE_DN_OUT5_P_MCIO 无通道分配（corridor=U_TO_MCIO seg=out_MCIO）",
+     "segname": "out_MCIO",
+     "status": "INFRA_ERROR"
+    }
+   ],
+   "status": "INFEASIBLE"
+  },
+  "PCIE_DN6": {
+   "segments": [
+    {
+     "reason": null,
+     "segname": "input",
+     "status": "SOLVED"
+    },
+    {
+     "reason": "PCIE_DN_OUT6_P_U3 无通道分配（corridor=U_TO_MCIO seg=out_U3）",
+     "segname": "out_U3",
+     "status": "INFRA_ERROR"
+    },
+    {
+     "reason": "PCIE_DN_OUT6_P_MCIO 无通道分配（corridor=U_TO_MCIO seg=out_MCIO）",
+     "segname": "out_MCIO",
+     "status": "INFRA_ERROR"
+    }
+   ],
+   "status": "INFEASIBLE"
+  },
+  "PCIE_DN7": {
+   "segments": [
+    {
+     "reason": null,
+     "segname": "input",
+     "status": "SOLVED"
+    },
+    {
+     "reason": "PCIE_DN_OUT7_P_U3 无通道分配（corridor=U_TO_MCIO seg=out_U3）",
+     "segname": "out_U3",
+     "status": "INFRA_ERROR"
+    },
+    {
+     "reason": "PCIE_DN_OUT7_P_MCIO 无通道分配（corridor=U_TO_MCIO seg=out_MCIO）",
+     "segname": "out_MCIO",
+     "status": "INFRA_ERROR"
+    }
+   ],
+   "status": "INFEASIBLE"
+  },
+  "PCIE_REFCLK1": {
+   "segments": [
+    {
+     "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸 P/N 相向交叉（min 边缘距 -0.2050 < 0.175）",
+     "segname": "input",
+     "status": "INFEASIBLE"
+    }
+   ],
+   "status": "INFEASIBLE"
+  },
+  "PCIE_UP0": {
+   "segments": [
+    {
+     "reason": "PCIE_UP0_P 无通道分配（corridor=U_TO_MCIO seg=input）",
+     "segname": "input",
+     "status": "INFRA_ERROR"
+    },
+    {
+     "reason": "走廊段无净空窗口（通道 y 被低速/引脚占位）",
+     "segname": "out_U7",
+     "status": "INFEASIBLE"
+    },
+    {
+     "reason": null,
+     "segname": "out_J2",
+     "status": "SOLVED"
+    }
+   ],
+   "status": "INFEASIBLE"
+  },
+  "PCIE_UP1": {
+   "segments": [
+    {
+     "reason": "PCIE_UP1_P 无通道分配（corridor=U_TO_MCIO seg=input）",
+     "segname": "input",
+     "status": "INFRA_ERROR"
+    },
+    {
+     "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(98.825,47.500) → cv=(99.430,41.500) dir=1 flip=True pn_dist=0.400）",
+     "segname": "out_U7",
+     "status": "INFEASIBLE"
+    },
+    {
+     "reason": null,
+     "segname": "out_J2",
+     "status": "SOLVED"
+    }
+   ],
+   "status": "INFEASIBLE"
+  },
+  "PCIE_UP2": {
+   "segments": [
+    {
+     "reason": "PCIE_UP2_P 无通道分配（corridor=U_TO_MCIO seg=input）",
+     "segname": "input",
+     "status": "INFRA_ERROR"
+    },
+    {
+     "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(98.825,46.300) → cv=(99.430,42.700) dir=1 flip=True pn_dist=0.400）",
+     "segname": "out_U7",
+     "status": "INFEASIBLE"
+    },
+    {
+     "reason": null,
+     "segname": "out_J2",
+     "status": "SOLVED"
+    }
+   ],
+   "status": "INFEASIBLE"
+  },
+  "PCIE_UP3": {
+   "segments": [
+    {
+     "reason": "PCIE_UP3_P 无通道分配（corridor=U_TO_MCIO seg=input）",
+     "segname": "input",
+     "status": "INFRA_ERROR"
+    },
+    {
+     "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(98.825,45.100) → cv=(99.430,43.900) dir=1 flip=True pn_dist=0.400）",
+     "segname": "out_U7",
+     "status": "INFEASIBLE"
+    },
+    {
+     "reason": null,
+     "segname": "out_J2",
+     "status": "SOLVED"
+    }
+   ],
+   "status": "INFEASIBLE"
+  },
+  "PCIE_UP4": {
+   "segments": [
+    {
+     "reason": "PCIE_UP4_P 无通道分配（corridor=U_TO_MCIO seg=input）",
+     "segname": "input",
+     "status": "INFRA_ERROR"
+    },
+    {
+     "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (100.848,45.087)）",
+     "segname": "out_U7",
+     "status": "INFEASIBLE"
+    },
+    {
+     "reason": null,
+     "segname": "out_J2",
+     "status": "SOLVED"
+    }
+   ],
+   "status": "INFEASIBLE"
+  },
+  "PCIE_UP5": {
+   "segments": [
+    {
+     "reason": "PCIE_UP5_P 无通道分配（corridor=U_TO_MCIO seg=input）",
+     "segname": "input",
+     "status": "INFRA_ERROR"
+    },
+    {
+     "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(98.825,42.700) → cv=(99.430,46.300) dir=1 flip=True pn_dist=0.400）",
+     "segname": "out_U7",
+     "status": "INFEASIBLE"
+    },
+    {
+     "reason": null,
+     "segname": "out_J2",
+     "status": "SOLVED"
+    }
+   ],
+   "status": "INFEASIBLE"
+  },
+  "PCIE_UP6": {
+   "segments": [
+    {
+     "reason": "PCIE_UP6_P 无通道分配（corridor=U_TO_MCIO seg=input）",
+     "segname": "input",
+     "status": "INFRA_ERROR"
+    },
+    {
+     "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(98.825,41.500) → cv=(99.430,47.500) dir=1 flip=True pn_dist=0.400）",
+     "segname": "out_U7",
+     "status": "INFEASIBLE"
+    },
+    {
+     "reason": null,
+     "segname": "out_J2",
+     "status": "SOLVED"
+    }
+   ],
+   "status": "INFEASIBLE"
+  },
+  "PCIE_UP7": {
+   "segments": [
+    {
+     "reason": "PCIE_UP7_P 无通道分配（corridor=U_TO_MCIO seg=input）",
+     "segname": "input",
+     "status": "INFRA_ERROR"
+    },
+    {
+     "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(98.825,40.300) → cv=(99.430,48.700) dir=1 flip=True pn_dist=0.400）",
+     "segname": "out_U7",
+     "status": "INFEASIBLE"
+    },
+    {
+     "reason": null,
+     "segname": "out_J2",
+     "status": "SOLVED"
+    }
+   ],
+   "status": "INFEASIBLE"
+  }
+ },
+ "stages": {
+  "alloc": {
+   "alloc": {
+    "PCIE_DN0": {
+     "band": "lower",
+     "channel": "J2_TO_U/lower/0",
+     "corridor": "J2_TO_U",
+     "layer": "F.Cu",
+     "solve_ref": "aab2a683695efb2cc01047d2ce0369ffba407760f28d056cd3252790c17c5848",
+     "status": "SOLVED",
+     "track_y": 58.3
+    },
+    "PCIE_DN1": {
+     "band": "lower",
+     "channel": "J2_TO_U/lower/1",
+     "corridor": "J2_TO_U",
+     "layer": "F.Cu",
+     "solve_ref": "d6de6124869b855db302a29a1bc171c329816fbb6aa392e6ca79203731fabc5d",
+     "status": "SOLVED",
+     "track_y": 59.5
+    },
+    "PCIE_DN2": {
+     "band": "lower",
+     "channel": "J2_TO_U/lower/2",
+     "corridor": "J2_TO_U",
+     "layer": "F.Cu",
+     "solve_ref": "e60e076587fa3929dff855fedb4595ef9811c3280c56a16dd6d76200969e7c71",
+     "status": "SOLVED",
+     "track_y": 60.7
+    },
+    "PCIE_DN3": {
+     "band": "lower",
+     "channel": "J2_TO_U/lower/3",
+     "corridor": "J2_TO_U",
+     "layer": "F.Cu",
+     "solve_ref": "65b383787d67cfc36a7b12406ac509dbdccf9ee1085b18a85e9b08245079ce25",
+     "status": "SOLVED",
+     "track_y": 61.9
+    },
+    "PCIE_DN4": {
+     "band": "lower",
+     "channel": "J2_TO_U/lower/4",
+     "corridor": "J2_TO_U",
+     "layer": "F.Cu",
+     "solve_ref": "a90b578987ae46818c91905f7def5394306f02c24a23a22fac1fbe542413e788",
+     "status": "SOLVED",
+     "track_y": 63.1
+    },
+    "PCIE_DN5": {
+     "band": "lower",
+     "channel": "J2_TO_U/lower/5",
+     "corridor": "J2_TO_U",
+     "layer": "F.Cu",
+     "solve_ref": "d2cbcc12c7d2c2acd4b3b0cf52eb43e274161ec300257605151fc7b0cdd06562",
+     "status": "SOLVED",
+     "track_y": 64.3
+    },
+    "PCIE_DN6": {
+     "band": "lower",
+     "channel": "J2_TO_U/lower/6",
+     "corridor": "J2_TO_U",
+     "layer": "F.Cu",
+     "solve_ref": "34f9fd76a1c50fe5abb94e5534ea927d43efc2cc03cf9b5b728109831e1a9e67",
+     "status": "SOLVED",
+     "track_y": 65.5
+    },
+    "PCIE_DN7": {
+     "band": "lower",
+     "channel": "J2_TO_U/lower/7",
+     "corridor": "J2_TO_U",
+     "layer": "F.Cu",
+     "solve_ref": "72952e673f8c963cd058cee21c0bb248be44518bc88a53894dedc45af400fb4a",
+     "status": "SOLVED",
+     "track_y": 66.7
+    },
+    "PCIE_REFCLK0": {
+     "band": "refclk",
+     "channel": "J2_TO_U/refclk/0",
+     "corridor": "J2_TO_U",
+     "layer": "In6.Cu",
+     "solve_ref": "6622ee19d6d9db80fad1138e123d6d1d953038e8a04d40c716c6aba8474666a7",
+     "status": "SOLVED",
+     "track_y": 45.7
+    },
+    "PCIE_REFCLK1": {
+     "band": "refclk",
+     "channel": "J2_TO_U/refclk/1",
+     "corridor": "J2_TO_U",
+     "layer": "In6.Cu",
+     "solve_ref": "04b905a319a13c25e3b9b43a82120d230bb385443ad154c4a38822296508495d",
+     "status": "SOLVED",
+     "track_y": 50.5
+    },
+    "PCIE_UP0": {
+     "band": "upper",
+     "channel": "J2_TO_U/upper/0",
+     "corridor": "J2_TO_U",
+     "layer": "F.Cu",
+     "solve_ref": "4b039225c0f970780a694bae8511009984aaa30bc1f70c50201a3a3faf065447",
+     "status": "SOLVED",
+     "track_y": 40.3
+    },
+    "PCIE_UP1": {
+     "band": "upper",
+     "channel": "J2_TO_U/upper/1",
+     "corridor": "J2_TO_U",
+     "layer": "F.Cu",
+     "solve_ref": "93ab89da3e7d468ee34cb54337c18995b2589752f4585e503cef95b478d7107b",
+     "status": "SOLVED",
+     "track_y": 41.5
+    },
+    "PCIE_UP2": {
+     "band": "upper",
+     "channel": "J2_TO_U/upper/2",
+     "corridor": "J2_TO_U",
+     "layer": "F.Cu",
+     "solve_ref": "403beaf1f094c0c88b5d51d1812bb76d7def41c0daace0be786b329eb9ae097f",
+     "status": "SOLVED",
+     "track_y": 42.7
+    },
+    "PCIE_UP3": {
+     "band": "upper",
+     "channel": "J2_TO_U/upper/3",
+     "corridor": "J2_TO_U",
+     "layer": "F.Cu",
+     "solve_ref": "38afaa6a5e375b9e494accb41e668727222a535ce160651fef95f0e2125b9c7f",
+     "status": "SOLVED",
+     "track_y": 43.9
+    },
+    "PCIE_UP4": {
+     "band": "upper",
+     "channel": "J2_TO_U/upper/4",
+     "corridor": "J2_TO_U",
+     "layer": "F.Cu",
+     "solve_ref": "d6b9293800e078df4cce92eba3b279393dbdf2415b69e770eda28689bdfb571f",
+     "status": "SOLVED",
+     "track_y": 45.1
+    },
+    "PCIE_UP5": {
+     "band": "upper",
+     "channel": "J2_TO_U/upper/5",
+     "corridor": "J2_TO_U",
+     "layer": "F.Cu",
+     "solve_ref": "e79822ba2311c62476cb739e60f4a26dac5dabce2d7137879485835dad637558",
+     "status": "SOLVED",
+     "track_y": 46.3
+    },
+    "PCIE_UP6": {
+     "band": "upper",
+     "channel": "J2_TO_U/upper/6",
+     "corridor": "J2_TO_U",
+     "layer": "F.Cu",
+     "solve_ref": "64ae94786000465e9c95f1da653bfce28fad83314f6d7d3a8408c4bab57712cb",
+     "status": "SOLVED",
+     "track_y": 47.5
+    },
+    "PCIE_UP7": {
+     "band": "upper",
+     "channel": "J2_TO_U/upper/7",
+     "corridor": "J2_TO_U",
+     "layer": "F.Cu",
+     "solve_ref": "db76d9f2700421268462343c66e76a7bce966ea7edf1cbbf89fa33ff3b5d869c",
+     "status": "SOLVED",
+     "track_y": 48.7
+    }
+   },
+   "evidence": {
+    "channels": [
+     {
+      "band": "upper",
+      "corridor": "J2_TO_U",
+      "id": "J2_TO_U/upper/0",
+      "layer": "F.Cu",
+      "track_y": 40.3
+     },
+     {
+      "band": "upper",
+      "corridor": "J2_TO_U",
+      "id": "J2_TO_U/upper/1",
+      "layer": "F.Cu",
+      "track_y": 41.5
+     },
+     {
+      "band": "upper",
+      "corridor": "J2_TO_U",
+      "id": "J2_TO_U/upper/2",
+      "layer": "F.Cu",
+      "track_y": 42.7
+     },
+     {
+      "band": "upper",
+      "corridor": "J2_TO_U",
+      "id": "J2_TO_U/upper/3",
+      "layer": "F.Cu",
+      "track_y": 43.9
+     },
+     {
+      "band": "upper",
+      "corridor": "J2_TO_U",
+      "id": "J2_TO_U/upper/4",
+      "layer": "F.Cu",
+      "track_y": 45.1
+     },
+     {
+      "band": "upper",
+      "corridor": "J2_TO_U",
+      "id": "J2_TO_U/upper/5",
+      "layer": "F.Cu",
+      "track_y": 46.3
+     },
+     {
+      "band": "upper",
+      "corridor": "J2_TO_U",
+      "id": "J2_TO_U/upper/6",
+      "layer": "F.Cu",
+      "track_y": 47.5
+     },
+     {
+      "band": "upper",
+      "corridor": "J2_TO_U",
+      "id": "J2_TO_U/upper/7",
+      "layer": "F.Cu",
+      "track_y": 48.7
+     },
+     {
+      "band": "lower",
+      "corridor": "J2_TO_U",
+      "id": "J2_TO_U/lower/0",
+      "layer": "F.Cu",
+      "track_y": 58.3
+     },
+     {
+      "band": "lower",
+      "corridor": "J2_TO_U",
+      "id": "J2_TO_U/lower/1",
+      "layer": "F.Cu",
+      "track_y": 59.5
+     },
+     {
+      "band": "lower",
+      "corridor": "J2_TO_U",
+      "id": "J2_TO_U/lower/2",
+      "layer": "F.Cu",
+      "track_y": 60.7
+     },
+     {
+      "band": "lower",
+      "corridor": "J2_TO_U",
+      "id": "J2_TO_U/lower/3",
+      "layer": "F.Cu",
+      "track_y": 61.9
+     },
+     {
+      "band": "lower",
+      "corridor": "J2_TO_U",
+      "id": "J2_TO_U/lower/4",
+      "layer": "F.Cu",
+      "track_y": 63.1
+     },
+     {
+      "band": "lower",
+      "corridor": "J2_TO_U",
+      "id": "J2_TO_U/lower/5",
+      "layer": "F.Cu",
+      "track_y": 64.3
+     },
+     {
+      "band": "lower",
+      "corridor": "J2_TO_U",
+      "id": "J2_TO_U/lower/6",
+      "layer": "F.Cu",
+      "track_y": 65.5
+     },
+     {
+      "band": "lower",
+      "corridor": "J2_TO_U",
+      "id": "J2_TO_U/lower/7",
+      "layer": "F.Cu",
+      "track_y": 66.7
+     },
+     {
+      "band": "refclk",
+      "corridor": "J2_TO_U",
+      "id": "J2_TO_U/refclk/0",
+      "layer": "In6.Cu",
+      "track_y": 45.7
+     },
+     {
+      "band": "refclk",
+      "corridor": "J2_TO_U",
+      "id": "J2_TO_U/refclk/1",
+      "layer": "In6.Cu",
+      "track_y": 50.5
+     },
+     {
+      "band": "upper",
+      "corridor": "U_TO_MCIO",
+      "id": "U_TO_MCIO/upper/0",
+      "layer": "F.Cu",
+      "track_y": 40.7
+     },
+     {
+      "band": "upper",
+      "corridor": "U_TO_MCIO",
+      "id": "U_TO_MCIO/upper/1",
+      "layer": "F.Cu",
+      "track_y": 41.9
+     },
+     {
+      "band": "upper",
+      "corridor": "U_TO_MCIO",
+      "id": "U_TO_MCIO/upper/2",
+      "layer": "F.Cu",
+      "track_y": 43.1
+     },
+     {
+      "band": "upper",
+      "corridor": "U_TO_MCIO",
+      "id": "U_TO_MCIO/upper/3",
+      "layer": "F.Cu",
+      "track_y": 44.3
+     },
+     {
+      "band": "upper",
+      "corridor": "U_TO_MCIO",
+      "id": "U_TO_MCIO/upper/4",
+      "layer": "F.Cu",
+      "track_y": 45.5
+     },
+     {
+      "band": "upper",
+      "corridor": "U_TO_MCIO",
+      "id": "U_TO_MCIO/upper/5",
+      "layer": "F.Cu",
+      "track_y": 46.7
+     },
+     {
+      "band": "upper",
+      "corridor": "U_TO_MCIO",
+      "id": "U_TO_MCIO/upper/6",
+      "layer": "F.Cu",
+      "track_y": 47.9
+     },
+     {
+      "band": "upper",
+      "corridor": "U_TO_MCIO",
+      "id": "U_TO_MCIO/upper/7",
+      "layer": "F.Cu",
+      "track_y": 49.1
+     },
+     {
+      "band": "lower",
+      "corridor": "U_TO_MCIO",
+      "id": "U_TO_MCIO/lower/0",
+      "layer": "F.Cu",
+      "track_y": 58.7
+     },
+     {
+      "band": "lower",
+      "corridor": "U_TO_MCIO",
+      "id": "U_TO_MCIO/lower/1",
+      "layer": "F.Cu",
+      "track_y": 59.9
+     },
+     {
+      "band": "lower",
+      "corridor": "U_TO_MCIO",
+      "id": "U_TO_MCIO/lower/2",
+      "layer": "F.Cu",
+      "track_y": 61.1
+     },
+     {
+      "band": "lower",
+      "corridor": "U_TO_MCIO",
+      "id": "U_TO_MCIO/lower/3",
+      "layer": "F.Cu",
+      "track_y": 62.3
+     },
+     {
+      "band": "lower",
+      "corridor": "U_TO_MCIO",
+      "id": "U_TO_MCIO/lower/4",
+      "layer": "F.Cu",
+      "track_y": 63.5
+     },
+     {
+      "band": "lower",
+      "corridor": "U_TO_MCIO",
+      "id": "U_TO_MCIO/lower/5",
+      "layer": "F.Cu",
+      "track_y": 64.7
+     },
+     {
+      "band": "lower",
+      "corridor": "U_TO_MCIO",
+      "id": "U_TO_MCIO/lower/6",
+      "layer": "F.Cu",
+      "track_y": 65.9
+     },
+     {
+      "band": "lower",
+      "corridor": "U_TO_MCIO",
+      "id": "U_TO_MCIO/lower/7",
+      "layer": "F.Cu",
+      "track_y": 67.1
+     },
+     {
+      "band": "refclk",
+      "corridor": "U_TO_MCIO",
+      "id": "U_TO_MCIO/refclk/0",
+      "layer": "In6.Cu",
+      "track_y": 45.7
+     },
+     {
+      "band": "refclk",
+      "corridor": "U_TO_MCIO",
+      "id": "U_TO_MCIO/refclk/1",
+      "layer": "In6.Cu",
+      "track_y": 50.5
+     }
+    ],
+    "determinism": "Dijkstra 距离升序 + 坐标序，零随机",
+    "model": "channel_alloc",
+    "nets": 18,
+    "order": [
+     "PCIE_DN0",
+     "PCIE_DN1",
+     "PCIE_DN2",
+     "PCIE_DN3",
+     "PCIE_DN4",
+     "PCIE_DN5",
+     "PCIE_DN6",
+     "PCIE_DN7",
+     "PCIE_REFCLK0",
+     "PCIE_REFCLK1",
+     "PCIE_UP0",
+     "PCIE_UP1",
+     "PCIE_UP2",
+     "PCIE_UP3",
+     "PCIE_UP4",
+     "PCIE_UP5",
+     "PCIE_UP6",
+     "PCIE_UP7"
+    ],
+    "pitch": 1.1999999999999886,
+    "version": "1.0"
+   },
+   "infeasible": 0,
+   "input_fp": "dbf083b1cd9e8b47894256cbe5b63670ed4bfea2c92458698d72006ac5cc0112",
+   "solve_ref": "solve-alloc-dbf083b1cd9e8b47",
+   "solved": 18
+  },
+  "capacity": {
+   "bottleneck_stage": "TRACK",
+   "evidence": {
+    "global_pressure": 1.0,
+    "max_flow_pairs": 16,
+    "pressure_limit": 1.0,
+    "rules": {
+     "clearance": 0.175,
+     "cross_layer_degradation": 1.0,
+     "inter_pair_spacing": 0.875,
+     "intra_pair_gap": 0.175,
+     "line_width": 0.205,
+     "via_drill_d": 0.175,
+     "via_outer_d": 0.35,
+     "via_pair_center_min": 0.525
+    },
+    "stage_pressures": {
+     "CAP_WALL": 1.0,
+     "TRACK": 1.0,
+     "VIA": 0.257
+    },
+    "total_demand_pairs": 36
+   },
+   "input_fp": "dbf083b1cd9e8b47894256cbe5b63670ed4bfea2c92458698d72006ac5cc0112",
+   "solve_ref": "solve-capacity-dbf083b1cd9e8b47",
+   "stages": {
+    "CAP_WALL": {
+     "capacity_total": 16,
+     "chains": [
+      "PCIE_DN0",
+      "PCIE_DN1",
+      "PCIE_DN2",
+      "PCIE_DN3",
+      "PCIE_DN4",
+      "PCIE_DN5",
+      "PCIE_DN6",
+      "PCIE_DN7",
+      "PCIE_UP0",
+      "PCIE_UP1",
+      "PCIE_UP2",
+      "PCIE_UP3",
+      "PCIE_UP4",
+      "PCIE_UP5",
+      "PCIE_UP6",
+      "PCIE_UP7"
+     ],
+     "demand_total": 16,
+     "ok": true,
+     "per_resource": {
+      "AC_CAP_WALL": {
+       "ac_coupling_count": 32,
+       "cap_pairs": 16,
+       "capacity": 16,
+       "demand_chains": 16,
+       "min_pitch_mm": 1.3,
+       "ok": true,
+       "per_side_capacity": [
+        11,
+        26
+       ],
+       "pressure": 1.0,
+       "span_capacity": 37
+      }
+     },
+     "pressure": 1.0,
+     "stage": "CAP_WALL"
+    },
+    "TRACK": {
+     "capacity_total": 36,
+     "demand_total": 36,
+     "ok": true,
+     "per_resource": {
+      "J2_TO_U|lower": {
+       "band": "lower",
+       "capacity": 8,
+       "corridor": "J2_TO_U",
+       "degradation": 1.0,
+       "degraded": false,
+       "demand_pairs": 8,
+       "encroachment": [],
+       "lane_pitch_mm": 0.875,
+       "layer": "F.Cu",
+       "ok": true,
+       "pair_envelope_mm": 0.38,
+       "pair_fit": true,
+       "pressure": 1.0,
+       "tracks_total": 8,
+       "tracks_usable": 8
+      },
+      "J2_TO_U|refclk": {
+       "band": "refclk",
+       "capacity": 2,
+       "corridor": "J2_TO_U",
+       "degradation": 1.0,
+       "degraded": false,
+       "demand_pairs": 2,
+       "encroachment": [],
+       "lane_pitch_mm": 0.875,
+       "layer": "In6.Cu",
+       "ok": true,
+       "pair_envelope_mm": 0.38,
+       "pair_fit": true,
+       "pressure": 1.0,
+       "tracks_total": 2,
+       "tracks_usable": 2
+      },
+      "J2_TO_U|upper": {
+       "band": "upper",
+       "capacity": 8,
+       "corridor": "J2_TO_U",
+       "degradation": 1.0,
+       "degraded": false,
+       "demand_pairs": 8,
+       "encroachment": [],
+       "lane_pitch_mm": 0.875,
+       "layer": "F.Cu",
+       "ok": true,
+       "pair_envelope_mm": 0.38,
+       "pair_fit": true,
+       "pressure": 1.0,
+       "tracks_total": 8,
+       "tracks_usable": 8
+      },
+      "U_TO_MCIO|lower": {
+       "band": "lower",
+       "capacity": 8,
+       "corridor": "U_TO_MCIO",
+       "degradation": 1.0,
+       "degraded": false,
+       "demand_pairs": 8,
+       "encroachment": [],
+       "lane_pitch_mm": 0.875,
+       "layer": "F.Cu",
+       "ok": true,
+       "pair_envelope_mm": 0.38,
+       "pair_fit": true,
+       "pressure": 1.0,
+       "tracks_total": 8,
+       "tracks_usable": 8
+      },
+      "U_TO_MCIO|refclk": {
+       "band": "refclk",
+       "capacity": 2,
+       "corridor": "U_TO_MCIO",
+       "degradation": 1.0,
+       "degraded": false,
+       "demand_pairs": 2,
+       "encroachment": [],
+       "lane_pitch_mm": 0.875,
+       "layer": "In6.Cu",
+       "ok": true,
+       "pair_envelope_mm": 0.38,
+       "pair_fit": true,
+       "pressure": 1.0,
+       "tracks_total": 2,
+       "tracks_usable": 2
+      },
+      "U_TO_MCIO|upper": {
+       "band": "upper",
+       "capacity": 8,
+       "corridor": "U_TO_MCIO",
+       "degradation": 1.0,
+       "degraded": false,
+       "demand_pairs": 8,
+       "encroachment": [],
+       "lane_pitch_mm": 0.875,
+       "layer": "F.Cu",
+       "ok": true,
+       "pair_envelope_mm": 0.38,
+       "pair_fit": true,
+       "pressure": 1.0,
+       "tracks_total": 8,
+       "tracks_usable": 8
+      }
+     },
+     "pressure": 1.0,
+     "stage": "TRACK",
+     "unmapped_demands": []
+    },
+    "VIA": {
+     "capacity_total": 140,
+     "demand_total": 36,
+     "ok": true,
+     "per_resource": {
+      "J2_ESCAPE": {
+       "capacity_pairs": 41,
+       "demand_pairs": 18,
+       "free_span_mm": 21.6,
+       "kind": "CONN",
+       "need_mm": 9.45,
+       "obstacle_occupancy_mm": 0.0,
+       "occupation_rate": 0.438,
+       "ok": true,
+       "span_mm": 21.6,
+       "via_slot_mm": 0.525
+      },
+      "MCIO_ESCAPE": {
+       "capacity_pairs": 65,
+       "demand_pairs": 0,
+       "free_span_mm": 34.5,
+       "kind": "CONN",
+       "need_mm": 0.0,
+       "obstacle_occupancy_mm": 0.0,
+       "occupation_rate": 0.0,
+       "ok": true,
+       "span_mm": 34.5,
+       "via_slot_mm": 0.525
+      },
+      "U3_ESCAPE": {
+       "capacity_pairs": 17,
+       "demand_pairs": 9,
+       "free_span_mm": 9.2,
+       "kind": "CHIP",
+       "need_mm": 4.725,
+       "obstacle_occupancy_mm": 0.0,
+       "occupation_rate": 0.514,
+       "ok": true,
+       "span_mm": 9.2,
+       "via_slot_mm": 0.525
+      },
+      "U7_ESCAPE": {
+       "capacity_pairs": 17,
+       "demand_pairs": 9,
+       "free_span_mm": 9.2,
+       "kind": "CHIP",
+       "need_mm": 4.725,
+       "obstacle_occupancy_mm": 0.0,
+       "occupation_rate": 0.514,
+       "ok": true,
+       "span_mm": 9.2,
+       "via_slot_mm": 0.525
+      }
+     },
+     "pressure": 0.257,
+     "stage": "VIA",
+     "unknown_zones": []
+    }
+   },
+   "verdict": "FEASIBLE"
+  },
+  "feasibility": {
+   "evidence": {
+    "chains": {},
+    "constraints": {
+     "CAP_COORDINATION": true,
+     "ESCAPE_SLOT_CAPACITY": true,
+     "PN_POLARITY_MATCH": true,
+     "TRACK_CAPACITY": true,
+     "VIA_SPACING": true
+    },
+    "input_hashes": {
+     "alloc_sha256_16": "4dc34353a4581553",
+     "board_sha256_16": "6c387dff2d7ebdde",
+     "rules_sha256_16": "fc1fdc2fa845f4f9",
+     "spec_sha256_16": "4ff6772caff7ed9a"
+    },
+    "polarity": {
+     "groups": [],
+     "polarity_ok": true,
+     "resource_ok": true
+    },
+    "probe": "routing_topology_gate",
+    "resources": {
+     "escape_zones": {
+      "CAP_WALL": {
+       "capacity": 32,
+       "kind": "CAP_WALL",
+       "span_mm": 44.6
+      },
+      "CHIP_U3": {
+       "capacity": 16,
+       "kind": "CHIP",
+       "span_mm": 10.45
+      },
+      "CHIP_U7": {
+       "capacity": 16,
+       "kind": "CHIP",
+       "span_mm": 10.45
+      },
+      "CONN_J2": {
+       "capacity": 18,
+       "kind": "CONN",
+       "span_mm": 21.95
+      },
+      "CONN_J3": {
+       "capacity": 9,
+       "kind": "CONN",
+       "span_mm": 9.9
+      },
+      "CONN_J4": {
+       "capacity": 9,
+       "kind": "CONN",
+       "span_mm": 9.9
+      }
+     },
+     "tracks": {
+      "J2_TO_U": {
+       "lower": {
+        "capacity": 8,
+        "pairs": 8
+       },
+       "refclk": {
+        "capacity": 2,
+        "pairs": 2
+       },
+       "upper": {
+        "capacity": 8,
+        "pairs": 8
+       }
+      },
+      "U_TO_MCIO": {
+       "lower": {
+        "capacity": 8,
+        "pairs": 8
+       },
+       "refclk": {
+        "capacity": 2,
+        "pairs": 2
+       },
+       "upper": {
+        "capacity": 8,
+        "pairs": 8
+       }
+      }
+     }
+    },
+    "version": "1.0"
+   },
+   "input_fp": "dbf083b1cd9e8b47894256cbe5b63670ed4bfea2c92458698d72006ac5cc0112",
+   "polarity_ok": true,
+   "resource_ok": true,
+   "solve_ref": "solve-feasibility-dbf083b1cd9e8b47",
+   "verdict": "FEASIBLE"
+  },
+  "landing": {
+   "allocation": {
+    "PCIE_DN0/N": {
+     "base": "PCIE_DN0",
+     "landing": {
+      "anchor": "OUTSIDE",
+      "region": "OUTSIDE",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.35,
+       "kind": "pad",
+       "margin_mm": 0.0,
+       "net": "PCIE_DN0_N",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 2.175,
+      "x": 136.0,
+      "y": 54.3
+     },
+     "net": "PCIE_DN0_N",
+     "pad": [
+      135.0,
+      54.3
+     ],
+     "pad_column": "RIGHT",
+     "polarity": "N",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    },
+    "PCIE_DN0/P": {
+     "base": "PCIE_DN0",
+     "landing": {
+      "anchor": "GAP",
+      "region": "GAP",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.525,
+       "kind": "pad",
+       "margin_mm": 0.175,
+       "net": "PCIE_DN0_P",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 2.175,
+      "x": 133.825,
+      "y": 54.3
+     },
+     "net": "PCIE_DN0_P",
+     "pad": [
+      132.65,
+      54.3
+     ],
+     "pad_column": "LEFT",
+     "polarity": "P",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    },
+    "PCIE_DN1/N": {
+     "base": "PCIE_DN1",
+     "landing": {
+      "anchor": "GAP",
+      "region": "GAP",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.525,
+       "kind": "pad",
+       "margin_mm": 0.175,
+       "net": "PCIE_DN1_N",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 0.6,
+      "x": 133.825,
+      "y": 55.5
+     },
+     "net": "PCIE_DN1_N",
+     "pad": [
+      132.65,
+      55.5
+     ],
+     "pad_column": "LEFT",
+     "polarity": "N",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    },
+    "PCIE_DN1/P": {
+     "base": "PCIE_DN1",
+     "landing": {
+      "anchor": "GAP",
+      "region": "GAP",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.525,
+       "kind": "pad",
+       "margin_mm": 0.175,
+       "net": "GND",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 0.6,
+      "x": 133.825,
+      "y": 54.9
+     },
+     "net": "PCIE_DN1_P",
+     "pad": [
+      135.0,
+      54.9
+     ],
+     "pad_column": "RIGHT",
+     "polarity": "P",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    },
+    "PCIE_DN2/N": {
+     "base": "PCIE_DN2",
+     "landing": {
+      "anchor": "OUTSIDE",
+      "region": "OUTSIDE",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.35,
+       "kind": "pad",
+       "margin_mm": 0.0,
+       "net": "PCIE_DN2_N",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 2.175,
+      "x": 136.0,
+      "y": 57.9
+     },
+     "net": "PCIE_DN2_N",
+     "pad": [
+      135.0,
+      57.9
+     ],
+     "pad_column": "RIGHT",
+     "polarity": "N",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    },
+    "PCIE_DN2/P": {
+     "base": "PCIE_DN2",
+     "landing": {
+      "anchor": "GAP",
+      "region": "GAP",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.525,
+       "kind": "pad",
+       "margin_mm": 0.175,
+       "net": "PCIE_DN2_P",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 2.175,
+      "x": 133.825,
+      "y": 57.9
+     },
+     "net": "PCIE_DN2_P",
+     "pad": [
+      132.65,
+      57.9
+     ],
+     "pad_column": "LEFT",
+     "polarity": "P",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    },
+    "PCIE_DN3/N": {
+     "base": "PCIE_DN3",
+     "landing": {
+      "anchor": "GAP",
+      "region": "GAP",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.525,
+       "kind": "pad",
+       "margin_mm": 0.175,
+       "net": "PCIE_DN3_N",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 0.6,
+      "x": 133.825,
+      "y": 59.1
+     },
+     "net": "PCIE_DN3_N",
+     "pad": [
+      132.65,
+      59.1
+     ],
+     "pad_column": "LEFT",
+     "polarity": "N",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    },
+    "PCIE_DN3/P": {
+     "base": "PCIE_DN3",
+     "landing": {
+      "anchor": "GAP",
+      "region": "GAP",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.525,
+       "kind": "pad",
+       "margin_mm": 0.175,
+       "net": "GND",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 0.6,
+      "x": 133.825,
+      "y": 58.5
+     },
+     "net": "PCIE_DN3_P",
+     "pad": [
+      135.0,
+      58.5
+     ],
+     "pad_column": "RIGHT",
+     "polarity": "P",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    },
+    "PCIE_DN4/N": {
+     "base": "PCIE_DN4",
+     "landing": {
+      "anchor": "OUTSIDE",
+      "region": "OUTSIDE",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.35,
+       "kind": "pad",
+       "margin_mm": 0.0,
+       "net": "PCIE_DN4_N",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 2.175,
+      "x": 136.0,
+      "y": 59.7
+     },
+     "net": "PCIE_DN4_N",
+     "pad": [
+      135.0,
+      59.7
+     ],
+     "pad_column": "RIGHT",
+     "polarity": "N",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    },
+    "PCIE_DN4/P": {
+     "base": "PCIE_DN4",
+     "landing": {
+      "anchor": "GAP",
+      "region": "GAP",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.525,
+       "kind": "pad",
+       "margin_mm": 0.175,
+       "net": "PCIE_DN4_P",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 2.175,
+      "x": 133.825,
+      "y": 59.7
+     },
+     "net": "PCIE_DN4_P",
+     "pad": [
+      132.65,
+      59.7
+     ],
+     "pad_column": "LEFT",
+     "polarity": "P",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    },
+    "PCIE_DN5/N": {
+     "base": "PCIE_DN5",
+     "landing": {
+      "anchor": "GAP",
+      "region": "GAP",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.525,
+       "kind": "pad",
+       "margin_mm": 0.175,
+       "net": "PCIE_DN5_N",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 0.6,
+      "x": 133.825,
+      "y": 60.9
+     },
+     "net": "PCIE_DN5_N",
+     "pad": [
+      132.65,
+      60.9
+     ],
+     "pad_column": "LEFT",
+     "polarity": "N",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    },
+    "PCIE_DN5/P": {
+     "base": "PCIE_DN5",
+     "landing": {
+      "anchor": "GAP",
+      "region": "GAP",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.525,
+       "kind": "pad",
+       "margin_mm": 0.175,
+       "net": "GND",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 0.6,
+      "x": 133.825,
+      "y": 60.3
+     },
+     "net": "PCIE_DN5_P",
+     "pad": [
+      135.0,
+      60.3
+     ],
+     "pad_column": "RIGHT",
+     "polarity": "P",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    },
+    "PCIE_DN6/N": {
+     "base": "PCIE_DN6",
+     "landing": {
+      "anchor": "OUTSIDE",
+      "region": "OUTSIDE",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.35,
+       "kind": "pad",
+       "margin_mm": 0.0,
+       "net": "PCIE_DN6_N",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 2.175,
+      "x": 136.0,
+      "y": 63.3
+     },
+     "net": "PCIE_DN6_N",
+     "pad": [
+      135.0,
+      63.3
+     ],
+     "pad_column": "RIGHT",
+     "polarity": "N",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    },
+    "PCIE_DN6/P": {
+     "base": "PCIE_DN6",
+     "landing": {
+      "anchor": "GAP",
+      "region": "GAP",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.525,
+       "kind": "pad",
+       "margin_mm": 0.175,
+       "net": "PCIE_DN6_P",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 2.175,
+      "x": 133.825,
+      "y": 63.3
+     },
+     "net": "PCIE_DN6_P",
+     "pad": [
+      132.65,
+      63.3
+     ],
+     "pad_column": "LEFT",
+     "polarity": "P",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    },
+    "PCIE_DN7/N": {
+     "base": "PCIE_DN7",
+     "landing": {
+      "anchor": "GAP",
+      "region": "GAP",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.525,
+       "kind": "pad",
+       "margin_mm": 0.175,
+       "net": "PCIE_DN7_N",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 0.6,
+      "x": 133.825,
+      "y": 64.5
+     },
+     "net": "PCIE_DN7_N",
+     "pad": [
+      132.65,
+      64.5
+     ],
+     "pad_column": "LEFT",
+     "polarity": "N",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    },
+    "PCIE_DN7/P": {
+     "base": "PCIE_DN7",
+     "landing": {
+      "anchor": "GAP",
+      "region": "GAP",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.525,
+       "kind": "pad",
+       "margin_mm": 0.175,
+       "net": "GND",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 0.6,
+      "x": 133.825,
+      "y": 63.9
+     },
+     "net": "PCIE_DN7_P",
+     "pad": [
+      135.0,
+      63.9
+     ],
+     "pad_column": "RIGHT",
+     "polarity": "P",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    },
+    "PCIE_REFCLK0/N": {
+     "base": "PCIE_REFCLK0",
+     "landing": {
+      "anchor": "OUTSIDE",
+      "region": "OUTSIDE",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.35,
+       "kind": "pad",
+       "margin_mm": 0.0,
+       "net": "PCIE_REFCLK0_N",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 2.175,
+      "x": 136.0,
+      "y": 45.9
+     },
+     "net": "PCIE_REFCLK0_N",
+     "pad": [
+      135.0,
+      45.9
+     ],
+     "pad_column": "RIGHT",
+     "polarity": "N",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    },
+    "PCIE_REFCLK0/P": {
+     "base": "PCIE_REFCLK0",
+     "landing": {
+      "anchor": "GAP",
+      "region": "GAP",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.525,
+       "kind": "pad",
+       "margin_mm": 0.175,
+       "net": "PCIE_REFCLK0_P",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 2.175,
+      "x": 133.825,
+      "y": 45.9
+     },
+     "net": "PCIE_REFCLK0_P",
+     "pad": [
+      132.65,
+      45.9
+     ],
+     "pad_column": "LEFT",
+     "polarity": "P",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    },
+    "PCIE_REFCLK1/N": {
+     "base": "PCIE_REFCLK1",
+     "landing": {
+      "anchor": "OUTSIDE",
+      "region": "OUTSIDE",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.35,
+       "kind": "pad",
+       "margin_mm": 0.0,
+       "net": "PCIE_REFCLK1_N",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 2.175,
+      "x": 136.0,
+      "y": 51.3
+     },
+     "net": "PCIE_REFCLK1_N",
+     "pad": [
+      135.0,
+      51.3
+     ],
+     "pad_column": "RIGHT",
+     "polarity": "N",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    },
+    "PCIE_REFCLK1/P": {
+     "base": "PCIE_REFCLK1",
+     "landing": {
+      "anchor": "GAP",
+      "region": "GAP",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.525,
+       "kind": "pad",
+       "margin_mm": 0.175,
+       "net": "PCIE_REFCLK1_P",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 2.175,
+      "x": 133.825,
+      "y": 51.3
+     },
+     "net": "PCIE_REFCLK1_P",
+     "pad": [
+      132.65,
+      51.3
+     ],
+     "pad_column": "LEFT",
+     "polarity": "P",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    },
+    "PCIE_UP0/N": {
+     "base": "PCIE_UP0",
+     "landing": {
+      "anchor": "GAP",
+      "region": "GAP",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.525,
+       "kind": "pad",
+       "margin_mm": 0.175,
+       "net": "PCIE_UP_OUT0_N_J2",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 0.6,
+      "x": 133.825,
+      "y": 43.5
+     },
+     "net": "PCIE_UP_OUT0_N_J2",
+     "pad": [
+      132.65,
+      43.5
+     ],
+     "pad_column": "LEFT",
+     "polarity": "N",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    },
+    "PCIE_UP0/P": {
+     "base": "PCIE_UP0",
+     "landing": {
+      "anchor": "GAP",
+      "region": "GAP",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.525,
+       "kind": "pad",
+       "margin_mm": 0.175,
+       "net": "GND",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 0.6,
+      "x": 133.825,
+      "y": 42.9
+     },
+     "net": "PCIE_UP_OUT0_P_J2",
+     "pad": [
+      135.0,
+      42.9
+     ],
+     "pad_column": "RIGHT",
+     "polarity": "P",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    },
+    "PCIE_UP1/N": {
+     "base": "PCIE_UP1",
+     "landing": {
+      "anchor": "OUTSIDE",
+      "region": "OUTSIDE",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.35,
+       "kind": "pad",
+       "margin_mm": 0.0,
+       "net": "PCIE_UP_OUT1_N_J2",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 2.175,
+      "x": 136.0,
+      "y": 44.1
+     },
+     "net": "PCIE_UP_OUT1_N_J2",
+     "pad": [
+      135.0,
+      44.1
+     ],
+     "pad_column": "RIGHT",
+     "polarity": "N",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    },
+    "PCIE_UP1/P": {
+     "base": "PCIE_UP1",
+     "landing": {
+      "anchor": "GAP",
+      "region": "GAP",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.525,
+       "kind": "pad",
+       "margin_mm": 0.175,
+       "net": "PCIE_UP_OUT1_P_J2",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 2.175,
+      "x": 133.825,
+      "y": 44.1
+     },
+     "net": "PCIE_UP_OUT1_P_J2",
+     "pad": [
+      132.65,
+      44.1
+     ],
+     "pad_column": "LEFT",
+     "polarity": "P",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    },
+    "PCIE_UP2/N": {
+     "base": "PCIE_UP2",
+     "landing": {
+      "anchor": "GAP",
+      "region": "GAP",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.525,
+       "kind": "pad",
+       "margin_mm": 0.175,
+       "net": "PCIE_UP_OUT2_N_J2",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 0.6,
+      "x": 133.825,
+      "y": 47.1
+     },
+     "net": "PCIE_UP_OUT2_N_J2",
+     "pad": [
+      132.65,
+      47.1
+     ],
+     "pad_column": "LEFT",
+     "polarity": "N",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    },
+    "PCIE_UP2/P": {
+     "base": "PCIE_UP2",
+     "landing": {
+      "anchor": "GAP",
+      "region": "GAP",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.525,
+       "kind": "pad",
+       "margin_mm": 0.175,
+       "net": "GND",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 0.6,
+      "x": 133.825,
+      "y": 46.5
+     },
+     "net": "PCIE_UP_OUT2_P_J2",
+     "pad": [
+      135.0,
+      46.5
+     ],
+     "pad_column": "RIGHT",
+     "polarity": "P",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    },
+    "PCIE_UP3/N": {
+     "base": "PCIE_UP3",
+     "landing": {
+      "anchor": "OUTSIDE",
+      "region": "OUTSIDE",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.35,
+       "kind": "pad",
+       "margin_mm": 0.0,
+       "net": "PCIE_UP_OUT3_N_J2",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 2.175,
+      "x": 136.0,
+      "y": 47.7
+     },
+     "net": "PCIE_UP_OUT3_N_J2",
+     "pad": [
+      135.0,
+      47.7
+     ],
+     "pad_column": "RIGHT",
+     "polarity": "N",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    },
+    "PCIE_UP3/P": {
+     "base": "PCIE_UP3",
+     "landing": {
+      "anchor": "GAP",
+      "region": "GAP",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.525,
+       "kind": "pad",
+       "margin_mm": 0.175,
+       "net": "PCIE_UP_OUT3_P_J2",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 2.175,
+      "x": 133.825,
+      "y": 47.7
+     },
+     "net": "PCIE_UP_OUT3_P_J2",
+     "pad": [
+      132.65,
+      47.7
+     ],
+     "pad_column": "LEFT",
+     "polarity": "P",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    },
+    "PCIE_UP4/N": {
+     "base": "PCIE_UP4",
+     "landing": {
+      "anchor": "GAP",
+      "region": "GAP",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.525,
+       "kind": "pad",
+       "margin_mm": 0.175,
+       "net": "PCIE_UP_OUT4_N_J2",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 0.6,
+      "x": 133.825,
+      "y": 48.9
+     },
+     "net": "PCIE_UP_OUT4_N_J2",
+     "pad": [
+      132.65,
+      48.9
+     ],
+     "pad_column": "LEFT",
+     "polarity": "N",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    },
+    "PCIE_UP4/P": {
+     "base": "PCIE_UP4",
+     "landing": {
+      "anchor": "GAP",
+      "region": "GAP",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.525,
+       "kind": "pad",
+       "margin_mm": 0.175,
+       "net": "GND",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 0.6,
+      "x": 133.825,
+      "y": 48.3
+     },
+     "net": "PCIE_UP_OUT4_P_J2",
+     "pad": [
+      135.0,
+      48.3
+     ],
+     "pad_column": "RIGHT",
+     "polarity": "P",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    },
+    "PCIE_UP5/N": {
+     "base": "PCIE_UP5",
+     "landing": {
+      "anchor": "OUTSIDE",
+      "region": "OUTSIDE",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.35,
+       "kind": "pad",
+       "margin_mm": 0.0,
+       "net": "PCIE_UP_OUT5_N_J2",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 2.175,
+      "x": 136.0,
+      "y": 49.5
+     },
+     "net": "PCIE_UP_OUT5_N_J2",
+     "pad": [
+      135.0,
+      49.5
+     ],
+     "pad_column": "RIGHT",
+     "polarity": "N",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    },
+    "PCIE_UP5/P": {
+     "base": "PCIE_UP5",
+     "landing": {
+      "anchor": "GAP",
+      "region": "GAP",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.525,
+       "kind": "pad",
+       "margin_mm": 0.175,
+       "net": "PCIE_UP_OUT5_P_J2",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 2.175,
+      "x": 133.825,
+      "y": 49.5
+     },
+     "net": "PCIE_UP_OUT5_P_J2",
+     "pad": [
+      132.65,
+      49.5
+     ],
+     "pad_column": "LEFT",
+     "polarity": "P",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    },
+    "PCIE_UP6/N": {
+     "base": "PCIE_UP6",
+     "landing": {
+      "anchor": "GAP",
+      "region": "GAP",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.525,
+       "kind": "pad",
+       "margin_mm": 0.175,
+       "net": "PCIE_UP_OUT6_N_J2",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 0.6,
+      "x": 133.825,
+      "y": 52.5
+     },
+     "net": "PCIE_UP_OUT6_N_J2",
+     "pad": [
+      132.65,
+      52.5
+     ],
+     "pad_column": "LEFT",
+     "polarity": "N",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    },
+    "PCIE_UP6/P": {
+     "base": "PCIE_UP6",
+     "landing": {
+      "anchor": "GAP",
+      "region": "GAP",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.525,
+       "kind": "pad",
+       "margin_mm": 0.175,
+       "net": "GND",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 0.6,
+      "x": 133.825,
+      "y": 51.9
+     },
+     "net": "PCIE_UP_OUT6_P_J2",
+     "pad": [
+      135.0,
+      51.9
+     ],
+     "pad_column": "RIGHT",
+     "polarity": "P",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    },
+    "PCIE_UP7/N": {
+     "base": "PCIE_UP7",
+     "landing": {
+      "anchor": "OUTSIDE",
+      "region": "OUTSIDE",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.35,
+       "kind": "pad",
+       "margin_mm": 0.0,
+       "net": "PCIE_UP_OUT7_N_J2",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 2.175,
+      "x": 136.0,
+      "y": 53.1
+     },
+     "net": "PCIE_UP_OUT7_N_J2",
+     "pad": [
+      135.0,
+      53.1
+     ],
+     "pad_column": "RIGHT",
+     "polarity": "N",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    },
+    "PCIE_UP7/P": {
+     "base": "PCIE_UP7",
+     "landing": {
+      "anchor": "GAP",
+      "region": "GAP",
+      "row_relocate_steps": 0,
+      "verify": {
+       "dist_mm": 0.525,
+       "kind": "pad",
+       "margin_mm": 0.175,
+       "net": "PCIE_UP_OUT7_P_J2",
+       "required_mm": 0.35
+      },
+      "via_pair_center_mm": 2.175,
+      "x": 133.825,
+      "y": 53.1
+     },
+     "net": "PCIE_UP_OUT7_P_J2",
+     "pad": [
+      132.65,
+      53.1
+     ],
+     "pad_column": "LEFT",
+     "polarity": "P",
+     "segname": "out_J2",
+     "status": "ASSIGNED"
+    }
+   },
+   "evidence": {
+    "n_assigned": 36,
+    "n_signals": 36,
+    "pad_heap": {
+     "columns": [
+      {
+       "extent": [
+        132.0,
+        133.3
+       ],
+       "n_pads": 37,
+       "x": 132.65
+      },
+      {
+       "extent": [
+        134.35,
+        135.65
+       ],
+       "n_pads": 37,
+       "x": 135.0
+      }
+     ],
+     "gap": [
+      133.3,
+      134.35
+     ],
+     "gap_center": 133.825,
+     "gap_width_mm": 1.05,
+     "interleaved": true,
+     "missing_cells": [],
+     "n_pads": 74,
+     "outside": [
+      135.65,
+      143.0
+     ],
+     "outside_lanes": [
+      136.0,
+      136.525,
+      137.05,
+      137.575,
+      138.1,
+      138.625,
+      139.15,
+      139.675,
+      140.2,
+      140.725,
+      141.25,
+      141.775,
+      142.3
+     ],
+     "outside_width_mm": 7.35,
+     "row_pitch": 0.6,
+     "rows": [
+      42.9,
+      43.5,
+      44.1,
+      44.7,
+      45.3,
+      45.9,
+      46.5,
+      47.1,
+      47.7,
+      48.3,
+      48.9,
+      49.5,
+      50.1,
+      50.7,
+      51.3,
+      51.9,
+      52.5,
+      53.1,
+      53.7,
+      54.3,
+      54.9,
+      55.5,
+      56.1,
+      56.7,
+      57.3,
+      57.9,
+      58.5,
+      59.1,
+      59.7,
+      60.3,
+      60.9,
+      61.5,
+      62.1,
+      62.7,
+      63.3,
+      63.9,
+      64.5
+     ]
+    },
+    "regions": {
+     "GAP": {
+      "capacity": 37,
+      "pressure": 0.703,
+      "used": 26
+     },
+     "IN2_REUSE": {
+      "capacity": null,
+      "pressure": null,
+      "used": 0
+     },
+     "OUTSIDE": {
+      "capacity": 481,
+      "pressure": 0.021,
+      "used": 10
+     }
+    },
+    "unassigned": []
+   },
+   "input_fp": "dbf083b1cd9e8b47894256cbe5b63670ed4bfea2c92458698d72006ac5cc0112",
+   "solve_ref": "solve-landing-dbf083b1cd9e8b47",
+   "verdict": "FEASIBLE"
+  },
+  "solve": {
+   "evidence": {
+    "input_hashes": {
+     "board_sha256": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24"
+    },
+    "model": "hs_route_model",
+    "shared_seg_count": 7,
+    "shared_via_count": 2,
+    "status_tally": {
+     "bases": [
+      "PCIE_DN0",
+      "PCIE_DN1",
+      "PCIE_DN2",
+      "PCIE_DN3",
+      "PCIE_DN4",
+      "PCIE_DN5",
+      "PCIE_DN6",
+      "PCIE_DN7",
+      "PCIE_REFCLK0",
+      "PCIE_REFCLK1",
+      "PCIE_UP0",
+      "PCIE_UP1",
+      "PCIE_UP2",
+      "PCIE_UP3",
+      "PCIE_UP4",
+      "PCIE_UP5",
+      "PCIE_UP6",
+      "PCIE_UP7"
+     ],
+     "infeasible": 17,
+     "solved": 1
+    },
+    "version": "4.0"
+   },
+   "input_fp": "dbf083b1cd9e8b47894256cbe5b63670ed4bfea2c92458698d72006ac5cc0112",
+   "results": {
+    "PCIE_DN0": {
+     "base": "DN0",
+     "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+     "lenN": 42.36,
+     "lenP": 39.98,
+     "segments": [
+      {
+       "N": {
+        "layers": [
+         "F.Cu",
+         "In2.Cu",
+         "In2.Cu",
+         "F.Cu"
+        ],
+        "length": 42.36,
+        "net": "PCIE_DN0_N",
+        "path": [
+         [
+          98.83,
+          58.489999999999995
+         ],
+         [
+          131.725,
+          58.489999999999995
+         ],
+         [
+          136.0,
+          58.489999999999995
+         ],
+         [
+          136.0,
+          54.300000000000004
+         ],
+         [
+          135.0,
+          54.300000000000004
+         ]
+        ],
+        "solve_ref": "1cb76000fdf4140214abc948f6e38c5460baeea65c0d0571ca40d38d3ebab1b3"
+       },
+       "P": {
+        "layers": [
+         "F.Cu",
+         "In2.Cu",
+         "In2.Cu",
+         "F.Cu"
+        ],
+        "length": 39.98,
+        "net": "PCIE_DN0_P",
+        "path": [
+         [
+          98.83,
+          58.11
+         ],
+         [
+          131.725,
+          58.11
+         ],
+         [
+          131.725,
+          54.3
+         ],
+         [
+          133.825,
+          54.300000000000004
+         ],
+         [
+          132.64999999999998,
+          54.300000000000004
+         ]
+        ],
+        "solve_ref": "fb24c4ec232db5039f68c9c82b3eaffc6ad3df954d7b41ff42dbeecfc006bde6"
+       },
+       "corridor": "J2_TO_U",
+       "escape": {
+        "layer": "In2.Cu",
+        "segments": {
+         "right": {
+          "N": {
+           "kind": "LANDING",
+           "length": 9.465,
+           "n_nodes": 0,
+           "via": [
+            136.0,
+            54.3
+           ]
+          },
+          "P": {
+           "kind": "LANDING",
+           "length": 7.085,
+           "n_nodes": 0,
+           "via": [
+            133.825,
+            54.3
+           ]
+          }
+         }
+        }
+       },
+       "flip": true,
+       "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+       "layer": "F.Cu",
+       "name": "input",
+       "skew": 2.38,
+       "skew_ok": false,
+       "status": "SOLVED",
+       "track_y": 58.3,
+       "vias": [
+        [
+         131.725,
+         58.11
+        ],
+        [
+         133.825,
+         54.3
+        ],
+        [
+         131.725,
+         58.49
+        ],
+        [
+         136.0,
+         54.3
+        ]
+       ],
+       "width": 0.205
+      },
+      {
+       "name": "out_U3",
+       "reason": "PCIE_DN_OUT0_P_U3 无通道分配（corridor=U_TO_MCIO seg=out_U3）",
+       "status": "INFRA_ERROR"
+      },
+      {
+       "name": "out_MCIO",
+       "reason": "PCIE_DN_OUT0_P_MCIO 无通道分配（corridor=U_TO_MCIO seg=out_MCIO）",
+       "status": "INFRA_ERROR"
+      }
+     ],
+     "skew": null,
+     "skew_ok": false,
+     "status": "INFEASIBLE"
+    },
+    "PCIE_DN1": {
+     "base": "DN1",
+     "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+     "lenN": 40.36,
+     "lenP": 40.58,
+     "segments": [
+      {
+       "N": {
+        "layers": [
+         "F.Cu",
+         "In2.Cu",
+         "In2.Cu",
+         "F.Cu"
+        ],
+        "length": 40.36,
+        "net": "PCIE_DN1_N",
+        "path": [
+         [
+          98.83,
+          59.69
+         ],
+         [
+          131.725,
+          59.69
+         ],
+         [
+          133.825,
+          59.69
+         ],
+         [
+          133.825,
+          55.5
+         ],
+         [
+          132.64999999999998,
+          55.5
+         ]
+        ],
+        "solve_ref": "6258d629c27efd68a5e87beca8b1b32b575758222eac0a2f4c57f72cc09932a5"
+       },
+       "P": {
+        "layers": [
+         "F.Cu",
+         "In2.Cu",
+         "In2.Cu",
+         "F.Cu"
+        ],
+        "length": 40.58,
+        "net": "PCIE_DN1_P",
+        "path": [
+         [
+          98.83,
+          59.31
+         ],
+         [
+          131.725,
+          59.31
+         ],
+         [
+          131.725,
+          54.9
+         ],
+         [
+          133.825,
+          54.900000000000006
+         ],
+         [
+          135.0,
+          54.900000000000006
+         ]
+        ],
+        "solve_ref": "86914eb7387bc4e38839c38c255a4f83e84d88dffbe37ac694c4865bbf2876ed"
+       },
+       "corridor": "J2_TO_U",
+       "escape": {
+        "layer": "In2.Cu",
+        "segments": {
+         "right": {
+          "N": {
+           "kind": "LANDING",
+           "length": 7.465,
+           "n_nodes": 0,
+           "via": [
+            133.825,
+            55.5
+           ]
+          },
+          "P": {
+           "kind": "LANDING",
+           "length": 7.685,
+           "n_nodes": 0,
+           "via": [
+            133.825,
+            54.9
+           ]
+          }
+         }
+        }
+       },
+       "flip": true,
+       "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+       "layer": "F.Cu",
+       "name": "input",
+       "skew": 0.22,
+       "skew_ok": false,
+       "status": "SOLVED",
+       "track_y": 59.5,
+       "vias": [
+        [
+         131.725,
+         59.31
+        ],
+        [
+         133.825,
+         54.9
+        ],
+        [
+         131.725,
+         59.69
+        ],
+        [
+         133.825,
+         55.5
+        ]
+       ],
+       "width": 0.205
+      },
+      {
+       "name": "out_U3",
+       "reason": "PCIE_DN_OUT1_P_U3 无通道分配（corridor=U_TO_MCIO seg=out_U3）",
+       "status": "INFRA_ERROR"
+      },
+      {
+       "name": "out_MCIO",
+       "reason": "PCIE_DN_OUT1_P_MCIO 无通道分配（corridor=U_TO_MCIO seg=out_MCIO）",
+       "status": "INFRA_ERROR"
+      }
+     ],
+     "skew": null,
+     "skew_ok": false,
+     "status": "INFEASIBLE"
+    },
+    "PCIE_DN2": {
+     "base": "DN2",
+     "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+     "lenN": 41.16,
+     "lenP": 38.78,
+     "segments": [
+      {
+       "N": {
+        "layers": [
+         "F.Cu",
+         "In2.Cu",
+         "In2.Cu",
+         "F.Cu"
+        ],
+        "length": 41.16,
+        "net": "PCIE_DN2_N",
+        "path": [
+         [
+          98.83,
+          60.89
+         ],
+         [
+          131.725,
+          60.89
+         ],
+         [
+          136.0,
+          60.89
+         ],
+         [
+          136.0,
+          57.900000000000006
+         ],
+         [
+          135.0,
+          57.900000000000006
+         ]
+        ],
+        "solve_ref": "e2626243859131f56c35313a83e39b2acc7fc0c195b2a9b97aa45cf687b6afea"
+       },
+       "P": {
+        "layers": [
+         "F.Cu",
+         "In2.Cu",
+         "In2.Cu",
+         "F.Cu"
+        ],
+        "length": 38.78,
+        "net": "PCIE_DN2_P",
+        "path": [
+         [
+          98.83,
+          60.510000000000005
+         ],
+         [
+          131.725,
+          60.510000000000005
+         ],
+         [
+          131.725,
+          57.9
+         ],
+         [
+          133.825,
+          57.900000000000006
+         ],
+         [
+          132.64999999999998,
+          57.900000000000006
+         ]
+        ],
+        "solve_ref": "af9c09688654eddcbdb31ca6deaf2e2976847fb66c94922e1ff7efaeb3f5b88d"
+       },
+       "corridor": "J2_TO_U",
+       "escape": {
+        "layer": "In2.Cu",
+        "segments": {
+         "right": {
+          "N": {
+           "kind": "LANDING",
+           "length": 8.265,
+           "n_nodes": 0,
+           "via": [
+            136.0,
+            57.9
+           ]
+          },
+          "P": {
+           "kind": "LANDING",
+           "length": 5.885,
+           "n_nodes": 0,
+           "via": [
+            133.825,
+            57.9
+           ]
+          }
+         }
+        }
+       },
+       "flip": true,
+       "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+       "layer": "F.Cu",
+       "name": "input",
+       "skew": 2.38,
+       "skew_ok": false,
+       "status": "SOLVED",
+       "track_y": 60.7,
+       "vias": [
+        [
+         131.725,
+         60.51
+        ],
+        [
+         133.825,
+         57.9
+        ],
+        [
+         131.725,
+         60.89
+        ],
+        [
+         136.0,
+         57.9
+        ]
+       ],
+       "width": 0.205
+      },
+      {
+       "name": "out_U3",
+       "reason": "PCIE_DN_OUT2_P_U3 无通道分配（corridor=U_TO_MCIO seg=out_U3）",
+       "status": "INFRA_ERROR"
+      },
+      {
+       "name": "out_MCIO",
+       "reason": "PCIE_DN_OUT2_P_MCIO 无通道分配（corridor=U_TO_MCIO seg=out_MCIO）",
+       "status": "INFRA_ERROR"
+      }
+     ],
+     "skew": null,
+     "skew_ok": false,
+     "status": "INFEASIBLE"
+    },
+    "PCIE_DN3": {
+     "base": "DN3",
+     "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+     "lenN": 39.16,
+     "lenP": 39.38,
+     "segments": [
+      {
+       "N": {
+        "layers": [
+         "F.Cu",
+         "In2.Cu",
+         "In2.Cu",
+         "F.Cu"
+        ],
+        "length": 39.16,
+        "net": "PCIE_DN3_N",
+        "path": [
+         [
+          98.83,
+          62.089999999999996
+         ],
+         [
+          131.725,
+          62.089999999999996
+         ],
+         [
+          133.825,
+          62.089999999999996
+         ],
+         [
+          133.825,
+          59.1
+         ],
+         [
+          132.64999999999998,
+          59.1
+         ]
+        ],
+        "solve_ref": "fbd181f7ebfbfd16eac48f96d45df0e3adde7e0effa4d787272a2f2df4554446"
+       },
+       "P": {
+        "layers": [
+         "F.Cu",
+         "In2.Cu",
+         "In2.Cu",
+         "F.Cu"
+        ],
+        "length": 39.38,
+        "net": "PCIE_DN3_P",
+        "path": [
+         [
+          98.83,
+          61.71
+         ],
+         [
+          131.725,
+          61.71
+         ],
+         [
+          131.725,
+          58.5
+         ],
+         [
+          133.825,
+          58.5
+         ],
+         [
+          135.0,
+          58.5
+         ]
+        ],
+        "solve_ref": "33ebeeca228528a808712944ca77eb7fcc11453c2f9228d49396bf8bdd19361f"
+       },
+       "corridor": "J2_TO_U",
+       "escape": {
+        "layer": "In2.Cu",
+        "segments": {
+         "right": {
+          "N": {
+           "kind": "LANDING",
+           "length": 6.265,
+           "n_nodes": 0,
+           "via": [
+            133.825,
+            59.1
+           ]
+          },
+          "P": {
+           "kind": "LANDING",
+           "length": 6.485,
+           "n_nodes": 0,
+           "via": [
+            133.825,
+            58.5
+           ]
+          }
+         }
+        }
+       },
+       "flip": true,
+       "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+       "layer": "F.Cu",
+       "name": "input",
+       "skew": 0.22,
+       "skew_ok": false,
+       "status": "SOLVED",
+       "track_y": 61.9,
+       "vias": [
+        [
+         131.725,
+         61.71
+        ],
+        [
+         133.825,
+         58.5
+        ],
+        [
+         131.725,
+         62.09
+        ],
+        [
+         133.825,
+         59.1
+        ]
+       ],
+       "width": 0.205
+      },
+      {
+       "name": "out_U3",
+       "reason": "PCIE_DN_OUT3_P_U3 无通道分配（corridor=U_TO_MCIO seg=out_U3）",
+       "status": "INFRA_ERROR"
+      },
+      {
+       "name": "out_MCIO",
+       "reason": "PCIE_DN_OUT3_P_MCIO 无通道分配（corridor=U_TO_MCIO seg=out_MCIO）",
+       "status": "INFRA_ERROR"
+      }
+     ],
+     "skew": null,
+     "skew_ok": false,
+     "status": "INFEASIBLE"
+    },
+    "PCIE_DN4": {
+     "base": "DN4",
+     "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+     "lenN": 41.76,
+     "lenP": 39.38,
+     "segments": [
+      {
+       "N": {
+        "layers": [
+         "F.Cu",
+         "In2.Cu",
+         "In2.Cu",
+         "F.Cu"
+        ],
+        "length": 41.76,
+        "net": "PCIE_DN4_N",
+        "path": [
+         [
+          98.83,
+          63.29
+         ],
+         [
+          131.725,
+          63.29
+         ],
+         [
+          136.0,
+          63.29
+         ],
+         [
+          136.0,
+          59.7
+         ],
+         [
+          135.0,
+          59.7
+         ]
+        ],
+        "solve_ref": "cba4f0265272f3f89d791cb881fec2bd49f899f4f540bf623227697bd511bbf1"
+       },
+       "P": {
+        "layers": [
+         "F.Cu",
+         "In2.Cu",
+         "In2.Cu",
+         "F.Cu"
+        ],
+        "length": 39.38,
+        "net": "PCIE_DN4_P",
+        "path": [
+         [
+          98.83,
+          62.910000000000004
+         ],
+         [
+          131.725,
+          62.910000000000004
+         ],
+         [
+          131.725,
+          59.7
+         ],
+         [
+          133.825,
+          59.7
+         ],
+         [
+          132.64999999999998,
+          59.7
+         ]
+        ],
+        "solve_ref": "8ca551fe64809f04a63f7807306da9a3f4be835c699db9e49045339f86a6db4a"
+       },
+       "corridor": "J2_TO_U",
+       "escape": {
+        "layer": "In2.Cu",
+        "segments": {
+         "right": {
+          "N": {
+           "kind": "LANDING",
+           "length": 8.865,
+           "n_nodes": 0,
+           "via": [
+            136.0,
+            59.7
+           ]
+          },
+          "P": {
+           "kind": "LANDING",
+           "length": 6.485,
+           "n_nodes": 0,
+           "via": [
+            133.825,
+            59.7
+           ]
+          }
+         }
+        }
+       },
+       "flip": true,
+       "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+       "layer": "F.Cu",
+       "name": "input",
+       "skew": 2.38,
+       "skew_ok": false,
+       "status": "SOLVED",
+       "track_y": 63.1,
+       "vias": [
+        [
+         131.725,
+         62.91
+        ],
+        [
+         133.825,
+         59.7
+        ],
+        [
+         131.725,
+         63.29
+        ],
+        [
+         136.0,
+         59.7
+        ]
+       ],
+       "width": 0.205
+      },
+      {
+       "name": "out_U3",
+       "reason": "PCIE_DN_OUT4_P_U3 无通道分配（corridor=U_TO_MCIO seg=out_U3）",
+       "status": "INFRA_ERROR"
+      },
+      {
+       "name": "out_MCIO",
+       "reason": "PCIE_DN_OUT4_P_MCIO 无通道分配（corridor=U_TO_MCIO seg=out_MCIO）",
+       "status": "INFRA_ERROR"
+      }
+     ],
+     "skew": null,
+     "skew_ok": false,
+     "status": "INFEASIBLE"
+    },
+    "PCIE_DN5": {
+     "base": "DN5",
+     "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+     "lenN": 39.76,
+     "lenP": 39.98,
+     "segments": [
+      {
+       "N": {
+        "layers": [
+         "F.Cu",
+         "In2.Cu",
+         "In2.Cu",
+         "F.Cu"
+        ],
+        "length": 39.76,
+        "net": "PCIE_DN5_N",
+        "path": [
+         [
+          98.83,
+          64.49
+         ],
+         [
+          131.725,
+          64.49
+         ],
+         [
+          133.825,
+          64.49
+         ],
+         [
+          133.825,
+          60.900000000000006
+         ],
+         [
+          132.64999999999998,
+          60.900000000000006
+         ]
+        ],
+        "solve_ref": "ff69412536270abcce6d0add047cf839fc5ebf9553aa939bbaf3ae17a59f62c4"
+       },
+       "P": {
+        "layers": [
+         "F.Cu",
+         "In2.Cu",
+         "In2.Cu",
+         "F.Cu"
+        ],
+        "length": 39.98,
+        "net": "PCIE_DN5_P",
+        "path": [
+         [
+          98.83,
+          64.11
+         ],
+         [
+          131.725,
+          64.11
+         ],
+         [
+          131.725,
+          60.3
+         ],
+         [
+          133.825,
+          60.300000000000004
+         ],
+         [
+          135.0,
+          60.300000000000004
+         ]
+        ],
+        "solve_ref": "ccb37eb7466b09b96b8eb2720568abaa5e844d6d16fe0f093a10320dab26ba05"
+       },
+       "corridor": "J2_TO_U",
+       "escape": {
+        "layer": "In2.Cu",
+        "segments": {
+         "right": {
+          "N": {
+           "kind": "LANDING",
+           "length": 6.865,
+           "n_nodes": 0,
+           "via": [
+            133.825,
+            60.9
+           ]
+          },
+          "P": {
+           "kind": "LANDING",
+           "length": 7.085,
+           "n_nodes": 0,
+           "via": [
+            133.825,
+            60.3
+           ]
+          }
+         }
+        }
+       },
+       "flip": true,
+       "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+       "layer": "F.Cu",
+       "name": "input",
+       "skew": 0.22,
+       "skew_ok": false,
+       "status": "SOLVED",
+       "track_y": 64.3,
+       "vias": [
+        [
+         131.725,
+         64.11
+        ],
+        [
+         133.825,
+         60.3
+        ],
+        [
+         131.725,
+         64.49
+        ],
+        [
+         133.825,
+         60.9
+        ]
+       ],
+       "width": 0.205
+      },
+      {
+       "name": "out_U3",
+       "reason": "PCIE_DN_OUT5_P_U3 无通道分配（corridor=U_TO_MCIO seg=out_U3）",
+       "status": "INFRA_ERROR"
+      },
+      {
+       "name": "out_MCIO",
+       "reason": "PCIE_DN_OUT5_P_MCIO 无通道分配（corridor=U_TO_MCIO seg=out_MCIO）",
+       "status": "INFRA_ERROR"
+      }
+     ],
+     "skew": null,
+     "skew_ok": false,
+     "status": "INFEASIBLE"
+    },
+    "PCIE_DN6": {
+     "base": "DN6",
+     "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+     "lenN": 40.56,
+     "lenP": 38.18,
+     "segments": [
+      {
+       "N": {
+        "layers": [
+         "F.Cu",
+         "In2.Cu",
+         "In2.Cu",
+         "F.Cu"
+        ],
+        "length": 40.56,
+        "net": "PCIE_DN6_N",
+        "path": [
+         [
+          98.83,
+          65.69
+         ],
+         [
+          133.825,
+          65.69
+         ],
+         [
+          136.0,
+          65.69
+         ],
+         [
+          136.0,
+          63.300000000000004
+         ],
+         [
+          135.0,
+          63.300000000000004
+         ]
+        ],
+        "solve_ref": "f10051ce26bddb223247b411f4d5ebb6b7066c69cc4a72b370cfaba8b5148612"
+       },
+       "P": {
+        "layers": [
+         "F.Cu",
+         "In2.Cu",
+         "F.Cu"
+        ],
+        "length": 38.18,
+        "net": "PCIE_DN6_P",
+        "path": [
+         [
+          98.83,
+          65.31
+         ],
+         [
+          133.825,
+          65.31
+         ],
+         [
+          133.825,
+          63.300000000000004
+         ],
+         [
+          132.64999999999998,
+          63.300000000000004
+         ]
+        ],
+        "solve_ref": "610a3c2880d5e45af8644d0fdab7cc74a5accf5ca747b22166ce3527ae938455"
+       },
+       "corridor": "J2_TO_U",
+       "escape": {
+        "layer": "In2.Cu",
+        "segments": {
+         "right": {
+          "N": {
+           "kind": "LANDING",
+           "length": 5.565,
+           "n_nodes": 0,
+           "via": [
+            136.0,
+            63.3
+           ]
+          },
+          "P": {
+           "kind": "LANDING",
+           "length": 3.185,
+           "n_nodes": 0,
+           "via": [
+            133.825,
+            63.3
+           ]
+          }
+         }
+        }
+       },
+       "flip": true,
+       "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+       "layer": "F.Cu",
+       "name": "input",
+       "skew": 2.38,
+       "skew_ok": false,
+       "status": "SOLVED",
+       "track_y": 65.5,
+       "vias": [
+        [
+         133.825,
+         65.31
+        ],
+        [
+         133.825,
+         63.3
+        ],
+        [
+         133.825,
+         65.69
+        ],
+        [
+         136.0,
+         63.3
+        ]
+       ],
+       "width": 0.205
+      },
+      {
+       "name": "out_U3",
+       "reason": "PCIE_DN_OUT6_P_U3 无通道分配（corridor=U_TO_MCIO seg=out_U3）",
+       "status": "INFRA_ERROR"
+      },
+      {
+       "name": "out_MCIO",
+       "reason": "PCIE_DN_OUT6_P_MCIO 无通道分配（corridor=U_TO_MCIO seg=out_MCIO）",
+       "status": "INFRA_ERROR"
+      }
+     ],
+     "skew": null,
+     "skew_ok": false,
+     "status": "INFEASIBLE"
+    },
+    "PCIE_DN7": {
+     "base": "DN7",
+     "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+     "lenN": 38.56,
+     "lenP": 38.78,
+     "segments": [
+      {
+       "N": {
+        "layers": [
+         "F.Cu",
+         "In2.Cu",
+         "In2.Cu",
+         "F.Cu"
+        ],
+        "length": 38.56,
+        "net": "PCIE_DN7_N",
+        "path": [
+         [
+          98.83,
+          66.89
+         ],
+         [
+          133.225,
+          66.89
+         ],
+         [
+          133.825,
+          66.89
+         ],
+         [
+          133.825,
+          64.5
+         ],
+         [
+          132.64999999999998,
+          64.5
+         ]
+        ],
+        "solve_ref": "5ae671c3c4e4ce9a1ad81a9b9324ec0f126daafd945eda32c0832cc8f287354d"
+       },
+       "P": {
+        "layers": [
+         "F.Cu",
+         "In2.Cu",
+         "In2.Cu",
+         "F.Cu"
+        ],
+        "length": 38.78,
+        "net": "PCIE_DN7_P",
+        "path": [
+         [
+          98.83,
+          66.51
+         ],
+         [
+          133.225,
+          66.51
+         ],
+         [
+          133.225,
+          63.9
+         ],
+         [
+          133.825,
+          63.900000000000006
+         ],
+         [
+          135.0,
+          63.900000000000006
+         ]
+        ],
+        "solve_ref": "e578673b23e5d4a6b4b174d062310e6d00b0d584086b834c5e36b32fc8ac2da6"
+       },
+       "corridor": "J2_TO_U",
+       "escape": {
+        "layer": "In2.Cu",
+        "segments": {
+         "right": {
+          "N": {
+           "kind": "LANDING",
+           "length": 4.165,
+           "n_nodes": 0,
+           "via": [
+            133.825,
+            64.5
+           ]
+          },
+          "P": {
+           "kind": "LANDING",
+           "length": 4.385,
+           "n_nodes": 0,
+           "via": [
+            133.825,
+            63.9
+           ]
+          }
+         }
+        }
+       },
+       "flip": true,
+       "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+       "layer": "F.Cu",
+       "name": "input",
+       "skew": 0.22,
+       "skew_ok": false,
+       "status": "SOLVED",
+       "track_y": 66.7,
+       "vias": [
+        [
+         133.225,
+         66.51
+        ],
+        [
+         133.825,
+         63.9
+        ],
+        [
+         133.225,
+         66.89
+        ],
+        [
+         133.825,
+         64.5
+        ]
+       ],
+       "width": 0.205
+      },
+      {
+       "name": "out_U3",
+       "reason": "PCIE_DN_OUT7_P_U3 无通道分配（corridor=U_TO_MCIO seg=out_U3）",
+       "status": "INFRA_ERROR"
+      },
+      {
+       "name": "out_MCIO",
+       "reason": "PCIE_DN_OUT7_P_MCIO 无通道分配（corridor=U_TO_MCIO seg=out_MCIO）",
+       "status": "INFRA_ERROR"
+      }
+     ],
+     "skew": null,
+     "skew_ok": false,
+     "status": "INFEASIBLE"
+    },
+    "PCIE_REFCLK0": {
+     "base": "REFCLK0",
+     "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+     "lenN": 78.79,
+     "lenP": 76.41,
+     "segments": [
+      {
+       "N": {
+        "layers": [
+         "In6.Cu",
+         "In6.Cu",
+         "In6.Cu",
+         "F.Cu"
+        ],
+        "length": 78.79,
+        "net": "PCIE_REFCLK0_N",
+        "path": [
+         [
+          58.599999999999994,
+          45.510000000000005
+         ],
+         [
+          133.825,
+          45.510000000000005
+         ],
+         [
+          136.0,
+          45.510000000000005
+         ],
+         [
+          136.0,
+          45.900000000000006
+         ],
+         [
+          135.0,
+          45.900000000000006
+         ]
+        ],
+        "solve_ref": "938d299598ba452dae0a149fc0b16dbf898f76f6704d15f995d9514ea6dd9886"
+       },
+       "P": {
+        "layers": [
+         "In6.Cu",
+         "In6.Cu",
+         "F.Cu"
+        ],
+        "length": 76.41,
+        "net": "PCIE_REFCLK0_P",
+        "path": [
+         [
+          58.599999999999994,
+          45.89
+         ],
+         [
+          133.825,
+          45.89
+         ],
+         [
+          133.825,
+          45.900000000000006
+         ],
+         [
+          132.64999999999998,
+          45.900000000000006
+         ]
+        ],
+        "solve_ref": "2dbd571cd5d8f72a6d45ba9ef00aaaff18c6a717894fd92ec0b1abec238a9471"
+       },
+       "corridor": "J2_TO_U",
+       "escape": {
+        "layer": "In6.Cu",
+        "segments": {
+         "right": {
+          "N": {
+           "kind": "LANDING",
+           "length": 3.565,
+           "n_nodes": 0,
+           "via": [
+            136.0,
+            45.9
+           ]
+          },
+          "P": {
+           "kind": "LANDING",
+           "length": 1.185,
+           "n_nodes": 0,
+           "via": [
+            133.825,
+            45.9
+           ]
+          }
+         }
+        }
+       },
+       "flip": false,
+       "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+       "layer": "In6.Cu",
+       "name": "input",
+       "skew": 2.38,
+       "skew_ok": false,
+       "status": "SOLVED",
+       "track_y": 45.7,
+       "vias": [
+        [
+         133.825,
+         45.9
+        ],
+        [
+         136.0,
+         45.9
+        ]
+       ],
+       "width": 0.205
+      }
+     ],
+     "skew": 2.38,
+     "skew_ok": false,
+     "status": "SOLVED"
+    },
+    "PCIE_REFCLK1": {
+     "base": "REFCLK1",
+     "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+     "lenN": 0,
+     "lenP": 0,
+     "segments": [
+      {
+       "esc": {
+        "cross_evidence": {
+         "min_edge": -0.205,
+         "point": [
+          133.825,
+          51.3
+         ],
+         "req": 0.175
+        },
+        "kind": "LANDING",
+        "reason": "落点驱动逃逸 P/N 相向交叉（min 边缘距 -0.2050 < 0.175）",
+        "status": "INFEASIBLE"
+       },
+       "flip": true,
+       "name": "input",
+       "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸 P/N 相向交叉（min 边缘距 -0.2050 < 0.175）",
+       "status": "INFEASIBLE"
+      }
+     ],
+     "skew": null,
+     "skew_ok": false,
+     "status": "INFEASIBLE"
+    },
+    "PCIE_UP0": {
+     "base": "UP0",
+     "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+     "lenN": 38.8241,
+     "lenP": 37.4524,
+     "segments": [
+      {
+       "name": "input",
+       "reason": "PCIE_UP0_P 无通道分配（corridor=U_TO_MCIO seg=input）",
+       "status": "INFRA_ERROR"
+      },
+      {
+       "name": "out_U7",
+       "reason": "走廊段无净空窗口（通道 y 被低速/引脚占位）",
+       "status": "INFEASIBLE"
+      },
+      {
+       "N": {
+        "layers": [
+         "F.Cu",
+         "In2.Cu",
+         "In2.Cu",
+         "F.Cu",
+         "In2.Cu",
+         "In2.Cu",
+         "F.Cu"
+        ],
+        "length": 38.8241,
+        "net": "PCIE_UP_OUT0_N_J2",
+        "path": [
+         [
+          99.85,
+          39.4
+         ],
+         [
+          99.96966449296802,
+          40.07808014359822
+         ],
+         [
+          100.62451671440813,
+          40.438527507677236
+         ],
+         [
+          101.15,
+          40.489999999999995
+         ],
+         [
+          133.225,
+          40.489999999999995
+         ],
+         [
+          133.225,
+          43.5
+         ],
+         [
+          133.825,
+          43.5
+         ],
+         [
+          132.64999999999998,
+          43.5
+         ]
+        ],
+        "solve_ref": "afc6c47d65766ca69dfbabe85b03191dd614db68f0a72a9acc5e72a4cb89c15f"
+       },
+       "P": {
+        "layers": [
+         "F.Cu",
+         "In2.Cu",
+         "F.Cu",
+         "In2.Cu",
+         "In2.Cu",
+         "F.Cu"
+        ],
+        "length": 37.4524,
+        "net": "PCIE_UP_OUT0_P_J2",
+        "path": [
+         [
+          101.14999999999999,
+          39.4
+         ],
+         [
+          101.26966449296802,
+          40.07808014359822
+         ],
+         [
+          101.15,
+          40.11
+         ],
+         [
+          133.225,
+          40.11
+         ],
+         [
+          133.825,
+          40.11
+         ],
+         [
+          133.825,
+          42.900000000000006
+         ],
+         [
+          135.0,
+          42.900000000000006
+         ]
+        ],
+        "solve_ref": "1ccad077e4bb1210cd006ca1a7b952a73e0b490178c1372a3187b679f3b98a91"
+       },
+       "corridor": "J2_TO_U",
+       "escape": {
+        "layer": "In2.Cu",
+        "segments": {
+         "left": {
+          "N": {
+           "kind": "L-H-V",
+           "length": 1.9641,
+           "n_nodes": 0,
+           "via": [
+            99.96966449296802,
+            40.07808014359822
+           ]
+          },
+          "P": {
+           "kind": "L-H-V",
+           "length": 0.8124,
+           "n_nodes": 0,
+           "via": [
+            101.26966449296802,
+            40.07808014359822
+           ]
+          }
+         },
+         "right": {
+          "N": {
+           "kind": "LANDING",
+           "length": 4.785,
+           "n_nodes": 0,
+           "via": [
+            133.825,
+            43.5
+           ]
+          },
+          "P": {
+           "kind": "LANDING",
+           "length": 4.565,
+           "n_nodes": 0,
+           "via": [
+            133.825,
+            42.9
+           ]
+          }
+         }
+        }
+       },
+       "flip": true,
+       "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+       "layer": "F.Cu",
+       "name": "out_J2",
+       "skew": 1.3716,
+       "skew_ok": false,
+       "status": "SOLVED",
+       "track_y": 40.3,
+       "vias": [
+        [
+         101.27,
+         40.078
+        ],
+        [
+         101.15,
+         40.11
+        ],
+        [
+         133.225,
+         40.11
+        ],
+        [
+         133.825,
+         42.9
+        ],
+        [
+         99.97,
+         40.078
+        ],
+        [
+         101.15,
+         40.49
+        ],
+        [
+         133.225,
+         40.49
+        ],
+        [
+         133.825,
+         43.5
+        ]
+       ],
+       "width": 0.205
+      }
+     ],
+     "skew": null,
+     "skew_ok": false,
+     "status": "INFEASIBLE"
+    },
+    "PCIE_UP1": {
+     "base": "UP1",
+     "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+     "lenN": 38.7196,
+     "lenP": 35.95,
+     "segments": [
+      {
+       "name": "input",
+       "reason": "PCIE_UP1_P 无通道分配（corridor=U_TO_MCIO seg=input）",
+       "status": "INFRA_ERROR"
+      },
+      {
+       "esc": {
+        "nearest": {
+         "desc": "pad:PCIE_UP_OUT3_P_U7 (F.Cu)",
+         "dist": -0.075,
+         "kind": "pad",
+         "net": "PCIE_UP_OUT3_P_U7",
+         "req": 0.175
+        },
+        "reason": "对级对称逃逸无净空（M=(98.825,47.500) → cv=(99.430,41.500) dir=1 flip=True pn_dist=0.400）",
+        "status": "INFEASIBLE"
+       },
+       "flip": true,
+       "name": "out_U7",
+       "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(98.825,47.500) → cv=(99.430,41.500) dir=1 flip=True pn_dist=0.400）",
+       "status": "INFEASIBLE"
+      },
+      {
+       "N": {
+        "layers": [
+         "F.Cu",
+         "In2.Cu",
+         "F.Cu",
+         "F.Cu",
+         "In2.Cu",
+         "In2.Cu",
+         "F.Cu"
+        ],
+        "length": 38.7196,
+        "net": "PCIE_UP_OUT1_N_J2",
+        "path": [
+         [
+          102.44999999999999,
+          39.4
+         ],
+         [
+          102.44999999999999,
+          39.95
+         ],
+         [
+          103.15,
+          41.31
+         ],
+         [
+          103.75,
+          41.31
+         ],
+         [
+          133.825,
+          41.31
+         ],
+         [
+          136.0,
+          41.31
+         ],
+         [
+          136.0,
+          44.1
+         ],
+         [
+          135.0,
+          44.1
+         ]
+        ],
+        "solve_ref": "3b705ccfadfaa601a42f4a3646c76559d293c04428b51e1e0ef1b590599c5eac"
+       },
+       "P": {
+        "layers": [
+         "F.Cu",
+         "In2.Cu",
+         "F.Cu",
+         "In2.Cu",
+         "F.Cu"
+        ],
+        "length": 35.95,
+        "net": "PCIE_UP_OUT1_P_J2",
+        "path": [
+         [
+          103.75,
+          39.4
+         ],
+         [
+          103.75,
+          39.95
+         ],
+         [
+          103.75,
+          41.69
+         ],
+         [
+          133.825,
+          41.69
+         ],
+         [
+          133.825,
+          44.1
+         ],
+         [
+          132.64999999999998,
+          44.1
+         ]
+        ],
+        "solve_ref": "56a4d211cd5f0c183f6f87bc8efc18d838725202338cfb5242fa0c0cb58b21f4"
+       },
+       "corridor": "J2_TO_U",
+       "escape": {
+        "layer": "In2.Cu",
+        "segments": {
+         "left": {
+          "N": {
+           "kind": "LSWAP_V",
+           "length": 2.6796,
+           "n_nodes": 0,
+           "via": [
+            [
+             102.45,
+             39.95
+            ],
+            [
+             103.15,
+             41.31
+            ]
+           ]
+          },
+          "P": {
+           "kind": "LSWAP_V",
+           "length": 2.29,
+           "n_nodes": 0,
+           "via": [
+            [
+             103.75,
+             39.95
+            ],
+            [
+             103.75,
+             41.69
+            ]
+           ]
+          }
+         },
+         "right": {
+          "N": {
+           "kind": "LANDING",
+           "length": 5.965,
+           "n_nodes": 0,
+           "via": [
+            136.0,
+            44.1
+           ]
+          },
+          "P": {
+           "kind": "LANDING",
+           "length": 3.585,
+           "n_nodes": 0,
+           "via": [
+            133.825,
+            44.1
+           ]
+          }
+         }
+        }
+       },
+       "flip": false,
+       "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+       "layer": "F.Cu",
+       "name": "out_J2",
+       "skew": 2.7696,
+       "skew_ok": false,
+       "status": "SOLVED",
+       "track_y": 41.5,
+       "vias": [
+        [
+         103.75,
+         39.95
+        ],
+        [
+         103.75,
+         41.69
+        ],
+        [
+         133.825,
+         41.69
+        ],
+        [
+         133.825,
+         44.1
+        ],
+        [
+         102.45,
+         39.95
+        ],
+        [
+         103.15,
+         41.31
+        ],
+        [
+         133.825,
+         41.31
+        ],
+        [
+         136.0,
+         44.1
+        ]
+       ],
+       "width": 0.205
+      }
+     ],
+     "skew": null,
+     "skew_ok": false,
+     "status": "INFEASIBLE"
+    },
+    "PCIE_UP2": {
+     "base": "UP2",
+     "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+     "lenN": 36.8154,
+     "lenP": 35.75,
+     "segments": [
+      {
+       "name": "input",
+       "reason": "PCIE_UP2_P 无通道分配（corridor=U_TO_MCIO seg=input）",
+       "status": "INFRA_ERROR"
+      },
+      {
+       "esc": {
+        "nearest": {
+         "desc": "pad:PCIE_UP_OUT3_N_U7 (F.Cu)",
+         "dist": -0.075,
+         "kind": "pad",
+         "net": "PCIE_UP_OUT3_N_U7",
+         "req": 0.175
+        },
+        "reason": "对级对称逃逸无净空（M=(98.825,46.300) → cv=(99.430,42.700) dir=1 flip=True pn_dist=0.400）",
+        "status": "INFEASIBLE"
+       },
+       "flip": true,
+       "name": "out_U7",
+       "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(98.825,46.300) → cv=(99.430,42.700) dir=1 flip=True pn_dist=0.400）",
+       "status": "INFEASIBLE"
+      },
+      {
+       "N": {
+        "layers": [
+         "F.Cu",
+         "In2.Cu",
+         "F.Cu",
+         "F.Cu",
+         "In2.Cu",
+         "In2.Cu",
+         "F.Cu"
+        ],
+        "length": 36.8154,
+        "net": "PCIE_UP_OUT2_N_J2",
+        "path": [
+         [
+          105.05,
+          39.4
+         ],
+         [
+          105.05,
+          39.95
+         ],
+         [
+          106.05,
+          42.89
+         ],
+         [
+          106.35,
+          42.89
+         ],
+         [
+          131.725,
+          42.89
+         ],
+         [
+          131.725,
+          47.1
+         ],
+         [
+          133.825,
+          47.1
+         ],
+         [
+          132.64999999999998,
+          47.1
+         ]
+        ],
+        "solve_ref": "912dbfb1d02a57cab89dd49653f39d912effe63b150883101abadd26477b56cb"
+       },
+       "P": {
+        "layers": [
+         "F.Cu",
+         "In2.Cu",
+         "F.Cu",
+         "In2.Cu",
+         "In2.Cu",
+         "F.Cu"
+        ],
+        "length": 35.75,
+        "net": "PCIE_UP_OUT2_P_J2",
+        "path": [
+         [
+          106.35,
+          39.4
+         ],
+         [
+          106.35,
+          39.95
+         ],
+         [
+          106.35,
+          42.510000000000005
+         ],
+         [
+          131.725,
+          42.510000000000005
+         ],
+         [
+          133.825,
+          42.510000000000005
+         ],
+         [
+          133.825,
+          46.5
+         ],
+         [
+          135.0,
+          46.5
+         ]
+        ],
+        "solve_ref": "4d22c6e3ff81591cc303475d2dce20db558a6985b4cbf5b5177979ede64e2f8c"
+       },
+       "corridor": "J2_TO_U",
+       "escape": {
+        "layer": "In2.Cu",
+        "segments": {
+         "left": {
+          "N": {
+           "kind": "LSWAP_V",
+           "length": 3.9554,
+           "n_nodes": 0,
+           "via": [
+            [
+             105.05,
+             39.95
+            ],
+            [
+             106.05,
+             42.89
+            ]
+           ]
+          },
+          "P": {
+           "kind": "LSWAP_V",
+           "length": 3.11,
+           "n_nodes": 0,
+           "via": [
+            [
+             106.35,
+             39.95
+            ],
+            [
+             106.35,
+             42.51
+            ]
+           ]
+          }
+         },
+         "right": {
+          "N": {
+           "kind": "LANDING",
+           "length": 7.485,
+           "n_nodes": 0,
+           "via": [
+            133.825,
+            47.1
+           ]
+          },
+          "P": {
+           "kind": "LANDING",
+           "length": 7.265,
+           "n_nodes": 0,
+           "via": [
+            133.825,
+            46.5
+           ]
+          }
+         }
+        }
+       },
+       "flip": true,
+       "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+       "layer": "F.Cu",
+       "name": "out_J2",
+       "skew": 1.0654,
+       "skew_ok": false,
+       "status": "SOLVED",
+       "track_y": 42.7,
+       "vias": [
+        [
+         106.35,
+         39.95
+        ],
+        [
+         106.35,
+         42.51
+        ],
+        [
+         131.725,
+         42.51
+        ],
+        [
+         133.825,
+         46.5
+        ],
+        [
+         105.05,
+         39.95
+        ],
+        [
+         106.05,
+         42.89
+        ],
+        [
+         131.725,
+         42.89
+        ],
+        [
+         133.825,
+         47.1
+        ]
+       ],
+       "width": 0.205
+      }
+     ],
+     "skew": null,
+     "skew_ok": false,
+     "status": "INFEASIBLE"
+    },
+    "PCIE_UP3": {
+     "base": "UP3",
+     "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+     "lenN": 37.0146,
+     "lenP": 34.35,
+     "segments": [
+      {
+       "name": "input",
+       "reason": "PCIE_UP3_P 无通道分配（corridor=U_TO_MCIO seg=input）",
+       "status": "INFRA_ERROR"
+      },
+      {
+       "esc": {
+        "nearest": {
+         "desc": "pad:GND (F.Cu)",
+         "dist": -0.062071059572096056,
+         "kind": "pad",
+         "net": "GND",
+         "req": 0.175
+        },
+        "reason": "对级对称逃逸无净空（M=(98.825,45.100) → cv=(99.430,43.900) dir=1 flip=True pn_dist=0.400）",
+        "status": "INFEASIBLE"
+       },
+       "flip": true,
+       "name": "out_U7",
+       "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(98.825,45.100) → cv=(99.430,43.900) dir=1 flip=True pn_dist=0.400）",
+       "status": "INFEASIBLE"
+      },
+      {
+       "N": {
+        "layers": [
+         "F.Cu",
+         "In2.Cu",
+         "F.Cu",
+         "F.Cu",
+         "In2.Cu",
+         "In2.Cu",
+         "F.Cu"
+        ],
+        "length": 37.0146,
+        "net": "PCIE_UP_OUT3_N_J2",
+        "path": [
+         [
+          107.64999999999999,
+          39.4
+         ],
+         [
+          107.64999999999999,
+          39.95
+         ],
+         [
+          108.35,
+          43.71
+         ],
+         [
+          108.95,
+          43.71
+         ],
+         [
+          131.725,
+          43.71
+         ],
+         [
+          136.0,
+          43.71
+         ],
+         [
+          136.0,
+          47.7
+         ],
+         [
+          135.0,
+          47.7
+         ]
+        ],
+        "solve_ref": "a760ff96111b60e49a6c5b099f89b83c8a995bb0f9667f2a95328df112088f98"
+       },
+       "P": {
+        "layers": [
+         "F.Cu",
+         "In2.Cu",
+         "F.Cu",
+         "In2.Cu",
+         "In2.Cu",
+         "F.Cu"
+        ],
+        "length": 34.35,
+        "net": "PCIE_UP_OUT3_P_J2",
+        "path": [
+         [
+          108.94999999999999,
+          39.4
+         ],
+         [
+          108.94999999999999,
+          39.95
+         ],
+         [
+          108.95,
+          44.089999999999996
+         ],
+         [
+          131.725,
+          44.089999999999996
+         ],
+         [
+          131.725,
+          47.7
+         ],
+         [
+          133.825,
+          47.7
+         ],
+         [
+          132.64999999999998,
+          47.7
+         ]
+        ],
+        "solve_ref": "147265fdd7b7b4d4b54f74dde07ead2b9b73aaf6948110441e5d1a93d7f462a3"
+       },
+       "corridor": "J2_TO_U",
+       "escape": {
+        "layer": "In2.Cu",
+        "segments": {
+         "left": {
+          "N": {
+           "kind": "LSWAP_V",
+           "length": 4.9746,
+           "n_nodes": 0,
+           "via": [
+            [
+             107.65,
+             39.95
+            ],
+            [
+             108.35,
+             43.71
+            ]
+           ]
+          },
+          "P": {
+           "kind": "LSWAP_V",
+           "length": 4.69,
+           "n_nodes": 0,
+           "via": [
+            [
+             108.95,
+             39.95
+            ],
+            [
+             108.95,
+             44.09
+            ]
+           ]
+          }
+         },
+         "right": {
+          "N": {
+           "kind": "LANDING",
+           "length": 9.265,
+           "n_nodes": 0,
+           "via": [
+            136.0,
+            47.7
+           ]
+          },
+          "P": {
+           "kind": "LANDING",
+           "length": 6.885,
+           "n_nodes": 0,
+           "via": [
+            133.825,
+            47.7
+           ]
+          }
+         }
+        }
+       },
+       "flip": false,
+       "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+       "layer": "F.Cu",
+       "name": "out_J2",
+       "skew": 2.6646,
+       "skew_ok": false,
+       "status": "SOLVED",
+       "track_y": 43.9,
+       "vias": [
+        [
+         108.95,
+         39.95
+        ],
+        [
+         108.95,
+         44.09
+        ],
+        [
+         131.725,
+         44.09
+        ],
+        [
+         133.825,
+         47.7
+        ],
+        [
+         107.65,
+         39.95
+        ],
+        [
+         108.35,
+         43.71
+        ],
+        [
+         131.725,
+         43.71
+        ],
+        [
+         136.0,
+         47.7
+        ]
+       ],
+       "width": 0.205
+      }
+     ],
+     "skew": null,
+     "skew_ok": false,
+     "status": "INFEASIBLE"
+    },
+    "PCIE_UP4": {
+     "base": "UP4",
+     "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+     "lenN": 33.3428,
+     "lenP": 32.35,
+     "segments": [
+      {
+       "name": "input",
+       "reason": "PCIE_UP4_P 无通道分配（corridor=U_TO_MCIO seg=input）",
+       "status": "INFRA_ERROR"
+      },
+      {
+       "esc": {
+        "cross_evidence": {
+         "min_edge": -0.205,
+         "point": [
+          100.848,
+          45.087
+         ],
+         "req": 0.175
+        },
+        "kind": "VIA",
+        "nearest": {
+         "desc": "pad:GND (F.Cu)",
+         "dist": -0.062071059572096056,
+         "kind": "pad",
+         "net": "GND",
+         "req": 0.175
+        },
+        "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (100.848,45.087)）",
+        "status": "INFEASIBLE"
+       },
+       "flip": true,
+       "name": "out_U7",
+       "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (100.848,45.087)）",
+       "status": "INFEASIBLE"
+      },
+      {
+       "N": {
+        "layers": [
+         "F.Cu",
+         "In2.Cu",
+         "F.Cu",
+         "F.Cu",
+         "In2.Cu",
+         "In2.Cu",
+         "F.Cu"
+        ],
+        "length": 33.3428,
+        "net": "PCIE_UP_OUT4_N_J2",
+        "path": [
+         [
+          110.25,
+          39.4
+         ],
+         [
+          110.25,
+          39.95
+         ],
+         [
+          111.25,
+          45.29
+         ],
+         [
+          111.55,
+          45.29
+         ],
+         [
+          131.725,
+          45.29
+         ],
+         [
+          131.725,
+          48.9
+         ],
+         [
+          133.825,
+          48.900000000000006
+         ],
+         [
+          132.64999999999998,
+          48.900000000000006
+         ]
+        ],
+        "solve_ref": "0423e14f12bbd479fac2d4c9b6c56fb6aca9ba66f383c0b13a6747f8f50f6dbe"
+       },
+       "P": {
+        "layers": [
+         "F.Cu",
+         "In2.Cu",
+         "F.Cu",
+         "In2.Cu",
+         "In2.Cu",
+         "F.Cu"
+        ],
+        "length": 32.35,
+        "net": "PCIE_UP_OUT4_P_J2",
+        "path": [
+         [
+          111.55,
+          39.4
+         ],
+         [
+          111.55,
+          39.95
+         ],
+         [
+          111.55,
+          44.910000000000004
+         ],
+         [
+          131.725,
+          44.910000000000004
+         ],
+         [
+          133.825,
+          44.910000000000004
+         ],
+         [
+          133.825,
+          48.300000000000004
+         ],
+         [
+          135.0,
+          48.300000000000004
+         ]
+        ],
+        "solve_ref": "6cf0512fda8580e78547e9d2110567db6eac68fb024821e57f3a08c8d12c21bb"
+       },
+       "corridor": "J2_TO_U",
+       "escape": {
+        "layer": "In2.Cu",
+        "segments": {
+         "left": {
+          "N": {
+           "kind": "LSWAP_V",
+           "length": 6.2828,
+           "n_nodes": 0,
+           "via": [
+            [
+             110.25,
+             39.95
+            ],
+            [
+             111.25,
+             45.29
+            ]
+           ]
+          },
+          "P": {
+           "kind": "LSWAP_V",
+           "length": 5.51,
+           "n_nodes": 0,
+           "via": [
+            [
+             111.55,
+             39.95
+            ],
+            [
+             111.55,
+             44.91
+            ]
+           ]
+          }
+         },
+         "right": {
+          "N": {
+           "kind": "LANDING",
+           "length": 6.885,
+           "n_nodes": 0,
+           "via": [
+            133.825,
+            48.9
+           ]
+          },
+          "P": {
+           "kind": "LANDING",
+           "length": 6.665,
+           "n_nodes": 0,
+           "via": [
+            133.825,
+            48.3
+           ]
+          }
+         }
+        }
+       },
+       "flip": true,
+       "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+       "layer": "F.Cu",
+       "name": "out_J2",
+       "skew": 0.9928,
+       "skew_ok": false,
+       "status": "SOLVED",
+       "track_y": 45.1,
+       "vias": [
+        [
+         111.55,
+         39.95
+        ],
+        [
+         111.55,
+         44.91
+        ],
+        [
+         131.725,
+         44.91
+        ],
+        [
+         133.825,
+         48.3
+        ],
+        [
+         110.25,
+         39.95
+        ],
+        [
+         111.25,
+         45.29
+        ],
+        [
+         131.725,
+         45.29
+        ],
+        [
+         133.825,
+         48.9
+        ]
+       ],
+       "width": 0.205
+      }
+     ],
+     "skew": null,
+     "skew_ok": false,
+     "status": "INFEASIBLE"
+    },
+    "PCIE_UP5": {
+     "base": "UP5",
+     "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+     "lenN": 33.5896,
+     "lenP": 30.95,
+     "segments": [
+      {
+       "name": "input",
+       "reason": "PCIE_UP5_P 无通道分配（corridor=U_TO_MCIO seg=input）",
+       "status": "INFRA_ERROR"
+      },
+      {
+       "esc": {
+        "nearest": {
+         "desc": "pad:GND (F.Cu)",
+         "dist": -0.075,
+         "kind": "pad",
+         "net": "GND",
+         "req": 0.175
+        },
+        "reason": "对级对称逃逸无净空（M=(98.825,42.700) → cv=(99.430,46.300) dir=1 flip=True pn_dist=0.400）",
+        "status": "INFEASIBLE"
+       },
+       "flip": true,
+       "name": "out_U7",
+       "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(98.825,42.700) → cv=(99.430,46.300) dir=1 flip=True pn_dist=0.400）",
+       "status": "INFEASIBLE"
+      },
+      {
+       "N": {
+        "layers": [
+         "F.Cu",
+         "In2.Cu",
+         "F.Cu",
+         "F.Cu",
+         "In2.Cu",
+         "In2.Cu",
+         "F.Cu"
+        ],
+        "length": 33.5896,
+        "net": "PCIE_UP_OUT5_N_J2",
+        "path": [
+         [
+          112.85,
+          39.4
+         ],
+         [
+          112.85,
+          39.95
+         ],
+         [
+          113.55,
+          46.11
+         ],
+         [
+          114.15,
+          46.11
+         ],
+         [
+          131.725,
+          46.11
+         ],
+         [
+          136.0,
+          46.11
+         ],
+         [
+          136.0,
+          49.5
+         ],
+         [
+          135.0,
+          49.5
+         ]
+        ],
+        "solve_ref": "315fe52864f91a47c19a15b42faadd00e89c7a609e1ce824fc6d4a85d9a4f9c2"
+       },
+       "P": {
+        "layers": [
+         "F.Cu",
+         "In2.Cu",
+         "F.Cu",
+         "In2.Cu",
+         "In2.Cu",
+         "F.Cu"
+        ],
+        "length": 30.95,
+        "net": "PCIE_UP_OUT5_P_J2",
+        "path": [
+         [
+          114.14999999999999,
+          39.4
+         ],
+         [
+          114.14999999999999,
+          39.95
+         ],
+         [
+          114.15,
+          46.489999999999995
+         ],
+         [
+          131.725,
+          46.489999999999995
+         ],
+         [
+          131.725,
+          49.5
+         ],
+         [
+          133.825,
+          49.5
+         ],
+         [
+          132.64999999999998,
+          49.5
+         ]
+        ],
+        "solve_ref": "b1eccfa68b802cb919d497c21281896631ea46e4af63d04bf3cd02cec5d5f672"
+       },
+       "corridor": "J2_TO_U",
+       "escape": {
+        "layer": "In2.Cu",
+        "segments": {
+         "left": {
+          "N": {
+           "kind": "LSWAP_V",
+           "length": 7.3496,
+           "n_nodes": 0,
+           "via": [
+            [
+             112.85,
+             39.95
+            ],
+            [
+             113.55,
+             46.11
+            ]
+           ]
+          },
+          "P": {
+           "kind": "LSWAP_V",
+           "length": 7.09,
+           "n_nodes": 0,
+           "via": [
+            [
+             114.15,
+             39.95
+            ],
+            [
+             114.15,
+             46.49
+            ]
+           ]
+          }
+         },
+         "right": {
+          "N": {
+           "kind": "LANDING",
+           "length": 8.665,
+           "n_nodes": 0,
+           "via": [
+            136.0,
+            49.5
+           ]
+          },
+          "P": {
+           "kind": "LANDING",
+           "length": 6.285,
+           "n_nodes": 0,
+           "via": [
+            133.825,
+            49.5
+           ]
+          }
+         }
+        }
+       },
+       "flip": false,
+       "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+       "layer": "F.Cu",
+       "name": "out_J2",
+       "skew": 2.6396,
+       "skew_ok": false,
+       "status": "SOLVED",
+       "track_y": 46.3,
+       "vias": [
+        [
+         114.15,
+         39.95
+        ],
+        [
+         114.15,
+         46.49
+        ],
+        [
+         131.725,
+         46.49
+        ],
+        [
+         133.825,
+         49.5
+        ],
+        [
+         112.85,
+         39.95
+        ],
+        [
+         113.55,
+         46.11
+        ],
+        [
+         131.725,
+         46.11
+        ],
+        [
+         136.0,
+         49.5
+        ]
+       ],
+       "width": 0.205
+      }
+     ],
+     "skew": null,
+     "skew_ok": false,
+     "status": "INFEASIBLE"
+    },
+    "PCIE_UP6": {
+     "base": "UP6",
+     "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+     "lenN": 31.9816,
+     "lenP": 30.75,
+     "segments": [
+      {
+       "name": "input",
+       "reason": "PCIE_UP6_P 无通道分配（corridor=U_TO_MCIO seg=input）",
+       "status": "INFRA_ERROR"
+      },
+      {
+       "esc": {
+        "nearest": {
+         "desc": "pad:P3V3 (F.Cu)",
+         "dist": -0.075,
+         "kind": "pad",
+         "net": "P3V3",
+         "req": 0.2
+        },
+        "reason": "对级对称逃逸无净空（M=(98.825,41.500) → cv=(99.430,47.500) dir=1 flip=True pn_dist=0.400）",
+        "status": "INFEASIBLE"
+       },
+       "flip": true,
+       "name": "out_U7",
+       "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(98.825,41.500) → cv=(99.430,47.500) dir=1 flip=True pn_dist=0.400）",
+       "status": "INFEASIBLE"
+      },
+      {
+       "N": {
+        "layers": [
+         "F.Cu",
+         "In2.Cu",
+         "F.Cu",
+         "F.Cu",
+         "In2.Cu",
+         "In2.Cu",
+         "F.Cu"
+        ],
+        "length": 31.9816,
+        "net": "PCIE_UP_OUT6_N_J2",
+        "path": [
+         [
+          115.44999999999999,
+          39.4
+         ],
+         [
+          115.44999999999999,
+          39.95
+         ],
+         [
+          116.15,
+          47.69
+         ],
+         [
+          116.75,
+          47.69
+         ],
+         [
+          131.725,
+          47.69
+         ],
+         [
+          131.725,
+          52.5
+         ],
+         [
+          133.825,
+          52.5
+         ],
+         [
+          132.64999999999998,
+          52.5
+         ]
+        ],
+        "solve_ref": "3201c88415c37ddd94241895810d0598c536ea260578dc5f52035acd45f8559e"
+       },
+       "P": {
+        "layers": [
+         "F.Cu",
+         "In2.Cu",
+         "F.Cu",
+         "In2.Cu",
+         "In2.Cu",
+         "F.Cu"
+        ],
+        "length": 30.75,
+        "net": "PCIE_UP_OUT6_P_J2",
+        "path": [
+         [
+          116.75,
+          39.4
+         ],
+         [
+          116.75,
+          39.95
+         ],
+         [
+          116.75,
+          47.31
+         ],
+         [
+          131.725,
+          47.31
+         ],
+         [
+          133.825,
+          47.31
+         ],
+         [
+          133.825,
+          51.900000000000006
+         ],
+         [
+          135.0,
+          51.900000000000006
+         ]
+        ],
+        "solve_ref": "2fb94f1d9f7b4d14d3da93b91ecfc68fc94c12c979cdc39ce0ff84a6e25a2077"
+       },
+       "corridor": "J2_TO_U",
+       "escape": {
+        "layer": "In2.Cu",
+        "segments": {
+         "left": {
+          "N": {
+           "kind": "LSWAP_V",
+           "length": 8.9216,
+           "n_nodes": 0,
+           "via": [
+            [
+             115.45,
+             39.95
+            ],
+            [
+             116.15,
+             47.69
+            ]
+           ]
+          },
+          "P": {
+           "kind": "LSWAP_V",
+           "length": 7.91,
+           "n_nodes": 0,
+           "via": [
+            [
+             116.75,
+             39.95
+            ],
+            [
+             116.75,
+             47.31
+            ]
+           ]
+          }
+         },
+         "right": {
+          "N": {
+           "kind": "LANDING",
+           "length": 8.085,
+           "n_nodes": 0,
+           "via": [
+            133.825,
+            52.5
+           ]
+          },
+          "P": {
+           "kind": "LANDING",
+           "length": 7.865,
+           "n_nodes": 0,
+           "via": [
+            133.825,
+            51.9
+           ]
+          }
+         }
+        }
+       },
+       "flip": true,
+       "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+       "layer": "F.Cu",
+       "name": "out_J2",
+       "skew": 1.2316,
+       "skew_ok": false,
+       "status": "SOLVED",
+       "track_y": 47.5,
+       "vias": [
+        [
+         116.75,
+         39.95
+        ],
+        [
+         116.75,
+         47.31
+        ],
+        [
+         131.725,
+         47.31
+        ],
+        [
+         133.825,
+         51.9
+        ],
+        [
+         115.45,
+         39.95
+        ],
+        [
+         116.15,
+         47.69
+        ],
+        [
+         131.725,
+         47.69
+        ],
+        [
+         133.825,
+         52.5
+        ]
+       ],
+       "width": 0.205
+      }
+     ],
+     "skew": null,
+     "skew_ok": false,
+     "status": "INFEASIBLE"
+    },
+    "PCIE_UP7": {
+     "base": "UP7",
+     "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+     "lenN": 31.9786,
+     "lenP": 29.35,
+     "segments": [
+      {
+       "name": "input",
+       "reason": "PCIE_UP7_P 无通道分配（corridor=U_TO_MCIO seg=input）",
+       "status": "INFRA_ERROR"
+      },
+      {
+       "esc": {
+        "nearest": {
+         "desc": "pad:VREG2_U7 (F.Cu)",
+         "dist": -0.075,
+         "kind": "pad",
+         "net": "VREG2_U7",
+         "req": 0.2
+        },
+        "reason": "对级对称逃逸无净空（M=(98.825,40.300) → cv=(99.430,48.700) dir=1 flip=True pn_dist=0.400）",
+        "status": "INFEASIBLE"
+       },
+       "flip": true,
+       "name": "out_U7",
+       "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(98.825,40.300) → cv=(99.430,48.700) dir=1 flip=True pn_dist=0.400）",
+       "status": "INFEASIBLE"
+      },
+      {
+       "N": {
+        "layers": [
+         "F.Cu",
+         "In2.Cu",
+         "F.Cu",
+         "F.Cu",
+         "In2.Cu",
+         "In2.Cu",
+         "F.Cu"
+        ],
+        "length": 31.9786,
+        "net": "PCIE_UP_OUT7_N_J2",
+        "path": [
+         [
+          118.05,
+          39.4
+         ],
+         [
+          118.05,
+          39.95
+         ],
+         [
+          118.75,
+          48.510000000000005
+         ],
+         [
+          119.35,
+          48.510000000000005
+         ],
+         [
+          131.725,
+          48.510000000000005
+         ],
+         [
+          136.0,
+          48.510000000000005
+         ],
+         [
+          136.0,
+          53.1
+         ],
+         [
+          135.0,
+          53.1
+         ]
+        ],
+        "solve_ref": "3f97cc85fc3063f2b683f00d6e6523ab1e7efce413b020a64599f2e1e80a2205"
+       },
+       "P": {
+        "layers": [
+         "F.Cu",
+         "In2.Cu",
+         "F.Cu",
+         "In2.Cu",
+         "In2.Cu",
+         "F.Cu"
+        ],
+        "length": 29.35,
+        "net": "PCIE_UP_OUT7_P_J2",
+        "path": [
+         [
+          119.35,
+          39.4
+         ],
+         [
+          119.35,
+          39.95
+         ],
+         [
+          119.35,
+          48.89
+         ],
+         [
+          131.725,
+          48.89
+         ],
+         [
+          131.725,
+          53.1
+         ],
+         [
+          133.825,
+          53.1
+         ],
+         [
+          132.64999999999998,
+          53.1
+         ]
+        ],
+        "solve_ref": "88442b072fce7bbabbfdee9c8f0f865f2f1c0a58e222d7a6bd7a89214cd7f493"
+       },
+       "corridor": "J2_TO_U",
+       "escape": {
+        "layer": "In2.Cu",
+        "segments": {
+         "left": {
+          "N": {
+           "kind": "LSWAP_V",
+           "length": 9.7386,
+           "n_nodes": 0,
+           "via": [
+            [
+             118.05,
+             39.95
+            ],
+            [
+             118.75,
+             48.51
+            ]
+           ]
+          },
+          "P": {
+           "kind": "LSWAP_V",
+           "length": 9.49,
+           "n_nodes": 0,
+           "via": [
+            [
+             119.35,
+             39.95
+            ],
+            [
+             119.35,
+             48.89
+            ]
+           ]
+          }
+         },
+         "right": {
+          "N": {
+           "kind": "LANDING",
+           "length": 9.865,
+           "n_nodes": 0,
+           "via": [
+            136.0,
+            53.1
+           ]
+          },
+          "P": {
+           "kind": "LANDING",
+           "length": 7.485,
+           "n_nodes": 0,
+           "via": [
+            133.825,
+            53.1
+           ]
+          }
+         }
+        }
+       },
+       "flip": false,
+       "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+       "layer": "F.Cu",
+       "name": "out_J2",
+       "skew": 2.6286,
+       "skew_ok": false,
+       "status": "SOLVED",
+       "track_y": 48.7,
+       "vias": [
+        [
+         119.35,
+         39.95
+        ],
+        [
+         119.35,
+         48.89
+        ],
+        [
+         131.725,
+         48.89
+        ],
+        [
+         133.825,
+         53.1
+        ],
+        [
+         118.05,
+         39.95
+        ],
+        [
+         118.75,
+         48.51
+        ],
+        [
+         131.725,
+         48.51
+        ],
+        [
+         136.0,
+         53.1
+        ]
+       ],
+       "width": 0.205
+      }
+     ],
+     "skew": null,
+     "skew_ok": false,
+     "status": "INFEASIBLE"
+    }
+   },
+   "solve_ref": "solve-solve-dbf083b1cd9e8b47",
+   "solved_pairs": 1
+  }
+ },
+ "task_card": "p3_k2_real_board_e2e_card.md",
+ "trace": [
+  {
+   "inputs": [
+    "SolveInput"
+   ],
+   "output_type": "FeasibilityVerdict",
+   "solve_ref": "solve-feasibility-dbf083b1cd9e8b47",
+   "stage": "feasibility"
+  },
+  {
+   "inputs": [
+    "SolveInput"
+   ],
+   "output_type": "CapacityReport",
+   "solve_ref": "solve-capacity-dbf083b1cd9e8b47",
+   "stage": "capacity"
+  },
+  {
+   "inputs": [
+    "CapacityReport"
+   ],
+   "output_type": "AllocTable",
+   "solve_ref": "solve-alloc-dbf083b1cd9e8b47",
+   "stage": "alloc"
+  },
+  {
+   "inputs": [
+    "AllocTable"
+   ],
+   "output_type": "LandingTable",
+   "solve_ref": "solve-landing-dbf083b1cd9e8b47",
+   "stage": "landing"
+  },
+  {
+   "inputs": [
+    "AllocTable",
+    "LandingTable"
+   ],
+   "output_type": "SolveResult",
+   "solve_ref": "solve-solve-dbf083b1cd9e8b47",
+   "stage": "solve"
+  }
+ ]
+}
