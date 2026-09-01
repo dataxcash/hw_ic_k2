@@ -347,21 +347,37 @@ def main() -> int:
                 "root": "escape_landing 需 P/N 对级对称约束（同 region/镜像列），回上层 ECO",
             },
         })
-    out_u7_blocked = sorted(b for b, r in base_reasons.items()
-                            if any(x.get("segname") == "out_U7"
-                                   and x.get("status") == "INFEASIBLE"
-                                   for x in r["segments"]))
-    if out_u7_blocked:
+    # 阶段⑤ C3 归因：走廊段无净空窗口（D2 段廊道窗口验证闭环后应消失）
+    c3_segments = sorted(
+        (b, x.get("segname"), x.get("reason"))
+        for b, r in base_reasons.items()
+        for x in r["segments"]
+        if "走廊段无净空窗口" in (x.get("reason") or ""))
+    if c3_segments:
         report["gaps"].append({
             "stage": "solve", "verdict": "INFEASIBLE",
-            "reason": "UP out_U7 段走廊无净空窗口（通道 y 被低速/引脚占位，track_y=40.3）——"
-                      "8 对 UP 的 U7→J2 段全部被占",
-            "evidence": {
-                "bases_affected": out_u7_blocked,
-                "count": len(out_u7_blocked),
-                "blocked_track_y": 40.3,
-                "segment": "out_U7",
-            },
+            "reason": "走廊段无净空窗口（通道 y 被低速/引脚占位）——alloc 段廊道窗口验证未覆盖",
+            "evidence": {"segments": [
+                {"base": b, "segname": s, "reason": rn}
+                for b, s, rn in c3_segments]},
+        })
+    # 阶段⑤ 逃逸/形态归因（非 C3：对级逃逸净空/via 极性/短段直连）——层4 形态卡边界
+    # （D4 触发条件），阶段 B/D 范围，非本卡（Phase A C3 闭环）
+    esc_segments = sorted(
+        (b, x.get("segname"), x.get("reason"))
+        for b, r in base_reasons.items()
+        for x in r["segments"]
+        if x.get("status") == "INFEASIBLE"
+        and "走廊段无净空窗口" not in (x.get("reason") or ""))
+    if esc_segments:
+        report["gaps"].append({
+            "stage": "solve", "verdict": "INFEASIBLE",
+            "reason": "逃逸/形态段 INFEASIBLE（对级逃逸净空/via 极性/短段直连）——"
+                      "层3 段廊道验证已闭环（C3 消除）；剩余属层4 形态卡边界（D4 触发条件），阶段 B/D",
+            "evidence": {"segments": [
+                {"base": b, "segname": s, "reason": rn}
+                for b, s, rn in esc_segments],
+                "c3_eliminated": not c3_segments},
         })
     if base_reasons:
         report["solve_base_reasons"] = base_reasons
