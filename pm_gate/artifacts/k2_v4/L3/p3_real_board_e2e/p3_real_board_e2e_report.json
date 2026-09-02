@@ -36,6 +36,25 @@
       "id": "MCIO",
       "kind": "CONN",
       "pads_path": "derived.landing_pads.MCIO",
+      "series_cap_wall": {
+       "axis": "x",
+       "crossing_dir": "increasing",
+       "evidence": {
+        "downstream_via_gap_mm": {
+         "max": 2.22,
+         "min": 0.38
+        },
+        "layer_pair": "F.Cu->In/B.Cu",
+        "source_case": [
+         "learned_aic_pex88096_10slimsas",
+         "learned_pex8748_2slimsas_4ngff"
+        ]
+       },
+       "wall": {
+        "pads_path": "derived.cap_wall_pads_MCIO",
+        "via_downstream_side": "past_cap"
+       }
+      },
       "side": "LEFT"
      },
      {
@@ -387,12 +406,12 @@
     "segments": [
      {
       "base": "PCIE_DN0",
-      "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(69.8, 57.8) N=(69.8, 64.117)，sx 扫描 69.8→64.3）",
+      "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(86.875, 57.8) N=(86.875, 64.117)，sx 扫描 86.875→64.3）",
       "segname": "out_MCIO"
      },
      {
       "base": "PCIE_DN1",
-      "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(69.8, 51.483) N=(69.8, 70.434)，sx 扫描 69.8→62.5）",
+      "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(86.875, 51.483) N=(86.875, 70.434)，sx 扫描 86.875→62.5）",
       "segname": "out_MCIO"
      },
      {
@@ -402,7 +421,7 @@
      },
      {
       "base": "PCIE_DN3",
-      "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(69.8, 38.849) N=(69.8, 83.068)，sx 扫描 69.8→55.3）",
+      "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(86.875, 38.849) N=(86.875, 83.068)，sx 扫描 86.875→55.3）",
       "segname": "out_MCIO"
      },
      {
@@ -417,12 +436,12 @@
      },
      {
       "base": "PCIE_DN6",
-      "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(69.8, 55.366) N=(69.8, 86.951)，sx 扫描 69.8→62.5）",
+      "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(86.875, 55.366) N=(86.875, 86.951)，sx 扫描 86.875→62.5）",
       "segname": "out_MCIO"
      },
      {
       "base": "PCIE_DN7",
-      "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(69.8, 49.049) N=(69.8, 93.268)，sx 扫描 69.8→64.3）",
+      "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(86.875, 49.049) N=(86.875, 93.268)，sx 扫描 86.875→64.3）",
       "segname": "out_MCIO"
      },
      {
@@ -506,7 +525,7 @@
    "verdict": "WARN"
   }
  ],
- "input_fp": "15218f47f80af738c8daeeed3526dda74a3eb73b86ee64001f73c87e77f96e09",
+ "input_fp": "418ed943dbd692355f34dae470aeb899e735758083d0cfa8636c10519ded4f24",
  "solve_base_reasons": {
   "PCIE_DN0": {
    "segments": [
@@ -521,7 +540,7 @@
      "status": "SOLVED"
     },
     {
-     "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(69.8, 57.8) N=(69.8, 64.117)，sx 扫描 69.8→64.3）",
+     "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(86.875, 57.8) N=(86.875, 64.117)，sx 扫描 86.875→64.3）",
      "segname": "out_MCIO",
      "status": "INFEASIBLE"
     }
@@ -541,7 +560,7 @@
      "status": "SOLVED"
     },
     {
-     "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(69.8, 51.483) N=(69.8, 70.434)，sx 扫描 69.8→62.5）",
+     "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(86.875, 51.483) N=(86.875, 70.434)，sx 扫描 86.875→62.5）",
      "segname": "out_MCIO",
      "status": "INFEASIBLE"
     }
@@ -581,7 +600,7 @@
      "status": "SOLVED"
     },
     {
-     "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(69.8, 38.849) N=(69.8, 83.068)，sx 扫描 69.8→55.3）",
+     "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(86.875, 38.849) N=(86.875, 83.068)，sx 扫描 86.875→55.3）",
      "segname": "out_MCIO",
      "status": "INFEASIBLE"
     }
@@ -641,7 +660,7 @@
      "status": "SOLVED"
     },
     {
-     "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(69.8, 55.366) N=(69.8, 86.951)，sx 扫描 69.8→62.5）",
+     "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(86.875, 55.366) N=(86.875, 86.951)，sx 扫描 86.875→62.5）",
      "segname": "out_MCIO",
      "status": "INFEASIBLE"
     }
@@ -661,7 +680,7 @@
      "status": "INFEASIBLE"
     },
     {
-     "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(69.8, 49.049) N=(69.8, 93.268)，sx 扫描 69.8→64.3）",
+     "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(86.875, 49.049) N=(86.875, 93.268)，sx 扫描 86.875→64.3）",
      "segname": "out_MCIO",
      "status": "INFEASIBLE"
     }
@@ -837,7 +856,7 @@
      "channel": "J2_TO_U/lower/0",
      "corridor": "J2_TO_U",
      "layer": "F.Cu",
-     "solve_ref": "a593ffb44f018a18d2e549deed1ee4bbb8dc1982bed57147c890a8d04051c1e8",
+     "solve_ref": "0dec8886acff9be75cc83b72a1c28dc3347db197052d8b611e0a4770f3b02dd6",
      "status": "SOLVED",
      "track_y": 58.3
     },
@@ -846,7 +865,7 @@
      "channel": "J2_TO_U/lower/1",
      "corridor": "J2_TO_U",
      "layer": "F.Cu",
-     "solve_ref": "92f989f80a8269140b3a93449feb7b305106aeb00a09811a1ba8a221083895fc",
+     "solve_ref": "c14f1bcd2ce42427a43fba8156a80dccc3142ac0c74f85958a177e926fd15ca9",
      "status": "SOLVED",
      "track_y": 59.5
     },
@@ -855,7 +874,7 @@
      "channel": "J2_TO_U/lower/2",
      "corridor": "J2_TO_U",
      "layer": "F.Cu",
-     "solve_ref": "90902ece0270dc372f92360b2fa9aa7b17d677c455991d2482f7a0d896825998",
+     "solve_ref": "9cb1d7554405813e3f330c2506ad38917f8f9fdc6f23e3abd4b4a64cbac69b12",
      "status": "SOLVED",
      "track_y": 60.7
     },
@@ -864,7 +883,7 @@
      "channel": "J2_TO_U/lower/3",
      "corridor": "J2_TO_U",
      "layer": "F.Cu",
-     "solve_ref": "73e98bfba18d51d3cb79e9cb1e9c3ffb510d647419636d0126db84aaa39d799b",
+     "solve_ref": "a2c95c270beffd471dc9a7ae1aa5ba0b3858dc279f4c1d49bf6451c5a6e6d051",
      "status": "SOLVED",
      "track_y": 61.9
     },
@@ -873,7 +892,7 @@
      "channel": "J2_TO_U/lower/4",
      "corridor": "J2_TO_U",
      "layer": "F.Cu",
-     "solve_ref": "b671de51e6dbddba0883ef405800a1002c85857920e5ffd13a1aaa0d35331e6d",
+     "solve_ref": "7b3dc5b6e4a5a987f11717ab9c7c219e10d35ad61de073f00708b0f788f83909",
      "status": "SOLVED",
      "track_y": 63.1
     },
@@ -882,7 +901,7 @@
      "channel": "J2_TO_U/lower/5",
      "corridor": "J2_TO_U",
      "layer": "F.Cu",
-     "solve_ref": "f6b333476c04cf7cd43c9889dc408ed51727897547296b2cfe836d601dd6222e",
+     "solve_ref": "1c735bd491127c2e14124b006e335cb4a0ab018f2ae0ee63e091336b4c4f5caa",
      "status": "SOLVED",
      "track_y": 64.3
     },
@@ -891,7 +910,7 @@
      "channel": "J2_TO_U/lower/6",
      "corridor": "J2_TO_U",
      "layer": "F.Cu",
-     "solve_ref": "29388114026055d8ff192aaaee8c90f682f0c4d11de4c84743c1b214c92166df",
+     "solve_ref": "8a230ddc4bdb76ed77d846a6a95b28afdc0fd050a876d4048cf45d991fab7899",
      "status": "SOLVED",
      "track_y": 65.5
     },
@@ -900,7 +919,7 @@
      "channel": "J2_TO_U/lower/7",
      "corridor": "J2_TO_U",
      "layer": "F.Cu",
-     "solve_ref": "5049f837063e943b1d8a02b5907e56e67e926e4375aa8662cf5af3fcf8b7f519",
+     "solve_ref": "6a8f3899bdc7bedfc27c9c8b3b241c15ccc6f3dc936187d50fd342a28a778e80",
      "status": "SOLVED",
      "track_y": 66.7
     },
@@ -909,7 +928,7 @@
      "channel": "J2_TO_U/refclk/0",
      "corridor": "J2_TO_U",
      "layer": "In6.Cu",
-     "solve_ref": "2f19f418d9e17d682e824a14de8e2eff7330eaff8a13cc25571879f8eb39830d",
+     "solve_ref": "ba11061109992b433f7e5008eb0b012682443867afe3d86eef2ed3bfcc9c5233",
      "status": "SOLVED",
      "track_y": 45.7
     },
@@ -918,7 +937,7 @@
      "channel": "J2_TO_U/refclk/1",
      "corridor": "J2_TO_U",
      "layer": "In6.Cu",
-     "solve_ref": "84e8fd451c73665d6f2fc6c31be16cd9f3ccdaaf311a317d9b98c655c2dd4cf1",
+     "solve_ref": "d2bcede4ca569f2a9b67803a483d147ec48067d2cb101821c70e406aac299161",
      "status": "SOLVED",
      "track_y": 50.5
     },
@@ -927,7 +946,7 @@
      "channel": "J2_TO_U/upper/7",
      "corridor": "J2_TO_U",
      "layer": "F.Cu",
-     "solve_ref": "52cc32ff58da30ecee27fbe9e410b03cc1258d1ce01bc80d8e71a646d062537c",
+     "solve_ref": "54799ad2ca12e4bb64532415d1266cea60fb4b45462314c49261262c9da0e037",
      "status": "SOLVED",
      "track_y": 48.7
     },
@@ -936,7 +955,7 @@
      "channel": "J2_TO_U/upper/6",
      "corridor": "J2_TO_U",
      "layer": "F.Cu",
-     "solve_ref": "253b7ccfbbccf47bafdd5bbb228c1883e1ccf468687ffa897d8dc0f731b82df8",
+     "solve_ref": "da6816def167971e0e124c80025cc39829aa723f633516f4746eaa9cde7a4424",
      "status": "SOLVED",
      "track_y": 47.5
     },
@@ -945,7 +964,7 @@
      "channel": "J2_TO_U/upper/5",
      "corridor": "J2_TO_U",
      "layer": "F.Cu",
-     "solve_ref": "1c326250a4eb8f382293fc6e71a410adc37ce58597dc52f80ec9f5ae5548870e",
+     "solve_ref": "237c6712bcab091b8de808f9dfdee8c62ebb54023c0269802776306c6728e5a8",
      "status": "SOLVED",
      "track_y": 46.3
     },
@@ -954,7 +973,7 @@
      "channel": "J2_TO_U/upper/4",
      "corridor": "J2_TO_U",
      "layer": "F.Cu",
-     "solve_ref": "313774a47377d4197804b85a8bfb38bfcb16f3b4290d60524c915b1f1c715933",
+     "solve_ref": "61820212a33918197bb5d0720509887b02c378402f85309152f2d5103b100cd2",
      "status": "SOLVED",
      "track_y": 45.1
     },
@@ -963,7 +982,7 @@
      "channel": "J2_TO_U/upper/3",
      "corridor": "J2_TO_U",
      "layer": "F.Cu",
-     "solve_ref": "eeca2438271cff5edac3d8bb8402bfe5f11c2adb1d000c560f1b019aef404a22",
+     "solve_ref": "4cc5130b370b9916b32e136ef0eeefe9d9ad01f9753bd6750312c974b3b69660",
      "status": "SOLVED",
      "track_y": 43.9
     },
@@ -972,7 +991,7 @@
      "channel": "J2_TO_U/upper/2",
      "corridor": "J2_TO_U",
      "layer": "F.Cu",
-     "solve_ref": "9668172bcc40ae9cfe5b21aa8a552ac89c02053e67681f314b5248577ca0da1c",
+     "solve_ref": "271db41c16c5efcb77a623bb5d96643df49b9f5a29bae553103c3ecf1dd0d078",
      "status": "SOLVED",
      "track_y": 42.7
     },
@@ -981,7 +1000,7 @@
      "channel": "J2_TO_U/upper/1",
      "corridor": "J2_TO_U",
      "layer": "F.Cu",
-     "solve_ref": "a38c71fcab8238746d5028a2c0b37066089331353f6faadf6b95a27cb6c20119",
+     "solve_ref": "e9bd04f39fc5509ad043ea26b9ecbf534900179ab3f0f236be6689256551bd62",
      "status": "SOLVED",
      "track_y": 41.5
     },
@@ -990,7 +1009,7 @@
      "channel": "J2_TO_U/upper/0",
      "corridor": "J2_TO_U",
      "layer": "F.Cu",
-     "solve_ref": "6b2d48960184d5ab3c592f5c3ee1af6db003cbe9c991307b6142fec5fd82a0f2",
+     "solve_ref": "bbb0dca83fb1beb47fb925d464e34446c2e6042982f0f396eb34dc671ed80300",
      "status": "SOLVED",
      "track_y": 40.3
     }
@@ -2607,8 +2626,8 @@
     "version": "1.0"
    },
    "infeasible": 0,
-   "input_fp": "15218f47f80af738c8daeeed3526dda74a3eb73b86ee64001f73c87e77f96e09",
-   "solve_ref": "solve-alloc-15218f47f80af738",
+   "input_fp": "418ed943dbd692355f34dae470aeb899e735758083d0cfa8636c10519ded4f24",
+   "solve_ref": "solve-alloc-418ed943dbd69235",
    "solved": 18
   },
   "capacity": {
@@ -2634,8 +2653,8 @@
     },
     "total_demand_pairs": 36
    },
-   "input_fp": "15218f47f80af738c8daeeed3526dda74a3eb73b86ee64001f73c87e77f96e09",
-   "solve_ref": "solve-capacity-15218f47f80af738",
+   "input_fp": "418ed943dbd692355f34dae470aeb899e735758083d0cfa8636c10519ded4f24",
+   "solve_ref": "solve-capacity-418ed943dbd69235",
    "stages": {
     "CAP_WALL": {
      "capacity_total": 16,
@@ -2865,7 +2884,7 @@
      "alloc_sha256_16": "4dc34353a4581553",
      "board_sha256_16": "6c387dff2d7ebdde",
      "rules_sha256_16": "fc1fdc2fa845f4f9",
-     "spec_sha256_16": "04f4e970d1192126"
+     "spec_sha256_16": "b6bb06f2d753aa6f"
     },
     "polarity": {
      "groups": [],
@@ -2939,10 +2958,10 @@
     },
     "version": "1.0"
    },
-   "input_fp": "15218f47f80af738c8daeeed3526dda74a3eb73b86ee64001f73c87e77f96e09",
+   "input_fp": "418ed943dbd692355f34dae470aeb899e735758083d0cfa8636c10519ded4f24",
    "polarity_ok": true,
    "resource_ok": true,
-   "solve_ref": "solve-feasibility-15218f47f80af738",
+   "solve_ref": "solve-feasibility-418ed943dbd69235",
    "verdict": "FEASIBLE"
   },
   "landing": {
@@ -3457,18 +3476,19 @@
       "anchor": "GAP",
       "pair_mirror_row_gap_mm": 6.317,
       "pair_symmetric": true,
+      "past_cap_wall": true,
       "polarity_consistent": true,
       "region": "IN2_REUSE",
       "row_relocate_steps": 1,
       "verify": {
-       "dist_mm": 4.75,
+       "dist_mm": 1.725,
        "kind": "pad",
-       "margin_mm": 4.4,
+       "margin_mm": 1.375,
        "net": "GND",
        "required_mm": 0.35
       },
       "via_pair_center_mm": 6.317,
-      "x": 69.8,
+      "x": 86.875,
       "y": 64.117
      },
      "net": "PCIE_DN_OUT0_N_MCIO",
@@ -3520,18 +3540,19 @@
       "anchor": "GAP",
       "pair_mirror_row_gap_mm": 6.317,
       "pair_symmetric": true,
+      "past_cap_wall": true,
       "polarity_consistent": true,
       "region": "GAP",
       "row_relocate_steps": 0,
       "verify": {
-       "dist_mm": 5.15,
+       "dist_mm": 1.725,
        "kind": "pad",
-       "margin_mm": 4.8,
-       "net": "PCIE_DN_OUT0_N_U3",
+       "margin_mm": 1.375,
+       "net": "PCIE_DN_OUT3_P_MCIO",
        "required_mm": 0.35
       },
       "via_pair_center_mm": 6.317,
-      "x": 69.8,
+      "x": 86.875,
       "y": 57.8
      },
      "net": "PCIE_DN_OUT0_P_MCIO",
@@ -3583,18 +3604,19 @@
       "anchor": "GAP",
       "pair_mirror_row_gap_mm": 18.951,
       "pair_symmetric": true,
+      "past_cap_wall": true,
       "polarity_consistent": true,
       "region": "IN2_REUSE",
       "row_relocate_steps": 2,
       "verify": {
-       "dist_mm": 5.594,
+       "dist_mm": 2.783,
        "kind": "pad",
-       "margin_mm": 5.244,
-       "net": "PCIE_DN_OUT4_N_U3",
+       "margin_mm": 2.433,
+       "net": "PCIE_DN_OUT7_P_MCIO",
        "required_mm": 0.35
       },
       "via_pair_center_mm": 18.951,
-      "x": 69.8,
+      "x": 86.875,
       "y": 70.434
      },
      "net": "PCIE_DN_OUT1_N_MCIO",
@@ -3646,18 +3668,19 @@
       "anchor": "GAP",
       "pair_mirror_row_gap_mm": 18.951,
       "pair_symmetric": true,
+      "past_cap_wall": true,
       "polarity_consistent": true,
       "region": "IN2_REUSE",
       "row_relocate_steps": 1,
       "verify": {
-       "dist_mm": 7.179,
+       "dist_mm": 2.685,
        "kind": "pad",
-       "margin_mm": 6.829,
-       "net": "GND",
+       "margin_mm": 2.335,
+       "net": "PCIE_UP0_P",
        "required_mm": 0.35
       },
       "via_pair_center_mm": 18.951,
-      "x": 69.8,
+      "x": 86.875,
       "y": 51.483
      },
      "net": "PCIE_DN_OUT1_P_MCIO",
@@ -3709,18 +3732,19 @@
       "anchor": "GAP",
       "pair_mirror_row_gap_mm": 31.585,
       "pair_symmetric": true,
+      "past_cap_wall": true,
       "polarity_consistent": true,
       "region": "IN2_REUSE",
       "row_relocate_steps": 3,
       "verify": {
-       "dist_mm": 9.939,
+       "dist_mm": 8.674,
        "kind": "pad",
-       "margin_mm": 9.589,
-       "net": "PCIE_DN_OUT4_N_U3",
+       "margin_mm": 8.324,
+       "net": "PCIE_DN_OUT7_P_MCIO",
        "required_mm": 0.35
       },
       "via_pair_center_mm": 31.585,
-      "x": 69.8,
+      "x": 86.875,
       "y": 76.751
      },
      "net": "PCIE_DN_OUT2_N_MCIO",
@@ -3772,18 +3796,19 @@
       "anchor": "GAP",
       "pair_mirror_row_gap_mm": 31.585,
       "pair_symmetric": true,
+      "past_cap_wall": true,
       "polarity_consistent": true,
       "region": "IN2_REUSE",
       "row_relocate_steps": 2,
       "verify": {
-       "dist_mm": 4.756,
+       "dist_mm": 1.725,
        "kind": "pad",
-       "margin_mm": 4.406,
-       "net": "GND",
+       "margin_mm": 1.375,
+       "net": "PCIE_UP3_N",
        "required_mm": 0.35
       },
       "via_pair_center_mm": 31.585,
-      "x": 69.8,
+      "x": 86.875,
       "y": 45.166
      },
      "net": "PCIE_DN_OUT2_P_MCIO",
@@ -3835,18 +3860,19 @@
       "anchor": "GAP",
       "pair_mirror_row_gap_mm": 44.219,
       "pair_symmetric": true,
+      "past_cap_wall": true,
       "polarity_consistent": true,
       "region": "IN2_REUSE",
       "row_relocate_steps": 4,
       "verify": {
-       "dist_mm": 15.687,
+       "dist_mm": 14.918,
        "kind": "pad",
-       "margin_mm": 15.337,
-       "net": "PCIE_DN_OUT4_N_U3",
+       "margin_mm": 14.568,
+       "net": "PCIE_DN_OUT7_P_MCIO",
        "required_mm": 0.35
       },
       "via_pair_center_mm": 44.219,
-      "x": 69.8,
+      "x": 86.875,
       "y": 83.068
      },
      "net": "PCIE_DN_OUT3_N_MCIO",
@@ -3898,18 +3924,19 @@
       "anchor": "GAP",
       "pair_mirror_row_gap_mm": 44.219,
       "pair_symmetric": true,
+      "past_cap_wall": true,
       "polarity_consistent": true,
       "region": "IN2_REUSE",
       "row_relocate_steps": 3,
       "verify": {
-       "dist_mm": 6.243,
+       "dist_mm": 2.06,
        "kind": "pad",
-       "margin_mm": 5.893,
+       "margin_mm": 1.71,
        "net": "GND",
        "required_mm": 0.35
       },
       "via_pair_center_mm": 44.219,
-      "x": 69.8,
+      "x": 86.875,
       "y": 38.849
      },
      "net": "PCIE_DN_OUT3_P_MCIO",
@@ -3961,18 +3988,19 @@
       "anchor": "GAP",
       "pair_mirror_row_gap_mm": 6.317,
       "pair_symmetric": true,
+      "past_cap_wall": true,
       "polarity_consistent": true,
       "region": "IN2_REUSE",
       "row_relocate_steps": 1,
       "verify": {
-       "dist_mm": 7.958,
+       "dist_mm": 6.307,
        "kind": "pad",
-       "margin_mm": 7.608,
-       "net": "PCIE_DN_OUT4_N_U3",
+       "margin_mm": 5.957,
+       "net": "PCIE_DN_OUT7_P_MCIO",
        "required_mm": 0.35
       },
       "via_pair_center_mm": 6.317,
-      "x": 69.8,
+      "x": 86.875,
       "y": 74.317
      },
      "net": "PCIE_DN_OUT4_N_MCIO",
@@ -4024,18 +4052,19 @@
       "anchor": "GAP",
       "pair_mirror_row_gap_mm": 6.317,
       "pair_symmetric": true,
+      "past_cap_wall": true,
       "polarity_consistent": true,
       "region": "GAP",
       "row_relocate_steps": 0,
       "verify": {
-       "dist_mm": 5.15,
+       "dist_mm": 1.725,
        "kind": "pad",
-       "margin_mm": 4.8,
-       "net": "PCIE_DN_OUT4_N_U3",
+       "margin_mm": 1.375,
+       "net": "PCIE_DN_OUT7_P_MCIO",
        "required_mm": 0.35
       },
       "via_pair_center_mm": 6.317,
-      "x": 69.8,
+      "x": 86.875,
       "y": 68.0
      },
      "net": "PCIE_DN_OUT4_P_MCIO",
@@ -4087,18 +4116,19 @@
       "anchor": "GAP",
       "pair_mirror_row_gap_mm": 18.951,
       "pair_symmetric": true,
+      "past_cap_wall": true,
       "polarity_consistent": true,
       "region": "IN2_REUSE",
       "row_relocate_steps": 2,
       "verify": {
-       "dist_mm": 13.412,
+       "dist_mm": 12.504,
        "kind": "pad",
-       "margin_mm": 13.062,
-       "net": "PCIE_DN_OUT4_N_U3",
+       "margin_mm": 12.154,
+       "net": "PCIE_DN_OUT7_P_MCIO",
        "required_mm": 0.35
       },
       "via_pair_center_mm": 18.951,
-      "x": 69.8,
+      "x": 86.875,
       "y": 80.634
      },
      "net": "PCIE_DN_OUT5_N_MCIO",
@@ -4150,18 +4180,19 @@
       "anchor": "GAP",
       "pair_mirror_row_gap_mm": 18.951,
       "pair_symmetric": true,
+      "past_cap_wall": true,
       "polarity_consistent": true,
       "region": "IN2_REUSE",
       "row_relocate_steps": 1,
       "verify": {
-       "dist_mm": 4.75,
+       "dist_mm": 1.725,
        "kind": "pad",
-       "margin_mm": 4.4,
-       "net": "GND",
+       "margin_mm": 1.375,
+       "net": "VREG1_U3",
        "required_mm": 0.35
       },
       "via_pair_center_mm": 18.951,
-      "x": 69.8,
+      "x": 86.875,
       "y": 61.683
      },
      "net": "PCIE_DN_OUT5_P_MCIO",
@@ -4213,18 +4244,19 @@
       "anchor": "GAP",
       "pair_mirror_row_gap_mm": 31.585,
       "pair_symmetric": true,
+      "past_cap_wall": true,
       "polarity_consistent": true,
       "region": "IN2_REUSE",
       "row_relocate_steps": 3,
       "verify": {
-       "dist_mm": 19.397,
+       "dist_mm": 18.78,
        "kind": "pad",
-       "margin_mm": 19.047,
-       "net": "PCIE_DN_OUT4_N_U3",
+       "margin_mm": 18.43,
+       "net": "PCIE_DN_OUT7_P_MCIO",
        "required_mm": 0.35
       },
       "via_pair_center_mm": 31.585,
-      "x": 69.8,
+      "x": 86.875,
       "y": 86.951
      },
      "net": "PCIE_DN_OUT6_N_MCIO",
@@ -4276,18 +4308,19 @@
       "anchor": "GAP",
       "pair_mirror_row_gap_mm": 31.585,
       "pair_symmetric": true,
+      "past_cap_wall": true,
       "polarity_consistent": true,
       "region": "IN2_REUSE",
       "row_relocate_steps": 2,
       "verify": {
-       "dist_mm": 5.594,
+       "dist_mm": 2.783,
        "kind": "pad",
-       "margin_mm": 5.244,
-       "net": "PCIE_DN_OUT0_N_U3",
+       "margin_mm": 2.433,
+       "net": "PCIE_DN_OUT3_P_MCIO",
        "required_mm": 0.35
       },
       "via_pair_center_mm": 31.585,
-      "x": 69.8,
+      "x": 86.875,
       "y": 55.366
      },
      "net": "PCIE_DN_OUT6_P_MCIO",
@@ -4339,18 +4372,19 @@
       "anchor": "GAP",
       "pair_mirror_row_gap_mm": 44.219,
       "pair_symmetric": true,
+      "past_cap_wall": true,
       "polarity_consistent": true,
       "region": "IN2_REUSE",
       "row_relocate_steps": 4,
       "verify": {
-       "dist_mm": 25.543,
+       "dist_mm": 25.077,
        "kind": "pad",
-       "margin_mm": 25.193,
-       "net": "PCIE_DN_OUT4_N_U3",
+       "margin_mm": 24.727,
+       "net": "PCIE_DN_OUT7_P_MCIO",
        "required_mm": 0.35
       },
       "via_pair_center_mm": 44.219,
-      "x": 69.8,
+      "x": 86.875,
       "y": 93.268
      },
      "net": "PCIE_DN_OUT7_N_MCIO",
@@ -4402,18 +4436,19 @@
       "anchor": "GAP",
       "pair_mirror_row_gap_mm": 44.219,
       "pair_symmetric": true,
+      "past_cap_wall": true,
       "polarity_consistent": true,
       "region": "IN2_REUSE",
       "row_relocate_steps": 3,
       "verify": {
-       "dist_mm": 5.591,
+       "dist_mm": 1.725,
        "kind": "pad",
-       "margin_mm": 5.241,
-       "net": "GND",
+       "margin_mm": 1.375,
+       "net": "PCIE_UP0_N",
        "required_mm": 0.35
       },
       "via_pair_center_mm": 44.219,
-      "x": 69.8,
+      "x": 86.875,
       "y": 49.049
      },
      "net": "PCIE_DN_OUT7_P_MCIO",
@@ -5650,8 +5685,8 @@
      "PCIE_UP_OUT7_P_U7"
     ]
    },
-   "input_fp": "15218f47f80af738c8daeeed3526dda74a3eb73b86ee64001f73c87e77f96e09",
-   "solve_ref": "solve-landing-15218f47f80af738",
+   "input_fp": "418ed943dbd692355f34dae470aeb899e735758083d0cfa8636c10519ded4f24",
+   "solve_ref": "solve-landing-418ed943dbd69235",
    "verdict": "INFEASIBLE"
   },
   "solve": {
@@ -5688,7 +5723,7 @@
     },
     "version": "4.0"
    },
-   "input_fp": "15218f47f80af738c8daeeed3526dda74a3eb73b86ee64001f73c87e77f96e09",
+   "input_fp": "418ed943dbd692355f34dae470aeb899e735758083d0cfa8636c10519ded4f24",
    "results": {
     "PCIE_DN0": {
      "base": "DN0",
@@ -5941,12 +5976,12 @@
       {
        "esc": {
         "kind": "LANDING",
-        "reason": "落点驱动逃逸无净空（落点 P=(69.8, 57.8) N=(69.8, 64.117)，sx 扫描 69.8→64.3）",
+        "reason": "落点驱动逃逸无净空（落点 P=(86.875, 57.8) N=(86.875, 64.117)，sx 扫描 86.875→64.3）",
         "status": "INFEASIBLE"
        },
        "flip": true,
        "name": "out_MCIO",
-       "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(69.8, 57.8) N=(69.8, 64.117)，sx 扫描 69.8→64.3）",
+       "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(86.875, 57.8) N=(86.875, 64.117)，sx 扫描 86.875→64.3）",
        "status": "INFEASIBLE"
       }
      ],
@@ -6212,12 +6247,12 @@
       {
        "esc": {
         "kind": "LANDING",
-        "reason": "落点驱动逃逸无净空（落点 P=(69.8, 51.483) N=(69.8, 70.434)，sx 扫描 69.8→62.5）",
+        "reason": "落点驱动逃逸无净空（落点 P=(86.875, 51.483) N=(86.875, 70.434)，sx 扫描 86.875→62.5）",
         "status": "INFEASIBLE"
        },
        "flip": true,
        "name": "out_MCIO",
-       "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(69.8, 51.483) N=(69.8, 70.434)，sx 扫描 69.8→62.5）",
+       "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(86.875, 51.483) N=(86.875, 70.434)，sx 扫描 86.875→62.5）",
        "status": "INFEASIBLE"
       }
      ],
@@ -6774,12 +6809,12 @@
       {
        "esc": {
         "kind": "LANDING",
-        "reason": "落点驱动逃逸无净空（落点 P=(69.8, 38.849) N=(69.8, 83.068)，sx 扫描 69.8→55.3）",
+        "reason": "落点驱动逃逸无净空（落点 P=(86.875, 38.849) N=(86.875, 83.068)，sx 扫描 86.875→55.3）",
         "status": "INFEASIBLE"
        },
        "flip": true,
        "name": "out_MCIO",
-       "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(69.8, 38.849) N=(69.8, 83.068)，sx 扫描 69.8→55.3）",
+       "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(86.875, 38.849) N=(86.875, 83.068)，sx 扫描 86.875→55.3）",
        "status": "INFEASIBLE"
       }
      ],
@@ -7622,12 +7657,12 @@
       {
        "esc": {
         "kind": "LANDING",
-        "reason": "落点驱动逃逸无净空（落点 P=(69.8, 55.366) N=(69.8, 86.951)，sx 扫描 69.8→62.5）",
+        "reason": "落点驱动逃逸无净空（落点 P=(86.875, 55.366) N=(86.875, 86.951)，sx 扫描 86.875→62.5）",
         "status": "INFEASIBLE"
        },
        "flip": true,
        "name": "out_MCIO",
-       "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(69.8, 55.366) N=(69.8, 86.951)，sx 扫描 69.8→62.5）",
+       "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(86.875, 55.366) N=(86.875, 86.951)，sx 扫描 86.875→62.5）",
        "status": "INFEASIBLE"
       }
      ],
@@ -7777,12 +7812,12 @@
       {
        "esc": {
         "kind": "LANDING",
-        "reason": "落点驱动逃逸无净空（落点 P=(69.8, 49.049) N=(69.8, 93.268)，sx 扫描 69.8→64.3）",
+        "reason": "落点驱动逃逸无净空（落点 P=(86.875, 49.049) N=(86.875, 93.268)，sx 扫描 86.875→64.3）",
         "status": "INFEASIBLE"
        },
        "flip": true,
        "name": "out_MCIO",
-       "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(69.8, 49.049) N=(69.8, 93.268)，sx 扫描 69.8→64.3）",
+       "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(86.875, 49.049) N=(86.875, 93.268)，sx 扫描 86.875→64.3）",
        "status": "INFEASIBLE"
       }
      ],
@@ -10678,7 +10713,7 @@
      "status": "INFEASIBLE"
     }
    },
-   "solve_ref": "solve-solve-15218f47f80af738",
+   "solve_ref": "solve-solve-418ed943dbd69235",
    "solved_pairs": 2
   }
  },
@@ -10689,7 +10724,7 @@
     "SolveInput"
    ],
    "output_type": "FeasibilityVerdict",
-   "solve_ref": "solve-feasibility-15218f47f80af738",
+   "solve_ref": "solve-feasibility-418ed943dbd69235",
    "stage": "feasibility"
   },
   {
@@ -10697,7 +10732,7 @@
     "SolveInput"
    ],
    "output_type": "CapacityReport",
-   "solve_ref": "solve-capacity-15218f47f80af738",
+   "solve_ref": "solve-capacity-418ed943dbd69235",
    "stage": "capacity"
   },
   {
@@ -10705,7 +10740,7 @@
     "CapacityReport"
    ],
    "output_type": "AllocTable",
-   "solve_ref": "solve-alloc-15218f47f80af738",
+   "solve_ref": "solve-alloc-418ed943dbd69235",
    "stage": "alloc"
   },
   {
@@ -10713,7 +10748,7 @@
     "AllocTable"
    ],
    "output_type": "LandingTable",
-   "solve_ref": "solve-landing-15218f47f80af738",
+   "solve_ref": "solve-landing-418ed943dbd69235",
    "stage": "landing"
   },
   {
@@ -10722,7 +10757,7 @@
     "LandingTable"
    ],
    "output_type": "SolveResult",
-   "solve_ref": "solve-solve-15218f47f80af738",
+   "solve_ref": "solve-solve-418ed943dbd69235",
    "stage": "solve"
   }
  ]

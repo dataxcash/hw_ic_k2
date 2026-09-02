@@ -261,6 +261,28 @@ def derive_cap_walls(spec: dict) -> list:
     }]
 
 
+def derive_cap_wall_pads(real_board: Path, spec: dict) -> list:
+    """真板 → MCIO 侧串联 AC 电容 pad 集（series_cap_wall 墙位置源）。
+
+    过滤：SPEC capacitor_walls.ac_coupling.downstream_refs（C17-C32 等
+    footprint refdes）∩ net 尾 _MCIO ——每网恰 1 个墙 pad（= 该网最大 x pad，
+    即 demands 锚定 pad），与 escape_landing 网级 gate 的『墙 pad ∩ 网名』
+    自关联精确匹配。墙位置全走 SPEC refdes 声明 + 真板解析，代码零坐标。"""
+    refs = set((spec.get("capacitor_walls") or {}).get("ac_coupling", {})
+               .get("downstream_refs") or [])
+    b = BoardParser(str(real_board)).parse()
+    out = []
+    for p in b.pads:
+        if p.footprint_ref not in refs:
+            continue
+        if not (p.net or "").endswith("_MCIO"):
+            continue
+        out.append({"net": p.net, "ref": p.footprint_ref,
+                    "x": _r3(p.pos[0]), "y": _r3(p.pos[1]),
+                    "w": _r3(p.size[0]), "h": _r3(p.size[1])})
+    return sorted(out, key=lambda e: e["net"])
+
+
 def build_config(base_cfg: dict) -> dict:
     """route_model_config.json + 声明段（路径注入，非引擎硬编码）。
 
@@ -312,6 +334,7 @@ def main() -> int:
     nets = sorted({d["base"] for d in capacity_demands})   # 18 base（去重排序，确定性）
     via_zones = derive_via_zones(spec, escape_spec, j2_pads, REAL_BOARD)
     cap_walls = derive_cap_walls(spec)
+    cap_wall_pads_mcio = derive_cap_wall_pads(REAL_BOARD, spec)
     spec["derived"] = {
         "nets": nets,
         "landing_demands": landing_demands,
@@ -323,6 +346,7 @@ def main() -> int:
         "capacity_demands": capacity_demands,
         "via_zones": via_zones,
         "cap_walls": cap_walls,
+        "cap_wall_pads_MCIO": cap_wall_pads_mcio,
         "derivation_note": "从真板 k2_v4.kicad_pcb + SPEC 生成（P3-B 组装，引擎零改动）",
     }
 
