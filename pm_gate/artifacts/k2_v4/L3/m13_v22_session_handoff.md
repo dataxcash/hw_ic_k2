@@ -33,11 +33,14 @@
   8.9×22.8、ball 0.6 TYP、(0.3) TYP gaps、非均匀分组逃逸优化）。→ "无公开源"缺口**否决**。
 - **剩余缺口（诚实标注）**：ZDG0354A 图内球位**标签为 tabular/可读布局，非物理定位**（实测列字母轴
   scale ≈ 34.8 pts/mm 为行号轴 4.9 pts/mm 的 7 倍，真实图纸不可能；行号轴 pts/row p50≈2.87 与 0.6mm
-  名义不符）→ 图中标签坐标**不能**直接校准为物理 mm。精确逐球 X/Y 需**机器球栅 CAD footprint**
-  （EasyEDA / Ultra Librarian / Intel PCIe5 retimer spec registration-gated / Astera
-  `PTx16xx_supplemental_info.xlsx` 唯一已知电子表格形态，gated）+ 对 ZDG0354A 图交叉验证。
+  名义不符）→ 图中标签坐标**不能**直接校准为物理 mm。**逐类穷举（librarian，2026-09-05）终判：**
+  **无任何公开可得的机器可读逐球 X/Y 资产**——KiCad/grep.app/GitHub 0 命中、SnapEDA/UL/SamacSys
+  login-gated、Intel spec 纯 raster figure（无矢量/文本坐标表）、唯一机器资产 =
+  Astera `PTx16xx_supplemental_info.xlsx`（**FAE-gated**，vendor-declared，同 footprint）。
 - **决定性判定**：`escape_landing.analyze_pad_heap(pads)` 需物理 pad X/Y；逻辑球名集（列字母+行号）
   不能喂入 → **决定性逃逸项未能工具级验证 → 层数维持 INDETERMINATE**。**禁宣布"6L 闭合"。**
+  **禁动作（宪法 §8.8）**：禁止用 Intel Fig3-5 raster vision 投影造"派生球栅"喂引擎宣称为工具验证
+  （= v21 评审"假成功"复刻：置信度提升≠验证能力提升）。
 
 ## 2. 已闭合 vs 待闭合（vs v21 评审 §2 阻塞项）
 

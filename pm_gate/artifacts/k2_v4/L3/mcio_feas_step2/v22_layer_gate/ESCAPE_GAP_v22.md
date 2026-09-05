@@ -46,3 +46,25 @@
 - ✅ 走廊闭合工具背书（capacity_audit FEASIBLE，见 CORRIDOR_CLOSURE_v22）。
 - ✅ "物理球栅无公开源"被否决 → 缺口收窄为"机器 CAD 精确 mm 坐标"（模型层资产）。
 - ❌ 决定性逃逸逐球求解：仍阻塞（机器球栅资产缺）→ 层数未定案。
+
+## 6. 机器球栅资产可得性终判（librarian 穷举，2026-09-05，否决一切"可自建"路径）
+
+对 5 类来源 + 加分项穷举（无遗漏、未造数），结论 = **无任何公开可得的机器可读逐球 X/Y 资产**：
+
+| 来源 | 判定 | 证据 |
+|---|---|---|
+| KiCad/EDA footprint 库（GitHub/GitLab） | ❌ 不存在 | grep.app(1M+ repo) 对 BCM85657/DS320PR1601/DS160PR1601/PT5161L/PM8658A **0 命中**（仅 Linux hwmon `pt5161l.c`，无几何）；GitHub repo 搜索 0；kicad-unofficial 无 retimer；官方 Package_BGA 无 354-ball |
+| SnapEDA / Ultra Librarian / SamacSys CSE | ❌ login-gated/缺席 | TI 只路由到 Ultra Librarian（注册/email 必需）；SnapEDA Cloudflare 403；SamacSys 403 需安装器 |
+| **Astera `PTx16xx_supplemental_info.xlsx`** | ⚠️ **唯一最高可信机器资产，但 FAE-gated** | PT5161LRS/PT4161LRS datasheet §5.2 明示"detailed land pad coordinates, sizes, rotation"；ampheo 镜像/asteralabs wp-content/GitHub 全 404 → **仅经 Astera FAE/注册可得** |
+| Broadcom BCM85657 | ❌ 仅 product brief figure | 官方文档 login-gated；无坐标表 |
+| Intel PCIe4.0 Retimer spec | ❌ 纯 raster figure | 实析 §3.4 Fig3-4 物理球栅(p20)/§3.5 Fig3-5 Land Pattern(p21) **均为嵌入 raster**，零矢量/零文本层/无坐标表；text="for reference only"；OCR 仅得 pad legend 计数 354 + group callouts (0.6)/(0.4)/(0.85)/(1.2) TYP，均藏于 raster 内 |
+| TI ZDG0354A 机械图 | ❌ 非物理可读网格 | 354 球名全在 pp2-3，但 label+矢量球圆落在**非物理 readable grid**（行轴 Δ 与列轴 Δ 倍数失真）；(0.6)/(0.3) TYP 为文本但标注非比例图上 |
+
+**结论（决定性）**：`escape_landing.analyze_pad_heap` 需物理 pad X/Y；唯一机器资产（Astera xlsx）FAE-gated，其余全为 raster 图/可读标签网格。**无法在本环境（无 FAE/无 CAD 账号）取得机器球栅 mm 坐标 → 决定性逃逸项无法由引擎工具精确验证。** 
+
+**禁动作（宪法 §8.8 / v21 评审失败签名）**：禁止用 Intel Fig3-5 raster **vision 投影**造一个"派生球栅 JSON"喂引擎并宣称为工具验证——那是"置信度提升≠验证能力提升"的假成功复刻（vision 投影 = figure-grade ±图准，非 vendor-declared）。层数**维持 INDETERMINATE**，不闭 6L、不闭 8L。
+
+**下一步唯一路径（外部输入，超出会话边界）**：
+1. 经 Astera FAE 索 `PTx16xx_supplemental_info.xlsx`（vendor-declared 逐 pad 坐标，同 footprint，最高可信）。
+2. 或取得登录态 CAD（Ultra Librarian / SnapEDA / Intel spec registration）导出机器球栅。
+→ 资产到位 → `ds320pr1601_ballmap` JSON → `escape_landing` 精确一次求解 → 过闸冻 6L / 不过回 8L（不重跑）。
