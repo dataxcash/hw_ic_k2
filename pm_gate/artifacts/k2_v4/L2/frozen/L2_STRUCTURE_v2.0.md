@@ -3,10 +3,11 @@
 > 状态：**已冻结（2026-09-05，ECN v21，用户授权）**。为 L3 施工图的约束包络，
 > 超脱并替代 `L2_STRUCTURE_v1.0.md`（8 层/电容墙/WQFN 方案，作废，git 存档）。
 > 变更依据：L1_TOPOLOGY_v2.0（单 DS320PR1601/46mm/6L 试用/单面）+ v20 叠层重估。
-> **层数 = 未定案（6L 试用 vs 8L 兜底）**：本文件按 6L 试用结构冻结，但**决定性逃逸项
-> （75% via/50% 穿越密度）未做工具精确验证 = known_gap**（工具缺 DS320PR1601 物理球栅坐标资产），
-> 逃逸验证为 **L3 开工前硬门**（不是 L3 运行时回退）。v21 初始"6L 闭合"判定被非执行者对抗评审
-> FAIL，见 v21_realroute/REVIEW_ADVERSARIAL_v21.md。
+> **层数 = 已定案 6L（2026-09-05 per-ball 逃逸引擎验证 FEASIBLE）**：本文件由「6L 试用结构」升级为
+> 「6L 定案结构」；原 known_gap（决定性逃逸项未做工具精确验证、工具缺 DS320PR1601 物理球栅坐标资产）
+> **已闭合**——v25 取得真实 354 球坐标，v26 用模型层新增 per-ball 逃逸引擎（⑦）逐球判定通过。
+> v21 初始"6L 闭合"判定曾被非执行者对抗评审 FAIL（见 v21_realroute/REVIEW_ADVERSARIAL_v21.md），
+> 本次在**工具级 per-ball 验证后**重新定案，非评审 FAIL 前的状态复辟。
 > 与 L2_STRUCTURE_v1.0 冲突以本文件为准。
 
 ## 叠层分配（冻结）
@@ -57,27 +58,31 @@
   逃逸优化阵列）**——lane 分组 + 组间 0.3/0.4/0.8/1.2mm 布线通道，目的 = 每差分对单层逃逸。
 - 列带（全 lane 一致，datasheet Table 5-1）：**A_PER@col1-2、B_PET@col7-10、A_PET@col26-29、
   B_PER@col34-35**；有效信号球 64（8/16 lane）；25% 外环 F.Cu 直出、75% 需 via、50%（16 对）穿越。
-- **逃逸精确逐球求解 = known_gap（决定性项未工具验证）**：物理球栅坐标无公开源（需 Intel PCIe5
-  retimer spec 图 / TI EVM）。**现为封装设计级/结构级**判定（Intel 设计目标 = 单层逃逸），
-  **非工具精确解**；逃逸验证 = L3 开工前硬门。层数（6L vs 8L）定案待此验证。
+- **逃逸精确逐球求解 = 工具级已闭合（v25 坐标 + v26 per-ball 引擎，2026-09-05）**：v25 从 UltraLibrarian
+  取得 `ds320pr1601_ballmap.json`（354 真实逐球 x/y mm,vendor-validated），v26 新增模型层
+  per-ball 逃逸引擎（⑥⑦）逐球判定 FEASIBLE → 层数定案 6L。**不再是 known_gap、不再"非工具精确解"**；
+  逃逸验证（L3 开工前硬门）已过闸。
 
 ## PDN（冻结）
 
 - 单 3.3V（VCC1-4=30 球，内部 LDO）；去耦 0402/0603 就近 VCC 球；B.Cu 空置。
 - 禁止电源网拉细线（checklist C.3 结转）。
 
-## 层数定案闸（L3 开工前硬门，非运行时回退）
+## 层数定案闸（L3 开工前硬门，非运行时回退）——已触发并定案
 
-**层数（6L vs 8L）= 未定案**。6L 逃逸验证 = **L3 开工前硬门**：在取得 Intel footprint 物理坐标资产后，
-用引擎（escape_landing / capacity_audit）跑一次精确逃逸求解（禁暴力迭代）。判定：
+**层数（6L vs 8L）= 6L 定案**。原定案闸：在取得 Intel footprint 物理坐标资产后，
+用引擎跑一次精确逃逸求解（禁暴力迭代）。**本 m14 v26 已执行该闸**：
 
-- **通过** → 6L 正式冻结（更新本文件层数行）→ 进入 L3 施工。
-- **不可解**（任一 lane 对在组间通道/翼带 keepout 内 vias 间距冲突；REFCLK 在 6L In2 与 8 对穿越 +
-  端区 stub 争抢不可满足）→ **不重跑 6L**，直接改冻结为 **8L**（F/G/S/G/P/G/S/B，In6 承接逃逸/REFCLK
-  溢出 + 额外 GND + B.Cu 可用），成本 +50~100% 可接受（v20 用户已批；8L 为旧板已验证形态的兜底参考）。
-
-> **纪律**：此闸在 L3 开工前执行，层数在闸后定案写入本文件；禁止把"6L 闭合"当作已定案下传 L3。
-> （v21 初始"6L 闭合"判定已被非执行者对抗评审 FAIL，见 REVIEW_ADVERSARIAL_v21.md。）
+- **闸前**：v25 取得 UltraLibrarian 真实 354 球坐标（vendor-validated）→ 原"物理球栅资产不可得"
+  阻塞解除（v22/v23 缺口闭合）。
+- **闸中**：模型层 Per-ball 逃逸引擎（路径 a ECN：`routing_topology_gate.py` 新增 ⑦
+  `BGA_PER_BALL_ESCAPE` + `escape_landing.py` 新增 `bga_per_ball_escape`）消费
+  `ds320pr1601_ballmap.json` + U1@(93.8,53.7) 逐球判定一次对。
+- **判定通过（FEASIBLE）**：K2 8-of-16 lane 64 信号球 = 32 F.Cu 直出 + 32 ball-via→In2，
+  穿越 16 对；每带 8 对 fan-out 1.2→1.46（11.68≤23.36），N/S 翼各 8 对 4.8≤16.2/18.8，
+  via 净空 0.6≥0.427，REFCLK 预留，deficits 0 → **6L 正式冻结，8L 兜底不启用**。
+- **纪律复核**：此闸在 L3 开工前执行（已完成）；本次为工具级 per-ball 验证后定案，
+  非 v21 评审 FAIL 前状态复辟。**层数现在可安全下传 L3。**
 
 ## 硬约束（L3 必须满足）
 
