@@ -1,0 +1,260 @@
+{
+ "bottleneck_stage": "TRACK",
+ "determinism": "sorted 固定序 + round(x,3)，零搜索/零随机，毫秒级",
+ "global_pressure": 0.64,
+ "max_flow_pairs": 50,
+ "pressure_limit": 1.0,
+ "probe": "capacity_audit",
+ "rules": {
+  "clearance": 0.175,
+  "cross_layer_degradation": 1.0,
+  "inter_pair_spacing": 1.46,
+  "intra_pair_gap": 0.175,
+  "line_width": 0.205,
+  "via_drill_d": 0.175,
+  "via_outer_d": 0.35,
+  "via_pair_center_min": 0.525
+ },
+ "stages": {
+  "CAP_WALL": {
+   "capacity_total": 0,
+   "chains": [],
+   "demand_total": 0,
+   "ok": true,
+   "per_resource": {},
+   "pressure": null,
+   "stage": "CAP_WALL"
+  },
+  "TRACK": {
+   "capacity_total": 50,
+   "demand_total": 32,
+   "ok": true,
+   "per_resource": {
+    "E_J2|DN_IN": {
+     "band": "DN_IN",
+     "capacity": 14,
+     "corridor": "E_J2",
+     "degradation": 1.0,
+     "degraded": false,
+     "demand_pairs": 8,
+     "encroachment": [
+      {
+       "encroached_by": [
+        {
+         "kind": "DEVICE",
+         "label": "U1 body",
+         "obstacle_y": [
+          49.2,
+          58.2
+         ],
+         "overlap_mm": 0.19
+        }
+       ],
+       "track_y": 58.2
+      },
+      {
+       "encroached_by": [
+        {
+         "kind": "DEVICE",
+         "label": "U1 body",
+         "obstacle_y": [
+          49.2,
+          58.2
+         ],
+         "overlap_mm": 0.09
+        }
+       ],
+       "track_y": 58.3
+      }
+     ],
+     "lane_pitch_mm": 1.46,
+     "layer": "F.Cu",
+     "ok": true,
+     "pair_envelope_mm": 0.38,
+     "pair_fit": true,
+     "pressure": 0.571,
+     "tracks_total": 208,
+     "tracks_usable": 206
+    },
+    "E_J2|UP_OUT": {
+     "band": "UP_OUT",
+     "capacity": 11,
+     "corridor": "E_J2",
+     "degradation": 1.0,
+     "degraded": false,
+     "demand_pairs": 8,
+     "encroachment": [
+      {
+       "encroached_by": [
+        {
+         "kind": "DEVICE",
+         "label": "U1 body",
+         "obstacle_y": [
+          49.2,
+          58.2
+         ],
+         "overlap_mm": 0.09
+        }
+       ],
+       "track_y": 49.1
+      },
+      {
+       "encroached_by": [
+        {
+         "kind": "DEVICE",
+         "label": "U1 body",
+         "obstacle_y": [
+          49.2,
+          58.2
+         ],
+         "overlap_mm": 0.19
+        }
+       ],
+       "track_y": 49.2
+      }
+     ],
+     "lane_pitch_mm": 1.46,
+     "layer": "F.Cu",
+     "ok": true,
+     "pair_envelope_mm": 0.38,
+     "pair_fit": true,
+     "pressure": 0.727,
+     "tracks_total": 163,
+     "tracks_usable": 161
+    },
+    "W_MCIO|J3_N": {
+     "band": "J3_N",
+     "capacity": 11,
+     "corridor": "W_MCIO",
+     "degradation": 1.0,
+     "degraded": false,
+     "demand_pairs": 8,
+     "encroachment": [
+      {
+       "encroached_by": [
+        {
+         "kind": "DEVICE",
+         "label": "U1 body",
+         "obstacle_y": [
+          49.2,
+          58.2
+         ],
+         "overlap_mm": 0.09
+        }
+       ],
+       "track_y": 49.1
+      },
+      {
+       "encroached_by": [
+        {
+         "kind": "DEVICE",
+         "label": "U1 body",
+         "obstacle_y": [
+          49.2,
+          58.2
+         ],
+         "overlap_mm": 0.19
+        }
+       ],
+       "track_y": 49.2
+      }
+     ],
+     "lane_pitch_mm": 1.46,
+     "layer": "F.Cu",
+     "ok": true,
+     "pair_envelope_mm": 0.38,
+     "pair_fit": true,
+     "pressure": 0.727,
+     "tracks_total": 163,
+     "tracks_usable": 161
+    },
+    "W_MCIO|J4_S": {
+     "band": "J4_S",
+     "capacity": 14,
+     "corridor": "W_MCIO",
+     "degradation": 1.0,
+     "degraded": false,
+     "demand_pairs": 8,
+     "encroachment": [
+      {
+       "encroached_by": [
+        {
+         "kind": "DEVICE",
+         "label": "U1 body",
+         "obstacle_y": [
+          49.2,
+          58.2
+         ],
+         "overlap_mm": 0.19
+        }
+       ],
+       "track_y": 58.2
+      },
+      {
+       "encroached_by": [
+        {
+         "kind": "DEVICE",
+         "label": "U1 body",
+         "obstacle_y": [
+          49.2,
+          58.2
+         ],
+         "overlap_mm": 0.09
+        }
+       ],
+       "track_y": 58.3
+      }
+     ],
+     "lane_pitch_mm": 1.46,
+     "layer": "F.Cu",
+     "ok": true,
+     "pair_envelope_mm": 0.38,
+     "pair_fit": true,
+     "pressure": 0.571,
+     "tracks_total": 208,
+     "tracks_usable": 206
+    }
+   },
+   "pressure": 0.64,
+   "stage": "TRACK",
+   "unmapped_demands": []
+  },
+  "VIA": {
+   "capacity_total": 69,
+   "demand_total": 32,
+   "ok": true,
+   "per_resource": {
+    "WING_N": {
+     "capacity_pairs": 30,
+     "demand_pairs": 16,
+     "free_span_mm": 16.2,
+     "kind": "CHIP",
+     "need_mm": 8.4,
+     "obstacle_occupancy_mm": 0.0,
+     "occupation_rate": 0.519,
+     "ok": true,
+     "span_mm": 16.2,
+     "via_slot_mm": 0.525
+    },
+    "WING_S": {
+     "capacity_pairs": 39,
+     "demand_pairs": 16,
+     "free_span_mm": 20.8,
+     "kind": "CHIP",
+     "need_mm": 8.4,
+     "obstacle_occupancy_mm": 0.0,
+     "occupation_rate": 0.404,
+     "ok": true,
+     "span_mm": 20.8,
+     "via_slot_mm": 0.525
+    }
+   },
+   "pressure": 0.464,
+   "stage": "VIA",
+   "unknown_zones": []
+  }
+ },
+ "total_demand_pairs": 32,
+ "verdict": "FEASIBLE",
+ "version": "1.0"
+}

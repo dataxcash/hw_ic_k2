@@ -56,6 +56,10 @@
     "default_layer": "F.Cu",
     "pitch_fallback": 1.08
   },
+  "capacity_audit": {
+    "inter_pair_spacing": 1.46,
+    "note": "v22 用户裁决(2026-09-05): inter_pair_spacing 语义 = 0.875 对间铜边净空 → 对中心距 1.46mm. 引擎 capacity_audit 按对中心距(pitch)计, 故注入 1.46 (勿用 drc_rules.json diff_pair.inter_pair_spacing=0.875, 其为铜边净空口径)"
+  },
   "band_polarity": {
     "upper": "P_BOTTOM",
     "lower": "P_BOTTOM",
