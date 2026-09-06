@@ -61,3 +61,19 @@ evaluated FEASIBLE（消除 not_configured 假静默）。此为 C3 修复的**�
 
 > 注入注意：新增 ref `DS320PR1601`（勿覆盖 U3/U7 遗留项直至原理图 ECO 完成换名）；
 > engine v1.4 per_wing 口径已按 inter_pair_spacing=1.46（C2），报告 crossing_need=11.68。
+
+## 5. v28 ECO 执行补记（2026-09-06，用户授权路径 b 范围 A）——C3 闭合
+
+- **生产 SPEC 本体再生完成**：`SPEC_k2_v4.json`（sha `7eaad223` → **`8732cb75`**，备份
+  `.bak_v28_eco`）——描述层对齐：① redriver U3/U7(WQFN-64)→**DS320PR1601 主条目** +
+  `bga_escape.per_ball` 注入（354 ballmap，契约 1:1 v27 POC）；U3/U7 降级
+  **legacy_alloc_holder**（alloc 段名 `out_U3/out_U7` + u3_side_bridges 折线映射所需，
+  scope-B alloc 重解后移除）；② stackup 8L→6L（F/G/S/G/P/B）；③ board outline_y
+  38→46mm；④ capacitor_walls 移除；⑤ 顶层 `_v28_eco` 注记（scope + legacy_note）。
+- **生产模型验证**：`RoutingTopologyGate.plan()` v1.4 真执行 → verdict
+  **FEASIBLE_WITH_MORPH_GAP**（与 v27 基线同 verdict，无回归；PN polarity 混合 = 既有
+  形态缺口，评审已接受）+ **⑦ BGA_PER_BALL_ESCAPE = evaluated → DS320PR1601 FEASIBLE
+  （64/32/32/16/deficits 0）** → **not_configured 假静默消除（生产本体级）**。
+- **C3 闭合**（范围 A）：SPEC 再生对齐 + ⑦ evaluated FEASIBLE = 评审条件达成；
+  可复跑资产 `reproduce_c3_spec_regen_draft.py`（REGEN_DRAFT_PASS）。
+  scope-B（真板物理 ECO + U3/U7 全移除 + alloc 重解 + layer_plan 施工段 6L 化）随 L3。

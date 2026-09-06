@@ -1,20 +1,23 @@
 {
-  "tasks": {
-    "mcio_feas": {
-      "name": "MCIO \u5e03\u5c40\u53ef\u884c\u6027\u51e0\u4f55\u5224\u5b9a (L2 \u7269\u7406\u53ef\u884c\u6027\u8bc1\u636e)",
-      "s_state": "S0",
-      "deps": [
-        "L1_frozen"
-      ],
-      "plan_artifacts": [
-        "L3/mcio_feasibility_plan.md"
-      ],
-      "outputs": [
-        "L3/mcio_q2_solution.json",
-        "L3/m13_mcio_layout_feasibility_report.md"
-      ],
-      "drc_evidence": null,
-      "gate_budget": 3
-    }
+ "tasks": {
+  "mcio_feas": {
+   "name": "MCIO 布局可行性几何判定 (L2 物理可行性证据)",
+   "s_state": "S0",
+   "deps": [
+    "L1_frozen"
+   ],
+   "plan_artifacts": [
+    "L3/mcio_feas_step2/per_ball_escape_6L_report.json",
+    "L3/mcio_feas_step2/REVIEW_ADVERSARIAL_v26.md",
+    "L3/mcio_feas_step2/m13_v28_session_handoff.md"
+   ],
+   "outputs": [
+    "L3/mcio_feas_step2/c1_via_reclass_report.json",
+    "L3/mcio_feas_step2/c5_chip_level_expect_matrix_v28.json",
+    "L3/mcio_feas_step2/spec_regen_diff_checklist_v28.json"
+   ],
+   "drc_evidence": null,
+   "gate_budget": 3
   }
+ }
 }

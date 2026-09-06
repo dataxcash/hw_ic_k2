@@ -33,3 +33,14 @@
 - 真板 = `k2/k2_v4.kicad_pcb`（read-only，BoardParser L0 解析，508 pads）。
 - J3/J4/J2 pad→net 全表见本记录 §1（`PCIE_*` 前缀唯一化，P/N 各 8 lane + 2 REFCLK）。
 - sch 真源 = `k2/sch/k2_sch.kicad_sch` + v5_* 子页（DS320PR1601 0 命中、DS160PR810 旧符号）。
+
+## 4. v28 ECO 执行补记（2026-09-06，用户授权路径 b 范围 A）——C5 芯片级（范围 A）闭合
+
+- **芯片级核对（范围 A）**：DS320PR1601 网表未落地前，芯片级核对 = per_ball 注入 vs
+  `c5_chip_level_expect_matrix_v28.json`（期望矩阵，派生自已冻结 L1 v2.0 信号流 + 同源
+  354 ballmap）**机器比对一致**：64 球全名/signal 逐球匹配、`selected_lanes=[0..7]`、
+  `port_to_corridor {A:east}` = A 端口=host/J2 侧（L1 穿越语义）、ballmap 无 REFCLK 球
+  （REFCLK 直通断言）→ **C5_SCOPE_A_MATCH**。
+- **C5 闭合（范围 A）**：连接器级真板实测一致（§1，v27）+ 芯片级注入/期望矩阵一致
+  （本补记）。scope-B：真板物理 ECO 落地后按期望矩阵一次实测核对（5 条 check_items），
+  禁运行时改判。

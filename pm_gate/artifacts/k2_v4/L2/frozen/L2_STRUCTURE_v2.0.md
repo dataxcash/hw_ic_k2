@@ -3,10 +3,15 @@
 > 状态：**已冻结（2026-09-05，ECN v21，用户授权；2026-09-06 v26 评审降级补记）**。
 > 为 L3 施工图的约束包络，超脱并替代 `L2_STRUCTURE_v1.0.md`（8 层/电容墙/WQFN 方案，作废，git 存档）。
 > 变更依据：L1_TOPOLOGY_v2.0（单 DS320PR1601/46mm/6L 试用/单面）+ v20 叠层重估。
-> **层数 = 引擎级 FEASIBLE（per-ball 容量/净空/首发判定，2026-09-05 per-ball 逃逸引擎验证；
-> 2026-09-06 非执行者双路对抗评审 = PASS_WITH_CONDITIONS），待 C1-C3-C5 闭合后流程终定**
-> ——非"正式定案"。v25 取得真实 354 球坐标，v26 用模型层新增 per-ball 逃逸引擎（⑦）逐球
-> 判定 FEASIBLE；v26 对抗评审确认容量账稳健不翻转，但流程终定须先闭 C1-C5（详见"层数定案闸"）。
+> **层数 = 6L 判定流程终定（per-ball 容量/净空/首发判定，2026-09-05 per-ball 逃逸引擎验证；
+> 2026-09-06 非执行者双路对抗评审 = PASS_WITH_CONDITIONS；v28 ECO 范围 A C1-C5 闭合升格）**
+> ——v25 取得真实 354 球坐标，v26 用模型层新增 per-ball 逃逸引擎（⑦）逐球判定 FEASIBLE；
+> v26 对抗评审确认容量账稳健不翻转（PASS_WITH_CONDITIONS），C1-C5 已闭合（C1 via 兜底 ✅/
+> C2 引擎口径 ✅/C3 SPEC 再生+⑦ evaluated ✅/C4 文档 ✅/C5 连接器级实测 + 芯片级期望一致 ✅，
+> v28 ECO 范围 A）；判定链可下传 L3（详见"层数定案闸"）。
+> **范围 A 诚实边界**：真板物理 ECO（sch/PCB 换 DS320PR1601）+ L3 施工 = scope-B；C5 芯片级
+> 实测核对随 scope-B 按期望矩阵一次执行（当前 = per_ball 注入与期望矩阵机器一致，同源
+> 354 ballmap）。
 > v21 初始"6L 闭合"判定曾被非执行者对抗评审 FAIL（见 v21_realroute/REVIEW_ADVERSARIAL_v21.md）；
 > v26 的引擎级判定为工具级 per-ball 验证后结论，非评审 FAIL 前状态复辟，但同样不豁免条件闭合。
 > 与 L2_STRUCTURE_v1.0 冲突以本文件为准。
@@ -76,14 +81,18 @@
 - 单 3.3V（VCC1-4=30 球，内部 LDO）；去耦 0402/0603 就近 VCC 球；B.Cu 空置。
 - 禁止电源网拉细线（checklist C.3 结转）。
 
-## 层数定案闸（L3 开工前硬门，非运行时回退）——引擎级 FEASIBLE，流程终定待 C1-C3-C5
+## 层数定案闸（L3 开工前硬门，非运行时回退）——6L 判定流程终定（v28 ECO 范围 A 升格）
 
-**层数（6L vs 8L）= 引擎级 FEASIBLE（未流程终定）**。原定案闸：在取得 Intel footprint
-物理坐标资产后，用引擎跑一次精确逃逸求解（禁暴力迭代）。**本 m14 v26 已执行该闸，经
-非执行者双路对抗评审 = PASS_WITH_CONDITIONS**（v26 评审 §0）：容量级判定稳健、不翻转，
-但"6L 已正式定案可下传 L3"不成立——须先闭合 C1-C3-C5（C1 全程穿线/VIA 兜底复核已按路径 b
-闭合：c1_via_reclass_report.json FEASIBLE_UNCHANGED；C2 引擎口径修订已 ECN 完成；C3 SPEC
-再生、C5 网表核对为 L3 前置登记项）：
+**层数（6L vs 8L）= 6L 判定流程终定（C1-C5 闭合，2026-09-06 v28 ECO 范围 A）**。
+原定案闸：在取得 Intel footprint 物理坐标资产后，用引擎跑一次精确逃逸求解（禁暴力迭代）。
+本 m14 v26 已执行该闸，经非执行者双路对抗评审 = PASS_WITH_CONDITIONS（v26 评审 §0）：
+容量级判定稳健、不翻转；C1-C5 条件于 v27（C1/C2/C4）+ v28 ECO 范围 A（C3/C5）全部闭合
+（C1 全程穿线/VIA 兜底复核已按路径 b 闭合：c1_via_reclass_report.json FEASIBLE_UNCHANGED
+40/64≤69；C2 引擎口径修订已 ECN 完成；C3 SPEC 再生 = 生产 SPEC 本体描述层对齐
+DS320PR1601 + ⑦ 生产 plan() evaluated FEASIBLE，not_configured 假静默消除；C4 文档修订
+完成；C5 = 连接器级真板实测一致 + 芯片级 per_ball 注入与期望矩阵机器一致）：
+mcio_feas 已 advance（planned→plan→review）。**判定链流程终定，可下传 L3（施工/真板物理
+ECO = scope-B，C5 芯片级实测核对随 scope-B 执行）。**
 
 - **闸前**：v25 取得 UltraLibrarian 真实 354 球坐标（vendor-validated）→ 原"物理球栅资产不可得"
   阻塞解除（v22/v23 缺口闭合）。
@@ -94,9 +103,14 @@
   穿越 16 对；每带 8 对 fan-out 1.2→1.46（11.68≤23.36），N/S 翼各 8 对按 ipair 口径
   11.68≤16.2/18.8（C2 修订后重跑仍过），via 净空全 354 球 worst 0.6≥0.427，deficits 0。
 - **条件闭合状态**：C1（b 路径 VIA 兜底）✅ 2026-09-06 证书复核 40/64≤69；C2（引擎口径）✅
-  2026-09-06 ECN 修订重跑 FEASIBLE 不变；C3（SPEC 再生⑦真执行）⏳ L3 前置；C4（stale 清理/
-  死指针/8L 重入条款）✅ 2026-09-06；C5（真板网表核对）⏳ 依赖 DS320PR1601 原理图落地。
-  **条件全闭 + 状态机 advance 前：不得以"6L 已流程终定"下传 L3。**
+  2026-09-06 ECN 修订重跑 FEASIBLE 不变；C3（SPEC 再生⑦真执行）✅ 2026-09-06 v28 ECO
+  生产 SPEC 本体描述层再生（DS320PR1601 + per_ball 注入）+ ⑦ evaluated FEASIBLE
+  （not_configured 假静默消除）；C4（stale 清理/死指针/8L 重入条款）✅ 2026-09-06；
+  C5（网表核对）✅ v28 ECO 范围 A = 连接器级真板实测一致（v27）+ 芯片级 per_ball 注入与
+  期望矩阵机器一致（同源 354 ballmap；真板物理 ECO 后实测核对随 scope-B）。
+  **6L 判定流程终定（v28 ECO 范围 A，用户授权）；mcio_feas 已 advance
+  （planned→plan→review）。施工/真板物理 ECO = scope-B，届时按期望矩阵一次实测核对
+  C5 芯片级，禁运行时改判。**
 
 ## 8L 重入 ECN 触发条款（宪法 Ch6#5 回退裁决性补全，v26 评审 §2-E）
 
@@ -109,7 +123,7 @@
 3. **SI9000 重算轨距收紧溢出**：阻抗终值致 inter_pair_spacing 1.46 放不下 8 对/带。
 
 触发即 ECN → 回 L2（叠层分配）或 L1（层数裁决）重开；重开须重新过对抗评审，
-不得以本闸已过为由免审。未触发前 6L 保持引擎级 FEASIBLE 状态。
+不得以本闸已过为由免审。未触发前 6L 保持流程终定状态。
 
 ## 硬约束（L3 必须满足）
 
@@ -133,3 +147,7 @@
   修正、19mm → 18.8 REFCLK 预留口径、走廊/翼带口径统一 1.46=11.68）；
   ③ 死指针「§回退 8L」修复 → 新增「8L 重入 ECN 触发条款」；
   ④ C1-b 闭合记录引用（c1_via_reclass_report.json）。
+- v2.0 升格补记（2026-09-06，v28 ECO 范围 A，用户授权）：C1-C5 条件闭合 → 层数表述
+  「引擎级 FEASIBLE（待条件闭合）」升格为「6L 判定流程终定」；条件闭合状态表更新
+  （C3/C5 ⏳ → ✅ 范围 A）；mcio_feas advance（planned→plan→review）。范围 A 边界：
+  真板物理 ECO + L3 施工 = scope-B，C5 芯片级实测核对随 scope-B 按期望矩阵一次执行。

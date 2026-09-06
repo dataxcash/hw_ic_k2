@@ -4,9 +4,14 @@
 > 本文件为 L2 结构设计的约束包络，超脱并替代 `L1_TOPOLOGY_v1.0.md`（双侧对称电容墙/WQFN 方案，
 > 作废，git 保留存档）。
 > 变更依据：v19 器件选型冻结（DS320PR1601）+ v20 用户裁决（板加高 46mm、单面贴、6L 先试不闭合回 8L）。
-> **层数（6L vs 8L）= 引擎级 FEASIBLE（per-ball 容量/净空/首发判定，[CACHE_STABLE] 对抗评审
-> PASS_WITH_CONDITIONS），待 C1-C3-C5 闭合后流程终定**——本文件由「6L 试用 + 8L 兜底」升级为
-> 「引擎级 FEASIBLE（待条件闭合）」，非「正式定案」（2026-09-06 降级修正，v26 评审 §0）。
+> **层数（6L vs 8L）= 6L 判定流程终定（[CACHE_STABLE] 对抗评审 PASS_WITH_CONDITIONS +
+> C1-C5 条件闭合，v28 ECO 范围 A 升格，2026-09-06）**——本文件由「6L 试用 + 8L 兜底」
+> 升级为「引擎级 FEASIBLE（待条件闭合）」（2026-09-06 降级修正，v26 评审 §0），再经
+> C1-C5 闭合升格为「判定流程终定」（v28 ECO 范围 A：C1 via 兜底 ✅/C2 引擎口径 ✅/
+> C3 SPEC 再生+⑦ evaluated ✅/C4 文档 ✅/C5 连接器级实测 + 芯片级期望一致 ✅）。
+> **范围 A 诚实边界**：C5 芯片级 = per_ball 注入与期望矩阵机器一致（同源 354 ballmap）；
+> 真板物理 ECO（sch/PCB 换 DS320PR1601）+ L3 施工在 scope-B 执行，届时按期望矩阵一次实测
+> 核对。6L 判定链可下传 L3；8L 兜底仍为回退候选（重入条件见 L2「8L 重入 ECN 触发条款」）。
 > v21 初始"闭合"判定曾被非执行者对抗评审 FAIL 退回（见 v21_realroute/REVIEW_ADVERSARIAL_v21.md，
 > 因决定性逃逸项未做工具级验证）。
 > **本 m14 v26 以真实 354 球坐标（v25）+ 模型层新增 per-ball 逃逸引擎（⑥ BGA_GROUP_ESCAPE
@@ -14,9 +19,9 @@
 > 64 信号球 = 32 F.Cu 直出 + 32 ball-via→In2，穿越 16 对（A_PER+A_PET 板级 In2 东穿，
 > B_PET/B_PER 直出）；每带 8 对 fan-out 阵列 1.2mm→走廊 1.46mm（transition 段扩张，
 > 11.68≤23.36）；N/S 翼各 8 对按 ipair 口径 11.68mm≤16.2/18.8（C2 修订后重跑仍过，REFCLK
-> 2.0 预留）；via 净空全 354 球 worst 0.6mm≥0.427 阈值；deficits 0 → **6L 引擎级 FEASIBLE
-> （容量级稳健，流程终定待 C1-C3-C5）**；8L 兜底仅作回退候选（重入条件见 L2「8L 重入 ECN
-> 触发条款」）。
+> 2.0 预留）；via 净空全 354 球 worst 0.6mm≥0.427 阈值；deficits 0 → **6L 判定流程终定
+> （容量级稳健 + C1-C5 闭合，v28 ECO 范围 A 升格）**；8L 兜底仅作回退候选（重入条件见
+> L2「8L 重入 ECN 触发条款」）。
 > 引用：任何 L2/L3 不得违反本文件任何决策；与 L1_TOPOLOGY_v1.0 冲突以本文件为准。
 
 ## 器件分区（冻结）
@@ -61,7 +66,7 @@
 |---|---|---|
 | 板框 | x∈[23,143]（120mm）；**y∈[33,79]（46mm）** | v20 用户裁决 H1 |
 | 贴面 | **单面（F.Cu），B.Cu 空置** | v20 用户裁决（真板 101 件本就在 F.Cu 单面） |
-| 叠层 | **6 层 F/G/S/G/P/B = 引擎级 FEASIBLE（2026-09-05 per-ball 引擎验证；v26 对抗评审 PASS_WITH_CONDITIONS，流程终定待 C1-C3-C5）；8L 兜底仅回退候选（重入见 L2 条款）** | v20 用户裁决 + v21 + m14 v26 per-ball 逃逸引擎（⑦ FEASIBLE）+ v26 评审降级 |
+| 叠层 | **6 层 F/G/S/G/P/B = 6L 判定流程终定（2026-09-05 per-ball 引擎 FEASIBLE；v26 对抗评审 PASS_WITH_CONDITIONS；v28 ECO 范围 A C1-C5 闭合升格）；8L 兜底仅回退候选（重入见 L2 条款）** | v20 用户裁决 + v21 + m14 v26 per-ball 逃逸引擎（⑦ FEASIBLE）+ v26 评审降级 + v28 ECO 升格 |
 | 电容墙 | 32×220nF 0402 **全部移除**（64 AC 集成于 DS320PR1601 TX 脚，220nF typ） | v19 §3 #2 |
 
 ## 电源域划分（冻结）
@@ -91,3 +96,7 @@
   ① 层数表述由「已定案 6L 正式冻结」降级为「引擎级 FEASIBLE（PASS_WITH_CONDITIONS），
   待 C1-C3-C5 闭合后流程终定」；② 「穿越」语义统一为板级（A_PER+A_PET In2 东穿 16 对），
   与 die 级端口流（DN/UP 各 8 输入侧网）区分并禁混用；③ 引用 L2「8L 重入 ECN 触发条款」。
+- v2.0 升格补记（2026-09-06，v28 ECO 范围 A，用户授权）：C1-C5 条件闭合 → 层数表述
+  「引擎级 FEASIBLE（待条件闭合）」升格为「6L 判定流程终定」（C3: 生产 SPEC 再生
+  DS320PR1601 + ⑦ evaluated FEASIBLE；C5: 连接器级真板实测一致 + 芯片级期望矩阵一致）。
+  范围 A 边界：真板物理 ECO + L3 施工 = scope-B，C5 芯片级实测核对随 scope-B 一次执行。
