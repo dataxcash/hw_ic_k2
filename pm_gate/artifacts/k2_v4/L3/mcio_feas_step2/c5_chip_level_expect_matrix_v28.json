@@ -1,0 +1,185 @@
+{
+ "probe": "c5_chip_level_expect_matrix",
+ "level": "alignment_prep (C5 前置准备, 路径 c)",
+ "basis": [
+  "REVIEW_ADVERSARIAL_v26 C5 (DS320PR1601 ball→ASIC lane 映射核对, 缺口登记)",
+  "L1_TOPOLOGY_v2.0 §信号流向/穿越 (A_PORT=host J2 侧, B_PORT=device MCIO 侧; DN: J2→A→re-drive→B→MCIO; UP 反向; 穿越=板级 A 带 In2 东穿)",
+  "ds320pr1601_ballmap.json (UltraLibrarian TI 354 球, die 级命名 A/B 端口×PER/PET 列带×lane×P/N)",
+  "kb corridor_pair_ds320pr1601_dual_band v5 (provenance: TI SNLS683 Table 5-1 列带逐球解析 全 16 lane 一致)"
+ ],
+ "port_roles": {
+  "A": {
+   "side": "host",
+   "connector": "J2 (SlimSAS x8)",
+   "nets": "PCIE_DN/UP0-7 (host 侧)"
+  },
+  "B": {
+   "side": "device",
+   "connector": "J3/J4 (MCIO x4+x4)",
+   "nets": "DN_OUT0-7_MCIO / UP0-7 (J3=0-3, J4=4-7)"
+  }
+ },
+ "lane_to_mcio": {
+  "J3": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "J4": [
+   4,
+   5,
+   6,
+   7
+  ]
+ },
+ "refclk": "REFCLK0=J3/REFCLK1=J4 直通不经芯片 (无芯片球, L1 v2.0)",
+ "expect_ball_by_band": {
+  "A_PER": {
+   "0": {
+    "P": "N2",
+    "N": "R1"
+   },
+   "1": {
+    "P": "Y2",
+    "N": "AB1"
+   },
+   "2": {
+    "P": "AJ1",
+    "N": "AG2"
+   },
+   "3": {
+    "P": "AT1",
+    "N": "AP2"
+   },
+   "4": {
+    "P": "BA2",
+    "N": "BC1"
+   },
+   "5": {
+    "P": "BH2",
+    "N": "BK1"
+   },
+   "6": {
+    "P": "BU1",
+    "N": "BR2"
+   },
+   "7": {
+    "P": "CD1",
+    "N": "CB2"
+   }
+  },
+  "B_PET": {
+   "0": {
+    "P": "P10",
+    "N": "M7"
+   },
+   "1": {
+    "P": "AA10",
+    "N": "W7"
+   },
+   "2": {
+    "P": "AH10",
+    "N": "AF7"
+   },
+   "3": {
+    "P": "AR10",
+    "N": "AN7"
+   },
+   "4": {
+    "P": "BB10",
+    "N": "AY7"
+   },
+   "5": {
+    "P": "BJ10",
+    "N": "BG7"
+   },
+   "6": {
+    "P": "BT10",
+    "N": "BP7"
+   },
+   "7": {
+    "P": "CC10",
+    "N": "CA7"
+   }
+  },
+  "A_PET": {
+   "0": {
+    "P": "M26",
+    "N": "P29"
+   },
+   "1": {
+    "P": "W26",
+    "N": "AA29"
+   },
+   "2": {
+    "P": "AF26",
+    "N": "AH29"
+   },
+   "3": {
+    "P": "AN26",
+    "N": "AR29"
+   },
+   "4": {
+    "P": "AY26",
+    "N": "BB29"
+   },
+   "5": {
+    "P": "BG26",
+    "N": "BJ29"
+   },
+   "6": {
+    "P": "BP26",
+    "N": "BT29"
+   },
+   "7": {
+    "P": "CA26",
+    "N": "CC29"
+   }
+  },
+  "B_PER": {
+   "0": {
+    "P": "R35",
+    "N": "N34"
+   },
+   "1": {
+    "P": "AB35",
+    "N": "Y34"
+   },
+   "2": {
+    "P": "AG34",
+    "N": "AJ35"
+   },
+   "3": {
+    "P": "AP34",
+    "N": "AT35"
+   },
+   "4": {
+    "P": "BC35",
+    "N": "BA34"
+   },
+   "5": {
+    "P": "BK35",
+    "N": "BH34"
+   },
+   "6": {
+    "P": "BR34",
+    "N": "BU35"
+   },
+   "7": {
+    "P": "CB34",
+    "N": "CD35"
+   }
+  }
+ },
+ "check_items_after_eco": [
+  "ECO 网表: J2 host lanes 0-7 P/N ↔ A 端口球 (A_PER/A_PET 带) — 每 lane 2 球全接",
+  "ECO 网表: J3(0-3)/J4(4-7) ↔ B 端口球 (B_PER/B_PET 带) — 与 v27/v28 板级核对衔接",
+  "DN/UP 方向: redriver 内部 re-drive (A↔B); 网表接对 P/N/lane 即满足, 方向由芯片配置",
+  "REFCLK0/1: 无芯片球, 直通 (断言网表无 REFCLK 接到 DS320PR1601)",
+  "若 ECO 网表 A 端口实际接 MCIO (与 L1 A=host 冲突) → 冲突即停机, 回 L1/L2 对账, 禁运行时改判"
+ ],
+ "total_signal_balls": 64,
+ "engine_consistency": "64 球 = per_ball 引擎 signal_ball_count=64 (per_ball_escape_6L_report.json; v26/v27 FEASIBLE 同口径)",
+ "caveat": "本矩阵 = 期望断言 (已冻结文档+已验资产派生), 非芯片实测; 真实映射以 ECO 后网表为唯一裁决源"
+}

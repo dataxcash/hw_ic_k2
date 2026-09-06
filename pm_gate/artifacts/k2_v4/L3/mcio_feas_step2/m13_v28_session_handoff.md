@@ -133,6 +133,16 @@
    验证（模型驱动延续）：注入路径已由 v28 主 session 机器证明（草案 sha `2f8ca81f` →
    生产 plan() v1.4 ⑦ evaluated FEASIBLE；REGEN_DRAFT_PASS）。本补记不新增求解、不改任何
    冻结/引擎/生产 SPEC 文件。
+3. **C5 芯片级核对期望矩阵**（`gen_c5_chip_expect_matrix.py` + `c5_chip_level_expect_matrix_v28.json`，
+   本目录落盘）：C5 不可核部分（DS320PR1601 ball→ASIC lane）的前置准备。从
+   `ds320pr1601_ballmap.json` 提取 K2 lanes 0-7 的 **64 信号球全名**（4 带 × 16 球，与 per_ball
+   引擎 signal=64 口径完全自洽），结合 L1 v2.0 §信号流（A_PORT=host/J2、B_PORT=device/MCIO）
+   生成 5 条 ECO 后核对断言（含"网表若 A 端口实接 MCIO → 冲突即停机回 L1/L2 对账"条款）。
+   边界：期望矩阵派生自已冻结文档 + 已验资产，**非芯片实测**；真实映射以 ECO 后网表为唯一
+   裁决源（C3 同批一次核对）。
 
 - v28 补记 commit 面：`m13_v28_session_handoff.md`（本节）+ `spec_regen_diff_checklist_v28.json`
-  → k2 commit → 容器 bump。_shared 仍无改动。
+  + `gen_c5_chip_expect_matrix.py` + `c5_chip_level_expect_matrix_v28.json` → k2 commit →
+  容器 bump。_shared 仍无改动。路径 c 对齐准备至此穷尽（草案/注入校验/差异清单/符号缺口/
+  C5 期望矩阵），下 session 触发器不变（ECO 落地 → 差异清单逐项再生 → ⑦ evaluated →
+  C5 期望矩阵一次核对）。
