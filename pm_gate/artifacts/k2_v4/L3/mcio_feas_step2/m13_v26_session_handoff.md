@@ -83,6 +83,31 @@ v25/v26 真实几何校准为 12% 直出游标 /88% via 计数口径；实际 K2
 ## 6. commit 预备
 
 - `_shared`：escape_landing.py + routing_topology_gate.py（⑦ per-ball，v1.3）+ kb.sqlite3。
-- `k2`：L1/L2 frozen 层数行 + `ds320pr1601_ballmap.json`（若首次入库）+ `reproduce_per_ball_escape.py`
-  + `per_ball_escape_6L_report.json` + 本文件。
+- `k2`：L1/L2 frozen 层数行 + `reproduce_per_ball_escape.py` + `per_ball_escape_6L_report.json`
+  + `direct_escape_wedge_report.json` + `reproduce_direct_escape_wedge.py` + 本文件。
 - 冻结区在 git 前 unlock、后 lock（freeze_ctl.sh）。
+
+## 7. 对抗评审补记（v26 后置，必读——修订本文件 §3/§4 的"干净闭合"表述）
+
+> **6L 判定经非执行者双路对抗评审 = PASS_WITH_CONDITIONS，非干净 PASS**。详见
+> `REVIEW_ADVERSARIAL_v26.md`（本目录）。评审过程缺陷如实记录：两路裁定者均耗尽输出预算、
+> 未独立交付最终裁决，由执行者补查合成。**承接本任务的下一 session 必须：**
+>
+> 1. **L1/L2 frozen 层数表述须降级修正**：现文"6L 正式冻结/已定案"（本文件 §4 回写）
+>    → "**引擎级 FEASIBLE（per-ball 容量/净空/首发判定），待条件 C1-C3-C5 闭合后流程终定**"；
+>    mcio_feas 任务维持 planned/S0 不 advance（本次评审后未推进状态机）。
+> 2. **闭合条件 C1-C5**（评审 §3，均不翻转 6L 判定，但为下传 L3 前必修/前置）：
+>    - C1 直出球（重点 B_PER row1 by57.12 8 球，仅 4.5~12° 南向楔形）F.Cu 全程穿线 → L3
+>      dogbone 逐段验证或改判 VIA+In2 stub 复核（最坏 64≤69 via 预算兜底）；
+>    - C2 per_wing 口径修正（pair_pitch 0.6→ipair 1.46 呈现）+ 引擎净空改测全 354 球；
+>    - **C3 SPEC_k2_v4.json 再生对齐 DS320PR1601 + 注入 per_ball 描述符 → ⑦ 在生产 plan() 真执行**
+>      （现 SPEC 仍 U3/U7 → plan() 得 not_configured，可验证性断裂）；
+>    - C4 L2 stale 文本清理（25/75%、col-band 表、19mm）+ 死指针"§回退 8L"修复 + 8L 重入
+>      ECN 触发条款 + L1"穿越"die级/板级语义统一；
+>    - C5 lanes 0-7 ↔ MCIO/ASIC 真板网表核对（引擎可单次重跑任一 lane 子集）。
+> 3. 补查证据可复现：`reproduce_direct_escape_wedge.py` → 32/32 直出球首发楔形可行；
+>    B_PER row2(顶行) 107.4° 北向出阵（物理直出 ✓）；B_PER row1 仅南向窄楔 → C1。
+> 4. **评审未触发 G4 熔断**（两路裁定者卡点为同一几何点第 3 轮以上，补查为有界确定性检查、
+>    non-bruteforce；已按纪律停止、问题回模型登记为 C1）。
+> 5. 本轮 commit 仅 k2（评审/补查/本补记）+ 容器 bump；_shared 无新改动（C2 引擎修订未做，
+>    留待条件闭合 session 走 ECN）。
