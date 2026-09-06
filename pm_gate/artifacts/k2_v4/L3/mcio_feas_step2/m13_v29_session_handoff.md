@@ -78,3 +78,19 @@
   tasks/mcio_feas.json（advance 状态）+ L1/L2 frozen（升格）+ C3_SPEC_REGEN_v27.md §5 +
   C5_NETLIST_CHECK_v27.md §4 + m13_v29_session_handoff.md → commit → 容器 bump gitlink。
 - 容器根：bump _shared + k2。冻结区 git 前 unlock、后 lock（0/0/0）。
+
+## 6. v29 补记（同 session 延续：pm_gate task 状态机完整闭环，2026-09-06）
+
+> 用户「继续」：把工具链最后一段未验证流程走通 = task 状态机四段闭环能力验证。
+
+- **mcio_feas task 全链闭环**：planned → plan → review → **build → drc → closed**
+  （task_gate 机械 gate 逐段过：build/drc 查 outputs 产物 c1_via_reclass_report.json +
+  c5_chip_level_expect_matrix_v28.json + spec_regen_diff_checklist_v28.json 在位；
+  closed 终态）。history = [planned, plan, review, build, drc, closed]，iterations=1。
+  **语义**：mcio_feas 判定任务登记闭合（判定链完成，可下传 L3 = scope-B）。
+- **kb v6→v7**（put-template）：provenance.mcio_feas_phase review→**closed** +
+  layer_count 补「mcio_feas task closed」（知识库 = 唯一事实源，保持与状态机一致）。
+- **S 状态机（S0-S5）不动**：项目级施工阶段机，属 scope-B（L3 施工）领域；mcio_feas 作为
+  L2 判定任务 closed 即完成使命。
+- commit 面（v29 补记）：k2 = tasks/mcio_feas.json（closed）+ 本文件 §6；_shared =
+  kb.sqlite3（v7）。容器 bump。git 前 unlock 后 lock。
