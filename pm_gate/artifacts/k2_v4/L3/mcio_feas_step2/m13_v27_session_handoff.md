@@ -106,7 +106,8 @@
   （C2 ECN v1.4）+ kb.sqlite3（v5）。→ commit 后容器根 bump gitlink。
 - `k2`：L1/L2 frozen（C4/降级）+ per_ball_escape_6L_report.json（C2 重跑更新）+
   c1_via_reclass_review.py + c1_via_reclass_report.json（C1-b）+ C3_SPEC_REGEN_v27.md +
-  C5_NETLIST_CHECK_v27.md + 本文件。→ commit 后容器根 bump gitlink。
+  C5_NETLIST_CHECK_v27.md + SPEC_k2_v4_c3poc.json + reproduce_c3_plan_poc.py（C3 POC
+  可复跑资产，v27 补记落盘）+ 本文件。→ commit 后容器根 bump gitlink。
 - 注意：_shared 内 escape_closure_analysis.py + pipeline/hooks 的 mode-only 漂移（100755→100644）
   为 freeze lock 副作用（444 剥 exec bit），非内容修改，**不纳入本 commit**（避免夹带）。
 - 容器根：bump _shared + k2 gitlink。

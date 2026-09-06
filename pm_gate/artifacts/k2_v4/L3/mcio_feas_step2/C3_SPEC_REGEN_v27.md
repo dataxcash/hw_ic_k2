@@ -19,10 +19,11 @@
 基线：`verdict=FEASIBLE_WITH_MORPH_GAP`，**⑥=not_configured、⑦=not_configured**
 （ok=True 静默过）——评审 C 段"生产接线断裂"实证。
 
-## 2. 机制级实证（POC，SPEC 变体注入，禁删）
+## 2. 机制级实证（POC，SPEC 变体注入，可复跑禁删）
 
-在 /tmp 构造 SPEC 变体：`components.redriver.DS320PR1601.bga_escape.per_ball` 注入
-真实 ballmap（354 球）+ U1@(93.8,53.7) + 走廊/翼带/容量数字 → 生产 plan() v1.4 真执行：
+`SPEC_k2_v4_c3poc.json`（生产 SPEC 副本 + `components.redriver.DS320PR1601.bga_escape.
+per_ball` 注入真实 354 ballmap + U1@(93.8,53.7) + 走廊/翼带/容量数字）+ `reproduce_c3_plan_poc.py`
+（复跑脚本，输出 POC_PASS）→ 生产 plan() v1.4 真执行：
 
 ```
 BGA_PER_BALL_ESCAPE: ok=True  status=evaluated  level=per_ball
@@ -43,6 +44,8 @@ evaluated FEASIBLE（消除 not_configured 假静默）。此为 C3 修复的**�
   （原理图换 DS320PR1601 + 46mm 板框 + 单面）**必须同批**，超出本 session 授权/能力。
 - **登记**：C3 = L3 前置（DS320PR1601 原理图 ECO 后：SPEC 再生 → plan() ⑦=evaluated
   FEASIBLE，本记录 §2 路径直接复用）。**未以 POC 冒充 SPEC 已完成再生**。
+- **复跑（v27 补记）**：`SPEC_k2_v4_c3poc.json`（POC SPEC 变体）+ `reproduce_c3_plan_poc.py`
+  （复跑脚本，输出 POC_PASS）落盘本目录为**可复跑资产（禁删）**，供 SPEC 再生 session 直接复用。
 
 ## 4. 附：⑦ 描述符注入样张（供 SPEC 再生 session 复用）
 
