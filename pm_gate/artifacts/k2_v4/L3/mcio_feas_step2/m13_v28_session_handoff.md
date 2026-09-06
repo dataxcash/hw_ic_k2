@@ -113,3 +113,26 @@
   （历史惯例）；既有 untracked 文件（v10-v23 handoff、channel_alloc_diag、hs_rebuild_v11/v12
   等）为既往 session 未纳入项，**不夹带**，仅 add 本 session 2 文件。
 - 冻结区在 git 前 unlock、后 lock（freeze_ctl.sh status = 0/0/0）。
+
+## 8. v28 补记（同 session 延续：C3 对齐准备深化，2026-09-06）
+
+> 用户「继续」后追加。仍在路径 c 授权范围（对齐准备），未越冻结区、未假闭合。产出 2 项：
+
+1. **SPEC 再生差异清单**（`spec_regen_diff_checklist_v28.json`，本目录落盘）：生产 SPEC
+   （sha `7eaad223`）现状 vs L1/L2 v2.0 冻结要求的逐字段对照 = ECO 后全量再生的**工作底稿**。
+   机器提取现状 + 冻结出处引用：8 项 BLOCKED_BY_ECO（board 38→46mm / 8L→6L /
+   `layer_plan.in6_usage`+`u3_side_bridges`+`chip_side_routes` 8L 语义残留 / capacitor_walls
+   移除 / redriver U3+U7→DS320PR1601 / `*_U3/_U7` 网名 42 处 / per_ball 注入（PATH_PROVEN）/
+   corridors 口径 1.46 校验）+ 1 项 NO_DIFF（impedance）。
+2. **ECO 前置新缺口登记**（差异清单 item 10）：**DS320PR1601 符号/封装资产仓内缺失**——
+   `_shared/schlib` 无、`k2/schlib` 不存在、现行 sch 仅 DS160PR810 WQFN-64 旧符号 →
+   ECO 落地前置 = 先取得/建 DS320PR1601（nfBGA-354 ZDG）KiCad 符号+封装（354 球，来源与
+   kb machine_ballmap_source 同源 TI 资产）。此缺口 kb known_gaps 未单列，补记于此；
+   ECO 落地 session 首步即此。
+
+   验证（模型驱动延续）：注入路径已由 v28 主 session 机器证明（草案 sha `2f8ca81f` →
+   生产 plan() v1.4 ⑦ evaluated FEASIBLE；REGEN_DRAFT_PASS）。本补记不新增求解、不改任何
+   冻结/引擎/生产 SPEC 文件。
+
+- v28 补记 commit 面：`m13_v28_session_handoff.md`（本节）+ `spec_regen_diff_checklist_v28.json`
+  → k2 commit → 容器 bump。_shared 仍无改动。

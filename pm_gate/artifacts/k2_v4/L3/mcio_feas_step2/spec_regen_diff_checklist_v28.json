@@ -1,0 +1,88 @@
+{
+ "probe": "spec_regen_diff_checklist_v28",
+ "level": "alignment_prep (C3 缺口登记支撑, 路径 c)",
+ "basis": "REVIEW_ADVERSARIAL_v26 C3 + C3_SPEC_REGEN_v27.md + m13_v28 handoff; 冻结要求源 = L1_TOPOLOGY_v2.0 / L2_STRUCTURE_v2.0 (v27 降级版仍有效)",
+ "spec_audited": "k2/pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json",
+ "spec_sha16": "7eaad223cf691f7c",
+ "audit_at": "2026-09-06 (v28 延续, 模型/资产驱动, 未改任何文件)",
+ "note": "本清单 = DS320PR1601 原理图 ECO 落地后 SPEC 全量再生的逐字段工作底稿。现状列 = 机器提取 (生产 SPEC)；要求列 = L1/L2 v2.0 冻结文本引用。未以本清单冒充再生完成 (c 路径边界)。",
+ "items": [
+  {
+   "item": "board.outline_y",
+   "spec_current": "[33.0, 71.0] = 38mm",
+   "frozen_required": "[33,79] = 46mm (L1 v2.0 板框/叠层/贴面行, v20 用户裁决 H1)",
+   "regen_action": "ECO 后改板框 + SPEC board.outline_y；与真板 k2_v4.kicad_pcb 同批",
+   "status": "BLOCKED_BY_ECO"
+  },
+  {
+   "item": "stackup (层序/层数)",
+   "spec_current": "8L: F.Cu/In1/In2/In3/In4/In5/In6/B.Cu + material + basis (In5/In6 存在)",
+   "frozen_required": "6L: F/G/S/G/P/B — In2.Cu 唯一内部信号层(带状线双 GND 参考), B.Cu 空置 (L2 v2.0 叠层分配表)",
+   "regen_action": "再生时叠层重建 6L (去 In5/In6)；8L 仅回退候选 (L2「8L 重入 ECN 触发条款」)",
+   "status": "BLOCKED_BY_ECO"
+  },
+  {
+   "item": "layer_plan.in6_usage / u3_side_bridges / chip_side_routes",
+   "spec_current": "8L/U3/U7 语义残留字段在位 (layer_plan keys 实测)",
+   "frozen_required": "6L 语义 (L2 v2.0)；U3/U7 布局废除 (L1 v2.0 单 DS320PR1601)",
+   "regen_action": "移除/按 6L + 单芯片语义重写 layer_plan；in2_crossing_nets 保留为板级穿越 16 对口径 (L1 v2.0 §信号流向穿越行)",
+   "status": "BLOCKED_BY_ECO"
+  },
+  {
+   "item": "capacitor_walls",
+   "spec_current": "symmetric_bands + mcio_side_x + j2_side_x 在位",
+   "frozen_required": "32×220nF 0402 全部移除 (64 AC 集成于 DS320PR1601 TX 脚, L1 v2.0 电容墙行)",
+   "regen_action": "SPEC 删除 capacitor_walls 段 (cap_wall_ac 本板关闭, L2 v2.0 硬约束 6)",
+   "status": "BLOCKED_BY_ECO"
+  },
+  {
+   "item": "components.redriver",
+   "spec_current": "U3 + U7 (role/pos/pcie_side/caps/footprint/channel_count/pad_groups, 无 bga_escape)",
+   "frozen_required": "单 DS320PR1601 (nfBGA-354 22.9x9.0, U1 中心 (93.8,53.7), L1 v2.0 器件分区)",
+   "regen_action": "U3/U7 条目替换为 DS320PR1601 (refdes 以原理图 YAML 为准, L1 v2.0 U1 refdes 说明)；换名完成前不覆盖 (C3_SPEC_REGEN_v27.md §4)",
+   "status": "BLOCKED_BY_ECO"
+  },
+  {
+   "item": "网名 *_U3/_U7 引用",
+   "spec_current": "42 处 *_U3/*_U7 引用 (SPEC body 实测计数)",
+   "frozen_required": "无 U3/U7 网 (DS320PR1601 直连: J2↔芯片↔J3/J4, 穿越=板级 In2 东穿 16 对)",
+   "regen_action": "网名重连 (DN/UP 语义保持: host→device J2→芯片→MCIO)；随原理图 ECO 网表同批",
+   "status": "BLOCKED_BY_ECO"
+  },
+  {
+   "item": "components.redriver.DS320PR1601.bga_escape.per_ball",
+   "spec_current": "不存在 (0 引用 DS320PR1601)",
+   "frozen_required": "注入 per_ball 描述符 (354 ballmap + chip_center [93.8,53.7] + 走廊/翼带/容量) → 生产 plan() ⑦=evaluated (REVIEW_ADVERSARIAL_v26 C3)",
+   "regen_action": "注入样张 = v27 POC 契约 1:1 (SPEC_k2_v4_c3poc.json)；v28 已证: 注入后生产 plan() v1.4 ⑦ evaluated FEASIBLE (草案 sha 2f8ca81f, REGEN_DRAFT_PASS)",
+   "status": "PATH_PROVEN (机制已机器实证, 本体注入随 ECO)"
+  },
+  {
+   "item": "corridors / track_pitch 口径",
+   "spec_current": "corridors[0]: pairs=18, band_gap_mm_min=2.0, track_pitch_mm=1.08 (机器提取)",
+   "frozen_required": "对间口径 inter_pair_spacing=1.46 (v22 裁决: 0.875 铜边净空 → 0.585+0.875=1.46; L1/L2 v2.0 硬约束); 1.08 为实际排轨居中值不冲突",
+   "regen_action": "再生时保持 capacity_audit.inter_pair_spacing=1.46 注入 (route_model_config.json); 禁误用 drc_rules.json 0.875",
+   "status": "口径已裁决 (v22), 再生时校验一致"
+  },
+  {
+   "item": "impedance",
+   "spec_current": "85Ω target, w0.205/g0.175, JLC_SI9000_H1_5.0mil_Er1_4.3, coupon_required=true",
+   "frozen_required": "w=0.205/g=0.175 → 85.1Ω (L2 v2.0 阻抗参数, SI9000 重算终值后定 L3 线宽)",
+   "regen_action": "无 diff, 保留",
+   "status": "NO_DIFF"
+  },
+  {
+   "item": "DS320PR1601 符号/封装资产 (ECO 前置新登记)",
+   "spec_current": "schlib (容器根 _shared/schlib) 与 k2/schlib (不存在) 均无 DS320PR1601 符号/封装; 现行 sch 仅 DS160PR810 WQFN-64 旧符号 (v5 upstream/downstream 两页)",
+   "frozen_required": "ECO 需 DS320PR1601 (nfBGA-354 ZDG) KiCad 符号 + 封装 (354 球), 网表重连 16 lane + REFCLK 直通 + 电源 30 VCC 球",
+   "regen_action": "ECO 前置: 取得/建 DS320PR1601 符号+封装 (来源: UltraLibrarian 已取 354 ballmap 同源 TI 资产; kb machine_ballmap_source 引用); 建库后 ECO 才可落地",
+   "status": "BLOCKED_BY_ECO (新增登记项, kb known_gaps 未单列, 本清单补记)"
+  }
+ ],
+ "summary": {
+  "blocked_by_eco": 8,
+  "path_proven": 1,
+  "no_diff": 1,
+  "regen_trigger": "DS320PR1601 符号/封装资产 → 原理图 ECO (换符号/46mm/单面/网表) → 真板 → 本清单逐项再生 → reproduce_c3_spec_regen_draft.py --spec 再生后 SPEC (移除 U3/U7 重跑) → ⑦ evaluated → C5 芯片级核对",
+  "mcio_feas": "planned/S0 (C3/C5 未闭不 advance)"
+ }
+}
