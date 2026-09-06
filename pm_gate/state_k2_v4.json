@@ -237,6 +237,16 @@
       "created_at": "2026-08-23T10:21:11+00:00",
       "ruling": "按 candidate_method 落盘 gnd_stitch_via.coordinates 坐标表：100 换层点 → 69 可落 + 31 显式 blocked（名义 0.6mm 正交位被相邻差分墙占用）；ecn_pending=false；blocked 显式标注，禁止静默放弃",
       "ruled_at": "2026-08-23T10:21:11+00:00"
+    },
+    {
+      "id": "ECN-007",
+      "reason": "SPEC bga_escape.per_ball port_to_corridor {A:east,B:west} = 带前缀键 (band[0])，无法表达 v30 对账修正后逐带映射 (A_PER/B_PET->east、A_PET/B_PER->west)；现引擎 per_ball_escape_6L_report 分类 B_PET=DIRECT_F.CU/A_PET=VIA_IN2 = 修正前语义，与 L2 v2.0 对账修正文本相悖",
+      "raised_from": "L3",
+      "affects_gates": [],
+      "status": "ruled",
+      "created_at": "2026-09-06T09:44:38+00:00",
+      "ruling": "批准: per_ball desc port_to_corridor 契约升级 = 逐带全名键 (A_PER/B_PET->east, A_PET/B_PER->west)，引擎 escape_landing 全名键优先 + 前缀键回退兼容；SPEC_k2_v4.json + reproduce_per_ball_escape.py + SPEC_k2_v4_c3poc.json 数据同批更新；回归 per_ball verdict FEASIBLE 不变，方法拆分翻转为修正语义 (DIRECT=A_PET+B_PER 32 / VIA=A_PER+B_PET 32 / crossing 16 对 N/S 8+8)，容量账中性不触发 8L 重入",
+      "ruled_at": "2026-09-06T09:44:52+00:00"
     }
   ],
   "reviews": [

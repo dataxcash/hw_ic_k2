@@ -25,5 +25,50 @@
   "SPEC bga_escape.per_ball port_to_corridor {A:east,B:west} is band-prefix-keyed and cannot express corrected per-band mapping (A_PER/B_PET->east, A_PET/B_PER->west) - engine-desc ECN candidate for L3",
   "sch side (k2_sch.yaml + kicad_sch sheets) still U3/U7 DS160PR810 - DS320 symbol integration + netlist parity pending sideband design",
   "L3 construction (escape/corridor routing, DRC-zero) not started in this session"
- ]
+ ],
+ "_v31_addendum": {
+  "at": "2026-09-06 (m13_v31)",
+  "gap_B_decoupling_reposition": {
+   "moved": {
+    "C79": [
+     91.0,
+     58.0,
+     "->",
+     91.0,
+     61.0
+    ],
+    "C83": [
+     91.0,
+     57.0,
+     "->",
+     91.0,
+     62.0
+    ]
+   },
+   "rationale": "pre-placed ECN-004 redriver_vcc_decoupling caps at (91,57)/(91,58) fell inside DS320 rot-90 ball field (6 pad violations, worst C83-BM2 0.12mm<0.55); relocated south-band row x=91 col y58/57 -> y61/62 (south of U6 pad field max y 57.49, >=2mm margin), keeping same column & decoupling ring semantics",
+   "clearance_audit": "reproduce_eco_full_clearance.py rerun: NON-U6=0, U6-vs-others=0 (was 6)",
+   "board_backup": "k2_v4.kicad_pcb.bak_scopeB_v30 (sha 5237578bb974937d85f1c1552831368dfe5f8ead63292669bee5b150728cfbd0)",
+   "board_sha_after": "f6273de613f43d05555d12d6c3492b1e70f383761d8db5121f12b2ca0695af9a",
+   "freeze": "unlock->pcbnew move->lock (0/0/0)"
+  },
+  "gap_A_ruling": "user/arch 2026-09-06: DS320PR1601 sideband = MODE L2 SMBus-target (6.225kohm to GND) + SDA/SCL -> MCU I2C2 (R33/R34 pullups reuse, J11 EC header reachable); PD_3-0/PD_7-4 -> GND(power up lanes0-7), PD_11-8/PD_15-12 -> P3V3(power down unused lanes8-15); A_ADDR0/1_7-0 bank=L0/L0(1k/1k, 0x18/0x19), B_ADDR0/1_7-0 bank=L0/L1(1k/8.25k, 0x1A/0x1B), unused A/B_ADDRx_15-8 banks=L0(1k) x4; READ_EN_#/ALL_DONE_# NC (target mode floating). Board physical wiring + strap parts = follow-on (gap D/E)",
+  "gap_C_ecn007": {
+   "ecn": "ECN-007 ruled (L3, 批准不回退)",
+   "engine": "_shared/eda_core/escape_landing.py _corridor_of_band (full-band key first, prefix fallback)",
+   "data": "SPEC_k2_v4.json + SPEC_k2_v4_c3poc.json + reproduce_per_ball_escape.py port_to_corridor -> band keys",
+   "regression": "per_ball FEASIBLE unchanged; method flip corrected (DIRECT=A_PET+B_PER 32, VIA=A_PER+B_PET 32, crossing 16 N/S 8+8); eda_core tests 19 passed; production plan() v1.4 FEASIBLE_WITH_MORPH_GAP + 07 evaluated FEASIBLE (POC_PASS)"
+  },
+  "gap_D_sch_yaml": {
+   "action": "k2_sch.yaml rebuilt (k2_sch_v31_rebuild.py): REDR_DS160PR810 -> DS320PR1601 354pin symbol (unique pin names; dup GND/N/C/VCC -> ball), U3/U7 + C17-C32/C49-C64/C65-C72 + old straps removed, 64 diff nets rewired per corrected C5 matrix, sideband per gap-A ruling, new strap R35-R39/R42-R45, stra_intents U6 scheme, links rebuilt",
+   "verification": "schlib loader PASS (55 comp, U6x1, U3/U7 zero) + reproduce_k2_sch_v31_parity.py: 246 board-wired U6 balls checked 0 fails + sideband yaml mapping PASS",
+   "backup": "boards_k2_sch.yaml.bak_v30 (in L3/)"
+  },
+  "gap_D_graphics_kicad_sch": {
+   "status": "MODEL_GAP registered (user ruling 2026-09-06): schlib generator cannot render 354pin single-body symbol (pin_pitch>=2.54 enforced; min body height 449.6mm > A2 420mm); kicad_sch v5 sheets stay DS160PR810-era stale; regeneration requires generator extension (multi-unit/custom paper) = ECN + arch ruling, NOT faked this session"
+  },
+  "gap_E_l3_construction": {
+   "status": "OPEN (user ruling 2026-09-06): board 0 track/0 via/0 zone; SPEC layer_plan 6L skeleton regenerated (stale 8L/U3-U7 polyline cleared, corrected per-ball semantics + corridor band nets per corrected C5); per-net construction plan + engine chain routing + DRC-zero + QA + S-state = next session",
+   "spec_sha16_after": "2c024beed007412c"
+  }
+ }
 }
