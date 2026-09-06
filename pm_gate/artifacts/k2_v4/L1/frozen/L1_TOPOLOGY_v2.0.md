@@ -45,17 +45,33 @@
 
 ## 信号流向（冻结）
 
-- DN（8 lane，J2 x8 → J3/J4 x4+x4）：J2 → 芯片 A_PORT（A_PER west 端入）→ 芯片内部 →
-  芯片 B_PORT（B_PET west 端出）→ MCIO J3(0-3)/J4(4-7)。
-- UP（8 lane，J3/J4 → J2）：MCIO → 芯片 B_PORT（B_PER east 端入）→ 芯片内部 → 芯片 A_PORT
-  （A_PET east 端出）→ J2。
-- **穿越（板级语义，v26 引擎口径，2026-09-06 统一）**：K2 lanes 0-7 全部落在西半球
-  （bx<93.8），A 带（A_PER+A_PET 各 8 对 = 16 对）西半球球经 ball-via→In2 **东穿**至东走廊
-  （J2 侧，F→In2→F，2 via ≤2 硬限）；B 带（B_PET/B_PER 各 8 对）西半球球 F.Cu **直出**西走廊
-  （MCIO 侧）。——本行取代旧 die 级表述「DN/UP 各 8 输入侧网（A_PER/B_PER）跨芯片全长」；
-  §信号流 DN/UP 方向为 die 级端口流（端口 A↔J2、端口 B↔MCIO），与板级穿越集合
-  （A 带 16 对 In2 东穿）是不同计数口径（前者 16=DN8+UP8、后者 16=A_PER8+A_PET8），
-  二者并存不冲突但**禁止混用**（v26 评审 B 语义漂移修正）。
+> **[CACHE_STABLE] v2.0 对账修正（scope-B 裁决点，2026-09-06，用户/架构裁决）**：
+> A/B 前缀 = TI **方向通道组**（非空间端口组）——SNLA425 Table 1-2/1-3（Downstream = CPU→A-Side→EP
+> ↔ A_PEx；Upstream = EP→B-Side→CPU ↔ B_PEx）+ SNLU300 §2.4（Downstream/Upstream channel 定义）+
+> SNLS683 Table 5-1（A_PER=receive/A_PET=transmit side A, Diff Input/Output）+ 功能框图（1-Channel of 16
+> ×2：A 通道 = A_PER 入→A_PET 出；B 通道 = B_PER 入→B_PET 出）三重源钉死。
+> 通道语义：**A 通道 = downstream（host 端 A_PER 收 → device 端 A_PET 发）；B 通道 = upstream
+> （device 端 B_PER 收 → host 端 B_PET 发）**。→ **host(J2) 端球 = A_PER + B_PET；device(MCIO) 端球 =
+> A_PET + B_PER**。
+> 修正前本文（及 C5 矩阵 v28）按「A 组球(A_PER+A_PET)→J2、B 组球→MCIO」编码 = A_PET/B_PET 角色对调
+> （若照布 → 芯片下游输出 A_PET 误接 host、上游输出 B_PET 误接 device → 链路环回失效）；本行起按
+> TI 硅片真实语义。容量账中性（穿越/直出仍各 16 对、32 via/32 直出、8 对/带 fan-out 不变）。
+
+- DN（8 lane，J2 x8 → J3/J4 x4+x4）= A 通道（downstream）：J2 host TX（PCIE_DN0-7）→ 芯片 **A_PER**
+  （A 通道入，host 端收）→ 芯片内部 A 通道 → 芯片 **A_PET**（A 通道出，device 端发）→ MCIO J3(0-3)/J4(4-7)。
+- UP（8 lane，J3/J4 → J2）= B 通道（upstream）：MCIO device TX（PCIE_UP0-7）→ 芯片 **B_PER**
+  （B 通道入，device 端收）→ 芯片内部 B 通道 → 芯片 **B_PET**（B 通道出，host 端发）→ J2。
+- **网名↔球组（对账修正后）**：J2 侧 = PCIE_DN*（→A_PER）+ PCIE_UP_OUT*_J2（←B_PET）；MCIO 侧 =
+  PCIE_UP*（→B_PER）+ PCIE_DN_OUT*_MCIO（←A_PET）。
+- **穿越（板级语义，v26 引擎口径 + 2026-09-06 对账修正成员）**：K2 lanes 0-7 全部落在西半球
+  （bx<93.8），J2 侧网球组（**A_PER + B_PET** 各 8 对 = 16 对）西半球球经 ball-via→In2 **东穿**至东走廊
+  （J2 侧，F→In2→F，2 via ≤2 硬限）；MCIO 侧网球组（**A_PET + B_PER** 各 8 对 = 16 对）西半球球 F.Cu
+  **直出**西走廊（MCIO 侧）。——本行取代旧 die 级表述「DN/UP 各 8 输入侧网（A_PER/B_PER）跨芯片全长」；
+  §信号流 DN/UP 方向为 die 级通道流（A 通道/J2、B 通道/MCIO），与板级穿越集合
+  （J2 侧网 16 对 In2 东穿）是不同计数口径（前者 16=DN8+UP8、后者 16=A_PER8+B_PET8），
+  二者并存不冲突但**禁止混用**（v26 评审 B 语义漂移修正 + scope-B 对账修正）。
+- **[CACHE_STABLE] 对账修正前旧文（保留可追溯，勿引用）**：DN「J2→A_PER→B_PET→MCIO」/UP
+  「MCIO→B_PER→A_PET→J2」及「A 带(A_PER+A_PET)东穿」为 A_PET/B_PET 对调版本，已被本行取代。
 - REFCLK0/1：**直通，不经芯片**（redriver 协议透明零 REFCLK，v19 §3#2）。REFCLK0=J2↔J3、
   REFCLK1=J2↔J4，In2 S 翼分带 + 包地 ≥2mm。
 - 低速/边带 24 网：I2C/UART/PERST#/USB/GPIO 等，走 In2 端区/B.Cu/F.Cu 外围，不争 PCIe 走廊。
@@ -100,3 +116,12 @@
   「引擎级 FEASIBLE（待条件闭合）」升格为「6L 判定流程终定」（C3: 生产 SPEC 再生
   DS320PR1601 + ⑦ evaluated FEASIBLE；C5: 连接器级真板实测一致 + 芯片级期望矩阵一致）。
   范围 A 边界：真板物理 ECO + L3 施工 = scope-B，C5 芯片级实测核对随 scope-B 一次执行。
+- v2.0 对账修正补记（2026-09-06，scope-B 裁决点，用户/架构裁决）：
+  ① A/B 前缀语义 = TI 方向通道组（A=downstream/CPU→EP、B=upstream/EP→CPU，SNLA425 T1-2/1-3 +
+  SNLU300 §2.4 + SNLS683 T5-1 三重源），非「A 组球全朝 host」空间端口组；host(J2) 端球 =
+  A_PER+B_PET，device(MCIO) 端球 = A_PET+B_PER。
+  ② §信号流向 DN/UP + 穿越成员按修正后语义重写（A_PET/B_PET 角色对调）；容量账中性，6L 判定
+  流程终定不变（未触发 8L 重入条款）。
+  ③ C5 期望矩阵 v28 同批修正（见 c5_chip_level_expect_matrix_v28.json 补记段）。
+  ④ footprint 放置帧裁决：DS320PR1601.kicad_mod（ballmap 原帧）rot-270 落位 (93.8,53.7)
+  （A1→西南角），拟合本文件体包络；引擎 per_ball 帧与之 N-S 镜像、容量良性（Oracle 复核）。

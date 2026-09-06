@@ -94,3 +94,31 @@
   L2 判定任务 closed 即完成使命。
 - commit 面（v29 补记）：k2 = tasks/mcio_feas.json（closed）+ 本文件 §6；_shared =
   kb.sqlite3（v7）。容器 bump。git 前 unlock 后 lock。
+
+## 7. v29 补记(2)（同 session 延续：pcbnew 环境发现 + DS320 库资产 + 归档清理）
+
+> 用户「继续」scope-B + 指出归档目录干扰。三件事：
+
+1. **pcbnew 环境发现（纠正 v28「缺 pcbnew」误判）**：本机 KiCad 10.0.5（AppImage 解包于
+   容器根 `AppDir/`，.gitignore 已排除不入库）。正确调用：
+   ```
+   LD_LIBRARY_PATH=AppDir/shared/lib PYTHONPATH=AppDir/shared/lib/python3.11/dist-packages \
+     AppDir/usr/bin/python3.11 <script>
+   ```
+   裸系统 python3 缺 AppDir 路径 → ModuleNotFoundError/wx 缺失 = 误判根因。14+ 引擎文件
+   （pad_extract/hs_apply/board_model 等）本就 import pcbnew。真板 k2_v4.kicad_pcb 实测可加载。
+2. **DS320PR1601 KiCad 库资产（scope-B ECO 前置）**：`gen_ds320pr1601_lib.py`（可复跑，
+   资产驱动 354 ballmap）→ **k2/ForgeOS.pretty/DS320PR1601.kicad_mod**（354 smd circle pads，
+   ballmap 逐球坐标，pcbnew 加载验证 A1=(-3.94,-11.05)/CB34 一致）+ **k2/DS320PR1601.kicad_sym**
+   （354 pins：name=signal/number=球名/电气类型映射）。落位 = k2 工程（ForgeOS: 前缀唯一
+   消费者 = k2_v4.kicad_pcb）；曾误落归档 strix 已撤销。
+3. **归档清理（用户裁决）**：`strix-halo-ioconvert/` 整个目录已删除（非 submodule、容器不
+   track，rm -rf 即净）；容器 .gitignore 增 `strix-halo-ioconvert/` 防再 checkout 干扰。
+   唯一引用 = k2 verify/*.json 历史证据（2026-08 存档，保留原样不改）。
+   ForgeOS 库真源随 strix 删除 —— k2 真板 footprint 已实例化嵌入（打开不受影响）；
+   k2/ForgeOS.pretty/ 为本 session 新建，DS320PR1601 为库内唯一 footprint。
+
+- 遗留 untracked（既往 session 未纳入，非本 session 产物，不夹带）：k2 内嵌 `_shared` 陈旧
+  镜像（`?? _shared`，v27 声明勿动）、L3/m13_v10 handoff、model_solves/channel_alloc_diag、
+  hs_rebuild_v11/v12、容器 88096Image/、pciesw4 gitlink 漂移（submodule 未初始化）、key_v2
+  untracked。均与本 session 无关。

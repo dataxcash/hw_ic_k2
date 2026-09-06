@@ -1,0 +1,29 @@
+{
+ "probe": "eco_scopeB_physical_record",
+ "at": "2026-09-06",
+ "authority": "user/arch rulings: (1) A_PET<->B_PET swap per TI SNLS683/SNLA425/SNLU300; (2) fp rot semantics = KiCad angle 90 (A1->SW corner), asset unchanged",
+ "board_backup": "k2_v4.kicad_pcb.bak_scopeB_v29 (sha 6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24)",
+ "operations": {
+  "deleted_footprints": "U3,U7 + C17-C32(AC wall DN) + C49-C64(AC wall UP) + C65-C72(VREG decap) + R4-R7,R9-R12,R17-R20,R22-R27(old DS160PR810 straps) = 60",
+  "inserted": "U6 = DS320PR1601 @(93.8,53.7) rot 90 (A1->board SW 82.75,57.64; lanes0-7 west half -> frozen A-group In2-east-cross semantics)",
+  "nets": "64 signal balls wired per corrected C5 matrix (A_PER->PCIE_DN*, B_PET->PCIE_UP_OUT*_J2, A_PET->PCIE_DN_OUT*_MCIO, B_PER->PCIE_UP*); VCC1-4 30 balls -> P3V3; GND 152 -> GND",
+  "board_outline": "y 33->79 (46mm); x 23/143 unchanged (Edge.Cuts 4 segs)",
+  "stackup": "8L -> 6L (F/In1/In2/In3/In4/B; In5/In6 layer defs removed)"
+ },
+ "verifications": {
+  "c5_chip_level": "130 assertions PASS (eco_c5_verify.py): 64-ball net matrix exact + J2/J3/J4 endpoint sharing + no REFCLK on U6",
+  "refclk": "REFCLK0 J2<->J3, REFCLK1 J2<->J4 direct (no U6 ball) PASS",
+  "legacy_nets": "0 *_U3/*_U7 nets remaining",
+  "footprint_count": "42 (101 - 60 + 1)",
+  "copper_layers": "6 confirmed on reload",
+  "board_bbox": "y[32.95,79.05] x[22.95,143.05] = 120x46.1mm"
+ },
+ "open_gaps": [
+  "DS320PR1601 sideband (SDA/SCL/A_ADDR0/1_7-0+B_ADDR0/1_7-0+A_ADDR0/1_15-8+B_ADDR0/1_15-8/PD_3-0,7-4,11-8,15-12/READ_EN_#/MODE/ALL_DONE_# = 17 balls) UNCONNECTED - no frozen strap/sideband design intent exists (k2_sch.yaml strap_intents are DS160PR810-era); needs sch-layer design decision before netlist completion",
+  "C79/C83 decap collision: pre-placed ECN-004 'redriver_vcc_decoupling' caps at (91,57)/(91,58) fall inside DS320 rot-90 ball field (min center dist 0.323mm vs need >=0.55 for C83; 6 pad violations) - needs PDN decap repositioning in L3, not improvised here",
+  "lanes 8-15 (64 balls) unconnected = expected (K2 8-of-16); RSVD15+N/C12 unwired normal",
+  "SPEC bga_escape.per_ball port_to_corridor {A:east,B:west} is band-prefix-keyed and cannot express corrected per-band mapping (A_PER/B_PET->east, A_PET/B_PER->west) - engine-desc ECN candidate for L3",
+  "sch side (k2_sch.yaml + kicad_sch sheets) still U3/U7 DS160PR810 - DS320 symbol integration + netlist parity pending sideband design",
+  "L3 construction (escape/corridor routing, DRC-zero) not started in this session"
+ ]
+}

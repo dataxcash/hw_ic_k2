@@ -7,16 +7,31 @@
   "ds320pr1601_ballmap.json (UltraLibrarian TI 354 球, die 级命名 A/B 端口×PER/PET 列带×lane×P/N)",
   "kb corridor_pair_ds320pr1601_dual_band v5 (provenance: TI SNLS683 Table 5-1 列带逐球解析 全 16 lane 一致)"
  ],
+ "_v30_scopeB_correction": {
+  "at": "2026-09-06",
+  "authority": "user/arch ruling (scope-B 裁决点: DS320PR1601 A/B 端口实际定义 vs L1「A=host」假设对账)",
+  "evidence": [
+   "SNLA425 Table 1-2/1-3: Downstream = CPU -> A-Side -> Endpoint (lane N <-> A_PExN); Upstream = Endpoint -> B-Side -> CPU (lane N <-> B_PExN)",
+   "SNLU300 2.4: Downstream channels = data flows CPU->DS320PR1601->Endpoint (A channels); Upstream = Endpoint->DS320PR1601->CPU (B channels)",
+   "SNLS683 Table 5-1: A_PER=Diff Input(receive side A)/A_PET=Diff Output(transmit side A); B_* 同 (side B)",
+   "SNLS683 7.2 功能框图: 1-Channel of 16 x2 -- A 通道 = A_PER 入->CTLE->Linear->A_PET 出; B 通道 = B_PER 入->B_PET 出 (方向通道组, 非空间端口组)"
+  ],
+  "semantics": "A/B 前缀 = TI 方向通道组: A 通道 = downstream(host 端 A_PER 收 -> device 端 A_PET 发); B 通道 = upstream(device 端 B_PER 收 -> host 端 B_PET 发). host(J2) 端球 = A_PER + B_PET; device(MCIO) 端球 = A_PET + B_PER.",
+  "correction": "port_roles 以下按修正后语义重写: J2(host) 网 = PCIE_DN0-7(host TX, ->A_PER) + PCIE_UP_OUT0-7_J2(host RX, <-B_PET); MCIO(device) 网 = PCIE_UP0-7(device TX, ->B_PER) + PCIE_DN_OUT0-7_MCIO(device RX, <-A_PET). check_items 1/2 原「J2<->A_PER/A_PET 带」「J3/J4<->B_PER/B_PET 带」= A_PET/B_PET 对调版本, 已修正.",
+  "impact": "容量账中性 (每侧 16 对/32 网、32 via/32 直出不变), 6L 判定流程终定不变; 真板物理 ECO 网表按修正后矩阵接线。修正前旧编码勿引用。"
+ },
  "port_roles": {
   "A": {
    "side": "host",
    "connector": "J2 (SlimSAS x8)",
-   "nets": "PCIE_DN/UP0-7 (host 侧)"
+   "balls": "A_PER (host TX 入: PCIE_DN0-7) + B_PET (host RX 出: PCIE_UP_OUT0-7_J2)",
+   "nets": "PCIE_DN0-7 (host TX -> A_PER) / PCIE_UP_OUT0-7_J2 (host RX <- B_PET)"
   },
   "B": {
    "side": "device",
    "connector": "J3/J4 (MCIO x4+x4)",
-   "nets": "DN_OUT0-7_MCIO / UP0-7 (J3=0-3, J4=4-7)"
+   "balls": "A_PET (device RX 出: PCIE_DN_OUT0-7_MCIO) + B_PER (device TX 入: PCIE_UP0-7)",
+   "nets": "PCIE_UP0-7 (device TX -> B_PER; J3=0-3, J4=4-7) / PCIE_DN_OUT0-7_MCIO (device RX <- A_PET)"
   }
  },
  "lane_to_mcio": {
@@ -173,11 +188,13 @@
   }
  },
  "check_items_after_eco": [
-  "ECO 网表: J2 host lanes 0-7 P/N ↔ A 端口球 (A_PER/A_PET 带) — 每 lane 2 球全接",
-  "ECO 网表: J3(0-3)/J4(4-7) ↔ B 端口球 (B_PER/B_PET 带) — 与 v27/v28 板级核对衔接",
-  "DN/UP 方向: redriver 内部 re-drive (A↔B); 网表接对 P/N/lane 即满足, 方向由芯片配置",
+  "ECO 网表: J2 host TX lanes 0-7 P/N (PCIE_DN0-7) ↔ A_PER 带球 (A_PER 每 lane 2 球全接)",
+  "ECO 网表: J2 host RX lanes 0-7 P/N (PCIE_UP_OUT0-7_J2) ↔ B_PET 带球 (每 lane 2 球全接)",
+  "ECO 网表: J3(0-3)/J4(4-7) device RX (PCIE_DN_OUT0-7_MCIO) ↔ A_PET 带球 (每 lane 2 球全接) — 与 v27/v28 板级核对衔接",
+  "ECO 网表: J3(0-3)/J4(4-7) device TX (PCIE_UP0-7) ↔ B_PER 带球 (每 lane 2 球全接)",
+  "DN/UP 方向: redriver 内部通道 (A 通道=A_PER→A_PET downstream; B 通道=B_PER→B_PET upstream); 网表接对 P/N/lane 即满足, 方向由芯片通道定义 (TI SNLA425/SNLU300)",
   "REFCLK0/1: 无芯片球, 直通 (断言网表无 REFCLK 接到 DS320PR1601)",
-  "若 ECO 网表 A 端口实际接 MCIO (与 L1 A=host 冲突) → 冲突即停机, 回 L1/L2 对账, 禁运行时改判"
+  "若 ECO 网表与上述修正后映射不符 (如 A_PER/A_PET 仍同接 J2 或 A 端口实际接 MCIO) → 冲突即停机, 回 L1/L2 对账, 禁运行时改判"
  ],
  "total_signal_balls": 64,
  "engine_consistency": "64 球 = per_ball 引擎 signal_ball_count=64 (per_ball_escape_6L_report.json; v26/v27 FEASIBLE 同口径)",
