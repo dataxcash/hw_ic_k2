@@ -1,17 +1,22 @@
 # L1 冻结：整体方案 V2 — 单 DS320PR1601 × 46mm × 6L（ECN v20→v21）
 
-> 状态：**已冻结（2026-09-05，ECN v21，用户授权）**。本文件为 L2 结构设计的约束包络，
-> 超脱并替代 `L1_TOPOLOGY_v1.0.md`（双侧对称电容墙/WQFN 方案，作废，git 保留存档）。
+> 状态：**已冻结（2026-09-05，ECN v21，用户授权；2026-09-06 v26 评审降级补记）**。
+> 本文件为 L2 结构设计的约束包络，超脱并替代 `L1_TOPOLOGY_v1.0.md`（双侧对称电容墙/WQFN 方案，
+> 作废，git 保留存档）。
 > 变更依据：v19 器件选型冻结（DS320PR1601）+ v20 用户裁决（板加高 46mm、单面贴、6L 先试不闭合回 8L）。
-> **层数定案（6L vs 8L）= 已定案 6L 正式冻结（2026-09-05，per-ball 工具级逃逸验证通过）**；
-> 本文件由「6L 试用 + 8L 兜底」升级为「6L 定案」。v21 初始"闭合"判定曾被非执行者对抗评审
-> FAIL 退回（见 v21_realroute/REVIEW_ADVERSARIAL_v21.md，因决定性逃逸项未做工具级验证）。
+> **层数（6L vs 8L）= 引擎级 FEASIBLE（per-ball 容量/净空/首发判定，[CACHE_STABLE] 对抗评审
+> PASS_WITH_CONDITIONS），待 C1-C3-C5 闭合后流程终定**——本文件由「6L 试用 + 8L 兜底」升级为
+> 「引擎级 FEASIBLE（待条件闭合）」，非「正式定案」（2026-09-06 降级修正，v26 评审 §0）。
+> v21 初始"闭合"判定曾被非执行者对抗评审 FAIL 退回（见 v21_realroute/REVIEW_ADVERSARIAL_v21.md，
+> 因决定性逃逸项未做工具级验证）。
 > **本 m14 v26 以真实 354 球坐标（v25）+ 模型层新增 per-ball 逃逸引擎（⑥ BGA_GROUP_ESCAPE
 > 拓扑级 + ⑦ BGA_PER_BALL_ESCAPE per-ball 物理几何）逐球判定 FEASIBLE**：K2 8-of-16 lane
-> 64 信号球 = 32 F.Cu 直出 + 32 ball-via→In2，穿越 16 对（A_PER+A_PET，B_PET/B_PER 直出）；
-> 每带 8 对 fan-out 阵列 1.2mm→走廊 1.46mm（transition 段扩张，11.68≤23.36）；N/S 翼各 8 对
-> 4.8mm≤16.2/18.8（REFCLK 2.0 预留）；via 净空 0.6mm≥0.427 阈值；deficits 0 → **6L 闭合，
-> 8L 兜底不启用**。
+> 64 信号球 = 32 F.Cu 直出 + 32 ball-via→In2，穿越 16 对（A_PER+A_PET 板级 In2 东穿，
+> B_PET/B_PER 直出）；每带 8 对 fan-out 阵列 1.2mm→走廊 1.46mm（transition 段扩张，
+> 11.68≤23.36）；N/S 翼各 8 对按 ipair 口径 11.68mm≤16.2/18.8（C2 修订后重跑仍过，REFCLK
+> 2.0 预留）；via 净空全 354 球 worst 0.6mm≥0.427 阈值；deficits 0 → **6L 引擎级 FEASIBLE
+> （容量级稳健，流程终定待 C1-C3-C5）**；8L 兜底仅作回退候选（重入条件见 L2「8L 重入 ECN
+> 触发条款」）。
 > 引用：任何 L2/L3 不得违反本文件任何决策；与 L1_TOPOLOGY_v1.0 冲突以本文件为准。
 
 ## 器件分区（冻结）
@@ -39,7 +44,13 @@
   芯片 B_PORT（B_PET west 端出）→ MCIO J3(0-3)/J4(4-7)。
 - UP（8 lane，J3/J4 → J2）：MCIO → 芯片 B_PORT（B_PER east 端入）→ 芯片内部 → 芯片 A_PORT
   （A_PET east 端出）→ J2。
-- **穿越**：DN/UP 各 8 输入侧网（A_PER/B_PER）跨芯片全长，走 In2 内层（F→In2→F，2 via ≤2 硬限）。
+- **穿越（板级语义，v26 引擎口径，2026-09-06 统一）**：K2 lanes 0-7 全部落在西半球
+  （bx<93.8），A 带（A_PER+A_PET 各 8 对 = 16 对）西半球球经 ball-via→In2 **东穿**至东走廊
+  （J2 侧，F→In2→F，2 via ≤2 硬限）；B 带（B_PET/B_PER 各 8 对）西半球球 F.Cu **直出**西走廊
+  （MCIO 侧）。——本行取代旧 die 级表述「DN/UP 各 8 输入侧网（A_PER/B_PER）跨芯片全长」；
+  §信号流 DN/UP 方向为 die 级端口流（端口 A↔J2、端口 B↔MCIO），与板级穿越集合
+  （A 带 16 对 In2 东穿）是不同计数口径（前者 16=DN8+UP8、后者 16=A_PER8+A_PET8），
+  二者并存不冲突但**禁止混用**（v26 评审 B 语义漂移修正）。
 - REFCLK0/1：**直通，不经芯片**（redriver 协议透明零 REFCLK，v19 §3#2）。REFCLK0=J2↔J3、
   REFCLK1=J2↔J4，In2 S 翼分带 + 包地 ≥2mm。
 - 低速/边带 24 网：I2C/UART/PERST#/USB/GPIO 等，走 In2 端区/B.Cu/F.Cu 外围，不争 PCIe 走廊。
@@ -50,7 +61,7 @@
 |---|---|---|
 | 板框 | x∈[23,143]（120mm）；**y∈[33,79]（46mm）** | v20 用户裁决 H1 |
 | 贴面 | **单面（F.Cu），B.Cu 空置** | v20 用户裁决（真板 101 件本就在 F.Cu 单面） |
-| 叠层 | **6 层 F/G/S/G/P/B = 已定案（2026-09-05 per-ball 逃逸引擎验证 FEASIBLE）；8L 兜底不启用** | v20 用户裁决 + v21 + m14 v26 per-ball 逃逸引擎（⑦ FEASIBLE） |
+| 叠层 | **6 层 F/G/S/G/P/B = 引擎级 FEASIBLE（2026-09-05 per-ball 引擎验证；v26 对抗评审 PASS_WITH_CONDITIONS，流程终定待 C1-C3-C5）；8L 兜底仅回退候选（重入见 L2 条款）** | v20 用户裁决 + v21 + m14 v26 per-ball 逃逸引擎（⑦ FEASIBLE）+ v26 评审降级 |
 | 电容墙 | 32×220nF 0402 **全部移除**（64 AC 集成于 DS320PR1601 TX 脚，220nF typ） | v19 §3 #2 |
 
 ## 电源域划分（冻结）
@@ -76,3 +87,7 @@
 
 - v1.0（2026-08-13 冻结，双侧电容墙/WQFN/8L）——**作废，git 存档**。
 - v2.0（2026-09-05 冻结，DS320PR1601/46mm/6L/单面）——本文件。
+- v2.0 修订补记（2026-09-06，v26 对抗评审 C4 + 裁决点1 授权）：
+  ① 层数表述由「已定案 6L 正式冻结」降级为「引擎级 FEASIBLE（PASS_WITH_CONDITIONS），
+  待 C1-C3-C5 闭合后流程终定」；② 「穿越」语义统一为板级（A_PER+A_PET In2 东穿 16 对），
+  与 die 级端口流（DN/UP 各 8 输入侧网）区分并禁混用；③ 引用 L2「8L 重入 ECN 触发条款」。

@@ -1,0 +1,58 @@
+{
+ "probe": "c1_via_reclass_review",
+ "level": "certificate_review",
+ "basis": "REVIEW_ADVERSARIAL_v26 C1 路径 b（用户裁决 2026-09-06）",
+ "verdict": "FEASIBLE_UNCHANGED",
+ "ok": true,
+ "scenarios": {
+  "S0_baseline_engine": {
+   "via_balls": 32,
+   "direct_balls": 32,
+   "crossing_pairs": 16,
+   "via_demand": 32,
+   "via_capacity": 69,
+   "via_ok": true,
+   "wing_need_mm": 11.68,
+   "wing_N_ok": true,
+   "wing_S_ok": true,
+   "engine_verdict": "FEASIBLE"
+  },
+  "S1_bper_row1_via": {
+   "reclass_balls": [
+    "AG34",
+    "AP34",
+    "BA34",
+    "BH34",
+    "BR34",
+    "CB34",
+    "N34",
+    "Y34"
+   ],
+   "reclass_count": 8,
+   "via_demand": 40,
+   "via_capacity": 69,
+   "via_ok": true,
+   "crossing_pairs_unchanged": true,
+   "note": "stub 型改判不增穿越对（west 侧 In2 stub 潜行，非东穿）"
+  },
+  "S2_all_direct_via": {
+   "reclass_balls": 32,
+   "via_demand": 64,
+   "via_capacity": 69,
+   "via_ok": true,
+   "crossing_pairs_unchanged": true,
+   "margin": 5
+  }
+ },
+ "remaining_to_l3": [
+  "B_PER row1 8 球若走 stub 的 In2 逐段落点 = L3 dogbone 级（本复核只证容量账）",
+  "引擎 VIA_IN2 语义=crossing；stub 型改判以本证书复核兜底，非引擎重判"
+ ],
+ "numbers": {
+  "via_capacity": 69,
+  "inter_pair_spacing": 1.46,
+  "wing_N_avail": 16.2,
+  "wing_S_avail": 18.8,
+  "b_per_row1_by": 57.12
+ }
+}
