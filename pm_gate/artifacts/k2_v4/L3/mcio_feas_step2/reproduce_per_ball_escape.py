@@ -47,7 +47,8 @@ def build_desc() -> dict:
             "axis": {"board_x": "ball_y", "board_y": "ball_x"},
             "selected_lanes": list(range(8)),
             "inter_pair_spacing": 1.46,
-            "port_to_corridor": {"A": "east", "B": "west"},
+            "port_to_corridor": {"A_PER": "east", "B_PET": "east",
+                                 "A_PET": "west", "B_PER": "west"},  # ECN-007: band-keyed
             "corridor_edge": {"east": 105.25, "west": 82.35},
             "band_corridor_capacity": {"east": 16, "west": 16},
             "via_zone_capacity": 69,
