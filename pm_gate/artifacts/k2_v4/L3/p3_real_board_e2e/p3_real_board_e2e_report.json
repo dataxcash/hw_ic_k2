@@ -548,38 +548,6 @@
    ],
    "status": "INFEASIBLE"
   },
-  "PCIE_DN_OUT0": {
-   "segments": [],
-   "status": "INFRA_ERROR"
-  },
-  "PCIE_DN_OUT1": {
-   "segments": [],
-   "status": "INFRA_ERROR"
-  },
-  "PCIE_DN_OUT2": {
-   "segments": [],
-   "status": "INFRA_ERROR"
-  },
-  "PCIE_DN_OUT3": {
-   "segments": [],
-   "status": "INFRA_ERROR"
-  },
-  "PCIE_DN_OUT4": {
-   "segments": [],
-   "status": "INFRA_ERROR"
-  },
-  "PCIE_DN_OUT5": {
-   "segments": [],
-   "status": "INFRA_ERROR"
-  },
-  "PCIE_DN_OUT6": {
-   "segments": [],
-   "status": "INFRA_ERROR"
-  },
-  "PCIE_DN_OUT7": {
-   "segments": [],
-   "status": "INFRA_ERROR"
-  },
   "PCIE_REFCLK0": {
    "segments": [
     {
@@ -719,38 +687,6 @@
     }
    ],
    "status": "INFEASIBLE"
-  },
-  "PCIE_UP_OUT0": {
-   "segments": [],
-   "status": "INFRA_ERROR"
-  },
-  "PCIE_UP_OUT1": {
-   "segments": [],
-   "status": "INFRA_ERROR"
-  },
-  "PCIE_UP_OUT2": {
-   "segments": [],
-   "status": "INFRA_ERROR"
-  },
-  "PCIE_UP_OUT3": {
-   "segments": [],
-   "status": "INFRA_ERROR"
-  },
-  "PCIE_UP_OUT4": {
-   "segments": [],
-   "status": "INFRA_ERROR"
-  },
-  "PCIE_UP_OUT5": {
-   "segments": [],
-   "status": "INFRA_ERROR"
-  },
-  "PCIE_UP_OUT6": {
-   "segments": [],
-   "status": "INFRA_ERROR"
-  },
-  "PCIE_UP_OUT7": {
-   "segments": [],
-   "status": "INFRA_ERROR"
   }
  },
  "stages": {
@@ -4145,14 +4081,6 @@
       "PCIE_DN5",
       "PCIE_DN6",
       "PCIE_DN7",
-      "PCIE_DN_OUT0",
-      "PCIE_DN_OUT1",
-      "PCIE_DN_OUT2",
-      "PCIE_DN_OUT3",
-      "PCIE_DN_OUT4",
-      "PCIE_DN_OUT5",
-      "PCIE_DN_OUT6",
-      "PCIE_DN_OUT7",
       "PCIE_REFCLK0",
       "PCIE_REFCLK1",
       "PCIE_UP0",
@@ -4162,15 +4090,7 @@
       "PCIE_UP4",
       "PCIE_UP5",
       "PCIE_UP6",
-      "PCIE_UP7",
-      "PCIE_UP_OUT0",
-      "PCIE_UP_OUT1",
-      "PCIE_UP_OUT2",
-      "PCIE_UP_OUT3",
-      "PCIE_UP_OUT4",
-      "PCIE_UP_OUT5",
-      "PCIE_UP_OUT6",
-      "PCIE_UP_OUT7"
+      "PCIE_UP7"
      ],
      "infeasible": 18,
      "solved": 0
@@ -4206,6 +4126,56 @@
         "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (95.120,58.300)）",
         "status": "INFEASIBLE"
        },
+       "fail_forms": {
+        "flip_False": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            85.279,
+            57.655
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:GND (F.Cu)",
+           "dist": -0.2173012711661768,
+           "kind": "pad",
+           "net": "GND",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (85.279,57.655)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=False) via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (85.279,57.655)）"
+        },
+        "flip_True": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            95.12,
+            58.3
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:GND (F.Cu)",
+           "dist": -0.2173012711661768,
+           "kind": "pad",
+           "net": "GND",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (95.120,58.300)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (95.120,58.300)）"
+        }
+       },
        "flip": true,
        "name": "input",
        "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (95.120,58.300)）",
@@ -4216,6 +4186,26 @@
         "kind": "LANDING",
         "reason": "落点驱动逃逸无净空（落点 P=(66.555, 52.366) N=(66.555, 51.673)，sx 扫描 66.555→64.3）",
         "status": "INFEASIBLE"
+       },
+       "fail_forms": {
+        "flip_False": {
+         "cross": null,
+         "esc": {
+          "kind": "LANDING",
+          "reason": "落点驱动逃逸无净空（落点 P=(66.555, 52.366) N=(66.555, 51.673)，sx 扫描 66.555→64.3）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "右逃逸对级失败(flip=False) 落点驱动逃逸无净空（落点 P=(66.555, 52.366) N=(66.555, 51.673)，sx 扫描 66.555→64.3）"
+        },
+        "flip_True": {
+         "cross": null,
+         "esc": {
+          "kind": "LANDING",
+          "reason": "落点驱动逃逸无净空（落点 P=(66.555, 52.366) N=(66.555, 51.673)，sx 扫描 66.555→64.3）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(66.555, 52.366) N=(66.555, 51.673)，sx 扫描 66.555→64.3）"
+        }
        },
        "flip": true,
        "name": "out_MCIO",
@@ -4254,6 +4244,56 @@
         "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (95.696,59.500)）",
         "status": "INFEASIBLE"
        },
+       "fail_forms": {
+        "flip_False": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            86.446,
+            57.669
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:PCIE_DN3_P (F.Cu)",
+           "dist": -0.20119417557664065,
+           "kind": "pad",
+           "net": "PCIE_DN3_P",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (86.446,57.669)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=False) via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (86.446,57.669)）"
+        },
+        "flip_True": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            95.696,
+            59.5
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:PCIE_DN3_P (F.Cu)",
+           "dist": -0.20119417557664065,
+           "kind": "pad",
+           "net": "PCIE_DN3_P",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (95.696,59.500)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (95.696,59.500)）"
+        }
+       },
        "flip": true,
        "name": "input",
        "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (95.696,59.500)）",
@@ -4264,6 +4304,26 @@
         "kind": "LANDING",
         "reason": "落点驱动逃逸无净空（落点 P=(66.555, 54.866) N=(66.555, 54.173)，sx 扫描 66.555→62.5）",
         "status": "INFEASIBLE"
+       },
+       "fail_forms": {
+        "flip_False": {
+         "cross": null,
+         "esc": {
+          "kind": "LANDING",
+          "reason": "落点驱动逃逸无净空（落点 P=(66.555, 54.866) N=(66.555, 54.173)，sx 扫描 66.555→62.5）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "右逃逸对级失败(flip=False) 落点驱动逃逸无净空（落点 P=(66.555, 54.866) N=(66.555, 54.173)，sx 扫描 66.555→62.5）"
+        },
+        "flip_True": {
+         "cross": null,
+         "esc": {
+          "kind": "LANDING",
+          "reason": "落点驱动逃逸无净空（落点 P=(66.555, 54.866) N=(66.555, 54.173)，sx 扫描 66.555→62.5）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(66.555, 54.866) N=(66.555, 54.173)，sx 扫描 66.555→62.5）"
+        }
        },
        "flip": true,
        "name": "out_MCIO",
@@ -4302,6 +4362,56 @@
         "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (96.401,59.054)）",
         "status": "INFEASIBLE"
        },
+       "fail_forms": {
+        "flip_False": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            96.249,
+            60.7
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:PCIE_DN3_P (F.Cu)",
+           "dist": -0.21642436463089915,
+           "kind": "pad",
+           "net": "PCIE_DN3_P",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (96.249,60.700)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=False) via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (96.249,60.700)）"
+        },
+        "flip_True": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            96.401,
+            59.054
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:PCIE_DN3_P (F.Cu)",
+           "dist": -0.21642436463089915,
+           "kind": "pad",
+           "net": "PCIE_DN3_P",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (96.401,59.054)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (96.401,59.054)）"
+        }
+       },
        "flip": true,
        "name": "input",
        "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (96.401,59.054)）",
@@ -4327,6 +4437,56 @@
         },
         "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (57.105,45.563)）",
         "status": "INFEASIBLE"
+       },
+       "fail_forms": {
+        "flip_False": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            59.601,
+            61.096
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:GND (F.Cu)",
+           "dist": 0.18708594706174475,
+           "kind": "pad",
+           "net": "GND",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (59.601,61.096)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=False) via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (59.601,61.096)）"
+        },
+        "flip_True": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            57.105,
+            45.563
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:GND (F.Cu)",
+           "dist": 0.18708594706174475,
+           "kind": "pad",
+           "net": "GND",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (57.105,45.563)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (57.105,45.563)）"
+        }
        },
        "flip": true,
        "name": "out_MCIO",
@@ -4365,6 +4525,56 @@
         "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (97.073,59.680)）",
         "status": "INFEASIBLE"
        },
+       "fail_forms": {
+        "flip_False": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            96.777,
+            61.899
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:GND (F.Cu)",
+           "dist": -0.1707576392921954,
+           "kind": "pad",
+           "net": "GND",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (96.777,61.899)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=False) via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (96.777,61.899)）"
+        },
+        "flip_True": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            97.073,
+            59.68
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:GND (F.Cu)",
+           "dist": -0.1707576392921954,
+           "kind": "pad",
+           "net": "GND",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (97.073,59.680)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (97.073,59.680)）"
+        }
+       },
        "flip": true,
        "name": "input",
        "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (97.073,59.680)）",
@@ -4375,6 +4585,26 @@
         "kind": "LANDING",
         "reason": "落点驱动逃逸无净空（落点 P=(66.555, 57.366) N=(66.555, 56.673)，sx 扫描 66.555→55.3）",
         "status": "INFEASIBLE"
+       },
+       "fail_forms": {
+        "flip_False": {
+         "cross": null,
+         "esc": {
+          "kind": "LANDING",
+          "reason": "落点驱动逃逸无净空（落点 P=(66.555, 57.366) N=(66.555, 56.673)，sx 扫描 66.555→55.3）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "右逃逸对级失败(flip=False) 落点驱动逃逸无净空（落点 P=(66.555, 57.366) N=(66.555, 56.673)，sx 扫描 66.555→55.3）"
+        },
+        "flip_True": {
+         "cross": null,
+         "esc": {
+          "kind": "LANDING",
+          "reason": "落点驱动逃逸无净空（落点 P=(66.555, 57.366) N=(66.555, 56.673)，sx 扫描 66.555→55.3）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(66.555, 57.366) N=(66.555, 56.673)，sx 扫描 66.555→55.3）"
+        }
        },
        "flip": true,
        "name": "out_MCIO",
@@ -4622,6 +4852,56 @@
         "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (55.300,61.640)）",
         "status": "INFEASIBLE"
        },
+       "fail_forms": {
+        "flip_False": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            55.3,
+            61.64
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:GND (F.Cu)",
+           "dist": -0.075,
+           "kind": "pad",
+           "net": "GND",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (55.300,61.640)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=False) via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (55.300,61.640)）"
+        },
+        "flip_True": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            55.3,
+            61.64
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:GND (F.Cu)",
+           "dist": -0.075,
+           "kind": "pad",
+           "net": "GND",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (55.300,61.640)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (55.300,61.640)）"
+        }
+       },
        "flip": true,
        "name": "out_MCIO",
        "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (55.300,61.640)）",
@@ -4659,6 +4939,56 @@
         "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (97.748,64.299)）",
         "status": "INFEASIBLE"
        },
+       "fail_forms": {
+        "flip_False": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            98.502,
+            61.022
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:GND (F.Cu)",
+           "dist": -0.1310871306309258,
+           "kind": "pad",
+           "net": "GND",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (98.502,61.022)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=False) via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (98.502,61.022)）"
+        },
+        "flip_True": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            97.748,
+            64.299
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:GND (F.Cu)",
+           "dist": -0.1310871306309258,
+           "kind": "pad",
+           "net": "GND",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (97.748,64.299)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (97.748,64.299)）"
+        }
+       },
        "flip": true,
        "name": "input",
        "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (97.748,64.299)）",
@@ -4684,6 +5014,56 @@
         },
         "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (60.931,64.698)）",
         "status": "INFEASIBLE"
+       },
+       "fail_forms": {
+        "flip_False": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            57.311,
+            61.639
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:GND (F.Cu)",
+           "dist": -0.075,
+           "kind": "pad",
+           "net": "GND",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (57.311,61.639)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=False) via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (57.311,61.639)）"
+        },
+        "flip_True": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            60.931,
+            64.698
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:GND (F.Cu)",
+           "dist": -0.075,
+           "kind": "pad",
+           "net": "GND",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (60.931,64.698)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (60.931,64.698)）"
+        }
        },
        "flip": true,
        "name": "out_MCIO",
@@ -4911,6 +5291,26 @@
         "reason": "落点驱动逃逸无净空（落点 P=(66.555, 58.95) N=(66.555, 66.45)，sx 扫描 66.555→62.5）",
         "status": "INFEASIBLE"
        },
+       "fail_forms": {
+        "flip_False": {
+         "cross": null,
+         "esc": {
+          "kind": "LANDING",
+          "reason": "落点驱动逃逸无净空（落点 P=(66.555, 58.95) N=(66.555, 66.45)，sx 扫描 66.555→62.5）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "右逃逸对级失败(flip=False) 落点驱动逃逸无净空（落点 P=(66.555, 58.95) N=(66.555, 66.45)，sx 扫描 66.555→62.5）"
+        },
+        "flip_True": {
+         "cross": null,
+         "esc": {
+          "kind": "LANDING",
+          "reason": "落点驱动逃逸无净空（落点 P=(66.555, 58.95) N=(66.555, 66.45)，sx 扫描 66.555→62.5）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(66.555, 58.95) N=(66.555, 66.45)，sx 扫描 66.555→62.5）"
+        }
+       },
        "flip": true,
        "name": "out_MCIO",
        "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(66.555, 58.95) N=(66.555, 66.45)，sx 扫描 66.555→62.5）",
@@ -5137,6 +5537,26 @@
         "reason": "落点驱动逃逸无净空（落点 P=(66.555, 68.95) N=(66.555, 71.45)，sx 扫描 66.555→64.3）",
         "status": "INFEASIBLE"
        },
+       "fail_forms": {
+        "flip_False": {
+         "cross": null,
+         "esc": {
+          "kind": "LANDING",
+          "reason": "落点驱动逃逸无净空（落点 P=(66.555, 68.95) N=(66.555, 71.45)，sx 扫描 66.555→64.3）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "右逃逸对级失败(flip=False) 落点驱动逃逸无净空（落点 P=(66.555, 68.95) N=(66.555, 71.45)，sx 扫描 66.555→64.3）"
+        },
+        "flip_True": {
+         "cross": null,
+         "esc": {
+          "kind": "LANDING",
+          "reason": "落点驱动逃逸无净空（落点 P=(66.555, 68.95) N=(66.555, 71.45)，sx 扫描 66.555→64.3）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(66.555, 68.95) N=(66.555, 71.45)，sx 扫描 66.555→64.3）"
+        }
+       },
        "flip": true,
        "name": "out_MCIO",
        "reason": "右逃逸对级失败(flip=True) 落点驱动逃逸无净空（落点 P=(66.555, 68.95) N=(66.555, 71.45)，sx 扫描 66.555→64.3）",
@@ -5146,38 +5566,6 @@
      "skew": null,
      "skew_ok": false,
      "status": "INFEASIBLE"
-    },
-    "PCIE_DN_OUT0": {
-     "reason": "DN_OUT0 无链路段",
-     "status": "INFRA_ERROR"
-    },
-    "PCIE_DN_OUT1": {
-     "reason": "DN_OUT1 无链路段",
-     "status": "INFRA_ERROR"
-    },
-    "PCIE_DN_OUT2": {
-     "reason": "DN_OUT2 无链路段",
-     "status": "INFRA_ERROR"
-    },
-    "PCIE_DN_OUT3": {
-     "reason": "DN_OUT3 无链路段",
-     "status": "INFRA_ERROR"
-    },
-    "PCIE_DN_OUT4": {
-     "reason": "DN_OUT4 无链路段",
-     "status": "INFRA_ERROR"
-    },
-    "PCIE_DN_OUT5": {
-     "reason": "DN_OUT5 无链路段",
-     "status": "INFRA_ERROR"
-    },
-    "PCIE_DN_OUT6": {
-     "reason": "DN_OUT6 无链路段",
-     "status": "INFRA_ERROR"
-    },
-    "PCIE_DN_OUT7": {
-     "reason": "DN_OUT7 无链路段",
-     "status": "INFRA_ERROR"
     },
     "PCIE_REFCLK0": {
      "base": "REFCLK0",
@@ -5205,6 +5593,56 @@
         },
         "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (58.900,45.560)）",
         "status": "INFEASIBLE"
+       },
+       "fail_forms": {
+        "flip_False": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            58.9,
+            45.56
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:GND (F.Cu)",
+           "dist": -0.075,
+           "kind": "pad",
+           "net": "GND",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (58.900,45.560)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=False) via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (58.900,45.560)）"
+        },
+        "flip_True": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            58.9,
+            45.56
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:GND (F.Cu)",
+           "dist": -0.075,
+           "kind": "pad",
+           "net": "GND",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (58.900,45.560)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (58.900,45.560)）"
+        }
        },
        "flip": true,
        "name": "input",
@@ -5242,6 +5680,56 @@
         },
         "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (60.700,61.640)）",
         "status": "INFEASIBLE"
+       },
+       "fail_forms": {
+        "flip_False": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            60.7,
+            61.64
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:GND (F.Cu)",
+           "dist": -0.22256321341713275,
+           "kind": "pad",
+           "net": "GND",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (60.700,61.640)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=False) via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (60.700,61.640)）"
+        },
+        "flip_True": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            60.7,
+            61.64
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:GND (F.Cu)",
+           "dist": -0.22256321341713275,
+           "kind": "pad",
+           "net": "GND",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (60.700,61.640)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (60.700,61.640)）"
+        }
        },
        "flip": true,
        "name": "input",
@@ -5491,6 +5979,56 @@
         "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (85.000,55.666)）",
         "status": "INFEASIBLE"
        },
+       "fail_forms": {
+        "flip_False": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            96.142,
+            47.06
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:PCIE_DN_OUT4_N_MCIO (F.Cu)",
+           "dist": -0.15032758991361042,
+           "kind": "pad",
+           "net": "PCIE_DN_OUT4_N_MCIO",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (96.142,47.060)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=False) via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (96.142,47.060)）"
+        },
+        "flip_True": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            85.0,
+            55.666
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:PCIE_DN_OUT4_N_MCIO (F.Cu)",
+           "dist": -0.15032758991361042,
+           "kind": "pad",
+           "net": "PCIE_DN_OUT4_N_MCIO",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (85.000,55.666)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (85.000,55.666)）"
+        }
+       },
        "flip": true,
        "name": "out_J2",
        "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (85.000,55.666)）",
@@ -5732,6 +6270,56 @@
         "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (86.200,55.666)）",
         "status": "INFEASIBLE"
        },
+       "fail_forms": {
+        "flip_False": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            96.64,
+            47.752
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:PCIE_UP7_P (F.Cu)",
+           "dist": -0.17075155475371756,
+           "kind": "pad",
+           "net": "PCIE_UP7_P",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (96.640,47.752)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=False) via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (96.640,47.752)）"
+        },
+        "flip_True": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            86.2,
+            55.666
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:PCIE_UP7_P (F.Cu)",
+           "dist": -0.17075155475371756,
+           "kind": "pad",
+           "net": "PCIE_UP7_P",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (86.200,55.666)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (86.200,55.666)）"
+        }
+       },
        "flip": true,
        "name": "out_J2",
        "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (86.200,55.666)）",
@@ -5769,6 +6357,56 @@
         "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (57.100,43.060)）",
         "status": "INFEASIBLE"
        },
+       "fail_forms": {
+        "flip_False": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            57.1,
+            43.06
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:GND (F.Cu)",
+           "dist": -0.075,
+           "kind": "pad",
+           "net": "GND",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (57.100,43.060)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=False) via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (57.100,43.060)）"
+        },
+        "flip_True": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            57.1,
+            43.06
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:GND (F.Cu)",
+           "dist": -0.075,
+           "kind": "pad",
+           "net": "GND",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (57.100,43.060)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (57.100,43.060)）"
+        }
+       },
        "flip": true,
        "name": "input",
        "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (57.100,43.060)）",
@@ -5794,6 +6432,56 @@
         },
         "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (95.312,42.701)）",
         "status": "INFEASIBLE"
+       },
+       "fail_forms": {
+        "flip_False": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            97.139,
+            48.443
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:GND (F.Cu)",
+           "dist": -0.18219316192310642,
+           "kind": "pad",
+           "net": "GND",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (97.139,48.443)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=False) via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (97.139,48.443)）"
+        },
+        "flip_True": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            95.312,
+            42.701
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:GND (F.Cu)",
+           "dist": -0.18219316192310642,
+           "kind": "pad",
+           "net": "GND",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (95.312,42.701)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (95.312,42.701)）"
+        }
        },
        "flip": true,
        "name": "out_J2",
@@ -6043,6 +6731,56 @@
         "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (88.600,55.666)）",
         "status": "INFEASIBLE"
        },
+       "fail_forms": {
+        "flip_False": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            97.637,
+            49.131
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:GND (F.Cu)",
+           "dist": -0.1936990542504895,
+           "kind": "pad",
+           "net": "GND",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (97.637,49.131)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=False) via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (97.637,49.131)）"
+        },
+        "flip_True": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            88.6,
+            55.666
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:GND (F.Cu)",
+           "dist": -0.1936990542504895,
+           "kind": "pad",
+           "net": "GND",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (88.600,55.666)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (88.600,55.666)）"
+        }
+       },
        "flip": true,
        "name": "out_J2",
        "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (88.600,55.666)）",
@@ -6079,6 +6817,56 @@
         },
         "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (55.199,63.213)）",
         "status": "INFEASIBLE"
+       },
+       "fail_forms": {
+        "flip_False": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            58.402,
+            45.503
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:GND (F.Cu)",
+           "dist": -0.075,
+           "kind": "pad",
+           "net": "GND",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (58.402,45.503)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=False) via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (58.402,45.503)）"
+        },
+        "flip_True": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            55.199,
+            63.213
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:GND (F.Cu)",
+           "dist": -0.075,
+           "kind": "pad",
+           "net": "GND",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (55.199,63.213)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (55.199,63.213)）"
+        }
        },
        "flip": true,
        "name": "input",
@@ -6527,6 +7315,56 @@
         "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (91.000,55.666)）",
         "status": "INFEASIBLE"
        },
+       "fail_forms": {
+        "flip_False": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            98.636,
+            50.502
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:P3V3 (F.Cu)",
+           "dist": -0.16484051519323856,
+           "kind": "pad",
+           "net": "P3V3",
+           "req": 0.2
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (98.636,50.502)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=False) via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (98.636,50.502)）"
+        },
+        "flip_True": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            91.0,
+            55.666
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:P3V3 (F.Cu)",
+           "dist": -0.16484051519323856,
+           "kind": "pad",
+           "net": "P3V3",
+           "req": 0.2
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (91.000,55.666)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (91.000,55.666)）"
+        }
+       },
        "flip": true,
        "name": "out_J2",
        "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (91.000,55.666)）",
@@ -6775,6 +7613,56 @@
         "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (92.200,55.666)）",
         "status": "INFEASIBLE"
        },
+       "fail_forms": {
+        "flip_False": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            99.137,
+            51.182
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:GND (F.Cu)",
+           "dist": -0.18047673349877358,
+           "kind": "pad",
+           "net": "GND",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (99.137,51.182)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=False) via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (99.137,51.182)）"
+        },
+        "flip_True": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.205,
+           "point": [
+            92.2,
+            55.666
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:GND (F.Cu)",
+           "dist": -0.18047673349877358,
+           "kind": "pad",
+           "net": "GND",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (92.200,55.666)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (92.200,55.666)）"
+        }
+       },
        "flip": true,
        "name": "out_J2",
        "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (92.200,55.666)）",
@@ -6811,6 +7699,56 @@
         },
         "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.1050 < 0.175 @ (93.400,48.960)）",
         "status": "INFEASIBLE"
+       },
+       "fail_forms": {
+        "flip_False": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.185,
+           "point": [
+            93.175,
+            49.3
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:GND (F.Cu)",
+           "dist": -0.20251126041816686,
+           "kind": "pad",
+           "net": "GND",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.1850 < 0.175 @ (93.175,49.300)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "右逃逸对级失败(flip=False) via 换层 P/N 极性不一致（flip=False 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.1850 < 0.175 @ (93.175,49.300)）"
+        },
+        "flip_True": {
+         "cross": null,
+         "esc": {
+          "cross_evidence": {
+           "min_edge": -0.105,
+           "point": [
+            93.4,
+            48.96
+           ],
+           "req": 0.175
+          },
+          "kind": "VIA",
+          "nearest": {
+           "desc": "pad:GND (F.Cu)",
+           "dist": -0.20251126041816686,
+           "kind": "pad",
+           "net": "GND",
+           "req": 0.175
+          },
+          "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.1050 < 0.175 @ (93.400,48.960)）",
+          "status": "INFEASIBLE"
+         },
+         "reason": "右逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.1050 < 0.175 @ (93.400,48.960)）"
+        }
        },
        "flip": true,
        "name": "input",
@@ -7025,38 +7963,6 @@
      "skew": null,
      "skew_ok": false,
      "status": "INFEASIBLE"
-    },
-    "PCIE_UP_OUT0": {
-     "reason": "UP_OUT0 无链路段",
-     "status": "INFRA_ERROR"
-    },
-    "PCIE_UP_OUT1": {
-     "reason": "UP_OUT1 无链路段",
-     "status": "INFRA_ERROR"
-    },
-    "PCIE_UP_OUT2": {
-     "reason": "UP_OUT2 无链路段",
-     "status": "INFRA_ERROR"
-    },
-    "PCIE_UP_OUT3": {
-     "reason": "UP_OUT3 无链路段",
-     "status": "INFRA_ERROR"
-    },
-    "PCIE_UP_OUT4": {
-     "reason": "UP_OUT4 无链路段",
-     "status": "INFRA_ERROR"
-    },
-    "PCIE_UP_OUT5": {
-     "reason": "UP_OUT5 无链路段",
-     "status": "INFRA_ERROR"
-    },
-    "PCIE_UP_OUT6": {
-     "reason": "UP_OUT6 无链路段",
-     "status": "INFRA_ERROR"
-    },
-    "PCIE_UP_OUT7": {
-     "reason": "UP_OUT7 无链路段",
-     "status": "INFRA_ERROR"
     }
    },
    "solve_ref": "solve-solve-178a0646888b9b45",
