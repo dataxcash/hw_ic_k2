@@ -188,14 +188,45 @@ def derive_region_demands(real_board: Path, suffix: str,
     return sorted(demands, key=lambda d: d["base"])
 
 
-def derive_capacity_demands(spec: dict, corridors: list) -> list:
-    """SPEC corridors（J2_TO_U / U_TO_MCIO × upper/lower/refclk）→ 36 段容量需求。
+def _strip_pin_suffix(net: str) -> str:
+    """net 'PCIE_DN3_P'/'PCIE_UP_OUT2_N'/'PCIE_DN_OUT1_U4' → corridor base 名
+    （PCIE_DN3 / PCIE_UP_OUT2 / PCIE_DN_OUT1，与 SPEC band.nets 同键）。"""
+    for suf in ("_P", "_N"):
+        if net.endswith(suf):
+            return net[:-2]
+    head, _, tail = net.rpartition("_")
+    if head and tail.startswith("U") and tail[1:].isdigit():
+        return head
+    return net
 
-    base = band.nets[i]（refclk band nets=['PCIE_REFCLK'] → PCIE_REFCLK{i}）；
-    track_y = band.tracks_y[i]；via_zones 按段侧注入（J2 侧 / 芯片侧 U7/U3）；
-    via_cap = 数据对（PCIE_UP/DN）穿越 AC 电容墙，REFCLK 否。"""
+
+def derive_capacity_demands(spec: dict, corridors: list, escape_spec: dict,
+                            config: dict) -> list:
+    """SPEC corridors → 容量需求。每对 via_zones = 两端真实逃逸区（列表，容量审计
+    按 [左区, 右区] 逐 zone 计）：
+
+    - 连接器端 zone：由 config.escape_landing.regions（kind=CONN 且 corridor_id
+      匹配当前 corridor）声明派生（EAST_CHIP_TO_J2→J2_ESCAPE，WEST_MCIO_TO_CHIP→
+      MCIO_ESCAPE）。
+    - 芯片端 zone：base 差分对族归属 escape_spec pins 的 chip_ref（U3/U7），
+      base ∈ 芯片 pin 集 → 该芯片 _ESCAPE。
+    零硬编码走廊名（历史教训：旧名 J2_TO_U/U_TO_MCIO+upper/lower 全错位 →
+      U3 被塞 30 对假需求）。via_cap = 数据对（PCIE_UP/DN）穿越 AC 墙，REFCLK 否。"""
+    chip_bases = {}
+    for p in (escape_spec or {}).get("pins") or []:
+        base = _strip_pin_suffix(p.get("net") or "")
+        chip_bases.setdefault(p.get("chip_ref"), set()).add(base)
+    conn_zone = {}
+    wall_corridor = None
+    for rc in ((config or {}).get("escape_landing") or {}).get("regions") or []:
+        if rc.get("kind") == "CONN" and rc.get("corridor_id"):
+            conn_zone[rc["corridor_id"]] = f"{rc['id']}_ESCAPE"
+            if rc.get("series_cap_wall"):
+                wall_corridor = rc["corridor_id"]
     out = []
     for c in corridors:
+        cid = c["id"]
+        czone = conn_zone.get(cid)
         for b in c.get("bands", []):
             nets = b.get("nets") or []
             tys = b.get("tracks_y") or []
@@ -206,19 +237,23 @@ def derive_capacity_demands(spec: dict, corridors: list) -> list:
                     base = nets[i]
                 else:
                     base = f"PCIE_REFCLK{i}"
-                # 段侧 via 区：J2_TO_U → J2 端；U_TO_MCIO → 芯片端（band 侧）
-                if c["id"] == "J2_TO_U":
-                    zones = ["J2_ESCAPE"]
-                else:
-                    zones = ["U7_ESCAPE"] if b["band"] == "upper" else \
-                        (["U3_ESCAPE"] if b["band"] == "lower"
-                         else ["U7_ESCAPE" if i == 0 else "U3_ESCAPE"])
+                zones = []
+                if czone:
+                    zones.append(czone)
+                for chip, bs in sorted(chip_bases.items()):
+                    if base in bs:
+                        zones.append(f"{chip}_ESCAPE")
+                        break
+                # via_cap = 过 AC 耦合墙的对（墙在 series_cap_wall 声明的 CONN
+                # corridor 上，仅该 corridor 数据对；refclk/不过墙侧非）
+                is_data = base.startswith(("PCIE_UP", "PCIE_DN"))
+                via_cap = bool(wall_corridor and cid == wall_corridor and is_data)
                 out.append({
                     "base": base, "segname": "input",
-                    "corridor_id": c["id"], "band": b["band"],
+                    "corridor_id": cid, "band": b["band"],
                     "track_y": _r3(float(ty)),
                     "via_zones": zones,
-                    "via_cap": base.startswith(("PCIE_UP", "PCIE_DN")),
+                    "via_cap": via_cap,
                 })
     return sorted(out, key=lambda d: (d["corridor_id"], d["band"], d["base"]))
 
@@ -331,7 +366,9 @@ def main() -> int:
         region_demands[rid] = derive_region_demands(REAL_BOARD, rid,
                                                     suffix_only=(rid != "J2"))
     corridors = spec.get("corridors") or []
-    capacity_demands = derive_capacity_demands(spec, corridors)
+    config = build_config(base_cfg)      # 提前：zone 派生需 config.escape_landing 声明
+    capacity_demands = derive_capacity_demands(spec, corridors, escape_spec,
+                                               config)
     nets = sorted({d["base"] for d in capacity_demands})   # 18 base（去重排序，确定性）
     via_zones = derive_via_zones(spec, escape_spec, j2_pads, REAL_BOARD)
     cap_walls = derive_cap_walls(spec)
@@ -350,9 +387,6 @@ def main() -> int:
         "cap_wall_pads_MCIO": cap_wall_pads_mcio,
         "derivation_note": "从真板 k2_v4.kicad_pcb + SPEC 生成（P3-B 组装，引擎零改动）",
     }
-
-    # 4. config 声明段
-    config = build_config(base_cfg)
 
     # 5. route_input：复用 spec_to_route_input + obstacles.pads 覆写为 J2 pad 堆
     ri = spec_to_route_input(spec, escape_spec, j2_pads, config)

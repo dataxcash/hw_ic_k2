@@ -1,129 +1,158 @@
 {
-  "project": "k2_v4",
-  "description": "K2 模型输入契约 — 严格镜像 ls_route_model.build_field / hs_route_model / channel_alloc 的 K2 现状读取语义（字节级不变）",
-  "ls_route_model": {
-    "escape_entries_path": "low_speed_escape.entries",
-    "obstacle_segs": [
-      {
-        "mode": "concat_entries",
-        "path": "layer_plan",
-        "keys": ["wp1_escape_nets", "j2_escape_nets"],
-        "seg_key": "segments",
-        "pts_key": "pts",
-        "layer_key": "layer",
-        "filter_layer": "B.Cu"
-      },
-      {
-        "mode": "entries",
-        "path": "layer_plan.wp6_single_nets.nets",
-        "seg_key": "segments",
-        "pts_key": "pts",
-        "layer_key": "layer",
-        "filter_layer": "B.Cu"
-      }
+ "project": "k2_v4",
+ "description": "K2 模型输入契约 — 严格镜像 ls_route_model.build_field / hs_route_model / channel_alloc 的 K2 现状读取语义（字节级不变）",
+ "ls_route_model": {
+  "escape_entries_path": "low_speed_escape.entries",
+  "obstacle_segs": [
+   {
+    "mode": "concat_entries",
+    "path": "layer_plan",
+    "keys": [
+     "wp1_escape_nets",
+     "j2_escape_nets"
     ],
-    "obstacle_vias": [
-      {
-        "mode": "concat_entries",
-        "path": "layer_plan",
-        "keys": ["wp1_escape_nets", "j2_escape_nets"],
-        "via_key": "vias"
-      },
-      {
-        "mode": "entries",
-        "path": "layer_plan.in2_crossing_nets",
-        "via_keys": ["via1", "via2"]
-      },
-      {
-        "mode": "entries",
-        "path": "layer_plan.wp6_single_nets.nets",
-        "via_key": "vias"
-      }
+    "seg_key": "segments",
+    "pts_key": "pts",
+    "layer_key": "layer",
+    "filter_layer": "B.Cu"
+   },
+   {
+    "mode": "entries",
+    "path": "layer_plan.wp6_single_nets.nets",
+    "seg_key": "segments",
+    "pts_key": "pts",
+    "layer_key": "layer",
+    "filter_layer": "B.Cu"
+   }
+  ],
+  "obstacle_vias": [
+   {
+    "mode": "concat_entries",
+    "path": "layer_plan",
+    "keys": [
+     "wp1_escape_nets",
+     "j2_escape_nets"
+    ],
+    "via_key": "vias"
+   },
+   {
+    "mode": "entries",
+    "path": "layer_plan.in2_crossing_nets",
+    "via_keys": [
+     "via1",
+     "via2"
     ]
-  },
-  "hs_route_model": {
-    "hs_prefixes": ["PCIE", "REFCLK"],
-    "pdn_yield_prefixes": ["GND", "P3V3", "MCU_", "VREG", "PWR_5V"],
-    "hs_layer": "F.Cu",
-    "chain_in_pattern": "PCIE_{base}",
-    "chain_out_suffixes": ["_U7", "_J2", "_U3", "_MCIO"],
-    "chain_out_pattern": "PCIE_{stem}_OUT{num}_{pn}{suf}",
-    "channel_fallback_prefixes": ["PCIE_UP_OUT", "PCIE_DN_OUT"],
-    "skew_limit": 0.15,
-    "col_stack_escape_layer": "In1.Cu"
-  },
-  "channel_alloc": {
-    "corridors_path": "corridors",
-    "default_layer": "F.Cu",
-    "pitch_fallback": 1.08
-  },
-  "capacity_audit": {
-    "inter_pair_spacing": 1.46,
-    "note": "v22 用户裁决(2026-09-05): inter_pair_spacing 语义 = 0.875 对间铜边净空 → 对中心距 1.46mm. 引擎 capacity_audit 按对中心距(pitch)计, 故注入 1.46 (勿用 drc_rules.json diff_pair.inter_pair_spacing=0.875, 其为铜边净空口径)"
-  },
-  "band_polarity": {
-    "upper": "P_BOTTOM",
-    "lower": "P_BOTTOM",
-    "refclk": "P_BOTTOM"
-  },
-  "escape_landing": {
-    "regions": [
-      {
-        "id": "J2",
-        "kind": "CONN",
-        "side": "RIGHT",
-        "corridor_id": "J2_TO_U",
-        "pads_path": "derived.landing_pads.J2",
-        "demands_path": "derived.landing_demands_J2",
-        "board_edge_x": 143.0,
-        "corridor_bound_x": 131.5
+   },
+   {
+    "mode": "entries",
+    "path": "layer_plan.wp6_single_nets.nets",
+    "via_key": "vias"
+   }
+  ]
+ },
+ "hs_route_model": {
+  "hs_prefixes": [
+   "PCIE",
+   "REFCLK"
+  ],
+  "pdn_yield_prefixes": [
+   "GND",
+   "P3V3",
+   "MCU_",
+   "VREG",
+   "PWR_5V"
+  ],
+  "hs_layer": "F.Cu",
+  "chain_in_pattern": "PCIE_{base}",
+  "chain_out_suffixes": [
+   "_U7",
+   "_J2",
+   "_U3",
+   "_MCIO"
+  ],
+  "chain_out_pattern": "PCIE_{stem}_OUT{num}_{pn}{suf}",
+  "channel_fallback_prefixes": [
+   "PCIE_UP_OUT",
+   "PCIE_DN_OUT"
+  ],
+  "skew_limit": 0.15,
+  "col_stack_escape_layer": "In1.Cu"
+ },
+ "channel_alloc": {
+  "corridors_path": "corridors",
+  "default_layer": "F.Cu",
+  "pitch_fallback": 1.08
+ },
+ "capacity_audit": {
+  "inter_pair_spacing": 1.46,
+  "note": "v22 用户裁决(2026-09-05): inter_pair_spacing 语义 = 0.875 对间铜边净空 → 对中心距 1.46mm. 引擎 capacity_audit 按对中心距(pitch)计, 故注入 1.46 (勿用 drc_rules.json diff_pair.inter_pair_spacing=0.875, 其为铜边净空口径)"
+ },
+ "band_polarity": {
+  "upper": "P_BOTTOM",
+  "lower": "P_BOTTOM",
+  "refclk": "P_BOTTOM"
+ },
+ "escape_landing": {
+  "regions": [
+   {
+    "id": "J2",
+    "kind": "CONN",
+    "side": "RIGHT",
+    "corridor_id": "EAST_CHIP_TO_J2",
+    "pads_path": "derived.landing_pads.J2",
+    "demands_path": "derived.landing_demands_J2",
+    "board_edge_x": 143.0,
+    "corridor_bound_x": 131.5
+   },
+   {
+    "id": "MCIO",
+    "kind": "CONN",
+    "side": "LEFT",
+    "corridor_id": "WEST_MCIO_TO_CHIP",
+    "pads_path": "derived.landing_pads.MCIO",
+    "demands_path": "derived.landing_demands_MCIO",
+    "board_edge_x": 90.0,
+    "corridor_bound_x": 65.5,
+    "series_cap_wall": {
+     "axis": "x",
+     "crossing_dir": "increasing",
+     "wall": {
+      "pads_path": "derived.cap_wall_pads_MCIO",
+      "via_downstream_side": "past_cap"
+     },
+     "evidence": {
+      "source_case": [
+       "learned_aic_pex88096_10slimsas",
+       "learned_pex8748_2slimsas_4ngff"
+      ],
+      "downstream_via_gap_mm": {
+       "min": 0.38,
+       "max": 2.22
       },
-      {
-        "id": "MCIO",
-        "kind": "CONN",
-        "side": "LEFT",
-        "corridor_id": "U_TO_MCIO",
-        "pads_path": "derived.landing_pads.MCIO",
-        "demands_path": "derived.landing_demands_MCIO",
-        "board_edge_x": 90.0,
-        "corridor_bound_x": 65.5,
-        "series_cap_wall": {
-          "axis": "x",
-          "crossing_dir": "increasing",
-          "wall": {
-            "pads_path": "derived.cap_wall_pads_MCIO",
-            "via_downstream_side": "past_cap"
-          },
-          "evidence": {
-            "source_case": [
-              "learned_aic_pex88096_10slimsas",
-              "learned_pex8748_2slimsas_4ngff"
-            ],
-            "downstream_via_gap_mm": {"min": 0.38, "max": 2.22},
-            "layer_pair": "F.Cu->In/B.Cu"
-          }
-        }
-      },
-      {
-        "id": "U7",
-        "kind": "CHIP",
-        "side": "LEFT",
-        "corridor_id": null,
-        "pads_path": "derived.landing_pads.U7",
-        "demands_path": "derived.landing_demands_U7",
-        "board_edge_x": 119.0,
-        "corridor_bound_x": 88.83
-      },
-      {
-        "id": "U3",
-        "kind": "CHIP",
-        "side": "LEFT",
-        "corridor_id": null,
-        "pads_path": "derived.landing_pads.U3",
-        "demands_path": "derived.landing_demands_U3",
-        "board_edge_x": 89.0,
-        "corridor_bound_x": 88.83
-      }
-    ]
-  }
+      "layer_pair": "F.Cu->In/B.Cu"
+     }
+    }
+   },
+   {
+    "id": "U7",
+    "kind": "CHIP",
+    "side": "LEFT",
+    "corridor_id": null,
+    "pads_path": "derived.landing_pads.U7",
+    "demands_path": "derived.landing_demands_U7",
+    "board_edge_x": 119.0,
+    "corridor_bound_x": 88.83
+   },
+   {
+    "id": "U3",
+    "kind": "CHIP",
+    "side": "LEFT",
+    "corridor_id": null,
+    "pads_path": "derived.landing_pads.U3",
+    "demands_path": "derived.landing_demands_U3",
+    "board_edge_x": 89.0,
+    "corridor_bound_x": 88.83
+   }
+  ]
+ }
 }
