@@ -37,6 +37,7 @@ sys.path.insert(0, str(SHARED))
 from eda_core.drc_rules import BoardParser            # noqa: E402
 from eda_core.route_input import spec_to_route_input  # noqa: E402
 from eda_core.solve_pipeline import SolveInput, SolvePipeline  # noqa: E402
+from eda_core.topview import Topview                  # noqa: E402
 
 # ── 路径 ─────────────────────────────────────────────────────────────
 ART = REPO / "pm_gate" / "artifacts" / "k2_v4"
@@ -568,6 +569,22 @@ def main() -> int:
             "workaround": "config.channel_alloc.nets_path -> derived.nets (18 base 字符串)",
         },
     })
+
+    # TOPVIEW（ENG 原生全局视差）：一次列全 BLOCKER gap + 逐项处置（能力在
+    # eda_core/topview.py，本脚本只组装输入并调用，非人肉归因）
+    try:
+        tv = Topview(inp, ctx)
+        report["topview"] = {
+            "gaps": [{"id": g.id, "kind": g.kind, "stage": g.stage,
+                      "severity": g.severity, "summary": g.summary,
+                      "evidence": g.evidence} for g in tv.gap_list()],
+            "remediations": [{"gap_id": r.gap_id, "action": r.action,
+                              "resolved": r.resolved, "note": r.note,
+                              "patch": r.patch}
+                             for g in tv.gap_list() for r in [tv.remediate(g)]],
+        }
+    except Exception as e:  # TOPVIEW 附加能力，异常不崩主报告
+        report["topview"] = {"error": f"{type(e).__name__}: {e}"}
 
     out_path = OUT_DIR / "p3_real_board_e2e_report.json"
     with open(out_path, "w", encoding="utf-8") as f:
