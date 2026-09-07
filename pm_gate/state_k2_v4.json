@@ -247,6 +247,30 @@
       "created_at": "2026-09-06T09:44:38+00:00",
       "ruling": "批准: per_ball desc port_to_corridor 契约升级 = 逐带全名键 (A_PER/B_PET->east, A_PET/B_PER->west)，引擎 escape_landing 全名键优先 + 前缀键回退兼容；SPEC_k2_v4.json + reproduce_per_ball_escape.py + SPEC_k2_v4_c3poc.json 数据同批更新；回归 per_ball verdict FEASIBLE 不变，方法拆分翻转为修正语义 (DIRECT=A_PET+B_PER 32 / VIA=A_PER+B_PET 32 / crossing 16 对 N/S 8+8)，容量账中性不触发 8L 重入",
       "ruled_at": "2026-09-06T09:44:52+00:00"
+    },
+    {
+      "id": "ECN-008",
+      "reason": "M14 v33 DIRECT_F.CU 西族芯片逃逸形态接入: hs_route_model 新增 _col_stack_escape(竖排主导对 In2/In1 列下穿, W6-D 后触发) + ModelConfig.col_stack_escape_layer(K2=In1.Cu, 方向分层消除东西族共享列 In2 互斥)。探针实证+单测 43 passed 零回归(7 failed 与基线同集)。全量仍 16/17 fail: 孤立单段全 SOLVED=共享顺序调度问题; REFCLK0/1 孤立 INFEASIBLE=MCIO 连接器区独立形态缺口。证据 /tmp/solve_v33g + dbg_refclk。",
+      "raised_from": "L3",
+      "affects_gates": [
+        "G4"
+      ],
+      "status": "open",
+      "created_at": "2026-09-07T06:39:13+00:00",
+      "ruling": null,
+      "ruled_at": null
+    },
+    {
+      "id": "ECN-009",
+      "reason": "M14 v36 芯片摆向根因(case A 实锤)：DS320PR1601 流透式——host 球带(列带1-10 A_PER+B_PET)与 device 球带(列带26-35 A_PET+B_PER)分置封装短轴两侧(datasheet Fig7.2 A_PER->CTLE->A_PET + Fig5-1..3 球图)；本板 U6 rot90 使两族球同列重叠(kicad X 间隔=0.00mm)仅沿Y分带，而连接器 J2(host)东/MCIO(device)西按X分离 -> device 球在芯片东侧被硬拉向西 MCIO -> 横穿芯片被同列邻族 pad 挡死。此为之前 col_stack 治标不治本的真正病灶。EVM 对照证据: SNLU300 Fig4-1 视觉(芯片短轴=数据流、host金手指/device straddle 分置短轴两端、lane沿长轴)。几何证(改板rot180计算): host 族 X[95.23..97.74]东(J2)/device 族 X[89.86..92.47]西(MCIO) 间隔5.41mm 同列重叠消除。实测 run#1(/tmp/solve_v35_rot180, board仅rot90->rot180) 18对全 INFEASIBLE: ①SPEC rot90 时代硬编码 control/strap 球 ball_board_pos、逃逸区/走廊障碍未同步重生成 -> 引擎跑在「rot180 HS球 x rot90障碍」错配下必崩; ②DS320 BGA 场 GND/VCC 球穿插信号组间, 任何摆向逃逸区须适配(UP0 逃逸被 pad:GND dist=-0.218 挡即证)。解法=设计层输入协调重建: 板+SPEC 全部 rot90 派生球位/逃逸区/走廊/障碍统一重生成到 rot180 + 引擎逃逸区适配 GND 穿插, 非引擎单点改动。回退: 板已恢复 rot90(sha f6273de6 还原)、冻结区 lock 0/0/0、备份 k2_v4.kicad_pcb.bak_v35 保留。【v36 实测证伪·结论更正】后续两次全量 run 证伪『转芯片 rot90->rot180』方向：run#1(板rot180,无chip-landing)=0解18IFF; run#2(板rot180+rot180落点表)=仅DN6,17IFF。决定性证据: 挡路 pad:GND 为 rot180 板上真实 DS320 GND 球(L35/U34距逃逸点0.52mm)——GND 三明治为 DS320 BGA 天生(任意摆向都有), 非 rot90 SPEC 旧障碍; 且走廊/band(tracks_y)系现行 rot90 布局设计(rot90 基线 v33g 解 UP1+DN0 > rot180 仅1对, 旋转打破走廊对齐)。故正确路径=case B(保持rot90): 16数据对=共享顺序/gutter 调度(引擎/分配), REFCLK0/1=MCIO连接器区独立缺口, 引擎逃逸区须紧贴 DS320 GND 穿插游走(±0.52mm三明治->内层 col_stack/分层已接入, 需深化全 lane), 非转芯片。初版『case A 实锤』判断错误, 凭实测证伪并收回。详证 m13_v36_orient_rootcause_fix.md §9。",
+      "raised_from": "L3",
+      "affects_gates": [
+        "G4"
+      ],
+      "status": "open",
+      "created_at": "2026-09-07T07:10:55+00:00",
+      "ruling": null,
+      "ruled_at": null
     }
   ],
   "reviews": [
