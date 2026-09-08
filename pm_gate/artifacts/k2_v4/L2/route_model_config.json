@@ -81,7 +81,18 @@
  "channel_alloc": {
   "corridors_path": "corridors",
   "default_layer": "F.Cu",
-  "pitch_fallback": 1.08
+  "pitch_fallback": 1.08,
+  "half_pitch": 0.19,
+  "escape_check": {
+   "via_jogs_x": [0.0, 0.45, 0.75, 1.05, 1.35, 1.65],
+   "via_jogs_y": [0.45, 0.75, 1.05, -0.45, -0.75, -1.05],
+   "keepout": 0.37,
+   "half_track": 0.1025,
+   "pair_half": 0.19,
+   "fcu_layer": "F.Cu",
+   "chip_refs": ["U6"],
+   "band_spans": {"refclk": [60.0, 133.0]}
+  }
  },
  "capacity_audit": {
   "inter_pair_spacing": 1.46,
