@@ -1,0 +1,328 @@
+{
+ "artifact": "m13_v56_p0_baseline",
+ "baseline_34seg": {
+  "base_status": {
+   "INFEASIBLE": 15,
+   "SOLVED": 3
+  },
+  "bases": {
+   "PCIE_DN0": {
+    "segments": [
+     {
+      "reason": null,
+      "segname": "input",
+      "status": "SOLVED"
+     },
+     {
+      "reason": "右逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (84.660,52.919)）",
+      "segname": "out_MCIO",
+      "status": "INFEASIBLE"
+     }
+    ],
+    "status": "INFEASIBLE"
+   },
+   "PCIE_DN1": {
+    "segments": [
+     {
+      "reason": null,
+      "segname": "input",
+      "status": "SOLVED"
+     },
+     {
+      "reason": "右逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (85.785,52.914)）",
+      "segname": "out_MCIO",
+      "status": "INFEASIBLE"
+     }
+    ],
+    "status": "INFEASIBLE"
+   },
+   "PCIE_DN2": {
+    "segments": [
+     {
+      "reason": null,
+      "segname": "input",
+      "status": "SOLVED"
+     },
+     {
+      "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (57.106,45.564)）",
+      "segname": "out_MCIO",
+      "status": "INFEASIBLE"
+     }
+    ],
+    "status": "INFEASIBLE"
+   },
+   "PCIE_DN3": {
+    "segments": [
+     {
+      "reason": null,
+      "segname": "input",
+      "status": "SOLVED"
+     },
+     {
+      "reason": "右逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (84.384,58.838)）",
+      "segname": "out_MCIO",
+      "status": "INFEASIBLE"
+     }
+    ],
+    "status": "INFEASIBLE"
+   },
+   "PCIE_DN4": {
+    "segments": [
+     {
+      "reason": null,
+      "segname": "input",
+      "status": "SOLVED"
+     },
+     {
+      "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (55.300,61.640)）",
+      "segname": "out_MCIO",
+      "status": "INFEASIBLE"
+     }
+    ],
+    "status": "INFEASIBLE"
+   },
+   "PCIE_DN5": {
+    "segments": [
+     {
+      "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (97.748,64.299)）",
+      "segname": "input",
+      "status": "INFEASIBLE"
+     },
+     {
+      "reason": null,
+      "segname": "out_MCIO",
+      "status": "SOLVED"
+     }
+    ],
+    "status": "INFEASIBLE"
+   },
+   "PCIE_DN6": {
+    "segments": [
+     {
+      "reason": null,
+      "segname": "input",
+      "status": "SOLVED"
+     },
+     {
+      "reason": null,
+      "segname": "out_MCIO",
+      "status": "SOLVED"
+     }
+    ],
+    "status": "SOLVED"
+   },
+   "PCIE_DN7": {
+    "segments": [
+     {
+      "reason": "右逃逸对级失败(flip=True) 落点净空校验失败（P=(133.825, 63.9) N=(133.825, 64.5)，fail-closed 不改落点）",
+      "segname": "input",
+      "status": "INFEASIBLE"
+     },
+     {
+      "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(64.000,61.450) → cv=(65.050,67.100) dir=1 flip=True pn_dist=0.600）",
+      "segname": "out_MCIO",
+      "status": "INFEASIBLE"
+     }
+    ],
+    "status": "INFEASIBLE"
+   },
+   "PCIE_REFCLK0": {
+    "segments": [
+     {
+      "reason": null,
+      "segname": "input",
+      "status": "SOLVED"
+     }
+    ],
+    "status": "SOLVED"
+   },
+   "PCIE_REFCLK1": {
+    "segments": [
+     {
+      "reason": null,
+      "segname": "input",
+      "status": "SOLVED"
+     }
+    ],
+    "status": "SOLVED"
+   },
+   "PCIE_UP0": {
+    "segments": [
+     {
+      "reason": "右逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (85.005,49.820)）",
+      "segname": "input",
+      "status": "INFEASIBLE"
+     },
+     {
+      "reason": null,
+      "segname": "out_J2",
+      "status": "SOLVED"
+     }
+    ],
+    "status": "INFEASIBLE"
+   },
+   "PCIE_UP1": {
+    "segments": [
+     {
+      "reason": "右逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (86.356,49.560)）",
+      "segname": "input",
+      "status": "INFEASIBLE"
+     },
+     {
+      "reason": null,
+      "segname": "out_J2",
+      "status": "SOLVED"
+     }
+    ],
+    "status": "INFEASIBLE"
+   },
+   "PCIE_UP2": {
+    "segments": [
+     {
+      "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (57.100,43.060)）",
+      "segname": "input",
+      "status": "INFEASIBLE"
+     },
+     {
+      "reason": null,
+      "segname": "out_J2",
+      "status": "SOLVED"
+     }
+    ],
+    "status": "INFEASIBLE"
+   },
+   "PCIE_UP3": {
+    "segments": [
+     {
+      "reason": "右逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(88.600,50.020) → cv=(82.350,44.300) dir=-1 flip=True pn_dist=0.600）",
+      "segname": "input",
+      "status": "INFEASIBLE"
+     },
+     {
+      "reason": null,
+      "segname": "out_J2",
+      "status": "SOLVED"
+     }
+    ],
+    "status": "INFEASIBLE"
+   },
+   "PCIE_UP4": {
+    "segments": [
+     {
+      "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (55.190,63.211)）",
+      "segname": "input",
+      "status": "INFEASIBLE"
+     },
+     {
+      "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (96.715,45.101)）",
+      "segname": "out_J2",
+      "status": "INFEASIBLE"
+     }
+    ],
+    "status": "INFEASIBLE"
+   },
+   "PCIE_UP5": {
+    "segments": [
+     {
+      "reason": "右逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(91.000,50.020) → cv=(82.350,46.700) dir=-1 flip=True pn_dist=0.600）",
+      "segname": "input",
+      "status": "INFEASIBLE"
+     },
+     {
+      "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (97.415,46.301)）",
+      "segname": "out_J2",
+      "status": "INFEASIBLE"
+     }
+    ],
+    "status": "INFEASIBLE"
+   },
+   "PCIE_UP6": {
+    "segments": [
+     {
+      "reason": "右逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(92.200,50.020) → cv=(82.350,47.900) dir=-1 flip=True pn_dist=0.600）",
+      "segname": "input",
+      "status": "INFEASIBLE"
+     },
+     {
+      "reason": null,
+      "segname": "out_J2",
+      "status": "SOLVED"
+     }
+    ],
+    "status": "INFEASIBLE"
+   },
+   "PCIE_UP7": {
+    "segments": [
+     {
+      "reason": "右逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(93.400,50.020) → cv=(82.350,49.100) dir=-1 flip=True pn_dist=0.600）",
+      "segname": "input",
+      "status": "INFEASIBLE"
+     },
+     {
+      "reason": null,
+      "segname": "out_J2",
+      "status": "SOLVED"
+     }
+    ],
+    "status": "INFEASIBLE"
+   }
+  },
+  "segment_status": {
+   "INFEASIBLE": 18,
+   "SOLVED": 16
+  },
+  "total_segments": 34
+ },
+ "board": {
+  "note": "driver 内 sha_expected 短前缀(6c387dff)为陈旧字面量，以实际 sha256 为准；板文件本卡未动(只读)",
+  "path": "k2/k2_v4.kicad_pcb",
+  "sha256": "f6273de613f43d05555d12d6c3492b1e70f383761d8db5121f12b2ca0695af9a"
+ },
+ "card": "NEW_SESSION_PROMPT_v56.md",
+ "classification": {
+  "18_infeasible": {
+   "12x_minus_0p205_via_polarity_cross": {
+    "count": 12,
+    "reason_substr": "via 换层 P/N 极性不一致 ... -0.2050"
+   },
+   "1x_dn7_landing_133p825": {
+    "count": 1,
+    "reason_substr": "落点净空校验失败 P=(133.825, 63.9)"
+   },
+   "5x_pn0p6_no_clearance": {
+    "count": 5,
+    "reason_substr": "对级对称逃逸无净空 pn_dist=0.600"
+   }
+  }
+ },
+ "determinism": {
+  "dual_run_byte_identical": true,
+  "evidence": {
+   "cross_session_eq_vs_predecessor_baseline": true,
+   "note": "连跑 run1..run4 四次 output 摘要含 input_fp 全同；run2/run3 快照全文件字节一致(同 sha256)；与前任 pre-fix 基线报告亦逐字节一致",
+   "predecessor_backup_sha256": "5fb604e7297c6ce8",
+   "run2_sha256": "5fb604e7297c6ce8",
+   "run3_sha256": "5fb604e7297c6ce8",
+   "stages_solve_results_eq_run2_vs_run3": true,
+   "whole_file_eq_run2_vs_run3": true
+  }
+ },
+ "engine": {
+  "commit": "f15b03e77e0c8698e96b64264389a6c6813ed82e",
+  "container_shared": "/home/fila/jqdDev_2025/ic_hw/_shared",
+  "dirty": false
+ },
+ "generated": "2026-09-09T00:06:19+08:00",
+ "input_files": {
+  "config_l2": "2fed74f136c7cd1f",
+  "spec": "13e3bc4f48941702"
+ },
+ "input_fp": "5113681d4d3256f53d6b0e928d2945e2054c741aa8b484e9b3bd4f61c1fe7d64",
+ "monotonic_reference": "后续每阶段(P1..P5)结束对照本文件 baseline_34seg：全局失败集只许收缩、不许平移",
+ "phase": "P0 基线固化 (m13_v56_remediation_plan.md P0)",
+ "run": {
+  "driver": "k2/tools/p3_k2_real_board_e2e.py",
+  "out_dir": "L3/p3_real_board_e2e",
+  "report_sha256": "5fb604e7297c6ce8335278623943ab8260e96470e80584c7d30e55fede7ba04e"
+ }
+}
