@@ -1,0 +1,189 @@
+{
+ "artifact": "m13_v53_p1_audit.json",
+ "checks": {
+  "all_pinned": true,
+  "alloc_checksum": {
+   "p0": "fab637681f69f53bd6c5923a3a3e03d92694cf4e4ebdb199994e01781280034e",
+   "unchanged": true,
+   "value": "fab637681f69f53bd6c5923a3a3e03d92694cf4e4ebdb199994e01781280034e"
+  },
+  "byte_identical_to_p0": true,
+  "ccf_assembled": 15,
+  "dn5_dn6_traceable": {
+   "all": [
+    {
+     "escape_id": "ESC-DN5-out_MCIO",
+     "kind": "COL_STACK",
+     "pinned": true,
+     "solve_ref": "3e91995701a5...",
+     "source_path": "stages.solve.results[PCIE_DN5].segments[out_MCIO]"
+    },
+    {
+     "escape_id": "ESC-DN6-out_MCIO",
+     "kind": "PAD_ROW_DIP",
+     "pinned": true,
+     "solve_ref": "8ab4513fda45...",
+     "source_path": "stages.solve.results[PCIE_DN6].segments[out_MCIO]"
+    }
+   ],
+   "count": 2
+  },
+  "dup_via_coords_checked": 58,
+  "empty_escape_table_no_effect": true,
+  "fact_validate_all_ok": true,
+  "landing_checksum": {
+   "p0": "4f9f24db5d464a2bc669d660627be42a1b3feb3804cba46cc18567d35ec9429b",
+   "unchanged": true,
+   "value": "4f9f24db5d464a2bc669d660627be42a1b3feb3804cba46cc18567d35ec9429b"
+  },
+  "n_reverse_derived": {
+   "rows": 16,
+   "solved_segments": 16
+  },
+  "provenance_complete": true,
+  "replay_equals_all": true,
+  "roundtrip_ids": true,
+  "rows_direct_no_via": 1,
+  "rows_with_chip_via": 15
+ },
+ "gate_status": "PASS",
+ "per_fact": [
+  {
+   "base": "DN0",
+   "chip_via_coords_checked": 4,
+   "errors": [],
+   "escape_id": "ESC-DN0-input",
+   "fact_validate_ok": true,
+   "replay_equals": true,
+   "segname": "input"
+  },
+  {
+   "base": "DN1",
+   "chip_via_coords_checked": 4,
+   "errors": [],
+   "escape_id": "ESC-DN1-input",
+   "fact_validate_ok": true,
+   "replay_equals": true,
+   "segname": "input"
+  },
+  {
+   "base": "DN2",
+   "chip_via_coords_checked": 4,
+   "errors": [],
+   "escape_id": "ESC-DN2-input",
+   "fact_validate_ok": true,
+   "replay_equals": true,
+   "segname": "input"
+  },
+  {
+   "base": "DN3",
+   "chip_via_coords_checked": 4,
+   "errors": [],
+   "escape_id": "ESC-DN3-input",
+   "fact_validate_ok": true,
+   "replay_equals": true,
+   "segname": "input"
+  },
+  {
+   "base": "DN4",
+   "chip_via_coords_checked": 4,
+   "errors": [],
+   "escape_id": "ESC-DN4-input",
+   "fact_validate_ok": true,
+   "replay_equals": true,
+   "segname": "input"
+  },
+  {
+   "base": "DN5",
+   "chip_via_coords_checked": 4,
+   "errors": [],
+   "escape_id": "ESC-DN5-out_MCIO",
+   "fact_validate_ok": true,
+   "replay_equals": true,
+   "segname": "out_MCIO"
+  },
+  {
+   "base": "DN6",
+   "chip_via_coords_checked": 4,
+   "errors": [],
+   "escape_id": "ESC-DN6-input",
+   "fact_validate_ok": true,
+   "replay_equals": true,
+   "segname": "input"
+  },
+  {
+   "base": "DN6",
+   "chip_via_coords_checked": 2,
+   "errors": [],
+   "escape_id": "ESC-DN6-out_MCIO",
+   "fact_validate_ok": true,
+   "replay_equals": true,
+   "segname": "out_MCIO"
+  },
+  {
+   "base": "REFCLK1",
+   "chip_via_coords_checked": 4,
+   "errors": [],
+   "escape_id": "ESC-REFCLK1-input",
+   "fact_validate_ok": true,
+   "replay_equals": true,
+   "segname": "input"
+  },
+  {
+   "base": "UP0",
+   "chip_via_coords_checked": 4,
+   "errors": [],
+   "escape_id": "ESC-UP0-out_J2",
+   "fact_validate_ok": true,
+   "replay_equals": true,
+   "segname": "out_J2"
+  },
+  {
+   "base": "UP1",
+   "chip_via_coords_checked": 4,
+   "errors": [],
+   "escape_id": "ESC-UP1-out_J2",
+   "fact_validate_ok": true,
+   "replay_equals": true,
+   "segname": "out_J2"
+  },
+  {
+   "base": "UP2",
+   "chip_via_coords_checked": 4,
+   "errors": [],
+   "escape_id": "ESC-UP2-out_J2",
+   "fact_validate_ok": true,
+   "replay_equals": true,
+   "segname": "out_J2"
+  },
+  {
+   "base": "UP3",
+   "chip_via_coords_checked": 4,
+   "errors": [],
+   "escape_id": "ESC-UP3-out_J2",
+   "fact_validate_ok": true,
+   "replay_equals": true,
+   "segname": "out_J2"
+  },
+  {
+   "base": "UP6",
+   "chip_via_coords_checked": 4,
+   "errors": [],
+   "escape_id": "ESC-UP6-out_J2",
+   "fact_validate_ok": true,
+   "replay_equals": true,
+   "segname": "out_J2"
+  },
+  {
+   "base": "UP7",
+   "chip_via_coords_checked": 4,
+   "errors": [],
+   "escape_id": "ESC-UP7-out_J2",
+   "fact_validate_ok": true,
+   "replay_equals": true,
+   "segname": "out_J2"
+  }
+ ],
+ "phase": "P1",
+ "report_sha256": "5fb604e7297c6ce8335278623943ab8260e96470e80584c7d30e55fede7ba04e"
+}

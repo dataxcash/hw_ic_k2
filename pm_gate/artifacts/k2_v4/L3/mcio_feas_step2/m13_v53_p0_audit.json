@@ -1,0 +1,334 @@
+{
+ "artifact": "m13_v53_p0_audit.json",
+ "baseline_status": "PRESENT",
+ "checks": {
+  "alloc_unchanged": true,
+  "byte_identical": true,
+  "checksums": {
+   "AllocTable": {
+    "head": "fab637681f69f53bd6c5923a3a3e03d92694cf4e4ebdb199994e01781280034e",
+    "new": "fab637681f69f53bd6c5923a3a3e03d92694cf4e4ebdb199994e01781280034e"
+   },
+   "LandingTable": {
+    "head": "4f9f24db5d464a2bc669d660627be42a1b3feb3804cba46cc18567d35ec9429b",
+    "new": "4f9f24db5d464a2bc669d660627be42a1b3feb3804cba46cc18567d35ec9429b"
+   },
+   "SolveResults": {
+    "head": "cc711d6cbe822029b8134e59c6afa908da7a459dc787db53dfef9796c7f80e89",
+    "new": "cc711d6cbe822029b8134e59c6afa908da7a459dc787db53dfef9796c7f80e89"
+   }
+  },
+  "counting_transparent": true,
+  "e2e_rc": 0,
+  "fingerprint_match": true,
+  "landing_unchanged": true,
+  "no_production_modification": true,
+  "segment_tally": {
+   "head": {
+    "bases": 18,
+    "segments": 34,
+    "solved": 16
+   },
+   "new": {
+    "bases": 18,
+    "segments": 34,
+    "solved": 16
+   }
+  },
+  "solve_unchanged": true
+ },
+ "fact_validate": {
+  "all_pass": true,
+  "n_solved": 16,
+  "per_segment": [
+   {
+    "base": "PCIE_UP0",
+    "fail_checks": [],
+    "n_shared_segs": 0,
+    "n_shared_vias": 0,
+    "ok": true,
+    "segname": "out_J2"
+   },
+   {
+    "base": "PCIE_UP1",
+    "fail_checks": [],
+    "n_shared_segs": 0,
+    "n_shared_vias": 0,
+    "ok": true,
+    "segname": "out_J2"
+   },
+   {
+    "base": "PCIE_UP2",
+    "fail_checks": [],
+    "n_shared_segs": 0,
+    "n_shared_vias": 0,
+    "ok": true,
+    "segname": "out_J2"
+   },
+   {
+    "base": "PCIE_UP3",
+    "fail_checks": [],
+    "n_shared_segs": 0,
+    "n_shared_vias": 0,
+    "ok": true,
+    "segname": "out_J2"
+   },
+   {
+    "base": "PCIE_UP6",
+    "fail_checks": [],
+    "n_shared_segs": 0,
+    "n_shared_vias": 0,
+    "ok": true,
+    "segname": "out_J2"
+   },
+   {
+    "base": "PCIE_UP7",
+    "fail_checks": [],
+    "n_shared_segs": 0,
+    "n_shared_vias": 0,
+    "ok": true,
+    "segname": "out_J2"
+   },
+   {
+    "base": "PCIE_DN0",
+    "fail_checks": [],
+    "n_shared_segs": 0,
+    "n_shared_vias": 0,
+    "ok": true,
+    "segname": "input"
+   },
+   {
+    "base": "PCIE_DN1",
+    "fail_checks": [],
+    "n_shared_segs": 0,
+    "n_shared_vias": 0,
+    "ok": true,
+    "segname": "input"
+   },
+   {
+    "base": "PCIE_DN2",
+    "fail_checks": [],
+    "n_shared_segs": 0,
+    "n_shared_vias": 0,
+    "ok": true,
+    "segname": "input"
+   },
+   {
+    "base": "PCIE_DN3",
+    "fail_checks": [],
+    "n_shared_segs": 0,
+    "n_shared_vias": 0,
+    "ok": true,
+    "segname": "input"
+   },
+   {
+    "base": "PCIE_DN4",
+    "fail_checks": [],
+    "n_shared_segs": 0,
+    "n_shared_vias": 0,
+    "ok": true,
+    "segname": "input"
+   },
+   {
+    "base": "PCIE_DN5",
+    "fail_checks": [],
+    "n_shared_segs": 0,
+    "n_shared_vias": 0,
+    "ok": true,
+    "segname": "out_MCIO"
+   },
+   {
+    "base": "PCIE_DN6",
+    "fail_checks": [],
+    "n_shared_segs": 0,
+    "n_shared_vias": 0,
+    "ok": true,
+    "segname": "input"
+   },
+   {
+    "base": "PCIE_DN6",
+    "fail_checks": [],
+    "n_shared_segs": 15,
+    "n_shared_vias": 8,
+    "ok": true,
+    "segname": "out_MCIO"
+   },
+   {
+    "base": "PCIE_REFCLK0",
+    "fail_checks": [],
+    "n_shared_segs": 29,
+    "n_shared_vias": 14,
+    "ok": true,
+    "segname": "input"
+   },
+   {
+    "base": "PCIE_REFCLK1",
+    "fail_checks": [],
+    "n_shared_segs": 45,
+    "n_shared_vias": 16,
+    "ok": true,
+    "segname": "input"
+   }
+  ]
+ },
+ "fallback": {
+  "fallback_segments": [
+   {
+    "base": "PCIE_UP0",
+    "kinds": [
+     "COL_STACK",
+     "LANDING"
+    ],
+    "segname": "out_J2"
+   },
+   {
+    "base": "PCIE_UP1",
+    "kinds": [
+     "COL_STACK",
+     "LANDING"
+    ],
+    "segname": "out_J2"
+   },
+   {
+    "base": "PCIE_UP2",
+    "kinds": [
+     "COL_STACK",
+     "LANDING"
+    ],
+    "segname": "out_J2"
+   },
+   {
+    "base": "PCIE_UP3",
+    "kinds": [
+     "COL_STACK",
+     "LANDING"
+    ],
+    "segname": "out_J2"
+   },
+   {
+    "base": "PCIE_UP6",
+    "kinds": [
+     "COL_STACK",
+     "LANDING"
+    ],
+    "segname": "out_J2"
+   },
+   {
+    "base": "PCIE_UP7",
+    "kinds": [
+     "COL_STACK",
+     "LANDING"
+    ],
+    "segname": "out_J2"
+   },
+   {
+    "base": "PCIE_DN0",
+    "kinds": [
+     "COL_STACK",
+     "LANDING"
+    ],
+    "segname": "input"
+   },
+   {
+    "base": "PCIE_DN1",
+    "kinds": [
+     "COL_STACK",
+     "LANDING"
+    ],
+    "segname": "input"
+   },
+   {
+    "base": "PCIE_DN2",
+    "kinds": [
+     "COL_STACK",
+     "LANDING"
+    ],
+    "segname": "input"
+   },
+   {
+    "base": "PCIE_DN3",
+    "kinds": [
+     "COL_STACK",
+     "LANDING"
+    ],
+    "segname": "input"
+   },
+   {
+    "base": "PCIE_DN4",
+    "kinds": [
+     "COL_STACK",
+     "LANDING"
+    ],
+    "segname": "input"
+   },
+   {
+    "base": "PCIE_DN5",
+    "kinds": [
+     "COL_STACK",
+     "LSWAP_V"
+    ],
+    "segname": "out_MCIO"
+   },
+   {
+    "base": "PCIE_DN6",
+    "kinds": [
+     "COL_STACK",
+     "LANDING"
+    ],
+    "segname": "input"
+   },
+   {
+    "base": "PCIE_DN6",
+    "kinds": [
+     "LSWAP_V",
+     "PAD_ROW_DIP"
+    ],
+    "segname": "out_MCIO"
+   },
+   {
+    "base": "PCIE_REFCLK1",
+    "kinds": [
+     "LANDING",
+     "LSWAP_V"
+    ],
+    "segname": "input"
+   }
+  ],
+  "per_form": {
+   "col_stack": 49,
+   "escape_pair": 107,
+   "layer_swap": 31,
+   "layer_swap_v": 29,
+   "pad_row_dip": 19
+  },
+  "pn_ok": {
+   "col_stack": {
+    "calls": 42384,
+    "rejects": 42360
+   },
+   "layer_swap": {},
+   "layer_swap_v": {
+    "calls": 209,
+    "rejects": 188
+   },
+   "pad_row_dip": {
+    "calls": 331744,
+    "rejects": 331740
+   }
+  },
+  "total_form_calls": 235
+ },
+ "gate_status": "PASS",
+ "golden": {
+  "board_sha256": "f6273de613f43d05555d12d6c3492b1e70f383761d8db5121f12b2ca0695af9a",
+  "input_fp": "5113681d4d3256f53d6b0e928d2945e2054c741aa8b484e9b3bd4f61c1fe7d64",
+  "sha256": "5fb604e7297c6ce8335278623943ab8260e96470e80584c7d30e55fede7ba04e"
+ },
+ "golden_source": "git HEAD:pm_gate/artifacts/k2_v4/L3/p3_real_board_e2e/p3_real_board_e2e_report.json",
+ "new_report": {
+  "board_sha256": "f6273de613f43d05555d12d6c3492b1e70f383761d8db5121f12b2ca0695af9a",
+  "input_fp": "5113681d4d3256f53d6b0e928d2945e2054c741aa8b484e9b3bd4f61c1fe7d64",
+  "sha256": "5fb604e7297c6ce8335278623943ab8260e96470e80584c7d30e55fede7ba04e"
+ },
+ "phase": "P0"
+}
