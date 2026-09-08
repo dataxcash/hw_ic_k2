@@ -1,8 +1,11 @@
 # M14 v49 承接 — ② col-stack 构造谓词首片（C-1 载体两轮 + C-3 跨带包络）落地；K2 e2e 零净增 → 残余=stub 形态缺 → 停机上报
 
 > 承接 v48。任务：把 v48 N4 的 col 构造 P/N 相向交叉归因落成 ②施工图层构造谓词 → e2e 净增验证。
-> 结论：谓词首片已落码+单测绿；K2 e2e **solved_pairs 仍 = 2（零净增、零回归，REFCLK0/1 全保）**；
-> 归因定案 = col-stack **stub/via₁ 障碍域形态缺**（alloc E3 单点存在性 ≠ 路径可入）→ **停机上报**，kb 新模板已入。
+> 结论：谓词首片已落码+单测绿；K2 e2e **solved_pairs 仍 = 2（净指标未增，REFCLK0/1 全保）**；
+> **段级真相（v49 修正）**：真解段 4→15（DN0-4/6/7 input + UP0-3/6/7 out_J2 + REFCLK×2，全部 REFCLK 行合规）；
+> v48 的 UP input SOLVED = 撞 REFCLK In6 行 0.04mm 的场层隔离盲区假象 → C-3 清除（物理正确化，非回归）；
+> 唯一真回退 = UP4 out_J2（v48 合法解 → v49 INFEASIBLE，贪婪序共享占位，新缺口）；
+> 归因定案 = col-stack **stub/via₁ 障碍域形态缺** + UP 芯片西列 REFCLK 合规硬缺口 + 段级占用协调缺 → 停机上报，kb 已更新。
 
 ---
 
