@@ -1,0 +1,37 @@
+{
+  "template_id": "col_stack_obstacle_stub_gap",
+  "category": "bga_fanout",
+  "name": "K2 芯片列 col-stack 逃逸 stub/via₁ 障碍域形态缺（C-1 载体两轮 + C-3 跨带包络落地后仍 0 净增）",
+  "applicability": {
+    "board": "k2_v4",
+    "connector": "SlimSAS_x8_SFF8654",
+    "corridor_count": "2",
+    "diff_pairs": "16",
+    "escape_side": "chip",
+    "form": "col_stack",
+    "leg_layer": "In1.Cu",
+    "refclk_pairs": "2"
+  },
+  "structure": {
+    "defect": "K2 数据 lane 芯片侧（U6 x84-93 竖排对角对 dx0.3/dy0.52，轨行 58.3-66.7）col-stack 候选全败于 stub/via₁ 障碍域：F.Cu 单点可入（alloc E3(a) 逐 via 点存在性通过）≠ 路径可入（col_stack 需 pad→F.Cu stub→via₁ 连续净空，U6 pad 墙 + 邻族高速 pad + C79-C83 去耦墙 x90.45-91.55 使 jog 域无可布路径）；VIA 对称族（Form A/C）在竖排对角对两 flip 出口排序均自交叉（-0.205 = width 0.205 全叠，@ 各轨行/逃逸区，v48 N4 同源）",
+    "gap": "需要新形态（kb 另卡）：① pad 列障碍簇内可布 stub/via 形态（非单 jog 点判断），或 ② per-ball 落点驱动（chip_landing VIA_IN2 球旁 via 直接接入），或 ③ alloc 行序让行 ≥64.54/列东移（DN5 C82 col-top via 死局，v44 chip_col_stack_band_tail_carrier limitation 同源）",
+    "expected": "② 首片谓词（C-1 尾段载体两轮 + C-3 跨带包络）为必要非充分：合成板谓词逻辑自洽（TestColStackTailCarrier 4 绿）但 K2 真板 e2e 零净增 → 残余阻塞在 stub 构造域而非尾段/跨带层"
+  },
+  "params": {},
+  "validation": {
+    "e2e_after_C1_C3": "solved_pairs 2（REFCLK0+REFCLK1 全保），alloc 34/34 无回归，16 数据 lane 仍 INFEASIBLE（reason 与 v48 一致：via 换层 P/N 极性不一致/出口排序相向交叉 @ 轨行）",
+    "unit": "test_escape_envelope.py 11 绿 + test_hs_route_model TestColStackTailCarrier 4 绿；test_solve_pipeline 1 failed pre-existing 勿修",
+    "status": "gap（未净增，停机上报 v49）"
+  },
+  "provenance": {
+    "board": "k2_v4",
+    "board_sha": "f6273de613f43d05555d12d6c3492b1e70f383761d8db5121f12b2ca0695af9a",
+    "code_candidate": "HSRouteModel._col_stack_escape tail 载体两轮 + cross-band env（v49 commit）",
+    "records": [
+      "k2/pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v48_session_handoff.md",
+      "k2/pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v49_session_handoff.md",
+      "k2/pm_gate/artifacts/k2_v4/L3/p3_real_board_e2e/p3_real_board_e2e_report.json"
+    ],
+    "session": "M14 v49"
+  }
+}
