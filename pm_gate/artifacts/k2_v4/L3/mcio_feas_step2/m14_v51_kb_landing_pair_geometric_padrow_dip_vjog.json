@@ -1,0 +1,39 @@
+{
+  "template_id": "landing_pair_geometric_padrow_dip_vjog",
+  "category": "connector_escape",
+  "name": "out_MCIO 落点对级几何两形态 — 芯片侧 pad-row dip（In2 沿 pad 行西行+东界下钻）+ 连接器侧 V-jog stub 消费（ENG-β 归属门落地, v51）",
+  "applicability": {
+    "board": "k2_v4",
+    "connector": "MCIO_4i_SFF1016",
+    "corridor_count": "2",
+    "corridor_id": "WEST_MCIO_TO_CHIP",
+    "diff_pairs": "8",
+    "escape_side": "chip",
+    "form": "pad_row_dip",
+    "layer": "In2.Cu",
+    "refclk_pairs": "2",
+    "track_y": "58.7"
+  },
+  "structure": {
+    "defect": "DN out_MCIO ×7 (DN0-4/6/7) 芯片侧（U6 pad 84.6/85.0, y51.67/52.37，东于走廊 WEST_MCIO_TO_CHIP x[65.05,82.35] 东界）col_stack 竖腿（pad 列 In2 直穿轨行）两 flip 全返 None——终报 VIA 交叉 @(84.66,52.92)（F5）；alloc 落点记录 pad 锚=芯片 pad 但 via 落在连接器侧隙列 x66.555（18mm F.Cu stub 首段被 GND pad dist 0.05 挡, F3）——B1 锚错端点 + B2 alloc 无 stub 可达门 + A 消费侧只喂 idx1/右逃逸（F4）三层叠加；col_stack 既有形态不可达 = 芯片侧需新逃逸形态",
+    "fix": "两形态：α 芯片侧 pad-row dip（v51 ENG-α 加性,dormant）——col_stack 返 None 后、direction<0 且 pad 东于 corr_x 时枚举 F.Cu stub 西 0.3/0.6/0.9 → via@pad 行 → In2 沿 pad 行西行 → corr_x 东界下钻至 ty（逐段 seg_ok + pn_ok≥0.155, flip 仅换 ty_P/ty_N, 垂直 sign(track_y−pad_y) 覆盖 DN7 北行, 候选序确定性 first-clear）；β 消费侧归属门（v51 ENG-β）——消费 landing_pair 前校验记录 pad≈本逃逸 ep pad(ε0.02, 同 _chip_pair_for) 且 F.Cu pad→via stub 可达（H 或 V-jog seg_ok），任一失败落回自搜（不改记录不 fail-closed 死锁），landing_pair 传参侧自适应（谁 pad 归属谁接）",
+    "construct_preconditions": "α: 走廊带层=逃逸载体层（In2 走廊 esc=In2, F.Cu 走廊 esc=In2≠band 时休眠）; via@pad行 需 fcu+esc 双点净空（含 C-3 包络, dormant keepout≤0 恒过）; P/N 下钻列独立枚举 0.1 步防同列 via 堆叠（DN7 高风险点）; β: 记录须带 pad 锚字段（alloc v1.0+ allocate_regions 恒写）",
+    "gap": "ENG-β 只解消费侧归属（含 H/V-jog stub 可达门评估），未解 alloc 重锚（B1: region MCIO 窗口 [50,90] 吞芯片列 84.6-90 → 连接器侧落点被锚到芯片 pad）——若 J3 侧自搜仍不可达（45.75 本行被 GND 挡须竖爬 46.5-49 再横走至隙列 via）, 需下一卡: alloc 重锚或 V-jog 落点消费形态"
+  },
+  "params": {},
+  "validation": {
+    "e2e_after_v51": "solved_pairs 2→3（DN6 全解：左 LSWAP_V + 右 PAD_ROW_DIP 首hit）；段级真解 15→17（+DN5 out_MCIO 右 COL_STACK + DN6 out_MCIO 右 PAD_ROW_DIP——ENG-β 门移除错锚消费后 col_stack/dip 自搜解锁）；28 已解 P/N 段端字节零变更（REFCLK0/1 保 + UP out_J2 保 + DN0-4/6 input 保）；DN7 input 新 INFEASIBLE=同列 via 堆叠（DN6 全解共享其 J2 列 x133.825 F.Cu stub 竖线 y63.3→65.31 穿过 DN7 落点 via 63.9/64.5 → point_ok 拒；v51 高风险明示同源）→ 归 alloc 重锚/段级占用协调下一卡",
+    "unit": "test_escape_envelope.py 11 绿保 + test_hs_route_model TestColStackTailCarrier 4 绿保 + v51 新增 8 绿（TestPadRowDipEscape 3 + TestLandingAttributionGate 5）——全量 16 失败 pre/after 同集（环境/工具链, 含 test_t5 pre-existing）零新增",
+    "status": "v51 净增 1/7（部分落地）：dip 形态 + 归属门实证有效；DN7 同列堆叠回退 + J3 侧 V-jog stub 消费缺口 → 下一卡"
+  },
+  "provenance": {
+    "board": "k2_v4",
+    "board_sha": "6c387dff",
+    "code_candidate": "HSRouteModel._pad_row_dip_escape + _escape_pair landing 归属门（v51 commit）",
+    "records": [
+      "k2/pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v50_session_handoff.md",
+      "k2/pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/NEW_SESSION_PROMPT_v51.md"
+    ],
+    "session": "M14 v51"
+  }
+}
