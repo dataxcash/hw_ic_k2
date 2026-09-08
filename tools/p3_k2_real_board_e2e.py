@@ -328,7 +328,9 @@ def build_config(base_cfg: dict) -> dict:
     cfg = json.loads(json.dumps(base_cfg))
     ca = cfg.setdefault("channel_alloc", {})
     ca["channels_from_spec"] = True                      # corridors → RouteInput.channels
-    ca["nets_path"] = "derived.nets"                     # 待分配网显式声明（18 base 字符串）
+    # v56 P1 E1：不再 nets_path 覆写——channel.nets 经 extract_channels 以 list
+    # 原样透传 SPEC corridors.bands.nets（含 refclk 索引对齐 0/1），_alloc_nets
+    # 展平聚合 = 全 34 网（与 derived.nets 同集），伪网名由引擎 fail-closed raise。
     cfg["capacity_audit"] = {
         "demands_path": "derived.capacity_demands",
         "via_zones_path": "derived.via_zones",
@@ -588,21 +590,9 @@ def main() -> int:
         "evidence": {"k2_shared_head": "84b613d", "container_shared_head": "b48d3f4"},
     })
 
-    # 数据形状错配缺口：SPEC band.nets 列表 vs ChannelInput.nets str（_alloc_nets 字符串化列表）。
-    # 本卡以 nets_path 显式声明规避（契约层机制）；形状修正确认归属回上层 ECO，细节见 report.gaps。
-    report["gaps"].append({
-        "stage": "env", "verdict": "WARN",
-        "reason": "SPEC corridors band.nets 为列表 vs ChannelInput.nets 声明 str："
-                  "_alloc_nets 会把列表字符串化成伪网名（首跑 alloc 3 伪网全 INFEASIBLE）。"
-                  "本卡经 nets_path 显式声明规避，底层形状错配记录回上层 ECO",
-        "evidence": {
-            "first_run_nets": ["['PCIE_DN0', 'PCIE_DN1', ...]", "['PCIE_REFCLK']",
-                               "['PCIE_UP0', ...]"],
-            "channel_input_nets_type": "list (SPEC band.nets)",
-            "declared_field_type": "str",
-            "workaround": "config.channel_alloc.nets_path -> derived.nets (18 base 字符串)",
-        },
-    })
+    # 数据形状缺口（E1）已闭环（v56 P1）：SPEC band.nets(list) 经 extract_channels
+    # list 原样透传 ChannelInput.nets，_alloc_nets 展平聚合 + 伪网名 raise；
+    # nets_path 覆写已删，伪网名不再可能产生（本 gap 记录随覆写一并移除）。
 
     # TOPVIEW（ENG 原生全局视差）：一次列全 BLOCKER gap + 逐项处置（能力在
     # eda_core/topview.py，本脚本只组装输入并调用，非人肉归因）

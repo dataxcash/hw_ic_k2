@@ -1,0 +1,528 @@
+{
+ "artifact": "m13_v56_p1_chip_coverage",
+ "board_sha256": "f6273de613f43d05555d12d6c3492b1e70f383761d8db5121f12b2ca0695af9a",
+ "chip_domains": {
+  "U3_EAST": {
+   "corridor": "EAST_CHIP_TO_J2",
+   "keys": [
+    "PCIE_DN0",
+    "PCIE_DN1",
+    "PCIE_DN2",
+    "PCIE_DN3",
+    "PCIE_DN4",
+    "PCIE_DN5",
+    "PCIE_DN6",
+    "PCIE_DN7",
+    "PCIE_UP_OUT0",
+    "PCIE_UP_OUT1",
+    "PCIE_UP_OUT2",
+    "PCIE_UP_OUT3",
+    "PCIE_UP_OUT4",
+    "PCIE_UP_OUT5",
+    "PCIE_UP_OUT6",
+    "PCIE_UP_OUT7"
+   ],
+   "pads": 32
+  },
+  "U7_WEST": {
+   "corridor": "WEST_MCIO_TO_CHIP",
+   "keys": [
+    "PCIE_DN_OUT0",
+    "PCIE_DN_OUT1",
+    "PCIE_DN_OUT2",
+    "PCIE_DN_OUT3",
+    "PCIE_DN_OUT4",
+    "PCIE_DN_OUT5",
+    "PCIE_DN_OUT6",
+    "PCIE_DN_OUT7",
+    "PCIE_UP0",
+    "PCIE_UP1",
+    "PCIE_UP2",
+    "PCIE_UP3",
+    "PCIE_UP4",
+    "PCIE_UP5",
+    "PCIE_UP6",
+    "PCIE_UP7"
+   ],
+   "pads": 32
+  }
+ },
+ "engine": "container _shared pristine f15b03e + P1 E1 契约改动（route_input/solve_pipeline，见引擎 commit）",
+ "landing_regions": {
+  "U3": {
+   "corridor_id": "EAST_CHIP_TO_J2",
+   "n_assigned": 4,
+   "n_signals": 32,
+   "unassigned": [
+    "PCIE_DN0_N",
+    "PCIE_DN1_N",
+    "PCIE_DN2_N",
+    "PCIE_DN2_P",
+    "PCIE_DN3_N",
+    "PCIE_DN3_P",
+    "PCIE_DN4_N",
+    "PCIE_DN4_P",
+    "PCIE_DN5_N",
+    "PCIE_DN5_P",
+    "PCIE_DN6_N",
+    "PCIE_DN6_P",
+    "PCIE_DN7_N",
+    "PCIE_DN7_P",
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT1_P_J2",
+    "PCIE_UP_OUT2_N_J2",
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT3_N_J2",
+    "PCIE_UP_OUT3_P_J2",
+    "PCIE_UP_OUT4_N_J2",
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT5_N_J2",
+    "PCIE_UP_OUT5_P_J2",
+    "PCIE_UP_OUT6_N_J2",
+    "PCIE_UP_OUT6_P_J2",
+    "PCIE_UP_OUT7_N_J2",
+    "PCIE_UP_OUT7_P_J2"
+   ],
+   "verdict": "INFEASIBLE"
+  },
+  "U7": {
+   "corridor_id": "WEST_MCIO_TO_CHIP",
+   "n_assigned": 5,
+   "n_signals": 32,
+   "unassigned": [
+    "PCIE_DN_OUT0_N_MCIO",
+    "PCIE_DN_OUT0_P_MCIO",
+    "PCIE_DN_OUT1_N_MCIO",
+    "PCIE_DN_OUT1_P_MCIO",
+    "PCIE_DN_OUT2_N_MCIO",
+    "PCIE_DN_OUT2_P_MCIO",
+    "PCIE_DN_OUT3_N_MCIO",
+    "PCIE_DN_OUT3_P_MCIO",
+    "PCIE_DN_OUT4_N_MCIO",
+    "PCIE_DN_OUT4_P_MCIO",
+    "PCIE_DN_OUT5_N_MCIO",
+    "PCIE_DN_OUT5_P_MCIO",
+    "PCIE_DN_OUT6_N_MCIO",
+    "PCIE_DN_OUT6_P_MCIO",
+    "PCIE_DN_OUT7_N_MCIO",
+    "PCIE_DN_OUT7_P_MCIO",
+    "PCIE_UP0_N",
+    "PCIE_UP1_N",
+    "PCIE_UP2_P",
+    "PCIE_UP3_P",
+    "PCIE_UP4_N",
+    "PCIE_UP5_N",
+    "PCIE_UP5_P",
+    "PCIE_UP6_N",
+    "PCIE_UP6_P",
+    "PCIE_UP7_N",
+    "PCIE_UP7_P"
+   ],
+   "verdict": "INFEASIBLE"
+  }
+ },
+ "landing_rows": {
+  "PCIE_DN0_N": {
+   "region": "U3",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_DN0_P": {
+   "region": "U3",
+   "status": "ASSIGNED",
+   "x": 93.8,
+   "y": 59.061
+  },
+  "PCIE_DN1_N": {
+   "region": "U3",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_DN1_P": {
+   "region": "U3",
+   "status": "ASSIGNED",
+   "x": 93.8,
+   "y": 59.708
+  },
+  "PCIE_DN2_N": {
+   "region": "U3",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_DN2_P": {
+   "region": "U3",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_DN3_N": {
+   "region": "U3",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_DN3_P": {
+   "region": "U3",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_DN4_N": {
+   "region": "U3",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_DN4_P": {
+   "region": "U3",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_DN5_N": {
+   "region": "U3",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_DN5_P": {
+   "region": "U3",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_DN6_N": {
+   "region": "U3",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_DN6_P": {
+   "region": "U3",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_DN7_N": {
+   "region": "U3",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_DN7_P": {
+   "region": "U3",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_DN_OUT0_N_MCIO": {
+   "region": "U7",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_DN_OUT0_P_MCIO": {
+   "region": "U7",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_DN_OUT1_N_MCIO": {
+   "region": "U7",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_DN_OUT1_P_MCIO": {
+   "region": "U7",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_DN_OUT2_N_MCIO": {
+   "region": "U7",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_DN_OUT2_P_MCIO": {
+   "region": "U7",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_DN_OUT3_N_MCIO": {
+   "region": "U7",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_DN_OUT3_P_MCIO": {
+   "region": "U7",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_DN_OUT4_N_MCIO": {
+   "region": "U7",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_DN_OUT4_P_MCIO": {
+   "region": "U7",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_DN_OUT5_N_MCIO": {
+   "region": "U7",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_DN_OUT5_P_MCIO": {
+   "region": "U7",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_DN_OUT6_N_MCIO": {
+   "region": "U7",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_DN_OUT6_P_MCIO": {
+   "region": "U7",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_DN_OUT7_N_MCIO": {
+   "region": "U7",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_DN_OUT7_P_MCIO": {
+   "region": "U7",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_UP0_N": {
+   "region": "U7",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_UP0_P": {
+   "region": "U7",
+   "status": "ASSIGNED",
+   "x": 93.8,
+   "y": 49.113
+  },
+  "PCIE_UP1_N": {
+   "region": "U7",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_UP1_P": {
+   "region": "U7",
+   "status": "ASSIGNED",
+   "x": 93.8,
+   "y": 48.466
+  },
+  "PCIE_UP2_N": {
+   "region": "U7",
+   "status": "ASSIGNED",
+   "x": 93.8,
+   "y": 47.819
+  },
+  "PCIE_UP2_P": {
+   "region": "U7",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_UP3_N": {
+   "region": "U7",
+   "status": "ASSIGNED",
+   "x": 93.8,
+   "y": 52.348
+  },
+  "PCIE_UP3_P": {
+   "region": "U7",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_UP4_N": {
+   "region": "U7",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_UP4_P": {
+   "region": "U7",
+   "status": "ASSIGNED",
+   "x": 93.8,
+   "y": 47.172
+  },
+  "PCIE_UP5_N": {
+   "region": "U7",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_UP5_P": {
+   "region": "U7",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_UP6_N": {
+   "region": "U7",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_UP6_P": {
+   "region": "U7",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_UP7_N": {
+   "region": "U7",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_UP7_P": {
+   "region": "U7",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_UP_OUT0_N_J2": {
+   "region": "U3",
+   "status": "ASSIGNED",
+   "x": 93.8,
+   "y": 58.411
+  },
+  "PCIE_UP_OUT0_P_J2": {
+   "region": "U3",
+   "status": "ASSIGNED",
+   "x": 93.8,
+   "y": 55.777
+  },
+  "PCIE_UP_OUT1_N_J2": {
+   "region": "U3",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_UP_OUT1_P_J2": {
+   "region": "U3",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_UP_OUT2_N_J2": {
+   "region": "U3",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_UP_OUT2_P_J2": {
+   "region": "U3",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_UP_OUT3_N_J2": {
+   "region": "U3",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_UP_OUT3_P_J2": {
+   "region": "U3",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_UP_OUT4_N_J2": {
+   "region": "U3",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_UP_OUT4_P_J2": {
+   "region": "U3",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_UP_OUT5_N_J2": {
+   "region": "U3",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_UP_OUT5_P_J2": {
+   "region": "U3",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_UP_OUT6_N_J2": {
+   "region": "U3",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_UP_OUT6_P_J2": {
+   "region": "U3",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_UP_OUT7_N_J2": {
+   "region": "U3",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  },
+  "PCIE_UP_OUT7_P_J2": {
+   "region": "U3",
+   "status": "UNASSIGNED",
+   "x": null,
+   "y": null
+  }
+ },
+ "p2_consumption": "P2 把本工件 chip_domains 域 rows 接成 chip_landing 命名空间喂 solve；NO_ESCAPE（DN_OUT 西侧）移交 P3/P4 守恒级容量",
+ "pad_classification": {
+  "chip:EAST_CHIP_TO_J2": 32,
+  "chip:WEST_MCIO_TO_CHIP": 32,
+  "conn:J2": 36,
+  "conn:J3_J4": 36
+ },
+ "phase": "P1 数据形状/覆盖（v56 plan P1，方案 A：管道外工件，消费接线 P2）",
+ "pipeline_parity_note": "本工件独立于求解管道；管道 landing 仍只含连接器域（J2/MCIO），solve 失败集 == P0 基线（不因 P1 平移），见 e2e report 双跑比对",
+ "predicates": {
+  "P1_no_nets_path_override": true,
+  "P2_chip_domain_pairs_complete": true,
+  "P2_disjoint_no_unclassified": true,
+  "P2_no_domain_duplicate": true,
+  "P2_no_partial_pairs": true,
+  "P3_region_corridor_anchors": true,
+  "P4_U3_U7_assigned_gt0": true
+ }
+}
