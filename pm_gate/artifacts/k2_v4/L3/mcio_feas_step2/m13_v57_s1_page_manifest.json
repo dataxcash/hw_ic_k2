@@ -1,0 +1,2163 @@
+{
+ "artifact": "m13_v57_s1_page_manifest",
+ "authority": [
+  "S0 权威端点模型(网表×ballmap×放置)",
+  "k2_sch 网表 REFCLK 双端成员"
+ ],
+ "basis": "m13_v57_s1_generator_design.md §0.1",
+ "inputs_sha": {
+  "s0_endpoint_model": "614bc90740cf",
+  "sch": "70448241caa6"
+ },
+ "n_pages": 34,
+ "pages": [
+  {
+   "anchors": {
+    "chip": {
+     "N": {
+      "ball": "A_PERN0",
+      "ball_grid": "R1",
+      "net": "PCIE_DN0_N",
+      "pad_global": [
+       85.15,
+       57.64
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     },
+     "P": {
+      "ball": "A_PERP0",
+      "ball_grid": "N2",
+      "net": "PCIE_DN0_P",
+      "pad_global": [
+       84.85,
+       57.12
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     }
+    },
+    "conn": {
+     "N": {
+      "net": "PCIE_DN0_N",
+      "pad_global": [
+       135.0,
+       54.3
+      ],
+      "pad_num": "40",
+      "pin": "TX0_N",
+      "ref": "J2",
+      "source": "s0_endpoint_model.connector_audit"
+     },
+     "P": {
+      "net": "PCIE_DN0_P",
+      "pad_global": [
+       132.65,
+       54.3
+      ],
+      "pad_num": "39",
+      "pin": "TX0_P",
+      "ref": "J2",
+      "source": "s0_endpoint_model.connector_audit"
+     }
+    }
+   },
+   "base": "PCIE_DN0",
+   "corridor": {
+    "band": "dn",
+    "id": "EAST_CHIP_TO_J2"
+   },
+   "kind": "data",
+   "nets": {
+    "N": "PCIE_DN0_N",
+    "P": "PCIE_DN0_P"
+   },
+   "page_id": "PCIE_DN0/input",
+   "segname": "input",
+   "side": "east"
+  },
+  {
+   "anchors": {
+    "chip": {
+     "N": {
+      "ball": "A_PETN0",
+      "ball_grid": "P29",
+      "net": "PCIE_DN_OUT0_N_MCIO",
+      "pad_global": [
+       85.0,
+       51.673
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     },
+     "P": {
+      "ball": "A_PETP0",
+      "ball_grid": "M26",
+      "net": "PCIE_DN_OUT0_P_MCIO",
+      "pad_global": [
+       84.6,
+       52.366
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     }
+    },
+    "conn": {
+     "N": {
+      "net": "PCIE_DN_OUT0_N_MCIO",
+      "pad_global": [
+       63.7,
+       45.75
+      ],
+      "pad_num": "A3",
+      "pin": "RX0_N",
+      "ref": "J3",
+      "source": "s0_endpoint_model.connector_audit"
+     },
+     "P": {
+      "net": "PCIE_DN_OUT0_P_MCIO",
+      "pad_global": [
+       64.3,
+       45.75
+      ],
+      "pad_num": "A2",
+      "pin": "RX0_P",
+      "ref": "J3",
+      "source": "s0_endpoint_model.connector_audit"
+     }
+    }
+   },
+   "base": "PCIE_DN0",
+   "corridor": {
+    "band": "dn",
+    "id": "WEST_MCIO_TO_CHIP"
+   },
+   "kind": "data",
+   "nets": {
+    "N": "PCIE_DN_OUT0_N_MCIO",
+    "P": "PCIE_DN_OUT0_P_MCIO"
+   },
+   "page_id": "PCIE_DN0/out_MCIO",
+   "segname": "out_MCIO",
+   "side": "west"
+  },
+  {
+   "anchors": {
+    "chip": {
+     "N": {
+      "ball": "A_PERN1",
+      "ball_grid": "AB1",
+      "net": "PCIE_DN1_N",
+      "pad_global": [
+       86.35,
+       57.64
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     },
+     "P": {
+      "ball": "A_PERP1",
+      "ball_grid": "Y2",
+      "net": "PCIE_DN1_P",
+      "pad_global": [
+       86.05,
+       57.12
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     }
+    },
+    "conn": {
+     "N": {
+      "net": "PCIE_DN1_N",
+      "pad_global": [
+       132.65,
+       55.5
+      ],
+      "pad_num": "43",
+      "pin": "TX1_N",
+      "ref": "J2",
+      "source": "s0_endpoint_model.connector_audit"
+     },
+     "P": {
+      "net": "PCIE_DN1_P",
+      "pad_global": [
+       135.0,
+       54.9
+      ],
+      "pad_num": "42",
+      "pin": "TX1_P",
+      "ref": "J2",
+      "source": "s0_endpoint_model.connector_audit"
+     }
+    }
+   },
+   "base": "PCIE_DN1",
+   "corridor": {
+    "band": "dn",
+    "id": "EAST_CHIP_TO_J2"
+   },
+   "kind": "data",
+   "nets": {
+    "N": "PCIE_DN1_N",
+    "P": "PCIE_DN1_P"
+   },
+   "page_id": "PCIE_DN1/input",
+   "segname": "input",
+   "side": "east"
+  },
+  {
+   "anchors": {
+    "chip": {
+     "N": {
+      "ball": "A_PETN1",
+      "ball_grid": "AA29",
+      "net": "PCIE_DN_OUT1_N_MCIO",
+      "pad_global": [
+       86.2,
+       51.673
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     },
+     "P": {
+      "ball": "A_PETP1",
+      "ball_grid": "W26",
+      "net": "PCIE_DN_OUT1_P_MCIO",
+      "pad_global": [
+       85.8,
+       52.366
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     }
+    },
+    "conn": {
+     "N": {
+      "net": "PCIE_DN_OUT1_N_MCIO",
+      "pad_global": [
+       61.9,
+       45.75
+      ],
+      "pad_num": "A6",
+      "pin": "RX1_N",
+      "ref": "J3",
+      "source": "s0_endpoint_model.connector_audit"
+     },
+     "P": {
+      "net": "PCIE_DN_OUT1_P_MCIO",
+      "pad_global": [
+       62.5,
+       45.75
+      ],
+      "pad_num": "A5",
+      "pin": "RX1_P",
+      "ref": "J3",
+      "source": "s0_endpoint_model.connector_audit"
+     }
+    }
+   },
+   "base": "PCIE_DN1",
+   "corridor": {
+    "band": "dn",
+    "id": "WEST_MCIO_TO_CHIP"
+   },
+   "kind": "data",
+   "nets": {
+    "N": "PCIE_DN_OUT1_N_MCIO",
+    "P": "PCIE_DN_OUT1_P_MCIO"
+   },
+   "page_id": "PCIE_DN1/out_MCIO",
+   "segname": "out_MCIO",
+   "side": "west"
+  },
+  {
+   "anchors": {
+    "chip": {
+     "N": {
+      "ball": "A_PERN2",
+      "ball_grid": "AG2",
+      "net": "PCIE_DN2_N",
+      "pad_global": [
+       87.25,
+       57.12
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     },
+     "P": {
+      "ball": "A_PERP2",
+      "ball_grid": "AJ1",
+      "net": "PCIE_DN2_P",
+      "pad_global": [
+       87.55,
+       57.64
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     }
+    },
+    "conn": {
+     "N": {
+      "net": "PCIE_DN2_N",
+      "pad_global": [
+       135.0,
+       57.9
+      ],
+      "pad_num": "52",
+      "pin": "TX2_N",
+      "ref": "J2",
+      "source": "s0_endpoint_model.connector_audit"
+     },
+     "P": {
+      "net": "PCIE_DN2_P",
+      "pad_global": [
+       132.65,
+       57.9
+      ],
+      "pad_num": "51",
+      "pin": "TX2_P",
+      "ref": "J2",
+      "source": "s0_endpoint_model.connector_audit"
+     }
+    }
+   },
+   "base": "PCIE_DN2",
+   "corridor": {
+    "band": "dn",
+    "id": "EAST_CHIP_TO_J2"
+   },
+   "kind": "data",
+   "nets": {
+    "N": "PCIE_DN2_N",
+    "P": "PCIE_DN2_P"
+   },
+   "page_id": "PCIE_DN2/input",
+   "segname": "input",
+   "side": "east"
+  },
+  {
+   "anchors": {
+    "chip": {
+     "N": {
+      "ball": "A_PETN2",
+      "ball_grid": "AH29",
+      "net": "PCIE_DN_OUT2_N_MCIO",
+      "pad_global": [
+       87.4,
+       51.673
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     },
+     "P": {
+      "ball": "A_PETP2",
+      "ball_grid": "AF26",
+      "net": "PCIE_DN_OUT2_P_MCIO",
+      "pad_global": [
+       87.0,
+       52.366
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     }
+    },
+    "conn": {
+     "N": {
+      "net": "PCIE_DN_OUT2_N_MCIO",
+      "pad_global": [
+       56.5,
+       45.75
+      ],
+      "pad_num": "A15",
+      "pin": "RX2_N",
+      "ref": "J3",
+      "source": "s0_endpoint_model.connector_audit"
+     },
+     "P": {
+      "net": "PCIE_DN_OUT2_P_MCIO",
+      "pad_global": [
+       57.1,
+       45.75
+      ],
+      "pad_num": "A14",
+      "pin": "RX2_P",
+      "ref": "J3",
+      "source": "s0_endpoint_model.connector_audit"
+     }
+    }
+   },
+   "base": "PCIE_DN2",
+   "corridor": {
+    "band": "dn",
+    "id": "WEST_MCIO_TO_CHIP"
+   },
+   "kind": "data",
+   "nets": {
+    "N": "PCIE_DN_OUT2_N_MCIO",
+    "P": "PCIE_DN_OUT2_P_MCIO"
+   },
+   "page_id": "PCIE_DN2/out_MCIO",
+   "segname": "out_MCIO",
+   "side": "west"
+  },
+  {
+   "anchors": {
+    "chip": {
+     "N": {
+      "ball": "A_PERN3",
+      "ball_grid": "AP2",
+      "net": "PCIE_DN3_N",
+      "pad_global": [
+       88.45,
+       57.12
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     },
+     "P": {
+      "ball": "A_PERP3",
+      "ball_grid": "AT1",
+      "net": "PCIE_DN3_P",
+      "pad_global": [
+       88.75,
+       57.64
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     }
+    },
+    "conn": {
+     "N": {
+      "net": "PCIE_DN3_N",
+      "pad_global": [
+       132.65,
+       59.1
+      ],
+      "pad_num": "55",
+      "pin": "TX3_N",
+      "ref": "J2",
+      "source": "s0_endpoint_model.connector_audit"
+     },
+     "P": {
+      "net": "PCIE_DN3_P",
+      "pad_global": [
+       135.0,
+       58.5
+      ],
+      "pad_num": "54",
+      "pin": "TX3_P",
+      "ref": "J2",
+      "source": "s0_endpoint_model.connector_audit"
+     }
+    }
+   },
+   "base": "PCIE_DN3",
+   "corridor": {
+    "band": "dn",
+    "id": "EAST_CHIP_TO_J2"
+   },
+   "kind": "data",
+   "nets": {
+    "N": "PCIE_DN3_N",
+    "P": "PCIE_DN3_P"
+   },
+   "page_id": "PCIE_DN3/input",
+   "segname": "input",
+   "side": "east"
+  },
+  {
+   "anchors": {
+    "chip": {
+     "N": {
+      "ball": "A_PETN3",
+      "ball_grid": "AR29",
+      "net": "PCIE_DN_OUT3_N_MCIO",
+      "pad_global": [
+       88.6,
+       51.673
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     },
+     "P": {
+      "ball": "A_PETP3",
+      "ball_grid": "AN26",
+      "net": "PCIE_DN_OUT3_P_MCIO",
+      "pad_global": [
+       88.2,
+       52.366
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     }
+    },
+    "conn": {
+     "N": {
+      "net": "PCIE_DN_OUT3_N_MCIO",
+      "pad_global": [
+       54.7,
+       45.75
+      ],
+      "pad_num": "A18",
+      "pin": "RX3_N",
+      "ref": "J3",
+      "source": "s0_endpoint_model.connector_audit"
+     },
+     "P": {
+      "net": "PCIE_DN_OUT3_P_MCIO",
+      "pad_global": [
+       55.3,
+       45.75
+      ],
+      "pad_num": "A17",
+      "pin": "RX3_P",
+      "ref": "J3",
+      "source": "s0_endpoint_model.connector_audit"
+     }
+    }
+   },
+   "base": "PCIE_DN3",
+   "corridor": {
+    "band": "dn",
+    "id": "WEST_MCIO_TO_CHIP"
+   },
+   "kind": "data",
+   "nets": {
+    "N": "PCIE_DN_OUT3_N_MCIO",
+    "P": "PCIE_DN_OUT3_P_MCIO"
+   },
+   "page_id": "PCIE_DN3/out_MCIO",
+   "segname": "out_MCIO",
+   "side": "west"
+  },
+  {
+   "anchors": {
+    "chip": {
+     "N": {
+      "ball": "A_PERN4",
+      "ball_grid": "BC1",
+      "net": "PCIE_DN4_N",
+      "pad_global": [
+       89.95,
+       57.64
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     },
+     "P": {
+      "ball": "A_PERP4",
+      "ball_grid": "BA2",
+      "net": "PCIE_DN4_P",
+      "pad_global": [
+       89.65,
+       57.12
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     }
+    },
+    "conn": {
+     "N": {
+      "net": "PCIE_DN4_N",
+      "pad_global": [
+       135.0,
+       59.7
+      ],
+      "pad_num": "58",
+      "pin": "TX4_N",
+      "ref": "J2",
+      "source": "s0_endpoint_model.connector_audit"
+     },
+     "P": {
+      "net": "PCIE_DN4_P",
+      "pad_global": [
+       132.65,
+       59.7
+      ],
+      "pad_num": "57",
+      "pin": "TX4_P",
+      "ref": "J2",
+      "source": "s0_endpoint_model.connector_audit"
+     }
+    }
+   },
+   "base": "PCIE_DN4",
+   "corridor": {
+    "band": "dn",
+    "id": "EAST_CHIP_TO_J2"
+   },
+   "kind": "data",
+   "nets": {
+    "N": "PCIE_DN4_N",
+    "P": "PCIE_DN4_P"
+   },
+   "page_id": "PCIE_DN4/input",
+   "segname": "input",
+   "side": "east"
+  },
+  {
+   "anchors": {
+    "chip": {
+     "N": {
+      "ball": "A_PETN4",
+      "ball_grid": "BB29",
+      "net": "PCIE_DN_OUT4_N_MCIO",
+      "pad_global": [
+       89.8,
+       51.673
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     },
+     "P": {
+      "ball": "A_PETP4",
+      "ball_grid": "AY26",
+      "net": "PCIE_DN_OUT4_P_MCIO",
+      "pad_global": [
+       89.4,
+       52.366
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     }
+    },
+    "conn": {
+     "N": {
+      "net": "PCIE_DN_OUT4_N_MCIO",
+      "pad_global": [
+       55.3,
+       61.45
+      ],
+      "pad_num": "A3",
+      "pin": "RX0_N",
+      "ref": "J4",
+      "source": "s0_endpoint_model.connector_audit"
+     },
+     "P": {
+      "net": "PCIE_DN_OUT4_P_MCIO",
+      "pad_global": [
+       54.7,
+       61.45
+      ],
+      "pad_num": "A2",
+      "pin": "RX0_P",
+      "ref": "J4",
+      "source": "s0_endpoint_model.connector_audit"
+     }
+    }
+   },
+   "base": "PCIE_DN4",
+   "corridor": {
+    "band": "dn",
+    "id": "WEST_MCIO_TO_CHIP"
+   },
+   "kind": "data",
+   "nets": {
+    "N": "PCIE_DN_OUT4_N_MCIO",
+    "P": "PCIE_DN_OUT4_P_MCIO"
+   },
+   "page_id": "PCIE_DN4/out_MCIO",
+   "segname": "out_MCIO",
+   "side": "west"
+  },
+  {
+   "anchors": {
+    "chip": {
+     "N": {
+      "ball": "A_PERN5",
+      "ball_grid": "BK1",
+      "net": "PCIE_DN5_N",
+      "pad_global": [
+       91.15,
+       57.64
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     },
+     "P": {
+      "ball": "A_PERP5",
+      "ball_grid": "BH2",
+      "net": "PCIE_DN5_P",
+      "pad_global": [
+       90.85,
+       57.12
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     }
+    },
+    "conn": {
+     "N": {
+      "net": "PCIE_DN5_N",
+      "pad_global": [
+       132.65,
+       60.9
+      ],
+      "pad_num": "61",
+      "pin": "TX5_N",
+      "ref": "J2",
+      "source": "s0_endpoint_model.connector_audit"
+     },
+     "P": {
+      "net": "PCIE_DN5_P",
+      "pad_global": [
+       135.0,
+       60.3
+      ],
+      "pad_num": "60",
+      "pin": "TX5_P",
+      "ref": "J2",
+      "source": "s0_endpoint_model.connector_audit"
+     }
+    }
+   },
+   "base": "PCIE_DN5",
+   "corridor": {
+    "band": "dn",
+    "id": "EAST_CHIP_TO_J2"
+   },
+   "kind": "data",
+   "nets": {
+    "N": "PCIE_DN5_N",
+    "P": "PCIE_DN5_P"
+   },
+   "page_id": "PCIE_DN5/input",
+   "segname": "input",
+   "side": "east"
+  },
+  {
+   "anchors": {
+    "chip": {
+     "N": {
+      "ball": "A_PETN5",
+      "ball_grid": "BJ29",
+      "net": "PCIE_DN_OUT5_N_MCIO",
+      "pad_global": [
+       91.0,
+       51.673
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     },
+     "P": {
+      "ball": "A_PETP5",
+      "ball_grid": "BG26",
+      "net": "PCIE_DN_OUT5_P_MCIO",
+      "pad_global": [
+       90.6,
+       52.366
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     }
+    },
+    "conn": {
+     "N": {
+      "net": "PCIE_DN_OUT5_N_MCIO",
+      "pad_global": [
+       57.1,
+       61.45
+      ],
+      "pad_num": "A6",
+      "pin": "RX1_N",
+      "ref": "J4",
+      "source": "s0_endpoint_model.connector_audit"
+     },
+     "P": {
+      "net": "PCIE_DN_OUT5_P_MCIO",
+      "pad_global": [
+       56.5,
+       61.45
+      ],
+      "pad_num": "A5",
+      "pin": "RX1_P",
+      "ref": "J4",
+      "source": "s0_endpoint_model.connector_audit"
+     }
+    }
+   },
+   "base": "PCIE_DN5",
+   "corridor": {
+    "band": "dn",
+    "id": "WEST_MCIO_TO_CHIP"
+   },
+   "kind": "data",
+   "nets": {
+    "N": "PCIE_DN_OUT5_N_MCIO",
+    "P": "PCIE_DN_OUT5_P_MCIO"
+   },
+   "page_id": "PCIE_DN5/out_MCIO",
+   "segname": "out_MCIO",
+   "side": "west"
+  },
+  {
+   "anchors": {
+    "chip": {
+     "N": {
+      "ball": "A_PERN6",
+      "ball_grid": "BR2",
+      "net": "PCIE_DN6_N",
+      "pad_global": [
+       92.05,
+       57.12
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     },
+     "P": {
+      "ball": "A_PERP6",
+      "ball_grid": "BU1",
+      "net": "PCIE_DN6_P",
+      "pad_global": [
+       92.35,
+       57.64
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     }
+    },
+    "conn": {
+     "N": {
+      "net": "PCIE_DN6_N",
+      "pad_global": [
+       135.0,
+       63.3
+      ],
+      "pad_num": "70",
+      "pin": "TX6_N",
+      "ref": "J2",
+      "source": "s0_endpoint_model.connector_audit"
+     },
+     "P": {
+      "net": "PCIE_DN6_P",
+      "pad_global": [
+       132.65,
+       63.3
+      ],
+      "pad_num": "69",
+      "pin": "TX6_P",
+      "ref": "J2",
+      "source": "s0_endpoint_model.connector_audit"
+     }
+    }
+   },
+   "base": "PCIE_DN6",
+   "corridor": {
+    "band": "dn",
+    "id": "EAST_CHIP_TO_J2"
+   },
+   "kind": "data",
+   "nets": {
+    "N": "PCIE_DN6_N",
+    "P": "PCIE_DN6_P"
+   },
+   "page_id": "PCIE_DN6/input",
+   "segname": "input",
+   "side": "east"
+  },
+  {
+   "anchors": {
+    "chip": {
+     "N": {
+      "ball": "A_PETN6",
+      "ball_grid": "BT29",
+      "net": "PCIE_DN_OUT6_N_MCIO",
+      "pad_global": [
+       92.2,
+       51.673
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     },
+     "P": {
+      "ball": "A_PETP6",
+      "ball_grid": "BP26",
+      "net": "PCIE_DN_OUT6_P_MCIO",
+      "pad_global": [
+       91.8,
+       52.366
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     }
+    },
+    "conn": {
+     "N": {
+      "net": "PCIE_DN_OUT6_N_MCIO",
+      "pad_global": [
+       62.5,
+       61.45
+      ],
+      "pad_num": "A15",
+      "pin": "RX2_N",
+      "ref": "J4",
+      "source": "s0_endpoint_model.connector_audit"
+     },
+     "P": {
+      "net": "PCIE_DN_OUT6_P_MCIO",
+      "pad_global": [
+       61.9,
+       61.45
+      ],
+      "pad_num": "A14",
+      "pin": "RX2_P",
+      "ref": "J4",
+      "source": "s0_endpoint_model.connector_audit"
+     }
+    }
+   },
+   "base": "PCIE_DN6",
+   "corridor": {
+    "band": "dn",
+    "id": "WEST_MCIO_TO_CHIP"
+   },
+   "kind": "data",
+   "nets": {
+    "N": "PCIE_DN_OUT6_N_MCIO",
+    "P": "PCIE_DN_OUT6_P_MCIO"
+   },
+   "page_id": "PCIE_DN6/out_MCIO",
+   "segname": "out_MCIO",
+   "side": "west"
+  },
+  {
+   "anchors": {
+    "chip": {
+     "N": {
+      "ball": "A_PERN7",
+      "ball_grid": "CB2",
+      "net": "PCIE_DN7_N",
+      "pad_global": [
+       93.25,
+       57.12
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     },
+     "P": {
+      "ball": "A_PERP7",
+      "ball_grid": "CD1",
+      "net": "PCIE_DN7_P",
+      "pad_global": [
+       93.55,
+       57.64
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     }
+    },
+    "conn": {
+     "N": {
+      "net": "PCIE_DN7_N",
+      "pad_global": [
+       132.65,
+       64.5
+      ],
+      "pad_num": "73",
+      "pin": "TX7_N",
+      "ref": "J2",
+      "source": "s0_endpoint_model.connector_audit"
+     },
+     "P": {
+      "net": "PCIE_DN7_P",
+      "pad_global": [
+       135.0,
+       63.9
+      ],
+      "pad_num": "72",
+      "pin": "TX7_P",
+      "ref": "J2",
+      "source": "s0_endpoint_model.connector_audit"
+     }
+    }
+   },
+   "base": "PCIE_DN7",
+   "corridor": {
+    "band": "dn",
+    "id": "EAST_CHIP_TO_J2"
+   },
+   "kind": "data",
+   "nets": {
+    "N": "PCIE_DN7_N",
+    "P": "PCIE_DN7_P"
+   },
+   "page_id": "PCIE_DN7/input",
+   "segname": "input",
+   "side": "east"
+  },
+  {
+   "anchors": {
+    "chip": {
+     "N": {
+      "ball": "A_PETN7",
+      "ball_grid": "CC29",
+      "net": "PCIE_DN_OUT7_N_MCIO",
+      "pad_global": [
+       93.4,
+       51.673
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     },
+     "P": {
+      "ball": "A_PETP7",
+      "ball_grid": "CA26",
+      "net": "PCIE_DN_OUT7_P_MCIO",
+      "pad_global": [
+       93.0,
+       52.366
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     }
+    },
+    "conn": {
+     "N": {
+      "net": "PCIE_DN_OUT7_N_MCIO",
+      "pad_global": [
+       64.3,
+       61.45
+      ],
+      "pad_num": "A18",
+      "pin": "RX3_N",
+      "ref": "J4",
+      "source": "s0_endpoint_model.connector_audit"
+     },
+     "P": {
+      "net": "PCIE_DN_OUT7_P_MCIO",
+      "pad_global": [
+       63.7,
+       61.45
+      ],
+      "pad_num": "A17",
+      "pin": "RX3_P",
+      "ref": "J4",
+      "source": "s0_endpoint_model.connector_audit"
+     }
+    }
+   },
+   "base": "PCIE_DN7",
+   "corridor": {
+    "band": "dn",
+    "id": "WEST_MCIO_TO_CHIP"
+   },
+   "kind": "data",
+   "nets": {
+    "N": "PCIE_DN_OUT7_N_MCIO",
+    "P": "PCIE_DN_OUT7_P_MCIO"
+   },
+   "page_id": "PCIE_DN7/out_MCIO",
+   "segname": "out_MCIO",
+   "side": "west"
+  },
+  {
+   "anchors": {
+    "conn": {
+     "N": {
+      "net": "PCIE_REFCLK0_N",
+      "pad_global": [
+       58.3,
+       45.75
+      ],
+      "pad_num": "A12",
+      "pin": "REFCLK_N",
+      "ref": "J3",
+      "source": "s0_endpoint_model.connector_audit"
+     },
+     "P": {
+      "net": "PCIE_REFCLK0_P",
+      "pad_global": [
+       58.9,
+       45.75
+      ],
+      "pad_num": "A11",
+      "pin": "REFCLK_P",
+      "ref": "J3",
+      "source": "s0_endpoint_model.connector_audit"
+     }
+    },
+    "conn2": {
+     "N": {
+      "net": "PCIE_REFCLK0_N",
+      "pad_global": [
+       135.0,
+       45.9
+      ],
+      "pad_num": "12",
+      "ref": "J2",
+      "source": "s0_method_net_join(REFCLK 第二端补录)"
+     },
+     "P": {
+      "net": "PCIE_REFCLK0_P",
+      "pad_global": [
+       132.65,
+       45.9
+      ],
+      "pad_num": "11",
+      "ref": "J2",
+      "source": "s0_method_net_join(REFCLK 第二端补录)"
+     }
+    }
+   },
+   "base": "PCIE_REFCLK0",
+   "corridor": {
+    "band": "refclk",
+    "id": "EAST+WEST_CHIP_TO_CONN"
+   },
+   "kind": "refclk_pass",
+   "nets": {
+    "N": "PCIE_REFCLK0_N",
+    "P": "PCIE_REFCLK0_P"
+   },
+   "page_id": "PCIE_REFCLK0/input",
+   "segname": "input",
+   "side": "pass"
+  },
+  {
+   "anchors": {
+    "conn": {
+     "N": {
+      "net": "PCIE_REFCLK1_N",
+      "pad_global": [
+       60.7,
+       61.45
+      ],
+      "pad_num": "A12",
+      "pin": "REFCLK_N",
+      "ref": "J4",
+      "source": "s0_endpoint_model.connector_audit"
+     },
+     "P": {
+      "net": "PCIE_REFCLK1_P",
+      "pad_global": [
+       60.1,
+       61.45
+      ],
+      "pad_num": "A11",
+      "pin": "REFCLK_P",
+      "ref": "J4",
+      "source": "s0_endpoint_model.connector_audit"
+     }
+    },
+    "conn2": {
+     "N": {
+      "net": "PCIE_REFCLK1_N",
+      "pad_global": [
+       135.0,
+       51.3
+      ],
+      "pad_num": "30",
+      "ref": "J2",
+      "source": "s0_method_net_join(REFCLK 第二端补录)"
+     },
+     "P": {
+      "net": "PCIE_REFCLK1_P",
+      "pad_global": [
+       132.65,
+       51.3
+      ],
+      "pad_num": "29",
+      "ref": "J2",
+      "source": "s0_method_net_join(REFCLK 第二端补录)"
+     }
+    }
+   },
+   "base": "PCIE_REFCLK1",
+   "corridor": {
+    "band": "refclk",
+    "id": "EAST+WEST_CHIP_TO_CONN"
+   },
+   "kind": "refclk_pass",
+   "nets": {
+    "N": "PCIE_REFCLK1_N",
+    "P": "PCIE_REFCLK1_P"
+   },
+   "page_id": "PCIE_REFCLK1/input",
+   "segname": "input",
+   "side": "pass"
+  },
+  {
+   "anchors": {
+    "chip": {
+     "N": {
+      "ball": "B_PERN0",
+      "ball_grid": "N34",
+      "net": "PCIE_UP0_N",
+      "pad_global": [
+       84.85,
+       50.28
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     },
+     "P": {
+      "ball": "B_PERP0",
+      "ball_grid": "R35",
+      "net": "PCIE_UP0_P",
+      "pad_global": [
+       85.15,
+       49.76
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     }
+    },
+    "conn": {
+     "N": {
+      "net": "PCIE_UP0_N",
+      "pad_global": [
+       63.7,
+       43.25
+      ],
+      "pad_num": "B3",
+      "pin": "TX0_N",
+      "ref": "J3",
+      "source": "s0_endpoint_model.connector_audit"
+     },
+     "P": {
+      "net": "PCIE_UP0_P",
+      "pad_global": [
+       64.3,
+       43.25
+      ],
+      "pad_num": "B2",
+      "pin": "TX0_P",
+      "ref": "J3",
+      "source": "s0_endpoint_model.connector_audit"
+     }
+    }
+   },
+   "base": "PCIE_UP0",
+   "corridor": {
+    "band": "up",
+    "id": "WEST_MCIO_TO_CHIP"
+   },
+   "kind": "data",
+   "nets": {
+    "N": "PCIE_UP0_N",
+    "P": "PCIE_UP0_P"
+   },
+   "page_id": "PCIE_UP0/input",
+   "segname": "input",
+   "side": "west"
+  },
+  {
+   "anchors": {
+    "chip": {
+     "N": {
+      "ball": "B_PETN0",
+      "ball_grid": "M7",
+      "net": "PCIE_UP_OUT0_N_J2",
+      "pad_global": [
+       84.6,
+       55.823
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     },
+     "P": {
+      "ball": "B_PETP0",
+      "ball_grid": "P10",
+      "net": "PCIE_UP_OUT0_P_J2",
+      "pad_global": [
+       85.0,
+       55.13
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     }
+    },
+    "conn": {
+     "N": {
+      "net": "PCIE_UP_OUT0_N_J2",
+      "pad_global": [
+       132.65,
+       43.5
+      ],
+      "pad_num": "3",
+      "pin": "RX0_N",
+      "ref": "J2",
+      "source": "s0_endpoint_model.connector_audit"
+     },
+     "P": {
+      "net": "PCIE_UP_OUT0_P_J2",
+      "pad_global": [
+       135.0,
+       42.9
+      ],
+      "pad_num": "2",
+      "pin": "RX0_P",
+      "ref": "J2",
+      "source": "s0_endpoint_model.connector_audit"
+     }
+    }
+   },
+   "base": "PCIE_UP0",
+   "corridor": {
+    "band": "up",
+    "id": "EAST_CHIP_TO_J2"
+   },
+   "kind": "data",
+   "nets": {
+    "N": "PCIE_UP_OUT0_N_J2",
+    "P": "PCIE_UP_OUT0_P_J2"
+   },
+   "page_id": "PCIE_UP0/out_J2",
+   "segname": "out_J2",
+   "side": "east"
+  },
+  {
+   "anchors": {
+    "chip": {
+     "N": {
+      "ball": "B_PERN1",
+      "ball_grid": "Y34",
+      "net": "PCIE_UP1_N",
+      "pad_global": [
+       86.05,
+       50.28
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     },
+     "P": {
+      "ball": "B_PERP1",
+      "ball_grid": "AB35",
+      "net": "PCIE_UP1_P",
+      "pad_global": [
+       86.35,
+       49.76
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     }
+    },
+    "conn": {
+     "N": {
+      "net": "PCIE_UP1_N",
+      "pad_global": [
+       61.9,
+       43.25
+      ],
+      "pad_num": "B6",
+      "pin": "TX1_N",
+      "ref": "J3",
+      "source": "s0_endpoint_model.connector_audit"
+     },
+     "P": {
+      "net": "PCIE_UP1_P",
+      "pad_global": [
+       62.5,
+       43.25
+      ],
+      "pad_num": "B5",
+      "pin": "TX1_P",
+      "ref": "J3",
+      "source": "s0_endpoint_model.connector_audit"
+     }
+    }
+   },
+   "base": "PCIE_UP1",
+   "corridor": {
+    "band": "up",
+    "id": "WEST_MCIO_TO_CHIP"
+   },
+   "kind": "data",
+   "nets": {
+    "N": "PCIE_UP1_N",
+    "P": "PCIE_UP1_P"
+   },
+   "page_id": "PCIE_UP1/input",
+   "segname": "input",
+   "side": "west"
+  },
+  {
+   "anchors": {
+    "chip": {
+     "N": {
+      "ball": "B_PETN1",
+      "ball_grid": "W7",
+      "net": "PCIE_UP_OUT1_N_J2",
+      "pad_global": [
+       85.8,
+       55.823
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     },
+     "P": {
+      "ball": "B_PETP1",
+      "ball_grid": "AA10",
+      "net": "PCIE_UP_OUT1_P_J2",
+      "pad_global": [
+       86.2,
+       55.13
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     }
+    },
+    "conn": {
+     "N": {
+      "net": "PCIE_UP_OUT1_N_J2",
+      "pad_global": [
+       135.0,
+       44.1
+      ],
+      "pad_num": "6",
+      "pin": "RX1_N",
+      "ref": "J2",
+      "source": "s0_endpoint_model.connector_audit"
+     },
+     "P": {
+      "net": "PCIE_UP_OUT1_P_J2",
+      "pad_global": [
+       132.65,
+       44.1
+      ],
+      "pad_num": "5",
+      "pin": "RX1_P",
+      "ref": "J2",
+      "source": "s0_endpoint_model.connector_audit"
+     }
+    }
+   },
+   "base": "PCIE_UP1",
+   "corridor": {
+    "band": "up",
+    "id": "EAST_CHIP_TO_J2"
+   },
+   "kind": "data",
+   "nets": {
+    "N": "PCIE_UP_OUT1_N_J2",
+    "P": "PCIE_UP_OUT1_P_J2"
+   },
+   "page_id": "PCIE_UP1/out_J2",
+   "segname": "out_J2",
+   "side": "east"
+  },
+  {
+   "anchors": {
+    "chip": {
+     "N": {
+      "ball": "B_PERN2",
+      "ball_grid": "AJ35",
+      "net": "PCIE_UP2_N",
+      "pad_global": [
+       87.55,
+       49.76
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     },
+     "P": {
+      "ball": "B_PERP2",
+      "ball_grid": "AG34",
+      "net": "PCIE_UP2_P",
+      "pad_global": [
+       87.25,
+       50.28
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     }
+    },
+    "conn": {
+     "N": {
+      "net": "PCIE_UP2_N",
+      "pad_global": [
+       56.5,
+       43.25
+      ],
+      "pad_num": "B15",
+      "pin": "TX2_N",
+      "ref": "J3",
+      "source": "s0_endpoint_model.connector_audit"
+     },
+     "P": {
+      "net": "PCIE_UP2_P",
+      "pad_global": [
+       57.1,
+       43.25
+      ],
+      "pad_num": "B14",
+      "pin": "TX2_P",
+      "ref": "J3",
+      "source": "s0_endpoint_model.connector_audit"
+     }
+    }
+   },
+   "base": "PCIE_UP2",
+   "corridor": {
+    "band": "up",
+    "id": "WEST_MCIO_TO_CHIP"
+   },
+   "kind": "data",
+   "nets": {
+    "N": "PCIE_UP2_N",
+    "P": "PCIE_UP2_P"
+   },
+   "page_id": "PCIE_UP2/input",
+   "segname": "input",
+   "side": "west"
+  },
+  {
+   "anchors": {
+    "chip": {
+     "N": {
+      "ball": "B_PETN2",
+      "ball_grid": "AF7",
+      "net": "PCIE_UP_OUT2_N_J2",
+      "pad_global": [
+       87.0,
+       55.823
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     },
+     "P": {
+      "ball": "B_PETP2",
+      "ball_grid": "AH10",
+      "net": "PCIE_UP_OUT2_P_J2",
+      "pad_global": [
+       87.4,
+       55.13
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     }
+    },
+    "conn": {
+     "N": {
+      "net": "PCIE_UP_OUT2_N_J2",
+      "pad_global": [
+       132.65,
+       47.1
+      ],
+      "pad_num": "15",
+      "pin": "RX2_N",
+      "ref": "J2",
+      "source": "s0_endpoint_model.connector_audit"
+     },
+     "P": {
+      "net": "PCIE_UP_OUT2_P_J2",
+      "pad_global": [
+       135.0,
+       46.5
+      ],
+      "pad_num": "14",
+      "pin": "RX2_P",
+      "ref": "J2",
+      "source": "s0_endpoint_model.connector_audit"
+     }
+    }
+   },
+   "base": "PCIE_UP2",
+   "corridor": {
+    "band": "up",
+    "id": "EAST_CHIP_TO_J2"
+   },
+   "kind": "data",
+   "nets": {
+    "N": "PCIE_UP_OUT2_N_J2",
+    "P": "PCIE_UP_OUT2_P_J2"
+   },
+   "page_id": "PCIE_UP2/out_J2",
+   "segname": "out_J2",
+   "side": "east"
+  },
+  {
+   "anchors": {
+    "chip": {
+     "N": {
+      "ball": "B_PERN3",
+      "ball_grid": "AT35",
+      "net": "PCIE_UP3_N",
+      "pad_global": [
+       88.75,
+       49.76
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     },
+     "P": {
+      "ball": "B_PERP3",
+      "ball_grid": "AP34",
+      "net": "PCIE_UP3_P",
+      "pad_global": [
+       88.45,
+       50.28
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     }
+    },
+    "conn": {
+     "N": {
+      "net": "PCIE_UP3_N",
+      "pad_global": [
+       54.7,
+       43.25
+      ],
+      "pad_num": "B18",
+      "pin": "TX3_N",
+      "ref": "J3",
+      "source": "s0_endpoint_model.connector_audit"
+     },
+     "P": {
+      "net": "PCIE_UP3_P",
+      "pad_global": [
+       55.3,
+       43.25
+      ],
+      "pad_num": "B17",
+      "pin": "TX3_P",
+      "ref": "J3",
+      "source": "s0_endpoint_model.connector_audit"
+     }
+    }
+   },
+   "base": "PCIE_UP3",
+   "corridor": {
+    "band": "up",
+    "id": "WEST_MCIO_TO_CHIP"
+   },
+   "kind": "data",
+   "nets": {
+    "N": "PCIE_UP3_N",
+    "P": "PCIE_UP3_P"
+   },
+   "page_id": "PCIE_UP3/input",
+   "segname": "input",
+   "side": "west"
+  },
+  {
+   "anchors": {
+    "chip": {
+     "N": {
+      "ball": "B_PETN3",
+      "ball_grid": "AN7",
+      "net": "PCIE_UP_OUT3_N_J2",
+      "pad_global": [
+       88.2,
+       55.823
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     },
+     "P": {
+      "ball": "B_PETP3",
+      "ball_grid": "AR10",
+      "net": "PCIE_UP_OUT3_P_J2",
+      "pad_global": [
+       88.6,
+       55.13
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     }
+    },
+    "conn": {
+     "N": {
+      "net": "PCIE_UP_OUT3_N_J2",
+      "pad_global": [
+       135.0,
+       47.7
+      ],
+      "pad_num": "18",
+      "pin": "RX3_N",
+      "ref": "J2",
+      "source": "s0_endpoint_model.connector_audit"
+     },
+     "P": {
+      "net": "PCIE_UP_OUT3_P_J2",
+      "pad_global": [
+       132.65,
+       47.7
+      ],
+      "pad_num": "17",
+      "pin": "RX3_P",
+      "ref": "J2",
+      "source": "s0_endpoint_model.connector_audit"
+     }
+    }
+   },
+   "base": "PCIE_UP3",
+   "corridor": {
+    "band": "up",
+    "id": "EAST_CHIP_TO_J2"
+   },
+   "kind": "data",
+   "nets": {
+    "N": "PCIE_UP_OUT3_N_J2",
+    "P": "PCIE_UP_OUT3_P_J2"
+   },
+   "page_id": "PCIE_UP3/out_J2",
+   "segname": "out_J2",
+   "side": "east"
+  },
+  {
+   "anchors": {
+    "chip": {
+     "N": {
+      "ball": "B_PERN4",
+      "ball_grid": "BA34",
+      "net": "PCIE_UP4_N",
+      "pad_global": [
+       89.65,
+       50.28
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     },
+     "P": {
+      "ball": "B_PERP4",
+      "ball_grid": "BC35",
+      "net": "PCIE_UP4_P",
+      "pad_global": [
+       89.95,
+       49.76
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     }
+    },
+    "conn": {
+     "N": {
+      "net": "PCIE_UP4_N",
+      "pad_global": [
+       55.3,
+       63.95
+      ],
+      "pad_num": "B3",
+      "pin": "TX0_N",
+      "ref": "J4",
+      "source": "s0_endpoint_model.connector_audit"
+     },
+     "P": {
+      "net": "PCIE_UP4_P",
+      "pad_global": [
+       54.7,
+       63.95
+      ],
+      "pad_num": "B2",
+      "pin": "TX0_P",
+      "ref": "J4",
+      "source": "s0_endpoint_model.connector_audit"
+     }
+    }
+   },
+   "base": "PCIE_UP4",
+   "corridor": {
+    "band": "up",
+    "id": "WEST_MCIO_TO_CHIP"
+   },
+   "kind": "data",
+   "nets": {
+    "N": "PCIE_UP4_N",
+    "P": "PCIE_UP4_P"
+   },
+   "page_id": "PCIE_UP4/input",
+   "segname": "input",
+   "side": "west"
+  },
+  {
+   "anchors": {
+    "chip": {
+     "N": {
+      "ball": "B_PETN4",
+      "ball_grid": "AY7",
+      "net": "PCIE_UP_OUT4_N_J2",
+      "pad_global": [
+       89.4,
+       55.823
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     },
+     "P": {
+      "ball": "B_PETP4",
+      "ball_grid": "BB10",
+      "net": "PCIE_UP_OUT4_P_J2",
+      "pad_global": [
+       89.8,
+       55.13
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     }
+    },
+    "conn": {
+     "N": {
+      "net": "PCIE_UP_OUT4_N_J2",
+      "pad_global": [
+       132.65,
+       48.9
+      ],
+      "pad_num": "21",
+      "pin": "RX4_N",
+      "ref": "J2",
+      "source": "s0_endpoint_model.connector_audit"
+     },
+     "P": {
+      "net": "PCIE_UP_OUT4_P_J2",
+      "pad_global": [
+       135.0,
+       48.3
+      ],
+      "pad_num": "20",
+      "pin": "RX4_P",
+      "ref": "J2",
+      "source": "s0_endpoint_model.connector_audit"
+     }
+    }
+   },
+   "base": "PCIE_UP4",
+   "corridor": {
+    "band": "up",
+    "id": "EAST_CHIP_TO_J2"
+   },
+   "kind": "data",
+   "nets": {
+    "N": "PCIE_UP_OUT4_N_J2",
+    "P": "PCIE_UP_OUT4_P_J2"
+   },
+   "page_id": "PCIE_UP4/out_J2",
+   "segname": "out_J2",
+   "side": "east"
+  },
+  {
+   "anchors": {
+    "chip": {
+     "N": {
+      "ball": "B_PERN5",
+      "ball_grid": "BH34",
+      "net": "PCIE_UP5_N",
+      "pad_global": [
+       90.85,
+       50.28
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     },
+     "P": {
+      "ball": "B_PERP5",
+      "ball_grid": "BK35",
+      "net": "PCIE_UP5_P",
+      "pad_global": [
+       91.15,
+       49.76
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     }
+    },
+    "conn": {
+     "N": {
+      "net": "PCIE_UP5_N",
+      "pad_global": [
+       57.1,
+       63.95
+      ],
+      "pad_num": "B6",
+      "pin": "TX1_N",
+      "ref": "J4",
+      "source": "s0_endpoint_model.connector_audit"
+     },
+     "P": {
+      "net": "PCIE_UP5_P",
+      "pad_global": [
+       56.5,
+       63.95
+      ],
+      "pad_num": "B5",
+      "pin": "TX1_P",
+      "ref": "J4",
+      "source": "s0_endpoint_model.connector_audit"
+     }
+    }
+   },
+   "base": "PCIE_UP5",
+   "corridor": {
+    "band": "up",
+    "id": "WEST_MCIO_TO_CHIP"
+   },
+   "kind": "data",
+   "nets": {
+    "N": "PCIE_UP5_N",
+    "P": "PCIE_UP5_P"
+   },
+   "page_id": "PCIE_UP5/input",
+   "segname": "input",
+   "side": "west"
+  },
+  {
+   "anchors": {
+    "chip": {
+     "N": {
+      "ball": "B_PETN5",
+      "ball_grid": "BG7",
+      "net": "PCIE_UP_OUT5_N_J2",
+      "pad_global": [
+       90.6,
+       55.823
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     },
+     "P": {
+      "ball": "B_PETP5",
+      "ball_grid": "BJ10",
+      "net": "PCIE_UP_OUT5_P_J2",
+      "pad_global": [
+       91.0,
+       55.13
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     }
+    },
+    "conn": {
+     "N": {
+      "net": "PCIE_UP_OUT5_N_J2",
+      "pad_global": [
+       135.0,
+       49.5
+      ],
+      "pad_num": "24",
+      "pin": "RX5_N",
+      "ref": "J2",
+      "source": "s0_endpoint_model.connector_audit"
+     },
+     "P": {
+      "net": "PCIE_UP_OUT5_P_J2",
+      "pad_global": [
+       132.65,
+       49.5
+      ],
+      "pad_num": "23",
+      "pin": "RX5_P",
+      "ref": "J2",
+      "source": "s0_endpoint_model.connector_audit"
+     }
+    }
+   },
+   "base": "PCIE_UP5",
+   "corridor": {
+    "band": "up",
+    "id": "EAST_CHIP_TO_J2"
+   },
+   "kind": "data",
+   "nets": {
+    "N": "PCIE_UP_OUT5_N_J2",
+    "P": "PCIE_UP_OUT5_P_J2"
+   },
+   "page_id": "PCIE_UP5/out_J2",
+   "segname": "out_J2",
+   "side": "east"
+  },
+  {
+   "anchors": {
+    "chip": {
+     "N": {
+      "ball": "B_PERN6",
+      "ball_grid": "BU35",
+      "net": "PCIE_UP6_N",
+      "pad_global": [
+       92.35,
+       49.76
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     },
+     "P": {
+      "ball": "B_PERP6",
+      "ball_grid": "BR34",
+      "net": "PCIE_UP6_P",
+      "pad_global": [
+       92.05,
+       50.28
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     }
+    },
+    "conn": {
+     "N": {
+      "net": "PCIE_UP6_N",
+      "pad_global": [
+       62.5,
+       63.95
+      ],
+      "pad_num": "B15",
+      "pin": "TX2_N",
+      "ref": "J4",
+      "source": "s0_endpoint_model.connector_audit"
+     },
+     "P": {
+      "net": "PCIE_UP6_P",
+      "pad_global": [
+       61.9,
+       63.95
+      ],
+      "pad_num": "B14",
+      "pin": "TX2_P",
+      "ref": "J4",
+      "source": "s0_endpoint_model.connector_audit"
+     }
+    }
+   },
+   "base": "PCIE_UP6",
+   "corridor": {
+    "band": "up",
+    "id": "WEST_MCIO_TO_CHIP"
+   },
+   "kind": "data",
+   "nets": {
+    "N": "PCIE_UP6_N",
+    "P": "PCIE_UP6_P"
+   },
+   "page_id": "PCIE_UP6/input",
+   "segname": "input",
+   "side": "west"
+  },
+  {
+   "anchors": {
+    "chip": {
+     "N": {
+      "ball": "B_PETN6",
+      "ball_grid": "BP7",
+      "net": "PCIE_UP_OUT6_N_J2",
+      "pad_global": [
+       91.8,
+       55.823
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     },
+     "P": {
+      "ball": "B_PETP6",
+      "ball_grid": "BT10",
+      "net": "PCIE_UP_OUT6_P_J2",
+      "pad_global": [
+       92.2,
+       55.13
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     }
+    },
+    "conn": {
+     "N": {
+      "net": "PCIE_UP_OUT6_N_J2",
+      "pad_global": [
+       132.65,
+       52.5
+      ],
+      "pad_num": "33",
+      "pin": "RX6_N",
+      "ref": "J2",
+      "source": "s0_endpoint_model.connector_audit"
+     },
+     "P": {
+      "net": "PCIE_UP_OUT6_P_J2",
+      "pad_global": [
+       135.0,
+       51.9
+      ],
+      "pad_num": "32",
+      "pin": "RX6_P",
+      "ref": "J2",
+      "source": "s0_endpoint_model.connector_audit"
+     }
+    }
+   },
+   "base": "PCIE_UP6",
+   "corridor": {
+    "band": "up",
+    "id": "EAST_CHIP_TO_J2"
+   },
+   "kind": "data",
+   "nets": {
+    "N": "PCIE_UP_OUT6_N_J2",
+    "P": "PCIE_UP_OUT6_P_J2"
+   },
+   "page_id": "PCIE_UP6/out_J2",
+   "segname": "out_J2",
+   "side": "east"
+  },
+  {
+   "anchors": {
+    "chip": {
+     "N": {
+      "ball": "B_PERN7",
+      "ball_grid": "CD35",
+      "net": "PCIE_UP7_N",
+      "pad_global": [
+       93.55,
+       49.76
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     },
+     "P": {
+      "ball": "B_PERP7",
+      "ball_grid": "CB34",
+      "net": "PCIE_UP7_P",
+      "pad_global": [
+       93.25,
+       50.28
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     }
+    },
+    "conn": {
+     "N": {
+      "net": "PCIE_UP7_N",
+      "pad_global": [
+       64.3,
+       63.95
+      ],
+      "pad_num": "B18",
+      "pin": "TX3_N",
+      "ref": "J4",
+      "source": "s0_endpoint_model.connector_audit"
+     },
+     "P": {
+      "net": "PCIE_UP7_P",
+      "pad_global": [
+       63.7,
+       63.95
+      ],
+      "pad_num": "B17",
+      "pin": "TX3_P",
+      "ref": "J4",
+      "source": "s0_endpoint_model.connector_audit"
+     }
+    }
+   },
+   "base": "PCIE_UP7",
+   "corridor": {
+    "band": "up",
+    "id": "WEST_MCIO_TO_CHIP"
+   },
+   "kind": "data",
+   "nets": {
+    "N": "PCIE_UP7_N",
+    "P": "PCIE_UP7_P"
+   },
+   "page_id": "PCIE_UP7/input",
+   "segname": "input",
+   "side": "west"
+  },
+  {
+   "anchors": {
+    "chip": {
+     "N": {
+      "ball": "B_PETN7",
+      "ball_grid": "CA7",
+      "net": "PCIE_UP_OUT7_N_J2",
+      "pad_global": [
+       93.0,
+       55.823
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     },
+     "P": {
+      "ball": "B_PETP7",
+      "ball_grid": "CC10",
+      "net": "PCIE_UP_OUT7_P_J2",
+      "pad_global": [
+       93.4,
+       55.13
+      ],
+      "source": "s0_endpoint_model.chip_audit"
+     }
+    },
+    "conn": {
+     "N": {
+      "net": "PCIE_UP_OUT7_N_J2",
+      "pad_global": [
+       135.0,
+       53.1
+      ],
+      "pad_num": "36",
+      "pin": "RX7_N",
+      "ref": "J2",
+      "source": "s0_endpoint_model.connector_audit"
+     },
+     "P": {
+      "net": "PCIE_UP_OUT7_P_J2",
+      "pad_global": [
+       132.65,
+       53.1
+      ],
+      "pad_num": "35",
+      "pin": "RX7_P",
+      "ref": "J2",
+      "source": "s0_endpoint_model.connector_audit"
+     }
+    }
+   },
+   "base": "PCIE_UP7",
+   "corridor": {
+    "band": "up",
+    "id": "EAST_CHIP_TO_J2"
+   },
+   "kind": "data",
+   "nets": {
+    "N": "PCIE_UP_OUT7_N_J2",
+    "P": "PCIE_UP_OUT7_P_J2"
+   },
+   "page_id": "PCIE_UP7/out_J2",
+   "segname": "out_J2",
+   "side": "east"
+  }
+ ],
+ "tally": {
+  "data_input": 16,
+  "data_out_j2": 8,
+  "data_out_mcio": 8,
+  "refclk_pass": 2
+ }
+}
