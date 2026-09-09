@@ -1,0 +1,110 @@
+{
+ "artifact": "m13_v57_s1_a13_report",
+ "negative_controls": [
+  {
+   "case": "V5_pair_spacing",
+   "detected": true,
+   "violations": [
+    {
+     "V": "V5_pair_spacing",
+     "d_y": 0.0,
+     "id": "SYN/valid"
+    },
+    {
+     "V": "V6_pn_min_edge",
+     "edge": -0.205,
+     "id": "SYN/valid"
+    },
+    {
+     "V": "V5_pair_spacing",
+     "d_y": 0.0,
+     "id": "SYN/valid"
+    },
+    {
+     "V": "V6_pn_min_edge",
+     "edge": -0.205,
+     "id": "SYN/valid"
+    }
+   ]
+  },
+  {
+   "case": "V2_via_count",
+   "detected": true,
+   "violations": [
+    {
+     "V": "V2_via_count",
+     "id": "SYN/valid",
+     "n": 3,
+     "pol": "P"
+    },
+    {
+     "V": "V3_via_turn",
+     "id": "SYN/valid",
+     "pol": "P",
+     "via": [
+      90.0,
+      58.58
+     ]
+    }
+   ]
+  },
+  {
+   "case": "V1_anchor_end",
+   "detected": true,
+   "violations": [
+    {
+     "V": "V1_anchor_end",
+     "got": [
+      135.1,
+      54.3
+     ],
+     "id": "SYN/valid",
+     "pol": "P",
+     "want": [
+      135.0,
+      54.3
+     ]
+    }
+   ]
+  },
+  {
+   "case": "V4_layer_len",
+   "detected": true,
+   "violations": [
+    {
+     "V": "V4_layer_len",
+     "id": "SYN/valid",
+     "n_lyr": 3,
+     "n_seg": 4,
+     "pol": "P"
+    }
+   ]
+  },
+  {
+   "case": "V3_via_turn",
+   "detected": true,
+   "violations": [
+    {
+     "V": "V3_via_turn",
+     "id": "SYN/valid",
+     "pol": "N",
+     "via": [
+      85.0,
+      52.0
+     ]
+    }
+   ]
+  }
+ ],
+ "positive_control_ok": true,
+ "predicate": "A1.3 几何不变量套件自测(正/负控)",
+ "rules": {
+  "half_pitch": 0.19,
+  "max_vias_per_net": 2,
+  "p_gap": 0.175,
+  "pn_min_edge": 0.155,
+  "via_od": 0.35,
+  "width": 0.205
+ },
+ "verdict": "PASS"
+}
