@@ -97,7 +97,10 @@ def main() -> int:
                         cands.append([round(x, 3), round(y, 3)])
             pa[pol] = {"ball": a["ball"], "ball_grid": a["ball_grid"],
                        "pad": a["pad_global"], "n_cand": len(cands),
-                       "cands": cands}
+                       "cands": sorted(cands,
+                                       key=lambda c: (abs(c[0] - px),
+                                                      abs(c[1] - py),
+                                                      c[0], c[1]))}
         # P/N 对判定
         pair = None
         for cp in pa["P"]["cands"]:
