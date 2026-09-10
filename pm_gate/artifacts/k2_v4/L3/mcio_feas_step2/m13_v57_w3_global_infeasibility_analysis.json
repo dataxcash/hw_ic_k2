@@ -1,0 +1,116 @@
+{
+ "analysis": "W3-C9 global-infeasibility attempt + root cause of the residual crossings",
+ "crossing_root_cause": {
+  "evidence": "P-P crossings (28 in EAST/up, 21 in EAST/dn, 6 in WEST/dn/J4) are geometrically impossible for collinear sources with monotone x and monotone targets",
+  "finding": "P and N ramps are monotone within every frame, yet P-P and N-N segments cross => sources are NOT collinear: the R1 y-absorption snaps each page to its own row, whereas a planar fan requires a per-(frame,polarity) COMMON source row",
+  "method": "recompute within-frame crossings from W3-CN.2 (straight) + monotonicity of ramps",
+  "per_frame": {
+   "EAST/dn/J2": {
+    "N_y_distinct": 2,
+    "N_y_rows": [
+     58.19,
+     58.27
+    ],
+    "P_y_distinct": 2,
+    "P_y_rows": [
+     58.17,
+     58.24
+    ],
+    "n": 7
+   },
+   "EAST/up/J2": {
+    "N_y_distinct": 1,
+    "N_y_rows": [
+     55.773
+    ],
+    "P_y_distinct": 1,
+    "P_y_rows": [
+     54.28
+    ],
+    "n": 8
+   },
+   "WEST/dn/J3": {
+    "N_y_distinct": 3,
+    "N_y_rows": [
+     51.723,
+     51.823,
+     52.273
+    ],
+    "P_y_distinct": 3,
+    "P_y_rows": [
+     52.716,
+     53.216,
+     53.466
+    ],
+    "n": 4
+   },
+   "WEST/dn/J4": {
+    "N_y_distinct": 1,
+    "N_y_rows": [
+     51.723
+    ],
+    "P_y_distinct": 1,
+    "P_y_rows": [
+     53.216
+    ],
+    "n": 4
+   },
+   "WEST/up/J3": {
+    "N_y_distinct": 2,
+    "N_y_rows": [
+     49.13,
+     49.21
+    ],
+    "P_y_distinct": 2,
+    "P_y_rows": [
+     49.16,
+     49.23
+    ],
+    "n": 3
+   },
+   "WEST/up/J4": {
+    "N_y_distinct": 2,
+    "N_y_rows": [
+     49.13,
+     49.21
+    ],
+    "P_y_distinct": 2,
+    "P_y_rows": [
+     49.16,
+     49.23
+    ],
+    "n": 3
+   }
+  }
+ },
+ "ordering_lower_bound": {
+  "available_layers": 2,
+  "claim": "layers needed by page-order inversion pairs",
+  "clique_size": 2,
+  "conclusion": "ordering-based lower bound = 2 = A => NO ordering-based global infeasibility proof exists",
+  "inversion_edges": [
+   [
+    "J3dn",
+    "J4up"
+   ],
+   [
+    "J4dn",
+    "J4up"
+   ]
+  ],
+  "west_frame_src_rows": {
+   "J3dn": 51.673,
+   "J3up": 49.76,
+   "J4dn": 51.673,
+   "J4up": 49.76
+  }
+ },
+ "unexhausted_legal_construction": {
+  "expected": "same-frame crossings -> 0 (collinear sources), cross-frame handled by the 2-color inversion coloring",
+  "name": "collinear-row fan + inversion-graph layer coloring",
+  "rule_R1": "choose ONE via row per (frame,polarity) that is admissible for ALL pages of that frame+polarity (closed-form: the row minimising the max |y - pad_y| over the frame's pages); then per-page monotone x ramp as today",
+  "rule_R1_5": "straight segment (corner-free) between two ordered collinear/vertical rails => planar by the two-ordered-rails lemma",
+  "rule_layers": "color fan groups by the inversion graph (permutation-graph greedy scan, 2 colors = In2/B)",
+  "status": "NOT YET IMPLEMENTED (session budget exhausted) - next session's first action"
+ }
+}
