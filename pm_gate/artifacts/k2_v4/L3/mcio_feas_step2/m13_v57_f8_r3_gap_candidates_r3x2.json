@@ -1,0 +1,2216 @@
+{
+ "artifact": "m13_v57_f8_r3_gap_candidates",
+ "authority": {
+  "manifest": "m13_v57_s1_page_manifest.json",
+  "pad_constants": "frozen footprint geometry (named constants; zero board read at runtime)",
+  "rules": "_shared/eda_core/drc_rules.json",
+  "spec": "SPEC_k2_v4.json"
+ },
+ "basis": "S1 design §R3 + SPEC.constraints.j2_escape_topology + manifest connector anchors; zero board read",
+ "conflict_graph": {
+  "edges": [
+   {
+    "conflict": true,
+    "dy_mm": 0.0,
+    "gap_x": 133.825,
+    "pad_a": "PCIE_DN0_P",
+    "pad_b": "PCIE_DN0_N",
+    "required_mm": 0.525
+   },
+   {
+    "conflict": true,
+    "dy_mm": 0.0,
+    "gap_x": 133.825,
+    "pad_a": "PCIE_DN2_P",
+    "pad_b": "PCIE_DN2_N",
+    "required_mm": 0.525
+   },
+   {
+    "conflict": true,
+    "dy_mm": 0.0,
+    "gap_x": 133.825,
+    "pad_a": "PCIE_DN4_P",
+    "pad_b": "PCIE_DN4_N",
+    "required_mm": 0.525
+   },
+   {
+    "conflict": true,
+    "dy_mm": 0.0,
+    "gap_x": 133.825,
+    "pad_a": "PCIE_DN6_P",
+    "pad_b": "PCIE_DN6_N",
+    "required_mm": 0.525
+   },
+   {
+    "conflict": true,
+    "dy_mm": 0.0,
+    "gap_x": 133.825,
+    "pad_a": "PCIE_REFCLK0_P",
+    "pad_b": "PCIE_REFCLK0_N",
+    "required_mm": 0.525
+   },
+   {
+    "conflict": true,
+    "dy_mm": 0.0,
+    "gap_x": 133.825,
+    "pad_a": "PCIE_REFCLK1_P",
+    "pad_b": "PCIE_REFCLK1_N",
+    "required_mm": 0.525
+   },
+   {
+    "conflict": true,
+    "dy_mm": 0.0,
+    "gap_x": 133.825,
+    "pad_a": "PCIE_UP_OUT1_P_J2",
+    "pad_b": "PCIE_UP_OUT1_N_J2",
+    "required_mm": 0.525
+   },
+   {
+    "conflict": true,
+    "dy_mm": 0.0,
+    "gap_x": 133.825,
+    "pad_a": "PCIE_UP_OUT3_P_J2",
+    "pad_b": "PCIE_UP_OUT3_N_J2",
+    "required_mm": 0.525
+   },
+   {
+    "conflict": true,
+    "dy_mm": 0.0,
+    "gap_x": 133.825,
+    "pad_a": "PCIE_UP_OUT5_P_J2",
+    "pad_b": "PCIE_UP_OUT5_N_J2",
+    "required_mm": 0.525
+   },
+   {
+    "conflict": true,
+    "dy_mm": 0.0,
+    "gap_x": 133.825,
+    "pad_a": "PCIE_UP_OUT7_P_J2",
+    "pad_b": "PCIE_UP_OUT7_N_J2",
+    "required_mm": 0.525
+   },
+   {
+    "conflict": true,
+    "dy_mm": 0.0,
+    "gap_x": 55.9,
+    "pad_a": "PCIE_DN_OUT2_N_MCIO",
+    "pad_b": "PCIE_DN_OUT3_P_MCIO",
+    "required_mm": 0.525
+   },
+   {
+    "conflict": true,
+    "dy_mm": 0.0,
+    "gap_x": 55.9,
+    "pad_a": "PCIE_UP2_N",
+    "pad_b": "PCIE_UP3_P",
+    "required_mm": 0.525
+   },
+   {
+    "conflict": true,
+    "dy_mm": 0.0,
+    "gap_x": 57.7,
+    "pad_a": "PCIE_DN_OUT2_P_MCIO",
+    "pad_b": "PCIE_REFCLK0_N",
+    "required_mm": 0.525
+   },
+   {
+    "conflict": true,
+    "dy_mm": 0.0,
+    "gap_x": 60.4,
+    "pad_a": "PCIE_DN_OUT1_N_MCIO",
+    "pad_b": "PCIE_REFCLK0_P",
+    "required_mm": 0.525
+   },
+   {
+    "conflict": true,
+    "dy_mm": 0.0,
+    "gap_x": 63.1,
+    "pad_a": "PCIE_DN_OUT0_N_MCIO",
+    "pad_b": "PCIE_DN_OUT1_P_MCIO",
+    "required_mm": 0.525
+   },
+   {
+    "conflict": true,
+    "dy_mm": 0.0,
+    "gap_x": 63.1,
+    "pad_a": "PCIE_UP0_N",
+    "pad_b": "PCIE_UP1_P",
+    "required_mm": 0.525
+   },
+   {
+    "conflict": true,
+    "dy_mm": 0.0,
+    "gap_x": 55.9,
+    "pad_a": "PCIE_DN_OUT4_N_MCIO",
+    "pad_b": "PCIE_DN_OUT5_P_MCIO",
+    "required_mm": 0.525
+   },
+   {
+    "conflict": true,
+    "dy_mm": 0.0,
+    "gap_x": 55.9,
+    "pad_a": "PCIE_UP4_N",
+    "pad_b": "PCIE_UP5_P",
+    "required_mm": 0.525
+   },
+   {
+    "conflict": true,
+    "dy_mm": 0.0,
+    "gap_x": 58.6,
+    "pad_a": "PCIE_DN_OUT5_N_MCIO",
+    "pad_b": "PCIE_REFCLK1_P",
+    "required_mm": 0.525
+   },
+   {
+    "conflict": true,
+    "dy_mm": 0.0,
+    "gap_x": 61.3,
+    "pad_a": "PCIE_DN_OUT6_P_MCIO",
+    "pad_b": "PCIE_REFCLK1_N",
+    "required_mm": 0.525
+   },
+   {
+    "conflict": true,
+    "dy_mm": 0.0,
+    "gap_x": 63.1,
+    "pad_a": "PCIE_DN_OUT6_N_MCIO",
+    "pad_b": "PCIE_DN_OUT7_P_MCIO",
+    "required_mm": 0.525
+   },
+   {
+    "conflict": true,
+    "dy_mm": 0.0,
+    "gap_x": 63.1,
+    "pad_a": "PCIE_UP6_N",
+    "pad_b": "PCIE_UP7_P",
+    "required_mm": 0.525
+   }
+  ],
+  "n_edges": 22,
+  "required_mm": 0.525,
+  "rule": "same-column adjacent landings y-distance >= via_od + clearance",
+  "verdict": "COMPLETE"
+ },
+ "connectors": {
+  "J2": {
+   "columns": {
+    "132.65": {
+     "entries": [
+      {
+       "gap_candidates": [
+        131.65
+       ],
+       "kind": "data",
+       "net": "PCIE_UP_OUT0_N_J2",
+       "pad_num": "3",
+       "page": "PCIE_UP0/out_J2",
+       "pin": "RX0_N",
+       "pol": "N",
+       "y": 43.5,
+       "y_band": [
+        43.2,
+        43.8
+       ]
+      },
+      {
+       "gap_candidates": [
+        131.05
+       ],
+       "kind": "data",
+       "net": "PCIE_UP_OUT1_P_J2",
+       "pad_num": "5",
+       "page": "PCIE_UP1/out_J2",
+       "pin": "RX1_P",
+       "pol": "P",
+       "y": 44.1,
+       "y_band": [
+        43.8,
+        44.4
+       ]
+      },
+      {
+       "gap_candidates": [
+        130.45
+       ],
+       "kind": "refclk",
+       "net": "PCIE_REFCLK0_P",
+       "pad_num": "11",
+       "page": "PCIE_REFCLK0/input",
+       "pin": null,
+       "pol": "P",
+       "y": 45.9,
+       "y_band": [
+        45.6,
+        46.2
+       ]
+      },
+      {
+       "gap_candidates": [
+        129.85
+       ],
+       "kind": "data",
+       "net": "PCIE_UP_OUT2_N_J2",
+       "pad_num": "15",
+       "page": "PCIE_UP2/out_J2",
+       "pin": "RX2_N",
+       "pol": "N",
+       "y": 47.1,
+       "y_band": [
+        46.8,
+        47.4
+       ]
+      },
+      {
+       "gap_candidates": [
+        129.25
+       ],
+       "kind": "data",
+       "net": "PCIE_UP_OUT3_P_J2",
+       "pad_num": "17",
+       "page": "PCIE_UP3/out_J2",
+       "pin": "RX3_P",
+       "pol": "P",
+       "y": 47.7,
+       "y_band": [
+        47.4,
+        48.0
+       ]
+      },
+      {
+       "gap_candidates": [
+        128.65
+       ],
+       "kind": "data",
+       "net": "PCIE_UP_OUT4_N_J2",
+       "pad_num": "21",
+       "page": "PCIE_UP4/out_J2",
+       "pin": "RX4_N",
+       "pol": "N",
+       "y": 48.9,
+       "y_band": [
+        48.6,
+        49.2
+       ]
+      },
+      {
+       "gap_candidates": [
+        128.05
+       ],
+       "kind": "data",
+       "net": "PCIE_UP_OUT5_P_J2",
+       "pad_num": "23",
+       "page": "PCIE_UP5/out_J2",
+       "pin": "RX5_P",
+       "pol": "P",
+       "y": 49.5,
+       "y_band": [
+        49.2,
+        49.8
+       ]
+      },
+      {
+       "gap_candidates": [
+        127.45
+       ],
+       "kind": "refclk",
+       "net": "PCIE_REFCLK1_P",
+       "pad_num": "29",
+       "page": "PCIE_REFCLK1/input",
+       "pin": null,
+       "pol": "P",
+       "y": 51.3,
+       "y_band": [
+        51.0,
+        51.6
+       ]
+      },
+      {
+       "gap_candidates": [
+        126.85
+       ],
+       "kind": "data",
+       "net": "PCIE_UP_OUT6_N_J2",
+       "pad_num": "33",
+       "page": "PCIE_UP6/out_J2",
+       "pin": "RX6_N",
+       "pol": "N",
+       "y": 52.5,
+       "y_band": [
+        52.2,
+        52.8
+       ]
+      },
+      {
+       "gap_candidates": [
+        126.25
+       ],
+       "kind": "data",
+       "net": "PCIE_UP_OUT7_P_J2",
+       "pad_num": "35",
+       "page": "PCIE_UP7/out_J2",
+       "pin": "RX7_P",
+       "pol": "P",
+       "y": 53.1,
+       "y_band": [
+        52.8,
+        53.4
+       ]
+      },
+      {
+       "gap_candidates": [
+        125.65
+       ],
+       "kind": "data",
+       "net": "PCIE_DN0_P",
+       "pad_num": "39",
+       "page": "PCIE_DN0/input",
+       "pin": "TX0_P",
+       "pol": "P",
+       "y": 54.3,
+       "y_band": [
+        54.0,
+        54.6
+       ]
+      },
+      {
+       "gap_candidates": [
+        125.05
+       ],
+       "kind": "data",
+       "net": "PCIE_DN1_N",
+       "pad_num": "43",
+       "page": "PCIE_DN1/input",
+       "pin": "TX1_N",
+       "pol": "N",
+       "y": 55.5,
+       "y_band": [
+        55.2,
+        55.8
+       ]
+      },
+      {
+       "gap_candidates": [
+        124.45
+       ],
+       "kind": "data",
+       "net": "PCIE_DN2_P",
+       "pad_num": "51",
+       "page": "PCIE_DN2/input",
+       "pin": "TX2_P",
+       "pol": "P",
+       "y": 57.9,
+       "y_band": [
+        57.6,
+        58.2
+       ]
+      },
+      {
+       "gap_candidates": [
+        123.85
+       ],
+       "kind": "data",
+       "net": "PCIE_DN3_N",
+       "pad_num": "55",
+       "page": "PCIE_DN3/input",
+       "pin": "TX3_N",
+       "pol": "N",
+       "y": 59.1,
+       "y_band": [
+        58.8,
+        59.4
+       ]
+      },
+      {
+       "gap_candidates": [
+        123.25
+       ],
+       "kind": "data",
+       "net": "PCIE_DN4_P",
+       "pad_num": "57",
+       "page": "PCIE_DN4/input",
+       "pin": "TX4_P",
+       "pol": "P",
+       "y": 59.7,
+       "y_band": [
+        59.4,
+        60.0
+       ]
+      },
+      {
+       "gap_candidates": [
+        122.65
+       ],
+       "kind": "data",
+       "net": "PCIE_DN5_N",
+       "pad_num": "61",
+       "page": "PCIE_DN5/input",
+       "pin": "TX5_N",
+       "pol": "N",
+       "y": 60.9,
+       "y_band": [
+        60.6,
+        61.2
+       ]
+      },
+      {
+       "gap_candidates": [
+        122.05
+       ],
+       "kind": "data",
+       "net": "PCIE_DN6_P",
+       "pad_num": "69",
+       "page": "PCIE_DN6/input",
+       "pin": "TX6_P",
+       "pol": "P",
+       "y": 63.3,
+       "y_band": [
+        63.0,
+        63.6
+       ]
+      },
+      {
+       "gap_candidates": [
+        121.45
+       ],
+       "kind": "data",
+       "net": "PCIE_DN7_N",
+       "pad_num": "73",
+       "page": "PCIE_DN7/input",
+       "pin": "TX7_N",
+       "pol": "N",
+       "y": 64.5,
+       "y_band": [
+        64.2,
+        64.8
+       ]
+      }
+     ],
+     "escape_dir": "left",
+     "gap_columns": [
+      {
+       "basis": "outside",
+       "feasible": true,
+       "gap_width_mm": null,
+       "side": "left",
+       "x": 131.65
+      },
+      {
+       "basis": null,
+       "feasible": true,
+       "gap_width_mm": 1.05,
+       "side": "between",
+       "x": 133.825
+      }
+     ],
+     "n_pads": 18,
+     "role": "inner",
+     "rows": [
+      43.5,
+      44.1,
+      45.9,
+      47.1,
+      47.7,
+      48.9,
+      49.5,
+      51.3,
+      52.5,
+      53.1,
+      54.3,
+      55.5,
+      57.9,
+      59.1,
+      59.7,
+      60.9,
+      63.3,
+      64.5
+     ],
+     "x": 132.65,
+     "y_max": 64.5,
+     "y_min": 43.5
+    },
+    "135.0": {
+     "entries": [
+      {
+       "gap_candidates": [
+        136.0
+       ],
+       "kind": "data",
+       "net": "PCIE_UP_OUT0_P_J2",
+       "pad_num": "2",
+       "page": "PCIE_UP0/out_J2",
+       "pin": "RX0_P",
+       "pol": "P",
+       "y": 42.9,
+       "y_band": [
+        42.6,
+        43.2
+       ]
+      },
+      {
+       "gap_candidates": [
+        136.6
+       ],
+       "kind": "data",
+       "net": "PCIE_UP_OUT1_N_J2",
+       "pad_num": "6",
+       "page": "PCIE_UP1/out_J2",
+       "pin": "RX1_N",
+       "pol": "N",
+       "y": 44.1,
+       "y_band": [
+        43.8,
+        44.4
+       ]
+      },
+      {
+       "gap_candidates": [
+        137.2
+       ],
+       "kind": "refclk",
+       "net": "PCIE_REFCLK0_N",
+       "pad_num": "12",
+       "page": "PCIE_REFCLK0/input",
+       "pin": null,
+       "pol": "N",
+       "y": 45.9,
+       "y_band": [
+        45.6,
+        46.2
+       ]
+      },
+      {
+       "gap_candidates": [
+        137.8
+       ],
+       "kind": "data",
+       "net": "PCIE_UP_OUT2_P_J2",
+       "pad_num": "14",
+       "page": "PCIE_UP2/out_J2",
+       "pin": "RX2_P",
+       "pol": "P",
+       "y": 46.5,
+       "y_band": [
+        46.2,
+        46.8
+       ]
+      },
+      {
+       "gap_candidates": [
+        138.4
+       ],
+       "kind": "data",
+       "net": "PCIE_UP_OUT3_N_J2",
+       "pad_num": "18",
+       "page": "PCIE_UP3/out_J2",
+       "pin": "RX3_N",
+       "pol": "N",
+       "y": 47.7,
+       "y_band": [
+        47.4,
+        48.0
+       ]
+      },
+      {
+       "gap_candidates": [
+        139.0
+       ],
+       "kind": "data",
+       "net": "PCIE_UP_OUT4_P_J2",
+       "pad_num": "20",
+       "page": "PCIE_UP4/out_J2",
+       "pin": "RX4_P",
+       "pol": "P",
+       "y": 48.3,
+       "y_band": [
+        48.0,
+        48.6
+       ]
+      },
+      {
+       "gap_candidates": [
+        139.6
+       ],
+       "kind": "data",
+       "net": "PCIE_UP_OUT5_N_J2",
+       "pad_num": "24",
+       "page": "PCIE_UP5/out_J2",
+       "pin": "RX5_N",
+       "pol": "N",
+       "y": 49.5,
+       "y_band": [
+        49.2,
+        49.8
+       ]
+      },
+      {
+       "gap_candidates": [
+        140.2
+       ],
+       "kind": "refclk",
+       "net": "PCIE_REFCLK1_N",
+       "pad_num": "30",
+       "page": "PCIE_REFCLK1/input",
+       "pin": null,
+       "pol": "N",
+       "y": 51.3,
+       "y_band": [
+        51.0,
+        51.6
+       ]
+      },
+      {
+       "gap_candidates": [
+        140.8
+       ],
+       "kind": "data",
+       "net": "PCIE_UP_OUT6_P_J2",
+       "pad_num": "32",
+       "page": "PCIE_UP6/out_J2",
+       "pin": "RX6_P",
+       "pol": "P",
+       "y": 51.9,
+       "y_band": [
+        51.6,
+        52.2
+       ]
+      },
+      {
+       "gap_candidates": [
+        141.4
+       ],
+       "kind": "data",
+       "net": "PCIE_UP_OUT7_N_J2",
+       "pad_num": "36",
+       "page": "PCIE_UP7/out_J2",
+       "pin": "RX7_N",
+       "pol": "N",
+       "y": 53.1,
+       "y_band": [
+        52.8,
+        53.4
+       ]
+      },
+      {
+       "gap_candidates": [
+        142.0
+       ],
+       "kind": "data",
+       "net": "PCIE_DN0_N",
+       "pad_num": "40",
+       "page": "PCIE_DN0/input",
+       "pin": "TX0_N",
+       "pol": "N",
+       "y": 54.3,
+       "y_band": [
+        54.0,
+        54.6
+       ]
+      },
+      {
+       "gap_candidates": [
+        142.6
+       ],
+       "kind": "data",
+       "net": "PCIE_DN1_P",
+       "pad_num": "42",
+       "page": "PCIE_DN1/input",
+       "pin": "TX1_P",
+       "pol": "P",
+       "y": 54.9,
+       "y_band": [
+        54.6,
+        55.2
+       ]
+      },
+      {
+       "gap_candidates": [
+        143.2
+       ],
+       "kind": "data",
+       "net": "PCIE_DN2_N",
+       "pad_num": "52",
+       "page": "PCIE_DN2/input",
+       "pin": "TX2_N",
+       "pol": "N",
+       "y": 57.9,
+       "y_band": [
+        57.6,
+        58.2
+       ]
+      },
+      {
+       "gap_candidates": [
+        143.8
+       ],
+       "kind": "data",
+       "net": "PCIE_DN3_P",
+       "pad_num": "54",
+       "page": "PCIE_DN3/input",
+       "pin": "TX3_P",
+       "pol": "P",
+       "y": 58.5,
+       "y_band": [
+        58.2,
+        58.8
+       ]
+      },
+      {
+       "gap_candidates": [
+        144.4
+       ],
+       "kind": "data",
+       "net": "PCIE_DN4_N",
+       "pad_num": "58",
+       "page": "PCIE_DN4/input",
+       "pin": "TX4_N",
+       "pol": "N",
+       "y": 59.7,
+       "y_band": [
+        59.4,
+        60.0
+       ]
+      },
+      {
+       "gap_candidates": [
+        145.0
+       ],
+       "kind": "data",
+       "net": "PCIE_DN5_P",
+       "pad_num": "60",
+       "page": "PCIE_DN5/input",
+       "pin": "TX5_P",
+       "pol": "P",
+       "y": 60.3,
+       "y_band": [
+        60.0,
+        60.6
+       ]
+      },
+      {
+       "gap_candidates": [
+        145.6
+       ],
+       "kind": "data",
+       "net": "PCIE_DN6_N",
+       "pad_num": "70",
+       "page": "PCIE_DN6/input",
+       "pin": "TX6_N",
+       "pol": "N",
+       "y": 63.3,
+       "y_band": [
+        63.0,
+        63.6
+       ]
+      },
+      {
+       "gap_candidates": [
+        146.2
+       ],
+       "kind": "data",
+       "net": "PCIE_DN7_P",
+       "pad_num": "72",
+       "page": "PCIE_DN7/input",
+       "pin": "TX7_P",
+       "pol": "P",
+       "y": 63.9,
+       "y_band": [
+        63.6,
+        64.2
+       ]
+      }
+     ],
+     "escape_dir": "right",
+     "gap_columns": [
+      {
+       "basis": null,
+       "feasible": true,
+       "gap_width_mm": 1.05,
+       "side": "between",
+       "x": 133.825
+      },
+      {
+       "basis": "outside",
+       "feasible": true,
+       "gap_width_mm": null,
+       "side": "right",
+       "x": 136.0
+      }
+     ],
+     "n_pads": 18,
+     "role": "outer",
+     "rows": [
+      42.9,
+      44.1,
+      45.9,
+      46.5,
+      47.7,
+      48.3,
+      49.5,
+      51.3,
+      51.9,
+      53.1,
+      54.3,
+      54.9,
+      57.9,
+      58.5,
+      59.7,
+      60.3,
+      63.3,
+      63.9
+     ],
+     "x": 135.0,
+     "y_max": 63.9,
+     "y_min": 42.9
+    }
+   },
+   "half_row_pitch_mm": 0.3,
+   "n_pads": 36,
+   "row_pitch_mm": 0.6
+  },
+  "J3": {
+   "columns": {
+    "54.7": {
+     "entries": [
+      {
+       "gap_candidates": [
+        54.2
+       ],
+       "kind": "data",
+       "net": "PCIE_UP3_N",
+       "pad_num": "B18",
+       "page": "PCIE_UP3/input",
+       "pin": "TX3_N",
+       "pol": "N",
+       "y": 43.25,
+       "y_band": [
+        42.0,
+        44.5
+       ]
+      },
+      {
+       "gap_candidates": [
+        54.8
+       ],
+       "kind": "data",
+       "net": "PCIE_DN_OUT3_N_MCIO",
+       "pad_num": "A18",
+       "page": "PCIE_DN3/out_MCIO",
+       "pin": "RX3_N",
+       "pol": "N",
+       "y": 45.75,
+       "y_band": [
+        44.5,
+        47.0
+       ]
+      }
+     ],
+     "escape_dir": "east",
+     "gap_columns": [
+      {
+       "basis": "outside",
+       "feasible": true,
+       "gap_width_mm": null,
+       "side": "left",
+       "x": 54.2
+      },
+      {
+       "basis": null,
+       "feasible": false,
+       "gap_width_mm": 0.3,
+       "side": "between",
+       "x": 55.0
+      }
+     ],
+     "n_pads": 2,
+     "role": "MCIO",
+     "rows": [
+      43.25,
+      45.75
+     ],
+     "x": 54.7,
+     "y_max": 45.75,
+     "y_min": 43.25
+    },
+    "55.3": {
+     "entries": [
+      {
+       "gap_candidates": [
+        55.4
+       ],
+       "kind": "data",
+       "net": "PCIE_UP3_P",
+       "pad_num": "B17",
+       "page": "PCIE_UP3/input",
+       "pin": "TX3_P",
+       "pol": "P",
+       "y": 43.25,
+       "y_band": [
+        42.0,
+        44.5
+       ]
+      },
+      {
+       "gap_candidates": [
+        56.0
+       ],
+       "kind": "data",
+       "net": "PCIE_DN_OUT3_P_MCIO",
+       "pad_num": "A17",
+       "page": "PCIE_DN3/out_MCIO",
+       "pin": "RX3_P",
+       "pol": "P",
+       "y": 45.75,
+       "y_band": [
+        44.5,
+        47.0
+       ]
+      }
+     ],
+     "escape_dir": "east",
+     "gap_columns": [
+      {
+       "basis": null,
+       "feasible": false,
+       "gap_width_mm": 0.3,
+       "side": "between",
+       "x": 55.0
+      },
+      {
+       "basis": null,
+       "feasible": true,
+       "gap_width_mm": 0.9,
+       "side": "between",
+       "x": 55.9
+      }
+     ],
+     "n_pads": 2,
+     "role": "MCIO",
+     "rows": [
+      43.25,
+      45.75
+     ],
+     "x": 55.3,
+     "y_max": 45.75,
+     "y_min": 43.25
+    },
+    "56.5": {
+     "entries": [
+      {
+       "gap_candidates": [
+        56.6
+       ],
+       "kind": "data",
+       "net": "PCIE_UP2_N",
+       "pad_num": "B15",
+       "page": "PCIE_UP2/input",
+       "pin": "TX2_N",
+       "pol": "N",
+       "y": 43.25,
+       "y_band": [
+        42.0,
+        44.5
+       ]
+      },
+      {
+       "gap_candidates": [
+        57.2
+       ],
+       "kind": "data",
+       "net": "PCIE_DN_OUT2_N_MCIO",
+       "pad_num": "A15",
+       "page": "PCIE_DN2/out_MCIO",
+       "pin": "RX2_N",
+       "pol": "N",
+       "y": 45.75,
+       "y_band": [
+        44.5,
+        47.0
+       ]
+      }
+     ],
+     "escape_dir": "east",
+     "gap_columns": [
+      {
+       "basis": null,
+       "feasible": true,
+       "gap_width_mm": 0.9,
+       "side": "between",
+       "x": 55.9
+      },
+      {
+       "basis": null,
+       "feasible": false,
+       "gap_width_mm": 0.3,
+       "side": "between",
+       "x": 56.8
+      }
+     ],
+     "n_pads": 2,
+     "role": "MCIO",
+     "rows": [
+      43.25,
+      45.75
+     ],
+     "x": 56.5,
+     "y_max": 45.75,
+     "y_min": 43.25
+    },
+    "57.1": {
+     "entries": [
+      {
+       "gap_candidates": [
+        57.8
+       ],
+       "kind": "data",
+       "net": "PCIE_UP2_P",
+       "pad_num": "B14",
+       "page": "PCIE_UP2/input",
+       "pin": "TX2_P",
+       "pol": "P",
+       "y": 43.25,
+       "y_band": [
+        42.0,
+        44.5
+       ]
+      },
+      {
+       "gap_candidates": [
+        58.4
+       ],
+       "kind": "data",
+       "net": "PCIE_DN_OUT2_P_MCIO",
+       "pad_num": "A14",
+       "page": "PCIE_DN2/out_MCIO",
+       "pin": "RX2_P",
+       "pol": "P",
+       "y": 45.75,
+       "y_band": [
+        44.5,
+        47.0
+       ]
+      }
+     ],
+     "escape_dir": "east",
+     "gap_columns": [
+      {
+       "basis": null,
+       "feasible": false,
+       "gap_width_mm": 0.3,
+       "side": "between",
+       "x": 56.8
+      },
+      {
+       "basis": null,
+       "feasible": true,
+       "gap_width_mm": 0.9,
+       "side": "between",
+       "x": 57.7
+      }
+     ],
+     "n_pads": 2,
+     "role": "MCIO",
+     "rows": [
+      43.25,
+      45.75
+     ],
+     "x": 57.1,
+     "y_max": 45.75,
+     "y_min": 43.25
+    },
+    "58.3": {
+     "entries": [
+      {
+       "gap_candidates": [
+        59.0
+       ],
+       "kind": "refclk",
+       "net": "PCIE_REFCLK0_N",
+       "pad_num": "A12",
+       "page": "PCIE_REFCLK0/input",
+       "pin": "REFCLK_N",
+       "pol": "N",
+       "y": 45.75,
+       "y_band": [
+        44.5,
+        47.0
+       ]
+      }
+     ],
+     "escape_dir": "east",
+     "gap_columns": [
+      {
+       "basis": null,
+       "feasible": true,
+       "gap_width_mm": 0.9,
+       "side": "between",
+       "x": 57.7
+      },
+      {
+       "basis": null,
+       "feasible": false,
+       "gap_width_mm": 0.3,
+       "side": "between",
+       "x": 58.6
+      }
+     ],
+     "n_pads": 1,
+     "role": "MCIO",
+     "rows": [
+      45.75
+     ],
+     "x": 58.3,
+     "y_max": 45.75,
+     "y_min": 45.75
+    },
+    "58.9": {
+     "entries": [
+      {
+       "gap_candidates": [
+        59.6
+       ],
+       "kind": "refclk",
+       "net": "PCIE_REFCLK0_P",
+       "pad_num": "A11",
+       "page": "PCIE_REFCLK0/input",
+       "pin": "REFCLK_P",
+       "pol": "P",
+       "y": 45.75,
+       "y_band": [
+        44.5,
+        47.0
+       ]
+      }
+     ],
+     "escape_dir": "east",
+     "gap_columns": [
+      {
+       "basis": null,
+       "feasible": false,
+       "gap_width_mm": 0.3,
+       "side": "between",
+       "x": 58.6
+      },
+      {
+       "basis": null,
+       "feasible": true,
+       "gap_width_mm": 2.7,
+       "side": "between",
+       "x": 60.4
+      }
+     ],
+     "n_pads": 1,
+     "role": "MCIO",
+     "rows": [
+      45.75
+     ],
+     "x": 58.9,
+     "y_max": 45.75,
+     "y_min": 45.75
+    },
+    "61.9": {
+     "entries": [
+      {
+       "gap_candidates": [
+        60.2
+       ],
+       "kind": "data",
+       "net": "PCIE_UP1_N",
+       "pad_num": "B6",
+       "page": "PCIE_UP1/input",
+       "pin": "TX1_N",
+       "pol": "N",
+       "y": 43.25,
+       "y_band": [
+        42.0,
+        44.5
+       ]
+      },
+      {
+       "gap_candidates": [
+        60.8
+       ],
+       "kind": "data",
+       "net": "PCIE_DN_OUT1_N_MCIO",
+       "pad_num": "A6",
+       "page": "PCIE_DN1/out_MCIO",
+       "pin": "RX1_N",
+       "pol": "N",
+       "y": 45.75,
+       "y_band": [
+        44.5,
+        47.0
+       ]
+      }
+     ],
+     "escape_dir": "east",
+     "gap_columns": [
+      {
+       "basis": null,
+       "feasible": true,
+       "gap_width_mm": 2.7,
+       "side": "between",
+       "x": 60.4
+      },
+      {
+       "basis": null,
+       "feasible": false,
+       "gap_width_mm": 0.3,
+       "side": "between",
+       "x": 62.2
+      }
+     ],
+     "n_pads": 2,
+     "role": "MCIO",
+     "rows": [
+      43.25,
+      45.75
+     ],
+     "x": 61.9,
+     "y_max": 45.75,
+     "y_min": 43.25
+    },
+    "62.5": {
+     "entries": [
+      {
+       "gap_candidates": [
+        61.4
+       ],
+       "kind": "data",
+       "net": "PCIE_UP1_P",
+       "pad_num": "B5",
+       "page": "PCIE_UP1/input",
+       "pin": "TX1_P",
+       "pol": "P",
+       "y": 43.25,
+       "y_band": [
+        42.0,
+        44.5
+       ]
+      },
+      {
+       "gap_candidates": [
+        62.0
+       ],
+       "kind": "data",
+       "net": "PCIE_DN_OUT1_P_MCIO",
+       "pad_num": "A5",
+       "page": "PCIE_DN1/out_MCIO",
+       "pin": "RX1_P",
+       "pol": "P",
+       "y": 45.75,
+       "y_band": [
+        44.5,
+        47.0
+       ]
+      }
+     ],
+     "escape_dir": "east",
+     "gap_columns": [
+      {
+       "basis": null,
+       "feasible": false,
+       "gap_width_mm": 0.3,
+       "side": "between",
+       "x": 62.2
+      },
+      {
+       "basis": null,
+       "feasible": true,
+       "gap_width_mm": 0.9,
+       "side": "between",
+       "x": 63.1
+      }
+     ],
+     "n_pads": 2,
+     "role": "MCIO",
+     "rows": [
+      43.25,
+      45.75
+     ],
+     "x": 62.5,
+     "y_max": 45.75,
+     "y_min": 43.25
+    },
+    "63.7": {
+     "entries": [
+      {
+       "gap_candidates": [
+        62.6
+       ],
+       "kind": "data",
+       "net": "PCIE_UP0_N",
+       "pad_num": "B3",
+       "page": "PCIE_UP0/input",
+       "pin": "TX0_N",
+       "pol": "N",
+       "y": 43.25,
+       "y_band": [
+        42.0,
+        44.5
+       ]
+      },
+      {
+       "gap_candidates": [
+        63.2
+       ],
+       "kind": "data",
+       "net": "PCIE_DN_OUT0_N_MCIO",
+       "pad_num": "A3",
+       "page": "PCIE_DN0/out_MCIO",
+       "pin": "RX0_N",
+       "pol": "N",
+       "y": 45.75,
+       "y_band": [
+        44.5,
+        47.0
+       ]
+      }
+     ],
+     "escape_dir": "east",
+     "gap_columns": [
+      {
+       "basis": null,
+       "feasible": true,
+       "gap_width_mm": 0.9,
+       "side": "between",
+       "x": 63.1
+      },
+      {
+       "basis": null,
+       "feasible": false,
+       "gap_width_mm": 0.3,
+       "side": "between",
+       "x": 64.0
+      }
+     ],
+     "n_pads": 2,
+     "role": "MCIO",
+     "rows": [
+      43.25,
+      45.75
+     ],
+     "x": 63.7,
+     "y_max": 45.75,
+     "y_min": 43.25
+    },
+    "64.3": {
+     "entries": [
+      {
+       "gap_candidates": [
+        63.8
+       ],
+       "kind": "data",
+       "net": "PCIE_UP0_P",
+       "pad_num": "B2",
+       "page": "PCIE_UP0/input",
+       "pin": "TX0_P",
+       "pol": "P",
+       "y": 43.25,
+       "y_band": [
+        42.0,
+        44.5
+       ]
+      },
+      {
+       "gap_candidates": [
+        64.4
+       ],
+       "kind": "data",
+       "net": "PCIE_DN_OUT0_P_MCIO",
+       "pad_num": "A2",
+       "page": "PCIE_DN0/out_MCIO",
+       "pin": "RX0_P",
+       "pol": "P",
+       "y": 45.75,
+       "y_band": [
+        44.5,
+        47.0
+       ]
+      }
+     ],
+     "escape_dir": "east",
+     "gap_columns": [
+      {
+       "basis": null,
+       "feasible": false,
+       "gap_width_mm": 0.3,
+       "side": "between",
+       "x": 64.0
+      },
+      {
+       "basis": "outside",
+       "feasible": true,
+       "gap_width_mm": null,
+       "side": "right",
+       "x": 64.8
+      }
+     ],
+     "n_pads": 2,
+     "role": "MCIO",
+     "rows": [
+      43.25,
+      45.75
+     ],
+     "x": 64.3,
+     "y_max": 45.75,
+     "y_min": 43.25
+    }
+   },
+   "half_row_pitch_mm": 1.25,
+   "n_pads": 18,
+   "row_pitch_mm": 2.5
+  },
+  "J4": {
+   "columns": {
+    "54.7": {
+     "entries": [
+      {
+       "gap_candidates": [
+        54.2
+       ],
+       "kind": "data",
+       "net": "PCIE_DN_OUT4_P_MCIO",
+       "pad_num": "A2",
+       "page": "PCIE_DN4/out_MCIO",
+       "pin": "RX0_P",
+       "pol": "P",
+       "y": 61.45,
+       "y_band": [
+        60.2,
+        62.7
+       ]
+      },
+      {
+       "gap_candidates": [
+        54.8
+       ],
+       "kind": "data",
+       "net": "PCIE_UP4_P",
+       "pad_num": "B2",
+       "page": "PCIE_UP4/input",
+       "pin": "TX0_P",
+       "pol": "P",
+       "y": 63.95,
+       "y_band": [
+        62.7,
+        65.2
+       ]
+      }
+     ],
+     "escape_dir": "east",
+     "gap_columns": [
+      {
+       "basis": "outside",
+       "feasible": true,
+       "gap_width_mm": null,
+       "side": "left",
+       "x": 54.2
+      },
+      {
+       "basis": null,
+       "feasible": false,
+       "gap_width_mm": 0.3,
+       "side": "between",
+       "x": 55.0
+      }
+     ],
+     "n_pads": 2,
+     "role": "MCIO",
+     "rows": [
+      61.45,
+      63.95
+     ],
+     "x": 54.7,
+     "y_max": 63.95,
+     "y_min": 61.45
+    },
+    "55.3": {
+     "entries": [
+      {
+       "gap_candidates": [
+        55.4
+       ],
+       "kind": "data",
+       "net": "PCIE_DN_OUT4_N_MCIO",
+       "pad_num": "A3",
+       "page": "PCIE_DN4/out_MCIO",
+       "pin": "RX0_N",
+       "pol": "N",
+       "y": 61.45,
+       "y_band": [
+        60.2,
+        62.7
+       ]
+      },
+      {
+       "gap_candidates": [
+        56.0
+       ],
+       "kind": "data",
+       "net": "PCIE_UP4_N",
+       "pad_num": "B3",
+       "page": "PCIE_UP4/input",
+       "pin": "TX0_N",
+       "pol": "N",
+       "y": 63.95,
+       "y_band": [
+        62.7,
+        65.2
+       ]
+      }
+     ],
+     "escape_dir": "east",
+     "gap_columns": [
+      {
+       "basis": null,
+       "feasible": false,
+       "gap_width_mm": 0.3,
+       "side": "between",
+       "x": 55.0
+      },
+      {
+       "basis": null,
+       "feasible": true,
+       "gap_width_mm": 0.9,
+       "side": "between",
+       "x": 55.9
+      }
+     ],
+     "n_pads": 2,
+     "role": "MCIO",
+     "rows": [
+      61.45,
+      63.95
+     ],
+     "x": 55.3,
+     "y_max": 63.95,
+     "y_min": 61.45
+    },
+    "56.5": {
+     "entries": [
+      {
+       "gap_candidates": [
+        56.6
+       ],
+       "kind": "data",
+       "net": "PCIE_DN_OUT5_P_MCIO",
+       "pad_num": "A5",
+       "page": "PCIE_DN5/out_MCIO",
+       "pin": "RX1_P",
+       "pol": "P",
+       "y": 61.45,
+       "y_band": [
+        60.2,
+        62.7
+       ]
+      },
+      {
+       "gap_candidates": [
+        57.2
+       ],
+       "kind": "data",
+       "net": "PCIE_UP5_P",
+       "pad_num": "B5",
+       "page": "PCIE_UP5/input",
+       "pin": "TX1_P",
+       "pol": "P",
+       "y": 63.95,
+       "y_band": [
+        62.7,
+        65.2
+       ]
+      }
+     ],
+     "escape_dir": "east",
+     "gap_columns": [
+      {
+       "basis": null,
+       "feasible": true,
+       "gap_width_mm": 0.9,
+       "side": "between",
+       "x": 55.9
+      },
+      {
+       "basis": null,
+       "feasible": false,
+       "gap_width_mm": 0.3,
+       "side": "between",
+       "x": 56.8
+      }
+     ],
+     "n_pads": 2,
+     "role": "MCIO",
+     "rows": [
+      61.45,
+      63.95
+     ],
+     "x": 56.5,
+     "y_max": 63.95,
+     "y_min": 61.45
+    },
+    "57.1": {
+     "entries": [
+      {
+       "gap_candidates": [
+        57.8
+       ],
+       "kind": "data",
+       "net": "PCIE_DN_OUT5_N_MCIO",
+       "pad_num": "A6",
+       "page": "PCIE_DN5/out_MCIO",
+       "pin": "RX1_N",
+       "pol": "N",
+       "y": 61.45,
+       "y_band": [
+        60.2,
+        62.7
+       ]
+      },
+      {
+       "gap_candidates": [
+        58.4
+       ],
+       "kind": "data",
+       "net": "PCIE_UP5_N",
+       "pad_num": "B6",
+       "page": "PCIE_UP5/input",
+       "pin": "TX1_N",
+       "pol": "N",
+       "y": 63.95,
+       "y_band": [
+        62.7,
+        65.2
+       ]
+      }
+     ],
+     "escape_dir": "east",
+     "gap_columns": [
+      {
+       "basis": null,
+       "feasible": false,
+       "gap_width_mm": 0.3,
+       "side": "between",
+       "x": 56.8
+      },
+      {
+       "basis": null,
+       "feasible": true,
+       "gap_width_mm": 2.7,
+       "side": "between",
+       "x": 58.6
+      }
+     ],
+     "n_pads": 2,
+     "role": "MCIO",
+     "rows": [
+      61.45,
+      63.95
+     ],
+     "x": 57.1,
+     "y_max": 63.95,
+     "y_min": 61.45
+    },
+    "60.1": {
+     "entries": [
+      {
+       "gap_candidates": [
+        59.0
+       ],
+       "kind": "refclk",
+       "net": "PCIE_REFCLK1_P",
+       "pad_num": "A11",
+       "page": "PCIE_REFCLK1/input",
+       "pin": "REFCLK_P",
+       "pol": "P",
+       "y": 61.45,
+       "y_band": [
+        60.2,
+        62.7
+       ]
+      }
+     ],
+     "escape_dir": "east",
+     "gap_columns": [
+      {
+       "basis": null,
+       "feasible": true,
+       "gap_width_mm": 2.7,
+       "side": "between",
+       "x": 58.6
+      },
+      {
+       "basis": null,
+       "feasible": false,
+       "gap_width_mm": 0.3,
+       "side": "between",
+       "x": 60.4
+      }
+     ],
+     "n_pads": 1,
+     "role": "MCIO",
+     "rows": [
+      61.45
+     ],
+     "x": 60.1,
+     "y_max": 61.45,
+     "y_min": 61.45
+    },
+    "60.7": {
+     "entries": [
+      {
+       "gap_candidates": [
+        59.6
+       ],
+       "kind": "refclk",
+       "net": "PCIE_REFCLK1_N",
+       "pad_num": "A12",
+       "page": "PCIE_REFCLK1/input",
+       "pin": "REFCLK_N",
+       "pol": "N",
+       "y": 61.45,
+       "y_band": [
+        60.2,
+        62.7
+       ]
+      }
+     ],
+     "escape_dir": "east",
+     "gap_columns": [
+      {
+       "basis": null,
+       "feasible": false,
+       "gap_width_mm": 0.3,
+       "side": "between",
+       "x": 60.4
+      },
+      {
+       "basis": null,
+       "feasible": true,
+       "gap_width_mm": 0.9,
+       "side": "between",
+       "x": 61.3
+      }
+     ],
+     "n_pads": 1,
+     "role": "MCIO",
+     "rows": [
+      61.45
+     ],
+     "x": 60.7,
+     "y_max": 61.45,
+     "y_min": 61.45
+    },
+    "61.9": {
+     "entries": [
+      {
+       "gap_candidates": [
+        60.2
+       ],
+       "kind": "data",
+       "net": "PCIE_DN_OUT6_P_MCIO",
+       "pad_num": "A14",
+       "page": "PCIE_DN6/out_MCIO",
+       "pin": "RX2_P",
+       "pol": "P",
+       "y": 61.45,
+       "y_band": [
+        60.2,
+        62.7
+       ]
+      },
+      {
+       "gap_candidates": [
+        60.8
+       ],
+       "kind": "data",
+       "net": "PCIE_UP6_P",
+       "pad_num": "B14",
+       "page": "PCIE_UP6/input",
+       "pin": "TX2_P",
+       "pol": "P",
+       "y": 63.95,
+       "y_band": [
+        62.7,
+        65.2
+       ]
+      }
+     ],
+     "escape_dir": "east",
+     "gap_columns": [
+      {
+       "basis": null,
+       "feasible": true,
+       "gap_width_mm": 0.9,
+       "side": "between",
+       "x": 61.3
+      },
+      {
+       "basis": null,
+       "feasible": false,
+       "gap_width_mm": 0.3,
+       "side": "between",
+       "x": 62.2
+      }
+     ],
+     "n_pads": 2,
+     "role": "MCIO",
+     "rows": [
+      61.45,
+      63.95
+     ],
+     "x": 61.9,
+     "y_max": 63.95,
+     "y_min": 61.45
+    },
+    "62.5": {
+     "entries": [
+      {
+       "gap_candidates": [
+        61.4
+       ],
+       "kind": "data",
+       "net": "PCIE_DN_OUT6_N_MCIO",
+       "pad_num": "A15",
+       "page": "PCIE_DN6/out_MCIO",
+       "pin": "RX2_N",
+       "pol": "N",
+       "y": 61.45,
+       "y_band": [
+        60.2,
+        62.7
+       ]
+      },
+      {
+       "gap_candidates": [
+        62.0
+       ],
+       "kind": "data",
+       "net": "PCIE_UP6_N",
+       "pad_num": "B15",
+       "page": "PCIE_UP6/input",
+       "pin": "TX2_N",
+       "pol": "N",
+       "y": 63.95,
+       "y_band": [
+        62.7,
+        65.2
+       ]
+      }
+     ],
+     "escape_dir": "east",
+     "gap_columns": [
+      {
+       "basis": null,
+       "feasible": false,
+       "gap_width_mm": 0.3,
+       "side": "between",
+       "x": 62.2
+      },
+      {
+       "basis": null,
+       "feasible": true,
+       "gap_width_mm": 0.9,
+       "side": "between",
+       "x": 63.1
+      }
+     ],
+     "n_pads": 2,
+     "role": "MCIO",
+     "rows": [
+      61.45,
+      63.95
+     ],
+     "x": 62.5,
+     "y_max": 63.95,
+     "y_min": 61.45
+    },
+    "63.7": {
+     "entries": [
+      {
+       "gap_candidates": [
+        62.6
+       ],
+       "kind": "data",
+       "net": "PCIE_DN_OUT7_P_MCIO",
+       "pad_num": "A17",
+       "page": "PCIE_DN7/out_MCIO",
+       "pin": "RX3_P",
+       "pol": "P",
+       "y": 61.45,
+       "y_band": [
+        60.2,
+        62.7
+       ]
+      },
+      {
+       "gap_candidates": [
+        63.2
+       ],
+       "kind": "data",
+       "net": "PCIE_UP7_P",
+       "pad_num": "B17",
+       "page": "PCIE_UP7/input",
+       "pin": "TX3_P",
+       "pol": "P",
+       "y": 63.95,
+       "y_band": [
+        62.7,
+        65.2
+       ]
+      }
+     ],
+     "escape_dir": "east",
+     "gap_columns": [
+      {
+       "basis": null,
+       "feasible": true,
+       "gap_width_mm": 0.9,
+       "side": "between",
+       "x": 63.1
+      },
+      {
+       "basis": null,
+       "feasible": false,
+       "gap_width_mm": 0.3,
+       "side": "between",
+       "x": 64.0
+      }
+     ],
+     "n_pads": 2,
+     "role": "MCIO",
+     "rows": [
+      61.45,
+      63.95
+     ],
+     "x": 63.7,
+     "y_max": 63.95,
+     "y_min": 61.45
+    },
+    "64.3": {
+     "entries": [
+      {
+       "gap_candidates": [
+        63.8
+       ],
+       "kind": "data",
+       "net": "PCIE_DN_OUT7_N_MCIO",
+       "pad_num": "A18",
+       "page": "PCIE_DN7/out_MCIO",
+       "pin": "RX3_N",
+       "pol": "N",
+       "y": 61.45,
+       "y_band": [
+        60.2,
+        62.7
+       ]
+      },
+      {
+       "gap_candidates": [
+        64.4
+       ],
+       "kind": "data",
+       "net": "PCIE_UP7_N",
+       "pad_num": "B18",
+       "page": "PCIE_UP7/input",
+       "pin": "TX3_N",
+       "pol": "N",
+       "y": 63.95,
+       "y_band": [
+        62.7,
+        65.2
+       ]
+      }
+     ],
+     "escape_dir": "east",
+     "gap_columns": [
+      {
+       "basis": null,
+       "feasible": false,
+       "gap_width_mm": 0.3,
+       "side": "between",
+       "x": 64.0
+      },
+      {
+       "basis": "outside",
+       "feasible": true,
+       "gap_width_mm": null,
+       "side": "right",
+       "x": 64.8
+      }
+     ],
+     "n_pads": 2,
+     "role": "MCIO",
+     "rows": [
+      61.45,
+      63.95
+     ],
+     "x": 64.3,
+     "y_max": 63.95,
+     "y_min": 61.45
+    }
+   },
+   "half_row_pitch_mm": 1.25,
+   "n_pads": 18,
+   "row_pitch_mm": 2.5
+  }
+ },
+ "conservation": {
+  "n_pads": 72,
+  "n_with_candidate": 72,
+  "n_without_candidate": 0,
+  "rule": "each pad exactly 1 landing (>=1 candidate gap column)",
+  "verdict": "FEASIBLE",
+  "violations": []
+ },
+ "escape_topology": {
+  "J2": {
+   "inner_col_x": 132.65,
+   "inner_escape": "left",
+   "outer_col_x": 135.0,
+   "outer_escape": "right",
+   "source": "SPEC.constraints.j2_escape_topology"
+  },
+  "J3": {
+   "escape": "east",
+   "source": "S1 design §R3 (MCIO A column toward corridor; corridor WEST lies east of the connector)"
+  },
+  "J4": {
+   "escape": "east",
+   "source": "S1 design §R3 (MCIO A column toward corridor; corridor WEST lies east of the connector)"
+  }
+ },
+ "inputs_sha": {
+  "f8_base_sha256": "8a31632907b171483cd40a053231c702e378f944af33f92598a6141bd052cdeb",
+  "manifest": "a8ef3ea8ecff99d7549d4122043c972c1bb68346dc4dcc3f36fdd9bacde49890",
+  "rules": "0a459839e15960b8fbfe0e1f5bb154a02b30cbafa1cbb0d56c2b810a71228448",
+  "spec": "0bd52ed48e720b8cb6a7869379f6c0a220f3e141e1514ab159f9f5f3b8b02233"
+ },
+ "params": {
+  "clearance": 0.175,
+  "gap_fit_mm": 0.7,
+  "pad_constants": {
+   "J2": {
+    "authority": "SPEC.constraints.j2_escape_topology '0.6 pitch/0.35 高' + frozen footprint SlimSAS_x8_SFF-8654_74pin (1.3x0.35)",
+    "h": 0.35,
+    "w": 1.3
+   },
+   "J3": {
+    "authority": "frozen footprint MCIO_4i_SFF-1016 (0.3x0.7)",
+    "h": 0.7,
+    "w": 0.3
+   },
+   "J4": {
+    "authority": "frozen footprint MCIO_4i_SFF-1016 (0.3x0.7)",
+    "h": 0.7,
+    "w": 0.3
+   }
+  },
+  "required_same_column_dy_mm": 0.525,
+  "via_od": 0.35,
+  "via_via_min_mm": 0.525
+ },
+ "producer": {
+  "generator": {
+   "path": "tools/p3_v57_f8_r3_gap_candidates.py",
+   "revision": "R3GEN-F8.1",
+   "sha256": "12dd1f1f99cdcdace39e05951002a583d42069d1f4a3beab8b031a8081e76918"
+  }
+ },
+ "r3x2_basis": {
+  "authority": "ROOT-16 A + ROOT-17 ② (owner/监督预授权)",
+  "change_j2": "J2 内列向左/外列向右唯一逃逸槽 (同 J2X1)",
+  "change_j3j4": "J3/J4 每个 pad 列的多 net 各给互异槽 slot = min(cands) + rank*0.6",
+  "closed_form": "slot = base + rank*pitch (rank 由 (pad y, pol, net) 定序)",
+  "pitch_mm": 0.6,
+  "zero_search": true
+ },
+ "refclk_pads": [
+  {
+   "net": "PCIE_REFCLK0_P",
+   "pad_num": "11",
+   "page": "PCIE_REFCLK0/input",
+   "pol": "P",
+   "ref": "J2",
+   "side": "conn2",
+   "x": 132.65,
+   "y": 45.9
+  },
+  {
+   "net": "PCIE_REFCLK0_N",
+   "pad_num": "12",
+   "page": "PCIE_REFCLK0/input",
+   "pol": "N",
+   "ref": "J2",
+   "side": "conn2",
+   "x": 135.0,
+   "y": 45.9
+  },
+  {
+   "net": "PCIE_REFCLK1_P",
+   "pad_num": "29",
+   "page": "PCIE_REFCLK1/input",
+   "pol": "P",
+   "ref": "J2",
+   "side": "conn2",
+   "x": 132.65,
+   "y": 51.3
+  },
+  {
+   "net": "PCIE_REFCLK1_N",
+   "pad_num": "30",
+   "page": "PCIE_REFCLK1/input",
+   "pol": "N",
+   "ref": "J2",
+   "side": "conn2",
+   "x": 135.0,
+   "y": 51.3
+  },
+  {
+   "net": "PCIE_REFCLK0_N",
+   "pad_num": "A12",
+   "page": "PCIE_REFCLK0/input",
+   "pol": "N",
+   "ref": "J3",
+   "side": "conn",
+   "x": 58.3,
+   "y": 45.75
+  },
+  {
+   "net": "PCIE_REFCLK0_P",
+   "pad_num": "A11",
+   "page": "PCIE_REFCLK0/input",
+   "pol": "P",
+   "ref": "J3",
+   "side": "conn",
+   "x": 58.9,
+   "y": 45.75
+  },
+  {
+   "net": "PCIE_REFCLK1_P",
+   "pad_num": "A11",
+   "page": "PCIE_REFCLK1/input",
+   "pol": "P",
+   "ref": "J4",
+   "side": "conn",
+   "x": 60.1,
+   "y": 61.45
+  },
+  {
+   "net": "PCIE_REFCLK1_N",
+   "pad_num": "A12",
+   "page": "PCIE_REFCLK1/input",
+   "pol": "N",
+   "ref": "J4",
+   "side": "conn",
+   "x": 60.7,
+   "y": 61.45
+  }
+ ],
+ "revision": "R3X2",
+ "schema": 1,
+ "supersedes": {
+  "artifact": "m13_v57_f8_r3_gap_candidates",
+  "note": "旧 F-8 件不动；J2X1 为中间版本",
+  "revision": "R3GEN-F8.1"
+ }
+}

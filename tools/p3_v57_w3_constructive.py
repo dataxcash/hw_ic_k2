@@ -33,10 +33,10 @@ F = {
     "param_trace": STEP2 / "m13_v57_f13_r1_param_trace.json",
     "pair_coupling": STEP2 / "m13_v57_f13_r1_pair_coupling.json",
     "pair_xorder": STEP2 / "m13_v57_f13_r1_pair_coupling_v1_1.json",
-    "r3_gaps": STEP2 / "m13_v57_f8_r3_gap_candidates_j2x1.json",   # ROOT-16 A (versioned domain rev)
+    "r3_gaps": STEP2 / "m13_v57_f8_r3_gap_candidates_r3x2.json",   # ROOT-16 A (versioned domain rev)
     "f6b_report": STEP2 / "m13_v57_f6b_report.json",
     "verdict": STEP2 / "m13_v57_s1_r1_via_verdict_r2.json",
-    "card": STEP2 / "m13_v57_w3_kickoff_card_v1_25.md",   # ROOT-16 contract revision
+    "card": STEP2 / "m13_v57_w3_kickoff_card_v1_26.md",   # ROOT-16 contract revision
     "layer_intent": STEP2 / "m13_v57_layer_intent_rev4.json",
     "coherent_rows": STEP2 / "m13_v57_f13_r3_coherent_rows.json",
 }
@@ -48,17 +48,17 @@ FROZEN_SHA = {
     "lane_frame": "ff804e1edfacbf02e4227f10359a9217347ecdf0473801d655ef3a71ddf5cb6c",
     "param_trace": "e288ffa5421c22972075a7a3bef503a4b472aa32ea148c2ed0502090a3d98cae",
     "pair_coupling": "82e11c4cbdb4e8d44df1997f660c97fb75a47d33661223c9e5cf5fb0cb9c0d14",
-    "r3_gaps": "ace489a3594bd31c5ed6805cfcc725eba4ed144c3310ed8ec7483bfdba71bbf6",
+    "r3_gaps": "5511c8c30c21f9144c8b5e81d951649c50cc8ee427cdd94677cb4f65e06a2e05",
     "f6b_report": "9070ed53f970f480e88b1de3aa19792f8b637de51857935fa6b7c51fa8a015d6",
     "verdict": "f2e2632506457e31c145b491284c9ecbf1cb72cc09d96ccdfb3251ef80a5556a",
     "coherent_rows": "014a14b317e1c3df3d4400d45d6877ffc81f4ca92d533da4c7c7e4af67319c9a",
-    "card": "addec4b5267d51a3141668ba44bf77198b525a133f248c8f8c887cff839c4bd9",
+    "card": "318e4c57d5eadd37dcee4d49cc8ecd581d86f09dcbe301e5f6c0ad7b1a77e767",
     "layer_intent": "994363267baca54da9658283f21856a1bf2194b123a8de91f262c767edc35491",
 }
 OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
 OUT_LANDING = STEP2 / "m13_v57_w3_chip_landing_rows.json"
 
-REVISION = "W3-CN.13"
+REVISION = "W3-CN.16"
 SCHEMA = 1
 STEP = 1.46
 LANE_LO = 33.3
@@ -187,7 +187,8 @@ def pol_off(f: dict, pol: str) -> float:
     return base if pol == "P" else -base
 
 
-def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict, coherent: dict = None) -> dict:
+def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict, coherent: dict = None,
+             lanes: dict = None) -> dict:
     """R1 逐帧混合（W3-C18）：帧的 (P,N) 相干集**非空** ⇒ 共线行构造（该帧 R1.5 交叉→0）；
     否则 ⇒ 基线吸附（不退化）。两法均为闭式/单遍 argmin，无试错/回溯。"""
     out, certs = {}, []
@@ -298,36 +299,61 @@ def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict, coherent: d
         for _pi in range(len(_fr["pages"])):
             _rank[_fr["pages"][_pi]] = _pi
     _placed = {}
-    for _pid, _a in sorted(out.items()):
-        _placed[_pid] = (_a["P_via"], _a["N_via"])
+    for _q0, _a0 in sorted(out.items()):
+        _placed[_q0] = (_a0["P_via"], _a0["N_via"])
+    # ROOT-17 (1)(3): per candidate, check via pairwise clearance (1) and escape-vertical no-overlap
+    # (3) against the OTHER already-placed pages.  Index rebuilt once per page (O(n) per page, tiny),
+    # candidate checks O(1) => total wall linear in the page count.  Closed-form, single pass.
+    def _mk_index(_exclude):
+        _vb, _esc = {}, {}
+        for _q, _a in _placed.items():
+            if _q == _exclude:
+                continue
+            for _pol, _xy in (("P", _a[0]), ("N", _a[1])):
+                _x, _y = _xy
+                _vb.setdefault(int(_x * 2.0), []).append((float(_x), float(_y)))
+                if lanes is not None:
+                    _ly = fp(lanes[_q]["lane_y"] + pol_off(facts[_q], _pol))
+                    _esc.setdefault(round(float(_x), 3), []).append((min(_y, _ly), max(_y, _ly)))
+        return _vb, _esc
+
+    def _vb_clear(_vb, _x, _y):
+        _b = int(_x * 2.0)
+        for _bb in (_b - 2, _b - 1, _b, _b + 1, _b + 2):   # bucket 0.5 wide => +-2 covers |dx|<=1.5
+            for _ox, _oy in _vb.get(_bb, ()):
+                if (_x - _ox) ** 2 + (_y - _oy) ** 2 < (VIA_VIA - TOL) ** 2:
+                    return False
+        return True
+
+    def _esc_ok(_esc, _vx, _vy, _ly):
+        if lanes is None:
+            return True
+        _lo, _hi = min(_vy, _ly), max(_vy, _ly)
+        for _olo, _ohi in _esc.get(round(float(_vx), 3), ()):
+            if min(_hi, _ohi) - max(_lo, _olo) > 1e-6:
+                return False
+        return True
     for _pid in sorted(facts, key=lambda p: (facts[p]["corridor"], facts[p]["conn_ref"],
                                              facts[p]["band"], _rank.get(p, 0), p)):
         _f = facts[_pid]
         _rows = _pdm.get(_pid, {}).get("pair_rows", [])
         if not _rows:
             continue
-        _sgn = 1.0 if (_rank.get(_pid, 0) % 2 == 0) else -1.0
-        _tP = _f["pad"]["P"][0] + _sgn * 0.6
-        _tN = _f["pad"]["N"][0] + _sgn * 1.2
+        # ROOT-17 (1): pad-aligned (near-vertical) breakout => monotone by pad order, planar fan
+        _tP = _f["pad"]["P"][0]
+        _tN = _f["pad"]["N"][0]
         _best = None
+        _vb, _esc = _mk_index(_pid)
         for _rr in _rows:
             _px = float(_rr[0]); _nx = float(_rr[1]); _py = float(_rr[2]); _ny = float(_rr[3]); _dd = float(_rr[4])
             if _dd < VIA_VIA - TOL or abs(_px - _nx) < STAGGER - TOL:
                 continue
-            _clear = True
-            for _k3, _pv in _placed.items():
-                if _k3 == _pid:
+            if lanes is not None:
+                _lyp = fp(lanes[_pid]["lane_y"] + pol_off(_f, "P"))
+                _lyn = fp(lanes[_pid]["lane_y"] + pol_off(_f, "N"))
+                if not (_esc_ok(_esc, _px, _py, _lyp) and _esc_ok(_esc, _nx, _ny, _lyn)):
                     continue
-                for _pa in ((_px, _py), (_nx, _ny)):
-                    for _pb in _pv:
-                        if ((_pa[0] - _pb[0]) ** 2 + (_pa[1] - _pb[1]) ** 2) ** 0.5 < VIA_VIA - TOL:
-                            _clear = False
-                            break
-                    if not _clear:
-                        break
-                if not _clear:
-                    break
-            if not _clear:
+            if not (_vb_clear(_vb, _px, _py) and _vb_clear(_vb, _nx, _ny)):
                 continue
             _key = (round(abs(_px - _tP) + abs(_nx - _tN), 3), round(abs(_px - _f["pad"]["P"][0]) + abs(_nx - _f["pad"]["N"][0]), 3), _px, _nx)
             if _best is None or _key < _best[0]:
@@ -340,6 +366,7 @@ def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict, coherent: d
                      "frame": [_f["corridor"], _f["conn_ref"], _f["band"]],
                      "direction": "t2_clear", "mode": "t2_clear"}
         _placed[_pid] = ([fp(_px), fp(_py)], [fp(_nx), fp(_ny)])
+
     # ---- ROOT-15: a CONSTRUCTION_INFEASIBLE certificate asserts "this page could not be placed
     #      under this rule". Once the sequential pass *has* placed it, the certificate is stale and
     #      MUST be voided, otherwise verdict can never reach FEASIBLE_ALL while all predicates PASS.
@@ -727,7 +754,7 @@ def main(argv=None) -> int:
     _coh = dict(j.get("coherent_rows") or {})
     _pd2 = STEP2 / "m13_v57_f13_r1_pair_coupling_v1_2.json"
     _coh["pair_domain"] = json.load(_pd2.open())["pages"] if _pd2.exists() else {}
-    r1 = r1_place(facts, frs, j["pair_xorder"], j["verdict"], _coh)
+    r1 = r1_place(facts, frs, j["pair_xorder"], j["verdict"], _coh, lanes)
     r3 = r3_place(j["r3_gaps"], lanes, args.r3_order)
     rfc = refclk_place(j["manifest"], j["w0r_model"])
 
