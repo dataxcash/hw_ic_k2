@@ -1,0 +1,3206 @@
+{
+ "artifact": "m13_v57_big_w0r_corridor_model",
+ "certificates": [],
+ "corridors": {
+  "EAST_CHIP_TO_J2": {
+   "blocked_component_projections": [],
+   "data_bands": {
+    "dn": {
+     "candidate_spans": [
+      [
+       33.3,
+       78.7
+      ]
+     ],
+     "centre_span_needed_mm": 10.22,
+     "feasible": true,
+     "n_pairs": 8,
+     "page_ids": [
+      "PCIE_DN0/input",
+      "PCIE_DN1/input",
+      "PCIE_DN2/input",
+      "PCIE_DN3/input",
+      "PCIE_DN4/input",
+      "PCIE_DN5/input",
+      "PCIE_DN6/input",
+      "PCIE_DN7/input"
+     ]
+    },
+    "up": {
+     "candidate_spans": [
+      [
+       33.3,
+       78.7
+      ]
+     ],
+     "centre_span_needed_mm": 10.22,
+     "feasible": true,
+     "n_pairs": 8,
+     "page_ids": [
+      "PCIE_UP0/out_J2",
+      "PCIE_UP1/out_J2",
+      "PCIE_UP2/out_J2",
+      "PCIE_UP3/out_J2",
+      "PCIE_UP4/out_J2",
+      "PCIE_UP5/out_J2",
+      "PCIE_UP6/out_J2",
+      "PCIE_UP7/out_J2"
+     ]
+    }
+   },
+   "data_layer": "In2.Cu",
+   "joint_data_frame": {
+    "band_order": [
+     "up",
+     "dn"
+    ],
+    "candidate_spans": [
+     [
+      33.3,
+      78.7
+     ]
+    ],
+    "centre_span_needed_mm": 21.9,
+    "feasible": true,
+    "n_pairs": 16
+   },
+   "keepout_application": {
+    "component_body_clearance_mm": 0.175,
+    "m3_holes_present": false,
+    "m3_projected": false
+   },
+   "projection_evidence": {
+    "claim": "blocked_component_projections is a real enumeration result, not an empty default (W0R-G3)",
+    "endpoint_overlaps": [
+     {
+      "bbox": [
+       132.0,
+       42.725,
+       135.65,
+       64.675
+      ],
+      "endpoint_excluded": true,
+      "kind": "pad_field",
+      "overhang_mm": 0.65,
+      "pad_extent_x": [
+       132.0,
+       135.65
+      ],
+      "ref": "J2",
+      "slab_pad_free": false,
+      "slab_x": [
+       132.0,
+       132.65
+      ]
+     },
+     {
+      "bbox": [
+       82.0,
+       48.85,
+       105.6,
+       58.55
+      ],
+      "endpoint_excluded": true,
+      "kind": "courtyard_only_pad_free",
+      "overhang_mm": 0.35,
+      "pad_extent_x": [
+       82.6,
+       104.84
+      ],
+      "ref": "U6",
+      "slab_pad_free": true,
+      "slab_x": [
+       105.25,
+       105.6
+      ]
+     }
+    ],
+    "enumeration": {
+     "checked": [
+      {
+       "at": [
+        28.5,
+        47.0,
+        0.0
+       ],
+       "bbox": [
+        27.75,
+        46.65,
+        29.25,
+        47.35
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0402_1005Metric",
+       "ref": "C73",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        91.0,
+        40.0,
+        0.0
+       ],
+       "bbox": [
+        90.45,
+        39.75,
+        91.55,
+        40.25
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0402_1005Metric",
+       "ref": "C74",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        91.0,
+        41.0,
+        0.0
+       ],
+       "bbox": [
+        90.45,
+        40.75,
+        91.55,
+        41.25
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0402_1005Metric",
+       "ref": "C75",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        91.0,
+        42.0,
+        0.0
+       ],
+       "bbox": [
+        90.45,
+        41.75,
+        91.55,
+        42.25
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0402_1005Metric",
+       "ref": "C76",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        91.0,
+        43.0,
+        0.0
+       ],
+       "bbox": [
+        90.45,
+        42.75,
+        91.55,
+        43.25
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0402_1005Metric",
+       "ref": "C77",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        91.0,
+        38.5,
+        0.0
+       ],
+       "bbox": [
+        90.25,
+        38.15,
+        91.75,
+        38.85
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0603_1608Metric",
+       "ref": "C78",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        91.0,
+        61.0,
+        0.0
+       ],
+       "bbox": [
+        90.45,
+        60.75,
+        91.55,
+        61.25
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0402_1005Metric",
+       "ref": "C79",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        91.0,
+        59.0,
+        0.0
+       ],
+       "bbox": [
+        90.45,
+        58.75,
+        91.55,
+        59.25
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0402_1005Metric",
+       "ref": "C80",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        91.0,
+        60.0,
+        0.0
+       ],
+       "bbox": [
+        90.45,
+        59.75,
+        91.55,
+        60.25
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0402_1005Metric",
+       "ref": "C81",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        91.0,
+        64.0,
+        0.0
+       ],
+       "bbox": [
+        90.45,
+        63.75,
+        91.55,
+        64.25
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0402_1005Metric",
+       "ref": "C82",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        91.0,
+        62.0,
+        0.0
+       ],
+       "bbox": [
+        90.25,
+        61.65,
+        91.75,
+        62.35
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0603_1608Metric",
+       "ref": "C83",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        44.0,
+        40.0,
+        0.0
+       ],
+       "bbox": [
+        43.0,
+        39.55,
+        45.0,
+        40.45
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0805_2012Metric",
+       "ref": "C84",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        31.5,
+        54.5,
+        0.0
+       ],
+       "bbox": [
+        30.95,
+        54.25,
+        32.05,
+        54.75
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0402_1005Metric",
+       "ref": "C85",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        31.5,
+        56.0,
+        0.0
+       ],
+       "bbox": [
+        30.75,
+        55.65,
+        32.25,
+        56.35
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0603_1608Metric",
+       "ref": "C86",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        44.0,
+        35.0,
+        0.0
+       ],
+       "bbox": [
+        43.45,
+        34.75,
+        44.55,
+        35.25
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0402_1005Metric",
+       "ref": "C87",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        29.5,
+        41.5,
+        0.0
+       ],
+       "bbox": [
+        28.75,
+        41.15,
+        30.25,
+        41.85
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0603_1608Metric",
+       "ref": "C88",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        44.0,
+        37.5,
+        0.0
+       ],
+       "bbox": [
+        43.25,
+        37.15,
+        44.75,
+        37.85
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0603_1608Metric",
+       "ref": "C89",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        30.0,
+        53.0,
+        0.0
+       ],
+       "bbox": [
+        29.45,
+        52.75,
+        30.55,
+        53.25
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0402_1005Metric",
+       "ref": "C90",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        48.5,
+        66.5,
+        0.0
+       ],
+       "bbox": [
+        47.75,
+        66.15,
+        49.25,
+        66.85
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "LED_SMD:LED_0603_1608Metric",
+       "ref": "D1",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        44.0,
+        60.0,
+        0.0
+       ],
+       "bbox": [
+        41.75,
+        57.645,
+        46.25,
+        62.355
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "ForgeOS:SOIC8_FRU",
+       "ref": "E2",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        26.5,
+        65.38,
+        90.0
+       ],
+       "disposition": "no projectable primitive (no fp_line/rect/poly, no pad) in frozen source; at-position recorded; x-distance to corridor range = 78.75 mm; cannot x-overlap under any body extent observed on this board",
+       "endpoint_excluded": false,
+       "geometry": "none",
+       "intruder": false,
+       "library": "ForgeOS:PinHeader_1x04",
+       "ref": "J11",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        26.5,
+        35.32,
+        90.0
+       ],
+       "disposition": "no projectable primitive (no fp_line/rect/poly, no pad) in frozen source; at-position recorded; x-distance to corridor range = 78.75 mm; cannot x-overlap under any body extent observed on this board",
+       "endpoint_excluded": false,
+       "geometry": "none",
+       "intruder": false,
+       "library": "ForgeOS:PinHeader_1x02",
+       "ref": "J12",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        26.5,
+        46.54,
+        90.0
+       ],
+       "disposition": "no projectable primitive (no fp_line/rect/poly, no pad) in frozen source; at-position recorded; x-distance to corridor range = 78.75 mm; cannot x-overlap under any body extent observed on this board",
+       "endpoint_excluded": false,
+       "geometry": "none",
+       "intruder": false,
+       "library": "ForgeOS:PinHeader_1x04",
+       "ref": "J13",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        133.825,
+        53.7,
+        0.0
+       ],
+       "bbox": [
+        132.0,
+        42.725,
+        135.65,
+        64.675
+       ],
+       "endpoint_excluded": true,
+       "geometry": "present",
+       "intruder": false,
+       "library": "ForgeOS:SlimSAS_x8_SFF-8654_74pin_RASide",
+       "ref": "J2",
+       "x_overlaps_corridor": true
+      },
+      {
+       "at": [
+        59.5,
+        44.5,
+        180.0
+       ],
+       "bbox": [
+        53.95,
+        42.9,
+        65.05,
+        46.1
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "ForgeOS:MCIO_4i_SFF-1016_RASide",
+       "ref": "J3",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        59.5,
+        62.7,
+        0.0
+       ],
+       "bbox": [
+        53.95,
+        61.1,
+        65.05,
+        64.3
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "ForgeOS:MCIO_4i_SFF-1016_RASide",
+       "ref": "J4",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        26.5,
+        39.66,
+        90.0
+       ],
+       "disposition": "no projectable primitive (no fp_line/rect/poly, no pad) in frozen source; at-position recorded; x-distance to corridor range = 78.75 mm; cannot x-overlap under any body extent observed on this board",
+       "endpoint_excluded": false,
+       "geometry": "none",
+       "intruder": false,
+       "library": "ForgeOS:PinHeader_1x02",
+       "ref": "J6",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        26.5,
+        55.96,
+        90.0
+       ],
+       "disposition": "no projectable primitive (no fp_line/rect/poly, no pad) in frozen source; at-position recorded; x-distance to corridor range = 78.75 mm; cannot x-overlap under any body extent observed on this board",
+       "endpoint_excluded": false,
+       "geometry": "none",
+       "intruder": false,
+       "library": "ForgeOS:PinHeader_1x04",
+       "ref": "J9",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        50.5,
+        37.0,
+        0.0
+       ],
+       "bbox": [
+        49.75,
+        36.65,
+        51.25,
+        37.35
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Resistor_SMD:R_0603_1608Metric",
+       "ref": "R1",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        45.5,
+        66.5,
+        0.0
+       ],
+       "bbox": [
+        44.75,
+        66.15,
+        46.25,
+        66.85
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Resistor_SMD:R_0603_1608Metric",
+       "ref": "R21",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        50.5,
+        41.0,
+        0.0
+       ],
+       "bbox": [
+        49.75,
+        40.65,
+        51.25,
+        41.35
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Resistor_SMD:R_0603_1608Metric",
+       "ref": "R28",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        53.5,
+        41.0,
+        0.0
+       ],
+       "bbox": [
+        52.75,
+        40.65,
+        54.25,
+        41.35
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Resistor_SMD:R_0603_1608Metric",
+       "ref": "R29",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        53.5,
+        37.0,
+        0.0
+       ],
+       "bbox": [
+        52.75,
+        36.65,
+        54.25,
+        37.35
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Resistor_SMD:R_0603_1608Metric",
+       "ref": "R3",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        55.5,
+        66.5,
+        0.0
+       ],
+       "bbox": [
+        54.75,
+        66.15,
+        56.25,
+        66.85
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Resistor_SMD:R_0603_1608Metric",
+       "ref": "R31",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        55.5,
+        67.5,
+        0.0
+       ],
+       "bbox": [
+        54.75,
+        67.15,
+        56.25,
+        67.85
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Resistor_SMD:R_0603_1608Metric",
+       "ref": "R32",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        55.5,
+        68.5,
+        0.0
+       ],
+       "bbox": [
+        54.75,
+        68.15,
+        56.25,
+        68.85
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Resistor_SMD:R_0603_1608Metric",
+       "ref": "R33",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        55.5,
+        69.5,
+        0.0
+       ],
+       "bbox": [
+        54.75,
+        69.15,
+        56.25,
+        69.85
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Resistor_SMD:R_0603_1608Metric",
+       "ref": "R34",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        36.0,
+        52.0,
+        0.0
+       ],
+       "bbox": [
+        33.05,
+        49.05,
+        38.95,
+        54.95
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "ForgeOS:MCU_STM32G0_LQFP48",
+       "ref": "U1",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        33.0,
+        37.0,
+        0.0
+       ],
+       "bbox": [
+        30.75,
+        34.645,
+        35.25,
+        39.355
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Package_SO:SOIC-8_5.3x5.3mm_P1.27mm",
+       "ref": "U2",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        40.0,
+        37.0,
+        0.0
+       ],
+       "bbox": [
+        38.75,
+        35.7,
+        41.25,
+        38.3
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "ForgeOS:SOT23_BAT54C",
+       "ref": "U4",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        44.5,
+        52.0,
+        0.0
+       ],
+       "bbox": [
+        42.95,
+        50.75,
+        46.05,
+        53.25
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "ForgeOS:OPTO_LTV356T",
+       "ref": "U5",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        93.8,
+        53.7,
+        90.0
+       ],
+       "bbox": [
+        82.0,
+        48.85,
+        105.6,
+        58.55
+       ],
+       "endpoint_excluded": true,
+       "geometry": "present",
+       "intruder": false,
+       "library": "DS320PR1601",
+       "ref": "U6",
+       "x_overlaps_corridor": true
+      }
+     ],
+     "footprints_total": 42,
+     "with_geometry": 37,
+     "without_geometry": [
+      {
+       "at": [
+        26.5,
+        65.38,
+        90.0
+       ],
+       "library": "ForgeOS:PinHeader_1x04",
+       "ref": "J11"
+      },
+      {
+       "at": [
+        26.5,
+        35.32,
+        90.0
+       ],
+       "library": "ForgeOS:PinHeader_1x02",
+       "ref": "J12"
+      },
+      {
+       "at": [
+        26.5,
+        46.54,
+        90.0
+       ],
+       "library": "ForgeOS:PinHeader_1x04",
+       "ref": "J13"
+      },
+      {
+       "at": [
+        26.5,
+        39.66,
+        90.0
+       ],
+       "library": "ForgeOS:PinHeader_1x02",
+       "ref": "J6"
+      },
+      {
+       "at": [
+        26.5,
+        55.96,
+        90.0
+       ],
+       "library": "ForgeOS:PinHeader_1x04",
+       "ref": "J9"
+      }
+     ]
+    },
+    "predicate": {
+     "bbox_construction": "footprint fp_line/fp_rect/fp_poly vertices + pad rectangles transformed by (at x y rot), KiCad clockwise rotation; body proxy = graphics+pads union (accepted W0-R semantics)",
+     "endpoint_exclusion_rationale": "corridor longitudinal endpoints: lane rows terminate on their pads; boundary pad fields / courtyard overhangs are quantified under refclk_resource_domain.conflicting_resources and inherited by W2 connector columns + R3/R4 landing rows",
+     "endpoint_exclusions": [
+      "J2",
+      "J3",
+      "J4",
+      "U6"
+     ],
+     "intruder_iff": "STRICT x-overlap (bbox_x0 < corridor_x1 AND bbox_x1 > corridor_x0) AND ref NOT IN endpoint_exclusions; intruder y-projection inflated by body_clearance_mm",
+     "primitive_coverage": {
+      "fp_circle_or_arc_primitives_in_source": 0
+     },
+     "y_inflation_application": "applied to actual intruders only (none in either corridor); endpoint slabs are recorded un-inflated here and keepout-inflated inside refclk_passage_witness",
+     "y_inflation_mm": 0.175
+    },
+    "result": {
+     "census_agrees_with_subtraction_input": true,
+     "empty_justification": "All 42 footprints of the frozen placement source were enumerated (37 with projectable geometry, 5 geometry-less listed individually with at-positions). Strict x-overlap set = ['J2@[132.0, 132.65]', 'U6@[105.25, 105.6]']. Every x-overlapping footprint is a corridor endpoint under the frozen exclusion set ['J2', 'J3', 'J4', 'U6']; non-endpoint overlaps = 0. Therefore blocked_component_projections == [] is the genuine result of enumeration + subtraction, not an empty default.",
+     "intruder_count": 0,
+     "non_empty_detail": null
+    },
+    "source": {
+     "file": "k2_v4.kicad_pcb",
+     "note": "identical fingerprint to inputs_sha256.board",
+     "sha256": "f6273de613f43d05555d12d6c3492b1e70f383761d8db5121f12b2ca0695af9a"
+    }
+   },
+   "refclk_resource_domain": {
+    "anchor_side_rule": "conn2 (J2 face; J2 west pad column x=132.65 = corridor east bound)",
+    "anchors": [
+     {
+      "far_ref": "J3",
+      "far_y": [
+       45.75,
+       45.75
+      ],
+      "j2_y": [
+       45.9,
+       45.9
+      ],
+      "page_id": "PCIE_REFCLK0/input"
+     },
+     {
+      "far_ref": "J4",
+      "far_y": [
+       61.45,
+       61.45
+      ],
+      "j2_y": [
+       51.3,
+       51.3
+      ],
+      "page_id": "PCIE_REFCLK1/input"
+     }
+    ],
+    "available": {
+     "pairwise_separations": [
+      {
+       "ok": true,
+       "pages": [
+        "PCIE_REFCLK0/input",
+        "PCIE_REFCLK1/input"
+       ],
+       "required_mm": 1.46,
+       "separation_mm": 5.4
+      }
+     ],
+     "per_page_containment": [
+      {
+       "contained": true,
+       "containing_span": [
+        33.3,
+        78.7
+       ],
+       "page_id": "PCIE_REFCLK0/input",
+       "single_span_required": true
+      },
+      {
+       "contained": true,
+       "containing_span": [
+        33.3,
+        78.7
+       ],
+       "page_id": "PCIE_REFCLK1/input",
+       "single_span_required": true
+      }
+     ],
+     "row_band_capacity_note": "single span [33.3,78.7] admits 32 pitch rows >= 2 required",
+     "span_source": "same subtraction as the data layer: body blockers are layer-independent and non-endpoint intruders are zero (projection_evidence); F.Cu adds no declared blockers of its own (board copper is a declared non-input)",
+     "usable_y_spans_fcu_mm": [
+      [
+       33.3,
+       78.7
+      ]
+     ]
+    },
+    "certificate_form": "B1.5 (v1 \u00a76 item 4): quantitative conservation per page and per corridor",
+    "conflicting_resources": [
+     {
+      "class": "refclk_rows_same_corridor_same_layer",
+      "layer": "F.Cu",
+      "members": [
+       "PCIE_REFCLK0/input",
+       "PCIE_REFCLK1/input"
+      ],
+      "outcome": "DISJOINT",
+      "separations": [
+       {
+        "ok": true,
+        "pages": [
+         "PCIE_REFCLK0/input",
+         "PCIE_REFCLK1/input"
+        ],
+        "required_mm": 1.46,
+        "separation_mm": 5.4
+       }
+      ]
+     },
+     {
+      "class": "non_endpoint_body_projections",
+      "count": 0,
+      "evidence_ref": "projection_evidence (this corridor)",
+      "outcome": "NONE_IN_CORRIDOR"
+     },
+     {
+      "class": "m3_keepout",
+      "m3_holes_present": false,
+      "outcome": "ABSENT"
+     },
+     {
+      "authority": "drc_rules.json clearance.layer_interaction: elements interact only through a shared copper layer",
+      "class": "data_bands_cross_layer",
+      "data_layer": "In2.Cu",
+      "note": "all endpoint pads (U6 balls, J2/J3/J4) are SMD on F.Cu per the frozen board; any layer-transition via is R3/R4 construction, not a corridor row resource",
+      "outcome": "NO_SHARED_COPPER_LAYER",
+      "refclk_layer": "F.Cu"
+     },
+     {
+      "class": "endpoint_body_overhang",
+      "entries": [
+       {
+        "bbox": [
+         132.0,
+         42.725,
+         135.65,
+         64.675
+        ],
+        "endpoint_excluded": true,
+        "kind": "pad_field",
+        "overhang_mm": 0.65,
+        "pad_extent_x": [
+         132.0,
+         135.65
+        ],
+        "ref": "J2",
+        "slab_pad_free": false,
+        "slab_x": [
+         132.0,
+         132.65
+        ]
+       },
+       {
+        "bbox": [
+         82.0,
+         48.85,
+         105.6,
+         58.55
+        ],
+        "endpoint_excluded": true,
+        "kind": "courtyard_only_pad_free",
+        "overhang_mm": 0.35,
+        "pad_extent_x": [
+         82.6,
+         104.84
+        ],
+        "ref": "U6",
+        "slab_pad_free": true,
+        "slab_x": [
+         105.25,
+         105.6
+        ]
+       }
+      ],
+      "heir": "W2 connector columns + R3/R4 landing rows",
+      "outcome": "BOUNDARY_CONDITION_QUANTIFIED"
+     },
+     {
+      "band_neighbour_pads": {
+       "PCIE_REFCLK0/input": [
+        "9",
+        "11",
+        "13"
+       ],
+       "PCIE_REFCLK1/input": [
+        "27",
+        "29",
+        "31"
+       ]
+      },
+      "class": "connector_face_row_compression",
+      "clearance_ok": true,
+      "face_row_pitch_mm": 0.6,
+      "face_slice_x": [
+       132.0,
+       132.65
+      ],
+      "heir": "W2 + R3/R4",
+      "note": "the anchor pad is the page's own; band reservation applies to the lane run, rows compress to connector face pitch inside the face slice",
+      "outcome": "QUANTIFIED_OK",
+      "pad_size_mm": [
+       1.3,
+       0.35
+      ],
+      "required_clearance_mm": 0.175,
+      "row_copper_edge_to_neighbour_pad_mm": 0.323
+     },
+     {
+      "applies_to": "every page with an N anchor in the J2 east column \u2014 both REFCLK pages and all accepted data bands share this obligation",
+      "class": "connector_pad_field_transit_and_n_escape",
+      "connectors": [
+       "J2"
+      ],
+      "heir": "W2 (m13_v57_big_w2_connector_cols.json) + R3/R4",
+      "inter_column_gap_width_mm": 1.05,
+      "inter_column_gap_x": [
+       133.3,
+       134.35
+      ],
+      "inter_column_transit_ok": true,
+      "inter_pad_transit": "BLOCKED (window < single-trace transit requirement)",
+      "inter_pad_window_mm": 0.25,
+      "outcome": "DELEGATED_QUANTIFIED",
+      "single_trace_transit_required_mm": 0.555,
+      "vertical_bypass_windows_y": {
+       "above": [
+        64.953,
+        78.7
+       ],
+       "below": [
+        33.3,
+        42.447
+       ]
+      }
+     }
+    ],
+    "layer": "F.Cu",
+    "minimal_core": {
+     "members": [],
+     "semantics": "empty \u21d2 conservation satisfied: no unsatisfiable subset under the declared inputs; non-empty \u21d2 the canonical minimal set of row bands / separation pairs that cannot be granted simultaneously (v1 \u00a72 escalation invariant)"
+    },
+    "passage_witness_ref": "top-level refclk_passage_witness (the chip zone lies between the two corridors; the witness is inherently cross-corridor)",
+    "per_page_passage_status": {
+     "PCIE_REFCLK0/input": "WITNESSED",
+     "PCIE_REFCLK1/input": "WITNESSED"
+    },
+    "reason": "quantitative conservation per v1 \u00a76 item 4; F.Cu route/obstacle/return-path construction remains R3/R4 \u2014 W0-R claims resources and existence, never a route",
+    "required": {
+     "band_pitch_mm": 1.46,
+     "pair_copper_extent_mm": 0.585,
+     "per_page": [
+      {
+       "anchor_dy_mm": 0.0,
+       "anchor_pads": {
+        "N": {
+         "net": "PCIE_REFCLK0_N",
+         "pad_num": "12",
+         "x": 135.0,
+         "y": 45.9
+        },
+        "P": {
+         "net": "PCIE_REFCLK0_P",
+         "pad_num": "11",
+         "x": 132.65,
+         "y": 45.9
+        }
+       },
+       "anchor_ref": "J2",
+       "anchor_side_key": "conn2",
+       "band_centre_y": 45.9,
+       "band_y": [
+        45.17,
+        46.63
+       ],
+       "containment": {
+        "contained": true,
+        "containing_span": [
+         33.3,
+         78.7
+        ],
+        "single_span_required": true
+       },
+       "copper_y": [
+        45.608,
+        46.193
+       ],
+       "manifest_corridor_id": "EAST+WEST_CHIP_TO_CONN",
+       "page_id": "PCIE_REFCLK0/input"
+      },
+      {
+       "anchor_dy_mm": 0.0,
+       "anchor_pads": {
+        "N": {
+         "net": "PCIE_REFCLK1_N",
+         "pad_num": "30",
+         "x": 135.0,
+         "y": 51.3
+        },
+        "P": {
+         "net": "PCIE_REFCLK1_P",
+         "pad_num": "29",
+         "x": 132.65,
+         "y": 51.3
+        }
+       },
+       "anchor_ref": "J2",
+       "anchor_side_key": "conn2",
+       "band_centre_y": 51.3,
+       "band_y": [
+        50.57,
+        52.03
+       ],
+       "containment": {
+        "contained": true,
+        "containing_span": [
+         33.3,
+         78.7
+        ],
+        "single_span_required": true
+       },
+       "copper_y": [
+        51.008,
+        51.593
+       ],
+       "manifest_corridor_id": "EAST+WEST_CHIP_TO_CONN",
+       "page_id": "PCIE_REFCLK1/input"
+      }
+     ],
+     "rows": 2,
+     "unit": "pair_row_band (one reserved pitch slot per REFCLK page crossing this corridor x-range on F.Cu)"
+    },
+    "resource_kind": "conservation_certificate",
+    "separate_from_data_layer": "In2.Cu",
+    "shortage": {
+     "containment_violations": 0,
+     "detail": [],
+     "passage_witness": "see top-level refclk_passage_witness",
+     "separation_violations": 0,
+     "unsatisfied_rows": 0
+    },
+    "status": "SATISFIED",
+    "x_range": [
+     105.25,
+     132.65
+    ]
+   },
+   "usable_y_spans": [
+    [
+     33.3,
+     78.7
+    ]
+   ],
+   "x_range": [
+    105.25,
+    132.65
+   ]
+  },
+  "WEST_MCIO_TO_CHIP": {
+   "blocked_component_projections": [],
+   "data_bands": {
+    "dn": {
+     "candidate_spans": [
+      [
+       33.3,
+       78.7
+      ]
+     ],
+     "centre_span_needed_mm": 10.22,
+     "feasible": true,
+     "n_pairs": 8,
+     "page_ids": [
+      "PCIE_DN0/out_MCIO",
+      "PCIE_DN1/out_MCIO",
+      "PCIE_DN2/out_MCIO",
+      "PCIE_DN3/out_MCIO",
+      "PCIE_DN4/out_MCIO",
+      "PCIE_DN5/out_MCIO",
+      "PCIE_DN6/out_MCIO",
+      "PCIE_DN7/out_MCIO"
+     ]
+    },
+    "up": {
+     "candidate_spans": [
+      [
+       33.3,
+       78.7
+      ]
+     ],
+     "centre_span_needed_mm": 10.22,
+     "feasible": true,
+     "n_pairs": 8,
+     "page_ids": [
+      "PCIE_UP0/input",
+      "PCIE_UP1/input",
+      "PCIE_UP2/input",
+      "PCIE_UP3/input",
+      "PCIE_UP4/input",
+      "PCIE_UP5/input",
+      "PCIE_UP6/input",
+      "PCIE_UP7/input"
+     ]
+    }
+   },
+   "data_layer": "In2.Cu",
+   "joint_data_frame": {
+    "band_order": [
+     "up",
+     "dn"
+    ],
+    "candidate_spans": [
+     [
+      33.3,
+      78.7
+     ]
+    ],
+    "centre_span_needed_mm": 21.9,
+    "feasible": true,
+    "n_pairs": 16
+   },
+   "keepout_application": {
+    "component_body_clearance_mm": 0.175,
+    "m3_holes_present": false,
+    "m3_projected": false
+   },
+   "projection_evidence": {
+    "claim": "blocked_component_projections is a real enumeration result, not an empty default (W0R-G3)",
+    "endpoint_overlaps": [
+     {
+      "bbox": [
+       82.0,
+       48.85,
+       105.6,
+       58.55
+      ],
+      "endpoint_excluded": true,
+      "kind": "courtyard_only_pad_free",
+      "overhang_mm": 0.35,
+      "pad_extent_x": [
+       82.6,
+       104.84
+      ],
+      "ref": "U6",
+      "slab_pad_free": true,
+      "slab_x": [
+       82.0,
+       82.35
+      ]
+     }
+    ],
+    "enumeration": {
+     "checked": [
+      {
+       "at": [
+        28.5,
+        47.0,
+        0.0
+       ],
+       "bbox": [
+        27.75,
+        46.65,
+        29.25,
+        47.35
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0402_1005Metric",
+       "ref": "C73",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        91.0,
+        40.0,
+        0.0
+       ],
+       "bbox": [
+        90.45,
+        39.75,
+        91.55,
+        40.25
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0402_1005Metric",
+       "ref": "C74",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        91.0,
+        41.0,
+        0.0
+       ],
+       "bbox": [
+        90.45,
+        40.75,
+        91.55,
+        41.25
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0402_1005Metric",
+       "ref": "C75",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        91.0,
+        42.0,
+        0.0
+       ],
+       "bbox": [
+        90.45,
+        41.75,
+        91.55,
+        42.25
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0402_1005Metric",
+       "ref": "C76",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        91.0,
+        43.0,
+        0.0
+       ],
+       "bbox": [
+        90.45,
+        42.75,
+        91.55,
+        43.25
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0402_1005Metric",
+       "ref": "C77",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        91.0,
+        38.5,
+        0.0
+       ],
+       "bbox": [
+        90.25,
+        38.15,
+        91.75,
+        38.85
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0603_1608Metric",
+       "ref": "C78",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        91.0,
+        61.0,
+        0.0
+       ],
+       "bbox": [
+        90.45,
+        60.75,
+        91.55,
+        61.25
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0402_1005Metric",
+       "ref": "C79",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        91.0,
+        59.0,
+        0.0
+       ],
+       "bbox": [
+        90.45,
+        58.75,
+        91.55,
+        59.25
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0402_1005Metric",
+       "ref": "C80",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        91.0,
+        60.0,
+        0.0
+       ],
+       "bbox": [
+        90.45,
+        59.75,
+        91.55,
+        60.25
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0402_1005Metric",
+       "ref": "C81",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        91.0,
+        64.0,
+        0.0
+       ],
+       "bbox": [
+        90.45,
+        63.75,
+        91.55,
+        64.25
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0402_1005Metric",
+       "ref": "C82",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        91.0,
+        62.0,
+        0.0
+       ],
+       "bbox": [
+        90.25,
+        61.65,
+        91.75,
+        62.35
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0603_1608Metric",
+       "ref": "C83",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        44.0,
+        40.0,
+        0.0
+       ],
+       "bbox": [
+        43.0,
+        39.55,
+        45.0,
+        40.45
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0805_2012Metric",
+       "ref": "C84",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        31.5,
+        54.5,
+        0.0
+       ],
+       "bbox": [
+        30.95,
+        54.25,
+        32.05,
+        54.75
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0402_1005Metric",
+       "ref": "C85",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        31.5,
+        56.0,
+        0.0
+       ],
+       "bbox": [
+        30.75,
+        55.65,
+        32.25,
+        56.35
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0603_1608Metric",
+       "ref": "C86",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        44.0,
+        35.0,
+        0.0
+       ],
+       "bbox": [
+        43.45,
+        34.75,
+        44.55,
+        35.25
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0402_1005Metric",
+       "ref": "C87",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        29.5,
+        41.5,
+        0.0
+       ],
+       "bbox": [
+        28.75,
+        41.15,
+        30.25,
+        41.85
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0603_1608Metric",
+       "ref": "C88",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        44.0,
+        37.5,
+        0.0
+       ],
+       "bbox": [
+        43.25,
+        37.15,
+        44.75,
+        37.85
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0603_1608Metric",
+       "ref": "C89",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        30.0,
+        53.0,
+        0.0
+       ],
+       "bbox": [
+        29.45,
+        52.75,
+        30.55,
+        53.25
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Capacitor_SMD:C_0402_1005Metric",
+       "ref": "C90",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        48.5,
+        66.5,
+        0.0
+       ],
+       "bbox": [
+        47.75,
+        66.15,
+        49.25,
+        66.85
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "LED_SMD:LED_0603_1608Metric",
+       "ref": "D1",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        44.0,
+        60.0,
+        0.0
+       ],
+       "bbox": [
+        41.75,
+        57.645,
+        46.25,
+        62.355
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "ForgeOS:SOIC8_FRU",
+       "ref": "E2",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        26.5,
+        65.38,
+        90.0
+       ],
+       "disposition": "no projectable primitive (no fp_line/rect/poly, no pad) in frozen source; at-position recorded; x-distance to corridor range = 38.55 mm; cannot x-overlap under any body extent observed on this board",
+       "endpoint_excluded": false,
+       "geometry": "none",
+       "intruder": false,
+       "library": "ForgeOS:PinHeader_1x04",
+       "ref": "J11",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        26.5,
+        35.32,
+        90.0
+       ],
+       "disposition": "no projectable primitive (no fp_line/rect/poly, no pad) in frozen source; at-position recorded; x-distance to corridor range = 38.55 mm; cannot x-overlap under any body extent observed on this board",
+       "endpoint_excluded": false,
+       "geometry": "none",
+       "intruder": false,
+       "library": "ForgeOS:PinHeader_1x02",
+       "ref": "J12",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        26.5,
+        46.54,
+        90.0
+       ],
+       "disposition": "no projectable primitive (no fp_line/rect/poly, no pad) in frozen source; at-position recorded; x-distance to corridor range = 38.55 mm; cannot x-overlap under any body extent observed on this board",
+       "endpoint_excluded": false,
+       "geometry": "none",
+       "intruder": false,
+       "library": "ForgeOS:PinHeader_1x04",
+       "ref": "J13",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        133.825,
+        53.7,
+        0.0
+       ],
+       "bbox": [
+        132.0,
+        42.725,
+        135.65,
+        64.675
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "ForgeOS:SlimSAS_x8_SFF-8654_74pin_RASide",
+       "ref": "J2",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        59.5,
+        44.5,
+        180.0
+       ],
+       "bbox": [
+        53.95,
+        42.9,
+        65.05,
+        46.1
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "ForgeOS:MCIO_4i_SFF-1016_RASide",
+       "ref": "J3",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        59.5,
+        62.7,
+        0.0
+       ],
+       "bbox": [
+        53.95,
+        61.1,
+        65.05,
+        64.3
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "ForgeOS:MCIO_4i_SFF-1016_RASide",
+       "ref": "J4",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        26.5,
+        39.66,
+        90.0
+       ],
+       "disposition": "no projectable primitive (no fp_line/rect/poly, no pad) in frozen source; at-position recorded; x-distance to corridor range = 38.55 mm; cannot x-overlap under any body extent observed on this board",
+       "endpoint_excluded": false,
+       "geometry": "none",
+       "intruder": false,
+       "library": "ForgeOS:PinHeader_1x02",
+       "ref": "J6",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        26.5,
+        55.96,
+        90.0
+       ],
+       "disposition": "no projectable primitive (no fp_line/rect/poly, no pad) in frozen source; at-position recorded; x-distance to corridor range = 38.55 mm; cannot x-overlap under any body extent observed on this board",
+       "endpoint_excluded": false,
+       "geometry": "none",
+       "intruder": false,
+       "library": "ForgeOS:PinHeader_1x04",
+       "ref": "J9",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        50.5,
+        37.0,
+        0.0
+       ],
+       "bbox": [
+        49.75,
+        36.65,
+        51.25,
+        37.35
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Resistor_SMD:R_0603_1608Metric",
+       "ref": "R1",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        45.5,
+        66.5,
+        0.0
+       ],
+       "bbox": [
+        44.75,
+        66.15,
+        46.25,
+        66.85
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Resistor_SMD:R_0603_1608Metric",
+       "ref": "R21",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        50.5,
+        41.0,
+        0.0
+       ],
+       "bbox": [
+        49.75,
+        40.65,
+        51.25,
+        41.35
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Resistor_SMD:R_0603_1608Metric",
+       "ref": "R28",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        53.5,
+        41.0,
+        0.0
+       ],
+       "bbox": [
+        52.75,
+        40.65,
+        54.25,
+        41.35
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Resistor_SMD:R_0603_1608Metric",
+       "ref": "R29",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        53.5,
+        37.0,
+        0.0
+       ],
+       "bbox": [
+        52.75,
+        36.65,
+        54.25,
+        37.35
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Resistor_SMD:R_0603_1608Metric",
+       "ref": "R3",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        55.5,
+        66.5,
+        0.0
+       ],
+       "bbox": [
+        54.75,
+        66.15,
+        56.25,
+        66.85
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Resistor_SMD:R_0603_1608Metric",
+       "ref": "R31",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        55.5,
+        67.5,
+        0.0
+       ],
+       "bbox": [
+        54.75,
+        67.15,
+        56.25,
+        67.85
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Resistor_SMD:R_0603_1608Metric",
+       "ref": "R32",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        55.5,
+        68.5,
+        0.0
+       ],
+       "bbox": [
+        54.75,
+        68.15,
+        56.25,
+        68.85
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Resistor_SMD:R_0603_1608Metric",
+       "ref": "R33",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        55.5,
+        69.5,
+        0.0
+       ],
+       "bbox": [
+        54.75,
+        69.15,
+        56.25,
+        69.85
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Resistor_SMD:R_0603_1608Metric",
+       "ref": "R34",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        36.0,
+        52.0,
+        0.0
+       ],
+       "bbox": [
+        33.05,
+        49.05,
+        38.95,
+        54.95
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "ForgeOS:MCU_STM32G0_LQFP48",
+       "ref": "U1",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        33.0,
+        37.0,
+        0.0
+       ],
+       "bbox": [
+        30.75,
+        34.645,
+        35.25,
+        39.355
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "Package_SO:SOIC-8_5.3x5.3mm_P1.27mm",
+       "ref": "U2",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        40.0,
+        37.0,
+        0.0
+       ],
+       "bbox": [
+        38.75,
+        35.7,
+        41.25,
+        38.3
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "ForgeOS:SOT23_BAT54C",
+       "ref": "U4",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        44.5,
+        52.0,
+        0.0
+       ],
+       "bbox": [
+        42.95,
+        50.75,
+        46.05,
+        53.25
+       ],
+       "endpoint_excluded": false,
+       "geometry": "present",
+       "intruder": false,
+       "library": "ForgeOS:OPTO_LTV356T",
+       "ref": "U5",
+       "x_overlaps_corridor": false
+      },
+      {
+       "at": [
+        93.8,
+        53.7,
+        90.0
+       ],
+       "bbox": [
+        82.0,
+        48.85,
+        105.6,
+        58.55
+       ],
+       "endpoint_excluded": true,
+       "geometry": "present",
+       "intruder": false,
+       "library": "DS320PR1601",
+       "ref": "U6",
+       "x_overlaps_corridor": true
+      }
+     ],
+     "footprints_total": 42,
+     "with_geometry": 37,
+     "without_geometry": [
+      {
+       "at": [
+        26.5,
+        65.38,
+        90.0
+       ],
+       "library": "ForgeOS:PinHeader_1x04",
+       "ref": "J11"
+      },
+      {
+       "at": [
+        26.5,
+        35.32,
+        90.0
+       ],
+       "library": "ForgeOS:PinHeader_1x02",
+       "ref": "J12"
+      },
+      {
+       "at": [
+        26.5,
+        46.54,
+        90.0
+       ],
+       "library": "ForgeOS:PinHeader_1x04",
+       "ref": "J13"
+      },
+      {
+       "at": [
+        26.5,
+        39.66,
+        90.0
+       ],
+       "library": "ForgeOS:PinHeader_1x02",
+       "ref": "J6"
+      },
+      {
+       "at": [
+        26.5,
+        55.96,
+        90.0
+       ],
+       "library": "ForgeOS:PinHeader_1x04",
+       "ref": "J9"
+      }
+     ]
+    },
+    "predicate": {
+     "bbox_construction": "footprint fp_line/fp_rect/fp_poly vertices + pad rectangles transformed by (at x y rot), KiCad clockwise rotation; body proxy = graphics+pads union (accepted W0-R semantics)",
+     "endpoint_exclusion_rationale": "corridor longitudinal endpoints: lane rows terminate on their pads; boundary pad fields / courtyard overhangs are quantified under refclk_resource_domain.conflicting_resources and inherited by W2 connector columns + R3/R4 landing rows",
+     "endpoint_exclusions": [
+      "J2",
+      "J3",
+      "J4",
+      "U6"
+     ],
+     "intruder_iff": "STRICT x-overlap (bbox_x0 < corridor_x1 AND bbox_x1 > corridor_x0) AND ref NOT IN endpoint_exclusions; intruder y-projection inflated by body_clearance_mm",
+     "primitive_coverage": {
+      "fp_circle_or_arc_primitives_in_source": 0
+     },
+     "y_inflation_application": "applied to actual intruders only (none in either corridor); endpoint slabs are recorded un-inflated here and keepout-inflated inside refclk_passage_witness",
+     "y_inflation_mm": 0.175
+    },
+    "result": {
+     "census_agrees_with_subtraction_input": true,
+     "empty_justification": "All 42 footprints of the frozen placement source were enumerated (37 with projectable geometry, 5 geometry-less listed individually with at-positions). Strict x-overlap set = ['U6@[82.0, 82.35]']. Every x-overlapping footprint is a corridor endpoint under the frozen exclusion set ['J2', 'J3', 'J4', 'U6']; non-endpoint overlaps = 0. Therefore blocked_component_projections == [] is the genuine result of enumeration + subtraction, not an empty default.",
+     "intruder_count": 0,
+     "non_empty_detail": null
+    },
+    "source": {
+     "file": "k2_v4.kicad_pcb",
+     "note": "identical fingerprint to inputs_sha256.board",
+     "sha256": "f6273de613f43d05555d12d6c3492b1e70f383761d8db5121f12b2ca0695af9a"
+    }
+   },
+   "refclk_resource_domain": {
+    "anchor_side_rule": "conn (J3/J4 face; courtyard east edge x=65.05 = corridor west bound)",
+    "anchors": [
+     {
+      "far_ref": "J3",
+      "far_y": [
+       45.75,
+       45.75
+      ],
+      "j2_y": [
+       45.9,
+       45.9
+      ],
+      "page_id": "PCIE_REFCLK0/input"
+     },
+     {
+      "far_ref": "J4",
+      "far_y": [
+       61.45,
+       61.45
+      ],
+      "j2_y": [
+       51.3,
+       51.3
+      ],
+      "page_id": "PCIE_REFCLK1/input"
+     }
+    ],
+    "available": {
+     "pairwise_separations": [
+      {
+       "ok": true,
+       "pages": [
+        "PCIE_REFCLK0/input",
+        "PCIE_REFCLK1/input"
+       ],
+       "required_mm": 1.46,
+       "separation_mm": 15.7
+      }
+     ],
+     "per_page_containment": [
+      {
+       "contained": true,
+       "containing_span": [
+        33.3,
+        78.7
+       ],
+       "page_id": "PCIE_REFCLK0/input",
+       "single_span_required": true
+      },
+      {
+       "contained": true,
+       "containing_span": [
+        33.3,
+        78.7
+       ],
+       "page_id": "PCIE_REFCLK1/input",
+       "single_span_required": true
+      }
+     ],
+     "row_band_capacity_note": "single span [33.3,78.7] admits 32 pitch rows >= 2 required",
+     "span_source": "same subtraction as the data layer: body blockers are layer-independent and non-endpoint intruders are zero (projection_evidence); F.Cu adds no declared blockers of its own (board copper is a declared non-input)",
+     "usable_y_spans_fcu_mm": [
+      [
+       33.3,
+       78.7
+      ]
+     ]
+    },
+    "certificate_form": "B1.5 (v1 \u00a76 item 4): quantitative conservation per page and per corridor",
+    "conflicting_resources": [
+     {
+      "class": "refclk_rows_same_corridor_same_layer",
+      "layer": "F.Cu",
+      "members": [
+       "PCIE_REFCLK0/input",
+       "PCIE_REFCLK1/input"
+      ],
+      "outcome": "DISJOINT",
+      "separations": [
+       {
+        "ok": true,
+        "pages": [
+         "PCIE_REFCLK0/input",
+         "PCIE_REFCLK1/input"
+        ],
+        "required_mm": 1.46,
+        "separation_mm": 15.7
+       }
+      ]
+     },
+     {
+      "class": "non_endpoint_body_projections",
+      "count": 0,
+      "evidence_ref": "projection_evidence (this corridor)",
+      "outcome": "NONE_IN_CORRIDOR"
+     },
+     {
+      "class": "m3_keepout",
+      "m3_holes_present": false,
+      "outcome": "ABSENT"
+     },
+     {
+      "authority": "drc_rules.json clearance.layer_interaction: elements interact only through a shared copper layer",
+      "class": "data_bands_cross_layer",
+      "data_layer": "In2.Cu",
+      "note": "all endpoint pads (U6 balls, J2/J3/J4) are SMD on F.Cu per the frozen board; any layer-transition via is R3/R4 construction, not a corridor row resource",
+      "outcome": "NO_SHARED_COPPER_LAYER",
+      "refclk_layer": "F.Cu"
+     },
+     {
+      "class": "endpoint_body_overhang",
+      "entries": [
+       {
+        "bbox": [
+         82.0,
+         48.85,
+         105.6,
+         58.55
+        ],
+        "endpoint_excluded": true,
+        "kind": "courtyard_only_pad_free",
+        "overhang_mm": 0.35,
+        "pad_extent_x": [
+         82.6,
+         104.84
+        ],
+        "ref": "U6",
+        "slab_pad_free": true,
+        "slab_x": [
+         82.0,
+         82.35
+        ]
+       }
+      ],
+      "heir": "W2 connector columns + R3/R4 landing rows",
+      "outcome": "BOUNDARY_CONDITION_QUANTIFIED"
+     },
+     {
+      "class": "connector_pad_field_transit_and_n_escape",
+      "connectors": [
+       "J3",
+       "J4"
+      ],
+      "heir": "W2 (m13_v57_big_w2_connector_cols.json) + R3/R4",
+      "note": "REFCLK anchors sit inside the J3/J4 SMD pad fields (pad extent reaches the corridor west boundary x=65.05 exactly, zero strict overlap); transit from anchor pads to the corridor crosses same-connector other-net pads and is delegated together with the accepted data bands",
+      "outcome": "DELEGATED_QUANTIFIED"
+     }
+    ],
+    "layer": "F.Cu",
+    "minimal_core": {
+     "members": [],
+     "semantics": "empty \u21d2 conservation satisfied: no unsatisfiable subset under the declared inputs; non-empty \u21d2 the canonical minimal set of row bands / separation pairs that cannot be granted simultaneously (v1 \u00a72 escalation invariant)"
+    },
+    "passage_witness_ref": "top-level refclk_passage_witness (the chip zone lies between the two corridors; the witness is inherently cross-corridor)",
+    "per_page_passage_status": {
+     "PCIE_REFCLK0/input": "WITNESSED",
+     "PCIE_REFCLK1/input": "WITNESSED"
+    },
+    "reason": "quantitative conservation per v1 \u00a76 item 4; F.Cu route/obstacle/return-path construction remains R3/R4 \u2014 W0-R claims resources and existence, never a route",
+    "required": {
+     "band_pitch_mm": 1.46,
+     "pair_copper_extent_mm": 0.585,
+     "per_page": [
+      {
+       "anchor_dy_mm": 0.0,
+       "anchor_pads": {
+        "N": {
+         "net": "PCIE_REFCLK0_N",
+         "pad_num": "A12",
+         "x": 58.3,
+         "y": 45.75
+        },
+        "P": {
+         "net": "PCIE_REFCLK0_P",
+         "pad_num": "A11",
+         "x": 58.9,
+         "y": 45.75
+        }
+       },
+       "anchor_ref": "J3",
+       "anchor_side_key": "conn",
+       "band_centre_y": 45.75,
+       "band_y": [
+        45.02,
+        46.48
+       ],
+       "containment": {
+        "contained": true,
+        "containing_span": [
+         33.3,
+         78.7
+        ],
+        "single_span_required": true
+       },
+       "copper_y": [
+        45.458,
+        46.042
+       ],
+       "manifest_corridor_id": "EAST+WEST_CHIP_TO_CONN",
+       "page_id": "PCIE_REFCLK0/input"
+      },
+      {
+       "anchor_dy_mm": 0.0,
+       "anchor_pads": {
+        "N": {
+         "net": "PCIE_REFCLK1_N",
+         "pad_num": "A12",
+         "x": 60.7,
+         "y": 61.45
+        },
+        "P": {
+         "net": "PCIE_REFCLK1_P",
+         "pad_num": "A11",
+         "x": 60.1,
+         "y": 61.45
+        }
+       },
+       "anchor_ref": "J4",
+       "anchor_side_key": "conn",
+       "band_centre_y": 61.45,
+       "band_y": [
+        60.72,
+        62.18
+       ],
+       "containment": {
+        "contained": true,
+        "containing_span": [
+         33.3,
+         78.7
+        ],
+        "single_span_required": true
+       },
+       "copper_y": [
+        61.157,
+        61.742
+       ],
+       "manifest_corridor_id": "EAST+WEST_CHIP_TO_CONN",
+       "page_id": "PCIE_REFCLK1/input"
+      }
+     ],
+     "rows": 2,
+     "unit": "pair_row_band (one reserved pitch slot per REFCLK page crossing this corridor x-range on F.Cu)"
+    },
+    "resource_kind": "conservation_certificate",
+    "separate_from_data_layer": "In2.Cu",
+    "shortage": {
+     "containment_violations": 0,
+     "detail": [],
+     "passage_witness": "see top-level refclk_passage_witness",
+     "separation_violations": 0,
+     "unsatisfied_rows": 0
+    },
+    "status": "SATISFIED",
+    "x_range": [
+     65.05,
+     82.35
+    ]
+   },
+   "usable_y_spans": [
+    [
+     33.3,
+     78.7
+    ]
+   ],
+   "x_range": [
+    65.05,
+    82.35
+   ]
+  }
+ },
+ "double_run_contract": "canonical JSON (sorted keys, trailing newline) must be byte-identical",
+ "evidence_protocol_v1_s3": {
+  "item1_schema_versions": "schema + revision + producer block (generator/validator tool paths, revisions, sha256 fingerprints)",
+  "item2_source_fingerprints_authority": "input envelope m13_v57_big_w0r_inputs.json: authority classification + inputs_sha256 (spec/board/manifest/rules), pinned here by input_artifact_sha256",
+  "item3_deterministic_status": "verdict: exactly one of B1.5 PASS / B1.5 INFEASIBLE_CERT; double_run_contract below",
+  "item4_demand_capacity_minimal_core": "data_bands + joint_data_frame (demand vs candidate spans); refclk_resource_domain.required/available/shortage/minimal_core per corridor; refclk_passage_witness (existence)",
+  "item5_legal_escape_hatches": "legal_escape_hatches (upstream input changes only) + certificates[].escape_hatches",
+  "item6_independent_validation": "m13_v57_big_w0r_validation.json produced by the separately implemented validator"
+ },
+ "input_artifact": "m13_v57_big_w0r_inputs.json",
+ "input_artifact_sha256": "4ca3e134407634dd8fb4fb396d35aebcbe2893c1548119566f0ff0913771eb17",
+ "legal_escape_hatches": {
+  "hatches": [
+   {
+    "change": "interface topology / netlist: REFCLK page count, endpoints or pass-through structure",
+    "target_layer": "L1"
+   },
+   {
+    "change": "corridor x-ranges (pending-L2 ruling constants), component placement or stackup layer assignment",
+    "target_layer": "L2"
+   },
+   {
+    "change": "introduce/move bodies or M3 mounting holes into corridor x-ranges or chip-zone passage channels",
+    "target_layer": "L2"
+   },
+   {
+    "change": "REFCLK resource-layer ruling (currently F.Cu, separate from the In2.Cu data layer)",
+    "target_layer": "L2"
+   }
+  ],
+  "principle": "escape hatches are upstream input changes only; downstream construction edits are never a legal hatch (v1 \u00a73 item 5)"
+ },
+ "producer": {
+  "generator": {
+   "path": "tools/p3_v57_big_w0r_corridor_model.py",
+   "revision": "W0R-FIX.1",
+   "sha256": "1283d2b68a5d3459436c922d5f2ecb9b2ae35c7979de7482598267f43585d31b"
+  },
+  "split": "the validator does not import this module; it re-parses the frozen sources and re-derives every claim independently",
+  "validator": {
+   "path": "tools/p3_v57_big_w0r_validator.py",
+   "revision": "W0R-FIX.1",
+   "sha256": "4b8b90dd618f1ee860cb5a15be55c9fa4c9ff575ef6e19a334955a2c34fcb8e8"
+  }
+ },
+ "refclk_passage_witness": {
+  "all_pages_witnessed": true,
+  "blockers": [
+   {
+    "bbox": [
+     90.45,
+     39.75,
+     91.55,
+     40.25
+    ],
+    "keepout_x": [
+     90.275,
+     91.725
+    ],
+    "keepout_y": [
+     39.575,
+     40.425
+    ],
+    "ref": "C74"
+   },
+   {
+    "bbox": [
+     90.45,
+     40.75,
+     91.55,
+     41.25
+    ],
+    "keepout_x": [
+     90.275,
+     91.725
+    ],
+    "keepout_y": [
+     40.575,
+     41.425
+    ],
+    "ref": "C75"
+   },
+   {
+    "bbox": [
+     90.45,
+     41.75,
+     91.55,
+     42.25
+    ],
+    "keepout_x": [
+     90.275,
+     91.725
+    ],
+    "keepout_y": [
+     41.575,
+     42.425
+    ],
+    "ref": "C76"
+   },
+   {
+    "bbox": [
+     90.45,
+     42.75,
+     91.55,
+     43.25
+    ],
+    "keepout_x": [
+     90.275,
+     91.725
+    ],
+    "keepout_y": [
+     42.575,
+     43.425
+    ],
+    "ref": "C77"
+   },
+   {
+    "bbox": [
+     90.25,
+     38.15,
+     91.75,
+     38.85
+    ],
+    "keepout_x": [
+     90.075,
+     91.925
+    ],
+    "keepout_y": [
+     37.975,
+     39.025
+    ],
+    "ref": "C78"
+   },
+   {
+    "bbox": [
+     90.45,
+     60.75,
+     91.55,
+     61.25
+    ],
+    "keepout_x": [
+     90.275,
+     91.725
+    ],
+    "keepout_y": [
+     60.575,
+     61.425
+    ],
+    "ref": "C79"
+   },
+   {
+    "bbox": [
+     90.45,
+     58.75,
+     91.55,
+     59.25
+    ],
+    "keepout_x": [
+     90.275,
+     91.725
+    ],
+    "keepout_y": [
+     58.575,
+     59.425
+    ],
+    "ref": "C80"
+   },
+   {
+    "bbox": [
+     90.45,
+     59.75,
+     91.55,
+     60.25
+    ],
+    "keepout_x": [
+     90.275,
+     91.725
+    ],
+    "keepout_y": [
+     59.575,
+     60.425
+    ],
+    "ref": "C81"
+   },
+   {
+    "bbox": [
+     90.45,
+     63.75,
+     91.55,
+     64.25
+    ],
+    "keepout_x": [
+     90.275,
+     91.725
+    ],
+    "keepout_y": [
+     63.575,
+     64.425
+    ],
+    "ref": "C82"
+   },
+   {
+    "bbox": [
+     90.25,
+     61.65,
+     91.75,
+     62.35
+    ],
+    "keepout_x": [
+     90.075,
+     91.925
+    ],
+    "keepout_y": [
+     61.475,
+     62.525
+    ],
+    "ref": "C83"
+   },
+   {
+    "bbox": [
+     82.0,
+     48.85,
+     105.6,
+     58.55
+    ],
+    "keepout_x": [
+     81.825,
+     105.775
+    ],
+    "keepout_y": [
+     48.675,
+     58.725
+    ],
+    "ref": "U6"
+   }
+  ],
+  "chip_zone_source": "x-gap between the two frozen corridor ranges: WEST_MCIO_TO_CHIP.hi -> EAST_CHIP_TO_J2.lo",
+  "chip_zone_x": [
+   82.35,
+   105.25
+  ],
+  "keepout_inflation_mm": 0.175,
+  "min_channel_height_mm": 0.585,
+  "pair_copper_extent_mm": 0.585,
+  "per_page": {
+   "PCIE_REFCLK0/input": {
+    "channel_y": [
+     43.425,
+     48.675
+    ],
+    "east_band_copper_y": [
+     45.608,
+     46.193
+    ],
+    "east_copper_contained": true,
+    "kind": "direct_channel",
+    "margins_mm": {
+     "east_copper_to_channel": [
+      2.183,
+      2.482
+     ],
+     "west_copper_to_channel": [
+      2.033,
+      2.632
+     ]
+    },
+    "note": "both corridor band coppers lie inside one chip-zone free channel chain; no detour required",
+    "status": "WITNESSED",
+    "west_band_copper_y": [
+     45.458,
+     46.042
+    ],
+    "west_copper_contained": true
+   },
+   "PCIE_REFCLK1/input": {
+    "alternative_windows_same_side": [
+     [
+      64.425,
+      78.7
+     ]
+    ],
+    "bounding_keepouts": [
+     "C82",
+     "C83"
+    ],
+    "chain_windows_y": [
+     [
+      58.725,
+      78.7
+     ],
+     [
+      62.525,
+      78.7
+     ],
+     [
+      62.525,
+      63.575
+     ],
+     [
+      62.525,
+      63.575
+     ],
+     [
+      62.525,
+      63.575
+     ]
+    ],
+    "coexistence_alternative": {
+     "coexistence_feasible_centre_windows_y": [
+      [
+       43.718,
+       44.29
+      ],
+      [
+       47.36,
+       48.383
+      ]
+     ],
+     "coexistence_rule": "centre separation >= 1.46 mm from every other REFCLK page band (both of its corridor centres)",
+     "crossing_free_rise_note": "crossing-free variant: stay in the channel west through the WEST corridor, rise west of the J3/J4 keepout x_lo minus copper half-extent, then J4 west-face pad-field transit (delegated W2/R3-R4)",
+     "crossing_free_rise_x_le": 53.483,
+     "kind": "coexistence_channel_detour",
+     "physical_channel_y": [
+      43.425,
+      48.675
+     ],
+     "status": "EXISTS_WITH_CONSTRAINT (not selected as primary)",
+     "west_rise_in_corridor_crossing": "FORBIDDEN: rising inside the WEST corridor crosses the other page's west row band on the same layer",
+     "west_rise_in_corridor_x": [
+      65.517,
+      81.532
+     ]
+    },
+    "entry": {
+     "free_y": [
+      [
+       33.3,
+       78.7
+      ]
+     ],
+     "from_band_centre_y": 51.3,
+     "via": "east_rise_column",
+     "x_centre_range": [
+      106.067,
+      131.532
+     ]
+    },
+    "exit": {
+     "descent_column_x": [
+      82.642,
+      89.782
+     ],
+     "descent_distance_mm": 0.782,
+     "mode": "descent_in_west_slice",
+     "to_band_centre_y": 61.45
+    },
+    "kind": "detour",
+    "min_required_height_mm": 0.585,
+    "pair_centre_window_y": [
+     62.818,
+     63.282
+    ],
+    "selection_rule": "minimal descent distance to the west band, tie-break lowest window; ordering is evidence only \u2014 construction choice belongs to W3/R3-R4",
+    "side": "north",
+    "status": "WITNESSED",
+    "traverse_window_y": [
+     62.525,
+     63.575
+    ],
+    "window_height_mm": 1.05
+   }
+  },
+  "sealed_or_merged_keepout_pairs": [
+   {
+    "gap_mm": 0.15,
+    "pair": [
+     "C74",
+     "C75"
+    ],
+    "reason": "gap < pair_copper_extent"
+   },
+   {
+    "gap_mm": 0.15,
+    "pair": [
+     "C75",
+     "C76"
+    ],
+    "reason": "gap < pair_copper_extent"
+   },
+   {
+    "gap_mm": 0.15,
+    "pair": [
+     "C76",
+     "C77"
+    ],
+    "reason": "gap < pair_copper_extent"
+   },
+   {
+    "gap_mm": 0.55,
+    "pair": [
+     "C78",
+     "C74"
+    ],
+    "reason": "gap < pair_copper_extent"
+   },
+   {
+    "gap_mm": 0.05,
+    "pair": [
+     "C79",
+     "C83"
+    ],
+    "reason": "gap < pair_copper_extent"
+   },
+   {
+    "gap_mm": 0.15,
+    "pair": [
+     "C80",
+     "C81"
+    ],
+    "reason": "gap < pair_copper_extent"
+   },
+   {
+    "gap_mm": 0.15,
+    "pair": [
+     "C81",
+     "C79"
+    ],
+    "reason": "gap < pair_copper_extent"
+   },
+   {
+    "gap_mm": -0.15,
+    "pair": [
+     "U6",
+     "C80"
+    ],
+    "reason": "keepouts overlap (negative gap)"
+   }
+  ],
+  "semantics": "existence proof (a feasibility verdict must carry a constructability guarantee); emits free windows only \u2014 NO route, NO assignment; construction and final window selection belong to W3/R3-R4",
+  "slices": [
+   {
+    "blockers": [
+     "U6"
+    ],
+    "free_channels_ge_extent": [
+     [
+      33.3,
+      48.675
+     ],
+     [
+      58.725,
+      78.7
+     ]
+    ],
+    "sealed_windows_lt_extent": [],
+    "x_range": [
+     82.35,
+     90.075
+    ]
+   },
+   {
+    "blockers": [
+     "C78",
+     "C83",
+     "U6"
+    ],
+    "free_channels_ge_extent": [
+     [
+      33.3,
+      37.975
+     ],
+     [
+      39.025,
+      48.675
+     ],
+     [
+      58.725,
+      61.475
+     ],
+     [
+      62.525,
+      78.7
+     ]
+    ],
+    "sealed_windows_lt_extent": [],
+    "x_range": [
+     90.075,
+     90.275
+    ]
+   },
+   {
+    "blockers": [
+     "C74",
+     "C75",
+     "C76",
+     "C77",
+     "C78",
+     "C79",
+     "C80",
+     "C81",
+     "C82",
+     "C83",
+     "U6"
+    ],
+    "free_channels_ge_extent": [
+     [
+      33.3,
+      37.975
+     ],
+     [
+      43.425,
+      48.675
+     ],
+     [
+      62.525,
+      63.575
+     ],
+     [
+      64.425,
+      78.7
+     ]
+    ],
+    "sealed_windows_lt_extent": [
+     [
+      39.025,
+      39.575
+     ],
+     [
+      40.425,
+      40.575
+     ],
+     [
+      41.425,
+      41.575
+     ],
+     [
+      42.425,
+      42.575
+     ],
+     [
+      59.425,
+      59.575
+     ],
+     [
+      60.425,
+      60.575
+     ],
+     [
+      61.425,
+      61.475
+     ]
+    ],
+    "x_range": [
+     90.275,
+     91.725
+    ]
+   },
+   {
+    "blockers": [
+     "C78",
+     "C83",
+     "U6"
+    ],
+    "free_channels_ge_extent": [
+     [
+      33.3,
+      37.975
+     ],
+     [
+      39.025,
+      48.675
+     ],
+     [
+      58.725,
+      61.475
+     ],
+     [
+      62.525,
+      78.7
+     ]
+    ],
+    "sealed_windows_lt_extent": [],
+    "x_range": [
+     91.725,
+     91.925
+    ]
+   },
+   {
+    "blockers": [
+     "U6"
+    ],
+    "free_channels_ge_extent": [
+     [
+      33.3,
+      48.675
+     ],
+     [
+      58.725,
+      78.7
+     ]
+    ],
+    "sealed_windows_lt_extent": [],
+    "x_range": [
+     91.925,
+     105.25
+    ]
+   }
+  ],
+  "transition_columns": {
+   "east_rise": {
+    "bounded_by": [
+     "U6 keepout east edge + copper half-extent",
+     "J2 pad-field keepout west edge - copper half-extent"
+    ],
+    "free_y": [
+     [
+      33.3,
+      78.7
+     ]
+    ],
+    "x_centre_range": [
+     106.067,
+     131.532
+    ]
+   },
+   "west_descent": {
+    "bounded_by": [
+     "chip-zone west boundary + copper half-extent",
+     "capacitor column keepout west edge - copper half-extent"
+    ],
+    "free_y_channels": [
+     [
+      33.3,
+      48.675
+     ],
+     [
+      58.725,
+      78.7
+     ]
+    ],
+    "x_centre_range": [
+     82.642,
+     89.782
+    ]
+   },
+   "west_rise_in_corridor": {
+    "caveat": "usable only when it does not cross another REFCLK page's west band (checked per page)",
+    "free_y": [
+     [
+      33.3,
+      78.7
+     ]
+    ],
+    "x_centre_range": [
+     65.517,
+     81.532
+    ]
+   }
+  },
+  "west_slice_channels": [
+   [
+    33.3,
+    48.675
+   ],
+   [
+    58.725,
+    78.7
+   ]
+  ]
+ },
+ "revision": "W0R-FIX.1",
+ "schema": 2,
+ "verdict": "B1.5 PASS",
+ "verdict_rule": {
+  "B1.5 INFEASIBLE_CERT": "otherwise; each certificate carries required/available/shortage/conflicts/canonical minimal core/escape hatches",
+  "B1.5 PASS": "certificates == [] AND every refclk_resource_domain.status == SATISFIED AND every data band/joint frame feasible",
+  "no_third_state": "any other value is invalid and keeps W0-R BLOCKED (v1 \u00a76)"
+ }
+}

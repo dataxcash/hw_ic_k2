@@ -1,0 +1,75 @@
+{
+ "artifact": "m13_v57_big_w0r_inputs",
+ "authority": {
+  "board_outline_stackup_constraints": "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json",
+  "endpoint_anchors": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_s1_page_manifest.json",
+  "placement_and_body_geometry": "k2_v4.kicad_pcb",
+  "rules": "_shared/eda_core/drc_rules.json"
+ },
+ "board": {
+  "inner_y": [
+   33.3,
+   78.7
+  ],
+  "outline_y": [
+   33.0,
+   79.0
+  ],
+  "stackup_layers": [
+   "F.Cu",
+   "In1.Cu",
+   "In2.Cu",
+   "In3.Cu",
+   "In4.Cu",
+   "B.Cu"
+  ]
+ },
+ "corridor_x_ranges_pending_l2_ruling": {
+  "EAST_CHIP_TO_J2": [
+   105.25,
+   132.65
+  ],
+  "WEST_MCIO_TO_CHIP": [
+   65.05,
+   82.35
+  ]
+ },
+ "explicit_non_inputs": [
+  "SPEC.corridors",
+  "board tracks",
+  "board vias",
+  "board zones",
+  "legacy lane books"
+ ],
+ "inputs_sha256": {
+  "board": "f6273de613f43d05555d12d6c3492b1e70f383761d8db5121f12b2ca0695af9a",
+  "manifest": "87c4c97378ff6f151fad214e6c63c64094f921fa5ab6f6cc0e269c3ac6c03360",
+  "rules": "0a459839e15960b8fbfe0e1f5bb154a02b30cbafa1cbb0d56c2b810a71228448",
+  "spec": "3bdecb10ab4747a9280131c89cb5a25b64466b62966b3354c4780c5fbf9a0d7a"
+ },
+ "keepouts": {
+  "m3_clearance_mm": 3.0,
+  "m3_holes_present": false,
+  "policy": "project a physical M3 primitive only when present; body projections always apply"
+ },
+ "rules": {
+  "body_clearance_mm": 0.175,
+  "edge_clearance_mm": 0.3,
+  "pair_pitch_mm": 1.46,
+  "rule_file_keys": [
+   "clearance",
+   "diff_pair",
+   "documentation",
+   "hole_clearance",
+   "manufacturing",
+   "rule_library",
+   "schema_version",
+   "solder_mask",
+   "sources",
+   "tracks_crossing",
+   "units",
+   "zone"
+  ]
+ },
+ "schema": 1
+}
