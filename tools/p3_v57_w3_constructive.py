@@ -58,7 +58,7 @@ FROZEN_SHA = {
 OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
 OUT_LANDING = STEP2 / "m13_v57_w3_chip_landing_rows.json"
 
-REVISION = "W3-CN.10"
+REVISION = "W3-CN.11"
 SCHEMA = 1
 STEP = 1.46
 LANE_LO = 33.3
@@ -466,9 +466,23 @@ def seg_cross(p, q, r, s) -> int:
     return int(((d1 > 0) != (d2 > 0)) and ((d3 > 0) != (d4 > 0)))
 
 
-def count_crossings(paths: dict) -> int:
-    """同层段对交叉计数（跨层由层分配隔离）；按类（R1.5 / connector stub）分列报告。"""
-    cls = {}
+def seg_overlap(p, q, r, s) -> int:
+    """同层共线重叠（异网铜搭接/短路）计 1；非共线返回 0。"""
+    def o(a, b, c):
+        return (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0])
+    if abs(o(p, q, r)) > 1e-6 or abs(o(p, q, s)) > 1e-6:
+        return 0
+    axis = 0 if abs(q[0] - p[0]) >= abs(q[1] - p[1]) else 1
+    lo1, hi1 = sorted((p[axis], q[axis]))
+    lo2, hi2 = sorted((r[axis], s[axis]))
+    return int(min(hi1, hi2) - max(lo1, lo2) > 1e-6)
+
+
+def count_crossings(paths: dict):
+    """同层异网段对**冲突**计数（跨层由层分配隔离）。返回 (cross, overlap) 两个按类字典：
+    cross = 真交叉（transversal）；overlap = 共线重叠（同层异网铜搭接 = 短路）。
+    同类同网（同一 base pid + 同一 pol）的相邻段不互比。"""
+    cross, over = {}, {}
     ids = sorted(paths)
     for a in range(len(ids)):
         for b in range(a + 1, len(ids)):
@@ -476,13 +490,17 @@ def count_crossings(paths: dict) -> int:
                 continue
             _na = ids[a][0] if isinstance(ids[a], tuple) else ids[a]
             _nb = ids[b][0] if isinstance(ids[b], tuple) else ids[b]
+            _pa = ids[a][1] if isinstance(ids[a], tuple) else ""
+            _pb = ids[b][1] if isinstance(ids[b], tuple) else ""
+            if _na.split("#")[0] == _nb.split("#")[0] and _pa == _pb:
+                continue                                    # same net: connected segments
             k = "stub" if ("#stub" in _na or "#stub" in _nb) else "r1_5"
             pa, pb = paths[ids[a]][1], paths[ids[b]][1]
             for s1 in zip(pa, pa[1:]):
                 for s2 in zip(pb, pb[1:]):
-                    n = seg_cross(s1[0], s1[1], s2[0], s2[1])
-                    cls[k] = cls.get(k, 0) + n
-    return cls
+                    cross[k] = cross.get(k, 0) + seg_cross(s1[0], s1[1], s2[0], s2[1])
+                    over[k] = over.get(k, 0) + seg_overlap(s1[0], s1[1], s2[0], s2[1])
+    return cross, over
 
 
 def resource_gate(facts: dict, spec: dict, rules: dict, intent: dict) -> dict:
@@ -770,13 +788,16 @@ def main(argv=None) -> int:
     for pid, f in facts.items():
         # ROOT-15 fix: R3 assignment keys are "<conn_ref>|<net>", NOT the page id; the previous
         # guard was always-true so the stub class was never populated (stub:0 was vacuous).
-        r3key = f["conn_ref"] + "|" + f["nets"]["P"]
-        if r3key not in r3["assignment"]:
-            continue
         cid = f["corridor"]
         ext = CORRIDOR[cid]["bounds"][1] if cid == "EAST_CHIP_TO_J2" else CORRIDOR[cid]["bounds"][0]
-        r3a = r3["assignment"][r3key]
+        a_pg = r1["assignment"].get(pid)
+        if not a_pg:
+            continue
         for pol in ("P", "N"):
+            r3key = f["conn_ref"] + "|" + f["nets"][pol]     # per-polarity R3 landing (P and N differ)
+            if r3key not in r3["assignment"]:
+                continue
+            r3a = r3["assignment"][r3key]
             off = pol_off(f, pol)
             ly = fp(lanes[pid]["lane_y"] + off)
             key = (pid, pol)
@@ -811,12 +832,12 @@ def main(argv=None) -> int:
     if shape != "t2":
         for k in ids_all:
             paths[k][0] = LAYER_PALETTE[col[k]]
-    cls = count_crossings(paths)
-    # C17 semantics: same_layer_crossings covers ALL same-layer classes (r1_5 AND connector stub);
-    # the per-class split is reported alongside.  (Previously the total silently took r1_5 only.)
-    r15_cross = cls.get("r1_5", 0)
-    stub_cross = cls.get("stub", 0)
-    crossings = r15_cross + stub_cross
+    cls, ovl = count_crossings(paths)
+    # C17 semantics: same_layer_crossings covers ALL same-layer classes (r1_5 AND connector stub) AND
+    # ALL conflict kinds (proper crossings AND collinear overlaps = same-layer shorts).
+    r15_cross = cls.get("r1_5", 0); stub_cross = cls.get("stub", 0)
+    r15_ovl = ovl.get("r1_5", 0); stub_ovl = ovl.get("stub", 0)
+    crossings = r15_cross + stub_cross + r15_ovl + stub_ovl
     cross_core = []
     ids_all = sorted(paths)
     for ai in range(len(ids_all)):
@@ -925,6 +946,7 @@ def main(argv=None) -> int:
     gate["informational_coarse_extent_overlap"] = gate.get("layer_demand_peak_overlap")
     gate["verification_check"] = {"same_layer_crossings": crossings,
                                   "crossings_by_class": {"r1_5": r15_cross, "stub": stub_cross},
+                                  "overlaps_by_class": {"r1_5": r15_ovl, "stub": stub_ovl},
                                   "r1_assigned": len(r1["assignment"]),
                                   "r1_required": len(facts),
                                   "capacity_ok": gate["lane_capacity"]["ok"],
@@ -974,7 +996,9 @@ def main(argv=None) -> int:
         a = r1["assignment"].get(pid)
         cid = f["corridor"]
         ent, ext = CORRIDOR[cid]["bounds"]
-        r3a = r3["assignment"].get(f["conn_ref"] + "|" + f["nets"]["P"])
+        r3_by_pol = {pol: r3["assignment"].get(f["conn_ref"] + "|" + f["nets"][pol])
+                     for pol in ("P", "N")}
+        r3a = r3_by_pol["P"]
         page = {"page_id": pid, "kind": "data", "side": f["side"], "corridor": cid,
                 "band": f["band"], "conn_ref": f["conn_ref"], "row_y": f["row_y"],
                 "chip_row_y": f["chip_row_y"],
@@ -996,10 +1020,15 @@ def main(argv=None) -> int:
                        "layer": glayer[f["corridor"] + "/" + f["band"]], "pol_offset_mm": POL_OFF},
                 "r3": None if not r3a else {"pad": r3a["pad"], "landing": r3a["landing"],
                                             "column_x": r3a["column_x"],
-                                            "layer_chain": ["F.Cu", "In2.Cu", "F.Cu"]},
+                                            "layer_chain": ["F.Cu", "B.Cu", "In2.Cu", "B.Cu", "F.Cu"]},
+                "r3_by_pol": {pol: (None if not r3_by_pol[pol] else
+                                    {"pad": r3_by_pol[pol]["pad"],
+                                     "landing": r3_by_pol[pol]["landing"],
+                                     "column_x": r3_by_pol[pol]["column_x"]}) for pol in ("P", "N")},
                 "vias": [], "nodes": {}}
-        if a and r3a and verdict == "FEASIBLE_ALL":
+        if a and all(r3_by_pol.values()) and verdict == "FEASIBLE_ALL":
             for pol in ("P", "N"):
+                r3a = r3_by_pol[pol]                         # per-polarity landing
                 off = pol_off(f, pol)
                 ly = fp(lanes[pid]["lane_y"] + off)
                 v1 = a[pol + "_via"]
@@ -1107,6 +1136,7 @@ def main(argv=None) -> int:
                      "band_layer_rule_legacy": glayer,
                      "crossings_same_layer": crossings,
                      "crossings_by_class": {"r1_5": r15_cross, "stub": stub_cross},
+                     "overlaps_by_class": {"r1_5": r15_ovl, "stub": stub_ovl},
                      "planarity_basis": "T-2 river: escape vertical (B.Cu) + corridor run (In2.Cu) + "
                                         "connector drop (B.Cu); same-layer segments are pairwise "
                                         "distinct-x (verticals) or distinct-y (horizontals) by "
