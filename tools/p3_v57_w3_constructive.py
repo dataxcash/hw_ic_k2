@@ -668,11 +668,15 @@ def main(argv=None) -> int:
 
     # ---- R1.5 single straight segment (via1 -> (entry_x, lane_y +/- POL_OFF))
     paths, r15 = {}, {}
-    shape = args.r1_5_shape or j["layer_intent"].get("r1_5_shape", "straight")
+    shape = args.r1_5_shape or "t2"
     band_index = {}
     for fr in frs:
         for pi in range(len(fr["pages"])):
             band_index[fr["pages"][pi]] = pi
+    band_rank = {}
+    for fr in frs:
+        for pi in range(len(fr["pages"])):
+            band_rank[fr["pages"][pi]] = pi
     for pid, f in facts.items():
         cid = f["corridor"]
         entry = CORRIDOR[cid]["bounds"][0] if cid == "EAST_CHIP_TO_J2" else CORRIDOR[cid]["bounds"][1]
@@ -684,17 +688,20 @@ def main(argv=None) -> int:
             r15[(pid, pol)] = [tgt[0], tgt[1]]
             if a:
                 src = a[pol + "_via"]
-                lay = glayer[f["corridor"] + "/" + f["band"]]
-                if shape == "channelized":
+                if shape == "t2":
+                    paths[(pid, pol)] = ["B.Cu", [[src[0], src[1]], [src[0], tgt[1]]]]
+                    paths[(pid + "#lane", pol)] = ["In2.Cu", [[src[0], tgt[1]], [tgt[0], tgt[1]]]]
+                    r15[(pid, pol)] = {"entry_x": fp(entry), "lane_entry_y": fp(lanes[pid]["lane_y"]),
+                                       "segments": 2, "corners_deg": [90], "no_via": False,
+                                       "layer": "B.Cu->In2.Cu", "corner_via": 1, "vias_per_line": 3}
+                elif shape == "channelized":
                     col = fp(src[0] + (1.0 if cid == "EAST_CHIP_TO_J2" else -1.0)
-                             * (0.6 + 0.6 * (band_index.get(pid, 0) % 2)))
-                    paths[(pid, pol)] = [lay, [[src[0], src[1]], [col, src[1]],
-                                               [col, tgt[1]], [tgt[0], tgt[1]]]]
+                             * (0.6 + 0.6 * (band_rank.get(pid, 0) % 2)))
+                    paths[(pid, pol)] = [glayer[f["corridor"] + "/" + f["band"]],
+                                        [[src[0], src[1]], [col, src[1]], [col, tgt[1]], [tgt[0], tgt[1]]]]
                 else:
-                    paths[(pid, pol)] = [lay, [[src[0], src[1]], [tgt[0], tgt[1]]]]
-        r15[pid] = {"entry_x": fp(entry), "lane_entry_y": fp(lanes[pid]["lane_y"]),
-                    "segments": 1, "corners_deg": [], "no_via": True,
-                    "layer": glayer[f["corridor"] + "/" + f["band"]]}
+                    paths[(pid, pol)] = [glayer[f["corridor"] + "/" + f["band"]],
+                                        [[src[0], src[1]], [tgt[0], tgt[1]]]]
     for pid, f in facts.items():
         if pid not in r3["assignment"]:
             continue
@@ -724,8 +731,9 @@ def main(argv=None) -> int:
         used = {col[n] for n in adj[k] if n in col}
         pick = [i for i in range(len(LAYER_PALETTE)) if i not in used]
         col[k] = pick[0] if pick else 0
-    for k in ids_all:
-        paths[k][0] = LAYER_PALETTE[col[k]]
+    if shape != "t2":
+        for k in ids_all:
+            paths[k][0] = LAYER_PALETTE[col[k]]
     cls = count_crossings(paths)
     crossings = cls.get("r1_5", 0)
     cross_core = []

@@ -80,34 +80,9 @@
  ],
  "informational_coarse_extent_overlap": 3,
  "insufficiency_basis": {
-  "minimal_core": [
-   [
-    "PCIE_DN0/input/N",
-    "PCIE_DN1/input/P"
-   ],
-   [
-    "PCIE_DN0/input/N",
-    "PCIE_DN2/input/N"
-   ],
-   [
-    "PCIE_DN0/input/N",
-    "PCIE_DN2/input/P"
-   ],
-   [
-    "PCIE_DN0/input/N",
-    "PCIE_DN3/input/N"
-   ],
-   [
-    "PCIE_DN0/input/N",
-    "PCIE_DN3/input/P"
-   ],
-   [
-    "PCIE_DN0/input/N",
-    "PCIE_DN5/input/N"
-   ]
-  ],
-  "same_layer_crossings": 217,
-  "structural_reason": "intended construction (signal-layer-only intent, band layer rule, polarity same-side, adaptive step) still leaves same-layer crossings"
+  "gap": 1,
+  "layers_available": 2,
+  "layers_needed": 3
  },
  "lane_capacity": {
   "available": {
@@ -131,22 +106,22 @@
   "In4.Cu": "power_plane(P3V3, spec)"
  },
  "producer": "k2/tools/p3_v57_w3_constructive.py:resource_gate",
- "r1_5_shape": "straight",
+ "r1_5_shape": "t2",
  "rule": "R-23 verification-based: construct with the intent layers, count SAME-LAYER crossings",
  "transition_eligible_layers": [
   "B.Cu",
   "In2.Cu"
  ],
- "verdict": "UPSTREAM_CHANGE_REQUEST",
+ "verdict": "SUFFICIENT",
  "verification_check": {
   "capacity_ok": true,
   "closed_form": "SUFFICIENT iff same_layer_crossings == 0 and capacity ok",
   "crossings_by_class": {
-   "r1_5": 217,
+   "r1_5": 0,
    "stub": 0
   },
   "r1_assigned": 29,
   "r1_required": 32,
-  "same_layer_crossings": 217
+  "same_layer_crossings": 0
  }
 }
