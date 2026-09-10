@@ -638,7 +638,7 @@ def main(argv=None) -> int:
     ap.add_argument("--enum-order", choices=["natural", "reverse", "hash"], default="natural")
     ap.add_argument("--scale", type=int, default=1)
     ap.add_argument("--r1-5-shape", default=None)
-    ap.add_argument("--r3-order", choices=["lane", "y"], default="lane")
+    ap.add_argument("--r3-order", choices=["lane", "y"], default="y")
     ap.add_argument("--out", default=None)
     ap.add_argument("--landing-out", default=None)
     ap.add_argument("--quiet", action="store_true")

@@ -77,138 +77,6 @@
    "scope_note": "本构造规则下不可行；非全局不可能性证明"
   },
   {
-   "closed_form_condition": "y_k = max(pad_y_k - 0.3, y_{k-1} + 0.6) in y_band",
-   "kind": "CONSTRUCTION_INFEASIBLE",
-   "layer": "R3_connector_escape_gap",
-   "observed": {
-    "gap_x": 131.65,
-    "pad_y": 45.9,
-    "prev_y": 64.2,
-    "ref": "J2",
-    "y_k": 64.8
-   },
-   "page_or_pad": "PCIE_REFCLK0_P",
-   "required": {
-    "step_mm": 0.6,
-    "y_band": [
-     45.6,
-     46.2
-    ]
-   },
-   "rule": "gap_column_prefix_recurrence",
-   "scope_note": "本构造规则下不可行；非全局不可能性证明"
-  },
-  {
-   "closed_form_condition": "y_k = max(pad_y_k - 0.3, y_{k-1} + 0.6) in y_band",
-   "kind": "CONSTRUCTION_INFEASIBLE",
-   "layer": "R3_connector_escape_gap",
-   "observed": {
-    "gap_x": 131.65,
-    "pad_y": 51.3,
-    "prev_y": 64.8,
-    "ref": "J2",
-    "y_k": 65.4
-   },
-   "page_or_pad": "PCIE_REFCLK1_P",
-   "required": {
-    "step_mm": 0.6,
-    "y_band": [
-     51.0,
-     51.6
-    ]
-   },
-   "rule": "gap_column_prefix_recurrence",
-   "scope_note": "本构造规则下不可行；非全局不可能性证明"
-  },
-  {
-   "closed_form_condition": "y_k = max(pad_y_k - 0.3, y_{k-1} + 0.6) in y_band",
-   "kind": "CONSTRUCTION_INFEASIBLE",
-   "layer": "R3_connector_escape_gap",
-   "observed": {
-    "gap_x": 133.825,
-    "pad_y": 45.9,
-    "prev_y": 63.6,
-    "ref": "J2",
-    "y_k": 64.2
-   },
-   "page_or_pad": "PCIE_REFCLK0_N",
-   "required": {
-    "step_mm": 0.6,
-    "y_band": [
-     45.6,
-     46.2
-    ]
-   },
-   "rule": "gap_column_prefix_recurrence",
-   "scope_note": "本构造规则下不可行；非全局不可能性证明"
-  },
-  {
-   "closed_form_condition": "y_k = max(pad_y_k - 0.3, y_{k-1} + 0.6) in y_band",
-   "kind": "CONSTRUCTION_INFEASIBLE",
-   "layer": "R3_connector_escape_gap",
-   "observed": {
-    "gap_x": 133.825,
-    "pad_y": 51.3,
-    "prev_y": 64.2,
-    "ref": "J2",
-    "y_k": 64.8
-   },
-   "page_or_pad": "PCIE_REFCLK1_N",
-   "required": {
-    "step_mm": 0.6,
-    "y_band": [
-     51.0,
-     51.6
-    ]
-   },
-   "rule": "gap_column_prefix_recurrence",
-   "scope_note": "本构造规则下不可行；非全局不可能性证明"
-  },
-  {
-   "closed_form_condition": "y_k = max(pad_y_k - 0.3, y_{k-1} + 0.6) in y_band",
-   "kind": "CONSTRUCTION_INFEASIBLE",
-   "layer": "R3_connector_escape_gap",
-   "observed": {
-    "gap_x": 58.6,
-    "pad_y": 61.45,
-    "prev_y": 63.65,
-    "ref": "J4",
-    "y_k": 64.25
-   },
-   "page_or_pad": "PCIE_REFCLK1_P",
-   "required": {
-    "step_mm": 0.6,
-    "y_band": [
-     60.2,
-     62.7
-    ]
-   },
-   "rule": "gap_column_prefix_recurrence",
-   "scope_note": "本构造规则下不可行；非全局不可能性证明"
-  },
-  {
-   "closed_form_condition": "y_k = max(pad_y_k - 0.3, y_{k-1} + 0.6) in y_band",
-   "kind": "CONSTRUCTION_INFEASIBLE",
-   "layer": "R3_connector_escape_gap",
-   "observed": {
-    "gap_x": 61.3,
-    "pad_y": 61.45,
-    "prev_y": 63.65,
-    "ref": "J4",
-    "y_k": 64.25
-   },
-   "page_or_pad": "PCIE_REFCLK1_N",
-   "required": {
-    "step_mm": 0.6,
-    "y_band": [
-     60.2,
-     62.7
-    ]
-   },
-   "rule": "gap_column_prefix_recurrence",
-   "scope_note": "本构造规则下不可行；非全局不可能性证明"
-  },
-  {
    "closed_form_condition": "realized |dx| >= 0.525 for every via pair after 0.05-grid snapping",
    "kind": "CONSTRUCTION_INFEASIBLE",
    "layer": "R1_chip_escape_column",
@@ -343,8 +211,7 @@
  "gate_status": {
   "failed": [
    "A-CN.1d",
-   "A-CN.1b",
-   "A-CN.3c"
+   "A-CN.1b"
   ],
   "predicates": {
    "A-CN.1a": "PASS",
@@ -355,7 +222,7 @@
    "A-CN.2b": "PASS",
    "A-CN.3a": "PASS",
    "A-CN.3b": "PASS",
-   "A-CN.3c": "FAIL",
+   "A-CN.3c": "PASS",
    "A-CN.4": "PASS",
    "A-CN.5a": "PASS",
    "A-CN.5b": "PASS",
@@ -1675,7 +1542,7 @@
      "kind": "refclk",
      "landing": [
       133.825,
-      64.2
+      45.6
      ],
      "pad": [
       135.0,
@@ -1700,7 +1567,7 @@
      "kind": "refclk",
      "landing": [
       131.65,
-      64.8
+      45.6
      ],
      "pad": [
       132.65,
@@ -1725,7 +1592,7 @@
      "kind": "refclk",
      "landing": [
       133.825,
-      64.8
+      51.0
      ],
      "pad": [
       135.0,
@@ -1750,7 +1617,7 @@
      "kind": "refclk",
      "landing": [
       131.65,
-      65.4
+      51.0
      ],
      "pad": [
       132.65,
@@ -2174,7 +2041,7 @@
      "kind": "data",
      "landing": [
       63.1,
-      46.05
+      45.45
      ],
      "pad": [
       63.7,
@@ -2246,7 +2113,7 @@
      "kind": "data",
      "landing": [
       63.1,
-      45.45
+      46.05
      ],
      "pad": [
       62.5,
@@ -2270,7 +2137,7 @@
      "kind": "data",
      "landing": [
       55.9,
-      46.05
+      45.45
      ],
      "pad": [
       56.5,
@@ -2342,7 +2209,7 @@
      "kind": "data",
      "landing": [
       55.9,
-      45.45
+      46.05
      ],
      "pad": [
       55.3,
@@ -2414,7 +2281,7 @@
      "kind": "data",
      "landing": [
       63.1,
-      43.55
+      42.95
      ],
      "pad": [
       63.7,
@@ -2486,7 +2353,7 @@
      "kind": "data",
      "landing": [
       63.1,
-      42.95
+      43.55
      ],
      "pad": [
       62.5,
@@ -2510,7 +2377,7 @@
      "kind": "data",
      "landing": [
       55.9,
-      43.55
+      42.95
      ],
      "pad": [
       56.5,
@@ -2582,7 +2449,7 @@
      "kind": "data",
      "landing": [
       55.9,
-      42.95
+      43.55
      ],
      "pad": [
       55.3,
@@ -2798,7 +2665,7 @@
      "kind": "refclk",
      "landing": [
       61.3,
-      64.25
+      61.75
      ],
      "pad": [
       60.7,
@@ -2822,7 +2689,7 @@
      "kind": "refclk",
      "landing": [
       58.6,
-      64.25
+      61.75
      ],
      "pad": [
       60.1,
@@ -3032,7 +2899,7 @@
     }
    },
    "method": "gap_column_prefix_recurrence",
-   "status": "CERTIFICATE"
+   "status": "FEASIBLE"
   },
   "REFCLK": {
    "assignment": {
@@ -3461,7 +3328,7 @@
     "column_x": 63.1,
     "landing": [
      63.1,
-     45.45
+     46.05
     ],
     "layer_chain": [
      "F.Cu",
@@ -3761,7 +3628,7 @@
     "column_x": 55.9,
     "landing": [
      55.9,
-     45.45
+     46.05
     ],
     "layer_chain": [
      "F.Cu",
@@ -4536,7 +4403,7 @@
     "column_x": 63.1,
     "landing": [
      63.1,
-     42.95
+     43.55
     ],
     "layer_chain": [
      "F.Cu",
@@ -4836,7 +4703,7 @@
     "column_x": 55.9,
     "landing": [
      55.9,
-     42.95
+     43.55
     ],
     "layer_chain": [
      "F.Cu",
