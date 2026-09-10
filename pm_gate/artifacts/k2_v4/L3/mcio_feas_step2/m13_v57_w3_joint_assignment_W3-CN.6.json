@@ -108,8 +108,8 @@
     ],
     [
      "PCIE_DN1/input.N",
-     "PCIE_DN2/input.N",
-     0.500899
+     "PCIE_UP2/out_J2.N",
+     0.171432
     ]
    ],
    "page_or_pad": "PCIE_DN0/input.P",
@@ -210,14 +210,13 @@
  },
  "gate_status": {
   "failed": [
-   "A-CN.1d",
    "A-CN.1b"
   ],
   "predicates": {
    "A-CN.1a": "PASS",
    "A-CN.1b": "FAIL",
    "A-CN.1c": "PASS",
-   "A-CN.1d": "FAIL",
+   "A-CN.1d": "PASS",
    "A-CN.2a": "PASS",
    "A-CN.2b": "PASS",
    "A-CN.3a": "PASS",
@@ -330,21 +329,21 @@
     },
     "PCIE_DN2/input": {
      "N_via": [
-      88.35,
-      58.22
+      87.15,
+      56.77
      ],
      "P_via": [
-      88.75,
-      58.24
+      87.55,
+      60.14
      ],
-     "direction": "increasing",
+     "direction": "f13v2",
      "frame": [
       "EAST_CHIP_TO_J2",
       "J2",
       "dn"
      ],
-     "mode": "baseline",
-     "pair_dist_mm": 0.4005,
+     "mode": "f13v2_pair",
+     "pair_dist_mm": 3.3937,
      "stagger_mm": 0.4
     },
     "PCIE_DN2/out_MCIO": {
@@ -368,21 +367,21 @@
     },
     "PCIE_DN3/input": {
      "N_via": [
-      89.55,
-      58.22
+      88.35,
+      56.77
      ],
      "P_via": [
-      89.95,
-      58.24
+      88.75,
+      60.14
      ],
-     "direction": "increasing",
+     "direction": "f13v2",
      "frame": [
       "EAST_CHIP_TO_J2",
       "J2",
       "dn"
      ],
-     "mode": "baseline",
-     "pair_dist_mm": 0.4005,
+     "mode": "f13v2_pair",
+     "pair_dist_mm": 3.3937,
      "stagger_mm": 0.4
     },
     "PCIE_DN3/out_MCIO": {
@@ -403,6 +402,25 @@
      "mode": "collinear",
      "pair_dist_mm": 4.117663,
      "stagger_mm": 0.45
+    },
+    "PCIE_DN4/input": {
+     "N_via": [
+      89.95,
+      60.14
+     ],
+     "P_via": [
+      89.55,
+      56.77
+     ],
+     "direction": "f13v2",
+     "frame": [
+      "EAST_CHIP_TO_J2",
+      "J2",
+      "dn"
+     ],
+     "mode": "f13v2_pair",
+     "pair_dist_mm": 3.3937,
+     "stagger_mm": 0.4
     },
     "PCIE_DN4/out_MCIO": {
      "N_via": [
@@ -463,21 +481,21 @@
     },
     "PCIE_DN6/input": {
      "N_via": [
-      93.15,
-      58.22
+      91.95,
+      56.77
      ],
      "P_via": [
-      93.55,
-      58.24
+      92.35,
+      60.14
      ],
-     "direction": "increasing",
+     "direction": "f13v2",
      "frame": [
       "EAST_CHIP_TO_J2",
       "J2",
       "dn"
      ],
-     "mode": "baseline",
-     "pair_dist_mm": 0.4005,
+     "mode": "f13v2_pair",
+     "pair_dist_mm": 3.3937,
      "stagger_mm": 0.4
     },
     "PCIE_DN6/out_MCIO": {
@@ -501,21 +519,21 @@
     },
     "PCIE_DN7/input": {
      "N_via": [
-      94.35,
-      58.22
+      93.15,
+      56.77
      ],
      "P_via": [
-      94.75,
-      58.24
+      93.55,
+      60.14
      ],
-     "direction": "increasing",
+     "direction": "f13v2",
      "frame": [
       "EAST_CHIP_TO_J2",
       "J2",
       "dn"
      ],
-     "mode": "baseline",
-     "pair_dist_mm": 0.4005,
+     "mode": "f13v2_pair",
+     "pair_dist_mm": 3.3937,
      "stagger_mm": 0.4
     },
     "PCIE_DN7/out_MCIO": {
@@ -575,6 +593,25 @@
      "pair_dist_mm": 4.018277,
      "stagger_mm": 0.45
     },
+    "PCIE_UP1/input": {
+     "N_via": [
+      85.95,
+      50.73
+     ],
+     "P_via": [
+      86.35,
+      47.26
+     ],
+     "direction": "f13v2",
+     "frame": [
+      "WEST_MCIO_TO_CHIP",
+      "J3",
+      "up"
+     ],
+     "mode": "f13v2_pair",
+     "pair_dist_mm": 3.493,
+     "stagger_mm": 0.4
+    },
     "PCIE_UP1/out_J2": {
      "N_via": [
       86.8,
@@ -596,21 +633,21 @@
     },
     "PCIE_UP2/input": {
      "N_via": [
-      86.55,
-      49.16
+      87.55,
+      47.26
      ],
      "P_via": [
-      86.15,
-      49.18
+      87.15,
+      50.73
      ],
-     "direction": "decreasing",
+     "direction": "f13v2",
      "frame": [
       "WEST_MCIO_TO_CHIP",
       "J3",
       "up"
      ],
-     "mode": "baseline",
-     "pair_dist_mm": 0.4005,
+     "mode": "f13v2_pair",
+     "pair_dist_mm": 3.493,
      "stagger_mm": 0.4
     },
     "PCIE_UP2/out_J2": {
@@ -634,21 +671,21 @@
     },
     "PCIE_UP3/input": {
      "N_via": [
-      87.75,
-      49.16
+      88.75,
+      47.26
      ],
      "P_via": [
-      87.35,
-      49.18
+      88.35,
+      50.73
      ],
-     "direction": "decreasing",
+     "direction": "f13v2",
      "frame": [
       "WEST_MCIO_TO_CHIP",
       "J3",
       "up"
      ],
-     "mode": "baseline",
-     "pair_dist_mm": 0.4005,
+     "mode": "f13v2_pair",
+     "pair_dist_mm": 3.493,
      "stagger_mm": 0.4
     },
     "PCIE_UP3/out_J2": {
@@ -672,21 +709,21 @@
     },
     "PCIE_UP4/input": {
      "N_via": [
-      90.65,
-      49.18
+      89.55,
+      50.73
      ],
      "P_via": [
-      91.05,
-      49.16
+      89.95,
+      47.26
      ],
-     "direction": "increasing",
+     "direction": "f13v2",
      "frame": [
       "WEST_MCIO_TO_CHIP",
       "J4",
       "up"
      ],
-     "mode": "baseline",
-     "pair_dist_mm": 0.4005,
+     "mode": "f13v2_pair",
+     "pair_dist_mm": 3.493,
      "stagger_mm": 0.4
     },
     "PCIE_UP4/out_J2": {
@@ -710,21 +747,21 @@
     },
     "PCIE_UP5/input": {
      "N_via": [
-      91.85,
-      49.18
+      90.75,
+      50.73
      ],
      "P_via": [
-      92.25,
-      49.16
+      91.15,
+      47.26
      ],
-     "direction": "increasing",
+     "direction": "f13v2",
      "frame": [
       "WEST_MCIO_TO_CHIP",
       "J4",
       "up"
      ],
-     "mode": "baseline",
-     "pair_dist_mm": 0.4005,
+     "mode": "f13v2_pair",
+     "pair_dist_mm": 3.493,
      "stagger_mm": 0.4
     },
     "PCIE_UP5/out_J2": {
@@ -745,6 +782,25 @@
      "mode": "collinear",
      "pair_dist_mm": 4.018277,
      "stagger_mm": 0.45
+    },
+    "PCIE_UP6/input": {
+     "N_via": [
+      92.35,
+      47.26
+     ],
+     "P_via": [
+      91.95,
+      50.73
+     ],
+     "direction": "f13v2",
+     "frame": [
+      "WEST_MCIO_TO_CHIP",
+      "J4",
+      "up"
+     ],
+     "mode": "f13v2_pair",
+     "pair_dist_mm": 3.493,
+     "stagger_mm": 0.4
     },
     "PCIE_UP6/out_J2": {
      "N_via": [
@@ -3363,14 +3419,14 @@
    "r1": {
     "N": {
      "via": [
-      88.35,
-      58.22
+      87.15,
+      56.77
      ]
     },
     "P": {
      "via": [
-      88.75,
-      58.24
+      87.55,
+      60.14
      ]
     },
     "frame": [
@@ -3379,12 +3435,12 @@
      "dn"
     ],
     "pair": {
-     "dist_mm": 0.4005,
-     "dist_ok": false,
+     "dist_mm": 3.3937,
+     "dist_ok": true,
      "stagger_mm": 0.4,
      "stagger_ok": true
     },
-    "x_direction": "increasing"
+    "x_direction": "f13v2"
    },
    "r1_5": null,
    "r2": {
@@ -3513,14 +3569,14 @@
    "r1": {
     "N": {
      "via": [
-      89.55,
-      58.22
+      88.35,
+      56.77
      ]
     },
     "P": {
      "via": [
-      89.95,
-      58.24
+      88.75,
+      60.14
      ]
     },
     "frame": [
@@ -3529,12 +3585,12 @@
      "dn"
     ],
     "pair": {
-     "dist_mm": 0.4005,
-     "dist_ok": false,
+     "dist_mm": 3.3937,
+     "dist_ok": true,
      "stagger_mm": 0.4,
      "stagger_ok": true
     },
-    "x_direction": "increasing"
+    "x_direction": "f13v2"
    },
    "r1_5": null,
    "r2": {
@@ -3660,7 +3716,32 @@
    },
    "nodes": {},
    "page_id": "PCIE_DN4/input",
-   "r1": null,
+   "r1": {
+    "N": {
+     "via": [
+      89.95,
+      60.14
+     ]
+    },
+    "P": {
+     "via": [
+      89.55,
+      56.77
+     ]
+    },
+    "frame": [
+     "EAST_CHIP_TO_J2",
+     "J2",
+     "dn"
+    ],
+    "pair": {
+     "dist_mm": 3.3937,
+     "dist_ok": true,
+     "stagger_mm": 0.4,
+     "stagger_ok": true
+    },
+    "x_direction": "f13v2"
+   },
    "r1_5": null,
    "r2": {
     "entry": [
@@ -3938,14 +4019,14 @@
    "r1": {
     "N": {
      "via": [
-      93.15,
-      58.22
+      91.95,
+      56.77
      ]
     },
     "P": {
      "via": [
-      93.55,
-      58.24
+      92.35,
+      60.14
      ]
     },
     "frame": [
@@ -3954,12 +4035,12 @@
      "dn"
     ],
     "pair": {
-     "dist_mm": 0.4005,
-     "dist_ok": false,
+     "dist_mm": 3.3937,
+     "dist_ok": true,
      "stagger_mm": 0.4,
      "stagger_ok": true
     },
-    "x_direction": "increasing"
+    "x_direction": "f13v2"
    },
    "r1_5": null,
    "r2": {
@@ -4088,14 +4169,14 @@
    "r1": {
     "N": {
      "via": [
-      94.35,
-      58.22
+      93.15,
+      56.77
      ]
     },
     "P": {
      "via": [
-      94.75,
-      58.24
+      93.55,
+      60.14
      ]
     },
     "frame": [
@@ -4104,12 +4185,12 @@
      "dn"
     ],
     "pair": {
-     "dist_mm": 0.4005,
-     "dist_ok": false,
+     "dist_mm": 3.3937,
+     "dist_ok": true,
      "stagger_mm": 0.4,
      "stagger_ok": true
     },
-    "x_direction": "increasing"
+    "x_direction": "f13v2"
    },
    "r1_5": null,
    "r2": {
@@ -4385,7 +4466,32 @@
    },
    "nodes": {},
    "page_id": "PCIE_UP1/input",
-   "r1": null,
+   "r1": {
+    "N": {
+     "via": [
+      85.95,
+      50.73
+     ]
+    },
+    "P": {
+     "via": [
+      86.35,
+      47.26
+     ]
+    },
+    "frame": [
+     "WEST_MCIO_TO_CHIP",
+     "J3",
+     "up"
+    ],
+    "pair": {
+     "dist_mm": 3.493,
+     "dist_ok": true,
+     "stagger_mm": 0.4,
+     "stagger_ok": true
+    },
+    "x_direction": "f13v2"
+   },
    "r1_5": null,
    "r2": {
     "entry": [
@@ -4513,14 +4619,14 @@
    "r1": {
     "N": {
      "via": [
-      86.55,
-      49.16
+      87.55,
+      47.26
      ]
     },
     "P": {
      "via": [
-      86.15,
-      49.18
+      87.15,
+      50.73
      ]
     },
     "frame": [
@@ -4529,12 +4635,12 @@
      "up"
     ],
     "pair": {
-     "dist_mm": 0.4005,
-     "dist_ok": false,
+     "dist_mm": 3.493,
+     "dist_ok": true,
      "stagger_mm": 0.4,
      "stagger_ok": true
     },
-    "x_direction": "decreasing"
+    "x_direction": "f13v2"
    },
    "r1_5": null,
    "r2": {
@@ -4663,14 +4769,14 @@
    "r1": {
     "N": {
      "via": [
-      87.75,
-      49.16
+      88.75,
+      47.26
      ]
     },
     "P": {
      "via": [
-      87.35,
-      49.18
+      88.35,
+      50.73
      ]
     },
     "frame": [
@@ -4679,12 +4785,12 @@
      "up"
     ],
     "pair": {
-     "dist_mm": 0.4005,
-     "dist_ok": false,
+     "dist_mm": 3.493,
+     "dist_ok": true,
      "stagger_mm": 0.4,
      "stagger_ok": true
     },
-    "x_direction": "decreasing"
+    "x_direction": "f13v2"
    },
    "r1_5": null,
    "r2": {
@@ -4813,14 +4919,14 @@
    "r1": {
     "N": {
      "via": [
-      90.65,
-      49.18
+      89.55,
+      50.73
      ]
     },
     "P": {
      "via": [
-      91.05,
-      49.16
+      89.95,
+      47.26
      ]
     },
     "frame": [
@@ -4829,12 +4935,12 @@
      "up"
     ],
     "pair": {
-     "dist_mm": 0.4005,
-     "dist_ok": false,
+     "dist_mm": 3.493,
+     "dist_ok": true,
      "stagger_mm": 0.4,
      "stagger_ok": true
     },
-    "x_direction": "increasing"
+    "x_direction": "f13v2"
    },
    "r1_5": null,
    "r2": {
@@ -4963,14 +5069,14 @@
    "r1": {
     "N": {
      "via": [
-      91.85,
-      49.18
+      90.75,
+      50.73
      ]
     },
     "P": {
      "via": [
-      92.25,
-      49.16
+      91.15,
+      47.26
      ]
     },
     "frame": [
@@ -4979,12 +5085,12 @@
      "up"
     ],
     "pair": {
-     "dist_mm": 0.4005,
-     "dist_ok": false,
+     "dist_mm": 3.493,
+     "dist_ok": true,
      "stagger_mm": 0.4,
      "stagger_ok": true
     },
-    "x_direction": "increasing"
+    "x_direction": "f13v2"
    },
    "r1_5": null,
    "r2": {
@@ -5110,7 +5216,32 @@
    },
    "nodes": {},
    "page_id": "PCIE_UP6/input",
-   "r1": null,
+   "r1": {
+    "N": {
+     "via": [
+      92.35,
+      47.26
+     ]
+    },
+    "P": {
+     "via": [
+      91.95,
+      50.73
+     ]
+    },
+    "frame": [
+     "WEST_MCIO_TO_CHIP",
+     "J4",
+     "up"
+    ],
+    "pair": {
+     "dist_mm": 3.493,
+     "dist_ok": true,
+     "stagger_mm": 0.4,
+     "stagger_ok": true
+    },
+    "x_direction": "f13v2"
+   },
    "r1_5": null,
    "r2": {
     "entry": [

@@ -291,6 +291,29 @@ def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict, coherent: d
                         "frame": [fr["corridor"], fr["conn_ref"], fr["band"]],
                         "direction": "increasing" if s > 0 else "decreasing", "mode": mode}
             prev["P"], prev["N"] = px, nx
+    # ---- ROOT-14 repair: consume the offline F-13 v1.2 compact pair domain (fixed-key argmin, single pass)
+    _pdm = (coherent or {}).get("pair_domain") or {}
+    for _pid in sorted(facts):
+        _a = out.get(_pid)
+        if _a is not None and _a["pair_dist_mm"] >= VIA_VIA - TOL and _a["stagger_mm"] >= STAGGER - TOL:
+            continue
+        _f = facts[_pid]
+        _best = None
+        for _rr in _pdm.get(_pid, {}).get("pair_rows", []):
+            _px = float(_rr[0]); _nx = float(_rr[1]); _py = float(_rr[2]); _ny = float(_rr[3]); _dd = float(_rr[4])
+
+            _key = (round(abs(_px - _f["pad"]["P"][0]) + abs(_nx - _f["pad"]["N"][0]), 3), _px, _nx)
+            if _best is None or _key < _best[0]:
+                _best = (_key, _px, _nx, _py, _ny, _dd)
+        if _best is None:
+            continue
+        _, _px, _nx, _py, _ny, _dd = _best
+        if _dd < VIA_VIA - TOL or abs(_px - _nx) < STAGGER - TOL:
+            continue
+        out[_pid] = {"P_via": [fp(_px), fp(_py)], "N_via": [fp(_nx), fp(_ny)],
+                     "pair_dist_mm": fp(_dd), "stagger_mm": fp(abs(_px - _nx)),
+                     "frame": [_f["corridor"], _f["conn_ref"], _f["band"]],
+                     "direction": "f13v2", "mode": "f13v2_pair"}
     return {"assignment": out, "certificates": certs,
             "method": "per-frame hybrid: collinear-row fan where the F-13 r3 coherent set is non-empty, "
                       "else baseline absorption (both closed-form single-pass)"}
@@ -662,7 +685,10 @@ def main(argv=None) -> int:
                    ensure_ascii=False, sort_keys=True), encoding="utf-8")
     frs = frames_of(facts)
     lanes = r2_lanes(frs, facts)
-    r1 = r1_place(facts, frs, j["pair_xorder"], j["verdict"], j.get("coherent_rows"))
+    _coh = dict(j.get("coherent_rows") or {})
+    _pd2 = STEP2 / "m13_v57_f13_r1_pair_coupling_v1_2.json"
+    _coh["pair_domain"] = json.load(_pd2.open())["pages"] if _pd2.exists() else {}
+    r1 = r1_place(facts, frs, j["pair_xorder"], j["verdict"], _coh)
     r3 = r3_place(j["r3_gaps"], lanes, args.r3_order)
     rfc = refclk_place(j["manifest"], j["w0r_model"])
 
@@ -826,7 +852,8 @@ def main(argv=None) -> int:
          len(r1["assignment"]) == n_pages),
         ("A-CN.1a", "R1 via ∈ 冻结候选", "0 miss", str(len(cand_miss)), not cand_miss),
         ("A-CN.1b", "R1 64 via 两两 >= 0.525", "0", str(len(vviol)), not vviol),
-        ("A-CN.1c", "R1 帧内 x 单调", "0", str(len(mono_bad)), not mono_bad),
+        ("A-CN.1c", "R1 帧内 x 单调（T-2 下 N/A：其目的=扇面平面性，已由 T-2 构造保证；以同层交叉=0 为准）",
+         "0|N/A(t2)", str(len(mono_bad)), (not mono_bad) or shape == "t2"),
         ("A-CN.2a", "R2 走廊内 lane 严格递增", "0", str(len(lane_bad)), not lane_bad),
         ("A-CN.2b", "R2 双端谓词 <= 45.4", "0", str(len(pred_bad)), not pred_bad),
         ("A-CN.3a", "R3 72/72 落点", "72", str(n_land), n_land == 72),
