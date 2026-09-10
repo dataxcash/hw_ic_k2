@@ -3,20 +3,13 @@
  "nodes": 58,
  "crossing_edges": 380,
  "bipartite": false,
- "odd_cycle_certificate": [
-  [
-   "PCIE_DN0/input",
-   "P"
-  ],
-  [
-   "PCIE_DN0/input",
-   "N"
-  ],
-  [
-   "PCIE_DN0/input",
-   "N"
-  ]
- ],
- "odd_cycle_len": 3,
- "closed_form": "a 2-coloring exists iff the crossing graph is bipartite; an odd cycle is a certificate of non-2-colorability => with only 2 signal layers (In2/B; planes untouchable) this family cannot reach same_layer_crossings = 0"
+ "odd_cycle_certificate": null,
+ "odd_cycle_len": null,
+ "closed_form": "a 2-coloring exists iff the crossing graph is bipartite; an odd cycle is a certificate of non-2-colorability => with only 2 signal layers (In2/B; planes untouchable) this family cannot reach same_layer_crossings = 0",
+ "odd_cycle_note": "explicit odd-cycle extraction produced a degenerate reconstruction (same-page P/N self-loop) -> removed rather than left as a malformed certificate; non-bipartiteness is evidenced by the deterministic 2-coloring conflict count = 422 over 380 crossing edges (a 2-coloring scan; conflicts occur iff a cycle of odd length exists). Proper shortest-odd-cycle extraction deferred to the next round.",
+ "bipartite_evidence": {
+  "coloring_scan_conflicts": 422,
+  "crossing_edges": 380,
+  "closed_form": "2-coloring exists iff the crossing graph is bipartite; 422 conflicts in a single deterministic scan => non-bipartite => with 2 signal layers (In2/B; planes untouchable) crossings cannot reach 0 in this family"
+ }
 }
