@@ -33,10 +33,10 @@ F = {
     "param_trace": STEP2 / "m13_v57_f13_r1_param_trace.json",
     "pair_coupling": STEP2 / "m13_v57_f13_r1_pair_coupling.json",
     "pair_xorder": STEP2 / "m13_v57_f13_r1_pair_coupling_v1_1.json",
-    "r3_gaps": STEP2 / "m13_v57_f8_r3_gap_candidates.json",
+    "r3_gaps": STEP2 / "m13_v57_f8_r3_gap_candidates_j2x1.json",   # ROOT-16 A (versioned domain rev)
     "f6b_report": STEP2 / "m13_v57_f6b_report.json",
     "verdict": STEP2 / "m13_v57_s1_r1_via_verdict_r2.json",
-    "card": STEP2 / "m13_v57_w3_kickoff_card_v1_21.md",
+    "card": STEP2 / "m13_v57_w3_kickoff_card_v1_24.md",   # ROOT-16 contract revision
     "layer_intent": STEP2 / "m13_v57_layer_intent_rev4.json",
     "coherent_rows": STEP2 / "m13_v57_f13_r3_coherent_rows.json",
 }
@@ -48,17 +48,17 @@ FROZEN_SHA = {
     "lane_frame": "ff804e1edfacbf02e4227f10359a9217347ecdf0473801d655ef3a71ddf5cb6c",
     "param_trace": "e288ffa5421c22972075a7a3bef503a4b472aa32ea148c2ed0502090a3d98cae",
     "pair_coupling": "82e11c4cbdb4e8d44df1997f660c97fb75a47d33661223c9e5cf5fb0cb9c0d14",
-    "r3_gaps": "8a31632907b171483cd40a053231c702e378f944af33f92598a6141bd052cdeb",
+    "r3_gaps": "ace489a3594bd31c5ed6805cfcc725eba4ed144c3310ed8ec7483bfdba71bbf6",
     "f6b_report": "9070ed53f970f480e88b1de3aa19792f8b637de51857935fa6b7c51fa8a015d6",
     "verdict": "f2e2632506457e31c145b491284c9ecbf1cb72cc09d96ccdfb3251ef80a5556a",
     "coherent_rows": "014a14b317e1c3df3d4400d45d6877ffc81f4ca92d533da4c7c7e4af67319c9a",
-    "card": "57f49e020e67ffadb942182d6a765fd10b3cbd59463d024720924fb8701c7881",
+    "card": "7e051b053b525b80a168174c242a8fb6d9ef6dc10154d9d8fbb8e165dca77c8b",
     "layer_intent": "994363267baca54da9658283f21856a1bf2194b123a8de91f262c767edc35491",
 }
 OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
 OUT_LANDING = STEP2 / "m13_v57_w3_chip_landing_rows.json"
 
-REVISION = "W3-CN.11"
+REVISION = "W3-CN.12"
 SCHEMA = 1
 STEP = 1.46
 LANE_LO = 33.3
@@ -494,7 +494,8 @@ def count_crossings(paths: dict):
             _pb = ids[b][1] if isinstance(ids[b], tuple) else ""
             if _na.split("#")[0] == _nb.split("#")[0] and _pa == _pb:
                 continue                                    # same net: connected segments
-            k = "stub" if ("#stub" in _na or "#stub" in _nb) else "r1_5"
+            k = "stub" if ("#stub" in _na or "#stub" in _nb
+                           or "#fcu_land" in _na or "#fcu_land" in _nb) else "r1_5"
             pa, pb = paths[ids[a]][1], paths[ids[b]][1]
             for s1 in zip(pa, pa[1:]):
                 for s2 in zip(pb, pb[1:]):
@@ -813,6 +814,13 @@ def main(argv=None) -> int:
             else:
                 paths[(pid + "#stub", pol)] = ["F.Cu", [[ext, ly],
                                                         [r3a["landing"][0], r3a["landing"][1]]]]
+            # FULL-ROUTE metric (ROOT-16): chip pad->via1 (F.Cu) and landing->pad (F.Cu)
+            paths[(pid + "#fcu_pad", pol)] = ["F.Cu",
+                [[f["pad"][pol][0], f["pad"][pol][1]],
+                 [a_pg[pol + "_via"][0], a_pg[pol + "_via"][1]]]]
+            paths[(pid + "#fcu_land", pol)] = ["F.Cu",
+                [[r3a["landing"][0], r3a["landing"][1]],
+                 [f["conn_pad"][pol][0], f["conn_pad"][pol][1]]]]
     ids_all = sorted(paths)
     adj = {k: set() for k in ids_all}
     for a in range(len(ids_all)):

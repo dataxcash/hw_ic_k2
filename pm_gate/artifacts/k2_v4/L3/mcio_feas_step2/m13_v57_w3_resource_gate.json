@@ -80,8 +80,33 @@
  ],
  "informational_coarse_extent_overlap": 3,
  "insufficiency_basis": {
-  "minimal_core": [],
-  "same_layer_crossings": 240,
+  "minimal_core": [
+   [
+    "PCIE_DN0/input#fcu_pad/N",
+    "PCIE_DN1/input#fcu_pad/P"
+   ],
+   [
+    "PCIE_DN0/input#fcu_pad/N",
+    "PCIE_UP0/out_J2#fcu_pad/N"
+   ],
+   [
+    "PCIE_DN0/input#fcu_pad/P",
+    "PCIE_DN1/input#fcu_pad/N"
+   ],
+   [
+    "PCIE_DN0/input#fcu_pad/P",
+    "PCIE_UP1/out_J2#fcu_pad/N"
+   ],
+   [
+    "PCIE_DN0/out_MCIO#fcu_pad/N",
+    "PCIE_DN0/out_MCIO#fcu_pad/P"
+   ],
+   [
+    "PCIE_DN1/input#fcu_pad/P",
+    "PCIE_UP1/out_J2#fcu_pad/N"
+   ]
+  ],
+  "same_layer_crossings": 80,
   "structural_reason": "intended construction (signal-layer-only intent, band layer rule, polarity same-side, adaptive step) still leaves same-layer crossings"
  },
  "lane_capacity": {
@@ -117,15 +142,15 @@
   "capacity_ok": true,
   "closed_form": "SUFFICIENT iff same_layer_crossings == 0 and capacity ok",
   "crossings_by_class": {
-   "r1_5": 0,
+   "r1_5": 43,
    "stub": 0
   },
   "overlaps_by_class": {
    "r1_5": 4,
-   "stub": 236
+   "stub": 33
   },
   "r1_assigned": 32,
   "r1_required": 32,
-  "same_layer_crossings": 240
+  "same_layer_crossings": 80
  }
 }
