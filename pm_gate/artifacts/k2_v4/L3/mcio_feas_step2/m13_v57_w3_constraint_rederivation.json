@@ -1,0 +1,56 @@
+{
+ "artifact": "m13_v57_w3_constraint_rederivation",
+ "authority": "ROOT-1 root-cause order (supervision); registry m13_v57_rule_registry_v1.md; lifecycle m13_v57_rule_lifecycle_policy.md",
+ "construction_space_after_fix": {
+  "expected": "with 3 legal signal layers the page-level crossing 3-coloring becomes feasible => same_layer_crossings 0; with the R1 hybrid + freed lane order, R1 32/32 expected => FEASIBLE_ALL",
+  "lane_order": "free (purpose satisfied)",
+  "layers": "{F.Cu, In2, B.Cu}; WEST lanes may run F.Cu-direct per the layer plan",
+  "topology": "free staircase/trunk with the 0.075 micro-clearance",
+  "vias": "<=3 on breakout/transition with SI note"
+ },
+ "kept_hard": [
+  "planes In1/In3/In4 not for signals",
+  "6L stackup / fab process limits",
+  "frozen four sources byte-identical (revisions only in new files)"
+ ],
+ "method": "re-derive each W3 blocking constraint under the registry (reason + boundary), classify legal relaxations",
+ "rederived": [
+  {
+   "blocker": "no_90deg applied to the chip-side transition",
+   "origin_scope": "0.4mm pitch pad-wall access segment (SPEC escape_clearance_basis)",
+   "registry": "R-01",
+   "verdict": "SOFT mis-scoped => transition may use staircase/trunk topology with the 0.075 micro-clearance carried over"
+  },
+  {
+   "blocker": "no_via in the transition zone",
+   "registry": "R-02",
+   "verdict": "SOFT mis-scoped => transition-end vias (via1/via2 by design) unaffected"
+  },
+  {
+   "blocker": "only 2 usable signal layers (In2/B)",
+   "origin": "assumption; refuted by SPEC /layer_plan/wp1_escape_nets ('WEST nets ... DIRECT F.Cu west') and /stackup (B.Cu empty/single-side)",
+   "registry": "R-03",
+   "verdict": "MIS-SCOPED: usable signal layers = {F.Cu, In2, B.Cu} (3); planes stay HARD-forbidden"
+  },
+  {
+   "blocker": "via <=2 per line blocking local layer changes",
+   "origin": "PM ruling 2026-08-16 (controlled vias + back-drill), not a physics limit",
+   "registry": "R-04",
+   "verdict": "SOFT with SI caveat => breakout/transition via <=3 allowed via version bump + SI note"
+  },
+  {
+   "blocker": "lane order must follow conn rows",
+   "evidence": "C17 measured connector stub crossings = 0 regardless of lane order",
+   "registry": "R-05",
+   "verdict": "SOFT: its purpose is already satisfied => relaxable by a version-bumped F-5 revision"
+  },
+  {
+   "blocker": "R1 escape window 1.5mm",
+   "registry": "R-06",
+   "verdict": "SOFT (producer parameter) -> already relaxed to 2.5mm (r2)"
+  }
+ ],
+ "revision": "ROOT1.1",
+ "schema": 1,
+ "status": "re-derivation complete; implementation + re-run is the next action (session budget exhausted)"
+}
