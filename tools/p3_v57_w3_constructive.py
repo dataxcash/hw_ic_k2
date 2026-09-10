@@ -52,7 +52,7 @@ FROZEN_SHA = {
     "f6b_report": "9070ed53f970f480e88b1de3aa19792f8b637de51857935fa6b7c51fa8a015d6",
     "verdict": "f2e2632506457e31c145b491284c9ecbf1cb72cc09d96ccdfb3251ef80a5556a",
     "coherent_rows": "014a14b317e1c3df3d4400d45d6877ffc81f4ca92d533da4c7c7e4af67319c9a",
-    "card": "020eb68da74ff581e6194a0bac726209790e9a2266824f5cd55d278483b45019",
+    "card": "1bab0e98d810908b5c01544f2dcdd70665b553436c6354f52e95c0c4e563e233",
     "layer_intent": "994363267baca54da9658283f21856a1bf2194b123a8de91f262c767edc35491",
 }
 OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
