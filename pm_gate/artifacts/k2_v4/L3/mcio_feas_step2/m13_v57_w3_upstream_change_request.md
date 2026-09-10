@@ -15,7 +15,11 @@
 ## Gate measurement (verification-based, R-23)
 ```json
 {
- "same_layer_crossings": 264,
+ "same_layer_crossings": 217,
+ "crossings_by_class": {
+  "r1_5": 217,
+  "stub": 0
+ },
  "r1_assigned": 29,
  "r1_required": 32,
  "capacity_ok": true,
