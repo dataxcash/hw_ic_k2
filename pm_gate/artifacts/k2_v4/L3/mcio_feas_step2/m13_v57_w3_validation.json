@@ -3,13 +3,12 @@
   {
    "key": "stale_state",
    "ok": true,
-   "probe": "confirm artifact.inputs_sha equals CURRENT on-disk frozen inputs and record git HEAD/worktree state",
+   "probe": "artifact inputs_sha vs CURRENT on-disk frozen inputs; git status/HEAD recorded as-is",
    "result": {
-    "git_head": "7e3f92e154a4e8ef694f46d2bf50e9e1d61f494b",
-    "git_status_short": [
+    "git_status": [
      "? _shared",
      " M pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_joint_assignment.json",
-     " M tools/p3_v57_w3_joint_assign.py",
+     " M pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_validation.json",
      "?? k2_v4.kicad_pcb.bak_v35",
      "?? pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json.bak_v32",
      "?? pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json.bak_v32_tracks",
@@ -24,768 +23,727 @@
      "?? pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v52_forensics_probe.py",
      "?? pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v52_irg_readiness.md",
      "?? pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v52_session_handoff.md",
-     "?? pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_joint_assignment_boundary_v1_1.md",
-     "?? pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_kickoff_card_v1_1.md",
-     "?? pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_validation.json",
+     "?? pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_f13_r1_pair_coupling_v1_1.json",
+     "?? pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_f13_r1_pair_coupling_v1_1_validation.json",
+     "?? pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_kickoff_card_v1_2.md",
      "?? pm_gate/artifacts/k2_v4/L3/model_solves/channel_alloc_diag/",
      "?? pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v11/",
      "?? pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v12/",
-     "?? tools/p3_v57_w3_validator.py"
+     "?? tools/p3_v57_f13_r1_pair_xorder.py",
+     "?? tools/p3_v57_f13_xorder_validator.py",
+     "?? tools/p3_v57_w3_constructive.py",
+     "?? tools/p3_v57_w3_constructive_validator.py"
     ],
-    "inputs_mismatch": []
+    "head": "9e6f19e0f10fdff9154581ad38813ced1eebc72b",
+    "stale": [],
+    "stale_count": 0
    }
   },
   {
    "key": "dirty_worktree",
    "ok": true,
-   "probe": "report pre-existing untracked artifacts (gitlink deviation, *.bak_v32*, model_solves/*); they are NOT part of the verdict",
+   "probe": "pre-existing untracked artifacts (_shared gitlink deviation, *.bak_v32*, model_solves/*) recorded, NOT part of verdict",
    "result": {
-    "known_untracked": [
-     "? _shared",
+    "untracked": [
+     "?? k2_v4.kicad_pcb.bak_v35",
      "?? pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json.bak_v32",
      "?? pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json.bak_v32_tracks",
+     "?? pm_gate/artifacts/k2_v4/L3/m13_v10_session_handoff.md",
+     "?? pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v52_architecture_target.md",
+     "?? pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v52_audit_alloc_landing.json",
+     "?? pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v52_audit_coverage_matrix.json",
+     "?? pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v52_audit_geometry_anchors.json",
+     "?? pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v52_audit_mcio_landing_all.json",
+     "?? pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v52_audit_schema_dataflow.json",
+     "?? pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v52_ccf_schema_v1.json",
+     "?? pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v52_forensics_probe.py",
+     "?? pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v52_irg_readiness.md",
+     "?? pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v52_session_handoff.md",
+     "?? pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_f13_r1_pair_coupling_v1_1.json",
+     "?? pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_f13_r1_pair_coupling_v1_1_validation.json",
+     "?? pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_kickoff_card_v1_2.md",
      "?? pm_gate/artifacts/k2_v4/L3/model_solves/channel_alloc_diag/",
      "?? pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v11/",
-     "?? pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v12/"
+     "?? pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v12/",
+     "?? tools/p3_v57_f13_r1_pair_xorder.py",
+     "?? tools/p3_v57_f13_xorder_validator.py",
+     "?? tools/p3_v57_w3_constructive.py",
+     "?? tools/p3_v57_w3_constructive_validator.py"
     ],
-    "known_untracked_count": 6,
-    "total_status_lines": 24
+    "untracked_count": 24
    }
   },
   {
    "key": "misleading_success_output",
    "ok": true,
-   "probe": "TEMPORARY copy of the artifact in /tmp with one mutated field (set R1[PCIE_DN0/input].N_via = P_via (pair dist 0 < 0.525)); validator must return FAIL and exit non-zero (the real artifact is never touched)",
+   "probe": "temp copy with PCIE_DN0/input.P_via shifted +0.4mm -> validator must return FAIL",
    "result": {
-    "emitted_verdict": "FAIL",
-    "first_failed_check": "V3a",
-    "mutation": "set R1[PCIE_DN0/input].N_via = P_via (pair dist 0 < 0.525)",
-    "temp_artifact": "<TMPDIR>/mutated.json",
-    "validator_returncode": 1
+    "detected": true,
+    "failed_checks": [
+     "A-CN.1.cands",
+     "A-CN.1.pair",
+     "A-CN.1.allpairs"
+    ],
+    "temp_path": "/tmp/w3cn_tampered_via.json"
    }
   },
   {
    "key": "hung_or_long_commands",
    "ok": true,
-   "probe": "report per-check runtime; flag any check > ~60s (raw timings are printed to stdout, not stored, so the report stays byte-identical)",
+   "probe": "per-command runtime; flag any > 60s",
    "result": {
-    "checks_over_60s": [],
-    "raw_runtimes_stdout_only": true
+    "gm3_medians_s": {
+     "1": 0.3461134110002604,
+     "2": 0.5519253689999459,
+     "4": 0.7391137710001203
+    },
+    "gm4_seconds": 1.433,
+    "long_commands": [],
+    "order_invariance_s": {
+     "hash": 0.335,
+     "natural": 0.355,
+     "reverse": 0.343
+    }
    }
   }
  ],
- "artifact": "/home/fila/jqdDev_2025/ic_hw/k2/pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_joint_assignment.json",
- "artifact_revision": "W3-JA.2",
- "certificate_recheck": {
-  "applicable": true,
-  "attributed_infeasible_layers": [
-   "R1_5"
-  ],
-  "certificate_rows": [
-   {
-    "cert_id": "W3-R1_5-PLANARITY-EAST_CHIP_TO_J2",
-    "has_escape_hatches": true,
-    "has_minimal_core": true,
-    "has_why_no_alloc_possible": true,
-    "infeasible_layer": "R1_5_chip_transition",
-    "kind": "PLANARITY_CERTIFICATE",
-    "ok": true,
-    "resolved_layer_key": "R1_5",
-    "resolved_status": "CERTIFICATE"
-   },
-   {
-    "cert_id": "W3-R1_5-PLANARITY-WEST_MCIO_TO_CHIP",
-    "has_escape_hatches": true,
-    "has_minimal_core": true,
-    "has_why_no_alloc_possible": true,
-    "infeasible_layer": "R1_5_chip_transition",
-    "kind": "PLANARITY_CERTIFICATE",
-    "ok": true,
-    "resolved_layer_key": "R1_5",
-    "resolved_status": "CERTIFICATE"
-   }
-  ],
-  "certificates_valid": true,
-  "crossing_recount": [
-   {
-    "claimed_n_crossings": 21.0,
-    "corridor": "EAST_CHIP_TO_J2",
-    "independent_recount": 21,
-    "n_paths": 16,
-    "no_under_reporting": true,
-    "variant": "V_at_viax/N"
-   },
-   {
-    "claimed_n_crossings": 17.0,
-    "corridor": "EAST_CHIP_TO_J2",
-    "independent_recount": 17,
-    "n_paths": 16,
-    "no_under_reporting": true,
-    "variant": "V_at_viax/P"
-   },
-   {
-    "claimed_n_crossings": 26.0,
-    "corridor": "EAST_CHIP_TO_J2",
-    "independent_recount": 54,
-    "n_paths": 16,
-    "no_under_reporting": true,
-    "variant": "Z_r15/N"
-   },
-   {
-    "claimed_n_crossings": 20.0,
-    "corridor": "EAST_CHIP_TO_J2",
-    "independent_recount": 50,
-    "n_paths": 16,
-    "no_under_reporting": true,
-    "variant": "Z_r15/P"
-   },
-   {
-    "claimed_n_crossings": 19.0,
-    "corridor": "WEST_MCIO_TO_CHIP",
-    "independent_recount": 19,
-    "n_paths": 16,
-    "no_under_reporting": true,
-    "variant": "V_at_viax/N"
-   },
-   {
-    "claimed_n_crossings": 19.0,
-    "corridor": "WEST_MCIO_TO_CHIP",
-    "independent_recount": 19,
-    "n_paths": 16,
-    "no_under_reporting": true,
-    "variant": "V_at_viax/P"
-   },
-   {
-    "claimed_n_crossings": 48.0,
-    "corridor": "WEST_MCIO_TO_CHIP",
-    "independent_recount": 86,
-    "n_paths": 16,
-    "no_under_reporting": true,
-    "variant": "Z_r15/N"
-   },
-   {
-    "claimed_n_crossings": 43.0,
-    "corridor": "WEST_MCIO_TO_CHIP",
-    "independent_recount": 74,
-    "n_paths": 16,
-    "no_under_reporting": true,
-    "variant": "Z_r15/P"
-   }
-  ],
-  "residual_uncertainty": "The R1_5 planarity certificate enumerates a 4-variant construction family (shape x pol) that holds the R1 via selection fixed at the emitted lex-min DFS choice.  Its crossing recount is independently confirmed (min 17 EAST / 19 WEST), and crossings on a no-via single layer do imply infeasibility; however the family does NOT sweep alternative R1 via selections inside the F-13 domain, so exhaustiveness of the 'no alloc' claim w.r.t. R1 selection is NOT independently established by this validator.",
-  "under_reporting": []
+ "artifact": {
+  "path": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_joint_assignment.json",
+  "revision_field": "W3-CN.1",
+  "sha256": "dd19a9ad86cb68eb6b2ce217f46ccee1e69fc1fa3a4bcb5077f5e55158248fdc",
+  "verdict_field": "CERTIFICATE"
  },
  "checks": [
   {
-   "assertion": "9 frozen inputs + W3-C1 v1.1 card sha256 chain: on-disk == card prefix == artifact.inputs_sha; artifact.frozen_sha_check.drift == []; card v1.1 sha256 pinned and artifact.contract.supersedes.sha256 == frozen v1 card sha",
-   "expected": "drift=[]; v1.1 card 4555f8b65abeb1a3; supersedes v1 card 97a8084bb73f3af2",
-   "id": "V1",
-   "observed": {
-    "artifact_contract_sha256": "4555f8b65abeb1a3a1743002f91f9ddbd2bda2462a1480d87bde23dedadc4ed2",
-    "artifact_contract_supersedes": {
-     "id": "W3-C1 v1",
-     "sha256": "97a8084bb73f3af2b6996d58e616354c1941f2dc1b507e88725abe7a26f84a97"
-    },
-    "artifact_frozen_sha_check_drift": [],
-    "card_v1_1_ok": true,
-    "card_v1_1_recomputed": "4555f8b65abeb1a3a1743002f91f9ddbd2bda2462a1480d87bde23dedadc4ed2",
-    "card_v1_ok": true,
-    "card_v1_recomputed": "97a8084bb73f3af2b6996d58e616354c1941f2dc1b507e88725abe7a26f84a97",
-    "drift": [],
-    "extra_inputs_sha_keys": [
-     "verdict"
-    ],
-    "per_key": {
-     "f6b_report": {
-      "artifact_inputs_sha": "9070ed53f970f480e88b1de3aa19792f8b637de51857935fa6b7c51fa8a015d6",
-      "artifact_matches_disk": true,
-      "card_prefix16": "9070ed53f970f480",
-      "disk_matches_card": true,
-      "on_disk_prefix16": "9070ed53f970f480"
-     },
-     "lane_frame": {
-      "artifact_inputs_sha": "ff804e1edfacbf02e4227f10359a9217347ecdf0473801d655ef3a71ddf5cb6c",
-      "artifact_matches_disk": true,
-      "card_prefix16": "ff804e1edfacbf02",
-      "disk_matches_card": true,
-      "on_disk_prefix16": "ff804e1edfacbf02"
-     },
-     "manifest": {
-      "artifact_inputs_sha": "a8ef3ea8ecff99d7549d4122043c972c1bb68346dc4dcc3f36fdd9bacde49890",
-      "artifact_matches_disk": true,
-      "card_prefix16": "a8ef3ea8ecff99d7",
-      "disk_matches_card": true,
-      "on_disk_prefix16": "a8ef3ea8ecff99d7"
-     },
-     "pair_coupling": {
-      "artifact_inputs_sha": "82e11c4cbdb4e8d44df1997f660c97fb75a47d33661223c9e5cf5fb0cb9c0d14",
-      "artifact_matches_disk": true,
-      "card_prefix16": "82e11c4cbdb4e8d4",
-      "disk_matches_card": true,
-      "on_disk_prefix16": "82e11c4cbdb4e8d4"
-     },
-     "param_trace": {
-      "artifact_inputs_sha": "e288ffa5421c22972075a7a3bef503a4b472aa32ea148c2ed0502090a3d98cae",
-      "artifact_matches_disk": true,
-      "card_prefix16": "e288ffa5421c2297",
-      "disk_matches_card": true,
-      "on_disk_prefix16": "e288ffa5421c2297"
-     },
-     "r3_gaps": {
-      "artifact_inputs_sha": "8a31632907b171483cd40a053231c702e378f944af33f92598a6141bd052cdeb",
-      "artifact_matches_disk": true,
-      "card_prefix16": "8a31632907b17148",
-      "disk_matches_card": true,
-      "on_disk_prefix16": "8a31632907b17148"
-     },
-     "rules": {
-      "artifact_inputs_sha": "0a459839e15960b8fbfe0e1f5bb154a02b30cbafa1cbb0d56c2b810a71228448",
-      "artifact_matches_disk": true,
-      "card_prefix16": "0a459839e15960b8",
-      "disk_matches_card": true,
-      "on_disk_prefix16": "0a459839e15960b8"
-     },
-     "spec": {
-      "artifact_inputs_sha": "0bd52ed48e720b8cb6a7869379f6c0a220f3e141e1514ab159f9f5f3b8b02233",
-      "artifact_matches_disk": true,
-      "card_prefix16": "0bd52ed48e720b8c",
-      "disk_matches_card": true,
-      "on_disk_prefix16": "0bd52ed48e720b8c"
-     },
-     "w0r_model": {
-      "artifact_inputs_sha": "80ee9adb78a7e9ad94c27d426295592eee21af3d1e3ce88fe3042183160f0efa",
-      "artifact_matches_disk": true,
-      "card_prefix16": "80ee9adb78a7e9ad",
-      "disk_matches_card": true,
-      "on_disk_prefix16": "80ee9adb78a7e9ad"
-     }
-    }
-   },
+   "assertion": "all frozen inputs match pinned sha256",
+   "expected": "0 drift",
+   "id": "FROZEN.sha",
+   "observed": "drift=[]",
    "ok": true
   },
   {
-   "assertion": "R1: 32 data pages x P/N = 64 vias, each with a position",
-   "expected": "32 pages / 64 vias with [x,y]",
-   "id": "V2_R1",
-   "observed": {
-    "artifact_r1_keys": 32,
-    "bad_via": [],
-    "missing_pages": []
-   },
+   "assertion": "R1 emits exactly 64 vias (32 pages x P/N)",
+   "expected": "64",
+   "id": "A-CN.1.count",
+   "observed": "64",
    "ok": true
   },
   {
-   "assertion": "R2: each of 32 data pages has exactly one lane entry (corridor-nested); lane_index distinct per corridor",
-   "expected": "32 lane entries, distinct lane_index within each corridor",
-   "id": "V2_R2",
-   "observed": {
-    "duplicate_lane_index": {
-     "EAST_CHIP_TO_J2": {},
-     "WEST_MCIO_TO_CHIP": {}
-    },
-    "extra_keys": [],
-    "missing": [],
-    "n_entries": 32,
-    "per_corridor_counts": {
-     "EAST_CHIP_TO_J2": 16,
-     "WEST_MCIO_TO_CHIP": 16
-    }
-   },
+   "assertion": "every R1 via in frozen verdict candidate list (exact)",
+   "expected": "0 miss",
+   "id": "A-CN.1.cands",
+   "observed": "0",
    "ok": true
   },
   {
-   "assertion": "R3 (v1.1): all 72 connector pads have exactly one landing, keyed <ref>|<net> (REFCLK duplicate net names kept separate); each landing x in the pad's F-8 gap_candidates and each landing y inside the pad's F-8 y_band (tol 1e-9). The emitted assignment is a constructive v1.1 feasibility witness.",
-   "expected": "72/72 landings; keyed ref|net; x in gap_candidates; y in y_band",
-   "id": "V2_R3",
-   "observed": {
-    "artifact_r3_key_count": 72,
-    "expected_key_count": 72,
-    "extra_keys": [],
-    "frozen_pad_count": 72,
-    "landing_violations": [],
-    "missing_keys": [],
-    "unique_nets_if_collapsed": 68
-   },
+   "assertion": "per page pair dist>=0.525 and |dx|>=0.38",
+   "expected": "0 bad",
+   "id": "A-CN.1.pair",
+   "observed": "0",
    "ok": true
   },
   {
-   "assertion": "Superseded strict rule (v1: landing y := pad y) independently re-solved: J2 feasible, J3/J4 infeasible; artifact layers.R3.strict_rule_finding cores are genuine minimal 2-net forced collisions (same single gap column + identical pad y), including PCIE_UP2_N/PCIE_UP3_P @ 55.9 / y=43.25",
-   "expected": "strict feasibility {J2:True,J3:False,J4:False}; cores genuine; example core present",
-   "id": "V2_R3_strict",
-   "observed": {
-    "all_artifact_cores_genuine": true,
-    "artifact_cores_count": 12,
-    "artifact_has_PCIE_UP2_N_PCIE_UP3_P_core": true,
-    "artifact_strict_feasible": {
-     "J2": true,
-     "J3": false,
-     "J4": false
-    },
-    "independent_has_PCIE_UP2_N_PCIE_UP3_P_core": true,
-    "independent_strict_feasible": {
-     "J2": true,
-     "J3": false,
-     "J4": false
-    },
-    "my_cores_count": 12
-   },
+   "assertion": "all 64 vias pairwise >=0.525",
+   "expected": "0 bad",
+   "id": "A-CN.1.allpairs",
+   "observed": "3 first=['PCIE_DN3/input.N', 'PCIE_DN4/input.P', 0.316228]",
+   "ok": false
+  },
+  {
+   "assertion": "frame=(corridor,conn_ref,band) per-polarity x strictly monotone in F-5 order",
+   "expected": "0 bad",
+   "id": "A-CN.1.mono",
+   "observed": "0",
    "ok": true
   },
   {
-   "assertion": "aggregate conservation (R1 64 via / R2 32 lanes / R3 72 landings or certified infeasibility)",
-   "expected": "all sub-checks pass",
-   "id": "V2",
-   "observed": {
-    "aggregate_ok": true
-   },
+   "assertion": "R2 assigns exactly 32 data-page lanes",
+   "expected": "32",
+   "id": "A-CN.2.count",
+   "observed": "32",
    "ok": true
   },
   {
-   "assertion": "R1: all 64 vias pairwise >= 0.525 - 1e-9; plus the F-13 col-pair dual constraint dist>=0.525 & |dx|>=0.38 and via x inside the frozen F-13 admissible columns",
-   "expected": ">= 0.525",
-   "id": "V3a",
-   "observed": {
-    "f13_domain_violations": [],
-    "f13_dual_violations": [],
-    "min_pair": [
-     "PCIE_DN0/out_MCIO/P_via",
-     "PCIE_DN0/out_MCIO/N_via"
-    ],
-    "min_pair_dist": 0.5269240932050752,
-    "n_vias": 64,
-    "n_violations": 0,
-    "violations": []
-   },
+   "assertion": "per-corridor lane_index strictly increasing in F-5 lane order",
+   "expected": "0 bad",
+   "id": "A-CN.2.mono",
+   "observed": "0",
    "ok": true
   },
   {
-   "assertion": "R2: lane_index strictly increasing within each corridor under the contract F-5 key recomputed from the frozen manifest (G3 v1 §2: row_y=(N.y+P.y)/2; WEST framed by conn_ref, key (conn_ref,row_y) + in-frame conn_x asc)",
-   "expected": "strictly increasing in both corridors",
-   "id": "V3b",
-   "observed": {
-    "alternative_keys_also_increasing": {
-     "EAST_CHIP_TO_J2": {
-      "file_order_band_major": true,
-      "literal_(conn_ref,conn_x)": false
-     },
-     "WEST_MCIO_TO_CHIP": {
-      "file_order_band_major": false,
-      "literal_(conn_ref,conn_x)": false
-     }
-    },
-    "primary_f5": {
-     "EAST_CHIP_TO_J2": {
-      "key": "(conn_ref,row_y,conn_x,page_id)",
-      "lane_seq": [
-       6.0,
-       7.0,
-       8.0,
-       9.0,
-       10.0,
-       11.0,
-       12.0,
-       13.0,
-       14.0,
-       15.0,
-       16.0,
-       17.0,
-       18.0,
-       19.0,
-       20.0,
-       21.0
-      ],
-      "strict_increasing": true
-     },
-     "WEST_MCIO_TO_CHIP": {
-      "key": "(conn_ref,row_y,conn_x,page_id)",
-      "lane_seq": [
-       4.0,
-       5.0,
-       6.0,
-       7.0,
-       8.0,
-       9.0,
-       10.0,
-       11.0,
-       17.0,
-       18.0,
-       19.0,
-       20.0,
-       21.0,
-       22.0,
-       23.0,
-       24.0
-      ],
-      "strict_increasing": true
-     }
-    }
-   },
+   "assertion": "|lane_y-conn_row_y|<=45.4 and |lane_y-chip_row_y|<=45.4",
+   "expected": "0 bad",
+   "id": "A-CN.2.reach",
+   "observed": "0",
    "ok": true
   },
   {
-   "assertion": "R3 (v1.1): any two landings sharing the same gap column_x have |dy| >= 0.525 - 1e-9",
-   "expected": ">= 0.525",
-   "id": "V3c",
-   "observed": {
-    "min_same_column_dy": 0.5499999999999972,
-    "n_gap_columns": 10,
-    "n_landings": 72,
-    "n_violations": 0,
-    "violations": []
-   },
+   "assertion": "R3 exactly 72 landings (one per F-8 pad)",
+   "expected": "72",
+   "id": "A-CN.3.count",
+   "observed": "72",
    "ok": true
   },
   {
-   "assertion": "REFCLK: page-to-page F.Cu lane separation >= 1.46",
-   "expected": ">= 1.46",
-   "id": "V3d",
-   "observed": {
-    "min_separation": 5.399999999999999,
-    "refclk_pages": [
-     {
-      "page": "PCIE_REFCLK0/input",
-      "y": 45.9
-     },
-     {
-      "page": "PCIE_REFCLK1/input",
-      "y": 51.3
-     }
-    ],
-    "separations": [
-     5.399999999999999
-    ]
-   },
+   "assertion": "every landing x in that pad's F-8 gap_candidates",
+   "expected": "0 bad",
+   "id": "A-CN.3.column",
+   "observed": "0",
    "ok": true
   },
   {
-   "assertion": "aggregate exclusivity (V3a-V3d geometric recompute)",
-   "expected": "all sub-checks pass",
-   "id": "V3",
-   "observed": {
-    "aggregate_ok": true
-   },
+   "assertion": "every landing y inside that pad's F-8 y_band",
+   "expected": "0 bad",
+   "id": "A-CN.3.band",
+   "observed": "0",
    "ok": true
   },
   {
-   "assertion": "F-6 predicate/deltas recomputed from frozen anchors + emitted lane_y: |conn_delta|,|chip_delta| <= 45.4+1e-9 and reported deltas match to 1e-6",
-   "expected": "32 pages, all |delta| <= 45.4, reported == recomputed",
-   "id": "V4",
-   "observed": {
-    "delta_mismatch": [],
-    "max_abs_chip_delta": 18.320000000000007,
-    "max_abs_conn_delta": 4.390000000000001,
-    "n_pages": 32,
-    "reach_violations": []
-   },
+   "assertion": "landings sharing column_x are >=0.525 apart",
+   "expected": "0 bad",
+   "id": "A-CN.3.sep",
+   "observed": "0",
    "ok": true
   },
   {
-   "assertion": "R2 order-preserving min-cost DP re-solved independently (grid 33.3+1.46*i, in F-5 order, minimize sum|lane_y-row_y|); compare to artifact objective (tol 1e-6)",
-   "expected": "artifact objective == independent DP optimum per corridor and total",
-   "id": "V5",
-   "observed": {
-    "emitted_per_corridor": {
-     "EAST_CHIP_TO_J2": 11.92,
-     "WEST_MCIO_TO_CHIP": 30.9
-    },
-    "emitted_total": 42.82,
-    "grid_head": [
-     33.3,
-     34.76,
-     36.22
-    ],
-    "grid_tail": [
-     77.1,
-     78.56
-    ],
-    "independent_per_corridor": {
-     "EAST_CHIP_TO_J2": 11.920000000000009,
-     "WEST_MCIO_TO_CHIP": 30.9
-    },
-    "independent_total": 42.82000000000001,
-    "per_corridor_match": true,
-    "total_diff": -7.105427357601002e-15
-   },
+   "assertion": "R1.5 emitted segment-segment crossings == 0 (independent O(n^2))",
+   "expected": "0",
+   "id": "A-CN.4.cross",
+   "observed": "454 first=['PCIE_DN0/input.N', 'PCIE_DN0/input.P']",
+   "ok": false
+  },
+  {
+   "assertion": "no REFCLK segment intersects any of the 11 keepout boxes",
+   "expected": "0 hits",
+   "id": "A-CN.5.keepout",
+   "observed": "0",
    "ok": true
   },
   {
-   "assertion": "layer semantics: data pages only F.Cu/In2.Cu; <=2 vias per line; REFCLK only F.Cu; forbidden R4 keys zero occurrences",
-   "expected": "no bad layers, no via>2, no R4 keys",
-   "id": "V6",
-   "observed": {
-    "bad_data_layers": {},
-    "data_layers_seen": {
-     "F.Cu": 64,
-     "In2.Cu": 64
-    },
-    "forbidden_r4_hits": {
-     "capacitor_walls": 0,
-     "downstream_refs": 0,
-     "upstream_refs": 0,
-     "wall gap": 0,
-     "wall_gap": 0,
-     "wall_pad": 0
-    },
-    "forbidden_r4_violations": {},
-    "max_chain_transitions": 2,
-    "refclk_bad": {},
-    "refclk_layers_seen": [
-     "F.Cu"
-    ],
-    "via_chain_sample": [
-     {
-      "chain_transitions": 2,
-      "layer_chain": [
-       "F.Cu",
-       "In2.Cu",
-       "F.Cu"
-      ],
-      "page": "PCIE_UP0/out_J2",
-      "vias_list": 0
-     },
-     {
-      "chain_transitions": 2,
-      "layer_chain": [
-       "F.Cu",
-       "In2.Cu",
-       "F.Cu"
-      ],
-      "page": "PCIE_UP1/out_J2",
-      "vias_list": 0
-     }
-    ],
-    "via_violations": []
-   },
+   "assertion": "every REFCLK segment lies inside a W0-R witness free window",
+   "expected": "0 bad",
+   "id": "A-CN.5.window",
+   "observed": "0",
    "ok": true
   },
   {
-   "assertion": "all-or-certificate: CERTIFICATE => landing_rows null + NOT_REEMITTED; FEASIBLE_ALL => 34 pages with node chains + landing file re-emitted",
-   "expected": "artifact verdict consistent with landing emission",
-   "id": "V7",
-   "observed": {
-    "landing_rows": null,
-    "landing_rows_status": "NOT_REEMITTED",
-    "verdict": "CERTIFICATE"
-   },
+   "assertion": "REFCLK page-to-page lane separation >=1.46",
+   "expected": "True",
+   "id": "A-CN.5.sep",
+   "observed": "True [45.9, 51.3]",
    "ok": true
   },
   {
-   "assertion": "CERTIFICATE: independent segment-segment recount on emitted R1_5 variant paths >= claimed crossings (no under-reporting); escape_hatches + why_no_alloc_possible present; infeasible_layer resolves to a non-FEASIBLE layer and the unmet capability (R1_5) is certificate-attributed (A-W3.1 v1.1)",
-   "expected": "no under-reporting; all certificate fields valid; R1_5 attributed",
-   "id": "V8",
-   "observed": {
-    "applicable": true,
-    "attributed_infeasible_layers": [
-     "R1_5"
-    ],
-    "certificate_rows": [
-     {
-      "cert_id": "W3-R1_5-PLANARITY-EAST_CHIP_TO_J2",
-      "has_escape_hatches": true,
-      "has_minimal_core": true,
-      "has_why_no_alloc_possible": true,
-      "infeasible_layer": "R1_5_chip_transition",
-      "kind": "PLANARITY_CERTIFICATE",
-      "ok": true,
-      "resolved_layer_key": "R1_5",
-      "resolved_status": "CERTIFICATE"
-     },
-     {
-      "cert_id": "W3-R1_5-PLANARITY-WEST_MCIO_TO_CHIP",
-      "has_escape_hatches": true,
-      "has_minimal_core": true,
-      "has_why_no_alloc_possible": true,
-      "infeasible_layer": "R1_5_chip_transition",
-      "kind": "PLANARITY_CERTIFICATE",
-      "ok": true,
-      "resolved_layer_key": "R1_5",
-      "resolved_status": "CERTIFICATE"
-     }
-    ],
-    "certificates_valid": true,
-    "crossing_recount": [
-     {
-      "claimed_n_crossings": 21.0,
-      "corridor": "EAST_CHIP_TO_J2",
-      "independent_recount": 21,
-      "n_paths": 16,
-      "no_under_reporting": true,
-      "variant": "V_at_viax/N"
-     },
-     {
-      "claimed_n_crossings": 17.0,
-      "corridor": "EAST_CHIP_TO_J2",
-      "independent_recount": 17,
-      "n_paths": 16,
-      "no_under_reporting": true,
-      "variant": "V_at_viax/P"
-     },
-     {
-      "claimed_n_crossings": 26.0,
-      "corridor": "EAST_CHIP_TO_J2",
-      "independent_recount": 54,
-      "n_paths": 16,
-      "no_under_reporting": true,
-      "variant": "Z_r15/N"
-     },
-     {
-      "claimed_n_crossings": 20.0,
-      "corridor": "EAST_CHIP_TO_J2",
-      "independent_recount": 50,
-      "n_paths": 16,
-      "no_under_reporting": true,
-      "variant": "Z_r15/P"
-     },
-     {
-      "claimed_n_crossings": 19.0,
-      "corridor": "WEST_MCIO_TO_CHIP",
-      "independent_recount": 19,
-      "n_paths": 16,
-      "no_under_reporting": true,
-      "variant": "V_at_viax/N"
-     },
-     {
-      "claimed_n_crossings": 19.0,
-      "corridor": "WEST_MCIO_TO_CHIP",
-      "independent_recount": 19,
-      "n_paths": 16,
-      "no_under_reporting": true,
-      "variant": "V_at_viax/P"
-     },
-     {
-      "claimed_n_crossings": 48.0,
-      "corridor": "WEST_MCIO_TO_CHIP",
-      "independent_recount": 86,
-      "n_paths": 16,
-      "no_under_reporting": true,
-      "variant": "Z_r15/N"
-     },
-     {
-      "claimed_n_crossings": 43.0,
-      "corridor": "WEST_MCIO_TO_CHIP",
-      "independent_recount": 74,
-      "n_paths": 16,
-      "no_under_reporting": true,
-      "variant": "Z_r15/P"
-     }
-    ],
-    "residual_uncertainty": "The R1_5 planarity certificate enumerates a 4-variant construction family (shape x pol) that holds the R1 via selection fixed at the emitted lex-min DFS choice.  Its crossing recount is independently confirmed (min 17 EAST / 19 WEST), and crossings on a no-via single layer do imply infeasibility; however the family does NOT sweep alternative R1 via selections inside the F-13 domain, so exhaustiveness of the 'no alloc' claim w.r.t. R1 selection is NOT independently established by this validator.",
-    "under_reporting": []
-   },
+   "assertion": "certificates (if any) are CONSTRUCTION_INFEASIBLE only, fields limited, scope=construction-only",
+   "expected": "0 violations",
+   "id": "A-CN.cert.discipline",
+   "observed": "n_certs=2 kind_bad=0 field_bad=0 global_bad=0",
    "ok": true
   },
   {
-   "assertion": "order-invariance: engine run 3x with permuted input enumeration orders (natural/reverse/hash) -> byte-identical outputs equal to the canonical artifact",
-   "expected": "3 outputs byte-identical AND equal to on-disk artifact sha256",
-   "id": "V9",
-   "observed": {
-    "canonical_artifact_sha256": "d081618c7b961d770c8e2f180f93b92125b316bc0eeec181f9d1d191a0ee6acc",
-    "commands": [
-     "/usr/bin/python3 /home/fila/jqdDev_2025/ic_hw/k2/tools/p3_v57_w3_joint_assign.py --enum-order natural --out <TMPDIR>/w3_order_natural.json",
-     "/usr/bin/python3 /home/fila/jqdDev_2025/ic_hw/k2/tools/p3_v57_w3_joint_assign.py --enum-order reverse --out <TMPDIR>/w3_order_reverse.json",
-     "/usr/bin/python3 /home/fila/jqdDev_2025/ic_hw/k2/tools/p3_v57_w3_joint_assign.py --enum-order hash --out <TMPDIR>/w3_order_hash.json"
-    ],
-    "distinct": 1,
-    "engine": "/home/fila/jqdDev_2025/ic_hw/k2/tools/p3_v57_w3_joint_assign.py",
-    "equals_canonical": true,
-    "exists": true,
-    "help_excerpt": "usage: p3_v57_w3_joint_assign.py [-h] [--enum-order {natural,reverse,hash}]\n                                 [--out OUT] [--landing-out LANDING_OUT]\n                                 [--quiet]\n\noptions:\n  -h, --help            show this help message and exit\n  --enum-order {natural,reverse,hash}\n  --out OUT\n  --landing-out LANDING_OUT\n  --quiet\n",
-    "order_flag": "--enum-order",
-    "out_flag": "--out",
-    "runs": [
-     {
-      "order": "natural",
-      "rc": 0,
-      "sha256": "d081618c7b961d770c8e2f180f93b92125b316bc0eeec181f9d1d191a0ee6acc"
-     },
-     {
-      "order": "reverse",
-      "rc": 0,
-      "sha256": "d081618c7b961d770c8e2f180f93b92125b316bc0eeec181f9d1d191a0ee6acc"
-     },
-     {
-      "order": "hash",
-      "rc": 0,
-      "sha256": "d081618c7b961d770c8e2f180f93b92125b316bc0eeec181f9d1d191a0ee6acc"
-     }
-    ],
-    "sha256s": [
-     "d081618c7b961d770c8e2f180f93b92125b316bc0eeec181f9d1d191a0ee6acc",
-     "d081618c7b961d770c8e2f180f93b92125b316bc0eeec181f9d1d191a0ee6acc",
-     "d081618c7b961d770c8e2f180f93b92125b316bc0eeec181f9d1d191a0ee6acc"
-    ]
-   },
-   "ok": true
+   "assertion": "FEASIBLE_ALL required for A-CN.7 (verdict mode)",
+   "expected": "FEASIBLE_ALL",
+   "id": "A-CN.7.pages",
+   "observed": "CERTIFICATE",
+   "ok": false
   },
   {
-   "assertion": "no per-net first-fit: artifact.no_first_fit block consistent AND engine source shows no per-net greedy/first-fit allocation identifier",
-   "expected": "block valid (probed=3, byte_identical=true); no first-fit/greedy identifier",
-   "id": "V10",
-   "observed": {
-    "block_ok": true,
-    "engine_source_grep": {
-     "engine_missing": false,
-     "first_fit_greedy_NAME_tokens": [],
-     "grep_first_or_greedy": [
-      "7: **禁 per-net first-fit**：R1 = 规范序 DFS（全局约束）、R2 = 精确保序最小代价 DP、",
-      "320:                       \"checking, canonical value order (y asc, x asc); no per-net first-fit\"}",
-      "753:                       \"R3 exact CSP (MRV + forward checking). No per-net first-fit.\",",
-      "767:         \"no_first_fit\": {",
-      "769:                          \"R3 精确 CSP（MRV+前向检查）；无逐网 first-fit 循环。\","
-     ],
-     "n_hits": 5,
-     "tokenize_error": null
-    },
-    "no_first_fit_block": {
-     "byte_identical": true,
-     "enumeration_orders_probed": 3,
-     "statement": "全局范式：R1 规范序精确 DFS（跨页并列约束）、R2 精确保序最小代价 DP、R3 精确 CSP（MRV+前向检查）；无逐网 first-fit 循环。"
-    },
-    "static_decidability": "identifier/comment grep is heuristic: a per-net loop without the words first-fit/greedy would not be caught statically",
-    "suspicious_identifiers": false
-   },
-   "ok": true
+   "assertion": "FEASIBLE_ALL required for re-emission",
+   "expected": "FEASIBLE_ALL + landing file",
+   "id": "A-CN.7.landing",
+   "observed": "verdict=CERTIFICATE landing_file=False",
+   "ok": false
   }
  ],
  "frozen_sha_check": {
   "actual": {
+   "card": "78a96a7fc4daaa9f700dc9852d2e8114e7a214afc249cee1e587a8f719108f15",
    "f6b_report": "9070ed53f970f480e88b1de3aa19792f8b637de51857935fa6b7c51fa8a015d6",
    "lane_frame": "ff804e1edfacbf02e4227f10359a9217347ecdf0473801d655ef3a71ddf5cb6c",
    "manifest": "a8ef3ea8ecff99d7549d4122043c972c1bb68346dc4dcc3f36fdd9bacde49890",
    "pair_coupling": "82e11c4cbdb4e8d44df1997f660c97fb75a47d33661223c9e5cf5fb0cb9c0d14",
+   "pair_xorder": "662c7839185260ae9c0d68edf6a323ac79743707a913cc1bd5f90b62714ebce3",
    "param_trace": "e288ffa5421c22972075a7a3bef503a4b472aa32ea148c2ed0502090a3d98cae",
    "r3_gaps": "8a31632907b171483cd40a053231c702e378f944af33f92598a6141bd052cdeb",
    "rules": "0a459839e15960b8fbfe0e1f5bb154a02b30cbafa1cbb0d56c2b810a71228448",
    "spec": "0bd52ed48e720b8cb6a7869379f6c0a220f3e141e1514ab159f9f5f3b8b02233",
+   "verdict": "2a3c8cf465c0ac1f808c1fdf7409725ab04862e4a8002f7ff71cfa299770bb5b",
    "w0r_model": "80ee9adb78a7e9ad94c27d426295592eee21af3d1e3ce88fe3042183160f0efa"
   },
-  "card_v1_1_sha256": "4555f8b65abeb1a3a1743002f91f9ddbd2bda2462a1480d87bde23dedadc4ed2",
-  "card_v1_1_sha256_expected": "4555f8b65abeb1a3a1743002f91f9ddbd2bda2462a1480d87bde23dedadc4ed2",
-  "card_v1_sha256": "97a8084bb73f3af2b6996d58e616354c1941f2dc1b507e88725abe7a26f84a97",
-  "card_v1_sha256_expected": "97a8084bb73f3af2b6996d58e616354c1941f2dc1b507e88725abe7a26f84a97",
+  "drift": [],
   "expected": {
-   "f6b_report": "9070ed53f970f480",
-   "lane_frame": "ff804e1edfacbf02",
-   "manifest": "a8ef3ea8ecff99d7",
-   "pair_coupling": "82e11c4cbdb4e8d4",
-   "param_trace": "e288ffa5421c2297",
-   "r3_gaps": "8a31632907b17148",
-   "rules": "0a459839e15960b8",
-   "spec": "0bd52ed48e720b8c",
-   "w0r_model": "80ee9adb78a7e9ad"
+   "card": "78a96a7fc4daaa9f700dc9852d2e8114e7a214afc249cee1e587a8f719108f15",
+   "f6b_report": "9070ed53f970f480e88b1de3aa19792f8b637de51857935fa6b7c51fa8a015d6",
+   "lane_frame": "ff804e1edfacbf02e4227f10359a9217347ecdf0473801d655ef3a71ddf5cb6c",
+   "manifest": "a8ef3ea8ecff99d7549d4122043c972c1bb68346dc4dcc3f36fdd9bacde49890",
+   "pair_coupling": "82e11c4cbdb4e8d44df1997f660c97fb75a47d33661223c9e5cf5fb0cb9c0d14",
+   "pair_xorder": "662c7839185260ae9c0d68edf6a323ac79743707a913cc1bd5f90b62714ebce3",
+   "param_trace": "e288ffa5421c22972075a7a3bef503a4b472aa32ea148c2ed0502090a3d98cae",
+   "r3_gaps": "8a31632907b171483cd40a053231c702e378f944af33f92598a6141bd052cdeb",
+   "rules": "0a459839e15960b8fbfe0e1f5bb154a02b30cbafa1cbb0d56c2b810a71228448",
+   "spec": "0bd52ed48e720b8cb6a7869379f6c0a220f3e141e1514ab159f9f5f3b8b02233",
+   "verdict": "2a3c8cf465c0ac1f808c1fdf7409725ab04862e4a8002f7ff71cfa299770bb5b",
+   "w0r_model": "80ee9adb78a7e9ad94c27d426295592eee21af3d1e3ce88fe3042183160f0efa"
+  },
+  "match": true
+ },
+ "method_gates": {
+  "A-CN.6": {
+   "byte_identical": true,
+   "detail": {
+    "hash": {
+     "rc": 0,
+     "seconds": 0.335,
+     "sha256": "dd19a9ad86cb68eb6b2ce217f46ccee1e69fc1fa3a4bcb5077f5e55158248fdc"
+    },
+    "natural": {
+     "rc": 0,
+     "seconds": 0.355,
+     "sha256": "dd19a9ad86cb68eb6b2ce217f46ccee1e69fc1fa3a4bcb5077f5e55158248fdc"
+    },
+    "reverse": {
+     "rc": 0,
+     "seconds": 0.343,
+     "sha256": "dd19a9ad86cb68eb6b2ce217f46ccee1e69fc1fa3a4bcb5077f5e55158248fdc"
+    }
+   },
+   "ok": true,
+   "shas": {
+    "hash": "dd19a9ad86cb68eb6b2ce217f46ccee1e69fc1fa3a4bcb5077f5e55158248fdc",
+    "natural": "dd19a9ad86cb68eb6b2ce217f46ccee1e69fc1fa3a4bcb5077f5e55158248fdc",
+    "reverse": "dd19a9ad86cb68eb6b2ce217f46ccee1e69fc1fa3a4bcb5077f5e55158248fdc"
+   }
+  },
+  "G-M1": {
+   "forbidden_attr_hits": [],
+   "forbidden_name_hits": [],
+   "ok": true,
+   "scan_output": "  (none)"
+  },
+  "G-M2": {
+   "bad_imports": [],
+   "branch_sites": {
+    "_in_box": {
+     "branch_sites": 0,
+     "chains": 0,
+     "ifexps": 0,
+     "line": 380
+    },
+    "bump": {
+     "branch_sites": 0,
+     "chains": 0,
+     "ifexps": 0,
+     "line": 86
+    },
+    "colx_center": {
+     "branch_sites": 1,
+     "chains": 1,
+     "ifexps": 0,
+     "line": 334
+    },
+    "count_crossings": {
+     "branch_sites": 0,
+     "chains": 0,
+     "ifexps": 0,
+     "line": 401
+    },
+    "fp": {
+     "branch_sites": 0,
+     "chains": 0,
+     "ifexps": 0,
+     "line": 102
+    },
+    "frames_of": {
+     "branch_sites": 0,
+     "chains": 0,
+     "ifexps": 0,
+     "line": 136
+    },
+    "freeze_check": {
+     "branch_sites": 0,
+     "chains": 0,
+     "ifexps": 0,
+     "line": 95
+    },
+    "main": {
+     "branch_sites": 36,
+     "chains": 17,
+     "ifexps": 19,
+     "line": 470
+    },
+    "o": {
+     "branch_sites": 0,
+     "chains": 0,
+     "ifexps": 0,
+     "line": 395
+    },
+    "page_facts": {
+     "branch_sites": 3,
+     "chains": 2,
+     "ifexps": 1,
+     "line": 106
+    },
+    "pol_off": {
+     "branch_sites": 2,
+     "chains": 0,
+     "ifexps": 2,
+     "line": 177
+    },
+    "r1_place": {
+     "branch_sites": 16,
+     "chains": 9,
+     "ifexps": 7,
+     "line": 184
+    },
+    "r2_lanes": {
+     "branch_sites": 0,
+     "chains": 0,
+     "ifexps": 0,
+     "line": 153
+    },
+    "r3_place": {
+     "branch_sites": 3,
+     "chains": 1,
+     "ifexps": 2,
+     "line": 291
+    },
+    "refclk_place": {
+     "branch_sites": 7,
+     "chains": 1,
+     "ifexps": 6,
+     "line": 342
+    },
+    "sanitize": {
+     "branch_sites": 3,
+     "chains": 3,
+     "ifexps": 0,
+     "line": 795
+    },
+    "scale_probe": {
+     "branch_sites": 3,
+     "chains": 1,
+     "ifexps": 2,
+     "line": 413
+    },
+    "seg_cross": {
+     "branch_sites": 0,
+     "chains": 0,
+     "ifexps": 0,
+     "line": 394
+    },
+    "seg_hits_box": {
+     "branch_sites": 0,
+     "chains": 0,
+     "ifexps": 0,
+     "line": 384
+    },
+    "sha256": {
+     "branch_sites": 0,
+     "chains": 0,
+     "ifexps": 0,
+     "line": 91
+    }
+   },
+   "functions": [
+    "_in_box",
+    "bump",
+    "colx_center",
+    "count_crossings",
+    "fp",
+    "frames_of",
+    "freeze_check",
+    "main",
+    "o",
+    "page_facts",
+    "pol_off",
+    "r1_place",
+    "r2_lanes",
+    "r3_place",
+    "refclk_place",
+    "sanitize",
+    "scale_probe",
+    "seg_cross",
+    "seg_hits_box",
+    "sha256"
+   ],
+   "ok": false,
+   "recursion_cycles": [
+    [
+     "sanitize",
+     "sanitize"
+    ]
+   ],
+   "rule_functions": {
+    "r1_place": {
+     "branch_sites": 16,
+     "chains": 9,
+     "ifexps": 7,
+     "line": 184
+    },
+    "r2_lanes": {
+     "branch_sites": 0,
+     "chains": 0,
+     "ifexps": 0,
+     "line": 153
+    },
+    "r3_place": {
+     "branch_sites": 3,
+     "chains": 1,
+     "ifexps": 2,
+     "line": 291
+    },
+    "refclk_place": {
+     "branch_sites": 7,
+     "chains": 1,
+     "ifexps": 6,
+     "line": 342
+    }
+   },
+   "rule_functions_over_2": {
+    "r1_place": {
+     "branch_sites": 16,
+     "chains": 9,
+     "ifexps": 7,
+     "line": 184
+    },
+    "r3_place": {
+     "branch_sites": 3,
+     "chains": 1,
+     "ifexps": 2,
+     "line": 291
+    },
+    "refclk_place": {
+     "branch_sites": 7,
+     "chains": 1,
+     "ifexps": 6,
+     "line": 342
+    }
+   },
+   "self_direct": [
+    "sanitize"
+   ],
+   "whiles": []
+  },
+  "G-M3": {
+   "declared_formula": "11*n_pages + 2*n_landing + 6*n_refclk + 3*n_frames",
+   "declared_formula_ok": false,
+   "declared_formula_values": {
+    "1": 526,
+    "2": 1052,
+    "4": 2104
+   },
+   "engine_source_uses_args_scale": true,
+   "linear_a_n_b_ok": false,
+   "ok": false,
+   "runs": {
+    "1": {
+     "median_s": 0.3461134110002604,
+     "times_s": [
+      0.361629,
+      0.346113,
+      0.338602
+     ],
+     "work_units": 526
+    },
+    "2": {
+     "median_s": 0.5519253689999459,
+     "times_s": [
+      0.534608,
+      0.551925,
+      0.55764
+     ],
+     "work_units": 740
+    },
+    "4": {
+     "median_s": 0.7391137710001203,
+     "times_s": [
+      0.742432,
+      0.739114,
+      0.728427
+     ],
+     "work_units": 1480
+    }
+   },
+   "time_ratio_2": 1.595,
+   "time_ratio_4": 2.135,
+   "time_ratio_ok": true,
+   "w1": 526,
+   "w2": 740,
+   "w4": 1480,
+   "work_units_ratio_2": 1.4068441064638784,
+   "work_units_ratio_4": 2.8136882129277567
+  },
+  "G-M4": {
+   "first_mismatch": {
+    "artifact": 16,
+    "derived": 8,
+    "field": "lane_index",
+    "kind": "R2",
+    "page": "PCIE_UP0/out_J2"
+   },
+   "meta": {
+    "derived_r1": 32,
+    "derived_r15": 32,
+    "derived_r2": 32,
+    "derived_r3": 72,
+    "mismatch_count": 197
+   },
+   "mismatch_count": 197,
+   "ok": false,
+   "seconds": 1.433
+  },
+  "G-M5": {
+   "acn1": {
+    "misses": [],
+    "mono_bad": [],
+    "n_vias": 64,
+    "pair_bad": [],
+    "via_via_bad": [
+     [
+      "PCIE_DN3/input.N",
+      "PCIE_DN4/input.P",
+      0.316228
+     ],
+     [
+      "PCIE_UP1/input.P",
+      "PCIE_UP2/input.N",
+      0.304138
+     ],
+     [
+      "PCIE_UP5/input.N",
+      "PCIE_UP6/input.P",
+      0.316228
+     ]
+    ]
+   },
+   "acn2": {
+    "n_lanes": 32,
+    "pred_bad": [],
+    "seq_bad": []
+   },
+   "acn3": {
+    "band_bad": [],
+    "extra": [],
+    "missing": [],
+    "n_land": 72,
+    "sep_bad": [],
+    "x_bad": []
+   },
+   "acn4": {
+    "crossing_pairs": [
+     [
+      "PCIE_DN0/input.N",
+      "PCIE_DN0/input.P"
+     ],
+     [
+      "PCIE_DN0/input.N",
+      "PCIE_DN1/input.N"
+     ],
+     [
+      "PCIE_DN0/input.N",
+      "PCIE_DN1/input.P"
+     ],
+     [
+      "PCIE_DN0/input.N",
+      "PCIE_DN2/input.N"
+     ],
+     [
+      "PCIE_DN0/input.N",
+      "PCIE_DN2/input.P"
+     ],
+     [
+      "PCIE_DN0/input.N",
+      "PCIE_DN3/input.N"
+     ],
+     [
+      "PCIE_DN0/input.N",
+      "PCIE_DN3/input.P"
+     ],
+     [
+      "PCIE_DN0/input.N",
+      "PCIE_DN4/input.N"
+     ],
+     [
+      "PCIE_DN0/input.N",
+      "PCIE_DN4/input.P"
+     ],
+     [
+      "PCIE_DN0/input.N",
+      "PCIE_DN5/input.N"
+     ]
+    ],
+    "n_crossings": 454,
+    "n_segments": 64
+   },
+   "acn5": {
+    "keepout_hits": [],
+    "lane_y": [
+     45.9,
+     51.3
+    ],
+    "n_boxes": 11,
+    "sep_ok": true,
+    "window_bad": []
+   },
+   "acn7": {
+    "verdict": "CERTIFICATE"
+   },
+   "certificates": {
+    "field_bad": [],
+    "global_bad": [],
+    "has_certs": true,
+    "kind_bad": [],
+    "n_certs": 2
+   },
+   "ok": false,
+   "r1_5_crossings_independent": 454
+  },
+  "G-M6": {
+   "artifact_key_hits": [],
+   "engine_function_hits": [],
+   "engine_function_names": [
+    "bump",
+    "sha256",
+    "freeze_check",
+    "fp",
+    "page_facts",
+    "frames_of",
+    "r2_lanes",
+    "pol_off",
+    "r1_place",
+    "r3_place",
+    "colx_center",
+    "refclk_place",
+    "_in_box",
+    "seg_hits_box",
+    "seg_cross",
+    "count_crossings",
+    "scale_probe",
+    "main",
+    "sanitize",
+    "o"
+   ],
+   "grep_cmd": "grep -nE 'alternatives|options|tried|branch|attempts|node' p3_v57_w3_constructive.py",
+   "grep_output": [
+    "80:KEEP_KEYS = (\"alternatives\", \"options\", \"tried\", \"attempts\")   # G-M6（禁止键名）",
+    "436:    bump(4 * len(facts), \"nodes\")",
+    "454:              \"formula\": \"11*n_pages + 3*n_frames (scale probe: R2+R1+R15+nodes per page, block per frame)\",",
+    "487:    bump(4 * len(facts), \"nodes\")",
+    "664:                \"vias\": [], \"nodes\": {}}",
+    "670:                page[\"nodes\"][pol] = ["
+   ],
+   "ok": true
   }
  },
- "notes": "artifact_verdict=CERTIFICATE; artifact_revision=W3-JA.2; checks=18 failed=none; probes=4 failed=none",
- "producer_sha256": "d081618c7b961d770c8e2f180f93b92125b316bc0eeec181f9d1d191a0ee6acc",
- "revision": "W3-VAL.2",
- "schema": 1,
- "uncertainties": [
-  "R1_5 planarity certificate: crossing counts confirmed (>=), but the 4-variant construction family fixes the R1 via selection; exhaustiveness over alternative R1 via choices in the F-13 domain is not independently established.",
-  "certificates use descriptive infeasible_layer labels (R1_5_chip_transition) rather than the canonical layer key R1_5; resolved by prefix match.",
-  "artifact.inputs_sha carries an extra key 'verdict' (m13_v57_s1_r1_via_verdict.json) beyond the 9-item card whitelist; it is an upstream input to F-13, not a frozen whitelist drift, but it is outside the literal whitelist.",
-  "pages[].r1_5 omits the card's path/layer/corners_deg/crossings fields (the R1.5 polylines live under layers.R1_5[cid].variants[*].paths; each `crossings` list is truncated to 20 entries while n_crossings is the full count).",
-  "R3 v1.1 landings are boundary-tight: many sit exactly on an F-8 y_band edge with 0.000000 mm margin (e.g. J2|PCIE_DN0_N y=54.0 in [54.0,54.6]; J3|PCIE_UP2_N y=42.0 in [42.0,44.5]). The v1.1 rule 'y in y_band' is inclusive, so it PASSes at 1e-9 tolerance, but the solution rides the construction boundary rather than an interior."
+ "notes": [
+  "artifact verdict field = CERTIFICATE; gate_status.failed = ['A-CN.1b', 'A-CN.4']",
+  "G-M4 re-derivation implements CARD v1.2 R-4 text; where the card is silent (R1 seed/tie-break, y-grid selection) the interpretation is documented in derive_r1() and is compared byte-exactly.",
+  "G-M4 first mismatch: {\"kind\": \"R2\", \"page\": \"PCIE_UP0/out_J2\", \"field\": \"lane_index\", \"derived\": 8, \"artifact\": 16}"
  ],
- "validator_sha256": "ca55a0bc790d2152681ce38fa54598ade5403a3d130c29563dbe5a445490e89b",
- "verdict": "PASS"
+ "producer_sha256": "ca372d26a0d2b2a4ceb6fdec8f002163e1e9101f3ae2df48bc1f348fc7abccb2",
+ "revision": "W3-CN-VAL.1",
+ "schema": 1,
+ "total_seconds": 7.559,
+ "validator_sha256": "250006e2e0fd546a585c39ae39402b97dd39e50e889fd0453684a59161d2f80e",
+ "verdict": "FAIL"
 }

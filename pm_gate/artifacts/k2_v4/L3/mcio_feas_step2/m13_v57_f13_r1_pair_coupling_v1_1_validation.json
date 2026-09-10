@@ -1,0 +1,479 @@
+{
+  "artifact": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_f13_r1_pair_coupling_v1_1.json",
+  "schema": 1,
+  "revision": "F13-XORDER-VAL.1",
+  "verdict": "PASS",
+  "frozen_sha_check": {
+    "v1_on_disk": "82e11c4cbdb4e8d44df1997f660c97fb75a47d33661223c9e5cf5fb0cb9c0d14",
+    "frozen": [
+      {
+        "source": "verdict",
+        "path": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_s1_r1_via_verdict.json",
+        "claimed_sha256": "2a3c8cf465c0ac1f808c1fdf7409725ab04862e4a8002f7ff71cfa299770bb5b",
+        "actual_sha256": "2a3c8cf465c0ac1f808c1fdf7409725ab04862e4a8002f7ff71cfa299770bb5b",
+        "match": true
+      },
+      {
+        "source": "manifest",
+        "path": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_s1_page_manifest.json",
+        "claimed_sha256": "a8ef3ea8ecff99d7549d4122043c972c1bb68346dc4dcc3f36fdd9bacde49890",
+        "actual_sha256": "a8ef3ea8ecff99d7549d4122043c972c1bb68346dc4dcc3f36fdd9bacde49890",
+        "match": true
+      },
+      {
+        "source": "spec",
+        "path": "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json",
+        "claimed_sha256": "0bd52ed48e720b8cb6a7869379f6c0a220f3e141e1514ab159f9f5f3b8b02233",
+        "actual_sha256": "0bd52ed48e720b8cb6a7869379f6c0a220f3e141e1514ab159f9f5f3b8b02233",
+        "match": true
+      },
+      {
+        "source": "rules",
+        "path": "_shared/eda_core/drc_rules.json",
+        "claimed_sha256": "0a459839e15960b8fbfe0e1f5bb154a02b30cbafa1cbb0d56c2b810a71228448",
+        "actual_sha256": "0a459839e15960b8fbfe0e1f5bb154a02b30cbafa1cbb0d56c2b810a71228448",
+        "match": true
+      }
+    ],
+    "all_match": true
+  },
+  "checks": [
+    {
+      "id": "X1",
+      "assertion": "artifact page set == verdict page set; pages[pid].x_column_pairs key-set == independent numpy recomputation (all 32 pages, set equality at 1e-9) and dist_max_mm match within 1e-4",
+      "expected": "empty symmetric difference; no dist / malformed / order / duplicate defect",
+      "observed": {
+        "pages_checked": 32,
+        "page_set_ok": true,
+        "pages_only_in_artifact": [],
+        "pages_only_in_recomputation": [],
+        "total_column_pairs": 57770,
+        "symmetric_difference_recompute_only": [],
+        "symmetric_difference_artifact_only": [],
+        "dist_max_mm_mismatch_over_1e-4": [],
+        "max_dist_max_mm_abs_diff": 5e-05,
+        "malformed_entries": [],
+        "unsorted_pages": [],
+        "duplicate_keys": []
+      },
+      "ok": true
+    },
+    {
+      "id": "X2",
+      "assertion": "x_columns_P / x_columns_N / x_span_P_mm / x_span_N_mm / n_column_pairs and summary statistics are consistent with the independent recomputation (all 32 pages)",
+      "expected": "no per-page inconsistency; summary totals == recomputed totals",
+      "observed": {
+        "pages_checked": 32,
+        "bad_pages": {},
+        "summary_issues": [],
+        "recomputed_total": 57770,
+        "recomputed_min": 623,
+        "recomputed_max": 2898
+      },
+      "ok": true
+    },
+    {
+      "id": "X3",
+      "assertion": "every claimed v1 inheritance (n_pairs_admissible_stagger_038, admissible_pair_witness, x_columns_P/N, v1_pair_domain_ref.sha256 == on-disk v1 sha) equals the frozen v1 artifact, page by page",
+      "expected": "no page-level inheritance mismatch; v1_pair_domain_ref.sha256 == sha256(v1 file)",
+      "observed": {
+        "pages_checked": 32,
+        "field_mismatch": [],
+        "ref_sha256_mismatch": [],
+        "x_columns_vs_v1_mismatch": [],
+        "v1_file_sha256": "82e11c4cbdb4e8d44df1997f660c97fb75a47d33661223c9e5cf5fb0cb9c0d14"
+      },
+      "ok": true
+    },
+    {
+      "id": "X4",
+      "assertion": "supersedes.sha256 and authority.{verdict,manifest,spec,rules}.sha256 equal the freshly hashed on-disk frozen sources (bytes unchanged)",
+      "expected": "all supersedes/authority hashes == freshly computed on-disk sha256",
+      "observed": {
+        "supersedes_ok": true,
+        "details": [
+          {
+            "field": "supersedes.sha256",
+            "claimed": "82e11c4cbdb4e8d44df1997f660c97fb75a47d33661223c9e5cf5fb0cb9c0d14",
+            "on_disk_v1": "82e11c4cbdb4e8d44df1997f660c97fb75a47d33661223c9e5cf5fb0cb9c0d14",
+            "ok": true
+          },
+          {
+            "field": "authority.verdict.sha256",
+            "claimed": "2a3c8cf465c0ac1f808c1fdf7409725ab04862e4a8002f7ff71cfa299770bb5b",
+            "on_disk": "2a3c8cf465c0ac1f808c1fdf7409725ab04862e4a8002f7ff71cfa299770bb5b",
+            "claimed_path": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_s1_r1_via_verdict.json",
+            "path_ok": true,
+            "ok": true
+          },
+          {
+            "field": "authority.manifest.sha256",
+            "claimed": "a8ef3ea8ecff99d7549d4122043c972c1bb68346dc4dcc3f36fdd9bacde49890",
+            "on_disk": "a8ef3ea8ecff99d7549d4122043c972c1bb68346dc4dcc3f36fdd9bacde49890",
+            "claimed_path": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_s1_page_manifest.json",
+            "path_ok": true,
+            "ok": true
+          },
+          {
+            "field": "authority.spec.sha256",
+            "claimed": "0bd52ed48e720b8cb6a7869379f6c0a220f3e141e1514ab159f9f5f3b8b02233",
+            "on_disk": "0bd52ed48e720b8cb6a7869379f6c0a220f3e141e1514ab159f9f5f3b8b02233",
+            "claimed_path": "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json",
+            "path_ok": true,
+            "ok": true
+          },
+          {
+            "field": "authority.rules.sha256",
+            "claimed": "0a459839e15960b8fbfe0e1f5bb154a02b30cbafa1cbb0d56c2b810a71228448",
+            "on_disk": "0a459839e15960b8fbfe0e1f5bb154a02b30cbafa1cbb0d56c2b810a71228448",
+            "claimed_path": "_shared/eda_core/drc_rules.json",
+            "path_ok": true,
+            "ok": true
+          },
+          {
+            "field": "x_order_dim.frozen_sources_unchanged",
+            "claimed": true,
+            "recomputed": true,
+            "ok": true
+          }
+        ]
+      },
+      "ok": true
+    },
+    {
+      "id": "X5",
+      "assertion": "zero-allocation: no keys named assigned/allocation/selected_lane/lane_assignment anywhere, except the explicit constraints.allocation=false self-declaration; constraints.allocation is false",
+      "expected": "forbidden key paths == ['constraints.allocation']; constraints.allocation is false",
+      "observed": {
+        "forbidden_key_paths": [
+          "constraints.allocation"
+        ],
+        "non_declaration_forbidden_keys": [],
+        "constraints_allocation": false,
+        "no_allocation_scan_leaked": []
+      },
+      "ok": true
+    },
+    {
+      "id": "X6",
+      "assertion": "domain sanity: for every frame = (corridor, conn_ref, band) a strictly monotone per-polarity x sequence is derivable by a forward-only construction from the artifact x-column domains (step >= 0.6, direction = sign of chip pad_x trend); F-5 page order cross-checked vs F-3 lane frame",
+      "expected": "all frames derivable for both polarities; derived page order == F-3 lane frame order",
+      "observed": {
+        "all_frames_derivable": true,
+        "frames": [
+          {
+            "frame_id": "EAST_CHIP_TO_J2/dn/J2",
+            "corridor": "EAST_CHIP_TO_J2",
+            "conn_ref": "J2",
+            "band": "dn",
+            "order_key": "conn_row_y",
+            "pages": [
+              "PCIE_DN0/input",
+              "PCIE_DN1/input",
+              "PCIE_DN2/input",
+              "PCIE_DN3/input",
+              "PCIE_DN4/input",
+              "PCIE_DN5/input",
+              "PCIE_DN6/input",
+              "PCIE_DN7/input"
+            ],
+            "pad_x_trend_direction": 1,
+            "polarity_N_trend_direction": 1,
+            "P_derivable": true,
+            "P_realized_x": [
+              83.35,
+              84.55,
+              86.05,
+              87.25,
+              88.15,
+              89.35,
+              90.85,
+              92.05
+            ],
+            "N_derivable": true,
+            "N_realized_x": [
+              83.65,
+              84.85,
+              85.75,
+              86.95,
+              88.45,
+              89.65,
+              90.55,
+              91.75
+            ],
+            "ok": true
+          },
+          {
+            "frame_id": "EAST_CHIP_TO_J2/up/J2",
+            "corridor": "EAST_CHIP_TO_J2",
+            "conn_ref": "J2",
+            "band": "up",
+            "order_key": "conn_row_y",
+            "pages": [
+              "PCIE_UP0/out_J2",
+              "PCIE_UP1/out_J2",
+              "PCIE_UP2/out_J2",
+              "PCIE_UP3/out_J2",
+              "PCIE_UP4/out_J2",
+              "PCIE_UP5/out_J2",
+              "PCIE_UP6/out_J2",
+              "PCIE_UP7/out_J2"
+            ],
+            "pad_x_trend_direction": 1,
+            "polarity_N_trend_direction": 1,
+            "P_derivable": true,
+            "P_realized_x": [
+              83.5,
+              84.7,
+              85.95,
+              87.15,
+              88.35,
+              89.55,
+              90.75,
+              91.95
+            ],
+            "N_derivable": true,
+            "N_realized_x": [
+              83.45,
+              84.3,
+              85.6,
+              86.8,
+              88.0,
+              89.2,
+              90.4,
+              91.6
+            ],
+            "ok": true
+          },
+          {
+            "frame_id": "WEST_MCIO_TO_CHIP/dn/J3",
+            "corridor": "WEST_MCIO_TO_CHIP",
+            "conn_ref": "J3",
+            "band": "dn",
+            "order_key": "conn_x",
+            "pages": [
+              "PCIE_DN3/out_MCIO",
+              "PCIE_DN2/out_MCIO",
+              "PCIE_DN1/out_MCIO",
+              "PCIE_DN0/out_MCIO"
+            ],
+            "pad_x_trend_direction": -1,
+            "polarity_N_trend_direction": -1,
+            "P_derivable": true,
+            "P_realized_x": [
+              89.65,
+              88.45,
+              87.25,
+              86.05
+            ],
+            "N_derivable": true,
+            "N_realized_x": [
+              90.0,
+              88.8,
+              87.6,
+              86.4
+            ],
+            "ok": true
+          },
+          {
+            "frame_id": "WEST_MCIO_TO_CHIP/up/J3",
+            "corridor": "WEST_MCIO_TO_CHIP",
+            "conn_ref": "J3",
+            "band": "up",
+            "order_key": "conn_x",
+            "pages": [
+              "PCIE_UP3/input",
+              "PCIE_UP2/input",
+              "PCIE_UP1/input",
+              "PCIE_UP0/input"
+            ],
+            "pad_x_trend_direction": -1,
+            "polarity_N_trend_direction": -1,
+            "P_derivable": true,
+            "P_realized_x": [
+              89.95,
+              88.75,
+              87.85,
+              86.65
+            ],
+            "N_derivable": true,
+            "N_realized_x": [
+              90.25,
+              89.05,
+              87.55,
+              86.35
+            ],
+            "ok": true
+          },
+          {
+            "frame_id": "WEST_MCIO_TO_CHIP/dn/J4",
+            "corridor": "WEST_MCIO_TO_CHIP",
+            "conn_ref": "J4",
+            "band": "dn",
+            "order_key": "conn_x",
+            "pages": [
+              "PCIE_DN4/out_MCIO",
+              "PCIE_DN5/out_MCIO",
+              "PCIE_DN6/out_MCIO",
+              "PCIE_DN7/out_MCIO"
+            ],
+            "pad_x_trend_direction": 1,
+            "polarity_N_trend_direction": 1,
+            "P_derivable": true,
+            "P_realized_x": [
+              88.0,
+              89.2,
+              90.4,
+              91.6
+            ],
+            "N_derivable": true,
+            "N_realized_x": [
+              88.4,
+              89.6,
+              90.8,
+              92.0
+            ],
+            "ok": true
+          },
+          {
+            "frame_id": "WEST_MCIO_TO_CHIP/up/J4",
+            "corridor": "WEST_MCIO_TO_CHIP",
+            "conn_ref": "J4",
+            "band": "up",
+            "order_key": "conn_x",
+            "pages": [
+              "PCIE_UP4/input",
+              "PCIE_UP5/input",
+              "PCIE_UP6/input",
+              "PCIE_UP7/input"
+            ],
+            "pad_x_trend_direction": 1,
+            "polarity_N_trend_direction": 1,
+            "P_derivable": true,
+            "P_realized_x": [
+              88.45,
+              89.65,
+              90.55,
+              91.75
+            ],
+            "N_derivable": true,
+            "N_realized_x": [
+              88.15,
+              89.35,
+              90.85,
+              92.05
+            ],
+            "ok": true
+          }
+        ],
+        "f3_order_match": true
+      },
+      "ok": true
+    },
+    {
+      "id": "X7",
+      "assertion": "at least 5 mutation tests each flip the checker to FAIL",
+      "expected": "all mutations observed FAIL (baseline PASS)",
+      "observed": {
+        "n_mutations": 5,
+        "observed": [
+          {
+            "id": "M1",
+            "observed_verdict": "FAIL",
+            "checks_flipped": [
+              "X1",
+              "X2"
+            ]
+          },
+          {
+            "id": "M2",
+            "observed_verdict": "FAIL",
+            "checks_flipped": [
+              "X1",
+              "X2"
+            ]
+          },
+          {
+            "id": "M3",
+            "observed_verdict": "FAIL",
+            "checks_flipped": [
+              "X1"
+            ]
+          },
+          {
+            "id": "M4",
+            "observed_verdict": "FAIL",
+            "checks_flipped": [
+              "X3"
+            ]
+          },
+          {
+            "id": "M5",
+            "observed_verdict": "FAIL",
+            "checks_flipped": [
+              "X4"
+            ]
+          }
+        ]
+      },
+      "ok": true
+    }
+  ],
+  "mutation_tests": [
+    {
+      "id": "M1",
+      "mutation": "delete one column pair from PCIE_DN0/input.x_column_pairs",
+      "expected_verdict": "FAIL",
+      "observed_verdict": "FAIL",
+      "ok": true,
+      "checks_flipped": [
+        "X1",
+        "X2"
+      ]
+    },
+    {
+      "id": "M2",
+      "mutation": "add bogus column pair [999.0, 999.0, 0.9] to PCIE_DN0/input",
+      "expected_verdict": "FAIL",
+      "observed_verdict": "FAIL",
+      "ok": true,
+      "checks_flipped": [
+        "X1",
+        "X2"
+      ]
+    },
+    {
+      "id": "M3",
+      "mutation": "increase one PCIE_DN0/input dist_max_mm by +0.5",
+      "expected_verdict": "FAIL",
+      "observed_verdict": "FAIL",
+      "ok": true,
+      "checks_flipped": [
+        "X1"
+      ]
+    },
+    {
+      "id": "M4",
+      "mutation": "corrupt PCIE_UP0/input.v1_pair_domain_ref.sha256",
+      "expected_verdict": "FAIL",
+      "observed_verdict": "FAIL",
+      "ok": true,
+      "checks_flipped": [
+        "X3"
+      ]
+    },
+    {
+      "id": "M5",
+      "mutation": "tamper supersedes.sha256",
+      "expected_verdict": "FAIL",
+      "observed_verdict": "FAIL",
+      "ok": true,
+      "checks_flipped": [
+        "X4"
+      ]
+    }
+  ],
+  "producer_sha256": "67aac270e4eb8deca2f97eafa32b9b446b6aea99b3bc89bc511b16dc83cc55b6",
+  "validator_sha256": "11c7bbd99e2a15e35261a7dfbe49950c1cbbccaea626f9731c940c737e16dc5f",
+  "notes": "Independent recomputation from the frozen verdict (per-page P/N via candidate lists), manifest, drc_rules and SPEC. Producer treated as a black box (hashed only: 67aac270e4eb8deca2f97eafa32b9b446b6aea99b3bc89bc511b16dc83cc55b6). X1/X2 recompute the full admissible column-pair set with numpy from scratch (dist >= 0.525-1e-9 AND |dx| >= 0.38-1e-9) over all 32 pages. X5 scans every dict key name in the artifact tree; the only forbidden-name occurrence is the explicit constraints.allocation=false self-declaration. X6 direction = sign of the chip-side P pad x trend within each F-5 frame (chip P and N trends agree in every frame); F-5 frames are derived from the manifest (corridor.id, conn_ref, corridor.band) and ordered by conn_row_y for EAST / conn_x for WEST, cross-checked byte-for-byte against the F-3 lane-frame page order. X6 is a per-polarity DOMAIN report only (no allocation emitted anywhere); joint cross-polarity coupling is a W3 construction/solve concern and is intentionally out of X6 scope. Mutation tests are applied to in-memory copies only; no file under test is modified."
+}
