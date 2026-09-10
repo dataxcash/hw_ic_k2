@@ -36,7 +36,7 @@ F = {
     "r3_gaps": STEP2 / "m13_v57_f8_r3_gap_candidates.json",
     "f6b_report": STEP2 / "m13_v57_f6b_report.json",
     "verdict": STEP2 / "m13_v57_s1_r1_via_verdict.json",
-    "card": STEP2 / "m13_v57_w3_kickoff_card_v1_3.md",
+    "card": STEP2 / "m13_v57_w3_kickoff_card_v1_4.md",
 }
 FROZEN_SHA = {
     "spec": "0bd52ed48e720b8cb6a7869379f6c0a220f3e141e1514ab159f9f5f3b8b02233",
@@ -49,12 +49,12 @@ FROZEN_SHA = {
     "r3_gaps": "8a31632907b171483cd40a053231c702e378f944af33f92598a6141bd052cdeb",
     "f6b_report": "9070ed53f970f480e88b1de3aa19792f8b637de51857935fa6b7c51fa8a015d6",
     "verdict": "2a3c8cf465c0ac1f808c1fdf7409725ab04862e4a8002f7ff71cfa299770bb5b",
-    "card": "6ad141c1c4e99518739ba035ba88ad3f245d072f7536c3533fa8a3c2ad9cda11",
+    "card": "be15305cf76980bc057a2261d5938fd0018f29ec60dae33de31f8eb062861bb8",
 }
 OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
 OUT_LANDING = STEP2 / "m13_v57_w3_chip_landing_rows.json"
 
-REVISION = "W3-CN.2"
+REVISION = "W3-CN.3"
 SCHEMA = 1
 STEP = 1.46
 LANE_LO = 33.3
@@ -219,7 +219,8 @@ def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict) -> dict:
                 px = min(px_all, key=lambda x: (abs(x - slot_p), x)) if px_all else None
                 nx = None
                 if px is not None and px in columns:
-                    nok = [x for x in columns[px] if abs(x - px) >= SLOT_SEP - GRID - TOL]
+                    nok = [x for x in columns[px] if (x - px) * s > 0
+                           and abs(x - px) >= SLOT_SEP - GRID - TOL]
                     nx = min(nok, key=lambda x: (abs(x - slot_n), x)) if nok else None
                 ok_list = [
                     prev["P"] is None or (px >= prev["P"] + s * (MIN_XSTEP - GRID) - TOL if s > 0
@@ -415,6 +416,105 @@ def count_crossings(paths: dict) -> int:
     return n
 
 
+def resource_gate(facts: dict, spec: dict, rules: dict) -> dict:
+    """W3-C4 上游资源充分性门（闭式 O(n)，机器可判）：层意图资源 vs 需求。"""
+    bump(4, "gate_layers")
+    signals = {"F.Cu": "stub_only", "In2.Cu": "transition_eligible",
+               "In4.Cu": "power_plane(spec)", "B.Cu": "transition_eligible"}
+    avail = sorted(k for k in signals if signals[k] == "transition_eligible")
+    # 每组 = (corridor, band)；源行来自 chip 锚；lane 区来自 v1.3 分段区意图
+    _src = {}
+    for _f in facts.values():
+        _src.setdefault(_f["corridor"], []).append(_f["pad"]["P"][1])
+    corridors = sorted(_src, key=lambda c: (sum(_src[c]) / len(_src[c])))  # 与 R2 分段区同序
+    regions = {}
+    for ci in range(len(corridors)):
+        lo = ci * N_USED
+        regions[corridors[ci]] = [fp(LANE_LO + lo * STEP), fp(LANE_LO + (lo + N_USED - 1) * STEP)]
+    groups = {}
+    for pid, f in facts.items():
+        key = (f["corridor"], f["band"])
+        g = groups.setdefault(key, {"src": [], "corridor": f["corridor"], "band": f["band"]})
+        g["src"].append(f["pad"]["P"][1])
+        g["src"].append(f["pad"]["N"][1])
+    rows = []
+    for key in sorted(groups):
+        g = groups[key]
+        reg = regions[g["corridor"]]
+        ys = g["src"] + reg
+        rows.append({"group": key[0] + "/" + key[1], "source_y_range": [min(g["src"]), max(g["src"])],
+                     "lane_region_y": reg, "fan_y_extent": [fp(min(ys)), fp(max(ys))],
+                     "x_extent_chip_zone": [82.35, 105.25]})
+    # 层需求 = 扇面 y 区间在同一 x 带内的最大重叠数（区间图团数 = 端点扫描）
+    events = []
+    for i in range(len(rows)):
+        events.append((rows[i]["fan_y_extent"][0], 1))
+        events.append((rows[i]["fan_y_extent"][1], -1))
+    events.sort(key=lambda e: (e[0], -e[1]))
+    cur = peak = 0
+    for e in events:
+        cur += e[1]
+        peak = max(peak, cur)
+    lanes_needed = {c: sum(1 for f in facts.values() if f["corridor"] == c) for c in corridors}
+    lanes_avail = {c: N_LANES for c in corridors}
+    cap_ok = all(lanes_needed[c] <= lanes_avail[c] for c in corridors)
+    layers_ok = peak <= len(avail)
+    bump(4, "gate_groups")
+    return {"verdict": "SUFFICIENT" if (cap_ok and layers_ok) else "UPSTREAM_CHANGE_REQUEST",
+            "rule": "available transition-eligible signal layers x corridor/band fan capacity vs demand",
+            "transition_eligible_layers": avail,
+            "layer_intent": signals,
+            "layer_demand_peak_overlap": peak,
+            "layer_demand_ok": layers_ok,
+            "lane_capacity": {"needed": lanes_needed, "available": lanes_avail, "ok": cap_ok},
+            "fan_groups": rows,
+            "closed_form": "verdict = SUFFICIENT iff peak(fan y-extent overlap in chip-zone x) "
+                           "<= |transition_eligible_layers| and lanes_needed <= lanes_avail",
+            "insufficiency_basis": None if (cap_ok and layers_ok) else {
+                "layers_needed": peak, "layers_available": len(avail),
+                "gap": peak - len(avail)},
+            "producer": "k2/tools/p3_v57_w3_constructive.py:resource_gate"}
+
+
+def emit_gate_artifacts(gate: dict, args) -> None:
+    """不足：出 UPSTREAM_CHANGE_REQUEST 工件 + 上游变更请求卡（不发 R1/R1.5 求解）。"""
+    cr = STEP2 / "m13_v57_w3_upstream_change_request.md"
+    doc = {"artifact": "m13_v57_w3_joint_assignment", "schema": SCHEMA, "revision": REVISION,
+           "status": "EMITTED", "verdict": "UPSTREAM_CHANGE_REQUEST",
+           "contract": {"id": "W3-C4", "card_md": str(F["card"].relative_to(K2)),
+                        "sha256": FROZEN_SHA["card"]},
+           "resource_gate": gate,
+           "layers": {}, "pages": [], "certificates": [], "landing_rows": None,
+           "landing_rows_status": "NOT_REEMITTED",
+           "upstream_change_request": str(cr.relative_to(K2)),
+           "note": "W3-C4 门：上游资源不足，未进入 R1/R1.5 求解（天条：发现上游问题立即停机回上层）"}
+    out = Path(args.out) if args.out else OUT_MAIN
+    out.write_text(json.dumps(sanitize(doc), indent=1, ensure_ascii=False, sort_keys=True),
+                   encoding="utf-8")
+    cr.write_text(chr(10).join([
+        "# 上游变更请求卡 — W3 层意图资源不足（W3-C4）", "",
+        "> 触发：`m13_v57_w3_resource_gate` verdict = UPSTREAM_CHANGE_REQUEST（闭式门）。",
+        "> 语义：CERTIFICATE/门失败 = **升级触发器**，不是终点；本卡即升级件。", "",
+        "## 门实测（闭式）", "```json",
+        json.dumps(gate, ensure_ascii=False, indent=1), "```", "",
+        "## 待 L2 裁决的层意图项（每项附闭式依据）",
+        "1. **In4.Cu 可否作信号层**：当前 SPEC 记 In4 为电源分区；若放行，可用过渡层 2→3，",
+        "   闭式依据：`peak(fan y-extent overlap) <= |transition_eligible_layers|`。",
+        "2. **no_90deg 是否放宽**：若放宽，R1.5 可走确定性通道化折线（新增 R1.5 资源层字段），",
+        "   闭式依据：折线通道互斥谓词（同层同 y 通道唯一占用）。",
+        "3. **lane 序可否改**：若允许按源序排 lane，chip 侧扇面可直接对齐，",
+        "   闭式依据：`sign(src_y_a - src_y_b) == sign(lane_y_a - lane_y_b) forall a,b`。",
+        "4. **R1 x 序准入约束**（hatch ①，已在 v1.1 域内）：若需全局单调 x，须放宽 ±1.5mm 逃逸域。",
+        "",
+        "## 当前层意图结论", "- 可用过渡层：" + ", ".join(gate["transition_eligible_layers"]),
+        "- 层需求（扇面 y 重叠峰值）：" + str(gate["layer_demand_peak_overlap"]),
+        "- 判定：" + gate["verdict"],
+        ""]) , encoding="utf-8")
+    if not args.quiet:
+        print("W3-C4 GATE:", gate["verdict"], "| demand", gate["layer_demand_peak_overlap"],
+              "| available", len(gate["transition_eligible_layers"]), "| change-request ->", cr)
+
+
 def scale_probe(j: dict, base_facts: dict, args) -> int:
     """G-M3 规模探针：复制数据页集 K 份（x + 300*c，闭式偏移），只跑构造并报 work_units（线性）。"""
     WORK[0] = 0
@@ -520,6 +620,10 @@ def main(argv=None) -> int:
     facts = page_facts(j["manifest"], j["lane_frame"])
     if args.scale > 1:
         return scale_probe(j, facts, args)
+    gate = resource_gate(facts, j["spec"], j["rules"])
+    if gate["verdict"] != "SUFFICIENT":
+        emit_gate_artifacts(gate, args)
+        return 0
     bump(4 * len(facts), "nodes")
     frs = frames_of(facts)
     lanes = r2_lanes(frs, facts)
