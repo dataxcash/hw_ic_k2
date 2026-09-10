@@ -1,0 +1,11 @@
+{
+ "failing_pages_by_frame": {},
+ "chosen_common_rows": {},
+ "closure": "no closed-form key in the row-carrying family satisfies prefix-monotone x for all pages; 16/32 pages lack a row-carrying column beyond the monotone threshold",
+ "minimal_upstream_item": {
+  "item": "R1 escape-domain widening (+/-1.5mm -> larger)",
+  "closed_form_basis": "monotone ramp needs a row-carrying column x_i >= x_{i-1} + step; the frozen escape domain (+/-1.5mm) does not carry the frame-common row far enough along the ramp for 16 pages",
+  "measured": "R1 16/32 with row key; baseline(no collinear) 29/32; crossings 176 vs 264"
+ },
+ "no_degradation_action": "roll back R1 change (keep analysis); targets current = 264 / 29-32"
+}
