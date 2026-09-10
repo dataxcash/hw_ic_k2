@@ -35,8 +35,8 @@ F = {
     "pair_xorder": STEP2 / "m13_v57_f13_r1_pair_coupling_v1_1.json",
     "r3_gaps": STEP2 / "m13_v57_f8_r3_gap_candidates.json",
     "f6b_report": STEP2 / "m13_v57_f6b_report.json",
-    "verdict": STEP2 / "m13_v57_s1_r1_via_verdict.json",
-    "card": STEP2 / "m13_v57_w3_kickoff_card_v1_13.md",
+    "verdict": STEP2 / "m13_v57_s1_r1_via_verdict_r2.json",
+    "card": STEP2 / "m13_v57_w3_kickoff_card_v1_15.md",
     "layer_intent": STEP2 / "m13_v57_layer_intent_rev4.json",
 }
 FROZEN_SHA = {
@@ -49,14 +49,14 @@ FROZEN_SHA = {
     "pair_coupling": "82e11c4cbdb4e8d44df1997f660c97fb75a47d33661223c9e5cf5fb0cb9c0d14",
     "r3_gaps": "8a31632907b171483cd40a053231c702e378f944af33f92598a6141bd052cdeb",
     "f6b_report": "9070ed53f970f480e88b1de3aa19792f8b637de51857935fa6b7c51fa8a015d6",
-    "verdict": "2a3c8cf465c0ac1f808c1fdf7409725ab04862e4a8002f7ff71cfa299770bb5b",
-    "card": "e01b5356aa50a026e999efac4cf9a22035145e4d60da62d63e3ae163b6f2ea3f",
+    "verdict": "f2e2632506457e31c145b491284c9ecbf1cb72cc09d96ccdfb3251ef80a5556a",
+    "card": "9e48499156faebe6ee3c85b16fd05ecce04a214336853b40a30a4e2e70e68a94",
     "layer_intent": "994363267baca54da9658283f21856a1bf2194b123a8de91f262c767edc35491",
 }
 OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
 OUT_LANDING = STEP2 / "m13_v57_w3_chip_landing_rows.json"
 
-REVISION = "W3-CN.5"
+REVISION = "W3-CN.6"
 SCHEMA = 1
 STEP = 1.46
 LANE_LO = 33.3
