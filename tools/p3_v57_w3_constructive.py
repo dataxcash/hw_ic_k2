@@ -36,7 +36,7 @@ F = {
     "r3_gaps": STEP2 / "m13_v57_f8_r3_gap_candidates_j2x1.json",   # ROOT-16 A (versioned domain rev)
     "f6b_report": STEP2 / "m13_v57_f6b_report.json",
     "verdict": STEP2 / "m13_v57_s1_r1_via_verdict_r2.json",
-    "card": STEP2 / "m13_v57_w3_kickoff_card_v1_24.md",   # ROOT-16 contract revision
+    "card": STEP2 / "m13_v57_w3_kickoff_card_v1_25.md",   # ROOT-16 contract revision
     "layer_intent": STEP2 / "m13_v57_layer_intent_rev4.json",
     "coherent_rows": STEP2 / "m13_v57_f13_r3_coherent_rows.json",
 }
@@ -52,13 +52,13 @@ FROZEN_SHA = {
     "f6b_report": "9070ed53f970f480e88b1de3aa19792f8b637de51857935fa6b7c51fa8a015d6",
     "verdict": "f2e2632506457e31c145b491284c9ecbf1cb72cc09d96ccdfb3251ef80a5556a",
     "coherent_rows": "014a14b317e1c3df3d4400d45d6877ffc81f4ca92d533da4c7c7e4af67319c9a",
-    "card": "7e051b053b525b80a168174c242a8fb6d9ef6dc10154d9d8fbb8e165dca77c8b",
+    "card": "addec4b5267d51a3141668ba44bf77198b525a133f248c8f8c887cff839c4bd9",
     "layer_intent": "994363267baca54da9658283f21856a1bf2194b123a8de91f262c767edc35491",
 }
 OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
 OUT_LANDING = STEP2 / "m13_v57_w3_chip_landing_rows.json"
 
-REVISION = "W3-CN.12"
+REVISION = "W3-CN.13"
 SCHEMA = 1
 STEP = 1.46
 LANE_LO = 33.3
@@ -582,23 +582,9 @@ def overlap(a: list, b: list) -> bool:
     return min(a[1], b[1]) >= max(a[0], b[0])
 
 
-def emit_gate_artifacts(gate: dict, args) -> None:
-    """不足：出 UPSTREAM_CHANGE_REQUEST 工件 + 上游变更请求卡（不发 R1/R1.5 求解）。"""
-    # Versioned request card: never clobber a pinned/curated canonical card (C7 concern).
+def emit_request_card(gate: dict) -> None:
+    """不足：出**版本化**上游变更请求卡（不 clobber canonical；ROOT-16 起几何已随主件持久化）。"""
     cr = STEP2 / ("m13_v57_w3_upstream_change_request_" + REVISION + ".md")
-    doc = {"artifact": "m13_v57_w3_joint_assignment", "schema": SCHEMA, "revision": REVISION,
-           "status": "EMITTED", "verdict": "UPSTREAM_CHANGE_REQUEST",
-           "contract": {"id": "W3-C4", "card_md": str(F["card"].relative_to(K2)),
-                        "sha256": FROZEN_SHA["card"]},
-           "resource_gate": gate,
-           "layers": {}, "pages": [], "certificates": [], "landing_rows": None,
-           "landing_rows_status": "NOT_REEMITTED",
-           "upstream_change_request": str(cr.relative_to(K2)),
-           "note": "W3-C4 门：上游资源不足，未进入 R1/R1.5 求解（天条：发现上游问题立即停机回上层）"}
-    out = Path(args.out) if args.out else OUT_MAIN
-    blob = json.dumps(sanitize(doc), indent=1, ensure_ascii=False, sort_keys=True)
-    out.write_text(blob, encoding="utf-8")
-    (STEP2 / ("m13_v57_w3_joint_assignment_" + REVISION + ".json")).write_text(blob, encoding="utf-8")
     rej = ["In4.Cu as signal layer - REJECTED (spec: In4 = power plane P3V3; In2 = the only internal signal layer; PD/SI red line; measured regression 29/32 -> 8/32)"]
     levers = ["lane order by source - WITHDRAWN (equals card v1.3 R-8 closed-form infeasibility proof)",
               "no_90deg channelized polyline - MEASURED worse (319 > 264) -> rolled back",
@@ -617,9 +603,8 @@ def emit_gate_artifacts(gate: dict, args) -> None:
         "UPSTREAM: (a) R1 escape domain widening, (b) F-5 frame/lane order revision, "
         "(c) connector/ball re-mapping, or (d) provide a GLOBAL infeasibility proof."]),
         encoding="utf-8")
-    if not args.quiet:
-        print("W3-C4 GATE:", gate["verdict"], "| demand", gate["layer_demand_peak_overlap"],
-              "| available", len(gate["transition_eligible_layers"]), "| change-request ->", cr)
+    print("W3-C4 GATE:", gate["verdict"], "| demand", gate["layer_demand_peak_overlap"],
+          "| available", len(gate["transition_eligible_layers"]), "| change-request ->", cr)
 
 
 def scale_probe(j: dict, base_facts: dict, args) -> int:
@@ -967,12 +952,12 @@ def main(argv=None) -> int:
             "minimal_core": cross_core,
             "structural_reason": "intended construction (signal-layer-only intent, band layer rule, "
                                  "polarity same-side, adaptive step) still leaves same-layer crossings"}
-        (STEP2 / "m13_v57_w3_resource_gate.json").write_text(
-            json.dumps(sanitize(gate), indent=1, ensure_ascii=False, sort_keys=True), encoding="utf-8")
-        emit_gate_artifacts(gate, args)
-        return 0
     (STEP2 / "m13_v57_w3_resource_gate.json").write_text(
         json.dumps(sanitize(gate), indent=1, ensure_ascii=False, sort_keys=True), encoding="utf-8")
+    if gate["verdict"] != "SUFFICIENT":
+        emit_request_card(gate)
+    # ROOT-16: NEVER early-return; always persist the full route geometry so the conflict counts
+    # (真交叉 + 共线重叠) are independently recomputable from THIS artifact (no "trust-me" scalars).
     certs = r1["certificates"] + r3["certificates"]
     if crossings:
         certs.append({"kind": "CONSTRUCTION_INFEASIBLE", "layer": "R1_5_chip_transition",
@@ -992,7 +977,10 @@ def main(argv=None) -> int:
                                                "0.05-grid snapping",
                       "observed": vviol[:6], "required": {"dist_mm": VIA_VIA},
                       "page_or_pad": vviol[0][0], "scope_note": "本构造规则下不可行；非全局不可能性证明"})
-    verdict = "FEASIBLE_ALL" if all(c[4] for c in checks) and not certs else "CERTIFICATE"
+    if crossings == 0 and gate["lane_capacity"]["ok"]:
+        verdict = "FEASIBLE_ALL" if (all(c[4] for c in checks) and not certs) else "CERTIFICATE"
+    else:
+        verdict = "UPSTREAM_CHANGE_REQUEST"
     checks.append(("A-CN.6", "序无关（3 枚举序，验证器复跑）", "byte-identical", "see validator", True))
     checks.append(("A-CN.7", "FEASIBLE_ALL ⇒ 34 页节点 + landing 重发射", "vacuous|satisfied",
                    "vacuous(CERTIFICATE)" if verdict != "FEASIBLE_ALL" else "satisfied", True))
@@ -1034,7 +1022,7 @@ def main(argv=None) -> int:
                                      "landing": r3_by_pol[pol]["landing"],
                                      "column_x": r3_by_pol[pol]["column_x"]}) for pol in ("P", "N")},
                 "vias": [], "nodes": {}}
-        if a and all(r3_by_pol.values()) and verdict == "FEASIBLE_ALL":
+        if a and all(r3_by_pol.values()):
             for pol in ("P", "N"):
                 r3a = r3_by_pol[pol]                         # per-polarity landing
                 off = pol_off(f, pol)
@@ -1081,6 +1069,7 @@ def main(argv=None) -> int:
     doc = {
         "artifact": "m13_v57_w3_joint_assignment",
         "schema": SCHEMA, "revision": REVISION, "status": "EMITTED", "verdict": verdict,
+        "resource_gate": gate,
         "contract": {"id": "W3-C2", "card_md": str(F["card"].relative_to(K2)),
                      "sha256": FROZEN_SHA["card"],
                      "supersedes": {"v1": "97a8084bb73f3af2b6996d58e616354c1941f2dc1b507e88725abe7a26f84a97",
@@ -1162,6 +1151,12 @@ def main(argv=None) -> int:
                        "assignment": rfc, "keepout_hits": rf_hits, "page_separation_ok": rf_sep},
         },
         "pages": pages_out,
+        "route_geometry": [{"key": [k[0], k[1]], "layer": paths[k][0],
+                            "points": [[fp(q[0]), fp(q[1])] for q in paths[k][1]]}
+                           for k in sorted(paths)],
+        "upstream_change_request": (str((STEP2 / ("m13_v57_w3_upstream_change_request_"
+                                                  + REVISION + ".md")).relative_to(K2))
+                                    if gate["verdict"] != "SUFFICIENT" else None),
         "certificates": certs,
         "gate_status": {"predicates": {c[0]: ("PASS" if c[4] else "FAIL") for c in checks},
                         "failed": [c[0] for c in checks if not c[4]]},
