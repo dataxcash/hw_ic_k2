@@ -1,0 +1,65 @@
+{
+ "artifact": "m13_v57_w3_rule_revision",
+ "authority": "ROOT-1 registry + lifecycle policy; authorization: project-artifact layer (pre-authorized per ROOT-1 policy §2.3)",
+ "layer_palette": [
+  "F.Cu",
+  "In2.Cu",
+  "B.Cu"
+ ],
+ "method": "deterministic greedy 3-coloring of the R1.5 crossing graph (single pass, fixed node order, no search)",
+ "revision": "REV1",
+ "rules": [
+  {
+   "boundary": "pad-wall access segment only",
+   "changed": "no_90deg scoped to the 0.4mm pad-wall access segment (per SPEC escape_clearance_basis)",
+   "class": "SOFT",
+   "id": "R-01",
+   "purpose": "fab micro-clearance in the pad-wall access segment",
+   "relaxation": "transition topology free with the 0.075 micro-clearance carried over",
+   "revision": "REV1"
+  },
+  {
+   "boundary": "pad-wall access segment only",
+   "changed": "no_via scoped likewise",
+   "class": "SOFT",
+   "id": "R-02",
+   "relaxation": "transition-end vias permitted (design-inherent via1/via2)",
+   "revision": "REV1"
+  },
+  {
+   "boundary": "lane run = impedance-controlled; transition/stub = breakout",
+   "changed": "usable signal layers = {F.Cu, In2.Cu, B.Cu} (SPEC /layer_plan: WEST lane = DIRECT F.Cu; /stackup: B.Cu empty)",
+   "class": "HARD for impedance-controlled lane runs / SOFT elsewhere",
+   "id": "R-03",
+   "kept_hard": "planes In1/In3/In4 not for signals",
+   "relaxation": "transition+stub may use any of the three signal layers",
+   "revision": "REV1"
+  },
+  {
+   "changed": "via <=3 allowed on breakout/transition segments",
+   "class": "SOFT (SI caveat)",
+   "id": "R-04",
+   "purpose": "SI stub/resonance",
+   "relaxation": "controlled vias + back-drill (per the same PM ruling)",
+   "revision": "REV1"
+  },
+  {
+   "changed": "lane order may deviate from conn-row monotonicity",
+   "class": "SOFT",
+   "evidence": "C17 measured connector stub crossings = 0 regardless of lane order",
+   "id": "R-05",
+   "purpose": "connector-side non-crossing",
+   "relaxation": "version-bumped F-5 revision",
+   "revision": "REV1"
+  },
+  {
+   "changed": "R1 escape window 1.5 -> 2.5mm",
+   "class": "SOFT",
+   "id": "R-06",
+   "relaxation": "producer re-emission (done: r2)",
+   "revision": "REV1"
+  }
+ ],
+ "schema": 1,
+ "supersedes": "none (new file; frozen four sources untouched)"
+}

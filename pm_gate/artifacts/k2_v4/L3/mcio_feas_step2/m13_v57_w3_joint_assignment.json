@@ -2,9 +2,9 @@
  "artifact": "m13_v57_w3_joint_assignment",
  "certificates": [],
  "contract": {
-  "card_md": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_kickoff_card_v1_20.md",
+  "card_md": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_kickoff_card_v1_21.md",
   "id": "W3-C4",
-  "sha256": "2f9cfa368130255ad221eed2914e0f5099b1dfcd0768429a60fe16e2f676c5f8"
+  "sha256": "57c0397e81c376bf0038f8bfcdc32d3ac73dba8a320c14dbf8944ab98497e82f"
  },
  "landing_rows": null,
  "landing_rows_status": "NOT_REEMITTED",
@@ -96,14 +96,6 @@
    "minimal_core": [
     [
      "PCIE_DN0/input/N",
-     "PCIE_DN0/input/P"
-    ],
-    [
-     "PCIE_DN0/input/N",
-     "PCIE_DN1/input/N"
-    ],
-    [
-     "PCIE_DN0/input/N",
      "PCIE_DN1/input/P"
     ],
     [
@@ -117,9 +109,17 @@
     [
      "PCIE_DN0/input/N",
      "PCIE_DN3/input/N"
+    ],
+    [
+     "PCIE_DN0/input/N",
+     "PCIE_DN3/input/P"
+    ],
+    [
+     "PCIE_DN0/input/N",
+     "PCIE_DN5/input/N"
     ]
    ],
-   "same_layer_crossings": 245,
+   "same_layer_crossings": 217,
    "structural_reason": "intended construction (signal-layer-only intent, band layer rule, polarity same-side, adaptive step) still leaves same-layer crossings"
   },
   "lane_capacity": {
@@ -155,12 +155,12 @@
    "capacity_ok": true,
    "closed_form": "SUFFICIENT iff same_layer_crossings == 0 and capacity ok",
    "crossings_by_class": {
-    "r1_5": 245,
+    "r1_5": 217,
     "stub": 0
    },
    "r1_assigned": 29,
    "r1_required": 32,
-   "same_layer_crossings": 245
+   "same_layer_crossings": 217
   }
  },
  "revision": "W3-CN.6",

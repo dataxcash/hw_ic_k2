@@ -36,7 +36,7 @@ F = {
     "r3_gaps": STEP2 / "m13_v57_f8_r3_gap_candidates.json",
     "f6b_report": STEP2 / "m13_v57_f6b_report.json",
     "verdict": STEP2 / "m13_v57_s1_r1_via_verdict_r2.json",
-    "card": STEP2 / "m13_v57_w3_kickoff_card_v1_20.md",
+    "card": STEP2 / "m13_v57_w3_kickoff_card_v1_21.md",
     "layer_intent": STEP2 / "m13_v57_layer_intent_rev4.json",
     "coherent_rows": STEP2 / "m13_v57_f13_r3_coherent_rows.json",
 }
@@ -52,7 +52,7 @@ FROZEN_SHA = {
     "f6b_report": "9070ed53f970f480e88b1de3aa19792f8b637de51857935fa6b7c51fa8a015d6",
     "verdict": "f2e2632506457e31c145b491284c9ecbf1cb72cc09d96ccdfb3251ef80a5556a",
     "coherent_rows": "014a14b317e1c3df3d4400d45d6877ffc81f4ca92d533da4c7c7e4af67319c9a",
-    "card": "2f9cfa368130255ad221eed2914e0f5099b1dfcd0768429a60fe16e2f676c5f8",
+    "card": "57c0397e81c376bf0038f8bfcdc32d3ac73dba8a320c14dbf8944ab98497e82f",
     "layer_intent": "994363267baca54da9658283f21856a1bf2194b123a8de91f262c767edc35491",
 }
 OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
@@ -74,6 +74,7 @@ R3_OFF = -0.3
 R3_STEP = 0.6
 POL_OFF = 0.19
 LAYER_BY_BAND = {"up": "In2.Cu", "dn": "B.Cu"}
+LAYER_PALETTE = ["F.Cu", "In2.Cu", "B.Cu"]
 TOL = 1e-9
 SUPERSEDED = {"artifact": "m13_v57_w3_joint_assignment.json", "revision": "W3-JA.2",
                "sha256": "d081618c7b961d770c8e2f180f93b92125b316bc0eeec181f9d1d191a0ee6acc",
@@ -707,6 +708,24 @@ def main(argv=None) -> int:
             if key in paths:
                 paths[(pid + "#stub", pol)] = ["F.Cu", [[ext, ly],
                                                         [r3a["landing"][0], r3a["landing"][1]]]]
+    ids_all = sorted(paths)
+    adj = {k: set() for k in ids_all}
+    for a in range(len(ids_all)):
+        for b in range(a + 1, len(ids_all)):
+            pa, pb = paths[ids_all[a]][1], paths[ids_all[b]][1]
+            hit = 0
+            for s1 in zip(pa, pa[1:]):
+                for s2 in zip(pb, pb[1:]):
+                    hit += seg_cross(s1[0], s1[1], s2[0], s2[1])
+            if hit:
+                adj[ids_all[a]].add(ids_all[b]); adj[ids_all[b]].add(ids_all[a])
+    col = {}
+    for k in ids_all:
+        used = {col[n] for n in adj[k] if n in col}
+        pick = [i for i in range(len(LAYER_PALETTE)) if i not in used]
+        col[k] = pick[0] if pick else 0
+    for k in ids_all:
+        paths[k][0] = LAYER_PALETTE[col[k]]
     cls = count_crossings(paths)
     crossings = cls.get("r1_5", 0)
     cross_core = []
