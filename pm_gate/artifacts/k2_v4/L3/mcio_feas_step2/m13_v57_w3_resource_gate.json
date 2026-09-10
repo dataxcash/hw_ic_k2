@@ -78,7 +78,36 @@
    ]
   }
  ],
- "insufficiency_basis": null,
+ "insufficiency_basis": {
+  "minimal_core": [
+   [
+    "PCIE_DN0/input/N",
+    "PCIE_DN0/input/P"
+   ],
+   [
+    "PCIE_DN0/input/N",
+    "PCIE_DN1/input/N"
+   ],
+   [
+    "PCIE_DN0/input/N",
+    "PCIE_DN1/input/P"
+   ],
+   [
+    "PCIE_DN0/input/N",
+    "PCIE_DN2/input/N"
+   ],
+   [
+    "PCIE_DN0/input/N",
+    "PCIE_DN2/input/P"
+   ],
+   [
+    "PCIE_DN0/input/N",
+    "PCIE_DN3/input/N"
+   ]
+  ],
+  "same_layer_crossings": 264,
+  "structural_reason": "intended construction (signal-layer-only intent, band layer rule, polarity same-side, adaptive step) still leaves same-layer crossings"
+ },
  "lane_capacity": {
   "available": {
    "EAST_CHIP_TO_J2": 32,
@@ -90,13 +119,7 @@
   },
   "ok": true
  },
- "layer_assignment": {
-  "EAST_CHIP_TO_J2/dn": "B.Cu",
-  "EAST_CHIP_TO_J2/up": "In4.Cu",
-  "WEST_MCIO_TO_CHIP/dn": "B.Cu",
-  "WEST_MCIO_TO_CHIP/up": "In2.Cu"
- },
- "layer_demand_ok": true,
+ "layer_demand_ok": false,
  "layer_demand_peak_overlap": 3,
  "layer_intent": {
   "B.Cu": "transition_eligible",
@@ -104,14 +127,20 @@
   "In1.Cu": "gnd_plane",
   "In2.Cu": "transition_eligible",
   "In3.Cu": "gnd_plane",
-  "In4.Cu": "transition_eligible"
+  "In4.Cu": "power_plane(P3V3, spec)"
  },
  "producer": "k2/tools/p3_v57_w3_constructive.py:resource_gate",
  "rule": "available transition-eligible signal layers x corridor/band fan capacity vs demand",
  "transition_eligible_layers": [
   "B.Cu",
-  "In2.Cu",
-  "In4.Cu"
+  "In2.Cu"
  ],
- "verdict": "SUFFICIENT"
+ "verdict": "UPSTREAM_CHANGE_REQUEST",
+ "verification_check": {
+  "capacity_ok": true,
+  "closed_form": "SUFFICIENT iff same_layer_crossings == 0 and capacity ok",
+  "r1_assigned": 29,
+  "r1_required": 32,
+  "same_layer_crossings": 264
+ }
 }

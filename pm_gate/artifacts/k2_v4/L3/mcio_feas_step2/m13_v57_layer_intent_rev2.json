@@ -1,0 +1,34 @@
+{
+ "artifact": "m13_v57_layer_intent",
+ "authority": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_d1_layer_intent_revision_card_withdrawal.md",
+ "authorization_source": "supervision work order W3-C5 (NOT L2)",
+ "closed_form": "gate = verification-based: construct with intent layers; SUFFICIENT iff same-layer crossings == 0",
+ "frozen_sources_untouched": true,
+ "layer_intent": {
+  "B.Cu": "transition_eligible",
+  "F.Cu": "stub_only",
+  "In1.Cu": "gnd_plane",
+  "In2.Cu": "transition_eligible",
+  "In3.Cu": "gnd_plane",
+  "In4.Cu": "power_plane(P3V3, spec)"
+ },
+ "legal_rule_levers": [
+  "no_90deg_channelized_polyline",
+  "lane_order_by_source",
+  "r1_polarity_same_side",
+  "per_frame_adaptive_step"
+ ],
+ "revision": "REV2",
+ "ruling": "REV2: signal-layer-only intent. Plane layers (In1/In3/In4) must NOT be used for signals. Transition-eligible = [In2.Cu, B.Cu]. Rule changes (routing topology) are the only legal lever.",
+ "schema": 1,
+ "stackup_unchanged": true,
+ "supersedes": {
+  "file": "m13_v57_layer_intent_rev1.json",
+  "reason": "withdrawn: plane repurposing violates system design; no benefit, R1 regression",
+  "revision": "REV1"
+ },
+ "transition_eligible_layers": [
+  "In2.Cu",
+  "B.Cu"
+ ]
+}

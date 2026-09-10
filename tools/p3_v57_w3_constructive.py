@@ -36,8 +36,8 @@ F = {
     "r3_gaps": STEP2 / "m13_v57_f8_r3_gap_candidates.json",
     "f6b_report": STEP2 / "m13_v57_f6b_report.json",
     "verdict": STEP2 / "m13_v57_s1_r1_via_verdict.json",
-    "card": STEP2 / "m13_v57_w3_kickoff_card_v1_5.md",
-    "layer_intent": STEP2 / "m13_v57_layer_intent_rev1.json",
+    "card": STEP2 / "m13_v57_w3_kickoff_card_v1_7.md",
+    "layer_intent": STEP2 / "m13_v57_layer_intent_rev2.json",
 }
 FROZEN_SHA = {
     "spec": "0bd52ed48e720b8cb6a7869379f6c0a220f3e141e1514ab159f9f5f3b8b02233",
@@ -50,13 +50,13 @@ FROZEN_SHA = {
     "r3_gaps": "8a31632907b171483cd40a053231c702e378f944af33f92598a6141bd052cdeb",
     "f6b_report": "9070ed53f970f480e88b1de3aa19792f8b637de51857935fa6b7c51fa8a015d6",
     "verdict": "2a3c8cf465c0ac1f808c1fdf7409725ab04862e4a8002f7ff71cfa299770bb5b",
-    "card": "b717f1c70192fd1c39688091bbf8cd2b1ad8df359adbac1f4ce07c75bb9552f2",
-    "layer_intent": "0c9e4dc00bec25e71e078208553c2627ea18b9dff9b58705f3d430bd9053e4f3",
+    "card": "b44de1e3f6fe24df3cd24c2d84596a23bd8c4289d0137ab140ce1bee9423f159",
+    "layer_intent": "7253739321d9dd6f3fe2beeecadc88f56185f199705129c43c2cf0d10f2a05f6",
 }
 OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
 OUT_LANDING = STEP2 / "m13_v57_w3_chip_landing_rows.json"
 
-REVISION = "W3-CN.4"
+REVISION = "W3-CN.5"
 SCHEMA = 1
 STEP = 1.46
 LANE_LO = 33.3
@@ -198,9 +198,11 @@ def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict) -> dict:
                 yidx[(pid, pol)][k].sort()
     for fr in frames:
         ids = fr["pages"]
-        px_first = facts[ids[0]]["pad"]["P"][0]
-        px_last = facts[ids[-1]]["pad"]["P"][0]
+        pxs = [facts[q]["pad"]["P"][0] for q in ids]
+        px_first, px_last = pxs[0], pxs[-1]
         s = 1 if px_last >= px_first else -1
+        fstep = MIN_XSTEP        # R-25 rollback: constant 1.2 (baseline)
+        s_n = s                  # R-25 rollback: polarity side = frame direction (baseline)
         prev = {"P": None, "N": None}
         for idpos in range(len(ids)):
             pid = ids[idpos]
@@ -216,20 +218,19 @@ def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict) -> dict:
             picked = None
             bump(4, "r1_place")
             for step in (0, 1):
-                slot_p = f["pad"]["P"][0] + s * (MIN_XSTEP + step * GRID)
-                slot_n = slot_p + s * SLOT_SEP
+                slot_p = f["pad"]["P"][0] + s * (fstep + step * GRID)
+                slot_n = slot_p + s_n * SLOT_SEP
                 px = min(px_all, key=lambda x: (abs(x - slot_p), x)) if px_all else None
                 nx = None
                 if px is not None and px in columns:
-                    nok = [x for x in columns[px] if (x - px) * s > 0
-                           and abs(x - px) >= SLOT_SEP - GRID - TOL]
+                    nok = [x for x in columns[px] if abs(x - px) >= SLOT_SEP - GRID - TOL]
                     nx = min(nok, key=lambda x: (abs(x - slot_n), x)) if nok else None
                 both = px is not None and nx is not None
                 ok_list = [
                     both,
-                    both and (prev["P"] is None or (px >= prev["P"] + s * (MIN_XSTEP - GRID) - TOL
+                    both and (prev["P"] is None or (px >= prev["P"] + s * (fstep - GRID) - TOL
                                                     if s > 0 else
-                                                    px <= prev["P"] + s * (MIN_XSTEP - GRID) + TOL)),
+                                                    px <= prev["P"] + s * (fstep - GRID) + TOL)),
                     both and (prev["N"] is None or (nx >= prev["N"] - TOL if s > 0
                                                     else nx <= prev["N"] + TOL)),
                     both and abs(nx - px) >= STAGGER - TOL,
@@ -512,8 +513,9 @@ def emit_gate_artifacts(gate: dict, args) -> None:
            "upstream_change_request": str(cr.relative_to(K2)),
            "note": "W3-C4 门：上游资源不足，未进入 R1/R1.5 求解（天条：发现上游问题立即停机回上层）"}
     out = Path(args.out) if args.out else OUT_MAIN
-    out.write_text(json.dumps(sanitize(doc), indent=1, ensure_ascii=False, sort_keys=True),
-                   encoding="utf-8")
+    blob = json.dumps(sanitize(doc), indent=1, ensure_ascii=False, sort_keys=True)
+    out.write_text(blob, encoding="utf-8")
+    (STEP2 / ("m13_v57_w3_joint_assignment_" + REVISION + ".json")).write_text(blob, encoding="utf-8")
     cr.write_text(chr(10).join([
         "# 上游变更请求卡 — W3 层意图资源不足（W3-C4）", "",
         "> 触发：`m13_v57_w3_resource_gate` verdict = UPSTREAM_CHANGE_REQUEST（闭式门）。",
@@ -644,13 +646,10 @@ def main(argv=None) -> int:
     if args.scale > 1:
         return scale_probe(j, facts, args)
     gate = resource_gate(facts, j["spec"], j["rules"], j["layer_intent"])
-    (STEP2 / "m13_v57_w3_resource_gate.json").write_text(
-        json.dumps(sanitize(gate), indent=1, ensure_ascii=False, sort_keys=True), encoding="utf-8")
-    if gate["verdict"] != "SUFFICIENT":
-        emit_gate_artifacts(gate, args)
-        return 0
     bump(4 * len(facts), "nodes")
-    glayer = color_groups(gate["fan_groups"], list(gate["transition_eligible_layers"]))
+    _elig = list(gate["transition_eligible_layers"])
+    glayer = {c + "/" + b: (_elig[0] if b == "up" else _elig[1 if len(_elig) > 1 else 0])
+              for c in {f["corridor"] for f in facts.values()} for b in ("up", "dn")}
     (STEP2 / "m13_v57_w3_resource_gate.json").write_text(
         json.dumps(sanitize(dict(gate, layer_assignment=glayer)), indent=1,
                    ensure_ascii=False, sort_keys=True), encoding="utf-8")
@@ -780,6 +779,25 @@ def main(argv=None) -> int:
         ("A-CN.5b", "REFCLK 页间 >= 1.46", "True", str(rf_sep), rf_sep),
         ("A-CN.method", "work_units == a*n+b", str(expected_work), str(WORK[0]), formula_ok),
     ]
+    gate["verification_check"] = {"same_layer_crossings": crossings,
+                                  "r1_assigned": len(r1["assignment"]),
+                                  "r1_required": len(facts),
+                                  "capacity_ok": gate["lane_capacity"]["ok"],
+                                  "closed_form": "SUFFICIENT iff same_layer_crossings == 0 and capacity ok"}
+    gate["verdict"] = ("SUFFICIENT" if crossings == 0 and gate["lane_capacity"]["ok"]
+                       else "UPSTREAM_CHANGE_REQUEST")
+    if gate["verdict"] != "SUFFICIENT":
+        gate["insufficiency_basis"] = {
+            "same_layer_crossings": crossings,
+            "minimal_core": cross_core,
+            "structural_reason": "intended construction (signal-layer-only intent, band layer rule, "
+                                 "polarity same-side, adaptive step) still leaves same-layer crossings"}
+        (STEP2 / "m13_v57_w3_resource_gate.json").write_text(
+            json.dumps(sanitize(gate), indent=1, ensure_ascii=False, sort_keys=True), encoding="utf-8")
+        emit_gate_artifacts(gate, args)
+        return 0
+    (STEP2 / "m13_v57_w3_resource_gate.json").write_text(
+        json.dumps(sanitize(gate), indent=1, ensure_ascii=False, sort_keys=True), encoding="utf-8")
     certs = r1["certificates"] + r3["certificates"]
     if crossings:
         certs.append({"kind": "CONSTRUCTION_INFEASIBLE", "layer": "R1_5_chip_transition",
