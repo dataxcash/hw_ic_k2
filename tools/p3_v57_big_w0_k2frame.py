@@ -106,7 +106,7 @@ def main() -> int:
            "board_inner_y": inner, "pitch": P, "margin": MARGIN,
            "frames": frames, "certificates": certs, "diff_vs_old_spec": diff,
            "inputs_sha": {"manifest": hashlib.sha256(
-               MANIFEST.read_bytes()).hexdigest()[:12]},
+               MANIFEST.read_bytes()).hexdigest()},
            "verdict": "FEASIBLE_DATA + REFCLK_CERT" if frames and certs
            else ("FEASIBLE" if frames else "CERTIFICATE")}
     OUT.write_text(json.dumps(rep, indent=1, ensure_ascii=False,

@@ -186,8 +186,8 @@ def main() -> int:
         "basis": "m13_v57_s1_generator_design.md §0.1",
         "inputs_sha": {
             "s0_endpoint_model": hashlib.sha256(EP_MODEL.read_bytes()).
-            hexdigest()[:12],
-            "sch": hashlib.sha256(SCH.read_bytes()).hexdigest()[:12],
+            hexdigest(),
+            "sch": hashlib.sha256(SCH.read_bytes()).hexdigest(),
         },
         "authority": ["S0 权威端点模型(网表×ballmap×放置)", "k2_sch 网表 REFCLK 双端成员"],
         "n_pages": len(pages),

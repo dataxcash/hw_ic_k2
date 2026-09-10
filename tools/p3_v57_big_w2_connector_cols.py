@@ -14,11 +14,19 @@ STEP2 = L3 / "mcio_feas_step2"
 MANIFEST = STEP2 / "m13_v57_s1_page_manifest.json"
 SPEC = L3 / "SPEC_k2_v4.json"
 OUT = STEP2 / "m13_v57_big_w2_connector_cols.json"
+GENERATOR = Path(__file__).resolve()
+REV = "W2-F11.1"
+
+
+def sha(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def main() -> int:
     mf = json.load(open(MANIFEST))
     spec = json.load(open(SPEC))
+    # authority relocated by SPEC-REV-1/D0-1: capacitor_walls -> appendix original
+    cap = spec["appendix"]["capacitor_walls_original"]
     cols = {}
     for pg in mf["pages"]:
         if pg["kind"] != "data":
@@ -41,17 +49,19 @@ def main() -> int:
                 "rows": rows,
                 "entries": sorted(cols[ref][x], key=lambda e: e["y"])}
     rep = {"artifact": "m13_v57_big_w2_connector_cols",
+           "schema": 1, "revision": REV,
            "basis": "page_manifest 连接器锚(pad_global) 聚列; 零板读",
+           "producer": {"generator": {
+               "path": str(GENERATOR.relative_to(K2)), "revision": REV,
+               "sha256": sha(GENERATOR)}},
            "connectors": out,
            "ac_wall_declared": {
-               "mcio_side_x": spec["capacitor_walls"]["mcio_side_x"],
-               "j2_side_x": spec["capacitor_walls"]["j2_side_x"],
-               "upper_band_y": spec["capacitor_walls"]["upper_band_y"],
-               "lower_band_y": spec["capacitor_walls"]["lower_band_y"],
-               "min_center_pitch_mm": spec["capacitor_walls"][
-                   "min_center_pitch_mm"]},
-           "inputs_sha": {"manifest": hashlib.sha256(
-               MANIFEST.read_bytes()).hexdigest()[:12]}}
+               "mcio_side_x": cap["mcio_side_x"],
+               "j2_side_x": cap["j2_side_x"],
+               "upper_band_y": cap["upper_band_y"],
+               "lower_band_y": cap["lower_band_y"],
+               "min_center_pitch_mm": cap["min_center_pitch_mm"]},
+           "inputs_sha": {"manifest": sha(MANIFEST), "spec": sha(SPEC)}}
     OUT.write_text(json.dumps(rep, indent=1, ensure_ascii=False,
                               sort_keys=True), encoding="utf-8")
     for ref in sorted(out):

@@ -45,9 +45,9 @@ def main() -> int:
            "rows": rows,
            "inputs_sha": {
                "verdict": hashlib.sha256(
-                   VERDICT.read_bytes()).hexdigest()[:12],
+                   VERDICT.read_bytes()).hexdigest(),
                "manifest": hashlib.sha256(
-                   MANIFEST.read_bytes()).hexdigest()[:12]}}
+                   MANIFEST.read_bytes()).hexdigest()}}
     OUT.write_text(json.dumps(rep, indent=1, ensure_ascii=False,
                               sort_keys=True), encoding="utf-8")
     nets = sorted(r["net"] for r in rows)

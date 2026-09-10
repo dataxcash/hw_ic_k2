@@ -12,13 +12,21 @@ MUS（两实现同口径）：(基数升序, id 元组字典序) 首个不可行
 """
 from __future__ import annotations
 
+import hashlib
 import itertools
 import json
 import random
 from pathlib import Path
 
-OUT = (Path(__file__).resolve().parents[1] / "pm_gate" / "artifacts" / "k2_v4" /
+SELF = Path(__file__).resolve()
+OUT = (SELF.parents[1] / "pm_gate" / "artifacts" / "k2_v4" /
        "L3" / "mcio_feas_step2" / "m13_v57_big_w1_report.json")
+REV = "W1-F11.1"
+SEED = 20260909
+
+
+def sha(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def _allowed(lanes, row, leg):
@@ -66,7 +74,7 @@ def mus(pages, lanes, leg, engine):
 
 
 def main() -> int:
-    rng = random.Random(20260909)
+    rng = random.Random(SEED)
     n_inst = 200
     mism, mus_mism, b12 = [], [], 0
     for _ in range(n_inst):
@@ -96,6 +104,14 @@ def main() -> int:
             b12 += 1
     ok = not mism and not mus_mism and b12 == n_inst
     rep = {"artifact": "m13_v57_big_w1_report",
+           "schema": 1, "revision": REV, "seed": SEED,
+           "versions": {
+               "producer": {"path": str(SELF.relative_to(SELF.parents[1])),
+                            "symbol": "kernel_feasible", "revision": REV,
+                            "sha256": sha(SELF)},
+               "validator": {"path": str(SELF.relative_to(SELF.parents[1])),
+                             "symbol": "oracle_feasible", "revision": REV,
+                             "sha256": sha(SELF)}},
            "predicate": "W1 无交叉指派 契约 vs 独立穷举 oracle + MUS + 序无关",
            "n_instances": n_inst, "decision_match": n_inst - len(mism),
            "mus_match": n_inst - len(mism) - len(mus_mism),

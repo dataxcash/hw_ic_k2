@@ -119,7 +119,7 @@ def main() -> int:
               "n_pages": len(out_pages), "n_escapable": n_ok,
               "pages": out_pages,
               "inputs_sha": {"ballmap": hashlib.sha256(
-                  BALLMAP.read_bytes()).hexdigest()[:12]},
+                  BALLMAP.read_bytes()).hexdigest()},
               "params": {"via_od": VIA_OD, "clr": CLR, "via_via": VIA_VIA}}
     OUT.write_text(json.dumps(report, indent=1, ensure_ascii=False,
                               sort_keys=True), encoding="utf-8")
