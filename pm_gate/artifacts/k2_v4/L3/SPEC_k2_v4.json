@@ -1,5 +1,5 @@
 {
- "spec_version": "1.1.v28-eco",
+ "spec_version": "1.1.spec-rev-1",
  "source": "L2_STRUCTURE_v1.0.md (v1.2) + prereq_closure.md + ECN-004",
  "board": {
   "file": "k2_v4.kicad_pcb",
@@ -393,7 +393,8 @@
      ],
      "tracks_y_basis": "v32 复用老 alloc v4 曾 SOLVED 轨道值 (J2/J3/J4 未动)",
      "band_legacy": "refclk",
-     "layer": "In6.Cu"
+     "layer": "F.Cu",
+     "layer_note": "per D0-2"
     }
    ]
   },
@@ -476,7 +477,8 @@
      ],
      "tracks_y_basis": "v32 复用老 alloc v4 曾 SOLVED 轨道值 (J2/J3/J4 未动)",
      "band_legacy": "refclk",
-     "layer": "In6.Cu"
+     "layer": "F.Cu",
+     "layer_note": "per D0-2"
     }
    ]
   }
@@ -6870,66 +6872,91 @@
   "regen_v31_note": "layer_plan/corridors 6L 单芯片修正语义骨架再生 (stale 8L/U3-U7 polyline 清理); per-net 施工 = L3 open (board 0 track/0 via)"
  },
  "capacitor_walls": {
-  "symmetric_bands": true,
-  "mcio_side_x": [
-   75.0,
-   90.0
-  ],
-  "j2_side_x": [
-   93.0,
-   128.0
-  ],
-  "upper_band_y": [
-   44.0,
-   47.0
-  ],
-  "lower_band_y": [
-   60.0,
-   66.0
-  ],
-  "min_center_pitch_mm": 1.3,
-  "pitch_basis": "0402 pad 0.4x0.5 + clearance 0.2 + 余量 (DRC k2_v5 实测 1.2mm 中心距 → 0.1mm pad 间距 < 0.2 违规, 2026-08-16)",
-  "ac_coupling": {
-   "value_nf": 220,
-   "footprint": "Capacitor_SMD:C_0402_1005Metric",
-   "count": 32,
-   "downstream_refs": [
-    "C17",
-    "C18",
-    "C19",
-    "C20",
-    "C21",
-    "C22",
-    "C23",
-    "C24",
-    "C25",
-    "C26",
-    "C27",
-    "C28",
-    "C29",
-    "C30",
-    "C31",
-    "C32"
+  "out_of_scope_for_mvp": true,
+  "basis": "D0-1 (k2 ad5c20817b5892848f25f524a0cf8366814c7535): R4 AC-wall crossing out of MVP chain",
+  "original_preserved_in": "appendix.capacitor_walls_original"
+ },
+ "appendix": {
+  "preserved_by": "SPEC-REV-1",
+  "authority": "D0 L2 decision card ad5c20817b5892848f25f524a0cf8366814c7535 (k2 submodule): D0-1 R4 AC-wall out of chain",
+  "semantics": "verbatim pre-revision declaration retained as evidence; non-semantic, never consumed by W0-R (W0-R reads only board.outline_y, stackup .Cu keys, constraints.m3_keepout_mm)",
+  "capacitor_walls_original": {
+   "symmetric_bands": true,
+   "mcio_side_x": [
+    75.0,
+    90.0
    ],
-   "upstream_refs": [
-    "C49",
-    "C50",
-    "C51",
-    "C52",
-    "C53",
-    "C54",
-    "C55",
-    "C56",
-    "C57",
-    "C58",
-    "C59",
-    "C60",
-    "C61",
-    "C62",
-    "C63",
-    "C64"
-   ]
-  },
-  "note": "M14 v40: 从 SPEC_k2_v4_c3poc 声明源补入(main SPEC 缺段); derive_cap_walls 消费 ac_coupling.count/side_x/min_pitch"
+   "j2_side_x": [
+    93.0,
+    128.0
+   ],
+   "upper_band_y": [
+    44.0,
+    47.0
+   ],
+   "lower_band_y": [
+    60.0,
+    66.0
+   ],
+   "min_center_pitch_mm": 1.3,
+   "pitch_basis": "0402 pad 0.4x0.5 + clearance 0.2 + 余量 (DRC k2_v5 实测 1.2mm 中心距 → 0.1mm pad 间距 < 0.2 违规, 2026-08-16)",
+   "ac_coupling": {
+    "value_nf": 220,
+    "footprint": "Capacitor_SMD:C_0402_1005Metric",
+    "count": 32,
+    "downstream_refs": [
+     "C17",
+     "C18",
+     "C19",
+     "C20",
+     "C21",
+     "C22",
+     "C23",
+     "C24",
+     "C25",
+     "C26",
+     "C27",
+     "C28",
+     "C29",
+     "C30",
+     "C31",
+     "C32"
+    ],
+    "upstream_refs": [
+     "C49",
+     "C50",
+     "C51",
+     "C52",
+     "C53",
+     "C54",
+     "C55",
+     "C56",
+     "C57",
+     "C58",
+     "C59",
+     "C60",
+     "C61",
+     "C62",
+     "C63",
+     "C64"
+    ]
+   },
+   "note": "M14 v40: 从 SPEC_k2_v4_c3poc 声明源补入(main SPEC 缺段); derive_cap_walls 消费 ac_coupling.count/side_x/min_pitch"
+  }
+ },
+ "_spec_rev_1": {
+  "at": "2026-09-10",
+  "card": "SPEC-REV-1",
+  "authority": "D0 L2 decision card (k2 commit ad5c20817b5892848f25f524a0cf8366814c7535)",
+  "scope": "declared fields only: capacitor_walls out-of-scope marker + original moved to appendix; corridors[*].bands[refclk].layer In6.Cu -> F.Cu; spec_version bump",
+  "changes": [
+   "spec_version: 1.1.v28-eco -> 1.1.spec-rev-1",
+   "capacitor_walls: marked out_of_scope_for_mvp=true (D0-1); original declaration preserved in appendix.capacitor_walls_original",
+   "corridors[*].bands[refclk].layer: In6.Cu -> F.Cu (D0-2; In6.Cu absent from stackup), layer_note 'per D0-2'"
+  ],
+  "unchanged": "board outline / stackup / constraints / corridor x-ranges / all other fields; _shared, placement, PCB copper, W0-R/W1/W2 artifacts",
+  "spec_sha256_before": "3bdecb10ab4747a9280131c89cb5a25b64466b62966b3354c4780c5fbf9a0d7a",
+  "spec_backup": "git 39f0c13:pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json (pre-revision)",
+  "rollback": "restore SPEC_k2_v4.json to spec_sha256_before and revert this card; rerun W0-R chain if REFCLK layer semantics change"
  }
 }
