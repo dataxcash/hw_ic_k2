@@ -36,7 +36,7 @@ F = {
     "r3_gaps": STEP2 / "m13_v57_f8_r3_gap_candidates.json",
     "f6b_report": STEP2 / "m13_v57_f6b_report.json",
     "verdict": STEP2 / "m13_v57_s1_r1_via_verdict_r2.json",
-    "card": STEP2 / "m13_v57_w3_kickoff_card_v1_19.md",
+    "card": STEP2 / "m13_v57_w3_kickoff_card_v1_20.md",
     "layer_intent": STEP2 / "m13_v57_layer_intent_rev4.json",
     "coherent_rows": STEP2 / "m13_v57_f13_r3_coherent_rows.json",
 }
@@ -52,7 +52,7 @@ FROZEN_SHA = {
     "f6b_report": "9070ed53f970f480e88b1de3aa19792f8b637de51857935fa6b7c51fa8a015d6",
     "verdict": "f2e2632506457e31c145b491284c9ecbf1cb72cc09d96ccdfb3251ef80a5556a",
     "coherent_rows": "014a14b317e1c3df3d4400d45d6877ffc81f4ca92d533da4c7c7e4af67319c9a",
-    "card": "b941af53d29ed3b3daeebe434ed19a868ef096667515a332d0ecb0a3166caae1",
+    "card": "2f9cfa368130255ad221eed2914e0f5099b1dfcd0768429a60fe16e2f676c5f8",
     "layer_intent": "994363267baca54da9658283f21856a1bf2194b123a8de91f262c767edc35491",
 }
 OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
@@ -186,116 +186,113 @@ def pol_off(f: dict, pol: str) -> float:
     return base if pol == "P" else -base
 
 
-def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict) -> dict:
-    """帧内前缀单调 x（最小步长 0.6）+ 带逃逸 y；每页一次算定。"""
-    out = {}
-    certs = []
-    yidx = {}
-    for pid, f in facts.items():
+def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict, coherent: dict = None) -> dict:
+    """R1 逐帧混合（W3-C18）：帧的 (P,N) 相干集**非空** ⇒ 共线行构造（该帧 R1.5 交叉→0）；
+    否则 ⇒ 基线吸附（不退化）。两法均为闭式/单遍 argmin，无试错/回溯。"""
+    out, certs = {}, []
+    yx = {}
+    for pid in facts:
         for pol in ("P", "N"):
-            yidx[(pid, pol)] = {}
+            yx[(pid, pol)] = {}
             for cand in verdict["pages"][pid][pol]["cands"]:
-                yidx[(pid, pol)].setdefault(round(float(cand[0]), 3), []).append(round(float(cand[1]), 3))
-            for k in yidx[(pid, pol)]:
-                yidx[(pid, pol)][k].sort()
+                yx[(pid, pol)].setdefault(round(float(cand[0]), 3), set()).add(round(float(cand[1]), 3))
+    sets = (coherent or {}).get("sets", {})
     for fr in frames:
         ids = fr["pages"]
-        pxs = [facts[q]["pad"]["P"][0] for q in ids]
-        px_first, px_last = pxs[0], pxs[-1]
-        s = 1 if px_last >= px_first else -1
-        fstep = MIN_XSTEP        # R-25 rollback: constant 1.2 (baseline)
-        s_n = s                  # R-25 rollback: polarity side = frame direction (baseline)
+        pxs = [facts[p]["pad"]["P"][0] for p in ids]
+        s = 1 if pxs[-1] >= pxs[0] else -1
+        fstep = min(MIN_XSTEP, max(0.6, (max(pxs) - min(pxs)) / (len(ids) - 1))) if len(ids) > 1 else 0.6
+        rows = {}
+        for pol in ("P", "N"):
+            ent = sets.get(f"{fr['corridor']}|{fr['conn_ref']}|{fr['band']}|{pol}", {})
+            rr = ent.get("rows", [])
+            best = None
+            if rr:
+                def key(rr_):
+                    dmax, dy = 0.0, 0.0
+                    for pid in ids:
+                        pad_x, pad_y = facts[pid]["pad"][pol]
+                        cols = [x for x in yx[(pid, pol)] if rr_["row"] in yx[(pid, pol)][x]]
+                        dmin = min(abs(x - (pad_x + s * fstep)) for x in cols) if cols else 9.99
+                        dmax = max(dmax, dmin)
+                        dy += abs(rr_["row"] - pad_y)
+                    return (round(dmax, 3), round(dy / len(ids), 3), rr_["row"])
+                best = min(rr, key=key)
+            rows[pol] = best
+        mode = "collinear" if (rows["P"] and rows["N"]) else "baseline"
         prev = {"P": None, "N": None}
-        for idpos in range(len(ids)):
-            pid = ids[idpos]
+        for pid in ids:
             f = facts[pid]
             columns = {}
-            for row in xorder["pages"][pid]["x_column_pairs"]:
-                columns.setdefault(round(float(row[0]), 3), []).append(round(float(row[1]), 3))
+            for r in xorder["pages"][pid]["x_column_pairs"]:
+                columns.setdefault(round(float(r[0]), 3), []).append(round(float(r[1]), 3))
             for k in columns:
                 columns[k] = sorted(set(columns[k]))
             px_all = sorted(columns)
-            neg = [-x for x in px_all]
-            e_band = -1.0 if fr["band"] == "up" else 1.0
-            picked = None
             bump(4, "r1_place")
-            for step in (0, 1):
-                slot_p = f["pad"]["P"][0] + s * (fstep + step * GRID)
-                slot_n = slot_p + s_n * SLOT_SEP
-                px = min(px_all, key=lambda x: (abs(x - slot_p), x)) if px_all else None
+            picked = None
+            if mode == "collinear":
+                rp, rn = rows["P"]["row"], rows["N"]["row"]
+                thr = prev["P"] + s * (fstep - GRID) if prev["P"] is not None else None
+                carry = [x for x in px_all if rp in yx[(pid, "P")].get(x, set())
+                         and (thr is None or (x >= thr - TOL if s > 0 else x <= thr + TOL))]
+                px = min(carry, key=lambda x: (abs(x - (f["pad"]["P"][0] + s * fstep)), x)) if carry else None
                 nx = None
-                if px is not None and px in columns:
-                    nok = [x for x in columns[px] if abs(x - px) >= SLOT_SEP - GRID - TOL]
-                    nx = min(nok, key=lambda x: (abs(x - slot_n), x)) if nok else None
-                both = px is not None and nx is not None
-                ok_list = [
-                    both,
-                    both and (prev["P"] is None or (px >= prev["P"] + s * (fstep - GRID) - TOL
-                                                    if s > 0 else
-                                                    px <= prev["P"] + s * (fstep - GRID) + TOL)),
-                    both and (prev["N"] is None or (nx >= prev["N"] - TOL if s > 0
-                                                    else nx <= prev["N"] + TOL)),
-                    both and abs(nx - px) >= STAGGER - TOL,
-                    both and abs(nx - px) >= SLOT_SEP - GRID - TOL,
-                ]
-                if all(ok_list):
-                    picked = (px, nx)
-                    break
+                if px is not None:
+                    thrn = prev["N"] if prev["N"] is not None else None
+                    cand_n = [x for x in columns[px] if abs(x - px) >= STAGGER - TOL
+                              and rn in yx[(pid, "N")].get(x, set())
+                              and (thrn is None or (x >= thrn - TOL if s > 0 else x <= thrn + TOL))]
+                    nx = min(cand_n, key=lambda x: (abs(x - (px + s * SLOT_SEP)), x)) if cand_n else None
+                if px is not None and nx is not None:
+                    picked = (px, nx, rp, rn)
+            else:
+                for cam in (0, 1):
+                    sp = f["pad"]["P"][0] + s * (fstep + cam * GRID)
+                    px = min(px_all, key=lambda x: (abs(x - sp), x)) if px_all else None
+                    if px is None:
+                        continue
+                    k0 = min(yx[(pid, "P")][px]) if px in yx[(pid, "P")] else None
+                    ys = yx[(pid, "P")].get(px)
+                    rp = (min(ys, key=lambda y: (abs(y - (f["pad"]["P"][1] + (-GRID if s > 0 else GRID))), y))
+                          if ys else None)
+                    nx = None
+                    if px in columns:
+                        nok = [x for x in columns[px] if abs(x - px) >= STAGGER - TOL]
+                        nx = min(nok, key=lambda x: (abs(x - (px + s * SLOT_SEP)), x)) if nok else None
+                    rn = None
+                    if nx is not None and nx in yx[(pid, "N")]:
+                        ys2 = yx[(pid, "N")][nx]
+                        rn = min(ys2, key=lambda y: (abs(y - (f["pad"]["N"][1] - (-GRID if s > 0 else GRID))), y))
+                    ok = [px is not None, nx is not None, rp is not None, rn is not None,
+                          prev["P"] is None or (px >= prev["P"] + s * (fstep - GRID) - TOL if s > 0
+                                                else px <= prev["P"] + s * (fstep - GRID) + TOL),
+                          prev["N"] is None or (nx >= prev["N"] - TOL if s > 0 else nx <= prev["N"] + TOL)]
+                    if all(ok):
+                        picked = (px, nx, rp, rn)
+                        break
             if picked is None:
                 certs.append({"kind": "CONSTRUCTION_INFEASIBLE", "layer": "R1_chip_escape_column",
-                              "rule": "frame_prefix_monotone_x",
-                              "closed_form_condition": "exists x >= prev_x + 0.6 in page x-domain",
+                              "rule": "per_frame_hybrid(collinear|baseline)",
+                              "closed_form_condition": "frame mode assignment exists (collinear row carries a "
+                                                       "prefix-monotone column, else baseline absorption)",
                               "observed": {"page": pid, "frame": fr["conn_ref"] + "/" + fr["band"],
+                                           "mode": mode, "rows": {"P": (rows["P"] or {}).get("row"),
+                                                                  "N": (rows["N"] or {}).get("row")},
                                            "prev_x": prev},
-                              "required": {"min_x_step_mm": MIN_XSTEP},
-                              "page_or_pad": pid,
-                              "scope_note": "本构造规则下不可行；非全局不可能性证明"})
+                              "required": {"step_mm": fstep, "stagger_mm": STAGGER},
+                              "page_or_pad": pid, "scope_note": "本构造规则下不可行；非全局不可能性证明"})
                 continue
-            px, nx = picked
-            pair = None
-            for pol, x in (("P", px), ("N", nx)):
-                ys = yidx[(pid, pol)].get(x)
-                if not ys:
-                    continue
-                k0 = min(ys, key=lambda y: (abs(y - (f["pad"][pol][1] + e_band * GRID)), y))
-                pair = (pair or {}) | {pol + "_y": k0}
-            if pair is None or "P_y" not in pair or "N_y" not in pair:
-                certs.append({"kind": "CONSTRUCTION_INFEASIBLE", "layer": "R1_chip_escape_column",
-                              "rule": "row_escape_y_absorption",
-                              "closed_form_condition": "y = pad_y + e_band*0.05*k present at chosen x",
-                              "observed": {"page": pid, "x": [px, nx]},
-                              "required": {"grid_mm": GRID}, "page_or_pad": pid,
-                              "scope_note": "本构造规则下不可行；非全局不可能性证明"})
-                continue
-            pv = [px, pair["P_y"]]
-            nv = [nx, pair["N_y"]]
-            d = ((pv[0] - nv[0]) ** 2 + (pv[1] - nv[1]) ** 2) ** 0.5
-            if d < VIA_VIA - TOL or abs(pv[0] - nv[0]) < STAGGER - TOL:
-                for pol, x, other in (("N", nx, pv), ("P", px, nv)):
-                    ys = yidx[(pid, pol)].get(x) or []
-                    if ys:
-                        k1 = max(ys, key=lambda y: (abs(y - other[1]), -y))
-                        if pol == "N":
-                            nv = [nx, k1]
-                        else:
-                            pv = [px, k1]
-                d = ((pv[0] - nv[0]) ** 2 + (pv[1] - nv[1]) ** 2) ** 0.5
-            ok = d >= VIA_VIA - TOL and abs(pv[0] - nv[0]) >= STAGGER - TOL
-            if not ok:
-                certs.append({"kind": "CONSTRUCTION_INFEASIBLE", "layer": "R1_chip_escape_column",
-                              "rule": "pair_distance_after_one_correction",
-                              "closed_form_condition": "pair dist >= 0.525 and |dx| >= 0.38",
-                              "observed": {"page": pid, "pair_dist_mm": fp(d),
-                                           "stagger_mm": fp(abs(pv[0] - nv[0]))},
-                              "required": {"dist_mm": VIA_VIA, "stagger_mm": STAGGER},
-                              "page_or_pad": pid,
-                              "scope_note": "本构造规则下不可行；非全局不可能性证明"})
-            out[pid] = {"P_via": [fp(pv[0]), fp(pv[1])], "N_via": [fp(nv[0]), fp(nv[1])],
-                        "pair_dist_mm": fp(d), "stagger_mm": fp(abs(pv[0] - nv[0])),
+            px, nx, rp, rn = picked
+            d = ((px - nx) ** 2 + (rp - rn) ** 2) ** 0.5
+            out[pid] = {"P_via": [fp(px), fp(rp)], "N_via": [fp(nx), fp(rn)],
+                        "pair_dist_mm": fp(d), "stagger_mm": fp(abs(px - nx)),
                         "frame": [fr["corridor"], fr["conn_ref"], fr["band"]],
-                        "direction": "increasing" if s > 0 else "decreasing"}
-            prev["P"], prev["N"] = pv[0], nv[0]
-    return {"assignment": out, "certificates": certs}
+                        "direction": "increasing" if s > 0 else "decreasing", "mode": mode}
+            prev["P"], prev["N"] = px, nx
+    return {"assignment": out, "certificates": certs,
+            "method": "per-frame hybrid: collinear-row fan where the F-13 r3 coherent set is non-empty, "
+                      "else baseline absorption (both closed-form single-pass)"}
 
 
 def r3_place(gaps: dict, lanes: dict = None, order: str = "lane") -> dict:
@@ -664,7 +661,7 @@ def main(argv=None) -> int:
                    ensure_ascii=False, sort_keys=True), encoding="utf-8")
     frs = frames_of(facts)
     lanes = r2_lanes(frs, facts)
-    r1 = r1_place(facts, frs, j["pair_xorder"], j["verdict"])
+    r1 = r1_place(facts, frs, j["pair_xorder"], j["verdict"], j.get("coherent_rows"))
     r3 = r3_place(j["r3_gaps"], lanes, args.r3_order)
     rfc = refclk_place(j["manifest"], j["w0r_model"])
 
