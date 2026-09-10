@@ -36,7 +36,7 @@ F = {
     "r3_gaps": STEP2 / "m13_v57_f8_r3_gap_candidates_r3x2.json",   # ROOT-16 A (versioned domain rev)
     "f6b_report": STEP2 / "m13_v57_f6b_report.json",
     "verdict": STEP2 / "m13_v57_s1_r1_via_verdict_r2.json",
-    "card": STEP2 / "m13_v57_w3_kickoff_card_v1_27.md",   # ROOT-16 contract revision
+    "card": STEP2 / "m13_v57_w3_kickoff_card_v1_28.md",   # ROOT-16 contract revision
     "layer_intent": STEP2 / "m13_v57_layer_intent_rev4.json",
     "coherent_rows": STEP2 / "m13_v57_f13_r3_coherent_rows.json",
 }
@@ -52,13 +52,13 @@ FROZEN_SHA = {
     "f6b_report": "9070ed53f970f480e88b1de3aa19792f8b637de51857935fa6b7c51fa8a015d6",
     "verdict": "f2e2632506457e31c145b491284c9ecbf1cb72cc09d96ccdfb3251ef80a5556a",
     "coherent_rows": "014a14b317e1c3df3d4400d45d6877ffc81f4ca92d533da4c7c7e4af67319c9a",
-    "card": "ee7b9d42e01458aa649ed4ed716955928de560a00087413a39362a361b9f59d3",
+    "card": "0ae3016379cd1db27ba6004e2d86336466aad0c877bcee1fddf784879bbc90c2",
     "layer_intent": "994363267baca54da9658283f21856a1bf2194b123a8de91f262c767edc35491",
 }
 OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
 OUT_LANDING = STEP2 / "m13_v57_w3_chip_landing_rows.json"
 
-REVISION = "W3-CN.18"
+REVISION = "W3-CN.20"
 SCHEMA = 1
 STEP = 1.46
 LANE_LO = 33.3
@@ -298,6 +298,12 @@ def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict, coherent: d
     for _fr in frames:
         for _pi in range(len(_fr["pages"])):
             _rank[_fr["pages"][_pi]] = _pi
+    # ROOT-18 T-1: chip escape fan = deterministic RADIAL homothety from the chip pad-field
+    # centroid (outer rows escape first; inner rows are pushed outward => planar fan, single pass).
+    _allpts = [facts[_p]["pad"][_q] for _p in facts for _q in ("P", "N")]
+    _cxx = sum(_t[0] for _t in _allpts) / len(_allpts)
+    _cyy = sum(_t[1] for _t in _allpts) / len(_allpts)
+    _TFAN = 0.05
     _placed = {}
     for _q0, _a0 in sorted(out.items()):
         _placed[_q0] = (_a0["P_via"], _a0["N_via"])
@@ -306,7 +312,7 @@ def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict, coherent: d
     # candidate checks O(1) => total wall linear in the page count.  Closed-form, single pass.
     def _mk_index(_exclude):
         """Index EVERY via of the other placed pages (via1/corner/drop/land) for via-via clearance."""
-        _vb, _esc = {}, {}
+        _vb, _esc, _brk = {}, {}, {}
 
         def _vbadd(_x, _y):
             _vb.setdefault(int(float(_x) * 2.0), []).append((float(_x), float(_y)))
@@ -318,6 +324,10 @@ def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict, coherent: d
             for _pol, _xy in (("P", _a[0]), ("N", _a[1])):
                 _x, _y = _xy
                 _vbadd(_x, _y)
+                _bp = _fq["pad"][_pol]
+                for _cx in range(int(min(_bp[0], _x) - 0.1), int(max(_bp[0], _x) + 0.1) + 1):
+                    for _cy in range(int(min(_bp[1], _y) - 0.1), int(max(_bp[1], _y) + 0.1) + 1):
+                        _brk.setdefault((_cx, _cy), []).append(((tuple(_bp)), (float(_x), float(_y))))
                 if lanes is None:
                     continue
                 _ly = fp(lanes[_q]["lane_y"] + pol_off(_fq, _pol))
@@ -328,7 +338,7 @@ def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict, coherent: d
                     if _ra is not None:
                         _vbadd(_ra["column_x"], _ly)                # drop via
                         _vbadd(_ra["column_x"], _ra["landing"][1])  # land via
-        return _vb, _esc
+        return _vb, _esc, _brk
 
     def _vb_clear(_vb, _x, _y):
         _b = int(_x * 2.0)
@@ -352,11 +362,13 @@ def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict, coherent: d
         _rows = _pdm.get(_pid, {}).get("pair_rows", [])
         if not _rows:
             continue
-        # ROOT-17 (1): pad-aligned (near-vertical) breakout => monotone by pad order, planar fan
-        _tP = _f["pad"]["P"][0]
-        _tN = _f["pad"]["N"][0]
+        # ROOT-18 T-1: radial outward target (2D) from the pad-field centroid
+        _tPx = _f["pad"]["P"][0] + _TFAN * (_f["pad"]["P"][0] - _cxx)
+        _tPy = _f["pad"]["P"][1] + _TFAN * (_f["pad"]["P"][1] - _cyy)
+        _tNx = _f["pad"]["N"][0] + _TFAN * (_f["pad"]["N"][0] - _cxx)
+        _tNy = _f["pad"]["N"][1] + _TFAN * (_f["pad"]["N"][1] - _cyy)
         _best = None
-        _vb, _esc = _mk_index(_pid)
+        _vb, _esc, _brk = _mk_index(_pid)
         for _rr in _rows:
             _px = float(_rr[0]); _nx = float(_rr[1]); _py = float(_rr[2]); _ny = float(_rr[3]); _dd = float(_rr[4])
             if _dd < VIA_VIA - TOL or abs(_px - _nx) < STAGGER - TOL:
@@ -393,6 +405,36 @@ def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict, coherent: d
                             break
                 if not _ok:
                     continue
+            # T-1: candidate chip breakouts (pad->via, F.Cu) must not cross placed breakouts
+            _bk = [(tuple(_f["pad"]["P"]), (float(_px), float(_py))),
+                   (tuple(_f["pad"]["N"]), (float(_nx), float(_ny)))]
+            _okb = True
+            if seg_cross(_bk[0][0], _bk[0][1], _bk[1][0], _bk[1][1]) or \
+               seg_overlap(_bk[0][0], _bk[0][1], _bk[1][0], _bk[1][1]):
+                _okb = False
+            if _okb:
+                _seen = set()
+                for _si in _bk:
+                    _x0 = min(_si[0][0], _si[1][0]); _x1 = max(_si[0][0], _si[1][0])
+                    _y0 = min(_si[0][1], _si[1][1]); _y1 = max(_si[0][1], _si[1][1])
+                    for _cx in range(int(_x0 - 0.1), int(_x1 + 0.1) + 1):
+                        for _cy in range(int(_y0 - 0.1), int(_y1 + 0.1) + 1):
+                            for _pl in _brk.get((_cx, _cy), ()):
+                                if id(_pl) in _seen:
+                                    continue
+                                _seen.add(id(_pl))
+                                if seg_cross(_si[0], _si[1], _pl[0], _pl[1]) or \
+                                   seg_overlap(_si[0], _si[1], _pl[0], _pl[1]):
+                                    _okb = False
+                                    break
+                            if not _okb:
+                                break
+                        if not _okb:
+                            break
+                    if not _okb:
+                        break
+            if not _okb:
+                continue
             if lanes is not None:
                 _lyp = fp(lanes[_pid]["lane_y"] + pol_off(_f, "P"))
                 _lyn = fp(lanes[_pid]["lane_y"] + pol_off(_f, "N"))
@@ -400,7 +442,10 @@ def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict, coherent: d
                     continue
             if not (_vb_clear(_vb, _px, _py) and _vb_clear(_vb, _nx, _ny)):
                 continue
-            _key = (round(abs(_px - _tP) + abs(_nx - _tN), 3), round(abs(_px - _f["pad"]["P"][0]) + abs(_nx - _f["pad"]["N"][0]), 3), _px, _nx)
+            # T-1 primary: keep the via x at the PAD x (vertical breakouts => planar fan);
+            # secondary: radial y target.  (Pad-aligned x is the planarity driver.)
+            _key = (round(abs(_px - _f["pad"]["P"][0]) + abs(_nx - _f["pad"]["N"][0]), 3),
+                    round(abs(_py - _tPy) + abs(_ny - _tNy), 3), _px, _nx)
             if _best is None or _key < _best[0]:
                 _best = (_key, _px, _nx, _py, _ny, _dd)
         if _best is None:
