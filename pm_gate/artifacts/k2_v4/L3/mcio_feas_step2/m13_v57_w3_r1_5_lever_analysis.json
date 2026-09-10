@@ -1,0 +1,85 @@
+{
+ "analysis": "W3-C8 R1.5 lever closure",
+ "frames": {
+  "EAST_CHIP_TO_J2|dn|J2": {
+   "dir": "inc",
+   "dx_avail_max_mm": 20.4,
+   "dy_need_max_mm": 57.64,
+   "min_inter_via_gap_mm": 0.9,
+   "n": 8,
+   "pages_failing_dx_ge_dy": 8,
+   "reverse_Z_disjoint_trunk_ok": false,
+   "reverse_Z_reason": "reverse channel order needs trunk span >= (n-1)*pitch + gap > inter-via gap => trunks overlap",
+   "staircase_45_only_ok": false,
+   "via_x_span_mm": 8.7
+  },
+  "EAST_CHIP_TO_J2|up|J2": {
+   "dir": "inc",
+   "dx_avail_max_mm": 20.25,
+   "dy_need_max_mm": 55.13,
+   "min_inter_via_gap_mm": 1.2,
+   "n": 8,
+   "pages_failing_dx_ge_dy": 8,
+   "reverse_Z_disjoint_trunk_ok": false,
+   "reverse_Z_reason": "reverse channel order needs trunk span >= (n-1)*pitch + gap > inter-via gap => trunks overlap",
+   "staircase_45_only_ok": false,
+   "via_x_span_mm": 8.4
+  },
+  "WEST_MCIO_TO_CHIP|dn|J3": {
+   "dir": "dec",
+   "dx_avail_max_mm": 5.85,
+   "dy_need_max_mm": 52.366,
+   "min_inter_via_gap_mm": -1.2,
+   "n": 4,
+   "pages_failing_dx_ge_dy": 4,
+   "reverse_Z_disjoint_trunk_ok": false,
+   "reverse_Z_reason": "reverse channel order needs trunk span >= (n-1)*pitch + gap > inter-via gap => trunks overlap",
+   "staircase_45_only_ok": false,
+   "via_x_span_mm": 3.6
+  },
+  "WEST_MCIO_TO_CHIP|dn|J4": {
+   "dir": "inc",
+   "dx_avail_max_mm": 10.65,
+   "dy_need_max_mm": 52.366,
+   "min_inter_via_gap_mm": 1.2,
+   "n": 4,
+   "pages_failing_dx_ge_dy": 4,
+   "reverse_Z_disjoint_trunk_ok": false,
+   "reverse_Z_reason": "reverse channel order needs trunk span >= (n-1)*pitch + gap > inter-via gap => trunks overlap",
+   "staircase_45_only_ok": false,
+   "via_x_span_mm": 3.6
+  },
+  "WEST_MCIO_TO_CHIP|up|J3": {
+   "dir": "dec",
+   "dx_avail_max_mm": 6.1,
+   "dy_need_max_mm": 50.28,
+   "min_inter_via_gap_mm": -1.2,
+   "n": 4,
+   "pages_failing_dx_ge_dy": 4,
+   "reverse_Z_disjoint_trunk_ok": false,
+   "reverse_Z_reason": "reverse channel order needs trunk span >= (n-1)*pitch + gap > inter-via gap => trunks overlap",
+   "staircase_45_only_ok": false,
+   "via_x_span_mm": 3.3
+  },
+  "WEST_MCIO_TO_CHIP|up|J4": {
+   "dir": "inc",
+   "dx_avail_max_mm": 10.9,
+   "dy_need_max_mm": 50.28,
+   "min_inter_via_gap_mm": 0.9,
+   "n": 4,
+   "pages_failing_dx_ge_dy": 4,
+   "reverse_Z_disjoint_trunk_ok": false,
+   "reverse_Z_reason": "reverse channel order needs trunk span >= (n-1)*pitch + gap > inter-via gap => trunks overlap",
+   "staircase_45_only_ok": false,
+   "via_x_span_mm": 3.3
+  }
+ },
+ "method": "closed-form per-frame geometry",
+ "summary": {
+  "conclusion": "in-layer levers measured/closed-form: lane-by-source infeasible (R-8), Z-family infeasible (forward=>crossings, reverse=>trunk overlap), 45/135-only staircase infeasible where dx<dy; straight family remains (264 crossings); => remaining are upstream items or a global proof",
+  "forward_Z": "channel order follows via order => planar order violated => crossings (measured 319 for straight-vs-channelized delta)",
+  "n_frames": 6,
+  "reverse_Z": "channel order reversed => trunks overlap (collinear copper) => invalid; Z-family cannot be planar+valid",
+  "staircase_45_135_only": "requires |dx| >= |dy| per page; failing frames: EAST_CHIP_TO_J2|up|J2, EAST_CHIP_TO_J2|dn|J2, WEST_MCIO_TO_CHIP|up|J3, WEST_MCIO_TO_CHIP|up|J4, WEST_MCIO_TO_CHIP|dn|J3, WEST_MCIO_TO_CHIP|dn|J4"
+ }
+}
