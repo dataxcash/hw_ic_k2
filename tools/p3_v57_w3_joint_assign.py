@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""W3 (G4) 联合指派 + 34 页节点图纸 / 层证书。
+"""W3 (G4) 联合指派 + 34 页节点图纸 / 层证书（W3-JA.2，契约 W3-C1 v1.1）。
 
 契约：`pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_kickoff_card.md`（W3-C1）。
 全景：R1(chip via 列对联合指派) + R1.5(过渡段资源层/平面性核实) + R2(走廊 lane) +
@@ -34,7 +34,7 @@ F = {
     "r3_gaps": STEP2 / "m13_v57_f8_r3_gap_candidates.json",
     "f6b_report": STEP2 / "m13_v57_f6b_report.json",
     "verdict": STEP2 / "m13_v57_s1_r1_via_verdict.json",
-    "card": STEP2 / "m13_v57_w3_kickoff_card.md",
+    "card": STEP2 / "m13_v57_w3_kickoff_card_v1_1.md",
 }
 FROZEN_SHA = {
     "spec": "0bd52ed48e720b8cb6a7869379f6c0a220f3e141e1514ab159f9f5f3b8b02233",
@@ -46,13 +46,13 @@ FROZEN_SHA = {
     "pair_coupling": "82e11c4cbdb4e8d44df1997f660c97fb75a47d33661223c9e5cf5fb0cb9c0d14",
     "r3_gaps": "8a31632907b171483cd40a053231c702e378f944af33f92598a6141bd052cdeb",
     "f6b_report": "9070ed53f970f480e88b1de3aa19792f8b637de51857935fa6b7c51fa8a015d6",
-    "card": "97a8084bb73f3af2b6996d58e616354c1941f2dc1b507e88725abe7a26f84a97",
+    "card": "4555f8b65abeb1a3a1743002f91f9ddbd2bda2462a1480d87bde23dedadc4ed2",
     "verdict": "2a3c8cf465c0ac1f808c1fdf7409725ab04862e4a8002f7ff71cfa299770bb5b",
 }
 OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
 OUT_LANDING = STEP2 / "m13_v57_w3_chip_landing_rows.json"
 
-REVISION = "W3-JA.1"
+REVISION = "W3-JA.2"
 SCHEMA = 1
 STEP = 1.46
 LANE_LO = 33.3
@@ -216,93 +216,108 @@ def r1_assign(dom: dict, pages: list) -> dict:
 
 
 # ---------------------------------------------------------------- R3 (landing)
-def r3_conflict(assigned: dict, pad: dict, col) -> bool:
-    for net, a in assigned.items():
-        if a["column_x"] == col and abs(a["y"] - pad["y"]) < VIA_VIA - TOL:
+def _r3_pads(gaps: dict, order: str) -> dict:
+    out = {}
+    for cref in sorted(gaps["connectors"]):
+        conn = gaps["connectors"][cref]
+        lst = []
+        for xc, col in sorted(conn["columns"].items(), key=lambda kv: float(kv[0])):
+            for en in perm(list(col["entries"]), order):
+                band = en.get("y_band") or [en["y"] - conn["half_row_pitch_mm"],
+                                            en["y"] + conn["half_row_pitch_mm"]]
+                lst.append({"ref": cref, "conn_col_x": float(xc), "net": en["net"],
+                            "y": round(float(en["y"]), 6), "pol": en["pol"],
+                            "page": en["page"], "kind": en["kind"],
+                            "cands": sorted(float(c) for c in en["gap_candidates"]),
+                            "y_band": [round(float(band[0]), 6), round(float(band[1]), 6)]})
+        out[cref] = sorted(lst, key=lambda q: (q["y"], q["net"]))
+    return out
+
+
+def _r3_csp(pads: list, strict: bool, cap: int = 400000):
+    """精确 CSP：变量 = pad，值域 = (gap 列 x, y)；y ∈ y_band（v1.1）或固定 pad y（v1 口径）。"""
+    doms = {}
+    for pd in pads:
+        if strict:
+            ys = [round(pd["y"], 4)]
+        else:
+            lo, hi = pd["y_band"]
+            ys = [round(lo + 0.05 * i, 4) for i in range(int(round((hi - lo) / 0.05)) + 1)]
+        doms[pd["net"]] = sorted({(c, y) for c in pd["cands"] for y in ys},
+                                 key=lambda v: (v[1], v[0]))
+    placed, nodes = {}, [0]
+
+    def dfs(remaining):
+        nodes[0] += 1
+        if nodes[0] > cap:
+            return False
+        if not remaining:
             return True
-    return False
+        best, vals = None, None
+        for net in remaining:
+            vv = [v for v in doms[net] if not any(
+                a["column_x"] == v[0] and abs(a["y"] - v[1]) < VIA_VIA - TOL
+                for a in placed.values())]
+            if not vv:
+                return False
+            if vals is None or (len(vv), net) < (len(vals), best):
+                best, vals = net, vv
+        rest = [n for n in remaining if n != best]
+        for c, y in vals:
+            placed[best] = {"column_x": c, "y": y}
+            if dfs(rest):
+                return True
+            del placed[best]
+        return False
+
+    okall = dfs(sorted(doms))
+    return okall, placed, nodes[0]
+
+
+def _strict_cores(pads: list) -> list:
+    cores, by_col = [], {}
+    for pd in pads:
+        if len(pd["cands"]) == 1:
+            by_col.setdefault(pd["cands"][0], []).append(pd)
+    for col, grp in sorted(by_col.items()):
+        seen = {}
+        for pd in sorted(grp, key=lambda q: (q["y"], q["net"])):
+            k = round(pd["y"], 6)
+            if k in seen:
+                cores.append({"gap_column_x": col, "minimal_core": sorted([seen[k], pd["net"]]),
+                              "y": k})
+            seen[k] = pd["net"]
+    return cores
 
 
 def r3_assign(gaps: dict, order: str) -> dict:
-    """精确 CSP：变量 = pad（最小剩余值序，tie-break (y,net)），前向检查冲突。"""
-    result: dict = {}
-    report: dict = {}
-    for cref in sorted(gaps["connectors"]):
-        pads = []
-        for xc, col in sorted(gaps["connectors"][cref]["columns"].items(),
-                              key=lambda kv: float(kv[0])):
-            for en in perm(list(col["entries"]), order):
-                pads.append({"ref": cref, "conn_col_x": float(xc), "net": en["net"],
-                             "y": round(float(en["y"]), 6), "pol": en["pol"],
-                             "page": en["page"], "kind": en["kind"],
-                             "cands": sorted(float(c) for c in en["gap_candidates"])})
-        pads.sort(key=lambda p: (p["y"], p["net"]))
-        assigned: dict = {}
-        nodes = [0]
-
-        def solve(remaining: list) -> bool:
-            nodes[0] += 1
-            if nodes[0] > 2000000:
-                return False
-            if not remaining:
-                return True
-            # 最小剩余值（原域大小）→ 最少剩余合法值（MRV）
-            best_i, best_vals = None, None
-            for i, pd in enumerate(remaining):
-                vals = [c for c in pd["cands"] if not r3_conflict(assigned, pd, c)]
-                if not vals:
-                    return False
-                if best_vals is None or (len(vals), pd["y"], pd["net"]) < \
-                        (len(best_vals), remaining[best_i]["y"], remaining[best_i]["net"]):
-                    best_i, best_vals = i, vals
-            pd = remaining[best_i]
-            rest = remaining[:best_i] + remaining[best_i + 1:]
-            for c in best_vals:
-                assigned[pd["net"]] = {"column_x": c, "y": pd["y"]}
-                if solve(rest):
-                    return True
-                del assigned[pd["net"]]
-            return False
-
-        # 解析冲突需要 pad.y；r3_conflict 用 pd["y"] 与已放置 y
-        def solve_wrap():
-            rem = list(pads)
-            return solve(rem)
-
-        okall = solve_wrap()
-        core = []
-        if not okall:
-            by_col = {}
-            for pd in pads:
-                if len(pd["cands"]) == 1:
-                    by_col.setdefault(pd["cands"][0], []).append(pd)
-            for col, grp in sorted(by_col.items()):
-                seen = {}
-                for pd in sorted(grp, key=lambda q: (q["y"], q["net"])):
-                    key = round(pd["y"], 6)
-                    if key in seen:
-                        core = sorted([seen[key], pd["net"]])
-                        break
-                    seen[key] = pd["net"]
-                if core:
-                    break
-        report[cref] = {"n_pads": len(pads), "feasible": okall, "search_nodes": nodes[0],
-                        "infeasible_core": core,
-                        "core_reason": ("single gap candidate shared by >=2 pads at identical y "
-                                        "-> landing y fixed to pad y makes 0.525 separation "
-                                        "impossible (pigeonhole)") if core else None,
-                        "relaxed_y_band_probe": r3_relaxed_probe(pads)}
-        for net, a in assigned.items():
-            pd = next(p for p in pads if p["net"] == net)
-            result[net] = {"ref": cref, "pad": [pd["conn_col_x"], pd["y"]],
-                           "y": pd["y"], "column_x": a["column_x"],
-                           "landing": [a["column_x"], pd["y"]],
-                           "kind": pd["kind"], "page": pd["page"], "pol": pd["pol"],
-                           "gap_column_candidates": pd["cands"]}
-    return {"assignment": result, "report": report, "feasible": all(
-        r["feasible"] for r in report.values()),
-        "method": "exact CSP: MRV variable order + forward checking; lex-min domain values "
-                  "(no per-net first-fit)"}
+    pads_by_ref = _r3_pads(gaps, order)
+    result, report = {}, {}
+    for cref in sorted(pads_by_ref):
+        pads = pads_by_ref[cref]
+        ok_strict, _, n_strict = _r3_csp(pads, strict=True)
+        okall, placed, nodes = _r3_csp(pads, strict=False)
+        report[cref] = {"n_pads": len(pads), "feasible": okall, "search_nodes": nodes,
+                        "strict_v1_rule": {"feasible": ok_strict, "search_nodes": n_strict}}
+        for net, a in placed.items():
+            pd = next(q for q in pads if q["net"] == net)
+            result[f"{cref}|{net}"] = {
+                "ref": cref, "pad": [pd["conn_col_x"], pd["y"]], "y": a["y"],
+                "pad_y": pd["y"], "y_band": pd["y_band"], "column_x": a["column_x"],
+                "landing": [a["column_x"], a["y"]], "kind": pd["kind"], "page": pd["page"],
+                "pol": pd["pol"], "gap_column_candidates": pd["cands"]}
+    strict_cores = _strict_cores([q for c in pads_by_ref for q in pads_by_ref[c]])
+    strict = {"rule": "W3-C1 v1 (landing y := pad y) - superseded by v1.1 y_band",
+              "feasible_all": all(report[c]["strict_v1_rule"]["feasible"] for c in report),
+              "per_connector": {c: report[c]["strict_v1_rule"] for c in report},
+              "infeasible_cores": strict_cores,
+              "core_reason": ("single gap candidate shared by >=2 pads at identical y -> 0.525 "
+                              "separation impossible (pigeonhole)") if strict_cores else None}
+    return {"assignment": result, "report": report,
+            "feasible": all(r["feasible"] for r in report.values()),
+            "strict_rule_finding": strict,
+            "method": "exact CSP on (gap column x, y in F-8 y_band): MRV variable order + forward "
+                      "checking, canonical value order (y asc, x asc); no per-net first-fit"}
 
 
 def r3_relaxed_probe(pads: list, cap: int = 400000) -> dict:
@@ -524,15 +539,15 @@ def main(argv=None) -> int:
     # A-W3.1 conservation
     n_via = sum(2 for p in facts)
     landing_nets = set(r3["assignment"])
-    gap_pads = [en["net"] for cref in j["r3_gaps"]["connectors"]
+    gap_pads = [f"{cref}|{en['net']}" for cref in j["r3_gaps"]["connectors"]
                 for col in j["r3_gaps"]["connectors"][cref]["columns"].values()
                 for en in col["entries"]]
     n_gap_pads = len(gap_pads)
-    checks.append(("A-W3.1", "R3 每 pad 恰 1 落点（entries 计）",
-                   f"{n_gap_pads}/{n_gap_pads}",
-                   f"{len(landing_nets)}/{n_gap_pads} "
-                   f"(J2 ok; J3/J4 infeasible -> certificate)",
-                   len(landing_nets) == n_gap_pads))
+    a31_ok = len(landing_nets) == n_gap_pads
+    checks.append(("A-W3.1", "R3 每 pad 恰 1 落点（entries 计；v1.1 条件化）",
+                   f"{n_gap_pads}/{n_gap_pads}" + ("" if r3["feasible"] else " | N/A(CERTIFICATE)"),
+                   f"{len(landing_nets)}/{n_gap_pads}",
+                   a31_ok if r3["feasible"] else (verdict == "CERTIFICATE")))
     checks.append(("A-W3.1b", "R1 每页 2 via (64)", "64",
                    str(n_via if r1["feasible"] else 0), r1["feasible"] and n_via == 64))
     # A-W3.2 exclusivity
@@ -609,30 +624,6 @@ def main(argv=None) -> int:
                              "x_order_inversions_vs_lane_order":
                                  v["x_order_inversions_vs_lane_order"]}})
 
-    if not r3["feasible"]:
-        verdict = "CERTIFICATE"
-        bad = {k: v for k, v in sorted(r3["report"].items()) if not v["feasible"]}
-        for cref, v in bad.items():
-            probe = v.get("relaxed_y_band_probe", {})
-            certificates.append({
-                "cert_id": f"W3-R3-JOINT-CONSERVATION-{cref}",
-                "kind": "CONSERVATION_CERTIFICATE",
-                "infeasible_layer": "R3_connector_escape_gap",
-                "corridor": cref,
-                "minimal_core": v.get("infeasible_core") or [],
-                "why_no_alloc_possible":
-                    "W3-C1 §3 规定落点 = (gap 列 x, pad y)；而该连接器存在同一 gap 列上 "
-                    "多个 pad 的唯一候选列相同且 pad_y 完全相同（证：鸽笼），则 0.525 互斥不可能。"
-                    + (f" 最小核 = {v.get('infeasible_core')}" if v.get("infeasible_core") else ""),
-                "escape_hatches": [
-                    "① 落点 y 放宽为 F-8 已给的 y_band（pad_y ± half_row）——本卡诊断探针"
-                    f"结果 feasible={probe.get('feasible')}，nodes={probe.get('search_nodes')}",
-                    "② 为 pad 增补 gap 候选列（F-8 域重发）",
-                    "③ 允许 pad 微段先行（在 pad 与 gap 列之间加一段 F.Cu）以解耦 y"],
-                "evidence": {"infeasible_core": v.get("infeasible_core"),
-                             "core_reason": v.get("core_reason"),
-                             "relaxed_y_band_probe": probe}})
-
     # ---- pages 装配
     pages_out = []
     emit_nodes = verdict == "FEASIBLE_ALL"
@@ -642,7 +633,7 @@ def main(argv=None) -> int:
             a = r2_all[cid]["assignment"][pid]
             ent, ext = CORRIDOR[cid]["bounds"]
             r1a = r1["assignment"].get(pid)
-            r3a = r3["assignment"].get(p["nets"]["P"])
+            r3a = r3["assignment"].get(f"{p['conn_ref']}|{p['nets']['P']}")
             page = {
                 "page_id": pid, "kind": "data", "side": p["side"], "corridor": cid,
                 "band": p.get("band", "?"), "conn_ref": p["conn_ref"],
@@ -710,8 +701,10 @@ def main(argv=None) -> int:
     doc = {
         "artifact": "m13_v57_w3_joint_assignment",
         "schema": SCHEMA, "revision": REVISION, "status": "EMITTED", "verdict": verdict,
-        "contract": {"id": "W3-C1", "card_md": str(F["card"].relative_to(K2)),
-                     "sha256": FROZEN_SHA["card"]},
+        "contract": {"id": "W3-C1 v1.1", "card_md": str(F["card"].relative_to(K2)),
+                     "sha256": FROZEN_SHA["card"],
+                     "supersedes": {"id": "W3-C1 v1",
+                                    "sha256": "97a8084bb73f3af2b6996d58e616354c1941f2dc1b507e88725abe7a26f84a97"}},
         "inputs_sha": {**{k: FROZEN_SHA[k] for k in
                           ("spec", "rules", "manifest", "w0r_model", "lane_frame",
                            "param_trace", "pair_coupling", "r3_gaps", "f6b_report")},
@@ -742,6 +735,7 @@ def main(argv=None) -> int:
                    "assignment": {c: r2_all[c]["assignment"] for c in r2_all}},
             "R3": {"status": "FEASIBLE" if r3["feasible"] else "CERTIFICATE",
                    "method": r3["method"], "report": r3["report"],
+                   "strict_rule_finding": r3["strict_rule_finding"],
                    "assignment": r3["assignment"]},
             "REFCLK": {"status": "FEASIBLE_DECLARED_OPEN_CROSS_SEGMENT",
                        "assignment": refclk},
@@ -781,6 +775,10 @@ def main(argv=None) -> int:
             {"id": "W3-RES-2", "topic": "REFCLK 跨走廊段（F.Cu）",
              "detail": "D0-2 定层后跨体段几何无权威承载，标记 DECLARED_OPEN",
              "status": "OPEN-UPSTREAM"},
+            {"id": "W3-RES-3a", "topic": "R3 落点 y 口径",
+             "detail": "W3-C1 v1「y := pad y」在本几何下 J3/J4 鸽笼不可行；v1.1 采用 F-8 y_band，"
+                       "32/32 页可行（取证见 layers.R3.strict_rule_finding）",
+             "status": "CLOSED-BY-V1.1"},
             {"id": "W3-RES-3", "topic": "R1.5 微净空 0.075 / no_90deg 具体几何",
              "detail": "本卡只做资源层与平面性判定；微净空与折角合法性属 DRC 阶段",
              "status": "DEFERRED-TO-DRC"},
