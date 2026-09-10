@@ -1,0 +1,994 @@
+{
+ "artifact": "m13_v57_f6b_report",
+ "authority": {
+  "d0_card": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_d0_decision_card.md",
+  "g3_v1_1": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_g3_freeze_contract_v1_1_frame_ruling.md",
+  "g3_v1_2": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_g3_freeze_contract_v1_2_lane_domain.md",
+  "manifest": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_s1_page_manifest.json",
+  "rules": "_shared/eda_core/drc_rules.json",
+  "w0r_model": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_big_w0r_corridor_model.json"
+ },
+ "evidence_protocol_v1_s3": {
+  "item1_schema_versions": "schema=1, revision=F6B-DE.1, producer/validator tool path + revision + sha256 fingerprints",
+  "item2_source_fingerprints_authority": "manifest/w0r_model/rules/g3_v1_1/g3_v1_2/d0_card SHA-256 pinned at runtime against frozen constants; full 64-hex recorded",
+  "item3_deterministic_status": "verdict is exactly one of PASS/FAIL; report is byte-identical across two consecutive runs",
+  "item4_demand_capacity_minimal_core": "real n=8 single-band + n=16 joint-frame double-end decisions per leg k; MUS page-id cores + required_leg_mm/short_mm certificates for infeasible cases; reachable_band_mm vs required_band_mm context",
+  "item5_legal_escape_hatches": "upstream input changes only (add corridor y / reduce pairs / widen R1.5 chip-side transition zone); no downstream construction edits",
+  "item6_independent_validation": "exact increasing-constraint DP cross-checked against an independent local brute permutation oracle on 200 synthetic double-end instances (n<=7); no F4/W1 import"
+ },
+ "inputs_sha": {
+  "d0_card": "a69cc7f5eedab2a19fa6ad5be55e100e1163da71d274ad540192d35b9bfdf79d",
+  "g3_v1_1": "232fda852ee8612be3f2bf2c4655d0aa716c408dfb71a8eb71df298b08c031ff",
+  "g3_v1_2": "128b0b97358d8980e1fecd66aa137b5b963c76cea9c4af78e71dc75e5cc85edb",
+  "manifest": "a8ef3ea8ecff99d7549d4122043c972c1bb68346dc4dcc3f36fdd9bacde49890",
+  "rules": "0a459839e15960b8fbfe0e1f5bb154a02b30cbafa1cbb0d56c2b810a71228448",
+  "w0r_model": "80ee9adb78a7e9ad94c27d426295592eee21af3d1e3ce88fe3042183160f0efa"
+ },
+ "no_allocation_scan": {
+  "forbidden_keys": [
+   "selected",
+   "assigned",
+   "allocation",
+   "witness"
+  ],
+  "leaked": []
+ },
+ "predicate": "G3 v1 §3 / F-6 double-end reach: injective page->lane index; pages sorted by (conn_row_y, page_id) map to strictly increasing lane indices; |lane_y - conn_row_y| <= leg AND |lane_y - chip_row_y| <= leg",
+ "real": {
+  "certificates": [
+   {
+    "corridor": "EAST_CHIP_TO_J2",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "frame": "up",
+    "k": 1,
+    "leg": 1.46,
+    "mus": [
+     "PCIE_UP0/out_J2"
+    ],
+    "n": 8,
+    "reachable_band_mm": 14.6,
+    "required_band_mm": 10.22,
+    "required_leg_mm": 7.16,
+    "short_mm": 5.7
+   },
+   {
+    "corridor": "EAST_CHIP_TO_J2",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "frame": "up",
+    "k": 2,
+    "leg": 2.92,
+    "mus": [
+     "PCIE_UP0/out_J2"
+    ],
+    "n": 8,
+    "reachable_band_mm": 14.6,
+    "required_band_mm": 10.22,
+    "required_leg_mm": 7.16,
+    "short_mm": 4.24
+   },
+   {
+    "corridor": "EAST_CHIP_TO_J2",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "frame": "up",
+    "k": 3,
+    "leg": 4.38,
+    "mus": [
+     "PCIE_UP0/out_J2"
+    ],
+    "n": 8,
+    "reachable_band_mm": 14.6,
+    "required_band_mm": 10.22,
+    "required_leg_mm": 7.16,
+    "short_mm": 2.78
+   },
+   {
+    "corridor": "EAST_CHIP_TO_J2",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "frame": "dn",
+    "k": 1,
+    "leg": 1.46,
+    "mus": [
+     "PCIE_DN0/input"
+    ],
+    "n": 8,
+    "reachable_band_mm": 14.6,
+    "required_band_mm": 10.22,
+    "required_leg_mm": 5.12,
+    "short_mm": 3.66
+   },
+   {
+    "corridor": "EAST_CHIP_TO_J2",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "frame": "dn",
+    "k": 2,
+    "leg": 2.92,
+    "mus": [
+     "PCIE_DN6/input"
+    ],
+    "n": 8,
+    "reachable_band_mm": 14.6,
+    "required_band_mm": 10.22,
+    "required_leg_mm": 5.12,
+    "short_mm": 2.2
+   },
+   {
+    "corridor": "EAST_CHIP_TO_J2",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "frame": "dn",
+    "k": 3,
+    "leg": 4.38,
+    "mus": [
+     "PCIE_DN0/input",
+     "PCIE_DN1/input",
+     "PCIE_DN2/input",
+     "PCIE_DN3/input",
+     "PCIE_DN4/input",
+     "PCIE_DN5/input",
+     "PCIE_DN6/input"
+    ],
+    "n": 8,
+    "reachable_band_mm": 14.6,
+    "required_band_mm": 10.22,
+    "required_leg_mm": 5.12,
+    "short_mm": 0.74
+   },
+   {
+    "corridor": "EAST_CHIP_TO_J2",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "frame": "joint",
+    "k": 1,
+    "leg": 1.46,
+    "mus": [
+     "PCIE_DN0/input"
+    ],
+    "n": 16,
+    "reachable_band_mm": 16.503,
+    "required_band_mm": 21.9,
+    "required_leg_mm": 10.497,
+    "short_mm": 9.037
+   },
+   {
+    "corridor": "EAST_CHIP_TO_J2",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "frame": "joint",
+    "k": 2,
+    "leg": 2.92,
+    "mus": [
+     "PCIE_DN6/input"
+    ],
+    "n": 16,
+    "reachable_band_mm": 16.503,
+    "required_band_mm": 21.9,
+    "required_leg_mm": 10.497,
+    "short_mm": 7.577
+   },
+   {
+    "corridor": "EAST_CHIP_TO_J2",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "frame": "joint",
+    "k": 3,
+    "leg": 4.38,
+    "mus": [
+     "PCIE_UP0/out_J2"
+    ],
+    "n": 16,
+    "reachable_band_mm": 16.503,
+    "required_band_mm": 21.9,
+    "required_leg_mm": 10.497,
+    "short_mm": 6.117
+   },
+   {
+    "corridor": "EAST_CHIP_TO_J2",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "frame": "joint",
+    "k": 5,
+    "leg": 7.3,
+    "mus": [
+     "PCIE_DN0/input",
+     "PCIE_DN1/input",
+     "PCIE_DN2/input",
+     "PCIE_DN3/input",
+     "PCIE_DN4/input",
+     "PCIE_DN5/input",
+     "PCIE_DN6/input",
+     "PCIE_DN7/input",
+     "PCIE_UP0/out_J2",
+     "PCIE_UP1/out_J2",
+     "PCIE_UP2/out_J2",
+     "PCIE_UP3/out_J2"
+    ],
+    "n": 16,
+    "reachable_band_mm": 16.503,
+    "required_band_mm": 21.9,
+    "required_leg_mm": 10.497,
+    "short_mm": 3.197
+   },
+   {
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "frame": "up",
+    "k": 1,
+    "leg": 1.46,
+    "mus": [
+     "PCIE_UP0/input"
+    ],
+    "n": 8,
+    "reachable_band_mm": 14.6,
+    "required_band_mm": 10.22,
+    "required_leg_mm": 9.56,
+    "short_mm": 8.1
+   },
+   {
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "frame": "up",
+    "k": 2,
+    "leg": 2.92,
+    "mus": [
+     "PCIE_UP0/input"
+    ],
+    "n": 8,
+    "reachable_band_mm": 14.6,
+    "required_band_mm": 10.22,
+    "required_leg_mm": 9.56,
+    "short_mm": 6.64
+   },
+   {
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "frame": "up",
+    "k": 3,
+    "leg": 4.38,
+    "mus": [
+     "PCIE_UP4/input"
+    ],
+    "n": 8,
+    "reachable_band_mm": 14.6,
+    "required_band_mm": 10.22,
+    "required_leg_mm": 9.56,
+    "short_mm": 5.18
+   },
+   {
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "frame": "up",
+    "k": 5,
+    "leg": 7.3,
+    "mus": [
+     "PCIE_UP4/input",
+     "PCIE_UP5/input"
+    ],
+    "n": 8,
+    "reachable_band_mm": 14.6,
+    "required_band_mm": 10.22,
+    "required_leg_mm": 9.56,
+    "short_mm": 2.26
+   },
+   {
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "frame": "dn",
+    "k": 1,
+    "leg": 1.46,
+    "mus": [
+     "PCIE_DN0/out_MCIO"
+    ],
+    "n": 8,
+    "reachable_band_mm": 14.6,
+    "required_band_mm": 10.22,
+    "required_leg_mm": 7.56,
+    "short_mm": 6.1
+   },
+   {
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "frame": "dn",
+    "k": 2,
+    "leg": 2.92,
+    "mus": [
+     "PCIE_DN0/out_MCIO"
+    ],
+    "n": 8,
+    "reachable_band_mm": 14.6,
+    "required_band_mm": 10.22,
+    "required_leg_mm": 7.56,
+    "short_mm": 4.64
+   },
+   {
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "frame": "dn",
+    "k": 3,
+    "leg": 4.38,
+    "mus": [
+     "PCIE_DN4/out_MCIO"
+    ],
+    "n": 8,
+    "reachable_band_mm": 14.6,
+    "required_band_mm": 10.22,
+    "required_leg_mm": 7.56,
+    "short_mm": 3.18
+   },
+   {
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "frame": "dn",
+    "k": 5,
+    "leg": 7.3,
+    "mus": [
+     "PCIE_DN4/out_MCIO",
+     "PCIE_DN5/out_MCIO",
+     "PCIE_DN6/out_MCIO",
+     "PCIE_DN7/out_MCIO"
+    ],
+    "n": 8,
+    "reachable_band_mm": 14.6,
+    "required_band_mm": 10.22,
+    "required_leg_mm": 7.56,
+    "short_mm": 0.26
+   },
+   {
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "frame": "joint",
+    "k": 1,
+    "leg": 1.46,
+    "mus": [
+     "PCIE_DN0/out_MCIO"
+    ],
+    "n": 16,
+    "reachable_band_mm": 16.6,
+    "required_band_mm": 21.9,
+    "required_leg_mm": 11.02,
+    "short_mm": 9.56
+   },
+   {
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "frame": "joint",
+    "k": 2,
+    "leg": 2.92,
+    "mus": [
+     "PCIE_DN0/out_MCIO"
+    ],
+    "n": 16,
+    "reachable_band_mm": 16.6,
+    "required_band_mm": 21.9,
+    "required_leg_mm": 11.02,
+    "short_mm": 8.1
+   },
+   {
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "frame": "joint",
+    "k": 3,
+    "leg": 4.38,
+    "mus": [
+     "PCIE_DN4/out_MCIO"
+    ],
+    "n": 16,
+    "reachable_band_mm": 16.6,
+    "required_band_mm": 21.9,
+    "required_leg_mm": 11.02,
+    "short_mm": 6.64
+   },
+   {
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "frame": "joint",
+    "k": 5,
+    "leg": 7.3,
+    "mus": [
+     "PCIE_UP4/input",
+     "PCIE_UP5/input"
+    ],
+    "n": 16,
+    "reachable_band_mm": 16.6,
+    "required_band_mm": 21.9,
+    "required_leg_mm": 11.02,
+    "short_mm": 3.72
+   }
+  ],
+  "expected_mismatch": [],
+  "joint_frame": [
+   {
+    "corridor": "EAST_CHIP_TO_J2",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "feasible": false,
+    "frame": "joint",
+    "k": 1,
+    "leg": 1.46,
+    "mus": [
+     "PCIE_DN0/input"
+    ],
+    "n": 16,
+    "reachable_band_mm": 16.503,
+    "required_band_mm": 21.9,
+    "required_leg_mm": 10.497,
+    "short_mm": 9.037
+   },
+   {
+    "corridor": "EAST_CHIP_TO_J2",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "feasible": false,
+    "frame": "joint",
+    "k": 2,
+    "leg": 2.92,
+    "mus": [
+     "PCIE_DN6/input"
+    ],
+    "n": 16,
+    "reachable_band_mm": 16.503,
+    "required_band_mm": 21.9,
+    "required_leg_mm": 10.497,
+    "short_mm": 7.577
+   },
+   {
+    "corridor": "EAST_CHIP_TO_J2",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "feasible": false,
+    "frame": "joint",
+    "k": 3,
+    "leg": 4.38,
+    "mus": [
+     "PCIE_UP0/out_J2"
+    ],
+    "n": 16,
+    "reachable_band_mm": 16.503,
+    "required_band_mm": 21.9,
+    "required_leg_mm": 10.497,
+    "short_mm": 6.117
+   },
+   {
+    "corridor": "EAST_CHIP_TO_J2",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "feasible": false,
+    "frame": "joint",
+    "k": 5,
+    "leg": 7.3,
+    "mus": [
+     "PCIE_DN0/input",
+     "PCIE_DN1/input",
+     "PCIE_DN2/input",
+     "PCIE_DN3/input",
+     "PCIE_DN4/input",
+     "PCIE_DN5/input",
+     "PCIE_DN6/input",
+     "PCIE_DN7/input",
+     "PCIE_UP0/out_J2",
+     "PCIE_UP1/out_J2",
+     "PCIE_UP2/out_J2",
+     "PCIE_UP3/out_J2"
+    ],
+    "n": 16,
+    "reachable_band_mm": 16.503,
+    "required_band_mm": 21.9,
+    "required_leg_mm": 10.497,
+    "short_mm": 3.197
+   },
+   {
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "feasible": false,
+    "frame": "joint",
+    "k": 1,
+    "leg": 1.46,
+    "mus": [
+     "PCIE_DN0/out_MCIO"
+    ],
+    "n": 16,
+    "reachable_band_mm": 16.6,
+    "required_band_mm": 21.9,
+    "required_leg_mm": 11.02,
+    "short_mm": 9.56
+   },
+   {
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "feasible": false,
+    "frame": "joint",
+    "k": 2,
+    "leg": 2.92,
+    "mus": [
+     "PCIE_DN0/out_MCIO"
+    ],
+    "n": 16,
+    "reachable_band_mm": 16.6,
+    "required_band_mm": 21.9,
+    "required_leg_mm": 11.02,
+    "short_mm": 8.1
+   },
+   {
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "feasible": false,
+    "frame": "joint",
+    "k": 3,
+    "leg": 4.38,
+    "mus": [
+     "PCIE_DN4/out_MCIO"
+    ],
+    "n": 16,
+    "reachable_band_mm": 16.6,
+    "required_band_mm": 21.9,
+    "required_leg_mm": 11.02,
+    "short_mm": 6.64
+   },
+   {
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "feasible": false,
+    "frame": "joint",
+    "k": 5,
+    "leg": 7.3,
+    "mus": [
+     "PCIE_UP4/input",
+     "PCIE_UP5/input"
+    ],
+    "n": 16,
+    "reachable_band_mm": 16.6,
+    "required_band_mm": 21.9,
+    "required_leg_mm": 11.02,
+    "short_mm": 3.72
+   }
+  ],
+  "single_band": [
+   {
+    "corridor": "EAST_CHIP_TO_J2",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "feasible": false,
+    "frame": "up",
+    "k": 1,
+    "leg": 1.46,
+    "mus": [
+     "PCIE_UP0/out_J2"
+    ],
+    "n": 8,
+    "reachable_band_mm": 14.6,
+    "required_band_mm": 10.22,
+    "required_leg_mm": 7.16,
+    "short_mm": 5.7
+   },
+   {
+    "corridor": "EAST_CHIP_TO_J2",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "feasible": false,
+    "frame": "up",
+    "k": 2,
+    "leg": 2.92,
+    "mus": [
+     "PCIE_UP0/out_J2"
+    ],
+    "n": 8,
+    "reachable_band_mm": 14.6,
+    "required_band_mm": 10.22,
+    "required_leg_mm": 7.16,
+    "short_mm": 4.24
+   },
+   {
+    "corridor": "EAST_CHIP_TO_J2",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "feasible": false,
+    "frame": "up",
+    "k": 3,
+    "leg": 4.38,
+    "mus": [
+     "PCIE_UP0/out_J2"
+    ],
+    "n": 8,
+    "reachable_band_mm": 14.6,
+    "required_band_mm": 10.22,
+    "required_leg_mm": 7.16,
+    "short_mm": 2.78
+   },
+   {
+    "corridor": "EAST_CHIP_TO_J2",
+    "feasible": true,
+    "frame": "up",
+    "k": 5,
+    "leg": 7.3,
+    "n": 8,
+    "reachable_band_mm": 14.6,
+    "required_band_mm": 10.22
+   },
+   {
+    "corridor": "EAST_CHIP_TO_J2",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "feasible": false,
+    "frame": "dn",
+    "k": 1,
+    "leg": 1.46,
+    "mus": [
+     "PCIE_DN0/input"
+    ],
+    "n": 8,
+    "reachable_band_mm": 14.6,
+    "required_band_mm": 10.22,
+    "required_leg_mm": 5.12,
+    "short_mm": 3.66
+   },
+   {
+    "corridor": "EAST_CHIP_TO_J2",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "feasible": false,
+    "frame": "dn",
+    "k": 2,
+    "leg": 2.92,
+    "mus": [
+     "PCIE_DN6/input"
+    ],
+    "n": 8,
+    "reachable_band_mm": 14.6,
+    "required_band_mm": 10.22,
+    "required_leg_mm": 5.12,
+    "short_mm": 2.2
+   },
+   {
+    "corridor": "EAST_CHIP_TO_J2",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "feasible": false,
+    "frame": "dn",
+    "k": 3,
+    "leg": 4.38,
+    "mus": [
+     "PCIE_DN0/input",
+     "PCIE_DN1/input",
+     "PCIE_DN2/input",
+     "PCIE_DN3/input",
+     "PCIE_DN4/input",
+     "PCIE_DN5/input",
+     "PCIE_DN6/input"
+    ],
+    "n": 8,
+    "reachable_band_mm": 14.6,
+    "required_band_mm": 10.22,
+    "required_leg_mm": 5.12,
+    "short_mm": 0.74
+   },
+   {
+    "corridor": "EAST_CHIP_TO_J2",
+    "feasible": true,
+    "frame": "dn",
+    "k": 5,
+    "leg": 7.3,
+    "n": 8,
+    "reachable_band_mm": 14.6,
+    "required_band_mm": 10.22
+   },
+   {
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "feasible": false,
+    "frame": "up",
+    "k": 1,
+    "leg": 1.46,
+    "mus": [
+     "PCIE_UP0/input"
+    ],
+    "n": 8,
+    "reachable_band_mm": 14.6,
+    "required_band_mm": 10.22,
+    "required_leg_mm": 9.56,
+    "short_mm": 8.1
+   },
+   {
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "feasible": false,
+    "frame": "up",
+    "k": 2,
+    "leg": 2.92,
+    "mus": [
+     "PCIE_UP0/input"
+    ],
+    "n": 8,
+    "reachable_band_mm": 14.6,
+    "required_band_mm": 10.22,
+    "required_leg_mm": 9.56,
+    "short_mm": 6.64
+   },
+   {
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "feasible": false,
+    "frame": "up",
+    "k": 3,
+    "leg": 4.38,
+    "mus": [
+     "PCIE_UP4/input"
+    ],
+    "n": 8,
+    "reachable_band_mm": 14.6,
+    "required_band_mm": 10.22,
+    "required_leg_mm": 9.56,
+    "short_mm": 5.18
+   },
+   {
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "feasible": false,
+    "frame": "up",
+    "k": 5,
+    "leg": 7.3,
+    "mus": [
+     "PCIE_UP4/input",
+     "PCIE_UP5/input"
+    ],
+    "n": 8,
+    "reachable_band_mm": 14.6,
+    "required_band_mm": 10.22,
+    "required_leg_mm": 9.56,
+    "short_mm": 2.26
+   },
+   {
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "feasible": false,
+    "frame": "dn",
+    "k": 1,
+    "leg": 1.46,
+    "mus": [
+     "PCIE_DN0/out_MCIO"
+    ],
+    "n": 8,
+    "reachable_band_mm": 14.6,
+    "required_band_mm": 10.22,
+    "required_leg_mm": 7.56,
+    "short_mm": 6.1
+   },
+   {
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "feasible": false,
+    "frame": "dn",
+    "k": 2,
+    "leg": 2.92,
+    "mus": [
+     "PCIE_DN0/out_MCIO"
+    ],
+    "n": 8,
+    "reachable_band_mm": 14.6,
+    "required_band_mm": 10.22,
+    "required_leg_mm": 7.56,
+    "short_mm": 4.64
+   },
+   {
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "feasible": false,
+    "frame": "dn",
+    "k": 3,
+    "leg": 4.38,
+    "mus": [
+     "PCIE_DN4/out_MCIO"
+    ],
+    "n": 8,
+    "reachable_band_mm": 14.6,
+    "required_band_mm": 10.22,
+    "required_leg_mm": 7.56,
+    "short_mm": 3.18
+   },
+   {
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "escape_hatches": [
+     "add corridor y (extend usable_y_spans span)",
+     "reduce pairs (reduce n)",
+     "widen R1.5 chip-side transition zone (increase effective leg)"
+    ],
+    "feasible": false,
+    "frame": "dn",
+    "k": 5,
+    "leg": 7.3,
+    "mus": [
+     "PCIE_DN4/out_MCIO",
+     "PCIE_DN5/out_MCIO",
+     "PCIE_DN6/out_MCIO",
+     "PCIE_DN7/out_MCIO"
+    ],
+    "n": 8,
+    "reachable_band_mm": 14.6,
+    "required_band_mm": 10.22,
+    "required_leg_mm": 7.56,
+    "short_mm": 0.26
+   }
+  ]
+ },
+ "revision": "F6B-DE.1",
+ "schema": 1,
+ "seed": 20260909,
+ "synthetic": {
+  "decision_match": 200,
+  "mismatch": [],
+  "mus_match": 200,
+  "mus_mismatch": [],
+  "n_instances": 200,
+  "order_invariant": 200
+ },
+ "verdict": "PASS",
+ "versions": {
+  "producer": {
+   "path": "tools/p3_v57_f6b_double_end_verifier.py",
+   "revision": "F6B-DE.1",
+   "sha256": "695871b0a8ee919ff16bc72cb23aa6254121616a48a48cb5674fbfe88e874334",
+   "symbol": "exact_feasible"
+  },
+  "validator": {
+   "path": "tools/p3_v57_f6b_double_end_verifier.py",
+   "revision": "F6B-DE.1",
+   "sha256": "695871b0a8ee919ff16bc72cb23aa6254121616a48a48cb5674fbfe88e874334",
+   "symbol": "brute_feasible"
+  }
+ }
+}

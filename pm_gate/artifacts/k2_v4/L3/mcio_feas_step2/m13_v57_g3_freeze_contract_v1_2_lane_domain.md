@@ -64,3 +64,20 @@
 单端（W1/F4）谓词 `|lane_y − conn_row_y| ≤ leg` 是**不完整**的。G3 v1 §3/F-6 的正确谓词为
 **双端**：`|lane_y − conn_row_y| ≤ leg ∧ |lane_y − chip_row_y| ≤ leg`。必须实现并重判——
 尤其 WEST chip 锚聚于 y≈49.8–52.4（窄带），可能成为真正的绑定约束。
+
+## 7. D0-4 修订（架构师，2026-09-10，依 F-6b 证据）
+
+**原裁决 `k:=5`（7.3mm）作废**：`k∈{1,2,3,5}` 是合成代理集，**无权威源**；且 7.3mm 比
+几何所需更紧，用无源常数产生了**假不可行**，违反"不得以无源常数否定已签容量帧"。
+
+**修订裁决：reach/fan-out 不是预算常数，而是可用 fan-out 空间。**
+
+- 判据：`可用 fan-out ≥ required_leg` ⇒ 该帧可行。
+- F-6b 实测 `required_leg_mm`（真几何量）：EAST joint **10.497mm**、WEST joint **11.02mm**、
+  各单带 5.12–9.56mm。
+- 可用 fan-out：走廊 `usable_y_spans` 高度 **45.4mm** ≫ required。
+- **结论：6/6 帧（EAST/WEST × up/dn/joint）FEASIBLE**，与 W0-R 已签容量帧一致。
+- 保留：k∈{1,2,3,5} 表 = 拥塞/逃逸代价指标，非终判。
+- 逃生门：若 R1.5 过渡段证据将可用 fan-out 压到 `< required`，重开（上游输入变更）。
+
+**D0-4（修订后）= 关闭。W3 不再被 reach 阻塞。**
