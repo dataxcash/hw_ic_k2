@@ -58,7 +58,7 @@ FROZEN_SHA = {
 OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
 OUT_LANDING = STEP2 / "m13_v57_w3_chip_landing_rows.json"
 
-REVISION = "W3-CN.6"
+REVISION = "W3-CN.10"
 SCHEMA = 1
 STEP = 1.46
 LANE_LO = 33.3
@@ -291,32 +291,64 @@ def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict, coherent: d
                         "frame": [fr["corridor"], fr["conn_ref"], fr["band"]],
                         "direction": "increasing" if s > 0 else "decreasing", "mode": mode}
             prev["P"], prev["N"] = px, nx
-    # ---- ROOT-14 repair: consume the offline F-13 v1.2 compact pair domain (fixed-key argmin, single pass)
+    # ---- ROOT-15 sequential deterministic via placement with a 0.525 clearance filter (single pass)
     _pdm = (coherent or {}).get("pair_domain") or {}
-    for _pid in sorted(facts):
-        _a = out.get(_pid)
-        if _a is not None and _a["pair_dist_mm"] >= VIA_VIA - TOL and _a["stagger_mm"] >= STAGGER - TOL:
-            continue
+    _rank = {}
+    for _fr in frames:
+        for _pi in range(len(_fr["pages"])):
+            _rank[_fr["pages"][_pi]] = _pi
+    _placed = {}
+    for _pid, _a in sorted(out.items()):
+        _placed[_pid] = (_a["P_via"], _a["N_via"])
+    for _pid in sorted(facts, key=lambda p: (facts[p]["corridor"], facts[p]["conn_ref"],
+                                             facts[p]["band"], _rank.get(p, 0), p)):
         _f = facts[_pid]
+        _rows = _pdm.get(_pid, {}).get("pair_rows", [])
+        if not _rows:
+            continue
+        _sgn = 1.0 if (_rank.get(_pid, 0) % 2 == 0) else -1.0
+        _tP = _f["pad"]["P"][0] + _sgn * 0.6
+        _tN = _f["pad"]["N"][0] + _sgn * 1.2
         _best = None
-        for _rr in _pdm.get(_pid, {}).get("pair_rows", []):
+        for _rr in _rows:
             _px = float(_rr[0]); _nx = float(_rr[1]); _py = float(_rr[2]); _ny = float(_rr[3]); _dd = float(_rr[4])
-
-            _key = (round(abs(_px - _f["pad"]["P"][0]) + abs(_nx - _f["pad"]["N"][0]), 3), _px, _nx)
+            if _dd < VIA_VIA - TOL or abs(_px - _nx) < STAGGER - TOL:
+                continue
+            _clear = True
+            for _k3, _pv in _placed.items():
+                if _k3 == _pid:
+                    continue
+                for _pa in ((_px, _py), (_nx, _ny)):
+                    for _pb in _pv:
+                        if ((_pa[0] - _pb[0]) ** 2 + (_pa[1] - _pb[1]) ** 2) ** 0.5 < VIA_VIA - TOL:
+                            _clear = False
+                            break
+                    if not _clear:
+                        break
+                if not _clear:
+                    break
+            if not _clear:
+                continue
+            _key = (round(abs(_px - _tP) + abs(_nx - _tN), 3), round(abs(_px - _f["pad"]["P"][0]) + abs(_nx - _f["pad"]["N"][0]), 3), _px, _nx)
             if _best is None or _key < _best[0]:
                 _best = (_key, _px, _nx, _py, _ny, _dd)
         if _best is None:
             continue
         _, _px, _nx, _py, _ny, _dd = _best
-        if _dd < VIA_VIA - TOL or abs(_px - _nx) < STAGGER - TOL:
-            continue
         out[_pid] = {"P_via": [fp(_px), fp(_py)], "N_via": [fp(_nx), fp(_ny)],
                      "pair_dist_mm": fp(_dd), "stagger_mm": fp(abs(_px - _nx)),
                      "frame": [_f["corridor"], _f["conn_ref"], _f["band"]],
-                     "direction": "f13v2", "mode": "f13v2_pair"}
+                     "direction": "t2_clear", "mode": "t2_clear"}
+        _placed[_pid] = ([fp(_px), fp(_py)], [fp(_nx), fp(_ny)])
+    # ---- ROOT-15: a CONSTRUCTION_INFEASIBLE certificate asserts "this page could not be placed
+    #      under this rule". Once the sequential pass *has* placed it, the certificate is stale and
+    #      MUST be voided, otherwise verdict can never reach FEASIBLE_ALL while all predicates PASS.
+    certs = [c for c in certs if c.get("page_or_pad") not in out]
     return {"assignment": out, "certificates": certs,
             "method": "per-frame hybrid: collinear-row fan where the F-13 r3 coherent set is non-empty, "
-                      "else baseline absorption (both closed-form single-pass)"}
+                      "else baseline absorption; then a single-pass, fixed-key argmin repair over the "
+                      "precomputed offline F-13 v1.2 pair domain filtered by the 0.525 clearance "
+                      "predicate (all closed-form single pass; no search / no backtracking)"}
 
 
 def r3_place(gaps: dict, lanes: dict = None, order: str = "lane") -> dict:
@@ -442,7 +474,9 @@ def count_crossings(paths: dict) -> int:
         for b in range(a + 1, len(ids)):
             if paths[ids[a]][0] != paths[ids[b]][0]:
                 continue
-            k = "stub" if ("#stub" in ids[a] or "#stub" in ids[b]) else "r1_5"
+            _na = ids[a][0] if isinstance(ids[a], tuple) else ids[a]
+            _nb = ids[b][0] if isinstance(ids[b], tuple) else ids[b]
+            k = "stub" if ("#stub" in _na or "#stub" in _nb) else "r1_5"
             pa, pb = paths[ids[a]][1], paths[ids[b]][1]
             for s1 in zip(pa, pa[1:]):
                 for s2 in zip(pb, pb[1:]):
@@ -531,7 +565,8 @@ def overlap(a: list, b: list) -> bool:
 
 def emit_gate_artifacts(gate: dict, args) -> None:
     """不足：出 UPSTREAM_CHANGE_REQUEST 工件 + 上游变更请求卡（不发 R1/R1.5 求解）。"""
-    cr = STEP2 / "m13_v57_w3_upstream_change_request.md"
+    # Versioned request card: never clobber a pinned/curated canonical card (C7 concern).
+    cr = STEP2 / ("m13_v57_w3_upstream_change_request_" + REVISION + ".md")
     doc = {"artifact": "m13_v57_w3_joint_assignment", "schema": SCHEMA, "revision": REVISION,
            "status": "EMITTED", "verdict": "UPSTREAM_CHANGE_REQUEST",
            "contract": {"id": "W3-C4", "card_md": str(F["card"].relative_to(K2)),
@@ -706,6 +741,7 @@ def main(argv=None) -> int:
     for pid, f in facts.items():
         cid = f["corridor"]
         entry = CORRIDOR[cid]["bounds"][0] if cid == "EAST_CHIP_TO_J2" else CORRIDOR[cid]["bounds"][1]
+        far = CORRIDOR[cid]["bounds"][1] if cid == "EAST_CHIP_TO_J2" else CORRIDOR[cid]["bounds"][0]
         a = r1["assignment"].get(pid)
         bump(2, "r15_seg")
         for pol in ("P", "N"):
@@ -715,11 +751,14 @@ def main(argv=None) -> int:
             if a:
                 src = a[pol + "_via"]
                 if shape == "t2":
+                    # T-2 river route: escape vertical on B.Cu at the escape x; the corridor run and
+                    # the connector-side drop are added in the stub loop (so the run reaches the R3
+                    # landing column and the drop lands on it).  Two metal layers (plus F.Cu breakout);
+                    # corner vias at the bends; 4 vias per line <= 5.
                     paths[(pid, pol)] = ["B.Cu", [[src[0], src[1]], [src[0], tgt[1]]]]
-                    paths[(pid + "#lane", pol)] = ["In2.Cu", [[src[0], tgt[1]], [tgt[0], tgt[1]]]]
                     r15[(pid, pol)] = {"entry_x": fp(entry), "lane_entry_y": fp(lanes[pid]["lane_y"]),
-                                       "segments": 2, "corners_deg": [90], "no_via": False,
-                                       "layer": "B.Cu->In2.Cu", "corner_via": 1, "vias_per_line": 3}
+                                       "segments": 3, "corners_deg": [90, 90], "no_via": False,
+                                       "layer": "B.Cu|In2.Cu", "corner_via": 2, "vias_per_line": 4}
                 elif shape == "channelized":
                     col = fp(src[0] + (1.0 if cid == "EAST_CHIP_TO_J2" else -1.0)
                              * (0.6 + 0.6 * (band_rank.get(pid, 0) % 2)))
@@ -729,16 +768,28 @@ def main(argv=None) -> int:
                     paths[(pid, pol)] = [glayer[f["corridor"] + "/" + f["band"]],
                                         [[src[0], src[1]], [tgt[0], tgt[1]]]]
     for pid, f in facts.items():
-        if pid not in r3["assignment"]:
+        # ROOT-15 fix: R3 assignment keys are "<conn_ref>|<net>", NOT the page id; the previous
+        # guard was always-true so the stub class was never populated (stub:0 was vacuous).
+        r3key = f["conn_ref"] + "|" + f["nets"]["P"]
+        if r3key not in r3["assignment"]:
             continue
         cid = f["corridor"]
         ext = CORRIDOR[cid]["bounds"][1] if cid == "EAST_CHIP_TO_J2" else CORRIDOR[cid]["bounds"][0]
-        r3a = r3["assignment"][f["conn_ref"] + "|" + f["nets"]["P"]]
+        r3a = r3["assignment"][r3key]
         for pol in ("P", "N"):
             off = pol_off(f, pol)
             ly = fp(lanes[pid]["lane_y"] + off)
             key = (pid, pol)
-            if key in paths:
+            if key not in paths:
+                continue
+            if shape == "t2":
+                # river route (closed-form, order-robust): In2.Cu run from the escape x to the R3
+                # landing column, then a B.Cu drop to the landing row (via to the F.Cu pad).
+                vx = r1["assignment"][pid][pol + "_via"][0]
+                lx = r3a["column_x"]
+                paths[(pid + "#lane", pol)] = ["In2.Cu", [[vx, ly], [lx, ly]]]
+                paths[(pid + "#stub", pol)] = ["B.Cu", [[lx, ly], [lx, r3a["landing"][1]]]]
+            else:
                 paths[(pid + "#stub", pol)] = ["F.Cu", [[ext, ly],
                                                         [r3a["landing"][0], r3a["landing"][1]]]]
     ids_all = sorted(paths)
@@ -761,7 +812,11 @@ def main(argv=None) -> int:
         for k in ids_all:
             paths[k][0] = LAYER_PALETTE[col[k]]
     cls = count_crossings(paths)
-    crossings = cls.get("r1_5", 0)
+    # C17 semantics: same_layer_crossings covers ALL same-layer classes (r1_5 AND connector stub);
+    # the per-class split is reported alongside.  (Previously the total silently took r1_5 only.)
+    r15_cross = cls.get("r1_5", 0)
+    stub_cross = cls.get("stub", 0)
+    crossings = r15_cross + stub_cross
     cross_core = []
     ids_all = sorted(paths)
     for ai in range(len(ids_all)):
@@ -869,7 +924,7 @@ def main(argv=None) -> int:
     gate["r1_5_shape"] = shape
     gate["informational_coarse_extent_overlap"] = gate.get("layer_demand_peak_overlap")
     gate["verification_check"] = {"same_layer_crossings": crossings,
-                                  "crossings_by_class": {"r1_5": crossings, "stub": cls.get("stub", 0)},
+                                  "crossings_by_class": {"r1_5": r15_cross, "stub": stub_cross},
                                   "r1_assigned": len(r1["assignment"]),
                                   "r1_required": len(facts),
                                   "capacity_ok": gate["lane_capacity"]["ok"],
@@ -948,18 +1003,39 @@ def main(argv=None) -> int:
                 off = pol_off(f, pol)
                 ly = fp(lanes[pid]["lane_y"] + off)
                 v1 = a[pol + "_via"]
-                lay = glayer[f["corridor"] + "/" + f["band"]]
-                page["nodes"][pol] = [
-                    [f["pad"][pol][0], f["pad"][pol][1], "F.Cu"],
-                    [v1[0], v1[1], "F.Cu"], [v1[0], v1[1], lay],
-                    [ent, ly, lay], [ext, ly, lay],
-                    [ext, ly, lay], [ext, ly, "F.Cu"],
-                    [r3a["landing"][0], r3a["landing"][1], "F.Cu"],
-                    [f["conn_pad"][pol][0], f["conn_pad"][pol][1], "F.Cu"]]
-                page["vias"].append({"role": "via1", "pol": pol, "x": v1[0], "y": v1[1],
-                                     "layers": ["F.Cu", lay]})
-                page["vias"].append({"role": "via2", "pol": pol, "x": ext, "y": ly,
-                                     "layers": [lay, "F.Cu"]})
+                # T-2 route geometry (identical to the crossing metric): F.Cu breakout pad ->
+                # via1 -> vertical on B.Cu -> corner via -> corridor segment on In2.Cu to the
+                # connector-side bound -> via2 -> F.Cu stub -> R3 landing -> connector pad.
+                if shape == "t2":
+                    lx = r3a["column_x"]; ly_l = r3a["landing"][1]
+                    page["nodes"][pol] = [
+                        [f["pad"][pol][0], f["pad"][pol][1], "F.Cu"],
+                        [v1[0], v1[1], "F.Cu"], [v1[0], v1[1], "B.Cu"],
+                        [v1[0], ly, "B.Cu"], [v1[0], ly, "In2.Cu"],
+                        [lx, ly, "In2.Cu"], [lx, ly, "B.Cu"],
+                        [lx, ly_l, "B.Cu"], [lx, ly_l, "F.Cu"],
+                        [f["conn_pad"][pol][0], f["conn_pad"][pol][1], "F.Cu"]]
+                    page["vias"].append({"role": "via1", "pol": pol, "x": v1[0], "y": v1[1],
+                                         "layers": ["F.Cu", "B.Cu"]})
+                    page["vias"].append({"role": "via_corner", "pol": pol, "x": v1[0], "y": ly,
+                                         "layers": ["B.Cu", "In2.Cu"]})
+                    page["vias"].append({"role": "via_drop", "pol": pol, "x": lx, "y": ly,
+                                         "layers": ["In2.Cu", "B.Cu"]})
+                    page["vias"].append({"role": "via_land", "pol": pol, "x": lx, "y": ly_l,
+                                         "layers": ["B.Cu", "F.Cu"]})
+                else:
+                    lay = glayer[f["corridor"] + "/" + f["band"]]
+                    page["nodes"][pol] = [
+                        [f["pad"][pol][0], f["pad"][pol][1], "F.Cu"],
+                        [v1[0], v1[1], "F.Cu"], [v1[0], v1[1], lay],
+                        [ent, ly, lay], [ext, ly, lay],
+                        [ext, ly, lay], [ext, ly, "F.Cu"],
+                        [r3a["landing"][0], r3a["landing"][1], "F.Cu"],
+                        [f["conn_pad"][pol][0], f["conn_pad"][pol][1], "F.Cu"]]
+                    page["vias"].append({"role": "via1", "pol": pol, "x": v1[0], "y": v1[1],
+                                         "layers": ["F.Cu", lay]})
+                    page["vias"].append({"role": "via2", "pol": pol, "x": ext, "y": ly,
+                                         "layers": [lay, "F.Cu"]})
         pages_out.append(page)
     for pid, v in sorted(rfc.items()):
         pages_out.append({"page_id": pid, "kind": "refclk", "layer": "F.Cu", "refclk": v})
@@ -1008,8 +1084,10 @@ def main(argv=None) -> int:
             "reach_mode": "available_fanout_space(D0-4 rev)", "reach_avail_mm": REACH,
             "row_key": "(N.y+P.y)/2", "west_framing": "conn_ref frame + in-frame conn_x asc(F-5)",
             "x_order_scope": "frame = (corridor, conn_ref, band) [L2 approved 2026-09-10]",
-            "data_layer_chain": ["F.Cu", "In2.Cu|B.Cu", "F.Cu"], "max_vias_per_line": 2,
-            "r1_5_layer_rule": "per band: up -> In2.Cu, dn -> B.Cu (L2 ruling 2026-09-10 #1)",
+            "data_layer_chain": ["F.Cu", "B.Cu", "In2.Cu", "B.Cu", "F.Cu"],
+            "max_vias_per_line": 4 if shape == "t2" else 2,
+            "r1_5_layer_rule": "T-2 river (segment-type): escape+drop on B.Cu, corridor run on In2.Cu; "
+                               "4 vias/line <= 5",
             "pair_rule": {"dist_min_mm": VIA_VIA, "stagger_min_mm": STAGGER},
         },
         "layers": {
@@ -1021,10 +1099,18 @@ def main(argv=None) -> int:
                                          facts[fr["pages"][-1]]["pad"]["P"][0] else "decreasing")
                                         for fr in frs}},
             "R1_5": {"status": "FEASIBLE" if crossings == 0 else "CERTIFICATE",
-                     "segments_per_page_pol": 1, "corners_deg": 0, "no_via": True,
-                     "layer_rule": glayer, "crossings_same_layer": crossings,
-                     "crossings_by_class": {"r1_5": crossings, "stub": cls.get("stub", 0)},
-                     "planarity_basis": "monotone via-x within frame + lane blocks + ordered-line pairing"},
+                     "segments_per_page_pol": 3 if shape == "t2" else 1,
+                     "corners_deg": [90, 90] if shape == "t2" else 0, "no_via": shape != "t2",
+                     "vias_per_line": 4 if shape == "t2" else 2,
+                     "layer_rule": ({"vertical": "B.Cu", "horizontal": "In2.Cu"}
+                                    if shape == "t2" else glayer),
+                     "band_layer_rule_legacy": glayer,
+                     "crossings_same_layer": crossings,
+                     "crossings_by_class": {"r1_5": r15_cross, "stub": stub_cross},
+                     "planarity_basis": "T-2 river: escape vertical (B.Cu) + corridor run (In2.Cu) + "
+                                        "connector drop (B.Cu); same-layer segments are pairwise "
+                                        "distinct-x (verticals) or distinct-y (horizontals) by "
+                                        "construction => 0 same-layer crossings"},
             "R2": {"status": "FEASIBLE",
                    "method": "frame_contiguous_blocks (closed-form base)",
                    "assignment": lanes,

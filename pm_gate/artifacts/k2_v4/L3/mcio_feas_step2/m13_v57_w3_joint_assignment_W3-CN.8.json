@@ -1,6 +1,139 @@
 {
  "artifact": "m13_v57_w3_joint_assignment",
- "certificates": [],
+ "certificates": [
+  {
+   "closed_form_condition": "y_k = max(pad_y_k - 0.3, y_{k-1} + 0.6) in y_band",
+   "kind": "CONSTRUCTION_INFEASIBLE",
+   "layer": "R3_connector_escape_gap",
+   "observed": {
+    "gap_x": 131.65,
+    "pad_y": 45.9,
+    "prev_y": 64.2,
+    "ref": "J2",
+    "y_k": 64.8
+   },
+   "page_or_pad": "PCIE_REFCLK0_P",
+   "required": {
+    "step_mm": 0.6,
+    "y_band": [
+     45.6,
+     46.2
+    ]
+   },
+   "rule": "gap_column_prefix_recurrence",
+   "scope_note": "本构造规则下不可行；非全局不可能性证明"
+  },
+  {
+   "closed_form_condition": "y_k = max(pad_y_k - 0.3, y_{k-1} + 0.6) in y_band",
+   "kind": "CONSTRUCTION_INFEASIBLE",
+   "layer": "R3_connector_escape_gap",
+   "observed": {
+    "gap_x": 131.65,
+    "pad_y": 51.3,
+    "prev_y": 64.8,
+    "ref": "J2",
+    "y_k": 65.4
+   },
+   "page_or_pad": "PCIE_REFCLK1_P",
+   "required": {
+    "step_mm": 0.6,
+    "y_band": [
+     51.0,
+     51.6
+    ]
+   },
+   "rule": "gap_column_prefix_recurrence",
+   "scope_note": "本构造规则下不可行；非全局不可能性证明"
+  },
+  {
+   "closed_form_condition": "y_k = max(pad_y_k - 0.3, y_{k-1} + 0.6) in y_band",
+   "kind": "CONSTRUCTION_INFEASIBLE",
+   "layer": "R3_connector_escape_gap",
+   "observed": {
+    "gap_x": 133.825,
+    "pad_y": 45.9,
+    "prev_y": 63.6,
+    "ref": "J2",
+    "y_k": 64.2
+   },
+   "page_or_pad": "PCIE_REFCLK0_N",
+   "required": {
+    "step_mm": 0.6,
+    "y_band": [
+     45.6,
+     46.2
+    ]
+   },
+   "rule": "gap_column_prefix_recurrence",
+   "scope_note": "本构造规则下不可行；非全局不可能性证明"
+  },
+  {
+   "closed_form_condition": "y_k = max(pad_y_k - 0.3, y_{k-1} + 0.6) in y_band",
+   "kind": "CONSTRUCTION_INFEASIBLE",
+   "layer": "R3_connector_escape_gap",
+   "observed": {
+    "gap_x": 133.825,
+    "pad_y": 51.3,
+    "prev_y": 64.2,
+    "ref": "J2",
+    "y_k": 64.8
+   },
+   "page_or_pad": "PCIE_REFCLK1_N",
+   "required": {
+    "step_mm": 0.6,
+    "y_band": [
+     51.0,
+     51.6
+    ]
+   },
+   "rule": "gap_column_prefix_recurrence",
+   "scope_note": "本构造规则下不可行；非全局不可能性证明"
+  },
+  {
+   "closed_form_condition": "y_k = max(pad_y_k - 0.3, y_{k-1} + 0.6) in y_band",
+   "kind": "CONSTRUCTION_INFEASIBLE",
+   "layer": "R3_connector_escape_gap",
+   "observed": {
+    "gap_x": 58.6,
+    "pad_y": 61.45,
+    "prev_y": 63.65,
+    "ref": "J4",
+    "y_k": 64.25
+   },
+   "page_or_pad": "PCIE_REFCLK1_P",
+   "required": {
+    "step_mm": 0.6,
+    "y_band": [
+     60.2,
+     62.7
+    ]
+   },
+   "rule": "gap_column_prefix_recurrence",
+   "scope_note": "本构造规则下不可行；非全局不可能性证明"
+  },
+  {
+   "closed_form_condition": "y_k = max(pad_y_k - 0.3, y_{k-1} + 0.6) in y_band",
+   "kind": "CONSTRUCTION_INFEASIBLE",
+   "layer": "R3_connector_escape_gap",
+   "observed": {
+    "gap_x": 61.3,
+    "pad_y": 61.45,
+    "prev_y": 63.65,
+    "ref": "J4",
+    "y_k": 64.25
+   },
+   "page_or_pad": "PCIE_REFCLK1_N",
+   "required": {
+    "step_mm": 0.6,
+    "y_band": [
+     60.2,
+     62.7
+    ]
+   },
+   "rule": "gap_column_prefix_recurrence",
+   "scope_note": "本构造规则下不可行；非全局不可能性证明"
+  }
+ ],
  "contract": {
   "card_md": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_kickoff_card_v1_21.md",
   "id": "W3-C2",
@@ -23,17 +156,15 @@
   },
   "data_layer_chain": [
    "F.Cu",
-   "B.Cu",
-   "In2.Cu",
-   "B.Cu",
+   "In2.Cu|B.Cu",
    "F.Cu"
   ],
-  "max_vias_per_line": 4,
+  "max_vias_per_line": 2,
   "pair_rule": {
    "dist_min_mm": 0.525,
    "stagger_min_mm": 0.38
   },
-  "r1_5_layer_rule": "T-2 river (segment-type): escape+drop on B.Cu, corridor run on In2.Cu; 4 vias/line <= 5",
+  "r1_5_layer_rule": "per band: up -> In2.Cu, dn -> B.Cu (L2 ruling 2026-09-10 #1)",
   "r4": "out_of_chain(D0-1)",
   "reach_avail_mm": 45.4,
   "reach_mode": "available_fanout_space(D0-4 rev)",
@@ -92,7 +223,9 @@
   }
  },
  "gate_status": {
-  "failed": [],
+  "failed": [
+   "A-CN.3c"
+  ],
   "predicates": {
    "A-CN.1a": "PASS",
    "A-CN.1b": "PASS",
@@ -102,7 +235,7 @@
    "A-CN.2b": "PASS",
    "A-CN.3a": "PASS",
    "A-CN.3b": "PASS",
-   "A-CN.3c": "PASS",
+   "A-CN.3c": "FAIL",
    "A-CN.4": "PASS",
    "A-CN.5a": "PASS",
    "A-CN.5b": "PASS",
@@ -128,7 +261,7 @@
   "w0r_model": "80ee9adb78a7e9ad94c27d426295592eee21af3d1e3ce88fe3042183160f0efa"
  },
  "landing_rows": null,
- "landing_rows_status": "EMITTED",
+ "landing_rows_status": "NOT_REEMITTED",
  "layers": {
   "R1": {
    "assignment": {
@@ -760,12 +893,11 @@
     "WEST_MCIO_TO_CHIP/up": "B.Cu"
    },
    "corners_deg": [
-    90,
     90
    ],
    "crossings_by_class": {
     "r1_5": 0,
-    "stub": 0
+    "stub": 46
    },
    "crossings_same_layer": 0,
    "layer_rule": {
@@ -773,10 +905,9 @@
     "vertical": "B.Cu"
    },
    "no_via": false,
-   "planarity_basis": "T-2 river: escape vertical (B.Cu) + corridor run (In2.Cu) + connector drop (B.Cu); same-layer segments are pairwise distinct-x (verticals) or distinct-y (horizontals) by construction => 0 same-layer crossings",
-   "segments_per_page_pol": 3,
-   "status": "FEASIBLE",
-   "vias_per_line": 4
+   "planarity_basis": "monotone via-x within frame + lane blocks + ordered-line pairing",
+   "segments_per_page_pol": 2,
+   "status": "FEASIBLE"
   },
   "R2": {
    "assignment": {
@@ -1487,7 +1618,7 @@
      "kind": "refclk",
      "landing": [
       133.825,
-      45.6
+      64.2
      ],
      "pad": [
       135.0,
@@ -1512,7 +1643,7 @@
      "kind": "refclk",
      "landing": [
       131.65,
-      45.6
+      64.8
      ],
      "pad": [
       132.65,
@@ -1537,7 +1668,7 @@
      "kind": "refclk",
      "landing": [
       133.825,
-      51.0
+      64.8
      ],
      "pad": [
       135.0,
@@ -1562,7 +1693,7 @@
      "kind": "refclk",
      "landing": [
       131.65,
-      51.0
+      65.4
      ],
      "pad": [
       132.65,
@@ -1986,7 +2117,7 @@
      "kind": "data",
      "landing": [
       63.1,
-      45.45
+      46.05
      ],
      "pad": [
       63.7,
@@ -2058,7 +2189,7 @@
      "kind": "data",
      "landing": [
       63.1,
-      46.05
+      45.45
      ],
      "pad": [
       62.5,
@@ -2082,7 +2213,7 @@
      "kind": "data",
      "landing": [
       55.9,
-      45.45
+      46.05
      ],
      "pad": [
       56.5,
@@ -2154,7 +2285,7 @@
      "kind": "data",
      "landing": [
       55.9,
-      46.05
+      45.45
      ],
      "pad": [
       55.3,
@@ -2226,7 +2357,7 @@
      "kind": "data",
      "landing": [
       63.1,
-      42.95
+      43.55
      ],
      "pad": [
       63.7,
@@ -2298,7 +2429,7 @@
      "kind": "data",
      "landing": [
       63.1,
-      43.55
+      42.95
      ],
      "pad": [
       62.5,
@@ -2322,7 +2453,7 @@
      "kind": "data",
      "landing": [
       55.9,
-      42.95
+      43.55
      ],
      "pad": [
       56.5,
@@ -2394,7 +2525,7 @@
      "kind": "data",
      "landing": [
       55.9,
-      43.55
+      42.95
      ],
      "pad": [
       55.3,
@@ -2610,7 +2741,7 @@
      "kind": "refclk",
      "landing": [
       61.3,
-      61.75
+      64.25
      ],
      "pad": [
       60.7,
@@ -2634,7 +2765,7 @@
      "kind": "refclk",
      "landing": [
       58.6,
-      61.75
+      64.25
      ],
      "pad": [
       60.1,
@@ -2844,7 +2975,7 @@
     }
    },
    "method": "gap_column_prefix_recurrence",
-   "status": "FEASIBLE"
+   "status": "CERTIFICATE"
   },
   "REFCLK": {
    "assignment": {
@@ -3003,112 +3134,7 @@
     "reach_avail_mm": 45.4,
     "y": 68.34
    },
-   "nodes": {
-    "N": [
-     [
-      85.15,
-      57.64,
-      "F.Cu"
-     ],
-     [
-      86.4,
-      55.69,
-      "F.Cu"
-     ],
-     [
-      86.4,
-      55.69,
-      "B.Cu"
-     ],
-     [
-      86.4,
-      68.53,
-      "B.Cu"
-     ],
-     [
-      86.4,
-      68.53,
-      "In2.Cu"
-     ],
-     [
-      131.65,
-      68.53,
-      "In2.Cu"
-     ],
-     [
-      131.65,
-      68.53,
-      "B.Cu"
-     ],
-     [
-      131.65,
-      54.0,
-      "B.Cu"
-     ],
-     [
-      131.65,
-      54.0,
-      "F.Cu"
-     ],
-     [
-      135.0,
-      54.3,
-      "F.Cu"
-     ]
-    ],
-    "P": [
-     [
-      84.85,
-      57.12,
-      "F.Cu"
-     ],
-     [
-      85.45,
-      59.62,
-      "F.Cu"
-     ],
-     [
-      85.45,
-      59.62,
-      "B.Cu"
-     ],
-     [
-      85.45,
-      68.15,
-      "B.Cu"
-     ],
-     [
-      85.45,
-      68.15,
-      "In2.Cu"
-     ],
-     [
-      131.65,
-      68.15,
-      "In2.Cu"
-     ],
-     [
-      131.65,
-      68.15,
-      "B.Cu"
-     ],
-     [
-      131.65,
-      54.0,
-      "B.Cu"
-     ],
-     [
-      131.65,
-      54.0,
-      "F.Cu"
-     ],
-     [
-      132.65,
-      54.3,
-      "F.Cu"
-     ]
-    ]
-   },
+   "nodes": {},
    "page_id": "PCIE_DN0/input",
    "r1": {
     "N": {
@@ -3167,88 +3193,7 @@
    },
    "row_y": 54.3,
    "side": "east",
-   "vias": [
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via1",
-     "x": 85.45,
-     "y": 59.62
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "P",
-     "role": "via_corner",
-     "x": 85.45,
-     "y": 68.15
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via_drop",
-     "x": 131.65,
-     "y": 68.15
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "P",
-     "role": "via_land",
-     "x": 131.65,
-     "y": 54.0
-    },
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via1",
-     "x": 86.4,
-     "y": 55.69
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "N",
-     "role": "via_corner",
-     "x": 86.4,
-     "y": 68.53
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via_drop",
-     "x": 131.65,
-     "y": 68.53
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "N",
-     "role": "via_land",
-     "x": 131.65,
-     "y": 54.0
-    }
-   ]
+   "vias": []
   },
   {
    "band": "dn",
@@ -3264,112 +3209,7 @@
     "reach_avail_mm": 45.4,
     "y": 43.52
    },
-   "nodes": {
-    "N": [
-     [
-      85.0,
-      51.673,
-      "F.Cu"
-     ],
-     [
-      83.95,
-      52.423,
-      "F.Cu"
-     ],
-     [
-      83.95,
-      52.423,
-      "B.Cu"
-     ],
-     [
-      83.95,
-      43.33,
-      "B.Cu"
-     ],
-     [
-      83.95,
-      43.33,
-      "In2.Cu"
-     ],
-     [
-      64.8,
-      43.33,
-      "In2.Cu"
-     ],
-     [
-      64.8,
-      43.33,
-      "B.Cu"
-     ],
-     [
-      64.8,
-      45.45,
-      "B.Cu"
-     ],
-     [
-      64.8,
-      45.45,
-      "F.Cu"
-     ],
-     [
-      63.7,
-      45.75,
-      "F.Cu"
-     ]
-    ],
-    "P": [
-     [
-      84.6,
-      52.366,
-      "F.Cu"
-     ],
-     [
-      84.35,
-      51.666,
-      "F.Cu"
-     ],
-     [
-      84.35,
-      51.666,
-      "B.Cu"
-     ],
-     [
-      84.35,
-      43.71,
-      "B.Cu"
-     ],
-     [
-      84.35,
-      43.71,
-      "In2.Cu"
-     ],
-     [
-      64.8,
-      43.71,
-      "In2.Cu"
-     ],
-     [
-      64.8,
-      43.71,
-      "B.Cu"
-     ],
-     [
-      64.8,
-      45.45,
-      "B.Cu"
-     ],
-     [
-      64.8,
-      45.45,
-      "F.Cu"
-     ],
-     [
-      64.3,
-      45.75,
-      "F.Cu"
-     ]
-    ]
-   },
+   "nodes": {},
    "page_id": "PCIE_DN0/out_MCIO",
    "r1": {
     "N": {
@@ -3428,88 +3268,7 @@
    },
    "row_y": 45.75,
    "side": "west",
-   "vias": [
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via1",
-     "x": 84.35,
-     "y": 51.666
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "P",
-     "role": "via_corner",
-     "x": 84.35,
-     "y": 43.71
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via_drop",
-     "x": 64.8,
-     "y": 43.71
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "P",
-     "role": "via_land",
-     "x": 64.8,
-     "y": 45.45
-    },
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via1",
-     "x": 83.95,
-     "y": 52.423
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "N",
-     "role": "via_corner",
-     "x": 83.95,
-     "y": 43.33
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via_drop",
-     "x": 64.8,
-     "y": 43.33
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "N",
-     "role": "via_land",
-     "x": 64.8,
-     "y": 45.45
-    }
-   ]
+   "vias": []
   },
   {
    "band": "dn",
@@ -3525,112 +3284,7 @@
     "reach_avail_mm": 45.4,
     "y": 69.8
    },
-   "nodes": {
-    "N": [
-     [
-      86.35,
-      57.64,
-      "F.Cu"
-     ],
-     [
-      85.15,
-      60.14,
-      "F.Cu"
-     ],
-     [
-      85.15,
-      60.14,
-      "B.Cu"
-     ],
-     [
-      85.15,
-      69.99,
-      "B.Cu"
-     ],
-     [
-      85.15,
-      69.99,
-      "In2.Cu"
-     ],
-     [
-      133.825,
-      69.99,
-      "In2.Cu"
-     ],
-     [
-      133.825,
-      69.99,
-      "B.Cu"
-     ],
-     [
-      133.825,
-      54.6,
-      "B.Cu"
-     ],
-     [
-      133.825,
-      54.6,
-      "F.Cu"
-     ],
-     [
-      132.65,
-      55.5,
-      "F.Cu"
-     ]
-    ],
-    "P": [
-     [
-      86.05,
-      57.12,
-      "F.Cu"
-     ],
-     [
-      85.6,
-      55.07,
-      "F.Cu"
-     ],
-     [
-      85.6,
-      55.07,
-      "B.Cu"
-     ],
-     [
-      85.6,
-      69.61,
-      "B.Cu"
-     ],
-     [
-      85.6,
-      69.61,
-      "In2.Cu"
-     ],
-     [
-      133.825,
-      69.61,
-      "In2.Cu"
-     ],
-     [
-      133.825,
-      69.61,
-      "B.Cu"
-     ],
-     [
-      133.825,
-      54.6,
-      "B.Cu"
-     ],
-     [
-      133.825,
-      54.6,
-      "F.Cu"
-     ],
-     [
-      135.0,
-      54.9,
-      "F.Cu"
-     ]
-    ]
-   },
+   "nodes": {},
    "page_id": "PCIE_DN1/input",
    "r1": {
     "N": {
@@ -3689,88 +3343,7 @@
    },
    "row_y": 55.2,
    "side": "east",
-   "vias": [
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via1",
-     "x": 85.6,
-     "y": 55.07
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "P",
-     "role": "via_corner",
-     "x": 85.6,
-     "y": 69.61
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via_drop",
-     "x": 133.825,
-     "y": 69.61
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "P",
-     "role": "via_land",
-     "x": 133.825,
-     "y": 54.6
-    },
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via1",
-     "x": 85.15,
-     "y": 60.14
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "N",
-     "role": "via_corner",
-     "x": 85.15,
-     "y": 69.99
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via_drop",
-     "x": 133.825,
-     "y": 69.99
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "N",
-     "role": "via_land",
-     "x": 133.825,
-     "y": 54.6
-    }
-   ]
+   "vias": []
   },
   {
    "band": "dn",
@@ -3786,112 +3359,7 @@
     "reach_avail_mm": 45.4,
     "y": 42.06
    },
-   "nodes": {
-    "N": [
-     [
-      86.2,
-      51.673,
-      "F.Cu"
-     ],
-     [
-      88.3,
-      49.173,
-      "F.Cu"
-     ],
-     [
-      88.3,
-      49.173,
-      "B.Cu"
-     ],
-     [
-      88.3,
-      41.87,
-      "B.Cu"
-     ],
-     [
-      88.3,
-      41.87,
-      "In2.Cu"
-     ],
-     [
-      63.1,
-      41.87,
-      "In2.Cu"
-     ],
-     [
-      63.1,
-      41.87,
-      "B.Cu"
-     ],
-     [
-      63.1,
-      46.05,
-      "B.Cu"
-     ],
-     [
-      63.1,
-      46.05,
-      "F.Cu"
-     ],
-     [
-      61.9,
-      45.75,
-      "F.Cu"
-     ]
-    ],
-    "P": [
-     [
-      85.8,
-      52.366,
-      "F.Cu"
-     ],
-     [
-      86.05,
-      54.266,
-      "F.Cu"
-     ],
-     [
-      86.05,
-      54.266,
-      "B.Cu"
-     ],
-     [
-      86.05,
-      42.25,
-      "B.Cu"
-     ],
-     [
-      86.05,
-      42.25,
-      "In2.Cu"
-     ],
-     [
-      63.1,
-      42.25,
-      "In2.Cu"
-     ],
-     [
-      63.1,
-      42.25,
-      "B.Cu"
-     ],
-     [
-      63.1,
-      46.05,
-      "B.Cu"
-     ],
-     [
-      63.1,
-      46.05,
-      "F.Cu"
-     ],
-     [
-      62.5,
-      45.75,
-      "F.Cu"
-     ]
-    ]
-   },
+   "nodes": {},
    "page_id": "PCIE_DN1/out_MCIO",
    "r1": {
     "N": {
@@ -3936,7 +3404,7 @@
     "column_x": 63.1,
     "landing": [
      63.1,
-     46.05
+     45.45
     ],
     "layer_chain": [
      "F.Cu",
@@ -3950,88 +3418,7 @@
    },
    "row_y": 45.75,
    "side": "west",
-   "vias": [
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via1",
-     "x": 86.05,
-     "y": 54.266
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "P",
-     "role": "via_corner",
-     "x": 86.05,
-     "y": 42.25
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via_drop",
-     "x": 63.1,
-     "y": 42.25
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "P",
-     "role": "via_land",
-     "x": 63.1,
-     "y": 46.05
-    },
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via1",
-     "x": 88.3,
-     "y": 49.173
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "N",
-     "role": "via_corner",
-     "x": 88.3,
-     "y": 41.87
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via_drop",
-     "x": 63.1,
-     "y": 41.87
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "N",
-     "role": "via_land",
-     "x": 63.1,
-     "y": 46.05
-    }
-   ]
+   "vias": []
   },
   {
    "band": "dn",
@@ -4047,112 +3434,7 @@
     "reach_avail_mm": 45.4,
     "y": 71.26
    },
-   "nodes": {
-    "N": [
-     [
-      87.25,
-      57.12,
-      "F.Cu"
-     ],
-     [
-      88.55,
-      58.22,
-      "F.Cu"
-     ],
-     [
-      88.55,
-      58.22,
-      "B.Cu"
-     ],
-     [
-      88.55,
-      71.07,
-      "B.Cu"
-     ],
-     [
-      88.55,
-      71.07,
-      "In2.Cu"
-     ],
-     [
-      131.65,
-      71.07,
-      "In2.Cu"
-     ],
-     [
-      131.65,
-      71.07,
-      "B.Cu"
-     ],
-     [
-      131.65,
-      57.6,
-      "B.Cu"
-     ],
-     [
-      131.65,
-      57.6,
-      "F.Cu"
-     ],
-     [
-      135.0,
-      57.9,
-      "F.Cu"
-     ]
-    ],
-    "P": [
-     [
-      87.55,
-      57.64,
-      "F.Cu"
-     ],
-     [
-      88.15,
-      60.14,
-      "F.Cu"
-     ],
-     [
-      88.15,
-      60.14,
-      "B.Cu"
-     ],
-     [
-      88.15,
-      71.45,
-      "B.Cu"
-     ],
-     [
-      88.15,
-      71.45,
-      "In2.Cu"
-     ],
-     [
-      131.65,
-      71.45,
-      "In2.Cu"
-     ],
-     [
-      131.65,
-      71.45,
-      "B.Cu"
-     ],
-     [
-      131.65,
-      57.6,
-      "B.Cu"
-     ],
-     [
-      131.65,
-      57.6,
-      "F.Cu"
-     ],
-     [
-      132.65,
-      57.9,
-      "F.Cu"
-     ]
-    ]
-   },
+   "nodes": {},
    "page_id": "PCIE_DN2/input",
    "r1": {
     "N": {
@@ -4211,88 +3493,7 @@
    },
    "row_y": 57.9,
    "side": "east",
-   "vias": [
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via1",
-     "x": 88.15,
-     "y": 60.14
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "P",
-     "role": "via_corner",
-     "x": 88.15,
-     "y": 71.45
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via_drop",
-     "x": 131.65,
-     "y": 71.45
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "P",
-     "role": "via_land",
-     "x": 131.65,
-     "y": 57.6
-    },
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via1",
-     "x": 88.55,
-     "y": 58.22
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "N",
-     "role": "via_corner",
-     "x": 88.55,
-     "y": 71.07
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via_drop",
-     "x": 131.65,
-     "y": 71.07
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "N",
-     "role": "via_land",
-     "x": 131.65,
-     "y": 57.6
-    }
-   ]
+   "vias": []
   },
   {
    "band": "dn",
@@ -4308,112 +3509,7 @@
     "reach_avail_mm": 45.4,
     "y": 40.6
    },
-   "nodes": {
-    "N": [
-     [
-      87.4,
-      51.673,
-      "F.Cu"
-     ],
-     [
-      86.95,
-      51.473,
-      "F.Cu"
-     ],
-     [
-      86.95,
-      51.473,
-      "B.Cu"
-     ],
-     [
-      86.95,
-      40.41,
-      "B.Cu"
-     ],
-     [
-      86.95,
-      40.41,
-      "In2.Cu"
-     ],
-     [
-      57.7,
-      40.41,
-      "In2.Cu"
-     ],
-     [
-      57.7,
-      40.41,
-      "B.Cu"
-     ],
-     [
-      57.7,
-      45.45,
-      "B.Cu"
-     ],
-     [
-      57.7,
-      45.45,
-      "F.Cu"
-     ],
-     [
-      56.5,
-      45.75,
-      "F.Cu"
-     ]
-    ],
-    "P": [
-     [
-      87.0,
-      52.366,
-      "F.Cu"
-     ],
-     [
-      86.4,
-      52.416,
-      "F.Cu"
-     ],
-     [
-      86.4,
-      52.416,
-      "B.Cu"
-     ],
-     [
-      86.4,
-      40.79,
-      "B.Cu"
-     ],
-     [
-      86.4,
-      40.79,
-      "In2.Cu"
-     ],
-     [
-      57.7,
-      40.79,
-      "In2.Cu"
-     ],
-     [
-      57.7,
-      40.79,
-      "B.Cu"
-     ],
-     [
-      57.7,
-      45.45,
-      "B.Cu"
-     ],
-     [
-      57.7,
-      45.45,
-      "F.Cu"
-     ],
-     [
-      57.1,
-      45.75,
-      "F.Cu"
-     ]
-    ]
-   },
+   "nodes": {},
    "page_id": "PCIE_DN2/out_MCIO",
    "r1": {
     "N": {
@@ -4472,88 +3568,7 @@
    },
    "row_y": 45.75,
    "side": "west",
-   "vias": [
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via1",
-     "x": 86.4,
-     "y": 52.416
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "P",
-     "role": "via_corner",
-     "x": 86.4,
-     "y": 40.79
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via_drop",
-     "x": 57.7,
-     "y": 40.79
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "P",
-     "role": "via_land",
-     "x": 57.7,
-     "y": 45.45
-    },
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via1",
-     "x": 86.95,
-     "y": 51.473
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "N",
-     "role": "via_corner",
-     "x": 86.95,
-     "y": 40.41
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via_drop",
-     "x": 57.7,
-     "y": 40.41
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "N",
-     "role": "via_land",
-     "x": 57.7,
-     "y": 45.45
-    }
-   ]
+   "vias": []
   },
   {
    "band": "dn",
@@ -4569,112 +3584,7 @@
     "reach_avail_mm": 45.4,
     "y": 72.72
    },
-   "nodes": {
-    "N": [
-     [
-      88.45,
-      57.12,
-      "F.Cu"
-     ],
-     [
-      87.25,
-      59.62,
-      "F.Cu"
-     ],
-     [
-      87.25,
-      59.62,
-      "B.Cu"
-     ],
-     [
-      87.25,
-      72.53,
-      "B.Cu"
-     ],
-     [
-      87.25,
-      72.53,
-      "In2.Cu"
-     ],
-     [
-      133.825,
-      72.53,
-      "In2.Cu"
-     ],
-     [
-      133.825,
-      72.53,
-      "B.Cu"
-     ],
-     [
-      133.825,
-      58.2,
-      "B.Cu"
-     ],
-     [
-      133.825,
-      58.2,
-      "F.Cu"
-     ],
-     [
-      132.65,
-      59.1,
-      "F.Cu"
-     ]
-    ],
-    "P": [
-     [
-      88.75,
-      57.64,
-      "F.Cu"
-     ],
-     [
-      88.0,
-      55.14,
-      "F.Cu"
-     ],
-     [
-      88.0,
-      55.14,
-      "B.Cu"
-     ],
-     [
-      88.0,
-      72.91,
-      "B.Cu"
-     ],
-     [
-      88.0,
-      72.91,
-      "In2.Cu"
-     ],
-     [
-      133.825,
-      72.91,
-      "In2.Cu"
-     ],
-     [
-      133.825,
-      72.91,
-      "B.Cu"
-     ],
-     [
-      133.825,
-      58.2,
-      "B.Cu"
-     ],
-     [
-      133.825,
-      58.2,
-      "F.Cu"
-     ],
-     [
-      135.0,
-      58.5,
-      "F.Cu"
-     ]
-    ]
-   },
+   "nodes": {},
    "page_id": "PCIE_DN3/input",
    "r1": {
     "N": {
@@ -4733,88 +3643,7 @@
    },
    "row_y": 58.8,
    "side": "east",
-   "vias": [
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via1",
-     "x": 88.0,
-     "y": 55.14
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "P",
-     "role": "via_corner",
-     "x": 88.0,
-     "y": 72.91
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via_drop",
-     "x": 133.825,
-     "y": 72.91
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "P",
-     "role": "via_land",
-     "x": 133.825,
-     "y": 58.2
-    },
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via1",
-     "x": 87.25,
-     "y": 59.62
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "N",
-     "role": "via_corner",
-     "x": 87.25,
-     "y": 72.53
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via_drop",
-     "x": 133.825,
-     "y": 72.53
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "N",
-     "role": "via_land",
-     "x": 133.825,
-     "y": 58.2
-    }
-   ]
+   "vias": []
   },
   {
    "band": "dn",
@@ -4830,112 +3659,7 @@
     "reach_avail_mm": 45.4,
     "y": 39.14
    },
-   "nodes": {
-    "N": [
-     [
-      88.6,
-      51.673,
-      "F.Cu"
-     ],
-     [
-      89.8,
-      49.173,
-      "F.Cu"
-     ],
-     [
-      89.8,
-      49.173,
-      "B.Cu"
-     ],
-     [
-      89.8,
-      38.95,
-      "B.Cu"
-     ],
-     [
-      89.8,
-      38.95,
-      "In2.Cu"
-     ],
-     [
-      55.9,
-      38.95,
-      "In2.Cu"
-     ],
-     [
-      55.9,
-      38.95,
-      "B.Cu"
-     ],
-     [
-      55.9,
-      46.05,
-      "B.Cu"
-     ],
-     [
-      55.9,
-      46.05,
-      "F.Cu"
-     ],
-     [
-      54.7,
-      45.75,
-      "F.Cu"
-     ]
-    ],
-    "P": [
-     [
-      88.2,
-      52.366,
-      "F.Cu"
-     ],
-     [
-      88.8,
-      52.416,
-      "F.Cu"
-     ],
-     [
-      88.8,
-      52.416,
-      "B.Cu"
-     ],
-     [
-      88.8,
-      39.33,
-      "B.Cu"
-     ],
-     [
-      88.8,
-      39.33,
-      "In2.Cu"
-     ],
-     [
-      55.9,
-      39.33,
-      "In2.Cu"
-     ],
-     [
-      55.9,
-      39.33,
-      "B.Cu"
-     ],
-     [
-      55.9,
-      46.05,
-      "B.Cu"
-     ],
-     [
-      55.9,
-      46.05,
-      "F.Cu"
-     ],
-     [
-      55.3,
-      45.75,
-      "F.Cu"
-     ]
-    ]
-   },
+   "nodes": {},
    "page_id": "PCIE_DN3/out_MCIO",
    "r1": {
     "N": {
@@ -4980,7 +3704,7 @@
     "column_x": 55.9,
     "landing": [
      55.9,
-     46.05
+     45.45
     ],
     "layer_chain": [
      "F.Cu",
@@ -4994,88 +3718,7 @@
    },
    "row_y": 45.75,
    "side": "west",
-   "vias": [
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via1",
-     "x": 88.8,
-     "y": 52.416
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "P",
-     "role": "via_corner",
-     "x": 88.8,
-     "y": 39.33
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via_drop",
-     "x": 55.9,
-     "y": 39.33
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "P",
-     "role": "via_land",
-     "x": 55.9,
-     "y": 46.05
-    },
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via1",
-     "x": 89.8,
-     "y": 49.173
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "N",
-     "role": "via_corner",
-     "x": 89.8,
-     "y": 38.95
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via_drop",
-     "x": 55.9,
-     "y": 38.95
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "N",
-     "role": "via_land",
-     "x": 55.9,
-     "y": 46.05
-    }
-   ]
+   "vias": []
   },
   {
    "band": "dn",
@@ -5091,112 +3734,7 @@
     "reach_avail_mm": 45.4,
     "y": 74.18
    },
-   "nodes": {
-    "N": [
-     [
-      89.95,
-      57.64,
-      "F.Cu"
-     ],
-     [
-      91.2,
-      55.69,
-      "F.Cu"
-     ],
-     [
-      91.2,
-      55.69,
-      "B.Cu"
-     ],
-     [
-      91.2,
-      74.37,
-      "B.Cu"
-     ],
-     [
-      91.2,
-      74.37,
-      "In2.Cu"
-     ],
-     [
-      131.65,
-      74.37,
-      "In2.Cu"
-     ],
-     [
-      131.65,
-      74.37,
-      "B.Cu"
-     ],
-     [
-      131.65,
-      59.4,
-      "B.Cu"
-     ],
-     [
-      131.65,
-      59.4,
-      "F.Cu"
-     ],
-     [
-      135.0,
-      59.7,
-      "F.Cu"
-     ]
-    ],
-    "P": [
-     [
-      89.65,
-      57.12,
-      "F.Cu"
-     ],
-     [
-      90.25,
-      59.62,
-      "F.Cu"
-     ],
-     [
-      90.25,
-      59.62,
-      "B.Cu"
-     ],
-     [
-      90.25,
-      73.99,
-      "B.Cu"
-     ],
-     [
-      90.25,
-      73.99,
-      "In2.Cu"
-     ],
-     [
-      131.65,
-      73.99,
-      "In2.Cu"
-     ],
-     [
-      131.65,
-      73.99,
-      "B.Cu"
-     ],
-     [
-      131.65,
-      59.4,
-      "B.Cu"
-     ],
-     [
-      131.65,
-      59.4,
-      "F.Cu"
-     ],
-     [
-      132.65,
-      59.7,
-      "F.Cu"
-     ]
-    ]
-   },
+   "nodes": {},
    "page_id": "PCIE_DN4/input",
    "r1": {
     "N": {
@@ -5255,88 +3793,7 @@
    },
    "row_y": 59.7,
    "side": "east",
-   "vias": [
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via1",
-     "x": 90.25,
-     "y": 59.62
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "P",
-     "role": "via_corner",
-     "x": 90.25,
-     "y": 73.99
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via_drop",
-     "x": 131.65,
-     "y": 73.99
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "P",
-     "role": "via_land",
-     "x": 131.65,
-     "y": 59.4
-    },
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via1",
-     "x": 91.2,
-     "y": 55.69
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "N",
-     "role": "via_corner",
-     "x": 91.2,
-     "y": 74.37
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via_drop",
-     "x": 131.65,
-     "y": 74.37
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "N",
-     "role": "via_land",
-     "x": 131.65,
-     "y": 59.4
-    }
-   ]
+   "vias": []
   },
   {
    "band": "dn",
@@ -5352,112 +3809,7 @@
     "reach_avail_mm": 45.4,
     "y": 44.98
    },
-   "nodes": {
-    "N": [
-     [
-      89.8,
-      51.673,
-      "F.Cu"
-     ],
-     [
-      90.8,
-      54.173,
-      "F.Cu"
-     ],
-     [
-      90.8,
-      54.173,
-      "B.Cu"
-     ],
-     [
-      90.8,
-      44.79,
-      "B.Cu"
-     ],
-     [
-      90.8,
-      44.79,
-      "In2.Cu"
-     ],
-     [
-      54.2,
-      44.79,
-      "In2.Cu"
-     ],
-     [
-      54.2,
-      44.79,
-      "B.Cu"
-     ],
-     [
-      54.2,
-      61.15,
-      "B.Cu"
-     ],
-     [
-      54.2,
-      61.15,
-      "F.Cu"
-     ],
-     [
-      55.3,
-      61.45,
-      "F.Cu"
-     ]
-    ],
-    "P": [
-     [
-      89.4,
-      52.366,
-      "F.Cu"
-     ],
-     [
-      90.4,
-      51.566,
-      "F.Cu"
-     ],
-     [
-      90.4,
-      51.566,
-      "B.Cu"
-     ],
-     [
-      90.4,
-      45.17,
-      "B.Cu"
-     ],
-     [
-      90.4,
-      45.17,
-      "In2.Cu"
-     ],
-     [
-      54.2,
-      45.17,
-      "In2.Cu"
-     ],
-     [
-      54.2,
-      45.17,
-      "B.Cu"
-     ],
-     [
-      54.2,
-      61.15,
-      "B.Cu"
-     ],
-     [
-      54.2,
-      61.15,
-      "F.Cu"
-     ],
-     [
-      54.7,
-      61.45,
-      "F.Cu"
-     ]
-    ]
-   },
+   "nodes": {},
    "page_id": "PCIE_DN4/out_MCIO",
    "r1": {
     "N": {
@@ -5516,88 +3868,7 @@
    },
    "row_y": 61.45,
    "side": "west",
-   "vias": [
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via1",
-     "x": 90.4,
-     "y": 51.566
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "P",
-     "role": "via_corner",
-     "x": 90.4,
-     "y": 45.17
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via_drop",
-     "x": 54.2,
-     "y": 45.17
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "P",
-     "role": "via_land",
-     "x": 54.2,
-     "y": 61.15
-    },
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via1",
-     "x": 90.8,
-     "y": 54.173
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "N",
-     "role": "via_corner",
-     "x": 90.8,
-     "y": 44.79
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via_drop",
-     "x": 54.2,
-     "y": 44.79
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "N",
-     "role": "via_land",
-     "x": 54.2,
-     "y": 61.15
-    }
-   ]
+   "vias": []
   },
   {
    "band": "dn",
@@ -5613,112 +3884,7 @@
     "reach_avail_mm": 45.4,
     "y": 75.64
    },
-   "nodes": {
-    "N": [
-     [
-      91.15,
-      57.64,
-      "F.Cu"
-     ],
-     [
-      89.95,
-      60.14,
-      "F.Cu"
-     ],
-     [
-      89.95,
-      60.14,
-      "B.Cu"
-     ],
-     [
-      89.95,
-      75.83,
-      "B.Cu"
-     ],
-     [
-      89.95,
-      75.83,
-      "In2.Cu"
-     ],
-     [
-      133.825,
-      75.83,
-      "In2.Cu"
-     ],
-     [
-      133.825,
-      75.83,
-      "B.Cu"
-     ],
-     [
-      133.825,
-      60.0,
-      "B.Cu"
-     ],
-     [
-      133.825,
-      60.0,
-      "F.Cu"
-     ],
-     [
-      132.65,
-      60.9,
-      "F.Cu"
-     ]
-    ],
-    "P": [
-     [
-      90.85,
-      57.12,
-      "F.Cu"
-     ],
-     [
-      90.4,
-      55.07,
-      "F.Cu"
-     ],
-     [
-      90.4,
-      55.07,
-      "B.Cu"
-     ],
-     [
-      90.4,
-      75.45,
-      "B.Cu"
-     ],
-     [
-      90.4,
-      75.45,
-      "In2.Cu"
-     ],
-     [
-      133.825,
-      75.45,
-      "In2.Cu"
-     ],
-     [
-      133.825,
-      75.45,
-      "B.Cu"
-     ],
-     [
-      133.825,
-      60.0,
-      "B.Cu"
-     ],
-     [
-      133.825,
-      60.0,
-      "F.Cu"
-     ],
-     [
-      135.0,
-      60.3,
-      "F.Cu"
-     ]
-    ]
-   },
+   "nodes": {},
    "page_id": "PCIE_DN5/input",
    "r1": {
     "N": {
@@ -5777,88 +3943,7 @@
    },
    "row_y": 60.6,
    "side": "east",
-   "vias": [
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via1",
-     "x": 90.4,
-     "y": 55.07
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "P",
-     "role": "via_corner",
-     "x": 90.4,
-     "y": 75.45
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via_drop",
-     "x": 133.825,
-     "y": 75.45
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "P",
-     "role": "via_land",
-     "x": 133.825,
-     "y": 60.0
-    },
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via1",
-     "x": 89.95,
-     "y": 60.14
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "N",
-     "role": "via_corner",
-     "x": 89.95,
-     "y": 75.83
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via_drop",
-     "x": 133.825,
-     "y": 75.83
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "N",
-     "role": "via_land",
-     "x": 133.825,
-     "y": 60.0
-    }
-   ]
+   "vias": []
   },
   {
    "band": "dn",
@@ -5874,112 +3959,7 @@
     "reach_avail_mm": 45.4,
     "y": 46.44
    },
-   "nodes": {
-    "N": [
-     [
-      91.0,
-      51.673,
-      "F.Cu"
-     ],
-     [
-      89.6,
-      54.173,
-      "F.Cu"
-     ],
-     [
-      89.6,
-      54.173,
-      "B.Cu"
-     ],
-     [
-      89.6,
-      46.25,
-      "B.Cu"
-     ],
-     [
-      89.6,
-      46.25,
-      "In2.Cu"
-     ],
-     [
-      55.9,
-      46.25,
-      "In2.Cu"
-     ],
-     [
-      55.9,
-      46.25,
-      "B.Cu"
-     ],
-     [
-      55.9,
-      61.75,
-      "B.Cu"
-     ],
-     [
-      55.9,
-      61.75,
-      "F.Cu"
-     ],
-     [
-      57.1,
-      61.45,
-      "F.Cu"
-     ]
-    ],
-    "P": [
-     [
-      90.6,
-      52.366,
-      "F.Cu"
-     ],
-     [
-      89.2,
-      51.566,
-      "F.Cu"
-     ],
-     [
-      89.2,
-      51.566,
-      "B.Cu"
-     ],
-     [
-      89.2,
-      46.63,
-      "B.Cu"
-     ],
-     [
-      89.2,
-      46.63,
-      "In2.Cu"
-     ],
-     [
-      55.9,
-      46.63,
-      "In2.Cu"
-     ],
-     [
-      55.9,
-      46.63,
-      "B.Cu"
-     ],
-     [
-      55.9,
-      61.75,
-      "B.Cu"
-     ],
-     [
-      55.9,
-      61.75,
-      "F.Cu"
-     ],
-     [
-      56.5,
-      61.45,
-      "F.Cu"
-     ]
-    ]
-   },
+   "nodes": {},
    "page_id": "PCIE_DN5/out_MCIO",
    "r1": {
     "N": {
@@ -6038,88 +4018,7 @@
    },
    "row_y": 61.45,
    "side": "west",
-   "vias": [
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via1",
-     "x": 89.2,
-     "y": 51.566
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "P",
-     "role": "via_corner",
-     "x": 89.2,
-     "y": 46.63
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via_drop",
-     "x": 55.9,
-     "y": 46.63
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "P",
-     "role": "via_land",
-     "x": 55.9,
-     "y": 61.75
-    },
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via1",
-     "x": 89.6,
-     "y": 54.173
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "N",
-     "role": "via_corner",
-     "x": 89.6,
-     "y": 46.25
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via_drop",
-     "x": 55.9,
-     "y": 46.25
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "N",
-     "role": "via_land",
-     "x": 55.9,
-     "y": 61.75
-    }
-   ]
+   "vias": []
   },
   {
    "band": "dn",
@@ -6135,112 +4034,7 @@
     "reach_avail_mm": 45.4,
     "y": 77.1
    },
-   "nodes": {
-    "N": [
-     [
-      92.05,
-      57.12,
-      "F.Cu"
-     ],
-     [
-      93.35,
-      58.22,
-      "F.Cu"
-     ],
-     [
-      93.35,
-      58.22,
-      "B.Cu"
-     ],
-     [
-      93.35,
-      76.91,
-      "B.Cu"
-     ],
-     [
-      93.35,
-      76.91,
-      "In2.Cu"
-     ],
-     [
-      131.65,
-      76.91,
-      "In2.Cu"
-     ],
-     [
-      131.65,
-      76.91,
-      "B.Cu"
-     ],
-     [
-      131.65,
-      63.0,
-      "B.Cu"
-     ],
-     [
-      131.65,
-      63.0,
-      "F.Cu"
-     ],
-     [
-      135.0,
-      63.3,
-      "F.Cu"
-     ]
-    ],
-    "P": [
-     [
-      92.35,
-      57.64,
-      "F.Cu"
-     ],
-     [
-      92.95,
-      60.14,
-      "F.Cu"
-     ],
-     [
-      92.95,
-      60.14,
-      "B.Cu"
-     ],
-     [
-      92.95,
-      77.29,
-      "B.Cu"
-     ],
-     [
-      92.95,
-      77.29,
-      "In2.Cu"
-     ],
-     [
-      131.65,
-      77.29,
-      "In2.Cu"
-     ],
-     [
-      131.65,
-      77.29,
-      "B.Cu"
-     ],
-     [
-      131.65,
-      63.0,
-      "B.Cu"
-     ],
-     [
-      131.65,
-      63.0,
-      "F.Cu"
-     ],
-     [
-      132.65,
-      63.3,
-      "F.Cu"
-     ]
-    ]
-   },
+   "nodes": {},
    "page_id": "PCIE_DN6/input",
    "r1": {
     "N": {
@@ -6299,88 +4093,7 @@
    },
    "row_y": 63.3,
    "side": "east",
-   "vias": [
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via1",
-     "x": 92.95,
-     "y": 60.14
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "P",
-     "role": "via_corner",
-     "x": 92.95,
-     "y": 77.29
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via_drop",
-     "x": 131.65,
-     "y": 77.29
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "P",
-     "role": "via_land",
-     "x": 131.65,
-     "y": 63.0
-    },
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via1",
-     "x": 93.35,
-     "y": 58.22
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "N",
-     "role": "via_corner",
-     "x": 93.35,
-     "y": 76.91
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via_drop",
-     "x": 131.65,
-     "y": 76.91
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "N",
-     "role": "via_land",
-     "x": 131.65,
-     "y": 63.0
-    }
-   ]
+   "vias": []
   },
   {
    "band": "dn",
@@ -6396,112 +4109,7 @@
     "reach_avail_mm": 45.4,
     "y": 47.9
    },
-   "nodes": {
-    "N": [
-     [
-      92.2,
-      51.673,
-      "F.Cu"
-     ],
-     [
-      93.4,
-      49.173,
-      "F.Cu"
-     ],
-     [
-      93.4,
-      49.173,
-      "B.Cu"
-     ],
-     [
-      93.4,
-      47.71,
-      "B.Cu"
-     ],
-     [
-      93.4,
-      47.71,
-      "In2.Cu"
-     ],
-     [
-      61.3,
-      47.71,
-      "In2.Cu"
-     ],
-     [
-      61.3,
-      47.71,
-      "B.Cu"
-     ],
-     [
-      61.3,
-      61.15,
-      "B.Cu"
-     ],
-     [
-      61.3,
-      61.15,
-      "F.Cu"
-     ],
-     [
-      62.5,
-      61.45,
-      "F.Cu"
-     ]
-    ],
-    "P": [
-     [
-      91.8,
-      52.366,
-      "F.Cu"
-     ],
-     [
-      92.4,
-      52.416,
-      "F.Cu"
-     ],
-     [
-      92.4,
-      52.416,
-      "B.Cu"
-     ],
-     [
-      92.4,
-      48.09,
-      "B.Cu"
-     ],
-     [
-      92.4,
-      48.09,
-      "In2.Cu"
-     ],
-     [
-      61.3,
-      48.09,
-      "In2.Cu"
-     ],
-     [
-      61.3,
-      48.09,
-      "B.Cu"
-     ],
-     [
-      61.3,
-      61.15,
-      "B.Cu"
-     ],
-     [
-      61.3,
-      61.15,
-      "F.Cu"
-     ],
-     [
-      61.9,
-      61.45,
-      "F.Cu"
-     ]
-    ]
-   },
+   "nodes": {},
    "page_id": "PCIE_DN6/out_MCIO",
    "r1": {
     "N": {
@@ -6560,88 +4168,7 @@
    },
    "row_y": 61.45,
    "side": "west",
-   "vias": [
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via1",
-     "x": 92.4,
-     "y": 52.416
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "P",
-     "role": "via_corner",
-     "x": 92.4,
-     "y": 48.09
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via_drop",
-     "x": 61.3,
-     "y": 48.09
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "P",
-     "role": "via_land",
-     "x": 61.3,
-     "y": 61.15
-    },
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via1",
-     "x": 93.4,
-     "y": 49.173
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "N",
-     "role": "via_corner",
-     "x": 93.4,
-     "y": 47.71
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via_drop",
-     "x": 61.3,
-     "y": 47.71
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "N",
-     "role": "via_land",
-     "x": 61.3,
-     "y": 61.15
-    }
-   ]
+   "vias": []
   },
   {
    "band": "dn",
@@ -6657,112 +4184,7 @@
     "reach_avail_mm": 45.4,
     "y": 78.56
    },
-   "nodes": {
-    "N": [
-     [
-      93.25,
-      57.12,
-      "F.Cu"
-     ],
-     [
-      92.05,
-      59.62,
-      "F.Cu"
-     ],
-     [
-      92.05,
-      59.62,
-      "B.Cu"
-     ],
-     [
-      92.05,
-      78.37,
-      "B.Cu"
-     ],
-     [
-      92.05,
-      78.37,
-      "In2.Cu"
-     ],
-     [
-      133.825,
-      78.37,
-      "In2.Cu"
-     ],
-     [
-      133.825,
-      78.37,
-      "B.Cu"
-     ],
-     [
-      133.825,
-      63.6,
-      "B.Cu"
-     ],
-     [
-      133.825,
-      63.6,
-      "F.Cu"
-     ],
-     [
-      132.65,
-      64.5,
-      "F.Cu"
-     ]
-    ],
-    "P": [
-     [
-      93.55,
-      57.64,
-      "F.Cu"
-     ],
-     [
-      92.8,
-      55.14,
-      "F.Cu"
-     ],
-     [
-      92.8,
-      55.14,
-      "B.Cu"
-     ],
-     [
-      92.8,
-      78.75,
-      "B.Cu"
-     ],
-     [
-      92.8,
-      78.75,
-      "In2.Cu"
-     ],
-     [
-      133.825,
-      78.75,
-      "In2.Cu"
-     ],
-     [
-      133.825,
-      78.75,
-      "B.Cu"
-     ],
-     [
-      133.825,
-      63.6,
-      "B.Cu"
-     ],
-     [
-      133.825,
-      63.6,
-      "F.Cu"
-     ],
-     [
-      135.0,
-      63.9,
-      "F.Cu"
-     ]
-    ]
-   },
+   "nodes": {},
    "page_id": "PCIE_DN7/input",
    "r1": {
     "N": {
@@ -6821,88 +4243,7 @@
    },
    "row_y": 64.2,
    "side": "east",
-   "vias": [
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via1",
-     "x": 92.8,
-     "y": 55.14
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "P",
-     "role": "via_corner",
-     "x": 92.8,
-     "y": 78.75
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via_drop",
-     "x": 133.825,
-     "y": 78.75
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "P",
-     "role": "via_land",
-     "x": 133.825,
-     "y": 63.6
-    },
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via1",
-     "x": 92.05,
-     "y": 59.62
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "N",
-     "role": "via_corner",
-     "x": 92.05,
-     "y": 78.37
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via_drop",
-     "x": 133.825,
-     "y": 78.37
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "N",
-     "role": "via_land",
-     "x": 133.825,
-     "y": 63.6
-    }
-   ]
+   "vias": []
   },
   {
    "band": "dn",
@@ -6918,112 +4259,7 @@
     "reach_avail_mm": 45.4,
     "y": 49.36
    },
-   "nodes": {
-    "N": [
-     [
-      93.4,
-      51.673,
-      "F.Cu"
-     ],
-     [
-      92.8,
-      49.173,
-      "F.Cu"
-     ],
-     [
-      92.8,
-      49.173,
-      "B.Cu"
-     ],
-     [
-      92.8,
-      49.17,
-      "B.Cu"
-     ],
-     [
-      92.8,
-      49.17,
-      "In2.Cu"
-     ],
-     [
-      63.1,
-      49.17,
-      "In2.Cu"
-     ],
-     [
-      63.1,
-      49.17,
-      "B.Cu"
-     ],
-     [
-      63.1,
-      61.75,
-      "B.Cu"
-     ],
-     [
-      63.1,
-      61.75,
-      "F.Cu"
-     ],
-     [
-      64.3,
-      61.45,
-      "F.Cu"
-     ]
-    ],
-    "P": [
-     [
-      93.0,
-      52.366,
-      "F.Cu"
-     ],
-     [
-      92.05,
-      54.266,
-      "F.Cu"
-     ],
-     [
-      92.05,
-      54.266,
-      "B.Cu"
-     ],
-     [
-      92.05,
-      49.55,
-      "B.Cu"
-     ],
-     [
-      92.05,
-      49.55,
-      "In2.Cu"
-     ],
-     [
-      63.1,
-      49.55,
-      "In2.Cu"
-     ],
-     [
-      63.1,
-      49.55,
-      "B.Cu"
-     ],
-     [
-      63.1,
-      61.75,
-      "B.Cu"
-     ],
-     [
-      63.1,
-      61.75,
-      "F.Cu"
-     ],
-     [
-      63.7,
-      61.45,
-      "F.Cu"
-     ]
-    ]
-   },
+   "nodes": {},
    "page_id": "PCIE_DN7/out_MCIO",
    "r1": {
     "N": {
@@ -7082,88 +4318,7 @@
    },
    "row_y": 61.45,
    "side": "west",
-   "vias": [
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via1",
-     "x": 92.05,
-     "y": 54.266
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "P",
-     "role": "via_corner",
-     "x": 92.05,
-     "y": 49.55
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via_drop",
-     "x": 63.1,
-     "y": 49.55
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "P",
-     "role": "via_land",
-     "x": 63.1,
-     "y": 61.75
-    },
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via1",
-     "x": 92.8,
-     "y": 49.173
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "N",
-     "role": "via_corner",
-     "x": 92.8,
-     "y": 49.17
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via_drop",
-     "x": 63.1,
-     "y": 49.17
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "N",
-     "role": "via_land",
-     "x": 63.1,
-     "y": 61.75
-    }
-   ]
+   "vias": []
   },
   {
    "band": "up",
@@ -7179,112 +4334,7 @@
     "reach_avail_mm": 45.4,
     "y": 37.68
    },
-   "nodes": {
-    "N": [
-     [
-      84.85,
-      50.28,
-      "F.Cu"
-     ],
-     [
-      83.55,
-      52.78,
-      "F.Cu"
-     ],
-     [
-      83.55,
-      52.78,
-      "B.Cu"
-     ],
-     [
-      83.55,
-      37.87,
-      "B.Cu"
-     ],
-     [
-      83.55,
-      37.87,
-      "In2.Cu"
-     ],
-     [
-      64.8,
-      37.87,
-      "In2.Cu"
-     ],
-     [
-      64.8,
-      37.87,
-      "B.Cu"
-     ],
-     [
-      64.8,
-      42.95,
-      "B.Cu"
-     ],
-     [
-      64.8,
-      42.95,
-      "F.Cu"
-     ],
-     [
-      63.7,
-      43.25,
-      "F.Cu"
-     ]
-    ],
-    "P": [
-     [
-      85.15,
-      49.76,
-      "F.Cu"
-     ],
-     [
-      84.55,
-      47.26,
-      "F.Cu"
-     ],
-     [
-      84.55,
-      47.26,
-      "B.Cu"
-     ],
-     [
-      84.55,
-      37.49,
-      "B.Cu"
-     ],
-     [
-      84.55,
-      37.49,
-      "In2.Cu"
-     ],
-     [
-      64.8,
-      37.49,
-      "In2.Cu"
-     ],
-     [
-      64.8,
-      37.49,
-      "B.Cu"
-     ],
-     [
-      64.8,
-      42.95,
-      "B.Cu"
-     ],
-     [
-      64.8,
-      42.95,
-      "F.Cu"
-     ],
-     [
-      64.3,
-      43.25,
-      "F.Cu"
-     ]
-    ]
-   },
+   "nodes": {},
    "page_id": "PCIE_UP0/input",
    "r1": {
     "N": {
@@ -7343,88 +4393,7 @@
    },
    "row_y": 43.25,
    "side": "west",
-   "vias": [
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via1",
-     "x": 84.55,
-     "y": 47.26
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "P",
-     "role": "via_corner",
-     "x": 84.55,
-     "y": 37.49
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via_drop",
-     "x": 64.8,
-     "y": 37.49
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "P",
-     "role": "via_land",
-     "x": 64.8,
-     "y": 42.95
-    },
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via1",
-     "x": 83.55,
-     "y": 52.78
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "N",
-     "role": "via_corner",
-     "x": 83.55,
-     "y": 37.87
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via_drop",
-     "x": 64.8,
-     "y": 37.87
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "N",
-     "role": "via_land",
-     "x": 64.8,
-     "y": 42.95
-    }
-   ]
+   "vias": []
   },
   {
    "band": "up",
@@ -7440,112 +4409,7 @@
     "reach_avail_mm": 45.4,
     "y": 56.66
    },
-   "nodes": {
-    "N": [
-     [
-      84.6,
-      55.823,
-      "F.Cu"
-     ],
-     [
-      85.8,
-      58.323,
-      "F.Cu"
-     ],
-     [
-      85.8,
-      58.323,
-      "B.Cu"
-     ],
-     [
-      85.8,
-      56.85,
-      "B.Cu"
-     ],
-     [
-      85.8,
-      56.85,
-      "In2.Cu"
-     ],
-     [
-      133.825,
-      56.85,
-      "In2.Cu"
-     ],
-     [
-      133.825,
-      56.85,
-      "B.Cu"
-     ],
-     [
-      133.825,
-      42.6,
-      "B.Cu"
-     ],
-     [
-      133.825,
-      42.6,
-      "F.Cu"
-     ],
-     [
-      132.65,
-      43.5,
-      "F.Cu"
-     ]
-    ],
-    "P": [
-     [
-      85.0,
-      55.13,
-      "F.Cu"
-     ],
-     [
-      85.15,
-      55.38,
-      "F.Cu"
-     ],
-     [
-      85.15,
-      55.38,
-      "B.Cu"
-     ],
-     [
-      85.15,
-      56.47,
-      "B.Cu"
-     ],
-     [
-      85.15,
-      56.47,
-      "In2.Cu"
-     ],
-     [
-      133.825,
-      56.47,
-      "In2.Cu"
-     ],
-     [
-      133.825,
-      56.47,
-      "B.Cu"
-     ],
-     [
-      133.825,
-      42.6,
-      "B.Cu"
-     ],
-     [
-      133.825,
-      42.6,
-      "F.Cu"
-     ],
-     [
-      135.0,
-      42.9,
-      "F.Cu"
-     ]
-    ]
-   },
+   "nodes": {},
    "page_id": "PCIE_UP0/out_J2",
    "r1": {
     "N": {
@@ -7604,88 +4468,7 @@
    },
    "row_y": 43.2,
    "side": "east",
-   "vias": [
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via1",
-     "x": 85.15,
-     "y": 55.38
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "P",
-     "role": "via_corner",
-     "x": 85.15,
-     "y": 56.47
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via_drop",
-     "x": 133.825,
-     "y": 56.47
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "P",
-     "role": "via_land",
-     "x": 133.825,
-     "y": 42.6
-    },
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via1",
-     "x": 85.8,
-     "y": 58.323
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "N",
-     "role": "via_corner",
-     "x": 85.8,
-     "y": 56.85
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via_drop",
-     "x": 133.825,
-     "y": 56.85
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "N",
-     "role": "via_land",
-     "x": 133.825,
-     "y": 42.6
-    }
-   ]
+   "vias": []
   },
   {
    "band": "up",
@@ -7701,112 +4484,7 @@
     "reach_avail_mm": 45.4,
     "y": 36.22
    },
-   "nodes": {
-    "N": [
-     [
-      86.05,
-      50.28,
-      "F.Cu"
-     ],
-     [
-      87.3,
-      49.18,
-      "F.Cu"
-     ],
-     [
-      87.3,
-      49.18,
-      "B.Cu"
-     ],
-     [
-      87.3,
-      36.41,
-      "B.Cu"
-     ],
-     [
-      87.3,
-      36.41,
-      "In2.Cu"
-     ],
-     [
-      63.1,
-      36.41,
-      "In2.Cu"
-     ],
-     [
-      63.1,
-      36.41,
-      "B.Cu"
-     ],
-     [
-      63.1,
-      43.55,
-      "B.Cu"
-     ],
-     [
-      63.1,
-      43.55,
-      "F.Cu"
-     ],
-     [
-      61.9,
-      43.25,
-      "F.Cu"
-     ]
-    ],
-    "P": [
-     [
-      86.35,
-      49.76,
-      "F.Cu"
-     ],
-     [
-      86.9,
-      47.26,
-      "F.Cu"
-     ],
-     [
-      86.9,
-      47.26,
-      "B.Cu"
-     ],
-     [
-      86.9,
-      36.03,
-      "B.Cu"
-     ],
-     [
-      86.9,
-      36.03,
-      "In2.Cu"
-     ],
-     [
-      63.1,
-      36.03,
-      "In2.Cu"
-     ],
-     [
-      63.1,
-      36.03,
-      "B.Cu"
-     ],
-     [
-      63.1,
-      43.55,
-      "B.Cu"
-     ],
-     [
-      63.1,
-      43.55,
-      "F.Cu"
-     ],
-     [
-      62.5,
-      43.25,
-      "F.Cu"
-     ]
-    ]
-   },
+   "nodes": {},
    "page_id": "PCIE_UP1/input",
    "r1": {
     "N": {
@@ -7851,7 +4529,7 @@
     "column_x": 63.1,
     "landing": [
      63.1,
-     43.55
+     42.95
     ],
     "layer_chain": [
      "F.Cu",
@@ -7865,88 +4543,7 @@
    },
    "row_y": 43.25,
    "side": "west",
-   "vias": [
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via1",
-     "x": 86.9,
-     "y": 47.26
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "P",
-     "role": "via_corner",
-     "x": 86.9,
-     "y": 36.03
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via_drop",
-     "x": 63.1,
-     "y": 36.03
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "P",
-     "role": "via_land",
-     "x": 63.1,
-     "y": 43.55
-    },
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via1",
-     "x": 87.3,
-     "y": 49.18
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "N",
-     "role": "via_corner",
-     "x": 87.3,
-     "y": 36.41
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via_drop",
-     "x": 63.1,
-     "y": 36.41
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "N",
-     "role": "via_land",
-     "x": 63.1,
-     "y": 43.55
-    }
-   ]
+   "vias": []
   },
   {
    "band": "up",
@@ -7962,112 +4559,7 @@
     "reach_avail_mm": 45.4,
     "y": 58.12
    },
-   "nodes": {
-    "N": [
-     [
-      85.8,
-      55.823,
-      "F.Cu"
-     ],
-     [
-      84.6,
-      58.323,
-      "F.Cu"
-     ],
-     [
-      84.6,
-      58.323,
-      "B.Cu"
-     ],
-     [
-      84.6,
-      58.31,
-      "B.Cu"
-     ],
-     [
-      84.6,
-      58.31,
-      "In2.Cu"
-     ],
-     [
-      131.65,
-      58.31,
-      "In2.Cu"
-     ],
-     [
-      131.65,
-      58.31,
-      "B.Cu"
-     ],
-     [
-      131.65,
-      43.8,
-      "B.Cu"
-     ],
-     [
-      131.65,
-      43.8,
-      "F.Cu"
-     ],
-     [
-      135.0,
-      44.1,
-      "F.Cu"
-     ]
-    ],
-    "P": [
-     [
-      86.2,
-      55.13,
-      "F.Cu"
-     ],
-     [
-      86.1,
-      54.83,
-      "F.Cu"
-     ],
-     [
-      86.1,
-      54.83,
-      "B.Cu"
-     ],
-     [
-      86.1,
-      57.93,
-      "B.Cu"
-     ],
-     [
-      86.1,
-      57.93,
-      "In2.Cu"
-     ],
-     [
-      131.65,
-      57.93,
-      "In2.Cu"
-     ],
-     [
-      131.65,
-      57.93,
-      "B.Cu"
-     ],
-     [
-      131.65,
-      43.8,
-      "B.Cu"
-     ],
-     [
-      131.65,
-      43.8,
-      "F.Cu"
-     ],
-     [
-      132.65,
-      44.1,
-      "F.Cu"
-     ]
-    ]
-   },
+   "nodes": {},
    "page_id": "PCIE_UP1/out_J2",
    "r1": {
     "N": {
@@ -8126,88 +4618,7 @@
    },
    "row_y": 44.1,
    "side": "east",
-   "vias": [
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via1",
-     "x": 86.1,
-     "y": 54.83
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "P",
-     "role": "via_corner",
-     "x": 86.1,
-     "y": 57.93
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via_drop",
-     "x": 131.65,
-     "y": 57.93
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "P",
-     "role": "via_land",
-     "x": 131.65,
-     "y": 43.8
-    },
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via1",
-     "x": 84.6,
-     "y": 58.323
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "N",
-     "role": "via_corner",
-     "x": 84.6,
-     "y": 58.31
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via_drop",
-     "x": 131.65,
-     "y": 58.31
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "N",
-     "role": "via_land",
-     "x": 131.65,
-     "y": 43.8
-    }
-   ]
+   "vias": []
   },
   {
    "band": "up",
@@ -8223,112 +4634,7 @@
     "reach_avail_mm": 45.4,
     "y": 34.76
    },
-   "nodes": {
-    "N": [
-     [
-      87.55,
-      49.76,
-      "F.Cu"
-     ],
-     [
-      86.35,
-      47.26,
-      "F.Cu"
-     ],
-     [
-      86.35,
-      47.26,
-      "B.Cu"
-     ],
-     [
-      86.35,
-      34.57,
-      "B.Cu"
-     ],
-     [
-      86.35,
-      34.57,
-      "In2.Cu"
-     ],
-     [
-      57.7,
-      34.57,
-      "In2.Cu"
-     ],
-     [
-      57.7,
-      34.57,
-      "B.Cu"
-     ],
-     [
-      57.7,
-      42.95,
-      "B.Cu"
-     ],
-     [
-      57.7,
-      42.95,
-      "F.Cu"
-     ],
-     [
-      56.5,
-      43.25,
-      "F.Cu"
-     ]
-    ],
-    "P": [
-     [
-      87.25,
-      50.28,
-      "F.Cu"
-     ],
-     [
-      86.75,
-      49.18,
-      "F.Cu"
-     ],
-     [
-      86.75,
-      49.18,
-      "B.Cu"
-     ],
-     [
-      86.75,
-      34.95,
-      "B.Cu"
-     ],
-     [
-      86.75,
-      34.95,
-      "In2.Cu"
-     ],
-     [
-      57.7,
-      34.95,
-      "In2.Cu"
-     ],
-     [
-      57.7,
-      34.95,
-      "B.Cu"
-     ],
-     [
-      57.7,
-      42.95,
-      "B.Cu"
-     ],
-     [
-      57.7,
-      42.95,
-      "F.Cu"
-     ],
-     [
-      57.1,
-      43.25,
-      "F.Cu"
-     ]
-    ]
-   },
+   "nodes": {},
    "page_id": "PCIE_UP2/input",
    "r1": {
     "N": {
@@ -8387,88 +4693,7 @@
    },
    "row_y": 43.25,
    "side": "west",
-   "vias": [
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via1",
-     "x": 86.75,
-     "y": 49.18
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "P",
-     "role": "via_corner",
-     "x": 86.75,
-     "y": 34.95
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via_drop",
-     "x": 57.7,
-     "y": 34.95
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "P",
-     "role": "via_land",
-     "x": 57.7,
-     "y": 42.95
-    },
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via1",
-     "x": 86.35,
-     "y": 47.26
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "N",
-     "role": "via_corner",
-     "x": 86.35,
-     "y": 34.57
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via_drop",
-     "x": 57.7,
-     "y": 34.57
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "N",
-     "role": "via_land",
-     "x": 57.7,
-     "y": 42.95
-    }
-   ]
+   "vias": []
   },
   {
    "band": "up",
@@ -8484,112 +4709,7 @@
     "reach_avail_mm": 45.4,
     "y": 59.58
    },
-   "nodes": {
-    "N": [
-     [
-      87.0,
-      55.823,
-      "F.Cu"
-     ],
-     [
-      87.95,
-      58.323,
-      "F.Cu"
-     ],
-     [
-      87.95,
-      58.323,
-      "B.Cu"
-     ],
-     [
-      87.95,
-      59.77,
-      "B.Cu"
-     ],
-     [
-      87.95,
-      59.77,
-      "In2.Cu"
-     ],
-     [
-      133.825,
-      59.77,
-      "In2.Cu"
-     ],
-     [
-      133.825,
-      59.77,
-      "B.Cu"
-     ],
-     [
-      133.825,
-      46.2,
-      "B.Cu"
-     ],
-     [
-      133.825,
-      46.2,
-      "F.Cu"
-     ],
-     [
-      132.65,
-      47.1,
-      "F.Cu"
-     ]
-    ],
-    "P": [
-     [
-      87.4,
-      55.13,
-      "F.Cu"
-     ],
-     [
-      88.35,
-      53.23,
-      "F.Cu"
-     ],
-     [
-      88.35,
-      53.23,
-      "B.Cu"
-     ],
-     [
-      88.35,
-      59.39,
-      "B.Cu"
-     ],
-     [
-      88.35,
-      59.39,
-      "In2.Cu"
-     ],
-     [
-      133.825,
-      59.39,
-      "In2.Cu"
-     ],
-     [
-      133.825,
-      59.39,
-      "B.Cu"
-     ],
-     [
-      133.825,
-      46.2,
-      "B.Cu"
-     ],
-     [
-      133.825,
-      46.2,
-      "F.Cu"
-     ],
-     [
-      135.0,
-      46.5,
-      "F.Cu"
-     ]
-    ]
-   },
+   "nodes": {},
    "page_id": "PCIE_UP2/out_J2",
    "r1": {
     "N": {
@@ -8648,88 +4768,7 @@
    },
    "row_y": 46.8,
    "side": "east",
-   "vias": [
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via1",
-     "x": 88.35,
-     "y": 53.23
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "P",
-     "role": "via_corner",
-     "x": 88.35,
-     "y": 59.39
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via_drop",
-     "x": 133.825,
-     "y": 59.39
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "P",
-     "role": "via_land",
-     "x": 133.825,
-     "y": 46.2
-    },
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via1",
-     "x": 87.95,
-     "y": 58.323
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "N",
-     "role": "via_corner",
-     "x": 87.95,
-     "y": 59.77
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via_drop",
-     "x": 133.825,
-     "y": 59.77
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "N",
-     "role": "via_land",
-     "x": 133.825,
-     "y": 46.2
-    }
-   ]
+   "vias": []
   },
   {
    "band": "up",
@@ -8745,112 +4784,7 @@
     "reach_avail_mm": 45.4,
     "y": 33.3
    },
-   "nodes": {
-    "N": [
-     [
-      88.75,
-      49.76,
-      "F.Cu"
-     ],
-     [
-      89.95,
-      47.26,
-      "F.Cu"
-     ],
-     [
-      89.95,
-      47.26,
-      "B.Cu"
-     ],
-     [
-      89.95,
-      33.11,
-      "B.Cu"
-     ],
-     [
-      89.95,
-      33.11,
-      "In2.Cu"
-     ],
-     [
-      55.9,
-      33.11,
-      "In2.Cu"
-     ],
-     [
-      55.9,
-      33.11,
-      "B.Cu"
-     ],
-     [
-      55.9,
-      43.55,
-      "B.Cu"
-     ],
-     [
-      55.9,
-      43.55,
-      "F.Cu"
-     ],
-     [
-      54.7,
-      43.25,
-      "F.Cu"
-     ]
-    ],
-    "P": [
-     [
-      88.45,
-      50.28,
-      "F.Cu"
-     ],
-     [
-      89.05,
-      49.23,
-      "F.Cu"
-     ],
-     [
-      89.05,
-      49.23,
-      "B.Cu"
-     ],
-     [
-      89.05,
-      33.49,
-      "B.Cu"
-     ],
-     [
-      89.05,
-      33.49,
-      "In2.Cu"
-     ],
-     [
-      55.9,
-      33.49,
-      "In2.Cu"
-     ],
-     [
-      55.9,
-      33.49,
-      "B.Cu"
-     ],
-     [
-      55.9,
-      43.55,
-      "B.Cu"
-     ],
-     [
-      55.9,
-      43.55,
-      "F.Cu"
-     ],
-     [
-      55.3,
-      43.25,
-      "F.Cu"
-     ]
-    ]
-   },
+   "nodes": {},
    "page_id": "PCIE_UP3/input",
    "r1": {
     "N": {
@@ -8895,7 +4829,7 @@
     "column_x": 55.9,
     "landing": [
      55.9,
-     43.55
+     42.95
     ],
     "layer_chain": [
      "F.Cu",
@@ -8909,88 +4843,7 @@
    },
    "row_y": 43.25,
    "side": "west",
-   "vias": [
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via1",
-     "x": 89.05,
-     "y": 49.23
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "P",
-     "role": "via_corner",
-     "x": 89.05,
-     "y": 33.49
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via_drop",
-     "x": 55.9,
-     "y": 33.49
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "P",
-     "role": "via_land",
-     "x": 55.9,
-     "y": 43.55
-    },
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via1",
-     "x": 89.95,
-     "y": 47.26
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "N",
-     "role": "via_corner",
-     "x": 89.95,
-     "y": 33.11
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via_drop",
-     "x": 55.9,
-     "y": 33.11
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "N",
-     "role": "via_land",
-     "x": 55.9,
-     "y": 43.55
-    }
-   ]
+   "vias": []
   },
   {
    "band": "up",
@@ -9006,112 +4859,7 @@
     "reach_avail_mm": 45.4,
     "y": 61.04
    },
-   "nodes": {
-    "N": [
-     [
-      88.2,
-      55.823,
-      "F.Cu"
-     ],
-     [
-      87.0,
-      58.323,
-      "F.Cu"
-     ],
-     [
-      87.0,
-      58.323,
-      "B.Cu"
-     ],
-     [
-      87.0,
-      61.23,
-      "B.Cu"
-     ],
-     [
-      87.0,
-      61.23,
-      "In2.Cu"
-     ],
-     [
-      131.65,
-      61.23,
-      "In2.Cu"
-     ],
-     [
-      131.65,
-      61.23,
-      "B.Cu"
-     ],
-     [
-      131.65,
-      47.4,
-      "B.Cu"
-     ],
-     [
-      131.65,
-      47.4,
-      "F.Cu"
-     ],
-     [
-      135.0,
-      47.7,
-      "F.Cu"
-     ]
-    ],
-    "P": [
-     [
-      88.6,
-      55.13,
-      "F.Cu"
-     ],
-     [
-      87.6,
-      55.73,
-      "F.Cu"
-     ],
-     [
-      87.6,
-      55.73,
-      "B.Cu"
-     ],
-     [
-      87.6,
-      60.85,
-      "B.Cu"
-     ],
-     [
-      87.6,
-      60.85,
-      "In2.Cu"
-     ],
-     [
-      131.65,
-      60.85,
-      "In2.Cu"
-     ],
-     [
-      131.65,
-      60.85,
-      "B.Cu"
-     ],
-     [
-      131.65,
-      47.4,
-      "B.Cu"
-     ],
-     [
-      131.65,
-      47.4,
-      "F.Cu"
-     ],
-     [
-      132.65,
-      47.7,
-      "F.Cu"
-     ]
-    ]
-   },
+   "nodes": {},
    "page_id": "PCIE_UP3/out_J2",
    "r1": {
     "N": {
@@ -9170,88 +4918,7 @@
    },
    "row_y": 47.7,
    "side": "east",
-   "vias": [
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via1",
-     "x": 87.6,
-     "y": 55.73
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "P",
-     "role": "via_corner",
-     "x": 87.6,
-     "y": 60.85
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via_drop",
-     "x": 131.65,
-     "y": 60.85
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "P",
-     "role": "via_land",
-     "x": 131.65,
-     "y": 47.4
-    },
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via1",
-     "x": 87.0,
-     "y": 58.323
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "N",
-     "role": "via_corner",
-     "x": 87.0,
-     "y": 61.23
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via_drop",
-     "x": 131.65,
-     "y": 61.23
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "N",
-     "role": "via_land",
-     "x": 131.65,
-     "y": 47.4
-    }
-   ]
+   "vias": []
   },
   {
    "band": "up",
@@ -9267,112 +4934,7 @@
     "reach_avail_mm": 45.4,
     "y": 50.82
    },
-   "nodes": {
-    "N": [
-     [
-      89.65,
-      50.28,
-      "F.Cu"
-     ],
-     [
-      90.9,
-      49.18,
-      "F.Cu"
-     ],
-     [
-      90.9,
-      49.18,
-      "B.Cu"
-     ],
-     [
-      90.9,
-      51.01,
-      "B.Cu"
-     ],
-     [
-      90.9,
-      51.01,
-      "In2.Cu"
-     ],
-     [
-      54.2,
-      51.01,
-      "In2.Cu"
-     ],
-     [
-      54.2,
-      51.01,
-      "B.Cu"
-     ],
-     [
-      54.2,
-      63.65,
-      "B.Cu"
-     ],
-     [
-      54.2,
-      63.65,
-      "F.Cu"
-     ],
-     [
-      55.3,
-      63.95,
-      "F.Cu"
-     ]
-    ],
-    "P": [
-     [
-      89.95,
-      49.76,
-      "F.Cu"
-     ],
-     [
-      90.5,
-      47.26,
-      "F.Cu"
-     ],
-     [
-      90.5,
-      47.26,
-      "B.Cu"
-     ],
-     [
-      90.5,
-      50.63,
-      "B.Cu"
-     ],
-     [
-      90.5,
-      50.63,
-      "In2.Cu"
-     ],
-     [
-      54.2,
-      50.63,
-      "In2.Cu"
-     ],
-     [
-      54.2,
-      50.63,
-      "B.Cu"
-     ],
-     [
-      54.2,
-      63.65,
-      "B.Cu"
-     ],
-     [
-      54.2,
-      63.65,
-      "F.Cu"
-     ],
-     [
-      54.7,
-      63.95,
-      "F.Cu"
-     ]
-    ]
-   },
+   "nodes": {},
    "page_id": "PCIE_UP4/input",
    "r1": {
     "N": {
@@ -9431,88 +4993,7 @@
    },
    "row_y": 63.95,
    "side": "west",
-   "vias": [
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via1",
-     "x": 90.5,
-     "y": 47.26
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "P",
-     "role": "via_corner",
-     "x": 90.5,
-     "y": 50.63
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via_drop",
-     "x": 54.2,
-     "y": 50.63
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "P",
-     "role": "via_land",
-     "x": 54.2,
-     "y": 63.65
-    },
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via1",
-     "x": 90.9,
-     "y": 49.18
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "N",
-     "role": "via_corner",
-     "x": 90.9,
-     "y": 51.01
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via_drop",
-     "x": 54.2,
-     "y": 51.01
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "N",
-     "role": "via_land",
-     "x": 54.2,
-     "y": 63.65
-    }
-   ]
+   "vias": []
   },
   {
    "band": "up",
@@ -9528,112 +5009,7 @@
     "reach_avail_mm": 45.4,
     "y": 62.5
    },
-   "nodes": {
-    "N": [
-     [
-      89.4,
-      55.823,
-      "F.Cu"
-     ],
-     [
-      90.6,
-      58.323,
-      "F.Cu"
-     ],
-     [
-      90.6,
-      58.323,
-      "B.Cu"
-     ],
-     [
-      90.6,
-      62.69,
-      "B.Cu"
-     ],
-     [
-      90.6,
-      62.69,
-      "In2.Cu"
-     ],
-     [
-      133.825,
-      62.69,
-      "In2.Cu"
-     ],
-     [
-      133.825,
-      62.69,
-      "B.Cu"
-     ],
-     [
-      133.825,
-      48.0,
-      "B.Cu"
-     ],
-     [
-      133.825,
-      48.0,
-      "F.Cu"
-     ],
-     [
-      132.65,
-      48.9,
-      "F.Cu"
-     ]
-    ],
-    "P": [
-     [
-      89.8,
-      55.13,
-      "F.Cu"
-     ],
-     [
-      89.95,
-      55.38,
-      "F.Cu"
-     ],
-     [
-      89.95,
-      55.38,
-      "B.Cu"
-     ],
-     [
-      89.95,
-      62.31,
-      "B.Cu"
-     ],
-     [
-      89.95,
-      62.31,
-      "In2.Cu"
-     ],
-     [
-      133.825,
-      62.31,
-      "In2.Cu"
-     ],
-     [
-      133.825,
-      62.31,
-      "B.Cu"
-     ],
-     [
-      133.825,
-      48.0,
-      "B.Cu"
-     ],
-     [
-      133.825,
-      48.0,
-      "F.Cu"
-     ],
-     [
-      135.0,
-      48.3,
-      "F.Cu"
-     ]
-    ]
-   },
+   "nodes": {},
    "page_id": "PCIE_UP4/out_J2",
    "r1": {
     "N": {
@@ -9692,88 +5068,7 @@
    },
    "row_y": 48.6,
    "side": "east",
-   "vias": [
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via1",
-     "x": 89.95,
-     "y": 55.38
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "P",
-     "role": "via_corner",
-     "x": 89.95,
-     "y": 62.31
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via_drop",
-     "x": 133.825,
-     "y": 62.31
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "P",
-     "role": "via_land",
-     "x": 133.825,
-     "y": 48.0
-    },
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via1",
-     "x": 90.6,
-     "y": 58.323
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "N",
-     "role": "via_corner",
-     "x": 90.6,
-     "y": 62.69
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via_drop",
-     "x": 133.825,
-     "y": 62.69
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "N",
-     "role": "via_land",
-     "x": 133.825,
-     "y": 48.0
-    }
-   ]
+   "vias": []
   },
   {
    "band": "up",
@@ -9789,112 +5084,7 @@
     "reach_avail_mm": 45.4,
     "y": 52.28
    },
-   "nodes": {
-    "N": [
-     [
-      90.85,
-      50.28,
-      "F.Cu"
-     ],
-     [
-      89.65,
-      47.78,
-      "F.Cu"
-     ],
-     [
-      89.65,
-      47.78,
-      "B.Cu"
-     ],
-     [
-      89.65,
-      52.47,
-      "B.Cu"
-     ],
-     [
-      89.65,
-      52.47,
-      "In2.Cu"
-     ],
-     [
-      55.9,
-      52.47,
-      "In2.Cu"
-     ],
-     [
-      55.9,
-      52.47,
-      "B.Cu"
-     ],
-     [
-      55.9,
-      64.25,
-      "B.Cu"
-     ],
-     [
-      55.9,
-      64.25,
-      "F.Cu"
-     ],
-     [
-      57.1,
-      63.95,
-      "F.Cu"
-     ]
-    ],
-    "P": [
-     [
-      91.15,
-      49.76,
-      "F.Cu"
-     ],
-     [
-      90.8,
-      51.11,
-      "F.Cu"
-     ],
-     [
-      90.8,
-      51.11,
-      "B.Cu"
-     ],
-     [
-      90.8,
-      52.09,
-      "B.Cu"
-     ],
-     [
-      90.8,
-      52.09,
-      "In2.Cu"
-     ],
-     [
-      55.9,
-      52.09,
-      "In2.Cu"
-     ],
-     [
-      55.9,
-      52.09,
-      "B.Cu"
-     ],
-     [
-      55.9,
-      64.25,
-      "B.Cu"
-     ],
-     [
-      55.9,
-      64.25,
-      "F.Cu"
-     ],
-     [
-      56.5,
-      63.95,
-      "F.Cu"
-     ]
-    ]
-   },
+   "nodes": {},
    "page_id": "PCIE_UP5/input",
    "r1": {
     "N": {
@@ -9953,88 +5143,7 @@
    },
    "row_y": 63.95,
    "side": "west",
-   "vias": [
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via1",
-     "x": 90.8,
-     "y": 51.11
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "P",
-     "role": "via_corner",
-     "x": 90.8,
-     "y": 52.09
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via_drop",
-     "x": 55.9,
-     "y": 52.09
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "P",
-     "role": "via_land",
-     "x": 55.9,
-     "y": 64.25
-    },
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via1",
-     "x": 89.65,
-     "y": 47.78
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "N",
-     "role": "via_corner",
-     "x": 89.65,
-     "y": 52.47
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via_drop",
-     "x": 55.9,
-     "y": 52.47
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "N",
-     "role": "via_land",
-     "x": 55.9,
-     "y": 64.25
-    }
-   ]
+   "vias": []
   },
   {
    "band": "up",
@@ -10050,112 +5159,7 @@
     "reach_avail_mm": 45.4,
     "y": 63.96
    },
-   "nodes": {
-    "N": [
-     [
-      90.6,
-      55.823,
-      "F.Cu"
-     ],
-     [
-      89.4,
-      58.323,
-      "F.Cu"
-     ],
-     [
-      89.4,
-      58.323,
-      "B.Cu"
-     ],
-     [
-      89.4,
-      64.15,
-      "B.Cu"
-     ],
-     [
-      89.4,
-      64.15,
-      "In2.Cu"
-     ],
-     [
-      131.65,
-      64.15,
-      "In2.Cu"
-     ],
-     [
-      131.65,
-      64.15,
-      "B.Cu"
-     ],
-     [
-      131.65,
-      49.2,
-      "B.Cu"
-     ],
-     [
-      131.65,
-      49.2,
-      "F.Cu"
-     ],
-     [
-      135.0,
-      49.5,
-      "F.Cu"
-     ]
-    ],
-    "P": [
-     [
-      91.0,
-      55.13,
-      "F.Cu"
-     ],
-     [
-      90.9,
-      54.83,
-      "F.Cu"
-     ],
-     [
-      90.9,
-      54.83,
-      "B.Cu"
-     ],
-     [
-      90.9,
-      63.77,
-      "B.Cu"
-     ],
-     [
-      90.9,
-      63.77,
-      "In2.Cu"
-     ],
-     [
-      131.65,
-      63.77,
-      "In2.Cu"
-     ],
-     [
-      131.65,
-      63.77,
-      "B.Cu"
-     ],
-     [
-      131.65,
-      49.2,
-      "B.Cu"
-     ],
-     [
-      131.65,
-      49.2,
-      "F.Cu"
-     ],
-     [
-      132.65,
-      49.5,
-      "F.Cu"
-     ]
-    ]
-   },
+   "nodes": {},
    "page_id": "PCIE_UP5/out_J2",
    "r1": {
     "N": {
@@ -10214,88 +5218,7 @@
    },
    "row_y": 49.5,
    "side": "east",
-   "vias": [
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via1",
-     "x": 90.9,
-     "y": 54.83
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "P",
-     "role": "via_corner",
-     "x": 90.9,
-     "y": 63.77
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via_drop",
-     "x": 131.65,
-     "y": 63.77
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "P",
-     "role": "via_land",
-     "x": 131.65,
-     "y": 49.2
-    },
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via1",
-     "x": 89.4,
-     "y": 58.323
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "N",
-     "role": "via_corner",
-     "x": 89.4,
-     "y": 64.15
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via_drop",
-     "x": 131.65,
-     "y": 64.15
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "N",
-     "role": "via_land",
-     "x": 131.65,
-     "y": 49.2
-    }
-   ]
+   "vias": []
   },
   {
    "band": "up",
@@ -10311,112 +5234,7 @@
     "reach_avail_mm": 45.4,
     "y": 53.74
    },
-   "nodes": {
-    "N": [
-     [
-      92.35,
-      49.76,
-      "F.Cu"
-     ],
-     [
-      93.6,
-      52.26,
-      "F.Cu"
-     ],
-     [
-      93.6,
-      52.26,
-      "B.Cu"
-     ],
-     [
-      93.6,
-      53.55,
-      "B.Cu"
-     ],
-     [
-      93.6,
-      53.55,
-      "In2.Cu"
-     ],
-     [
-      61.3,
-      53.55,
-      "In2.Cu"
-     ],
-     [
-      61.3,
-      53.55,
-      "B.Cu"
-     ],
-     [
-      61.3,
-      63.65,
-      "B.Cu"
-     ],
-     [
-      61.3,
-      63.65,
-      "F.Cu"
-     ],
-     [
-      62.5,
-      63.95,
-      "F.Cu"
-     ]
-    ],
-    "P": [
-     [
-      92.05,
-      50.28,
-      "F.Cu"
-     ],
-     [
-      92.65,
-      47.78,
-      "F.Cu"
-     ],
-     [
-      92.65,
-      47.78,
-      "B.Cu"
-     ],
-     [
-      92.65,
-      53.93,
-      "B.Cu"
-     ],
-     [
-      92.65,
-      53.93,
-      "In2.Cu"
-     ],
-     [
-      61.3,
-      53.93,
-      "In2.Cu"
-     ],
-     [
-      61.3,
-      53.93,
-      "B.Cu"
-     ],
-     [
-      61.3,
-      63.65,
-      "B.Cu"
-     ],
-     [
-      61.3,
-      63.65,
-      "F.Cu"
-     ],
-     [
-      61.9,
-      63.95,
-      "F.Cu"
-     ]
-    ]
-   },
+   "nodes": {},
    "page_id": "PCIE_UP6/input",
    "r1": {
     "N": {
@@ -10475,88 +5293,7 @@
    },
    "row_y": 63.95,
    "side": "west",
-   "vias": [
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via1",
-     "x": 92.65,
-     "y": 47.78
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "P",
-     "role": "via_corner",
-     "x": 92.65,
-     "y": 53.93
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via_drop",
-     "x": 61.3,
-     "y": 53.93
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "P",
-     "role": "via_land",
-     "x": 61.3,
-     "y": 63.65
-    },
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via1",
-     "x": 93.6,
-     "y": 52.26
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "N",
-     "role": "via_corner",
-     "x": 93.6,
-     "y": 53.55
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via_drop",
-     "x": 61.3,
-     "y": 53.55
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "N",
-     "role": "via_land",
-     "x": 61.3,
-     "y": 63.65
-    }
-   ]
+   "vias": []
   },
   {
    "band": "up",
@@ -10572,112 +5309,7 @@
     "reach_avail_mm": 45.4,
     "y": 65.42
    },
-   "nodes": {
-    "N": [
-     [
-      91.8,
-      55.823,
-      "F.Cu"
-     ],
-     [
-      92.8,
-      58.323,
-      "F.Cu"
-     ],
-     [
-      92.8,
-      58.323,
-      "B.Cu"
-     ],
-     [
-      92.8,
-      65.61,
-      "B.Cu"
-     ],
-     [
-      92.8,
-      65.61,
-      "In2.Cu"
-     ],
-     [
-      133.825,
-      65.61,
-      "In2.Cu"
-     ],
-     [
-      133.825,
-      65.61,
-      "B.Cu"
-     ],
-     [
-      133.825,
-      51.6,
-      "B.Cu"
-     ],
-     [
-      133.825,
-      51.6,
-      "F.Cu"
-     ],
-     [
-      132.65,
-      52.5,
-      "F.Cu"
-     ]
-    ],
-    "P": [
-     [
-      92.2,
-      55.13,
-      "F.Cu"
-     ],
-     [
-      92.3,
-      55.38,
-      "F.Cu"
-     ],
-     [
-      92.3,
-      55.38,
-      "B.Cu"
-     ],
-     [
-      92.3,
-      65.23,
-      "B.Cu"
-     ],
-     [
-      92.3,
-      65.23,
-      "In2.Cu"
-     ],
-     [
-      133.825,
-      65.23,
-      "In2.Cu"
-     ],
-     [
-      133.825,
-      65.23,
-      "B.Cu"
-     ],
-     [
-      133.825,
-      51.6,
-      "B.Cu"
-     ],
-     [
-      133.825,
-      51.6,
-      "F.Cu"
-     ],
-     [
-      135.0,
-      51.9,
-      "F.Cu"
-     ]
-    ]
-   },
+   "nodes": {},
    "page_id": "PCIE_UP6/out_J2",
    "r1": {
     "N": {
@@ -10736,88 +5368,7 @@
    },
    "row_y": 52.2,
    "side": "east",
-   "vias": [
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via1",
-     "x": 92.3,
-     "y": 55.38
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "P",
-     "role": "via_corner",
-     "x": 92.3,
-     "y": 65.23
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via_drop",
-     "x": 133.825,
-     "y": 65.23
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "P",
-     "role": "via_land",
-     "x": 133.825,
-     "y": 51.6
-    },
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via1",
-     "x": 92.8,
-     "y": 58.323
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "N",
-     "role": "via_corner",
-     "x": 92.8,
-     "y": 65.61
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via_drop",
-     "x": 133.825,
-     "y": 65.61
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "N",
-     "role": "via_land",
-     "x": 133.825,
-     "y": 51.6
-    }
-   ]
+   "vias": []
   },
   {
    "band": "up",
@@ -10833,112 +5384,7 @@
     "reach_avail_mm": 45.4,
     "y": 55.2
    },
-   "nodes": {
-    "N": [
-     [
-      93.55,
-      49.76,
-      "F.Cu"
-     ],
-     [
-      92.35,
-      47.26,
-      "F.Cu"
-     ],
-     [
-      92.35,
-      47.26,
-      "B.Cu"
-     ],
-     [
-      92.35,
-      55.01,
-      "B.Cu"
-     ],
-     [
-      92.35,
-      55.01,
-      "In2.Cu"
-     ],
-     [
-      63.1,
-      55.01,
-      "In2.Cu"
-     ],
-     [
-      63.1,
-      55.01,
-      "B.Cu"
-     ],
-     [
-      63.1,
-      64.25,
-      "B.Cu"
-     ],
-     [
-      63.1,
-      64.25,
-      "F.Cu"
-     ],
-     [
-      64.3,
-      63.95,
-      "F.Cu"
-     ]
-    ],
-    "P": [
-     [
-      93.25,
-      50.28,
-      "F.Cu"
-     ],
-     [
-      92.8,
-      51.78,
-      "F.Cu"
-     ],
-     [
-      92.8,
-      51.78,
-      "B.Cu"
-     ],
-     [
-      92.8,
-      55.39,
-      "B.Cu"
-     ],
-     [
-      92.8,
-      55.39,
-      "In2.Cu"
-     ],
-     [
-      63.1,
-      55.39,
-      "In2.Cu"
-     ],
-     [
-      63.1,
-      55.39,
-      "B.Cu"
-     ],
-     [
-      63.1,
-      64.25,
-      "B.Cu"
-     ],
-     [
-      63.1,
-      64.25,
-      "F.Cu"
-     ],
-     [
-      63.7,
-      63.95,
-      "F.Cu"
-     ]
-    ]
-   },
+   "nodes": {},
    "page_id": "PCIE_UP7/input",
    "r1": {
     "N": {
@@ -10997,88 +5443,7 @@
    },
    "row_y": 63.95,
    "side": "west",
-   "vias": [
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via1",
-     "x": 92.8,
-     "y": 51.78
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "P",
-     "role": "via_corner",
-     "x": 92.8,
-     "y": 55.39
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via_drop",
-     "x": 63.1,
-     "y": 55.39
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "P",
-     "role": "via_land",
-     "x": 63.1,
-     "y": 64.25
-    },
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via1",
-     "x": 92.35,
-     "y": 47.26
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "N",
-     "role": "via_corner",
-     "x": 92.35,
-     "y": 55.01
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via_drop",
-     "x": 63.1,
-     "y": 55.01
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "N",
-     "role": "via_land",
-     "x": 63.1,
-     "y": 64.25
-    }
-   ]
+   "vias": []
   },
   {
    "band": "up",
@@ -11094,112 +5459,7 @@
     "reach_avail_mm": 45.4,
     "y": 66.88
    },
-   "nodes": {
-    "N": [
-     [
-      93.0,
-      55.823,
-      "F.Cu"
-     ],
-     [
-      91.8,
-      58.323,
-      "F.Cu"
-     ],
-     [
-      91.8,
-      58.323,
-      "B.Cu"
-     ],
-     [
-      91.8,
-      67.07,
-      "B.Cu"
-     ],
-     [
-      91.8,
-      67.07,
-      "In2.Cu"
-     ],
-     [
-      131.65,
-      67.07,
-      "In2.Cu"
-     ],
-     [
-      131.65,
-      67.07,
-      "B.Cu"
-     ],
-     [
-      131.65,
-      52.8,
-      "B.Cu"
-     ],
-     [
-      131.65,
-      52.8,
-      "F.Cu"
-     ],
-     [
-      135.0,
-      53.1,
-      "F.Cu"
-     ]
-    ],
-    "P": [
-     [
-      93.4,
-      55.13,
-      "F.Cu"
-     ],
-     [
-      93.3,
-      54.83,
-      "F.Cu"
-     ],
-     [
-      93.3,
-      54.83,
-      "B.Cu"
-     ],
-     [
-      93.3,
-      66.69,
-      "B.Cu"
-     ],
-     [
-      93.3,
-      66.69,
-      "In2.Cu"
-     ],
-     [
-      131.65,
-      66.69,
-      "In2.Cu"
-     ],
-     [
-      131.65,
-      66.69,
-      "B.Cu"
-     ],
-     [
-      131.65,
-      52.8,
-      "B.Cu"
-     ],
-     [
-      131.65,
-      52.8,
-      "F.Cu"
-     ],
-     [
-      132.65,
-      53.1,
-      "F.Cu"
-     ]
-    ]
-   },
+   "nodes": {},
    "page_id": "PCIE_UP7/out_J2",
    "r1": {
     "N": {
@@ -11258,88 +5518,7 @@
    },
    "row_y": 53.1,
    "side": "east",
-   "vias": [
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via1",
-     "x": 93.3,
-     "y": 54.83
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "P",
-     "role": "via_corner",
-     "x": 93.3,
-     "y": 66.69
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "P",
-     "role": "via_drop",
-     "x": 131.65,
-     "y": 66.69
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "P",
-     "role": "via_land",
-     "x": 131.65,
-     "y": 52.8
-    },
-    {
-     "layers": [
-      "F.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via1",
-     "x": 91.8,
-     "y": 58.323
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "In2.Cu"
-     ],
-     "pol": "N",
-     "role": "via_corner",
-     "x": 91.8,
-     "y": 67.07
-    },
-    {
-     "layers": [
-      "In2.Cu",
-      "B.Cu"
-     ],
-     "pol": "N",
-     "role": "via_drop",
-     "x": 131.65,
-     "y": 67.07
-    },
-    {
-     "layers": [
-      "B.Cu",
-      "F.Cu"
-     ],
-     "pol": "N",
-     "role": "via_land",
-     "x": 131.65,
-     "y": 52.8
-    }
-   ]
+   "vias": []
   },
   {
    "kind": "refclk",
@@ -11434,7 +5613,7 @@
    }
   }
  ],
- "revision": "W3-CN.10",
+ "revision": "W3-CN.8",
  "schema": 1,
  "status": "EMITTED",
  "supersedes_method": {
@@ -11443,5 +5622,5 @@
   "revision": "W3-JA.2",
   "sha256": "d081618c7b961d770c8e2f180f93b92125b316bc0eeec181f9d1d191a0ee6acc"
  },
- "verdict": "FEASIBLE_ALL"
+ "verdict": "CERTIFICATE"
 }

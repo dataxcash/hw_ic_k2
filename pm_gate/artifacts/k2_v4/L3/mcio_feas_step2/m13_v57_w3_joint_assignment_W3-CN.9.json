@@ -1,0 +1,171 @@
+{
+ "artifact": "m13_v57_w3_joint_assignment",
+ "certificates": [],
+ "contract": {
+  "card_md": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_kickoff_card_v1_21.md",
+  "id": "W3-C4",
+  "sha256": "57f49e020e67ffadb942182d6a765fd10b3cbd59463d024720924fb8701c7881"
+ },
+ "landing_rows": null,
+ "landing_rows_status": "NOT_REEMITTED",
+ "layers": {},
+ "note": "W3-C4 门：上游资源不足，未进入 R1/R1.5 求解（天条：发现上游问题立即停机回上层）",
+ "pages": [],
+ "resource_gate": {
+  "closed_form": "SUFFICIENT iff same_layer_crossings == 0 and lanes_needed <= lanes_avail",
+  "fan_groups": [
+   {
+    "fan_y_extent": [
+     56.66,
+     78.56
+    ],
+    "group": "EAST_CHIP_TO_J2/dn",
+    "lane_region_y": [
+     56.66,
+     78.56
+    ],
+    "source_y_range": [
+     57.12,
+     57.64
+    ],
+    "x_extent_chip_zone": [
+     82.35,
+     105.25
+    ]
+   },
+   {
+    "fan_y_extent": [
+     55.13,
+     78.56
+    ],
+    "group": "EAST_CHIP_TO_J2/up",
+    "lane_region_y": [
+     56.66,
+     78.56
+    ],
+    "source_y_range": [
+     55.13,
+     55.823
+    ],
+    "x_extent_chip_zone": [
+     82.35,
+     105.25
+    ]
+   },
+   {
+    "fan_y_extent": [
+     33.3,
+     55.2
+    ],
+    "group": "WEST_MCIO_TO_CHIP/dn",
+    "lane_region_y": [
+     33.3,
+     55.2
+    ],
+    "source_y_range": [
+     51.673,
+     52.366
+    ],
+    "x_extent_chip_zone": [
+     82.35,
+     105.25
+    ]
+   },
+   {
+    "fan_y_extent": [
+     33.3,
+     55.2
+    ],
+    "group": "WEST_MCIO_TO_CHIP/up",
+    "lane_region_y": [
+     33.3,
+     55.2
+    ],
+    "source_y_range": [
+     49.76,
+     50.28
+    ],
+    "x_extent_chip_zone": [
+     82.35,
+     105.25
+    ]
+   }
+  ],
+  "informational_coarse_extent_overlap": 3,
+  "insufficiency_basis": {
+   "minimal_core": [
+    [
+     "PCIE_DN0/out_MCIO#stub/N",
+     "PCIE_DN4/out_MCIO#stub/N"
+    ],
+    [
+     "PCIE_DN0/out_MCIO#stub/P",
+     "PCIE_DN4/out_MCIO#stub/N"
+    ],
+    [
+     "PCIE_DN1/out_MCIO#stub/N",
+     "PCIE_UP0/input#stub/N"
+    ],
+    [
+     "PCIE_DN1/out_MCIO#stub/N",
+     "PCIE_UP0/input#stub/P"
+    ],
+    [
+     "PCIE_DN1/out_MCIO#stub/P",
+     "PCIE_UP0/input#stub/N"
+    ],
+    [
+     "PCIE_DN1/out_MCIO#stub/P",
+     "PCIE_UP0/input#stub/P"
+    ]
+   ],
+   "same_layer_crossings": 46,
+   "structural_reason": "intended construction (signal-layer-only intent, band layer rule, polarity same-side, adaptive step) still leaves same-layer crossings"
+  },
+  "lane_capacity": {
+   "available": {
+    "EAST_CHIP_TO_J2": 32,
+    "WEST_MCIO_TO_CHIP": 32
+   },
+   "needed": {
+    "EAST_CHIP_TO_J2": 16,
+    "WEST_MCIO_TO_CHIP": 16
+   },
+   "ok": true
+  },
+  "layer_demand_ok": false,
+  "layer_demand_peak_overlap": 3,
+  "layer_intent": {
+   "B.Cu": "transition_eligible",
+   "F.Cu": "stub_only",
+   "In1.Cu": "gnd_plane",
+   "In2.Cu": "transition_eligible",
+   "In3.Cu": "gnd_plane",
+   "In4.Cu": "power_plane(P3V3, spec)"
+  },
+  "producer": "k2/tools/p3_v57_w3_constructive.py:resource_gate",
+  "r1_5_shape": "t2",
+  "rule": "R-23 verification-based: construct with the intent layers, count SAME-LAYER crossings",
+  "transition_eligible_layers": [
+   "B.Cu",
+   "In2.Cu"
+  ],
+  "verdict": "UPSTREAM_CHANGE_REQUEST",
+  "verification_check": {
+   "capacity_ok": true,
+   "closed_form": "SUFFICIENT iff same_layer_crossings == 0 and capacity ok",
+   "crossings_by_class": {
+    "r1_5": 0,
+    "stub": 46
+   },
+   "r1_assigned": 32,
+   "r1_required": 32,
+   "same_layer_crossings": 46
+  }
+ },
+ "revision": "W3-CN.9",
+ "schema": 1,
+ "status": "EMITTED",
+ "upstream_change_request": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_upstream_change_request.md",
+ "verdict": "UPSTREAM_CHANGE_REQUEST"
+}
