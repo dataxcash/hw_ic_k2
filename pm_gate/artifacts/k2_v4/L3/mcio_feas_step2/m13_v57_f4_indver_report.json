@@ -1,0 +1,365 @@
+{
+ "artifact": "m13_v57_f4_indver_report",
+ "authority": {
+  "g3_contract": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_g3_freeze_contract_v1_1_frame_ruling.md",
+  "manifest": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_s1_page_manifest.json",
+  "rules": "_shared/eda_core/drc_rules.json",
+  "w0r_model": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_big_w0r_corridor_model.json",
+  "w1_report": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_big_w1_report.json"
+ },
+ "evidence_protocol_v1_s3": {
+  "item1_schema_versions": "schema=1, revision=F4-INDVER.1, producer/validator tool path + revision + sha256 fingerprints",
+  "item2_source_fingerprints_authority": "manifest/rules/w0r_model SHA-256 pinned at runtime against frozen constants; w1_report and g3_contract recorded",
+  "item3_deterministic_status": "verdict is exactly one of PASS/FAIL; report is byte-identical across two consecutive runs",
+  "item4_demand_capacity_minimal_core": "real n=8 single-band + n=16 joint-frame decisions per leg k; MUS page-id cores for infeasible cases; frame capacity (n-1)*pitch <= span cross-check",
+  "item5_legal_escape_hatches": "upstream input changes only (manifest/SPEC/drc_rules/W0-R); no downstream construction edits",
+  "item6_independent_validation": "exact interval bipartite matching (Kuhn) cross-checked against an independent local brute permutation oracle on 200 synthetic instances (n<=7); W1 is not imported"
+ },
+ "frozen_sha_match": true,
+ "g3_contract_sha": "232fda852ee8612be3f2bf2c4655d0aa716c408dfb71a8eb71df298b08c031ff",
+ "inputs_sha": {
+  "manifest": "a8ef3ea8ecff99d7549d4122043c972c1bb68346dc4dcc3f36fdd9bacde49890",
+  "rules": "0a459839e15960b8fbfe0e1f5bb154a02b30cbafa1cbb0d56c2b810a71228448",
+  "w0r_model": "80ee9adb78a7e9ad94c27d426295592eee21af3d1e3ce88fe3042183160f0efa",
+  "w1_report": "57d0c9228bf48efd63e07eec8a04bb526523650567c62a0db8c432c916ef459a"
+ },
+ "no_allocation_scan": {
+  "forbidden_keys": [
+   "selected",
+   "assigned",
+   "allocation",
+   "witness"
+  ],
+  "leaked": []
+ },
+ "pitch_derivation": {
+  "derived": 1.46,
+  "inter_pair_spacing": 0.875,
+  "p_gap": 0.175,
+  "p_width": 0.205,
+  "pitch": 1.46
+ },
+ "predicate": "W1 no-crossing ordered-assignment feasibility: injective page->lane index; pages sorted by (row_y, id) map to strictly increasing lane indices; |lane_y - row_y| <= leg",
+ "real": {
+  "expected_mismatch": [],
+  "frame_capacity_crosscheck": [
+   {
+    "corridor": "EAST_CHIP_TO_J2",
+    "frame": "dn",
+    "n": 8,
+    "ok": true,
+    "required_mm": 10.22,
+    "span_len_mm": 45.4
+   },
+   {
+    "corridor": "EAST_CHIP_TO_J2",
+    "frame": "up",
+    "n": 8,
+    "ok": true,
+    "required_mm": 10.22,
+    "span_len_mm": 45.4
+   },
+   {
+    "corridor": "EAST_CHIP_TO_J2",
+    "frame": "joint",
+    "n": 16,
+    "ok": true,
+    "required_mm": 21.9,
+    "span_len_mm": 45.4
+   },
+   {
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "frame": "dn",
+    "n": 8,
+    "ok": true,
+    "required_mm": 10.22,
+    "span_len_mm": 45.4
+   },
+   {
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "frame": "up",
+    "n": 8,
+    "ok": true,
+    "required_mm": 10.22,
+    "span_len_mm": 45.4
+   },
+   {
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "frame": "joint",
+    "n": 16,
+    "ok": true,
+    "required_mm": 21.9,
+    "span_len_mm": 45.4
+   }
+  ],
+  "joint_frame": [
+   {
+    "corridor": "EAST_CHIP_TO_J2",
+    "feasible": false,
+    "frame": "joint",
+    "k": 1,
+    "leg": 1.46,
+    "mus": [
+     "PCIE_DN0/input",
+     "PCIE_DN1/input",
+     "PCIE_DN2/input",
+     "PCIE_DN3/input",
+     "PCIE_DN4/input",
+     "PCIE_DN5/input",
+     "PCIE_UP2/out_J2",
+     "PCIE_UP3/out_J2",
+     "PCIE_UP4/out_J2",
+     "PCIE_UP5/out_J2",
+     "PCIE_UP6/out_J2",
+     "PCIE_UP7/out_J2"
+    ],
+    "n": 16
+   },
+   {
+    "corridor": "EAST_CHIP_TO_J2",
+    "feasible": true,
+    "frame": "joint",
+    "k": 2,
+    "leg": 2.92,
+    "n": 16
+   },
+   {
+    "corridor": "EAST_CHIP_TO_J2",
+    "feasible": true,
+    "frame": "joint",
+    "k": 3,
+    "leg": 4.38,
+    "n": 16
+   },
+   {
+    "corridor": "EAST_CHIP_TO_J2",
+    "feasible": true,
+    "frame": "joint",
+    "k": 5,
+    "leg": 7.3,
+    "n": 16
+   },
+   {
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "feasible": false,
+    "frame": "joint",
+    "k": 1,
+    "leg": 1.46,
+    "mus": [
+     "PCIE_DN0/out_MCIO",
+     "PCIE_DN1/out_MCIO",
+     "PCIE_DN2/out_MCIO"
+    ],
+    "n": 16
+   },
+   {
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "feasible": false,
+    "frame": "joint",
+    "k": 2,
+    "leg": 2.92,
+    "mus": [
+     "PCIE_DN4/out_MCIO",
+     "PCIE_DN5/out_MCIO",
+     "PCIE_DN6/out_MCIO",
+     "PCIE_DN7/out_MCIO",
+     "PCIE_UP4/input",
+     "PCIE_UP5/input"
+    ],
+    "n": 16
+   },
+   {
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "feasible": false,
+    "frame": "joint",
+    "k": 3,
+    "leg": 4.38,
+    "mus": [
+     "PCIE_DN4/out_MCIO",
+     "PCIE_DN5/out_MCIO",
+     "PCIE_DN6/out_MCIO",
+     "PCIE_DN7/out_MCIO",
+     "PCIE_UP4/input",
+     "PCIE_UP5/input",
+     "PCIE_UP6/input",
+     "PCIE_UP7/input"
+    ],
+    "n": 16
+   },
+   {
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "feasible": true,
+    "frame": "joint",
+    "k": 5,
+    "leg": 7.3,
+    "n": 16
+   }
+  ],
+  "single_band": [
+   {
+    "band": "dn",
+    "corridor": "EAST_CHIP_TO_J2",
+    "feasible": true,
+    "k": 1,
+    "leg": 1.46,
+    "n": 8
+   },
+   {
+    "band": "dn",
+    "corridor": "EAST_CHIP_TO_J2",
+    "feasible": true,
+    "k": 2,
+    "leg": 2.92,
+    "n": 8
+   },
+   {
+    "band": "dn",
+    "corridor": "EAST_CHIP_TO_J2",
+    "feasible": true,
+    "k": 3,
+    "leg": 4.38,
+    "n": 8
+   },
+   {
+    "band": "dn",
+    "corridor": "EAST_CHIP_TO_J2",
+    "feasible": true,
+    "k": 5,
+    "leg": 7.3,
+    "n": 8
+   },
+   {
+    "band": "up",
+    "corridor": "EAST_CHIP_TO_J2",
+    "feasible": true,
+    "k": 1,
+    "leg": 1.46,
+    "n": 8
+   },
+   {
+    "band": "up",
+    "corridor": "EAST_CHIP_TO_J2",
+    "feasible": true,
+    "k": 2,
+    "leg": 2.92,
+    "n": 8
+   },
+   {
+    "band": "up",
+    "corridor": "EAST_CHIP_TO_J2",
+    "feasible": true,
+    "k": 3,
+    "leg": 4.38,
+    "n": 8
+   },
+   {
+    "band": "up",
+    "corridor": "EAST_CHIP_TO_J2",
+    "feasible": true,
+    "k": 5,
+    "leg": 7.3,
+    "n": 8
+   },
+   {
+    "band": "dn",
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "feasible": false,
+    "k": 1,
+    "leg": 1.46,
+    "mus": [
+     "PCIE_DN0/out_MCIO",
+     "PCIE_DN1/out_MCIO",
+     "PCIE_DN2/out_MCIO"
+    ],
+    "n": 8
+   },
+   {
+    "band": "dn",
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "feasible": true,
+    "k": 2,
+    "leg": 2.92,
+    "n": 8
+   },
+   {
+    "band": "dn",
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "feasible": true,
+    "k": 3,
+    "leg": 4.38,
+    "n": 8
+   },
+   {
+    "band": "dn",
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "feasible": true,
+    "k": 5,
+    "leg": 7.3,
+    "n": 8
+   },
+   {
+    "band": "up",
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "feasible": false,
+    "k": 1,
+    "leg": 1.46,
+    "mus": [
+     "PCIE_UP0/input",
+     "PCIE_UP1/input",
+     "PCIE_UP2/input"
+    ],
+    "n": 8
+   },
+   {
+    "band": "up",
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "feasible": true,
+    "k": 2,
+    "leg": 2.92,
+    "n": 8
+   },
+   {
+    "band": "up",
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "feasible": true,
+    "k": 3,
+    "leg": 4.38,
+    "n": 8
+   },
+   {
+    "band": "up",
+    "corridor": "WEST_MCIO_TO_CHIP",
+    "feasible": true,
+    "k": 5,
+    "leg": 7.3,
+    "n": 8
+   }
+  ]
+ },
+ "revision": "F4-INDVER.1",
+ "schema": 1,
+ "seed": 20260909,
+ "synthetic": {
+  "decision_match": 200,
+  "mismatch": [],
+  "mus_match": 200,
+  "mus_mismatch": [],
+  "n_instances": 200,
+  "order_invariant": 200
+ },
+ "verdict": "PASS",
+ "versions": {
+  "producer": {
+   "path": "tools/p3_v57_f4_independent_verifier.py",
+   "revision": "F4-INDVER.1",
+   "sha256": "2f377a641f110251f994cf03a6b969159376895b2361f3c5960c2696e78023fe",
+   "symbol": "exact_feasible"
+  },
+  "validator": {
+   "path": "tools/p3_v57_f4_independent_verifier.py",
+   "revision": "F4-INDVER.1",
+   "sha256": "2f377a641f110251f994cf03a6b969159376895b2361f3c5960c2696e78023fe",
+   "symbol": "brute_feasible"
+  }
+ }
+}
