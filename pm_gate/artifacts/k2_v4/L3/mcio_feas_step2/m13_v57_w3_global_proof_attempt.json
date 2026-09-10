@@ -1,0 +1,96 @@
+{
+ "N1_inversion_pairs": {
+  "count": 240,
+  "sample": [
+   [
+    "PCIE_UP0/out_J2",
+    "PCIE_UP1/out_J2"
+   ],
+   [
+    "PCIE_UP0/out_J2",
+    "PCIE_UP2/out_J2"
+   ],
+   [
+    "PCIE_UP0/out_J2",
+    "PCIE_UP3/out_J2"
+   ],
+   [
+    "PCIE_UP0/out_J2",
+    "PCIE_UP4/out_J2"
+   ],
+   [
+    "PCIE_UP0/out_J2",
+    "PCIE_UP5/out_J2"
+   ]
+  ]
+ },
+ "N2_conditionality": "非无条件全局障碍：① stub 可绕行（非单调族）规避（代价=长度/拥挤）；② **该反演可由 R3 规则修正**——把同 (connector,gap 列) 组的递推输入序由 (pad_y,net) 改为**按 lane 序**，则落点 y 沿 lane 序单调 ⇒ 反演消失（闭式、项目工件层）。",
+ "N2_connector_stub_order": {
+  "EAST_CHIP_TO_J2": {
+   "n": 16,
+   "sample": [],
+   "stub_order_inversions": 0
+  },
+  "WEST_MCIO_TO_CHIP": {
+   "n": 16,
+   "sample": [
+    [
+     "PCIE_UP3/input",
+     43.55,
+     "PCIE_UP2/input",
+     42.95
+    ],
+    [
+     "PCIE_UP1/input",
+     43.55,
+     "PCIE_UP0/input",
+     42.95
+    ],
+    [
+     "PCIE_DN3/out_MCIO",
+     46.05,
+     "PCIE_DN2/out_MCIO",
+     45.45
+    ],
+    [
+     "PCIE_DN1/out_MCIO",
+     46.05,
+     "PCIE_DN0/out_MCIO",
+     45.45
+    ]
+   ],
+   "stub_order_inversions": 6
+  }
+ },
+ "N2_interpretation": "WEST 走廊：lane 序 vs R3 落点 y 序出现 6 处反演（同 pad_y 组内落点成对为 42.95/43.55、45.45/46.05，由 R3 递推按 (pad_y,net) 输入序产生，而 lane 序按 conn_x 升序）⇒ 在**单调 stub 族**下 F.Cu 端必然交叉。",
+ "attempted_necessary_conditions": {
+  "N1_inversion_bound": "inversion-graph lower bound on layers: if the inversion graph (page granularity, per corridor) has chromatic number <= 2 = A, the ordering route yields NO proof",
+  "N2_connector_FCu_stub_order": "necessary condition: lane order must match landing-y order per corridor (F.Cu stubs); any inversion => unavoidable F.Cu crossing (global)",
+  "N3_chip_stub_order": "free by construction (via order can follow pad order)"
+ },
+ "conclusion": {
+  "global_proof": "NOT OBTAINED (honest)",
+  "why": [
+   "N1 inversion bound = 2 <= A => ordering route cannot prove infeasibility",
+   "N2 connector-stub inversions are conditional (monotone-stub family) and FIXABLE by an in-project R3 rule",
+   "coupling space (via choices x path families x 2-coloring) is too large for a closed-form proof with the current tooling"
+  ]
+ },
+ "conclusion_pending": false,
+ "decision_package_final": {
+  "recommended_first": "R3 landing-order rule (in-project, pre-authorized) then re-run W3",
+  "then": [
+   "F-13 r3 coherent rows consumed by W3 (already emitted)",
+   "if still blocked: the 3 owner options (frozen-source placement/ball remap; new topology family with local layer change + via-count relaxation; formal proof)"
+  ]
+ },
+ "formal_statement": "prove: NOT exists (assignment of 32 pages to frozen admissible via pairs, legal R1.5 paths with no_90deg in the transition zone, layer in {In2,B}) such that same_layer_crossings=0",
+ "unexhausted_legal_construction": {
+  "closed_form_basis": "same-pad_y groups receive y = pad_y-0.3, pad_y+0.3 in the fed order; feeding by lane order makes landing y monotone in lane order => the 6 connector-stub inversions vanish",
+  "expected": "F.Cu stub inversions 6 -> 0; combined with the R1.5 families this removes one more crossing class",
+  "legality": "project-artifact-layer rule change (R3 producer), no frozen-source change => pre-authorized (W3-C13)",
+  "name": "R3 landing-order rule (feed the recurrence in lane order)",
+  "rule": "within each (connector, gap column) group, order the pads by the page's R2 lane index before applying the prefix recurrence y_k = max(pad_y_k - 0.3, y_{k-1} + 0.6)",
+  "status": "NOT YET IMPLEMENTED (budget); next session first action"
+ }
+}
