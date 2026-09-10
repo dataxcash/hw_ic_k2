@@ -36,7 +36,7 @@ F = {
     "r3_gaps": STEP2 / "m13_v57_f8_r3_gap_candidates.json",
     "f6b_report": STEP2 / "m13_v57_f6b_report.json",
     "verdict": STEP2 / "m13_v57_s1_r1_via_verdict_r2.json",
-    "card": STEP2 / "m13_v57_w3_kickoff_card_v1_18.md",
+    "card": STEP2 / "m13_v57_w3_kickoff_card_v1_19.md",
     "layer_intent": STEP2 / "m13_v57_layer_intent_rev4.json",
     "coherent_rows": STEP2 / "m13_v57_f13_r3_coherent_rows.json",
 }
@@ -52,7 +52,7 @@ FROZEN_SHA = {
     "f6b_report": "9070ed53f970f480e88b1de3aa19792f8b637de51857935fa6b7c51fa8a015d6",
     "verdict": "f2e2632506457e31c145b491284c9ecbf1cb72cc09d96ccdfb3251ef80a5556a",
     "coherent_rows": "014a14b317e1c3df3d4400d45d6877ffc81f4ca92d533da4c7c7e4af67319c9a",
-    "card": "d54e55910700a206a6ec78054017bc2716e69449ee3d9f10b612f89c6801debc",
+    "card": "b941af53d29ed3b3daeebe434ed19a868ef096667515a332d0ecb0a3166caae1",
     "layer_intent": "994363267baca54da9658283f21856a1bf2194b123a8de91f262c767edc35491",
 }
 OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
@@ -414,18 +414,20 @@ def seg_cross(p, q, r, s) -> int:
 
 
 def count_crossings(paths: dict) -> int:
-    """仅统计**同层**段对交叉（跨层由层分配规则保证隔离）。"""
-    n = 0
+    """同层段对交叉计数（跨层由层分配隔离）；按类（R1.5 / connector stub）分列报告。"""
+    cls = {}
     ids = sorted(paths)
     for a in range(len(ids)):
         for b in range(a + 1, len(ids)):
             if paths[ids[a]][0] != paths[ids[b]][0]:
                 continue
+            k = "stub" if ("#stub" in ids[a] or "#stub" in ids[b]) else "r1_5"
             pa, pb = paths[ids[a]][1], paths[ids[b]][1]
             for s1 in zip(pa, pa[1:]):
                 for s2 in zip(pb, pb[1:]):
-                    n += seg_cross(s1[0], s1[1], s2[0], s2[1])
-    return n
+                    n = seg_cross(s1[0], s1[1], s2[0], s2[1])
+                    cls[k] = cls.get(k, 0) + n
+    return cls
 
 
 def resource_gate(facts: dict, spec: dict, rules: dict, intent: dict) -> dict:
@@ -708,7 +710,8 @@ def main(argv=None) -> int:
             if key in paths:
                 paths[(pid + "#stub", pol)] = ["F.Cu", [[ext, ly],
                                                         [r3a["landing"][0], r3a["landing"][1]]]]
-    crossings = count_crossings(paths)
+    cls = count_crossings(paths)
+    crossings = cls.get("r1_5", 0)
     cross_core = []
     ids_all = sorted(paths)
     for ai in range(len(ids_all)):
@@ -815,6 +818,7 @@ def main(argv=None) -> int:
     gate["r1_5_shape"] = shape
     gate["informational_coarse_extent_overlap"] = gate.get("layer_demand_peak_overlap")
     gate["verification_check"] = {"same_layer_crossings": crossings,
+                                  "crossings_by_class": {"r1_5": crossings, "stub": cls.get("stub", 0)},
                                   "r1_assigned": len(r1["assignment"]),
                                   "r1_required": len(facts),
                                   "capacity_ok": gate["lane_capacity"]["ok"],
@@ -968,6 +972,7 @@ def main(argv=None) -> int:
             "R1_5": {"status": "FEASIBLE" if crossings == 0 else "CERTIFICATE",
                      "segments_per_page_pol": 1, "corners_deg": 0, "no_via": True,
                      "layer_rule": glayer, "crossings_same_layer": crossings,
+                     "crossings_by_class": {"r1_5": crossings, "stub": cls.get("stub", 0)},
                      "planarity_basis": "monotone via-x within frame + lane blocks + ordered-line pairing"},
             "R2": {"status": "FEASIBLE",
                    "method": "frame_contiguous_blocks (closed-form base)",
