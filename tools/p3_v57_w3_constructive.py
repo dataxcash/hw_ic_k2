@@ -36,7 +36,7 @@ F = {
     "r3_gaps": STEP2 / "m13_v57_f8_r3_gap_candidates.json",
     "f6b_report": STEP2 / "m13_v57_f6b_report.json",
     "verdict": STEP2 / "m13_v57_s1_r1_via_verdict_r2.json",
-    "card": STEP2 / "m13_v57_w3_kickoff_card_v1_17.md",
+    "card": STEP2 / "m13_v57_w3_kickoff_card_v1_18.md",
     "layer_intent": STEP2 / "m13_v57_layer_intent_rev4.json",
     "coherent_rows": STEP2 / "m13_v57_f13_r3_coherent_rows.json",
 }
@@ -52,7 +52,7 @@ FROZEN_SHA = {
     "f6b_report": "9070ed53f970f480e88b1de3aa19792f8b637de51857935fa6b7c51fa8a015d6",
     "verdict": "f2e2632506457e31c145b491284c9ecbf1cb72cc09d96ccdfb3251ef80a5556a",
     "coherent_rows": "014a14b317e1c3df3d4400d45d6877ffc81f4ca92d533da4c7c7e4af67319c9a",
-    "card": "26b6206b188fe889f7b914def89a38d5e1c18c4ac7e021d55966d8987a102763",
+    "card": "d54e55910700a206a6ec78054017bc2716e69449ee3d9f10b612f89c6801debc",
     "layer_intent": "994363267baca54da9658283f21856a1bf2194b123a8de91f262c767edc35491",
 }
 OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
@@ -298,7 +298,7 @@ def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict) -> dict:
     return {"assignment": out, "certificates": certs}
 
 
-def r3_place(gaps: dict) -> dict:
+def r3_place(gaps: dict, lanes: dict = None, order: str = "lane") -> dict:
     """每 pad 取最小 gap 候选归组；组内按 (pad_y, net) 前缀递推。"""
     pads = []
     for cref in sorted(gaps["connectors"]):
@@ -315,7 +315,11 @@ def r3_place(gaps: dict) -> dict:
         groups.setdefault((pd["ref"], pd["cands"][0]), []).append(pd)
     out, certs = {}, []
     for (cref, colx) in sorted(groups):
-        grp = sorted(groups[(cref, colx)], key=lambda q: (q["y"], q["net"]))
+        if order == "lane" and lanes is not None:
+            grp = sorted(groups[(cref, colx)],
+                         key=lambda q: (lanes.get(q["page"], {}).get("lane_index", 10 ** 6), q["net"]))
+        else:
+            grp = sorted(groups[(cref, colx)], key=lambda q: (q["y"], q["net"]))
         prev = None
         for pd in grp:
             bump(2, "r3_landing")
@@ -634,6 +638,7 @@ def main(argv=None) -> int:
     ap.add_argument("--enum-order", choices=["natural", "reverse", "hash"], default="natural")
     ap.add_argument("--scale", type=int, default=1)
     ap.add_argument("--r1-5-shape", default=None)
+    ap.add_argument("--r3-order", choices=["lane", "y"], default="lane")
     ap.add_argument("--out", default=None)
     ap.add_argument("--landing-out", default=None)
     ap.add_argument("--quiet", action="store_true")
@@ -658,7 +663,7 @@ def main(argv=None) -> int:
     frs = frames_of(facts)
     lanes = r2_lanes(frs, facts)
     r1 = r1_place(facts, frs, j["pair_xorder"], j["verdict"])
-    r3 = r3_place(j["r3_gaps"])
+    r3 = r3_place(j["r3_gaps"], lanes, args.r3_order)
     rfc = refclk_place(j["manifest"], j["w0r_model"])
 
     # ---- R1.5 single straight segment (via1 -> (entry_x, lane_y +/- POL_OFF))
@@ -690,6 +695,19 @@ def main(argv=None) -> int:
         r15[pid] = {"entry_x": fp(entry), "lane_entry_y": fp(lanes[pid]["lane_y"]),
                     "segments": 1, "corners_deg": [], "no_via": True,
                     "layer": glayer[f["corridor"] + "/" + f["band"]]}
+    for pid, f in facts.items():
+        if pid not in r3["assignment"]:
+            continue
+        cid = f["corridor"]
+        ext = CORRIDOR[cid]["bounds"][1] if cid == "EAST_CHIP_TO_J2" else CORRIDOR[cid]["bounds"][0]
+        r3a = r3["assignment"][f["conn_ref"] + "|" + f["nets"]["P"]]
+        for pol in ("P", "N"):
+            off = pol_off(f, pol)
+            ly = fp(lanes[pid]["lane_y"] + off)
+            key = (pid, pol)
+            if key in paths:
+                paths[(pid + "#stub", pol)] = ["F.Cu", [[ext, ly],
+                                                        [r3a["landing"][0], r3a["landing"][1]]]]
     crossings = count_crossings(paths)
     cross_core = []
     ids_all = sorted(paths)
