@@ -1,27 +1,27 @@
 {
  "artifact": "m13_v57_w3_scale_probe",
- "certificates": 12,
+ "certificates": 6,
  "closed_form": {
-  "data_pages": 128,
-  "expected": 2104,
+  "data_pages": 64,
+  "expected": 1052,
   "formula": "11*n_pages + 2*n_landing + 6*n_refclk + 3*n_frames (= K * 526)",
-  "frames": 24,
-  "landings": 288,
+  "frames": 12,
+  "landings": 144,
   "per_copy": 526,
-  "refclk_pages": 8
+  "refclk_pages": 4
  },
- "k": 4,
+ "k": 2,
  "matches": true,
  "per_site": {
-  "nodes": 512,
-  "r15_seg": 256,
-  "r1_place": 512,
-  "r2_block": 72,
-  "r2_lane": 128,
-  "r3_landing": 576,
-  "refclk_path": 48
+  "nodes": 256,
+  "r15_seg": 128,
+  "r1_place": 256,
+  "r2_block": 36,
+  "r2_lane": 64,
+  "r3_landing": 288,
+  "refclk_path": 24
  },
- "revision": "W3-CN.20",
+ "revision": "W3-CN.22",
  "schema": 1,
- "work_units": 2104
+ "work_units": 1052
 }

@@ -58,7 +58,8 @@ FROZEN_SHA = {
 OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
 OUT_LANDING = STEP2 / "m13_v57_w3_chip_landing_rows.json"
 
-REVISION = "W3-CN.20"
+REVISION = "W3-CN.22"
+ORD = "natural"   # ROOT-20: enumeration order (A1.2 order-invariance, non-vacuous)
 SCHEMA = 1
 STEP = 1.46
 LANE_LO = 33.3
@@ -822,13 +823,21 @@ def main(argv=None) -> int:
     ap.add_argument("--landing-out", default=None)
     ap.add_argument("--quiet", action="store_true")
     args = ap.parse_args(argv)
+    global ORD
+    ORD = args.enum_order
 
     fc = freeze_check(F)
     if fc["drift"]:
         print("W3-CN: FROZEN SHA DRIFT", fc["drift"])
         return 2
     j = {k: json.load(v.open()) for k, v in F.items() if v.suffix == ".json"}
-    facts = page_facts(j["manifest"], j["lane_frame"])
+    _mpages = list(j["manifest"]["pages"])               # ROOT-20: A1.2 tests insensitivity to the
+    if ORD == "reverse":                                 # INPUT enumeration order; the engine must
+        _mpages = list(reversed(_mpages))                # canonicalise internally (it sorts).
+    elif ORD == "hash":
+        _mpages = sorted(_mpages, key=lambda p: hashlib.sha256(p["page_id"].encode("utf-8")).hexdigest())
+    _mman = dict(j["manifest"]); _mman["pages"] = _mpages
+    facts = page_facts(_mman, j["lane_frame"])
     if args.scale > 1:
         return scale_probe(j, facts, args)
     gate = resource_gate(facts, j["spec"], j["rules"], j["layer_intent"])
@@ -1287,7 +1296,7 @@ def main(argv=None) -> int:
     blob = json.dumps(doc, indent=1, ensure_ascii=False, sort_keys=True)
     out_main.write_text(blob, encoding="utf-8")
     (STEP2 / ("m13_v57_w3_joint_assignment_" + REVISION + ".json")).write_text(blob, encoding="utf-8")
-    if verdict == "FEASIBLE_ALL" and args.out is None:
+    if verdict == "FEASIBLE_ALL" and (args.out is None or args.landing_out is not None):
         rows = []
         for pid, f in sorted(facts.items()):
             a = r1["assignment"][pid]
