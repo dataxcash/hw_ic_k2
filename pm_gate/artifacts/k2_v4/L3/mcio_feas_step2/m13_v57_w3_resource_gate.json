@@ -80,9 +80,14 @@
  ],
  "informational_coarse_extent_overlap": 3,
  "insufficiency_basis": {
-  "gap": 1,
-  "layers_available": 2,
-  "layers_needed": 3
+  "minimal_core": [
+   [
+    "PCIE_DN7/out_MCIO#fcu_pad/N",
+    "PCIE_UP7/input#fcu_pad/N"
+   ]
+  ],
+  "same_layer_crossings": 1,
+  "structural_reason": "intended construction (signal-layer-only intent, band layer rule, polarity same-side, adaptive step) still leaves same-layer crossings"
  },
  "lane_capacity": {
   "available": {
@@ -112,12 +117,12 @@
   "B.Cu",
   "In2.Cu"
  ],
- "verdict": "SUFFICIENT",
+ "verdict": "UPSTREAM_CHANGE_REQUEST",
  "verification_check": {
   "capacity_ok": true,
   "closed_form": "SUFFICIENT iff same_layer_crossings == 0 and capacity ok",
   "crossings_by_class": {
-   "r1_5": 0,
+   "r1_5": 1,
    "stub": 0
   },
   "overlaps_by_class": {
@@ -126,6 +131,6 @@
   },
   "r1_assigned": 32,
   "r1_required": 32,
-  "same_layer_crossings": 0
+  "same_layer_crossings": 1
  }
 }

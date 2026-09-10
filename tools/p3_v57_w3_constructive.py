@@ -36,7 +36,7 @@ F = {
     "r3_gaps": STEP2 / "m13_v57_f8_r3_gap_candidates_r3x2.json",   # ROOT-16 A (versioned domain rev)
     "f6b_report": STEP2 / "m13_v57_f6b_report.json",
     "verdict": STEP2 / "m13_v57_s1_r1_via_verdict_r2.json",
-    "card": STEP2 / "m13_v57_w3_kickoff_card_v1_26.md",   # ROOT-16 contract revision
+    "card": STEP2 / "m13_v57_w3_kickoff_card_v1_27.md",   # ROOT-16 contract revision
     "layer_intent": STEP2 / "m13_v57_layer_intent_rev4.json",
     "coherent_rows": STEP2 / "m13_v57_f13_r3_coherent_rows.json",
 }
@@ -52,13 +52,13 @@ FROZEN_SHA = {
     "f6b_report": "9070ed53f970f480e88b1de3aa19792f8b637de51857935fa6b7c51fa8a015d6",
     "verdict": "f2e2632506457e31c145b491284c9ecbf1cb72cc09d96ccdfb3251ef80a5556a",
     "coherent_rows": "014a14b317e1c3df3d4400d45d6877ffc81f4ca92d533da4c7c7e4af67319c9a",
-    "card": "318e4c57d5eadd37dcee4d49cc8ecd581d86f09dcbe301e5f6c0ad7b1a77e767",
+    "card": "ee7b9d42e01458aa649ed4ed716955928de560a00087413a39362a361b9f59d3",
     "layer_intent": "994363267baca54da9658283f21856a1bf2194b123a8de91f262c767edc35491",
 }
 OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
 OUT_LANDING = STEP2 / "m13_v57_w3_chip_landing_rows.json"
 
-REVISION = "W3-CN.16"
+REVISION = "W3-CN.18"
 SCHEMA = 1
 STEP = 1.46
 LANE_LO = 33.3
@@ -188,7 +188,7 @@ def pol_off(f: dict, pol: str) -> float:
 
 
 def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict, coherent: dict = None,
-             lanes: dict = None) -> dict:
+             lanes: dict = None, r3: dict = None) -> dict:
     """R1 逐帧混合（W3-C18）：帧的 (P,N) 相干集**非空** ⇒ 共线行构造（该帧 R1.5 交叉→0）；
     否则 ⇒ 基线吸附（不退化）。两法均为闭式/单遍 argmin，无试错/回溯。"""
     out, certs = {}, []
@@ -305,16 +305,29 @@ def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict, coherent: d
     # (3) against the OTHER already-placed pages.  Index rebuilt once per page (O(n) per page, tiny),
     # candidate checks O(1) => total wall linear in the page count.  Closed-form, single pass.
     def _mk_index(_exclude):
+        """Index EVERY via of the other placed pages (via1/corner/drop/land) for via-via clearance."""
         _vb, _esc = {}, {}
+
+        def _vbadd(_x, _y):
+            _vb.setdefault(int(float(_x) * 2.0), []).append((float(_x), float(_y)))
+
         for _q, _a in _placed.items():
             if _q == _exclude:
                 continue
+            _fq = facts[_q]
             for _pol, _xy in (("P", _a[0]), ("N", _a[1])):
                 _x, _y = _xy
-                _vb.setdefault(int(_x * 2.0), []).append((float(_x), float(_y)))
-                if lanes is not None:
-                    _ly = fp(lanes[_q]["lane_y"] + pol_off(facts[_q], _pol))
-                    _esc.setdefault(round(float(_x), 3), []).append((min(_y, _ly), max(_y, _ly)))
+                _vbadd(_x, _y)
+                if lanes is None:
+                    continue
+                _ly = fp(lanes[_q]["lane_y"] + pol_off(_fq, _pol))
+                _esc.setdefault(round(float(_x), 3), []).append((min(_y, _ly), max(_y, _ly)))
+                _vbadd(_x, _ly)                                     # corner via
+                if r3 is not None:
+                    _ra = r3["assignment"].get(_fq["conn_ref"] + "|" + _fq["nets"][_pol])
+                    if _ra is not None:
+                        _vbadd(_ra["column_x"], _ly)                # drop via
+                        _vbadd(_ra["column_x"], _ra["landing"][1])  # land via
         return _vb, _esc
 
     def _vb_clear(_vb, _x, _y):
@@ -348,6 +361,38 @@ def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict, coherent: d
             _px = float(_rr[0]); _nx = float(_rr[1]); _py = float(_rr[2]); _ny = float(_rr[3]); _dd = float(_rr[4])
             if _dd < VIA_VIA - TOL or abs(_px - _nx) < STAGGER - TOL:
                 continue
+            # ROOT-17: FULL via set (via1/corner/drop/land, B.Cu lanes shared) must keep >=0.525
+            # inter-net clearance (extends A-CN.1b from R1 vias to every emitted via).
+            if lanes is not None and r3 is not None:
+                _va = []
+                for _pol, _vx, _vy in (("P", _px, _py), ("N", _nx, _ny)):
+                    _ly = fp(lanes[_pid]["lane_y"] + pol_off(_f, _pol))
+                    _ra = r3["assignment"].get(_f["conn_ref"] + "|" + _f["nets"][_pol])
+                    if _ra is None:
+                        _va = None
+                        break
+                    _lx, _lyl = _ra["column_x"], _ra["landing"][1]
+                    _va.append((_pol, _vx, _vy)); _va.append((_pol, _vx, _ly))
+                    _va.append((_pol, _lx, _ly)); _va.append((_pol, _lx, _lyl))
+                if _va is None:
+                    continue
+                _ok = True
+                for _i in range(len(_va)):
+                    for _j2 in range(_i + 1, len(_va)):
+                        if _va[_i][0] == _va[_j2][0]:
+                            continue                      # same net (same polarity): exempt
+                        if (_va[_i][1] - _va[_j2][1]) ** 2 + (_va[_i][2] - _va[_j2][2]) ** 2 < (VIA_VIA - TOL) ** 2:
+                            _ok = False
+                            break
+                    if not _ok:
+                        break
+                if _ok:
+                    for _, _vx2, _vy2 in _va:
+                        if not _vb_clear(_vb, _vx2, _vy2):
+                            _ok = False
+                            break
+                if not _ok:
+                    continue
             if lanes is not None:
                 _lyp = fp(lanes[_pid]["lane_y"] + pol_off(_f, "P"))
                 _lyn = fp(lanes[_pid]["lane_y"] + pol_off(_f, "N"))
@@ -754,8 +799,8 @@ def main(argv=None) -> int:
     _coh = dict(j.get("coherent_rows") or {})
     _pd2 = STEP2 / "m13_v57_f13_r1_pair_coupling_v1_2.json"
     _coh["pair_domain"] = json.load(_pd2.open())["pages"] if _pd2.exists() else {}
-    r1 = r1_place(facts, frs, j["pair_xorder"], j["verdict"], _coh, lanes)
-    r3 = r3_place(j["r3_gaps"], lanes, args.r3_order)
+    r3 = r3_place(j["r3_gaps"], lanes, args.r3_order)   # ROOT-17: r3 first (r1 needs the landings)
+    r1 = r1_place(facts, frs, j["pair_xorder"], j["verdict"], _coh, lanes, r3)
     rfc = refclk_place(j["manifest"], j["w0r_model"])
 
     # ---- R1.5 single straight segment (via1 -> (entry_x, lane_y +/- POL_OFF))
