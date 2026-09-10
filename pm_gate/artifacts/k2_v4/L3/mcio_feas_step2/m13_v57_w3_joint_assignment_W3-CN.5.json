@@ -2,9 +2,9 @@
  "artifact": "m13_v57_w3_joint_assignment",
  "certificates": [],
  "contract": {
-  "card_md": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_kickoff_card_v1_7.md",
+  "card_md": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_kickoff_card_v1_8.md",
   "id": "W3-C4",
-  "sha256": "b44de1e3f6fe24df3cd24c2d84596a23bd8c4289d0137ab140ce1bee9423f159"
+  "sha256": "9a758abe2bd248748d5d9497d9d271c264149c4642d1de0f45f15bacc0d55f7a"
  },
  "landing_rows": null,
  "landing_rows_status": "NOT_REEMITTED",
@@ -12,7 +12,7 @@
  "note": "W3-C4 门：上游资源不足，未进入 R1/R1.5 求解（天条：发现上游问题立即停机回上层）",
  "pages": [],
  "resource_gate": {
-  "closed_form": "verdict = SUFFICIENT iff peak(fan y-extent overlap in chip-zone x) <= |transition_eligible_layers| and lanes_needed <= lanes_avail",
+  "closed_form": "SUFFICIENT iff same_layer_crossings == 0 and lanes_needed <= lanes_avail",
   "fan_groups": [
    {
     "fan_y_extent": [
@@ -91,6 +91,7 @@
     ]
    }
   ],
+  "informational_coarse_extent_overlap": 3,
   "insufficiency_basis": {
    "minimal_core": [
     [
@@ -143,7 +144,8 @@
    "In4.Cu": "power_plane(P3V3, spec)"
   },
   "producer": "k2/tools/p3_v57_w3_constructive.py:resource_gate",
-  "rule": "available transition-eligible signal layers x corridor/band fan capacity vs demand",
+  "r1_5_shape": "straight",
+  "rule": "R-23 verification-based: construct with the intent layers, count SAME-LAYER crossings",
   "transition_eligible_layers": [
    "B.Cu",
    "In2.Cu"

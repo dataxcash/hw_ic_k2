@@ -1,5 +1,5 @@
 {
- "closed_form": "verdict = SUFFICIENT iff peak(fan y-extent overlap in chip-zone x) <= |transition_eligible_layers| and lanes_needed <= lanes_avail",
+ "closed_form": "SUFFICIENT iff same_layer_crossings == 0 and lanes_needed <= lanes_avail",
  "fan_groups": [
   {
    "fan_y_extent": [
@@ -78,6 +78,7 @@
    ]
   }
  ],
+ "informational_coarse_extent_overlap": 3,
  "insufficiency_basis": {
   "minimal_core": [
    [
@@ -130,7 +131,8 @@
   "In4.Cu": "power_plane(P3V3, spec)"
  },
  "producer": "k2/tools/p3_v57_w3_constructive.py:resource_gate",
- "rule": "available transition-eligible signal layers x corridor/band fan capacity vs demand",
+ "r1_5_shape": "straight",
+ "rule": "R-23 verification-based: construct with the intent layers, count SAME-LAYER crossings",
  "transition_eligible_layers": [
   "B.Cu",
   "In2.Cu"

@@ -36,8 +36,8 @@ F = {
     "r3_gaps": STEP2 / "m13_v57_f8_r3_gap_candidates.json",
     "f6b_report": STEP2 / "m13_v57_f6b_report.json",
     "verdict": STEP2 / "m13_v57_s1_r1_via_verdict.json",
-    "card": STEP2 / "m13_v57_w3_kickoff_card_v1_7.md",
-    "layer_intent": STEP2 / "m13_v57_layer_intent_rev2.json",
+    "card": STEP2 / "m13_v57_w3_kickoff_card_v1_8.md",
+    "layer_intent": STEP2 / "m13_v57_layer_intent_rev4.json",
 }
 FROZEN_SHA = {
     "spec": "0bd52ed48e720b8cb6a7869379f6c0a220f3e141e1514ab159f9f5f3b8b02233",
@@ -50,8 +50,8 @@ FROZEN_SHA = {
     "r3_gaps": "8a31632907b171483cd40a053231c702e378f944af33f92598a6141bd052cdeb",
     "f6b_report": "9070ed53f970f480e88b1de3aa19792f8b637de51857935fa6b7c51fa8a015d6",
     "verdict": "2a3c8cf465c0ac1f808c1fdf7409725ab04862e4a8002f7ff71cfa299770bb5b",
-    "card": "b44de1e3f6fe24df3cd24c2d84596a23bd8c4289d0137ab140ce1bee9423f159",
-    "layer_intent": "7253739321d9dd6f3fe2beeecadc88f56185f199705129c43c2cf0d10f2a05f6",
+    "card": "9a758abe2bd248748d5d9497d9d271c264149c4642d1de0f45f15bacc0d55f7a",
+    "layer_intent": "994363267baca54da9658283f21856a1bf2194b123a8de91f262c767edc35491",
 }
 OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
 OUT_LANDING = STEP2 / "m13_v57_w3_chip_landing_rows.json"
@@ -516,25 +516,24 @@ def emit_gate_artifacts(gate: dict, args) -> None:
     blob = json.dumps(sanitize(doc), indent=1, ensure_ascii=False, sort_keys=True)
     out.write_text(blob, encoding="utf-8")
     (STEP2 / ("m13_v57_w3_joint_assignment_" + REVISION + ".json")).write_text(blob, encoding="utf-8")
-    cr.write_text(chr(10).join([
-        "# 上游变更请求卡 — W3 层意图资源不足（W3-C4）", "",
-        "> 触发：`m13_v57_w3_resource_gate` verdict = UPSTREAM_CHANGE_REQUEST（闭式门）。",
-        "> 语义：CERTIFICATE/门失败 = **升级触发器**，不是终点；本卡即升级件。", "",
-        "## 门实测（闭式）", "```json",
-        json.dumps(gate, ensure_ascii=False, indent=1), "```", "",
-        "## 待 L2 裁决的层意图项（每项附闭式依据）",
-        "1. **In4.Cu 可否作信号层**：当前 SPEC 记 In4 为电源分区；若放行，可用过渡层 2→3，",
-        "   闭式依据：`peak(fan y-extent overlap) <= |transition_eligible_layers|`。",
-        "2. **no_90deg 是否放宽**：若放宽，R1.5 可走确定性通道化折线（新增 R1.5 资源层字段），",
-        "   闭式依据：折线通道互斥谓词（同层同 y 通道唯一占用）。",
-        "3. **lane 序可否改**：若允许按源序排 lane，chip 侧扇面可直接对齐，",
-        "   闭式依据：`sign(src_y_a - src_y_b) == sign(lane_y_a - lane_y_b) forall a,b`。",
-        "4. **R1 x 序准入约束**（hatch ①，已在 v1.1 域内）：若需全局单调 x，须放宽 ±1.5mm 逃逸域。",
-        "",
-        "## 当前层意图结论", "- 可用过渡层：" + ", ".join(gate["transition_eligible_layers"]),
-        "- 层需求（扇面 y 重叠峰值）：" + str(gate["layer_demand_peak_overlap"]),
-        "- 判定：" + gate["verdict"],
-        ""]) , encoding="utf-8")
+    rej = ["In4.Cu as signal layer - REJECTED (spec: In4 = power plane P3V3; In2 = the only internal signal layer; PD/SI red line; measured regression 29/32 -> 8/32)"]
+    levers = ["lane order by source - WITHDRAWN (equals card v1.3 R-8 closed-form infeasibility proof)",
+              "no_90deg channelized polyline - MEASURED worse (319 > 264) -> rolled back",
+              "per-frame adaptive step - MEASURED neutral on this geometry",
+              "R1 escape-domain widening - UPSTREAM ONLY"]
+    cr.write_text("\n".join([
+        "# Upstream change request (engine-generated, W3-C7)", "",
+        "> Semantics: UPSTREAM_CHANGE_REQUEST / CERTIFICATE = escalation trigger, not an endpoint.",
+        "> Gate criterion: " + str(gate.get("closed_form")), "",
+        "## Rejected (do not re-propose)"] + ["- " + x for x in rej] + [
+        "", "## Legal levers (signal-layer routing/topology only) + measured status"]
+        + ["- " + x for x in levers] + [
+        "", "## Gate measurement (verification-based, R-23)", "```json",
+        json.dumps(gate.get("verification_check"), ensure_ascii=False, indent=1), "```",
+        "", "## Next", "All in-layer legal levers measured neutral-or-worse => remaining options are "
+        "UPSTREAM: (a) R1 escape domain widening, (b) F-5 frame/lane order revision, "
+        "(c) connector/ball re-mapping, or (d) provide a GLOBAL infeasibility proof."]),
+        encoding="utf-8")
     if not args.quiet:
         print("W3-C4 GATE:", gate["verdict"], "| demand", gate["layer_demand_peak_overlap"],
               "| available", len(gate["transition_eligible_layers"]), "| change-request ->", cr)
@@ -632,6 +631,7 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--enum-order", choices=["natural", "reverse", "hash"], default="natural")
     ap.add_argument("--scale", type=int, default=1)
+    ap.add_argument("--r1-5-shape", default=None)
     ap.add_argument("--out", default=None)
     ap.add_argument("--landing-out", default=None)
     ap.add_argument("--quiet", action="store_true")
@@ -661,6 +661,11 @@ def main(argv=None) -> int:
 
     # ---- R1.5 single straight segment (via1 -> (entry_x, lane_y +/- POL_OFF))
     paths, r15 = {}, {}
+    shape = args.r1_5_shape or j["layer_intent"].get("r1_5_shape", "straight")
+    band_index = {}
+    for fr in frs:
+        for pi in range(len(fr["pages"])):
+            band_index[fr["pages"][pi]] = pi
     for pid, f in facts.items():
         cid = f["corridor"]
         entry = CORRIDOR[cid]["bounds"][0] if cid == "EAST_CHIP_TO_J2" else CORRIDOR[cid]["bounds"][1]
@@ -672,8 +677,14 @@ def main(argv=None) -> int:
             r15[(pid, pol)] = [tgt[0], tgt[1]]
             if a:
                 src = a[pol + "_via"]
-                paths[(pid, pol)] = [glayer[f["corridor"] + "/" + f["band"]],
-                                  [[src[0], src[1]], [tgt[0], tgt[1]]]]
+                lay = glayer[f["corridor"] + "/" + f["band"]]
+                if shape == "channelized":
+                    col = fp(src[0] + (1.0 if cid == "EAST_CHIP_TO_J2" else -1.0)
+                             * (0.6 + 0.6 * (band_index.get(pid, 0) % 2)))
+                    paths[(pid, pol)] = [lay, [[src[0], src[1]], [col, src[1]],
+                                               [col, tgt[1]], [tgt[0], tgt[1]]]]
+                else:
+                    paths[(pid, pol)] = [lay, [[src[0], src[1]], [tgt[0], tgt[1]]]]
         r15[pid] = {"entry_x": fp(entry), "lane_entry_y": fp(lanes[pid]["lane_y"]),
                     "segments": 1, "corners_deg": [], "no_via": True,
                     "layer": glayer[f["corridor"] + "/" + f["band"]]}
@@ -779,6 +790,10 @@ def main(argv=None) -> int:
         ("A-CN.5b", "REFCLK 页间 >= 1.46", "True", str(rf_sep), rf_sep),
         ("A-CN.method", "work_units == a*n+b", str(expected_work), str(WORK[0]), formula_ok),
     ]
+    gate["rule"] = ("R-23 verification-based: construct with the intent layers, count SAME-LAYER crossings")
+    gate["closed_form"] = "SUFFICIENT iff same_layer_crossings == 0 and lanes_needed <= lanes_avail"
+    gate["r1_5_shape"] = shape
+    gate["informational_coarse_extent_overlap"] = gate.get("layer_demand_peak_overlap")
     gate["verification_check"] = {"same_layer_crossings": crossings,
                                   "r1_assigned": len(r1["assignment"]),
                                   "r1_required": len(facts),

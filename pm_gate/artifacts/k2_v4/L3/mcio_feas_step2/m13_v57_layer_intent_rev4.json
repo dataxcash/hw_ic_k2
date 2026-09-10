@@ -1,0 +1,52 @@
+{
+ "artifact": "m13_v57_layer_intent",
+ "authority": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_kickoff_card_v1_8.md",
+ "authorization_source": "supervision work order W3-C7",
+ "closed_form": "gate = verification-based: construct with intent layers; SUFFICIENT iff same-layer crossings == 0",
+ "frozen_sources_untouched": true,
+ "layer_intent": {
+  "B.Cu": "transition_eligible",
+  "F.Cu": "stub_only",
+  "In1.Cu": "gnd_plane",
+  "In2.Cu": "transition_eligible",
+  "In3.Cu": "gnd_plane",
+  "In4.Cu": "power_plane(P3V3, spec)"
+ },
+ "legal_rule_levers": [
+  "no_90deg_channelized_polyline",
+  "lane_order_by_source",
+  "r1_polarity_same_side",
+  "per_frame_adaptive_step"
+ ],
+ "lever_evaluation": [
+  {
+   "lever": "lane_order_by_source",
+   "result": "WITHDRAWN equal to card v1.3 R-8 closed-form ③ (proved infeasible)"
+  },
+  {
+   "lever": "no_90deg_channelized_polyline",
+   "result": "MEASURED 319 same-layer crossings > 264 -> ROLLED BACK"
+  },
+  {
+   "lever": "per_frame_adaptive_step",
+   "result": "MEASURED neutral on this geometry"
+  },
+  {
+   "lever": "r1_escape_domain_widening",
+   "result": "UPSTREAM ONLY (not in-layer)"
+  }
+ ],
+ "r1_5_shape": "straight",
+ "revision": "REV4",
+ "ruling": "REV2: signal-layer-only intent. Plane layers (In1/In3/In4) must NOT be used for signals. Transition-eligible = [In2.Cu, B.Cu]. Rule changes (routing topology) are the only legal lever.",
+ "schema": 1,
+ "stackup_unchanged": true,
+ "supersedes": {
+  "reason": "channelized polyline measured WORSE (319 > 264) -> rolled back (C6-3)",
+  "revision": "REV3"
+ },
+ "transition_eligible_layers": [
+  "In2.Cu",
+  "B.Cu"
+ ]
+}
