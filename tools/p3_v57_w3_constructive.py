@@ -36,7 +36,7 @@ F = {
     "r3_gaps": STEP2 / "m13_v57_f8_r3_gap_candidates.json",
     "f6b_report": STEP2 / "m13_v57_f6b_report.json",
     "verdict": STEP2 / "m13_v57_s1_r1_via_verdict.json",
-    "card": STEP2 / "m13_v57_w3_kickoff_card_v1_2.md",
+    "card": STEP2 / "m13_v57_w3_kickoff_card_v1_3.md",
 }
 FROZEN_SHA = {
     "spec": "0bd52ed48e720b8cb6a7869379f6c0a220f3e141e1514ab159f9f5f3b8b02233",
@@ -49,12 +49,12 @@ FROZEN_SHA = {
     "r3_gaps": "8a31632907b171483cd40a053231c702e378f944af33f92598a6141bd052cdeb",
     "f6b_report": "9070ed53f970f480e88b1de3aa19792f8b637de51857935fa6b7c51fa8a015d6",
     "verdict": "2a3c8cf465c0ac1f808c1fdf7409725ab04862e4a8002f7ff71cfa299770bb5b",
-    "card": "78a96a7fc4daaa9f700dc9852d2e8114e7a214afc249cee1e587a8f719108f15",
+    "card": "6ad141c1c4e99518739ba035ba88ad3f245d072f7536c3533fa8a3c2ad9cda11",
 }
 OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
 OUT_LANDING = STEP2 / "m13_v57_w3_chip_landing_rows.json"
 
-REVISION = "W3-CN.1"
+REVISION = "W3-CN.2"
 SCHEMA = 1
 STEP = 1.46
 LANE_LO = 33.3
@@ -63,12 +63,13 @@ N_USED = 16
 REACH = 45.4
 VIA_VIA = 0.525
 STAGGER = 0.38
-MIN_XSTEP = 0.6
+MIN_XSTEP = 1.2
 SLOT_SEP = 0.6
 GRID = 0.05
 R3_OFF = -0.3
 R3_STEP = 0.6
 POL_OFF = 0.19
+LAYER_BY_BAND = {"up": "In2.Cu", "dn": "B.Cu"}
 TOL = 1e-9
 SUPERSEDED = {"artifact": "m13_v57_w3_joint_assignment.json", "revision": "W3-JA.2",
                "sha256": "d081618c7b961d770c8e2f180f93b92125b316bc0eeec181f9d1d191a0ee6acc",
@@ -343,11 +344,12 @@ def refclk_place(manifest: dict, w0r: dict) -> dict:
     pw = w0r["refclk_passage_witness"]
     eu = pw["transition_columns"]["east_rise"]["x_centre_range"]
     rise_x = fp(eu[0] + 0.5)
-    chan = pw["per_page"]["PCIE_REFCLK1/input"]["alternative_windows_same_side"][0]
+    chan = pw["per_page"]["PCIE_REFCLK1/input"]["alternative_windows_same_side"][0]  # base-id lookup
     out = {}
     for pg in sorted([p for p in manifest["pages"] if p["kind"] != "data"],
                      key=lambda p: p["page_id"]):
         pid = pg["page_id"]
+        base_pid = pid.split("#")[0]
         a1 = [fp(pg["anchors"]["conn"]["P"]["pad_global"][0]),
               fp(pg["anchors"]["conn"]["P"]["pad_global"][1])]
         a2 = [fp(pg["anchors"]["conn2"]["P"]["pad_global"][0]),
@@ -371,8 +373,8 @@ def refclk_place(manifest: dict, w0r: dict) -> dict:
                     "crossing_y_from_witness": crossing_y if crossing_y != j2[1] else None,
                     "path": path,
                     "witness": {"source": "W0-R refclk_passage_witness",
-                                "kind": pw["per_page"][pid]["kind"],
-                                "status": pw["per_page"][pid]["status"]},
+                                "kind": pw["per_page"][base_pid]["kind"],
+                                "status": pw["per_page"][base_pid]["status"]},
                     "pad_field_transit": "delegated to connector side (W2/R3-R4), per witness note"}
     return out
 
@@ -399,11 +401,14 @@ def seg_cross(p, q, r, s) -> int:
 
 
 def count_crossings(paths: dict) -> int:
+    """仅统计**同层**段对交叉（跨层由层分配规则保证隔离）。"""
     n = 0
     ids = sorted(paths)
     for a in range(len(ids)):
         for b in range(a + 1, len(ids)):
-            pa, pb = paths[ids[a]], paths[ids[b]]
+            if paths[ids[a]][0] != paths[ids[b]][0]:
+                continue
+            pa, pb = paths[ids[a]][1], paths[ids[b]][1]
             for s1 in zip(pa, pa[1:]):
                 for s2 in zip(pb, pb[1:]):
                     n += seg_cross(s1[0], s1[1], s2[0], s2[1])
@@ -448,12 +453,43 @@ def scale_probe(j: dict, base_facts: dict, args) -> int:
     r1 = r1_place(facts, frs, xorder, verdict)
     for pid in facts:
         bump(2, "r15_seg")
+    base_gaps = j["r3_gaps"]
+    rgaps = {"connectors": {}}
+    for c in range(args.scale):
+        for cref, cd in base_gaps["connectors"].items():
+            tgt = rgaps["connectors"].setdefault(cref + f"#c{c}", {"columns": {}})
+            for xc, col in cd["columns"].items():
+                tgt["columns"][xc] = json.loads(json.dumps(col))
+                for en in tgt["columns"][xc]["entries"]:
+                    en["net"] = en["net"] + f"#c{c}"
+    r3 = r3_place(rgaps)
+    base_manifest = j["manifest"]
+    rman = {"pages": []}
+    for c in range(args.scale):
+        for pg in base_manifest["pages"]:
+            if pg["kind"] == "data":
+                continue
+            g = json.loads(json.dumps(pg))
+            g["page_id"] = g["page_id"] + f"#c{c}"
+            for side in ("conn", "conn2"):
+                if side in g["anchors"]:
+                    for pol in ("P", "N"):
+                        a = g["anchors"][side].get(pol)
+                        if a:
+                            a["pad_global"] = [a["pad_global"][0] + 300.0 * c, a["pad_global"][1]]
+            rman["pages"].append(g)
+    w0r = json.loads(json.dumps(j["w0r_model"]))
+    for c in range(args.scale):
+        for kk, vv in list(w0r["refclk_passage_witness"]["per_page"].items()):
+            w0r["refclk_passage_witness"]["per_page"][kk + f"#c{c}"] = vv
+    rfc = refclk_place(rman, w0r)
     n_pages = len(facts)
     n_frames = len(frs)
-    closed = {"data_pages": n_pages, "frames": n_frames,
-              "formula": "11*n_pages + 3*n_frames (scale probe: R2+R1+R15+nodes per page, block per frame)",
-              "expected": 11 * n_pages + 3 * n_frames,
-              "per_page_rate": 11, "per_frame_rate": 3}
+    closed = {"data_pages": n_pages, "frames": n_frames, "landings": len(r3["assignment"]),
+              "refclk_pages": len(rfc),
+              "formula": "11*n_pages + 2*n_landing + 6*n_refclk + 3*n_frames (= K * 526)",
+              "expected": 11 * n_pages + 2 * len(r3["assignment"]) + 6 * len(rfc) + 3 * n_frames,
+              "per_copy": 526}
     doc = {"artifact": "m13_v57_w3_scale_probe", "schema": 1, "k": args.scale,
            "work_units": WORK[0], "closed_form": closed,
            "matches": WORK[0] == closed["expected"], "per_site": dict(BOOK),
@@ -504,15 +540,18 @@ def main(argv=None) -> int:
             r15[(pid, pol)] = [tgt[0], tgt[1]]
             if a:
                 src = a[pol + "_via"]
-                paths[(pid, pol)] = [[src[0], src[1]], [tgt[0], tgt[1]]]
+                paths[(pid, pol)] = [LAYER_BY_BAND[f["band"]], [[src[0], src[1]], [tgt[0], tgt[1]]]]
         r15[pid] = {"entry_x": fp(entry), "lane_entry_y": fp(lanes[pid]["lane_y"]),
-                    "segments": 1, "corners_deg": [], "no_via": True, "layer": "In2.Cu"}
+                    "segments": 1, "corners_deg": [], "no_via": True,
+                    "layer": LAYER_BY_BAND[f["band"]]}
     crossings = count_crossings(paths)
     cross_core = []
     ids_all = sorted(paths)
     for ai in range(len(ids_all)):
         for bi in range(ai + 1, len(ids_all)):
-            pa, pb = paths[ids_all[ai]], paths[ids_all[bi]]
+            if paths[ids_all[ai]][0] != paths[ids_all[bi]][0]:
+                continue
+            pa, pb = paths[ids_all[ai]][1], paths[ids_all[bi]][1]
             n = seg_cross(pa[0], pa[1], pb[0], pb[1])
             if n and len(cross_core) < 6:
                 cross_core.append([ids_all[ai][0] + "/" + ids_all[ai][1],
@@ -657,7 +696,7 @@ def main(argv=None) -> int:
                 "r1_5": r15.get(pid),
                 "r2": {"entry": [ent, fp(lanes[pid]["lane_y"] + pol_off(f, "P"))],
                        "exit": [ext, fp(lanes[pid]["lane_y"] + pol_off(f, "P"))],
-                       "layer": "In2.Cu", "pol_offset_mm": POL_OFF},
+                       "layer": LAYER_BY_BAND[f["band"]], "pol_offset_mm": POL_OFF},
                 "r3": None if not r3a else {"pad": r3a["pad"], "landing": r3a["landing"],
                                             "column_x": r3a["column_x"],
                                             "layer_chain": ["F.Cu", "In2.Cu", "F.Cu"]},
@@ -667,17 +706,18 @@ def main(argv=None) -> int:
                 off = pol_off(f, pol)
                 ly = fp(lanes[pid]["lane_y"] + off)
                 v1 = a[pol + "_via"]
+                lay = LAYER_BY_BAND[f["band"]]
                 page["nodes"][pol] = [
                     [f["pad"][pol][0], f["pad"][pol][1], "F.Cu"],
-                    [v1[0], v1[1], "F.Cu"], [v1[0], v1[1], "In2.Cu"],
-                    [ent, ly, "In2.Cu"], [ext, ly, "In2.Cu"],
-                    [ext, ly, "In2.Cu"], [ext, ly, "F.Cu"],
+                    [v1[0], v1[1], "F.Cu"], [v1[0], v1[1], lay],
+                    [ent, ly, lay], [ext, ly, lay],
+                    [ext, ly, lay], [ext, ly, "F.Cu"],
                     [r3a["landing"][0], r3a["landing"][1], "F.Cu"],
                     [f["conn_pad"][pol][0], f["conn_pad"][pol][1], "F.Cu"]]
                 page["vias"].append({"role": "via1", "pol": pol, "x": v1[0], "y": v1[1],
-                                     "layers": ["F.Cu", "In2.Cu"]})
+                                     "layers": ["F.Cu", lay]})
                 page["vias"].append({"role": "via2", "pol": pol, "x": ext, "y": ly,
-                                     "layers": ["In2.Cu", "F.Cu"]})
+                                     "layers": [lay, "F.Cu"]})
         pages_out.append(page)
     for pid, v in sorted(rfc.items()):
         pages_out.append({"page_id": pid, "kind": "refclk", "layer": "F.Cu", "refclk": v})
@@ -726,7 +766,8 @@ def main(argv=None) -> int:
             "reach_mode": "available_fanout_space(D0-4 rev)", "reach_avail_mm": REACH,
             "row_key": "(N.y+P.y)/2", "west_framing": "conn_ref frame + in-frame conn_x asc(F-5)",
             "x_order_scope": "frame = (corridor, conn_ref, band) [L2 approved 2026-09-10]",
-            "data_layer_chain": ["F.Cu", "In2.Cu", "F.Cu"], "max_vias_per_line": 2,
+            "data_layer_chain": ["F.Cu", "In2.Cu|B.Cu", "F.Cu"], "max_vias_per_line": 2,
+            "r1_5_layer_rule": "per band: up -> In2.Cu, dn -> B.Cu (L2 ruling 2026-09-10 #1)",
             "pair_rule": {"dist_min_mm": VIA_VIA, "stagger_min_mm": STAGGER},
         },
         "layers": {
@@ -739,7 +780,7 @@ def main(argv=None) -> int:
                                         for fr in frs}},
             "R1_5": {"status": "FEASIBLE" if crossings == 0 else "CERTIFICATE",
                      "segments_per_page_pol": 1, "corners_deg": 0, "no_via": True,
-                     "crossings": crossings,
+                     "layer_rule": LAYER_BY_BAND, "crossings_same_layer": crossings,
                      "planarity_basis": "monotone via-x within frame + lane blocks + ordered-line pairing"},
             "R2": {"status": "FEASIBLE",
                    "method": "frame_contiguous_blocks (closed-form base)",
@@ -793,13 +834,38 @@ def main(argv=None) -> int:
 
 
 def sanitize(o):
-    if isinstance(o, dict):
-        return {k: sanitize(v) for k, v in o.items()}
-    if isinstance(o, (list, tuple)):
-        return [sanitize(v) for v in o]
-    if isinstance(o, np.generic):
-        return o.item()
-    return o
+    """numpy 标量 -> 原生类型（显式队列 BFS，无自递归、无 while）。"""
+    root = None
+    queue = [(o, None, None)]
+    for cur, par, key in queue:
+        if isinstance(cur, dict):
+            new = {}
+            if par is None:
+                root = new
+            else:
+                par[key] = new
+            for k in cur:
+                v = cur[k]
+                if isinstance(v, (dict, list, tuple)):
+                    queue.append((v, new, k))
+                else:
+                    new[k] = v.item() if isinstance(v, np.generic) else v
+        elif isinstance(cur, (list, tuple)):
+            new = []
+            if par is None:
+                root = new
+            else:
+                par[key] = new
+            for i in range(len(cur)):
+                v = cur[i]
+                if isinstance(v, (dict, list, tuple)):
+                    queue.append((v, new, len(new)))
+                    new.append(None)
+                else:
+                    new.append(v.item() if isinstance(v, np.generic) else v)
+    if root is not None:
+        return root
+    return o.item() if isinstance(o, np.generic) else o
 
 
 if __name__ == "__main__":
