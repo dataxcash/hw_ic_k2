@@ -36,7 +36,8 @@ F = {
     "r3_gaps": STEP2 / "m13_v57_f8_r3_gap_candidates.json",
     "f6b_report": STEP2 / "m13_v57_f6b_report.json",
     "verdict": STEP2 / "m13_v57_s1_r1_via_verdict.json",
-    "card": STEP2 / "m13_v57_w3_kickoff_card_v1_4.md",
+    "card": STEP2 / "m13_v57_w3_kickoff_card_v1_5.md",
+    "layer_intent": STEP2 / "m13_v57_layer_intent_rev1.json",
 }
 FROZEN_SHA = {
     "spec": "0bd52ed48e720b8cb6a7869379f6c0a220f3e141e1514ab159f9f5f3b8b02233",
@@ -49,12 +50,13 @@ FROZEN_SHA = {
     "r3_gaps": "8a31632907b171483cd40a053231c702e378f944af33f92598a6141bd052cdeb",
     "f6b_report": "9070ed53f970f480e88b1de3aa19792f8b637de51857935fa6b7c51fa8a015d6",
     "verdict": "2a3c8cf465c0ac1f808c1fdf7409725ab04862e4a8002f7ff71cfa299770bb5b",
-    "card": "be15305cf76980bc057a2261d5938fd0018f29ec60dae33de31f8eb062861bb8",
+    "card": "b717f1c70192fd1c39688091bbf8cd2b1ad8df359adbac1f4ce07c75bb9552f2",
+    "layer_intent": "0c9e4dc00bec25e71e078208553c2627ea18b9dff9b58705f3d430bd9053e4f3",
 }
 OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
 OUT_LANDING = STEP2 / "m13_v57_w3_chip_landing_rows.json"
 
-REVISION = "W3-CN.3"
+REVISION = "W3-CN.4"
 SCHEMA = 1
 STEP = 1.46
 LANE_LO = 33.3
@@ -222,13 +224,16 @@ def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict) -> dict:
                     nok = [x for x in columns[px] if (x - px) * s > 0
                            and abs(x - px) >= SLOT_SEP - GRID - TOL]
                     nx = min(nok, key=lambda x: (abs(x - slot_n), x)) if nok else None
+                both = px is not None and nx is not None
                 ok_list = [
-                    prev["P"] is None or (px >= prev["P"] + s * (MIN_XSTEP - GRID) - TOL if s > 0
-                                          else px <= prev["P"] + s * (MIN_XSTEP - GRID) + TOL),
-                    prev["N"] is None or (nx >= prev["N"] - TOL if s > 0 else nx <= prev["N"] + TOL),
-                    px is not None and nx is not None,
-                    px is not None and nx is not None and abs(nx - px) >= STAGGER - TOL,
-                    px is not None and nx is not None and abs(nx - px) >= SLOT_SEP - GRID - TOL,
+                    both,
+                    both and (prev["P"] is None or (px >= prev["P"] + s * (MIN_XSTEP - GRID) - TOL
+                                                    if s > 0 else
+                                                    px <= prev["P"] + s * (MIN_XSTEP - GRID) + TOL)),
+                    both and (prev["N"] is None or (nx >= prev["N"] - TOL if s > 0
+                                                    else nx <= prev["N"] + TOL)),
+                    both and abs(nx - px) >= STAGGER - TOL,
+                    both and abs(nx - px) >= SLOT_SEP - GRID - TOL,
                 ]
                 if all(ok_list):
                     picked = (px, nx)
@@ -416,12 +421,11 @@ def count_crossings(paths: dict) -> int:
     return n
 
 
-def resource_gate(facts: dict, spec: dict, rules: dict) -> dict:
+def resource_gate(facts: dict, spec: dict, rules: dict, intent: dict) -> dict:
     """W3-C4 上游资源充分性门（闭式 O(n)，机器可判）：层意图资源 vs 需求。"""
     bump(4, "gate_layers")
-    signals = {"F.Cu": "stub_only", "In2.Cu": "transition_eligible",
-               "In4.Cu": "power_plane(spec)", "B.Cu": "transition_eligible"}
-    avail = sorted(k for k in signals if signals[k] == "transition_eligible")
+    signals = dict(intent["layer_intent"])
+    avail = sorted(intent["transition_eligible_layers"])
     # 每组 = (corridor, band)；源行来自 chip 锚；lane 区来自 v1.3 分段区意图
     _src = {}
     for _f in facts.values():
@@ -474,6 +478,25 @@ def resource_gate(facts: dict, spec: dict, rules: dict) -> dict:
                 "layers_needed": peak, "layers_available": len(avail),
                 "gap": peak - len(avail)},
             "producer": "k2/tools/p3_v57_w3_constructive.py:resource_gate"}
+
+
+def color_groups(rows: list, layers: list) -> dict:
+    """区间图贪心着色（按起点升序，取首个未被重叠组占用的层）；确定性、非搜索。"""
+    order = sorted(range(len(rows)), key=lambda i: (rows[i]["fan_y_extent"][0], rows[i]["group"]))
+    out = {}
+    for i in order:
+        used = set()
+        for j in order:
+            if j != i and out.get(rows[j]["group"]) is not None and overlap(
+                    rows[i]["fan_y_extent"], rows[j]["fan_y_extent"]):
+                used.add(out[rows[j]["group"]])
+        pick = [x for x in layers if x not in used]
+        out[rows[i]["group"]] = pick[0] if pick else None
+    return out
+
+
+def overlap(a: list, b: list) -> bool:
+    return min(a[1], b[1]) >= max(a[0], b[0])
 
 
 def emit_gate_artifacts(gate: dict, args) -> None:
@@ -620,11 +643,17 @@ def main(argv=None) -> int:
     facts = page_facts(j["manifest"], j["lane_frame"])
     if args.scale > 1:
         return scale_probe(j, facts, args)
-    gate = resource_gate(facts, j["spec"], j["rules"])
+    gate = resource_gate(facts, j["spec"], j["rules"], j["layer_intent"])
+    (STEP2 / "m13_v57_w3_resource_gate.json").write_text(
+        json.dumps(sanitize(gate), indent=1, ensure_ascii=False, sort_keys=True), encoding="utf-8")
     if gate["verdict"] != "SUFFICIENT":
         emit_gate_artifacts(gate, args)
         return 0
     bump(4 * len(facts), "nodes")
+    glayer = color_groups(gate["fan_groups"], list(gate["transition_eligible_layers"]))
+    (STEP2 / "m13_v57_w3_resource_gate.json").write_text(
+        json.dumps(sanitize(dict(gate, layer_assignment=glayer)), indent=1,
+                   ensure_ascii=False, sort_keys=True), encoding="utf-8")
     frs = frames_of(facts)
     lanes = r2_lanes(frs, facts)
     r1 = r1_place(facts, frs, j["pair_xorder"], j["verdict"])
@@ -644,10 +673,11 @@ def main(argv=None) -> int:
             r15[(pid, pol)] = [tgt[0], tgt[1]]
             if a:
                 src = a[pol + "_via"]
-                paths[(pid, pol)] = [LAYER_BY_BAND[f["band"]], [[src[0], src[1]], [tgt[0], tgt[1]]]]
+                paths[(pid, pol)] = [glayer[f["corridor"] + "/" + f["band"]],
+                                  [[src[0], src[1]], [tgt[0], tgt[1]]]]
         r15[pid] = {"entry_x": fp(entry), "lane_entry_y": fp(lanes[pid]["lane_y"]),
                     "segments": 1, "corners_deg": [], "no_via": True,
-                    "layer": LAYER_BY_BAND[f["band"]]}
+                    "layer": glayer[f["corridor"] + "/" + f["band"]]}
     crossings = count_crossings(paths)
     cross_core = []
     ids_all = sorted(paths)
@@ -731,7 +761,7 @@ def main(argv=None) -> int:
     n_pages = len(facts)
     n_land = len(r3["assignment"])
     n_frames = len(frs)
-    expected_work = 11 * n_pages + 2 * n_land + 6 * len(rfc) + 3 * n_frames
+    expected_work = 11 * n_pages + 2 * n_land + 6 * len(rfc) + 3 * n_frames + 8  # +8 = gate sites
     formula_ok = WORK[0] == expected_work
 
     checks = [
@@ -800,7 +830,7 @@ def main(argv=None) -> int:
                 "r1_5": r15.get(pid),
                 "r2": {"entry": [ent, fp(lanes[pid]["lane_y"] + pol_off(f, "P"))],
                        "exit": [ext, fp(lanes[pid]["lane_y"] + pol_off(f, "P"))],
-                       "layer": LAYER_BY_BAND[f["band"]], "pol_offset_mm": POL_OFF},
+                       "layer": glayer[f["corridor"] + "/" + f["band"]], "pol_offset_mm": POL_OFF},
                 "r3": None if not r3a else {"pad": r3a["pad"], "landing": r3a["landing"],
                                             "column_x": r3a["column_x"],
                                             "layer_chain": ["F.Cu", "In2.Cu", "F.Cu"]},
@@ -810,7 +840,7 @@ def main(argv=None) -> int:
                 off = pol_off(f, pol)
                 ly = fp(lanes[pid]["lane_y"] + off)
                 v1 = a[pol + "_via"]
-                lay = LAYER_BY_BAND[f["band"]]
+                lay = glayer[f["corridor"] + "/" + f["band"]]
                 page["nodes"][pol] = [
                     [f["pad"][pol][0], f["pad"][pol][1], "F.Cu"],
                     [v1[0], v1[1], "F.Cu"], [v1[0], v1[1], lay],
@@ -856,7 +886,7 @@ def main(argv=None) -> int:
                                 "detail": "R1: 1 primary + 1 correction; R1 popup y: k in {0,1}; "
                                           "R3: recurrence (no decision)"},
             "work_units": {"total": WORK[0],
-                           "formula": "11*n_pages + 2*n_landing + 6*n_refclk + 3*n_frames",
+                           "formula": "11*n_pages + 2*n_landing + 6*n_refclk + 3*n_frames + 8(gate)",
                            "expected": expected_work, "matches_formula": formula_ok,
                            "per_site": {k: BOOK[k] for k in sorted(BOOK)},
                            "n_pages": n_pages, "n_landing": n_land, "n_refclk": len(rfc),
@@ -884,7 +914,7 @@ def main(argv=None) -> int:
                                         for fr in frs}},
             "R1_5": {"status": "FEASIBLE" if crossings == 0 else "CERTIFICATE",
                      "segments_per_page_pol": 1, "corners_deg": 0, "no_via": True,
-                     "layer_rule": LAYER_BY_BAND, "crossings_same_layer": crossings,
+                     "layer_rule": glayer, "crossings_same_layer": crossings,
                      "planarity_basis": "monotone via-x within frame + lane blocks + ordered-line pairing"},
             "R2": {"status": "FEASIBLE",
                    "method": "frame_contiguous_blocks (closed-form base)",
@@ -909,8 +939,9 @@ def main(argv=None) -> int:
 
     out_main = Path(args.out) if args.out else OUT_MAIN
     doc = sanitize(doc)
-    out_main.write_text(json.dumps(doc, indent=1, ensure_ascii=False, sort_keys=True),
-                        encoding="utf-8")
+    blob = json.dumps(doc, indent=1, ensure_ascii=False, sort_keys=True)
+    out_main.write_text(blob, encoding="utf-8")
+    (STEP2 / ("m13_v57_w3_joint_assignment_" + REVISION + ".json")).write_text(blob, encoding="utf-8")
     if verdict == "FEASIBLE_ALL" and args.out is None:
         rows = []
         for pid, f in sorted(facts.items()):

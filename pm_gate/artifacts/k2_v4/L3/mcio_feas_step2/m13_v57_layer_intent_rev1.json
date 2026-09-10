@@ -1,0 +1,24 @@
+{
+ "artifact": "m13_v57_layer_intent",
+ "authority": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_d1_layer_intent_revision_card.md",
+ "closed_form": "verdict = SUFFICIENT iff D <= |transition_eligible_layers|",
+ "frozen_sources_untouched": true,
+ "layer_intent": {
+  "B.Cu": "transition_eligible",
+  "F.Cu": "stub_only",
+  "In1.Cu": "gnd_plane",
+  "In2.Cu": "transition_eligible",
+  "In3.Cu": "gnd_plane",
+  "In4.Cu": "transition_eligible"
+ },
+ "revision": "REV1",
+ "rollback": "withdraw card + this file -> back to A=2",
+ "ruling": "D1-1: In4.Cu admitted as transition signal layer (minimal change, D=3 <= A=3)",
+ "schema": 1,
+ "stackup_unchanged": true,
+ "transition_eligible_layers": [
+  "In2.Cu",
+  "In4.Cu",
+  "B.Cu"
+ ]
+}
