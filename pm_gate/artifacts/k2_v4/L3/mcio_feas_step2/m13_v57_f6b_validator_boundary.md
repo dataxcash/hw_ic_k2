@@ -127,3 +127,13 @@ double-end predicate as the small-n reference.
 是**真几何量**，已用于修订判据：可用 fan-out（走廊 45.4mm）≫ required → **全帧 FEASIBLE**。
 
 F-6b 的 `required_leg_mm` / `reachable_band_mm` / MUS 保留为**拥塞与逃逸代价指标**。
+
+## 重发记录（架构师，2026-09-10）
+
+- **起因**：commit `af31397` 原地修订 G3 v1.2（追加 §7 D0-4 修订），契约哈希
+  `128b0b97…` → `c8f380c1…`；本卡 `FROZEN_SHA["g3_v1_2"]` 未同步 → 重跑即 FAIL
+  （子代理"误改报告"实为正确报警）。
+- **处置**：`FROZEN_SHA["g3_v1_2"]` 更新为 `c8f380c1…`，重发本卡 → `verdict=PASS`，
+  报告钉 `c8f380c1…`（新报告 SHA `9070ed53…`）。`k=5` 行仍 F = 拥塞指标，非终判（D0-4 修订）。
+- **流程规则（教训）**：契约一经发布且被工件钉哈希，**修订必须版本 bump（新文件）**，
+  禁止原地改写；依赖方须同步重发。

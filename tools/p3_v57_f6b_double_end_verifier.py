@@ -76,7 +76,7 @@ FROZEN_SHA = {
     "w0r_model": "80ee9adb78a7e9ad94c27d426295592eee21af3d1e3ce88fe3042183160f0efa",
     "rules": "0a459839e15960b8fbfe0e1f5bb154a02b30cbafa1cbb0d56c2b810a71228448",
     "g3_v1_1": "232fda852ee8612be3f2bf2c4655d0aa716c408dfb71a8eb71df298b08c031ff",
-    "g3_v1_2": "128b0b97358d8980e1fecd66aa137b5b963c76cea9c4af78e71dc75e5cc85edb",
+    "g3_v1_2": "c8f380c184976fb5072e3afc6d47f25a5e6221de46c21aa67bd8cf1e20bd16b6",
     "d0_card": "a69cc7f5eedab2a19fa6ad5be55e100e1163da71d274ad540192d35b9bfdf79d",
 }
 
