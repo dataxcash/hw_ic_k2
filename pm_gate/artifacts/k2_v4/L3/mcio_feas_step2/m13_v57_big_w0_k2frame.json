@@ -1,0 +1,226 @@
+{
+ "artifact": "m13_v57_big_w0_k2frame",
+ "board_inner_y": [
+  33.3,
+  78.7
+ ],
+ "certificates": [
+  {
+   "corridor": "EAST_CHIP_TO_J2",
+   "j2_row": 45.9,
+   "kind": "refclk_band",
+   "page": "PCIE_REFCLK0/input",
+   "reason": "REFCLK J2 行落数据带行区, In2 无 ≥1.46 隔离位 → 缺 1 条独立路由资源"
+  },
+  {
+   "corridor": "EAST_CHIP_TO_J2",
+   "j2_row": 51.3,
+   "kind": "refclk_band",
+   "page": "PCIE_REFCLK1/input",
+   "reason": "REFCLK J2 行落数据带行区, In2 无 ≥1.46 隔离位 → 缺 1 条独立路由资源"
+  },
+  {
+   "corridor": "WEST_MCIO_TO_CHIP",
+   "j2_row": 45.9,
+   "kind": "refclk_band",
+   "page": "PCIE_REFCLK0/input",
+   "reason": "REFCLK J2 行落数据带行区, In2 无 ≥1.46 隔离位 → 缺 1 条独立路由资源"
+  },
+  {
+   "corridor": "WEST_MCIO_TO_CHIP",
+   "j2_row": 51.3,
+   "kind": "refclk_band",
+   "page": "PCIE_REFCLK1/input",
+   "reason": "REFCLK J2 行落数据带行区, In2 无 ≥1.46 隔离位 → 缺 1 条独立路由资源"
+  }
+ ],
+ "diff_vs_old_spec": {
+  "EAST_CHIP_TO_J2/dn": {
+   "new_tracks": [
+    54.28,
+    55.74,
+    57.2,
+    58.66,
+    60.12,
+    61.58,
+    63.04,
+    64.5
+   ],
+   "old_layer": "In2.Cu",
+   "old_layer_valid_6L": true,
+   "old_tracks": [
+    58.3,
+    59.5,
+    60.7,
+    61.9,
+    63.1,
+    64.3,
+    65.5,
+    66.7
+   ]
+  },
+  "EAST_CHIP_TO_J2/refclk": {
+   "new_tracks": null,
+   "old_layer": "In6.Cu",
+   "old_layer_valid_6L": false,
+   "old_tracks": [
+    45.7,
+    50.5
+   ]
+  },
+  "EAST_CHIP_TO_J2/up": {
+   "new_tracks": [
+    42.6,
+    44.06,
+    45.52,
+    46.98,
+    48.44,
+    49.9,
+    51.36,
+    52.82
+   ],
+   "old_layer": "In2.Cu",
+   "old_layer_valid_6L": true,
+   "old_tracks": [
+    40.3,
+    41.5,
+    42.7,
+    43.9,
+    45.1,
+    46.3,
+    47.5,
+    48.7
+   ]
+  },
+  "WEST_MCIO_TO_CHIP/dn": {
+   "new_tracks": [
+    51.23,
+    52.69,
+    54.15,
+    55.61,
+    57.07,
+    58.53,
+    59.99,
+    61.45
+   ],
+   "old_layer": "In2.Cu",
+   "old_layer_valid_6L": true,
+   "old_tracks": [
+    58.7,
+    59.9,
+    61.1,
+    62.3,
+    63.5,
+    64.7,
+    65.9,
+    67.1
+   ]
+  },
+  "WEST_MCIO_TO_CHIP/refclk": {
+   "new_tracks": null,
+   "old_layer": "In6.Cu",
+   "old_layer_valid_6L": false,
+   "old_tracks": [
+    45.7,
+    50.5
+   ]
+  },
+  "WEST_MCIO_TO_CHIP/up": {
+   "new_tracks": [
+    39.55,
+    41.01,
+    42.47,
+    43.93,
+    45.39,
+    46.85,
+    48.31,
+    49.77
+   ],
+   "old_layer": "In2.Cu",
+   "old_layer_valid_6L": true,
+   "old_tracks": [
+    40.7,
+    41.9,
+    43.1,
+    44.3,
+    45.5,
+    46.7,
+    47.9,
+    49.1
+   ]
+  }
+ },
+ "frames": {
+  "EAST_CHIP_TO_J2": {
+   "dn": [
+    54.28,
+    55.74,
+    57.2,
+    58.66,
+    60.12,
+    61.58,
+    63.04,
+    64.5
+   ],
+   "extend_north_mm": 0.3,
+   "gap_mm": 1.46,
+   "north_band": "up",
+   "reach": {
+    "budget_mm": 12.0,
+    "max_leg_mm": 10.22,
+    "north_max_row": 42.9,
+    "ok": true,
+    "south_min_row": 64.5
+   },
+   "up": [
+    42.6,
+    44.06,
+    45.52,
+    46.98,
+    48.44,
+    49.9,
+    51.36,
+    52.82
+   ]
+  },
+  "WEST_MCIO_TO_CHIP": {
+   "dn": [
+    51.23,
+    52.69,
+    54.15,
+    55.61,
+    57.07,
+    58.53,
+    59.99,
+    61.45
+   ],
+   "extend_north_mm": 3.7,
+   "gap_mm": 1.46,
+   "north_band": "up",
+   "reach": {
+    "budget_mm": 12.0,
+    "max_leg_mm": 10.22,
+    "north_max_row": 43.25,
+    "ok": true,
+    "south_min_row": 61.45
+   },
+   "up": [
+    39.55,
+    41.01,
+    42.47,
+    43.93,
+    45.39,
+    46.85,
+    48.31,
+    49.77
+   ]
+  }
+ },
+ "inputs_sha": {
+  "manifest": "87c4c97378ff"
+ },
+ "margin": 0.6,
+ "pitch": 1.46,
+ "predicate": "W0 真实 K2 lane 帧派生 + 证书 + 旧 SPEC 差异表",
+ "verdict": "FEASIBLE_DATA + REFCLK_CERT"
+}
