@@ -1,0 +1,920 @@
+{
+ "artifact": "m13_v57_root4_hop_plan",
+ "schema": 1,
+ "revision": "ROOT4.1",
+ "method": "single-pass deterministic: greedy 3-color -> same-layer crossing list -> greedy vertex cover -> per-cover-path take the 2 lowest-x crossings (fixed order) + joggle layer cycle (closed form, no search)",
+ "palette": [
+  "F.Cu",
+  "In2.Cu",
+  "B.Cu"
+ ],
+ "n_cover_paths": 45,
+ "n_planned_hops": 90,
+ "max_vias_per_line": "2 + 2*hops <= 5 (R-08)",
+ "plan": {
+  "('PCIE_DN0/input', 'N')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 91.6892,
+     "partner": "PCIE_DN1/input/P",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 92.2123,
+     "partner": "PCIE_DN2/input/N",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_DN0/out_MCIO', 'N')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 82.9928,
+     "partner": "PCIE_DN5/out_MCIO/N",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 83.0897,
+     "partner": "PCIE_DN5/out_MCIO/P",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_DN0/out_MCIO', 'P')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 82.685,
+     "partner": "PCIE_DN5/out_MCIO/N",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 82.7393,
+     "partner": "PCIE_DN5/out_MCIO/P",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_DN1/input', 'P')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 91.6892,
+     "partner": "PCIE_DN0/input/N",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 92.5739,
+     "partner": "PCIE_DN2/input/N",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_DN1/out_MCIO', 'N')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 82.8756,
+     "partner": "PCIE_UP0/input/N",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 83.5521,
+     "partner": "PCIE_UP0/input/P",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_DN1/out_MCIO', 'P')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 83.048,
+     "partner": "PCIE_UP0/input/N",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 83.2632,
+     "partner": "PCIE_DN5/out_MCIO/N",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_DN2/input', 'N')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 92.2123,
+     "partner": "PCIE_DN0/input/N",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 92.5739,
+     "partner": "PCIE_DN1/input/P",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_DN2/input', 'P')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 93.3166,
+     "partner": "PCIE_DN0/input/N",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 94.1019,
+     "partner": "PCIE_DN1/input/P",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_DN2/out_MCIO', 'N')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 82.6414,
+     "partner": "PCIE_UP0/input/N",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 82.9645,
+     "partner": "PCIE_UP0/input/P",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_DN2/out_MCIO', 'P')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 82.724,
+     "partner": "PCIE_UP0/input/N",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 83.2089,
+     "partner": "PCIE_UP0/input/P",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_DN3/input', 'N')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 93.6143,
+     "partner": "PCIE_DN0/input/N",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 94.1948,
+     "partner": "PCIE_DN1/input/P",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_DN3/input', 'P')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 94.3791,
+     "partner": "PCIE_DN0/input/N",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 95.0418,
+     "partner": "PCIE_DN1/input/P",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_DN3/out_MCIO', 'N')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 82.47,
+     "partner": "PCIE_UP0/input/N",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 82.6401,
+     "partner": "PCIE_UP0/input/P",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_DN5/input', 'N')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 96.3708,
+     "partner": "PCIE_DN6/input/N",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 96.6016,
+     "partner": "PCIE_DN0/input/N",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_DN5/input', 'P')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 96.0623,
+     "partner": "PCIE_DN0/input/N",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 96.5793,
+     "partner": "PCIE_DN1/input/P",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_DN5/out_MCIO', 'N')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 82.685,
+     "partner": "PCIE_DN0/out_MCIO/P",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 82.9928,
+     "partner": "PCIE_DN0/out_MCIO/N",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_DN5/out_MCIO', 'P')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 82.7393,
+     "partner": "PCIE_DN0/out_MCIO/P",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 83.0897,
+     "partner": "PCIE_DN0/out_MCIO/N",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_DN6/input', 'N')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 96.3708,
+     "partner": "PCIE_DN5/input/N",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 96.5725,
+     "partner": "PCIE_DN0/input/N",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_DN6/input', 'P')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 97.0806,
+     "partner": "PCIE_DN0/input/N",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 97.5131,
+     "partner": "PCIE_DN1/input/P",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_DN6/out_MCIO', 'N')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 82.8631,
+     "partner": "PCIE_DN0/out_MCIO/P",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 83.2554,
+     "partner": "PCIE_UP0/input/N",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_DN6/out_MCIO', 'P')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 82.9179,
+     "partner": "PCIE_DN0/out_MCIO/P",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 83.2976,
+     "partner": "PCIE_UP0/input/N",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_DN7/input', 'N')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 97.4596,
+     "partner": "PCIE_DN0/input/N",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 97.8479,
+     "partner": "PCIE_DN1/input/P",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_DN7/input', 'P')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 97.9365,
+     "partner": "PCIE_DN0/input/N",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 98.3141,
+     "partner": "PCIE_DN1/input/P",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_DN7/out_MCIO', 'N')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 83.0356,
+     "partner": "PCIE_DN0/out_MCIO/P",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 83.536,
+     "partner": "PCIE_DN0/out_MCIO/N",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_DN7/out_MCIO', 'P')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 83.091,
+     "partner": "PCIE_DN0/out_MCIO/P",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 83.6347,
+     "partner": "PCIE_DN0/out_MCIO/N",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_UP0/input', 'N')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 82.47,
+     "partner": "PCIE_DN3/out_MCIO/N",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 82.6414,
+     "partner": "PCIE_DN2/out_MCIO/N",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_UP0/input', 'P')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 82.6401,
+     "partner": "PCIE_DN3/out_MCIO/N",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 82.9645,
+     "partner": "PCIE_DN2/out_MCIO/N",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_UP0/out_J2', 'N')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 89.4956,
+     "partner": "PCIE_UP3/out_J2/N",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 90.6448,
+     "partner": "PCIE_UP4/out_J2/N",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_UP0/out_J2', 'P')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 90.9871,
+     "partner": "PCIE_UP3/out_J2/P",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 92.0843,
+     "partner": "PCIE_UP4/out_J2/P",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_UP3/out_J2', 'N')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 89.4956,
+     "partner": "PCIE_UP0/out_J2/N",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 93.2672,
+     "partner": "PCIE_UP4/out_J2/N",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_UP3/out_J2', 'P')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 90.9871,
+     "partner": "PCIE_UP0/out_J2/P",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 93.9109,
+     "partner": "PCIE_UP7/out_J2/N",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_UP4/input', 'N')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 83.2175,
+     "partner": "PCIE_DN0/out_MCIO/P",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 83.7788,
+     "partner": "PCIE_DN0/out_MCIO/N",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_UP4/input', 'P')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 83.1783,
+     "partner": "PCIE_DN0/out_MCIO/P",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 83.7236,
+     "partner": "PCIE_DN0/out_MCIO/N",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_UP4/out_J2', 'N')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 90.6448,
+     "partner": "PCIE_UP0/out_J2/N",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 93.2672,
+     "partner": "PCIE_UP3/out_J2/N",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_UP4/out_J2', 'P')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 92.0843,
+     "partner": "PCIE_UP0/out_J2/P",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 93.6983,
+     "partner": "PCIE_UP7/out_J2/N",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_UP5/input', 'N')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 83.3757,
+     "partner": "PCIE_DN0/out_MCIO/P",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 84.2645,
+     "partner": "PCIE_DN1/out_MCIO/P",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_UP5/input', 'P')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 83.3382,
+     "partner": "PCIE_DN0/out_MCIO/P",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 83.9602,
+     "partner": "PCIE_DN0/out_MCIO/N",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_UP5/out_J2', 'N')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 91.7941,
+     "partner": "PCIE_UP0/out_J2/N",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 94.2101,
+     "partner": "PCIE_UP3/out_J2/N",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_UP5/out_J2', 'P')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 93.1814,
+     "partner": "PCIE_UP0/out_J2/P",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 94.8475,
+     "partner": "PCIE_UP0/out_J2/N",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_UP6/out_J2', 'N')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 92.9433,
+     "partner": "PCIE_UP0/out_J2/N",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 95.153,
+     "partner": "PCIE_UP3/out_J2/N",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_UP6/out_J2', 'P')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 94.2786,
+     "partner": "PCIE_UP0/out_J2/P",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 95.492,
+     "partner": "PCIE_UP0/out_J2/N",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_UP7/input', 'N')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 89.5135,
+     "partner": "PCIE_DN7/out_MCIO/P",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 89.6022,
+     "partner": "PCIE_UP7/input/P",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_UP7/input', 'P')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 89.5192,
+     "partner": "PCIE_DN7/out_MCIO/P",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 89.6022,
+     "partner": "PCIE_UP7/input/N",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_UP7/out_J2', 'N')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 93.6983,
+     "partner": "PCIE_UP4/out_J2/P",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 93.9109,
+     "partner": "PCIE_UP3/out_J2/P",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  },
+  "('PCIE_UP7/out_J2', 'P')": {
+   "current_layer": "F.Cu",
+   "hops": [
+    {
+     "x": 95.3757,
+     "partner": "PCIE_UP0/out_J2/P",
+     "partner_namespace": "page/pol"
+    },
+    {
+     "x": 96.2666,
+     "partner": "PCIE_UP0/out_J2/N",
+     "partner_namespace": "page/pol"
+    }
+   ],
+   "joggle_layer": [
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "via_added": 4
+  }
+ },
+ "precheck": {
+  "joggle_halfwidth_mm": 0.3,
+  "note": "joggle = leave layer at x-0.3, run on joggle layer, return at x+0.3; checks required at implementation: via-via/via-pad DRC, no new same-layer crossings, no pad-field collision"
+ }
+}
