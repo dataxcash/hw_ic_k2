@@ -1,0 +1,383 @@
+{
+  "artifact": "m13_v57_f13_r1_param_trace_validation",
+  "checks": [
+    {
+      "assertion": "four frozen sha256 (SPEC/manifest/rules/verdict) recomputed and equal to FROZEN_SHA declared inside trace and pair_coupling; drift == []",
+      "expected": "all four 64-hex equal in trace.expected, trace.actual, pair.inputs_sha, pair.authority.verdict_sha256; match all true; drift []",
+      "id": "C1",
+      "observed": {
+        "pair_authority_verdict_sha256": "2a3c8cf465c0ac1f808c1fdf7409725ab04862e4a8002f7ff71cfa299770bb5b",
+        "pair_inputs_sha": {
+          "manifest": "a8ef3ea8ecff99d7549d4122043c972c1bb68346dc4dcc3f36fdd9bacde49890",
+          "rules": "0a459839e15960b8fbfe0e1f5bb154a02b30cbafa1cbb0d56c2b810a71228448",
+          "spec": "0bd52ed48e720b8cb6a7869379f6c0a220f3e141e1514ab159f9f5f3b8b02233",
+          "verdict": "2a3c8cf465c0ac1f808c1fdf7409725ab04862e4a8002f7ff71cfa299770bb5b"
+        },
+        "recomputed": {
+          "manifest": "a8ef3ea8ecff99d7549d4122043c972c1bb68346dc4dcc3f36fdd9bacde49890",
+          "rules": "0a459839e15960b8fbfe0e1f5bb154a02b30cbafa1cbb0d56c2b810a71228448",
+          "spec": "0bd52ed48e720b8cb6a7869379f6c0a220f3e141e1514ab159f9f5f3b8b02233",
+          "verdict": "2a3c8cf465c0ac1f808c1fdf7409725ab04862e4a8002f7ff71cfa299770bb5b"
+        },
+        "recomputed_drift": [],
+        "structural_ok": true,
+        "trace_actual": {
+          "manifest": "a8ef3ea8ecff99d7549d4122043c972c1bb68346dc4dcc3f36fdd9bacde49890",
+          "rules": "0a459839e15960b8fbfe0e1f5bb154a02b30cbafa1cbb0d56c2b810a71228448",
+          "spec": "0bd52ed48e720b8cb6a7869379f6c0a220f3e141e1514ab159f9f5f3b8b02233",
+          "verdict": "2a3c8cf465c0ac1f808c1fdf7409725ab04862e4a8002f7ff71cfa299770bb5b"
+        },
+        "trace_drift_field": [],
+        "trace_expected": {
+          "manifest": "a8ef3ea8ecff99d7549d4122043c972c1bb68346dc4dcc3f36fdd9bacde49890",
+          "rules": "0a459839e15960b8fbfe0e1f5bb154a02b30cbafa1cbb0d56c2b810a71228448",
+          "spec": "0bd52ed48e720b8cb6a7869379f6c0a220f3e141e1514ab159f9f5f3b8b02233",
+          "verdict": "2a3c8cf465c0ac1f808c1fdf7409725ab04862e4a8002f7ff71cfa299770bb5b"
+        },
+        "trace_match": {
+          "manifest": true,
+          "rules": true,
+          "spec": true,
+          "verdict": true
+        },
+        "trace_verdict_artifact_sha256": "2a3c8cf465c0ac1f808c1fdf7409725ab04862e4a8002f7ff71cfa299770bb5b"
+      },
+      "ok": true
+    },
+    {
+      "assertion": "re-derive parameter mapping from raw SPEC/rules: via_od, clr (POWER==0.2 >= PCIe85 0.175 >= board_min 0.1), via_via==0.35+0.175==0.525, col_pair_stagger_min 0.36/binding 0.38; all holds true; every source sha256+value correct",
+      "expected": "4/4 params hold; 0 source discrepancies",
+      "id": "C2",
+      "observed": {
+        "identities": [
+          {
+            "name": "via_od==0.35",
+            "ok": true
+          },
+          {
+            "name": "clr==POWER 0.2 >= PCIe85 0.175 >= board_min 0.1",
+            "ok": true
+          },
+          {
+            "name": "via_via==via_od+pcie_clr==0.525",
+            "ok": true
+          },
+          {
+            "name": "col_pair_stagger_min==0.36 and binding==max(0.36,p_gap+p_width)==0.38",
+            "ok": true
+          }
+        ],
+        "n_holds_true": 4,
+        "n_params": 4,
+        "params_found": [
+          "clr",
+          "col_pair_stagger_min",
+          "via_od",
+          "via_via"
+        ],
+        "problems": []
+      },
+      "ok": true
+    },
+    {
+      "assertion": "column-stagger caliber identities: 0.36-p_width==0.155 and (p_gap+p_width)-p_width==0.175, with p_width=0.205, p_gap=0.175 from SPEC PCIe85",
+      "expected": "0.36-0.205==0.155 and (0.175+0.205)-0.205==0.175; constraints 0.36/0.155/0.175 recorded",
+      "id": "C3",
+      "observed": {
+        "(0.175+0.205)-0.205": 0.17500000000000002,
+        "(0.175+0.205)-0.205==0.175": true,
+        "0.36-0.205": 0.155,
+        "0.36-0.205==0.155": true,
+        "p_gap": 0.175,
+        "p_width": 0.205,
+        "pair_constraints": {
+          "col_stagger_design_text_mm": 0.36,
+          "col_stagger_mm": 0.38,
+          "design_text_edge_clearance_mm": 0.155,
+          "dist_min_mm": 0.525,
+          "leg_edge_clearance_mm": 0.175
+        },
+        "trace_governing_constants_ok": true
+      },
+      "ok": true
+    },
+    {
+      "assertion": "recompute 32x3 pair-domain counts (n_pairs_dist_ok / admissible_stagger_036 / admissible_stagger_038) with own numpy implementation and compare exactly",
+      "expected": "32 pages x 3 counts identical to pair_coupling.pages[pid].pair_domain",
+      "id": "C4",
+      "observed": {
+        "constraints_ok": true,
+        "counts_per_page": 3,
+        "derived_constraints": {
+          "col_stagger_binding_mm": 0.38,
+          "col_stagger_design_text_mm": 0.36,
+          "dist_min_mm": 0.5249999999999999
+        },
+        "mismatches": [],
+        "pages_compared": 32
+      },
+      "ok": true
+    },
+    {
+      "assertion": "recompute pair_coupling.summary counts",
+      "expected": {
+        "n_pages": 32,
+        "n_pages_with_admissible_pair_stagger_036": 32,
+        "n_pages_with_admissible_pair_stagger_038": 32,
+        "n_verdict_pairs_stagger_036_ok": 16,
+        "n_verdict_pairs_total": 32
+      },
+      "id": "C4-summary",
+      "observed": {
+        "n_pages": 32,
+        "n_pages_with_admissible_pair_stagger_036": 32,
+        "n_pages_with_admissible_pair_stagger_038": 32,
+        "n_verdict_pairs_stagger_036_ok": 16,
+        "n_verdict_pairs_total": 32
+      },
+      "ok": true
+    },
+    {
+      "assertion": "every admissible_pair_witness satisfies dist>=0.525 AND |dx|>=0.38 and lies in the frozen cands lists (tolerance 1e-9)",
+      "expected": "32/32 witnesses valid; smallest coordinate tolerance margin reported",
+      "id": "C4-witness",
+      "observed": {
+        "problems": [],
+        "smallest_tolerance_margin": 0.0,
+        "tolerance": 1e-09,
+        "witnesses_checked": 32
+      },
+      "ok": true
+    },
+    {
+      "assertion": "verdict_pair P/N coordinates equal the frozen verdict page pair coordinates; derived dist/stagger flags recomputed",
+      "expected": "32/32 exact coordinate match and consistent dist_ok/stagger_ok flags",
+      "id": "C4-verdictpair",
+      "observed": {
+        "pairs_checked": 32,
+        "problems": [],
+        "recomputed_stagger_ok_038": 16,
+        "summary_stagger_036_ok": 16
+      },
+      "ok": true
+    },
+    {
+      "assertion": "frozen derived fields dist_hist_mm / dist_min_mm / dist_max_mm / x_columns_P/N recomputed",
+      "expected": "all 32 pages consistent (dist_min/max rounded 4dp)",
+      "id": "C4-extra",
+      "observed": {
+        "problems": [],
+        "smallest_abs(dist-0.525)": 0.0002143294639189719
+      },
+      "ok": true
+    },
+    {
+      "assertion": "zero allocation: no forbidden key (assigned/allocation/selected_lane/lane_assignment) anywhere except the explicit false field_spec.allocation declaration",
+      "expected": "leaks==[] and pair.field_spec.allocation is false",
+      "id": "C5",
+      "observed": {
+        "field_spec_allocation": false,
+        "forbidden_hits_pair": [
+          [
+            [
+              "field_spec",
+              "allocation"
+            ],
+            false
+          ]
+        ],
+        "forbidden_hits_trace": [],
+        "permitted_declaration": [
+          [
+            [
+              "field_spec",
+              "allocation"
+            ],
+            false
+          ]
+        ],
+        "trace_no_allocation_scan_leaked": []
+      },
+      "ok": true
+    },
+    {
+      "assertion": "F-13 scope: frozen verdict file bytes re-hashed and n_pages/n_escapable/params match trace.verdict_artifact; verdict result unchanged",
+      "expected": "sha matches; n_pages==32; n_escapable==32; params=={clr:0.2,via_od:0.35,via_via:0.525}; inputs_sha unchanged",
+      "id": "C6",
+      "observed": {
+        "recomputed_verdict_sha256": "2a3c8cf465c0ac1f808c1fdf7409725ab04862e4a8002f7ff71cfa299770bb5b",
+        "trace_inputs_sha_as_frozen": {
+          "ballmap": "3f096af125c4e60582a7e9b83dcab52b37949dde349625c1922a92c8a25bdbd7"
+        },
+        "trace_n_escapable": 32,
+        "trace_n_pages": 32,
+        "trace_params_as_frozen": {
+          "clr": 0.2,
+          "via_od": 0.35,
+          "via_via": 0.525
+        },
+        "trace_verdict_artifact_sha256": "2a3c8cf465c0ac1f808c1fdf7409725ab04862e4a8002f7ff71cfa299770bb5b",
+        "verdict_inputs_sha": {
+          "ballmap": "3f096af125c4e60582a7e9b83dcab52b37949dde349625c1922a92c8a25bdbd7"
+        },
+        "verdict_n_escapable": 32,
+        "verdict_n_pages": 32,
+        "verdict_params": {
+          "clr": 0.2,
+          "via_od": 0.35,
+          "via_via": 0.525
+        },
+        "verdict_result_unchanged": true
+      },
+      "ok": true
+    },
+    {
+      "assertion": "pair_coupling page ids/kind/side consistent with frozen s1_page_manifest; page set == manifest data pages",
+      "expected": "32 data pages, 0 mismatches",
+      "id": "X1-manifest",
+      "observed": {
+        "manifest_data_pages": 32,
+        "pair_pages": 32,
+        "problems": []
+      },
+      "ok": true
+    },
+    {
+      "assertion": "at least 5 in-memory mutations each flip the independent checker to FAIL",
+      "expected": "5/5 rejected (observed_verdict FAIL)",
+      "id": "C7",
+      "observed": {
+        "n_mutations": 5,
+        "n_rejected": 5,
+        "outcomes": [
+          {
+            "failing_checks": [
+              "C2"
+            ],
+            "id": "MUT-A",
+            "observed_verdict": "FAIL"
+          },
+          {
+            "failing_checks": [
+              "C2"
+            ],
+            "id": "MUT-B",
+            "observed_verdict": "FAIL"
+          },
+          {
+            "failing_checks": [
+              "C4"
+            ],
+            "id": "MUT-C",
+            "observed_verdict": "FAIL"
+          },
+          {
+            "failing_checks": [
+              "C4-witness"
+            ],
+            "id": "MUT-D",
+            "observed_verdict": "FAIL"
+          },
+          {
+            "failing_checks": [
+              "C1"
+            ],
+            "id": "MUT-E",
+            "observed_verdict": "FAIL"
+          }
+        ]
+      },
+      "ok": true
+    },
+    {
+      "assertion": "candidate/witness coordinate comparison uses tolerance 1e-9; smallest observed margin reported",
+      "expected": "smallest observed L-inf margin <= 1e-9 (witness coords drawn from cands)",
+      "id": "TOL-1e-9",
+      "observed": {
+        "smallest_observed_margin": 0.0,
+        "tolerance": 1e-09
+      },
+      "ok": true
+    }
+  ],
+  "frozen_sha_check": {
+    "actual": {
+      "manifest": "a8ef3ea8ecff99d7549d4122043c972c1bb68346dc4dcc3f36fdd9bacde49890",
+      "rules": "0a459839e15960b8fbfe0e1f5bb154a02b30cbafa1cbb0d56c2b810a71228448",
+      "spec": "0bd52ed48e720b8cb6a7869379f6c0a220f3e141e1514ab159f9f5f3b8b02233",
+      "verdict": "2a3c8cf465c0ac1f808c1fdf7409725ab04862e4a8002f7ff71cfa299770bb5b"
+    },
+    "drift": [],
+    "expected": {
+      "manifest": "a8ef3ea8ecff99d7549d4122043c972c1bb68346dc4dcc3f36fdd9bacde49890",
+      "rules": "0a459839e15960b8fbfe0e1f5bb154a02b30cbafa1cbb0d56c2b810a71228448",
+      "spec": "0bd52ed48e720b8cb6a7869379f6c0a220f3e141e1514ab159f9f5f3b8b02233",
+      "verdict": "2a3c8cf465c0ac1f808c1fdf7409725ab04862e4a8002f7ff71cfa299770bb5b"
+    },
+    "match": {
+      "manifest": true,
+      "rules": true,
+      "spec": true,
+      "verdict": true
+    }
+  },
+  "mutation_tests": [
+    {
+      "expected_verdict": "FAIL",
+      "failing_checks": [
+        "C2"
+      ],
+      "id": "MUT-A",
+      "mutation": "trace.params_mapping[via_via].value 0.525 -> 0.5",
+      "observed_verdict": "FAIL",
+      "ok": true
+    },
+    {
+      "expected_verdict": "FAIL",
+      "failing_checks": [
+        "C2"
+      ],
+      "id": "MUT-B",
+      "mutation": "trace.params_mapping[clr] POWER source value 0.2 -> 0.19",
+      "observed_verdict": "FAIL",
+      "ok": true
+    },
+    {
+      "expected_verdict": "FAIL",
+      "failing_checks": [
+        "C4"
+      ],
+      "id": "MUT-C",
+      "mutation": "pair_coupling.pages[PCIE_DN0/input].pair_domain.n_pairs_admissible_stagger_038 += 1",
+      "observed_verdict": "FAIL",
+      "ok": true
+    },
+    {
+      "expected_verdict": "FAIL",
+      "failing_checks": [
+        "C4-witness"
+      ],
+      "id": "MUT-D",
+      "mutation": "pair_coupling.pages[PCIE_DN0/input].admissible_pair_witness.N -> [0.0, 0.0] (not in cands)",
+      "observed_verdict": "FAIL",
+      "ok": true
+    },
+    {
+      "expected_verdict": "FAIL",
+      "failing_checks": [
+        "C1"
+      ],
+      "id": "MUT-E",
+      "mutation": "trace.frozen_sha_check.actual.spec -> 64x'0' (corrupt frozen sha)",
+      "observed_verdict": "FAIL",
+      "ok": true
+    }
+  ],
+  "notes": "Independent adversarial validator (F13-VAL.1). The producer The F-13 producer tool was NOT imported, executed, or read for logic; only its sha256 is recorded (producer_sha256). All numeric facts are re-derived from the frozen read-only sources (SPEC_k2_v4.json, drc_rules.json, m13_v57_s1_page_manifest.json, m13_v57_s1_r1_via_verdict.json) with this file's own parsing and numpy (distance = sqrt(dx^2+dy^2)). Coordinate comparisons use tolerance 1e-09; scalar constant identities use 1e-12. seed=0 is a fixed determinism constant; no RNG is used. C5 nuance: the token 'allocation' appears exactly once, as the mandated declaration pair.field_spec.allocation == false; every other occurrence of the forbidden keys is treated as a leak. C4-extra validates producer-rounded fields (dist_min_mm/dist_max_mm to 4 decimals, tolerance 5e-05). Mutations are applied to in-memory deep copies only; the real artifacts are never written.",
+  "producer_sha256": "28f74b0429d1958e4d6d2e4aeaa1a90094be9c07f7254453e6083fdfeb76b053",
+  "revision": "F13-VAL.1",
+  "schema": 1,
+  "seed": 0,
+  "validator_sha256": "53ceec546a8e8eb896ba7022ea1dfbc9cbdb898692aa69ade48755af07436ebd",
+  "verdict": "PASS"
+}

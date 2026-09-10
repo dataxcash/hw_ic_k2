@@ -1,0 +1,200 @@
+{
+ "artifact": "m13_v57_f13_r1_param_trace",
+ "caliber_differences": [
+  {
+   "design_caliber": 0.2775,
+   "id": "CAL-1",
+   "impact": "无（判定更严）",
+   "resolution": "不同基准: verdict = 边到边净距(POWER 网类 0.2 保守)；设计 = 中心线膨胀(PCIe85 clearance 0.175 + 半线宽 0.1025, R1 §推导2 用于禁列膨胀)。verdict 边距 0.2 >= 0.175 合规, 无需复制 0.2775。",
+   "topic": "verdict.clr 0.2 vs 设计中心线膨胀 0.175+0.1025=0.2775",
+   "verdict_value": 0.2
+  },
+  {
+   "design_caliber": 0.36,
+   "id": "CAL-2",
+   "impact": "F-13 检出: verdict 的 `pair` witness 16/32 页不满足 0.36（见 pair_coupling）→ 记 V-3 证据",
+   "resolution": "W3 取 0.38（边缘距=0.175 净距真源）；0.36 对应边缘距 0.155（S1 A1.3 宽松口径）。",
+   "topic": "列对错距 0.36 (设计文本) vs 0.38 (p_gap+p_width 真源)",
+   "verdict_value": null
+  },
+  {
+   "design_caliber": "G3 v1 §3 证据协议 (2)",
+   "id": "CAL-3",
+   "impact": "证据协议满足（verdict 原文不动）",
+   "resolution": "本工件补齐 SPEC/manifest/rules/verdict 全 64hex 指纹链, **不改 verdict**（F-11 口径承接）。",
+   "topic": "verdict.inputs_sha 仅 ballmap（缺 SPEC/manifest/rules）",
+   "verdict_value": "ballmap only"
+  }
+ ],
+ "contract": {
+  "id": "G3-C v1.3",
+  "note": "参数口径与列对耦合字段并入 G3 v1.3（版本 bump，不原地改写 v1.2）",
+  "path_md": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_g3_freeze_contract_v1_2_lane_domain.md"
+ },
+ "evidence_protocol": {
+  "item1_schema_versions": "schema=1, revision=F13-R1TRACE.1/F13-R1PAIR.1, producer path+revision+sha256 recorded",
+  "item2_source_fingerprints": "SPEC/manifest/rules/verdict pinned to full 64-hex at runtime; drift -> non-zero exit",
+  "item3_deterministic": "byte-identical report across two consecutive runs (sort_keys=True deterministic JSON)",
+  "item5_escape_hatches": "upstream only (SPEC netclass/pad geometry, rules netclass table) ; no downstream edits",
+  "item6_independent_validation": "see m13_v57_f13_r1_param_trace_validation.json (independent re-derivation, does not import this producer)"
+ },
+ "frozen_sha_check": {
+  "actual": {
+   "manifest": "a8ef3ea8ecff99d7549d4122043c972c1bb68346dc4dcc3f36fdd9bacde49890",
+   "rules": "0a459839e15960b8fbfe0e1f5bb154a02b30cbafa1cbb0d56c2b810a71228448",
+   "spec": "0bd52ed48e720b8cb6a7869379f6c0a220f3e141e1514ab159f9f5f3b8b02233",
+   "verdict": "2a3c8cf465c0ac1f808c1fdf7409725ab04862e4a8002f7ff71cfa299770bb5b"
+  },
+  "drift": [],
+  "expected": {
+   "manifest": "a8ef3ea8ecff99d7549d4122043c972c1bb68346dc4dcc3f36fdd9bacde49890",
+   "rules": "0a459839e15960b8fbfe0e1f5bb154a02b30cbafa1cbb0d56c2b810a71228448",
+   "spec": "0bd52ed48e720b8cb6a7869379f6c0a220f3e141e1514ab159f9f5f3b8b02233",
+   "verdict": "2a3c8cf465c0ac1f808c1fdf7409725ab04862e4a8002f7ff71cfa299770bb5b"
+  },
+  "match": {
+   "manifest": true,
+   "rules": true,
+   "spec": true,
+   "verdict": true
+  }
+ },
+ "governing_constants": {
+  "col_stagger_binding_mm": 0.38,
+  "col_stagger_design_text_mm": 0.36,
+  "eps": 1e-09,
+  "p_gap_mm": 0.175,
+  "track_width_mm": 0.205,
+  "via_via_min_mm": 0.525
+ },
+ "no_allocation_scan": {
+  "forbidden_keys": [
+   "assigned",
+   "allocation",
+   "selected_lane",
+   "lane_assignment"
+  ],
+  "leaked": [],
+  "statement": "No cross-page resource allocation is emitted; per-page witness only."
+ },
+ "params_mapping": [
+  {
+   "assertion": "via_od == SPEC.vias.std.outer == rules.manufacturing.min_via_diameter",
+   "holds": true,
+   "kind": "exact",
+   "note": "verdict 只录裸值; 关联常数 drill=0.2 (annular 0.0750mm)",
+   "param": "via_od",
+   "sources": [
+    {
+     "sha256": "0bd52ed48e720b8cb6a7869379f6c0a220f3e141e1514ab159f9f5f3b8b02233",
+     "source": "SPEC_k2_v4.json /vias/std/outer",
+     "value": 0.35
+    },
+    {
+     "sha256": "0a459839e15960b8fbfe0e1f5bb154a02b30cbafa1cbb0d56c2b810a71228448",
+     "source": "drc_rules.json /manufacturing/min_via_diameter",
+     "value": 0.35
+    }
+   ],
+   "value": 0.35
+  },
+  {
+   "assertion": "verdict.clr == POWER netclass clearance (0.2) >= PCIe85 netclass clearance (0.175) >= board_min (0.1)",
+   "caliber_role": "verdict.clr 是**铜边到铜边**净距，按邻居最坏情况取 GND/POWER 网类值 0.2 (verdict docstring: 'GND/POWER netclass 保守')；PCIe85 专值 0.175 更松 → 取严不取松",
+   "holds": true,
+   "kind": "conservative_envelope",
+   "note": "verdict 的判据形态 = pad_half_diag + clr + via_od/2（边到边），故 0.2 与设计口径 'clearance0.175 + 半线宽0.1025 膨胀' **不同基准**：后者是中心线膨胀（0.2775），前者是边距；verdict 未复制 0.2775，属正确（边距 ≥ 0.175 即合规）",
+   "param": "clr",
+   "sources": [
+    {
+     "sha256": "0a459839e15960b8fbfe0e1f5bb154a02b30cbafa1cbb0d56c2b810a71228448",
+     "source": "drc_rules.json /clearance/net_classes[POWER]/clearance",
+     "value": 0.2
+    },
+    {
+     "sha256": "0bd52ed48e720b8cb6a7869379f6c0a220f3e141e1514ab159f9f5f3b8b02233",
+     "source": "SPEC_k2_v4.json /net_classes/PCIe85/clearance",
+     "value": 0.175
+    },
+    {
+     "sha256": "0a459839e15960b8fbfe0e1f5bb154a02b30cbafa1cbb0d56c2b810a71228448",
+     "source": "drc_rules.json /clearance/board_min",
+     "value": 0.1
+    }
+   ],
+   "value": 0.2
+  },
+  {
+   "assertion": "via_via == via_od + PCIe85_clearance == 0.35 + 0.175 == 0.525",
+   "holds": true,
+   "kind": "identity",
+   "note": "F-8 R3 冲突图同口径 (required_same_column_dy_mm=0.525) → 两工件互证",
+   "param": "via_via",
+   "sources": [
+    {
+     "sha256": "0bd52ed48e720b8cb6a7869379f6c0a220f3e141e1514ab159f9f5f3b8b02233",
+     "source": "SPEC_k2_v4.json /vias/std/outer (via 外径)",
+     "value": 0.35
+    },
+    {
+     "sha256": "0a459839e15960b8fbfe0e1f5bb154a02b30cbafa1cbb0d56c2b810a71228448",
+     "source": "drc_rules.json /clearance/net_classes[PCIe85]/clearance (via-via 铜净距)",
+     "value": 0.175
+    },
+    {
+     "sha256": "0a459839e15960b8fbfe0e1f5bb154a02b30cbafa1cbb0d56c2b810a71228448",
+     "source": "drc_rules.json /clearance/geometry_translation (过孔/过孔=圆心距-(od1+od2)/2)",
+     "value": "rule_text"
+    }
+   ],
+   "value": 0.525
+  },
+  {
+   "assertion": "binding := max(0.36, p_gap+p_width=0.38) = 0.38；边缘距 = stagger - p_width",
+   "caliber_role": "0.36 → 竖腿边缘净距 0.155（=S1 设计 A1.3 不变量口径）; 0.38 → 竖腿边缘净距 0.175（=PCIe85 netclass clearance 真源）",
+   "derived_binding": 0.38,
+   "design_text": "S1 设计 §R1: 每差分对占用 2 列，对列错距 >= 0.36",
+   "holds": true,
+   "kind": "caliber_diff",
+   "note": "两者互差 0.02mm。W3 准入取**真源** 0.38；0.36/0.155 为逃逸域宽松口径保留为 NOTE。verdict 不受影响: 其 pair 判据只用 via-via 0.525（更严，但**不含列对错距**）→ V-3",
+   "param": "col_pair_stagger_min",
+   "sources": [
+    {
+     "sha256": "0bd52ed48e720b8cb6a7869379f6c0a220f3e141e1514ab159f9f5f3b8b02233",
+     "source": "SPEC_k2_v4.json /net_classes/PCIe85/diff_pair/p_gap",
+     "value": 0.175
+    },
+    {
+     "sha256": "0bd52ed48e720b8cb6a7869379f6c0a220f3e141e1514ab159f9f5f3b8b02233",
+     "source": "SPEC_k2_v4.json /net_classes/PCIe85/diff_pair/p_width",
+     "value": 0.205
+    },
+    {
+     "sha256": null,
+     "source": "S1 设计 §6 A1.3 不变量 (P/N 中心距=0.38±ε, 竖腿边缘距>=0.155)",
+     "value": "design_invariant"
+    }
+   ],
+   "value": 0.36
+  }
+ ],
+ "revision": "F13-R1TRACE.1",
+ "schema": 1,
+ "scope": "G3 冻结前置项 F-13 (R1 参数溯源映射断言 V-2 + 列对耦合字段 V-3)；只读消费冻结件",
+ "status": "EMITTED",
+ "verdict_artifact": {
+  "inputs_sha_as_frozen": {
+   "ballmap": "3f096af125c4e60582a7e9b83dcab52b37949dde349625c1922a92c8a25bdbd7"
+  },
+  "n_escapable": 32,
+  "n_pages": 32,
+  "params_as_frozen": {
+   "clr": 0.2,
+   "via_od": 0.35,
+   "via_via": 0.525
+  },
+  "path": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_s1_r1_via_verdict.json",
+  "sha256": "2a3c8cf465c0ac1f808c1fdf7409725ab04862e4a8002f7ff71cfa299770bb5b",
+  "verdict_result_unchanged": true
+ }
+}
