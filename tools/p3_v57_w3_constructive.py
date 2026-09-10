@@ -36,7 +36,7 @@ F = {
     "r3_gaps": STEP2 / "m13_v57_f8_r3_gap_candidates.json",
     "f6b_report": STEP2 / "m13_v57_f6b_report.json",
     "verdict": STEP2 / "m13_v57_s1_r1_via_verdict.json",
-    "card": STEP2 / "m13_v57_w3_kickoff_card_v1_12.md",
+    "card": STEP2 / "m13_v57_w3_kickoff_card_v1_13.md",
     "layer_intent": STEP2 / "m13_v57_layer_intent_rev4.json",
 }
 FROZEN_SHA = {
@@ -50,7 +50,7 @@ FROZEN_SHA = {
     "r3_gaps": "8a31632907b171483cd40a053231c702e378f944af33f92598a6141bd052cdeb",
     "f6b_report": "9070ed53f970f480e88b1de3aa19792f8b637de51857935fa6b7c51fa8a015d6",
     "verdict": "2a3c8cf465c0ac1f808c1fdf7409725ab04862e4a8002f7ff71cfa299770bb5b",
-    "card": "288fad33c1b1c0e2f56870d3b3795ba95d124505e97a19bf3b1699b601f12ffe",
+    "card": "e01b5356aa50a026e999efac4cf9a22035145e4d60da62d63e3ae163b6f2ea3f",
     "layer_intent": "994363267baca54da9658283f21856a1bf2194b123a8de91f262c767edc35491",
 }
 OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
