@@ -7,8 +7,7 @@
    "result": {
     "git_status": [
      "? _shared",
-     " M pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_joint_assignment.json",
-     " M pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_validation.json",
+     " M tools/p3_v57_w3_constructive_validator.py",
      "?? k2_v4.kicad_pcb.bak_v35",
      "?? pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json.bak_v32",
      "?? pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json.bak_v32_tracks",
@@ -23,18 +22,11 @@
      "?? pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v52_forensics_probe.py",
      "?? pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v52_irg_readiness.md",
      "?? pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v52_session_handoff.md",
-     "?? pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_f13_r1_pair_coupling_v1_1.json",
-     "?? pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_f13_r1_pair_coupling_v1_1_validation.json",
-     "?? pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_kickoff_card_v1_2.md",
      "?? pm_gate/artifacts/k2_v4/L3/model_solves/channel_alloc_diag/",
      "?? pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v11/",
-     "?? pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v12/",
-     "?? tools/p3_v57_f13_r1_pair_xorder.py",
-     "?? tools/p3_v57_f13_xorder_validator.py",
-     "?? tools/p3_v57_w3_constructive.py",
-     "?? tools/p3_v57_w3_constructive_validator.py"
+     "?? pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v12/"
     ],
-    "head": "9e6f19e0f10fdff9154581ad38813ced1eebc72b",
+    "head": "16ad98efaf6fcd3ee47fba30e1171def3ad05174",
     "stale": [],
     "stale_count": 0
    }
@@ -59,18 +51,11 @@
      "?? pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v52_forensics_probe.py",
      "?? pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v52_irg_readiness.md",
      "?? pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v52_session_handoff.md",
-     "?? pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_f13_r1_pair_coupling_v1_1.json",
-     "?? pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_f13_r1_pair_coupling_v1_1_validation.json",
-     "?? pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_kickoff_card_v1_2.md",
      "?? pm_gate/artifacts/k2_v4/L3/model_solves/channel_alloc_diag/",
      "?? pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v11/",
-     "?? pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v12/",
-     "?? tools/p3_v57_f13_r1_pair_xorder.py",
-     "?? tools/p3_v57_f13_xorder_validator.py",
-     "?? tools/p3_v57_w3_constructive.py",
-     "?? tools/p3_v57_w3_constructive_validator.py"
+     "?? pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v12/"
     ],
-    "untracked_count": 24
+    "untracked_count": 17
    }
   },
   {
@@ -93,16 +78,16 @@
    "probe": "per-command runtime; flag any > 60s",
    "result": {
     "gm3_medians_s": {
-     "1": 0.3461134110002604,
-     "2": 0.5519253689999459,
-     "4": 0.7391137710001203
+     "1": 0.3160288679973746,
+     "2": 0.5316220079985214,
+     "4": 0.7357273639972846
     },
-    "gm4_seconds": 1.433,
+    "gm4_seconds": 1.392,
     "long_commands": [],
     "order_invariance_s": {
-     "hash": 0.335,
-     "natural": 0.355,
-     "reverse": 0.343
+     "hash": 0.31,
+     "natural": 0.323,
+     "reverse": 0.337
     }
    }
   }
@@ -293,20 +278,21 @@
    "detail": {
     "hash": {
      "rc": 0,
-     "seconds": 0.335,
+     "seconds": 0.31,
      "sha256": "dd19a9ad86cb68eb6b2ce217f46ccee1e69fc1fa3a4bcb5077f5e55158248fdc"
     },
     "natural": {
      "rc": 0,
-     "seconds": 0.355,
+     "seconds": 0.323,
      "sha256": "dd19a9ad86cb68eb6b2ce217f46ccee1e69fc1fa3a4bcb5077f5e55158248fdc"
     },
     "reverse": {
      "rc": 0,
-     "seconds": 0.343,
+     "seconds": 0.337,
      "sha256": "dd19a9ad86cb68eb6b2ce217f46ccee1e69fc1fa3a4bcb5077f5e55158248fdc"
     }
    },
+   "engine_references_args_enum_order": false,
    "ok": true,
    "shas": {
     "hash": "dd19a9ad86cb68eb6b2ce217f46ccee1e69fc1fa3a4bcb5077f5e55158248fdc",
@@ -537,35 +523,35 @@
    "ok": false,
    "runs": {
     "1": {
-     "median_s": 0.3461134110002604,
+     "median_s": 0.3160288679973746,
      "times_s": [
-      0.361629,
-      0.346113,
-      0.338602
+      0.319088,
+      0.316029,
+      0.310871
      ],
      "work_units": 526
     },
     "2": {
-     "median_s": 0.5519253689999459,
+     "median_s": 0.5316220079985214,
      "times_s": [
-      0.534608,
-      0.551925,
-      0.55764
+      0.518207,
+      0.531622,
+      0.54133
      ],
      "work_units": 740
     },
     "4": {
-     "median_s": 0.7391137710001203,
+     "median_s": 0.7357273639972846,
      "times_s": [
-      0.742432,
-      0.739114,
-      0.728427
+      0.735727,
+      0.720466,
+      0.744086
      ],
      "work_units": 1480
     }
    },
-   "time_ratio_2": 1.595,
-   "time_ratio_4": 2.135,
+   "time_ratio_2": 1.682,
+   "time_ratio_4": 2.328,
    "time_ratio_ok": true,
    "w1": 526,
    "w2": 740,
@@ -590,7 +576,7 @@
    },
    "mismatch_count": 197,
    "ok": false,
-   "seconds": 1.433
+   "seconds": 1.392
   },
   "G-M5": {
    "acn1": {
@@ -736,6 +722,7 @@
   }
  },
  "notes": [
+  "ENGINE does not reference args.enum_order -> --enum-order is accepted but not consumed; A-CN.6 byte-identity is therefore vacuous.",
   "artifact verdict field = CERTIFICATE; gate_status.failed = ['A-CN.1b', 'A-CN.4']",
   "G-M4 re-derivation implements CARD v1.2 R-4 text; where the card is silent (R1 seed/tie-break, y-grid selection) the interpretation is documented in derive_r1() and is compared byte-exactly.",
   "G-M4 first mismatch: {\"kind\": \"R2\", \"page\": \"PCIE_UP0/out_J2\", \"field\": \"lane_index\", \"derived\": 8, \"artifact\": 16}"
@@ -743,7 +730,7 @@
  "producer_sha256": "ca372d26a0d2b2a4ceb6fdec8f002163e1e9101f3ae2df48bc1f348fc7abccb2",
  "revision": "W3-CN-VAL.1",
  "schema": 1,
- "total_seconds": 7.559,
- "validator_sha256": "250006e2e0fd546a585c39ae39402b97dd39e50e889fd0453684a59161d2f80e",
+ "total_seconds": 7.273,
+ "validator_sha256": "da6ebffe32b4801e688e8fd40057f4061c4c5f82417a3a8307bb5f8e6c0c92de",
  "verdict": "FAIL"
 }

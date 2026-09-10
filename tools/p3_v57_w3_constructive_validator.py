@@ -1202,6 +1202,10 @@ def main():
 
     # ---- A-CN.6 order invariance (black box)
     gm_oi, oi_ok = probe_order_invariance(ENGINE)
+    gm_oi["engine_references_args_enum_order"] = ("args.enum_order" in ENGINE.read_text(encoding="utf-8"))
+    if not gm_oi["engine_references_args_enum_order"]:
+        notes.append("ENGINE does not reference args.enum_order -> --enum-order is accepted "
+                     "but not consumed; A-CN.6 byte-identity is therefore vacuous.")
     gates["A-CN.6"] = gm_oi
 
     # ---- adversarial probes
@@ -1251,7 +1255,6 @@ def main():
                    "ok": detected})
 
     # hung_or_long_commands
-    per_check_seconds = {"gm2_ast": None, "gm3_scaling": runs_total(gm3) if False else None}
     long_cmds = []
     for K, v in gm3.get("runs", {}).items():
         if v["median_s"] is not None and v["median_s"] > 60:
@@ -1317,10 +1320,6 @@ def main():
     print(f"VERDICT = {verdict_str}  (checks_ok={all_checks_ok} gates_ok={all_gates_ok} probes_ok={all_probes_ok})")
     print("=" * 100)
     return 0 if verdict_str == "PASS" else 1
-
-
-def runs_total(gm3):
-    return None
 
 
 def _write(result):
