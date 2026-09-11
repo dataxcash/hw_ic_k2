@@ -45,6 +45,8 @@
   **仍 R1 31/32**（same_layer 2）。⇒ 瓶颈**不是 via 域范围**，而是「chip 侧 breakout+竖段+run+drop+stub」在 0.38/0.4525 净距下
   的**拓扑/密度** ⇒ 预授权杠杆②不足，O1 需 owner 在 ①第 4 信号层 / ③放宽净距 中裁决（或改拓扑——但 3 层内未见合法族）。
 - 探针输出全部落 /tmp；canonical 保持 CN.22（FEASIBLE_ALL）；stray 请求卡已清。
+- **再验序无关**：同一净距引擎在 `natural/reverse/hash` 三输入序下**均 R1 31/32**（same_layer 2）⇒ 不可行性
+  **与贪心序无关**，亦与 via 域范围无关 ⇒ 属**拓扑级**不可行（3 信号层），非实现/顺序缺陷。
 
 ## 6. 纪律 / 现状
 - **canonical 保持 CN.22（FEASIBLE_ALL，旧口径）——无退化**；CN.23 仅作探针证据留档。
