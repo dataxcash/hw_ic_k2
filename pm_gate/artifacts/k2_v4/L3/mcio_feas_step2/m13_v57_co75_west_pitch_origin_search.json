@@ -1,0 +1,223 @@
+{
+ "artifact": "m13_v57_co75_west_pitch_origin_search",
+ "baseline_reproduction": {
+  "EAST_CHIP_TO_J2": {
+   "in_board_band": true,
+   "y_max": 78.569,
+   "y_min": 56.334
+  },
+  "WEST_MCIO_TO_CHIP": {
+   "in_board_band": true,
+   "y_max": 49.7,
+   "y_min": 33.45
+  },
+  "n_pages": 32,
+  "pass": true,
+  "placed_32of32": true,
+  "scratch_sha16": "2ce9fcb75b100d89"
+ },
+ "conclusion": "负结果：WSTEP=1.580 在 {WLO(12) × WSWAP/COLMODE(3) × FANY_J3(5) × HOLE_GAP(3)} 全 23 组合下无 32/32 落位；失败恒在芯片输入 via 区（x 84..93 / y 50..58，vt_intra / pad_via / vv_placed / vt_placed），行扫至 1.5e4 耗尽 ⇒ 球栅逃逸硬限，非 WLO/fan 旋钮所致。与 CO-60/61 负结果一致并补足其未覆盖维。",
+ "criteria": {
+  "lane_y_in_band": [
+   33.4025,
+   78.5975
+  ],
+  "placed_32of32": true
+ },
+ "n_pass": 0,
+ "n_placed": 0,
+ "n_probes": 23,
+ "nature": "L2 走廊分配：西侧 1.580 的 WLO×WSWAP×COLMODE 联合搜索（CO-60/61 未覆盖维）",
+ "redline": "只读冻结源；scratch 即发即删；阈值未放宽；零 while/坐标搜索（发射器闭式）。",
+ "revision": "CO-75.1",
+ "rows": [
+  {
+   "colmode": "pol",
+   "note": "NOT FULLY PLACED: 13 {'PCIE_DN6/out_MCIO': {'n_rows_scanned'",
+   "placed_32of32": false,
+   "wlo": 33.3,
+   "wstep": 1.58,
+   "wswap": "1-11"
+  },
+  {
+   "colmode": "pol",
+   "note": "NOT FULLY PLACED: 10 {'PCIE_DN6/out_MCIO': {'n_rows_scanned'",
+   "placed_32of32": false,
+   "wlo": 34.0,
+   "wstep": 1.58,
+   "wswap": "1-11"
+  },
+  {
+   "colmode": "pol",
+   "note": "NOT FULLY PLACED: 14 {'PCIE_DN6/out_MCIO': {'n_rows_scanned'",
+   "placed_32of32": false,
+   "wlo": 35.0,
+   "wstep": 1.58,
+   "wswap": "1-11"
+  },
+  {
+   "colmode": "pol",
+   "note": "NOT FULLY PLACED: 10 {'PCIE_DN6/out_MCIO': {'n_rows_scanned'",
+   "placed_32of32": false,
+   "wlo": 36.0,
+   "wstep": 1.58,
+   "wswap": "1-11"
+  },
+  {
+   "colmode": "pol",
+   "note": "NOT FULLY PLACED: 13 {'PCIE_DN6/out_MCIO': {'n_rows_scanned'",
+   "placed_32of32": false,
+   "wlo": 37.0,
+   "wstep": 1.58,
+   "wswap": "1-11"
+  },
+  {
+   "colmode": "pol",
+   "note": "NOT FULLY PLACED: 13 {'PCIE_UP4/input': {'n_rows_scanned': 1",
+   "placed_32of32": false,
+   "wlo": 38.0,
+   "wstep": 1.58,
+   "wswap": "1-11"
+  },
+  {
+   "colmode": "pol",
+   "note": "NOT FULLY PLACED: 14 {'PCIE_DN6/out_MCIO': {'n_rows_scanned'",
+   "placed_32of32": false,
+   "wlo": 40.0,
+   "wstep": 1.58,
+   "wswap": "1-11"
+  },
+  {
+   "colmode": "pol",
+   "note": "NOT FULLY PLACED: 15 {'PCIE_DN6/out_MCIO': {'n_rows_scanned'",
+   "placed_32of32": false,
+   "wlo": 42.0,
+   "wstep": 1.58,
+   "wswap": "1-11"
+  },
+  {
+   "colmode": "pol",
+   "note": "NOT FULLY PLACED: 16 {'PCIE_UP6/input': {'n_rows_scanned': 1",
+   "placed_32of32": false,
+   "wlo": 44.0,
+   "wstep": 1.58,
+   "wswap": "1-11"
+  },
+  {
+   "colmode": "pol",
+   "note": "NOT FULLY PLACED: 15 {'PCIE_UP6/input': {'n_rows_scanned': 1",
+   "placed_32of32": false,
+   "wlo": 46.0,
+   "wstep": 1.58,
+   "wswap": "1-11"
+  },
+  {
+   "colmode": "pol",
+   "note": "NOT FULLY PLACED: 15 {'PCIE_UP6/input': {'n_rows_scanned': 1",
+   "placed_32of32": false,
+   "wlo": 48.0,
+   "wstep": 1.58,
+   "wswap": "1-11"
+  },
+  {
+   "colmode": "pol",
+   "note": "NOT FULLY PLACED: 12 {'PCIE_UP6/input': {'n_rows_scanned': 1",
+   "placed_32of32": false,
+   "wlo": 50.0,
+   "wstep": 1.58,
+   "wswap": "1-11"
+  },
+  {
+   "colmode": "",
+   "knob": "wswap/colmode",
+   "note": "NOT FULLY PLACED: 12 {'PCIE_UP7/input': {'n_rows_scanned': 1",
+   "placed_32of32": false,
+   "wlo": 33.7,
+   "wstep": 1.58,
+   "wswap": "1-11"
+  },
+  {
+   "colmode": "pol",
+   "knob": "wswap/colmode",
+   "note": "NOT FULLY PLACED: 14 {'PCIE_UP7/input': {'n_rows_scanned': 1",
+   "placed_32of32": false,
+   "wlo": 33.7,
+   "wstep": 1.58,
+   "wswap": ""
+  },
+  {
+   "colmode": "",
+   "knob": "wswap/colmode",
+   "note": "NOT FULLY PLACED: 14 {'PCIE_UP7/input': {'n_rows_scanned': 1",
+   "placed_32of32": false,
+   "wlo": 33.7,
+   "wstep": 1.58,
+   "wswap": ""
+  },
+  {
+   "fany_j3": "31.5,51.5",
+   "knob": "FANY_J3",
+   "note": "NOT FULLY PLACED: 12 {'PCIE_UP7/input': {'n_rows_scanned': 1",
+   "placed_32of32": false,
+   "wlo": 33.7,
+   "wstep": 1.58
+  },
+  {
+   "fany_j3": "34.5,49.0",
+   "knob": "FANY_J3",
+   "note": "NOT FULLY PLACED: 13 {'PCIE_UP7/input': {'n_rows_scanned': 1",
+   "placed_32of32": false,
+   "wlo": 33.7,
+   "wstep": 1.58
+  },
+  {
+   "fany_j3": "34.5,53.5",
+   "knob": "FANY_J3",
+   "note": "NOT FULLY PLACED: 12 {'PCIE_UP7/input': {'n_rows_scanned': 1",
+   "placed_32of32": false,
+   "wlo": 33.7,
+   "wstep": 1.58
+  },
+  {
+   "fany_j3": "30.0,51.5",
+   "knob": "FANY_J3",
+   "note": "NOT FULLY PLACED: 12 {'PCIE_UP7/input': {'n_rows_scanned': 1",
+   "placed_32of32": false,
+   "wlo": 33.7,
+   "wstep": 1.58
+  },
+  {
+   "fany_j3": "38.0,51.5",
+   "knob": "FANY_J3",
+   "note": "NOT FULLY PLACED: 13 {'PCIE_UP7/input': {'n_rows_scanned': 1",
+   "placed_32of32": false,
+   "wlo": 33.7,
+   "wstep": 1.58
+  },
+  {
+   "hole_gap": 0.35,
+   "knob": "HOLE_GAP",
+   "note": "NOT FULLY PLACED: 12 {'PCIE_UP7/input': {'n_rows_scanned': 1",
+   "placed_32of32": false,
+   "wlo": 33.7,
+   "wstep": 1.58
+  },
+  {
+   "hole_gap": 0.55,
+   "knob": "HOLE_GAP",
+   "note": "NOT FULLY PLACED: 12 {'PCIE_UP7/input': {'n_rows_scanned': 1",
+   "placed_32of32": false,
+   "wlo": 33.7,
+   "wstep": 1.58
+  },
+  {
+   "hole_gap": 0.25,
+   "knob": "HOLE_GAP",
+   "note": "NOT FULLY PLACED: 12 {'PCIE_UP7/input': {'n_rows_scanned': 1",
+   "placed_32of32": false,
+   "wlo": 33.7,
+   "wstep": 1.58
+  }
+ ],
+ "schema": 1
+}
