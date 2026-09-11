@@ -1,0 +1,180 @@
+{
+ "artifact": "m13_v57_co62_bcu_hs_carrying_audit",
+ "board": {
+  "bcu_net_count": 32,
+  "bcu_total_len_mm": 290.208,
+  "bcu_worst_nets": [
+   {
+    "bcu_len_mm": 17.966,
+    "max_continuous_mm": 7.229,
+    "net": "PCIE_DN_OUT7_N_MCIO"
+   },
+   {
+    "bcu_len_mm": 17.866,
+    "max_continuous_mm": 17.866,
+    "net": "PCIE_DN_OUT7_P_MCIO"
+   },
+   {
+    "bcu_len_mm": 14.216,
+    "max_continuous_mm": 14.216,
+    "net": "PCIE_DN_OUT3_P_MCIO"
+   },
+   {
+    "bcu_len_mm": 13.773,
+    "max_continuous_mm": 13.773,
+    "net": "PCIE_DN_OUT3_N_MCIO"
+   },
+   {
+    "bcu_len_mm": 13.166,
+    "max_continuous_mm": 13.166,
+    "net": "PCIE_DN_OUT2_P_MCIO"
+   },
+   {
+    "bcu_len_mm": 12.723,
+    "max_continuous_mm": 12.723,
+    "net": "PCIE_DN_OUT2_N_MCIO"
+   },
+   {
+    "bcu_len_mm": 12.116,
+    "max_continuous_mm": 12.116,
+    "net": "PCIE_DN_OUT1_P_MCIO"
+   },
+   {
+    "bcu_len_mm": 11.623,
+    "max_continuous_mm": 11.623,
+    "net": "PCIE_DN_OUT1_N_MCIO"
+   }
+  ],
+  "n_nets": 68,
+  "n_segments": 2441
+ },
+ "finding": "CO-55/CO-56 声明 B.Cu 非阻抗控制层且**不得承载阻抗关键网**；实测本阶段 68 条高速网中 **32 条**在 B.Cu 上有铜，合计 **290.21mm**（最长连续 **17.87mm**）⇒ **违反该 L2 残余条款**。B.Cu 一阶 Zdiff = 119.1Ω（+34.1 vs 85Ω，**超出 85±10%**）；即使按『In6 铺地作参考』假设亦同值。⇒ B.Cu 在本 8L 叠层下**无法承载 85Ω 差分**，须将上述网移出 B.Cu（层分配 = L2）。",
+ "gate_impact": "none（本件零改动）；**新开 L2 整改项（B.Cu 阻抗承载）**",
+ "inputs_sha": {
+  "board_l4": "cdcb869e9827ec87"
+ },
+ "layer_first_order_zdiff_ohm": {
+  "B.Cu": {
+   "in_85_pm10pct": false,
+   "kind": "microstrip(单参考=In6 信号层, h=0.1836)",
+   "zdiff": 119.1
+  },
+  "F.Cu": {
+   "in_85_pm10pct": true,
+   "kind": "microstrip",
+   "zdiff": 88.4
+  },
+  "In2.Cu": {
+   "in_85_pm10pct": true,
+   "kind": "stripline",
+   "zdiff": 82.0
+  },
+  "In6.Cu": {
+   "in_85_pm10pct": true,
+   "kind": "microstrip",
+   "zdiff": 85.5
+  }
+ },
+ "max_pair_bcu_skew_mm": 1.443,
+ "nature": "L2/SI 物理承载机判：B.Cu 承载阻抗关键网审计（只读；零几何改动）",
+ "pair_layer_mismatch_by_bcu_len": [
+  {
+   "bcu_N_mm": 17.966,
+   "bcu_P_mm": 17.866,
+   "max_bcu_mm": 17.966,
+   "pair": "PCIE_DN_OUT7_MCIO",
+   "skew_len_mm": 0.1
+  },
+  {
+   "bcu_N_mm": 13.773,
+   "bcu_P_mm": 14.216,
+   "max_bcu_mm": 14.216,
+   "pair": "PCIE_DN_OUT3_MCIO",
+   "skew_len_mm": 0.443
+  },
+  {
+   "bcu_N_mm": 12.723,
+   "bcu_P_mm": 13.166,
+   "max_bcu_mm": 13.166,
+   "pair": "PCIE_DN_OUT2_MCIO",
+   "skew_len_mm": 0.443
+  },
+  {
+   "bcu_N_mm": 11.623,
+   "bcu_P_mm": 12.116,
+   "max_bcu_mm": 12.116,
+   "pair": "PCIE_DN_OUT1_MCIO",
+   "skew_len_mm": 0.493
+  },
+  {
+   "bcu_N_mm": 11.154,
+   "bcu_P_mm": 11.347,
+   "max_bcu_mm": 11.347,
+   "pair": "PCIE_UP_OUT7_J2",
+   "skew_len_mm": 0.193
+  },
+  {
+   "bcu_N_mm": 10.623,
+   "bcu_P_mm": 11.066,
+   "max_bcu_mm": 11.066,
+   "pair": "PCIE_DN_OUT0_MCIO",
+   "skew_len_mm": 0.443
+  },
+  {
+   "bcu_N_mm": 9.205,
+   "bcu_P_mm": 10.648,
+   "max_bcu_mm": 10.648,
+   "pair": "PCIE_UP_OUT6_J2",
+   "skew_len_mm": 1.443
+  },
+  {
+   "bcu_N_mm": 9.073,
+   "bcu_P_mm": 10.516,
+   "max_bcu_mm": 10.516,
+   "pair": "PCIE_DN_OUT4_MCIO",
+   "skew_len_mm": 1.443
+  }
+ ],
+ "pair_layer_mismatch_by_skew": [
+  {
+   "bcu_N_mm": 9.205,
+   "bcu_P_mm": 10.648,
+   "max_bcu_mm": 10.648,
+   "pair": "PCIE_UP_OUT6_J2",
+   "skew_len_mm": 1.443
+  },
+  {
+   "bcu_N_mm": 9.073,
+   "bcu_P_mm": 10.516,
+   "max_bcu_mm": 10.516,
+   "pair": "PCIE_DN_OUT4_MCIO",
+   "skew_len_mm": 1.443
+  },
+  {
+   "bcu_N_mm": 8.023,
+   "bcu_P_mm": 9.466,
+   "max_bcu_mm": 9.466,
+   "pair": "PCIE_DN_OUT5_MCIO",
+   "skew_len_mm": 1.443
+  },
+  {
+   "bcu_N_mm": 6.307,
+   "bcu_P_mm": 7.75,
+   "max_bcu_mm": 7.75,
+   "pair": "PCIE_UP_OUT4_J2",
+   "skew_len_mm": 1.443
+  },
+  {
+   "bcu_N_mm": 3.409,
+   "bcu_P_mm": 4.852,
+   "max_bcu_mm": 4.852,
+   "pair": "PCIE_UP_OUT2_J2",
+   "skew_len_mm": 1.443
+  }
+ ],
+ "redline": "只读冻结源；零几何/阈值改动；不伪 sign-off；一阶结论须标『未经 SI9000/券』。",
+ "revision": "CO-62.1",
+ "ruling": "L2 自裁：B.Cu 不得承载 85Ω 关键网（维持 CO-55 条款，且该条款**当前被违反**）。整改 = 把 16 张 dn 带页（WEST dn + EAST dn）的逃逸/stub 层由 B.Cu 改到受控层（In2/In6/F.Cu），属 L2『叠层分配/过孔策略/走廊分配』⇒ 走新 LID 修订 + 全链重导。",
+ "schema": 1,
+ "second_order": "差分对 B.Cu 长度失配最大 1.44mm ⇒ 层混合（B.Cu er_eff 低于内层）产生**长度等长之外的电气 skew**；一阶估算 0.03~0.16mm 内层等效（取决于 er_eff，悲观档已 > 对内等长 0.15mm 预算）⇒ 现有 SI 记录（按物理长度 skew 0.0031）**未覆盖**该机制，需按层加权复算。"
+}
