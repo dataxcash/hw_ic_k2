@@ -1,0 +1,128 @@
+{
+ "A_west_pitch_x_strategy": [
+  {
+   "case": "WEST=1.20 noswap/colmode=pol",
+   "placed_32of32": false,
+   "stdout": "NOT FULLY PLACED: 10 {'PCIE_UP6/input': {'n_rows_scanned': 15150, 'reasons': {'vv_placed': \"('vv_placed', (93.2, 50.88, 'P'), 'PCIE_UP7/inpu",
+   "wstep": "1.20"
+  },
+  {
+   "case": "WEST=1.20 noswap/colmode=default",
+   "placed_32of32": false,
+   "stdout": "NOT FULLY PLACED: 11 {'PCIE_UP6/input': {'n_rows_scanned': 15150, 'reasons': {'vv_placed': \"('vv_placed', (93.2, 50.88, 'P'), 'PCIE_UP7/inpu",
+   "wstep": "1.20"
+  },
+  {
+   "case": "WEST=1.20 swap/colmode=default",
+   "placed_32of32": false,
+   "stdout": "NOT FULLY PLACED: 10 {'PCIE_UP6/input': {'n_rows_scanned': 15150, 'reasons': {'vv_placed': \"('vv_placed', (93.2, 50.88, 'P'), 'PCIE_UP7/inpu",
+   "wstep": "1.20"
+  },
+  {
+   "case": "WEST=1.46 noswap/colmode=pol",
+   "placed_32of32": false,
+   "stdout": "NOT FULLY PLACED: 11 {'PCIE_DN6/out_MCIO': {'n_rows_scanned': 2045, 'reasons': {'vt_placed': \"('vt_placed', (91.5, 52.366, 'P', 'In2.Cu'), '",
+   "wstep": "1.46"
+  },
+  {
+   "case": "WEST=1.46 noswap/colmode=default",
+   "placed_32of32": false,
+   "stdout": "NOT FULLY PLACED: 11 {'PCIE_DN6/out_MCIO': {'n_rows_scanned': 2045, 'reasons': {'vt_placed': \"('vt_placed', (91.5, 52.366, 'P', 'In2.Cu'), '",
+   "wstep": "1.46"
+  },
+  {
+   "case": "WEST=1.46 swap/colmode=default",
+   "placed_32of32": false,
+   "stdout": "NOT FULLY PLACED: 11 {'PCIE_DN6/out_MCIO': {'n_rows_scanned': 2045, 'reasons': {'vt_placed': \"('vt_placed', (91.5, 52.366, 'P', 'In2.Cu'), '",
+   "wstep": "1.46"
+  },
+  {
+   "case": "WEST=1.58 noswap/colmode=pol",
+   "placed_32of32": false,
+   "stdout": "NOT FULLY PLACED: 14 {'PCIE_UP7/input': {'n_rows_scanned': 15148, 'reasons': {'vt_intra': \"('vt_intra', (93.2, 50.58, 'P', 'In2.Cu'))\", 'pad",
+   "wstep": "1.58"
+  },
+  {
+   "case": "WEST=1.58 noswap/colmode=default",
+   "placed_32of32": false,
+   "stdout": "NOT FULLY PLACED: 14 {'PCIE_UP7/input': {'n_rows_scanned': 15148, 'reasons': {'vt_intra': \"('vt_intra', (93.2, 50.58, 'P', 'In2.Cu'))\", 'pad",
+   "wstep": "1.58"
+  },
+  {
+   "case": "WEST=1.58 swap/colmode=default",
+   "placed_32of32": false,
+   "stdout": "NOT FULLY PLACED: 12 {'PCIE_UP7/input': {'n_rows_scanned': 15148, 'reasons': {'vt_intra': \"('vt_intra', (93.2, 50.58, 'P', 'In2.Cu'))\", 'pad",
+   "wstep": "1.58"
+  }
+ ],
+ "B_east_lane_plane_anchor": [
+  {
+   "EAST_CHIP_TO_J2": {
+    "in_board_band": false,
+    "y_max": 82.63,
+    "y_min": 58.43
+   },
+   "WEST_MCIO_TO_CHIP": {
+    "in_board_band": true,
+    "y_max": 49.7,
+    "y_min": 33.45
+   },
+   "case": "EAST=1.580 EDELTA=-0.10",
+   "edelta": "-0.10",
+   "placed_32of32": true,
+   "stdout": "CO16-ALLOC.6probe: pages=32 sha16=9366fbfd691b1125 size=22KiB"
+  },
+  {
+   "EAST_CHIP_TO_J2": {
+    "in_board_band": false,
+    "y_max": 81.53,
+    "y_min": 57.33
+   },
+   "WEST_MCIO_TO_CHIP": {
+    "in_board_band": true,
+    "y_max": 49.7,
+    "y_min": 33.45
+   },
+   "case": "EAST=1.580 EDELTA=1.00",
+   "edelta": "1.00",
+   "placed_32of32": true,
+   "stdout": "CO16-ALLOC.6probe: pages=32 sha16=cfa457c94904d513 size=22KiB"
+  },
+  {
+   "EAST_CHIP_TO_J2": {
+    "in_board_band": false,
+    "y_max": 80.53,
+    "y_min": 56.33
+   },
+   "WEST_MCIO_TO_CHIP": {
+    "in_board_band": true,
+    "y_max": 49.7,
+    "y_min": 33.45
+   },
+   "case": "EAST=1.580 EDELTA=2.00",
+   "edelta": "2.00",
+   "placed_32of32": true,
+   "stdout": "CO16-ALLOC.6probe: pages=32 sha16=15d6ca8eb9448cbc size=22KiB"
+  },
+  {
+   "case": "EAST=1.580 EDELTA=3.00",
+   "edelta": "3.00",
+   "placed_32of32": false,
+   "stdout": "NOT FULLY PLACED: 1 {'PCIE_UP0/out_J2': {'n_rows_scanned': 3724, 'reasons': {'vv_intra': \"('vv_intra', (84.7, 55.13, 'P'), (84.3, 55.33, 'N'"
+  }
+ ],
+ "artifact": "m13_v57_co61_l2_search_exhaustion",
+ "baseline_faithful": true,
+ "conclusion": "A：西侧 1.20/1.46/1.58 × {无交换/有交换} × {colmode pol/默认} 共 9 组**全部落位失败**（失败均为芯片逃逸区，行扫 ~15150 耗尽）⇒ 与策略无关，受球栅逃逸硬限。B：东侧 1.580 可落位，但走廊平面 y_max 80.5~82.6 > 板边可用上限 78.5975；下移锚定至 +2.0 仍越界，+3.0 起 J2 侧逃逸落位失败 ⇒ 无可行锚定。⇒ R3-2 realized 0.875（⇒ 中心距 1.580）在冻结 L1 包络内**不可达**，L1 冲突成立。",
+ "criterion": {
+  "lane_plane_in_board_band": [
+   33.4025,
+   78.5975
+  ],
+  "placed_32of32": true
+ },
+ "nature": "L2 设计空间穷举（负结果）：走廊对间距目标在冻结 L1 包络内不可达",
+ "redline": "只读冻结源；候选件 scratch 即发即删；canonical 零改动。",
+ "revision": "CO-61.1",
+ "schema": 1
+}
