@@ -1,0 +1,153 @@
+{
+ "artifact": "m13_v57_co54_zdiff_sensitivity",
+ "authority": "L2/SI（LAYOUT_CONSTITUTION 第二章）+ handoff §5(2) + CO-53 §3.2",
+ "conformance": "NOT_DEMONSTRATED",
+ "delivered_basis": {
+  "delivered_edge_gap_mm": 0.295,
+  "intra_center_mm": 0.5,
+  "source": "CO-54 audit (L4 construction 实测)",
+  "spec_p_gap_mm": 0.175
+ },
+ "gate_impact": "none（不改 SPEC/板/几何；仅记录）",
+ "input_gap": {
+  "effect": "无此输入 ⇒ 只能给敏感性包络，不能给分层 85Ω 终值",
+  "item": "8L 介质叠层（材料 + 逐层介质厚度）",
+  "provided": false,
+  "repo": "缺（四源/板/公开文档均无 8L 逐层厚度）"
+ },
+ "model": {
+  "kind": "first_order",
+  "method": "IPC-2141 (edge-coupled microstrip / symmetric stripline)",
+  "required_for_signoff": "SI9000 + 板厂阻抗券 (SPEC coupon_required=true)",
+  "signoff": false,
+  "source": "_shared/eda_core/stackup.py"
+ },
+ "revision": "CO-54.1",
+ "schema": 1,
+ "sensitivity_envelope": [
+  {
+   "delta_pct_er4p3": 6.72,
+   "h_mm": 0.1,
+   "within_tolerance_10pct_at_er4p3": true,
+   "zdiff_at_delivered_s_mm": {
+    "3.99": 80.06,
+    "4.16": 78.83,
+    "4.3": 77.85,
+    "4.5": 76.53,
+    "4.6": 75.89
+   },
+   "zdiff_at_spec_s_mm": {
+    "3.99": 75.02,
+    "4.16": 73.86,
+    "4.3": 72.95,
+    "4.5": 71.71,
+    "4.6": 71.11
+   }
+  },
+  {
+   "delta_pct_er4p3": 8.74,
+   "h_mm": 0.127,
+   "within_tolerance_10pct_at_er4p3": true,
+   "zdiff_at_delivered_s_mm": {
+    "3.99": 95.11,
+    "4.16": 93.64,
+    "4.3": 92.49,
+    "4.5": 90.91,
+    "4.6": 90.15
+   },
+   "zdiff_at_spec_s_mm": {
+    "3.99": 87.46,
+    "4.16": 86.12,
+    "4.3": 85.05,
+    "4.5": 83.6,
+    "4.6": 82.9
+   }
+  },
+  {
+   "delta_pct_er4p3": 9.95,
+   "h_mm": 0.15,
+   "within_tolerance_10pct_at_er4p3": false,
+   "zdiff_at_delivered_s_mm": {
+    "3.99": 104.55,
+    "4.16": 102.95,
+    "4.3": 101.68,
+    "4.5": 99.94,
+    "4.6": 99.11
+   },
+   "zdiff_at_spec_s_mm": {
+    "3.99": 95.09,
+    "4.16": 93.63,
+    "4.3": 92.47,
+    "4.5": 90.89,
+    "4.6": 90.13
+   }
+  },
+  {
+   "delta_pct_er4p3": 11.44,
+   "h_mm": 0.2,
+   "within_tolerance_10pct_at_er4p3": false,
+   "zdiff_at_delivered_s_mm": {
+    "3.99": 118.65,
+    "4.16": 116.82,
+    "4.3": 115.38,
+    "4.5": 113.41,
+    "4.6": 112.46
+   },
+   "zdiff_at_spec_s_mm": {
+    "3.99": 106.46,
+    "4.16": 104.82,
+    "4.3": 103.53,
+    "4.5": 101.76,
+    "4.6": 100.91
+   }
+  },
+  {
+   "delta_pct_er4p3": 11.99,
+   "h_mm": 0.25,
+   "within_tolerance_10pct_at_er4p3": false,
+   "zdiff_at_delivered_s_mm": {
+    "3.99": 127.65,
+    "4.16": 125.69,
+    "4.3": 124.14,
+    "4.5": 122.02,
+    "4.6": 121.0
+   },
+   "zdiff_at_spec_s_mm": {
+    "3.99": 113.98,
+    "4.16": 112.23,
+    "4.3": 110.85,
+    "4.5": 108.95,
+    "4.6": 108.04
+   }
+  },
+  {
+   "delta_pct_er4p3": 12.05,
+   "h_mm": 0.3,
+   "within_tolerance_10pct_at_er4p3": false,
+   "zdiff_at_delivered_s_mm": {
+    "3.99": 133.9,
+    "4.16": 131.84,
+    "4.3": 130.21,
+    "4.5": 127.99,
+    "4.6": 126.92
+   },
+   "zdiff_at_spec_s_mm": {
+    "3.99": 119.51,
+    "4.16": 117.67,
+    "4.3": 116.22,
+    "4.5": 114.23,
+    "4.6": 113.28
+   }
+  }
+ ],
+ "spec_datum_check": {
+  "claimed_zdiff": 85.1,
+  "delta_ohm": -0.05,
+  "er": 4.3,
+  "h_mm": 0.127,
+  "model_zdiff_ohm": 85.05,
+  "s_mm": 0.175,
+  "t_mm": 0.035,
+  "w_mm": 0.205
+ }
+}
