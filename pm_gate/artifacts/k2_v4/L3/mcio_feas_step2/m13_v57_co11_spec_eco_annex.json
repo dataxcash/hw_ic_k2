@@ -1,0 +1,45 @@
+{
+ "apply_policy": "应用 ECO 时：SPEC 版本 bump（新文件 + 变更单）+ 引擎 FROZEN_SHA 与阈值断言同步更新 + validator 规则更新；本附件本身不改任何冻结原件",
+ "artifact": "m13_v57_co11_spec_eco_annex",
+ "authority": "CO-09 §3 + CO-11 §8（L2 自裁：过孔策略/层角色）",
+ "deltas": [
+  {
+   "from": 2,
+   "path": "vias/high_speed/max_per_line",
+   "reason": "CO-09 §3 安全 hop 层角色：bandY 经 F↔In2↔In6↔B 共 3 段 + corner/drop/land；bandX 共 4 via/线",
+   "to": {
+    "bandX_escape_In2": 4,
+    "bandY_escape_B": 6
+   }
+  },
+  {
+   "from": 300,
+   "path": "vias/high_speed_via_count",
+   "to": {
+    "measured_probe": 320,
+    "note": "CO-11 通道分配实测受控过孔数（数据网）；含 GND 伴行/stitch 须另行核算"
+   }
+  },
+  {
+   "from": 5,
+   "path": "validator:A1.3.rules.max_vias_per_net",
+   "reason": "bandY 6 via/线；validator p3_v57_w3_constructive_validator_v2.py:345",
+   "to": 6
+  },
+  {
+   "from": "4 if t2 else 2",
+   "path": "engine:max_vias_per_line_report",
+   "reason": "p3_v57_w3_constructive.py:1615",
+   "to": "bandX 4 / bandY 6"
+  }
+ ],
+ "kind": "L2 过孔策略 ECO 附件（冻结原件不动；应用时版本 bump）",
+ "measured": {
+  "n_lines_bandX": 32,
+  "n_lines_bandY": 32,
+  "via_total_estimate": 320
+ },
+ "schema": 1,
+ "spec_sha16": "0bd52ed48e720b8c",
+ "spec_target": "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json"
+}

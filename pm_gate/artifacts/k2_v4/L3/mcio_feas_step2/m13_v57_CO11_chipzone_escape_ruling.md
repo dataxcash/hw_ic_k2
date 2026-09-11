@@ -160,3 +160,24 @@ k2 `ff438f0`｜父仓（bump）｜四源 4/4 MATCH｜canonical W3-CN.30 `05f7bd1
 6. `clearance_metric` paths 补齐 escape 竖段（现 t2 缺项，CO-06 D2 缺口）；`same_layer_crossings` 覆盖 lane。
 7. `REVISION` bump（W3-CN.34+）；A1.2 由工件（与输入序无关）保证。
 8. 一次求解 → `FEASIBLE_ALL ∧ crossings=0 ∧ A-CN.9 0/0/0 ∧ skew≤0.15 ∧ wall≤120s` → G4→G7。
+
+---
+
+## 11. 引擎接线的上游解阻项（L2 过孔策略 ECO）
+### 11.1 冲突（实测）
+| 项 | 现值（冻结） | CO-11 需求 | 出处 |
+|---|---|---|---|
+| `SPEC.vias.high_speed.max_per_line` | **2** | bandX(**escape=In2**)=**4** / bandY(**escape=B**)=**6** via 跨距/线 | CO-09 §3 安全 hop 链 |
+| `vias.high_speed_via_count` | 300（basis 实测 214） | 通道分配实测 **320**（32 线 bandX×4 + 32 线 bandY×6） | `..._channel_allocation.json` 统计 |
+| validator A1.3 `max_vias_per_net` | **5**（`p3_v57_w3_constructive_validator_v2.py:345`） | **6** | 同上 |
+| 引擎 `max_vias_per_line` 报表 | `4 if shape=="t2" else 2`（`:1615`） | bandX 4 / bandY 6 | 同上 |
+
+### 11.2 ECO 附件（不动冻结原件）
+`m13_v57_co11_spec_eco_annex.json`（`b859ab84bea7836b`，rev CO11-ECO.1）：机读列出上述 delta 与 apply 策略
+（SPEC 版本 bump + 引擎 `FROZEN_SHA`/阈值断言同步 + validator 规则更新）。
+**计数口径**：按 **via 跨距（hop）数**计；bandY 在 (vx,vy) 处为 3 段同轴跨距（F↔In2↔In6↔B），物理为叠孔/通孔。
+
+### 11.3 结论（对监理工）
+- CO-11 的**过孔策略/层角色**属 L2（CO-09 §3 已裁），但落地**必须**伴随上表 ECO（SPEC 属冻结输出，需版本 bump）。
+- 因此引擎 rev bump 与 SPEC ECO **同批**执行，才能通过 A1.3/A-CN.9 与 SPEC 断言；单改引擎会被 `FROZEN_SHA` 与 `max_vias_per_line` 断言挡下。
+- 下一步（同批）：应用 ECO（SPEC v-bump + validator 规则 + 引擎阈值）→ 引擎接线（§10.3）→ 一次求解 → G4→G7。
