@@ -89,7 +89,8 @@ POLMODE = __import__("os").environ.get("CO10_POLMODE", "")
 #   CO10_EASTSPLIT=1 ⇒ J2 up stub→In6 / dn stub→In2（跨带列可复用）
 #   !! 实验性：up In6 stub 会与 In6 lane 跨页真交叉（32/32 落位但复核 FAIL 56）⇒ 未采用。
 #   CO10_J2STEP=<mm> ⇒ J2 落列步长（默认 0.525 原口径）；CO-16 用 0.55（≥VV 0.525 + 余量）
-EASTSPLIT = __import__("os").environ.get("CO10_EASTSPLIT", "") not in ("", "0")
+_ES = __import__("os").environ.get("CO10_EASTSPLIT", "")
+EASTSPLIT = _ES if _ES not in ("", "0") else ""
 J2STEP = float(__import__("os").environ.get("CO10_J2STEP", "0.525"))
 
 
@@ -115,7 +116,14 @@ def pol_off(f, pol):
     return base if pol == "P" else -base
 
 
-def esc_layer(f): return ESC_MAP[(f["corridor"], f["band"])]
+_EFL = __import__("os").environ.get("CO10_EFLIP", "") not in ("", "0")
+
+
+def esc_layer(f):
+    # CO-16 候选：东侧 escape 层对调（up→In2 / dn→B），配合 up stub→B ⇒ 每线 via ≤6
+    if _EFL and f["corridor"] == "EAST_CHIP_TO_J2":
+        return "In2.Cu" if f["band"] == "up" else "B.Cu"
+    return ESC_MAP[(f["corridor"], f["band"])]
 
 
 def row_lower(f):
@@ -140,7 +148,19 @@ def row_group(f):
 
 def stub_layer(f):
     if f["conn_ref"] == "J2":
-        return "In6.Cu" if (EASTSPLIT and f["band"] == "up") else "In2.Cu"
+        if not EASTSPLIT:
+            return "In2.Cu"
+        if EASTSPLIT in ("in2", "in2c"):     # CO-16 候选：东侧 stub 全 In2
+            return "In2.Cu"
+        if EASTSPLIT == "b2":                # CO-16 候选：up stub In2（6 via）/ dn stub B（6 via，安全 hop land）
+            return "In2.Cu" if f["band"] == "up" else "B.Cu"
+        if EASTSPLIT == "ub":                # CO-16 候选：up stub B（8 via 安全 land）/ dn stub In2（4 via）
+            return "B.Cu" if f["band"] == "up" else "In2.Cu"
+        if EASTSPLIT == "ball":              # CO-16 候选：东侧全部 stub 落 B（In2 仅剩 landing via 点）
+            return "B.Cu"
+        if EASTSPLIT == "b":                 # CO-16 候选：up stub In2 / dn stub B（无 In6 stub ⇒ 不穿 lane）
+            return "In2.Cu" if f["band"] == "up" else "B.Cu"
+        return "In6.Cu" if f["band"] == "up" else "In2.Cu"
     return "In2.Cu" if GS_IN2[row_group(f)] else "In6.Cu"
 
 
@@ -148,16 +168,59 @@ def r3_build(rule):
     r3 = W.r3_place(J["r3_gaps"], LANES, "y", J.get("r3_base"))
     A = dict(r3["assignment"])
     j2k = [k for k, a in A.items() if a["ref"] == "J2" and a.get("page") in LANES and a.get("kind") == "data"]
-    if EASTSPLIT:
+    if EASTSPLIT == "in2c":
+        # CO-16：J2 列 = 区间图确定性贪心着色（每侧独立；区间图 ⇒ 贪心=最优，色数=max depth）
+        _ent = []
+        for k in j2k:
+            a = A[k]; f = FACTS[a["page"]]
+            ly = LANES[a["page"]]["lane_y"]; lx0, ll = a["column_x"], a["landing"][1]
+            _ent.append({"k": k, "side": 0 if abs(a["pad_x"] - J2_IN) < 1e-6 else 1,
+                         "vx": max(f["pad"]["P"][0], f["pad"]["N"][0]),
+                         "lo": min(ly, ll) - VV / 2.0, "hi": max(ly, ll) + VV / 2.0})
+        _col = {}
+        for side in (0, 1):
+            sub = sorted([e for e in _ent if e["side"] == side], key=lambda e: (e["lo"], e["k"]))
+            used = []                                     # list of (k, lo, hi)
+            for e in sub:
+                kk = 0
+                while any(abs(kk - u[0]) < 1 and e["lo"] < u[2] - TOL and u[1] < e["hi"] - TOL for u in used):
+                    kk += 1
+                _col[e["k"]] = kk; used.append((kk, e["lo"], e["hi"]))
+            # O4 感知：真着色对色值置换不变 ⇒ 按组内最大 pad_x 降序重排色值（大 vx 页取小 offset ⇒ R 大、ΔL 小）
+            _grp = {}
+            for e in sub:
+                _grp.setdefault(_col[e["k"]], []).append(e)
+            for _new, _old in enumerate(sorted(_grp, key=lambda g: -max(e["vx"] for e in _grp[g]))):
+                for e in _grp[_old]:
+                    _col[e["k"]] = _new
+        for k in j2k:
+            a = A[k]; _inner = abs(a["pad_x"] - J2_IN) < 1e-6
+            lx = W.fp(J2L - J2STEP * _col[k]) if _inner else W.fp(J2R + J2STEP * _col[k])
+            A[k] = dict(a, column_x=lx, landing=[lx, a["landing"][1]])
+    elif EASTSPLIT:
         # CO-16：逐带 per-page rank + J2STEP（跨带 stub 异层 ⇒ 列可复用 ⇒ 落列收拢 ⇒ O4 可闭合）
         byb = {}
         for k in j2k:
             byb.setdefault(FACTS[A[k]["page"]]["band"], {}).setdefault(A[k]["page"], []).append(k)
         for _b, _pm in byb.items():
-            for _r, _pg in enumerate(sorted(_pm, key=lambda q: LANES[q]["lane_index"])):
+            _order = sorted(_pm, key=lambda q: LANES[q]["lane_index"])
+            _n = len(_order)
+            # CO-16 列分配口径：
+            #   ub  ⇒ 压缩 8 列/侧 + 反对称配对（In2 仅 dn stub + up landing 点，y 互斥 ⇒ 可复用列）
+            #   in2/b2 ⇒ 奇偶交错 16 列/侧（两带 stub 同在 In2 ⇒ 必须列互斥）
+            _par = 0 if EASTSPLIT == "ub" else (1 if _b == "dn" else 0)
+            for _r, _pg in enumerate(_order):
+                if EASTSPLIT == "ub":
+                    _kin = _r
+                    _kout = (_n - 1) - _r
+                else:
+                    _kin = 2 * _r + _par
+                    _kout = (2 * _n - 2 + _par) - 2 * _r
                 for k in _pm[_pg]:
                     a = A[k]
-                    lx = W.fp(J2L - J2STEP * _r) if abs(a["pad_x"] - J2_IN) < 1e-6 else W.fp(J2R + J2STEP * _r)
+                    _inner = abs(a["pad_x"] - J2_IN) < 1e-6
+                    _off = _kin if _inner else _kout
+                    lx = W.fp(J2L - J2STEP * _off) if _inner else W.fp(J2R + J2STEP * _off)
                     A[k] = dict(a, column_x=lx, landing=[lx, a["landing"][1]])
     else:
         pgs = sorted({A[k]["page"] for k in j2k}, key=lambda p: LANES[p]["lane_index"])
@@ -182,7 +245,19 @@ def r3_build(rule):
 
 def _stub_layer_of(a):
     if a["ref"] == "J2":
-        return "In6.Cu" if (EASTSPLIT and FACTS[a["page"]]["band"] == "up") else "In2.Cu"
+        if not EASTSPLIT:
+            return "In2.Cu"
+        if EASTSPLIT in ("in2", "in2c"):
+            return "In2.Cu"
+        if EASTSPLIT == "b2":
+            return "In2.Cu" if FACTS[a["page"]]["band"] == "up" else "B.Cu"
+        if EASTSPLIT == "ub":
+            return "B.Cu" if FACTS[a["page"]]["band"] == "up" else "In2.Cu"
+        if EASTSPLIT == "ball":
+            return "B.Cu"
+        if EASTSPLIT == "b":
+            return "In2.Cu" if FACTS[a["page"]]["band"] == "up" else "B.Cu"
+        return "In6.Cu" if FACTS[a["page"]]["band"] == "up" else "In2.Cu"
     mid = GAP[a["ref"]]
     g = (a["ref"], "U" if a["pad_y"] < mid else "L")
     return "In2.Cu" if GS_IN2[g] else "In6.Cu"
@@ -346,9 +421,15 @@ def build(f, px, py, nx, ny):
         vias.append((vx, ly, pol, (E, "In6.Cu")))
         if S == "In2.Cu":                                   # lane(In6) -> drop -> In2 stub -> land
             vias.append((lx, ly, pol, ("In6.Cu", "In2.Cu")))
+            vias.append((lx, ll, pol, ("In2.Cu", "F.Cu")))
+        elif S == "B.Cu":                                   # lane(In6)->drop->B stub->land(B↔In6↔In2↔F，安全 hop)
+            vias.append((lx, ly, pol, ("In6.Cu", "B.Cu")))
+            vias.append((lx, ll, pol, ("B.Cu", "In6.Cu")))
+            vias.append((lx, ll, pol, ("In6.Cu", "In2.Cu")))
+            vias.append((lx, ll, pol, ("In2.Cu", "F.Cu")))
         else:                                               # lane(In6) -> In6 stub -> land stack
             vias.append((lx, ll, pol, ("In6.Cu", "In2.Cu")))
-        vias.append((lx, ll, pol, ("In2.Cu", "F.Cu")))
+            vias.append((lx, ll, pol, ("In2.Cu", "F.Cu")))
         segs.append(("F.Cu", f["pad"][pol][0], f["pad"][pol][1], vx, vy, True, pol))
         segs.append((E, vx, vy, vx, ly, False, pol))
         segs.append(("In6.Cu", vx, ly, lx, ly, False, pol))
