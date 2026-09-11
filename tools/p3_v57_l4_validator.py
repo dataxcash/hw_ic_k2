@@ -152,18 +152,20 @@ def main() -> int:
         try:
             import pcbnew
             b = pcbnew.LoadBoard(str(DST_PCB))
+            def _q(v):      # CO-22: pcbnew 以 nm 存盘；浮点往返有 ~1e-5mm 噪声 =>
+                return round(v, 4)      # 两侧同用 0.1um 粒度（远低于几何意义，远高于 nm 往返噪声）
             got = {}
             for t in b.GetTracks():
                 k = t.GetClass()
                 if k == "PCB_TRACK":
                     name = t.GetNetname(); L = b.GetLayerName(t.GetLayer())
-                    a = (round(pcbnew.ToMM(t.GetStart().x), 5), round(pcbnew.ToMM(t.GetStart().y), 5))
-                    c = (round(pcbnew.ToMM(t.GetEnd().x), 5), round(pcbnew.ToMM(t.GetEnd().y), 5))
+                    a = (_q(pcbnew.ToMM(t.GetStart().x)), _q(pcbnew.ToMM(t.GetStart().y)))
+                    c = (_q(pcbnew.ToMM(t.GetEnd().x)), _q(pcbnew.ToMM(t.GetEnd().y)))
                     got.setdefault(name, []).append((L, a, c))
             miss = 0
             for net, segs in rec["segments"].items():
                 g = sorted(got.get(net, []))
-                e = sorted((s["layer"], tuple(round(v, 5) for v in s["a"]), tuple(round(v, 5) for v in s["b"])) for s in segs)
+                e = sorted((s["layer"], tuple(_q(v) for v in s["a"]), tuple(_q(v) for v in s["b"])) for s in segs)
                 # board stores a->b possibly reversed; normalise
                 e = sorted((l, tuple(sorted((p, q)))) for l, p, q in e)
                 g2 = sorted((l, tuple(sorted((p, q)))) for l, p, q in g)
@@ -180,10 +182,10 @@ def main() -> int:
                             max(cu, key=lambda i: LIDX[b.GetLayerName(i)]))
                     spann = (b.GetLayerName(span[0]), b.GetLayerName(span[1]))
                     gv.setdefault(t2.GetNetname(), []).append(
-                        ((round(pcbnew.ToMM(t2.GetPosition().x), 5), round(pcbnew.ToMM(t2.GetPosition().y), 5)), spann))
+                        ((_q(pcbnew.ToMM(t2.GetPosition().x)), _q(pcbnew.ToMM(t2.GetPosition().y))), spann))
             vmiss = 0
             for net, vs in rec["vias"].items():
-                a = sorted(((round(v["xy"][0], 5), round(v["xy"][1], 5)), tuple(v["layers"])) for v in vs)
+                a = sorted(((_q(v["xy"][0]), _q(v["xy"][1])), tuple(v["layers"])) for v in vs)
                 c = sorted(gv.get(net, []))
                 if a != c:
                     vmiss += 1

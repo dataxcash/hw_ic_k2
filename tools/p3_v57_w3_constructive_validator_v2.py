@@ -449,7 +449,7 @@ def main() -> int:
     _shape = (art.get("resource_gate") or {}).get("r1_5_shape", "t2")
     m4 = {"r2_mismatch": [], "r3_mismatch": [], "nodes_route_mismatch": [], "shape": _shape}
     if _shape == "co16":
-        _alloc = load(STEP2 / "m13_v57_co16_channel_allocation_v2.json")
+        _alloc = load(STEP2 / "m13_v57_co16_channel_allocation_v3.json")
         _apg = _alloc["pages"]
         for pid, pg in [(p["page_id"], p) for p in art["pages"] if p["kind"] == "data"]:
             al = _apg.get(pid)
@@ -466,7 +466,7 @@ def main() -> int:
                 if abs(rb["column_x"] - want[0]) > 1e-6 or abs(rb["landing"][1] - want[1]) > 1e-6:
                     m4["r3_mismatch"].append({"page": pid, "pol": pol, "artifact": rb, "alloc": want})
         m4["co16_allocation"] = {
-            "artifact": "m13_v57_co16_channel_allocation_v2.json", "n_pages": len(_apg),
+            "artifact": "m13_v57_co16_channel_allocation_v3.json", "n_pages": len(_apg),
             "basis": "O(1) 消费保真；CO16-ALLOC.1 由 p3_v57_co11_placement_verify.py 独立复核 320/320 0 违规 PASS"}
     else:
         r2 = derive_r2(manifest, lane_frame)

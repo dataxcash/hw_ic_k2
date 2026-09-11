@@ -62,7 +62,7 @@ OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
 OUT_LANDING = STEP2 / "m13_v57_w3_chip_landing_rows.json"
 
 REVISION = "W3-CN.30"   # 默认（t2）路径不动；CO-16 见 REVISION_CO16
-REVISION_CO16 = "W3-CN.35"   # CO-16 全板 safe-hop + O4 有界幅值蛇形（O(1) 消费 CO16-ALLOC.1）/ ECO SPEC-REV-2
+REVISION_CO16 = "W3-CN.36"   # CO-16 全板 safe-hop + O4 有界幅值蛇形（O(1) 消费 CO16-ALLOC.1）/ ECO SPEC-REV-2
 ORD = "natural"   # ROOT-20: enumeration order (A1.2 order-invariance, non-vacuous)
 SCHEMA = 1
 STEP = 1.46
@@ -98,6 +98,9 @@ CO16_MEANDER = True
 TT_TRACK = 0.38            # width + clearance (PCIE85)；蛇形自净距下限
 MEANDER_MARGIN = 0.02      # 净距余量（自净距 / 邻道净距；防 FP 边界）
 LEGSEP_MIN = 0.38          # 蛇形相邻斜腿垂直净距下限（= width + clearance，同网可制造性）
+# CO-22：板边净空带（k2_v4_8L 板 bbox y[32.95,79.05]；0.3 板边约束 + 0.1025 半线宽）
+BOARD_Y_MIN, BOARD_Y_MAX = 32.95, 79.05
+LANE_Y_LO, LANE_Y_HI = BOARD_Y_MIN + 0.3 + 0.1025, BOARD_Y_MAX - 0.3 - 0.1025
 # CO-05c (O4): 成对落列 + L3 长度补偿（run 上确定性 45° 单侧蛇形）
 PAIR_MODE = True
 MEANDER_MODE = True
@@ -113,8 +116,8 @@ TOL = 1e-9
 SUPERSEDED = {"artifact": "m13_v57_w3_joint_assignment.json", "revision": "W3-JA.2",
                "sha256": "d081618c7b961d770c8e2f180f93b92125b316bc0eeec181f9d1d191a0ee6acc",
                "reason": "method-level iron-law violation (search-based); retained, not rewritten"}
-CO16_ALLOC = STEP2 / "m13_v57_co16_channel_allocation_v2.json"   # CO16-ALLOC.2（板内 fan）
-CO16_ALLOC_SHA = "236c72bc7d228fbf4312b2cce2c645b9e7ccb0a8d9c7201867ad06cf9253bc3d"
+CO16_ALLOC = STEP2 / "m13_v57_co16_channel_allocation_v3.json"   # CO16-ALLOC.3（lane 平面重整）
+CO16_ALLOC_SHA = "238eb812a05eeac6e0a469961796e4ddb9970294a9a9d4a8ed31b7ee520d5bab"
 CORRIDOR = {
     "EAST_CHIP_TO_J2": {"bounds": (105.25, 132.65), "x_domain": (93.55, 105.25)},
     "WEST_MCIO_TO_CHIP": {"bounds": (65.05, 82.35), "x_domain": (82.35, 93.55)},
@@ -469,7 +472,9 @@ def co16_o4_amp_table(alloc, o4):
         y, xlo, xhi = lanes[(pid, pol)]
         best = None
         for d in (1.0, -1.0):
-            room = 1e9
+            room = (LANE_Y_HI - y) if d > 0 else (y - LANE_Y_LO)      # CO-22 板边净空带
+            if room <= TOL:
+                continue
             for (p2, pol2), (y2, lo2, hi2) in lanes.items():
                 if p2 == pid and pol2 == pol:
                     continue
@@ -480,7 +485,10 @@ def co16_o4_amp_table(alloc, o4):
             cand = (room, d)
             if best is None or cand > best:
                 best = cand
-        tab[pid] = [best[1], 0.0, xlo, xhi]
+        if best is None:
+            tab[pid] = [1.0 if y < (LANE_Y_LO + LANE_Y_HI) / 2 else -1.0, 0.0, xlo, xhi]
+        else:
+            tab[pid] = [best[1], 0.0, xlo, xhi]
     for pid, pol in mset.items():
         d = tab[pid][0]
         y, xlo, xhi = lanes[(pid, pol)]
@@ -494,6 +502,7 @@ def co16_o4_amp_table(alloc, o4):
             if mset.get(p2) == pol2 and tab[p2][0] * (y - y2) > TOL:
                 gap = min(gap, (abs(y2 - y) - VT) / 2.0 - MEANDER_MARGIN)   # 对向蛇形对称解
             amp = min(amp, gap)
+        amp = min(amp, (LANE_Y_HI - y) if d > 0 else (y - LANE_Y_LO))        # CO-22 顶点不得出板边带
         tab[pid][1] = max(0.0, min(MEANDER_A_MAX, amp))
     # x 窗口：E=B 的 In6 via1 stack 截断（原 co16_lane_room 口径）
     for pid, pol in mset.items():

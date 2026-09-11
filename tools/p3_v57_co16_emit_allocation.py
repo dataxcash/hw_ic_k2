@@ -26,7 +26,8 @@ CFG = {"CO10_PAIR": "m13_v57_f13_r1_pair_coupling_v1_5.json", "CO10_WSTEP": "1.1
 for _k, _e in (("CO10_PAIR", "CO16_PAIR"), ("CO10_WSTEP", "CO16_WSTEP"), ("CO10_WLO", "CO16_WLO"),
                ("CO10_FANY_J3", "CO16_FANY_J3"), ("CO10_STUB", "CO16_STUB"),
                ("CO10_POLMODE", "CO16_POLMODE"), ("CO10_EASTSPLIT", "CO16_EASTSPLIT"),
-               ("CO10_J2STEP", "CO16_J2STEP")):
+               ("CO10_J2STEP", "CO16_J2STEP"), ("CO10_STEP", "CO16_STEP"),
+               ("CO10_EDELTA", "CO16_EDELTA")):
     if os.environ.get(_e):
         CFG[_k] = os.environ[_e]
 REVISION = os.environ.get("CO16_REV", "CO16-ALLOC.1")
