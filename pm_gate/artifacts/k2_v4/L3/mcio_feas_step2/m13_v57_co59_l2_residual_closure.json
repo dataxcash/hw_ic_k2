@@ -1,0 +1,138 @@
+{
+ "A_bcu_in6_coupling": {
+  "b_cu_nets": 32,
+  "b_cu_segments": 70,
+  "b_cu_zones": 0,
+  "criterion": {
+   "centerline_perp_mm_lt": 0.5,
+   "overlap_mm_gt": 0.3,
+   "parallel_angle_deg_le": 10.0
+  },
+  "min_centerline_perp_any_mm": 20.3,
+  "note": "B.Cu 实体走线存在（残余②声明的非阻塞项），但**无并行**铺铜/走线落入 In6 关键段关注带；与 In6 的关系为垂交（B.Cu 段为纵向、In6 带为横向）。",
+  "parallel_couplings": 0,
+  "verdict": "PASS",
+  "worst_edge_gap_mm": null
+ },
+ "B_delivered_interpair": {
+  "EAST_CHIP_TO_J2": {
+   "copper_edge_mm": 0.744,
+   "in6_long_rows_y": [
+    56.334,
+    56.834,
+    57.783,
+    58.283,
+    59.232,
+    59.732,
+    60.681,
+    61.181,
+    62.13,
+    62.63,
+    63.579,
+    64.079,
+    65.028,
+    65.528,
+    66.477,
+    66.977,
+    67.926,
+    68.426,
+    69.375,
+    69.875,
+    70.824,
+    71.324,
+    72.273,
+    72.773,
+    73.722,
+    74.222,
+    75.171,
+    75.671,
+    76.62,
+    77.12,
+    78.069,
+    78.569
+   ],
+   "inter_pair_pitch_mm": 1.449,
+   "inter_pair_steps_mm": [],
+   "intra_pair_center_mm": 0.5,
+   "intra_pair_steps_mm": [
+    0.5,
+    0.949
+   ],
+   "pair_pitch_2step_mm": [
+    1.449
+   ],
+   "pair_span_mm": 0.705,
+   "vs_req_center_mm": -0.011,
+   "vs_req_edge_mm": -0.131
+  },
+  "WEST_MCIO_TO_CHIP": {
+   "copper_edge_mm": 0.345,
+   "in6_long_rows_y": [
+    33.45,
+    34.5,
+    35.0,
+    35.55,
+    36.05,
+    37.1,
+    37.65,
+    38.7,
+    39.75,
+    40.8,
+    41.85,
+    42.9,
+    43.95,
+    44.45,
+    45.0,
+    45.5,
+    46.05,
+    47.1,
+    48.15,
+    49.2,
+    49.7
+   ],
+   "inter_pair_pitch_mm": 1.05,
+   "inter_pair_steps_mm": [
+    1.05
+   ],
+   "intra_pair_center_mm": 0.5,
+   "intra_pair_steps_mm": [
+    0.5,
+    0.55
+   ],
+   "pair_pitch_2step_mm": [
+    1.05,
+    1.55,
+    1.6,
+    2.1
+   ],
+   "pair_span_mm": 0.705,
+   "vs_req_center_mm": -0.41,
+   "vs_req_edge_mm": -0.53
+  }
+ },
+ "C_requirement_provenance": {
+  "engine_lane_step_const": "{\"WEST_MCIO_TO_CHIP\": 1.05, \"EAST_CHIP_TO_J2\": 1.449}",
+  "reading": "冻结输入显式声明：inter_pair_spacing 语义 = R3-2 0.875 **对间铜边净空**，1.46mm 为其在**冻结对铜跨 0.585** 下的中心距换算；config 注记要求勿把 0.875 当中心距注入 ⇒ **要求量是铜边净空 0.875**，1.46 是换算值。",
+  "route_model_config.json": {
+   "capacity_audit.inter_pair_spacing": 1.46,
+   "capacity_audit.note": "v22 用户裁决(2026-09-05): inter_pair_spacing 语义 = 0.875 对间铜边净空 → 对中心距 1.46mm. 引擎 capacity_audit 按对中心距(pitch)计, 故注入 1.46 (勿用 drc_rules.json diff_pair.inter_pair_spacing=0.875, 其为铜边净空口径)",
+   "channel_alloc.half_pitch": 0.19,
+   "channel_alloc.pitch_fallback": 1.08,
+   "path": "pm_gate/artifacts/k2_v4/L2/route_model_config.json",
+   "sha16": "71c001125959b24b"
+  }
+ },
+ "artifact": "m13_v57_co59_l2_residual_closure",
+ "conformance": "残余②=PASS；对间口径=待 owner 确认要求量（铜边 0.875 realized vs 中心距 1.46 换算）",
+ "gate_impact": "none（零改动；G4..G7 不变）",
+ "inputs_sha": {
+  "board_l4": "cdcb869e9827ec87",
+  "drc_rules": "0a459839e15960b8",
+  "route_model_config": "71c001125959b24b",
+  "spec_rev4": "1c4eecb0edf4a446"
+ },
+ "nature": "L2 自裁：残余②机器闭合 + 对间口径证据再基（只读；零几何/阈值改动）",
+ "open_item": "Q1 收窄：要求量 = **铜边净空 0.875**（冻结 config 注记原文）⇒ 交付对铜跨 0.705 下，中心距需 ≥ 0.705+0.875 = **1.580**（realized 读数）。若 owner 认定 1.46 中心距口径（即 0.585 跨换算）为准，则目标 = 1.46。**现交付：EAST 1.449 / WEST 1.05 ⇒ 两读数下均不达标。**",
+ "revision": "CO-59.1",
+ "schema": 1
+}
