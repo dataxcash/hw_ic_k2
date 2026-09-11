@@ -6,7 +6,13 @@
   (2) CO-09 §4ter D3 落列规则（lx=conn pad x、ll=行间中缝）在西侧是否可行；
   (3) 剩余不可落位页的精确归因（via-via / via-track / track-track / pad 冲突）。
 零搜索：候选来自冻结 F-13 pair 域 + 冻结 verdict；单遍确定性 argmin；无回溯。
-CLI: --rule {d3,fan}  --order {engine,fewest,laneidx}  --out PATH  --verbose
+CLI: --rule {d3,fan,co10}  --order {engine,fewest,laneidx}  --out PATH  --verbose
+env（只读旋钮，CO-11 实测用；默认=原行为）:
+  CO10_PAIR=<file>      pair 域文件名（默认 v1_4；CO-11 用 v1_5=pad 场合法域）
+  CO10_STEP=<mm>        全局 lane STEP
+  CO10_WDELTA=<mm>      仅西侧 lane 块整体下移
+  CO10_WSTEP/CO10_WLO   仅西侧 lane 块重派生（lane_y=WLO+idx*WSTEP）
+  CO10_FANDX_J3/_J4=<mm> 西侧 connector landing lx 偏置
 """
 from __future__ import annotations
 import argparse, hashlib, json, math, sys
@@ -24,8 +30,20 @@ FACTS = W.page_facts(J["manifest"], J["lane_frame"])
 FRS = W.frames_of(FACTS)
 W.STEP = float(__import__("os").environ.get("CO10_STEP", W.STEP))
 LANES = W.r2_lanes(FRS, FACTS)
+_WD = float(__import__("os").environ.get("CO10_WDELTA", "0"))
+if _WD:
+    for _p, _v in LANES.items():
+        if FACTS[_p]["corridor"] == "WEST_MCIO_TO_CHIP":
+            _v["lane_y"] = W.fp(_v["lane_y"] - _WD)
+_WS = float(__import__("os").environ.get("CO10_WSTEP", "0"))
+_WL = float(__import__("os").environ.get("CO10_WLO", "33.3"))
+if _WS:
+    for _p, _v in LANES.items():
+        if FACTS[_p]["corridor"] == "WEST_MCIO_TO_CHIP":
+            _v["lane_y"] = W.fp(_WL + _v["lane_index"] * _WS)
 PADF = json.loads((SPEC / "m13_v57_co09_pad_field.json").read_text())
-PAIR_DOMAIN = json.loads((SPEC / "m13_v57_f13_r1_pair_coupling_v1_4.json").read_text())["pages"]
+PAIR_ART = __import__("os").environ.get("CO10_PAIR", "m13_v57_f13_r1_pair_coupling_v1_4.json")
+PAIR_DOMAIN = json.loads((SPEC / PAIR_ART).read_text())["pages"]
 
 VIA_R, CLEAR, ESC, WID = 0.175, 0.175, 0.075, 0.205
 YWIN = 0.7           # via1 只允许落在 pad_y ± 0.7 内（保 up/dn band 隔离）
@@ -102,6 +120,12 @@ def r3_build(rule):
 
 FAN_Y = {("J3", "U"): 42.0, ("J3", "L"): 44.2, ("J4", "U"): 60.2, ("J4", "L"): 65.0}
 FAN_DX = {("J3", "U"): 0.0, ("J3", "L"): 0.0, ("J4", "U"): 0.0, ("J4", "L"): 0.0}
+_FX = float(__import__("os").environ.get("CO10_FANDX_J4", "0"))
+_FX3 = float(__import__("os").environ.get("CO10_FANDX_J3", "0"))
+if _FX or _FX3:
+    for _g in list(FAN_DX):
+        if _g[0] == "J4": FAN_DX[_g] += _FX
+        if _g[0] == "J3": FAN_DX[_g] += _FX3
 
 
 def y_bias(f):
