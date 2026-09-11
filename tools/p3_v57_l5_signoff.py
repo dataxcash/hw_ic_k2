@@ -42,6 +42,22 @@ def drc(board: Path, pro: Path, dru: Path | None = None) -> dict:
         return json.loads(out.read_text())
 
 
+def _zone_stats(board):
+    """CO-50：按种类统计 zone（铜铺铜 vs 非铜 rule area），供 PDN 事实核验（非断言）。"""
+    tot = pour = rule = 0
+    layers = {}
+    for z in board.Zones():
+        tot += 1
+        if hasattr(z, "GetIsRuleArea") and z.GetIsRuleArea():
+            rule += 1
+        else:
+            pour += 1
+            for ln in z.GetLayerSet().Seq():
+                nm = board.GetLayerName(ln)
+                layers[nm] = layers.get(nm, 0) + 1
+    return {"total": tot, "copper_pour": pour, "rule_area": rule, "pour_layers": layers}
+
+
 def main() -> int:
     import pcbnew
     rules = json.loads(RULES.read_text())
@@ -52,6 +68,8 @@ def main() -> int:
 
     # ---- FAB record ----
     b = pcbnew.LoadBoard(str(L4_PCB))
+    zs_src = _zone_stats(pcbnew.LoadBoard(str(SRC_PCB)))     # CO-50：PDN 事实核验（冻结源）
+    zs_l4 = _zone_stats(b)                                   # CO-50：PDN 事实核验（L4）
     cu = [b.GetLayerName(i) for i in range(pcbnew.PCB_LAYER_ID_COUNT)
           if b.GetEnabledLayers().Contains(i) and str(b.GetLayerName(i)).endswith(".Cu")]
     tracks = [t for t in b.GetTracks() if t.GetClass() == "PCB_TRACK"]
@@ -137,14 +155,19 @@ def main() -> int:
         skew.append({"page": pg["page_id"], "skew_mm": round(abs(plen("P") - plen("N")), 4)})
     skew_max = max((s["skew_mm"] for s in skew), default=0)
     planes = [l for l in cu if l in ("In1.Cu", "In3.Cu", "In4.Cu", "In5.Cu")]
-    si = {"artifact": "m13_v57_l5_si_pi_emc_record", "schema": 1, "revision": "L5-SI.2",
+    si = {"artifact": "m13_v57_l5_si_pi_emc_record", "schema": 1, "revision": "L5-SI.3",
           "SI": {"track_width_rule_mm": 0.205, "all_pcie_tracks_0p205": widths_ok,
                  "max_intra_pair_skew_mm": skew_max, "skew_rule_mm": rules["diff_pair"]["intra_pair_skew_mm"],
                  "skew_ok": skew_max <= rules["diff_pair"]["intra_pair_skew_mm"] + 1e-9,
                  "skew_pages_checked": len(skew), "skew_pages": skew,
                  "layer_transitions_per_line": {"via1/corner/drop/land": 4}},
-          "PI": {"plane_layers": planes, "planes_present": bool(planes),
-                 "pdn_planes_untouched": "frozen board zones unmodified (L4 adds tracks only)",
+          "PI": {"plane_layers_reserved": planes,
+                 "zone_counts": {"frozen_src": zs_src, "l4": zs_l4},
+                 "pdn_status": ("reserved_not_poured"
+                                if (zs_src["copper_pour"] == 0 and zs_l4["copper_pour"] == 0) else "poured"),
+                 "pdn_plane_copper_untouched": (zs_src["copper_pour"] == 0 and zs_l4["copper_pour"] == 0),
+                 "pdn_note": ("CO-50 事实核验：冻结源与 L4 均无铜铺铜 zone（平面层为**保留层**，铺铜属后续阶段 WP2）；"
+                              "L4 仅新增 %d 个非铜 rule area + tracks ⇒ 无平面铜被改写" % zs_l4["rule_area"]),
                  "hole_clearance_violations": dfm["drc"]["new_violations"].get("hole_clearance", 0)},
           "EMC": {"signal_layers": [l for l in cu if l not in planes],
                   "reference_plane_adjacency": "F.Cu<->In1.Cu, In2.Cu<->In3.Cu, In6.Cu<->In5.Cu, B.Cu<->In4.Cu (8L stack, LID.1)",
@@ -169,7 +192,8 @@ def main() -> int:
 - SI（对内等长）：**{si['verdict']}** — `max_intra_pair_skew_mm = {skew_max:.4f} <= {rules['diff_pair']['intra_pair_skew_mm']}`（{si['SI']['skew_pages_checked']} 页，含 REFCLK）。
 - DFM：**{dfm['verdict']}** — `new_total = {dfm['drc']['new_total']}`；L4 违规 by_type `{dfm['drc']['l4_applied']['by_type']}`（= 冻结基线 lib/silk，计入不计）。
 - DFT（施工连通性，CO-47 谓词）：在册网未连项 **{_dft['in_scope_unconnected_nets']}/{_dft['in_scope_nets']}**（{_dft['rule']}）。
-- EMC：solder_mask_bridge `{si['EMC']['solder_mask_bridge_violations']}` / copper_edge `{si['EMC']['copper_edge_violations']}`；PI：hole_clearance `{si['PI']['hole_clearance_violations']}`、平面未动。
+- EMC：solder_mask_bridge `{si['EMC']['solder_mask_bridge_violations']}` / copper_edge `{si['EMC']['copper_edge_violations']}`；
+  PI：hole_clearance `{si['PI']['hole_clearance_violations']}`；pdn_status `{si['PI']['pdn_status']}`（铜铺铜 zone：冻结源 `{si['PI']['zone_counts']['frozen_src']['copper_pour']}` / L4 `{si['PI']['zone_counts']['l4']['copper_pour']}` ⇒ 保留层未铺铜，CO-50）。
 - **裁决：无需回上层**（G4..G7 全 PASS）。里程碑 tag `k2-v57-g7-l5-pass`；收口声明件 W3 boundary v1.17。
 
 ## 2. 量（8L）

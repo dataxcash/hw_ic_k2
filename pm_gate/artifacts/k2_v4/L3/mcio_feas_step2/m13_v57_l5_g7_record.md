@@ -8,7 +8,8 @@
 - SI（对内等长）：**PASS** — `max_intra_pair_skew_mm = 0.0031 <= 0.15`（34 页，含 REFCLK）。
 - DFM：**PASS** — `new_total = 0`；L4 违规 by_type `{'silk_edge_clearance': 1, 'lib_footprint_mismatch': 29, 'lib_footprint_issues': 12}`（= 冻结基线 lib/silk，计入不计）。
 - DFT（施工连通性，CO-47 谓词）：在册网未连项 **0/68**（CO-47：在册（L4 施工）网必须 0 未连项（kicad-cli unconnected_items 网名解析）；范围外网不计）。
-- EMC：solder_mask_bridge `0` / copper_edge `0`；PI：hole_clearance `0`、平面未动。
+- EMC：solder_mask_bridge `0` / copper_edge `0`；
+  PI：hole_clearance `0`；pdn_status `reserved_not_poured`（铜铺铜 zone：冻结源 `0` / L4 `0` ⇒ 保留层未铺铜，CO-50）。
 - **裁决：无需回上层**（G4..G7 全 PASS）。里程碑 tag `k2-v57-g7-l5-pass`；收口声明件 W3 boundary v1.17。
 
 ## 2. 量（8L）
@@ -36,7 +37,7 @@
 ## 5. 指纹
 图纸 `dfa1d7c4a811b0da`｜landing `ef5704eb18c5e6d5`｜G5 `23b2b6d161f9bea1`
 ｜L4 construction `58ccf62e881f2a8f`｜L4 validation `5bdf42b50a34ed3f`｜L4 板 `cdcb869e9827ec87`
-｜fab `9a223923b029a1f9`｜dfm `f5a691f4cda234df`｜si `a3187aed93c48b6b`
+｜fab `9a223923b029a1f9`｜dfm `f5a691f4cda234df`｜si `305c237c88762b94`
 ｜`.kicad_dru` `3148703240d54420`
 冻结四源 `0bd52ed48e720b8c / a8ef3ea8ecff99d7 / fb07d25ac426ff84 / 0a459839e15960b8`（未改）。
 

@@ -12,14 +12,29 @@
  },
  "PI": {
   "hole_clearance_violations": 0,
-  "pdn_planes_untouched": "frozen board zones unmodified (L4 adds tracks only)",
-  "plane_layers": [
+  "pdn_note": "CO-50 事实核验：冻结源与 L4 均无铜铺铜 zone（平面层为**保留层**，铺铜属后续阶段 WP2）；L4 仅新增 4 个非铜 rule area + tracks ⇒ 无平面铜被改写",
+  "pdn_plane_copper_untouched": true,
+  "pdn_status": "reserved_not_poured",
+  "plane_layers_reserved": [
    "In1.Cu",
    "In3.Cu",
    "In4.Cu",
    "In5.Cu"
   ],
-  "planes_present": true
+  "zone_counts": {
+   "frozen_src": {
+    "copper_pour": 0,
+    "pour_layers": {},
+    "rule_area": 0,
+    "total": 0
+   },
+   "l4": {
+    "copper_pour": 0,
+    "pour_layers": {},
+    "rule_area": 4,
+    "total": 4
+   }
+  }
  },
  "SI": {
   "all_pcie_tracks_0p205": true,
@@ -171,7 +186,7 @@
   "track_width_rule_mm": 0.205
  },
  "artifact": "m13_v57_l5_si_pi_emc_record",
- "revision": "L5-SI.2",
+ "revision": "L5-SI.3",
  "schema": 1,
  "verdict": "PASS"
 }
