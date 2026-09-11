@@ -74,8 +74,14 @@ def build(art, manifest):
             rv = pg["refclk"]                                  # ROOT-21: P/N 差分对 + 正确网名 (O3)
             for pol in ("P", "N"):
                 net = rv["nets"][pol]
-                pth = rv["paths"][pol]["path"]
                 segs.setdefault(net, []); vias.setdefault(net, [])
+                if rv.get("nodes", {}).get(pol):               # CO-40 ECS-001：3D 节点（含换层）
+                    pts, segL, vs = collapse(rv["nodes"][pol])
+                    for i in range(len(segL)):
+                        segs[net].append({"layer": segL[i], "a": pts[i], "b": pts[i + 1]})
+                    vias[net] += vs
+                    continue
+                pth = rv["paths"][pol]["path"]                 # 兼容：无 nodes 时按 F.Cu 直段
                 for i in range(len(pth) - 1):
                     segs[net].append({"layer": rv["layer"], "a": pth[i], "b": pth[i + 1]})
     nets = sorted(set(segs) | set(vias))

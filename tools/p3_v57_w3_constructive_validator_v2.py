@@ -23,9 +23,9 @@ GAPS = STEP2 / "m13_v57_f8_r3_gap_candidates_r3x2.json"
 BASE_GAPS = STEP2 / "m13_v57_f8_r3_gap_candidates.json"
 LANEFRAME = STEP2 / "m13_v57_f3_lane_frame.json"
 W0R = STEP2 / "m13_v57_big_w0r_corridor_model.json"
-FROZEN = {"spec": L3 / "SPEC_k2_v4.spec-rev-2.json", "rules": K2 / "_shared/eda_core/drc_rules.json",
+FROZEN = {"spec": L3 / "SPEC_k2_v4.spec-rev-3.json", "rules": K2 / "_shared/eda_core/drc_rules.json",
           "manifest": STEP2 / "m13_v57_s1_page_manifest.json", "pcb": K2 / "k2_v4.kicad_pcb"}
-FROZEN_SHA_PREFIX = {"spec": "0a7ad112ac4c57e3", "manifest": "a8ef3ea8ecff99d7",
+FROZEN_SHA_PREFIX = {"spec": "2d6dbd8bd8d667d7", "manifest": "a8ef3ea8ecff99d7",
                      "pcb": "f6273de613f43d05", "rules": "0a459839e15960b8"}
 STEP, LANE_LO, N_USED = 1.46, 33.3, 16
 VIA_VIA, POL_OFF, R3_OFF = 0.525, 0.19, -0.3

@@ -78,8 +78,15 @@ def main() -> int:
         else:
             rv = pg["refclk"]
             for pol in ("P", "N"):
-                net = rv["nets"][pol]; pth = rv["paths"][pol]["path"]
+                net = rv["nets"][pol]
                 exp_segs.setdefault(net, []); exp_vias.setdefault(net, [])
+                if rv.get("nodes", {}).get(pol):          # CO-40 ECS-001：3D 节点（含换层 via）
+                    pts, segL, vs = collapse(rv["nodes"][pol])
+                    for i in range(len(segL)):
+                        exp_segs[net].append({"layer": segL[i], "a": pts[i], "b": pts[i + 1]})
+                    exp_vias[net] += vs
+                    continue
+                pth = rv["paths"][pol]["path"]            # 兼容：无 nodes 时按 F.Cu 直段
                 for i in range(len(pth) - 1):
                     exp_segs[net].append({"layer": rv["layer"], "a": pth[i], "b": pth[i + 1]})
     def key(s): return (s["layer"], tuple(round(v, 5) for v in s["a"]), tuple(round(v, 5) for v in s["b"]))

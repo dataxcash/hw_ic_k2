@@ -26,7 +26,7 @@ K2 = Path("/home/fila/jqdDev_2025/ic_hw/k2")
 L3 = K2 / "pm_gate" / "artifacts" / "k2_v4" / "L3"
 STEP2 = L3 / "mcio_feas_step2"
 F = {
-    "spec": L3 / "SPEC_k2_v4.spec-rev-2.json",   # ECO SPEC-REV-2（CO-11 附件应用）
+    "spec": L3 / "SPEC_k2_v4.spec-rev-3.json",   # ECO SPEC-REV-3（CO-40 ECS-001 REFCLK J2 transit）
     "rules": K2 / "_shared" / "eda_core" / "drc_rules.json",
     "manifest": STEP2 / "m13_v57_s1_page_manifest.json",
     "w0r_model": STEP2 / "m13_v57_big_w0r_corridor_model.json",
@@ -43,7 +43,7 @@ F = {
     "coherent_rows": STEP2 / "m13_v57_f13_r3_coherent_rows.json",
 }
 FROZEN_SHA = {
-    "spec": "0a7ad112ac4c57e31f5f3ca06e10cf76a67c01a9d5360651f970ca2b289c56a6",
+    "spec": "2d6dbd8bd8d667d7392e2f571839c112babaf3d3f281b5c0a9c606ac0bf51066",
     "rules": "0a459839e15960b8fbfe0e1f5bb154a02b30cbafa1cbb0d56c2b810a71228448",
     "manifest": "a8ef3ea8ecff99d7549d4122043c972c1bb68346dc4dcc3f36fdd9bacde49890",
     "w0r_model": "80ee9adb78a7e9ad94c27d426295592eee21af3d1e3ce88fe3042183160f0efa",
@@ -62,7 +62,16 @@ OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
 OUT_LANDING = STEP2 / "m13_v57_w3_chip_landing_rows.json"
 
 REVISION = "W3-CN.30"   # 默认（t2）路径不动；CO-16 见 REVISION_CO16
-REVISION_CO16 = "W3-CN.38"   # CO-36 D3b 收官：connector 落列 = land 段长升序优先（O(1) 消费 CO16-ALLOC.5）
+REVISION_CO16 = "W3-CN.39"   # CO-40：REFCLK 页 pad_field_transit = ECS-001 闭式（F.Cu->In2->F.Cu 单次换层）
+ECS_VIA1_X = 133.825        # 两列缝中线（距两侧 pad 边各 0.35 >= vias.high_speed.pad_edge_clearance_mm 0.3）
+ECS_VIA2_X_MAX = 131.525    # 内列 pad 西缘 132.0 - via 半径 0.175 - pad_edge_clearance 0.3
+ECS_VIA_R = 0.175           # vias.std: drill 0.2 + 2*annular 0.075
+ECS_TRACE_HALF = 0.1025     # PCIe85 width 0.205 / 2
+ECS_CLEAR = 0.175           # 店规 PCIe85 净距（域内不放宽任何数值阈值）
+ECS_MARGIN = 0.2775         # trace_half + clear：迹跨列端所需
+ECS_DX = 0.4525             # via 避开同层列的横向最小中心距：via_r + trace_half + clear
+ECS_COL_LO, ECS_COL_HI = 129.0, 132.2   # pad 场近域 In2 stub 列筛选窗
+REFCLK_N_OFF = 0.31        # REFCLK 内 N 轨相对 pad 行 y 的偏移（P=-0.19 ⇒ 对内 0.50 >= ECS_DX）
 ORD = "natural"   # ROOT-20: enumeration order (A1.2 order-invariance, non-vacuous)
 SCHEMA = 1
 STEP = 1.46
@@ -1122,6 +1131,45 @@ def colx_center(gaps: dict, cref: str, pd: dict) -> float:
     return float("nan")
 
 
+def _in2_columns():
+    """pad 场近域的 In2 竖直 stub 列 (x, y_lo, y_hi)。来源 = CO-16 帧（模块级 _CO16_PTS），闭式无搜索。"""
+    cols = {}
+    for pp in _CO16_PTS.values():
+        for q in (pp or {}).get("stub", []):
+            x, y = fp(q[0]), fp(q[1])
+            if ECS_COL_LO <= x <= ECS_COL_HI:
+                lo, hi = cols.get(x, (y, y))
+                cols[x] = (min(lo, y), max(hi, y))
+    return sorted((x, lo, hi) for x, (lo, hi) in cols.items())
+
+
+def refclk_transit_nodes(j2, rail_y, west_x, rise_x, run_y, far, off):
+    """CO-40 ECS-001：J2 外列 N 的 pad 场 transit（F.Cu -> In2 -> F.Cu 单次换层）。
+
+    闭式：via1 落两列缝中线；via2 取 x<=ECS_VIA2_X_MAX 上避开同层 In2 列的缝中心；
+    若无直行缝（rail_y 被 In2 列端封堵）则绕该列端部（detour_y = 该列 y_lo - ECS_MARGIN 取整）。
+    """
+    tail = [[fp(rise_x + off), rail_y, "F.Cu"], [fp(rise_x + off), fp(run_y + off), "F.Cu"],
+            [fp(west_x), fp(run_y + off), "F.Cu"], [far[0], far[1], "F.Cu"]]
+    head = [[j2[0], j2[1], "F.Cu"],
+            [ECS_VIA1_X, rail_y, "F.Cu"], [ECS_VIA1_X, rail_y, "In2.Cu"]]
+    cols = _in2_columns()
+    x_v = fp(math.floor((ECS_VIA2_X_MAX - GRID) / GRID) * GRID)      # 直行候选（最东可用，留 0.075 余量）
+    blk = [c for c in cols if c[1] - ECS_MARGIN <= rail_y <= c[2] + ECS_MARGIN]  # rail_y 处封堵列
+    direct = (not blk) or (x_v - max(c[0] for c in blk) >= ECS_DX)
+    if direct:
+        return head + [[x_v, rail_y, "In2.Cu"], [x_v, rail_y, "F.Cu"]] + tail
+    x_wall = max(c[0] for c in blk)                                  # 最东封堵列 = 须绕行的那道墙
+    detour_y = fp(math.floor((min(c[1] for c in blk if c[0] == x_wall) - ECS_DX) / GRID) * GRID)
+    west_blk = [c[0] for c in blk if c[0] < x_wall]      # rail_y 处封堵列中位于墙西侧者
+    x_v = (fp((x_wall + max(west_blk)) / 2.0) if west_blk   # 墙 ↔ 其西邻封堵列 的中缝
+           else fp(x_wall - ECS_DX - 2 * GRID))
+    x_vert = fp(math.floor(((x_wall + ECS_VIA1_X) / 2.0) / GRID) * GRID)          # 竖直段（墙东侧、缝内）
+    return (head + [[x_vert, rail_y, "In2.Cu"], [x_vert, detour_y, "In2.Cu"],
+                    [x_v, detour_y, "In2.Cu"], [x_v, rail_y, "In2.Cu"],
+                    [x_v, rail_y, "F.Cu"]] + tail)
+
+
 def refclk_place(manifest: dict, w0r: dict) -> dict:
     pw = w0r["refclk_passage_witness"]
     eu = pw["transition_columns"]["east_rise"]["x_centre_range"]
@@ -1172,13 +1220,25 @@ def refclk_place(manifest: dict, w0r: dict) -> dict:
             paths[pol] = {"path": path, "j2_pad": j2, "far_pad": far, "pol_offset_mm": off,
                           "run_y": run_y,
                           "crossing_y_from_witness": base_run if base_run != j2[1] else None}
+        nodes = {}
+        for pol in ("P", "N"):
+            pth = paths[pol]["path"]
+            if pol == "P":                                        # 内列 pad：F.Cu 直出，无换层
+                nodes[pol] = [[q[0], q[1], "F.Cu"] for q in pth]
+            else:                                                 # 外列 pad：ECS-001 单次换层
+                nodes[pol] = refclk_transit_nodes(j2, fp(j2[1] + paths[pol]["pol_offset_mm"]),
+                                                  west, rise_x, paths[pol]["run_y"], far,
+                                                  paths[pol]["pol_offset_mm"])
         out[pid] = {"layer": "F.Cu", "lane_y": lane_y, "pol_offset_mm": POL_OFF,
                     "nets": {q: pg["anchors"]["conn2"][q]["net"] for q in ("P", "N")},
                     "paths": paths,
                     "witness": {"source": "W0-R refclk_passage_witness",
                                 "kind": pw["per_page"][base_pid]["kind"],
                                 "status": pw["per_page"][base_pid]["status"]},
-                    "pad_field_transit": "delegated to connector side (W2/R3-R4), per witness note"}
+                    "nodes": nodes,
+                    "pad_field_transit": ("ECS-001 (CO-40 L2 自裁): 外列 N = F.Cu stub -> via1 "
+                                          "-> In2 下穿内列墙 -> via2 -> F.Cu；每线 2 via；"
+                                          "内列 P = F.Cu 直出")}
     return out
 
 
@@ -1579,8 +1639,6 @@ def main(argv=None) -> int:
         _co16, r1 = co16_prepare(j, facts, lanes, r3)           # W3-CN.31: 工件 O(1) 消费
     else:
         r1 = r1_place(facts, frs, j["pair_xorder"], j["verdict"], _coh, lanes, r3)
-    rfc = refclk_place(j["manifest"], j["w0r_model"])
-
     # ---- R1.5 single straight segment (via1 -> (entry_x, lane_y +/- POL_OFF))
     paths, r15 = {}, {}
     band_index = {}
@@ -1623,6 +1681,8 @@ def main(argv=None) -> int:
         _p2, _c2 = co16_build_routes(facts, _co16, lanes)
         paths.update(_p2)
         r1["certificates"] = r1["certificates"] + _c2
+    # CO-40：REFCLK 页须在 co16_build_routes 之后构造（ECS-001 需消费 _CO16_PTS 的 In2 stub 列）
+    rfc = refclk_place(j["manifest"], j["w0r_model"])
     _MEANDER = {}
     for pid, f in facts.items():
         # ROOT-15 fix: R3 assignment keys are "<conn_ref>|<net>", NOT the page id; the previous
