@@ -1,14 +1,14 @@
 {
  "application": {
   "dst": "k2_v4.l4.kicad_pcb",
-  "dst_sha256": "33ded90443f2e2c2c9dbf297537604f83a3db72471281f10713590438acb46de"
+  "dst_sha256": "b63e6c09aa57e76de923a84fb8886b13a75bfc6db8e407129eab6dff336f9bcf"
  },
  "artifact": "m13_v57_l4_construction",
  "authority": {
   "design_decisions": 0,
   "drawing": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_joint_assignment.json",
-  "drawing_rev": "W3-CN.22",
-  "drawing_sha256": "caa516abdaf8e823cf8ce40b59212626daaea3a12722fdeb4438d1d9811e5421",
+  "drawing_rev": "W3-CN.25",
+  "drawing_sha256": "c17c5a4217888f1e15ae939a81c3e90d96d44a1e3b52f2d5e65ca79d5adbd620",
   "src_pcb_sha256": "f6273de613f43d05555d12d6c3492b1e70f383761d8db5121f12b2ca0695af9a"
  },
  "nets": [
@@ -44,8 +44,10 @@
   "PCIE_DN_OUT6_P_MCIO",
   "PCIE_DN_OUT7_N_MCIO",
   "PCIE_DN_OUT7_P_MCIO",
-  "PCIE_REFCLK0/input",
-  "PCIE_REFCLK1/input",
+  "PCIE_REFCLK0_N",
+  "PCIE_REFCLK0_P",
+  "PCIE_REFCLK1_N",
+  "PCIE_REFCLK1_P",
   "PCIE_UP0_N",
   "PCIE_UP0_P",
   "PCIE_UP1_N",
@@ -1906,33 +1908,90 @@
     "layer": "F.Cu"
    }
   ],
-  "PCIE_REFCLK0/input": [
+  "PCIE_REFCLK0_N": [
+   {
+    "a": [
+     135.0,
+     45.9
+    ],
+    "b": [
+     135.0,
+     46.09
+    ],
+    "layer": "F.Cu"
+   },
+   {
+    "a": [
+     135.0,
+     46.09
+    ],
+    "b": [
+     106.757,
+     46.09
+    ],
+    "layer": "F.Cu"
+   },
+   {
+    "a": [
+     106.757,
+     46.09
+    ],
+    "b": [
+     82.35,
+     46.09
+    ],
+    "layer": "F.Cu"
+   },
+   {
+    "a": [
+     82.35,
+     46.09
+    ],
+    "b": [
+     58.3,
+     45.75
+    ],
+    "layer": "F.Cu"
+   }
+  ],
+  "PCIE_REFCLK0_P": [
    {
     "a": [
      132.65,
      45.9
     ],
     "b": [
-     105.825,
-     45.9
+     132.65,
+     45.71
     ],
     "layer": "F.Cu"
    },
    {
     "a": [
-     105.825,
-     45.9
+     132.65,
+     45.71
+    ],
+    "b": [
+     106.377,
+     45.71
+    ],
+    "layer": "F.Cu"
+   },
+   {
+    "a": [
+     106.377,
+     45.71
     ],
     "b": [
      82.35,
-     45.9
+     45.71
     ],
     "layer": "F.Cu"
    },
    {
     "a": [
      82.35,
-     45.9
+     45.71
     ],
     "b": [
      58.9,
@@ -1941,55 +2000,112 @@
     "layer": "F.Cu"
    }
   ],
-  "PCIE_REFCLK1/input": [
+  "PCIE_REFCLK1_N": [
+   {
+    "a": [
+     135.0,
+     51.3
+    ],
+    "b": [
+     135.0,
+     51.49
+    ],
+    "layer": "F.Cu"
+   },
+   {
+    "a": [
+     135.0,
+     51.49
+    ],
+    "b": [
+     106.757,
+     51.49
+    ],
+    "layer": "F.Cu"
+   },
+   {
+    "a": [
+     106.757,
+     51.49
+    ],
+    "b": [
+     106.757,
+     63.472
+    ],
+    "layer": "F.Cu"
+   },
+   {
+    "a": [
+     106.757,
+     63.472
+    ],
+    "b": [
+     82.35,
+     63.472
+    ],
+    "layer": "F.Cu"
+   },
+   {
+    "a": [
+     82.35,
+     63.472
+    ],
+    "b": [
+     60.7,
+     61.45
+    ],
+    "layer": "F.Cu"
+   }
+  ],
+  "PCIE_REFCLK1_P": [
    {
     "a": [
      132.65,
      51.3
     ],
     "b": [
-     105.825,
-     51.3
+     132.65,
+     51.11
     ],
     "layer": "F.Cu"
    },
    {
     "a": [
-     105.825,
-     51.3
+     132.65,
+     51.11
     ],
     "b": [
-     106.567,
-     51.3
+     106.377,
+     51.11
     ],
     "layer": "F.Cu"
    },
    {
     "a": [
-     106.567,
-     51.3
+     106.377,
+     51.11
     ],
     "b": [
-     106.567,
-     64.475
+     106.377,
+     63.092
     ],
     "layer": "F.Cu"
    },
    {
     "a": [
-     106.567,
-     64.475
+     106.377,
+     63.092
     ],
     "b": [
      82.35,
-     64.475
+     63.092
     ],
     "layer": "F.Cu"
    },
    {
     "a": [
      82.35,
-     64.475
+     63.092
     ],
     "b": [
      60.1,
@@ -3824,8 +3940,8 @@
   ]
  },
  "tally": {
-  "n_nets": 66,
-  "n_segments": 328,
+  "n_nets": 68,
+  "n_segments": 338,
   "n_vias": 256
  },
  "vias": {
@@ -5173,8 +5289,10 @@
     ]
    }
   ],
-  "PCIE_REFCLK0/input": [],
-  "PCIE_REFCLK1/input": [],
+  "PCIE_REFCLK0_N": [],
+  "PCIE_REFCLK0_P": [],
+  "PCIE_REFCLK1_N": [],
+  "PCIE_REFCLK1_P": [],
   "PCIE_UP0_N": [
    {
     "layers": [

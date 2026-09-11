@@ -67,10 +67,12 @@ def main() -> int:
                     exp_segs[net].append({"layer": segL[i], "a": pts[i], "b": pts[i + 1]})
                 exp_vias[net] += vs
         else:
-            rv = pg["refclk"]; net = pg["page_id"]; pth = rv["path"]
-            exp_segs.setdefault(net, []); exp_vias.setdefault(net, [])
-            for i in range(len(pth) - 1):
-                exp_segs[net].append({"layer": rv["layer"], "a": pth[i], "b": pth[i + 1]})
+            rv = pg["refclk"]
+            for pol in ("P", "N"):
+                net = rv["nets"][pol]; pth = rv["paths"][pol]["path"]
+                exp_segs.setdefault(net, []); exp_vias.setdefault(net, [])
+                for i in range(len(pth) - 1):
+                    exp_segs[net].append({"layer": rv["layer"], "a": pth[i], "b": pth[i + 1]})
     def key(s): return (s["layer"], tuple(round(v, 5) for v in s["a"]), tuple(round(v, 5) for v in s["b"]))
     for net in set(exp_segs) | set(rec["segments"]):
         a = sorted(key(s) for s in exp_segs.get(net, []))
@@ -128,10 +130,12 @@ def main() -> int:
                 if chip not in ends or conn not in ends:
                     viol.append({"V": "L4-D", "net": net, "chip_in": chip in ends, "conn_in": conn in ends})
         else:
-            rv = pg["refclk"]; net = pg["page_id"]; pth = rv["path"]
-            if (round(pth[0][0], 5), round(pth[0][1], 5)) != tuple(round(v, 5) for v in rv["j2_pad"]) or \
-               (round(pth[-1][0], 5), round(pth[-1][1], 5)) != tuple(round(v, 5) for v in rv["far_pad"]):
-                viol.append({"V": "L4-D-refclk", "net": net})
+            rv = pg["refclk"]
+            for pol in ("P", "N"):
+                net = rv["nets"][pol]; pp = rv["paths"][pol]; pth = pp["path"]
+                if (round(pth[0][0], 5), round(pth[0][1], 5)) != tuple(round(v, 5) for v in pp["j2_pad"]) or \
+                   (round(pth[-1][0], 5), round(pth[-1][1], 5)) != tuple(round(v, 5) for v in pp["far_pad"]):
+                    viol.append({"V": "L4-D-refclk", "net": net, "pol": pol})
 
     # L4-E board consumption
     board_ok = False

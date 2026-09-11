@@ -58,7 +58,7 @@ FROZEN_SHA = {
 OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
 OUT_LANDING = STEP2 / "m13_v57_w3_chip_landing_rows.json"
 
-REVISION = "W3-CN.22"
+REVISION = "W3-CN.25"
 ORD = "natural"   # ROOT-20: enumeration order (A1.2 order-invariance, non-vacuous)
 SCHEMA = 1
 STEP = 1.46
@@ -534,28 +534,49 @@ def refclk_place(manifest: dict, w0r: dict) -> dict:
                      key=lambda p: p["page_id"]):
         pid = pg["page_id"]
         base_pid = pid.split("#")[0]
-        a1 = [fp(pg["anchors"]["conn"]["P"]["pad_global"][0]),
-              fp(pg["anchors"]["conn"]["P"]["pad_global"][1])]
-        a2 = [fp(pg["anchors"]["conn2"]["P"]["pad_global"][0]),
-              fp(pg["anchors"]["conn2"]["P"]["pad_global"][1])]
-        j2 = a1 if a1[0] >= a2[0] else a2          # J2 端 = x 较大侧（闭式）
-        far = a2 if a1[0] >= a2[0] else a1
-        crossing_y = j2[1] if abs(far[1] - j2[1]) <= 3.2 else fp(max(far[1], chan[0]) + GRID)
         west = CORRIDOR["WEST_MCIO_TO_CHIP"]["bounds"][1]
         east = CORRIDOR["EAST_CHIP_TO_J2"]["bounds"][0]
         u6 = [b for b in pw["blockers"] if b["ref"] == "U6"][0]
         east_clear = fp(east if east > u6["keepout_x"][1] else u6["keepout_x"][1] + GRID)
         rise_x = fp(max(rise_x, east_clear + 0.5))
-        rise = [[rise_x, j2[1]], [rise_x, crossing_y]] if abs(crossing_y - j2[1]) > TOL else []
-        pts = [j2, [east_clear, j2[1]]] + rise + [[west, crossing_y], [far[0], far[1]]]
-        path = [pts[0]]
-        for pt in pts[1:]:
-            if abs(pt[0] - path[-1][0]) > TOL or abs(pt[1] - path[-1][1]) > TOL:
-                path.append(pt)
-        bump(6, "refclk_path")
-        out[pid] = {"layer": "F.Cu", "lane_y": j2[1], "j2_pad": j2, "far_pad": far,
-                    "crossing_y_from_witness": crossing_y if crossing_y != j2[1] else None,
-                    "path": path,
+        pp = pw["per_page"][base_pid]
+        half = pw.get("pair_copper_extent_mm", 0.585) / 2.0
+        if "pair_centre_window_y" in pp:
+            _lo, _hi = pp["pair_centre_window_y"]
+        elif "channel_y" in pp:
+            _lo, _hi = pp["channel_y"][0] + half, pp["channel_y"][1] - half
+        else:
+            _lo = _hi = None
+        paths = {}
+        lane_y = None
+        for pol in ("P", "N"):
+            off = -POL_OFF if pol == "P" else POL_OFF        # ROOT-21: P/N 分离 0.38 >= 净距
+            a1 = [fp(pg["anchors"]["conn"][pol]["pad_global"][0]),
+                  fp(pg["anchors"]["conn"][pol]["pad_global"][1])]
+            a2 = [fp(pg["anchors"]["conn2"][pol]["pad_global"][0]),
+                  fp(pg["anchors"]["conn2"][pol]["pad_global"][1])]
+            j2 = a1 if a1[0] >= a2[0] else a2                # J2 端 = x 较大侧（闭式）
+            far = a2 if a1[0] >= a2[0] else a1
+            lane_y = j2[1] if lane_y is None else lane_y
+            base_run = j2[1] if abs(far[1] - j2[1]) <= 3.2 else fp(max(far[1], chan[0]) + GRID)
+            run_y = base_run if _lo is None else fp(min(max(base_run, _lo), _hi))  # 见证成对中心窗
+            # 差分对几何：P/N 各自在 pad x / rise x / run y 上偏移 0.38，全程不共线
+            pts = [j2, [j2[0], fp(j2[1] + off)],
+                   [fp(rise_x + off), fp(j2[1] + off)],
+                   [fp(rise_x + off), fp(run_y + off)],
+                   [fp(west), fp(run_y + off)],
+                   [far[0], far[1]]]
+            path = [pts[0]]
+            for q in pts[1:]:
+                if abs(q[0] - path[-1][0]) > TOL or abs(q[1] - path[-1][1]) > TOL:
+                    path.append(q)
+            bump(6, "refclk_path")
+            paths[pol] = {"path": path, "j2_pad": j2, "far_pad": far, "pol_offset_mm": off,
+                          "run_y": run_y,
+                          "crossing_y_from_witness": base_run if base_run != j2[1] else None}
+        out[pid] = {"layer": "F.Cu", "lane_y": lane_y, "pol_offset_mm": POL_OFF,
+                    "nets": {q: pg["anchors"]["conn2"][q]["net"] for q in ("P", "N")},
+                    "paths": paths,
                     "witness": {"source": "W0-R refclk_passage_witness",
                                 "kind": pw["per_page"][base_pid]["kind"],
                                 "status": pw["per_page"][base_pid]["status"]},
@@ -797,9 +818,10 @@ def scale_probe(j: dict, base_facts: dict, args) -> int:
     n_frames = len(frs)
     closed = {"data_pages": n_pages, "frames": n_frames, "landings": len(r3["assignment"]),
               "refclk_pages": len(rfc),
-              "formula": "11*n_pages + 2*n_landing + 6*n_refclk + 3*n_frames (= K * 526)",
-              "expected": 11 * n_pages + 2 * len(r3["assignment"]) + 6 * len(rfc) + 3 * n_frames,
-              "per_copy": 526}
+              "formula": "11*n_pages + 2*n_landing + 6*n_refclk_paths + 3*n_frames (= K * per_copy)",
+              "expected": 11 * n_pages + 2 * len(r3["assignment"]) + 6 * sum(len(v["paths"]) for v in rfc.values()) + 3 * n_frames,
+              "per_copy": (11 * n_pages + 2 * len(r3["assignment"])
+                           + 6 * sum(len(v["paths"]) for v in rfc.values()) + 3 * n_frames) // args.scale}
     doc = {"artifact": "m13_v57_w3_scale_probe", "schema": 1, "k": args.scale,
            "work_units": WORK[0], "closed_form": closed,
            "matches": WORK[0] == closed["expected"], "per_site": dict(BOOK),
@@ -1029,17 +1051,21 @@ def main(argv=None) -> int:
              for b in j["w0r_model"]["refclk_passage_witness"]["blockers"]]
     rf_hits = []
     for pid, v in sorted(rfc.items()):
-        for s1 in zip(v["path"], v["path"][1:]):
-            for bi in range(len(boxes)):
-                if seg_hits_box(s1[0], s1[1], boxes[bi]):
-                    rf_hits.append([pid, bi, j["w0r_model"]["refclk_passage_witness"]["blockers"][bi]["ref"]])
+        for pol in ("P", "N"):
+            pth = v["paths"][pol]["path"]
+            for s1 in zip(pth, pth[1:]):
+                for bi in range(len(boxes)):
+                    if seg_hits_box(s1[0], s1[1], boxes[bi]):
+                        rf_hits.append([pid, pol, bi,
+                                        j["w0r_model"]["refclk_passage_witness"]["blockers"][bi]["ref"]])
     rf_lane = sorted(v["lane_y"] for v in rfc.values())
     rf_sep = all(rf_lane[i + 1] - rf_lane[i] >= STEP - TOL for i in range(len(rf_lane) - 1))
 
     n_pages = len(facts)
     n_land = len(r3["assignment"])
     n_frames = len(frs)
-    expected_work = 11 * n_pages + 2 * n_land + 6 * len(rfc) + 3 * n_frames + 8  # +8 = gate sites
+    n_rf_paths = sum(len(v["paths"]) for v in rfc.values())
+    expected_work = 11 * n_pages + 2 * n_land + 6 * n_rf_paths + 3 * n_frames + 8  # +8 = gate sites
     formula_ok = WORK[0] == expected_work
 
     checks = [
@@ -1222,10 +1248,10 @@ def main(argv=None) -> int:
                                 "detail": "R1: 1 primary + 1 correction; R1 popup y: k in {0,1}; "
                                           "R3: recurrence (no decision)"},
             "work_units": {"total": WORK[0],
-                           "formula": "11*n_pages + 2*n_landing + 6*n_refclk + 3*n_frames + 8(gate)",
+                           "formula": "11*n_pages + 2*n_landing + 6*n_refclk_paths + 3*n_frames + 8(gate)",
                            "expected": expected_work, "matches_formula": formula_ok,
                            "per_site": {k: BOOK[k] for k in sorted(BOOK)},
-                           "n_pages": n_pages, "n_landing": n_land, "n_refclk": len(rfc),
+                           "n_pages": n_pages, "n_landing": n_land, "n_refclk_pages": len(rfc), "n_refclk_paths": n_rf_paths,
                            "n_frames": n_frames},
         },
         "inputs_sha": {k: FROZEN_SHA[k] for k in FROZEN_SHA},

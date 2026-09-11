@@ -122,8 +122,8 @@ def gm3():
             except Exception as e:                                  # noqa: BLE001
                 res[K] = {"error": str(e)}
     ok = all(isinstance(res.get(K), dict) and res[K].get("matches")
-             and res[K]["work_units"] == K * 526 for K in (2, 4))
-    return {"ok": ok, "probe": res, "per_copy": 526, "linear": ok}
+             and res[K]["work_units"] == K * res[K]["per_copy"] for K in (2, 4))
+    return {"ok": ok, "probe": res, "linear": ok}
 
 
 def gm6(art: dict):
@@ -306,14 +306,15 @@ def a13(art, manifest):
     refclk_checked = 0
     for pid, rv in rf.items():
         refclk_checked += 1
-        pth = rv["path"]
-        if len(pth) < 2 or rv["layer"] != "F.Cu":
-            viol.append({"id": pid, "V": "V7_refclk_path", "n": len(pth), "layer": rv["layer"]})
-        if abs(pth[0][0] - rv["j2_pad"][0]) > 1e-6 or abs(pth[0][1] - rv["j2_pad"][1]) > 1e-6:
-            viol.append({"id": pid, "V": "V7_refclk_start", "got": pth[0], "want": rv["j2_pad"]})
-        if abs(pth[-1][0] - rv["far_pad"][0]) > 1e-6 or abs(pth[-1][1] - rv["far_pad"][1]) > 1e-6:
-            viol.append({"id": pid, "V": "V7_refclk_end", "got": pth[-1], "want": rv["far_pad"]})
-        strong += 2
+        for pol in ("P", "N"):
+            pp = rv["paths"][pol]; pth = pp["path"]
+            if len(pth) < 2 or rv["layer"] != "F.Cu":
+                viol.append({"id": pid, "pol": pol, "V": "V7_refclk_path", "n": len(pth), "layer": rv["layer"]})
+            if abs(pth[0][0] - pp["j2_pad"][0]) > 1e-6 or abs(pth[0][1] - pp["j2_pad"][1]) > 1e-6:
+                viol.append({"id": pid, "pol": pol, "V": "V7_refclk_start", "got": pth[0], "want": pp["j2_pad"]})
+            if abs(pth[-1][0] - pp["far_pad"][0]) > 1e-6 or abs(pth[-1][1] - pp["far_pad"][1]) > 1e-6:
+                viol.append({"id": pid, "pol": pol, "V": "V7_refclk_end", "got": pth[-1], "want": pp["far_pad"]})
+            strong += 1
     return {"ok": not viol, "pages_checked": pages_checked + refclk_checked,
             "data_pages_checked": pages_checked, "refclk_pages_checked": refclk_checked,
             "strong_nodes_censused": strong,

@@ -1,9 +1,9 @@
 {
  "artifact": "m13_v57_l5_dfm_dft_record",
  "dft": {
-  "nets": 95,
+  "nets": 93,
   "note": "DFT 可测性以网络可达/未连项计；完整 DFT 规矩待 L5 深化",
-  "unconnected_items": 352
+  "unconnected_items": 348
  },
  "drc": {
   "baseline_frozen": {
@@ -18,28 +18,30 @@
   },
   "l4_applied": {
    "by_type": {
-    "clearance": 171,
+    "clearance": 173,
     "copper_edge_clearance": 26,
     "hole_clearance": 26,
     "hole_to_hole": 3,
     "invalid_outline": 1,
     "lib_footprint_issues": 12,
     "lib_footprint_mismatch": 29,
-    "shorting_items": 117,
+    "shorting_items": 121,
     "silk_edge_clearance": 1,
-    "solder_mask_bridge": 110
+    "solder_mask_bridge": 128,
+    "tracks_crossing": 2
    },
-   "n": 496,
-   "unconnected": 352
+   "n": 522,
+   "unconnected": 348
   },
-  "new_total": 453,
+  "new_total": 479,
   "new_violations": {
-   "clearance": 171,
+   "clearance": 173,
    "copper_edge_clearance": 26,
    "hole_clearance": 26,
    "hole_to_hole": 3,
-   "shorting_items": 117,
-   "solder_mask_bridge": 110
+   "shorting_items": 121,
+   "solder_mask_bridge": 128,
+   "tracks_crossing": 2
   },
   "tool": "kicad-cli 10.0.5"
  },

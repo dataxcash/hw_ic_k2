@@ -32,3 +32,12 @@
 ## 6. 下一步（阻塞上报）
 - 依宪法：**发现上游问题立即停机回上层**。W3 需补全 **净距类度量（track/via/孔铜/板边/阻焊）+ 对内等长**，
   属新的 W3 修订周期（版本化、预授权域内可实施；触及契约口径须按 ROOT-1 记录）。
+
+## ROOT-21 修订（O1b + O3 实施；2026-09-11）
+- 图纸 rev **W3-CN.25**（`c17c5a42`）：**REFCLK 差分对 P/N 补齐**（原只布 P；现 2 页 × P/N = 4 条，P/N 分离
+  ≥0.38、成对中心取见证 `pair_centre_window_y`/`channel_y`、keepout 零交 A-CN.5a PASS）；net 名取
+  manifest（`PCIE_REFCLK*_P/N`）。
+- L4 重发：**68 网 / 338 段 / 256 via**（construction `6fb043a1`；validation `9abcc836` PASS；板 `b63e6c09`）。
+- D8/G5 验证器 v2：**PASS**（G-M1..G-M6 + 双度量 0 + A1.2/A1.3/A1.4；A1.3 现覆盖 REFCLK P/N）。
+- L5 重测：DFM **479**（含新增 N 轨的 26 条）；SI 等长 **skew 24.476mm** 不变 ⇒ **G7 仍 FAIL**；
+  **O1**（净距不可行，已实证与域/序无关）与 **O2**（板既有铜/读板）仍待 owner。

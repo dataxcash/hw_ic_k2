@@ -58,11 +58,13 @@ def build(art, manifest):
                     segs[net].append({"layer": segL[i], "a": pts[i], "b": pts[i + 1]})
                 vias[net] += vs
         elif pg["kind"] == "refclk":
-            rv = pg["refclk"]; net = pg["page_id"]
-            pth = rv["path"]
-            segs.setdefault(net, []); vias.setdefault(net, [])
-            for i in range(len(pth) - 1):
-                segs[net].append({"layer": rv["layer"], "a": pth[i], "b": pth[i + 1]})
+            rv = pg["refclk"]                                  # ROOT-21: P/N 差分对 + 正确网名 (O3)
+            for pol in ("P", "N"):
+                net = rv["nets"][pol]
+                pth = rv["paths"][pol]["path"]
+                segs.setdefault(net, []); vias.setdefault(net, [])
+                for i in range(len(pth) - 1):
+                    segs[net].append({"layer": rv["layer"], "a": pth[i], "b": pth[i + 1]})
     nets = sorted(set(segs) | set(vias))
     return {"artifact": "m13_v57_l4_construction", "schema": 1, "revision": "L4-A1",
             "authority": {"drawing": str(MAIN.relative_to(K2)), "drawing_rev": art["revision"],
