@@ -1,0 +1,29 @@
+{
+ "artifact": "m13_v57_co08c_cn32v2_result",
+ "conclusion": "(B) 拓扑需继续迭代：via1 域约束、F.Cu 逃逸扇平面性显式求解、段索引包围盒裁剪；属 L2（无 owner）。",
+ "diagnosis": "全局 rank 消除了 stub 共线(tt 0.0)但引出新的 via1 近距(vv 0.15~0.5)与 F.Cu 逃逸扇交叉；run 仍超 120s（F.Cu 长段/多段索引）。",
+ "metrics": {
+  "n_vias": 240,
+  "same_layer_crossings": 14,
+  "viol_tt": 33,
+  "viol_vt": 57,
+  "viol_vv": 7
+ },
+ "observed": {
+  "failed": [
+   "A-CN.1d",
+   "A-CN.1a",
+   "A-CN.1b",
+   "A-CN.4",
+   "A-CN.9"
+  ],
+  "n_certificates": 5,
+  "r1_placed": 30,
+  "verdict": "UPSTREAM_CHANGE_REQUEST",
+  "wall_s": 196
+ },
+ "redline": "四源未改；canonical W3-CN.30 05f7bd10 未动（probe 仅 /tmp）",
+ "revision": "CO-08c-ATTEMPT.2",
+ "schema": 1,
+ "variant": "(B) + r3 全局唯一落列 rank + pitch 0.525（分离 DN/UP stub）"
+}
