@@ -23,10 +23,19 @@ GAPS = STEP2 / "m13_v57_f8_r3_gap_candidates_r3x2.json"
 BASE_GAPS = STEP2 / "m13_v57_f8_r3_gap_candidates.json"
 LANEFRAME = STEP2 / "m13_v57_f3_lane_frame.json"
 W0R = STEP2 / "m13_v57_big_w0r_corridor_model.json"
-FROZEN = {"spec": L3 / "SPEC_k2_v4.spec-rev-3.json", "rules": K2 / "_shared/eda_core/drc_rules.json",
-          "manifest": STEP2 / "m13_v57_s1_page_manifest.json", "pcb": K2 / "k2_v4.kicad_pcb"}
-FROZEN_SHA_PREFIX = {"spec": "2d6dbd8bd8d667d7", "manifest": "a8ef3ea8ecff99d7",
-                     "pcb": "f6273de613f43d05", "rules": "0a459839e15960b8"}
+# CO-46（L2/L3 冻结校验修正）：原 FROZEN 只钉「引擎消费的 ECO spec（rev-3）」与**历史 6L 板**
+# （`k2_v4.kicad_pcb`），既未覆盖宪法红线 SPEC 原件，也未覆盖 CO-03 版本 bump 后的 8L 冻结板
+# （L4 施工真实源）。本修正**只增不减**：补 `spec_orig`（SPEC 原件）与 `pcb`（8L 基线），
+# 原 6L 上游钉扎保留为 `pcb_6l`。判据强度只升不降。
+FROZEN = {"spec": L3 / "SPEC_k2_v4.spec-rev-3.json",         # 引擎消费的 ECO spec（CO-40 ECS-001）
+          "spec_orig": L3 / "SPEC_k2_v4.json",               # 宪法红线 SPEC 原件
+          "rules": K2 / "_shared/eda_core/drc_rules.json",
+          "manifest": STEP2 / "m13_v57_s1_page_manifest.json",
+          "pcb": K2 / "k2_v4_8L.kicad_pcb",                  # 宪法红线 8L 冻结板（CO-03）
+          "pcb_6l": K2 / "k2_v4.kicad_pcb"}                  # 8L 派生的上游历史件（未动）
+FROZEN_SHA_PREFIX = {"spec": "2d6dbd8bd8d667d7", "spec_orig": "0bd52ed48e720b8c",
+                     "manifest": "a8ef3ea8ecff99d7", "pcb": "fb07d25ac426ff84",
+                     "pcb_6l": "f6273de613f43d05", "rules": "0a459839e15960b8"}
 STEP, LANE_LO, N_USED = 1.46, 33.3, 16
 VIA_VIA, POL_OFF, R3_OFF = 0.525, 0.19, -0.3
 R3_STEP = 0.6
