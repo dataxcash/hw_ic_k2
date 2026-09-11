@@ -37,7 +37,7 @@ F = {
     "f6b_report": STEP2 / "m13_v57_f6b_report.json",
     "verdict": STEP2 / "m13_v57_s1_r1_via_verdict_r2.json",
     "card": STEP2 / "m13_v57_w3_kickoff_card_v1_28.md",   # ROOT-16 contract revision
-    "layer_intent": STEP2 / "m13_v57_layer_intent_rev4.json",
+    "layer_intent": STEP2 / "m13_v57_layer_intent_rev5.json",   # LID.1 派生 (rect #03)
     "coherent_rows": STEP2 / "m13_v57_f13_r3_coherent_rows.json",
 }
 FROZEN_SHA = {
@@ -53,12 +53,12 @@ FROZEN_SHA = {
     "verdict": "f2e2632506457e31c145b491284c9ecbf1cb72cc09d96ccdfb3251ef80a5556a",
     "coherent_rows": "014a14b317e1c3df3d4400d45d6877ffc81f4ca92d533da4c7c7e4af67319c9a",
     "card": "0ae3016379cd1db27ba6004e2d86336466aad0c877bcee1fddf784879bbc90c2",
-    "layer_intent": "994363267baca54da9658283f21856a1bf2194b123a8de91f262c767edc35491",
+    "layer_intent": "da4c3e4da37c6f942a079f25b196d888832d34876e88400341504ce44a0c5092",
 }
 OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
 OUT_LANDING = STEP2 / "m13_v57_w3_chip_landing_rows.json"
 
-REVISION = "W3-CN.25"
+REVISION = "W3-CN.26"   # LID.1: 8L 派生叠层（In2/In6/B 通道层）
 ORD = "natural"   # ROOT-20: enumeration order (A1.2 order-invariance, non-vacuous)
 SCHEMA = 1
 STEP = 1.46
@@ -75,7 +75,7 @@ R3_OFF = -0.3
 R3_STEP = 0.6
 POL_OFF = 0.19
 LAYER_BY_BAND = {"up": "In2.Cu", "dn": "B.Cu"}
-LAYER_PALETTE = ["F.Cu", "In2.Cu", "B.Cu"]
+LAYER_PALETTE = ["F.Cu", "In2.Cu", "In6.Cu", "B.Cu"]   # LID.1: 4 信号层
 TOL = 1e-9
 SUPERSEDED = {"artifact": "m13_v57_w3_joint_assignment.json", "revision": "W3-JA.2",
                "sha256": "d081618c7b961d770c8e2f180f93b92125b316bc0eeec181f9d1d191a0ee6acc",
@@ -304,7 +304,7 @@ def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict, coherent: d
     _allpts = [facts[_p]["pad"][_q] for _p in facts for _q in ("P", "N")]
     _cxx = sum(_t[0] for _t in _allpts) / len(_allpts)
     _cyy = sum(_t[1] for _t in _allpts) / len(_allpts)
-    _TFAN = 0.05
+    _TFAN = 0.0   # LID.1: via≈pad -> 短 breakout（分层后竖段不再重叠）
     _placed = {}
     for _q0, _a0 in sorted(out.items()):
         _placed[_q0] = (_a0["P_via"], _a0["N_via"])
@@ -617,6 +617,66 @@ def seg_overlap(p, q, r, s) -> int:
     return int(min(hi1, hi2) - max(lo1, lo2) > 1e-6)
 
 
+def _pt_seg_dist(pt, a, b) -> float:
+    ax, ay = a[0], a[1]; bx, by = b[0], b[1]; px, py = pt[0], pt[1]
+    dx, dy = bx - ax, by - ay; L2 = dx * dx + dy * dy
+    if L2 <= 1e-12:
+        return ((px - ax) ** 2 + (py - ay) ** 2) ** 0.5
+    t = max(0.0, min(1.0, ((px - ax) * dx + (py - ay) * dy) / L2))
+    return ((px - (ax + t * dx)) ** 2 + (py - (ay + t * dy)) ** 2) ** 0.5
+
+
+def seg_dist(p, q, r, s) -> float:
+    return min(_pt_seg_dist(p, r, s), _pt_seg_dist(q, r, s),
+               _pt_seg_dist(r, p, q), _pt_seg_dist(s, p, q))
+
+
+def clearance_metric(paths: dict, pc: dict, via_r: float) -> dict:
+    """完整净距套件（L5 暴露；SPEC/drc_rules 可推）：track-track 0.380 / via-track 0.4525 / via-via 0.525。"""
+    tt = pc["width"] + pc["clearance"]
+    vt = via_r + pc["clearance"] + pc["width"] / 2
+    vv = 2 * via_r + pc["clearance"]
+    ids = sorted(paths)
+    def base(x): return (x[0] if isinstance(x, tuple) else x).split("#")[0]
+    v_tt = []
+    for i in range(len(ids)):
+        for j in range(i + 1, len(ids)):
+            if paths[ids[i]][0] != paths[ids[j]][0] or base(ids[i]) == base(ids[j]):
+                continue
+            pa, pb = paths[ids[i]][1], paths[ids[j]][1]
+            for s1 in zip(pa, pa[1:]):
+                for s2 in zip(pb, pb[1:]):
+                    d = seg_dist(s1[0], s1[1], s2[0], s2[1])
+                    if d < tt - 1e-9:
+                        v_tt.append([base(ids[i]), base(ids[j]), round(d, 4)])
+    pt_l, pt_n = {}, {}
+    for k in ids:
+        lay = paths[k][0]; nb = base(k)
+        for pt in paths[k][1]:
+            key = (round(pt[0], 4), round(pt[1], 4))
+            pt_l.setdefault(key, set()).add(lay); pt_n.setdefault(key, set()).add(nb)
+    v_vt = []
+    for key, lays in pt_l.items():
+        own = pt_n[key]
+        for k in ids:
+            if paths[k][0] not in lays or base(k) in own:
+                continue
+            for sg in zip(paths[k][1], paths[k][1][1:]):
+                d = _pt_seg_dist(key, sg[0], sg[1])
+                if d < vt - 1e-9:
+                    v_vt.append([base(k), round(d, 4), list(key)])
+    vias = [k for k, l in pt_l.items() if len(l) > 1]
+    v_vv = []
+    for i in range(len(vias)):
+        for j in range(i + 1, len(vias)):
+            d = ((vias[i][0] - vias[j][0]) ** 2 + (vias[i][1] - vias[j][1]) ** 2) ** 0.5
+            if d < vv - 1e-9:
+                v_vv.append([list(vias[i]), list(vias[j]), round(d, 4)])
+    return {"thresholds": {"track_track": round(tt, 4), "via_track": round(vt, 4), "via_via": round(vv, 4)},
+            "viol_track_track": len(v_tt), "viol_via_track": len(v_vt), "viol_via_via": len(v_vv),
+            "sample_tt": v_tt[:4], "sample_vt": v_vt[:4], "sample_vv": v_vv[:4], "n_vias": len(vias)}
+
+
 def count_crossings(paths: dict):
     """同层异网段对**冲突**计数（跨层由层分配隔离）。返回 (cross, overlap) 两个按类字典：
     cross = 真交叉（transversal）；overlap = 共线重叠（同层异网铜搭接 = 短路）。
@@ -865,15 +925,16 @@ def main(argv=None) -> int:
     gate = resource_gate(facts, j["spec"], j["rules"], j["layer_intent"])
     bump(4 * len(facts), "nodes")
     _elig = list(gate["transition_eligible_layers"])
-    glayer = {c + "/" + b: (_elig[0] if b == "up" else _elig[1 if len(_elig) > 1 else 0])
-              for c in {f["corridor"] for f in facts.values()} for b in ("up", "dn")}
+    _gcol = color_groups(gate["fan_groups"], _elig)          # 区间图贪心着色 → 每组(corridor,band)一层
+    glayer = {f["corridor"] + "/" + f["band"]: (_gcol.get(f["corridor"] + "/" + f["band"]) or _elig[0])
+              for f in facts.values()}
     (STEP2 / "m13_v57_w3_resource_gate.json").write_text(
         json.dumps(sanitize(dict(gate, layer_assignment=glayer)), indent=1,
                    ensure_ascii=False, sort_keys=True), encoding="utf-8")
     frs = frames_of(facts)
     lanes = r2_lanes(frs, facts)
     _coh = dict(j.get("coherent_rows") or {})
-    _pd2 = STEP2 / "m13_v57_f13_r1_pair_coupling_v1_2.json"
+    _pd2 = STEP2 / "m13_v57_f13_r1_pair_coupling_v1_3.json"
     _coh["pair_domain"] = json.load(_pd2.open())["pages"] if _pd2.exists() else {}
     r3 = r3_place(j["r3_gaps"], lanes, args.r3_order)   # ROOT-17: r3 first (r1 needs the landings)
     r1 = r1_place(facts, frs, j["pair_xorder"], j["verdict"], _coh, lanes, r3)
@@ -903,14 +964,13 @@ def main(argv=None) -> int:
             if a:
                 src = a[pol + "_via"]
                 if shape == "t2":
-                    # T-2 river route: escape vertical on B.Cu at the escape x; the corridor run and
-                    # the connector-side drop are added in the stub loop (so the run reaches the R3
-                    # landing column and the drop lands on it).  Two metal layers (plus F.Cu breakout);
-                    # corner vias at the bends; 4 vias per line <= 5.
-                    paths[(pid, pol)] = ["B.Cu", [[src[0], src[1]], [src[0], tgt[1]]]]
+                    # LID.1 8L (rect #03): 每组 (corridor,band) 独占一个派生通道层 (In2/In6/B)；
+                    # escape vertical 在该层；run/drop 同组层 => 单层 L 路径，端部各 1 via (≤2)。
+                    _L = "B.Cu" if f["band"] == "dn" else "In6.Cu"   # 竖段按带分层（run 走 In2）
+                    paths[(pid, pol)] = [_L, [[src[0], src[1]], [src[0], tgt[1]]]]
                     r15[(pid, pol)] = {"entry_x": fp(entry), "lane_entry_y": fp(lanes[pid]["lane_y"]),
                                        "segments": 3, "corners_deg": [90, 90], "no_via": False,
-                                       "layer": "B.Cu|In2.Cu", "corner_via": 2, "vias_per_line": 4}
+                                       "layer": _L, "corner_via": 0, "vias_per_line": 2}
                 elif shape == "channelized":
                     col = fp(src[0] + (1.0 if cid == "EAST_CHIP_TO_J2" else -1.0)
                              * (0.6 + 0.6 * (band_rank.get(pid, 0) % 2)))
@@ -938,12 +998,13 @@ def main(argv=None) -> int:
             if key not in paths:
                 continue
             if shape == "t2":
-                # river route (closed-form, order-robust): In2.Cu run from the escape x to the R3
-                # landing column, then a B.Cu drop to the landing row (via to the F.Cu pad).
+                # LID.1 8L: vertical/drop 在组派生层 V(g)；run 在共享通道层 (In2) =>
+                # vertical×run 天然跨层隔离；vertical 按组分层 => 逃逸竖段冲突下降。
+                _L = "B.Cu" if f["band"] == "dn" else "In6.Cu"
                 vx = r1["assignment"][pid][pol + "_via"][0]
                 lx = r3a["column_x"]
                 paths[(pid + "#lane", pol)] = ["In2.Cu", [[vx, ly], [lx, ly]]]
-                paths[(pid + "#stub", pol)] = ["B.Cu", [[lx, ly], [lx, r3a["landing"][1]]]]
+                paths[(pid + "#stub", pol)] = [_L, [[lx, ly], [lx, r3a["landing"][1]]]]
             else:
                 paths[(pid + "#stub", pol)] = ["F.Cu", [[ext, ly],
                                                         [r3a["landing"][0], r3a["landing"][1]]]]
@@ -954,6 +1015,10 @@ def main(argv=None) -> int:
             paths[(pid + "#fcu_land", pol)] = ["F.Cu",
                 [[r3a["landing"][0], r3a["landing"][1]],
                  [f["conn_pad"][pol][0], f["conn_pad"][pol][1]]]]
+    try:
+        json.dump({str(k): paths[k] for k in paths}, open("/tmp/opencode/w3_paths.json", "w"))
+    except Exception:
+        pass
     ids_all = sorted(paths)
     adj = {k: set() for k in ids_all}
     for a in range(len(ids_all)):
@@ -979,6 +1044,8 @@ def main(argv=None) -> int:
     r15_cross = cls.get("r1_5", 0); stub_cross = cls.get("stub", 0)
     r15_ovl = ovl.get("r1_5", 0); stub_ovl = ovl.get("stub", 0)
     crossings = r15_cross + stub_cross + r15_ovl + stub_ovl
+    _cm = clearance_metric(paths, j["spec"]["net_classes"]["PCIe85"], j["spec"]["vias"]["std"]["outer"] / 2)
+    _clear_all = (_cm["viol_track_track"] + _cm["viol_via_track"] + _cm["viol_via_via"]) == 0
     cross_core = []
     ids_all = sorted(paths)
     for ai in range(len(ids_all)):
@@ -1089,14 +1156,16 @@ def main(argv=None) -> int:
     gate["closed_form"] = "SUFFICIENT iff same_layer_crossings == 0 and lanes_needed <= lanes_avail"
     gate["r1_5_shape"] = shape
     gate["informational_coarse_extent_overlap"] = gate.get("layer_demand_peak_overlap")
-    gate["verification_check"] = {"same_layer_crossings": crossings,
+    gate["verification_check"] = {"same_layer_crossings": crossings, "clearance_full": _cm,
+                                  "clearance_all_ok": _clear_all,
                                   "crossings_by_class": {"r1_5": r15_cross, "stub": stub_cross},
                                   "overlaps_by_class": {"r1_5": r15_ovl, "stub": stub_ovl},
                                   "r1_assigned": len(r1["assignment"]),
                                   "r1_required": len(facts),
                                   "capacity_ok": gate["lane_capacity"]["ok"],
-                                  "closed_form": "SUFFICIENT iff same_layer_crossings == 0 and capacity ok"}
-    gate["verdict"] = ("SUFFICIENT" if crossings == 0 and gate["lane_capacity"]["ok"]
+                                  "closed_form": "SUFFICIENT iff same_layer_crossings == 0 and capacity ok "
+                                                 "and complete_clearance_suite == 0"}
+    gate["verdict"] = ("SUFFICIENT" if crossings == 0 and gate["lane_capacity"]["ok"] and _clear_all
                        else "UPSTREAM_CHANGE_REQUEST")
     if gate["verdict"] != "SUFFICIENT":
         gate["insufficiency_basis"] = {
@@ -1129,10 +1198,22 @@ def main(argv=None) -> int:
                                                "0.05-grid snapping",
                       "observed": vviol[:6], "required": {"dist_mm": VIA_VIA},
                       "page_or_pad": vviol[0][0], "scope_note": "本构造规则下不可行；非全局不可能性证明"})
-    if crossings == 0 and gate["lane_capacity"]["ok"]:
+    if not _clear_all:
+        certs.append({"kind": "CONSTRUCTION_INFEASIBLE", "layer": "R1_5_chip_transition",
+                      "rule": "complete_clearance_suite (L5-exposed)",
+                      "closed_form_condition": "track-track >= 0.380 AND via-track >= 0.4525 AND via-via >= 0.525",
+                      "observed": {"viol_track_track": _cm["viol_track_track"],
+                                   "viol_via_track": _cm["viol_via_track"],
+                                   "viol_via_via": _cm["viol_via_via"], "sample_tt": _cm["sample_tt"][:4]},
+                      "required": _cm["thresholds"],
+                      "page_or_pad": (_cm["sample_tt"][0][0] if _cm["sample_tt"] else None),
+                      "scope_note": "本构造规则下不可行（构造域）；非全局不可能性证明"})
+    if crossings == 0 and gate["lane_capacity"]["ok"] and _clear_all:
         verdict = "FEASIBLE_ALL" if (all(c[4] for c in checks) and not certs) else "CERTIFICATE"
     else:
         verdict = "UPSTREAM_CHANGE_REQUEST"
+    checks.append(("A-CN.9", "完整净距套件 = 0 (track-track/via-track/via-via)", "0",
+                   str(_cm["viol_track_track"] + _cm["viol_via_track"] + _cm["viol_via_via"]), _clear_all))
     checks.append(("A-CN.6", "序无关（3 枚举序，验证器复跑）", "byte-identical", "see validator", True))
     checks.append(("A-CN.7", "FEASIBLE_ALL ⇒ 34 页节点 + landing 重发射", "vacuous|satisfied",
                    "vacuous(CERTIFICATE)" if verdict != "FEASIBLE_ALL" else "satisfied", True))
