@@ -219,6 +219,21 @@ def land_meta(f):
     return out
 
 
+def _cross_seg(a, b, c, d):
+    """真交叉（proper intersection）判定（与引擎 count_crossings 同语义）。"""
+    def o(p, q, r):
+        v = (q[1] - p[1]) * (r[0] - q[0]) - (q[0] - p[0]) * (r[1] - q[1])
+        return 0 if abs(v) < 1e-12 else (1 if v > 0 else 2)
+    def on(p, q, r):
+        return (min(p[0], r[0]) - 1e-9 <= q[0] <= max(p[0], r[0]) + 1e-9 and
+                min(p[1], r[1]) - 1e-9 <= q[1] <= max(p[1], r[1]) + 1e-9)
+    o1, o2, o3, o4 = o(a, b, c), o(a, b, d), o(c, d, a), o(c, d, b)
+    if o1 != o2 and o3 != o4:
+        return 1
+    return 1 if ((o1 == 0 and on(a, c, b)) or (o2 == 0 and on(a, d, b))
+                 or (o3 == 0 and on(c, a, d)) or (o4 == 0 and on(c, b, d))) else 0
+
+
 def pt_seg(px_, py_, x1, y1, x2, y2):
     dx, dy = x2 - x1, y2 - y1; L2 = dx * dx + dy * dy
     L2 = np.where(L2 < 1e-12, 1.0, L2)
@@ -327,6 +342,12 @@ def check(vias, segs, own, st):
             if pol2 == pol or lay not in lays: continue
             if pt_seg(x, y, np.array([x1]), np.array([y1]), np.array([x2]), np.array([y2]))[0] < (VT_E if pa else VT) - TOL:
                 return ("vt_intra", (x, y, pol, lay))
+    for (lay, x1, y1, x2, y2, pa, pol) in segs:    # candidate seg vs candidate seg（同页异极性真交叉）
+        for (lay2, u1, v1, u2, v2, pa2, pol2) in segs:
+            if lay != lay2 or pol == pol2:
+                continue
+            if (_cross_seg((x1, y1), (x2, y2), (u1, v1), (u2, v2))):
+                return ("cross_intra", (lay, x1, y1, x2, y2, pol), (lay2, u1, v1, u2, v2, pol2))
     for (lay, x1, y1, x2, y2, pa, pol) in segs:
         X = st.S[lay]
         if not len(X): continue

@@ -181,3 +181,31 @@ k2 `ff438f0`｜父仓（bump）｜四源 4/4 MATCH｜canonical W3-CN.30 `05f7bd1
 - CO-11 的**过孔策略/层角色**属 L2（CO-09 §3 已裁），但落地**必须**伴随上表 ECO（SPEC 属冻结输出，需版本 bump）。
 - 因此引擎 rev bump 与 SPEC ECO **同批**执行，才能通过 A1.3/A-CN.9 与 SPEC 断言；单改引擎会被 `FROZEN_SHA` 与 `max_vias_per_line` 断言挡下。
 - 下一步（同批）：应用 ECO（SPEC v-bump + validator 规则 + 引擎阈值）→ 引擎接线（§10.3）→ 一次求解 → G4→G7。
+
+---
+
+## 12. 【重要修正】§8 的 32/32 解含**同层真交叉**，非有效解
+### 12.1 修正事由
+引擎副本接线（`co11` shape）复跑时，引擎 `count_crossings`（**proper intersection** 语义）报 **4 处同层真交叉**；
+而探针 `check()` 只做 vv/vt/tt 的**距离/共线**判据、**缺 intra-page 段-段真交叉检查**；本会话的独立复核器亦只做距离判据
+⇒ 二者均漏检 **transversal crossing**。已修正复核器（补 proper-intersection 判定）并实测复现：**4 处**：
+| 层 | 页 | 极性 | 机理 |
+|---|---|---|---|
+| F.Cu | PCIE_DN5/out_MCIO | P×N | §8 的 `_lx_separate` **独立移动 P/N** 的 lx，使 land 段（对方程）互叉 |
+| F.Cu | PCIE_DN7/out_MCIO | P×N | 同上 |
+| In6.Cu | PCIE_UP6/input | P×N | J4-L 的 **In6 stub** 横切对面极性 **In6 lane** |
+| In6.Cu | PCIE_UP7/input | P×N | 同上 |
+
+### 12.2 修正后的实测
+- 探针 `check()` 已补 `cross_intra`（proper intersection）；复核器已补 `cross` 判据。
+- 同一配置（`WSTEP 1.1265 / WLO 33.3 / FANY_J3 31.5,51.5 / STUB J3L`）**现为 28/32**（DN5/DN7/UP6/UP7 失败）
+  ⇒ §8 的「32/32」是**放过了交叉**的伪结果。`m13_v57_co11_placement_verification.json` 现为 **FAIL（4 violations）**。
+- 部分修正尝试（P/N 同步按页偏移；J4L stub 改 In2）分别降到 28/32 与 26/32 ⇒ 需**新的几何推导**（非同一配置微调）。
+
+### 12.3 对结论的影响（诚实标注）
+- `m13_v57_co11_channel_allocation.json`（CO11-ALLOC.1）**不是有效解**（含 4 同层真交叉）；不得据此进引擎/G4。
+- §8/§8.5 的「存在性证明」**失效**；`same_layer_crossings=0` 尚未达成。
+- 仍成立的部分：§8.2 的四要素是**必要方向**（lane 压缩 / landing 移出 / stub 层 / lx 分离），但**不充分**；
+  §8.5 的 band 双行 y-stagger 规律仍是有用输入。
+- 教训（防再犯）：探针/复核器判据必须含 **proper-intersection 交叉**（引擎 `count_crossings` 语义），不能只有距离判据。
+- 红线：冻结四源 4/4 MATCH；canonical `05f7bd10ab3b45b6` 未动；引擎未改；无 sign-off。

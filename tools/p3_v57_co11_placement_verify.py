@@ -103,6 +103,32 @@ def main():
             thr = VTE if pa else VT
             if d < thr - TOL:
                 bad.append(("vt", pi, pol, lay, pj, p2, round(d, 4)))
+    # track-track (transversal crossing, proper intersection) — engine count_crossings 语义
+    def _cross(a, b, c, d):
+        def o(p, q, r):
+            v = (q[1] - p[1]) * (r[0] - q[0]) - (q[0] - p[0]) * (r[1] - q[1])
+            return 0 if abs(v) < 1e-12 else (1 if v > 0 else 2)
+        def on(p, q, r):
+            return (min(p[0], r[0]) - 1e-9 <= q[0] <= max(p[0], r[0]) + 1e-9 and
+                    min(p[1], r[1]) - 1e-9 <= q[1] <= max(p[1], r[1]) + 1e-9)
+        o1, o2, o3, o4 = o(a, b, c), o(a, b, d), o(c, d, a), o(c, d, b)
+        if o1 != o2 and o3 != o4:
+            return 1
+        if o1 == 0 and on(a, c, b): return 1
+        if o2 == 0 and on(a, d, b): return 1
+        if o3 == 0 and on(c, a, d): return 1
+        if o4 == 0 and on(c, b, d): return 1
+        return 0
+    for i in range(len(segs)):
+        for j in range(i + 1, len(segs)):
+            pi, li, x1, y1, x2, y2, pai, poli = segs[i]
+            pj, lj, u1, v1, u2, v2, paj, polj = segs[j]
+            if li != lj:
+                continue
+            if pi == pj and poli == polj:
+                continue
+            if _cross((x1, y1), (x2, y2), (u1, v1), (u2, v2)):
+                bad.append(("cross", li, pi, poli, pj, polj))
     # track-track
     for i in range(len(segs)):
         for j in range(i + 1, len(segs)):
