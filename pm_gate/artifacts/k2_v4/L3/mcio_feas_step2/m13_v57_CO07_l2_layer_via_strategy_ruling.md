@@ -15,3 +15,20 @@
 - `p3_v57_w3_constructive_validator_v2.py`：合法层对/重导契约同步。
 - SPEC `high_speed.max_per_line` 若走 (b) 需 owner 修订（冻结源 → 只走变更单）。
 - 冻结四源：**均不改**（走新版本工件 + 变更单）。
+
+## 实测 A：直接层交换（lane↔escape/stub）——**不可行**（单次，已回退）
+把 `escape/stub` 由 band 层（B/In6）改为 **In2**、`lane` 由 In2 改为 **In6**（过孔仅 F↔In2、In2↔In6），重解：
+- `verdict=UPSTREAM_CHANGE_REQUEST`；`same_layer_crossings=18`（r1_5=2）；`tt 58 / vt 142 / vv 11`；`n_vias=248`。
+- 根因：**逃逸竖段密度**。64 条 escape 集中在芯片侧 x≈83–93（约 10mm），同层 x 间距需 ≥0.38 ⇒ 约 24mm，**物理放不下**；
+  两带 escape 必须分层才不重叠。故「单层承载 escape+lane」不成立。
+- 结论：本层交换**不是**可行解；已回退（引擎恢复 W3-CN.30 `05f7bd10`，探针产物仅 /tmp）。
+
+## 结论：需**平面 river 重派生**（L2 工作周期）或 owner 放宽预算
+安全 hop 限制 + 逃逸密度 ⇒ 必须重派生（不是改几个常量）：
+1. **候选一（首选，符合 SPEC F→In2→F，2 via/线）**：lane+stub 在 **In2**；escape 在 **F.Cu**（芯片 pad 直接 F.Cu 拉线到 lane 入口，`via1=F↔In2` 落在 lane 上；`land=In2↔F`）。
+   需把 R1 的**平面扇（F.Cu breakout 不交叉）**扩到"芯片 pad→lane 入口"的长 escape，并同时管住 conn 侧 breakout。可行性须以 river 平面性判据证明。
+2. **候选二（4 via/线，需 owner 改 SPEC `max_per_line`）**：dn=escape/stub In2 + lane In6；up=escape In6 + lane/stub In2（up 芯片侧多一次 F↔In2→In2↔In6）。
+   代价：In2 上混合 escape/lane/stub 需排 river；每线 4 via（现设计亦 4 via，故非增量）。
+3. 若两者均不可行 ⇒ 触 **L1**（信号层次序/叠层间距/反钻）→ owner。
+
+> 说明：现设计**已是 4 via/线**，故候选一才是回到 SPEC"每线 ≤2"的唯一路线；候选二属"承认现状 + 修安全 hop"。
