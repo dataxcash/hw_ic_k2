@@ -77,9 +77,21 @@ J2L, J2R, J2_IN, J2_OUT, J2P = 131.65, 136.0, 132.65, 135.0, 0.525
 
 
 POL_OFF = 0.25            # L2 参数：对内 lane y 偏移 >= vt(0.4525)/2；0.19->0.25（原 0.38 < 0.4525）
+# CO-15 只读旋钮（默认 "" = 原行为）：POLMODE="lx" ⇒ 方向感知 P/N lane 排序。
+# 目的：当 stub 层 == lane 层（In6）时，竖直 stub 必穿过对面极性水平 lane（CO-11 §13.2 UP6/UP7 自叉）。
+# 规则（闭式，由几何推导）：stub 朝上（ll>lane_y）⇒ landing lx 较大者取上层 lane（+POL_OFF）、较小者取下（-POL_OFF）；
+# 朝下（ll<lane_y）反之。仅对 WEST_MCIO_TO_CHIP 生效（stub 全 In2 时该规则不影响可行性，保留一致性）。
+POLMODE = __import__("os").environ.get("CO10_POLMODE", "")
 
 
 def pol_off(f, pol):
+    if POLMODE == "lx" and f["corridor"] == "WEST_MCIO_TO_CHIP":
+        ll = FAN_Y[row_group(f)]
+        ly = LANES[f["page_id"]]["lane_y"]
+        big = "P" if f["conn_pad"]["P"][0] > f["conn_pad"]["N"][0] else "N"
+        if ll > ly:
+            return POL_OFF if pol == big else -POL_OFF
+        return -POL_OFF if pol == big else POL_OFF
     d = f["pad"]["N"][1] - f["pad"]["P"][1]
     base = -POL_OFF if d > 0 else POL_OFF
     return base if pol == "P" else -base
