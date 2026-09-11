@@ -1,0 +1,246 @@
+{
+ "artifact": "m13_v57_co71_layer_zdiff_requirement",
+ "authority": "L2 叠层分配 + SI 物理承载（LAYOUT_CONSTITUTION 第二章；CO-67 裁定 L2）",
+ "build_evaluation": {
+  "all_within_tol": true,
+  "path": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_co71_option_a_stackup_input.json",
+  "per_layer": {
+   "B.Cu": {
+    "var_mm": 0.1164,
+    "within_tol": {
+     "0.5": true,
+     "0.6": true
+    },
+    "zdiff_ohm": {
+     "0.5": 88.43,
+     "0.6": 90.61
+    }
+   },
+   "F.Cu": {
+    "var_mm": 0.1164,
+    "within_tol": {
+     "0.5": true,
+     "0.6": true
+    },
+    "zdiff_ohm": {
+     "0.5": 88.43,
+     "0.6": 90.61
+    }
+   },
+   "In2.Cu": {
+    "var_mm": 0.5,
+    "within_tol": {
+     "0.5": true,
+     "0.6": true
+    },
+    "zdiff_ohm": {
+     "0.5": 84.56,
+     "0.6": 89.48
+    }
+   },
+   "In5.Cu": {
+    "var_mm": 0.5,
+    "within_tol": {
+     "0.5": true,
+     "0.6": true
+    },
+    "zdiff_ohm": {
+     "0.5": 84.56,
+     "0.6": 89.48
+    }
+   }
+  },
+  "sha16": "8e2a22eb77638e09"
+ },
+ "checks": {
+  "all_layers_referenced": true,
+  "all_var_band_nonempty": true,
+  "closure_ok": true
+ },
+ "fallback_w_table": [
+  {
+   "b_mm": 0.35,
+   "w_mm": 0.128,
+   "zdiff_ohm": 85.12
+  },
+  {
+   "b_mm": 0.4,
+   "w_mm": 0.139,
+   "zdiff_ohm": 85.16
+  },
+  {
+   "b_mm": 0.45,
+   "w_mm": 0.149,
+   "zdiff_ohm": 85.14
+  },
+  {
+   "b_mm": 0.5,
+   "w_mm": 0.159,
+   "zdiff_ohm": 84.86
+  },
+  {
+   "b_mm": 0.55,
+   "w_mm": 0.167,
+   "zdiff_ohm": 85.0
+  },
+  {
+   "b_mm": 0.6,
+   "w_mm": 0.175,
+   "zdiff_ohm": 84.98
+  }
+ ],
+ "layer_structure": {
+  "B.Cu": {
+   "kind": "microstrip",
+   "refs": [
+    "In6.Cu"
+   ],
+   "w_mm": 0.205
+  },
+  "F.Cu": {
+   "kind": "microstrip",
+   "refs": [
+    "In1.Cu"
+   ],
+   "w_mm": 0.205
+  },
+  "In2.Cu": {
+   "kind": "stripline",
+   "refs": [
+    "In1.Cu",
+    "In3.Cu"
+   ],
+   "w_mm": 0.16
+  },
+  "In5.Cu": {
+   "kind": "stripline",
+   "refs": [
+    "In4.Cu",
+    "In6.Cu"
+   ],
+   "w_mm": 0.16
+  }
+ },
+ "model": {
+  "method": "IPC-2141 一阶",
+  "required": "SI9000 + 板厂阻抗券（coupon_required=true）",
+  "signoff": false,
+  "source": "_shared/eda_core/stackup.py"
+ },
+ "nature": "方案(a) 层结构下的逐层 Zdiff 要求 + 板厂券判定接口（CO-55 harness 的 rev-2）",
+ "redline": "只读冻结源；不改板/图纸/阈值；一阶未经 SI9000/券。",
+ "requirement": {
+  "B.Cu": {
+   "basis": "交付 w=0.205, 对内中心 (0.5, 0.6) ⇒ Zdiff 85.0±10% (IPC-2141 一阶)",
+   "er": 4.16,
+   "kind": "microstrip",
+   "material_example": "2116*1",
+   "refs": [
+    "In6.Cu"
+   ],
+   "t_mm": 0.035,
+   "var_band_mm": [
+    0.097,
+    0.1215
+   ],
+   "var_key": "d(In6.Cu-B.Cu)"
+  },
+  "F.Cu": {
+   "basis": "交付 w=0.205, 对内中心 (0.5, 0.6) ⇒ Zdiff 85.0±10% (IPC-2141 一阶)",
+   "er": 4.16,
+   "kind": "microstrip",
+   "material_example": "2116*1",
+   "refs": [
+    "In1.Cu"
+   ],
+   "t_mm": 0.035,
+   "var_band_mm": [
+    0.097,
+    0.1215
+   ],
+   "var_key": "d(F.Cu-In1.Cu)"
+  },
+  "In2.Cu": {
+   "basis": "交付 w=0.16, 对内中心 (0.5, 0.6) ⇒ Zdiff 85.0±10% (IPC-2141 一阶)",
+   "er": 3.99,
+   "kind": "stripline",
+   "material_example": "core 0.25*2",
+   "refs": [
+    "In1.Cu",
+    "In3.Cu"
+   ],
+   "t_mm": 0.0175,
+   "var_band_mm": [
+    0.378,
+    0.5805
+   ],
+   "var_key": "b(In1.Cu-In3.Cu)"
+  },
+  "In5.Cu": {
+   "basis": "交付 w=0.16, 对内中心 (0.5, 0.6) ⇒ Zdiff 85.0±10% (IPC-2141 一阶)",
+   "er": 3.99,
+   "kind": "stripline",
+   "material_example": "core 0.25*2",
+   "refs": [
+    "In4.Cu",
+    "In6.Cu"
+   ],
+   "t_mm": 0.0175,
+   "var_band_mm": [
+    0.378,
+    0.5805
+   ],
+   "var_key": "b(In4.Cu-In6.Cu)"
+  }
+ },
+ "revision": "CO-71.1",
+ "ruled_target_mm": {
+  "b(In1.Cu-In3.Cu)": 0.5,
+  "b(In4.Cu-In6.Cu)": 0.5,
+  "d(F.Cu-In1.Cu)": 0.1164,
+  "d(In6.Cu-B.Cu)": 0.1164
+ },
+ "schema": 1,
+ "supersedes_scope": "CO-55 requirement 的**层结构**（旧 F/In2/In6/B ⇒ 新 F/In2/In5/B）；阀值/目标不变",
+ "thickness_closure": {
+  "copper_mm": 0.175,
+  "dielectric": {
+   "d(F.Cu-In1.Cu)": 0.1164,
+   "d(In1.Cu-In2.Cu)": 0.25,
+   "d(In2.Cu-In3.Cu)": 0.25,
+   "d(In3.Cu-In4.Cu)": 0.1922,
+   "d(In4.Cu-In5.Cu)": 0.25,
+   "d(In5.Cu-In6.Cu)": 0.25,
+   "d(In6.Cu-B.Cu)": 0.1164
+  },
+  "dielectric_mm": 1.425,
+  "ok": true,
+  "total_mm": 1.6
+ },
+ "verdict_at_ruled_target": {
+  "B.Cu": {
+   "zdiff_ohm": {
+    "0.5": 88.43,
+    "0.6": 90.61
+   }
+  },
+  "F.Cu": {
+   "zdiff_ohm": {
+    "0.5": 88.43,
+    "0.6": 90.61
+   }
+  },
+  "In2.Cu": {
+   "zdiff_ohm": {
+    "0.5": 84.56,
+    "0.6": 89.48
+   }
+  },
+  "In5.Cu": {
+   "zdiff_ohm": {
+    "0.5": 84.56,
+    "0.6": 89.48
+   }
+  }
+ }
+}
