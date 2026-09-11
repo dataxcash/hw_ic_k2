@@ -83,6 +83,15 @@ lane 取 **In6**（到 stub 仅需 `In6↔In2` 一跳）时，escape 只能是 *
 方向正确，但必须由引擎重派生几何（唯一列 + 全跨层 via 障碍 + 连接器 pad 障碍）后**一次求解**；relabel 探针（probe1 120 / probe2 116）
 证明单纯改层标签/唯一列不足。
 
+## 4ter. D3 落列修复规则（**已验证**，2026-09-11）
+连接器 pad 场实测（板 pad 与 manifest 逐点 d=0.000）：
+- **J3**：2 行 `y=43.25/45.75`，19 pad/行，`x 54.1~64.9`，0.6 pitch，pad 0.3；
+- **J4**：2 行 `y=61.45/63.95`，同上；**J2**：仅 2 列 `x=132.65/135.0`。
+- 规则：**西侧 `lx = 连接器 pad x`；`ll = 行间中缝`（J3=44.5 / J4=62.7）** ⇒ 落 via 距两行 pad 各 **1.25mm**；
+  F.Cu breakout 退化为沿 pad x 的竖段，只触本网 pad。东侧 J2 仅两列，canonical（131.65/136.0）基本合规。
+- 探针（`m13_v57_co09_d3_landing_fix_probe.json`）：连接器 pad short **34→2**、solder_mask_bridge **103→43**。
+  ⇒ **D3 主项已找到可落地规则**；残余 via_span/via_via 由 CO-09 层角色 + 全跨层桶 + 唯一列在一次求解中解决。
+
 ## 5. 验收
 - 一次求解须同时满足：`FEASIBLE_ALL ∧ same_layer_crossings=0 ∧ A-CN.9 0/0/0（含全跨距口径）∧ 对内 skew ≤0.15 ∧ wall ≤120s`；
 - 重跑 G4→G5→G6→G7（shop 口径 `k2_v4_8L.kicad_pro`），目标 **DFM new=0**（含 D2–D6）；

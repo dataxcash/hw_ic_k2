@@ -1,0 +1,25 @@
+{
+ "artifact": "m13_v57_co09_d3_landing_fix_probe",
+ "schema": 1,
+ "scope": "只读探针：验证 D3『西侧落列压连接器 pad』的闭式修复规则",
+ "connector_pad_fields": {
+  "J3": {"at": [59.5, 44.5, 180], "pad_size": 0.3, "rows_y": [43.25, 45.75], "n_per_row": 19, "pitch": 0.6, "x_range": [54.1, 64.9]},
+  "J4": {"at": [59.5, 62.7, 0], "pad_size": 0.3, "rows_y": [61.45, 63.95], "n_per_row": 19, "pitch": 0.6, "x_range": [54.1, 64.9]},
+  "J2": {"at": [133.825, 53.7, 0], "pad_size": 1.3, "cols_x": [132.65, 135.0], "rows_y_step": 0.6, "y_range": [42.9, 64.5]},
+  "manifest_vs_board": "conn pad_global 与板 pad 逐点 d=0.000（坐标无偏差）"
+ },
+ "fix_rule": {
+  "west": "lx = 连接器 pad x（= manifest conn pad x）；ll = J3 行间中缝 44.5 / J4 行间中缝 62.7（两行 43.25/45.75、61.45/63.95 的共同中缝）=> 落 via 距两行 pad 各 1.25mm ≥0.38；F.Cu breakout 为竖段沿 pad x，只触本网 pad",
+  "east": "J2 仅两条 x 列（132.65/135.0）=> 落列取 131.65/136.0 并在 pad 行侧进入，canonical 已基本合规（仅 2 条 short）"
+ },
+ "probe3_result": {
+  "board": "/tmp (只读；西侧 landing 重派生 + 层重标；东侧保持 canonical)",
+  "drc_new_total": 393,
+  "shorting_items": 136,
+  "by_cause": {"via_barrel_vs_track": 95, "via_vs_via": 29, "track_vs_track": 7, "pad_J3": 1, "pad_J4": 1, "pad_J2": 2, "pad_U6": 1},
+  "delta_vs_canonical_108": {"pad_J3": "17->1", "pad_J4": "17->1", "solder_mask_bridge": "103->43"},
+  "note": "via_span/via_via 上升因本探针未对东侧应用 CO-09 层重标/唯一列，不可据此评价 CO-09 的 via 侧；仅据此判定 D3 落列修复有效"
+ },
+ "verdict": "D3 落列修复规则**验证有效**：连接器 pad short 34->2、阻焊桥 103->43。此为 D2/D3 主项的第一块可落地修复。",
+ "redline": "只读；四源未改；canonical 未动"
+}
