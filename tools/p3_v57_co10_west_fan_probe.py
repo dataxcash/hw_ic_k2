@@ -147,8 +147,10 @@ def _stub_layer_of(a):
 
 
 def _lx_separate(A):
-    """CO-11 §8：connector 侧 lx 前缀分配（零搜索单遍）。
-    同层 stub 的 y 区间重叠时，lx 须 >= VV(0.525)；候选=本 pad 列邻域内的中缝列。"""
+    """CO-11 §13：connector 侧 lx 前缀分配（零搜索单遍，**按页整体偏移**）。
+    - P/N 同 δ 平移 => 保持 pad 相对次序 => 不产生 land 段互叉（§12 修正项 a）。
+    - δ 网格 0.6mm（=pad pitch，落另一中缝列）=> 页间 lx 净距 >=0.525。
+    同层 stub/land 的 y 区间重叠时，要求页间 lx >= VV(0.525)。"""
     ents = []
     for k, a in A.items():
         if a["ref"] not in ("J3", "J4"):
@@ -156,33 +158,39 @@ def _lx_separate(A):
         page = a.get("page")
         if page not in LANES:
             continue
-        S = _stub_layer_of(a)
-        ly = LANES[page]["lane_y"]
-        ll = float(a["landing"][1])
-        ents.append({"key": k, "a": a, "S": S, "pad_x": float(a["pad_x"]),
-                     "lo": min(ly, ll), "hi": max(ly, ll), "lx": float(a["column_x"])})
-    ents.sort(key=lambda e: (e["S"], round(e["lo"], 3), round(e["hi"], 3), e["key"]))
-    placed = []
+        ents.append({"key": k, "a": a, "page": page, "S": _stub_layer_of(a)})
+    bypage = {}
     for e in ents:
-        cand = [e["pad_x"] - 0.3, e["pad_x"] + 0.3, e["pad_x"] - 0.9, e["pad_x"] + 0.9,
-                e["pad_x"] - 1.5, e["pad_x"] + 1.5, e["lx"]]
+        bypage.setdefault(e["page"], []).append(e)
+    pages = sorted(bypage, key=lambda q: (bypage[q][0]["S"], round(LANES[q]["lane_y"], 3), q))
+    placed = []
+    for pg in pages:
+        grp = bypage[pg]
+        S = grp[0]["S"]
+        ly = LANES[pg]["lane_y"]
+        lo = min(min(ly, g["a"]["landing"][1]) for g in grp)
+        hi = max(max(ly, g["a"]["landing"][1]) for g in grp)
         best = None
-        for c in cand:
-            okc = True
+        for d in (0.0, 0.6, -0.6, 1.2, -1.2, 1.8, -1.8, 2.4, -2.4):
+            xs = [g["a"]["column_x"] + d for g in grp]
+            okd = True
             for q in placed:
-                if q["S"] != e["S"]:
+                if q["S"] != S:
                     continue
-                if e["lo"] >= q["hi"] - VV or e["hi"] <= q["lo"] + VV:
-                    continue                                   # y 区间净距 >= VV
-                if abs(c - q["lx"]) < VV - TOL:
-                    okc = False; break
-            if okc:
-                best = c; break
-        e["lx"] = best if best is not None else e["lx"]
-        placed.append(e)
-    for e in placed:
-        e["a"]["column_x"] = W.fp(e["lx"])
-        e["a"]["landing"] = [W.fp(e["lx"]), e["a"]["landing"][1]]
+                if lo >= q["hi"] - VV or hi <= q["lo"] + VV:
+                    continue
+                for x in xs:
+                    if abs(x - q["lx"]) < VV - TOL:
+                        okd = False; break
+                if not okd:
+                    break
+            if okd:
+                best = d; break
+        d = best if best is not None else 0.0
+        for g in grp:
+            g["a"]["column_x"] = W.fp(g["a"]["column_x"] + d)
+            g["a"]["landing"] = [W.fp(g["a"]["column_x"]), g["a"]["landing"][1]]
+            placed.append({"S": S, "lx": g["a"]["column_x"], "lo": lo, "hi": hi})
 
 
 FAN_Y = {("J3", "U"): 42.0, ("J3", "L"): 44.2, ("J4", "U"): 60.2, ("J4", "L"): 65.0}

@@ -157,7 +157,8 @@ def main():
            "n_vias": len(vias), "n_segs": len(segs), "n_pages": len(G),
            "n_violations": len(bad), "verdict": "PASS" if not bad else "FAIL",
            "violations": bad[:40]}
-    out = Path("pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_co11_placement_verification.json")
+    out = Path(sys.argv[2]) if len(sys.argv) > 2 else \
+        Path("pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_co11_placement_verification.json")
     out.write_text(json.dumps(res, ensure_ascii=False, indent=1, sort_keys=True), encoding="utf-8")
     print(json.dumps({k: res[k] for k in ("n_pages", "n_vias", "n_segs", "n_violations", "verdict")}))
     if bad:

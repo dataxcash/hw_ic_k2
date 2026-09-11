@@ -209,3 +209,31 @@ k2 `ff438f0`｜父仓（bump）｜四源 4/4 MATCH｜canonical W3-CN.30 `05f7bd1
   §8.5 的 band 双行 y-stagger 规律仍是有用输入。
 - 教训（防再犯）：探针/复核器判据必须含 **proper-intersection 交叉**（引擎 `count_crossings` 语义），不能只有距离判据。
 - 红线：冻结四源 4/4 MATCH；canonical `05f7bd10ab3b45b6` 未动；引擎未改；无 sign-off。
+
+---
+
+## 13. 交叉免几何推导（新周期）：(a) 已修 → 30/32 有效；(b) connector In2 拥塞仍阻 2 页
+### 13.1 (a) land 互叉已消除（§12 修正项 a）
+- 改 `_lx_separate` 为**按页整体偏移**（P/N 同 δ），δ 网格 **0.6mm**（落另一中缝列，页间净距 ≥0.525）⇒
+  P/N land 段保持 pad 相对次序 ⇒ **不再互叉**。
+- 结果：同配置 **30/32**（原 28/32），失败仅 **UP6/UP7**；几何产物 `m13_v57_co13_perpage_lx_probe_fan_rev.json`
+  （`debc3da294d4c7a0`）。
+- **非执行者复核（含 proper-intersection 全对全）**：`m13_v57_co13_placement_verification.json`
+  **0 违规 PASS**（304 via / 300 段）⇒ 这 30 页**既净距合规、又无同层交叉**。
+
+### 13.2 (b) 剩余 2 页（UP6/UP7）＝ **J4-L In6 stub × 对面极性 In6 lane** 交叉
+- 机理：J4-L 的 `ll=65.0` 在 lane 之上，stub 竖直上溯必穿对面极性 lane（同 In6）⇒ 需要 **stub 改 In2**。
+- 但 J4-L 改 In2 后，connector 侧 In2 拥塞：按压缩 lane 块，各 row 组的 In2 stub y 区间为
+  J3U `[31.5,36.7]`、J3L `[37.8,51.5]`、J4U `[42.3,60.2]`、J4L `[46.8,65.0]`；
+  重叠团 **{J3L,J4U,J4L} = 12 页 × 2 pol = 24 项**，而 connector 中缝列仅 **~19**（0.6 pitch），
+  且需 ≥0.525 分离 ⇒ **x 维不足**（实测 J4L→In2 掉到 26–28/32）。
+- L2 候选（下一周期，需新几何而非微调）：
+  1. **非竖直 stub**（斜段/折线）把 In2 竖段移到不同 x 列，降低阶梯团；
+  2. **landing 方案重派生**（如 J4 组改用 lane 块**下方** ll + In2 stub，需与 J3 组协调）；
+  3. **J4 组 lane 降带**（若能把 J4 组 lane 压到 J3 组同区，stub 变短、团收缩）；
+  4. 或对 2 页（UP6/UP7）做**局部拓扑特例**（L2 过孔策略允许逐页混合，CO-09 §4-7）。
+
+### 13.3 结论 / 红线
+- 现状：**30/32 有效**（crossing-free + clearance-clean，经修正判据复核）；2 页待 (b) 的新几何。
+- 冻结四源 4/4 MATCH；canonical `05f7bd10ab3b45b6` 未动；引擎未改；无 sign-off。
+- 判据纪律（§12 教训）已固化：探针 `cross_intra` + 复核器 `cross`（proper intersection）。
