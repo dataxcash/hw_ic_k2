@@ -1,0 +1,63 @@
+{
+ "artifact": "m13_v57_l5_dfm_dft_record",
+ "dft": {
+  "nets": 95,
+  "note": "DFT 可测性以网络可达/未连项计；完整 DFT 规矩待 L5 深化",
+  "unconnected_items": 352
+ },
+ "drc": {
+  "baseline_frozen": {
+   "by_type": {
+    "invalid_outline": 1,
+    "lib_footprint_issues": 12,
+    "lib_footprint_mismatch": 29,
+    "silk_edge_clearance": 1
+   },
+   "n": 43,
+   "unconnected": 416
+  },
+  "l4_applied": {
+   "by_type": {
+    "clearance": 171,
+    "copper_edge_clearance": 26,
+    "hole_clearance": 26,
+    "hole_to_hole": 3,
+    "invalid_outline": 1,
+    "lib_footprint_issues": 12,
+    "lib_footprint_mismatch": 29,
+    "shorting_items": 117,
+    "silk_edge_clearance": 1,
+    "solder_mask_bridge": 110
+   },
+   "n": 496,
+   "unconnected": 352
+  },
+  "new_total": 453,
+  "new_violations": {
+   "clearance": 171,
+   "copper_edge_clearance": 26,
+   "hole_clearance": 26,
+   "hole_to_hole": 3,
+   "shorting_items": 117,
+   "solder_mask_bridge": 110
+  },
+  "tool": "kicad-cli 10.0.5"
+ },
+ "manufacturing_conformance": {
+  "annular_mm": 0.075,
+  "min_annular_width_rule_mm": 0.075,
+  "min_through_hole_diameter_rule_mm": 0.2,
+  "min_track_width_rule_mm": 0.09,
+  "min_track_width_used_mm": 0.205,
+  "min_via_diameter_rule_mm": 0.35,
+  "via_dia_used_mm": [
+   0.35
+  ],
+  "via_drill_used_mm": [
+   0.2
+  ]
+ },
+ "revision": "L5-DFM.1",
+ "schema": 1,
+ "verdict": "FAIL"
+}

@@ -1,0 +1,36 @@
+{
+ "EMC": {
+  "copper_edge_violations": 26,
+  "reference_plane_adjacency": "F.Cu<->In1.Cu, In2.Cu<->In3.Cu, B.Cu<->In4.Cu (6L stack)",
+  "signal_layers": [
+   "F.Cu",
+   "B.Cu",
+   "In2.Cu"
+  ],
+  "solder_mask_bridge_violations": 110
+ },
+ "PI": {
+  "hole_clearance_violations": 26,
+  "pdn_planes_untouched": "frozen board zones unmodified (L4 adds tracks only)",
+  "plane_layers": [
+   "In1.Cu",
+   "In3.Cu",
+   "In4.Cu"
+  ],
+  "planes_present": true
+ },
+ "SI": {
+  "all_pcie_tracks_0p205": true,
+  "layer_transitions_per_line": {
+   "via1/corner/drop/land": 4
+  },
+  "max_intra_pair_skew_mm": 24.476,
+  "skew_ok": false,
+  "skew_rule_mm": 0.15,
+  "track_width_rule_mm": 0.205
+ },
+ "artifact": "m13_v57_l5_si_pi_emc_record",
+ "revision": "L5-SI.1",
+ "schema": 1,
+ "verdict": "FAIL"
+}
