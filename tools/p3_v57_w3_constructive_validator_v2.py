@@ -342,6 +342,18 @@ def check_acn(art, verdict, manifest, gaps):
     chk("A-CN.5b", "True", str(rf["page_separation_ok"]), bool(rf["page_separation_ok"]))
     d = len([p for p in art["pages"] if p["kind"] == "refclk"])
     chk("A-CN.5c", "2 refclk", str(d), d == 2)
+    # CO-45（独立复算）：REFCLK 折线同层 P/N（含页间）不得交叉
+    _rfp = []
+    for _pid2, _rv2 in sorted(rf["assignment"].items()):
+        for _p2 in ("P", "N"):
+            _rfp.append((_pid2 + "/" + _p2, _rv2["paths"][_p2]["path"]))
+    _rfc = 0
+    for _i in range(len(_rfp)):
+        for _j in range(_i + 1, len(_rfp)):
+            for _s1 in zip(_rfp[_i][1], _rfp[_i][1][1:]):
+                for _s2 in zip(_rfp[_j][1], _rfp[_j][1][1:]):
+                    _rfc += seg_cross(_s1[0], _s1[1], _s2[0], _s2[1])
+    chk("A-CN.5d", "0", str(_rfc), _rfc == 0)
     return checks
 
 

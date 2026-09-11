@@ -103,14 +103,16 @@ def main() -> int:
     widths_ok = all(abs(pcbnew.ToMM(t.GetWidth()) - 0.205) < 1e-6 for t in tracks if t.GetNetname().startswith("PCIE"))
     skew = []
     for pg in art["pages"]:
-        if pg["kind"] != "data":
+        if pg["kind"] == "data":
+            _nodes = pg["nodes"]
+        elif pg["kind"] == "refclk":
+            # CO-45：REFCLK 对同属 net_class PCIe85 ⇒ SPEC intra_pair_skew_mm 亦适用（原实现跳过非 data 页）
+            _nodes = pg["refclk"]["nodes"]
+        else:
             continue
-        f = next(q for q in man["pages"] if q["page_id"] == pg["page_id"])
-        for pol in ("P", "N"):
-            pass
         # per-page P/N path length from the drawing nodes
-        def plen(pol):
-            pts = [[n[0], n[1]] for n in pg["nodes"][pol]]
+        def plen(pol, _n=_nodes):
+            pts = [[n[0], n[1]] for n in _n[pol]]
             dd = 0.0
             for i in range(len(pts) - 1):
                 dd += ((pts[i + 1][0] - pts[i][0]) ** 2 + (pts[i + 1][1] - pts[i][1]) ** 2) ** 0.5
@@ -122,6 +124,7 @@ def main() -> int:
           "SI": {"track_width_rule_mm": 0.205, "all_pcie_tracks_0p205": widths_ok,
                  "max_intra_pair_skew_mm": skew_max, "skew_rule_mm": rules["diff_pair"]["intra_pair_skew_mm"],
                  "skew_ok": skew_max <= rules["diff_pair"]["intra_pair_skew_mm"] + 1e-9,
+                 "skew_pages_checked": len(skew), "skew_pages": skew,
                  "layer_transitions_per_line": {"via1/corner/drop/land": 4}},
           "PI": {"plane_layers": planes, "planes_present": bool(planes),
                  "pdn_planes_untouched": "frozen board zones unmodified (L4 adds tracks only)",

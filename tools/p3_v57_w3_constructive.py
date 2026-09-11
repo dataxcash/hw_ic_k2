@@ -62,7 +62,7 @@ OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
 OUT_LANDING = STEP2 / "m13_v57_w3_chip_landing_rows.json"
 
 REVISION = "W3-CN.30"   # 默认（t2）路径不动；CO-16 见 REVISION_CO16
-REVISION_CO16 = "W3-CN.39"   # CO-40：REFCLK 页 pad_field_transit = ECS-001 闭式（F.Cu->In2->F.Cu 单次换层）
+REVISION_CO16 = "W3-CN.40"   # CO-45：远端 N 折线补入 3D nodes（修 CO-43 图纸/nodes 不一致）+ REFCLK 对内 0.5/dip 解耦
 ECS_VIA1_X = 133.825        # 两列缝中线（距两侧 pad 边各 0.35 >= vias.high_speed.pad_edge_clearance_mm 0.3）
 ECS_VIA2_X_MAX = 131.525    # 内列 pad 西缘 132.0 - via 半径 0.175 - pad_edge_clearance 0.3
 ECS_VIA_R = 0.175           # vias.std: drill 0.2 + 2*annular 0.075
@@ -71,10 +71,20 @@ ECS_CLEAR = 0.175           # 店规 PCIe85 净距（域内不放宽任何数值
 ECS_MARGIN = 0.2775         # trace_half + clear：迹跨列端所需
 ECS_DX = 0.4525             # via 避开同层列的横向最小中心距：via_r + trace_half + clear
 ECS_COL_LO, ECS_COL_HI = 129.0, 132.2   # pad 场近域 In2 stub 列筛选窗
-REFCLK_N_OFF = 0.31        # REFCLK 内 N 轨相对 pad 行 y 的偏移（P=-0.19 ⇒ 对内 0.50 >= ECS_DX）
+# CO-45 (W3-CN.40) REFCLK 对内偏移（取代 ROOT-21 的 ±POL_OFF=±0.19）：
+#   P = 0.0  -> 内列 pad 由 pad 中心线直出，无 0.19 jog（消 vs J2 GND pad 9/13/27/31 实测 0.1325）；
+#   N = -0.5 -> 外列 N 的 dip rail 在 P 北侧 0.5（> ECS_DX 0.4525，消 via#2 vs P 轨实测 0.1025），
+#               且远端 P 竖段与他轨不相交（见 refclk_far_transit 内真实线段自检）。
+REFCLK_OFF = {"P": 0.0, "N": -0.5}
+ECS_VIA1_DY = 0.19         # via1 自 pad 中心南偏（ECS-001 既定；pad 10/14 净距合格）
+# CO-45 等长补偿（SPEC PCIe85.intra_pair_skew_mm = 0.15；CO-40 预留、CO-41/43 未实施）：
+#   P 的 rail 段（west -> xj_P，实测 x<=82.35 段全空）插入**南向三角幂绕**；幅值上界取 2.0mm。
+REFCLK_MEANDER_A_MAX = 2.0     # 幂绕幅值上界（实测自由带 >=4mm，留 2x 余量）
+REFCLK_MEANDER_LO = 1.5        # 幂绕带西端距 xj_P 的余量
+REFCLK_MEANDER_HI = 1.0        # 幂绕带东端距 west 的余量
 FAR_ROW_MARGIN = 0.6275    # CO-42/43 远端：排中心到自由带边界 = pad高0.35 + 净距0.175 + 半线宽0.1025
 FAR_LINE_LO = 0.28         # 带内近边界线距带边界
-FAR_LINE_STEP = 0.38       # 带内两线间距（= 现行对内间距）
+FAR_LINE_STEP = 0.5        # CO-45：带内两线间距（0.38 边距恰 0.175 无余量；0.5 -> 0.295）
 FAR_JOG_EAST = 0.5         # 抬升列位于 A 排东端之外的安全余量（覆盖 pad 半宽+净距+半线宽）
 ORD = "natural"   # ROOT-20: enumeration order (A1.2 order-invariance, non-vacuous)
 SCHEMA = 1
@@ -1147,31 +1157,35 @@ def _in2_columns():
     return sorted((x, lo, hi) for x, (lo, hi) in cols.items())
 
 
-def refclk_transit_nodes(j2, rail_y, west_x, rise_x, run_y, far, off):
-    """CO-40 ECS-001：J2 外列 N 的 pad 场 transit（F.Cu -> In2 -> F.Cu 单次换层）。
+def refclk_transit_nodes(j2, via1_y, dip_y, west_x, rise_x, run_y, off):
+    """CO-40/CO-45 ECS-001：J2 外列 N 的 pad 场 transit（F.Cu -> In2 -> F.Cu 单次换层）。
 
-    闭式：via1 落两列缝中线；via2 取 x<=ECS_VIA2_X_MAX 上避开同层 In2 列的缝中心；
-    若无直行缝（rail_y 被 In2 列端封堵）则绕该列端部（detour_y = 该列 y_lo - ECS_MARGIN 取整）。
+    闭式：via1 落两列缝中线 (ECS_VIA1_X, via1_y)；via2 取 x<=ECS_VIA2_X_MAX 上避开同层 In2 列的
+    缝中心 (x_v, dip_y)；若无直行缝（dip_y 被 In2 列端封堵）则绕该列端部
+    （detour_y = 该列 y_lo - ECS_DX 取整）。
+    CO-45：via1_y（自 pad 直出的 stub 端，受 pad 10/14 净距约束）与 dip_y（N 轨 y）解耦。
+    远端接入折线由调用方统一追加（P/N 同口径）——修补 CO-43 中 nodes 丢失远端 waypoint 的缺陷。
     """
-    tail = [[fp(rise_x + off), rail_y, "F.Cu"], [fp(rise_x + off), fp(run_y + off), "F.Cu"],
-            [fp(west_x), fp(run_y + off), "F.Cu"], [far[0], far[1], "F.Cu"]]
+    tail = [[fp(rise_x + off), dip_y, "F.Cu"],
+            [fp(rise_x + off), fp(run_y + off), "F.Cu"],
+            [fp(west_x), fp(run_y + off), "F.Cu"]]
     head = [[j2[0], j2[1], "F.Cu"],
-            [ECS_VIA1_X, rail_y, "F.Cu"], [ECS_VIA1_X, rail_y, "In2.Cu"]]
+            [ECS_VIA1_X, via1_y, "F.Cu"], [ECS_VIA1_X, via1_y, "In2.Cu"]]
     cols = _in2_columns()
     x_v = fp(math.floor((ECS_VIA2_X_MAX - GRID) / GRID) * GRID)      # 直行候选（最东可用，留 0.075 余量）
-    blk = [c for c in cols if c[1] - ECS_MARGIN <= rail_y <= c[2] + ECS_MARGIN]  # rail_y 处封堵列
+    blk = [c for c in cols if c[1] - ECS_MARGIN <= dip_y <= c[2] + ECS_MARGIN]  # dip_y 处封堵列
     direct = (not blk) or (x_v - max(c[0] for c in blk) >= ECS_DX)
     if direct:
-        return head + [[x_v, rail_y, "In2.Cu"], [x_v, rail_y, "F.Cu"]] + tail
+        return head + [[x_v, dip_y, "In2.Cu"], [x_v, dip_y, "F.Cu"]] + tail
     x_wall = max(c[0] for c in blk)                                  # 最东封堵列 = 须绕行的那道墙
     detour_y = fp(math.floor((min(c[1] for c in blk if c[0] == x_wall) - ECS_DX) / GRID) * GRID)
-    west_blk = [c[0] for c in blk if c[0] < x_wall]      # rail_y 处封堵列中位于墙西侧者
+    west_blk = [c[0] for c in blk if c[0] < x_wall]      # dip_y 处封堵列中位于墙西侧者
     x_v = (fp((x_wall + max(west_blk)) / 2.0) if west_blk   # 墙 ↔ 其西邻封堵列 的中缝
            else fp(x_wall - ECS_DX - 2 * GRID))
     x_vert = fp(math.floor(((x_wall + ECS_VIA1_X) / 2.0) / GRID) * GRID)          # 竖直段（墙东侧、缝内）
-    return (head + [[x_vert, rail_y, "In2.Cu"], [x_vert, detour_y, "In2.Cu"],
-                    [x_v, detour_y, "In2.Cu"], [x_v, rail_y, "In2.Cu"],
-                    [x_v, rail_y, "F.Cu"]] + tail)
+    return (head + [[x_vert, via1_y, "In2.Cu"], [x_vert, detour_y, "In2.Cu"],
+                    [x_v, detour_y, "In2.Cu"], [x_v, dip_y, "In2.Cu"],
+                    [x_v, dip_y, "F.Cu"]] + tail)
 
 
 def _far_row_span(manifest, far_ref):
@@ -1189,19 +1203,45 @@ def _far_row_span(manifest, far_ref):
     return sorted(ys)
 
 
-def refclk_far_transit(manifest, far_ref, far_pads, run_y, pol, x_rise_lo):
-    """CO-43（依 CO-42 裁定）：远端接入 = 抬升入两排间自由带 -> 带内西行 -> 垂直入 pad。
+def refclk_meander(m1, y0, extra, span_max):
+    """CO-45 等长补偿：在水平段 y=y0 上自 m1 向西插入**南向三角幂绕**。
 
-    带内两线取低侧起算的 line_a / line_b（相距 FAR_LINE_STEP=0.38）。分配规则：
-    far-pad x 较小的一根走 line_a 并取更东的抬升列（小 x 的水平段更长，必须避开另一根的下降段）。
-    该 2 选 1 为闭式判定：两候选各做一次水平段×竖直段相交测试，取不相交者（都不相交取候选 1）。
+    闭式：半齿距 h = 0.05 栅格最近值，齿数 n 取满足 A<=REFCLK_MEANDER_A_MAX 的**最小**整数，
+    幅值 A = sqrt(((extra+L)/(2n))^2 - h^2)（L = 2n*h，故实测额外长度 == extra，无需回搜）。
+    返回 [m1,y0] 起的折线点列（末点 = [m1-2n*h, y0]）；不可达则 RuntimeError = 停机。
+    """
+    if extra <= TOL:
+        return [[m1, y0]]
+    for n in range(1, 65):
+        h = fp(span_max / (2 * n))
+        if h <= 4 * GRID:
+            continue
+        a2 = (extra / (2 * n) + h) ** 2 - h * h
+        if a2 > TOL and math.sqrt(a2) <= REFCLK_MEANDER_A_MAX + TOL:
+            a_mag = math.sqrt(a2)
+            pts = [[m1, y0]]
+            for k in range(1, 2 * n + 1):
+                pts.append([fp(m1 - k * h), y0 + (a_mag if k % 2 else 0.0)])
+            return pts
+    raise RuntimeError("CO-45 meander: no feasible (n, A) within amplitude bound")
+
+
+def refclk_far_transit(manifest, far_ref, far_pads, run_y, pol, x_rise_lo):
+    """CO-42/43/45：远端接入 = 抬升入两排间自由带 -> 带内西行 -> 垂直入 pad。
+
+    闭式分配（CO-45 修正，取代 CO-43 的 2 选 1 启发）：
+      * rails：P = run_y + REFCLK_OFF["P"]（pad 中心线侧），N = run_y + REFCLK_OFF["N"]（北侧）；
+      * lines：N 走北线 line_a（贴 row_lo 侧），P 走南线 line_b；
+      * 抬升列：P 取西列 xj_near，N 取东列 xj_far。
+    该组合下 P/N 折线互不相交；函数内以**真实线段相交**自检（相交即 RuntimeError = 停机，禁静默回退）。
+    line_a/line_b 间距 = FAR_LINE_STEP（CO-45：0.5，边距 0.295；原 0.38 边距恰 0.175 无余量）。
     """
     rows = _far_row_span(manifest, far_ref)
     if len(rows) < 2:
         return None
-    row_lo, row_hi = rows[0], rows[-1]
-    line_a = fp(row_lo + FAR_ROW_MARGIN + FAR_LINE_LO)
-    line_b = fp(line_a + FAR_LINE_STEP)
+    row_lo = rows[0]
+    line_a = fp(row_lo + FAR_ROW_MARGIN + FAR_LINE_LO)     # 北线（贴 row_lo 侧）
+    line_b = fp(line_a + FAR_LINE_STEP)                    # 南线
     east_end = 0.0
     for pg in manifest["pages"]:
         for k in ("conn", "conn2"):
@@ -1216,30 +1256,20 @@ def refclk_far_transit(manifest, far_ref, far_pads, run_y, pol, x_rise_lo):
     # witness `west_rise_in_corridor.x_centre_range[0]`（其认证的自由抬升列，东于整个 pad 场）的较大者
     xj_near = fp(math.ceil(max(east_end + FAR_JOG_EAST, x_rise_lo) / GRID) * GRID)
     xj_far = fp(xj_near + GRID * 10)
-    small_pol = "P" if far_pads["P"][0] <= far_pads["N"][0] else "N"
-    lrg_pol = "N" if small_pol == "P" else "P"
-    x_small, x_lrg = far_pads[small_pol][0], far_pads[lrg_pol][0]
-    rails = {"P": fp(run_y - POL_OFF), "N": fp(run_y + POL_OFF)}
+    rails = {q: fp(run_y + REFCLK_OFF[q]) for q in ("P", "N")}
+    line_of = {"N": line_a, "P": line_b}
+    xj_of = {"P": xj_near, "N": xj_far}
 
-    def _bad(ln_small, ln_lrg):
-        lo, hi = min(ln_lrg, rails[lrg_pol]), max(ln_lrg, rails[lrg_pol])
-        if x_small < x_lrg < xj_far and lo < ln_small < hi:
-            return True
-        lo2, hi2 = min(ln_small, rails[small_pol]), max(ln_small, rails[small_pol])
-        if x_lrg < x_small < xj_near and lo2 < ln_lrg < hi2:
-            return True
-        return False
+    def _poly(q):
+        return [[xj_of[q], rails[q]], [xj_of[q], line_of[q]],
+                [far_pads[q][0], line_of[q]], [far_pads[q][0], far_pads[q][1]]]
 
-    if _bad(line_a, line_b) and not _bad(line_b, line_a):      # 2 选 1：取不相交者
-        small_on_a = False
-    else:
-        small_on_a = True
-    line_of = {small_pol: (line_a if small_on_a else line_b),
-               lrg_pol: (line_b if small_on_a else line_a)}
-    xj_of = {small_pol: xj_far, lrg_pol: xj_near}
-    return [[xj_of[pol], rails[pol]],
-            [xj_of[pol], line_of[pol]],
-            [far_pads[pol][0], line_of[pol]], [far_pads[pol][0], far_pads[pol][1]]]
+    _pp, _nn = _poly("P"), _poly("N")
+    for _s1 in zip(_pp, _pp[1:]):
+        for _s2 in zip(_nn, _nn[1:]):
+            if seg_cross(_s1[0], _s1[1], _s2[0], _s2[1]):
+                raise RuntimeError(f"CO-45 self-check: REFCLK far transit P/N cross ({far_ref}/{pol})")
+    return _poly(pol)
 
 
 def refclk_place(manifest: dict, w0r: dict) -> dict:
@@ -1256,7 +1286,9 @@ def refclk_place(manifest: dict, w0r: dict) -> dict:
         east = CORRIDOR["EAST_CHIP_TO_J2"]["bounds"][0]
         u6 = [b for b in pw["blockers"] if b["ref"] == "U6"][0]
         east_clear = fp(east if east > u6["keepout_x"][1] else u6["keepout_x"][1] + GRID)
-        rise_x = fp(max(rise_x, east_clear + 0.5))
+        # CO-45：抬升列以 P 列为基准（off=0）；须使最北偏移列（N, off=-0.5）仍满足 U6 余量
+        _off_lo = min(REFCLK_OFF.values())
+        rise_x = fp(max(rise_x, east_clear + 0.5 - _off_lo))
         pp = pw["per_page"][base_pid]
         half = pw.get("pair_copper_extent_mm", 0.585) / 2.0
         if "pair_centre_window_y" in pp:
@@ -1266,6 +1298,8 @@ def refclk_place(manifest: dict, w0r: dict) -> dict:
         else:
             _lo = _hi = None
         paths = {}
+        nodes = {}
+        _far_tr = {}
         lane_y = None
         _far_pads, _far_ref = {}, None                          # CO-43: 远端 pad（J3/J4）
         for _p in ("P", "N"):
@@ -1275,8 +1309,9 @@ def refclk_place(manifest: dict, w0r: dict) -> dict:
                    fp(pg["anchors"]["conn2"][_p]["pad_global"][1])]
             _far_pads[_p] = _a1 if _a1[0] < _a2[0] else _a2
             _far_ref = pg["anchors"]["conn"][_p]["ref"]
+        _b3, _meta = {}, {}
         for pol in ("P", "N"):
-            off = -POL_OFF if pol == "P" else POL_OFF        # ROOT-21: P/N 分离 0.38 >= 净距
+            off = REFCLK_OFF[pol]        # CO-45: P=0（内列 pad 中心线直出）、N=-0.5（北侧 0.5）
             a1 = [fp(pg["anchors"]["conn"][pol]["pad_global"][0]),
                   fp(pg["anchors"]["conn"][pol]["pad_global"][1])]
             a2 = [fp(pg["anchors"]["conn2"][pol]["pad_global"][0]),
@@ -1291,28 +1326,60 @@ def refclk_place(manifest: dict, w0r: dict) -> dict:
             _tr = refclk_far_transit(manifest, _far_ref, _far_pads, run_y, pol, _rise_lo)
             if _tr is None:
                 _tr = [[far[0], far[1]]]
-            pts = [j2, [j2[0], fp(j2[1] + off)],
-                   [fp(rise_x + off), fp(j2[1] + off)],
-                   [fp(rise_x + off), fp(run_y + off)],
-                   [fp(west), fp(run_y + off)]] + _tr
-            path = [pts[0]]
-            for q in pts[1:]:
+            _far_tr[pol] = _tr
+            if pol == "P":                       # 内列 pad：F.Cu 直出（off=0 ⇒ pad 中心线），无换层
+                _b3[pol] = [[j2[0], j2[1], "F.Cu"],
+                            [j2[0], fp(j2[1] + off), "F.Cu"],
+                            [fp(rise_x + off), fp(j2[1] + off), "F.Cu"],
+                            [fp(rise_x + off), fp(run_y + off), "F.Cu"],
+                            [fp(west), fp(run_y + off), "F.Cu"]]
+            else:                                # 外列 pad：ECS-001 单次换层（F.Cu -> In2 -> F.Cu）
+                _b3[pol] = refclk_transit_nodes(j2, fp(j2[1] + ECS_VIA1_DY), fp(j2[1] + off),
+                                                west, rise_x, run_y, off)
+            _meta[pol] = {"j2": j2, "far": far, "off": off, "run_y": run_y,
+                          "base_run": base_run, "tr": _tr}
+
+        # CO-45 等长补偿：P rail（west -> xj_P）插入南向幂绕，补偿 |L_P - L_N|（>=0 时）
+        def _xy_len(_r):
+            return sum((( _r[i + 1][0] - _r[i][0]) ** 2 + (_r[i + 1][1] - _r[i][1]) ** 2) ** 0.5
+                       for i in range(len(_r) - 1))
+        _pl, _nl_ = _xy_len(_b3["P"] + [[q[0], q[1], "F.Cu"] for q in _meta["P"]["tr"]]), \
+                    _xy_len(_b3["N"] + [[q[0], q[1], "F.Cu"] for q in _meta["N"]["tr"]])
+        _extra = _nl_ - _pl
+        if _extra < -TOL:
+            raise RuntimeError("CO-45 length compensation: P longer than N (no feasible shortener)")
+        _runp = fp(_meta["P"]["run_y"] + _meta["P"]["off"])
+        _xjp = _meta["P"]["tr"][0][0]
+        _mp = refclk_meander(fp(west - REFCLK_MEANDER_HI), _runp, _extra,
+                             fp((west - REFCLK_MEANDER_HI) - (_xjp + REFCLK_MEANDER_LO)))
+        _b3["P"] = _b3["P"] + [[q[0], q[1], "F.Cu"] for q in _mp]
+        _skew_after = {}
+
+        for pol in ("P", "N"):
+            _raw3 = _b3[pol] + [[q[0], q[1], "F.Cu"] for q in _meta[pol]["tr"]]
+            _nd = [_raw3[0]]
+            for q in _raw3[1:]:
+                if (abs(q[0] - _nd[-1][0]) > TOL or abs(q[1] - _nd[-1][1]) > TOL
+                        or q[2] != _nd[-1][2]):
+                    _nd.append(q)
+            nodes[pol] = _nd
+            _xy = [[q[0], q[1]] for q in _nd]
+            path = [_xy[0]]
+            for q in _xy[1:]:
                 if abs(q[0] - path[-1][0]) > TOL or abs(q[1] - path[-1][1]) > TOL:
                     path.append(q)
             bump(6, "refclk_path")
-            paths[pol] = {"path": path, "j2_pad": j2, "far_pad": far, "pol_offset_mm": off,
-                          "run_y": run_y,
-                          "crossing_y_from_witness": base_run if base_run != j2[1] else None}
-        nodes = {}
-        for pol in ("P", "N"):
-            pth = paths[pol]["path"]
-            if pol == "P":                                        # 内列 pad：F.Cu 直出，无换层
-                nodes[pol] = [[q[0], q[1], "F.Cu"] for q in pth]
-            else:                                                 # 外列 pad：ECS-001 单次换层
-                nodes[pol] = refclk_transit_nodes(j2, fp(j2[1] + paths[pol]["pol_offset_mm"]),
-                                                  west, rise_x, paths[pol]["run_y"], far,
-                                                  paths[pol]["pol_offset_mm"])
-        out[pid] = {"layer": "F.Cu", "lane_y": lane_y, "pol_offset_mm": POL_OFF,
+            paths[pol] = {"path": path, "j2_pad": _meta[pol]["j2"], "far_pad": _meta[pol]["far"],
+                          "pol_offset_mm": _meta[pol]["off"], "run_y": _meta[pol]["run_y"],
+                          "crossing_y_from_witness": (_meta[pol]["base_run"]
+                                                      if _meta[pol]["base_run"] != _meta[pol]["j2"][1]
+                                                      else None)}
+            _skew_after[pol] = _xy_len(_xy)
+        _skew_mm = round(abs(_skew_after["P"] - _skew_after["N"]), 4)
+        if _skew_mm > 0.15 + 1e-9:
+            raise RuntimeError(f"CO-45 length compensation: residual skew {_skew_mm} > 0.15")
+        out[pid] = {"layer": "F.Cu", "lane_y": lane_y, "pol_offset_mm": dict(REFCLK_OFF),
+                    "meander_extra_mm": round(_extra, 4), "intra_pair_skew_mm": _skew_mm,
                     "nets": {q: pg["anchors"]["conn2"][q]["net"] for q in ("P", "N")},
                     "paths": paths,
                     "witness": {"source": "W0-R refclk_passage_witness",
@@ -1619,16 +1686,12 @@ def scale_probe(j: dict, base_facts: dict, args) -> int:
     rman = {"pages": []}
     for c in range(args.scale):
         for pg in base_manifest["pages"]:
-            if pg["kind"] == "data":
-                continue
             g = json.loads(json.dumps(pg))
             g["page_id"] = g["page_id"] + f"#c{c}"
-            for side in ("conn", "conn2"):
-                if side in g["anchors"]:
-                    for pol in ("P", "N"):
-                        a = g["anchors"][side].get(pol)
-                        if a:
-                            a["pad_global"] = [a["pad_global"][0] + 300.0 * c, a["pad_global"][1]]
+            # G-M3：全部页进 manifest（refclk_place 内部只迭代 non-data 页，但 `_far_row_span`
+            # 需数据页锚点才能取到连接器**两排** pad 行；漏掉即把远端折叠成直线 stub）。
+            # REFCLK 构造消费绝对板框常量（ECS via 列 x、走廊边界），故探针**不复刻其 x 坐标**；
+            # 每页仍各计一次工作单元，线性性由此仍被强制。
             rman["pages"].append(g)
     w0r = json.loads(json.dumps(j["w0r_model"]))
     for c in range(args.scale):
@@ -1955,6 +2018,18 @@ def main(argv=None) -> int:
                                         j["w0r_model"]["refclk_passage_witness"]["blockers"][bi]["ref"]])
     rf_lane = sorted(v["lane_y"] for v in rfc.values())
     rf_sep = all(rf_lane[i + 1] - rf_lane[i] >= STEP - TOL for i in range(len(rf_lane) - 1))
+    # CO-45：REFCLK 同层交叉自检（教训 1：引擎既有 crossing/净距套件不含 REFCLK 节点）
+    _rfp = []
+    for _pid2, _v2 in sorted(rfc.items()):
+        for _p2 in ("P", "N"):
+            _rfp.append((_pid2 + "/" + _p2, _v2["paths"][_p2]["path"]))
+    rf_cross = []
+    for _i in range(len(_rfp)):
+        for _j2 in range(_i + 1, len(_rfp)):
+            for _s1 in zip(_rfp[_i][1], _rfp[_i][1][1:]):
+                for _s2 in zip(_rfp[_j2][1], _rfp[_j2][1][1:]):
+                    if seg_cross(_s1[0], _s1[1], _s2[0], _s2[1]):
+                        rf_cross.append([_rfp[_i][0], _rfp[_j2][0]])
 
     n_pages = len(facts)
     n_land = len(r3["assignment"])
@@ -1978,6 +2053,7 @@ def main(argv=None) -> int:
         ("A-CN.4", "R1.5 交叉 = 0", "0", str(crossings), crossings == 0),
         ("A-CN.5a", "REFCLK 段与 keepout 零交", "0", str(len(rf_hits)), not rf_hits),
         ("A-CN.5b", "REFCLK 页间 >= 1.46", "True", str(rf_sep), rf_sep),
+        ("A-CN.5d", "REFCLK 同层交叉 = 0（P/N + 页间）", "0", str(len(rf_cross)), not rf_cross),
         ("A-CN.method", "work_units == a*n+b", str(expected_work), str(WORK[0]), formula_ok),
     ]
     gate["rule"] = ("R-23 verification-based: construct with the intent layers, count SAME-LAYER crossings")
@@ -2239,8 +2315,9 @@ def main(argv=None) -> int:
             "R3": {"status": "FEASIBLE" if not r3["certificates"] else "CERTIFICATE",
                    "method": "gap_column_prefix_recurrence",
                    "assignment": r3["assignment"]},
-            "REFCLK": {"status": "FEASIBLE" if not rf_hits else "CERTIFICATE",
-                       "assignment": rfc, "keepout_hits": rf_hits, "page_separation_ok": rf_sep},
+            "REFCLK": {"status": "FEASIBLE" if not (rf_hits or rf_cross) else "CERTIFICATE",
+                       "assignment": rfc, "keepout_hits": rf_hits, "page_separation_ok": rf_sep,
+                       "crossings": rf_cross},
         },
         "pages": pages_out,
         "route_geometry": [{"key": [k[0], k[1]], "layer": paths[k][0],
