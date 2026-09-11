@@ -43,6 +43,15 @@ GAP = {"J3": 44.5, "J4": 62.7}
 J2L, J2R, J2_IN, J2_OUT, J2P = 131.65, 136.0, 132.65, 135.0, 0.525
 
 
+POL_OFF = 0.25            # L2 参数：对内 lane y 偏移 >= vt(0.4525)/2；0.19->0.25（原 0.38 < 0.4525）
+
+
+def pol_off(f, pol):
+    d = f["pad"]["N"][1] - f["pad"]["P"][1]
+    base = -POL_OFF if d > 0 else POL_OFF
+    return base if pol == "P" else -base
+
+
 def esc_layer(f): return ESC_MAP[(f["corridor"], f["band"])]
 
 
@@ -50,11 +59,20 @@ def row_lower(f):
     return min(f["conn_pad"]["P"][1], f["conn_pad"]["N"][1]) >= GAP[f["conn_ref"]]
 
 
+# CO-10 §3.3: 西侧 4 行组 stub 2-着色（按 y 区间，与 band 无关）
+#   G0(J3 上排 43.25)->In2 ; G1(J3 下排 45.75)->In6 ; G2(J4 上排 61.45)->In2 ; G3(J4 下排 63.95)->In6
+GS_IN2 = {("J3", "U"): True, ("J3", "L"): False, ("J4", "U"): True, ("J4", "L"): False}
+
+
+def row_group(f):
+    mid = GAP[f["conn_ref"]]
+    return (f["conn_ref"], "U" if min(f["conn_pad"]["P"][1], f["conn_pad"]["N"][1]) < mid else "L")
+
+
 def stub_layer(f):
-    """J2 落列全局唯一 => In2。J3/J4: band up => In2, band dn => In6（同 x 上两 band 分列层）。"""
     if f["conn_ref"] == "J2":
         return "In2.Cu"
-    return "In2.Cu" if f["band"] == "up" else "In6.Cu"
+    return "In2.Cu" if GS_IN2[row_group(f)] else "In6.Cu"
 
 
 def r3_build(rule):
@@ -79,7 +97,7 @@ def r3_build(rule):
     return {"assignment": A, "certificates": r3["certificates"]}
 
 
-FAN_Y = {("J3", "U"): 42.0, ("J3", "L"): 47.0, ("J4", "U"): 60.2, ("J4", "L"): 65.0}
+FAN_Y = {("J3", "U"): 42.0, ("J3", "L"): 44.2, ("J4", "U"): 60.2, ("J4", "L"): 65.0}
 FAN_DX = {("J3", "U"): 0.0, ("J3", "L"): 0.0, ("J4", "U"): 0.0, ("J4", "L"): 0.0}
 
 
@@ -123,15 +141,17 @@ class Store:
     def __init__(self):
         self.vx = np.zeros(0); self.vy = np.zeros(0); self.vm = np.zeros(0, dtype=int)
         self.S = {l: np.zeros((0, 4)) for l in LAYERS}; self.SP = {l: np.zeros(0, dtype=bool) for l in LAYERS}
+        self.vlab = []; self.SLAB = {l: [] for l in LAYERS}
 
-    def add(self, vias, segs):
+    def add(self, vias, segs, pid="?"):
         for (x, y, pol, lays) in vias:
+            self.vlab.append(pid + "." + pol)
             m = 0
             for l in lays: m |= 1 << LI[l]
             self.vx = np.append(self.vx, x); self.vy = np.append(self.vy, y); self.vm = np.append(self.vm, m)
         for (lay, x1, y1, x2, y2, pa, pol) in segs:
             self.S[lay] = np.vstack([self.S[lay], [x1, y1, x2, y2]])
-            self.SP[lay] = np.append(self.SP[lay], pa)
+            self.SP[lay] = np.append(self.SP[lay], pa); self.SLAB[lay].append(pid + "." + pol)
 
 
 def build(f, px, py, nx, ny):
@@ -141,7 +161,7 @@ def build(f, px, py, nx, ny):
     vias, segs, own = [], [], []
     for pol, vx, vy in (("P", px, py), ("N", nx, ny)):
         lx, ll = lm[pol]
-        ly = W.fp(LANES[f["page_id"]]["lane_y"] + W.pol_off(f, pol))
+        ly = W.fp(LANES[f["page_id"]]["lane_y"] + pol_off(f, pol))
         own += [(round(f["pad"][pol][0], 3), round(f["pad"][pol][1], 3)),
                 (round(f["conn_pad"][pol][0], 3), round(f["conn_pad"][pol][1], 3))]
         vias.append((vx, vy, pol, ("F.Cu", "In2.Cu")))
@@ -174,26 +194,36 @@ def check(vias, segs, own, st):
             m = 0
             for l in lays: m |= 1 << LI[l]
             d = np.hypot(st.vx - x, st.vy - y)
-            if ((d < VV - TOL) & ((st.vm & m) != 0)).any():
-                return ("vv_placed", (x, y, pol))
+            bad = np.nonzero((d < VV - TOL) & ((st.vm & m) != 0))[0]
+            if len(bad):
+                return ("vv_placed", (x, y, pol), st.vlab[int(bad[0])], round(float(d[bad[0]]), 3))
     for (x, y, pol, lays) in vias:
         for l in lays:
             X = st.S[l]
             if not len(X): continue
             d = pt_seg(x, y, X[:, 0], X[:, 1], X[:, 2], X[:, 3])
             thr = np.where(st.SP[l], VT_E, VT)
-            if (d < thr - TOL).any(): return ("vt_placed", (x, y, pol, l), round(float(d.min()), 4))
+            bad = np.nonzero(d < thr - TOL)[0]
+            if len(bad):
+                return ("vt_placed", (x, y, pol, l), st.SLAB[l][int(bad[0])], round(float(d[bad[0]]), 4))
     if nv:
         for (lay, x1, y1, x2, y2, pa, pol) in segs:
             d = pt_seg(st.vx, st.vy, x1, y1, x2, y2)
-            if ((d < (VT_E if pa else VT) - TOL) & ((st.vm & (1 << LI[lay])) != 0)).any():
-                return ("vt2_placed", (lay, x1, y1, x2, y2, pol))
+            bad = np.nonzero((d < (VT_E if pa else VT) - TOL) & ((st.vm & (1 << LI[lay])) != 0))[0]
+            if len(bad):
+                return ("vt2_placed", (lay, x1, y1, x2, y2, pol), st.vlab[int(bad[0])], round(float(d[bad[0]]), 4))
+    for (x, y, pol, lays) in vias:                      # candidate via vs candidate tracks
+        for (lay, x1, y1, x2, y2, pa, pol2) in segs:
+            if pol2 == pol or lay not in lays: continue
+            if pt_seg(x, y, np.array([x1]), np.array([y1]), np.array([x2]), np.array([y2]))[0] < (VT_E if pa else VT) - TOL:
+                return ("vt_intra", (x, y, pol, lay))
     for (lay, x1, y1, x2, y2, pa, pol) in segs:
         X = st.S[lay]
         if not len(X): continue
         d = seg_seg((x1, y1), (x2, y2), X[:, 0], X[:, 1], X[:, 2], X[:, 3])
-        if (d < np.where(st.SP[lay] | pa, TT_E, TT) - TOL).any():
-            return ("tt_placed", (lay, x1, y1, x2, y2, pol), round(float(d.min()), 4))
+        bad = np.nonzero(d < np.where(st.SP[lay] | pa, TT_E, TT) - TOL)[0]
+        if len(bad):
+            return ("tt_placed", (lay, x1, y1, x2, y2, pol), st.SLAB[lay][int(bad[0])], round(float(d[bad[0]]), 4))
     for (lay, x1, y1, x2, y2, pa, pol) in segs:
         if lay != "F.Cu": continue
         d = pad_seg_edge((x1, y1), (x2, y2))
@@ -208,6 +238,40 @@ def check(vias, segs, own, st):
     return None
 
 
+def band_key(f): return (f["corridor"], f["band"])
+
+
+def alloc_x(verbose=False):
+    """每 (corridor,band) 16 网的 escape-vertical x 前缀递推（>=0.46），
+    x 取自该页 verdict 的合法 escape 窗口 [pad_x-0.35, pad_x+0.35]。"""
+    VER = json.loads((SPEC / "m13_v57_s1_r1_via_verdict_r2.json").read_text())["pages"]
+    need_avoid = {}                                        # west-up 长竖段须避开 east-up via1 x
+    for pid, f in FACTS.items():
+        if f["corridor"] == "EAST_CHIP_TO_J2" and f["band"] == "up":
+            pass
+    out = {}
+    groups = {}
+    for pid, f in FACTS.items():
+        for pol in ("P", "N"):
+            groups.setdefault((f["corridor"], f["band"]), []).append((f, pol))
+    for key, items in groups.items():
+        items.sort(key=lambda t: (t[0]["pad"][t[1]][0], t[0]["page_id"], t[1]))
+        boxes = []
+        for f, pol in items:
+            cands = VER[f["page_id"]][pol]["cands"]
+            xs = sorted({round(float(c[0]), 3) for c in cands})
+            pad_x = f["pad"][pol][0]
+            lo, hi = pad_x - 0.35, pad_x + 0.35
+            ok = [x for x in xs if lo - TOL <= x <= hi + TOL] or [min(xs, key=lambda x: abs(x - pad_x))]
+            tgt = pad_x - 0.3
+            if boxes:
+                tgt = max(tgt, boxes[-1] + 0.5)
+            x = min(ok, key=lambda v: (abs(v - tgt), v))
+            boxes.append(x)
+            out[(f["page_id"], pol)] = x
+    return out
+
+
 def probe(rule="d3", order="engine", verbose=False):
     global R3
     R3 = r3_build(rule)
@@ -218,8 +282,41 @@ def probe(rule="d3", order="engine", verbose=False):
     else:
         seq = sorted(FACTS, key=lambda p: (FACTS[p]["corridor"], FACTS[p]["conn_ref"], FACTS[p]["band"], p))
     st = Store(); placed = {}; failed = {}
+    XALLOC = alloc_x() if rule == "co10" else {}
+    VER = json.loads((SPEC / "m13_v57_s1_r1_via_verdict_r2.json").read_text())["pages"] if rule == "co10" else {}
     for pid in seq:
         f = FACTS[pid]
+        if rule == "co10":
+            cand = []
+            for pol in ("P", "N"):
+                xa = XALLOC[(pid, pol)]
+                pts = [c for c in VER[pid][pol]["cands"] if abs(float(c[0]) - xa) < 0.026]
+                pts.sort(key=lambda c: (abs(float(c[1]) - f["pad"][pol][1]), float(c[1])))
+                cand.append((pol, pts))
+            hit = None; reasons = {}
+            for ip in range(len(cand[0][1])):
+                for jn in range(len(cand[1][1])):
+                    px, py = float(cand[0][1][ip][0]), float(cand[0][1][ip][1])
+                    nx, ny = float(cand[1][1][jn][0]), float(cand[1][1][jn][1])
+                    if math.hypot(px - nx, py - ny) < VV - TOL: continue
+                    b = build(f, px, py, nx, ny)
+                    if b is None: continue
+                    err = check(*b, st)
+                    if err is None:
+                        hit = (px, py, nx, ny, b); break
+                    reasons.setdefault(err[0], err)
+                if hit: break
+            if hit is None:
+                failed[pid] = {"rule": "co10", "xalloc": [XALLOC[(pid, "P")], XALLOC[(pid, "N")]],
+                               "reasons": {k: str(v)[:160] for k, v in reasons.items()}}
+                if verbose: print("FAIL", pid, failed[pid]["reasons"])
+                continue
+            px, py, nx, ny, b = hit
+            placed[pid] = {"P_via": [px, py], "N_via": [nx, ny], "escape": esc_layer(f),
+                           "stub": stub_layer(f), "xalloc": [XALLOC[(pid, "P")], XALLOC[(pid, "N")]]}
+            st.add(b[0], b[1], pid)
+            if verbose: print("OK  ", pid, esc_layer(f), stub_layer(f), (px, py), (nx, ny))
+            continue
         rows = sorted(PAIR_DOMAIN[pid]["pair_rows"],
                       key=lambda r: (abs(float(r[0]) - f["pad"]["P"][0]) + abs(float(r[1]) - f["pad"]["N"][0])
                                      + abs(float(r[2]) - f["pad"]["P"][1]) + abs(float(r[3]) - f["pad"]["N"][1]),
@@ -242,7 +339,7 @@ def probe(rule="d3", order="engine", verbose=False):
         placed[pid] = {"P_via": [px, py], "N_via": [nx, ny], "escape": esc_layer(f),
                        "stub": stub_layer(f), "pair_dist": dd,
                        "land": {"P": land_meta(f)["P"], "N": land_meta(f)["N"]}}
-        st.add(b[0], b[1])
+        st.add(b[0], b[1], pid)
         if verbose: print("OK  ", pid, esc_layer(f), stub_layer(f), (px, py), (nx, ny))
     return {"rule": rule, "order": order, "n_pages": len(FACTS), "n_placed": len(placed),
             "n_failed": len(failed), "placed": placed, "failed": failed,
@@ -251,7 +348,7 @@ def probe(rule="d3", order="engine", verbose=False):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--rule", choices=["d3", "fan"], default="d3")
+    ap.add_argument("--rule", choices=["d3", "fan", "co10"], default="d3")
     ap.add_argument("--order", choices=["engine", "fewest", "laneidx"], default="engine")
     ap.add_argument("--out", default=None)
     ap.add_argument("--verbose", action="store_true")

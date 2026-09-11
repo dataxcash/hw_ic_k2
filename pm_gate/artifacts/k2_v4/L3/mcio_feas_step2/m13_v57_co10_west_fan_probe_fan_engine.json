@@ -1,59 +1,46 @@
 {
  "failed": {
-  "PCIE_DN4/out_MCIO": {
-   "n_rows_scanned": 7937,
-   "reasons": {
-    "vt2_placed": "('vt2_placed', ('In6.Cu', 54.4, 45.17, 54.4, 60.2, 'P'))",
-    "vt_placed": "('vt_placed', (89.1, 45.17, 'P', 'B.Cu'), 0.2)",
-    "vv_placed": "('vv_placed', (89.0, 52.366, 'P'))"
-   }
-  },
-  "PCIE_DN5/out_MCIO": {
-   "n_rows_scanned": 7937,
-   "reasons": {
-    "vt2_placed": "('vt2_placed', ('In6.Cu', 90.3, 46.63, 56.2, 46.63, 'P'))",
-    "vt_placed": "('vt_placed', (88.4, 46.63, 'P', 'B.Cu'), 0.1)",
-    "vv_placed": "('vv_placed', (88.8, 52.366, 'P'))"
-   }
-  },
   "PCIE_UP5/input": {
    "n_rows_scanned": 24102,
    "reasons": {
-    "vt2_placed": "('vt2_placed', ('In6.Cu', 91.05, 52.09, 56.2, 52.09, 'P'))",
-    "vt_placed": "('vt_placed', (89.25, 49.16, 'P', 'In2.Cu'), 0.45)",
-    "vv_intra": "('vv_intra', (90.8, 52.09, 'P'), (90.4, 51.78, 'N'))",
-    "vv_placed": "('vv_placed', (91.2, 52.09, 'P'))"
+    "vt2_placed": "('vt2_placed', ('In6.Cu', 90.8, 52.03, 56.2, 52.03, 'P'), 'PCIE_DN0/out_MCIO.P', 0.336)",
+    "vt_placed": "('vt_placed', (89.35, 49.06, 'P', 'In2.Cu'), 'PCIE_UP3/input.N', 0.45)",
+    "vv_intra": "('vv_intra', (90.85, 52.03, 'P'), (90.4, 51.78, 'N'))",
+    "vv_placed": "('vv_placed', (91.2, 52.03, 'P'), 'PCIE_DN5/out_MCIO.N', 0.371)"
    }
   },
   "PCIE_UP6/input": {
    "n_rows_scanned": 24155,
    "reasons": {
-    "vt_placed": "('vt_placed', (61.6, 53.93, 'P', 'In6.Cu'), 0.0)",
-    "vv_placed": "('vv_placed', (91.6, 51.58, 'P'))"
+    "pad_seg": "('pad_seg', (92.05, 50.28, 94.3, 49.18), ('U6', 'BY35'), 0.0)",
+    "tt_placed": "('tt_placed', ('F.Cu', 92.05, 50.28, 90.0, 52.43, 'P'), 'PCIE_DN5/out_MCIO.N', 0.2014)",
+    "vt2_placed": "('vt2_placed', ('In2.Cu', 92.0, 50.58, 92.0, 53.99, 'P'), 'PCIE_DN6/out_MCIO.P', 0.1)",
+    "vt_intra": "('vt_intra', (94.4, 50.88, 'P', 'In2.Cu'))",
+    "vv_placed": "('vv_placed', (91.6, 51.58, 'P'), 'PCIE_DN5/out_MCIO.N', 0.314)"
    }
   },
   "PCIE_UP7/input": {
    "n_rows_scanned": 24153,
    "reasons": {
-    "vt_placed": "('vt_placed', (63.4, 55.39, 'P', 'In6.Cu'), 0.0)",
-    "vv_placed": "('vv_placed', (93.2, 55.39, 'P'))"
+    "vt2_placed": "('vt2_placed', ('In6.Cu', 94.4, 55.45, 63.4, 55.45, 'P'), 'PCIE_UP0/out_J2.P', 0.02)",
+    "vv_placed": "('vv_placed', (93.2, 55.45, 'P'), 'PCIE_UP7/out_J2.N', 0.386)"
    }
   }
  },
- "n_failed": 5,
+ "n_failed": 3,
  "n_pages": 32,
- "n_placed": 27,
+ "n_placed": 29,
  "order": "engine",
  "pad_field_sha256": "1568ddbc51a743b33cf17212d5688dd187f5e2e1c6dc693c22a838900ef25346",
  "placed": {
   "PCIE_DN0/input": {
    "N_via": [
-    85.2,
-    57.94
+    85.25,
+    57.99
    ],
    "P_via": [
-    84.8,
-    56.82
+    84.75,
+    56.77
    ],
    "escape": "In2.Cu",
    "land": {
@@ -66,12 +53,12 @@
      54.05
     ]
    },
-   "pair_dist": 1.1893,
+   "pair_dist": 1.3185,
    "stub": "In2.Cu"
   },
   "PCIE_DN0/out_MCIO": {
    "N_via": [
-    84.7,
+    85.3,
     51.673
    ],
    "P_via": [
@@ -82,24 +69,24 @@
    "land": {
     "N": [
      63.4,
-     47.0
+     44.2
     ],
     "P": [
      64.0,
-     47.0
+     44.2
     ]
    },
-   "pair_dist": 0.8002,
+   "pair_dist": 1.2167,
    "stub": "In6.Cu"
   },
   "PCIE_DN1/input": {
    "N_via": [
-    86.4,
-    57.94
+    86.45,
+    57.99
    ],
    "P_via": [
-    86.0,
-    56.82
+    85.95,
+    56.77
    ],
    "escape": "In2.Cu",
    "land": {
@@ -112,40 +99,40 @@
      54.65
     ]
    },
-   "pair_dist": 1.1893,
+   "pair_dist": 1.3185,
    "stub": "In2.Cu"
   },
   "PCIE_DN1/out_MCIO": {
    "N_via": [
-    85.9,
+    86.5,
     51.673
    ],
    "P_via": [
-    85.5,
-    52.366
+    85.9,
+    52.616
    ],
    "escape": "B.Cu",
    "land": {
     "N": [
      61.6,
-     47.0
+     44.2
     ],
     "P": [
      62.2,
-     47.0
+     44.2
     ]
    },
-   "pair_dist": 0.8002,
+   "pair_dist": 1.1177,
    "stub": "In6.Cu"
   },
   "PCIE_DN2/input": {
    "N_via": [
-    87.2,
-    56.82
+    87.15,
+    56.77
    ],
    "P_via": [
-    87.6,
-    57.94
+    87.65,
+    57.99
    ],
    "escape": "In2.Cu",
    "land": {
@@ -158,7 +145,7 @@
      57.65
     ]
    },
-   "pair_dist": 1.1893,
+   "pair_dist": 1.3185,
    "stub": "In2.Cu"
   },
   "PCIE_DN2/out_MCIO": {
@@ -167,31 +154,31 @@
     51.673
    ],
    "P_via": [
-    86.7,
-    52.366
+    87.1,
+    52.616
    ],
    "escape": "B.Cu",
    "land": {
     "N": [
      56.2,
-     47.0
+     44.2
     ],
     "P": [
      56.8,
-     47.0
+     44.2
     ]
    },
-   "pair_dist": 1.2167,
+   "pair_dist": 1.1177,
    "stub": "In6.Cu"
   },
   "PCIE_DN3/input": {
    "N_via": [
-    88.4,
-    56.82
+    88.35,
+    56.77
    ],
    "P_via": [
-    88.8,
-    57.94
+    88.85,
+    57.99
    ],
    "escape": "In2.Cu",
    "land": {
@@ -204,7 +191,7 @@
      58.25
     ]
    },
-   "pair_dist": 1.1893,
+   "pair_dist": 1.3185,
    "stub": "In2.Cu"
   },
   "PCIE_DN3/out_MCIO": {
@@ -213,31 +200,31 @@
     51.673
    ],
    "P_via": [
-    88.5,
-    52.366
+    88.3,
+    52.616
    ],
    "escape": "B.Cu",
    "land": {
     "N": [
      54.4,
-     47.0
+     44.2
     ],
     "P": [
      55.0,
-     47.0
+     44.2
     ]
    },
-   "pair_dist": 0.8002,
+   "pair_dist": 1.1177,
    "stub": "In6.Cu"
   },
   "PCIE_DN4/input": {
    "N_via": [
-    90.0,
-    57.94
+    90.05,
+    57.99
    ],
    "P_via": [
-    89.6,
-    56.82
+    89.55,
+    56.77
    ],
    "escape": "In2.Cu",
    "land": {
@@ -250,17 +237,40 @@
      59.45
     ]
    },
-   "pair_dist": 1.1893,
+   "pair_dist": 1.3185,
+   "stub": "In2.Cu"
+  },
+  "PCIE_DN4/out_MCIO": {
+   "N_via": [
+    90.1,
+    51.673
+   ],
+   "P_via": [
+    89.5,
+    52.616
+   ],
+   "escape": "B.Cu",
+   "land": {
+    "N": [
+     55.0,
+     60.2
+    ],
+    "P": [
+     54.4,
+     60.2
+    ]
+   },
+   "pair_dist": 1.1177,
    "stub": "In2.Cu"
   },
   "PCIE_DN5/input": {
    "N_via": [
-    91.2,
-    57.94
+    91.25,
+    57.99
    ],
    "P_via": [
-    90.8,
-    56.82
+    90.75,
+    56.77
    ],
    "escape": "In2.Cu",
    "land": {
@@ -273,17 +283,40 @@
      60.05
     ]
    },
-   "pair_dist": 1.1893,
+   "pair_dist": 1.3185,
+   "stub": "In2.Cu"
+  },
+  "PCIE_DN5/out_MCIO": {
+   "N_via": [
+    91.3,
+    51.673
+   ],
+   "P_via": [
+    90.7,
+    52.616
+   ],
+   "escape": "B.Cu",
+   "land": {
+    "N": [
+     56.8,
+     60.2
+    ],
+    "P": [
+     56.2,
+     60.2
+    ]
+   },
+   "pair_dist": 1.1177,
    "stub": "In2.Cu"
   },
   "PCIE_DN6/input": {
    "N_via": [
-    92.0,
-    56.82
+    91.95,
+    56.77
    ],
    "P_via": [
-    92.4,
-    57.94
+    92.45,
+    57.99
    ],
    "escape": "In2.Cu",
    "land": {
@@ -296,17 +329,17 @@
      63.05
     ]
    },
-   "pair_dist": 1.1893,
+   "pair_dist": 1.3185,
    "stub": "In2.Cu"
   },
   "PCIE_DN6/out_MCIO": {
    "N_via": [
-    91.9,
+    92.5,
     51.673
    ],
    "P_via": [
-    91.5,
-    52.366
+    91.9,
+    52.616
    ],
    "escape": "B.Cu",
    "land": {
@@ -319,17 +352,17 @@
      60.2
     ]
    },
-   "pair_dist": 0.8002,
-   "stub": "In6.Cu"
+   "pair_dist": 1.1177,
+   "stub": "In2.Cu"
   },
   "PCIE_DN7/input": {
    "N_via": [
-    93.2,
-    56.82
+    93.15,
+    56.77
    ],
    "P_via": [
-    93.6,
-    57.94
+    93.65,
+    57.99
    ],
    "escape": "In2.Cu",
    "land": {
@@ -342,16 +375,16 @@
      63.65
     ]
    },
-   "pair_dist": 1.1893,
+   "pair_dist": 1.3185,
    "stub": "In2.Cu"
   },
   "PCIE_DN7/out_MCIO": {
    "N_via": [
-    93.7,
+    93.8,
     51.673
    ],
    "P_via": [
-    92.7,
+    93.3,
     52.366
    ],
    "escape": "B.Cu",
@@ -365,13 +398,13 @@
      60.2
     ]
    },
-   "pair_dist": 1.2167,
-   "stub": "In6.Cu"
+   "pair_dist": 0.8545,
+   "stub": "In2.Cu"
   },
   "PCIE_UP0/input": {
    "N_via": [
-    84.8,
-    50.58
+    84.7,
+    50.68
    ],
    "P_via": [
     85.2,
@@ -388,17 +421,17 @@
      42.0
     ]
    },
-   "pair_dist": 1.1893,
+   "pair_dist": 1.3185,
    "stub": "In2.Cu"
   },
   "PCIE_UP0/out_J2": {
    "N_via": [
-    84.3,
-    55.823
+    84.5,
+    55.573
    ],
    "P_via": [
-    84.7,
-    55.13
+    85.05,
+    55.43
    ],
    "escape": "B.Cu",
    "land": {
@@ -411,7 +444,7 @@
      42.65
     ]
    },
-   "pair_dist": 0.8002,
+   "pair_dist": 0.5683,
    "stub": "In2.Cu"
   },
   "PCIE_UP1/input": {
@@ -420,8 +453,8 @@
     50.58
    ],
    "P_via": [
-    86.4,
-    49.46
+    86.5,
+    49.36
    ],
    "escape": "In2.Cu",
    "land": {
@@ -434,16 +467,16 @@
      42.0
     ]
    },
-   "pair_dist": 1.1893,
+   "pair_dist": 1.3185,
    "stub": "In2.Cu"
   },
   "PCIE_UP1/out_J2": {
    "N_via": [
-    85.5,
-    55.823
+    85.7,
+    55.573
    ],
    "P_via": [
-    85.9,
+    86.5,
     55.13
    ],
    "escape": "B.Cu",
@@ -457,13 +490,13 @@
      43.85
     ]
    },
-   "pair_dist": 0.8002,
+   "pair_dist": 0.9145,
    "stub": "In2.Cu"
   },
   "PCIE_UP2/input": {
    "N_via": [
-    87.6,
-    49.46
+    87.7,
+    49.36
    ],
    "P_via": [
     87.2,
@@ -480,16 +513,16 @@
      42.0
     ]
    },
-   "pair_dist": 1.1893,
+   "pair_dist": 1.3185,
    "stub": "In2.Cu"
   },
   "PCIE_UP2/out_J2": {
    "N_via": [
-    86.7,
+    87.3,
     55.823
    ],
    "P_via": [
-    87.7,
+    87.8,
     55.13
    ],
    "escape": "B.Cu",
@@ -503,13 +536,13 @@
      46.25
     ]
    },
-   "pair_dist": 1.2167,
+   "pair_dist": 0.8545,
    "stub": "In2.Cu"
   },
   "PCIE_UP3/input": {
    "N_via": [
-    88.8,
-    49.46
+    88.9,
+    49.36
    ],
    "P_via": [
     88.4,
@@ -526,7 +559,7 @@
      42.0
     ]
    },
-   "pair_dist": 1.1893,
+   "pair_dist": 1.3185,
    "stub": "In2.Cu"
   },
   "PCIE_UP3/out_J2": {
@@ -535,7 +568,7 @@
     55.823
    ],
    "P_via": [
-    88.9,
+    89.0,
     55.13
    ],
    "escape": "B.Cu",
@@ -549,7 +582,7 @@
      47.45
     ]
    },
-   "pair_dist": 0.8002,
+   "pair_dist": 0.8545,
    "stub": "In2.Cu"
   },
   "PCIE_UP4/input": {
@@ -573,15 +606,15 @@
     ]
    },
    "pair_dist": 1.384,
-   "stub": "In2.Cu"
+   "stub": "In6.Cu"
   },
   "PCIE_UP4/out_J2": {
    "N_via": [
-    89.7,
-    55.823
+    89.65,
+    55.723
    ],
    "P_via": [
-    90.1,
+    90.15,
     55.13
    ],
    "escape": "B.Cu",
@@ -595,7 +628,7 @@
      48.05
     ]
    },
-   "pair_dist": 0.8002,
+   "pair_dist": 0.7757,
    "stub": "In2.Cu"
   },
   "PCIE_UP5/out_J2": {
@@ -650,7 +683,7 @@
     55.823
    ],
    "P_via": [
-    93.7,
+    93.8,
     55.13
    ],
    "escape": "B.Cu",
@@ -664,7 +697,7 @@
      52.85
     ]
    },
-   "pair_dist": 0.8002,
+   "pair_dist": 0.8545,
    "stub": "In2.Cu"
   }
  },

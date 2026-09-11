@@ -1,0 +1,489 @@
+{
+ "failed": {
+  "PCIE_DN5/input": {
+   "reasons": {
+    "pad_seg": "('pad_seg', (90.85, 57.12, 90.55, 58.27), ('U6', 'BF1'), 0.009)",
+    "vt_intra": "('vt_intra', (91.05, 57.99, 'N', 'F.Cu'))"
+   },
+   "rule": "co10",
+   "xalloc": [
+    90.55,
+    91.05
+   ]
+  },
+  "PCIE_UP0/out_J2": {
+   "reasons": {
+    "pad_seg": "('pad_seg', (84.6, 55.823, 84.3, 58.173), ('U6', 'K2'), 0.0329)",
+    "pad_via": "('pad_via', (84.3, 56.91, 'N'), ('U6', 'K2'), 0.0663)",
+    "vt_intra": "('vt_intra', (84.8, 56.38, 'P', 'F.Cu'))"
+   },
+   "rule": "co10",
+   "xalloc": [
+    84.8,
+    84.3
+   ]
+  },
+  "PCIE_UP4/input": {
+   "reasons": {
+    "vv_placed": "('vv_placed', (89.35, 51.07, 'N'), 'PCIE_DN4/out_MCIO.N', 0.474)"
+   },
+   "rule": "co10",
+   "xalloc": [
+    89.85,
+    89.35
+   ]
+  },
+  "PCIE_UP5/input": {
+   "reasons": {
+    "vv_placed": "('vv_placed', (90.55, 52.53, 'N'), 'PCIE_DN5/out_MCIO.P', 0.299)"
+   },
+   "rule": "co10",
+   "xalloc": [
+    91.05,
+    90.55
+   ]
+  },
+  "PCIE_UP5/out_J2": {
+   "reasons": {
+    "pad_via": "('pad_via', (90.8, 63.71, 'P'), ('C82', '1'), 0.04)",
+    "vv_placed": "('vv_placed', (90.3, 58.173, 'N'), 'PCIE_DN4/input.N', 0.455)"
+   },
+   "rule": "co10",
+   "xalloc": [
+    90.8,
+    90.3
+   ]
+  },
+  "PCIE_UP6/input": {
+   "reasons": {
+    "vt2_placed": "('vt2_placed', ('In2.Cu', 91.75, 49.13, 91.75, 53.99, 'P'), 'PCIE_DN6/out_MCIO.P', 0.25)"
+   },
+   "rule": "co10",
+   "xalloc": [
+    91.75,
+    92.25
+   ]
+  },
+  "PCIE_UP7/input": {
+   "reasons": {
+    "vv_placed": "('vv_placed', (92.95, 55.45, 'P'), 'PCIE_UP7/out_J2.N', 0.449)"
+   },
+   "rule": "co10",
+   "xalloc": [
+    92.95,
+    93.45
+   ]
+  }
+ },
+ "n_failed": 7,
+ "n_pages": 32,
+ "n_placed": 25,
+ "order": "engine",
+ "pad_field_sha256": "1568ddbc51a743b33cf17212d5688dd187f5e2e1c6dc693c22a838900ef25346",
+ "placed": {
+  "PCIE_DN0/input": {
+   "N_via": [
+    85.05,
+    58.24
+   ],
+   "P_via": [
+    84.55,
+    59.27
+   ],
+   "escape": "In2.Cu",
+   "stub": "In2.Cu",
+   "xalloc": [
+    84.55,
+    85.05
+   ]
+  },
+  "PCIE_DN0/out_MCIO": {
+   "N_via": [
+    84.8,
+    51.473
+   ],
+   "P_via": [
+    84.3,
+    52.366
+   ],
+   "escape": "B.Cu",
+   "stub": "In6.Cu",
+   "xalloc": [
+    84.3,
+    84.8
+   ]
+  },
+  "PCIE_DN1/input": {
+   "N_via": [
+    86.25,
+    58.24
+   ],
+   "P_via": [
+    85.75,
+    59.27
+   ],
+   "escape": "In2.Cu",
+   "stub": "In2.Cu",
+   "xalloc": [
+    85.75,
+    86.25
+   ]
+  },
+  "PCIE_DN1/out_MCIO": {
+   "N_via": [
+    86.0,
+    51.473
+   ],
+   "P_via": [
+    85.5,
+    52.366
+   ],
+   "escape": "B.Cu",
+   "stub": "In6.Cu",
+   "xalloc": [
+    85.5,
+    86.0
+   ]
+  },
+  "PCIE_DN2/input": {
+   "N_via": [
+    86.95,
+    59.27
+   ],
+   "P_via": [
+    87.45,
+    58.24
+   ],
+   "escape": "In2.Cu",
+   "stub": "In2.Cu",
+   "xalloc": [
+    87.45,
+    86.95
+   ]
+  },
+  "PCIE_DN2/out_MCIO": {
+   "N_via": [
+    87.2,
+    51.473
+   ],
+   "P_via": [
+    86.7,
+    52.366
+   ],
+   "escape": "B.Cu",
+   "stub": "In6.Cu",
+   "xalloc": [
+    86.7,
+    87.2
+   ]
+  },
+  "PCIE_DN3/input": {
+   "N_via": [
+    88.15,
+    59.27
+   ],
+   "P_via": [
+    88.65,
+    58.24
+   ],
+   "escape": "In2.Cu",
+   "stub": "In2.Cu",
+   "xalloc": [
+    88.65,
+    88.15
+   ]
+  },
+  "PCIE_DN3/out_MCIO": {
+   "N_via": [
+    88.4,
+    51.473
+   ],
+   "P_via": [
+    87.9,
+    52.366
+   ],
+   "escape": "B.Cu",
+   "stub": "In6.Cu",
+   "xalloc": [
+    87.9,
+    88.4
+   ]
+  },
+  "PCIE_DN4/input": {
+   "N_via": [
+    89.85,
+    58.24
+   ],
+   "P_via": [
+    89.35,
+    59.27
+   ],
+   "escape": "In2.Cu",
+   "stub": "In2.Cu",
+   "xalloc": [
+    89.35,
+    89.85
+   ]
+  },
+  "PCIE_DN4/out_MCIO": {
+   "N_via": [
+    89.6,
+    51.473
+   ],
+   "P_via": [
+    89.1,
+    52.366
+   ],
+   "escape": "B.Cu",
+   "stub": "In2.Cu",
+   "xalloc": [
+    89.1,
+    89.6
+   ]
+  },
+  "PCIE_DN5/out_MCIO": {
+   "N_via": [
+    90.8,
+    51.473
+   ],
+   "P_via": [
+    90.3,
+    52.366
+   ],
+   "escape": "B.Cu",
+   "stub": "In2.Cu",
+   "xalloc": [
+    90.3,
+    90.8
+   ]
+  },
+  "PCIE_DN6/input": {
+   "N_via": [
+    91.75,
+    59.27
+   ],
+   "P_via": [
+    92.25,
+    58.24
+   ],
+   "escape": "In2.Cu",
+   "stub": "In2.Cu",
+   "xalloc": [
+    92.25,
+    91.75
+   ]
+  },
+  "PCIE_DN6/out_MCIO": {
+   "N_via": [
+    92.0,
+    51.473
+   ],
+   "P_via": [
+    91.5,
+    52.366
+   ],
+   "escape": "B.Cu",
+   "stub": "In2.Cu",
+   "xalloc": [
+    91.5,
+    92.0
+   ]
+  },
+  "PCIE_DN7/input": {
+   "N_via": [
+    92.95,
+    59.27
+   ],
+   "P_via": [
+    93.45,
+    58.24
+   ],
+   "escape": "In2.Cu",
+   "stub": "In2.Cu",
+   "xalloc": [
+    93.45,
+    92.95
+   ]
+  },
+  "PCIE_DN7/out_MCIO": {
+   "N_via": [
+    93.2,
+    51.473
+   ],
+   "P_via": [
+    92.7,
+    52.366
+   ],
+   "escape": "B.Cu",
+   "stub": "In2.Cu",
+   "xalloc": [
+    92.7,
+    93.2
+   ]
+  },
+  "PCIE_UP0/input": {
+   "N_via": [
+    84.55,
+    50.83
+   ],
+   "P_via": [
+    85.05,
+    49.41
+   ],
+   "escape": "In2.Cu",
+   "stub": "In2.Cu",
+   "xalloc": [
+    85.05,
+    84.55
+   ]
+  },
+  "PCIE_UP1/input": {
+   "N_via": [
+    85.75,
+    48.13
+   ],
+   "P_via": [
+    86.25,
+    49.16
+   ],
+   "escape": "In2.Cu",
+   "stub": "In2.Cu",
+   "xalloc": [
+    86.25,
+    85.75
+   ]
+  },
+  "PCIE_UP1/out_J2": {
+   "N_via": [
+    85.5,
+    55.823
+   ],
+   "P_via": [
+    86.0,
+    54.93
+   ],
+   "escape": "B.Cu",
+   "stub": "In2.Cu",
+   "xalloc": [
+    86.0,
+    85.5
+   ]
+  },
+  "PCIE_UP2/input": {
+   "N_via": [
+    87.45,
+    49.16
+   ],
+   "P_via": [
+    86.95,
+    48.13
+   ],
+   "escape": "In2.Cu",
+   "stub": "In2.Cu",
+   "xalloc": [
+    86.95,
+    87.45
+   ]
+  },
+  "PCIE_UP2/out_J2": {
+   "N_via": [
+    86.7,
+    55.823
+   ],
+   "P_via": [
+    87.2,
+    54.93
+   ],
+   "escape": "B.Cu",
+   "stub": "In2.Cu",
+   "xalloc": [
+    87.2,
+    86.7
+   ]
+  },
+  "PCIE_UP3/input": {
+   "N_via": [
+    88.65,
+    49.16
+   ],
+   "P_via": [
+    88.15,
+    48.13
+   ],
+   "escape": "In2.Cu",
+   "stub": "In2.Cu",
+   "xalloc": [
+    88.15,
+    88.65
+   ]
+  },
+  "PCIE_UP3/out_J2": {
+   "N_via": [
+    87.9,
+    55.823
+   ],
+   "P_via": [
+    88.4,
+    54.93
+   ],
+   "escape": "B.Cu",
+   "stub": "In2.Cu",
+   "xalloc": [
+    88.4,
+    87.9
+   ]
+  },
+  "PCIE_UP4/out_J2": {
+   "N_via": [
+    89.1,
+    55.823
+   ],
+   "P_via": [
+    89.6,
+    54.93
+   ],
+   "escape": "B.Cu",
+   "stub": "In2.Cu",
+   "xalloc": [
+    89.6,
+    89.1
+   ]
+  },
+  "PCIE_UP6/out_J2": {
+   "N_via": [
+    91.5,
+    55.823
+   ],
+   "P_via": [
+    92.0,
+    54.93
+   ],
+   "escape": "B.Cu",
+   "stub": "In2.Cu",
+   "xalloc": [
+    92.0,
+    91.5
+   ]
+  },
+  "PCIE_UP7/out_J2": {
+   "N_via": [
+    92.7,
+    55.823
+   ],
+   "P_via": [
+    93.2,
+    54.93
+   ],
+   "escape": "B.Cu",
+   "stub": "In2.Cu",
+   "xalloc": [
+    93.2,
+    92.7
+   ]
+  }
+ },
+ "producer": "k2/tools/p3_v57_co10_west_fan_probe.py",
+ "redline": "只读探针：未改冻结四源；未改 canonical 图纸",
+ "rule": "co10",
+ "verdict": "PROBE_RESIDUAL"
+}

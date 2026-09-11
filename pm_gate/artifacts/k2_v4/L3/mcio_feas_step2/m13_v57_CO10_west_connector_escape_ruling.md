@@ -53,3 +53,40 @@ CO-09 §4ter 的 D3 规则「**lx = 连接器 pad x、ll = 行间中缝(44.5/62.
 
 ## 6. 红线遵守
 只读探针；冻结四源原件未改；canonical `m13_v57_w3_joint_assignment.json`(W3-CN.30, `05f7bd10ab3b45b6`) 未改；零坐标搜索；未放宽任何阈值；无 sign-off。
+
+
+---
+
+## 7. 续推（第二轮，2026-09-11 晚）：实现 CO-10 fan + **A-CN.9 同页豁免发现的真缺口**
+### 7.1 新增实测（同一只读探针，`--rule {d3,fan,co10}`）
+| rule | 落位 | 说明 |
+|---|---|---|
+| d3（CO-09 §4ter 原规则） | **28/32** | 残余 = J4-dn4/5 同 x 叠层 + UP5/6/7 chip 区 |
+| fan（CO-10 §3：行组 2-着色 + 独立 breakout y 带 + 共享 8 列） | **29/32** | 残余 = 西侧 UP5/6/7（J4 下行组）|
+| co10（+ 每 band escape-x 前缀递推 0.5） | **25/32** | x 单独递推不佳（未联立 y；方向留作 §7.4） |
+（探针：`tools/p3_v57_co10_west_fan_probe.py`；结果 `m13_v57_co10_west_fan_probe_{d3,fan,co10}_engine.json`）
+
+### 7.2 **重要发现：A-CN.9 度量对"同页（同 base pid）"豁免 ⇒ P↔N 跨极性从未被检查**
+`p3_v57_w3_constructive.py:clearance_metric` 的判据是 `base(ids[i]) == base(ids[j])` 跳过（=`pid#lane` 与 `pid` 视为同网），
+**把一对差分线的 P 与 N 当成同网** ⇒ P/N 之间的 via↔track / track↔track 全被豁免。实测反例（canonical 参数）：
+- `POL_OFF=0.19` ⇒ 对内两条 lane 中心距 **0.38**（=tt 恰好），但**一条 lane 与另一极性的 corner via（In2↔In6）距离也是 0.38 < vt=0.4525**。
+- 探针加入真判据后（`vt_intra`）在 28/32~29/32 的每个残余页都命中该类冲突。
+⇒ **L2 自裁**：`POL_OFF` 由 **0.19 提到 0.25**（对内 lane y 偏移 0.50 ≥ vt 0.4525；tt 由 0.38→0.50 亦增余量）。
+  代价：O4 等长补偿基数改变（L3 蛇形预算需随之重派生，属实现期，非 owner）。
+
+### 7.3 残余不可落位页的**精确归因**（探针已输出对照页）
+- `PCIE_UP5/input`: `vv_placed (91.2,52.03,'P') ↔ PCIE_DN5/out_MCIO.N 0.371 < 0.525`
+  ⇒ **西侧 up/dn 两 band 的 via1 在 chip 区 y 向重叠**（up pad y 49.76/50.28 与 dn pad y 51.673/52.366 仅隔 1.4–2.1mm，而 verdict 允许的 via1 y 窗口相互侵入）。
+- `PCIE_UP6/input`: `vt2_placed (In2, 92.0,50.58→92.0,53.99) ↔ PCIE_DN6/out_MCIO.P 0.1`
+  ⇒ 同上（up 的 In2 竖段与 dn 的 via1 同层过近）。
+- `PCIE_UP7/input`: `vv_placed (93.2,55.45,'P') ↔ PCIE_UP7/out_J2.N 0.386`
+  ⇒ **J4 下行组 lane 15 的 escape 竖段（In2）下探到 y=55.45，侵入东侧 up band 的 via1 y（55.13/55.823）**（CO-09 §4.1 已预警，本轮实测确认）。
+
+### 7.4 下一步（L2/L3 实现项，无需 owner）
+1. **chip 区 via1 二维联立分配**（x,y 同时分配）：按 band 内 16 网，用 `m13_v57_co09_pad_field.json` 障碍场 + escape 竖段 ±0.4525 约束，
+   闭式前缀递推（先 x 后 y，或按 (x,y) 联合前缀），并保证 **up/dn band 的 via1 y 带不互相侵入**（各留 ≥0.525 隔离带）。
+2. **J4 下行组 lane 15 的 x/y 让位**：对 `lane_y+POL_OFF ≥ 54.6` 的页，列 x 需与东侧 up band 的 via1 x 保持 ≥0.4525（或把该 2 网的 escape 层与东侧 up band 错开）。
+3. 落地后 rev bump 引擎 → 一次求解 → G4..G7（目标 DFM new=0）。
+
+### 7.5 红线
+只读探针；冻结四源未改；canonical W3-CN.30 `05f7bd10ab3b45b6` 未动；POL_OFF 变更仅记录为 L2 裁定（**尚未写入引擎**，须与 O4 预算一并落地）；零搜索；无 sign-off。
