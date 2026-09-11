@@ -1,0 +1,7254 @@
+{
+ "_low_speed_frozen_at": "2026-08-21 T3-前置",
+ "_spec_rev_1": {
+  "at": "2026-09-10",
+  "authority": "D0 L2 decision card (k2 commit ad5c20817b5892848f25f524a0cf8366814c7535)",
+  "card": "SPEC-REV-1",
+  "changes": [
+   "spec_version: 1.1.v28-eco -> 1.1.spec-rev-1",
+   "capacitor_walls: marked out_of_scope_for_mvp=true (D0-1); original declaration preserved in appendix.capacitor_walls_original",
+   "corridors[*].bands[refclk].layer: In6.Cu -> F.Cu (D0-2; In6.Cu absent from stackup), layer_note 'per D0-2'"
+  ],
+  "rollback": "restore SPEC_k2_v4.json to spec_sha256_before and revert this card; rerun W0-R chain if REFCLK layer semantics change",
+  "scope": "declared fields only: capacitor_walls out-of-scope marker + original moved to appendix; corridors[*].bands[refclk].layer In6.Cu -> F.Cu; spec_version bump",
+  "spec_backup": "git 39f0c13:pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json (pre-revision)",
+  "spec_sha256_before": "3bdecb10ab4747a9280131c89cb5a25b64466b62966b3354c4780c5fbf9a0d7a",
+  "unchanged": "board outline / stackup / constraints / corridor x-ranges / all other fields; _shared, placement, PCB copper, W0-R/W1/W2 artifacts"
+ },
+ "_spec_rev_2": {
+  "at": "2026-09-12",
+  "authority": "L2 自裁（CO-08(B) 过孔策略/过孔预算 = L2）；依据 m13_v57_co11_spec_eco_annex.json b859ab84bea7836b",
+  "card": "SPEC-REV-2",
+  "changes": [
+   "spec_version: 1.1.spec-rev-1 -> 1.1.spec-rev-2",
+   "vias.high_speed.max_per_line: 2 -> {bandX_escape_In2:4, bandY_escape_B:6}",
+   "vias.high_speed_via_count: 300 -> {measured_probe:320, note,basis}"
+  ],
+  "rollback": "删除本文件并令引擎/验证器 FROZEN spec 指回 SPEC_k2_v4.json（sha 0bd52ed48e720b8c）",
+  "scope": "declared fields only: vias.high_speed.max_per_line 2->{bandX 4, bandY 6}; vias.high_speed_via_count 300->{measured_probe 320}; spec_version bump",
+  "spec_sha256_before": "0bd52ed48e720b8cb6a7869379f6c0a220f3e141e1514ab159f9f5f3b8b02233",
+  "unchanged": "board outline / stackup / impedance / net_classes / constraints / corridors / PD / all other fields; 原 SPEC_k2_v4.json 逐字节未动（本文件为其版本化后继）"
+ },
+ "_spec_rev_3": {
+  "at": "2026-09-12",
+  "authority": "L2 自裁（CO-40；LAYOUT_CONSTITUTION 第二章 走廊/过孔策略 = L2）",
+  "basis": "m13_v57_CO40_refclk_j2_transit_l2_ruling.md 7be78b59cdff4380",
+  "card": "SPEC-REV-3",
+  "changes": [
+   "spec_version: 1.1.spec-rev-2 -> 1.1.spec-rev-3",
+   "constraints.escape_transition_zone.refclk_j2_transit: 新增（ECS-001 闭式规格）",
+   "constraints.escape_transition_zone.no_via: 语义收窄为'域默认 true + REFCLK J2 transit 唯一例外'",
+   "constraints.refclk_isolated_scope: 新增（隔离=区外）",
+   "corridors[EAST_CHIP_TO_J2].bands[refclk].j2_transit: 新增注记（轨 y/layer 未改）"
+  ],
+  "rollback": "删除本文件；引擎/验证器 FROZEN spec 指回 SPEC_k2_v4.json（0bd52ed48e720b8c）或 spec-rev-2（0a7ad112ac4c57e3）",
+  "spec_sha256_before": "0a7ad112ac4c57e31f5f3ca06e10cf76a67c01a9d5360651f970ca2b289c56a6",
+  "unchanged": "stackup / impedance / net_classes / vias / PD / 其他 corridors/bands（含 bands[refclk].layer=F.Cu 与 tracks_y）/ 所有其他字段；原 SPEC_k2_v4.json 与 spec-rev-2 逐字节未动"
+ },
+ "_v28_eco": {
+  "at": "2026-09-06",
+  "authority": "user/arch ruling (path b, scope A: tool-chain flow verification)",
+  "ecn-007_note": "port_to_corridor prefix->band keys (A_PER/B_PET east, A_PET/B_PER west), engine fallback compat; per_ball regen FEASIBLE direct/via flip corrected",
+  "legacy_note": "layer_plan construction-data segs (in2_crossing_nets/j2_escape_nets/wp1_escape_nets/u3_side_bridges/low_speed_nets polylines) + alloc + real board k2_v4.kicad_pcb/sch remain 8L/U3-U7 physical layout -- L3 redo after real-board physical ECO; this regen = description-layer alignment (scope-A ruling, not fake alignment)",
+  "regen_v31_note": "layer_plan/corridors 6L 单芯片修正语义骨架再生 (stale 8L/U3-U7 polyline 清理); per-net 施工 = L3 open (board 0 track/0 via)",
+  "scope": "description-layer regen: redriver U3/U7(WQFN-64 DS160PR810) -> DS320PR1601(nfBGA-354) + bga_escape.per_ball inject(354 ballmap, contract 1:1 from v27 POC) + stackup 8L->6L + board 46mm + capacitor_walls removed; U3/U7 降级 legacy 物理占位(alloc 段名 out_U3/out_U7 + u3_side_bridges 折线映射所需, scope-B alloc 重解后移除)",
+  "spec_backup": "SPEC_k2_v4.json.bak_v28_eco"
+ },
+ "_wp1_frozen_at": "2026-08-23T09:53:46.014374+00:00",
+ "appendix": {
+  "authority": "D0 L2 decision card ad5c20817b5892848f25f524a0cf8366814c7535 (k2 submodule): D0-1 R4 AC-wall out of chain",
+  "capacitor_walls_original": {
+   "ac_coupling": {
+    "count": 32,
+    "downstream_refs": [
+     "C17",
+     "C18",
+     "C19",
+     "C20",
+     "C21",
+     "C22",
+     "C23",
+     "C24",
+     "C25",
+     "C26",
+     "C27",
+     "C28",
+     "C29",
+     "C30",
+     "C31",
+     "C32"
+    ],
+    "footprint": "Capacitor_SMD:C_0402_1005Metric",
+    "upstream_refs": [
+     "C49",
+     "C50",
+     "C51",
+     "C52",
+     "C53",
+     "C54",
+     "C55",
+     "C56",
+     "C57",
+     "C58",
+     "C59",
+     "C60",
+     "C61",
+     "C62",
+     "C63",
+     "C64"
+    ],
+    "value_nf": 220
+   },
+   "j2_side_x": [
+    93.0,
+    128.0
+   ],
+   "lower_band_y": [
+    60.0,
+    66.0
+   ],
+   "mcio_side_x": [
+    75.0,
+    90.0
+   ],
+   "min_center_pitch_mm": 1.3,
+   "note": "M14 v40: 从 SPEC_k2_v4_c3poc 声明源补入(main SPEC 缺段); derive_cap_walls 消费 ac_coupling.count/side_x/min_pitch",
+   "pitch_basis": "0402 pad 0.4x0.5 + clearance 0.2 + 余量 (DRC k2_v5 实测 1.2mm 中心距 → 0.1mm pad 间距 < 0.2 违规, 2026-08-16)",
+   "symmetric_bands": true,
+   "upper_band_y": [
+    44.0,
+    47.0
+   ]
+  },
+  "preserved_by": "SPEC-REV-1",
+  "semantics": "verbatim pre-revision declaration retained as evidence; non-semantic, never consumed by W0-R (W0-R reads only board.outline_y, stackup .Cu keys, constraints.m3_keepout_mm)"
+ },
+ "board": {
+  "file": "k2_v4.kicad_pcb",
+  "note_v28_eco": "y 38mm->46mm (L1_TOPOLOGY_v2.0 board-frame frozen, v20 user ruling H1)",
+  "outline_x": [
+   23.0,
+   143.0
+  ],
+  "outline_y": [
+   33.0,
+   79.0
+  ]
+ },
+ "capacitor_walls": {
+  "basis": "D0-1 (k2 ad5c20817b5892848f25f524a0cf8366814c7535): R4 AC-wall crossing out of MVP chain",
+  "original_preserved_in": "appendix.capacitor_walls_original",
+  "out_of_scope_for_mvp": true
+ },
+ "components": {
+  "anchor_fixes": {
+   "C64": {
+    "basis": "pad2 下缘 43.35, 距 C63 pad1 上缘 43.15 = 0.2mm",
+    "pos": [
+     99.825,
+     43.6
+    ]
+   },
+   "C66": {
+    "basis": "pad1 左缘 89.25, 距 U3 pad47-49 右缘 89.05 = 0.2mm",
+    "pos": [
+     89.8,
+     61.25
+    ]
+   },
+   "C82": {
+    "basis": "C66↔C82 交互冲突裁决 2026-08-16: C82 移入 ECN-004 冻结备用带 [64,66], 距 C66 pad2 y-gap 2.25mm, 距 C81 4.0mm, 距 U3 短边 pad x>=92.3 无重叠",
+    "pos": [
+     91.0,
+     64.0
+    ]
+   },
+   "reason": "产物锚点既有 clearance 违规 (DRC k2_v5c 实测: C66↔U3 0.025mm, C63↔C64 0.10mm < 0.2), 2026-08-16 裁决"
+  },
+  "connectors": {
+   "J2": {
+    "footprint": "SlimSAS_x8_SFF-8654_74pin_RASide",
+    "pos": [
+     133.825,
+     53.7
+    ]
+   },
+   "J3": {
+    "footprint": "MCIO_4i_SFF-1016_RASide",
+    "pos": [
+     59.5,
+     44.5
+    ]
+   },
+   "J4": {
+    "footprint": "MCIO_4i_SFF-1016_RASide",
+    "pos": [
+     59.5,
+     62.7
+    ]
+   }
+  },
+  "keep_confirm": [
+   "R1",
+   "R3",
+   "R21",
+   "D1",
+   "R28",
+   "R29"
+  ],
+  "mcu": {
+   "U1": {
+    "footprint": "ForgeOS:MCU_STM32G0_QFN32",
+    "pos": [
+     36.0,
+     52.0
+    ],
+    "value": "STM32G0B1KBU6"
+   }
+  },
+  "must_add": {
+   "i2c_pullup": [
+    "R31",
+    "R32",
+    "R33",
+    "R34"
+   ],
+   "p3v3_aux_decoupling": [
+    "C90"
+   ],
+   "p3v3_bulk": [
+    "C84"
+   ],
+   "reason": "ECN-004 器件完整性裁决（旧产物缺失）",
+   "redriver_vcc_decoupling": [
+    "C74",
+    "C75",
+    "C76",
+    "C77",
+    "C78",
+    "C79",
+    "C80",
+    "C81",
+    "C82",
+    "C83"
+   ]
+  },
+  "oring": {
+   "U4": {
+    "footprint": "BAT54C_ORING",
+    "pos": [
+     40.0,
+     37.0
+    ]
+   }
+  },
+  "pin_headers": {
+   "column_x": 26.5,
+   "layout_basis": "相邻 pad 中心距 = pad直径 1.5 + 净距 0.3 = 1.8mm; 上缘 pad <= 71-1.05=69.95; 下缘 pad >= 33+1.05=34.05 (2026-08-16, ECN-004 修正: 初版公式遗漏 pad 半径项被 S1 拦截)",
+   "min_net_gap": 0.3,
+   "pad_diameter": 1.5,
+   "positions": {
+    "J11": [
+     26.5,
+     65.38
+    ],
+    "J12": [
+     26.5,
+     35.32
+    ],
+    "J13": [
+     26.5,
+     46.54
+    ],
+    "J6": [
+     26.5,
+     39.66
+    ],
+    "J9": [
+     26.5,
+     55.96
+    ]
+   },
+   "rot": 90
+  },
+  "redriver": {
+   "DS320PR1601": {
+    "bga_escape": {
+     "per_ball": {
+      "axis": {
+       "board_x": "ball_y",
+       "board_y": "ball_x"
+      },
+      "ballmap": [
+       {
+        "name": "A1",
+        "signal": "N/C",
+        "x_mm": -3.94,
+        "y_mm": -11.05
+       },
+       {
+        "name": "A35",
+        "signal": "N/C",
+        "x_mm": 3.94,
+        "y_mm": -11.05
+       },
+       {
+        "name": "B3",
+        "signal": "RSVD11",
+        "x_mm": -2.89,
+        "y_mm": -10.89
+       },
+       {
+        "name": "C2",
+        "signal": "N/C",
+        "x_mm": -3.4204,
+        "y_mm": -10.75
+       },
+       {
+        "name": "D1",
+        "signal": "N/C",
+        "x_mm": -3.94,
+        "y_mm": -10.45
+       },
+       {
+        "name": "F2",
+        "signal": "RSVD3",
+        "x_mm": -3.4204,
+        "y_mm": -10.15
+       },
+       {
+        "name": "G1",
+        "signal": "A_ADDR1_7-0",
+        "x_mm": -3.94,
+        "y_mm": -9.85
+       },
+       {
+        "name": "K2",
+        "signal": "GND",
+        "x_mm": -3.4204,
+        "y_mm": -9.55
+       },
+       {
+        "name": "L1",
+        "signal": "GND",
+        "x_mm": -3.94,
+        "y_mm": -9.25
+       },
+       {
+        "name": "N2",
+        "signal": "A_PERP0",
+        "x_mm": -3.4204,
+        "y_mm": -8.95
+       },
+       {
+        "name": "R1",
+        "signal": "A_PERN0",
+        "x_mm": -3.94,
+        "y_mm": -8.65
+       },
+       {
+        "name": "U2",
+        "signal": "GND",
+        "x_mm": -3.4204,
+        "y_mm": -8.35
+       },
+       {
+        "name": "V1",
+        "signal": "GND",
+        "x_mm": -3.94,
+        "y_mm": -8.05
+       },
+       {
+        "name": "Y2",
+        "signal": "A_PERP1",
+        "x_mm": -3.4204,
+        "y_mm": -7.75
+       },
+       {
+        "name": "AB1",
+        "signal": "A_PERN1",
+        "x_mm": -3.94,
+        "y_mm": -7.45
+       },
+       {
+        "name": "AD2",
+        "signal": "GND",
+        "x_mm": -3.4204,
+        "y_mm": -7.15
+       },
+       {
+        "name": "AE1",
+        "signal": "GND",
+        "x_mm": -3.94,
+        "y_mm": -6.85
+       },
+       {
+        "name": "AG2",
+        "signal": "A_PERN2",
+        "x_mm": -3.4204,
+        "y_mm": -6.55
+       },
+       {
+        "name": "C34",
+        "signal": "N/C",
+        "x_mm": 3.4204,
+        "y_mm": -10.75
+       },
+       {
+        "name": "D35",
+        "signal": "N/C",
+        "x_mm": 3.94,
+        "y_mm": -10.45
+       },
+       {
+        "name": "F34",
+        "signal": "B_ADDR1_7-0",
+        "x_mm": 3.4204,
+        "y_mm": -10.15
+       },
+       {
+        "name": "G35",
+        "signal": "RSVD4",
+        "x_mm": 3.94,
+        "y_mm": -9.85
+       },
+       {
+        "name": "K34",
+        "signal": "GND",
+        "x_mm": 3.4204,
+        "y_mm": -9.55
+       },
+       {
+        "name": "L35",
+        "signal": "GND",
+        "x_mm": 3.94,
+        "y_mm": -9.25
+       },
+       {
+        "name": "N34",
+        "signal": "B_PERN0",
+        "x_mm": 3.4204,
+        "y_mm": -8.95
+       },
+       {
+        "name": "R35",
+        "signal": "B_PERP0",
+        "x_mm": 3.94,
+        "y_mm": -8.65
+       },
+       {
+        "name": "U34",
+        "signal": "GND",
+        "x_mm": 3.4204,
+        "y_mm": -8.35
+       },
+       {
+        "name": "V35",
+        "signal": "GND",
+        "x_mm": 3.94,
+        "y_mm": -8.05
+       },
+       {
+        "name": "Y34",
+        "signal": "B_PERN1",
+        "x_mm": 3.4204,
+        "y_mm": -7.75
+       },
+       {
+        "name": "AB35",
+        "signal": "B_PERP1",
+        "x_mm": 3.94,
+        "y_mm": -7.45
+       },
+       {
+        "name": "AD34",
+        "signal": "GND",
+        "x_mm": 3.4204,
+        "y_mm": -7.15
+       },
+       {
+        "name": "AE35",
+        "signal": "GND",
+        "x_mm": 3.94,
+        "y_mm": -6.85
+       },
+       {
+        "name": "AG34",
+        "signal": "B_PERP2",
+        "x_mm": 3.4204,
+        "y_mm": -6.55
+       },
+       {
+        "name": "AJ35",
+        "signal": "B_PERN2",
+        "x_mm": 3.94,
+        "y_mm": -6.25
+       },
+       {
+        "name": "AL34",
+        "signal": "GND",
+        "x_mm": 3.4204,
+        "y_mm": -5.95
+       },
+       {
+        "name": "AM35",
+        "signal": "GND",
+        "x_mm": 3.94,
+        "y_mm": -5.65
+       },
+       {
+        "name": "AP34",
+        "signal": "B_PERP3",
+        "x_mm": 3.4204,
+        "y_mm": -5.35
+       },
+       {
+        "name": "AT35",
+        "signal": "B_PERN3",
+        "x_mm": 3.94,
+        "y_mm": -5.05
+       },
+       {
+        "name": "AV34",
+        "signal": "GND",
+        "x_mm": 3.4204,
+        "y_mm": -4.75
+       },
+       {
+        "name": "AW35",
+        "signal": "GND",
+        "x_mm": 3.94,
+        "y_mm": -4.45
+       },
+       {
+        "name": "BA34",
+        "signal": "B_PERN4",
+        "x_mm": 3.4204,
+        "y_mm": -4.15
+       },
+       {
+        "name": "BC35",
+        "signal": "B_PERP4",
+        "x_mm": 3.94,
+        "y_mm": -3.85
+       },
+       {
+        "name": "BE34",
+        "signal": "GND",
+        "x_mm": 3.4204,
+        "y_mm": -3.55
+       },
+       {
+        "name": "BF35",
+        "signal": "GND",
+        "x_mm": 3.94,
+        "y_mm": -3.25
+       },
+       {
+        "name": "BH34",
+        "signal": "B_PERN5",
+        "x_mm": 3.4204,
+        "y_mm": -2.95
+       },
+       {
+        "name": "BK35",
+        "signal": "B_PERP5",
+        "x_mm": 3.94,
+        "y_mm": -2.65
+       },
+       {
+        "name": "BM34",
+        "signal": "GND",
+        "x_mm": 3.4204,
+        "y_mm": -2.35
+       },
+       {
+        "name": "BN35",
+        "signal": "GND",
+        "x_mm": 3.94,
+        "y_mm": -2.05
+       },
+       {
+        "name": "BR34",
+        "signal": "B_PERP6",
+        "x_mm": 3.4204,
+        "y_mm": -1.75
+       },
+       {
+        "name": "AJ1",
+        "signal": "A_PERP2",
+        "x_mm": -3.94,
+        "y_mm": -6.25
+       },
+       {
+        "name": "AL2",
+        "signal": "GND",
+        "x_mm": -3.4204,
+        "y_mm": -5.95
+       },
+       {
+        "name": "AM1",
+        "signal": "GND",
+        "x_mm": -3.94,
+        "y_mm": -5.65
+       },
+       {
+        "name": "AP2",
+        "signal": "A_PERN3",
+        "x_mm": -3.4204,
+        "y_mm": -5.35
+       },
+       {
+        "name": "AT1",
+        "signal": "A_PERP3",
+        "x_mm": -3.94,
+        "y_mm": -5.05
+       },
+       {
+        "name": "AV2",
+        "signal": "GND",
+        "x_mm": -3.4204,
+        "y_mm": -4.75
+       },
+       {
+        "name": "AW1",
+        "signal": "GND",
+        "x_mm": -3.94,
+        "y_mm": -4.45
+       },
+       {
+        "name": "BA2",
+        "signal": "A_PERP4",
+        "x_mm": -3.4204,
+        "y_mm": -4.15
+       },
+       {
+        "name": "BC1",
+        "signal": "A_PERN4",
+        "x_mm": -3.94,
+        "y_mm": -3.85
+       },
+       {
+        "name": "BE2",
+        "signal": "GND",
+        "x_mm": -3.4204,
+        "y_mm": -3.55
+       },
+       {
+        "name": "BF1",
+        "signal": "GND",
+        "x_mm": -3.94,
+        "y_mm": -3.25
+       },
+       {
+        "name": "BH2",
+        "signal": "A_PERP5",
+        "x_mm": -3.4204,
+        "y_mm": -2.95
+       },
+       {
+        "name": "BK1",
+        "signal": "A_PERN5",
+        "x_mm": -3.94,
+        "y_mm": -2.65
+       },
+       {
+        "name": "BM2",
+        "signal": "GND",
+        "x_mm": -3.4204,
+        "y_mm": -2.35
+       },
+       {
+        "name": "BN1",
+        "signal": "GND",
+        "x_mm": -3.94,
+        "y_mm": -2.05
+       },
+       {
+        "name": "BR2",
+        "signal": "A_PERN6",
+        "x_mm": -3.4204,
+        "y_mm": -1.75
+       },
+       {
+        "name": "BU1",
+        "signal": "A_PERP6",
+        "x_mm": -3.94,
+        "y_mm": -1.45
+       },
+       {
+        "name": "BW2",
+        "signal": "GND",
+        "x_mm": -3.4204,
+        "y_mm": -1.15
+       },
+       {
+        "name": "BY1",
+        "signal": "GND",
+        "x_mm": -3.94,
+        "y_mm": -0.85
+       },
+       {
+        "name": "CB2",
+        "signal": "A_PERN7",
+        "x_mm": -3.4204,
+        "y_mm": -0.55
+       },
+       {
+        "name": "CD1",
+        "signal": "A_PERP7",
+        "x_mm": -3.94,
+        "y_mm": -0.25
+       },
+       {
+        "name": "CF2",
+        "signal": "GND",
+        "x_mm": -3.4204,
+        "y_mm": 0.05
+       },
+       {
+        "name": "CG1",
+        "signal": "GND",
+        "x_mm": -3.94,
+        "y_mm": 0.35
+       },
+       {
+        "name": "CJ2",
+        "signal": "A_PERP8",
+        "x_mm": -3.4204,
+        "y_mm": 0.65
+       },
+       {
+        "name": "CL1",
+        "signal": "A_PERN8",
+        "x_mm": -3.94,
+        "y_mm": 0.95
+       },
+       {
+        "name": "CN2",
+        "signal": "GND",
+        "x_mm": -3.4204,
+        "y_mm": 1.25
+       },
+       {
+        "name": "CP1",
+        "signal": "GND",
+        "x_mm": -3.94,
+        "y_mm": 1.55
+       },
+       {
+        "name": "CT2",
+        "signal": "A_PERP9",
+        "x_mm": -3.4204,
+        "y_mm": 1.85
+       },
+       {
+        "name": "CV1",
+        "signal": "A_PERN9",
+        "x_mm": -3.94,
+        "y_mm": 2.15
+       },
+       {
+        "name": "CY2",
+        "signal": "GND",
+        "x_mm": -3.4204,
+        "y_mm": 2.45
+       },
+       {
+        "name": "DA1",
+        "signal": "GND",
+        "x_mm": -3.94,
+        "y_mm": 2.75
+       },
+       {
+        "name": "DC2",
+        "signal": "A_PERN10",
+        "x_mm": -3.4204,
+        "y_mm": 3.05
+       },
+       {
+        "name": "DE1",
+        "signal": "A_PERP10",
+        "x_mm": -3.94,
+        "y_mm": 3.35
+       },
+       {
+        "name": "DG2",
+        "signal": "GND",
+        "x_mm": -3.4204,
+        "y_mm": 3.65
+       },
+       {
+        "name": "DH1",
+        "signal": "GND",
+        "x_mm": -3.94,
+        "y_mm": 3.95
+       },
+       {
+        "name": "DK2",
+        "signal": "A_PERN11",
+        "x_mm": -3.4204,
+        "y_mm": 4.25
+       },
+       {
+        "name": "DM1",
+        "signal": "A_PERP11",
+        "x_mm": -3.94,
+        "y_mm": 4.55
+       },
+       {
+        "name": "DP2",
+        "signal": "GND",
+        "x_mm": -3.4204,
+        "y_mm": 4.85
+       },
+       {
+        "name": "DR1",
+        "signal": "GND",
+        "x_mm": -3.94,
+        "y_mm": 5.15
+       },
+       {
+        "name": "DU2",
+        "signal": "A_PERP12",
+        "x_mm": -3.4204,
+        "y_mm": 5.45
+       },
+       {
+        "name": "DW1",
+        "signal": "A_PERN12",
+        "x_mm": -3.94,
+        "y_mm": 5.75
+       },
+       {
+        "name": "EA2",
+        "signal": "GND",
+        "x_mm": -3.4204,
+        "y_mm": 6.05
+       },
+       {
+        "name": "EB1",
+        "signal": "GND",
+        "x_mm": -3.94,
+        "y_mm": 6.35
+       },
+       {
+        "name": "ED2",
+        "signal": "A_PERP13",
+        "x_mm": -3.4204,
+        "y_mm": 6.65
+       },
+       {
+        "name": "EF1",
+        "signal": "A_PERN13",
+        "x_mm": -3.94,
+        "y_mm": 6.95
+       },
+       {
+        "name": "EH2",
+        "signal": "GND",
+        "x_mm": -3.4204,
+        "y_mm": 7.25
+       },
+       {
+        "name": "EJ1",
+        "signal": "GND",
+        "x_mm": -3.94,
+        "y_mm": 7.55
+       },
+       {
+        "name": "EL2",
+        "signal": "A_PERN14",
+        "x_mm": -3.4204,
+        "y_mm": 7.85
+       },
+       {
+        "name": "BU35",
+        "signal": "B_PERN6",
+        "x_mm": 3.94,
+        "y_mm": -1.45
+       },
+       {
+        "name": "BW34",
+        "signal": "GND",
+        "x_mm": 3.4204,
+        "y_mm": -1.15
+       },
+       {
+        "name": "BY35",
+        "signal": "GND",
+        "x_mm": 3.94,
+        "y_mm": -0.85
+       },
+       {
+        "name": "CB34",
+        "signal": "B_PERP7",
+        "x_mm": 3.4204,
+        "y_mm": -0.55
+       },
+       {
+        "name": "CD35",
+        "signal": "B_PERN7",
+        "x_mm": 3.94,
+        "y_mm": -0.25
+       },
+       {
+        "name": "CF34",
+        "signal": "GND",
+        "x_mm": 3.4204,
+        "y_mm": 0.05
+       },
+       {
+        "name": "CG35",
+        "signal": "GND",
+        "x_mm": 3.94,
+        "y_mm": 0.35
+       },
+       {
+        "name": "CJ34",
+        "signal": "B_PERN8",
+        "x_mm": 3.4204,
+        "y_mm": 0.65
+       },
+       {
+        "name": "CL35",
+        "signal": "B_PERP8",
+        "x_mm": 3.94,
+        "y_mm": 0.95
+       },
+       {
+        "name": "CN34",
+        "signal": "GND",
+        "x_mm": 3.4204,
+        "y_mm": 1.25
+       },
+       {
+        "name": "CP35",
+        "signal": "GND",
+        "x_mm": 3.94,
+        "y_mm": 1.55
+       },
+       {
+        "name": "CT34",
+        "signal": "B_PERN9",
+        "x_mm": 3.4204,
+        "y_mm": 1.85
+       },
+       {
+        "name": "CV35",
+        "signal": "B_PERP9",
+        "x_mm": 3.94,
+        "y_mm": 2.15
+       },
+       {
+        "name": "CY34",
+        "signal": "GND",
+        "x_mm": 3.4204,
+        "y_mm": 2.45
+       },
+       {
+        "name": "DA35",
+        "signal": "GND",
+        "x_mm": 3.94,
+        "y_mm": 2.75
+       },
+       {
+        "name": "DC34",
+        "signal": "B_PERP10",
+        "x_mm": 3.4204,
+        "y_mm": 3.05
+       },
+       {
+        "name": "DE35",
+        "signal": "B_PERN10",
+        "x_mm": 3.94,
+        "y_mm": 3.35
+       },
+       {
+        "name": "DG34",
+        "signal": "GND",
+        "x_mm": 3.4204,
+        "y_mm": 3.65
+       },
+       {
+        "name": "DH35",
+        "signal": "GND",
+        "x_mm": 3.94,
+        "y_mm": 3.95
+       },
+       {
+        "name": "DK34",
+        "signal": "B_PERP11",
+        "x_mm": 3.4204,
+        "y_mm": 4.25
+       },
+       {
+        "name": "DM35",
+        "signal": "B_PERN11",
+        "x_mm": 3.94,
+        "y_mm": 4.55
+       },
+       {
+        "name": "DP34",
+        "signal": "GND",
+        "x_mm": 3.4204,
+        "y_mm": 4.85
+       },
+       {
+        "name": "DR35",
+        "signal": "GND",
+        "x_mm": 3.94,
+        "y_mm": 5.15
+       },
+       {
+        "name": "DU34",
+        "signal": "B_PERN12",
+        "x_mm": 3.4204,
+        "y_mm": 5.45
+       },
+       {
+        "name": "DW35",
+        "signal": "B_PERP12",
+        "x_mm": 3.94,
+        "y_mm": 5.75
+       },
+       {
+        "name": "EA34",
+        "signal": "GND",
+        "x_mm": 3.4204,
+        "y_mm": 6.05
+       },
+       {
+        "name": "EB35",
+        "signal": "GND",
+        "x_mm": 3.94,
+        "y_mm": 6.35
+       },
+       {
+        "name": "ED34",
+        "signal": "B_PERN13",
+        "x_mm": 3.4204,
+        "y_mm": 6.65
+       },
+       {
+        "name": "EF35",
+        "signal": "B_PERP13",
+        "x_mm": 3.94,
+        "y_mm": 6.95
+       },
+       {
+        "name": "EH34",
+        "signal": "GND",
+        "x_mm": 3.4204,
+        "y_mm": 7.25
+       },
+       {
+        "name": "EJ35",
+        "signal": "GND",
+        "x_mm": 3.94,
+        "y_mm": 7.55
+       },
+       {
+        "name": "EL34",
+        "signal": "B_PERP14",
+        "x_mm": 3.4204,
+        "y_mm": 7.85
+       },
+       {
+        "name": "ER2",
+        "signal": "GND",
+        "x_mm": -3.4204,
+        "y_mm": 8.45
+       },
+       {
+        "name": "ET1",
+        "signal": "GND",
+        "x_mm": -3.94,
+        "y_mm": 8.75
+       },
+       {
+        "name": "EV2",
+        "signal": "A_PERN15",
+        "x_mm": -3.4204,
+        "y_mm": 9.05
+       },
+       {
+        "name": "EY1",
+        "signal": "A_PERP15",
+        "x_mm": -3.94,
+        "y_mm": 9.35
+       },
+       {
+        "name": "FB2",
+        "signal": "GND",
+        "x_mm": -3.4204,
+        "y_mm": 9.65
+       },
+       {
+        "name": "FD1",
+        "signal": "GND",
+        "x_mm": -3.94,
+        "y_mm": 9.95
+       },
+       {
+        "name": "FE2",
+        "signal": "N/C",
+        "x_mm": -3.4204,
+        "y_mm": 10.25
+       },
+       {
+        "name": "EN1",
+        "signal": "A_PERP14",
+        "x_mm": -3.94,
+        "y_mm": 8.15
+       },
+       {
+        "name": "ER34",
+        "signal": "GND",
+        "x_mm": 3.4204,
+        "y_mm": 8.45
+       },
+       {
+        "name": "ET35",
+        "signal": "GND",
+        "x_mm": 3.94,
+        "y_mm": 8.75
+       },
+       {
+        "name": "EV34",
+        "signal": "B_PERP15",
+        "x_mm": 3.4204,
+        "y_mm": 9.05
+       },
+       {
+        "name": "EY35",
+        "signal": "B_PERN15",
+        "x_mm": 3.94,
+        "y_mm": 9.35
+       },
+       {
+        "name": "FB34",
+        "signal": "GND",
+        "x_mm": 3.4204,
+        "y_mm": 9.65
+       },
+       {
+        "name": "FD35",
+        "signal": "GND",
+        "x_mm": 3.94,
+        "y_mm": 9.95
+       },
+       {
+        "name": "FE34",
+        "signal": "N/C",
+        "x_mm": 3.4204,
+        "y_mm": 10.25
+       },
+       {
+        "name": "EN35",
+        "signal": "B_PERN14",
+        "x_mm": 3.94,
+        "y_mm": 8.15
+       },
+       {
+        "name": "FG1",
+        "signal": "N/C",
+        "x_mm": -3.94,
+        "y_mm": 10.55
+       },
+       {
+        "name": "FH2",
+        "signal": "N/C",
+        "x_mm": -3.4204,
+        "y_mm": 10.85
+       },
+       {
+        "name": "FH34",
+        "signal": "N/C",
+        "x_mm": 3.4204,
+        "y_mm": 10.85
+       },
+       {
+        "name": "FG35",
+        "signal": "N/C",
+        "x_mm": 3.94,
+        "y_mm": 10.55
+       },
+       {
+        "name": "B6",
+        "signal": "RSVD10",
+        "x_mm": -2.29,
+        "y_mm": -10.89
+       },
+       {
+        "name": "B9",
+        "signal": "RSVD9",
+        "x_mm": -1.69,
+        "y_mm": -10.89
+       },
+       {
+        "name": "B12",
+        "signal": "RSVD8",
+        "x_mm": -1.09,
+        "y_mm": -10.89
+       },
+       {
+        "name": "B16",
+        "signal": "RSVD7",
+        "x_mm": -0.49,
+        "y_mm": -10.89
+       },
+       {
+        "name": "B19",
+        "signal": "GND",
+        "x_mm": 0.11,
+        "y_mm": -10.89
+       },
+       {
+        "name": "B23",
+        "signal": "A_ADDR0_7-0",
+        "x_mm": 0.71,
+        "y_mm": -10.89
+       },
+       {
+        "name": "B25",
+        "signal": "B_ADDR0_7-0",
+        "x_mm": 1.31,
+        "y_mm": -10.89
+       },
+       {
+        "name": "B28",
+        "signal": "SDA",
+        "x_mm": 1.91,
+        "y_mm": -10.89
+       },
+       {
+        "name": "B31",
+        "signal": "SCL",
+        "x_mm": 2.51,
+        "y_mm": -10.89
+       },
+       {
+        "name": "E8",
+        "signal": "RSVD12",
+        "x_mm": -1.99,
+        "y_mm": -10.3704
+       },
+       {
+        "name": "E11",
+        "signal": "RSVD13",
+        "x_mm": -1.39,
+        "y_mm": -10.3704
+       },
+       {
+        "name": "E14",
+        "signal": "GND",
+        "x_mm": -0.79,
+        "y_mm": -10.3704
+       },
+       {
+        "name": "E18",
+        "signal": "RSVD14",
+        "x_mm": -0.19,
+        "y_mm": -10.3704
+       },
+       {
+        "name": "E33",
+        "signal": "GND",
+        "x_mm": 2.81,
+        "y_mm": -10.3704
+       },
+       {
+        "name": "E30",
+        "signal": "GND",
+        "x_mm": 2.21,
+        "y_mm": -10.3704
+       },
+       {
+        "name": "E27",
+        "signal": "GND",
+        "x_mm": 1.61,
+        "y_mm": -10.3704
+       },
+       {
+        "name": "H12",
+        "signal": "GND",
+        "x_mm": -1.09,
+        "y_mm": -9.8508
+       },
+       {
+        "name": "H16",
+        "signal": "GND",
+        "x_mm": -0.49,
+        "y_mm": -9.8508
+       },
+       {
+        "name": "H19",
+        "signal": "GND",
+        "x_mm": 0.11,
+        "y_mm": -9.8508
+       },
+       {
+        "name": "H31",
+        "signal": "GND",
+        "x_mm": 2.51,
+        "y_mm": -9.8508
+       },
+       {
+        "name": "FJ3",
+        "signal": "A_ADDR1_15-8",
+        "x_mm": -2.89,
+        "y_mm": 10.89
+       },
+       {
+        "name": "FJ6",
+        "signal": "PD_11-8",
+        "x_mm": -2.29,
+        "y_mm": 10.89
+       },
+       {
+        "name": "FJ9",
+        "signal": "RSVD0",
+        "x_mm": -1.69,
+        "y_mm": 10.89
+       },
+       {
+        "name": "FJ12",
+        "signal": "GND",
+        "x_mm": -1.09,
+        "y_mm": 10.89
+       },
+       {
+        "name": "FJ16",
+        "signal": "RSVD5",
+        "x_mm": -0.49,
+        "y_mm": 10.89
+       },
+       {
+        "name": "FJ19",
+        "signal": "GND",
+        "x_mm": 0.11,
+        "y_mm": 10.89
+       },
+       {
+        "name": "FJ23",
+        "signal": "RSVD1",
+        "x_mm": 0.71,
+        "y_mm": 10.89
+       },
+       {
+        "name": "FJ25",
+        "signal": "READ_EN_#",
+        "x_mm": 1.31,
+        "y_mm": 10.89
+       },
+       {
+        "name": "FJ28",
+        "signal": "B_ADDR0_15-8",
+        "x_mm": 1.91,
+        "y_mm": 10.89
+       },
+       {
+        "name": "FJ31",
+        "signal": "PD_7-4",
+        "x_mm": 2.51,
+        "y_mm": 10.89
+       },
+       {
+        "name": "FF5",
+        "signal": "A_ADDR0_15-8",
+        "x_mm": -2.59,
+        "y_mm": 10.3704
+       },
+       {
+        "name": "FF8",
+        "signal": "PD_15-12",
+        "x_mm": -1.99,
+        "y_mm": 10.3704
+       },
+       {
+        "name": "FF11",
+        "signal": "RSVD2",
+        "x_mm": -1.39,
+        "y_mm": 10.3704
+       },
+       {
+        "name": "FF14",
+        "signal": "GND",
+        "x_mm": -0.79,
+        "y_mm": 10.3704
+       },
+       {
+        "name": "FF18",
+        "signal": "RSVD6",
+        "x_mm": -0.19,
+        "y_mm": 10.3704
+       },
+       {
+        "name": "FF21",
+        "signal": "GND",
+        "x_mm": 0.41,
+        "y_mm": 10.3704
+       },
+       {
+        "name": "FF24",
+        "signal": "MODE",
+        "x_mm": 1.01,
+        "y_mm": 10.3704
+       },
+       {
+        "name": "FF27",
+        "signal": "ALL_DONE#",
+        "x_mm": 1.61,
+        "y_mm": 10.3704
+       },
+       {
+        "name": "FF30",
+        "signal": "B_ADDR1_15-8",
+        "x_mm": 2.21,
+        "y_mm": 10.3704
+       },
+       {
+        "name": "FF33",
+        "signal": "PD_3-0",
+        "x_mm": 2.81,
+        "y_mm": 10.3704
+       },
+       {
+        "name": "FC3",
+        "signal": "GND",
+        "x_mm": -2.89,
+        "y_mm": 9.8508
+       },
+       {
+        "name": "FC6",
+        "signal": "GND",
+        "x_mm": -2.29,
+        "y_mm": 9.8508
+       },
+       {
+        "name": "FC9",
+        "signal": "GND",
+        "x_mm": -1.69,
+        "y_mm": 9.8508
+       },
+       {
+        "name": "FC28",
+        "signal": "GND",
+        "x_mm": 1.91,
+        "y_mm": 9.8508
+       },
+       {
+        "name": "FC25",
+        "signal": "GND",
+        "x_mm": 1.31,
+        "y_mm": 9.8508
+       },
+       {
+        "name": "FC23",
+        "signal": "GND",
+        "x_mm": 0.71,
+        "y_mm": 9.8508
+       },
+       {
+        "name": "FC19",
+        "signal": "GND",
+        "x_mm": 0.11,
+        "y_mm": 9.8508
+       },
+       {
+        "name": "EW10",
+        "signal": "B_PETP15",
+        "x_mm": -1.43,
+        "y_mm": 9.2
+       },
+       {
+        "name": "FA32",
+        "signal": "GND",
+        "x_mm": 2.72,
+        "y_mm": 9.6
+       },
+       {
+        "name": "EP22",
+        "signal": "GND",
+        "x_mm": 0.7,
+        "y_mm": 8.4
+       },
+       {
+        "name": "FA15",
+        "signal": "GND",
+        "x_mm": -0.74,
+        "y_mm": 9.6
+       },
+       {
+        "name": "EW29",
+        "signal": "A_PETN15",
+        "x_mm": 2.0272,
+        "y_mm": 9.2
+       },
+       {
+        "name": "EU26",
+        "signal": "A_PETP15",
+        "x_mm": 1.3344,
+        "y_mm": 8.8
+       },
+       {
+        "name": "EU7",
+        "signal": "B_PETN15",
+        "x_mm": -2.1228,
+        "y_mm": 8.8
+       },
+       {
+        "name": "EP4",
+        "signal": "GND",
+        "x_mm": -2.8156,
+        "y_mm": 8.4
+       },
+       {
+        "name": "EP32",
+        "signal": "GND",
+        "x_mm": 2.72,
+        "y_mm": 8.4
+       },
+       {
+        "name": "EM29",
+        "signal": "A_PETN14",
+        "x_mm": 2.0272,
+        "y_mm": 8.0
+       },
+       {
+        "name": "EK26",
+        "signal": "A_PETP14",
+        "x_mm": 1.3344,
+        "y_mm": 7.6
+       },
+       {
+        "name": "EM10",
+        "signal": "B_PETP14",
+        "x_mm": -1.43,
+        "y_mm": 8.0
+       },
+       {
+        "name": "EK7",
+        "signal": "B_PETN14",
+        "x_mm": -2.1228,
+        "y_mm": 7.6
+       },
+       {
+        "name": "EG4",
+        "signal": "GND",
+        "x_mm": -2.8156,
+        "y_mm": 7.2
+       },
+       {
+        "name": "EG13",
+        "signal": "GND",
+        "x_mm": -0.8,
+        "y_mm": 7.2
+       },
+       {
+        "name": "EP20",
+        "signal": "VCC4",
+        "x_mm": 0.2,
+        "y_mm": 8.4
+       },
+       {
+        "name": "EP17",
+        "signal": "VCC4",
+        "x_mm": -0.3,
+        "y_mm": 8.4
+       },
+       {
+        "name": "EP13",
+        "signal": "GND",
+        "x_mm": -0.8,
+        "y_mm": 8.4
+       },
+       {
+        "name": "EG17",
+        "signal": "VCC4",
+        "x_mm": -0.3,
+        "y_mm": 7.2
+       },
+       {
+        "name": "EG20",
+        "signal": "VCC4",
+        "x_mm": 0.2,
+        "y_mm": 7.2
+       },
+       {
+        "name": "EG22",
+        "signal": "GND",
+        "x_mm": 0.7,
+        "y_mm": 7.2
+       },
+       {
+        "name": "DN4",
+        "signal": "GND",
+        "x_mm": -2.8156,
+        "y_mm": 4.8
+       },
+       {
+        "name": "DY4",
+        "signal": "GND",
+        "x_mm": -2.8156,
+        "y_mm": 6.0
+       },
+       {
+        "name": "EC7",
+        "signal": "B_PETN13",
+        "x_mm": -2.1228,
+        "y_mm": 6.4
+       },
+       {
+        "name": "DT7",
+        "signal": "B_PETN12",
+        "x_mm": -2.1228,
+        "y_mm": 5.2
+       },
+       {
+        "name": "DV10",
+        "signal": "B_PETP12",
+        "x_mm": -1.43,
+        "y_mm": 5.6
+       },
+       {
+        "name": "EE10",
+        "signal": "B_PETP13",
+        "x_mm": -1.43,
+        "y_mm": 6.8
+       },
+       {
+        "name": "DY13",
+        "signal": "GND",
+        "x_mm": -0.8,
+        "y_mm": 6.0
+       },
+       {
+        "name": "DN13",
+        "signal": "GND",
+        "x_mm": -0.8,
+        "y_mm": 4.8
+       },
+       {
+        "name": "DN17",
+        "signal": "VCC3",
+        "x_mm": -0.3,
+        "y_mm": 4.8
+       },
+       {
+        "name": "DY17",
+        "signal": "VCC4",
+        "x_mm": -0.3,
+        "y_mm": 6.0
+       },
+       {
+        "name": "DY20",
+        "signal": "VCC4",
+        "x_mm": 0.2,
+        "y_mm": 6.0
+       },
+       {
+        "name": "DN20",
+        "signal": "VCC4",
+        "x_mm": 0.2,
+        "y_mm": 4.8
+       },
+       {
+        "name": "DN22",
+        "signal": "GND",
+        "x_mm": 0.7,
+        "y_mm": 4.8
+       },
+       {
+        "name": "DY22",
+        "signal": "GND",
+        "x_mm": 0.7,
+        "y_mm": 6.0
+       },
+       {
+        "name": "DT26",
+        "signal": "A_PETP12",
+        "x_mm": 1.3344,
+        "y_mm": 5.2
+       },
+       {
+        "name": "EC26",
+        "signal": "A_PETP13",
+        "x_mm": 1.3344,
+        "y_mm": 6.4
+       },
+       {
+        "name": "DV29",
+        "signal": "A_PETN12",
+        "x_mm": 2.0272,
+        "y_mm": 5.6
+       },
+       {
+        "name": "EE29",
+        "signal": "A_PETN13",
+        "x_mm": 2.0272,
+        "y_mm": 6.8
+       },
+       {
+        "name": "EG32",
+        "signal": "GND",
+        "x_mm": 2.72,
+        "y_mm": 7.2
+       },
+       {
+        "name": "DY32",
+        "signal": "GND",
+        "x_mm": 2.72,
+        "y_mm": 6.0
+       },
+       {
+        "name": "CW4",
+        "signal": "GND",
+        "x_mm": -2.8156,
+        "y_mm": 2.4
+       },
+       {
+        "name": "DF4",
+        "signal": "GND",
+        "x_mm": -2.8156,
+        "y_mm": 3.6
+       },
+       {
+        "name": "DJ7",
+        "signal": "B_PETN11",
+        "x_mm": -2.1228,
+        "y_mm": 4.0
+       },
+       {
+        "name": "DB7",
+        "signal": "B_PETN10",
+        "x_mm": -2.1228,
+        "y_mm": 2.8
+       },
+       {
+        "name": "DD10",
+        "signal": "B_PETP10",
+        "x_mm": -1.43,
+        "y_mm": 3.2
+       },
+       {
+        "name": "DL10",
+        "signal": "B_PETP11",
+        "x_mm": -1.43,
+        "y_mm": 4.4
+       },
+       {
+        "name": "DF13",
+        "signal": "GND",
+        "x_mm": -0.8,
+        "y_mm": 3.6
+       },
+       {
+        "name": "CW13",
+        "signal": "GND",
+        "x_mm": -0.8,
+        "y_mm": 2.4
+       },
+       {
+        "name": "CW17",
+        "signal": "VCC3",
+        "x_mm": -0.3,
+        "y_mm": 2.4
+       },
+       {
+        "name": "DF17",
+        "signal": "VCC3",
+        "x_mm": -0.3,
+        "y_mm": 3.6
+       },
+       {
+        "name": "DF20",
+        "signal": "VCC3",
+        "x_mm": 0.2,
+        "y_mm": 3.6
+       },
+       {
+        "name": "CW20",
+        "signal": "VCC3",
+        "x_mm": 0.2,
+        "y_mm": 2.4
+       },
+       {
+        "name": "CW22",
+        "signal": "GND",
+        "x_mm": 0.7,
+        "y_mm": 2.4
+       },
+       {
+        "name": "DF22",
+        "signal": "GND",
+        "x_mm": 0.7,
+        "y_mm": 3.6
+       },
+       {
+        "name": "DB26",
+        "signal": "A_PETP10",
+        "x_mm": 1.3344,
+        "y_mm": 2.8
+       },
+       {
+        "name": "DJ26",
+        "signal": "A_PETP11",
+        "x_mm": 1.3344,
+        "y_mm": 4.0
+       },
+       {
+        "name": "DD29",
+        "signal": "A_PETN10",
+        "x_mm": 2.0272,
+        "y_mm": 3.2
+       },
+       {
+        "name": "DL29",
+        "signal": "A_PETN11",
+        "x_mm": 2.0272,
+        "y_mm": 4.4
+       },
+       {
+        "name": "DN32",
+        "signal": "GND",
+        "x_mm": 2.72,
+        "y_mm": 4.8
+       },
+       {
+        "name": "DF32",
+        "signal": "GND",
+        "x_mm": 2.72,
+        "y_mm": 3.6
+       },
+       {
+        "name": "CE4",
+        "signal": "GND",
+        "x_mm": -2.8156,
+        "y_mm": -0.0
+       },
+       {
+        "name": "CM4",
+        "signal": "GND",
+        "x_mm": -2.8156,
+        "y_mm": 1.2
+       },
+       {
+        "name": "CR7",
+        "signal": "B_PETN9",
+        "x_mm": -2.1228,
+        "y_mm": 1.6
+       },
+       {
+        "name": "CH7",
+        "signal": "B_PETN8",
+        "x_mm": -2.1228,
+        "y_mm": 0.4
+       },
+       {
+        "name": "CK10",
+        "signal": "B_PETP8",
+        "x_mm": -1.43,
+        "y_mm": 0.8
+       },
+       {
+        "name": "CU10",
+        "signal": "B_PETP9",
+        "x_mm": -1.43,
+        "y_mm": 2.0
+       },
+       {
+        "name": "CM13",
+        "signal": "GND",
+        "x_mm": -0.8,
+        "y_mm": 1.2
+       },
+       {
+        "name": "CE13",
+        "signal": "GND",
+        "x_mm": -0.8,
+        "y_mm": -0.0
+       },
+       {
+        "name": "CE17",
+        "signal": "VCC2",
+        "x_mm": -0.3,
+        "y_mm": -0.0
+       },
+       {
+        "name": "CM17",
+        "signal": "VCC3",
+        "x_mm": -0.3,
+        "y_mm": 1.2
+       },
+       {
+        "name": "CM20",
+        "signal": "VCC3",
+        "x_mm": 0.2,
+        "y_mm": 1.2
+       },
+       {
+        "name": "CE20",
+        "signal": "VCC3",
+        "x_mm": 0.2,
+        "y_mm": -0.0
+       },
+       {
+        "name": "CE22",
+        "signal": "GND",
+        "x_mm": 0.7,
+        "y_mm": -0.0
+       },
+       {
+        "name": "CM22",
+        "signal": "GND",
+        "x_mm": 0.7,
+        "y_mm": 1.2
+       },
+       {
+        "name": "CH26",
+        "signal": "A_PETP8",
+        "x_mm": 1.3344,
+        "y_mm": 0.4
+       },
+       {
+        "name": "CR26",
+        "signal": "A_PETP9",
+        "x_mm": 1.3344,
+        "y_mm": 1.6
+       },
+       {
+        "name": "CK29",
+        "signal": "A_PETN8",
+        "x_mm": 2.0272,
+        "y_mm": 0.8
+       },
+       {
+        "name": "CU29",
+        "signal": "A_PETN9",
+        "x_mm": 2.0272,
+        "y_mm": 2.0
+       },
+       {
+        "name": "CW32",
+        "signal": "GND",
+        "x_mm": 2.72,
+        "y_mm": 2.4
+       },
+       {
+        "name": "CM32",
+        "signal": "GND",
+        "x_mm": 2.72,
+        "y_mm": 1.2
+       },
+       {
+        "name": "BL4",
+        "signal": "GND",
+        "x_mm": -2.8156,
+        "y_mm": -2.4
+       },
+       {
+        "name": "BV4",
+        "signal": "GND",
+        "x_mm": -2.8156,
+        "y_mm": -1.2
+       },
+       {
+        "name": "CA7",
+        "signal": "B_PETN7",
+        "x_mm": -2.1228,
+        "y_mm": -0.8
+       },
+       {
+        "name": "BP7",
+        "signal": "B_PETN6",
+        "x_mm": -2.1228,
+        "y_mm": -2.0
+       },
+       {
+        "name": "BT10",
+        "signal": "B_PETP6",
+        "x_mm": -1.43,
+        "y_mm": -1.6
+       },
+       {
+        "name": "CC10",
+        "signal": "B_PETP7",
+        "x_mm": -1.43,
+        "y_mm": -0.4
+       },
+       {
+        "name": "BV13",
+        "signal": "GND",
+        "x_mm": -0.8,
+        "y_mm": -1.2
+       },
+       {
+        "name": "BL13",
+        "signal": "GND",
+        "x_mm": -0.8,
+        "y_mm": -2.4
+       },
+       {
+        "name": "BL17",
+        "signal": "VCC2",
+        "x_mm": -0.3,
+        "y_mm": -2.4
+       },
+       {
+        "name": "BV17",
+        "signal": "VCC2",
+        "x_mm": -0.3,
+        "y_mm": -1.2
+       },
+       {
+        "name": "BV20",
+        "signal": "VCC2",
+        "x_mm": 0.2,
+        "y_mm": -1.2
+       },
+       {
+        "name": "BL20",
+        "signal": "VCC2",
+        "x_mm": 0.2,
+        "y_mm": -2.4
+       },
+       {
+        "name": "BL22",
+        "signal": "GND",
+        "x_mm": 0.7,
+        "y_mm": -2.4
+       },
+       {
+        "name": "BV22",
+        "signal": "GND",
+        "x_mm": 0.7,
+        "y_mm": -1.2
+       },
+       {
+        "name": "BP26",
+        "signal": "A_PETP6",
+        "x_mm": 1.3344,
+        "y_mm": -2.0
+       },
+       {
+        "name": "CA26",
+        "signal": "A_PETP7",
+        "x_mm": 1.3344,
+        "y_mm": -0.8
+       },
+       {
+        "name": "BT29",
+        "signal": "A_PETN6",
+        "x_mm": 2.0272,
+        "y_mm": -1.6
+       },
+       {
+        "name": "CC29",
+        "signal": "A_PETN7",
+        "x_mm": 2.0272,
+        "y_mm": -0.4
+       },
+       {
+        "name": "CE32",
+        "signal": "GND",
+        "x_mm": 2.72,
+        "y_mm": -0.0
+       },
+       {
+        "name": "BV32",
+        "signal": "GND",
+        "x_mm": 2.72,
+        "y_mm": -1.2
+       },
+       {
+        "name": "AU4",
+        "signal": "GND",
+        "x_mm": -2.8156,
+        "y_mm": -4.8
+       },
+       {
+        "name": "BD4",
+        "signal": "GND",
+        "x_mm": -2.8156,
+        "y_mm": -3.6
+       },
+       {
+        "name": "BG7",
+        "signal": "B_PETN5",
+        "x_mm": -2.1228,
+        "y_mm": -3.2
+       },
+       {
+        "name": "AY7",
+        "signal": "B_PETN4",
+        "x_mm": -2.1228,
+        "y_mm": -4.4
+       },
+       {
+        "name": "BB10",
+        "signal": "B_PETP4",
+        "x_mm": -1.43,
+        "y_mm": -4.0
+       },
+       {
+        "name": "BJ10",
+        "signal": "B_PETP5",
+        "x_mm": -1.43,
+        "y_mm": -2.8
+       },
+       {
+        "name": "BD13",
+        "signal": "GND",
+        "x_mm": -0.8,
+        "y_mm": -3.6
+       },
+       {
+        "name": "AU13",
+        "signal": "GND",
+        "x_mm": -0.8,
+        "y_mm": -4.8
+       },
+       {
+        "name": "AU17",
+        "signal": "VCC1",
+        "x_mm": -0.3,
+        "y_mm": -4.8
+       },
+       {
+        "name": "BD17",
+        "signal": "VCC2",
+        "x_mm": -0.3,
+        "y_mm": -3.6
+       },
+       {
+        "name": "BD20",
+        "signal": "VCC2",
+        "x_mm": 0.2,
+        "y_mm": -3.6
+       },
+       {
+        "name": "AU20",
+        "signal": "VCC2",
+        "x_mm": 0.2,
+        "y_mm": -4.8
+       },
+       {
+        "name": "AU22",
+        "signal": "GND",
+        "x_mm": 0.7,
+        "y_mm": -4.8
+       },
+       {
+        "name": "BD22",
+        "signal": "GND",
+        "x_mm": 0.7,
+        "y_mm": -3.6
+       },
+       {
+        "name": "AY26",
+        "signal": "A_PETP4",
+        "x_mm": 1.3344,
+        "y_mm": -4.4
+       },
+       {
+        "name": "BG26",
+        "signal": "A_PETP5",
+        "x_mm": 1.3344,
+        "y_mm": -3.2
+       },
+       {
+        "name": "BB29",
+        "signal": "A_PETN4",
+        "x_mm": 2.0272,
+        "y_mm": -4.0
+       },
+       {
+        "name": "BJ29",
+        "signal": "A_PETN5",
+        "x_mm": 2.0272,
+        "y_mm": -2.8
+       },
+       {
+        "name": "BL32",
+        "signal": "GND",
+        "x_mm": 2.72,
+        "y_mm": -2.4
+       },
+       {
+        "name": "BD32",
+        "signal": "GND",
+        "x_mm": 2.72,
+        "y_mm": -3.6
+       },
+       {
+        "name": "AC4",
+        "signal": "GND",
+        "x_mm": -2.8156,
+        "y_mm": -7.2
+       },
+       {
+        "name": "AK4",
+        "signal": "GND",
+        "x_mm": -2.8156,
+        "y_mm": -6.0
+       },
+       {
+        "name": "AN7",
+        "signal": "B_PETN3",
+        "x_mm": -2.1228,
+        "y_mm": -5.6
+       },
+       {
+        "name": "AF7",
+        "signal": "B_PETN2",
+        "x_mm": -2.1228,
+        "y_mm": -6.8
+       },
+       {
+        "name": "AH10",
+        "signal": "B_PETP2",
+        "x_mm": -1.43,
+        "y_mm": -6.4
+       },
+       {
+        "name": "AR10",
+        "signal": "B_PETP3",
+        "x_mm": -1.43,
+        "y_mm": -5.2
+       },
+       {
+        "name": "AK13",
+        "signal": "GND",
+        "x_mm": -0.8,
+        "y_mm": -6.0
+       },
+       {
+        "name": "AC13",
+        "signal": "GND",
+        "x_mm": -0.8,
+        "y_mm": -7.2
+       },
+       {
+        "name": "AC17",
+        "signal": "VCC1",
+        "x_mm": -0.3,
+        "y_mm": -7.2
+       },
+       {
+        "name": "AK17",
+        "signal": "VCC1",
+        "x_mm": -0.3,
+        "y_mm": -6.0
+       },
+       {
+        "name": "AK20",
+        "signal": "VCC1",
+        "x_mm": 0.2,
+        "y_mm": -6.0
+       },
+       {
+        "name": "AC20",
+        "signal": "VCC1",
+        "x_mm": 0.2,
+        "y_mm": -7.2
+       },
+       {
+        "name": "AC22",
+        "signal": "GND",
+        "x_mm": 0.7,
+        "y_mm": -7.2
+       },
+       {
+        "name": "AK22",
+        "signal": "GND",
+        "x_mm": 0.7,
+        "y_mm": -6.0
+       },
+       {
+        "name": "AF26",
+        "signal": "A_PETP2",
+        "x_mm": 1.3344,
+        "y_mm": -6.8
+       },
+       {
+        "name": "AN26",
+        "signal": "A_PETP3",
+        "x_mm": 1.3344,
+        "y_mm": -5.6
+       },
+       {
+        "name": "AH29",
+        "signal": "A_PETN2",
+        "x_mm": 2.0272,
+        "y_mm": -6.4
+       },
+       {
+        "name": "AR29",
+        "signal": "A_PETN3",
+        "x_mm": 2.0272,
+        "y_mm": -5.2
+       },
+       {
+        "name": "AU32",
+        "signal": "GND",
+        "x_mm": 2.72,
+        "y_mm": -4.8
+       },
+       {
+        "name": "AK32",
+        "signal": "GND",
+        "x_mm": 2.72,
+        "y_mm": -6.0
+       },
+       {
+        "name": "J4",
+        "signal": "GND",
+        "x_mm": -2.8156,
+        "y_mm": -9.6
+       },
+       {
+        "name": "T4",
+        "signal": "GND",
+        "x_mm": -2.8156,
+        "y_mm": -8.4
+       },
+       {
+        "name": "W7",
+        "signal": "B_PETN1",
+        "x_mm": -2.1228,
+        "y_mm": -8.0
+       },
+       {
+        "name": "M7",
+        "signal": "B_PETN0",
+        "x_mm": -2.1228,
+        "y_mm": -9.2
+       },
+       {
+        "name": "P10",
+        "signal": "B_PETP0",
+        "x_mm": -1.43,
+        "y_mm": -8.8
+       },
+       {
+        "name": "AA10",
+        "signal": "B_PETP1",
+        "x_mm": -1.43,
+        "y_mm": -7.6
+       },
+       {
+        "name": "T13",
+        "signal": "GND",
+        "x_mm": -0.8,
+        "y_mm": -8.4
+       },
+       {
+        "name": "T17",
+        "signal": "VCC1",
+        "x_mm": -0.3,
+        "y_mm": -8.4
+       },
+       {
+        "name": "T20",
+        "signal": "VCC1",
+        "x_mm": 0.2,
+        "y_mm": -8.4
+       },
+       {
+        "name": "J22",
+        "signal": "GND",
+        "x_mm": 0.7,
+        "y_mm": -9.6
+       },
+       {
+        "name": "T22",
+        "signal": "GND",
+        "x_mm": 0.7,
+        "y_mm": -8.4
+       },
+       {
+        "name": "M26",
+        "signal": "A_PETP0",
+        "x_mm": 1.3344,
+        "y_mm": -9.2
+       },
+       {
+        "name": "W26",
+        "signal": "A_PETP1",
+        "x_mm": 1.3344,
+        "y_mm": -8.0
+       },
+       {
+        "name": "P29",
+        "signal": "A_PETN0",
+        "x_mm": 2.0272,
+        "y_mm": -8.8
+       },
+       {
+        "name": "AA29",
+        "signal": "A_PETN1",
+        "x_mm": 2.0272,
+        "y_mm": -7.6
+       },
+       {
+        "name": "AC32",
+        "signal": "GND",
+        "x_mm": 2.72,
+        "y_mm": -7.2
+       },
+       {
+        "name": "T32",
+        "signal": "GND",
+        "x_mm": 2.72,
+        "y_mm": -8.4
+       }
+      ],
+      "band_corridor_capacity": {
+       "east": 16,
+       "west": 16
+      },
+      "chip_center": [
+       93.8,
+       53.7
+      ],
+      "clearance_mm": 0.1,
+      "corridor_edge": {
+       "east": 105.25,
+       "west": 82.35
+      },
+      "in2_wings": [
+       {
+        "in2_mm": 16.2,
+        "name": "N",
+        "refclk_mm": 0.0
+       },
+       {
+        "in2_mm": 20.8,
+        "name": "S",
+        "refclk_mm": 2.0
+       }
+      ],
+      "inter_pair_spacing": 1.46,
+      "pad_mm": 0.305,
+      "pair_pitch_mm": 0.6,
+      "port_to_corridor": {
+       "A_PER": "east",
+       "A_PET": "west",
+       "B_PER": "west",
+       "B_PET": "east"
+      },
+      "selected_lanes": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7
+      ],
+      "signal_bands": [
+       "A_PER",
+       "B_PET",
+       "A_PET",
+       "B_PER"
+      ],
+      "via_mm": 0.35,
+      "via_zone_capacity": 69
+     }
+    },
+    "pcie_side": "PCIE_*",
+    "role": "MCIO_x8_redriver"
+   },
+   "U3": {
+    "caps": "C17-C32",
+    "channel_count": 8,
+    "footprint": "WQFN-64_10x5.5mm_P0.4mm (LEGACY, 非生产器件)",
+    "legacy_alloc_holder": true,
+    "pad_groups": {
+     "note": "引脚功能分组真源 = revA/IOCONVERT.kicad_sym REDR_DS160PR810 (RX0-7/RX1-7... 引脚名机械导出, 2026-08-26 M13 v8): rx=RX0P/RX0N..RX7P/RX7N 共16脚, tx=TX0P/TX0N..TX7P/TX7N 共16脚; 两组物理分列封装两侧 (2026-08-26 板文件反算实证), 通道单向 RX_i->TX_i",
+     "rx": [
+      1,
+      2,
+      4,
+      5,
+      7,
+      8,
+      10,
+      11,
+      13,
+      14,
+      16,
+      17,
+      19,
+      20,
+      22,
+      23
+     ],
+     "tx": [
+      33,
+      34,
+      36,
+      37,
+      39,
+      40,
+      42,
+      43,
+      45,
+      46,
+      48,
+      49,
+      51,
+      52,
+      54,
+      55
+     ]
+    },
+    "pcie_side": "PCIE_DN*",
+    "pos": [
+     93.825,
+     62.7
+    ],
+    "role": "LEGACY_ALLOC_HOLDER(DN, 8L 时代; alloc 段名 out_U3 映射占位, scope-B 移除)"
+   },
+   "U7": {
+    "caps": "C49-C64",
+    "channel_count": 8,
+    "footprint": "WQFN-64_10x5.5mm_P0.4mm (LEGACY, 非生产器件)",
+    "legacy_alloc_holder": true,
+    "pad_groups": {
+     "note": "同 U3 (REDR_DS160PR810 同符号): rx=RX0-7 16脚, tx=TX0-7 16脚, 分列封装两侧, 通道单向",
+     "rx": [
+      1,
+      2,
+      4,
+      5,
+      7,
+      8,
+      10,
+      11,
+      13,
+      14,
+      16,
+      17,
+      19,
+      20,
+      22,
+      23
+     ],
+     "tx": [
+      33,
+      34,
+      36,
+      37,
+      39,
+      40,
+      42,
+      43,
+      45,
+      46,
+      48,
+      49,
+      51,
+      52,
+      54,
+      55
+     ]
+    },
+    "pcie_side": "PCIE_UP*",
+    "pos": [
+     93.825,
+     44.7
+    ],
+    "role": "LEGACY_ALLOC_HOLDER(UP, 8L 时代; alloc 段名 out_U7 映射占位, scope-B 移除)"
+   }
+  },
+  "refdes_authority": "boards/ioconvert_v2.yaml sheets (禁止自造)"
+ },
+ "constraints": {
+  "ac_pad_gnd_cutout": true,
+  "edge_copper_min": 0.3,
+  "escape_transition_zone": {
+   "corridor_y_clearance_from_wall_mm": 0.1025,
+   "escape_clearance_basis": "2026-08-16 冻结: 0.4mm 节距 pad 墙接入段 (线0.205+双净距0.555 > pad节距0.4, 封装固有) 采用逃逸区微净距 0.075 (JLC 线距极限 0.10 内, fcu_router escape_clearance 先例); 实测接入段铜距 0.1725 满足制造, 电气净距降级为逃逸区规则",
+   "escape_clearance_mm": 0.075,
+   "no_90deg": true,
+   "no_via": true,
+   "per_pin_vertical_escape": true,
+   "pitch_mm": 0.4,
+   "refclk_j2_transit": {
+    "applies_to": [
+     "PCIE_REFCLK0_N",
+     "PCIE_REFCLK1_N"
+    ],
+    "authority": "CO-40 L2 自裁（LAYOUT_CONSTITUTION 第二章：走廊分配/过孔策略=L2）",
+    "in2_channel_basis": "In2 竖直 stub 列 x=130.49/131.65 之间净宽 0.955mm（REFCLK1 U 形绕行用）",
+    "in2_channel_x_mm": [
+     130.5925,
+     131.5475
+    ],
+    "in2_layer_basis": "In2 = stripline dual GND ref (In1/In3)；选择依据 = In2 通道几何（CO-72 更正：原文『B.Cu 参考层为 In6 信号层、非定阻抗』在 LID REV6 下已失效——B.Cu 现由 In6=GND 参考、阻抗可控）",
+    "layer_seq": [
+     "F.Cu",
+     "In2.Cu",
+     "F.Cu"
+    ],
+    "max_vias_per_line": 2,
+    "no_via": false,
+    "pad_edge_clearance_mm": 0.3,
+    "perimeter": "域外维持 shop/netclass 判据（PCIe85 0.175 / POWER 0.2）；本例外不放宽任何数值阈值",
+    "reason": "J2 外列 pad (12/30) 被内列焊盘墙封堵：同排缝 0.6-0.35=0.25mm < 0.205+2*0.075=0.355mm（店规 0.175 更甚）⇒ F.Cu 直行物理不可能",
+    "rule": "REFCLK-ECS-001",
+    "skew_compensation": "N 增 ~2.4mm(REFCLK0)/~8.0mm(REFCLK1) ⇒ 须 P 侧幂绕补偿至 intra_pair_skew_mm <= 0.15",
+    "via1_x_basis": "两列缝中线：距内列 pad 东缘 133.3 与 外列 pad 西缘 134.35 各 0.35mm（>=0.3）",
+    "via1_x_mm": 133.825,
+    "via2_x_basis": "内列 pad 西缘 132.0 - via 半径 0.175 - pad_edge_clearance 0.3",
+    "via2_x_max_mm": 131.525,
+    "via_std": {
+     "annular_mm": 0.075,
+     "back_drill": true,
+     "drill_mm": 0.2,
+     "outer_mm": 0.35
+    }
+   },
+   "rule": "ECN-001"
+  },
+  "j2_escape_topology": {
+   "inner_col_x": 132.65,
+   "inner_escape": "内列焊盘直接向左水平逃逸进入走廊 (F.Cu)",
+   "outer_basis": "8 层: In2 独立走廊容纳全部 UP_OUT, B.Cu 释放给低速 (2026-08-19 用户裁决)",
+   "outer_bot_y": 65.5,
+   "outer_col_x": 135.0,
+   "outer_escape": "外列焊盘右侧绕行至 In2 走廊 (v25 求解器分配 vx∈[131.7,136.0] 区)",
+   "outer_route_x": 142.5,
+   "outer_top_y": 42.0,
+   "row_end_y": [
+    42.6,
+    64.8
+   ],
+   "rule": "2026-08-19 8 层定案: J2 双列焊盘墙 0.6 pitch/0.35 高 → UP_OUT 16 网经 In2 单内层走廊 (F→In2→F 单次换层), 不再走 B.Cu",
+   "wall_topology": "SlimSAS 74pin 双列 0.6 pitch, 列距 2.35mm"
+  },
+  "m3_keepout_mm": 3.0,
+  "power_no_fine_traces": true,
+  "refclk_isolated": true,
+  "refclk_isolated_scope": "J2 逃逸区外维持隔离（refclk_isolated 仍 true）；区内仅允许 ECS-001 规定的单次 F.Cu->In2->F.Cu 换层，REFCLK 不与数据扇共用走廊（数据扇在 In2 的列/走廊不因本例外改变）",
+  "trace_clearance_min": 0.1,
+  "trace_width_min": 0.09
+ },
+ "corridors": [
+  {
+   "bands": [
+    {
+     "band": "dn",
+     "band_legacy": "a_per_dn_in",
+     "layer": "In2.Cu",
+     "nets": [
+      "PCIE_DN0",
+      "PCIE_DN1",
+      "PCIE_DN2",
+      "PCIE_DN3",
+      "PCIE_DN4",
+      "PCIE_DN5",
+      "PCIE_DN6",
+      "PCIE_DN7"
+     ],
+     "note": "A_PER -> In2 east crossing (VIA_IN2)",
+     "pairs": 8,
+     "tracks_y": [
+      58.3,
+      59.5,
+      60.7,
+      61.9,
+      63.1,
+      64.3,
+      65.5,
+      66.7
+     ],
+     "tracks_y_basis": "v32 复用老 alloc v4 曾 SOLVED 轨道值 (J2/J3/J4 未动)"
+    },
+    {
+     "band": "up",
+     "band_legacy": "b_pet_up_out",
+     "layer": "In2.Cu",
+     "nets": [
+      "PCIE_UP_OUT0",
+      "PCIE_UP_OUT1",
+      "PCIE_UP_OUT2",
+      "PCIE_UP_OUT3",
+      "PCIE_UP_OUT4",
+      "PCIE_UP_OUT5",
+      "PCIE_UP_OUT6",
+      "PCIE_UP_OUT7"
+     ],
+     "note": "B_PET -> In2 east crossing (VIA_IN2)",
+     "pairs": 8,
+     "tracks_y": [
+      40.3,
+      41.5,
+      42.7,
+      43.9,
+      45.1,
+      46.3,
+      47.5,
+      48.7
+     ],
+     "tracks_y_basis": "v32 复用老 alloc v4 曾 SOLVED 轨道值 (J2/J3/J4 未动)"
+    },
+    {
+     "band": "refclk",
+     "band_legacy": "refclk",
+     "j2_transit": "REFCLK-ECS-001 (F.Cu->In2->F.Cu 单次换层, 仅 J2 pad 场内); 轨 y/layer 不变",
+     "layer": "F.Cu",
+     "layer_note": "per D0-2",
+     "nets": [
+      "PCIE_REFCLK0",
+      "PCIE_REFCLK1"
+     ],
+     "note": "REFCLK0/1 J2<->J3/J4 直通不经芯片",
+     "pairs": 2,
+     "tracks_y": [
+      45.7,
+      50.5
+     ],
+     "tracks_y_basis": "v32 复用老 alloc v4 曾 SOLVED 轨道值 (J2/J3/J4 未动)"
+    }
+   ],
+   "id": "EAST_CHIP_TO_J2",
+   "note": "v31 regen: single DS320 east corridor (L2 v2.0 东走廊 27.40mm); 16 data pairs (DN in A_PER 8 + UP_OUT out B_PET 8) + REFCLK0/1 2 (In2 S翼, L3)",
+   "pairs": 18,
+   "x_range": [
+    105.25,
+    132.65
+   ]
+  },
+  {
+   "bands": [
+    {
+     "band": "up",
+     "band_legacy": "b_per_up_in",
+     "layer": "In2.Cu",
+     "nets": [
+      "PCIE_UP0",
+      "PCIE_UP1",
+      "PCIE_UP2",
+      "PCIE_UP3",
+      "PCIE_UP4",
+      "PCIE_UP5",
+      "PCIE_UP6",
+      "PCIE_UP7"
+     ],
+     "note": "B_PER direct F.Cu west (J3 0-3/J4 4-7)",
+     "pairs": 8,
+     "tracks_y": [
+      40.7,
+      41.9,
+      43.1,
+      44.3,
+      45.5,
+      46.7,
+      47.9,
+      49.1
+     ],
+     "tracks_y_basis": "v32 复用老 alloc v4 曾 SOLVED 轨道值 (J2/J3/J4 未动)"
+    },
+    {
+     "band": "dn",
+     "band_legacy": "a_pet_dn_out",
+     "layer": "In2.Cu",
+     "nets": [
+      "PCIE_DN_OUT0",
+      "PCIE_DN_OUT1",
+      "PCIE_DN_OUT2",
+      "PCIE_DN_OUT3",
+      "PCIE_DN_OUT4",
+      "PCIE_DN_OUT5",
+      "PCIE_DN_OUT6",
+      "PCIE_DN_OUT7"
+     ],
+     "note": "A_PET direct F.Cu west (J3 0-3/J4 4-7)",
+     "pairs": 8,
+     "tracks_y": [
+      58.7,
+      59.9,
+      61.1,
+      62.3,
+      63.5,
+      64.7,
+      65.9,
+      67.1
+     ],
+     "tracks_y_basis": "v32 复用老 alloc v4 曾 SOLVED 轨道值 (J2/J3/J4 未动)"
+    },
+    {
+     "band": "refclk",
+     "band_legacy": "refclk",
+     "layer": "F.Cu",
+     "layer_note": "per D0-2",
+     "nets": [
+      "PCIE_REFCLK0",
+      "PCIE_REFCLK1"
+     ],
+     "note": "REFCLK0/1 直通",
+     "pairs": 2,
+     "tracks_y": [
+      45.7,
+      50.5
+     ],
+     "tracks_y_basis": "v32 复用老 alloc v4 曾 SOLVED 轨道值 (J2/J3/J4 未动)"
+    }
+   ],
+   "id": "WEST_MCIO_TO_CHIP",
+   "note": "v31 regen: single DS320 west corridor (L2 v2.0 西走廊 17.30mm); 16 data pairs (UP in B_PER 8 + DN_OUT out A_PET 8) + REFCLK0/1 2",
+   "pairs": 18,
+   "x_range": [
+    65.05,
+    82.35
+   ]
+  }
+ ],
+ "impedance": {
+  "alt_gap_mm": 0.2,
+  "alt_width_mm": 0.215,
+  "coupon_required": true,
+  "gap_mm": 0.175,
+  "model": "JLC_SI9000_H1_5.0mil_Er1_4.3",
+  "target_zdiff": 85.0,
+  "tolerance_pct": 10,
+  "width_mm": 0.205,
+  "gap_mm_semantics": "lower_bound（DRC clearance 0.175）；几何真源 = per_layer[*].gap_mm_delivered",
+  "per_layer": {
+   "F.Cu": {
+    "kind": "microstrip",
+    "refs": [
+     "In1.Cu"
+    ],
+    "w_mm": 0.205,
+    "h_mm": 0.1164,
+    "er": 4.16,
+    "gap_mm_delivered": [
+     0.295,
+     0.395
+    ],
+    "material": "2116*1"
+   },
+   "In2.Cu": {
+    "kind": "symmetric_stripline",
+    "refs": [
+     "In1.Cu",
+     "In3.Cu"
+    ],
+    "w_mm": 0.16,
+    "b_mm": 0.5,
+    "er": 3.99,
+    "gap_mm_delivered": [
+     0.34,
+     0.44
+    ],
+    "material": "core 0.25*2"
+   },
+   "In5.Cu": {
+    "kind": "symmetric_stripline",
+    "refs": [
+     "In4.Cu",
+     "In6.Cu"
+    ],
+    "w_mm": 0.16,
+    "b_mm": 0.5,
+    "er": 3.99,
+    "gap_mm_delivered": [
+     0.34,
+     0.44
+    ],
+    "material": "core 0.25*2"
+   },
+   "B.Cu": {
+    "kind": "microstrip",
+    "refs": [
+     "In6.Cu"
+    ],
+    "w_mm": 0.205,
+    "h_mm": 0.1164,
+    "er": 4.16,
+    "gap_mm_delivered": [
+     0.295,
+     0.395
+    ],
+    "material": "2116*1"
+   }
+  },
+  "per_layer_basis": "CO-68：方案(a) 下 4 信号层**全部有参考平面**（修复 CO-62 的 B.Cu 无参考）；内层线宽 0.205→0.16（铜厚自洽闭合要求）。终判 = 板厂券。",
+  "width_mm_by_layer": {
+   "F.Cu": 0.205,
+   "In2.Cu": 0.16,
+   "In5.Cu": 0.16,
+   "B.Cu": 0.205
+  }
+ },
+ "layer_plan": {
+  "basis": "L2_STRUCTURE_v2.0 (6L 判定流程终定) + per_ball_escape_6L_report.json v31 (ECN-007 regen: FEASIBLE direct=32 via=32 crossing=16) + C5 expect matrix v28 _v30 修正",
+  "chip_side_routes": [],
+  "execution_mode": "frozen_polyline",
+  "in2_crossing_nets": {
+   "semantics": "crossing_pairs=16 = J2 侧网球组 A_PER+B_PET lanes0-7 (per_ball_escape_6L_report v31); N/S 翼各 8 对; In2 双 GND 参考带状线 (6L); 逐网 via/in2_path = L3 open",
+   "stale_cleared": "_U3/_U7 era entries removed (nets deleted in v30 ECO)"
+  },
+  "in2_width_mm": 0.205,
+  "in6_usage": "removed: 8L In6.Cu semantics (6L stack F/In1/In2/In3/In4/B; In2 only internal signal layer)",
+  "j2_escape_nets": {
+   "semantics": "东走廊(J2) nets = PCIE_DN0-7 (A_PER 带, VIA_IN2->In2 east) + PCIE_UP_OUT0-7_J2 (B_PET 带, VIA_IN2->In2 east); dogbone/via coords L3 open",
+   "stale_cleared": "old U3/U7-row polylines removed"
+  },
+  "low_speed_nets": {
+   "basis": "board netlist v31 (k2_sch.yaml): I2C1/I2C2/UART/PERST/GPIO/FRU sideband; layer In2/B.Cu(F.Cu 外围) per L2 v2.0; segs L3 open",
+   "nets": [
+    "I2C1_SCL",
+    "I2C1_SDA",
+    "PERSTA#",
+    "PERSTB#",
+    "PWR_BTN_OUT",
+    "PWR_BTN_ISO",
+    "PWR_CTRL_OUT",
+    "GPIO_LED",
+    "LED_A",
+    "UART_TX",
+    "UART_RX",
+    "NRST",
+    "SWCLK_BOOT0",
+    "SWDIO",
+    "SW_U2",
+    "FB_U2",
+    "PWR_5V_KEY",
+    "I2C2_SCL",
+    "I2C2_SDA"
+   ],
+   "segs": "L3 open"
+  },
+  "regen_v31": {
+   "at": "2026-09-06 (m13_v31, gaps A/C closed; E open)",
+   "authority": "ECN-007 (port_to_corridor band keys) + gap A user ruling (sideband L2 target/MCU I2C2) + L1/L2 v2.0 对账修正",
+   "open_for_L3": "per-net dogbone/via/in2 coordinates + wing N/S lane assignment + low-speed/sideband routing plan = L3 施工 (engine chain escape_connect_gen etc.) next session; board currently 0 track/0 via (v31 probe)",
+   "scope": "stale 8L/U3-U7 construction-data cleared (nets *_U3/_U7 no longer exist on真板 v30 ECO); corrected per-ball escape semantics injected (band->corridor method from per_ball_escape_6L_report.json v31)"
+  },
+  "strap_domain_v32": {
+   "at": "2026-09-07 (m13_v32)",
+   "authority": "m13_v32_session_handoff.md §3b 用户裁决 A/B/C (2026-09-07); v31 §4 open (gap E L3 施工) 承接",
+   "deps": [
+    "HS escape per-net dogbone/via/In2 coord freeze (v31 open item #1) as clearance input where corridor-adjacent",
+    "PDN plane (In4 P3V3 / In1 In3 GND pours) for PD/plane stitching"
+   ],
+   "exec_gate": "low_speed_apply (engine chain) after coords frozen; freeze_ctl unlock->backup->apply->lock; DRC 归零为核对",
+   "non_strap_sideband": {
+    "ALL_DONE_FF27": "NC no-action",
+    "PD_11-8_FJ6": "P3V3 with PDN batch (ruling C)",
+    "PD_15-12_FF8": "P3V3 with PDN batch (ruling C)",
+    "PD_3-0_FF33": "GND via (ruling C)",
+    "PD_7-4_FJ31": "GND via (ruling C)",
+    "READ_EN_FJ25": "NC no-action",
+    "SCL_B31": "I2C2_SCL same",
+    "SDA_B28": "I2C2_SDA deferred to low-speed whole-plan (R33/R34 on board)"
+   },
+   "open_for_coords": [
+    "ball-gap via + micro-dogbone per-ball 2D solve (17 balls outside per_ball engine 64-HS scope)",
+    "east-4 (B23/B25/F34/G1) E-open 2.93/2.33/1.14mm vs east corridor x>=105.25 keepout netting check",
+    "south strip R row final coords + GND via grid",
+    "SPEC layer_plan.low_speed_nets schema migration (nets str list -> dict entries) pending atomic w/ first low-speed routing"
+   ],
+   "placement": {
+    "decap_column_keepout_mm": {
+     "x": [
+      90.25,
+      91.75
+     ],
+     "y": [
+      58.5,
+      64.5
+     ]
+    },
+    "footprint": "Resistor_SMD:R_0603_1608Metric",
+    "rationale": "远离 HS 走廊/端区; 净空审计单一域; 9 件同域可复跑",
+    "row_plan": "2 rows x 5/4 stagger, part spacing >=0.5mm",
+    "scheme": "south_strip_concentrated (甲案)",
+    "zone_mm": {
+     "x": [
+      83.0,
+      104.0
+     ],
+     "y": [
+      58.5,
+      66.0
+     ]
+    }
+   },
+   "resistors": [
+    {
+     "ball": "FF24",
+     "ball_board_pos": [
+      83.43,
+      54.71
+     ],
+     "net": "DS320_STRAP_MODE",
+     "r_a_net": "DS320_STRAP_MODE",
+     "r_b_net": "GND",
+     "resistor": "R35",
+     "side": "west",
+     "signal": "MODE",
+     "value": "6.19k 1% (E96) L2"
+    },
+    {
+     "ball": "B23",
+     "ball_board_pos": [
+      104.69,
+      54.41
+     ],
+     "net": "DS320_STRAP_A_ADDR0_7-0",
+     "r_a_net": "DS320_STRAP_A_ADDR0_7-0",
+     "r_b_net": "GND",
+     "resistor": "R36",
+     "side": "east",
+     "signal": "A_ADDR0_7-0",
+     "value": "1k 1% L0"
+    },
+    {
+     "ball": "G1",
+     "ball_board_pos": [
+      103.65,
+      49.76
+     ],
+     "net": "DS320_STRAP_A_ADDR1_7-0",
+     "r_a_net": "DS320_STRAP_A_ADDR1_7-0",
+     "r_b_net": "GND",
+     "resistor": "R37",
+     "side": "east",
+     "signal": "A_ADDR1_7-0",
+     "value": "1k 1% L0"
+    },
+    {
+     "ball": "B25",
+     "ball_board_pos": [
+      104.69,
+      55.01
+     ],
+     "net": "DS320_STRAP_B_ADDR0_7-0",
+     "r_a_net": "DS320_STRAP_B_ADDR0_7-0",
+     "r_b_net": "GND",
+     "resistor": "R38",
+     "side": "east",
+     "signal": "B_ADDR0_7-0",
+     "value": "8.25k 1% L1"
+    },
+    {
+     "ball": "F34",
+     "ball_board_pos": [
+      103.95,
+      57.12
+     ],
+     "net": "DS320_STRAP_B_ADDR1_7-0",
+     "r_a_net": "DS320_STRAP_B_ADDR1_7-0",
+     "r_b_net": "GND",
+     "resistor": "R39",
+     "side": "east",
+     "signal": "B_ADDR1_7-0",
+     "value": "1k 1% L0"
+    },
+    {
+     "ball": "FF5",
+     "ball_board_pos": [
+      83.43,
+      51.11
+     ],
+     "net": "DS320_STRAP_A_ADDR0_15-8",
+     "r_a_net": "DS320_STRAP_A_ADDR0_15-8",
+     "r_b_net": "GND",
+     "resistor": "R42",
+     "side": "west",
+     "signal": "A_ADDR0_15-8",
+     "value": "1k 1% L0"
+    },
+    {
+     "ball": "FJ3",
+     "ball_board_pos": [
+      82.91,
+      50.81
+     ],
+     "net": "DS320_STRAP_A_ADDR1_15-8",
+     "r_a_net": "DS320_STRAP_A_ADDR1_15-8",
+     "r_b_net": "GND",
+     "resistor": "R43",
+     "side": "west",
+     "signal": "A_ADDR1_15-8",
+     "value": "1k 1% L0"
+    },
+    {
+     "ball": "FJ28",
+     "ball_board_pos": [
+      82.91,
+      55.61
+     ],
+     "net": "DS320_STRAP_B_ADDR0_15-8",
+     "r_a_net": "DS320_STRAP_B_ADDR0_15-8",
+     "r_b_net": "GND",
+     "resistor": "R44",
+     "side": "west",
+     "signal": "B_ADDR0_15-8",
+     "value": "1k 1% L0"
+    },
+    {
+     "ball": "FF30",
+     "ball_board_pos": [
+      83.43,
+      55.91
+     ],
+     "net": "DS320_STRAP_B_ADDR1_15-8",
+     "r_a_net": "DS320_STRAP_B_ADDR1_15-8",
+     "r_b_net": "GND",
+     "resistor": "R45",
+     "side": "west",
+     "signal": "B_ADDR1_15-8",
+     "value": "1k 1% L0"
+    }
+   ],
+   "route_strategy": {
+    "escape": "ball-gap via (0.35) at adjacent-pad midpoint (pad-edge clr 0.125) -> In2 (internal, may pass under chip)",
+    "f_cu_stub_basis": "JLC06161H min 0.09/0.10 (L1 v2.0 hard constraint 4); LOW_SPEED 0.15 直出不可行 (0.35>0.30 channel)",
+    "f_cu_stub_mm": 0.1,
+    "south_up_via_then_r": "up-via to F.Cu at south strip -> R/A pad; R/B -> GND via (0.2/0.35 std, mechanism per ruling C)"
+   },
+   "status": "decision_frozen / coords_open (见 open_for_coords)"
+  },
+  "wp1_escape_nets": {
+   "semantics": "西走廊(MCIO) nets = PCIE_UP0-7 (B_PER 带, DIRECT F.Cu west) + PCIE_DN_OUT0-7_MCIO (A_PET 带, DIRECT F.Cu west); coords L3 open",
+   "stale_cleared": "old 26-net wp1 polylines removed"
+  },
+  "wp6_single_nets": {
+   "basis": "L3 open",
+   "nets": [],
+   "segments": [],
+   "segs": "L3 open"
+  }
+ },
+ "net_classes": {
+  "LOW_SPEED": {
+   "clearance": 0.1,
+   "width": 0.15
+  },
+  "PCIe85": {
+   "clearance": 0.175,
+   "diff_pair": {
+    "p_gap": 0.175,
+    "p_width": 0.205,
+    "p_gap_semantics": "lower_bound",
+    "p_gap_geometry_mm_delivered": 0.295,
+    "p_gap_geometry_source": "L4 construction 实测（CO-54 card / tools/p3_v57_co54_spec_delivery_audit.py；对内中心 0.500/0.600；去环：不引用下游工件 sha）",
+    "p_width_mm_by_layer": {
+     "F.Cu": 0.205,
+     "In2.Cu": 0.16,
+     "In5.Cu": 0.16,
+     "B.Cu": 0.205
+    },
+    "p_width_scope": "netclass 标量 p_width=0.205 保留（外层次口径）；内层交付线宽 = p_width_mm_by_layer（CO-68 几何协同：内层 0.16 以满足对称叠层 85Ω 闭合）"
+   },
+   "inter_pair_spacing_mm": 0.875,
+   "intra_pair_skew_mm": 0.15,
+   "width": 0.205,
+   "inter_pair_spacing_scope": "0.875 = 对间铜边净空设计基线（容量/新布线口径）；as-built 走廊轨距 1.20（corridors[].bands[].tracks_y，L2 CO-10 落地）⇒ 交付对间最小铜边 0.345（In6 长平行带）；对间串扰复核 = 领域求解器/板厂券，记录见 CO-54 F2/F3"
+  },
+  "POWER": {
+   "clearance": 0.2,
+   "width": 0.5
+  }
+ },
+ "pd": {
+  "decoupling": "C67_C68_C72_via_to_plane",
+  "gnd_planes": [
+   "In1.Cu",
+   "In3.Cu",
+   "In6.Cu"
+  ],
+  "gnd_stitch_via": {
+   "candidates_file": "j2_via_gnd_stitch_v8.json",
+   "rule": "差分换层处硬性 GND 伴行 via (每换层点 ≥1, 2026-08-19 8 层定案)",
+   "via_drill": 0.2,
+   "via_outer": 0.35
+  },
+  "power_partition": {
+   "P3V3": "In4 一区 (东侧)",
+   "P3V3_AUX_MCU_VDD": "In4 二区 (西侧)"
+  },
+  "power_plane_layer": "In4.Cu",
+  "zone_defs": {
+   "decoupling_via_to_plane": {
+    "rule": "C67/C68/C72 GND pad via 直达 In1/In3/In6 GND 平面 (贯通孔 drill 0.2/outer 0.35, no_via_in_pad, pad 边缘净距 ≥0.3)",
+    "vias": [
+     {
+      "basis": "C67 pad2(GND) 中心(91.45,49) 右缘 91.75 + pad_edge_clearance 0.3 + via_outer/2 0.175 = 92.225; 距 U7 侧 pad 最小 1.315mm [T4.4 微调避让新 T3]",
+      "net": "GND",
+      "pos": [
+       91.825,
+       48.6
+      ],
+      "ref": "C67"
+     },
+     {
+      "basis": "C68 pad2(GND) 中心(91.45,52) 右缘 91.75 + 0.3 + 0.175 = 92.225; 距 U7/U3 侧 pad 最小 4.305mm [T4.4 微调避让新 T3]",
+      "net": "GND",
+      "pos": [
+       91.625,
+       52.8
+      ],
+      "ref": "C68"
+     },
+     {
+      "basis": "C72 pad2(GND) 中心(91.45,55) 右缘 91.75 + 0.3 + 0.175 = 92.225; 距 U3 侧 pad 最小 4.704mm [T4.4 微调避让新 T3]",
+      "net": "GND",
+      "pos": [
+       91.625,
+       55.0
+      ],
+      "ref": "C72"
+     }
+    ]
+   },
+   "ecn_pending_items": [
+    {
+     "desc": "P3V3 源器件物理位置与 pd 分区语义冲突: U2@33,37 pad5=P3V3, C84@44,40 pad1=P3V3, U4@40,37 pad3=P3V3 均位于 In4 西区铜皮(P3V3_AUX_MCU_VDD 网)内; 而 pd 语义 P3V3=东区, 中间 In4 走线带 x∈[50,88.17] 阻断跨带铜皮",
+     "direction": "待 PM 裁决: a) P3V3 源经 B.Cu/In6 走线绕行至东区 b) 西区增 P3V3 小岛 c) 分区边界重划; 禁止自行选择",
+     "id": "T2-ECN-1",
+     "ruled": true,
+     "ruled_at": "2026-08-23T10:21:11+00:00",
+     "ruling": "PM 裁决方向 a 变体：P3V3 经 B.Cu POWER_POUR 桥接西区源→东区 In4 主平面（SPEC stackup 明示 B.Cu=POWER_POUR，In4 走线带不跨）；顶部条带+西区 pocket 多边形 + U4/C84 F.Cu 短段+via 显式接入 + 东端 via 阵列，已落盘 SPEC pd.zone_defs.power_zones",
+     "severity": "HIGH"
+    },
+    {
+     "desc": "J3/J4 (MCIO) A9 pad=P3V3_AUX @(58.9,43.25)/(58.9,61.45) 位于 In4 走线带内(x=58.9 ∈ [50,88.17]), 西区铜皮右界 49.8 无法覆盖 → P3V3_AUX 到 MCIO 供电路径未冻结",
+     "direction": "待 PM 裁决: a) B.Cu 铺铜到 J3/J4 b) In6 低速层走线 c) 走线带缺口; 禁止自行选择",
+     "id": "T2-ECN-2",
+     "ruled": true,
+     "ruled_at": "2026-08-23T10:21:11+00:00",
+     "ruling": "PM 裁决方向 a：P3V3_AUX 经 B.Cu 铜皮到 J3/J4 A9 pad（In4 西区 drop via → B.Cu 上带接 J3.A9 + In6 跨层搭桥 → B.Cu 下带接 J4.A9）；J3.A9 坐标以板实测 (60.1,45.75) 为准（原 ECN desc 的 (58.9,43.25) 与板不符）；已落盘 SPEC pd.zone_defs.power_zones",
+     "severity": "HIGH"
+    },
+    {
+     "desc": "gnd_stitch_via 具体坐标未冻结 (j2_via_gnd_stitch_v8.json 不存在); 已落盘规则 + 候选推导方法",
+     "direction": "待 ECN 裁决后按 candidate_method 落盘坐标表",
+     "id": "T2-ECN-3",
+     "ruled": true,
+     "ruled_at": "2026-08-23T10:21:11+00:00",
+     "ruling": "按 candidate_method 落盘 gnd_stitch_via.coordinates 坐标表：100 换层点 → 69 可落 + 31 显式 blocked（名义 0.6mm 正交位被相邻差分墙占用）；ecn_pending=false；blocked 显式标注，禁止静默放弃",
+     "severity": "MED"
+    },
+    {
+     "id": "CO-72-PDN-1",
+     "ruled": false,
+     "desc": "pd.power_zones[2..4] 把 P3V3/P3V3_AUX/MCU_VDD 铺到 B.Cu（POWER_POUR/桥接/短段）；但 8L LID.1/REV6 下 B.Cu 为**信号层**（且 REV6 下由 In6=GND 参考、阻抗可控），与 B.Cu 承载的 PCIe 逃逸/落段直接冲突。",
+     "nature": "既有漂移（8L 迁移起；本件仅登记，不擅改铜皮）",
+     "resolution_scope": "L1（电源域划分 / 层数）",
+     "direction": "待 owner：a) In4 分区扩展/重划  b) 增设内部电源层（层数）  c) B.Cu 信号改层；禁止自行选择"
+    }
+   ],
+   "edge_copper_min_mm": 0.3,
+   "frozen_at": "2026-08-21T2-pre",
+   "frozen_basis": "SPEC board/corridors/capacitor_walls/components/constraints + wp1_escape_nets In4 段 + k2_v4.kicad_pcb 重建板实测 (101 fp, U3=DN@62.7/U7=UP@44.7)",
+   "gnd_planes": [
+    {
+     "basis": "整面铺铜, 板边内缩 edge_copper_min 0.3mm (板边铜≥0.3 约束)",
+     "layer": "In1.Cu",
+     "net": "GND",
+     "polygon": [
+      [
+       23.3,
+       33.3
+      ],
+      [
+       142.7,
+       33.3
+      ],
+      [
+       142.7,
+       70.7
+      ],
+      [
+       23.3,
+       70.7
+      ]
+     ]
+    },
+    {
+     "basis": "整面铺铜, 板边内缩 edge_copper_min 0.3mm (板边铜≥0.3 约束)",
+     "layer": "In3.Cu",
+     "net": "GND",
+     "polygon": [
+      [
+       23.3,
+       33.3
+      ],
+      [
+       142.7,
+       33.3
+      ],
+      [
+       142.7,
+       70.7
+      ],
+      [
+       23.3,
+       70.7
+      ]
+     ]
+    },
+    {
+     "basis": "整面铺铜, 板边内缩 edge_copper_min 0.3mm (板边铜≥0.3 约束)；CO-72：层名随 LID REV6 由 In5.Cu 更正为 In6.Cu（方案(a) 后 In5=信号、In6=GND；几何/网/铜皮形状不变）",
+     "layer": "In6.Cu",
+     "net": "GND",
+     "polygon": [
+      [
+       23.3,
+       33.3
+      ],
+      [
+       142.7,
+       33.3
+      ],
+      [
+       142.7,
+       70.7
+      ],
+      [
+       23.3,
+       70.7
+      ]
+     ]
+    }
+   ],
+   "gnd_stitch_via": {
+    "candidate_method": "从冻结 wp1_escape_nets 每网 vias 列表(44 个换层 via) + j2_escape_nets 换层点(56) 推导伴行位: 每换层 via 0.6mm 正交 4 向确定性候选(排除 GND 网障碍), 逐障碍按网级净距(PCIe85 0.175/低速 0.1)校验, 取余量最大候选; 逐坐标已对 k2_v4 重建板 pad/segment 几何核对",
+    "coordinates": [
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_UP3_P 换层via(55.30,41.25) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(55.30,40.65), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 55.3,
+      "y": 40.65
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_UP3_P 换层via(84.83,44.70) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(84.23,44.70), 距差分 via 中心 0.6mm, 净距余量 0.025mm",
+      "net": "GND",
+      "x": 84.23,
+      "y": 44.7
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_UP2_P 换层via(57.10,40.85) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(57.10,40.25), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 57.1,
+      "y": 40.25
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_UP2_P 换层via(84.83,46.40) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(84.23,46.40), 距差分 via 中心 0.6mm, 净距余量 0.150mm",
+      "net": "GND",
+      "x": 84.23,
+      "y": 46.4
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_UP1_N 换层via(61.90,40.45) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(61.90,39.85), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 61.9,
+      "y": 39.85
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_UP1_N 换层via(84.83,47.20) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(84.23,47.20), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 84.23,
+      "y": 47.2
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_UP1_P 换层via(62.50,40.05) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(62.50,39.45), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 62.5,
+      "y": 39.45
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_UP1_P 换层via(84.83,48.10) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(84.23,48.10), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 84.23,
+      "y": 48.1
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_UP0_N 换层via(63.70,39.65) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(63.70,39.05), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 63.7,
+      "y": 39.05
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_UP0_N 换层via(84.83,48.90) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(84.23,48.90), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 84.23,
+      "y": 48.9
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_UP0_P 换层via(64.30,39.25) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(63.70,39.25), 距差分 via 中心 0.6mm, 净距余量 0.050mm",
+      "net": "GND",
+      "x": 63.7,
+      "y": 39.25
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_UP0_P 换层via(84.83,49.80) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(84.23,49.80), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 84.23,
+      "y": 49.8
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_DN_OUT1_P_MCIO 换层via(62.50,48.35) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(62.50,48.95), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 62.5,
+      "y": 48.95
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_DN_OUT1_P_MCIO 换层via(75.17,58.55) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(75.77,58.55), 距差分 via 中心 0.6mm, 净距余量 0.000mm",
+      "net": "GND",
+      "x": 75.77,
+      "y": 58.55
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_DN_OUT1_N_MCIO 换层via(61.90,47.95) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(61.90,48.55), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 61.9,
+      "y": 48.55
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_DN_OUT1_N_MCIO 换层via(77.47,59.55) 0.6mm 正交候选, 逐障碍网级净距校验 → 4 候选全被 ['C20.1', 'PCIE_DN_OUT1_N_U3', -0.025] 占用(余量 -0.025) → 显式 blocked; GND 回路由 In1/3/5 平面 + 连接器 GND 脚/去耦墙 GND via 承担, 待施工裁决(禁止自行发明路径)",
+      "net": "GND",
+      "status": "blocked",
+      "x": null,
+      "y": null
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_DN_OUT2_P_MCIO 换层via(57.10,47.55) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(57.10,48.15), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 57.1,
+      "y": 48.15
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_DN_OUT2_P_MCIO 换层via(78.28,59.55) 0.6mm 正交候选, 逐障碍网级净距校验 → 4 候选全被 ['C21.2', 'PCIE_DN_OUT2_P_MCIO', -0.025] 占用(余量 -0.025) → 显式 blocked; GND 回路由 In1/3/5 平面 + 连接器 GND 脚/去耦墙 GND via 承担, 待施工裁决(禁止自行发明路径)",
+      "net": "GND",
+      "status": "blocked",
+      "x": null,
+      "y": null
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_DN_OUT2_N_MCIO 换层via(56.50,47.15) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(56.50,47.75), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 56.5,
+      "y": 47.75
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_DN_OUT2_N_MCIO 换层via(80.08,59.05) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(79.48,59.05), 距差分 via 中心 0.6mm, 净距余量 0.201mm",
+      "net": "GND",
+      "x": 79.48,
+      "y": 59.05
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_DN_OUT3_P_MCIO 换层via(55.30,46.75) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(55.30,47.35), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 55.3,
+      "y": 47.35
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_DN_OUT3_P_MCIO 换层via(80.88,59.05) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(81.48,59.05), 距差分 via 中心 0.6mm, 净距余量 0.080mm",
+      "net": "GND",
+      "x": 81.48,
+      "y": 59.05
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_DN_OUT3_N_MCIO 换层via(54.70,46.35) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(54.70,46.95), 距差分 via 中心 0.6mm, 净距余量 0.075mm",
+      "net": "GND",
+      "x": 54.7,
+      "y": 46.95
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_DN_OUT3_N_MCIO 换层via(81.17,57.55) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(81.77,57.55), 距差分 via 中心 0.6mm, 净距余量 0.030mm",
+      "net": "GND",
+      "x": 81.77,
+      "y": 57.55
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_UP4_N 换层via(55.30,64.55) 0.6mm 正交候选, 逐障碍网级净距校验 → 4 候选全被 ['F.Cu', 'I2C1_SCL', -0.025] 占用(余量 -0.025) → 显式 blocked; GND 回路由 In1/3/5 平面 + 连接器 GND 脚/去耦墙 GND via 承担, 待施工裁决(禁止自行发明路径)",
+      "net": "GND",
+      "status": "blocked",
+      "x": null,
+      "y": null
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_UP4_N 换层via(86.33,44.10) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(86.33,43.50), 距差分 via 中心 0.6mm, 净距余量 0.020mm",
+      "net": "GND",
+      "x": 86.33,
+      "y": 43.5
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_UP5_N 换层via(57.10,64.55) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(57.10,65.15), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 57.1,
+      "y": 65.15
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_UP5_N 换层via(87.83,42.90) 0.6mm 正交候选, 逐障碍网级净距校验 → 4 候选全被 ['B.Cu', 'PCIE_UP5_N', -0.13] 占用(余量 -0.130) → 显式 blocked; GND 回路由 In1/3/5 平面 + 连接器 GND 脚/去耦墙 GND via 承担, 待施工裁决(禁止自行发明路径)",
+      "net": "GND",
+      "status": "blocked",
+      "x": null,
+      "y": null
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_UP6_N 换层via(62.50,65.35) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(62.50,65.95), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 62.5,
+      "y": 65.95
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_UP6_N 换层via(86.33,41.20) 0.6mm 正交候选, 逐障碍网级净距校验 → 4 候选全被 ['B.Cu', 'PCIE_UP1_N', -0.2] 占用(余量 -0.200) → 显式 blocked; GND 回路由 In1/3/5 平面 + 连接器 GND 脚/去耦墙 GND via 承担, 待施工裁决(禁止自行发明路径)",
+      "net": "GND",
+      "status": "blocked",
+      "x": null,
+      "y": null
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_UP6_P 换层via(61.90,64.95) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(61.90,65.55), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 61.9,
+      "y": 65.55
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_UP6_P 换层via(87.83,42.10) 0.6mm 正交候选, 逐障碍网级净距校验 → 4 候选全被 ['B.Cu', 'PCIE_UP5_N', -0.15] 占用(余量 -0.150) → 显式 blocked; GND 回路由 In1/3/5 平面 + 连接器 GND 脚/去耦墙 GND via 承担, 待施工裁决(禁止自行发明路径)",
+      "net": "GND",
+      "status": "blocked",
+      "x": null,
+      "y": null
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_UP7_N 换层via(64.30,66.15) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(64.30,66.75), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 64.3,
+      "y": 66.75
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_UP7_N 换层via(86.33,40.50) 0.6mm 正交候选, 逐障碍网级净距校验 → 4 候选全被 ['B.Cu', 'PCIE_UP0_N', -0.1] 占用(余量 -0.100) → 显式 blocked; GND 回路由 In1/3/5 平面 + 连接器 GND 脚/去耦墙 GND via 承担, 待施工裁决(禁止自行发明路径)",
+      "net": "GND",
+      "status": "blocked",
+      "x": null,
+      "y": null
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_UP7_P 换层via(63.70,65.75) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(63.70,66.35), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 63.7,
+      "y": 66.35
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_UP7_P 换层via(87.83,40.90) 0.6mm 正交候选, 逐障碍网级净距校验 → 4 候选全被 ['F.Cu', 'PCIE_UP7_N', -0.15] 占用(余量 -0.150) → 显式 blocked; GND 回路由 In1/3/5 平面 + 连接器 GND 脚/去耦墙 GND via 承担, 待施工裁决(禁止自行发明路径)",
+      "net": "GND",
+      "status": "blocked",
+      "x": null,
+      "y": null
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_DN_OUT4_P_MCIO 换层via(54.70,60.45) 0.6mm 正交候选, 逐障碍网级净距校验 → 4 候选全被 ['In2.Cu', 'PCIE_UP4_N', -0.17] 占用(余量 -0.170) → 显式 blocked; GND 回路由 In1/3/5 平面 + 连接器 GND 脚/去耦墙 GND via 承担, 待施工裁决(禁止自行发明路径)",
+      "net": "GND",
+      "status": "blocked",
+      "x": null,
+      "y": null
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_DN_OUT4_N_MCIO 换层via(55.30,60.45) 0.6mm 正交候选, 逐障碍网级净距校验 → 4 候选全被 ['In2.Cu', 'PCIE_UP4_N', -0.17] 占用(余量 -0.170) → 显式 blocked; GND 回路由 In1/3/5 平面 + 连接器 GND 脚/去耦墙 GND via 承担, 待施工裁决(禁止自行发明路径)",
+      "net": "GND",
+      "status": "blocked",
+      "x": null,
+      "y": null
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_DN_OUT7_P_MCIO 换层via(63.70,57.50) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(63.70,56.90), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 63.7,
+      "y": 56.9
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_DN_OUT7_N_MCIO 换层via(64.30,57.50) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(64.30,56.90), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 64.3,
+      "y": 56.9
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_DN_OUT5_P_MCIO 换层via(56.50,60.45) 0.6mm 正交候选, 逐障碍网级净距校验 → 4 候选全被 ['In2.Cu', 'PCIE_UP4_N', -0.17] 占用(余量 -0.170) → 显式 blocked; GND 回路由 In1/3/5 平面 + 连接器 GND 脚/去耦墙 GND via 承担, 待施工裁决(禁止自行发明路径)",
+      "net": "GND",
+      "status": "blocked",
+      "x": null,
+      "y": null
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_DN_OUT5_N_MCIO 换层via(57.10,60.45) 0.6mm 正交候选, 逐障碍网级净距校验 → 4 候选全被 ['In2.Cu', 'PCIE_UP4_N', -0.17] 占用(余量 -0.170) → 显式 blocked; GND 回路由 In1/3/5 平面 + 连接器 GND 脚/去耦墙 GND via 承担, 待施工裁决(禁止自行发明路径)",
+      "net": "GND",
+      "status": "blocked",
+      "x": null,
+      "y": null
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_DN_OUT6_N_MCIO 换层via(62.50,62.30) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(62.50,62.90), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 62.5,
+      "y": 62.9
+     },
+     {
+      "basis": "T2-ECN-3 派生: wp1 PCIE_DN_OUT6_P_MCIO 换层via(61.90,60.45) 0.6mm 正交候选, 逐障碍网级净距校验 → 4 候选全被 ['In2.Cu', 'PCIE_DN_OUT5_N_MCIO', -0.2] 占用(余量 -0.200) → 显式 blocked; GND 回路由 In1/3/5 平面 + 连接器 GND 脚/去耦墙 GND via 承担, 待施工裁决(禁止自行发明路径)",
+      "net": "GND",
+      "status": "blocked",
+      "x": null,
+      "y": null
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_DN0_N 换层via(133.83,54.30) 0.6mm 正交候选, 逐障碍网级净距校验 → 4 候选全被 ['In2.Cu', 'PCIE_DN0_N', -0.277] 占用(余量 -0.277) → 显式 blocked; GND 回路由 In1/3/5 平面 + 连接器 GND 脚/去耦墙 GND via 承担, 待施工裁决(禁止自行发明路径)",
+      "net": "GND",
+      "status": "blocked",
+      "x": null,
+      "y": null
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_DN0_N 换层via(99.60,58.50) 0.6mm 正交候选, 逐障碍网级净距校验 → 4 候选全被 ['F.Cu', 'PCIE_DN0_P', -0.15] 占用(余量 -0.150) → 显式 blocked; GND 回路由 In1/3/5 平面 + 连接器 GND 脚/去耦墙 GND via 承担, 待施工裁决(禁止自行发明路径)",
+      "net": "GND",
+      "status": "blocked",
+      "x": null,
+      "y": null
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_DN1_P 换层via(133.83,54.90) 0.6mm 正交候选, 逐障碍网级净距校验 → 4 候选全被 ['B.Cu', 'I2C1_SCL', -0.155] 占用(余量 -0.155) → 显式 blocked; GND 回路由 In1/3/5 平面 + 连接器 GND 脚/去耦墙 GND via 承担, 待施工裁决(禁止自行发明路径)",
+      "net": "GND",
+      "status": "blocked",
+      "x": null,
+      "y": null
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_DN1_P 换层via(99.60,59.30) 0.6mm 正交候选, 逐障碍网级净距校验 → 4 候选全被 ['F.Cu', 'PCIE_DN1_N', -0.15] 占用(余量 -0.150) → 显式 blocked; GND 回路由 In1/3/5 平面 + 连接器 GND 脚/去耦墙 GND via 承担, 待施工裁决(禁止自行发明路径)",
+      "net": "GND",
+      "status": "blocked",
+      "x": null,
+      "y": null
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_DN2_N 换层via(133.83,57.90) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(133.83,57.30), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 133.83,
+      "y": 57.3
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_DN2_N 换层via(99.60,60.90) 0.6mm 正交候选, 逐障碍网级净距校验 → 4 候选全被 ['F.Cu', 'PCIE_DN2_P', -0.15] 占用(余量 -0.150) → 显式 blocked; GND 回路由 In1/3/5 平面 + 连接器 GND 脚/去耦墙 GND via 承担, 待施工裁决(禁止自行发明路径)",
+      "net": "GND",
+      "status": "blocked",
+      "x": null,
+      "y": null
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_DN3_P 换层via(133.83,58.50) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(133.83,59.10), 距差分 via 中心 0.6mm, 净距余量 0.247mm",
+      "net": "GND",
+      "x": 133.83,
+      "y": 59.1
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_DN3_P 换层via(99.60,61.70) 0.6mm 正交候选, 逐障碍网级净距校验 → 4 候选全被 ['F.Cu', 'PCIE_DN3_N', -0.15] 占用(余量 -0.150) → 显式 blocked; GND 回路由 In1/3/5 平面 + 连接器 GND 脚/去耦墙 GND via 承担, 待施工裁决(禁止自行发明路径)",
+      "net": "GND",
+      "status": "blocked",
+      "x": null,
+      "y": null
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_DN4_N 换层via(133.83,59.70) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(133.83,59.10), 距差分 via 中心 0.6mm, 净距余量 0.247mm (与 PCIE_DN3_P 共享同一 GND via 孔)",
+      "net": "GND",
+      "x": 133.83,
+      "y": 59.1
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_DN4_N 换层via(99.60,63.30) 0.6mm 正交候选, 逐障碍网级净距校验 → 4 候选全被 ['F.Cu', 'PCIE_DN4_P', -0.15] 占用(余量 -0.150) → 显式 blocked; GND 回路由 In1/3/5 平面 + 连接器 GND 脚/去耦墙 GND via 承担, 待施工裁决(禁止自行发明路径)",
+      "net": "GND",
+      "status": "blocked",
+      "x": null,
+      "y": null
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_DN5_P 换层via(133.83,60.30) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(133.83,60.90), 距差分 via 中心 0.6mm, 净距余量 0.246mm",
+      "net": "GND",
+      "x": 133.83,
+      "y": 60.9
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_DN5_P 换层via(99.60,64.10) 0.6mm 正交候选, 逐障碍网级净距校验 → 4 候选全被 ['In2.Cu', 'PCIE_DN4_N', -0.15] 占用(余量 -0.150) → 显式 blocked; GND 回路由 In1/3/5 平面 + 连接器 GND 脚/去耦墙 GND via 承担, 待施工裁决(禁止自行发明路径)",
+      "net": "GND",
+      "status": "blocked",
+      "x": null,
+      "y": null
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_DN6_N 换层via(133.83,63.30) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(133.83,62.70), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 133.83,
+      "y": 62.7
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_DN6_N 换层via(99.60,65.70) 0.6mm 正交候选, 逐障碍网级净距校验 → 4 候选全被 ['F.Cu', 'PCIE_DN6_P', -0.15] 占用(余量 -0.150) → 显式 blocked; GND 回路由 In1/3/5 平面 + 连接器 GND 脚/去耦墙 GND via 承担, 待施工裁决(禁止自行发明路径)",
+      "net": "GND",
+      "status": "blocked",
+      "x": null,
+      "y": null
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_DN7_P 换层via(133.83,63.90) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(133.83,64.50), 距差分 via 中心 0.6mm, 净距余量 0.248mm",
+      "net": "GND",
+      "x": 133.83,
+      "y": 64.5
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_DN7_P 换层via(99.60,66.50) 0.6mm 正交候选, 逐障碍网级净距校验 → 4 候选全被 ['In2.Cu', 'PCIE_DN6_N', -0.15] 占用(余量 -0.150) → 显式 blocked; GND 回路由 In1/3/5 平面 + 连接器 GND 脚/去耦墙 GND via 承担, 待施工裁决(禁止自行发明路径)",
+      "net": "GND",
+      "status": "blocked",
+      "x": null,
+      "y": null
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_REFCLK0_P 换层via(133.83,45.90) 0.6mm 正交候选, 逐障碍网级净距校验 → 4 候选全被 ['B.Cu', 'I2C1_SCL', -0.155] 占用(余量 -0.155) → 显式 blocked; GND 回路由 In1/3/5 平面 + 连接器 GND 脚/去耦墙 GND via 承担, 待施工裁决(禁止自行发明路径)",
+      "net": "GND",
+      "status": "blocked",
+      "x": null,
+      "y": null
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_REFCLK0_P 换层via(58.90,45.90) 0.6mm 正交候选, 逐障碍网级净距校验 → 4 候选全被 ['B.Cu', 'PCIE_DN_OUT3_N_MCIO', -0.2] 占用(余量 -0.200) → 显式 blocked; GND 回路由 In1/3/5 平面 + 连接器 GND 脚/去耦墙 GND via 承担, 待施工裁决(禁止自行发明路径)",
+      "net": "GND",
+      "status": "blocked",
+      "x": null,
+      "y": null
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_REFCLK0_N 换层via(134.30,45.90) 0.6mm 正交候选, 逐障碍网级净距校验 → 4 候选全被 ['In6.Cu', 'PCIE_REFCLK0_N', -0.15] 占用(余量 -0.150) → 显式 blocked; GND 回路由 In1/3/5 平面 + 连接器 GND 脚/去耦墙 GND via 承担, 待施工裁决(禁止自行发明路径)",
+      "net": "GND",
+      "status": "blocked",
+      "x": null,
+      "y": null
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_REFCLK0_N 换层via(58.30,45.50) 0.6mm 正交候选, 逐障碍网级净距校验 → 4 候选全被 ['B.Cu', 'PD1_U3', -0.125] 占用(余量 -0.125) → 显式 blocked; GND 回路由 In1/3/5 平面 + 连接器 GND 脚/去耦墙 GND via 承担, 待施工裁决(禁止自行发明路径)",
+      "net": "GND",
+      "status": "blocked",
+      "x": null,
+      "y": null
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_REFCLK1_P 换层via(133.83,51.30) 0.6mm 正交候选, 逐障碍网级净距校验 → 4 候选全被 ['B.Cu', 'I2C1_SCL', -0.155] 占用(余量 -0.155) → 显式 blocked; GND 回路由 In1/3/5 平面 + 连接器 GND 脚/去耦墙 GND via 承担, 待施工裁决(禁止自行发明路径)",
+      "net": "GND",
+      "status": "blocked",
+      "x": null,
+      "y": null
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_REFCLK1_P 换层via(60.10,51.30) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(60.10,50.70), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 60.1,
+      "y": 50.7
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_REFCLK1_N 换层via(134.30,51.30) 0.6mm 正交候选, 逐障碍网级净距校验 → 4 候选全被 ['J2.32', 'PCIE_UP_OUT6_P_J2', -0.225] 占用(余量 -0.225) → 显式 blocked; GND 回路由 In1/3/5 平面 + 连接器 GND 脚/去耦墙 GND via 承担, 待施工裁决(禁止自行发明路径)",
+      "net": "GND",
+      "status": "blocked",
+      "x": null,
+      "y": null
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_REFCLK1_N 换层via(60.70,50.50) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(60.10,50.50), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 60.1,
+      "y": 50.5
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_UP_OUT6_N_J2 换层via(129.80,52.50) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(129.20,52.50), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 129.2,
+      "y": 52.5
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_UP_OUT6_N_J2 换层via(102.17,44.70) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(102.77,44.70), 距差分 via 中心 0.6mm, 净距余量 0.128mm",
+      "net": "GND",
+      "x": 102.77,
+      "y": 44.7
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_UP_OUT1_N_J2 换层via(137.14,44.10) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(137.14,44.70), 距差分 via 中心 0.6mm, 净距余量 0.030mm",
+      "net": "GND",
+      "x": 137.14,
+      "y": 44.7
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_UP_OUT1_N_J2 换层via(124.17,42.28) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(123.58,42.28), 距差分 via 中心 0.6mm, 净距余量 0.030mm",
+      "net": "GND",
+      "x": 123.58,
+      "y": 42.28
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_UP_OUT6_P_J2 换层via(137.52,51.90) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(137.52,52.50), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 137.52,
+      "y": 52.5
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_UP_OUT6_P_J2 换层via(104.17,41.52) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(104.17,40.92), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 104.17,
+      "y": 40.92
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_UP_OUT3_N_J2 换层via(139.42,47.70) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(139.42,48.30), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 139.42,
+      "y": 48.3
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_UP_OUT3_N_J2 换层via(116.17,40.76) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(116.17,40.16), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 116.17,
+      "y": 40.16
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_UP_OUT7_P_J2 换层via(129.42,53.10) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(129.42,52.50), 距差分 via 中心 0.6mm, 净距余量 0.030mm",
+      "net": "GND",
+      "x": 129.42,
+      "y": 52.5
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_UP_OUT7_P_J2 换层via(101.50,43.20) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(102.10,43.20), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 102.1,
+      "y": 43.2
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_UP_OUT3_P_J2 换层via(130.56,47.70) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(129.96,47.70), 距差分 via 中心 0.6mm, 净距余量 0.130mm",
+      "net": "GND",
+      "x": 129.96,
+      "y": 47.7
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_UP_OUT3_P_J2 换层via(114.17,46.46) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(113.58,46.46), 距差分 via 中心 0.6mm, 净距余量 0.210mm",
+      "net": "GND",
+      "x": 113.58,
+      "y": 46.46
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_UP_OUT4_P_J2 换层via(136.38,48.30) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(136.98,48.30), 距差分 via 中心 0.6mm, 净距余量 0.190mm",
+      "net": "GND",
+      "x": 136.98,
+      "y": 48.3
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_UP_OUT4_P_J2 换层via(112.17,42.66) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(112.17,42.06), 距差分 via 中心 0.6mm, 净距余量 0.190mm",
+      "net": "GND",
+      "x": 112.17,
+      "y": 42.06
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_UP_OUT1_P_J2 换层via(130.56,44.10) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(130.56,44.70), 距差分 via 中心 0.6mm, 净距余量 0.030mm",
+      "net": "GND",
+      "x": 130.56,
+      "y": 44.7
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_UP_OUT1_P_J2 换层via(122.17,43.80) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(121.58,43.80), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 121.58,
+      "y": 43.8
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_UP_OUT7_N_J2 换层via(137.90,53.10) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(137.90,52.50), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 137.9,
+      "y": 52.5
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_UP_OUT7_N_J2 换层via(100.17,43.90) 0.6mm 正交候选, 逐障碍网级净距校验 → 4 候选全被 ['In2.Cu', 'PCIE_UP_OUT6_N_U7', -0.015] 占用(余量 -0.015) → 显式 blocked; GND 回路由 In1/3/5 平面 + 连接器 GND 脚/去耦墙 GND via 承担, 待施工裁决(禁止自行发明路径)",
+      "net": "GND",
+      "status": "blocked",
+      "x": null,
+      "y": null
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_UP_OUT4_N_J2 换层via(131.32,48.90) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(131.32,48.30), 距差分 via 中心 0.6mm, 净距余量 0.030mm",
+      "net": "GND",
+      "x": 131.32,
+      "y": 48.3
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_UP_OUT4_N_J2 换层via(110.17,48.30) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(110.77,48.30), 距差分 via 中心 0.6mm, 净距余量 0.128mm",
+      "net": "GND",
+      "x": 110.77,
+      "y": 48.3
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_UP_OUT0_N_J2 换层via(130.94,43.50) 0.6mm 正交候选, 逐障碍网级净距校验 → 4 候选全被 ['In2.Cu', 'PCIE_UP_OUT1_P_J2', -0.05] 占用(余量 -0.050) → 显式 blocked; GND 回路由 In1/3/5 平面 + 连接器 GND 脚/去耦墙 GND via 承担, 待施工裁决(禁止自行发明路径)",
+      "net": "GND",
+      "status": "blocked",
+      "x": null,
+      "y": null
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_UP_OUT0_N_J2 换层via(126.17,48.74) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(126.17,48.14), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 126.17,
+      "y": 48.14
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_UP_OUT5_N_J2 换层via(138.66,49.50) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(138.66,50.10), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 138.66,
+      "y": 50.1
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_UP_OUT5_N_J2 换层via(108.17,41.14) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(108.17,40.54), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 108.17,
+      "y": 40.54
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_UP_OUT5_P_J2 换层via(131.70,49.50) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(131.70,50.10), 距差分 via 中心 0.6mm, 净距余量 0.050mm",
+      "net": "GND",
+      "x": 131.7,
+      "y": 50.1
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_UP_OUT5_P_J2 换层via(106.17,43.04) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(106.17,42.44), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 106.17,
+      "y": 42.44
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_UP_OUT0_P_J2 换层via(140.94,42.90) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(140.94,43.50), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 140.94,
+      "y": 43.5
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_UP_OUT0_P_J2 换层via(128.18,40.38) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(127.58,40.38), 距差分 via 中心 0.6mm, 净距余量 0.030mm",
+      "net": "GND",
+      "x": 127.58,
+      "y": 40.38
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_UP_OUT2_P_J2 换层via(142.08,46.50) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(142.08,47.10), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 142.08,
+      "y": 47.1
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_UP_OUT2_P_J2 换层via(120.17,40.00) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(120.17,39.40), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 120.17,
+      "y": 39.4
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_UP_OUT2_N_J2 换层via(130.18,47.10) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(130.18,47.70), 距差分 via 中心 0.6mm, 净距余量 0.030mm",
+      "net": "GND",
+      "x": 130.18,
+      "y": 47.7
+     },
+     {
+      "basis": "T2-ECN-3 派生: j2 PCIE_UP_OUT2_N_J2 换层via(118.17,47.22) 0.6mm 正交候选, 逐障碍网级净距校验 → 落孔(117.58,47.22), 距差分 via 中心 0.6mm, 净距余量 0.250mm",
+      "net": "GND",
+      "x": 117.58,
+      "y": 47.22
+     }
+    ],
+    "ecn_pending": false,
+    "note": "2026-08-23 T2-ECN-3 落盘: 100 换层点 → 69 可落(68 唯一孔 + 1 共享孔 PCIE_DN3_P/DN4_N 共用 (133.83,59.1)) + 31 显式 blocked(名义 0.6mm 正交位被相邻差分墙 0.4-0.8mm 节距 / J2 焊盘墙 / 去耦墙占用, 余量<0); blocked 条目 GND 回路由 In1/3/5 平面 + 连接器 GND 脚 + 去耦墙 GND via 承担, 显式标注非静默放弃",
+    "rule": "差分换层处硬性 GND 伴行 via (每换层点 ≥1, drill 0.2/outer 0.35, 对称, JLC 背钻消残桩)"
+   },
+   "in4_pcie_keepout_band": {
+    "basis": "wp1_escape_nets 冻结折线 In4.Cu 段 (指纹 ea89470b... PASS); 铜皮东西两区禁止跨越此带 (两侧各留 POWER clearance 0.2)",
+    "seg_count": 14,
+    "x": [
+     50.0,
+     88.17
+    ],
+    "y": [
+     43.44,
+     65.1
+    ]
+   },
+   "m3_keepout_mm": 3.0,
+   "m3_keepout_note": "板文件实测无 M3 孔实例 (drill 全 0.8=pin headers, 无 gr_circle/MountingHole footprint, 2026-08-21); 规则保留, 若未来开孔需重推导",
+   "power_pad_connect": {
+    "blocked": [
+     {
+      "net": "GND",
+      "pad": "A16",
+      "pad_pos": [
+       63.1,
+       61.45
+      ],
+      "reason": "4 方向候选全部与障碍冲突",
+      "ref": "J4"
+     },
+     {
+      "net": "P3V3",
+      "pad": "1",
+      "pad_pos": [
+       90.65,
+       64.0
+      ],
+      "reason": "4 方向候选全部与障碍冲突",
+      "ref": "C82"
+     },
+     {
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       91.35,
+       64.0
+      ],
+      "reason": "4 方向候选全部与障碍冲突",
+      "ref": "C82"
+     },
+     {
+      "net": "GND",
+      "pad": "9",
+      "pad_pos": [
+       88.825,
+       46.1
+      ],
+      "reason": "4 方向候选全部与障碍冲突",
+      "ref": "U7"
+     },
+     {
+      "net": "VREG1_U7",
+      "pad": "47",
+      "pad_pos": [
+       98.825,
+       45.7
+      ],
+      "reason": "4 方向候选全部与障碍冲突",
+      "ref": "U7"
+     },
+     {
+      "net": "GND",
+      "pad": "37",
+      "pad_pos": [
+       132.65,
+       53.7
+      ],
+      "reason": "4 方向候选全部与障碍冲突",
+      "ref": "J2"
+     },
+     {
+      "net": "GND",
+      "pad": "38",
+      "pad_pos": [
+       135.0,
+       53.7
+      ],
+      "reason": "4 方向候选全部与障碍冲突",
+      "ref": "J2"
+     },
+     {
+      "net": "GND",
+      "pad": "53",
+      "pad_pos": [
+       132.65,
+       58.5
+      ],
+      "reason": "4 方向候选全部与障碍冲突",
+      "ref": "J2"
+     },
+     {
+      "net": "GND",
+      "pad": "71",
+      "pad_pos": [
+       132.65,
+       63.9
+      ],
+      "reason": "4 方向候选全部与障碍冲突",
+      "ref": "J2"
+     }
+    ],
+    "entries": [
+     {
+      "clearance": 0.85,
+      "direction": "E",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       50.95,
+       69.0
+      ],
+      "ref": "R18",
+      "via_pos": [
+       51.725,
+       69.0
+      ]
+     },
+     {
+      "clearance": 0.85,
+      "direction": "E",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       50.95,
+       48.0
+      ],
+      "ref": "R24",
+      "via_pos": [
+       51.725,
+       48.0
+      ]
+     },
+     {
+      "clearance": 0.6,
+      "direction": "W",
+      "net": "GND",
+      "pad": "A1",
+      "pad_pos": [
+       54.1,
+       61.45
+      ],
+      "ref": "J4",
+      "via_pos": [
+       53.475,
+       61.45
+      ]
+     },
+     {
+      "clearance": 0.479,
+      "direction": "S",
+      "net": "GND",
+      "pad": "A4",
+      "pad_pos": [
+       55.9,
+       61.45
+      ],
+      "ref": "J4",
+      "via_pos": [
+       55.9,
+       62.275
+      ]
+     },
+     {
+      "clearance": 0.479,
+      "direction": "S",
+      "net": "GND",
+      "pad": "A7",
+      "pad_pos": [
+       57.7,
+       61.45
+      ],
+      "ref": "J4",
+      "via_pos": [
+       57.7,
+       62.275
+      ]
+     },
+     {
+      "clearance": 0.479,
+      "direction": "S",
+      "net": "P3V3_AUX",
+      "pad": "A9",
+      "pad_pos": [
+       58.9,
+       61.45
+      ],
+      "ref": "J4",
+      "via_pos": [
+       58.9,
+       62.275
+      ]
+     },
+     {
+      "clearance": 0.479,
+      "direction": "S",
+      "net": "GND",
+      "pad": "A10",
+      "pad_pos": [
+       59.5,
+       61.45
+      ],
+      "ref": "J4",
+      "via_pos": [
+       59.5,
+       62.275
+      ]
+     },
+     {
+      "clearance": 0.479,
+      "direction": "S",
+      "net": "GND",
+      "pad": "A13",
+      "pad_pos": [
+       61.3,
+       61.45
+      ],
+      "ref": "J4",
+      "via_pos": [
+       61.3,
+       62.275
+      ]
+     },
+     {
+      "clearance": 0.075,
+      "direction": "E",
+      "net": "GND",
+      "pad": "A19",
+      "pad_pos": [
+       64.9,
+       61.45
+      ],
+      "ref": "J4",
+      "via_pos": [
+       65.525,
+       61.45
+      ]
+     },
+     {
+      "clearance": 0.438,
+      "direction": "W",
+      "net": "GND",
+      "pad": "B1",
+      "pad_pos": [
+       54.1,
+       63.95
+      ],
+      "ref": "J4",
+      "via_pos": [
+       53.475,
+       63.95
+      ]
+     },
+     {
+      "clearance": 0.479,
+      "direction": "N",
+      "net": "GND",
+      "pad": "B4",
+      "pad_pos": [
+       55.9,
+       63.95
+      ],
+      "ref": "J4",
+      "via_pos": [
+       55.9,
+       63.125
+      ]
+     },
+     {
+      "clearance": 0.479,
+      "direction": "N",
+      "net": "GND",
+      "pad": "B7",
+      "pad_pos": [
+       57.7,
+       63.95
+      ],
+      "ref": "J4",
+      "via_pos": [
+       57.7,
+       63.125
+      ]
+     },
+     {
+      "clearance": 0.479,
+      "direction": "N",
+      "net": "GND",
+      "pad": "B10",
+      "pad_pos": [
+       59.5,
+       63.95
+      ],
+      "ref": "J4",
+      "via_pos": [
+       59.5,
+       63.125
+      ]
+     },
+     {
+      "clearance": 0.479,
+      "direction": "N",
+      "net": "GND",
+      "pad": "B13",
+      "pad_pos": [
+       61.3,
+       63.95
+      ],
+      "ref": "J4",
+      "via_pos": [
+       61.3,
+       63.125
+      ]
+     },
+     {
+      "clearance": 0.479,
+      "direction": "N",
+      "net": "GND",
+      "pad": "B16",
+      "pad_pos": [
+       63.1,
+       63.95
+      ],
+      "ref": "J4",
+      "via_pos": [
+       63.1,
+       63.125
+      ]
+     },
+     {
+      "clearance": 0.479,
+      "direction": "N",
+      "net": "GND",
+      "pad": "B19",
+      "pad_pos": [
+       64.9,
+       63.95
+      ],
+      "ref": "J4",
+      "via_pos": [
+       64.9,
+       63.125
+      ]
+     },
+     {
+      "clearance": 0.75,
+      "direction": "W",
+      "net": "P3V3",
+      "pad": "1",
+      "pad_pos": [
+       90.65,
+       58.0
+      ],
+      "ref": "C79",
+      "via_pos": [
+       89.975,
+       58.0
+      ]
+     },
+     {
+      "clearance": 0.625,
+      "direction": "E",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       91.35,
+       58.0
+      ],
+      "ref": "C79",
+      "via_pos": [
+       92.025,
+       58.0
+      ]
+     },
+     {
+      "clearance": 0.75,
+      "direction": "W",
+      "net": "P3V3",
+      "pad": "1",
+      "pad_pos": [
+       90.65,
+       40.0
+      ],
+      "ref": "C74",
+      "via_pos": [
+       89.975,
+       40.0
+      ]
+     },
+     {
+      "clearance": 0.625,
+      "direction": "E",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       91.35,
+       40.0
+      ],
+      "ref": "C74",
+      "via_pos": [
+       92.025,
+       40.0
+      ]
+     },
+     {
+      "clearance": 0.59,
+      "direction": "N",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       91.45,
+       49.0
+      ],
+      "ref": "C67",
+      "via_pos": [
+       91.45,
+       48.175
+      ]
+     },
+     {
+      "clearance": 0.75,
+      "direction": "W",
+      "net": "P3V3",
+      "pad": "1",
+      "pad_pos": [
+       90.65,
+       41.0
+      ],
+      "ref": "C75",
+      "via_pos": [
+       89.975,
+       41.0
+      ]
+     },
+     {
+      "clearance": 0.625,
+      "direction": "E",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       91.35,
+       41.0
+      ],
+      "ref": "C75",
+      "via_pos": [
+       92.025,
+       41.0
+      ]
+     },
+     {
+      "clearance": 1.494,
+      "direction": "S",
+      "net": "MCU_VDD",
+      "pad": "2",
+      "pad_pos": [
+       40.95,
+       37.95
+      ],
+      "ref": "U4",
+      "via_pos": [
+       40.95,
+       38.775
+      ]
+     },
+     {
+      "clearance": 2.287,
+      "direction": "N",
+      "net": "P3V3",
+      "pad": "3",
+      "pad_pos": [
+       40.0,
+       36.05
+      ],
+      "ref": "U4",
+      "via_pos": [
+       40.0,
+       35.225
+      ]
+     },
+     {
+      "clearance": 0.773,
+      "direction": "E",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       31.05,
+       36.365
+      ],
+      "ref": "U2",
+      "via_pos": [
+       31.825,
+       36.365
+      ]
+     },
+     {
+      "clearance": 1.369,
+      "direction": "S",
+      "net": "12V_IN",
+      "pad": "4",
+      "pad_pos": [
+       31.05,
+       38.905
+      ],
+      "ref": "U2",
+      "via_pos": [
+       31.05,
+       39.83
+      ]
+     },
+     {
+      "clearance": 1.57,
+      "direction": "S",
+      "net": "P3V3",
+      "pad": "5",
+      "pad_pos": [
+       34.95,
+       38.905
+      ],
+      "ref": "U2",
+      "via_pos": [
+       34.95,
+       39.83
+      ]
+     },
+     {
+      "clearance": 0.773,
+      "direction": "E",
+      "net": "12V_IN",
+      "pad": "6",
+      "pad_pos": [
+       34.95,
+       37.635
+      ],
+      "ref": "U2",
+      "via_pos": [
+       35.725,
+       37.635
+      ]
+     },
+     {
+      "clearance": 1.2,
+      "direction": "E",
+      "net": "P3V3",
+      "pad": "2",
+      "pad_pos": [
+       53.95,
+       54.0
+      ],
+      "ref": "R9",
+      "via_pos": [
+       54.725,
+       54.0
+      ]
+     },
+     {
+      "clearance": 0.85,
+      "direction": "E",
+      "net": "P3V3",
+      "pad": "2",
+      "pad_pos": [
+       50.95,
+       54.0
+      ],
+      "ref": "R4",
+      "via_pos": [
+       51.725,
+       54.0
+      ]
+     },
+     {
+      "clearance": 0.3,
+      "direction": "E",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       53.95,
+       63.0
+      ],
+      "ref": "R12",
+      "via_pos": [
+       54.725,
+       63.0
+      ]
+     },
+     {
+      "clearance": 0.59,
+      "direction": "N",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       53.95,
+       60.0
+      ],
+      "ref": "R11",
+      "via_pos": [
+       53.95,
+       59.175
+      ]
+     },
+     {
+      "clearance": 1.0,
+      "direction": "W",
+      "net": "MCU_VDD",
+      "pad": "1",
+      "pad_pos": [
+       31.15,
+       54.5
+      ],
+      "ref": "C85",
+      "via_pos": [
+       30.475,
+       54.5
+      ]
+     },
+     {
+      "clearance": 0.622,
+      "direction": "E",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       31.85,
+       54.5
+      ],
+      "ref": "C85",
+      "via_pos": [
+       32.525,
+       54.5
+      ]
+     },
+     {
+      "clearance": 0.59,
+      "direction": "S",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       48.95,
+       66.5
+      ],
+      "ref": "D1",
+      "via_pos": [
+       48.95,
+       67.325
+      ]
+     },
+     {
+      "clearance": 0.85,
+      "direction": "E",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       50.95,
+       45.0
+      ],
+      "ref": "R22",
+      "via_pos": [
+       51.725,
+       45.0
+      ]
+     },
+     {
+      "clearance": 0.275,
+      "direction": "N",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       93.975,
+       58.9
+      ],
+      "ref": "C65",
+      "via_pos": [
+       93.975,
+       58.175
+      ]
+     },
+     {
+      "clearance": 1.2,
+      "direction": "W",
+      "net": "P3V3",
+      "pad": "1",
+      "pad_pos": [
+       90.55,
+       38.5
+      ],
+      "ref": "C78",
+      "via_pos": [
+       89.775,
+       38.5
+      ]
+     },
+     {
+      "clearance": 0.747,
+      "direction": "E",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       91.45,
+       38.5
+      ],
+      "ref": "C78",
+      "via_pos": [
+       92.225,
+       38.5
+      ]
+     },
+     {
+      "clearance": 1.2,
+      "direction": "E",
+      "net": "P3V3",
+      "pad": "2",
+      "pad_pos": [
+       53.95,
+       51.0
+      ],
+      "ref": "R27",
+      "via_pos": [
+       54.725,
+       51.0
+      ]
+     },
+     {
+      "clearance": 1.2,
+      "direction": "E",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       44.45,
+       37.5
+      ],
+      "ref": "C89",
+      "via_pos": [
+       45.225,
+       37.5
+      ]
+     },
+     {
+      "clearance": 0.85,
+      "direction": "E",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       50.95,
+       60.0
+      ],
+      "ref": "R6",
+      "via_pos": [
+       51.725,
+       60.0
+      ]
+     },
+     {
+      "clearance": 1.2,
+      "direction": "W",
+      "net": "MCU_VDD",
+      "pad": "1",
+      "pad_pos": [
+       31.05,
+       56.0
+      ],
+      "ref": "C86",
+      "via_pos": [
+       30.275,
+       56.0
+      ]
+     },
+     {
+      "clearance": 1.2,
+      "direction": "E",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       31.95,
+       56.0
+      ],
+      "ref": "C86",
+      "via_pos": [
+       32.725,
+       56.0
+      ]
+     },
+     {
+      "clearance": 0.75,
+      "direction": "W",
+      "net": "P3V3",
+      "pad": "1",
+      "pad_pos": [
+       90.65,
+       43.0
+      ],
+      "ref": "C77",
+      "via_pos": [
+       89.975,
+       43.0
+      ]
+     },
+     {
+      "clearance": 1.0,
+      "direction": "E",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       91.35,
+       43.0
+      ],
+      "ref": "C77",
+      "via_pos": [
+       92.025,
+       43.0
+      ]
+     },
+     {
+      "clearance": 0.25,
+      "direction": "S",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       98.175,
+       46.5
+      ],
+      "ref": "C70",
+      "via_pos": [
+       98.175,
+       47.225
+      ]
+     },
+     {
+      "clearance": 0.275,
+      "direction": "E",
+      "net": "P3V3",
+      "pad": "6",
+      "pad_pos": [
+       88.825,
+       47.3
+      ],
+      "ref": "U7",
+      "via_pos": [
+       89.525,
+       47.3
+      ]
+     },
+     {
+      "clearance": 0.374,
+      "direction": "E",
+      "net": "GND",
+      "pad": "12",
+      "pad_pos": [
+       88.825,
+       44.9
+      ],
+      "ref": "U7",
+      "via_pos": [
+       89.525,
+       44.9
+      ]
+     },
+     {
+      "clearance": 0.374,
+      "direction": "E",
+      "net": "P3V3",
+      "pad": "18",
+      "pad_pos": [
+       88.825,
+       42.5
+      ],
+      "ref": "U7",
+      "via_pos": [
+       89.525,
+       42.5
+      ]
+     },
+     {
+      "clearance": 0.374,
+      "direction": "E",
+      "net": "GND",
+      "pad": "21",
+      "pad_pos": [
+       88.825,
+       41.3
+      ],
+      "ref": "U7",
+      "via_pos": [
+       89.525,
+       41.3
+      ]
+     },
+     {
+      "clearance": 0.7,
+      "direction": "N",
+      "net": "GND",
+      "pad": "24",
+      "pad_pos": [
+       88.825,
+       40.1
+      ],
+      "ref": "U7",
+      "via_pos": [
+       88.825,
+       39.5
+      ]
+     },
+     {
+      "clearance": 0.7,
+      "direction": "E",
+      "net": "GND",
+      "pad": "32",
+      "pad_pos": [
+       95.225,
+       47.7
+      ],
+      "ref": "U7",
+      "via_pos": [
+       95.825,
+       47.7
+      ]
+     },
+     {
+      "clearance": 0.374,
+      "direction": "E",
+      "net": "P3V3",
+      "pad": "38",
+      "pad_pos": [
+       98.825,
+       42.1
+      ],
+      "ref": "U7",
+      "via_pos": [
+       99.525,
+       42.1
+      ]
+     },
+     {
+      "clearance": 0.374,
+      "direction": "W",
+      "net": "GND",
+      "pad": "41",
+      "pad_pos": [
+       98.825,
+       43.3
+      ],
+      "ref": "U7",
+      "via_pos": [
+       98.125,
+       43.3
+      ]
+     },
+     {
+      "clearance": 0.374,
+      "direction": "W",
+      "net": "GND",
+      "pad": "44",
+      "pad_pos": [
+       98.825,
+       44.5
+      ],
+      "ref": "U7",
+      "via_pos": [
+       98.125,
+       44.5
+      ]
+     },
+     {
+      "clearance": 0.374,
+      "direction": "E",
+      "net": "P3V3",
+      "pad": "50",
+      "pad_pos": [
+       98.825,
+       46.9
+      ],
+      "ref": "U7",
+      "via_pos": [
+       99.525,
+       46.9
+      ]
+     },
+     {
+      "clearance": 0.374,
+      "direction": "W",
+      "net": "GND",
+      "pad": "53",
+      "pad_pos": [
+       98.825,
+       48.1
+      ],
+      "ref": "U7",
+      "via_pos": [
+       98.125,
+       48.1
+      ]
+     },
+     {
+      "clearance": 0.425,
+      "direction": "S",
+      "net": "GND",
+      "pad": "56",
+      "pad_pos": [
+       98.825,
+       49.3
+      ],
+      "ref": "U7",
+      "via_pos": [
+       98.825,
+       49.9
+      ]
+     },
+     {
+      "clearance": 0.7,
+      "direction": "W",
+      "net": "GND",
+      "pad": "64",
+      "pad_pos": [
+       92.425,
+       41.7
+      ],
+      "ref": "U7",
+      "via_pos": [
+       91.825,
+       41.7
+      ]
+     },
+     {
+      "clearance": 0.625,
+      "direction": "E",
+      "net": "GND",
+      "pad": "65",
+      "pad_pos": [
+       93.825,
+       44.7
+      ],
+      "ref": "U7",
+      "via_pos": [
+       96.3,
+       44.7
+      ]
+     },
+     {
+      "clearance": 0.225,
+      "direction": "E",
+      "net": "P3V3",
+      "pad": "6",
+      "pad_pos": [
+       98.825,
+       60.1
+      ],
+      "ref": "U3",
+      "via_pos": [
+       99.525,
+       60.1
+      ]
+     },
+     {
+      "clearance": 0.374,
+      "direction": "W",
+      "net": "GND",
+      "pad": "9",
+      "pad_pos": [
+       98.825,
+       61.3
+      ],
+      "ref": "U3",
+      "via_pos": [
+       98.125,
+       61.3
+      ]
+     },
+     {
+      "clearance": 0.225,
+      "direction": "E",
+      "net": "GND",
+      "pad": "12",
+      "pad_pos": [
+       98.825,
+       62.5
+      ],
+      "ref": "U3",
+      "via_pos": [
+       99.525,
+       62.5
+      ]
+     },
+     {
+      "clearance": 0.225,
+      "direction": "E",
+      "net": "P3V3",
+      "pad": "18",
+      "pad_pos": [
+       98.825,
+       64.9
+      ],
+      "ref": "U3",
+      "via_pos": [
+       99.525,
+       64.9
+      ]
+     },
+     {
+      "clearance": 0.374,
+      "direction": "W",
+      "net": "GND",
+      "pad": "21",
+      "pad_pos": [
+       98.825,
+       66.1
+      ],
+      "ref": "U3",
+      "via_pos": [
+       98.125,
+       66.1
+      ]
+     },
+     {
+      "clearance": 0.7,
+      "direction": "S",
+      "net": "GND",
+      "pad": "24",
+      "pad_pos": [
+       98.825,
+       67.3
+      ],
+      "ref": "U3",
+      "via_pos": [
+       98.825,
+       67.9
+      ]
+     },
+     {
+      "clearance": 0.7,
+      "direction": "W",
+      "net": "GND",
+      "pad": "32",
+      "pad_pos": [
+       92.425,
+       59.7
+      ],
+      "ref": "U3",
+      "via_pos": [
+       91.825,
+       59.7
+      ]
+     },
+     {
+      "clearance": 0.195,
+      "direction": "W",
+      "net": "P3V3",
+      "pad": "38",
+      "pad_pos": [
+       88.825,
+       65.3
+      ],
+      "ref": "U3",
+      "via_pos": [
+       88.125,
+       65.3
+      ]
+     },
+     {
+      "clearance": 0.13,
+      "direction": "W",
+      "net": "GND",
+      "pad": "41",
+      "pad_pos": [
+       88.825,
+       64.1
+      ],
+      "ref": "U3",
+      "via_pos": [
+       88.125,
+       64.1
+      ]
+     },
+     {
+      "clearance": 0.15,
+      "direction": "E",
+      "net": "GND",
+      "pad": "44",
+      "pad_pos": [
+       88.825,
+       62.9
+      ],
+      "ref": "U3",
+      "via_pos": [
+       89.525,
+       62.9
+      ]
+     },
+     {
+      "clearance": 0.175,
+      "direction": "E",
+      "net": "P3V3",
+      "pad": "50",
+      "pad_pos": [
+       88.825,
+       60.5
+      ],
+      "ref": "U3",
+      "via_pos": [
+       89.525,
+       60.5
+      ]
+     },
+     {
+      "clearance": 0.374,
+      "direction": "E",
+      "net": "GND",
+      "pad": "53",
+      "pad_pos": [
+       88.825,
+       59.3
+      ],
+      "ref": "U3",
+      "via_pos": [
+       89.525,
+       59.3
+      ]
+     },
+     {
+      "clearance": 0.374,
+      "direction": "E",
+      "net": "GND",
+      "pad": "56",
+      "pad_pos": [
+       88.825,
+       58.1
+      ],
+      "ref": "U3",
+      "via_pos": [
+       89.525,
+       58.1
+      ]
+     },
+     {
+      "clearance": 0.465,
+      "direction": "E",
+      "net": "GND",
+      "pad": "64",
+      "pad_pos": [
+       95.225,
+       65.7
+      ],
+      "ref": "U3",
+      "via_pos": [
+       95.825,
+       65.7
+      ]
+     },
+     {
+      "clearance": 0.134,
+      "direction": "S",
+      "net": "GND",
+      "pad": "65",
+      "pad_pos": [
+       93.825,
+       62.7
+      ],
+      "ref": "U3",
+      "via_pos": [
+       93.825,
+       65.175
+      ]
+     },
+     {
+      "clearance": 1.2,
+      "direction": "E",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       53.95,
+       48.0
+      ],
+      "ref": "R25",
+      "via_pos": [
+       54.725,
+       48.0
+      ]
+     },
+     {
+      "clearance": 0.75,
+      "direction": "W",
+      "net": "P3V3",
+      "pad": "1",
+      "pad_pos": [
+       90.65,
+       42.0
+      ],
+      "ref": "C76",
+      "via_pos": [
+       89.975,
+       42.0
+      ]
+     },
+     {
+      "clearance": 0.504,
+      "direction": "E",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       91.35,
+       42.0
+      ],
+      "ref": "C76",
+      "via_pos": [
+       92.025,
+       42.0
+      ]
+     },
+     {
+      "clearance": 1.0,
+      "direction": "E",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       44.35,
+       35.0
+      ],
+      "ref": "C87",
+      "via_pos": [
+       45.025,
+       35.0
+      ]
+     },
+     {
+      "clearance": 0.85,
+      "direction": "E",
+      "net": "P3V3",
+      "pad": "2",
+      "pad_pos": [
+       50.95,
+       51.0
+      ],
+      "ref": "R26",
+      "via_pos": [
+       51.725,
+       51.0
+      ]
+     },
+     {
+      "clearance": 0.59,
+      "direction": "S",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       53.95,
+       69.0
+      ],
+      "ref": "R20",
+      "via_pos": [
+       53.95,
+       69.825
+      ]
+     },
+     {
+      "clearance": 1.57,
+      "direction": "N",
+      "net": "GND",
+      "pad": "1",
+      "pad_pos": [
+       42.05,
+       58.095
+      ],
+      "ref": "E2",
+      "via_pos": [
+       42.05,
+       57.17
+      ]
+     },
+     {
+      "clearance": 0.773,
+      "direction": "W",
+      "net": "MCU_VDD",
+      "pad": "2",
+      "pad_pos": [
+       42.05,
+       59.365
+      ],
+      "ref": "E2",
+      "via_pos": [
+       41.275,
+       59.365
+      ]
+     },
+     {
+      "clearance": 1.57,
+      "direction": "S",
+      "net": "GND",
+      "pad": "3",
+      "pad_pos": [
+       42.05,
+       60.635
+      ],
+      "ref": "E2",
+      "via_pos": [
+       42.05,
+       61.56
+      ]
+     },
+     {
+      "clearance": 2.84,
+      "direction": "S",
+      "net": "GND",
+      "pad": "4",
+      "pad_pos": [
+       42.05,
+       61.905
+      ],
+      "ref": "E2",
+      "via_pos": [
+       42.05,
+       62.83
+      ]
+     },
+     {
+      "clearance": 0.773,
+      "direction": "E",
+      "net": "GND",
+      "pad": "7",
+      "pad_pos": [
+       45.95,
+       59.365
+      ],
+      "ref": "E2",
+      "via_pos": [
+       46.725,
+       59.365
+      ]
+     },
+     {
+      "clearance": 1.57,
+      "direction": "N",
+      "net": "MCU_VDD",
+      "pad": "8",
+      "pad_pos": [
+       45.95,
+       58.095
+      ],
+      "ref": "E2",
+      "via_pos": [
+       45.95,
+       57.17
+      ]
+     },
+     {
+      "clearance": 0.59,
+      "direction": "S",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       91.45,
+       52.0
+      ],
+      "ref": "C68",
+      "via_pos": [
+       91.45,
+       52.825
+      ]
+     },
+     {
+      "clearance": 0.515,
+      "direction": "N",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       90.35,
+       48.0
+      ],
+      "ref": "C71",
+      "via_pos": [
+       90.35,
+       47.275
+      ]
+     },
+     {
+      "clearance": 1.2,
+      "direction": "E",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       28.95,
+       47.0
+      ],
+      "ref": "C73",
+      "via_pos": [
+       29.725,
+       47.0
+      ]
+     },
+     {
+      "clearance": 1.2,
+      "direction": "E",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       91.45,
+       55.0
+      ],
+      "ref": "C72",
+      "via_pos": [
+       92.225,
+       55.0
+      ]
+     },
+     {
+      "clearance": 0.85,
+      "direction": "E",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       50.95,
+       57.0
+      ],
+      "ref": "R5",
+      "via_pos": [
+       51.725,
+       57.0
+      ]
+     },
+     {
+      "clearance": 1.2,
+      "direction": "E",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       53.95,
+       57.0
+      ],
+      "ref": "R10",
+      "via_pos": [
+       54.725,
+       57.0
+      ]
+     },
+     {
+      "clearance": 0.85,
+      "direction": "E",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       50.95,
+       63.0
+      ],
+      "ref": "R7",
+      "via_pos": [
+       51.725,
+       63.0
+      ]
+     },
+     {
+      "clearance": 0.85,
+      "direction": "E",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       50.95,
+       41.0
+      ],
+      "ref": "R28",
+      "via_pos": [
+       51.725,
+       41.0
+      ]
+     },
+     {
+      "clearance": 1.2,
+      "direction": "E",
+      "net": "MCU_VDD",
+      "pad": "2",
+      "pad_pos": [
+       55.95,
+       66.5
+      ],
+      "ref": "R31",
+      "via_pos": [
+       56.725,
+       66.5
+      ]
+     },
+     {
+      "clearance": 1.2,
+      "direction": "E",
+      "net": "MCU_VDD",
+      "pad": "2",
+      "pad_pos": [
+       55.95,
+       67.5
+      ],
+      "ref": "R32",
+      "via_pos": [
+       56.725,
+       67.5
+      ]
+     },
+     {
+      "clearance": 1.2,
+      "direction": "E",
+      "net": "MCU_VDD",
+      "pad": "2",
+      "pad_pos": [
+       55.95,
+       69.5
+      ],
+      "ref": "R34",
+      "via_pos": [
+       56.725,
+       69.5
+      ]
+     },
+     {
+      "clearance": 0.15,
+      "direction": "N",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       90.15,
+       61.25
+      ],
+      "ref": "C66",
+      "via_pos": [
+       90.15,
+       60.525
+      ]
+     },
+     {
+      "clearance": 0.59,
+      "direction": "S",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       53.95,
+       66.0
+      ],
+      "ref": "R19",
+      "via_pos": [
+       53.95,
+       66.825
+      ]
+     },
+     {
+      "clearance": 2.1,
+      "direction": "S",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       43.2,
+       52.9
+      ],
+      "ref": "U5",
+      "via_pos": [
+       43.2,
+       53.725
+      ]
+     },
+     {
+      "clearance": 2.1,
+      "direction": "N",
+      "net": "GND",
+      "pad": "3",
+      "pad_pos": [
+       45.8,
+       51.1
+      ],
+      "ref": "U5",
+      "via_pos": [
+       45.8,
+       50.275
+      ]
+     },
+     {
+      "clearance": 0.675,
+      "direction": "W",
+      "net": "P3V3",
+      "pad": "1",
+      "pad_pos": [
+       90.65,
+       60.0
+      ],
+      "ref": "C81",
+      "via_pos": [
+       89.975,
+       60.0
+      ]
+     },
+     {
+      "clearance": 0.504,
+      "direction": "E",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       91.35,
+       60.0
+      ],
+      "ref": "C81",
+      "via_pos": [
+       92.025,
+       60.0
+      ]
+     },
+     {
+      "clearance": 0.59,
+      "direction": "S",
+      "net": "MCU_VDD",
+      "pad": "2",
+      "pad_pos": [
+       53.95,
+       41.0
+      ],
+      "ref": "R29",
+      "via_pos": [
+       53.95,
+       41.825
+      ]
+     },
+     {
+      "clearance": 1.2,
+      "direction": "E",
+      "net": "MCU_VDD",
+      "pad": "2",
+      "pad_pos": [
+       55.95,
+       68.5
+      ],
+      "ref": "R33",
+      "via_pos": [
+       56.725,
+       68.5
+      ]
+     },
+     {
+      "clearance": 0.75,
+      "direction": "W",
+      "net": "P3V3",
+      "pad": "1",
+      "pad_pos": [
+       90.65,
+       59.0
+      ],
+      "ref": "C80",
+      "via_pos": [
+       89.975,
+       59.0
+      ]
+     },
+     {
+      "clearance": 0.625,
+      "direction": "E",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       91.35,
+       59.0
+      ],
+      "ref": "C80",
+      "via_pos": [
+       92.025,
+       59.0
+      ]
+     },
+     {
+      "clearance": 0.4,
+      "direction": "N",
+      "net": "GND",
+      "pad": "A1",
+      "pad_pos": [
+       64.9,
+       45.75
+      ],
+      "ref": "J3",
+      "via_pos": [
+       64.9,
+       44.925
+      ]
+     },
+     {
+      "clearance": 0.4,
+      "direction": "N",
+      "net": "GND",
+      "pad": "A4",
+      "pad_pos": [
+       63.1,
+       45.75
+      ],
+      "ref": "J3",
+      "via_pos": [
+       63.1,
+       44.925
+      ]
+     },
+     {
+      "clearance": 0.4,
+      "direction": "N",
+      "net": "GND",
+      "pad": "A7",
+      "pad_pos": [
+       61.3,
+       45.75
+      ],
+      "ref": "J3",
+      "via_pos": [
+       61.3,
+       44.925
+      ]
+     },
+     {
+      "clearance": 0.4,
+      "direction": "N",
+      "net": "P3V3_AUX",
+      "pad": "A9",
+      "pad_pos": [
+       60.1,
+       45.75
+      ],
+      "ref": "J3",
+      "via_pos": [
+       60.1,
+       44.925
+      ]
+     },
+     {
+      "clearance": 0.4,
+      "direction": "N",
+      "net": "GND",
+      "pad": "A10",
+      "pad_pos": [
+       59.5,
+       45.75
+      ],
+      "ref": "J3",
+      "via_pos": [
+       59.5,
+       44.925
+      ]
+     },
+     {
+      "clearance": 0.479,
+      "direction": "N",
+      "net": "GND",
+      "pad": "A13",
+      "pad_pos": [
+       57.7,
+       45.75
+      ],
+      "ref": "J3",
+      "via_pos": [
+       57.7,
+       44.925
+      ]
+     },
+     {
+      "clearance": 0.479,
+      "direction": "N",
+      "net": "GND",
+      "pad": "A16",
+      "pad_pos": [
+       55.9,
+       45.75
+      ],
+      "ref": "J3",
+      "via_pos": [
+       55.9,
+       44.925
+      ]
+     },
+     {
+      "clearance": 0.479,
+      "direction": "N",
+      "net": "GND",
+      "pad": "A19",
+      "pad_pos": [
+       54.1,
+       45.75
+      ],
+      "ref": "J3",
+      "via_pos": [
+       54.1,
+       44.925
+      ]
+     },
+     {
+      "clearance": 0.9,
+      "direction": "E",
+      "net": "GND",
+      "pad": "B1",
+      "pad_pos": [
+       64.9,
+       43.25
+      ],
+      "ref": "J3",
+      "via_pos": [
+       65.525,
+       43.25
+      ]
+     },
+     {
+      "clearance": 0.479,
+      "direction": "S",
+      "net": "GND",
+      "pad": "B4",
+      "pad_pos": [
+       63.1,
+       43.25
+      ],
+      "ref": "J3",
+      "via_pos": [
+       63.1,
+       44.075
+      ]
+     },
+     {
+      "clearance": 0.479,
+      "direction": "S",
+      "net": "GND",
+      "pad": "B7",
+      "pad_pos": [
+       61.3,
+       43.25
+      ],
+      "ref": "J3",
+      "via_pos": [
+       61.3,
+       44.075
+      ]
+     },
+     {
+      "clearance": 0.479,
+      "direction": "S",
+      "net": "GND",
+      "pad": "B10",
+      "pad_pos": [
+       59.5,
+       43.25
+      ],
+      "ref": "J3",
+      "via_pos": [
+       59.5,
+       44.075
+      ]
+     },
+     {
+      "clearance": 0.479,
+      "direction": "S",
+      "net": "GND",
+      "pad": "B13",
+      "pad_pos": [
+       57.7,
+       43.25
+      ],
+      "ref": "J3",
+      "via_pos": [
+       57.7,
+       44.075
+      ]
+     },
+     {
+      "clearance": 0.479,
+      "direction": "S",
+      "net": "GND",
+      "pad": "B16",
+      "pad_pos": [
+       55.9,
+       43.25
+      ],
+      "ref": "J3",
+      "via_pos": [
+       55.9,
+       44.075
+      ]
+     },
+     {
+      "clearance": 0.9,
+      "direction": "W",
+      "net": "GND",
+      "pad": "B19",
+      "pad_pos": [
+       54.1,
+       43.25
+      ],
+      "ref": "J3",
+      "via_pos": [
+       53.475,
+       43.25
+      ]
+     },
+     {
+      "clearance": 1.5,
+      "direction": "W",
+      "net": "P3V3",
+      "pad": "1",
+      "pad_pos": [
+       43.4,
+       40.0
+      ],
+      "ref": "C84",
+      "via_pos": [
+       42.525,
+       40.0
+      ]
+     },
+     {
+      "clearance": 1.5,
+      "direction": "E",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       44.6,
+       40.0
+      ],
+      "ref": "C84",
+      "via_pos": [
+       45.475,
+       40.0
+      ]
+     },
+     {
+      "clearance": 0.85,
+      "direction": "W",
+      "net": "P3V3",
+      "pad": "1",
+      "pad_pos": [
+       90.55,
+       57.0
+      ],
+      "ref": "C83",
+      "via_pos": [
+       89.775,
+       57.0
+      ]
+     },
+     {
+      "clearance": 0.59,
+      "direction": "N",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       91.45,
+       57.0
+      ],
+      "ref": "C83",
+      "via_pos": [
+       91.45,
+       56.175
+      ]
+     },
+     {
+      "clearance": 0.85,
+      "direction": "W",
+      "net": "12V_IN",
+      "pad": "1",
+      "pad_pos": [
+       29.05,
+       41.5
+      ],
+      "ref": "C88",
+      "via_pos": [
+       28.275,
+       41.5
+      ]
+     },
+     {
+      "clearance": 1.2,
+      "direction": "E",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       29.95,
+       41.5
+      ],
+      "ref": "C88",
+      "via_pos": [
+       30.725,
+       41.5
+      ]
+     },
+     {
+      "clearance": 0.85,
+      "direction": "E",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       50.95,
+       66.0
+      ],
+      "ref": "R17",
+      "via_pos": [
+       51.725,
+       66.0
+      ]
+     },
+     {
+      "clearance": 0.415,
+      "direction": "N",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       34.75,
+       49.3
+      ],
+      "ref": "U1",
+      "via_pos": [
+       34.75,
+       48.575
+      ]
+     },
+     {
+      "clearance": 0.415,
+      "direction": "N",
+      "net": "GND",
+      "pad": "3",
+      "pad_pos": [
+       35.25,
+       49.3
+      ],
+      "ref": "U1",
+      "via_pos": [
+       35.25,
+       48.575
+      ]
+     },
+     {
+      "clearance": 0.415,
+      "direction": "N",
+      "net": "MCU_VDD",
+      "pad": "6",
+      "pad_pos": [
+       36.75,
+       49.3
+      ],
+      "ref": "U1",
+      "via_pos": [
+       36.75,
+       48.575
+      ]
+     },
+     {
+      "clearance": 0.415,
+      "direction": "N",
+      "net": "GND",
+      "pad": "7",
+      "pad_pos": [
+       37.25,
+       49.3
+      ],
+      "ref": "U1",
+      "via_pos": [
+       37.25,
+       48.575
+      ]
+     },
+     {
+      "clearance": 0.415,
+      "direction": "E",
+      "net": "P3V3_AUX",
+      "pad": "15",
+      "pad_pos": [
+       38.7,
+       53.25
+      ],
+      "ref": "U1",
+      "via_pos": [
+       39.425,
+       53.25
+      ]
+     },
+     {
+      "clearance": 0.415,
+      "direction": "S",
+      "net": "GND",
+      "pad": "19",
+      "pad_pos": [
+       36.75,
+       54.7
+      ],
+      "ref": "U1",
+      "via_pos": [
+       36.75,
+       55.425
+      ]
+     },
+     {
+      "clearance": 0.415,
+      "direction": "S",
+      "net": "GND",
+      "pad": "20",
+      "pad_pos": [
+       36.25,
+       54.7
+      ],
+      "ref": "U1",
+      "via_pos": [
+       36.25,
+       55.425
+      ]
+     },
+     {
+      "clearance": 0.415,
+      "direction": "W",
+      "net": "GND",
+      "pad": "30",
+      "pad_pos": [
+       33.3,
+       51.25
+      ],
+      "ref": "U1",
+      "via_pos": [
+       32.575,
+       51.25
+      ]
+     },
+     {
+      "clearance": 0.065,
+      "direction": "E",
+      "net": "GND",
+      "pad": "1",
+      "pad_pos": [
+       132.65,
+       42.9
+      ],
+      "ref": "J2",
+      "via_pos": [
+       133.775,
+       42.9
+      ]
+     },
+     {
+      "clearance": 0.4,
+      "direction": "W",
+      "net": "GND",
+      "pad": "4",
+      "pad_pos": [
+       135.0,
+       43.5
+      ],
+      "ref": "J2",
+      "via_pos": [
+       133.875,
+       43.5
+      ]
+     },
+     {
+      "clearance": 0.462,
+      "direction": "E",
+      "net": "GND",
+      "pad": "7",
+      "pad_pos": [
+       132.65,
+       44.7
+      ],
+      "ref": "J2",
+      "via_pos": [
+       133.775,
+       44.7
+      ]
+     },
+     {
+      "clearance": 0.462,
+      "direction": "W",
+      "net": "GND",
+      "pad": "8",
+      "pad_pos": [
+       135.0,
+       44.7
+      ],
+      "ref": "J2",
+      "via_pos": [
+       133.875,
+       44.7
+      ]
+     },
+     {
+      "clearance": 0.2,
+      "direction": "N",
+      "net": "GND",
+      "pad": "9",
+      "pad_pos": [
+       132.65,
+       45.3
+      ],
+      "ref": "J2",
+      "via_pos": [
+       132.65,
+       44.65
+      ]
+     },
+     {
+      "clearance": 0.2,
+      "direction": "N",
+      "net": "GND",
+      "pad": "10",
+      "pad_pos": [
+       135.0,
+       45.3
+      ],
+      "ref": "J2",
+      "via_pos": [
+       135.0,
+       44.65
+      ]
+     },
+     {
+      "clearance": 0.4,
+      "direction": "E",
+      "net": "GND",
+      "pad": "13",
+      "pad_pos": [
+       132.65,
+       46.5
+      ],
+      "ref": "J2",
+      "via_pos": [
+       133.775,
+       46.5
+      ]
+     },
+     {
+      "clearance": 0.4,
+      "direction": "W",
+      "net": "GND",
+      "pad": "16",
+      "pad_pos": [
+       135.0,
+       47.1
+      ],
+      "ref": "J2",
+      "via_pos": [
+       133.875,
+       47.1
+      ]
+     },
+     {
+      "clearance": 0.4,
+      "direction": "E",
+      "net": "GND",
+      "pad": "19",
+      "pad_pos": [
+       132.65,
+       48.3
+      ],
+      "ref": "J2",
+      "via_pos": [
+       133.775,
+       48.3
+      ]
+     },
+     {
+      "clearance": 0.425,
+      "direction": "E",
+      "net": "GND",
+      "pad": "22",
+      "pad_pos": [
+       135.0,
+       48.9
+      ],
+      "ref": "J2",
+      "via_pos": [
+       136.125,
+       48.9
+      ]
+     },
+     {
+      "clearance": 0.225,
+      "direction": "E",
+      "net": "GND",
+      "pad": "25",
+      "pad_pos": [
+       132.65,
+       50.1
+      ],
+      "ref": "J2",
+      "via_pos": [
+       133.775,
+       50.1
+      ]
+     },
+     {
+      "clearance": 0.425,
+      "direction": "E",
+      "net": "GND",
+      "pad": "26",
+      "pad_pos": [
+       135.0,
+       50.1
+      ],
+      "ref": "J2",
+      "via_pos": [
+       136.125,
+       50.1
+      ]
+     },
+     {
+      "clearance": 0.2,
+      "direction": "N",
+      "net": "GND",
+      "pad": "27",
+      "pad_pos": [
+       132.65,
+       50.7
+      ],
+      "ref": "J2",
+      "via_pos": [
+       132.65,
+       50.05
+      ]
+     },
+     {
+      "clearance": 0.462,
+      "direction": "E",
+      "net": "GND",
+      "pad": "28",
+      "pad_pos": [
+       135.0,
+       50.7
+      ],
+      "ref": "J2",
+      "via_pos": [
+       136.125,
+       50.7
+      ]
+     },
+     {
+      "clearance": 0.425,
+      "direction": "W",
+      "net": "GND",
+      "pad": "31",
+      "pad_pos": [
+       132.65,
+       51.9
+      ],
+      "ref": "J2",
+      "via_pos": [
+       131.525,
+       51.9
+      ]
+     },
+     {
+      "clearance": 0.425,
+      "direction": "E",
+      "net": "GND",
+      "pad": "34",
+      "pad_pos": [
+       135.0,
+       52.5
+      ],
+      "ref": "J2",
+      "via_pos": [
+       136.125,
+       52.5
+      ]
+     },
+     {
+      "clearance": 0.119,
+      "direction": "W",
+      "net": "GND",
+      "pad": "41",
+      "pad_pos": [
+       132.65,
+       54.9
+      ],
+      "ref": "J2",
+      "via_pos": [
+       131.525,
+       54.9
+      ]
+     },
+     {
+      "clearance": 0.462,
+      "direction": "E",
+      "net": "GND",
+      "pad": "44",
+      "pad_pos": [
+       135.0,
+       55.5
+      ],
+      "ref": "J2",
+      "via_pos": [
+       136.125,
+       55.5
+      ]
+     },
+     {
+      "clearance": 0.462,
+      "direction": "W",
+      "net": "GND",
+      "pad": "47",
+      "pad_pos": [
+       132.65,
+       56.7
+      ],
+      "ref": "J2",
+      "via_pos": [
+       131.525,
+       56.7
+      ]
+     },
+     {
+      "clearance": 0.428,
+      "direction": "E",
+      "net": "GND",
+      "pad": "49",
+      "pad_pos": [
+       132.65,
+       57.3
+      ],
+      "ref": "J2",
+      "via_pos": [
+       133.775,
+       57.3
+      ]
+     },
+     {
+      "clearance": 0.462,
+      "direction": "E",
+      "net": "GND",
+      "pad": "50",
+      "pad_pos": [
+       135.0,
+       57.3
+      ],
+      "ref": "J2",
+      "via_pos": [
+       136.125,
+       57.3
+      ]
+     },
+     {
+      "clearance": 0.462,
+      "direction": "E",
+      "net": "GND",
+      "pad": "56",
+      "pad_pos": [
+       135.0,
+       59.1
+      ],
+      "ref": "J2",
+      "via_pos": [
+       136.125,
+       59.1
+      ]
+     },
+     {
+      "clearance": 0.079,
+      "direction": "W",
+      "net": "GND",
+      "pad": "59",
+      "pad_pos": [
+       132.65,
+       60.3
+      ],
+      "ref": "J2",
+      "via_pos": [
+       131.525,
+       60.3
+      ]
+     },
+     {
+      "clearance": 0.462,
+      "direction": "E",
+      "net": "GND",
+      "pad": "62",
+      "pad_pos": [
+       135.0,
+       60.9
+      ],
+      "ref": "J2",
+      "via_pos": [
+       136.125,
+       60.9
+      ]
+     },
+     {
+      "clearance": 0.462,
+      "direction": "W",
+      "net": "GND",
+      "pad": "65",
+      "pad_pos": [
+       132.65,
+       62.1
+      ],
+      "ref": "J2",
+      "via_pos": [
+       131.525,
+       62.1
+      ]
+     },
+     {
+      "clearance": 0.427,
+      "direction": "E",
+      "net": "GND",
+      "pad": "67",
+      "pad_pos": [
+       132.65,
+       62.7
+      ],
+      "ref": "J2",
+      "via_pos": [
+       133.775,
+       62.7
+      ]
+     },
+     {
+      "clearance": 0.462,
+      "direction": "E",
+      "net": "GND",
+      "pad": "68",
+      "pad_pos": [
+       135.0,
+       62.7
+      ],
+      "ref": "J2",
+      "via_pos": [
+       136.125,
+       62.7
+      ]
+     },
+     {
+      "clearance": 0.9,
+      "direction": "S",
+      "net": "GND",
+      "pad": "74",
+      "pad_pos": [
+       135.0,
+       64.5
+      ],
+      "ref": "J2",
+      "via_pos": [
+       135.0,
+       65.15
+      ]
+     },
+     {
+      "clearance": 0.59,
+      "direction": "N",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       53.95,
+       45.0
+      ],
+      "ref": "R23",
+      "via_pos": [
+       53.95,
+       44.175
+      ]
+     },
+     {
+      "clearance": 0.85,
+      "direction": "E",
+      "net": "P3V3_AUX",
+      "pad": "2",
+      "pad_pos": [
+       50.95,
+       37.0
+      ],
+      "ref": "R1",
+      "via_pos": [
+       51.725,
+       37.0
+      ]
+     },
+     {
+      "clearance": 1.0,
+      "direction": "W",
+      "net": "P3V3_AUX",
+      "pad": "1",
+      "pad_pos": [
+       29.65,
+       53.0
+      ],
+      "ref": "C90",
+      "via_pos": [
+       28.975,
+       53.0
+      ]
+     },
+     {
+      "clearance": 1.0,
+      "direction": "E",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       30.35,
+       53.0
+      ],
+      "ref": "C90",
+      "via_pos": [
+       31.025,
+       53.0
+      ]
+     },
+     {
+      "clearance": 0.515,
+      "direction": "N",
+      "net": "GND",
+      "pad": "2",
+      "pad_pos": [
+       93.975,
+       50.2
+      ],
+      "ref": "C69",
+      "via_pos": [
+       93.975,
+       49.475
+      ]
+     }
+    ],
+    "frozen_at": "2026-08-23 T2 施工",
+    "rule": "SMD 电源/地 pad → via 直连（F.Cu 短段 + 通孔 via drill 0.2/outer 0.35）; 方向 = 4 正交候选净距最大; pad 边缘净距 ≥0.3; VREG 网移除（WP1 已布 F.Cu 走线，无需 via）"
+   },
+   "power_zones": [
+    {
+     "basis": "pd 语义 P3V3=In4 一区(东侧); 左界 = In4 走线带东缘 88.17 + POWER clearance 0.2 = 88.37; 覆盖 U3/U7 P3V3 pads(x=88.825/98.825) + C65-C83 去耦(x∈[89.8,99.825]) + C67/68/72(x=91)",
+     "layer": "In4.Cu",
+     "net": "P3V3",
+     "polygon": [
+      [
+       88.37,
+       33.3
+      ],
+      [
+       142.7,
+       33.3
+      ],
+      [
+       142.7,
+       70.7
+      ],
+      [
+       88.37,
+       70.7
+      ]
+     ],
+     "vias": [],
+     "zone": "P3V3_EAST"
+    },
+    {
+     "basis": "pd 语义 P3V3_AUX+MCU_VDD=In4 二区(西侧); 右界 = In4 走线带西缘 50.0 - POWER clearance 0.2 = 49.8; 覆盖 MCU U1@36,52 + U2@33,37 + U4@40,37 + C84-C92 + E2@44,60 + pin headers@26.5; 2026-08-23 PM 落定: 板上真实网为 P3V3_AUX（MCU_VDD 经 U4 ORing 独立路径走 In6，T2-ECN-2 ruling 预授权）; 2026-08-23 PM: In4 西区 = MCU_VDD（7 负载全在西区）; P3V3_AUX 西区负载改 B.Cu 扩展",
+     "layer": "In4.Cu",
+     "net": "MCU_VDD",
+     "polygon": [
+      [
+       23.3,
+       33.3
+      ],
+      [
+       49.8,
+       33.3
+      ],
+      [
+       49.8,
+       70.7
+      ],
+      [
+       23.3,
+       70.7
+      ]
+     ],
+     "vias": [],
+     "zone": "MCU_VDD_WEST"
+    },
+    {
+     "basis": "2026-08-23 T2-ECN-1 PM 裁决: P3V3 经 B.Cu POWER_POUR 桥接（SPEC stackup 明示 B.Cu=POWER_POUR），In4 走线带(x∈[50,88.17]) 不跨。顶部条带 y∈[33.3,35.0] x∈[23.3,90] 为 B.Cu 唯一干净横贯通道（wp1 B.Cu y≥39.25, 低速段 y≥35.9, 条带底缘距 PWR_BTN_ISO@35.5 净距 0.5）; 西区 x∈[23.3,38.5] y∈[33.3,41.5] 覆盖 U2 pad5 via（右界 38.5=PERSTA# 竖线 x38.7 净距 0.2, 较 PM 基准 38.7 微调 -0.2 保净距）; U4/C84 pad1 因孤立 pocket 经 F.Cu 短段+via 显式接入（见 vias.basis, 禁止静默放弃）; 净空校验脚本 PASS: 所有新增 polygon 与 B.Cu 冻结段净距≥0.1(LOW_SPEED/POWER)/0.175(PCIe85)",
+     "layer": "B.Cu",
+     "net": "P3V3",
+     "polygons": [
+      [
+       [
+        23.3,
+        33.3
+       ],
+       [
+        90.0,
+        33.3
+       ],
+       [
+        90.0,
+        35.0
+       ],
+       [
+        23.3,
+        35.0
+       ]
+      ],
+      [
+       [
+        23.3,
+        33.3
+       ],
+       [
+        38.5,
+        33.3
+       ],
+       [
+        38.5,
+        41.5
+       ],
+       [
+        23.3,
+        41.5
+       ]
+      ]
+     ],
+     "vias": [
+      {
+       "pos": [
+        33.95,
+        39.9
+       ]
+      },
+      {
+       "pos": [
+        40.0,
+        33.6
+       ]
+      },
+      {
+       "pos": [
+        43.1,
+        33.6
+       ]
+      },
+      {
+       "pos": [
+        [
+         89.6,
+         33.7
+        ],
+        [
+         89.6,
+         34.0
+        ],
+        [
+         89.6,
+         33.5
+        ]
+       ]
+      }
+     ],
+     "zone": "P3V3_BCU_BRIDGE"
+    },
+    {
+     "basis": "2026-08-23 T2-ECN-2 PM 裁决: P3V3_AUX 经 B.Cu 铜皮到 J3/J4 A9 pad。上带 y∈[47.75,52.35] x∈[46,62] = DN_OUT2_P@47.55 与 STRAP_EQ0_U7@52.5 之间的横贯通道, 承接 In4 西区 drop via + J3.A9 via; 下带 y∈[61.9,64.35] x∈[53.75,62] 覆盖 J4.A9 via(上距 DN_OUT4_N@61.2 0.7/下距 PERSTB#@64.5 0.15, 左界= I2C2_SDA@53.65 净距 0.1); B.Cu 走线带内 I2C1_SDA(x54.35)/I2C1_SCL(x55.9) 长竖线 + STRAP 簇 + DN_OUT 车道使同层铜皮连续连接不可达 → 显式 In6 跨层搭桥(in6_segments + HOP vias, 确定性坐标, 非求解器); 净空校验 PASS: 全部 polygon 与 B.Cu 冻结段净距达标。⚠ 施工注意: In4 西区平面 zone net 现为 SPEC 既有 'P3V3_AUX_MCU_VDD'(板上无此网, 与 P3V3_AUX/MCU_VDD 双网不一致的既有语义), 本裁决 drop via 记 net=P3V3_AUX; 施工期须将 In4 西区平面 net 落定为板上真实网 P3V3_AUX(MCU_VDD 负载经 U4 ORing 独立路径) 或经 ECN 修订, 否则 S3 DRC 报跨网 short — 显式标注待施工确认, 非本裁决静默假设; 2026-08-23 西扩 x[23.3,46] y[45,63] 覆盖 J11/C90/U1.15",
+     "in6_segments": [
+      {
+       "basis": "T4.4 重设计: 原桥段 (54,50)→(56.2,50)→(56.2,62.7) 与新 T3 In6 走廊墙(x∈[37,97]) 交叉; 改走 x=34.5 左通道(避 I2C2_SDA 走廊 x∈[34.75,56.45] y=62.55), 换层点 (54,48.8) 上带内/(56.2,63.2) 下带内",
+       "net": "P3V3_AUX",
+       "pts": [
+        [
+         54.0,
+         48.8
+        ],
+        [
+         34.5,
+         48.8
+        ],
+        [
+         34.5,
+         63.2
+        ],
+        [
+         56.2,
+         63.2
+        ]
+       ]
+      }
+     ],
+     "layer": "B.Cu",
+     "net": "P3V3_AUX",
+     "polygons": [
+      [
+       [
+        46.0,
+        47.75
+       ],
+       [
+        62.0,
+        47.75
+       ],
+       [
+        62.0,
+        52.35
+       ],
+       [
+        46.0,
+        52.35
+       ]
+      ],
+      [
+       [
+        53.75,
+        61.9
+       ],
+       [
+        62.0,
+        61.9
+       ],
+       [
+        62.0,
+        64.35
+       ],
+       [
+        53.75,
+        64.35
+       ]
+      ],
+      [
+       [
+        23.3,
+        45.0
+       ],
+       [
+        46.0,
+        45.0
+       ],
+       [
+        46.0,
+        63.0
+       ],
+       [
+        23.3,
+        63.0
+       ]
+      ]
+     ],
+     "vias": [
+      {
+       "pos": [
+        47.0,
+        49.0
+       ]
+      },
+      {
+       "pos": [
+        47.0,
+        49.0
+       ]
+      },
+      {
+       "pos": [
+        60.1,
+        48.0
+       ]
+      },
+      {
+       "pos": [
+        58.9,
+        63.0
+       ]
+      },
+      {
+       "pos": [
+        54.2,
+        49.8
+       ]
+      },
+      {
+       "pos": [
+        56.2,
+        49.8
+       ]
+      },
+      {
+       "pos": [
+        57.2,
+        63.1
+       ]
+      },
+      {
+       "pos": [
+        26.5,
+        61.57
+       ]
+      },
+      {
+       "pos": [
+        29.65,
+        53.0
+       ]
+      },
+      {
+       "pos": [
+        38.7,
+        53.25
+       ]
+      }
+     ],
+     "zone": "P3V3_AUX_BCU_BRIDGE"
+    },
+    {
+     "basis": "2026-08-23 PM: R29/R31-34 在 In4 走线带内(x 53-56), In4 分区无法覆盖; 走 B.Cu 短段(drop via → 段 → pad via); I2C 上拉 μA 级 0.3mm 足够",
+     "layer": "B.Cu",
+     "net": "MCU_VDD",
+     "polygons": [],
+     "segments": [
+      [
+       [
+        50.2,
+        41.0
+       ],
+       [
+        53.95,
+        41.0
+       ]
+      ],
+      [
+       [
+        50.2,
+        69.5
+       ],
+       [
+        55.95,
+        69.5
+       ]
+      ],
+      [
+       [
+        55.95,
+        69.5
+       ],
+       [
+        55.95,
+        66.5
+       ]
+      ]
+     ],
+     "vias": [
+      {
+       "pos": [
+        51.0,
+        40.6
+       ]
+      },
+      {
+       "pos": [
+        54.95,
+        40.0
+       ]
+      },
+      {
+       "pos": [
+        50.2,
+        69.5
+       ]
+      },
+      {
+       "pos": [
+        56.95,
+        70.5
+       ]
+      },
+      {
+       "pos": [
+        55.95,
+        66.5
+       ]
+      },
+      {
+       "pos": [
+        55.75,
+        66.7
+       ]
+      },
+      {
+       "pos": [
+        56.95,
+        68.5
+       ]
+      }
+     ],
+     "width": 0.3,
+     "zone": "MCU_VDD_BCU_RESISTORS"
+    }
+   ]
+  }
+ },
+ "router": {
+  "escape_spec": "pm_gate/artifacts/L2/escape_spec.json",
+  "region": {
+   "escape_dense_refs": [
+    "U9",
+    "U1",
+    "U6",
+    "U8",
+    "E1",
+    "E2",
+    "J1",
+    "J7",
+    "U3",
+    "U7",
+    "C17",
+    "C18",
+    "C19",
+    "C20",
+    "C21",
+    "C22",
+    "C23",
+    "C24",
+    "C25",
+    "C26",
+    "C27",
+    "C28",
+    "C29",
+    "C30",
+    "C31",
+    "C32",
+    "C49",
+    "C50",
+    "C51",
+    "C52",
+    "C53",
+    "C54",
+    "C55",
+    "C56",
+    "C57",
+    "C58",
+    "C59",
+    "C60",
+    "C61",
+    "C62",
+    "C63",
+    "C64"
+   ]
+  }
+ },
+ "source": "L2_STRUCTURE_v1.0.md (v1.2) + prereq_closure.md + ECN-004",
+ "spec_version": "1.1.spec-rev-6",
+ "stackup": {
+  "B.Cu": "signal (PCIe + escape)",
+  "F.Cu": "signal (PCIe + escape)",
+  "In1.Cu": "GND_PLANE (full)",
+  "In2.Cu": "signal (PCIe + escape)",
+  "In3.Cu": "GND_PLANE (full)",
+  "In4.Cu": "POWER_PLANE (P3V3)",
+  "basis": "方案(a) 对称叠层（CO-66/CO-68，L2 叠层分配；CO-67 机判：层数/平面数/电源域不变）；逐层介质厚度 = CO-68 铜厚自洽修正解；终判 = SI9000 + 板厂阻抗券",
+  "material": "JLC 8L 1.6mm 阻抗板 JLC08161H（南亚 NP-155F；prepreg 2116*1 / 3313*1，core 0.36*2） — 叠层分配与逐层介质厚度由 L2 CO-55 反解裁定；终判 = 板厂阻抗券",
+  "material_legacy_6l": "JLC 6L stackup (JLC06161H process limits, L1 v2.0 hard-constraint 4; SI9000 final after freeze)",
+  "total_thickness_mm": 1.6,
+  "dielectric_8l": {
+   "d(F.Cu-In1.Cu)": {
+    "mm": 0.1164,
+    "material": "2116*1",
+    "er": 4.16,
+    "use": "F.Cu 微带参考"
+   },
+   "d(In1.Cu-In2.Cu)": {
+    "mm": 0.25,
+    "material": "core 0.25",
+    "er": 3.99,
+    "use": "In2 带状线上参考（对称化）"
+   },
+   "d(In2.Cu-In3.Cu)": {
+    "mm": 0.25,
+    "material": "core 0.25",
+    "er": 3.99,
+    "use": "In2 带状线下参考（对称化）"
+   },
+   "d(In3.Cu-In4.Cu)": {
+    "mm": 0.1922,
+    "material": "自由余隙（1080*2≈0.1528 / 2116+1080≈0.1928，按 1.6mm 闭合）",
+    "er": 4.1,
+    "use": "GND-P3V3 平面间余隙"
+   },
+   "d(In4.Cu-In5.Cu)": {
+    "mm": 0.25,
+    "material": "core 0.25",
+    "er": 3.99,
+    "use": "In5 带状线上参考（对称化）"
+   },
+   "d(In5.Cu-In6.Cu)": {
+    "mm": 0.25,
+    "material": "core 0.25",
+    "er": 3.99,
+    "use": "In5 带状线下参考（对称化）"
+   },
+   "d(In6.Cu-B.Cu)": {
+    "mm": 0.1164,
+    "material": "2116*1",
+    "er": 4.16,
+    "use": "B.Cu 微带参考"
+   }
+  },
+  "dielectric_8l_basis": {
+   "authority": "L2 叠层分配自裁（CO-66 → CO-68 修正；CO-67 红线裁定 L2）",
+   "method": "**铜厚自洽修正**：介质预算 = 1.6 - copper 0.175 = 1.425；闭合 2*h_o + 2*b_s + g4 = 1.425；外层微带 (w_o,h_o)->85Ω；内层对称带状线 (w_s,b_s)->85Ω；交付对内中心 {0.5,0.6} 均须落 85±10%",
+   "model": "IPC-2141（_shared/eda_core/stackup.py）",
+   "co66_correction": "CO-66 令 g4=1.6-2h_o-2b（未扣铜厚）⇒ 其 0.19/0.205 行实为不可行；本件修正后内层可行线宽上界 ~0.165（见 scan）",
+   "thickness_closure": "copper 0.175 + dielectric 1.425 = 1.6（delta 0.0）",
+   "verdict_first_order": {
+    "F.Cu/B.Cu": {
+     "kind": "microstrip(ref In1 / In6)",
+     "w_mm": 0.205,
+     "h_mm": 0.1164,
+     "zdiff_ohm": {
+      "0.5": 88.43,
+      "0.6": 90.61
+     },
+     "within_10pct": true
+    },
+    "In2.Cu/In5.Cu": {
+     "kind": "symmetric stripline(ref In1+In3 / In4+In6)",
+     "w_mm": 0.16,
+     "b_mm": 0.5,
+     "zdiff_ohm": {
+      "0.5": 84.56,
+      "0.6": 89.48
+     },
+     "within_10pct": true
+    }
+   },
+   "signoff": "未完成：须 SI9000 + 板厂阻抗券（coupon_required=true）"
+  },
+  "In5.Cu": "signal (PCIe + escape)",
+  "In6.Cu": "GND_PLANE (full)"
+ },
+ "vias": {
+  "high_speed": {
+   "back_drill": true,
+   "basis": "2026-08-16 PM 裁决: 取消 0 过孔绝对限制, 受控过孔 + JLC 背钻消除残桩; 每线 ≤2 过孔 = 单次换层 (F→In2→F), 每对差分 4 过孔",
+   "gnd_stitch_via": true,
+   "max_per_line": {
+    "bandX_escape_In2": 4,
+    "bandY_escape_B": 6
+   },
+   "max_per_line_basis": "2026-09-12 CO-09 §3 + CO-11 §8（L2 过孔策略）安全 hop 层角色；bandX(F↔In2 escape/In2 stub)=4 via,M bandY(B escape/In2 stub)=6 via/M；由 m13_v57_co11_spec_eco_annex.json 应用",
+   "no_via_in_pad": true,
+   "pad_edge_clearance_mm": 0.3,
+   "symmetric": true
+  },
+  "high_speed_via_count": {
+   "basis": "m13_v57_co16_channel_allocation.json 21ae78f8276d8df4",
+   "measured_probe": 320,
+   "note": "CO-16 全板通道分配实测受控过孔（数据网 32 页）；含 GND 伴行/stitch 须另行核算"
+  },
+  "high_speed_via_count_basis": "2026-08-23 ECN-006 闭环：G4.1 检查体改读本字段；受控过孔合规以 vias.high_speed（每线≤2+对称+GND 伴行+背钻）为准，300 = 全板受控过孔总数上限（施工板实测 214）",
+  "std": {
+   "annular_ring_min": 0.075,
+   "drill": 0.2,
+   "outer": 0.35
+  }
+ },
+ "_spec_rev_4": {
+  "card": "SPEC-REV-4",
+  "at": "2026-09-12",
+  "authority": "L2/SI 自裁（CO-55/CO-56；LAYOUT_CONSTITUTION 第二章）",
+  "basis": [
+   "CO-53 card",
+   "CO-54 card",
+   "CO-55 card",
+   "tools/p3_v57_co55_layer_aware_zdiff.py（本 ECO 只引用 card/工具，不引用下游工件 sha ⇒ 无循环重基线）"
+  ],
+  "changes": [
+   "spec_version: 1.1.spec-rev-3 -> 1.1.spec-rev-4",
+   "stackup.material -> 8L 声明（旧值移入 material_legacy_6l）；新增 total_thickness_mm / dielectric_8l（+ basis）",
+   "impedance: 新增 per_layer（F/In2/In6 分层口径）+ gap_mm_semantics",
+   "net_classes.PCIe85.diff_pair: 新增 p_gap_semantics=lower_bound / p_gap_geometry_mm_delivered / inter_pair_spacing_scope（**数值均未改**）"
+  ],
+  "unchanged": "所有数值阈值（net_classes.PCIe85.* / impedance.target_zdiff,width_mm,gap_mm / vias / constraints）、corridors（含 tracks_y 1.20，符合交付网格）与 layer_plan、PD、board、components；原 SPEC_k2_v4.json / spec-rev-2 / spec-rev-3 逐字节未动",
+  "geometry_impact_expected": "none（引擎消费字段未改 ⇒ W3 图纸应逐字节不变，由 CO-56 复跑核验）",
+  "spec_sha256_before": "2d6dbd8bd8d667d7392e2f571839c112babaf3d3f281b5c0a9c606ac0bf51066",
+  "rollback": "删除本文件；引擎 F/FROZEN_SHA 与 validator 冻结集指回 spec-rev-3（2d6dbd8bd8d667d7）"
+ },
+ "_spec_rev_5": {
+  "card": "SPEC-REV-5",
+  "at": "2026-09-12",
+  "authority": "L2 叠层分配自裁（CO-66/CO-68；CO-67 红线张力裁定 = L2）",
+  "changes": [
+   "spec_version: 1.1.spec-rev-4 -> 1.1.spec-rev-5",
+   "stackup.*.Cu：In5 signal / In6 GND（方案(a) 平面在位次序；层数/平面数/电源域不变）",
+   "stackup.dielectric_8l -> CO-68 铜厚自洽修正解（+ basis/co66_correction）",
+   "impedance.per_layer -> F/B 微带 + In2/In5 对称带状线（新线宽 0.16 内层）；新增 width_mm_by_layer",
+   "net_classes.PCIe85.diff_pair.p_width_mm_by_layer/p_width_scope（**数值阈值未改**）"
+  ],
+  "unchanged": "net_classes.PCIe85.*（宽度/净距/对内等长阈值）、vias、constraints、corridors、layer_plan、PD、board；原 SPEC_k2_v4.json / spec-rev-2 / rev-3 / rev-4 逐字节未动",
+  "geometry_impact_expected": "内层 track 宽度 0.205->0.16（引擎图纸内层段）；F/B 不变；几何（走廊/落列/球位）由引擎重跑，本件不改坐标",
+  "rollback": "删除本文件；引擎 F.spec/FROZEN_SHA 指回 spec-rev-4（1c4eecb0edf4a446）；LID 指回 rev5"
+ },
+ "_spec_rev_6": {
+  "card": "SPEC-REV-6",
+  "at": "2026-09-12",
+  "authority": "L2 PDN 自裁（CO-72；LAYOUT_CONSTITUTION 第二章 PDN）",
+  "changes": [
+   "spec_version: 1.1.spec-rev-5 -> 1.1.spec-rev-6",
+   "pd.gnd_planes: In5.Cu -> In6.Cu（LID REV6：In5=信号、In6=GND）",
+   "pd.zone_defs.gnd_planes[In5] -> In6.Cu（层名更正；形状/网不变）",
+   "pd.zone_defs.decoupling_via_to_plane.rule 文本 In1/In3/In5 -> In1/In3/In6",
+   "pd.zone_defs.ecn_pending_items += CO-72-PDN-1（B.Cu 铺铜 vs 信号层冲突，L1）",
+   "constraints.escape_transition_zone.refclk_j2_transit.in2_layer_basis 文本更正（B.Cu 现受参考）"
+  ],
+  "unchanged": "stackup / impedance / net_classes / vias / corridors / layer_plan / board / components 全部未动；零几何",
+  "geometry_impact_expected": "none（引擎不消费 pd；文本更正不影响任何几何键）",
+  "rollback": "删除本文件；引擎/记录指回 spec-rev-5 (1f351194b3e22b7e)"
+ }
+}

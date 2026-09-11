@@ -37,7 +37,7 @@ def main() -> int:
         "nature": "L2 叠层分配：方案(a) 引擎 bump + 全链 G4..G7 + SI 判据升级（按层加权电气长度）",
         "four_sources": fro, "four_sources_all_match": all(v["match"] for v in fro.values()),
         "versioned_inputs": {"lid_rev6": s16(STEP2 / "m13_v57_layer_intent_rev6.json"),
-                             "spec_rev5": s16(L3 / "SPEC_k2_v4.spec-rev-5.json"),
+                             "spec_rev5": s16(L3 / "SPEC_k2_v4.spec-rev-6.json"),
                              "co16_alloc7": s16(STEP2 / "m13_v57_co16_channel_allocation_v7.json")},
         "gates": {
             "G4": {"rev": g4.get("revision"), "verdict": g4.get("verdict"),
@@ -68,7 +68,7 @@ def main() -> int:
         },
         "engine_deltas": {
             "layer_palette": ["F.Cu", "In2.Cu", "In5.Cu", "B.Cu"],
-            "spec": "spec-rev-4 -> spec-rev-5", "layer_intent": "rev5 -> rev6",
+            "spec": "spec-rev-4 -> spec-rev-5 -> spec-rev-6（CO-72 PDN 对齐）", "layer_intent": "rev5 -> rev6",
             "co16_alloc": "ALLOC.5 (0bf6cdc203887a48) -> ALLOC.7 (a765af4c9bf61e64)（CO-60 候选 v6 2ebda54c 未触碰）",
             "revision": "W3-CN.40 -> W3-CN.41",
             "length_compensation": "CO-69：对内等长补偿由**纯物理长度**改为**按层加权电气长度**"

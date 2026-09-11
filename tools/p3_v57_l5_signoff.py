@@ -194,7 +194,7 @@ def main() -> int:
 
     # ---- SI/PI/EMC record ----
     # CO-68：分层线宽 + **按层加权电气长度**（CO-62 §4）——判据用 mm-equivalent（er_ref=3.99 带状线）
-    _specw = json.loads((STEP2.parent / "SPEC_k2_v4.spec-rev-5.json").read_text(encoding="utf-8"))
+    _specw = json.loads((STEP2.parent / "SPEC_k2_v4.spec-rev-6.json").read_text(encoding="utf-8"))
     _wmap = _specw["impedance"]["width_mm_by_layer"]
     _pl = _specw["impedance"]["per_layer"]
     _C_MM_PS = 299.792458
@@ -235,7 +235,7 @@ def main() -> int:
     skew_max = max((s["skew_mm"] for s in skew), default=0)                 # 电气（按层加权，判据）
     skew_phys_max = max((s["phys_skew_mm"] for s in skew), default=0)       # 物理（保留报告，CO-62 §4）
     planes = [l for l in cu if l in ("In1.Cu", "In3.Cu", "In4.Cu", "In6.Cu")]
-    _spec = json.loads((STEP2.parent / "SPEC_k2_v4.spec-rev-5.json").read_text(encoding="utf-8"))
+    _spec = json.loads((STEP2.parent / "SPEC_k2_v4.spec-rev-6.json").read_text(encoding="utf-8"))
     _spec_nc = _spec["net_classes"]["PCIe85"]
     _pg = _pair_geometry(rec["segments"])          # CO-53: 对内/对间几何实测
     si = {"artifact": "m13_v57_l5_si_pi_emc_record", "schema": 1, "revision": "L5-SI.6",

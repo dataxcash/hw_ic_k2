@@ -11,7 +11,7 @@
   ],
   "length_compensation": "CO-69：对内等长补偿由**纯物理长度**改为**按层加权电气长度**（数据对：lane(In5) 换算；REFCLK：F.Cu 换算）——修复电气 skew",
   "revision": "W3-CN.40 -> W3-CN.41",
-  "spec": "spec-rev-4 -> spec-rev-5"
+  "spec": "spec-rev-4 -> spec-rev-5 -> spec-rev-6（CO-72 PDN 对齐）"
  },
  "four_sources": {
   "SPEC_k2_v4.json": {
@@ -35,25 +35,25 @@
  "gates": {
   "G4": {
    "crossings": null,
-   "drawing": "87ef07f280e4dffb",
-   "landing": "6b2f73bd014c6eb4",
+   "drawing": "d8fc88d6f4133fba",
+   "landing": "fcfa5c3c32ca7f87",
    "rev": "W3-CN.41",
    "verdict": "FEASIBLE_ALL"
   },
   "G5": {
    "frozen": null,
-   "validation": "14f6d92e0d17cadf",
-   "validator_v2": "b6684ab44d63e828",
+   "validation": "26313087acce4d3d",
+   "validator_v2": "0421f16c1a0630ee",
    "verdict": "PASS"
   },
   "G6": {
    "board": "0e636a67c1472462",
-   "construction": "fa5c055b5911d611",
+   "construction": "a9f96a458f94f820",
    "n_nets": 68,
    "n_segments": 2523,
    "n_vias": 252,
-   "validation": "1035dc9c2168f10b",
-   "validator": "29d7c59c2b20e75f",
+   "validation": "094f21a3db4e1533",
+   "validator": "b37ce88b55d3729b",
    "verdict": "PASS"
   },
   "G7": {
@@ -67,7 +67,7 @@
    "fab": {
     "n_tracks": 2523,
     "n_vias": 252,
-    "sha16": "1a76fbf4c58fb3d2"
+    "sha16": "73a9d22a4adeee6d"
    },
    "si": {
     "max_elec_skew_mm_eq": 0.13,
@@ -94,7 +94,7 @@
  "redline": "只读产物；四冻结源 4/4 MATCH；原件/历史件未动；未放宽任何阈值。",
  "reproducibility": {
   "board": "0e636a67c1472462",
-  "drawing": "87ef07f280e4dffb",
+  "drawing": "d8fc88d6f4133fba",
   "note": "全链（引擎→G5→L4→L5）连跑 ×2，产出 11 件逐字节一致（CO-49 口径）"
  },
  "revision": "CO-69.1",
@@ -116,6 +116,6 @@
  "versioned_inputs": {
   "co16_alloc7": "a765af4c9bf61e64",
   "lid_rev6": "05009687a3f01583",
-  "spec_rev5": "1f351194b3e22b7e"
+  "spec_rev5": "9e8fb5bae4a33207"
  }
 }

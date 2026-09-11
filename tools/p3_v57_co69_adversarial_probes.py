@@ -25,7 +25,7 @@ L3 = K2 / "pm_gate/artifacts/k2_v4/L3"
 STEP2 = L3 / "mcio_feas_step2"
 OUT = STEP2 / "m13_v57_co69_adversarial_review.json"
 SPEC4 = L3 / "SPEC_k2_v4.spec-rev-4.json"
-SPEC5 = L3 / "SPEC_k2_v4.spec-rev-5.json"
+SPEC5 = L3 / "SPEC_k2_v4.spec-rev-6.json"
 FROZEN = {"SPEC_k2_v4.json": (L3 / "SPEC_k2_v4.json", "0bd52ed48e720b8c"),
           "page_manifest": (STEP2 / "m13_v57_s1_page_manifest.json", "a8ef3ea8ecff99d7"),
           "k2_v4_8L.kicad_pcb": (K2 / "k2_v4_8L.kicad_pcb", "fb07d25ac426ff84"),
