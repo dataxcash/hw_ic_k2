@@ -1,0 +1,120 @@
+{
+ "adopted_stackup": {
+  "layer_purpose": [
+   {
+    "layer": "F.Cu",
+    "role": "signal"
+   },
+   {
+    "layer": "In1.Cu",
+    "role": "GND"
+   },
+   {
+    "layer": "In2.Cu",
+    "role": "signal"
+   },
+   {
+    "layer": "In3.Cu",
+    "role": "GND"
+   },
+   {
+    "layer": "In4.Cu",
+    "role": "PWR"
+   },
+   {
+    "layer": "In5.Cu",
+    "role": "GND"
+   },
+   {
+    "layer": "In6.Cu",
+    "role": "signal"
+   },
+   {
+    "layer": "B.Cu",
+    "role": "signal"
+   }
+  ],
+  "pd": {
+   "gnd_planes": [
+    "In1.Cu",
+    "In3.Cu",
+    "In5.Cu"
+   ],
+   "power_plane_layer": "In4.Cu"
+  },
+  "reference_sandwich_ok": true,
+  "signal_layers": [
+   "F.Cu",
+   "B.Cu",
+   "In2.Cu",
+   "In6.Cu"
+  ],
+  "total_layers": 8
+ },
+ "artifact": "m13_v57_layer_intent_adoption",
+ "authority": "mechanical adoption of LID.1 derivation; no owner/work-order parameter",
+ "closure": {
+  "L_capacity": 2,
+  "L_conflict": 2,
+  "L_escape": 4,
+  "L_signal_derived": 4,
+  "frozen_stackup_signal_layers": 3,
+  "frozen_stackup_sufficient": false,
+  "greedy_colors_used": 2,
+  "region_closure": {
+   "chip_escape": {
+    "C_total": 100.0,
+    "D": 32,
+    "closed": true
+   },
+   "corridor:EAST_CHIP_TO_J2": {
+    "C_total": 124.4,
+    "D": 18,
+    "closed": true
+   },
+   "corridor:WEST_MCIO_TO_CHIP": {
+    "C_total": 124.4,
+    "D": 18,
+    "closed": true
+   }
+  },
+  "same_layer_crossings": 0,
+  "signal_layers": [
+   "F.Cu",
+   "B.Cu",
+   "In2.Cu",
+   "In6.Cu"
+  ],
+  "total_layers_derived": 8
+ },
+ "consumption_contract": {
+  "chip_row_to_layer": {
+   "0": "F.Cu",
+   "1": "B.Cu",
+   "2": "In2.Cu",
+   "3": "In6.Cu"
+  },
+  "gate": "same-layer crossings == 0 ∧ D <= capacity (per region)",
+  "layer_palette": [
+   "F.Cu",
+   "B.Cu",
+   "In2.Cu",
+   "In6.Cu"
+  ],
+  "rule": "W3 引擎 palette[F.Cu,B.Cu,In2.Cu,In6.Cu]；每 chip 逃逸行→独立信号层（L_escape=4 下 R1 逃逸列冲突消解）"
+ },
+ "date": "2026-09-11",
+ "inputs": {
+  "derived_sha16": "e7c3c91c47429da6",
+  "spec_sha16": "0bd52ed48e720b8c"
+ },
+ "next_wave": [
+  "W3 引擎消费本件（palette += In6）→ 重跑 W3 under 完整净距",
+  "W4/L4/L5 重签 G7"
+ ],
+ "original_spec_unchanged": true,
+ "revision": "LID-ADOPT.1",
+ "schema": 1,
+ "self_consistent": true,
+ "spec_revision_written": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/SPEC_k2_v4_8L_LID1.json"
+}
