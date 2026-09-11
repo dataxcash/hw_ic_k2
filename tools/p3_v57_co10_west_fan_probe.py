@@ -14,6 +14,8 @@ env（只读旋钮，CO-11 实测用；默认=原行为）:
   CO10_WSTEP/CO10_WLO   仅西侧 lane 块重派生（lane_y=WLO+idx*WSTEP）
   CO10_FANDX_J3/_J4=<mm> 西侧 connector landing lx 偏置
   CO10_POLMODE=lx     方向感知 P/N lane 排序（CO-15；西侧 32/32 所必需）
+  CO10_LXPRIO=landlen  CO-36：connector 落列器按 land 段长度升序处理（短段优先自然列）
+                      —— D3b 收官（消 6 条 land 铜距违规）；默认 "" = 旧行为
   CO10_EASTSPLIT=1    实验性（CO-16 open）：东侧 up stub→In6；**当前会使 up In6 stub 与 In6 lane
                       跨页真交叉**（复核 FAIL）⇒ 未采用；仅用于记录东侧重派生方向，勿用于 sign-off。
 """
@@ -291,7 +293,20 @@ def _lx_separate(A):
     bypage = {}
     for e in ents:
         bypage.setdefault(e["page"], []).append(e)
-    pages = sorted(bypage, key=lambda q: (bypage[q][0]["S"], round(LANES[q]["lane_y"], 3), q))
+    _PRIO = __import__("os").environ.get("CO10_LXPRIO", "")
+    if _PRIO == "landlen":
+        # CO-36（D3b 收官，L2：落列/过孔策略，闭式非搜索）：
+        #   connector 侧落列偏移的**容差 ∝ land 段长度 |ll - conn_y|**——短 land 段（J4U 1.25mm /
+        #   J4L 1.05mm）对 |dx| 敏感：斜度大 ⇒ 段身扫过邻焊盘 ⇒ 铜距 < 0.075（D3b 6 条）；
+        #   长 land 段（J3U 8.75mm / J3L 5.75mm）在焊盘行附近已收敛到 conn_x ⇒ 可吸收较大偏移。
+        #   故：同 stub 层内**按 land 段长度升序**处理 ⇒ 短段先取自然列（delta=0），长段吸收偏移。
+        #   确定性单遍排序，无搜索/无回溯；默认关闭（旧行为 + ALLOC.1..4 逐字节可复现）。
+        def _landlen(q):
+            return abs(bypage[q][0]["a"]["landing"][1] - FACTS[q]["conn_pad"]["P"][1])
+        pages = sorted(bypage, key=lambda q: (bypage[q][0]["S"], round(_landlen(q), 3),
+                                              round(LANES[q]["lane_y"], 3), q))
+    else:
+        pages = sorted(bypage, key=lambda q: (bypage[q][0]["S"], round(LANES[q]["lane_y"], 3), q))
     placed = []
     for pg in pages:
         grp = bypage[pg]

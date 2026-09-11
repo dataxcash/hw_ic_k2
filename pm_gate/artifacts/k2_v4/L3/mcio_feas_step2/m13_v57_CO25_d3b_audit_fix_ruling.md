@@ -237,3 +237,79 @@ J3 用 `{54.7/55.3, 56.5/57.1, 61.9/62.5, 63.7/64.3}`（两行 y=43.25/45.75，*
 1. 定位 4 层配置下 J4 In2 竖直段的 x 来源（`vx`/escape 链），确认其与 FAN_DX/column 的耦合关系；
 2. 联合派生使 **两连接器的 In2 竖直段与对方 lane-end via 的 x 差 ≥ 0.525**（可借 column + FAN_DX + land 狗腿补偿）；
 3. 目标 **32/32 且 dx ∈ {+0.3,-0.3}** ⇒ D3b 消 6/6 ⇒ ALLOC.5 + 引擎 rev + G4→G7。
+
+## 16. 追加（CO-36：D3b **收官** — connector 落列器改「land 段长升序」；32/32 + shop-clean；DFM new 73→65）
+> 2026-09-12｜裁定：ARCHER（续接会话，独立复核 + 落地 gate 链）｜性质：**L2 自裁落地**（落列/过孔策略）
+> §13–§15 的「4 层 stub / 联合派生 (J3 via x, J4 In2 段 x)」路线**不再需要**：本解**未动 LID.1 层意图、未动 stub 分组**（仍为 CO-23 同款 `CO10_STUB=J3L`：In2 承载 J3U+J3L+J4U、In6 承载 J4L）。
+
+### 16.1 根因（闭式，非搜索）
+`_lx_separate` 的页处理次序原为 `(stub 层, lane_y, page)`；先处理者先取自然列（`d=0`），后处理者被整页平移 `±0.6k`。
+connector land 段（`#fcu_land`：`landing (lx,ll) → conn pad`）对 |dx|（= |lx − conn_pad.x|）的铜距敏感度 ∝ **段长倒数**：
+- 短段（J4U 1.25mm / J4L 1.05mm）：斜度大 ⇒ |dx| 越大，段身越扫过邻 pad；实测 |dx|=0.3→铜距 **+0.2534**、0.9→**+0.0582**、1.5→**−0.0833**；
+- 长段（J3U 8.75mm / J3L 5.75mm）：近竖直 ⇒ 在焊盘行处已收敛到 conn_x ⇒ 可吸收较大 |dx|（实测 |dx| 至 1.5 仍 ≥0.175）。
+⇒ **短 land 段组优先取自然列，长 land 段组吸收列偏移**（`CO10_LXPRIO=landlen`，默认关 = 旧行为）。
+
+### 16.2 变更（ALLOC.4 → ALLOC.5，仅 6 处 `landing` 字段）
+| 页面 | ALLOC.4 landing P/N | ALLOC.5 landing P/N | dx(P) |
+|---|---|---|---|
+| `DN1/out_MCIO`(J3L) | 62.2 / 61.6 | **61.0 / 60.4** | +0.9 |
+| `DN2/out_MCIO`(J3L) | 56.8 / 56.2 | **58.0 / 57.4** | −1.5 |
+| `DN3/out_MCIO`(J3L) | 55.0 / 54.4 | **53.8 / 53.2** | +0.9 |
+| `DN4/out_MCIO`(J4U) | 53.2 / 53.8 | **54.4 / 55.0** | **−0.3（自然列）** |
+| `DN5/out_MCIO`(J4U) | 57.4 / 58.0 | **56.2 / 56.8** | **−0.3（自然列）** |
+| `DN6/out_MCIO`(J4U) | 60.4 / 61.0 | **61.6 / 62.2** | **−0.3（自然列）** |
+其余 26 页（含 J4L、J3U、东侧、refclk）**逐字节不变**；`config`/`inputs_sha16` 仅新增 `CO10_LXPRIO=landlen`。
+
+### 16.3 量（实测）
+| 指标 | CO-23（ALLOC.4） | CO-36（ALLOC.5） |
+|---|---|---|
+| 落位（探针 `check` 全谓词） | 32/32 | **32/32** |
+| CO-25 真值 pad 铜距（`CO11_PAD_UNITS=copper`） | **6 违规**（−0.0833 / 0.0582 / −0.0833） | **0 违规**（该 6 页最劣 **+0.2534**；全 32 页最劣 +0.1211 ≥ SPEC 0.075） |
+| 落位/复核 320 via + 320 段 | 0 违规 | **0 违规**（centerline 与 copper 双口径均 PASS） |
+| 层意图（LID.1 8L） | F/In2/In6/B（stub: In2×3 组 + In6×1 组） | **同上（未变）** |
+| DFM new（shop `k2_v4_8L.kicad_pro`） | 73 | **65** |
+
+### 16.4 独立复核（本会话重放，非信任上游）
+- **几何阶段**（ALLOC.5 + probe 补丁 + `co36_*` 复核件）系中断会话遗留于工作树的未提交产物；本会话**逐字节重放**后收口：ALLOC.5 `0bf6cdc203887a48`、geom `6610557070a37960`、verify `add6f9918a17ea3d`、copper audit `03fad029e6709f28`（均与盘上一致）。
+- **旧证据保真**：ALLOC.4 按原旋钮重发射仍 `e5d30cd4eac83e16` 逐字节同（仅 `supersedes.reason/revision` 文档字段，因未传 `CO16_SUPERSEDES*`）；t2 默认路径重跑仍 `c2d201f030b49efd`（既有偏差 #1 未变）；冻结四源 4/4 MATCH；引擎 AST `while=0`。
+- **逐对 DRC 差分**（CO-23 L4 板 = `git HEAD:k2_v4_8L.l4.kicad_pcb` `70f3fdc4149db146` vs W3-CN.38 L4 `5e8d88d405126014`，同一 `kicad-cli 10.0.5` 口径，含位置键）：
+  **消 14 / 增 6，净 −8**，且：
+  1. **消 8 = D3b 全部数据件**：`DN4 P×N` shorting、`DN4_N 盲孔 × DN4_P` clearance、`DN5_N×GND` 与 `DN5_P×DN5_N` clearance、`DN4_P×GND`/`DN4_P×N`/`DN6_P×GND`/`DN6_P×N` mask bridge ⇒ J4 焊盘场 **数据件 0 残留**；
+  2. **消/增各 4 = 同一 REFCLK 冲突点随 land 列平移**（`DN1 P/N × REFCLK0_N` crossing、`DN6 P/N × REFCLK1_P` shorting：类型与网对不变，位置随 landing 由 62.2/61.6↔60.4/61.0、60.4/61.0↔61.6/62.2 平移）；
+  3. **消/增各 2 = J2 逃逸区 REFCLK 报类重归属**（`REFCLK*_N (28.243mm) × J2 pad 14/32 [UP_OUT*_P]` clearance ↔ `× J2 pad 11/29 [REFCLK*_P]` shorting）。**已证 REFCLK 铜几何两版完全相同**（18 基元逐项一致）⇒ 报类差异来自 KiCad 分组/归属，**非新缺陷**。
+- **归因计数闭合**：13 → 5 数据/其他（= 8 条 D3b 消）；REFCLK 族 60 = 11 仅 REFCLK + 49 REFCLK×数据（与 D3a 口径一致）。
+- **新增 D3a 证据**（供上游变更单）：J2 `REFCLK0_P` pad 11 与 `REFCLK0_N` 逃逸段（`(135.0,46.09)→(106.757,46.09)`）真值铜距 **−0.0875mm（实铜重叠）**，`REFCLK1_P` pad 29 同值；两版板相同 ⇒ 既有缺陷，非本批引入。
+
+### 16.5 gate 链（W3-CN.38，ALLOC.5 消费）
+| 门 | 判定 | 证据（sha16） |
+|---|---|---|
+| G4/W3 | **FEASIBLE_ALL** | 引擎 `W3-CN.38`：canonical `0261e0b0a598df6d`（certs=0, crossings 0/0, work 546/546, A-CN.1..9 全 PASS）；landing `6a42a329a0e75a31` |
+| G5/W4 | **PASS** | `m13_v57_w3_validation.json` `b0ff500448e7b54b`（W3-VALv2.4；G-M1..6 全 True）＋ A1.2 序无关 `454df5b5abb905ee`（三枚举序同 sha） |
+| G6/L4 | **PASS** | `m13_v57_l4_construction.json` `512192df1f1e8f84`（68 网/2408 段/248 via）；`m13_v57_l4_validation.json` `efc07c52a93c08a4`（L4-A..E viol=0）；板 `k2_v4_8L.l4.kicad_pcb` `5e8d88d405126014` |
+| G7/L5 | **SI PASS / DFM FAIL** | SI `03cc5b67430fb3e8`（skew 0.0031 ≤0.15）；fab `3b91202b1e5dd1a4`；dfm `9f7158f2634df815` = **new 65**（`clearance 13` / `tracks_crossing 5` / `shorting 9` / `mask 38`），`copper_edge 0` / `hole_to_hole 0`；`m13_v57_l5_g7_record.md` `3830f8f6db0f7c14`（L5-G7.4，本会话重写至 W3-CN.38/new=65 口径） |
+
+### 16.6 未决（下一周期）
+1. **D3a（60，REFCLK 族）**：仍需上游 W0-R 见证件补齐（版本化）+ 引擎 `refclk_place()` 修订（见 `m13_v57_CO25_upstream_change_request_W0R_refclk_keepout.md`）；**本批新增证据**：J2 侧 REFCLK P pad × N 逃逸段实铜重叠 −0.0875（连接器侧接入窗口缺陷，须并入该变更单 scope）。
+2. **数据/其他 5**（J2 pad 19[GND]×UP_OUT4_N、J2 pad 70[DN6_N]×DN7_P、J2 pad 71[GND]×DN7_N、J2 pad 16[GND]×UP_OUT3_N、R3 pad 2[PWR_BTN_ISO]×UP3_N）：非 D3b（非 J4 land 场），留待 D3c 域判定后处置。
+3. **D3c**：`.kicad_dru` 规则域（SPEC 逃逸区 0.075）+ L5 signoff 同批版本化（CO-25 §3 自裁，L2）。
+4. 全链 G4→G7 重跑 → `new=0` → milestone tag（`pm_gate/TAG_POLICY.md`）。
+
+### 16.7 红线 / 指纹
+未改四冻结源（`0bd52ed48e720b8c / a8ef3ea8ecff99d7 / fb07d25ac426ff84 / 0a459839e15960b8`）、未改 `k2_v4_8L.kicad_pro`、
+未放宽 `intra_pair_skew_mm`/净距阈值、未动 GND/PWR 平面（In1/In3/In5=GND、In4=P3V3）、未改 pad/球分配（**L1 未动**）。
+引擎 AST `while=0`；`_lx_separate` 仍为**闭式候选表 + 单遍首可行**（仅改页次序，无坐标搜索/无回溯）。
+复现：
+```
+CO16_REV=CO16-ALLOC.5 CO16_OUT=<abs>/…_v5.json CO16_VERIFY=m13_v57_co36_placement_verification.json \
+CO16_SUPERSEDES=CO16-ALLOC.4 CO16_SUPERSEDES_REASON="<见工件>" \
+CO16_STEP=1.449 CO16_EDELTA=-0.10 CO16_WLO=33.70 CO16_WSTEP=1.05 CO16_FANY_J3=34.5,51.5 CO16_STUB=J3L \
+CO16_POLMODE=lx CO16_EASTSPLIT=in2c CO16_J2STEP=0.58 CO16_COLMODE=pol CO16_WSWAP=1-11 CO16_HOLE_GAP=0.4495 \
+CO16_LXPRIO=landlen CO16_PAIR=m13_v57_f13_r1_pair_coupling_v1_5.json python3 tools/p3_v57_co16_emit_allocation.py
+python3 tools/p3_v57_w3_constructive.py --r1-5-shape co16          # ⇒ W3-CN.38 0261e0b0a598df6d
+python3 tools/p3_v57_w3_constructive_validator_v2.py
+AppDir/bin/python3.11 tools/p3_v57_l4_apply_drawing.py --board && AppDir/bin/python3.11 tools/p3_v57_l4_validator.py
+AppDir/bin/python3.11 tools/p3_v57_l5_signoff.py                    # ⇒ DFM new=65
+```
+指纹：ALLOC.5 `0bf6cdc203887a48`｜CO-36 geom `6610557070a37960`｜CO-36 verify `add6f9918a17ea3d`｜CO-36 copper audit `03fad029e6709f28`
+｜W3-CN.38 `0261e0b0a598df6d`｜landing `6a42a329a0e75a31`｜W4 `b0ff500448e7b54b`｜L4 `512192df1f1e8f84` / 板 `5e8d88d405126014`
+｜fab `3b91202b1e5dd1a4`｜dfm `9f7158f2634df815`｜si `03cc5b67430fb3e8`
