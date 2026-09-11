@@ -1,0 +1,310 @@
+{
+ "artifact": "m13_v57_co05c_l3_compensation_probe_result",
+ "conclusion": "长度侧闭合成功：32/32 页 skew<=0.0574mm（O4 长度要求满足）。但 W3=UPSTREAM_CHANGE_REQUEST：成对落列改变了 R1 净距环境，导致 1 页 phase-2 全部候选被 via-via 否决而退化到**无净距校核的 phase-1**（角 via 在 lane y 与对带芯片 via1 形成 fence；through(F-B) 与 buried(In6-In2) 钻确实互斥）⇒ A-CN.1b/4/9。",
+ "hypothesis": "H3: 成对局部落列 + run 上确定性 45° 单侧蛇形可把对内 skew 补到 <=0.15 且不破坏平面扇/净距",
+ "method": {
+  "engine_rev": "W3-CN.29（prototype；已回退）",
+  "landing": "J2 数据页成对局部落列（inner 131.65-0.38k / outer 136.0+0.38k，同带列互异）",
+  "meander": "短极 run 插入 45° 单侧锯齿：A=dm/(2n) ∈ [0.27,0.34]，extra=(sqrt2-1)*dm；居中于 run",
+  "run": "single run; outputs /tmp only; canonical untouched"
+ },
+ "next": "解 R1/R2 耦合：① R2 lane 区块错位使 up 带角 via y 避开 dn 芯片 via y；② phase-1 回退须带净距校核；③ 或换落列配对次序。",
+ "observed": {
+  "certificates": [
+   {
+    "closed_form_condition": "exists p in segments: p_x monotone per frame AND all segment pairs disjoint (planar fan)",
+    "kind": "CONSTRUCTION_INFEASIBLE",
+    "layer": "R1_5_chip_transition",
+    "observed": {
+     "crossings": 1,
+     "minimal_core": [
+      [
+       "PCIE_DN2/input#fcu_pad/N",
+       "PCIE_DN2/input#fcu_pad/P"
+      ]
+     ],
+     "note": "chip source rows shared across frames while R2 lane order forces frame blocks far apart in y"
+    },
+    "page_or_pad": "PCIE_DN2/input#fcu_pad/N",
+    "required": {
+     "crossings": 0
+    },
+    "rule": "frame_monotone_fan_single_layer_straight_segment",
+    "scope_note": "本构造规则下不可行；非全局不可能性证明"
+   },
+   {
+    "closed_form_condition": "realized |dx| >= 0.525 for every via pair after 0.05-grid snapping",
+    "kind": "CONSTRUCTION_INFEASIBLE",
+    "layer": "R1_chip_escape_column",
+    "observed": [
+     [
+      "PCIE_DN2/input.P",
+      "PCIE_DN2/input.N",
+      0.4005
+     ],
+     [
+      "PCIE_DN2/input.P",
+      "PCIE_DN3/input.P",
+      0.304138
+     ]
+    ],
+    "page_or_pad": "PCIE_DN2/input.P",
+    "required": {
+     "dist_mm": 0.525
+    },
+    "rule": "x_lattice_snap_mutual_clearance",
+    "scope_note": "本构造规则下不可行；非全局不可能性证明"
+   },
+   {
+    "closed_form_condition": "track-track >= 0.380 AND via-track >= 0.4525 AND via-via >= 0.525",
+    "kind": "CONSTRUCTION_INFEASIBLE",
+    "layer": "R1_5_chip_transition",
+    "observed": {
+     "sample_tt": [
+      [
+       "PCIE_DN2/input",
+       "PCIE_DN3/input",
+       0.05
+      ],
+      [
+       "PCIE_DN2/input",
+       "PCIE_DN3/input",
+       0.35
+      ],
+      [
+       "PCIE_DN2/input",
+       "PCIE_DN3/input",
+       0.05
+      ]
+     ],
+     "viol_track_track": 3,
+     "viol_via_track": 67,
+     "viol_via_via": 2
+    },
+    "page_or_pad": "PCIE_DN2/input",
+    "required": {
+     "track_track": 0.38,
+     "track_track_escape": 0.28,
+     "via_track": 0.4525,
+     "via_track_escape": 0.3525,
+     "via_via": 0.525
+    },
+    "rule": "complete_clearance_suite (L5-exposed)",
+    "scope_note": "本构造规则下不可行（构造域）；非全局不可能性证明"
+   }
+  ],
+  "crossings_by_class": {
+   "r1_5": 1,
+   "stub": 0
+  },
+  "failed": [
+   "A-CN.1b",
+   "A-CN.4",
+   "A-CN.9"
+  ],
+  "max_intra_pair_skew_mm": 0.0011,
+  "n_pages_skew_gt_0p15": 0,
+  "n_pages_with_meander": 16,
+  "r1_phase1_fallback_pages": [
+   "PCIE_DN2/input"
+  ],
+  "verdict": "UPSTREAM_CHANGE_REQUEST"
+ },
+ "per_page": [
+  {
+   "mode": "t2_clear",
+   "nodes_P": 44,
+   "page": "PCIE_DN0/input",
+   "skew_mm": 0.0
+  },
+  {
+   "mode": "t2_clear",
+   "nodes_P": 26,
+   "page": "PCIE_DN0/out_MCIO",
+   "skew_mm": 0.0
+  },
+  {
+   "mode": "t2_clear",
+   "nodes_P": 10,
+   "page": "PCIE_DN1/input",
+   "skew_mm": 0.0
+  },
+  {
+   "mode": "t2_clear",
+   "nodes_P": 28,
+   "page": "PCIE_DN1/out_MCIO",
+   "skew_mm": 0.0
+  },
+  {
+   "mode": "increasing",
+   "nodes_P": 56,
+   "page": "PCIE_DN2/input",
+   "skew_mm": 0.0
+  },
+  {
+   "mode": "t2_clear",
+   "nodes_P": 18,
+   "page": "PCIE_DN2/out_MCIO",
+   "skew_mm": 0.0
+  },
+  {
+   "mode": "t2_clear",
+   "nodes_P": 10,
+   "page": "PCIE_DN3/input",
+   "skew_mm": 0.0
+  },
+  {
+   "mode": "t2_clear",
+   "nodes_P": 20,
+   "page": "PCIE_DN3/out_MCIO",
+   "skew_mm": 0.0
+  },
+  {
+   "mode": "t2_clear",
+   "nodes_P": 64,
+   "page": "PCIE_DN4/input",
+   "skew_mm": 0.0
+  },
+  {
+   "mode": "t2_clear",
+   "nodes_P": 10,
+   "page": "PCIE_DN4/out_MCIO",
+   "skew_mm": 0.0
+  },
+  {
+   "mode": "t2_clear",
+   "nodes_P": 10,
+   "page": "PCIE_DN5/input",
+   "skew_mm": 0.0
+  },
+  {
+   "mode": "t2_clear",
+   "nodes_P": 10,
+   "page": "PCIE_DN5/out_MCIO",
+   "skew_mm": 0.0
+  },
+  {
+   "mode": "t2_clear",
+   "nodes_P": 88,
+   "page": "PCIE_DN6/input",
+   "skew_mm": 0.0
+  },
+  {
+   "mode": "t2_clear",
+   "nodes_P": 10,
+   "page": "PCIE_DN6/out_MCIO",
+   "skew_mm": 0.0
+  },
+  {
+   "mode": "t2_clear",
+   "nodes_P": 10,
+   "page": "PCIE_DN7/input",
+   "skew_mm": 0.0
+  },
+  {
+   "mode": "t2_clear",
+   "nodes_P": 10,
+   "page": "PCIE_DN7/out_MCIO",
+   "skew_mm": 0.0
+  },
+  {
+   "mode": "t2_clear",
+   "nodes_P": 24,
+   "page": "PCIE_UP0/input",
+   "skew_mm": 0.0
+  },
+  {
+   "mode": "t2_clear",
+   "nodes_P": 10,
+   "page": "PCIE_UP0/out_J2",
+   "skew_mm": 0.0
+  },
+  {
+   "mode": "t2_clear",
+   "nodes_P": 24,
+   "page": "PCIE_UP1/input",
+   "skew_mm": 0.0
+  },
+  {
+   "mode": "t2_clear",
+   "nodes_P": 54,
+   "page": "PCIE_UP1/out_J2",
+   "skew_mm": 0.0
+  },
+  {
+   "mode": "t2_clear",
+   "nodes_P": 16,
+   "page": "PCIE_UP2/input",
+   "skew_mm": 0.0011
+  },
+  {
+   "mode": "t2_clear",
+   "nodes_P": 10,
+   "page": "PCIE_UP2/out_J2",
+   "skew_mm": 0.0
+  },
+  {
+   "mode": "t2_clear",
+   "nodes_P": 22,
+   "page": "PCIE_UP3/input",
+   "skew_mm": 0.0
+  },
+  {
+   "mode": "t2_clear",
+   "nodes_P": 68,
+   "page": "PCIE_UP3/out_J2",
+   "skew_mm": 0.0
+  },
+  {
+   "mode": "t2_clear",
+   "nodes_P": 10,
+   "page": "PCIE_UP4/input",
+   "skew_mm": 0.0
+  },
+  {
+   "mode": "t2_clear",
+   "nodes_P": 10,
+   "page": "PCIE_UP4/out_J2",
+   "skew_mm": 0.0
+  },
+  {
+   "mode": "t2_clear",
+   "nodes_P": 10,
+   "page": "PCIE_UP5/input",
+   "skew_mm": 0.0
+  },
+  {
+   "mode": "t2_clear",
+   "nodes_P": 80,
+   "page": "PCIE_UP5/out_J2",
+   "skew_mm": 0.0
+  },
+  {
+   "mode": "t2_clear",
+   "nodes_P": 10,
+   "page": "PCIE_UP6/input",
+   "skew_mm": 0.0
+  },
+  {
+   "mode": "t2_clear",
+   "nodes_P": 10,
+   "page": "PCIE_UP6/out_J2",
+   "skew_mm": 0.0
+  },
+  {
+   "mode": "t2_clear",
+   "nodes_P": 10,
+   "page": "PCIE_UP7/input",
+   "skew_mm": 0.0
+  },
+  {
+   "mode": "t2_clear",
+   "nodes_P": 92,
+   "page": "PCIE_UP7/out_J2",
+   "skew_mm": 0.0
+  }
+ ],
+ "redline": "frozen four sources untouched; canonical W3-CN.27 13dfb9f4 untouched; engine REVERTED to W3-CN.27; no skew-budget change; single run.",
+ "revision": "CO-05c-PROBE.1",
+ "schema": 1
+}
