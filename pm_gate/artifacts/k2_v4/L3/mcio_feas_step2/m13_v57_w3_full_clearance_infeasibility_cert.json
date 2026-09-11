@@ -1,0 +1,125 @@
+{
+ "artifact": "m13_v57_w3_full_clearance_infeasibility_cert",
+ "authority": "ROOT-20/21/22 执行令（监督下发）执行侧产出；结论为**构造域**不可行，非全局数学证明",
+ "bottleneck_analysis": {
+  "cause": "我方 In2 走廊 run 自 chip 逃逸 via 一路拉至连接器槽（穿芯片区）=> 与其它网 chip 侧 via 的 In2 铜相撞；且 64 逃逸竖段/chip 区密度 + 过孔跨层铜（F↔B / In2↔B）令 chip 区在 0.38/0.4525/0.525 下无合法赋位",
+  "dominant": "via↔track（via1↔In2 run 85；via1↔escape 62；via_corner↔escape 58）",
+  "excluded_levers_already_tested": [
+   "域扩 WIN2.5→3.5（无效）",
+   "序变体 3 序（无效）",
+   "stub 形状 L（更差）",
+   "stub 剔除（仅在不完整净距集下 32/32，不作数）"
+  ]
+ },
+ "date": "2026-09-11",
+ "evidence_refs": [
+  "m13_v57_w3_reopen_probe_v1.md §5.2/§5.3/§5.4",
+  "m13_v57_l5_g7_record.md",
+  "m13_v57_l5_dfm_dft_record.json"
+ ],
+ "fingerprints": {
+  "f13_domain_v1_2": "3a08c4634bbd1d5c22cd7993e16bcb3af5bc250ece63021b5115bce3fc816fa6",
+  "frozen_four": {
+   "manifest": "a8ef3ea8ecff99d7",
+   "pcb": "f6273de613f43d05",
+   "rules": "0a459839e15960b8",
+   "spec": "0bd52ed48e720b8c"
+  },
+  "probe_win35_verdict_sha": "见 /tmp/probe_verdict_win35.json（未入库）",
+  "w3_main": "c17c5a4217888f1e15ae939a81c3e90d96d44a1e3b52f2d5e65ca79d5adbd620"
+ },
+ "no_regression": "canonical W3-CN.25 FEASIBLE_ALL（旧口径）；本证书不改任何已发布工件",
+ "o1b_o3_done": [
+  "REFCLK 差分对 P/N 已实施（W3-CN.25）",
+  "L4 网名已修（PCIE_REFCLK*_P/N）"
+ ],
+ "owner_options": [
+  {
+   "change": "第 4 信号层（动层叠/层用途）",
+   "closed_form_basis": "P4 R1 29/32",
+   "id": "O1-a"
+  },
+  {
+   "change": "放宽净距（动冻结 drc_rules.json PCIe85）",
+   "closed_form_basis": "P4 违例 0.380/0.4525 带宽不足",
+   "id": "O1-b"
+  },
+  {
+   "change": "授权新构造周期 T-5（三信号层通道 + chip 规则网格 + 层变点移走廊入口）",
+   "closed_form_basis": "P4 失败点为 chip 侧密度；三层面通道 + 规则网格为该密度的候选解法（项目层，未实施）",
+   "id": "O1-c"
+  },
+  {
+   "change": "允许 W3/L4 读板以规避既有铜",
+   "closed_form_basis": "L5 our↔frozen 159",
+   "id": "O2"
+  }
+ ],
+ "probes": [
+  {
+   "domain": "F-13 v1.2 (195,916 rows, WIN2.5)",
+   "engine": "W3-CN.25",
+   "name": "P0 基线（无净距约束）",
+   "result": {
+    "note": "旧口径达标",
+    "r1": "32/32",
+    "same_layer": 0,
+    "verdict": "FEASIBLE_ALL"
+   }
+  },
+  {
+   "domain": "F-13 v1.2",
+   "name": "P1 段↔段净距（不完整：缺 via↔track）",
+   "result": {
+    "r1": "31/32",
+    "same_layer": 5
+   }
+  },
+  {
+   "domain": "WIN3.5 (571,904 rows)",
+   "name": "P2 段↔段净距 + 域扩",
+   "result": {
+    "r1": "31/32",
+    "same_layer": 2
+   }
+  },
+  {
+   "domain": "WIN3.5",
+   "name": "P3 序变体",
+   "result": {
+    "hash": "31/32",
+    "natural": "31/32",
+    "note": "序无关",
+    "reverse": "31/32"
+   }
+  },
+  {
+   "domain": "WIN3.5",
+   "name": "P4 **完整净距套件（补 via↔track 双向）**",
+   "result": {
+    "certificates": [
+     "R1_chip_escape_column:PCIE_DN4/input",
+     "R1_chip_escape_column:PCIE_UP1/input",
+     "R1_chip_escape_column:PCIE_UP6/input",
+     "R1_5_chip_transition:PCIE_DN0/input#fcu_pad/N"
+    ],
+    "note": "决定性：完整套件下更不可行",
+    "r1": "29/32",
+    "same_layer": 29
+   }
+  }
+ ],
+ "revision": "W3-FCC.1",
+ "schema": 1,
+ "scope": "W3(G4) 在 L5(G7) 暴露的**完整净距套件**下的可行性（不改冻结四源、不改层叠、不读板）",
+ "scope_note": "本证书断言『本构造族 + 本资源域 + 完整净距套件』不可行；**不是**全局数学不可能性证明。",
+ "suite": {
+  "basis": "SPEC/drc_rules PCIe85",
+  "same_layer_crossings": "真交叉 + 共线重叠（整条页路由）",
+  "source": "完全由 drc_rules.json(PCIe85) + SPEC 线宽推出；非新口径",
+  "track_track_center_min_mm": 0.38,
+  "via_track_center_min_mm": 0.4525,
+  "via_via_center_min_mm": 0.525
+ },
+ "verdict": "INFEASIBLE_CONSTRUCTION_DOMAIN"
+}
