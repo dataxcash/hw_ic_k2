@@ -470,6 +470,27 @@ def probe(rule="d3", order="engine", verbose=False):
                         and abs(float(r[1]) - f["pad"]["N"][0]) <= _xw]
                 if _flt:
                     PAIR_DOMAIN[pid]["pair_rows"] = _flt
+            if __import__("os").environ.get("CO10_CORNER"):
+                _ly = LANES[pid]["lane_y"]
+                _own = np.array([list(f["pad"][q]) + list(f["conn_pad"][q]) for q in ("P", "N")], dtype=float)
+                _exm = np.zeros(len(PXA), dtype=bool)
+                for _q in ("P", "N"):
+                    _exm |= (np.abs(PXA - f["pad"][_q][0]) < 0.02) & (np.abs(PYA - f["pad"][_q][1]) < 0.02)
+                    _exm |= (np.abs(PXA - f["conn_pad"][_q][0]) < 0.02) & (np.abs(PYA - f["conn_pad"][_q][1]) < 0.02)
+                _all = PAIR_DOMAIN[pid]["pair_rows"]
+                _flt = []
+                for r in _all:
+                    ok = True
+                    for _q, _x in (("P", float(r[0])), ("N", float(r[1]))):
+                        _cy = _ly + pol_off(f, _q)
+                        _g = pad_via_edge(np.array([_x]), np.array([_cy]))[0]
+                        _gg = np.where(_exm, 999.0, pad_via_edge(np.array([_x]), np.array([_cy])))[0]
+                        if min(_g, _gg) < ESC - TOL:
+                            ok = False; break
+                    if ok:
+                        _flt.append(r)
+                if _flt:
+                    PAIR_DOMAIN[pid]["pair_rows"] = _flt
             rows = sorted(PAIR_DOMAIN[pid]["pair_rows"],
                           key=lambda r: (abs(float(r[0]) - ALLOC[(pid, "P")][0])
                                          + abs(float(r[1]) - ALLOC[(pid, "N")][0])

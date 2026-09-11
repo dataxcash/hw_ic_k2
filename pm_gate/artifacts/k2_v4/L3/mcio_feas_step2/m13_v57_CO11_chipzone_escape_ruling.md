@@ -134,3 +134,29 @@ lane 与邻页 land via（`ll`）的净距须满足 `|lane_y − ll| ≥ vv + PO
 
 ### 8.6 ledger/状态
 k2 `ff438f0`｜父仓（bump）｜四源 4/4 MATCH｜canonical W3-CN.30 `05f7bd10ab3b45b6` 未动｜引擎仍 W3-CN.30（**未改**）。
+
+---
+
+## 10. L3 通道分配工件（引擎闭式消费）
+### 10.1 产物
+`m13_v57_co11_channel_allocation.json`（rev `CO11-ALLOC.1`，sha16 **`5b82b5b2add19075`**，21KiB）：
+每 (page,pol) 固化 `via1(x,y) / escape_layer / stub_layer / lane_y / landing(lx,ll) / chip_pad / conn_pad`。
+生产者 `tools/p3_v57_co11_emit_allocation.py`；与已验证几何 `..._geom.json`（`ebd6acc92f3446b4`）**逐点一致**（32/32 via1 全匹配）。
+
+### 10.2 架构一致性（为何这不是「引擎搜索」）
+- 引擎既有契约：**离线域（F-13 pair/xorder、coherent_rows、r3_gaps）→ 执行器闭式消费（零搜索/零 fallback）**。
+  本工件与之一致：执行器按 (page,pol) **O(1) 取用**，无运行时自由度。
+- 派生方法（记录在案，供复核）：**单遍确定性**——固定键序 `(corridor,conn_ref,band,page_id)` 逆序，
+  候选按 `|Δx|+|Δy|` 到 pad 的固定键序排列，**首次通过 A-CN.9 谓词即取，无回溯、无重试**。
+- **诚实标注**：该派生含「候选枚举 + 首可行」语义（非纯闭式前缀）。若 PM/owner 要求派生亦须纯闭式，
+  则须另立工作周期做闭式推导（§9 实验显示逐页独立闭式目标只到 31/32，残留与 corner via × SMD 列耦合）。
+
+### 10.3 引擎落地清单（下一步，机械接线）
+1. `r2_lanes`：西侧 corridor 块 `lane_y = 33.3 + k*1.1265`（东侧不变）。
+2. `r3_place`：J3-up `ll=31.5`、J3-dn `ll=51.5`；`lx` 取工件 `landing[0]`。
+3. stub 层：按工件 `stub_layer`（J3 下行组=In2）。
+4. via1：按工件 `via1`（替代 r1_place 的帧内前缀构造）。
+5. 节点发射：CO-11 拓扑（pad→F→via1→escape(In2/B)→corner→lane(In6)→drop→stub(In2/In6)→land(In2↔F)→F→conn）。
+6. `clearance_metric` paths 补齐 escape 竖段（现 t2 缺项，CO-06 D2 缺口）；`same_layer_crossings` 覆盖 lane。
+7. `REVISION` bump（W3-CN.34+）；A1.2 由工件（与输入序无关）保证。
+8. 一次求解 → `FEASIBLE_ALL ∧ crossings=0 ∧ A-CN.9 0/0/0 ∧ skew≤0.15 ∧ wall≤120s` → G4→G7。
