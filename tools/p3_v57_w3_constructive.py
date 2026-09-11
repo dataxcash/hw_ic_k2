@@ -62,7 +62,7 @@ OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
 OUT_LANDING = STEP2 / "m13_v57_w3_chip_landing_rows.json"
 
 REVISION = "W3-CN.30"   # 默认（t2）路径不动；CO-16 见 REVISION_CO16
-REVISION_CO16 = "W3-CN.31"   # ROOT-22: O4 成对落列 pitch=0.6(R3_STEP) + L3 蛇形；A-CN.9 完整净距；无 stale seed
+REVISION_CO16 = "W3-CN.31"   # CO-16 安全-hop 拓扑（O(1) 消费 CO16-ALLOC.1）；O4 蛇形见 CO-17 裁定
 ORD = "natural"   # ROOT-20: enumeration order (A1.2 order-invariance, non-vacuous)
 SCHEMA = 1
 STEP = 1.46
@@ -91,12 +91,12 @@ POL_OFF = 0.19
 POL_OFF_CO16 = 0.25        # L2: 对内 lane y 偏移 >= vt(0.4525)/2（0.19 不足）
 CO16_LANE_STEP = {"WEST_MCIO_TO_CHIP": 1.1265, "EAST_CHIP_TO_J2": STEP}
 DEFAULT_SHAPE = "t2"
-# CO16_MEANDER: O4 等长蛇形。几何可行性（W3-CN.31 实测，见证书）：CO16-ALLOC.1 的
-#   西侧 lane pitch=1.1265 / J2 列 pitch=0.6 下，相邻通道净距 0.6265 < 2*(0.269)+0.38
-#   ⇒ 双侧同时蛇形无解；单侧 45° 蛇形自净距下限 0.38 亦不满足。置 False 时仅发射
-#   CO16-ALLOC.1 拓扑几何 + O4 残差证书（等长待 CO-17 重派生列/层距）。
-CO16_MEANDER = False
+# CO16_MEANDER: O4 等长蛇形（CO-16 ruling §2.2 双段模型的推广：lane-run 优先，缺口落竖段）。
+#   幅值 A 受相邻通道净距所限（A <= 邻道间距 - TT），纵向步 a 由「自净距 >= TT + 余量」与
+#   「命中 extra_mm」联立解出 —— 容许 a < A（陡于 45°），容量 = (2A/TT - 1) mm/mm 段长。
+CO16_MEANDER = True
 TT_TRACK = 0.38            # width + clearance (PCIE85)；蛇形自净距下限
+MEANDER_MARGIN = 0.02      # 净距余量（自净距 / 邻道净距；防 FP 边界）
 # CO-05c (O4): 成对落列 + L3 长度补偿（run 上确定性 45° 单侧蛇形）
 PAIR_MODE = True
 MEANDER_MODE = True
@@ -283,9 +283,13 @@ def _zig_pts(p, q, a, amp, teeth, lat):
 
 
 def meander_zig(p, q, extra_mm, lat, a_max):
-    """轴对齐段 p->q 上确定性单侧锯齿（45° 或更浅），使段长 +extra_mm。
-    自净距：相邻平行段间距 2aA/sqrt(a^2+A^2) >= TT_TRACK。返回 (pts, realized, A, a)。
-    不可达（a_max 太小 / 段太短）时返回直线段 + realized=0。"""
+    """轴对齐段 p->q 上确定性单侧锯齿，使段长 +extra_mm。
+
+    横向幅值 A <= min(MEANDER_A_MAX, a_max)（只向 lat 一侧鼓出）；纵向步 a 由两条闭式条件联立：
+      自净距 2aA/sqrt(a^2+A^2) >= TT_TRACK + margin  ⇒ a >= a_min
+      per-tooth 增量 2(sqrt(a^2+A^2)-a) = extra/teeth ⇒ a = (A^2 - per_t^2/4)/per_t
+    容许 a < A（陡于 45°）：容量 = (2A/TT - 1) mm/mm 段长（45° 特例 = sqrt2-1）。
+    返回 (pts, realized, A, a)；不可达（幅值/段长不足）=> 直线段 + realized=0。"""
     dx, dy = q[0] - p[0], q[1] - p[1]
     horiz = abs(dx) >= abs(dy)
     run = abs(dx) if horiz else abs(dy)
@@ -293,14 +297,16 @@ def meander_zig(p, q, extra_mm, lat, a_max):
     if extra_mm <= TOL or run <= 1.0:
         return straight, 0.0, 0.0, 0.0
     amp = min(MEANDER_A_MAX, max(0.0, a_max))
-    if 4.0 * amp * amp <= TT_TRACK * TT_TRACK:
-        return straight, 0.0, 0.0, 0.0                    # 任意浅度锯齿自净距上限 2A < TT
-    a_min = amp * TT_TRACK / math.sqrt(4.0 * amp * amp - TT_TRACK * TT_TRACK)
-    per45 = 2.0 * amp * (2 ** 0.5 - 1.0)
-    teeth = max(1, int(round(extra_mm / per45)))
-    per_t = extra_mm / teeth                              # 精确命中：解 a（不陡于 45° => a >= amp）
-    a_ex = (amp * amp - per_t * per_t / 4.0) / per_t
-    a = max(amp, a_min, a_ex)
+    tte = TT_TRACK + MEANDER_MARGIN
+    if 2.0 * amp <= tte:
+        return straight, 0.0, 0.0, 0.0                    # 幅值 <= TT/2：任意陡度均无净距
+    a_min = tte * amp / math.sqrt(4.0 * amp * amp - tte * tte)
+    per_min = 2.0 * (math.hypot(a_min, amp) - a_min)      # 最陡可用步下的 per-tooth 增量
+    if per_min <= TOL:
+        return straight, 0.0, 0.0, 0.0
+    teeth = max(1, int(math.ceil(extra_mm / per_min)))    # ceil ⇒ per_t <= per_min ⇒ a_ex >= a_min
+    per_t = extra_mm / teeth
+    a = max(a_min, (amp * amp - per_t * per_t / 4.0) / per_t)
     per = 2.0 * (math.hypot(a, amp) - a)
     if per <= TOL:
         return straight, 0.0, 0.0, 0.0
@@ -398,7 +404,7 @@ def co16_seg_room(alloc):
                         continue                          # 仅同侧（横向鼓出方向）邻居约束
                     if min(t["hi"], s["hi"]) - max(t["lo"], s["lo"]) <= 1e-9:
                         continue
-                    best = min(best, abs(t["x"] - s["x"]) - TT_TRACK)
+                    best = min(best, abs(t["x"] - s["x"]) - TT_TRACK - MEANDER_MARGIN)
                 room[(kind,) + k + (lat,)] = max(0.0, best)
     return esc, stb, room
 
@@ -463,7 +469,7 @@ def co16_lane_room(alloc, pid, pol, dy):
             if min(xhi, max(v2, l2)) - max(xlo, min(v2, l2)) <= 0:
                 continue
             if dy * (y2 - ly) > TOL:
-                amp = min(amp, abs(y2 - ly) - TT_TRACK)
+                amp = min(amp, abs(y2 - ly) - TT_TRACK - MEANDER_MARGIN)
     cuts = []
     for pid2, a2 in alloc.items():
         if a2["escape_layer"] != "B.Cu":       # 仅 E=B 的 via1 stack 在 In6 有实体
