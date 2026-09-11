@@ -56,3 +56,44 @@ hole_to_hole 1 / holes_co_located 72(新增类型) / hole_clearance 0`
 ## 5. 红线遵守
 只读消费冻结四源（未改）；canonical W3-CN.30 未 promotion；默认 t2 路径逐字节不动；引擎零坐标搜索（AST while=0/enumerate=0）；
 未放宽任何阈值；无 partial pass；无 sign-off；结论=否定（几何不可行）+ 模型缺口。
+
+
+## 6. 追加实证（本会话第二轮：DFM 残余簇定位 + CO-17 起手式）
+
+### 6.1 板边（新）——`CO16-ALLOC.1` 西 J3 上排 landing 出板
+- 板形 bbox（`m13_v57_l5_fab_record.json`）= `[22.95, 32.95, 120.1, 46.1]` ⇒ **y ∈ [32.95, 79.05]**。
+- 但 CO-16 用 `CO10_FANY_J3=31.5,51.5` ⇒ 西 J3 上排 8 个 landing 在 **y=31.5（出板）**，其 F.Cu land 段与 In2 stub 也出板
+  ⇒ KiCad `copper_edge_clearance` **10 → 29**（DFM 175 中的 29 项）。
+- 探针扫描（只读，`--rule fan --order rev`，其余 CO-16 旋钮不变）：
+
+| `CO10_FANY_J3` U | 结果 |
+|---|---|
+| 33.5 / 34.5 / 35.5 / 36.5（L 取 47.0/49.0/51.5 任一） | **32/32 placed, failed=[]** |
+| 38.0 | 31/32（失 `PCIE_DN3/out_MCIO`） |
+| 40.0 | 31/32（失 `PCIE_DN1/out_MCIO`） |
+| 42.0（默认） | 31/32（失 `PCIE_UP3/input`） |
+
+- **已验证的 CO-17 起手几何**：`CO10_WSTEP=1.1265 CO10_WLO=33.3 CO10_FANY_J3=34.5,51.5 CO10_STUB=J3L
+  CO10_POLMODE=lx CO10_EASTSPLIT=in2c CO10_J2STEP=0.6 CO10_PAIR=…v1_5.json`
+  → 探针 32/32；`p3_v57_co11_placement_verify.py` → **320 via / 320 段 / 0 违规 PASS**（**在板内**）。
+
+### 6.2 西侧 lane 蛇形通道占用（新）
+按 `m13_v57_co16_o4_budget.json` 的短极与鼓出方向统计 16 条西 lane（k=0..15）：
+- **k=4..15（12 条）：其上方通道为单占用** ⇒ 单侧蛇形可行：通道 0.6265，`A ≤ 0.6265 − 0.38 = 0.2465`；
+  自净距取 `2aA/sqrt(a²+A²) ≥ 0.38` ⇒ `a ≥ 0.2982`（浅齿，**无 45° 需 A≥0.269 之限**），密度 0.297；
+  容量 `(R−1)·0.297 = 5.7..9.4mm` ≥ 需求 1.2..2.2mm **全部可闭合**。
+- **k=1..3：通道被相邻两 lane 双向占用** ⇒ `A ≤ (0.6265−0.38)/2 = 0.123 < 0.19`（自净距上限 2A）⇒ 该 3 条需第二段（stub/escape）或改列距。
+- 结论：**西侧 O4 可由「板内 fan + 单侧浅齿蛇形」基本闭合**（仅 k=1..3 需第二段），不再需要把 lane pitch 放宽到 1.418。
+
+### 6.3 东侧（复核先前结论）
+- `PCIE_DN0/input P`：`R_lane=40.9`，45° 容量 16.53 ≥ 新 fan 下 extra **16.45** ⇒ **lane-only 可闭合**（叠加容量感知置换后 DN2 亦可）。
+- `PCIE_DN1/input N`(extra 19.22) / `PCIE_UP0/out_J2 N`(extra 17.69)：lane-run 容量不足，需第二段；前者可用 escape 竖段（A≤0.32，容量 ≈4.4 ≥ 缺额），
+  后者 lane 窗口被 In6 via stack 截断（x≳94）且 escape 仅 0.59mm ⇒ **UP0 仍为硬缺口**，须靠 (B) 容量感知色值置换把它换到更短的列（k 小）或另设补偿段。
+
+### 6.4 DFM 残余簇（co16 拓扑-only, new=175）归属
+| 簇 | new | 归属 |
+|---|---|---|
+| `solder_mask_bridge` 42 / `clearance` 19 / `shorting_items` 11 | 72 | **PCIE_REFCLK0/1 走线与 J2/J3/J4 pad / GND / P3V3 冲突**（与 CO-16 拓扑无关，属既有 refclk 路线） |
+| `copper_edge_clearance` 29 | 29 | **§6.1 西 J3 fan 出板**（CO-17 可直接修） |
+| `holes_co_located` 72(warning) + `hole_to_hole` 1 | 73 | L4 同点叠层 via 未合并（应合并为单支贯通 via） |
+| `tracks_crossing` 1 | 1 | REFCLK P/N 自交 |
