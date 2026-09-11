@@ -48,3 +48,32 @@
 - D8/G5 验证器 v2：**PASS**（G-M1..G-M6 + 双度量 0 + A1.2/A1.3/A1.4；A1.3 现覆盖 REFCLK P/N）。
 - L5 重测：DFM **479**（含新增 N 轨的 26 条）；SI 等长 **skew 24.476mm** 不变 ⇒ **G7 仍 FAIL**；
   **O1**（净距不可行，已实证与域/序无关）与 **O2**（板既有铜/读板）仍待 owner。
+
+## W3-CN.27 复核（G6 重评：**BLOCKED / 上游变更单 UC-01**；2026-09-11，ROOT-21 之后）
+- 触发：图纸由 W3-CN.25 → **W3-CN.27**（LID.1 派生 8L；up 带逃逸层 = **In6.Cu**）。G6 必须对新图纸重跑。
+- L4 工具按 8L 物理叠层更新（`PHYS` 8 层；`LM` 动态映射 `In5_Cu/In6_Cu`）。
+
+| 检查 | 结果 |
+|---|---|
+| L4-A 图纸只读 | **True**（drawing sha == `13dfb9f4d74224d9`；冻结板 sha `f6273de613f43d05` 未变） |
+| L4-B 几何=图纸 | **True**（独立 collapse 逐段/逐 via 一致） |
+| L4-C 链连续 | **True** |
+| L4-D 端点处方 | **True**（64 data 网 + 2 REFCLK×2） |
+| **L4-E 板已消费** | **False** ⇒ G6 **BLOCKED** |
+
+- L4 构造记录（机械展开，零设计决策）：**68 网 / 338 段 / 256 via**
+  （按层：F.Cu 146、B.Cu 64、In2.Cu 64、**In6.Cu 64**）sha `e275689aedebf399`。
+- **L4-E 根因（硬阻塞，非本层可修）**：冻结源 PCB `k2_v4.kicad_pcb`（四源之一，`f6273de613f43d05`）
+  为 **6 层铜** = `F.Cu/In1.Cu/In2.Cu/In3.Cu/In4.Cu/B.Cu`，**不存在 In5.Cu/In6.Cu**。
+  实测：对冻结板施加 8L 图纸后，板文件仍声明 6 层铜，却含 **192 处 `In6.Cu` 线段/过孔**
+  ⇒ **无效板**（落在未声明层上）。故 `board != record`（64 网 + 64 via 失配），L4-E 不可能通过。
+- 上游依据（既有文献，非本会话新造）：`m13_v57_layer_intent_derived_v1.json` (LID.1) 明示
+  `frozen_stackup_signal_layers = 3`、**`frozen_stackup_sufficient = false`**、`total_layers_derived = 8`；
+  `m13_v57_layer_intent_adoption_v1.json` 采用该 8L。即：**8L 叠层是派生需求，冻结板尚未重发**。
+- 处置：按宪法「下层发现问题无权私下妥协，必须升级变更单」⇒ **不修改冻结板**、不伪造 L4-E；
+  开 **UC-01**（见 `m13_v57_l4_upstream_UC01_stackup_8L_required.md`）等 owner 裁决：
+  (a) 授权 **8 层板重发**（加 In5 GND + In6 signal；叠层/阻抗/板厚/成本变更）→ 重跑 L4；或
+  (b) 授权 **6L 约束下重做**（仅 3 信号层），此时须由 owner 就 A-CN.9 完整净距（SPEC 0.175）放行或修订。
+- 现状：`k2_v4.l4.kicad_pcb`（sha `b63e6c09aa57e76d`）为 **上一版 W3-CN.25（6L）** 的产物，
+  **不得用于本图纸**；本会话未对其就地覆写（避免产生无效板）。
+- 指纹：construction `e275689aedebf399`｜validation `c1fe0eeb3876ed5c`（L4-A..D True / L4-E False，viol=1）

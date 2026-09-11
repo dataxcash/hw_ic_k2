@@ -21,7 +21,7 @@ MANIFEST = STEP2 / "m13_v57_s1_page_manifest.json"
 OUT = STEP2 / "m13_v57_l4_construction.json"
 SRC_PCB = K2 / "k2_v4.kicad_pcb"
 DST_PCB = K2 / "k2_v4.l4.kicad_pcb"
-PHYS = ["F.Cu", "In1.Cu", "In2.Cu", "In3.Cu", "In4.Cu", "B.Cu"]   # top->bottom
+PHYS = ["F.Cu", "In1.Cu", "In2.Cu", "In3.Cu", "In4.Cu", "In5.Cu", "In6.Cu", "B.Cu"]  # LID.1 8L top->bottom
 LIDX = {n: i for i, n in enumerate(PHYS)}
 
 
@@ -78,8 +78,7 @@ def build(art, manifest):
 def apply_board(rec, src: Path, dst: Path):
     import pcbnew                                                       # noqa: E402
     b = pcbnew.LoadBoard(str(src))
-    LM = {"F.Cu": pcbnew.F_Cu, "In1.Cu": pcbnew.In1_Cu, "In2.Cu": pcbnew.In2_Cu,
-          "In3.Cu": pcbnew.In3_Cu, "In4.Cu": pcbnew.In4_Cu, "B.Cu": pcbnew.B_Cu}
+    LM = {n: getattr(pcbnew, n.replace(".", "_")) for n in PHYS}   # LID.1 8L (incl. In5/In6)
     mm = pcbnew.FromMM
     vec = lambda x, y: pcbnew.VECTOR2I(mm(x), mm(y))                    # noqa: E731
     cache = {}

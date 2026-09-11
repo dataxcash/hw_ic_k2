@@ -21,7 +21,7 @@ REC = STEP2 / "m13_v57_l4_construction.json"
 SRC_PCB = K2 / "k2_v4.kicad_pcb"
 DST_PCB = K2 / "k2_v4.l4.kicad_pcb"
 TOL = 1e-6
-PHYS = ["F.Cu", "In1.Cu", "In2.Cu", "In3.Cu", "In4.Cu", "B.Cu"]
+PHYS = ["F.Cu", "In1.Cu", "In2.Cu", "In3.Cu", "In4.Cu", "In5.Cu", "In6.Cu", "B.Cu"]  # LID.1 8L top->bottom
 LIDX = {n: i for i, n in enumerate(PHYS)}
 
 
