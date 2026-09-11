@@ -72,17 +72,13 @@ def min_abs_dl(pid, lxP, lxN, man, art, base, ver):
             land = np.hypot(conn[pol][0] - lx[pol], conn[pol][1] - yl)
             L.append(base_len + stub + land)
         res[pol] = np.sort(np.concatenate(L))
-    A, B = res["P"], res["N"]
-    i = j = 0
+    A, B = res["P"], res["N"]                             # sorted achievable length sets
     best = float("inf")
-    while i < len(A) and j < len(B):                       # merge (analysis kernel; bounded)
-        d = abs(A[i] - B[j])
-        if d < best:
-            best = d
-        if A[i] < B[j]:
-            i += 1
-        else:
-            j += 1
+    for a in A:                                            # 最近邻查询（numpy searchsorted，无循环搜索）
+        j = int(np.searchsorted(B, a))
+        for c in (j - 1, j):
+            if 0 <= c < len(B):
+                best = min(best, abs(a - B[c]))
     return float(best)
 
 
