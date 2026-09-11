@@ -14,8 +14,13 @@ STEP2 = L3 / "mcio_feas_step2"
 OUT = STEP2 / "m13_v57_co74_chain.json"
 BOARD = K2 / "k2_v4_8L.l4.kicad_pcb"
 GEOM_KEYS = ["route_geometry", "pages", "decision_contract", "layers"]
+# route_geometry / pages / layers：与 CO-73 rev-7 基线**逐字节同**（几何零变化）。
+# decision_contract：CO-76（非执行者对抗评审 F1）**有意**改变一个声明字符串 ——
+#   r1_5_layer_rule "up=In6.Cu" -> "up=In5.Cu"（REV6 下 In6=GND；引擎实现本即 up->In5）
+#   故此处改钉 CO-76 后值，属声明层 delta（非几何）。
 REF_GEOM = {"route_geometry": "d39becad4f51f3af", "pages": "e659edaa6608f3d2",
-            "decision_contract": "c0e018ec4102fa72", "layers": "db2ee692c03204da"}
+            "layers": "db2ee692c03204da"}
+REF_DECISION_CONTRACT = "5a8b2847ba27a66c"
 REF_DRAWING = "3cc123056a7319ff"
 REF_BOARD = "0e636a67c1472462"
 
@@ -38,7 +43,8 @@ def main() -> int:
     si = json.loads((STEP2 / "m13_v57_l5_si_pi_emc_record.json").read_text(encoding="utf-8"))
 
     geom = {k: khash(g4.get(k)) for k in GEOM_KEYS}
-    geom_ok = all(geom[k] == REF_GEOM[k] for k in GEOM_KEYS)
+    geom_ok = all(geom[k] == REF_GEOM[k] for k in REF_GEOM) and \
+        geom["decision_contract"] == REF_DECISION_CONTRACT
     board_ok = s16(BOARD) == REF_BOARD
     assert geom_ok, geom
     assert board_ok, s16(BOARD)
@@ -69,7 +75,11 @@ def main() -> int:
         "invariance": {
             "reference_rev7_drawing_sha16": REF_DRAWING,
             "reference_git": "46e30e5 (CO-73)",
-            "geometry_key_hashes": geom, "all_geometry_identical": geom_ok,
+            "geometry_key_hashes": geom,
+            "geometry_keys_identical_to_rev7": {k: geom[k] == REF_GEOM[k] for k in REF_GEOM},
+            "decision_contract_expected_sha16": REF_DECISION_CONTRACT,
+            "decision_contract_delta": "CO-76 F1: r1_5_layer_rule up=In6.Cu -> up=In5.Cu（声明层，非几何）",
+            "all_geometry_identical": geom_ok,
             "board_sha16": s16(BOARD), "board_identical": board_ok,
             "differing_top_level_keys": ["frozen_sha_check", "inputs_sha"],
         },

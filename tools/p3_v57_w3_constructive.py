@@ -125,8 +125,8 @@ GRID = 0.05
 R3_OFF = -0.3
 R3_STEP = 0.6
 POL_OFF = 0.19
-# CO-16 (W3-CN.31): 全板安全-hop 拓扑（pad->F->via1(F<->In2)->escape(In2/B)->corner->lane(In6)
-#   ->drop->stub(In2/In6/B)->land(..->In2->F)->F->conn）+ O4 双段蛇形。
+# CO-16 (W3-CN.31): 全板安全-hop 拓扑（pad->F->via1(F<->In2)->escape(In2/B)->corner->lane(In5)
+#   ->drop->stub(In2/In5/B)->land(..->In2->F)->F->conn）+ O4 双段蛇形。
 #   几何（via1/lane_y/landing/escape/stub 层）O(1) 消费 CO16-ALLOC.1 工件，零坐标搜索。
 POL_OFF_CO16 = 0.25        # L2: 对内 lane y 偏移 >= vt(0.4525)/2（0.19 不足）
 CO16_LANE_STEP = {"WEST_MCIO_TO_CHIP": 1.05, "EAST_CHIP_TO_J2": 1.449}   # CO-23（informational；引擎消费工件 lane_y）
@@ -468,13 +468,13 @@ def co16_nodes(f, pol, v1, esc_pts, lane_pts, stub_pts, esc_l, stub_l, land, con
         n += [[vx, vy, "In5.Cu"], [vx, vy, "B.Cu"]]
     for q in esc_pts[1:]:
         n.append([q[0], q[1], esc_l])
-    n.append([end[0], end[1], "In5.Cu"])                  # corner via esc_l <-> In6
+    n.append([end[0], end[1], "In5.Cu"])                  # corner via esc_l <-> In5
     for q in lane_pts[1:]:
         n.append([q[0], q[1], "In5.Cu"])
     if stub_l == "In2.Cu":
-        n.append([lx, lane_y, "In2.Cu"])                  # drop In6 -> In2 @ lane y
+        n.append([lx, lane_y, "In2.Cu"])                  # drop In5 -> In2 @ lane y
     elif stub_l == "B.Cu":
-        n.append([lx, lane_y, "B.Cu"])                    # drop In6 -> B @ lane y
+        n.append([lx, lane_y, "B.Cu"])                    # drop In5 -> B @ lane y
     for q in stub_pts[1:]:
         n.append([q[0], q[1], stub_l])
     if stub_l == "B.Cu":
@@ -504,7 +504,7 @@ def co16_o4_amp_table(alloc, o4):
 
     顶点净距：A <= Δy - vt（vt = via_r + clearance + width/2 = 0.4525；A-CN.9 对**每个折点**
     作 via 候选量测）。方向取静态 vt 余量较大侧（平手取 CO16-O4.1 的 dy）。x 窗口按 E=B 的
-    In6 via1 stack 截断（避免蛇形扫过异网 via stack）。"""
+    In5 via1 stack 截断（避免蛇形扫过异网 via stack）。"""
     VT = VT_TRACK
     lanes = {}
     for pid, a in alloc.items():
@@ -549,7 +549,7 @@ def co16_o4_amp_table(alloc, o4):
             amp = min(amp, gap)
         amp = min(amp, (LANE_Y_HI - y) if d > 0 else (y - LANE_Y_LO))        # CO-22 顶点不得出板边带
         tab[pid][1] = max(0.0, min(MEANDER_A_MAX, amp))
-    # x 窗口：E=B 的 In6 via1 stack 截断（原 co16_lane_room 口径）
+    # x 窗口：E=B 的 In5 via1 stack 截断（原 co16_lane_room 口径）
     for pid, pol in mset.items():
         a = alloc[pid]
         vx, lx = a["via1"][pol][0], a["landing"][pol][0]
@@ -1061,7 +1061,7 @@ def _pair_lands(base_gaps, lanes):
 
     合法域（BASE F-8）：列 132.65(inner) 只可向左 (x<=131.65)；135.0(outer) 只可向右 (x>=136.0)。
     每页取成对局部列：inner 极 lx=131.65-PITCH*k，outer 极 lx=136.0+PITCH*k（k=本带行序）。
-    同带内列互异（>=0.38）⇒ 落段竖段互不重叠；异带（B.Cu/In6.Cu）可复用列。
+    同带内列互异（>=0.38）⇒ 落段竖段互不重叠；异带（B.Cu/In5.Cu）可复用列。
     """
     out = {}
     seen = {}
@@ -1835,7 +1835,7 @@ def main(argv=None) -> int:
             if a and shape != "co16":
                 src = a[pol + "_via"]
                 if shape == "t2":
-                    # LID.1 8L (rect #03): 每组 (corridor,band) 独占一个派生通道层 (In2/In6/B)；
+                    # LID.1 8L (rect #03): 每组 (corridor,band) 独占一个派生通道层 (In2/In5/B)；
                     # escape vertical 在该层；run/drop 同组层 => 单层 L 路径，端部各 1 via (≤2)。
                     _L = "B.Cu" if f["band"] == "dn" else "In5.Cu"   # 竖段按带分层（run 走 In2）
                     paths[(pid, pol)] = [_L, [[src[0], src[1]], [src[0], tgt[1]]]]
@@ -2200,7 +2200,7 @@ def main(argv=None) -> int:
             for pol in ("P", "N"):
                 r3a = r3_by_pol[pol]                         # per-polarity landing
                 if shape == "co16":
-                    # W3-CN.31: CO-09/CO-11 安全-hop 拓扑（全 via in {F<->In2, In2<->In6, In6<->B}）
+                    # W3-CN.31: CO-09/CO-11 安全-hop 拓扑（全 via in {F<->In2, In2<->In5, In5<->B}）
                     _pp = _CO16_PTS[(pid, pol)]
                     _nd = co16_nodes(f, pol, a[pol + "_via"], _pp["esc"], _pp["lane"], _pp["stub"],
                                      lanes[pid]["escape_layer"], lanes[pid]["stub_layer"],
@@ -2216,7 +2216,7 @@ def main(argv=None) -> int:
                 # connector-side bound -> via2 -> F.Cu stub -> R3 landing -> connector pad.
                 if shape == "t2":
                     # ROOT-21: emission MUST mirror the internal escape-layer rule (dn->B.Cu,
-                    # up->In6.Cu); the previous hardcoded "B.Cu" made the artifact disagree with the
+                    # up->In5.Cu); the previous hardcoded "B.Cu" made the artifact disagree with the
                     # geometry the A-CN.9 metric validates (non-self-consistent artifact).
                     _Lp = "B.Cu" if f["band"] == "dn" else "In5.Cu"
                     lx = r3a["column_x"]; ly_l = r3a["landing"][1]
@@ -2307,7 +2307,7 @@ def main(argv=None) -> int:
             "max_vias_per_line": ({"bandX_escape_In2": 4, "bandY_escape_B": 6} if shape == "co16"
                                   else (4 if shape == "t2" else 2)),
             "r1_5_layer_rule": "T-2 river (segment-type): escape+drop on the band layer "
-                               "(dn=B.Cu, up=In6.Cu), corridor run on In2.Cu; 4 vias/line <= 5",
+                               "(dn=B.Cu, up=In5.Cu), corridor run on In2.Cu; 4 vias/line <= 5",
             "pair_rule": {"dist_min_mm": VIA_VIA, "stagger_min_mm": STAGGER},
         },
         "layers": {

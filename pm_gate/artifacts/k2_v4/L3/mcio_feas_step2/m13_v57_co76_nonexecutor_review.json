@@ -1,0 +1,63 @@
+{
+ "artifact": "m13_v57_co76_nonexecutor_review",
+ "checks": {
+  "C10_thresholds_not_relaxed": true,
+  "C11_spec_rev8_pdn": true,
+  "C1_engine_layer_roles": true,
+  "C2_drawing_decl_string": true,
+  "C3_drawing_no_In6_field": true,
+  "C4_board_layer_hygiene": true,
+  "C5_A5_hardened_and_pass": true,
+  "C6_engine_input_and_LID": true,
+  "C7_interpair_negative_intact": true,
+  "C8_frozen_sources_4of4": true,
+  "C9_tools_while_free": true
+ },
+ "failures": [],
+ "findings": {
+  "F1_stale_role_string_in_production_drawing": {
+   "class": "declaration/artifact correctness",
+   "evidence_before_fix": "decision_contract.r1_5_layer_rule = '...(dn=B.Cu, up=In6.Cu)...'；REV6 下 In6=GND，且实现为 up->In5.Cu ⇒ 声明与实现/叠层不一致",
+   "fix": "引擎文本 up=In6.Cu -> up=In5.Cu（零几何）；图纸 decision_contract 随之更新",
+   "severity": "medium",
+   "status": "fixed"
+  },
+  "F2_A5_probe_coverage_hole": {
+   "class": "verification weakness",
+   "evidence_before_fix": "CO-69 A5 断言 '\"In6.Cu\"' not in eng（带引号）；裸 In6 文本 14 处全漏检",
+   "fix": "A5 改裸 token 扫描 + 显式豁免 In6->In5 迁移注；修复前该强化断言会 FAIL（有齿）",
+   "severity": "medium",
+   "status": "fixed"
+  },
+  "F3_stale_comments": {
+   "class": "documentation",
+   "fix": "10 处注释/docstring 的 In6 信号层表述改 In5（0 处残留，除迁移注）",
+   "severity": "low",
+   "status": "fixed"
+  }
+ },
+ "nature": "非执行者侧对抗评审 pass 1/2（对象 CO-67..CO-75）+ F1/F2/F3 修复校验",
+ "observations": {
+  "board_segment_layers": {
+   "B.Cu": 39,
+   "F.Cu": 174,
+   "In2.Cu": 106,
+   "In5.Cu": 2204
+  },
+  "board_zone_layers": {
+   "F.Cu": 4
+  },
+  "engine_in6_lines_after_fix": [
+   [
+    159,
+    "CO16_ALLOC = STEP2 / \"m13_v57_co16_channel_allocation_v7.json\"   # CO16-ALLOC.7（CO-69：stub 层 In6->In5，随 LID REV6）"
+   ]
+  ]
+ },
+ "redline": "评审只读；F1/F3 为文本修正零几何；阈值未放宽；四冻结源未动。",
+ "residual": "本件 = pass 1/2；修复后的 revision 仍欠第二路非执行者评审；① 对间净空仍为 L1（CO-75 负结果）",
+ "reviewer_independence": "本会话与 CO-67..73 执行者非同一会话（context 归零续接）；CO-74/75 为本会话改动，已排除在评审对象外",
+ "revision": "CO-76.1",
+ "schema": 1,
+ "verdict": "PASS"
+}

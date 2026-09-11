@@ -120,11 +120,16 @@ def main() -> int:
     add("A4", "per-layer Zdiff in 85+-10% at delivered pair centers {0.5,0.6}", not zbad,
         {"bad": zbad, "widths": s5["impedance"]["width_mm_by_layer"]})
 
-    # A5 engine
+    # A5 engine（CO-76 加固：原断言只查**带引号**字面量 `"In6.Cu"`，无法发现
+    #   未加引号的层角色文本（如 emitted `up=In6.Cu`）与陈旧注释；改为裸 token 扫描 + 显式豁免）
     eng = (K2 / "tools/p3_v57_w3_constructive.py").read_text(encoding="utf-8")
-    add("A5", "engine has no In6.Cu literal; palette = F/In2/In5/B",
-        ('"In6.Cu"' not in eng) and ('LAYER_PALETTE = ["F.Cu", "In2.Cu", "In5.Cu", "B.Cu"]' in eng),
-        {"in6_literal": eng.count('"In6.Cu"'), "palette_ok": '["F.Cu", "In2.Cu", "In5.Cu", "B.Cu"]' in eng})
+    _in6_lines = [(i + 1, ln.strip()) for i, ln in enumerate(eng.splitlines()) if "In6" in ln]
+    _in6_unallowed = [(i, ln) for i, ln in _in6_lines if "In6->In5" not in ln]
+    _palette_ok = 'LAYER_PALETTE = ["F.Cu", "In2.Cu", "In5.Cu", "B.Cu"]' in eng
+    add("A5", "engine: palette = F/In2/In5/B；无 In6 层角色文本（裸 token 扫描，豁免 In6->In5 迁移注）",
+        _palette_ok and not _in6_unallowed,
+        {"palette_ok": _palette_ok, "in6_quoted_literal": eng.count('"In6.Cu"'),
+         "in6_bare_lines": len(_in6_lines), "in6_unallowed": _in6_unallowed})
 
     # A6 board widths (needs pcbnew)
     try:
