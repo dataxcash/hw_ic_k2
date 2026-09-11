@@ -212,3 +212,16 @@ J3 用 `{54.7/55.3, 56.5/57.1, 61.9/62.5, 63.7/64.3}`（两行 y=43.25/45.75，*
 按需微调 J3 两组的 escape 层（`ESC_MAP` 现 WEST up→In2 / dn→B.Cu）或落位带 → 期望 32/32；
 随后 land 保持直线（dx=+0.3 已合规，**无需狗腿**）⇒ 直接结算 D3b（消 6/6）。
 **层意图**：占用 B/F 作 stub 属 LID.1 变更（L2：叠层分配/过孔策略）⇒ 须版本化层意图 + 全链重跑；In1/In3/In5/In4 红线未动。
+
+## 14. 追加（CO-33：J3 组失败根因 = **In2 lane-end via 间距**，与列/land 无关）
+探针临时补丁（已还原）打印 `failed[page]["reasons"]`：
+- `DN0/DN1/DN2/DN3 out_MCIO`（J3L 组）：`vt_placed` **距离 0.0**（via 正压他页 In2 lane）+ `vv_placed` 0.493；
+- `UP0/UP2 input`（J3U 组）：`vv_placed` 0.500 / 0.522；
+- 失败项**全部**指向 `(x, lane_y, pol, "In2.Cu")` 的 **lane-end via** vs 他页 In2 lane/via 间距（需 ≥0.525）。
+列偏移实验：`FAN_DX(J4)=+0.6 / -0.6` ⇒ dx = `{+0.3,-0.3}` / `{+0.3,+0.9}`（**全 shop-clean ≥0.175**），
+但**落位仍 26/32 且失败页完全相同**（DN0-3/UP0/UP2）⇒ **J3 组失败与 J4 列无关**。
+⇒ 结论：
+1. **J3L 不能上 In6**（与本仓 CO-23 选择 `CO10_STUB=J3L` 一致）：即使 stub 换层，**lane-end via 仍在 In2**，必须与他页 In2 lane 保持 ≥0.525。
+2. ⇒ 真正的约束是 **(列 x, lane_y) 联合间距**，不是 stub 层或 land 形状。CO-32 的「4 层 ⇒ dx 全自然」只解了 stub 列，未解 via。
+**下一周期（有界、明确）**：对 J3 两组做 **(列 x, lane_y) 联合派生**（闭式：保证每 via 与他页 In2 lane/via ≥0.525，允许 column 离开 pad 列而用 land 狗腿补偿）
+⇒ 目标 32/32 且 dx ∈ {+0.3,-0.3}（shop-clean）⇒ D3b 消 6/6；随后 ALLOC.5 + 引擎 rev + G4→G7。
