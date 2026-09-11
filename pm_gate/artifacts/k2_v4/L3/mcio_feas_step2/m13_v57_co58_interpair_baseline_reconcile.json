@@ -1,0 +1,85 @@
+{
+ "artifact": "m13_v57_co58_interpair_baseline_reconcile",
+ "baselines": [
+  {
+   "edge_mm": 0.875,
+   "id": "R3-2 强条(v1.1)",
+   "kind": "requirement",
+   "pitch_mm": null,
+   "source": "L1_TOPOLOGY_v1.0.md 硬约束 3（2026-08-15 强条）",
+   "span_mm": 0.585
+  },
+  {
+   "edge_mm": 0.875,
+   "id": "v22 容量口径",
+   "kind": "capacity",
+   "pitch_mm": 1.46,
+   "source": "L1_TOPOLOGY_v2.0.md 硬约束 2（用户裁决 v22）",
+   "span_mm": 0.585
+  },
+  {
+   "edge_mm": 0.495,
+   "id": "冻结轨距(v2.0/模板)",
+   "kind": "frozen_as_built",
+   "pitch_mm": 1.08,
+   "source": "L1_TOPOLOGY_v2.0.md 硬约束 2 + L2_STRUCTURE_v2.0.md:145 + mcio_learning_gate.md §4.2（生产过模板）",
+   "span_mm": 0.585
+  },
+  {
+   "edge_mm": 0.495,
+   "id": "交付·走廊",
+   "kind": "delivered",
+   "pitch_mm": 1.2,
+   "source": "L4 construction 实测（CO-54 audit）",
+   "span_mm": 0.705
+  },
+  {
+   "edge_mm": 0.345,
+   "id": "交付·芯片侧 In6 长平行带",
+   "kind": "delivered",
+   "pitch_mm": 1.05,
+   "source": "L4 construction 实测（CO-54 audit worst：PCIE_UP2_N‖PCIE_UP4_P，29.1mm）",
+   "span_mm": 0.705
+  }
+ ],
+ "conformance": "PENDING_L1_Q1（更正后：走廊=冻结口径一致；芯片侧低于冻结口径）",
+ "delivered_constants": {
+  "chip_side_pair_pitch_mm": 1.05,
+  "corridor_pitch_mm": [
+   1.2
+  ],
+  "intra_center_mm": [
+   0.5
+  ],
+  "span_now_mm": 0.705,
+  "w_mm": 0.205
+ },
+ "gate_impact": "none（本件零改动；G4..G7 不变）",
+ "narrowed_owner_questions": [
+  {
+   "id": "Q1",
+   "if_capacity_only": "以 v2.0 冻结口径 1.08（铜边 0.495）为准 ⇒ 走廊交付（0.495）已一致；仅芯片侧 In6 带（0.345，低于冻结 0.15）需 L2 重导至 ≥1.08",
+   "if_realized": "走廊轨距需 ≥ span(0.705)+0.875 = **1.580**（芯片侧同理）⇒ W3..G7 全链重导（8×1.580=12.64 < N16.2/S20.8 ⇒ 几何可行）",
+   "level": "L1",
+   "question": "R3-2『对间铜边净空 ≥0.875』是 **realized 要求** 还是 **capacity 口径**？（v2.0 冻结轨距 1.08 ⇒ 实排 0.495，本身即不满足 0.875）"
+  },
+  {
+   "id": "Q2",
+   "level": "L2-ready（待 Q1 定标）",
+   "note": "若 Q1=capacity_only ⇒ 目标 1.08（+0.03/对）即可对齐冻结口径；若 Q1=realized ⇒ 目标 1.580。**目标值取决于 Q1，故不预开 W3**。",
+   "question": "芯片侧 In6 长平行带 pair pitch 1.05（铜边 0.345）是否重导？"
+  }
+ ],
+ "nature": "口径对账（只读；更正 CO-57 的过度升档表述；零几何/阈值改动）",
+ "reconciliation": {
+  "chip_side_below_frozen": 0.15,
+  "corridor_equals_frozen_edge": true,
+  "corridor_matches": "与冻结口径同值（0.495）⇒ 走廊**不构成对冻结口径的偏离**（轨距 +0.12 与铜跨 +0.12 相抵）",
+  "frozen_edge_mm": 0.495,
+  "r3_2_note": "0.875 未被 v2.0 冻结口径满足（0.495）⇒ R3-2 的『realized 0.875』时效/范围属 L1 口径问题，非交付单方面违约",
+  "r3_2_realized_by_frozen": false
+ },
+ "revision": "CO-58.1",
+ "schema": 1,
+ "supersedes_framing_of": "m13_v57_CO57_L1_escalation_interpair_clearance.md（事实保留；『交付违约』表述按本件更正）"
+}
