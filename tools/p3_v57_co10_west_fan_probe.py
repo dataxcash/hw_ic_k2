@@ -98,6 +98,10 @@ POLMODE = __import__("os").environ.get("CO10_POLMODE", "")
 _ES = __import__("os").environ.get("CO10_EASTSPLIT", "")
 EASTSPLIT = _ES if _ES not in ("", "0") else ""
 J2STEP = float(__import__("os").environ.get("CO10_J2STEP", "0.525"))
+# CO-22：J2 列区间图口径。默认 "" = 原口径（区间用 lane_y 基值）。
+#   CO10_COLMODE=pol ⇒ 区间用**该 pad 实际极性 via y**（lane_y + pol_off），消除 P/N 偏移 0.25 造成的
+#   同色列 landing/corner via 漏判（vv_placed，如 DN5_P ×  UP2_P 同列 0.2895）。
+_COLMODE = __import__("os").environ.get("CO10_COLMODE", "")
 
 
 def pol_off(f, pol):
@@ -180,6 +184,8 @@ def r3_build(rule):
         for k in j2k:
             a = A[k]; f = FACTS[a["page"]]
             ly = LANES[a["page"]]["lane_y"]; lx0, ll = a["column_x"], a["landing"][1]
+            if _COLMODE == "pol":
+                ly += pol_off(f, a["pol"])
             _ent.append({"k": k, "side": 0 if abs(a["pad_x"] - J2_IN) < 1e-6 else 1,
                          "vx": max(f["pad"]["P"][0], f["pad"]["N"][0]),
                          "lo": min(ly, ll) - VV / 2.0, "hi": max(ly, ll) + VV / 2.0})
@@ -334,6 +340,71 @@ if _FX or _FX3:
         if _g[0] == "J3": FAN_DX[_g] += _FX3
 
 
+# CO-23：西侧 lane 索引**约束分配**（确定性单遍贪心；非坐标搜索）。
+#   机理：西侧 lane 块跨越多条 landing 行（FANY_J3/J4），而 landing 行固定于 connector 侧。
+#   (1) 同页同极性：drop via(lx,lane_y) ↔ land via(lx,land_y) => 同网钻孔距 >= HOLE_GAP(0.4495)
+#       （实测 DRC hole_to_hole：UP2_P lane 34.5865 vs land 34.5）。
+#   (2) 共享落列（J3-U/J3-L 同 connector 共用 8 列；J4-L 与 J3 反向共用）：
+#       lane via(lx,lane_y) ↔ 他页 land via(lx,land_y) => 异网 via 净距 >= VV(0.525)
+#       （实测 vv_placed：DN0_P (64.0,35.0) × UP0_P land (64.0,34.5) = 0.50）。
+#   规则：按 (conn row_y, conn_x) 原帧序逐页取**最小可用 lane 索引**，两个极性 lane_y 值
+#   {base±POL_OFF} 均须满足上述判据；已占用索引跳过。全部约束为静态 → O(n^2) 闭式。
+if __import__("os").environ.get("CO10_WORDER") == "landrow":
+    _hg = float(__import__("os").environ.get("CO10_HOLE_GAP", "0.4495"))
+    _westp = [q for q in LANES if FACTS[q]["corridor"] == "WEST_MCIO_TO_CHIP"]
+    _landx, _landy = {}, {}
+    for _q in _westp:
+        _g = row_group(FACTS[_q])
+        _landy[_q] = FAN_Y[_g]
+        for _p2 in ("P", "N"):
+            _landx[(_q, _p2)] = W.fp(FACTS[_q]["conn_pad"][_p2][0] - 0.3 + FAN_DX[_g])
+    _fixed = [(_landx[(_q, _p2)], _landy[_q], _q) for _q in _westp for _p2 in ("P", "N")]
+    _westp.sort(key=lambda q: (FACTS[q]["row_y"], FACTS[q]["conn_x"], q))
+    _free = list(range(len(_westp)))
+    _asg = {}
+    for _q in _westp:
+        _pick = None
+        for _i in _free:
+            _b = _WL + _i * _WS
+            _ok = True
+            for _p2 in ("P", "N"):
+                _x = _landx[(_q, _p2)]
+                for _v in (_b - POL_OFF, _b + POL_OFF):
+                    for (_x2, _y2, _q2) in _fixed:
+                        if abs(_x2 - _x) > 1e-6:
+                            continue
+                        _need = _hg if _q2 == _q else VV
+                        if abs(_v - _y2) < _need - TOL:
+                            _ok = False; break
+                    if not _ok: break
+                if not _ok: break
+            if _ok:
+                _pick = _i; break
+        if _pick is None:
+            _pick = _free[0]
+        _asg[_q] = _pick; _free.remove(_pick)
+    for _q, _i in _asg.items():
+        LANES[_q]["lane_index"] = _i
+        LANES[_q]["lane_y"] = W.fp(_WL + _i * _WS)
+
+
+# CO-23：西侧 lane 索引**定点置换**（CO10_WSWAP="1-8,2-9"：帧序位置 ⇄ lane 索引成对交换）。
+#   用途：原帧序（conn_x 升序）中位置 1 的 lane（WLO+WSTEP，pol ±0.25）恰好压在 J3-U 的
+#   landing 行 FANY_J3 上（同页 drop/land via 钻孔距 < 0.4495）；把该位置与无共享落列的页
+#   交换（如 J4-U 的首页）即可闭式消除，无需重排整块。
+_sw = __import__("os").environ.get("CO10_WSWAP", "")
+if _sw:
+    _wp = sorted([q for q in LANES if FACTS[q]["corridor"] == "WEST_MCIO_TO_CHIP"],
+                 key=lambda q: LANES[q]["lane_index"])
+    for _pair in _sw.split(","):
+        _a, _b = (int(_v) for _v in _pair.split("-"))
+        _qa, _qb = _wp[_a], _wp[_b]
+        _ia, _ib = LANES[_qa]["lane_index"], LANES[_qb]["lane_index"]
+        LANES[_qa]["lane_index"] = _ib; LANES[_qb]["lane_index"] = _ia
+        LANES[_qa]["lane_y"] = W.fp(_WL + _ib * _WS)
+        LANES[_qb]["lane_y"] = W.fp(_WL + _ia * _WS)
+
+
 def y_bias(f):
     """同 band 内不同 connector 的 escape 竖段在 y 上错开 0.6：
     west-up  J3(+pad_y-0.3) / J4(+pad_y+0.3) => 竖段 y 区间互斥，解耦其 x 分配。"""
@@ -445,6 +516,13 @@ def build(f, px, py, nx, ny):
 
 
 def check(vias, segs, own, st):
+    if _HOLE_GAP > 0:      # L2（CO-23）：同网钻孔距（同极性 via 对）=> 逃逸/落位竖段 >= HOLE_GAP
+        for i in range(len(vias)):
+            for j in range(i + 1, len(vias)):
+                if vias[i][2] != vias[j][2]: continue
+                d = math.hypot(vias[i][0] - vias[j][0], vias[i][1] - vias[j][1])
+                if 1e-6 < d < _HOLE_GAP - TOL:   # d<1e-6 = 同点叠层（L4 合并为单孔）
+                    return ("hh_intra", vias[i][:3], vias[j][:3], round(d, 4))
     for i in range(len(vias)):
         for j in range(i + 1, len(vias)):
             if vias[i][2] == vias[j][2]: continue

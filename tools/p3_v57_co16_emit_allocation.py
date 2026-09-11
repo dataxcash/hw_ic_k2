@@ -30,6 +30,11 @@ for _k, _e in (("CO10_PAIR", "CO16_PAIR"), ("CO10_WSTEP", "CO16_WSTEP"), ("CO10_
                ("CO10_EDELTA", "CO16_EDELTA")):
     if os.environ.get(_e):
         CFG[_k] = os.environ[_e]
+# CO-23 旋钮（默认 = 旧行为；**仅在显式指定时写入 config**，保 ALLOC.1/2/3 逐字节可复现）
+for _k, _e in (("CO10_COLMODE", "CO16_COLMODE"), ("CO10_WSWAP", "CO16_WSWAP"),
+               ("CO10_HOLE_GAP", "CO16_HOLE_GAP")):
+    if os.environ.get(_e):
+        CFG[_k] = os.environ[_e]
 REVISION = os.environ.get("CO16_REV", "CO16-ALLOC.1")
 OUT_NAME = os.environ.get("CO16_OUT", "m13_v57_co16_channel_allocation.json")
 VERIFY_NAME = os.environ.get("CO16_VERIFY", "m13_v57_co16_placement_verification.json")

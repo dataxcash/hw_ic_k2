@@ -449,7 +449,13 @@ def main() -> int:
     _shape = (art.get("resource_gate") or {}).get("r1_5_shape", "t2")
     m4 = {"r2_mismatch": [], "r3_mismatch": [], "nodes_route_mismatch": [], "shape": _shape}
     if _shape == "co16":
-        _alloc = load(STEP2 / "m13_v57_co16_channel_allocation_v3.json")
+        # W3-VALv2.4（CO-23）：lane 平面工件按**引擎实际消费的 sha**解析（不再硬编码修订号）
+        _want = (art.get("inputs_sha") or {}).get("co16_alloc")
+        _alloc, _alloc_name = None, None
+        for _c in sorted(STEP2.glob("m13_v57_co16_channel_allocation*.json")):
+            if sha(_c) == _want:
+                _alloc, _alloc_name = load(_c), _c.name; break
+        assert _alloc is not None, f"CO16 allocation matching engine sha not found: {_want}"
         _apg = _alloc["pages"]
         for pid, pg in [(p["page_id"], p) for p in art["pages"] if p["kind"] == "data"]:
             al = _apg.get(pid)
@@ -466,8 +472,8 @@ def main() -> int:
                 if abs(rb["column_x"] - want[0]) > 1e-6 or abs(rb["landing"][1] - want[1]) > 1e-6:
                     m4["r3_mismatch"].append({"page": pid, "pol": pol, "artifact": rb, "alloc": want})
         m4["co16_allocation"] = {
-            "artifact": "m13_v57_co16_channel_allocation_v3.json", "n_pages": len(_apg),
-            "basis": "O(1) 消费保真；CO16-ALLOC.1 由 p3_v57_co11_placement_verify.py 独立复核 320/320 0 违规 PASS"}
+            "artifact": _alloc_name, "revision": _alloc.get("revision"), "n_pages": len(_apg),
+            "basis": "O(1) 消费保真；工件由 p3_v57_co11_placement_verify.py 独立复核 320/320 0 违规 PASS"}
     else:
         r2 = derive_r2(manifest, lane_frame)
         r3d = derive_r3(gaps, manifest, load(BASE_GAPS), lane_frame)
@@ -525,7 +531,7 @@ def main() -> int:
     verdict_str = "PASS" if (gates_ok and checks_ok and frozen_ok and a12r["ok"] and a13r["ok"]
                              and a14r["ok"] and all(p["ok"] for p in probes)) else "FAIL"
 
-    val = {"artifact": "m13_v57_w3_validation", "schema": 1, "revision": "W3-VALv2.3",
+    val = {"artifact": "m13_v57_w3_validation", "schema": 1, "revision": "W3-VALv2.4",
            "artifact_rev": art["revision"], "verdict": verdict_str,
            "stage": {"D8": {"gates": gates}, "G5": {"A1.2": a12r["ok"], "A1.3": a13r["ok"], "A1.4": a14r["ok"]}},
            "method_gates": gates, "frozen_sha_check": {"actual": frozen, "match": frozen_ok},
@@ -534,7 +540,8 @@ def main() -> int:
                      "+ 双度量（段冲突/全 via 间距，由工件 route_geometry/pages[*].vias 独立重算）。",
                      "R1 via 以不变量验证（∈冻结候选 + 100% 间距 + 平面性），非重现 argmin（引擎候选键）。",
                      "v2.3 契约修订：R3 独立重导纳入 CO-05c 成对落列（J2 数据页 inner=131.65-0.6k / outer=136.0+0.6k，k=本带序，"
-                     "无前缀递推）；其余 pad 保留 v2.2 列序交替偏置规则。CO-05c 见 m13_v57_CO05_addendum_v6/v7。"]}
+                     "无前缀递推）；其余 pad 保留 v2.2 列序交替偏置规则。CO-05c 见 m13_v57_CO05_addendum_v6/v7。",
+                     "v2.4（CO-23）：G-M4 的 CO16 lane 平面工件改为按引擎 inputs_sha 解析（支持 ALLOC.4+）。"]}
     MAIN_VAL = STEP2 / "m13_v57_w3_validation.json"
     MAIN_VAL.write_text(json.dumps(val, indent=1, ensure_ascii=False, sort_keys=True), encoding="utf-8")
     (STEP2 / "m13_v57_w4_a12_report.json").write_text(json.dumps(

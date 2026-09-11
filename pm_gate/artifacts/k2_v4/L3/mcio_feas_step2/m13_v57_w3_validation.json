@@ -12,11 +12,11 @@
   }
  ],
  "artifact": "m13_v57_w3_validation",
- "artifact_rev": "W3-CN.36",
+ "artifact_rev": "W3-CN.37",
  "f12": {
-  "authority_main_sha256": "55e6ddc81d1d5e69d10740c78727f6fe2eb9f5a81b3b40c2b2c27c912a6fd702",
-  "landing_revision": "W3-CN.36",
-  "main_sha256": "55e6ddc81d1d5e69d10740c78727f6fe2eb9f5a81b3b40c2b2c27c912a6fd702",
+  "authority_main_sha256": "37d2d05db841852665fcafcc38cb0d9ae8c2b2129cf5554af3933d90f9b310e8",
+  "landing_revision": "W3-CN.37",
+  "main_sha256": "37d2d05db841852665fcafcc38cb0d9ae8c2b2129cf5554af3933d90f9b310e8",
   "match": true,
   "n_rows": 64
  },
@@ -71,10 +71,10 @@
    "shape": "co16",
    "via_clearance": {
     "exempt": "CO-16 层跨不相交（CO-18 §1b/§4-2）",
-    "min_inter_net_mm": 0.52731,
+    "min_inter_net_mm": 0.595054,
     "n_vias": 320,
-    "span_blind_min_mm": 0.188404,
-    "span_blind_violations": 4,
+    "span_blind_min_mm": 0.163083,
+    "span_blind_violations": 3,
     "violations": 0
    }
   },
@@ -145,9 +145,10 @@
  "notes": [
   "G-M4 独立重导：R2 lane（由冻结 lane_frame 独立复刻块规则）+ R3 landing（由 r3x2 域 + pad y-band）+ 双度量（段冲突/全 via 间距，由工件 route_geometry/pages[*].vias 独立重算）。",
   "R1 via 以不变量验证（∈冻结候选 + 100% 间距 + 平面性），非重现 argmin（引擎候选键）。",
-  "v2.3 契约修订：R3 独立重导纳入 CO-05c 成对落列（J2 数据页 inner=131.65-0.6k / outer=136.0+0.6k，k=本带序，无前缀递推）；其余 pad 保留 v2.2 列序交替偏置规则。CO-05c 见 m13_v57_CO05_addendum_v6/v7。"
+  "v2.3 契约修订：R3 独立重导纳入 CO-05c 成对落列（J2 数据页 inner=131.65-0.6k / outer=136.0+0.6k，k=本带序，无前缀递推）；其余 pad 保留 v2.2 列序交替偏置规则。CO-05c 见 m13_v57_CO05_addendum_v6/v7。",
+  "v2.4（CO-23）：G-M4 的 CO16 lane 平面工件改为按引擎 inputs_sha 解析（支持 ALLOC.4+）。"
  ],
- "revision": "W3-VALv2.3",
+ "revision": "W3-VALv2.4",
  "schema": 1,
  "stage": {
   "D8": {
@@ -193,10 +194,10 @@
      "shape": "co16",
      "via_clearance": {
       "exempt": "CO-16 层跨不相交（CO-18 §1b/§4-2）",
-      "min_inter_net_mm": 0.52731,
+      "min_inter_net_mm": 0.595054,
       "n_vias": 320,
-      "span_blind_min_mm": 0.188404,
-      "span_blind_violations": 4,
+      "span_blind_min_mm": 0.163083,
+      "span_blind_violations": 3,
       "violations": 0
      }
     },

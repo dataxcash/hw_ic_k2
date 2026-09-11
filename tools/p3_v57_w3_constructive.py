@@ -62,7 +62,7 @@ OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
 OUT_LANDING = STEP2 / "m13_v57_w3_chip_landing_rows.json"
 
 REVISION = "W3-CN.30"   # 默认（t2）路径不动；CO-16 见 REVISION_CO16
-REVISION_CO16 = "W3-CN.36"   # CO-16 全板 safe-hop + O4 有界幅值蛇形（O(1) 消费 CO16-ALLOC.1）/ ECO SPEC-REV-2
+REVISION_CO16 = "W3-CN.37"   # CO-23 板边真带（Edge.Cuts 33.0/79.0）+ lane 带压缩/置换（O(1) 消费 CO16-ALLOC.4）
 ORD = "natural"   # ROOT-20: enumeration order (A1.2 order-invariance, non-vacuous)
 SCHEMA = 1
 STEP = 1.46
@@ -89,7 +89,7 @@ POL_OFF = 0.19
 #   ->drop->stub(In2/In6/B)->land(..->In2->F)->F->conn）+ O4 双段蛇形。
 #   几何（via1/lane_y/landing/escape/stub 层）O(1) 消费 CO16-ALLOC.1 工件，零坐标搜索。
 POL_OFF_CO16 = 0.25        # L2: 对内 lane y 偏移 >= vt(0.4525)/2（0.19 不足）
-CO16_LANE_STEP = {"WEST_MCIO_TO_CHIP": 1.1265, "EAST_CHIP_TO_J2": STEP}
+CO16_LANE_STEP = {"WEST_MCIO_TO_CHIP": 1.05, "EAST_CHIP_TO_J2": 1.449}   # CO-23（informational；引擎消费工件 lane_y）
 DEFAULT_SHAPE = "t2"
 # CO16_MEANDER: O4 等长蛇形（CO-16 ruling §2.2 双段模型的推广：lane-run 优先，缺口落竖段）。
 #   幅值 A 受相邻通道净距所限（A <= 邻道间距 - TT），纵向步 a 由「自净距 >= TT + 余量」与
@@ -99,7 +99,7 @@ TT_TRACK = 0.38            # width + clearance (PCIE85)；蛇形自净距下限
 MEANDER_MARGIN = 0.02      # 净距余量（自净距 / 邻道净距；防 FP 边界）
 LEGSEP_MIN = 0.38          # 蛇形相邻斜腿垂直净距下限（= width + clearance，同网可制造性）
 # CO-22：板边净空带（k2_v4_8L 板 bbox y[32.95,79.05]；0.3 板边约束 + 0.1025 半线宽）
-BOARD_Y_MIN, BOARD_Y_MAX = 32.95, 79.05
+BOARD_Y_MIN, BOARD_Y_MAX = 33.0, 79.0    # CO-23 更正：Edge.Cuts 实线（旧值 32.95/79.05 系 bbox 偏宽 0.05）
 LANE_Y_LO, LANE_Y_HI = BOARD_Y_MIN + 0.3 + 0.1025, BOARD_Y_MAX - 0.3 - 0.1025
 # CO-05c (O4): 成对落列 + L3 长度补偿（run 上确定性 45° 单侧蛇形）
 PAIR_MODE = True
@@ -116,8 +116,8 @@ TOL = 1e-9
 SUPERSEDED = {"artifact": "m13_v57_w3_joint_assignment.json", "revision": "W3-JA.2",
                "sha256": "d081618c7b961d770c8e2f180f93b92125b316bc0eeec181f9d1d191a0ee6acc",
                "reason": "method-level iron-law violation (search-based); retained, not rewritten"}
-CO16_ALLOC = STEP2 / "m13_v57_co16_channel_allocation_v3.json"   # CO16-ALLOC.3（lane 平面重整）
-CO16_ALLOC_SHA = "238eb812a05eeac6e0a469961796e4ddb9970294a9a9d4a8ed31b7ee520d5bab"
+CO16_ALLOC = STEP2 / "m13_v57_co16_channel_allocation_v4.json"   # CO16-ALLOC.4（CO-23 板边真带 + lane 压缩/置换）
+CO16_ALLOC_SHA = "e5d30cd4eac83e166ac17ff420108b7fd1f73e6349a52c0e95086a1657774438"
 CORRIDOR = {
     "EAST_CHIP_TO_J2": {"bounds": (105.25, 132.65), "x_domain": (93.55, 105.25)},
     "WEST_MCIO_TO_CHIP": {"bounds": (65.05, 82.35), "x_domain": (82.35, 93.55)},
@@ -322,7 +322,7 @@ def meander_zig(p, q, extra_mm, lat, a_max, legsep=None):
 
 
 def co16_prepare(j, facts, lanes, r3):
-    """O(1) 消费 CO16-ALLOC.1：lane_y(P/N)、via1、landing、escape/stub 层（零坐标搜索）。"""
+    """O(1) 消费 CO16-ALLOC.4：lane_y(P/N)、via1、landing、escape/stub 层（零坐标搜索）。"""
     alloc = j["co16_alloc"]["pages"]
     bump(4 * len(alloc), "co16_consume")
     for pid, a in alloc.items():
@@ -1556,7 +1556,7 @@ def main(argv=None) -> int:
         return scale_probe(j, facts, args)
     if shape == "co16":
         if sha256(CO16_ALLOC) != CO16_ALLOC_SHA:
-            print("W3-CN: CO16-ALLOC.1 sha drift")
+            print("W3-CN: CO16-ALLOC.4 sha drift")
             return 4
         j["co16_alloc"] = json.load(CO16_ALLOC.open())
     gate = resource_gate(facts, j["spec"], j["rules"], j["layer_intent"])
