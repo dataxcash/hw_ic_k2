@@ -95,3 +95,38 @@ canonical `m13_v57_w3_joint_assignment.json`（W3-CN.30 `05f7bd10ab3b45b6`）**�
 ## 9. 下一周期输入（不变）
 O4 蛇形预算重派生（新 lane_y 分布）→ ECO 同批应用 → 引擎 rev bump（CO-10 §10.3 八项 + CO-15 拓扑/工件消费）→
 一次求解（`FEASIBLE_ALL ∧ crossings=0 ∧ A-CN.9 0/0/0 ∧ skew≤0.15 ∧ wall≤120s`）→ G4→G5→G6→G7（目标 DFM new=0）。
+
+---
+
+## 10. O4 蛇形预算**重派生**（新几何；`m13_v57_co15_o4_budget.json` `CO15-O4.1` `ff3420a3303f4be7`）
+- 模型 = 引擎 O4 长度面（拓扑无关，仅几何）：`L = |pad→via1| + |escape 竖段| + |lane run| + |stub 竖段| + |landing→conn|`；
+  meander 置于**短极** lane run，`Dm = extra/(√2−1)`，`Dm ≤ R−1` 才可吸收（`extra_max=(R−1)(√2−1)`）。
+- 工具 `tools/p3_v57_co15_o4_budget.py`（只读消费 CO-15 分配工件）。
+
+| 走廊 | n | all_fit | max extra | max Dm | min Dm_max | max residual skew |
+|---|---|---|---|---|---|---|
+| **WEST_MCIO_TO_CHIP**（CO-15 新几何） | 16 | **True** | 2.20 | **5.30** | 19.30 | **0.0000** |
+| EAST_CHIP_TO_J2（探针模型 J2 落列） | 16 | **False** | 19.98 | 48.24 | 29.62 | 7.7089 |
+
+- **西侧结论**：16 页 O4 蛇形预算**全部闭合**且余量极大（最大 Dm 5.30 vs 最小 Dm_max 19.30）⇒ POL_OFF 0.25 + lane 块压缩
+  **不扰动**西侧等长闭合；引擎接线时西侧 meander 保持 `extra=|ΔL|`、`extreme=n·A` 原式即可，**无需**新机制。
+- **东侧结论（新发现，诚实标注）**：CO-15 工件的东侧页取自探针模型（J2 落列 = 0.525 pitch × **全局 rank**），
+  其 `|ΔL|`（15.8–20.0）超过短极 run 的可吸收上限（Dm_max 29.6–36.5，短 0.65–7.71mm）⇒ **O4 不闭合**。
+  根因：CO-09 §3 拓扑令东侧 stub 亦落 In2，而东 up/dn stub 的 y 区间**两两重叠**（up[42.9,66.9] × dn[54.3,78.6]）
+  ⇒ 32 个 In2 stub 成 **32-clique**，须 32 个全局互异列 ⇒ J2 落列被迫展开 ±8mm ⇒ run 差被放大。
+  对照：引擎 canonical（W3-CN.30）东侧以**层分流**（stub 落 B/In6）只须 16 列/带，`|ΔL|` 3.6–12.6、R 46–51 ⇒ O4 闭合（skew 0.0574）。
+- **东侧修法（下一周期，L2，建议）**：对东侧同样**逐带/逐页混合 stub 层**（up stub→In6、dn stub→In2；`land_ = In2↔F` 安全 hop 不破）
+  ⇒ 跨带 stub 异层 ⇒ J2 列可**跨带复用**（16 列/带），落列收拢 ⇒ R 回升、`|ΔL|` 回落 ⇒ O4 闭合（同时仍 32/32）。
+  本会话已实测：该层分流 + 方向感知 lane 排序 ⇒ **32/32 crossing-free + clearance-clean**；但 J2 落列仍须**成对/收拢重派生**
+  （现 rank 步长使 `|ΔL|` 23.7）⇒ 属独立周期。
+
+## 11. 影响范围 / 引擎接线口径（CO-15 §10 后的精确口径）
+1. **西侧**：CO-15 工件（via1/escape/stub/lane_y/landing）+ `CO10_POLMODE=lx` 语义 + lane 块压缩 ⇒ 引擎按工件 O(1) 布线；
+   O4 无需额外机制。
+2. **东侧**：**不得**直接消费 CO-15 工件的东侧页（会破坏 O4）。引擎 rev bump 时二择一：
+   (a) **保留 W3-CN.30 东侧几何**（O4 已闭），仅对西侧应用 CO-09/CO-11 拓扑；或
+   (b) **另立周期**做东侧 stub 层分流 + 成对收拢 J2 落列（同时满足 CO-09 安全 hop 与 O4），再统一消费。
+3. 本裁定不改 SPEC/validator；ECO（§7 一致）与引擎 rev bump 仍须**同批**。
+
+## 12. 红线（追加）
+O4 预算工具只读消费 CO-15 工件；未改冻结四源/引擎；未放宽 skew 0.15；无 sign-off。
