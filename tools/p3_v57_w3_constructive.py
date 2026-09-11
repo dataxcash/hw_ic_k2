@@ -493,6 +493,11 @@ def r3_place(gaps: dict, lanes: dict = None, order: str = "lane") -> dict:
     for pd in pads:
         groups.setdefault((pd["ref"], pd["cands"][0]), []).append(pd)
     out, certs = {}, []
+    _rk = 0
+    RANK = {}
+    for _c in sorted({k[0] for k in groups}):
+        for _cx in sorted({k[1] for k in groups if k[0] == _c}):
+            RANK[(_c, _cx)] = _rk; _rk += 1
     for (cref, colx) in sorted(groups):
         if order == "lane" and lanes is not None:
             grp = sorted(groups[(cref, colx)],
@@ -502,7 +507,9 @@ def r3_place(gaps: dict, lanes: dict = None, order: str = "lane") -> dict:
         prev = None
         for pd in grp:
             bump(2, "r3_landing")
-            y = pd["y"] + R3_OFF if prev is None else max(pd["y"] + R3_OFF, prev + R3_STEP)
+            _stag = 0.1 if (RANK.get((cref, colx), 0) % 2) else -0.1   # 列序交替小偏置（band 内）
+            _base_y = min(max(pd["y"] + R3_OFF + _stag, pd["band"][0] + 0.05), pd["band"][1] - 0.05)
+            y = _base_y if prev is None else max(_base_y, prev + R3_STEP)
             if y > pd["band"][1] + TOL or y < pd["band"][0] - TOL or (
                     prev is not None and y - prev < VIA_VIA - TOL):
                 certs.append({"kind": "CONSTRUCTION_INFEASIBLE",
