@@ -35,10 +35,11 @@ def _horiz_run_layers(paths: Dict[str, Dict], pol: str):
     pts = paths[pol]["points"]
     lyr = paths[pol]["layers"]
     runs = []
+    _minlen = globals().get("PAIR_RUN_MIN_MM", 0.0)      # CO-18: V5 仅比对走廊 run（pad-access 微段排除）
     for i in range(len(pts) - 1):
         x1, y1 = pts[i]
         x2, y2 = pts[i + 1]
-        if abs(y1 - y2) < 1e-9 and lyr[i] in ("F.Cu", "In2.Cu"):
+        if abs(y1 - y2) < 1e-9 and lyr[i] in ("F.Cu", "In2.Cu") and abs(x2 - x1) >= _minlen:
             runs.append((min(x1, x2), max(x1, x2), y1, lyr[i]))
     return runs
 

@@ -26,7 +26,7 @@ K2 = Path("/home/fila/jqdDev_2025/ic_hw/k2")
 L3 = K2 / "pm_gate" / "artifacts" / "k2_v4" / "L3"
 STEP2 = L3 / "mcio_feas_step2"
 F = {
-    "spec": L3 / "SPEC_k2_v4.json",
+    "spec": L3 / "SPEC_k2_v4.spec-rev-2.json",   # ECO SPEC-REV-2（CO-11 附件应用）
     "rules": K2 / "_shared" / "eda_core" / "drc_rules.json",
     "manifest": STEP2 / "m13_v57_s1_page_manifest.json",
     "w0r_model": STEP2 / "m13_v57_big_w0r_corridor_model.json",
@@ -43,7 +43,7 @@ F = {
     "coherent_rows": STEP2 / "m13_v57_f13_r3_coherent_rows.json",
 }
 FROZEN_SHA = {
-    "spec": "0bd52ed48e720b8cb6a7869379f6c0a220f3e141e1514ab159f9f5f3b8b02233",
+    "spec": "0a7ad112ac4c57e31f5f3ca06e10cf76a67c01a9d5360651f970ca2b289c56a6",
     "rules": "0a459839e15960b8fbfe0e1f5bb154a02b30cbafa1cbb0d56c2b810a71228448",
     "manifest": "a8ef3ea8ecff99d7549d4122043c972c1bb68346dc4dcc3f36fdd9bacde49890",
     "w0r_model": "80ee9adb78a7e9ad94c27d426295592eee21af3d1e3ce88fe3042183160f0efa",
@@ -62,7 +62,7 @@ OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
 OUT_LANDING = STEP2 / "m13_v57_w3_chip_landing_rows.json"
 
 REVISION = "W3-CN.30"   # 默认（t2）路径不动；CO-16 见 REVISION_CO16
-REVISION_CO16 = "W3-CN.31"   # CO-16 安全-hop 拓扑（O(1) 消费 CO16-ALLOC.1）；O4 蛇形见 CO-17 裁定
+REVISION_CO16 = "W3-CN.34"   # CO-16 全板 safe-hop + O4 有界幅值蛇形（O(1) 消费 CO16-ALLOC.1）/ ECO SPEC-REV-2
 ORD = "natural"   # ROOT-20: enumeration order (A1.2 order-invariance, non-vacuous)
 SCHEMA = 1
 STEP = 1.46
@@ -97,6 +97,7 @@ DEFAULT_SHAPE = "t2"
 CO16_MEANDER = True
 TT_TRACK = 0.38            # width + clearance (PCIE85)；蛇形自净距下限
 MEANDER_MARGIN = 0.02      # 净距余量（自净距 / 邻道净距；防 FP 边界）
+LEGSEP_MIN = 0.38          # 蛇形相邻斜腿垂直净距下限（= width + clearance，同网可制造性）
 # CO-05c (O4): 成对落列 + L3 长度补偿（run 上确定性 45° 单侧蛇形）
 PAIR_MODE = True
 MEANDER_MODE = True
@@ -282,13 +283,13 @@ def _zig_pts(p, q, a, amp, teeth, lat):
     return out
 
 
-def meander_zig(p, q, extra_mm, lat, a_max):
-    """轴对齐段 p->q 上确定性单侧锯齿，使段长 +extra_mm。
+def meander_zig(p, q, extra_mm, lat, a_max, legsep=None):
+    """轴对齐段 p->q 上确定性单侧锯齿，使段长恰 +extra_mm（闭式，无搜索/无迭代）。
 
-    横向幅值 A <= min(MEANDER_A_MAX, a_max)（只向 lat 一侧鼓出）；纵向步 a 由两条闭式条件联立：
-      自净距 2aA/sqrt(a^2+A^2) >= TT_TRACK + margin  ⇒ a >= a_min
-      per-tooth 增量 2(sqrt(a^2+A^2)-a) = extra/teeth ⇒ a = (A^2 - per_t^2/4)/per_t
-    容许 a < A（陡于 45°）：容量 = (2A/TT - 1) mm/mm 段长（45° 特例 = sqrt2-1）。
+    横向幅值 A <= min(MEANDER_A_MAX, a_max)（只向 lat 一侧鼓出，A 由调用方按 vt 顶点净距限定）；
+    纵向半齿步 a 由「相邻斜腿垂直净距 2aA/sqrt(a^2+A^2) >= legsep」与「per-tooth 增量命中
+    extra/teeth」联立解出。per-tooth 增量 = 2(sqrt(a^2+A^2)-a)，随 a 单调递减；故取满足净距的
+    最小齿数 teeth = ceil(extra / per_max) 即得最小占段长。
     返回 (pts, realized, A, a)；不可达（幅值/段长不足）=> 直线段 + realized=0。"""
     dx, dy = q[0] - p[0], q[1] - p[1]
     horiz = abs(dx) >= abs(dy)
@@ -296,27 +297,25 @@ def meander_zig(p, q, extra_mm, lat, a_max):
     straight = [list(p), list(q)]
     if extra_mm <= TOL or run <= 1.0:
         return straight, 0.0, 0.0, 0.0
-    amp = min(MEANDER_A_MAX, max(0.0, a_max))
-    tte = TT_TRACK + MEANDER_MARGIN
-    if 2.0 * amp <= tte:
-        return straight, 0.0, 0.0, 0.0                    # 幅值 <= TT/2：任意陡度均无净距
-    a_min = tte * amp / math.sqrt(4.0 * amp * amp - tte * tte)
-    per_min = 2.0 * (math.hypot(a_min, amp) - a_min)      # 最陡可用步下的 per-tooth 增量
-    if per_min <= TOL:
+    A = min(MEANDER_A_MAX, max(0.0, a_max))
+    ls = LEGSEP_MIN if legsep is None else legsep
+    if A <= TOL or ls <= TOL:
         return straight, 0.0, 0.0, 0.0
-    teeth = max(1, int(math.ceil(extra_mm / per_min)))    # ceil ⇒ per_t <= per_min ⇒ a_ex >= a_min
+    a_min = ls / 2.0                                      # 半齿步下限 => 相邻斜腿沿 run 距 2a >= ls
+    per_max = 2.0 * (math.hypot(a_min, A) - a_min)        # 最陡可用齿的 per-tooth 增量上界
+    if per_max <= TOL:
+        return straight, 0.0, 0.0, 0.0
+    teeth = max(1, int(math.ceil(extra_mm / per_max - 1e-12)))
     per_t = extra_mm / teeth
-    a = max(a_min, (amp * amp - per_t * per_t / 4.0) / per_t)
-    per = 2.0 * (math.hypot(a, amp) - a)
-    if per <= TOL:
+    if per_t > 2.0 * A - 1e-12:
         return straight, 0.0, 0.0, 0.0
-    teeth = max(1, int(round(extra_mm / per)))
-    if 2.0 * teeth * a > run - 0.2:                       # 段长不足：按可容纳齿数缩减
-        teeth = int((run - 0.2) // (2.0 * a))
-    if teeth < 1:
+    a = (A * A - per_t * per_t / 4.0) / per_t
+    if a < a_min - 1e-9:
         return straight, 0.0, 0.0, 0.0
-    real = teeth * per
-    return _zig_pts(p, q, a, amp, teeth, lat), real, amp, a
+    if 2.0 * teeth * a > run - 0.4:
+        return straight, 0.0, 0.0, 0.0
+    real = teeth * 2.0 * (math.hypot(a, A) - a)
+    return _zig_pts(p, q, a, A, teeth, lat), real, A, a
 
 
 def co16_prepare(j, facts, lanes, r3):
@@ -404,7 +403,7 @@ def co16_seg_room(alloc):
                         continue                          # 仅同侧（横向鼓出方向）邻居约束
                     if min(t["hi"], s["hi"]) - max(t["lo"], s["lo"]) <= 1e-9:
                         continue
-                    best = min(best, abs(t["x"] - s["x"]) - TT_TRACK - MEANDER_MARGIN)
+                    best = min(best, abs(t["x"] - s["x"]) - VT_TRACK - MEANDER_MARGIN)
                 room[(kind,) + k + (lat,)] = max(0.0, best)
     return esc, stb, room
 
@@ -452,41 +451,80 @@ def co16_vias(nodes, pol):
 _CO16_PTS = {}
 
 
-def co16_lane_room(alloc, pid, pol, dy):
-    """lane-run 蛇形可用性：返回 (amp_max, x_lo, x_hi)。
-    amp = 鼓出方向最近同层异网 lane 净距 - TT_TRACK；x 窗口按 In6 via1 stack（E=B）截断。"""
-    a = alloc[pid]
-    vx, lx = a["via1"][pol][0], a["landing"][pol][0]
-    ly = a["lane_y"][pol]
-    xlo, xhi = min(vx, lx), max(vx, lx)
-    amp = MEANDER_A_MAX
-    for pid2, a2 in alloc.items():
-        for pol2 in ("P", "N"):
-            if pid2 == pid and pol2 == pol:
+def co16_o4_amp_table(alloc, o4):
+    """O4 lane 蛇形「方向 + 幅值 + x 窗口」表（vt 顶点净距口径；对向同时蛇形按对称解折半）。
+
+    顶点净距：A <= Δy - vt（vt = via_r + clearance + width/2 = 0.4525；A-CN.9 对**每个折点**
+    作 via 候选量测）。方向取静态 vt 余量较大侧（平手取 CO16-O4.1 的 dy）。x 窗口按 E=B 的
+    In6 via1 stack 截断（避免蛇形扫过异网 via stack）。"""
+    VT = VT_TRACK
+    lanes = {}
+    for pid, a in alloc.items():
+        for pol in ("P", "N"):
+            vx, lx = a["via1"][pol][0], a["landing"][pol][0]
+            lanes[(pid, pol)] = (a["lane_y"][pol], min(vx, lx), max(vx, lx))
+    mset = {pid: mz["pol"] for pid, mz in o4.items()}
+    tab = {}
+    for pid, pol in mset.items():
+        y, xlo, xhi = lanes[(pid, pol)]
+        best = None
+        for d in (1.0, -1.0):
+            room = 1e9
+            for (p2, pol2), (y2, lo2, hi2) in lanes.items():
+                if p2 == pid and pol2 == pol:
+                    continue
+                if min(xhi, hi2) - max(xlo, lo2) <= 0:
+                    continue
+                if d * (y2 - y) > TOL:
+                    room = min(room, abs(y2 - y))
+            cand = (room, d)
+            if best is None or cand > best:
+                best = cand
+        tab[pid] = [best[1], 0.0, xlo, xhi]
+    for pid, pol in mset.items():
+        d = tab[pid][0]
+        y, xlo, xhi = lanes[(pid, pol)]
+        amp = MEANDER_A_MAX
+        for (p2, pol2), (y2, lo2, hi2) in lanes.items():
+            if p2 == pid and pol2 == pol:
                 continue
-            y2 = a2["lane_y"][pol2]
-            v2, l2 = a2["via1"][pol2][0], a2["landing"][pol2][0]
-            if min(xhi, max(v2, l2)) - max(xlo, min(v2, l2)) <= 0:
+            if min(xhi, hi2) - max(xlo, lo2) <= 0 or d * (y2 - y) <= TOL:
                 continue
-            if dy * (y2 - ly) > TOL:
-                amp = min(amp, abs(y2 - ly) - TT_TRACK - MEANDER_MARGIN)
-    cuts = []
-    for pid2, a2 in alloc.items():
-        if a2["escape_layer"] != "B.Cu":       # 仅 E=B 的 via1 stack 在 In6 有实体
-            continue
-        for pol2 in ("P", "N"):
-            if pid2 == pid and pol2 == pol:
+            gap = abs(y2 - y) - VT - MEANDER_MARGIN
+            if mset.get(p2) == pol2 and tab[p2][0] * (y - y2) > TOL:
+                gap = min(gap, (abs(y2 - y) - VT) / 2.0 - MEANDER_MARGIN)   # 对向蛇形对称解
+            amp = min(amp, gap)
+        tab[pid][1] = max(0.0, min(MEANDER_A_MAX, amp))
+    # x 窗口：E=B 的 In6 via1 stack 截断（原 co16_lane_room 口径）
+    for pid, pol in mset.items():
+        a = alloc[pid]
+        vx, lx = a["via1"][pol][0], a["landing"][pol][0]
+        ly = a["lane_y"][pol]
+        xlo, xhi = tab[pid][2], tab[pid][3]
+        amp = tab[pid][1]
+        cuts = []
+        for pid2, a2 in alloc.items():
+            if a2["escape_layer"] != "B.Cu":
                 continue
-            x2, y2 = a2["via1"][pol2][0], a2["via1"][pol2][1]
-            if xlo - 1e-9 <= x2 <= xhi + 1e-9 and dy * (y2 - ly) > TOL \
-               and abs(y2 - ly) < amp + TT_TRACK:
-                cuts.append(x2)
-    if cuts:
-        if lx >= vx:
-            xlo = max(xlo, max(cuts) + 0.2)
-        else:
-            xhi = min(xhi, min(cuts) - 0.2)
-    return max(0.0, amp), xlo, xhi
+            for pol2 in ("P", "N"):
+                if pid2 == pid and pol2 == pol:
+                    continue
+                x2, y2 = a2["via1"][pol2][0], a2["via1"][pol2][1]
+                if xlo - 1e-9 <= x2 <= xhi + 1e-9 and tab[pid][0] * (y2 - ly) > TOL \
+                   and abs(y2 - ly) < amp + VT_TRACK:
+                    cuts.append(x2)
+        if cuts:
+            if lx >= vx:
+                tab[pid][2] = max(xlo, max(cuts) + 0.2)
+            else:
+                tab[pid][3] = min(xhi, min(cuts) - 0.2)
+    return {k: (v[0], v[1], v[2], v[3]) for k, v in tab.items()}
+
+
+def co16_lane_room(alloc, pid, pol, dy, table):
+    """(amp_max, x_lo, x_hi)：由 co16_o4_amp_table 的 vt 口径表给出（dy 由表内方向决定）。"""
+    d, amp, xlo, xhi = table[pid]
+    return amp, xlo, xhi
 
 
 def co16_build_routes(facts, alloc, lanes):
@@ -494,6 +532,7 @@ def co16_build_routes(facts, alloc, lanes):
     返回 (paths, certificates)。零坐标搜索：几何全部来自工件，蛇形为闭式单遍。"""
     esc_tab, stb_tab, room = co16_seg_room(alloc)
     o4 = co16_o4_plan(alloc)
+    table = co16_o4_amp_table(alloc, o4)
     paths, certs = {}, []
     _CO16_PTS.clear()
     for pid in sorted(alloc):
@@ -508,15 +547,16 @@ def co16_build_routes(facts, alloc, lanes):
             esc_pts = [[vx, vy], [vx, ly]]
             lane_pts = [[vx, ly], [lx, ly]]
             stub_pts = [[lx, ly], [lx, ll]]
-            if CO16_MEANDER and mz and pol == mz["pol"] and mz["extra"] > TOL:
+            if CO16_MEANDER and mz and pol == mz["pol"] and mz["extra"] > 0.15:
                 extra = mz["extra"]
-                _lamp, _xlo, _xhi = co16_lane_room(alloc, pid, pol, mz["dy"])
+                _dir = table[pid][0]
+                _lamp, _xlo, _xhi = co16_lane_room(alloc, pid, pol, _dir, table)
                 _lp0 = [vx, ly]
                 _lp1 = [lx, ly]
-                if (lx >= vx and _xhi - _xlo > 1.5) or (lx < vx and _xhi - _xlo > 1.5):
-                    _lp0 = [_xlo, ly]
-                    _lp1 = [_xhi, ly]
-                _mid, real, _amp, _a = meander_zig(_lp0, _lp1, extra, mz["dy"], _lamp)
+                if _xhi - _xlo > 1.5:                     # 窗口端点须按行进方向排序（lx<vx = 向西）
+                    _lp0 = [_xlo if lx >= vx else _xhi, ly]
+                    _lp1 = [_xhi if lx >= vx else _xlo, ly]
+                _mid, real, _amp, _a = meander_zig(_lp0, _lp1, extra, _dir, _lamp)
                 _raw = [[vx, ly]] + _mid + [[lx, ly]]
                 lane_pts = [_raw[0]]
                 for _q in _raw[1:]:

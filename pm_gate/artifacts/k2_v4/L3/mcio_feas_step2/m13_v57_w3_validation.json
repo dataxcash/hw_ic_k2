@@ -12,11 +12,11 @@
   }
  ],
  "artifact": "m13_v57_w3_validation",
- "artifact_rev": "W3-CN.30",
+ "artifact_rev": "W3-CN.34",
  "f12": {
-  "authority_main_sha256": "05f7bd10ab3b45b6847e8c00c14c6a26b9032692bc0ce79a235d81d7e92e837f",
-  "landing_revision": "W3-CN.30",
-  "main_sha256": "05f7bd10ab3b45b6847e8c00c14c6a26b9032692bc0ce79a235d81d7e92e837f",
+  "authority_main_sha256": "cf60e9dd167e739c4d9c0fe1feb9e15e7692c9921de90cf24d9a58e90d85cb0b",
+  "landing_revision": "W3-CN.34",
+  "main_sha256": "cf60e9dd167e739c4d9c0fe1feb9e15e7692c9921de90cf24d9a58e90d85cb0b",
   "match": true,
   "n_rows": 64
  },
@@ -25,7 +25,7 @@
    "manifest": "a8ef3ea8ecff99d7549d4122043c972c1bb68346dc4dcc3f36fdd9bacde49890",
    "pcb": "f6273de613f43d05555d12d6c3492b1e70f383761d8db5121f12b2ca0695af9a",
    "rules": "0a459839e15960b8fbfe0e1f5bb154a02b30cbafa1cbb0d56c2b810a71228448",
-   "spec": "0bd52ed48e720b8cb6a7869379f6c0a220f3e141e1514ab159f9f5f3b8b02233"
+   "spec": "0a7ad112ac4c57e31f5f3ca06e10cf76a67c01a9d5360651f970ca2b289c56a6"
   },
   "match": true
  },
@@ -68,9 +68,13 @@
     "overlap": 0,
     "total": 0
    },
+   "shape": "co16",
    "via_clearance": {
-    "min_inter_net_mm": 0.527898,
-    "n_vias": 256,
+    "exempt": "CO-16 层跨不相交（CO-18 §1b/§4-2）",
+    "min_inter_net_mm": 0.532265,
+    "n_vias": 320,
+    "span_blind_min_mm": 0.331059,
+    "span_blind_violations": 4,
     "violations": 0
    }
   },
@@ -186,9 +190,13 @@
       "overlap": 0,
       "total": 0
      },
+     "shape": "co16",
      "via_clearance": {
-      "min_inter_net_mm": 0.527898,
-      "n_vias": 256,
+      "exempt": "CO-16 层跨不相交（CO-18 §1b/§4-2）",
+      "min_inter_net_mm": 0.532265,
+      "n_vias": 320,
+      "span_blind_min_mm": 0.331059,
+      "span_blind_violations": 4,
       "violations": 0
      }
     },

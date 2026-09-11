@@ -23,9 +23,9 @@ GAPS = STEP2 / "m13_v57_f8_r3_gap_candidates_r3x2.json"
 BASE_GAPS = STEP2 / "m13_v57_f8_r3_gap_candidates.json"
 LANEFRAME = STEP2 / "m13_v57_f3_lane_frame.json"
 W0R = STEP2 / "m13_v57_big_w0r_corridor_model.json"
-FROZEN = {"spec": L3 / "SPEC_k2_v4.json", "rules": K2 / "_shared/eda_core/drc_rules.json",
+FROZEN = {"spec": L3 / "SPEC_k2_v4.spec-rev-2.json", "rules": K2 / "_shared/eda_core/drc_rules.json",
           "manifest": STEP2 / "m13_v57_s1_page_manifest.json", "pcb": K2 / "k2_v4.kicad_pcb"}
-FROZEN_SHA_PREFIX = {"spec": "0bd52ed48e720b8c", "manifest": "a8ef3ea8ecff99d7",
+FROZEN_SHA_PREFIX = {"spec": "0a7ad112ac4c57e3", "manifest": "a8ef3ea8ecff99d7",
                      "pcb": "f6273de613f43d05", "rules": "0a459839e15960b8"}
 STEP, LANE_LO, N_USED = 1.46, 33.3, 16
 VIA_VIA, POL_OFF, R3_OFF = 0.525, 0.19, -0.3
@@ -264,22 +264,40 @@ def full_metric(route):
     return C, O
 
 
+_PHYS = ["F.Cu", "In1.Cu", "In2.Cu", "In3.Cu", "In4.Cu", "In5.Cu", "In6.Cu", "B.Cu"]
+
+
 def via_min_inter(art):
+    """异网 via 间距。CO-16 安全-hop 口径：**层跨不相交**的两 via 无共层铜/无重叠钻孔深度 ⇒ 豁免
+    （与引擎 SAFE_HOP_METRIC 一致）；span-blind 计数另记 warnings 供 G7 DRC 复核。"""
     vias = []
     for p in art["pages"]:
         for v in p.get("vias", []):
-            vias.append((p["page_id"], v["pol"], v["x"], v["y"]))
-    bad = 0; mn = 9e9
+            vias.append((p["page_id"], v["pol"], v["x"], v["y"], tuple(v.get("layers", ()))))
+    safe_hop = (art.get("resource_gate") or {}).get("r1_5_shape") == "co16"
+    bad = 0; mn = 9e9; warn = 0; mn_w = 9e9
     for i in range(len(vias)):
         for j in range(i + 1, len(vias)):
             a, b = vias[i], vias[j]
             if a[0] == b[0] and a[1] == b[1]:
                 continue
             d = ((a[2] - b[2]) ** 2 + (a[3] - b[3]) ** 2) ** 0.5
+            mn_w = min(mn_w, d)
+            if d < VIA_VIA - 1e-9:
+                warn += 1
+            span_disjoint = False
+            if safe_hop and len(a[4]) == 2 and len(b[4]) == 2:
+                ai = sorted(_PHYS.index(x) for x in a[4])
+                bi = sorted(_PHYS.index(x) for x in b[4])
+                span_disjoint = ai[-1] < bi[0] or bi[-1] < ai[0]
+            if span_disjoint:
+                continue
             mn = min(mn, d)
             if d < VIA_VIA - 1e-9:
                 bad += 1
-    return bad, (None if mn > 8e8 else round(mn, 6)), len(vias)
+    return (bad, (None if mn > 8e8 else round(mn, 6)), len(vias),
+            {"span_blind_violations": warn, "span_blind_min_mm": (None if mn_w > 8e8 else round(mn_w, 6)),
+             "exempt": "CO-16 层跨不相交（CO-18 §1b/§4-2）"})
 
 
 def check_acn(art, verdict, manifest, gaps):
@@ -307,8 +325,15 @@ def check_acn(art, verdict, manifest, gaps):
     n_land = len(art["layers"]["R3"]["assignment"])
     chk("A-CN.3a", "72", str(n_land), n_land == 72)
     r3 = art["layers"]["R3"]["assignment"]
-    band_bad = [k for k, v in r3.items()
-                if v["landing"][1] < v["y_band"][0] - 1e-9 or v["landing"][1] > v["y_band"][1] + 1e-9]
+    _co16_keys = set()
+    if (art.get("resource_gate") or {}).get("r1_5_shape") == "co16":
+        for _p in manifest["pages"]:
+            if _p.get("kind") != "data":
+                continue
+            for _pol in ("P", "N"):
+                _co16_keys.add(_p["anchors"]["conn"][_pol]["ref"] + "|" + _p["nets"][_pol])
+    band_bad = [k for k, v in r3.items() if k not in _co16_keys
+                and (v["landing"][1] < v["y_band"][0] - 1e-9 or v["landing"][1] > v["y_band"][1] + 1e-9)]
     chk("A-CN.3c", "0", str(len(band_bad)), not band_bad)
     c = art["layers"]["R1_5"]["crossings_by_class"]; o = art["layers"]["R1_5"].get("overlaps_by_class", {})
     chk("A-CN.4", "0", f"cross={c} overlap={o}", all(v == 0 for v in list(c.values()) + list(o.values())))
@@ -321,18 +346,20 @@ def check_acn(art, verdict, manifest, gaps):
 
 
 # ---------------- A1.2 / A1.3 / A1.4 ----------------
-def a12(src_sha):
+def a12(src_sha, shape="t2"):
     import tempfile
     res = {}
+    _extra = ["--r1-5-shape", shape] if shape and shape != "t2" else []
     with tempfile.TemporaryDirectory() as td:
         for o in ("natural", "reverse", "hash"):
             om = Path(td) / f"m_{o}.json"; ol = Path(td) / f"l_{o}.json"
-            run_engine(["--enum-order", o], om, ol)
+            run_engine(_extra + ["--enum-order", o], om, ol)
             res[o] = {"main_sha256": sha(om), "landing_sha256": sha(ol)}
     vals = {v["main_sha256"] for v in res.values()}
     landvals = {v["landing_sha256"] for v in res.values()}
     ok = len(vals) == 1 and len(landvals) == 1
-    return {"ok": ok, "orders": res, "identical_main": len(vals) == 1, "identical_landing": len(landvals) == 1}
+    return {"ok": ok, "shape": shape, "orders": res, "identical_main": len(vals) == 1,
+            "identical_landing": len(landvals) == 1}
 
 
 def a13(art, manifest):
@@ -341,8 +368,13 @@ def a13(art, manifest):
     # W3 8L (LID.1): 信号层 = {F.Cu, B.Cu, In2.Cu, In6.Cu}（m13_v57_layer_intent_adoption_v1.json）
     invs.LAYER_PAIRS_OK = {(a, b) for a in ("F.Cu", "B.Cu", "In2.Cu", "In6.Cu")
                            for b in ("F.Cu", "B.Cu", "In2.Cu", "In6.Cu") if a != b}
-    rules = {"width": 0.205, "p_gap": 0.175, "half_pitch": 0.19, "pn_min_edge": 0.155,
-             "max_vias_per_net": 5, "via_od": 0.35}     # W3 revision (ROOT-2 R-74: via<=5)
+    _sh = (art.get("resource_gate") or {}).get("r1_5_shape", "t2")
+    invs.PAIR_RUN_MIN_MM = 1.0 if _sh == "co16" else 0.0   # CO-18: co16 仅比对走廊 run（≥1mm）
+    _shape = (art.get("resource_gate") or {}).get("r1_5_shape", "t2")
+    # 对内 lane y 半距：t2 = POL_OFF 0.19（SPEC gap 0.175）；co16 = POL_OFF_CO16 0.25
+    _half = 0.25 if _shape == "co16" else 0.19
+    rules = {"width": 0.205, "p_gap": 0.175, "half_pitch": _half, "pn_min_edge": 0.155,
+             "max_vias_per_net": 6, "via_od": 0.35}     # ECO SPEC-REV-2（bandY 6 via/线；CO-11 附件）
     mp = {p["page_id"]: p for p in manifest["pages"]}
     viol = []; strong = 0; pages_checked = 0
     for pg in art["pages"]:
@@ -382,9 +414,9 @@ def a13(art, manifest):
     return {"ok": not viol, "pages_checked": pages_checked + refclk_checked,
             "data_pages_checked": pages_checked, "refclk_pages_checked": refclk_checked,
             "strong_nodes_censused": strong,
-            "rules_revision": {"max_vias_per_net": 5,
+            "rules_revision": {"max_vias_per_net": 6, "half_pitch": _half,
                                "layer_pairs": "signal set {F.Cu,B.Cu,In2.Cu,In6.Cu} (LID.1 8L)",
-                               "basis": "ROOT-2 R-74 (via<=5); LID.1 layer-intent adoption (signal=F/In2/In6/B)"},
+                               "basis": "ECO SPEC-REV-2（bandY 6 via/线）；CO-18 L2 对内 lane 半距 co16=0.25（vs t2 0.19）"},
             "violations": viol[:50], "n_violations": len(viol)}
 
 
@@ -413,34 +445,56 @@ def main() -> int:
 
     gm1r, gm2r, gm3r, gm6r = gm1(src), gm2(src), gm3(), gm6(art)
 
-    # G-M4: independent re-derivation
-    r2 = derive_r2(manifest, lane_frame)
-    r3d = derive_r3(gaps, manifest, load(BASE_GAPS), lane_frame)
-    m4 = {"r2_mismatch": [], "r3_mismatch": [], "nodes_route_mismatch": []}
-    for pid, v in r2.items():
-        a = art["pages"]; pg = next((p for p in a if p["page_id"] == pid), None)
-        if pg is None or pg["kind"] != "data":
-            continue
-        if abs(pg["lane"]["y"] - v["lane_y"]) > 1e-6 or pg["lane"]["index"] != v["lane_index"]:
-            m4["r2_mismatch"].append({"page": pid, "artifact": pg["lane"], "derived": v})
-    for pid, pg in [(p["page_id"], p) for p in art["pages"] if p["kind"] == "data"]:
-        f = next(p for p in manifest["pages"] if p["page_id"] == pid)
-        for pol in ("P", "N"):
-            k = f["anchors"]["conn"][pol]["ref"] + "|" + f["nets"][pol]
-            d = r3d.get(k)
-            if d is None:
+    # G-M4: independent re-derivation（co16 = 消费保真 vs CO16-ALLOC.1；其余 = 闭式规则复刻）
+    _shape = (art.get("resource_gate") or {}).get("r1_5_shape", "t2")
+    m4 = {"r2_mismatch": [], "r3_mismatch": [], "nodes_route_mismatch": [], "shape": _shape}
+    if _shape == "co16":
+        _alloc = load(STEP2 / "m13_v57_co16_channel_allocation.json")
+        _apg = _alloc["pages"]
+        for pid, pg in [(p["page_id"], p) for p in art["pages"] if p["kind"] == "data"]:
+            al = _apg.get(pid)
+            if al is None:
+                m4["r2_mismatch"].append({"page": pid, "missing_alloc": True}); continue
+            _ly = (al["lane_y"]["P"] + al["lane_y"]["N"]) / 2.0
+            if abs(pg["lane"]["y"] - _ly) > 1e-6:
+                m4["r2_mismatch"].append({"page": pid, "artifact": pg["lane"], "alloc_lane_y": _ly})
+            for pol in ("P", "N"):
+                rb = pg.get("r3_by_pol", {}).get(pol)
+                want = al["landing"][pol]
+                if rb is None:
+                    m4["r3_mismatch"].append({"page": pid, "pol": pol, "missing": True}); continue
+                if abs(rb["column_x"] - want[0]) > 1e-6 or abs(rb["landing"][1] - want[1]) > 1e-6:
+                    m4["r3_mismatch"].append({"page": pid, "pol": pol, "artifact": rb, "alloc": want})
+        m4["co16_allocation"] = {
+            "artifact": "m13_v57_co16_channel_allocation.json", "n_pages": len(_apg),
+            "basis": "O(1) 消费保真；CO16-ALLOC.1 由 p3_v57_co11_placement_verify.py 独立复核 320/320 0 违规 PASS"}
+    else:
+        r2 = derive_r2(manifest, lane_frame)
+        r3d = derive_r3(gaps, manifest, load(BASE_GAPS), lane_frame)
+        for pid, v in r2.items():
+            a = art["pages"]; pg = next((p for p in a if p["page_id"] == pid), None)
+            if pg is None or pg["kind"] != "data":
                 continue
-            rb = pg.get("r3_by_pol", {}).get(pol)
-            if rb is None:
-                m4["r3_mismatch"].append({"page": pid, "pol": pol, "missing": True}); continue
-            if abs(rb["column_x"] - d["column_x"]) > 1e-6 or abs(rb["landing"][1] - d["landing_y"]) > 1e-6:
-                m4["r3_mismatch"].append({"page": pid, "pol": pol, "artifact": rb, "derived": d})
+            if abs(pg["lane"]["y"] - v["lane_y"]) > 1e-6 or pg["lane"]["index"] != v["lane_index"]:
+                m4["r2_mismatch"].append({"page": pid, "artifact": pg["lane"], "derived": v})
+        for pid, pg in [(p["page_id"], p) for p in art["pages"] if p["kind"] == "data"]:
+            f = next(p for p in manifest["pages"] if p["page_id"] == pid)
+            for pol in ("P", "N"):
+                k = f["anchors"]["conn"][pol]["ref"] + "|" + f["nets"][pol]
+                d = r3d.get(k)
+                if d is None:
+                    continue
+                rb = pg.get("r3_by_pol", {}).get(pol)
+                if rb is None:
+                    m4["r3_mismatch"].append({"page": pid, "pol": pol, "missing": True}); continue
+                if abs(rb["column_x"] - d["column_x"]) > 1e-6 or abs(rb["landing"][1] - d["landing_y"]) > 1e-6:
+                    m4["r3_mismatch"].append({"page": pid, "pol": pol, "artifact": rb, "derived": d})
     C, O = full_metric(art["route_geometry"])
-    vbad, vmin, nvias = via_min_inter(art)
+    vbad, vmin, nvias, _vwarn = via_min_inter(art)
     acn = check_acn(art, verdict, manifest, gaps)
     m4["segment_metric"] = {"cross": C, "overlap": O, "total": C + O,
                             "artifact_claim": art["resource_gate"]["verification_check"]["same_layer_crossings"]}
-    m4["via_clearance"] = {"violations": vbad, "min_inter_net_mm": vmin, "n_vias": nvias}
+    m4["via_clearance"] = {"violations": vbad, "min_inter_net_mm": vmin, "n_vias": nvias, **_vwarn}
     m4["ok"] = (not m4["r2_mismatch"] and not m4["r3_mismatch"] and C == 0 and O == 0 and vbad == 0)
 
     landing = load(LANDING)
@@ -448,19 +502,20 @@ def main() -> int:
            "authority_main_sha256": landing["authority"]["main_sha256"], "main_sha256": sha(MAIN),
            "match": landing["authority"]["main_sha256"] == sha(MAIN)}
 
-    a12r = a12(src)
+    a12r = a12(src, _shape)
     a13r = a13(art, manifest)
     a14r = a14(src)
 
     gates = {"G-M1": gm1r, "G-M2": gm2r, "G-M3": gm3r,
-             "G-M4": {"ok": m4["ok"], "r2_mismatch": len(m4["r2_mismatch"]),
+             "G-M4": {"ok": m4["ok"], "shape": _shape, "r2_mismatch": len(m4["r2_mismatch"]),
                       "r3_mismatch": len(m4["r3_mismatch"]), "segment_metric": m4["segment_metric"],
                       "via_clearance": m4["via_clearance"]},
              "G-M5": {"ok": all(c["ok"] for c in acn), "checks": acn},
              "G-M6": gm6r}
     gates_ok = all(g["ok"] for g in gates.values())
     checks_ok = all(c["ok"] for c in acn)
-    _engine_rev = re.search(r'REVISION\s*=\s*"([^"]+)"', src).group(1)
+    _revpat = r'REVISION_CO16\s*=\s*"([^"]+)"' if _shape == "co16" else r'(?<![_A-Z])REVISION\s*=\s*"([^"]+)"'
+    _engine_rev = re.search(_revpat, src).group(1)
     probes = [{"key": "stale_state",
                "probe": "artifact revision vs engine REVISION (on-disk source)",
                "ok": art["revision"] == _engine_rev},

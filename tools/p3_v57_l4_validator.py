@@ -29,15 +29,24 @@ def sha(p): return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 
 
 def collapse(nodes):
-    pts = [[nodes[0][0], nodes[0][1]]]; seg = []; vias = []
-    cur = nodes[0][2]
+    """同 XY 的连续/重复层变点合并为一支 via（与 L4 apply 同一口径；CO-18）。"""
+    pts = [[nodes[0][0], nodes[0][1]]]; seg = []; cur = nodes[0][2]
+    seen = {}
+
+    def note(x, y, L):
+        k = (x, y); i = LIDX[L]
+        if k in seen:
+            seen[k][0] = min(seen[k][0], i); seen[k][1] = max(seen[k][1], i)
+        else:
+            seen[k] = [i, i]
+
+    note(nodes[0][0], nodes[0][1], cur)
     for x, y, L in nodes[1:]:
         if abs(x - pts[-1][0]) < 1e-9 and abs(y - pts[-1][1]) < 1e-9:
-            if L != cur:
-                lo, hi = sorted((cur, L), key=lambda n: LIDX[n])
-                vias.append({"xy": [x, y], "layers": [lo, hi]}); cur = L
-            continue
-        seg.append(cur); pts.append([x, y]); cur = L
+            note(x, y, L); cur = L; continue
+        seg.append(cur); pts.append([x, y]); note(x, y, cur); note(x, y, L); cur = L
+    vias = [{"xy": [k[0], k[1]], "layers": [PHYS[v[0]], PHYS[v[1]]]}
+            for k, v in seen.items() if v[1] > v[0]]
     return pts, seg, vias
 
 
