@@ -393,33 +393,21 @@ def alloc_x(verbose=False):
 
 
 def alloc_closed_form():
-    """CO-11 §9：chip 区 via1 (x,y) 闭式前缀分配（与落位顺序无关，A1.2）。
-    每 (corridor,band) 16 网：按 (pad_x,pid,pol) 排序做 x 前缀（>=0.525，钳入合法 x 窗）；
-    y 取 band 子窗（使四 band 的 via1 y 互斥 >=0.525）。返回 (page,pol)->(tx,ty)。"""
+    """CO-11 §8.5：chip 区 via1 闭式目标（**逐页独立**，与落位顺序无关）。
+    up band 目标 y 取 pad_y ∓ 0.4（下探至 dn 带之下），dn band 取 pad_y；x 取 pad_x（同页 P/N 分离由 pair 域保证）。
+    选择 = pair 域中到目标最近的行（单遍 argmin，无搜索）。"""
+    out = {}
     ysub = {("WEST_MCIO_TO_CHIP", "up"): ("le", 50.44), ("WEST_MCIO_TO_CHIP", "dn"): ("ge", 50.973),
             ("EAST_CHIP_TO_J2", "up"): ("le", 55.895), ("EAST_CHIP_TO_J2", "dn"): ("ge", 56.42)}
-    groups = {}
     for pid, f in FACTS.items():
-        rows = PAIR_DOMAIN[pid]["pair_rows"]
+        key = (f["corridor"], f["band"])
+        mode, yv = ysub[key]
         for pol in ("P", "N"):
-            gi = 0 if pol == "P" else 1
-            xs = sorted({round(float(r[gi]), 4) for r in rows})
-            groups.setdefault((f["corridor"], f["band"]), []).append((f["pad"][pol][0], pid, pol, xs))
-    out = {}
-    for key, items in groups.items():
-        items.sort(key=lambda t: (t[0], t[1], t[2]))
-        t = None
-        for pad_x, pid, pol, xs in items:
-            lo, hi = xs[0], xs[-1]
-            t = lo if t is None else max(lo, t + VV)
-            if t > hi:
-                t = hi
-            mode, yv = ysub[key]
-            py = FACTS[pid]["pad"][pol][1]
-            ty = py - 0.5 if FACTS[pid]["band"] == "up" else py + 0.5
+            py = f["pad"][pol][1]
+            ty = py - 0.4 if f["band"] == "up" else py + 0.0
             ty = min(max(ty, py - YWIN), py + YWIN)
             ty = min(ty, yv) if mode == "le" else max(ty, yv)
-            out[(pid, pol)] = (t, ty)
+            out[(pid, pol)] = (f["pad"][pol][0], ty)
     return out
 
 
@@ -475,6 +463,13 @@ def probe(rule="d3", order="engine", verbose=False):
             continue
         _by = y_bias(f)
         if ALLOC:
+            _xw = float(__import__("os").environ.get("CO10_XWIN", "0"))
+            if _xw > 0:
+                _all = PAIR_DOMAIN[pid]["pair_rows"]
+                _flt = [r for r in _all if abs(float(r[0]) - f["pad"]["P"][0]) <= _xw
+                        and abs(float(r[1]) - f["pad"]["N"][0]) <= _xw]
+                if _flt:
+                    PAIR_DOMAIN[pid]["pair_rows"] = _flt
             rows = sorted(PAIR_DOMAIN[pid]["pair_rows"],
                           key=lambda r: (abs(float(r[0]) - ALLOC[(pid, "P")][0])
                                          + abs(float(r[1]) - ALLOC[(pid, "N")][0])
