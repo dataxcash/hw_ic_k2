@@ -1,0 +1,131 @@
+{
+ "P1_corridor_macro_closure": {
+  "EAST_CHIP_TO_J2": {
+   "band_span_needed_mm": 10.805,
+   "pairs_per_band": 8,
+   "pairs_total": 18,
+   "total_span_if_one_plane_mm": 25.405,
+   "x_net_span_mm": 27.4,
+   "x_range": [
+    105.25,
+    132.65
+   ]
+  },
+  "WEST_MCIO_TO_CHIP": {
+   "band_span_needed_mm": 10.805,
+   "pairs_per_band": 8,
+   "pairs_total": 18,
+   "total_span_if_one_plane_mm": 25.405,
+   "x_net_span_mm": 17.3,
+   "x_range": [
+    65.05,
+    82.35
+   ]
+  },
+  "available": {
+   "n_wing_mm": 16.2,
+   "s_wing_mm": 20.8,
+   "usable_y_span_mm": 45.4
+  },
+  "closure": true
+ },
+ "P2_pad_wall_penetration": {
+  "all_walls_impenetrable": true,
+  "lane_needed_mm": 0.555,
+  "penetrable_wall_count": 0,
+  "walls": {
+   "chip_field(64 pads)": {
+    "min_ctr_dist_mm": 0.6003,
+    "min_pad_gap_mm": 0.2953,
+    "note": "SPEC escape_transition_zone pitch=0.4",
+    "pad_mm": 0.305,
+    "penetrable": false,
+    "pitch_zone_mm": 0.4
+   },
+   "connector J2": {
+    "min_ctr_dist_mm": 0.6,
+    "min_pad_gap_mm": 0.295,
+    "n_pads": 32,
+    "pad_mm": 0.305,
+    "penetrable": false
+   },
+   "connector J3": {
+    "min_ctr_dist_mm": 0.6,
+    "min_pad_gap_mm": 0.295,
+    "n_pads": 18,
+    "pad_mm": 0.305,
+    "penetrable": false
+   },
+   "connector J4": {
+    "min_ctr_dist_mm": 0.6,
+    "min_pad_gap_mm": 0.295,
+    "n_pads": 18,
+    "pad_mm": 0.305,
+    "penetrable": false
+   }
+  }
+ },
+ "P3_pin_escape_reachability": {
+  "chip_pads": 64,
+  "conn_pads": 68,
+  "data_pairs": 32,
+  "in2_escape_band": {
+   "n_wing_mm": 16.2,
+   "pairs_capacity": 25.3425,
+   "s_wing_mm": 20.8
+  },
+  "internal_signal_layers_6L": [
+   "In2.Cu"
+  ],
+  "internal_signal_layers_8L": [
+   "In2.Cu",
+   "In6.Cu"
+  ],
+  "via_escape_budget": {
+   "chip_side_vias": 64,
+   "conn_side_inner_col_vias": 0,
+   "note": "P2=0 可穿透 -> 高速球一律需层转移；6L 只有 1 个内部信号层承接全部逃逸"
+  },
+  "via_per_line_max": 2
+ },
+ "P4_strong_gate_embedding": {
+  "full_clearance_suite_in_L2": false,
+  "l2_structure_doc": "pm_gate/artifacts/k2_v4/L3/../L2/frozen/L2_STRUCTURE_v2.0.md",
+  "length_match_declared_in_L2": true,
+  "length_match_machine_gate_in_L2": false,
+  "verdict": "FAIL: L2 包络缺完整净距套件 (0.38/0.4525/0.525)；对内等长仅文本声明未机检"
+ },
+ "artifact": "m13_v57_l1_struct_preflight_v2",
+ "authority": "LAYOUT_CONSTITUTION Ch.3 §5 + Ch.9 row2/3; rectification #02 (定层纠正)",
+ "constants": {
+  "clr_mm": 0.175,
+  "lane_needed_mm": 0.555,
+  "pair_copper_mm": 0.585,
+  "pair_pitch_mm": 1.46,
+  "via_outer_mm": 0.35,
+  "w_mm": 0.205
+ },
+ "date": "2026-09-11",
+ "escalation": "变更单 CO-02 -> L2 结构方案竞标（叠层分配/走廊矩阵/过孔策略/等长窗口）",
+ "hard_gates": {
+  "clearance_suite": {
+   "track_track_center_mm": 0.38,
+   "via_track_center_mm": 0.4525,
+   "via_via_center_mm": 0.525
+  },
+  "jlc_limits": {
+   "edge_copper_min_mm": 0.3
+  },
+  "length_match_intra_pair_skew_mm": 0.15,
+  "via_per_line_max": 2
+ },
+ "inputs_sha": {
+  "manifest": "a8ef3ea8ecff99d7",
+  "pcb": "f6273de613f43d05",
+  "rules": "0a459839e15960b8",
+  "spec": "0bd52ed48e720b8c"
+ },
+ "revision": "L1-PF.2",
+ "schema": 1,
+ "verdict": "PREFLIGHT_FAIL"
+}
