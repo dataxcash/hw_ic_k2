@@ -8,7 +8,10 @@
 产出：
   - m13_v57_l4_construction.json   (per-net 段/过孔，逐字节 = 图纸几何；供 L4 验证器消费)
   - <dst>.kicad_pcb                (--board 给定时；新建版本化板，冻结板不动)
-CLI: python3 p3_v57_l4_apply_drawing.py [--board] [--out-board PATH]
+CLI: python3 p3_v57_l4_apply_drawing.py [--board] [--out-board PATH] [--escape-domain PATH]
+
+CO-37：`--escape-domain` 时按版本化域工件注入**具名 rule area**（非铜、非布线；供 `.kicad_dru` 条件引用），
+实现 SPEC `escape_transition_zone`（ECN-001）；域工件与判据变更须版本化（见 CO-25 §3 / CO-37 裁定）。
 """
 from __future__ import annotations
 import argparse, hashlib, json, shutil
@@ -85,7 +88,7 @@ def build(art, manifest):
                       "n_vias": sum(len(v) for v in vias.values())}}
 
 
-def apply_board(rec, src: Path, dst: Path):
+def apply_board(rec, src: Path, dst: Path, domain=None):
     import pcbnew                                                       # noqa: E402
     b = pcbnew.LoadBoard(str(src))
     LM = {n: getattr(pcbnew, n.replace(".", "_")) for n in PHYS}   # LID.1 8L (incl. In5/In6)
@@ -123,22 +126,46 @@ def apply_board(rec, src: Path, dst: Path):
             for ln in PHYS[i0:i1 + 1]:
                 ls.AddLayer(LM[ln])
             vi.SetLayerSet(ls); vi.SetNetCode(netcode(net)); b.Add(vi)
+    n_rule_areas = 0
+    if domain:                                          # CO-37: SPEC 逃逸区 named rule areas（非铜）
+        for d in domain["domains"]:
+            x0, y0, x1, y1 = d["rect_mm"]
+            z = pcbnew.ZONE(b)
+            z.SetIsRuleArea(True); z.SetZoneName(d["id"]); z.SetLayer(LM[d["layer"]])
+            for setter in ("SetDoNotAllowCopperPour", "SetDoNotAllowVias", "SetDoNotAllowTracks",
+                           "SetDoNotAllowPads", "SetDoNotAllowFootprints", "SetDoNotAllowZoneFills"):
+                if hasattr(z, setter):
+                    getattr(z, setter)(False)
+            o = z.Outline(); o.NewOutline()
+            for (x, y) in ((x0, y0), (x1, y0), (x1, y1), (x0, y1)):
+                o.Append(mm(x), mm(y))
+            b.Add(z); n_rule_areas += 1
     pcbnew.SaveBoard(str(dst), b)
-    return {"dst": str(dst.relative_to(K2)), "dst_sha256": sha(dst)}
+    return {"dst": str(dst.relative_to(K2)), "dst_sha256": sha(dst), "n_rule_areas": n_rule_areas}
 
 
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--board", action="store_true")
     ap.add_argument("--out-board", default=None)
+    ap.add_argument("--escape-domain", default=None)
     args = ap.parse_args()
     art = json.loads(MAIN.read_text(encoding="utf-8"))
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
     rec = build(art, manifest)
     rec["application"] = None
+    domain = None
+    if args.escape_domain:
+        dp = Path(args.escape_domain)
+        domain = json.loads(dp.read_text(encoding="utf-8"))
+        rec["escape_domain"] = {"artifact": domain["artifact"], "revision": domain["revision"],
+                                "sha256": sha(dp), "escape_clearance_mm": domain["escape_clearance_mm"],
+                                "excluded_nets": domain.get("excluded_nets", []),
+                                "n_domains": len(domain["domains"]),
+                                "note": "CO-37：SPEC 逃逸区 rule area（非铜）；域外维持 shop 0.175/0.2"}
     if args.board:
         dst = Path(args.out_board) if args.out_board else DST_PCB
-        rec["application"] = apply_board(rec, SRC_PCB, dst)
+        rec["application"] = apply_board(rec, SRC_PCB, dst, domain)
         rec["authority"]["src_pcb_sha256"] = sha(SRC_PCB)
     OUT.write_text(json.dumps(rec, indent=1, ensure_ascii=False, sort_keys=True), encoding="utf-8")
     print(f"L4: nets={rec['tally']['n_nets']} segs={rec['tally']['n_segments']} "

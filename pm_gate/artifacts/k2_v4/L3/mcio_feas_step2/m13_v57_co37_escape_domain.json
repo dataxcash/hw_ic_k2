@@ -1,0 +1,74 @@
+{
+ "artifact": "m13_v57_co37_escape_domain",
+ "authority": {
+  "ruling": "m13_v57_CO25_d3b_audit_fix_ruling.md §3 (D3c 自裁, L2)",
+  "spec_constraint": "SPEC.constraints.escape_transition_zone (ECN-001)"
+ },
+ "domains": [
+  {
+   "id": "ESC_J2",
+   "layer": "F.Cu",
+   "n_pads": 74,
+   "rect_mm": [
+    131.5,
+    42.225,
+    136.15,
+    65.175
+   ],
+   "ref": "J2"
+  },
+  {
+   "id": "ESC_J3",
+   "layer": "F.Cu",
+   "n_pads": 38,
+   "rect_mm": [
+    53.45,
+    42.4,
+    65.55,
+    46.6
+   ],
+   "ref": "J3"
+  },
+  {
+   "id": "ESC_J4",
+   "layer": "F.Cu",
+   "n_pads": 38,
+   "rect_mm": [
+    53.45,
+    60.6,
+    65.55,
+    64.8
+   ],
+   "ref": "J4"
+  },
+  {
+   "id": "ESC_U6",
+   "layer": "F.Cu",
+   "n_pads": 354,
+   "rect_mm": [
+    82.1,
+    49.11,
+    105.34,
+    58.29
+   ],
+   "ref": "U6"
+  }
+ ],
+ "escape_clearance_mm": 0.075,
+ "excluded_nets": [
+  "PCIE_REFCLK*"
+ ],
+ "exclusion_basis": "SPEC.constraints.refclk_isolated=true ⇒ REFCLK 不享受逃逸区放宽（其冲突属 D3a 几何缺陷）",
+ "inputs_sha256": {
+  "pad_field": "1568ddbc51a743b33cf17212d5688dd187f5e2e1c6dc693c22a838900ef25346"
+ },
+ "method": {
+  "basis": "pad 场 bbox 外扩 MARGIN；层=F.Cu（per_pin_vertical_escape + no_via）",
+  "kind": "closed_form_bbox",
+  "layer": "F.Cu",
+  "margin_mm": 0.5,
+  "no_search": true
+ },
+ "revision": "CO37-ESC.1",
+ "schema": 1
+}

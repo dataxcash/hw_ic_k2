@@ -22,16 +22,19 @@ DRAWING = STEP2 / "m13_v57_w3_joint_assignment.json"
 REC = STEP2 / "m13_v57_l4_construction.json"
 RULES = ROOT / "_shared/eda_core/drc_rules.json"
 CLI = ROOT / "AppDir/bin/kicad-cli"
+L4_DRU = K2 / "k2_v4_8L.l4.kicad_dru"   # CO-37: SPEC 逃逸区规则域（只随 L4 板；冻结基线不适用）
 
 
 def sha(p): return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 
 
-def drc(board: Path, pro: Path) -> dict:
+def drc(board: Path, pro: Path, dru: Path | None = None) -> dict:
     with tempfile.TemporaryDirectory() as td:
         b = Path(td) / board.name
         pr = b.with_suffix(".kicad_pro")
         shutil.copy(board, b); shutil.copy(pro, pr)
+        if dru is not None and Path(dru).exists():
+            shutil.copy(dru, b.with_suffix(".kicad_dru"))
         out = Path(td) / "drc.json"
         subprocess.run([str(CLI), "pcb", "drc", "--format", "json", "--severity-all",
                         "--refill-zones", "--output", str(out), str(b)],
@@ -68,19 +71,22 @@ def main() -> int:
            "inputs": {"frozen_pcb": sha(SRC_PCB), "drawing": sha(DRAWING), "construction": sha(REC)}}
 
     # ---- DFM/DFT record ----
-    dbase = drc(SRC_PCB, PRO); dl4 = drc(L4_PCB, PRO)
+    dbase = drc(SRC_PCB, PRO); dl4 = drc(L4_PCB, PRO, L4_DRU)
     def bytype(d): return dict(Counter(v.get("type") for v in d.get("violations", [])))
     tb, tl = bytype(dbase), bytype(dl4)
     new = {k: tl.get(k, 0) - tb.get(k, 0) for k in tl}
     widths = sorted({round(pcbnew.ToMM(t.GetWidth()), 3) for t in tracks})
-    dfm = {"artifact": "m13_v57_l5_dfm_dft_record", "schema": 1, "revision": "L5-DFM.2",
+    dfm = {"artifact": "m13_v57_l5_dfm_dft_record", "schema": 1, "revision": "L5-DFM.3",
            "drc": {"tool": f"kicad-cli {subprocess.run([str(CLI),'--version'],capture_output=True,text=True).stdout.strip()}",
                    "baseline_frozen": {"n": len(dbase.get("violations", [])), "by_type": tb,
                                        "unconnected": len(dbase.get("unconnected_items", []))},
                    "l4_applied": {"n": len(dl4.get("violations", [])), "by_type": tl,
                                   "unconnected": len(dl4.get("unconnected_items", []))},
                    "new_violations": {k: v for k, v in new.items() if v},
-                   "new_total": sum(v for v in new.values() if v > 0)},
+                   "new_total": sum(v for v in new.values() if v > 0),
+                   "escape_domain": ({"file": str(L4_DRU.relative_to(K2)), "sha256": sha(L4_DRU),
+                                      "applies_to": "l4_applied only（冻结基线无 .kicad_dru）"}
+                                     if L4_DRU.exists() else None)},
            "manufacturing_conformance": {
                "min_track_width_used_mm": widths[0] if widths else None,
                "min_track_width_rule_mm": mfg["min_track_width"],

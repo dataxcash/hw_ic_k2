@@ -1,7 +1,8 @@
 {
  "application": {
   "dst": "k2_v4_8L.l4.kicad_pcb",
-  "dst_sha256": "5e8d88d4051260143f43cd28dd6ab992956bec594fb17096111adc2b2d52c6ef"
+  "dst_sha256": "9e6b4839669e941a0e259d66da51451ca48e80ae4c2d42c09f99b35a09a81ba6",
+  "n_rule_areas": 4
  },
  "artifact": "m13_v57_l4_construction",
  "authority": {
@@ -10,6 +11,17 @@
   "drawing_rev": "W3-CN.38",
   "drawing_sha256": "0261e0b0a598df6d1d32e27382a8d04cc1d694dddce7e16e7d648fcdd1268113",
   "src_pcb_sha256": "fb07d25ac426ff84905200a9af88e04dd9e6b9216986c4f4459fd7d556a88c34"
+ },
+ "escape_domain": {
+  "artifact": "m13_v57_co37_escape_domain",
+  "escape_clearance_mm": 0.075,
+  "excluded_nets": [
+   "PCIE_REFCLK*"
+  ],
+  "n_domains": 4,
+  "note": "CO-37：SPEC 逃逸区 rule area（非铜）；域外维持 shop 0.175/0.2",
+  "revision": "CO37-ESC.1",
+  "sha256": "5616a9f873c9b84460f8ffedd8ceb865c3ddc6a7f4e177ba354aadad34bfa821"
  },
  "nets": [
   "PCIE_DN0_N",

@@ -313,3 +313,65 @@ AppDir/bin/python3.11 tools/p3_v57_l5_signoff.py                    # ⇒ DFM ne
 指纹：ALLOC.5 `0bf6cdc203887a48`｜CO-36 geom `6610557070a37960`｜CO-36 verify `add6f9918a17ea3d`｜CO-36 copper audit `03fad029e6709f28`
 ｜W3-CN.38 `0261e0b0a598df6d`｜landing `6a42a329a0e75a31`｜W4 `b0ff500448e7b54b`｜L4 `512192df1f1e8f84` / 板 `5e8d88d405126014`
 ｜fab `3b91202b1e5dd1a4`｜dfm `9f7158f2634df815`｜si `03cc5b67430fb3e8`
+
+## 17. 追加（CO-37：D3c **落地** — SPEC 逃逸区规则域（`.kicad_dru` + 板内具名 rule area）；DFM new 65→60；残余 = 100% REFCLK）
+> 2026-09-12｜裁定：ARCHER（续接会话）｜性质：**判据实现**（L2 自裁；实现冻结 SPEC `escape_transition_zone`/ECN-001，**非放宽**）｜**几何零改动**（canonical/landing/W4 指纹不变）
+
+### 17.1 结论
+以**版本化规则文件 + 版内具名 rule area**实现 SPEC `escape_transition_zone.escape_clearance_mm = 0.075`（域 = J2/J3/J4/U6 pad 场，F.Cu），
+**并排除 REFCLK 网**（`SPEC.constraints.refclk_isolated=true`）。落地后 DFM `new 65 → 60`（稳定）；
+**残余 60 条 = 100% `PCIE_REFCLK0/1` 路线族**（D3a）⇒ 里程碑路径唯一化：**只差 D3a 几何重派生**。
+与前两版一致：`copper_edge 0` / `hole_to_hole 0`；`unconnected` 348 不变。
+
+### 17.2 域与判据（全部版本化；零搜索）
+| 件 | sha16 | 说明 |
+|---|---|---|
+| `m13_v57_co37_escape_domain.json` | `5616a9f873c9b844` | 域工件（CO37-ESC.1）：`ESC_J2` x[131.50,136.15] y[42.23,65.18]；`ESC_J3` x[53.45,65.55] y[42.40,46.60]；`ESC_J4` x[53.45,65.55] y[60.60,64.80]；`ESC_U6` x[82.10,105.34] y[49.11,58.29]（pad 场 bbox 外扩 `MARGIN=0.5mm`，层 = F.Cu）|
+| `k2_v4_8L.l4.kicad_dru` | `3148703240d54420` | 规则：`(constraint clearance (min 0.075mm))` + `(layer "F.Cu")` + 条件 `(A∩域 ∨ B∩域) && !REFCLK(A) && !REFCLK(B)` |
+| L4 板 rule areas | 4（非铜） | `ESC_J2/ESC_J3/ESC_J4/ESC_U6`，由 `p3_v57_l4_apply_drawing.py --escape-domain <工件>` 注入 |
+| L5 判据输入 | — | `p3_v57_l5_signoff.py` 把 `.kicad_dru` 一并复制进 DRC 沙箱；**仅 `l4_applied` 适用**（冻结基线无 `.kicad_dru`）|
+生成器：`tools/p3_v57_co37_emit_escape_domain.py`（域派生，闭式 bbox）与 `tools/p3_v57_co37_emit_dru.py`（规则文件发射，O(1) 消费域工件）。
+
+### 17.3 域外/排除项（**不放宽**）
+- **REFCLK 不享受放宽**（`refclk_isolated`；其冲突是外来布线侵入 pad 场 ⇒ D3a 几何缺陷）。实测：8 条 REFCLK clearance（含 `0.0600` 与 C82×REFCLK1_N `0.1755`）**全部保持违规**。
+- 域外维持 shop/netclass（PCIe85 **0.175** / POWER **0.2**）；短接/交叉/阻焊桥类判据不变（放宽仅限 clearance 且仅在域内）。
+- 量纲与制造：准入项实测铜距 **0.1211–0.1522mm**（≥ SPEC 0.075 且 ≥ JLC 线距极限 0.10）。
+
+### 17.4 接受判据（实测，逐项；本会话执行）
+1. **净效果**：`new 65 → 60`（域板连跑 2 次均 60；同旋钮无域重建板连跑 2 次均 65 ⇒ 差值 5 稳定）。
+2. **恰好 5 条、0 新增**：逐对差分（含位置键）显示消 5 条 clearance = `J2 19[GND]×UP_OUT4_N_J2`、`J2 16[GND]×UP_OUT3_N_J2`、`J2 70[DN6_N]×DN7_P`、`J2 71[GND]×DN7_N`、`R3.2[PWR_BTN_ISO]×UP3_N`（全部为 pad 场逃逸段；非 REFCLK 对）。
+3. **无越界清除**：无 `actual < 0.075` 项消失；无短接/交叉/阻焊桥项消失；`tracks_crossing 5` 与 `solder_mask_bridge 38` 不变。
+4. **无新增违规**：域板 `unconnected` 348 不变；rule area 本身不产生 DRC 项。
+5. **REFCLK 计数不变**（60）：其条目/报类归属随 KiCad 分组抖动（同一几何下 ±4，clearance↔shorting；已证 REFCLK 铜几何两版 18 基元逐项相同）。
+6. **几何零改动**：canonical `0261e0b0a598df6d`、landing `6a42a329a0e75a31`、W4 `b0ff500448e7b54b`、probe 复核 `add6f9918a17ea3d`/`03fad029e6709f28` 与 CO-36 **逐字节同**。
+
+### 17.5 附带发现（上游 SPEC 文本一致性，供 owner/SPEC 维护）
+实测 pad 节距：**J2 0.6 / J3 0.6 / J4 0.6 / U6 0.5 mm**（pad 尺寸 1.3×0.35 / 0.3×0.7 / 0.3×0.3）；SPEC `escape_transition_zone.pitch_mm = 0.4` 与本板实测**不一致**（文本前提陈旧）。
+但**结论仍成立**：0.6 节距 + 0.205 线宽的单边净距 = `0.6−0.3−0.205 = 0.095mm < 0.175`（U6: `0.5−0.3−0.205 = −0.005` 居中不可行 ⇒ 须错列逃逸）⇒ pad 墙内逃逸段**必然**落在 `(0, 0.175)` 区间，逃逸区 0.075 判据有实测依据。
+建议：SPEC 文本把 `pitch_mm` 更正为实测值（或注明为「接入段包络」口径），以免后续会话据陈旧前提质疑/误用 D3c。
+
+### 17.6 gate / 指纹（D3c 批次 = 判据批，几何指纹沿用 CO-36）
+| 门 | 判定 | 证据 |
+|---|---|---|
+| G4/W3 | 不变（几何零改动） | `0261e0b0a598df6d` / landing `6a42a329a0e75a31` |
+| G5/W4 | 不变 | `b0ff500448e7b54b` |
+| G6/L4 | **PASS（重跑，板含 rule area）** | construction `d65cbcf8a993f2c5`（68/2408/248 + 4 rule areas）；validation `9bbb15fc88b2723f`（L4-A..E viol=0）；板 `9e6b4839669e941a` |
+| G7/L5 | **SI PASS / DFM FAIL（new 60）** | `L5-DFM.3` `7790f0eb2f4c256b` = `clearance 8` / `tracks_crossing 5` / `shorting 9` / `mask 38`；`b572226abd5bb8ea`（fab）；`03cc5b67430fb3e8`（si）；`m13_v57_l5_g7_record.md` `6cb9b1a75778a1d9`（L5-G7.5）|
+
+### 17.7 未决（下一周期）
+1. **D3a（60，唯一残余）**：W0-R 见证件补齐（版本化）+ 引擎 `refclk_place()` 修订 → rev bump → 重跑 G4..G7 → `new=0` → **milestone**。
+2. **数据/其他**：**0 残留**（CO-37 §17.4 已消 5/5）⇒ 该项关闭。
+3. SPEC 文本更正建议：见 §17.5（`pitch_mm`）——不影响本批判据效力。
+
+### 17.8 红线 / 复现
+未改四冻结源、未改 `k2_v4_8L.kicad_pro`、未放宽 `intra_pair_skew_mm`；放宽仅限 SPEC 明文逃逸区（0.075）且**排除 REFCLK**、**仅随 L4 板**（冻结基线判据不变）；GND/PWR 平面未动；L1（拓扑/接口/流向/球重映射）未动。
+```
+python3 tools/p3_v57_co37_emit_escape_domain.py
+python3 tools/p3_v57_co37_emit_dru.py
+AppDir/bin/python3.11 tools/p3_v57_l4_apply_drawing.py --board \
+  --escape-domain pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_co37_escape_domain.json
+AppDir/bin/python3.11 tools/p3_v57_l4_validator.py
+AppDir/bin/python3.11 tools/p3_v57_l5_signoff.py      # ⇒ DFM new=60（clearance 8 全为 REFCLK）
+```
+指纹：域工件 `5616a9f873c9b844`｜`.kicad_dru` `3148703240d54420`｜L4 `d65cbcf8a993f2c5` / val `9bbb15fc88b2723f` / 板 `9e6b4839669e941a`
+｜fab `b572226abd5bb8ea`｜dfm `7790f0eb2f4c256b`（new 60）｜si `03cc5b67430fb3e8`｜g7 `6cb9b1a75778a1d9`
