@@ -171,7 +171,7 @@ def _lx_separate(A):
         lo = min(min(ly, g["a"]["landing"][1]) for g in grp)
         hi = max(max(ly, g["a"]["landing"][1]) for g in grp)
         best = None
-        for d in (0.0, 0.6, -0.6, 1.2, -1.2, 1.8, -1.8, 2.4, -2.4):
+        for d in (0.0, 0.6, -0.6, 1.2, -1.2, 1.8, -1.8, 2.4, -2.4, 3.0, -3.0, 3.6, -3.6):
             xs = [g["a"]["column_x"] + d for g in grp]
             okd = True
             for q in placed:

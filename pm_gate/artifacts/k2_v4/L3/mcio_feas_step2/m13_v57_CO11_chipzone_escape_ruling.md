@@ -237,3 +237,31 @@ k2 `ff438f0`｜父仓（bump）｜四源 4/4 MATCH｜canonical W3-CN.30 `05f7bd1
 - 现状：**30/32 有效**（crossing-free + clearance-clean，经修正判据复核）；2 页待 (b) 的新几何。
 - 冻结四源 4/4 MATCH；canonical `05f7bd10ab3b45b6` 未动；引擎未改；无 sign-off。
 - 判据纪律（§12 教训）已固化：探针 `cross_intra` + 复核器 `cross`（proper intersection）。
+
+---
+
+## 14. (b) 收敛实验：landing 带重派生 + stub 层 + lx δ 扩展（最佳仍 30/32）
+### 14.1 实测矩阵（全部经修正复核器；探针默认行为不变）
+| 配置 | 落位 | 失败页 | 复核 |
+|---|---|---|---|
+| FANY_J3 `31.5,51.5` + STUB `J3L`（co13 基线） | **30/32** | UP6, UP7 | PASS |
+| FANY_J3 `31.5,44.5` + STUB `all` | **30/32** | DN1, UP6 | PASS（产物 `142beea07e4c9609`）|
+| FANY_J3 `31.5,42.0` / `43.0` / `45.0` + STUB `all` | 26–29/32 | DN0–3 等 | — |
+| FANY_J3 `31.5,31.5` + STUB `all`/`J3L,J4U,J4L` | 26/32 | DN0–3, UP4, UP6 | — |
+| J4L→In2（STUB `J3L,J4L`） | 28/32 | DN1, UP4/5/7 | — |
+| lx δ 网格扩至 ±3.6（0.6 步） | 基线不变 | — | — |
+
+### 14.2 两类残余的定量瓶颈
+1. **connector 侧 In2 stub 阶梯团**：把 J4L 改 In2 后，In2 stub 的 y 区间
+   J3U`[31.5,36.7]`/J3L`[37.8,ll_L]`/J4U`[42.3,ll_U]`/J4L`[46.8,65.0]`；
+   需 `|Δx|≥0.525` 的互斥团大小随 `ll_L/ll_U` 变化（最小 ≈16，最大 24），而 connector 中缝列 ≈18
+   ⇒ **处于容量边界**；`ll_L` 越界（<42.3）可解耦 J3L×J4，但会与 J3U 的 breakout 在 F.Cu 上互叉（实测 26/32）。
+2. **chip 侧 via 间距**：残余页出现 `vv_intra` 0.42–0.52（同页 P/N via1 或 corner 过近）与
+   `vt2_placed` 0.21（F.Cu 逃逸段 × 邻页 via）⇒ pair 域**逐页取最近行**不足以避开邻页已落位几何。
+
+### 14.3 结论 / 下一周期
+- (a) 已闭环（30/32，crossing-free + clearance-clean，复核 PASS）。
+- (b) 需**闭合的列分配器**：以 connector 中缝列为色板、In2 stub/land 的 y 区间为区间图做**确定性贪心着色**
+  （引擎 `color_groups` 同范式），并同时纳入 chip 侧 pair 行选择（含 corner/逃逸段避让）——
+  二者必须**联立**（当前逐页独立选行是残留的真因）。属新几何推导周期，非微调。
+- 红线：冻结四源 4/4 MATCH；canonical `05f7bd10ab3b45b6` 未动；引擎未改；无 sign-off。
