@@ -32,3 +32,26 @@
 3. 若两者均不可行 ⇒ 触 **L1**（信号层次序/叠层间距/反钻）→ owner。
 
 > 说明：现设计**已是 4 via/线**，故候选一才是回到 SPEC"每线 ≤2"的唯一路线；候选二属"承认现状 + 修安全 hop"。
+
+## 实测 B：escape 密度预检（只读，决定性）→ **触 L1，上抛 owner**
+证据：`m13_v57_co07b_escape_density_precheck.json`（基于 canonical W3-CN.30 只读）。
+
+| 组 | n | escape y-overlap clique | 需 x-span | 可用 x-span | 判定 |
+|---|---|---|---|---|---|
+| EAST/dn | 16 | 16 | 6.08mm | 8.8mm | OK（单带单层）|
+| EAST/up | 16 | 16 | 6.08mm | 9.45mm | OK |
+| WEST/dn | 16 | 16 | 6.08mm | 8.8mm | OK |
+| WEST/up | 16 | 13 | 4.94mm | 10.8mm | OK |
+| **两带合并到一层** | 32 | **32** | **12.16mm** | ≤9.45mm | **不可行** |
+
+**推论链（安全 hop 下）**：
+1. 从 F.Cu 出发的安全 hop 只有 `F↔In2` ⇒ escape 竖段层**只能**是 In2 ⇒ 两带 escape 必争 In2 ⇒ 需 12.16mm > 9.45mm ⇒ **C1 否证**。
+2. escape 与 lane 同层必交叉（escape=芯片侧竖段 x≈84–93，lane=水平 y=lane_y 跨同 x 范围）⇒ escape/lane 必须分层。
+3. 于是安全 hop 需：escape 两层 (In2,In6) + lane 第三层 (B)；而 lane→In2 需 `In2↔In6↔B` 多跳 ⇒ **每线 4~6 过孔** > SPEC `max_per_line=2`。
+
+**结论（owner 决议，L1）**：现 8L 叠层把信号层用平面隔开，与 SPEC「每线 ≤2 过孔」在本板密度下互斥。
+可选项（请 owner 择一）：
+- **(A) 叠层重排（L1）**：把信号层相邻化（如 F/In2/In6/B 连续，平面置于外侧），使 `In2↔In6`、`In6↔B` 为**相邻** hop；
+  则 escape 可安全落 In6/B，两带分层且 lane 独立一层 ⇒ 2~4 via/线可达。
+- **(B) 改 SPEC `high_speed.max_per_line`（2→4~6）**：保留现叠层，接受多跳安全 hop（每线 4~6 via）。
+- **(C) 减层/改拓扑（L1）**：减少需要内层逃逸的信号数（如并行走廊/换 pin 映射）——触球重映射。

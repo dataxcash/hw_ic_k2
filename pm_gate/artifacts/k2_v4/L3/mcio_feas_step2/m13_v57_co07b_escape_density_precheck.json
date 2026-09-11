@@ -1,0 +1,50 @@
+{
+ "artifact": "m13_v57_co07b_escape_density_precheck",
+ "conclusion": "8L 现叠层（信号层被平面隔开）与 SPEC 每线 ≤2 via 互斥；D1 解需 L1（叠层信号层次序/相邻化或加信号层）或 owner 改 SPEC 过孔预算。",
+ "evidence_basis": "canonical W3-CN.30 05f7bd10（只读）",
+ "findings": [
+  "per (corridor,band) escape y-overlap clique = 16 ⇒ 需 x-span 6.08mm ≤ 可用 8.8~9.45mm ⇒ 单带单层可行（原设计依据）。",
+  "两带合并到一层 ⇒ clique 32 ⇒ 需 12.16mm > 9.45mm ⇒ **单层 escape 不可行**（C1 否证）。",
+  "信号层序 F–In2–In6–B（In1/In3/In4/In5 平面）；从 F.Cu 安全 hop 仅 F↔In2 ⇒ escape 层只能是 In2 ⇒ 两带 escape 必争 In2。",
+  "escape 与 lane 同层必交叉（escape=芯片侧竖段 x≈84–93，lane=水平 y=lane_y 跨同 x）⇒ escape/lane 必须分层。",
+  "⇒ 安全 hop 下：escape 两层(In2,In6) + lane 第三层(B)；lane 到 In2 需 In2↔In6↔B 多跳 ⇒ **每线 4~6 via**，超 SPEC max_per_line=2。"
+ ],
+ "per_group": [
+  {
+   "band": "dn",
+   "corridor": "EAST_CHIP_TO_J2",
+   "n": 16,
+   "required_x_span_mm": 6.08,
+   "x_span_avail_mm": 8.8,
+   "y_overlap_clique": 16
+  },
+  {
+   "band": "up",
+   "corridor": "EAST_CHIP_TO_J2",
+   "n": 16,
+   "required_x_span_mm": 6.08,
+   "x_span_avail_mm": 9.45,
+   "y_overlap_clique": 16
+  },
+  {
+   "band": "dn",
+   "corridor": "WEST_MCIO_TO_CHIP",
+   "n": 16,
+   "required_x_span_mm": 6.08,
+   "x_span_avail_mm": 8.8,
+   "y_overlap_clique": 16
+  },
+  {
+   "band": "up",
+   "corridor": "WEST_MCIO_TO_CHIP",
+   "n": 16,
+   "required_x_span_mm": 4.94,
+   "x_span_avail_mm": 10.8,
+   "y_overlap_clique": 13
+  }
+ ],
+ "question": "C1(F.Cu 单层 escape) 是否可行 / 8L 安全 hop 下最小层数",
+ "redline": "四源未改；只读预检",
+ "revision": "CO-07b-PRECHECK.1",
+ "schema": 1
+}
