@@ -58,7 +58,7 @@ FROZEN_SHA = {
 OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
 OUT_LANDING = STEP2 / "m13_v57_w3_chip_landing_rows.json"
 
-REVISION = "W3-CN.26"   # LID.1: 8L 派生叠层（In2/In6/B 通道层）
+REVISION = "W3-CN.27"   # LID.1 8L + A-CN.9 完整净距谓词（via<->track）+ 无 stale seed
 ORD = "natural"   # ROOT-20: enumeration order (A1.2 order-invariance, non-vacuous)
 SCHEMA = 1
 STEP = 1.46
@@ -67,6 +67,13 @@ N_LANES = 32
 N_USED = 16
 REACH = 45.4
 VIA_VIA = 0.525
+# A-CN.9 完整净距（由冻结 SPEC 派生，main() 内断言一致）：
+#   vt   = via_r + clearance + width/2 = 0.35/2 + 0.175 + 0.205/2
+#   vt_e = via_r + escape_clearance_mm(ECN-001 0.075) + width/2
+#   tt_e = width + escape_clearance_mm
+VT_TRACK = 0.4525
+VT_ESC = 0.3525
+TT_ESC = 0.28
 STAGGER = 0.38
 MIN_XSTEP = 1.2
 SLOT_SEP = 0.6
@@ -305,47 +312,66 @@ def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict, coherent: d
     _cxx = sum(_t[0] for _t in _allpts) / len(_allpts)
     _cyy = sum(_t[1] for _t in _allpts) / len(_allpts)
     _TFAN = 0.0   # LID.1: via≈pad -> 短 breakout（分层后竖段不再重叠）
+    # ROOT-21: phase-2 re-places EVERY page (all 32 carry pair_rows). Seeding `_placed` from the
+    # phase-1 speculative `out` made each page avoid positions that LATER MOVE (stale avoidance
+    # geometry) => cascaded displacement. The constructor must be genuinely sequential.
     _placed = {}
-    for _q0, _a0 in sorted(out.items()):
-        _placed[_q0] = (_a0["P_via"], _a0["N_via"])
     # ROOT-17 (1)(3): per candidate, check via pairwise clearance (1) and escape-vertical no-overlap
     # (3) against the OTHER already-placed pages.  Index rebuilt once per page (O(n) per page, tiny),
     # candidate checks O(1) => total wall linear in the page count.  Closed-form, single pass.
+    # ROOT-21: chip pads are FIXED F.Cu obstacles (manifest geometry), independent of placement
+    # order; a breakout must clear every FOREIGN pad with the escape clearance.  A placed-page-only
+    # index misses pads of not-yet-placed pages => long breakouts sweeping over neighbours.
+    _PADALL = {}
+    for _q2, _f2 in facts.items():
+        for _pol2 in ("P", "N"):
+            _pp = _f2["pad"][_pol2]
+            _PADALL.setdefault(int(float(_pp[0]) * 2.0), []).append((float(_pp[0]), float(_pp[1]), _q2))
+    _SELF = [None]
+
     def _mk_index(_exclude):
         """Index EVERY via of the other placed pages (via1/corner/drop/land) for via-via clearance."""
-        _vb, _esc, _brk = {}, {}, {}
+        _vb, _esc, _pad, _brk = {}, {}, {}, {}
 
-        def _vbadd(_x, _y):
-            _vb.setdefault(int(float(_x) * 2.0), []).append((float(_x), float(_y)))
+        def _vbadd(_x, _y, _lays):
+            _vb.setdefault(int(float(_x) * 2.0), []).append((float(_x), float(_y), _lays))
+
+        def _segadd(_lay, _p, _q2, _padacc):
+            _xlo = int(min(_p[0], _q2[0]) * 2.0); _xhi = int(max(_p[0], _q2[0]) * 2.0)
+            for _bb in range(_xlo, _xhi + 1):
+                _esc.setdefault(_bb, []).append((_lay, float(_p[0]), float(_p[1]),
+                                                 float(_q2[0]), float(_q2[1]), _padacc))
 
         for _q, _a in _placed.items():
             if _q == _exclude:
                 continue
             _fq = facts[_q]
+            _Lq = "B.Cu" if _fq["band"] == "dn" else "In6.Cu"
             for _pol, _xy in (("P", _a[0]), ("N", _a[1])):
                 _x, _y = _xy
-                _vbadd(_x, _y)
                 _bp = _fq["pad"][_pol]
+                _vbadd(_x, _y, frozenset(("F.Cu", _Lq)))                 # via1
+                _segadd("F.Cu", _bp, (_x, _y), True)                     # #fcu_pad (pad-access)
                 for _cx in range(int(min(_bp[0], _x) - 0.1), int(max(_bp[0], _x) + 0.1) + 1):
                     for _cy in range(int(min(_bp[1], _y) - 0.1), int(max(_bp[1], _y) + 0.1) + 1):
                         _brk.setdefault((_cx, _cy), []).append(((tuple(_bp)), (float(_x), float(_y))))
                 if lanes is None:
                     continue
                 _ly = fp(lanes[_q]["lane_y"] + pol_off(_fq, _pol))
-                _lay = "B.Cu" if _fq["band"] == "dn" else "In6.Cu"
-                _esc.setdefault("L", []).append((_lay, float(_x), min(_y, _ly), max(_y, _ly)))
-                _vbadd(_x, _ly)                                     # corner via
+                _segadd(_Lq, (_x, _y), (_x, _ly), False)                 # escape vertical
+                _vbadd(_x, _ly, frozenset((_Lq, "In2.Cu")))              # corner via
                 if r3 is not None:
                     _ra = r3["assignment"].get(_fq["conn_ref"] + "|" + _fq["nets"][_pol])
                     if _ra is not None:
-                        _vbadd(_ra["column_x"], _ly)                # drop via
-                        _vbadd(_ra["column_x"], _ra["landing"][1])  # land via
-        return _vb, _esc, _brk
+                        _vbadd(float(_ra["column_x"]), _ly, frozenset(("In2.Cu", _Lq)))      # drop
+                        _vbadd(float(_ra["column_x"]), float(_ra["landing"][1]),
+                               frozenset((_Lq, "F.Cu")))                                     # land
+        return _vb, _esc, _pad, _brk
 
     def _vb_clear(_vb, _x, _y):
         _b = int(_x * 2.0)
         for _bb in (_b - 2, _b - 1, _b, _b + 1, _b + 2):   # bucket 0.5 wide => +-2 covers |dx|<=1.5
-            for _ox, _oy in _vb.get(_bb, ()):
+            for _ox, _oy, _ in _vb.get(_bb, ()):
                 if (_x - _ox) ** 2 + (_y - _oy) ** 2 < (VIA_VIA - TOL) ** 2:
                     return False
         return True
@@ -354,11 +380,56 @@ def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict, coherent: d
         if lanes is None:
             return True
         _lo, _hi = min(_vy, _ly), max(_vy, _ly)
-        for _olay, _ox, _olo, _ohi in _esc.get("L", ()):
-            if _olay != _lay:
-                continue                                    # cross-layer: exempt
-            if min(_hi, _ohi) - max(_lo, _olo) > 1e-6 and abs(float(_vx) - _ox) < STAGGER - TOL:
-                return False                                # same-layer vertical spacing >= 0.38
+        _b = int(_vx * 2.0)
+        for _bb in (_b - 1, _b, _b + 1):
+            for _olay, _x1, _y1, _x2, _y2, _pa in _esc.get(_bb, ()):
+                if _olay != _lay or _pa:
+                    continue                                # cross-layer / pad-access: exempt
+                if min(_hi, max(_y1, _y2)) - max(_lo, min(_y1, _y2)) > 1e-6 and \
+                   abs(float(_vx) - _x1) < STAGGER - TOL:
+                    return False                            # same-layer vertical spacing >= 0.38
+        return True
+
+    def _vt_pt(_x, _y, _lay):
+        """A-CN.9(vt): candidate via vertex vs placed same-layer tracks (zone-aware)."""
+        _b = int(_x * 2.0)
+        for _bb in (_b - 2, _b - 1, _b, _b + 1, _b + 2):
+            for _olay, _x1, _y1, _x2, _y2, _pa in _esc.get(_bb, ()):
+                if _olay != _lay:
+                    continue
+                if _pt_seg_dist((_x, _y), (_x1, _y1), (_x2, _y2)) < (VT_ESC if _pa else VT_TRACK) - TOL:
+                    return False
+        return True
+
+    def _vt_seg(_x1, _y1, _x2, _y2, _lay, _padacc):
+        """A-CN.9(vt): candidate track vs placed same-layer via vertices + ALL foreign chip pads."""
+        _th = VT_ESC if _padacc else VT_TRACK
+        _xlo = int(min(_x1, _x2) * 2.0); _xhi = int(max(_x1, _x2) * 2.0)
+        for _bb in range(_xlo - 2, _xhi + 3):
+            for _ox, _oy, _lays in _vb.get(_bb, ()):
+                if _lay not in _lays:
+                    continue
+                if _pt_seg_dist((_ox, _oy), (_x1, _y1), (_x2, _y2)) < _th - TOL:
+                    return False
+            if _padacc:                                        # pad access: foreign pads are F.Cu vertices
+                for _ox, _oy, _opid in _PADALL.get(_bb, ()):
+                    if _opid == _SELF[0]:
+                        continue
+                    if _pt_seg_dist((_ox, _oy), (_x1, _y1), (_x2, _y2)) < _th - TOL:
+                        return False
+        return True
+
+    def _seg_pair_clear(_x1, _y1, _x2, _y2, _lay, _thr):
+        """A-CN.9(tt): candidate track vs placed same-layer tracks."""
+        _xlo = int(min(_x1, _x2) * 2.0); _xhi = int(max(_x1, _x2) * 2.0)
+        for _bb in range(_xlo - 4, _xhi + 5):
+            for _olay, _ox1, _oy1, _ox2, _oy2, _pa in _esc.get(_bb, ()):
+                if _olay != _lay:
+                    continue
+                if _thr == TT_ESC and not _pa:
+                    continue                                   # escape thr only for pad-access pairs
+                if seg_dist((_x1, _y1), (_x2, _y2), (_ox1, _oy1), (_ox2, _oy2)) < _thr - TOL:
+                    return False
         return True
     for _pid in sorted(facts, key=lambda p: (facts[p]["corridor"], facts[p]["conn_ref"],
                                              facts[p]["band"], _rank.get(p, 0), p)):
@@ -372,7 +443,8 @@ def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict, coherent: d
         _tNx = _f["pad"]["N"][0] + _TFAN * (_f["pad"]["N"][0] - _cxx)
         _tNy = _f["pad"]["N"][1] + _TFAN * (_f["pad"]["N"][1] - _cyy)
         _best = None
-        _vb, _esc, _brk = _mk_index(_pid)
+        _vb, _esc, _pad, _brk = _mk_index(_pid)
+        _SELF[0] = _pid
         for _rr in _rows:
             _px = float(_rr[0]); _nx = float(_rr[1]); _py = float(_rr[2]); _ny = float(_rr[3]); _dd = float(_rr[4])
             if _dd < VIA_VIA - TOL or abs(_px - _nx) < STAGGER - TOL:
@@ -447,6 +519,34 @@ def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict, coherent: d
                     continue
             if not (_vb_clear(_vb, _px, _py) and _vb_clear(_vb, _nx, _ny)):
                 continue
+            if lanes is not None:
+                # ROOT-21 A-CN.9(vt/tt): the emitted metric also forbids via<->track (0.4525) and
+                # pad<->track breakouts.  The constructor previously checked only via<->via and
+                # vertical<->vertical (0.38) => this missing predicate is exactly what A-CN.9 caught.
+                _Lc = "B.Cu" if _f["band"] == "dn" else "In6.Cu"
+                _pts = ((_px, _py, "F.Cu"), (_px, _py, _Lc), (_nx, _ny, "F.Cu"), (_nx, _ny, _Lc),
+                        (_px, _lyp, _Lc), (_nx, _lyn, _Lc), (_px, _lyp, "In2.Cu"), (_nx, _lyn, "In2.Cu"))
+                _okv = True
+                for _vv in _pts:
+                    if not _vt_pt(float(_vv[0]), float(_vv[1]), _vv[2]):
+                        _okv = False
+                        break
+                if _okv:
+                    _bP = (float(_f["pad"]["P"][0]), float(_f["pad"]["P"][1]), float(_px), float(_py))
+                    _bN = (float(_f["pad"]["N"][0]), float(_f["pad"]["N"][1]), float(_nx), float(_ny))
+                    if not (_vt_seg(_bP[0], _bP[1], _bP[2], _bP[3], "F.Cu", True)
+                            and _vt_seg(_bN[0], _bN[1], _bN[2], _bN[3], "F.Cu", True)):
+                        _okv = False
+                if _okv:
+                    if not (_seg_pair_clear(_bP[0], _bP[1], _bP[2], _bP[3], "F.Cu", TT_ESC)
+                            and _seg_pair_clear(_bN[0], _bN[1], _bN[2], _bN[3], "F.Cu", TT_ESC)):
+                        _okv = False
+                if _okv:
+                    if not (_vt_seg(float(_px), float(_py), float(_px), float(_lyp), _Lc, False)
+                            and _vt_seg(float(_nx), float(_ny), float(_nx), float(_lyn), _Lc, False)):
+                        _okv = False
+                if not _okv:
+                    continue
             # T-1 primary: keep the via x at the PAD x (vertical breakouts => planar fan);
             # secondary: radial y target.  (Pad-aligned x is the planarity driver.)
             _boff = 0.3 if _f["band"] == "dn" else -0.3   # 带向 x 偏置：分离相邻行 F.Cu breakout ≥0.38
@@ -936,6 +1036,16 @@ def main(argv=None) -> int:
         print("W3-CN: FROZEN SHA DRIFT", fc["drift"])
         return 2
     j = {k: json.load(v.open()) for k, v in F.items() if v.suffix == ".json"}
+    # A-CN.9 thresholds must equal the frozen SPEC-derived values (drift => stop, not silently pass)
+    _pc = j["spec"]["net_classes"]["PCIe85"]
+    _vr = j["spec"]["vias"]["std"]["outer"] / 2.0
+    _ec = j["spec"]["constraints"]["escape_transition_zone"]["escape_clearance_mm"]
+    if (abs((_pc["width"] + _pc["clearance"]) - 0.38) > 1e-9
+            or abs((_vr + _pc["clearance"] + _pc["width"] / 2.0) - VT_TRACK) > 1e-9
+            or abs((_vr + _ec + _pc["width"] / 2.0) - VT_ESC) > 1e-9
+            or abs((_pc["width"] + _ec) - TT_ESC) > 1e-9):
+        print("W3-CN: A-CN.9 threshold drift vs frozen SPEC")
+        return 3
     _mpages = list(j["manifest"]["pages"])               # ROOT-20: A1.2 tests insensitivity to the
     if ORD == "reverse":                                 # INPUT enumeration order; the engine must
         _mpages = list(reversed(_mpages))                # canonicalise internally (it sorts).
@@ -1273,7 +1383,11 @@ def main(argv=None) -> int:
                        "layer": glayer[f["corridor"] + "/" + f["band"]], "pol_offset_mm": POL_OFF},
                 "r3": None if not r3a else {"pad": r3a["pad"], "landing": r3a["landing"],
                                             "column_x": r3a["column_x"],
-                                            "layer_chain": ["F.Cu", "B.Cu", "In2.Cu", "B.Cu", "F.Cu"]},
+                                            "layer_chain": ["F.Cu",
+                                                            ("B.Cu" if f["band"] == "dn" else "In6.Cu"),
+                                                            "In2.Cu",
+                                                            ("B.Cu" if f["band"] == "dn" else "In6.Cu"),
+                                                            "F.Cu"]},
                 "r3_by_pol": {pol: (None if not r3_by_pol[pol] else
                                     {"pad": r3_by_pol[pol]["pad"],
                                      "landing": r3_by_pol[pol]["landing"],
@@ -1289,22 +1403,26 @@ def main(argv=None) -> int:
                 # via1 -> vertical on B.Cu -> corner via -> corridor segment on In2.Cu to the
                 # connector-side bound -> via2 -> F.Cu stub -> R3 landing -> connector pad.
                 if shape == "t2":
+                    # ROOT-21: emission MUST mirror the internal escape-layer rule (dn->B.Cu,
+                    # up->In6.Cu); the previous hardcoded "B.Cu" made the artifact disagree with the
+                    # geometry the A-CN.9 metric validates (non-self-consistent artifact).
+                    _Lp = "B.Cu" if f["band"] == "dn" else "In6.Cu"
                     lx = r3a["column_x"]; ly_l = r3a["landing"][1]
                     page["nodes"][pol] = [
                         [f["pad"][pol][0], f["pad"][pol][1], "F.Cu"],
-                        [v1[0], v1[1], "F.Cu"], [v1[0], v1[1], "B.Cu"],
-                        [v1[0], ly, "B.Cu"], [v1[0], ly, "In2.Cu"],
-                        [lx, ly, "In2.Cu"], [lx, ly, "B.Cu"],
-                        [lx, ly_l, "B.Cu"], [lx, ly_l, "F.Cu"],
+                        [v1[0], v1[1], "F.Cu"], [v1[0], v1[1], _Lp],
+                        [v1[0], ly, _Lp], [v1[0], ly, "In2.Cu"],
+                        [lx, ly, "In2.Cu"], [lx, ly, _Lp],
+                        [lx, ly_l, _Lp], [lx, ly_l, "F.Cu"],
                         [f["conn_pad"][pol][0], f["conn_pad"][pol][1], "F.Cu"]]
                     page["vias"].append({"role": "via1", "pol": pol, "x": v1[0], "y": v1[1],
-                                         "layers": ["F.Cu", "B.Cu"]})
+                                         "layers": ["F.Cu", _Lp]})
                     page["vias"].append({"role": "via_corner", "pol": pol, "x": v1[0], "y": ly,
-                                         "layers": ["B.Cu", "In2.Cu"]})
+                                         "layers": [_Lp, "In2.Cu"]})
                     page["vias"].append({"role": "via_drop", "pol": pol, "x": lx, "y": ly,
-                                         "layers": ["In2.Cu", "B.Cu"]})
+                                         "layers": ["In2.Cu", _Lp]})
                     page["vias"].append({"role": "via_land", "pol": pol, "x": lx, "y": ly_l,
-                                         "layers": ["B.Cu", "F.Cu"]})
+                                         "layers": [_Lp, "F.Cu"]})
                 else:
                     lay = glayer[f["corridor"] + "/" + f["band"]]
                     page["nodes"][pol] = [
@@ -1369,8 +1487,8 @@ def main(argv=None) -> int:
             "x_order_scope": "frame = (corridor, conn_ref, band) [L2 approved 2026-09-10]",
             "data_layer_chain": ["F.Cu", "B.Cu", "In2.Cu", "B.Cu", "F.Cu"],
             "max_vias_per_line": 4 if shape == "t2" else 2,
-            "r1_5_layer_rule": "T-2 river (segment-type): escape+drop on B.Cu, corridor run on In2.Cu; "
-                               "4 vias/line <= 5",
+            "r1_5_layer_rule": "T-2 river (segment-type): escape+drop on the band layer "
+                               "(dn=B.Cu, up=In6.Cu), corridor run on In2.Cu; 4 vias/line <= 5",
             "pair_rule": {"dist_min_mm": VIA_VIA, "stagger_min_mm": STAGGER},
         },
         "layers": {

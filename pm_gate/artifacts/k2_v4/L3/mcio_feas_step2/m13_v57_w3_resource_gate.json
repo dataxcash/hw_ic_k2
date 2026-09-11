@@ -79,11 +79,7 @@
   }
  ],
  "informational_coarse_extent_overlap": 3,
- "insufficiency_basis": {
-  "gap": 1,
-  "layers_available": 2,
-  "layers_needed": 3
- },
+ "insufficiency_basis": null,
  "lane_capacity": {
   "available": {
    "EAST_CHIP_TO_J2": 32,
@@ -95,7 +91,7 @@
   },
   "ok": true
  },
- "layer_demand_ok": false,
+ "layer_demand_ok": true,
  "layer_demand_peak_overlap": 3,
  "layer_intent": {
   "B.Cu": "transition_eligible",
@@ -103,19 +99,39 @@
   "In1.Cu": "gnd_plane",
   "In2.Cu": "transition_eligible",
   "In3.Cu": "gnd_plane",
-  "In4.Cu": "power_plane(P3V3, spec)"
+  "In4.Cu": "power_plane(P3V3, spec)",
+  "In5.Cu": "gnd_plane",
+  "In6.Cu": "transition_eligible"
  },
  "producer": "k2/tools/p3_v57_w3_constructive.py:resource_gate",
  "r1_5_shape": "t2",
  "rule": "R-23 verification-based: construct with the intent layers, count SAME-LAYER crossings",
  "transition_eligible_layers": [
   "B.Cu",
-  "In2.Cu"
+  "In2.Cu",
+  "In6.Cu"
  ],
  "verdict": "SUFFICIENT",
  "verification_check": {
   "capacity_ok": true,
-  "closed_form": "SUFFICIENT iff same_layer_crossings == 0 and capacity ok",
+  "clearance_all_ok": true,
+  "clearance_full": {
+   "n_vias": 256,
+   "sample_tt": [],
+   "sample_vt": [],
+   "sample_vv": [],
+   "thresholds": {
+    "track_track": 0.38,
+    "track_track_escape": 0.28,
+    "via_track": 0.4525,
+    "via_track_escape": 0.3525,
+    "via_via": 0.525
+   },
+   "viol_track_track": 0,
+   "viol_via_track": 0,
+   "viol_via_via": 0
+  },
+  "closed_form": "SUFFICIENT iff same_layer_crossings == 0 and capacity ok and complete_clearance_suite == 0",
   "crossings_by_class": {
    "r1_5": 0,
    "stub": 0
