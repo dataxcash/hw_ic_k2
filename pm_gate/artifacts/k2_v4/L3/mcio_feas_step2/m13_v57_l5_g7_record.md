@@ -6,6 +6,7 @@
 
 ## 1. 结论（G7 PASS）
 - SI（对内等长）：**PASS** — `max_intra_pair_skew_mm = 0.0031 <= 0.15`（34 页，含 REFCLK）。
+  几何实测（CO-53）：对内中心 `0.5` mm（边距 `0.295`）vs SPEC p_gap `0.175`；对间最小中心 `0.55` vs SPEC inter_pair `0.875` ⇒ **阻抗符合性 NOT_DEMONSTRATED**（开放项 CO-53）。
 - DFM：**PASS** — `new_total = 0`；L4 违规 by_type `{'silk_edge_clearance': 1, 'lib_footprint_mismatch': 29, 'lib_footprint_issues': 12}`（= 冻结基线 lib/silk，计入不计）。
 - DFT（施工连通性，CO-47 谓词）：在册网未连项 **0/68**（CO-47：在册（L4 施工）网必须 0 未连项（kicad-cli unconnected_items 网名解析）；范围外网不计）。
 - EMC：solder_mask_bridge `0` / copper_edge `0`；
@@ -37,7 +38,7 @@
 ## 5. 指纹
 图纸 `dfa1d7c4a811b0da`｜landing `ef5704eb18c5e6d5`｜G5 `23b2b6d161f9bea1`
 ｜L4 construction `58ccf62e881f2a8f`｜L4 validation `9521321baf7ff2b0`｜L4 板 `cdcb869e9827ec87`
-｜fab `9a223923b029a1f9`｜dfm `de14f887a7819c11`｜si `305c237c88762b94`
+｜fab `9a223923b029a1f9`｜dfm `de14f887a7819c11`｜si `b16293f842ecf712`
 ｜`.kicad_dru` `3148703240d54420`
 冻结四源 `0bd52ed48e720b8c / a8ef3ea8ecff99d7 / fb07d25ac426ff84 / 0a459839e15960b8`（未改）。
 

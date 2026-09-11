@@ -58,6 +58,53 @@ def _zone_stats(board):
     return {"total": tot, "copper_pour": pour, "rule_area": rule, "pour_layers": layers}
 
 
+
+def _pair_geometry(segments):
+    """CO-53：由落盘段几何独立测**对内/对间**平行段最小中心距（边距 = 中心距 − p_width）。
+    网名归一：剥 `_J2`/`_MCIO` 尾缀后再剥 `_P`/`_N` 极性；同层且平行（叉积≈0）且投影重叠才计入。"""
+    import math as _m
+    def norm(n):
+        for suf in ("_J2", "_MCIO"):
+            if n.endswith(suf):
+                n = n[:-len(suf)]
+        return (n[:-2], n[-1]) if n.endswith(("_P", "_N")) else (n, None)
+    groups = {}
+    for n in segments:
+        b, pol = norm(n)
+        if pol:
+            groups.setdefault(b, {})[pol] = n
+    def md(a, b):
+        best = 1e9
+        for sa in segments[a]:
+            for sb in segments[b]:
+                if sa["layer"] != sb["layer"]:
+                    continue
+                ax, ay = sa["a"]; bx, by = sa["b"]; cx, cy = sb["a"]; dx, dy = sb["b"]
+                v1 = (bx - ax, by - ay); v2 = (dx - cx, dy - cy)
+                if abs(v1[0] * v2[1] - v1[1] * v2[0]) > 1e-6:
+                    continue
+                L = _m.hypot(*v2)
+                if L < 1e-9:
+                    continue
+                t1 = ((ax - cx) * v2[0] + (ay - cy) * v2[1]) / L ** 2
+                t2 = t1 + (v1[0] * v2[0] + v1[1] * v2[1]) / L ** 2
+                if max(t1, t2) < 0 or min(t1, t2) > 1:
+                    continue
+                best = min(best, abs((ax - cx) * v2[1] - (ay - cy) * v2[0]) / L)
+        return best
+    intra = [round(md(d["P"], d["N"]), 4) for d in groups.values() if "P" in d and "N" in d]
+    bl = sorted(groups)
+    cross = 1e9
+    for i, a in enumerate(bl):
+        for b2 in bl[i + 1:]:
+            for na in groups[a].values():
+                for nb in groups[b2].values():
+                    cross = min(cross, md(na, nb))
+    return {"pairs_measured": len(intra), "intra_center_mm": sorted(set(intra)),
+            "intra_center_max_mm": max(intra) if intra else None,
+            "min_inter_pair_center_mm": (None if cross > 8e8 else round(cross, 4))}
+
+
 def main() -> int:
     import pcbnew
     rules = json.loads(RULES.read_text())
@@ -166,12 +213,32 @@ def main() -> int:
         skew.append({"page": pg["page_id"], "skew_mm": round(abs(plen("P") - plen("N")), 4)})
     skew_max = max((s["skew_mm"] for s in skew), default=0)
     planes = [l for l in cu if l in ("In1.Cu", "In3.Cu", "In4.Cu", "In5.Cu")]
-    si = {"artifact": "m13_v57_l5_si_pi_emc_record", "schema": 1, "revision": "L5-SI.3",
+    _spec = json.loads((STEP2.parent / "SPEC_k2_v4.spec-rev-3.json").read_text(encoding="utf-8"))
+    _spec_nc = _spec["net_classes"]["PCIe85"]
+    _pg = _pair_geometry(rec["segments"])          # CO-53: 对内/对间几何实测
+    si = {"artifact": "m13_v57_l5_si_pi_emc_record", "schema": 1, "revision": "L5-SI.4",
           "SI": {"track_width_rule_mm": 0.205, "all_pcie_tracks_0p205": widths_ok,
                  "max_intra_pair_skew_mm": skew_max, "skew_rule_mm": rules["diff_pair"]["intra_pair_skew_mm"],
                  "skew_ok": skew_max <= rules["diff_pair"]["intra_pair_skew_mm"] + 1e-9,
                  "skew_pages_checked": len(skew), "skew_pages": skew,
-                 "layer_transitions_per_line": {"via1/corner/drop/land": 4}},
+                 "layer_transitions_per_line": {"via1/corner/drop/land": 4},
+                 # CO-53：对内/对间几何实测 vs SPEC 声明（几何项为**事实报告**；阻抗符合性 NOT_DEMONSTRATED）
+                 "netclass_geometry": {
+                     "delivered": {**_pg, "p_width_mm": 0.205,
+                                   "intra_edge_gap_mm": (None if _pg["intra_center_max_mm"] is None
+                                                         else round(_pg["intra_center_max_mm"] - 0.205, 4)),
+                                   "min_inter_pair_edge_gap_mm": (None if _pg["min_inter_pair_center_mm"] is None
+                                                                  else round(_pg["min_inter_pair_center_mm"] - 0.205, 4))},
+                     "spec": {"p_gap_mm": _spec_nc["diff_pair"]["p_gap"], "p_width_mm": _spec_nc["diff_pair"]["p_width"],
+                              "inter_pair_spacing_mm": _spec_nc["inter_pair_spacing_mm"],
+                              "target_zdiff_ohm": _spec["impedance"]["target_zdiff"],
+                              "impedance_model": _spec["impedance"]["model"],
+                              "impedance_gap_mm": _spec["impedance"]["gap_mm"],
+                              "stackup": _spec["stackup"]["material"]},
+                     "source": "SPEC_k2_v4.spec-rev-3.json net_classes.PCIe85 / impedance / stackup",
+                     "conformance": "NOT_DEMONSTRATED",
+                     "open_item": "CO-53：交付对内中心 0.500(边距 0.295) vs SPEC p_gap 0.175；SPEC stackup/impedance 仍 6L而板为 8L；"
+                                  "阻抗需按 8L 介质叠层重导（该输入缺失）并出 SPEC ECO ⇒ 见 m13_v57_CO53_intrapair_geometry_impedance_open.md"}},
           "PI": {"plane_layers_reserved": planes,
                  "zone_counts": {"frozen_src": zs_src, "l4": zs_l4},
                  "pdn_status": ("reserved_not_poured"
@@ -201,6 +268,7 @@ def main() -> int:
 
 ## 1. 结论（G7 {'PASS' if (dfm['verdict'] == 'PASS' and si['verdict'] == 'PASS') else 'FAIL'}）
 - SI（对内等长）：**{si['verdict']}** — `max_intra_pair_skew_mm = {skew_max:.4f} <= {rules['diff_pair']['intra_pair_skew_mm']}`（{si['SI']['skew_pages_checked']} 页，含 REFCLK）。
+  几何实测（CO-53）：对内中心 `{si['SI']['netclass_geometry']['delivered']['intra_center_max_mm']}` mm（边距 `{si['SI']['netclass_geometry']['delivered']['intra_edge_gap_mm']}`）vs SPEC p_gap `{si['SI']['netclass_geometry']['spec']['p_gap_mm']}`；对间最小中心 `{si['SI']['netclass_geometry']['delivered']['min_inter_pair_center_mm']}` vs SPEC inter_pair `{si['SI']['netclass_geometry']['spec']['inter_pair_spacing_mm']}` ⇒ **阻抗符合性 NOT_DEMONSTRATED**（开放项 CO-53）。
 - DFM：**{dfm['verdict']}** — `new_total = {dfm['drc']['new_total']}`；L4 违规 by_type `{dfm['drc']['l4_applied']['by_type']}`（= 冻结基线 lib/silk，计入不计）。
 - DFT（施工连通性，CO-47 谓词）：在册网未连项 **{_dft['in_scope_unconnected_nets']}/{_dft['in_scope_nets']}**（{_dft['rule']}）。
 - EMC：solder_mask_bridge `{si['EMC']['solder_mask_bridge_violations']}` / copper_edge `{si['EMC']['copper_edge_violations']}`；

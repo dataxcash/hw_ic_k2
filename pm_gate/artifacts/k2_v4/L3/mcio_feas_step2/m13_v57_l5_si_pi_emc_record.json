@@ -42,6 +42,31 @@
    "via1/corner/drop/land": 4
   },
   "max_intra_pair_skew_mm": 0.0031,
+  "netclass_geometry": {
+   "conformance": "NOT_DEMONSTRATED",
+   "delivered": {
+    "intra_center_max_mm": 0.5,
+    "intra_center_mm": [
+     0.5
+    ],
+    "intra_edge_gap_mm": 0.295,
+    "min_inter_pair_center_mm": 0.55,
+    "min_inter_pair_edge_gap_mm": 0.345,
+    "p_width_mm": 0.205,
+    "pairs_measured": 34
+   },
+   "open_item": "CO-53：交付对内中心 0.500(边距 0.295) vs SPEC p_gap 0.175；SPEC stackup/impedance 仍 6L而板为 8L；阻抗需按 8L 介质叠层重导（该输入缺失）并出 SPEC ECO ⇒ 见 m13_v57_CO53_intrapair_geometry_impedance_open.md",
+   "source": "SPEC_k2_v4.spec-rev-3.json net_classes.PCIe85 / impedance / stackup",
+   "spec": {
+    "impedance_gap_mm": 0.175,
+    "impedance_model": "JLC_SI9000_H1_5.0mil_Er1_4.3",
+    "inter_pair_spacing_mm": 0.875,
+    "p_gap_mm": 0.175,
+    "p_width_mm": 0.205,
+    "stackup": "JLC 6L stackup (JLC06161H process limits, L1 v2.0 hard-constraint 4; SI9000 final after freeze)",
+    "target_zdiff_ohm": 85.0
+   }
+  },
   "skew_ok": true,
   "skew_pages": [
    {
@@ -186,7 +211,7 @@
   "track_width_rule_mm": 0.205
  },
  "artifact": "m13_v57_l5_si_pi_emc_record",
- "revision": "L5-SI.3",
+ "revision": "L5-SI.4",
  "schema": 1,
  "verdict": "PASS"
 }
