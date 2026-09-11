@@ -29,7 +29,7 @@ Default 0.1 / LOW_SPEED 0.1 / **PCIe85** 0.175 + diff_gap 0.175 + width 0.205 / 
   (e) 同网 via 也校 `hole_to_hole`（中心 ≥0.45 或改 POL_OFF/落位）；
   (f) REFCLK 交叉纳入 A-CN.4 等价门禁。
   完成后 W3 须重解一次（确定性），重跑 G4→G5→G6→G7。
-- **D1 触 L2 结构**：D1 的根因是 **LID.1 把 up 带竖段放 In6，而 dn 带 via1 为 through(F↔B) 穿透 In6**。
+- **D1 = L2 结构（ARCHER 自裁，见 CO-08；非 owner）**：D1 的根因是 **LID.1 把 up 带竖段放 In6，而 dn 带 via1 为 through(F↔B) 穿透 In6**。
   层集合本身使两条带互相穿透。**须 L2 裁决**其一：
   (1) 交替换层（up→B.Cu / dn→In6）并把 through via 改为 buried（需确认回钻/钻互斥可行性）；或
   (2) 维持 LID.1，但把 through via 的**落位**约束为远离对带 In6 走线（把 D1 退化为纯 L3 避让）；

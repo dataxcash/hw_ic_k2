@@ -1,0 +1,22 @@
+{
+ "artifact": "m13_v57_co08b_cn32_attempt1_result",
+ "diagnosis": "主要残余：(a) r3 列按 band 独立 rank ⇒ DN/UP 共用落列列 x ⇒ 两者 In2 stub 共线重叠(tt 0.0)；(b) F.Cu escape 扇存在交叉(crossings 30)；(c) 运行 2m19s 超 120s 红线（F.Cu 长段索引开销）。",
+ "next": "需 (1) band 列错位/全局 rank 分离 stub；(2) F.Cu 逃逸扇平面性显式求解；(3) 段索引按包围盒裁剪以回到 ≤120s。",
+ "observed": {
+  "failed": [
+   "A-CN.1d",
+   "A-CN.1a",
+   "A-CN.1b",
+   "A-CN.4",
+   "A-CN.9"
+  ],
+  "n_certificates": 5,
+  "r1_placed": 30,
+  "verdict": "UPSTREAM_CHANGE_REQUEST",
+  "wall_s": 139
+ },
+ "redline": "四源未改；canonical 将回退 W3-CN.30",
+ "revision": "CO-08b-ATTEMPT.1",
+ "schema": 1,
+ "topology": "安全 hop：F.Cu escape + In2 短横 + In6 lane + In2 stub；via ∈ {F<->In2, In2<->In6}"
+}

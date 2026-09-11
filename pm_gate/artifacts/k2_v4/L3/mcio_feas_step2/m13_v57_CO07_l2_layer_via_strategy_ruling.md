@@ -1,3 +1,5 @@
+> **已被 CO-08 取代**：本文件 §6/"结论(owner)" 的 owner 升级请求作废（叠层重排/过孔预算 = L2）。
+
 # CO-07 — L2 裁定：8L 层/过孔策略（逃逸拓扑仅允许信号层相邻 hop）
 
 > 2026-09-11｜ARCHER（L2 裁决权内）｜依据：`m13_v57_CO06_dfm_clearance_model_gaps.md` §5 的构造不可行证书
@@ -49,7 +51,7 @@
 2. escape 与 lane 同层必交叉（escape=芯片侧竖段 x≈84–93，lane=水平 y=lane_y 跨同 x 范围）⇒ escape/lane 必须分层。
 3. 于是安全 hop 需：escape 两层 (In2,In6) + lane 第三层 (B)；而 lane→In2 需 `In2↔In6↔B` 多跳 ⇒ **每线 4~6 过孔** > SPEC `max_per_line=2`。
 
-**结论（owner 决议，L1）**：现 8L 叠层把信号层用平面隔开，与 SPEC「每线 ≤2 过孔」在本板密度下互斥。
+**结论（原误列为 owner/L1 — 已由 CO-08 更正为 L2 自裁）**：现 8L 叠层把信号层用平面隔开，与 SPEC「每线 ≤2 过孔」在本板密度下互斥。
 可选项（请 owner 择一）：
 - **(A) 叠层重排（L1）**：把信号层相邻化（如 F/In2/In6/B 连续，平面置于外侧），使 `In2↔In6`、`In6↔B` 为**相邻** hop；
   则 escape 可安全落 In6/B，两带分层且 lane 独立一层 ⇒ 2~4 via/线可达。
