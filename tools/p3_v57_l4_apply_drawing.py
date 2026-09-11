@@ -14,7 +14,7 @@ CO-37：`--escape-domain` 时按版本化域工件注入**具名 rule area**（�
 实现 SPEC `escape_transition_zone`（ECN-001）；域工件与判据变更须版本化（见 CO-25 §3 / CO-37 裁定）。
 """
 from __future__ import annotations
-import argparse, hashlib, json, shutil
+import argparse, hashlib, json, re, shutil, uuid
 from pathlib import Path
 
 K2 = Path("/home/fila/jqdDev_2025/ic_hw/k2")
@@ -94,6 +94,81 @@ def build(art, manifest):
                       "n_vias": sum(len(v) for v in vias.values())}}
 
 
+_CANON_TYPES = ("segment", "via", "zone")     # CO-49: pcbnew 保存顺序/uuid 会漂移的三类块
+_UUID_RE = re.compile(r'\(uuid "[^"]*"\)')
+
+
+def _root_children(txt: str):
+    """根块 (kicad_pcb ...) 的一级子块 [start,end)（括号/字符串安全扫描）。"""
+    i = txt.index("(")
+    depth = 0
+    start = None
+    out = []
+    instr = esc = False
+    for j in range(i, len(txt)):
+        ch = txt[j]
+        if instr:
+            if esc:
+                esc = False
+            elif ch == "\\":
+                esc = True
+            elif ch == '"':
+                instr = False
+            continue
+        if ch == '"':
+            instr = True
+            continue
+        if ch == "(":
+            depth += 1
+            if depth == 2:
+                start = j
+        elif ch == ")":
+            if depth == 2 and start is not None:
+                out.append((start, j + 1))
+                start = None
+            depth -= 1
+    return out
+
+
+def canonicalize_board(path: Path) -> int:
+    """CO-49：令 L4 板**字节可复现**（解除 pcbnew 的非确定性）。
+
+    实测：pcbnew 保存时仅 `segment`/`via`/`zone` 块的**顺序**与 **uuid** 每次重建漂移；
+    其余块（footprint/pad/gr_line/setup/...）逐字节稳定，且这三类块的连续 run 结构稳定。
+    本步：① 在每个连续同类 run 内按「去 uuid 文本」排序；② 以该文本派生确定性 uuid5。
+    只触碰上述三类块；不改几何/网/层。返回被规范化块数。幂等。
+    """
+    txt = path.read_text(encoding="utf-8")
+    ch = _root_children(txt)
+    if len(ch) < 2:
+        return 0
+    sep = txt[ch[0][1]:ch[1][0]]
+    if {txt[ch[i][1]:ch[i + 1][0]] for i in range(len(ch) - 1)} != {sep}:
+        raise RuntimeError("CO-49: non-uniform child separators")
+    blocks = [txt[a:b] for a, b in ch]
+    types = [re.match(r"\(\s*([a-z_]+)", blk).group(1) for blk in blocks]
+    out = []
+    i, n, ncanon = 0, len(blocks), 0
+    while i < n:
+        if types[i] in _CANON_TYPES:
+            j = i
+            while j < n and types[j] == types[i]:
+                j += 1
+            run = []
+            for blk in blocks[i:j]:
+                canon = _UUID_RE.sub("", blk)
+                det = uuid.uuid5(uuid.NAMESPACE_URL, canon)
+                run.append((canon, _UUID_RE.sub('(uuid "%s")' % det, blk)))
+                ncanon += 1
+            out.extend(blk for _, blk in sorted(run, key=lambda q: q[0]))
+            i = j
+        else:
+            out.append(blocks[i])
+            i += 1
+    path.write_text(txt[:ch[0][0]] + sep.join(out) + txt[ch[-1][1]:], encoding="utf-8")
+    return ncanon
+
+
 def apply_board(rec, src: Path, dst: Path, domain=None):
     import pcbnew                                                       # noqa: E402
     b = pcbnew.LoadBoard(str(src))
@@ -147,7 +222,9 @@ def apply_board(rec, src: Path, dst: Path, domain=None):
                 o.Append(mm(x), mm(y))
             b.Add(z); n_rule_areas += 1
     pcbnew.SaveBoard(str(dst), b)
-    return {"dst": str(dst.relative_to(K2)), "dst_sha256": sha(dst), "n_rule_areas": n_rule_areas}
+    n_canon = canonicalize_board(dst)                     # CO-49: 字节可复现（确定性顺序 + uuid）
+    return {"dst": str(dst.relative_to(K2)), "dst_sha256": sha(dst), "n_rule_areas": n_rule_areas,
+            "canonicalized_blocks": n_canon}
 
 
 def main() -> int:
