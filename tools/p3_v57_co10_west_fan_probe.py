@@ -40,6 +40,13 @@ if __import__("os").environ.get("CO10_WORDER") == "upfirst":
                    key=lambda p: (FACTS[p]["band"] == "dn", LANES[p]["lane_index"]))
     for _r, _p in enumerate(_west):
         LANES[_p]["lane_y"] = W.fp(33.3 + _r * 1.46)
+_WB = __import__("os").environ.get("CO10_WBLOCK", "")
+if _WB:
+    _lo1, _st1, _n1, _lo2, _st2, _n2 = (float(v) for v in _WB.split(","))
+    for _p, _v in LANES.items():
+        if FACTS[_p]["corridor"] == "WEST_MCIO_TO_CHIP":
+            _k = _v["lane_index"]
+            _v["lane_y"] = W.fp(_lo1 + _k * _st1) if _k < _n1 else W.fp(_lo2 + (_k - _n1) * _st2)
 _WS = float(__import__("os").environ.get("CO10_WSTEP", "0"))
 _WL = float(__import__("os").environ.get("CO10_WLO", "33.3"))
 if _WS:
@@ -88,6 +95,12 @@ def row_lower(f):
 # CO-10 §3.3: 西侧 4 行组 stub 2-着色（按 y 区间，与 band 无关）
 #   G0(J3 上排 43.25)->In2 ; G1(J3 下排 45.75)->In6 ; G2(J4 上排 61.45)->In2 ; G3(J4 下排 63.95)->In6
 GS_IN2 = {("J3", "U"): True, ("J3", "L"): False, ("J4", "U"): True, ("J4", "L"): False}
+_ST = __import__("os").environ.get("CO10_STUB", "")
+if _ST == "all":
+    for _g in GS_IN2: GS_IN2[_g] = True
+elif _ST:
+    for _t in _ST.split(","):
+        if len(_t) == 3: GS_IN2[(_t[:2], _t[2])] = True
 
 
 def row_group(f):
@@ -120,11 +133,68 @@ def r3_build(rule):
                 g = (a["ref"], "U" if a["pad_y"] < mid else "L")
                 lx = W.fp(a["pad_x"] - 0.3 + FAN_DX[g]); ll = FAN_Y[g]
             A[k] = dict(a, column_x=lx, landing=[lx, W.fp(ll)])
+    if rule != "d3":
+        _lx_separate(A)
     return {"assignment": A, "certificates": r3["certificates"]}
 
 
+def _stub_layer_of(a):
+    if a["ref"] == "J2":
+        return "In2.Cu"
+    mid = GAP[a["ref"]]
+    g = (a["ref"], "U" if a["pad_y"] < mid else "L")
+    return "In2.Cu" if GS_IN2[g] else "In6.Cu"
+
+
+def _lx_separate(A):
+    """CO-11 §8：connector 侧 lx 前缀分配（零搜索单遍）。
+    同层 stub 的 y 区间重叠时，lx 须 >= VV(0.525)；候选=本 pad 列邻域内的中缝列。"""
+    ents = []
+    for k, a in A.items():
+        if a["ref"] not in ("J3", "J4"):
+            continue
+        page = a.get("page")
+        if page not in LANES:
+            continue
+        S = _stub_layer_of(a)
+        ly = LANES[page]["lane_y"]
+        ll = float(a["landing"][1])
+        ents.append({"key": k, "a": a, "S": S, "pad_x": float(a["pad_x"]),
+                     "lo": min(ly, ll), "hi": max(ly, ll), "lx": float(a["column_x"])})
+    ents.sort(key=lambda e: (e["S"], round(e["lo"], 3), round(e["hi"], 3), e["key"]))
+    placed = []
+    for e in ents:
+        cand = [e["pad_x"] - 0.3, e["pad_x"] + 0.3, e["pad_x"] - 0.9, e["pad_x"] + 0.9,
+                e["pad_x"] - 1.5, e["pad_x"] + 1.5, e["lx"]]
+        best = None
+        for c in cand:
+            okc = True
+            for q in placed:
+                if q["S"] != e["S"]:
+                    continue
+                if e["lo"] >= q["hi"] - VV or e["hi"] <= q["lo"] + VV:
+                    continue                                   # y 区间净距 >= VV
+                if abs(c - q["lx"]) < VV - TOL:
+                    okc = False; break
+            if okc:
+                best = c; break
+        e["lx"] = best if best is not None else e["lx"]
+        placed.append(e)
+    for e in placed:
+        e["a"]["column_x"] = W.fp(e["lx"])
+        e["a"]["landing"] = [W.fp(e["lx"]), e["a"]["landing"][1]]
+
+
 FAN_Y = {("J3", "U"): 42.0, ("J3", "L"): 44.2, ("J4", "U"): 60.2, ("J4", "L"): 65.0}
+_FY = __import__("os").environ.get("CO10_FANY_J3", "")
+if _FY:
+    _u, _l = (float(v) for v in _FY.split(","))
+    FAN_Y[("J3", "U")] = _u; FAN_Y[("J3", "L")] = _l
 FAN_DX = {("J3", "U"): 0.0, ("J3", "L"): 0.0, ("J4", "U"): 0.0, ("J4", "L"): 0.0}
+_FXG = __import__("os").environ.get("CO10_FANDX", "")
+if _FXG:
+    for _t in _FXG.split(","):
+        _k, _val = _t.split(":"); FAN_DX[(_k[:2], _k[2])] = float(_val)
 _FX = float(__import__("os").environ.get("CO10_FANDX_J4", "0"))
 _FX3 = float(__import__("os").environ.get("CO10_FANDX_J3", "0"))
 if _FX or _FX3:
@@ -278,6 +348,16 @@ def check(vias, segs, own, st):
     return None
 
 
+def geom_rec(b, f):
+    """(vias, segs) -> 可序列化几何（独立复核用）。"""
+    vias, segs = b[0], b[1]
+    return {"pad": {p: [f["pad"][p][0], f["pad"][p][1]] for p in ("P", "N")},
+            "conn": {p: [f["conn_pad"][p][0], f["conn_pad"][p][1]] for p in ("P", "N")},
+            "vias": [[float(x), float(y), pol, list(lays)] for (x, y, pol, lays) in vias],
+            "segs": [[lay, float(x1), float(y1), float(x2), float(y2), bool(pa), pol]
+                     for (lay, x1, y1, x2, y2, pa, pol) in segs]}
+
+
 def band_key(f): return (f["corridor"], f["band"])
 
 
@@ -312,6 +392,37 @@ def alloc_x(verbose=False):
     return out
 
 
+def alloc_closed_form():
+    """CO-11 §9：chip 区 via1 (x,y) 闭式前缀分配（与落位顺序无关，A1.2）。
+    每 (corridor,band) 16 网：按 (pad_x,pid,pol) 排序做 x 前缀（>=0.525，钳入合法 x 窗）；
+    y 取 band 子窗（使四 band 的 via1 y 互斥 >=0.525）。返回 (page,pol)->(tx,ty)。"""
+    ysub = {("WEST_MCIO_TO_CHIP", "up"): ("le", 50.44), ("WEST_MCIO_TO_CHIP", "dn"): ("ge", 50.973),
+            ("EAST_CHIP_TO_J2", "up"): ("le", 55.895), ("EAST_CHIP_TO_J2", "dn"): ("ge", 56.42)}
+    groups = {}
+    for pid, f in FACTS.items():
+        rows = PAIR_DOMAIN[pid]["pair_rows"]
+        for pol in ("P", "N"):
+            gi = 0 if pol == "P" else 1
+            xs = sorted({round(float(r[gi]), 4) for r in rows})
+            groups.setdefault((f["corridor"], f["band"]), []).append((f["pad"][pol][0], pid, pol, xs))
+    out = {}
+    for key, items in groups.items():
+        items.sort(key=lambda t: (t[0], t[1], t[2]))
+        t = None
+        for pad_x, pid, pol, xs in items:
+            lo, hi = xs[0], xs[-1]
+            t = lo if t is None else max(lo, t + VV)
+            if t > hi:
+                t = hi
+            mode, yv = ysub[key]
+            py = FACTS[pid]["pad"][pol][1]
+            ty = py - 0.5 if FACTS[pid]["band"] == "up" else py + 0.5
+            ty = min(max(ty, py - YWIN), py + YWIN)
+            ty = min(ty, yv) if mode == "le" else max(ty, yv)
+            out[(pid, pol)] = (t, ty)
+    return out
+
+
 def probe(rule="d3", order="engine", verbose=False):
     global R3
     R3 = r3_build(rule)
@@ -319,9 +430,13 @@ def probe(rule="d3", order="engine", verbose=False):
         seq = sorted(FACTS, key=lambda p: (len(PAIR_DOMAIN[p]["pair_rows"]), p))
     elif order == "laneidx":
         seq = sorted(FACTS, key=lambda p: LANES[p]["lane_index"])
+    elif order == "rev":
+        seq = sorted(FACTS, key=lambda p: (FACTS[p]["corridor"], FACTS[p]["conn_ref"], FACTS[p]["band"], p), reverse=True)
     else:
         seq = sorted(FACTS, key=lambda p: (FACTS[p]["corridor"], FACTS[p]["conn_ref"], FACTS[p]["band"], p))
-    st = Store(); placed = {}; failed = {}
+    st = Store(); placed = {}; failed = {}; GEOM = {}
+    global ALLOC
+    ALLOC = alloc_closed_form() if (rule != "co10" and __import__("os").environ.get("CO10_ALLOC")) else None
     XALLOC = alloc_x() if rule == "co10" else {}
     VER = json.loads((SPEC / "m13_v57_s1_r1_via_verdict_r2.json").read_text())["pages"] if rule == "co10" else {}
     for pid in seq:
@@ -354,15 +469,28 @@ def probe(rule="d3", order="engine", verbose=False):
             px, py, nx, ny, b = hit
             placed[pid] = {"P_via": [px, py], "N_via": [nx, ny], "escape": esc_layer(f),
                            "stub": stub_layer(f), "xalloc": [XALLOC[(pid, "P")], XALLOC[(pid, "N")]]}
+            GEOM[pid] = geom_rec(b, f)
             st.add(b[0], b[1], pid)
             if verbose: print("OK  ", pid, esc_layer(f), stub_layer(f), (px, py), (nx, ny))
             continue
         _by = y_bias(f)
-        rows = sorted(PAIR_DOMAIN[pid]["pair_rows"],
-                      key=lambda r: (abs(float(r[0]) - f["pad"]["P"][0]) + abs(float(r[1]) - f["pad"]["N"][0])
-                                     + abs(float(r[2]) - (f["pad"]["P"][1] + _by))
-                                     + abs(float(r[3]) - (f["pad"]["N"][1] + _by)),
-                                     float(r[0]), float(r[1])))
+        if ALLOC:
+            rows = sorted(PAIR_DOMAIN[pid]["pair_rows"],
+                          key=lambda r: (abs(float(r[0]) - ALLOC[(pid, "P")][0])
+                                         + abs(float(r[1]) - ALLOC[(pid, "N")][0])
+                                         + abs(float(r[2]) - ALLOC[(pid, "P")][1])
+                                         + abs(float(r[3]) - ALLOC[(pid, "N")][1]),
+                                         float(r[0]), float(r[1])))
+            rows = rows[:2000] + [r for r in sorted(PAIR_DOMAIN[pid]["pair_rows"],
+                                                    key=lambda r: (abs(float(r[2]) - ALLOC[(pid, "P")][1])
+                                                                   + abs(float(r[3]) - ALLOC[(pid, "N")][1])))[:400]]
+            seen = set(); rows = [r for r in rows if not (tuple(r) in seen or seen.add(tuple(r)))]
+        else:
+            rows = sorted(PAIR_DOMAIN[pid]["pair_rows"],
+                          key=lambda r: (abs(float(r[0]) - f["pad"]["P"][0]) + abs(float(r[1]) - f["pad"]["N"][0])
+                                         + abs(float(r[2]) - (f["pad"]["P"][1] + _by))
+                                         + abs(float(r[3]) - (f["pad"]["N"][1] + _by)),
+                                         float(r[0]), float(r[1])))
         hit = None; reasons = {}
         for r in rows:
             px, nx, py, ny, dd = (float(r[0]), float(r[1]), float(r[2]), float(r[3]), float(r[4]))
@@ -382,9 +510,10 @@ def probe(rule="d3", order="engine", verbose=False):
         placed[pid] = {"P_via": [px, py], "N_via": [nx, ny], "escape": esc_layer(f),
                        "stub": stub_layer(f), "pair_dist": dd,
                        "land": {"P": land_meta(f)["P"], "N": land_meta(f)["N"]}}
+        GEOM[pid] = geom_rec(b, f)
         st.add(b[0], b[1], pid)
         if verbose: print("OK  ", pid, esc_layer(f), stub_layer(f), (px, py), (nx, ny))
-    return {"rule": rule, "order": order, "n_pages": len(FACTS), "n_placed": len(placed),
+    return {"rule": rule, "order": order, "n_pages": len(FACTS), "n_placed": len(placed), "geom": GEOM,
             "n_failed": len(failed), "placed": placed, "failed": failed,
             "verdict": "PROBE_PLACED_ALL" if not failed else "PROBE_RESIDUAL"}
 
@@ -392,7 +521,7 @@ def probe(rule="d3", order="engine", verbose=False):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--rule", choices=["d3", "fan", "co10"], default="d3")
-    ap.add_argument("--order", choices=["engine", "fewest", "laneidx"], default="engine")
+    ap.add_argument("--order", choices=["engine", "fewest", "laneidx", "rev"], default="engine")
     ap.add_argument("--out", default=None)
     ap.add_argument("--verbose", action="store_true")
     a = ap.parse_args()

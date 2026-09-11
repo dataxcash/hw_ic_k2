@@ -91,3 +91,32 @@ lane 与邻页 land via（`ll`）的净距须满足 `|lane_y − ll| ≥ vv + PO
    即消除 24 槽竞争，且不动 lane/connector ⇒ **建议 R2 优先**（须先证 16 条扇平面性与浅角净距，CO-09 §4-7）。
 4. 追加证据（版本化，只读）：`m13_v57_co11_worder_upfirst_probe_fan_engine.json`（26/32，负结果）、
    `m13_v57_co11_wstep1093_wlo338_probe_fan_engine.json`（29/32）。
+
+---
+
+## 8. 第五轮：**32/32 全落位**（存在性证明）+ L2 配置裁定
+### 8.1 结果
+在只读探针上取得 **32/32**（`PROBE_PLACED_ALL`），并经**非执行者独立复核**：
+`m13_v57_co11_placement_verification.json`（`ea85fa2e83b09bf4`）对 320 via / 320 段做**全对全**重算
+（vv/vt/tt/全跨距 via 桶 + 全 616 pad 场，仅 F.Cu 段与 pad 比对）⇒ **0 违规 / PASS**。
+几何 dump：`m13_v57_co11_placement_probe_rev_geom.json`（`ebd6acc92f3446b4`）；配置：`m13_v57_co11_config.json`（`efc99c51b71e4dc2`）。
+
+### 8.2 L2 配置（四要素，均 L2/L3 自裁）
+| 要素 | 值 | 依据 |
+|---|---|---|
+| **西侧 lane 块压缩** | `lane_y = 33.3 + k*1.1265`（k=0..15 ⇒ 33.3..50.2） | 16 lane 全落在西侧 dn via1 y 带（≥50.973）之下 ⇒ 8 J4-up 竖段不再与 16 dn via1 争 x（24 槽 → 16 槽） |
+| **J3 landing 移出 lane 块** | J3-up `ll=31.5`（块下）、J3-dn `ll=51.5`（块上） | 消除 `|lane_y ± POL_OFF − ll| < 0.525`（阈值 0.775，§7.1） |
+| **J3 下行组 stub 层 → In2** | `GS_IN2[("J3","L")] = True` | In6 stub 会横切 lane 块；In2 stub 仅需与同层 stub/land 分离 |
+| **connector lx 前缀分配** | 同层 stub y 区间重叠时 `lx ≥ 0.525`（`_lx_separate`，零搜索单遍） | 消除 DN/J3 与 UP/J4 的 lx 撞列（§7.3） |
+| 落位序 | canonical 逆序（corridor,conn_ref,band,page_id） | 单遍确定性；A1.2 由引擎内部规范排序保证 |
+
+### 8.3 引擎落地的**硬约束**（勿违）
+1. **A1.2 序无关**：`--enum-order natural/reverse/hash` 只置换 manifest 输入；引擎内部**必须**按同一 canonical 键排序后再构造（现引擎已如此）。探针的 `order=rev` 即该 canonical 序，须固化进引擎。
+2. **零搜索**：探针的「逐行 check 直到通过」是**搜索/回退**，引擎不得采用；须把 chip 区 via1 (x,y) 与 connector lx 做成**闭式前缀分配**（`_lx_separate` 已是闭式单遍，可直接移植；via1 需按 §8.2 的 band 子窗 + 前缀 x 闭合）。
+3. **验收**：`FEASIBLE_ALL ∧ same_layer_crossings=0 ∧ A-CN.9 0/0/0（含同页跨极性/全跨距）∧ 对内 skew≤0.15 ∧ wall≤120s`；随后 G4→G5→G6→G7（shop 口径）。
+4. **连带重派生**：`POL_OFF 0.19→0.25`（本配置已按 0.25 复算）、O4 蛇形预算（lane STEP 变）、`ll` 变更后的 breakout 长度/等长。
+
+### 8.4 边界（诚实）
+- 本结果证明**几何可行**，但**尚未**证明 A1.2（需引擎闭式版）、未过 A1.3 几何不变量（V1–V6）、未跑 L4/L5/DRC/DFM。
+- 西侧 lane 块 33.3..50.2 与东侧 56.66..78.56 之间 6.4mm 空档未用（未优化，非缺陷）。
+- J3-up `ll=31.5` 是否在板边/keepout 内**未验**（探针不查板边，CO-06 D4 已知缺口）——引擎落地时须与板边 keepout 一并核对。

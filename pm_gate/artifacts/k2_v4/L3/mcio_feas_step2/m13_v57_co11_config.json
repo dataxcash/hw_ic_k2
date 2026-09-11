@@ -1,0 +1,26 @@
+{
+ "artifact": "m13_v57_co11_config",
+ "cli": {
+  "order": "rev",
+  "rule": "fan"
+ },
+ "env": {
+  "CO10_FANY_J3": "31.5,51.5",
+  "CO10_PAIR": "m13_v57_f13_r1_pair_coupling_v1_5.json",
+  "CO10_STUB": "J3L",
+  "CO10_WLO": "33.3",
+  "CO10_WSTEP": "1.1265"
+ },
+ "meaning": {
+  "J3_landing": "J3-up ll=31.5（lane 块之下）、J3-dn ll=51.5（lane 块之上）；避免 |lane-ll|<0.775",
+  "J3dn_stub": "J3 下行组 stub 层改 In2（原 In6）",
+  "lx_separate": "connector lx 前缀分配：同层 stub y 区间重叠时 lx>=0.525（_lx_separate）",
+  "order": "canonical 落位序 = 逆序（corridor,conn_ref,band,page_id）",
+  "west_lane_block": "16 lane = 33.3 + k*1.1265（k=0..15）=> 33.3..50.2（全部在 dn via1 带之下；POL_OFF=0.25）"
+ },
+ "note": "CO-11 §8 西侧逃逸/chip 区可行性配置（L2 自裁）；probe 复现命令见 repro",
+ "pair_domain": "m13_v57_f13_r1_pair_coupling_v1_5.json",
+ "repro": "CO10_WSTEP=1.1265 CO10_WLO=33.3 CO10_FANY_J3=31.5,51.5 CO10_STUB=J3L CO10_PAIR=m13_v57_f13_r1_pair_coupling_v1_5.json python3 tools/p3_v57_co10_west_fan_probe.py --rule fan --order rev --out OUT.json",
+ "schema": 1,
+ "verification": "m13_v57_co11_placement_verification.json"
+}
