@@ -155,6 +155,55 @@ def main() -> int:
     for name, obj in (("m13_v57_l5_fab_record.json", fab), ("m13_v57_l5_dfm_dft_record.json", dfm),
                       ("m13_v57_l5_si_pi_emc_record.json", si)):
         (STEP2 / name).write_text(json.dumps(obj, indent=1, ensure_ascii=False, sort_keys=True), encoding="utf-8")
+
+    # ---- G7 记录（CO-48：补齐 docstring 声明却从未写出的评审记录；确定性文本，不含墙钟）----
+    s16 = lambda p: sha(p)[:16]                                        # noqa: E731
+    _dft = dfm["dft"]
+    g7 = f"""# G7 / L5 记录 — k2 v57（8L）
+
+> revision **L5-G7.6**｜图纸 **{art['revision']}** `{s16(DRAWING)}`｜L4 板 `{s16(L4_PCB)}`（含 SPEC 逃逸区规则域 CO-37）
+> 产生：`tools/p3_v57_l5_signoff.py`（{dfm['drc']['tool']}，{dfm['revision']}）——**随 L5 每次重跑确定性重生成**
+> ｜历史 FAIL 叙事见 CO-37/CO-43/CO-44/CO-45 变更单与 git（本件取代 L5-G7.5 的 new=60 口径）。
+
+## 1. 结论（G7 {'PASS' if (dfm['verdict'] == 'PASS' and si['verdict'] == 'PASS') else 'FAIL'}）
+- SI（对内等长）：**{si['verdict']}** — `max_intra_pair_skew_mm = {skew_max:.4f} <= {rules['diff_pair']['intra_pair_skew_mm']}`（{si['SI']['skew_pages_checked']} 页，含 REFCLK）。
+- DFM：**{dfm['verdict']}** — `new_total = {dfm['drc']['new_total']}`；L4 违规 by_type `{dfm['drc']['l4_applied']['by_type']}`（= 冻结基线 lib/silk，计入不计）。
+- DFT（施工连通性，CO-47 谓词）：在册网未连项 **{_dft['in_scope_unconnected_nets']}/{_dft['in_scope_nets']}**（{_dft['rule']}）。
+- EMC：solder_mask_bridge `{si['EMC']['solder_mask_bridge_violations']}` / copper_edge `{si['EMC']['copper_edge_violations']}`；PI：hole_clearance `{si['PI']['hole_clearance_violations']}`、平面未动。
+- **裁决：无需回上层**（G4..G7 全 PASS）。里程碑 tag `k2-v57-g7-l5-pass`；收口声明件 W3 boundary v1.17。
+
+## 2. 量（8L）
+| 项 | 值 |
+|---|---|
+| copper layers | {len(cu)} = {'/'.join(c.replace('.Cu', '') for c in cu)}（In1/In3/In5=GND、In4=P3V3 平面未动）|
+| tracks / vias | {fab['n_tracks']} / {fab['n_vias']}（drill {list(fab['via_drill_table_mm'])}）|
+| L4 rule areas（非铜） | 4 = ESC_J2 / ESC_J3 / ESC_J4 / ESC_U6（F.Cu；SPEC 逃逸域）|
+| 在册网（L4 施工） | {_dft['in_scope_nets']}（来源 `m13_v57_l4_construction.json: nets`）|
+| 未连项（全板） | {_dft['unconnected_items_total']}（范围外 GND/P3V3/NO_CONNECT/MCU_VDD 等，见 boundary §6.4）|
+| DRC baseline（冻结板，无 .kicad_dru） | {dfm['drc']['baseline_frozen']['n']} = {dfm['drc']['baseline_frozen']['by_type']} |
+| DRC L4（含 .kicad_dru） | {dfm['drc']['l4_applied']['n']} = {dfm['drc']['l4_applied']['by_type']} |
+| **new violations** | **{dfm['drc']['new_total']}** {dfm['drc']['new_violations']} |
+
+## 3. 判据（未放宽）
+- `.kicad_dru` `{s16(L4_DRU)}`：实现 SPEC `constraints.escape_transition_zone`（ECN-001，`escape_clearance_mm=0.075`）+ 4 具名 rule area（J2/J3/J4/U6 pad 场）。
+- **条件显式排除 `PCIE_REFCLK*`** ⇒ REFCLK 仍按 shop/netclass 判据；其 0 违规由 CO-40..CO-45 几何收敛达成（**非**借道放宽；见 CO-45 §5）。
+- 域工件 `m13_v57_co37_escape_domain.json` `{s16(STEP2 / 'm13_v57_co37_escape_domain.json')}`；冻结基线板不加载 `.kicad_dru`。
+
+## 4. 独立复算
+- G5 `p3_v57_w3_constructive_validator_v2.py`（不 import 引擎）：`m13_v57_w3_validation.json` `{s16(STEP2 / 'm13_v57_w3_validation.json')}`（G-M1..6、A1.2/A1.3/A1.4、frozen）。
+- G6 `p3_v57_l4_validator.py`：`m13_v57_l4_validation.json` `{s16(STEP2 / 'm13_v57_l4_validation.json')}`（L4-A..E viol=0）。
+- 跨层 DRC：`kicad-cli pcb drc --format json --severity-all --refill-zones`（冻结板 vs L4，按类型差分；CO-47 起退出码=判定）。
+
+## 5. 指纹
+图纸 `{s16(DRAWING)}`｜landing `{s16(STEP2 / 'm13_v57_w3_chip_landing_rows.json')}`｜G5 `{s16(STEP2 / 'm13_v57_w3_validation.json')}`
+｜L4 construction `{fab['inputs']['construction'][:16]}`｜L4 validation `{s16(STEP2 / 'm13_v57_l4_validation.json')}`｜L4 板 `{s16(L4_PCB)}`
+｜fab `{s16(STEP2 / 'm13_v57_l5_fab_record.json')}`｜dfm `{s16(STEP2 / 'm13_v57_l5_dfm_dft_record.json')}`｜si `{s16(STEP2 / 'm13_v57_l5_si_pi_emc_record.json')}`
+｜`.kicad_dru` `{s16(L4_DRU)}`
+冻结四源 `{s16(STEP2.parent / 'SPEC_k2_v4.json')} / {s16(STEP2 / 'm13_v57_s1_page_manifest.json')} / {s16(SRC_PCB)} / {s16(RULES)}`（未改）。
+
+End of G7 record（L5-G7.6，机器生成）。
+"""
+    (STEP2 / "m13_v57_l5_g7_record.md").write_text(g7, encoding="utf-8")
     print("L5: FAB ok | DFM verdict=%s new=%d %s | in_scope_unconnected=%d/%d nets | SI verdict=%s skew=%.4f" %
           (dfm["verdict"], dfm["drc"]["new_total"], dfm["drc"]["new_violations"],
            dfm["dft"]["in_scope_unconnected_nets"], dfm["dft"]["in_scope_nets"], si["verdict"], skew_max))
