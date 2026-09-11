@@ -1,0 +1,151 @@
+{
+ "adjudication": {
+  "bid_doc": "m13_v57_l2_structural_bid_v1.md",
+  "eliminated": {
+   "CAND-A": "6L 保层重分配：族级穷尽不可行 + 单内部信号层资源不足 + B.Cu 参考 PWR"
+  },
+  "escalated_to_L1": {
+   "CAND-C": "连接器/球重映射 或 器件重排（触权威网表/SPEC 器件）"
+  },
+  "winner": "CAND-B",
+  "winner_name": "8L 恢复 In6（In2+In6 双内部信号层）"
+ },
+ "artifact": "m13_v57_l2_structural_envelope",
+ "authority": "LAYOUT_CONSTITUTION Ch.2 (L2 结构方案) + Ch.4 生产链 + 变更单 CO-02",
+ "authorization_source": "capacity-closure derivation (LID.1); NO owner/work-order/revision-card parameter",
+ "canonical_w3_untouched": "W3-CN.25 / FEASIBLE_ALL / c17c5a42",
+ "corridor_matrix": {
+  "B.Cu": "低速/边带 + 连接器 fan-out",
+  "F.Cu": "chip escape + 微带通道",
+  "In2.Cu": "J2 东走廊穿越 16 对（恢复 2026-08-19 8L 定案）",
+  "In6.Cu": "REFCLK 专属带 + 西走廊(MCIO) 溢流"
+ },
+ "date": "2026-09-11",
+ "derivation": {
+  "L_capacity": 2,
+  "L_conflict": 2,
+  "L_escape": 4,
+  "L_signal": 4,
+  "artifact": "m13_v57_layer_intent_derived_v1.json (LID.1, sha16 e7c3c91c)",
+  "closed": true,
+  "engine": "k2/tools/p3_v57_layer_intent_derive.py",
+  "frozen_stackup_sufficient": false,
+  "mechanism_spec": "m13_v57_layer_intent_mechanism_spec_v1.md",
+  "revocation": "m13_v57_change_order_CO-02_revocation.md",
+  "root_cause_doc": "m13_v57_root_cause_layer_intent_mechanism_v1.md",
+  "same_layer_crossings": 0,
+  "total_layers": 8
+ },
+ "frozen_four_untouched": true,
+ "hard_gates": {
+  "G-1_corridor_macro_closure": {
+   "n_wing_mm": 16.2,
+   "pass": true,
+   "s_wing_mm": 20.8,
+   "single_band_needed_mm": 10.805
+  },
+  "G-2_pad_wall_penetration": {
+   "consequence": "所有高速 pad 一律层转移（via）；须 >=2 内部信号层",
+   "lane_needed_mm": 0.555,
+   "min_pad_gap_mm": 0.295,
+   "pass_on_CAND_B": true,
+   "penetrable": false
+  },
+  "G-3_clearance_suite": {
+   "embed_required": true,
+   "track_track_center_mm": 0.38,
+   "via_track_center_mm": 0.4525,
+   "via_via_center_mm": 0.525
+  },
+  "G-4_length_match": {
+   "embed_required": true,
+   "intra_pair_skew_max_mm": 0.15
+  },
+  "G-5_inter_pair_pitch": {
+   "center_mm": 1.46,
+   "embed_required": true
+  },
+  "G-6_via_per_line": {
+   "embed_required": true,
+   "max": 2
+  },
+  "G-7_jlc_process": {
+   "edge_copper_min_mm": 0.3,
+   "embed_required": true,
+   "track_width_mm": 0.205,
+   "via_outer_mm": 0.35
+  },
+  "G-8_reference_plane_continuity": {
+   "CAND_B_improvement": "B.Cu 参考 In4(PWR)->In5(GND)",
+   "embed_required": true,
+   "rule": "每条线全程 GND 参考，不跨分割"
+  }
+ },
+ "length_window": {
+  "inter_pair_center_pitch_mm": 1.46,
+  "intra_pair_skew_mm": 0.15,
+  "machine_gate": true
+ },
+ "next": [
+  "L2 层叠修订 = 机械版本 bump（层数已派生, 非 owner 决策）",
+  "重跑 W3->W4->L4->L5（CO-02 R-04）；硬门禁 G-1..G-8",
+  "层用途/平面语义红线不变（PWR 固定 In4, GND 夹心）"
+ ],
+ "pd_si_embedded": {
+  "pd": "In5 GND 增层 => 平面电容/回流改善；In4 P3V3 分区保持",
+  "reference_plane": "F<->In1, In2<->In3, B<->In5, In6<->In5 (all GND)",
+  "si": "介质堆叠变 => SI9000 重推 w/g + impedance coupon（SPEC /impedance coupon_required=true）"
+ },
+ "provenance": {
+  "change_order": "m13_v57_change_order_CO-02.md",
+  "l1_preflight": "m13_v57_l1_struct_preflight_v2.json (L1-PF.2, PREFLIGHT_FAIL)",
+  "l2_reentry_clause": "pm_gate/artifacts/k2_v4/L2/frozen/L2_STRUCTURE_v2.0.md L126-137 8L 重入 ECN 触发条款 1&2（L1_TOPOLOGY_v2.0.md 引用）",
+  "l3_evidence": "m13_v57_w3_full_clearance_infeasibility_cert.json (W3-FCC.1) + m13_v57_w3_reopen_probe_v1.md"
+ },
+ "revision": "L2-SE.2",
+ "schema": 1,
+ "stackup": {
+  "derivation": "L_signal=4 => 2*L_signal=8; PWR 固定 In4; GND 夹心; signal=F/In2/In6/B",
+  "hard_redline_preserved": "In4=P3V3、In1/In3=GND 不变；仅新增 In5(GND)/In6(signal)",
+  "layers": [
+   "F.Cu",
+   "In1.Cu",
+   "In2.Cu",
+   "In3.Cu",
+   "In4.Cu",
+   "In5.Cu",
+   "In6.Cu",
+   "B.Cu"
+  ],
+  "role": {
+   "B.Cu": "signal (ref In5 GND)",
+   "F.Cu": "signal (PCIe microstrip ref In1)",
+   "In1.Cu": "GND_PLANE",
+   "In2.Cu": "signal (stripline dual GND ref)",
+   "In3.Cu": "GND_PLANE",
+   "In4.Cu": "POWER_PLANE (P3V3, 分区; In4 仍电源平面)",
+   "In5.Cu": "GND_PLANE",
+   "In6.Cu": "signal (第二内部信号层, stripline dual GND ref)"
+  }
+ },
+ "status": "DERIVED_BY_CAPACITY_CLOSURE",
+ "status_reason": "层数/层用途由机制派生（LID.1），非 owner/工单参数。L_signal=max(L_escape=4, L_capacity=2, L_conflict=2, 3)=4 => total=8L（signal=F/In2/In6/B）；冻结 6L(3 信号层) 不足 => DERIVED_STACKUP_REQUIRED。SPEC 层叠落地为机械版本 bump（非决策闸口）。",
+ "supersedes": "m13_v57_l2_structural_envelope_v1.json (L2-SE.1)",
+ "supersedes_on_ratification": "pm_gate/artifacts/k2_v4/L2/frozen/L2_STRUCTURE_v2.0.md",
+ "topology_derivation": {
+  "assignment_method": "fixed-order greedy coloring of conflict graph (O(n+m), deterministic)",
+  "same_layer_crossings": 0,
+  "signal_layers": [
+   "F.Cu",
+   "In2.Cu",
+   "In6.Cu",
+   "B.Cu"
+  ]
+ },
+ "via_strategy": {
+  "gnd_stitch_via": true,
+  "max_per_line": 2,
+  "no_via_in_pad": true,
+  "pattern": "(F->In2->F) / (F->In6->F)"
+ }
+}

@@ -1,0 +1,162 @@
+{
+ "L_capacity_evidence": {
+  "chip_escape": {
+   "C_per_layer": 25.0,
+   "D_pairs": 32,
+   "cross_section_mm": 37.52,
+   "layers_needed": 2
+  },
+  "corridor:EAST_CHIP_TO_J2": {
+   "C_per_layer": 31.1,
+   "D_pairs": 18,
+   "cross_section_mm": 45.4,
+   "layers_needed": 1
+  },
+  "corridor:WEST_MCIO_TO_CHIP": {
+   "C_per_layer": 31.1,
+   "D_pairs": 18,
+   "cross_section_mm": 45.4,
+   "layers_needed": 1
+  }
+ },
+ "L_conflict_evidence": {
+  "conflict_edges": 44,
+  "max_clique_per_order": {
+   "EAST_CHIP_TO_J2:src_x->tgt_y": 2,
+   "EAST_CHIP_TO_J2:src_y->tgt_y": 1,
+   "WEST_MCIO_TO_CHIP:src_x->tgt_y": 2,
+   "WEST_MCIO_TO_CHIP:src_y->tgt_y": 2
+  }
+ },
+ "L_escape_evidence": {
+  "J2": {
+   "depth": 2,
+   "min_pad_gap_mm": 0.295,
+   "penetrable": false
+  },
+  "J3": {
+   "depth": 2,
+   "min_pad_gap_mm": 0.295,
+   "penetrable": false
+  },
+  "J4": {
+   "depth": 2,
+   "min_pad_gap_mm": 0.295,
+   "penetrable": false
+  },
+  "chip_field": {
+   "depth": 4,
+   "min_pad_gap_mm": 0.2953,
+   "penetrable": false
+  }
+ },
+ "artifact": "m13_v57_layer_intent_derived",
+ "authority": "capacity-closure derivation (rectification #03); inputs = frozen four + rules ONLY",
+ "closure": {
+  "L_capacity": 2,
+  "L_conflict": 2,
+  "L_escape": 4,
+  "L_signal_derived": 4,
+  "frozen_stackup_signal_layers": 3,
+  "frozen_stackup_sufficient": false,
+  "greedy_colors_used": 2,
+  "region_closure": {
+   "chip_escape": {
+    "C_total": 100.0,
+    "D": 32,
+    "closed": true
+   },
+   "corridor:EAST_CHIP_TO_J2": {
+    "C_total": 124.4,
+    "D": 18,
+    "closed": true
+   },
+   "corridor:WEST_MCIO_TO_CHIP": {
+    "C_total": 124.4,
+    "D": 18,
+    "closed": true
+   }
+  },
+  "same_layer_crossings": 0,
+  "signal_layers": [
+   "F.Cu",
+   "B.Cu",
+   "In2.Cu",
+   "In6.Cu"
+  ],
+  "total_layers_derived": 8
+ },
+ "constants_from_frozen": {
+  "clr_mm": 0.175,
+  "lane_needed_mm": 0.555,
+  "pair_copper_mm": 0.585,
+  "pair_pitch_mm": 1.46,
+  "via_via_min_mm": 0.525,
+  "w_mm": 0.205
+ },
+ "date": "2026-09-11",
+ "derived_stackup": {
+  "layer_purpose": [
+   {
+    "layer": "F.Cu",
+    "role": "signal"
+   },
+   {
+    "layer": "In1.Cu",
+    "role": "GND"
+   },
+   {
+    "layer": "In2.Cu",
+    "role": "signal"
+   },
+   {
+    "layer": "In3.Cu",
+    "role": "GND"
+   },
+   {
+    "layer": "In4.Cu",
+    "role": "PWR"
+   },
+   {
+    "layer": "In5.Cu",
+    "role": "GND"
+   },
+   {
+    "layer": "In6.Cu",
+    "role": "signal"
+   },
+   {
+    "layer": "B.Cu",
+    "role": "signal"
+   }
+  ],
+  "rule": "signal*2 total (reference sandwich); F/B outer signal; interior = (S-2) signal + (S-1) GND + 1 PWR",
+  "signal_layers": [
+   "F.Cu",
+   "B.Cu",
+   "In2.Cu",
+   "In6.Cu"
+  ],
+  "total_layers": 8
+ },
+ "derived_topology": {
+  "chip_row_to_signal_layer": {
+   "0": "F.Cu",
+   "1": "B.Cu",
+   "2": "In2.Cu",
+   "3": "In6.Cu"
+  },
+  "color_assignment_size": 32,
+  "method": "fixed-order greedy coloring (O(n+m), deterministic)"
+ },
+ "inputs_sha": {
+  "manifest": "a8ef3ea8ecff99d7",
+  "pcb": "f6273de613f43d05",
+  "rules": "0a459839e15960b8",
+  "spec": "0bd52ed48e720b8c"
+ },
+ "no_parameter_privilege": "layer count/purpose are OUTPUTS; no owner/work-order/revision-card input",
+ "revision": "LID.1",
+ "schema": 1,
+ "verdict": "DERIVED_STACKUP_REQUIRED"
+}
