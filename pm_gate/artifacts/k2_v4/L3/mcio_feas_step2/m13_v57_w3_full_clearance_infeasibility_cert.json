@@ -57,6 +57,11 @@
    "id": "O2"
   }
  ],
+ "owner_verdict_20260911": {
+  "O1_3": "批准逃逸/过渡区放宽至 JLC 极限（W3-CLRREL.1）→ 实测 P7 仍 29/32 ⇒ 不足",
+  "O2": "批准只读读板（W3-BRDREAD.1）",
+  "request": "O1-①（加第 4 信号层）请 owner 复议"
+ },
  "probes": [
   {
    "domain": "F-13 v1.2 (195,916 rows, WIN2.5)",
@@ -126,6 +131,19 @@
     "note": "F.Cu 横段与 F.Cu breakout/landing-stub 在 pad y 带互交（106）；三层分配仍无冲突自由组合",
     "r1": "29/32",
     "same_layer": 106
+   }
+  },
+  {
+   "name": "P7 O1-③ 放宽至 JLC06161H 工艺极限（0.305/0.3775/0.45；全局施加＝比区域口径更宽松）",
+   "note": "放宽净距不足以解 ⇒ 失败非净距余量 ⇒ 依 owner 预设上报 O1-①（加层）",
+   "result": {
+    "orders": {
+     "hash": "29/32",
+     "natural": "29/32",
+     "reverse": "29/32"
+    },
+    "r1": "29/32",
+    "same_layer": 29
    }
   }
  ],

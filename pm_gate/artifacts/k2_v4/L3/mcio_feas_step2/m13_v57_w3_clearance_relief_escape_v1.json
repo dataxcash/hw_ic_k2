@@ -1,0 +1,90 @@
+{
+ "artifact": "m13_v57_w3_clearance_relief_escape",
+ "authority": "OWNER 裁定（监理代裁，2026-09-11）：批准 O1-③ —— 在不低于板厂工艺极限前提下，限定逃逸/过渡区放宽本设计净距套件；不改层叠",
+ "date": "2026-09-11",
+ "fab_process": {
+  "evidence_refs": [
+   "SPEC_k2_v4.json /material",
+   "SPEC_k2_v4.json escape_clearance_basis (2026-08-16 冻结先例: 逃逸区微净距)",
+   "buildability.md",
+   "DRC_SEMANTIC_CORE_PLAN.md",
+   "m13_v32_session_handoff.md §JLC06161H 强条"
+  ],
+  "id": "JLC06161H",
+  "limits": {
+   "min_annular_mm": 0.075,
+   "min_copper_edge_mm": 0.3,
+   "min_hole_to_hole_mm": 0.25,
+   "min_line_gap_mm": 0.1,
+   "min_line_width_mm": 0.09,
+   "min_via_dia_mm": 0.35,
+   "min_via_drill_mm": 0.2
+  }
+ },
+ "finding": {
+  "conclusion": "O1-③（放宽至 JLC 极限，甚至全局施加）**不足** ⇒ 失败非净距余量所致 ⇒ 依 owner 预设：**上报需 O1-①（加信号层）由 owner 复议**",
+  "result": {
+   "order_variants": {
+    "hash": "29/32",
+    "natural": "29/32",
+    "reverse": "29/32"
+   },
+   "r1": "29/32",
+   "same_layer": 29
+  },
+  "test": "把上述 fab-limit 值施加后重跑净距感知引擎（比区域口径更宽松：全局施加）"
+ },
+ "frozen_sources_touched": false,
+ "outside_region": {
+  "track_track_center_min_mm": 0.38,
+  "via_track_center_min_mm": 0.4525,
+  "via_via_center_min_mm": 0.525
+ },
+ "region": {
+  "name": "escape_transition",
+  "rects_mm": [
+   {
+    "id": "chip_escape",
+    "x": [
+     81.0,
+     106.0
+    ],
+    "y": [
+     30.0,
+     82.0
+    ]
+   },
+   {
+    "id": "j2_conn_escape",
+    "x": [
+     128.0,
+     150.0
+    ],
+    "y": [
+     30.0,
+     82.0
+    ]
+   },
+   {
+    "id": "j34_conn_escape",
+    "x": [
+     48.0,
+     66.0
+    ],
+    "y": [
+     30.0,
+     82.0
+    ]
+   }
+  ]
+ },
+ "relaxed_suite_in_region": {
+  "derivation": "0.205+w_gap(0.10); 0.175+0.10+0.1025; drill(0.2)+hole_to_hole(0.25)=0.45",
+  "track_track_center_min_mm": 0.305,
+  "via_track_center_min_mm": 0.3775,
+  "via_via_center_min_mm": 0.45
+ },
+ "revision": "W3-CLRREL.1",
+ "schema": 1,
+ "versioned": true
+}

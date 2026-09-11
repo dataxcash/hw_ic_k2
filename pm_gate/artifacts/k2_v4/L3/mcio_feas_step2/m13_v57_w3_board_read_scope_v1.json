@@ -1,0 +1,21 @@
+{
+ "artifact": "m13_v57_w3_board_read_scope",
+ "authority": "OWNER 裁定（监理代裁）：批准 O2 —— W3/L4 允许**只读**板既有铜以规避 our↔frozen 冲突",
+ "constraints": {
+  "frozen_four_unchanged": true,
+  "mechanism": "离线预计算为版本化工件（pcbnew 只读提取 → m13_v57_board_obstacles_v1.json）→ 引擎 O(1) 查表消费（禁求解路径内做板解析）",
+  "no_write_to_frozen_pcb": true,
+  "read_only": true,
+  "targets": [
+   "连接器焊盘场（J2/J3/J4 全部 pad，含 GND/异网）",
+   "板边铜（copper_edge 0.30）",
+   "阻焊桥（mask 网/桥）",
+   "既有异网 track/via/zone"
+  ]
+ },
+ "date": "2026-09-11",
+ "note": "O2 可独立降低 L5 的 our↔frozen 159；但 G7 仍受 O1 制约（R1 需 32/32）。",
+ "revision": "W3-BRDREAD.1",
+ "schema": 1,
+ "status": "AUTHORIZED_IMPLEMENTATION_PENDING_O1"
+}
