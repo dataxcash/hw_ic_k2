@@ -1,0 +1,34 @@
+{
+ "artifact": "m13_v57_co09_d1_structural_probe_result",
+ "schema": 1,
+ "purpose": "D1（L2 安全 hop 拓扑）结构可行性探针（只读，不动机件/引擎/canonical）",
+ "basis": "canonical W3-CN.30 (05f7bd10ab3b45b6) 的 chip pad / via1 / lane y / R3 column 几何 + 冻结 8L PCB k2_v4_8L.kicad_pcb 的 DS320PR1601 footprint pad 场",
+ "findings": [
+  {"id": "F1", "claim": "DS320PR1601 为满场 BGA：pad field x[82.9,104.85] y[49.76,57.64]，0.6mm pitch，pad 直径 0.3。",
+   "evidence": "footprint 解析：354 pad；full rows (n=37, 0.6 pitch) 位于 y=49.76/50.28/57.12/57.64；sparse rows (n=16, 1.2 pitch) 位于 y=50.88..56.42。",
+   "consequence": "0.6 pitch 相邻 pad 边距 0.3 < 2*(0.15+0.075+0.1025)=0.6575 ⇒ 单层 F.Cu 无法在满行 pad 间穿行；满行 y=57.12/57.64 是芯片下缘完整墙。"},
+  {"id": "F2", "claim": "CO-08(B) 的『F.Cu 长逃逸扇（chip pad → via1@(vx,ly)）』不可行。",
+   "evidence": "east 数据页 chip pad y∈[55.13,57.64]，lane y∈[56.66,78.56]（在 pad 场下方）；从 pad 到 lane 的 F.Cu 段必须穿越满行 y=57.12/57.64 ⇒ 无关断；x>104.85 绕行亦被 y=57.12/57.64 满行封锁。",
+   "consequence": "CO-08b(30/32,crossings30,wall139s)、CO-08c(30/32,crossings14,vv 0.15~0.5,wall196s) 的失败根因即此（长 F.Cu 段穿越 pad wall）。"},
+  {"id": "F3", "claim": "『2 via/线单层 river（lane+stub 同在 In2）』不可行。",
+   "evidence": "数值探针（canonical lane/column）：In2 river lane×stub 真交叉 = 271（west+east, dn 合并）；改善列序后仍 >0（lane 水平段与异网 stub 竖段必然相交）。",
+   "consequence": "CO-07 candidate (a)/(C1) 结构性否证（与序无关）。"},
+  {"id": "F4", "claim": "『merge river（escape+lane+stub 同层）』对 32 网不可行。",
+   "evidence": "数值探针：In6 merge river 交叉 178~301；In2 merge river 交叉 166~271（多种 lane/V 排序均 >0）。",
+   "consequence": "confirm 三层角色（escape / lane / stub）必须落在三个不同（或两两不共层）的层上。"},
+  {"id": "F5", "claim": "安全 hop 下的唯一可行层角色分配：escape ∈ {In2,B} 分流 16/16；lane=In6；stub=In2。",
+   "evidence": "land 必须 In2↔F（安全 hop 唯一）⇒ stub 必在 In2 ⇒ lane ≠ In2；lane=In6 时 escape 只能 In2 或 B；band-X(16 网) escape In2（密度 16*0.38=6.08 ≤ 可用 9.45），band-Y(16 网) escape B（需 In2↔In6↔B 两跳）。",
+   "vias_per_line": {"band_X": 4, "band_Y": 6},
+   "layer_budget": {"In2": "bandX escape 竖段 + bandY 入口 tiny + 全部 stub", "In6": "bandX lane + bandY lane + bandY 入口 tiny", "B": "bandY escape 竖段"}},
+  {"id": "F6", "claim": "可行性前提（必须一并重派生的 L2 子问题）。",
+   "items": [
+    "(i) lane y 布局：须使 lane y 与所有 pad 行 y 的距离 ≥0.38（bandY In6 入口 tiny 为 x≈pad_x 的短段，会与路过的 lane 相交）。现 LANE_LO=33.3/STEP=1.46 下 lane#13(52.28)/#15(55.2) 落入 pad_y±0.38 禁带 ⇒ 需重派生 LANE_LO/STEP。",
+    "(ii) stub 列必须 32 网互异（≥0.38，y 域重叠）：现 per-band rank 复用列（tt 0.0），须改全局唯一列（16 inner ≤131.65 + 16 outer ≥136.0）。",
+    "(iii) bandY 入口 tiny（In2 0.6mm + In6 0.6mm）与 bandX escape 竖段须 y-域分离：east 取 bandX=dn(pads 57.12+/lanes 68.34+, 竖段向下)、bandY=up(pads 55.13/55.823, tiny 向上/下均 ≤56.42) ⇒ 不重叠；west 取 bandX=up(lanes 0-7 向上)、bandY=dn(tiny 在 51.673~52.97) ⇒ 不重叠。",
+    "(iv) 谓词须改全跨距 via 桶（via 为其跨距内所有信号层的圆障碍）+ 同页跨极性 via↔track（D2/D3）。"
+   ]}
+ ],
+ "geometry_reuse": "W3-CN.30 的 polylines（escape 竖段 / lane 水平段 / stub 竖段 / F.Cu breakout）几何可复用，仅层标签与 via 定义变更；故 CO-09 是『层角色 + via 集 + 列布局 + lane y』重派生，不是全新几何。",
+ "redline": "四源未改；canonical W3-CN.30 未动；探针仅 /tmp/d1probe",
+ "verdict": "CO-08(B) 前提（F.Cu 长逃逸扇）证伪；D1 的 L2 可闭合架构已定；剩余为受控重派生 + 一次求解"
+}
