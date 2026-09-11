@@ -1,0 +1,346 @@
+{
+ "artifact": "m13_v57_co55_layer_impedance_requirement",
+ "authority": "L2/SI 自裁（LAYOUT_CONSTITUTION 第二章：叠层分配 + SI 物理承载）",
+ "conformance": "NOT_DEMONSTRATED_PENDING_BUILD_AND_COUPON",
+ "delivered": {
+  "intra_gap_mm": [
+   0.295,
+   0.395
+  ],
+  "source": "CO-54 audit 实测",
+  "w_mm": 0.205
+ },
+ "fallback_w_table": [
+  {
+   "b_mm": 0.35,
+   "w_mm": 0.12,
+   "zdiff_ohm": 83.52
+  },
+  {
+   "b_mm": 0.4,
+   "w_mm": 0.13,
+   "zdiff_ohm": 84.11
+  },
+  {
+   "b_mm": 0.45,
+   "w_mm": 0.14,
+   "zdiff_ohm": 84.39
+  },
+  {
+   "b_mm": 0.5,
+   "w_mm": 0.15,
+   "zdiff_ohm": 84.49
+  },
+  {
+   "b_mm": 0.55,
+   "w_mm": 0.16,
+   "zdiff_ohm": 84.48
+  },
+  {
+   "b_mm": 0.6,
+   "w_mm": 0.17,
+   "zdiff_ohm": 84.4
+  }
+ ],
+ "gate_impact": "none（本件零几何/阈值改动；ECO rev-4 落地后按变更单重跑）",
+ "layer_structure": {
+  "B.Cu": {
+   "gap_key": null,
+   "kind": "unreferenced",
+   "refs": []
+  },
+  "F.Cu": {
+   "gap_key": "d(F-In1)",
+   "kind": "microstrip",
+   "refs": [
+    "In1.Cu"
+   ]
+  },
+  "In2.Cu": {
+   "gap_key": "b(In1-In3)",
+   "kind": "stripline",
+   "refs": [
+    "In1.Cu",
+    "In3.Cu"
+   ]
+  },
+  "In6.Cu": {
+   "gap_key": "d(In5-In6)",
+   "kind": "microstrip",
+   "refs": [
+    "In5.Cu"
+   ]
+  }
+ },
+ "model": {
+  "method": "IPC-2141 (edge-coupled microstrip / symmetric stripline)",
+  "required_for_signoff": "SI9000 + 板厂阻抗券",
+  "signoff": false,
+  "source": "_shared/eda_core/stackup.py"
+ },
+ "nature": "反向下达 8L 叠层要求（不等板厂输入）；零几何改动、不 bump SPEC",
+ "requirement": {
+  "b(In1-In3)": {
+   "basis": "交付 w=0.205, gap∈[0.295, 0.395] → Zdiff 85±10% (IPC-2141 一阶)",
+   "er": 3.99,
+   "gaps_mm": [
+    0.295,
+    0.395
+   ],
+   "kind": "stripline",
+   "layers": "In2.Cu",
+   "refs": [
+    "In1.Cu",
+    "In3.Cu"
+   ],
+   "ruled_target_mm": 0.72,
+   "t_mm": 0.0175,
+   "var_band_mm": [
+    0.5815,
+    0.947
+   ],
+   "var_for_85_at_gap0.395": 0.6665
+  },
+  "d(F-In1)": {
+   "basis": "交付 w=0.205, gap∈[0.295, 0.395] → Zdiff 85±10% (IPC-2141 一阶)",
+   "er": 4.16,
+   "gaps_mm": [
+    0.295,
+    0.395
+   ],
+   "kind": "microstrip",
+   "layers": "F.Cu",
+   "refs": [
+    "In1.Cu"
+   ],
+   "ruled_target_mm": 0.1164,
+   "t_mm": 0.035,
+   "var_band_mm": [
+    0.097,
+    0.1215
+   ],
+   "var_for_85_at_gap0.395": 0.107
+  },
+  "d(In5-In6)": {
+   "basis": "交付 w=0.205, gap∈[0.295, 0.395] → Zdiff 85±10% (IPC-2141 一阶)",
+   "er": 4.16,
+   "gaps_mm": [
+    0.295,
+    0.395
+   ],
+   "kind": "microstrip",
+   "layers": "In6.Cu",
+   "refs": [
+    "In5.Cu"
+   ],
+   "ruled_target_mm": 0.1164,
+   "t_mm": 0.0175,
+   "var_band_mm": [
+    0.0875,
+    0.11
+   ],
+   "var_for_85_at_gap0.395": 0.097
+  }
+ },
+ "revision": "CO-55.1",
+ "ruled_target_evaluation": {
+  "F.Cu": {
+   "all_delivered_gaps_mm": [
+    0.295,
+    0.345,
+    0.372,
+    0.376,
+    0.378,
+    0.388,
+    0.392,
+    0.395,
+    0.445
+   ],
+   "er": 4.16,
+   "gap_key": "d(F-In1)",
+   "material": "2116*1 (0.1164mm)",
+   "var_mm": 0.1164,
+   "within_10pct": {
+    "0.295": true,
+    "0.345": true,
+    "0.372": true,
+    "0.376": true,
+    "0.378": true,
+    "0.388": true,
+    "0.392": true,
+    "0.395": true,
+    "0.445": true
+   },
+   "zdiff_ohm": {
+    "0.295": 88.43,
+    "0.345": 89.74,
+    "0.372": 90.26,
+    "0.376": 90.32,
+    "0.378": 90.35,
+    "0.388": 90.51,
+    "0.392": 90.57,
+    "0.395": 90.61,
+    "0.445": 91.19
+   }
+  },
+  "In2.Cu": {
+   "all_delivered_gaps_mm": [
+    0.295,
+    0.345,
+    0.372,
+    0.376,
+    0.378,
+    0.388,
+    0.392,
+    0.395,
+    0.445
+   ],
+   "er": 3.99,
+   "gap_key": "b(In1-In3)",
+   "material": "core 0.36 x2 (sym.)",
+   "var_mm": 0.72,
+   "within_10pct": {
+    "0.295": true,
+    "0.345": true,
+    "0.372": true,
+    "0.376": true,
+    "0.378": true,
+    "0.388": true,
+    "0.392": true,
+    "0.395": true,
+    "0.445": true
+   },
+   "zdiff_ohm": {
+    "0.295": 82.05,
+    "0.345": 84.58,
+    "0.372": 85.88,
+    "0.376": 86.07,
+    "0.378": 86.16,
+    "0.388": 86.63,
+    "0.392": 86.82,
+    "0.395": 86.95,
+    "0.445": 89.17
+   }
+  },
+  "In6.Cu": {
+   "all_delivered_gaps_mm": [
+    0.295,
+    0.345,
+    0.372,
+    0.376,
+    0.378,
+    0.388,
+    0.392,
+    0.395,
+    0.445
+   ],
+   "er": 4.1,
+   "gap_key": "d(In5-In6)",
+   "material": "3313*1 (0.0994mm)",
+   "var_mm": 0.0994,
+   "within_10pct": {
+    "0.295": true,
+    "0.345": true,
+    "0.372": true,
+    "0.376": true,
+    "0.378": true,
+    "0.388": true,
+    "0.392": true,
+    "0.395": true,
+    "0.445": true
+   },
+   "zdiff_ohm": {
+    "0.295": 85.49,
+    "0.345": 86.43,
+    "0.372": 86.78,
+    "0.376": 86.82,
+    "0.378": 86.84,
+    "0.388": 86.94,
+    "0.392": 86.98,
+    "0.395": 87.01,
+    "0.445": 87.36
+   }
+  }
+ },
+ "ruling": {
+  "R0": "单 (w,gap) 跨层通用不成立：0.205 是 **F.Cu 微带**解，套到 In2 带状线会低 10–25%。",
+  "R1_build_requirement": "8L 叠层要求（L2 下达）：**d(F.Cu–In1.Cu) = 0.1164mm（JLC 2116×1，Er 4.16）；d(In5.Cu–In6.Cu) = 0.0994mm（JLC 3313×1，Er 4.10）**（两者带内分别见 requirement.var_band_mm，差异源于外/内层铜厚 1oz vs 0.5oz）；**b(In1.Cu–In3.Cu) = 0.70–0.75mm（目标 0.72，对称 d(In1–In2)=d(In2–In3)=0.36 core）**；余隙 d(In3–In4)/d(In4–In5)≈0.1528（1080×2）、d(In6–B) 为自由余隙按 1.6mm 闭合（见 thickness_closure_example）。",
+  "R2_fallback": "若板厂标准 8L 无法给出 b ≥ 0.582（±10% 下限）⇒ In2 线宽须按 w*(b) 重导（见 fallback_w_table）⇒ 触发 W3/L4/L5 re-open（L2 授权；变更单 + 版本 bump）。",
+  "R3_unreferenced": "B.Cu 参考层为 In6（信号）⇒ 判 **B.Cu = 非阻抗控制层**（低速/边带/铺铜）；In6 阻抗关键段下方 B.Cu 不得并行跨铺铜/走线（否则单参考假设失效）。",
+  "R4_eco4": "SPEC ECO rev-4 内容：stackup 8L 逐层介质表 + **分层阻抗几何**（F/In2/In6 各层口径）+ `p_gap` 语义 = **下限**（DRC clearance 0.175）而几何真源 = 交付 (0.205, 0.295)；走廊步距 1.2 与交付网格一致（CO-54 F3）。",
+  "R5_closure": "CO-53/CO-54 的**输入缺口取消**：不再索取板厂表，改为下达本要求 + 板厂券终判（SPEC coupon_required=true）。"
+ },
+ "schema": 1,
+ "spec_datum_check": {
+  "claimed": 85.1,
+  "er": 4.3,
+  "h_mm": 0.127,
+  "model_zdiff_ohm": 85.05,
+  "s_mm": 0.175,
+  "t_mm": 0.035,
+  "w_mm": 0.205
+ },
+ "thickness_closure_example": {
+  "copper_mm": 0.175,
+  "delta_mm": 0.0,
+  "dielectric_mm": 1.425,
+  "materials": {
+   "d(F-In1)": 0.1164,
+   "d(In1-In2)": 0.36,
+   "d(In2-In3)": 0.36,
+   "d(In3-In4)": 0.1528,
+   "d(In4-In5)": 0.1528,
+   "d(In5-In6)": 0.0994,
+   "d(In6-B)": 0.1836
+  },
+  "ok": true,
+  "target_mm": 1.6,
+  "total_mm": 1.6
+ },
+ "verdict_if_spec_6L_like": {
+  "B.Cu": {
+   "conform": null,
+   "note": "参考层为信号层（In6），无平面参考 ⇒ 非阻抗控制层",
+   "status": "NOT_CONTROLLED_UNREFERENCED"
+  },
+  "F.Cu": {
+   "er": 4.16,
+   "kind": "microstrip",
+   "pct_vs_85": {
+    "0.295": 10.2,
+    "0.395": 13.4
+   },
+   "var_mm": 0.127,
+   "zdiff_ohm": {
+    "0.295": 93.64,
+    "0.395": 96.35
+   }
+  },
+  "In2.Cu": {
+   "er": 3.99,
+   "kind": "stripline",
+   "pct_vs_85": {
+    "0.295": -9.1,
+    "0.395": -3.3
+   },
+   "var_mm": 0.599,
+   "zdiff_ohm": {
+    "0.295": 77.3,
+    "0.395": 82.19
+   }
+  },
+  "In6.Cu": {
+   "er": 4.16,
+   "kind": "microstrip",
+   "pct_vs_85": {
+    "0.295": 17.7,
+    "0.395": 21.1
+   },
+   "var_mm": 0.127,
+   "zdiff_ohm": {
+    "0.295": 100.08,
+    "0.395": 102.97
+   }
+  }
+ }
+}
