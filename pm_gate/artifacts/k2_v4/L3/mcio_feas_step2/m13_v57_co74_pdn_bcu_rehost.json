@@ -1,0 +1,68 @@
+{
+ "artifact": "m13_v57_co74_pdn_bcu_rehost",
+ "changed_keys": [
+  "/pd/bcu_power_copper_policy (added)",
+  "/pd/zone_defs/ecn_pending_items (list changed)",
+  "/pd/zone_defs/power_zones (list changed)"
+ ],
+ "geometry_invariance_expected": true,
+ "l2_invariant": {
+  "layers": 8,
+  "planes": 4,
+  "power_domains": [
+   "P3V3",
+   "P3V3_AUX",
+   "MCU_VDD"
+  ],
+  "power_plane_layer": "In4.Cu",
+  "signal_layers": 4
+ },
+ "nature": "L2 PDN：B.Cu 电力铜退役 + In4 承载；CO-72-PDN-1 归口 L1->L2",
+ "probes": {
+  "P1_engine_has_no_In6_literal": true,
+  "P1_engine_palette_excl_In4": true,
+  "P2_board_In4_segments_zero": true,
+  "P2_board_sha": true,
+  "P3_engine_ignores_ecn_pending": true,
+  "P3_engine_ignores_power_zones": true,
+  "segment_layer_hist": {
+   "B.Cu": 39,
+   "F.Cu": 174,
+   "In2.Cu": 106,
+   "In5.Cu": 2204
+  }
+ },
+ "redline": "原件未动；零几何/阈值改动；阈值未放宽；历史件不触碰；无 while/坐标搜索。",
+ "rehosted": [
+  {
+   "index": 2,
+   "retired_keys": [
+    "retired_polygons_bcu"
+   ],
+   "zone": "P3V3_BCU_BRIDGE"
+  },
+  {
+   "index": 3,
+   "retired_keys": [
+    "retired_in6_segments_bcu",
+    "retired_polygons_bcu"
+   ],
+   "zone": "P3V3_AUX_BCU_BRIDGE"
+  },
+  {
+   "index": 4,
+   "retired_keys": [
+    "retired_polygons_bcu",
+    "retired_segments_bcu"
+   ],
+   "zone": "MCU_VDD_BCU_RESISTORS"
+  }
+ ],
+ "retired_geometry_preserved": true,
+ "revision": "CO-74.1",
+ "schema": 1,
+ "spec_rev7_sha16": "a15ffcd104d82f43",
+ "spec_rev7_sha16_after": "a15ffcd104d82f43",
+ "spec_rev8_sha16": "3ec8e35e676cf89d",
+ "unexpected_changes": []
+}

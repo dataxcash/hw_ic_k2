@@ -1,0 +1,73 @@
+{
+ "artifact": "m13_v57_co74_chain",
+ "gates": {
+  "G4": {
+   "crossings": null,
+   "drawing_sha16": "918cc528e4a81467",
+   "pages": 34,
+   "revision": "W3-CN.41",
+   "verdict": "FEASIBLE_ALL"
+  },
+  "G5": {
+   "frozen": null,
+   "method_gates": null,
+   "verdict": "PASS"
+  },
+  "G6": {
+   "board_sha16": "0e636a67c1472462",
+   "checks": {
+    "L4-A": true,
+    "L4-B": true,
+    "L4-C": true,
+    "L4-D": true,
+    "L4-E": true,
+    "L4-F": true
+   },
+   "n_nets": 68,
+   "n_segments": 2523,
+   "n_vias": 252,
+   "verdict": "PASS"
+  },
+  "G7": {
+   "dfm_new_total": 0,
+   "dfm_verdict": "PASS",
+   "fab_ok": true,
+   "in_scope_unconnected": 0,
+   "pi_plane_layers_reserved": [
+    "In1.Cu",
+    "In3.Cu",
+    "In4.Cu",
+    "In6.Cu"
+   ],
+   "si_skew_max": 0.13,
+   "si_skew_ok": true,
+   "si_skew_pages": 34,
+   "si_verdict": "PASS"
+  }
+ },
+ "inputs": {
+  "layer_intent": "05009687a3f01583",
+  "spec_rev8_sha16": "3ec8e35e676cf89d"
+ },
+ "invariance": {
+  "all_geometry_identical": true,
+  "board_identical": true,
+  "board_sha16": "0e636a67c1472462",
+  "differing_top_level_keys": [
+   "frozen_sha_check",
+   "inputs_sha"
+  ],
+  "geometry_key_hashes": {
+   "decision_contract": "c0e018ec4102fa72",
+   "layers": "db2ee692c03204da",
+   "pages": "e659edaa6608f3d2",
+   "route_geometry": "d39becad4f51f3af"
+  },
+  "reference_git": "46e30e5 (CO-73)",
+  "reference_rev7_drawing_sha16": "3cc123056a7319ff"
+ },
+ "nature": "L2 PDN：SPEC rev-8 下全链重基线（G4..G7）",
+ "redline": "四冻结源未动；阈值未放宽；零几何改动（几何键逐字节同）；while=0/零坐标搜索。",
+ "revision": "CO-74.1",
+ "schema": 1
+}
