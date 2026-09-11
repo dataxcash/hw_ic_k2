@@ -21,11 +21,14 @@ W = importlib.util.module_from_spec(_s); _s.loader.exec_module(W)
 
 J = {k: json.load(v.open()) for k, v in W.F.items() if v.suffix == ".json"}
 FACTS = W.page_facts(J["manifest"], J["lane_frame"])
-FRS = W.frames_of(FACTS); LANES = W.r2_lanes(FRS, FACTS)
+FRS = W.frames_of(FACTS)
+W.STEP = float(__import__("os").environ.get("CO10_STEP", W.STEP))
+LANES = W.r2_lanes(FRS, FACTS)
 PADF = json.loads((SPEC / "m13_v57_co09_pad_field.json").read_text())
 PAIR_DOMAIN = json.loads((SPEC / "m13_v57_f13_r1_pair_coupling_v1_4.json").read_text())["pages"]
 
 VIA_R, CLEAR, ESC, WID = 0.175, 0.175, 0.075, 0.205
+YWIN = 0.7           # via1 只允许落在 pad_y ± 0.7 内（保 up/dn band 隔离）
 TT = WID + CLEAR; TT_E = WID + ESC
 VT = VIA_R + CLEAR + WID / 2; VT_E = VIA_R + ESC + WID / 2
 VV = 2 * VIA_R + CLEAR; TOL = 1e-9
@@ -325,6 +328,7 @@ def probe(rule="d3", order="engine", verbose=False):
         for r in rows:
             px, nx, py, ny, dd = (float(r[0]), float(r[1]), float(r[2]), float(r[3]), float(r[4]))
             if dd < VV - TOL or abs(px - nx) < 0.38 - TOL: continue
+            if abs(py - f["pad"]["P"][1]) > YWIN or abs(ny - f["pad"]["N"][1]) > YWIN: continue
             b = build(f, px, py, nx, ny)
             if b is None: continue
             err = check(*b, st)
