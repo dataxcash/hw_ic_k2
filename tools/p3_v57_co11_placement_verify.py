@@ -6,11 +6,19 @@
 覆盖：via-via / via-track / track-track（全层）/ via-pad / track-pad（豁免本页 4 pad）。
 只读。"""
 from __future__ import annotations
-import json, sys
+import json, os, sys
 from pathlib import Path
 import numpy as np
 
 VV, VT, VTE, TT, TTE, ESC, TOL = 0.525, 0.4525, 0.3525, 0.38, 0.28, 0.075, 1e-9
+# CO-25（D3b 判据修正，**opt-in**）：SPEC `escape_transition_zone.escape_clearance_mm=0.075` 是**铜距**下限。
+#   本复核器 v1 的 `pad_gap_pt/seg_pad_gap` 返回的是**中心距**，却直接与 ESC 比较 ⇒ 少减 width/2(0.1025)/via_r(0.175)，判据被放宽。
+#   `CO11_PAD_UNITS=copper` 时改为铜距口径（默认 `centerline` = 旧行为，保 W3-CN.37/ALLOC.4 证据可复现）。
+PAD_UNITS = os.environ.get("CO11_PAD_UNITS", "centerline")
+TRACK_HALF = 0.205 / 2.0      # PCIe85 线宽 0.205
+VIA_R = 0.35 / 2.0            # via dia 0.35
+PAD_CENTER_THR_TRACK = ESC + TRACK_HALF   # 铜距 ESC ⇔ 中心距 ESC+width/2
+PAD_CENTER_THR_VIA = ESC + VIA_R          # 铜距 ESC ⇔ 中心距 ESC+via_r
 LI = {"B.Cu": 0, "In2.Cu": 1, "In6.Cu": 2, "F.Cu": 3}
 
 
@@ -49,6 +57,45 @@ def seg_pad_gap(a, b, pads, exempt):
             ex = max(abs(qx - x) - hx, 0.0); ey = max(abs(qy - y) - hy, 0.0)
             d = float(np.hypot(ex, ey))
         g = min(g, d)
+    return g
+
+
+def _orient(ax, ay, bx, by, cx, cy):
+    return (bx - ax) * (cy - ay) - (by - ay) * (cx - ax)
+
+
+def seg_cross(a, b, c, d):
+    o1 = _orient(a[0], a[1], b[0], b[1], c[0], c[1]); o2 = _orient(a[0], a[1], b[0], b[1], d[0], d[1])
+    o3 = _orient(c[0], c[1], d[0], d[1], a[0], a[1]); o4 = _orient(c[0], c[1], d[0], d[1], b[0], b[1])
+    return o1 * o2 < -1e-18 and o3 * o4 < -1e-18
+
+
+def _pt_in_rect(px, py, x, y, hx, hy):
+    return abs(px - x) <= hx + 1e-12 and abs(py - y) <= hy + 1e-12
+
+
+def seg_rect_gap(a, b, x, y, hx, hy, circ=False, r=0.0):
+    """CO-25: 线段到 pad 的**真**最短距离（旧 seg_pad_gap 用 pad 中心投影近似，**高估**净距 ⇒ 假阴性）。"""
+    if circ:
+        return max(pt_seg(x, y, a[0], a[1], b[0], b[1]) - r, 0.0)
+    if _pt_in_rect(a[0], a[1], x, y, hx, hy) or _pt_in_rect(b[0], b[1], x, y, hx, hy):
+        return 0.0
+    cs = [(x - hx, y - hy), (x + hx, y - hy), (x + hx, y + hy), (x - hx, y + hy)]
+    g = 9e9
+    for i in range(4):
+        c, d = cs[i], cs[(i + 1) % 4]
+        if seg_cross(a, b, c, d):
+            return 0.0
+        g = min(g, seg_seg(a, b, c, d))
+    return g
+
+
+def seg_pad_gap_true(a, b, pads, exempt):
+    g = 9e9
+    for (x, y, hx, hy, r, circ, ref, pn) in pads:
+        if (round(x, 2), round(y, 2)) in exempt:
+            continue
+        g = min(g, seg_rect_gap(a, b, x, y, hx, hy, circ, r))
     return g
 
 
@@ -144,18 +191,30 @@ def main():
                 bad.append(("tt", li, pi, poli, pj, polj, round(d, 4)))
     # via-pad / track-pad
     for (pi, x, y, pol, ls) in vias:
+        if "F.Cu" not in ls:
+            continue                                       # CO-25: pad 在 F.Cu（SMD）；埋孔(In2/In6)与 pad 无共层，不构成铜冲突
         g = pad_gap_pt(x, y, pads, own[pi])
-        if g < ESC - TOL:
-            bad.append(("vp", pi, pol, round(g, 4)))
+        _thr = PAD_CENTER_THR_VIA if PAD_UNITS == "copper" else ESC
+        if g < _thr - TOL:
+            bad.append(("vp", pi, pol, round(g - (VIA_R if PAD_UNITS == "copper" else 0.0), 4)))
     for (pi, lay, x1, y1, x2, y2, pa, pol) in segs:
         if lay != "F.Cu":
             continue                                       # pad 在 F.Cu；内层可穿行于 pad 之下
-        g = seg_pad_gap((x1, y1), (x2, y2), pads, own[pi])
-        if g < ESC - TOL:
-            bad.append(("sp", pi, pol, lay, round(g, 4)))
+        # CO-25: copper 模式仅豁免「本段落点的自有 pad + 芯片 pad」；否则同页对侧极性 pad 的 P/N 侵入会被掩盖
+        _ex = own[pi]
+        if PAD_UNITS == "copper":
+            _g = G[pi]
+            _ex = {(round(_g["pad"]["P"][0], 2), round(_g["pad"]["P"][1], 2)),
+                   (round(_g["pad"]["N"][0], 2), round(_g["pad"]["N"][1], 2)),
+                   (round(_g["conn"][pol][0], 2), round(_g["conn"][pol][1], 2))}
+        g = (seg_pad_gap_true if PAD_UNITS == "copper" else seg_pad_gap)((x1, y1), (x2, y2), pads, _ex)
+        _thr = PAD_CENTER_THR_TRACK if PAD_UNITS == "copper" else ESC
+        if g < _thr - TOL:
+            bad.append(("sp", pi, pol, lay, round(g - (TRACK_HALF if PAD_UNITS == "copper" else 0.0), 4)))
     res = {"artifact": "m13_v57_co11_placement_verification", "src": str(src),
            "n_vias": len(vias), "n_segs": len(segs), "n_pages": len(G),
-           "n_violations": len(bad), "verdict": "PASS" if not bad else "FAIL",
+           "n_violations": len(bad), "pad_units": PAD_UNITS, "escape_clearance_mm": ESC,
+           "verdict": "PASS" if not bad else "FAIL",
            "violations": bad[:40]}
     out = Path(sys.argv[2]) if len(sys.argv) > 2 else \
         Path("pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_co11_placement_verification.json")
