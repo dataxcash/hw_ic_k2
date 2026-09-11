@@ -21,6 +21,8 @@ REC = STEP2 / "m13_v57_l4_construction.json"
 SRC_PCB = K2 / "k2_v4.kicad_pcb"
 DST_PCB = K2 / "k2_v4.l4.kicad_pcb"
 TOL = 1e-6
+PHYS = ["F.Cu", "In1.Cu", "In2.Cu", "In3.Cu", "In4.Cu", "B.Cu"]
+LIDX = {n: i for i, n in enumerate(PHYS)}
 
 
 def sha(p): return hashlib.sha256(Path(p).read_bytes()).hexdigest()
@@ -32,7 +34,8 @@ def collapse(nodes):
     for x, y, L in nodes[1:]:
         if abs(x - pts[-1][0]) < 1e-9 and abs(y - pts[-1][1]) < 1e-9:
             if L != cur:
-                vias.append([x, y]); cur = L
+                lo, hi = sorted((cur, L), key=lambda n: LIDX[n])
+                vias.append({"xy": [x, y], "layers": [lo, hi]}); cur = L
             continue
         seg.append(cur); pts.append([x, y]); cur = L
     return pts, seg, vias
@@ -74,9 +77,10 @@ def main() -> int:
         b = sorted(key(s) for s in rec["segments"].get(net, []))
         if a != b:
             viol.append({"V": "L4-B", "net": net, "exp": len(a), "got": len(b)})
+    def vkey(v): return (tuple(round(q, 5) for q in v["xy"]), tuple(v["layers"]))
     for net in set(exp_vias) | set(rec["vias"]):
-        a = sorted(tuple(round(v, 5) for v in p) for p in exp_vias.get(net, []))
-        b = sorted(tuple(round(v, 5) for v in p) for p in rec["vias"].get(net, []))
+        a = sorted(vkey(v) for v in exp_vias.get(net, []))
+        b = sorted(vkey(v) for v in rec["vias"].get(net, []))
         if a != b:
             viol.append({"V": "L4-B-via", "net": net, "exp": len(a), "got": len(b)})
 
@@ -95,12 +99,9 @@ def main() -> int:
         if others or len(ends) not in (0, 2):
             viol.append({"V": "L4-C", "net": net, "ends": len(ends), "odd": len(others)})
     for net, vs in rec["vias"].items():
-        vs6 = {(round(v[0], 5), round(v[1], 5)) for v in vs}
-        for s in rec["segments"].get(net, []):
-            pass
         # every via must sit on >=2 segments of different layers
         for v in vs:
-            p = (round(v[0], 5), round(v[1], 5))
+            p = (round(v["xy"][0], 5), round(v["xy"][1], 5))
             lyr = {s["layer"] for s in rec["segments"].get(net, [])
                    if (round(s["a"][0], 5), round(s["a"][1], 5)) == p or (round(s["b"][0], 5), round(s["b"][1], 5)) == p}
             if len(lyr) < 2:
@@ -155,9 +156,27 @@ def main() -> int:
                 g2 = sorted((l, tuple(sorted((p, q)))) for l, p, q in g)
                 if e != g2:
                     miss += 1
-            board_ok = (miss == 0)
+            # vias: position + physical layer span
+            gv = {}
+            for t2 in b.GetTracks():
+                if t2.GetClass() == "PCB_VIA":
+                    ls = t2.GetLayerSet()
+                    cu = [i for i in range(pcbnew.PCB_LAYER_ID_COUNT)
+                          if ls.Contains(i) and b.GetLayerName(i) in LIDX]
+                    span = (min(cu, key=lambda i: LIDX[b.GetLayerName(i)]),
+                            max(cu, key=lambda i: LIDX[b.GetLayerName(i)]))
+                    spann = (b.GetLayerName(span[0]), b.GetLayerName(span[1]))
+                    gv.setdefault(t2.GetNetname(), []).append(
+                        ((round(pcbnew.ToMM(t2.GetPosition().x), 5), round(pcbnew.ToMM(t2.GetPosition().y), 5)), spann))
+            vmiss = 0
+            for net, vs in rec["vias"].items():
+                a = sorted(((round(v["xy"][0], 5), round(v["xy"][1], 5)), tuple(v["layers"])) for v in vs)
+                c = sorted(gv.get(net, []))
+                if a != c:
+                    vmiss += 1
+            board_ok = (miss == 0 and vmiss == 0)
             if not board_ok:
-                viol.append({"V": "L4-E", "why": "board tracks != record", "nets_mismatch": miss})
+                viol.append({"V": "L4-E", "why": "board != record", "nets_mismatch": miss, "via_nets_mismatch": vmiss})
         except Exception as ex:                                          # noqa: BLE001
             viol.append({"V": "L4-E", "why": "pcbnew load failed", "err": str(ex)[:120]})
     else:

@@ -21,7 +21,8 @@ MANIFEST = STEP2 / "m13_v57_s1_page_manifest.json"
 OUT = STEP2 / "m13_v57_l4_construction.json"
 SRC_PCB = K2 / "k2_v4.kicad_pcb"
 DST_PCB = K2 / "k2_v4.l4.kicad_pcb"
-LAYER_SET = ["F.Cu", "In2.Cu", "B.Cu"]
+PHYS = ["F.Cu", "In1.Cu", "In2.Cu", "In3.Cu", "In4.Cu", "B.Cu"]   # top->bottom
+LIDX = {n: i for i, n in enumerate(PHYS)}
 
 
 def sha(p: Path) -> str:
@@ -29,13 +30,15 @@ def sha(p: Path) -> str:
 
 
 def collapse(nodes):
-    """W3 per-point-layer node list -> (points, seg_layers, vias)（层变点=过孔）。"""
+    """W3 per-point-layer node list -> (points, seg_layers, vias)。
+    vias[i] = {"xy":[x,y], "layers":[lo,hi]}（层变点；按物理层序 lo<hi）。"""
     pts = [[nodes[0][0], nodes[0][1]]]; seg = []; vias = []
     cur = nodes[0][2]
     for x, y, L in nodes[1:]:
         if abs(x - pts[-1][0]) < 1e-9 and abs(y - pts[-1][1]) < 1e-9:
             if L != cur:
-                vias.append([x, y]); cur = L
+                lo, hi = sorted((cur, L), key=lambda n: LIDX[n])
+                vias.append({"xy": [x, y], "layers": [lo, hi]}); cur = L
             continue
         seg.append(cur); pts.append([x, y]); cur = L
     return pts, seg, vias
@@ -73,7 +76,8 @@ def build(art, manifest):
 def apply_board(rec, src: Path, dst: Path):
     import pcbnew                                                       # noqa: E402
     b = pcbnew.LoadBoard(str(src))
-    LM = {"F.Cu": pcbnew.F_Cu, "In2.Cu": pcbnew.In2_Cu, "B.Cu": pcbnew.B_Cu}
+    LM = {"F.Cu": pcbnew.F_Cu, "In1.Cu": pcbnew.In1_Cu, "In2.Cu": pcbnew.In2_Cu,
+          "In3.Cu": pcbnew.In3_Cu, "In4.Cu": pcbnew.In4_Cu, "B.Cu": pcbnew.B_Cu}
     mm = pcbnew.FromMM
     vec = lambda x, y: pcbnew.VECTOR2I(mm(x), mm(y))                    # noqa: E731
     cache = {}
@@ -98,9 +102,14 @@ def apply_board(rec, src: Path, dst: Path):
             tr.SetLayer(LM[s["layer"]]); tr.SetNetCode(netcode(net)); b.Add(tr)
         for v in rec["vias"][net]:
             vi = pcbnew.PCB_VIA(b)
-            vi.SetPosition(vec(*v)); vi.SetDrill(mm(0.2)); vi.SetWidth(mm(0.35))
+            vi.SetPosition(vec(*v["xy"])); vi.SetDrill(mm(0.2)); vi.SetWidth(mm(0.35))
+            lo, hi = v["layers"]
+            i0, i1 = sorted((LIDX[lo], LIDX[hi]))
+            through = (i0 == 0 and i1 == len(PHYS) - 1)
+            vi.SetViaType(pcbnew.VIATYPE_THROUGH if through else pcbnew.VIATYPE_BLIND)
+            vi.SetLayerPair(LM[lo], LM[hi])
             ls = pcbnew.LSET()
-            for ln in ("F.Cu", "In2.Cu", "B.Cu"):
+            for ln in PHYS[i0:i1 + 1]:
                 ls.AddLayer(LM[ln])
             vi.SetLayerSet(ls); vi.SetNetCode(netcode(net)); b.Add(vi)
     pcbnew.SaveBoard(str(dst), b)
