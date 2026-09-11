@@ -35,6 +35,11 @@ if _WD:
     for _p, _v in LANES.items():
         if FACTS[_p]["corridor"] == "WEST_MCIO_TO_CHIP":
             _v["lane_y"] = W.fp(_v["lane_y"] - _WD)
+if __import__("os").environ.get("CO10_WORDER") == "upfirst":
+    _west = sorted([p for p in LANES if FACTS[p]["corridor"] == "WEST_MCIO_TO_CHIP"],
+                   key=lambda p: (FACTS[p]["band"] == "dn", LANES[p]["lane_index"]))
+    for _r, _p in enumerate(_west):
+        LANES[_p]["lane_y"] = W.fp(33.3 + _r * 1.46)
 _WS = float(__import__("os").environ.get("CO10_WSTEP", "0"))
 _WL = float(__import__("os").environ.get("CO10_WLO", "33.3"))
 if _WS:

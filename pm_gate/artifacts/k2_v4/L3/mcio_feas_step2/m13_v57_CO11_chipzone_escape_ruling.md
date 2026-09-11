@@ -58,3 +58,36 @@
 
 ## 6. 红线遵守
 只读探针；冻结四源原件未改；canonical `m13_v57_w3_joint_assignment.json`（W3-CN.30 `05f7bd10ab3b45b6`）未动；零坐标搜索；未放宽任何阈值（A-CN.9 vt 0.4525 / vv 0.525 / skew）；无 partial pass；无 sign-off。
+
+---
+
+## 7. 追加实测（第四轮）：**binding constraint 是 connector 侧 landing/stub，不是 chip 侧 lane**
+### 7.1 drop via 的 POL_OFF 偏移 ⇒ 避让阈值 0.775（非 0.525）
+`build` 中 lane 端 drop via 位于 `(lx, lane_y + pol_off)`（**含 POL_OFF**）⇒ 同一 `lx` 上，
+lane 与邻页 land via（`ll`）的净距须满足 `|lane_y − ll| ≥ vv + POL_OFF = 0.525 + 0.25 = 0.775`。
+- 原（未压缩）配置 J4-dn `lane=44.98` vs J3-dn `ll=44.2`：`0.78` **恰好** ≥ 0.775（余量 0.005）⇒ 现状本就贴边。
+- 压缩后 J4-dn `lane=42.294`（含 −0.25）vs J3-up `ll=42.0`：`0.294` ⇒ 冲突（§4 R1-b 实测）。
+
+### 7.2 闭式不可能性（connector 侧）
+以 `|lane_y − ll| ≥ 0.775` 重算：`ll∈{42.0, 44.2}` 的禁带为 `(41.225,42.775) ∪ (43.425,44.975)`
+（两带间仅 0.65mm < 单 lane 最小间距）⇒ 合并为 **3.75mm 连续禁带 `(41.225,44.975)`**。
+西侧 16 lane 须落在 `[33.3, 50.198]`（chip 侧约束）内、避开该 3.75mm 带 ⇒ 上下两段可用
+`7.925mm + 5.223mm`，须塞 16 lane（`STEP≥0.38` 理论可行但 lane 端 drop/land 与邻页 lane 的水平净距同时受约束）
+⇒ 实测穷举 `(LO,STEP)` 唯一候选 `LO=33.8/STEP=1.093`（lanes 41.451/42.544/43.637）仍 **29/32**（`vv 0.294–0.313`，§4 失败为 DN4/5/6）。
+
+### 7.3 FAN_DX 与 frame 重排均不足（负结果）
+| 手段 | 结果 | 根因 |
+|---|---|---|
+| `FAN_DX_J4=+0.6`（lx 偏置 0.6） | 29/32 | 不同页映射到**不同连接器 pad**（R3 gap 候选），`pad_x±0.3` 仍可撞同一 x（实测 DN4/J4 与 DN3/J3 的 lx 皆 55.0） |
+| frame 重排 `upfirst`（up 占 idx0–7） | **26/32（恶化）** | J4-up lane≤43.52 → connector stub 自 38.9/40.35/42.31 拉到 `ll=65.0`，**纵穿 J3 行/landing**（`vt2_placed ... ↔ DN*.N 0.0`） |
+
+### 7.4 结论（修正 §5 的实现顺序）
+1. **binding constraint = connector 侧 landing/stub 架构**（`ll=FAN_Y`、`lx=pad_x−0.3`、竖直 stub）。
+   lane 压缩/重排**单独不可能闭合**：任何把 lane 移到 J3 landing 带附近的方案都会在 connector 侧爆掉。
+2. ⇒ **R1 的正确形态**：**同时**重派生 (a) connector 侧 landing：`ll` 与 lane 端净距 ≥0.775、
+   `lx` **跨页全局唯一**（不依赖 R3 的 pad x 分配，或把 R3 分配一并重派生）、stub 改为**非竖直 breakout**
+   （如 CO-09 §4ter 的沿 pad 列竖段 / 或斜段）；(b) 西侧 lane y（可保留原 STEP，仅改映射或小幅压缩）。
+3. **R2（x-band 横移扇）不受 connector 侧约束**，是**风险更低的备选**：chip 侧把 up 竖段横移到 `x<82.9`
+   即消除 24 槽竞争，且不动 lane/connector ⇒ **建议 R2 优先**（须先证 16 条扇平面性与浅角净距，CO-09 §4-7）。
+4. 追加证据（版本化，只读）：`m13_v57_co11_worder_upfirst_probe_fan_engine.json`（26/32，负结果）、
+   `m13_v57_co11_wstep1093_wlo338_probe_fan_engine.json`（29/32）。
