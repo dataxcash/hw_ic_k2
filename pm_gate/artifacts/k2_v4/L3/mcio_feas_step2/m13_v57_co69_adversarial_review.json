@@ -1,0 +1,139 @@
+{
+ "artifact": "m13_v57_co69_adversarial_review",
+ "failed": [],
+ "nature": "执行者侧对抗证伪探针（独立重算；不替代项目「非执行者双路对抗评审」外部闸）",
+ "note": "L2_STRUCTURE_v2.0.md:137 要求重开层须重新过对抗评审；本件给出机器可判前置证据，外部（非执行者）双路评审仍为独立闸，须由 non-executor 完成方可宣称「评审闭合」。",
+ "probes": [
+  {
+   "desc": "layer/plane/domain invariance LID REV5 -> REV6",
+   "detail": {
+    "rev5": {
+     "layers": 8,
+     "nets": {
+      "GND": 3,
+      "p3v3": 1
+     },
+     "planes": 4
+    },
+    "rev6": {
+     "layers": 8,
+     "nets": {
+      "GND": 3,
+      "p3v3": 1
+     },
+     "planes": 4
+    }
+   },
+   "id": "A1",
+   "pass": true
+  },
+  {
+   "desc": "rev4->rev5: no numeric threshold changed (excl. L2-mandated impedance.per_layer geometry)",
+   "detail": {
+    "common_numeric_keys_checked": 95,
+    "drift": {},
+    "thresholds": {
+     "inter_pair_spacing_mm": [
+      0.875,
+      0.875
+     ],
+     "intra_pair_skew_mm": [
+      0.15,
+      0.15
+     ],
+     "p_gap": [
+      0.175,
+      0.175
+     ]
+    }
+   },
+   "id": "A2",
+   "pass": true
+  },
+  {
+   "desc": "dielectric+copper = 1.6000mm",
+   "detail": {
+    "copper": 0.175,
+    "dielectric": 1.425,
+    "total": 1.6
+   },
+   "id": "A3",
+   "pass": true
+  },
+  {
+   "desc": "per-layer Zdiff in 85+-10% at delivered pair centers {0.5,0.6}",
+   "detail": {
+    "bad": {},
+    "widths": {
+     "B.Cu": 0.205,
+     "F.Cu": 0.205,
+     "In2.Cu": 0.16,
+     "In5.Cu": 0.16
+    }
+   },
+   "id": "A4",
+   "pass": true
+  },
+  {
+   "desc": "engine has no In6.Cu literal; palette = F/In2/In5/B",
+   "detail": {
+    "in6_literal": 0,
+    "palette_ok": true
+   },
+   "id": "A5",
+   "pass": true
+  },
+  {
+   "desc": "L4 board PCIE track width == SPEC width_mm_by_layer",
+   "detail": {
+    "mismatch": {}
+   },
+   "id": "A6",
+   "pass": true
+  },
+  {
+   "desc": "four frozen sources 4/4 MATCH",
+   "detail": {
+    "SPEC_k2_v4.json": {
+     "match": true,
+     "sha16": "0bd52ed48e720b8c"
+    },
+    "drc_rules.json": {
+     "match": true,
+     "sha16": "0a459839e15960b8"
+    },
+    "k2_v4_8L.kicad_pcb": {
+     "match": true,
+     "sha16": "fb07d25ac426ff84"
+    },
+    "page_manifest": {
+     "match": true,
+     "sha16": "a8ef3ea8ecff99d7"
+    }
+   },
+   "id": "A7",
+   "pass": true
+  },
+  {
+   "desc": "independent electrical skew (from L4 construction) == SI record max",
+   "detail": {
+    "recomputed": 0.13,
+    "si_record": 0.13
+   },
+   "id": "A8",
+   "pass": true
+  },
+  {
+   "desc": "DFM new_total=0 and disappeared_total=0",
+   "detail": {
+    "disappeared_total": 0,
+    "new_total": 0
+   },
+   "id": "A9",
+   "pass": true
+  }
+ ],
+ "revision": "CO-69-AR.1",
+ "schema": 1,
+ "verdict": "PASS"
+}

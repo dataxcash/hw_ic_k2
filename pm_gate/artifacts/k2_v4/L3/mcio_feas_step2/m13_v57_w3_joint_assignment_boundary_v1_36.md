@@ -10,6 +10,7 @@
 > ② **CO-68** 修正 CO-66 铜厚口径（介质预算 1.425 = 1.6-0.175）⇒ 设计点 w_outer 0.205 / **w_inner 0.16**、闭合 1.6000（标准料 2116 / core 0.25）⇒ **LID REV6** `05009687a3f01583` + **SPEC rev-5** `1f351194b3e22b7e`；
 > ③ **CO-69** 引擎 bump（`LAYER_PALETTE`=F/In2/**In5**/B、In6→In5 全量、`CO16-ALLOC.7` `a765af4c9bf61e64`、rev W3-CN.41）+ **全链重导**（G4 `87ef07f280e4dffb` / G5 PASS / G6 板 `0e636a67c1472462` / G7 DFM new=0 + SI PASS）；
 > ④ **SI 判据升级**为**按层加权电气长度**（CO-62 §4）：升级前 max skew **0.9807** > 0.15 ⇒ FAIL（REFCLK1：P 全 F.Cu vs N F.Cu+In2 8.745mm）；**L2 等长整改**（补偿目标由物理长度改为电气长度）⇒ max **0.1300** ≤ 0.15 ⇒ **PASS**；物理量报告 max 1.1046mm（层补偿之预期；判据为电气/时延）。
+> ⑤ **对抗评审**（执行者侧独立证伪探针 A1..A9：不变量/阈值不变/闭合/阻抗/引擎无 In6/板按层线宽/冻结/独立重算等长/DFM）= **全 PASS** `m13_v57_co69_adversarial_review.json` `50ff390f2803f25d`；**非执行者双路对抗评审仍为外部闸**（L2_STRUCTURE_v2.0.md:137）。
 > 记录 `m13_v57_CO69_L2_option_a_chain.md` `d472f16e73a57f3e`。**注意**：`CO-60` 候选 `..._v6.json`（`2ebda54c…`）为走廊 1.580 实验件，**未触碰**。
 - `verdict = FEASIBLE_ALL`；`gate_status.failed = []`；`certificates = []`；`status` PASS。
 - **A-CN 全 PASS**：1d 32/32、1a 0 miss、1b 0、2a/2b 0、3a 72/72、3b/3c 0、4 交叉 0、5a keepout 0、
@@ -116,7 +117,8 @@ L4 板 `kicad-cli` 实跑：仅冻结基线 42 条 lib/silk，**铜层违规 0**
 `m13_v57_CO59_L2_residual_closure_and_interpair_target.md` `0fdb19fec39bf110` /
 `m13_v57_CO67_L2_redline_ruling.md` `c562419d70a41ab9` /
 `m13_v57_CO68_L2_option_a_execute.md` `17965908fd5d5635` /
-`m13_v57_CO69_L2_option_a_chain.md` `d472f16e73a57f3e`）已入库；**本件取代 v1.35**，v1.35 及以前保留不改。
+`m13_v57_CO69_L2_option_a_chain.md` `d472f16e73a57f3e` /
+`m13_v57_co69_adversarial_review.json` `50ff390f2803f25d`）已入库；**本件取代 v1.35**，v1.35 及以前保留不改。
 监理/tag 政策：`k2-v57-g7-l5-pass`（G7/L5 PASS）已 push；`git ls-remote` 核验 `^{}` → `b5afe47`。
 
 End of boundary v1.36.
