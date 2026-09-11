@@ -22,17 +22,18 @@
   }
  },
  "finding": {
-  "conclusion": "O1-③（放宽至 JLC 极限，甚至全局施加）**不足** ⇒ 失败非净距余量所致 ⇒ 依 owner 预设：**上报需 O1-①（加信号层）由 owner 复议**",
-  "result": {
-   "order_variants": {
-    "hash": "29/32",
-    "natural": "29/32",
-    "reverse": "29/32"
-   },
-   "r1": "29/32",
-   "same_layer": 29
+  "clean_baseline": {
+   "clearance_off": {
+    "r1": "32/32",
+    "same_layer": 0
+   }
   },
-  "test": "把上述 fab-limit 值施加后重跑净距感知引擎（比区域口径更宽松：全局施加）"
+  "conclusion": "放宽至 JLC 极限（甚至全局施加）仍 29/32，且基线干净（32/32）⇒ **O1-③ 不足** ⇒ 依 owner 预设：**上报 O1-①（加第 4 信号层）复议**",
+  "relief_applied": {
+   "r1": "29/32",
+   "same_layer": 28
+  },
+  "test": "以**canonical F-13 v1.2 域**（WIN2.5）为基，关闭净距 vs 施加 fab-limit 放宽"
  },
  "frozen_sources_touched": false,
  "outside_region": {

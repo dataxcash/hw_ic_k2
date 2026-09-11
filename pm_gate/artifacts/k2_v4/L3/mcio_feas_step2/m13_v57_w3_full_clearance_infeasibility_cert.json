@@ -145,6 +145,14 @@
     "r1": "29/32",
     "same_layer": 29
    }
+  },
+  {
+   "name": "P8 复测（canonical WIN2.5 域，基线干净）",
+   "note": "清除了 P7 的探针基线伪影：基线 32/32，放宽后仍 29/32 ⇒ O1-③ 不足确认，上报 O1-①",
+   "result": {
+    "clearance_off": "32/32 (same_layer 0)",
+    "relief_fablimit": "29/32 (same_layer 28)"
+   }
   }
  ],
  "probes_note": "已试拓扑/参数 6 组（P0..P6）全部无法同时满足完整净距套件与 R1 32/32；chip 区在 {F.Cu,In2,B.Cu} 内不存在冲突自由的『竖/横/横』三层分配 ⇒ O1 需 owner（第 4 层 或 放宽净距）。（构造域不可行，非全局数学证明）",
