@@ -1,0 +1,1004 @@
+{
+ "artifact": "m13_v57_co05b_joint_probe_result",
+ "conclusion": "joint (via,landing) derivation with paired local landing does NOT close O4: the via displacement required to balance |L_P-L_N| (|dv1x| ~ separation 4~10mm) breaks the planar fan (A-CN.4 crossings=5) and clearance (A-CN.1b via-via, A-CN.9 track/via). max skew 10.92mm. Addendum v3 refuted.",
+ "hypothesis": "CO-05 addendum v3: O4 closable by joint (via1 in verdict window, landing in F-8 legal gap, y_l in y_band) closed-form placement",
+ "observed": {
+  "certificates": [
+   {
+    "layer": "R1_5_chip_transition",
+    "observed": {
+     "crossings": 5,
+     "minimal_core": [
+      [
+       "PCIE_DN1/input#fcu_pad/N",
+       "PCIE_UP1/out_J2#fcu_pad/N"
+      ],
+      [
+       "PCIE_DN2/input#fcu_pad/P",
+       "PCIE_UP3/out_J2#fcu_pad/N"
+      ],
+      [
+       "PCIE_DN3/input#fcu_pad/N",
+       "PCIE_UP3/out_J2#fcu_pad/N"
+      ],
+      [
+       "PCIE_DN3/input#fcu_pad/P",
+       "PCIE_UP3/out_J2#fcu_pad/N"
+      ],
+      [
+       "PCIE_UP7/input#fcu_pad/N",
+       "PCIE_UP7/input#fcu_pad/P"
+      ]
+     ],
+     "note": "chip source rows shared across frames while R2 lane order forces frame blocks far apart in y"
+    },
+    "rule": "frame_monotone_fan_single_layer_straight_segment"
+   },
+   {
+    "layer": "R1_chip_escape_column",
+    "observed": [
+     [
+      "PCIE_UP6/input.N",
+      "PCIE_UP7/input.P",
+      0.335261
+     ]
+    ],
+    "rule": "x_lattice_snap_mutual_clearance"
+   },
+   {
+    "layer": "R1_5_chip_transition",
+    "observed": {
+     "sample_tt": [
+      [
+       "PCIE_DN1/input",
+       "PCIE_UP1/out_J2",
+       0.1774
+      ],
+      [
+       "PCIE_DN1/input",
+       "PCIE_UP1/out_J2",
+       0.091
+      ],
+      [
+       "PCIE_DN3/input",
+       "PCIE_UP3/out_J2",
+       0.2587
+      ],
+      [
+       "PCIE_DN3/input",
+       "PCIE_UP3/out_J2",
+       0.1774
+      ]
+     ],
+     "viol_track_track": 8,
+     "viol_via_track": 74,
+     "viol_via_via": 3
+    },
+    "rule": "complete_clearance_suite (L5-exposed)"
+   }
+  ],
+  "crossings_by_class": {
+   "r1_5": 5,
+   "stub": 0
+  },
+  "failed_predicates": [
+   "A-CN.1b",
+   "A-CN.4",
+   "A-CN.9"
+  ],
+  "max_intra_pair_skew_mm": 10.9145,
+  "n_pages_skew_gt_0p15": 24,
+  "overlaps_by_class": {
+   "r1_5": 0,
+   "stub": 0
+  },
+  "verdict": "UPSTREAM_CHANGE_REQUEST"
+ },
+ "per_page_skew_mm": [
+  {
+   "page": "PCIE_DN0/input",
+   "skew_mm": 0.0003
+  },
+  {
+   "page": "PCIE_DN0/out_MCIO",
+   "skew_mm": 0.4098
+  },
+  {
+   "page": "PCIE_DN1/input",
+   "skew_mm": 0.8899
+  },
+  {
+   "page": "PCIE_DN1/out_MCIO",
+   "skew_mm": 1.0225
+  },
+  {
+   "page": "PCIE_DN2/input",
+   "skew_mm": 1.0499
+  },
+  {
+   "page": "PCIE_DN2/out_MCIO",
+   "skew_mm": 0.3396
+  },
+  {
+   "page": "PCIE_DN3/input",
+   "skew_mm": 5.0598
+  },
+  {
+   "page": "PCIE_DN3/out_MCIO",
+   "skew_mm": 0.0029
+  },
+  {
+   "page": "PCIE_DN4/input",
+   "skew_mm": 5.2198
+  },
+  {
+   "page": "PCIE_DN4/out_MCIO",
+   "skew_mm": 0.0052
+  },
+  {
+   "page": "PCIE_DN5/input",
+   "skew_mm": 10.9145
+  },
+  {
+   "page": "PCIE_DN5/out_MCIO",
+   "skew_mm": 0.2535
+  },
+  {
+   "page": "PCIE_DN6/input",
+   "skew_mm": 8.4578
+  },
+  {
+   "page": "PCIE_DN6/out_MCIO",
+   "skew_mm": 1.2234
+  },
+  {
+   "page": "PCIE_DN7/input",
+   "skew_mm": 9.0056
+  },
+  {
+   "page": "PCIE_DN7/out_MCIO",
+   "skew_mm": 0.0046
+  },
+  {
+   "page": "PCIE_UP0/input",
+   "skew_mm": 2.3218
+  },
+  {
+   "page": "PCIE_UP0/out_J2",
+   "skew_mm": 0.0003
+  },
+  {
+   "page": "PCIE_UP1/input",
+   "skew_mm": 2.3999
+  },
+  {
+   "page": "PCIE_UP1/out_J2",
+   "skew_mm": 3.6223
+  },
+  {
+   "page": "PCIE_UP2/input",
+   "skew_mm": 0.0086
+  },
+  {
+   "page": "PCIE_UP2/out_J2",
+   "skew_mm": 5.6715
+  },
+  {
+   "page": "PCIE_UP3/input",
+   "skew_mm": 0.0
+  },
+  {
+   "page": "PCIE_UP3/out_J2",
+   "skew_mm": 5.1423
+  },
+  {
+   "page": "PCIE_UP4/input",
+   "skew_mm": 1.325
+  },
+  {
+   "page": "PCIE_UP4/out_J2",
+   "skew_mm": 5.7154
+  },
+  {
+   "page": "PCIE_UP5/input",
+   "skew_mm": 0.0628
+  },
+  {
+   "page": "PCIE_UP5/out_J2",
+   "skew_mm": 8.2323
+  },
+  {
+   "page": "PCIE_UP6/input",
+   "skew_mm": 0.9741
+  },
+  {
+   "page": "PCIE_UP6/out_J2",
+   "skew_mm": 7.3162
+  },
+  {
+   "page": "PCIE_UP7/input",
+   "skew_mm": 0.9274
+  },
+  {
+   "page": "PCIE_UP7/out_J2",
+   "skew_mm": 8.6482
+  }
+ ],
+ "probe_run": {
+  "engine_rev": "W3-CN.28 (pair-aware r3 + skew-aware r1 _key; prototype, REVERTED)",
+  "mode": "single pre-registered run; outputs to /tmp/opencode only; canonical untouched"
+ },
+ "r3_by_pol": {
+  "PCIE_DN0/input": {
+   "N": {
+    "column_x": 136.0,
+    "landing": [
+     136.0,
+     54.05
+    ],
+    "pad": [
+     135.0,
+     54.3
+    ]
+   },
+   "P": {
+    "column_x": 131.65,
+    "landing": [
+     131.65,
+     54.05
+    ],
+    "pad": [
+     132.65,
+     54.3
+    ]
+   }
+  },
+  "PCIE_DN0/out_MCIO": {
+   "N": {
+    "column_x": 63.2,
+    "landing": [
+     63.2,
+     45.55
+    ],
+    "pad": [
+     63.7,
+     45.75
+    ]
+   },
+   "P": {
+    "column_x": 64.4,
+    "landing": [
+     64.4,
+     45.55
+    ],
+    "pad": [
+     64.3,
+     45.75
+    ]
+   }
+  },
+  "PCIE_DN1/input": {
+   "N": {
+    "column_x": 131.27,
+    "landing": [
+     131.27,
+     55.25
+    ],
+    "pad": [
+     132.65,
+     55.5
+    ]
+   },
+   "P": {
+    "column_x": 136.38,
+    "landing": [
+     136.38,
+     54.65
+    ],
+    "pad": [
+     135.0,
+     54.9
+    ]
+   }
+  },
+  "PCIE_DN1/out_MCIO": {
+   "N": {
+    "column_x": 60.8,
+    "landing": [
+     60.8,
+     45.55
+    ],
+    "pad": [
+     61.9,
+     45.75
+    ]
+   },
+   "P": {
+    "column_x": 62.0,
+    "landing": [
+     62.0,
+     45.55
+    ],
+    "pad": [
+     62.5,
+     45.75
+    ]
+   }
+  },
+  "PCIE_DN2/input": {
+   "N": {
+    "column_x": 136.76,
+    "landing": [
+     136.76,
+     57.65
+    ],
+    "pad": [
+     135.0,
+     57.9
+    ]
+   },
+   "P": {
+    "column_x": 130.89,
+    "landing": [
+     130.89,
+     57.65
+    ],
+    "pad": [
+     132.65,
+     57.9
+    ]
+   }
+  },
+  "PCIE_DN2/out_MCIO": {
+   "N": {
+    "column_x": 57.2,
+    "landing": [
+     57.2,
+     45.55
+    ],
+    "pad": [
+     56.5,
+     45.75
+    ]
+   },
+   "P": {
+    "column_x": 58.4,
+    "landing": [
+     58.4,
+     45.55
+    ],
+    "pad": [
+     57.1,
+     45.75
+    ]
+   }
+  },
+  "PCIE_DN3/input": {
+   "N": {
+    "column_x": 130.51,
+    "landing": [
+     130.51,
+     58.85
+    ],
+    "pad": [
+     132.65,
+     59.1
+    ]
+   },
+   "P": {
+    "column_x": 137.14,
+    "landing": [
+     137.14,
+     58.25
+    ],
+    "pad": [
+     135.0,
+     58.5
+    ]
+   }
+  },
+  "PCIE_DN3/out_MCIO": {
+   "N": {
+    "column_x": 54.8,
+    "landing": [
+     54.8,
+     45.55
+    ],
+    "pad": [
+     54.7,
+     45.75
+    ]
+   },
+   "P": {
+    "column_x": 56.0,
+    "landing": [
+     56.0,
+     45.55
+    ],
+    "pad": [
+     55.3,
+     45.75
+    ]
+   }
+  },
+  "PCIE_DN4/input": {
+   "N": {
+    "column_x": 137.52,
+    "landing": [
+     137.52,
+     59.45
+    ],
+    "pad": [
+     135.0,
+     59.7
+    ]
+   },
+   "P": {
+    "column_x": 130.13,
+    "landing": [
+     130.13,
+     59.45
+    ],
+    "pad": [
+     132.65,
+     59.7
+    ]
+   }
+  },
+  "PCIE_DN4/out_MCIO": {
+   "N": {
+    "column_x": 55.4,
+    "landing": [
+     55.4,
+     61.05
+    ],
+    "pad": [
+     55.3,
+     61.45
+    ]
+   },
+   "P": {
+    "column_x": 54.2,
+    "landing": [
+     54.2,
+     61.05
+    ],
+    "pad": [
+     54.7,
+     61.45
+    ]
+   }
+  },
+  "PCIE_DN5/input": {
+   "N": {
+    "column_x": 129.75,
+    "landing": [
+     129.75,
+     60.65
+    ],
+    "pad": [
+     132.65,
+     60.9
+    ]
+   },
+   "P": {
+    "column_x": 137.9,
+    "landing": [
+     137.9,
+     60.05
+    ],
+    "pad": [
+     135.0,
+     60.3
+    ]
+   }
+  },
+  "PCIE_DN5/out_MCIO": {
+   "N": {
+    "column_x": 57.8,
+    "landing": [
+     57.8,
+     61.05
+    ],
+    "pad": [
+     57.1,
+     61.45
+    ]
+   },
+   "P": {
+    "column_x": 56.6,
+    "landing": [
+     56.6,
+     61.05
+    ],
+    "pad": [
+     56.5,
+     61.45
+    ]
+   }
+  },
+  "PCIE_DN6/input": {
+   "N": {
+    "column_x": 138.28,
+    "landing": [
+     138.28,
+     63.05
+    ],
+    "pad": [
+     135.0,
+     63.3
+    ]
+   },
+   "P": {
+    "column_x": 129.37,
+    "landing": [
+     129.37,
+     63.05
+    ],
+    "pad": [
+     132.65,
+     63.3
+    ]
+   }
+  },
+  "PCIE_DN6/out_MCIO": {
+   "N": {
+    "column_x": 61.4,
+    "landing": [
+     61.4,
+     61.05
+    ],
+    "pad": [
+     62.5,
+     61.45
+    ]
+   },
+   "P": {
+    "column_x": 60.2,
+    "landing": [
+     60.2,
+     61.05
+    ],
+    "pad": [
+     61.9,
+     61.45
+    ]
+   }
+  },
+  "PCIE_DN7/input": {
+   "N": {
+    "column_x": 128.99,
+    "landing": [
+     128.99,
+     64.25
+    ],
+    "pad": [
+     132.65,
+     64.5
+    ]
+   },
+   "P": {
+    "column_x": 138.66,
+    "landing": [
+     138.66,
+     63.65
+    ],
+    "pad": [
+     135.0,
+     63.9
+    ]
+   }
+  },
+  "PCIE_DN7/out_MCIO": {
+   "N": {
+    "column_x": 63.8,
+    "landing": [
+     63.8,
+     61.05
+    ],
+    "pad": [
+     64.3,
+     61.45
+    ]
+   },
+   "P": {
+    "column_x": 62.6,
+    "landing": [
+     62.6,
+     61.05
+    ],
+    "pad": [
+     63.7,
+     61.45
+    ]
+   }
+  },
+  "PCIE_UP0/input": {
+   "N": {
+    "column_x": 62.6,
+    "landing": [
+     62.6,
+     42.85
+    ],
+    "pad": [
+     63.7,
+     43.25
+    ]
+   },
+   "P": {
+    "column_x": 63.8,
+    "landing": [
+     63.8,
+     42.85
+    ],
+    "pad": [
+     64.3,
+     43.25
+    ]
+   }
+  },
+  "PCIE_UP0/out_J2": {
+   "N": {
+    "column_x": 131.65,
+    "landing": [
+     131.65,
+     43.25
+    ],
+    "pad": [
+     132.65,
+     43.5
+    ]
+   },
+   "P": {
+    "column_x": 136.0,
+    "landing": [
+     136.0,
+     42.65
+    ],
+    "pad": [
+     135.0,
+     42.9
+    ]
+   }
+  },
+  "PCIE_UP1/input": {
+   "N": {
+    "column_x": 60.2,
+    "landing": [
+     60.2,
+     42.85
+    ],
+    "pad": [
+     61.9,
+     43.25
+    ]
+   },
+   "P": {
+    "column_x": 61.4,
+    "landing": [
+     61.4,
+     42.85
+    ],
+    "pad": [
+     62.5,
+     43.25
+    ]
+   }
+  },
+  "PCIE_UP1/out_J2": {
+   "N": {
+    "column_x": 136.38,
+    "landing": [
+     136.38,
+     43.85
+    ],
+    "pad": [
+     135.0,
+     44.1
+    ]
+   },
+   "P": {
+    "column_x": 131.27,
+    "landing": [
+     131.27,
+     43.85
+    ],
+    "pad": [
+     132.65,
+     44.1
+    ]
+   }
+  },
+  "PCIE_UP2/input": {
+   "N": {
+    "column_x": 56.6,
+    "landing": [
+     56.6,
+     42.85
+    ],
+    "pad": [
+     56.5,
+     43.25
+    ]
+   },
+   "P": {
+    "column_x": 57.8,
+    "landing": [
+     57.8,
+     42.85
+    ],
+    "pad": [
+     57.1,
+     43.25
+    ]
+   }
+  },
+  "PCIE_UP2/out_J2": {
+   "N": {
+    "column_x": 130.89,
+    "landing": [
+     130.89,
+     46.85
+    ],
+    "pad": [
+     132.65,
+     47.1
+    ]
+   },
+   "P": {
+    "column_x": 136.76,
+    "landing": [
+     136.76,
+     46.25
+    ],
+    "pad": [
+     135.0,
+     46.5
+    ]
+   }
+  },
+  "PCIE_UP3/input": {
+   "N": {
+    "column_x": 54.2,
+    "landing": [
+     54.2,
+     42.85
+    ],
+    "pad": [
+     54.7,
+     43.25
+    ]
+   },
+   "P": {
+    "column_x": 55.4,
+    "landing": [
+     55.4,
+     42.85
+    ],
+    "pad": [
+     55.3,
+     43.25
+    ]
+   }
+  },
+  "PCIE_UP3/out_J2": {
+   "N": {
+    "column_x": 137.14,
+    "landing": [
+     137.14,
+     47.45
+    ],
+    "pad": [
+     135.0,
+     47.7
+    ]
+   },
+   "P": {
+    "column_x": 130.51,
+    "landing": [
+     130.51,
+     47.45
+    ],
+    "pad": [
+     132.65,
+     47.7
+    ]
+   }
+  },
+  "PCIE_UP4/input": {
+   "N": {
+    "column_x": 56.0,
+    "landing": [
+     56.0,
+     63.75
+    ],
+    "pad": [
+     55.3,
+     63.95
+    ]
+   },
+   "P": {
+    "column_x": 54.8,
+    "landing": [
+     54.8,
+     63.75
+    ],
+    "pad": [
+     54.7,
+     63.95
+    ]
+   }
+  },
+  "PCIE_UP4/out_J2": {
+   "N": {
+    "column_x": 130.13,
+    "landing": [
+     130.13,
+     48.65
+    ],
+    "pad": [
+     132.65,
+     48.9
+    ]
+   },
+   "P": {
+    "column_x": 137.52,
+    "landing": [
+     137.52,
+     48.05
+    ],
+    "pad": [
+     135.0,
+     48.3
+    ]
+   }
+  },
+  "PCIE_UP5/input": {
+   "N": {
+    "column_x": 58.4,
+    "landing": [
+     58.4,
+     63.75
+    ],
+    "pad": [
+     57.1,
+     63.95
+    ]
+   },
+   "P": {
+    "column_x": 57.2,
+    "landing": [
+     57.2,
+     63.75
+    ],
+    "pad": [
+     56.5,
+     63.95
+    ]
+   }
+  },
+  "PCIE_UP5/out_J2": {
+   "N": {
+    "column_x": 137.9,
+    "landing": [
+     137.9,
+     49.25
+    ],
+    "pad": [
+     135.0,
+     49.5
+    ]
+   },
+   "P": {
+    "column_x": 129.75,
+    "landing": [
+     129.75,
+     49.25
+    ],
+    "pad": [
+     132.65,
+     49.5
+    ]
+   }
+  },
+  "PCIE_UP6/input": {
+   "N": {
+    "column_x": 62.0,
+    "landing": [
+     62.0,
+     63.75
+    ],
+    "pad": [
+     62.5,
+     63.95
+    ]
+   },
+   "P": {
+    "column_x": 60.8,
+    "landing": [
+     60.8,
+     63.75
+    ],
+    "pad": [
+     61.9,
+     63.95
+    ]
+   }
+  },
+  "PCIE_UP6/out_J2": {
+   "N": {
+    "column_x": 129.37,
+    "landing": [
+     129.37,
+     52.25
+    ],
+    "pad": [
+     132.65,
+     52.5
+    ]
+   },
+   "P": {
+    "column_x": 138.28,
+    "landing": [
+     138.28,
+     51.65
+    ],
+    "pad": [
+     135.0,
+     51.9
+    ]
+   }
+  },
+  "PCIE_UP7/input": {
+   "N": {
+    "column_x": 64.4,
+    "landing": [
+     64.4,
+     63.75
+    ],
+    "pad": [
+     64.3,
+     63.95
+    ]
+   },
+   "P": {
+    "column_x": 63.2,
+    "landing": [
+     63.2,
+     63.75
+    ],
+    "pad": [
+     63.7,
+     63.95
+    ]
+   }
+  },
+  "PCIE_UP7/out_J2": {
+   "N": {
+    "column_x": 138.66,
+    "landing": [
+     138.66,
+     52.85
+    ],
+    "pad": [
+     135.0,
+     53.1
+    ]
+   },
+   "P": {
+    "column_x": 128.99,
+    "landing": [
+     128.99,
+     52.85
+    ],
+    "pad": [
+     132.65,
+     53.1
+    ]
+   }
+  }
+ },
+ "redline": "frozen four sources untouched; canonical W3-CN.27 13dfb9f4d74224d9 untouched; engine reverted; no skew-budget relaxation; single run (not a scan).",
+ "revision": "CO-05b-PROBE.1",
+ "schema": 1
+}

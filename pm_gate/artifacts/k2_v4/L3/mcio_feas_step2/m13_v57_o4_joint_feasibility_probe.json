@@ -1,0 +1,321 @@
+{
+ "artifact": "m13_v57_o4_joint_feasibility_probe",
+ "bands": {
+  "dn": {
+   "assignment_ok": true,
+   "dx_max_sorted": [
+    8.53,
+    8.53,
+    8.91,
+    9.29,
+    9.29,
+    9.67,
+    9.67,
+    9.67
+   ],
+   "n_pages": 8,
+   "n_with_solution": 8,
+   "rank_assignment": [
+    {
+     "dx_max": 8.53,
+     "ok": true,
+     "page": "PCIE_DN3/input",
+     "rank": 0,
+     "sep_mm": 4.35
+    },
+    {
+     "dx_max": 8.53,
+     "ok": true,
+     "page": "PCIE_DN7/input",
+     "rank": 1,
+     "sep_mm": 5.11
+    },
+    {
+     "dx_max": 8.91,
+     "ok": true,
+     "page": "PCIE_DN4/input",
+     "rank": 2,
+     "sep_mm": 5.87
+    },
+    {
+     "dx_max": 9.29,
+     "ok": true,
+     "page": "PCIE_DN1/input",
+     "rank": 3,
+     "sep_mm": 6.63
+    },
+    {
+     "dx_max": 9.29,
+     "ok": true,
+     "page": "PCIE_DN5/input",
+     "rank": 4,
+     "sep_mm": 7.39
+    },
+    {
+     "dx_max": 9.67,
+     "ok": true,
+     "page": "PCIE_DN0/input",
+     "rank": 5,
+     "sep_mm": 8.15
+    },
+    {
+     "dx_max": 9.67,
+     "ok": true,
+     "page": "PCIE_DN2/input",
+     "rank": 6,
+     "sep_mm": 8.91
+    },
+    {
+     "dx_max": 9.67,
+     "ok": true,
+     "page": "PCIE_DN6/input",
+     "rank": 7,
+     "sep_mm": 9.67
+    }
+   ]
+  },
+  "up": {
+   "assignment_ok": true,
+   "dx_max_sorted": [
+    8.53,
+    8.53,
+    8.53,
+    9.29,
+    9.29,
+    9.67,
+    9.67,
+    9.67
+   ],
+   "n_pages": 8,
+   "n_with_solution": 8,
+   "rank_assignment": [
+    {
+     "dx_max": 8.53,
+     "ok": true,
+     "page": "PCIE_UP3/out_J2",
+     "rank": 0,
+     "sep_mm": 4.35
+    },
+    {
+     "dx_max": 8.53,
+     "ok": true,
+     "page": "PCIE_UP5/out_J2",
+     "rank": 1,
+     "sep_mm": 5.11
+    },
+    {
+     "dx_max": 8.53,
+     "ok": true,
+     "page": "PCIE_UP7/out_J2",
+     "rank": 2,
+     "sep_mm": 5.87
+    },
+    {
+     "dx_max": 9.29,
+     "ok": true,
+     "page": "PCIE_UP4/out_J2",
+     "rank": 3,
+     "sep_mm": 6.63
+    },
+    {
+     "dx_max": 9.29,
+     "ok": true,
+     "page": "PCIE_UP6/out_J2",
+     "rank": 4,
+     "sep_mm": 7.39
+    },
+    {
+     "dx_max": 9.67,
+     "ok": true,
+     "page": "PCIE_UP0/out_J2",
+     "rank": 5,
+     "sep_mm": 8.15
+    },
+    {
+     "dx_max": 9.67,
+     "ok": true,
+     "page": "PCIE_UP1/out_J2",
+     "rank": 6,
+     "sep_mm": 8.91
+    },
+    {
+     "dx_max": 9.67,
+     "ok": true,
+     "page": "PCIE_UP2/out_J2",
+     "rank": 7,
+     "sep_mm": 9.67
+    }
+   ]
+  }
+ },
+ "binding_constraint": "落列竖段唯一性：同带内每 pad 落列 x 必须互异 (>=0.38mm)。J2 合法列 = {left 半无穷, 唯一 between 中缝, right 半无穷}；inner 列(132.65)只可 left/中缝，outer 列(135.0)只可 right/中缝 ⇒ 1 对可取 dx=2.175(占唯一中缝)，其余 7 对 dx >= 4.35 + 0.38*(p_k+q_k)",
+ "dx_lower_bound": {
+  "four_three_five": 4.35,
+  "min_sum_dx_no_mid": 56.08,
+  "min_sum_dx_with_mid": 48.585,
+  "note": "p_k,q_k ∈ 0..7(或0..6) 互异 ⇒ 存在一对 dx >= 4.35+0.38*6 = 6.63"
+ },
+ "geometry_gate": {
+  "conclusion": "O4 不可由纯 R1.5+R3 联合 (via,landing) 派生闭合；需 L3 长度补偿或 L2/L1 结构变更；禁放宽 intra_pair_skew_mm。",
+  "engine_probe": "CO-05b prototype (paired landing + skew-aware key): verdict UPSTREAM_CHANGE_REQUEST; crossings=5; A-CN.1b/4/9 FAIL; max skew 10.92mm (见 CO-05 v5)。",
+  "finding": "长度侧可达，但平衡 |ΔL|<=0.15 要求 via1 位移 |Δv1x| ≈ 落列分离 (4~10mm)，远超 pad 邻近短 breakout 区间；引擎联合探针 (CO-05b) 实测平面扇/净距失效。"
+ },
+ "inputs_sha": {
+  "f8_base": "8a31632907b171483cd40a053231c702e378f944af33f92598a6141bd052cdeb",
+  "joint_assignment": "13dfb9f4d74224d96710ce9617bfd6ac4f713db1f359dd69e23d4746f36774a3",
+  "manifest": "a8ef3ea8ecff99d7549d4122043c972c1bb68346dc4dcc3f36fdd9bacde49890",
+  "verdict_r2": "f2e2632506457e31c145b491284c9ecbf1cb72cc09d96ccdfb3251ef80a5556a"
+ },
+ "method": "independent length kernel L = |pad-v1| + |ly-v1y| + |lx-v1x| + |ly_l-ly| + |conn-(lx,ly_l)|; min over verdict cands x 0.05mm y_band grid (bounded analysis kernel, not engine construction)",
+ "pages": {
+  "PCIE_DN0/input": {
+   "at": [
+    128.99,
+    138.66
+   ],
+   "band": "dn",
+   "dx_max": 9.67,
+   "min_abs_dl": 1.4e-05
+  },
+  "PCIE_DN1/input": {
+   "at": [
+    138.28,
+    128.99
+   ],
+   "band": "dn",
+   "dx_max": 9.29,
+   "min_abs_dl": 5e-06
+  },
+  "PCIE_DN2/input": {
+   "at": [
+    128.99,
+    138.66
+   ],
+   "band": "dn",
+   "dx_max": 9.67,
+   "min_abs_dl": 0.044966
+  },
+  "PCIE_DN3/input": {
+   "at": [
+    137.52,
+    128.99
+   ],
+   "band": "dn",
+   "dx_max": 8.53,
+   "min_abs_dl": 1e-06
+  },
+  "PCIE_DN4/input": {
+   "at": [
+    128.99,
+    137.9
+   ],
+   "band": "dn",
+   "dx_max": 8.91,
+   "min_abs_dl": 3.2e-05
+  },
+  "PCIE_DN5/input": {
+   "at": [
+    138.28,
+    128.99
+   ],
+   "band": "dn",
+   "dx_max": 9.29,
+   "min_abs_dl": 0.000556
+  },
+  "PCIE_DN6/input": {
+   "at": [
+    128.99,
+    138.66
+   ],
+   "band": "dn",
+   "dx_max": 9.67,
+   "min_abs_dl": 0.044966
+  },
+  "PCIE_DN7/input": {
+   "at": [
+    137.52,
+    128.99
+   ],
+   "band": "dn",
+   "dx_max": 8.53,
+   "min_abs_dl": 1e-06
+  },
+  "PCIE_UP0/out_J2": {
+   "at": [
+    138.66,
+    128.99
+   ],
+   "band": "up",
+   "dx_max": 9.67,
+   "min_abs_dl": 0.00017
+  },
+  "PCIE_UP1/out_J2": {
+   "at": [
+    128.99,
+    138.66
+   ],
+   "band": "up",
+   "dx_max": 9.67,
+   "min_abs_dl": 3e-05
+  },
+  "PCIE_UP2/out_J2": {
+   "at": [
+    138.66,
+    128.99
+   ],
+   "band": "up",
+   "dx_max": 9.67,
+   "min_abs_dl": 0.013623
+  },
+  "PCIE_UP3/out_J2": {
+   "at": [
+    128.99,
+    137.52
+   ],
+   "band": "up",
+   "dx_max": 8.53,
+   "min_abs_dl": 7.3e-05
+  },
+  "PCIE_UP4/out_J2": {
+   "at": [
+    138.28,
+    128.99
+   ],
+   "band": "up",
+   "dx_max": 9.29,
+   "min_abs_dl": 0.000187
+  },
+  "PCIE_UP5/out_J2": {
+   "at": [
+    128.99,
+    137.52
+   ],
+   "band": "up",
+   "dx_max": 8.53,
+   "min_abs_dl": 7.3e-05
+  },
+  "PCIE_UP6/out_J2": {
+   "at": [
+    138.28,
+    128.99
+   ],
+   "band": "up",
+   "dx_max": 9.29,
+   "min_abs_dl": 0.000187
+  },
+  "PCIE_UP7/out_J2": {
+   "at": [
+    128.99,
+    137.52
+   ],
+   "band": "up",
+   "dx_max": 8.53,
+   "min_abs_dl": 7.3e-05
+  }
+ },
+ "revision": "O4-JOINT-FEAS.1",
+ "rule": "O4 = intra-pair skew <= 0.15mm by joint (via1 in verdict window, landing in F-8 legal lattice, y_l in y_band)",
+ "schema": 1,
+ "scope_note": "本探针判 O4 长度侧在合法落列晶格内的可达性；平面扇/净距约束由 CO-05b 引擎探针判定。",
+ "verdict": "LENGTH_SIDE_FEASIBLE"
+}
