@@ -1,0 +1,99 @@
+{
+ "artifact": "m13_v57_co57_l1_interpair_conflict",
+ "authority": "L1 冻结阈值（R3-2 3W / 用户裁决 v22）；本件=L2/L3 事实与升档材料",
+ "conflict": {
+  "C1_pitch": {
+   "delivered_pitch_mm": [
+    1.2
+   ],
+   "delta_mm": -0.26,
+   "l1_pitch_mm": 1.46,
+   "verdict": "VIOLATION（交付走廊轨距 < L1 口径）"
+  },
+  "C2_span_breaks_formula": {
+   "edge_at_l1_pitch_mm": 0.755,
+   "l1_formula_assumed_span_mm": 0.585,
+   "span_dominant_mm": 0.705,
+   "verdict": "VIOLATION（L2 的 CO-10 把对内铜跨 0.585→0.705，使 L1 的 1.46 公式不再给出 0.875 净空）"
+  },
+  "C3_min_edge": {
+   "delivered_min_mm": 0.345,
+   "required_mm": 0.875,
+   "verdict": "VIOLATION（最紧处 = 内层长平行带）"
+  },
+  "edge_at_delivered_pitch_mm": 0.495,
+  "pitch_needed_for_L1_mm": 1.58
+ },
+ "conformance": "L1_CONSTRAINT_VIOLATION_PENDING_OWNER",
+ "delivered": {
+  "corridor_pitch_mm": [
+   1.2
+  ],
+  "intra_center_mm_unique": [
+   0.5
+  ],
+  "intra_spans_mm": {
+   "center_0.5": 0.705
+  },
+  "min_inter_pair_center_mm": 0.55,
+  "min_inter_pair_edge_mm": 0.345,
+  "span_dominant_mm": 0.705,
+  "w_mm": 0.205
+ },
+ "gate_impact": "none（本件零改动；G4..G7 现状不变）",
+ "l1_threshold": {
+  "l1_legacy_span_mm": 0.585,
+  "l1_stated_pitch_mm": 1.46,
+  "required_edge_clearance_mm": 0.875,
+  "sources": [
+   {
+    "file": "pm_gate/artifacts/k2_v4/L1/frozen/L1_TOPOLOGY_v1.0.md",
+    "line": "硬约束 3：对间间距 ≥0.875mm（R3-2 3W 原则，2026-08-15 强条）",
+    "sha16": "dc59c1e94efd7cc0"
+   },
+   {
+    "file": "pm_gate/artifacts/k2_v4/L1/frozen/L1_TOPOLOGY_v2.0.md",
+    "line": "硬约束 2：R3-2『0.875』= 对间铜边净空 → 中心距 0.585+0.875 = 1.46mm；口径统一 = 1.46",
+    "sha16": "24e227c97ae27a90"
+   }
+  ]
+ },
+ "nature": "L1 阈值 vs 交付几何冲突机判（只读；零几何/阈值改动）",
+ "options": [
+  {
+   "change": "重开 W3 走廊：轨距 ≥ 1.580mm（按现行对内铜跨 0.705 + 0.875）并按 L1 口径重导",
+   "id": "A",
+   "impact": "图纸/landing/板/记录全链重建（G4..G7）；触及 J2/J3/J4 落列与球行派生走廊行 ⇒ 拓扑相邻",
+   "owner_needed": true
+  },
+  {
+   "change": "回退对内铜跨至 0.585（L2 的 CO-10 决定反向）以恢复 1.46 口径",
+   "id": "B",
+   "impact": "与前序 L2 裁定（CO-10 §7.2 via-track 净距 0.4525）冲突；同样触发 W3/L4/L5 重建",
+   "owner_needed": false
+  },
+  {
+   "change": "正式修订 L1 R3-2 阈值/口径（接受交付实距 0.345/0.495）",
+   "id": "C",
+   "impact": "属 L1 阈值变更（铁律：阈值不得放宽 ⇒ 必须 owner 明示）",
+   "owner_needed": true
+  }
+ ],
+ "remedy_capacity_check": {
+  "N": {
+   "feasible": true,
+   "need_mm": 12.64,
+   "pairs": 8,
+   "room_mm": 16.2
+  },
+  "S": {
+   "feasible": true,
+   "need_mm": 12.64,
+   "pairs": 8,
+   "room_mm": 20.8
+  }
+ },
+ "request": "请 owner 裁定 A / B / C（L1；L2 不得自行放宽 R3-2）。",
+ "revision": "CO-57.1",
+ "schema": 1
+}
