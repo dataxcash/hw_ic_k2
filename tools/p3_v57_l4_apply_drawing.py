@@ -19,8 +19,8 @@ STEP2 = K2 / "pm_gate" / "artifacts" / "k2_v4" / "L3" / "mcio_feas_step2"
 MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
 MANIFEST = STEP2 / "m13_v57_s1_page_manifest.json"
 OUT = STEP2 / "m13_v57_l4_construction.json"
-SRC_PCB = K2 / "k2_v4.kicad_pcb"
-DST_PCB = K2 / "k2_v4.l4.kicad_pcb"
+SRC_PCB = K2 / "k2_v4_8L.kicad_pcb"
+DST_PCB = K2 / "k2_v4_8L.l4.kicad_pcb"
 PHYS = ["F.Cu", "In1.Cu", "In2.Cu", "In3.Cu", "In4.Cu", "In5.Cu", "In6.Cu", "B.Cu"]  # LID.1 8L top->bottom
 LIDX = {n: i for i, n in enumerate(PHYS)}
 

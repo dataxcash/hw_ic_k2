@@ -18,8 +18,8 @@ STEP2 = K2 / "pm_gate" / "artifacts" / "k2_v4" / "L3" / "mcio_feas_step2"
 MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
 MANIFEST = STEP2 / "m13_v57_s1_page_manifest.json"
 REC = STEP2 / "m13_v57_l4_construction.json"
-SRC_PCB = K2 / "k2_v4.kicad_pcb"
-DST_PCB = K2 / "k2_v4.l4.kicad_pcb"
+SRC_PCB = K2 / "k2_v4_8L.kicad_pcb"
+DST_PCB = K2 / "k2_v4_8L.l4.kicad_pcb"
 TOL = 1e-6
 PHYS = ["F.Cu", "In1.Cu", "In2.Cu", "In3.Cu", "In4.Cu", "In5.Cu", "In6.Cu", "B.Cu"]  # LID.1 8L top->bottom
 LIDX = {n: i for i, n in enumerate(PHYS)}
@@ -50,7 +50,7 @@ def main() -> int:
     # L4-A
     if rec["authority"]["drawing_sha256"] != sha(MAIN):
         viol.append({"V": "L4-A", "why": "drawing sha != recorded"})
-    if sha(SRC_PCB) != "f6273de613f43d05" and not sha(SRC_PCB).startswith("f6273de613f43d05"):
+    if sha(SRC_PCB) != "fb07d25ac426ff84905200a9af88e04dd9e6b9216986c4f4459fd7d556a88c34" and not sha(SRC_PCB).startswith("fb07d25ac426ff84905200a9af88e04dd9e6b9216986c4f4459fd7d556a88c34"):
         viol.append({"V": "L4-A", "why": "frozen src pcb changed", "sha": sha(SRC_PCB)[:16]})
 
     # L4-B independent recompute

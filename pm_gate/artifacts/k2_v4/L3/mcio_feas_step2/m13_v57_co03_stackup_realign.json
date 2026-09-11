@@ -1,0 +1,43 @@
+{
+ "artifact": "m13_v57_co03_stackup_realign",
+ "authority": "L2 (LAYOUT_CONSTITUTION ch.2) + rectification #03 + LID.1 derivation",
+ "deltas": [
+  {
+   "basis": "k2_gen_v5.py:427-434 HEADER == LID.1 derived stackup (8L)",
+   "id": "D1",
+   "kind": "layer_table",
+   "new": "+In5.Cu(12) +In6.Cu(14)"
+  },
+  {
+   "basis": "SPEC board.outline_y=[33,79]; repair open contour (left y=71 vs right/bottom y=79)",
+   "id": "D2",
+   "kind": "board_outline",
+   "new": "(23,79)->(23,33)",
+   "old": "Edge.Cuts left (23,71)->(23,33)"
+  }
+ ],
+ "dst": {
+  "path": "k2_v4_8L.kicad_pcb",
+  "sha256": "fb07d25ac426ff84905200a9af88e04dd9e6b9216986c4f4459fd7d556a88c34"
+ },
+ "frozen_originals_untouched": true,
+ "revision": "CO-03.1",
+ "schema": 1,
+ "selfcheck": {
+  "copper_layer_lines": 8,
+  "edge_cuts_segments": 4,
+  "frame_closed": true,
+  "frame_x": [
+   23.0,
+   143.0
+  ],
+  "frame_y": [
+   33.0,
+   79.0
+  ]
+ },
+ "src": {
+  "path": "k2_v4.kicad_pcb",
+  "sha256": "f6273de613f43d05555d12d6c3492b1e70f383761d8db5121f12b2ca0695af9a"
+ }
+}

@@ -38,8 +38,9 @@ git tag -n1 | tail
 git ls-remote --tags origin | grep k2-v57
 sha256sum pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json \
   pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_s1_page_manifest.json \
-  k2_v4.kicad_pcb _shared/eda_core/drc_rules.json | cut -c1-16
-# 期望四源: 0bd52ed48e720b8c / a8ef3ea8ecff99d7 / f6273de613f43d05 / 0a459839e15960b8
+  k2_v4_8L.kicad_pcb _shared/eda_core/drc_rules.json | cut -c1-16
+# 期望四源: 0bd52ed48e720b8c / a8ef3ea8ecff99d7 / fb07d25ac426ff84 / 0a459839e15960b8
+#   (PCB 项 = CO-03 版本化 8L 基线 `k2_v4_8L.kicad_pcb`；原 `k2_v4.kicad_pcb` 保留不动)
 ```
 
 ## 6. 归档
