@@ -13,6 +13,9 @@ env（只读旋钮，CO-11 实测用；默认=原行为）:
   CO10_WDELTA=<mm>      仅西侧 lane 块整体下移
   CO10_WSTEP/CO10_WLO   仅西侧 lane 块重派生（lane_y=WLO+idx*WSTEP）
   CO10_FANDX_J3/_J4=<mm> 西侧 connector landing lx 偏置
+  CO10_POLMODE=lx     方向感知 P/N lane 排序（CO-15；西侧 32/32 所必需）
+  CO10_EASTSPLIT=1    实验性（CO-16 open）：东侧 up stub→In6；**当前会使 up In6 stub 与 In6 lane
+                      跨页真交叉**（复核 FAIL）⇒ 未采用；仅用于记录东侧重派生方向，勿用于 sign-off。
 """
 from __future__ import annotations
 import argparse, hashlib, json, math, sys
@@ -82,6 +85,12 @@ POL_OFF = 0.25            # L2 参数：对内 lane y 偏移 >= vt(0.4525)/2；0
 # 规则（闭式，由几何推导）：stub 朝上（ll>lane_y）⇒ landing lx 较大者取上层 lane（+POL_OFF）、较小者取下（-POL_OFF）；
 # 朝下（ll<lane_y）反之。仅对 WEST_MCIO_TO_CHIP 生效（stub 全 In2 时该规则不影响可行性，保留一致性）。
 POLMODE = __import__("os").environ.get("CO10_POLMODE", "")
+# CO-16 只读旋钮（默认关）：东侧逐带 stub 层分流 + per-page rank J2 落列（O4 闭合所需）。
+#   CO10_EASTSPLIT=1 ⇒ J2 up stub→In6 / dn stub→In2（跨带列可复用）
+#   !! 实验性：up In6 stub 会与 In6 lane 跨页真交叉（32/32 落位但复核 FAIL 56）⇒ 未采用。
+#   CO10_J2STEP=<mm> ⇒ J2 落列步长（默认 0.525 原口径）；CO-16 用 0.55（≥VV 0.525 + 余量）
+EASTSPLIT = __import__("os").environ.get("CO10_EASTSPLIT", "") not in ("", "0")
+J2STEP = float(__import__("os").environ.get("CO10_J2STEP", "0.525"))
 
 
 def pol_off(f, pol):
@@ -92,6 +101,15 @@ def pol_off(f, pol):
         if ll > ly:
             return POL_OFF if pol == big else -POL_OFF
         return -POL_OFF if pol == big else POL_OFF
+    if EASTSPLIT and POLMODE == "lx" and f["corridor"] == "EAST_CHIP_TO_J2":
+        # 东侧 lane x-span = [vx, lx]（lx>vx）⇒ 跨 lane 的 stub 是 **lx 较小**者；其须在 stub 方向外侧。
+        # 东侧 stub 朝下（ll<lane_y，conn pad 在 lane 之下）⇒ 小 lx 极性须在**下**层 lane。
+        ll = f["conn_pad"][pol][1]           # landing y ≈ conn pad y（符号口径正确）
+        ly = LANES[f["page_id"]]["lane_y"]
+        big = "P" if f["conn_pad"]["P"][0] > f["conn_pad"]["N"][0] else "N"
+        if ll > ly:
+            return -POL_OFF if pol == big else POL_OFF
+        return POL_OFF if pol == big else -POL_OFF
     d = f["pad"]["N"][1] - f["pad"]["P"][1]
     base = -POL_OFF if d > 0 else POL_OFF
     return base if pol == "P" else -base
@@ -122,7 +140,7 @@ def row_group(f):
 
 def stub_layer(f):
     if f["conn_ref"] == "J2":
-        return "In2.Cu"
+        return "In6.Cu" if (EASTSPLIT and f["band"] == "up") else "In2.Cu"
     return "In2.Cu" if GS_IN2[row_group(f)] else "In6.Cu"
 
 
@@ -130,12 +148,24 @@ def r3_build(rule):
     r3 = W.r3_place(J["r3_gaps"], LANES, "y", J.get("r3_base"))
     A = dict(r3["assignment"])
     j2k = [k for k, a in A.items() if a["ref"] == "J2" and a.get("page") in LANES and a.get("kind") == "data"]
-    pgs = sorted({A[k]["page"] for k in j2k}, key=lambda p: LANES[p]["lane_index"])
-    rank = {p: i for i, p in enumerate(pgs)}
-    for k in j2k:
-        a = A[k]; r = rank[a["page"]]
-        lx = W.fp(J2L - J2P * r) if abs(a["pad_x"] - J2_IN) < 1e-6 else W.fp(J2R + J2P * r)
-        A[k] = dict(a, column_x=lx, landing=[lx, a["landing"][1]])
+    if EASTSPLIT:
+        # CO-16：逐带 per-page rank + J2STEP（跨带 stub 异层 ⇒ 列可复用 ⇒ 落列收拢 ⇒ O4 可闭合）
+        byb = {}
+        for k in j2k:
+            byb.setdefault(FACTS[A[k]["page"]]["band"], {}).setdefault(A[k]["page"], []).append(k)
+        for _b, _pm in byb.items():
+            for _r, _pg in enumerate(sorted(_pm, key=lambda q: LANES[q]["lane_index"])):
+                for k in _pm[_pg]:
+                    a = A[k]
+                    lx = W.fp(J2L - J2STEP * _r) if abs(a["pad_x"] - J2_IN) < 1e-6 else W.fp(J2R + J2STEP * _r)
+                    A[k] = dict(a, column_x=lx, landing=[lx, a["landing"][1]])
+    else:
+        pgs = sorted({A[k]["page"] for k in j2k}, key=lambda p: LANES[p]["lane_index"])
+        rank = {p: i for i, p in enumerate(pgs)}
+        for k in j2k:
+            a = A[k]; r = rank[a["page"]]
+            lx = W.fp(J2L - J2P * r) if abs(a["pad_x"] - J2_IN) < 1e-6 else W.fp(J2R + J2P * r)
+            A[k] = dict(a, column_x=lx, landing=[lx, a["landing"][1]])
     for k, a in list(A.items()):
         if a["ref"] in ("J3", "J4"):
             mid = GAP[a["ref"]]
@@ -152,7 +182,7 @@ def r3_build(rule):
 
 def _stub_layer_of(a):
     if a["ref"] == "J2":
-        return "In2.Cu"
+        return "In6.Cu" if (EASTSPLIT and FACTS[a["page"]]["band"] == "up") else "In2.Cu"
     mid = GAP[a["ref"]]
     g = (a["ref"], "U" if a["pad_y"] < mid else "L")
     return "In2.Cu" if GS_IN2[g] else "In6.Cu"
@@ -368,6 +398,20 @@ def check(vias, segs, own, st):
                 continue
             if (_cross_seg((x1, y1), (x2, y2), (u1, v1), (u2, v2))):
                 return ("cross_intra", (lay, x1, y1, x2, y2, pol), (lay2, u1, v1, u2, v2, pol2))
+    # 跨页 proper-intersection（CO-11 §12 教训：原 check() 仅同页 cross_intra + 端点距离，
+    # 端点距离对「两段真交叉」恒 >0 ⇒ 漏检；独立复核器已抓出，此处补齐使探针自洽）。
+    for (lay, x1, y1, x2, y2, pa, pol) in segs:
+        X = st.S[lay]
+        if not len(X):
+            continue
+        lo_x, hi_x = min(x1, x2) - 1e-9, max(x1, x2) + 1e-9
+        lo_y, hi_y = min(y1, y2) - 1e-9, max(y1, y2) + 1e-9
+        for _t in range(len(X)):
+            u1, v1, u2, v2 = X[_t]
+            if max(u1, u2) < lo_x or min(u1, u2) > hi_x or max(v1, v2) < lo_y or min(v1, v2) > hi_y:
+                continue
+            if _cross_seg((x1, y1), (x2, y2), (u1, v1), (u2, v2)):
+                return ("cross_placed", (lay, x1, y1, x2, y2, pol), st.SLAB[lay][_t])
     for (lay, x1, y1, x2, y2, pa, pol) in segs:
         X = st.S[lay]
         if not len(X): continue
