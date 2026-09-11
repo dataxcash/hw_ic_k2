@@ -17,6 +17,7 @@ import argparse
 import bisect
 import hashlib
 import json
+import math
 from pathlib import Path
 
 import numpy as np
@@ -60,7 +61,8 @@ FROZEN_SHA = {
 OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
 OUT_LANDING = STEP2 / "m13_v57_w3_chip_landing_rows.json"
 
-REVISION = "W3-CN.30"   # ROOT-22: O4 成对落列 pitch=0.6(R3_STEP) + L3 蛇形；A-CN.9 完整净距；无 stale seed
+REVISION = "W3-CN.30"   # 默认（t2）路径不动；CO-16 见 REVISION_CO16
+REVISION_CO16 = "W3-CN.31"   # ROOT-22: O4 成对落列 pitch=0.6(R3_STEP) + L3 蛇形；A-CN.9 完整净距；无 stale seed
 ORD = "natural"   # ROOT-20: enumeration order (A1.2 order-invariance, non-vacuous)
 SCHEMA = 1
 STEP = 1.46
@@ -83,6 +85,18 @@ GRID = 0.05
 R3_OFF = -0.3
 R3_STEP = 0.6
 POL_OFF = 0.19
+# CO-16 (W3-CN.31): 全板安全-hop 拓扑（pad->F->via1(F<->In2)->escape(In2/B)->corner->lane(In6)
+#   ->drop->stub(In2/In6/B)->land(..->In2->F)->F->conn）+ O4 双段蛇形。
+#   几何（via1/lane_y/landing/escape/stub 层）O(1) 消费 CO16-ALLOC.1 工件，零坐标搜索。
+POL_OFF_CO16 = 0.25        # L2: 对内 lane y 偏移 >= vt(0.4525)/2（0.19 不足）
+CO16_LANE_STEP = {"WEST_MCIO_TO_CHIP": 1.1265, "EAST_CHIP_TO_J2": STEP}
+DEFAULT_SHAPE = "t2"
+# CO16_MEANDER: O4 等长蛇形。几何可行性（W3-CN.31 实测，见证书）：CO16-ALLOC.1 的
+#   西侧 lane pitch=1.1265 / J2 列 pitch=0.6 下，相邻通道净距 0.6265 < 2*(0.269)+0.38
+#   ⇒ 双侧同时蛇形无解；单侧 45° 蛇形自净距下限 0.38 亦不满足。置 False 时仅发射
+#   CO16-ALLOC.1 拓扑几何 + O4 残差证书（等长待 CO-17 重派生列/层距）。
+CO16_MEANDER = False
+TT_TRACK = 0.38            # width + clearance (PCIE85)；蛇形自净距下限
 # CO-05c (O4): 成对落列 + L3 长度补偿（run 上确定性 45° 单侧蛇形）
 PAIR_MODE = True
 MEANDER_MODE = True
@@ -98,6 +112,8 @@ TOL = 1e-9
 SUPERSEDED = {"artifact": "m13_v57_w3_joint_assignment.json", "revision": "W3-JA.2",
                "sha256": "d081618c7b961d770c8e2f180f93b92125b316bc0eeec181f9d1d191a0ee6acc",
                "reason": "method-level iron-law violation (search-based); retained, not rewritten"}
+CO16_ALLOC = STEP2 / "m13_v57_co16_channel_allocation.json"
+CO16_ALLOC_SHA = "21ae78f8276d8df49d4bed83ac0a4fd8c03b65aa8066dc8e6d9358ce61d7d378"
 CORRIDOR = {
     "EAST_CHIP_TO_J2": {"bounds": (105.25, 132.65), "x_domain": (93.55, 105.25)},
     "WEST_MCIO_TO_CHIP": {"bounds": (65.05, 82.35), "x_domain": (82.35, 93.55)},
@@ -106,6 +122,9 @@ KEEP_KEYS = ("alternatives", "options", "tried", "attempts")   # G-M6（禁止�
 
 WORK = [0]
 BOOK: dict = {}
+# CO-16 专用净距口径（handoff §8f）：同页跨极性不再被 base(pid) 豁免 + via-via 层跨相交判定。
+#   仅在 shape=co16 生效，保证默认(t2)路径逐字节不动（W3-CN.30 判据保持原口径）。
+SAFE_HOP_METRIC = [False]
 
 
 def bump(n: int, site: str = "unspecified") -> None:
@@ -235,6 +254,323 @@ def meander_run(vx, ly, lx, extra_mm, dy):
         if abs(q[0] - out[-1][0]) > TOL or abs(q[1] - out[-1][1]) > TOL:
             out.append(q)
     return out
+
+
+def _zig_pts(p, q, a, amp, teeth, lat):
+    """轴对齐段 p->q 上单侧锯齿（run 轴步长 a、横向幅值 amp±lat、teeth 个齿=2*teeth 段），居中。"""
+    dx, dy = q[0] - p[0], q[1] - p[1]
+    horiz = abs(dx) >= abs(dy)
+    run = abs(dx) if horiz else abs(dy)
+    sgn = (1.0 if dx >= 0 else -1.0) if horiz else (1.0 if dy >= 0 else -1.0)
+    dm = 2.0 * teeth * a
+    off0 = (run - dm) / 2.0
+
+    def pt(u, v):
+        if horiz:
+            return [fp(p[0] + sgn * u), fp(p[1] + lat * v)]
+        return [fp(p[0] + lat * v), fp(p[1] + sgn * u)]
+
+    pts = [pt(0.0, 0.0), pt(off0, 0.0)]
+    for i in range(1, 2 * teeth):
+        pts.append(pt(off0 + i * a, amp if i % 2 else 0.0))
+    pts.append(pt(off0 + dm, 0.0))
+    pts.append(pt(run, 0.0))
+    out = [pts[0]]
+    for r in pts[1:]:
+        if abs(r[0] - out[-1][0]) > TOL or abs(r[1] - out[-1][1]) > TOL:
+            out.append(r)
+    return out
+
+
+def meander_zig(p, q, extra_mm, lat, a_max):
+    """轴对齐段 p->q 上确定性单侧锯齿（45° 或更浅），使段长 +extra_mm。
+    自净距：相邻平行段间距 2aA/sqrt(a^2+A^2) >= TT_TRACK。返回 (pts, realized, A, a)。
+    不可达（a_max 太小 / 段太短）时返回直线段 + realized=0。"""
+    dx, dy = q[0] - p[0], q[1] - p[1]
+    horiz = abs(dx) >= abs(dy)
+    run = abs(dx) if horiz else abs(dy)
+    straight = [list(p), list(q)]
+    if extra_mm <= TOL or run <= 1.0:
+        return straight, 0.0, 0.0, 0.0
+    amp = min(MEANDER_A_MAX, max(0.0, a_max))
+    if 4.0 * amp * amp <= TT_TRACK * TT_TRACK:
+        return straight, 0.0, 0.0, 0.0                    # 任意浅度锯齿自净距上限 2A < TT
+    a_min = amp * TT_TRACK / math.sqrt(4.0 * amp * amp - TT_TRACK * TT_TRACK)
+    per45 = 2.0 * amp * (2 ** 0.5 - 1.0)
+    teeth = max(1, int(round(extra_mm / per45)))
+    per_t = extra_mm / teeth                              # 精确命中：解 a（不陡于 45° => a >= amp）
+    a_ex = (amp * amp - per_t * per_t / 4.0) / per_t
+    a = max(amp, a_min, a_ex)
+    per = 2.0 * (math.hypot(a, amp) - a)
+    if per <= TOL:
+        return straight, 0.0, 0.0, 0.0
+    teeth = max(1, int(round(extra_mm / per)))
+    if 2.0 * teeth * a > run - 0.2:                       # 段长不足：按可容纳齿数缩减
+        teeth = int((run - 0.2) // (2.0 * a))
+    if teeth < 1:
+        return straight, 0.0, 0.0, 0.0
+    real = teeth * per
+    return _zig_pts(p, q, a, amp, teeth, lat), real, amp, a
+
+
+def co16_prepare(j, facts, lanes, r3):
+    """O(1) 消费 CO16-ALLOC.1：lane_y(P/N)、via1、landing、escape/stub 层（零坐标搜索）。"""
+    alloc = j["co16_alloc"]["pages"]
+    bump(4 * len(alloc), "co16_consume")
+    for pid, a in alloc.items():
+        lanes[pid]["lane_y"] = fp((a["lane_y"]["P"] + a["lane_y"]["N"]) / 2.0)
+        lanes[pid]["lane_y_pol"] = {"P": fp(a["lane_y"]["P"]), "N": fp(a["lane_y"]["N"])}
+        lanes[pid]["escape_layer"] = a["escape_layer"]
+        lanes[pid]["stub_layer"] = a["stub_layer"]
+    r1 = {"assignment": {}, "certificates": []}
+    for pid, a in alloc.items():
+        f = facts[pid]
+        pv = [fp(a["via1"]["P"][0]), fp(a["via1"]["P"][1])]
+        nv = [fp(a["via1"]["N"][0]), fp(a["via1"]["N"][1])]
+        d = ((pv[0] - nv[0]) ** 2 + (pv[1] - nv[1]) ** 2) ** 0.5
+        r1["assignment"][pid] = {
+            "P_via": pv, "N_via": nv, "pair_dist_mm": fp(d), "stagger_mm": fp(abs(pv[0] - nv[0])),
+            "frame": [f["corridor"], f["conn_ref"], f["band"]],
+            "direction": "co16_artifact", "mode": "co16_artifact"}
+    for pid, a in alloc.items():
+        f = facts[pid]
+        for pol in ("P", "N"):
+            k = f["conn_ref"] + "|" + f["nets"][pol]
+            if k not in r3["assignment"]:
+                continue
+            lx, ll = a["landing"][pol]
+            r3["assignment"][k]["column_x"] = fp(lx)
+            r3["assignment"][k]["landing"] = [fp(lx), fp(ll)]
+    return alloc, r1
+
+
+def co16_o4_plan(alloc):
+    """O4 双段蛇形预算（CO16-O4.1 模型）：短极 + lane-run 容量缺口。"""
+    out = {}
+    s2 = 2.0 ** 0.5 - 1.0
+    for pid, a in alloc.items():
+        length = {}
+        for pol in ("P", "N"):
+            pad = a["chip_pad"][pol]; v = a["via1"][pol]; ly = a["lane_y"][pol]
+            lx, ll = a["landing"][pol]; cp = a["conn_pad"][pol]
+            length[pol] = (math.hypot(pad[0] - v[0], pad[1] - v[1]) + abs(ly - v[1])
+                           + abs(lx - v[0]) + abs(ll - ly)
+                           + math.hypot(cp[0] - lx, cp[1] - ll))
+        sh = "P" if length["P"] < length["N"] else "N"
+        other = "N" if sh == "P" else "P"
+        extra = abs(length["P"] - length["N"])
+        if extra <= TOL:
+            continue
+        r_lane = abs(a["landing"][sh][0] - a["via1"][sh][0])
+        out[pid] = {"pol": sh, "other": other, "extra": extra,
+                    "cap_lane": max(0.0, r_lane - 1.0) * s2,
+                    "dy": 1.0 if a["lane_y"][sh] > a["lane_y"][other] else -1.0}
+    return out
+
+
+def co16_seg_room(alloc):
+    """每 (kind,pid,pol) 的 escape/stub 竖段方向化幅值上限：单侧最近同层异网净距 - TT_TRACK。
+    返回 (esc, stb, room[(kind,pid,pol,lat)])。"""
+    esc, stb = {}, {}
+    for pid, a in alloc.items():
+        for pol in ("P", "N"):
+            vx, vy = a["via1"][pol][0], a["via1"][pol][1]
+            ly = a["lane_y"][pol]
+            lx, ll = a["landing"][pol]
+            esc[(pid, pol)] = {"x": vx, "lo": min(vy, ly), "hi": max(vy, ly),
+                               "layer": a["escape_layer"], "p0": [vx, vy], "p1": [vx, ly]}
+            stb[(pid, pol)] = {"x": lx, "lo": min(ly, ll), "hi": max(ly, ll),
+                               "layer": a["stub_layer"], "p0": [lx, ly], "p1": [lx, ll]}
+    room = {}
+    for kind, tab in (("esc", esc), ("stb", stb)):
+        keys = sorted(tab)
+        for lat in (-1.0, 1.0):
+            for k in keys:
+                s = tab[k]
+                best = MEANDER_A_MAX
+                for k2 in keys:
+                    if k2 == k:
+                        continue
+                    t = tab[k2]
+                    if t["layer"] != s["layer"]:
+                        continue
+                    if lat * (t["x"] - s["x"]) <= TOL:
+                        continue                          # 仅同侧（横向鼓出方向）邻居约束
+                    if min(t["hi"], s["hi"]) - max(t["lo"], s["lo"]) <= 1e-9:
+                        continue
+                    best = min(best, abs(t["x"] - s["x"]) - TT_TRACK)
+                room[(kind,) + k + (lat,)] = max(0.0, best)
+    return esc, stb, room
+
+
+def co16_nodes(f, pol, v1, esc_pts, lane_pts, stub_pts, esc_l, stub_l, land, conn):
+    """CO-09/CO-11 节点链：pad->F->via1->escape->corner->lane->drop->stub->land->F->conn。"""
+    vx, vy = v1
+    end = esc_pts[-1]
+    lx, ly_l = land
+    lane_y = lane_pts[-1][1]
+    n = [[f["pad"][pol][0], f["pad"][pol][1], "F.Cu"],
+         [vx, vy, "F.Cu"], [vx, vy, "In2.Cu"]]
+    if esc_l == "B.Cu":
+        n += [[vx, vy, "In6.Cu"], [vx, vy, "B.Cu"]]
+    for q in esc_pts[1:]:
+        n.append([q[0], q[1], esc_l])
+    n.append([end[0], end[1], "In6.Cu"])                  # corner via esc_l <-> In6
+    for q in lane_pts[1:]:
+        n.append([q[0], q[1], "In6.Cu"])
+    if stub_l == "In2.Cu":
+        n.append([lx, lane_y, "In2.Cu"])                  # drop In6 -> In2 @ lane y
+    elif stub_l == "B.Cu":
+        n.append([lx, lane_y, "B.Cu"])                    # drop In6 -> B @ lane y
+    for q in stub_pts[1:]:
+        n.append([q[0], q[1], stub_l])
+    if stub_l == "B.Cu":
+        n.append([lx, ly_l, "In6.Cu"])
+    if stub_l in ("B.Cu", "In6.Cu"):
+        n.append([lx, ly_l, "In2.Cu"])
+    n.append([lx, ly_l, "F.Cu"])                          # land -> F
+    n.append([f["conn_pad"][pol][0], f["conn_pad"][pol][1], "F.Cu"])
+    return n
+
+
+def co16_vias(nodes, pol):
+    """从节点链抽取层变点（via）列表。"""
+    out = []
+    for i in range(1, len(nodes)):
+        a, b = nodes[i - 1], nodes[i]
+        if abs(a[0] - b[0]) < 1e-9 and abs(a[1] - b[1]) < 1e-9 and a[2] != b[2]:
+            out.append({"x": fp(a[0]), "y": fp(a[1]), "pol": pol,
+                        "layers": [a[2], b[2]], "role": "co16"})
+    return out
+
+_CO16_PTS = {}
+
+
+def co16_lane_room(alloc, pid, pol, dy):
+    """lane-run 蛇形可用性：返回 (amp_max, x_lo, x_hi)。
+    amp = 鼓出方向最近同层异网 lane 净距 - TT_TRACK；x 窗口按 In6 via1 stack（E=B）截断。"""
+    a = alloc[pid]
+    vx, lx = a["via1"][pol][0], a["landing"][pol][0]
+    ly = a["lane_y"][pol]
+    xlo, xhi = min(vx, lx), max(vx, lx)
+    amp = MEANDER_A_MAX
+    for pid2, a2 in alloc.items():
+        for pol2 in ("P", "N"):
+            if pid2 == pid and pol2 == pol:
+                continue
+            y2 = a2["lane_y"][pol2]
+            v2, l2 = a2["via1"][pol2][0], a2["landing"][pol2][0]
+            if min(xhi, max(v2, l2)) - max(xlo, min(v2, l2)) <= 0:
+                continue
+            if dy * (y2 - ly) > TOL:
+                amp = min(amp, abs(y2 - ly) - TT_TRACK)
+    cuts = []
+    for pid2, a2 in alloc.items():
+        if a2["escape_layer"] != "B.Cu":       # 仅 E=B 的 via1 stack 在 In6 有实体
+            continue
+        for pol2 in ("P", "N"):
+            if pid2 == pid and pol2 == pol:
+                continue
+            x2, y2 = a2["via1"][pol2][0], a2["via1"][pol2][1]
+            if xlo - 1e-9 <= x2 <= xhi + 1e-9 and dy * (y2 - ly) > TOL \
+               and abs(y2 - ly) < amp + TT_TRACK:
+                cuts.append(x2)
+    if cuts:
+        if lx >= vx:
+            xlo = max(xlo, max(cuts) + 0.2)
+        else:
+            xhi = min(xhi, min(cuts) - 0.2)
+    return max(0.0, amp), xlo, xhi
+
+
+def co16_build_routes(facts, alloc, lanes):
+    """CO-16 折线 + O4 双段蛇形（lane-run 优先，不足时落 escape 竖段 / stub 竖段）。
+    返回 (paths, certificates)。零坐标搜索：几何全部来自工件，蛇形为闭式单遍。"""
+    esc_tab, stb_tab, room = co16_seg_room(alloc)
+    o4 = co16_o4_plan(alloc)
+    paths, certs = {}, []
+    _CO16_PTS.clear()
+    for pid in sorted(alloc):
+        a = alloc[pid]
+        f = facts[pid]
+        E, S = a["escape_layer"], a["stub_layer"]
+        mz = o4.get(pid)
+        for pol in ("P", "N"):
+            vx, vy = fp(a["via1"][pol][0]), fp(a["via1"][pol][1])
+            ly = fp(a["lane_y"][pol])
+            lx, ll = fp(a["landing"][pol][0]), fp(a["landing"][pol][1])
+            esc_pts = [[vx, vy], [vx, ly]]
+            lane_pts = [[vx, ly], [lx, ly]]
+            stub_pts = [[lx, ly], [lx, ll]]
+            if CO16_MEANDER and mz and pol == mz["pol"] and mz["extra"] > TOL:
+                extra = mz["extra"]
+                _lamp, _xlo, _xhi = co16_lane_room(alloc, pid, pol, mz["dy"])
+                _lp0 = [vx, ly]
+                _lp1 = [lx, ly]
+                if (lx >= vx and _xhi - _xlo > 1.5) or (lx < vx and _xhi - _xlo > 1.5):
+                    _lp0 = [_xlo, ly]
+                    _lp1 = [_xhi, ly]
+                _mid, real, _amp, _a = meander_zig(_lp0, _lp1, extra, mz["dy"], _lamp)
+                _raw = [[vx, ly]] + _mid + [[lx, ly]]
+                lane_pts = [_raw[0]]
+                for _q in _raw[1:]:
+                    if abs(_q[0] - lane_pts[-1][0]) > TOL or abs(_q[1] - lane_pts[-1][1]) > TOL:
+                        lane_pts.append(_q)
+                resid = extra - real
+                if resid > 0.02:
+                    for kind in ("esc", "stb"):
+                        rp = room.get((kind, pid, pol, 1.0), 0.0)
+                        rm = room.get((kind, pid, pol, -1.0), 0.0)
+                        lat = 1.0 if rp >= rm else -1.0
+                        amax = min(MEANDER_A_MAX, max(rp, rm))
+                        s0, s1 = ([vx, vy], [vx, ly]) if kind == "esc" else ([lx, ly], [lx, ll])
+                        pts2, real2, _A2, _a2 = meander_zig(s0, s1, resid, lat, amax)
+                        if real2 <= TOL:
+                            continue
+                        if kind == "esc":
+                            esc_pts = pts2
+                        else:
+                            stub_pts = pts2
+                        resid -= real2
+                        break
+                if resid > 0.15:
+                    certs.append({"kind": "CONSTRUCTION_INFEASIBLE",
+                                  "layer": "R1_5_o4_length_compensation",
+                                  "rule": "double_segment_meander(lane_run+vertical)",
+                                  "closed_form_condition": "second-segment lateral room >= "
+                                                           "TT_TRACK + needed amplitude",
+                                  "observed": {"page": pid, "pol": pol, "residual_mm": fp(resid),
+                                               "room_esc": [room.get(("esc", pid, pol, -1.0), 0.0),
+                                                            room.get(("esc", pid, pol, 1.0), 0.0)],
+                                               "room_stb": [room.get(("stb", pid, pol, -1.0), 0.0),
+                                                            room.get(("stb", pid, pol, 1.0), 0.0)]},
+                                  "required": {"skew_mm": 0.15},
+                                  "page_or_pad": pid,
+                                  "scope_note": "本构造规则下不可行；非全局不可能性证明"})
+            if not CO16_MEANDER and mz and pol == mz["pol"] and mz["extra"] > 0.15:
+                _lamp, _xlo, _xhi = co16_lane_room(alloc, pid, pol, mz["dy"])
+                certs.append({"kind": "CONSTRUCTION_INFEASIBLE",
+                              "layer": "R1_5_o4_length_compensation",
+                              "rule": "45deg_one_sided_meander (lane-run / escape / stub)",
+                              "closed_form_condition": "channel clearance >= 2*MEANDER_A_MIN + TT_TRACK "
+                                                       "for adjacent co-meandering channels",
+                              "observed": {"page": pid, "pol": pol,
+                                           "extra_mm": fp(mz["extra"]),
+                                           "lane_amp_room_mm": fp(_lamp),
+                                           "lane_window_mm": fp(_xhi - _xlo),
+                                           "min_amp_mm": MEANDER_A_MIN},
+                              "required": {"skew_mm": 0.15},
+                              "page_or_pad": pid,
+                              "scope_note": "本构造规则下不可行（列距/层距不足）；非全局不可能性证明"})
+            _CO16_PTS[(pid, pol)] = {"esc": esc_pts, "lane": lane_pts, "stub": stub_pts}
+            paths[(pid, pol)] = [E, esc_pts]
+            paths[(pid + "#lane", pol)] = ["In6.Cu", lane_pts]
+            paths[(pid + "#stub", pol)] = [S, stub_pts]
+            paths[(pid + "#fcu_pad", pol)] = ["F.Cu",
+                [[f["pad"][pol][0], f["pad"][pol][1]], [vx, vy]]]
+            paths[(pid + "#fcu_land", pol)] = ["F.Cu",
+                [[lx, ll], [f["conn_pad"][pol][0], f["conn_pad"][pol][1]]]]
+    return paths, certs
 
 
 def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict, coherent: dict = None,
@@ -848,10 +1184,14 @@ def clearance_metric(paths: dict, pc: dict, via_r: float, esc_clr: float) -> dic
     def _esc(nm): return ("#fcu_pad" in nm) or ("#fcu_land" in nm)
     ids = sorted(paths)
     def base(x): return (x[0] if isinstance(x, tuple) else x).split("#")[0]
+    def _nid(x):
+        if not SAFE_HOP_METRIC[0]:
+            return (base(x), None)
+        return (base(x), x[1] if (isinstance(x, tuple) and len(x) > 1) else None)
     v_tt = []
     for i in range(len(ids)):
         for j in range(i + 1, len(ids)):
-            if paths[ids[i]][0] != paths[ids[j]][0] or base(ids[i]) == base(ids[j]):
+            if paths[ids[i]][0] != paths[ids[j]][0] or _nid(ids[i]) == _nid(ids[j]):
                 continue
             pa, pb = paths[ids[i]][1], paths[ids[j]][1]
             for s1 in zip(pa, pa[1:]):
@@ -862,27 +1202,35 @@ def clearance_metric(paths: dict, pc: dict, via_r: float, esc_clr: float) -> dic
                         v_tt.append([base(ids[i]), base(ids[j]), round(d, 4)])
     pt_l, pt_n = {}, {}
     for k in ids:
-        lay = paths[k][0]; nb = base(k)
+        lay = paths[k][0]; nid = _nid(k)
         for pt in paths[k][1]:
             key = (round(pt[0], 4), round(pt[1], 4))
-            pt_l.setdefault(key, set()).add(lay); pt_n.setdefault(key, set()).add(nb)
+            pt_l.setdefault(key, set()).add(lay); pt_n.setdefault(key, set()).add(nid)
     v_vt = []
     for key, lays in pt_l.items():
         own = pt_n[key]
         for k in ids:
-            if paths[k][0] not in lays or base(k) in own:
+            if paths[k][0] not in lays or _nid(k) in own:
                 continue
             for sg in zip(paths[k][1], paths[k][1][1:]):
                 d = _pt_seg_dist(key, sg[0], sg[1])
                 _thr = vt_esc if _esc(str(k)) else vt
                 if d < _thr - 1e-9:
                     v_vt.append([base(k), round(d, 4), list(key)])
+    _LI = {}
+    for _ii in range(len(LAYER_PALETTE)):
+        _LI[LAYER_PALETTE[_ii]] = _ii
     vias = [k for k, l in pt_l.items() if len(l) > 1]
     v_vv = []
     for i in range(len(vias)):
         for j in range(i + 1, len(vias)):
             if pt_n.get(vias[i], set()) & pt_n.get(vias[j], set()):
                 continue                                    # 同网（相连）豁免
+            if SAFE_HOP_METRIC[0]:
+                _si = sorted(_LI[l] for l in pt_l[vias[i]])
+                _sj = sorted(_LI[l] for l in pt_l[vias[j]])
+                if _si[-1] < _sj[0] or _sj[-1] < _si[0]:
+                    continue    # CO-16 安全 hop：层跨不相交 => 无共层铜/钻孔冲突
             d = ((vias[i][0] - vias[j][0]) ** 2 + (vias[i][1] - vias[j][1]) ** 2) ** 0.5
             if d < vv - 1e-9:
                 v_vv.append([list(vias[i]), list(vias[j]), round(d, 4)])
@@ -1120,8 +1468,12 @@ def main(argv=None) -> int:
     ap.add_argument("--landing-out", default=None)
     ap.add_argument("--quiet", action="store_true")
     args = ap.parse_args(argv)
-    global ORD
+    global ORD, REVISION
     ORD = args.enum_order
+    shape = args.r1_5_shape or DEFAULT_SHAPE
+    if shape == "co16":
+        REVISION = REVISION_CO16
+        SAFE_HOP_METRIC[0] = True
 
     fc = freeze_check(F)
     if fc["drift"]:
@@ -1147,6 +1499,11 @@ def main(argv=None) -> int:
     facts = page_facts(_mman, j["lane_frame"])
     if args.scale > 1:
         return scale_probe(j, facts, args)
+    if shape == "co16":
+        if sha256(CO16_ALLOC) != CO16_ALLOC_SHA:
+            print("W3-CN: CO16-ALLOC.1 sha drift")
+            return 4
+        j["co16_alloc"] = json.load(CO16_ALLOC.open())
     gate = resource_gate(facts, j["spec"], j["rules"], j["layer_intent"])
     bump(4 * len(facts), "nodes")
     _elig = list(gate["transition_eligible_layers"])
@@ -1162,12 +1519,15 @@ def main(argv=None) -> int:
     _pd2 = STEP2 / "m13_v57_f13_r1_pair_coupling_v1_4.json"
     _coh["pair_domain"] = json.load(_pd2.open())["pages"] if _pd2.exists() else {}
     r3 = r3_place(j["r3_gaps"], lanes, args.r3_order, j.get("r3_base"))   # ROOT-17 / CO-05b
-    r1 = r1_place(facts, frs, j["pair_xorder"], j["verdict"], _coh, lanes, r3)
+    _co16 = None
+    if shape == "co16":
+        _co16, r1 = co16_prepare(j, facts, lanes, r3)           # W3-CN.31: 工件 O(1) 消费
+    else:
+        r1 = r1_place(facts, frs, j["pair_xorder"], j["verdict"], _coh, lanes, r3)
     rfc = refclk_place(j["manifest"], j["w0r_model"])
 
     # ---- R1.5 single straight segment (via1 -> (entry_x, lane_y +/- POL_OFF))
     paths, r15 = {}, {}
-    shape = args.r1_5_shape or "t2"
     band_index = {}
     for fr in frs:
         for pi in range(len(fr["pages"])):
@@ -1186,7 +1546,7 @@ def main(argv=None) -> int:
             off = pol_off(f, pol)
             tgt = [fp(entry), fp(lanes[pid]["lane_y"] + off)]
             r15[(pid, pol)] = [tgt[0], tgt[1]]
-            if a:
+            if a and shape != "co16":
                 src = a[pol + "_via"]
                 if shape == "t2":
                     # LID.1 8L (rect #03): 每组 (corridor,band) 独占一个派生通道层 (In2/In6/B)；
@@ -1204,6 +1564,10 @@ def main(argv=None) -> int:
                 else:
                     paths[(pid, pol)] = [glayer[f["corridor"] + "/" + f["band"]],
                                         [[src[0], src[1]], [tgt[0], tgt[1]]]]
+    if shape == "co16":
+        _p2, _c2 = co16_build_routes(facts, _co16, lanes)
+        paths.update(_p2)
+        r1["certificates"] = r1["certificates"] + _c2
     _MEANDER = {}
     for pid, f in facts.items():
         # ROOT-15 fix: R3 assignment keys are "<conn_ref>|<net>", NOT the page id; the previous
@@ -1212,6 +1576,8 @@ def main(argv=None) -> int:
         ext = CORRIDOR[cid]["bounds"][1] if cid == "EAST_CHIP_TO_J2" else CORRIDOR[cid]["bounds"][0]
         a_pg = r1["assignment"].get(pid)
         if not a_pg:
+            continue
+        if shape == "co16":
             continue
         if MEANDER_MODE:
             _Lv, _lyp = {}, {}
@@ -1275,21 +1641,22 @@ def main(argv=None) -> int:
         pass
     ids_all = sorted(paths)
     adj = {k: set() for k in ids_all}
-    for a in range(len(ids_all)):
-        for b in range(a + 1, len(ids_all)):
-            pa, pb = paths[ids_all[a]][1], paths[ids_all[b]][1]
-            hit = 0
-            for s1 in zip(pa, pa[1:]):
-                for s2 in zip(pb, pb[1:]):
-                    hit += seg_cross(s1[0], s1[1], s2[0], s2[1])
-            if hit:
-                adj[ids_all[a]].add(ids_all[b]); adj[ids_all[b]].add(ids_all[a])
     col = {}
-    for k in ids_all:
-        used = {col[n] for n in adj[k] if n in col}
-        pick = [i for i in range(len(LAYER_PALETTE)) if i not in used]
-        col[k] = pick[0] if pick else 0
-    if shape != "t2":
+    if shape != "co16":
+        for a in range(len(ids_all)):
+            for b in range(a + 1, len(ids_all)):
+                pa, pb = paths[ids_all[a]][1], paths[ids_all[b]][1]
+                hit = 0
+                for s1 in zip(pa, pa[1:]):
+                    for s2 in zip(pb, pb[1:]):
+                        hit += seg_cross(s1[0], s1[1], s2[0], s2[1])
+                if hit:
+                    adj[ids_all[a]].add(ids_all[b]); adj[ids_all[b]].add(ids_all[a])
+        for k in ids_all:
+            used = {col[n] for n in adj[k] if n in col}
+            pick = [i for i in range(len(LAYER_PALETTE)) if i not in used]
+            col[k] = pick[0] if pick else 0
+    if shape not in ("t2", "co16"):
         for k in ids_all:
             paths[k][0] = LAYER_PALETTE[col[k]]
     cls, ovl = count_crossings(paths)
@@ -1365,8 +1732,16 @@ def main(argv=None) -> int:
             a, b = r3["assignment"][keys[i]], r3["assignment"][keys[k]]
             if a["column_x"] == b["column_x"] and abs(a["landing"][1] - b["landing"][1]) < VIA_VIA - TOL:
                 r3_bad.append([keys[i], keys[k]])
+    _co16_keys = set()
+    if _co16:
+        for _pid2, _a2 in _co16.items():
+            _f2 = facts[_pid2]
+            for _pol2 in ("P", "N"):
+                _co16_keys.add(_f2["conn_ref"] + "|" + _f2["nets"][_pol2])
     r3_band_bad = []
     for k, a in r3["assignment"].items():
+        if k in _co16_keys:
+            continue           # CO-16 L2 扇面 y（CO-10/CO-15 fan）：不在 F-8 gap y_band 内（工件裁定）
         if a["landing"][1] < a["y_band"][0] - TOL or a["landing"][1] > a["y_band"][1] + TOL:
             r3_band_bad.append([k, a["landing"][1], a["y_band"]])
     boxes = [([b["keepout_x"][0], b["keepout_y"][0]], [b["keepout_x"][1], b["keepout_y"][1]])
@@ -1396,7 +1771,7 @@ def main(argv=None) -> int:
         ("A-CN.1a", "R1 via ∈ 冻结候选", "0 miss", str(len(cand_miss)), not cand_miss),
         ("A-CN.1b", "R1 64 via 两两 >= 0.525", "0", str(len(vviol)), not vviol),
         ("A-CN.1c", "R1 帧内 x 单调（T-2 下 N/A：其目的=扇面平面性，已由 T-2 构造保证；以同层交叉=0 为准）",
-         "0|N/A(t2)", str(len(mono_bad)), (not mono_bad) or shape == "t2"),
+         "0|N/A(t2|co16)", str(len(mono_bad)), (not mono_bad) or shape in ("t2", "co16")),
         ("A-CN.2a", "R2 走廊内 lane 严格递增", "0", str(len(lane_bad)), not lane_bad),
         ("A-CN.2b", "R2 双端谓词 <= 45.4", "0", str(len(pred_bad)), not pred_bad),
         ("A-CN.3a", "R3 72/72 落点", "72", str(n_land), n_land == 72),
@@ -1499,9 +1874,15 @@ def main(argv=None) -> int:
                              "stagger_ok": a["stagger_mm"] >= STAGGER - TOL},
                     "frame": a["frame"], "x_direction": a["direction"]},
                 "r1_5": r15.get(pid),
-                "r2": {"entry": [ent, fp(lanes[pid]["lane_y"] + pol_off(f, "P"))],
-                       "exit": [ext, fp(lanes[pid]["lane_y"] + pol_off(f, "P"))],
-                       "layer": glayer[f["corridor"] + "/" + f["band"]], "pol_offset_mm": POL_OFF},
+                "r2": {"entry": [ent, fp(lanes[pid]["lane_y"] + (
+                           (lanes[pid]["lane_y_pol"]["P"] - lanes[pid]["lane_y"]) if shape == "co16"
+                           else pol_off(f, "P")))],
+                       "exit": [ext, fp(lanes[pid]["lane_y"] + (
+                           (lanes[pid]["lane_y_pol"]["P"] - lanes[pid]["lane_y"]) if shape == "co16"
+                           else pol_off(f, "P")))],
+                       "layer": (lanes[pid].get("escape_layer") if shape == "co16"
+                                 else glayer[f["corridor"] + "/" + f["band"]]),
+                       "pol_offset_mm": POL_OFF_CO16 if shape == "co16" else POL_OFF},
                 "r3": None if not r3a else {"pad": r3a["pad"], "landing": r3a["landing"],
                                             "column_x": r3a["column_x"],
                                             "layer_chain": ["F.Cu",
@@ -1517,6 +1898,15 @@ def main(argv=None) -> int:
         if a and all(r3_by_pol.values()):
             for pol in ("P", "N"):
                 r3a = r3_by_pol[pol]                         # per-polarity landing
+                if shape == "co16":
+                    # W3-CN.31: CO-09/CO-11 安全-hop 拓扑（全 via in {F<->In2, In2<->In6, In6<->B}）
+                    _pp = _CO16_PTS[(pid, pol)]
+                    _nd = co16_nodes(f, pol, a[pol + "_via"], _pp["esc"], _pp["lane"], _pp["stub"],
+                                     lanes[pid]["escape_layer"], lanes[pid]["stub_layer"],
+                                     r3a["landing"], f["conn_pad"][pol])
+                    page["nodes"][pol] = _nd
+                    page["vias"] += co16_vias(_nd, pol)
+                    continue
                 off = pol_off(f, pol)
                 ly = fp(lanes[pid]["lane_y"] + off)
                 v1 = a[pol + "_via"]
@@ -1603,7 +1993,8 @@ def main(argv=None) -> int:
                            "n_pages": n_pages, "n_landing": n_land, "n_refclk_pages": len(rfc), "n_refclk_paths": n_rf_paths,
                            "n_frames": n_frames},
         },
-        "inputs_sha": {k: FROZEN_SHA[k] for k in FROZEN_SHA},
+        "inputs_sha": dict({k: FROZEN_SHA[k] for k in FROZEN_SHA},
+                          **({"co16_alloc": CO16_ALLOC_SHA} if shape == "co16" else {})),
         "frozen_sha_check": fc,
         "decision_contract": {
             "r4": "out_of_chain(D0-1)", "refclk_layer": "F.Cu(D0-2)",
@@ -1612,7 +2003,8 @@ def main(argv=None) -> int:
             "row_key": "(N.y+P.y)/2", "west_framing": "conn_ref frame + in-frame conn_x asc(F-5)",
             "x_order_scope": "frame = (corridor, conn_ref, band) [L2 approved 2026-09-10]",
             "data_layer_chain": ["F.Cu", "B.Cu", "In2.Cu", "B.Cu", "F.Cu"],
-            "max_vias_per_line": 4 if shape == "t2" else 2,
+            "max_vias_per_line": ({"bandX_escape_In2": 4, "bandY_escape_B": 6} if shape == "co16"
+                                  else (4 if shape == "t2" else 2)),
             "r1_5_layer_rule": "T-2 river (segment-type): escape+drop on the band layer "
                                "(dn=B.Cu, up=In6.Cu), corridor run on In2.Cu; 4 vias/line <= 5",
             "pair_rule": {"dist_min_mm": VIA_VIA, "stagger_min_mm": STAGGER},
@@ -1628,7 +2020,8 @@ def main(argv=None) -> int:
             "R1_5": {"status": "FEASIBLE" if crossings == 0 else "CERTIFICATE",
                      "segments_per_page_pol": 3 if shape == "t2" else 1,
                      "corners_deg": [90, 90] if shape == "t2" else 0, "no_via": shape != "t2",
-                     "vias_per_line": 4 if shape == "t2" else 2,
+                     "vias_per_line": (["via1", "corner", "drop", "land"] if shape == "co16"
+                                       else (4 if shape == "t2" else 2)),
                      "layer_rule": ({"vertical": "B.Cu", "horizontal": "In2.Cu"}
                                     if shape == "t2" else glayer),
                      "band_layer_rule_legacy": glayer,
