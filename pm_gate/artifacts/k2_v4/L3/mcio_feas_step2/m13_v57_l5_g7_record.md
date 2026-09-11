@@ -41,3 +41,43 @@
 - D8/G5 验证器 v2：**PASS**（G-M1..G-M6 + 双度量 0 + A1.2/A1.3/A1.4；A1.3 现覆盖 REFCLK P/N）。
 - L5 重测：DFM **479**（含新增 N 轨的 26 条）；SI 等长 **skew 24.476mm** 不变 ⇒ **G7 仍 FAIL**；
   **O1**（净距不可行，已实证与域/序无关）与 **O2**（板既有铜/读板）仍待 owner。
+
+
+---
+
+# G7 复核（ROOT-22: O4/R1-R2 收口后重跑；引擎 W3-CN.30；2026-09-11）
+
+
+> 2026-09-11｜图纸 rev **W3-CN.30**（sha16 `05f7bd10ab3b45b6`）｜板 `k2_v4_8L.l4.kicad_pcb`（sha16 `225fccb23c5b1b5f`）
+> ｜工具 `AppDir/bin/python3.11 tools/p3_v57_l5_signoff.py`（L5-FAB.2 / L5-DFM.2 / L5-SI.2，8L 口径）
+
+## 1. 结论
+- **SI（对内等长）：PASS** — `max_intra_pair_skew_mm = 0.0574 ≤ 0.15`（O4 长度侧保持闭合）。
+- **DFM/DFT：FAIL** — `new_total = 426`（shop 规则 `k2_v4_8L.kicad_pro` 口径）。**G7 保持 OPEN**。
+- 处置：**CO-06 变更单**（D1 跨层过孔桶短路触 L2；D2..D6 为 L3 净距模型缺口）。
+
+## 2. 量（8L）
+| 项 | 值 |
+|---|---|
+| copper layers | 8 = F/B/In1..In6 |
+| tracks / vias | 1710 / 256（drill 全部 0.2）|
+| SI | width 0.205 ✓；skew 0.0574 ✓（rule 0.15）|
+| EMC | 平面 In1/In3/In4/In5；信号层 F/In2/In6/B（LID.1 8L）|
+| DRC baseline（冻结 8L 空板）| 73（lib_footprint/silk，既有）|
+| DRC L4 | 499（=73 既有 + 426 新）|
+| **new violations** | **426** = shorting 108 / clearance 176 / solder_mask_bridge 103 / hole_clearance 24 / copper_edge 10 / tracks_crossing 4 / hole_to_hole 1 |
+
+## 3. 门禁口径说明
+初跑用板侧 `k2_v4_8L.l4.kicad_pro`（**过时 6L 规则**：min_via 0.5/drill 0.3/edge 0.5/仅 Default netclass）⇒ 伪阳性 1026。
+改用 **`k2_v4_8L.kicad_pro`**（规则取自冻结 `drc_rules.json` 语义 + `k2_v4.kicad_pro` 网络类，含 PCIe85 0.175）后 `new=426`。
+**判据不放松**：426 全部为真实几何（样本见 CO-06 §2）。
+
+## 4. 独立复算
+- `verify_w3_acn9_independent.py`（自带几何核/阈值）：tt/vt/vv = **0/0/0**（同层端点层口径）。
+- 跨层口径由 `kicad-cli pcb drc`（KiCad 10.0.5）给出；两者口径差即 CO-06 D1/D2（跨层/自对不在当前 W3 契约内）。
+
+## 5. 指纹
+图纸 `05f7bd10ab3b45b6`｜landing `8fa507a8cc765264`｜G5 validation `44372895944abd78`（W3-VALv2.3 PASS）
+｜L4 construction `aa25f636c5468f97`｜L4 validation `69d3dea9aa4253fe`（L4-A..E PASS）
+｜fab `136048baf1c8fbdf`｜dfm `cd20e835118f4469`｜si `ae94efdfc99e5e2a`
+冻结四源 `0bd52ed48e720b8c / a8ef3ea8ecff99d7 / fb07d25ac426ff84 / 0a459839e15960b8`（未改）。

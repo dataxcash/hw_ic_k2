@@ -15,9 +15,9 @@ from pathlib import Path
 K2 = Path("/home/fila/jqdDev_2025/ic_hw/k2")
 ROOT = Path("/home/fila/jqdDev_2025/ic_hw")
 STEP2 = K2 / "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2"
-SRC_PCB = K2 / "k2_v4.kicad_pcb"
-L4_PCB = K2 / "k2_v4.l4.kicad_pcb"
-PRO = K2 / "k2_v4.kicad_pro"
+SRC_PCB = K2 / "k2_v4_8L.kicad_pcb"
+L4_PCB = K2 / "k2_v4_8L.l4.kicad_pcb"
+PRO = K2 / "k2_v4_8L.kicad_pro"
 DRAWING = STEP2 / "m13_v57_w3_joint_assignment.json"
 REC = STEP2 / "m13_v57_l4_construction.json"
 RULES = ROOT / "_shared/eda_core/drc_rules.json"
@@ -58,7 +58,7 @@ def main() -> int:
     for v in vias:
         drill[round(pcbnew.ToMM(v.GetDrill()), 3)] += 1
     bb = b.GetBoardEdgesBoundingBox()
-    fab = {"artifact": "m13_v57_l5_fab_record", "schema": 1, "revision": "L5-FAB.1",
+    fab = {"artifact": "m13_v57_l5_fab_record", "schema": 1, "revision": "L5-FAB.2",
            "board": str(L4_PCB.relative_to(K2)), "board_sha256": sha(L4_PCB),
            "copper_layers": cu, "n_copper_layers": len(cu),
            "n_tracks": len(tracks), "n_vias": len(vias), "n_nets": b.GetNetCount(),
@@ -73,7 +73,7 @@ def main() -> int:
     tb, tl = bytype(dbase), bytype(dl4)
     new = {k: tl.get(k, 0) - tb.get(k, 0) for k in tl}
     widths = sorted({round(pcbnew.ToMM(t.GetWidth()), 3) for t in tracks})
-    dfm = {"artifact": "m13_v57_l5_dfm_dft_record", "schema": 1, "revision": "L5-DFM.1",
+    dfm = {"artifact": "m13_v57_l5_dfm_dft_record", "schema": 1, "revision": "L5-DFM.2",
            "drc": {"tool": f"kicad-cli {subprocess.run([str(CLI),'--version'],capture_output=True,text=True).stdout.strip()}",
                    "baseline_frozen": {"n": len(dbase.get("violations", [])), "by_type": tb,
                                        "unconnected": len(dbase.get("unconnected_items", []))},
@@ -111,8 +111,8 @@ def main() -> int:
             return dd
         skew.append({"page": pg["page_id"], "skew_mm": round(abs(plen("P") - plen("N")), 4)})
     skew_max = max((s["skew_mm"] for s in skew), default=0)
-    planes = [l for l in cu if l in ("In1.Cu", "In3.Cu", "In4.Cu")]
-    si = {"artifact": "m13_v57_l5_si_pi_emc_record", "schema": 1, "revision": "L5-SI.1",
+    planes = [l for l in cu if l in ("In1.Cu", "In3.Cu", "In4.Cu", "In5.Cu")]
+    si = {"artifact": "m13_v57_l5_si_pi_emc_record", "schema": 1, "revision": "L5-SI.2",
           "SI": {"track_width_rule_mm": 0.205, "all_pcie_tracks_0p205": widths_ok,
                  "max_intra_pair_skew_mm": skew_max, "skew_rule_mm": rules["diff_pair"]["intra_pair_skew_mm"],
                  "skew_ok": skew_max <= rules["diff_pair"]["intra_pair_skew_mm"] + 1e-9,
@@ -121,7 +121,7 @@ def main() -> int:
                  "pdn_planes_untouched": "frozen board zones unmodified (L4 adds tracks only)",
                  "hole_clearance_violations": dfm["drc"]["new_violations"].get("hole_clearance", 0)},
           "EMC": {"signal_layers": [l for l in cu if l not in planes],
-                  "reference_plane_adjacency": "F.Cu<->In1.Cu, In2.Cu<->In3.Cu, B.Cu<->In4.Cu (6L stack)",
+                  "reference_plane_adjacency": "F.Cu<->In1.Cu, In2.Cu<->In3.Cu, In6.Cu<->In5.Cu, B.Cu<->In4.Cu (8L stack, LID.1)",
                   "solder_mask_bridge_violations": dfm["drc"]["new_violations"].get("solder_mask_bridge", 0),
                   "copper_edge_violations": dfm["drc"]["new_violations"].get("copper_edge_clearance", 0)},
           "verdict": "PASS" if (widths_ok and skew_max <= rules["diff_pair"]["intra_pair_skew_mm"] + 1e-9) else "FAIL"}

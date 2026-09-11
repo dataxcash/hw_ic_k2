@@ -20,6 +20,7 @@ MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
 LANDING = STEP2 / "m13_v57_w3_chip_landing_rows.json"
 VERDICT = STEP2 / "m13_v57_s1_r1_via_verdict_r2.json"
 GAPS = STEP2 / "m13_v57_f8_r3_gap_candidates_r3x2.json"
+BASE_GAPS = STEP2 / "m13_v57_f8_r3_gap_candidates.json"
 LANEFRAME = STEP2 / "m13_v57_f3_lane_frame.json"
 W0R = STEP2 / "m13_v57_big_w0r_corridor_model.json"
 FROZEN = {"spec": L3 / "SPEC_k2_v4.json", "rules": K2 / "_shared/eda_core/drc_rules.json",
@@ -175,27 +176,65 @@ def derive_r2(manifest, lane_frame):
     return out
 
 
-def derive_r3(gaps, manifest):
-    """独立重导（闭式规则，来自冻结 r3x2 域）：
-    组 = (conn_ref, min(gap_candidates))；组序 rank 交替偏置 stag=±0.1（band-clamped）；
-    base_k = clamp(pad_y + R3_OFF + stag, band_lo+0.05, band_hi-0.05)；y_k = max(base_k, y_{k-1} + 0.6)；
-    组内序 = (pad_y, net)。  （W3 8L 波次修订：列序交替小偏置；validator rev v2.2）"""
+def derive_r3(gaps, manifest, base_gaps, lane_frame):
+    """独立重导（闭式规则，v2.3 纳入 CO-05c 成对落列契约）：
+    - J2 数据页（ROOT-22 成对落列）：inner lx=131.65-0.6k / outer lx=136.0+0.6k，
+      k = 本带 (band, P.pad_y, page) 序；landing_y = clamp(pad_y+R3_OFF, band±0.05)（无前缀递推）。
+    - 其余 pad（含 J2 refclk 与 J3/J4）：组=(conn_ref, min(gap_candidates))，rank 交替偏置 stag=±0.1
+      （band-clamped）；base_k=clamp(pad_y+R3_OFF+stag, band±0.05)；y_k=max(base_k, y_{k-1}+0.6)；组内序=(pad_y, net)。"""
     pads = []
     for cref in sorted(gaps["connectors"]):
         for xc, col in sorted(gaps["connectors"][cref]["columns"].items(), key=lambda kv: float(kv[0])):
             for en in col["entries"]:
                 band = en.get("y_band") or [en["y"] - 0.3, en["y"] + 0.3]
-                pads.append({"ref": cref, "net": en["net"], "y": round(float(en["y"]), 6),
+                pads.append({"ref": cref, "net": en["net"], "page": en["page"], "kind": en["kind"],
+                             "y": round(float(en["y"]), 6),
                              "colx": round(min(float(g) for g in en["gap_candidates"]), 6),
                              "band": [round(float(band[0]), 6), round(float(band[1]), 6)]})
+    band_of = {}
+    for cd in lane_frame["corridors"].values():
+        for f in cd["frames"]:
+            for q in f["pages"]:
+                band_of[q["page_id"]] = f["band"]
+    j2y = {pd["net"]: pd for pd in pads if pd["ref"] == "J2"}
+    # ---- J2 paired landing (ROOT-22) ----
+    bseen = {}
+    for xc, col in base_gaps["connectors"]["J2"]["columns"].items():
+        for en in col["entries"]:
+            bseen[(en["page"], en["pol"])] = (float(xc), en)
+    prows = []
+    for pg in sorted({k[0] for k in bseen}):
+        if pg not in band_of:
+            continue
+        pn = bseen.get((pg, "P")); nn = bseen.get((pg, "N"))
+        if pn and nn:
+            prows.append((band_of[pg], round(float(pn[1]["y"]), 6), pg))
+    prows.sort()
+    out = {}
+    paired_pages = set()
+    prank = {}
+    for band, _, pg in prows:
+        paired_pages.add(pg)
+        k = prank.get(band, 0); prank[band] = k + 1
+        for tag in ("P", "N"):
+            xc, en = bseen[(pg, tag)]
+            inner = abs(xc - 132.65) < 1e-6
+            lx = round(131.65 - 0.6 * k, 6) if inner else round(136.0 + 0.6 * k, 6)
+            pdy = j2y.get(en["net"], {}).get("y", float(en["y"]))
+            b = en.get("y_band") or [en["y"] - 0.3, en["y"] + 0.3]
+            y = min(max(float(pdy) + R3_OFF, float(b[0]) + 0.05), float(b[1]) - 0.05)
+            out["J2|" + en["net"]] = {"column_x": lx, "landing_y": round(y, 6),
+                                      "band": [round(float(b[0]), 6), round(float(b[1]), 6)]}
+    # ---- remaining pads: original grouped rule ----
     groups = {}
     for pd in pads:
+        if pd["page"] in paired_pages:
+            continue
         groups.setdefault((pd["ref"], pd["colx"]), []).append(pd)
     rank, rk = {}, 0
     for c in sorted({k[0] for k in groups}):
         for cx in sorted({k[1] for k in groups if k[0] == c}):
             rank[(c, cx)] = rk; rk += 1
-    out = {}
     for key in sorted(groups):
         cref, colx = key
         prev = None
@@ -376,7 +415,7 @@ def main() -> int:
 
     # G-M4: independent re-derivation
     r2 = derive_r2(manifest, lane_frame)
-    r3d = derive_r3(gaps, manifest)
+    r3d = derive_r3(gaps, manifest, load(BASE_GAPS), lane_frame)
     m4 = {"r2_mismatch": [], "r3_mismatch": [], "nodes_route_mismatch": []}
     for pid, v in r2.items():
         a = art["pages"]; pg = next((p for p in a if p["page_id"] == pid), None)
@@ -431,7 +470,7 @@ def main() -> int:
     verdict_str = "PASS" if (gates_ok and checks_ok and frozen_ok and a12r["ok"] and a13r["ok"]
                              and a14r["ok"] and all(p["ok"] for p in probes)) else "FAIL"
 
-    val = {"artifact": "m13_v57_w3_validation", "schema": 1, "revision": "W3-VALv2.2",
+    val = {"artifact": "m13_v57_w3_validation", "schema": 1, "revision": "W3-VALv2.3",
            "artifact_rev": art["revision"], "verdict": verdict_str,
            "stage": {"D8": {"gates": gates}, "G5": {"A1.2": a12r["ok"], "A1.3": a13r["ok"], "A1.4": a14r["ok"]}},
            "method_gates": gates, "frozen_sha_check": {"actual": frozen, "match": frozen_ok},
@@ -439,8 +478,8 @@ def main() -> int:
            "notes": ["G-M4 独立重导：R2 lane（由冻结 lane_frame 独立复刻块规则）+ R3 landing（由 r3x2 域 + pad y-band）"
                      "+ 双度量（段冲突/全 via 间距，由工件 route_geometry/pages[*].vias 独立重算）。",
                      "R1 via 以不变量验证（∈冻结候选 + 100% 间距 + 平面性），非重现 argmin（引擎候选键）。",
-                     "v2.2 契约修订：R3 独立重导纳入列序交替偏置 ±0.1 + band clamp + 前缀递推（列序偏置由 W3 8L 波次引入，"
-                     "见 m13_v57_w3_8l_progress_v2/v3.md）；V3 合法层对扩为 LID.1 8L 信号层集 {F.Bu,B.Cu,In2.Cu,In6.Cu}。"]}
+                     "v2.3 契约修订：R3 独立重导纳入 CO-05c 成对落列（J2 数据页 inner=131.65-0.6k / outer=136.0+0.6k，k=本带序，"
+                     "无前缀递推）；其余 pad 保留 v2.2 列序交替偏置规则。CO-05c 见 m13_v57_CO05_addendum_v6/v7。"]}
     MAIN_VAL = STEP2 / "m13_v57_w3_validation.json"
     MAIN_VAL.write_text(json.dumps(val, indent=1, ensure_ascii=False, sort_keys=True), encoding="utf-8")
     (STEP2 / "m13_v57_w4_a12_report.json").write_text(json.dumps(

@@ -34,6 +34,7 @@ F = {
     "pair_coupling": STEP2 / "m13_v57_f13_r1_pair_coupling.json",
     "pair_xorder": STEP2 / "m13_v57_f13_r1_pair_coupling_v1_1.json",
     "r3_gaps": STEP2 / "m13_v57_f8_r3_gap_candidates_r3x2.json",   # ROOT-16 A (versioned domain rev)
+    "r3_base": STEP2 / "m13_v57_f8_r3_gap_candidates.json",        # CO-05b: multi-candidate legality
     "f6b_report": STEP2 / "m13_v57_f6b_report.json",
     "verdict": STEP2 / "m13_v57_s1_r1_via_verdict_r2.json",
     "card": STEP2 / "m13_v57_w3_kickoff_card_v1_28.md",   # ROOT-16 contract revision
@@ -49,6 +50,7 @@ FROZEN_SHA = {
     "param_trace": "e288ffa5421c22972075a7a3bef503a4b472aa32ea148c2ed0502090a3d98cae",
     "pair_coupling": "82e11c4cbdb4e8d44df1997f660c97fb75a47d33661223c9e5cf5fb0cb9c0d14",
     "r3_gaps": "5511c8c30c21f9144c8b5e81d951649c50cc8ee427cdd94677cb4f65e06a2e05",
+    "r3_base": "8a31632907b171483cd40a053231c702e378f944af33f92598a6141bd052cdeb",
     "f6b_report": "9070ed53f970f480e88b1de3aa19792f8b637de51857935fa6b7c51fa8a015d6",
     "verdict": "f2e2632506457e31c145b491284c9ecbf1cb72cc09d96ccdfb3251ef80a5556a",
     "coherent_rows": "014a14b317e1c3df3d4400d45d6877ffc81f4ca92d533da4c7c7e4af67319c9a",
@@ -58,7 +60,7 @@ FROZEN_SHA = {
 OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
 OUT_LANDING = STEP2 / "m13_v57_w3_chip_landing_rows.json"
 
-REVISION = "W3-CN.27"   # LID.1 8L + A-CN.9 完整净距谓词（via<->track）+ 无 stale seed
+REVISION = "W3-CN.30"   # ROOT-22: O4 成对落列 pitch=0.6(R3_STEP) + L3 蛇形；A-CN.9 完整净距；无 stale seed
 ORD = "natural"   # ROOT-20: enumeration order (A1.2 order-invariance, non-vacuous)
 SCHEMA = 1
 STEP = 1.46
@@ -81,6 +83,15 @@ GRID = 0.05
 R3_OFF = -0.3
 R3_STEP = 0.6
 POL_OFF = 0.19
+# CO-05c (O4): 成对落列 + L3 长度补偿（run 上确定性 45° 单侧蛇形）
+PAIR_MODE = True
+MEANDER_MODE = True
+PAIR_PITCH = 0.6                  # ROOT-22: 落列 pitch = R3_STEP >= max(vv 0.525, vt 0.4525)
+J2_INNER_X, J2_OUTER_X = 132.65, 135.0
+J2_LEFT0, J2_RIGHT0 = 131.65, 136.0
+MEANDER_PITCH = 0.615             # 2A >= 3w (=0.615) => A >= 0.3075
+MEANDER_A_MAX = 0.34              # 单侧横摆上限（相邻 lane 对面 run 间距 1.08 => 双向 2*0.34+0.38=1.06 <= 1.08）
+MEANDER_A_MIN = 0.27             # n>=2 时自净距 1.414*A >= 0.38
 LAYER_BY_BAND = {"up": "In2.Cu", "dn": "B.Cu"}
 LAYER_PALETTE = ["F.Cu", "In2.Cu", "In6.Cu", "B.Cu"]   # LID.1: 4 信号层
 TOL = 1e-9
@@ -193,6 +204,37 @@ def pol_off(f: dict, pol: str) -> float:
     d = f["pad"]["N"][1] - f["pad"]["P"][1]
     base = -POL_OFF if d > 0 else POL_OFF
     return base if pol == "P" else -base
+
+
+def meander_run(vx, ly, lx, extra_mm, dy):
+    """沿 run (In2) 插入确定性 45° 单侧蛇形，使 run 长度 +extra_mm。返回折线点列表。
+
+    Dm = extra/(sqrt2-1) 为蛇形纵向跨度；段长 sqrt2*A、纵向 A、横摆 A（A<=MEANDER_A_MAX）。
+    m = 2*ceil(Dm/(2*A_MAX)) 段（偶数，起止均回 ly）；A = Dm/m。越界即钳位（由调用方出证书）。
+    """
+    R = abs(lx - vx)
+    if extra_mm <= TOL:
+        return [[vx, ly], [lx, ly]]
+    dm = extra_mm / (2 ** 0.5 - 1.0)
+    if dm > R - 1.0:
+        dm = R - 1.0
+    n = max(1, int(round(dm / 0.6)))                       # 齿数：A = dm/(2n) ~ 0.3
+    a = dm / (2.0 * n)
+    a = min(a, MEANDER_A_MAX) if n == 1 else min(MEANDER_A_MAX, max(MEANDER_A_MIN, a))
+    dm = 2.0 * n * a                                       # 实得纵向跨度（钳位后）
+    m = 2 * n
+    sgn = 1.0 if lx >= vx else -1.0                        # 沿 run 方向推进（勿回折）
+    x0 = fp(vx + sgn * (R - dm) / 2.0)                     # 居中：自 vx 沿行进方向 (R-dm)/2
+    pts = [[fp(vx), fp(ly)], [x0, fp(ly)]]
+    for i in range(1, m):
+        pts.append([fp(x0 + sgn * i * a), fp(ly + (dy * a if i % 2 else 0.0))])
+    pts.append([fp(x0 + sgn * dm), fp(ly)])
+    pts.append([fp(lx), fp(ly)])
+    out = [pts[0]]
+    for q in pts[1:]:
+        if abs(q[0] - out[-1][0]) > TOL or abs(q[1] - out[-1][1]) > TOL:
+            out.append(q)
+    return out
 
 
 def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict, coherent: dict = None,
@@ -432,7 +474,8 @@ def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict, coherent: d
                     return False
         return True
     for _pid in sorted(facts, key=lambda p: (facts[p]["corridor"], facts[p]["conn_ref"],
-                                             facts[p]["band"], _rank.get(p, 0), p)):
+                                             facts[p]["band"],
+                                             _rank.get(p, 0), p)):
         _f = facts[_pid]
         _rows = _pdm.get(_pid, {}).get("pair_rows", [])
         if not _rows:
@@ -577,8 +620,41 @@ def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict, coherent: d
                       "predicate (all closed-form single pass; no search / no backtracking)"}
 
 
-def r3_place(gaps: dict, lanes: dict = None, order: str = "lane") -> dict:
-    """每 pad 取最小 gap 候选归组；组内按 (pad_y, net) 前缀递推。"""
+def _pair_lands(base_gaps, lanes):
+    """CO-05b：J2 数据页成对落列派生（确定性、单遍、零搜索）。
+
+    合法域（BASE F-8）：列 132.65(inner) 只可向左 (x<=131.65)；135.0(outer) 只可向右 (x>=136.0)。
+    每页取成对局部列：inner 极 lx=131.65-PITCH*k，outer 极 lx=136.0+PITCH*k（k=本带行序）。
+    同带内列互异（>=0.38）⇒ 落段竖段互不重叠；异带（B.Cu/In6.Cu）可复用列。
+    """
+    out = {}
+    seen = {}
+    for xc, col in base_gaps["connectors"]["J2"]["columns"].items():
+        for en in col["entries"]:
+            seen[(en["page"], en["pol"])] = (float(xc), en)
+    rows = []
+    for pg in sorted({k[0] for k in seen}):
+        if lanes is None or pg not in lanes:
+            continue
+        pn = seen.get((pg, "P")); nn = seen.get((pg, "N"))
+        if pn and nn:
+            rows.append((lanes[pg]["frame"][2], pn[1]["y"], pg, pn, nn))
+    rows.sort(key=lambda t: (t[0], t[1], t[2]))
+    rank = {}
+    for band, _, pg, pn, nn in rows:
+        k = rank.get(band, 0); rank[band] = k + 1
+        ent = {}
+        for tag, (xc, en) in (("P", pn), ("N", nn)):
+            inner = abs(xc - J2_INNER_X) < 1e-6
+            lx = fp(J2_LEFT0 - PAIR_PITCH * k) if inner else fp(J2_RIGHT0 + PAIR_PITCH * k)
+            b = en.get("y_band") or [en["y"] - 0.3, en["y"] + 0.3]
+            ent[tag] = (lx, [fp(b[0]), fp(b[1])], bool(inner))
+        out[pg] = ent
+    return out
+
+
+def r3_place(gaps: dict, lanes: dict = None, order: str = "lane", base_gaps: dict = None) -> dict:
+    """每 pad 取最小 gap 候选归组；组内按 (pad_y, net) 前缀递推。CO-05b: J2 数据页成对落列。"""
     pads = []
     for cref in sorted(gaps["connectors"]):
         for xc, col in sorted(gaps["connectors"][cref]["columns"].items(),
@@ -589,15 +665,30 @@ def r3_place(gaps: dict, lanes: dict = None, order: str = "lane") -> dict:
                              "cands": sorted(float(c) for c in en["gap_candidates"]),
                              "band": [fp(band[0]), fp(band[1])], "pol": en["pol"],
                              "page": en["page"], "kind": en["kind"]})
-    groups = {}
-    for pd in pads:
-        groups.setdefault((pd["ref"], pd["cands"][0]), []).append(pd)
+    PL = _pair_lands(base_gaps, lanes) if (PAIR_MODE and base_gaps is not None) else {}
     out, certs = {}, []
     _rk = 0
     RANK = {}
+    groups = {}
+    for pd in pads:
+        groups.setdefault((pd["ref"], pd["cands"][0]), []).append(pd)
     for _c in sorted({k[0] for k in groups}):
         for _cx in sorted({k[1] for k in groups if k[0] == _c}):
             RANK[(_c, _cx)] = _rk; _rk += 1
+    for pg, ent in sorted(PL.items()):
+        for pol in ("P", "N"):
+            lx, band, _inner = ent[pol]
+            pd = next((q for q in pads if q["page"] == pg and q["pol"] == pol), None)
+            if pd is None:
+                continue
+            bump(2, "r3_landing")
+            y = fp(min(max(pd["y"] + R3_OFF, band[0] + 0.05), band[1] - 0.05))
+            out[pd["ref"] + "|" + pd["net"]] = {
+                "ref": pd["ref"], "pad": [fp(colx_center(gaps, pd["ref"], pd)),
+                                          fp(pd["y"])], "pad_x": fp(colx_center(gaps, pd["ref"], pd)),
+                "pad_y": fp(pd["y"]), "y_band": band, "column_x": fp(lx),
+                "landing": [fp(lx), y], "kind": pd["kind"], "page": pd["page"],
+                "pol": pd["pol"], "gap_column_candidates": pd["cands"]}
     for (cref, colx) in sorted(groups):
         if order == "lane" and lanes is not None:
             grp = sorted(groups[(cref, colx)],
@@ -606,8 +697,10 @@ def r3_place(gaps: dict, lanes: dict = None, order: str = "lane") -> dict:
             grp = sorted(groups[(cref, colx)], key=lambda q: (q["y"], q["net"]))
         prev = None
         for pd in grp:
+            if pd["page"] in PL:
+                continue
             bump(2, "r3_landing")
-            _stag = 0.1 if (RANK.get((cref, colx), 0) % 2) else -0.1   # 列序交替小偏置（band 内）
+            _stag = 0.1 if (RANK.get((cref, colx), 0) % 2) else -0.1
             _base_y = min(max(pd["y"] + R3_OFF + _stag, pd["band"][0] + 0.05), pd["band"][1] - 0.05)
             y = _base_y if prev is None else max(_base_y, prev + R3_STEP)
             if y > pd["band"][1] + TOL or y < pd["band"][0] - TOL or (
@@ -629,7 +722,6 @@ def r3_place(gaps: dict, lanes: dict = None, order: str = "lane") -> dict:
                 "pol": pd["pol"], "gap_column_candidates": pd["cands"]}
             prev = y
     return {"assignment": out, "certificates": certs}
-
 
 def colx_center(gaps: dict, cref: str, pd: dict) -> float:
     for xc, col in gaps["connectors"][cref]["columns"].items():
@@ -1069,7 +1161,7 @@ def main(argv=None) -> int:
     _coh = dict(j.get("coherent_rows") or {})
     _pd2 = STEP2 / "m13_v57_f13_r1_pair_coupling_v1_4.json"
     _coh["pair_domain"] = json.load(_pd2.open())["pages"] if _pd2.exists() else {}
-    r3 = r3_place(j["r3_gaps"], lanes, args.r3_order)   # ROOT-17: r3 first (r1 needs the landings)
+    r3 = r3_place(j["r3_gaps"], lanes, args.r3_order, j.get("r3_base"))   # ROOT-17 / CO-05b
     r1 = r1_place(facts, frs, j["pair_xorder"], j["verdict"], _coh, lanes, r3)
     rfc = refclk_place(j["manifest"], j["w0r_model"])
 
@@ -1112,6 +1204,7 @@ def main(argv=None) -> int:
                 else:
                     paths[(pid, pol)] = [glayer[f["corridor"] + "/" + f["band"]],
                                         [[src[0], src[1]], [tgt[0], tgt[1]]]]
+    _MEANDER = {}
     for pid, f in facts.items():
         # ROOT-15 fix: R3 assignment keys are "<conn_ref>|<net>", NOT the page id; the previous
         # guard was always-true so the stub class was never populated (stub:0 was vacuous).
@@ -1120,6 +1213,28 @@ def main(argv=None) -> int:
         a_pg = r1["assignment"].get(pid)
         if not a_pg:
             continue
+        if MEANDER_MODE:
+            _Lv, _lyp = {}, {}
+            for _p2 in ("P", "N"):
+                _ra = r3["assignment"].get(f["conn_ref"] + "|" + f["nets"][_p2])
+                if _ra is None:
+                    _Lv = None
+                    break
+                _off = pol_off(f, _p2)
+                _lyp[_p2] = fp(lanes[pid]["lane_y"] + _off)
+                _v = a_pg[_p2 + "_via"]; _pad = f["pad"][_p2]; _cp = f["conn_pad"][_p2]
+                _lx = _ra["column_x"]; _yl = _ra["landing"][1]
+                _Lv[_p2] = (((_pad[0] - _v[0]) ** 2 + (_pad[1] - _v[1]) ** 2) ** 0.5
+                            + abs(_lyp[_p2] - _v[1]) + abs(_lx - _v[0])
+                            + abs(_yl - _lyp[_p2])
+                            + ((_cp[0] - _lx) ** 2 + (_cp[1] - _yl) ** 2) ** 0.5)
+            if _Lv:
+                _sh = "P" if _Lv["P"] < _Lv["N"] else "N"
+                _ex = abs(_Lv["P"] - _Lv["N"])
+                if _ex > TOL:
+                    _other = "N" if _sh == "P" else "P"
+                    _dy = 1.0 if _lyp[_sh] > _lyp[_other] else -1.0
+                    _MEANDER[pid] = {"pol": _sh, "extra": _ex, "dy": _dy}
         for pol in ("P", "N"):
             r3key = f["conn_ref"] + "|" + f["nets"][pol]     # per-polarity R3 landing (P and N differ)
             if r3key not in r3["assignment"]:
@@ -1136,7 +1251,13 @@ def main(argv=None) -> int:
                 _L = "B.Cu" if f["band"] == "dn" else "In6.Cu"
                 vx = r1["assignment"][pid][pol + "_via"][0]
                 lx = r3a["column_x"]
-                paths[(pid + "#lane", pol)] = ["In2.Cu", [[vx, ly], [lx, ly]]]
+                _mz = _MEANDER.get(pid, {})
+                if MEANDER_MODE and pol == _mz.get("pol") and _mz.get("extra", 0.0) > TOL:
+                    _pts = meander_run(vx, ly, lx, _mz["extra"], _mz["dy"])
+                    paths[(pid + "#lane", pol)] = ["In2.Cu", _pts]
+                    _mz.setdefault("lane_pts", {})[pol] = _pts
+                else:
+                    paths[(pid + "#lane", pol)] = ["In2.Cu", [[vx, ly], [lx, ly]]]
                 paths[(pid + "#stub", pol)] = [_L, [[lx, ly], [lx, r3a["landing"][1]]]]
             else:
                 paths[(pid + "#stub", pol)] = ["F.Cu", [[ext, ly],
@@ -1408,11 +1529,16 @@ def main(argv=None) -> int:
                     # geometry the A-CN.9 metric validates (non-self-consistent artifact).
                     _Lp = "B.Cu" if f["band"] == "dn" else "In6.Cu"
                     lx = r3a["column_x"]; ly_l = r3a["landing"][1]
+                    _mzp = (_MEANDER.get(pid, {}).get("lane_pts", {}) or {}).get(pol)
+                    # ROOT-22 fix: meander 路径须保留末点 [lx, ly]（落列 via 的 In2 顶点），
+                    # 否则 drop 处层变无 via 顶点 => L4 collapse 丢失 32 个 via。
+                    _in2 = ([[q[0], q[1], "In2.Cu"] for q in _mzp[1:]] if _mzp
+                            else [[lx, ly, "In2.Cu"]])
                     page["nodes"][pol] = [
                         [f["pad"][pol][0], f["pad"][pol][1], "F.Cu"],
                         [v1[0], v1[1], "F.Cu"], [v1[0], v1[1], _Lp],
                         [v1[0], ly, _Lp], [v1[0], ly, "In2.Cu"],
-                        [lx, ly, "In2.Cu"], [lx, ly, _Lp],
+                        *_in2, [lx, ly, _Lp],
                         [lx, ly_l, _Lp], [lx, ly_l, "F.Cu"],
                         [f["conn_pad"][pol][0], f["conn_pad"][pol][1], "F.Cu"]]
                     page["vias"].append({"role": "via1", "pol": pol, "x": v1[0], "y": v1[1],

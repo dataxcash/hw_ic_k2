@@ -12,11 +12,11 @@
   }
  ],
  "artifact": "m13_v57_w3_validation",
- "artifact_rev": "W3-CN.27",
+ "artifact_rev": "W3-CN.30",
  "f12": {
-  "authority_main_sha256": "13dfb9f4d74224d96710ce9617bfd6ac4f713db1f359dd69e23d4746f36774a3",
-  "landing_revision": "W3-CN.27",
-  "main_sha256": "13dfb9f4d74224d96710ce9617bfd6ac4f713db1f359dd69e23d4746f36774a3",
+  "authority_main_sha256": "05f7bd10ab3b45b6847e8c00c14c6a26b9032692bc0ce79a235d81d7e92e837f",
+  "landing_revision": "W3-CN.30",
+  "main_sha256": "05f7bd10ab3b45b6847e8c00c14c6a26b9032692bc0ce79a235d81d7e92e837f",
   "match": true,
   "n_rows": 64
  },
@@ -141,9 +141,9 @@
  "notes": [
   "G-M4 独立重导：R2 lane（由冻结 lane_frame 独立复刻块规则）+ R3 landing（由 r3x2 域 + pad y-band）+ 双度量（段冲突/全 via 间距，由工件 route_geometry/pages[*].vias 独立重算）。",
   "R1 via 以不变量验证（∈冻结候选 + 100% 间距 + 平面性），非重现 argmin（引擎候选键）。",
-  "v2.2 契约修订：R3 独立重导纳入列序交替偏置 ±0.1 + band clamp + 前缀递推（列序偏置由 W3 8L 波次引入，见 m13_v57_w3_8l_progress_v2/v3.md）；V3 合法层对扩为 LID.1 8L 信号层集 {F.Bu,B.Cu,In2.Cu,In6.Cu}。"
+  "v2.3 契约修订：R3 独立重导纳入 CO-05c 成对落列（J2 数据页 inner=131.65-0.6k / outer=136.0+0.6k，k=本带序，无前缀递推）；其余 pad 保留 v2.2 列序交替偏置规则。CO-05c 见 m13_v57_CO05_addendum_v6/v7。"
  ],
- "revision": "W3-VALv2.2",
+ "revision": "W3-VALv2.3",
  "schema": 1,
  "stage": {
   "D8": {
