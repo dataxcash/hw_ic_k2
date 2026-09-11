@@ -77,3 +77,14 @@
 - 现状：`k2_v4.l4.kicad_pcb`（sha `b63e6c09aa57e76d`）为 **上一版 W3-CN.25（6L）** 的产物，
   **不得用于本图纸**；本会话未对其就地覆写（避免产生无效板）。
 - 指纹：construction `e275689aedebf399`｜validation `c1fe0eeb3876ed5c`（L4-A..D True / L4-E False，viol=1）
+
+## G6 复核 → **PASS**（CO-03；2026-09-11，整改 #06 之后）
+- 触发：整改 #06 定层纠正 ⇒ UC-01 owner 升级撤回，叠层按 **L2 容量闭合**裁定为派生 8L；
+  版本化新基线 `k2_v4_8L.kicad_pcb`（sha16 `fb07d25ac426ff84`；原 `k2_v4.kicad_pcb` 不动）。
+- 工具：L4 `SRC_PCB`→`k2_v4_8L.kicad_pcb`、`DST_PCB`→`k2_v4_8L.l4.kicad_pcb`；L4-A 期望 sha 同步。
+- 结果（`AppDir/bin/python3.11`）：
+  - `p3_v57_l4_apply_drawing.py --board`：`nets=68 segs=338 vias=256 board=k2_v4_8L.l4.kicad_pcb`
+  - `p3_v57_l4_validator.py`：**`verdict=PASS  checks={L4-A: True, L4-B: True, L4-C: True, L4-D: True, L4-E: True}  viol=0`**
+- ⇒ 上一节「L4-E 不可能（冻结 6L 板无 In5/In6）」的硬阻塞**已消除**（以版本化 8L 基线对齐工件）。
+- 举证：`m13_v57_co03_stackup_realign.json`｜变更单：`m13_v57_CO03_stackup_baseline_realign.md`
+- 备注：G7(L5) 待 **O4**（成对局部落列）并入后重签；见 `m13_v57_CO04_o4_l2_landing_ruling.md`。
