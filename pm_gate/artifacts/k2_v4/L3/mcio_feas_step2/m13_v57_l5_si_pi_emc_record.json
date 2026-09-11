@@ -1,12 +1,12 @@
 {
  "EMC": {
   "copper_edge_violations": 0,
-  "reference_plane_adjacency": "F.Cu<->In1.Cu, In2.Cu<->In3.Cu, In6.Cu<->In5.Cu, B.Cu<->In4.Cu (8L stack, LID.1)",
+  "reference_plane_adjacency": "F.Cu<->In1.Cu; In2.Cu<->In1.Cu+In3.Cu; In5.Cu<->In4.Cu+In6.Cu; B.Cu<->In6.Cu (8L stack, LID REV6 / CO-68 方案(a))",
   "signal_layers": [
    "F.Cu",
    "B.Cu",
    "In2.Cu",
-   "In6.Cu"
+   "In5.Cu"
   ],
   "solder_mask_bridge_violations": 0
  },
@@ -19,7 +19,7 @@
    "In1.Cu",
    "In3.Cu",
    "In4.Cu",
-   "In5.Cu"
+   "In6.Cu"
   ],
   "zone_counts": {
    "frozen_src": {
@@ -37,11 +37,12 @@
   }
  },
  "SI": {
-  "all_pcie_tracks_0p205": true,
+  "all_pcie_tracks_match_spec_width": true,
   "layer_transitions_per_line": {
    "via1/corner/drop/land": 4
   },
-  "max_intra_pair_skew_mm": 0.0031,
+  "max_intra_pair_skew_mm": 0.13,
+  "max_intra_pair_skew_phys_mm": 1.1046,
   "netclass_geometry": {
    "conformance": "DESIGN_CONFORMANT_FIRST_ORDER_PENDING_COUPON",
    "delivered": {
@@ -53,12 +54,32 @@
     "min_inter_pair_center_mm": 0.55,
     "min_inter_pair_edge_gap_mm": 0.345,
     "p_width_mm": 0.205,
+    "p_width_mm_by_layer": {
+     "B.Cu": 0.205,
+     "F.Cu": 0.205,
+     "In2.Cu": 0.16,
+     "In5.Cu": 0.16
+    },
     "pairs_measured": 34
    },
-   "evidence": "m13_v57_co55_layer_impedance_requirement.json e9e1268b8e9bf312 / m13_v57_CO55_layer_aware_impedance_build_ruling.md b5c5b9a65f50f201",
-   "note": "CO-56：SPEC ECO rev-4 采用 CO-55 反解 8L 叠层要求 ⇒ 交付各层一阶落 85Ω±10%（F 88.4–91.2 / In2 82.1–89.2 / In6 85.5–87.4）；**终判 = 板厂阻抗券**（coupon_required=true）。B.Cu 无平面参考 ⇒ 非阻抗控制层。对间串扰复核另记（CO-54 F2/F3）。",
+   "evidence": "m13_v57_co68_option_a_execute_derive.json cab5ce0e6cbd5e38 / m13_v57_CO68_L2_option_a_execute.md 17965908fd5d5635 / m13_v57_CO67_L2_redline_ruling.md c562419d70a41ab9",
+   "note": "CO-68：方案(a) 对称叠层（铜厚自洽修正）⇒ 4 信号层全参考；交付各层一阶落 85Ω±10%（F/B 0.205 微带 88.4/90.6；In2/In5 0.16 对称带状线 84.6/89.5）；**终判 = 板厂阻抗券**（coupon_required=true）。对内 skew = **按层加权电气长度**（CO-62 §4）。",
    "p_gap_semantics": "lower_bound",
    "per_layer_impedance": {
+    "B.Cu": {
+     "er": 4.16,
+     "gap_mm_delivered": [
+      0.295,
+      0.395
+     ],
+     "h_mm": 0.1164,
+     "kind": "microstrip",
+     "material": "2116*1",
+     "refs": [
+      "In6.Cu"
+     ],
+     "w_mm": 0.205
+    },
     "F.Cu": {
      "er": 4.16,
      "gap_mm_delivered": [
@@ -74,36 +95,37 @@
      "w_mm": 0.205
     },
     "In2.Cu": {
-     "b_mm": 0.72,
+     "b_mm": 0.5,
      "er": 3.99,
      "gap_mm_delivered": [
-      0.295,
-      0.395
+      0.34,
+      0.44
      ],
-     "kind": "stripline(asym→sym)",
-     "material": "core 0.36*2",
+     "kind": "symmetric_stripline",
+     "material": "core 0.25*2",
      "refs": [
       "In1.Cu",
       "In3.Cu"
      ],
-     "w_mm": 0.205
+     "w_mm": 0.16
     },
-    "In6.Cu": {
-     "er": 4.1,
+    "In5.Cu": {
+     "b_mm": 0.5,
+     "er": 3.99,
      "gap_mm_delivered": [
-      0.295,
-      0.395
+      0.34,
+      0.44
      ],
-     "h_mm": 0.0994,
-     "kind": "microstrip(single-ref)",
-     "material": "3313*1",
+     "kind": "symmetric_stripline",
+     "material": "core 0.25*2",
      "refs": [
-      "In5.Cu"
+      "In4.Cu",
+      "In6.Cu"
      ],
-     "w_mm": 0.205
+     "w_mm": 0.16
     }
    },
-   "source": "SPEC_k2_v4.spec-rev-4.json (CO-56) net_classes.PCIe85 / impedance(per_layer) / stackup(dielectric_8l)",
+   "source": "SPEC_k2_v4.spec-rev-5.json (CO-68) net_classes.PCIe85 / impedance(per_layer) / stackup(dielectric_8l)",
    "spec": {
     "impedance_gap_mm": 0.175,
     "impedance_model": "JLC_SI9000_H1_5.0mil_Er1_4.3",
@@ -122,39 +144,39 @@
     },
     "d(In1.Cu-In2.Cu)": {
      "er": 3.99,
-     "material": "core",
-     "mm": 0.36,
+     "material": "core 0.25",
+     "mm": 0.25,
      "use": "In2 带状线上参考（对称化）"
     },
     "d(In2.Cu-In3.Cu)": {
      "er": 3.99,
-     "material": "core",
-     "mm": 0.36,
+     "material": "core 0.25",
+     "mm": 0.25,
      "use": "In2 带状线下参考（对称化）"
     },
     "d(In3.Cu-In4.Cu)": {
      "er": 4.1,
-     "material": "1080*2",
-     "mm": 0.1528,
-     "use": "余隙"
+     "material": "自由余隙（1080*2≈0.1528 / 2116+1080≈0.1928，按 1.6mm 闭合）",
+     "mm": 0.1922,
+     "use": "GND-P3V3 平面间余隙"
     },
     "d(In4.Cu-In5.Cu)": {
-     "er": 4.1,
-     "material": "1080*2",
-     "mm": 0.1528,
-     "use": "余隙"
+     "er": 3.99,
+     "material": "core 0.25",
+     "mm": 0.25,
+     "use": "In5 带状线上参考（对称化）"
     },
     "d(In5.Cu-In6.Cu)": {
-     "er": 4.1,
-     "material": "3313*1",
-     "mm": 0.0994,
-     "use": "In6 单参考微带"
+     "er": 3.99,
+     "material": "core 0.25",
+     "mm": 0.25,
+     "use": "In5 带状线下参考（对称化）"
     },
     "d(In6.Cu-B.Cu)": {
-     "er": 4.1,
-     "material": "自由余隙（1.6mm 闭合）",
-     "mm": 0.1836,
-     "use": "余隙"
+     "er": 4.16,
+     "material": "2116*1",
+     "mm": 0.1164,
+     "use": "B.Cu 微带参考"
     }
    }
   },
@@ -162,147 +184,221 @@
   "skew_pages": [
    {
     "page": "PCIE_DN0/input",
-    "skew_mm": 0.0
+    "phys_skew_mm": 0.065,
+    "skew_mm": 0.0,
+    "skew_ps": 0.0
    },
    {
     "page": "PCIE_DN0/out_MCIO",
-    "skew_mm": 0.0
+    "phys_skew_mm": 0.0531,
+    "skew_mm": 0.0,
+    "skew_ps": 0.0
    },
    {
     "page": "PCIE_DN1/input",
-    "skew_mm": 0.0
+    "phys_skew_mm": 0.065,
+    "skew_mm": 0.0,
+    "skew_ps": 0.0
    },
    {
     "page": "PCIE_DN1/out_MCIO",
-    "skew_mm": 0.0
+    "phys_skew_mm": 0.0548,
+    "skew_mm": 0.0,
+    "skew_ps": 0.0
    },
    {
     "page": "PCIE_DN2/input",
-    "skew_mm": 0.0
+    "phys_skew_mm": 0.065,
+    "skew_mm": 0.0,
+    "skew_ps": 0.0
    },
    {
     "page": "PCIE_DN2/out_MCIO",
-    "skew_mm": 0.0
+    "phys_skew_mm": 0.0531,
+    "skew_mm": 0.0,
+    "skew_ps": 0.0
    },
    {
     "page": "PCIE_DN3/input",
-    "skew_mm": 0.0
+    "phys_skew_mm": 0.065,
+    "skew_mm": 0.0,
+    "skew_ps": 0.0
    },
    {
     "page": "PCIE_DN3/out_MCIO",
-    "skew_mm": 0.0
+    "phys_skew_mm": 0.0531,
+    "skew_mm": 0.0,
+    "skew_ps": 0.0
    },
    {
     "page": "PCIE_DN4/input",
-    "skew_mm": 0.0
+    "phys_skew_mm": 0.0,
+    "skew_mm": 0.0,
+    "skew_ps": 0.0
    },
    {
     "page": "PCIE_DN4/out_MCIO",
-    "skew_mm": 0.0
+    "phys_skew_mm": 0.1653,
+    "skew_mm": 0.0,
+    "skew_ps": 0.0
    },
    {
     "page": "PCIE_DN5/input",
-    "skew_mm": 0.0
+    "phys_skew_mm": 0.0,
+    "skew_mm": 0.0,
+    "skew_ps": 0.0
    },
    {
     "page": "PCIE_DN5/out_MCIO",
-    "skew_mm": 0.0
+    "phys_skew_mm": 0.1653,
+    "skew_mm": 0.0,
+    "skew_ps": 0.0
    },
    {
     "page": "PCIE_DN6/input",
-    "skew_mm": 0.0
+    "phys_skew_mm": 0.0,
+    "skew_mm": 0.0,
+    "skew_ps": 0.0
    },
    {
     "page": "PCIE_DN6/out_MCIO",
-    "skew_mm": 0.0
+    "phys_skew_mm": 0.167,
+    "skew_mm": 0.0,
+    "skew_ps": 0.0
    },
    {
     "page": "PCIE_DN7/input",
-    "skew_mm": 0.0
+    "phys_skew_mm": 0.0,
+    "skew_mm": 0.0,
+    "skew_ps": 0.0
    },
    {
     "page": "PCIE_DN7/out_MCIO",
-    "skew_mm": 0.0
+    "phys_skew_mm": 0.1338,
+    "skew_mm": 0.13,
+    "skew_ps": 0.0009
    },
    {
     "page": "PCIE_UP0/input",
-    "skew_mm": 0.0
+    "phys_skew_mm": 0.0138,
+    "skew_mm": 0.0,
+    "skew_ps": 0.0
    },
    {
     "page": "PCIE_UP0/out_J2",
-    "skew_mm": 0.0
+    "phys_skew_mm": 0.2156,
+    "skew_mm": 0.0,
+    "skew_ps": 0.0
    },
    {
     "page": "PCIE_UP1/input",
-    "skew_mm": 0.0
+    "phys_skew_mm": 0.0138,
+    "skew_mm": 0.0,
+    "skew_ps": 0.0
    },
    {
     "page": "PCIE_UP1/out_J2",
-    "skew_mm": 0.0
+    "phys_skew_mm": 0.1112,
+    "skew_mm": 0.0,
+    "skew_ps": 0.0
    },
    {
     "page": "PCIE_UP2/input",
-    "skew_mm": 0.0031
+    "phys_skew_mm": 0.0031,
+    "skew_mm": 0.0107,
+    "skew_ps": 0.0001
    },
    {
     "page": "PCIE_UP2/out_J2",
-    "skew_mm": 0.0
+    "phys_skew_mm": 0.0289,
+    "skew_mm": 0.0,
+    "skew_ps": 0.0
    },
    {
     "page": "PCIE_UP3/input",
-    "skew_mm": 0.0
+    "phys_skew_mm": 0.0138,
+    "skew_mm": 0.0,
+    "skew_ps": 0.0
    },
    {
     "page": "PCIE_UP3/out_J2",
-    "skew_mm": 0.0
+    "phys_skew_mm": 0.1745,
+    "skew_mm": 0.0,
+    "skew_ps": 0.0
    },
    {
     "page": "PCIE_UP4/input",
-    "skew_mm": 0.0
+    "phys_skew_mm": 0.0138,
+    "skew_mm": 0.0,
+    "skew_ps": 0.0
    },
    {
     "page": "PCIE_UP4/out_J2",
-    "skew_mm": 0.0
+    "phys_skew_mm": 0.6109,
+    "skew_mm": 0.0,
+    "skew_ps": 0.0
    },
    {
     "page": "PCIE_UP5/input",
-    "skew_mm": 0.0
+    "phys_skew_mm": 0.0138,
+    "skew_mm": 0.0,
+    "skew_ps": 0.0
    },
    {
     "page": "PCIE_UP5/out_J2",
-    "skew_mm": 0.0
+    "phys_skew_mm": 0.0462,
+    "skew_mm": 0.0,
+    "skew_ps": 0.0
    },
    {
     "page": "PCIE_UP6/input",
-    "skew_mm": 0.0
+    "phys_skew_mm": 0.0138,
+    "skew_mm": 0.0,
+    "skew_ps": 0.0
    },
    {
     "page": "PCIE_UP6/out_J2",
-    "skew_mm": 0.0
+    "phys_skew_mm": 0.1584,
+    "skew_mm": 0.0,
+    "skew_ps": 0.0
    },
    {
     "page": "PCIE_UP7/input",
-    "skew_mm": 0.0
+    "phys_skew_mm": 0.0366,
+    "skew_mm": 0.0,
+    "skew_ps": 0.0
    },
    {
     "page": "PCIE_UP7/out_J2",
-    "skew_mm": 0.0
+    "phys_skew_mm": 0.0216,
+    "skew_mm": 0.0,
+    "skew_ps": 0.0
    },
    {
     "page": "PCIE_REFCLK0/input",
-    "skew_mm": 0.0
+    "phys_skew_mm": 0.3124,
+    "skew_mm": 0.0,
+    "skew_ps": 0.0
    },
    {
     "page": "PCIE_REFCLK1/input",
-    "skew_mm": 0.0
+    "phys_skew_mm": 1.1046,
+    "skew_mm": 0.0,
+    "skew_ps": 0.0
    }
   ],
   "skew_pages_checked": 34,
   "skew_rule_mm": 0.15,
-  "track_width_rule_mm": 0.205
+  "track_width_rule_mm_by_layer": {
+   "B.Cu": 0.205,
+   "F.Cu": 0.205,
+   "In2.Cu": 0.16,
+   "In5.Cu": 0.16
+  }
  },
  "artifact": "m13_v57_l5_si_pi_emc_record",
- "revision": "L5-SI.5",
+ "revision": "L5-SI.6",
  "schema": 1,
+ "skew_metric": "layer-weighted electrical length -> mm-equivalent @ er_ref=3.99 (CO-62 §4 / CO-68)",
  "verdict": "PASS"
 }

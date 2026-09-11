@@ -9,7 +9,7 @@
 CLI: run under KiCad python (pcbnew); kicad-cli auto-found.
 """
 from __future__ import annotations
-import hashlib, json, os, re, subprocess, tempfile, shutil
+import hashlib, json, math, os, re, subprocess, tempfile, shutil
 from pathlib import Path
 
 K2 = Path("/home/fila/jqdDev_2025/ic_hw/k2")
@@ -158,7 +158,7 @@ def main() -> int:
             if _m and _m.group(1) in in_scope:
                 _ins_uc[_m.group(1)] = _ins_uc.get(_m.group(1), 0) + 1
     _ins_uc_items = sum(_ins_uc.values())
-    dfm = {"artifact": "m13_v57_l5_dfm_dft_record", "schema": 1, "revision": "L5-DFM.5",
+    dfm = {"artifact": "m13_v57_l5_dfm_dft_record", "schema": 1, "revision": "L5-DFM.6",
            "drc": {"tool": f"kicad-cli {subprocess.run([str(CLI),'--version'],capture_output=True,text=True).stdout.strip()}",
                    "baseline_frozen": {"n": len(dbase.get("violations", [])), "by_type": tb,
                                        "unconnected": len(dbase.get("unconnected_items", []))},
@@ -193,7 +193,24 @@ def main() -> int:
                                and _ins_uc_items == 0) else "FAIL"
 
     # ---- SI/PI/EMC record ----
-    widths_ok = all(abs(pcbnew.ToMM(t.GetWidth()) - 0.205) < 1e-6 for t in tracks if t.GetNetname().startswith("PCIE"))
+    # CO-68：分层线宽 + **按层加权电气长度**（CO-62 §4）——判据用 mm-equivalent（er_ref=3.99 带状线）
+    _specw = json.loads((STEP2.parent / "SPEC_k2_v4.spec-rev-5.json").read_text(encoding="utf-8"))
+    _wmap = _specw["impedance"]["width_mm_by_layer"]
+    _pl = _specw["impedance"]["per_layer"]
+    _C_MM_PS = 299.792458
+    _ER_REF = 3.99
+
+    def _er_eff(layer):
+        m = _pl.get(layer)
+        if not m:
+            return 4.0
+        if "stripline" in m["kind"]:
+            return float(m["er"])
+        w, h, er = float(m["w_mm"]), float(m["h_mm"]), float(m["er"])
+        return (er + 1) / 2 + (er - 1) / 2 / math.sqrt(1 + 12 * h / w)
+
+    widths_ok = all(abs(pcbnew.ToMM(t.GetWidth()) - _wmap.get(b.GetLayerName(t.GetLayer()), 0.205)) < 1e-6
+                    for t in tracks if t.GetNetname().startswith("PCIE"))
     skew = []
     for pg in art["pages"]:
         if pg["kind"] == "data":
@@ -203,28 +220,34 @@ def main() -> int:
             _nodes = pg["refclk"]["nodes"]
         else:
             continue
-        # per-page P/N path length from the drawing nodes
-        def plen(pol, _n=_nodes):
-            pts = [[n[0], n[1]] for n in _n[pol]]
-            dd = 0.0
+        def _stat(pol, _n=_nodes):
+            t = ph = 0.0
+            pts = _n[pol]
             for i in range(len(pts) - 1):
-                dd += ((pts[i + 1][0] - pts[i][0]) ** 2 + (pts[i + 1][1] - pts[i][1]) ** 2) ** 0.5
-            return dd
-        skew.append({"page": pg["page_id"], "skew_mm": round(abs(plen("P") - plen("N")), 4)})
-    skew_max = max((s["skew_mm"] for s in skew), default=0)
-    planes = [l for l in cu if l in ("In1.Cu", "In3.Cu", "In4.Cu", "In5.Cu")]
-    _spec = json.loads((STEP2.parent / "SPEC_k2_v4.spec-rev-4.json").read_text(encoding="utf-8"))
+                seg = math.hypot(pts[i + 1][0] - pts[i][0], pts[i + 1][1] - pts[i][1])
+                ph += seg
+                t += seg * math.sqrt(_er_eff(pts[i][2])) / _C_MM_PS
+            return t, ph
+        _tP, _pP = _stat("P"); _tN, _pN = _stat("N")
+        _dt = abs(_tP - _tN)
+        skew.append({"page": pg["page_id"], "skew_mm": round(_dt * _C_MM_PS / math.sqrt(_ER_REF), 4),
+                     "skew_ps": round(_dt, 4), "phys_skew_mm": round(abs(_pP - _pN), 4)})
+    skew_max = max((s["skew_mm"] for s in skew), default=0)                 # 电气（按层加权，判据）
+    skew_phys_max = max((s["phys_skew_mm"] for s in skew), default=0)       # 物理（保留报告，CO-62 §4）
+    planes = [l for l in cu if l in ("In1.Cu", "In3.Cu", "In4.Cu", "In6.Cu")]
+    _spec = json.loads((STEP2.parent / "SPEC_k2_v4.spec-rev-5.json").read_text(encoding="utf-8"))
     _spec_nc = _spec["net_classes"]["PCIe85"]
     _pg = _pair_geometry(rec["segments"])          # CO-53: 对内/对间几何实测
-    si = {"artifact": "m13_v57_l5_si_pi_emc_record", "schema": 1, "revision": "L5-SI.5",
-          "SI": {"track_width_rule_mm": 0.205, "all_pcie_tracks_0p205": widths_ok,
+    si = {"artifact": "m13_v57_l5_si_pi_emc_record", "schema": 1, "revision": "L5-SI.6",
+          "SI": {"track_width_rule_mm_by_layer": _wmap, "all_pcie_tracks_match_spec_width": widths_ok,
                  "max_intra_pair_skew_mm": skew_max, "skew_rule_mm": rules["diff_pair"]["intra_pair_skew_mm"],
+                 "max_intra_pair_skew_phys_mm": skew_phys_max,
                  "skew_ok": skew_max <= rules["diff_pair"]["intra_pair_skew_mm"] + 1e-9,
                  "skew_pages_checked": len(skew), "skew_pages": skew,
                  "layer_transitions_per_line": {"via1/corner/drop/land": 4},
                  # CO-53：对内/对间几何实测 vs SPEC 声明（几何项为**事实报告**；阻抗符合性 NOT_DEMONSTRATED）
                  "netclass_geometry": {
-                     "delivered": {**_pg, "p_width_mm": 0.205,
+                     "delivered": {**_pg, "p_width_mm": 0.205, "p_width_mm_by_layer": _wmap,
                                    "intra_edge_gap_mm": (None if _pg["intra_center_max_mm"] is None
                                                          else round(_pg["intra_center_max_mm"] - 0.205, 4)),
                                    "min_inter_pair_edge_gap_mm": (None if _pg["min_inter_pair_center_mm"] is None
@@ -235,16 +258,17 @@ def main() -> int:
                               "impedance_model": _spec["impedance"]["model"],
                               "impedance_gap_mm": _spec["impedance"]["gap_mm"],
                               "stackup": _spec["stackup"]["material"]},
-                     "source": "SPEC_k2_v4.spec-rev-4.json (CO-56) net_classes.PCIe85 / impedance(per_layer) / stackup(dielectric_8l)",
+                     "source": "SPEC_k2_v4.spec-rev-5.json (CO-68) net_classes.PCIe85 / impedance(per_layer) / stackup(dielectric_8l)",
                      "conformance": "DESIGN_CONFORMANT_FIRST_ORDER_PENDING_COUPON",
                      "per_layer_impedance": _spec["impedance"].get("per_layer"),
                      "stackup_build": _spec["stackup"].get("dielectric_8l"),
                      "p_gap_semantics": _spec_nc["diff_pair"].get("p_gap_semantics"),
-                     "note": "CO-56：SPEC ECO rev-4 采用 CO-55 反解 8L 叠层要求 ⇒ 交付各层一阶落 85Ω±10%"
-                             "（F 88.4–91.2 / In2 82.1–89.2 / In6 85.5–87.4）；**终判 = 板厂阻抗券**（coupon_required=true）。"
-                             "B.Cu 无平面参考 ⇒ 非阻抗控制层。对间串扰复核另记（CO-54 F2/F3）。",
-                     "evidence": "m13_v57_co55_layer_impedance_requirement.json e9e1268b8e9bf312 / "
-                                 "m13_v57_CO55_layer_aware_impedance_build_ruling.md b5c5b9a65f50f201"}},
+                     "note": "CO-68：方案(a) 对称叠层（铜厚自洽修正）⇒ 4 信号层全参考；交付各层一阶落 85Ω±10%"
+                             "（F/B 0.205 微带 88.4/90.6；In2/In5 0.16 对称带状线 84.6/89.5）；"
+                             "**终判 = 板厂阻抗券**（coupon_required=true）。对内 skew = **按层加权电气长度**（CO-62 §4）。",
+                     "evidence": "m13_v57_co68_option_a_execute_derive.json cab5ce0e6cbd5e38 / "
+                                 "m13_v57_CO68_L2_option_a_execute.md 17965908fd5d5635 / "
+                                 "m13_v57_CO67_L2_redline_ruling.md c562419d70a41ab9"}},
           "PI": {"plane_layers_reserved": planes,
                  "zone_counts": {"frozen_src": zs_src, "l4": zs_l4},
                  "pdn_status": ("reserved_not_poured"
@@ -254,10 +278,11 @@ def main() -> int:
                               "L4 仅新增 %d 个非铜 rule area + tracks ⇒ 无平面铜被改写" % zs_l4["rule_area"]),
                  "hole_clearance_violations": dfm["drc"]["new_violations"].get("hole_clearance", 0)},
           "EMC": {"signal_layers": [l for l in cu if l not in planes],
-                  "reference_plane_adjacency": "F.Cu<->In1.Cu, In2.Cu<->In3.Cu, In6.Cu<->In5.Cu, B.Cu<->In4.Cu (8L stack, LID.1)",
+                  "reference_plane_adjacency": "F.Cu<->In1.Cu; In2.Cu<->In1.Cu+In3.Cu; In5.Cu<->In4.Cu+In6.Cu; B.Cu<->In6.Cu (8L stack, LID REV6 / CO-68 方案(a))",
                   "solder_mask_bridge_violations": dfm["drc"]["new_violations"].get("solder_mask_bridge", 0),
                   "copper_edge_violations": dfm["drc"]["new_violations"].get("copper_edge_clearance", 0)},
-          "verdict": "PASS" if (widths_ok and skew_max <= rules["diff_pair"]["intra_pair_skew_mm"] + 1e-9) else "FAIL"}
+          "verdict": "PASS" if (widths_ok and skew_max <= rules["diff_pair"]["intra_pair_skew_mm"] + 1e-9) else "FAIL",
+          "skew_metric": "layer-weighted electrical length -> mm-equivalent @ er_ref=3.99 (CO-62 §4 / CO-68)"}
 
     for name, obj in (("m13_v57_l5_fab_record.json", fab), ("m13_v57_l5_dfm_dft_record.json", dfm),
                       ("m13_v57_l5_si_pi_emc_record.json", si)):
@@ -266,25 +291,30 @@ def main() -> int:
     # ---- G7 记录（CO-48：补齐 docstring 声明却从未写出的评审记录；确定性文本，不含墙钟）----
     s16 = lambda p: sha(p)[:16]                                        # noqa: E731
     _dft = dfm["dft"]
+    _g7v = 'PASS' if (dfm['verdict'] == 'PASS' and si['verdict'] == 'PASS') else 'FAIL'
+    _g7note = ('无需回上层（G4..G7 全 PASS）' if _g7v == 'PASS' else
+               f"**G7 FAIL**：SI（按层加权电气长度）实测 max skew {skew_max:.4f}mm-eq > 规则 "
+               f"{rules['diff_pair']['intra_pair_skew_mm']}mm ⇒ **L2 等长整改（属 L2 自裁范围）**；"
+               "物理长度判据仍 PASS，缺陷根因 = 等长补偿只按物理长度（未按层加权）")
     g7 = f"""# G7 / L5 记录 — k2 v57（8L）
 
-> revision **L5-G7.6**｜图纸 **{art['revision']}** `{s16(DRAWING)}`｜L4 板 `{s16(L4_PCB)}`（含 SPEC 逃逸区规则域 CO-37）
+> revision **L5-G7.7**｜图纸 **{art['revision']}** `{s16(DRAWING)}`｜L4 板 `{s16(L4_PCB)}`（含 SPEC 逃逸区规则域 CO-37）
 > 产生：`tools/p3_v57_l5_signoff.py`（{dfm['drc']['tool']}，{dfm['revision']}）——**随 L5 每次重跑确定性重生成**
 > ｜历史 FAIL 叙事见 CO-37/CO-43/CO-44/CO-45 变更单与 git（本件取代 L5-G7.5 的 new=60 口径）。
 
-## 1. 结论（G7 {'PASS' if (dfm['verdict'] == 'PASS' and si['verdict'] == 'PASS') else 'FAIL'}）
-- SI（对内等长）：**{si['verdict']}** — `max_intra_pair_skew_mm = {skew_max:.4f} <= {rules['diff_pair']['intra_pair_skew_mm']}`（{si['SI']['skew_pages_checked']} 页，含 REFCLK）。
+## 1. 结论（G7 {_g7v}）
+- SI（对内等长）：**{si['verdict']}** — `max_intra_pair_skew_mm(加权电气长度) = {skew_max:.4f} <= {rules['diff_pair']['intra_pair_skew_mm']}`（{si['SI']['skew_pages_checked']} 页，含 REFCLK）。
   几何实测（CO-53）：对内中心 `{si['SI']['netclass_geometry']['delivered']['intra_center_max_mm']}` mm（边距 `{si['SI']['netclass_geometry']['delivered']['intra_edge_gap_mm']}`）vs SPEC p_gap `{si['SI']['netclass_geometry']['spec']['p_gap_mm']}`；对间最小中心 `{si['SI']['netclass_geometry']['delivered']['min_inter_pair_center_mm']}` vs SPEC inter_pair `{si['SI']['netclass_geometry']['spec']['inter_pair_spacing_mm']}` ⇒ **阻抗符合性 NOT_DEMONSTRATED**（开放项 CO-53）。
 - DFM：**{dfm['verdict']}** — `new_total = {dfm['drc']['new_total']}`；L4 违规 by_type `{dfm['drc']['l4_applied']['by_type']}`（= 冻结基线 lib/silk，计入不计）。
 - DFT（施工连通性，CO-47 谓词）：在册网未连项 **{_dft['in_scope_unconnected_nets']}/{_dft['in_scope_nets']}**（{_dft['rule']}）。
 - EMC：solder_mask_bridge `{si['EMC']['solder_mask_bridge_violations']}` / copper_edge `{si['EMC']['copper_edge_violations']}`；
   PI：hole_clearance `{si['PI']['hole_clearance_violations']}`；pdn_status `{si['PI']['pdn_status']}`（铜铺铜 zone：冻结源 `{si['PI']['zone_counts']['frozen_src']['copper_pour']}` / L4 `{si['PI']['zone_counts']['l4']['copper_pour']}` ⇒ 保留层未铺铜，CO-50）。
-- **裁决：无需回上层**（G4..G7 全 PASS）。里程碑 tag `k2-v57-g7-l5-pass`；收口声明件 W3 boundary v1.17。
+- **裁决（CO-69）**：{_g7note}。里程碑 tag `k2-v57-g7-l5-pass`（**仅在前述全 PASS 时**适用）；收口声明件 W3 boundary v1.36（CO-67/CO-68）。
 
 ## 2. 量（8L）
 | 项 | 值 |
 |---|---|
-| copper layers | {len(cu)} = {'/'.join(c.replace('.Cu', '') for c in cu)}（In1/In3/In5=GND、In4=P3V3 平面未动）|
+| copper layers | {len(cu)} = {'/'.join(c.replace('.Cu', '') for c in cu)}（In1/In3/In6=GND、In4=P3V3；方案(a) 层数/平面数/电源域不变）|
 | tracks / vias | {fab['n_tracks']} / {fab['n_vias']}（drill {list(fab['via_drill_table_mm'])}）|
 | L4 rule areas（非铜） | 4 = ESC_J2 / ESC_J3 / ESC_J4 / ESC_U6（F.Cu；SPEC 逃逸域）|
 | 在册网（L4 施工） | {_dft['in_scope_nets']}（来源 `m13_v57_l4_construction.json: nets`）|

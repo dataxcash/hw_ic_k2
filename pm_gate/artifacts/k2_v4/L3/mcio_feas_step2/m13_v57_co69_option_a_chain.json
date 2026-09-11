@@ -1,0 +1,121 @@
+{
+ "artifact": "m13_v57_co69_option_a_chain",
+ "engine_deltas": {
+  "co16_alloc": "ALLOC.5 (0bf6cdc203887a48) -> ALLOC.7 (a765af4c9bf61e64)（CO-60 候选 v6 2ebda54c 未触碰）",
+  "layer_intent": "rev5 -> rev6",
+  "layer_palette": [
+   "F.Cu",
+   "In2.Cu",
+   "In5.Cu",
+   "B.Cu"
+  ],
+  "length_compensation": "CO-69：对内等长补偿由**纯物理长度**改为**按层加权电气长度**（数据对：lane(In5) 换算；REFCLK：F.Cu 换算）——修复电气 skew",
+  "revision": "W3-CN.40 -> W3-CN.41",
+  "spec": "spec-rev-4 -> spec-rev-5"
+ },
+ "four_sources": {
+  "SPEC_k2_v4.json": {
+   "match": true,
+   "sha16": "0bd52ed48e720b8c"
+  },
+  "drc_rules.json": {
+   "match": true,
+   "sha16": "0a459839e15960b8"
+  },
+  "k2_v4_8L.kicad_pcb": {
+   "match": true,
+   "sha16": "fb07d25ac426ff84"
+  },
+  "page_manifest": {
+   "match": true,
+   "sha16": "a8ef3ea8ecff99d7"
+  }
+ },
+ "four_sources_all_match": true,
+ "gates": {
+  "G4": {
+   "crossings": null,
+   "drawing": "87ef07f280e4dffb",
+   "landing": "6b2f73bd014c6eb4",
+   "rev": "W3-CN.41",
+   "verdict": "FEASIBLE_ALL"
+  },
+  "G5": {
+   "frozen": null,
+   "validation": "14f6d92e0d17cadf",
+   "validator_v2": "b6684ab44d63e828",
+   "verdict": "PASS"
+  },
+  "G6": {
+   "board": "0e636a67c1472462",
+   "construction": "fa5c055b5911d611",
+   "n_nets": 68,
+   "n_segments": 2523,
+   "n_vias": 252,
+   "validation": "1035dc9c2168f10b",
+   "validator": "29d7c59c2b20e75f",
+   "verdict": "PASS"
+  },
+  "G7": {
+   "dfm": {
+    "disappeared_total": 0,
+    "in_scope_unconnected": 0,
+    "new_total": 0,
+    "sha16": "40445f87be664f31",
+    "verdict": "PASS"
+   },
+   "fab": {
+    "n_tracks": 2523,
+    "n_vias": 252,
+    "sha16": "1a76fbf4c58fb3d2"
+   },
+   "si": {
+    "max_elec_skew_mm_eq": 0.13,
+    "max_phys_skew_mm": 1.1046,
+    "rev": "L5-SI.6",
+    "sha16": "73f9b59ed5f6f3ce",
+    "skew_rule_mm": 0.15,
+    "verdict": "PASS",
+    "widths_by_layer": {
+     "B.Cu": 0.205,
+     "F.Cu": 0.205,
+     "In2.Cu": 0.16,
+     "In5.Cu": 0.16
+    }
+   }
+  }
+ },
+ "nature": "L2 叠层分配：方案(a) 引擎 bump + 全链 G4..G7 + SI 判据升级（按层加权电气长度）",
+ "open_items": [
+  "板厂阻抗券（SPEC coupon_required=true）——一阶 IPC-2141 未替代 SI9000/券",
+  "① 对间净空 0.875（中心距 1.580）：本方案(a) 未解（瓶颈 = 板边/球栅逃逸，属 L1 包络冲突，非本件范围）",
+  "物理 skew 报告量升至 1.1046mm（电气已达标）——若验收方要求物理量亦 ≤0.15，需双变量补偿/重构，属新 L2 议题"
+ ],
+ "redline": "只读产物；四冻结源 4/4 MATCH；原件/历史件未动；未放宽任何阈值。",
+ "reproducibility": {
+  "board": "0e636a67c1472462",
+  "drawing": "87ef07f280e4dffb",
+  "note": "全链（引擎→G5→L4→L5）连跑 ×2，产出 11 件逐字节一致（CO-49 口径）"
+ },
+ "revision": "CO-69.1",
+ "schema": 1,
+ "si_criterion_upgrade": {
+  "after_fix": {
+   "max_elec_skew_mm_eq": 0.13,
+   "max_phys_skew_mm": 1.1046,
+   "verdict": "PASS"
+  },
+  "before_fix": {
+   "max_elec_skew_mm_eq": 0.9807,
+   "max_phys_skew_mm": 0.0031,
+   "verdict": "FAIL（REFCLK1 0.9807：P 全 F.Cu vs N F.Cu+In2 8.745mm）"
+  },
+  "note": "电气等长达成后**物理** skew 上升（max 1.1046mm）——属层补偿之预期：判据为电气（时延），物理为报告量。CO-62 §4 要求保留物理量报告。",
+  "rule": "intra_pair_skew_mm = 0.15（按层加权电气长度；mm-eq @ er_ref=3.99）"
+ },
+ "versioned_inputs": {
+  "co16_alloc7": "a765af4c9bf61e64",
+  "lid_rev6": "05009687a3f01583",
+  "spec_rev5": "1f351194b3e22b7e"
+ }
+}

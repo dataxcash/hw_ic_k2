@@ -1,0 +1,233 @@
+{
+ "artifact": "m13_v57_co68_option_a_execute_derive",
+ "co66_correction": {
+  "co66_closure_omitted_copper_mm": 0.175,
+  "co66_g4_formula": "1.6 - 2*h_o - 2*b_s（未扣铜厚）",
+  "corrected_dielectric_budget_mm": 1.425,
+  "corrected_feasible_w_stripline_max_mm": 0.165
+ },
+ "design_point": {
+  "b_stripline_mm": 0.5,
+  "closure": {
+   "copper_mm": 0.175,
+   "delta_mm": 0.0,
+   "dielectric_mm": 1.425,
+   "ok": true,
+   "target_mm": 1.6,
+   "total_mm": 1.6
+  },
+  "copper_mm": 0.175,
+  "dielectric_mm": {
+   "d(F.Cu-In1.Cu)": 0.1164,
+   "d(In1.Cu-In2.Cu)": 0.25,
+   "d(In2.Cu-In3.Cu)": 0.25,
+   "d(In3.Cu-In4.Cu)": 0.1922,
+   "d(In4.Cu-In5.Cu)": 0.25,
+   "d(In5.Cu-In6.Cu)": 0.25,
+   "d(In6.Cu-B.Cu)": 0.1164
+  },
+  "stackup": "F(S)/In1(G)/In2(S)/In3(G)/In4(P3V3)/In5(S)/In6(G)/B(S)",
+  "verdict_first_order": {
+   "F.Cu/B.Cu": {
+    "h_mm": 0.1164,
+    "kind": "microstrip(ref In1 / In6)",
+    "w_mm": 0.205,
+    "within_10pct": true,
+    "zdiff_ohm": {
+     "0.5": 88.43,
+     "0.6": 90.61
+    }
+   },
+   "In2.Cu/In5.Cu": {
+    "b_mm": 0.5,
+    "kind": "symmetric stripline(ref In1+In3 / In4+In6)",
+    "w_mm": 0.16,
+    "within_10pct": true,
+    "zdiff_ohm": {
+     "0.5": 84.56,
+     "0.6": 89.48
+    }
+   }
+  },
+  "w_inner_mm": 0.16,
+  "w_outer_mm": 0.205
+ },
+ "nature": "L2 叠层分配执行：CO-66 铜厚修正 + 方案(a) 设计点 + LID REV6 + SPEC rev-5（版本化）",
+ "outputs": {
+  "lid_rev6": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_layer_intent_rev6.json",
+  "lid_rev6_sha16": "05009687a3f01583",
+  "spec_rev5": "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-5.json",
+  "spec_rev5_sha16": "1f351194b3e22b7e"
+ },
+ "redline": "原件/历史件未动；数值阈值未改；一阶结论未经 SI9000/券。",
+ "revision": "CO-68.1",
+ "scan": [
+  {
+   "b_stripline_mm": 0.2803,
+   "closes_1p6_copper_incl": true,
+   "g4_mm": 0.6316,
+   "w_stripline_mm": 0.11,
+   "zdiff_ohm": {
+    "0.5": 84.99,
+    "0.6": 88.56
+   }
+  },
+  {
+   "b_stripline_mm": 0.2979,
+   "closes_1p6_copper_incl": true,
+   "g4_mm": 0.5964,
+   "w_stripline_mm": 0.115,
+   "zdiff_ohm": {
+    "0.5": 85.0,
+    "0.6": 88.77
+   }
+  },
+  {
+   "b_stripline_mm": 0.3166,
+   "closes_1p6_copper_incl": true,
+   "g4_mm": 0.559,
+   "w_stripline_mm": 0.12,
+   "zdiff_ohm": {
+    "0.5": 85.0,
+    "0.6": 88.98
+   }
+  },
+  {
+   "b_stripline_mm": 0.3363,
+   "closes_1p6_copper_incl": true,
+   "g4_mm": 0.5196,
+   "w_stripline_mm": 0.125,
+   "zdiff_ohm": {
+    "0.5": 85.0,
+    "0.6": 89.16
+   }
+  },
+  {
+   "b_stripline_mm": 0.3572,
+   "closes_1p6_copper_incl": true,
+   "g4_mm": 0.4778,
+   "w_stripline_mm": 0.13,
+   "zdiff_ohm": {
+    "0.5": 85.0,
+    "0.6": 89.33
+   }
+  },
+  {
+   "b_stripline_mm": 0.3793,
+   "closes_1p6_copper_incl": true,
+   "g4_mm": 0.4336,
+   "w_stripline_mm": 0.135,
+   "zdiff_ohm": {
+    "0.5": 85.0,
+    "0.6": 89.48
+   }
+  },
+  {
+   "b_stripline_mm": 0.4026,
+   "closes_1p6_copper_incl": true,
+   "g4_mm": 0.387,
+   "w_stripline_mm": 0.14,
+   "zdiff_ohm": {
+    "0.5": 85.0,
+    "0.6": 89.61
+   }
+  },
+  {
+   "b_stripline_mm": 0.4271,
+   "closes_1p6_copper_incl": true,
+   "g4_mm": 0.338,
+   "w_stripline_mm": 0.145,
+   "zdiff_ohm": {
+    "0.5": 85.0,
+    "0.6": 89.72
+   }
+  },
+  {
+   "b_stripline_mm": 0.4529,
+   "closes_1p6_copper_incl": true,
+   "g4_mm": 0.2864,
+   "w_stripline_mm": 0.15,
+   "zdiff_ohm": {
+    "0.5": 85.0,
+    "0.6": 89.81
+   }
+  },
+  {
+   "b_stripline_mm": 0.48,
+   "closes_1p6_copper_incl": true,
+   "g4_mm": 0.2322,
+   "w_stripline_mm": 0.155,
+   "zdiff_ohm": {
+    "0.5": 85.0,
+    "0.6": 89.88
+   }
+  },
+  {
+   "b_stripline_mm": 0.5083,
+   "closes_1p6_copper_incl": true,
+   "g4_mm": 0.1756,
+   "w_stripline_mm": 0.16,
+   "zdiff_ohm": {
+    "0.5": 85.0,
+    "0.6": 89.94
+   }
+  },
+  {
+   "b_stripline_mm": 0.5379,
+   "closes_1p6_copper_incl": true,
+   "g4_mm": 0.1164,
+   "w_stripline_mm": 0.165,
+   "zdiff_ohm": {
+    "0.5": 85.0,
+    "0.6": 89.98
+   }
+  },
+  {
+   "b_stripline_mm": 0.5686,
+   "closes_1p6_copper_incl": false,
+   "g4_mm": 0.055,
+   "w_stripline_mm": 0.17,
+   "zdiff_ohm": {
+    "0.5": 85.0,
+    "0.6": 90.01
+   }
+  },
+  {
+   "b_stripline_mm": 0.6004,
+   "closes_1p6_copper_incl": false,
+   "g4_mm": -0.0086,
+   "w_stripline_mm": 0.175,
+   "zdiff_ohm": {
+    "0.5": 85.0,
+    "0.6": 90.02
+   }
+  },
+  {
+   "b_stripline_mm": 0.6332,
+   "closes_1p6_copper_incl": false,
+   "g4_mm": -0.0742,
+   "w_stripline_mm": 0.18,
+   "zdiff_ohm": {
+    "0.5": 85.0,
+    "0.6": 90.01
+   }
+  },
+  {
+   "b_stripline_mm": 0.6671,
+   "closes_1p6_copper_incl": false,
+   "g4_mm": -0.142,
+   "w_stripline_mm": 0.185,
+   "zdiff_ohm": {
+    "0.5": 85.0,
+    "0.6": 90.0
+   }
+  }
+ ],
+ "schema": 1,
+ "unchanged_check": {
+  "lid_rev5_sha16_after": "da4c3e4da37c6f94",
+  "lid_rev5_sha16_before": "da4c3e4da37c6f94",
+  "spec_rev4_sha16_after": "1c4eecb0edf4a446",
+  "spec_rev4_sha16_before": "1c4eecb0edf4a446"
+ }
+}

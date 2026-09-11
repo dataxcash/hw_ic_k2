@@ -27,13 +27,13 @@ W0R = STEP2 / "m13_v57_big_w0r_corridor_model.json"
 # （`k2_v4.kicad_pcb`），既未覆盖宪法红线 SPEC 原件，也未覆盖 CO-03 版本 bump 后的 8L 冻结板
 # （L4 施工真实源）。本修正**只增不减**：补 `spec_orig`（SPEC 原件）与 `pcb`（8L 基线），
 # 原 6L 上游钉扎保留为 `pcb_6l`。判据强度只升不降。
-FROZEN = {"spec": L3 / "SPEC_k2_v4.spec-rev-4.json",         # 引擎消费的 ECO spec（CO-56 8L 叠层/分层阻抗；纯加性）
+FROZEN = {"spec": L3 / "SPEC_k2_v4.spec-rev-5.json",         # 引擎消费的 ECO spec（CO-68 方案(a) 对称叠层/内层 0.16）
           "spec_orig": L3 / "SPEC_k2_v4.json",               # 宪法红线 SPEC 原件
           "rules": K2 / "_shared/eda_core/drc_rules.json",
           "manifest": STEP2 / "m13_v57_s1_page_manifest.json",
           "pcb": K2 / "k2_v4_8L.kicad_pcb",                  # 宪法红线 8L 冻结板（CO-03）
           "pcb_6l": K2 / "k2_v4.kicad_pcb"}                  # 8L 派生的上游历史件（未动）
-FROZEN_SHA_PREFIX = {"spec": "1c4eecb0edf4a446", "spec_orig": "0bd52ed48e720b8c",
+FROZEN_SHA_PREFIX = {"spec": "1f351194b3e22b7e", "spec_orig": "0bd52ed48e720b8c",
                      "manifest": "a8ef3ea8ecff99d7", "pcb": "fb07d25ac426ff84",
                      "pcb_6l": "f6273de613f43d05", "rules": "0a459839e15960b8"}
 STEP, LANE_LO, N_USED = 1.46, 33.3, 16
@@ -386,9 +386,9 @@ def a12(src_sha, shape="t2"):
 def a13(art, manifest):
     spec = importlib.util.spec_from_file_location("invs", str(K2 / "tools/p3_v57_s1_invariants.py"))
     invs = importlib.util.module_from_spec(spec); spec.loader.exec_module(invs)
-    # W3 8L (LID.1): 信号层 = {F.Cu, B.Cu, In2.Cu, In6.Cu}（m13_v57_layer_intent_adoption_v1.json）
-    invs.LAYER_PAIRS_OK = {(a, b) for a in ("F.Cu", "B.Cu", "In2.Cu", "In6.Cu")
-                           for b in ("F.Cu", "B.Cu", "In2.Cu", "In6.Cu") if a != b}
+    # W3 8L (LID REV6, CO-68): 信号层 = {F.Cu, B.Cu, In2.Cu, In5.Cu}
+    invs.LAYER_PAIRS_OK = {(a, b) for a in ("F.Cu", "B.Cu", "In2.Cu", "In5.Cu")
+                           for b in ("F.Cu", "B.Cu", "In2.Cu", "In5.Cu") if a != b}
     _sh = (art.get("resource_gate") or {}).get("r1_5_shape", "t2")
     invs.PAIR_RUN_MIN_MM = 1.0 if _sh == "co16" else 0.0   # CO-18: co16 仅比对走廊 run（≥1mm）
     _shape = (art.get("resource_gate") or {}).get("r1_5_shape", "t2")
@@ -436,7 +436,7 @@ def a13(art, manifest):
             "data_pages_checked": pages_checked, "refclk_pages_checked": refclk_checked,
             "strong_nodes_censused": strong,
             "rules_revision": {"max_vias_per_net": 6, "half_pitch": _half,
-                               "layer_pairs": "signal set {F.Cu,B.Cu,In2.Cu,In6.Cu} (LID.1 8L)",
+                               "layer_pairs": "signal set {F.Cu,B.Cu,In2.Cu,In5.Cu} (LID REV6, CO-68)",
                                "basis": "ECO SPEC-REV-2（bandY 6 via/线）；CO-18 L2 对内 lane 半距 co16=0.25（vs t2 0.19）"},
             "violations": viol[:50], "n_violations": len(viol)}
 

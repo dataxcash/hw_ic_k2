@@ -26,7 +26,7 @@ K2 = Path("/home/fila/jqdDev_2025/ic_hw/k2")
 L3 = K2 / "pm_gate" / "artifacts" / "k2_v4" / "L3"
 STEP2 = L3 / "mcio_feas_step2"
 F = {
-    "spec": L3 / "SPEC_k2_v4.spec-rev-4.json",   # ECO SPEC-REV-4（CO-56：8L 叠层/分层阻抗口径，纯加性）
+    "spec": L3 / "SPEC_k2_v4.spec-rev-5.json",   # ECO SPEC-REV-5（CO-68：方案(a) 对称叠层/内层 0.16 线宽）
     "rules": K2 / "_shared" / "eda_core" / "drc_rules.json",
     "manifest": STEP2 / "m13_v57_s1_page_manifest.json",
     "w0r_model": STEP2 / "m13_v57_big_w0r_corridor_model.json",
@@ -39,11 +39,11 @@ F = {
     "f6b_report": STEP2 / "m13_v57_f6b_report.json",
     "verdict": STEP2 / "m13_v57_s1_r1_via_verdict_r2.json",
     "card": STEP2 / "m13_v57_w3_kickoff_card_v1_28.md",   # ROOT-16 contract revision
-    "layer_intent": STEP2 / "m13_v57_layer_intent_rev5.json",   # LID.1 派生 (rect #03)
+    "layer_intent": STEP2 / "m13_v57_layer_intent_rev6.json",   # LID REV6（CO-68 方案(a)：signal F/In2/In5/B）
     "coherent_rows": STEP2 / "m13_v57_f13_r3_coherent_rows.json",
 }
 FROZEN_SHA = {
-    "spec": "1c4eecb0edf4a4460a2036f9cd06997164ef48cdfa3b008599304675d60bb41d",
+    "spec": "1f351194b3e22b7e72dd67c40305576f4dfd4eaf630f3a934a6f9c3e1b231c12",
     "rules": "0a459839e15960b8fbfe0e1f5bb154a02b30cbafa1cbb0d56c2b810a71228448",
     "manifest": "a8ef3ea8ecff99d7549d4122043c972c1bb68346dc4dcc3f36fdd9bacde49890",
     "w0r_model": "80ee9adb78a7e9ad94c27d426295592eee21af3d1e3ce88fe3042183160f0efa",
@@ -56,13 +56,13 @@ FROZEN_SHA = {
     "verdict": "f2e2632506457e31c145b491284c9ecbf1cb72cc09d96ccdfb3251ef80a5556a",
     "coherent_rows": "014a14b317e1c3df3d4400d45d6877ffc81f4ca92d533da4c7c7e4af67319c9a",
     "card": "0ae3016379cd1db27ba6004e2d86336466aad0c877bcee1fddf784879bbc90c2",
-    "layer_intent": "da4c3e4da37c6f942a079f25b196d888832d34876e88400341504ce44a0c5092",
+    "layer_intent": "05009687a3f01583d0cdf562f1510d7354995926be0629407fddb741a477dd0b",
 }
 OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
 OUT_LANDING = STEP2 / "m13_v57_w3_chip_landing_rows.json"
 
 REVISION = "W3-CN.30"   # 默认（t2）路径不动；CO-16 见 REVISION_CO16
-REVISION_CO16 = "W3-CN.40"   # CO-45：远端 N 折线补入 3D nodes（修 CO-43 图纸/nodes 不一致）+ REFCLK 对内 0.5/dip 解耦
+REVISION_CO16 = "W3-CN.41"   # CO-45：远端 N 折线补入 3D nodes（修 CO-43 图纸/nodes 不一致）+ REFCLK 对内 0.5/dip 解耦；CO-68: LID REV6 层集 F/In2/In5/B（方案(a)）
 ECS_VIA1_X = 133.825        # 两列缝中线（距两侧 pad 边各 0.35 >= vias.high_speed.pad_edge_clearance_mm 0.3）
 ECS_VIA2_X_MAX = 131.525    # 内列 pad 西缘 132.0 - via 半径 0.175 - pad_edge_clearance 0.3
 ECS_VIA_R = 0.175           # vias.std: drill 0.2 + 2*annular 0.075
@@ -87,6 +87,23 @@ FAR_LINE_LO = 0.28         # 带内近边界线距带边界
 FAR_LINE_STEP = 0.5        # CO-45：带内两线间距（0.38 边距恰 0.175 无余量；0.5 -> 0.295）
 FAR_JOG_EAST = 0.5         # 抬升列位于 A 排东端之外的安全余量（覆盖 pad 半宽+净距+半线宽）
 ORD = "natural"   # ROOT-20: enumeration order (A1.2 order-invariance, non-vacuous)
+_SQER_CACHE: dict = {}
+
+
+def _sqrt_er(layer: str) -> float:
+    """CO-69：层感知电气长度的权重 sqrt(er_eff)（由 SPEC impedance.per_layer 一阶推导；缓存）。
+    微带 er_eff = (er+1)/2 + (er-1)/2 / sqrt(1+12h/w)；带状线 er_eff = er。"""
+    if not _SQER_CACHE:
+        _imp = json.loads(F["spec"].read_text(encoding="utf-8"))["impedance"]["per_layer"]
+        for _l, _m in _imp.items():
+            if "stripline" in _m["kind"]:
+                _e = float(_m["er"])
+            else:
+                _w, _h, _er = float(_m["w_mm"]), float(_m["h_mm"]), float(_m["er"])
+                _e = (_er + 1) / 2 + (_er - 1) / 2 / math.sqrt(1 + 12 * _h / _w)
+            _SQER_CACHE[_l] = math.sqrt(_e)
+    return _SQER_CACHE.get(layer, 2.0)
+
 SCHEMA = 1
 STEP = 1.46
 LANE_LO = 33.3
@@ -134,13 +151,13 @@ MEANDER_PITCH = 0.615             # 2A >= 3w (=0.615) => A >= 0.3075
 MEANDER_A_MAX = 0.34              # 单侧横摆上限（相邻 lane 对面 run 间距 1.08 => 双向 2*0.34+0.38=1.06 <= 1.08）
 MEANDER_A_MIN = 0.27             # n>=2 时自净距 1.414*A >= 0.38
 LAYER_BY_BAND = {"up": "In2.Cu", "dn": "B.Cu"}
-LAYER_PALETTE = ["F.Cu", "In2.Cu", "In6.Cu", "B.Cu"]   # LID.1: 4 信号层
+LAYER_PALETTE = ["F.Cu", "In2.Cu", "In5.Cu", "B.Cu"]   # LID REV6 (CO-68): 4 信号层（方案(a)）
 TOL = 1e-9
 SUPERSEDED = {"artifact": "m13_v57_w3_joint_assignment.json", "revision": "W3-JA.2",
                "sha256": "d081618c7b961d770c8e2f180f93b92125b316bc0eeec181f9d1d191a0ee6acc",
                "reason": "method-level iron-law violation (search-based); retained, not rewritten"}
-CO16_ALLOC = STEP2 / "m13_v57_co16_channel_allocation_v5.json"   # CO16-ALLOC.5（CO-36 D3b：connector 落列重分配）
-CO16_ALLOC_SHA = "0bf6cdc203887a48f162ad2355e4f372ae895f5422bead9fc76992afd8476bfd"
+CO16_ALLOC = STEP2 / "m13_v57_co16_channel_allocation_v7.json"   # CO16-ALLOC.7（CO-69：stub 层 In6->In5，随 LID REV6）
+CO16_ALLOC_SHA = "a765af4c9bf61e642780ad2ebbea177e8a2c76125eda93feca9641e7dfd0185a"
 CORRIDOR = {
     "EAST_CHIP_TO_J2": {"bounds": (105.25, 132.65), "x_domain": (93.55, 105.25)},
     "WEST_MCIO_TO_CHIP": {"bounds": (65.05, 82.35), "x_domain": (82.35, 93.55)},
@@ -380,16 +397,21 @@ def co16_o4_plan(alloc):
     out = {}
     s2 = 2.0 ** 0.5 - 1.0
     for pid, a in alloc.items():
+        E, S = a["escape_layer"], a["stub_layer"]
         length = {}
         for pol in ("P", "N"):
             pad = a["chip_pad"][pol]; v = a["via1"][pol]; ly = a["lane_y"][pol]
             lx, ll = a["landing"][pol]; cp = a["conn_pad"][pol]
-            length[pol] = (math.hypot(pad[0] - v[0], pad[1] - v[1]) + abs(ly - v[1])
-                           + abs(lx - v[0]) + abs(ll - ly)
-                           + math.hypot(cp[0] - lx, cp[1] - ll))
+            # CO-69：**按层加权电气长度**（各段乘 sqrt(er_eff)）——修复只按物理长度补偿的电气 skew
+            length[pol] = (math.hypot(pad[0] - v[0], pad[1] - v[1]) * _sqrt_er("F.Cu")
+                           + abs(ly - v[1]) * _sqrt_er(E)
+                           + abs(lx - v[0]) * _sqrt_er("In5.Cu")
+                           + abs(ll - ly) * _sqrt_er(S)
+                           + math.hypot(cp[0] - lx, cp[1] - ll) * _sqrt_er("F.Cu"))
         sh = "P" if length["P"] < length["N"] else "N"
         other = "N" if sh == "P" else "P"
-        extra = abs(length["P"] - length["N"])
+        # 主蛇形落 lane(In5)；把电气缺口换算为 In5 上的物理长度
+        extra = abs(length["P"] - length["N"]) / _sqrt_er("In5.Cu")
         if extra <= TOL:
             continue
         r_lane = abs(a["landing"][sh][0] - a["via1"][sh][0])
@@ -443,12 +465,12 @@ def co16_nodes(f, pol, v1, esc_pts, lane_pts, stub_pts, esc_l, stub_l, land, con
     n = [[f["pad"][pol][0], f["pad"][pol][1], "F.Cu"],
          [vx, vy, "F.Cu"], [vx, vy, "In2.Cu"]]
     if esc_l == "B.Cu":
-        n += [[vx, vy, "In6.Cu"], [vx, vy, "B.Cu"]]
+        n += [[vx, vy, "In5.Cu"], [vx, vy, "B.Cu"]]
     for q in esc_pts[1:]:
         n.append([q[0], q[1], esc_l])
-    n.append([end[0], end[1], "In6.Cu"])                  # corner via esc_l <-> In6
+    n.append([end[0], end[1], "In5.Cu"])                  # corner via esc_l <-> In6
     for q in lane_pts[1:]:
-        n.append([q[0], q[1], "In6.Cu"])
+        n.append([q[0], q[1], "In5.Cu"])
     if stub_l == "In2.Cu":
         n.append([lx, lane_y, "In2.Cu"])                  # drop In6 -> In2 @ lane y
     elif stub_l == "B.Cu":
@@ -456,8 +478,8 @@ def co16_nodes(f, pol, v1, esc_pts, lane_pts, stub_pts, esc_l, stub_l, land, con
     for q in stub_pts[1:]:
         n.append([q[0], q[1], stub_l])
     if stub_l == "B.Cu":
-        n.append([lx, ly_l, "In6.Cu"])
-    if stub_l in ("B.Cu", "In6.Cu"):
+        n.append([lx, ly_l, "In5.Cu"])
+    if stub_l in ("B.Cu", "In5.Cu"):
         n.append([lx, ly_l, "In2.Cu"])
     n.append([lx, ly_l, "F.Cu"])                          # land -> F
     n.append([f["conn_pad"][pol][0], f["conn_pad"][pol][1], "F.Cu"])
@@ -642,7 +664,7 @@ def co16_build_routes(facts, alloc, lanes):
                               "scope_note": "本构造规则下不可行（列距/层距不足）；非全局不可能性证明"})
             _CO16_PTS[(pid, pol)] = {"esc": esc_pts, "lane": lane_pts, "stub": stub_pts}
             paths[(pid, pol)] = [E, esc_pts]
-            paths[(pid + "#lane", pol)] = ["In6.Cu", lane_pts]
+            paths[(pid + "#lane", pol)] = ["In5.Cu", lane_pts]
             paths[(pid + "#stub", pol)] = [S, stub_pts]
             paths[(pid + "#fcu_pad", pol)] = ["F.Cu",
                 [[f["pad"][pol][0], f["pad"][pol][1]], [vx, vy]]]
@@ -802,7 +824,7 @@ def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict, coherent: d
             if _q == _exclude:
                 continue
             _fq = facts[_q]
-            _Lq = "B.Cu" if _fq["band"] == "dn" else "In6.Cu"
+            _Lq = "B.Cu" if _fq["band"] == "dn" else "In5.Cu"
             for _pol, _xy in (("P", _a[0]), ("N", _a[1])):
                 _x, _y = _xy
                 _bp = _fq["pad"][_pol]
@@ -971,7 +993,7 @@ def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict, coherent: d
             if lanes is not None:
                 _lyp = fp(lanes[_pid]["lane_y"] + pol_off(_f, "P"))
                 _lyn = fp(lanes[_pid]["lane_y"] + pol_off(_f, "N"))
-                _lay1 = "B.Cu" if _f["band"] == "dn" else "In6.Cu"
+                _lay1 = "B.Cu" if _f["band"] == "dn" else "In5.Cu"
                 if not (_esc_ok(_esc, _px, _py, _lyp, _lay1) and _esc_ok(_esc, _nx, _ny, _lyn, _lay1)):
                     continue
             if not (_vb_clear(_vb, _px, _py) and _vb_clear(_vb, _nx, _ny)):
@@ -980,7 +1002,7 @@ def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict, coherent: d
                 # ROOT-21 A-CN.9(vt/tt): the emitted metric also forbids via<->track (0.4525) and
                 # pad<->track breakouts.  The constructor previously checked only via<->via and
                 # vertical<->vertical (0.38) => this missing predicate is exactly what A-CN.9 caught.
-                _Lc = "B.Cu" if _f["band"] == "dn" else "In6.Cu"
+                _Lc = "B.Cu" if _f["band"] == "dn" else "In5.Cu"
                 _pts = ((_px, _py, "F.Cu"), (_px, _py, _Lc), (_nx, _ny, "F.Cu"), (_nx, _ny, _Lc),
                         (_px, _lyp, _Lc), (_nx, _lyn, _Lc), (_px, _lyp, "In2.Cu"), (_nx, _lyn, "In2.Cu"))
                 _okv = True
@@ -1340,12 +1362,17 @@ def refclk_place(manifest: dict, w0r: dict) -> dict:
                           "base_run": base_run, "tr": _tr}
 
         # CO-45 等长补偿：P rail（west -> xj_P）插入南向幂绕，补偿 |L_P - L_N|（>=0 时）
-        def _xy_len(_r):
-            return sum((( _r[i + 1][0] - _r[i][0]) ** 2 + (_r[i + 1][1] - _r[i][1]) ** 2) ** 0.5
-                       for i in range(len(_r) - 1))
-        _pl, _nl_ = _xy_len(_b3["P"] + [[q[0], q[1], "F.Cu"] for q in _meta["P"]["tr"]]), \
-                    _xy_len(_b3["N"] + [[q[0], q[1], "F.Cu"] for q in _meta["N"]["tr"]])
-        _extra = _nl_ - _pl
+        def _el_len(_r):
+            """CO-69：按层加权电气长度（节点第 3 元为层；tr 段按 F.Cu）。"""
+            _t = 0.0
+            for i in range(len(_r) - 1):
+                _d = ((_r[i + 1][0] - _r[i][0]) ** 2 + (_r[i + 1][1] - _r[i][1]) ** 2) ** 0.5
+                _t += _d * _sqrt_er(_r[i][2] if len(_r[i]) > 2 else "F.Cu")
+            return _t
+        _pl, _nl_ = _el_len(_b3["P"] + [[q[0], q[1], "F.Cu"] for q in _meta["P"]["tr"]]), \
+                    _el_len(_b3["N"] + [[q[0], q[1], "F.Cu"] for q in _meta["N"]["tr"]])
+        # 幂绕落 P rail(F.Cu)；把电气缺口换算为 F.Cu 上的物理长度
+        _extra = (_nl_ - _pl) / _sqrt_er("F.Cu")
         if _extra < -TOL:
             raise RuntimeError("CO-45 length compensation: P longer than N (no feasible shortener)")
         _runp = fp(_meta["P"]["run_y"] + _meta["P"]["off"])
@@ -1374,8 +1401,8 @@ def refclk_place(manifest: dict, w0r: dict) -> dict:
                           "crossing_y_from_witness": (_meta[pol]["base_run"]
                                                       if _meta[pol]["base_run"] != _meta[pol]["j2"][1]
                                                       else None)}
-            _skew_after[pol] = _xy_len(_xy)
-        _skew_mm = round(abs(_skew_after["P"] - _skew_after["N"]), 4)
+            _skew_after[pol] = _el_len(_nd)          # CO-69：电气（按层加权）
+        _skew_mm = round(abs(_skew_after["P"] - _skew_after["N"]) / _sqrt_er("In2.Cu"), 4)  # mm-eq @ er 3.99
         if _skew_mm > 0.15 + 1e-9:
             raise RuntimeError(f"CO-45 length compensation: residual skew {_skew_mm} > 0.15")
         out[pid] = {"layer": "F.Cu", "lane_y": lane_y, "pol_offset_mm": dict(REFCLK_OFF),
@@ -1810,7 +1837,7 @@ def main(argv=None) -> int:
                 if shape == "t2":
                     # LID.1 8L (rect #03): 每组 (corridor,band) 独占一个派生通道层 (In2/In6/B)；
                     # escape vertical 在该层；run/drop 同组层 => 单层 L 路径，端部各 1 via (≤2)。
-                    _L = "B.Cu" if f["band"] == "dn" else "In6.Cu"   # 竖段按带分层（run 走 In2）
+                    _L = "B.Cu" if f["band"] == "dn" else "In5.Cu"   # 竖段按带分层（run 走 In2）
                     paths[(pid, pol)] = [_L, [[src[0], src[1]], [src[0], tgt[1]]]]
                     r15[(pid, pol)] = {"entry_x": fp(entry), "lane_entry_y": fp(lanes[pid]["lane_y"]),
                                        "segments": 3, "corners_deg": [90, 90], "no_via": False,
@@ -1875,7 +1902,7 @@ def main(argv=None) -> int:
             if shape == "t2":
                 # LID.1 8L: vertical/drop 在组派生层 V(g)；run 在共享通道层 (In2) =>
                 # vertical×run 天然跨层隔离；vertical 按组分层 => 逃逸竖段冲突下降。
-                _L = "B.Cu" if f["band"] == "dn" else "In6.Cu"
+                _L = "B.Cu" if f["band"] == "dn" else "In5.Cu"
                 vx = r1["assignment"][pid][pol + "_via"][0]
                 lx = r3a["column_x"]
                 _mz = _MEANDER.get(pid, {})
@@ -2160,9 +2187,9 @@ def main(argv=None) -> int:
                 "r3": None if not r3a else {"pad": r3a["pad"], "landing": r3a["landing"],
                                             "column_x": r3a["column_x"],
                                             "layer_chain": ["F.Cu",
-                                                            ("B.Cu" if f["band"] == "dn" else "In6.Cu"),
+                                                            ("B.Cu" if f["band"] == "dn" else "In5.Cu"),
                                                             "In2.Cu",
-                                                            ("B.Cu" if f["band"] == "dn" else "In6.Cu"),
+                                                            ("B.Cu" if f["band"] == "dn" else "In5.Cu"),
                                                             "F.Cu"]},
                 "r3_by_pol": {pol: (None if not r3_by_pol[pol] else
                                     {"pad": r3_by_pol[pol]["pad"],
@@ -2191,7 +2218,7 @@ def main(argv=None) -> int:
                     # ROOT-21: emission MUST mirror the internal escape-layer rule (dn->B.Cu,
                     # up->In6.Cu); the previous hardcoded "B.Cu" made the artifact disagree with the
                     # geometry the A-CN.9 metric validates (non-self-consistent artifact).
-                    _Lp = "B.Cu" if f["band"] == "dn" else "In6.Cu"
+                    _Lp = "B.Cu" if f["band"] == "dn" else "In5.Cu"
                     lx = r3a["column_x"]; ly_l = r3a["landing"][1]
                     _mzp = (_MEANDER.get(pid, {}).get("lane_pts", {}) or {}).get(pol)
                     # ROOT-22 fix: meander 路径须保留末点 [lx, ly]（落列 via 的 In2 顶点），

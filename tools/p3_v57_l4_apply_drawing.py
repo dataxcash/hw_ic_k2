@@ -23,6 +23,7 @@ MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
 MANIFEST = STEP2 / "m13_v57_s1_page_manifest.json"
 OUT = STEP2 / "m13_v57_l4_construction.json"
 SRC_PCB = K2 / "k2_v4_8L.kicad_pcb"
+SPEC = K2 / "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-5.json"   # CO-68: 分层线宽口径
 DST_PCB = K2 / "k2_v4_8L.l4.kicad_pcb"
 PHYS = ["F.Cu", "In1.Cu", "In2.Cu", "In3.Cu", "In4.Cu", "In5.Cu", "In6.Cu", "B.Cu"]  # LID.1 8L top->bottom
 LIDX = {n: i for i, n in enumerate(PHYS)}
@@ -171,6 +172,7 @@ def canonicalize_board(path: Path) -> int:
 
 def apply_board(rec, src: Path, dst: Path, domain=None):
     import pcbnew                                                       # noqa: E402
+    WIDTH = json.loads(SPEC.read_text(encoding="utf-8"))["impedance"]["width_mm_by_layer"]  # CO-68
     b = pcbnew.LoadBoard(str(src))
     LM = {n: getattr(pcbnew, n.replace(".", "_")) for n in PHYS}   # LID.1 8L (incl. In5/In6)
     mm = pcbnew.FromMM
@@ -193,7 +195,7 @@ def apply_board(rec, src: Path, dst: Path, domain=None):
     for net in rec["nets"]:
         for s in rec["segments"][net]:
             tr = pcbnew.PCB_TRACK(b)
-            tr.SetStart(vec(*s["a"])); tr.SetEnd(vec(*s["b"])); tr.SetWidth(mm(0.205))
+            tr.SetStart(vec(*s["a"])); tr.SetEnd(vec(*s["b"])); tr.SetWidth(mm(WIDTH.get(s["layer"], 0.205)))
             tr.SetLayer(LM[s["layer"]]); tr.SetNetCode(netcode(net)); b.Add(tr)
         for v in rec["vias"][net]:
             vi = pcbnew.PCB_VIA(b)

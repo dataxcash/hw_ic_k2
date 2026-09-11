@@ -1,0 +1,52 @@
+{
+ "artifact": "m13_v57_layer_intent_rev6",
+ "authority": "k2/tools/p3_v57_co68_option_a_execute_derive.py —— L2 叠层分配执行（CO-67 红线裁定 L2 + CO-66 方案(a)）",
+ "authorization_source": "capacity-closure derivation (rectification #03); layer count/purpose are DERIVED outputs",
+ "derivation_ref": "m13_v57_layer_intent_derived_v1.json (LID.1, sha16 e7c3c91c)",
+ "domain_invariance": {
+  "nets": {
+   "GND": 3,
+   "P3V3": 1
+  },
+  "note": "平面清单与网归属不变；仅位置变更 ⇒ L2（CO-67）",
+  "plane_count": 4
+ },
+ "frozen_sources_untouched": true,
+ "layer_intent": {
+  "B.Cu": "transition_eligible",
+  "F.Cu": "stub_only",
+  "In1.Cu": "gnd_plane",
+  "In2.Cu": "transition_eligible",
+  "In3.Cu": "gnd_plane",
+  "In4.Cu": "power_plane(P3V3, spec)",
+  "In5.Cu": "transition_eligible",
+  "In6.Cu": "gnd_plane"
+ },
+ "reference_sandwich": {
+  "B.Cu": [
+   "In6.Cu"
+  ],
+  "F.Cu": [
+   "In1.Cu"
+  ],
+  "In2.Cu": [
+   "In1.Cu",
+   "In3.Cu"
+  ],
+  "In5.Cu": [
+   "In4.Cu",
+   "In6.Cu"
+  ]
+ },
+ "revision": "REV6",
+ "ruling": "层集由容量闭合派生（L_signal=4 ⇒ 8L）不变；方案(a) 仅改**平面在位次序**：In5(GND)->信号、In6(信号)->GND；层数/平面数/电源域划分不变（CO-67 机判）。",
+ "schema": 1,
+ "stackup": "8L F/In1(G)/In2(S)/In3(G)/In4(P)/In5(S)/In6(G)/B(S)  [CO-68 方案(a)：对称叠层、4 信号层全参考]",
+ "stackup_unchanged": false,
+ "supersedes": "m13_v57_layer_intent_rev5.json (REV5) —— 保存于仓库，未改",
+ "transition_eligible_layers": [
+  "In2.Cu",
+  "In5.Cu",
+  "B.Cu"
+ ]
+}
