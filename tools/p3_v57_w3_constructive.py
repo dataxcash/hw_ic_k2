@@ -72,6 +72,10 @@ ECS_MARGIN = 0.2775         # trace_half + clear：迹跨列端所需
 ECS_DX = 0.4525             # via 避开同层列的横向最小中心距：via_r + trace_half + clear
 ECS_COL_LO, ECS_COL_HI = 129.0, 132.2   # pad 场近域 In2 stub 列筛选窗
 REFCLK_N_OFF = 0.31        # REFCLK 内 N 轨相对 pad 行 y 的偏移（P=-0.19 ⇒ 对内 0.50 >= ECS_DX）
+FAR_ROW_MARGIN = 0.6275    # CO-42/43 远端：排中心到自由带边界 = pad高0.35 + 净距0.175 + 半线宽0.1025
+FAR_LINE_LO = 0.28         # 带内近边界线距带边界
+FAR_LINE_STEP = 0.38       # 带内两线间距（= 现行对内间距）
+FAR_JOG_EAST = 0.5         # 抬升列位于 A 排东端之外的安全余量（覆盖 pad 半宽+净距+半线宽）
 ORD = "natural"   # ROOT-20: enumeration order (A1.2 order-invariance, non-vacuous)
 SCHEMA = 1
 STEP = 1.46
@@ -1170,6 +1174,74 @@ def refclk_transit_nodes(j2, rail_y, west_x, rise_x, run_y, far, off):
                     [x_v, rail_y, "F.Cu"]] + tail)
 
 
+def _far_row_span(manifest, far_ref):
+    """远端连接器（J3/J4）两排 pad 行 y（升序）。来源 = manifest 锚点，闭式无搜索。"""
+    ys = set()
+    for pg in manifest["pages"]:
+        for k in ("conn", "conn2"):
+            a = pg.get("anchors", {}).get(k)
+            if not isinstance(a, dict):
+                continue
+            for pol in ("P", "N"):
+                q = a.get(pol)
+                if isinstance(q, dict) and q.get("ref") == far_ref:
+                    ys.add(fp(q["pad_global"][1]))
+    return sorted(ys)
+
+
+def refclk_far_transit(manifest, far_ref, far_pads, run_y, pol, x_rise_lo):
+    """CO-43（依 CO-42 裁定）：远端接入 = 抬升入两排间自由带 -> 带内西行 -> 垂直入 pad。
+
+    带内两线取低侧起算的 line_a / line_b（相距 FAR_LINE_STEP=0.38）。分配规则：
+    far-pad x 较小的一根走 line_a 并取更东的抬升列（小 x 的水平段更长，必须避开另一根的下降段）。
+    该 2 选 1 为闭式判定：两候选各做一次水平段×竖直段相交测试，取不相交者（都不相交取候选 1）。
+    """
+    rows = _far_row_span(manifest, far_ref)
+    if len(rows) < 2:
+        return None
+    row_lo, row_hi = rows[0], rows[-1]
+    line_a = fp(row_lo + FAR_ROW_MARGIN + FAR_LINE_LO)
+    line_b = fp(line_a + FAR_LINE_STEP)
+    east_end = 0.0
+    for pg in manifest["pages"]:
+        for k in ("conn", "conn2"):
+            a = pg.get("anchors", {}).get(k)
+            if not isinstance(a, dict):
+                continue
+            for _p in ("P", "N"):
+                q = a.get(_p)
+                if isinstance(q, dict) and q.get("ref") == far_ref:
+                    east_end = max(east_end, fp(q["pad_global"][0]))
+    # 抬升列须在 A 排 pad 场之外：取「manifest 已引用 pad 东端 + 余量」与
+    # witness `west_rise_in_corridor.x_centre_range[0]`（其认证的自由抬升列，东于整个 pad 场）的较大者
+    xj_near = fp(math.ceil(max(east_end + FAR_JOG_EAST, x_rise_lo) / GRID) * GRID)
+    xj_far = fp(xj_near + GRID * 10)
+    small_pol = "P" if far_pads["P"][0] <= far_pads["N"][0] else "N"
+    lrg_pol = "N" if small_pol == "P" else "P"
+    x_small, x_lrg = far_pads[small_pol][0], far_pads[lrg_pol][0]
+    rails = {"P": fp(run_y - POL_OFF), "N": fp(run_y + POL_OFF)}
+
+    def _bad(ln_small, ln_lrg):
+        lo, hi = min(ln_lrg, rails[lrg_pol]), max(ln_lrg, rails[lrg_pol])
+        if x_small < x_lrg < xj_far and lo < ln_small < hi:
+            return True
+        lo2, hi2 = min(ln_small, rails[small_pol]), max(ln_small, rails[small_pol])
+        if x_lrg < x_small < xj_near and lo2 < ln_lrg < hi2:
+            return True
+        return False
+
+    if _bad(line_a, line_b) and not _bad(line_b, line_a):      # 2 选 1：取不相交者
+        small_on_a = False
+    else:
+        small_on_a = True
+    line_of = {small_pol: (line_a if small_on_a else line_b),
+               lrg_pol: (line_b if small_on_a else line_a)}
+    xj_of = {small_pol: xj_far, lrg_pol: xj_near}
+    return [[xj_of[pol], rails[pol]],
+            [xj_of[pol], line_of[pol]],
+            [far_pads[pol][0], line_of[pol]], [far_pads[pol][0], far_pads[pol][1]]]
+
+
 def refclk_place(manifest: dict, w0r: dict) -> dict:
     pw = w0r["refclk_passage_witness"]
     eu = pw["transition_columns"]["east_rise"]["x_centre_range"]
@@ -1195,6 +1267,14 @@ def refclk_place(manifest: dict, w0r: dict) -> dict:
             _lo = _hi = None
         paths = {}
         lane_y = None
+        _far_pads, _far_ref = {}, None                          # CO-43: 远端 pad（J3/J4）
+        for _p in ("P", "N"):
+            _a1 = [fp(pg["anchors"]["conn"][_p]["pad_global"][0]),
+                   fp(pg["anchors"]["conn"][_p]["pad_global"][1])]
+            _a2 = [fp(pg["anchors"]["conn2"][_p]["pad_global"][0]),
+                   fp(pg["anchors"]["conn2"][_p]["pad_global"][1])]
+            _far_pads[_p] = _a1 if _a1[0] < _a2[0] else _a2
+            _far_ref = pg["anchors"]["conn"][_p]["ref"]
         for pol in ("P", "N"):
             off = -POL_OFF if pol == "P" else POL_OFF        # ROOT-21: P/N 分离 0.38 >= 净距
             a1 = [fp(pg["anchors"]["conn"][pol]["pad_global"][0]),
@@ -1207,11 +1287,14 @@ def refclk_place(manifest: dict, w0r: dict) -> dict:
             base_run = j2[1] if abs(far[1] - j2[1]) <= 3.2 else fp(max(far[1], chan[0]) + GRID)
             run_y = base_run if _lo is None else fp(min(max(base_run, _lo), _hi))  # 见证成对中心窗
             # 差分对几何：P/N 各自在 pad x / rise x / run y 上偏移 0.38，全程不共线
+            _rise_lo = fp(pw["transition_columns"]["west_rise_in_corridor"]["x_centre_range"][0])
+            _tr = refclk_far_transit(manifest, _far_ref, _far_pads, run_y, pol, _rise_lo)
+            if _tr is None:
+                _tr = [[far[0], far[1]]]
             pts = [j2, [j2[0], fp(j2[1] + off)],
                    [fp(rise_x + off), fp(j2[1] + off)],
                    [fp(rise_x + off), fp(run_y + off)],
-                   [fp(west), fp(run_y + off)],
-                   [far[0], far[1]]]
+                   [fp(west), fp(run_y + off)]] + _tr
             path = [pts[0]]
             for q in pts[1:]:
                 if abs(q[0] - path[-1][0]) > TOL or abs(q[1] - path[-1][1]) > TOL:

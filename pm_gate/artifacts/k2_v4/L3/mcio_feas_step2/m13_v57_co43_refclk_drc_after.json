@@ -1,0 +1,740 @@
+{
+ "artifact": "m13_v57_co43_refclk_drc_after",
+ "schema": 1,
+ "revision": "CO-43",
+ "tool": "kicad-cli 10.0.5",
+ "board": "k2_v4_8L.l4.kicad_pcb",
+ "drawing_rev": "W3-CN.39",
+ "note": "CO-43 远端接入实施后 L4 板 DRC 中 REFCLK 相关 new 型缺陷明细（与 CO-41 同口径）",
+ "n_new": 38,
+ "by_type": {
+  "clearance": 8,
+  "shorting_items": 7,
+  "solder_mask_bridge": 18,
+  "tracks_crossing": 5
+ },
+ "violations": [
+  {
+   "type": "clearance",
+   "items": [
+    {
+     "desc": "F.Cu 上 C82 的焊盘 1 [P3V3]",
+     "pos": [
+      90.65,
+      64.0
+     ]
+    },
+    {
+     "desc": "走线 [PCIE_REFCLK1_N] (F.Cu), 长度: 24.4070 mm",
+     "pos": [
+      106.757,
+      63.472
+     ]
+    }
+   ]
+  },
+  {
+   "type": "clearance",
+   "items": [
+    {
+     "desc": "走线 [PCIE_REFCLK1_N] (F.Cu), 长度: 21.7442 mm",
+     "pos": [
+      82.35,
+      63.472
+     ]
+    },
+    {
+     "desc": "走线 [PCIE_REFCLK1_P] (F.Cu), 长度: 24.0270 mm",
+     "pos": [
+      106.377,
+      63.092
+     ]
+    }
+   ]
+  },
+  {
+   "type": "tracks_crossing",
+   "items": [
+    {
+     "desc": "走线 [PCIE_REFCLK1_N] (F.Cu), 长度: 21.7442 mm",
+     "pos": [
+      82.35,
+      63.472
+     ]
+    },
+    {
+     "desc": "走线 [PCIE_REFCLK1_P] (F.Cu), 长度: 16.3000 mm",
+     "pos": [
+      82.35,
+      63.092
+     ]
+    }
+   ]
+  },
+  {
+   "type": "clearance",
+   "items": [
+    {
+     "desc": "F.Cu - In2.Cu 上的盲孔 [PCIE_REFCLK1_N]",
+     "pos": [
+      131.07,
+      51.49
+     ]
+    },
+    {
+     "desc": "走线 [PCIE_REFCLK1_P] (F.Cu), 长度: 26.2730 mm",
+     "pos": [
+      132.65,
+      51.11
+     ]
+    }
+   ]
+  },
+  {
+   "type": "shorting_items",
+   "items": [
+    {
+     "desc": "走线 [PCIE_REFCLK0_N] (F.Cu), 长度: 24.0524 mm",
+     "pos": [
+      82.35,
+      46.09
+     ]
+    },
+    {
+     "desc": "F.Cu 上 J3 的焊盘 A1 [GND]",
+     "pos": [
+      64.9,
+      45.75
+     ]
+    }
+   ]
+  },
+  {
+   "type": "shorting_items",
+   "items": [
+    {
+     "desc": "走线 [PCIE_REFCLK1_N] (F.Cu), 长度: 21.7442 mm",
+     "pos": [
+      82.35,
+      63.472
+     ]
+    },
+    {
+     "desc": "F.Cu 上 J4 的焊盘 A13 [GND]",
+     "pos": [
+      61.3,
+      61.45
+     ]
+    }
+   ]
+  },
+  {
+   "type": "shorting_items",
+   "items": [
+    {
+     "desc": "走线 [PCIE_REFCLK0_N] (F.Cu), 长度: 24.0524 mm",
+     "pos": [
+      82.35,
+      46.09
+     ]
+    },
+    {
+     "desc": "走线 [PCIE_REFCLK0_P] (F.Cu), 长度: 1.2125 mm",
+     "pos": [
+      58.9,
+      44.538
+     ]
+    }
+   ]
+  },
+  {
+   "type": "clearance",
+   "items": [
+    {
+     "desc": "走线 [PCIE_REFCLK0_P] (F.Cu), 长度: 0.1900 mm",
+     "pos": [
+      132.65,
+      45.9
+     ]
+    },
+    {
+     "desc": "F.Cu 上 J2 的焊盘 9 [GND]",
+     "pos": [
+      132.65,
+      45.3
+     ]
+    }
+   ]
+  },
+  {
+   "type": "shorting_items",
+   "items": [
+    {
+     "desc": "走线 [PCIE_REFCLK0_N] (F.Cu), 长度: 24.0524 mm",
+     "pos": [
+      82.35,
+      46.09
+     ]
+    },
+    {
+     "desc": "走线 [PCIE_REFCLK0_P] (F.Cu), 长度: 16.8000 mm",
+     "pos": [
+      82.35,
+      45.71
+     ]
+    }
+   ]
+  },
+  {
+   "type": "clearance",
+   "items": [
+    {
+     "desc": "走线 [PCIE_REFCLK1_P] (F.Cu), 长度: 0.1900 mm",
+     "pos": [
+      132.65,
+      51.3
+     ]
+    },
+    {
+     "desc": "F.Cu 上 J2 的焊盘 27 [GND]",
+     "pos": [
+      132.65,
+      50.7
+     ]
+    }
+   ]
+  },
+  {
+   "type": "shorting_items",
+   "items": [
+    {
+     "desc": "走线 [PCIE_REFCLK0_N] (F.Cu), 长度: 24.0524 mm",
+     "pos": [
+      82.35,
+      46.09
+     ]
+    },
+    {
+     "desc": "走线 [PCIE_REFCLK0_P] (F.Cu), 长度: 1.1725 mm",
+     "pos": [
+      65.55,
+      45.71
+     ]
+    }
+   ]
+  },
+  {
+   "type": "clearance",
+   "items": [
+    {
+     "desc": "走线 [PCIE_REFCLK0_P] (F.Cu), 长度: 26.2730 mm",
+     "pos": [
+      132.65,
+      45.71
+     ]
+    },
+    {
+     "desc": "F.Cu - In2.Cu 上的盲孔 [PCIE_REFCLK0_N]",
+     "pos": [
+      131.45,
+      46.09
+     ]
+    }
+   ]
+  },
+  {
+   "type": "tracks_crossing",
+   "items": [
+    {
+     "desc": "走线 [PCIE_REFCLK0_N] (F.Cu), 长度: 24.0524 mm",
+     "pos": [
+      82.35,
+      46.09
+     ]
+    },
+    {
+     "desc": "走线 [PCIE_DN_OUT1_P_MCIO] (F.Cu), 长度: 5.9424 mm",
+     "pos": [
+      61.0,
+      51.5
+     ]
+    }
+   ]
+  },
+  {
+   "type": "tracks_crossing",
+   "items": [
+    {
+     "desc": "走线 [PCIE_REFCLK0_N] (F.Cu), 长度: 24.0524 mm",
+     "pos": [
+      82.35,
+      46.09
+     ]
+    },
+    {
+     "desc": "走线 [PCIE_DN_OUT0_N_MCIO] (F.Cu), 长度: 5.8200 mm",
+     "pos": [
+      64.6,
+      51.5
+     ]
+    }
+   ]
+  },
+  {
+   "type": "tracks_crossing",
+   "items": [
+    {
+     "desc": "走线 [PCIE_REFCLK0_N] (F.Cu), 长度: 24.0524 mm",
+     "pos": [
+      82.35,
+      46.09
+     ]
+    },
+    {
+     "desc": "走线 [PCIE_DN_OUT0_P_MCIO] (F.Cu), 长度: 5.8200 mm",
+     "pos": [
+      65.2,
+      51.5
+     ]
+    }
+   ]
+  },
+  {
+   "type": "clearance",
+   "items": [
+    {
+     "desc": "走线 [PCIE_REFCLK1_N] (F.Cu), 长度: 21.7442 mm",
+     "pos": [
+      82.35,
+      63.472
+     ]
+    },
+    {
+     "desc": "走线 [PCIE_DN_OUT7_N_MCIO] (F.Cu), 长度: 1.2855 mm",
+     "pos": [
+      64.0,
+      60.2
+     ]
+    }
+   ]
+  },
+  {
+   "type": "clearance",
+   "items": [
+    {
+     "desc": "走线 [PCIE_REFCLK1_N] (F.Cu), 长度: 21.7442 mm",
+     "pos": [
+      82.35,
+      63.472
+     ]
+    },
+    {
+     "desc": "走线 [PCIE_DN_OUT7_P_MCIO] (F.Cu), 长度: 1.2855 mm",
+     "pos": [
+      63.4,
+      60.2
+     ]
+    }
+   ]
+  },
+  {
+   "type": "shorting_items",
+   "items": [
+    {
+     "desc": "走线 [PCIE_DN_OUT6_N_MCIO] (F.Cu), 长度: 1.2855 mm",
+     "pos": [
+      62.2,
+      60.2
+     ]
+    },
+    {
+     "desc": "走线 [PCIE_REFCLK1_N] (F.Cu), 长度: 21.7442 mm",
+     "pos": [
+      82.35,
+      63.472
+     ]
+    }
+   ]
+  },
+  {
+   "type": "shorting_items",
+   "items": [
+    {
+     "desc": "走线 [PCIE_REFCLK1_N] (F.Cu), 长度: 21.7442 mm",
+     "pos": [
+      82.35,
+      63.472
+     ]
+    },
+    {
+     "desc": "走线 [PCIE_DN_OUT6_P_MCIO] (F.Cu), 长度: 1.2855 mm",
+     "pos": [
+      61.6,
+      60.2
+     ]
+    }
+   ]
+  },
+  {
+   "type": "tracks_crossing",
+   "items": [
+    {
+     "desc": "走线 [PCIE_REFCLK0_N] (F.Cu), 长度: 24.0524 mm",
+     "pos": [
+      82.35,
+      46.09
+     ]
+    },
+    {
+     "desc": "走线 [PCIE_DN_OUT1_N_MCIO] (F.Cu), 长度: 5.9424 mm",
+     "pos": [
+      60.4,
+      51.5
+     ]
+    }
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "items": [
+    {
+     "desc": "走线 [PCIE_REFCLK0_N] (F.Cu), 长度: 24.0524 mm",
+     "pos": [
+      82.35,
+      46.09
+     ]
+    },
+    {
+     "desc": "F.Cu 上 J3 的焊盘 A1 [GND]",
+     "pos": [
+      64.9,
+      45.75
+     ]
+    }
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "items": [
+    {
+     "desc": "走线 [PCIE_REFCLK0_N] (F.Cu), 长度: 24.0524 mm",
+     "pos": [
+      82.35,
+      46.09
+     ]
+    },
+    {
+     "desc": "F.Cu 上 J3 的焊盘 A2 [PCIE_DN_OUT0_P_MCIO]",
+     "pos": [
+      64.3,
+      45.75
+     ]
+    }
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "items": [
+    {
+     "desc": "走线 [PCIE_REFCLK0_N] (F.Cu), 长度: 24.0524 mm",
+     "pos": [
+      82.35,
+      46.09
+     ]
+    },
+    {
+     "desc": "F.Cu 上 J3 的焊盘 A3 [PCIE_DN_OUT0_N_MCIO]",
+     "pos": [
+      63.7,
+      45.75
+     ]
+    }
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "items": [
+    {
+     "desc": "走线 [PCIE_REFCLK0_N] (F.Cu), 长度: 24.0524 mm",
+     "pos": [
+      82.35,
+      46.09
+     ]
+    },
+    {
+     "desc": "F.Cu 上 J3 的焊盘 A4 [GND]",
+     "pos": [
+      63.1,
+      45.75
+     ]
+    }
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "items": [
+    {
+     "desc": "走线 [PCIE_REFCLK0_N] (F.Cu), 长度: 24.0524 mm",
+     "pos": [
+      82.35,
+      46.09
+     ]
+    },
+    {
+     "desc": "F.Cu 上 J3 的焊盘 A5 [PCIE_DN_OUT1_P_MCIO]",
+     "pos": [
+      62.5,
+      45.75
+     ]
+    }
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "items": [
+    {
+     "desc": "走线 [PCIE_REFCLK0_N] (F.Cu), 长度: 24.0524 mm",
+     "pos": [
+      82.35,
+      46.09
+     ]
+    },
+    {
+     "desc": "F.Cu 上 J3 的焊盘 A6 [PCIE_DN_OUT1_N_MCIO]",
+     "pos": [
+      61.9,
+      45.75
+     ]
+    }
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "items": [
+    {
+     "desc": "走线 [PCIE_REFCLK0_N] (F.Cu), 长度: 24.0524 mm",
+     "pos": [
+      82.35,
+      46.09
+     ]
+    },
+    {
+     "desc": "F.Cu 上 J3 的焊盘 A7 [GND]",
+     "pos": [
+      61.3,
+      45.75
+     ]
+    }
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "items": [
+    {
+     "desc": "走线 [PCIE_REFCLK0_N] (F.Cu), 长度: 24.0524 mm",
+     "pos": [
+      82.35,
+      46.09
+     ]
+    },
+    {
+     "desc": "F.Cu 上 J3 的焊盘 A8 [NO_CONNECT]",
+     "pos": [
+      60.7,
+      45.75
+     ]
+    }
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "items": [
+    {
+     "desc": "走线 [PCIE_REFCLK0_N] (F.Cu), 长度: 24.0524 mm",
+     "pos": [
+      82.35,
+      46.09
+     ]
+    },
+    {
+     "desc": "F.Cu 上 J3 的焊盘 A9 [P3V3_AUX]",
+     "pos": [
+      60.1,
+      45.75
+     ]
+    }
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "items": [
+    {
+     "desc": "走线 [PCIE_REFCLK0_N] (F.Cu), 长度: 24.0524 mm",
+     "pos": [
+      82.35,
+      46.09
+     ]
+    },
+    {
+     "desc": "F.Cu 上 J3 的焊盘 A10 [GND]",
+     "pos": [
+      59.5,
+      45.75
+     ]
+    }
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "items": [
+    {
+     "desc": "走线 [PCIE_REFCLK0_N] (F.Cu), 长度: 24.0524 mm",
+     "pos": [
+      82.35,
+      46.09
+     ]
+    },
+    {
+     "desc": "F.Cu 上 J3 的焊盘 A11 [PCIE_REFCLK0_P]",
+     "pos": [
+      58.9,
+      45.75
+     ]
+    }
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "items": [
+    {
+     "desc": "走线 [PCIE_REFCLK1_N] (F.Cu), 长度: 21.7442 mm",
+     "pos": [
+      82.35,
+      63.472
+     ]
+    },
+    {
+     "desc": "F.Cu 上 J4 的焊盘 A13 [GND]",
+     "pos": [
+      61.3,
+      61.45
+     ]
+    }
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "items": [
+    {
+     "desc": "走线 [PCIE_REFCLK1_N] (F.Cu), 长度: 21.7442 mm",
+     "pos": [
+      82.35,
+      63.472
+     ]
+    },
+    {
+     "desc": "F.Cu 上 J4 的焊盘 A14 [PCIE_DN_OUT6_P_MCIO]",
+     "pos": [
+      61.9,
+      61.45
+     ]
+    }
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "items": [
+    {
+     "desc": "走线 [PCIE_REFCLK1_N] (F.Cu), 长度: 21.7442 mm",
+     "pos": [
+      82.35,
+      63.472
+     ]
+    },
+    {
+     "desc": "F.Cu 上 J4 的焊盘 A15 [PCIE_DN_OUT6_N_MCIO]",
+     "pos": [
+      62.5,
+      61.45
+     ]
+    }
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "items": [
+    {
+     "desc": "走线 [PCIE_REFCLK1_N] (F.Cu), 长度: 21.7442 mm",
+     "pos": [
+      82.35,
+      63.472
+     ]
+    },
+    {
+     "desc": "F.Cu 上 J4 的焊盘 A16 [GND]",
+     "pos": [
+      63.1,
+      61.45
+     ]
+    }
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "items": [
+    {
+     "desc": "走线 [PCIE_REFCLK1_N] (F.Cu), 长度: 21.7442 mm",
+     "pos": [
+      82.35,
+      63.472
+     ]
+    },
+    {
+     "desc": "F.Cu 上 J4 的焊盘 A17 [PCIE_DN_OUT7_P_MCIO]",
+     "pos": [
+      63.7,
+      61.45
+     ]
+    }
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "items": [
+    {
+     "desc": "走线 [PCIE_REFCLK1_N] (F.Cu), 长度: 21.7442 mm",
+     "pos": [
+      82.35,
+      63.472
+     ]
+    },
+    {
+     "desc": "F.Cu 上 J4 的焊盘 A18 [PCIE_DN_OUT7_N_MCIO]",
+     "pos": [
+      64.3,
+      61.45
+     ]
+    }
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "items": [
+    {
+     "desc": "走线 [PCIE_REFCLK1_N] (F.Cu), 长度: 21.7442 mm",
+     "pos": [
+      82.35,
+      63.472
+     ]
+    },
+    {
+     "desc": "F.Cu 上 J4 的焊盘 A19 [GND]",
+     "pos": [
+      64.9,
+      61.45
+     ]
+    }
+   ]
+  }
+ ]
+}
