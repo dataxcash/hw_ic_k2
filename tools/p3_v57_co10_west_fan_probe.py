@@ -104,6 +104,14 @@ FAN_Y = {("J3", "U"): 42.0, ("J3", "L"): 44.2, ("J4", "U"): 60.2, ("J4", "L"): 6
 FAN_DX = {("J3", "U"): 0.0, ("J3", "L"): 0.0, ("J4", "U"): 0.0, ("J4", "L"): 0.0}
 
 
+def y_bias(f):
+    """同 band 内不同 connector 的 escape 竖段在 y 上错开 0.6：
+    west-up  J3(+pad_y-0.3) / J4(+pad_y+0.3) => 竖段 y 区间互斥，解耦其 x 分配。"""
+    if f["corridor"] == "WEST_MCIO_TO_CHIP" and f["band"] == "up":
+        return -0.3 if f["conn_ref"] == "J3" else 0.3
+    return 0.0
+
+
 def land_meta(f):
     out = {}
     for pol in ("P", "N"):
@@ -320,9 +328,11 @@ def probe(rule="d3", order="engine", verbose=False):
             st.add(b[0], b[1], pid)
             if verbose: print("OK  ", pid, esc_layer(f), stub_layer(f), (px, py), (nx, ny))
             continue
+        _by = y_bias(f)
         rows = sorted(PAIR_DOMAIN[pid]["pair_rows"],
                       key=lambda r: (abs(float(r[0]) - f["pad"]["P"][0]) + abs(float(r[1]) - f["pad"]["N"][0])
-                                     + abs(float(r[2]) - f["pad"]["P"][1]) + abs(float(r[3]) - f["pad"]["N"][1]),
+                                     + abs(float(r[2]) - (f["pad"]["P"][1] + _by))
+                                     + abs(float(r[3]) - (f["pad"]["N"][1] + _by)),
                                      float(r[0]), float(r[1])))
         hit = None; reasons = {}
         for r in rows:
