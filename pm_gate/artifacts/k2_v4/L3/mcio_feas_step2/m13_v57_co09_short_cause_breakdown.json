@@ -1,0 +1,21 @@
+{
+ "artifact": "m13_v57_co09_short_cause_breakdown",
+ "schema": 1,
+ "method": "kicad-cli 10.0.5 pcb drc（shop 口径 k2_v4_8L.kicad_pro, --refill-zones）对 canonical L4 板与两个只读 CO-09 relabel 探针板分类 shorting_items",
+ "boards": {
+  "canonical_L4": {"board": "k2_v4_8L.l4.kicad_pcb (225fccb23c5b1b5f)", "shorting_items": 108,
+    "by_cause": {"via_barrel_vs_track": 67, "land_or_breakout_on_J3_pad": 17, "on_J4_pad": 17, "on_J2_pad": 2, "on_U6_chip_pad": 1, "track_vs_track_FCu": 4}},
+  "co09_probe1_relabel": {"board": "/tmp (In2<->In6, B->In2 relabel only)", "shorting_items": 120,
+    "by_cause": {"via_barrel_vs_track": 73, "pad_J3": 16, "pad_J4": 22, "pad_U6": 3, "track_track": 6}},
+  "co09_probe2_relabel_uniquecols": {"board": "/tmp (relabel + 唯一落列 0.45 pitch)", "shorting_items": 116,
+    "note": "唯一落列单独不足以消除：残余为 via 的 In2 焊盘 × In2 走线（stub/lane 复用域）+ 落列 breakout × 连接器 pad"}
+ },
+ "drc_totals": {"baseline_frozen_8L": 42, "canonical_L4": 499, "canonical_new": 426,
+                "probe2": 435, "probe2_new": 393},
+ "conclusion": [
+  "CO-06 D1『108 = 过孔穿透信号层』为**部分归因**：via_span 67/108（62%），连接器/芯片 pad 障碍缺失 37/108（34%），F.Cu 走线相触 4/108。",
+  "⇒ D1（安全 hop/跨层桶）是必要项但不是主项；D3（障碍场纳入 J2/J3/J4/U6 pad）+ 落列/breakout 布局 是主项。",
+  "CO-09 的层角色（lane=In6 / stub&escape=In2 / land=In2↔F）是正确方向，但必须由引擎**重派生几何**（含唯一列 + 全跨层 via 障碍 + 连接器 pad 障碍）后一次求解，relabel 探针不能替代。"
+ ],
+ "redline": "只读探针；四源未改；canonical W3-CN.30 未动"
+}

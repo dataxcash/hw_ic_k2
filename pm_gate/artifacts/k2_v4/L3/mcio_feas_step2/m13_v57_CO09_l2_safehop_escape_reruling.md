@@ -69,6 +69,20 @@ lane 取 **In6**（到 stub 仅需 `In6↔In2` 一跳）时，escape 只能是 *
      的 y 域 ⇒ (a) 需 lane 重排（等长连带）；否则须 **逐页混合分配**（按 lane 段决定该页 escape 落 In2 或 B）。
    - 本单的"层角色"已定，"具体分配/横移几何"须在实现期以数值证过再落盘。
 
+## 4bis. 实测校正（2026-09-11，kicad-cli DRC 分类）
+`m13_v57_co09_short_cause_breakdown.json`：对 canonical L4 板 108 条 `shorting_items` 逐条分类：
+| 成因 | 数 | 归属 |
+|---|---|---|
+| via barrel × 异层 track（跨层相碰） | **67** | D1/D2（安全 hop + 全跨层 via 障碍）|
+| breakout/land 压到 **J3/J4 连接器 pad** | **34** | **D3**（障碍场缺 J2/J3/J4 pad）|
+| 压到 J2 pad / U6 chip pad | 2 / 1 | D3 |
+| F.Cu track × track 相触 | 4 | D2/落列布局 |
+
+**校正**：CO-06 D1 的『108 全归过孔穿透』为**部分归因**（via_span 仅 62%）。安全的 via 层对是**必要项**，
+但**主项是 D3（连接器/芯片 pad 未入障碍场）+ 落列/breakout 布局**；CO-09 的层角色（lane=In6 / stub&escape=In2 / land=In2↔F）
+方向正确，但必须由引擎重派生几何（唯一列 + 全跨层 via 障碍 + 连接器 pad 障碍）后**一次求解**；relabel 探针（probe1 120 / probe2 116）
+证明单纯改层标签/唯一列不足。
+
 ## 5. 验收
 - 一次求解须同时满足：`FEASIBLE_ALL ∧ same_layer_crossings=0 ∧ A-CN.9 0/0/0（含全跨距口径）∧ 对内 skew ≤0.15 ∧ wall ≤120s`；
 - 重跑 G4→G5→G6→G7（shop 口径 `k2_v4_8L.kicad_pro`），目标 **DFM new=0**（含 D2–D6）；
