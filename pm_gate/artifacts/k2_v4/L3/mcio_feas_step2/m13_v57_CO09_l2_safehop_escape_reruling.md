@@ -45,14 +45,23 @@ lane 取 **In6**（到 stub 仅需 `In6↔In2` 一跳）时，escape 只能是 *
 ## 4. 一次求解前必须一并重派生的 L2 子问题（F6）
 1. **lane y 布局**：lane y 与任一 pad 行 y 须 ≥0.38（bandY 的 In6 入口 tiny 是 x≈pad_x 的短段，会被路过的 lane 切）。
    现 `LANE_LO=33.3 / STEP=1.46` 下 `lane#13 y=52.28`、`lane#15 y=55.2` 落入 `pad_y±0.38` 禁带 ⇒ 重派生 `LANE_LO/STEP`
-   （32 lane 需容纳 5.47mm 禁带，可用 45.26mm ⇒ STEP ≈1.28）。
+   （32 lane 需容纳 5.47mm 禁带，可用 45.26mm ⇒ STEP ≈1.28）。**但**：若走 §4-3(b) x-band 分离，
+  lane y 无需改（入口 tiny 只在 In2 短段，不落 lane 层）⇒ **优先 (b) 以免扰动 O4 等长**。
 2. **stub 列全局唯一**：32 网/侧列须互异（现 per-band rank 复用列 ⇒ In2 stub 共线 tt 0.0）：
    16 inner（`≤131.65`）+ 16 outer（`≥136.0`），间距 ≥0.38。
-3. **入口 tiny 与 escape 竖段 y-域分离**：east 取 X=dn（竖段 57.12→向下）、Y=up（tiny ≤56.42）；west 取 X=up
-   （lane 0-7 向上）、Y=dn（tiny 51.673~52.97）⇒ 同层 In2 不重叠。
+3. **入口 tiny 与 escape 竖段同层避让（两种手段，任选其一，优先 (b)）**：
+   (a) **y-域分离**：east 取 X=dn（竖段 57.12→向下）、Y=up（tiny ≤56.42）；west 取 X=up（需 lane 0-7 低区）、
+       Y=dn（tiny 51.673~52.97）。**代价**：west 须把 up/dn 改成"band-clean 区块"⇒ 动到 R2 lane 序，
+       **连带影响 O4 对内等长闭合**（须一并复核 meander 预算），故非首选。
+   (b) **x-band 分离（首选，免动 lane 序）**：In2 是**自由内层**（可穿行于 chip pad 之下），
+       把 bandX 的 escape 竖段经由 45° 横移搬到**另一 x-band**（west 可移至 x<82.9 或 chip 下方 x≈84~95 之外；
+       east 移至 x>94），与 bandY 的入口 tiny（x≈pad_x 84.6~93.55）**异 x-band** 同层不交；
+       横移段须为平面扇（16 条、按源 x 序单调）。
 4. **谓词升级**：via = 其跨距内**所有信号层**的圆障碍（全跨距桶）+ 同页跨极性 `via↔track`（= CO-06 D2/D3），
-   否则仅"端点层口径"会再次放过跨层相碰（108 shorting 的真身）。
+      否则仅"端点层口径"会再次放过跨层相碰（108 shorting 的真身）。
 5. `bandY` escape 若因 B 层可用性受阻，可将 bandX/bandY 对调后再证（结构对称）。
+6. **落地顺序建议**：先 (b) x-band 分离版（不动 lane y / 不动 R2 序 ⇒ O4 等长不受扰），
+      若 16 条横移扇证不出平面性，再退 (a) 并一并复核等长。
 
 ## 5. 验收
 - 一次求解须同时满足：`FEASIBLE_ALL ∧ same_layer_crossings=0 ∧ A-CN.9 0/0/0（含全跨距口径）∧ 对内 skew ≤0.15 ∧ wall ≤120s`；
