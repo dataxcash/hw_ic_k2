@@ -1,0 +1,361 @@
+{
+ "artifact": "m13_v57_co66_option_a_stackup_derive",
+ "conclusion": "方案(a) 在 8L **厚度自洽可解**（如 w_s=0.170/b_s=0.6146 + w_o=0.205/h_o=0.1101 ⇒ g4=0.1505）——**前提是内层信号线宽由 0.205 收窄到 ~0.13–0.19**（外层次之）。⇒ (a) 的归口更正为 **L2（叠层分配）**：层数不变、电源域不变、平面仍 4 个；代价是**线宽几何协同变更**（级联到走廊/对内几何与全链重导）。",
+ "constraints": {
+  "free_gap_min_mm": 0.0764,
+  "solve": "外层微带 (w_o,h_o)→85Ω；内层对称带状线 (w_s,b_s)→85Ω",
+  "total_mm": 1.6
+ },
+ "feasible": [
+  {
+   "b_stripline_mm": 0.4134,
+   "closes_1p6mm": true,
+   "g4_free_gap_mm": 0.553,
+   "h_outer_mm": 0.1101,
+   "w_signal_outer_mm": 0.205,
+   "w_signal_stripline_mm": 0.13,
+   "z_check": {
+    "outer_ohm": 85.0,
+    "stripline_ohm": 85.0
+   }
+  },
+  {
+   "b_stripline_mm": 0.4134,
+   "closes_1p6mm": true,
+   "g4_free_gap_mm": 0.506,
+   "h_outer_mm": 0.1336,
+   "w_signal_outer_mm": 0.25,
+   "w_signal_stripline_mm": 0.13,
+   "z_check": {
+    "outer_ohm": 85.0,
+    "stripline_ohm": 85.0
+   }
+  },
+  {
+   "b_stripline_mm": 0.4134,
+   "closes_1p6mm": true,
+   "g4_free_gap_mm": 0.4496,
+   "h_outer_mm": 0.1618,
+   "w_signal_outer_mm": 0.3,
+   "w_signal_stripline_mm": 0.13,
+   "z_check": {
+    "outer_ohm": 85.0,
+    "stripline_ohm": 85.0
+   }
+  },
+  {
+   "b_stripline_mm": 0.4134,
+   "closes_1p6mm": true,
+   "g4_free_gap_mm": 0.3882,
+   "h_outer_mm": 0.1925,
+   "w_signal_outer_mm": 0.35,
+   "w_signal_stripline_mm": 0.13,
+   "z_check": {
+    "outer_ohm": 85.0,
+    "stripline_ohm": 85.0
+   }
+  },
+  {
+   "b_stripline_mm": 0.51,
+   "closes_1p6mm": true,
+   "g4_free_gap_mm": 0.3598,
+   "h_outer_mm": 0.1101,
+   "w_signal_outer_mm": 0.205,
+   "w_signal_stripline_mm": 0.15,
+   "z_check": {
+    "outer_ohm": 85.0,
+    "stripline_ohm": 85.0
+   }
+  },
+  {
+   "b_stripline_mm": 0.51,
+   "closes_1p6mm": true,
+   "g4_free_gap_mm": 0.3128,
+   "h_outer_mm": 0.1336,
+   "w_signal_outer_mm": 0.25,
+   "w_signal_stripline_mm": 0.15,
+   "z_check": {
+    "outer_ohm": 85.0,
+    "stripline_ohm": 85.0
+   }
+  }
+ ],
+ "layer_plan": {
+  "domain_invariance": "仍 3×GND 平面 + 1×P3V3 平面（同一网、同一域）⇒ 电源域划分**不变**",
+  "order": [
+   "F.Cu",
+   "In1.Cu",
+   "In2.Cu",
+   "In3.Cu",
+   "In4.Cu",
+   "In5.Cu",
+   "In6.Cu",
+   "B.Cu"
+  ],
+  "purposes": [
+   "signal",
+   "GND",
+   "signal",
+   "GND",
+   "PWR(P3V3)",
+   "signal",
+   "GND",
+   "signal"
+  ],
+  "reference_sandwich": "F↔In1 / In2↔In1+In3 / In5↔In4+In6 / B↔In6（4 层信号全部被参考）"
+ },
+ "n_feasible": 10,
+ "nature": "L2 叠层分配：方案(a) 8L 对称叠层的厚度自洽推导（判定 L2 可执行性）",
+ "redline": "只读冻结源；零 canonical 改动；本件不启动物理变更。",
+ "remaining_l2_steps": [
+  "新 LID（REV6：layer_intent 信号层集 F/In2/In5/B，参考夹心）",
+  "SPEC rev-5（dielectric 厚度表 + impedance.per_layer + 新线宽口径）",
+  "几何协同：线宽 w_s 收窄后的对内/对间几何重解（CO-55 工具 --build 路径）",
+  "引擎 palette/冻结集版本 bump → G4..G7 全链 + SI 判据按层加权",
+  "重新过对抗评审（L2_STRUCTURE_v2.0.md:137）"
+ ],
+ "revision": "CO-66.1",
+ "scan": [
+  {
+   "b_stripline_mm": 0.4134,
+   "closes_1p6mm": true,
+   "g4_free_gap_mm": 0.553,
+   "h_outer_mm": 0.1101,
+   "w_signal_outer_mm": 0.205,
+   "w_signal_stripline_mm": 0.13,
+   "z_check": {
+    "outer_ohm": 85.0,
+    "stripline_ohm": 85.0
+   }
+  },
+  {
+   "b_stripline_mm": 0.4134,
+   "closes_1p6mm": true,
+   "g4_free_gap_mm": 0.506,
+   "h_outer_mm": 0.1336,
+   "w_signal_outer_mm": 0.25,
+   "w_signal_stripline_mm": 0.13,
+   "z_check": {
+    "outer_ohm": 85.0,
+    "stripline_ohm": 85.0
+   }
+  },
+  {
+   "b_stripline_mm": 0.4134,
+   "closes_1p6mm": true,
+   "g4_free_gap_mm": 0.4496,
+   "h_outer_mm": 0.1618,
+   "w_signal_outer_mm": 0.3,
+   "w_signal_stripline_mm": 0.13,
+   "z_check": {
+    "outer_ohm": 85.0,
+    "stripline_ohm": 85.0
+   }
+  },
+  {
+   "b_stripline_mm": 0.4134,
+   "closes_1p6mm": true,
+   "g4_free_gap_mm": 0.3882,
+   "h_outer_mm": 0.1925,
+   "w_signal_outer_mm": 0.35,
+   "w_signal_stripline_mm": 0.13,
+   "z_check": {
+    "outer_ohm": 85.0,
+    "stripline_ohm": 85.0
+   }
+  },
+  {
+   "b_stripline_mm": 0.51,
+   "closes_1p6mm": true,
+   "g4_free_gap_mm": 0.3598,
+   "h_outer_mm": 0.1101,
+   "w_signal_outer_mm": 0.205,
+   "w_signal_stripline_mm": 0.15,
+   "z_check": {
+    "outer_ohm": 85.0,
+    "stripline_ohm": 85.0
+   }
+  },
+  {
+   "b_stripline_mm": 0.51,
+   "closes_1p6mm": true,
+   "g4_free_gap_mm": 0.3128,
+   "h_outer_mm": 0.1336,
+   "w_signal_outer_mm": 0.25,
+   "w_signal_stripline_mm": 0.15,
+   "z_check": {
+    "outer_ohm": 85.0,
+    "stripline_ohm": 85.0
+   }
+  },
+  {
+   "b_stripline_mm": 0.51,
+   "closes_1p6mm": true,
+   "g4_free_gap_mm": 0.2564,
+   "h_outer_mm": 0.1618,
+   "w_signal_outer_mm": 0.3,
+   "w_signal_stripline_mm": 0.15,
+   "z_check": {
+    "outer_ohm": 85.0,
+    "stripline_ohm": 85.0
+   }
+  },
+  {
+   "b_stripline_mm": 0.51,
+   "closes_1p6mm": true,
+   "g4_free_gap_mm": 0.195,
+   "h_outer_mm": 0.1925,
+   "w_signal_outer_mm": 0.35,
+   "w_signal_stripline_mm": 0.15,
+   "z_check": {
+    "outer_ohm": 85.0,
+    "stripline_ohm": 85.0
+   }
+  },
+  {
+   "b_stripline_mm": 0.6146,
+   "closes_1p6mm": true,
+   "g4_free_gap_mm": 0.1506,
+   "h_outer_mm": 0.1101,
+   "w_signal_outer_mm": 0.205,
+   "w_signal_stripline_mm": 0.17,
+   "z_check": {
+    "outer_ohm": 85.0,
+    "stripline_ohm": 85.0
+   }
+  },
+  {
+   "b_stripline_mm": 0.6146,
+   "closes_1p6mm": true,
+   "g4_free_gap_mm": 0.1036,
+   "h_outer_mm": 0.1336,
+   "w_signal_outer_mm": 0.25,
+   "w_signal_stripline_mm": 0.17,
+   "z_check": {
+    "outer_ohm": 85.0,
+    "stripline_ohm": 85.0
+   }
+  },
+  {
+   "b_stripline_mm": 0.6146,
+   "closes_1p6mm": false,
+   "g4_free_gap_mm": 0.0472,
+   "h_outer_mm": 0.1618,
+   "w_signal_outer_mm": 0.3,
+   "w_signal_stripline_mm": 0.17,
+   "z_check": {
+    "outer_ohm": 85.0,
+    "stripline_ohm": 85.0
+   }
+  },
+  {
+   "b_stripline_mm": 0.6146,
+   "closes_1p6mm": false,
+   "g4_free_gap_mm": -0.0142,
+   "h_outer_mm": 0.1925,
+   "w_signal_outer_mm": 0.35,
+   "w_signal_stripline_mm": 0.17,
+   "z_check": {
+    "outer_ohm": 85.0,
+    "stripline_ohm": 85.0
+   }
+  },
+  {
+   "b_stripline_mm": 0.7251,
+   "closes_1p6mm": false,
+   "g4_free_gap_mm": -0.0704,
+   "h_outer_mm": 0.1101,
+   "w_signal_outer_mm": 0.205,
+   "w_signal_stripline_mm": 0.19,
+   "z_check": {
+    "outer_ohm": 85.0,
+    "stripline_ohm": 85.0
+   }
+  },
+  {
+   "b_stripline_mm": 0.7251,
+   "closes_1p6mm": false,
+   "g4_free_gap_mm": -0.1174,
+   "h_outer_mm": 0.1336,
+   "w_signal_outer_mm": 0.25,
+   "w_signal_stripline_mm": 0.19,
+   "z_check": {
+    "outer_ohm": 85.0,
+    "stripline_ohm": 85.0
+   }
+  },
+  {
+   "b_stripline_mm": 0.7251,
+   "closes_1p6mm": false,
+   "g4_free_gap_mm": -0.1738,
+   "h_outer_mm": 0.1618,
+   "w_signal_outer_mm": 0.3,
+   "w_signal_stripline_mm": 0.19,
+   "z_check": {
+    "outer_ohm": 85.0,
+    "stripline_ohm": 85.0
+   }
+  },
+  {
+   "b_stripline_mm": 0.7251,
+   "closes_1p6mm": false,
+   "g4_free_gap_mm": -0.2352,
+   "h_outer_mm": 0.1925,
+   "w_signal_outer_mm": 0.35,
+   "w_signal_stripline_mm": 0.19,
+   "z_check": {
+    "outer_ohm": 85.0,
+    "stripline_ohm": 85.0
+   }
+  },
+  {
+   "b_stripline_mm": 0.8109,
+   "closes_1p6mm": false,
+   "g4_free_gap_mm": -0.242,
+   "h_outer_mm": 0.1101,
+   "w_signal_outer_mm": 0.205,
+   "w_signal_stripline_mm": 0.205,
+   "z_check": {
+    "outer_ohm": 85.0,
+    "stripline_ohm": 85.0
+   }
+  },
+  {
+   "b_stripline_mm": 0.8109,
+   "closes_1p6mm": false,
+   "g4_free_gap_mm": -0.289,
+   "h_outer_mm": 0.1336,
+   "w_signal_outer_mm": 0.25,
+   "w_signal_stripline_mm": 0.205,
+   "z_check": {
+    "outer_ohm": 85.0,
+    "stripline_ohm": 85.0
+   }
+  },
+  {
+   "b_stripline_mm": 0.8109,
+   "closes_1p6mm": false,
+   "g4_free_gap_mm": -0.3454,
+   "h_outer_mm": 0.1618,
+   "w_signal_outer_mm": 0.3,
+   "w_signal_stripline_mm": 0.205,
+   "z_check": {
+    "outer_ohm": 85.0,
+    "stripline_ohm": 85.0
+   }
+  },
+  {
+   "b_stripline_mm": 0.8109,
+   "closes_1p6mm": false,
+   "g4_free_gap_mm": -0.4068,
+   "h_outer_mm": 0.1925,
+   "w_signal_outer_mm": 0.35,
+   "w_signal_stripline_mm": 0.205,
+   "z_check": {
+    "outer_ohm": 85.0,
+    "stripline_ohm": 85.0
+   }
+  }
+ ],
+ "schema": 1
+}
