@@ -1,0 +1,71 @@
+{
+ "artifact": "m13_v57_co63_bcu_free_layerplan_probe",
+ "conclusion": "B.Cu-free 的两个层计划均 FAIL：A 18/32 + 1 违规；B 12/32 + 11 违规（F.Cu 焊盘挤压 'sp'）。⇒ B.Cu 逃逸层是**承载性**的：4 信号层中 F.Cu 被 SMD 焊盘占用、In6 为 lane 层（逃逸入 In6 必自交）、In2 为西侧逃逸层 ⇒ 无第三层可用。CO-62 的整改方向**不可由 L2 层分配达成**，必须改逃逸拓扑/层数/球图逃逸 ⇒ 属 L1（L1 包络）。",
+ "criterion": "32/32 落位 AND 净距 0 违规（copper 口径）",
+ "nature": "L2 层计划可行性机判（负结果）：B.Cu-free 逃逸层映射不可落位",
+ "redline": "只读冻结源；零正式件改动（候选为 probe/scratch）；不伪 sign-off。",
+ "revision": "CO-63.1",
+ "schema": 1,
+ "variants": [
+  {
+   "b_cu_used": false,
+   "esc_map": {
+    "EAST_CHIP_TO_J2/dn": "In2.Cu",
+    "EAST_CHIP_TO_J2/up": "In6.Cu",
+    "WEST_MCIO_TO_CHIP/dn": "In6.Cu",
+    "WEST_MCIO_TO_CHIP/up": "In2.Cu"
+   },
+   "first_violations": [
+    [
+     "sp",
+     "PCIE_DN7/out_MCIO",
+     "P",
+     "F.Cu",
+     -0.0047
+    ]
+   ],
+   "n_pages": 32,
+   "placed": 18,
+   "placement_violations_centerline_or_copper": 1,
+   "variant": "A_dn_In2_up_In6",
+   "verdict": "FAIL"
+  },
+  {
+   "b_cu_used": false,
+   "esc_map": {
+    "EAST_CHIP_TO_J2/dn": "In6.Cu",
+    "EAST_CHIP_TO_J2/up": "In6.Cu",
+    "WEST_MCIO_TO_CHIP/dn": "In2.Cu",
+    "WEST_MCIO_TO_CHIP/up": "In2.Cu"
+   },
+   "first_violations": [
+    [
+     "sp",
+     "PCIE_DN1/out_MCIO",
+     "P",
+     "F.Cu",
+     -0.0168
+    ],
+    [
+     "sp",
+     "PCIE_DN1/out_MCIO",
+     "N",
+     "F.Cu",
+     -0.0065
+    ],
+    [
+     "sp",
+     "PCIE_DN4/out_MCIO",
+     "N",
+     "F.Cu",
+     0.0693
+    ]
+   ],
+   "n_pages": 32,
+   "placed": 12,
+   "placement_violations_centerline_or_copper": 11,
+   "variant": "B_east_In6_west_In2",
+   "verdict": "FAIL"
+  }
+ ]
+}
