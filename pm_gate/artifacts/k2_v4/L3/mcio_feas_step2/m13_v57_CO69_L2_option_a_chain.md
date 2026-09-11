@@ -1,7 +1,7 @@
 # CO-69 — 【L2 叠层分配】方案(a) 全链执行：引擎 bump + G4..G7 + SI 判据升级
 
 > 2026-09-12｜定层 **L2**（CO-67 裁定）｜工具 `tools/p3_v57_co69_option_a_chain.py`
-> 记录 `49c0497584b19d53`｜LID REV6 `05009687a3f01583`｜SPEC rev-5 `1f351194b3e22b7e`｜ALLOC.6 `2ebda54c7b917ef9`
+> 记录 `1a24b4a6b9080ef4`｜LID REV6 `05009687a3f01583`｜SPEC rev-7 `a15ffcd104d82f43`｜ALLOC.7 `a765af4c9bf61e64`
 
 ## 1. 引擎 bump（版本化输入）
 - `LAYER_PALETTE` -> `['F.Cu', 'In2.Cu', 'In5.Cu', 'B.Cu']`；引擎全量 `In6.Cu -> In5.Cu`；`REVISION_CO16` -> **W3-CN.40 -> W3-CN.41**。
@@ -12,9 +12,9 @@
 ## 2. 整链门禁（实测）
 | 门 | 判定 | 证据 |
 |---|---|---|
-| G4 | **FEASIBLE_ALL** | 图纸 `d8fc88d6f4133fba`（None crossings）、landing `fcfa5c3c32ca7f87` |
-| G5 | **PASS**（frozen=None） | validation `26313087acce4d3d` |
-| G6 | **PASS** | 板 `0e636a67c1472462`（68 网/2523 段/252 via）、construction `a9f96a458f94f820` |
+| G4 | **FEASIBLE_ALL** | 图纸 `3cc123056a7319ff`（None crossings）、landing `e222331c14e591e4` |
+| G5 | **PASS**（frozen=None） | validation `b3c1e32ac173841a` |
+| G6 | **PASS** | 板 `0e636a67c1472462`（68 网/2523 段/252 via）、construction `39eba23a1f4b0669` |
 | G7 | FAB ok / DFM **PASS** / SI **PASS** | new=0 / vanished=0 / 在册未连 0/68；SI `73f9b59ed5f6f3ce` |
 
 **SI（对内等长）**：判据 = 按层加权电气长度（mm-eq @ er_ref=3.99）。
@@ -23,7 +23,7 @@
 - 物理量报告 max 1.1046 mm（层补偿之预期；判据为电气/时延）。
 
 ## 3. 复现
-- 全链连跑 ×2：11 件产出逐字节一致；板 **0e636a67c1472462** / 图纸 **d8fc88d6f4133fba**。
+- 全链连跑 ×2：11 件产出逐字节一致；板 **0e636a67c1472462** / 图纸 **3cc123056a7319ff**。
 
 ## 4. 开放项
 - 板厂阻抗券（SPEC coupon_required=true）——一阶 IPC-2141 未替代 SI9000/券
