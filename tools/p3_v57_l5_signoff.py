@@ -92,7 +92,13 @@ def main() -> int:
     dbase = drc(SRC_PCB, PRO); dl4 = drc(L4_PCB, PRO, L4_DRU)
     def bytype(d): return dict(Counter(v.get("type") for v in d.get("violations", [])))
     tb, tl = bytype(dbase), bytype(dl4)
-    new = {k: tl.get(k, 0) - tb.get(k, 0) for k in tl}
+    new = {k: tl.get(k, 0) - tb.get(k, 0) for k in tl}          # 保留类型计数差（兼容/人读）
+    # CO-51：多重集差（键 = (type, items[].description)）——可捕获"同类型对调"的掩盖；
+    # 并显式报告**基线中消失**的条目（L4 只加 tracks/rule area ⇒ 基线项不应消失）。
+    _sig = lambda v: (v.get("type"), tuple(sorted(str(s.get("description", "")) for s in v.get("items", []))))  # noqa: E731
+    _cb = Counter(_sig(v) for v in dbase.get("violations", []))
+    _cl = Counter(_sig(v) for v in dl4.get("violations", []))
+    _new_ms, _gone_ms = _cl - _cb, _cb - _cl
     widths = sorted({round(pcbnew.ToMM(t.GetWidth()), 3) for t in tracks})
     # CO-47：施工连通性闭合谓词（L3 完整性）——在册（L4 施工）网必须 0 未连项。
     # kicad-cli 的 unconnected_items 无独立 net 键，网名从 items[].description 尾部 "[NET]" 解析。
@@ -105,14 +111,18 @@ def main() -> int:
             if _m and _m.group(1) in in_scope:
                 _ins_uc[_m.group(1)] = _ins_uc.get(_m.group(1), 0) + 1
     _ins_uc_items = sum(_ins_uc.values())
-    dfm = {"artifact": "m13_v57_l5_dfm_dft_record", "schema": 1, "revision": "L5-DFM.4",
+    dfm = {"artifact": "m13_v57_l5_dfm_dft_record", "schema": 1, "revision": "L5-DFM.5",
            "drc": {"tool": f"kicad-cli {subprocess.run([str(CLI),'--version'],capture_output=True,text=True).stdout.strip()}",
                    "baseline_frozen": {"n": len(dbase.get("violations", [])), "by_type": tb,
                                        "unconnected": len(dbase.get("unconnected_items", []))},
                    "l4_applied": {"n": len(dl4.get("violations", [])), "by_type": tl,
                                   "unconnected": len(dl4.get("unconnected_items", []))},
                    "new_violations": {k: v for k, v in new.items() if v},
-                   "new_total": sum(v for v in new.values() if v > 0),
+                   "new_total": sum(_new_ms.values()),
+                   "new_items_by_type": dict(Counter(t for (t, _) in _new_ms.elements())),
+                   "disappeared_total": sum(_gone_ms.values()),
+                   "disappeared_by_type": dict(Counter(t for (t, _) in _gone_ms.elements())),
+                   "metric": "CO-51: 多重集差 (type, items[].description)；L4=tracks-only ⇒ 基线项消失须为 0",
                    "escape_domain": ({"file": str(L4_DRU.relative_to(K2)), "sha256": sha(L4_DRU),
                                       "applies_to": "l4_applied only（冻结基线无 .kicad_dru）"}
                                      if L4_DRU.exists() else None)},
@@ -132,7 +142,8 @@ def main() -> int:
                    "unconnected_items_total": len(dl4.get("unconnected_items", [])),
                    "rule": "CO-47：在册（L4 施工）网必须 0 未连项（kicad-cli unconnected_items 网名解析）；范围外网不计",
                    "note": "范围外网（GND/P3V3/NO_CONNECT/MCU_VDD 等）未连项属本阶段范围外，见 W3 boundary §6.4（版本化记录，勿引旧版号）"}}
-    dfm["verdict"] = "PASS" if (dfm["drc"]["new_total"] == 0 and _ins_uc_items == 0) else "FAIL"
+    dfm["verdict"] = "PASS" if (dfm["drc"]["new_total"] == 0 and dfm["drc"]["disappeared_total"] == 0
+                               and _ins_uc_items == 0) else "FAIL"
 
     # ---- SI/PI/EMC record ----
     widths_ok = all(abs(pcbnew.ToMM(t.GetWidth()) - 0.205) < 1e-6 for t in tracks if t.GetNetname().startswith("PCIE"))
@@ -206,7 +217,7 @@ def main() -> int:
 | 未连项（全板） | {_dft['unconnected_items_total']}（范围外 GND/P3V3/NO_CONNECT/MCU_VDD 等，见 boundary §6.4）|
 | DRC baseline（冻结板，无 .kicad_dru） | {dfm['drc']['baseline_frozen']['n']} = {dfm['drc']['baseline_frozen']['by_type']} |
 | DRC L4（含 .kicad_dru） | {dfm['drc']['l4_applied']['n']} = {dfm['drc']['l4_applied']['by_type']} |
-| **new violations** | **{dfm['drc']['new_total']}** {dfm['drc']['new_violations']} |
+| **new violations** | **{dfm['drc']['new_total']}** {dfm['drc']['new_violations']}（多重集差；基线消失 **{dfm['drc']['disappeared_total']}**）|
 
 ## 3. 判据（未放宽）
 - `.kicad_dru` `{s16(L4_DRU)}`：实现 SPEC `constraints.escape_transition_zone`（ECN-001，`escape_clearance_mm=0.075`）+ 4 具名 rule area（J2/J3/J4/U6 pad 场）。
@@ -228,8 +239,8 @@ def main() -> int:
 End of G7 record（L5-G7.6，机器生成）。
 """
     (STEP2 / "m13_v57_l5_g7_record.md").write_text(g7, encoding="utf-8")
-    print("L5: FAB ok | DFM verdict=%s new=%d %s | in_scope_unconnected=%d/%d nets | SI verdict=%s skew=%.4f" %
-          (dfm["verdict"], dfm["drc"]["new_total"], dfm["drc"]["new_violations"],
+    print("L5: FAB ok | DFM verdict=%s new=%d (disappeared=%d) %s | in_scope_unconnected=%d/%d nets | SI verdict=%s skew=%.4f" %
+          (dfm["verdict"], dfm["drc"]["new_total"], dfm["drc"]["disappeared_total"], dfm["drc"]["new_violations"],
            dfm["dft"]["in_scope_unconnected_nets"], dfm["dft"]["in_scope_nets"], si["verdict"], skew_max))
     # CO-47：签核脚本退出码须等于门禁判定（原实现无条件 return 0，CI 无法据此判失败）
     return 0 if (dfm["verdict"] == "PASS" and si["verdict"] == "PASS") else 1

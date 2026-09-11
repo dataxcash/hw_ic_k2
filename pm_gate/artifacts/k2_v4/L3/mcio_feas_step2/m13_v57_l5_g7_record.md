@@ -1,7 +1,7 @@
 # G7 / L5 记录 — k2 v57（8L）
 
 > revision **L5-G7.6**｜图纸 **W3-CN.40** `dfa1d7c4a811b0da`｜L4 板 `cdcb869e9827ec87`（含 SPEC 逃逸区规则域 CO-37）
-> 产生：`tools/p3_v57_l5_signoff.py`（kicad-cli 10.0.5，L5-DFM.4）——**随 L5 每次重跑确定性重生成**
+> 产生：`tools/p3_v57_l5_signoff.py`（kicad-cli 10.0.5，L5-DFM.5）——**随 L5 每次重跑确定性重生成**
 > ｜历史 FAIL 叙事见 CO-37/CO-43/CO-44/CO-45 变更单与 git（本件取代 L5-G7.5 的 new=60 口径）。
 
 ## 1. 结论（G7 PASS）
@@ -22,7 +22,7 @@
 | 未连项（全板） | 348（范围外 GND/P3V3/NO_CONNECT/MCU_VDD 等，见 boundary §6.4）|
 | DRC baseline（冻结板，无 .kicad_dru） | 42 = {'silk_edge_clearance': 1, 'lib_footprint_mismatch': 29, 'lib_footprint_issues': 12} |
 | DRC L4（含 .kicad_dru） | 42 = {'silk_edge_clearance': 1, 'lib_footprint_mismatch': 29, 'lib_footprint_issues': 12} |
-| **new violations** | **0** {} |
+| **new violations** | **0** {}（多重集差；基线消失 **0**）|
 
 ## 3. 判据（未放宽）
 - `.kicad_dru` `3148703240d54420`：实现 SPEC `constraints.escape_transition_zone`（ECN-001，`escape_clearance_mm=0.075`）+ 4 具名 rule area（J2/J3/J4/U6 pad 场）。
@@ -37,7 +37,7 @@
 ## 5. 指纹
 图纸 `dfa1d7c4a811b0da`｜landing `ef5704eb18c5e6d5`｜G5 `23b2b6d161f9bea1`
 ｜L4 construction `58ccf62e881f2a8f`｜L4 validation `5bdf42b50a34ed3f`｜L4 板 `cdcb869e9827ec87`
-｜fab `9a223923b029a1f9`｜dfm `f5a691f4cda234df`｜si `305c237c88762b94`
+｜fab `9a223923b029a1f9`｜dfm `de14f887a7819c11`｜si `305c237c88762b94`
 ｜`.kicad_dru` `3148703240d54420`
 冻结四源 `0bd52ed48e720b8c / a8ef3ea8ecff99d7 / fb07d25ac426ff84 / 0a459839e15960b8`（未改）。
 
