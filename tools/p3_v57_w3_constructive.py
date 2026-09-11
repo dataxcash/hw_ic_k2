@@ -332,7 +332,8 @@ def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict, coherent: d
                 if lanes is None:
                     continue
                 _ly = fp(lanes[_q]["lane_y"] + pol_off(_fq, _pol))
-                _esc.setdefault(round(float(_x), 3), []).append((min(_y, _ly), max(_y, _ly)))
+                _lay = "B.Cu" if _fq["band"] == "dn" else "In6.Cu"
+                _esc.setdefault("L", []).append((_lay, float(_x), min(_y, _ly), max(_y, _ly)))
                 _vbadd(_x, _ly)                                     # corner via
                 if r3 is not None:
                     _ra = r3["assignment"].get(_fq["conn_ref"] + "|" + _fq["nets"][_pol])
@@ -349,13 +350,15 @@ def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict, coherent: d
                     return False
         return True
 
-    def _esc_ok(_esc, _vx, _vy, _ly):
+    def _esc_ok(_esc, _vx, _vy, _ly, _lay):
         if lanes is None:
             return True
         _lo, _hi = min(_vy, _ly), max(_vy, _ly)
-        for _olo, _ohi in _esc.get(round(float(_vx), 3), ()):
-            if min(_hi, _ohi) - max(_lo, _olo) > 1e-6:
-                return False
+        for _olay, _ox, _olo, _ohi in _esc.get("L", ()):
+            if _olay != _lay:
+                continue                                    # cross-layer: exempt
+            if min(_hi, _ohi) - max(_lo, _olo) > 1e-6 and abs(float(_vx) - _ox) < STAGGER - TOL:
+                return False                                # same-layer vertical spacing >= 0.38
         return True
     for _pid in sorted(facts, key=lambda p: (facts[p]["corridor"], facts[p]["conn_ref"],
                                              facts[p]["band"], _rank.get(p, 0), p)):
@@ -439,14 +442,19 @@ def r1_place(facts: dict, frames: list, xorder: dict, verdict: dict, coherent: d
             if lanes is not None:
                 _lyp = fp(lanes[_pid]["lane_y"] + pol_off(_f, "P"))
                 _lyn = fp(lanes[_pid]["lane_y"] + pol_off(_f, "N"))
-                if not (_esc_ok(_esc, _px, _py, _lyp) and _esc_ok(_esc, _nx, _ny, _lyn)):
+                _lay1 = "B.Cu" if _f["band"] == "dn" else "In6.Cu"
+                if not (_esc_ok(_esc, _px, _py, _lyp, _lay1) and _esc_ok(_esc, _nx, _ny, _lyn, _lay1)):
                     continue
             if not (_vb_clear(_vb, _px, _py) and _vb_clear(_vb, _nx, _ny)):
                 continue
             # T-1 primary: keep the via x at the PAD x (vertical breakouts => planar fan);
             # secondary: radial y target.  (Pad-aligned x is the planarity driver.)
-            _key = (round(abs(_px - _f["pad"]["P"][0]) + abs(_nx - _f["pad"]["N"][0]), 3),
-                    round(abs(_py - _tPy) + abs(_ny - _tNy), 3), _px, _nx)
+            _boff = 0.3 if _f["band"] == "dn" else -0.3   # 带向 x 偏置：分离相邻行 F.Cu breakout ≥0.38
+            # 主键 = pad 邻近（短 breakout）；次键 = 带向 x 偏置对齐
+            _key = (round(abs(_px - _f["pad"]["P"][0]) + abs(_nx - _f["pad"]["N"][0])
+                          + abs(_py - _f["pad"]["P"][1]) + abs(_ny - _f["pad"]["N"][1]), 3),
+                    round(abs(_px - (_f["pad"]["P"][0] + _boff))
+                          + abs(_nx - (_f["pad"]["N"][0] + _boff)), 3), _px, _nx)
             if _best is None or _key < _best[0]:
                 _best = (_key, _px, _nx, _py, _ny, _dd)
         if _best is None:
@@ -934,7 +942,7 @@ def main(argv=None) -> int:
     frs = frames_of(facts)
     lanes = r2_lanes(frs, facts)
     _coh = dict(j.get("coherent_rows") or {})
-    _pd2 = STEP2 / "m13_v57_f13_r1_pair_coupling_v1_3.json"
+    _pd2 = STEP2 / "m13_v57_f13_r1_pair_coupling_v1_4.json"
     _coh["pair_domain"] = json.load(_pd2.open())["pages"] if _pd2.exists() else {}
     r3 = r3_place(j["r3_gaps"], lanes, args.r3_order)   # ROOT-17: r3 first (r1 needs the landings)
     r1 = r1_place(facts, frs, j["pair_xorder"], j["verdict"], _coh, lanes, r3)
