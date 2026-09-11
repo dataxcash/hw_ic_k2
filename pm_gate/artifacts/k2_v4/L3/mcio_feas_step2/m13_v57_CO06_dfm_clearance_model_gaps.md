@@ -41,3 +41,38 @@ Default 0.1 / LOW_SPEED 0.1 / **PCIe85** 0.175 + diff_gap 0.175 + width 0.205 / 
 - 板 `k2_v4_8L.l4.kicad_pcb` sha16 `225fccb23c5b1b5f`（L4-A..E 全 PASS，256 via）
 - 图纸 W3-CN.30 sha16 `05f7bd10ab3b45b6`
 - 冻结四源未改；**G7 保持 OPEN**（DFM new=426）。
+
+---
+
+## 5. D1 实测（L3 已证不可闭合 ⇒ L2 结构裁决）
+
+**实验（单次、确定性）**：把「via 桶 = 其跨距内全部信号层障碍」写入 W3 构造器（W3-CN.31probe，副修：经 `_sig_span` 计算
+F↔In2/In2↔In6/In6↔B/F↔B/F↔In6/In2↔B 的信号层覆盖；候选 via 点按跨距层全集校核，并补 drop/land 顶点），重解一次：
+
+- **verdict = UPSTREAM_CHANGE_REQUEST**；R1 放置 **31/32**（`PCIE_UP1/input` 无可行 pair_row）。
+- 证书：`R1_chip_escape_column:per_frame_hybrid`（UP1/input 无行）、`x_lattice_snap_mutual_clearance`
+  （如 `DN1/input.N–UP1/out_J2.N 0.52047`）、`complete_clearance_suite`（tt 18 / vt 34 / vv 11）、`frame_monotone_fan`（3）。
+- 结论：在 **LID.1（lanes=In2；dn escape/stub=B.Cu；up escape/stub=In6.Cu）** 下，
+  过孔必然穿透信号层（F↔B 穿透 In2+In6；F↔In6 穿透 In2；In2↔B 穿透 In6），而 In2 承载全部 32 条 lane、
+  In6 承载 up 竖段 ⇒ **构造域内不可闭合**（非全局不可能性证明）。
+
+**物理根因**：信号层物理序 = `F(1) → In2(4) → In6(7) → B(8)`（In1/In3/In4/In5 为 GND/PWR）。
+从 F.Cu 出发**不穿透其它信号层即可达的内层只有 In2**（其间隔仅 In1 平面）；In6/B 均在 In2 之后。
+故「每线 ≤2 过孔（SPEC: 单次换层 F→In2→F）」与「4 信号层分流避交叉」在本叠层下**互斥**。
+
+**单层可行性旁证**：把现图纸各网折线投影到 In2 单层计数 → 1009 真交叉（说明现折线假设分层，
+不能直接降为单层；单层方案须**重新派生 river**，不能投影）。
+
+## 6. L2 裁定（ARCHER，2026-09-11）与所需决议
+
+- **裁定**：逃逸/落列拓扑只允许**信号层相邻 hop**的过孔：`F↔In2`、`In2↔In6`、`In6↔B`；
+  **禁用** `F↔In6 / F↔B / In2↔B`（穿透信号层）。
+- 满足该裁定的两条路线：
+  - **(a) 单内层 In2 river（2 via/线，符合 SPEC）**：芯片 F→In2 →escape+lane+stub 全在 In2→In2→F conn。
+    需**重新派生** 32 网的平面 river（现引擎 frame/lane 序已按 row 对齐，可作初值）。
+  - **(b) 双内层 In2↔In6 链（4 via/线）**：`F↔In2 → escape(In2) → In2↔In6 → lane(In6) → In6↔In2 → stub(In2) → In2↔F`。
+    全部 hop 安全，但**违反 SPEC `high_speed.max_per_line=2`** ⇒ 需 **owner 修订 SPEC**。
+- **决议**：优先执行 **(a)**（L2 我方权限）。若 (a) 的 river 重派生证明不可行（序不兼容），
+  或因 (b)/叠层调整需改 **反钻策略 / 叠层信号层次序 / 每线过孔数** ⇒ **触 L1，请 owner 裁决**。
+
+> 现状：**G7 阻塞于 (a)/(b) 决议**；本会话已把 D1 从"猜测"变为"可复现的构造不可行证书 + 物理根因"。

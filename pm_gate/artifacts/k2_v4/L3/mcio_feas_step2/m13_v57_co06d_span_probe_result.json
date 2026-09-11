@@ -1,0 +1,139 @@
+{
+ "artifact": "m13_v57_co06d_span_probe_result",
+ "conclusion": "LID.1( lanes=In2; dn escape/stub=B.Cu; up escape/stub=In6.Cu )下，过孔必然穿透信号层（F↔B/F↔In6/In2↔B）；构造域内不可闭合 ⇒ L2 结构裁决（CO-07）",
+ "hypothesis": "D1: via 桶覆盖跨距内全部信号层后 W3 是否仍可闭合",
+ "method": {
+  "change": "_sig_span(): 放置 via 与候选 via 均按跨距信号层全集作为障碍；候选补 drop/land 顶点",
+  "engine": "W3-CN.31probe (probe only, /tmp)",
+  "run": "single run; canonical untouched"
+ },
+ "observed": {
+  "certificates": [
+   {
+    "layer": "R1_chip_escape_column",
+    "observed": {
+     "frame": "J3/up",
+     "mode": "baseline",
+     "page": "PCIE_UP1/input",
+     "prev_x": {
+      "N": 83.45,
+      "P": 84.05
+     },
+     "rows": {
+      "N": null,
+      "P": null
+     }
+    },
+    "page_or_pad": "PCIE_UP1/input",
+    "rule": "per_frame_hybrid(collinear|baseline)"
+   },
+   {
+    "layer": "R1_5_chip_transition",
+    "observed": {
+     "crossings": 3,
+     "minimal_core": [
+      [
+       "PCIE_DN4/out_MCIO#fcu_pad/N",
+       "PCIE_UP4/input#fcu_pad/N"
+      ],
+      [
+       "PCIE_DN4/out_MCIO#fcu_pad/N",
+       "PCIE_UP4/input#fcu_pad/P"
+      ],
+      [
+       "PCIE_UP5/input#fcu_pad/N",
+       "PCIE_UP5/input#fcu_pad/P"
+      ]
+     ],
+     "note": "chip source rows shared across frames while R2 lane order forces frame blocks far apart in y"
+    },
+    "page_or_pad": "PCIE_DN4/out_MCIO#fcu_pad/N",
+    "rule": "frame_monotone_fan_single_layer_straight_segment"
+   },
+   {
+    "layer": "R1_chip_escape_column",
+    "observed": [
+     [
+      "PCIE_DN1/input.N",
+      "PCIE_UP1/out_J2.N",
+      0.52047
+     ],
+     [
+      "PCIE_DN2/input.P",
+      "PCIE_UP2/out_J2.N",
+      0.52047
+     ],
+     [
+      "PCIE_DN3/input.P",
+      "PCIE_UP3/out_J2.N",
+      0.52047
+     ],
+     [
+      "PCIE_DN4/input.N",
+      "PCIE_UP4/out_J2.N",
+      0.52047
+     ],
+     [
+      "PCIE_DN4/out_MCIO.N",
+      "PCIE_UP4/input.P",
+      0.100841
+     ],
+     [
+      "PCIE_DN5/input.N",
+      "PCIE_UP5/out_J2.N",
+      0.52047
+     ]
+    ],
+    "page_or_pad": "PCIE_DN1/input.N",
+    "rule": "x_lattice_snap_mutual_clearance"
+   },
+   {
+    "layer": "R1_5_chip_transition",
+    "observed": {
+     "sample_tt": [
+      [
+       "PCIE_DN1/input",
+       "PCIE_UP1/out_J2",
+       0.1774
+      ],
+      [
+       "PCIE_DN1/input",
+       "PCIE_UP1/out_J2",
+       0.1916
+      ],
+      [
+       "PCIE_DN2/input",
+       "PCIE_UP2/out_J2",
+       0.1916
+      ],
+      [
+       "PCIE_DN2/input",
+       "PCIE_UP2/out_J2",
+       0.1774
+      ]
+     ],
+     "viol_track_track": 18,
+     "viol_via_track": 34,
+     "viol_via_via": 11
+    },
+    "page_or_pad": "PCIE_DN1/input",
+    "rule": "complete_clearance_suite (L5-exposed)"
+   }
+  ],
+  "failed_gates": [
+   "A-CN.1d",
+   "A-CN.1b",
+   "A-CN.4",
+   "A-CN.9"
+  ],
+  "n_certificates": 4,
+  "r1_expected": 32,
+  "r1_placed": 31,
+  "status": "EMITTED",
+  "verdict": "UPSTREAM_CHANGE_REQUEST"
+ },
+ "redline": "frozen four untouched; canonical W3-CN.30 05f7bd10 untouched; engine reverted; single run",
+ "revision": "CO-06d-PROBE.1",
+ "schema": 1,
+ "single_layer_projection_crossings": 1009
+}
