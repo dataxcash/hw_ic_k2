@@ -12,11 +12,11 @@
   }
  ],
  "artifact": "m13_v57_w3_validation",
- "artifact_rev": "W3-CN.25",
+ "artifact_rev": "W3-CN.27",
  "f12": {
-  "authority_main_sha256": "c17c5a4217888f1e15ae939a81c3e90d96d44a1e3b52f2d5e65ca79d5adbd620",
-  "landing_revision": "W3-CN.25",
-  "main_sha256": "c17c5a4217888f1e15ae939a81c3e90d96d44a1e3b52f2d5e65ca79d5adbd620",
+  "authority_main_sha256": "13dfb9f4d74224d96710ce9617bfd6ac4f713db1f359dd69e23d4746f36774a3",
+  "landing_revision": "W3-CN.27",
+  "main_sha256": "13dfb9f4d74224d96710ce9617bfd6ac4f713db1f359dd69e23d4746f36774a3",
   "match": true,
   "n_rows": 64
  },
@@ -69,7 +69,7 @@
     "total": 0
    },
    "via_clearance": {
-    "min_inter_net_mm": 0.527152,
+    "min_inter_net_mm": 0.527898,
     "n_vias": 256,
     "violations": 0
    }
@@ -140,9 +140,10 @@
  },
  "notes": [
   "G-M4 独立重导：R2 lane（由冻结 lane_frame 独立复刻块规则）+ R3 landing（由 r3x2 域 + pad y-band）+ 双度量（段冲突/全 via 间距，由工件 route_geometry/pages[*].vias 独立重算）。",
-  "R1 via 以不变量验证（∈冻结候选 + 100% 间距 + 平面性），非重现 argmin（引擎候选键）。"
+  "R1 via 以不变量验证（∈冻结候选 + 100% 间距 + 平面性），非重现 argmin（引擎候选键）。",
+  "v2.2 契约修订：R3 独立重导纳入列序交替偏置 ±0.1 + band clamp + 前缀递推（列序偏置由 W3 8L 波次引入，见 m13_v57_w3_8l_progress_v2/v3.md）；V3 合法层对扩为 LID.1 8L 信号层集 {F.Bu,B.Cu,In2.Cu,In6.Cu}。"
  ],
- "revision": "W3-VALv2.1",
+ "revision": "W3-VALv2.2",
  "schema": 1,
  "stage": {
   "D8": {
@@ -186,7 +187,7 @@
       "total": 0
      },
      "via_clearance": {
-      "min_inter_net_mm": 0.527152,
+      "min_inter_net_mm": 0.527898,
       "n_vias": 256,
       "violations": 0
      }

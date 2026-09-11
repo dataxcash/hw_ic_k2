@@ -28,6 +28,7 @@ FROZEN_SHA_PREFIX = {"spec": "0bd52ed48e720b8c", "manifest": "a8ef3ea8ecff99d7",
                      "pcb": "f6273de613f43d05", "rules": "0a459839e15960b8"}
 STEP, LANE_LO, N_USED = 1.46, 33.3, 16
 VIA_VIA, POL_OFF, R3_OFF = 0.525, 0.19, -0.3
+R3_STEP = 0.6
 TOL = 1e-9
 
 
@@ -175,13 +176,36 @@ def derive_r2(manifest, lane_frame):
 
 
 def derive_r3(gaps, manifest):
-    out = {}
-    for cref, c in gaps["connectors"].items():
-        for xc, col in c["columns"].items():
+    """独立重导（闭式规则，来自冻结 r3x2 域）：
+    组 = (conn_ref, min(gap_candidates))；组序 rank 交替偏置 stag=±0.1（band-clamped）；
+    base_k = clamp(pad_y + R3_OFF + stag, band_lo+0.05, band_hi-0.05)；y_k = max(base_k, y_{k-1} + 0.6)；
+    组内序 = (pad_y, net)。  （W3 8L 波次修订：列序交替小偏置；validator rev v2.2）"""
+    pads = []
+    for cref in sorted(gaps["connectors"]):
+        for xc, col in sorted(gaps["connectors"][cref]["columns"].items(), key=lambda kv: float(kv[0])):
             for en in col["entries"]:
-                out[cref + "|" + en["net"]] = {
-                    "column_x": min(float(g) for g in en["gap_candidates"]),
-                    "landing_y": round(en["y"] + R3_OFF, 6), "band": en["y_band"]}
+                band = en.get("y_band") or [en["y"] - 0.3, en["y"] + 0.3]
+                pads.append({"ref": cref, "net": en["net"], "y": round(float(en["y"]), 6),
+                             "colx": round(min(float(g) for g in en["gap_candidates"]), 6),
+                             "band": [round(float(band[0]), 6), round(float(band[1]), 6)]})
+    groups = {}
+    for pd in pads:
+        groups.setdefault((pd["ref"], pd["colx"]), []).append(pd)
+    rank, rk = {}, 0
+    for c in sorted({k[0] for k in groups}):
+        for cx in sorted({k[1] for k in groups if k[0] == c}):
+            rank[(c, cx)] = rk; rk += 1
+    out = {}
+    for key in sorted(groups):
+        cref, colx = key
+        prev = None
+        stag = 0.1 if (rank[key] % 2) else -0.1
+        for pd in sorted(groups[key], key=lambda q: (q["y"], q["net"])):
+            base = min(max(pd["y"] + R3_OFF + stag, pd["band"][0] + 0.05), pd["band"][1] - 0.05)
+            y = base if prev is None else max(base, prev + R3_STEP)
+            out[pd["ref"] + "|" + pd["net"]] = {"column_x": colx, "landing_y": round(y, 6),
+                                               "band": pd["band"]}
+            prev = y
     return out
 
 
@@ -275,8 +299,9 @@ def a12(src_sha):
 def a13(art, manifest):
     spec = importlib.util.spec_from_file_location("invs", str(K2 / "tools/p3_v57_s1_invariants.py"))
     invs = importlib.util.module_from_spec(spec); spec.loader.exec_module(invs)
-    invs.LAYER_PAIRS_OK = {("F.Cu", "B.Cu"), ("B.Cu", "F.Cu"), ("B.Cu", "In2.Cu"),
-                           ("In2.Cu", "B.Cu"), ("F.Cu", "In2.Cu"), ("In2.Cu", "F.Cu")}
+    # W3 8L (LID.1): 信号层 = {F.Cu, B.Cu, In2.Cu, In6.Cu}（m13_v57_layer_intent_adoption_v1.json）
+    invs.LAYER_PAIRS_OK = {(a, b) for a in ("F.Cu", "B.Cu", "In2.Cu", "In6.Cu")
+                           for b in ("F.Cu", "B.Cu", "In2.Cu", "In6.Cu") if a != b}
     rules = {"width": 0.205, "p_gap": 0.175, "half_pitch": 0.19, "pn_min_edge": 0.155,
              "max_vias_per_net": 5, "via_od": 0.35}     # W3 revision (ROOT-2 R-74: via<=5)
     mp = {p["page_id"]: p for p in manifest["pages"]}
@@ -318,8 +343,9 @@ def a13(art, manifest):
     return {"ok": not viol, "pages_checked": pages_checked + refclk_checked,
             "data_pages_checked": pages_checked, "refclk_pages_checked": refclk_checked,
             "strong_nodes_censused": strong,
-            "rules_revision": {"max_vias_per_net": 5, "layer_pairs": "F.Cu/B.Cu/In2.Cu (W3, ROOT-2 R-74)",
-                               "basis": "ROOT-2 R-74 (via<=5); ROOT-16 layer set {F.Cu,In2.Cu,B.Cu}"},
+            "rules_revision": {"max_vias_per_net": 5,
+                               "layer_pairs": "signal set {F.Cu,B.Cu,In2.Cu,In6.Cu} (LID.1 8L)",
+                               "basis": "ROOT-2 R-74 (via<=5); LID.1 layer-intent adoption (signal=F/In2/In6/B)"},
             "violations": viol[:50], "n_violations": len(viol)}
 
 
@@ -405,14 +431,16 @@ def main() -> int:
     verdict_str = "PASS" if (gates_ok and checks_ok and frozen_ok and a12r["ok"] and a13r["ok"]
                              and a14r["ok"] and all(p["ok"] for p in probes)) else "FAIL"
 
-    val = {"artifact": "m13_v57_w3_validation", "schema": 1, "revision": "W3-VALv2.1",
+    val = {"artifact": "m13_v57_w3_validation", "schema": 1, "revision": "W3-VALv2.2",
            "artifact_rev": art["revision"], "verdict": verdict_str,
            "stage": {"D8": {"gates": gates}, "G5": {"A1.2": a12r["ok"], "A1.3": a13r["ok"], "A1.4": a14r["ok"]}},
            "method_gates": gates, "frozen_sha_check": {"actual": frozen, "match": frozen_ok},
            "f12": f12, "adversarial_probes": probes,
            "notes": ["G-M4 独立重导：R2 lane（由冻结 lane_frame 独立复刻块规则）+ R3 landing（由 r3x2 域 + pad y-band）"
                      "+ 双度量（段冲突/全 via 间距，由工件 route_geometry/pages[*].vias 独立重算）。",
-                     "R1 via 以不变量验证（∈冻结候选 + 100% 间距 + 平面性），非重现 argmin（引擎候选键）。"]}
+                     "R1 via 以不变量验证（∈冻结候选 + 100% 间距 + 平面性），非重现 argmin（引擎候选键）。",
+                     "v2.2 契约修订：R3 独立重导纳入列序交替偏置 ±0.1 + band clamp + 前缀递推（列序偏置由 W3 8L 波次引入，"
+                     "见 m13_v57_w3_8l_progress_v2/v3.md）；V3 合法层对扩为 LID.1 8L 信号层集 {F.Bu,B.Cu,In2.Cu,In6.Cu}。"]}
     MAIN_VAL = STEP2 / "m13_v57_w3_validation.json"
     MAIN_VAL.write_text(json.dumps(val, indent=1, ensure_ascii=False, sort_keys=True), encoding="utf-8")
     (STEP2 / "m13_v57_w4_a12_report.json").write_text(json.dumps(

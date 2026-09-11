@@ -43,3 +43,25 @@
 - D8/G5 验证器 v2：**PASS**（G-M1..G-M6 + 双度量 0 + A1.2/A1.3/A1.4；A1.3 现覆盖 REFCLK P/N）。
 - L5 重测：DFM **479**（含新增 N 轨的 26 条）；SI 等长 **skew 24.476mm** 不变 ⇒ **G7 仍 FAIL**；
   **O1**（净距不可行，已实证与域/序无关）与 **O2**（板既有铜/读板）仍待 owner。
+
+## W3-CN.27 复核（G5 重签；2026-09-11，ROOT-21 之后）
+- 触发：canonical 由 W3-CN.25（旧口径）→ **W3-CN.27（A-CN.9 完整净距 FEASIBLE_ALL）**，G5 必须对新主件重跑。
+- 验证器升 **W3-VALv2.2**（两处契约修订，均版本化记录、不原地改语义）：
+  1. **R3 独立重导**纳入 **列序交替偏置 ±0.1 + band clamp + 前缀递推**（该规则由 W3 8L 波次引入，
+     见 `m13_v57_w3_8l_progress_v2/v3.md`；旧重导只做 `y = pad_y - 0.3` ⇒ 对新主件 64/64 误报失配）。
+  2. **V3 合法层对**扩为 **LID.1 8L 信号层集 {F.Cu, B.Cu, In2.Cu, In6.Cu}**（依据
+     `m13_v57_layer_intent_adoption_v1.json`；旧集仅 F/B/In2 ⇒ 对 up 带 In6 段 128 条误报）。
+- 重跑结果（**PASS**，无 partial pass）：
+  | 门 | 结果 |
+  |---|---|
+  | G-M1..G-M6 | 全 PASS（G-M4 独立重导 R2/R3 失配 **0/0**；双度量 0；via 间距 0，min 0.527898） |
+  | A1.2 序无关 | PASS（validator 以 3 枚举序独立重跑引擎，main/landing sha 逐字节一致） |
+  | A1.3 生成即合法 | PASS（**0** 违例；覆盖 34 页，强节点普查 **388**） |
+  | A1.4 单向性 | PASS |
+  | 四源 / stale_state / misleading_success | 全 PASS |
+- 指纹：
+  - 主件 `m13_v57_w3_joint_assignment.json` rev **W3-CN.27** `13dfb9f4d74224d9`
+  - landing `m13_v57_w3_chip_landing_rows.json` rev W3-CN.27 `e096740627a0101d`（authority == main sha，64 行）
+  - validation `9c9510422e730e63`｜a12 `246a86a646496d31`｜a13 `597fa06f949641ce`｜a14 `fb52613c9751c122`
+  - validator `tools/p3_v57_w3_constructive_validator_v2.py` rev **W3-VALv2.2**
+- 结论：**G5 PASS（W3-CN.27 口径）**。下一步 G6（L4 图纸直构）→ G7（L5 重签，含 O4 对内等长）。
