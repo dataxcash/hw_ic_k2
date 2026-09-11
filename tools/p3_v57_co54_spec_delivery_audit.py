@@ -20,7 +20,7 @@ from pathlib import Path
 
 K2 = Path("/home/fila/jqdDev_2025/ic_hw/k2")
 STEP2 = K2 / "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2"
-SPEC = K2 / "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-3.json"
+SPEC = K2 / "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-4.json"   # CO-56: 现行为 rev-4
 REC = STEP2 / "m13_v57_l4_construction.json"
 SHEET = STEP2 / "m13_v57_w3_joint_assignment.json"
 OUT = STEP2 / "m13_v57_co54_spec_delivery_audit.json"
@@ -196,8 +196,8 @@ def main() -> int:
                        "per_layer": intra["per_layer_values_mm_counts"]},
          "delta": {"edge_gap_mm": round(intra["min_edge_gap_mm"] - nc["diff_pair"]["p_gap"], 4),
                    "direction": "wider_gap => lower_coupling => higher_Zdiff"},
-         "judge": "L5-SI.4 netclass_geometry（CO-53 新增；下界另由 drc_semantic_core clearance 0.175 判）",
-         "status": "OPEN"},
+         "judge": "L5-SI.5 netclass_geometry（CO-53 新增；下界另由 drc_semantic_core clearance 0.175 判）",
+         "status": "CLOSED_BY_CO55_CO56（叠层反解后各层一阶落 85±10%；终判=板厂券）"},
         {"id": "F2", "class": "CROSSTALK_GEOMETRY(inter-pair)",
          "spec": {"inter_pair_spacing_mm": nc["inter_pair_spacing_mm"]},
          "delivered": {"min_center_mm": inter["min_center_mm"], "min_edge_gap_mm": inter["min_edge_gap_mm"],
@@ -207,21 +207,21 @@ def main() -> int:
                              f'{inter["worst"]["nets"]} @ {inter["worst"]["layer"]} '
                              f'(平行重叠 {inter["worst"]["overlap_mm"]}mm) ⇒ 归因更正为「内层长平行带」'),
          "judge": "无（inter_pair_spacing_mm 无门禁机判；本件为首个测量项）",
-         "status": "OPEN"},
+         "status": "OPEN_RESIDUAL_CROSSTALK（几何已记录；串扰复核=领域求解器/券）"},
         {"id": "F3", "class": "SPEC_SELF_INCONSISTENCY(corridor pitch)",
          "spec": {"formula_pitch_mm": spec_pitch,
                   "corridors_tracks_y_pitch_mm": sorted({p for b in bands for p in b["tracks_y_pitch_mm"]}),
                   "formula": "p_gap + 2*p_width + inter_pair_spacing_mm"},
          "delta": {"mm": round(spec_pitch - min(p for b in bands for p in b["tracks_y_pitch_mm"]), 4)},
          "judge": "无（corridors.tracks_y 由引擎冻结折线消费，其与 net_classes 的一致性未机判）",
-         "status": "OPEN"},
+         "status": "DOCUMENTED_IN_SPEC_REV4（scope 注记；数值未改）"},
         {"id": "F4", "class": "MANUFACTURING_INPUT_GAP(stackup)",
          "spec": {"stackup_material": spec["stackup"]["material"]},
          "delivered": {"layers": 8, "stackup_definition_in_board": False,
                        "authority": "LID.1（F/In1(G)/In2(S)/In3(G)/In4(P)/In5(G)/In6(S)/B）"},
          "delta": {"layers": 2, "dielectric_table": "缺失(逐层介质厚度/材料)"},
          "judge": "无（板 (setup) 无 (stackup) 介质定义）",
-         "status": "OPEN/BLOCKED_INPUT"},
+         "status": "CLOSED_BY_CO56（SPEC rev-4 stackup.dielectric_8l 已落盘逐层介质表）"},
         {"id": "F5", "class": "MODEL_INPUT_DRIFT(impedance basis)",
          "spec": {"model": imp["model"], "implied": "H1=5.0mil=0.127mm, Er1=4.3"},
          "repo_model": {"source": "_shared/eda_core/stackup.py:JLC_6L_16MM",
@@ -279,7 +279,7 @@ def main() -> int:
         "judge_coverage": cover,
         "conformance": "NOT_DEMONSTRATED",
         "gate_impact": "none（无几何/阈值改动；G4..G7 判定不变）",
-        "open_item": "CO-53/CO-54（交付阻塞）：8L 介质叠层输入 → 分层 Zdiff 重导 → SPEC ECO rev-4 → 关项",
+        "open_item": "CO-53/54/55/56：已由 CO-55 叠层反解 + CO-56 SPEC rev-4 收口（一阶在设计带内）；余 = 板厂券终判 + 对间串扰复核",
     }
     OUT.write_text(json.dumps(rec, indent=1, ensure_ascii=False, sort_keys=True), encoding="utf-8")
     print(json.dumps({"out": str(OUT.relative_to(K2)), "sha16": sha16(OUT),

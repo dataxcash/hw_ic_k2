@@ -465,12 +465,12 @@
     "edge_gap_mm": 0.12
    },
    "id": "F1",
-   "judge": "L5-SI.4 netclass_geometry（CO-53 新增；下界另由 drc_semantic_core clearance 0.175 判）",
+   "judge": "L5-SI.5 netclass_geometry（CO-53 新增；下界另由 drc_semantic_core clearance 0.175 判）",
    "spec": {
     "impedance_gap_mm": 0.175,
     "p_gap_mm": 0.175
    },
-   "status": "OPEN"
+   "status": "CLOSED_BY_CO55_CO56（叠层反解后各层一阶落 85±10%；终判=板厂券）"
   },
   {
    "attribution_fix": "CO-53 F2 记为「连接器扇出密集区」；机判证据显示最紧项为 PCIE_UP2_N|PCIE_UP4_P @ In6.Cu (平行重叠 29.1mm) ⇒ 归因更正为「内层长平行带」",
@@ -513,7 +513,7 @@
    "spec": {
     "inter_pair_spacing_mm": 0.875
    },
-   "status": "OPEN"
+   "status": "OPEN_RESIDUAL_CROSSTALK（几何已记录；串扰复核=领域求解器/券）"
   },
   {
    "class": "SPEC_SELF_INCONSISTENCY(corridor pitch)",
@@ -530,7 +530,7 @@
     "formula": "p_gap + 2*p_width + inter_pair_spacing_mm",
     "formula_pitch_mm": 1.46
    },
-   "status": "OPEN"
+   "status": "DOCUMENTED_IN_SPEC_REV4（scope 注记；数值未改）"
   },
   {
    "class": "MANUFACTURING_INPUT_GAP(stackup)",
@@ -546,9 +546,9 @@
    "id": "F4",
    "judge": "无（板 (setup) 无 (stackup) 介质定义）",
    "spec": {
-    "stackup_material": "JLC 6L stackup (JLC06161H process limits, L1 v2.0 hard-constraint 4; SI9000 final after freeze)"
+    "stackup_material": "JLC 8L 1.6mm 阻抗板 JLC08161H（南亚 NP-155F；prepreg 2116*1 / 3313*1，core 0.36*2） — 叠层分配与逐层介质厚度由 L2 CO-55 反解裁定；终判 = 板厂阻抗券"
    },
-   "status": "OPEN/BLOCKED_INPUT"
+   "status": "CLOSED_BY_CO56（SPEC rev-4 stackup.dielectric_8l 已落盘逐层介质表）"
   },
   {
    "class": "MODEL_INPUT_DRIFT(impedance basis)",
@@ -646,15 +646,15 @@
  "inputs": {
   "drawing": {
    "path": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_joint_assignment.json",
-   "sha16": "dfa1d7c4a811b0da"
+   "sha16": "4e7497daf97cebd1"
   },
   "l4_construction": {
    "path": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_l4_construction.json",
-   "sha16": "58ccf62e881f2a8f"
+   "sha16": "758314dc01814701"
   },
   "spec": {
-   "path": "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-3.json",
-   "sha16": "2d6dbd8bd8d667d7"
+   "path": "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-4.json",
+   "sha16": "1c4eecb0edf4a446"
   }
  },
  "judge_coverage": [
@@ -725,7 +725,7 @@
   }
  ],
  "nature": "机判事实审计（只读）：零几何改动、零阈值改动、不 bump SPEC、不预判门判定",
- "open_item": "CO-53/CO-54（交付阻塞）：8L 介质叠层输入 → 分层 Zdiff 重导 → SPEC ECO rev-4 → 关项",
+ "open_item": "CO-53/54/55/56：已由 CO-55 叠层反解 + CO-56 SPEC rev-4 收口（一阶在设计带内）；余 = 板厂券终判 + 对间串扰复核",
  "revision": "CO-54.1",
  "schema": 1,
  "spec_geometry": {
@@ -734,7 +734,54 @@
    "alt_width_mm": 0.215,
    "coupon_required": true,
    "gap_mm": 0.175,
+   "gap_mm_semantics": "lower_bound（DRC clearance 0.175）；几何真源 = per_layer[*].gap_mm_delivered",
    "model": "JLC_SI9000_H1_5.0mil_Er1_4.3",
+   "per_layer": {
+    "F.Cu": {
+     "er": 4.16,
+     "gap_mm_delivered": [
+      0.295,
+      0.395
+     ],
+     "h_mm": 0.1164,
+     "kind": "microstrip",
+     "material": "2116*1",
+     "refs": [
+      "In1.Cu"
+     ],
+     "w_mm": 0.205
+    },
+    "In2.Cu": {
+     "b_mm": 0.72,
+     "er": 3.99,
+     "gap_mm_delivered": [
+      0.295,
+      0.395
+     ],
+     "kind": "stripline(asym→sym)",
+     "material": "core 0.36*2",
+     "refs": [
+      "In1.Cu",
+      "In3.Cu"
+     ],
+     "w_mm": 0.205
+    },
+    "In6.Cu": {
+     "er": 4.1,
+     "gap_mm_delivered": [
+      0.295,
+      0.395
+     ],
+     "h_mm": 0.0994,
+     "kind": "microstrip(single-ref)",
+     "material": "3313*1",
+     "refs": [
+      "In5.Cu"
+     ],
+     "w_mm": 0.205
+    }
+   },
+   "per_layer_basis": "CO-55/CO-56：单一 (w,gap) 跨层通用不成立；上表为分层口径（一阶），终判=板厂券；B.Cu 无平面参考（参考层 In6 为信号）⇒ 非阻抗控制层",
    "target_zdiff": 85.0,
    "tolerance_pct": 10,
    "width_mm": 0.205
@@ -743,6 +790,6 @@
   "intra_pair_skew_mm": 0.15,
   "p_gap_mm": 0.175,
   "p_width_mm": 0.205,
-  "stackup_material": "JLC 6L stackup (JLC06161H process limits, L1 v2.0 hard-constraint 4; SI9000 final after freeze)"
+  "stackup_material": "JLC 8L 1.6mm 阻抗板 JLC08161H（南亚 NP-155F；prepreg 2116*1 / 3313*1，core 0.36*2） — 叠层分配与逐层介质厚度由 L2 CO-55 反解裁定；终判 = 板厂阻抗券"
  }
 }

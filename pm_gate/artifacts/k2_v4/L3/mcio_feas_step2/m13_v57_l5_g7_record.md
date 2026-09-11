@@ -1,6 +1,6 @@
 # G7 / L5 记录 — k2 v57（8L）
 
-> revision **L5-G7.6**｜图纸 **W3-CN.40** `dfa1d7c4a811b0da`｜L4 板 `cdcb869e9827ec87`（含 SPEC 逃逸区规则域 CO-37）
+> revision **L5-G7.6**｜图纸 **W3-CN.40** `4e7497daf97cebd1`｜L4 板 `cdcb869e9827ec87`（含 SPEC 逃逸区规则域 CO-37）
 > 产生：`tools/p3_v57_l5_signoff.py`（kicad-cli 10.0.5，L5-DFM.5）——**随 L5 每次重跑确定性重生成**
 > ｜历史 FAIL 叙事见 CO-37/CO-43/CO-44/CO-45 变更单与 git（本件取代 L5-G7.5 的 new=60 口径）。
 
@@ -31,14 +31,14 @@
 - 域工件 `m13_v57_co37_escape_domain.json` `5616a9f873c9b844`；冻结基线板不加载 `.kicad_dru`。
 
 ## 4. 独立复算
-- G5 `p3_v57_w3_constructive_validator_v2.py`（不 import 引擎）：`m13_v57_w3_validation.json` `23b2b6d161f9bea1`（G-M1..6、A1.2/A1.3/A1.4、frozen）。
-- G6 `p3_v57_l4_validator.py`：`m13_v57_l4_validation.json` `9521321baf7ff2b0`（L4-A..E viol=0）。
+- G5 `p3_v57_w3_constructive_validator_v2.py`（不 import 引擎）：`m13_v57_w3_validation.json` `95ec1af12f6edae3`（G-M1..6、A1.2/A1.3/A1.4、frozen）。
+- G6 `p3_v57_l4_validator.py`：`m13_v57_l4_validation.json` `b15c6432a3da3e39`（L4-A..E viol=0）。
 - 跨层 DRC：`kicad-cli pcb drc --format json --severity-all --refill-zones`（冻结板 vs L4，按类型差分；CO-47 起退出码=判定）。
 
 ## 5. 指纹
-图纸 `dfa1d7c4a811b0da`｜landing `ef5704eb18c5e6d5`｜G5 `23b2b6d161f9bea1`
-｜L4 construction `58ccf62e881f2a8f`｜L4 validation `9521321baf7ff2b0`｜L4 板 `cdcb869e9827ec87`
-｜fab `9a223923b029a1f9`｜dfm `de14f887a7819c11`｜si `b16293f842ecf712`
+图纸 `4e7497daf97cebd1`｜landing `54c44b6a5aa54f40`｜G5 `95ec1af12f6edae3`
+｜L4 construction `758314dc01814701`｜L4 validation `b15c6432a3da3e39`｜L4 板 `cdcb869e9827ec87`
+｜fab `cc20edd45406db6b`｜dfm `de14f887a7819c11`｜si `12bab1f0152b5e0e`
 ｜`.kicad_dru` `3148703240d54420`
 冻结四源 `0bd52ed48e720b8c / a8ef3ea8ecff99d7 / fb07d25ac426ff84 / 0a459839e15960b8`（未改）。
 

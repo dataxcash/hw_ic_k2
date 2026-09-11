@@ -213,10 +213,10 @@ def main() -> int:
         skew.append({"page": pg["page_id"], "skew_mm": round(abs(plen("P") - plen("N")), 4)})
     skew_max = max((s["skew_mm"] for s in skew), default=0)
     planes = [l for l in cu if l in ("In1.Cu", "In3.Cu", "In4.Cu", "In5.Cu")]
-    _spec = json.loads((STEP2.parent / "SPEC_k2_v4.spec-rev-3.json").read_text(encoding="utf-8"))
+    _spec = json.loads((STEP2.parent / "SPEC_k2_v4.spec-rev-4.json").read_text(encoding="utf-8"))
     _spec_nc = _spec["net_classes"]["PCIe85"]
     _pg = _pair_geometry(rec["segments"])          # CO-53: 对内/对间几何实测
-    si = {"artifact": "m13_v57_l5_si_pi_emc_record", "schema": 1, "revision": "L5-SI.4",
+    si = {"artifact": "m13_v57_l5_si_pi_emc_record", "schema": 1, "revision": "L5-SI.5",
           "SI": {"track_width_rule_mm": 0.205, "all_pcie_tracks_0p205": widths_ok,
                  "max_intra_pair_skew_mm": skew_max, "skew_rule_mm": rules["diff_pair"]["intra_pair_skew_mm"],
                  "skew_ok": skew_max <= rules["diff_pair"]["intra_pair_skew_mm"] + 1e-9,
@@ -235,10 +235,16 @@ def main() -> int:
                               "impedance_model": _spec["impedance"]["model"],
                               "impedance_gap_mm": _spec["impedance"]["gap_mm"],
                               "stackup": _spec["stackup"]["material"]},
-                     "source": "SPEC_k2_v4.spec-rev-3.json net_classes.PCIe85 / impedance / stackup",
-                     "conformance": "NOT_DEMONSTRATED",
-                     "open_item": "CO-53：交付对内中心 0.500(边距 0.295) vs SPEC p_gap 0.175；SPEC stackup/impedance 仍 6L而板为 8L；"
-                                  "阻抗需按 8L 介质叠层重导（该输入缺失）并出 SPEC ECO ⇒ 见 m13_v57_CO53_intrapair_geometry_impedance_open.md"}},
+                     "source": "SPEC_k2_v4.spec-rev-4.json (CO-56) net_classes.PCIe85 / impedance(per_layer) / stackup(dielectric_8l)",
+                     "conformance": "DESIGN_CONFORMANT_FIRST_ORDER_PENDING_COUPON",
+                     "per_layer_impedance": _spec["impedance"].get("per_layer"),
+                     "stackup_build": _spec["stackup"].get("dielectric_8l"),
+                     "p_gap_semantics": _spec_nc["diff_pair"].get("p_gap_semantics"),
+                     "note": "CO-56：SPEC ECO rev-4 采用 CO-55 反解 8L 叠层要求 ⇒ 交付各层一阶落 85Ω±10%"
+                             "（F 88.4–91.2 / In2 82.1–89.2 / In6 85.5–87.4）；**终判 = 板厂阻抗券**（coupon_required=true）。"
+                             "B.Cu 无平面参考 ⇒ 非阻抗控制层。对间串扰复核另记（CO-54 F2/F3）。",
+                     "evidence": "m13_v57_co55_layer_impedance_requirement.json e9e1268b8e9bf312 / "
+                                 "m13_v57_CO55_layer_aware_impedance_build_ruling.md b5c5b9a65f50f201"}},
           "PI": {"plane_layers_reserved": planes,
                  "zone_counts": {"frozen_src": zs_src, "l4": zs_l4},
                  "pdn_status": ("reserved_not_poured"

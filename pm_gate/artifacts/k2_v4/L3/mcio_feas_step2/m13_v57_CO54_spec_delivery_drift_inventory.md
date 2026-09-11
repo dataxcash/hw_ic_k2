@@ -51,7 +51,7 @@
 
 - **模型层复用（非本工具自创）**：`_shared/eda_core/stackup.py` 的 IPC-2141 边缘耦合微带/对称带状线。
 - **模型保真度自检**：以 SPEC 自陈基准（H=0.127/Er=4.3, w=0.205, s=0.175）投入 ⇒ **85.05Ω vs 自陈 85.1Ω（Δ0.05）** ⇒ 与 SPEC 同源，可用作一阶重导（fail-fast 门：|Δ|>0.5Ω 即非零退出）。
-- **敏感性（一阶，默认模式）**：交付 s=0.295 vs SPEC s=0.175 ⇒ ΔZ% 随 H：`+6.7%(0.10) / +8.7%(0.127) / +10.0%(0.15) / +11.4%(0.20) / +12.0%(≥0.25)`（对 Er 不敏感）。**方向**：交付对内加宽 ⇒ Zdiff 抬高。**此表不是合规结论**（`conformance` 仍 `NOT_DEMONSTRATED`）。
+- **敏感性（一阶，默认模式）**：交付 s=0.295 vs SPEC s=0.175 ⇒ ΔZ% 随 H：`+6.7%(0.10) / +8.7%(0.127) / +10.0%(0.15) / +11.4%(0.20) / +12.0%(≥0.25)`（对 Er 不敏感）。**方向**：交付对内加宽 ⇒ Zdiff 抬高。**此表不是合规结论**（`conformance` 后由 CO-56 记为 `DESIGN_CONFORMANT_FIRST_ORDER_PENDING_COUPON`）。
 - **`--stackup <json>` 通路已实测**（合成探针，**非**真实 8L 叠层）：微带 (0.20, 0.17)→85.86Ω；带状线 h=0.25/Er=4.16 ⇒ 85Ω 需 **w≈0.07**（对照交付 0.205）⇒ 印证 **F6**「0.205 同时满足微带与带状线 85Ω」不成立，须分层重导。
 - 输入到位后同一命令产出 **ECO rev-4 提议**（`applied: false`，含 `stackup.material / impedance{model,width_mm,gap_mm} / net_classes.PCIe85.diff_pair.p_gap` 及 p_gap 语义裁定提示）⇒ 届时再走"变更单 + 引擎 `F`/`FROZEN_SHA` + validator 冻结集 bump → 重跑 G4..G7"。
 
@@ -63,7 +63,7 @@
 | `PCIe85.width / p_width 0.205` | L5-SI `all_pcie_tracks_0p205` | JUDGED |
 | `PCIe85.intra_pair_skew_mm 0.15` | L5-SI `max_intra_pair_skew`（0.0031） | JUDGED |
 | `PCIe85.diff_pair.p_gap 0.175`（**下界**） | `drc_semantic_core` clearance | JUDGED_LOWER_BOUND |
-| `PCIe85.diff_pair.p_gap`（**目标/上界**） | L5-SI.4 `netclass_geometry`（CO-53 新增） | JUDGED_OPEN |
+| `PCIe85.diff_pair.p_gap`（**目标/上界**） | L5-SI.5 `netclass_geometry`（CO-53 新增；**CO-56 已把语义定为 lower_bound + 交付几何真源**） | JUDGED_CLOSED_PENDING_COUPON |
 | `PCIe85.inter_pair_spacing_mm 0.875` | **无** | **NOT_JUDGED**（本件首次测量） |
 | `corridors.tracks_y` 与 PITCH 公式一致性 | **无** | **NOT_JUDGED**（本件首次测量） |
 | `impedance.{target,model,width,gap}` | **无**（`coupon_required=true`，板厂券路径） | **NOT_JUDGED** |
@@ -77,10 +77,10 @@
 
 ## 6. 裁定（L2/SI 自裁，取代"等 owner"态）
 
-1. CO-53/CO-54 各事实项 **全部 OPEN**；`conformance = NOT_DEMONSTRATED`（既非已证合规、亦非已证违反）。
+1. ~~CO-53/CO-54 各事实项 全部 OPEN~~ → **CO-55/CO-56 收口**：F1/F4 由叠层反解 + SPEC rev-4 关闭；F3 由 rev-4 scope 注记记录（数值未改）；F2（对间串扰）**保留为残余**（领域求解器/券）；`conformance = DESIGN_CONFORMANT_FIRST_ORDER_PENDING_COUPON`。
 2. **门判定不变**：G4/W3、G5/W4、G6/L4、G7/L5 的几何/DFM 结论**不受影响**（本件零改动 canonical；drawing `dfa1d7c4a811b0da`、板 `cdcb869e9827ec87` 未动）。
 3. **无 owner 闸口**：本项 = L2/SI 记录 + **制造输入缺口**（非 L1 拓扑/接口/信号流向/球重映射）。
-4. ECO rev-4 前置 = **8L 介质叠层输入（材料 + 逐层介质厚度）**；到位后按 §4 一命令产出提议 → 变更单 → bump `F/FROZEN_SHA` + validator 冻结集 → 重跑 G4..G7。
+4. ~~ECO rev-4 前置 = 8L 介质叠层输入~~ → **已由 CO-55 反向下达叠层要求 + CO-56 落盘 SPEC rev-4 并复跑 G4..G7（全 PASS、板逐字节不变、重跑零漂移）**。
 
 ## 7. 未改物 / 红线 / 复现 / 指纹
 
@@ -93,4 +93,4 @@
   python3 tools/p3_v57_si_zdiff_rederive.py --stackup <8L叠层.json>          # → 分层 85Ω 重导 + ECO rev-4 提议（applied:false）
   ```
   两工具均**字节确定性**（重跑同 sha16）。
-- 指纹：audit `m13_v57_co54_spec_delivery_audit.json` **ba87413ae4d8c7b4**｜sensitivity `m13_v57_co54_zdiff_sensitivity.json` **137ad69ac39aee86**｜boundary 本件 → v1.23。
+- 指纹：audit `m13_v57_co54_spec_delivery_audit.json` **69fcbcdd19025874**（rev-4 下复算；CO-56 前为 ba87413ae4d8c7b4）｜sensitivity `m13_v57_co54_zdiff_sensitivity.json` **137ad69ac39aee86**｜boundary 本件 → v1.25。

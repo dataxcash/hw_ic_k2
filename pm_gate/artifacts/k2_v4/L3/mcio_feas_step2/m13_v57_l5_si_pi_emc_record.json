@@ -43,7 +43,7 @@
   },
   "max_intra_pair_skew_mm": 0.0031,
   "netclass_geometry": {
-   "conformance": "NOT_DEMONSTRATED",
+   "conformance": "DESIGN_CONFORMANT_FIRST_ORDER_PENDING_COUPON",
    "delivered": {
     "intra_center_max_mm": 0.5,
     "intra_center_mm": [
@@ -55,16 +55,107 @@
     "p_width_mm": 0.205,
     "pairs_measured": 34
    },
-   "open_item": "CO-53：交付对内中心 0.500(边距 0.295) vs SPEC p_gap 0.175；SPEC stackup/impedance 仍 6L而板为 8L；阻抗需按 8L 介质叠层重导（该输入缺失）并出 SPEC ECO ⇒ 见 m13_v57_CO53_intrapair_geometry_impedance_open.md",
-   "source": "SPEC_k2_v4.spec-rev-3.json net_classes.PCIe85 / impedance / stackup",
+   "evidence": "m13_v57_co55_layer_impedance_requirement.json e9e1268b8e9bf312 / m13_v57_CO55_layer_aware_impedance_build_ruling.md b5c5b9a65f50f201",
+   "note": "CO-56：SPEC ECO rev-4 采用 CO-55 反解 8L 叠层要求 ⇒ 交付各层一阶落 85Ω±10%（F 88.4–91.2 / In2 82.1–89.2 / In6 85.5–87.4）；**终判 = 板厂阻抗券**（coupon_required=true）。B.Cu 无平面参考 ⇒ 非阻抗控制层。对间串扰复核另记（CO-54 F2/F3）。",
+   "p_gap_semantics": "lower_bound",
+   "per_layer_impedance": {
+    "F.Cu": {
+     "er": 4.16,
+     "gap_mm_delivered": [
+      0.295,
+      0.395
+     ],
+     "h_mm": 0.1164,
+     "kind": "microstrip",
+     "material": "2116*1",
+     "refs": [
+      "In1.Cu"
+     ],
+     "w_mm": 0.205
+    },
+    "In2.Cu": {
+     "b_mm": 0.72,
+     "er": 3.99,
+     "gap_mm_delivered": [
+      0.295,
+      0.395
+     ],
+     "kind": "stripline(asym→sym)",
+     "material": "core 0.36*2",
+     "refs": [
+      "In1.Cu",
+      "In3.Cu"
+     ],
+     "w_mm": 0.205
+    },
+    "In6.Cu": {
+     "er": 4.1,
+     "gap_mm_delivered": [
+      0.295,
+      0.395
+     ],
+     "h_mm": 0.0994,
+     "kind": "microstrip(single-ref)",
+     "material": "3313*1",
+     "refs": [
+      "In5.Cu"
+     ],
+     "w_mm": 0.205
+    }
+   },
+   "source": "SPEC_k2_v4.spec-rev-4.json (CO-56) net_classes.PCIe85 / impedance(per_layer) / stackup(dielectric_8l)",
    "spec": {
     "impedance_gap_mm": 0.175,
     "impedance_model": "JLC_SI9000_H1_5.0mil_Er1_4.3",
     "inter_pair_spacing_mm": 0.875,
     "p_gap_mm": 0.175,
     "p_width_mm": 0.205,
-    "stackup": "JLC 6L stackup (JLC06161H process limits, L1 v2.0 hard-constraint 4; SI9000 final after freeze)",
+    "stackup": "JLC 8L 1.6mm 阻抗板 JLC08161H（南亚 NP-155F；prepreg 2116*1 / 3313*1，core 0.36*2） — 叠层分配与逐层介质厚度由 L2 CO-55 反解裁定；终判 = 板厂阻抗券",
     "target_zdiff_ohm": 85.0
+   },
+   "stackup_build": {
+    "d(F.Cu-In1.Cu)": {
+     "er": 4.16,
+     "material": "2116*1",
+     "mm": 0.1164,
+     "use": "F.Cu 微带参考"
+    },
+    "d(In1.Cu-In2.Cu)": {
+     "er": 3.99,
+     "material": "core",
+     "mm": 0.36,
+     "use": "In2 带状线上参考（对称化）"
+    },
+    "d(In2.Cu-In3.Cu)": {
+     "er": 3.99,
+     "material": "core",
+     "mm": 0.36,
+     "use": "In2 带状线下参考（对称化）"
+    },
+    "d(In3.Cu-In4.Cu)": {
+     "er": 4.1,
+     "material": "1080*2",
+     "mm": 0.1528,
+     "use": "余隙"
+    },
+    "d(In4.Cu-In5.Cu)": {
+     "er": 4.1,
+     "material": "1080*2",
+     "mm": 0.1528,
+     "use": "余隙"
+    },
+    "d(In5.Cu-In6.Cu)": {
+     "er": 4.1,
+     "material": "3313*1",
+     "mm": 0.0994,
+     "use": "In6 单参考微带"
+    },
+    "d(In6.Cu-B.Cu)": {
+     "er": 4.1,
+     "material": "自由余隙（1.6mm 闭合）",
+     "mm": 0.1836,
+     "use": "余隙"
+    }
    }
   },
   "skew_ok": true,
@@ -211,7 +302,7 @@
   "track_width_rule_mm": 0.205
  },
  "artifact": "m13_v57_l5_si_pi_emc_record",
- "revision": "L5-SI.4",
+ "revision": "L5-SI.5",
  "schema": 1,
  "verdict": "PASS"
 }

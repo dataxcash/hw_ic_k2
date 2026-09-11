@@ -46,16 +46,16 @@ SPEC 只有一个阻抗口径 `JLC_SI9000_H1_5.0mil_Er1_4.3`（即 **F.Cu 微带
 - **R2（回退，若板厂不能给 b ≥ 0.582）**：In2 线宽须重导 `w*(b)`：`b=0.35→0.12 / 0.40→0.13 / 0.45→0.14 / 0.50→0.15 / 0.55→0.16 / 0.60→0.17`
   ⇒ 触发 W3/L4/L5 re-open（L2 授权；变更单 + 版本 bump）。
 - **R3（无参考层）**：**B.Cu 判非阻抗控制层**（低速/边带/铺铜）；**In6 阻抗关键段下方 B.Cu 不得并行铺铜/走线**（否则 In6 单参考假设失效）。
-- **R4（SPEC ECO rev-4 内容；本次不落盘）**：`stackup`（8L 材料 + 逐层介质表=本裁定）、`impedance` 增 **`per_layer` 分层口径**（保留原标量字段兼容消费方）、`net_classes.PCIe85.diff_pair.p_gap` 语义 = **下限**（DRC clearance 0.175）而几何真源 = 交付 (0.205, 0.295)。
-  ⚠ **前置（CO-54 F3）**：引擎 `p3_v57_big_w0r_corridor_model.py:224-239` 内置不变量 `PITCH == p_gap + 2·p_width + inter_pair_spacing`，而冻结 PITCH=1.20 与该公式（现值 1.46）**不自洽** ⇒ ECO rev-4 必须**同时**裁定该不变量（属另一变更单元，勿在未裁定前改 SPEC）。
+- **R4（SPEC ECO rev-4 内容；**已由 CO-56 落盘**，rev-4 = `1c4eecb0edf4a446`）**：`stackup`（8L 材料 + 逐层介质表=本裁定）、`impedance` 增 **`per_layer` 分层口径**（保留原标量字段兼容消费方）、`net_classes.PCIe85.diff_pair.p_gap` 语义 = **下限**（DRC clearance 0.175）而几何真源 = 交付 (0.205, 0.295)。
+  裁定：该不变量为**规则文件自洽性**校验（`drc_rules.diff_pair` 派生 1.46 = 冻结 PITCH），与 `corridors[].bands[].tracks_y` 的**布线轨距 1.20 属不同对象** ⇒ CO-56 以 `inter_pair_spacing_scope` **记录二者口径**（数值均未改），不需要改动该不变量。
 - **R5（缺口取消）**：CO-53/CO-54 的"8L 介质叠层输入缺口"**取消**：不再索取板厂表，改为下达本要求 + 板厂券终判（`coupon_required=true` 本就是 SPEC 既有路径）。
 
 ## 5. 状态与门禁
 - SI 阻抗项：`NOT_DEMONSTRATED` → **`DESIGN_CONFORMANT_FIRST_ORDER_PENDING_COUPON`**（一阶在设计带内；终判 = SI9000/板厂券）。
-- **G4..G7 判定不变**（本件零几何/阈值改动；drawing `dfa1d7c4a811b0da`、板 `cdcb869e9827ec87`、fab/dfm/si 记录未动）。
+- **G4..G7 判定不变**；CO-56 落盘 rev-4 后复跑：图纸 `4e7497daf97cebd1`（仅指纹重基线，route_geometry/pages 逐字节同）、**板 `cdcb869e9827ec87` 逐字节不变**、G4..G7 全 PASS、重跑零漂移。
 - 无 owner 闸口（叠层分配 = L2）。
 
 ## 6. 未改物 / 红线 / 复现 / 指纹
 - 零几何/阈值改动；四冻结源 **4/4 MATCH**；不 bump SPEC；不伪造 sign-off；一阶模型显式标注，未声称为合规已证。
 - 复现：`python3 tools/p3_v57_co55_layer_aware_zdiff.py`（字节确定性）；`--build <json>` 可对真实板厂叠层逐层判定。
-- 指纹：`m13_v57_co55_layer_impedance_requirement.json` **e9e1268b8e9bf312**｜工具 `tools/p3_v57_co55_layer_aware_zdiff.py`｜boundary → v1.24。
+- 指纹：`m13_v57_co55_layer_impedance_requirement.json` **e9e1268b8e9bf312**（rev-4 下复算仍同）｜工具 `tools/p3_v57_co55_layer_aware_zdiff.py`｜ECO rev-4 `1c4eecb0edf4a446`（CO-56）｜boundary → v1.25。

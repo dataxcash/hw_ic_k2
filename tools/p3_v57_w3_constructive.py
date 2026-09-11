@@ -26,7 +26,7 @@ K2 = Path("/home/fila/jqdDev_2025/ic_hw/k2")
 L3 = K2 / "pm_gate" / "artifacts" / "k2_v4" / "L3"
 STEP2 = L3 / "mcio_feas_step2"
 F = {
-    "spec": L3 / "SPEC_k2_v4.spec-rev-3.json",   # ECO SPEC-REV-3（CO-40 ECS-001 REFCLK J2 transit）
+    "spec": L3 / "SPEC_k2_v4.spec-rev-4.json",   # ECO SPEC-REV-4（CO-56：8L 叠层/分层阻抗口径，纯加性）
     "rules": K2 / "_shared" / "eda_core" / "drc_rules.json",
     "manifest": STEP2 / "m13_v57_s1_page_manifest.json",
     "w0r_model": STEP2 / "m13_v57_big_w0r_corridor_model.json",
@@ -43,7 +43,7 @@ F = {
     "coherent_rows": STEP2 / "m13_v57_f13_r3_coherent_rows.json",
 }
 FROZEN_SHA = {
-    "spec": "2d6dbd8bd8d667d7392e2f571839c112babaf3d3f281b5c0a9c606ac0bf51066",
+    "spec": "1c4eecb0edf4a4460a2036f9cd06997164ef48cdfa3b008599304675d60bb41d",
     "rules": "0a459839e15960b8fbfe0e1f5bb154a02b30cbafa1cbb0d56c2b810a71228448",
     "manifest": "a8ef3ea8ecff99d7549d4122043c972c1bb68346dc4dcc3f36fdd9bacde49890",
     "w0r_model": "80ee9adb78a7e9ad94c27d426295592eee21af3d1e3ce88fe3042183160f0efa",
