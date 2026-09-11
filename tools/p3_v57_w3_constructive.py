@@ -62,7 +62,7 @@ OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
 OUT_LANDING = STEP2 / "m13_v57_w3_chip_landing_rows.json"
 
 REVISION = "W3-CN.30"   # 默认（t2）路径不动；CO-16 见 REVISION_CO16
-REVISION_CO16 = "W3-CN.34"   # CO-16 全板 safe-hop + O4 有界幅值蛇形（O(1) 消费 CO16-ALLOC.1）/ ECO SPEC-REV-2
+REVISION_CO16 = "W3-CN.35"   # CO-16 全板 safe-hop + O4 有界幅值蛇形（O(1) 消费 CO16-ALLOC.1）/ ECO SPEC-REV-2
 ORD = "natural"   # ROOT-20: enumeration order (A1.2 order-invariance, non-vacuous)
 SCHEMA = 1
 STEP = 1.46
@@ -113,8 +113,8 @@ TOL = 1e-9
 SUPERSEDED = {"artifact": "m13_v57_w3_joint_assignment.json", "revision": "W3-JA.2",
                "sha256": "d081618c7b961d770c8e2f180f93b92125b316bc0eeec181f9d1d191a0ee6acc",
                "reason": "method-level iron-law violation (search-based); retained, not rewritten"}
-CO16_ALLOC = STEP2 / "m13_v57_co16_channel_allocation.json"
-CO16_ALLOC_SHA = "21ae78f8276d8df49d4bed83ac0a4fd8c03b65aa8066dc8e6d9358ce61d7d378"
+CO16_ALLOC = STEP2 / "m13_v57_co16_channel_allocation_v2.json"   # CO16-ALLOC.2（板内 fan）
+CO16_ALLOC_SHA = "236c72bc7d228fbf4312b2cce2c645b9e7ccb0a8d9c7201867ad06cf9253bc3d"
 CORRIDOR = {
     "EAST_CHIP_TO_J2": {"bounds": (105.25, 132.65), "x_domain": (93.55, 105.25)},
     "WEST_MCIO_TO_CHIP": {"bounds": (65.05, 82.35), "x_domain": (82.35, 93.55)},

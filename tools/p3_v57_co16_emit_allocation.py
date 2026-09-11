@@ -19,12 +19,24 @@ from pathlib import Path
 
 K2 = Path("/home/fila/jqdDev_2025/ic_hw/k2")
 STEP2 = K2 / "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2"
-OUT = STEP2 / "m13_v57_co16_channel_allocation.json"
-
 CFG = {"CO10_PAIR": "m13_v57_f13_r1_pair_coupling_v1_5.json", "CO10_WSTEP": "1.1265", "CO10_WLO": "33.3",
        "CO10_FANY_J3": "31.5,51.5", "CO10_STUB": "J3L", "CO10_POLMODE": "lx",
        "CO10_EASTSPLIT": "in2c", "CO10_J2STEP": "0.6"}
-REVISION = "CO16-ALLOC.1"
+# 版本化旋钮（CO16-ALLOC.2 等）：env 覆盖，默认 = ALLOC.1 逐字节可复现
+for _k, _e in (("CO10_PAIR", "CO16_PAIR"), ("CO10_WSTEP", "CO16_WSTEP"), ("CO10_WLO", "CO16_WLO"),
+               ("CO10_FANY_J3", "CO16_FANY_J3"), ("CO10_STUB", "CO16_STUB"),
+               ("CO10_POLMODE", "CO16_POLMODE"), ("CO10_EASTSPLIT", "CO16_EASTSPLIT"),
+               ("CO10_J2STEP", "CO16_J2STEP")):
+    if os.environ.get(_e):
+        CFG[_k] = os.environ[_e]
+REVISION = os.environ.get("CO16_REV", "CO16-ALLOC.1")
+OUT_NAME = os.environ.get("CO16_OUT", "m13_v57_co16_channel_allocation.json")
+VERIFY_NAME = os.environ.get("CO16_VERIFY", "m13_v57_co16_placement_verification.json")
+SUPERSEDES = os.environ.get("CO16_SUPERSEDES", "CO11-ALLOC.1")
+SUPERSEDES_REASON = os.environ.get(
+    "CO16_SUPERSEDES_REASON",
+    "30/32 -> 32/32（方向感知 P/N lane 排序，消除 UP6/UP7 In6 stub self-cross）")
+OUT = STEP2 / OUT_NAME
 
 
 def sha16(p: Path) -> str:
@@ -55,8 +67,8 @@ def main() -> int:
         }
     doc = {
         "artifact": "m13_v57_co16_channel_allocation", "schema": 1, "revision": REVISION,
-        "supersedes": {"artifact": "m13_v57_co11_channel_allocation", "revision": "CO11-ALLOC.1",
-                       "reason": "30/32 -> 32/32（方向感知 P/N lane 排序，消除 UP6/UP7 In6 stub self-cross）"},
+        "supersedes": {"artifact": "m13_v57_co11_channel_allocation", "revision": SUPERSEDES,
+                       "reason": SUPERSEDES_REASON},
         "status": "EMITTED", "status_kind": "VERIFIED_FULL_PLACEMENT_32of32",
         "authority": {"co15_ruling": "m13_v57_CO15_joint_allocation_ruling.md"},
         "method": {"name": "single_pass_deterministic_greedy",
@@ -69,8 +81,8 @@ def main() -> int:
                          "lane_frame": sha16(STEP2 / "m13_v57_f3_lane_frame.json"),
                          "pair_v1_5": sha16(STEP2 / "m13_v57_f13_r1_pair_coupling_v1_5.json"),
                          "pad_field": sha16(STEP2 / "m13_v57_co09_pad_field.json")},
-        "verification": {"artifact": "m13_v57_co16_placement_verification.json",
-                         "sha16": sha16(STEP2 / "m13_v57_co16_placement_verification.json"),
+        "verification": {"artifact": VERIFY_NAME,
+                         "sha16": sha16(STEP2 / VERIFY_NAME),
                          "result": "n_violations=0 PASS（全对全 320 via/320 段 + 616 pad 场 + proper-intersection 交叉）"},
         "n_pages": len(pages), "pages": pages,
         "redline": "只读冻结四源；canonical W3-CN.30 未动；无 sign-off",
