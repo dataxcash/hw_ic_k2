@@ -5,7 +5,8 @@
   "L4-B": true,
   "L4-C": true,
   "L4-D": true,
-  "L4-E": true
+  "L4-E": true,
+  "L4-F": true
  },
  "fingerprints": {
   "construction_sha256": "58ccf62e881f2a8fff0b7ea32be324b64b8f5ee6f618f83b6e23a45604f26600",
@@ -14,7 +15,7 @@
   "src_pcb_sha256": "fb07d25ac426ff84905200a9af88e04dd9e6b9216986c4f4459fd7d556a88c34"
  },
  "n_violations": 0,
- "revision": "L4-V1",
+ "revision": "L4-V2",
  "schema": 1,
  "tally": {
   "n_nets": 68,
@@ -22,5 +23,30 @@
   "n_vias": 252
  },
  "verdict": "PASS",
+ "via_budget": {
+  "all_within": true,
+  "classes": {
+   "bandX_escape_In2": {
+    "limit": 4,
+    "max_used": 4,
+    "nets": 32,
+    "over": []
+   },
+   "bandY_escape_B": {
+    "limit": 6,
+    "max_used": 4,
+    "nets": 32,
+    "over": []
+   },
+   "refclk_j2_transit": {
+    "limit": 2,
+    "max_used": 2,
+    "nets": 4,
+    "over": []
+   }
+  },
+  "source": "SPEC_k2_v4.spec-rev-3.json vias.high_speed.max_per_line + refclk_j2_transit.max_vias_per_line",
+  "total_vias": 252
+ },
  "violations": []
 }

@@ -7,6 +7,8 @@
   L4-C 链连续：每网段序列首尾相接（端点匹配，容差 1e-6）；层变点有 via。
   L4-D 端点处方：每 data 网首点=chip pad、末点=conn pad（manifest）；REFCLK 首/末=witness 锚。
   L4-E 板已消费：新板 track/via（pcbnew 读）逐条 == construction 记录（网名、层、端点）。
+  L4-F 过孔预算闭合（CO-52）：每网 via 数 <= SPEC `vias.high_speed.max_per_line`（按 band 族）/
+       REFCLK `constraints.escape_transition_zone.refclk_j2_transit.max_vias_per_line`（宪法第五章第 4 条）。
 产出 m13_v57_l4_validation.json。
 """
 from __future__ import annotations
@@ -20,6 +22,7 @@ MANIFEST = STEP2 / "m13_v57_s1_page_manifest.json"
 REC = STEP2 / "m13_v57_l4_construction.json"
 SRC_PCB = K2 / "k2_v4_8L.kicad_pcb"
 DST_PCB = K2 / "k2_v4_8L.l4.kicad_pcb"
+SPEC = K2 / "pm_gate" / "artifacts" / "k2_v4" / "L3" / "SPEC_k2_v4.spec-rev-3.json"
 TOL = 1e-6
 PHYS = ["F.Cu", "In1.Cu", "In2.Cu", "In3.Cu", "In4.Cu", "In5.Cu", "In6.Cu", "B.Cu"]  # LID.1 8L top->bottom
 LIDX = {n: i for i, n in enumerate(PHYS)}
@@ -204,13 +207,41 @@ def main() -> int:
     else:
         viol.append({"V": "L4-E", "why": "dst board missing"})
 
-    out = {"artifact": "m13_v57_l4_validation", "schema": 1, "revision": "L4-V1",
+    # ---- L4-F：过孔预算闭合（CO-52；SPEC 显式字段，非散文口径）----
+    _spec = json.loads(SPEC.read_text(encoding="utf-8"))
+    _mpl = _spec["vias"]["high_speed"]["max_per_line"]
+    _rfc_lim = _spec["constraints"]["escape_transition_zone"]["refclk_j2_transit"]["max_vias_per_line"]
+
+    def _limit(net):
+        if net.startswith("PCIE_REFCLK"):
+            return _rfc_lim, "refclk_j2_transit"
+        lays = {l for v in rec["vias"][net] for l in v["layers"]}
+        return (_mpl["bandY_escape_B"], "bandY_escape_B") if "B.Cu" in lays else (_mpl["bandX_escape_In2"], "bandX_escape_In2")
+    _bud = {}
+    for _net, _vs in sorted(rec["vias"].items()):
+        _lim, _cls = _limit(_net)
+        _b = _bud.setdefault(_cls, {"limit": _lim, "nets": 0, "max_used": 0, "over": []})
+        _b["nets"] += 1
+        _b["max_used"] = max(_b["max_used"], len(_vs))
+        if len(_vs) > _lim:
+            _b["over"].append({"net": _net, "vias": len(_vs), "limit": _lim})
+    l4f = not any(b["over"] for b in _bud.values())
+    via_budget = {"total_vias": sum(len(v) for v in rec["vias"].values()),
+                  "classes": _bud, "all_within": l4f,
+                  "source": "SPEC_k2_v4.spec-rev-3.json vias.high_speed.max_per_line + refclk_j2_transit.max_vias_per_line"}
+    if not l4f:
+        for _c, _b in _bud.items():
+            for _o in _b["over"]:
+                viol.append({"V": "L4-F", "why": "via budget exceeded", "class": _c, **_o})
+
+    out = {"artifact": "m13_v57_l4_validation", "schema": 1, "revision": "L4-V2",
            "verdict": "PASS" if not viol else "FAIL",
            "checks": {"L4-A": not any(v["V"] == "L4-A" for v in viol),
                       "L4-B": not any(v["V"].startswith("L4-B") for v in viol),
                       "L4-C": not any(v["V"].startswith("L4-C") for v in viol),
                       "L4-D": not any(v["V"].startswith("L4-D") for v in viol),
-                      "L4-E": board_ok},
+                      "L4-E": board_ok, "L4-F": l4f},
+           "via_budget": via_budget,
            "n_violations": len(viol), "violations": viol[:40],
            "fingerprints": {"drawing_sha256": sha(MAIN), "construction_sha256": sha(REC),
                             "src_pcb_sha256": sha(SRC_PCB), "dst_pcb_sha256": sha(DST_PCB) if DST_PCB.exists() else None},

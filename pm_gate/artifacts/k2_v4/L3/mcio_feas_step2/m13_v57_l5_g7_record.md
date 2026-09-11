@@ -31,12 +31,12 @@
 
 ## 4. 独立复算
 - G5 `p3_v57_w3_constructive_validator_v2.py`（不 import 引擎）：`m13_v57_w3_validation.json` `23b2b6d161f9bea1`（G-M1..6、A1.2/A1.3/A1.4、frozen）。
-- G6 `p3_v57_l4_validator.py`：`m13_v57_l4_validation.json` `5bdf42b50a34ed3f`（L4-A..E viol=0）。
+- G6 `p3_v57_l4_validator.py`：`m13_v57_l4_validation.json` `9521321baf7ff2b0`（L4-A..E viol=0）。
 - 跨层 DRC：`kicad-cli pcb drc --format json --severity-all --refill-zones`（冻结板 vs L4，按类型差分；CO-47 起退出码=判定）。
 
 ## 5. 指纹
 图纸 `dfa1d7c4a811b0da`｜landing `ef5704eb18c5e6d5`｜G5 `23b2b6d161f9bea1`
-｜L4 construction `58ccf62e881f2a8f`｜L4 validation `5bdf42b50a34ed3f`｜L4 板 `cdcb869e9827ec87`
+｜L4 construction `58ccf62e881f2a8f`｜L4 validation `9521321baf7ff2b0`｜L4 板 `cdcb869e9827ec87`
 ｜fab `9a223923b029a1f9`｜dfm `de14f887a7819c11`｜si `305c237c88762b94`
 ｜`.kicad_dru` `3148703240d54420`
 冻结四源 `0bd52ed48e720b8c / a8ef3ea8ecff99d7 / fb07d25ac426ff84 / 0a459839e15960b8`（未改）。
