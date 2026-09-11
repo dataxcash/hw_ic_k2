@@ -1,0 +1,151 @@
+{
+ "artifact": "m13_v57_co70_si_skew_criterion_ruling",
+ "criterion": {
+  "authority": "CO-62 §4/§5.2（物理判据不能替代电气复算）+ 本件 L2 裁定",
+  "governing": "layer-weighted electrical length (mm-eq @ er_ref=3.99)",
+  "reported_only": "physical length difference",
+  "threshold": 0.15
+ },
+ "dual_meander_cost": {
+  "note": "同时满足物理与电气的唯一加法解 = 两极性各置一蛇形且蛇形层速度不同（P 置 In2, N 置 F）",
+  "per_page": [
+   {
+    "extra_vias_P": 2,
+    "feasible": true,
+    "page": "PCIE_REFCLK1/input",
+    "phys_mm": 1.1046,
+    "xN_on_F_mm": 9.849,
+    "xP_on_In2_mm": 8.745
+   },
+   {
+    "extra_vias_P": 2,
+    "feasible": true,
+    "page": "PCIE_UP4/out_J2",
+    "phys_mm": 0.6109,
+    "xN_on_F_mm": 5.447,
+    "xP_on_In2_mm": 4.836
+   },
+   {
+    "extra_vias_P": 2,
+    "feasible": true,
+    "page": "PCIE_REFCLK0/input",
+    "phys_mm": 0.3124,
+    "xN_on_F_mm": 2.786,
+    "xP_on_In2_mm": 2.473
+   },
+   {
+    "extra_vias_P": 2,
+    "feasible": true,
+    "page": "PCIE_UP0/out_J2",
+    "phys_mm": 0.2156,
+    "xN_on_F_mm": 1.922,
+    "xP_on_In2_mm": 1.707
+   },
+   {
+    "extra_vias_P": 2,
+    "feasible": true,
+    "page": "PCIE_UP3/out_J2",
+    "phys_mm": 0.1745,
+    "xN_on_F_mm": 1.556,
+    "xP_on_In2_mm": 1.381
+   }
+  ],
+  "verdict": "costly_and_SI_degrading（额外铜 + 额外过孔；标准做法是只匹配电气）→ 不作为默认路径"
+ },
+ "evidence": {
+  "elec_max_mm_eq": 0.13,
+  "pages": 34,
+  "phys_max_mm": 1.1046,
+  "phys_over_0p15_pages": 9,
+  "si_record_elec_max": 0.13,
+  "si_record_phys_max": 1.1046,
+  "worst_phys_pages": [
+   {
+    "E_N": 0.560358,
+    "E_P": 0.560358,
+    "L_N": 93.6193,
+    "L_P": 94.7239,
+    "elec_mm_eq": 0.0,
+    "page": "PCIE_REFCLK1/input",
+    "phys_mm": 1.1046
+   },
+   {
+    "E_N": 0.510101,
+    "E_P": 0.510101,
+    "L_N": 77.4145,
+    "L_P": 78.0254,
+    "elec_mm_eq": 0.0,
+    "page": "PCIE_UP4/out_J2",
+    "phys_mm": 0.6109
+   },
+   {
+    "E_N": 0.473024,
+    "E_P": 0.473024,
+    "L_N": 79.6485,
+    "L_P": 79.9609,
+    "elec_mm_eq": 0.0,
+    "page": "PCIE_REFCLK0/input",
+    "phys_mm": 0.3124
+   },
+   {
+    "E_N": 0.519741,
+    "E_P": 0.519741,
+    "L_N": 78.7367,
+    "L_P": 78.9523,
+    "elec_mm_eq": 0.0,
+    "page": "PCIE_UP0/out_J2",
+    "phys_mm": 0.2156
+   },
+   {
+    "E_N": 0.451545,
+    "E_P": 0.451545,
+    "L_N": 68.5198,
+    "L_P": 68.6943,
+    "elec_mm_eq": 0.0,
+    "page": "PCIE_UP3/out_J2",
+    "phys_mm": 0.1745
+   },
+   {
+    "E_N": 0.36666,
+    "E_P": 0.36666,
+    "L_N": 55.9845,
+    "L_P": 56.1515,
+    "elec_mm_eq": 0.0,
+    "page": "PCIE_DN6/out_MCIO",
+    "phys_mm": 0.167
+   },
+   {
+    "E_N": 0.425058,
+    "E_P": 0.425058,
+    "L_N": 64.9862,
+    "L_P": 65.1515,
+    "elec_mm_eq": 0.0,
+    "page": "PCIE_DN4/out_MCIO",
+    "phys_mm": 0.1653
+   },
+   {
+    "E_N": 0.407852,
+    "E_P": 0.407852,
+    "L_N": 62.2862,
+    "L_P": 62.4515,
+    "elec_mm_eq": 0.0,
+    "page": "PCIE_DN5/out_MCIO",
+    "phys_mm": 0.1653
+   },
+   {
+    "E_N": 0.477424,
+    "E_P": 0.477424,
+    "L_N": 73.0283,
+    "L_P": 73.1866,
+    "elec_mm_eq": 0.0,
+    "page": "PCIE_UP6/out_J2",
+    "phys_mm": 0.1584
+   }
+  ]
+ },
+ "nature": "L2 等长窗口裁定：intra_pair_skew 判据 = 按层加权电气长度；物理长度 = 报告量",
+ "redline": "只读产物；不改板/图纸/阈值；一阶未经 SI9000/券。",
+ "revision": "CO-70.1",
+ "ruling": "对内 skew 机器判据 = **电气（时延）**；物理长度为**报告量**，非并列闸。故 9/34 页物理量 >0.15 属**层补偿之预期**，不构成 FAIL；电气 max 0.13 <= 0.15 ⇒ PASS。若验收方坚持物理量亦 <=0.15，则须采用 dual_meander（代价已量化）或 P/N 层混同构重路由，属 L2 但为**显式设计折衷**，需验收方明示（非本件默认）。",
+ "schema": 1
+}

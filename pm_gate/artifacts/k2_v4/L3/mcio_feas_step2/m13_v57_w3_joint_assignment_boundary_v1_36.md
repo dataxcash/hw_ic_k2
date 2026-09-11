@@ -12,6 +12,7 @@
 > ④ **SI 判据升级**为**按层加权电气长度**（CO-62 §4）：升级前 max skew **0.9807** > 0.15 ⇒ FAIL（REFCLK1：P 全 F.Cu vs N F.Cu+In2 8.745mm）；**L2 等长整改**（补偿目标由物理长度改为电气长度）⇒ max **0.1300** ≤ 0.15 ⇒ **PASS**；物理量报告 max 1.1046mm（层补偿之预期；判据为电气/时延）。
 > ⑤ **对抗评审**（执行者侧独立证伪探针 A1..A9：不变量/阈值不变/闭合/阻抗/引擎无 In6/板按层线宽/冻结/独立重算等长/DFM）= **全 PASS** `m13_v57_co69_adversarial_review.json` `50ff390f2803f25d`；**非执行者双路对抗评审仍为外部闸**（L2_STRUCTURE_v2.0.md:137）。
 > ⑥ **① 再判（handoff §6.2 子项）**：在方案(a) 现状下复跑 CO-60/CO-61，**逐字节复现**（`m13_v57_co60_corridor_pitch_frontier.json` `e2d74c7afaae0d45` / `m13_v57_co61_l2_search_exhaustion.json` `b4ef0063188b6ec6`，二者 `baseline_faithful=true`）：西侧 >1.05 落位破裂、东侧 1.580 可落位但越板边、无策略维解 ⇒ **① 负结果不变**。理由：落位(r1/r3)为**面内几何**、信号层数不变（4）、走廊/通道输入冻结 ⇒ 层集 In6→In5 不改变 pitch 可达性。① 仍属 **L1 包络冲突**。
+> ⑦ **CO-70（L2 等长窗口裁定）**：对内 skew **判据 = 按层加权电气长度**（mm-eq @ er_ref=3.99），**物理长度为报告量、非并列闸**：CO-62 §5.2「保留物理长度判据」= 保留**报告**。证据：电气 max 0.1300 ≤ 0.15 PASS；物理 9/34 页 >0.15（max 1.1046@REFCLK1）属层补偿之预期；同时满足物理+电气需 2 变量（P 蛇形置 In2 ≈8.745mm + 2 过孔，N 蛇形置 F ≈9.849mm@REFCLK1）——额外铜/过孔、SI 劣化，非默认。记录 `m13_v57_CO70_L2_si_skew_criterion_ruling.md` `f104a102ae2a2caf`。
 > 记录 `m13_v57_CO69_L2_option_a_chain.md` `d472f16e73a57f3e`。**注意**：`CO-60` 候选 `..._v6.json`（`2ebda54c…`）为走廊 1.580 实验件，**未触碰**。
 - `verdict = FEASIBLE_ALL`；`gate_status.failed = []`；`certificates = []`；`status` PASS。
 - **A-CN 全 PASS**：1d 32/32、1a 0 miss、1b 0、2a/2b 0、3a 72/72、3b/3c 0、4 交叉 0、5a keepout 0、
@@ -122,4 +123,4 @@ L4 板 `kicad-cli` 实跑：仅冻结基线 42 条 lib/silk，**铜层违规 0**
 `m13_v57_co69_adversarial_review.json` `50ff390f2803f25d`）已入库；**本件取代 v1.35**，v1.35 及以前保留不改。
 监理/tag 政策：`k2-v57-g7-l5-pass`（G7/L5 PASS）已 push；`git ls-remote` 核验 `^{}` → `b5afe47`。
 
-End of boundary v1.36.
+End of boundary v1.36（含 CO-67..CO-70）。
