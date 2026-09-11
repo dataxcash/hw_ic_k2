@@ -639,11 +639,14 @@ def seg_dist(p, q, r, s) -> float:
                _pt_seg_dist(r, p, q), _pt_seg_dist(s, p, q))
 
 
-def clearance_metric(paths: dict, pc: dict, via_r: float) -> dict:
-    """完整净距套件（L5 暴露；SPEC/drc_rules 可推）：track-track 0.380 / via-track 0.4525 / via-via 0.525。"""
+def clearance_metric(paths: dict, pc: dict, via_r: float, esc_clr: float) -> dict:
+    """完整净距套件（L5 暴露）；pad-access 段（#fcu_pad/#fcu_land）按 SPEC escape_transition_zone 微净距。"""
     tt = pc["width"] + pc["clearance"]
+    tt_esc = pc["width"] + esc_clr
     vt = via_r + pc["clearance"] + pc["width"] / 2
+    vt_esc = via_r + esc_clr + pc["width"] / 2
     vv = 2 * via_r + pc["clearance"]
+    def _esc(nm): return ("#fcu_pad" in nm) or ("#fcu_land" in nm)
     ids = sorted(paths)
     def base(x): return (x[0] if isinstance(x, tuple) else x).split("#")[0]
     v_tt = []
@@ -655,7 +658,8 @@ def clearance_metric(paths: dict, pc: dict, via_r: float) -> dict:
             for s1 in zip(pa, pa[1:]):
                 for s2 in zip(pb, pb[1:]):
                     d = seg_dist(s1[0], s1[1], s2[0], s2[1])
-                    if d < tt - 1e-9:
+                    _thr = tt_esc if (_esc(str(ids[i])) or _esc(str(ids[j]))) else tt
+                    if d < _thr - 1e-9:
                         v_tt.append([base(ids[i]), base(ids[j]), round(d, 4)])
     pt_l, pt_n = {}, {}
     for k in ids:
@@ -671,7 +675,8 @@ def clearance_metric(paths: dict, pc: dict, via_r: float) -> dict:
                 continue
             for sg in zip(paths[k][1], paths[k][1][1:]):
                 d = _pt_seg_dist(key, sg[0], sg[1])
-                if d < vt - 1e-9:
+                _thr = vt_esc if _esc(str(k)) else vt
+                if d < _thr - 1e-9:
                     v_vt.append([base(k), round(d, 4), list(key)])
     vias = [k for k, l in pt_l.items() if len(l) > 1]
     v_vv = []
@@ -680,7 +685,8 @@ def clearance_metric(paths: dict, pc: dict, via_r: float) -> dict:
             d = ((vias[i][0] - vias[j][0]) ** 2 + (vias[i][1] - vias[j][1]) ** 2) ** 0.5
             if d < vv - 1e-9:
                 v_vv.append([list(vias[i]), list(vias[j]), round(d, 4)])
-    return {"thresholds": {"track_track": round(tt, 4), "via_track": round(vt, 4), "via_via": round(vv, 4)},
+    return {"thresholds": {"track_track": round(tt, 4), "track_track_escape": round(tt_esc, 4),
+                           "via_track": round(vt, 4), "via_track_escape": round(vt_esc, 4), "via_via": round(vv, 4)},
             "viol_track_track": len(v_tt), "viol_via_track": len(v_vt), "viol_via_via": len(v_vv),
             "sample_tt": v_tt[:4], "sample_vt": v_vt[:4], "sample_vv": v_vv[:4], "n_vias": len(vias)}
 
@@ -1052,7 +1058,8 @@ def main(argv=None) -> int:
     r15_cross = cls.get("r1_5", 0); stub_cross = cls.get("stub", 0)
     r15_ovl = ovl.get("r1_5", 0); stub_ovl = ovl.get("stub", 0)
     crossings = r15_cross + stub_cross + r15_ovl + stub_ovl
-    _cm = clearance_metric(paths, j["spec"]["net_classes"]["PCIe85"], j["spec"]["vias"]["std"]["outer"] / 2)
+    _cm = clearance_metric(paths, j["spec"]["net_classes"]["PCIe85"], j["spec"]["vias"]["std"]["outer"] / 2,
+                           j["spec"]["constraints"]["escape_transition_zone"]["escape_clearance_mm"])
     _clear_all = (_cm["viol_track_track"] + _cm["viol_via_track"] + _cm["viol_via_via"]) == 0
     cross_core = []
     ids_all = sorted(paths)
