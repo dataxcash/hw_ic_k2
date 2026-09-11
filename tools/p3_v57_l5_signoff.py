@@ -9,7 +9,7 @@
 CLI: run under KiCad python (pcbnew); kicad-cli auto-found.
 """
 from __future__ import annotations
-import hashlib, json, os, subprocess, tempfile, shutil
+import hashlib, json, os, re, subprocess, tempfile, shutil
 from pathlib import Path
 
 K2 = Path("/home/fila/jqdDev_2025/ic_hw/k2")
@@ -76,7 +76,18 @@ def main() -> int:
     tb, tl = bytype(dbase), bytype(dl4)
     new = {k: tl.get(k, 0) - tb.get(k, 0) for k in tl}
     widths = sorted({round(pcbnew.ToMM(t.GetWidth()), 3) for t in tracks})
-    dfm = {"artifact": "m13_v57_l5_dfm_dft_record", "schema": 1, "revision": "L5-DFM.3",
+    # CO-47：施工连通性闭合谓词（L3 完整性）——在册（L4 施工）网必须 0 未连项。
+    # kicad-cli 的 unconnected_items 无独立 net 键，网名从 items[].description 尾部 "[NET]" 解析。
+    _NET = re.compile(r"\[([^\[\]]+)\]\s*$")
+    in_scope = set(rec.get("nets", []))
+    _ins_uc: dict[str, int] = {}
+    for _it in dl4.get("unconnected_items", []):
+        for _sub in _it.get("items", []):
+            _m = _NET.search(_sub.get("description", ""))
+            if _m and _m.group(1) in in_scope:
+                _ins_uc[_m.group(1)] = _ins_uc.get(_m.group(1), 0) + 1
+    _ins_uc_items = sum(_ins_uc.values())
+    dfm = {"artifact": "m13_v57_l5_dfm_dft_record", "schema": 1, "revision": "L5-DFM.4",
            "drc": {"tool": f"kicad-cli {subprocess.run([str(CLI),'--version'],capture_output=True,text=True).stdout.strip()}",
                    "baseline_frozen": {"n": len(dbase.get("violations", [])), "by_type": tb,
                                        "unconnected": len(dbase.get("unconnected_items", []))},
@@ -95,9 +106,15 @@ def main() -> int:
                "min_via_diameter_rule_mm": mfg["min_via_diameter"],
                "min_through_hole_diameter_rule_mm": mfg["min_through_hole_diameter"],
                "annular_mm": round((0.35 - 0.2) / 2, 4), "min_annular_width_rule_mm": mfg["min_annular_width"]},
-           "dft": {"nets": b.GetNetCount(), "unconnected_items": len(dl4.get("unconnected_items", [])),
-                   "note": "DFT 可测性以网络可达/未连项计；完整 DFT 规矩待 L5 深化"}}
-    dfm["verdict"] = "PASS" if dfm["drc"]["new_total"] == 0 else "FAIL"
+           "dft": {"nets": b.GetNetCount(),
+                   "in_scope_nets": len(in_scope),
+                   "in_scope_unconnected_nets": len(_ins_uc),
+                   "in_scope_unconnected_items": _ins_uc_items,
+                   "in_scope_violating_nets": sorted(_ins_uc),
+                   "unconnected_items_total": len(dl4.get("unconnected_items", [])),
+                   "rule": "CO-47：在册（L4 施工）网必须 0 未连项（kicad-cli unconnected_items 网名解析）；范围外网不计",
+                   "note": "范围外网（GND/P3V3/NO_CONNECT/MCU_VDD 等）未连项属本阶段范围外，见 W3 boundary §6.4（版本化记录，勿引旧版号）"}}
+    dfm["verdict"] = "PASS" if (dfm["drc"]["new_total"] == 0 and _ins_uc_items == 0) else "FAIL"
 
     # ---- SI/PI/EMC record ----
     widths_ok = all(abs(pcbnew.ToMM(t.GetWidth()) - 0.205) < 1e-6 for t in tracks if t.GetNetname().startswith("PCIE"))
@@ -138,9 +155,11 @@ def main() -> int:
     for name, obj in (("m13_v57_l5_fab_record.json", fab), ("m13_v57_l5_dfm_dft_record.json", dfm),
                       ("m13_v57_l5_si_pi_emc_record.json", si)):
         (STEP2 / name).write_text(json.dumps(obj, indent=1, ensure_ascii=False, sort_keys=True), encoding="utf-8")
-    print("L5: FAB ok | DFM verdict=%s new=%d %s | SI verdict=%s skew=%.4f" %
-          (dfm["verdict"], dfm["drc"]["new_total"], dfm["drc"]["new_violations"], si["verdict"], skew_max))
-    return 0
+    print("L5: FAB ok | DFM verdict=%s new=%d %s | in_scope_unconnected=%d/%d nets | SI verdict=%s skew=%.4f" %
+          (dfm["verdict"], dfm["drc"]["new_total"], dfm["drc"]["new_violations"],
+           dfm["dft"]["in_scope_unconnected_nets"], dfm["dft"]["in_scope_nets"], si["verdict"], skew_max))
+    # CO-47：签核脚本退出码须等于门禁判定（原实现无条件 return 0，CI 无法据此判失败）
+    return 0 if (dfm["verdict"] == "PASS" and si["verdict"] == "PASS") else 1
 
 
 if __name__ == "__main__":
