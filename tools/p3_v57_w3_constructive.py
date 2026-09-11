@@ -689,6 +689,8 @@ def clearance_metric(paths: dict, pc: dict, via_r: float, esc_clr: float) -> dic
     v_vv = []
     for i in range(len(vias)):
         for j in range(i + 1, len(vias)):
+            if pt_n.get(vias[i], set()) & pt_n.get(vias[j], set()):
+                continue                                    # 同网（相连）豁免
             d = ((vias[i][0] - vias[j][0]) ** 2 + (vias[i][1] - vias[j][1]) ** 2) ** 0.5
             if d < vv - 1e-9:
                 v_vv.append([list(vias[i]), list(vias[j]), round(d, 4)])
