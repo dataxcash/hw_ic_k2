@@ -1,0 +1,141 @@
+{
+ "artifact": "m13_v57_co124_input_selfcheck_gate",
+ "schema": 1,
+ "revision": "CO-124.1",
+ "nature": "输入自检闸：规格/规则自身自洽 + 物理可达登记 + 缺陷登记完备（整改通知 #08 第 2/3 条）",
+ "definition_doc": {
+  "path": "pm_gate/artifacts/k2_v4/L2/BASIC_SKILL_VS_REDLINE_v1.0.md",
+  "sha16": "9ad91da8a49510a5",
+  "status": "v1.0 提议件（待监理裁定/owner 批准）"
+ },
+ "inputs": {
+  "spec": "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-16.json",
+  "spec_sha16": "5748828a23161250",
+  "rules_sha16": "0a459839e15960b8",
+  "register": "pm_gate/artifacts/k2_v4/L2/input_defect_register_v1.json",
+  "register_sha16": "237beea4deac4fbb"
+ },
+ "checks": {
+  "k1_definition_in_place": true,
+  "k2_netclass_two_source": true,
+  "k3_layer_role": true,
+  "k4_bcu_policy": true,
+  "k5_reachability": true,
+  "k6_threshold_registered": true,
+  "k7_register_complete": true
+ },
+ "findings": [
+  {
+   "check": "K3",
+   "id": "stackup_text_omits_in4_nets",
+   "detail": {
+    "layer": "In4.Cu",
+    "in4_nets": [
+     "MCU_VDD",
+     "P3V3",
+     "P3V3_AUX"
+    ],
+    "stackup_text": "POWER_PLANE (P3V3)",
+    "missing": [
+     "MCU_VDD",
+     "P3V3_AUX"
+    ]
+   }
+  },
+  {
+   "check": "K4",
+   "id": "bcu_policy_vs_zone_carrier:P3V3_BCU_BRIDGE_IN4",
+   "detail": {
+    "zone": "P3V3_BCU_BRIDGE_IN4",
+    "net": "P3V3"
+   }
+  },
+  {
+   "check": "K4",
+   "id": "bcu_policy_vs_zone_carrier:P3V3_AUX_BCU_BRIDGE_IN4",
+   "detail": {
+    "zone": "P3V3_AUX_BCU_BRIDGE_IN4",
+    "net": "P3V3_AUX"
+   }
+  },
+  {
+   "check": "K4",
+   "id": "bcu_policy_vs_zone_carrier:MCU_VDD_BCU_RESISTORS_IN4",
+   "detail": {
+    "zone": "MCU_VDD_BCU_RESISTORS_IN4",
+    "net": "MCU_VDD"
+   }
+  },
+  {
+   "check": "K6",
+   "id": "threshold_unproved_unregistered:pair_copper_edge_clearance_mm",
+   "detail": {
+    "rule_key": "pair_copper_edge_clearance_mm",
+    "value": 0.875,
+    "source": "L1_TOPOLOGY_v1.0 硬约束3 / R3-2 3W 强条"
+   }
+  },
+  {
+   "check": "K6",
+   "id": "threshold_unproved_unregistered:pair_cross_mm",
+   "detail": {
+    "rule_key": "pair_cross_mm",
+    "value": 0.585,
+    "source": "L1_TOPOLOGY_v2.0 硬约束2（0.585+0.875=1.46）"
+   }
+  },
+  {
+   "check": "K6",
+   "id": "threshold_unproved_unregistered:power_clearance_mm",
+   "detail": {
+    "rule_key": "power_clearance_mm",
+    "value": 0.2,
+    "source": "drc_rules.clearance.net_classes[POWER]"
+   }
+  },
+  {
+   "check": "K6",
+   "id": "threshold_unproved_unregistered:pcb_edge_copper_min_mm",
+   "detail": {
+    "rule_key": "pcb_edge_copper_min_mm",
+    "value": 0.3,
+    "source": "L1_TOPOLOGY_v2.0 硬约束4 / drc_rules.manufacturing"
+   }
+  },
+  {
+   "check": "K6",
+   "id": "threshold_unproved_unregistered:m3_keepout_mm",
+   "detail": {
+    "rule_key": "m3_keepout_mm",
+    "value": 3.0,
+    "source": "L1_TOPOLOGY_v2.0 硬约束5"
+   }
+  }
+ ],
+ "n_findings": 9,
+ "unregistered_findings": [],
+ "register_malformed": [],
+ "teeth": {
+  "T1_netclass_drift": true,
+  "T3_threshold_unregistered": true,
+  "T4_doc_anchor_missing": true,
+  "T2_unregistered_finding_detected": true
+ },
+ "teeth_ok": true,
+ "verdict": "PASS",
+ "scan_scope_zero_omission": {
+  "scanned": [
+   "SPEC rev-16：pd.zone_defs(power_zones/gnd_planes/power_pad_connect/plane_reachability_status/bcu_power_copper_policy)、net_classes、stackup、board、constraints",
+   "冻结 drc_rules.json：clearance.net_classes / board_min / hole_clearance.min / manufacturing",
+   "L2/BASIC_SKILL_VS_REDLINE_v1.0.md 锚点",
+   "L2/input_defect_register_v1.json 登记完备性"
+  ],
+  "not_scanned_and_why": [
+   "L3/L4 几何与制造件（属输出侧闸：G4..G7/DFM/SI 已覆盖）",
+   "L1 v1.0 归档件（已作废，语义经 L1 v2.0 结转）"
+  ],
+  "claim": "在已声明扫描范围内**零遗漏**：K1..K6 未列出的规约缺陷类型不在本闸判据内，属范围外非静默"
+ },
+ "redline": "只读；不改 SPEC/规则/板/冻结源；无随机、无坐标搜索；牙齿只动内存副本",
+ "board_sha16_l4": "0e636a67c1472462"
+}

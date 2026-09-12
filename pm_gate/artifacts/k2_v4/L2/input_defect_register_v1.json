@@ -1,0 +1,98 @@
+{
+ "schema": 1,
+ "name": "input_defect_register_v1",
+ "purpose": "整改通知 #08 第 3 条：现行 SPEC / 冻结规则的规约缺陷与阈值证明的**显式登记**。未登记者 = 静默缺陷（违 R-5）⇒ 由 co124 输入自检闸判 FAIL。",
+ "scope": "SPEC_k2_v4.spec-rev-16.json + 冻结 _shared/eda_core/drc_rules.json",
+ "kinds": {
+  "SPEC_DEFECT": "规格自身缺陷（矛盾/文本不自洽/阈值几何不可达）",
+  "TOOL_DEFECT": "工具能力缺陷（基本功缺口，非物理不可行）",
+  "PROVED_THRESHOLD": "阈值已由机判闸证明可达（须给 refs 指向可复算的闸记录）"
+ },
+ "items": [
+  {
+   "finding": "bcu_policy_vs_zone_carrier:P3V3_BCU_BRIDGE_IN4",
+   "kind": "SPEC_DEFECT", "severity": "high",
+   "what": "CO-74 `bcu_power_copper_policy=PROHIBITED`（B.Cu 不得铺电力铜/搭桥）↔ 本 zone `bridge_layer=B.Cu` 且 `carrier_change` 又写 B.Cu→In4.Cu ⇒ 规则互斥",
+   "refs": ["CO-74", "CO-112", "CO-118", "CO-122"],
+   "disposition": "R1 = 确定性重承载至 In4（CO-122 已证 C84.1/U4.3 可行，U2.5 在有界 1 跳 palette 内不可行）；R2 = 放宽 L1 v2.0 冻结『B.Cu 空置』（owner）。R1 余项 = 待确定性绕障能力（见 TOOL_DEFECT 项）",
+   "status": "OPEN", "next": "①完成后以同一确定性路由器复判 U2.5/J4.A9"
+  },
+  {
+   "finding": "bcu_policy_vs_zone_carrier:P3V3_AUX_BCU_BRIDGE_IN4",
+   "kind": "SPEC_DEFECT", "severity": "high",
+   "what": "同上（P3V3_AUX 桥区 zone 声明 B.Cu 载体，与 CO-74 禁令互斥）",
+   "refs": ["CO-74", "CO-112", "CO-118", "CO-121", "CO-123"],
+   "disposition": "J4.A9 在 CO-123 有界 1 跳 palette 内不可行（阻塞链 J4.A7/E2.x，且触不到本网平面）⇒ 须确定性路由器复判或 owner 定 R2",
+   "status": "OPEN"
+  },
+  {
+   "finding": "bcu_policy_vs_zone_carrier:MCU_VDD_BCU_RESISTORS_IN4",
+   "kind": "SPEC_DEFECT", "severity": "high",
+   "what": "同上（MCU_VDD 电阻桥区 zone 声明 B.Cu 载体，与 CO-74 禁令互斥）",
+   "refs": ["CO-74", "CO-112", "CO-118"],
+   "disposition": "R1 = 本网（MCU_VDD）在 In4 已有 MCU_VDD_WEST 承载 ⇒ 该 zone 的 B.Cu 载体应为冗余声明；须核 R29/R31-R34 落点是否已在 MCU_VDD_WEST 覆盖内，是则退役该 B.Cu 声明",
+   "status": "OPEN"
+  },
+  {
+   "finding": "stackup_text_omits_in4_nets",
+   "kind": "SPEC_DEFECT", "severity": "low",
+   "what": "`stackup['In4.Cu']` 文本 = `POWER_PLANE (P3V3)`，但 In4 实际 zone 网集 = {MCU_VDD, P3V3, P3V3_AUX} ⇒ 层角色**文本**与实际声明网集不自洽（CO-121/122b 后新增 P3V3_AUX 使差异显性化）",
+   "refs": ["SPEC rev-16 stackup", "SPEC rev-16 pd.zone_defs.power_zones", "L2_STRUCTURE_v2.0 §叠层分配"],
+   "disposition": "L2 自裁可修（文本层角色对齐实际网集），须 rev-17 + 全链重基线；不涉几何/板",
+   "status": "OPEN", "next": "并入下一次 SPEC bump"
+  },
+  {
+   "finding": "threshold_unproved_unregistered:pair_copper_edge_clearance_mm",
+   "kind": "SPEC_DEFECT", "severity": "high",
+   "what": "L1 硬约束『对间铜边净空 0.875mm』（R3-2 3W 强条）在现行走廊/焊盘场几何内**不可达**：CO-86 机判 L2 六域无剩余变量，最小缺额 WEST +0.232 / 焊盘场 +0.682",
+   "refs": ["CO-86", "L1_TOPOLOGY_v1.0 硬约束3", "L1_TOPOLOGY_v2.0 硬约束2"],
+   "disposition": "属**规格缺陷（阈值几何不可达）**；按 BASIC_SKILL_VS_REDLINE §4 须先做**确定性可达性自证**（闭式 + 走廊容量账），再提**口径修订提案**（0.875 铜边净空的等价可执行口径或降级口径）；口径修订属 L1 红线（用户 2026-08-15 强条）⇒ 我方出提案，批准归 owner",
+   "status": "OPEN"
+  },
+  {
+   "finding": "threshold_unproved_unregistered:power_clearance_mm",
+   "kind": "PROVED_THRESHOLD", "severity": "info",
+   "what": "POWER 网级净距 0.2mm",
+   "refs": ["drc_rules.clearance.net_classes[POWER]", "m13_v57_co91_pdn_planned_coord_clearance_gate.json（via_viol 0 / stub_viol 0）"],
+   "disposition": "已由 CO-91 机判闸在权威口径下证明（计划坐标全合法）；CO-121 另以 0.375 = 0.2+od/2 用于区域-过孔净距",
+   "status": "PROVED"
+  },
+  {
+   "finding": "threshold_unproved_unregistered:pcb_edge_copper_min_mm",
+   "kind": "PROVED_THRESHOLD", "severity": "info",
+   "what": "板边铜 ≥ 0.30mm",
+   "refs": ["L1_TOPOLOGY_v2.0 硬约束4", "co106 check A（zone 多边形 vs 板框内缩；内岛承载区显式豁免）", "L5 DFM PASS new=0"],
+   "disposition": "已由 CO-106 板框内缩闸 + L5 DFM 机判证明",
+   "status": "PROVED"
+  },
+  {
+   "finding": "threshold_unproved_unregistered:m3_keepout_mm",
+   "kind": "PROVED_THRESHOLD", "severity": "info",
+   "what": "M3 孔 3.0mm keepout",
+   "refs": ["L1_TOPOLOGY_v2.0 硬约束5", "p3_v57_co84_dru_domain_gate.py PASS", "p3_v57_l4_validator.py PASS"],
+   "disposition": "已由 DRC 放宽域一致性闸 + L4 校验机判证明",
+   "status": "PROVED"
+  },
+  {
+   "finding": "threshold_unproved_unregistered:pair_cross_mm",
+   "kind": "PROVED_THRESHOLD", "severity": "info",
+   "what": "对铜跨 0.585mm（0.585 + 0.875 = 1.46 对中心距恒等式）",
+   "refs": ["L1_TOPOLOGY_v2.0 硬约束2", "tools/p3_v57_co54_spec_delivery_audit.py（交付几何实测 p_gap 0.295 / 内对中心 0.500-0.600）"],
+   "disposition": "恒等式与交付实测一致（co124 K6 内置恒等式校验：0.585+0.875=1.46 ⇒ PASS）",
+   "status": "PROVED"
+  }
+ ],
+ "closed_items": [
+  {
+   "id": "D-CLOSED-1",
+   "what": "P3V3_AUX 西区名义网 = MCU_VDD 而 basis 文本称 P3V3_AUX+MCU_VDD 同区（区域归属冲突）",
+   "closed_by": ["CO-121（L2 自裁裁定）", "CO-122b（施加 SPEC rev-16）"],
+   "evidence": "co98 三态 45/4/6 → 48/4/3；板 0e636a67c1472462 逐字节不变"
+  }
+ ],
+ "meta": {
+  "owner": "ARCHER（L2 自裁执行侧）",
+  "approval": "定义件 v1.0 待监理裁定/owner 批准；登记簿随闸每次运行校验",
+  "mandatory_trigger": "任何 SPEC / drc_rules 变更后必须跑 tools/p3_v57_co124_input_selfcheck_gate.py 并 PASS"
+ }
+}
