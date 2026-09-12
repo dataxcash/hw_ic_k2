@@ -1,0 +1,50 @@
+{
+  "artifact": "m13_v57_co93_pdn_rev10_derive",
+  "board": {
+    "name": "k2_v4_8L.l4.kicad_pcb",
+    "sha16": "0e636a67c1472462"
+  },
+  "delta": {
+    "blocked": 120,
+    "connected_delta": -34,
+    "entries": 189,
+    "pad_targets": 309,
+    "rev9_blocked": 86,
+    "rev9_entries": 223,
+    "stitch": {
+      "already_blocked": 31,
+      "blocked_new": 29,
+      "kept": 28,
+      "moved": 12
+    },
+    "zone_via_blocked_new": 3,
+    "zone_via_moved": 4
+  },
+  "invariants": {
+    "board_unchanged": true,
+    "outside_pd_changed_keys": [
+      "spec_version"
+    ]
+  },
+  "nature": "L2 PDN 自裁：按权威净距重落 PDN 计划坐标 → SPEC rev-10（声明式有限 palette）",
+  "out": {
+    "sha16": "4416e42eed10cb8c",
+    "spec": "SPEC_k2_v4.spec-rev-10.json"
+  },
+  "revision": "CO-93.1",
+  "ruling": {
+    "decisions": [
+      "一律按权威净距重落（netclass max + min_hole_clearance + 层语义）",
+      "无合法位 ⇒ 转 blocked（不放宽任何阈值）",
+      "不默认采用 via-in-pad（需工艺证据）",
+      "pad→via 短段宽度 0.5 → 0.2mm（可制造下限）"
+    ],
+    "scope": "L2（via 策略/PDN 承载）自裁"
+  },
+  "schema": 1,
+  "src": {
+    "sha16": "77f5c54df88bb0ca",
+    "spec": "SPEC_k2_v4.spec-rev-9.json"
+  },
+  "verdict": "DERIVED"
+}

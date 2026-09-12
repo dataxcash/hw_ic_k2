@@ -20,7 +20,7 @@ K2 = Path("/home/fila/jqdDev_2025/ic_hw/k2")
 RULES = K2.parent / "_shared/eda_core/drc_rules.json"
 TEMPLATE = K2 / "tools/k2_jlc_template.kicad_pro"
 INTENT_PRO = K2 / "k2_v4_8L.kicad_pro"   # 意图工程（含 4 网类 + 网-类指派）
-SPEC = K2 / "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-9.json"   # 红线 SPEC（net_classes 权威）
+SPEC = K2 / "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-10.json"   # 红线 SPEC（net_classes 权威）
 TEMPLATE_EXEMPT = "tools/k2_jlc_template.kicad_pro"
 OUT = K2 / "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_co81_project_rules_gate.json"
 

@@ -28,13 +28,13 @@ K2 = Path(__file__).resolve().parents[1]
 SHARED = K2 / "_shared"                 # k2 链约定：tools/* 一律读 K2/_shared
 SHARED_ALT = K2.parent / "_shared"      # 容器共享层（handoff §1 的冻结源口径）
 sys.path.insert(0, str(SHARED))
-DEFAULT_SPEC = K2 / "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-9.json"
+DEFAULT_SPEC = K2 / "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-10.json"
 DEFAULT_BOARD = K2 / "k2_v4_8L.l4.kicad_pcb"
 DEFAULT_OUT = (K2 / "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2"
                / "m13_v57_co91_pdn_planned_coord_clearance_gate.json")
 RULES = SHARED / "eda_core/drc_rules.json"
 RULES_ALT = SHARED_ALT / "eda_core/drc_rules.json"
-STUB_W = 0.5
+STUB_W_DEFAULT = 0.5   # 仅当 SPEC 未声明 stub_width_mm 时（legacy rev）
 
 
 def s16(p: Path) -> str:
@@ -199,7 +199,7 @@ def collect(zd: dict):
             vias.append(("ppc_via", e.get("ref"), e.get("pad"), e.get("net"), v[0], v[1]))
         if (isinstance(v, list) and isinstance(p0, list) and len(v) == 2 and len(p0) == 2):
             stubs.append(("ppc_stub", e.get("ref"), e.get("pad"), e.get("net"),
-                          p0[0], p0[1], v[0], v[1], STUB_W))
+                          p0[0], p0[1], v[0], v[1], STUB_W_DEFAULT))
     for c in zd.get("gnd_stitch_via", {}).get("coordinates", []):
         if c.get("blocked") or c.get("status") == "blocked":
             continue
@@ -242,7 +242,10 @@ def main(argv=None) -> int:
     zd = json.loads(sp.read_text())["pd"]["zone_defs"]
     scene = Scene(board, rules, pa.VIA_DIA / 2, pa.VIA_DRILL / 2)
 
+    decl_w = zd.get("power_pad_connect", {}).get("stub_width_mm")
+    stub_w = float(decl_w) if isinstance(decl_w, (int, float)) else STUB_W_DEFAULT
     targets, stubs = collect(zd)
+    stubs = [(k, r, p_, n, ax, ay, bx, by, stub_w) for (k, r, p_, n, ax, ay, bx, by, _w) in stubs]
     rows, bad = [], []
     for kind, ref, pad, net, x, y in sorted(targets, key=lambda t: (t[0], str(t[1]), str(t[2]))):
         ok, c, h, bind = scene.via_at(x, y, net)
@@ -264,9 +267,18 @@ def main(argv=None) -> int:
     clean = next((r for r in reversed(rows) if r["clr_margin"] > 0.3 and r["hole_margin"] > 0.3), None)
     tb = bad[0] if bad else {"pos": [86.6, 56.516], "net": "GND"}
     _, bc_, bh_, _ = scene.via_at(tb["pos"][0], tb["pos"][1], tb["net"])
+    # 牙齿（段）必须是**合成注入**（不能取自本件数据，否则干净件无法受检）：
+    # 取首条短段的 pad 端 + 已知非法 via 位（tb）为终点 ⇒ 必然越界。
     sb = min(sbad, key=lambda r: r["clr_margin"]) if sbad else None
-    sbc = scene.seg_clear(sb["pad_pos"][0], sb["pad_pos"][1], sb["via_pos"][0], sb["via_pos"][1],
-                          sb["width"], sb["net"])[1] if sb else None
+    if sb is not None:
+        sbc = scene.seg_clear(sb["pad_pos"][0], sb["pad_pos"][1], sb["via_pos"][0], sb["via_pos"][1],
+                              sb["width"], sb["net"])[1]
+    elif srows:
+        _p = srows[0]
+        sbc = scene.seg_clear(_p["pad_pos"][0], _p["pad_pos"][1], tb["pos"][0], tb["pos"][1],
+                              0.5, _p["net"])[1]
+    else:
+        sbc = None
     sc = max((r for r in srows if r["clr_margin"] > 0.3), key=lambda r: r["clr_margin"], default=None)
     scc = scene.seg_clear(sc["pad_pos"][0], sc["pad_pos"][1], sc["via_pos"][0], sc["via_pos"][1],
                           sc["width"], sc["net"])[1] if sc else None
@@ -281,13 +293,16 @@ def main(argv=None) -> int:
                for k in sorted({r["kind"] for r in rows})}
     verd = "PASS" if (not bad and not sbad and cons["agree"]) else "FAIL"
     rec = {"artifact": "m13_v57_co91_pdn_planned_coord_clearance_gate", "schema": 1,
-           "revision": "CO-91.3",
+           "revision": "CO-91.4",
            "nature": "L2 PDN：pd.zone_defs 计划坐标（pdn_apply 实落集）对权威净距（netclass clearance + min_hole_clearance）的机判",
            "inputs": {"spec": sp.name, "spec_sha16": s16(sp), "board": bp.name,
                       "board_sha16": s16(bp), "rules": RULES.name, "rules_sha16": s16(RULES),
                       "rules_source_consistency": cons,
-                      "via_dia": pa.VIA_DIA, "via_drill": pa.VIA_DRILL, "stub_width": STUB_W,
+                      "via_dia": pa.VIA_DIA, "via_drill": pa.VIA_DRILL, "stub_width": stub_w,
                       "materializer": "eda_core/pdn_apply.py（坐标逐字取自 SPEC）"},
+           "stub_width_mm": stub_w,
+           "stub_width_source": ("SPEC pd.zone_defs.power_pad_connect.stub_width_mm"
+                                 if isinstance(decl_w, (int, float)) else "legacy default 0.5 (SPEC 未声明)"),
            "counts": {"by_kind": by_kind, "n_via_targets": len(rows), "n_via_violations": len(bad),
                       "n_stub_targets": len(srows), "n_stub_violations": len(sbad)},
            "via_violations": sorted(bad, key=lambda r: (r["kind"], r["ref"], str(r["pad"]))),
@@ -303,7 +318,7 @@ def main(argv=None) -> int:
                           "引擎净距口径借用 drc_rules.json 语义核（已对齐 kicad DRC 430/430 + 106/106）"],
            "redline": "零几何（只读）；无 while 搜索；无坐标搜索；输出确定性（sorted）。"}
     Path(a.out).write_text(json.dumps(rec, ensure_ascii=False, indent=2, sort_keys=True) + "\n")
-    print(f"CO-91 verdict={verd} via_targets={len(rows)} via_viol={len(bad)} "
+    print(f"CO-91 verdict={verd} stub_w={stub_w} via_targets={len(rows)} via_viol={len(bad)} "
           f"stub_targets={len(srows)} stub_viol={len(sbad)}")
     for r in sorted(bad, key=lambda r: min(r["clr_margin"], r["hole_margin"]))[:8]:
         print(f"  {r['kind']} {r['ref']}.{r['pad']} {r['net']} @{r['pos']} "
