@@ -799,6 +799,49 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body38
     txt = txt.replace("W3 Boundary **v2.09**", "W3 Boundary **v2.10**")
+    # ── §39 CO-165（收敛执行器自加固） ─────────────────────────────────────
+    MARK39 = "## 39. CO-165"
+    _rc39 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    sec39 = [MARK39 + "（**L2 自裁 · 收敛执行器加固**：白名单证据 + 受控 sha 全域）", "",
+             f"- 实测缺口（修前，均机判）：**G-1** CO-164 执行器的白名单只按 `rc≠0` 放行 ⇒ 白名单步（当前仅 `co146_jlc_dfm_gate`）的**任何**非零——"
+             f"含崩溃/静默失败——都被当「预期 FAIL」。负控：把 DFM 闸替换为 `raise SystemExit('boom')`（rc=1、stderr 无 traceback）⇒ **旧判据放行**；"
+             f"仅加 Traceback 检测**仍不足**（不打印 traceback 的失败会让盘上**陈旧** FAIL 记录充当 verdict 证据 —— 由本会话自己的端到端负控当场证伪）。"
+             f"**G-2** 受控 sha 仅 7 件（漏 co106/co150/打样包件）⇒ 未受控文件的 2-循环/抖动对收敛判定**不可见**。",
+             f"- 处置（**CO-165**，执行器升 **CO-164.2**）：白名单项改 `verdict/record/why` 结构化 + 纯判据 "
+             f"`allowlist_decision(step, rc, stderr, verdict, record_fresh)` —— 白名单步须 **rc≠0 ∧ 无 Traceback ∧ 记录由本次执行产出（mtime 新鲜）"
+             f"∧ 记录 verdict == 声明 verdict** 方判 `expected_nonzero`，否则判 `expected_step_returned_zero`/`expected_step_crashed`/"
+             f"`expected_step_record_not_produced`/`expected_step_verdict_mismatch` 并**立即停机**；`watch_paths()` 覆盖 boundary + **全部**记录 + 台账/登记簿 + "
+             f"打样包 MANIFEST/ORDER_NOTES；`--check` 增 **t07**（四类伪通过负控 + 恒真正控）/ **t08**（受控集覆盖记录类产物）。",
+             f"- 复核：`--check` **8/8 True**；负控 A（co78 步 rc=3 合成件）⇒ abort(rc=1)；负控 B（DFM 步 `SystemExit('boom')`）⇒ "
+             f"abort class=`expected_step_record_not_produced`；正控：真 DFM 闸（重写记录、verdict=FAIL）判 `expected_nonzero` 且整序 "
+             f"**converged（iterations 2 / rc=0）**。登记簿 **{_rc39['total']} 项 / OPEN {_rc39['OPEN']}**（注：`co148` 登记项在序内为 OPEN、由 `co150` 收口 ⇒ 中途 OPEN 属正常，须以整序收敛后为准）。", "",
+             "> **R-CO165-1**：`EXPECTED_NONZERO` 白名单步须给**双重证据** —— 期望 `verdict` **且** 记录由**本次执行产出**（mtime 新鲜）；`rc≠0` 本身不构成预期 FAIL 的证据（崩溃/静默失败不得被放行）。",
+             "> **R-CO165-2**：收敛判定的受控 sha 须覆盖**全部**序内产物（boundary + 全部 `m13_v57_co*.json` + 台账/登记簿 + 打样包件）；新增产物须落入 `watch_paths()`。",
+             "> **R-CO165-3**（复现序，步骤集与 R-CO164-3 相同）：规范复现序 = `co146_impedance_table → co146_pm_eval → co146_ledger_add → "
+             "co153_k9_domain_coverage → co148_u6_datasheet_inputs → co148_thermal_ruling → co149_thermal_mitigation_derive → "
+             "co147_l2_ruling → co146_jlc_dfm_gate → co146_jlc_fab_package → co152_findings_disposition → co155_co154_findings_disposition → "
+             "co156_co154_open_disposition → co157_gate_hardening_3 → co158_l5_packet_selfcontained → co159_rev19_co156_co157_co158_review → "
+             "co160_co159_findings_disposition → co161_gap_hardening_4 → co162_verdict_binding → co163_binding_to_order_notes → "
+             "co124_input_selfcheck_gate → co150_k9_domain_gate → co146_boundary_append → co77_closure_declaration_sweep → "
+             "co120_provenance_pin_gate → co135_review_hygiene → co136_gate_hygiene → co78_layer_role_drift_gate → co81_project_rules_gate → "
+             "co84_dru_domain_gate → co95_in4_reachability → co98_reachability_status_report → co106_reference_plane_gate → "
+             "co146_boundary_append`，**循环至 sha 稳定**（收敛判定须遵 R-CO164-1 + R-CO165-1/2）。",
+             "", "| 工件 | sha16 |", "|---|---|"]
+    _rows39 = [("工具 `p3_v57_co164_order_runner.py`（CO-164.2 / `allowlist_decision` + `watch_paths` + t07/t08）",
+                K2 / "tools/p3_v57_co164_order_runner.py"),
+               ("工具 `p3_v57_co165_runner_hardening.py`", K2 / "tools/p3_v57_co165_runner_hardening.py"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc39['total']} 项 / OPEN {_rc39['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows39:
+        if pth.exists():
+            sec39.append(f"| {label} | `{s16(pth)}` |")
+    sec39.append("")
+    body39 = "\n".join(sec39)
+    if MARK39 in txt:
+        txt = re.sub(re.escape(MARK39) + r"[\s\S]*?(?=\n## |\Z)", body39, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body39
+    txt = txt.replace("W3 Boundary **v2.10**", "W3 Boundary **v2.11**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
     return 0

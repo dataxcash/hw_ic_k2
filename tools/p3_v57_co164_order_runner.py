@@ -14,7 +14,7 @@ CLI:
   python3 tools/p3_v57_co164_order_runner.py [--check] [--max-iter 5]
 """
 from __future__ import annotations
-import argparse, hashlib, json, re, subprocess, sys
+import argparse, hashlib, json, re, subprocess, sys, time
 from pathlib import Path
 
 K2 = Path(__file__).resolve().parents[1]
@@ -32,23 +32,52 @@ ORDER = ["co146_impedance_table", "co146_pm_eval", "co146_ledger_add", "co153_k9
          "co146_boundary_append", "co77_closure_declaration_sweep", "co120_provenance_pin_gate", "co135_review_hygiene",
          "co136_gate_hygiene", "co78_layer_role_drift_gate", "co81_project_rules_gate", "co84_dru_domain_gate",
          "co95_in4_reachability", "co98_reachability_status_report", "co106_reference_plane_gate", "co146_boundary_append"]
-# 允许非零的步骤（verdict=FAIL 属预期；须与 boundary 声明一致）
-EXPECTED_NONZERO = {"co146_jlc_dfm_gate": "verdict=FAIL（DFM 两项阻塞）属预期；rc=1 即 R-CO158-3/R-CO159-4 生效"}
-WATCH = [STEP2 / "m13_v57_w3_joint_assignment_boundary_v1_82.md",
-         STEP2 / "m13_v57_co124_input_selfcheck_gate.json", STEP2 / "m13_v57_co120_provenance_pin_gate.json",
-         STEP2 / "m13_v57_co77_closure_declaration_sweep.json", STEP2 / "m13_v57_co135_review_hygiene.json",
-         L2 / "input_defect_register_v1.json", L2 / "derived_value_ledger_v1.json"]
+# 允许非零的步骤（**须带 verdict 证据**：rc≠0 不等于预期 FAIL —— CO-165）
+EXPECTED_NONZERO = {
+    "co146_jlc_dfm_gate": {"verdict": "FAIL", "record": str(STEP2 / "m13_v57_co146_jlc_dfm_gate.json"),
+                           "why": "verdict=FAIL（DFM 两项阻塞）属预期；rc=1 即 R-CO158-3/R-CO159-4 生效"},
+}
+
+
+def watch_paths() -> list:
+    """CO-165（t08）：受控 sha 覆盖**全部**规范序会写入的产物（边界 + 全部 co*.json 记录 + 台账/登记簿 + 打样包件）。"""
+    out = [STEP2 / "m13_v57_w3_joint_assignment_boundary_v1_82.md",
+           L2 / "input_defect_register_v1.json", L2 / "derived_value_ledger_v1.json",
+           K2 / "pm_gate/artifacts/k2_v4/L5/jlc_package/MANIFEST.json",
+           K2 / "pm_gate/artifacts/k2_v4/L5/jlc_package/ORDER_NOTES.md"]
+    out += sorted(STEP2.glob("m13_v57_co*.json"))
+    return out
 
 
 def s16(p) -> str:
     return hashlib.sha256(Path(p).read_bytes()).hexdigest()[:16]
 
 
-def classify_rc(name: str, rc: int) -> str:
-    """CO-164 核心判据：ok / expected_nonzero / unexpected_nonzero。"""
+def record_verdict(path):
+    try:
+        return json.loads(Path(path).read_text(encoding="utf-8")).get("verdict")
+    except Exception:
+        return None
+
+
+def allowlist_decision(step: str, rc: int, stderr: str, verdict, record_fresh: bool = True) -> str:
+    """CO-165 核心判据（纯函数）：
+    非白名单步：rc==0 ⇒ ok，否则 unexpected_nonzero；
+    白名单步：须 rc≠0 **且** 无 Traceback **且** 记录由**本次执行**产出（mtime 新鲜）
+              **且** 记录 verdict == 声明 verdict ⇒ expected_nonzero；
+    其余 ⇒ expected_step_* 失败（**不得把崩溃 / 未产出记录（陈旧 verdict 从盘上读取）/ 错误判决当预期 FAIL**）。"""
+    if step not in EXPECTED_NONZERO:
+        return "ok" if rc == 0 else "unexpected_nonzero"
+    exp = EXPECTED_NONZERO[step]
     if rc == 0:
-        return "ok"
-    return "expected_nonzero" if name in EXPECTED_NONZERO else "unexpected_nonzero"
+        return "expected_step_returned_zero"
+    if "Traceback (most recent call last)" in (stderr or ""):
+        return "expected_step_crashed"
+    if not record_fresh:
+        return "expected_step_record_not_produced"
+    if verdict != exp.get("verdict"):
+        return "expected_step_verdict_mismatch"
+    return "expected_nonzero"
 
 
 def stable(prev: str, cur: str) -> bool:
@@ -85,7 +114,7 @@ def tool_path(step: str) -> Path | None:
 
 def snapshot() -> str:
     h = hashlib.sha256()
-    for p in WATCH:
+    for p in watch_paths():
         h.update(p.read_bytes() if p.exists() else b"<missing>")
     return h.hexdigest()[:16]
 
@@ -109,9 +138,22 @@ def main(argv=None) -> int:
     checks["t01_steps_exist"] = not missing
     checks["t02_steps_compile"] = not uncompilable
     checks["t03_expected_nonzero_policy_declared"] = set(EXPECTED_NONZERO) <= set(ORDER)
-    checks["t04_unexpected_nonzero_detected"] = (classify_rc("co78_layer_role_drift_gate", 1) == "unexpected_nonzero"
-                                                 and classify_rc("co146_jlc_dfm_gate", 1) == "expected_nonzero"
-                                                 and classify_rc("co77_closure_declaration_sweep", 0) == "ok")
+    checks["t04_unexpected_nonzero_detected"] = (
+        allowlist_decision("co78_layer_role_drift_gate", 1, "", None) == "unexpected_nonzero"
+        and allowlist_decision("co77_closure_declaration_sweep", 0, "", "PASS") == "ok")
+    # CO-165（t07）：白名单步的**伪通过**必须被拒（崩溃 / 意外归零 / verdict 不符 / 缺证据）
+    checks["t07_allowlist_evidence_enforced"] = (
+        allowlist_decision("co146_jlc_dfm_gate", 1, "Traceback (most recent call last):\n", "FAIL", True) == "expected_step_crashed"
+        and allowlist_decision("co146_jlc_dfm_gate", 0, "", "FAIL", True) == "expected_step_returned_zero"
+        and allowlist_decision("co146_jlc_dfm_gate", 1, "", "PASS", True) == "expected_step_verdict_mismatch"
+        and allowlist_decision("co146_jlc_dfm_gate", 1, "", "FAIL", False) == "expected_step_record_not_produced"
+        and allowlist_decision("co146_jlc_dfm_gate", 1, "", "FAIL", True) == "expected_nonzero"
+        and all(("verdict" in v and "record" in v) for v in EXPECTED_NONZERO.values()))
+    # CO-165（t08）：受控 sha 覆盖全部记录类产物（非窄清单）
+    _w = [p.as_posix() for p in watch_paths()]
+    checks["t08_watch_covers_records"] = (len(_w) >= 20
+                                          and any(p.endswith("m13_v57_co106_reference_plane_gate.json") for p in _w)
+                                          and any(p.endswith("jlc_package/MANIFEST.json") for p in _w))
     checks["t05_stability_oracle"] = (stable("x", "x") and not stable("x", "y") and not stable("", ""))
     # CO-164（t06）：执行器 ORDER 必须与 boundary 规范复现序**有序一致**（文档↔执行器防漂移）
     _bdy = boundary_order_steps()
@@ -133,11 +175,20 @@ def main(argv=None) -> int:
         rcs, unexpected = {}, None
         for step in ORDER:
             p = tool_path(step)
+            t0 = time.time()
+            _exp = EXPECTED_NONZERO.get(step) or {}
             r = subprocess.run([str(PY), str(p)], cwd=K2, capture_output=True, text=True)
-            cls = classify_rc(step, r.returncode)
+            _fresh = False
+            if _exp.get("record"):
+                try:
+                    _fresh = Path(_exp["record"]).stat().st_mtime >= (t0 - 1.0)   # CO-165：记录须由本次执行产出
+                except OSError:
+                    _fresh = False
+            cls = allowlist_decision(step, r.returncode, r.stderr, record_verdict(_exp.get("record")), _fresh)
             rcs[step] = {"rc": r.returncode, "class": cls}
-            if cls == "unexpected_nonzero":
-                unexpected = {"step": step, "rc": r.returncode, "stderr_tail": (r.stderr or "")[-600:]}
+            if cls not in ("ok", "expected_nonzero"):
+                unexpected = {"step": step, "rc": r.returncode, "class": cls,
+                              "stderr_tail": (r.stderr or "")[-600:]}
                 break
         cur = snapshot()
         iterations.append({"iter": it, "rcs": rcs, "sha": cur, "unexpected": unexpected})
@@ -148,11 +199,11 @@ def main(argv=None) -> int:
             converged = True
             break
         prev = cur
-    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-164.1",
+    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-164.2",
               "nature": "规范复现序机判执行器（rc 策略 + 真收敛判定）；报告落 .archer_tmp/ 且**不被 boundary 引用**（避免不动点）",
               "order": ORDER, "expected_nonzero": EXPECTED_NONZERO,
               "checks": checks, "iterations": iterations, "abort": abort, "converged": converged,
-              "watched": [str(p.relative_to(K2)) for p in WATCH],
+              "watched": [str(p.relative_to(K2)) for p in watch_paths()],
               "redline": "只读工具源；执行序内写记录/边界（即规范序本身）；本报告不参与 pin 表。"}
     REPORT.parent.mkdir(parents=True, exist_ok=True)
     REPORT.write_text(json.dumps(report, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
