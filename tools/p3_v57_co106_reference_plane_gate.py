@@ -77,14 +77,31 @@ def main(argv=None) -> int:
             xs = [p[0] for p in poly]; ys = [p[1] for p in poly]
             rows.append({"obj": f"gnd_plane {g['net']}@{g['layer']}", "basis": g.get("basis", "")[:40],
                          "x": [min(xs), max(xs)], "y": [min(ys), max(ys)]})
+    # CO-122b：**内岛承载区**（strictly inside 另一电源区多边形的 carve-out，如 P3V3_AUX_WEST@MCU_VDD_WEST）
+    # 不适用「整面铺铜 + 板边内缩」判据（该判据针对整面平面）⇒ **显式登记豁免**（非静默跳过）。
+    _zp = [(z.get("zone"), poly) for z in zd["power_zones"] for poly in polys_of(z)]
+    exempt = []
     for z in zd["power_zones"]:
         for poly in polys_of(z):
             xs = [p[0] for p in poly]; ys = [p[1] for p in poly]
+            inner = None
+            if len(poly) >= 3:
+                cx = sum(p[0] for p in poly) / len(poly); cy = sum(p[1] for p in poly) / len(poly)
+                for zz, pp in _zp:
+                    if zz == z.get("zone") or len(pp) < 3:
+                        continue
+                    if pip((cx, cy), pp) and all(pip(pt, pp) for pt in poly):
+                        inner = zz; break
             rows.append({"obj": f"power_zone {z['net']}@{z.get('zone')}", "basis": z.get("basis", "")[:40],
                          "x": [min(xs), max(xs)], "y": [min(ys), max(ys)],
-                         "y_only": True})   # 电源区按分区裁剪 x（P3V3_EAST/MCU_VDD_WEST）⇒ 仅校 y 跨度
+                         "y_only": True, "interior_of": inner})
+            if inner:
+                exempt.append({"obj": f"power_zone {z['net']}@{z.get('zone')}", "interior_of": inner,
+                               "why": "内岛承载区（L2 走廊/区域分配）⇒ 非整面平面，不适用板边内缩判据"})
     dev = []
     for r in rows:
+        if r.get("interior_of"):
+            continue
         dy = [round(r["y"][0] - expect["y"][0], 3), round(expect["y"][1] - r["y"][1], 3)]
         dx = ([0.0, 0.0] if r.get("y_only") else
               [round(r["x"][0] - expect["x"][0], 3), round(expect["x"][1] - r["x"][1], 3)])
@@ -92,8 +109,10 @@ def main(argv=None) -> int:
             dev.append({"obj": r["obj"], "inset_dev_mm": {"left": -dx[0], "right": -dx[1], "top": -dy[0], "bottom": -dy[1]}})
     checks["A_frame_inset_consistency"] = {
         "ok": not dev, "expected_inset_polygon": expect, "n_zone_polygons": len(rows),
-        "deviations": dev,
-        "note": "basis 明文「整面铺铜 + 板边内缩 edge_copper_min」；板框取 SPEC board.outline_x/y（v28 ECO：y 38mm→46mm）"}
+        "deviations": dev, "interior_carriers_exempt": exempt,
+        "n_interior_carriers_exempt": len(exempt),
+        "note": "basis 明文「整面铺铜 + 板边内缩 edge_copper_min」；板框取 SPEC board.outline_x/y（v28 ECO：y 38mm→46mm）；"
+                "内岛承载区（carve-out）显式豁免并登记"}
     # 牙齿（合成负控/正控，独立于数据状态）：内缩检测器必须能抓"错内缩"，连续性检测器必须能分"无铜/有铜"
     synth = [{"obj": "SYNTH", "x": expect["x"], "y": [expect["y"][0], round(expect["y"][1] - 8.0, 3)]}]
     sdev = [{"obj": s["obj"], "bottom": round(expect["y"][1] - s["y"][1], 3)} for s in synth

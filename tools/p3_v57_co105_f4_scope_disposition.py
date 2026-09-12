@@ -95,11 +95,21 @@ def main(argv=None) -> int:
 
     # ---------- V4：F3 R1.2 根因属 L1 ----------
     co98 = json.loads((STEP2 / "m13_v57_co98_reachability_status_report.json").read_text())
+    # CO-122b：原实现断言 ruling_pending_l1 == 6（把「当时状态」写死）。改为**更强**的交叉断言：
+    #   SPEC `plane_reachability_status.unresolved` 的 pad 数 == co98 ruling_pending_l1，
+    #   且**未决网均不已有显式 In4 多边形**（有则不属 L1 归属类，本闸即应报警）。
+    _prs = json.loads(SPEC_CUR.read_text())["pd"]["zone_defs"]["plane_reachability_status"]
+    _unr_nets = sorted(u["net"] for u in _prs["unresolved"])
+    _unr_pads = sum(len(u["pads"]) for u in _prs["unresolved"])
+    _in4_nets = sorted({z["net"] for z in zd["power_zones"] if isinstance(z.get("polygon"), list)})
     checks["V4_f3_r1_2_is_l1"] = {
-        "ok": co98["three_state"]["ruling_pending_l1"] == 6,
+        "ok": (co98["three_state"]["ruling_pending_l1"] == _unr_pads
+               and all(n not in _in4_nets for n in _unr_nets)),
         "ruling_pending_l1": co98["three_state"]["ruling_pending_l1"],
         "declared_pending_l3": co98["three_state"]["declared_pending_l3"],
-        "note": "6 项 ruling 中 R1.2 依赖自由文本（CO-96 F3），其根因=电源域/区域归属 ⇒ L1（不在本件）"}
+        "unresolved_nets": _unr_nets, "unresolved_pads": _unr_pads,
+        "nets_with_in4_polygon": _in4_nets,
+        "note": "ruling 项 = SPEC unresolved（根因=电源域/区域归属 ⇒ L1）；CO-122b 后 ② P3V3_AUX 由 L2 自裁闭合 ⇒ 余 12V_IN(3 pad)"}
 
     teeth["teeth_ok"] = all(v for k, v in teeth.items())
     mismatch = {k: {"expect": v, "actual": s16({"spec_current": SPEC_CUR, "board": K2 / "k2_v4_8L.l4.kicad_pcb"}[k])}
