@@ -6,5 +6,5 @@
 - **可达性**：REACHABLE —— 域外 0.355+0.41=0.765 ≤ cap（WEST 1.05 / EAST 1.449）；
   焊盘场属 ECN-001 escape 域（已声明放宽）。
 - **板实实测**：域外偏差 **3** 处（见记录 `as_built`；显式登记为工程开放项，路由 = SI/板厂券 或后续几何迭代）。
-- **规矩入库**：`L2/REQUIREMENT_IMPLEMENTATION_SEPARATION_v1.0.md` `53153475e37dcb72` + 台账 `L2/derived_value_ledger_v1.json` `e96d799710b6ae4d`；
+- **规矩入库**：`L2/REQUIREMENT_IMPLEMENTATION_SEPARATION_v1.0.md` `53153475e37dcb72` + 台账 `L2/derived_value_ledger_v1.json` `860c7b1e30a2c915`；
   机判 = co124 **K9**（负控 T5/T6/T7）。

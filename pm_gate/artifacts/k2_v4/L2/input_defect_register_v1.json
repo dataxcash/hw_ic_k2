@@ -137,8 +137,12 @@
     "drc_rules.clearance.net_classes[POWER]",
     "m13_v57_co91_pdn_planned_coord_clearance_gate.json（via_viol 0 / stub_viol 0）"
    ],
-   "disposition": "已由 CO-91 机判闸在权威口径下证明（计划坐标全合法）；CO-121 另以 0.375 = 0.2+od/2 用于区域-过孔净距",
-   "status": "PROVED"
+   "disposition": "已由 CO-91 机判闸在权威口径下证明（计划坐标全合法）；CO-121 另以 0.375 = 0.2+od/2 用于区域-过孔净距 ｜CO-134：已按「需求/实现分家」规矩补溯源（来源原则 + 派生式 + 可达性/证据）⇒ 机判 co124 K9。",
+   "status": "PROVED",
+   "rule_key": "power_clearance_mm",
+   "evidence": [
+    "L2/derived_value_ledger_v1.json DV-CLR-POWER（来源原则 + 派生式 + 可达性/证据；CO-134 需求/实现分家规矩 R3）"
+   ]
   },
   {
    "finding": "threshold_unproved_unregistered:pcb_edge_copper_min_mm",
@@ -150,8 +154,12 @@
     "co106 check A（zone 多边形 vs 板框内缩；内岛承载区显式豁免）",
     "L5 DFM PASS new=0"
    ],
-   "disposition": "已由 CO-106 板框内缩闸 + L5 DFM 机判证明",
-   "status": "PROVED"
+   "disposition": "已由 CO-106 板框内缩闸 + L5 DFM 机判证明 ｜CO-134：已按「需求/实现分家」规矩补溯源（来源原则 + 派生式 + 可达性/证据）⇒ 机判 co124 K9。",
+   "status": "PROVED",
+   "rule_key": "pcb_edge_copper_min_mm",
+   "evidence": [
+    "L2/derived_value_ledger_v1.json DV-EDGE-COPPER（来源原则 + 派生式 + 可达性/证据；CO-134 需求/实现分家规矩 R3）"
+   ]
   },
   {
    "finding": "threshold_unproved_unregistered:m3_keepout_mm",
@@ -163,8 +171,12 @@
     "p3_v57_co84_dru_domain_gate.py PASS",
     "p3_v57_l4_validator.py PASS"
    ],
-   "disposition": "已由 DRC 放宽域一致性闸 + L4 校验机判证明",
-   "status": "PROVED"
+   "disposition": "已由 DRC 放宽域一致性闸 + L4 校验机判证明 ｜CO-134：已按「需求/实现分家」规矩补溯源（来源原则 + 派生式 + 可达性/证据）⇒ 机判 co124 K9。",
+   "status": "PROVED",
+   "rule_key": "m3_keepout_mm",
+   "evidence": [
+    "L2/derived_value_ledger_v1.json DV-M3-KEEPOUT（来源原则 + 派生式 + 可达性/证据；CO-134 需求/实现分家规矩 R3）"
+   ]
   },
   {
    "finding": "threshold_unproved_unregistered:pair_cross_mm",
@@ -175,8 +187,12 @@
     "L1_TOPOLOGY_v2.0 硬约束2",
     "tools/p3_v57_co54_spec_delivery_audit.py（交付几何实测 p_gap 0.295 / 内对中心 0.500-0.600）"
    ],
-   "disposition": "恒等式与交付实测一致（co124 K6 内置恒等式校验：0.585+0.875=1.46 ⇒ PASS）",
-   "status": "PROVED"
+   "disposition": "恒等式与交付实测一致（co124 K6 内置恒等式校验：0.585+0.875=1.46 ⇒ PASS） ｜CO-134：已按「需求/实现分家」规矩补溯源（来源原则 + 派生式 + 可达性/证据）⇒ 机判 co124 K9。",
+   "status": "PROVED",
+   "rule_key": "pair_cross_mm",
+   "evidence": [
+    "L2/derived_value_ledger_v1.json DV-PAIR-CROSS（来源原则 + 派生式 + 可达性/证据；CO-134 需求/实现分家规矩 R3）"
+   ]
   },
   {
    "finding": "pdn_net_not_power_class:12V_IN",
@@ -314,6 +330,6 @@
   "owner": "ARCHER（L2 自裁执行侧）",
   "approval": "定义件 v1.0 待监理裁定/owner 批准；登记簿随闸每次运行校验",
   "mandatory_trigger": "任何 SPEC / drc_rules 变更后必须跑 tools/p3_v57_co124_input_selfcheck_gate.py 并 PASS",
-  "updated_by": "CO-127..CO-133 + **CO-134（整改通知 #09：③ 重新定性 = 工程换算错误 → REQ-R3-2 忠实实现 + 需求/实现分家规矩 + co124 K9）**；登记簿随 co124 每次运行校验"
+  "updated_by": "CO-127..CO-133 + **CO-134（整改通知 #09：③ 重新定性 = 工程换算错误 → REQ-R3-2 忠实实现 + 需求/实现分家规矩 + co124 K9）**；登记簿随 co124 每次运行校验；CO-134 续：4 项已声明定值补 rule_key + 台账溯源"
  }
 }

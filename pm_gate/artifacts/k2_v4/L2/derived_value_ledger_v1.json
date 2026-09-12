@@ -3,13 +3,37 @@
  "artifact": "derived_value_ledger_v1",
  "rule_doc": {
   "path": "pm_gate/artifacts/k2_v4/L2/REQUIREMENT_IMPLEMENTATION_SEPARATION_v1.0.md",
-  "sha16": null
+  "sha16": "53153475e37dcb72"
  },
  "requirements": [
   {
    "id": "REQ-R3-2",
    "statement": "对间不串扰 ⇒ R3-2「3W 原则」：对间中心距 ≥ 3×线宽 w（对间铜边 ≥ 2×w）",
    "source_principle_ref": "_shared/docs/PCB_DESIGN_RULES.md R3-2（目的=对间串扰控制）",
+   "frozen": true
+  },
+  {
+   "id": "REQ-DEF-PAIR-GEOM",
+   "statement": "对内几何定义：P/N 线宽 w、对内间距 g ⇒ 对铜跨 span = 2w + g",
+   "source_principle_ref": "SPEC net_classes.PCIe85.diff_pair（p_width/p_gap）",
+   "frozen": true
+  },
+  {
+   "id": "REQ-CLR-POWER",
+   "statement": "电源域间不短路/不放电 ⇒ 见网间净距 ≥ 工艺最小",
+   "source_principle_ref": "_shared/eda_core/drc_rules.json clearance.net_classes[POWER] + k2_v4.kicad_pro rules",
+   "frozen": true
+  },
+  {
+   "id": "REQ-EDGE-COPPER",
+   "statement": "板边铜不裸露/不崩边 ⇒ 铜-板边净距 ≥ 最小",
+   "source_principle_ref": "L1_TOPOLOGY_v2.0 硬约束4 + drc_rules.manufacturing",
+   "frozen": true
+  },
+  {
+   "id": "REQ-M3-KEEPOUT",
+   "statement": "机械螺孔不短路/不干涉 ⇒ M3 禁布半径",
+   "source_principle_ref": "L1_TOPOLOGY_v2.0 硬约束5 + SPEC constraints.m3_keepout_mm",
    "frozen": true
   }
  ],
@@ -79,6 +103,83 @@
     "value": 0.875,
     "kind": "LEGACY_DERIVED",
     "why": "legacy 换算定值：0.875 = 2×0.4375（等价 5×0.175 线距）；本板 w_by_layer={'F.Cu': 0.205, 'In2.Cu': 0.16, 'In5.Cu': 0.16, 'B.Cu': 0.205} 与带内 w_min=0.09 均无 0.4375 ⇒ 非 REQ-R3-2 的忠实实现"
+   }
+  },
+  {
+   "id": "DV-PAIR-CROSS",
+   "requirement": "REQ-DEF-PAIR-GEOM",
+   "form": "span = 2×p_width + p_gap",
+   "inputs": {
+    "p_width_mm": 0.205,
+    "p_gap_mm": 0.175
+   },
+   "computed": {
+    "span_mm": 0.585
+   },
+   "reachability": {
+    "kind": "identity",
+    "predicate": "span == 2×p_width + p_gap",
+    "verdict": "REACHABLE"
+   }
+  },
+  {
+   "id": "DV-CLR-POWER",
+   "requirement": "REQ-CLR-POWER",
+   "form": "clearance(POWER) = 工艺最小净距（drc_rules 权威源）",
+   "inputs": {
+    "source": "drc_rules.clearance.net_classes[POWER].clearance"
+   },
+   "computed": {
+    "value_mm": 0.2
+   },
+   "reachability": {
+    "kind": "process_floor",
+    "predicate": "存在设计/交付满足该净距（由 PDN 计划净距闸 0 违规佐证）",
+    "verdict": "REACHABLE",
+    "evidence_ref": {
+     "path": "m13_v57_co91_pdn_planned_coord_clearance_gate.json",
+     "sha16": "3ede251a830108f1"
+    }
+   }
+  },
+  {
+   "id": "DV-EDGE-COPPER",
+   "requirement": "REQ-EDGE-COPPER",
+   "form": "edge_copper_min = 板边铜最小净距（工艺下限）",
+   "inputs": {
+    "source": "drc_rules.manufacturing / SPEC constraints.edge_copper_min"
+   },
+   "computed": {
+    "value_mm": 0.3
+   },
+   "reachability": {
+    "kind": "process_floor",
+    "predicate": "交付板 DRC 违规 0（含板边铜规则）",
+    "verdict": "REACHABLE",
+    "evidence_ref": {
+     "path": "m13_v57_l4_validation.json",
+     "sha16": "313666e68dd610e6"
+    }
+   }
+  },
+  {
+   "id": "DV-M3-KEEPOUT",
+   "requirement": "REQ-M3-KEEPOUT",
+   "form": "m3_keepout = 机械螺孔禁布半径",
+   "inputs": {
+    "source": "SPEC constraints.m3_keepout_mm / L1_TOPOLOGY_v2.0 硬约束5"
+   },
+   "computed": {
+    "value_mm": 3.0
+   },
+   "reachability": {
+    "kind": "process_floor",
+    "predicate": "交付板 DRC 违规 0（含机械禁布/keepout 规则）",
+    "verdict": "REACHABLE",
+    "evidence_ref": {
+     "path": "m13_v57_l4_validation.json",
+     "sha16": "313666e68dd610e6"
+    }
    }
   },
   {

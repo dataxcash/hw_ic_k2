@@ -395,7 +395,7 @@ CO-49 `canonicalize_board` ⇒ 净板/已施工板两次投喂**同一字节**�
 | `m13_v57_co105_f4_scope_disposition.json` | `8453cc7dd6061767` |
 | `m13_v57_co106_reference_plane_gate.json` | `dfa0ebf1291573d4` |
 | `m13_v57_co120_provenance_pin_gate.json` | `915dec11d8b644db` |
-| `m13_v57_co124_input_selfcheck_gate.json` | `7e77ab4dc7841d40` |
+| `m13_v57_co124_input_selfcheck_gate.json` | `1dcfbba30fad7b13` |
 | `m13_v57_co88_pdn_board_reality_gate.json` | `17719cf7f8e3e702` |
 | `m13_v57_co78_layer_role_drift_gate.json` | `5257ca5f7d1be1cd` |
 | `m13_v57_co81_project_rules_gate.json` | `3b14b7e730d9dc5d` |

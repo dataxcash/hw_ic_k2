@@ -64,6 +64,24 @@ def k9_findings(led: dict) -> list:
                       {"requirement": rid, "known": sorted(x for x in ids if x)}))
             continue
         rc = dv.get("reachability") or {}
+        kind = rc.get("kind", "domain_cap" if rc.get("domains") is not None else "declared")
+        if kind == "identity":
+            form, comp = dv.get("form", ""), (dv.get("computed") or {})
+            inp = dv.get("inputs") or {}
+            try:
+                if "span" in form:
+                    exp = round(2 * float(inp["p_width_mm"]) + float(inp["p_gap_mm"]), 4)
+                    if abs(exp - float(comp["span_mm"])) > 5e-4:
+                        f.append(("K9", f"derived_value_identity_drift:{dv.get('id')}", {"expect": exp, "got": comp["span_mm"]}))
+            except (KeyError, TypeError, ValueError):
+                f.append(("K9", f"derived_value_identity_unparsable:{dv.get('id')}", {"form": form}))
+        if kind == "process_floor":
+            ev = rc.get("evidence_ref") or {}
+            pth = ev.get("path")
+            hitc = next((c for c in [STEP2 / str(pth), L3 / str(pth), L2 / str(pth)] if pth and c.exists()), None)
+            if hitc is None or s16(hitc) != ev.get("sha16"):
+                f.append(("K9", f"derived_value_evidence_bad:{dv.get('id')}",
+                          {"path": pth, "cited": ev.get("sha16"), "actual": s16(hitc) if hitc else None}))
         doms = rc.get("domains")
         if doms is not None:
             span = (dv.get("inputs") or {}).get("span_min_mm")
@@ -204,6 +222,11 @@ def main() -> int:
     _l7 = copy.deepcopy(_led); _l7["requirements"] = _l7.get("requirements", []) + [
         {"id": "T7_INJECT_REQ_WITH_VALUE", "statement": "x", "value": 0.875}]
     teeth["T7_requirement_carries_value"] = any(x[1].startswith("requirement_carries_derived_value") for x in k9_findings(_l7))
+    _l8 = copy.deepcopy(_led)
+    for _dv in _l8.get("derived_values", []):
+        if (_dv.get("reachability") or {}).get("kind") == "identity":
+            _dv["computed"] = {"span_mm": 0.999}; break
+    teeth["T8_identity_drift"] = any(x[1].startswith("derived_value_identity_drift") for x in k9_findings(_l8))
     teeth_ok = all(teeth.values())
     verdict = "PASS" if (not unreg and not reg_bad and teeth_ok) else (
         "FAIL_UNREGISTERED_INPUT_DEFECT" if unreg else "FAIL_REGISTER_MALFORMED" if reg_bad else "TEETH_FAIL")
