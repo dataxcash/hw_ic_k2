@@ -452,13 +452,13 @@
     }
    },
    "reachability": {
-    "kind": "declared",
+    "kind": "drop_domain",
     "verdict": "REACHABLE",
-    "predicate": "各轨 I_max@预算 ≥ 声明电流（余量见 computed）",
-    "basis": "几何取自交付板 zone 声明域（filled 缓存不可读）；电流为显式声明值（非实测）",
+    "predicate": "每轨 ΔV% ≤ 预算%（监理指令 #10 定值 3%）",
+    "budget_pct": 3.0,
     "evidence_ref": {
      "path": "m13_v57_co146_pm_eval.json",
-     "sha16": "2fd19425d6d1013f"
+     "sha16": "628c06ba2575ceb3"
     }
    }
   },
@@ -508,7 +508,45 @@
      "theta_ja_C_per_W": 17.4,
      "psi_jb_C_per_W": 5.9,
      "TJ_max_C": 120
-    }
+    },
+    "system_mitigation_options": [
+     {
+      "id": "O0_asbuilt",
+      "desc": "现状：40°C 自然对流、无散热片",
+      "theta_ja_eff_C_per_W": 17.22,
+      "theta_ja_expr": "θJA = ψJB + 1/(h_nat·2A)",
+      "h_eff": 8.0,
+      "covers_cases": [],
+      "covers_all": false
+     },
+     {
+      "id": "O1_forced_airflow",
+      "desc": "强制风冷（板面 ~2 m/s，无散热片）",
+      "h_eff": 16.0,
+      "theta_ja_eff_C_per_W": 11.56,
+      "covers_cases": [
+       "U6_EQ0-2_typ",
+       "U6_EQ0-2_max",
+       "U6_EQ5-19_typ"
+      ],
+      "covers_all": false
+     },
+     {
+      "id": "O2_heatsink_airflow",
+      "desc": "顶部 30×30mm 铝散热片 + 界面垫(1.0) + ~2 m/s 风冷",
+      "theta_jc_C_per_W": 6.5,
+      "r_interface_C_per_W": 1.0,
+      "theta_hs_C_per_W": 3.5,
+      "theta_ja_eff_C_per_W": 11.0,
+      "covers_cases": [
+       "U6_EQ0-2_typ",
+       "U6_EQ0-2_max",
+       "U6_EQ5-19_typ",
+       "U6_EQ5-19_max"
+      ],
+      "covers_all": true
+     }
+    ]
    },
    "computed": {
     "cases": {
@@ -544,17 +582,48 @@
     "hotspot_Tj_C": 161.8,
     "psi_jb_route_Tj_C": 173.6,
     "Tj_limit_C": 120,
-    "verdict": "FAIL"
+    "verdict": "FAIL",
+    "required": {
+     "system_mitigation_required": true,
+     "theta_ja_eff_max_C_per_W": 11.43,
+     "h_required_range_W_per_m2K": [
+      8.14,
+      16.38
+     ],
+     "top_sink_budget_range_C_per_W": [
+      4.93,
+      10.52
+     ]
+    }
    },
    "reachability": {
-    "kind": "declared",
-    "verdict": "UNREACHABLE_REGISTERED",
-    "predicate": "Tj ≤ Tj_limit（按声明环境 Ta/h 与手册 θJA/ψJB）",
-    "why": "40°C 自然对流下全 EQ 档超限；处置选项见裁定件 R4-2",
-    "gate_gap": "co124 K9 无热域模型 ⇒ 本项不可达性由登记簿承接（见 TOOL_DEFECT 项）",
+    "kind": "thermal_option_domain",
+    "verdict": "REACHABLE",
+    "predicate": "∃ 声明散热方案使 Tj ≤ Tj_limit（各方案按 θJA_eff ≤ 所需值判定）",
+    "required_mitigation": "系统须提供：强制风冷 h_eff ≥ 16.4 W/m²K 或 顶部散热片(θJC+R_int+θ_HS ≤ 4.93 °C/W)",
+    "domains": [
+     {
+      "id": "O0_asbuilt",
+      "theta_ja_eff_C_per_W": 17.22,
+      "ok": false,
+      "desc": "现状：40°C 自然对流、无散热片"
+     },
+     {
+      "id": "O1_forced_airflow",
+      "theta_ja_eff_C_per_W": 11.56,
+      "ok": false,
+      "desc": "强制风冷（板面 ~2 m/s，无散热片）"
+     },
+     {
+      "id": "O2_heatsink_airflow",
+      "theta_ja_eff_C_per_W": 11.0,
+      "ok": true,
+      "desc": "顶部 30×30mm 铝散热片 + 界面垫(1.0) + ~2 m/s 风冷"
+     }
+    ],
     "evidence_ref": {
-     "path": "input_defect_register_v1.json",
-     "sha16": "e51eba5ccbd52558"
+     "path": "L2_RULING_u6_thermal_mitigation_v1.md",
+     "sha16": "1ff34801833d07b5"
     }
    }
   }

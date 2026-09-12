@@ -84,7 +84,7 @@ def k9_findings(led: dict) -> list:
                 f.append(("K9", f"derived_value_evidence_bad:{dv.get('id')}",
                           {"path": pth, "cited": ev.get("sha16"), "actual": s16(hitc) if hitc else None}))
         doms = rc.get("domains")
-        if doms is not None:
+        if doms is not None and rc.get("kind") != "thermal_option_domain":
             span = (dv.get("inputs") or {}).get("span_min_mm")
             edge = (dv.get("computed") or {}).get("edge_outer_binding_mm")
             bad = []
@@ -111,6 +111,51 @@ def k9_findings(led: dict) -> list:
             if rc.get("verdict") != "REACHABLE" or bad:
                 f.append(("K9", f"derived_value_unreachable:{dv.get('id')}",
                           {"verdict": rc.get("verdict"), "bad": bad}))
+        if rc.get("kind") == "thermal_option_domain":
+            # CO-150：热/散热方案域。判据：∃ 声明方案 θJA_eff ≤ 最重工况所需 θJA；且若「现状(asbuilt)」不达标，
+            # 必须显式声明 required_mitigation（不得声称可达却不给实现条件）。
+            cases = (dv.get("computed") or {}).get("cases") or {}
+            dom_list = rc.get("domains") or []
+            _req_of = lambda c: c.get("theta_ja_required_C_per_W", c.get("required_theta_ja_C_per_W"))
+            reqs = [_req_of(c) for c in cases.values() if isinstance(_req_of(c), (int, float))]
+            effs = [d.get("theta_ja_eff_C_per_W") for d in dom_list
+                    if isinstance(d.get("theta_ja_eff_C_per_W"), (int, float))]
+            mit = (rc.get("required_mitigation") or "").strip()
+            asbuilt_ok = any(d.get("ok") for d in dom_list if "asbuilt" in str(d.get("id", "")).lower())
+            bad_t = []
+            if not reqs or not effs:
+                bad_t.append({"why": "unparsable", "reqs": len(reqs), "effs": len(effs)})
+            else:
+                hardest, best = max(reqs), min(effs)
+                if best > hardest:
+                    bad_t.append({"why": "no_declared_option_covers_hardest_case", "best_theta_eff": best,
+                                  "hardest_required": hardest})
+                if not asbuilt_ok and not mit:
+                    bad_t.append({"why": "asbuilt_fails_but_mitigation_undeclared"})
+            if rc.get("verdict") != "REACHABLE" or bad_t:
+                f.append(("K9", f"derived_value_unreachable:{dv.get('id')}",
+                          {"verdict": rc.get("verdict"), "bad": bad_t, "kind": "thermal_option_domain"}))
+        if rc.get("kind") == "drop_domain":
+            # CO-150：压降域。判据：每轨 ΔV% ≤ 预算%（监理指令 #10 定值）；全轨可解析且达标才 REACHABLE。
+            rails_c = dv.get("computed") or {}
+            budget = (dv.get("inputs") or {}).get("drop_budget_pct")
+            bad_d, n_ok = [], 0
+            if not isinstance(budget, (int, float)):
+                bad_d.append({"why": "budget_missing"})
+            for name, r in rails_c.items():
+                if not isinstance(r, dict) or not isinstance(r.get("drop_pct"), (int, float)):
+                    continue
+                if bad_d:
+                    continue
+                if r["drop_pct"] > budget:
+                    bad_d.append({"rail": name, "drop_pct": r["drop_pct"], "budget_pct": budget})
+                else:
+                    n_ok += 1
+            if not bad_d and n_ok == 0:
+                bad_d.append({"why": "no_rail_parsed"})
+            if rc.get("verdict") != "REACHABLE" or bad_d:
+                f.append(("K9", f"derived_value_unreachable:{dv.get('id')}",
+                          {"verdict": rc.get("verdict"), "bad": bad_d, "kind": "drop_domain"}))
     return f
 
 
@@ -247,11 +292,42 @@ def main() -> int:
                     _d.pop("evidence_ref", None)
             break
     teeth["T9_exemption_unpinned"] = any(x[1].startswith("derived_value_unreachable") for x in k9_findings(_l9))
+    # CO-150 负控 T10：热方案域「无可行方案 + 未声明缓解」⇒ 必须 FAIL（含旧 T6 注入不干扰的稳健性）
+    _l10 = copy.deepcopy(_led)
+    for _dv in _l10.get("derived_values", []):
+        _rc10 = _dv.get("reachability") or {}
+        if _rc10.get("kind") == "thermal_option_domain":
+            _rc10["domains"] = [{"id": "T10_INJECT_WEAK", "theta_ja_eff_C_per_W": 30.0, "ok": False}]
+            _rc10.pop("required_mitigation", None)
+            break
+    teeth["T10_thermal_option_domain_teeth"] = any(
+        x[1].startswith("derived_value_unreachable") for x in k9_findings(_l10))
+    # CO-150 负控 T11：压降域注入一轨超预算 ⇒ 必须 FAIL；T11b：注入前后正经台账不得误报
+    _l11 = copy.deepcopy(_led)
+    for _dv in _l11.get("derived_values", []):
+        if (_dv.get("reachability") or {}).get("kind") == "drop_domain":
+            _dv["computed"] = dict(_dv.get("computed") or {})
+            _dv["computed"]["T11_INJECT_RAIL"] = {"drop_pct": 99.0}
+            break
+    teeth["T11_drop_domain_teeth"] = any(
+        x[1].startswith("derived_value_unreachable") for x in k9_findings(_l11))
+    teeth["T11b_drop_domain_no_false_positive"] = not any(
+        x[1].startswith("derived_value_unreachable") and "PDN" in str(x[2])
+        for x in k9_findings(copy.deepcopy(_led)))
+    # T10b：现状不可行但已声明缓解 且 ∃ 方案覆盖 ⇒ 不得误报
+    _l10b = copy.deepcopy(_led)
+    for _dv in _l10b.get("derived_values", []):
+        _rc10b = _dv.get("reachability") or {}
+        if _rc10b.get("kind") == "thermal_option_domain":
+            _rc10b["required_mitigation"] = "SYNTH: 强制风冷"
+            break
+    teeth["T10b_thermal_domain_no_false_positive"] = not any(
+        x[1].startswith("derived_value_unreachable") for x in k9_findings(_l10b))
     teeth_ok = all(teeth.values())
     verdict = "PASS" if (not unreg and not reg_bad and teeth_ok) else (
         "FAIL_UNREGISTERED_INPUT_DEFECT" if unreg else "FAIL_REGISTER_MALFORMED" if reg_bad else "TEETH_FAIL")
     rec = {
-        "artifact": "m13_v57_co124_input_selfcheck_gate", "schema": 1, "revision": "CO-124.3",
+        "artifact": "m13_v57_co124_input_selfcheck_gate", "schema": 1, "revision": "CO-124.5",
         "nature": "输入自检闸：规格/规则自身自洽 + 物理可达登记 + 缺陷登记完备（整改通知 #08 第 2/3 条）",
         "definition_doc": {"path": str(DOC.relative_to(K2)), "sha16": s16(DOC), "status": f"{DOC_VER} 提议件（待监理裁定/owner 批准）"},
         "inputs": {"spec": str(SPEC.relative_to(K2)), "spec_sha16": s16(SPEC),

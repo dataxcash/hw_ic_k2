@@ -1,0 +1,40 @@
+{
+ "artifact": "m13_v57_co150_k9_domain_gate",
+ "schema": 1,
+ "revision": "CO-150.1",
+ "nature": "L2 闸硬化：K9 热/压降域机判 + 负控（关闭 CO-148 登记的 K9 缺口）",
+ "co124": {
+  "file": "m13_v57_co124_input_selfcheck_gate.json",
+  "sha16": "3de2c54ae5655f47",
+  "revision": "CO-124.5",
+  "verdict": "PASS",
+  "n_findings": 0,
+  "teeth": {
+   "T10_thermal_option_domain_teeth": true,
+   "T10b_thermal_domain_no_false_positive": true,
+   "T11_drop_domain_teeth": true,
+   "T11b_drop_domain_no_false_positive": true
+  }
+ },
+ "domains_added": [
+  "thermal_option_domain",
+  "drop_domain"
+ ],
+ "ledger_domain_kinds": {
+  "DV-CO146-THERMAL": "thermal_option_domain",
+  "DV-CO146-PDN-DROP": "drop_domain"
+ },
+ "register": {
+  "file": "input_defect_register_v1.json",
+  "sha16_after": "6a5e9e86e83f5b6b",
+  "closed": [
+   "tool_defect:co124_k9_has_no_thermal_or_drop_domain_model"
+  ],
+  "open_total": 0
+ },
+ "teeth": {
+  "t01_k9_teeth_all_true": true,
+  "t02_register_item_closed": true
+ },
+ "redline": "只读板/SPEC；只改闸判据与登记簿；零坐标搜索。"
+}

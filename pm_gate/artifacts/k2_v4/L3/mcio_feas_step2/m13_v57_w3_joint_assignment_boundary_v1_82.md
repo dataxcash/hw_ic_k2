@@ -395,12 +395,12 @@ CO-49 `canonicalize_board` ⇒ 净板/已施工板两次投喂**同一字节**�
 | `m13_v57_co105_f4_scope_disposition.json` | `8655cff7560b11ff` |
 | `m13_v57_co106_reference_plane_gate.json` | `b01774449669c10a` |
 | `m13_v57_co120_provenance_pin_gate.json` | `6a061d43074427e8` |
-| `m13_v57_co124_input_selfcheck_gate.json` | `58a7bdaca3966b1c` |
+| `m13_v57_co124_input_selfcheck_gate.json` | `3de2c54ae5655f47` |
 | `m13_v57_co88_pdn_board_reality_gate.json` | `17719cf7f8e3e702` |
 | `m13_v57_co78_layer_role_drift_gate.json` | `38c11158ce1bbb55` |
 | `m13_v57_co81_project_rules_gate.json` | `093dd05224455b9d` |
 | `m13_v57_co84_dru_domain_gate.json` | `9471fcfec54cbaee` |
-| `input_defect_register_v1.json`（含 CO-133 三条工具缺陷登记） | `e51eba5ccbd52558` |
+| `input_defect_register_v1.json`（含 CO-133 三条工具缺陷登记） | `6a5e9e86e83f5b6b` |
 
 **未决（不变）**：非执行者复评（本件 + rev-18 新基线）；③ 已撤回 owner 升级（CO-134 判为工程换算错误并落地忠实实现）；外部输入（板厂券/SI9000、PM 压降·热）。
 
@@ -417,12 +417,12 @@ SPEC **rev-19** `5f72182a2616392c`（白名单外 0 改动；0.875 退役留存 
 | 工件 | sha16 |
 |---|---|
 | 规矩件 `REQUIREMENT_IMPLEMENTATION_SEPARATION_v1.0.md` | `0181186c4b4266e1` |
-| 台账 `derived_value_ledger_v1.json` | `16aef4c6d6aa364d` |
+| 台账 `derived_value_ledger_v1.json` | `87e4ecfd9693a064` |
 | 定义件 `BASIC_SKILL_VS_REDLINE_v1.1.md`（③ 重新定性 bump） | `348735156c9d9b1d` |
 | 工具 `p3_v57_co134_req_impl_separation.py` | `68fc7610e66e63fb` |
 | 记录 `m13_v57_co134_req_impl_separation.json` | `1e5aa8503d211411` |
 | 卡 `m13_v57_CO134_req_impl_separation.md` | `813e66a5eb4b0e60` |
-| 登记簿 `input_defect_register_v1.json` | `e51eba5ccbd52558` |
+| 登记簿 `input_defect_register_v1.json` | `6a5e9e86e83f5b6b` |
 | `SPEC_k2_v4.spec-rev-19.json` | `5f72182a2616392c` |
 | `m13_v57_w3_joint_assignment.json`（G4 重基线） | `60cbd331836e52b7` |
 | `m13_v57_w3_validation.json`（G5） | `8b385d6c554ac527` |
@@ -430,7 +430,7 @@ SPEC **rev-19** `5f72182a2616392c`（白名单外 0 改动；0.875 退役留存 
 | `m13_v57_l4_validation.json` | `aa666a49e36883c7` |
 | `m13_v57_l5_fab_record.json` | `791012e88b514faa` |
 | `m13_v57_l5_si_pi_emc_record.json` | `261b58e745c67aea` |
-| `m13_v57_co124_input_selfcheck_gate.json`（K9 + T5/T6/T7） | `58a7bdaca3966b1c` |
+| `m13_v57_co124_input_selfcheck_gate.json`（K9 + T5/T6/T7） | `3de2c54ae5655f47` |
 | `m13_v57_co95_in4_reachability.json` | `c9eba916a9866808` |
 | `m13_v57_co98_reachability_status_report.json` | `c652f4b1b572912a` |
 | `m13_v57_co99_pdn_mutual_conflict_gate.json` | `1d256de815b1ed87` |
@@ -455,11 +455,11 @@ SPEC **rev-19** `5f72182a2616392c`（白名单外 0 改动；0.875 退役留存 
 |---|---|
 | 工具 `p3_v57_co106_reference_plane_gate.py`（CO-106.2） | `44356d38d2e87698` |
 | 记录 `m13_v57_co106_reference_plane_gate.json` | `b01774449669c10a` |
-| 记录 `m13_v57_co124_input_selfcheck_gate.json`（CO-124.2） | `58a7bdaca3966b1c` |
-| 登记簿 `input_defect_register_v1.json`（17 项） | `e51eba5ccbd52558` |
+| 记录 `m13_v57_co124_input_selfcheck_gate.json`（CO-124.2） | `3de2c54ae5655f47` |
+| 登记簿 `input_defect_register_v1.json`（17 项） | `6a5e9e86e83f5b6b` |
 | 工具 `p3_v57_co77_closure_declaration_sweep.py`（CO-77.5） | `53a7fff6004bcb4b` |
 | 工具 `p3_v57_co136_gate_hygiene.py` | `4b65e75a64b3b686` |
-| 记录 `m13_v57_co136_gate_hygiene.json` | `cb1e3f6f8e6b1282` |
+| 记录 `m13_v57_co136_gate_hygiene.json` | `2225b2bedb4ed3db` |
 | 卡 `m13_v57_CO136_gate_hygiene.md` | `e2124a06aa45c4b8` |
 
 
@@ -542,10 +542,10 @@ CO-135 F6 后半：K9 的「域外」豁免原本**只凭 regime 自由文本含
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co124_input_selfcheck_gate.py`（CO-124.3） | `59069713be2efecc` |
-| 记录 `m13_v57_co124_input_selfcheck_gate.json` | `58a7bdaca3966b1c` |
-| 台账 `derived_value_ledger_v1.json`（pad_field 已锚定） | `16aef4c6d6aa364d` |
-| 登记簿 `input_defect_register_v1.json` | `e51eba5ccbd52558` |
+| 工具 `p3_v57_co124_input_selfcheck_gate.py`（CO-124.3） | `1ec8a2f394b47db2` |
+| 记录 `m13_v57_co124_input_selfcheck_gate.json` | `3de2c54ae5655f47` |
+| 台账 `derived_value_ledger_v1.json`（pad_field 已锚定） | `87e4ecfd9693a064` |
+| 登记簿 `input_defect_register_v1.json` | `6a5e9e86e83f5b6b` |
 
 
 ## 18. CO-140（L2 分析 · 只读：as-built 偏差归因）当前态引用
@@ -643,7 +643,7 @@ opt-in 旋钮 `CO10_IP3W` / `CO10_PDN_OBS` / `--order xasc` 已入库（默认�
 | 卡 `m13_v57_CO143_escape_fan_3w_feasibility.md` | `3f9e35914b01a95c` |
 | 探针 `p3_v57_co10_west_fan_probe.py`（+opt-in 3W/PDN 旋钮/xasc） | `d335ade502ceebcb` |
 | 分配器 `p3_v57_co16_emit_allocation.py`（+CO16_IP3W 映射） | `64d75dd9f9d26875` |
-| 登记簿 `input_defect_register_v1.json`（定位更正；OPEN 保持） | `e51eba5ccbd52558` |
+| 登记簿 `input_defect_register_v1.json`（定位更正；OPEN 保持） | `6a5e9e86e83f5b6b` |
 
 ---
 
@@ -671,8 +671,8 @@ CO-144 以**分带单调 carry**（带内 (corridor,band) 连续 + 处理序自�
 | 引擎 `p3_v57_w3_constructive.py`（CO16_ALLOC→v8 / W3-CN.42） | `481617515038dad5` |
 | 探针 `p3_v57_co10_west_fan_probe.py`（+carry/orientation） | `d335ade502ceebcb` |
 | 分配器 `p3_v57_co16_emit_allocation.py`（+FAN_STRAT/PDN_OBS/ORDER 映射） | `64d75dd9f9d26875` |
-| 登记簿 `input_defect_register_v1.json`（该 TOOL_DEFECT **CLOSED**；OPEN 1 = F.Cu/owner） | `e51eba5ccbd52558` |
-| 台账 `derived_value_ledger_v1.json`（as-built B.Cu ok；evidence pin 刷新） | `16aef4c6d6aa364d` |
+| 登记簿 `input_defect_register_v1.json`（该 TOOL_DEFECT **CLOSED**；OPEN 1 = F.Cu/owner） | `6a5e9e86e83f5b6b` |
+| 台账 `derived_value_ledger_v1.json`（as-built B.Cu ok；evidence pin 刷新） | `87e4ecfd9693a064` |
 
 ---
 
@@ -700,7 +700,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | L4 校验 `m13_v57_l4_validation.json` | `aa666a49e36883c7` |
 | L5 SI `m13_v57_l5_si_pi_emc_record.json` | `261b58e745c67aea` |
 | 引擎 `p3_v57_w3_constructive.py`（3W 蛇形守卫 + W3-CN.43） `p3_v57_w3_constructive.py` | `481617515038dad5` |
-| 登记簿 `input_defect_register_v1.json`（+CO-145 项 CLOSED；OPEN 1 = F.Cu/L1） `input_defect_register_v1.json` | `e51eba5ccbd52558` |
+| 登记簿 `input_defect_register_v1.json`（+CO-145 项 CLOSED；OPEN 1 = F.Cu/L1） `input_defect_register_v1.json` | `6a5e9e86e83f5b6b` |
 
 ## 23. CO-146（L2 · 监理指令 #10「JLC 8 层打样就绪」）：阻抗表 / PM 评估 / 打样包 / DFM 闸 / 定性更正
 
@@ -730,8 +730,8 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 打样包记录 `m13_v57_co146_jlc_fab_package.json` | `c8d029254085efea` |
 | 定性更正 `m13_v57_co146_jlc_rebind.json` | `a0a0f6114223ef05` |
 | L2 定值绑定 `jlc_prototype_parameters_v1.json` | `e9bf5019aeddbd16` |
-| 登记簿 `input_defect_register_v1.json`(+2 OPEN) | `e51eba5ccbd52558` |
-| co124 输入自检 `m13_v57_co124_input_selfcheck_gate.json` | `58a7bdaca3966b1c` |
+| 登记簿 `input_defect_register_v1.json`(+2 OPEN) | `6a5e9e86e83f5b6b` |
+| co124 输入自检 `m13_v57_co124_input_selfcheck_gate.json` | `3de2c54ae5655f47` |
 | 工具 `p3_v57_co146_jlc_dfm_gate.py` | `dd58383fb637451b` |
 | 工具 `p3_v57_co146_impedance_table.py` | `07bf5fe6f660e340` |
 | 工具 `p3_v57_co146_pm_eval.py` | `a19a879bd2b5eeed` |
@@ -753,7 +753,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 |---|---|
 | L2 裁定件 `L2_RULING_via_channel_and_interpair_domain_v1.md` | `309f6c9ab223c993` |
 | 记录 `m13_v57_co147_l2_ruling.json` | `ab4d7cf3fb6635c4` |
-| 登记簿 `input_defect_register_v1.json`(3 项 CLOSED / OPEN 0) | `e51eba5ccbd52558` |
+| 登记簿 `input_defect_register_v1.json`(3 项 CLOSED / OPEN 0) | `6a5e9e86e83f5b6b` |
 | DFM 闸 `m13_v57_co146_jlc_dfm_gate.json` | `1692424817eaa89f` |
 | 通孔化反证 `m13_v57_co146_through_via_probe.json` | `fd82d5200294919e` |
 | 打样包记录 `m13_v57_co146_jlc_fab_package.json` | `c8d029254085efea` |
@@ -775,7 +775,28 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 记录 `m13_v57_co148_thermal_ruling.json` | `1da63cd2bb74315e` |
 | 手册输入 `m13_v57_co148_u6_ds320pr1601_inputs.json` | `987c714f8c3fc305` |
 | PM 评估 `m13_v57_co146_pm_eval.json`（手册输入） | `628c06ba2575ceb3` |
-| 登记簿 `input_defect_register_v1.json` | `e51eba5ccbd52558` |
-| 台账 `derived_value_ledger_v1.json` | `16aef4c6d6aa364d` |
+| 登记簿 `input_defect_register_v1.json` | `6a5e9e86e83f5b6b` |
+| 台账 `derived_value_ledger_v1.json` | `87e4ecfd9693a064` |
 | 工具 `p3_v57_co148_u6_datasheet_inputs.py` | `4261597b1e699f6d` |
 | 工具 `p3_v57_co148_thermal_ruling.py` | `5feaefca42dc9ccd` |
+
+## 26. CO-149 / CO-150（L2 自裁 · 热机械派生实现要求 + K9 热/压降域扩闸）：U6 散热要求 + 闸硬化
+
+**CO-149（热机械派生，解 CO-148 R4-2；监理定值 Ta = 40.0°C 不变）**：
+- 两路线互校：手册 θJA(high-K) 17.4 °C/W vs 本板一阶 ψJB+1/(h·2A) = **17.22 °C/W**（差 1.0%，模型可信）；其中**板→空气占 65.7%** ⇒ 瓶颈不在走线/via。
+- 派生要求：θJA_eff ≤ **11.43**（最重档）～17.02 °C/W；或强制风冷 h_eff ≥ **8.14–16.38 W/m²K**；或顶部散热片预算 θJC+R_int+θ_HS ≤ **4.93–10.52 °C/W**。
+- 方案（声明值）：O0 现状 17.22（0/4 档）、O1 风冷 11.56（3/4 档）、**O2 散热片+风冷 11.0（4/4 档 ✓）**⇒ **自然对流全档不可达 ⇒ 系统散热为必需项**（非可选项）。
+- **R5-3**：PCB 侧**不改几何**（瓶颈为板→空气；U6 域热过孔仅影响 ψJB 项）⇒ CO-148 R4-1「GND via 阵列」由义务降为**可选**，避免为边际收益触发 G4 全链重基线。终判 = 实板热测/仿真。
+
+**CO-150（闸硬化）**：co124 K9 扩 `thermal_option_domain`（∃ 声明散热方案覆盖最重工况；现状不达标须显式声明 required_mitigation）与 `drop_domain`（每轨 ΔV% ≤ 预算%）+ 负控 T10/T10b/T11/T11b ⇒ co124 rev **CO-124.5** verdict PASS findings 0；关闭 CO-148 登记的 K9 缺口项 ⇒ **登记簿 OPEN 0**。
+
+| 工件 | sha16 |
+|---|---|
+| L2 裁定件 `L2_RULING_u6_thermal_mitigation_v1.md` | `1ff34801833d07b5` |
+| 记录 `m13_v57_co149_u6_thermal_mitigation.json` | `f1245b125f3cd9ce` |
+| 记录 `m13_v57_co150_k9_domain_gate.json` | `bba1bccf8c98802a` |
+| co124 输入自检 `m13_v57_co124_input_selfcheck_gate.json` | `3de2c54ae5655f47` |
+| 登记簿 `input_defect_register_v1.json`(OPEN 0) | `6a5e9e86e83f5b6b` |
+| 台账 `derived_value_ledger_v1.json` | `87e4ecfd9693a064` |
+| 工具 `p3_v57_co149_thermal_mitigation_derive.py` | `efe600868a63c3ef` |
+| 工具 `p3_v57_co150_k9_domain_gate.py` | `5318637982787af3` |

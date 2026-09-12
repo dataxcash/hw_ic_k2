@@ -1,0 +1,109 @@
+{
+ "artifact": "m13_v57_co149_u6_thermal_mitigation",
+ "schema": 1,
+ "revision": "CO-149.1",
+ "nature": "L2 自裁：U6 热机械派生实现要求（解 CO-148 R4-2；监理定值不变）",
+ "doc": "L2_RULING_u6_thermal_mitigation_v1.md",
+ "doc_sha16": "1ff34801833d07b5",
+ "ta_C": 40.0,
+ "tj_limit_C": 120,
+ "routes": {
+  "datasheet_theta_ja": 17.4,
+  "board_first_order_theta_ja": 17.22,
+  "r_surface_to_air": 11.32,
+  "psi_jb": 5.9,
+  "board_to_air_share_pct": 65.7
+ },
+ "cases": {
+  "U6_EQ0-2_typ": {
+   "P_W": 4.7,
+   "theta_ja_required_C_per_W": 17.02,
+   "h_required_W_per_m2K": 8.14,
+   "top_sink_budget_C_per_W": 10.52
+  },
+  "U6_EQ0-2_max": {
+   "P_W": 6.0,
+   "theta_ja_required_C_per_W": 13.33,
+   "h_required_W_per_m2K": 12.19,
+   "top_sink_budget_C_per_W": 6.83
+  },
+  "U6_EQ5-19_typ": {
+   "P_W": 5.8,
+   "theta_ja_required_C_per_W": 13.79,
+   "h_required_W_per_m2K": 11.48,
+   "top_sink_budget_C_per_W": 7.29
+  },
+  "U6_EQ5-19_max": {
+   "P_W": 7.0,
+   "theta_ja_required_C_per_W": 11.43,
+   "h_required_W_per_m2K": 16.38,
+   "top_sink_budget_C_per_W": 4.93
+  }
+ },
+ "options": [
+  {
+   "id": "O0_asbuilt",
+   "desc": "现状：40°C 自然对流、无散热片",
+   "theta_ja_eff_C_per_W": 17.22,
+   "theta_ja_expr": "θJA = ψJB + 1/(h_nat·2A)",
+   "h_eff": 8.0,
+   "covers_cases": [],
+   "covers_all": false
+  },
+  {
+   "id": "O1_forced_airflow",
+   "desc": "强制风冷（板面 ~2 m/s，无散热片）",
+   "h_eff": 16.0,
+   "theta_ja_eff_C_per_W": 11.56,
+   "covers_cases": [
+    "U6_EQ0-2_typ",
+    "U6_EQ0-2_max",
+    "U6_EQ5-19_typ"
+   ],
+   "covers_all": false
+  },
+  {
+   "id": "O2_heatsink_airflow",
+   "desc": "顶部 30×30mm 铝散热片 + 界面垫(1.0) + ~2 m/s 风冷",
+   "theta_jc_C_per_W": 6.5,
+   "r_interface_C_per_W": 1.0,
+   "theta_hs_C_per_W": 3.5,
+   "theta_ja_eff_C_per_W": 11.0,
+   "covers_cases": [
+    "U6_EQ0-2_typ",
+    "U6_EQ0-2_max",
+    "U6_EQ5-19_typ",
+    "U6_EQ5-19_max"
+   ],
+   "covers_all": true
+  }
+ ],
+ "required": {
+  "system_mitigation_required": true,
+  "theta_ja_eff_max_C_per_W": 11.43,
+  "h_required_range_W_per_m2K": [
+   8.14,
+   16.38
+  ],
+  "top_sink_budget_range_C_per_W": [
+   4.93,
+   10.52
+  ]
+ },
+ "register": {
+  "file": "input_defect_register_v1.json",
+  "sha16_after": "db4352ec4be99b2c",
+  "open_total": 1
+ },
+ "ledger": {
+  "file": "derived_value_ledger_v1.json",
+  "sha16_after": "cea0a8c9d77d1fc3",
+  "dv": "DV-CO146-THERMAL→thermal_option_domain(REACHABLE)"
+ },
+ "teeth": {
+  "t01_two_routes_agree": true,
+  "t02_asbuilt_unreachable_all": true,
+  "t03_declared_option_covers_all": true
+ },
+ "redline": "只读板/SPEC（逐字节未动）；不改几何；零坐标搜索；输出只写 L2 政策层 + 登记簿 + 台账。"
+}
