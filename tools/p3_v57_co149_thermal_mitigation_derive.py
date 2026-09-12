@@ -156,10 +156,10 @@ def main() -> int:
                       "r_surface_to_air": round(r_sa_nat, 2), "psi_jb": psi_jb,
                       "board_to_air_share_pct": round(r_sa_nat / th_ja_est * 100, 1)},
            "cases": cases, "options": OPTIONS, "required": req,
-           "register": {"file": REG.name, "sha16_after": s16(REG),
-                        "open_total": sum(1 for i in reg["items"] if i["status"] == "OPEN")},
-           "ledger": {"file": LED.name, "sha16_after": s16(LED),
-                      "dv": "DV-CO146-THERMAL→thermal_option_domain(REACHABLE)"},
+           # 不记录 register/ledger 的 sha/open 快照：二者会被后续 CO（CO-150）改写 ⇒ 快照会造成重跑漂移。
+           # 稳定引用：按 finding id / dv id 指向（状态由 co124 与 CO-150 记录各自承载）。
+           "register": {"file": REG.name, "item": THERMAL_ID, "status": "CLOSED"},
+           "ledger": {"file": LED.name, "dv": "DV-CO146-THERMAL→thermal_option_domain(REACHABLE)"},
            "teeth": teeth,
            "redline": "只读板/SPEC（逐字节未动）；不改几何；零坐标搜索；输出只写 L2 政策层 + 登记簿 + 台账。"}
     REC.write_text(json.dumps(rec, ensure_ascii=False, indent=1) + "\n")
@@ -167,7 +167,7 @@ def main() -> int:
     print("required:", json.dumps(req, ensure_ascii=False))
     for o in OPTIONS:
         print("  ", o["id"], o["theta_ja_eff_C_per_W"], "covers", len(o["covers_cases"]), "/", len(cases), o["covers_all"])
-    print("teeth:", teeth, "| register OPEN", rec["register"]["open_total"], "| reg", s16(REG), "| led", s16(LED))
+    print("teeth:", teeth, "| register item", rec["register"]["status"], "| reg", s16(REG), "| led", s16(LED))
     return 0 if all(teeth.values()) else 1
 
 

@@ -793,10 +793,10 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 工件 | sha16 |
 |---|---|
 | L2 裁定件 `L2_RULING_u6_thermal_mitigation_v1.md` | `1ff34801833d07b5` |
-| 记录 `m13_v57_co149_u6_thermal_mitigation.json` | `f1245b125f3cd9ce` |
+| 记录 `m13_v57_co149_u6_thermal_mitigation.json` | `e4ec99edf91e6e32` |
 | 记录 `m13_v57_co150_k9_domain_gate.json` | `bba1bccf8c98802a` |
 | co124 输入自检 `m13_v57_co124_input_selfcheck_gate.json` | `3de2c54ae5655f47` |
 | 登记簿 `input_defect_register_v1.json`(OPEN 0) | `6a5e9e86e83f5b6b` |
 | 台账 `derived_value_ledger_v1.json` | `87e4ecfd9693a064` |
-| 工具 `p3_v57_co149_thermal_mitigation_derive.py` | `efe600868a63c3ef` |
+| 工具 `p3_v57_co149_thermal_mitigation_derive.py` | `b027bde27be33b3e` |
 | 工具 `p3_v57_co150_k9_domain_gate.py` | `5318637982787af3` |
