@@ -1,0 +1,335 @@
+{
+ "artifact": "m13_v57_co166_rev19_co159_co165_review",
+ "schema": 1,
+ "revision": "CO-166.2",
+ "nature": "非执行者对抗复评（context 归零续接会话产出）：CO-159（复评 CO-156..158）+ CO-160（F-1..F-12 处置）+ CO-161（K9 必需 DV 清单/identity fail-closed）+ CO-162（co106 verdict fail-open/承载区豁免）+ CO-163（下单备注↔定值表绑定 + 来源 pin）+ CO-164（复现序 rc 机判执行器）+ CO-165（白名单双重证据 + 受控 sha 全域）",
+ "reviewed_rev": "e427909",
+ "reviewer": "独立会话（handoff-z39 §5 第 1 步；禁自评条款由 context 归零的续接会话满足）",
+ "revision_note": "CO-166.2：修正复评件自身的**钉定缺陷**（CO-166.1 把 as-found 源码与**现行**工件混读 ⇒ boundary/备注一变即结论漂移）。现全输入钉在 `e427909`（`git show` 重放）；复评方法 R-CO166-1 由本件自身缺陷的实测补强。",
+ "scope": {
+  "reviewed": [
+   "CO-159",
+   "CO-160",
+   "CO-161",
+   "CO-162",
+   "CO-163",
+   "CO-164",
+   "CO-165"
+  ],
+  "spec_rev": "rev-19",
+  "focus": [
+   "t09 记号化对备注措辞的敏感度",
+   "t10 在容器侧 .omo 不可达时 fail-closed",
+   "EXPECTED_NONZERO 白名单扩展流程",
+   "t06 对 boundary 文本格式变更的脆性",
+   "record_fresh 的 mtime 判据在时钟回拨/网络盘下的稳健性",
+   "co146_boundary_append 大段 f-string 的转义易错性"
+  ]
+ },
+ "board_sha16": "d4e81f647be7f980",
+ "spec_sha16": "5f72182a2616392c",
+ "as_found_tool_sha16": {
+  "co159_review": "56e8a976e7b0c48c",
+  "co164_order_runner": "25d706b4ba30ea3b",
+  "co146_jlc_fab_package": "39ed4229274d3fe7",
+  "co146_boundary_append": "3e23ea03d84cd2f8",
+  "co124_input_selfcheck_gate": "481311e30b77a1b0",
+  "co106_reference_plane_gate": "84eeea00d8e987cb"
+ },
+ "checks": {
+  "V0_frozen_4of4_and_delivered_board": {
+   "frozen_ok": {
+    "SPEC_k2_v4.spec-rev-19.json": true,
+    "m13_v57_s1_page_manifest.json": true,
+    "k2_v4_8L.kicad_pcb": true,
+    "_shared/eda_core/drc_rules.json": true
+   },
+   "delivered_board_sha16": "d4e81f647be7f980",
+   "delivered_matches": true
+  },
+  "V1_claims_hold_as_found": {
+   "co159": {
+    "revision": "CO-159.1",
+    "verdict": "PASS_WITH_FINDINGS",
+    "n_findings": 12,
+    "ids": [
+     "F-1",
+     "F-10",
+     "F-11",
+     "F-12",
+     "F-2",
+     "F-3",
+     "F-4",
+     "F-5",
+     "F-6",
+     "F-7",
+     "F-8",
+     "F-9"
+    ],
+    "reviewed_rev": "c4e951c",
+    "ok": true
+   },
+   "co124": {
+    "revision": "CO-124.9",
+    "verdict": "PASS",
+    "n_findings": 0,
+    "teeth_true": 37,
+    "teeth_total": 37,
+    "required_dv_n": 9,
+    "ok": true
+   },
+   "co150": {
+    "revision": "CO-150.2",
+    "teeth": {
+     "t01_k9_teeth_all_true": true,
+     "t02_register_item_closed": true,
+     "t03_ledger_domain_kinds_expected": true,
+     "t04_dv_inventory_matches_producer": true,
+     "t05_inventory_drift_detectable": true
+    },
+    "ok": true
+   },
+   "co106": {
+    "revision": "CO-106.4",
+    "verdict": "PASS",
+    "teeth_true": 8,
+    "teeth_total": 8,
+    "ok": true
+   },
+   "co120": {
+    "revision": "CO-120.5",
+    "verdict": "PASS",
+    "teeth_true": 12,
+    "teeth_total": 12,
+    "ok": true
+   },
+   "co77": {
+    "revision": "CO-77.6",
+    "verdict": "PASS",
+    "ok": true
+   },
+   "co135": {
+    "revision": "CO-135.3",
+    "verdict": "PASS_WITH_FINDINGS",
+    "ok": true
+   },
+   "co136": {
+    "revision": "CO-136.2",
+    "verdict": "PASS",
+    "ok": true
+   },
+   "fab_pkg": {
+    "revision": "CO146-PKG.4",
+    "n_files": 34,
+    "teeth_true": 13,
+    "teeth_total": 13,
+    "ok": true
+   },
+   "register": {
+    "total": 65,
+    "OPEN": 0,
+    "co159_findings_all_closed": true,
+    "ok": true
+   }
+  },
+  "V2_k9_inventory_single_source": {
+   "co124_required_dv_ids": [
+    "DV-CLR-POWER",
+    "DV-CO146-PDN-DROP",
+    "DV-CO146-THERMAL",
+    "DV-CO146-ZDIFF",
+    "DV-EDGE-COPPER",
+    "DV-ENGINE-INT_PAIR_PITCH",
+    "DV-INTPAIR-EDGE",
+    "DV-M3-KEEPOUT",
+    "DV-PAIR-CROSS"
+   ],
+   "co153_kind_expect_keys": [
+    "DV-CLR-POWER",
+    "DV-CO146-PDN-DROP",
+    "DV-CO146-THERMAL",
+    "DV-CO146-ZDIFF",
+    "DV-EDGE-COPPER",
+    "DV-ENGINE-INT_PAIR_PITCH",
+    "DV-INTPAIR-EDGE",
+    "DV-M3-KEEPOUT",
+    "DV-PAIR-CROSS"
+   ],
+   "match": true,
+   "drift_detectable": true
+  },
+  "V3_boundary_append_replay": {
+   "rc": 0,
+   "files_written": [
+    "m13_v57_w3_joint_assignment_boundary_v1_82.md"
+   ],
+   "writes_only_boundary": true,
+   "captured_has_sections": true,
+   "captured_len": 169570,
+   "disk_unchanged": true
+  },
+  "V4_t10_source_pin_positive": {
+   "path": "/home/fila/jqdDev_2025/ic_hw/.omo/supervision/ledger/instruction-10-jlc-prototype-ready.md",
+   "exists": true,
+   "declared_sha16": "35aafe268ff52f89",
+   "actual_sha16": "35aafe268ff52f89",
+   "ok": true
+  },
+  "V5_t09_positive": {
+   "tokens": {
+    "stackup_code": "JLC08161H",
+    "thickness": "1.6 mm",
+    "outer_copper": "外层 1oz",
+    "inner_copper": "内层 0.5oz",
+    "zdiff": "85Ω",
+    "tolerance": "±10%",
+    "surface": "沉金"
+   },
+   "note_checks": {
+    "stackup": true,
+    "thickness": true,
+    "outer_copper": true,
+    "inner_copper": true,
+    "zdiff": true,
+    "tolerance": true,
+    "surface": true
+   },
+   "ok": true
+  },
+  "V6_verdict_ladder": {
+   "pin_mismatch": "BASELINE_MISMATCH",
+   "teeth_fail": "FAIL(teeth)",
+   "checks_fail": "FAIL_DECLARED_COPPER_MISSING",
+   "pass": "PASS",
+   "ok": true
+  },
+  "P1_t09_tokenization": {
+   "real_7of7": true,
+   "wording_mutation": {
+    "stackup": true,
+    "thickness": false,
+    "outer_copper": false,
+    "inner_copper": true,
+    "zdiff": false,
+    "tolerance": true,
+    "surface": true
+   },
+   "wording_trips": [
+    "thickness",
+    "outer_copper",
+    "zdiff"
+   ],
+   "loose_substr_185_ohm_accepts": true,
+   "loose_substr_11_6mm_accepts": true,
+   "tolerance_drift_masked_by_thickness": true,
+   "tolerance_drift_still_all": true
+  },
+  "P2_t10_fail_closed": {
+   "fake_exists": false,
+   "t10_with_fake_source": false,
+   "fail_closed": true
+  },
+  "P3_allowlist_governance": {
+   "t03_requires_in_order": true,
+   "t07_requires_keys": true,
+   "records_subset_of_watched_now": true,
+   "dfm_record": "/home/fila/jqdDev_2025/ic_hw/k2/pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_co146_jlc_dfm_gate.json",
+   "verdict_PASS_permitted_by_tooth": true,
+   "allowlist_is_single_trust_point": true,
+   "watch_blindspot_observable": true
+  },
+  "P4_t06_format_brittleness": {
+   "real_matches_order": true,
+   "arrow_dash_parses": [
+    "co146_impedance_table"
+   ],
+   "arrow_dash_fails_t06": true,
+   "newest_order_line_is_old": true,
+   "stale_fallback_returns_order": true,
+   "fail_open": true
+  },
+  "P5_record_fresh_clock_skew": {
+   "future_mtime": 1003600.0,
+   "t0": 1000000.0,
+   "old_predicate_says_fresh": true,
+   "allowlist_decision_with_future_stale": "expected_nonzero",
+   "normal_stale_says_not_fresh": false,
+   "fail_open": true
+  },
+  "P6_boundary_append_fstring": {
+   "boundary_append_compiles": true,
+   "synthetic_brace_errors_caught_by_compile": 3,
+   "synthetic_n": 3,
+   "t02_covers_incident_class": true,
+   "static_ok_at_head": true
+  }
+ },
+ "findings": [
+  {
+   "id": "F-1",
+   "sev": "medium",
+   "kind": "gate-fail-open",
+   "what": "`boundary_order_steps()` 以 `lines[-1]` 取「最后一条**含字面子串** `规范复现序 =` 的行」解析序。若更新的 R-COxxx-3 行改用别样措辞（如 `规范复现序（步骤集不变）= …`），该行不含该子串 ⇒ 解析器**回落到更旧的 R-CO165-3 行**并判 `t06=True` ⇒ 文档实际最新序与执行器 `ORDER` 不一致却**报一致**。",
+   "evidence": "P4：注入「新 §99 行（措辞变更）→ 旧 R-CO165-3 行仍在」⇒ `stale_fallback_still_matches_order=True`（fail-open）。",
+   "fix": "CO-167：若最后一条可解析序行之后仍有其它 `规范复现序` 提及 ⇒ 返回 []（fail-closed）+ 负控 t06b。"
+  },
+  {
+   "id": "F-2",
+   "sev": "low",
+   "kind": "gate-fail-open",
+   "what": "白名单「记录由本次执行产出」用**绝对时间**判据 `st_mtime >= t0-1.0`。若盘上记录 mtime 因时钟回拨/网络盘/异机写入而落在**未来**，则**崩溃（未重写记录）**的白名单步仍被判 `expected_nonzero` ⇒ 白名单证据被绕过。",
+   "evidence": "P5：未来 mtime ⇒ `old_predicate_says_fresh=True` 且 `allowlist_decision(...)=expected_nonzero`（fail-open）。",
+   "fix": "CO-167：改为**变更检测**（步前捕获 (exists, mtime_ns, sha)，步后须任一变化）⇒ 与时钟无关；负控 t10。"
+  },
+  {
+   "id": "F-3",
+   "sev": "low",
+   "kind": "gate-blindspot",
+   "what": "R-CO165-2 只声明「新增产物须落入 `watch_paths()`」，但**无任何牙齿**断言 `EXPECTED_NONZERO[*].record ⊆ watch_paths()`。当前 DFM 记录恰在 `m13_v57_co*.json` glob 内（无即时暴露），但未来白名单项若指向 glob 外件，其抖动/2-循环对收敛判定不可见。",
+   "evidence": "P3：`records_subset_of_watched_now=True` 但判据由 t07/t08 均未断言（无 t09）。",
+   "fix": "CO-167：runner `--check` 增 t09（白名单记录 ⊆ 受控集）；新增白名单须同步 `watch_paths()`。"
+  },
+  {
+   "id": "F-4",
+   "sev": "low",
+   "kind": "gate-false-accept",
+   "what": "`binding_param_checks` 用**无锚子串**命中：备注写 `185Ω`/`11.6 mm` 亦分别命中 `85Ω`/`1.6 mm`；且 `tolerance` 记号 `±10%` 可被**厚度公差** `（公差 ±10%）` 满足 ⇒ 阻抗容差漂移（85Ω 差分 ±5%）在备注里**静默通过**。",
+   "evidence": "P1：`loose_substr_185_ohm_accepts=True`、`loose_substr_11_6mm_accepts=True`、`tolerance_drift_masked_by_thickness=True`。",
+   "fix": "CO-167：数值记号加数字边界（`(?<![0-9.])`）；tolerance 须在 zdiff 记号邻域内命中；负控 t09c。"
+  },
+  {
+   "id": "F-5",
+   "sev": "low",
+   "kind": "gate-false-reject",
+   "what": "同一函数对备注**措辞**敏感：`1.6mm`（无空格）/`外层1oz`/`85 Ω` 即令 t09 失败——虽然备注语义正确。属 fail-closed（偏安全），但把「备注排版」与「定值漂移」混为一类，产生噪声失败。",
+   "evidence": "P1：`wording_trips=['thickness', 'outer_copper', 'zdiff']`。",
+   "fix": "CO-167：记号正则允许柔性空白（`\\s*`）⇒ 仅当**值**漂移才失败。"
+  },
+  {
+   "id": "F-6",
+   "sev": "low",
+   "kind": "gate-governance",
+   "what": "`EXPECTED_NONZERO` 是收敛判定的**单点信任**：t03/t07 只断言「步骤在序内」+「条目含 verdict/record」，既**不禁止**把 expected `verdict` 写成 `PASS`（与 rc≠0 自相矛盾），也无机制把声明 verdict 绑到独立来源。",
+   "evidence": "P3：`verdict_PASS_permitted_by_tooth=True`（无判据禁止 PASS）。",
+   "fix": "CO-167：t07 增判据 `all(v['verdict'] != 'PASS')`；新增白名单项须登记期望 verdict 并复评。"
+  }
+ ],
+ "n_findings": 6,
+ "verdict": "PASS_WITH_FINDINGS",
+ "independent_confirmations": [
+  "冻结四源 4/4 MATCH（含 drc_rules 0a459839e15960b8）；交付板 = d4e81f647be7f980",
+  "as-found 记录逐条复核成立：co159 PASS_WITH_FINDINGS/12；co124 CO-124.9 PASS/37 牙齿/0 findings；co150 CO-150.2 牙齿 5/5；co106 CO-106.4 PASS/8 牙齿；co120 PASS（12-12）；co77 PASS；co135 CO-135.3；co136 PASS；打样包 CO146-PKG.4 n_files 34/13 牙齿；登记簿 65 项 / OPEN 0（co159:F-1..F-12 全 CLOSED）",
+  "CO-161 单一真值成立：co124 `required_dv_ids`(9) == co153 `KIND_EXPECT` 键集（V2）",
+  "CO-163 t10 正控成立：容器侧监理指令件可达且 sha16 `35aafe268ff52f89` 与声明一致（V4）",
+  "CO-163 t09 正控成立：现行备注 7/7 记号命中（V5）",
+  "CO-162 阶梯独立复核：pin 漂移 ⇒ BASELINE_MISMATCH、teeth 失败 ⇒ FAIL(teeth)、check 失败 ⇒ 非 PASS（V6）",
+  "CO-164 边界文档序 ↔ 执行器 ORDER 一致（34 步）；CO-165 受控集覆盖 ≥20 件且含 co106 记录与打样包 MANIFEST（独立重算）",
+  "co146_boundary_append as-found 源码只读重放**执行成功（rc=0）且仅写 boundary**（V3）⇒ §37..§39 大段 f-string 现行可正确求值（逐字节幂等由 runner sha 跨轮稳定另行保证）",
+  "CO-163 t10 在本容器 `.omo` **不可达**时 fail-closed（P2 注入不存在路径 ⇒ 判据 False，不静默放行）"
+ ],
+ "reproduce": [
+  "python3 tools/p3_v57_co166_rev19_co159_co165_review.py（只读；对象钉在 e427909）"
+ ],
+ "as_found": "本件以 `git show e427909:<path>` 重放受评基线 ⇒ 结论**可重放且不随后续修复漂移**；findings 为 as-found 快照，其处置见 CO-167（登记簿 co166:F-* 与本件记录）。",
+ "redline": "只读；不改 SPEC/板/冻结四源/台账/登记簿/他人记录；注入一律内存（boundary 重放拦截 write_text）、tempfile 仅用于 mtime 探针且即用即删、零坐标搜索。"
+}

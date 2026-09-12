@@ -1428,6 +1428,132 @@
    "closed_by": [
     "CO-165"
    ]
+  },
+  {
+   "finding": "co166:F-1",
+   "sev": "medium",
+   "kind": "TOOL_DEFECT",
+   "what": "**t06 序解析陈旧回落（fail-open）**：`boundary_order_steps()` 取「最后一条**含字面子串** `规范复现序 =` 的行」解析序。若更新的 R-COxxx-3 行改用别样措辞（如 `规范复现序（步骤集不变）= …`），该行不含该子串 ⇒ 解析器**回落到更旧的 R-CO165-3 行**，判 `t06=True` ⇒ 文档实际最新序与执行器 `ORDER` 不一致却报一致。",
+   "disposition": "CO-167：`boundary_order_steps()` 增 fail-closed 判据 —— 若**最后一 条可解析序行之后**仍有其它 `规范复现序` 提及（措辞/格式变更的新式写法）⇒ 返回 []（**禁止回落到更旧序行**）。",
+   "status": "CLOSED",
+   "next": "新增/改写 R-COxxx-3 序行必须保持 `规范复现序 = ` 可解析式样；否则 runner `--check` t06 立即 FAIL。",
+   "evidence": [
+    "CO-166 P4 负控：注入措辞变更的新序行 ⇒ `stale_fallback_still_matches_order=True`（旧判据 fail-open）",
+    "CO-167 复核：同注入下 `boundary_order_steps()` 返回 [] ⇒ t06=False（fail-closed）；真 boundary 仍 == ORDER"
+   ],
+   "refs": [
+    "CO-166",
+    "CO-167",
+    "CO-164"
+   ],
+   "closed_by": [
+    "CO-167"
+   ]
+  },
+  {
+   "finding": "co166:F-2",
+   "sev": "low",
+   "kind": "TOOL_DEFECT",
+   "what": "**白名单刷新判据用绝对 mtime（fail-open）**：白名单「记录由本次执行产出」用 `st_mtime >= t0-1.0`。若盘上记录 mtime 因时钟回拨/网络盘/异机写入而落在**未来**，则**崩溃（未重写记录）**的白名单步仍被判 `expected_nonzero`。",
+   "disposition": "CO-167：新增纯判据 `record_refreshed(before, after)`（步前/步后捕获 exists + mtime_ns + 内容 sha16），以**变更检测**替代绝对时间比较（与时钟无关）；`--check` 增 t10（拒未重写的陈旧记录，含未来 mtime）。",
+   "status": "CLOSED",
+   "next": "白名单步的「本次产出」证据一律用变更检测；若文件系统 mtime 粒度不足，记录须由步内显式重写。",
+   "evidence": [
+    "CO-166 P5 负控：未来 mtime ⇒ 旧判据 `old_predicate_says_fresh=True` 且 `allowlist_decision=expected_nonzero`（fail-open）",
+    "CO-167 复核：`record_refreshed` 对「mtime/sha 均不变」与「记录消失」均判 False；t10=True"
+   ],
+   "refs": [
+    "CO-166",
+    "CO-167",
+    "CO-165"
+   ],
+   "closed_by": [
+    "CO-167"
+   ]
+  },
+  {
+   "finding": "co166:F-3",
+   "sev": "low",
+   "kind": "TOOL_DEFECT",
+   "what": "**白名单记录 ⊆ 受控集无牙齿**：R-CO165-2 只声明「新增产物须落入 `watch_paths()`」，但无判据断言 `EXPECTED_NONZERO[*].record ⊆ watch_paths()`。当前 DFM 记录恰在 `m13_v57_co*.json` glob 内（无即时暴露），未来白名单项若指向 glob 外件（如 `.archer_tmp/`）则其抖动/2-循环对收敛判定不可见。",
+   "disposition": "CO-167：runner `--check` 增 **t09**（白名单记录 ⊆ `watch_paths()`）；新增白名单须同步受控集。",
+   "status": "CLOSED",
+   "next": "新增白名单项须确保其 record 路径在 `watch_paths()` 覆盖范围内。",
+   "evidence": [
+    "CO-166 P3：`records_subset_of_watched_now=True` 但 t07/t08 均未断言（无 t09）",
+    "CO-167：t09=True（DFM 记录 ⊆ 受控集）"
+   ],
+   "refs": [
+    "CO-166",
+    "CO-167",
+    "CO-165"
+   ],
+   "closed_by": [
+    "CO-167"
+   ]
+  },
+  {
+   "finding": "co166:F-4",
+   "sev": "low",
+   "kind": "TOOL_DEFECT",
+   "what": "**t09 无锚子串（false-accept）**：`binding_param_checks` 用**无锚子串**命中 —— 备注写 `185Ω`/`11.6 mm` 亦分别命中 `85Ω`/`1.6 mm`；且 `tolerance` 记号 `±10%` 可被**厚度公差** `（公差 ±10%）` 满足 ⇒ 阻抗容差漂移（85Ω 差分 ±5%）在备注里静默通过。",
+   "disposition": "CO-167：记号改**有锚正则**（数值前缀 `(?<![0-9.])` + 后缀 `(?![0-9])`），且 `tolerance` 须在 **zdiff 记号邻域**（40 字符内）命中；打样包升 **CO146-PKG.5**。",
+   "status": "CLOSED",
+   "next": "凡「客户可见文字 ↔ 定值」绑定判据一律数值锚定，禁止裸子串。",
+   "evidence": [
+    "CO-166 P1：`loose_substr_185_ohm_accepts=True`、`loose_substr_11_6mm_accepts=True`、`tolerance_drift_masked_by_thickness=True`",
+    "CO-167 复核：`185Ω`⇒zdiff False；`11.6 mm`⇒thickness False；`85Ω 差分 ±5%`⇒tolerance False；真备注仍 7/7"
+   ],
+   "refs": [
+    "CO-166",
+    "CO-167",
+    "CO-163"
+   ],
+   "closed_by": [
+    "CO-167"
+   ]
+  },
+  {
+   "finding": "co166:F-5",
+   "sev": "low",
+   "kind": "TOOL_DEFECT",
+   "what": "**t09 措辞敏感（fail-closed 噪声）**：`1.6mm`（无空格）/`外层1oz`/`85 Ω` 即令 t09 失败——虽然备注语义正确。把「备注排版」与「定值漂移」混为一类。",
+   "disposition": "CO-167：记号正则允许**柔性空白**（数字↔单位边界 `\\s*` + 字面空格 `\\s*`）⇒ 仅当**值**漂移才失败。",
+   "status": "CLOSED",
+   "next": "判据区分「值漂移」（须 FAIL）与「排版差异」（不应 FAIL）。",
+   "evidence": [
+    "CO-166 P1：`wording_trips=['thickness','outer_copper','zdiff']`",
+    "CO-167 复核：`1.6mm`/`外层1oz`/`85 Ω` 均 7/7 通过；值漂移仍 FAIL"
+   ],
+   "refs": [
+    "CO-166",
+    "CO-167",
+    "CO-163"
+   ],
+   "closed_by": [
+    "CO-167"
+   ]
+  },
+  {
+   "finding": "co166:F-6",
+   "sev": "low",
+   "kind": "TOOL_DEFECT",
+   "what": "**白名单 expected verdict 未被禁 PASS（单点信任）**：t03/t07 只断言「步骤在序内」+「条目含 verdict/record」，不禁止把 expected `verdict` 写成 `PASS`（与 rc≠0 自相矛盾），亦无机制把声明 verdict 绑到独立来源。",
+   "disposition": "CO-167：`allowlist_decision` 增判据（expected verdict 为 `PASS` ⇒ `expected_verdict_pass_forbidden` 并停机）；t07 增 `all(verdict != 'PASS')`。",
+   "status": "CLOSED",
+   "next": "新增白名单项须登记期望 verdict（非 PASS）并由 t07 覆盖；禁以白名单「豁免」成功步。",
+   "evidence": [
+    "CO-166 P3：`verdict_PASS_permitted_by_tooth=True`（无判据禁止 PASS）",
+    "CO-167 复核：`allowlist_decision(...,'PASS',True)='expected_verdict_pass_forbidden'`；t07=True"
+   ],
+   "refs": [
+    "CO-166",
+    "CO-167",
+    "CO-165"
+   ],
+   "closed_by": [
+    "CO-167"
+   ]
   }
  ],
  "closed_items": [
@@ -1445,14 +1571,14 @@
   "owner": "ARCHER（L2 自裁执行侧）",
   "approval": "定义件 v1.0 待监理裁定/owner 批准；登记簿随闸每次运行校验",
   "mandatory_trigger": "任何 SPEC / drc_rules 变更后必须跑 tools/p3_v57_co124_input_selfcheck_gate.py 并 PASS",
-  "updated_by": "CO-127..CO-133 + **CO-134（整改通知 #09：③ 重新定性 = 工程换算错误 → REQ-R3-2 忠实实现 + 需求/实现分家规矩 + co124 K9）**；登记簿随 co124 每次运行校验；CO-134 续：4 项已声明定值补 rule_key + 台账溯源；**CO-136（L2 自裁 · 闸卫生续）**：登记并关闭 CO-135 F5(b)/F6 两条 TOOL_DEFECT（co124 标签 / co106 陈旧牙齿）；F4（handoff pin 失准）与 F5(a)（③ 根因叙述）属叙述类，保留在 CO-135 记录，不入本登记簿（非 SPEC/工具缺陷）。；**CO-139**：+1 TOOL_DEFECT（K9 豁免未锚定）并 CLOSED（hash-pin + T9）。；**CO-141**：更正 IMPLEMENTATION_DEVIATION 范围（24 平行对-对，非 3）+ 新增 OPEN TOOL_DEFECT（路由器列距基准漏 3W）。；**CO-142（L2 只读）**：对间 <3W 违规逐条明细 + 构造阶段归因；**CO-143（L2 只读）**：更正 `k2_router_escape_fan_omits_3w` 定位（f13 pair_xorder → escape-fan 落位判据 `p3_v57_co10_west_fan_probe.py:check()`）+ 施加可行性研究（可满足但须重派生策略；PDN 障碍 + 贪心夹死）。；**CO-146（监理指令 #10 · JLC 打样就绪）**：+2 IMPLEMENTATION_DEVIATION（OPEN：盲/埋孔 vs JLC 标准不支持 = 结构/工艺类别；阻焊桥 1 处 vs JLC 0.09mm）；外部输入定性更正（撤回「等券」表述，改绑 JLC 阻抗控制服务 + 监理定值）；登记簿随 co124 每次运行校验。；**CO-147（L2 自裁）**：三题裁定（R1 过孔策略维持盲/埋孔 ⇒ 渠道绑定 JLC advanced；R2 J2 landing 对间适用域 ACCEPT_L2；R3 阻焊桥 ACCEPT_L2_WITH_FAB_REVIEW）；登记簿 3 项转 CLOSED。；**CO-148**：U6 手册输入（TI SNLS683）⇒ 热 Tj 121.8–161.8°C 超上限 120°C ⇒ 登记 +2（热超限 HIGH / K9 无热域模型 MED）。；**CO-149（L2 自裁 · 热机械派生）**：自然对流全档不可达（两路线互校 θJA≈17.2 vs 手册 17.4）⇒ 派生出系统散热要求（h_eff ≥ 8.2–16.4 W/m²K 或 顶部散热片预算 ≤ 4.9–10.5 °C/W）；监理定值 Ta=40°C 不变；登记簿热项 CLOSED（OPEN 余 K9 热域缺口）；台账 DV-CO146-THERMAL 可达性 = 声明散热方案域。（1ff34801833d07b5）；**CO-150（L2 闸硬化）**：co124 K9 扩 `thermal_option_domain` + `drop_domain` 两域并加负控 T10/T10b/T11/T11b ⇒ 关闭 K9 缺口登记项。（记录 （本次生成））；**CO-152（L2 自裁 · CO-151 findings 处置）**：3 项 TOOL_DEFECT 登记并 CLOSED（记录内嵌下游快照致 pin 漂移 / co120 pin 覆盖面缺 *_sha16 快照键 + 豁免依据分级 / 派生物语义未标注）；并勘误 CO-147 R2 最劣值 0.2577 与 R3 叙述 0.0205（见 boundary §28）。；**CO-153（L2 自裁 · K9 覆盖缺口关闭）**：co124 K9 新增 `declared`（证据须锚定）+ `conservative_ge`（保守实现闭式证明）两支 + 牙齿 T12/T12b/T13/T13b；台账 DV-ENGINE-INT_PAIR_PITCH 归一等价可证；`p3_v57_co146_ledger_add.py` 并入规范序 ⇒ 证据 pin 自动刷新。关闭 TOOL_DEFECT：`co124_k9_declared_kind_has_no_evidence_check`。；**CO-155（L2 自裁 · executor · CO-154 复评处置）**：F-1 CLOSED（co150 崩溃修复）；F-2 工件侧（co147/co148 下游计数快照移除）完成、闸覆盖侧 OPEN；F-3..F-7 OPEN。登记 `co154:F-1..F-7`。；**CO-156（L2 自裁 · 闸硬化 · CO-154 剩余 OPEN 处置）**：F-2（co120 下游快照键通用化 = CO-120.3）/ F-3（co124→CO-124.6）/F-4（co134 只 upsert + co153 产出七域 kind）/ F-5（K9 域覆盖）/ F-6（declared 值-证据绑定）/ F-7（conservative_ge 引用权威 DV）全部 CLOSED ⇒ 登记簿 OPEN 0；co124 牙齿 24/24。；**CO-157（L2 自裁 · 闸硬化 3）**：H-1 K9 finder-id 覆盖元牙齿（T17/T17b + T18/T18b/T18c，牙齿 24→29）；H-2 判据声明失实订正（declared 严于 process_floor）；H-3 co120 `board_superseded` 收严为板 sha16（CO-120.4）；H-4 R-CO156-3 机判化（co136 CO-136.1 源码守卫 + 正负控）⇒ 4 项 CLOSED。；**CO-158（L2 自裁 · L5 打样包自足性）**：ORDER_NOTES 声明的随单附件（3 份 L2 裁定 + DFM 记录）此前不在包内 ⇒ CO146-PKG.2 新增 `06_rulings/` + 牙齿 t05/t06，并把打包工具并入规范序；gerber/drill 逐字节未变。；**CO-158（L2 自裁 · 交付物自足 + 闸卫生）**：J-1 ORDER_NOTES 声明的随单附件不在包内 ⇒ CO146-PKG.2 新增 `06_rulings/` + 牙齿 t05/t06（gerber/drill 逐字节未变）；J-2 co77 citation 候选目录缺 L5 包 ⇒ CO-77.6 补入 + 正控牙齿；J-3 co77/co124/co135/co136 退出码不反映 verdict ⇒ 四件改为按 verdict 返回码。；**CO-160（L2 自裁 · executor · CO-159 复评处置）**：F-1 declared 非空 computed / F-2 权威 DV 缺失显式 FAIL / F-3 T18d+T18e 源码 finder 覆盖 / F-4 R-CO156-3 机判面口径对齐 / F-5 快照键名面判据 / F-6 SUPERSEDED_BOARDS 白名单 / F-7 DFM 闸 rc 反映 verdict / F-8 t07 副本来源一致性 / F-9 t08 目录级声明 / F-10 co135↔co77 候选表交叉一致性 / F-11 六件回归闸 rc 反映 verdict / F-12 co135 链 pin 与 boundary 取最新 —— 全部 CLOSED ⇒ 登记簿 OPEN 0。；**CO-161（L2 自裁 · 查漏型闸硬化 4）**：G-1 K9 必需 DV 清单牙齿（co124 `REQUIRED_DV_IDS` + inventory 判据 + T19；co153 `KIND_EXPECT` 提模块级作单一真值；co150 t03/t04/t05）⇒ 删 DV 不再静默失覆盖；G-2 identity fail-closed（未识别/缺 form 必抓 + T20；新 finder id 入 `K9_FINDER_IDS`）。；**CO-162（L2 自裁 · 查漏型闸硬化 5）**：G-1 co106 verdict fail-open（`hard=False ∧ cls_count 空` 仍 PASS）+ 基线 pin 非约束 ⇒ 抽 `verdict_of` 纯函数并令 pin 漂移/check 失败一律非 PASS（+ 3 牙齿）；G-2 桥接承载区无声明豁免 ⇒ 注册表 + 冻结 SPEC pin 锚定豁免 （+ 1 牙齿）；co106 升 CO-106.4。（承接 z35 §5.4）；**CO-163（L2 自裁 · 查漏型闸硬化 6）**：G-1 下单备注参数与声明定值表 `jlc_prototype_parameters_v1.json` 无绑定 ⇒ CO146-PKG.4 增 `t09/t09b`（逐项记号 + 漂移灵敏度）；G-2 定值来源 pin 未核验 ⇒ `t10/t10b`（监理指令件 sha16 锚定）。；**CO-164（L2 自裁 · 收敛判定硬化）**：G-1 复现序无 rc 机判执行器 ⇒ 「恒崩溃步 + sha 稳定」被误判收敛（CO-163 期间实测事故）⇒ 新增 `p3_v57_co164_order_runner.py`：rc 策略（EXPECTED_NONZERO=DFM 闸）+ fail-fast + 真收敛（rc ∧ sha）+ `--check` t01..t06（含文档序↔执行器一致性）。；**CO-165（L2 自裁 · 收敛执行器加固）**：G-1 白名单只按 rc 放行 ⇒ 崩溃/静默失败可伪装预期 FAIL（含「陈旧 verdict 充当证据」二次漏洞）⇒ CO-164.2 `allowlist_decision` 要求 verdict + 记录由本次执行产出；G-2 受控 sha 仅 7 件 ⇒ `watch_paths()` 覆盖全部记录类产物；`--check` 增 t07/t08。",
+  "updated_by": "CO-127..CO-133 + **CO-134（整改通知 #09：③ 重新定性 = 工程换算错误 → REQ-R3-2 忠实实现 + 需求/实现分家规矩 + co124 K9）**；登记簿随 co124 每次运行校验；CO-134 续：4 项已声明定值补 rule_key + 台账溯源；**CO-136（L2 自裁 · 闸卫生续）**：登记并关闭 CO-135 F5(b)/F6 两条 TOOL_DEFECT（co124 标签 / co106 陈旧牙齿）；F4（handoff pin 失准）与 F5(a)（③ 根因叙述）属叙述类，保留在 CO-135 记录，不入本登记簿（非 SPEC/工具缺陷）。；**CO-139**：+1 TOOL_DEFECT（K9 豁免未锚定）并 CLOSED（hash-pin + T9）。；**CO-141**：更正 IMPLEMENTATION_DEVIATION 范围（24 平行对-对，非 3）+ 新增 OPEN TOOL_DEFECT（路由器列距基准漏 3W）。；**CO-142（L2 只读）**：对间 <3W 违规逐条明细 + 构造阶段归因；**CO-143（L2 只读）**：更正 `k2_router_escape_fan_omits_3w` 定位（f13 pair_xorder → escape-fan 落位判据 `p3_v57_co10_west_fan_probe.py:check()`）+ 施加可行性研究（可满足但须重派生策略；PDN 障碍 + 贪心夹死）。；**CO-146（监理指令 #10 · JLC 打样就绪）**：+2 IMPLEMENTATION_DEVIATION（OPEN：盲/埋孔 vs JLC 标准不支持 = 结构/工艺类别；阻焊桥 1 处 vs JLC 0.09mm）；外部输入定性更正（撤回「等券」表述，改绑 JLC 阻抗控制服务 + 监理定值）；登记簿随 co124 每次运行校验。；**CO-147（L2 自裁）**：三题裁定（R1 过孔策略维持盲/埋孔 ⇒ 渠道绑定 JLC advanced；R2 J2 landing 对间适用域 ACCEPT_L2；R3 阻焊桥 ACCEPT_L2_WITH_FAB_REVIEW）；登记簿 3 项转 CLOSED。；**CO-148**：U6 手册输入（TI SNLS683）⇒ 热 Tj 121.8–161.8°C 超上限 120°C ⇒ 登记 +2（热超限 HIGH / K9 无热域模型 MED）。；**CO-149（L2 自裁 · 热机械派生）**：自然对流全档不可达（两路线互校 θJA≈17.2 vs 手册 17.4）⇒ 派生出系统散热要求（h_eff ≥ 8.2–16.4 W/m²K 或 顶部散热片预算 ≤ 4.9–10.5 °C/W）；监理定值 Ta=40°C 不变；登记簿热项 CLOSED（OPEN 余 K9 热域缺口）；台账 DV-CO146-THERMAL 可达性 = 声明散热方案域。（1ff34801833d07b5）；**CO-150（L2 闸硬化）**：co124 K9 扩 `thermal_option_domain` + `drop_domain` 两域并加负控 T10/T10b/T11/T11b ⇒ 关闭 K9 缺口登记项。（记录 （本次生成））；**CO-152（L2 自裁 · CO-151 findings 处置）**：3 项 TOOL_DEFECT 登记并 CLOSED（记录内嵌下游快照致 pin 漂移 / co120 pin 覆盖面缺 *_sha16 快照键 + 豁免依据分级 / 派生物语义未标注）；并勘误 CO-147 R2 最劣值 0.2577 与 R3 叙述 0.0205（见 boundary §28）。；**CO-153（L2 自裁 · K9 覆盖缺口关闭）**：co124 K9 新增 `declared`（证据须锚定）+ `conservative_ge`（保守实现闭式证明）两支 + 牙齿 T12/T12b/T13/T13b；台账 DV-ENGINE-INT_PAIR_PITCH 归一等价可证；`p3_v57_co146_ledger_add.py` 并入规范序 ⇒ 证据 pin 自动刷新。关闭 TOOL_DEFECT：`co124_k9_declared_kind_has_no_evidence_check`。；**CO-155（L2 自裁 · executor · CO-154 复评处置）**：F-1 CLOSED（co150 崩溃修复）；F-2 工件侧（co147/co148 下游计数快照移除）完成、闸覆盖侧 OPEN；F-3..F-7 OPEN。登记 `co154:F-1..F-7`。；**CO-156（L2 自裁 · 闸硬化 · CO-154 剩余 OPEN 处置）**：F-2（co120 下游快照键通用化 = CO-120.3）/ F-3（co124→CO-124.6）/F-4（co134 只 upsert + co153 产出七域 kind）/ F-5（K9 域覆盖）/ F-6（declared 值-证据绑定）/ F-7（conservative_ge 引用权威 DV）全部 CLOSED ⇒ 登记簿 OPEN 0；co124 牙齿 24/24。；**CO-157（L2 自裁 · 闸硬化 3）**：H-1 K9 finder-id 覆盖元牙齿（T17/T17b + T18/T18b/T18c，牙齿 24→29）；H-2 判据声明失实订正（declared 严于 process_floor）；H-3 co120 `board_superseded` 收严为板 sha16（CO-120.4）；H-4 R-CO156-3 机判化（co136 CO-136.1 源码守卫 + 正负控）⇒ 4 项 CLOSED。；**CO-158（L2 自裁 · L5 打样包自足性）**：ORDER_NOTES 声明的随单附件（3 份 L2 裁定 + DFM 记录）此前不在包内 ⇒ CO146-PKG.2 新增 `06_rulings/` + 牙齿 t05/t06，并把打包工具并入规范序；gerber/drill 逐字节未变。；**CO-158（L2 自裁 · 交付物自足 + 闸卫生）**：J-1 ORDER_NOTES 声明的随单附件不在包内 ⇒ CO146-PKG.2 新增 `06_rulings/` + 牙齿 t05/t06（gerber/drill 逐字节未变）；J-2 co77 citation 候选目录缺 L5 包 ⇒ CO-77.6 补入 + 正控牙齿；J-3 co77/co124/co135/co136 退出码不反映 verdict ⇒ 四件改为按 verdict 返回码。；**CO-160（L2 自裁 · executor · CO-159 复评处置）**：F-1 declared 非空 computed / F-2 权威 DV 缺失显式 FAIL / F-3 T18d+T18e 源码 finder 覆盖 / F-4 R-CO156-3 机判面口径对齐 / F-5 快照键名面判据 / F-6 SUPERSEDED_BOARDS 白名单 / F-7 DFM 闸 rc 反映 verdict / F-8 t07 副本来源一致性 / F-9 t08 目录级声明 / F-10 co135↔co77 候选表交叉一致性 / F-11 六件回归闸 rc 反映 verdict / F-12 co135 链 pin 与 boundary 取最新 —— 全部 CLOSED ⇒ 登记簿 OPEN 0。；**CO-161（L2 自裁 · 查漏型闸硬化 4）**：G-1 K9 必需 DV 清单牙齿（co124 `REQUIRED_DV_IDS` + inventory 判据 + T19；co153 `KIND_EXPECT` 提模块级作单一真值；co150 t03/t04/t05）⇒ 删 DV 不再静默失覆盖；G-2 identity fail-closed（未识别/缺 form 必抓 + T20；新 finder id 入 `K9_FINDER_IDS`）。；**CO-162（L2 自裁 · 查漏型闸硬化 5）**：G-1 co106 verdict fail-open（`hard=False ∧ cls_count 空` 仍 PASS）+ 基线 pin 非约束 ⇒ 抽 `verdict_of` 纯函数并令 pin 漂移/check 失败一律非 PASS（+ 3 牙齿）；G-2 桥接承载区无声明豁免 ⇒ 注册表 + 冻结 SPEC pin 锚定豁免 （+ 1 牙齿）；co106 升 CO-106.4。（承接 z35 §5.4）；**CO-163（L2 自裁 · 查漏型闸硬化 6）**：G-1 下单备注参数与声明定值表 `jlc_prototype_parameters_v1.json` 无绑定 ⇒ CO146-PKG.4 增 `t09/t09b`（逐项记号 + 漂移灵敏度）；G-2 定值来源 pin 未核验 ⇒ `t10/t10b`（监理指令件 sha16 锚定）。；**CO-164（L2 自裁 · 收敛判定硬化）**：G-1 复现序无 rc 机判执行器 ⇒ 「恒崩溃步 + sha 稳定」被误判收敛（CO-163 期间实测事故）⇒ 新增 `p3_v57_co164_order_runner.py`：rc 策略（EXPECTED_NONZERO=DFM 闸）+ fail-fast + 真收敛（rc ∧ sha）+ `--check` t01..t06（含文档序↔执行器一致性）。；**CO-165（L2 自裁 · 收敛执行器加固）**：G-1 白名单只按 rc 放行 ⇒ 崩溃/静默失败可伪装预期 FAIL（含「陈旧 verdict 充当证据」二次漏洞）⇒ CO-164.2 `allowlist_decision` 要求 verdict + 记录由本次执行产出；G-2 受控 sha 仅 7 件 ⇒ `watch_paths()` 覆盖全部记录类产物；`--check` 增 t07/t08。；**CO-167（L2 自裁 · CO-166 findings 处置 + 收敛判据加固）**：F-1 t06 序解析陈旧回落 fail-open ⇒ 末条可解析序行之后仍有 `规范复现序` 提及即 fail-closed；F-2 白名单刷新用绝对 mtime ⇒ 改 `record_refreshed` 变更检测（exists/mtime_ns/sha）+ t10；F-3 白名单记录 ⊆ 受控集无牙齿 ⇒ 增 t09；F-4 t09 无锚子串 ⇒ 数值锚定 + 容差邻域（CO146-PKG.5）；F-5 t09 措辞敏感 ⇒ 柔性空白；F-6 白名单 verdict 未禁 PASS ⇒ `allowlist_decision` + t07 禁之。执行器升 CO-167.1。",
   "counts": {
    "SPEC_DEFECT": 5,
    "PROVED_THRESHOLD": 5,
-   "TOOL_DEFECT": 51,
+   "TOOL_DEFECT": 57,
    "IMPLEMENTATION_DEVIATION": 4,
    "OPEN": 0,
-   "total": 65
+   "total": 71
   }
  },
  "verdict": null

@@ -842,6 +842,82 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body39
     txt = txt.replace("W3 Boundary **v2.10**", "W3 Boundary **v2.11**")
+    # ── §40 CO-166（非执行者对抗复评 CO-159..CO-165） ───────────────────────
+    MARK40 = "## 40. CO-166"
+    _rc40 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    _ord166 = ('co146_impedance_table → co146_pm_eval → co146_ledger_add → co153_k9_domain_coverage → co148_u6_datasheet_inputs → co148_thermal_ruling → co149_thermal_mitigation_derive → co147_l2_ruling → co146_jlc_dfm_gate → co146_jlc_fab_package → co152_findings_disposition → co155_co154_findings_disposition → co156_co154_open_disposition → co157_gate_hardening_3 → co158_l5_packet_selfcontained → co159_rev19_co156_co157_co158_review → co160_co159_findings_disposition → co161_gap_hardening_4 → co162_verdict_binding → co163_binding_to_order_notes → co166_rev19_co159_co165_review → co124_input_selfcheck_gate → co150_k9_domain_gate → co146_boundary_append → co77_closure_declaration_sweep → co120_provenance_pin_gate → co135_review_hygiene → co136_gate_hygiene → co78_layer_role_drift_gate → co81_project_rules_gate → co84_dru_domain_gate → co95_in4_reachability → co98_reachability_status_report → co106_reference_plane_gate → co146_boundary_append')
+    sec40 = [MARK40 + "（**非执行者对抗复评**：CO-159..CO-165；as-found @ `e427909`）", "",
+             "- 复评方：context 归零的续接会话（满足 handoff-z39 §5「另一会话，禁自评」）；对象钉在受评基线 commit，"
+             "`git show` 内存重放 ⇒ 结论**可重放、不随后续修复漂移**。方法：正控 V0..V6 + 负控 P1..P6（内存注入、零落盘、零坐标搜索）。",
+             "- 结论：verdict **PASS_WITH_FINDINGS**；findings **6**（F-1..F-6）。独立确认含：冻结四源 4/4、"
+             "co124 CO-124.9（37 牙齿/0 findings）、co150 CO-150.2（5/5）、co106 CO-106.4（8/8）、co120（12/12）、co77 PASS、"
+             "co135 CO-135.3、co136 PASS、打样包 CO146-PKG.4（34 件/13 牙齿）、登记簿 65 项/OPEN 0（co159:F-1..F-12 全 CLOSED）、"
+             "co124 必需 DV 清单 == co153 `KIND_EXPECT`、t10 来源 pin 正控、co146_boundary_append **只读重放逐字节幂等且仅写 boundary**。",
+             f"- findings 处置见 §41（CO-167）。登记簿 **{_rc40['total']} 项 / OPEN {_rc40['OPEN']}**。", "",
+             "> **R-CO166-1**：复评必须由**另一会话**（context 归零）执行，且对象钉在受评基线 commit（`git show` 重放）"
+             "⇒ 结论可重放、不随后续修复漂移。",
+             "> **R-CO166-2**：负控须为**内存注入**（零落盘/零坐标搜索）；不得以「记录自证」充当独立证据。",
+             "> **R-CO166-3**（复现序，取代 R-CO165-3；步骤集新增 co166 复评步）：规范复现序 = `" + _ord166 + "`，"
+             "**循环至 sha 稳定**（收敛判定须遵 R-CO164-1 + R-CO165-1/2）。", "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows40 = [("工具 `p3_v57_co166_rev19_co159_co165_review.py`（只读复评；对象钉 `e427909`）",
+                K2 / "tools/p3_v57_co166_rev19_co159_co165_review.py"),
+               ("记录 `m13_v57_co166_rev19_co159_co165_review.json`（重建）",
+                STEP2 / "m13_v57_co166_rev19_co159_co165_review.json"),
+               ("卡 `m13_v57_CO166_rev19_co159_co165_review.md`（重建）",
+                STEP2 / "m13_v57_CO166_rev19_co159_co165_review.md"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc40['total']} 项 / OPEN {_rc40['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows40:
+        if pth.exists():
+            sec40.append(f"| {label} | `{s16(pth)}` |")
+    sec40.append("")
+    body40 = "\n".join(sec40)
+    if MARK40 in txt:
+        txt = re.sub(re.escape(MARK40) + r"[\s\S]*?(?=\n## |\Z)", body40, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body40
+    txt = txt.replace("W3 Boundary **v2.11**", "W3 Boundary **v2.12**")
+    # ── §41 CO-167（CO-166 findings 处置 + 收敛判据加固） ───────────────────
+    MARK41 = "## 41. CO-167"
+    _rc41 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    _ord167 = ('co146_impedance_table → co146_pm_eval → co146_ledger_add → co153_k9_domain_coverage → co148_u6_datasheet_inputs → co148_thermal_ruling → co149_thermal_mitigation_derive → co147_l2_ruling → co146_jlc_dfm_gate → co146_jlc_fab_package → co152_findings_disposition → co155_co154_findings_disposition → co156_co154_open_disposition → co157_gate_hardening_3 → co158_l5_packet_selfcontained → co159_rev19_co156_co157_co158_review → co160_co159_findings_disposition → co161_gap_hardening_4 → co162_verdict_binding → co163_binding_to_order_notes → co166_rev19_co159_co165_review → co167_co166_findings_disposition → co124_input_selfcheck_gate → co150_k9_domain_gate → co146_boundary_append → co77_closure_declaration_sweep → co120_provenance_pin_gate → co135_review_hygiene → co136_gate_hygiene → co78_layer_role_drift_gate → co81_project_rules_gate → co84_dru_domain_gate → co95_in4_reachability → co98_reachability_status_report → co106_reference_plane_gate → co146_boundary_append')
+    sec41 = [MARK41 + "（**L2 自裁 · CO-166 findings 处置**：收敛判据加固）", "",
+             "- 实测缺口（CO-166 复评，均机判内存注入）：**F-1**（medium）序解析器取「最后一条含字面量 `规范复现序` 赋值的行」"
+             "⇒ 更新的 R-COxxx-3 若改措辞即被**回落到更旧序行**，t06 假通过；**F-2**（low）白名单「记录由本次执行产出」用绝对 mtime "
+             "`≥ t0-1.0` ⇒ 记录 mtime 落在**未来**（时钟回拨/网络盘/异机）时，**崩溃**步仍被判 `expected_nonzero`；"
+             "**F-3**（low）白名单记录 ⊆ `watch_paths()` 无牙齿；**F-4**（low）t09 无锚子串（`185Ω`/`11.6 mm` 误命中）+ 容差记号被厚度公差满足；"
+             "**F-5**（low）t09 对措辞敏感（`1.6mm`/`外层1oz`）；**F-6**（low）白名单 expected verdict 允许写成 `PASS`。",
+             "- 处置（**CO-167**）：① 序解析器增「末条可解析序行之后仍有其它 `规范复现序` 提及 ⇒ 返回 []」fail-closed（F-1）；"
+             "② 白名单刷新判据改**变更检测** `record_refreshed(before, after)`（exists / mtime_ns / 内容 sha16，与时钟无关）（F-2）；"
+             "③ `--check` 增 **t09**（白名单记录 ⊆ 受控集）（F-3）/ **t10**（刷新判据变更检测灵敏度）（F-2）；"
+             "④ `binding_param_checks` 记号改**有锚正则 + 柔性空白 + 容差须在 zdiff 邻域**（F-4/F-5）；"
+             "⑤ `allowlist_decision` 与 t07 禁 expected verdict = `PASS`（F-6）。打样包升 **CO146-PKG.5**；执行器升 **CO-167.1**。",
+             "- 复核：`--check` **t01..t10 全 True**；`binding_param_checks` 现行备注 7/7、改排版仍 7/7、`185Ω`/`11.6 mm`/容差漂移均不通过；"
+             f"整序 **converged**（rc 策略不变）。登记簿 **{_rc41['total']} 项 / OPEN {_rc41['OPEN']}**。", "",
+             "> **R-CO167-1**：白名单「记录由本次执行产出」一律用**变更检测**（exists/mtime_ns/sha），**禁止**绝对时间比较（未来 mtime 可伪新鲜）。",
+             "> **R-CO167-2**：白名单记录须 ⊆ `watch_paths()`；expected `verdict` 不得为 `PASS`。",
+             "> **R-CO167-3**（复现序，取代 R-CO166-3）：规范复现序 = `" + _ord167 + "`，**循环至 sha 稳定**"
+             "（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2）。", "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows41 = [("工具 `p3_v57_co167_co166_findings_disposition.py`", K2 / "tools/p3_v57_co167_co166_findings_disposition.py"),
+               ("工具 `p3_v57_co164_order_runner.py`（CO-167.1 / `record_refreshed` + t09/t10 + 序解析 fail-closed）",
+                K2 / "tools/p3_v57_co164_order_runner.py"),
+               ("工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.5 / t09 有锚正则）",
+                K2 / "tools/p3_v57_co146_jlc_fab_package.py"),
+               ("记录 `m13_v57_co146_jlc_fab_package.json`（重建）", STEP2 / "m13_v57_co146_jlc_fab_package.json"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc41['total']} 项 / OPEN {_rc41['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows41:
+        if pth.exists():
+            sec41.append(f"| {label} | `{s16(pth)}` |")
+    sec41.append("")
+    body41 = "\n".join(sec41)
+    if MARK41 in txt:
+        txt = re.sub(re.escape(MARK41) + r"[\s\S]*?(?=\n## |\Z)", body41, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body41
+    txt = txt.replace("W3 Boundary **v2.12**", "W3 Boundary **v2.13**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
     return 0

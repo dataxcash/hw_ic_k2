@@ -140,13 +140,37 @@ def binding_tokens(binding: dict) -> dict:
             "surface": "沉金" if "ENIG" in str(binding.get("surface_finish", "")).upper() else str(binding.get("surface_finish", ""))}
 
 
+def _tok_re(tok: str) -> str:
+    """CO-167（F-4/F-5）：把记号渲染为**有锚正则** —— 柔性空白（防排版噪声）+ 数值边界
+    （防无锚子串，如 `185Ω` 命中 `85Ω`、`11.6 mm` 命中 `1.6 mm`）。"""
+    frag = ""
+    for i, ch in enumerate(tok):
+        prev = tok[i - 1] if i else ""
+        if i and "." not in (prev, ch) and prev.isdigit() != ch.isdigit():
+            frag += r"\s*"          # 数字↔单位 边界允许柔性空白（`85 Ω` / `10 %`），不改数值
+        frag += re.escape(ch)
+    r = frag.replace(r"\ ", r"\s*")
+    if re.match(r"^[0-9]", tok):
+        r = r"(?<![0-9.])" + r + r"(?![0-9])"
+    return r
+
+
 def binding_param_checks(note: str, binding: dict) -> dict:
-    """CO-163（G-1）：ORDER_NOTES 必须逐项含声明定值表的参数记号（客户可见交付物与定值来源绑定）。"""
+    """CO-163（G-1）+ CO-167（F-4/F-5）：ORDER_NOTES 必须逐项含声明定值表的参数记号。"""
     t = binding_tokens(binding)
-    return {"stackup": bool(t["stackup_code"]) and t["stackup_code"] in note,
-            "thickness": t["thickness"] in note, "outer_copper": t["outer_copper"] in note,
-            "inner_copper": t["inner_copper"] in note, "zdiff": t["zdiff"] in note,
-            "tolerance": t["tolerance"] in note, "surface": bool(t["surface"]) and t["surface"] in note}
+
+    def _has(tok: str) -> bool:
+        return bool(tok) and re.search(_tok_re(tok), note) is not None
+
+    # CO-167（F-4）：容差记号须出现在 zdiff 记号**邻域**内（防被厚度公差「（公差 ±10%）」误满足）
+    _tol_near = False
+    _m = re.search(_tok_re(t["zdiff"]), note) if t["zdiff"] else None
+    if _m and t["tolerance"]:
+        _tol_near = re.search(_tok_re(t["tolerance"]), note[_m.end():_m.end() + 40]) is not None
+    return {"stackup": _has(t["stackup_code"]), "thickness": _has(t["thickness"]),
+            "outer_copper": _has(t["outer_copper"]), "inner_copper": _has(t["inner_copper"]),
+            "zdiff": _has(t["zdiff"]), "tolerance": _has(t["tolerance"]) and _tol_near,
+            "surface": _has(t["surface"])}
 
 
 def order_notes(spec: dict, dfm: dict, imp: dict) -> str:
@@ -293,7 +317,7 @@ def main() -> int:
              "t02_8_copper_gerbers": len(cu) >= 8,
              "t03_drill_present": len(drl) >= 1,
              "t04_all_hashed": all(v.get("sha256") for v in m1.values())}
-    rec = {"artifact": "m13_v57_co146_jlc_fab_package", "schema": 1, "revision": "CO146-PKG.4",
+    rec = {"artifact": "m13_v57_co146_jlc_fab_package", "schema": 1, "revision": "CO146-PKG.5",
            "nature": "JLC 打样包（监理指令 #10 动作 3）；只出交付物，不改板/SPEC",
            "board": BOARD.name, "board_sha16": sha16(BOARD),
            "package_dir": str(OUT.relative_to(K2)), "n_files": len(m1),
