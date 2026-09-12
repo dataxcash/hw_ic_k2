@@ -204,6 +204,37 @@ def main() -> int:
         txt = re.sub(re.escape(MARK26) + r"[\s\S]*?(?=\n## |\Z)", body26, txt, count=1)
     else:
         txt = txt.rstrip("\n") + "\n\n" + body26
+    # ── §27 CO-151（非执行者对抗复评 rev-19 + CO-142..150） ────────────────
+    MARK27 = "## 27. CO-151"
+    r151 = json.loads((STEP2 / "m13_v57_co151_rev19_nonexecutor_review.json").read_text())
+    sec27 = [MARK27 + "（**非执行者对抗复评** · rev-19 + CO-142..CO-150）：独立重算全复现 + findings 8", "",
+             f"**复评人 = 非执行者会话**（未参与 CO-142..150 施加；context 隔离）；**verdict = {r151['verdict']}**；"
+             f"只读（除自身记录）。冻结四源 4/4 + 交付板 `{r151['board_sha16']}` 逐字节不变。", "",
+             "**独立确认（不复用执行者断言，自一次源重算）**："]
+    sec27 += [f"- {x}" for x in r151["independent_confirmations"]]
+    sec27 += ["", "**findings**：", "", "| id | sev | kind | 内容 | 修法 |", "|---|---|---|---|---|"]
+    sec27 += [f"| {f['id']} | {f['sev']} | {f['kind']} | {f['what']} | {f['fix']} |" for f in r151["findings"]]
+    sec27 += ["", "> 复评**只读**：findings **未**写入登记簿（登记簿 scope = SPEC/drc_rules；本类属记录/闸/注册表卫生）"
+                  "⇒ 由后续执行 CO 决定登记与重基线（同 CO-108/114 先例）。", "", "| 工件 | sha16 |", "|---|---|"]
+    for label, pth in [("工具 `p3_v57_co151_rev19_nonexecutor_review.py`",
+                        K2 / "tools/p3_v57_co151_rev19_nonexecutor_review.py"),
+                       ("记录 `m13_v57_co151_rev19_nonexecutor_review.json`",
+                        STEP2 / "m13_v57_co151_rev19_nonexecutor_review.json"),
+                       ("卡 `m13_v57_CO151_rev19_nonexecutor_review.md`",
+                        STEP2 / "m13_v57_CO151_rev19_nonexecutor_review.md"),
+                       ("co120 provenance 闸 `m13_v57_co120_provenance_pin_gate.json`",
+                        STEP2 / "m13_v57_co120_provenance_pin_gate.json"),
+                       ("登记簿 `input_defect_register_v1.json`(复评未改)", L2 / "input_defect_register_v1.json"),
+                       ("台账 `derived_value_ledger_v1.json`(复评未改)", L2 / "derived_value_ledger_v1.json")]:
+        if pth.exists():
+            sec27.append(f"| {label} | `{s16(pth)}` |")
+    sec27.append("")
+    body27 = "\n".join(sec27)
+    if MARK27 in txt:
+        txt = re.sub(re.escape(MARK27) + r"[\s\S]*?(?=\n## |\Z)", body27, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body27
+    txt = txt.replace("W3 Boundary **v1.98**", "W3 Boundary **v1.99**")
     txt = txt.replace("W3 Boundary **v1.97**", "W3 Boundary **v1.98**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))

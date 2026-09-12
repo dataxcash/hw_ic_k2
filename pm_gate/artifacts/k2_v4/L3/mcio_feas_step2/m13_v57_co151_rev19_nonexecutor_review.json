@@ -1,0 +1,787 @@
+{
+ "artifact": "m13_v57_co151_rev19_nonexecutor_review",
+ "board_sha16": "d4e81f647be7f980",
+ "findings": [
+  {
+   "fix": "① §6 标注「记录 pin = 时点快照，非复现目标」并给出时序；② 移交执行 CO：记录内嵌下游快照去留（登记簿 item 13 同族）。③ 复核 co120 是否需为这 4 条的 `sha16` 字段补 EXEMPT（现闸仅扫 `*_record` 键，不覆盖 → 见 F-1b）",
+   "id": "F-1",
+   "kind": "doc/reproducibility",
+   "sev": "low",
+   "what": "§6 记录 pin 为**时序快照**（记录内嵌下游 sha/状态计数）：按 §6 复现得**另一稳定不动点**，co124/co147/co148/co150 四条记录 pin 不可由 §6 复现（登记簿/台账 pin 可复现）；且 co148 重跑把 2 条已闭登记项重开（OPEN 0→2）。"
+  },
+  {
+   "fix": "co120 P1 增补白名单字段（或显式声明「非 *_record 快照不受闸管」并登记理由）。",
+   "id": "F-1b",
+   "kind": "gate-coverage",
+   "sev": "low",
+   "what": "co120 P1 正则仅抽 `\"<x>_record\"` 键 ⇒ 记录内 `register_sha16`/`sha16_after`/`sha16` 类**下游快照字段不在闸覆盖内**（CO-108/114 F-6 的另一半）；本件 4 条即为实例。"
+  },
+  {
+   "fix": "R2 facts 改列最劣 0.2577（另注 J2 侧最劣 0.2871）；doc + 记录 + boundary 同批重基线。",
+   "id": "F-2",
+   "kind": "record-errata",
+   "sev": "medium",
+   "what": "CO-147 R2 `facts.as_built_edge_mm`=0.3294 非最劣值：本板 F.Cu 平行(≤10°)异对全量最小铜边=0.2577mm（中心 0.4627），欠 2w 达 0.1523mm；0.3294 系 CO-134 单值口径，已被 CO-141 判 UNDER_REPORTED。裁定结论（接口固有 ⇒ ACCEPT_L2）不受影响，但 R2 引文与其所引证据链（CO-141/142）自相矛盾。"
+  },
+  {
+   "fix": "『0.0065mm』→『0.0205mm』。",
+   "id": "F-3",
+   "kind": "record-errata",
+   "sev": "low",
+   "what": "CO-147 R3 `not_done_why` 称『0.0065mm 量级边际差距』，与其本件 `facts.shortfall_mm`=0.0205 差 3.2×（本件独立复算 shortfall=0.0205 ✓）。仅叙述，处置（ACCEPT_WITH_FAB_REVIEW）不变。"
+  },
+  {
+   "fix": "补 h/ψJB↔RθJB 敏感度行 + 把『互校』改称『一致性核对』。",
+   "id": "F-4",
+   "kind": "advisory",
+   "sev": "low",
+   "what": "CO-149 板侧路线以**表征参数 ψJB=5.9**作加性热阻；若改用同表**热阻 RθJB=6.1**，所需 h 由 [8.15, 16.38] 抬到 [8.29, 16.99]（+3.39%），θJA_eff 17.22→17.42（与手册 θJA=17.4 反而更贴合）。『两路线互校差 1.0%』因复用手册自身 ψJB + 声明 h，**非独立证据**。另：O0（自然对流）覆盖 0/4 对声明 h=8.0 敏感——h=8.5 时覆盖 1/4。结论（须系统散热）不变。"
+  },
+  {
+   "fix": "口径显式声明（或改用 zone 内计数 + 保守侧）。",
+   "id": "F-5",
+   "kind": "advisory",
+   "sev": "low",
+   "what": "CO-146 PDN `n_plane_vias` 实为**全网 via 计数**（P3V3 41、P3V3_AUX 12）而非 zone 内净匹配（本件实算 35/5）；口径未声明。因 R_plane 主导，ΔV% 影响 <0.02%（绝对），四轨 PASS 不变。"
+  },
+  {
+   "fix": "标签改『一阶复现 + 单一独立模型交叉核对』。",
+   "id": "F-6",
+   "kind": "advisory",
+   "sev": "info",
+   "what": "CO-146 阻抗『两套独立闭式交叉核对』：M1 即 SPEC `dielectric_8l_basis.model` 同式同输入 ⇒ **非独立**（等价于复现 SPEC 一阶），真正独立第二模型仅 M2；结论（as-built ±10% PASS + 名义最宽 gap watch）仍成立（本件双模型逐值复现，差 ≤0.02Ω）。"
+  },
+  {
+   "fix": "删/收紧 `co110:co109_record`；为 co111/co118 补可机判依据（如现引记录 sha 对应板/时点）。",
+   "id": "F-7",
+   "kind": "registry-hygiene",
+   "sev": "info",
+   "what": "co120 EXEMPT 注册表声明 10 条，闸记录 `n_exempt_historical`=9：`co110:co109_record` 的 pin 现与目标**相等**（不再陈旧）⇒ 该条为**多余登记**（清单虚高 1）。另 co111/co118 两条（登记簿 item 13 点名复核）无板级机判佐证，仅靠自由文本理由（本件佐证其 pin 确陈旧且与现引值一致 ⇒ 判**充分**）。"
+  }
+ ],
+ "independent_confirmations": [
+  "CO-146 阻抗双模型逐值复现（≤0.02Ω）；PDN 四轨 ΔV% 漂移 ≤0.0001%",
+  "CO-146 DFM：自跑 DRC as-designed 42 / JLC 下限 43（solder_mask_bridge=1）；阻焊几何 0.0694 <0.09（回退 0.1004≥0.09）",
+  "CO-146/147 过孔：自数 493 支 / 非通孔 220（0.05 与 DFM 表逐型一致）",
+  "CO-147 R3 阻焊 FAIL；R1 盲埋孔『Not supported』出处 sha256 7d1d5a9193f3c212 ✓",
+  "CO-148/149 热：手册解析 PACT=[4.7, 6.0]/[5.8, 7.0]、θJA=17.4、TJmax=120.0 ⇒ Tj 最劣 161.8°C > 120 ⇒ FAIL 成立",
+  "CO-150 K9 两域本件自建 3 负控全触发、现行台账 0 findings（牙齿非空过）",
+  "co120 豁免 10 条全部『陈旧且非空』=True（非空过）"
+ ],
+ "items": {
+  "A_invariants": {
+   "delivered_board": "d4e81f647be7f980",
+   "delivered_ok": true,
+   "frozen": {
+    "SPEC_k2_v4.spec-rev-19.json": true,
+    "_shared/eda_core/drc_rules.json": true,
+    "k2_v4_8L.kicad_pcb": true,
+    "m13_v57_s1_page_manifest.json": true
+   },
+   "frozen_paths": {
+    "SPEC_k2_v4.spec-rev-19.json": "/home/fila/jqdDev_2025/ic_hw/k2/pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-19.json",
+    "_shared/eda_core/drc_rules.json": "/home/fila/jqdDev_2025/ic_hw/_shared/eda_core/drc_rules.json",
+    "k2_v4_8L.kicad_pcb": "/home/fila/jqdDev_2025/ic_hw/k2/k2_v4_8L.kicad_pcb",
+    "m13_v57_s1_page_manifest.json": "/home/fila/jqdDev_2025/ic_hw/k2/pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_s1_page_manifest.json"
+   },
+   "living": {
+    "boundary": "07c95dac1c4b5d06",
+    "ledger": "87e4ecfd9693a064",
+    "r1_doc": "309f6c9ab223c993",
+    "register": "6a5e9e86e83f5b6b",
+    "thermal_doc": "1ff34801833d07b5"
+   },
+   "teeth": {
+    "t01_all_frozen": true,
+    "t02_delivered_pinned": true,
+    "t03_negative_control_detects": true
+   },
+   "verdict": "PASS"
+  },
+  "B_interpair_3w": {
+   "B.Cu": {
+    "arg": {
+     "a": "PCIE_UP_OUT3_P_J2",
+     "b": "PCIE_UP_OUT4_N_J2",
+     "layer": "B.Cu"
+    },
+    "below_3w": 0,
+    "min_center_angle": 0.0,
+    "min_center_mm": 0.65,
+    "min_edge_mm": 0.445,
+    "pairs_parallel": 48,
+    "thr_3w": 0.615,
+    "viol_names": [],
+    "viol_rows": []
+   },
+   "F.Cu": {
+    "arg": {
+     "a": "PCIE_DN6_N",
+     "b": "PCIE_DN7_P",
+     "layer": "F.Cu"
+    },
+    "below_3w": 10,
+    "min_center_angle": 7.43,
+    "min_center_mm": 0.4627,
+    "min_edge_mm": 0.2577,
+    "pairs_parallel": 117,
+    "thr_3w": 0.615,
+    "viol_names": [
+     [
+      "PCIE_DN0_N",
+      "PCIE_DN1_P"
+     ],
+     [
+      "PCIE_DN2_N",
+      "PCIE_DN3_P"
+     ],
+     [
+      "PCIE_DN3_N",
+      "PCIE_DN4_P"
+     ],
+     [
+      "PCIE_DN4_N",
+      "PCIE_DN5_P"
+     ],
+     [
+      "PCIE_DN6_N",
+      "PCIE_DN7_P"
+     ],
+     [
+      "PCIE_REFCLK0_N",
+      "PCIE_UP_OUT2_P_J2"
+     ],
+     [
+      "PCIE_REFCLK1_N",
+      "PCIE_UP_OUT6_P_J2"
+     ],
+     [
+      "PCIE_UP_OUT0_N_J2",
+      "PCIE_UP_OUT1_P_J2"
+     ],
+     [
+      "PCIE_UP_OUT2_N_J2",
+      "PCIE_UP_OUT3_P_J2"
+     ],
+     [
+      "PCIE_UP_OUT6_N_J2",
+      "PCIE_UP_OUT7_P_J2"
+     ]
+    ],
+    "viol_rows": [
+     {
+      "a": "PCIE_DN6_N",
+      "angle": 7.43,
+      "b": "PCIE_DN7_P",
+      "center_mm": 0.4627
+     },
+     {
+      "a": "PCIE_UP_OUT6_N_J2",
+      "angle": 3.78,
+      "b": "PCIE_UP_OUT7_P_J2",
+      "center_mm": 0.4921
+     },
+     {
+      "a": "PCIE_UP_OUT2_N_J2",
+      "angle": 2.3,
+      "b": "PCIE_UP_OUT3_P_J2",
+      "center_mm": 0.5112
+     },
+     {
+      "a": "PCIE_DN4_N",
+      "angle": 1.11,
+      "b": "PCIE_DN5_P",
+      "center_mm": 0.5344
+     },
+     {
+      "a": "PCIE_DN3_N",
+      "angle": 0.37,
+      "b": "PCIE_DN4_P",
+      "center_mm": 0.5706
+     },
+     {
+      "a": "PCIE_UP_OUT0_N_J2",
+      "angle": 0.29,
+      "b": "PCIE_UP_OUT1_P_J2",
+      "center_mm": 0.5737
+     },
+     {
+      "a": "PCIE_DN2_N",
+      "angle": 0.24,
+      "b": "PCIE_DN3_P",
+      "center_mm": 0.5762
+     },
+     {
+      "a": "PCIE_DN0_N",
+      "angle": 0.17,
+      "b": "PCIE_DN1_P",
+      "center_mm": 0.58
+     },
+     {
+      "a": "PCIE_REFCLK0_N",
+      "angle": 2.58,
+      "b": "PCIE_UP_OUT2_P_J2",
+      "center_mm": 0.5923
+     },
+     {
+      "a": "PCIE_REFCLK1_N",
+      "angle": 3.97,
+      "b": "PCIE_UP_OUT6_P_J2",
+      "center_mm": 0.5923
+     }
+    ]
+   },
+   "In2.Cu": {
+    "arg": {
+     "a": "PCIE_DN3_N",
+     "b": "PCIE_DN4_P",
+     "layer": "In2.Cu"
+    },
+    "below_3w": 0,
+    "min_center_angle": 0.0,
+    "min_center_mm": 0.58,
+    "min_edge_mm": 0.42,
+    "pairs_parallel": 123,
+    "thr_3w": 0.48,
+    "viol_names": [],
+    "viol_rows": []
+   },
+   "In5.Cu": {
+    "arg": {
+     "a": "PCIE_UP0_P",
+     "b": "PCIE_UP1_N",
+     "layer": "In5.Cu"
+    },
+    "below_3w": 0,
+    "min_center_angle": 0.0,
+    "min_center_mm": 0.57,
+    "min_edge_mm": 0.41,
+    "pairs_parallel": 90,
+    "thr_3w": 0.48,
+    "viol_names": [],
+    "viol_rows": []
+   },
+   "errata": {
+    "R2_arg": {
+     "a": "PCIE_DN6_N",
+     "b": "PCIE_DN7_P",
+     "layer": "F.Cu"
+    },
+    "co147_R2_as_built_edge_cited": 0.3294,
+    "delta_mm": 0.0717,
+    "reviewer_min_center_mm": 0.4627,
+    "reviewer_min_edge_mm": 0.2577
+   },
+   "n_non_through": 220,
+   "n_tracks": 2512,
+   "n_vias": 493,
+   "teeth": {
+    "t01_negative_control_catches_violation": true,
+    "t02_nonempty_pairs": true
+   },
+   "via_census": {
+    "F.Cu->B.Cu": 273,
+    "F.Cu->In2.Cu": 92,
+    "F.Cu->In5.Cu": 8,
+    "In2.Cu->In5.Cu": 88,
+    "In5.Cu->B.Cu": 32
+   }
+  },
+  "C_impedance": {
+   "rows": [
+    {
+     "M1": [
+      88.43,
+      90.61
+     ],
+     "M2": [
+      92.65,
+      94.94
+     ],
+     "er": 4.16,
+     "h_or_b_mm": 0.1164,
+     "kind": "microstrip",
+     "layer": "F.Cu",
+     "ok_asbuilt": true,
+     "s_mm": [
+      0.295,
+      0.395
+     ],
+     "w_mm": 0.205,
+     "watch_nominal_max": [
+      94.94
+     ]
+    },
+    {
+     "M1": [
+      84.56,
+      89.48
+     ],
+     "M2": [
+      84.39,
+      86.27
+     ],
+     "er": 3.99,
+     "h_or_b_mm": 0.5,
+     "kind": "symmetric_stripline",
+     "layer": "In2.Cu",
+     "ok_asbuilt": true,
+     "s_mm": [
+      0.34,
+      0.44
+     ],
+     "w_mm": 0.16,
+     "watch_nominal_max": []
+    },
+    {
+     "M1": [
+      84.56,
+      89.48
+     ],
+     "M2": [
+      84.39,
+      86.27
+     ],
+     "er": 3.99,
+     "h_or_b_mm": 0.5,
+     "kind": "symmetric_stripline",
+     "layer": "In5.Cu",
+     "ok_asbuilt": true,
+     "s_mm": [
+      0.34,
+      0.44
+     ],
+     "w_mm": 0.16,
+     "watch_nominal_max": []
+    },
+    {
+     "M1": [
+      88.43,
+      90.61
+     ],
+     "M2": [
+      92.65,
+      94.94
+     ],
+     "er": 4.16,
+     "h_or_b_mm": 0.1164,
+     "kind": "microstrip",
+     "layer": "B.Cu",
+     "ok_asbuilt": true,
+     "s_mm": [
+      0.295,
+      0.395
+     ],
+     "w_mm": 0.205,
+     "watch_nominal_max": [
+      94.94
+     ]
+    }
+   ],
+   "target_zdiff": 85.0,
+   "teeth": {
+    "t01_overwide_leaves_window": true,
+    "z_overwide": 64.06
+   },
+   "verdict": "PASS",
+   "watch": 2,
+   "window": [
+    76.5,
+    93.50000000000001
+   ]
+  },
+  "D_pdn": {
+   "max_area_drift_mm2": 0.0025,
+   "max_drop_pct_drift": 0.0001,
+   "r_via_each_ohm": 0.002890839,
+   "rails": {
+    "12V_IN": {
+     "I_a": 0.6973,
+     "L_mm": 10.95,
+     "area_mm2": 18.8019,
+     "dV_mV": 5.397,
+     "drop_pct": 0.045,
+     "n_vias_board_net": 3,
+     "n_vias_in_zone": 3,
+     "verdict": "PASS",
+     "w_eq_mm": 1.7171
+    },
+    "MCU_VDD": {
+     "I_a": 0.15,
+     "L_mm": 45.4,
+     "area_mm2": 1564.03,
+     "dV_mV": 0.237,
+     "drop_pct": 0.0072,
+     "n_vias_board_net": 16,
+     "n_vias_in_zone": 16,
+     "verdict": "PASS",
+     "w_eq_mm": 34.45
+    },
+    "P3V3": {
+     "I_a": 2.2312,
+     "L_mm": 84.75,
+     "area_mm2": 3847.65,
+     "dV_mV": 4.583,
+     "drop_pct": 0.1389,
+     "n_vias_board_net": 41,
+     "n_vias_in_zone": 35,
+     "verdict": "PASS",
+     "w_eq_mm": 45.4
+    },
+    "P3V3_AUX": {
+     "I_a": 1.0,
+     "L_mm": 24.8,
+     "area_mm2": 28.8925,
+     "dV_mV": 22.86,
+     "drop_pct": 0.6927,
+     "n_vias_board_net": 12,
+     "n_vias_in_zone": 5,
+     "verdict": "PASS",
+     "w_eq_mm": 1.165
+    }
+   },
+   "ref_drop_pct": {
+    "12V_IN": 0.045,
+    "MCU_VDD": 0.0072,
+    "P3V3": 0.1388,
+    "P3V3_AUX": 0.6927
+   },
+   "rho_at_TA": 1.8595e-08,
+   "rs_ohm_sq": 0.001062575,
+   "teeth": {
+    "t01_x10_current_exceeds_budget": true,
+    "t02_within_1pct_of_record": true,
+    "x10_pct": 6.927
+   },
+   "verdict": "PASS"
+  },
+  "E_dfm_via": {
+   "drc_as_designed": {
+    "by_type": {
+     "lib_footprint_issues": 12,
+     "lib_footprint_mismatch": 29,
+     "silk_edge_clearance": 1
+    },
+    "mask": [],
+    "n": 42,
+    "unconnected": 178
+   },
+   "drc_jlc_limit": {
+    "by_type": {
+     "lib_footprint_issues": 12,
+     "lib_footprint_mismatch": 29,
+     "silk_edge_clearance": 1,
+     "solder_mask_bridge": 1
+    },
+    "mask": [
+     {
+      "items": [
+       "走线 [PCIE_UP3_N] (F.Cu), 长度: 8.7551 mm",
+       "F.Cu 上 R3 的焊盘 2 [PWR_BTN_ISO]"
+      ]
+     }
+    ],
+    "n": 43,
+    "unconnected": 178
+   },
+   "jlc_capability": {
+    "blind_buried_not_supported": true,
+    "mask_to_copper_0p09": true,
+    "source_sha256": "7d1d5a9193f3c2123367b1b306e9e3c67863fd31da6e577ad7c4f197fab8ac9d"
+   },
+   "mask": {
+    "expansion_mm": 0.05,
+    "fallback_gap_mm": 0.1004,
+    "fallback_ok": true,
+    "gap_mm": 0.0694,
+    "jlc_min_mm": 0.09,
+    "r3_2_center": [
+     53.95,
+     37.0
+    ],
+    "shortfall_mm": 0.0206
+   },
+   "teeth": {
+    "t01_mask_below_min": true,
+    "t02_fallback_covers": true,
+    "t03_jlc_run_isolates_mask": true
+   },
+   "verdict": "FAIL"
+  },
+  "F_thermal": {
+   "a_board_bbox_m2": 0.005537,
+   "a_board_decl_m2": 0.00552,
+   "asbuilt_route_Tj_C": 160.5,
+   "cases": {
+    "U6_EQ0-2_max": {
+     "P_W": 6.0,
+     "Ta_max_C": 15.6,
+     "Tj_C": 144.4,
+     "required_theta_ja": 13.33
+    },
+    "U6_EQ0-2_typ": {
+     "P_W": 4.7,
+     "Ta_max_C": 38.2,
+     "Tj_C": 121.8,
+     "required_theta_ja": 17.02
+    },
+    "U6_EQ5-19_max": {
+     "P_W": 7.0,
+     "Ta_max_C": -1.8,
+     "Tj_C": 161.8,
+     "required_theta_ja": 11.43
+    },
+    "U6_EQ5-19_typ": {
+     "P_W": 5.8,
+     "Ta_max_C": 19.1,
+     "Tj_C": 140.9,
+     "required_theta_ja": 13.79
+    }
+   },
+   "coverage_forced_h16": [
+    "U6_EQ0-2_max",
+    "U6_EQ0-2_typ",
+    "U6_EQ5-19_typ"
+   ],
+   "coverage_nat_h8": [],
+   "coverage_nat_h8_5": [
+    "U6_EQ0-2_typ"
+   ],
+   "h_required_range": [
+    8.15,
+    16.38
+   ],
+   "h_required_range_bbox": [
+    8.12,
+    12.15,
+    11.45,
+    16.33
+   ],
+   "h_required_range_using_RthetaJB": [
+    8.29,
+    16.99
+   ],
+   "parsed": {
+    "TJ_max": 120.0,
+    "pact_0_2": [
+     4.7,
+     6.0
+    ],
+    "pact_5_19": [
+     5.8,
+     7.0
+    ],
+    "psi_jb": 5.9,
+    "theta_ja": 17.4,
+    "theta_jb": 6.1,
+    "theta_jc": 6.5
+   },
+   "psi_vs_rjb_delta_pct": 3.39,
+   "ta_C": 40.0,
+   "teeth": {
+    "t01_worst_over_limit": true,
+    "t02_zero_power_passes": true,
+    "t03_h_sensitivity_flips_nat_coverage": true
+   },
+   "theta_ja_eff_asbuilt": 17.22,
+   "theta_ja_eff_rjb_asbuilt": 17.42,
+   "tj_limit_C": 120.0,
+   "verdict": "FAIL"
+  },
+  "G_k9_teeth": {
+   "live_findings": 0,
+   "n_findings_injected": [
+    1,
+    1,
+    1
+   ],
+   "n_injected": 3,
+   "teeth": {
+    "neg_asbuilt_undeclared": true,
+    "neg_drop_over_budget": true,
+    "neg_no_option_covers": true,
+    "pos_live_clean": true
+   }
+  },
+  "H_co120_exemption": {
+   "all_superseded_board": true,
+   "assessment": "9/10 陈旧且理由命名了取代 CO；co134 族 4 条另有『板已被取代』机判佐证；co111/co118 两条（登记簿 item 13 点名复核者）无板级佐证，但 pin 陈旧性与现引值（261b58e745c67aea / c9eba916a9866808）一致 ⇒ 理由充分。1 条为多余登记（见 F-7）。",
+   "basis_board_unknown": [
+    "m13_v57_co111_in5_pcie_corridor_exposure.json:l5_si_record",
+    "m13_v57_co118_bcu_bridge_conflict_check.json:co95_record"
+   ],
+   "entries": 10,
+   "gate_reported_exempt": 9,
+   "moot": [
+    "m13_v57_co110_l2_coverage_closure.json:co109_record"
+   ],
+   "nonvacuous_stale": 9,
+   "rows": [
+    {
+     "basis_board": "0e636a67c1472462",
+     "current": "b01774449669c10a",
+     "file": "m13_v57_co109_in4_void_l2_ruling.json",
+     "pin_key": "co106_record",
+     "pinned": "fa0ef14cb38dcb1c",
+     "reason": "CO-109 R2『按设计』已被 CO-115 更正 ⇒ 本记录为历史；pin 属历史",
+     "stale": true,
+     "superseded_board": true
+    },
+    {
+     "basis_board": "0e636a67c1472462",
+     "current": "b01774449669c10a",
+     "file": "m13_v57_co110_l2_coverage_closure.json",
+     "pin_key": "co106_record",
+     "pinned": "fa0ef14cb38dcb1c",
+     "reason": "CO-110 依赖被 CO-115 取代的前提 ⇒ 历史",
+     "stale": true,
+     "superseded_board": true
+    },
+    {
+     "basis_board": "0e636a67c1472462",
+     "current": "dd562f526705abef",
+     "file": "m13_v57_co110_l2_coverage_closure.json",
+     "pin_key": "co109_record",
+     "pinned": "dd562f526705abef",
+     "reason": "CO-109 已被 CO-115 取代 ⇒ 历史",
+     "stale": false,
+     "superseded_board": true
+    },
+    {
+     "basis_board": "0e636a67c1472462",
+     "current": "46d15557477d164b",
+     "file": "m13_v57_co110_l2_coverage_closure.json",
+     "pin_key": "co87_record",
+     "pinned": "d4849456357c84cc",
+     "reason": "CO-110 时点 co87 版本 ⇒ 历史（co87 已随后续 rev 重跑）",
+     "stale": true,
+     "superseded_board": true
+    },
+    {
+     "basis_board": null,
+     "current": "261b58e745c67aea",
+     "file": "m13_v57_co111_in5_pcie_corridor_exposure.json",
+     "pin_key": "l5_si_record",
+     "pinned": "73f9b59ed5f6f3ce",
+     "reason": "CO-111 时点 SI 记录；CO-133 施工后 L5 SI 记录随板重跑 ⇒ pin 属历史",
+     "stale": true,
+     "superseded_board": false
+    },
+    {
+     "basis_board": null,
+     "current": "c9eba916a9866808",
+     "file": "m13_v57_co118_bcu_bridge_conflict_check.json",
+     "pin_key": "co95_record",
+     "pinned": "7bb1d00b697b0c6e",
+     "reason": "CO-118 的 B.Cu 桥冲突已由 CO-130/CO-132 取代（B.Cu 载体退役 + In4 承载）⇒ 本记录为历史；CO-132 重跑 co95 后 pin 属历史",
+     "stale": true,
+     "superseded_board": false
+    },
+    {
+     "basis_board": "a3ce9ab803045a0a",
+     "current": "1e5aa8503d211411",
+     "file": "m13_v57_co137_interpair_fixspace.json",
+     "pin_key": "co134_record",
+     "pinned": "5dd6cc22c57da4a5",
+     "reason": "CO-137 对 CO-134 板 a3ce9ab8 的偏差几何可行性分析 ⇒ 历史（CO-144 已改几何）",
+     "stale": true,
+     "superseded_board": true
+    },
+    {
+     "basis_board": "a3ce9ab803045a0a",
+     "current": "1e5aa8503d211411",
+     "file": "m13_v57_co138_interpair_scope_probe.json",
+     "pin_key": "co134_record",
+     "pinned": "5dd6cc22c57da4a5",
+     "reason": "CO-138 对 CO-134 板 a3ce9ab8 的耦合几何画像 ⇒ 历史（CO-144 已改几何）",
+     "stale": true,
+     "superseded_board": true
+    },
+    {
+     "basis_board": "a3ce9ab803045a0a",
+     "current": "1e5aa8503d211411",
+     "file": "m13_v57_co140_deviation_attribution.json",
+     "pin_key": "co134_record",
+     "pinned": "5dd6cc22c57da4a5",
+     "reason": "CO-144 重基线前的板 a3ce9ab8 归因 ⇒ 历史（结论已由 CO-144 关闭 B.Cu）",
+     "stale": true,
+     "superseded_board": true
+    },
+    {
+     "basis_board": "a3ce9ab803045a0a",
+     "current": "1e5aa8503d211411",
+     "file": "m13_v57_co141_interpair_conformance_audit.json",
+     "pin_key": "co134_record",
+     "pinned": "5dd6cc22c57da4a5",
+     "reason": "CO-144 重基线前的板 a3ce9ab8 全量审计 ⇒ 历史（B.Cu 违规已由 CO-144 消除）",
+     "stale": true,
+     "superseded_board": true
+    }
+   ],
+   "teeth": {
+    "t01_nonempty": true,
+    "t02_nonvacuous": true,
+    "t03_basis_text_present": true
+   },
+   "verdict": "EXEMPTIONS_ADEQUATE"
+  },
+  "I_reproduction": {
+   "mechanism": "记录内嵌下游 sha 快照/状态计数 ⇒ 值随运行序/时点变",
+   "observed_reproduction": {
+    "fixed_point_vs_committed_pin": {
+     "co124": [
+      "180a5be06fb23bba",
+      "3de2c54ae5655f47"
+     ],
+     "co147": [
+      "d4528bcef0f387a1",
+      "ab4d7cf3fb6635c4"
+     ],
+     "co148": [
+      "0a48426df22ff920",
+      "1da63cd2bb74315e"
+     ],
+     "co150": [
+      "553d21c94a70d202",
+      "bba1bccf8c98802a"
+     ]
+    },
+    "note": "4/4 记录 pin 非 §6 复现目标（表 [复现值, 提交值]）；登记簿/台账 pin 复现 ✓；co148 重跑会把 2 条已闭登记项重开为 OPEN（实测 OPEN 0→2）",
+    "order": "z25 §6 序（co146_imp;co146_pm;co148_inputs;co148_ruling;co149;co147;co146_fab;co146_dfm;co124;co150）",
+    "pass2_stable": true,
+    "register_ledger_reproduce": [
+     "6a5e9e86e83f5b6b",
+     "87e4ecfd9693a064"
+    ]
+   },
+   "source_evidence": {
+    "p3_v57_co124_input_selfcheck_gate.py": {
+     "embeds_snapshot": true
+    },
+    "p3_v57_co147_l2_ruling.py": {
+     "embeds_snapshot": true
+    },
+    "p3_v57_co148_thermal_ruling.py": {
+     "embeds_snapshot": true
+    },
+    "p3_v57_co150_k9_domain_gate.py": {
+     "embeds_snapshot": true
+    }
+   },
+   "teeth": {
+    "t01_all_four_embed": true
+   }
+  }
+ },
+ "n_findings": 8,
+ "nature": "L2 · 非执行者对抗复评：rev-19 + CO-142..CO-150（独立重算/反证；只读）",
+ "redline": "只读（除自身记录）；不改 SPEC/板/阈值/冻结四源/登记簿/台账/boundary/其它工件；零坐标搜索。",
+ "reproduce": [
+  "../AppDir/usr/bin/python3.11 tools/p3_v57_co151_rev19_nonexecutor_review.py"
+ ],
+ "reviewer": "非执行者会话（z26；未参与 CO-142..150 施加；context 隔离）",
+ "revision": "CO-151.1",
+ "schema": 1,
+ "spec_sha16": "5f72182a2616392c",
+ "verdict": "PASS_WITH_FINDINGS"
+}
