@@ -41,7 +41,23 @@
   ],
   "verdict": "PASS"
  },
+ "advisory_ripple_policy": "ripple_checklist 不嵌入哈希体（CO-90 F4）；按需调用 ripple_checklist()",
  "artifact": "m13_v57_co88_pdn_board_reality_gate",
+ "coverage_scope": {
+  "b_denominator_net_set": [
+   "12V_IN",
+   "GND",
+   "MCU_VDD",
+   "P3V3",
+   "P3V3_AUX",
+   "VREG1_U3",
+   "VREG1_U7",
+   "VREG2_U3",
+   "VREG2_U7"
+  ],
+  "note": "B 判据分母 = 此网集合上的板实 SMD pad，非「板全电源网」；集合外电源类 pad 不计入（CO-90 F3 已登记）",
+  "source": "eda_core.pad_connect_gen.DEFAULT_PWR_NETS（内置常量；--nets 可覆盖）"
+ },
  "fix_candidate": {
   "blocked": 86,
   "blocked_U6_share": "63/86",
@@ -57,6 +73,7 @@
   "ok": true,
   "rule": "SMD 电源/地 pad → via 直连（F.Cu 短段 + 通孔 via drill 0.2/outer 0.35）"
  },
+ "hardening": "CO-90 F1/F2：headline verdict 并入判据 C（消除 C=FAIL 而 headline=PASS 的空真）；teeth 改为真跑检测路径的注入测试。CO-90 F4：ripple_checklist 移出哈希体（其内容随 tools/*.py 集合变化 ⇒ 会使本记录 sha 依赖无关工具文件，破坏逐字节可复现）",
  "inputs": {
   "board": "k2_v4_8L.l4.kicad_pcb",
   "board_sha16": "0e636a67c1472462",
@@ -76,42 +93,21 @@
  },
  "nature": "L2 PDN：live 机读字段（power_pad_connect / decoupling）的板实性 + 覆盖性机判",
  "redline": "只读；scratch 即用即删；不改 SPEC/板/阈值；不 partial pass。",
- "revision": "CO-88.1",
- "ripple_checklist_if_spec_bumped": [
-  "p3_v57_co40_emit_spec_rev3.py",
-  "p3_v57_co54_spec_delivery_audit.py",
-  "p3_v57_co55_layer_aware_zdiff.py",
-  "p3_v57_co56_emit_spec_rev4.py",
-  "p3_v57_co57_l1_interpair_conflict.py",
-  "p3_v57_co58_interpair_baseline_reconcile.py",
-  "p3_v57_co59_l2_residual_closure.py",
-  "p3_v57_co68_option_a_execute_derive.py",
-  "p3_v57_co69_adversarial_probes.py",
-  "p3_v57_co69_option_a_chain.py",
-  "p3_v57_co70_si_skew_criterion_ruling.py",
-  "p3_v57_co72_spec_rev6_pdn_align.py",
-  "p3_v57_co73_spec_rev7_layer_role_consistency.py",
-  "p3_v57_co74_chain_summary.py",
-  "p3_v57_co74_pdn_bcu_rehost.py",
-  "p3_v57_co76_nonexecutor_review.py",
-  "p3_v57_co77_closure_declaration_sweep.py",
-  "p3_v57_co78_layer_role_drift_gate.py",
-  "p3_v57_co81_project_rules_gate.py",
-  "p3_v57_co84_dru_domain_gate.py",
-  "p3_v57_co89_pdn_board_realize_spec_rev9.py",
-  "p3_v57_l4_apply_drawing.py",
-  "p3_v57_l4_validator.py",
-  "p3_v57_l5_signoff.py",
-  "p3_v57_si_zdiff_rederive.py",
-  "p3_v57_w3_constructive.py",
-  "p3_v57_w3_constructive_validator_v2.py"
- ],
+ "revision": "CO-88.3",
  "schema": 1,
  "teeth": {
   "board_pad_floor": 309,
-  "silent_detector_control": true,
-  "spec_entry_floor": 223,
-  "synthetic_orphan_ref_detected": true
+  "decoupling_target_floor": 15,
+  "detector_empty_decoupling_caught": true,
+  "detector_missing_decoupling_ref_caught": true,
+  "detector_orphan_injection_caught": true,
+  "detector_silent_pad_injection_caught": true,
+  "spec_entry_floor": 223
  },
- "verdict": "PASS（三项均合规：引用全板实 / 板实 pad 全有决策 / 解耦目标板实）"
+ "verdict": "PASS（三项均合规：引用全板实 / 板实 pad 全有决策 / 解耦目标板实）",
+ "verdict_by_criterion": {
+  "A_refdes_existence": "PASS",
+  "B_coverage": "PASS",
+  "C_decoupling": "PASS"
+ }
 }

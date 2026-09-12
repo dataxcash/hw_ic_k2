@@ -108,29 +108,56 @@ def main() -> int:
     pads = board_power_pads(BOARD)
     refs = spec_refs(spec)
     board_refs = {k[0] for k in pads}
-    orphans = {k: sorted(v - board_refs) for k, v in
-               (("entries", refs["entries_refs"]), ("blocked", refs["blocked_refs"]),
-                ("decoupling_via", refs["decoupling_via_refs"]),
-                ("decoupling_string", refs["decoupling_string_refs"]))}
+    def orphan_scan(spec_obj: dict) -> dict:
+        """判据 A 检测路径（正式判定与牙齿注入测试共用同一实现）。"""
+        r = spec_refs(spec_obj)
+        return {k: sorted(v - board_refs) for k, v in
+                (("entries", r["entries_refs"]), ("blocked", r["blocked_refs"]),
+                 ("decoupling_via", r["decoupling_via_refs"]),
+                 ("decoupling_string", r["decoupling_string_refs"]))}
+
+    def coverage_scan(spec_obj: dict) -> tuple:
+        """判据 B 检测路径（正式判定与牙齿注入测试共用同一实现）。"""
+        p_ = spec_obj["pd"]["zone_defs"]["power_pad_connect"]
+        c_ = {(str(e["ref"]), str(e["pad"])) for e in p_.get("entries", []) if isinstance(e, dict)}
+        bk_ = {(str(e["ref"]), str(e["pad"])) for e in p_.get("blocked", []) if isinstance(e, dict)}
+        return ([k for k in pads if k in c_], [k for k in pads if k in bk_],
+                sorted(k for k in pads if k not in c_ and k not in bk_))
+
+    def decoupling_ok(spec_obj: dict) -> bool:
+        """判据 C 检测路径：解耦目标非空 且 目标/vias 全板实。"""
+        r = spec_refs(spec_obj)
+        return bool(r["decoupling_targets"]) and not (r["decoupling_via_refs"] - board_refs)
+
+    orphans = orphan_scan(spec)
     ppc = spec["pd"]["zone_defs"]["power_pad_connect"]
-    cov = {(str(e["ref"]), str(e["pad"])) for e in ppc.get("entries", []) if isinstance(e, dict)}
-    blks = {(str(e["ref"]), str(e["pad"])) for e in ppc.get("blocked", []) if isinstance(e, dict)}
-    covered = [k for k in pads if k in cov]
-    declared_blocked = [k for k in pads if k in blks]
-    silent = sorted(k for k in pads if k not in cov and k not in blks)
+    covered, declared_blocked, silent = coverage_scan(spec)
+    c_ok = decoupling_ok(spec)
     n_orphan_entries = sum(1 for e in ppc.get("entries", []) if str(e.get("ref")) not in board_refs)
     n_orphan_blocked = sum(1 for e in ppc.get("blocked", []) if str(e.get("ref")) not in board_refs)
 
-    # 牙齿：合成件注入孤儿 ref + 缺失 pad ⇒ 必须被发现
-    syn_spec = json.loads(json.dumps(spec))
-    syn_spec["pd"]["zone_defs"]["power_pad_connect"]["entries"].append(
+    # 牙齿（CO-90 F2 加固）：阳性对照必须**真跑检测路径**；原实现 "bool({"U99"} - board_refs)" 恒真（仅查板 ref，未运行检测器）。
+    syn_orphan = json.loads(json.dumps(spec))
+    syn_orphan["pd"]["zone_defs"]["power_pad_connect"]["entries"].append(
         {"ref": "U99", "pad": "1", "net": "GND"})
-    syn = spec_refs(syn_spec)
-    teeth = {"synthetic_orphan_ref_detected": bool({"U99"} - board_refs),
+    syn_silent = json.loads(json.dumps(spec))
+    syn_silent["pd"]["zone_defs"]["power_pad_connect"]["entries"].pop(0)
+    syn_dec_empty = json.loads(json.dumps(spec))
+    syn_dec_empty["pd"]["zone_defs"]["decoupling_via_to_plane"]["targets"] = []
+    syn_dec_empty["pd"]["zone_defs"]["decoupling_via_to_plane"]["vias"] = []
+    syn_dec_miss = json.loads(json.dumps(spec))
+    syn_dec_miss["pd"]["zone_defs"]["decoupling_via_to_plane"]["vias"] = [
+        {"ref": "U99", "pos": [[0.0, 0.0]]}]
+    teeth = {"detector_orphan_injection_caught": "U99" in orphan_scan(syn_orphan)["entries"],
+             "detector_silent_pad_injection_caught": len(coverage_scan(syn_silent)[2]) >= 1,
+             "detector_empty_decoupling_caught": not decoupling_ok(syn_dec_empty),
+             "detector_missing_decoupling_ref_caught": not decoupling_ok(syn_dec_miss),
              "board_pad_floor": len(pads), "spec_entry_floor": len(ppc.get("entries", [])),
-             "silent_detector_control": bool(len(silent) == 0 or {("U99", "1")} - set(pads))}
+             "decoupling_target_floor": len(refs["decoupling_targets"])}
+    teeth_ok = all(v for k, v in teeth.items() if k.startswith("detector_"))
 
-    rec = {"artifact": "m13_v57_co88_pdn_board_reality_gate", "schema": 1, "revision": "CO-88.1",
+    rec = {"artifact": "m13_v57_co88_pdn_board_reality_gate", "schema": 1, "revision": "CO-88.3",
+           "hardening": "CO-90 F1/F2：headline verdict 并入判据 C（消除 C=FAIL 而 headline=PASS 的空真）；teeth 改为真跑检测路径的注入测试。CO-90 F4：ripple_checklist 移出哈希体（其内容随 tools/*.py 集合变化 ⇒ 会使本记录 sha 依赖无关工具文件，破坏逐字节可复现）",
            "nature": "L2 PDN：live 机读字段（power_pad_connect / decoupling）的板实性 + 覆盖性机判",
            "inputs": {"spec": spec_path.name, "spec_sha16": s16(spec_path), "board": BOARD.name,
                       "board_sha16": s16(BOARD), "pwr_nets": sorted(PWR_NETS)},
@@ -142,15 +169,23 @@ def main() -> int:
                           "declared_blocked": len(declared_blocked), "silent_undecided": len(silent),
                           "silent_list": [f"{r}.{p}" for r, p in silent[:20]],
                           "verdict": "PASS" if not silent else "FAIL"},
+           "coverage_scope": {"b_denominator_net_set": sorted(PWR_NETS),
+                              "source": "eda_core.pad_connect_gen.DEFAULT_PWR_NETS（内置常量；--nets 可覆盖）",
+                              "note": "B 判据分母 = 此网集合上的板实 SMD pad，非「板全电源网」；集合外电源类 pad 不计入（CO-90 F3 已登记）"},
            "C_decoupling": {"field": refs["decoupling"], "targets": refs["decoupling_targets"],
                             "n_targets": len(refs["decoupling_targets"]),
                             "missing_on_board": orphans["decoupling_via"],
-                            "verdict": "PASS" if (refs["decoupling_targets"] and not orphans["decoupling_via"]) else "FAIL"},
+                            "verdict": "PASS" if c_ok else "FAIL"},
            "fix_candidate": scratch_regeneration(spec_path),
-           "ripple_checklist_if_spec_bumped": ripple_checklist(),
+           # CO-90 F4：本记录必须是 (SPEC, 板) 的**纯函数**；任何目录扫描类「建议清单」不得进入哈希体。
+           # 需要 ripple 清单时按需调用 ripple_checklist()（见文件尾部函数；不写入本记录）。
+           "advisory_ripple_policy": "ripple_checklist 不嵌入哈希体（CO-90 F4）；按需调用 ripple_checklist()",
            "teeth": teeth,
+           "verdict_by_criterion": {"A_refdes_existence": "PASS" if not any(orphans.values()) else "FAIL",
+                                    "B_coverage": "PASS" if not silent else "FAIL",
+                                    "C_decoupling": "PASS" if c_ok else "FAIL"},
            "verdict": ("PASS（三项均合规：引用全板实 / 板实 pad 全有决策 / 解耦目标板实）"
-                       if not any(orphans.values()) and not silent and orphans["decoupling_via"] == []
+                       if (not any(orphans.values()) and not silent and c_ok)
                        else "FAIL（L2 SPEC 未达 ch.5 §1/§2/§3）"),
            "redline": "只读；scratch 即用即删；不改 SPEC/板/阈值；不 partial pass。"}
     OUT.write_text(json.dumps(rec, ensure_ascii=False, indent=1, sort_keys=True), encoding="utf-8")
@@ -158,8 +193,8 @@ def main() -> int:
                       "orphan_refs": sum(len(v) for v in orphans.values()),
                       "pads": len(pads), "covered": len(covered), "blocked": len(declared_blocked),
                       "silent": len(silent), "decoupling_missing": orphans["decoupling_via"],
-                      "fix_candidate": rec["fix_candidate"], "teeth": teeth,
-                      "ripple": rec["ripple_checklist_if_spec_bumped"]}, ensure_ascii=False))
+                      "fix_candidate": rec["fix_candidate"], "teeth": teeth, "teeth_ok": teeth_ok,
+                      "ripple_advisory_out_of_record": ripple_checklist()}, ensure_ascii=False))
     return 0
 
 

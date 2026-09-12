@@ -1,0 +1,250 @@
+{
+ "V1_chain_rerun_byte_identical": {
+  "drift": {},
+  "ok": true,
+  "runs": [
+   {
+    "cmd": "/usr/bin/python3 tools/p3_v57_w3_constructive.py",
+    "rc": 0
+   },
+   {
+    "cmd": "/usr/bin/python3 tools/p3_v57_w3_constructive_validator_v2.py",
+    "rc": 0
+   },
+   {
+    "cmd": "/home/fila/jqdDev_2025/ic_hw/AppDir/usr/bin/python3.11 tools/p3_v57_l4_apply_drawing.py",
+    "rc": 0
+   },
+   {
+    "cmd": "/home/fila/jqdDev_2025/ic_hw/AppDir/usr/bin/python3.11 tools/p3_v57_l4_validator.py",
+    "rc": 0
+   },
+   {
+    "cmd": "/home/fila/jqdDev_2025/ic_hw/AppDir/usr/bin/python3.11 tools/p3_v57_l5_signoff.py",
+    "rc": 0
+   }
+  ]
+ },
+ "V2_board_facts_selfparsed": {
+  "board_sha16": "0e636a67c1472462",
+  "facts": {
+   "n_segments": 2523,
+   "n_vias": 252,
+   "n_zones": 4,
+   "segments_by_layer": {
+    "B.Cu": 39,
+    "F.Cu": 174,
+    "In2.Cu": 106,
+    "In5.Cu": 2204
+   }
+  }
+ },
+ "V3_spec_rev9_facts": {
+  "bijection_board_pads_vs_decisions": {
+   "board_pads": 309,
+   "decisions": 309,
+   "exact": true,
+   "only_board": [],
+   "only_spec": []
+  },
+  "outside_pd_changed_top_level_keys": [],
+  "pd_changed_subkeys": [
+   "decoupling",
+   "decoupling_legacy_retired",
+   "zone_defs"
+  ],
+  "retired_entries_blocked": [
+   173,
+   9
+  ],
+  "retired_vias": 3,
+  "rev8_decoupling_vias": 3,
+  "rev8_orphans_entries_blocked": [
+   55,
+   2
+  ],
+  "rev9_decoupling_targets_missing": [],
+  "rev9_decoupling_vias": 0,
+  "rev9_orphan_refs": []
+ },
+ "V4_gate_mutation_tests": {
+  "baseline": {
+   "A": "PASS",
+   "B": "PASS",
+   "C": "PASS",
+   "by_criterion": {
+    "A_refdes_existence": "PASS",
+    "B_coverage": "PASS",
+    "C_decoupling": "PASS"
+   },
+   "headline": true,
+   "teeth_ok": true,
+   "verdict": "PASS"
+  },
+  "coverage_removed": {
+   "A": "PASS",
+   "B": "FAIL",
+   "C": "PASS",
+   "by_criterion": {
+    "A_refdes_existence": "PASS",
+    "B_coverage": "FAIL",
+    "C_decoupling": "PASS"
+   },
+   "headline": false,
+   "teeth_ok": true,
+   "verdict": "FAIL"
+  },
+  "empty_decoupling": {
+   "A": "PASS",
+   "B": "PASS",
+   "C": "FAIL",
+   "by_criterion": {
+    "A_refdes_existence": "PASS",
+    "B_coverage": "PASS",
+    "C_decoupling": "FAIL"
+   },
+   "headline": false,
+   "teeth_ok": true,
+   "verdict": "FAIL"
+  },
+  "missing_decoupling_ref": {
+   "A": "FAIL",
+   "B": "PASS",
+   "C": "FAIL",
+   "by_criterion": {
+    "A_refdes_existence": "FAIL",
+    "B_coverage": "PASS",
+    "C_decoupling": "FAIL"
+   },
+   "headline": false,
+   "teeth_ok": true,
+   "verdict": "FAIL"
+  },
+  "note": "F1 回归：empty_decoupling 在修复前 headline=PASS 而 C=FAIL（空真/partial pass）",
+  "ok": true,
+  "orphan_injected": {
+   "A": "FAIL",
+   "B": "PASS",
+   "C": "PASS",
+   "by_criterion": {
+    "A_refdes_existence": "FAIL",
+    "B_coverage": "PASS",
+    "C_decoupling": "PASS"
+   },
+   "headline": false,
+   "teeth_ok": true,
+   "verdict": "FAIL"
+  }
+ },
+ "V5_coverage_scope": {
+  "note": "B 判据分母 309 = 内置网集上的板实 SMD pad；板 POWER 类另有 1 个 SMD pad 不在集内 ⇒ 100% 为口径内声明",
+  "power_class_nets_not_in_scope": [
+   "PWR_5V_KEY"
+  ],
+  "power_class_pads_outside_scope": {
+   "PWR_5V_KEY": 1
+  },
+  "pwr_nets_source": "eda_core.pad_connect_gen.DEFAULT_PWR_NETS（内置常量）"
+ },
+ "V6_co89_idempotent_regeneration": {
+  "blocked_equal_to_rev9": true,
+  "entries_equal_to_rev9": true,
+  "rc": 0,
+  "regen_entries_blocked": [
+   223,
+   86
+  ]
+ },
+ "artifact": "m13_v57_co90_nonexecutor_review_pass3",
+ "findings": [
+  {
+   "class": "记录可复现性（哈希体含目录扫描）",
+   "evidence": "两次对照实测 + 修复后「移走/放回 CO-90 工具」三次同值 `bf69909aa64dc494`",
+   "id": "F4",
+   "sev": "中",
+   "status": "FIXED（CO-88.3：ripple 移出哈希体；记录 = (SPEC, 板) 纯函数）",
+   "what": "co88 记录曾嵌 `ripple_checklist()`（扫描 tools/*.py）⇒ 记录 sha 随**无关工具文件**增删而变：移走 CO-90 工具 → `d320c81263733158`；放回 → `b9990766698af315`（实测两次对照）"
+  },
+  {
+   "class": "记录确定性（set 迭代序）",
+   "evidence": "4 个 seed 实测 `pd_changed_subkeys` 出现 4 种排列；修复后（sorted）跨 seed 同值",
+   "id": "F6",
+   "sev": "中",
+   "status": "FIXED（CO-90.3：set→list 一律 sorted；记录为输入的纯函数）",
+   "what": "本评审记录自身含 `[k for k in set(...)]`（`outside_pd_changed_top_level_keys` / `pd_changed_subkeys`）⇒ list 序随 PYTHONHASHSEED 变 ⇒ 记录 sha 不可复现（实测同输入两次运行不一致）"
+  },
+  {
+   "class": "引用闸空真（行级历史豁免）",
+   "evidence": "负控：注入 `deadbeefdeadbeef` 现行 sha → co77 报 CITATION_MISMATCH（修复前该形态漏过）",
+   "id": "F5",
+   "sev": "中",
+   "status": "FIXED（CO-77.3：豁免改为按引用判定——校验紧跟该 sha 之后的标记窗口）",
+   "what": "co77 历史豁免按**整行**判定 ⇒ 「现行值 + 同行括号记录旧值已取代」的**现行值**被一并豁免：co88 记录漂移后 co77 仍报 citation_mismatch=[]"
+  },
+  {
+   "class": "闸内空真/partial pass",
+   "evidence": "mutation m3（修复前 headline=PASS / C=FAIL）",
+   "id": "F1",
+   "sev": "中",
+   "status": "FIXED（CO-88.2）",
+   "what": "CO-88 headline verdict 未并入判据 C 的『目标非空』测试 ⇒ 构造态（targets=[] 且 vias=[]）下 C=FAIL 而 headline=PASS"
+  },
+  {
+   "class": "空真牙（CO-79 同类）",
+   "evidence": "源码 129-131 行（修复前）；4 个注入突变在修复后全 True",
+   "id": "F2",
+   "sev": "中",
+   "status": "FIXED（CO-88.2）",
+   "what": "CO-88 自述 teeth 恒真：synthetic_orphan_ref_detected=false 只查 board_refs、syn 为死代码；silent_detector_control 第二操作数恒真"
+  },
+  {
+   "class": "覆盖口径/声明范围",
+   "evidence": "V5：power_class_nets_not_in_scope=['PWR_5V_KEY']，1 个 SMD pad；pad_connect_gen docstring 自称『从 SPEC 推导』但实现只读内置常量",
+   "id": "F3",
+   "sev": "低-中",
+   "status": "已登记（不改分母：涉及网范围=需 PM/owner 确认，改则 SPEC rev-10 + 全链重基线）",
+   "what": "CO-88/89『板实 SMD 电源地 pad 309/309 = 100%』的分母 = 内置 DEFAULT_PWR_NETS；板 POWER 类尚含 C89.1 PWR_5V_KEY（SMD, 0 走线）不在集内"
+  }
+ ],
+ "nature": "L2 可审计性：rev-9 新基线的非执行者对抗评审 pass 3/3（对象 CO-88/CO-89 + 全链）",
+ "non_claims": "不改 SPEC/板/图纸/阈值；不声称 PDN 压降/热；不触 L1；V1 为同代码复跑非独立实现。",
+ "redline": "零几何；scratch 即用即删；不改历史件；无 while/坐标搜索。",
+ "regression_gates": {
+  "fingerprints": {
+   "co69": {
+    "actual": "18a86c998dd6b4de",
+    "expected": "18a86c998dd6b4de"
+   },
+   "co77": {
+    "actual": "PASS",
+    "expected": "PASS"
+   },
+   "co78": {
+    "actual": "b736a0df7226f155",
+    "expected": "b736a0df7226f155"
+   },
+   "co81": {
+    "actual": "16b262663238a60a",
+    "expected": "16b262663238a60a"
+   },
+   "co84": {
+    "actual": "b927acbe46ec3007",
+    "expected": "b927acbe46ec3007"
+   },
+   "co87": {
+    "actual": "24aeb57f71a716f4",
+    "expected": "24aeb57f71a716f4"
+   }
+  },
+  "ok": true
+ },
+ "rev9_baseline": {
+  "board_sha16": "0e636a67c1472462",
+  "drawing_sha16": "3d452429bbc934c3",
+  "spec_rev9_sha16": "77f5c54df88bb0ca"
+ },
+ "reviewer_independence": "context 归零续接会话；未执行 CO-88/CO-89/rev-9 全链变更",
+ "revision": "CO-90.3",
+ "schema": 1,
+ "verdict": "PASS（rev-9 新基线可复现 + CO-88/89 事实独立复核通过；F1/F2/F4 已修，F3/F5 已登记）"
+}

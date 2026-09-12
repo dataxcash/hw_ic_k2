@@ -82,21 +82,16 @@ def main(argv=None) -> int:
     # CO-82 补强：**全量** sha16 引用校验 —— 任何 `file` `sha16` 形式必须等于实际文件，
     # 除非该行**显式标注历史**（原/已取代/历史/应为/实为）。12 项 claim 只是子集，本项覆盖全文。
     CITE = re.compile(r"`([A-Za-z0-9][A-Za-z0-9_./\-]*\.(?:json|md|py|kicad_pcb|kicad_pro|kicad_dru))`\s*`([0-9a-f]{16})`")
-    STALE = ("已取代", "历史", "原 ", "应为", "实为")
-    lines = txt.splitlines()
-    def _line_of(pos: int) -> str:
-        c = 0
-        for ln in lines:
-            if c <= pos < c + len(ln) + 1:
-                return ln
-            c += len(ln) + 1
-        return ""
+    # CO-90 F5：历史豁免必须**按引用**判定（校验紧跟该 sha 之后的标记窗口），不得按整行判定 ——
+    # 行级判定会把「现行值 + 同行括号里记录旧值已取代」这类行的**现行值**一并豁免
+    # ⇒ 现行 sha 漂移被静默放过（CO-90 实测：co88 记录 d320c812…→b9990766… 漂移未被发现）。
+    HIST_AFTER = re.compile(r"^[\s）)】,，、/]*[（(]?\s*(已取代|历史|应为|实为)")
     cite_rows, cite_bad, cite_hist = [], [], 0
     for m in CITE.finditer(txt):
         name, sha = m.group(1), m.group(2)
         _after = txt[m.end():m.end() + 8]
-        if any(s in _line_of(m.start()) for s in STALE) or ("→" in _after) or ("->" in _after):
-            cite_hist += 1      # 历史，或 "before → after" 变更记法
+        if HIST_AFTER.match(txt[m.end():m.end() + 16]) or ("→" in _after) or ("->" in _after):
+            cite_hist += 1      # 该引用自身被显式标注历史，或 "before → after" 变更记法
             continue
         n = Path(name)
         cands = [n, Path(n.name), L3 / n.name, L3 / "mcio_feas_step2" / n.name,
@@ -111,7 +106,7 @@ def main(argv=None) -> int:
     cite_floor_ok = (len(cite_rows) + cite_hist) >= CITE_FLOOR
     if not cite_floor_ok:
         cite_bad = cite_bad + ["__CITE_FLOOR_FAILED__"]
-    rec = {"artifact": "m13_v57_co77_closure_declaration_sweep", "schema": 1, "revision": "CO-77.2",
+    rec = {"artifact": "m13_v57_co77_closure_declaration_sweep", "schema": 1, "revision": "CO-77.3",
            "nature": "L2 收口声明件当前态身份引用机判扫描",
            "doc": str(Path(doc).relative_to(K2)), "doc_sha16": s16(doc),
            "claims": rows, "stale_claims": bad,
