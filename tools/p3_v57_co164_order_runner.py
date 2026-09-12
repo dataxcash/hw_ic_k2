@@ -29,7 +29,8 @@ ORDER = ["co146_impedance_table", "co146_pm_eval", "co146_ledger_add", "co153_k9
          "co156_co154_open_disposition", "co157_gate_hardening_3", "co158_l5_packet_selfcontained",
          "co159_rev19_co156_co157_co158_review", "co160_co159_findings_disposition", "co161_gap_hardening_4",
          "co162_verdict_binding", "co163_binding_to_order_notes", "co166_rev19_co159_co165_review",
-         "co167_co166_findings_disposition", "co124_input_selfcheck_gate", "co150_k9_domain_gate",
+         "co167_co166_findings_disposition", "co168_register_consistency", "co124_input_selfcheck_gate",
+         "co150_k9_domain_gate",
          "co146_boundary_append", "co77_closure_declaration_sweep", "co120_provenance_pin_gate", "co135_review_hygiene",
          "co136_gate_hygiene", "co78_layer_role_drift_gate", "co81_project_rules_gate", "co84_dru_domain_gate",
          "co95_in4_reachability", "co98_reachability_status_report", "co106_reference_plane_gate", "co146_boundary_append"]

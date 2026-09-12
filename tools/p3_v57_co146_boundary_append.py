@@ -918,6 +918,41 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body41
     txt = txt.replace("W3 Boundary **v2.12**", "W3 Boundary **v2.13**")
+    # ── §42 CO-168（登记簿自洽性硬化） ─────────────────────────────────────
+    MARK42 = "## 42. CO-168"
+    _rc42 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    _ord168 = ('co146_impedance_table → co146_pm_eval → co146_ledger_add → co153_k9_domain_coverage → co148_u6_datasheet_inputs → co148_thermal_ruling → co149_thermal_mitigation_derive → co147_l2_ruling → co146_jlc_dfm_gate → co146_jlc_fab_package → co152_findings_disposition → co155_co154_findings_disposition → co156_co154_open_disposition → co157_gate_hardening_3 → co158_l5_packet_selfcontained → co159_rev19_co156_co157_co158_review → co160_co159_findings_disposition → co161_gap_hardening_4 → co162_verdict_binding → co163_binding_to_order_notes → co166_rev19_co159_co165_review → co167_co166_findings_disposition → co168_register_consistency → co124_input_selfcheck_gate → co150_k9_domain_gate → co146_boundary_append → co77_closure_declaration_sweep → co120_provenance_pin_gate → co135_review_hygiene → co136_gate_hygiene → co78_layer_role_drift_gate → co81_project_rules_gate → co84_dru_domain_gate → co95_in4_reachability → co98_reachability_status_report → co106_reference_plane_gate → co146_boundary_append')
+    sec42 = [MARK42 + "（**L2 自裁 · 登记簿自洽性硬化**：status 词汇 + counts 复算）", "",
+             "- 实测缺口（修前，均机判）：**G-1** 登记簿 `status` 无词汇机判 —— 任一项 status 改成 `open`/`Closed` 后 co124 仍 PASS / 0 findings，"
+             "该项**静默落出** `counts` 的 OPEN 计数（未结缺陷被算作已结）⇒ handoff/§ 节引用的「OPEN 0」不可信；"
+             "**G-2** `meta.counts` 为自述摘要、无闸据 `items` 复算 —— 改 `total=999` / `OPEN=7` 后仍 PASS（该摘要被当权威引用）。",
+             "- 处置（**CO-168**）：co124 升 **CO-124.10** —— 增纯函数 `register_consistency(reg)` + 词汇 "
+             "`REGISTER_STATUSES = (OPEN, CLOSED, PROVED)`：① status 越词汇 ⇒ `status_not_in_vocabulary`；"
+             "② `meta.counts` 须与据 items 复算的（kind / OPEN / total 三元）**键集与值逐项一致**，否则 `counts_not_rederived_from_items`；"
+             "任一 ⇒ `FAIL_REGISTER_STALE`（记录落 `register_stale`）。牙齿增 T21 / T21b / T21c（co124 40/40）。",
+             f"- 复核：真登记簿 `register_stale == []`（{_rc42['total']} 项 / OPEN {_rc42['OPEN']} 复算一致）；"
+             f"注入 status 拼写错 / counts 漂移 ⇒ 分别判 `status_not_in_vocabulary` / `counts_not_rederived_from_items`。", "",
+             "> **R-CO168-1**：登记簿每项 `status` 须 ∈ `REGISTER_STATUSES`；新增状态须先入词汇（禁拼写自由文本）。",
+             "> **R-CO168-2**：`meta.counts` 为**派生**字段，须与据 `items` 的复算逐项一致；写登记簿的步骤须在写后重算。",
+             "> **R-CO168-3**（复现序，取代 R-CO167-3；步骤集新增 co168）：规范复现序 = `" + _ord168 + "`，**循环至 sha 稳定**"
+             "（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2）。", "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows42 = [("工具 `p3_v57_co168_register_consistency.py`", K2 / "tools/p3_v57_co168_register_consistency.py"),
+               ("工具 `p3_v57_co124_input_selfcheck_gate.py`（CO-124.10 / `register_consistency` + T21 系列）",
+                K2 / "tools/p3_v57_co124_input_selfcheck_gate.py"),
+               ("记录 `m13_v57_co124_input_selfcheck_gate.json`（重建）", STEP2 / "m13_v57_co124_input_selfcheck_gate.json"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc42['total']} 项 / OPEN {_rc42['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows42:
+        if pth.exists():
+            sec42.append(f"| {label} | `{s16(pth)}` |")
+    sec42.append("")
+    body42 = "\n".join(sec42)
+    if MARK42 in txt:
+        txt = re.sub(re.escape(MARK42) + r"[\s\S]*?(?=\n## |\Z)", body42, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body42
+    txt = txt.replace("W3 Boundary **v2.13**", "W3 Boundary **v2.14**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
     return 0

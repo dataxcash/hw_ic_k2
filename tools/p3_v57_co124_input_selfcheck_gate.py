@@ -18,7 +18,7 @@
 CLI: python3 tools/p3_v57_co124_input_selfcheck_gate.py
 """
 from __future__ import annotations
-import copy, hashlib, json, re
+import collections, copy, hashlib, json, re
 from pathlib import Path
 
 K2 = Path(__file__).resolve().parents[1]
@@ -66,6 +66,35 @@ REQUIRED_DV_IDS = ("DV-INTPAIR-EDGE", "DV-PAIR-CROSS", "DV-CLR-POWER", "DV-EDGE-
 
 KNOWN_KINDS = ("domain_cap", "identity", "process_floor", "declared",
                "conservative_ge", "drop_domain", "thermal_option_domain")
+# CO-168（G-1/G-2）：登记簿**自洽性**词汇 + 派生摘要复算 —— 此前无任何闸复算：
+#   ① `status` 拼写错误（如 `open`/`Closed`）使该项**静默落出** `counts["OPEN"]`（未结项被算作已结）；
+#   ② `meta.counts` 是自述摘要、无闸据 `items` 复算 ⇒ 可漂移而全链仍 PASS（handoff/§ 节引用它当权威）。
+REGISTER_STATUSES = ("OPEN", "CLOSED", "PROVED")
+
+
+def register_consistency(reg: dict) -> list:
+    """CO-168：登记簿自洽性（纯函数，便于负控注入）——返回问题列表（空 = 自洽）。
+
+    ① 每项 `status` 须 ∈ REGISTER_STATUSES（否则该项静默落出 OPEN 计数）；
+    ② `meta.counts` 须与据 `items` 复算的 {kind: n, OPEN: n, total: n} **键集与值逐项一致**。
+    """
+    items = reg.get("items", [])
+    out = []
+    bad = [it.get("finding") for it in items if it.get("status") not in REGISTER_STATUSES]
+    if bad:
+        out.append({"why": "status_not_in_vocabulary", "vocabulary": list(REGISTER_STATUSES),
+                    "bad_values": sorted({str(it.get("status")) for it in items
+                                          if it.get("status") not in REGISTER_STATUSES}),
+                    "items": bad[:20], "n": len(bad)})
+    derived = dict(collections.Counter(it.get("kind") for it in items))
+    derived["OPEN"] = sum(1 for it in items if it.get("status") == "OPEN")
+    derived["total"] = len(items)
+    declared = (reg.get("meta") or {}).get("counts") or {}
+    keys = set(derived) | set(declared)
+    if {k: derived.get(k) for k in keys} != {k: declared.get(k) for k in keys}:
+        out.append({"why": "counts_not_rederived_from_items", "declared": declared, "rederived": derived,
+                    "delta": sorted(k for k in keys if declared.get(k) != derived.get(k))})
+    return out
 # CO-159（F-3）：从**源码**抽取 K9 全部 finder id。T18 元牙齿只比对「合成电池触发集」与声明表，
 # 无法发现「电池未触发的条件分支」新增 finder；本正则给出源码面真值，供 T18d 断言。
 _K9_FINDER_ID_RE = re.compile(r'\("K9",\s*f?"([a-z0-9_]+):')
@@ -424,6 +453,8 @@ def main() -> int:
     reg_bad = [it.get("finding") for it in reg.get("items", [])
                if it.get("kind") not in ("SPEC_DEFECT", "TOOL_DEFECT", "PROVED_THRESHOLD", "IMPLEMENTATION_DEVIATION") or not it.get("refs")
                or not it.get("disposition")]
+    # CO-168（G-1/G-2）：登记簿自洽性（status 词汇 + counts 复算）
+    reg_stale = register_consistency(reg)
     # 牙齿（内存副本）
     teeth = {}
     s2 = copy.deepcopy(spec); s2["net_classes"]["PCIe85"]["clearance"] = 0.20
@@ -655,11 +686,26 @@ def main() -> int:
     teeth["T20b_identity_unhandled_no_false_positive"] = not any(
         x[1].startswith(("derived_value_identity_unhandled_form", "derived_value_identity_unparsable"))
         for x in k9_findings(copy.deepcopy(_led)))
+    # CO-168（G-1）：status 拼写错误 ⇒ 必抓（未结项静默落出 OPEN 计数）
+    _r168 = copy.deepcopy(reg)
+    if _r168.get("items"):
+        _r168["items"][0]["status"] = "open"
+    teeth["T21_register_status_vocabulary"] = any(
+        p["why"] == "status_not_in_vocabulary" for p in register_consistency(_r168))
+    # CO-168（G-2）：counts 与 items 不复算一致 ⇒ 必抓
+    _r168b = copy.deepcopy(reg)
+    _c = dict((_r168b.get("meta") or {}).get("counts") or {})
+    _c.update({"OPEN": (_c.get("OPEN", 0) + 7), "total": (_c.get("total", 0) + 999)})
+    _r168b.setdefault("meta", {})["counts"] = _c
+    teeth["T21b_register_counts_rederived"] = any(
+        p["why"] == "counts_not_rederived_from_items" for p in register_consistency(_r168b))
+    teeth["T21c_register_consistency_no_false_positive"] = register_consistency(copy.deepcopy(reg)) == []
     teeth_ok = all(teeth.values())
-    verdict = "PASS" if (not unreg and not reg_bad and teeth_ok) else (
-        "FAIL_UNREGISTERED_INPUT_DEFECT" if unreg else "FAIL_REGISTER_MALFORMED" if reg_bad else "TEETH_FAIL")
+    verdict = "PASS" if (not unreg and not reg_bad and not reg_stale and teeth_ok) else (
+        "FAIL_UNREGISTERED_INPUT_DEFECT" if unreg else "FAIL_REGISTER_MALFORMED" if reg_bad
+        else "FAIL_REGISTER_STALE" if reg_stale else "TEETH_FAIL")
     rec = {
-        "artifact": "m13_v57_co124_input_selfcheck_gate", "schema": 1, "revision": "CO-124.9",
+        "artifact": "m13_v57_co124_input_selfcheck_gate", "schema": 1, "revision": "CO-124.10",
         "nature": "输入自检闸：规格/规则自身自洽 + 物理可达登记 + 缺陷登记完备（整改通知 #08 第 2/3 条）",
         "definition_doc": {"path": str(DOC.relative_to(K2)), "sha16": s16(DOC), "status": f"{DOC_VER} 提议件（待监理裁定/owner 批准）"},
         "inputs": {"spec": str(SPEC.relative_to(K2)), "spec_sha16": s16(SPEC),
@@ -668,10 +714,12 @@ def main() -> int:
                                           "会使记录随运行序漂移；现行 sha 见 boundary pin 表）"},
         "checks": {"k1_definition_in_place": True, "k2_netclass_two_source": True,
                    "k3_layer_role": True, "k4_bcu_policy": True, "k5_reachability": True,
-                   "k6_threshold_registered": True, "k7_register_complete": not unreg, "k8_pdn_netclass_coverage": True},
+                   "k6_threshold_registered": True, "k7_register_complete": not unreg, "k8_pdn_netclass_coverage": True,
+                   "k7b_register_self_consistent": not reg_stale},
         "findings": [dict(zip(("check", "id", "detail"), x)) for x in findings],
         "n_findings": len(findings), "unregistered_findings": unreg,
         "register_malformed": reg_bad,
+        "register_stale": reg_stale,
         "teeth": teeth, "teeth_ok": teeth_ok, "verdict": verdict,
         "required_dv_ids": list(REQUIRED_DV_IDS),
         "scan_scope_zero_omission": {
@@ -697,7 +745,8 @@ def main() -> int:
     lines += ["", "扫描范围与零遗漏声明见记录 `scan_scope_zero_omission`。", ""]
     CARD.write_text("\n".join(lines), encoding="utf-8")
     print(json.dumps({"verdict": verdict, "n_findings": len(findings), "unregistered": len(unreg),
-                      "register_malformed": reg_bad, "teeth": teeth,
+                      "register_malformed": reg_bad,
+        "register_stale": reg_stale, "teeth": teeth,
                       "findings": [f"{c}:{i_}" for c, i_, _ in findings],
                       "rec_sha16": s16(REC), "card_sha16": s16(CARD)}, ensure_ascii=False, indent=1))
     return 0 if verdict == "PASS" else 1   # CO-158（J-3）：退出码须反映 verdict

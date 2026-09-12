@@ -1,7 +1,7 @@
 {
  "artifact": "m13_v57_co124_input_selfcheck_gate",
  "schema": 1,
- "revision": "CO-124.9",
+ "revision": "CO-124.10",
  "nature": "输入自检闸：规格/规则自身自洽 + 物理可达登记 + 缺陷登记完备（整改通知 #08 第 2/3 条）",
  "definition_doc": {
   "path": "pm_gate/artifacts/k2_v4/L2/BASIC_SKILL_VS_REDLINE_v1.1.md",
@@ -23,12 +23,14 @@
   "k5_reachability": true,
   "k6_threshold_registered": true,
   "k7_register_complete": true,
-  "k8_pdn_netclass_coverage": true
+  "k8_pdn_netclass_coverage": true,
+  "k7b_register_self_consistent": true
  },
  "findings": [],
  "n_findings": 0,
  "unregistered_findings": [],
  "register_malformed": [],
+ "register_stale": [],
  "teeth": {
   "T1_netclass_drift": true,
   "T3_threshold_unregistered": true,
@@ -66,7 +68,10 @@
   "T19_dv_inventory_teeth": true,
   "T19b_dv_inventory_no_false_positive": true,
   "T20_identity_unhandled_form_teeth": true,
-  "T20b_identity_unhandled_no_false_positive": true
+  "T20b_identity_unhandled_no_false_positive": true,
+  "T21_register_status_vocabulary": true,
+  "T21b_register_counts_rederived": true,
+  "T21c_register_consistency_no_false_positive": true
  },
  "teeth_ok": true,
  "verdict": "PASS",

@@ -161,7 +161,6 @@ def main() -> int:
         "writes_only_boundary": list(cap) == [str(BOUNDARY)],
         # §23..§39 大段 f-string 代码路径**执行成功**且产出含各节标记（CO-164 故障类＝SyntaxError/运行时错）
         "captured_has_sections": all(m in _cap_txt for m in ("## 23. CO-146", "## 39. CO-165")),
-        "captured_len": len(_cap_txt),
         # 逐字节幂等性由 runner 收敛判定（受控 sha 跨轮稳定）另行保证；as-found 重放非纯函数
         # （pin 再对齐按**现行**实件 sha 改写引用 ⇒ 现行件一变即与 as-found 文本有差），故不在此断言字节相等。
         "disk_unchanged": BOUNDARY.read_bytes() == live_before}
@@ -351,13 +350,13 @@ def main() -> int:
     findings.sort(key=lambda f: f["id"])
     n = len(findings)
     verdict = "PASS_WITH_FINDINGS" if n else "PASS"
-    rec = {"artifact": "m13_v57_co166_rev19_co159_co165_review", "schema": 1, "revision": "CO-166.3",
+    rec = {"artifact": "m13_v57_co166_rev19_co159_co165_review", "schema": 1, "revision": "CO-166.4",
            "nature": "非执行者对抗复评（context 归零续接会话产出）：CO-159（复评 CO-156..158）+ CO-160（F-1..F-12 处置）"
                      "+ CO-161（K9 必需 DV 清单/identity fail-closed）+ CO-162（co106 verdict fail-open/承载区豁免）"
                      "+ CO-163（下单备注↔定值表绑定 + 来源 pin）+ CO-164（复现序 rc 机判执行器）+ CO-165（白名单双重证据 + 受控 sha 全域）",
            "reviewed_rev": AS_FOUND_REV,
            "reviewer": "独立会话（handoff-z39 §5 第 1 步；禁自评条款由 context 归零的续接会话满足）",
-           "revision_note": "CO-166.2/3：CO-166.3 净化 stdout（重放 as-found 件会 print 自身摘要）。CO-166.2：修正复评件自身的**钉定缺陷**（CO-166.1 把 as-found 源码与**现行**工件混读 ⇒ boundary/备注一变即结论漂移）。现全输入钉在 `e427909`（`git show` 重放）；复评方法 R-CO166-1 由本件自身缺陷的实测补强。",
+           "revision_note": "CO-166.4：删除 V3 的 `captured_len`（重放件按**现行**实件重排 pin ⇒ 非纯函数，该字段随工作区漂移，违 R-CO166-1；改留布尔）。CO-166.2/3：CO-166.3 净化 stdout（重放 as-found 件会 print 自身摘要）。CO-166.2：修正复评件自身的**钉定缺陷**（CO-166.1 把 as-found 源码与**现行**工件混读 ⇒ boundary/备注一变即结论漂移）。现全输入钉在 `e427909`（`git show` 重放）；复评方法 R-CO166-1 由本件自身缺陷的实测补强。",
            "scope": {"reviewed": ["CO-159", "CO-160", "CO-161", "CO-162", "CO-163", "CO-164", "CO-165"],
                      "spec_rev": "rev-19",
                      "focus": ["t09 记号化对备注措辞的敏感度", "t10 在容器侧 .omo 不可达时 fail-closed",
