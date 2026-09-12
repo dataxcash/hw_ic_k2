@@ -395,12 +395,12 @@
    "inputs": {
     "rails": {
      "12V_IN": {
-      "I_a": 0.65,
-      "I_basis": "P3V3 输出功率 /(η=0.88 × 12V) = 2.0A×3.3V/0.88/12V ⇒ 0.63A，取 0.65A（声明值）"
+      "I_a": 0.697,
+      "I_basis": "P3V3 输出功率/(η=0.88（声明）×12V)=3.3×2.23/0.88/12=0.697A"
      },
      "P3V3": {
-      "I_a": 2.0,
-      "I_basis": "U6(DS320PR1601) 1.20A + U1 0.06A + 上拉/杂项 0.05A + 余量 ⇒ 声明 2.00A（保守；器件手册到位后替换）"
+      "I_a": 2.23,
+      "I_basis": "U6 手册 PACT(EQ5-19,max)=7.0W/3.3V=2.12A + MCU/上拉 0.11A（声明）"
      },
      "P3V3_AUX": {
       "I_a": 1.0,
@@ -418,20 +418,21 @@
     },
     "rho_cu_20C": 1.724e-08,
     "ambient_C": 40.0,
-    "disclaimer": "电流/功耗/θJA/对流系数为**显式声明值**（非实测）；不得当实测引用；器件手册或 PM 数据到位后须替换并重跑。"
+    "disclaimer": "电流/功耗/θJA/对流系数为**显式声明值**（非实测）；不得当实测引用；器件手册或 PM 数据到位后须替换并重跑。",
+    "source_note": "P3V3/12V_IN 电流由 U6 手册 PACT（最重档）导出；其余仍为声明值"
    },
    "computed": {
     "12V_IN": {
      "R_total_ohm": 0.007739806456191595,
-     "dV_mV": 5.031,
-     "drop_pct": 0.0419,
+     "dV_mV": 5.395,
+     "drop_pct": 0.045,
      "I_max_at_budget_a": 46.513,
      "verdict": "PASS"
     },
     "P3V3": {
      "R_total_ohm": 0.0020540597319753146,
-     "dV_mV": 4.108,
-     "drop_pct": 0.1245,
+     "dV_mV": 4.581,
+     "drop_pct": 0.1388,
      "I_max_at_budget_a": 48.197,
      "verdict": "PASS"
     },
@@ -489,37 +490,71 @@
       "basis": "U5 光耦 + E2 + LED + L1 铜损（声明值）"
      }
     },
-    "Tj_limit_C": 125.0
+    "Tj_limit_C": 125.0,
+    "u6_source": {
+     "artifact": "m13_v57_co148_u6_ds320pr1601_inputs.json",
+     "sha16": "987c714f8c3fc305",
+     "datasheet": "TI SNLS683 (JUNE 2023)",
+     "PACT_W": {
+      "0-2": {
+       "typ_W": 4.7,
+       "max_W": 6.0
+      },
+      "5-19": {
+       "typ_W": 5.8,
+       "max_W": 7.0
+      }
+     },
+     "theta_ja_C_per_W": 17.4,
+     "psi_jb_C_per_W": 5.9,
+     "TJ_max_C": 120
+    }
    },
    "computed": {
-    "P_total_W": 2.56,
-    "dT_board_C": 28.99,
-    "T_board_C": 69.0,
-    "Tj": {
-     "U6_redriver": {
-      "P_W": 1.5,
-      "theta_ja": 25.0,
-      "basis": "功耗/θJA 均为声明值（无器件手册输入），待 PM 替换",
-      "Tj_C": 106.5
+    "cases": {
+     "U6_EQ0-2_typ": {
+      "P_U6_W": 4.7,
+      "I_a": 1.424,
+      "Tj_C": 121.8,
+      "Ta_max_C": 38.2,
+      "required_theta_ja_C_per_W": 17.02
      },
-     "U1_mcu": {
-      "P_W": 0.05,
-      "theta_ja": 60.0,
-      "basis": "声明值",
-      "Tj_C": 72.0
+     "U6_EQ0-2_max": {
+      "P_U6_W": 6.0,
+      "I_a": 1.818,
+      "Tj_C": 144.4,
+      "Ta_max_C": 15.6,
+      "required_theta_ja_C_per_W": 13.33
+     },
+     "U6_EQ5-19_typ": {
+      "P_U6_W": 5.8,
+      "I_a": 1.758,
+      "Tj_C": 140.9,
+      "Ta_max_C": 19.1,
+      "required_theta_ja_C_per_W": 13.79
+     },
+     "U6_EQ5-19_max": {
+      "P_U6_W": 7.0,
+      "I_a": 2.121,
+      "Tj_C": 161.8,
+      "Ta_max_C": -1.8,
+      "required_theta_ja_C_per_W": 11.43
      }
     },
-    "hotspot_Tj_C": 106.5,
-    "verdict": "PASS"
+    "hotspot_Tj_C": 161.8,
+    "psi_jb_route_Tj_C": 173.6,
+    "Tj_limit_C": 120,
+    "verdict": "FAIL"
    },
    "reachability": {
     "kind": "declared",
-    "verdict": "REACHABLE",
-    "predicate": "热点 Tj < Tj_limit（见 computed）",
-    "basis": "P/θJA/h 为显式声明值（非实测）⇒ 器件手册到位后须替换重跑",
+    "verdict": "UNREACHABLE_REGISTERED",
+    "predicate": "Tj ≤ Tj_limit（按声明环境 Ta/h 与手册 θJA/ψJB）",
+    "why": "40°C 自然对流下全 EQ 档超限；处置选项见裁定件 R4-2",
+    "gate_gap": "co124 K9 无热域模型 ⇒ 本项不可达性由登记簿承接（见 TOOL_DEFECT 项）",
     "evidence_ref": {
-     "path": "m13_v57_co146_pm_eval.json",
-     "sha16": "2fd19425d6d1013f"
+     "path": "input_defect_register_v1.json",
+     "sha16": "8d61923d154d16b6"
     }
    }
   }

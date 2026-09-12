@@ -462,6 +462,43 @@
    ],
    "ruled_by": "CO-147",
    "ruling": "**ACCEPT_L2_WITH_FAB_REVIEW**：实测 0.0695mm vs JLC 0.09mm ⇒ 欠 0.0205mm（边际）。并入 JLC 盲埋孔工程评审一并提交（**不触铜几何、不改板**）。若板厂拒绝 ⇒ 回退最小修法（R3 开窗 0.05→**0.02mm** ⇒ 净距 0.0695+0.03=0.0995 ≥ 0.09；或该段 PCIe 走线微调 ~0.021mm）+ 上游声明件 + G4 全链重基线。"
+  },
+  {
+   "finding": "thermal_defect:u6_ds320pr1601_tj_exceeds_limit_at_40c_natural_convection",
+   "kind": "IMPLEMENTATION_DEVIATION",
+   "severity": "high",
+   "what": "U6（DS320PR1601，TI SNLS683）手册 PACT **4.7–7.0W**、θJA(high-K) 17.4°C/W、Tj 上限 **120°C**；按监理定值 40°C 自然对流 ⇒ **Tj 121.8–161.8°C 全档超限**（ψJB+h 交叉路线 173.6°C）。CO-146 的 U6 声明功耗 1.5W 偏低约 3–4.7 倍（PM 输入缺陷，已由手册值替换）。",
+   "refs": [
+    "CO-146",
+    "CO-148",
+    "监理指令 #10"
+   ],
+   "disposition": "L2 工程侧：PCB 散热路径义务（U6 域 GND via 补强 / GND 平面覆盖 / 铜面最大化）随下一轮几何修订施加；**系统侧须监理重裁定值**：40°C 自然对流与手册不相容 ⇒ (a) 强制风冷/顶部散热片使 θJA_eff ≤ 11.43–17.02°C/W，或 (b) 环境 ≤ 38.2°C（仅最轻档），或 (c) 复核 EQ/功耗假设。",
+   "status": "OPEN",
+   "next": "① 监理/需求方重裁环境/风冷输入（一句话）⇒ 重跑 co146_pm_eval；② L2：U6 域热过孔阵列随几何修订施加。",
+   "evidence": [
+    "手册入库件 m13_v57_co148_u6_ds320pr1601_inputs.json 987c714f8c3fc305",
+    "PM 评估 m13_v57_co146_pm_eval.json 628c06ba2575ceb3"
+   ],
+   "closed_by": []
+  },
+  {
+   "finding": "tool_defect:co124_k9_has_no_thermal_or_drop_domain_model",
+   "kind": "TOOL_DEFECT",
+   "severity": "medium",
+   "what": "co124 K9 的派生值可达性判据**只有 R3-2 节距域模型**（pitch_cap − span − edge）：热（Tj）与压降（ΔV）类定值即便不可达也不被机判 ⇒ 「工程定值须可达」在本类上**无牙齿**（本件热超限只能靠登记簿承接）。",
+   "refs": [
+    "CO-148",
+    "CO-124"
+   ],
+   "disposition": "登记（不改闸）：建议 K9 扩「热/压降」域模型（域 = 声明环境（Ta/h/θJA）与声明电流，判据 = Tj ≤ 上限 / ΔV ≤ 预算）；在扩判据前，本类不可达性以登记簿显式承接（不得静默）。",
+   "status": "OPEN",
+   "next": "L2：K9 扩热/压降域模型（含负控）——独立于本件的闸硬化任务。",
+   "evidence": [
+    "co124 定义 fe271d3b952f8ba7",
+    "本件 §3"
+   ],
+   "closed_by": []
   }
  ],
  "closed_items": [
@@ -479,7 +516,7 @@
   "owner": "ARCHER（L2 自裁执行侧）",
   "approval": "定义件 v1.0 待监理裁定/owner 批准；登记簿随闸每次运行校验",
   "mandatory_trigger": "任何 SPEC / drc_rules 变更后必须跑 tools/p3_v57_co124_input_selfcheck_gate.py 并 PASS",
-  "updated_by": "CO-127..CO-133 + **CO-134（整改通知 #09：③ 重新定性 = 工程换算错误 → REQ-R3-2 忠实实现 + 需求/实现分家规矩 + co124 K9）**；登记簿随 co124 每次运行校验；CO-134 续：4 项已声明定值补 rule_key + 台账溯源；**CO-136（L2 自裁 · 闸卫生续）**：登记并关闭 CO-135 F5(b)/F6 两条 TOOL_DEFECT（co124 标签 / co106 陈旧牙齿）；F4（handoff pin 失准）与 F5(a)（③ 根因叙述）属叙述类，保留在 CO-135 记录，不入本登记簿（非 SPEC/工具缺陷）。；**CO-139**：+1 TOOL_DEFECT（K9 豁免未锚定）并 CLOSED（hash-pin + T9）。；**CO-141**：更正 IMPLEMENTATION_DEVIATION 范围（24 平行对-对，非 3）+ 新增 OPEN TOOL_DEFECT（路由器列距基准漏 3W）。；**CO-142（L2 只读）**：对间 <3W 违规逐条明细 + 构造阶段归因；**CO-143（L2 只读）**：更正 `k2_router_escape_fan_omits_3w` 定位（f13 pair_xorder → escape-fan 落位判据 `p3_v57_co10_west_fan_probe.py:check()`）+ 施加可行性研究（可满足但须重派生策略；PDN 障碍 + 贪心夹死）。；**CO-146（监理指令 #10 · JLC 打样就绪）**：+2 IMPLEMENTATION_DEVIATION（OPEN：盲/埋孔 vs JLC 标准不支持 = 结构/工艺类别；阻焊桥 1 处 vs JLC 0.09mm）；外部输入定性更正（撤回「等券」表述，改绑 JLC 阻抗控制服务 + 监理定值）；登记簿随 co124 每次运行校验。；**CO-147（L2 自裁）**：三题裁定（R1 过孔策略维持盲/埋孔 ⇒ 渠道绑定 JLC advanced；R2 J2 landing 对间适用域 ACCEPT_L2；R3 阻焊桥 ACCEPT_L2_WITH_FAB_REVIEW）；登记簿 3 项转 CLOSED。",
+  "updated_by": "CO-127..CO-133 + **CO-134（整改通知 #09：③ 重新定性 = 工程换算错误 → REQ-R3-2 忠实实现 + 需求/实现分家规矩 + co124 K9）**；登记簿随 co124 每次运行校验；CO-134 续：4 项已声明定值补 rule_key + 台账溯源；**CO-136（L2 自裁 · 闸卫生续）**：登记并关闭 CO-135 F5(b)/F6 两条 TOOL_DEFECT（co124 标签 / co106 陈旧牙齿）；F4（handoff pin 失准）与 F5(a)（③ 根因叙述）属叙述类，保留在 CO-135 记录，不入本登记簿（非 SPEC/工具缺陷）。；**CO-139**：+1 TOOL_DEFECT（K9 豁免未锚定）并 CLOSED（hash-pin + T9）。；**CO-141**：更正 IMPLEMENTATION_DEVIATION 范围（24 平行对-对，非 3）+ 新增 OPEN TOOL_DEFECT（路由器列距基准漏 3W）。；**CO-142（L2 只读）**：对间 <3W 违规逐条明细 + 构造阶段归因；**CO-143（L2 只读）**：更正 `k2_router_escape_fan_omits_3w` 定位（f13 pair_xorder → escape-fan 落位判据 `p3_v57_co10_west_fan_probe.py:check()`）+ 施加可行性研究（可满足但须重派生策略；PDN 障碍 + 贪心夹死）。；**CO-146（监理指令 #10 · JLC 打样就绪）**：+2 IMPLEMENTATION_DEVIATION（OPEN：盲/埋孔 vs JLC 标准不支持 = 结构/工艺类别；阻焊桥 1 处 vs JLC 0.09mm）；外部输入定性更正（撤回「等券」表述，改绑 JLC 阻抗控制服务 + 监理定值）；登记簿随 co124 每次运行校验。；**CO-147（L2 自裁）**：三题裁定（R1 过孔策略维持盲/埋孔 ⇒ 渠道绑定 JLC advanced；R2 J2 landing 对间适用域 ACCEPT_L2；R3 阻焊桥 ACCEPT_L2_WITH_FAB_REVIEW）；登记簿 3 项转 CLOSED。；**CO-148**：U6 手册输入（TI SNLS683）⇒ 热 Tj 121.8–161.8°C 超上限 120°C ⇒ 登记 +2（热超限 HIGH / K9 无热域模型 MED）。",
   "counts": {
    "SPEC_DEFECT": 5,
    "TOOL_DEFECT": 8,

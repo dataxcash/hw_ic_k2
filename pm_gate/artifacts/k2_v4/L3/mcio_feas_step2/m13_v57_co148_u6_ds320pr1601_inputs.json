@@ -1,0 +1,55 @@
+{
+ "artifact": "m13_v57_co148_u6_ds320pr1601_inputs",
+ "schema": 1,
+ "revision": "CO-148.1",
+ "nature": "PM 评估输入升级：U6 由「声明值」→「数据手册值」（监理指令 #10「各轨电流由设计/器件手册导出」）",
+ "device": "DS320PR1601（TI；32 Gbps 16 Lane PCIe 5.0 / CXL 2.0 linear redriver，nfBGA-354）",
+ "source": {
+  "datasheet": "TI DS320PR1601, SNLS683 – JUNE 2023",
+  "url": "https://www.ti.com/lit/ds/symlink/ds320pr1601.pdf",
+  "fetched": "2026-09-12",
+  "excerpt_file": "m13_v57_co148_ds320pr1601_snls683_excerpt.txt",
+  "excerpt_sha16": "623b562cfc8262d2",
+  "pdf_sha256": "f61599c4356edb395e07c9300999ab818898986a4adde71753bae7a080c039da",
+  "note": "PDF 未入库（体积）；节录件含章节正文 + 抓取命令 + PDF sha256，可复核。"
+ },
+ "inputs": {
+  "VCC_V": 3.3,
+  "TJ_max_C": 120,
+  "theta_ja_highK_C_per_W": 17.4,
+  "psi_jb_C_per_W": 5.9,
+  "theta_jc_top_C_per_W": 6.5,
+  "PACT": {
+   "0-2": {
+    "typ_W": 4.7,
+    "max_W": 6.0
+   },
+   "5-19": {
+    "typ_W": 5.8,
+    "max_W": 7.0
+   }
+  },
+  "PRXDET_mW": 660,
+  "PSTBY_mW": 92,
+  "derived_current_a": {
+   "0-2": {
+    "typ": 1.424,
+    "max": 1.818
+   },
+   "5-19": {
+    "typ": 1.758,
+    "max": 2.121
+   }
+  }
+ },
+ "teeth": {
+  "t01_six_values": true,
+  "t02_all_pact_rows": true
+ },
+ "found": {
+  "pact_rows": 2,
+  "theta_ja": true,
+  "tj": true
+ },
+ "redline": "只读节录件；不联网；零坐标搜索。"
+}

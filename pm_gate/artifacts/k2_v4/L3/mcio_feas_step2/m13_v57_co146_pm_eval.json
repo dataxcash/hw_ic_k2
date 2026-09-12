@@ -1,8 +1,8 @@
 {
  "artifact": "m13_v57_co146_pm_eval",
  "schema": 1,
- "revision": "CO146-PM.1",
- "nature": "L2 一阶确定性评估：PDN 压降 + 热（监理指令 #10 动作 2）",
+ "revision": "CO148-PM.2",
+ "nature": "L2 一阶确定性评估：PDN 压降 + 热（监理指令 #10 动作 2；CO-148：U6 用数据手册值）",
  "board_sha16": "d4e81f647be7f980",
  "declared_inputs": {
   "supervisor_values_指令10": {
@@ -42,12 +42,12 @@
   },
   "rails": {
    "12V_IN": {
-    "I_a": 0.65,
-    "I_basis": "P3V3 输出功率 /(η=0.88 × 12V) = 2.0A×3.3V/0.88/12V ⇒ 0.63A，取 0.65A（声明值）"
+    "I_a": 0.697,
+    "I_basis": "P3V3 输出功率/(η=0.88（声明）×12V)=3.3×2.23/0.88/12=0.697A"
    },
    "P3V3": {
-    "I_a": 2.0,
-    "I_basis": "U6(DS320PR1601) 1.20A + U1 0.06A + 上拉/杂项 0.05A + 余量 ⇒ 声明 2.00A（保守；器件手册到位后替换）"
+    "I_a": 2.23,
+    "I_basis": "U6 手册 PACT(EQ5-19,max)=7.0W/3.3V=2.12A + MCU/上拉 0.11A（声明）"
    },
    "P3V3_AUX": {
     "I_a": 1.0,
@@ -60,13 +60,7 @@
   },
   "thermal_devices": {
    "U2_dcdc": {
-    "p_loss_W": 0.91,
-    "basis": "P_out=3.3V×2.0A=6.6W，η=0.88（声明） ⇒ loss=0.91W"
-   },
-   "U6_redriver": {
-    "p_W": 1.5,
-    "theta_ja": 25.0,
-    "basis": "功耗/θJA 均为声明值（无器件手册输入），待 PM 替换"
+    "basis": "P_out = 3.3V×I(P3V3)；η=0.88（声明值，U2 无器件手册）⇒ loss = P_out×(1/η−1)"
    },
    "U1_mcu": {
     "p_W": 0.05,
@@ -78,13 +72,14 @@
     "basis": "U5 光耦 + E2 + LED + L1 铜损（声明值）"
    }
   },
-  "DISCLAIMER": "电流/功耗/θJA/对流系数为**显式声明值**（非实测）；不得当实测引用；器件手册或 PM 数据到位后须替换并重跑。"
+  "u6_source": "**数据手册**（TI SNLS683 JUNE 2023，见 m13_v57_co148_u6_ds320pr1601_inputs.json）",
+  "DISCLAIMER": "U6 功耗/热阻 = 数据手册值（已入库）；其余（U2 效率、MCU/杂项功耗、对流系数 h、P3V3_AUX 侧带电流）仍为显式声明值（非实测）⇒ 到位后须替换并重跑。"
  },
  "method": {
   "plane": "Rs=ρ(T)/t；R_plane=Rs·L/W_eq，L=铜皮包络长边，W_eq=A/L（A=交付板 zone 声明域轮廓面积；filled 缓存不可读）",
   "via": "R_via=ρ·1.6mm/A_铜壁，A_铜壁=π((d/2)²-(d/2-18µm)²)，d=0.2mm；N 支并联",
   "drop": "ΔV=I·(R_plane+R_via/N)；预算 3%（监理定值）",
-  "thermal": "ΔT_board=P_total/(h·2A_board)；Tj=Ta+ΔT_board+P·θJA",
+  "thermal": "主路线 Tj = Ta + P_U6×θJA(手册 high-K 17.4)；交叉核对 Tj = T_board + P_U6×ψJB，T_board = Ta + P_total/(h·2A_board)",
   "nature": "几何一阶解析（非仿真；不含去耦电容动态/AC 阻抗/平面谐振）"
  },
  "rails": {
@@ -106,11 +101,11 @@
    "R_via_each_ohm": 0.002890838928166205,
    "R_via_eff_ohm": 0.0009636129760554017,
    "R_total_ohm": 0.007739806456191595,
-   "I_a": 0.65,
-   "I_basis": "P3V3 输出功率 /(η=0.88 × 12V) = 2.0A×3.3V/0.88/12V ⇒ 0.63A，取 0.65A（声明值）",
+   "I_a": 0.697,
+   "I_basis": "P3V3 输出功率/(η=0.88（声明）×12V)=3.3×2.23/0.88/12=0.697A",
    "V_rail": 12.0,
-   "dV_mV": 5.031,
-   "drop_pct": 0.0419,
+   "dV_mV": 5.395,
+   "drop_pct": 0.045,
    "budget_pct": 3.0,
    "verdict": "PASS",
    "I_max_at_budget_a": 46.513
@@ -133,11 +128,11 @@
    "R_via_each_ohm": 0.002890838928166205,
    "R_via_eff_ohm": 7.050826654063915e-05,
    "R_total_ohm": 0.0020540597319753146,
-   "I_a": 2.0,
-   "I_basis": "U6(DS320PR1601) 1.20A + U1 0.06A + 上拉/杂项 0.05A + 余量 ⇒ 声明 2.00A（保守；器件手册到位后替换）",
+   "I_a": 2.23,
+   "I_basis": "U6 手册 PACT(EQ5-19,max)=7.0W/3.3V=2.12A + MCU/上拉 0.11A（声明）",
    "V_rail": 3.3,
-   "dV_mV": 4.108,
-   "drop_pct": 0.1245,
+   "dV_mV": 4.581,
+   "drop_pct": 0.1388,
    "budget_pct": 3.0,
    "verdict": "PASS",
    "I_max_at_budget_a": 48.197
@@ -197,35 +192,74 @@
    "I_max_at_budget_a": 62.619
   }
  },
- "thermal": {
-  "P_total_W": 2.56,
-  "A_board_m2": 0.00552,
-  "dT_board_C": 28.99,
-  "T_board_C": 69.0,
-  "Tj": {
-   "U6_redriver": {
-    "P_W": 1.5,
-    "theta_ja": 25.0,
-    "basis": "功耗/θJA 均为声明值（无器件手册输入），待 PM 替换",
-    "Tj_C": 106.5
+ "u6_datasheet": {
+  "source_artifact": "m13_v57_co148_u6_ds320pr1601_inputs.json",
+  "source_sha16": "987c714f8c3fc305",
+  "PACT_W": {
+   "0-2": {
+    "typ_W": 4.7,
+    "max_W": 6.0
    },
-   "U1_mcu": {
-    "P_W": 0.05,
-    "theta_ja": 60.0,
-    "basis": "声明值",
-    "Tj_C": 72.0
+   "5-19": {
+    "typ_W": 5.8,
+    "max_W": 7.0
    }
   },
-  "hotspot_Tj_C": 106.5,
-  "Tj_limit_C": 125.0,
-  "verdict": "PASS"
+  "theta_ja_C_per_W": 17.4,
+  "psi_jb_C_per_W": 5.9,
+  "TJ_max_C": 120,
+  "cases": {
+   "U6_EQ0-2_typ": {
+    "P_U6_W": 4.7,
+    "I_a": 1.424,
+    "Tj_C": 121.8,
+    "Ta_max_C": 38.2,
+    "required_theta_ja_C_per_W": 17.02
+   },
+   "U6_EQ0-2_max": {
+    "P_U6_W": 6.0,
+    "I_a": 1.818,
+    "Tj_C": 144.4,
+    "Ta_max_C": 15.6,
+    "required_theta_ja_C_per_W": 13.33
+   },
+   "U6_EQ5-19_typ": {
+    "P_U6_W": 5.8,
+    "I_a": 1.758,
+    "Tj_C": 140.9,
+    "Ta_max_C": 19.1,
+    "required_theta_ja_C_per_W": 13.79
+   },
+   "U6_EQ5-19_max": {
+    "P_U6_W": 7.0,
+    "I_a": 2.121,
+    "Tj_C": 161.8,
+    "Ta_max_C": -1.8,
+    "required_theta_ja_C_per_W": 11.43
+   }
+  }
  },
- "verdict": "PASS",
+ "thermal": {
+  "P_total_W": 8.154,
+  "P_u2_loss_W": 1.004,
+  "A_board_m2": 0.00552,
+  "dT_board_C": 92.32,
+  "T_board_C": 132.3,
+  "routes": {
+   "theta_ja_route_hotspot_Tj_C": 161.8,
+   "psi_jb_plus_board_route_Tj_C": 173.6
+  },
+  "Tj_limit_C": 120,
+  "verdict": "FAIL"
+ },
+ "verdict": "FAIL",
  "rail_fails": [],
  "teeth": {
   "t01_linear_in_I": true,
   "t02_copper_thickness_monotone": true,
-  "t03_plane_geometry_from_board": true
+  "t03_plane_geometry_from_board": true,
+  "t04_datasheet_input_flips_verdict": true,
+  "t05_psi_route_agrees_fail": true
  },
  "redline": "只读：几何取自交付板；零坐标搜索；不改板/图纸/SPEC/冻结四源。"
 }

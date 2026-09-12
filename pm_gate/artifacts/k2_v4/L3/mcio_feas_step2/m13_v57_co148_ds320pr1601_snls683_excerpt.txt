@@ -1,0 +1,193 @@
+# DS320PR1601 数据手册节录（TI SNLS683, JUNE 2023）— 6.3 推荐工作条件 / 6.4 热信息 / 6.5 直流电气特性(Power)
+# 来源 URL: https://www.ti.com/lit/ds/symlink/ds320pr1601.pdf
+# 抓取: 2026-09-12；命令: curl -sL <url> -o ds320.pdf && pdftotext -layout ds320.pdf ds320.txt
+# 抓取 PDF sha256: f61599c4356edb395e07c9300999ab818898986a4adde71753bae7a080c039da
+# 本文件 = ds320.txt 第 755..941 行逐字节录（行号按原 pdftotext 输出）
+
+755: 6.3 Recommended Operating Conditions
+756: over operating free-air temperature range (unless otherwise noted)
+757:                                                                                                MIN      NOM          MAX           UNIT
+758:                                                     DC plus AC power should not
+759:  VCC           Supply voltage, VCC to GND                                                       3.0      3.3          3.6           V
+760:                                                     exceed these limits
+761:                                                     DC to <50 Hz, sinusoidal1                                         250          mVpp
+762:                                                     50 Hz to 500 kHz, sinusoidal1                                     100          mVpp
+763:  NVCC          Supply noise tolerance               500 kHz to 2.5 MHz, sinusoidal1                                    33          mVpp
+764:                                                     Supply noise, >2.5 MHz,
+765:                                                                                                                        10          mVpp
+766:                                                     sinusoidal1
+767:  TRampVCC      VCC supply ramp time                 From 0 V to 3.0 V                         0.150                   100           ms
+768:  TJ            Operating junction temperature                                                   –40                   120           °C
+769:                Minimum pulse width required for
+770:  PWLVCMOS      the device to detect a valid signal PDx, and READ_EN_N                           200                                 μs
+771:                on LVCMOS inputs
+772:                SMBus/I2C SDA and SCL open           Supply voltage for open drain
+773:  VCCSMBUS                                                                                                             3.6           V
+774:                drain termination voltage            pull-up resistor
+775:                SMBus/I2C clock (SCL) frequency
+776:  FSMBus                                                                                            10                 400           kHz
+777:                in target mode
+778:                Source differential launch
+779:  VIDLAUNCH                                                                                      800                  1200          mVpp
+780:                amplitude
+781:  DR            Data rate                                                                            1                  32          Gbps
+782: 
+783: 
+784: 
+785: 
+786: Copyright © 2023 Texas Instruments Incorporated                                                          Submit Document Feedback            15
+787: 
+788:                                                        Product Folder Links: DS320PR1601
+789: 
+790: DS320PR1601
+791: SNLS683 – JUNE 2023                                                                                                                    www.ti.com
+792: 
+793: 6.4 Thermal Information
+794:                                                                                                                    DS320PR1601
+795:                                                THERMAL METRIC(1)                                                                           UNIT
+796:                                                                                                                 ZDG (nfBGA, 354)
+797:  RθJA-High K        Junction-to-ambient thermal resistance                                                  17.4                           ℃/W
+798:  RθJC(top)          Junction-to-case (top) thermal resistance                                               6.5                            ℃/W
+799:  RθJB               Junction-to-board thermal resistance                                                    6.1                            ℃/W
+800:  ψJT                Junction-to-top characterization parameter                                              3.6                            ℃/W
+801:  ψJB                Junction-to-board characterization parameter                                            5.9                            ℃/W
+802:  RθJC(bot)          Junction-to-case (bottom) thermal resistance                                            N/A                            ℃/W
+803: 
+804: (1)       For more information about traditional and new thermal metrics, see the IC Package Thermal Metrics application report.
+805: 
+806: 
+807: 6.5 DC Electrical Characteristics
+808: over operating free-air temperature and voltage range (unless otherwise noted)
+809:                         PARAMETER                                      TEST CONDITIONS                   MIN        TYP      MAX         UNIT
+810:  Power
+811:  PACT              Device active power                        32-channels (16-lanes), EQ = 0-2                       4.7       6.0        W
+812:  PACT              Device active power                        32-channels (16-lanes), EQ = 5-19                      5.8       7.0        W
+813:                    Device power consumption while
+814:                                                               All channels enabled but no far end
+815:  PRXDET            waiting for far end receiver                                                                     660                  mW
+816:                                                               receiver detected
+817:                    terminations
+818:                    Device power consumption in standby
+819:  PSTBY                                                 All channels disabled                                         92                  mW
+820:                    power mode
+821:  Control IO
+822:  VIH               High level input voltage                   SDA, SCL, PD, READ_EN_N pins                2.1                              V
+823:                                                               SDA, SCL, PD, READ_EN_N,
+824:  VIL               Low level input voltage                                                                                    1.08         V
+825:                                                               SEL pins
+826:                                                               Rpull-up = 4.7 kΩ (SDA, SCL,
+827:  VOH               High level output voltage                                                              2.1                              V
+828:                                                               ALL_DONE_N pins)
+829:                                                               IOL = –4 mA (SDA, SCL,
+830:  VOL               Low level output voltage                                                                                    0.4         V
+831:                                                               ALL_DONE_N pins)
+832:                                                               VInput = VCC, (SCL, SDA, PD,
+833:  IIH               Input high leakage current                                                                                   40        µA
+834:                                                               READ_EN_N pins)
+835:                                                               VInput = 0 V, (SCL, SDA, PD,
+836:  IIL               Input low leakage current                                                              -40                             µA
+837:                                                               READ_EN_N pins)
+838:                    Input high leakage current for fail safe   VInput = 3.6 V, VCC = 0 V, (SCL, SDA,
+839:  IIH,FS                                                                                                                        800        µA
+840:                    input pins                                 PD, READ_EN_N pins)
+841:  CIN-CTRL          Input capacitance                          SDA, SCL, PD, READ_EN_Npins                            1.2                  pF
+842:  5 Level IOs (MODE, A/B_ADDR pins)
+843:  IIH_5L            Input high leakage current, 5-level IOs VIN = 2.5 V                                                          40        µA
+844:                    Input low leakage current for all 5-level
+845:  IIL_5L                                                      VIN = GND                                    -40                             µA
+846:                    IOs except MODE.
+847:                    Input low leakage current for MODE
+848:  IIL_5L,MODE                                                  VIN = GND                                 -800                              µA
+849:                    pin
+850:  Receiver
+851:  VRX-DC-CM         Rx DC common mode voltage                  Device is in active or standby state                   1.4                   V
+852:  ZRX-DC            Rx DC single-ended impedance                                                                      50                    Ω
+853:  ZRX-HIGH-IMP-     DC input CM input impedance during
+854:                                                               Inputs are at VRX-DC-CM voltage             15                              kΩ
+855:  DC-POS            Reset or power-down
+856:  Transmitter
+857:                                                               Impedance of Tx during active
+858:  ZTX-DIFF-DC       DC differential Tx impedance                                                                     100                    Ω
+859:                                                               signaling, VID,diff = 1Vpp
+860: 
+861: 
+862: 16        Submit Document Feedback                                                                    Copyright © 2023 Texas Instruments Incorporated
+863: 
+864:                                                          Product Folder Links: DS320PR1601
+865: 
+866:                                                                                                                          DS320PR1601
+867: www.ti.com                                                                                                            SNLS683 – JUNE 2023
+868: 
+869: 6.5 DC Electrical Characteristics (continued)
+870: over operating free-air temperature and voltage range (unless otherwise noted)
+871:                       PARAMETER                                     TEST CONDITIONS                 MIN       TYP    MAX      UNIT
+872:  VTX-DC-CM       Tx DC common mode Voltage                                                                     1.0              V
+873:                                                            Total current the Tx can supply when
+874:  ITX-SHORT       Tx short Circuit Current                                                                      70              mA
+875:                                                            shorted to GND
+876: 
+877: 
+878: 
+879: 6.6 High Speed Electrical Characteristics
+880: over operating free-air temperature and voltage range (unless otherwise noted)
+881:                       PARAMETER                                     TEST CONDITIONS                 MIN       TYP    MAX      UNIT
+882:  Receiver
+883:                                                            50 MHz                                             -32               dB
+884:                                                            4 GHz                                              -22               dB
+885:  RLRX-DIFF       Input differential return loss
+886:                                                            8 GHz                                              -14               dB
+887:                                                            16 GHz                                               -9              dB
+888:                                                            50 MHz                                             -24               dB
+889:                                                            4 GHz                                              -18               dB
+890:  RLRX-CM         Input common-mode return loss
+891:                                                            8 GHz                                              -14               dB
+892:                                                            16 GHz                                               -8              dB
+893:                                                            Pair-to-pair isolation (SDD21) between
+894:  XTRX            Receive-side pair-to-pair isolation       two adjacent receiver pairs from 10                -50               dB
+895:                                                            MHz to 16 GHz.
+896:  Transmitter
+897:                  Tx AC peak-to-peak common mode            Measured with lowest EQ, flat_gain =
+898:  VTX-AC-CM-PP                                                                                                           50    mVpp
+899:                  voltage                                   101
+900:                                                            Measured while Tx is sensing whether
+901:  VTX-RCV-        Amount of voltage change allowed          a low-impedance receiver is present.
+902:                                                                                                       0               600      mV
+903:  DETECT          during receiver detection                 No load is connected to the driver
+904:                                                            output
+905:                                                            50 MHz                                             -30               dB
+906:                                                            4 GHz                                              -14               dB
+907:  RLTX-DIFF       Output differential return loss
+908:                                                            8 GHz                                               -11              dB
+909:                                                            16.0 GHz                                             -9              dB
+910:                                                            50 MHz                                             -22               dB
+911:                                                            4 GHz                                              -16               dB
+912:  RLTX-CM         Output common-mode return loss
+913:                                                            8 GHz                                                -8              dB
+914:                                                            16 GHz                                               -8              dB
+915:                                                            Minimum pair-to-pair isolation
+916:                                                            (SDD21) between two adjacent
+917:  XTTX            Transmit-side pair-to-pair isolation                                                         -45               dB
+918:                                                            transmitter pairs from 10 MHz to 16
+919:                                                            GHz.
+920:                  AC coupling capacitors on transmit
+921:  CAC,TX          pins (integrated inside device                                                               220               nF
+922:                  package)
+923:  Device Datapath
+924:                  Input-to-output latency (propagation      For either Low-to-High or High-to-Low
+925:  TPLHD/PHLD                                                                                                   130     170       ps
+926:                  delay) through a data channel             transition.
+927:                                                            Between any two lanes within a single
+928:  LTX-SKEW        Lane-to-Lane Output Skew                                                                               24      ps
+929:                                                            transmitter.
+930:                                                            Jitter through redriver minus the
+931:  TRJ-DATA        Additive random jitter with data          calibration trace. 32 Gbps PRBS15.                  50               fs
+932:                                                            800 mVpp-diff input swing.
+933: 
+934: 
+935: Copyright © 2023 Texas Instruments Incorporated                                                           Submit Document Feedback    17
+936: 
+937:                                                         Product Folder Links: DS320PR1601
+938: 
+939: DS320PR1601
+940: SNLS683 – JUNE 2023                                                                                                                      www.ti.com
+941: 

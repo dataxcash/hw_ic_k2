@@ -1,0 +1,93 @@
+{
+ "artifact": "m13_v57_co148_thermal_ruling",
+ "schema": 1,
+ "revision": "CO-148.1",
+ "nature": "L2 裁定：U6 手册输入下的热超限（登记 + 处置 + 台账）",
+ "doc": "L2_RULING_u6_thermal_v1.md",
+ "doc_sha16": "fe512a44e9aeb4b2",
+ "board_sha16": "d4e81f647be7f980",
+ "u6_inputs": {
+  "artifact": "m13_v57_co148_u6_ds320pr1601_inputs.json",
+  "sha16": "987c714f8c3fc305"
+ },
+ "pm_eval": {
+  "artifact": "m13_v57_co146_pm_eval.json",
+  "sha16": "628c06ba2575ceb3",
+  "verdict": "FAIL"
+ },
+ "cases": {
+  "U6_EQ0-2_typ": {
+   "P_U6_W": 4.7,
+   "I_a": 1.424,
+   "Tj_C": 121.8,
+   "Ta_max_C": 38.2,
+   "required_theta_ja_C_per_W": 17.02
+  },
+  "U6_EQ0-2_max": {
+   "P_U6_W": 6.0,
+   "I_a": 1.818,
+   "Tj_C": 144.4,
+   "Ta_max_C": 15.6,
+   "required_theta_ja_C_per_W": 13.33
+  },
+  "U6_EQ5-19_typ": {
+   "P_U6_W": 5.8,
+   "I_a": 1.758,
+   "Tj_C": 140.9,
+   "Ta_max_C": 19.1,
+   "required_theta_ja_C_per_W": 13.79
+  },
+  "U6_EQ5-19_max": {
+   "P_U6_W": 7.0,
+   "I_a": 2.121,
+   "Tj_C": 161.8,
+   "Ta_max_C": -1.8,
+   "required_theta_ja_C_per_W": 11.43
+  }
+ },
+ "worst": {
+  "case": "U6_EQ5-19_max",
+  "Tj_C": 161.8
+ },
+ "best": {
+  "case": "U6_EQ0-2_typ",
+  "Tj_C": 121.8
+ },
+ "Tj_limit_C": 120,
+ "paths_cross_check": {
+  "theta_ja_route_hotspot_Tj_C": 161.8,
+  "psi_jb_plus_board_route_Tj_C": 173.6
+ },
+ "thermal_path": {
+  "u6_pads": 354,
+  "gnd_balls": 152,
+  "gnd_vias_in_u6_bbox": 66,
+  "all_vias_in_u6_bbox": 167,
+  "gnd_planes": [
+   "In1.Cu",
+   "In3.Cu",
+   "In6.Cu"
+  ],
+  "bottom_side_thermal_pad": "无（U6 在顶层）"
+ },
+ "register": {
+  "file": "input_defect_register_v1.json",
+  "sha16_after": "8d61923d154d16b6",
+  "items_added": [
+   "thermal_defect:u6_ds320pr1601_tj_exceeds_limit_at_40c_natural_convection",
+   "tool_defect:co124_k9_has_no_thermal_or_drop_domain_model"
+  ],
+  "items_total": 24,
+  "open_total": 2
+ },
+ "ledger": {
+  "file": "derived_value_ledger_v1.json",
+  "sha16_after": "27551cb766fdd3c8"
+ },
+ "owner_visible_input_conflict": "40°C 自然对流（监理定值）vs 器件手册 ⇒ 须重裁环境/风冷输入（R4-2）",
+ "teeth": {
+  "t01_worst_tj_over_limit": true,
+  "t02_gnd_via_deficit": true
+ },
+ "redline": "只读板/SPEC；不改几何；零坐标搜索；输出只写 L2 政策层 + 登记簿 + 台账。"
+}

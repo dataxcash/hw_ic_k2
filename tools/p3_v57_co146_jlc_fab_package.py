@@ -171,7 +171,13 @@ L2 裁定件 `L2_RULING_via_channel_and_interpair_domain_v1.md`；接受其 DFM 
 **请 JLC 阻抗表覆盖最宽对内间距（0.6mm 中心）的几何**。终判 = JLC 阻抗控制服务。
 见 04_impedance/。
 
-## 6. 已知板级非 DFM 事实（如实登记，非本单阻塞）
+## 6. 系统级事项（非制造/非本单阻塞，但影响可用性）
+**U6（DS320PR1601）热超限（CO-148）**：手册 PACT 4.7–7.0W / θJA(high-K) 17.4°C/W / Tj 上限 120°C；
+按监理定值 40°C 自然对流 ⇒ Tj 121.8–161.8°C **全档超限**（ψJB+h 交叉路线 173.6°C）。
+⇒ 须（a）系统强制风冷/顶部散热片 或（b）环境降额，并在下一轮几何修订中补强 U6 域 GND via 阵列。
+详见 `L2/L2_RULING_u6_thermal_v1.md` 与登记簿 HIGH 项。本板仍建议打样（散热路径实证需要实板）。
+
+## 7. 已知板级非 DFM 事实（如实登记，非本单阻塞）
 - 本板无 PTH/NPTH 焊盘：`J6/J9/J11/J12/J13` 为无焊盘占位（netlist 骨架），板上无安装孔。
 - DRC（as-designed，含逃逸域 dru）：42 项，全部为 `lib_footprint_*`(41) + `silk_edge_clearance`(1)，无铜几何违规。
 """
