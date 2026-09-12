@@ -62,7 +62,7 @@ OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
 OUT_LANDING = STEP2 / "m13_v57_w3_chip_landing_rows.json"
 
 REVISION = "W3-CN.30"   # 默认（t2）路径不动；CO-16 见 REVISION_CO16
-REVISION_CO16 = "W3-CN.42"   # CO-45：远端 N 折线补入 3D nodes（修 CO-43 图纸/nodes 不一致）+ REFCLK 对内 0.5/dip 解耦；CO-68: LID REV6 层集 F/In2/In5/B（方案(a)）
+REVISION_CO16 = "W3-CN.43"   # CO-45：远端 N 折线补入 3D nodes（修 CO-43 图纸/nodes 不一致）+ REFCLK 对内 0.5/dip 解耦；CO-68: LID REV6 层集 F/In2/In5/B（方案(a)）
 ECS_VIA1_X = 133.825        # 两列缝中线（距两侧 pad 边各 0.35 >= vias.high_speed.pad_edge_clearance_mm 0.3）
 ECS_VIA2_X_MAX = 131.525    # 内列 pad 西缘 132.0 - via 半径 0.175 - pad_edge_clearance 0.3
 ECS_VIA_R = 0.175           # vias.std: drill 0.2 + 2*annular 0.075
@@ -156,8 +156,8 @@ TOL = 1e-9
 SUPERSEDED = {"artifact": "m13_v57_w3_joint_assignment.json", "revision": "W3-JA.2",
                "sha256": "d081618c7b961d770c8e2f180f93b92125b316bc0eeec181f9d1d191a0ee6acc",
                "reason": "method-level iron-law violation (search-based); retained, not rewritten"}
-CO16_ALLOC = STEP2 / "m13_v57_co16_channel_allocation_v8.json"   # CO16-ALLOC.8（CO-144：逃生扇 carry + PDN 障碍场；stub In5）
-CO16_ALLOC_SHA = "3307d19a226f60fca84d20e12486a3a6b7c22190eea546ff8fee487ca2245d66"
+CO16_ALLOC = STEP2 / "m13_v57_co16_channel_allocation_v9.json"   # CO16-ALLOC.9（CO-145：lane 步距 1.07；CO-144 carry + PDN 障碍场）
+CO16_ALLOC_SHA = "d3cd1e5a312f253aa3720e5d3d6418286065fe16ce3cbc5c111e09179b5a3078"
 CORRIDOR = {
     "EAST_CHIP_TO_J2": {"bounds": (105.25, 132.65), "x_domain": (93.55, 105.25)},
     "WEST_MCIO_TO_CHIP": {"bounds": (65.05, 82.35), "x_domain": (82.35, 93.55)},
@@ -499,6 +499,17 @@ def co16_vias(nodes, pol):
 _CO16_PTS = {}
 
 
+def _lane_3w_min() -> float:
+    """CO-145：co16 lane-run 层 = In5.Cu；REQ-R3-2「3W」中心界 = 3*w(In5)（SPEC p_width_mm_by_layer）。
+    蛇形幅度守卫须并入该项——原守卫仅按 VT_TRACK=0.4525（净距口径）⇒ 峰值可侵入邻道至 0.4525
+    （< 0.48）⇒ 实测 In5 lane-run 对间铜边 0.3125 < 2w=0.32（ledger as_built）。"""
+    spec = json.loads(F["spec"].read_text(encoding="utf-8"))
+    pc = spec["net_classes"]["PCIe85"]
+    dp = pc.get("diff_pair") or {}
+    w = float((dp.get("p_width_mm_by_layer") or {}).get("In5.Cu", dp.get("p_width", pc["width"])))
+    return 3.0 * w
+
+
 def co16_o4_amp_table(alloc, o4):
     """O4 lane 蛇形「方向 + 幅值 + x 窗口」表（vt 顶点净距口径；对向同时蛇形按对称解折半）。
 
@@ -506,6 +517,7 @@ def co16_o4_amp_table(alloc, o4):
     作 via 候选量测）。方向取静态 vt 余量较大侧（平手取 CO16-O4.1 的 dy）。x 窗口按 E=B 的
     In5 via1 stack 截断（避免蛇形扫过异网 via stack）。"""
     VT = VT_TRACK
+    NEED_XP = max(VT_TRACK, _lane_3w_min())     # 异页（异对）邻道：净距与 3W 取严
     lanes = {}
     for pid, a in alloc.items():
         for pol in ("P", "N"):
@@ -543,9 +555,15 @@ def co16_o4_amp_table(alloc, o4):
                 continue
             if min(xhi, hi2) - max(xlo, lo2) <= 0 or d * (y2 - y) <= TOL:
                 continue
-            gap = abs(y2 - y) - VT - MEANDER_MARGIN
+            # 3W 仅约束对间（同对内维持 VT 口径）。异对项用 3W + 小余量 0.005：
+            # 3W(0.48)+MEANDER_MARGIN(0.02) 会把可用幅值压到 meander_zig 的下限以下 ⇒ 退化
+            # （实测 amp<0.071 时 DN0/out_MCIO、<0.075 时 UP6/input 无法实现等长）。
+            _xp = (p2 != pid)
+            _need = NEED_XP if _xp else VT
+            _mg = 0.005 if _xp else MEANDER_MARGIN
+            gap = abs(y2 - y) - _need - _mg
             if mset.get(p2) == pol2 and tab[p2][0] * (y - y2) > TOL:
-                gap = min(gap, (abs(y2 - y) - VT) / 2.0 - MEANDER_MARGIN)   # 对向蛇形对称解
+                gap = min(gap, (abs(y2 - y) - _need) / 2.0 - _mg)   # 对向蛇形对称解
             amp = min(amp, gap)
         amp = min(amp, (LANE_Y_HI - y) if d > 0 else (y - LANE_Y_LO))        # CO-22 顶点不得出板边带
         tab[pid][1] = max(0.0, min(MEANDER_A_MAX, amp))

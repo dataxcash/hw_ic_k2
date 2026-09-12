@@ -26,7 +26,7 @@ STEP2 = L3 / "mcio_feas_step2"
 SPEC_CUR = L3 / "SPEC_k2_v4.spec-rev-19.json"
 DRAWING = STEP2 / "m13_v57_w3_joint_assignment.json"
 BOARD = K2 / "k2_v4_8L.l4.kicad_pcb"
-BASE = {"spec_current": "5f72182a2616392c", "board": "76cdf64cc4c5043b"}
+BASE = {"spec_current": "5f72182a2616392c", "board": "d4e81f647be7f980"}
 
 
 def s16(p) -> str:

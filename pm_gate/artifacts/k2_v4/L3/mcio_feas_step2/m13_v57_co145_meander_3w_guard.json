@@ -1,0 +1,42 @@
+{
+ "artifact": "m13_v57_co145_meander_3w_guard",
+ "schema": 1,
+ "revision": "CO-145",
+ "nature": "L2 自裁（走廊分配/等长窗口）：lane-run 蛇形幅度守卫并入对间 3W + lane 步距 1.05->1.07",
+ "closes": {
+  "finding": "tool_defect:k2_meander_amp_guard_omits_3w",
+  "status": "CLOSED"
+ },
+ "root_cause": {
+  "tool": "tools/p3_v57_w3_constructive.py:co16_o4_amp_table",
+  "old_guard": "gap = |Δy| - VT_TRACK(0.4525) - MARGIN(0.02)（无 3w 项）",
+  "new_guard": "gap = |Δy| - max(VT_TRACK, 3w(In5)=0.48) - 0.005（仅异对邻道）",
+  "why_pitch": "meander_zig 在幅度 <~0.071(DN0/out_MCIO)/~0.075(UP6/input) 时无法在 run 内实现等长 ⇒ 仅压缩幅值会退化（实测 SI 0.2062）；故增 lane 步距留空间"
+ },
+ "inputs": {
+  "spec": "5f72182a2616392c",
+  "alloc9": "d3cd1e5a312f253a",
+  "g4": "f79d41990f6966f1",
+  "board": "d4e81f647be7f980"
+ },
+ "machine_check": {
+  "in5_as_built": {
+   "min_edge_mm": 0.325,
+   "required_edge_mm": 0.32,
+   "ok": true
+  },
+  "bcu_as_built": {
+   "min_edge_mm": 0.445,
+   "ok": true
+  },
+  "three_w_in5_mm": 0.48,
+  "si_skew_mm": 0.13,
+  "si_ok": true,
+  "drc": "42(+0)（CO-133 B_drc_neutral）",
+  "before": {
+   "in5_min_edge_mm": 0.3125
+  }
+ },
+ "verdict": "PASS",
+ "redline": "不改 SPEC/阈值/冻结四源；lane 步距与蛇形守卫为 L2 工程定值，来源原则 = REQ-R3-2（3W）+ SPEC escape/等长"
+}

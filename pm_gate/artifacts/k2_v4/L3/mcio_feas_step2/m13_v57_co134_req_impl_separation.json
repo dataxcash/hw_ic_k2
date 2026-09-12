@@ -14,14 +14,14 @@
  },
  "inputs": {
   "spec_in": "500f3da8179fe19c",
-  "board": "76cdf64cc4c5043b",
+  "board": "d4e81f647be7f980",
   "co129": "5e2f92e5e03f0ab9",
   "co37": "5616a9f873c9b844"
  },
  "outputs": {
   "spec_out": "5f72182a2616392c",
-  "ledger": "94bf57f659476084",
-  "rule_doc": "a1909cb0a0f49269"
+  "ledger": "cd8a5577e1a84541",
+  "rule_doc": "0181186c4b4266e1"
  },
  "faithful_derivation": {
   "edge_by_layer_mm": {
@@ -76,7 +76,7 @@
   "verdict": "REACHABLE"
  },
  "as_built": {
-  "source": "L4 board 76cdf64cc4c5043b（CO-134 实测，零搜索）",
+  "source": "L4 board d4e81f647be7f980（CO-134 实测，零搜索）",
   "rows": [
    {
     "layer": "B.Cu",
@@ -88,7 +88,7 @@
     ],
     "at": [
      89.65,
-     46.886
+     46.966
     ],
     "inside_escape_xy": false,
     "required_edge_mm": 0.41,
@@ -105,7 +105,7 @@
     ],
     "at": [
      89.65,
-     46.886
+     46.966
     ],
     "inside_escape_xy": false,
     "required_edge_mm": 0.41,
@@ -183,36 +183,36 @@
    {
     "layer": "In5.Cu",
     "scope": "all",
-    "min_edge_mm": 0.3125,
+    "min_edge_mm": 0.325,
     "pairs": [
-     "PCIE_DN_OUT0_N_MCIO",
-     "PCIE_DN_OUT1_P_MCIO"
+     "PCIE_UP0_P",
+     "PCIE_UP1_N"
     ],
     "at": [
-     74.725,
-     40.8
+     81.749,
+     36.617
     ],
     "inside_escape_xy": false,
     "required_edge_mm": 0.32,
-    "margin_mm": -0.0075,
-    "ok": false
+    "margin_mm": 0.005,
+    "ok": true
    },
    {
     "layer": "In5.Cu",
     "scope": "outside_escape",
-    "min_edge_mm": 0.3125,
+    "min_edge_mm": 0.325,
     "pairs": [
-     "PCIE_DN_OUT0_N_MCIO",
-     "PCIE_DN_OUT1_P_MCIO"
+     "PCIE_UP0_P",
+     "PCIE_UP1_N"
     ],
     "at": [
-     74.725,
-     40.8
+     81.749,
+     36.617
     ],
     "inside_escape_xy": false,
     "required_edge_mm": 0.32,
-    "margin_mm": -0.0075,
-    "ok": false
+    "margin_mm": 0.005,
+    "ok": true
    }
   ],
   "deviations_open_engineering": [
@@ -228,21 +228,6 @@
     "at": [
      137.24,
      59.575
-    ],
-    "disposition": "OPEN_ENGINEERING：域外实测低于忠实口径 ⇒ SI/板厂券复核（外部输入，CO-53/54）或后续几何迭代（须另开 CO）"
-   },
-   {
-    "layer": "In5.Cu",
-    "min_edge_mm": 0.3125,
-    "required_edge_mm": 0.32,
-    "margin_mm": -0.0075,
-    "pairs": [
-     "PCIE_DN_OUT0_N_MCIO",
-     "PCIE_DN_OUT1_P_MCIO"
-    ],
-    "at": [
-     74.725,
-     40.8
     ],
     "disposition": "OPEN_ENGINEERING：域外实测低于忠实口径 ⇒ SI/板厂券复核（外部输入，CO-53/54）或后续几何迭代（须另开 CO）"
    }

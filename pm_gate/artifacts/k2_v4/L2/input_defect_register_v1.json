@@ -300,22 +300,23 @@
    "finding": "implementation_deviation:R3-2_asbuilt_interpair_edge",
    "kind": "IMPLEMENTATION_DEVIATION",
    "severity": "medium",
-   "what": "交付板域外对间铜边低于 REQ-R3-2 忠实口径 —— **CO-144 后范围**：B.Cu 逃生竖列已由 CO-144 关闭（原 14 对 <2w ⇒ 0）；残留 **F.Cu 10 对**（J2 接口 0.6 节距 land 段，路由不可消除 = L1）与 In5 斜交口径（CO-141：In5 <2w 组合全为斜交 >10°，不属「长平行」）。",
+   "what": "交付板域外对间铜边低于 REQ-R3-2 忠实口径 —— **CO-145 后范围收窄至 1 项**：① B.Cu 逃生竖列 = CO-144 已几何闭合；② In5 lane-run = **CO-145 已闭合**（蛇形幅度守卫并入 3W + lane 步距 1.07；实测 0.3125 -> 0.325 ≥ 0.32）；③ 残留 **F.Cu = J2 接口 landing 段**（connector 0.6 节距 < 3w=0.615 ⇒ 接口固有不可达，L1/owner）。",
    "refs": [
     "CO-134",
     "CO-53",
     "CO-54"
    ],
-   "disposition": "**工程开放项**：① B.Cu 逃生竖列 = CO-144 已几何闭合；② F.Cu J2 接口 = L1/owner（J2 3W 适用域，接口固有节距 0.6 < 3w）；③ 外部：SI/板厂券判可接受性 + 「长平行」阈值。板现 76cdf64cc4c5043b（CO-144）。",
+   "disposition": "**工程开放项（仅 F.Cu 接口）**：B.Cu/In5（L2）已闭合；F.Cu J2 landing 段在连接器端中心距 0.6 < 0.615 ⇒ 路由不可消除；闭合需 owner 裁『J2 接口 3W 适用域』（超 CO-25 §3 pad 场矩形口径 ⇒ 属需求适用域变更）。板现 d4e81f647be7f980（CO-145）。",
    "status": "OPEN",
-   "next": "① L1/owner：J2 接口 3W 适用域（F.Cu 偏差）；② 外部：SI/板厂券 + 长平行阈值。B.Cu（L2）已闭合。",
+   "next": "① L1/owner：J2 接口 3W 适用域（F.Cu landing；物理不可达 0.6<0.615）；② 外部：SI/板厂券。B.Cu/In5（L2）已闭合。",
    "evidence": [
-    "CO-134 m13_v57_co134_req_impl_separation.json as_built.deviations_open_engineering（CO-144 后 B.Cu ok）",
-    "CO-141 全量审计（UNDER_REPORTED 6f8535535a58aaf7）",
-    "CO-144 m13_v57_co144_escape_fan_carry_rederive.json（B.Cu 0 违规）"
+    "CO-134 as_built（CO-145 后：B.Cu ok、In5 ok；仅 F.Cu 0.3294）",
+    "CO-141 全量审计（6f8535535a58aaf7）",
+    "CO-144（B.Cu 闭合）/ CO-145（In5 闭合）"
    ],
    "closed_by": [
-    "CO-144(B.Cu 部分)"
+    "CO-144(B.Cu)",
+    "CO-145(In5)"
    ]
   },
   {
@@ -390,6 +391,29 @@
    "closed_by": [
     "CO-144"
    ]
+  },
+  {
+   "finding": "tool_defect:k2_meander_amp_guard_omits_3w",
+   "kind": "TOOL_DEFECT",
+   "severity": "medium",
+   "what": "引擎 `co16_o4_amp_table` 的 lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻道余量，**未并入 REQ-R3-2 3W 界**（In5 3w=0.48）⇒ 蛇形峰值可侵入邻道至 0.4525（<0.48），实测 In5 lane-run 对间铜边 0.3125 < 2w=0.32（如 DN_OUT0_N × DN_OUT1_P）。根因与 CO-141/143 的逃生扇缺陷同族（列距基准漏 3W）。",
+   "refs": [
+    "CO-141",
+    "CO-145",
+    "CO-134"
+   ],
+   "disposition": "CO-145 修正：守卫对**异页（异对）**邻道改取 `max(VT_TRACK, 3w(In5))=0.48`（同对内维持 VT 口径——3W 只约束对间），余量 0.005；并把 lane 步距 1.05→1.07 使 `间隙−3w−余量` 容得下等长所需蛇形幅度（实测 amp<0.071/0.075 时 meander_zig 退化 ⇒ 不可单纯压缩幅值）。重发射 CO16-ALLOC.9 + G4 W3-CN.43；In5 对间 0.3125→0.325 ≥ 0.32；SI 0.1300 PASS；板级 DRC 42(+0)。",
+   "status": "CLOSED",
+   "next": "无（In5 lane-run 3W 已几何闭合）",
+   "evidence": [
+    "CO-145 m13_v57_co145_meander_3w_guard.json",
+    "CO16-ALLOC.9 m13_v57_co16_channel_allocation_v9.json",
+    "G4 m13_v57_w3_joint_assignment.json（W3-CN.43）",
+    "L5 SI 0.1300 PASS / DRC 42(+0)"
+   ],
+   "closed_by": [
+    "CO-145"
+   ]
   }
  ],
  "closed_items": [
@@ -416,5 +440,6 @@
    "OPEN": 2,
    "total": 19
   }
- }
+ },
+ "verdict": null
 }

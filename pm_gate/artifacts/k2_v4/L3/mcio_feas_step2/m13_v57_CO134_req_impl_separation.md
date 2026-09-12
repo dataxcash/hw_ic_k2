@@ -5,6 +5,6 @@
   带内下界 0.18；旧 0.875 退役留存。SPEC **rev-19** `5f72182a2616392c`（白名单外 0 改动）。
 - **可达性**：REACHABLE —— 域外 0.355+0.41=0.765 ≤ cap（WEST 1.05 / EAST 1.449）；
   焊盘场属 ECN-001 escape 域（已声明放宽）。
-- **板实实测**：域外偏差 **2** 处（见记录 `as_built`；显式登记为工程开放项，路由 = SI/板厂券 或后续几何迭代）。
-- **规矩入库**：`L2/REQUIREMENT_IMPLEMENTATION_SEPARATION_v1.0.md` `a1909cb0a0f49269` + 台账 `L2/derived_value_ledger_v1.json` `94bf57f659476084`；
+- **板实实测**：域外偏差 **1** 处（见记录 `as_built`；显式登记为工程开放项，路由 = SI/板厂券 或后续几何迭代）。
+- **规矩入库**：`L2/REQUIREMENT_IMPLEMENTATION_SEPARATION_v1.0.md` `0181186c4b4266e1` + 台账 `L2/derived_value_ledger_v1.json` `cd8a5577e1a84541`；
   机判 = co124 **K9**（负控 T5/T6/T7）。

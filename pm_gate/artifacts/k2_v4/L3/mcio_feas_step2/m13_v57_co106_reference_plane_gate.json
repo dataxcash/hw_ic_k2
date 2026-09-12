@@ -1,7 +1,7 @@
 {
  "artifact": "m13_v57_co106_reference_plane_gate",
  "base_pins": {
-  "board": "76cdf64cc4c5043b",
+  "board": "d4e81f647be7f980",
   "spec_current": "5f72182a2616392c"
  },
  "checks": {
@@ -54,9 +54,7 @@
    "ok": false
   },
   "B_reference_continuity": {
-   "class_counts": {
-    "region_scoped_indeterminate": 1
-   },
+   "class_counts": {},
    "examples": [],
    "frame_inset_bottom_y": 78.7,
    "full_void_by_net": {},
@@ -64,7 +62,7 @@
    "n_declared_copper_missing_points": 0,
    "n_full_void_segments": 0,
    "n_segments": 320,
-   "ok": false,
+   "ok": true,
    "reference_declared_copper": {
     "In1.Cu": 1,
     "In3.Cu": 1,
@@ -77,9 +75,7 @@
     "In2.Cu": 88,
     "In5.Cu": 72
    },
-   "violations_per_layer_ref": {
-    "In5.Cu<-In4.Cu": 1
-   }
+   "violations_per_layer_ref": {}
   },
   "C_realized_corroboration": {
    "board_entities_inside_void_band": {},
@@ -105,8 +101,8 @@
   }
  },
  "inputs": {
-  "board": "76cdf64cc4c5043b",
-  "drawing": "28d35252641ec48d",
+  "board": "d4e81f647be7f980",
+  "drawing": "60cbd331836e52b7",
   "spec_current": "5f72182a2616392c"
  },
  "nature": "L2 合格标准覆盖性补全（ch.2「参考平面」）+ 参考平面连续性/板框一致性机判",
@@ -124,5 +120,5 @@
   "frame_inset_detector": true,
   "teeth_ok": true
  },
- "verdict": "INDETERMINATE_REGION_SCOPED"
+ "verdict": "PASS"
 }

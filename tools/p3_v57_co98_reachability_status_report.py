@@ -26,7 +26,7 @@ STEP2 = L3 / "mcio_feas_step2"
 OUT = STEP2 / "m13_v57_co98_reachability_status_report.json"
 SPEC = L3 / "SPEC_k2_v4.spec-rev-19.json"
 CO95 = STEP2 / "m13_v57_co95_in4_reachability.json"
-BASE = {"spec": "5f72182a2616392c", "co95_record": "c9eba916a9866808", "board": "76cdf64cc4c5043b"}
+BASE = {"spec": "5f72182a2616392c", "co95_record": "c9eba916a9866808", "board": "d4e81f647be7f980"}
 GND = "GND"
 
 
