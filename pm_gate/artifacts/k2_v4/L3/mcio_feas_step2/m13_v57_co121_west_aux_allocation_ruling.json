@@ -1,0 +1,2317 @@
+{
+ "artifact": "m13_v57_co121_west_aux_allocation_ruling",
+ "schema": 1,
+ "nature": "L2 自裁 · 裁定（+ 施加计划）：西区 P3V3_AUX In4 承载归属分配",
+ "level": {
+  "ruling": "L2",
+  "basis": "《宪法》ch.2：L2=PDN 架构/走廊分配，L2 裁判标准含『参考平面』；冻结 L1=域集合+粗分区，本件二者不变 ⇒ L2（先例 CO-74；判据同 CO-117 level_basis）",
+  "supersedes": "boundary v1.82 附二 ②『L1 待裁』归口（过高）"
+ },
+ "inputs": {
+  "spec": "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-15.json",
+  "spec_sha16": "48d6fc7c565c8862",
+  "rules_sha16": "0a459839e15960b8",
+  "co95_flag": "plane_reachability_status.unresolved[P3V3_AUX]『区域归属冲突，须裁』"
+ },
+ "clearance": {
+  "derivation": "冻结 drc_rules.json：铜/铜 required=max(netclass,board_min)，P3V3_AUX=POWER 0.2；区域边→异网 via 圆心 ≥ required + via_od/2 = 0.375；孔/铜 = min_hole_clearance 0.25 + drill_r 0.1 = 0.35 < 0.375 ⇒ 铜规则约束",
+  "required_mm": 0.375,
+  "uniform": true,
+  "note": "P3V3_AUX 自身 POWER ⇒ 对任何异网 required 均为 0.2 ⇒ 统一 0.375（含 GND：In4 无 GND 区，但其孔/环需净距）"
+ },
+ "zone": {
+  "name": "MCU_VDD_WEST",
+  "rect": [
+   23.3,
+   33.3,
+   57.75,
+   78.7
+  ]
+ },
+ "targets": {
+  "C90.1": [
+   28.975,
+   53.0
+  ],
+  "R1.2": [
+   51.725,
+   37.0
+  ],
+  "U1.15": [
+   39.425,
+   53.25
+  ]
+ },
+ "mcu_vdd_vias_west": {
+  "C85.1": [
+   30.475,
+   54.5
+  ],
+  "C86.1": [
+   30.275,
+   56.0
+  ],
+  "E2.2": [
+   41.275,
+   59.365
+  ],
+  "E2.8": [
+   45.95,
+   57.17
+  ],
+  "R31.2": [
+   56.725,
+   66.5
+  ],
+  "R32.2": [
+   56.725,
+   67.5
+  ],
+  "R33.2": [
+   56.725,
+   68.5
+  ],
+  "R34.2": [
+   56.725,
+   69.5
+  ],
+  "U1.6": [
+   36.75,
+   49.775
+  ],
+  "U4.2": [
+   40.95,
+   38.775
+  ]
+ },
+ "foreign_vias_n": 190,
+ "family": {
+  "K0_islands_cw0.3": [
+   [
+    28.475,
+    52.5,
+    29.475,
+    53.5
+   ],
+   [
+    38.925,
+    52.75,
+    39.925,
+    53.75
+   ],
+   [
+    51.225,
+    36.5,
+    52.225,
+    37.5
+   ]
+  ],
+  "K1_direct_h0.5_cw0.3_off+0.000": [
+   [
+    28.475,
+    52.5,
+    29.475,
+    53.5
+   ],
+   [
+    38.925,
+    52.75,
+    39.925,
+    53.75
+   ],
+   [
+    28.475,
+    52.875,
+    52.025,
+    53.375
+   ],
+   [
+    51.225,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    51.225,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    51.425,
+    36.5,
+    52.025,
+    53.375
+   ]
+  ],
+  "K1_direct_h0.7_cw0.3_off+0.000": [
+   [
+    28.475,
+    52.5,
+    29.475,
+    53.5
+   ],
+   [
+    38.925,
+    52.75,
+    39.925,
+    53.75
+   ],
+   [
+    28.475,
+    52.775,
+    52.025,
+    53.475
+   ],
+   [
+    51.225,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    51.225,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    51.425,
+    36.5,
+    52.025,
+    53.475
+   ]
+  ],
+  "K1_below_h0.5_cw0.3_off+0.000": [
+   [
+    28.25,
+    52.275,
+    29.7,
+    53.725
+   ],
+   [
+    38.7,
+    52.525,
+    40.15,
+    53.975
+   ],
+   [
+    28.25,
+    52.025,
+    52.025,
+    52.525
+   ],
+   [
+    51.0,
+    36.275,
+    52.45,
+    37.725
+   ],
+   [
+    51.0,
+    36.5,
+    52.45,
+    37.5
+   ],
+   [
+    51.425,
+    36.5,
+    52.025,
+    52.525
+   ]
+  ],
+  "K1_below_h0.7_cw0.3_off+0.000": [
+   [
+    28.25,
+    52.275,
+    29.7,
+    53.725
+   ],
+   [
+    38.7,
+    52.525,
+    40.15,
+    53.975
+   ],
+   [
+    28.25,
+    51.825,
+    52.025,
+    52.525
+   ],
+   [
+    51.0,
+    36.275,
+    52.45,
+    37.725
+   ],
+   [
+    51.0,
+    36.5,
+    52.45,
+    37.5
+   ],
+   [
+    51.425,
+    36.5,
+    52.025,
+    52.525
+   ]
+  ],
+  "K1_above_h0.5_cw0.3_off+0.000": [
+   [
+    28.475,
+    52.5,
+    29.475,
+    53.5
+   ],
+   [
+    38.925,
+    52.75,
+    39.925,
+    53.75
+   ],
+   [
+    28.475,
+    53.725,
+    52.025,
+    54.225
+   ],
+   [
+    51.225,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    51.225,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    51.425,
+    36.5,
+    52.025,
+    54.225
+   ]
+  ],
+  "K1_above_h0.7_cw0.3_off+0.000": [
+   [
+    28.475,
+    52.5,
+    29.475,
+    53.5
+   ],
+   [
+    38.925,
+    52.75,
+    39.925,
+    53.75
+   ],
+   [
+    28.475,
+    53.725,
+    52.025,
+    54.425
+   ],
+   [
+    51.225,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    51.225,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    51.425,
+    36.5,
+    52.025,
+    54.425
+   ]
+  ],
+  "K1_direct_h0.5_cw0.3_off+0.775": [
+   [
+    28.475,
+    52.5,
+    29.475,
+    53.5
+   ],
+   [
+    38.925,
+    52.75,
+    39.925,
+    53.75
+   ],
+   [
+    28.475,
+    52.875,
+    52.8,
+    53.375
+   ],
+   [
+    51.225,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    51.225,
+    36.5,
+    52.8,
+    37.5
+   ],
+   [
+    52.2,
+    36.5,
+    52.8,
+    53.375
+   ]
+  ],
+  "K1_direct_h0.7_cw0.3_off+0.775": [
+   [
+    28.475,
+    52.5,
+    29.475,
+    53.5
+   ],
+   [
+    38.925,
+    52.75,
+    39.925,
+    53.75
+   ],
+   [
+    28.475,
+    52.775,
+    52.8,
+    53.475
+   ],
+   [
+    51.225,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    51.225,
+    36.5,
+    52.8,
+    37.5
+   ],
+   [
+    52.2,
+    36.5,
+    52.8,
+    53.475
+   ]
+  ],
+  "K1_below_h0.5_cw0.3_off+0.775": [
+   [
+    28.25,
+    52.275,
+    29.7,
+    53.725
+   ],
+   [
+    38.7,
+    52.525,
+    40.15,
+    53.975
+   ],
+   [
+    28.25,
+    52.025,
+    52.8,
+    52.525
+   ],
+   [
+    51.0,
+    36.275,
+    52.45,
+    37.725
+   ],
+   [
+    51.0,
+    36.5,
+    52.8,
+    37.5
+   ],
+   [
+    52.2,
+    36.5,
+    52.8,
+    52.525
+   ]
+  ],
+  "K1_below_h0.7_cw0.3_off+0.775": [
+   [
+    28.25,
+    52.275,
+    29.7,
+    53.725
+   ],
+   [
+    38.7,
+    52.525,
+    40.15,
+    53.975
+   ],
+   [
+    28.25,
+    51.825,
+    52.8,
+    52.525
+   ],
+   [
+    51.0,
+    36.275,
+    52.45,
+    37.725
+   ],
+   [
+    51.0,
+    36.5,
+    52.8,
+    37.5
+   ],
+   [
+    52.2,
+    36.5,
+    52.8,
+    52.525
+   ]
+  ],
+  "K1_above_h0.5_cw0.3_off+0.775": [
+   [
+    28.475,
+    52.5,
+    29.475,
+    53.5
+   ],
+   [
+    38.925,
+    52.75,
+    39.925,
+    53.75
+   ],
+   [
+    28.475,
+    53.725,
+    52.8,
+    54.225
+   ],
+   [
+    51.225,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    51.225,
+    36.5,
+    52.8,
+    37.5
+   ],
+   [
+    52.2,
+    36.5,
+    52.8,
+    54.225
+   ]
+  ],
+  "K1_above_h0.7_cw0.3_off+0.775": [
+   [
+    28.475,
+    52.5,
+    29.475,
+    53.5
+   ],
+   [
+    38.925,
+    52.75,
+    39.925,
+    53.75
+   ],
+   [
+    28.475,
+    53.725,
+    52.8,
+    54.425
+   ],
+   [
+    51.225,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    51.225,
+    36.5,
+    52.8,
+    37.5
+   ],
+   [
+    52.2,
+    36.5,
+    52.8,
+    54.425
+   ]
+  ],
+  "K1_direct_h0.5_cw0.3_off-0.775": [
+   [
+    28.475,
+    52.5,
+    29.475,
+    53.5
+   ],
+   [
+    38.925,
+    52.75,
+    39.925,
+    53.75
+   ],
+   [
+    28.475,
+    52.875,
+    51.25,
+    53.375
+   ],
+   [
+    51.225,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    50.65,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    50.65,
+    36.5,
+    51.25,
+    53.375
+   ]
+  ],
+  "K1_direct_h0.7_cw0.3_off-0.775": [
+   [
+    28.475,
+    52.5,
+    29.475,
+    53.5
+   ],
+   [
+    38.925,
+    52.75,
+    39.925,
+    53.75
+   ],
+   [
+    28.475,
+    52.775,
+    51.25,
+    53.475
+   ],
+   [
+    51.225,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    50.65,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    50.65,
+    36.5,
+    51.25,
+    53.475
+   ]
+  ],
+  "K1_below_h0.5_cw0.3_off-0.775": [
+   [
+    28.25,
+    52.275,
+    29.7,
+    53.725
+   ],
+   [
+    38.7,
+    52.525,
+    40.15,
+    53.975
+   ],
+   [
+    28.25,
+    52.025,
+    51.25,
+    52.525
+   ],
+   [
+    51.0,
+    36.275,
+    52.45,
+    37.725
+   ],
+   [
+    50.65,
+    36.5,
+    52.45,
+    37.5
+   ],
+   [
+    50.65,
+    36.5,
+    51.25,
+    52.525
+   ]
+  ],
+  "K1_below_h0.7_cw0.3_off-0.775": [
+   [
+    28.25,
+    52.275,
+    29.7,
+    53.725
+   ],
+   [
+    38.7,
+    52.525,
+    40.15,
+    53.975
+   ],
+   [
+    28.25,
+    51.825,
+    51.25,
+    52.525
+   ],
+   [
+    51.0,
+    36.275,
+    52.45,
+    37.725
+   ],
+   [
+    50.65,
+    36.5,
+    52.45,
+    37.5
+   ],
+   [
+    50.65,
+    36.5,
+    51.25,
+    52.525
+   ]
+  ],
+  "K1_above_h0.5_cw0.3_off-0.775": [
+   [
+    28.475,
+    52.5,
+    29.475,
+    53.5
+   ],
+   [
+    38.925,
+    52.75,
+    39.925,
+    53.75
+   ],
+   [
+    28.475,
+    53.725,
+    51.25,
+    54.225
+   ],
+   [
+    51.225,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    50.65,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    50.65,
+    36.5,
+    51.25,
+    54.225
+   ]
+  ],
+  "K1_above_h0.7_cw0.3_off-0.775": [
+   [
+    28.475,
+    52.5,
+    29.475,
+    53.5
+   ],
+   [
+    38.925,
+    52.75,
+    39.925,
+    53.75
+   ],
+   [
+    28.475,
+    53.725,
+    51.25,
+    54.425
+   ],
+   [
+    51.225,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    50.65,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    50.65,
+    36.5,
+    51.25,
+    54.425
+   ]
+  ],
+  "K0_islands_cw0.2": [
+   [
+    28.475,
+    52.5,
+    29.475,
+    53.5
+   ],
+   [
+    38.925,
+    52.75,
+    39.925,
+    53.75
+   ],
+   [
+    51.225,
+    36.5,
+    52.225,
+    37.5
+   ]
+  ],
+  "K1_direct_h0.5_cw0.2_off+0.000": [
+   [
+    28.475,
+    52.5,
+    29.475,
+    53.5
+   ],
+   [
+    38.925,
+    52.75,
+    39.925,
+    53.75
+   ],
+   [
+    28.475,
+    52.875,
+    51.925,
+    53.375
+   ],
+   [
+    51.225,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    51.225,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    51.525,
+    36.5,
+    51.925,
+    53.375
+   ]
+  ],
+  "K1_direct_h0.7_cw0.2_off+0.000": [
+   [
+    28.475,
+    52.5,
+    29.475,
+    53.5
+   ],
+   [
+    38.925,
+    52.75,
+    39.925,
+    53.75
+   ],
+   [
+    28.475,
+    52.775,
+    51.925,
+    53.475
+   ],
+   [
+    51.225,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    51.225,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    51.525,
+    36.5,
+    51.925,
+    53.475
+   ]
+  ],
+  "K1_below_h0.5_cw0.2_off+0.000": [
+   [
+    28.25,
+    52.275,
+    29.7,
+    53.725
+   ],
+   [
+    38.7,
+    52.525,
+    40.15,
+    53.975
+   ],
+   [
+    28.25,
+    52.025,
+    51.925,
+    52.525
+   ],
+   [
+    51.0,
+    36.275,
+    52.45,
+    37.725
+   ],
+   [
+    51.0,
+    36.5,
+    52.45,
+    37.5
+   ],
+   [
+    51.525,
+    36.5,
+    51.925,
+    52.525
+   ]
+  ],
+  "K1_below_h0.7_cw0.2_off+0.000": [
+   [
+    28.25,
+    52.275,
+    29.7,
+    53.725
+   ],
+   [
+    38.7,
+    52.525,
+    40.15,
+    53.975
+   ],
+   [
+    28.25,
+    51.825,
+    51.925,
+    52.525
+   ],
+   [
+    51.0,
+    36.275,
+    52.45,
+    37.725
+   ],
+   [
+    51.0,
+    36.5,
+    52.45,
+    37.5
+   ],
+   [
+    51.525,
+    36.5,
+    51.925,
+    52.525
+   ]
+  ],
+  "K1_above_h0.5_cw0.2_off+0.000": [
+   [
+    28.475,
+    52.5,
+    29.475,
+    53.5
+   ],
+   [
+    38.925,
+    52.75,
+    39.925,
+    53.75
+   ],
+   [
+    28.475,
+    53.725,
+    51.925,
+    54.225
+   ],
+   [
+    51.225,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    51.225,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    51.525,
+    36.5,
+    51.925,
+    54.225
+   ]
+  ],
+  "K1_above_h0.7_cw0.2_off+0.000": [
+   [
+    28.475,
+    52.5,
+    29.475,
+    53.5
+   ],
+   [
+    38.925,
+    52.75,
+    39.925,
+    53.75
+   ],
+   [
+    28.475,
+    53.725,
+    51.925,
+    54.425
+   ],
+   [
+    51.225,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    51.225,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    51.525,
+    36.5,
+    51.925,
+    54.425
+   ]
+  ],
+  "K1_direct_h0.5_cw0.2_off+0.675": [
+   [
+    28.475,
+    52.5,
+    29.475,
+    53.5
+   ],
+   [
+    38.925,
+    52.75,
+    39.925,
+    53.75
+   ],
+   [
+    28.475,
+    52.875,
+    52.6,
+    53.375
+   ],
+   [
+    51.225,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    51.225,
+    36.5,
+    52.6,
+    37.5
+   ],
+   [
+    52.2,
+    36.5,
+    52.6,
+    53.375
+   ]
+  ],
+  "K1_direct_h0.7_cw0.2_off+0.675": [
+   [
+    28.475,
+    52.5,
+    29.475,
+    53.5
+   ],
+   [
+    38.925,
+    52.75,
+    39.925,
+    53.75
+   ],
+   [
+    28.475,
+    52.775,
+    52.6,
+    53.475
+   ],
+   [
+    51.225,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    51.225,
+    36.5,
+    52.6,
+    37.5
+   ],
+   [
+    52.2,
+    36.5,
+    52.6,
+    53.475
+   ]
+  ],
+  "K1_below_h0.5_cw0.2_off+0.675": [
+   [
+    28.25,
+    52.275,
+    29.7,
+    53.725
+   ],
+   [
+    38.7,
+    52.525,
+    40.15,
+    53.975
+   ],
+   [
+    28.25,
+    52.025,
+    52.6,
+    52.525
+   ],
+   [
+    51.0,
+    36.275,
+    52.45,
+    37.725
+   ],
+   [
+    51.0,
+    36.5,
+    52.6,
+    37.5
+   ],
+   [
+    52.2,
+    36.5,
+    52.6,
+    52.525
+   ]
+  ],
+  "K1_below_h0.7_cw0.2_off+0.675": [
+   [
+    28.25,
+    52.275,
+    29.7,
+    53.725
+   ],
+   [
+    38.7,
+    52.525,
+    40.15,
+    53.975
+   ],
+   [
+    28.25,
+    51.825,
+    52.6,
+    52.525
+   ],
+   [
+    51.0,
+    36.275,
+    52.45,
+    37.725
+   ],
+   [
+    51.0,
+    36.5,
+    52.6,
+    37.5
+   ],
+   [
+    52.2,
+    36.5,
+    52.6,
+    52.525
+   ]
+  ],
+  "K1_above_h0.5_cw0.2_off+0.675": [
+   [
+    28.475,
+    52.5,
+    29.475,
+    53.5
+   ],
+   [
+    38.925,
+    52.75,
+    39.925,
+    53.75
+   ],
+   [
+    28.475,
+    53.725,
+    52.6,
+    54.225
+   ],
+   [
+    51.225,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    51.225,
+    36.5,
+    52.6,
+    37.5
+   ],
+   [
+    52.2,
+    36.5,
+    52.6,
+    54.225
+   ]
+  ],
+  "K1_above_h0.7_cw0.2_off+0.675": [
+   [
+    28.475,
+    52.5,
+    29.475,
+    53.5
+   ],
+   [
+    38.925,
+    52.75,
+    39.925,
+    53.75
+   ],
+   [
+    28.475,
+    53.725,
+    52.6,
+    54.425
+   ],
+   [
+    51.225,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    51.225,
+    36.5,
+    52.6,
+    37.5
+   ],
+   [
+    52.2,
+    36.5,
+    52.6,
+    54.425
+   ]
+  ],
+  "K1_direct_h0.5_cw0.2_off-0.675": [
+   [
+    28.475,
+    52.5,
+    29.475,
+    53.5
+   ],
+   [
+    38.925,
+    52.75,
+    39.925,
+    53.75
+   ],
+   [
+    28.475,
+    52.875,
+    51.25,
+    53.375
+   ],
+   [
+    51.225,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    50.85,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    50.85,
+    36.5,
+    51.25,
+    53.375
+   ]
+  ],
+  "K1_direct_h0.7_cw0.2_off-0.675": [
+   [
+    28.475,
+    52.5,
+    29.475,
+    53.5
+   ],
+   [
+    38.925,
+    52.75,
+    39.925,
+    53.75
+   ],
+   [
+    28.475,
+    52.775,
+    51.25,
+    53.475
+   ],
+   [
+    51.225,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    50.85,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    50.85,
+    36.5,
+    51.25,
+    53.475
+   ]
+  ],
+  "K1_below_h0.5_cw0.2_off-0.675": [
+   [
+    28.25,
+    52.275,
+    29.7,
+    53.725
+   ],
+   [
+    38.7,
+    52.525,
+    40.15,
+    53.975
+   ],
+   [
+    28.25,
+    52.025,
+    51.25,
+    52.525
+   ],
+   [
+    51.0,
+    36.275,
+    52.45,
+    37.725
+   ],
+   [
+    50.85,
+    36.5,
+    52.45,
+    37.5
+   ],
+   [
+    50.85,
+    36.5,
+    51.25,
+    52.525
+   ]
+  ],
+  "K1_below_h0.7_cw0.2_off-0.675": [
+   [
+    28.25,
+    52.275,
+    29.7,
+    53.725
+   ],
+   [
+    38.7,
+    52.525,
+    40.15,
+    53.975
+   ],
+   [
+    28.25,
+    51.825,
+    51.25,
+    52.525
+   ],
+   [
+    51.0,
+    36.275,
+    52.45,
+    37.725
+   ],
+   [
+    50.85,
+    36.5,
+    52.45,
+    37.5
+   ],
+   [
+    50.85,
+    36.5,
+    51.25,
+    52.525
+   ]
+  ],
+  "K1_above_h0.5_cw0.2_off-0.675": [
+   [
+    28.475,
+    52.5,
+    29.475,
+    53.5
+   ],
+   [
+    38.925,
+    52.75,
+    39.925,
+    53.75
+   ],
+   [
+    28.475,
+    53.725,
+    51.25,
+    54.225
+   ],
+   [
+    51.225,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    50.85,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    50.85,
+    36.5,
+    51.25,
+    54.225
+   ]
+  ],
+  "K1_above_h0.7_cw0.2_off-0.675": [
+   [
+    28.475,
+    52.5,
+    29.475,
+    53.5
+   ],
+   [
+    38.925,
+    52.75,
+    39.925,
+    53.75
+   ],
+   [
+    28.475,
+    53.725,
+    51.25,
+    54.425
+   ],
+   [
+    51.225,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    50.85,
+    36.5,
+    52.225,
+    37.5
+   ],
+   [
+    50.85,
+    36.5,
+    51.25,
+    54.425
+   ]
+  ],
+  "K4_fullheight_NEGCTRL": [
+   [
+    28.475,
+    33.3,
+    52.225,
+    78.7
+   ]
+  ],
+  "K5_missing_U1.15_NEGCTRL": [
+   [
+    28.475,
+    52.5,
+    29.475,
+    53.5
+   ],
+   [
+    51.225,
+    36.5,
+    52.225,
+    37.5
+   ]
+  ]
+ },
+ "family_results": {
+  "K0_islands_cw0.3": {
+   "a_coverage": [],
+   "b_clearance": [],
+   "c_mcu_continuity": true,
+   "d_aux_connectivity": false,
+   "n_aux_cells": 80,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "C85.1(MCU_VDD)",
+    "margin_mm": 1.0392
+   },
+   "ok": false
+  },
+  "K1_direct_h0.5_cw0.3_off+0.000": {
+   "a_coverage": [],
+   "b_clearance": [
+    "C90.2(GND) d=0.000 < 0.375",
+    "R28.2(GND) d=0.000 < 0.375",
+    "U5.2(GND) d=0.350 < 0.375"
+   ],
+   "c_mcu_continuity": true,
+   "d_aux_connectivity": true,
+   "n_aux_cells": 361,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "C90.2(GND)",
+    "margin_mm": -0.375
+   },
+   "ok": false
+  },
+  "K1_direct_h0.7_cw0.3_off+0.000": {
+   "a_coverage": [],
+   "b_clearance": [
+    "C90.2(GND) d=0.000 < 0.375",
+    "R28.2(GND) d=0.000 < 0.375",
+    "U5.2(GND) d=0.250 < 0.375"
+   ],
+   "c_mcu_continuity": true,
+   "d_aux_connectivity": true,
+   "n_aux_cells": 361,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "C90.2(GND)",
+    "margin_mm": -0.375
+   },
+   "ok": false
+  },
+  "K1_below_h0.5_cw0.3_off+0.000": {
+   "a_coverage": [],
+   "b_clearance": [
+    "R28.2(GND) d=0.000 < 0.375"
+   ],
+   "c_mcu_continuity": true,
+   "d_aux_connectivity": true,
+   "n_aux_cells": 396,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "R28.2(GND)",
+    "margin_mm": -0.375
+   },
+   "ok": false
+  },
+  "K1_below_h0.7_cw0.3_off+0.000": {
+   "a_coverage": [],
+   "b_clearance": [
+    "R28.2(GND) d=0.000 < 0.375"
+   ],
+   "c_mcu_continuity": true,
+   "d_aux_connectivity": true,
+   "n_aux_cells": 396,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "R28.2(GND)",
+    "margin_mm": -0.375
+   },
+   "ok": false
+  },
+  "K1_above_h0.5_cw0.3_off+0.000": {
+   "a_coverage": [],
+   "b_clearance": [
+    "C85.2(GND) d=0.275 < 0.375",
+    "R28.2(GND) d=0.000 < 0.375",
+    "U5.2(GND) d=0.000 < 0.375",
+    "C85.1(MCU_VDD) d=0.275 < 0.375"
+   ],
+   "c_mcu_continuity": true,
+   "d_aux_connectivity": false,
+   "n_aux_cells": 355,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "R28.2(GND)",
+    "margin_mm": -0.375
+   },
+   "ok": false
+  },
+  "K1_above_h0.7_cw0.3_off+0.000": {
+   "a_coverage": [],
+   "b_clearance": [
+    "C85.2(GND) d=0.075 < 0.375",
+    "R28.2(GND) d=0.000 < 0.375",
+    "U1.18(GND) d=0.275 < 0.375",
+    "U5.2(GND) d=0.000 < 0.375",
+    "C85.1(MCU_VDD) d=0.075 < 0.375"
+   ],
+   "c_mcu_continuity": false,
+   "d_aux_connectivity": false,
+   "n_aux_cells": 355,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "R28.2(GND)",
+    "margin_mm": -0.375
+   },
+   "ok": false
+  },
+  "K1_direct_h0.5_cw0.3_off+0.775": {
+   "a_coverage": [],
+   "b_clearance": [
+    "C90.2(GND) d=0.000 < 0.375",
+    "U5.2(GND) d=0.350 < 0.375"
+   ],
+   "c_mcu_continuity": true,
+   "d_aux_connectivity": true,
+   "n_aux_cells": 389,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "C90.2(GND)",
+    "margin_mm": -0.375
+   },
+   "ok": false
+  },
+  "K1_direct_h0.7_cw0.3_off+0.775": {
+   "a_coverage": [],
+   "b_clearance": [
+    "C90.2(GND) d=0.000 < 0.375",
+    "U5.2(GND) d=0.250 < 0.375"
+   ],
+   "c_mcu_continuity": true,
+   "d_aux_connectivity": true,
+   "n_aux_cells": 389,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "C90.2(GND)",
+    "margin_mm": -0.375
+   },
+   "ok": false
+  },
+  "K1_below_h0.5_cw0.3_off+0.775": {
+   "a_coverage": [],
+   "b_clearance": [],
+   "c_mcu_continuity": true,
+   "d_aux_connectivity": true,
+   "n_aux_cells": 421,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "C90.2(GND)",
+    "margin_mm": 0.1
+   },
+   "ok": true
+  },
+  "K1_below_h0.7_cw0.3_off+0.775": {
+   "a_coverage": [],
+   "b_clearance": [],
+   "c_mcu_continuity": true,
+   "d_aux_connectivity": true,
+   "n_aux_cells": 421,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "C90.2(GND)",
+    "margin_mm": 0.1
+   },
+   "ok": true
+  },
+  "K1_above_h0.5_cw0.3_off+0.775": {
+   "a_coverage": [],
+   "b_clearance": [
+    "C85.2(GND) d=0.275 < 0.375",
+    "U5.2(GND) d=0.000 < 0.375",
+    "C85.1(MCU_VDD) d=0.275 < 0.375"
+   ],
+   "c_mcu_continuity": true,
+   "d_aux_connectivity": false,
+   "n_aux_cells": 384,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "U5.2(GND)",
+    "margin_mm": -0.375
+   },
+   "ok": false
+  },
+  "K1_above_h0.7_cw0.3_off+0.775": {
+   "a_coverage": [],
+   "b_clearance": [
+    "C85.2(GND) d=0.075 < 0.375",
+    "U1.18(GND) d=0.275 < 0.375",
+    "U5.2(GND) d=0.000 < 0.375",
+    "C85.1(MCU_VDD) d=0.075 < 0.375"
+   ],
+   "c_mcu_continuity": false,
+   "d_aux_connectivity": false,
+   "n_aux_cells": 384,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "U5.2(GND)",
+    "margin_mm": -0.375
+   },
+   "ok": false
+  },
+  "K1_direct_h0.5_cw0.3_off-0.775": {
+   "a_coverage": [],
+   "b_clearance": [
+    "C90.2(GND) d=0.000 < 0.375",
+    "U5.2(GND) d=0.350 < 0.375",
+    "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.000 < 0.375"
+   ],
+   "c_mcu_continuity": true,
+   "d_aux_connectivity": true,
+   "n_aux_cells": 354,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "C90.2(GND)",
+    "margin_mm": -0.375
+   },
+   "ok": false
+  },
+  "K1_direct_h0.7_cw0.3_off-0.775": {
+   "a_coverage": [],
+   "b_clearance": [
+    "C90.2(GND) d=0.000 < 0.375",
+    "U5.2(GND) d=0.250 < 0.375",
+    "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.000 < 0.375"
+   ],
+   "c_mcu_continuity": true,
+   "d_aux_connectivity": true,
+   "n_aux_cells": 354,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "C90.2(GND)",
+    "margin_mm": -0.375
+   },
+   "ok": false
+  },
+  "K1_below_h0.5_cw0.3_off-0.775": {
+   "a_coverage": [],
+   "b_clearance": [
+    "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.000 < 0.375"
+   ],
+   "c_mcu_continuity": true,
+   "d_aux_connectivity": true,
+   "n_aux_cells": 389,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD)",
+    "margin_mm": -0.375
+   },
+   "ok": false
+  },
+  "K1_below_h0.7_cw0.3_off-0.775": {
+   "a_coverage": [],
+   "b_clearance": [
+    "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.000 < 0.375"
+   ],
+   "c_mcu_continuity": true,
+   "d_aux_connectivity": true,
+   "n_aux_cells": 389,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD)",
+    "margin_mm": -0.375
+   },
+   "ok": false
+  },
+  "K1_above_h0.5_cw0.3_off-0.775": {
+   "a_coverage": [],
+   "b_clearance": [
+    "C85.2(GND) d=0.275 < 0.375",
+    "U5.2(GND) d=0.000 < 0.375",
+    "C85.1(MCU_VDD) d=0.275 < 0.375",
+    "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.000 < 0.375"
+   ],
+   "c_mcu_continuity": true,
+   "d_aux_connectivity": false,
+   "n_aux_cells": 359,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "U5.2(GND)",
+    "margin_mm": -0.375
+   },
+   "ok": false
+  },
+  "K1_above_h0.7_cw0.3_off-0.775": {
+   "a_coverage": [],
+   "b_clearance": [
+    "C85.2(GND) d=0.075 < 0.375",
+    "U1.18(GND) d=0.275 < 0.375",
+    "U5.2(GND) d=0.000 < 0.375",
+    "C85.1(MCU_VDD) d=0.075 < 0.375",
+    "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.000 < 0.375"
+   ],
+   "c_mcu_continuity": false,
+   "d_aux_connectivity": false,
+   "n_aux_cells": 359,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "U5.2(GND)",
+    "margin_mm": -0.375
+   },
+   "ok": false
+  },
+  "K0_islands_cw0.2": {
+   "a_coverage": [],
+   "b_clearance": [],
+   "c_mcu_continuity": true,
+   "d_aux_connectivity": false,
+   "n_aux_cells": 80,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "C85.1(MCU_VDD)",
+    "margin_mm": 1.0392
+   },
+   "ok": false
+  },
+  "K1_direct_h0.5_cw0.2_off+0.000": {
+   "a_coverage": [],
+   "b_clearance": [
+    "C90.2(GND) d=0.000 < 0.375",
+    "R28.2(GND) d=0.000 < 0.375",
+    "U5.2(GND) d=0.350 < 0.375"
+   ],
+   "c_mcu_continuity": true,
+   "d_aux_connectivity": true,
+   "n_aux_cells": 309,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "C90.2(GND)",
+    "margin_mm": -0.375
+   },
+   "ok": false
+  },
+  "K1_direct_h0.7_cw0.2_off+0.000": {
+   "a_coverage": [],
+   "b_clearance": [
+    "C90.2(GND) d=0.000 < 0.375",
+    "R28.2(GND) d=0.000 < 0.375",
+    "U5.2(GND) d=0.250 < 0.375"
+   ],
+   "c_mcu_continuity": true,
+   "d_aux_connectivity": true,
+   "n_aux_cells": 309,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "C90.2(GND)",
+    "margin_mm": -0.375
+   },
+   "ok": false
+  },
+  "K1_below_h0.5_cw0.2_off+0.000": {
+   "a_coverage": [],
+   "b_clearance": [
+    "R28.2(GND) d=0.000 < 0.375"
+   ],
+   "c_mcu_continuity": true,
+   "d_aux_connectivity": true,
+   "n_aux_cells": 350,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "R28.2(GND)",
+    "margin_mm": -0.375
+   },
+   "ok": false
+  },
+  "K1_below_h0.7_cw0.2_off+0.000": {
+   "a_coverage": [],
+   "b_clearance": [
+    "R28.2(GND) d=0.000 < 0.375"
+   ],
+   "c_mcu_continuity": true,
+   "d_aux_connectivity": true,
+   "n_aux_cells": 350,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "R28.2(GND)",
+    "margin_mm": -0.375
+   },
+   "ok": false
+  },
+  "K1_above_h0.5_cw0.2_off+0.000": {
+   "a_coverage": [],
+   "b_clearance": [
+    "C85.2(GND) d=0.275 < 0.375",
+    "R28.2(GND) d=0.000 < 0.375",
+    "U5.2(GND) d=0.000 < 0.375",
+    "C85.1(MCU_VDD) d=0.275 < 0.375"
+   ],
+   "c_mcu_continuity": true,
+   "d_aux_connectivity": false,
+   "n_aux_cells": 293,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "R28.2(GND)",
+    "margin_mm": -0.375
+   },
+   "ok": false
+  },
+  "K1_above_h0.7_cw0.2_off+0.000": {
+   "a_coverage": [],
+   "b_clearance": [
+    "C85.2(GND) d=0.075 < 0.375",
+    "R28.2(GND) d=0.000 < 0.375",
+    "U1.18(GND) d=0.275 < 0.375",
+    "U5.2(GND) d=0.000 < 0.375",
+    "C85.1(MCU_VDD) d=0.075 < 0.375"
+   ],
+   "c_mcu_continuity": false,
+   "d_aux_connectivity": false,
+   "n_aux_cells": 293,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "R28.2(GND)",
+    "margin_mm": -0.375
+   },
+   "ok": false
+  },
+  "K1_direct_h0.5_cw0.2_off+0.675": {
+   "a_coverage": [],
+   "b_clearance": [
+    "C90.2(GND) d=0.000 < 0.375",
+    "U5.2(GND) d=0.350 < 0.375"
+   ],
+   "c_mcu_continuity": true,
+   "d_aux_connectivity": true,
+   "n_aux_cells": 364,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "C90.2(GND)",
+    "margin_mm": -0.375
+   },
+   "ok": false
+  },
+  "K1_direct_h0.7_cw0.2_off+0.675": {
+   "a_coverage": [],
+   "b_clearance": [
+    "C90.2(GND) d=0.000 < 0.375",
+    "U5.2(GND) d=0.250 < 0.375"
+   ],
+   "c_mcu_continuity": true,
+   "d_aux_connectivity": true,
+   "n_aux_cells": 364,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "C90.2(GND)",
+    "margin_mm": -0.375
+   },
+   "ok": false
+  },
+  "K1_below_h0.5_cw0.2_off+0.675": {
+   "a_coverage": [],
+   "b_clearance": [],
+   "c_mcu_continuity": true,
+   "d_aux_connectivity": true,
+   "n_aux_cells": 381,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "R28.2(GND)",
+    "margin_mm": 0.1
+   },
+   "ok": true
+  },
+  "K1_below_h0.7_cw0.2_off+0.675": {
+   "a_coverage": [],
+   "b_clearance": [],
+   "c_mcu_continuity": true,
+   "d_aux_connectivity": true,
+   "n_aux_cells": 381,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "R28.2(GND)",
+    "margin_mm": 0.1
+   },
+   "ok": true
+  },
+  "K1_above_h0.5_cw0.2_off+0.675": {
+   "a_coverage": [],
+   "b_clearance": [
+    "C85.2(GND) d=0.275 < 0.375",
+    "U5.2(GND) d=0.000 < 0.375",
+    "C85.1(MCU_VDD) d=0.275 < 0.375"
+   ],
+   "c_mcu_continuity": true,
+   "d_aux_connectivity": false,
+   "n_aux_cells": 354,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "U5.2(GND)",
+    "margin_mm": -0.375
+   },
+   "ok": false
+  },
+  "K1_above_h0.7_cw0.2_off+0.675": {
+   "a_coverage": [],
+   "b_clearance": [
+    "C85.2(GND) d=0.075 < 0.375",
+    "U1.18(GND) d=0.275 < 0.375",
+    "U5.2(GND) d=0.000 < 0.375",
+    "C85.1(MCU_VDD) d=0.075 < 0.375"
+   ],
+   "c_mcu_continuity": false,
+   "d_aux_connectivity": false,
+   "n_aux_cells": 354,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "U5.2(GND)",
+    "margin_mm": -0.375
+   },
+   "ok": false
+  },
+  "K1_direct_h0.5_cw0.2_off-0.675": {
+   "a_coverage": [],
+   "b_clearance": [
+    "C90.2(GND) d=0.000 < 0.375",
+    "U5.2(GND) d=0.350 < 0.375",
+    "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.000 < 0.375"
+   ],
+   "c_mcu_continuity": true,
+   "d_aux_connectivity": true,
+   "n_aux_cells": 329,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "C90.2(GND)",
+    "margin_mm": -0.375
+   },
+   "ok": false
+  },
+  "K1_direct_h0.7_cw0.2_off-0.675": {
+   "a_coverage": [],
+   "b_clearance": [
+    "C90.2(GND) d=0.000 < 0.375",
+    "U5.2(GND) d=0.250 < 0.375",
+    "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.000 < 0.375"
+   ],
+   "c_mcu_continuity": true,
+   "d_aux_connectivity": true,
+   "n_aux_cells": 329,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "C90.2(GND)",
+    "margin_mm": -0.375
+   },
+   "ok": false
+  },
+  "K1_below_h0.5_cw0.2_off-0.675": {
+   "a_coverage": [],
+   "b_clearance": [
+    "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.000 < 0.375"
+   ],
+   "c_mcu_continuity": true,
+   "d_aux_connectivity": true,
+   "n_aux_cells": 357,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD)",
+    "margin_mm": -0.375
+   },
+   "ok": false
+  },
+  "K1_below_h0.7_cw0.2_off-0.675": {
+   "a_coverage": [],
+   "b_clearance": [
+    "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.000 < 0.375"
+   ],
+   "c_mcu_continuity": true,
+   "d_aux_connectivity": true,
+   "n_aux_cells": 357,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD)",
+    "margin_mm": -0.375
+   },
+   "ok": false
+  },
+  "K1_above_h0.5_cw0.2_off-0.675": {
+   "a_coverage": [],
+   "b_clearance": [
+    "C85.2(GND) d=0.275 < 0.375",
+    "U5.2(GND) d=0.000 < 0.375",
+    "C85.1(MCU_VDD) d=0.275 < 0.375",
+    "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.000 < 0.375"
+   ],
+   "c_mcu_continuity": true,
+   "d_aux_connectivity": false,
+   "n_aux_cells": 329,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "U5.2(GND)",
+    "margin_mm": -0.375
+   },
+   "ok": false
+  },
+  "K1_above_h0.7_cw0.2_off-0.675": {
+   "a_coverage": [],
+   "b_clearance": [
+    "C85.2(GND) d=0.075 < 0.375",
+    "U1.18(GND) d=0.275 < 0.375",
+    "U5.2(GND) d=0.000 < 0.375",
+    "C85.1(MCU_VDD) d=0.075 < 0.375",
+    "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.000 < 0.375"
+   ],
+   "c_mcu_continuity": false,
+   "d_aux_connectivity": false,
+   "n_aux_cells": 329,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "U5.2(GND)",
+    "margin_mm": -0.375
+   },
+   "ok": false
+  },
+  "K4_fullheight_NEGCTRL": {
+   "a_coverage": [],
+   "b_clearance": [
+    "C88.1(12V_IN) d=0.200 < 0.375",
+    "U2.4(12V_IN) d=0.000 < 0.375",
+    "U2.6(12V_IN) d=0.000 < 0.375",
+    "C73.2(GND) d=0.000 < 0.375",
+    "C84.2(GND) d=0.000 < 0.375",
+    "C85.2(GND) d=0.000 < 0.375",
+    "C86.2(GND) d=0.000 < 0.375",
+    "C87.2(GND) d=0.000 < 0.375",
+    "C88.2(GND) d=0.000 < 0.375",
+    "C89.2(GND) d=0.000 < 0.375",
+    "C90.2(GND) d=0.000 < 0.375",
+    "D1.2(GND) d=0.000 < 0.375",
+    "E2.1(GND) d=0.000 < 0.375",
+    "E2.3(GND) d=0.000 < 0.375",
+    "E2.4(GND) d=0.000 < 0.375",
+    "E2.7(GND) d=0.000 < 0.375",
+    "R28.2(GND) d=0.000 < 0.375",
+    "U1.18(GND) d=0.000 < 0.375",
+    "U1.19(GND) d=0.000 < 0.375",
+    "U1.2(GND) d=0.000 < 0.375",
+    "U1.20(GND) d=0.000 < 0.375",
+    "U1.21(GND) d=0.000 < 0.375",
+    "U1.3(GND) d=0.000 < 0.375",
+    "U1.30(GND) d=0.000 < 0.375",
+    "U1.7(GND) d=0.000 < 0.375",
+    "U2.2(GND) d=0.000 < 0.375",
+    "U5.2(GND) d=0.000 < 0.375",
+    "U5.3(GND) d=0.000 < 0.375",
+    "C85.1(MCU_VDD) d=0.000 < 0.375",
+    "C86.1(MCU_VDD) d=0.000 < 0.375",
+    "E2.2(MCU_VDD) d=0.000 < 0.375",
+    "E2.8(MCU_VDD) d=0.000 < 0.375",
+    "U1.6(MCU_VDD) d=0.000 < 0.375",
+    "U4.2(MCU_VDD) d=0.000 < 0.375",
+    "C84.1(P3V3) d=0.000 < 0.375",
+    "U2.5(P3V3) d=0.000 < 0.375",
+    "U4.3(P3V3) d=0.000 < 0.375",
+    "P3V3_BCU_BRIDGE_IN4#v0(P3V3) d=0.000 < 0.375",
+    "P3V3_BCU_BRIDGE_IN4#v1(P3V3) d=0.000 < 0.375",
+    "P3V3_BCU_BRIDGE_IN4#v2(P3V3) d=0.000 < 0.375",
+    "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.000 < 0.375",
+    "MCU_VDD_BCU_RESISTORS_IN4#v1(MCU_VDD) d=0.000 < 0.375"
+   ],
+   "c_mcu_continuity": false,
+   "d_aux_connectivity": true,
+   "n_aux_cells": 192,
+   "n_free_components": 2,
+   "worst_margin": {
+    "via": "U2.4(12V_IN)",
+    "margin_mm": -0.375
+   },
+   "ok": false
+  },
+  "K5_missing_U1.15_NEGCTRL": {
+   "a_coverage": [
+    "U1.15 未被覆盖"
+   ],
+   "b_clearance": [],
+   "c_mcu_continuity": true,
+   "d_aux_connectivity": false,
+   "n_aux_cells": 36,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "C85.1(MCU_VDD)",
+    "margin_mm": 1.0392
+   },
+   "ok": false
+  }
+ },
+ "feasible_candidates": [
+  "K1_below_h0.5_cw0.2_off+0.675",
+  "K1_below_h0.5_cw0.3_off+0.775",
+  "K1_below_h0.7_cw0.2_off+0.675",
+  "K1_below_h0.7_cw0.3_off+0.775"
+ ],
+ "teeth": {
+  "negative_controls": {
+   "K4": true,
+   "K5": true
+  },
+  "detail": {
+   "K4_fullheight_NEGCTRL": {
+    "a_coverage": [],
+    "b_clearance": [
+     "C88.1(12V_IN) d=0.200 < 0.375",
+     "U2.4(12V_IN) d=0.000 < 0.375",
+     "U2.6(12V_IN) d=0.000 < 0.375",
+     "C73.2(GND) d=0.000 < 0.375",
+     "C84.2(GND) d=0.000 < 0.375",
+     "C85.2(GND) d=0.000 < 0.375",
+     "C86.2(GND) d=0.000 < 0.375",
+     "C87.2(GND) d=0.000 < 0.375",
+     "C88.2(GND) d=0.000 < 0.375",
+     "C89.2(GND) d=0.000 < 0.375",
+     "C90.2(GND) d=0.000 < 0.375",
+     "D1.2(GND) d=0.000 < 0.375",
+     "E2.1(GND) d=0.000 < 0.375",
+     "E2.3(GND) d=0.000 < 0.375",
+     "E2.4(GND) d=0.000 < 0.375",
+     "E2.7(GND) d=0.000 < 0.375",
+     "R28.2(GND) d=0.000 < 0.375",
+     "U1.18(GND) d=0.000 < 0.375",
+     "U1.19(GND) d=0.000 < 0.375",
+     "U1.2(GND) d=0.000 < 0.375",
+     "U1.20(GND) d=0.000 < 0.375",
+     "U1.21(GND) d=0.000 < 0.375",
+     "U1.3(GND) d=0.000 < 0.375",
+     "U1.30(GND) d=0.000 < 0.375",
+     "U1.7(GND) d=0.000 < 0.375",
+     "U2.2(GND) d=0.000 < 0.375",
+     "U5.2(GND) d=0.000 < 0.375",
+     "U5.3(GND) d=0.000 < 0.375",
+     "C85.1(MCU_VDD) d=0.000 < 0.375",
+     "C86.1(MCU_VDD) d=0.000 < 0.375",
+     "E2.2(MCU_VDD) d=0.000 < 0.375",
+     "E2.8(MCU_VDD) d=0.000 < 0.375",
+     "U1.6(MCU_VDD) d=0.000 < 0.375",
+     "U4.2(MCU_VDD) d=0.000 < 0.375",
+     "C84.1(P3V3) d=0.000 < 0.375",
+     "U2.5(P3V3) d=0.000 < 0.375",
+     "U4.3(P3V3) d=0.000 < 0.375",
+     "P3V3_BCU_BRIDGE_IN4#v0(P3V3) d=0.000 < 0.375",
+     "P3V3_BCU_BRIDGE_IN4#v1(P3V3) d=0.000 < 0.375",
+     "P3V3_BCU_BRIDGE_IN4#v2(P3V3) d=0.000 < 0.375",
+     "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.000 < 0.375",
+     "MCU_VDD_BCU_RESISTORS_IN4#v1(MCU_VDD) d=0.000 < 0.375"
+    ],
+    "c_mcu_continuity": false,
+    "d_aux_connectivity": true,
+    "n_aux_cells": 192,
+    "n_free_components": 2,
+    "worst_margin": {
+     "via": "U2.4(12V_IN)",
+     "margin_mm": -0.375
+    },
+    "ok": false
+   },
+   "K5_missing_U1.15_NEGCTRL": {
+    "a_coverage": [
+     "U1.15 未被覆盖"
+    ],
+    "b_clearance": [],
+    "c_mcu_continuity": true,
+    "d_aux_connectivity": false,
+    "n_aux_cells": 36,
+    "n_free_components": 1,
+    "worst_margin": {
+     "via": "C85.1(MCU_VDD)",
+     "margin_mm": 1.0392
+    },
+    "ok": false
+   }
+  }
+ },
+ "verdict": "FEASIBLE_WITHIN_DECLARED_FAMILY",
+ "chosen": "K1_below_h0.5_cw0.2_off+0.675",
+ "declared_design_margin_mm": 0.1,
+ "zero_margin_note": "若无声明余量（m=0），绕行带顶正好 = required（余量 0.000）= CO-94 family-limit 命中；本件按声明余量 0.1 施加，避免贴死阈值",
+ "apply_plan_co122": {
+  "scope": "SPEC rev-16（新增 `in4_west_aux_allocation_v1` + P3V3_AUX 由 unresolved → resolved_by_co121）+ 全链重基线",
+  "spec_keys": [
+   ".spec_version",
+   ".pd.zone_defs.in4_west_aux_allocation_v1",
+   ".pd.zone_defs.plane_reachability_status.unresolved",
+   ".pd.zone_defs.plane_reachability_status.resolved_by_co121"
+  ],
+  "chain_tool_coord_updates": [
+   "p3_v57_w3_constructive.py (F['spec'] + FROZEN_SHA['spec'])",
+   "p3_v57_w3_constructive_validator_v2.py",
+   "co77/co78/co81/co84/co91/co92/co95/co98/co99/co102/co104/co105/co106/co118"
+  ],
+  "must_rerun": "全链 G4→G7 + 全部回归闸 + PDN 闸（§7 复现命令）",
+  "board_must_stay": "fb07d25ac426ff84",
+  "review_debt": "非执行者半程复评（另一会话，禁自评）"
+ },
+ "redline": "本件只读；未改 SPEC/板/阈值/冻结源；零坐标搜索（有限声明家族，无求解器）；不改历史工件",
+ "board_sha16": "fb07d25ac426ff84"
+}
