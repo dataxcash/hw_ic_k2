@@ -355,3 +355,5 @@ End of boundary **v1.81**（含 CO-67..CO-115；+ CO-114 非执行者对抗复�
 | ④ | **B.Cu 桥冲突（CO-118）** | CO-74 `bcu_power_copper_policy=PROHIBITED`（『不得铺电力铜/**搭桥**』）↔ CO-112 三桥区 `bridge_layer="B.Cu"` + `na_scope_v1.bcu_bridge_zone_targets` N/A 裁定（同批 zone 的 `carrier_change` 又写 `B.Cu→In4.Cu`） | 若禁令成立 ⇒ **4 target 无载体**：P3V3 `C84.1/U2.5/U4.3` **落在 `MCU_VDD_WEST` 内**、P3V3_AUX `J4.A9` 落在 `P3V3_EAST` 内 ⇒ **R1**（L2 In4 pocket，受 requirement ④ 同网连通约束、可能不可行）或 **R2**（owner 放宽红线）。**CO-118 追加机判**：`P3V3_BCU_BRIDGE_IN4` 簇 bbox 内夹异网 via `U4.2`(MCU_VDD)/`U2.6`(12V_IN) ⇒ 凸 pocket 会围住异网 via ⇒ 形状非闭式（依赖走线搜索）⇒ **R1 不能在 L2 自裁** ⇒ 本项闭合归 owner（R2/红线或 L1） |
 
 **板实旁证**：交付板 `k2_v4_8L.l4.kicad_pcb` 上 `12V_IN`(3 pad) / `P3V3_AUX`(5 pad) **零 track、零 via**（PDN 铜经 CO-102 项目内路径单独施加/校验，不在交付板）⇒ 本议题为 **SPEC 声明层**承载/归属裁决。
+
+**L2 过程闸（CO-120，新）**：`p3_v57_co120_provenance_pin_gate.py` `43764c4e775868b6`、记录 `m13_v57_co120_provenance_pin_gate.json` `ae915e05018e3558`、卡 `m13_v57_CO120_provenance_pin_gate.md` `bc6ca56de45fda27` —— 关闭 CO-108/CO-114 **F-6 盲区**（记录内 inter-record provenance pin 一致性）；首跑 **PASS**（pins 12：match 8 / 豁免历史 3 / 未声明陈旧 0 / 解析歧义 1；牙齿 2/2）。

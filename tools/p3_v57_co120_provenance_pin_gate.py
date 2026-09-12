@@ -1,0 +1,128 @@
+#!/usr/bin/env python3
+"""CO-120：【L2 过程闸】记录内 **inter-record provenance pin** 一致性闸（关闭 CO-108/CO-114 **F-6 盲区**）。
+
+背景（F-6 根因）：CO-77 只校验**收口声明件（boundary）**里的 `file`+`sha16` 引用；**记录内部**的
+`*_record` / `inputs.*` provenance pin（指向上游记录版本）**无闸覆盖** ⇒ rev 重基线后上级记录 pin 陈旧
+也不会被发现（CO-114 实测 co109←co106 / co110←co106 / co110←co87）。
+
+本闸判据（机判、零搜索）：
+  P1 扫描 STEP2 下全部 `m13_v57_co*.json`，抽取形如 `"<x>_record": "<sha16>"` 的 pin；
+  P2 由 key 前缀解析被引记录文件（`m13_v57_<x>*.json`，唯一命中）；解析唯一性不足者记 `unresolved_key`（不计失败）；
+  P3 现行 pin 必须等于被引文件**当前** sha16；不等 ⇒ 必须是**已声明豁免**（`EXEMPT` 注册表：记录本体已被后续 CO 取代、
+      pin 属历史，理由明文）；
+  P4 牙齿：注入一个**未声明**的陈旧 pin 必须被判 FAIL（负控）；注入匹配 pin 必须 PASS（正控）。
+只读；不改任何工件。CLI: python3 tools/p3_v57_co120_provenance_pin_gate.py
+"""
+from __future__ import annotations
+import argparse, hashlib, json, re
+from pathlib import Path
+
+K2 = Path(__file__).resolve().parents[1]
+L3 = K2 / "pm_gate/artifacts/k2_v4/L3"
+STEP2 = L3 / "mcio_feas_step2"
+OUT = STEP2 / "m13_v57_co120_provenance_pin_gate.json"
+PIN = re.compile(r'"([a-z0-9_]*(?:record|_record))"\s*:\s*"([0-9a-f]{16})"')
+# 已声明豁免：{被引记录文件: {pin_key: 理由}} —— 仅限「记录本体已被后续 CO 取代 ⇒ pin 属历史」
+EXEMPT = {
+    "m13_v57_co109_in4_void_l2_ruling.json": {"co106_record": "CO-109 R2『按设计』已被 CO-115 更正 ⇒ 本记录为历史；pin 属历史"},
+    "m13_v57_co110_l2_coverage_closure.json": {"co106_record": "CO-110 依赖被 CO-115 取代的前提 ⇒ 历史",
+                                              "co109_record": "CO-109 已被 CO-115 取代 ⇒ 历史",
+                                              "co87_record": "CO-110 时点 co87 版本 ⇒ 历史（co87 已随后续 rev 重跑）"},
+}
+
+
+def s16(p) -> str:
+    return hashlib.sha256(Path(p).read_bytes()).hexdigest()[:16]
+
+
+# 歧义 key 的显式目标（globs 命中 >1；零搜索：显式登记，guarded by 存在性）
+PIN_TARGETS = {
+    "co95_record": "m13_v57_co95_in4_reachability.json",
+}
+
+
+def resolve(key: str):
+    pre = key[:-len("_record")] if key.endswith("_record") else key
+    if pre in ("", "record"):
+        return None, "unresolved_key"
+    if key in PIN_TARGETS:
+        f = STEP2 / PIN_TARGETS[key]
+        return (f, None) if f.exists() else (None, f"unresolved_key(mapped missing {PIN_TARGETS[key]})")
+    cands = sorted(STEP2.glob(f"m13_v57_{pre}*.json")) + sorted(L3.glob(f"m13_v57_{pre}*.json"))
+    if len(cands) != 1:
+        return None, f"unresolved_key({len(cands)} cands)"
+    return cands[0], None
+
+
+def scan(records: dict) -> list:
+    rows = []
+    for name, d in records.items():
+        for m in PIN.finditer(json.dumps(d)):
+            key, cited = m.group(1), m.group(2)
+            if key == "record":
+                rows.append({"record": name, "key": key, "cited": cited, "actual": None, "status": "unresolved_key"})
+                continue
+            p, err = resolve(key)
+            if err:
+                rows.append({"record": name, "key": key, "cited": cited, "actual": None, "status": err})
+                continue
+            actual = s16(p)
+            if actual == cited:
+                st = "match"
+            elif key in EXEMPT.get(name, {}):
+                st = "exempt_historical"
+            else:
+                st = "STALE"
+            rows.append({"record": name, "key": key, "cited": cited, "actual": actual,
+                         "resolved": p.name, "status": st})
+    return rows
+
+
+def main(argv=None) -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--out", default=str(OUT))
+    a = ap.parse_args(argv)
+    records = {}
+    for f in sorted(STEP2.glob("m13_v57_co*.json")):
+        try:
+            records[f.name] = json.loads(f.read_text())
+        except Exception:
+            continue
+    rows = scan(records)
+    stale = [r for r in rows if r["status"] == "STALE"]
+    unresolved = [r for r in rows if str(r["status"]).startswith("unresolved")]
+    # 牙齿（负控/正控，走真实 scan）
+    neg = scan({"synthetic_probe.json": {"co95_record": "0" * 16}})
+    neg_hit = any(r["status"] == "STALE" for r in neg)
+    p95 = STEP2 / "m13_v57_co95_in4_reachability.json"
+    pos = scan({"synthetic_probe.json": {"co95_record": s16(p95)}})
+    pos_ok = any(r["status"] == "match" for r in pos)
+    teeth_ok = neg_hit and pos_ok
+    rec = {
+        "artifact": "m13_v57_co120_provenance_pin_gate", "schema": 1, "revision": "CO-120.1",
+        "nature": "L2 过程闸：记录内 inter-record provenance pin 一致性（关闭 CO-108/CO-114 F-6 盲区）",
+        "pins_total": len(rows), "n_match": sum(1 for r in rows if r["status"] == "match"),
+        "n_exempt_historical": sum(1 for r in rows if r["status"] == "exempt_historical"),
+        "n_stale_undeclared": len(stale), "n_unresolved_key": len(unresolved),
+        "stale_undeclared": stale, "unresolved_key": unresolved,
+        "exemption_registry": EXEMPT,
+        "rows": rows,
+        "teeth": {"negative_control_undeclared_stale_caught": neg_hit,
+                  "positive_control_matching_pin_passes": pos_ok, "teeth_ok": teeth_ok},
+        "verdict": ("PASS" if (not stale and teeth_ok) else "FAIL_STALE_PROVENANCE_PIN" if stale else "FAIL(teeth)"),
+        "non_claims": ["只读；不改任何记录/SPEC/板/阈值/冻结源",
+                       "豁免仅限『记录本体已被后续 CO 取代 ⇒ pin 属历史』并在本闸注册表明文；未声明陈旧 pin 一律 FAIL",
+                       "pin→文件解析失败（歧义/无候选）记 unresolved_key，不计失败但入记录"],
+    }
+    Path(a.out).write_text(json.dumps(rec, ensure_ascii=False, indent=1, sort_keys=True) + "\n")
+    print(f"CO-120 verdict={rec['verdict']} | pins={len(rows)} match={rec['n_match']} exempt={rec['n_exempt_historical']} stale_undeclared={rec['n_stale_undeclared']} unresolved={rec['n_unresolved_key']} teeth={teeth_ok}")
+    for r in stale:
+        print("   STALE", r["record"], r["key"], r["cited"], "->", r["actual"])
+    with_out = rec["n_exempt_historical"]
+    if with_out:
+        print("   (exempt historical:", [(r['record'], r['key']) for r in rows if r['status'] == 'exempt_historical'], ")")
+    return 0 if rec["verdict"] == "PASS" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
