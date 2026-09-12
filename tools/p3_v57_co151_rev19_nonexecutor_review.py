@@ -616,7 +616,8 @@ def main() -> int:
                    f"CO-148/149 热：手册解析 PACT={F['parsed']['pact_0_2']}/{F['parsed']['pact_5_19']}、"
                    f"θJA={F['parsed']['theta_ja']}、TJmax={F['tj_limit_C']} ⇒ Tj 最劣 {max(c['Tj_C'] for c in F['cases'].values())}°C > 120 ⇒ FAIL 成立",
                    f"CO-150 K9 两域本件自建 3 负控全触发、现行台账 0 findings（牙齿非空过）",
-                   f"co120 豁免 {H['entries']} 条全部『陈旧且非空』={H['teeth']['t02_nonvacuous']}（非空过）"],
+                   f"co120 豁免 {H['entries']} 条中 {H['nonvacuous_stale']} 条确为陈旧（非空过）；"
+                   f"名义多余 {len(H['moot'])} 条（见 F-7）"],
                redline="只读（除自身记录）；不改 SPEC/板/阈值/冻结四源/登记簿/台账/boundary/其它工件；零坐标搜索。",
                reproduce=["../AppDir/usr/bin/python3.11 tools/p3_v57_co151_rev19_nonexecutor_review.py"])
     OUT.write_text(json.dumps(rec, ensure_ascii=False, indent=1, sort_keys=True) + "\n")

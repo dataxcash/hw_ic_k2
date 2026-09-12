@@ -812,7 +812,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 - CO-147 R3 阻焊 FAIL；R1 盲埋孔『Not supported』出处 sha256 7d1d5a9193f3c212 ✓
 - CO-148/149 热：手册解析 PACT=[4.7, 6.0]/[5.8, 7.0]、θJA=17.4、TJmax=120.0 ⇒ Tj 最劣 161.8°C > 120 ⇒ FAIL 成立
 - CO-150 K9 两域本件自建 3 负控全触发、现行台账 0 findings（牙齿非空过）
-- co120 豁免 10 条全部『陈旧且非空』=True（非空过）
+- co120 豁免 10 条中 9 条确为陈旧（非空过）；名义多余 1 条（见 F-7）
 
 **findings**：
 
@@ -831,9 +831,9 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co151_rev19_nonexecutor_review.py` | `7d9aa7cc7fdd2e52` |
-| 记录 `m13_v57_co151_rev19_nonexecutor_review.json` | `c88959341064f29a` |
-| 卡 `m13_v57_CO151_rev19_nonexecutor_review.md` | `4d6054d8416c8593` |
+| 工具 `p3_v57_co151_rev19_nonexecutor_review.py` | `0c6531f94869b1bb` |
+| 记录 `m13_v57_co151_rev19_nonexecutor_review.json` | `195a8102720ed140` |
+| 卡 `m13_v57_CO151_rev19_nonexecutor_review.md` | `512943d2bc24b463` |
 | co120 provenance 闸 `m13_v57_co120_provenance_pin_gate.json` | `6a061d43074427e8` |
 | 登记簿 `input_defect_register_v1.json`(复评未改) | `6a5e9e86e83f5b6b` |
 | 台账 `derived_value_ledger_v1.json`(复评未改) | `87e4ecfd9693a064` |
