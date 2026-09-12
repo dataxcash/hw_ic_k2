@@ -216,7 +216,9 @@ def main() -> int:
              "form": "capacity/新布线 对中心距（工程保守实现，本件不改几何）",
              "inputs": {"span_mm": 0.585, "w_outer_mm": 0.205},
              "computed": {"value_mm": 1.46, "faithful_min_mm": round(0.585 + edge_outer, 4)},
-             "reachability": {"predicate": "value ≥ span + edge_min(外层)", "verdict": "CONSERVATIVE_OK"},
+             "reachability": {"kind": "conservative_ge",   # CO-153：可闭式证明的保守实现（K9 新判据）
+                              "predicate": "value ≥ span + 2·w_outer（忠实下界，闭式重算）",
+                              "verdict": "CONSERVATIVE_OK"},
              "note": "route_model_config.capacity_audit.inter_pair_spacing；≥ 忠实下界 ⇒ 保守（安全）；几何口径不动"}
         ],
         "as_built": {"source": f"L4 board {s16(BOARD)}（CO-134 实测，零搜索）", "rows": ab_rows,

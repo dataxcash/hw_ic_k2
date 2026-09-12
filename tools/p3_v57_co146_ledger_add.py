@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """CO-146 — 派生值台账登记（K9 口径：来源原则 id + 派生式 + 输入 + 可达性）。
 
+CO-153 收窄：本件现**仅** upsert `DV-CO146-ZDIFF`（其证据 pin = 阻抗表记录的 sha16）——
+PDN-DROP 的域/证据归 CO-153 归一、输入/computed 归 CO-149；THERMAL 归 CO-148/CO-149。
+（原三 DV 一并重写会 **clobber** 上述归属 —— 曾致 `drop_domain` 静默丢失、T11 牙齿失效。）
+
 幂等（按 id 覆盖）。可达性一律 kind=declared（无 domains 键）——本件派生值的域不是 R3-2 节距模型，
 不得借用 pitch_cap 域（否则 K9 域重算误判）。可达性由**闭式一阶计算 + hash-pin 证据件**支撑。
 """
@@ -63,38 +67,29 @@ def main() -> int:
                           "basis": imp.get("verdict_basis"),
                           "method": "闭式一阶工程近似；终判 = JLC 阻抗控制服务（±10%）",
                           "evidence_ref": {"path": IMP.name, "sha16": s16(IMP)}}},
-        {"id": "DV-CO146-PDN-DROP",
-         "requirement": "REQ-PDN-DROP",
-         "form": "ΔV = I·(R_plane + R_via/N)　且　ΔV/V_rail ≤ 预算",
-         "inputs": {"rails": {n: {"I_a": r["I_a"], "I_basis": r["I_basis"]} for n, r in pm["rails"].items()},
-                    "drop_budget_pct": pm["declared_inputs"]["supervisor_values_指令10"]["drop_budget_pct"],
-                    "copper_oz": {"outer": 1.0, "inner": 0.5},
-                    "rho_cu_20C": pm["declared_inputs"]["engineering_declared"]["rho_cu_20C"]["value"],
-                    "ambient_C": pm["declared_inputs"]["supervisor_values_指令10"]["ambient_C"],
-                    "disclaimer": pm["declared_inputs"]["DISCLAIMER"]},
-         "computed": {n: {"R_total_ohm": r["R_total_ohm"], "dV_mV": r["dV_mV"], "drop_pct": r["drop_pct"],
-                          "I_max_at_budget_a": r["I_max_at_budget_a"], "verdict": r["verdict"]}
-                      for n, r in pm["rails"].items()},
-         "reachability": {"kind": "declared", "verdict": "REACHABLE",
-                          "predicate": "各轨 I_max@预算 ≥ 声明电流（余量见 computed）",
-                          "basis": "几何取自交付板 zone 声明域（filled 缓存不可读）；电流为显式声明值（非实测）",
-                          "evidence_ref": {"path": PM.name, "sha16": s16(PM)}}},
-        {"id": "DV-CO146-THERMAL",
-         "requirement": "REQ-THERM",
-         "form": "Tj = Ta + P_total/(h·2A_board) + P_dev·θJA ≤ Tj_limit",
-         "inputs": {"ambient_C": pm["declared_inputs"]["supervisor_values_指令10"]["ambient_C"],
-                    "convection": pm["declared_inputs"]["supervisor_values_指令10"]["convection"],
-                    "h_conv": pm["declared_inputs"]["engineering_declared"]["h_conv"]["value"],
-                    "devices": pm["declared_inputs"]["thermal_devices"],
-                    "Tj_limit_C": pm["declared_inputs"]["engineering_declared"]["tj_limit_C"]["value"]},
-         "computed": {"P_total_W": pm["thermal"]["P_total_W"], "dT_board_C": pm["thermal"]["dT_board_C"],
-                      "T_board_C": pm["thermal"]["T_board_C"], "Tj": pm["thermal"]["Tj"],
-                      "hotspot_Tj_C": pm["thermal"]["hotspot_Tj_C"], "verdict": pm["thermal"]["verdict"]},
-         "reachability": {"kind": "declared", "verdict": "REACHABLE",
-                          "predicate": "热点 Tj < Tj_limit（见 computed）",
-                          "basis": "P/θJA/h 为显式声明值（非实测）⇒ 器件手册到位后须替换重跑",
-                          "evidence_ref": {"path": PM.name, "sha16": s16(PM)}}},
-    ]
+    ]   # CO-153：本件**仅**维护 DV-CO146-ZDIFF 证据 pin；PDN-DROP/THERMAL 可达性归 CO-149/CO-150/CO-153
+
+    # CO-153：pm_eval schema 自 CO-148 起改用 routes/T_board（无 Tj/hotspot_Tj_C）⇒ 该 DV 归 CO-148/CO-149 拥有；
+    # 本件改为**仅在字段齐备时**登记，避免 schema 漂移导致 KeyError（这正是本件曾失修、被移出复现序的根因）。
+    if {"Tj", "hotspot_Tj_C"} <= set(pm.get("thermal") or {}):
+        new_dv.append(
+            {"id": "DV-CO146-THERMAL",
+             "requirement": "REQ-THERM",
+             "form": "Tj = Ta + P_total/(h·2A_board) + P_dev·θJA ≤ Tj_limit",
+             "inputs": {"ambient_C": pm["declared_inputs"]["supervisor_values_指令10"]["ambient_C"],
+                        "convection": pm["declared_inputs"]["supervisor_values_指令10"]["convection"],
+                        "h_conv": pm["declared_inputs"]["engineering_declared"]["h_conv"]["value"],
+                        "devices": pm["declared_inputs"]["thermal_devices"],
+                        "Tj_limit_C": pm["declared_inputs"]["engineering_declared"]["tj_limit_C"]["value"]},
+             "computed": {"P_total_W": pm["thermal"]["P_total_W"], "dT_board_C": pm["thermal"]["dT_board_C"],
+                          "T_board_C": pm["thermal"]["T_board_C"], "Tj": pm["thermal"]["Tj"],
+                          "hotspot_Tj_C": pm["thermal"]["hotspot_Tj_C"], "verdict": pm["thermal"]["verdict"]},
+             "reachability": {"kind": "declared", "verdict": "REACHABLE",
+                              "predicate": "热点 Tj < Tj_limit（见 computed）",
+                              "basis": "P/θJA/h 为显式声明值（非实测）⇒ 器件手册到位后须替换重跑",
+                              "evidence_ref": {"path": PM.name, "sha16": s16(PM)}}})
+    else:
+        print("note(CO-153): pm_eval 无 Tj/hotspot_Tj_C（CO-148 起 schema）⇒ 跳过 DV-CO146-THERMAL（归 CO-148/CO-149 拥有）")
     have = {d["id"]: i for i, d in enumerate(led["derived_values"])}
     for dv in new_dv:
         if dv["id"] in have:

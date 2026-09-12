@@ -156,6 +156,34 @@ def k9_findings(led: dict) -> list:
             if rc.get("verdict") != "REACHABLE" or bad_d:
                 f.append(("K9", f"derived_value_unreachable:{dv.get('id')}",
                           {"verdict": rc.get("verdict"), "bad": bad_d, "kind": "drop_domain"}))
+        if kind == "declared":
+            # CO-153：声明类可达性不得无证据（关闭「声明即通过」缺口）。判据同 process_floor：
+            # evidence_ref 须可解析 + sha16 与现行一致 + basis 非空。
+            ev = rc.get("evidence_ref") or {}
+            pth = ev.get("path")
+            hitc = next((c for c in [STEP2 / str(pth), L3 / str(pth), L2 / str(pth)] if pth and c.exists()), None)
+            if hitc is None or s16(hitc) != ev.get("sha16") or not str(rc.get("basis") or "").strip():
+                f.append(("K9", f"derived_value_declared_unpinned:{dv.get('id')}",
+                          {"path": pth, "cited": ev.get("sha16"), "actual": s16(hitc) if hitc else None,
+                           "basis_nonempty": bool(str(rc.get("basis") or "").strip())}))
+        if kind == "conservative_ge":
+            # CO-153：保守实现须闭式证明 value >= 忠实下界（faithful = span + 2*w_outer）且 cited 一致。
+            inp = dv.get("inputs") or {}
+            comp = dv.get("computed") or {}
+            bad_c = []
+            try:
+                span = float(inp["span_mm"]); w = float(inp["w_outer_mm"]); val = float(comp["value_mm"])
+                faithful = round(span + 2.0 * w, 4)
+                if val < faithful - 1e-9:
+                    bad_c.append({"why": "value_lt_faithful", "value_mm": val, "faithful_mm": faithful})
+                cited = comp.get("faithful_min_mm")
+                if cited is None or abs(float(cited) - faithful) > 5e-4:
+                    bad_c.append({"why": "faithful_cited_mismatch", "expect": faithful, "got": cited})
+            except (KeyError, TypeError, ValueError):
+                bad_c.append({"why": "unparsable"})
+            if rc.get("verdict") != "CONSERVATIVE_OK" or bad_c:
+                f.append(("K9", f"derived_value_conservative_unproved:{dv.get('id')}",
+                          {"verdict": rc.get("verdict"), "bad": bad_c}))
     return f
 
 
@@ -323,6 +351,41 @@ def main() -> int:
             break
     teeth["T10b_thermal_domain_no_false_positive"] = not any(
         x[1].startswith("derived_value_unreachable") for x in k9_findings(_l10b))
+    # CO-153 负控 T12：声明类证据被篡改/缺失 ⇒ 必须 FAIL（无 declared DV 时注入合成项）
+    _l12 = copy.deepcopy(_led)
+    _hit12 = False
+    for _dv in _l12.get("derived_values", []):
+        if (_dv.get("reachability") or {}).get("kind") == "declared":
+            _dv["reachability"]["evidence_ref"] = {"path": "m13_v57_co146_impedance_table.json", "sha16": "0" * 16}
+            _hit12 = True
+            break
+    if not _hit12:
+        _l12["derived_values"].append({"id": "T12_INJECT", "requirement": "REQ-ZDIFF",
+                                       "reachability": {"kind": "declared", "verdict": "REACHABLE",
+                                                        "evidence_ref": {"path": "m13_v57_co146_impedance_table.json",
+                                                                         "sha16": "0" * 16}}})
+    teeth["T12_declared_unpinned_teeth"] = any(
+        x[1].startswith("derived_value_declared_unpinned") for x in k9_findings(_l12))
+    # CO-153 负控 T13：保守实现 value < 忠实下界 ⇒ 必须 FAIL（无 conservative_ge DV 时注入合成项）
+    _l13 = copy.deepcopy(_led)
+    _hit13 = False
+    for _dv in _l13.get("derived_values", []):
+        if (_dv.get("reachability") or {}).get("kind") == "conservative_ge":
+            _dv.setdefault("computed", {})["value_mm"] = 0.5
+            _hit13 = True
+            break
+    if not _hit13:
+        _l13["derived_values"].append({"id": "T13_INJECT", "requirement": "REQ-R3-2",
+                                       "inputs": {"span_mm": 0.585, "w_outer_mm": 0.205},
+                                       "computed": {"value_mm": 0.5, "faithful_min_mm": 0.995},
+                                       "reachability": {"kind": "conservative_ge", "verdict": "CONSERVATIVE_OK"}})
+    teeth["T13_conservative_unproved_teeth"] = any(
+        x[1].startswith("derived_value_conservative_unproved") for x in k9_findings(_l13))
+    # T12b/T13b：现行台账（经 CO-153 归一）不得误报
+    teeth["T12b_declared_no_false_positive"] = not any(
+        x[1].startswith("derived_value_declared_unpinned") for x in k9_findings(copy.deepcopy(_led)))
+    teeth["T13b_conservative_no_false_positive"] = not any(
+        x[1].startswith("derived_value_conservative_unproved") for x in k9_findings(copy.deepcopy(_led)))
     teeth_ok = all(teeth.values())
     verdict = "PASS" if (not unreg and not reg_bad and teeth_ok) else (
         "FAIL_UNREGISTERED_INPUT_DEFECT" if unreg else "FAIL_REGISTER_MALFORMED" if reg_bad else "TEETH_FAIL")

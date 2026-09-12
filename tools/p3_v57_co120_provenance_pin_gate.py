@@ -215,7 +215,10 @@ def main(argv=None) -> int:
                        "（理由：该类快照使记录 sha 随运行序漂移 ⇒ 提交 pin 不可复现）；未声明一律 FAIL",
                        "F-7：豁免依据分 `board_superseded`（机判可证）与 `declared_historical`（无板级依据，计数明示）两类",
                        "豁免仅限『记录本体已被后续 CO 取代 ⇒ pin 属历史』并在本闸注册表明文；未声明陈旧 pin 一律 FAIL",
-                       "pin→文件解析失败（歧义/无候选）记 unresolved_key，不计失败但入记录"],
+                       "pin→文件解析失败（歧义/无候选）记 unresolved_key，不计失败但入记录",
+                       "扫描范围（CO-153 声明）：仅 STEP2 下 m13_v57_co*.json 记录的 `*_record` 键；"
+                       "台账（L2/derived_value_ledger_v1.json）内 DV 的 reachability.evidence_ref pin "
+                       "由 co124 K9 的 declared/process_floor 判据覆盖（CO-153）"],
     }
     Path(a.out).write_text(json.dumps(rec, ensure_ascii=False, indent=1, sort_keys=True) + "\n")
     print(f"CO-120 verdict={rec['verdict']} | snaps={len(snaps)} undeclared={len(snap_undeclared)} "

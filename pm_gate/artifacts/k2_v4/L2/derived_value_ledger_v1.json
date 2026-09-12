@@ -218,8 +218,9 @@
     "faithful_min_mm": 0.995
    },
    "reachability": {
-    "predicate": "value ≥ span + edge_min(外层)",
-    "verdict": "CONSERVATIVE_OK"
+    "predicate": "value_mm ≥ span + 2·w_outer（忠实下界，闭式重算）",
+    "verdict": "CONSERVATIVE_OK",
+    "kind": "conservative_ge"
    },
    "note": "route_model_config.capacity_audit.inter_pair_spacing；≥ 忠实下界 ⇒ 保守（安全）；几何口径不动"
   },
@@ -384,7 +385,7 @@
     "method": "闭式一阶工程近似；终判 = JLC 阻抗控制服务（±10%）",
     "evidence_ref": {
      "path": "m13_v57_co146_impedance_table.json",
-     "sha16": "2d1adf1996ee3185"
+     "sha16": "dcd307530cd2a9e9"
     }
    }
   },
@@ -418,7 +419,7 @@
     },
     "rho_cu_20C": 1.724e-08,
     "ambient_C": 40.0,
-    "disclaimer": "电流/功耗/θJA/对流系数为**显式声明值**（非实测）；不得当实测引用；器件手册或 PM 数据到位后须替换并重跑。",
+    "disclaimer": "U6 功耗/热阻 = 数据手册值（已入库）；其余（U2 效率、MCU/杂项功耗、对流系数 h、P3V3_AUX 侧带电流）仍为显式声明值（非实测）⇒ 到位后须替换并重跑。",
     "source_note": "P3V3/12V_IN 电流由 U6 手册 PACT（最重档）导出；其余仍为声明值"
    },
    "computed": {
@@ -454,11 +455,11 @@
    "reachability": {
     "kind": "drop_domain",
     "verdict": "REACHABLE",
-    "predicate": "每轨 ΔV% ≤ 预算%（监理指令 #10 定值 3%）",
-    "budget_pct": 3.0,
+    "predicate": "每轨 ΔV% ≤ 预算%（监理指令 #10 定值）",
+    "basis": "几何取自交付板 zone 声明域（filled 缓存不可读）；电流为显式声明值（非实测）",
     "evidence_ref": {
      "path": "m13_v57_co146_pm_eval.json",
-     "sha16": "628c06ba2575ceb3"
+     "sha16": "76a6b6860f071298"
     }
    }
   },
