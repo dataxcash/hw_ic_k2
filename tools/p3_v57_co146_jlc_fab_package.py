@@ -174,6 +174,39 @@ def stackup_svg_binding_checks(svg_text: str, binding: dict) -> dict:
     return {k: _tok_match(svg_text, t[k]) for k in STACKUP_SVG_BINDING_KEYS}
 
 
+def impedance_watch_figure(imp: dict) -> dict:
+    """CO-171（G-1）：从阻抗表记录派生「watch（最宽间距）下模型相对目标的**最大偏离%**」及其来源。
+
+    实测缺口：`ORDER_NOTES` §5 曾写死「model-spread 观察值（+11.6%）」—— 该串**不存在于任何记录**，
+    而记录自身在 s=0.395mm 处 M2(HJ)=94.94Ω 对目标 85Ω 即 **+11.69%**（且「模型间 spread」≈4.8%，措辞亦失实）。
+    """
+    tgt = float(imp.get("target_zdiff") or 0)
+    best, best_dev = {}, None
+    for w in (imp.get("watch") or []):
+        for model, zs in (w.get("zdiff") or {}).items():
+            for z in (zs if isinstance(zs, list) else [zs]):
+                if not isinstance(z, (int, float)) or tgt <= 0:
+                    continue
+                dev = (float(z) - tgt) / tgt * 100.0
+                if best_dev is None or abs(dev) > abs(best_dev):
+                    best_dev = dev
+                    best = {"layer": w.get("layer"), "model": model, "gap_mm": w.get("gap_mm"),
+                            "zdiff": z, "target_zdiff": tgt, "dev_pct": round(dev, 2)}
+    return best
+
+
+def order_notes_record_figures(note: str, imp: dict, dfm: dict) -> dict:
+    """CO-171（G-1/G-2）：`ORDER_NOTES` 内的**记录派生数字**须与其来源记录一致（有锚正则）。"""
+    fig = impedance_watch_figure(imp)
+    drc = dfm.get("drc_as_designed") or {}
+    by = drc.get("by_type") or {}
+    n = drc.get("n")
+    lf = sum(v for k, v in by.items() if str(k).startswith("lib_footprint") and isinstance(v, int))
+    return {"impedance_watch_dev_pct": bool(fig) and _tok_match(note, f"{abs(fig['dev_pct']):.1f}%"),
+            "drc_as_designed_total": isinstance(n, int) and _tok_match(note, f"{n} 项"),
+            "drc_lib_footprint_sum": bool(by) and _tok_match(note, f"({lf})")}
+
+
 def binding_param_checks(note: str, binding: dict) -> dict:
     """CO-163（G-1）+ CO-167（F-4/F-5）：ORDER_NOTES 必须逐项含声明定值表的参数记号。"""
     t = binding_tokens(binding)
@@ -236,7 +269,7 @@ L2 裁定件 `06_rulings/L2_RULING_via_channel_and_interpair_domain_v1.md`（R1/
 
 ## 5. 阻抗
 85Ω 差分两套独立闭式模型（IPC-2141 族 / Hammerstad–Jensen+Cohn）均落 ±10%（as-built 对内净距），
-设计名义最宽间距下有 1 项 model-spread 观察值（+11.6%），已列下单备注：
+设计名义最宽间距下有 1 项模型偏离观察值（M2(HJ) 相对目标 **+11.7%**；模型间 spread ≈4.8%），已列下单备注：
 **请 JLC 阻抗表覆盖最宽对内间距（0.6mm 中心）的几何**。终判 = JLC 阻抗控制服务。
 见 04_impedance/。
 
@@ -336,10 +369,14 @@ def main() -> int:
              "t11_stackup_svg_declared_binding": all(stackup_svg_binding_checks(_svg, jp_binding).values()),
              "t11b_stackup_svg_binding_sensitivity": (not all(stackup_svg_binding_checks(
                  _svg, {**jp_binding, "copper": {**(jp_binding.get("copper") or {}), "outer_oz": 2.0}}).values())),
+             # CO-171（G-1/G-2）：ORDER_NOTES 内的**记录派生数字**须与来源记录一致
+             "t12_order_notes_record_figures": all(order_notes_record_figures(notes_txt, imp, dfm).values()),
+             "t12b_record_figure_binding_sensitivity": (not all(order_notes_record_figures(
+                 notes_txt, imp, {**dfm, "drc_as_designed": {**(dfm.get("drc_as_designed") or {}), "n": 9999}}).values())),
              "t02_8_copper_gerbers": len(cu) >= 8,
              "t03_drill_present": len(drl) >= 1,
              "t04_all_hashed": all(v.get("sha256") for v in m1.values())}
-    rec = {"artifact": "m13_v57_co146_jlc_fab_package", "schema": 1, "revision": "CO146-PKG.6",
+    rec = {"artifact": "m13_v57_co146_jlc_fab_package", "schema": 1, "revision": "CO146-PKG.7",
            "nature": "JLC 打样包（监理指令 #10 动作 3）；只出交付物，不改板/SPEC",
            "board": BOARD.name, "board_sha16": sha16(BOARD),
            "package_dir": str(OUT.relative_to(K2)), "n_files": len(m1),
@@ -354,6 +391,9 @@ def main() -> int:
            "stackup_svg_sha16": sha16(OUT / "03_stackup/JLC08161H_stackup.svg"),
            "teeth": teeth,
            "declared_refs": {"files": refs, "dirs": dir_refs, "rulings_parity": rulings_parity},
+           "record_figures": {"impedance_watch": impedance_watch_figure(imp),
+                              "drc_as_designed_n": (dfm.get("drc_as_designed") or {}).get("n"),
+                              "order_notes_checks": order_notes_record_figures(notes_txt, imp, dfm)},
            "declared_binding": {"table": str(JP.relative_to(K2)), "tokens": binding_tokens(jp_binding),
                                 "order_notes_checks": binding_param_checks(notes_txt, jp_binding),
                                 "stackup_svg_checks": stackup_svg_binding_checks(_svg, jp_binding),

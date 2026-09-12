@@ -1024,6 +1024,45 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body44
     txt = txt.replace("W3 Boundary **v2.15**", "W3 Boundary **v2.16**")
+    # ── §45 CO-171（下单备注内记录派生数字的绑定） ─────────────────────────
+    MARK45 = "## 45. CO-171"
+    _rc45 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    _ord171 = ('co146_impedance_table → co146_pm_eval → co146_ledger_add → co153_k9_domain_coverage → co148_u6_datasheet_inputs → co148_thermal_ruling → co149_thermal_mitigation_derive → co147_l2_ruling → co146_jlc_dfm_gate → co146_jlc_fab_package → co152_findings_disposition → co155_co154_findings_disposition → co156_co154_open_disposition → co157_gate_hardening_3 → co158_l5_packet_selfcontained → co159_rev19_co156_co157_co158_review → co160_co159_findings_disposition → co161_gap_hardening_4 → co162_verdict_binding → co163_binding_to_order_notes → co166_rev19_co159_co165_review → co167_co166_findings_disposition → co168_register_consistency → co169_step_output_oracle → co170_stackup_binding → co171_order_notes_record_figures → co124_input_selfcheck_gate → co150_k9_domain_gate → co146_boundary_append → co77_closure_declaration_sweep → co120_provenance_pin_gate → co135_review_hygiene → co136_gate_hygiene → co78_layer_role_drift_gate → co81_project_rules_gate → co84_dru_domain_gate → co95_in4_reachability → co98_reachability_status_report → co106_reference_plane_gate → co146_boundary_append')
+    sec45 = [MARK45 + "（**L2 自裁 · 交付物绑定**：备注内记录派生数字 ↔ 来源记录）", "",
+             "- 实测缺口（修前，机判）：**G-1** `ORDER_NOTES` §5 写死「model-spread 观察值（**+11.6%**）」，该串**不存在于任何记录**"
+             "（`grep 11.6` 在 L2/L3 记录零命中）；阻抗表记录自身在 s=0.395mm（设计名义最宽间距）M2(HJ)=94.94Ω 对目标 85Ω 即 **+11.69%**，"
+             "且「模型间 spread」≈4.8% ⇒ 客户可见的阻抗告警数字**无源且已陈旧**，措辞亦失实（CO-163 的 t09 只绑声明定值表 7 记号，不覆盖记录派生值）。"
+             "**G-2** §7 的 DRC 计数（42 项 / `lib_footprint_*` 41 / silk 1）无牙齿绑定（现态一致，但无护栏）。",
+             "- 处置（**CO-171**）：`p3_v57_co146_jlc_fab_package.py` 升 **CO146-PKG.7** —— 新增 `impedance_watch_figure(imp)`"
+             "（由记录派生 watch 下模型相对目标的最大偏离）与 `order_notes_record_figures(note, imp, dfm)`；**订正备注字面量**"
+             "（+11.6% → **+11.7%**，措辞订正为「模型偏离观察值（M2(HJ) 相对目标）」+ 补「模型间 spread ≈4.8%」）；"
+             "牙齿 `t12_order_notes_record_figures` + `t12b`（灵敏度）；记录落 `record_figures`。",
+             f"- 复核：`record_figures.impedance_watch.dev_pct = 11.69`（F.Cu / M2_HJ_Cohn / 0.395mm）；"
+             f"`record_figures.drc_as_designed_n = 42`；打样包牙齿 **17/17**。登记簿 **{_rc45['total']} 项 / OPEN {_rc45['OPEN']}**。", "",
+             "> **R-CO171-1**：客户可见备注/图中的**记录派生**数字（观察值/计数/边界值）须绑定其来源记录；"
+             "来源记录变更而备注未同步即 FAIL。",
+             "> **R-CO171-2**：订正客户可见数值须同时留下「来源记录 → 数字」的可重算路径（本件：`impedance_watch_figure` / t12）。",
+             "> **R-CO171-3**（复现序，取代 R-CO170-3；步骤集新增 co171）：规范复现序 = `" + _ord171 + "`，**循环至 sha 稳定**"
+             "（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2）。", "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows45 = [("工具 `p3_v57_co171_order_notes_record_figures.py`", K2 / "tools/p3_v57_co171_order_notes_record_figures.py"),
+               ("工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.7 / `order_notes_record_figures` + t12/t12b）",
+                K2 / "tools/p3_v57_co146_jlc_fab_package.py"),
+               ("下单备注 `L5/jlc_package/ORDER_NOTES.md`（**§5 数值已订正**）", L5 / "jlc_package" / "ORDER_NOTES.md"),
+               ("记录 `m13_v57_co146_jlc_fab_package.json`（重建）", STEP2 / "m13_v57_co146_jlc_fab_package.json"),
+               ("阻抗表 `m13_v57_co146_impedance_table.json`（来源记录）", STEP2 / "m13_v57_co146_impedance_table.json"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc45['total']} 项 / OPEN {_rc45['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows45:
+        if pth.exists():
+            sec45.append(f"| {label} | `{s16(pth)}` |")
+    sec45.append("")
+    body45 = "\n".join(sec45)
+    if MARK45 in txt:
+        txt = re.sub(re.escape(MARK45) + r"[\s\S]*?(?=\n## |\Z)", body45, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body45
+    txt = txt.replace("W3 Boundary **v2.16**", "W3 Boundary **v2.17**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
     return 0

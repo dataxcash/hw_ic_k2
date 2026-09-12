@@ -37,7 +37,7 @@ L2 裁定件 `06_rulings/L2_RULING_via_channel_and_interpair_domain_v1.md`（R1/
 
 ## 5. 阻抗
 85Ω 差分两套独立闭式模型（IPC-2141 族 / Hammerstad–Jensen+Cohn）均落 ±10%（as-built 对内净距），
-设计名义最宽间距下有 1 项 model-spread 观察值（+11.6%），已列下单备注：
+设计名义最宽间距下有 1 项模型偏离观察值（M2(HJ) 相对目标 **+11.7%**；模型间 spread ≈4.8%），已列下单备注：
 **请 JLC 阻抗表覆盖最宽对内间距（0.6mm 中心）的几何**。终判 = JLC 阻抗控制服务。
 见 04_impedance/。
 

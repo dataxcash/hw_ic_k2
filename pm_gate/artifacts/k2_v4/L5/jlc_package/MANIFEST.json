@@ -1,7 +1,7 @@
 {
  "artifact": "m13_v57_co146_jlc_fab_package",
  "schema": 1,
- "revision": "CO146-PKG.6",
+ "revision": "CO146-PKG.7",
  "nature": "JLC 打样包（监理指令 #10 动作 3）；只出交付物，不改板/SPEC",
  "board": "k2_v4_8L.l4.kicad_pcb",
  "board_sha16": "d4e81f647be7f980",
@@ -54,6 +54,8 @@
   "t10b_binding_source_pin_discriminates": true,
   "t11_stackup_svg_declared_binding": true,
   "t11b_stackup_svg_binding_sensitivity": true,
+  "t12_order_notes_record_figures": true,
+  "t12b_record_figure_binding_sensitivity": true,
   "t02_8_copper_gerbers": true,
   "t03_drill_present": true,
   "t04_all_hashed": true
@@ -77,6 +79,24 @@
    "L2_RULING_u6_thermal_v1.md": true,
    "L2_RULING_u6_thermal_mitigation_v1.md": true,
    "m13_v57_co146_jlc_dfm_gate.json": true
+  }
+ },
+ "record_figures": {
+  "impedance_watch": {
+   "layer": "F.Cu",
+   "model": "M2_HJ_Cohn",
+   "gap_mm": [
+    0.395
+   ],
+   "zdiff": 94.94,
+   "target_zdiff": 85.0,
+   "dev_pct": 11.69
+  },
+  "drc_as_designed_n": 42,
+  "order_notes_checks": {
+   "impedance_watch_dev_pct": true,
+   "drc_as_designed_total": true,
+   "drc_lib_footprint_sum": true
   }
  },
  "declared_binding": {
@@ -250,8 +270,8 @@
    "bytes": 5782
   },
   "ORDER_NOTES.md": {
-   "sha256": "42ffae9eb22db38aa07783815bc44a8553eff04f29a81cae104a649ad9d53788",
-   "bytes": 3740
+   "sha256": "b7d86151d97b32a621f657e4b86195d4899e38e5a80cfbfb9f3c46434ac95ff2",
+   "bytes": 3789
   }
  },
  "redline": "只读板；零坐标搜索；不改板/图纸/SPEC/冻结四源（输出全在 L5 交付目录）。"
