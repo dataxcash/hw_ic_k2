@@ -10,6 +10,7 @@ CO-91 的 `Scene` 仅由板（pads/segs/vias）构建 ⇒ **对「计划集内�
 判据（机判，纯几何；半径/宽度取自 `pdn_apply.VIA_DIA/VIA_DRILL` 与 SPEC `stub_width_mm`）：
   A1 异网 via-via：`d < 2r` ⇒ **重叠/短路**；`2r ≤ d < 2r+req` ⇒ 净距违规；
   A2 异网 stub-via：`pt_seg(w/2+r)` 同理；A3 异网 stub-stub：`seg_seg((w1+w2)/2)` 同理。
+  A4 孔-孔（**net-agnostic**）：`d < drill + min_hole_to_hole(0.25)`（板配置口径；项目 drc_rules 为 same_net_exempt ⇒ CO-91 盲）。
   `req = Rules.req(netA, netB)`（规则源 = `_shared/eda_core/drc_rules.json`，与 CO-91 同源）。
 B（恒跑；需 AppDir pcbnew + kicad-cli）：scratch 板 baseline DRC → `pdn_apply --stage all` → DRC 差值（只记稳定量）。
 牙齿：合成重叠 via 必被抓、干净集合必放行。
@@ -115,6 +116,19 @@ def main(argv=None) -> int:
     ENGINE_STUB_W = 0.5  # `pdn_apply.add_track(..., width=0.5)` 字面量（施工侧未读 SPEC）
     ov, clr = conflicts(w)                     # SPEC 声明宽（0.2）
     ov_e, clr_e = conflicts(ENGINE_STUB_W)     # 引擎实落宽（0.5）
+    # 孔-孔（**net-agnostic**；源自板配置 `.kicad_pro` rules.min_hole_to_hole=0.25，非项目 drc_rules.json 的 same_net_exempt 口径）
+    DRILL = pa.VIA_DRILL
+    HOLE_MIN = 0.25
+    hole_ht = []
+    for (k1, r1, p1, n1, x1, y1), (k2, r2, p2, n2, x2, y2) in itertools.combinations(targets, 2):
+        d = math.hypot(x1 - x2, y1 - y2)
+        if d < DRILL + HOLE_MIN - 1e-9:
+            hole_ht.append({"a": f"{k1}:{n1}", "b": f"{k2}:{n2}", "d": round(d, 4),
+                            "pos": [[round(x1, 3), round(y1, 3)], [round(x2, 3), round(y2, 3)]],
+                            "co_located": d < 1e-6})
+    hole_ht.sort(key=lambda x: x["d"])
+    hole_colocated = [x for x in hole_ht if x["co_located"]]
+
     ov.sort(key=lambda x: x["d"])
     # 牙齿：合成重叠 via 必被抓；干净对必放行
     tooth_bad = 0.20 < 2 * R            # 0.20mm 间距 < 0.35mm 直径 ⇒ 视为重叠（必被抓）
@@ -125,7 +139,8 @@ def main(argv=None) -> int:
 
     verdict = ("BASELINE_MISMATCH" if mismatch else
                ("TEETH_FAIL" if not teeth_ok else
-                ("FAIL_MUTUAL_SHORT" if ov else ("FAIL_MUTUAL_CLEARANCE" if clr else "PASS"))))
+                ("FAIL_MUTUAL_SHORT" if ov else
+                 ("FAIL_HOLE_SPACING" if (hole_ht or clr) else "PASS"))))
     rec = {
         "artifact": "m13_v57_co99_pdn_mutual_conflict_gate", "schema": 1, "revision": "CO-99.1",
         "nature": "L2 PDN 施工就绪性：计划集**互相冲突**闸（补 CO-91/CO-96 的「只判 vs 板已有铜」覆盖缺口）",
@@ -137,6 +152,11 @@ def main(argv=None) -> int:
                                     "note": "以 pdn_apply 实落短段宽 0.5mm 计算的计划集互判（SPEC 声明为 0.2mm）"},
         "engine_width_overlaps": ov_e[:12],
         "overlaps": ov[:40], "clearance": clr[:40],
+        "hole_conflicts": {"threshold_mm": DRILL + HOLE_MIN, "hole_to_hole": len(hole_ht),
+                           "holes_co_located": len(hole_colocated),
+                           "net_agnostic": True,
+                           "source": "板配置 .kicad_pro rules.min_hole_to_hole=0.25（项目 drc_rules.json 为 same_net_exempt ⇒ CO-91 盲）",
+                           "sample": hole_ht[:8]},
         "by_kind": {"overlap": dict(collections.Counter(x["kind"] for x in ov)),
                     "clearance": dict(collections.Counter(x["kind"] for x in clr))},
         "dryrun": dry,
@@ -149,7 +169,8 @@ def main(argv=None) -> int:
         "verdict": verdict,
     }
     Path(a.out).write_text(json.dumps(rec, ensure_ascii=False, indent=1, sort_keys=True) + "\n")
-    print("CO-99 verdict=%s overlaps=%d clearance=%d teeth_ok=%s" % (verdict, len(ov), len(clr), teeth_ok))
+    print("CO-99 verdict=%s overlaps=%d clearance=%d hole_to_hole=%d co_located=%d teeth_ok=%s" %
+          (verdict, len(ov), len(clr), len(hole_ht), len(hole_colocated), teeth_ok))
     for x in ov[:6]:
         print("   OVERLAP", x["kind"], x["a"], x["b"], "d=%s need=%s" % (x["d"], x["need"]))
     if dry:

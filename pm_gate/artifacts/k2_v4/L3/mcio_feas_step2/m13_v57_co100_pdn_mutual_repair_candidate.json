@@ -1,0 +1,128 @@
+{
+ "artifact": "m13_v57_co100_pdn_mutual_repair_candidate",
+ "baseline_expectations": {
+  "board": "0e636a67c1472462",
+  "spec": "d85f10f722ba22b0"
+ },
+ "baseline_mismatch": {},
+ "blocked_detail": [
+  {
+   "kind": "ppc",
+   "net": "GND",
+   "new": null,
+   "old": [
+    83.949,
+    54.165
+   ],
+   "pad": [
+    83.949,
+    54.79
+   ],
+   "ref": "U6",
+   "status": "blocked"
+  },
+  {
+   "kind": "ppc",
+   "net": "GND",
+   "new": null,
+   "old": [
+    103.45,
+    50.905
+   ],
+   "pad": [
+    103.45,
+    50.28
+   ],
+   "ref": "U6",
+   "status": "blocked"
+  },
+  {
+   "kind": "ppc",
+   "net": "GND",
+   "new": null,
+   "old": [
+    103.026,
+    52.99
+   ],
+   "pad": [
+    103.651,
+    52.99
+   ],
+   "ref": "U6",
+   "status": "blocked"
+  },
+  {
+   "kind": "ppc",
+   "net": "GND",
+   "new": null,
+   "old": [
+    103.545,
+    53.29
+   ],
+   "pad": [
+    104.17,
+    53.29
+   ],
+   "ref": "U6",
+   "status": "blocked"
+  },
+  {
+   "kind": "ppc",
+   "net": "GND",
+   "new": null,
+   "old": [
+    103.545,
+    54.49
+   ],
+   "pad": [
+    104.17,
+    54.49
+   ],
+   "ref": "U6",
+   "status": "blocked"
+  },
+  {
+   "kind": "stitch",
+   "net": "GND",
+   "new": null,
+   "old": [
+    133.83,
+    59.1
+   ],
+   "pad": null,
+   "ref": "-",
+   "status": "blocked"
+  }
+ ],
+ "inputs": {
+  "board": "0e636a67c1472462",
+  "spec": "d85f10f722ba22b0",
+  "stub_width_mm": 0.2,
+  "via_dia": 0.35
+ },
+ "nature": "L2 PDN：CO-99 互冲的互障感知修复候选（声明 palette、确定性序、零坐标搜索；scratch，不改 canonical）",
+ "non_claims": [
+  "scratch 机判；不改 SPEC/板/阈值/冻结源",
+  "palette 声明固定、序确定；无 while/无搜索",
+  "本件不施加；施加 = rev-12 + 全链重基线 + 换会话复评",
+  "blocked 者若源于 U6 0.5mm 场密度 ⇒ 属 L1/工艺（via-in-pad/HDI，见 CO-94）"
+ ],
+ "residual_mutual_overlap": 0,
+ "revision": "CO-100.1",
+ "schema": 1,
+ "tally": {
+  "ppc_blocked": 5,
+  "ppc_kept": 126,
+  "ppc_relocated": 58,
+  "stitch_blocked": 1,
+  "stitch_kept": 34,
+  "stitch_relocated": 5,
+  "zone_kept": 13,
+  "zone_relocated": 4
+ },
+ "teeth": {
+  "overlap_pair_detected": true
+ },
+ "teeth_ok": true,
+ "verdict": "PARTIAL"
+}
