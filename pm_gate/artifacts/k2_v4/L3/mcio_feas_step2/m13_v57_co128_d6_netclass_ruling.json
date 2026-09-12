@@ -1,0 +1,432 @@
+{
+ "artifact": "m13_v57_co128_d6_netclass_ruling",
+ "schema": 1,
+ "revision": "CO-128.1",
+ "nature": "D-6 定案（12V_IN 网类 L2 裁定）+ ① 按新类（POWER/feat 0.5）确定性绕障复判",
+ "level": {
+  "ruling": "L2",
+  "basis": "《宪法》ch.2：网级净距/线宽口径 + PDN 承载 = L2（PDN 架构）；不改网名/域/层数 ⇒ 无 L1 面"
+ },
+ "definition_doc": {
+  "path": "pm_gate/artifacts/k2_v4/L2/BASIC_SKILL_VS_REDLINE_v1.0.md",
+  "sha16": "9ad91da8a49510a5"
+ },
+ "decision": {
+  "finding": "pdn_net_not_power_class:12V_IN",
+  "mechanism": {
+   "net_classes_override": {
+    "net": "12V_IN",
+    "class": "POWER"
+   }
+  },
+  "rejected_alternative": "改网名 PWR_12V_IN（波及网表/BOM/板/多工件，爆炸半径大且无增益）",
+  "consequences": {
+   "trace_width_min_mm": {
+    "from": 0.15,
+    "to": 0.5
+   },
+   "clearance_to_foreign_mm": {
+    "from": 0.1,
+    "to": 0.2
+   },
+   "required_to_foreign_via_center_mm": 0.375
+  },
+  "application": "rev-17（本件不改 SPEC）；施加后强制跑 co124 并 PASS"
+ },
+ "rerun_new_class": {
+  "verdict": "FEASIBLE_BY_DETERMINISTIC_ROUTER",
+  "net": "12V_IN",
+  "netclass": "POWER",
+  "min_feature_mm": 0.5,
+  "cleared_at_level": 0,
+  "required_mm": {
+   "C73.2(GND)": 0.375,
+   "C74.2(GND)": 0.375,
+   "C75.2(GND)": 0.375,
+   "C76.2(GND)": 0.375,
+   "C77.2(GND)": 0.375,
+   "C78.2(GND)": 0.375,
+   "C84.2(GND)": 0.375,
+   "C85.2(GND)": 0.375,
+   "C86.2(GND)": 0.375,
+   "C87.2(GND)": 0.375,
+   "C88.2(GND)": 0.375,
+   "C89.2(GND)": 0.375,
+   "C90.2(GND)": 0.375,
+   "D1.2(GND)": 0.375,
+   "E2.1(GND)": 0.375,
+   "E2.3(GND)": 0.375,
+   "E2.4(GND)": 0.375,
+   "E2.7(GND)": 0.375,
+   "J2.1(GND)": 0.375,
+   "J2.10(GND)": 0.375,
+   "J2.13(GND)": 0.375,
+   "J2.16(GND)": 0.375,
+   "J2.19(GND)": 0.375,
+   "J2.22(GND)": 0.375,
+   "J2.25(GND)": 0.375,
+   "J2.26(GND)": 0.375,
+   "J2.27(GND)": 0.375,
+   "J2.28(GND)": 0.375,
+   "J2.34(GND)": 0.375,
+   "J2.37(GND)": 0.375,
+   "J2.38(GND)": 0.375,
+   "J2.4(GND)": 0.375,
+   "J2.41(GND)": 0.375,
+   "J2.44(GND)": 0.375,
+   "J2.47(GND)": 0.375,
+   "J2.49(GND)": 0.375,
+   "J2.50(GND)": 0.375,
+   "J2.56(GND)": 0.375,
+   "J2.59(GND)": 0.375,
+   "J2.65(GND)": 0.375,
+   "J2.67(GND)": 0.375,
+   "J2.7(GND)": 0.375,
+   "J2.8(GND)": 0.375,
+   "J2.9(GND)": 0.375,
+   "J4.A1(GND)": 0.375,
+   "J4.A10(GND)": 0.375,
+   "J4.A19(GND)": 0.375,
+   "J4.A7(GND)": 0.375,
+   "J4.B1(GND)": 0.375,
+   "J4.B10(GND)": 0.375,
+   "J4.B19(GND)": 0.375,
+   "J4.B7(GND)": 0.375,
+   "R28.2(GND)": 0.375,
+   "U1.18(GND)": 0.375,
+   "U1.19(GND)": 0.375,
+   "U1.2(GND)": 0.375,
+   "U1.20(GND)": 0.375,
+   "U1.21(GND)": 0.375,
+   "U1.3(GND)": 0.375,
+   "U1.30(GND)": 0.375,
+   "U1.7(GND)": 0.375,
+   "U2.2(GND)": 0.375,
+   "U5.2(GND)": 0.375,
+   "U5.3(GND)": 0.375,
+   "U6.AC22(GND)": 0.375,
+   "U6.AK22(GND)": 0.375,
+   "U6.AU22(GND)": 0.375,
+   "U6.B19(GND)": 0.375,
+   "U6.BD22(GND)": 0.375,
+   "U6.BL22(GND)": 0.375,
+   "U6.BV13(GND)": 0.375,
+   "U6.BV22(GND)": 0.375,
+   "U6.CE13(GND)": 0.375,
+   "U6.CE22(GND)": 0.375,
+   "U6.CE32(GND)": 0.375,
+   "U6.CM13(GND)": 0.375,
+   "U6.CM22(GND)": 0.375,
+   "U6.CM32(GND)": 0.375,
+   "U6.CN34(GND)": 0.375,
+   "U6.CP35(GND)": 0.375,
+   "U6.CW13(GND)": 0.375,
+   "U6.CW22(GND)": 0.375,
+   "U6.CW32(GND)": 0.375,
+   "U6.CY34(GND)": 0.375,
+   "U6.DA35(GND)": 0.375,
+   "U6.DF13(GND)": 0.375,
+   "U6.DF22(GND)": 0.375,
+   "U6.DF32(GND)": 0.375,
+   "U6.DG34(GND)": 0.375,
+   "U6.DH35(GND)": 0.375,
+   "U6.DN13(GND)": 0.375,
+   "U6.DN22(GND)": 0.375,
+   "U6.DN32(GND)": 0.375,
+   "U6.DP34(GND)": 0.375,
+   "U6.DR35(GND)": 0.375,
+   "U6.DY13(GND)": 0.375,
+   "U6.DY22(GND)": 0.375,
+   "U6.DY32(GND)": 0.375,
+   "U6.E14(GND)": 0.375,
+   "U6.E27(GND)": 0.375,
+   "U6.E30(GND)": 0.375,
+   "U6.E33(GND)": 0.375,
+   "U6.EA34(GND)": 0.375,
+   "U6.EB35(GND)": 0.375,
+   "U6.EG13(GND)": 0.375,
+   "U6.EG22(GND)": 0.375,
+   "U6.EG32(GND)": 0.375,
+   "U6.EH34(GND)": 0.375,
+   "U6.EJ35(GND)": 0.375,
+   "U6.EP13(GND)": 0.375,
+   "U6.EP22(GND)": 0.375,
+   "U6.EP32(GND)": 0.375,
+   "U6.ER34(GND)": 0.375,
+   "U6.ET35(GND)": 0.375,
+   "U6.FA15(GND)": 0.375,
+   "U6.FA32(GND)": 0.375,
+   "U6.FC19(GND)": 0.375,
+   "U6.FC23(GND)": 0.375,
+   "U6.FC25(GND)": 0.375,
+   "U6.FC28(GND)": 0.375,
+   "U6.FC6(GND)": 0.375,
+   "U6.FC9(GND)": 0.375,
+   "U6.FD35(GND)": 0.375,
+   "U6.FJ12(GND)": 0.375,
+   "U6.FJ19(GND)": 0.375,
+   "U6.H16(GND)": 0.375,
+   "U6.H19(GND)": 0.375,
+   "U6.J22(GND)": 0.375,
+   "U6.J4(GND)": 0.375,
+   "U6.T22(GND)": 0.375,
+   "C85.1(MCU_VDD)": 0.375,
+   "C86.1(MCU_VDD)": 0.375,
+   "E2.2(MCU_VDD)": 0.375,
+   "E2.8(MCU_VDD)": 0.375,
+   "R31.2(MCU_VDD)": 0.375,
+   "R32.2(MCU_VDD)": 0.375,
+   "R33.2(MCU_VDD)": 0.375,
+   "R34.2(MCU_VDD)": 0.375,
+   "U1.6(MCU_VDD)": 0.375,
+   "U4.2(MCU_VDD)": 0.375,
+   "C74.1(P3V3)": 0.375,
+   "C75.1(P3V3)": 0.375,
+   "C76.1(P3V3)": 0.375,
+   "C77.1(P3V3)": 0.375,
+   "C78.1(P3V3)": 0.375,
+   "C84.1(P3V3)": 0.375,
+   "U2.5(P3V3)": 0.375,
+   "U4.3(P3V3)": 0.375,
+   "U6.AC17(P3V3)": 0.375,
+   "U6.AC20(P3V3)": 0.375,
+   "U6.AK17(P3V3)": 0.375,
+   "U6.AK20(P3V3)": 0.375,
+   "U6.AU17(P3V3)": 0.375,
+   "U6.AU20(P3V3)": 0.375,
+   "U6.BD17(P3V3)": 0.375,
+   "U6.BD20(P3V3)": 0.375,
+   "U6.BL17(P3V3)": 0.375,
+   "U6.BL20(P3V3)": 0.375,
+   "U6.BV17(P3V3)": 0.375,
+   "U6.BV20(P3V3)": 0.375,
+   "U6.CE17(P3V3)": 0.375,
+   "U6.CE20(P3V3)": 0.375,
+   "U6.CM17(P3V3)": 0.375,
+   "U6.CM20(P3V3)": 0.375,
+   "U6.CW17(P3V3)": 0.375,
+   "U6.CW20(P3V3)": 0.375,
+   "U6.DF17(P3V3)": 0.375,
+   "U6.DF20(P3V3)": 0.375,
+   "U6.DN17(P3V3)": 0.375,
+   "U6.DN20(P3V3)": 0.375,
+   "U6.DY17(P3V3)": 0.375,
+   "U6.DY20(P3V3)": 0.375,
+   "U6.EG17(P3V3)": 0.375,
+   "U6.EG20(P3V3)": 0.375,
+   "U6.EP17(P3V3)": 0.375,
+   "U6.EP20(P3V3)": 0.375,
+   "U6.T17(P3V3)": 0.375,
+   "U6.T20(P3V3)": 0.375,
+   "C90.1(P3V3_AUX)": 0.375,
+   "J4.A9(P3V3_AUX)": 0.375,
+   "R1.2(P3V3_AUX)": 0.375,
+   "U1.15(P3V3_AUX)": 0.375,
+   "P3V3_BCU_BRIDGE_IN4#v0(P3V3)": 0.375,
+   "P3V3_BCU_BRIDGE_IN4#v1(P3V3)": 0.375,
+   "P3V3_BCU_BRIDGE_IN4#v2(P3V3)": 0.375,
+   "P3V3_AUX_BCU_BRIDGE_IN4#v0(P3V3_AUX)": 0.375,
+   "P3V3_AUX_BCU_BRIDGE_IN4#v1(P3V3_AUX)": 0.375,
+   "P3V3_AUX_BCU_BRIDGE_IN4#v2(P3V3_AUX)": 0.375,
+   "P3V3_AUX_BCU_BRIDGE_IN4#v3(P3V3_AUX)": 0.375,
+   "P3V3_AUX_BCU_BRIDGE_IN4#v4(P3V3_AUX)": 0.375,
+   "P3V3_AUX_BCU_BRIDGE_IN4#v5(P3V3_AUX)": 0.375,
+   "P3V3_AUX_BCU_BRIDGE_IN4#v6(P3V3_AUX)": 0.375,
+   "P3V3_AUX_BCU_BRIDGE_IN4#v7(P3V3_AUX)": 0.375,
+   "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD)": 0.375,
+   "MCU_VDD_BCU_RESISTORS_IN4#v1(MCU_VDD)": 0.375,
+   "MCU_VDD_BCU_RESISTORS_IN4#v2(MCU_VDD)": 0.375,
+   "MCU_VDD_BCU_RESISTORS_IN4#v3(MCU_VDD)": 0.375,
+   "MCU_VDD_BCU_RESISTORS_IN4#v4(MCU_VDD)": 0.375,
+   "MCU_VDD_BCU_RESISTORS_IN4#v5(MCU_VDD)": 0.375
+  },
+  "centerline_radius_mm": 0.7286,
+  "window": [
+   25.275,
+   34.635,
+   38.725,
+   44.5
+  ],
+  "n_cells": 224,
+  "n_clear": 119,
+  "path_cells": 20,
+  "region_rects": [
+   [
+    25.025,
+    40.379,
+    28.525,
+    41.75
+   ],
+   [
+    28.025,
+    40.309,
+    30.246,
+    41.021
+   ],
+   [
+    29.746,
+    38.921,
+    31.3,
+    40.879
+   ],
+   [
+    30.8,
+    40.309,
+    32.804,
+    40.879
+   ],
+   [
+    31.204,
+    38.921,
+    32.804,
+    40.809
+   ],
+   [
+    32.304,
+    37.385,
+    33.471,
+    40.08
+   ],
+   [
+    32.971,
+    37.385,
+    34.929,
+    39.351
+   ],
+   [
+    33.971,
+    36.844,
+    35.975,
+    37.885
+   ]
+  ],
+  "ring": [
+   [
+    25.025,
+    40.378553
+   ],
+   [
+    28.025,
+    40.378553
+   ],
+   [
+    28.025,
+    40.308553
+   ],
+   [
+    29.746447,
+    40.308553
+   ],
+   [
+    29.746447,
+    38.921447
+   ],
+   [
+    32.303553,
+    38.921447
+   ],
+   [
+    32.303553,
+    37.385
+   ],
+   [
+    33.971447,
+    37.385
+   ],
+   [
+    33.971447,
+    36.843553
+   ],
+   [
+    35.975,
+    36.843553
+   ],
+   [
+    35.975,
+    37.885
+   ],
+   [
+    34.928553,
+    37.885
+   ],
+   [
+    34.928553,
+    39.351447
+   ],
+   [
+    33.471447,
+    39.351447
+   ],
+   [
+    33.471447,
+    40.08
+   ],
+   [
+    32.803553,
+    40.08
+   ],
+   [
+    32.803553,
+    40.878553
+   ],
+   [
+    30.246447,
+    40.878553
+   ],
+   [
+    30.246447,
+    41.021447
+   ],
+   [
+    28.525,
+    41.021447
+   ],
+   [
+    28.525,
+    41.75
+   ],
+   [
+    25.025,
+    41.75
+   ]
+  ],
+  "host_judge": {
+   "a_coverage": [],
+   "b_clearance": [],
+   "c_mcu_continuity": true,
+   "d_aux_connectivity": true,
+   "n_aux_cells": 766,
+   "n_free_components": 1,
+   "worst_margin": {
+    "via": "P3V3_BCU_BRIDGE_IN4#v0(P3V3)",
+    "margin_mm": 0.1036
+   },
+   "e_manufacturable_merge": true,
+   "min_merge_depth_mm": 0.0964,
+   "ok": true
+  },
+  "global_judge": {
+   "coverage_3of3": true,
+   "clearance": true,
+   "min_dim>=feat": true,
+   "rects_connected": true,
+   "host_zone": "MCU_VDD_WEST",
+   "host_judge_ok": true
+  },
+  "min_rect_dim_mm": 0.57,
+  "clearance_recheck_ok": true,
+  "ok": true
+ },
+ "model_note": "① 复判采用 CO-127 的「中线厚度模型 + 多分辨率细化」。现行口径（LOW_SPEED/feat 0.15）的① 结论见 CO-125 记录 `249166650c91fcba`；其 region+min-feature 模型在 feat=0.5 下不足以承载（属已登记 TOOL_DEFECT `tool_defect:co126_grid_coarsening_and_self_defeating_min_feature_gate`），故新类复判以 CO-127 模型为准。",
+ "teeth": {
+  "T3_determinism_reproduced": true,
+  "T1_structural_infeasible_detected": true,
+  "T2_output_clearance_recheck": true,
+  "T4_coverage_3of3": true
+ },
+ "teeth_ok": true,
+ "verdict": "D6_RULED_AND_1_FEASIBLE_UNDER_NEW_CLASS",
+ "spec_sha16": "5748828a23161250",
+ "board_sha16": "0e636a67c1472462",
+ "redline": "只读；不改 SPEC/板/阈值/冻结源；无随机、无坐标试错；不施加"
+}

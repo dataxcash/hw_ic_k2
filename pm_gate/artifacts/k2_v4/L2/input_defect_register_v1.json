@@ -20,9 +20,12 @@
     "CO-118",
     "CO-122"
    ],
-   "disposition": "R1 = 确定性重承载至 In4（CO-122 已证 C84.1/U4.3 可行，U2.5 在有界 1 跳 palette 内不可行）；R2 = 放宽 L1 v2.0 冻结『B.Cu 空置』（owner）。R1 余项 = 待确定性绕障能力（见 TOOL_DEFECT 项）",
+   "disposition": "R1 = 确定性重承载至 In4（CO-122 证 C84.1/U4.3；CO-127 以「中线厚度模型 + 多分辨率细化」证 U2.5，L 形绕行，ok=true）⇒ **R1 四项全证可行**；R2（放宽 L1『B.Cu 空置』）无需再议；余项 = rev-17 退役该 zone 的 B.Cu 载体声明",
    "status": "OPEN",
-   "next": "①完成后以同一确定性路由器复判 U2.5/J4.A9"
+   "next": "并入 rev-17：退役 B.Cu 载体声明（CO-127 已交可行性证据）",
+   "evidence": [
+    "CO-127 m13_v57_co127_multires_router.json d75c170546e86e91：U2.5 FEASIBLE（verdict R1_FEASIBLE_ALL）"
+   ]
   },
   {
    "finding": "bcu_policy_vs_zone_carrier:P3V3_AUX_BCU_BRIDGE_IN4",
@@ -36,8 +39,12 @@
     "CO-121",
     "CO-123"
    ],
-   "disposition": "J4.A9 在 CO-123 有界 1 跳 palette 内不可行（阻塞链 J4.A7/E2.x，且触不到本网平面）⇒ 须确定性路由器复判或 owner 定 R2",
-   "status": "OPEN"
+   "disposition": "R1 = 确定性重承载至 In4（CO-122 家族受限未过；CO-127 以「中线厚度模型 + 多分辨率细化」证 J4.A9 可行 —— L 形向西接本网 AUX band，宿主区 P3V3_EAST/MCU_VDD_WEST 连续性均过；该 island-in-plane 口径与 CO-122/CO-121 一致）⇒ R2/owner 无需再议；余项 = rev-17 退役 B.Cu 载体声明",
+   "status": "OPEN",
+   "next": "并入 rev-17：退役 B.Cu 载体声明（CO-127 已交可行性证据）",
+   "evidence": [
+    "CO-127 d75c170546e86e91：J4.A9 FEASIBLE（L 形；host P3V3_EAST ok / MCU_VDD_WEST 连续性 ok）"
+   ]
   },
   {
    "finding": "bcu_policy_vs_zone_carrier:MCU_VDD_BCU_RESISTORS_IN4",
@@ -141,7 +148,26 @@
    ],
    "disposition": "L2 自裁可修（为 12V_IN 补 POWER 类前缀 或 显式 `net_classes_override`），须 SPEC bump + 重跑 co124；注意：补类后 12V_IN 的承载线宽下限 = POWER 0.5mm，将改变 ① 的几何可行性判定（co125 需按新类重跑）",
    "status": "OPEN",
-   "next": "并入 rev-17"
+   "next": "并入 rev-17：为 12V_IN 补 POWER 类前缀 或 net_classes_override；补类后须重跑 CO-125（详见 CO-128）"
+  },
+  {
+   "finding": "tool_defect:co126_grid_coarsening_and_self_defeating_min_feature_gate",
+   "kind": "TOOL_DEFECT",
+   "severity": "medium",
+   "what": "CO-126 路由器（a）以「丢线规范化」合并网格线，把受阻大格与清晰格并一 ⇒ 切断真实走廊；（b）对单元格施加「格自身 ≥ min-feature」门限，细化后细格一律不可用 ⇒ 判据在细化下自毁，无法靠细化补救；（c）target 格被异网 ∓required 线细分后 < min-feature ⇒ 目标格不可用。后果：把 U2.5/J4.A9 误报为「工具不足（无走廊）」。",
+   "refs": [
+    "CO-126",
+    "CO-127",
+    "BASIC_SKILL_VS_REDLINE §2 B-1/B-3"
+   ],
+   "disposition": "已由 CO-127 修正：中线厚度模型（R = required + (feat/2)√2，输出净距可证）+ 无 min-feature 格宽门限+ 逐级二分细化（单调增连通）+ 逐宿主区限定域判定 ⇒ U2.5/J4.A9 均 FEASIBLE。",
+   "status": "CLOSED",
+   "closed_by": [
+    "CO-127"
+   ],
+   "evidence": [
+    "m13_v57_co127_multires_router.json d75c170546e86e91（teeth T1..T6 全过）"
+   ]
   }
  ],
  "closed_items": [
@@ -158,6 +184,7 @@
  "meta": {
   "owner": "ARCHER（L2 自裁执行侧）",
   "approval": "定义件 v1.0 待监理裁定/owner 批准；登记簿随闸每次运行校验",
-  "mandatory_trigger": "任何 SPEC / drc_rules 变更后必须跑 tools/p3_v57_co124_input_selfcheck_gate.py 并 PASS"
+  "mandatory_trigger": "任何 SPEC / drc_rules 变更后必须跑 tools/p3_v57_co124_input_selfcheck_gate.py 并 PASS",
+  "updated_by": "CO-127（R1 四项全证 + 新登记 CO-126 工具缺陷）；登记簿随 co124 每次运行校验"
  }
 }
