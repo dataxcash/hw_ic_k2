@@ -13,7 +13,7 @@
   "spec_sha16": "5748828a23161250",
   "rules_sha16": "0a459839e15960b8",
   "register": "pm_gate/artifacts/k2_v4/L2/input_defect_register_v1.json",
-  "register_sha16": "237beea4deac4fbb"
+  "register_sha16": "0fdc7e9343fe1bab"
  },
  "checks": {
   "k1_definition_in_place": true,
@@ -22,7 +22,8 @@
   "k4_bcu_policy": true,
   "k5_reachability": true,
   "k6_threshold_registered": true,
-  "k7_register_complete": true
+  "k7_register_complete": true,
+  "k8_pdn_netclass_coverage": true
  },
  "findings": [
   {
@@ -64,6 +65,16 @@
    "detail": {
     "zone": "MCU_VDD_BCU_RESISTORS_IN4",
     "net": "MCU_VDD"
+   }
+  },
+  {
+   "check": "K8",
+   "id": "pdn_net_not_power_class:12V_IN",
+   "detail": {
+    "net": "12V_IN",
+    "matched_class": "LOW_SPEED",
+    "constraint": "constraints.power_no_fine_traces=True",
+    "fix_hint": "净类前缀补 12V_IN（或显式 override）"
    }
   },
   {
@@ -112,7 +123,7 @@
    }
   }
  ],
- "n_findings": 9,
+ "n_findings": 10,
  "unregistered_findings": [],
  "register_malformed": [],
  "teeth": {

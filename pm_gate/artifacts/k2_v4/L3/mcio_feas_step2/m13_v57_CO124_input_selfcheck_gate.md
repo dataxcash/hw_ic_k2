@@ -2,7 +2,7 @@
 
 - verdict：**PASS**
 - 定义件：`pm_gate/artifacts/k2_v4/L2/BASIC_SKILL_VS_REDLINE_v1.0.md` `9ad91da8a49510a5`（v1.0 提议件）
-- findings：9（未登记 0）
+- findings：10（未登记 0）
 - 牙齿：{"T1_netclass_drift": true, "T3_threshold_unregistered": true, "T4_doc_anchor_missing": true, "T2_unregistered_finding_detected": true}
 
 | # | check | finding | detail | 已登记 |
@@ -11,6 +11,7 @@
 | | K4 | bcu_policy_vs_zone_carrier:P3V3_BCU_BRIDGE_IN4 | {"zone": "P3V3_BCU_BRIDGE_IN4", "net": "P3V3"} | 是 |
 | | K4 | bcu_policy_vs_zone_carrier:P3V3_AUX_BCU_BRIDGE_IN4 | {"zone": "P3V3_AUX_BCU_BRIDGE_IN4", "net": "P3V3_AUX"} | 是 |
 | | K4 | bcu_policy_vs_zone_carrier:MCU_VDD_BCU_RESISTORS_IN4 | {"zone": "MCU_VDD_BCU_RESISTORS_IN4", "net": "MCU_VDD"} | 是 |
+| | K8 | pdn_net_not_power_class:12V_IN | {"net": "12V_IN", "matched_class": "LOW_SPEED", "constraint": "constraints.power_no_fine_traces=True", "fix_hint": "净类前缀补 12V_IN（或显式 override）"} | 是 |
 | | K6 | threshold_unproved_unregistered:pair_copper_edge_clearance_mm | {"rule_key": "pair_copper_edge_clearance_mm", "value": 0.875, "source": "L1_TOPOLOGY_v1.0 硬约束3 / R3-2 3W 强条"} | 是 |
 | | K6 | threshold_unproved_unregistered:pair_cross_mm | {"rule_key": "pair_cross_mm", "value": 0.585, "source": "L1_TOPOLOGY_v2.0 硬约束2（0.585+0.875=1.46）"} | 是 |
 | | K6 | threshold_unproved_unregistered:power_clearance_mm | {"rule_key": "power_clearance_mm", "value": 0.2, "source": "drc_rules.clearance.net_classes[POWER]"} | 是 |

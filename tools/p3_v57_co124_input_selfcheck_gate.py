@@ -90,6 +90,17 @@ def check(spec: dict, rules: dict, doc_text: str, reg: dict) -> list:
             f.append(("K5", "unresolved_pad_count_mismatch",
                       {"net": u["net"], "declared": len(u["pads"]),
                        "ppc_entries": len([e for e in ppc if e["net"] == u["net"]])}))
+    # K8 PDN 网网类覆盖（整改通知 #08 第 3 条补审发现的类型）：pd.decoupling / power_partition 网
+    #    若未被 POWER 类前缀命中且未显式声明 ⇒ 被归 LOW_SPEED，与 constraints.power_no_fine_traces 冲突
+    power_pre = ("P3V3", "MCU_", "VREG", "PWR_5V")
+    pdn_nets = set(zd.get("decoupling", {}).keys())  # 注：power_partition 的值是「区域描述」非网名，不得入网类检查
+    pdn_nets |= {e["net"] for e in ppc if e["net"] != "GND"}
+    overrides = set((spec.get("net_classes_override") or []))
+    for n in sorted(pdn_nets):
+        if not n.startswith(power_pre) and n not in overrides:
+            f.append(("K8", f"pdn_net_not_power_class:{n}",
+                      {"net": n, "matched_class": "LOW_SPEED", "constraint": "constraints.power_no_fine_traces=True",
+                       "fix_hint": "净类前缀补 12V_IN（或显式 override）"}))
     # K6 阈值可达性登记
     reg_thr = {it.get("rule_key") for it in reg.get("items", [])}
     identities = {"inter_pair_spacing_mm": 0.585 + 0.875}
@@ -143,7 +154,7 @@ def main() -> int:
                    "register_sha16": s16(REG) if REG.exists() else None},
         "checks": {"k1_definition_in_place": True, "k2_netclass_two_source": True,
                    "k3_layer_role": True, "k4_bcu_policy": True, "k5_reachability": True,
-                   "k6_threshold_registered": True, "k7_register_complete": not unreg},
+                   "k6_threshold_registered": True, "k7_register_complete": not unreg, "k8_pdn_netclass_coverage": True},
         "findings": [dict(zip(("check", "id", "detail"), x)) for x in findings],
         "n_findings": len(findings), "unregistered_findings": unreg,
         "register_malformed": reg_bad,
