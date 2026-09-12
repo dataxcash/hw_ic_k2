@@ -39,6 +39,7 @@ CARD = STEP2 / "m13_v57_CO121_west_aux_allocation_ruling.md"
 POWER_CLR, LOW_CLR, BOARD_MIN, MIN_HOLE = 0.2, 0.1, 0.1, 0.25
 VIA_OD, DRILL = 0.35, 0.2
 MOAT, EPS = 0.2, 1e-9
+MERGE_MIN = 0.3       # 声明最小可制造搭接深度（块↔带↔柱↔臂；防「1µm 假连通」）
 DESIGN_MARGIN = 0.1   # 声明设计余量（绕行侧额外外置）：避免「贴死 required 的 0 余量」= CO-94 family-limit 命中
 X_WEST_MAX = 58.0
 
@@ -184,7 +185,30 @@ def judge(rects, zone, targets, mcu, foreign, moat=MOAT):
     f["n_aux_cells"] = sum(len(c) for c in aux)
     f["n_free_components"] = len(free)
     f["worst_margin"] = {"via": worst[0], "margin_mm": round(worst[1], 4)} if worst else None
-    f["ok"] = (not f["a_coverage"]) and (not f["b_clearance"]) and f["c_mcu_continuity"] and f["d_aux_connectivity"]
+    # (e) 可制造搭接：连通必须由「面积搭接深度 ≥ MERGE_MIN」的边承担（排除 1µm 假连通）
+    n = len(rects)
+    edges = {}
+    for i in range(n):
+        for j in range(i + 1, n):
+            a, b = rects[i], rects[j]
+            ox = min(a[2], b[2]) - max(a[0], b[0])
+            oy = min(a[3], b[3]) - max(a[1], b[1])
+            if ox > EPS and oy > EPS:
+                edges[(i, j)] = min(ox, oy)
+    good = {k for k, d in edges.items() if d >= MERGE_MIN - EPS}
+    parent = list(range(n))
+    def find(x):
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]; x = parent[x]
+        return x
+    for i, j in good:
+        parent[find(i)] = find(j)
+    tgt_idx = [i for i, r in enumerate(rects) if any(in_rect(p, r) for p in targets.values())]
+    roots = {find(i) for i in tgt_idx}
+    f["e_manufacturable_merge"] = len(roots) == 1 and bool(tgt_idx)
+    f["min_merge_depth_mm"] = round(min(edges.values()), 4) if edges else None
+    f["ok"] = ((not f["a_coverage"]) and (not f["b_clearance"]) and f["c_mcu_continuity"]
+               and f["d_aux_connectivity"] and f["e_manufacturable_merge"])
     return f
 
 
@@ -220,7 +244,7 @@ def family(t):
                                 else ylo - req - off_side - half))
                     b_top = yc + half
                     # 块外扩 = 声明 0.5 与「到带的必要重叠」取大（闭式派生，非调参）
-                    bb = max(B, yhi - b_top) + 1e-6
+                    bb = max(B, yhi - b_top + MERGE_MIN)
                     def blk(pt, w=bb):
                         return (pt[0] - w, pt[1] - w, pt[0] + w, pt[1] + w)
                     br = blk(r12)
@@ -228,6 +252,22 @@ def family(t):
                     arm = (min(br[0], col[0]), r12[1] - B, max(br[2], col[2]), r12[1] + B)
                     band = (xlo - bb, yc - half, max(xhi + bb, col[2]), b_top)
                     out[f"K1_{side}_h{h}_cw{cw}_off{off:+.3f}"] = [blk(c90), blk(u115), band, br, arm, col]
+    # K6 牙齿：块仅「贴合」带（搭接深度 0）⇒ 必须 FAIL (e) 可制造搭接（CO-121.1 修复前缺陷类）
+    h6, cw6 = 0.5, 0.2
+    off6 = req + DESIGN_MARGIN + cw6
+    half6 = h6 / 2.0
+    b_top6 = ylo - req - DESIGN_MARGIN - half6 + half6
+    bb6 = yhi - b_top6
+    cx6 = r12[0] + off6
+
+    def blk6(pt, w=bb6):
+        return (pt[0] - w, pt[1] - w, pt[0] + w, pt[1] + w)
+
+    br6 = blk6(r12)
+    col6 = (cx6 - cw6, r12[1] - B, cx6 + cw6, b_top6)
+    arm6 = (min(br6[0], col6[0]), r12[1] - B, max(br6[2], col6[2]), r12[1] + B)
+    band6 = (xlo - bb6, b_top6 - h6, max(xhi + bb6, col6[2]), b_top6)
+    out["K6_thin_merge_NEGCTRL"] = [blk6(c90), blk6(u115), band6, br6, arm6, col6]
     out["K4_fullheight_NEGCTRL"] = [(c90[0] - B, 33.3, r12[0] + B, 78.7)]
     out["K5_missing_U1.15_NEGCTRL"] = [(c90[0] - B, c90[1] - B, c90[0] + B, c90[1] + B),
                                         (r12[0] - B, r12[1] - B, r12[0] + B, r12[1] + B)]
@@ -243,8 +283,10 @@ def main() -> int:
     cands = {k: v for k, v in res.items() if not k.endswith("NEGCTRL")}
     fea = sorted([k for k, v in cands.items() if v["ok"]])
     teeth = {"K4_fullheight_NEGCTRL": res["K4_fullheight_NEGCTRL"],
-             "K5_missing_U1.15_NEGCTRL": res["K5_missing_U1.15_NEGCTRL"]}
-    t_ok = {"K4": not teeth["K4_fullheight_NEGCTRL"]["ok"]
+             "K5_missing_U1.15_NEGCTRL": res["K5_missing_U1.15_NEGCTRL"],
+             "K6_thin_merge_NEGCTRL": res["K6_thin_merge_NEGCTRL"]}
+    t_ok = {"K6": not teeth["K6_thin_merge_NEGCTRL"]["e_manufacturable_merge"],
+            "K4": not teeth["K4_fullheight_NEGCTRL"]["ok"]
             and not teeth["K4_fullheight_NEGCTRL"]["c_mcu_continuity"],
             "K5": not teeth["K5_missing_U1.15_NEGCTRL"]["ok"]
             and bool(teeth["K5_missing_U1.15_NEGCTRL"]["a_coverage"])}
@@ -281,6 +323,7 @@ def main() -> int:
         "verdict": verdict,
         "chosen": fea[0] if fea else None,
         "declared_design_margin_mm": DESIGN_MARGIN,
+        "merge_min_mm": MERGE_MIN,
         "zero_margin_note": "若无声明余量（m=0），绕行带顶正好 = required（余量 0.000）= CO-94 family-limit 命中；本件按声明余量 0.1 施加，避免贴死阈值",
         "apply_plan_co122": {
             "scope": "SPEC rev-16（新增 `in4_west_aux_allocation_v1` + P3V3_AUX 由 unresolved → resolved_by_co121）+ 全链重基线",
@@ -305,6 +348,7 @@ def main() -> int:
         f"- 更正：boundary v1.82 附二 ②『L1 待裁』归口 = 过高归口",
         f"- 机判 verdict：**{verdict}**",
         f"- 净距判据：区域边 → 异网 via 圆心 ≥ **{req_to_via('MCU_VDD')}** mm（闭式取自冻结 drc_rules）",
+        f"- 可制造搭接判据：块↔带↔柱↔臂 面积搭接深度 ≥ **{MERGE_MIN}** mm",
         f"- 可行候选：{fea if fea else '无'}",
         f"- 牙齿：{t_ok}",
         "",
