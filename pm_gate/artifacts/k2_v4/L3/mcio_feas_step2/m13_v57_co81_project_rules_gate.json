@@ -1,0 +1,111 @@
+{
+ "artifact": "m13_v57_co81_project_rules_gate",
+ "authority_source": {
+  "file": "_shared/eda_core/drc_rules.json",
+  "section": "manufacturing + hole_clearance:min",
+  "sha16": "0a459839e15960b8"
+ },
+ "expected": {
+  "min_clearance": 0.1,
+  "min_copper_edge_clearance": 0.3,
+  "min_hole_clearance": 0.25,
+  "min_through_hole_diameter": 0.2,
+  "min_track_width": 0.09,
+  "min_via_annular_width": 0.075,
+  "min_via_diameter": 0.35
+ },
+ "files_checked": [
+  {
+   "file": "k2_v4.kicad_pro",
+   "ok": true,
+   "rules_mismatch": {},
+   "severity_mismatch": {},
+   "sha16": "ef53b4ff8f0f20b9"
+  },
+  {
+   "file": "k2_v4.l4.kicad_pro",
+   "ok": true,
+   "rules_mismatch": {},
+   "severity_mismatch": {},
+   "sha16": "f89f4975af22cee7"
+  },
+  {
+   "file": "k2_v4_8L.kicad_pro",
+   "ok": true,
+   "rules_mismatch": {},
+   "severity_mismatch": {},
+   "sha16": "f54404024191ea64"
+  },
+  {
+   "file": "k2_v4_8L.l4.kicad_pro",
+   "ok": true,
+   "rules_mismatch": {},
+   "severity_mismatch": {},
+   "sha16": "4704dec4dd043c59"
+  },
+  {
+   "file": "tools/k2_jlc_template.kicad_pro",
+   "ok": true,
+   "rules_mismatch": {},
+   "severity_mismatch": {},
+   "sha16": "206dd0f26e245658"
+  }
+ ],
+ "historical_control_F80_1": {
+  "mismatch": {
+   "min_clearance": [
+    0.0,
+    0.1
+   ],
+   "min_copper_edge_clearance": [
+    0.5,
+    0.3
+   ],
+   "min_through_hole_diameter": [
+    0.3,
+    0.2
+   ],
+   "min_track_width": [
+    0.2,
+    0.09
+   ],
+   "min_via_annular_width": [
+    0.1,
+    0.075
+   ],
+   "min_via_diameter": [
+    0.5,
+    0.35
+   ]
+  },
+  "n_mismatch": 6,
+  "rules": {
+   "min_clearance": 0.0,
+   "min_copper_edge_clearance": 0.5,
+   "min_hole_clearance": 0.25,
+   "min_through_hole_diameter": 0.3,
+   "min_track_width": 0.2,
+   "min_via_annular_width": 0.1,
+   "min_via_diameter": 0.5
+  }
+ },
+ "nature": "L2 可审计性：受控工程文件设计规则 = 红线规则源 的回归闸",
+ "negative_control": {
+  "min_track_width": [
+   0.2,
+   0.09
+  ]
+ },
+ "positive_control": {},
+ "rationale": "kicad-cli 对 <board>.kicad_pcb 自动选取同名 .kicad_pro；规则不符则自然核查命令大面积误报（F-80-1）。",
+ "redline": "只读；不改任何工件；阈值取自红线规则源，不放宽。",
+ "revision": "CO-81.1",
+ "schema": 1,
+ "severity_reference": {
+  "file": "tools/k2_jlc_template.kicad_pro",
+  "sha16": "206dd0f26e245658"
+ },
+ "teeth_ok": true,
+ "verdict": "PASS",
+ "violations": []
+}
