@@ -1,0 +1,72 @@
+{
+ "artifact": "m13_v57_co137_interpair_fixspace",
+ "schema": 1,
+ "revision": "CO-137",
+ "nature": "L2 分析（只读）：as-built 对间铜边偏差的几何修正可行性",
+ "inputs": {
+  "board": "a3ce9ab803045a0a",
+  "spec": "5f72182a2616392c",
+  "co134_record": "5dd6cc22c57da4a5"
+ },
+ "rows": [
+  {
+   "layer": "B.Cu",
+   "at": [
+    92.15,
+    47.912
+   ],
+   "pairs": [
+    "PCIE_DN_OUT6_N_MCIO",
+    "PCIE_DN_OUT7_P_MCIO"
+   ],
+   "required_edge_mm": 0.41,
+   "recomputed_edge_mm": 0.345,
+   "delta_needed_mm": 0.065,
+   "move_candidate": "PCIE_DN_OUT7_N_MCIO",
+   "fixed": "PCIE_DN_OUT6_N_MCIO",
+   "far_side_slack_after_move_mm": null,
+   "near_side_slack_mm": -0.065,
+   "verdict": "NO_FAR_NEIGHBOUR"
+  },
+  {
+   "layer": "F.Cu",
+   "at": [
+    137.24,
+    59.575
+   ],
+   "pairs": [
+    "PCIE_DN4_N",
+    "PCIE_DN5_P"
+   ],
+   "required_edge_mm": 0.41,
+   "recomputed_edge_mm": 0.3294,
+   "delta_needed_mm": 0.0806,
+   "move_candidate": "PCIE_DN5_P",
+   "fixed": "PCIE_DN4_N",
+   "far_side_slack_after_move_mm": 0.3438,
+   "near_side_slack_mm": -0.0806,
+   "verdict": "FEASIBLE_SHIFT"
+  },
+  {
+   "layer": "In5.Cu",
+   "at": [
+    74.75,
+    40.8
+   ],
+   "pairs": [
+    "PCIE_DN_OUT0_N_MCIO",
+    "PCIE_DN_OUT1_P_MCIO"
+   ],
+   "required_edge_mm": 0.32,
+   "recomputed_edge_mm": 0.3125,
+   "delta_needed_mm": 0.0075,
+   "move_candidate": "PCIE_DN_OUT1_P_MCIO",
+   "fixed": "PCIE_DN_OUT0_N_MCIO",
+   "far_side_slack_after_move_mm": -0.0075,
+   "near_side_slack_mm": -0.0075,
+   "verdict": "INFEASIBLE_ONE_SIDE"
+  }
+ ],
+ "verdict": "MIXED",
+ "redline": "只读；不改板/SPEC/冻结源；无扫描/坐标搜索（最近邻闭式几何）"
+}
