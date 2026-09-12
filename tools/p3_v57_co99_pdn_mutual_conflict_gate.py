@@ -35,12 +35,12 @@ from pathlib import Path
 K2 = Path(__file__).resolve().parents[1]
 L3 = K2 / "pm_gate/artifacts/k2_v4/L3"
 STEP2 = L3 / "mcio_feas_step2"
-SPEC = L3 / "SPEC_k2_v4.spec-rev-16.json"
+SPEC = L3 / "SPEC_k2_v4.spec-rev-17.json"
 BOARD = K2 / "k2_v4_8L.l4.kicad_pcb"
 OUT = STEP2 / "m13_v57_co99_pdn_mutual_conflict_gate.json"
 SCRATCH = K2 / ".co99_dryrun"
 KICAD_CLI = K2.parent / "AppDir/bin/kicad-cli"
-BASE = {"spec": "5748828a23161250", "board": "0e636a67c1472462"}
+BASE = {"spec": "9fea9fd20149c736", "board": "0e636a67c1472462"}
 
 
 def s16(p: Path) -> str:

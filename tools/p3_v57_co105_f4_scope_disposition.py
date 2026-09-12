@@ -25,10 +25,10 @@ from pathlib import Path
 K2 = Path(__file__).resolve().parents[1]
 L3 = K2 / "pm_gate/artifacts/k2_v4/L3"
 STEP2 = L3 / "mcio_feas_step2"
-SPEC_CUR = L3 / "SPEC_k2_v4.spec-rev-16.json"
+SPEC_CUR = L3 / "SPEC_k2_v4.spec-rev-17.json"
 CO102P = K2 / "tools/p3_v57_co102_pdn_apply_local.py"
 FROZEN = K2.parent / "_shared/eda_core/pdn_apply.py"
-BASE = {"spec_current": "5748828a23161250", "board": "0e636a67c1472462"}
+BASE = {"spec_current": "9fea9fd20149c736", "board": "0e636a67c1472462"}
 
 
 def s16(p) -> str:

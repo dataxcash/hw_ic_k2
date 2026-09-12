@@ -179,7 +179,7 @@ def verify(spec: str, board: str, out: str) -> int:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="CO-102 项目内 PDN 施加器（修正施工侧三处口径）")
-    ap.add_argument("--spec", default=str(K2 / "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-16.json"))
+    ap.add_argument("--spec", default=str(K2 / "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-17.json"))
     ap.add_argument("--board", default=str(K2 / "k2_v4_8L.l4.kicad_pcb"))
     ap.add_argument("--stage", default="all", choices=["zone", "connect", "all"])
     ap.add_argument("--verify", action="store_true", help="scratch 三态 DRC 对比（baseline/冻结/项目内）")

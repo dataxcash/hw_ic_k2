@@ -9,8 +9,8 @@
   "status": "v1.0 提议件（待监理裁定/owner 批准）"
  },
  "inputs": {
-  "spec": "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-16.json",
-  "spec_sha16": "5748828a23161250",
+  "spec": "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-17.json",
+  "spec_sha16": "9fea9fd20149c736",
   "rules_sha16": "0a459839e15960b8",
   "register": "pm_gate/artifacts/k2_v4/L2/input_defect_register_v1.json",
   "register_sha16": "08fa79e0f58d9334"
@@ -26,57 +26,6 @@
   "k8_pdn_netclass_coverage": true
  },
  "findings": [
-  {
-   "check": "K3",
-   "id": "stackup_text_omits_in4_nets",
-   "detail": {
-    "layer": "In4.Cu",
-    "in4_nets": [
-     "MCU_VDD",
-     "P3V3",
-     "P3V3_AUX"
-    ],
-    "stackup_text": "POWER_PLANE (P3V3)",
-    "missing": [
-     "MCU_VDD",
-     "P3V3_AUX"
-    ]
-   }
-  },
-  {
-   "check": "K4",
-   "id": "bcu_policy_vs_zone_carrier:P3V3_BCU_BRIDGE_IN4",
-   "detail": {
-    "zone": "P3V3_BCU_BRIDGE_IN4",
-    "net": "P3V3"
-   }
-  },
-  {
-   "check": "K4",
-   "id": "bcu_policy_vs_zone_carrier:P3V3_AUX_BCU_BRIDGE_IN4",
-   "detail": {
-    "zone": "P3V3_AUX_BCU_BRIDGE_IN4",
-    "net": "P3V3_AUX"
-   }
-  },
-  {
-   "check": "K4",
-   "id": "bcu_policy_vs_zone_carrier:MCU_VDD_BCU_RESISTORS_IN4",
-   "detail": {
-    "zone": "MCU_VDD_BCU_RESISTORS_IN4",
-    "net": "MCU_VDD"
-   }
-  },
-  {
-   "check": "K8",
-   "id": "pdn_net_not_power_class:12V_IN",
-   "detail": {
-    "net": "12V_IN",
-    "matched_class": "LOW_SPEED",
-    "constraint": "constraints.power_no_fine_traces=True",
-    "fix_hint": "净类前缀补 12V_IN（或显式 override）"
-   }
-  },
   {
    "check": "K6",
    "id": "threshold_unproved_unregistered:pair_copper_edge_clearance_mm",
@@ -123,7 +72,7 @@
    }
   }
  ],
- "n_findings": 10,
+ "n_findings": 5,
  "unregistered_findings": [],
  "register_malformed": [],
  "teeth": {
