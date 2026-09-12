@@ -1,0 +1,62 @@
+{
+ "artifact": "m13_v57_co126_own_plane_router",
+ "schema": 1,
+ "revision": "CO-126.1",
+ "nature": "④ R1 U2.5/J4.A9：确定性绕障复判（替换 CO-123 有界 palette）",
+ "definition_doc": {
+  "path": "pm_gate/artifacts/k2_v4/L2/BASIC_SKILL_VS_REDLINE_v1.0.md",
+  "sha16": "9ad91da8a49510a5"
+ },
+ "algorithm": {
+  "grid": "声明数据派生（障碍 ± required / target / 锚点 / 窗口边界）+ 规范化(min-feature)",
+  "search": "Dijkstra 单位代价 + 固定邻居序 E,S,W,N（确定性）",
+  "completeness": "网格分辨率下界 = 该网声明 netclass 宽度 ⇒ 任何宽度 ≥ MIN_FEATURE 的轴对齐走廊均被表示（该类内完备）",
+  "determinism": "无随机、无未声明参数"
+ },
+ "cases": {
+  "U2.5": {
+   "verdict": "TOOL_INSUFFICIENT_NO_CORRIDOR",
+   "target": "U2.5",
+   "reason": "TOOL_INSUFFICIENT：声明窗口内未找到锚点→target 的净距合法走廊（网格粗化所致，非物理不可行）",
+   "anchor": [
+    58.2375,
+    39.83
+   ],
+   "n_cells": 4730,
+   "n_clear": 4000
+  },
+  "J4.A9": {
+   "verdict": "TOOL_INSUFFICIENT_NO_CORRIDOR",
+   "target": "J4.A9",
+   "reason": "TOOL_INSUFFICIENT：声明窗口内未找到锚点→target 的净距合法走廊（网格粗化所致，非物理不可行）",
+   "anchor": [
+    51.725,
+    52.275
+   ],
+   "n_cells": 2254,
+   "n_clear": 1453
+  }
+ },
+ "teeth": {
+  "T1_structural_infeasible_detected": true,
+  "T2_output_clearance_recheck": true,
+  "T3_own_plane_removed_negative_control": true
+ },
+ "teeth_ok": true,
+ "verdict": "TOOL_INSUFFICIENT_SOME_BY_ROUTER",
+ "escalation": {
+  "allowed": false,
+  "reason": "**无结构性阻断**；未连通系本路由器网格粗化所致 ⇒ 依 §4 判**工具能力不足**，禁止升级 owner；下一步 = 确定性多分辨率细化后复判"
+ },
+ "self_proof_4": {
+  "predicate": "存在覆盖 target 的 ≥min-feature 连通 In4 承载域且满足净距/宿主连续/本网平面搭接",
+  "algorithm": "声明数据派生网格 + 规范化 + Dijkstra 固定序（确定性）",
+  "completeness": "完备性仅限「宽度 ≥ MIN_FEATURE 的轴对齐走廊」；**当前网格粗化**使该假设未充分满足（未达完备）",
+  "repro": "python3 tools/p3_v57_co126_own_plane_router.py",
+  "failures": "两例均报「找不到锚点→target 走廊」，n_clear 远大于 0 ⇒ 非物理不可行证据",
+  "conclusion": "工具不足（非输入缺口、非物理不可行）"
+ },
+ "spec_sha16": "5748828a23161250",
+ "board_sha16": "0e636a67c1472462",
+ "redline": "只读；不改 SPEC/板/阈值/冻结源；无随机、无坐标试错；不施加"
+}
