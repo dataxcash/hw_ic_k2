@@ -1,0 +1,46 @@
+{
+ "artifact": "m13_v57_retirement_registry",
+ "schema": 1,
+ "nature": "红线『退役几何/决策必须显式留存（不得静默放弃）』的显式登记册；由 CO-97 闸机判（未登记者 FAIL）",
+ "basis": "CO-96 F1 机判：rev-10 重建 power_pad_connect 时静默丢弃 CO-89 的 retired_superseded_bom；本册显式登记其移除并给找回指针（不销毁可追溯性）。",
+ "declared_drops": [
+  {
+   "key": "/pd/zone_defs/power_pad_connect/retired_superseded_bom",
+   "from_rev": 9,
+   "from_file": "SPEC_k2_v4.spec-rev-9.json",
+   "to_rev": 10,
+   "to_file": "SPEC_k2_v4.spec-rev-10.json",
+   "declared_by": "CO-97（依 CO-96 F1 的『或显式登记其移除』分支）",
+   "what_it_held": {
+    "basis": "CO-89 留存的 pre-rev-9 冻结 BOM 退役记录（红驱动 U3+U7 → U6 合并遗留）",
+    "n_entries": 173,
+    "n_blocked": 9,
+    "n_orphan_entries": 55,
+    "n_orphan_blocked": 2,
+    "note": "仅摘要计数（无逐条 entries 列表）"
+   },
+   "removal_reason": "CO-93 以声明式有限 palette 重建 power_pad_connect（rev-9 计划坐标 223/86 → rev-10 189/120）时，新块以固定键集重建，未搬运该退役键；CO-93 变更说明未登记此移除（= CO-96 F1 的『静默』面）。",
+   "recovery": [
+    {"path": "pm_gate/artifacts/k2_v4/L3/m13_v57_co89_pdn_board_realize_rev9.json",
+     "note": "CO-89 记录保留 n_retired_entries=173 / n_orphan_entries_retired=55 / n_orphan_blocked_retired=2"},
+    {"path": "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json",
+     "note": "冻结源 SPEC（spec-rev-1）保留 pre-rev-9 原始 power_pad_connect 173 entries / 9 blocked"},
+    {"path": "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-9.json",
+     "note": "该键本体（含 basis 文本）仍在 rev-9 原件中，未被销毁"}
+   ],
+   "residual": "『SPEC 内留存』（把该键回填进现行 SPEC）为可选后续，随下一次构建期 SPEC bump 一并处理（避免为纯溯源字段单独触发重基线）；本册使该移除不再『静默』。"
+  }
+ ],
+ "retained_in_spec_current": {
+  "note": "现行 rev-11 仍在内保留的退役块（供对账；由 CO-97 闸逐版机判非空）",
+  "examples": [
+   "/pd/zone_defs/power_pad_connect/retired_superseded_clearance_v1",
+   "/pd/zone_defs/gnd_stitch_via/retired_superseded_clearance_v1",
+   "/pd/zone_defs/power_zones_via_retired_clearance_v1",
+   "/pd/zone_defs/retired_in4_keepout_band_6l",
+   "/pd/zone_defs/power_zones[#]/retired_polygons_bcu",
+   "/pd/zone_defs/decoupling_via_to_plane/retired_vias_superseded_bom",
+   "/pd/decoupling_legacy_retired"
+  ]
+ }
+}

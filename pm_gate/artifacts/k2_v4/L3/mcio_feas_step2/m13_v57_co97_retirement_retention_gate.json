@@ -1,0 +1,158 @@
+{
+ "advisory": {
+  "empty_retention_blocks": [
+   {
+    "file": "SPEC_k2_v4.spec-rev-8.json",
+    "key": "/pd/zone_defs/power_zones[#]/retired_polygons_bcu"
+   },
+   {
+    "file": "SPEC_k2_v4.spec-rev-9.json",
+    "key": "/pd/zone_defs/power_zones[#]/retired_polygons_bcu"
+   },
+   {
+    "file": "SPEC_k2_v4.spec-rev-10.json",
+    "key": "/pd/zone_defs/power_zones[#]/retired_polygons_bcu"
+   },
+   {
+    "file": "SPEC_k2_v4.spec-rev-11.json",
+    "key": "/pd/zone_defs/power_zones[#]/retired_polygons_bcu"
+   }
+  ]
+ },
+ "artifact": "m13_v57_co97_retirement_retention_gate",
+ "baseline_expectations": {
+  "board": "0e636a67c1472462",
+  "drc_rules": "0a459839e15960b8",
+  "spec_frozen": "0bd52ed48e720b8c",
+  "spec_rev11": "d85f10f722ba22b0"
+ },
+ "baseline_mismatch": {},
+ "baseline_ok": true,
+ "declared_drops": [
+  {
+   "declared_by": "CO-97（依 CO-96 F1 的『或显式登记其移除』分支）",
+   "from_file": "SPEC_k2_v4.spec-rev-9.json",
+   "from_rev": 9,
+   "key": "/pd/zone_defs/power_pad_connect/retired_superseded_bom",
+   "recovery": [
+    {
+     "note": "CO-89 记录保留 n_retired_entries=173 / n_orphan_entries_retired=55 / n_orphan_blocked_retired=2",
+     "path": "pm_gate/artifacts/k2_v4/L3/m13_v57_co89_pdn_board_realize_rev9.json"
+    },
+    {
+     "note": "冻结源 SPEC（spec-rev-1）保留 pre-rev-9 原始 power_pad_connect 173 entries / 9 blocked",
+     "path": "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json"
+    },
+    {
+     "note": "该键本体（含 basis 文本）仍在 rev-9 原件中，未被销毁",
+     "path": "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-9.json"
+    }
+   ],
+   "removal_reason": "CO-93 以声明式有限 palette 重建 power_pad_connect（rev-9 计划坐标 223/86 → rev-10 189/120）时，新块以固定键集重建，未搬运该退役键；CO-93 变更说明未登记此移除（= CO-96 F1 的『静默』面）。",
+   "residual": "『SPEC 内留存』（把该键回填进现行 SPEC）为可选后续，随下一次构建期 SPEC bump 一并处理（避免为纯溯源字段单独触发重基线）；本册使该移除不再『静默』。",
+   "to_file": "SPEC_k2_v4.spec-rev-10.json",
+   "to_rev": 10,
+   "what_it_held": {
+    "basis": "CO-89 留存的 pre-rev-9 冻结 BOM 退役记录（红驱动 U3+U7 → U6 合并遗留）",
+    "n_blocked": 9,
+    "n_entries": 173,
+    "n_orphan_blocked": 2,
+    "n_orphan_entries": 55,
+    "note": "仅摘要计数（无逐条 entries 列表）"
+   }
+  }
+ ],
+ "drops": [
+  {
+   "from": "SPEC_k2_v4.spec-rev-9.json",
+   "from_rev": 9,
+   "key": "/pd/zone_defs/power_pad_connect/retired_superseded_bom",
+   "to": "SPEC_k2_v4.spec-rev-10.json",
+   "to_rev": 10
+  }
+ ],
+ "inputs": {
+  "board": "0e636a67c1472462",
+  "drc_rules": "0a459839e15960b8",
+  "registry": "m13_v57_retirement_registry.json",
+  "registry_sha16": "4b13b538ba8e28ce",
+  "spec_frozen": "0bd52ed48e720b8c",
+  "spec_rev11": "d85f10f722ba22b0",
+  "spec_revs": [
+   "SPEC_k2_v4.json",
+   "SPEC_k2_v4.spec-rev-2.json",
+   "SPEC_k2_v4.spec-rev-3.json",
+   "SPEC_k2_v4.spec-rev-4.json",
+   "SPEC_k2_v4.spec-rev-5.json",
+   "SPEC_k2_v4.spec-rev-6.json",
+   "SPEC_k2_v4.spec-rev-7.json",
+   "SPEC_k2_v4.spec-rev-8.json",
+   "SPEC_k2_v4.spec-rev-9.json",
+   "SPEC_k2_v4.spec-rev-10.json",
+   "SPEC_k2_v4.spec-rev-11.json"
+  ]
+ },
+ "issues": {
+  "stale_registry_entries": [],
+  "undeclared_drops": [],
+  "unresolvable_recovery_pointers": []
+ },
+ "nature": "L2 可审计性：退役留存完整性闸（红线『退役决策须显式留存』机判化）+ 显式登记册",
+ "non_claims": [
+  "只读闸；不改 SPEC/板/阈值/冻结源",
+  "登记册只声明『移除已登记』，不替代 SPEC 内留存",
+  "本件不重跑链路（无 SPEC 改动）"
+ ],
+ "retention_blocks_per_rev": {
+  "SPEC_k2_v4.json": [],
+  "SPEC_k2_v4.spec-rev-10.json": [
+   "/pd/decoupling_legacy_retired",
+   "/pd/zone_defs/decoupling_via_to_plane/retired_vias_superseded_bom",
+   "/pd/zone_defs/gnd_stitch_via/retired_superseded_clearance_v1",
+   "/pd/zone_defs/power_pad_connect/retired_superseded_clearance_v1",
+   "/pd/zone_defs/power_zones[#]/retired_in6_segments_bcu",
+   "/pd/zone_defs/power_zones[#]/retired_polygons_bcu",
+   "/pd/zone_defs/power_zones[#]/retired_segments_bcu",
+   "/pd/zone_defs/power_zones_via_retired_clearance_v1"
+  ],
+  "SPEC_k2_v4.spec-rev-11.json": [
+   "/pd/decoupling_legacy_retired",
+   "/pd/zone_defs/decoupling_via_to_plane/retired_vias_superseded_bom",
+   "/pd/zone_defs/gnd_stitch_via/retired_superseded_clearance_v1",
+   "/pd/zone_defs/power_pad_connect/retired_superseded_clearance_v1",
+   "/pd/zone_defs/power_zones[#]/retired_in6_segments_bcu",
+   "/pd/zone_defs/power_zones[#]/retired_polygons_bcu",
+   "/pd/zone_defs/power_zones[#]/retired_segments_bcu",
+   "/pd/zone_defs/power_zones_via_retired_clearance_v1",
+   "/pd/zone_defs/retired_in4_keepout_band_6l"
+  ],
+  "SPEC_k2_v4.spec-rev-2.json": [],
+  "SPEC_k2_v4.spec-rev-3.json": [],
+  "SPEC_k2_v4.spec-rev-4.json": [],
+  "SPEC_k2_v4.spec-rev-5.json": [],
+  "SPEC_k2_v4.spec-rev-6.json": [],
+  "SPEC_k2_v4.spec-rev-7.json": [],
+  "SPEC_k2_v4.spec-rev-8.json": [
+   "/pd/zone_defs/power_zones[#]/retired_in6_segments_bcu",
+   "/pd/zone_defs/power_zones[#]/retired_polygons_bcu",
+   "/pd/zone_defs/power_zones[#]/retired_segments_bcu"
+  ],
+  "SPEC_k2_v4.spec-rev-9.json": [
+   "/pd/decoupling_legacy_retired",
+   "/pd/zone_defs/decoupling_via_to_plane/retired_vias_superseded_bom",
+   "/pd/zone_defs/power_pad_connect/retired_superseded_bom",
+   "/pd/zone_defs/power_zones[#]/retired_in6_segments_bcu",
+   "/pd/zone_defs/power_zones[#]/retired_polygons_bcu",
+   "/pd/zone_defs/power_zones[#]/retired_segments_bcu"
+  ]
+ },
+ "revision": "CO-97.1",
+ "schema": 1,
+ "teeth": {
+  "declared_drop_passes": true,
+  "stale_registry_entry_detected": true,
+  "undeclared_drop_detected": true
+ },
+ "teeth_ok": true,
+ "verdict": "PASS"
+}
