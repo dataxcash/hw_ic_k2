@@ -541,6 +541,39 @@
       ]
     },
     {
+      "detail": "P3V3_AUX_WEST",
+      "net": "P3V3_AUX",
+      "pad": "1",
+      "reach": "covered_explicit",
+      "ref": "C90",
+      "via_pos": [
+        28.975,
+        53.0
+      ]
+    },
+    {
+      "detail": "P3V3_AUX_WEST",
+      "net": "P3V3_AUX",
+      "pad": "2",
+      "reach": "covered_explicit",
+      "ref": "R1",
+      "via_pos": [
+        51.725,
+        37.0
+      ]
+    },
+    {
+      "detail": "P3V3_AUX_WEST",
+      "net": "P3V3_AUX",
+      "pad": "15",
+      "reach": "covered_explicit",
+      "ref": "U1",
+      "via_pos": [
+        39.425,
+        53.25
+      ]
+    },
+    {
       "detail": "no_in4_region_for_net(12V_IN)",
       "net": "12V_IN",
       "pad": "1",
@@ -571,39 +604,6 @@
       "via_pos": [
         35.725,
         37.635
-      ]
-    },
-    {
-      "detail": "declared:P3V3_AUX 无西区 In4 区；西区名义网 = MCU_VDD 而 basis 文本称 P3V3_AUX+MCU_",
-      "net": "P3V3_AUX",
-      "pad": "1",
-      "reach": "needs_region_ruling",
-      "ref": "C90",
-      "via_pos": [
-        28.975,
-        53.0
-      ]
-    },
-    {
-      "detail": "declared:P3V3_AUX 无西区 In4 区；西区名义网 = MCU_VDD 而 basis 文本称 P3V3_AUX+MCU_",
-      "net": "P3V3_AUX",
-      "pad": "2",
-      "reach": "needs_region_ruling",
-      "ref": "R1",
-      "via_pos": [
-        51.725,
-        37.0
-      ]
-    },
-    {
-      "detail": "declared:P3V3_AUX 无西区 In4 区；西区名义网 = MCU_VDD 而 basis 文本称 P3V3_AUX+MCU_",
-      "net": "P3V3_AUX",
-      "pad": "15",
-      "reach": "needs_region_ruling",
-      "ref": "U1",
-      "via_pos": [
-        39.425,
-        53.25
       ]
     }
   ],
@@ -640,39 +640,6 @@
         35.725,
         37.635
       ]
-    },
-    {
-      "detail": "declared:P3V3_AUX 无西区 In4 区；西区名义网 = MCU_VDD 而 basis 文本称 P3V3_AUX+MCU_",
-      "net": "P3V3_AUX",
-      "pad": "1",
-      "reach": "needs_region_ruling",
-      "ref": "C90",
-      "via_pos": [
-        28.975,
-        53.0
-      ]
-    },
-    {
-      "detail": "declared:P3V3_AUX 无西区 In4 区；西区名义网 = MCU_VDD 而 basis 文本称 P3V3_AUX+MCU_",
-      "net": "P3V3_AUX",
-      "pad": "2",
-      "reach": "needs_region_ruling",
-      "ref": "R1",
-      "via_pos": [
-        51.725,
-        37.0
-      ]
-    },
-    {
-      "detail": "declared:P3V3_AUX 无西区 In4 区；西区名义网 = MCU_VDD 而 basis 文本称 P3V3_AUX+MCU_",
-      "net": "P3V3_AUX",
-      "pad": "15",
-      "reach": "needs_region_ruling",
-      "ref": "U1",
-      "via_pos": [
-        39.425,
-        53.25
-      ]
     }
   ],
   "inputs": {
@@ -699,6 +666,9 @@
       ],
       "P3V3": [
         "P3V3_EAST"
+      ],
+      "P3V3_AUX": [
+        "P3V3_AUX_WEST"
       ]
     },
     "keepout_band": {
@@ -712,8 +682,8 @@
         65.1
       ]
     },
-    "spec": "SPEC_k2_v4.spec-rev-15.json",
-    "spec_sha16": "48d6fc7c565c8862"
+    "spec": "SPEC_k2_v4.spec-rev-16.json",
+    "spec_sha16": "5748828a23161250"
   },
   "nature": "L2 PDN：power entry 的 In4 平面可达性机判（via 是否被本网 In4 铜覆盖）",
   "non_claims": [
@@ -724,11 +694,11 @@
   "schema": 1,
   "summary": {
     "covered_bridge_target": 4,
-    "covered_explicit": 45,
+    "covered_explicit": 48,
     "l3_obligation": 0,
-    "needs_region_ruling": 6,
+    "needs_region_ruling": 3,
     "power_entries": 55,
-    "unresolved_total": 6
+    "unresolved_total": 3
   },
   "teeth": {
     "band_point_flagged": true,

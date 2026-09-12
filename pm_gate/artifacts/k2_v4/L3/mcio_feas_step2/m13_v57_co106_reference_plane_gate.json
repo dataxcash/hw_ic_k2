@@ -2,11 +2,21 @@
  "artifact": "m13_v57_co106_reference_plane_gate",
  "base_pins": {
   "board": "0e636a67c1472462",
-  "spec_current": "48d6fc7c565c8862"
+  "spec_current": "5748828a23161250"
  },
  "checks": {
   "A_frame_inset_consistency": {
-   "deviations": [],
+   "deviations": [
+    {
+     "inset_dev_mm": {
+      "bottom": -24.425,
+      "left": -0.0,
+      "right": -0.0,
+      "top": -2.675
+     },
+     "obj": "power_zone P3V3_AUX@P3V3_AUX_WEST"
+    }
+   ],
    "expected_inset_polygon": {
     "x": [
      23.3,
@@ -17,9 +27,9 @@
      78.7
     ]
    },
-   "n_zone_polygons": 5,
+   "n_zone_polygons": 6,
    "note": "basis 明文「整面铺铜 + 板边内缩 edge_copper_min」；板框取 SPEC board.outline_x/y（v28 ECO：y 38mm→46mm）",
-   "ok": true
+   "ok": false
   },
   "B_reference_continuity": {
    "class_counts": {
@@ -36,7 +46,7 @@
    "reference_declared_copper": {
     "In1.Cu": 1,
     "In3.Cu": 1,
-    "In4.Cu": 2,
+    "In4.Cu": 3,
     "In6.Cu": 1
    },
    "segments_per_layer": {
@@ -74,8 +84,8 @@
  },
  "inputs": {
   "board": "0e636a67c1472462",
-  "drawing": "8575714eb77247ca",
-  "spec_current": "48d6fc7c565c8862"
+  "drawing": "5f6a7c7d4c8ad03c",
+  "spec_current": "5748828a23161250"
  },
  "nature": "L2 合格标准覆盖性补全（ch.2「参考平面」）+ 参考平面连续性/板框一致性机判",
  "non_claims": [
