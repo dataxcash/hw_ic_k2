@@ -2,7 +2,7 @@
  "artifact": "m13_v57_co99_pdn_mutual_conflict_gate",
  "baseline_expectations": {
   "board": "0e636a67c1472462",
-  "spec": "9fea9fd20149c736"
+  "spec": "500f3da8179fe19c"
  },
  "baseline_mismatch": {},
  "by_kind": {
@@ -22,15 +22,15 @@
   "note": "以 pdn_apply 实落短段宽 0.5mm 计算的计划集互判（SPEC 声明为 0.2mm）"
  },
  "dryrun": {
-  "after_total": 76,
+  "after_total": 78,
   "applied": [
-   "OK stage=all zones=6 vias=241 tracks=185"
+   "OK stage=all zones=9 vias=241 tracks=185"
   ],
   "baseline_total": 42,
-  "delta_total": 34,
+  "delta_total": 36,
   "scratch": ".co99_dryrun",
   "stability_note": "仅记录稳定量（violation 总数 / 未连数）；逐类型明细随 zone refill 与 UUID 分组浮动 ⇒ 不入记录（见卡）",
-  "unconnected_after": 183,
+  "unconnected_after": 179,
   "unconnected_baseline": 348
  },
  "engine_width_overlaps": [],
@@ -44,7 +44,7 @@
  },
  "inputs": {
   "board": "0e636a67c1472462",
-  "spec": "9fea9fd20149c736",
+  "spec": "500f3da8179fe19c",
   "stub_width_mm": 0.2,
   "via_dia": 0.35,
   "via_drill": 0.2

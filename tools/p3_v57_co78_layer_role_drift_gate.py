@@ -30,7 +30,7 @@ PLANE_WORDS = re.compile(r"GND|gnd|平面|plane|参考|reference|pour|铜皮")
 EXEMPT_PATH = re.compile(r"_spec_rev|supersed|retired|ecn_pending|ruled|appendix|rollback|provenance")
 EXEMPT_TEXT = re.compile(r"更正|已失效|原 |禁止|不得|PROHIBITED|历史")
 
-CUR_INPUTS = [L3 / "SPEC_k2_v4.json", L3 / "SPEC_k2_v4.spec-rev-17.json",
+CUR_INPUTS = [L3 / "SPEC_k2_v4.json", L3 / "SPEC_k2_v4.spec-rev-18.json",
               L2 / "route_model_config.json",
               STEP2 / "m13_v57_layer_intent_rev6.json",
               STEP2 / "m13_v57_big_w0r_corridor_model.json",

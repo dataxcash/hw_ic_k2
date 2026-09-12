@@ -2,11 +2,30 @@
  "artifact": "m13_v57_co106_reference_plane_gate",
  "base_pins": {
   "board": "0e636a67c1472462",
-  "spec_current": "9fea9fd20149c736"
+  "spec_current": "500f3da8179fe19c"
  },
  "checks": {
   "A_frame_inset_consistency": {
-   "deviations": [],
+   "deviations": [
+    {
+     "inset_dev_mm": {
+      "bottom": -38.45,
+      "left": -0.0,
+      "right": -0.0,
+      "top": -0.721
+     },
+     "obj": "power_zone P3V3@P3V3_BCU_BRIDGE_IN4"
+    },
+    {
+     "inset_dev_mm": {
+      "bottom": -16.175,
+      "left": -0.0,
+      "right": -0.0,
+      "top": -18.721
+     },
+     "obj": "power_zone P3V3_AUX@P3V3_AUX_BCU_BRIDGE_IN4"
+    }
+   ],
    "expected_inset_polygon": {
     "x": [
      23.3,
@@ -22,12 +41,17 @@
      "interior_of": "MCU_VDD_WEST",
      "obj": "power_zone P3V3_AUX@P3V3_AUX_WEST",
      "why": "内岛承载区（L2 走廊/区域分配）⇒ 非整面平面，不适用板边内缩判据"
+    },
+    {
+     "interior_of": "MCU_VDD_WEST",
+     "obj": "power_zone 12V_IN@12V_IN_IN4_CARRIER",
+     "why": "内岛承载区（L2 走廊/区域分配）⇒ 非整面平面，不适用板边内缩判据"
     }
    ],
-   "n_interior_carriers_exempt": 1,
-   "n_zone_polygons": 6,
+   "n_interior_carriers_exempt": 2,
+   "n_zone_polygons": 9,
    "note": "basis 明文「整面铺铜 + 板边内缩 edge_copper_min」；板框取 SPEC board.outline_x/y（v28 ECO：y 38mm→46mm）；内岛承载区（carve-out）显式豁免并登记",
-   "ok": true
+   "ok": false
   },
   "B_reference_continuity": {
    "class_counts": {
@@ -44,7 +68,7 @@
    "reference_declared_copper": {
     "In1.Cu": 1,
     "In3.Cu": 1,
-    "In4.Cu": 3,
+    "In4.Cu": 6,
     "In6.Cu": 1
    },
    "segments_per_layer": {
@@ -82,8 +106,8 @@
  },
  "inputs": {
   "board": "0e636a67c1472462",
-  "drawing": "9711a2ff555de85b",
-  "spec_current": "9fea9fd20149c736"
+  "drawing": "6ad2ff97101cbc53",
+  "spec_current": "500f3da8179fe19c"
  },
  "nature": "L2 合格标准覆盖性补全（ch.2「参考平面」）+ 参考平面连续性/板框一致性机判",
  "non_claims": [

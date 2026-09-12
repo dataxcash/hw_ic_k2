@@ -25,10 +25,10 @@ from pathlib import Path
 K2 = Path(__file__).resolve().parents[1]
 L3 = K2 / "pm_gate/artifacts/k2_v4/L3"
 STEP2 = L3 / "mcio_feas_step2"
-SPEC_CUR = L3 / "SPEC_k2_v4.spec-rev-17.json"
+SPEC_CUR = L3 / "SPEC_k2_v4.spec-rev-18.json"
 CO102P = K2 / "tools/p3_v57_co102_pdn_apply_local.py"
 FROZEN = K2.parent / "_shared/eda_core/pdn_apply.py"
-BASE = {"spec_current": "9fea9fd20149c736", "board": "0e636a67c1472462"}
+BASE = {"spec_current": "500f3da8179fe19c", "board": "0e636a67c1472462"}
 
 
 def s16(p) -> str:
@@ -69,14 +69,19 @@ def main(argv=None) -> int:
                        "zone_has_derived_geometry": has_geom,
                        "geometry_status": z.get("geometry_status")})
     n_no_geom = sum(1 for r in zv if not r["zone_has_derived_geometry"])
-    checks["V2_zone_vias_pending_l3"] = {
-        "ok": len(zv) == 17 and n_no_geom == 17 and all(
-            r["geometry_status"] == "L3_CONSTRUCTION_DERIVED" for r in zv),
+    # CO-132（rev-18）后：3 个 bridge zone 的几何义务已闭合（2 个 L3_DERIVED_DECLARED + 1 个 COVERED_BY_HOST_PLANE）
+    # ⇒ 本项由「同桶 declared_pending_l3」改为「桶已清」断言；区分度由**历史 rev-17 正控**保住（见 teeth）。
+    CLOSED_STATUS = ("L3_DERIVED_DECLARED", "COVERED_BY_HOST_PLANE")
+    checks["V2_zone_vias_geometry_closed"] = {
+        "ok": len(zv) == 17 and all(r["geometry_status"] in CLOSED_STATUS for r in zv),
         "n_zone_vias": len(zv), "n_in_empty_polygon_zone": n_no_geom,
-        "detail": zv,
-        "note": "3 个 bridge zone（P3V3_BCU_BRIDGE_IN4 / P3V3_AUX_BCU_BRIDGE_IN4 / MCU_VDD_BCU_RESISTORS_IN4）polygons=[] ⇒ 与 CO-98 declared_pending_l3 同桶"}
-    teeth["empty_geom_detector"] = (n_no_geom == 17) and any(
-        bool(z.get("polygon")) for z in zd["power_zones"])   # 有几何的 zone 存在 ⇒ 检测器有区分度
+        "closed_statuses": list(CLOSED_STATUS), "detail": zv,
+        "note": "CO-132 已派生：P3V3_BCU_BRIDGE_IN4 / P3V3_AUX_BCU_BRIDGE_IN4 = L3_DERIVED_DECLARED；"
+                "MCU_VDD_BCU_RESISTORS_IN4 = COVERED_BY_HOST_PLANE（CO-131）⇒ declared_pending_l3 桶已清"}
+    hist = json.loads((L3 / "SPEC_k2_v4.spec-rev-17.json").read_text())["pd"]["zone_defs"]
+    h_zv = [v for z in hist["power_zones"] for v in z.get("vias", [])
+            if not (bool(z.get("polygons")) or bool(z.get("polygon")))]
+    teeth["empty_geom_detector"] = (len(h_zv) == 17) and any(bool(z.get("polygon")) for z in hist["power_zones"])
 
     # ---------- V3：gnd_stitch_gen 不在在役路径 ----------
     import re

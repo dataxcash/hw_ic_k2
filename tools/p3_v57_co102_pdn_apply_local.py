@@ -50,11 +50,13 @@ def ensure_net(board, netname):
     return n.GetNetCode()
 
 
-def add_zone(board, netname, layer, pts):
+def add_zone(board, netname, layer, pts, priority=0):
     z = pcbnew.ZONE(board)
     z.SetLayer(LAYER_MAP[layer])
     z.SetNetCode(ensure_net(board, netname))
     z.SetPadConnection(pcbnew.ZONE_CONNECTION_FULL)
+    if priority:
+        z.SetAssignedPriority(int(priority))   # 同网岛/宿主平面重叠 ⇒ 需不同优先级（CO-132）
     z.SetLocalClearance(mm(0.2))
     z.SetThermalReliefGap(mm(0.2))
     z.SetThermalReliefSpokeWidth(mm(0.3))
@@ -101,7 +103,7 @@ def apply(spec_path: str, board_path: str, stage: str = "all") -> dict:
         for pz in zd.get("power_zones", []):
             polys = pz.get("polygons", []) or ([pz["polygon"]] if pz.get("polygon") else [])
             for poly in polys:
-                add_zone(b, pz["net"], pz["layer"], poly); P.stats["zones"] += 1
+                add_zone(b, pz["net"], pz["layer"], poly, pz.get("fill_priority", 0)); P.stats["zones"] += 1
             for v in pz.get("vias", []):
                 pos = v["pos"]
                 seq = pos if (pos and isinstance(pos[0], list)) else [pos]
@@ -179,7 +181,7 @@ def verify(spec: str, board: str, out: str) -> int:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="CO-102 项目内 PDN 施加器（修正施工侧三处口径）")
-    ap.add_argument("--spec", default=str(K2 / "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-17.json"))
+    ap.add_argument("--spec", default=str(K2 / "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-18.json"))
     ap.add_argument("--board", default=str(K2 / "k2_v4_8L.l4.kicad_pcb"))
     ap.add_argument("--stage", default="all", choices=["zone", "connect", "all"])
     ap.add_argument("--verify", action="store_true", help="scratch 三态 DRC 对比（baseline/冻结/项目内）")

@@ -1,0 +1,653 @@
+{
+ "artifact": "m13_v57_co132_r1_in4_carrier_derive",
+ "schema": 1,
+ "revision": "CO-132.1",
+ "nature": "L2 自裁 · L3 确定性派生 + 施加：R1 In4 承载几何（3 桥区 + 12V_IN）→ SPEC rev-18",
+ "src": "SPEC_k2_v4.spec-rev-17.json",
+ "src_sha16": "9fea9fd20149c736",
+ "out": "SPEC_k2_v4.spec-rev-18.json",
+ "out_sha16": "500f3da8179fe19c",
+ "derivations": {
+  "P3V3_BCU_BRIDGE_IN4": {
+   "verdict": "FEASIBLE_BY_DETERMINISTIC_ROUTER",
+   "net": "P3V3",
+   "netclass": "POWER",
+   "min_feature_mm": 0.5,
+   "cleared_at_level": 0,
+   "window": [
+    32.95,
+    31.3,
+    144.7,
+    80.7
+   ],
+   "n_cells": 35088,
+   "n_clear": 27162,
+   "path_cells": 144,
+   "anchor_cell": [
+    83,
+    15
+   ],
+   "anchor": [
+    58.061,
+    38.752
+   ],
+   "region_rects": [
+    [
+     34.271,
+     39.254,
+     40.879,
+     40.08
+    ],
+    [
+     38.921,
+     34.021,
+     44.179,
+     35.475
+    ],
+    [
+     40.296,
+     39.58,
+     41.929,
+     40.25
+    ],
+    [
+     41.071,
+     39.254,
+     42.775,
+     40.08
+    ],
+    [
+     41.429,
+     38.851,
+     42.254,
+     39.754
+    ],
+    [
+     41.754,
+     38.154,
+     42.721,
+     39.521
+    ],
+    [
+     42.221,
+     38.154,
+     42.775,
+     40.25
+    ],
+    [
+     42.275,
+     38.154,
+     58.421,
+     39.351
+    ],
+    [
+     42.529,
+     34.975,
+     44.546,
+     35.886
+    ],
+    [
+     43.679,
+     35.386,
+     44.546,
+     38.296
+    ],
+    [
+     44.046,
+     37.479,
+     44.746,
+     38.614
+    ],
+    [
+     44.246,
+     37.979,
+     45.471,
+     38.614
+    ],
+    [
+     44.821,
+     38.114,
+     58.421,
+     38.654
+    ]
+   ],
+   "ring": [
+    [
+     34.271447,
+     39.253553
+    ],
+    [
+     40.878553,
+     39.253553
+    ],
+    [
+     40.878553,
+     39.58
+    ],
+    [
+     41.071447,
+     39.58
+    ],
+    [
+     41.071447,
+     39.253553
+    ],
+    [
+     41.428553,
+     39.253553
+    ],
+    [
+     41.428553,
+     38.851447
+    ],
+    [
+     41.753553,
+     38.851447
+    ],
+    [
+     41.753553,
+     38.153553
+    ],
+    [
+     43.678553,
+     38.153553
+    ],
+    [
+     43.678553,
+     35.886447
+    ],
+    [
+     42.528553,
+     35.886447
+    ],
+    [
+     42.528553,
+     35.475
+    ],
+    [
+     38.921447,
+     35.475
+    ],
+    [
+     38.921447,
+     34.021447
+    ],
+    [
+     44.178553,
+     34.021447
+    ],
+    [
+     44.178553,
+     34.975
+    ],
+    [
+     44.546447,
+     34.975
+    ],
+    [
+     44.546447,
+     37.478553
+    ],
+    [
+     44.746447,
+     37.478553
+    ],
+    [
+     44.746447,
+     37.978553
+    ],
+    [
+     45.471447,
+     37.978553
+    ],
+    [
+     45.471447,
+     38.113553
+    ],
+    [
+     58.421447,
+     38.113553
+    ],
+    [
+     58.421447,
+     39.351447
+    ],
+    [
+     42.775,
+     39.351447
+    ],
+    [
+     42.775,
+     40.25
+    ],
+    [
+     42.221447,
+     40.25
+    ],
+    [
+     42.221447,
+     40.08
+    ],
+    [
+     41.928553,
+     40.08
+    ],
+    [
+     41.928553,
+     40.25
+    ],
+    [
+     40.296447,
+     40.25
+    ],
+    [
+     40.296447,
+     40.08
+    ],
+    [
+     34.271447,
+     40.08
+    ]
+   ],
+   "min_rect_dim_mm": 0.54,
+   "coverage": true,
+   "clearance_recheck_ok": true,
+   "own_plane_attach_ok": true,
+   "host_judge": {
+    "MCU_VDD_WEST": {
+     "a_coverage": [],
+     "b_clearance": [],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 2320,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C87.2(GND)",
+      "margin_mm": 0.1036
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.0321,
+     "ok": true,
+     "scoped_targets": [
+      "C84.1",
+      "U2.5",
+      "U4.3"
+     ],
+     "scoped_host_vias": 10
+    },
+    "P3V3_EAST": {
+     "a_coverage": [],
+     "b_clearance": [],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 66,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C87.2(GND)",
+      "margin_mm": 0.1036
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.0321,
+     "ok": true,
+     "scoped_targets": [
+      "__zone_probe__"
+     ],
+     "scoped_host_vias": 35
+    }
+   },
+   "ok": true
+  },
+  "P3V3_AUX_BCU_BRIDGE_IN4": {
+   "verdict": "FEASIBLE_BY_DETERMINISTIC_ROUTER",
+   "net": "P3V3_AUX",
+   "netclass": "POWER",
+   "min_feature_mm": 0.5,
+   "cleared_at_level": 0,
+   "window": [
+    25.95,
+    33.975,
+    60.9,
+    64.275
+   ],
+   "n_cells": 6930,
+   "n_clear": 5522,
+   "path_cells": 37,
+   "anchor_cell": [
+    78,
+    39
+   ],
+   "anchor": [
+    52.527,
+    52.398
+   ],
+   "region_rects": [
+    [
+     52.204,
+     52.021,
+     58.679,
+     52.775
+    ],
+    [
+     56.721,
+     52.275,
+     58.679,
+     61.081
+    ],
+    [
+     58.179,
+     60.471,
+     59.021,
+     61.796
+    ],
+    [
+     58.521,
+     61.104,
+     59.15,
+     62.525
+    ]
+   ],
+   "ring": [
+    [
+     52.203553,
+     52.021447
+    ],
+    [
+     58.678553,
+     52.021447
+    ],
+    [
+     58.678553,
+     60.471447
+    ],
+    [
+     59.021447,
+     60.471447
+    ],
+    [
+     59.021447,
+     61.103553
+    ],
+    [
+     59.15,
+     61.103553
+    ],
+    [
+     59.15,
+     62.525
+    ],
+    [
+     58.521447,
+     62.525
+    ],
+    [
+     58.521447,
+     61.796447
+    ],
+    [
+     58.178553,
+     61.796447
+    ],
+    [
+     58.178553,
+     61.081447
+    ],
+    [
+     56.721447,
+     61.081447
+    ],
+    [
+     56.721447,
+     52.775
+    ],
+    [
+     52.203553,
+     52.775
+    ]
+   ],
+   "min_rect_dim_mm": 0.6286,
+   "coverage": true,
+   "clearance_recheck_ok": true,
+   "own_plane_attach_ok": true,
+   "host_judge": {
+    "P3V3_EAST": {
+     "a_coverage": [],
+     "b_clearance": [],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 227,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "J4.A10(GND)",
+      "margin_mm": 0.1036
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": true,
+     "scoped_targets": [
+      "J4.A9"
+     ],
+     "scoped_host_vias": 35
+    },
+    "MCU_VDD_WEST": {
+     "a_coverage": [],
+     "b_clearance": [],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 82,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "J4.A10(GND)",
+      "margin_mm": 0.1036
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": true,
+     "scoped_targets": [
+      "__zone_probe__"
+     ],
+     "scoped_host_vias": 10
+    }
+   },
+   "ok": true
+  },
+  "12V_IN_IN4_CARRIER": {
+   "verdict": "FEASIBLE_BY_DETERMINISTIC_ROUTER",
+   "net": "12V_IN",
+   "netclass": "POWER",
+   "min_feature_mm": 0.5,
+   "cleared_at_level": 0,
+   "window": [
+    25.275,
+    34.635,
+    38.725,
+    44.5
+   ],
+   "n_cells": 224,
+   "n_clear": 119,
+   "path_cells": 20,
+   "anchor_cell": [
+    0,
+    13
+   ],
+   "anchor": [
+    26.775,
+    41.136
+   ],
+   "region_rects": [
+    [
+     25.025,
+     40.379,
+     28.525,
+     41.75
+    ],
+    [
+     28.025,
+     40.309,
+     30.246,
+     41.021
+    ],
+    [
+     29.746,
+     38.921,
+     31.3,
+     40.879
+    ],
+    [
+     30.8,
+     40.309,
+     32.804,
+     40.879
+    ],
+    [
+     31.204,
+     38.921,
+     32.804,
+     40.809
+    ],
+    [
+     32.304,
+     37.385,
+     33.471,
+     40.08
+    ],
+    [
+     32.971,
+     37.385,
+     34.929,
+     39.351
+    ],
+    [
+     33.971,
+     36.844,
+     35.975,
+     37.885
+    ]
+   ],
+   "ring": [
+    [
+     25.025,
+     40.378553
+    ],
+    [
+     28.025,
+     40.378553
+    ],
+    [
+     28.025,
+     40.308553
+    ],
+    [
+     29.746447,
+     40.308553
+    ],
+    [
+     29.746447,
+     38.921447
+    ],
+    [
+     32.303553,
+     38.921447
+    ],
+    [
+     32.303553,
+     37.385
+    ],
+    [
+     33.971447,
+     37.385
+    ],
+    [
+     33.971447,
+     36.843553
+    ],
+    [
+     35.975,
+     36.843553
+    ],
+    [
+     35.975,
+     37.885
+    ],
+    [
+     34.928553,
+     37.885
+    ],
+    [
+     34.928553,
+     39.351447
+    ],
+    [
+     33.471447,
+     39.351447
+    ],
+    [
+     33.471447,
+     40.08
+    ],
+    [
+     32.803553,
+     40.08
+    ],
+    [
+     32.803553,
+     40.878553
+    ],
+    [
+     30.246447,
+     40.878553
+    ],
+    [
+     30.246447,
+     41.021447
+    ],
+    [
+     28.525,
+     41.021447
+    ],
+    [
+     28.525,
+     41.75
+    ],
+    [
+     25.025,
+     41.75
+    ]
+   ],
+   "min_rect_dim_mm": 0.57,
+   "coverage": true,
+   "clearance_recheck_ok": true,
+   "own_plane_attach_ok": true,
+   "host_judge": {
+    "MCU_VDD_WEST": {
+     "a_coverage": [],
+     "b_clearance": [],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 766,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "P3V3_BCU_BRIDGE_IN4#v0(P3V3)",
+      "margin_mm": 0.1036
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.0964,
+     "ok": true,
+     "scoped_targets": [
+      "C88.1",
+      "U2.4",
+      "U2.6"
+     ],
+     "scoped_host_vias": 10
+    }
+   },
+   "ok": true
+  }
+ },
+ "all_ok": true,
+ "changed_paths": 311,
+ "unexpected_changed_paths": [],
+ "whitelist_ok": true,
+ "board_untouched": true,
+ "board_sha16_l4": "0e636a67c1472462",
+ "redline": "不改板/阈值/冻结源；历史 SPEC 不改（新文件 bump）；零坐标搜索、无随机"
+}

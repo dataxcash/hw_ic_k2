@@ -27,10 +27,10 @@ from pathlib import Path
 K2 = Path(__file__).resolve().parents[1]
 L3 = K2 / "pm_gate/artifacts/k2_v4/L3"
 STEP2 = L3 / "mcio_feas_step2"
-SPEC_CUR, SPEC11 = L3 / "SPEC_k2_v4.spec-rev-17.json", L3 / "SPEC_k2_v4.spec-rev-11.json"
+SPEC_CUR, SPEC11 = L3 / "SPEC_k2_v4.spec-rev-18.json", L3 / "SPEC_k2_v4.spec-rev-11.json"
 BOARD = K2 / "k2_v4_8L.l4.kicad_pcb"
 CO91P = K2 / "tools/p3_v57_co91_pdn_planned_coord_clearance_gate.py"
-BASE = {"spec_current": "9fea9fd20149c736", "spec_rev11": "d85f10f722ba22b0", "board": "0e636a67c1472462"}
+BASE = {"spec_current": "500f3da8179fe19c", "spec_rev11": "d85f10f722ba22b0", "board": "0e636a67c1472462"}
 CARD = [(1, 0), (-1, 0), (0, 1), (0, -1)]
 TARGETS = [("U6", "FB34"), ("U6", "FF14"), ("U6", "FF21"), ("U6", "H12")]
 

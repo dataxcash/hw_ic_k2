@@ -2,47 +2,36 @@
   "artifact": "m13_v57_co95_in4_reachability",
   "detail": [
     {
-      "detail": "C84.pad1@P3V3_BCU_BRIDGE_IN4",
-      "net": "P3V3",
+      "detail": "12V_IN_IN4_CARRIER",
+      "net": "12V_IN",
       "pad": "1",
-      "reach": "covered_bridge_target",
-      "ref": "C84",
+      "reach": "covered_explicit",
+      "ref": "C88",
       "via_pos": [
-        42.525,
-        40.0
+        28.275,
+        41.5
       ]
     },
     {
-      "detail": "U2.pad5@P3V3_BCU_BRIDGE_IN4",
-      "net": "P3V3",
-      "pad": "5",
-      "reach": "covered_bridge_target",
+      "detail": "12V_IN_IN4_CARRIER",
+      "net": "12V_IN",
+      "pad": "4",
+      "reach": "covered_explicit",
       "ref": "U2",
       "via_pos": [
-        34.95,
+        31.05,
         39.83
       ]
     },
     {
-      "detail": "U4.pad3@P3V3_BCU_BRIDGE_IN4",
-      "net": "P3V3",
-      "pad": "3",
-      "reach": "covered_bridge_target",
-      "ref": "U4",
+      "detail": "12V_IN_IN4_CARRIER",
+      "net": "12V_IN",
+      "pad": "6",
+      "reach": "covered_explicit",
+      "ref": "U2",
       "via_pos": [
-        40.0,
-        35.225
-      ]
-    },
-    {
-      "detail": "J4.A9@P3V3_AUX_BCU_BRIDGE_IN4",
-      "net": "P3V3_AUX",
-      "pad": "A9",
-      "reach": "covered_bridge_target",
-      "ref": "J4",
-      "via_pos": [
-        58.9,
-        62.275
+        35.725,
+        37.635
       ]
     },
     {
@@ -208,6 +197,39 @@
       "via_pos": [
         89.775,
         38.5
+      ]
+    },
+    {
+      "detail": "P3V3_BCU_BRIDGE_IN4",
+      "net": "P3V3",
+      "pad": "1",
+      "reach": "covered_explicit",
+      "ref": "C84",
+      "via_pos": [
+        42.525,
+        40.0
+      ]
+    },
+    {
+      "detail": "P3V3_BCU_BRIDGE_IN4",
+      "net": "P3V3",
+      "pad": "5",
+      "reach": "covered_explicit",
+      "ref": "U2",
+      "via_pos": [
+        34.95,
+        39.83
+      ]
+    },
+    {
+      "detail": "P3V3_BCU_BRIDGE_IN4",
+      "net": "P3V3",
+      "pad": "3",
+      "reach": "covered_explicit",
+      "ref": "U4",
+      "via_pos": [
+        40.0,
+        35.225
       ]
     },
     {
@@ -552,6 +574,17 @@
       ]
     },
     {
+      "detail": "P3V3_AUX_BCU_BRIDGE_IN4",
+      "net": "P3V3_AUX",
+      "pad": "A9",
+      "reach": "covered_explicit",
+      "ref": "J4",
+      "via_pos": [
+        58.9,
+        62.275
+      ]
+    },
+    {
       "detail": "P3V3_AUX_WEST",
       "net": "P3V3_AUX",
       "pad": "2",
@@ -572,76 +605,9 @@
         39.425,
         53.25
       ]
-    },
-    {
-      "detail": "no_in4_region_for_net(12V_IN)",
-      "net": "12V_IN",
-      "pad": "1",
-      "reach": "needs_region_ruling",
-      "ref": "C88",
-      "via_pos": [
-        28.275,
-        41.5
-      ]
-    },
-    {
-      "detail": "no_in4_region_for_net(12V_IN)",
-      "net": "12V_IN",
-      "pad": "4",
-      "reach": "needs_region_ruling",
-      "ref": "U2",
-      "via_pos": [
-        31.05,
-        39.83
-      ]
-    },
-    {
-      "detail": "no_in4_region_for_net(12V_IN)",
-      "net": "12V_IN",
-      "pad": "6",
-      "reach": "needs_region_ruling",
-      "ref": "U2",
-      "via_pos": [
-        35.725,
-        37.635
-      ]
     }
   ],
-  "gaps": [
-    {
-      "detail": "no_in4_region_for_net(12V_IN)",
-      "net": "12V_IN",
-      "pad": "1",
-      "reach": "needs_region_ruling",
-      "ref": "C88",
-      "via_pos": [
-        28.275,
-        41.5
-      ]
-    },
-    {
-      "detail": "no_in4_region_for_net(12V_IN)",
-      "net": "12V_IN",
-      "pad": "4",
-      "reach": "needs_region_ruling",
-      "ref": "U2",
-      "via_pos": [
-        31.05,
-        39.83
-      ]
-    },
-    {
-      "detail": "no_in4_region_for_net(12V_IN)",
-      "net": "12V_IN",
-      "pad": "6",
-      "reach": "needs_region_ruling",
-      "ref": "U2",
-      "via_pos": [
-        35.725,
-        37.635
-      ]
-    }
-  ],
+  "gaps": [],
   "inputs": {
     "bridge_targets": {
       "@R29": "MCU_VDD_BCU_RESISTORS_IN4",
@@ -661,13 +627,18 @@
       "U4.pad3": "P3V3_BCU_BRIDGE_IN4"
     },
     "explicit_polygons": {
+      "12V_IN": [
+        "12V_IN_IN4_CARRIER"
+      ],
       "MCU_VDD": [
         "MCU_VDD_WEST"
       ],
       "P3V3": [
-        "P3V3_EAST"
+        "P3V3_EAST",
+        "P3V3_BCU_BRIDGE_IN4"
       ],
       "P3V3_AUX": [
+        "P3V3_AUX_BCU_BRIDGE_IN4",
         "P3V3_AUX_WEST"
       ]
     },
@@ -682,8 +653,8 @@
         65.1
       ]
     },
-    "spec": "SPEC_k2_v4.spec-rev-17.json",
-    "spec_sha16": "9fea9fd20149c736"
+    "spec": "SPEC_k2_v4.spec-rev-18.json",
+    "spec_sha16": "500f3da8179fe19c"
   },
   "nature": "L2 PDN：power entry 的 In4 平面可达性机判（via 是否被本网 In4 铜覆盖）",
   "non_claims": [
@@ -693,16 +664,16 @@
   "revision": "CO-95.1",
   "schema": 1,
   "summary": {
-    "covered_bridge_target": 4,
-    "covered_explicit": 48,
+    "covered_bridge_target": 0,
+    "covered_explicit": 55,
     "l3_obligation": 0,
-    "needs_region_ruling": 3,
+    "needs_region_ruling": 0,
     "power_entries": 55,
-    "unresolved_total": 3
+    "unresolved_total": 0
   },
   "teeth": {
     "band_point_flagged": true,
     "east_point_passes": true
   },
-  "verdict": "OPEN_needs_region_ruling"
+  "verdict": "PASS"
 }

@@ -9,7 +9,7 @@
  "artifact": "m13_v57_co105_f4_scope_disposition",
  "base_pins": {
   "board": "0e636a67c1472462",
-  "spec_current": "9fea9fd20149c736"
+  "spec_current": "500f3da8179fe19c"
  },
  "checks": {
   "V1_gnd_has_no_in4_plane": {
@@ -19,6 +19,7 @@
     "In6.Cu"
    ],
    "in4_nets": [
+    "12V_IN",
     "MCU_VDD",
     "P3V3",
     "P3V3_AUX"
@@ -33,120 +34,124 @@
     "gnd_stitch_realized": 39
    }
   },
-  "V2_zone_vias_pending_l3": {
+  "V2_zone_vias_geometry_closed": {
+   "closed_statuses": [
+    "L3_DERIVED_DECLARED",
+    "COVERED_BY_HOST_PLANE"
+   ],
    "detail": [
     {
-     "geometry_status": "L3_CONSTRUCTION_DERIVED",
+     "geometry_status": "L3_DERIVED_DECLARED",
      "net": "P3V3",
      "pos": [
       33.95,
       39.9
      ],
      "zone": "P3V3_BCU_BRIDGE_IN4",
-     "zone_has_derived_geometry": false
+     "zone_has_derived_geometry": true
     },
     {
-     "geometry_status": "L3_CONSTRUCTION_DERIVED",
+     "geometry_status": "L3_DERIVED_DECLARED",
      "net": "P3V3",
      "pos": [
       40.0,
       33.6
      ],
      "zone": "P3V3_BCU_BRIDGE_IN4",
-     "zone_has_derived_geometry": false
+     "zone_has_derived_geometry": true
     },
     {
-     "geometry_status": "L3_CONSTRUCTION_DERIVED",
+     "geometry_status": "L3_DERIVED_DECLARED",
      "net": "P3V3",
      "pos": [
       43.1,
       33.6
      ],
      "zone": "P3V3_BCU_BRIDGE_IN4",
-     "zone_has_derived_geometry": false
+     "zone_has_derived_geometry": true
     },
     {
-     "geometry_status": "L3_CONSTRUCTION_DERIVED",
+     "geometry_status": "L3_DERIVED_DECLARED",
      "net": "P3V3_AUX",
      "pos": [
       47.0,
       49.0
      ],
      "zone": "P3V3_AUX_BCU_BRIDGE_IN4",
-     "zone_has_derived_geometry": false
+     "zone_has_derived_geometry": true
     },
     {
-     "geometry_status": "L3_CONSTRUCTION_DERIVED",
+     "geometry_status": "L3_DERIVED_DECLARED",
      "net": "P3V3_AUX",
      "pos": [
       47.6,
       49.0
      ],
      "zone": "P3V3_AUX_BCU_BRIDGE_IN4",
-     "zone_has_derived_geometry": false
+     "zone_has_derived_geometry": true
     },
     {
-     "geometry_status": "L3_CONSTRUCTION_DERIVED",
+     "geometry_status": "L3_DERIVED_DECLARED",
      "net": "P3V3_AUX",
      "pos": [
       58.9,
       63.0
      ],
      "zone": "P3V3_AUX_BCU_BRIDGE_IN4",
-     "zone_has_derived_geometry": false
+     "zone_has_derived_geometry": true
     },
     {
-     "geometry_status": "L3_CONSTRUCTION_DERIVED",
+     "geometry_status": "L3_DERIVED_DECLARED",
      "net": "P3V3_AUX",
      "pos": [
       55.6,
       49.8
      ],
      "zone": "P3V3_AUX_BCU_BRIDGE_IN4",
-     "zone_has_derived_geometry": false
+     "zone_has_derived_geometry": true
     },
     {
-     "geometry_status": "L3_CONSTRUCTION_DERIVED",
+     "geometry_status": "L3_DERIVED_DECLARED",
      "net": "P3V3_AUX",
      "pos": [
       57.8,
       63.1
      ],
      "zone": "P3V3_AUX_BCU_BRIDGE_IN4",
-     "zone_has_derived_geometry": false
+     "zone_has_derived_geometry": true
     },
     {
-     "geometry_status": "L3_CONSTRUCTION_DERIVED",
+     "geometry_status": "L3_DERIVED_DECLARED",
      "net": "P3V3_AUX",
      "pos": [
       26.5,
       61.57
      ],
      "zone": "P3V3_AUX_BCU_BRIDGE_IN4",
-     "zone_has_derived_geometry": false
+     "zone_has_derived_geometry": true
     },
     {
-     "geometry_status": "L3_CONSTRUCTION_DERIVED",
+     "geometry_status": "L3_DERIVED_DECLARED",
      "net": "P3V3_AUX",
      "pos": [
       29.65,
       53.0
      ],
      "zone": "P3V3_AUX_BCU_BRIDGE_IN4",
-     "zone_has_derived_geometry": false
+     "zone_has_derived_geometry": true
     },
     {
-     "geometry_status": "L3_CONSTRUCTION_DERIVED",
+     "geometry_status": "L3_DERIVED_DECLARED",
      "net": "P3V3_AUX",
      "pos": [
       39.9,
       53.25
      ],
      "zone": "P3V3_AUX_BCU_BRIDGE_IN4",
-     "zone_has_derived_geometry": false
+     "zone_has_derived_geometry": true
     },
     {
-     "geometry_status": "L3_CONSTRUCTION_DERIVED",
+     "geometry_status": "COVERED_BY_HOST_PLANE",
      "net": "MCU_VDD",
      "pos": [
       51.0,
@@ -156,7 +161,7 @@
      "zone_has_derived_geometry": false
     },
     {
-     "geometry_status": "L3_CONSTRUCTION_DERIVED",
+     "geometry_status": "COVERED_BY_HOST_PLANE",
      "net": "MCU_VDD",
      "pos": [
       50.2,
@@ -166,7 +171,7 @@
      "zone_has_derived_geometry": false
     },
     {
-     "geometry_status": "L3_CONSTRUCTION_DERIVED",
+     "geometry_status": "COVERED_BY_HOST_PLANE",
      "net": "MCU_VDD",
      "pos": [
       56.95,
@@ -176,7 +181,7 @@
      "zone_has_derived_geometry": false
     },
     {
-     "geometry_status": "L3_CONSTRUCTION_DERIVED",
+     "geometry_status": "COVERED_BY_HOST_PLANE",
      "net": "MCU_VDD",
      "pos": [
       55.95,
@@ -186,7 +191,7 @@
      "zone_has_derived_geometry": false
     },
     {
-     "geometry_status": "L3_CONSTRUCTION_DERIVED",
+     "geometry_status": "COVERED_BY_HOST_PLANE",
      "net": "MCU_VDD",
      "pos": [
       55.75,
@@ -196,7 +201,7 @@
      "zone_has_derived_geometry": false
     },
     {
-     "geometry_status": "L3_CONSTRUCTION_DERIVED",
+     "geometry_status": "COVERED_BY_HOST_PLANE",
      "net": "MCU_VDD",
      "pos": [
       57.55,
@@ -206,9 +211,9 @@
      "zone_has_derived_geometry": false
     }
    ],
-   "n_in_empty_polygon_zone": 17,
+   "n_in_empty_polygon_zone": 6,
    "n_zone_vias": 17,
-   "note": "3 个 bridge zone（P3V3_BCU_BRIDGE_IN4 / P3V3_AUX_BCU_BRIDGE_IN4 / MCU_VDD_BCU_RESISTORS_IN4）polygons=[] ⇒ 与 CO-98 declared_pending_l3 同桶",
+   "note": "CO-132 已派生：P3V3_BCU_BRIDGE_IN4 / P3V3_AUX_BCU_BRIDGE_IN4 = L3_DERIVED_DECLARED；MCU_VDD_BCU_RESISTORS_IN4 = COVERED_BY_HOST_PLANE（CO-131）⇒ declared_pending_l3 桶已清",
    "ok": true
   },
   "V3_gnd_stitch_gen_not_in_path": {
@@ -220,25 +225,24 @@
    "spec_candidate_method": "从冻结 wp1_escape_nets 每网 vias 列表(44 个换层 via) + j2_escape_nets 换层点(56) 推导伴行位: 每换层 via 0.6mm 正交 4 向确定性候选(排除 GND 网障碍), 逐障碍按网级净距(PCIe85 0.175/低速 0.1)校验, 取余量最大候选; 逐坐标已对 k2_v4 重建板 pad/segment 几何核对"
   },
   "V4_f3_r1_2_is_l1": {
-   "declared_pending_l3": 4,
+   "declared_pending_l3": 0,
    "nets_with_in4_polygon": [
+    "12V_IN",
     "MCU_VDD",
     "P3V3",
     "P3V3_AUX"
    ],
    "note": "ruling 项 = SPEC unresolved（根因=电源域/区域归属 ⇒ L1）；CO-122b 后 ② P3V3_AUX 由 L2 自裁闭合 ⇒ 余 12V_IN(3 pad)",
    "ok": true,
-   "ruling_pending_l1": 3,
-   "unresolved_nets": [
-    "12V_IN"
-   ],
-   "unresolved_pads": 3
+   "ruling_pending_l1": 0,
+   "unresolved_nets": [],
+   "unresolved_pads": 0
   }
  },
  "inputs": {
   "board": "0e636a67c1472462",
-  "co98_record": "cc24a0b48805fde6",
-  "spec_current": "9fea9fd20149c736"
+  "co98_record": "e05d7adf67b527e0",
+  "spec_current": "500f3da8179fe19c"
  },
  "nature": "L2 自裁（PDN 建模）：CO-96 F4（可达性 requirement scope）落定 = 语义不可适用 + 几何待 L3（无需扩展动作）",
  "pin_mismatch": {},

@@ -2,23 +2,23 @@
  "artifact": "m13_v57_co98_reachability_status_report",
  "baseline_expectations": {
   "board": "0e636a67c1472462",
-  "co95_record": "95def04bc1ded144",
-  "spec": "9fea9fd20149c736"
+  "co95_record": "0bc98d2037ce5b47",
+  "spec": "500f3da8179fe19c"
  },
  "baseline_mismatch": {},
  "baseline_ok": true,
  "co95_summary": {
-  "covered_bridge_target": 4,
-  "covered_explicit": 48,
+  "covered_bridge_target": 0,
+  "covered_explicit": 55,
   "l3_obligation": 0,
-  "needs_region_ruling": 3,
+  "needs_region_ruling": 0,
   "power_entries": 55,
-  "unresolved_total": 3
+  "unresolved_total": 0
  },
  "inputs": {
   "board": "0e636a67c1472462",
-  "co95_record": "95def04bc1ded144",
-  "spec": "9fea9fd20149c736"
+  "co95_record": "0bc98d2037ce5b47",
+  "spec": "500f3da8179fe19c"
  },
  "integrity": {
   "classified": 55,
@@ -35,41 +35,10 @@
  "revision": "CO-98.1",
  "ruling_basis": {
   "breakdown": {
-   "machine": 3,
+   "machine": 0,
    "text_only": 0
   },
-  "rows": [
-   {
-    "basis": "machine:net_has_no_in4_region",
-    "machine_derived": true,
-    "net": "12V_IN",
-    "pad": "C88.1",
-    "via_pos": [
-     28.275,
-     41.5
-    ]
-   },
-   {
-    "basis": "machine:net_has_no_in4_region",
-    "machine_derived": true,
-    "net": "12V_IN",
-    "pad": "U2.4",
-    "via_pos": [
-     31.05,
-     39.83
-    ]
-   },
-   {
-    "basis": "machine:net_has_no_in4_region",
-    "machine_derived": true,
-    "net": "12V_IN",
-    "pad": "U2.6",
-    "via_pos": [
-     35.725,
-     37.635
-    ]
-   }
-  ]
+  "rows": []
  },
  "schema": 1,
  "scope_exclusions": {
@@ -85,11 +54,11 @@
  },
  "teeth_ok": true,
  "three_state": {
-  "declared_pending_l3": 4,
-  "geometric_covered": 48,
+  "declared_pending_l3": 0,
+  "geometric_covered": 55,
   "machine_closable_today": false,
   "note": "declared_pending_l3 = 声明覆盖（zone targets）或 band 退役义务，几何由 L3 确定性派生、当前未建 ⇒ ≠ 已满足；ruling_pending_l1 = 电源域/区域归属裁决。",
-  "ruling_pending_l1": 3
+  "ruling_pending_l1": 0
  },
- "verdict": "OPEN_GEOMETRY_PENDING_L3_AND_RULING_PENDING_L1"
+ "verdict": "PASS"
 }

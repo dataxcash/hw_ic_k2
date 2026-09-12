@@ -7,10 +7,10 @@
   "sha16": "3b0a8550e61a7637"
  },
  "input_absence_scan": {
-  "n_spec_fields_scanned": 8689,
+  "n_spec_fields_scanned": 8750,
   "requirement_source": "LAYOUT_CONSTITUTION.md ch.5 §4（PDN 压降达标）/ ch.2（L2 裁判标准含 热）",
   "spec_rev8_hits": [],
-  "spec_sha16": "9fea9fd20149c736"
+  "spec_sha16": "500f3da8179fe19c"
  },
  "matrix": [
   {
@@ -56,8 +56,14 @@
    "热：各器件功耗、环境温度/风速、可接受温升与热阻路径判据"
   ],
   "rails": {
+   "12V_IN_IN4_CARRIER": {
+    "geometry_status": null,
+    "layer": "In4.Cu",
+    "net": "12V_IN",
+    "targets": []
+   },
    "MCU_VDD_BCU_RESISTORS_IN4": {
-    "geometry_status": "L3_CONSTRUCTION_DERIVED",
+    "geometry_status": "COVERED_BY_HOST_PLANE",
     "layer": "In4.Cu",
     "net": "MCU_VDD",
     "targets": [
@@ -75,7 +81,7 @@
     "targets": []
    },
    "P3V3_AUX_BCU_BRIDGE_IN4": {
-    "geometry_status": "L3_CONSTRUCTION_DERIVED",
+    "geometry_status": "L3_DERIVED_DECLARED",
     "layer": "In4.Cu",
     "net": "P3V3_AUX",
     "targets": [
@@ -90,7 +96,7 @@
     "targets": []
    },
    "P3V3_BCU_BRIDGE_IN4": {
-    "geometry_status": "L3_CONSTRUCTION_DERIVED",
+    "geometry_status": "L3_DERIVED_DECLARED",
     "layer": "In4.Cu",
     "net": "P3V3",
     "targets": [
@@ -112,7 +118,7 @@
  "teeth": {
   "ch2_criteria_all_have_rows": true,
   "requirement_text_found_in_constitution": true,
-  "spec_scan_field_floor": 8689,
+  "spec_scan_field_floor": 8750,
   "synthetic_current_detected": true
  },
  "verdict": "L2 结构决策已终结（CO-63..CO-86），但 ch.5 §4 数学闭合的 **PDN 压降** 与 ch.2 的 **热** **NOT_DEMONSTRATED（缺输入）** ⇒ 显式登记，不得当作已闭合；本件不代填假设值。"
