@@ -21,7 +21,7 @@
 FAQ 将 blind/buried 列为 **advanced options（须 DFM review，成本/交期上升）**。
 
 ⇒ **下单走 JLC advanced / 盲埋孔通道**（L2 自裁 = 过孔策略），随单提交：本备注 + 叠层图(03_) + 阻抗表(04_) +
-L2 裁定件 `L2_RULING_via_channel_and_interpair_domain_v1.md`；接受其 DFM review 与重报价。
+L2 裁定件 `06_rulings/L2_RULING_via_channel_and_interpair_domain_v1.md`（R1/R2/R3 全文）；接受其 DFM review 与重报价。
 若只接受标准通孔工艺 ⇒ 须重开 W3 **通孔化派生**（独立 L2 候选；前置 = 引擎通孔模型 + 可行性证明；
 原地通孔化实测 111 项 shorting_items ⇒ 不可直接降级）。
 
@@ -33,7 +33,7 @@ L2 裁定件 `L2_RULING_via_channel_and_interpair_domain_v1.md`；接受其 DFM 
 ## 4. 其余 DFM 项（对照 JLC 8 层能力，实测 PASS）
 最小线宽 0.16mm(≥3.5mil)；过孔 0.2/0.35mm（孔 ≥0.15、盘径 ≥0.25、环宽 0.075=JLC「盘径 ≥ 孔径+0.15」）；
 孔到孔 0.25mm(≥0.2)；板规铜-板边 0.30mm(≥0.2)；层数/尺寸/铜厚/板厚/表面处理均落 JLC 能力。
-逐项见 `m13_v57_co146_jlc_dfm_gate.json`。
+逐项见包内 `06_rulings/m13_v57_co146_jlc_dfm_gate.json`。
 
 ## 5. 阻抗
 85Ω 差分两套独立闭式模型（IPC-2141 族 / Hammerstad–Jensen+Cohn）均落 ±10%（as-built 对内净距），
@@ -45,7 +45,7 @@ L2 裁定件 `L2_RULING_via_channel_and_interpair_domain_v1.md`；接受其 DFM 
 **U6（DS320PR1601）热超限（CO-148）**：手册 PACT 4.7–7.0W / θJA(high-K) 17.4°C/W / Tj 上限 120°C；
 按监理定值 40°C 自然对流 ⇒ Tj 121.8–161.8°C **全档超限**（ψJB+h 交叉路线 173.6°C）。
 ⇒ 须（a）系统强制风冷/顶部散热片 或（b）环境降额，并在下一轮几何修订中补强 U6 域 GND via 阵列。
-详见 `L2/L2_RULING_u6_thermal_v1.md` 与登记簿 HIGH 项。本板仍建议打样（散热路径实证需要实板）。
+详见包内 `06_rulings/L2_RULING_u6_thermal_v1.md`（缓解口径 `06_rulings/L2_RULING_u6_thermal_mitigation_v1.md`）与登记簿 HIGH 项。本板仍建议打样（散热路径实证需要实板）。
 
 ## 7. 已知板级非 DFM 事实（如实登记，非本单阻塞）
 - 本板无 PTH/NPTH 焊盘：`J6/J9/J11/J12/J13` 为无焊盘占位（netlist 骨架），板上无安装孔。

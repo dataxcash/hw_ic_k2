@@ -10,6 +10,7 @@
   05_layer_sequence.txt                       层序 + 层角色
   ORDER_NOTES.md                              下单备注（含 DFM 阻塞项，如实）
   MANIFEST.json                               每文件 sha256 + 计数
+  06_rulings/*                                ORDER_NOTES 声明随单提交的 L2 裁定件 + DFM 记录（CO-158）
 牙齿：① 跑两次 MANIFEST 必须逐字节同（幂等）；② 必须存在 8 个铜层 .gbr + 钻孔文件；
       ③ 目录内任何 sha 缺失即 FAIL。
 """
@@ -151,7 +152,7 @@ def order_notes(spec: dict, dfm: dict, imp: dict) -> str:
 FAQ 将 blind/buried 列为 **advanced options（须 DFM review，成本/交期上升）**。
 
 ⇒ **下单走 JLC advanced / 盲埋孔通道**（L2 自裁 = 过孔策略），随单提交：本备注 + 叠层图(03_) + 阻抗表(04_) +
-L2 裁定件 `L2_RULING_via_channel_and_interpair_domain_v1.md`；接受其 DFM review 与重报价。
+L2 裁定件 `06_rulings/L2_RULING_via_channel_and_interpair_domain_v1.md`（R1/R2/R3 全文）；接受其 DFM review 与重报价。
 若只接受标准通孔工艺 ⇒ 须重开 W3 **通孔化派生**（独立 L2 候选；前置 = 引擎通孔模型 + 可行性证明；
 原地通孔化实测 {probe_shorts} 项 shorting_items ⇒ 不可直接降级）。
 
@@ -163,7 +164,7 @@ L2 裁定件 `L2_RULING_via_channel_and_interpair_domain_v1.md`；接受其 DFM 
 ## 4. 其余 DFM 项（对照 JLC 8 层能力，实测 PASS）
 最小线宽 {b['min_track_width_mm']}mm(≥3.5mil)；过孔 {b['min_via_drill_mm']}/{b['min_via_diameter_mm']}mm（孔 ≥0.15、盘径 ≥0.25、环宽 0.075=JLC「盘径 ≥ 孔径+0.15」）；
 孔到孔 {b['min_via_hole_to_hole_mm']}mm(≥0.2)；板规铜-板边 0.30mm(≥0.2)；层数/尺寸/铜厚/板厚/表面处理均落 JLC 能力。
-逐项见 `m13_v57_co146_jlc_dfm_gate.json`。
+逐项见包内 `06_rulings/m13_v57_co146_jlc_dfm_gate.json`。
 
 ## 5. 阻抗
 85Ω 差分两套独立闭式模型（IPC-2141 族 / Hammerstad–Jensen+Cohn）均落 ±10%（as-built 对内净距），
@@ -175,12 +176,22 @@ L2 裁定件 `L2_RULING_via_channel_and_interpair_domain_v1.md`；接受其 DFM 
 **U6（DS320PR1601）热超限（CO-148）**：手册 PACT 4.7–7.0W / θJA(high-K) 17.4°C/W / Tj 上限 120°C；
 按监理定值 40°C 自然对流 ⇒ Tj 121.8–161.8°C **全档超限**（ψJB+h 交叉路线 173.6°C）。
 ⇒ 须（a）系统强制风冷/顶部散热片 或（b）环境降额，并在下一轮几何修订中补强 U6 域 GND via 阵列。
-详见 `L2/L2_RULING_u6_thermal_v1.md` 与登记簿 HIGH 项。本板仍建议打样（散热路径实证需要实板）。
+详见包内 `06_rulings/L2_RULING_u6_thermal_v1.md`（缓解口径 `06_rulings/L2_RULING_u6_thermal_mitigation_v1.md`）与登记簿 HIGH 项。本板仍建议打样（散热路径实证需要实板）。
 
 ## 7. 已知板级非 DFM 事实（如实登记，非本单阻塞）
 - 本板无 PTH/NPTH 焊盘：`J6/J9/J11/J12/J13` 为无焊盘占位（netlist 骨架），板上无安装孔。
 - DRC（as-designed，含逃逸域 dru）：42 项，全部为 `lib_footprint_*`(41) + `silk_edge_clearance`(1)，无铜几何违规。
 """
+
+
+# CO-158（H-1）：ORDER_NOTES 声明「随单提交」的附件必须**在包内**（否则下单时会静默漏交）。
+L2 = K2 / "pm_gate/artifacts/k2_v4/L2"
+RULINGS = [
+    (L2 / "L2_RULING_via_channel_and_interpair_domain_v1.md", "L2_RULING_via_channel_and_interpair_domain_v1.md"),
+    (L2 / "L2_RULING_u6_thermal_v1.md", "L2_RULING_u6_thermal_v1.md"),
+    (L2 / "L2_RULING_u6_thermal_mitigation_v1.md", "L2_RULING_u6_thermal_mitigation_v1.md"),
+    (STEP2 / "m13_v57_co146_jlc_dfm_gate.json", "m13_v57_co146_jlc_dfm_gate.json"),
+]
 
 
 def manifest(root: Path) -> dict:
@@ -207,6 +218,9 @@ def main() -> int:
     shutil.copy(STEP2 / "m13_v57_co146_impedance_table.md", OUT / "04_impedance/impedance_table.md")
     shutil.copy(STEP2 / "m13_v57_co146_impedance_table.json", OUT / "04_impedance/impedance_table.json")
     (OUT / "05_layer_sequence.txt").write_text(layer_sequence(spec))
+    (OUT / "06_rulings").mkdir(parents=True, exist_ok=True)
+    for _src, _dst in RULINGS:
+        shutil.copy(_src, OUT / "06_rulings" / _dst)
     (OUT / "ORDER_NOTES.md").write_text(order_notes(spec, dfm, imp))
     m1 = manifest(OUT)
     # 幂等：重出 gerber/drill，比较
@@ -223,11 +237,15 @@ def main() -> int:
     gbr = sorted(p.name for p in gdir.glob("*.gbr"))
     cu = [n for n in gbr if any(n.endswith(f"-{l.replace('.', '_')}.gbr") for l in COPPER)]
     drl = sorted(p.name for p in ddir.glob("*.drl"))
+    notes_txt = (OUT / "ORDER_NOTES.md").read_text()
+    refs = sorted(set(re.findall(r"`(06_rulings/[A-Za-z0-9_.\-]+)`", notes_txt)))
     teeth = {"t01_idempotent": ident,
+             "t05_declared_rulings_packaged": all((OUT / "06_rulings" / d).exists() for _, d in RULINGS),
+             "t06_order_notes_refs_resolve_in_package": bool(refs) and all((OUT / r).exists() for r in refs),
              "t02_8_copper_gerbers": len(cu) >= 8,
              "t03_drill_present": len(drl) >= 1,
              "t04_all_hashed": all(v.get("sha256") for v in m1.values())}
-    rec = {"artifact": "m13_v57_co146_jlc_fab_package", "schema": 1, "revision": "CO146-PKG.1",
+    rec = {"artifact": "m13_v57_co146_jlc_fab_package", "schema": 1, "revision": "CO146-PKG.2",
            "nature": "JLC 打样包（监理指令 #10 动作 3）；只出交付物，不改板/SPEC",
            "board": BOARD.name, "board_sha16": sha16(BOARD),
            "package_dir": str(OUT.relative_to(K2)), "n_files": len(m1),

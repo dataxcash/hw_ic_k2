@@ -10,6 +10,7 @@ from pathlib import Path
 K2 = Path("/home/fila/jqdDev_2025/ic_hw/k2")
 L3 = K2 / "pm_gate/artifacts/k2_v4/L3"
 L2 = K2 / "pm_gate/artifacts/k2_v4/L2"
+L5 = K2 / "pm_gate/artifacts/k2_v4/L5"
 STEP2 = L3 / "mcio_feas_step2"
 DOC = STEP2 / "m13_v57_w3_joint_assignment_boundary_v1_82.md"
 MARK = "## 23. CO-146"
@@ -494,6 +495,59 @@ def main() -> int:
         txt = re.sub(re.escape(MARK32) + r"[\s\S]*?(?=\n## |\Z)", body32, txt, count=1)
     else:
         txt = txt.rstrip("\n") + "\n\n" + body32
+    # ── §33 CO-158（L5 打样包自足性） ───────────────────────────────────────
+    MARK33 = "## 33. CO-158"
+    _rc33 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    _pkg = L5 / "jlc_package" / "MANIFEST.json"
+    _pk = json.loads(_pkg.read_text()) if _pkg.exists() else {}
+    sec33 = [MARK33 + "（**L2 自裁 · 交付物完整性**：L5 打样包自足）", "",
+             f"- 实测缺口（修前）：`ORDER_NOTES.md` §2 声明「随单提交 … L2 裁定件」，§3/§6 另引 DFM 记录与 U6 热裁定，"
+             f"但 `jlc_package/` 内**均无该等文件**（in-package=False）⇒ 下单时 silent omission；包内阻抗表副本亦为 CO-156 前陈旧件。",
+             f"- 处置（**CO146-PKG.2**）：新增 `06_rulings/`（3 份 L2 裁定件 + DFM 记录）+ ORDER_NOTES 引用改**包内路径** + "
+             f"牙齿 `t05_declared_rulings_packaged` / `t06_order_notes_refs_resolve_in_package`；打包工具**并入规范序**。",
+             f"- 复核：**全 gerber/drill 逐字节未变**（纯增量）；MANIFEST n_files = **{_pk.get('n_files')}**，"
+             f"teeth = {json.dumps(_pk.get('teeth', {}), ensure_ascii=False)}；登记簿 **{_rc33['total']} 项 / OPEN {_rc33['OPEN']}**。", "",
+             "**同 CO 另处置 2 项闸卫生**（实测缺陷）：", "",
+             "- **J-2**：co77 的 citation 候选目录**不含 L5 打样包** ⇒ §33 一类引用必被误判 CITATION_MISMATCH（实测 mismatches = "
+             "`['L5/jlc_package/MANIFEST.json','L5/jlc_package/ORDER_NOTES.md']`，并连带把 co135/co136 判 FAIL）⇒ **CO-77.6** 抽出 "
+             "`citation_candidates()` 补入 L5 包 + 正控牙齿 `l5_packet_citation_resolvable`；复核 co77 = PASS（mismatches []）。",
+             "- **J-3**：**闸退出码不反映 verdict** —— co77（恒 0）/co124/co135/co136 无条件 `return 0` ⇒ shell/CI 复现序无法据 rc 发现 FAIL"
+             "（实测 co136 FAIL 时 rc 仍 0）⇒ 四件改为 `PASS ⇒ 0 否则 1`（co135：`PASS`/`PASS_WITH_FINDINGS` ⇒ 0；对照 co120/co150/l4/l5 本已正确）。", "",
+             "> **R-CO158-1**（取代 R-CO157-1 的复现序）：规范复现序 = `co146_impedance_table → co146_pm_eval → co146_ledger_add → "
+             "co153_k9_domain_coverage → co148_u6_datasheet_inputs → co148_thermal_ruling → co149_thermal_mitigation_derive → "
+             "co147_l2_ruling → co146_jlc_dfm_gate → **co146_jlc_fab_package** → co152_findings_disposition → "
+             "co155_co154_findings_disposition → co156_co154_open_disposition → co157_gate_hardening_3 → **co158_l5_packet_selfcontained** → "
+             "co124_input_selfcheck_gate → co150_k9_domain_gate → co146_boundary_append → co77_closure_declaration_sweep → "
+             "co120_provenance_pin_gate → co135_review_hygiene → co136_gate_hygiene → co146_boundary_append`，**循环至 sha 稳定**。",
+             "> **R-CO158-2**：交付物（L5 打样包）内**声明随单提交的附件必须落包内**，且记录内引用须用**包内路径**；"
+             "新增此类声明由 t05/t06 把关（声明与包内容不一致即 FAIL）。",
+             "> **R-CO158-3**：凡规范序内的闸，**退出码必须反映 verdict**（FAIL/不一致 ⇒ 非 0），使复现序可 fail-fast；"
+             "被 boundary 引用的交付物目录须在 co77 citation 候选目录内。", "",
+             "> **附记（记录卫生·非工件缺陷）**：历次 handoff 称「工作树仅 `_shared` 模式位 dirty」**归因有误** —— "
+             "经查 k2 侧 `_shared` 的 dirty 实为 `k2/_shared/knowledge/kb.sqlite3-{wal,shm}`（未跟踪 SQLite 运行时件）；"
+             "而「模式位」（`eda_core/escape_closure_analysis.py` 100755→100644）在**容器侧 `_shared` 的独立 checkout** 内。"
+             "二者均属共享子模块边界、非 k2 工件；本件不修改（跨仓/运行时件），仅订正归因以免后续会话误追。", "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows33 = [("工具 `p3_v57_co158_l5_packet_selfcontained.py`", K2 / "tools/p3_v57_co158_l5_packet_selfcontained.py"),
+               ("工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.2 / 06_rulings + t05/t06）", K2 / "tools/p3_v57_co146_jlc_fab_package.py"),
+               ("工具 `p3_v57_co77_closure_declaration_sweep.py`（CO-77.6 / L5 citation + rc）", K2 / "tools/p3_v57_co77_closure_declaration_sweep.py"),
+               ("工具 `p3_v57_co124_input_selfcheck_gate.py`（rc 反映 verdict）", K2 / "tools/p3_v57_co124_input_selfcheck_gate.py"),
+               ("工具 `p3_v57_co135_review_hygiene.py`（rc）", K2 / "tools/p3_v57_co135_review_hygiene.py"),
+               ("工具 `p3_v57_co136_gate_hygiene.py`（rc）", K2 / "tools/p3_v57_co136_gate_hygiene.py"),
+               ("打样包 MANIFEST `L5/jlc_package/MANIFEST.json`", _pkg),
+               ("下单备注 `L5/jlc_package/ORDER_NOTES.md`", L5 / "jlc_package" / "ORDER_NOTES.md"),
+               ("打样包记录 `m13_v57_co146_jlc_fab_package.json`", STEP2 / "m13_v57_co146_jlc_fab_package.json"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc33['total']} 项 / OPEN {_rc33['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows33:
+        if pth.exists():
+            sec33.append(f"| {label} | `{s16(pth)}` |")
+    sec33.append("")
+    body33 = "\n".join(sec33)
+    if MARK33 in txt:
+        txt = re.sub(re.escape(MARK33) + r"[\s\S]*?(?=\n## |\Z)", body33, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body33
     txt = txt.replace("W3 Boundary **v2.00**", "W3 Boundary **v2.01**")
     txt = txt.replace("W3 Boundary **v1.99**", "W3 Boundary **v2.00**")
     txt = txt.replace("W3 Boundary **v1.98**", "W3 Boundary **v1.99**")
@@ -501,6 +555,7 @@ def main() -> int:
     txt = txt.replace("W3 Boundary **v2.01**", "W3 Boundary **v2.02**")
     txt = txt.replace("W3 Boundary **v2.02**", "W3 Boundary **v2.03**")
     txt = txt.replace("W3 Boundary **v2.03**", "W3 Boundary **v2.04**")
+    txt = txt.replace("W3 Boundary **v2.04**", "W3 Boundary **v2.05**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
     return 0

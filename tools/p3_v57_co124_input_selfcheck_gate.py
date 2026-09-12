@@ -615,7 +615,7 @@ def main() -> int:
                       "register_malformed": reg_bad, "teeth": teeth,
                       "findings": [f"{c}:{i_}" for c, i_, _ in findings],
                       "rec_sha16": s16(REC), "card_sha16": s16(CARD)}, ensure_ascii=False, indent=1))
-    return 0
+    return 0 if verdict == "PASS" else 1   # CO-158（J-3）：退出码须反映 verdict
 
 
 if __name__ == "__main__":

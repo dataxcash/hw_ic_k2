@@ -3,7 +3,7 @@
 - verdict：**PASS**
 - F6：co106 `teeth={"classifier_detector": true, "continuity_detector": true, "frame_inset_detector": true, "teeth_ok": true}`（rev CO-106.2）
 - F5(b)：co124 定义件 `pm_gate/artifacts/k2_v4/L2/BASIC_SKILL_VS_REDLINE_v1.1.md` → `v1.1 提议件（待监理裁定/owner 批准）`
-- F1：co77 表格行牙齿 `{'table_row_citation_detected': True}`，mismatches `0`
+- F1：co77 表格行牙齿 `{'l5_packet_citation_resolvable': True, 'table_row_citation_detected': True}`，mismatches `0`
 
 | 校验 | 通过 |
 |---|---|

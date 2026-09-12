@@ -20,6 +20,7 @@ K2 = Path(__file__).resolve().parents[1]
 L2 = K2 / "pm_gate/artifacts/k2_v4/L2"
 L3 = K2 / "pm_gate/artifacts/k2_v4/L3"
 S2 = L3 / "mcio_feas_step2"
+L5PKG = K2 / "pm_gate/artifacts/k2_v4/L5/jlc_package"   # CO-158（J-2）：交付物也可被收口件引用
 SPEC19 = L3 / "SPEC_k2_v4.spec-rev-19.json"
 SPEC18 = L3 / "SPEC_k2_v4.spec-rev-18.json"
 BOUNDARY = S2 / "m13_v57_w3_joint_assignment_boundary_v1_82.md"
@@ -101,7 +102,8 @@ def main() -> int:
         n += 1
         cands = [Path(name), Path(name).name and Path(Path(name).name), L3 / Path(name).name,
                  S2 / Path(name).name, L2 / Path(name).name, K2 / "tools" / Path(name).name,
-                 K2 / Path(name).name, K2 / "_shared" / "eda_core" / Path(name).name]
+                 K2 / Path(name).name, L5PKG / Path(name).name,
+                 K2 / "_shared" / "eda_core" / Path(name).name]
         hit = next((c for c in cands if c.exists()), None)
         if hit is None or s16(hit) != sha:
             cite_bad.append({"ref": name, "cited": sha, "actual": s16(hit) if hit else None})
@@ -167,7 +169,7 @@ def main() -> int:
     verdict = "PASS_WITH_FINDINGS" if (v1["frozen_4of4"] and v1["whitelist_outside_zero"]
                                        and v2["reachable"] and v3["citation_scan_clean"] and v4["all_pin_rev19"]
                                        and v4["fab_pin_current"]) else "FAIL"
-    rec = {"artifact": "m13_v57_co135_review_hygiene", "schema": 1, "revision": "CO-135.1",
+    rec = {"artifact": "m13_v57_co135_review_hygiene", "schema": 1, "revision": "CO-135.2",
            "nature": "非执行者复评（rev-19 + CO-134 全链）+ L2 声明/工具卫生修正",
            "reviewer": "另一会话（context 归零续接；非 CO-134 执行者）",
            "V1_frozen_and_spec": v1, "V2_faithful_derivation": v2, "V3_boundary_citations": v3,
@@ -201,7 +203,8 @@ def main() -> int:
                       "cite_clean": v3["citation_scan_clean"],
                       "rebase_rev19": v4["all_pin_rev19"], "fab_current": v4["fab_pin_current"],
                       "rec_sha16": s16(REC), "card_sha16": s16(CARD)}, ensure_ascii=False, indent=1))
-    return 0
+    # CO-158（J-3）：退出码须反映 verdict（PASS_WITH_FINDINGS 属通过档）
+    return 0 if verdict in ("PASS", "PASS_WITH_FINDINGS") else 1
 
 
 if __name__ == "__main__":

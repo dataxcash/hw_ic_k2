@@ -1,0 +1,236 @@
+{
+ "artifact": "m13_v57_co146_jlc_dfm_gate",
+ "schema": 1,
+ "revision": "CO146-JLC-DFM.1",
+ "nature": "L2 只读机判：DFM 对照 JLC 8 层公布能力（监理指令 #10 动作 4）",
+ "board": "k2_v4_8L.l4.kicad_pcb",
+ "board_sha16": "d4e81f647be7f980",
+ "board_sha256": "d4e81f647be7f9809aef72affb55fdf442a0cf743baead02d8e44fb130de18fc",
+ "as_built": {
+  "board": "k2_v4_8L.l4.kicad_pcb",
+  "board_sha16": "d4e81f647be7f980",
+  "n_copper_layers": 8,
+  "copper_layers": [
+   "F.Cu",
+   "In1.Cu",
+   "In2.Cu",
+   "In3.Cu",
+   "In4.Cu",
+   "In5.Cu",
+   "In6.Cu",
+   "B.Cu"
+  ],
+  "board_size_mm": [
+   120.1,
+   46.1
+  ],
+  "n_tracks": 2512,
+  "n_vias": 493,
+  "min_track_width_mm": 0.16,
+  "track_width_hist": {
+   "0.16": 2114,
+   "0.2": 185,
+   "0.205": 213
+  },
+  "min_track_width_by_layer": {
+   "B.Cu": 0.205,
+   "F.Cu": 0.2,
+   "In2.Cu": 0.16,
+   "In5.Cu": 0.16
+  },
+  "via_drill_hist_mm": {
+   "0.2": 493
+  },
+  "via_diameter_hist_mm": {
+   "0.35": 493
+  },
+  "min_via_drill_mm": 0.2,
+  "min_via_diameter_mm": 0.35,
+  "min_via_annular_mm": 0.075,
+  "via_type_census": {
+   "F.Cu->B.Cu|THROUGH": 273,
+   "F.Cu->In2.Cu|BLIND_BURIED": 92,
+   "F.Cu->In5.Cu|BLIND_BURIED": 8,
+   "In2.Cu->In5.Cu|BLIND_BURIED": 88,
+   "In5.Cu->B.Cu|BLIND_BURIED": 32
+  },
+  "n_non_through_vias": 220,
+  "min_via_hole_to_hole_mm": 0.25,
+  "pth_drill_hist_mm": {},
+  "min_pth_drill_mm": null,
+  "npth_drill_hist_mm": {},
+  "min_npth_drill_mm": null,
+  "n_zones": 13
+ },
+ "drc_as_designed": {
+  "n": 42,
+  "by_type": {
+   "lib_footprint_issues": 12,
+   "lib_footprint_mismatch": 29,
+   "silk_edge_clearance": 1
+  },
+  "unconnected": 178,
+  "samples": []
+ },
+ "drc_jlc_limits": {
+  "n": 43,
+  "by_type": {
+   "lib_footprint_issues": 12,
+   "lib_footprint_mismatch": 29,
+   "silk_edge_clearance": 1,
+   "solder_mask_bridge": 1
+  },
+  "unconnected": 178,
+  "samples": [
+   {
+    "type": "solder_mask_bridge",
+    "description": "顶层阻焊开窗区域与不同网络的项目相连",
+    "where": [
+     "走线 [PCIE_UP3_N] (F.Cu), 长度: 8.7551 mm",
+     "F.Cu 上 R3 的焊盘 2 [PWR_BTN_ISO]"
+    ]
+   }
+  ]
+ },
+ "items": [
+  {
+   "item": "板尺寸",
+   "jlc_limit": "≤656.0×586.0mm 且 ≥3×3mm",
+   "measured": "120.1×46.1mm",
+   "verdict": "PASS",
+   "note": ""
+  },
+  {
+   "item": "层数",
+   "jlc_limit": "1–32 层（阻抗控制支持 4/6/8/…）",
+   "measured": "8 层",
+   "verdict": "PASS",
+   "note": ""
+  },
+  {
+   "item": "外层铜厚",
+   "jlc_limit": "1 oz / 2 oz",
+   "measured": "1 oz（SPEC stackup / 监理定值）",
+   "verdict": "PASS",
+   "note": "声明值=监理定值"
+  },
+  {
+   "item": "内层铜厚",
+   "jlc_limit": "0.5 oz / 1 oz / 2 oz",
+   "measured": "0.5 oz（SPEC stackup / JLC 默认）",
+   "verdict": "PASS",
+   "note": "声明值=监理定值"
+  },
+  {
+   "item": "成品板厚",
+   "jlc_limit": "1.6mm ±10%",
+   "measured": "1.6mm（JLC08161H）",
+   "verdict": "PASS",
+   "note": "声明值"
+  },
+  {
+   "item": "最小线宽",
+   "jlc_limit": "≥0.09mm (3.5mil)",
+   "measured": "0.16mm",
+   "verdict": "PASS",
+   "note": ""
+  },
+  {
+   "item": "最小线距（域外，netclass 0.1/0.175/0.2 全 ≥3.5mil）",
+   "jlc_limit": "≥0.09mm",
+   "measured": "JLC 限 DRC clearance 违规 = 0",
+   "verdict": "PASS",
+   "note": "含逃逸域按 0.09mm 收紧后重跑"
+  },
+  {
+   "item": "最小过孔孔壁",
+   "jlc_limit": "≥0.15mm（建议 ≥0.2mm）",
+   "measured": "0.2mm",
+   "verdict": "PASS",
+   "note": ""
+  },
+  {
+   "item": "最小过孔盘径",
+   "jlc_limit": "≥0.25mm",
+   "measured": "0.35mm",
+   "verdict": "PASS",
+   "note": ""
+  },
+  {
+   "item": "过孔环宽（单边）",
+   "jlc_limit": "盘径 ≥ 孔径+0.15mm（⇒ 单边 ≥0.075mm）",
+   "measured": "0.075mm",
+   "verdict": "PASS",
+   "note": ""
+  },
+  {
+   "item": "过孔孔到孔",
+   "jlc_limit": "≥0.2mm",
+   "measured": "0.25mm",
+   "verdict": "PASS",
+   "note": ""
+  },
+  {
+   "item": "NPTH 最小孔径",
+   "jlc_limit": "≥0.5mm",
+   "measured": "Nonemm（[]）",
+   "verdict": "PASS",
+   "note": ""
+  },
+  {
+   "item": "铜到板边",
+   "jlc_limit": "≥0.2mm",
+   "measured": "板规 min_copper_edge_clearance=0.30mm；JLC 限 DRC copper_edge_clearance 违规 = 0",
+   "verdict": "PASS",
+   "note": ""
+  },
+  {
+   "item": "阻焊桥 / 阻焊-铜净距",
+   "jlc_limit": "桥 ≥0.1mm；开窗到邻近铜 ≥0.09mm",
+   "measured": "JLC 限 DRC solder_mask_bridge 违规 = 1",
+   "verdict": "FAIL",
+   "note": ""
+  },
+  {
+   "item": "表面处理",
+   "jlc_limit": "6 层及以上不支持 HASL ⇒ 须 ENIG",
+   "measured": "沉金 ENIG",
+   "verdict": "PASS",
+   "note": "监理定值一致"
+  },
+  {
+   "item": "阻抗控制",
+   "jlc_limit": "支持层数 4/6/8/10/12/.../32，公差 ±10%",
+   "measured": "8 层 + 85Ω±10%（见 CO-146 阻抗表）",
+   "verdict": "PASS",
+   "note": "终判 = JLC 阻抗控制服务"
+  },
+  {
+   "item": "**过孔类型（盲/埋孔）**",
+   "jlc_limit": "**不支持盲/埋孔（仅通孔）**",
+   "measured": "**非通孔 220/493 支**：F.Cu->In2.Cu|BLIND_BURIED=92；F.Cu->In5.Cu|BLIND_BURIED=8；In2.Cu->In5.Cu|BLIND_BURIED=88；In5.Cu->B.Cu|BLIND_BURIED=32",
+   "verdict": "FAIL",
+   "note": "JLC 公布能力页：Blind/Buried Vias Not supported / 仅通孔；FAQ 列为 advanced option 须 DFM review"
+  }
+ ],
+ "verdict": "FAIL",
+ "fails": [
+  "阻焊桥 / 阻焊-铜净距",
+  "**过孔类型（盲/埋孔）**"
+ ],
+ "teeth": {
+  "t01_track_width_limit_teeth": {
+   "ok": true,
+   "evidence": {
+    "lib_footprint_issues": 12,
+    "lib_footprint_mismatch": 29,
+    "silk_edge_clearance": 1,
+    "track_width": 199
+   }
+  },
+  "t02_blind_via_item_fails": {
+   "ok": true
+  }
+ },
+ "redline": "只读：仅读板/kicad-cli DRC；坐标零搜索；不改板/图纸/SPEC/冻结四源。"
+}

@@ -1,12 +1,12 @@
 {
  "artifact": "m13_v57_co146_jlc_fab_package",
  "schema": 1,
- "revision": "CO146-PKG.1",
+ "revision": "CO146-PKG.2",
  "nature": "JLC 打样包（监理指令 #10 动作 3）；只出交付物，不改板/SPEC",
  "board": "k2_v4_8L.l4.kicad_pcb",
  "board_sha16": "d4e81f647be7f980",
  "package_dir": "pm_gate/artifacts/k2_v4/L5/jlc_package",
- "n_files": 30,
+ "n_files": 34,
  "commands": {
   "gerber": "kicad-cli pcb export gerbers --board-plot-params --no-x2 --layers F.Cu,In1.Cu,In2.Cu,In3.Cu,In4.Cu,In5.Cu,In6.Cu,B.Cu,F.Paste,B.Paste,F.Silkscreen,B.Silkscreen,F.Mask,B.Mask,Edge.Cuts",
   "drill": "kicad-cli pcb export drill --format excellon --excellon-units mm --generate-map --map-format svg --generate-report"
@@ -43,6 +43,8 @@
  "stackup_svg_sha16": "44370475b258848f",
  "teeth": {
   "t01_idempotent": true,
+  "t05_declared_rulings_packaged": true,
+  "t06_order_notes_refs_resolve_in_package": true,
   "t02_8_copper_gerbers": true,
   "t03_drill_present": true,
   "t04_all_hashed": true
@@ -158,8 +160,8 @@
    "bytes": 3091
   },
   "04_impedance/impedance_table.json": {
-   "sha256": "2d1adf1996ee3185d37c84b88c637cfaac802b934c493ab64c2f13b65b16f1f1",
-   "bytes": 6915
+   "sha256": "794132ded5a0ce6116b7331de3e9140d3646032e61f0a5b3f48e035549bf65a9",
+   "bytes": 8625
   },
   "04_impedance/impedance_table.md": {
    "sha256": "fa44a665d84254fdb6a7e3ac70d8b79a51e06ff3f75ce46bbd18010aece7b748",
@@ -169,9 +171,25 @@
    "sha256": "6b33690f950c90fcaec3706e844c713fe1b82a4c36b1bdb890179a0617dbf20a",
    "bytes": 988
   },
+  "06_rulings/L2_RULING_u6_thermal_mitigation_v1.md": {
+   "sha256": "bf029700941f5145fe54dc2740a68b826b2bb88397034147ff861a4099933160",
+   "bytes": 2715
+  },
+  "06_rulings/L2_RULING_u6_thermal_v1.md": {
+   "sha256": "aa00f0207bc37e6f724155d4556a4288bec6133e02ea4d5d9d8b3cd4ff9d646a",
+   "bytes": 3055
+  },
+  "06_rulings/L2_RULING_via_channel_and_interpair_domain_v1.md": {
+   "sha256": "e8e16228bf1ea0ebc975b3ae4c551dcf2e8285254ebb9078dfab1c8b14f2523f",
+   "bytes": 4938
+  },
+  "06_rulings/m13_v57_co146_jlc_dfm_gate.json": {
+   "sha256": "1692424817eaa89ff1dd43acaade29566bb16ca6f3c629b93075cab4e56e8d35",
+   "bytes": 5782
+  },
   "ORDER_NOTES.md": {
-   "sha256": "af61e9e964249c079f18e1ee719397efaadf72d1cf11853ccc59c6b6772c7caa",
-   "bytes": 3609
+   "sha256": "42ffae9eb22db38aa07783815bc44a8553eff04f29a81cae104a649ad9d53788",
+   "bytes": 3740
   }
  },
  "redline": "只读板；零坐标搜索；不改板/图纸/SPEC/冻结四源（输出全在 L5 交付目录）。"

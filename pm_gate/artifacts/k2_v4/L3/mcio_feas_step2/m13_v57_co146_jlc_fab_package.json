@@ -1,12 +1,12 @@
 {
  "artifact": "m13_v57_co146_jlc_fab_package",
  "schema": 1,
- "revision": "CO146-PKG.1",
+ "revision": "CO146-PKG.2",
  "nature": "JLC 打样包（监理指令 #10 动作 3）；只出交付物，不改板/SPEC",
  "board": "k2_v4_8L.l4.kicad_pcb",
  "board_sha16": "d4e81f647be7f980",
  "package_dir": "pm_gate/artifacts/k2_v4/L5/jlc_package",
- "n_files": 30,
+ "n_files": 34,
  "commands": {
   "gerber": "kicad-cli pcb export gerbers --board-plot-params --no-x2 --layers F.Cu,In1.Cu,In2.Cu,In3.Cu,In4.Cu,In5.Cu,In6.Cu,B.Cu,F.Paste,B.Paste,F.Silkscreen,B.Silkscreen,F.Mask,B.Mask,Edge.Cuts",
   "drill": "kicad-cli pcb export drill --format excellon --excellon-units mm --generate-map --map-format svg --generate-report"
@@ -43,6 +43,8 @@
  "stackup_svg_sha16": "44370475b258848f",
  "teeth": {
   "t01_idempotent": true,
+  "t05_declared_rulings_packaged": true,
+  "t06_order_notes_refs_resolve_in_package": true,
   "t02_8_copper_gerbers": true,
   "t03_drill_present": true,
   "t04_all_hashed": true

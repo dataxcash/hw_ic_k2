@@ -15,6 +15,7 @@ K2 = Path("/home/fila/jqdDev_2025/ic_hw/k2")
 L3 = K2 / "pm_gate/artifacts/k2_v4/L3"
 L2 = K2 / "pm_gate/artifacts/k2_v4/L2"
 STEP2 = L3 / "mcio_feas_step2"
+L5PKG = K2 / "pm_gate/artifacts/k2_v4/L5/jlc_package"   # CO-158（J-2）：打样包也在收口声明件被引用
 def _latest_boundary() -> Path:
     """默认对象 = 最新版 boundary（避免闸默认指向过期版本 —— 一种自造漂移）。"""
     cands = list(STEP2.glob("m13_v57_w3_joint_assignment_boundary_v1_*.md"))
@@ -30,6 +31,14 @@ OUT = STEP2 / "m13_v57_co77_closure_declaration_sweep.json"
 
 def s16(p) -> str:
     return hashlib.sha256(Path(p).read_bytes()).hexdigest()[:16]
+
+
+def citation_candidates(name) -> list:
+    """CO-158（J-2）：citation 解析候选目录（含 L5 打样包 —— 此前缺此目录 ⇒ 包内文件引用一律误判 mismatch）。"""
+    n = Path(name)
+    return [n, Path(n.name), L3 / n.name, L3 / "mcio_feas_step2" / n.name,
+            L2 / n.name, K2 / "tools" / n.name, K2 / n.name, L5PKG / n.name,
+            K2 / "_shared" / "eda_core" / n.name, K2.parent / "_shared" / "eda_core" / n.name]
 
 
 def claims():
@@ -97,9 +106,7 @@ def main(argv=None) -> int:
             cite_hist += 1      # 该引用自身被显式标注历史，或 "before → after" 变更记法
             continue
         n = Path(name)
-        cands = [n, Path(n.name), L3 / n.name, L3 / "mcio_feas_step2" / n.name,
-                 L2 / n.name, K2 / "tools" / n.name, K2 / n.name,
-                 K2 / "_shared" / "eda_core" / n.name, K2.parent / "_shared" / "eda_core" / n.name]
+        cands = citation_candidates(n)
         hit = next((c for c in cands if c.exists()), None)
         real = s16(hit) if hit else None
         ok = bool(hit) and real == sha
@@ -114,8 +121,11 @@ def main(argv=None) -> int:
     # 数据无关：不依赖 boundary 当前内容；正则退化即 teeth=False ⇒ verdict FAIL。
     _probe = "| `SELF_TEST.json` | `" + "0" * 16 + "` |\n"
     teeth = {"table_row_citation_detected": [m.group(2) for m in CITE.finditer(_probe)] == ["0" * 16]}
+    # CO-158（J-2）正控：L5 打样包内文件的 citation 必须可解析（否则 §33 类引用会误判）
+    teeth["l5_packet_citation_resolvable"] = bool(
+        next((c for c in citation_candidates("MANIFEST.json") if c.exists()), None))
     teeth_ok = all(teeth.values())
-    rec = {"artifact": "m13_v57_co77_closure_declaration_sweep", "schema": 1, "revision": "CO-77.5",
+    rec = {"artifact": "m13_v57_co77_closure_declaration_sweep", "schema": 1, "revision": "CO-77.6",
            "nature": "L2 收口声明件当前态身份引用机判扫描",
            "doc": str(Path(doc).relative_to(K2)), "doc_sha16": s16(doc),
            "claims": rows, "stale_claims": bad,
@@ -132,7 +142,7 @@ def main(argv=None) -> int:
                       "verdict": rec["verdict"], "stale": bad, "citation_mismatch": cite_bad,
                       "detail": {r["claim"]: {"exp": r["expected"], "found": r["found"]}
                                  for r in rows if not r["ok"]}}, ensure_ascii=False))
-    return 0 if not bad else 0
+    return 0 if rec["verdict"] == "PASS" else 1   # CO-158（J-3）：退出码须反映 verdict
 
 
 if __name__ == "__main__":
