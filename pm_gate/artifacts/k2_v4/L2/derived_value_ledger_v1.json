@@ -94,7 +94,12 @@
       "required_pitch_mm": 0.765,
       "margin_mm": -0.165,
       "ok": true,
-      "regime": "ECN-001 escape_transition_zone 放宽（已声明，非该原则适用域）"
+      "regime": "ECN-001 escape_transition_zone（已声明；evidence_ref 已 hash-pin）⇒ 非该原则适用域",
+      "evidence_ref": {
+       "path": "SPEC_k2_v4.spec-rev-19.json",
+       "sha16": "5f72182a2616392c",
+       "basis": "SPEC constraints.escape_transition_zone（escape_clearance_mm=0.075；焊盘场节距 0.4/0.6 为封装固有）⇒ 该域非 REQ-R3-2「域外长平行」适用域"
+      }
      }
     ],
     "verdict": "REACHABLE"

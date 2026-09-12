@@ -99,6 +99,15 @@ def k9_findings(led: dict) -> list:
                                 "got": d.get("margin_mm")})
                 elif (exp < 0) and not exempt:
                     bad.append({"domain": d.get("id"), "why": "unreachable", "margin": exp})
+                elif exempt:
+                    # CO-139：豁免不得只靠 regime 自由文本 ⇒ 必须 hash-pin 到已声明依据（path 可解析 + sha 一致 + basis 非空）
+                    ev = d.get("evidence_ref") or {}
+                    pth = ev.get("path")
+                    hitc = next((c for c in [STEP2 / str(pth), L3 / str(pth), L2 / str(pth)]
+                                 if pth and c.exists()), None)
+                    if hitc is None or s16(hitc) != ev.get("sha16") or not ev.get("basis"):
+                        bad.append({"domain": d.get("id"), "why": "exemption_unpinned",
+                                    "evidence_ref": ev, "actual": s16(hitc) if hitc else None})
             if rc.get("verdict") != "REACHABLE" or bad:
                 f.append(("K9", f"derived_value_unreachable:{dv.get('id')}",
                           {"verdict": rc.get("verdict"), "bad": bad}))
@@ -228,11 +237,21 @@ def main() -> int:
         if (_dv.get("reachability") or {}).get("kind") == "identity":
             _dv["computed"] = {"span_mm": 0.999}; break
     teeth["T8_identity_drift"] = any(x[1].startswith("derived_value_identity_drift") for x in k9_findings(_l8))
+    # CO-139 负控 T9：豁免域去掉 evidence_ref ⇒ 必须 FAIL（豁免不得只靠自由文本）
+    _l9 = copy.deepcopy(_led)
+    for _dv in _l9.get("derived_values", []):
+        _doms = (_dv.get("reachability") or {}).get("domains")
+        if _doms:
+            for _d in _doms:
+                if "ECN-001" in str(_d.get("regime", "")):
+                    _d.pop("evidence_ref", None)
+            break
+    teeth["T9_exemption_unpinned"] = any(x[1].startswith("derived_value_unreachable") for x in k9_findings(_l9))
     teeth_ok = all(teeth.values())
     verdict = "PASS" if (not unreg and not reg_bad and teeth_ok) else (
         "FAIL_UNREGISTERED_INPUT_DEFECT" if unreg else "FAIL_REGISTER_MALFORMED" if reg_bad else "TEETH_FAIL")
     rec = {
-        "artifact": "m13_v57_co124_input_selfcheck_gate", "schema": 1, "revision": "CO-124.2",
+        "artifact": "m13_v57_co124_input_selfcheck_gate", "schema": 1, "revision": "CO-124.3",
         "nature": "输入自检闸：规格/规则自身自洽 + 物理可达登记 + 缺陷登记完备（整改通知 #08 第 2/3 条）",
         "definition_doc": {"path": str(DOC.relative_to(K2)), "sha16": s16(DOC), "status": f"{DOC_VER} 提议件（待监理裁定/owner 批准）"},
         "inputs": {"spec": str(SPEC.relative_to(K2)), "spec_sha16": s16(SPEC),

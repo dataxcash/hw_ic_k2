@@ -343,6 +343,20 @@
    "status": "CLOSED",
    "next": "无（工具类）",
    "closed_by": "CO-136"
+  },
+  {
+   "finding": "tool_defect:co124_k9_exemption_unpinned_scope_string",
+   "kind": "TOOL_DEFECT",
+   "severity": "medium",
+   "what": "co124 K9 的「域外」豁免仅凭 regime 自由文本含 `ECN-001` 即放行（无依据、无 sha）⇒ 任何人改写文本即可让不可达域通过（CO-135 F6 后半）",
+   "refs": [
+    "CO-135",
+    "CO-139",
+    "CO-84"
+   ],
+   "disposition": "CO-139 硬化：豁免域必须 hash-pin 到已声明依据（evidence_ref: path 可解析 + sha16 一致 + basis 非空），pad_field 锚定 SPEC constraints.escape_transition_zone；新增负控 T9（豁免未锚定必抓）",
+   "status": "CLOSED",
+   "closed_by": "CO-139"
   }
  ],
  "closed_items": [
@@ -360,14 +374,14 @@
   "owner": "ARCHER（L2 自裁执行侧）",
   "approval": "定义件 v1.0 待监理裁定/owner 批准；登记簿随闸每次运行校验",
   "mandatory_trigger": "任何 SPEC / drc_rules 变更后必须跑 tools/p3_v57_co124_input_selfcheck_gate.py 并 PASS",
-  "updated_by": "CO-127..CO-133 + **CO-134（整改通知 #09：③ 重新定性 = 工程换算错误 → REQ-R3-2 忠实实现 + 需求/实现分家规矩 + co124 K9）**；登记簿随 co124 每次运行校验；CO-134 续：4 项已声明定值补 rule_key + 台账溯源；**CO-136（L2 自裁 · 闸卫生续）**：登记并关闭 CO-135 F5(b)/F6 两条 TOOL_DEFECT（co124 标签 / co106 陈旧牙齿）；F4（handoff pin 失准）与 F5(a)（③ 根因叙述）属叙述类，保留在 CO-135 记录，不入本登记簿（非 SPEC/工具缺陷）。",
+  "updated_by": "CO-127..CO-133 + **CO-134（整改通知 #09：③ 重新定性 = 工程换算错误 → REQ-R3-2 忠实实现 + 需求/实现分家规矩 + co124 K9）**；登记簿随 co124 每次运行校验；CO-134 续：4 项已声明定值补 rule_key + 台账溯源；**CO-136（L2 自裁 · 闸卫生续）**：登记并关闭 CO-135 F5(b)/F6 两条 TOOL_DEFECT（co124 标签 / co106 陈旧牙齿）；F4（handoff pin 失准）与 F5(a)（③ 根因叙述）属叙述类，保留在 CO-135 记录，不入本登记簿（非 SPEC/工具缺陷）。；**CO-139**：+1 TOOL_DEFECT（K9 豁免未锚定）并 CLOSED（hash-pin + T9）。",
   "counts": {
    "SPEC_DEFECT": 5,
-   "TOOL_DEFECT": 6,
+   "TOOL_DEFECT": 7,
    "PROVED_THRESHOLD": 5,
    "IMPLEMENTATION_DEVIATION": 1,
    "OPEN": 1,
-   "total": 17
+   "total": 18
   }
  }
 }
