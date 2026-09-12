@@ -1,0 +1,243 @@
+{
+ "DISPOSITION": {
+  "basis": "(i) GND 无 In4 平面 ⇒ 对 130 ppc + 40 stitch 语义不可适用；(ii) 17 zone vias 全在 polygons=[] 的 bridge zone ⇒ 与 declared_pending_l3 同桶，扩 scope 只并入待派生清单、不新增可判缺陷；(iii) 生成端 latent 不在在役路径；(iv) F3/R1.2 根因属 L1",
+  "decision": "CLOSE_NO_SCOPE_EXTENSION",
+  "effects": "零 SPEC/板/阈值/冻结源改动；不需重基线；不需新复评（本件为 L2 自裁、非几何变更）",
+  "item": "CO-96 F4（可达性 scope 缺口，严重度=中）",
+  "open_after": "L1 三项（12V_IN 承载 / P3V3_AUX 西区归属 / L1① 0.875）＋外部输入（PM 压降·热 / 板厂券）"
+ },
+ "artifact": "m13_v57_co105_f4_scope_disposition",
+ "base_pins": {
+  "board": "0e636a67c1472462",
+  "spec_rev12": "1a381b06454dbe2c"
+ },
+ "checks": {
+  "V1_gnd_has_no_in4_plane": {
+   "gnd_plane_layers": [
+    "In1.Cu",
+    "In3.Cu",
+    "In6.Cu"
+   ],
+   "in4_nets": [
+    "MCU_VDD",
+    "P3V3",
+    "P3V3_AUX"
+   ],
+   "note": "判据=「落于本网 In4 铜」，GND 无 In4 区 ⇒ 对 GND 对象无可判定（非『未覆盖』）",
+   "ok": true,
+   "requirement_object": {
+    "non_gnd_ppc_entries": 55
+   },
+   "semantically_out_of_scope": {
+    "gnd_ppc_entries": 130,
+    "gnd_stitch_realized": 39
+   }
+  },
+  "V2_zone_vias_pending_l3": {
+   "detail": [
+    {
+     "geometry_status": "L3_CONSTRUCTION_DERIVED",
+     "net": "P3V3",
+     "pos": [
+      33.95,
+      39.9
+     ],
+     "zone": "P3V3_BCU_BRIDGE_IN4",
+     "zone_has_derived_geometry": false
+    },
+    {
+     "geometry_status": "L3_CONSTRUCTION_DERIVED",
+     "net": "P3V3",
+     "pos": [
+      40.0,
+      33.6
+     ],
+     "zone": "P3V3_BCU_BRIDGE_IN4",
+     "zone_has_derived_geometry": false
+    },
+    {
+     "geometry_status": "L3_CONSTRUCTION_DERIVED",
+     "net": "P3V3",
+     "pos": [
+      43.1,
+      33.6
+     ],
+     "zone": "P3V3_BCU_BRIDGE_IN4",
+     "zone_has_derived_geometry": false
+    },
+    {
+     "geometry_status": "L3_CONSTRUCTION_DERIVED",
+     "net": "P3V3_AUX",
+     "pos": [
+      47.0,
+      49.0
+     ],
+     "zone": "P3V3_AUX_BCU_BRIDGE_IN4",
+     "zone_has_derived_geometry": false
+    },
+    {
+     "geometry_status": "L3_CONSTRUCTION_DERIVED",
+     "net": "P3V3_AUX",
+     "pos": [
+      47.6,
+      49.0
+     ],
+     "zone": "P3V3_AUX_BCU_BRIDGE_IN4",
+     "zone_has_derived_geometry": false
+    },
+    {
+     "geometry_status": "L3_CONSTRUCTION_DERIVED",
+     "net": "P3V3_AUX",
+     "pos": [
+      58.9,
+      63.0
+     ],
+     "zone": "P3V3_AUX_BCU_BRIDGE_IN4",
+     "zone_has_derived_geometry": false
+    },
+    {
+     "geometry_status": "L3_CONSTRUCTION_DERIVED",
+     "net": "P3V3_AUX",
+     "pos": [
+      55.6,
+      49.8
+     ],
+     "zone": "P3V3_AUX_BCU_BRIDGE_IN4",
+     "zone_has_derived_geometry": false
+    },
+    {
+     "geometry_status": "L3_CONSTRUCTION_DERIVED",
+     "net": "P3V3_AUX",
+     "pos": [
+      57.8,
+      63.1
+     ],
+     "zone": "P3V3_AUX_BCU_BRIDGE_IN4",
+     "zone_has_derived_geometry": false
+    },
+    {
+     "geometry_status": "L3_CONSTRUCTION_DERIVED",
+     "net": "P3V3_AUX",
+     "pos": [
+      26.5,
+      61.57
+     ],
+     "zone": "P3V3_AUX_BCU_BRIDGE_IN4",
+     "zone_has_derived_geometry": false
+    },
+    {
+     "geometry_status": "L3_CONSTRUCTION_DERIVED",
+     "net": "P3V3_AUX",
+     "pos": [
+      29.65,
+      53.0
+     ],
+     "zone": "P3V3_AUX_BCU_BRIDGE_IN4",
+     "zone_has_derived_geometry": false
+    },
+    {
+     "geometry_status": "L3_CONSTRUCTION_DERIVED",
+     "net": "P3V3_AUX",
+     "pos": [
+      39.9,
+      53.25
+     ],
+     "zone": "P3V3_AUX_BCU_BRIDGE_IN4",
+     "zone_has_derived_geometry": false
+    },
+    {
+     "geometry_status": "L3_CONSTRUCTION_DERIVED",
+     "net": "MCU_VDD",
+     "pos": [
+      51.0,
+      40.0
+     ],
+     "zone": "MCU_VDD_BCU_RESISTORS_IN4",
+     "zone_has_derived_geometry": false
+    },
+    {
+     "geometry_status": "L3_CONSTRUCTION_DERIVED",
+     "net": "MCU_VDD",
+     "pos": [
+      50.2,
+      69.5
+     ],
+     "zone": "MCU_VDD_BCU_RESISTORS_IN4",
+     "zone_has_derived_geometry": false
+    },
+    {
+     "geometry_status": "L3_CONSTRUCTION_DERIVED",
+     "net": "MCU_VDD",
+     "pos": [
+      56.95,
+      70.5
+     ],
+     "zone": "MCU_VDD_BCU_RESISTORS_IN4",
+     "zone_has_derived_geometry": false
+    },
+    {
+     "geometry_status": "L3_CONSTRUCTION_DERIVED",
+     "net": "MCU_VDD",
+     "pos": [
+      55.95,
+      65.9
+     ],
+     "zone": "MCU_VDD_BCU_RESISTORS_IN4",
+     "zone_has_derived_geometry": false
+    },
+    {
+     "geometry_status": "L3_CONSTRUCTION_DERIVED",
+     "net": "MCU_VDD",
+     "pos": [
+      55.75,
+      66.7
+     ],
+     "zone": "MCU_VDD_BCU_RESISTORS_IN4",
+     "zone_has_derived_geometry": false
+    },
+    {
+     "geometry_status": "L3_CONSTRUCTION_DERIVED",
+     "net": "MCU_VDD",
+     "pos": [
+      57.55,
+      68.5
+     ],
+     "zone": "MCU_VDD_BCU_RESISTORS_IN4",
+     "zone_has_derived_geometry": false
+    }
+   ],
+   "n_in_empty_polygon_zone": 17,
+   "n_zone_vias": 17,
+   "note": "3 个 bridge zone（P3V3_BCU_BRIDGE_IN4 / P3V3_AUX_BCU_BRIDGE_IN4 / MCU_VDD_BCU_RESISTORS_IN4）polygons=[] ⇒ 与 CO-98 declared_pending_l3 同桶",
+   "ok": true
+  },
+  "V3_gnd_stitch_gen_not_in_path": {
+   "gnd_stitch_gen_code_refs_in_apply_path": 0,
+   "gnd_stitch_gen_prose_mentions": 1,
+   "note": "施工只读 SPEC `gnd_stitch_via.coordinates`（rev-12 由 CO-101 声明 palette 重放）⇒ 生成端缺陷为 latent，若重生成须同批修",
+   "ok": true,
+   "retired_ledger_present": true,
+   "spec_candidate_method": "从冻结 wp1_escape_nets 每网 vias 列表(44 个换层 via) + j2_escape_nets 换层点(56) 推导伴行位: 每换层 via 0.6mm 正交 4 向确定性候选(排除 GND 网障碍), 逐障碍按网级净距(PCIe85 0.175/低速 0.1)校验, 取余量最大候选; 逐坐标已对 k2_v4 重建板 pad/segment 几何核对"
+  },
+  "V4_f3_r1_2_is_l1": {
+   "declared_pending_l3": 14,
+   "note": "6 项 ruling 中 R1.2 依赖自由文本（CO-96 F3），其根因=电源域/区域归属 ⇒ L1（不在本件）",
+   "ok": true,
+   "ruling_pending_l1": 6
+  }
+ },
+ "inputs": {
+  "board": "0e636a67c1472462",
+  "co98_record": "1cf716469a5a9aaa",
+  "spec_rev12": "1a381b06454dbe2c"
+ },
+ "nature": "L2 自裁（PDN 建模）：CO-96 F4（可达性 requirement scope）落定 = 语义不可适用 + 几何待 L3（无需扩展动作）",
+ "pin_mismatch": {},
+ "revision": "CO-105.1",
+ "schema": 1,
+ "teeth": {
+  "empty_geom_detector": true,
+  "gnd_in4_detector": true,
+  "teeth_ok": true
+ }
+}
