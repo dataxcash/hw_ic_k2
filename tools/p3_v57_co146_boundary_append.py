@@ -953,6 +953,40 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body42
     txt = txt.replace("W3 Boundary **v2.13**", "W3 Boundary **v2.14**")
+    # ── §43 CO-169（收敛判据硬化：逐步产物产出证据） ───────────────────────
+    MARK43 = "## 43. CO-169"
+    _rc43 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    _ord169 = ('co146_impedance_table → co146_pm_eval → co146_ledger_add → co153_k9_domain_coverage → co148_u6_datasheet_inputs → co148_thermal_ruling → co149_thermal_mitigation_derive → co147_l2_ruling → co146_jlc_dfm_gate → co146_jlc_fab_package → co152_findings_disposition → co155_co154_findings_disposition → co156_co154_open_disposition → co157_gate_hardening_3 → co158_l5_packet_selfcontained → co159_rev19_co156_co157_co158_review → co160_co159_findings_disposition → co161_gap_hardening_4 → co162_verdict_binding → co163_binding_to_order_notes → co166_rev19_co159_co165_review → co167_co166_findings_disposition → co168_register_consistency → co169_step_output_oracle → co124_input_selfcheck_gate → co150_k9_domain_gate → co146_boundary_append → co77_closure_declaration_sweep → co120_provenance_pin_gate → co135_review_hygiene → co136_gate_hygiene → co78_layer_role_drift_gate → co81_project_rules_gate → co84_dru_domain_gate → co95_in4_reachability → co98_reachability_status_report → co106_reference_plane_gate → co146_boundary_append')
+    sec43 = [MARK43 + "（**L2 自裁 · 收敛判据硬化**：逐步产物产出证据）", "",
+             "- 实测缺口（机判探针）：CO-165/CO-167 的「记录由本次执行产出」（`record_refreshed` 变更检测）**只作用于白名单步**；"
+             "其余诸步的契约仅为 `rc == 0`。一个**不崩也不写**的步（早退分支 / 漏写 / 被改成只读检查）会因产物 sha 不变而被"
+             "「sha 稳定 ⇒ 收敛」**背书**（与 CO-164 假收敛同族，故障类相反：CO-164 = 崩而 sha 不变）。",
+             "- 处置（**CO-169**）：执行器升 **CO-169.1** —— 增纯判据 `step_did_work(before, after)`（受控产物集 `watch_paths()` 的 "
+             "mtime_ns 快照；前进 / 新增 / 删除任一即算做事）与 `zero_rc_class`；运行循环逐步取受控快照，`rc==0` 而**零产物变动** ⇒ "
+             "类 `step_wrote_nothing` 并**立即停机**；报告内逐步落 `did_work` 证据；`--check` 增 **t11**。",
+             f"- 复核：真序 37 步逐步探针 `did_work` **全 True**（每步至少刷写 1 件受控产物）；合成「rc=0 不写」步 ⇒ `step_wrote_nothing` 停机；"
+             f"整序 **converged**。登记簿 **{_rc43['total']} 项 / OPEN {_rc43['OPEN']}**。", "",
+             "> **R-CO169-1**：规范序**每步**须写出至少一个受控产物（`watch_paths()` 覆盖内）；`rc==0` 不构成「做了事」的证据；"
+             "纯只读步骤须显式登记豁免，不得默认放行。",
+             "> **R-CO169-2**：新增步骤须确保其产物在 `watch_paths()` 覆盖内，否则判 `step_wrote_nothing` 停机。",
+             "> **R-CO169-3**（复现序，取代 R-CO168-3；步骤集新增 co169）：规范复现序 = `" + _ord169 + "`，**循环至 sha 稳定**"
+             "（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2）。", "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows43 = [("工具 `p3_v57_co169_step_output_oracle.py`", K2 / "tools/p3_v57_co169_step_output_oracle.py"),
+               ("工具 `p3_v57_co164_order_runner.py`（CO-169.1 / `step_did_work` + t11）",
+                K2 / "tools/p3_v57_co164_order_runner.py"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc43['total']} 项 / OPEN {_rc43['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows43:
+        if pth.exists():
+            sec43.append(f"| {label} | `{s16(pth)}` |")
+    sec43.append("")
+    body43 = "\n".join(sec43)
+    if MARK43 in txt:
+        txt = re.sub(re.escape(MARK43) + r"[\s\S]*?(?=\n## |\Z)", body43, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body43
+    txt = txt.replace("W3 Boundary **v2.14**", "W3 Boundary **v2.15**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
     return 0

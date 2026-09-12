@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CO-164/CO-167 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
+"""CO-164/CO-167/CO-169 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2 + R-CO169-1）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
 
 缘起（实测事故，CO-163）：`co146_boundary_append.py` 因 §37 文本里的 f-string 花括号语法错误**每次崩溃（rc=1）**，
 但收敛判定只看 boundary/记录 sha ⇒ sha 恒不变 ⇒ 报「CONVERGED」，边界 §37 实际从未写入、pin 表陈旧（co77/co135/co136 判 FAIL）。
@@ -29,8 +29,8 @@ ORDER = ["co146_impedance_table", "co146_pm_eval", "co146_ledger_add", "co153_k9
          "co156_co154_open_disposition", "co157_gate_hardening_3", "co158_l5_packet_selfcontained",
          "co159_rev19_co156_co157_co158_review", "co160_co159_findings_disposition", "co161_gap_hardening_4",
          "co162_verdict_binding", "co163_binding_to_order_notes", "co166_rev19_co159_co165_review",
-         "co167_co166_findings_disposition", "co168_register_consistency", "co124_input_selfcheck_gate",
-         "co150_k9_domain_gate",
+         "co167_co166_findings_disposition", "co168_register_consistency", "co169_step_output_oracle",
+         "co124_input_selfcheck_gate", "co150_k9_domain_gate",
          "co146_boundary_append", "co77_closure_declaration_sweep", "co120_provenance_pin_gate", "co135_review_hygiene",
          "co136_gate_hygiene", "co78_layer_role_drift_gate", "co81_project_rules_gate", "co84_dru_domain_gate",
          "co95_in4_reachability", "co98_reachability_status_report", "co106_reference_plane_gate", "co146_boundary_append"]
@@ -84,6 +84,32 @@ def record_refreshed(before: dict, after: dict) -> bool:
     if not before.get("exists"):
         return True
     return after.get("mtime_ns") != before.get("mtime_ns") or after.get("sha") != before.get("sha")
+
+
+def _snap_watched() -> dict:
+    """CO-169（G-1）：受控产物集的 (路径 -> mtime_ns|None) 快照。"""
+    d = {}
+    for p in watch_paths():
+        try:
+            d[str(p)] = p.stat().st_mtime_ns
+        except OSError:
+            d[str(p)] = None
+    return d
+
+
+def step_did_work(before: dict, after: dict) -> bool:
+    """CO-169（G-1）：该步须**写出**至少一个受控产物（mtime_ns 前进 / 新增 / 删除）。
+
+    `rc == 0` 本身不证明「做了事」：一个静默返回的步（早退/漏写）会因产物 sha 不变而被
+    「sha 稳定 ⇒ 收敛」**背书**（与 CO-164 的教训同族，但故障类是「不崩也不写」）。
+    """
+    keys = set(before) | set(after)
+    return any(after.get(k) != before.get(k) for k in keys)
+
+
+def zero_rc_class(did_work: bool) -> str:
+    """CO-169：非白名单步在 rc==0 时的分类（须真正写出受控产物）。"""
+    return "ok" if did_work else "step_wrote_nothing"
 
 
 def record_verdict(path):
@@ -213,6 +239,13 @@ def main(argv=None) -> int:
         and record_refreshed({"exists": True, "mtime_ns": 1, "sha": "a"}, {"exists": True, "mtime_ns": 2, "sha": "a"})
         and not record_refreshed({"exists": True, "mtime_ns": 1, "sha": "a"}, {"exists": True, "mtime_ns": 1, "sha": "a"})
         and not record_refreshed({"exists": True, "mtime_ns": 1, "sha": "a"}, {"exists": False, "mtime_ns": None, "sha": None}))
+    # CO-169（G-1）：非白名单步 rc==0 亦须**真正写出**受控产物（禁「静默 no-op 步」被收敛背书）
+    checks["t11_step_output_oracle"] = (
+        step_did_work({"a": 1}, {"a": 2})                  # mtime 前进 ⇒ 做了事
+        and (not step_did_work({"a": 1}, {"a": 1}))        # 零变动 ⇒ 未做事
+        and step_did_work({"a": 1}, {"a": 1, "b": 7})      # 新增受控产物
+        and step_did_work({"a": 1}, {"a": None})           # 产物被删/失联
+        and zero_rc_class(True) == "ok" and zero_rc_class(False) == "step_wrote_nothing")
     checks["t05_stability_oracle"] = (stable("x", "x") and not stable("x", "y") and not stable("", ""))
     # CO-164（t06）：执行器 ORDER 必须与 boundary 规范复现序**有序一致**（文档↔执行器防漂移）
     _bdy = boundary_order_steps()
@@ -236,11 +269,15 @@ def main(argv=None) -> int:
             p = tool_path(step)
             _exp = EXPECTED_NONZERO.get(step) or {}
             _before = _record_snap(_exp["record"]) if _exp.get("record") else None
+            _w_before = _snap_watched()                                        # CO-169（G-1）
             r = subprocess.run([str(PY), str(p)], cwd=K2, capture_output=True, text=True)
+            _did = step_did_work(_w_before, _snap_watched())                   # CO-169（G-1）
             # CO-167（F-2）：变更检测（非绝对 mtime）
             _fresh = record_refreshed(_before, _record_snap(_exp["record"])) if _exp.get("record") else True
             cls = allowlist_decision(step, r.returncode, r.stderr, record_verdict(_exp.get("record")), _fresh)
-            rcs[step] = {"rc": r.returncode, "class": cls}
+            if cls == "ok" and not _did:
+                cls = zero_rc_class(False)     # CO-169（G-1）：rc==0 但未写出任何受控产物 ⇒ 立即停机
+            rcs[step] = {"rc": r.returncode, "class": cls, "did_work": _did}
             if cls not in ("ok", "expected_nonzero"):
                 unexpected = {"step": step, "rc": r.returncode, "class": cls,
                               "stderr_tail": (r.stderr or "")[-600:]}
@@ -254,7 +291,7 @@ def main(argv=None) -> int:
             converged = True
             break
         prev = cur
-    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-167.1",
+    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-169.1",
               "nature": "规范复现序机判执行器（rc 策略 + 真收敛判定）；报告落 .archer_tmp/ 且**不被 boundary 引用**（避免不动点）",
               "order": ORDER, "expected_nonzero": EXPECTED_NONZERO,
               "checks": checks, "iterations": iterations, "abort": abort, "converged": converged,
