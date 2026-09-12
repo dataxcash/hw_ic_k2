@@ -1,0 +1,29 @@
+{
+  "artifact": "m13_v57_co95_spec_rev11_band_retire",
+  "invariants": {
+    "board_unchanged": true,
+    "outside_pd_changed": [
+      "spec_version"
+    ]
+  },
+  "out": {
+    "sha16": "d85f10f722ba22b0",
+    "spec": "SPEC_k2_v4.spec-rev-11.json"
+  },
+  "revision": "CO-95.1",
+  "ruling": {
+    "acts": [
+      "退役 premise 已失效的 In4 keepout band（原约束留存 + void 理由）",
+      "废止 P3V3_EAST 的 band 推导西界，改由 ≥0.2mm 异网净距决定（落点 L3 派生）",
+      "新增 plane_reachability_requirement（via 须被本网 In4 铜覆盖）",
+      "登记 12 个无可达路径 entry（3 需区域裁决 / 6 已解除阻断 / 3 区域归属冲突）"
+    ],
+    "scope": "L2（PDN / 叠层分配）自裁"
+  },
+  "schema": 1,
+  "src": {
+    "sha16": "4416e42eed10cb8c",
+    "spec": "SPEC_k2_v4.spec-rev-10.json"
+  },
+  "verdict": "DERIVED"
+}
