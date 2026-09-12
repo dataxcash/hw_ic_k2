@@ -1,0 +1,89 @@
+{
+ "artifact": "m13_v57_co86_l2_span_option_closure",
+ "conclusion": "L2 侧无出口：所需走廊轨距在任一可行铜跨下均 > WEST 上限 1.050（球栅逃逸硬限）且 > 焊盘场 0.600（连接器引脚节距；且 0.600 < 0.875 与 span 无关）⇒ R3-2 0.875 不可由 L2 变量满足。最小缺额（最优内层重解 span'=0.407）= WEST 0.232 / 焊盘场 0.682。附加：备选非免费（gap 0.295->0.175 在 w 不变下 inner Zdiff 74.06Ω 出 85±10% 带 ⇒ 须重解 w + 券）。",
+ "impedance_first_order": {
+  "band_ohm": [
+   76.5,
+   93.50000000000001
+  ],
+  "delivered_gap_0p295": {
+   "inner": 82.02,
+   "outer": 88.43
+  },
+  "option_gap_0p175_same_w": {
+   "inner": 74.06,
+   "outer": 81.85
+  }
+ },
+ "inputs": {
+  "caps_mm": {
+   "EAST_CHIP_TO_J2": 1.449,
+   "WEST_MCIO_TO_CHIP": 1.05,
+   "pad_field": 0.6
+  },
+  "co85_record": "m13_v57_co85_nonexecutor_review_pass2.json",
+  "edge_requirement_mm": 0.875
+ },
+ "n_pass_all_caps": 0,
+ "nature": "L2 走廊分配/SI：对内铜跨备选的可达性闭合判定（L2 侧最后一条出口）",
+ "redline": "只读冻结源；不改板/图纸/阈值；零坐标搜索；一阶阻抗模型未经 SI9000/券。",
+ "revision": "CO-86.1",
+ "rows": [
+  {
+   "deficit_vs_EAST": 0.131,
+   "deficit_vs_WEST": 0.53,
+   "deficit_vs_pad_field": 0.98,
+   "passes_all_caps": false,
+   "pitch_required_mm": 1.58,
+   "span_option_mm": 0.705
+  },
+  {
+   "deficit_vs_EAST": 0.011,
+   "deficit_vs_WEST": 0.41,
+   "deficit_vs_pad_field": 0.86,
+   "passes_all_caps": false,
+   "pitch_required_mm": 1.46,
+   "span_option_mm": 0.585
+  },
+  {
+   "deficit_vs_EAST": -0.013,
+   "deficit_vs_WEST": 0.386,
+   "deficit_vs_pad_field": 0.836,
+   "passes_all_caps": false,
+   "pitch_required_mm": 1.436,
+   "span_option_mm": 0.561
+  },
+  {
+   "deficit_vs_EAST": -0.167,
+   "deficit_vs_WEST": 0.232,
+   "deficit_vs_pad_field": 0.682,
+   "passes_all_caps": false,
+   "pitch_required_mm": 1.282,
+   "span_option_mm": 0.407
+  }
+ ],
+ "schema": 1,
+ "solved_w_at_gap_0p175": {
+  "inner": {
+   "pitch_required_mm": 1.282,
+   "span_mm": 0.407,
+   "w_mm": 0.116,
+   "zdiff_ohm": 84.99
+  },
+  "outer": {
+   "pitch_required_mm": 1.436,
+   "span_mm": 0.561,
+   "w_mm": 0.193,
+   "zdiff_ohm": 85.08
+  }
+ },
+ "teeth": {
+  "hypothetical_control": true,
+  "pad_field_span_independent": true,
+  "span_grid_range_mm": [
+   0.407,
+   0.705
+  ],
+  "west_lower_bound_over_span_grid": true
+ }
+}
