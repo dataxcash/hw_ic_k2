@@ -1,0 +1,318 @@
+{
+ "artifact": "m13_v57_co103_rev12_nonexecutor_review",
+ "base_pins": {
+  "board": "0e636a67c1472462",
+  "co100": "11e21f3b97bac66b",
+  "co101": "cdeea6a3950f04f6",
+  "co102": "865b7336966e1186",
+  "co91": "eb982e150a1a4c50",
+  "co99": "4d969030d4046c9b",
+  "spec_rev11": "d85f10f722ba22b0",
+  "spec_rev12": "1a381b06454dbe2c"
+ },
+ "checks": {
+  "V1_idempotent_rederive": {
+   "canonical_sha16": "1a381b06454dbe2c",
+   "ok": true,
+   "rederived_sha16": "1a381b06454dbe2c"
+  },
+  "V2_palette_and_fixed_order": {
+   "n_items_replayed": 246,
+   "ok": true,
+   "outside_declared_palette": [],
+   "relocation_offsets": {
+    "ppc@0.475mm": 61,
+    "stitch@0.6mm": 5,
+    "zone@0.6mm": 4
+   },
+   "replay_disagreements": []
+  },
+  "V3_registration_completeness": {
+   "duplicate_planned_net_xy": [],
+   "entries_lost_without_registration": [],
+   "new_blocked_keys": [
+    [
+     "U6",
+     "FB34",
+     "GND"
+    ],
+    [
+     "U6",
+     "FF14",
+     "GND"
+    ],
+    [
+     "U6",
+     "FF21",
+     "GND"
+    ],
+    [
+     "U6",
+     "H12",
+     "GND"
+    ]
+   ],
+   "ok": true,
+   "planned_via_total": 241,
+   "retired_pos_preserved": true,
+   "stitch": {
+    "rev11_coord": 40,
+    "rev12_blocked": 61,
+    "rev12_coord": 39
+   }
+  },
+  "V4_clearance_caliber": {
+   "clearance_mismatch": [],
+   "co91_n_stub_viol": null,
+   "co91_n_via_viol": null,
+   "co91_stub_w": null,
+   "co91_verdict": "PASS",
+   "declared_stub_width_mm": 0.2,
+   "entries_checked": 185,
+   "ok": true
+  },
+  "V5_mutual_conflict": {
+   "co99_counts": {
+    "teeth_ok": true
+   },
+   "co99_verdict": "PASS",
+   "independent_hole_to_hole": 0,
+   "independent_overlap": 0,
+   "n_planned_vias": 241,
+   "ok": true
+  },
+  "V6_co102_construction_only": {
+   "co102_record_drc": {
+    "baseline": 42,
+    "frozen_delta": 34,
+    "local_delta": 0,
+    "stub_w": 0.2
+   },
+   "drc_scratch": {
+    "baseline": 42,
+    "frozen_delta": 34,
+    "local_delta": 0
+   },
+   "geometry_sets_equal": true,
+   "n_tracks": 2708,
+   "n_vias": 493,
+   "ok": true,
+   "width_delta_count": 185,
+   "width_delta_values": [
+    [
+     0.5,
+     0.2
+    ]
+   ]
+  },
+  "V7_block_cause_classification": {
+   "note": "4 项 U6 blocked 的 rev-11 位置对板铜干净；其阻塞成因全为与已接受计划件的同网孔距互障",
+   "ok": true,
+   "own_position_board_clean": {
+    "U6.FB34": {
+     "net": "GND",
+     "own_pos_board_clean_stub": true,
+     "own_pos_board_clean_via": true
+    },
+    "U6.FF14": {
+     "net": "GND",
+     "own_pos_board_clean_stub": true,
+     "own_pos_board_clean_via": true
+    },
+    "U6.FF21": {
+     "net": "GND",
+     "own_pos_board_clean_stub": true,
+     "own_pos_board_clean_via": true
+    },
+    "U6.H12": {
+     "net": "GND",
+     "own_pos_board_clean_stub": true,
+     "own_pos_board_clean_via": true
+    }
+   },
+   "plan_set_causes": {
+    "U6.FB34": [
+     [
+      [
+       103.45,
+       50.905
+      ],
+      "plan_hole:GND"
+     ],
+     [
+      [
+       103.45,
+       50.755
+      ],
+      "plan_hole:GND"
+     ],
+     [
+      [
+       103.45,
+       50.88
+      ],
+      "plan_hole:GND"
+     ]
+    ],
+    "U6.FF14": [
+     [
+      [
+       103.545,
+       54.49
+      ],
+      "plan_hole:GND"
+     ],
+     [
+      [
+       103.695,
+       54.49
+      ],
+      "plan_hole:GND"
+     ],
+     [
+      [
+       103.57,
+       54.49
+      ],
+      "plan_hole:GND"
+     ]
+    ],
+    "U6.FF21": [
+     [
+      [
+       103.545,
+       53.29
+      ],
+      "plan_hole:GND"
+     ],
+     [
+      [
+       103.695,
+       53.29
+      ],
+      "plan_hole:GND"
+     ],
+     [
+      [
+       103.57,
+       53.29
+      ],
+      "plan_hole:GND"
+     ]
+    ],
+    "U6.H12": [
+     [
+      [
+       83.949,
+       54.165
+      ],
+      "plan_hole:GND"
+     ],
+     [
+      [
+       83.949,
+       54.315
+      ],
+      "plan_hole:GND"
+     ],
+     [
+      [
+       83.949,
+       54.19
+      ],
+      "plan_hole:GND"
+     ]
+    ]
+   }
+  },
+  "V8_declaration_drift": {
+   "advisory": true,
+   "drift": {
+    "boundary": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_joint_assignment_boundary_v1_68.md",
+    "boundary_says_4_ppc": 3,
+    "boundary_says_5ppc1stitch": 1,
+    "boundary_says_6_items": 7,
+    "boundary_says_all_in_U6_field": 4,
+    "boundary_sha16": "c40f9598ef7fd636",
+    "boundary_stale_co95_citation": 2,
+    "canonical_new_blocked": 5,
+    "co95_actual_sha16": "f1c0c17ee7b379a4"
+   },
+   "ok": false
+  },
+  "V9_chain_pins": {
+   "co95_actual": "f1c0c17ee7b379a4",
+   "co96_certificate_stale": true,
+   "co96_pinned_co95": "61db48a283beeaae",
+   "gate_defaults_on_rev12": {
+    "p3_v57_co78_layer_role_drift_gate.py": true,
+    "p3_v57_co81_project_rules_gate.py": true,
+    "p3_v57_co84_dru_domain_gate.py": true,
+    "p3_v57_co91_pdn_planned_coord_clearance_gate.py": true,
+    "p3_v57_co92_pdn_repair_candidate.py": true,
+    "p3_v57_co95_in4_reachability.py": true,
+    "p3_v57_co98_reachability_status_report.py": true,
+    "p3_v57_co99_pdn_mutual_conflict_gate.py": true
+   },
+   "ok": true,
+   "validator_prefix_ok": true,
+   "w3_constructive_frozen_spec_ok": true
+  }
+ },
+ "findings": [
+  {
+   "evidence": [
+    "CO-100 tally ppc_blocked=4/relocated=61/kept=124",
+    "SPEC rev-12：blocked 120→124、stitch blocked 60→61"
+   ],
+   "id": "F-A",
+   "severity": "medium",
+   "statement": "声明「6 项新增 blocked（5 ppc + 1 stitch，全在 U6 0.5mm 场）」；canonical（CO-100 11e21f3b97bac66b tally + 已施加 rev-12）为 5 项 = 4 ppc + 1 stitch；该 stitch 在 J2 扇出 (133.83,59.1)、非 U6 场。同一 boundary 的 CO-101 条写 4 ppc + 1 ⇒ 自相矛盾。",
+   "target": "boundary v1.68（标题 + §6 CO-100 条）+ handoff §4-2 + ledger"
+  },
+  {
+   "evidence": [
+    "V7 own_position_board_clean / plan_set_causes",
+    "固定序敏感性探针（同 palette/检测器，仅换序）：8/13 ppc blocked，且每对幸存成员翻转 ⇒ 竞争性、canonical 4 为所试最优",
+    "板 .kicad_pro min_hole_to_hole=0.25；同网合成注入实测 kicad-cli hole_to_hole 违规（0.080 < 0.2495）"
+   ],
+   "id": "F-B",
+   "severity": "high",
+   "statement": "4 项 U6 新增 blocked ppc 的 rev-11 位置**对板铜干净**（V7），其阻塞全由**同网 GND 计划件孔距互障**（各由单一相邻 U6 GND 计划 via 触发，d=0.180-0.403mm < 0.45mm 阈值）造成；第 5 项为 J2 扇出 GND stitch 同址重孔对。⇒ 把 5 项一律归入 CO-94 的「板铜不可连接 ⇒ VIP/HDI（层数）」并升级 owner，**缺乏存在性证据**；这 5 项属**同网冗余竞争**（相邻 GND 球共面），与 CO-94 的 120 项板铜阻塞类不同类。",
+   "target": "CO-100/CO-101 的 L1/工艺升级叙述（⇒ via-in-pad/HDI）"
+  },
+  {
+   "evidence": [
+    "checks.V8_declaration_drift.drift.boundary_stale_co95_citation（=2）",
+    "checks.V9_chain_pins.co96_certificate_stale（=true）",
+    "本件实测：重跑 co96 → co77=CITATION_MISMATCH（canonical 已还原）"
+   ],
+   "id": "F-C",
+   "severity": "medium",
+   "statement": "boundary v1.68 两处以现行口径称「co95 记录 sha 仍 61db48a283beeaae」，现盘实为 f1c0c17ee7b379a4（rev-11 期记录已被 rev-12 重基线取代）；CO-96 证书同 pin 该陈旧 sha 却声明 baseline_ok=true ⇒ 证书对自身失效不实（重跑即 fail-closed 报 BASELINE_MISMATCH）。CO-77 结构上**抓不到**此类散文式身份声明（其 CITE 只匹配 `file` `sha16` 邻接形式）⇒ co77 PASS 不等于收口件内所有身份声明均为现行态。另：co96 无 `--out`，重跑会就地改写该**历史件**（违「历史件不改」精神）。",
+   "target": "收口件 co95 身份引用（§1 ㉛ / §6-20）+ CO-96 证书（8b591e5030aca11d）"
+  }
+ ],
+ "nature": "L2 PDN：rev-12 新基线**非执行者对抗复评**（对象 = CO-99/100/101/102 + 链 pin + 收口声明）",
+ "non_claims": [
+  "只读 canonical（仅写本件记录）；不改 SPEC/板/阈值/冻结源",
+  "独立重放复用 CO-91 几何原语：本件审「policy 施加」，原语本身由 CO-91/CO-99 覆盖",
+  "不重解、不用搜索式家族；F-B 只否定升级证据，不否定 CO-100 作为 declared-policy 输出的合法性",
+  "换序敏感性探针为评审证据（非 canonical 决策），不入库为 canonical"
+ ],
+ "pin_mismatch": {},
+ "reviewer": "非执行者会话（≠ CO-99..CO-102 执行者会话）",
+ "revision": "CO-103.1",
+ "schema": 1,
+ "teeth": {
+  "V2_palette_detector": true,
+  "V6_drc_reproduced": true,
+  "V7_own_clean_detector": true,
+  "co96_stale_detector": true,
+  "drift_detector": true,
+  "hole_detector": true,
+  "palette_membership": true,
+  "teeth_ok": true
+ },
+ "verdict": "PASS_WITH_FINDINGS"
+}
