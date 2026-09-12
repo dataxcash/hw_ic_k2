@@ -1,0 +1,67 @@
+{
+ "artifact": "m13_v57_co141_interpair_conformance_audit",
+ "schema": 1,
+ "revision": "CO-141",
+ "nature": "L2 分析（只读）：对间 2w 符合性全量审计（修正 co134 逐层最小值 = 下界）",
+ "inputs": {
+  "board": "a3ce9ab803045a0a",
+  "spec": "5f72182a2616392c",
+  "co134_record": "5dd6cc22c57da4a5"
+ },
+ "parallel_angle_cutoff_deg": 10.0,
+ "rows": [
+  {
+   "layer": "B.Cu",
+   "w_mm": 0.205,
+   "two_w_mm": 0.41,
+   "below_2w_parallel_le10deg": 14,
+   "below_2w_oblique_gt10deg": 0,
+   "parallel_pairs_involved": 14,
+   "min_parallel": [
+    0.345,
+    "PCIE_DN_OUT6_N_MCIO",
+    "PCIE_DN_OUT7_P_MCIO",
+    0.0
+   ],
+   "co134_reported_min_only": 0.345
+  },
+  {
+   "layer": "F.Cu",
+   "w_mm": 0.205,
+   "two_w_mm": 0.41,
+   "below_2w_parallel_le10deg": 10,
+   "below_2w_oblique_gt10deg": 2,
+   "parallel_pairs_involved": 10,
+   "min_parallel": [
+    0.2577,
+    "PCIE_DN6_N",
+    "PCIE_DN7_P",
+    7.4
+   ],
+   "co134_reported_min_only": 0.3294
+  },
+  {
+   "layer": "In2.Cu",
+   "w_mm": 0.16,
+   "two_w_mm": 0.32,
+   "below_2w_parallel_le10deg": 0,
+   "below_2w_oblique_gt10deg": 0,
+   "parallel_pairs_involved": 0,
+   "min_parallel": null,
+   "co134_reported_min_only": 0.42
+  },
+  {
+   "layer": "In5.Cu",
+   "w_mm": 0.16,
+   "two_w_mm": 0.32,
+   "below_2w_parallel_le10deg": 0,
+   "below_2w_oblique_gt10deg": 1138,
+   "parallel_pairs_involved": 0,
+   "min_parallel": null,
+   "co134_reported_min_only": 0.3125
+  }
+ ],
+ "finding": "co134 每层只报一个最小值 ⇒ 「域外偏差 3 处」为**下界**；全量枚举得**平行(≤10.0°) 低于 2w 的组合 24 个**，涉及 24 个对-对；In5 的低于 2w 组合**全为斜交**（>10°）⇒ 属「长平行」口径外。",
+ "verdict": "UNDER_REPORTED",
+ "redline": "只读；不改板/SPEC/冻结源；零坐标搜索"
+}
