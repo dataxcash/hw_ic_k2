@@ -395,7 +395,7 @@ CO-49 `canonicalize_board` ⇒ 净板/已施工板两次投喂**同一字节**�
 | `m13_v57_co105_f4_scope_disposition.json` | `5d6b48bc4ade3ec7` |
 | `m13_v57_co106_reference_plane_gate.json` | `71dcc7218938754a` |
 | `m13_v57_co120_provenance_pin_gate.json` | `73f5ff66dc861f3a` |
-| `m13_v57_co124_input_selfcheck_gate.json` | `770d920d2f2fb333` |
+| `m13_v57_co124_input_selfcheck_gate.json` | `7a61fb0171343d42` |
 | `m13_v57_co88_pdn_board_reality_gate.json` | `17719cf7f8e3e702` |
 | `m13_v57_co78_layer_role_drift_gate.json` | `f3e709bc348fe48d` |
 | `m13_v57_co81_project_rules_gate.json` | `093dd05224455b9d` |
@@ -430,7 +430,7 @@ SPEC **rev-19** `5f72182a2616392c`（白名单外 0 改动；0.875 退役留存 
 | `m13_v57_l4_validation.json` | `6511f81854c605a3` |
 | `m13_v57_l5_fab_record.json` | `3fd21d0b61202efa` |
 | `m13_v57_l5_si_pi_emc_record.json` | `87483571325e8f14` |
-| `m13_v57_co124_input_selfcheck_gate.json`（K9 + T5/T6/T7） | `770d920d2f2fb333` |
+| `m13_v57_co124_input_selfcheck_gate.json`（K9 + T5/T6/T7） | `7a61fb0171343d42` |
 | `m13_v57_co95_in4_reachability.json` | `c9eba916a9866808` |
 | `m13_v57_co98_reachability_status_report.json` | `1eaf00f34c882474` |
 | `m13_v57_co99_pdn_mutual_conflict_gate.json` | `1d256de815b1ed87` |
@@ -455,7 +455,7 @@ SPEC **rev-19** `5f72182a2616392c`（白名单外 0 改动；0.875 退役留存 
 |---|---|
 | 工具 `p3_v57_co106_reference_plane_gate.py`（CO-106.2） | `f6ff3bae52d9c166` |
 | 记录 `m13_v57_co106_reference_plane_gate.json` | `71dcc7218938754a` |
-| 记录 `m13_v57_co124_input_selfcheck_gate.json`（CO-124.2） | `770d920d2f2fb333` |
+| 记录 `m13_v57_co124_input_selfcheck_gate.json`（CO-124.2） | `7a61fb0171343d42` |
 | 登记簿 `input_defect_register_v1.json`（17 项） | `9ad0d6a33a22bed3` |
 | 工具 `p3_v57_co77_closure_declaration_sweep.py`（CO-77.5） | `423a23a42432fa39` |
 | 工具 `p3_v57_co136_gate_hygiene.py` | `4b65e75a64b3b686` |
@@ -543,7 +543,7 @@ CO-135 F6 后半：K9 的「域外」豁免原本**只凭 regime 自由文本含
 | 工件 | sha16 |
 |---|---|
 | 工具 `p3_v57_co124_input_selfcheck_gate.py`（CO-124.3） | `59069713be2efecc` |
-| 记录 `m13_v57_co124_input_selfcheck_gate.json` | `770d920d2f2fb333` |
+| 记录 `m13_v57_co124_input_selfcheck_gate.json` | `7a61fb0171343d42` |
 | 台账 `derived_value_ledger_v1.json`（pad_field 已锚定） | `94bf57f659476084` |
 | 登记簿 `input_defect_register_v1.json` | `9ad0d6a33a22bed3` |
 
