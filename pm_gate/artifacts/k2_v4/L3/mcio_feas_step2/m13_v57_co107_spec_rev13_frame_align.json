@@ -1,0 +1,220 @@
+{
+ "artifact": "m13_v57_co107_spec_rev13_frame_align",
+ "changes": {
+  "engine_consumes_zone_defs": false,
+  "l4_consumes_zone_defs": false,
+  "n_polygons_realigned": 5,
+  "new_frame_bottom": 78.7,
+  "old_frame_bottom": 70.7
+ },
+ "nature": "L2 PDN 自裁施加：平面多边形随板框 ECO 对齐（CO-106 FAIL 的修复）",
+ "out": "SPEC_k2_v4.spec-rev-13.json",
+ "out_sha16": "7943be727a4f8ef9",
+ "redline": "只改 polygon 顶点 + spec_version；不改阈值/网/层角色/坐标集/短段宽/blocked；退役几何显式留存",
+ "retired_detail": [
+  {
+   "new_polygon": [
+    [
+     23.3,
+     33.3
+    ],
+    [
+     142.7,
+     33.3
+    ],
+    [
+     142.7,
+     78.7
+    ],
+    [
+     23.3,
+     78.7
+    ]
+   ],
+   "old_polygon": [
+    [
+     23.3,
+     33.3
+    ],
+    [
+     142.7,
+     33.3
+    ],
+    [
+     142.7,
+     70.7
+    ],
+    [
+     23.3,
+     70.7
+    ]
+   ],
+   "owner": "gnd_planes[GND@In1.Cu]",
+   "reason": "CO-107 板框 38→46mm ECO 未随动（CO-106 FAIL）"
+  },
+  {
+   "new_polygon": [
+    [
+     23.3,
+     33.3
+    ],
+    [
+     142.7,
+     33.3
+    ],
+    [
+     142.7,
+     78.7
+    ],
+    [
+     23.3,
+     78.7
+    ]
+   ],
+   "old_polygon": [
+    [
+     23.3,
+     33.3
+    ],
+    [
+     142.7,
+     33.3
+    ],
+    [
+     142.7,
+     70.7
+    ],
+    [
+     23.3,
+     70.7
+    ]
+   ],
+   "owner": "gnd_planes[GND@In3.Cu]",
+   "reason": "CO-107 板框 38→46mm ECO 未随动（CO-106 FAIL）"
+  },
+  {
+   "new_polygon": [
+    [
+     23.3,
+     33.3
+    ],
+    [
+     142.7,
+     33.3
+    ],
+    [
+     142.7,
+     78.7
+    ],
+    [
+     23.3,
+     78.7
+    ]
+   ],
+   "old_polygon": [
+    [
+     23.3,
+     33.3
+    ],
+    [
+     142.7,
+     33.3
+    ],
+    [
+     142.7,
+     70.7
+    ],
+    [
+     23.3,
+     70.7
+    ]
+   ],
+   "owner": "gnd_planes[GND@In6.Cu]",
+   "reason": "CO-107 板框 38→46mm ECO 未随动（CO-106 FAIL）"
+  },
+  {
+   "new_polygon": [
+    [
+     88.37,
+     33.3
+    ],
+    [
+     142.7,
+     33.3
+    ],
+    [
+     142.7,
+     78.7
+    ],
+    [
+     88.37,
+     78.7
+    ]
+   ],
+   "old_polygon": [
+    [
+     88.37,
+     33.3
+    ],
+    [
+     142.7,
+     33.3
+    ],
+    [
+     142.7,
+     70.7
+    ],
+    [
+     88.37,
+     70.7
+    ]
+   ],
+   "owner": "power_zones[P3V3@P3V3_EAST]",
+   "reason": "CO-107 板框 38→46mm ECO 未随动（CO-106 FAIL）"
+  },
+  {
+   "new_polygon": [
+    [
+     23.3,
+     33.3
+    ],
+    [
+     49.8,
+     33.3
+    ],
+    [
+     49.8,
+     78.7
+    ],
+    [
+     23.3,
+     78.7
+    ]
+   ],
+   "old_polygon": [
+    [
+     23.3,
+     33.3
+    ],
+    [
+     49.8,
+     33.3
+    ],
+    [
+     49.8,
+     70.7
+    ],
+    [
+     23.3,
+     70.7
+    ]
+   ],
+   "owner": "power_zones[MCU_VDD@MCU_VDD_WEST]",
+   "reason": "CO-107 板框 38→46mm ECO 未随动（CO-106 FAIL）"
+  }
+ ],
+ "revision": "CO-107.1",
+ "schema": 1,
+ "src": "SPEC_k2_v4.spec-rev-12.json",
+ "src_sha16": "1a381b06454dbe2c"
+}

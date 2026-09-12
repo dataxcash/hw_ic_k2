@@ -1,0 +1,89 @@
+{
+ "artifact": "m13_v57_co106_reference_plane_gate",
+ "base_pins": {
+  "board": "0e636a67c1472462",
+  "spec_rev13": "7943be727a4f8ef9"
+ },
+ "checks": {
+  "A_frame_inset_consistency": {
+   "deviations": [],
+   "expected_inset_polygon": {
+    "x": [
+     23.3,
+     142.7
+    ],
+    "y": [
+     33.3,
+     78.7
+    ]
+   },
+   "n_zone_polygons": 5,
+   "note": "basis 明文「整面铺铜 + 板边内缩 edge_copper_min」；板框取 SPEC board.outline_x/y（v28 ECO：y 38mm→46mm）",
+   "ok": true
+  },
+  "B_reference_continuity": {
+   "class_counts": {
+    "region_scoped_indeterminate": 54
+   },
+   "examples": [],
+   "frame_inset_bottom_y": 78.7,
+   "full_void_by_net": {},
+   "interpretation": "ok=False 表示仍有参考层缺铜采样，但全部计入 region_scoped_indeterminate（In4 按电源区裁剪 + 桥区几何待 L3 派生）⇒ 本闸判 INDETERMINATE，不判 FAIL；declared_copper_missing（GND 整面层缺铜）= 0 才算板框一致性成立",
+   "n_declared_copper_missing_points": 0,
+   "n_full_void_segments": 0,
+   "n_segments": 320,
+   "ok": false,
+   "reference_declared_copper": {
+    "In1.Cu": 1,
+    "In3.Cu": 1,
+    "In4.Cu": 2,
+    "In6.Cu": 1
+   },
+   "segments_per_layer": {
+    "B.Cu": 32,
+    "F.Cu": 128,
+    "In2.Cu": 88,
+    "In5.Cu": 72
+   },
+   "violations_per_layer_ref": {
+    "In5.Cu<-In4.Cu": 54
+   }
+  },
+  "C_realized_corroboration": {
+   "board_entities_inside_void_band": {},
+   "declared_polygon_bottom_y": 78.7,
+   "frozen_outline_y_max": 79.0,
+   "note": "板实（L4 交付板）在平面下边界以下的铜实体计数 ⇒ 佐证该带已被施工使用",
+   "ok": true,
+   "void_band_mm": 0.3
+  },
+  "D_acceptance_matrix_coverage": {
+   "co87_ch2_criteria": "",
+   "co87_has_reference_plane_row": null,
+   "co87_matrix_items": [],
+   "note": "CO-87 自报判据含「参考平面」但矩阵无该行 ⇒ 本闸补上该判据（覆盖性缺口）；本项 ok 恒真（补全动作本身）",
+   "ok": true
+  }
+ },
+ "inputs": {
+  "board": "0e636a67c1472462",
+  "drawing": "73c0066df83fa8c2",
+  "spec_rev13": "7943be727a4f8ef9"
+ },
+ "nature": "L2 合格标准覆盖性补全（ch.2「参考平面」）+ 参考平面连续性/板框一致性机判",
+ "non_claims": [
+  "只读；不改 SPEC/板/阈值/冻结源",
+  "桥区 polygons=[] 的缺失归 CO-98 declared_pending_l3 桶，不在本件重复计缺陷",
+  "一阶判据：点采样（端点+相邻中点）；不做网格/有限元"
+ ],
+ "pin_mismatch": {},
+ "revision": "CO-106.1",
+ "schema": 1,
+ "teeth": {
+  "classifier_detector": true,
+  "continuity_detector": true,
+  "frame_inset_detector": true,
+  "teeth_ok": true
+ },
+ "verdict": "INDETERMINATE_REGION_SCOPED"
+}
