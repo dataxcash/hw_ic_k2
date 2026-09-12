@@ -1,0 +1,392 @@
+{
+ "artifact": "m13_v57_co114_rev14_nonexecutor_review",
+ "checks": {
+  "A_spec_delta": {
+   "added_families": {
+    "declared": 64,
+    "extra_source": 3
+   },
+   "changed_paths": [
+    ".spec_version"
+   ],
+   "co113_record_consistent": true,
+   "co113_record_says": {
+    "n_bridge_zones": 3,
+    "only_spec_version_changed_among_existing": true,
+    "out_sha16": "188b01deb34c9fba"
+   },
+   "declared_families_missing_source_key": [
+    ".pd.zone_defs.power_zones[2].bcu_bridge_bands_source",
+    ".pd.zone_defs.power_zones[3].bcu_bridge_bands_source",
+    ".pd.zone_defs.power_zones[4].bcu_bridge_bands_source"
+   ],
+   "n_added": 67,
+   "n_changed_existing": 1,
+   "n_removed": 0,
+   "ok": true,
+   "removed_paths": [],
+   "spec_version": [
+    "1.1.spec-rev-13",
+    "1.1.spec-rev-14"
+   ],
+   "unexpected_added": []
+  },
+  "B_invariance": {
+   "board_l4_pin": "0e636a67c1472462",
+   "board_l4_sha16": "0e636a67c1472462",
+   "drawing_pin": "0e74718b1e31dca5",
+   "drawing_sha16": "0e74718b1e31dca5",
+   "drc_container_identical": true,
+   "expected_sub": {
+    "landing_rows": "74234e98afe7498f",
+    "pages": "2535f3306cebe6eb",
+    "route_geometry": "c27d9f5b29c82ba2"
+   },
+   "frozen_actual_spec": "188b01deb34c9fbab3e81ef8c54acde1317d30c6a49c01b524f6b0556cbfc207",
+   "frozen_drift": [],
+   "frozen_four": {
+    "board_frozen": {
+     "actual": "fb07d25ac426ff84",
+     "ok": true,
+     "pin": "fb07d25ac426ff84"
+    },
+    "drc": {
+     "actual": "0a459839e15960b8",
+     "ok": true,
+     "pin": "0a459839e15960b8"
+    },
+    "manifest": {
+     "actual": "a8ef3ea8ecff99d7",
+     "ok": true,
+     "pin": "a8ef3ea8ecff99d7"
+    },
+    "spec_orig": {
+     "actual": "0bd52ed48e720b8c",
+     "ok": true,
+     "pin": "0bd52ed48e720b8c"
+    }
+   },
+   "ok": true,
+   "rev13_blob_pin": "73c0066df83fa8c2",
+   "rev13_blob_sha16": "73c0066df83fa8c2",
+   "rev13_sub": {
+    "landing_rows": "74234e98afe7498f",
+    "pages": "2535f3306cebe6eb",
+    "route_geometry": "c27d9f5b29c82ba2"
+   },
+   "rev14_sub": {
+    "landing_rows": "74234e98afe7498f",
+    "pages": "2535f3306cebe6eb",
+    "route_geometry": "c27d9f5b29c82ba2"
+   }
+  },
+  "C_spec_pin_advance": {
+   "live_missing_rev14": [],
+   "live_on_rev13": [],
+   "live_on_rev14": 15,
+   "n_live_tools": 15,
+   "n_tools_referencing_rev14": 18,
+   "ok": true,
+   "provenance_pin_consistency": {
+    "invariant": "CO-108 check C：记录内 inputs.*_record pin 须 == 当前文件（本件独立复算，§见 F-6）",
+    "mismatch": [
+     {
+      "actual": "9a304f65d449dc43",
+      "cited": "48b5bd29009a9eb8",
+      "file": "m13_v57_co105_f4_scope_disposition.json",
+      "key": "co98_record",
+      "ok": false,
+      "ref": "m13_v57_co98_reachability_status_report.json"
+     },
+     {
+      "actual": "cb4e69d2a8160bf7",
+      "cited": "fa0ef14cb38dcb1c",
+      "file": "m13_v57_co109_in4_void_l2_ruling.json",
+      "key": "co106_record",
+      "ok": false,
+      "ref": "m13_v57_co106_reference_plane_gate.json"
+     },
+     {
+      "actual": "cb4e69d2a8160bf7",
+      "cited": "fa0ef14cb38dcb1c",
+      "file": "m13_v57_co110_l2_coverage_closure.json",
+      "key": "co106_record",
+      "ok": false,
+      "ref": "m13_v57_co106_reference_plane_gate.json"
+     },
+     {
+      "actual": "8018713e2b6dcb0c",
+      "cited": "d4849456357c84cc",
+      "file": "m13_v57_co110_l2_coverage_closure.json",
+      "key": "co87_record",
+      "ok": false,
+      "ref": "m13_v57_co87_l2_acceptance_coverage.json"
+     },
+     {
+      "actual": "7c711ff63fb6ccdc",
+      "cited": "6bba8c878bdc2034",
+      "file": "m13_v57_co98_reachability_status_report.json",
+      "key": "co95_record",
+      "ok": false,
+      "ref": "m13_v57_co95_in4_reachability.json"
+     }
+    ],
+    "n_pins": 9,
+    "ok": false
+   },
+   "rev13_referencing_tools": [
+    "p3_v57_co107_spec_rev13_frame_align.py",
+    "p3_v57_co108_rev13_nonexecutor_review.py",
+    "p3_v57_co109_in4_void_l2_ruling.py",
+    "p3_v57_co110_l2_coverage_closure.py",
+    "p3_v57_co111_in5_pcie_corridor_exposure.py",
+    "p3_v57_co112_bcu_bridge_declaration.py",
+    "p3_v57_co113_spec_rev14_declare.py"
+   ],
+   "unexpected_rev13_tools": []
+  },
+  "D_keepout_correction": {
+   "band_x": [
+    50.0,
+    88.17
+   ],
+   "co115_all_checks_ok": true,
+   "co115_verdict": "L2_CORRECTION_STALE_KEEPOUT_PENDING_L3_L1_OWNERSHIP",
+   "corridor_x_in_rev14_key": [
+    49.8,
+    88.37
+   ],
+   "east_edge": 88.37,
+   "effect_authorizes_pour": true,
+   "erroneous_key_note": "CO-109/110/111/112：In4 走廊按设计无铜（PM T2-ECN-1/2『In4 走线带不跨』；bridge = B.Cu）",
+   "expected_east": 88.37,
+   "expected_west": 49.8,
+   "keepout_retired_by": "CO-95",
+   "ok": true,
+   "west_edge": 49.8
+  },
+  "E_exposure_recompute": {
+   "all_nets_pcie": true,
+   "co111_checkC_claim": "L5 SI 只签 intra-pair skew（本项目判据=按层加权电气长度）；**无逐线阻抗核验** ⇒ 走廊阻抗暴露未验",
+   "co111_record": {
+    "n_nets": 16,
+    "pct": 0.4014,
+    "total_mm": 2727.316,
+    "unref_mm": 1094.812
+   },
+   "ok": true,
+   "recomputed": {
+    "n_nets": 16,
+    "pct": 0.4014,
+    "total_mm": 2727.316,
+    "unref_mm": 1094.812
+   },
+   "si_signoff": {
+    "conformance": "DESIGN_CONFORMANT_FIRST_ORDER_PENDING_COUPON",
+    "in5_declared_refs": [
+     "In4.Cu",
+     "In6.Cu"
+    ],
+    "max_skew_mm": 0.13,
+    "per_layer_impedance_present": true,
+    "region_scoped_impedance_verification": false,
+    "skew_ok": true
+   }
+  },
+  "F_new_keys_no_consumer": {
+   "consumers_of_rev14_keys": {
+    "bcu_bridge_bands": [],
+    "bridge_layer": [],
+    "in4_corridor_void_by_design_v1": [],
+    "na_scope_v1": []
+   },
+   "nonempty_search_control": {
+    "bcu_bridge_bands": [
+     "p3_v57_co113_spec_rev14_declare.py",
+     "p3_v57_co114_rev14_nonexecutor_review.py"
+    ],
+    "bridge_layer": [
+     "p3_v57_co110_l2_coverage_closure.py",
+     "p3_v57_co112_bcu_bridge_declaration.py",
+     "p3_v57_co113_spec_rev14_declare.py",
+     "p3_v57_co114_rev14_nonexecutor_review.py"
+    ],
+    "in4_corridor_void_by_design_v1": [
+     "p3_v57_co113_spec_rev14_declare.py",
+     "p3_v57_co114_rev14_nonexecutor_review.py",
+     "p3_v57_co115_corridor_stale_keepout_correction.py"
+    ],
+    "na_scope_v1": [
+     "p3_v57_co113_spec_rev14_declare.py",
+     "p3_v57_co114_rev14_nonexecutor_review.py"
+    ]
+   },
+   "note": "rev-14 新增声明键在引擎/L4/L5/各闸（即 rev-14 SPEC 消费者）中零引用 ⇒ CO-113「读数不变」为逻辑必然（非信任执行者）",
+   "ok": true
+  }
+ },
+ "findings": [
+  {
+   "disposition": "OPEN_DECLARED",
+   "evidence": {
+    "co115_corrects": [
+     "CO-109 R2",
+     "CO-110",
+     "CO-113 rev-14 in4_corridor_void_by_design_v1"
+    ],
+    "co115_verdict": "L2_CORRECTION_STALE_KEEPOUT_PENDING_L3_L1_OWNERSHIP",
+    "key_note": "CO-109/110/111/112：In4 走廊按设计无铜（PM T2-ECN-1/2『In4 走线带不跨』；bridge = B.Cu）"
+   },
+   "id": "F-1",
+   "severity": "high",
+   "statement": "rev-14 canonical 键 `pd.zone_defs.in4_corridor_void_by_design_v1` 的陈述（`note` = 'In4 走廊按设计无铜'）已被 **CO-115** 判为**事实错误**（走廊空洞 = 失效 keepout 残留，待 L3 派生）。即：现行 canonical SPEC **内含一个已定性的错误声明**。A 面证明该键确为 rev-14 新增（非历史残留）⇒ 缺陷随 rev-14 生效。",
+   "target": "rev-15（更正键语义）；须先有 OWNER/L1 band 归属界面（bundling 才作一次 rev 重基线 + 复评）"
+  },
+  {
+   "disposition": "OPEN_DECLARED",
+   "evidence": {
+    "co87_reference_plane_row": [
+     {
+      "evidence": "CO-106 参考平面连续性闸 verdict=INDETERMINATE_REGION_SCOPED；declared_copper_missing=0；残余 {'In5.Cu<-In4.Cu': 54} ⇒ CO-110 判为按设计 In4 走廊空洞（bridge zone = B.Cu）",
+      "item": "参考平面（ch.2 L2 裁判标准）",
+      "status": "INDETERMINATE"
+     }
+    ]
+   },
+   "id": "F-2",
+   "severity": "medium",
+   "statement": "live 验收登记册 `co87` 的「参考平面」行证据文本仍内嵌 `CO-110 判为按设计 In4 走廊空洞（bridge zone = B.Cu）`，与 CO-115 更正冲突 ⇒ 该行状态（INDETERMINATE）虽正确，**证据叙述已陈旧**。",
+   "target": "co87 矩阵（下一 rev 一并更正）"
+  },
+  {
+   "disposition": "OPEN_DECLARED",
+   "evidence": {
+    "added_extra_source_keys": [
+     ".pd.zone_defs.power_zones[2].bcu_bridge_bands_source",
+     ".pd.zone_defs.power_zones[3].bcu_bridge_bands_source",
+     ".pd.zone_defs.power_zones[4].bcu_bridge_bands_source"
+    ],
+    "declared_new_keys": [
+     "pd.zone_defs.in4_corridor_void_by_design_v1",
+     "pd.zone_defs.power_zones[*].bridge_layer",
+     "pd.zone_defs.power_zones[*].bcu_bridge_bands",
+     "pd.zone_defs.plane_reachability_status.na_scope_v1"
+    ]
+   },
+   "id": "F-3",
+   "severity": "low",
+   "statement": "CO-113 变更记录的 `changes.new_keys` **少声明**一个实际新增键 `bcu_bridge_bands_source`（工具写入，属 band 来源标注）。无功能影响（无消费者），但**声明完整性**缺口。",
+   "target": "CO-113 记录 / rev-15 声明"
+  },
+  {
+   "disposition": "INFORMATIONAL",
+   "evidence": {
+    "conformance": "DESIGN_CONFORMANT_FIRST_ORDER_PENDING_COUPON",
+    "per_layer_impedance_In5": {
+     "b_mm": 0.5,
+     "er": 3.99,
+     "gap_mm_delivered": [
+      0.34,
+      0.44
+     ],
+     "kind": "symmetric_stripline",
+     "material": "core 0.25*2",
+     "refs": [
+      "In4.Cu",
+      "In6.Cu"
+     ],
+     "w_mm": 0.16
+    },
+    "region_scoped_verification_field": false
+   },
+   "id": "F-4",
+   "severity": "low",
+   "statement": "CO-111 check C 的措辞『**无逐线阻抗核验字段**』不精确：L5 SI 记录实含 `netclass_geometry.per_layer_impedance`（In5 声明 refs=[In4,In6]）与 `conformance=DESIGN_CONFORMANT_FIRST_ORDER_PENDING_COUPON`。真正的缺口是**区域无关性**（In5 阻抗模型无条件假定 In4 参考存在）⇒ CO-111 的实质结论（走廊阻抗未验）**成立且被本件加强**，仅措辞需收敛。",
+   "target": "CO-111 措辞（下一 rev 收敛为『区域条件阻抗未验』）"
+  },
+  {
+   "disposition": "CLOSED_BY_THIS_REVIEW",
+   "evidence": {
+    "boundary_v1_80_sha16": "a578ac707dc4cd91"
+   },
+   "id": "F-5",
+   "severity": "informational",
+   "statement": "boundary v1.80 §2「现行 SPEC」行仍把 rev-14 描述为『In4 走廊空洞按设计』，与同件 §1 ㊼/§6-36 的 CO-115 更正**自相矛盾**；本件出 v1.81 时一并更正措辞。",
+   "target": "boundary v1.81（本件）"
+  },
+  {
+   "disposition": "OPEN_DECLARED",
+   "evidence": {
+    "mismatch": [
+     {
+      "actual": "9a304f65d449dc43",
+      "cited": "48b5bd29009a9eb8",
+      "file": "m13_v57_co105_f4_scope_disposition.json",
+      "key": "co98_record",
+      "ref": "m13_v57_co98_reachability_status_report.json"
+     },
+     {
+      "actual": "cb4e69d2a8160bf7",
+      "cited": "fa0ef14cb38dcb1c",
+      "file": "m13_v57_co109_in4_void_l2_ruling.json",
+      "key": "co106_record",
+      "ref": "m13_v57_co106_reference_plane_gate.json"
+     },
+     {
+      "actual": "cb4e69d2a8160bf7",
+      "cited": "fa0ef14cb38dcb1c",
+      "file": "m13_v57_co110_l2_coverage_closure.json",
+      "key": "co106_record",
+      "ref": "m13_v57_co106_reference_plane_gate.json"
+     },
+     {
+      "actual": "8018713e2b6dcb0c",
+      "cited": "d4849456357c84cc",
+      "file": "m13_v57_co110_l2_coverage_closure.json",
+      "key": "co87_record",
+      "ref": "m13_v57_co87_l2_acceptance_coverage.json"
+     },
+     {
+      "actual": "7c711ff63fb6ccdc",
+      "cited": "6bba8c878bdc2034",
+      "file": "m13_v57_co98_reachability_status_report.json",
+      "key": "co95_record",
+      "ref": "m13_v57_co95_in4_reachability.json"
+     }
+    ]
+   },
+   "id": "F-6",
+   "severity": "medium",
+   "statement": "rev-14 重基线后 4 个记录内 5 处 `inputs.*_record` provenance pin 指向**已被取代**的上游记录（CO-108 check C 的不变量被打破）：co98←co95 / co105←co98 / co109←co106 / co110←co106 / co110←co87。CO-113 只前移 SPEC pin 并重跑闸记录（co87/95/98/106 于 d1af217 变 sha），未刷新上级记录的 inter-record pin ⇒ 与 CO-108 F-A 同族盲区（CO-77 不覆盖记录内 provenance pin）。被引值均为 git 内**真实历史版本**（非 F-A 式伪造）⇒ 属『陈旧 pin』，非『漂移伪造』。",
+   "target": "pin 刷新 CO（可并入 rev-15；CO-108 F-A 先例允许确定性重跑既有工具、语义不变），或在记录内显式标注『历史 pin』"
+  }
+ ],
+ "nature": "L2 非执行者对抗复评：SPEC rev-14 新基线（对象 = CO-113 + CO-115 + 链 pin 前移 + 几何/板不变性）",
+ "non_claims": [
+  "只读（除自身记录）；不改 SPEC/板/阈值/冻结源/其它工件",
+  "一阶点采样（段中点）；不做网格/有限元；不重跑 L3 桥区几何派生",
+  "「读数不变」以『新键零消费者 + 图纸/板逐字节同』为逻辑论证，未重跑 G4..G7 全链"
+ ],
+ "reviewer": "非执行者会话（rev-14 施加者 z13 之外的独立、context 隔离会话；L2_STRUCTURE_v2.0.md:137 禁自评）",
+ "revision": "CO-114.1",
+ "schema": 1,
+ "target_baseline": {
+  "board": "0e636a67c1472462",
+  "drawing": "0e74718b1e31dca5",
+  "drawing_rev13_blob": "73c0066df83fa8c2",
+  "spec_rev13": "7943be727a4f8ef9",
+  "spec_rev14": "188b01deb34c9fba"
+ },
+ "teeth": {
+  "A_existing_scalar_detector": true,
+  "A_unexpected_key_detector": true,
+  "B_frozen_source_detector": true,
+  "B_geometry_hash_detector": true,
+  "C_pin_drift_detector": true,
+  "D_inset_detector": true,
+  "E_positive_control": true,
+  "E_zero_control": true,
+  "F_scan_nonvacuous": true
+ },
+ "verdict": "PASS_WITH_FINDINGS"
+}
