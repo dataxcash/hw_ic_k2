@@ -48,19 +48,26 @@ def main() -> int:
     MARK = f"；**CO-150（L2 闸硬化）**：co124 K9 扩 `thermal_option_domain` + `drop_domain` 两域并加负控 T10/T10b/T11/T11b ⇒ 关闭 K9 缺口登记项。（记录 {s16(REC) if REC.exists() else '（本次生成）'}）"
     if "CO-150" not in reg["meta"]["updated_by"]:
         reg["meta"]["updated_by"] += MARK
+    # CO-152：本件是 canonical 链上登记簿的**最后写者** ⇒ 在此复位 meta.counts（此前为陈旧值 19/24）
+    import collections as _c
+    reg["meta"]["counts"] = dict(_c.Counter(i["kind"] for i in reg["items"]))
+    reg["meta"]["counts"]["OPEN"] = sum(1 for i in reg["items"] if i["status"] == "OPEN")
+    reg["meta"]["counts"]["total"] = len(reg["items"])
     REG.write_text(json.dumps(reg, ensure_ascii=False, indent=1) + "\n")
     led = json.loads(LED.read_text())
     doms = {dv["id"]: (dv.get("reachability") or {}).get("kind") for dv in led["derived_values"]}
     rec = {"artifact": "m13_v57_co150_k9_domain_gate", "schema": 1, "revision": "CO-150.1",
            "nature": "L2 闸硬化：K9 热/压降域机判 + 负控（关闭 CO-148 登记的 K9 缺口）",
-           "co124": {"file": CO124.name, "sha16": s16(CO124), "revision": c.get("revision"),
+           "co124": {"file": CO124.name,
+                     "sha16_note": "快照已移除（CO-152）；现行 sha 见 boundary pin 表",
+                     "revision": c.get("revision"),
                      "verdict": c.get("verdict"), "n_findings": c.get("n_findings"),
                      "teeth": {k: teeth.get(k) for k in TOOTH_KEYS}},
            "domains_added": ["thermal_option_domain", "drop_domain"],
            "ledger_domain_kinds": {"DV-CO146-THERMAL": doms.get("DV-CO146-THERMAL"),
                                    "DV-CO146-PDN-DROP": doms.get("DV-CO146-PDN-DROP")},
-           "register": {"file": REG.name, "sha16_after": s16(REG), "closed": hit,
-                        "open_total": sum(1 for i in reg["items"] if i["status"] == "OPEN")},
+           "register": {"file": REG.name, "closed": hit,
+                        "note": "sha/open_total 快照已移除（CO-152：下游时点观测 ⇒ 记录漂移）"},
            "teeth": {"t01_k9_teeth_all_true": teeth_ok,
                      "t02_register_item_closed": FIND in hit},
            "redline": "只读板/SPEC；只改闸判据与登记簿；零坐标搜索。"}

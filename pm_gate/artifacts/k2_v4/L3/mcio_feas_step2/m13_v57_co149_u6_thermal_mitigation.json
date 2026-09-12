@@ -4,7 +4,7 @@
  "revision": "CO-149.1",
  "nature": "L2 自裁：U6 热机械派生实现要求（解 CO-148 R4-2；监理定值不变）",
  "doc": "L2_RULING_u6_thermal_mitigation_v1.md",
- "doc_sha16": "1ff34801833d07b5",
+ "doc_sha16": "bf029700941f5145",
  "ta_C": 40.0,
  "tj_limit_C": 120,
  "routes": {
@@ -90,6 +90,29 @@
    10.52
   ]
  },
+ "sensitivity": {
+  "psi_jb": 5.9,
+  "r_theta_jb": 6.1,
+  "h_required_range_psi_jb": [
+   8.14,
+   16.38
+  ],
+  "h_required_range_rjb": [
+   8.29,
+   16.99
+  ],
+  "h8": [],
+  "h85": [
+   "U6_EQ0-2_typ"
+  ],
+  "h16": [
+   "U6_EQ0-2_typ",
+   "U6_EQ0-2_max",
+   "U6_EQ5-19_typ"
+  ],
+  "note": "板侧路线用 ψJB（表征参数）作加性热阻；改用 RθJB（热阻）更保守。两路线一致性 ≠ 独立证据。",
+  "delta_pct": 1.84
+ },
  "register": {
   "file": "input_defect_register_v1.json",
   "item": "thermal_defect:u6_ds320pr1601_tj_exceeds_limit_at_40c_natural_convection",
@@ -102,7 +125,9 @@
  "teeth": {
   "t01_two_routes_agree": true,
   "t02_asbuilt_unreachable_all": true,
-  "t03_declared_option_covers_all": true
+  "t03_declared_option_covers_all": true,
+  "t04_rjb_more_demanding": true,
+  "t05_sensitivity_disclosed": true
  },
  "redline": "只读板/SPEC（逐字节未动）；不改几何；零坐标搜索；输出只写 L2 政策层 + 登记簿 + 台账。"
 }

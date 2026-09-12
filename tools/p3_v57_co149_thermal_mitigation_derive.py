@@ -2,13 +2,14 @@
 """CO-149 — U6 热机械**派生实现要求**（L2 自裁；不待 owner、不改监理定值）。
 
 框架：监理定值 Ta = 40°C 保留不变（需求不动机器）；**工程派生** = 达成 Tj ≤ Tj_limit 所需的系统散热要求。
-两条独立路线互校（二者一致 ⇒ 模型可信）：
+两路线一致性核对（**B 路线复用手册 ψJB 与声明 h ⇒ 非独立证据**；CO-151 F-4）+ 敏感度披露（ψJB↔RθJB、h）：
   路线 A（数据手册参考板）：θJA(high-K) = 17.4 °C/W
   路线 B（本板几何一阶）：θJA_est = ψJB(手册) + 1/(h·2·A_board)，h = 声明自然对流系数
 派生输出：各 EQ 档所需 θJA_eff 上限；所需 h（强制风冷）或 顶部散热片预算（θJC 路径 = θJC + R_int + θ_HS）。
 产出：`L2/L2_RULING_u6_thermal_mitigation_v1.md` + `m13_v57_co149_u6_thermal_mitigation.json`
       + 登记簿（热项 CLOSED = 派生实现要求）+ 台账 DV-CO146-THERMAL 可达性 = 声明散热方案域（供 K9 判）。
-牙齿：① 两路线 θJA 互校 ≤5%；② 自然对流（as-built）全档不可达；③ 声明方案 O2 覆盖全档（∃ 可达）。
+牙齿：① 两路线 θJA 一致性 ≤5%；② 自然对流（as-built）全档不可达；③ 声明方案 O2 覆盖全档（∃ 可达）；
+④ 改用 RθJB（真热阻 ≥ ψJB）后所需 h 必须**更保守**（单调性）；⑤ 敏感度块必须非空（不得空过）。
 """
 from __future__ import annotations
 import hashlib, json, sys
@@ -47,6 +48,7 @@ def main() -> int:
     pact = u6["inputs"]["PACT"]
     th_ja_ds = u6["inputs"]["theta_ja_highK_C_per_W"]
     psi_jb = u6["inputs"]["psi_jb_C_per_W"]
+    thjb = u6["inputs"].get("theta_jb_C_per_W")          # CO-152：与 ψJB 并列披露
     tj_lim = u6["inputs"]["TJ_max_C"]
     ta = pm["declared_inputs"]["supervisor_values_指令10"]["ambient_C"]
     h_nat = pm["declared_inputs"]["engineering_declared"]["h_conv"]["value"]
@@ -76,9 +78,27 @@ def main() -> int:
         o["covers_all"] = len(o["covers_cases"]) == len(cases)
     o0 = next(o for o in OPTIONS if o["id"] == "O0_asbuilt")
     o2 = next(o for o in OPTIONS if o["id"] == "O2_heatsink_airflow")
+    # CO-152（CO-151 F-4）：敏感度披露（ψJB↔RθJB 模型选择 + h 声明值）
+    h_req_rjb = ({k: round(1.0 / (A2 * (c["theta_ja_required_C_per_W"] - thjb)), 2)
+                 for k, c in cases.items() if thjb and c["theta_ja_required_C_per_W"] > thjb})
+    cov_at = lambda h: [k for k, c in cases.items()
+                        if psi_jb + 1.0 / (h * A2) <= c["theta_ja_required_C_per_W"]]
+    sens = {"psi_jb": psi_jb, "r_theta_jb": thjb,
+            "h_required_range_psi_jb": [min(h_req_rjb and [0] or [0]) if False else
+                                        min(c["h_required_W_per_m2K"] for c in cases.values() if c["h_required_W_per_m2K"]),
+                                        max(c["h_required_W_per_m2K"] for c in cases.values() if c["h_required_W_per_m2K"])],
+            "h_required_range_rjb": [min(h_req_rjb.values()), max(h_req_rjb.values())] if h_req_rjb else None,
+            "h8": cov_at(8.0), "h85": cov_at(8.5), "h16": cov_at(16.0),
+            "note": "板侧路线用 ψJB（表征参数）作加性热阻；改用 RθJB（热阻）更保守。两路线一致性 ≠ 独立证据。"}
+    if sens["h_required_range_rjb"]:
+        sens["delta_pct"] = round((sens["h_required_range_rjb"][0] - sens["h_required_range_psi_jb"][0])
+                                  / sens["h_required_range_psi_jb"][0] * 100, 2)
     teeth = {"t01_two_routes_agree": abs(th_ja_est - th_ja_ds) / th_ja_ds <= 0.05,
              "t02_asbuilt_unreachable_all": not o0["covers_all"] and not o0["covers_cases"],
-             "t03_declared_option_covers_all": o2["covers_all"]}
+             "t03_declared_option_covers_all": o2["covers_all"],
+             "t04_rjb_more_demanding": bool(sens["h_required_range_rjb"]) and
+                                       sens["h_required_range_rjb"][0] > sens["h_required_range_psi_jb"][0],
+             "t05_sensitivity_disclosed": bool(sens["h8"] is not None and sens["r_theta_jb"] and sens["delta_pct"])}
     req = {"system_mitigation_required": True,
            "theta_ja_eff_max_C_per_W": min(c["theta_ja_required_C_per_W"] for c in cases.values()),
            "h_required_range_W_per_m2K": [min(c["h_required_W_per_m2K"] for c in cases.values() if c["h_required_W_per_m2K"]),
@@ -88,10 +108,16 @@ def main() -> int:
     doc = ["# L2 裁定 v1.0 — U6 热机械派生实现要求（CO-149；解 CO-148 R4-2）", "",
            f"> 依据：LAYOUT_CONSTITUTION 第二章（**热机械** = L2 自裁）；**监理定值 Ta = {ta}°C 保留不变**（不动需求输入）。",
            "> 本件把「输入冲突」转为**派生实现要求**：不是改环境，而是导出达成 Tj 上限所需的系统散热实现。", "",
-           "## 1. 两路线互校（模型可信度）", "",
+           "## 1. 两路线一致性核对（**非独立证据**）", "",
            f"- A（手册参考板）：θJA(high-K) = **{th_ja_ds} °C/W**",
            f"- B（本板一阶）：ψJB {psi_jb} + 1/(h_nat·2A) = {psi_jb} + 1/({h_nat}×{A2:.5f}) = **{th_ja_est:.2f} °C/W**",
-           f"- 互差 {abs(th_ja_est - th_ja_ds) / th_ja_ds * 100:.1f}% ⇒ 模型一致（牙齿 T1）", "",
+           f"- 互差 {abs(th_ja_est - th_ja_ds) / th_ja_ds * 100:.1f}% ⇒ **一致性核对通过**"
+           f"（B 路线复用手册 ψJB 与声明 h ⇒ 非独立证据，不作模型独立性主张）", "",
+           "### 1.1 敏感度（CO-151 F-4 披露）", "",
+           f"- 板侧路线改用同表**热阻 RθJB = {sens['r_theta_jb']}**（而非表征参数 ψJB = {psi_jb}）⇒ 所需 h 由 "
+           f"**{sens['h_required_range_psi_jb']} → {sens['h_required_range_rjb']} W/m²K**（更保守，+{sens['delta_pct']}%）。",
+           f"- 声明自然对流 h = {h_nat} 的敏感度：h = 8.0 覆盖 **{len(sens['h8'])}/4** 档；h = 8.5 覆盖 "
+           f"**{len(sens['h85'])}/4** 档（增量 = {'、'.join(sens['h85']) or '无'}）⇒ 『自然对流不足以覆盖全档』结论不因该敏感度改变。", "",
            "## 2. 派生要求（各 EQ 档）", "",
            "| 工况 | P (W) | 需要 θJA_eff ≤ (°C/W) | 需要 h ≥ (W/m²K) | 顶部散热片预算 θJC+R_int+θHS ≤ (°C/W) |",
            "|---|---|---|---|---|"]
@@ -155,7 +181,7 @@ def main() -> int:
            "routes": {"datasheet_theta_ja": th_ja_ds, "board_first_order_theta_ja": round(th_ja_est, 2),
                       "r_surface_to_air": round(r_sa_nat, 2), "psi_jb": psi_jb,
                       "board_to_air_share_pct": round(r_sa_nat / th_ja_est * 100, 1)},
-           "cases": cases, "options": OPTIONS, "required": req,
+           "cases": cases, "options": OPTIONS, "required": req, "sensitivity": sens,
            # 不记录 register/ledger 的 sha/open 快照：二者会被后续 CO（CO-150）改写 ⇒ 快照会造成重跑漂移。
            # 稳定引用：按 finding id / dv id 指向（状态由 co124 与 CO-150 记录各自承载）。
            "register": {"file": REG.name, "item": THERMAL_ID, "status": "CLOSED"},

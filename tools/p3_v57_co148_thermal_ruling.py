@@ -161,9 +161,10 @@ def main() -> int:
            "best": {"case": best[0], "Tj_C": best[1]["Tj_C"]}, "Tj_limit_C": limit,
            "paths_cross_check": th["routes"], "thermal_path": path,
            "co148_items": list(IDS), "items_added_this_run": [i["finding"] for i in added],
-           "register": {"file": REG.name, "sha16_after": s16(REG),
-                        "items_total": len(reg["items"]), "open_total": sum(1 for i in reg["items"] if i["status"] == "OPEN")},
-           "ledger": {"file": LED.name, "sha16_after": s16(LED)},
+           "register": {"file": REG.name, "items_total": len(reg["items"]),
+                        "note": "sha 快照已移除（CO-152：下游时点观测 ⇒ 记录漂移；现行 sha 见 boundary pin 表）"},
+           "ledger": {"file": LED.name,
+                      "note": "sha 快照已移除（CO-152 同上）"},
            "owner_visible_input_conflict": "40°C 自然对流（监理定值）vs 器件手册 ⇒ 须重裁环境/风冷输入（R4-2）",
            "teeth": teeth,
            "redline": "只读板/SPEC；不改几何；零坐标搜索；输出只写 L2 政策层 + 登记簿 + 台账。"}
@@ -171,7 +172,7 @@ def main() -> int:
     print("worst Tj:", worst, "| best Tj:", best, "| limit:", limit)
     print("path:", path)
     print("register +%d (total %d, OPEN %d) %s | ledger %s" % (len(added), len(reg["items"]),
-          rec["register"]["open_total"], s16(REG), s16(LED)))
+          sum(1 for i in reg["items"] if i["status"] == "OPEN"), s16(REG), s16(LED)))
     print("teeth:", teeth)
     return 0 if all(teeth.values()) else 1
 

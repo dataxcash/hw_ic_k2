@@ -4,15 +4,15 @@
  "revision": "CO-148.1",
  "nature": "L2 裁定：U6 手册输入下的热超限（登记 + 处置 + 台账）",
  "doc": "L2_RULING_u6_thermal_v1.md",
- "doc_sha16": "fe512a44e9aeb4b2",
+ "doc_sha16": "aa00f0207bc37e6f",
  "board_sha16": "d4e81f647be7f980",
  "u6_inputs": {
   "artifact": "m13_v57_co148_u6_ds320pr1601_inputs.json",
-  "sha16": "987c714f8c3fc305"
+  "sha16": "d98677fd7f7d51ba"
  },
  "pm_eval": {
   "artifact": "m13_v57_co146_pm_eval.json",
-  "sha16": "628c06ba2575ceb3",
+  "sha16": "76a6b6860f071298",
   "verdict": "FAIL"
  },
  "cases": {
@@ -77,13 +77,12 @@
  "items_added_this_run": [],
  "register": {
   "file": "input_defect_register_v1.json",
-  "sha16_after": "e51eba5ccbd52558",
-  "items_total": 24,
-  "open_total": 2
+  "items_total": 27,
+  "note": "sha 快照已移除（CO-152：下游时点观测 ⇒ 记录漂移；现行 sha 见 boundary pin 表）"
  },
  "ledger": {
   "file": "derived_value_ledger_v1.json",
-  "sha16_after": "16aef4c6d6aa364d"
+  "note": "sha 快照已移除（CO-152 同上）"
  },
  "owner_visible_input_conflict": "40°C 自然对流（监理定值）vs 器件手册 ⇒ 须重裁环境/风冷输入（R4-2）",
  "teeth": {

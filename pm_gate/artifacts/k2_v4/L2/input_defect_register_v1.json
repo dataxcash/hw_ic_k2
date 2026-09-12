@@ -477,8 +477,8 @@
    "status": "CLOSED",
    "next": "系统/机械侧落实散热方案（风冷 ≥1–3 m/s 或 顶部散热片+风冷）；L2 侧终判 = 实板热测/仿真。",
    "evidence": [
-    "手册入库件 m13_v57_co148_u6_ds320pr1601_inputs.json 987c714f8c3fc305",
-    "PM 评估 m13_v57_co146_pm_eval.json 628c06ba2575ceb3"
+    "手册入库件 m13_v57_co148_u6_ds320pr1601_inputs.json d98677fd7f7d51ba",
+    "PM 评估 m13_v57_co146_pm_eval.json 76a6b6860f071298"
    ],
    "closed_by": [
     "CO-149"
@@ -507,6 +507,72 @@
    ],
    "ruled_by": "CO-150",
    "ruling": "K9 扩两域并加负控：`thermal_option_domain`（∃ 声明散热方案使 θJA_eff ≤ 最重工况所需；且现状不达标时必须显式声明 required_mitigation）+ `drop_domain`（每轨 ΔV% ≤ 预算%）；负控 T10/T10b/T11/T11b 全触发。"
+  },
+  {
+   "finding": "tool_defect:records_snapshot_downstream_sha_causes_pin_drift",
+   "kind": "TOOL_DEFECT",
+   "severity": "medium",
+   "what": "记录内嵌**下游** sha 快照（`register_sha16` / `register.sha16_after` / `ledger.sha16_after` / `co124.sha16`）⇒ 记录 sha 随运行序/时点漂移，提交 pin 不可由文档化复现序复现。CO-151 实测：按 §6 序连跑两遍得**另一稳定不动点**（co124/co147/co148/co150 四条记录 pin ≠ 提交值），且 co148 重跑会把 2 条已闭登记项重开（OPEN 0→2）。与 CO-149 已修先例同族但未覆盖这 4 件。",
+   "refs": [
+    "CO-151",
+    "CO-152",
+    "CO-149"
+   ],
+   "disposition": "CO-152 处置：① 移除该 4 件的下游快照字段（现行 sha 一律由 boundary pin 表单一承载）；② co120 硬化（CO-120.2）新增 P5『下游快照声明册』：`*_sha16_after` 类键未在 SNAPSHOT_DECLARED 声明即 FAIL，附负控/正控牙齿 ⇒ 禁止复发；③ 复核：§6 序连跑两遍，4 件记录逐字节稳定，且残留 `sha16` 键均为**上游输入** pin（definition_doc / u6_inputs / pm_eval）。",
+   "status": "CLOSED",
+   "next": "新记录不得再嵌下游 sha 快照；跨件现行 sha 一律走 boundary pin 表。",
+   "evidence": [
+    "CO-151 记录 `m13_v57_co151_rev19_nonexecutor_review.json`（F-1）",
+    "co120 CO-120.2 `snapshot_declared`/`snapshot_rows`（P5 + 牙齿）"
+   ],
+   "closed_by": [
+    "CO-152"
+   ]
+  },
+  {
+   "finding": "tool_defect:co120_pin_scope_omits_sha16_snapshot_keys",
+   "kind": "TOOL_DEFECT",
+   "severity": "low",
+   "what": "co120 P1 正则仅抽 `\"<x>_record\"` 键 ⇒ 记录内 `*_sha16` / `*_sha16_after` 快照字段**不在闸覆盖内**（CO-108/CO-114 F-6 盲区的另一半；CO-151 F-1b）。另：EXEMPT 注册表声明 10 条而闸实测 9 条（`co110←co109_record` 的 pin 已与现行一致 ⇒ 多余登记；CO-151 F-7），且 co111/co118 两条点名义依据不可机判。",
+   "refs": [
+    "CO-151",
+    "CO-152",
+    "CO-108",
+    "CO-114",
+    "CO-120"
+   ],
+   "disposition": "CO-152 硬化 co120 → **CO-120.2**：① 新增 P5『下游快照声明册』（`*_sha16_after` 未声明即 FAIL_UNDECLARED_DOWNSTREAM_SNAPSHOT，负控/正控牙齿各 1）；② EXEMPT 增补 `exemption_basis` 分级：`board_superseded`（被引记录声明板 ≠ 交付板 ⇒ **机判可证**，4 条）/ `declared_historical`（无板级依据 ⇒ 计数明示不静默，5 条）；依据不成立即 FAIL_EXEMPTION_BASIS；③ 删除多余豁免（co110←co109）。复核：verdict PASS（snaps=8 / undeclared=0 / basis_not_ok=0）。",
+   "status": "CLOSED",
+   "next": "新增 `*_sha16_after` 记录须在 SNAPSHOT_DECLARED 声明；新豁免须择一 basis 类并成立。",
+   "evidence": [
+    "CO-151 记录（F-1b / F-7）",
+    "co120 CO-120.2：`snapshot_rows` / `exemption_basis` / `teeth`"
+   ],
+   "closed_by": [
+    "CO-152"
+   ]
+  },
+  {
+   "finding": "tool_defect:record_derived_value_semantics_unlabeled",
+   "kind": "TOOL_DEFECT",
+   "severity": "low",
+   "what": "三处记录内**派生物语义未标注**、易致误读（CO-151 F-4/F-5/F-6）：① 热板侧路线以**表征参数 ψJB** 作加性热阻，且「两路线互校差 1.0%」措辞暗示独立证据（实为复用手册 ψJB + 声明 h）；② PDN 记录字段 `n_plane_vias` 实为**全网 net via 计数**（P3V3 41 / P3V3_AUX 12），非 zone 内净匹配（本件独立复算 35 / 5），口径未声明；③ 阻抗表称「两套**独立**闭式交叉核对」，而 M1 实为 SPEC `dielectric_8l_basis` 同式同输入的一阶复现（**非独立**），真正独立者仅 M2。",
+   "refs": [
+    "CO-151",
+    "CO-152",
+    "CO-149",
+    "CO-146"
+   ],
+   "disposition": "CO-152 逐项标注/披露（**不改判据/阈值/结论**）：① CO-149 增 `sensitivity` 块（ψJB↔RθJB 模型选择所需 h：[8.15,16.38]→[8.29,16.99]，更保守 +3.4%；h 声明值敏感度：h=8.0 覆盖 0/4、h=8.5 覆盖 1/4、h=16 覆盖 3/4）+ 牙齿 t04/t05；文档 §1 改称『一致性核对（非独立证据）』；② CO-146 PM 评估增 `n_plane_vias_basis` 与 `method.via_count` 口径声明；③ CO-146 阻抗表 nature/docstring 改为『M1 复现 SPEC 一阶 + M2 单一独立模型交叉核对』。另：CO-147 R2 `as_built_edge_mm` 0.3294→**0.2577**（全量最劣，CO-151 F-2 medium）与 R3 叙述 0.0065→**0.0205**mm（F-3）一并勘误（属 L2 裁定件勘误，不在登记簿 scope，见 boundary §28）。",
+   "status": "CLOSED",
+   "next": "记录中凡「派生/计数/模型」字段须自带口径或依据标注（不得留白致误读）。",
+   "evidence": [
+    "CO-151 记录（F-2..F-6）",
+    "co149 CO-149.2：`sensitivity` + teeth t04/t05；co146 PM 评估：`n_plane_vias_basis`；co146 阻抗表：nature 标签；co147：`as_built_edge_basis`"
+   ],
+   "closed_by": [
+    "CO-152"
+   ]
   }
  ],
  "closed_items": [
@@ -524,14 +590,14 @@
   "owner": "ARCHER（L2 自裁执行侧）",
   "approval": "定义件 v1.0 待监理裁定/owner 批准；登记簿随闸每次运行校验",
   "mandatory_trigger": "任何 SPEC / drc_rules 变更后必须跑 tools/p3_v57_co124_input_selfcheck_gate.py 并 PASS",
-  "updated_by": "CO-127..CO-133 + **CO-134（整改通知 #09：③ 重新定性 = 工程换算错误 → REQ-R3-2 忠实实现 + 需求/实现分家规矩 + co124 K9）**；登记簿随 co124 每次运行校验；CO-134 续：4 项已声明定值补 rule_key + 台账溯源；**CO-136（L2 自裁 · 闸卫生续）**：登记并关闭 CO-135 F5(b)/F6 两条 TOOL_DEFECT（co124 标签 / co106 陈旧牙齿）；F4（handoff pin 失准）与 F5(a)（③ 根因叙述）属叙述类，保留在 CO-135 记录，不入本登记簿（非 SPEC/工具缺陷）。；**CO-139**：+1 TOOL_DEFECT（K9 豁免未锚定）并 CLOSED（hash-pin + T9）。；**CO-141**：更正 IMPLEMENTATION_DEVIATION 范围（24 平行对-对，非 3）+ 新增 OPEN TOOL_DEFECT（路由器列距基准漏 3W）。；**CO-142（L2 只读）**：对间 <3W 违规逐条明细 + 构造阶段归因；**CO-143（L2 只读）**：更正 `k2_router_escape_fan_omits_3w` 定位（f13 pair_xorder → escape-fan 落位判据 `p3_v57_co10_west_fan_probe.py:check()`）+ 施加可行性研究（可满足但须重派生策略；PDN 障碍 + 贪心夹死）。；**CO-146（监理指令 #10 · JLC 打样就绪）**：+2 IMPLEMENTATION_DEVIATION（OPEN：盲/埋孔 vs JLC 标准不支持 = 结构/工艺类别；阻焊桥 1 处 vs JLC 0.09mm）；外部输入定性更正（撤回「等券」表述，改绑 JLC 阻抗控制服务 + 监理定值）；登记簿随 co124 每次运行校验。；**CO-147（L2 自裁）**：三题裁定（R1 过孔策略维持盲/埋孔 ⇒ 渠道绑定 JLC advanced；R2 J2 landing 对间适用域 ACCEPT_L2；R3 阻焊桥 ACCEPT_L2_WITH_FAB_REVIEW）；登记簿 3 项转 CLOSED。；**CO-148**：U6 手册输入（TI SNLS683）⇒ 热 Tj 121.8–161.8°C 超上限 120°C ⇒ 登记 +2（热超限 HIGH / K9 无热域模型 MED）。；**CO-149（L2 自裁 · 热机械派生）**：自然对流全档不可达（两路线互校 θJA≈17.2 vs 手册 17.4）⇒ 派生出系统散热要求（h_eff ≥ 8.2–16.4 W/m²K 或 顶部散热片预算 ≤ 4.9–10.5 °C/W）；监理定值 Ta=40°C 不变；登记簿热项 CLOSED（OPEN 余 K9 热域缺口）；台账 DV-CO146-THERMAL 可达性 = 声明散热方案域。（1ff34801833d07b5）；**CO-150（L2 闸硬化）**：co124 K9 扩 `thermal_option_domain` + `drop_domain` 两域并加负控 T10/T10b/T11/T11b ⇒ 关闭 K9 缺口登记项。（记录 （本次生成））",
+  "updated_by": "CO-127..CO-133 + **CO-134（整改通知 #09：③ 重新定性 = 工程换算错误 → REQ-R3-2 忠实实现 + 需求/实现分家规矩 + co124 K9）**；登记簿随 co124 每次运行校验；CO-134 续：4 项已声明定值补 rule_key + 台账溯源；**CO-136（L2 自裁 · 闸卫生续）**：登记并关闭 CO-135 F5(b)/F6 两条 TOOL_DEFECT（co124 标签 / co106 陈旧牙齿）；F4（handoff pin 失准）与 F5(a)（③ 根因叙述）属叙述类，保留在 CO-135 记录，不入本登记簿（非 SPEC/工具缺陷）。；**CO-139**：+1 TOOL_DEFECT（K9 豁免未锚定）并 CLOSED（hash-pin + T9）。；**CO-141**：更正 IMPLEMENTATION_DEVIATION 范围（24 平行对-对，非 3）+ 新增 OPEN TOOL_DEFECT（路由器列距基准漏 3W）。；**CO-142（L2 只读）**：对间 <3W 违规逐条明细 + 构造阶段归因；**CO-143（L2 只读）**：更正 `k2_router_escape_fan_omits_3w` 定位（f13 pair_xorder → escape-fan 落位判据 `p3_v57_co10_west_fan_probe.py:check()`）+ 施加可行性研究（可满足但须重派生策略；PDN 障碍 + 贪心夹死）。；**CO-146（监理指令 #10 · JLC 打样就绪）**：+2 IMPLEMENTATION_DEVIATION（OPEN：盲/埋孔 vs JLC 标准不支持 = 结构/工艺类别；阻焊桥 1 处 vs JLC 0.09mm）；外部输入定性更正（撤回「等券」表述，改绑 JLC 阻抗控制服务 + 监理定值）；登记簿随 co124 每次运行校验。；**CO-147（L2 自裁）**：三题裁定（R1 过孔策略维持盲/埋孔 ⇒ 渠道绑定 JLC advanced；R2 J2 landing 对间适用域 ACCEPT_L2；R3 阻焊桥 ACCEPT_L2_WITH_FAB_REVIEW）；登记簿 3 项转 CLOSED。；**CO-148**：U6 手册输入（TI SNLS683）⇒ 热 Tj 121.8–161.8°C 超上限 120°C ⇒ 登记 +2（热超限 HIGH / K9 无热域模型 MED）。；**CO-149（L2 自裁 · 热机械派生）**：自然对流全档不可达（两路线互校 θJA≈17.2 vs 手册 17.4）⇒ 派生出系统散热要求（h_eff ≥ 8.2–16.4 W/m²K 或 顶部散热片预算 ≤ 4.9–10.5 °C/W）；监理定值 Ta=40°C 不变；登记簿热项 CLOSED（OPEN 余 K9 热域缺口）；台账 DV-CO146-THERMAL 可达性 = 声明散热方案域。（1ff34801833d07b5）；**CO-150（L2 闸硬化）**：co124 K9 扩 `thermal_option_domain` + `drop_domain` 两域并加负控 T10/T10b/T11/T11b ⇒ 关闭 K9 缺口登记项。（记录 （本次生成））；**CO-152（L2 自裁 · CO-151 findings 处置）**：3 项 TOOL_DEFECT 登记并 CLOSED（记录内嵌下游快照致 pin 漂移 / co120 pin 覆盖面缺 *_sha16 快照键 + 豁免依据分级 / 派生物语义未标注）；并勘误 CO-147 R2 最劣值 0.2577 与 R3 叙述 0.0205（见 boundary §28）。",
   "counts": {
    "SPEC_DEFECT": 5,
-   "TOOL_DEFECT": 8,
    "PROVED_THRESHOLD": 5,
-   "IMPLEMENTATION_DEVIATION": 1,
-   "OPEN": 2,
-   "total": 19
+   "TOOL_DEFECT": 13,
+   "IMPLEMENTATION_DEVIATION": 4,
+   "OPEN": 0,
+   "total": 27
   }
  },
  "verdict": null

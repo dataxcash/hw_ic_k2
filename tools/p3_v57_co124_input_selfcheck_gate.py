@@ -332,7 +332,8 @@ def main() -> int:
         "definition_doc": {"path": str(DOC.relative_to(K2)), "sha16": s16(DOC), "status": f"{DOC_VER} 提议件（待监理裁定/owner 批准）"},
         "inputs": {"spec": str(SPEC.relative_to(K2)), "spec_sha16": s16(SPEC),
                    "rules_sha16": s16(RULES), "register": str(REG.relative_to(K2)),
-                   "register_sha16": s16(REG) if REG.exists() else None},
+                   "register_sha16_note": "本件不嵌下游 sha 快照（CO-152：register_sha16 属下游时点观测，"
+                                          "会使记录随运行序漂移；现行 sha 见 boundary pin 表）"},
         "checks": {"k1_definition_in_place": True, "k2_netclass_two_source": True,
                    "k3_layer_role": True, "k4_bcu_policy": True, "k5_reachability": True,
                    "k6_threshold_registered": True, "k7_register_complete": not unreg, "k8_pdn_netclass_coverage": True},

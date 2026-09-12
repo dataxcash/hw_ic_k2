@@ -11,7 +11,7 @@
 
 ## R2 J2 连接器 landing 对间 3W 短欠（F.Cu）
 - 层级：L2（实现/派生值可达性；需求目的不变）
-- 事实：`{"requirement": "REQ-R3-2（对间不串扰 ⇒ 3W）", "l2_faithful_form": "对间铜边 ≥ 2w ⇒ F.Cu 0.41mm", "as_built_edge_mm": 0.3294, "connector_pitch_mm": 0.6, "cap_center_mm": 0.615, "segments": "J2 pad-field landing（连接器侧，接口固有不可路由）", "mechanism": "短、非长平行 landing；REQ-R3-2 针对长平行对间耦合"}`
+- 事实：`{"requirement": "REQ-R3-2（对间不串扰 ⇒ 3W）", "l2_faithful_form": "对间铜边 ≥ 2w ⇒ F.Cu 0.41mm", "as_built_edge_mm": 0.2577, "as_built_edge_basis": "**全量**平行(≤10°)异对最小铜边（CO-151 独立复算；CO-142 明细行 22：PCIE_DN6_N×PCIE_DN7_P @7.43°）；J2 侧最劣 0.2871；欠 2w 达 0.1523", "as_built_edge_cited_prev": 0.3294, "connector_pitch_mm": 0.6, "cap_center_mm": 0.615, "segments": "J2 pad-field landing（连接器侧，接口固有不可路由）", "mechanism": "短、非长平行 landing；REQ-R3-2 针对长平行对间耦合"}`
 - **裁定**：**ACCEPT_L2（声明偏差 + hash-pin 依据）**：J2 landing 段对间短欠判为**接口固有实现偏差**，维持需求目的（对间不串扰）不变，按「域适用」在 L2 内声明豁免（与既有 ECN-001 逃逸域豁免同族、口径一致），**终判 = SI/JLC 阻抗控制服务**。判据闭合条件：① 偏差显式登记（本件 + 台账 DV-INTPAIR-EDGE）；② 依据 hash-pin；③ 不得静默（ORDER_NOTES + boundary 双记）。
 - 不做的理由：不改需求文本、不改几何：连接器 0.6 节距为接口固有；路由不可消除（CO-140 已判 INHERENT_INTERFACE_PITCH）。
 
@@ -19,7 +19,7 @@
 - 层级：L2（DFM/阻焊实现）
 - 事实：`{"pad": {"ref": "R3.2", "net": "PWR_BTN_ISO", "center_mm": [53.95, 37.0], "size_mm": [0.6, 0.7]}, "mask_expansion_mm": 0.05, "foreign_net": "PCIE_UP3_N", "closest": {"gap_mm": 0.0695, "at": [54.472, 36.6], "seg": [54.4, 34.5, 54.7, 43.25], "trace_w": 0.205}, "jlc_min_mm": 0.09, "shortfall_mm": 0.0205, "jlc_rule": "Keep at least 0.09 mm clearance between soldermask openings and neighboring traces"}`
 - **裁定**：**ACCEPT_L2_WITH_FAB_REVIEW**：实测 0.0695mm vs JLC 0.09mm ⇒ 欠 0.0205mm（边际）。并入 JLC 盲埋孔工程评审一并提交（**不触铜几何、不改板**）。若板厂拒绝 ⇒ 回退最小修法（R3 开窗 0.05→**0.02mm** ⇒ 净距 0.0695+0.03=0.0995 ≥ 0.09；或该段 PCIe 走线微调 ~0.021mm）+ 上游声明件 + G4 全链重基线。
-- 不做的理由：0.0065mm 量级边际差距 vs 一次全链重基线 + 复评：比例失当；且该板必经板厂工程评审。
+- 不做的理由：0.0205mm 量级边际差距 vs 一次全链重基线 + 复评：比例失当；且该板必经板厂工程评审。（CO-152 订正：原叙述 0.0065mm 与本件 facts.shortfall_mm 0.0205 矛盾 = CO-151 F-3）
 
 ## 影响与后续
 

@@ -104,7 +104,11 @@ def main() -> int:
         {"id": "R2", "topic": "J2 连接器 landing 对间 3W 短欠（F.Cu）",
          "class": "L2（实现/派生值可达性；需求目的不变）",
          "facts": {"requirement": "REQ-R3-2（对间不串扰 ⇒ 3W）", "l2_faithful_form": "对间铜边 ≥ 2w ⇒ F.Cu 0.41mm",
-                   "as_built_edge_mm": 0.3294, "connector_pitch_mm": 0.6, "cap_center_mm": 0.615,
+                   "as_built_edge_mm": 0.2577,
+                   "as_built_edge_basis": "**全量**平行(≤10°)异对最小铜边（CO-151 独立复算；CO-142 明细行 22："
+                                          "PCIE_DN6_N×PCIE_DN7_P @7.43°）；J2 侧最劣 0.2871；欠 2w 达 0.1523",
+                   "as_built_edge_cited_prev": 0.3294,
+                   "connector_pitch_mm": 0.6, "cap_center_mm": 0.615,
                    "segments": "J2 pad-field landing（连接器侧，接口固有不可路由）",
                    "mechanism": "短、非长平行 landing；REQ-R3-2 针对长平行对间耦合"},
          "ruling": "**ACCEPT_L2（声明偏差 + hash-pin 依据）**：J2 landing 段对间短欠判为**接口固有实现偏差**，"
@@ -112,14 +116,16 @@ def main() -> int:
                    "**终判 = SI/JLC 阻抗控制服务**。判据闭合条件：① 偏差显式登记（本件 + 台账 DV-INTPAIR-EDGE）；"
                    "② 依据 hash-pin；③ 不得静默（ORDER_NOTES + boundary 双记）。",
          "not_done_why": "不改需求文本、不改几何：连接器 0.6 节距为接口固有；路由不可消除（CO-140 已判 INHERENT_INTERFACE_PITCH）。",
-         "evidence": ["CO-140/CO-141/CO-142/CO-143 归因链", f"台帐 DV-INTPAIR-EDGE（{s16(L2 / 'derived_value_ledger_v1.json')}）"]},
+         "evidence": ["CO-140/CO-141/CO-142/CO-143 归因链",
+                      "台帐 DV-INTPAIR-EDGE（现行 sha 见 boundary pin 表；本件不快照下游 sha，CO-152 红线）"]},
         {"id": "R3", "topic": "阻焊桥 / 开窗-邻铜净距 1 处（R3.pad2 ↔ PCIE_UP3_N）",
          "class": "L2（DFM/阻焊实现）",
          "facts": mask | {"jlc_rule": "Keep at least 0.09 mm clearance between soldermask openings and neighboring traces"},
          "ruling": f"**ACCEPT_L2_WITH_FAB_REVIEW**：实测 {mask['closest']['gap_mm']}mm vs JLC {JLC_MIN_MASK}mm ⇒ 欠 "
                    f"{mask['shortfall_mm']}mm（边际）。并入 JLC 盲埋孔工程评审一并提交（**不触铜几何、不改板**）。"
                    "若板厂拒绝 ⇒ 回退最小修法（R3 开窗 0.05→**0.02mm** ⇒ 净距 0.0695+0.03=0.0995 ≥ 0.09；或该段 PCIe 走线微调 ~0.021mm）+ 上游声明件 + G4 全链重基线。",
-         "not_done_why": "0.0065mm 量级边际差距 vs 一次全链重基线 + 复评：比例失当；且该板必经板厂工程评审。",
+         "not_done_why": "0.0205mm 量级边际差距 vs 一次全链重基线 + 复评：比例失当；且该板必经板厂工程评审。"
+                         "（CO-152 订正：原叙述 0.0065mm 与本件 facts.shortfall_mm 0.0205 矛盾 = CO-151 F-3）",
          "evidence": [f"co146 DFM 闸样本 {s16(DFM)}"]},
     ]
     doc = ["# L2 裁定 v1.0 — 过孔策略/打样渠道 · J2 对间适用域 · 阻焊桥（CO-147）", "",
@@ -174,7 +180,7 @@ def main() -> int:
            "doc": DOC.name, "doc_sha16": s16(DOC), "board_sha16": s16(BOARD),
            "spec_sha16": "5f72182a2616392c", "rulings": rulings,
            "mask_measure": mask,
-           "register": {"file": REG.name, "sha16_after": s16(REG), "items_ruled": hit,
+           "register": {"file": REG.name, "items_ruled": hit,
                         "open_total": sum(1 for i in reg["items"] if i.get("status") == "OPEN")},
            "owner_visible_items": 0, "teeth": teeth,
            "redline": "只读板/SPEC（逐字节不变）；不改几何；零坐标搜索；裁定只写 L2 政策层与登记簿。"}

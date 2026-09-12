@@ -108,7 +108,10 @@ def eval_rail(net: str, cfg: dict, t_amb: float, spokes: int) -> dict:
     return {"rail": net, "plane": {"layers": gi["layers"], "area_m2": round(A, 8),
                                    "L_m": round(L, 5), "W_eq_m": round(W, 5),
                                    "t_cu_m": t_cu, "Rs_ohm_sq": round(rs, 6)},
-            "n_plane_vias": n, "rho_ohm_m_at_T": round(rho, 10),
+            "n_plane_vias": n,
+            "n_plane_vias_basis": "**全网（board-wide）net via 计数**：该网全部 via（含落在 In4 zone 多边形之外的落点）；"
+                                  "**非** zone 内净匹配计数（CO-152 显式声明口径；R_via_eff = R_via/N）",
+            "rho_ohm_m_at_T": round(rho, 10),
             "R_plane_ohm": r_plane, "R_via_each_ohm": r_via, "R_via_eff_ohm": r_via_eff,
             "R_total_ohm": r_tot, "I_a": cfg["I_a"], "I_basis": cfg["I_basis"],
             "V_rail": v_rail, "dV_mV": round(dv * 1000, 3), "drop_pct": round(pct, 4),
@@ -174,6 +177,8 @@ def main() -> int:
                                              "P3V3_AUX 侧带电流）仍为显式声明值（非实测）⇒ 到位后须替换并重跑。"},
            "method": {"plane": "Rs=ρ(T)/t；R_plane=Rs·L/W_eq，L=铜皮包络长边，W_eq=A/L（A=交付板 zone 声明域轮廓面积；filled 缓存不可读）",
                       "via": "R_via=ρ·1.6mm/A_铜壁，A_铜壁=π((d/2)²-(d/2-18µm)²)，d=0.2mm；N 支并联",
+                     "via_count": "N = **全网（board-wide）该 net 的 via 计数**（非 zone 内净匹配计数）；CO-152 显式声明，"
+                                  "以消除 n_plane_vias 口径歧义（ΔV% 由 R_plane 主导，口径差异 <0.02% 绝对）",
                       "drop": "ΔV=I·(R_plane+R_via/N)；预算 3%（监理定值）",
                       "thermal": "主路线 Tj = Ta + P_U6×θJA(手册 high-K 17.4)；交叉核对 Tj = T_board + P_U6×ψJB，"
                                  "T_board = Ta + P_total/(h·2A_board)",

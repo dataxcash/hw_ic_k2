@@ -78,6 +78,7 @@
  "method": {
   "plane": "Rs=ρ(T)/t；R_plane=Rs·L/W_eq，L=铜皮包络长边，W_eq=A/L（A=交付板 zone 声明域轮廓面积；filled 缓存不可读）",
   "via": "R_via=ρ·1.6mm/A_铜壁，A_铜壁=π((d/2)²-(d/2-18µm)²)，d=0.2mm；N 支并联",
+  "via_count": "N = **全网（board-wide）该 net 的 via 计数**（非 zone 内净匹配计数）；CO-152 显式声明，以消除 n_plane_vias 口径歧义（ΔV% 由 R_plane 主导，口径差异 <0.02% 绝对）",
   "drop": "ΔV=I·(R_plane+R_via/N)；预算 3%（监理定值）",
   "thermal": "主路线 Tj = Ta + P_U6×θJA(手册 high-K 17.4)；交叉核对 Tj = T_board + P_U6×ψJB，T_board = Ta + P_total/(h·2A_board)",
   "nature": "几何一阶解析（非仿真；不含去耦电容动态/AC 阻抗/平面谐振）"
@@ -96,6 +97,7 @@
     "Rs_ohm_sq": 0.001063
    },
    "n_plane_vias": 3,
+   "n_plane_vias_basis": "**全网（board-wide）net via 计数**：该网全部 via（含落在 In4 zone 多边形之外的落点）；**非** zone 内净匹配计数（CO-152 显式声明口径；R_via_eff = R_via/N）",
    "rho_ohm_m_at_T": 1.86e-08,
    "R_plane_ohm": 0.006776193480136194,
    "R_via_each_ohm": 0.002890838928166205,
@@ -123,6 +125,7 @@
     "Rs_ohm_sq": 0.001063
    },
    "n_plane_vias": 41,
+   "n_plane_vias_basis": "**全网（board-wide）net via 计数**：该网全部 via（含落在 In4 zone 多边形之外的落点）；**非** zone 内净匹配计数（CO-152 显式声明口径；R_via_eff = R_via/N）",
    "rho_ohm_m_at_T": 1.86e-08,
    "R_plane_ohm": 0.0019835514654346752,
    "R_via_each_ohm": 0.002890838928166205,
@@ -150,6 +153,7 @@
     "Rs_ohm_sq": 0.001063
    },
    "n_plane_vias": 12,
+   "n_plane_vias_basis": "**全网（board-wide）net via 计数**：该网全部 via（含落在 In4 zone 多边形之外的落点）；**非** zone 内净匹配计数（CO-152 显式声明口径；R_via_eff = R_via/N）",
    "rho_ohm_m_at_T": 1.86e-08,
    "R_plane_ohm": 0.022619232697679823,
    "R_via_each_ohm": 0.002890838928166205,
@@ -177,6 +181,7 @@
     "Rs_ohm_sq": 0.001063
    },
    "n_plane_vias": 16,
+   "n_plane_vias_basis": "**全网（board-wide）net via 计数**：该网全部 via（含落在 In4 zone 多边形之外的落点）；**非** zone 内净匹配计数（CO-152 显式声明口径；R_via_eff = R_via/N）",
    "rho_ohm_m_at_T": 1.86e-08,
    "R_plane_ohm": 0.001400316689521151,
    "R_via_each_ohm": 0.002890838928166205,
@@ -194,7 +199,7 @@
  },
  "u6_datasheet": {
   "source_artifact": "m13_v57_co148_u6_ds320pr1601_inputs.json",
-  "source_sha16": "987c714f8c3fc305",
+  "source_sha16": "d98677fd7f7d51ba",
   "PACT_W": {
    "0-2": {
     "typ_W": 4.7,

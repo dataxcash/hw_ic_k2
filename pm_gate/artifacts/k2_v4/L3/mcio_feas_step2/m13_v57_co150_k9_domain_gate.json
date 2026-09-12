@@ -5,7 +5,7 @@
  "nature": "L2 闸硬化：K9 热/压降域机判 + 负控（关闭 CO-148 登记的 K9 缺口）",
  "co124": {
   "file": "m13_v57_co124_input_selfcheck_gate.json",
-  "sha16": "3de2c54ae5655f47",
+  "sha16_note": "快照已移除（CO-152）；现行 sha 见 boundary pin 表",
   "revision": "CO-124.5",
   "verdict": "PASS",
   "n_findings": 0,
@@ -26,11 +26,10 @@
  },
  "register": {
   "file": "input_defect_register_v1.json",
-  "sha16_after": "6a5e9e86e83f5b6b",
   "closed": [
    "tool_defect:co124_k9_has_no_thermal_or_drop_domain_model"
   ],
-  "open_total": 0
+  "note": "sha/open_total 快照已移除（CO-152：下游时点观测 ⇒ 记录漂移）"
  },
  "teeth": {
   "t01_k9_teeth_all_true": true,

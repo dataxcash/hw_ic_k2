@@ -28,7 +28,6 @@ EXEMPT = {
     "m13_v57_co111_in5_pcie_corridor_exposure.json": {"l5_si_record": "CO-111 时点 SI 记录；CO-133 施工后 L5 SI 记录随板重跑 ⇒ pin 属历史"},
     "m13_v57_co118_bcu_bridge_conflict_check.json": {"co95_record": "CO-118 的 B.Cu 桥冲突已由 CO-130/CO-132 取代（B.Cu 载体退役 + In4 承载）⇒ 本记录为历史；CO-132 重跑 co95 后 pin 属历史"},
     "m13_v57_co110_l2_coverage_closure.json": {"co106_record": "CO-110 依赖被 CO-115 取代的前提 ⇒ 历史",
-                                              "co109_record": "CO-109 已被 CO-115 取代 ⇒ 历史",
                                               "co87_record": "CO-110 时点 co87 版本 ⇒ 历史（co87 已随后续 rev 重跑）"},
     # CO-144（L2 重基线）：CO-140/141 是对 **CO-134 板 a3ce9ab8** 的归因/全量审计（结论驱动 CO-143/144）；
     # 板随 CO-144 重建（76cdf64c）且 co134 记录重派生 ⇒ 其 co134_record pin 属历史。
@@ -37,6 +36,75 @@ EXEMPT = {
     "m13_v57_co137_interpair_fixspace.json": {"co134_record": "CO-137 对 CO-134 板 a3ce9ab8 的偏差几何可行性分析 ⇒ 历史（CO-144 已改几何）"},
     "m13_v57_co138_interpair_scope_probe.json": {"co134_record": "CO-138 对 CO-134 板 a3ce9ab8 的耦合几何画像 ⇒ 历史（CO-144 已改几何）"},
 }
+
+
+# F-7（CO-151）：豁免依据分级 —— `board_superseded`（被引记录声明板 ≠ 交付板 ⇒ 机判可证）
+# vs `declared_historical`（无板级依据，仅声明为时点记录 ⇒ 本闸计数并明示，不静默接受）。
+EXEMPT_BASIS = {
+    "m13_v57_co109_in4_void_l2_ruling.json": {"co106_record": "declared_historical"},
+    "m13_v57_co110_l2_coverage_closure.json": {"co106_record": "declared_historical",
+                                               "co87_record": "declared_historical"},
+    "m13_v57_co111_in5_pcie_corridor_exposure.json": {"l5_si_record": "declared_historical"},
+    "m13_v57_co118_bcu_bridge_conflict_check.json": {"co95_record": "declared_historical"},
+    "m13_v57_co137_interpair_fixspace.json": {"co134_record": "board_superseded"},
+    "m13_v57_co138_interpair_scope_probe.json": {"co134_record": "board_superseded"},
+    "m13_v57_co140_deviation_attribution.json": {"co134_record": "board_superseded"},
+    "m13_v57_co141_interpair_conformance_audit.json": {"co134_record": "board_superseded"},
+}
+# F-1b（CO-151）：记录内**下游时点快照**（`*_sha16_after`）声明册 —— 未声明者一律 FAIL。
+# 缘起：CO-148/147/124/150 曾内嵌 register/ledger/co124 的 sha 快照 ⇒ 记录随运行序漂移、
+# 提交 pin 不可由复现序复现。CO-152 移除该 4 件快照，并以本闸禁止复发。
+SNAPSHOT_DECLARED = {
+    "m13_v57_co68_option_a_execute_derive.json": "历史：lid_rev5/spec_rev4 时点快照，已被 CO-113+ 取代",
+    "m13_v57_co72_pdn_align.json": "历史：spec_rev5 时点快照，已被 CO-113+ 取代",
+    "m13_v57_co73_layer_role_consistency.json": "历史：spec_rev6 时点快照，已被 CO-113+ 取代",
+    "m13_v57_co74_pdn_bcu_rehost.json": "历史：spec_rev7 时点快照，已被 CO-113+ 取代",
+    "m13_v57_co80_l4_project_rule_align.json": "历史：l4_project 时点快照（工程文件随后续 rev 重生成）",
+    "m13_v57_co82_l4_project_netclass_align.json": "历史：l4_project 时点快照（同上）",
+    "m13_v57_co133_pdn_construction_apply.json": "上游稳定：board_sha16_after = 交付板 d4e81f647be7f980（非下游漂移）",
+    "m13_v57_co146_jlc_rebind.json": "历史：register 时点快照；CO-152 起同类字段一律禁止，本件留存为历史",
+}
+DELIVERED_BOARD = "d4e81f647be7f980"
+
+
+def scan_snapshots(records: dict) -> list:
+    """F-1b：扫描 `*_sha16_after` 下游快照键；未声明者 = 违规。"""
+    rows = []
+    for name in sorted(records):
+        keys = set()
+
+        def w(o):
+            if isinstance(o, dict):
+                for k, v in o.items():
+                    if str(k).endswith("sha16_after"):
+                        keys.add(k)
+                    w(v)
+            elif isinstance(o, list):
+                for v in o:
+                    w(v)
+        w(records[name])
+        if keys:
+            rows.append({"record": name, "keys": sorted(keys), "declared": name in SNAPSHOT_DECLARED,
+                         "reason": SNAPSHOT_DECLARED.get(name, "")})
+    return rows
+
+
+def basis_of(records: dict) -> list:
+    """F-7：逐条复核豁免依据类别是否成立（board_superseded 须机判可证）。"""
+    out = []
+    for name, pins in EXEMPT.items():
+        d = records.get(name)
+        if d is None:
+            continue
+        blob = json.dumps(d, ensure_ascii=False)
+        board = (d.get("inputs") or {}).get("board") or d.get("board_sha16") or d.get("board")
+        for key in pins:
+            cls = (EXEMPT_BASIS.get(name) or {}).get(key, "undeclared")
+            ok = (cls == "board_superseded" and bool(board) and board != DELIVERED_BOARD) or \
+                 (cls == "declared_historical")
+            out.append({"record": name, "key": key, "basis": cls, "basis_ok": ok,
+                        "declared_board": board})
+    return out
 
 
 def s16(p) -> str:
@@ -99,31 +167,59 @@ def main(argv=None) -> int:
     rows = scan(records)
     stale = [r for r in rows if r["status"] == "STALE"]
     unresolved = [r for r in rows if str(r["status"]).startswith("unresolved")]
+    # F-1b：下游快照键（未声明 = 违规）
+    snaps = scan_snapshots(records)
+    snap_undeclared = [s for s in snaps if not s["declared"]]
+    # F-7：豁免依据类别机判
+    basis = basis_of(records)
+    basis_bad = [b for b in basis if not b["basis_ok"]]
+    n_decl_hist = sum(1 for b in basis if b["basis"] == "declared_historical")
     # 牙齿（负控/正控，走真实 scan）
     neg = scan({"synthetic_probe.json": {"co95_record": "0" * 16}})
     neg_hit = any(r["status"] == "STALE" for r in neg)
     p95 = STEP2 / "m13_v57_co95_in4_reachability.json"
     pos = scan({"synthetic_probe.json": {"co95_record": s16(p95)}})
     pos_ok = any(r["status"] == "match" for r in pos)
-    teeth_ok = neg_hit and pos_ok
+    # 牙齿（P5）：未声明的下游快照键必须被抓；已声明的必须放行
+    neg_snap = scan_snapshots({"synthetic_probe.json": {"x_sha16_after": "0" * 16}})
+    neg_snap_hit = any(not s["declared"] for s in neg_snap)
+    pos_snap = scan_snapshots({k: {"x_sha16_after": "0" * 16} for k in list(SNAPSHOT_DECLARED)[:1]})
+    pos_snap_ok = bool(pos_snap) and all(s["declared"] for s in pos_snap)
+    snap_ok = neg_snap_hit and pos_snap_ok
+    teeth_ok = neg_hit and pos_ok and snap_ok
     rec = {
-        "artifact": "m13_v57_co120_provenance_pin_gate", "schema": 1, "revision": "CO-120.1",
+        "artifact": "m13_v57_co120_provenance_pin_gate", "schema": 1, "revision": "CO-120.2",
         "nature": "L2 过程闸：记录内 inter-record provenance pin 一致性（关闭 CO-108/CO-114 F-6 盲区）",
         "pins_total": len(rows), "n_match": sum(1 for r in rows if r["status"] == "match"),
         "n_exempt_historical": sum(1 for r in rows if r["status"] == "exempt_historical"),
         "n_stale_undeclared": len(stale), "n_unresolved_key": len(unresolved),
         "stale_undeclared": stale, "unresolved_key": unresolved,
         "exemption_registry": EXEMPT,
+        "exemption_basis": {"classes": EXEMPT_BASIS, "rows": basis,
+                           "n_declared_historical": n_decl_hist,
+                           "n_basis_not_ok": len(basis_bad)},
+        "snapshot_declared": SNAPSHOT_DECLARED,
+        "snapshot_rows": snaps, "n_snapshot_undeclared": len(snap_undeclared),
         "rows": rows,
         "teeth": {"negative_control_undeclared_stale_caught": neg_hit,
-                  "positive_control_matching_pin_passes": pos_ok, "teeth_ok": teeth_ok},
-        "verdict": ("PASS" if (not stale and teeth_ok) else "FAIL_STALE_PROVENANCE_PIN" if stale else "FAIL(teeth)"),
+                  "positive_control_matching_pin_passes": pos_ok,
+                  "negative_control_undeclared_snapshot_caught": neg_snap_hit,
+                  "positive_control_declared_snapshot_passes": pos_snap_ok,
+                  "teeth_ok": teeth_ok},
+        "verdict": ("FAIL_STALE_PROVENANCE_PIN" if stale else
+                    "FAIL_UNDECLARED_DOWNSTREAM_SNAPSHOT" if snap_undeclared else
+                    "FAIL_EXEMPTION_BASIS" if basis_bad else
+                    "PASS" if teeth_ok else "FAIL(teeth)"),
         "non_claims": ["只读；不改任何记录/SPEC/板/阈值/冻结源",
+                       "F-1b：记录内**下游时点快照**键（`*_sha16_after`）必须在本闸 SNAPSHOT_DECLARED 声明"
+                       "（理由：该类快照使记录 sha 随运行序漂移 ⇒ 提交 pin 不可复现）；未声明一律 FAIL",
+                       "F-7：豁免依据分 `board_superseded`（机判可证）与 `declared_historical`（无板级依据，计数明示）两类",
                        "豁免仅限『记录本体已被后续 CO 取代 ⇒ pin 属历史』并在本闸注册表明文；未声明陈旧 pin 一律 FAIL",
                        "pin→文件解析失败（歧义/无候选）记 unresolved_key，不计失败但入记录"],
     }
     Path(a.out).write_text(json.dumps(rec, ensure_ascii=False, indent=1, sort_keys=True) + "\n")
-    print(f"CO-120 verdict={rec['verdict']} | pins={len(rows)} match={rec['n_match']} exempt={rec['n_exempt_historical']} stale_undeclared={rec['n_stale_undeclared']} unresolved={rec['n_unresolved_key']} teeth={teeth_ok}")
+    print(f"CO-120 verdict={rec['verdict']} | snaps={len(snaps)} undeclared={len(snap_undeclared)} "
+          f"basis_not_ok={len(basis_bad)} | pins={len(rows)} match={rec['n_match']} exempt={rec['n_exempt_historical']} stale_undeclared={rec['n_stale_undeclared']} unresolved={rec['n_unresolved_key']} teeth={teeth_ok}")
     for r in stale:
         print("   STALE", r["record"], r["key"], r["cited"], "->", r["actual"])
     with_out = rec["n_exempt_historical"]

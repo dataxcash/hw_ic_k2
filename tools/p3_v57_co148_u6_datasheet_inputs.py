@@ -4,7 +4,7 @@
 来源：TI DS320PR1601 数据手册 SNLS683（JUNE 2023）节录件
       `m13_v57_co148_ds320pr1601_snls683_excerpt.txt`（含抓取 URL/pdftotext 命令/PDF sha256）。
 本工具**只解析节录件**（确定性，不联网）⇒ 产出 `m13_v57_co148_u6_ds320pr1601_inputs.json`。
-牙齿：① 六项关键值（θJA / Tj_max / PACT×4）必须全部解析到；② 节录件 sha 须与记录一致。
+牙齿：① 七项关键值（θJA / RθJB / Tj_max / PACT×4）必须全部解析到；② 节录件 sha 须与记录一致。
 """
 from __future__ import annotations
 import hashlib, json, re, sys
@@ -18,6 +18,7 @@ PACT_RE = re.compile(r"PACT\s+Device active power\s+32-channels \(16-lanes\), EQ
 TH_RE = re.compile(r"RθJA-High K\s+Junction-to-ambient thermal resistance\s+([\d.]+)\s+")
 PSI_JB_RE = re.compile(r"ψJB\s+Junction-to-board characterization parameter\s+([\d.]+)\s+")
 TH_JC_RE = re.compile(r"RθJC\(top\)\s+Junction-to-case \(top\) thermal resistance\s+([\d.]+)\s+")
+TH_JB_RE = re.compile(r"RθJB\s+Junction-to-board thermal resistance\s+([\d.]+)\s+")
 TJ_RE = re.compile(r"TJ\s+Operating junction temperature\s+([–\-−\d]+)\s+([\d]+)\s+°C")
 
 
@@ -32,8 +33,9 @@ def main() -> int:
     tj = TJ_RE.search(txt)
     psijb = PSI_JB_RE.search(txt)
     thjc = TH_JC_RE.search(txt)
-    found = {"pact_rows": len(pacts), "theta_ja": bool(th), "tj": bool(tj)}
-    teeth = {"t01_six_values": len(pacts) == 2 and bool(th) and bool(tj) and bool(psijb) and bool(thjc),
+    thjb = TH_JB_RE.search(txt)
+    found = {"pact_rows": len(pacts), "theta_ja": bool(th), "tj": bool(tj), "theta_jb": bool(thjb)}
+    teeth = {"t01_seven_values": len(pacts) == 2 and bool(th) and bool(tj) and bool(psijb) and bool(thjc) and bool(thjb),
              "t02_all_pact_rows": set(pacts) == {"0-2", "5-19"}}
     rec = {"artifact": "m13_v57_co148_u6_ds320pr1601_inputs", "schema": 1, "revision": "CO-148.1",
            "nature": "PM 评估输入升级：U6 由「声明值」→「数据手册值」（监理指令 #10「各轨电流由设计/器件手册导出」）",
@@ -47,6 +49,7 @@ def main() -> int:
            "inputs": {"VCC_V": 3.3, "TJ_max_C": int(tj.group(2)) if tj else None,
                       "theta_ja_highK_C_per_W": float(th.group(1)) if th else None,
                       "psi_jb_C_per_W": float(psijb.group(1)) if psijb else None,
+                      "theta_jb_C_per_W": float(thjb.group(1)) if thjb else None,
                       "theta_jc_top_C_per_W": float(thjc.group(1)) if thjc else None,
                       "PACT": pacts, "PRXDET_mW": 660, "PSTBY_mW": 92,
                       "derived_current_a": {k: {"typ": round(v["typ_W"] / 3.3, 3), "max": round(v["max_W"] / 3.3, 3)}

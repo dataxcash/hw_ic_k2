@@ -4,8 +4,8 @@
 性质：**只读派生**（不改板/SPEC/冻结四源）。判据源：
   · 叠层/几何 = SPEC rev-19 `stackup.dielectric_8l` + `impedance.per_layer`（交付几何）
   · JLC 公布能力 = `m13_v57_co146_jlc8_capability.json`（±10%、阻抗控制层数、er 表）
-模型（两套独立闭式，交叉核对，均按 IPC-2141 族工程近似；终判 = JLC 阻抗控制服务）：
-  M1 = IPC-2141 边耦微带/对称带状线（复用 `_shared/eda_core/stackup.py` 同族公式）
+模型（**M1 = SPEC `dielectric_8l_basis` 同式同输入的一阶复现**（同族 ⇒ **非**独立证据）；**M2 = 单一独立模型**交叉核对；均按 IPC-2141 族工程近似；终判 = JLC 阻抗控制服务）：
+  M1 = IPC-2141 边耦微带/对称带状线（与 `_shared/eda_core/stackup.py` 同式；**等价于复现 SPEC 一阶 ⇒ 非独立**）
   M2 = Hammerstad–Jensen 微带（含铜厚修正）+ Cohn 带状线（独立实现）
 产出：`m13_v57_co146_impedance_table.json` / `.md`
 牙齿：① M1/M2 在参考点(0.5mm 中心距)须复现 SPEC 一阶值 ±3Ω；② 喂入 +50% 线宽必须使 Zdiff 跌出 ±10%。
@@ -141,7 +141,7 @@ def main() -> int:
               "reason": "设计名义最宽对内净距下 M2(HJ) 越 ±10% 上界 ⇒ 下单备注要求 JLC 阻抗表覆盖该几何（终判=JLC 阻抗控制服务）"}
              for r in rows if not r.get("within_10pct_nominal_max", True)]
     rec = {"artifact": "m13_v57_co146_impedance_table", "schema": 1, "revision": "CO146-IMP.1",
-           "nature": "L2 只读派生：85Ω 差分阻抗表（两套独立闭式交叉核对）",
+           "nature": "L2 只读派生：85Ω 差分阻抗表（M1 复现 SPEC 一阶 + M2 独立模型交叉核对；CO-152 订正标签）",
            "source": {"spec": SPEC.name, "spec_sha16": hashlib.sha256(SPEC.read_bytes()).hexdigest()[:16],
                       "stackup": spec["stackup"]["material"],
                       "jlc_capability": "m13_v57_co146_jlc8_capability.json",
