@@ -23,6 +23,19 @@ TOOTH_KEYS = ("T10_thermal_option_domain_teeth", "T10b_thermal_domain_no_false_p
               "T11_drop_domain_teeth", "T11b_drop_domain_no_false_positive")
 
 
+def _load_co153():
+    """CO-161（F-1）：只读加载七域生产者，取 `KIND_EXPECT` 作为必需 DV 清单的单一真值。"""
+    import importlib.util
+    sp = importlib.util.spec_from_file_location(
+        "co153_producer", K2 / "tools/p3_v57_co153_k9_domain_coverage.py")
+    m = importlib.util.module_from_spec(sp)
+    sp.loader.exec_module(m)
+    return m
+
+
+_m153 = _load_co153()
+
+
 def s16(p):
     return hashlib.sha256(Path(p).read_bytes()).hexdigest()[:16]
 
@@ -56,7 +69,15 @@ def main() -> int:
     REG.write_text(json.dumps(reg, ensure_ascii=False, indent=1) + "\n")
     led = json.loads(LED.read_text())
     doms = {dv["id"]: (dv.get("reachability") or {}).get("kind") for dv in led["derived_values"]}
-    rec = {"artifact": "m13_v57_co150_k9_domain_gate", "schema": 1, "revision": "CO-150.1",
+    # CO-161（F-1）：① 两域 kind 必须为其声明值（原先仅记录、不断言）；② co124 的必需 DV 清单
+    # 必须与七域生产者 co153 的 `KIND_EXPECT` 键集**逐项一致**（两处清单漂移即 FAIL）。
+    kinds_want = {"DV-CO146-THERMAL": "thermal_option_domain", "DV-CO146-PDN-DROP": "drop_domain"}
+    kinds_ok = all(doms.get(k) == v for k, v in kinds_want.items())
+    inv = sorted(c.get("required_dv_ids") or [])
+    producer_keys = sorted(_m153.KIND_EXPECT)
+    inv_ok = bool(inv) and inv == producer_keys
+    inv_tooth = (inv + ["DV-BOGUS"]) != producer_keys   # 灵敏度：注入漂移项必须被判不等（比较器非恒真）
+    rec = {"artifact": "m13_v57_co150_k9_domain_gate", "schema": 1, "revision": "CO-150.2",
            "nature": "L2 闸硬化：K9 热/压降域机判 + 负控（关闭 CO-148 登记的 K9 缺口）",
            "co124": {"file": CO124.name,
                      "sha16_note": "快照已移除（CO-152）；现行 sha 见 boundary pin 表",
@@ -65,11 +86,17 @@ def main() -> int:
                      "teeth": {k: teeth.get(k) for k in TOOTH_KEYS}},
            "domains_added": ["thermal_option_domain", "drop_domain"],
            "ledger_domain_kinds": {"DV-CO146-THERMAL": doms.get("DV-CO146-THERMAL"),
-                                   "DV-CO146-PDN-DROP": doms.get("DV-CO146-PDN-DROP")},
+                                   "DV-CO146-PDN-DROP": doms.get("DV-CO146-PDN-DROP"),
+                                   "expected": kinds_want, "ok": kinds_ok},
+           "dv_inventory": {"co124_required_dv_ids": inv, "co153_kind_expect_keys": producer_keys,
+                            "match": inv_ok, "n": len(inv)},
            "register": {"file": REG.name, "closed": hit,
                         "note": "sha/open_total 快照已移除（CO-152：下游时点观测 ⇒ 记录漂移）"},
            "teeth": {"t01_k9_teeth_all_true": teeth_ok,
-                     "t02_register_item_closed": FIND in hit},
+                     "t02_register_item_closed": FIND in hit,
+                     "t03_ledger_domain_kinds_expected": kinds_ok,
+                     "t04_dv_inventory_matches_producer": inv_ok,
+                     "t05_inventory_drift_detectable": bool(inv_tooth)},
            "redline": "只读板/SPEC；只改闸判据与登记簿；零坐标搜索。"}
     REC.write_text(json.dumps(rec, ensure_ascii=False, indent=1) + "\n")
     (S2 / "m13_v57_CO150_k9_domain_gate.md").write_text(
@@ -80,7 +107,7 @@ def main() -> int:
         f"- 负控：{ {k: teeth.get(k) for k in TOOTH_KEYS} }\n"
         f"- 登记项 `{FIND}` → **CLOSED**；登记簿现行态见 boundary pin 表（下游计数快照已移除，CO-155）\n")
     print("co124 rev:", c.get("revision"), "verdict:", c.get("verdict"), "findings:", c.get("n_findings"))
-    print("teeth:", rec["co124"]["teeth"], "| register closed:", hit)
+    print("teeth:", rec["teeth"], "| register closed:", hit)
     print("register sha:", s16(REG), "| rec:", s16(REC))
     return 0 if all(rec["teeth"].values()) else 1
 

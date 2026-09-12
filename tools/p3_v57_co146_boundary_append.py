@@ -619,6 +619,54 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body34
     txt = txt.replace("W3 Boundary **v2.05**", "W3 Boundary **v2.06**")
+    # ── §35 CO-161（查漏型 L2 闸硬化 4） ───────────────────────────────────
+    MARK35 = "## 35. CO-161"
+    _rc35 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    sec35 = [MARK35 + "（**L2 自裁 · 查漏型闸硬化 4**：K9 覆盖完备性 + identity fail-closed）", "",
+             f"- 实测缺口（修前，均机判）：**G-1** K9 无「必需 DV 清单」牙齿 —— 台账删 `DV-CO146-THERMAL` / `DV-CO146-PDN-DROP` / "
+             f"`DV-ENGINE-INT_PAIR_PITCH` 任一项时 co124 K9 = 0 findings、co150 `t01` 仍 True（T10/T11 负控用合成注入，不依赖真 DV 存在）"
+             f"⇒ 热/压降/保守实现三域覆盖可被一次 upsert 误删**无声**抹掉；**G-2** `identity` 类 fail-open —— `form` 未识别（如 `q = a + b`）"
+             f"或缺失时无判据命中、静默通过。",
+             f"- 处置（**CO-161**）：① co124 增 `REQUIRED_DV_IDS`（9 项）与 `derived_value_inventory_missing` 判据 + 负控 T19/T19b；"
+             f"② `co153.KIND_EXPECT` **提为模块级**（必需 DV 清单的单一真值）；③ co150 增 `t03`（两域 kind 断言）/`t04`"
+             f"（co124 `required_dv_ids` == co153 `KIND_EXPECT` 键集）/`t05`（漂移可辨）；④ co124 `identity` 改 **fail-closed**"
+             f"（缺 `form` ⇒ unparsable；未识别 ⇒ 新判据 `derived_value_identity_unhandled_form`，并入 `K9_FINDER_IDS`）+ 负控 T20/T20b。",
+             f"- 复核：co124 升 **CO-124.9**（牙齿 33→**37/37**，PASS/0 findings）；co150 升 **CO-150.2**（5 牙齿 True，rc=0）；"
+             f"co153 升 **CO-153.2**；登记簿 **{_rc35['total']} 项 / OPEN {_rc35['OPEN']}**。",
+             f"- 修订号对账：§30 的 CO-150 条与 §34 所记 `CO-124.8` 为各自时点陈述；co124 **现行 = CO-124.9**（本 §35）。", "",
+             "> **R-CO161-1**：K9 **必需 DV 清单**完备性 —— 台账须含全部 9 项必需 DV（`co153.KIND_EXPECT` 键集为**单一真值**）；"
+             "缺任一项即 `derived_value_inventory_missing` FAIL；co124 的 `required_dv_ids` 须与 co153 `KIND_EXPECT` 逐项一致（co150 `t04`）。",
+             "> **R-CO161-2**：`identity` 类派生式 **fail-closed** —— `form` 缺失 ⇒ `derived_value_identity_unparsable`；"
+             "`form` 未被重算分支识别 ⇒ `derived_value_identity_unhandled_form`（不得静默通过）；新增 identity 形式须同时提供机判重算分支。",
+             "> **R-CO161-3**（复现序，取代 R-CO159-5）：规范复现序 = `co146_impedance_table → co146_pm_eval → co146_ledger_add → "
+             "co153_k9_domain_coverage → co148_u6_datasheet_inputs → co148_thermal_ruling → co149_thermal_mitigation_derive → "
+             "co147_l2_ruling → co146_jlc_dfm_gate → co146_jlc_fab_package → co152_findings_disposition → co155_co154_findings_disposition → "
+             "co156_co154_open_disposition → co157_gate_hardening_3 → co158_l5_packet_selfcontained → co159_rev19_review → "
+             "co160_co159_findings_disposition → **co161_gap_hardening_4** → co124_input_selfcheck_gate → co150_k9_domain_gate → "
+             "co146_boundary_append → co77_closure_declaration_sweep → co120_provenance_pin_gate → co135_review_hygiene → co136_gate_hygiene → "
+             "co78_layer_role_drift_gate → co81_project_rules_gate → co84_dru_domain_gate → co95_in4_reachability → "
+             "co98_reachability_status_report → co106_reference_plane_gate → co146_boundary_append`，**循环至 sha 稳定**。",
+             "", "| 工件 | sha16 |", "|---|---|"]
+    _rows35 = [("工具 `p3_v57_co161_gap_hardening_4.py`", K2 / "tools/p3_v57_co161_gap_hardening_4.py"),
+               ("工具 `p3_v57_co124_input_selfcheck_gate.py`（CO-124.9 / REQUIRED_DV_IDS + identity fail-closed）",
+                K2 / "tools/p3_v57_co124_input_selfcheck_gate.py"),
+               ("工具 `p3_v57_co153_k9_domain_coverage.py`（CO-153.2 / KIND_EXPECT 模块级）",
+                K2 / "tools/p3_v57_co153_k9_domain_coverage.py"),
+               ("工具 `p3_v57_co150_k9_domain_gate.py`（CO-150.2 / t03+t04+t05）", K2 / "tools/p3_v57_co150_k9_domain_gate.py"),
+               ("记录 `m13_v57_co124_input_selfcheck_gate.json`", STEP2 / "m13_v57_co124_input_selfcheck_gate.json"),
+               ("记录 `m13_v57_co150_k9_domain_gate.json`", STEP2 / "m13_v57_co150_k9_domain_gate.json"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc35['total']} 项 / OPEN {_rc35['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows35:
+        if pth.exists():
+            sec35.append(f"| {label} | `{s16(pth)}` |")
+    sec35.append("")
+    body35 = "\n".join(sec35)
+    if MARK35 in txt:
+        txt = re.sub(re.escape(MARK35) + r"[\s\S]*?(?=\n## |\Z)", body35, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body35
+    txt = txt.replace("W3 Boundary **v2.06**", "W3 Boundary **v2.07**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
     return 0

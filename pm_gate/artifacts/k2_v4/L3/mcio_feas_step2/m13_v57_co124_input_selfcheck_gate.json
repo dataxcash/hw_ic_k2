@@ -1,7 +1,7 @@
 {
  "artifact": "m13_v57_co124_input_selfcheck_gate",
  "schema": 1,
- "revision": "CO-124.8",
+ "revision": "CO-124.9",
  "nature": "输入自检闸：规格/规则自身自洽 + 物理可达登记 + 缺陷登记完备（整改通知 #08 第 2/3 条）",
  "definition_doc": {
   "path": "pm_gate/artifacts/k2_v4/L2/BASIC_SKILL_VS_REDLINE_v1.1.md",
@@ -62,10 +62,25 @@
   "T18b_k9_finder_id_no_undeclared": true,
   "T18c_k9_finder_battery_nonempty": true,
   "T18d_k9_finder_ids_source_complete": true,
-  "T18e_k9_finder_id_extractor_sensitivity": true
+  "T18e_k9_finder_id_extractor_sensitivity": true,
+  "T19_dv_inventory_teeth": true,
+  "T19b_dv_inventory_no_false_positive": true,
+  "T20_identity_unhandled_form_teeth": true,
+  "T20b_identity_unhandled_no_false_positive": true
  },
  "teeth_ok": true,
  "verdict": "PASS",
+ "required_dv_ids": [
+  "DV-INTPAIR-EDGE",
+  "DV-PAIR-CROSS",
+  "DV-CLR-POWER",
+  "DV-EDGE-COPPER",
+  "DV-M3-KEEPOUT",
+  "DV-ENGINE-INT_PAIR_PITCH",
+  "DV-CO146-ZDIFF",
+  "DV-CO146-PDN-DROP",
+  "DV-CO146-THERMAL"
+ ],
  "scan_scope_zero_omission": {
   "scanned": [
    "SPEC rev-16：pd.zone_defs(power_zones/gnd_planes/power_pad_connect/plane_reachability_status/bcu_power_copper_policy)、net_classes、stackup、board、constraints",

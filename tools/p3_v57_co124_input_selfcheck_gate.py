@@ -55,8 +55,14 @@ K9_FINDER_IDS = (
     "requirement_carries_derived_value", "derived_value_without_principle", "derived_value_kind_unknown",
     "derived_value_domain_cap_empty", "derived_value_identity_drift", "derived_value_identity_unparsable",
     "derived_value_evidence_bad", "derived_value_unreachable", "derived_value_declared_unpinned",
-    "derived_value_conservative_unproved",
+    "derived_value_conservative_unproved", "derived_value_inventory_missing",
+    "derived_value_identity_unhandled_form",
 )
+
+# CO-161（F-1）：**必需 DV 清单**（= co153 `KIND_EXPECT` 的键集；由 co150 交叉比对防漂移）——
+# 缺任一项即失一层 K9 覆盖（此前无牙齿：删 DV-CO146-THERMAL/PDN-DROP/ENGINE-INT_PAIR_PITCH 后 0 findings）。
+REQUIRED_DV_IDS = ("DV-INTPAIR-EDGE", "DV-PAIR-CROSS", "DV-CLR-POWER", "DV-EDGE-COPPER", "DV-M3-KEEPOUT",
+                    "DV-ENGINE-INT_PAIR_PITCH", "DV-CO146-ZDIFF", "DV-CO146-PDN-DROP", "DV-CO146-THERMAL")
 
 KNOWN_KINDS = ("domain_cap", "identity", "process_floor", "declared",
                "conservative_ge", "drop_domain", "thermal_option_domain")
@@ -115,6 +121,14 @@ def _k9_battery(base: dict) -> dict:
                                           "sha16": "0" * 16, "key_path": "artifact"}}}]
     out["derived_value_declared_unpinned"] = l
     l = copy.deepcopy(base)
+    l["derived_values"] = [d for d in l.get("derived_values", []) if d.get("id") != REQUIRED_DV_IDS[0]]
+    out["derived_value_inventory_missing"] = l
+    l = copy.deepcopy(base)
+    l["derived_values"] = l.get("derived_values", []) + [{"id": "TB10", "requirement": "REQ-DEF-PAIR-GEOM",
+        "form": "q = a + b", "inputs": {"a": 1.0}, "computed": {"q": 3.0},
+        "reachability": {"kind": "identity", "verdict": "REACHABLE"}}]
+    out["derived_value_identity_unhandled_form"] = l
+    l = copy.deepcopy(base)
     l["derived_values"] = l.get("derived_values", []) + [{"id": "TB9", "requirement": "REQ-R3-2",
         "inputs": {"span_mm": 0.585, "w_outer_mm": 0.205, "span_src": "x", "w_outer_src": "x"},
         "computed": {"value_mm": 0.1, "faithful_min_mm": 0.995},
@@ -143,6 +157,10 @@ def k9_findings(led: dict) -> list:
     reqs = led.get("requirements", [])
     ids = {r.get("id") for r in reqs}
     _dvs = {d.get("id"): d for d in led.get("derived_values", [])}
+    # CO-161（F-1）：必需 DV 清单完备性（缺项 ⇒ 该域 K9 覆盖静默消失）
+    for _rid in REQUIRED_DV_IDS:
+        if _rid not in _dvs:
+            f.append(("K9", f"derived_value_inventory_missing:{_rid}", {"required_n": len(REQUIRED_DV_IDS)}))
     # CO-156（F-7）：conservative_ge 的 faithful 口径须绑定权威 DV，而非自带常数
     auth_edge = (((_dvs.get("DV-INTPAIR-EDGE") or {}).get("computed") or {}).get("edge_outer_binding_mm"))
     auth_span = (((_dvs.get("DV-PAIR-CROSS") or {}).get("computed") or {}).get("span_mm"))
@@ -165,15 +183,22 @@ def k9_findings(led: dict) -> list:
         if kind == "domain_cap" and not rc.get("domains"):
             f.append(("K9", f"derived_value_domain_cap_empty:{dv.get('id')}", {"domains": rc.get("domains")}))
         if kind == "identity":
-            form, comp = dv.get("form", ""), (dv.get("computed") or {})
+            form, comp = dv.get("form"), (dv.get("computed") or {})
             inp = dv.get("inputs") or {}
-            try:
-                if "span" in form:
+            # CO-161（F-2）：identity 判据原先**仅**覆盖「form 含 span」；未识别/缺失 form 静默通过（fail-open）。
+            if not form:
+                f.append(("K9", f"derived_value_identity_unparsable:{dv.get('id')}",
+                          {"form": form, "why": "form_missing"}))
+            elif "span" in form:
+                try:
                     exp = round(2 * float(inp["p_width_mm"]) + float(inp["p_gap_mm"]), 4)
                     if abs(exp - float(comp["span_mm"])) > 5e-4:
                         f.append(("K9", f"derived_value_identity_drift:{dv.get('id')}", {"expect": exp, "got": comp["span_mm"]}))
-            except (KeyError, TypeError, ValueError):
-                f.append(("K9", f"derived_value_identity_unparsable:{dv.get('id')}", {"form": form}))
+                except (KeyError, TypeError, ValueError):
+                    f.append(("K9", f"derived_value_identity_unparsable:{dv.get('id')}", {"form": form}))
+            else:
+                f.append(("K9", f"derived_value_identity_unhandled_form:{dv.get('id')}",
+                          {"form": form, "why": "form_not_recognized"}))
         if kind == "process_floor":
             ev = rc.get("evidence_ref") or {}
             pth = ev.get("path")
@@ -613,11 +638,28 @@ def main() -> int:
         Path(__file__).read_text(encoding="utf-8")) == sorted(K9_FINDER_IDS)
     _probe_src = 'f.append((' + '"K9", f"' + 'zzz_probe:x", {}))'  # 拼接构造：避免被 _K9_FINDER_ID_RE 自匹配
     teeth["T18e_k9_finder_id_extractor_sensitivity"] = _finder_ids_in_source(_probe_src) == ["zzz_probe"]
+    # CO-161（F-1）负控 T19：必需 DV 缺一 ⇒ 必抓；T19b：现行台账不得误报
+    _l19 = copy.deepcopy(_led)
+    _l19["derived_values"] = [d for d in _l19.get("derived_values", []) if d.get("id") != REQUIRED_DV_IDS[0]]
+    teeth["T19_dv_inventory_teeth"] = any(
+        x[1].startswith("derived_value_inventory_missing") for x in k9_findings(_l19))
+    teeth["T19b_dv_inventory_no_false_positive"] = not any(
+        x[1].startswith("derived_value_inventory_missing") for x in k9_findings(copy.deepcopy(_led)))
+    # CO-161（F-2）负控 T20：identity 未识别 form ⇒ 必抓；T20b：现行台账不得误报
+    _l20 = copy.deepcopy(_led)
+    _l20["derived_values"].append({"id": "T20_INJECT", "requirement": "REQ-DEF-PAIR-GEOM", "form": "q = a + b",
+        "inputs": {"a": 1.0}, "computed": {"q": 3.0},
+        "reachability": {"kind": "identity", "verdict": "REACHABLE"}})
+    teeth["T20_identity_unhandled_form_teeth"] = any(
+        x[1].startswith("derived_value_identity_unhandled_form") for x in k9_findings(_l20))
+    teeth["T20b_identity_unhandled_no_false_positive"] = not any(
+        x[1].startswith(("derived_value_identity_unhandled_form", "derived_value_identity_unparsable"))
+        for x in k9_findings(copy.deepcopy(_led)))
     teeth_ok = all(teeth.values())
     verdict = "PASS" if (not unreg and not reg_bad and teeth_ok) else (
         "FAIL_UNREGISTERED_INPUT_DEFECT" if unreg else "FAIL_REGISTER_MALFORMED" if reg_bad else "TEETH_FAIL")
     rec = {
-        "artifact": "m13_v57_co124_input_selfcheck_gate", "schema": 1, "revision": "CO-124.8",
+        "artifact": "m13_v57_co124_input_selfcheck_gate", "schema": 1, "revision": "CO-124.9",
         "nature": "输入自检闸：规格/规则自身自洽 + 物理可达登记 + 缺陷登记完备（整改通知 #08 第 2/3 条）",
         "definition_doc": {"path": str(DOC.relative_to(K2)), "sha16": s16(DOC), "status": f"{DOC_VER} 提议件（待监理裁定/owner 批准）"},
         "inputs": {"spec": str(SPEC.relative_to(K2)), "spec_sha16": s16(SPEC),
@@ -631,6 +673,7 @@ def main() -> int:
         "n_findings": len(findings), "unregistered_findings": unreg,
         "register_malformed": reg_bad,
         "teeth": teeth, "teeth_ok": teeth_ok, "verdict": verdict,
+        "required_dv_ids": list(REQUIRED_DV_IDS),
         "scan_scope_zero_omission": {
             "scanned": ["SPEC rev-16：pd.zone_defs(power_zones/gnd_planes/power_pad_connect/plane_reachability_status/"
                         "bcu_power_copper_policy)、net_classes、stackup、board、constraints",

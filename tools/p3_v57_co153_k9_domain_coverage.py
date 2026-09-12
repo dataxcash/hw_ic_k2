@@ -94,22 +94,26 @@ MARK = ("；**CO-153（L2 自裁 · K9 覆盖缺口关闭）**：co124 K9 新增
 def s16(p) -> str:
     return hashlib.sha256(Path(p).read_bytes()).hexdigest()[:16]
 
+# CO-156（F-4）：本件是 K9 **全部七域** `kind` 的规范序内具名生产者（此前仅 drop_domain/conservative_ge），
+# 使 R-CO153-1「各域均由规范序内具名生产者产出」成立；域内容（computed/domains）仍归各派生 CO。
+# CO-161（F-1）：提到模块级 ⇒ 作为**必需 DV 清单**的单一真值，由 co124 消费、co150 交叉比对（防两处清单漂移）。
+KIND_EXPECT = {
+    "DV-INTPAIR-EDGE": "domain_cap", "DV-PAIR-CROSS": "identity",
+    "DV-CLR-POWER": "process_floor", "DV-EDGE-COPPER": "process_floor",
+    "DV-M3-KEEPOUT": "process_floor", "DV-ENGINE-INT_PAIR_PITCH": "conservative_ge",
+    "DV-CO146-ZDIFF": "declared", "DV-CO146-PDN-DROP": "drop_domain",
+    "DV-CO146-THERMAL": "thermal_option_domain",
+}
+assert set(KIND_EXPECT.values()) == {"domain_cap", "identity", "process_floor", "declared",
+                                     "conservative_ge", "drop_domain", "thermal_option_domain"}
+
+
+
 
 def main() -> int:
     led = json.loads(LED.read_text())
     norm = []
     pm = json.loads((K2 / "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_co146_pm_eval.json").read_text())
-    # CO-156（F-4）：本件成为 K9 **全部七域** `kind` 的规范序内具名生产者（此前仅 drop_domain/conservative_ge），
-    # 使 R-CO153-1「各域均由规范序内具名生产者产出」成立；域内容（computed/domains）仍归各派生 CO。
-    KIND_EXPECT = {
-        "DV-INTPAIR-EDGE": "domain_cap", "DV-PAIR-CROSS": "identity",
-        "DV-CLR-POWER": "process_floor", "DV-EDGE-COPPER": "process_floor",
-        "DV-M3-KEEPOUT": "process_floor", "DV-ENGINE-INT_PAIR_PITCH": "conservative_ge",
-        "DV-CO146-ZDIFF": "declared", "DV-CO146-PDN-DROP": "drop_domain",
-        "DV-CO146-THERMAL": "thermal_option_domain",
-    }
-    assert set(KIND_EXPECT.values()) == {"domain_cap", "identity", "process_floor", "declared",
-                                         "conservative_ge", "drop_domain", "thermal_option_domain"}
     _by_id = {d["id"]: d for d in led["derived_values"]}
     _auth_edge = ((_by_id.get("DV-INTPAIR-EDGE") or {}).get("computed") or {}).get("edge_outer_binding_mm")
     _auth_span = ((_by_id.get("DV-PAIR-CROSS") or {}).get("computed") or {}).get("span_mm")

@@ -1,12 +1,12 @@
 {
  "artifact": "m13_v57_co150_k9_domain_gate",
  "schema": 1,
- "revision": "CO-150.1",
+ "revision": "CO-150.2",
  "nature": "L2 闸硬化：K9 热/压降域机判 + 负控（关闭 CO-148 登记的 K9 缺口）",
  "co124": {
   "file": "m13_v57_co124_input_selfcheck_gate.json",
   "sha16_note": "快照已移除（CO-152）；现行 sha 见 boundary pin 表",
-  "revision": "CO-124.8",
+  "revision": "CO-124.9",
   "verdict": "PASS",
   "n_findings": 0,
   "teeth": {
@@ -22,7 +22,38 @@
  ],
  "ledger_domain_kinds": {
   "DV-CO146-THERMAL": "thermal_option_domain",
-  "DV-CO146-PDN-DROP": "drop_domain"
+  "DV-CO146-PDN-DROP": "drop_domain",
+  "expected": {
+   "DV-CO146-THERMAL": "thermal_option_domain",
+   "DV-CO146-PDN-DROP": "drop_domain"
+  },
+  "ok": true
+ },
+ "dv_inventory": {
+  "co124_required_dv_ids": [
+   "DV-CLR-POWER",
+   "DV-CO146-PDN-DROP",
+   "DV-CO146-THERMAL",
+   "DV-CO146-ZDIFF",
+   "DV-EDGE-COPPER",
+   "DV-ENGINE-INT_PAIR_PITCH",
+   "DV-INTPAIR-EDGE",
+   "DV-M3-KEEPOUT",
+   "DV-PAIR-CROSS"
+  ],
+  "co153_kind_expect_keys": [
+   "DV-CLR-POWER",
+   "DV-CO146-PDN-DROP",
+   "DV-CO146-THERMAL",
+   "DV-CO146-ZDIFF",
+   "DV-EDGE-COPPER",
+   "DV-ENGINE-INT_PAIR_PITCH",
+   "DV-INTPAIR-EDGE",
+   "DV-M3-KEEPOUT",
+   "DV-PAIR-CROSS"
+  ],
+  "match": true,
+  "n": 9
  },
  "register": {
   "file": "input_defect_register_v1.json",
@@ -33,7 +64,10 @@
  },
  "teeth": {
   "t01_k9_teeth_all_true": true,
-  "t02_register_item_closed": true
+  "t02_register_item_closed": true,
+  "t03_ledger_domain_kinds_expected": true,
+  "t04_dv_inventory_matches_producer": true,
+  "t05_inventory_drift_detectable": true
  },
  "redline": "只读板/SPEC；只改闸判据与登记簿；零坐标搜索。"
 }
