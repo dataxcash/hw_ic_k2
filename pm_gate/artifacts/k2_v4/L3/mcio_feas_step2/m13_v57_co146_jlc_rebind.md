@@ -1,7 +1,7 @@
 # CO-146 卡 · 定性更正 + 登记（监理指令 #10 动作 5）
 
 - 监理指令 #10 出处 `.omo/supervision/ledger/instruction-10-jlc-prototype-ready.md` `35aafe268ff52f89`
-- 登记簿 `L2/input_defect_register_v1.json`：20 → **22** 项（OPEN 3）；新增：['implementation_deviation:asbuilt_via_strategy_requires_blind_buried', 'implementation_deviation:solder_mask_bridge_jlc_min_1x']
+- 登记簿 `L2/input_defect_register_v1.json`：20 → **22** 项（OPEN 3）；CO-146 项：['implementation_deviation:asbuilt_via_strategy_requires_blind_buried', 'implementation_deviation:solder_mask_bridge_jlc_min_1x']
 - SPEC 逐字节不变：`5f72182a2616392c`｜板 `d4e81f647be7f980`
 
 ## 定性更正（撤回「外部输入阻塞」）

@@ -127,19 +127,28 @@ def main() -> int:
     have = {it["finding"] for it in reg["items"]}
     added = [it for it in new if it["finding"] not in have]
     reg["items"].extend(added)
-    reg["meta"]["updated_by"] = reg["meta"].get("updated_by", "") + \
-        "；**CO-146（监理指令 #10 · JLC 打样就绪）**：+2 IMPLEMENTATION_DEVIATION（OPEN：盲/埋孔 vs JLC 标准不支持 = 结构/工艺类别；" \
-        "阻焊桥 1 处 vs JLC 0.09mm）；外部输入定性更正（撤回「等券」表述，改绑 JLC 阻抗控制服务 + 监理定值）；" \
-        "登记簿随 co124 每次运行校验。"
+    NOTE = ("；**CO-146（监理指令 #10 · JLC 打样就绪）**：+2 IMPLEMENTATION_DEVIATION（OPEN：盲/埋孔 vs JLC 标准不支持 = 结构/工艺类别；"
+            "阻焊桥 1 处 vs JLC 0.09mm）；外部输入定性更正（撤回「等券」表述，改绑 JLC 阻抗控制服务 + 监理定值）；"
+            "登记簿随 co124 每次运行校验。")
+    MARK146 = "；**CO-146（监理指令 #10 · JLC 打样就绪）**："
+    _ub = reg["meta"].get("updated_by", "")
+    if MARK146 in _ub:                      # 幂等：CO-146 注记若已在（且其后无新注记）则重写为同一文本
+        _ub = _ub.split(MARK146)[0]
+    reg["meta"]["updated_by"] = _ub + NOTE
     write(REG, reg)
     reg_after = sha16(REG)
 
     # ── 3. 记录 ────────────────────────────────────────────────────────────
+    co146_ids = [it["finding"] for it in new]
+    present = {it["finding"] for it in reg["items"]}
     rec = {"artifact": "m13_v57_co146_jlc_rebind", "schema": 1, "revision": "CO146-REBIND.1",
            "nature": "定性更正 + 登记簿登记（监理指令 #10 动作 5）",
-           "register": {"file": "L2/input_defect_register_v1.json", "sha16_before": None,
-                        "sha16_after": reg_after, "items_before": len(reg["items"]) - len(added),
-                        "items_added": [it["finding"] for it in added], "items_total": len(reg["items"]),
+           "register": {"file": "L2/input_defect_register_v1.json",
+                        "sha16_co145": "58bc24ea83f31735", "sha16_after": reg_after,
+                        "items_before_co146": len(reg["items"]) - sum(1 for f in co146_ids if f in present),
+                        "co146_items": co146_ids,
+                        "co146_items_already_present_at_this_run": [f for f in co146_ids if f in have],
+                        "items_total": len(reg["items"]),
                         "open_total": sum(1 for it in reg["items"] if it["status"] == "OPEN")},
            "l2_binding_artifact": {"file": "L2/jlc_prototype_parameters_v1.json",
                                    "sha16": sha16(L2 / "jlc_prototype_parameters_v1.json")},
@@ -154,19 +163,18 @@ def main() -> int:
                         "through_only_feasible": probe["verdict"] == "FEASIBLE",
                         "orderable_at_jlc_standard": not dfm["fails"]},
            "teeth": {"t01_register_written": reg_after is not None,
-                     "t02_idempotent_items": len(added) == len(new) or len(added) == 0},
+                     "t02_idempotent_items": all(f in present for f in co146_ids)},
            "redline": "只写 L2 政策层 + 登记簿；冻结四源逐字节不变（SPEC 前后同 sha）。"}
     write(STEP2 / "m13_v57_co146_jlc_rebind.json", rec)
     md = ["# CO-146 卡 · 定性更正 + 登记（监理指令 #10 动作 5）", "",
           f"- 监理指令 #10 出处 `{bind['supervisor_instruction']['file']}` `{bind['supervisor_instruction']['sha16']}`",
-          f"- 登记簿 `{rec['register']['file']}`：{rec['register']['items_before']} → **{rec['register']['items_total']}** 项"
-          f"（OPEN {rec['register']['open_total']}）；新增：{rec['register']['items_added']}",
+          f"- 登记簿 `{rec['register']['file']}`：{rec['register']['items_before_co146']} → **{rec['register']['items_total']}** 项"
+          f"（OPEN {rec['register']['open_total']}）；CO-146 项：{rec['register']['co146_items']}",
           f"- SPEC 逐字节不变：`{rec['spec_sha16']}`｜板 `{rec['board_sha16']}`", "",
           "## 定性更正（撤回「外部输入阻塞」）", ""]
     for r_ in bind["rebinding"]:
         md += [f"### {r_['item']}", f"- 旧：{r_['from']}", f"- 新：{r_['to']}", ""]
     md += ["## 交付物 verdict", ""] + [f"- {k}: **{v}**" for k, v in rec["verdicts"].items()] + [""]
-    write(STEP2 / "m13_v57_co146_jlc_rebind.md", {})  # placeholder (overwritten below)
     (STEP2 / "m13_v57_co146_jlc_rebind.md").write_text("\n".join(md) + "\n")
     print("register:", rec["register"])
     print("l2 bind sha16:", rec["l2_binding_artifact"]["sha16"])

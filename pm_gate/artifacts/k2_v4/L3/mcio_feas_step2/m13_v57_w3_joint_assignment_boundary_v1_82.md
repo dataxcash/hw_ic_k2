@@ -728,7 +728,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | JLC 能力表 `m13_v57_co146_jlc8_capability.json` | `b35130f9303d9726` |
 | 通孔化反证 `m13_v57_co146_through_via_probe.json` | `fd82d5200294919e` |
 | 打样包记录 `m13_v57_co146_jlc_fab_package.json` | `c8d029254085efea` |
-| 定性更正 `m13_v57_co146_jlc_rebind.json` | `83dc87e509b56298` |
+| 定性更正 `m13_v57_co146_jlc_rebind.json` | `a0a0f6114223ef05` |
 | L2 定值绑定 `jlc_prototype_parameters_v1.json` | `e9bf5019aeddbd16` |
 | 登记簿 `input_defect_register_v1.json`(+2 OPEN) | `864c7ae0d3a45091` |
 | co124 输入自检 `m13_v57_co124_input_selfcheck_gate.json` | `bcb44e5d9d6a2700` |
@@ -737,4 +737,4 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 工具 `p3_v57_co146_pm_eval.py` | `b8f1cbf5db245a11` |
 | 工具 `p3_v57_co146_jlc_fab_package.py` | `0efc45226e941fd3` |
 | 工具 `p3_v57_co146_through_via_probe.py` | `e6a53875c47319ae` |
-| 工具 `p3_v57_co146_closeout.py` | `dcb641285965b447` |
+| 工具 `p3_v57_co146_closeout.py` | `18220ee964ead702` |
