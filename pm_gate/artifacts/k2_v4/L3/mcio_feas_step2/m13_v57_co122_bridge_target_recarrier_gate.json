@@ -1,0 +1,2434 @@
+{
+ "artifact": "m13_v57_co122_bridge_target_recarrier_gate",
+ "schema": 1,
+ "revision": "CO-122.1",
+ "nature": "L2 自裁 · 机判：CO-118 R1（4 target 改 In4 承载）是否可闭式成立（声明式有限家族，零搜索）",
+ "level": {
+  "ruling": "L2",
+  "basis": "《宪法》ch.2：PDN 架构/走廊分配 = L2；R2（放宽 L1 v2.0『B.Cu 空置』）才归 owner"
+ },
+ "inputs": {
+  "spec_sha16": "48d6fc7c565c8862",
+  "co121_record_sha16": "d3042e4ffb96949a",
+  "co118_record": "m13_v57_co118_bcu_bridge_conflict_check.json"
+ },
+ "clearance_mm": 0.375,
+ "merge_min_mm": 0.3,
+ "families": {
+  "C84.1(P3V3)": {
+   "host_zone": "MCU_VDD_WEST",
+   "via": [
+    42.525,
+    40.0
+   ],
+   "own_plane": "P3V3",
+   "best": "C84.1|w1.0|h0.8|dy-1.0",
+   "n_members": 30,
+   "results": {
+    "C84.1|w0.75|h0.5|dy+0.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C84.2(GND) d=0.000 < 0.375",
+      "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 76,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C84.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "C84.1|w0.75|h0.5|dy+0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C84.2(GND) d=0.250 < 0.375",
+      "R28.2(GND) d=0.250 < 0.375",
+      "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.250 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 54,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C84.2(GND)",
+      "margin_mm": -0.125
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "C84.1|w0.75|h0.5|dy-0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C84.2(GND) d=0.250 < 0.375",
+      "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.250 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 54,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C84.2(GND)",
+      "margin_mm": -0.125
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "C84.1|w0.75|h0.5|dy+1.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "R28.2(GND) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 45,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "R28.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": null,
+     "ok": false,
+     "d_pocket_corridor_merge": false,
+     "f_reaches_own_plane": true
+    },
+    "C84.1|w0.75|h0.5|dy-1.0": {
+     "a_coverage": [],
+     "b_clearance": [],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 52,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C84.2(GND)",
+      "margin_mm": 0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": null,
+     "ok": false,
+     "d_pocket_corridor_merge": false,
+     "f_reaches_own_plane": true
+    },
+    "C84.1|w0.75|h0.8|dy+0.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C84.2(GND) d=0.000 < 0.375",
+      "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 76,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C84.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.75,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "C84.1|w0.75|h0.8|dy+0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C84.2(GND) d=0.100 < 0.375",
+      "R28.2(GND) d=0.100 < 0.375",
+      "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.100 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 71,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C84.2(GND)",
+      "margin_mm": -0.275
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.65,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "C84.1|w0.75|h0.8|dy-0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C84.2(GND) d=0.100 < 0.375",
+      "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.100 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 71,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C84.2(GND)",
+      "margin_mm": -0.275
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.65,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "C84.1|w0.75|h0.8|dy+1.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "R28.2(GND) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 68,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "R28.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.15,
+     "ok": false,
+     "d_pocket_corridor_merge": false,
+     "f_reaches_own_plane": true
+    },
+    "C84.1|w0.75|h0.8|dy-1.0": {
+     "a_coverage": [],
+     "b_clearance": [],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 75,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C84.2(GND)",
+      "margin_mm": 0.225
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.15,
+     "ok": false,
+     "d_pocket_corridor_merge": false,
+     "f_reaches_own_plane": true
+    },
+    "C84.1|w1.0|h0.5|dy+0.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C84.2(GND) d=0.000 < 0.375",
+      "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 76,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C84.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "C84.1|w1.0|h0.5|dy+0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C84.2(GND) d=0.250 < 0.375",
+      "R28.2(GND) d=0.250 < 0.375",
+      "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.250 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 72,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C84.2(GND)",
+      "margin_mm": -0.125
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "C84.1|w1.0|h0.5|dy-0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C84.2(GND) d=0.250 < 0.375",
+      "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.250 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 72,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C84.2(GND)",
+      "margin_mm": -0.125
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "C84.1|w1.0|h0.5|dy+1.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "R28.2(GND) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 75,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "R28.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.25,
+     "ok": false,
+     "d_pocket_corridor_merge": false,
+     "f_reaches_own_plane": true
+    },
+    "C84.1|w1.0|h0.5|dy-1.0": {
+     "a_coverage": [],
+     "b_clearance": [],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 82,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "U4.2(MCU_VDD)",
+      "margin_mm": 0.2425
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.25,
+     "ok": false,
+     "d_pocket_corridor_merge": false,
+     "f_reaches_own_plane": true
+    },
+    "C84.1|w1.0|h0.8|dy+0.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C84.2(GND) d=0.000 < 0.375",
+      "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 76,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C84.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.8,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "C84.1|w1.0|h0.8|dy+0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C84.2(GND) d=0.100 < 0.375",
+      "R28.2(GND) d=0.100 < 0.375",
+      "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.100 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 70,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C84.2(GND)",
+      "margin_mm": -0.275
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.8,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "C84.1|w1.0|h0.8|dy-0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C84.2(GND) d=0.100 < 0.375",
+      "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.100 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 70,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C84.2(GND)",
+      "margin_mm": -0.275
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.8,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "C84.1|w1.0|h0.8|dy+1.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "R28.2(GND) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 75,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "R28.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.4,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "C84.1|w1.0|h0.8|dy-1.0": {
+     "a_coverage": [],
+     "b_clearance": [],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 82,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C84.2(GND)",
+      "margin_mm": 0.225
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.4,
+     "ok": true,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "C84.1|w1.5|h0.5|dy+0.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C84.2(GND) d=0.000 < 0.375",
+      "U4.2(MCU_VDD) d=0.075 < 0.375",
+      "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": false,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 93,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C84.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "C84.1|w1.5|h0.5|dy+0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C84.2(GND) d=0.250 < 0.375",
+      "R28.2(GND) d=0.250 < 0.375",
+      "U4.2(MCU_VDD) d=0.075 < 0.375",
+      "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.250 < 0.375"
+     ],
+     "c_mcu_continuity": false,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 89,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "U4.2(MCU_VDD)",
+      "margin_mm": -0.3
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "C84.1|w1.5|h0.5|dy-0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C84.2(GND) d=0.250 < 0.375",
+      "U4.2(MCU_VDD) d=0.075 < 0.375",
+      "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.250 < 0.375"
+     ],
+     "c_mcu_continuity": false,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 89,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "U4.2(MCU_VDD)",
+      "margin_mm": -0.3
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "C84.1|w1.5|h0.5|dy+1.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "R28.2(GND) d=0.000 < 0.375",
+      "U4.2(MCU_VDD) d=0.075 < 0.375"
+     ],
+     "c_mcu_continuity": false,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 89,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "R28.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "C84.1|w1.5|h0.5|dy-1.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "U4.2(MCU_VDD) d=0.075 < 0.375"
+     ],
+     "c_mcu_continuity": false,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 93,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "U4.2(MCU_VDD)",
+      "margin_mm": -0.3
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "C84.1|w1.5|h0.8|dy+0.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C84.2(GND) d=0.000 < 0.375",
+      "U4.2(MCU_VDD) d=0.075 < 0.375",
+      "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": false,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 93,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C84.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.8,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "C84.1|w1.5|h0.8|dy+0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C84.2(GND) d=0.100 < 0.375",
+      "R28.2(GND) d=0.100 < 0.375",
+      "U4.2(MCU_VDD) d=0.075 < 0.375",
+      "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.100 < 0.375"
+     ],
+     "c_mcu_continuity": false,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 89,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "U4.2(MCU_VDD)",
+      "margin_mm": -0.3
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.8,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "C84.1|w1.5|h0.8|dy-0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C84.2(GND) d=0.100 < 0.375",
+      "U4.2(MCU_VDD) d=0.075 < 0.375",
+      "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.100 < 0.375"
+     ],
+     "c_mcu_continuity": false,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 89,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "U4.2(MCU_VDD)",
+      "margin_mm": -0.3
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.8,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "C84.1|w1.5|h0.8|dy+1.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "R28.2(GND) d=0.000 < 0.375",
+      "U4.2(MCU_VDD) d=0.075 < 0.375"
+     ],
+     "c_mcu_continuity": false,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 86,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "R28.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.8,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "C84.1|w1.5|h0.8|dy-1.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "U4.2(MCU_VDD) d=0.075 < 0.375"
+     ],
+     "c_mcu_continuity": false,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 90,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "U4.2(MCU_VDD)",
+      "margin_mm": -0.3
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.8,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    }
+   }
+  },
+  "U2.5(P3V3)": {
+   "host_zone": "MCU_VDD_WEST",
+   "via": [
+    34.95,
+    39.83
+   ],
+   "own_plane": "P3V3",
+   "best": null,
+   "n_members": 30,
+   "results": {
+    "U2.5|w0.75|h0.5|dy+0.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C84.2(GND) d=0.000 < 0.375",
+      "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 88,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C84.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U2.5|w0.75|h0.5|dy+0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C84.2(GND) d=0.080 < 0.375",
+      "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.080 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 63,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C84.2(GND)",
+      "margin_mm": -0.295
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U2.5|w0.75|h0.5|dy-0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "U4.2(MCU_VDD) d=0.305 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 63,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "U4.2(MCU_VDD)",
+      "margin_mm": -0.07
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U2.5|w0.75|h0.5|dy+1.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "R28.2(GND) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 54,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "R28.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": null,
+     "ok": false,
+     "d_pocket_corridor_merge": false,
+     "f_reaches_own_plane": true
+    },
+    "U2.5|w0.75|h0.5|dy-1.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "U4.2(MCU_VDD) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": false,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 64,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "U4.2(MCU_VDD)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": null,
+     "ok": false,
+     "d_pocket_corridor_merge": false,
+     "f_reaches_own_plane": true
+    },
+    "U2.5|w0.75|h0.8|dy+0.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C84.2(GND) d=0.000 < 0.375",
+      "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 88,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C84.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.75,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U2.5|w0.75|h0.8|dy+0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C84.2(GND) d=0.000 < 0.375",
+      "R28.2(GND) d=0.270 < 0.375",
+      "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 86,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C84.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.65,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U2.5|w0.75|h0.8|dy-0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C84.2(GND) d=0.270 < 0.375",
+      "U4.2(MCU_VDD) d=0.155 < 0.375",
+      "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.270 < 0.375"
+     ],
+     "c_mcu_continuity": false,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 86,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "U4.2(MCU_VDD)",
+      "margin_mm": -0.22
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.65,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U2.5|w0.75|h0.8|dy+1.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "R28.2(GND) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 83,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "R28.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.15,
+     "ok": false,
+     "d_pocket_corridor_merge": false,
+     "f_reaches_own_plane": true
+    },
+    "U2.5|w0.75|h0.8|dy-1.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "U4.2(MCU_VDD) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": false,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 93,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "U4.2(MCU_VDD)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.15,
+     "ok": false,
+     "d_pocket_corridor_merge": false,
+     "f_reaches_own_plane": true
+    },
+    "U2.5|w1.0|h0.5|dy+0.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C84.2(GND) d=0.000 < 0.375",
+      "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 88,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C84.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U2.5|w1.0|h0.5|dy+0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C84.2(GND) d=0.080 < 0.375",
+      "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.080 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 81,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C84.2(GND)",
+      "margin_mm": -0.295
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U2.5|w1.0|h0.5|dy-0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "U4.2(MCU_VDD) d=0.305 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 81,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "U4.2(MCU_VDD)",
+      "margin_mm": -0.07
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U2.5|w1.0|h0.5|dy+1.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "R28.2(GND) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 93,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "R28.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.25,
+     "ok": false,
+     "d_pocket_corridor_merge": false,
+     "f_reaches_own_plane": true
+    },
+    "U2.5|w1.0|h0.5|dy-1.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "U4.2(MCU_VDD) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": false,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 103,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "U4.2(MCU_VDD)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.25,
+     "ok": false,
+     "d_pocket_corridor_merge": false,
+     "f_reaches_own_plane": true
+    },
+    "U2.5|w1.0|h0.8|dy+0.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C84.2(GND) d=0.000 < 0.375",
+      "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 88,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C84.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.8,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U2.5|w1.0|h0.8|dy+0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C84.2(GND) d=0.000 < 0.375",
+      "R28.2(GND) d=0.270 < 0.375",
+      "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 82,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C84.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.8,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U2.5|w1.0|h0.8|dy-0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C84.2(GND) d=0.270 < 0.375",
+      "U4.2(MCU_VDD) d=0.155 < 0.375",
+      "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.270 < 0.375"
+     ],
+     "c_mcu_continuity": false,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 82,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "U4.2(MCU_VDD)",
+      "margin_mm": -0.22
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.8,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U2.5|w1.0|h0.8|dy+1.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "R28.2(GND) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 93,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "R28.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.4,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U2.5|w1.0|h0.8|dy-1.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "U4.2(MCU_VDD) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": false,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 103,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "U4.2(MCU_VDD)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.4,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U2.5|w1.5|h0.5|dy+0.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C84.2(GND) d=0.000 < 0.375",
+      "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 94,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C84.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U2.5|w1.5|h0.5|dy+0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C84.2(GND) d=0.080 < 0.375",
+      "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.080 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 87,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C84.2(GND)",
+      "margin_mm": -0.295
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U2.5|w1.5|h0.5|dy-0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "U4.2(MCU_VDD) d=0.305 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 87,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "U4.2(MCU_VDD)",
+      "margin_mm": -0.07
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U2.5|w1.5|h0.5|dy+1.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "R28.2(GND) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 87,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "R28.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U2.5|w1.5|h0.5|dy-1.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "U4.2(MCU_VDD) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": false,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 94,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "U4.2(MCU_VDD)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U2.5|w1.5|h0.8|dy+0.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C84.2(GND) d=0.000 < 0.375",
+      "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 94,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C84.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.8,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U2.5|w1.5|h0.8|dy+0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C84.2(GND) d=0.000 < 0.375",
+      "R28.2(GND) d=0.270 < 0.375",
+      "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 87,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C84.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.8,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U2.5|w1.5|h0.8|dy-0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C84.2(GND) d=0.270 < 0.375",
+      "U4.2(MCU_VDD) d=0.155 < 0.375",
+      "MCU_VDD_BCU_RESISTORS_IN4#v0(MCU_VDD) d=0.270 < 0.375"
+     ],
+     "c_mcu_continuity": false,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 87,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "U4.2(MCU_VDD)",
+      "margin_mm": -0.22
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.8,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U2.5|w1.5|h0.8|dy+1.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "R28.2(GND) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 88,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "R28.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.8,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U2.5|w1.5|h0.8|dy-1.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "U4.2(MCU_VDD) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": false,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 95,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "U4.2(MCU_VDD)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.8,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    }
+   }
+  },
+  "U4.3(P3V3)": {
+   "host_zone": "MCU_VDD_WEST",
+   "via": [
+    40.0,
+    35.225
+   ],
+   "own_plane": "P3V3",
+   "best": "U4.3|w0.75|h0.5|dy+0.5",
+   "n_members": 30,
+   "results": {
+    "U4.3|w0.75|h0.5|dy+0.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C87.2(GND) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 80,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C87.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U4.3|w0.75|h0.5|dy+0.5": {
+     "a_coverage": [],
+     "b_clearance": [],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 57,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C87.2(GND)",
+      "margin_mm": 0.1
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": true,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U4.3|w0.75|h0.5|dy-0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C87.2(GND) d=0.025 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 57,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C87.2(GND)",
+      "margin_mm": -0.35
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U4.3|w0.75|h0.5|dy+1.0": {
+     "a_coverage": [],
+     "b_clearance": [],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 48,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C87.2(GND)",
+      "margin_mm": 0.6
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": null,
+     "ok": false,
+     "d_pocket_corridor_merge": false,
+     "f_reaches_own_plane": true
+    },
+    "U4.3|w0.75|h0.5|dy-1.0": {
+     "a_coverage": [],
+     "b_clearance": [],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 48,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C87.2(GND)",
+      "margin_mm": 0.15
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": null,
+     "ok": false,
+     "d_pocket_corridor_merge": false,
+     "f_reaches_own_plane": true
+    },
+    "U4.3|w0.75|h0.8|dy+0.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C87.2(GND) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 80,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C87.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.75,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U4.3|w0.75|h0.8|dy+0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C87.2(GND) d=0.325 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 76,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C87.2(GND)",
+      "margin_mm": -0.05
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.65,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U4.3|w0.75|h0.8|dy-0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C87.2(GND) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 76,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C87.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.65,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U4.3|w0.75|h0.8|dy+1.0": {
+     "a_coverage": [],
+     "b_clearance": [],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 73,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C87.2(GND)",
+      "margin_mm": 0.45
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.15,
+     "ok": false,
+     "d_pocket_corridor_merge": false,
+     "f_reaches_own_plane": true
+    },
+    "U4.3|w0.75|h0.8|dy-1.0": {
+     "a_coverage": [],
+     "b_clearance": [],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 73,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C87.2(GND)",
+      "margin_mm": 0.0
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.15,
+     "ok": false,
+     "d_pocket_corridor_merge": false,
+     "f_reaches_own_plane": true
+    },
+    "U4.3|w1.0|h0.5|dy+0.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C87.2(GND) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 90,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C87.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U4.3|w1.0|h0.5|dy+0.5": {
+     "a_coverage": [],
+     "b_clearance": [],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 85,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C87.2(GND)",
+      "margin_mm": 0.1
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": true,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U4.3|w1.0|h0.5|dy-0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C87.2(GND) d=0.025 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 85,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C87.2(GND)",
+      "margin_mm": -0.35
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U4.3|w1.0|h0.5|dy+1.0": {
+     "a_coverage": [],
+     "b_clearance": [],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 91,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C87.2(GND)",
+      "margin_mm": 0.6
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.25,
+     "ok": false,
+     "d_pocket_corridor_merge": false,
+     "f_reaches_own_plane": true
+    },
+    "U4.3|w1.0|h0.5|dy-1.0": {
+     "a_coverage": [],
+     "b_clearance": [],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 91,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C87.2(GND)",
+      "margin_mm": 0.15
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.25,
+     "ok": false,
+     "d_pocket_corridor_merge": false,
+     "f_reaches_own_plane": true
+    },
+    "U4.3|w1.0|h0.8|dy+0.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C87.2(GND) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 90,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C87.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.8,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U4.3|w1.0|h0.8|dy+0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C87.2(GND) d=0.325 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 83,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C87.2(GND)",
+      "margin_mm": -0.05
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.8,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U4.3|w1.0|h0.8|dy-0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C87.2(GND) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 83,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C87.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.8,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U4.3|w1.0|h0.8|dy+1.0": {
+     "a_coverage": [],
+     "b_clearance": [],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 91,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C87.2(GND)",
+      "margin_mm": 0.45
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.4,
+     "ok": true,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U4.3|w1.0|h0.8|dy-1.0": {
+     "a_coverage": [],
+     "b_clearance": [],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 91,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C87.2(GND)",
+      "margin_mm": 0.0
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.4,
+     "ok": true,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U4.3|w1.5|h0.5|dy+0.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C87.2(GND) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 96,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C87.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U4.3|w1.5|h0.5|dy+0.5": {
+     "a_coverage": [],
+     "b_clearance": [],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 92,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C87.2(GND)",
+      "margin_mm": 0.1
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": true,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U4.3|w1.5|h0.5|dy-0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C87.2(GND) d=0.025 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 92,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C87.2(GND)",
+      "margin_mm": -0.35
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U4.3|w1.5|h0.5|dy+1.0": {
+     "a_coverage": [],
+     "b_clearance": [],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 92,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C87.2(GND)",
+      "margin_mm": 0.6
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": true,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U4.3|w1.5|h0.5|dy-1.0": {
+     "a_coverage": [],
+     "b_clearance": [],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 92,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C87.2(GND)",
+      "margin_mm": 0.15
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": true,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U4.3|w1.5|h0.8|dy+0.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C87.2(GND) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 96,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C87.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.8,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U4.3|w1.5|h0.8|dy+0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C87.2(GND) d=0.325 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 92,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C87.2(GND)",
+      "margin_mm": -0.05
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.8,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U4.3|w1.5|h0.8|dy-0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "C87.2(GND) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 92,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C87.2(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.8,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U4.3|w1.5|h0.8|dy+1.0": {
+     "a_coverage": [],
+     "b_clearance": [],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 88,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C87.2(GND)",
+      "margin_mm": 0.45
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.8,
+     "ok": true,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    },
+    "U4.3|w1.5|h0.8|dy-1.0": {
+     "a_coverage": [],
+     "b_clearance": [],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 88,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "C87.2(GND)",
+      "margin_mm": 0.0
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.8,
+     "ok": true,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": true
+    }
+   }
+  },
+  "J4.A9(P3V3_AUX)": {
+   "host_zone": "P3V3_EAST",
+   "via": [
+    58.9,
+    62.275
+   ],
+   "own_plane": "P3V3_AUX",
+   "best": null,
+   "n_members": 30,
+   "results": {
+    "J4.A9|w0.75|h0.5|dy+0.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "J4.A7(GND) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 68,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "J4.A7(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": false
+    },
+    "J4.A9|w0.75|h0.5|dy+0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "J4.A7(GND) d=0.250 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 48,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "J4.A7(GND)",
+      "margin_mm": -0.125
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": false
+    },
+    "J4.A9|w0.75|h0.5|dy-0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "J4.A1(GND) d=0.075 < 0.375",
+      "J4.A7(GND) d=0.250 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 48,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "J4.A1(GND)",
+      "margin_mm": -0.3
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": false
+    },
+    "J4.A9|w0.75|h0.5|dy+1.0": {
+     "a_coverage": [],
+     "b_clearance": [],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 39,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "J4.B1(GND)",
+      "margin_mm": 0.05
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": null,
+     "ok": false,
+     "d_pocket_corridor_merge": false,
+     "f_reaches_own_plane": false
+    },
+    "J4.A9|w0.75|h0.5|dy-1.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "J4.A1(GND) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 39,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "J4.A1(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": null,
+     "ok": false,
+     "d_pocket_corridor_merge": false,
+     "f_reaches_own_plane": false
+    },
+    "J4.A9|w0.75|h0.8|dy+0.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "J4.A7(GND) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 68,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "J4.A7(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.75,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": false
+    },
+    "J4.A9|w0.75|h0.8|dy+0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "J4.A7(GND) d=0.100 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 61,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "J4.A7(GND)",
+      "margin_mm": -0.275
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.65,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": false
+    },
+    "J4.A9|w0.75|h0.8|dy-0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "J4.A1(GND) d=0.000 < 0.375",
+      "J4.A7(GND) d=0.100 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 61,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "J4.A1(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.65,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": false
+    },
+    "J4.A9|w0.75|h0.8|dy+1.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "J4.B1(GND) d=0.275 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 58,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "J4.B1(GND)",
+      "margin_mm": -0.1
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.15,
+     "ok": false,
+     "d_pocket_corridor_merge": false,
+     "f_reaches_own_plane": false
+    },
+    "J4.A9|w0.75|h0.8|dy-1.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "J4.A1(GND) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 58,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "J4.A1(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.15,
+     "ok": false,
+     "d_pocket_corridor_merge": false,
+     "f_reaches_own_plane": false
+    },
+    "J4.A9|w1.0|h0.5|dy+0.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "J4.A7(GND) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 60,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "J4.A7(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": false
+    },
+    "J4.A9|w1.0|h0.5|dy+0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "J4.A7(GND) d=0.200 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 60,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "J4.A7(GND)",
+      "margin_mm": -0.175
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": false
+    },
+    "J4.A9|w1.0|h0.5|dy-0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "J4.A1(GND) d=0.075 < 0.375",
+      "J4.A7(GND) d=0.200 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 60,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "J4.A1(GND)",
+      "margin_mm": -0.3
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": false
+    },
+    "J4.A9|w1.0|h0.5|dy+1.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "J4.A7(GND) d=0.200 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 51,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "J4.A7(GND)",
+      "margin_mm": -0.175
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.25,
+     "ok": false,
+     "d_pocket_corridor_merge": false,
+     "f_reaches_own_plane": false
+    },
+    "J4.A9|w1.0|h0.5|dy-1.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "J4.A1(GND) d=0.000 < 0.375",
+      "J4.A7(GND) d=0.200 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 51,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "J4.A1(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.25,
+     "ok": false,
+     "d_pocket_corridor_merge": false,
+     "f_reaches_own_plane": false
+    },
+    "J4.A9|w1.0|h0.8|dy+0.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "J4.A7(GND) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 60,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "J4.A7(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.8,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": false
+    },
+    "J4.A9|w1.0|h0.8|dy+0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "J4.A7(GND) d=0.100 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 54,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "J4.A7(GND)",
+      "margin_mm": -0.275
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.8,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": false
+    },
+    "J4.A9|w1.0|h0.8|dy-0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "J4.A1(GND) d=0.000 < 0.375",
+      "J4.A7(GND) d=0.100 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 54,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "J4.A1(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.8,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": false
+    },
+    "J4.A9|w1.0|h0.8|dy+1.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "J4.A7(GND) d=0.200 < 0.375",
+      "J4.B1(GND) d=0.275 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 51,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "J4.A7(GND)",
+      "margin_mm": -0.175
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.4,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": false
+    },
+    "J4.A9|w1.0|h0.8|dy-1.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "J4.A1(GND) d=0.000 < 0.375",
+      "J4.A7(GND) d=0.200 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 51,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "J4.A1(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.4,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": false
+    },
+    "J4.A9|w1.5|h0.5|dy+0.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "J4.A10(GND) d=0.150 < 0.375",
+      "J4.A7(GND) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 50,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "J4.A7(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": false
+    },
+    "J4.A9|w1.5|h0.5|dy+0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "J4.A10(GND) d=0.150 < 0.375",
+      "J4.A7(GND) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 50,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "J4.A7(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": false
+    },
+    "J4.A9|w1.5|h0.5|dy-0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "J4.A1(GND) d=0.075 < 0.375",
+      "J4.A10(GND) d=0.150 < 0.375",
+      "J4.A7(GND) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 50,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "J4.A7(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": false
+    },
+    "J4.A9|w1.5|h0.5|dy+1.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "J4.A10(GND) d=0.150 < 0.375",
+      "J4.A7(GND) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 50,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "J4.A7(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": false
+    },
+    "J4.A9|w1.5|h0.5|dy-1.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "J4.A1(GND) d=0.000 < 0.375",
+      "J4.A10(GND) d=0.150 < 0.375",
+      "J4.A7(GND) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 50,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "J4.A1(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.5,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": false
+    },
+    "J4.A9|w1.5|h0.8|dy+0.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "J4.A10(GND) d=0.150 < 0.375",
+      "J4.A7(GND) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 50,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "J4.A7(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.8,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": false
+    },
+    "J4.A9|w1.5|h0.8|dy+0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "J4.A10(GND) d=0.150 < 0.375",
+      "J4.A7(GND) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 50,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "J4.A7(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.8,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": false
+    },
+    "J4.A9|w1.5|h0.8|dy-0.5": {
+     "a_coverage": [],
+     "b_clearance": [
+      "J4.A1(GND) d=0.000 < 0.375",
+      "J4.A10(GND) d=0.150 < 0.375",
+      "J4.A7(GND) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 50,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "J4.A1(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.8,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": false
+    },
+    "J4.A9|w1.5|h0.8|dy+1.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "J4.A10(GND) d=0.150 < 0.375",
+      "J4.A7(GND) d=0.000 < 0.375",
+      "J4.B1(GND) d=0.275 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 45,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "J4.A7(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.8,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": false
+    },
+    "J4.A9|w1.5|h0.8|dy-1.0": {
+     "a_coverage": [],
+     "b_clearance": [
+      "J4.A1(GND) d=0.000 < 0.375",
+      "J4.A10(GND) d=0.150 < 0.375",
+      "J4.A7(GND) d=0.000 < 0.375"
+     ],
+     "c_mcu_continuity": true,
+     "d_aux_connectivity": true,
+     "n_aux_cells": 45,
+     "n_free_components": 1,
+     "worst_margin": {
+      "via": "J4.A1(GND)",
+      "margin_mm": -0.375
+     },
+     "e_manufacturable_merge": true,
+     "min_merge_depth_mm": 0.8,
+     "ok": false,
+     "d_pocket_corridor_merge": true,
+     "f_reaches_own_plane": false
+    }
+   }
+  }
+ },
+ "rows": [
+  {
+   "target": "C84.1",
+   "net": "P3V3",
+   "host_zone": "MCU_VDD_WEST",
+   "via": [
+    42.525,
+    40.0
+   ],
+   "verdict": "FEASIBLE",
+   "chosen": "C84.1|w1.0|h0.8|dy-1.0"
+  },
+  {
+   "target": "U2.5",
+   "net": "P3V3",
+   "host_zone": "MCU_VDD_WEST",
+   "via": [
+    34.95,
+    39.83
+   ],
+   "verdict": "NOT_FEASIBLE_WITHIN_DECLARED_FAMILY",
+   "chosen": null
+  },
+  {
+   "target": "U4.3",
+   "net": "P3V3",
+   "host_zone": "MCU_VDD_WEST",
+   "via": [
+    40.0,
+    35.225
+   ],
+   "verdict": "FEASIBLE",
+   "chosen": "U4.3|w0.75|h0.5|dy+0.5"
+  },
+  {
+   "target": "J4.A9",
+   "net": "P3V3_AUX",
+   "host_zone": "P3V3_EAST",
+   "via": [
+    58.9,
+    62.275
+   ],
+   "verdict": "NOT_FEASIBLE_WITHIN_DECLARED_FAMILY",
+   "chosen": null
+  }
+ ],
+ "verdict": "R1_INFEASIBLE_SOME",
+ "consequence": "R1 家族内**未全过**：可行 target 可由 In4 承载；未过者**仅证「本声明式家族内无合法成员」**（家族受限；未证明不存在 —— 同 CO-94『family-limit 命中』口径，禁把家族不足写成不可行）。未过者归 owner（R2 放宽 B.Cu 红线 / L1 变更），或由后继以**更细声明 palette** 复核（逼近搜索红线须先自证不越界）",
+ "family_limited_caveat": "负结果为**家族受限**负结果（负控/牙齿见 CO-121 口径）；J4.A9 的 f 测 30/30 未过源于家族只含直走廊、不含「向西行至本网 AUX band 的 L 形段」⇒属家族不足而非不可行证据；U2.5 需更细 dy/h palette 复核（dy 步长 0.5、h∈{0.5,0.8} 已声明）",
+ "teeth_note": "本件无负控牙齿（属探索性机判）；负结果按 family-limited 口径报告，不以家族不足当不可行证据",
+ "redline": "只读；不改 SPEC/板/阈值/冻结源；零坐标搜索；本件不施加",
+ "board_sha16": "0e636a67c1472462"
+}
