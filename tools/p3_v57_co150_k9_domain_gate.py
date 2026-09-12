@@ -78,10 +78,9 @@ def main() -> int:
         f"- 新增域：`thermal_option_domain`（∃ 声明散热方案覆盖最重工况；现状不达标须显式声明缓解）"
         f"、`drop_domain`（每轨 ΔV% ≤ 预算%）\n"
         f"- 负控：{ {k: teeth.get(k) for k in TOOTH_KEYS} }\n"
-        f"- 登记项 `{FIND}` → **CLOSED**；登记簿 OPEN 余 {rec['register']['open_total']}\n")
+        f"- 登记项 `{FIND}` → **CLOSED**；登记簿现行态见 boundary pin 表（下游计数快照已移除，CO-155）\n")
     print("co124 rev:", c.get("revision"), "verdict:", c.get("verdict"), "findings:", c.get("n_findings"))
-    print("teeth:", rec["co124"]["teeth"], "| register closed:", hit,
-          "| OPEN", rec["register"]["open_total"])
+    print("teeth:", rec["co124"]["teeth"], "| register closed:", hit)
     print("register sha:", s16(REG), "| rec:", s16(REC))
     return 0 if all(rec["teeth"].values()) else 1
 

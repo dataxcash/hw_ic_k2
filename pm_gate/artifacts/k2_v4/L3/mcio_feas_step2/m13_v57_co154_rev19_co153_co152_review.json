@@ -1,0 +1,187 @@
+{
+ "artifact": "m13_v57_co154_rev19_co153_co152_review",
+ "schema": 1,
+ "revision": "CO-154.1",
+ "nature": "非执行者对抗复评（另一会话产出）：CO-153（K9 覆盖缺口关闭）+ CO-152（CO-151 findings 处置）",
+ "reviewer": "独立会话（handoff §5 第 1 步；禁自评条款由本会话满足）",
+ "scope": {
+  "reviewed": [
+   "CO-153",
+   "CO-152"
+  ],
+  "spec_rev": "rev-19",
+  "focus": {
+   "CO-153": [
+    "新判据可否被规避",
+    "conservative_ge faithful 口径是否等同 DV-INTPAIR-EDGE 忠实下界",
+    "是否仍有一次性写入残留（R-CO153-1）"
+   ],
+   "CO-152": [
+    "语义标注是否足够",
+    "co120 P5 是否真防复发",
+    "R2 勘误是否改变结论"
+   ]
+  }
+ },
+ "board_sha16": "d4e81f647be7f980",
+ "spec_sha16": "5f72182a2616392c",
+ "checks": {
+  "V0_frozen_4of4_and_delivered_board": {
+   "frozen_ok": {
+    "SPEC_k2_v4.spec-rev-19.json": true,
+    "m13_v57_s1_page_manifest.json": true,
+    "k2_v4_8L.kicad_pcb": true,
+    "dr rules": true
+   },
+   "delivered_board_sha16": "d4e81f647be7f980",
+   "delivered_matches": true
+  },
+  "V1_co153_closure_holds": {
+   "co124_verdict": "PASS",
+   "n_findings": 0,
+   "teeth_true": 17,
+   "teeth_total": 17,
+   "ok": true
+  },
+  "V2_co152_p5_holds_as_declared": {
+   "co120_verdict": "PASS",
+   "snaps": 8,
+   "undeclared": 0,
+   "basis_not_ok": 0,
+   "teeth_ok": true,
+   "ok": true
+  },
+  "V3_co152_r2_erratum": {
+   "doc_has_0.2577": true,
+   "doc_has_prev_0.3294": true,
+   "ruling_still_ACCEPT_L2": true,
+   "conclusion_changed": false
+  },
+  "N1_declared_semantic_free": {
+   "findings": [],
+   "evasion_succeeds": true
+  },
+  "N2_kind_coverage_tooth_missing": {
+   "domain_cap_no_domains": [],
+   "unknown_kind": [],
+   "unchecked": true
+  },
+  "N3_conservative_faithful_selfdeclared": {
+   "injected": [],
+   "evasion_succeeds": true,
+   "intpair_edge_binding_mm": 0.41,
+   "intpair_edge_span_min_mm": 0.355,
+   "conservative_ge_formula_span_mm": 0.585,
+   "note": "K9 以 DV 自带 inputs.span_mm/w_outer_mm 重算 faithful，未与 DV-INTPAIR-EDGE 的 edge_outer_binding_mm(0.41)/span_min_mm(0.355) 交叉"
+  },
+  "N4_positive_controls": {
+   "declared_stale_caught": true,
+   "conservative_caught": true,
+   "ok": true
+  },
+  "N5_co150_crash": {
+   "exception": "KeyError: 'open_total'",
+   "line": 81,
+   "wrote_stubbed": 2
+  },
+  "N6_co147_pin_not_reproducible": {
+   "record_open_total": 1,
+   "register_open_now": 0,
+   "stale": true,
+   "tool_computes_live": true
+  },
+  "N7_revision_label_mismatch": {
+   "boundary_co124_labels": [
+    "CO-124.2",
+    "CO-124.3",
+    "CO-124.5",
+    "CO-124.6"
+   ],
+   "co124_record_revision": "CO-124.5",
+   "co150_record_co124_revision": "CO-124.5",
+   "co147_record_revision": "CO-147.1",
+   "co147_tool_revision": "CO-147.1"
+  },
+  "N8_r_co153_1_unenforced": {
+   "co134_in_canonical_order": false,
+   "co134_writes_whole_ledger": true,
+   "kinds_owned_by_co134": [
+    "domain_cap",
+    "identity",
+    "process_floor"
+   ]
+  }
+ },
+ "findings": [
+  {
+   "id": "F-1",
+   "sev": "medium",
+   "kind": "executor-regression",
+   "what": "CO-152 从 CO-150 记录删去 `register.open_total` 字段（改为 note）却**未同步两处消费者**（`p3_v57_co150_k9_domain_gate.py` 第 81 行卡写入、第 84 行 print）⇒ 该工具在规范复现序（R-CO153-2）内**必然抛 KeyError**并终止（REC 先写、card 不刷新 ⇒ `m13_v57_CO150_k9_domain_gate.md` 为陈旧件）。",
+   "evidence": "受控执行（write_text 打桩、零落盘）：KeyError: 'open_total' @ line 81",
+   "fix": "删除/替换第 81/84 行的 `rec['register']['open_total']` 引用（如打印 `-` 或改为读登记簿現行值）；随后按 R-CO153-2 重跑规范序至不动点。"
+  },
+  {
+   "id": "F-2",
+   "sev": "medium",
+   "kind": "reproducibility",
+   "what": "CO-152 只要清理了 `*_sha16_after` 类**下游 sha** 快照，未覆盖同族的**下游计数/版本快照**：co147 记录内嵌 `register.open_total`（由工具**运行期现算**），现值 1 而登记簿现行 OPEN=0 ⇒ 该记录已陈旧，按规范序重跑会改写其字节（记录 sha≠提交 pin c7e66b7e9c92a2d8）⇒ R-CO153-2 的「循环至 sha 稳定」对 co147 不成立；同类残留：co148 `register.items_total`、co150 `co124.{revision,verdict,n_findings}`、co146_jlc_rebind `register.{items_total,open_total}`（后者已声明为历史）。co120 P1/P5 只扫 `*_record` 键与 `*_sha16_after` ⇒ 均不覆盖。",
+   "evidence": "co147.register.open_total=1 vs 登记簿 OPEN=0（工具源码含运行期现算表达式=True）",
+   "fix": "① 与 CO-152 F-1 同口径，移除 co147/co148 记录内的下游计数快照（版本/计数快照交由 boundary pin 表承载）；② co120 P5 扩展为「下游快照键」通用类（含 `*_sha16`、`register.*`、`open_total`/`items_total`）并加负控。"
+  },
+  {
+   "id": "F-3",
+   "sev": "low",
+   "kind": "pin-label-hygiene",
+   "what": "boundary 对同一实件的修订号自相矛盾：§26（CO-150 段）记 co124 = **CO-124.5**，§29 pin 表记 **CO-124.6**，而实件（记录 `revision`）为 CO-124.5 ⇒ pin 表标签高于实件（未随判据扩展 bump）。同类：handoff §2 记 co147=CO-147.2，而 co147 记录与工具均为 CO-147.1。（sha pin 本身 MATCH，仅修订号标签失真。）",
+   "evidence": "boundary 同时含 ['CO-124.2', 'CO-124.3', 'CO-124.5', 'CO-124.6']；co124 记录=CO-124.5；co147 记录/工具=CO-147.1",
+   "fix": "二择一并对齐：① 若 CO-153 扩展 K9 判据视为新版 ⇒ bump 实件 revision 至 CO-124.6 并同步 co150/卡；② 否则订正 boundary §29 pin 表标签为 CO-124.5。co147 同理（CO-147.2 vs .1）。"
+  },
+  {
+   "id": "F-4",
+   "sev": "medium",
+   "kind": "rule-unenforced",
+   "what": "R-CO153-1（「K9 各域均须由规范复现序内具名生产者产出；禁止一次性写入台账域」）对本条**不成立且无机判**：`domain_cap`/`identity`/`process_floor` 三域的生产者 = `p3_v57_co134_req_impl_separation.py`，该工具**不在** R-CO153-2 规范序内；且它以字面量列表**整表重写**台账（`derived_values` + `LEDGER.write_text`）⇒ 一旦（按设计）重跑 co134，CO-146/149/153 归属的 3 个 DV（declared/drop_domain/thermal_option_domain）会被**静默删除**、对应牙齿失去受试对象 —— 正是 CO-153 为 co146_ledger_add 修掉、但未覆盖 co134 的同一失败模式。",
+   "evidence": "R-CO153-2 序串含 co134=False；co134 整表重写=True",
+   "fix": "① co134 改为**只 upsert 自有三域**（同 co146_ledger_add 收窄先例）并纳入规范序；② 增 K9 牙齿「七域各有规范序内生产者」+ 负控（缺一域必抓）。"
+  },
+  {
+   "id": "F-5",
+   "sev": "medium",
+   "kind": "gate-coverage",
+   "what": "K9 对「域集合」无牙齿：`kind` 取未列值（如 `bogus_domain`）或 `kind=domain_cap` 但缺 `domains` 列表时，无任何分支命中 ⇒ **静默零校验通过**；亦无牙齿断言「每个 DV 的 kind ∈ 七域」。R-CO153-1 的「各域须由具名生产者产出」因此不可机判。",
+   "evidence": "N2 注入（domain_cap 无 domains / kind=bogus_domain）→ k9_findings = []",
+   "fix": "K9 增牙齿 T14：DV 的 kind 必须 ∈ {domain_cap,identity,process_floor,declared,conservative_ge,drop_domain,thermal_option_domain}，且 domain_cap 必带非空 domains；负控注入未列 kind / 空 domains 必抓。"
+  },
+  {
+   "id": "F-6",
+   "sev": "medium",
+   "kind": "gate-weakness",
+   "what": "CO-153 新增的 `declared` 判据只做**证据 pin 检查**（path 可解析 + sha16 现行 + basis 非空），与被声明的值**无语义关联**：实测把一个 DV 的 evidence_ref 指向**无关的现行文件**（SPEC）并给任意非空 basis ⇒ 0 findings 通过。「声明即通过」缺口被收窄（须钉一个文件）但**未关闭**。",
+   "evidence": "N1 注入（CO154_A pinned→SPEC sha 5f72182a2616392c）→ k9_findings = []",
+   "fix": "declared 判据增加「证据件须可解析出与 DV 值相关的字段」或要求 `evidence_ref.key_path` 白名单 + 值一致性抽检；否则应显式降级为 `unverified_declared` 并计数，不得与 process_floor 同权。"
+  },
+  {
+   "id": "F-7",
+   "sev": "low",
+   "kind": "gate-weakness",
+   "what": "`conservative_ge` 的「忠实下界」由该 DV **自带的** inputs.span_mm / w_outer_mm 重算（faithful = span+2·w_outer），只证**内部自洽**，未与权威 DV-INTPAIR-EDGE 的 `edge_outer_binding_mm`(0.41)/`span_min_mm`(0.355) 交叉 ⇒ 缩小自声明输入即可通过（实测 span=w=0.1,value=0.3 ⇒ 0 findings）。另：同一闸内两处用到**不同的 span 常量**（本支 0.585 对跨 vs DV-INTPAIR-EDGE 域判据 0.355 最小跨）⇒ faithful 数值并不等于 DV-INTPAIR-EDGE 忠实下界（0.995 vs 0.765）；方向偏保守（更严）故**不改结论**，但『等同』表述不成立。",
+   "evidence": "N3 注入 → []；DV-INTPAIR-EDGE.span_min_mm=0.355 / edge_outer_binding_mm=0.41 vs conservative_ge span=0.585",
+   "fix": "faithful 的 w_outer 应直接取自 DV-INTPAIR-EDGE.edge_outer_binding_mm/2、span 口径显式声明并交叉校验；或改为引用（非复制）该 DV。"
+  }
+ ],
+ "n_findings": 7,
+ "independent_confirmations": [
+  "冻结四源 4/4 MATCH（含 drc_rules 0a459839e15960b8）；交付板 = d4e81f647be7f980",
+  "CO-153 主张成立：co124 = PASS / findings 0 / 牙齿 17-17 全 True（复评独立复跑一致）",
+  "CO-152 P5 按声明成立：co120 = PASS / snaps 8 / undeclared 0 / basis_not_ok 0 / teeth ok",
+  "CO-152 R2 勘误已落实（doc 值 0.2577 + 保留旧值 0.3294 供追溯），裁定仍 ACCEPT_L2 ⇒ **不改变结论**",
+  "两类新判据在真违规时确被抓（declared 陈旧 sha / conservative value<faithful）⇒ 牙齿非空过"
+ ],
+ "verdict": "PASS_WITH_FINDINGS",
+ "reproduce": [
+  "python3 tools/p3_v57_co154_rev19_co153_co152_review.py"
+ ],
+ "as_found": "本件为 as-found 复评快照：重跑可得不同 findings/sha（属预期，与 co151 同例）；勿以其 sha 作复现目标。",
+ "redline": "只读；不改 SPEC/板/冻结四源/台账/登记簿/他人记录；子进程复现一律 write_text 打桩、零落盘；零坐标搜索。"
+}

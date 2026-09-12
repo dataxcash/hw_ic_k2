@@ -640,6 +640,141 @@
    "closed_by": [
     "CO-153"
    ]
+  },
+  {
+   "finding": "co154:F-1",
+   "kind": "TOOL_DEFECT",
+   "severity": "medium",
+   "what": "CO-152 删 CO-150 记录的 `register.open_total` 却未同步 co150 工具第 81/84 行消费者 ⇒ 规范序内必抛 KeyError、card 不刷新。",
+   "refs": [
+    "CO-154",
+    "CO-155",
+    "CO-153",
+    "CO-152"
+   ],
+   "disposition": "CO-155：删除该两处消费者（卡改静态注记、print 去 open_total）⇒ co150 在规范序内 rc=0；复跑序收敛。",
+   "status": "CLOSED",
+   "next": "无（已闭合）。",
+   "evidence": [
+    "CO-154 复评件（F-1）"
+   ],
+   "closed_by": [
+    "CO-155"
+   ]
+  },
+  {
+   "finding": "co154:F-2",
+   "kind": "TOOL_DEFECT",
+   "severity": "medium",
+   "what": "CO-152 仅清 `*_sha16_after` 下游 sha 快照，未覆盖同族**下游计数/版本快照**：co147 `register.open_total`（现值 1 vs 登记簿 OPEN=0）使提交 pin 不可复现。",
+   "refs": [
+    "CO-154",
+    "CO-155",
+    "CO-153",
+    "CO-152"
+   ],
+   "disposition": "CO-155（工件侧）：移除 co147 `register.open_total`、co148 `register.items_total`、co136 `register.{n_items,kinds}` ⇒ 三件记录不再嵌下游计数快照；并修复 boundary §25 对 co148 计数快照的消费者（co146_boundary_append）。**闸覆盖侧仍 OPEN**：co120 P1 仅抽 `*_record` 键、P5 仅扫 `*_sha16_after` ⇒ `register.*`/`open_total`/`items_total`/嵌套 `sha16` 类下游快照无闸（另实测残留：co136 `register.n_items`/`kinds` —— 已由 CO-155 一并移除；co150 `co124.{revision,verdict,n_findings}` 属**上游**记录引用，键名规范问题另计）。",
+   "status": "OPEN",
+   "next": "另开执行 CO：定义「下游快照」机判口径（建议：键名带 `_after`/`snapshot` 标记 + SNAPSHOT_DECLARED 声明册，或显式上游允许表）并给负控；实施前以人工复核承接。",
+   "evidence": [
+    "CO-154 复评件（F-2）"
+   ],
+   "closed_by": []
+  },
+  {
+   "finding": "co154:F-3",
+   "kind": "TOOL_DEFECT",
+   "severity": "low",
+   "what": "修订号标签失真：boundary §26 记 co124=CO-124.5、§29 pin 表记 CO-124.6，实件为 CO-124.5；handoff §2 记 co147=CO-147.2，实件/工具为 CO-147.1。",
+   "refs": [
+    "CO-154",
+    "CO-155",
+    "CO-153",
+    "CO-152"
+   ],
+   "disposition": "CO-155 未处置（须二择一并全链同步：bump 实件 revision 或订正标签）。§30 pin 表已按**实件**记 CO-124.5 / CO-147.1。",
+   "status": "OPEN",
+   "next": "另开执行 CO 二择一对齐（若视为新版则 bump 实件 + 同步 co150/卡/handoff）。",
+   "evidence": [
+    "CO-154 复评件（F-3）"
+   ],
+   "closed_by": []
+  },
+  {
+   "finding": "co154:F-4",
+   "kind": "TOOL_DEFECT",
+   "severity": "medium",
+   "what": "R-CO153-1 不成立且无机判：`domain_cap`/`identity`/`process_floor` 生产者 `p3_v57_co134_req_impl_separation.py` **不在**规范序内，且以字面量**整表重写**台账 ⇒ 重跑 co134 会静默删除 CO-146/149/153 归属的 3 个 DV。§29 pin 表自身也把 co134 列为生产者（与其序不含 co134 自相矛盾）。",
+   "refs": [
+    "CO-154",
+    "CO-155",
+    "CO-153",
+    "CO-152"
+   ],
+   "disposition": "CO-155 未处置（须收窄 co134 为只 upsert 自有三域 + 纳入规范序 + 增 K9 域生产者牙齿）。",
+   "status": "OPEN",
+   "next": "另开执行 CO：co134 收窄 + 入序 + 牙齿「七域各有规范序内生产者」。",
+   "evidence": [
+    "CO-154 复评件（F-4）"
+   ],
+   "closed_by": []
+  },
+  {
+   "finding": "co154:F-5",
+   "kind": "TOOL_DEFECT",
+   "severity": "medium",
+   "what": "K9 无「域覆盖」牙齿：`kind` 取未列值或 `domain_cap` 缺 `domains` 时零校验通过（静默）；无牙齿断言 kind ∈ 七域。",
+   "refs": [
+    "CO-154",
+    "CO-155",
+    "CO-153",
+    "CO-152"
+   ],
+   "disposition": "CO-155 未处置。",
+   "status": "OPEN",
+   "next": "另开执行 CO：K9 增 T14（kind 白名单 + domain_cap 必带非空 domains + 负控）。",
+   "evidence": [
+    "CO-154 复评件（F-5）"
+   ],
+   "closed_by": []
+  },
+  {
+   "finding": "co154:F-6",
+   "kind": "TOOL_DEFECT",
+   "severity": "medium",
+   "what": "CO-153 的 `declared` 判据只做证据 pin 检查、与值无语义关联 ⇒ 钉任意现行文件 + 任意非空 basis 即通过（实测 0 findings）。",
+   "refs": [
+    "CO-154",
+    "CO-155",
+    "CO-153",
+    "CO-152"
+   ],
+   "disposition": "CO-155 未处置。",
+   "status": "OPEN",
+   "next": "另开执行 CO：declared 增「证据件须可解析出与值相关字段」或显式降级为未验证类并计数。",
+   "evidence": [
+    "CO-154 复评件（F-6）"
+   ],
+   "closed_by": []
+  },
+  {
+   "finding": "co154:F-7",
+   "kind": "TOOL_DEFECT",
+   "severity": "low",
+   "what": "`conservative_ge` 的 faithful 用 DV 自带 inputs 重算（只证内部自洽），未与 DV-INTPAIR-EDGE 的 edge_outer_binding_mm(0.41)/span_min_mm(0.355) 交叉；同闸两处用不同 span 常量（0.585 vs 0.355）⇒「等同忠实下界」不成立（方向偏保守，结论不变）。",
+   "refs": [
+    "CO-154",
+    "CO-155",
+    "CO-153",
+    "CO-152"
+   ],
+   "disposition": "CO-155 未处置。",
+   "status": "OPEN",
+   "next": "另开执行 CO：faithful 直引 DV-INTPAIR-EDGE 的权威字段并交叉校验。",
+   "evidence": [
+    "CO-154 复评件（F-7）"
+   ],
+   "closed_by": []
   }
  ],
  "closed_items": [
@@ -657,14 +792,14 @@
   "owner": "ARCHER（L2 自裁执行侧）",
   "approval": "定义件 v1.0 待监理裁定/owner 批准；登记簿随闸每次运行校验",
   "mandatory_trigger": "任何 SPEC / drc_rules 变更后必须跑 tools/p3_v57_co124_input_selfcheck_gate.py 并 PASS",
-  "updated_by": "CO-127..CO-133 + **CO-134（整改通知 #09：③ 重新定性 = 工程换算错误 → REQ-R3-2 忠实实现 + 需求/实现分家规矩 + co124 K9）**；登记簿随 co124 每次运行校验；CO-134 续：4 项已声明定值补 rule_key + 台账溯源；**CO-136（L2 自裁 · 闸卫生续）**：登记并关闭 CO-135 F5(b)/F6 两条 TOOL_DEFECT（co124 标签 / co106 陈旧牙齿）；F4（handoff pin 失准）与 F5(a)（③ 根因叙述）属叙述类，保留在 CO-135 记录，不入本登记簿（非 SPEC/工具缺陷）。；**CO-139**：+1 TOOL_DEFECT（K9 豁免未锚定）并 CLOSED（hash-pin + T9）。；**CO-141**：更正 IMPLEMENTATION_DEVIATION 范围（24 平行对-对，非 3）+ 新增 OPEN TOOL_DEFECT（路由器列距基准漏 3W）。；**CO-142（L2 只读）**：对间 <3W 违规逐条明细 + 构造阶段归因；**CO-143（L2 只读）**：更正 `k2_router_escape_fan_omits_3w` 定位（f13 pair_xorder → escape-fan 落位判据 `p3_v57_co10_west_fan_probe.py:check()`）+ 施加可行性研究（可满足但须重派生策略；PDN 障碍 + 贪心夹死）。；**CO-146（监理指令 #10 · JLC 打样就绪）**：+2 IMPLEMENTATION_DEVIATION（OPEN：盲/埋孔 vs JLC 标准不支持 = 结构/工艺类别；阻焊桥 1 处 vs JLC 0.09mm）；外部输入定性更正（撤回「等券」表述，改绑 JLC 阻抗控制服务 + 监理定值）；登记簿随 co124 每次运行校验。；**CO-147（L2 自裁）**：三题裁定（R1 过孔策略维持盲/埋孔 ⇒ 渠道绑定 JLC advanced；R2 J2 landing 对间适用域 ACCEPT_L2；R3 阻焊桥 ACCEPT_L2_WITH_FAB_REVIEW）；登记簿 3 项转 CLOSED。；**CO-148**：U6 手册输入（TI SNLS683）⇒ 热 Tj 121.8–161.8°C 超上限 120°C ⇒ 登记 +2（热超限 HIGH / K9 无热域模型 MED）。；**CO-149（L2 自裁 · 热机械派生）**：自然对流全档不可达（两路线互校 θJA≈17.2 vs 手册 17.4）⇒ 派生出系统散热要求（h_eff ≥ 8.2–16.4 W/m²K 或 顶部散热片预算 ≤ 4.9–10.5 °C/W）；监理定值 Ta=40°C 不变；登记簿热项 CLOSED（OPEN 余 K9 热域缺口）；台账 DV-CO146-THERMAL 可达性 = 声明散热方案域。（1ff34801833d07b5）；**CO-150（L2 闸硬化）**：co124 K9 扩 `thermal_option_domain` + `drop_domain` 两域并加负控 T10/T10b/T11/T11b ⇒ 关闭 K9 缺口登记项。（记录 （本次生成））；**CO-152（L2 自裁 · CO-151 findings 处置）**：3 项 TOOL_DEFECT 登记并 CLOSED（记录内嵌下游快照致 pin 漂移 / co120 pin 覆盖面缺 *_sha16 快照键 + 豁免依据分级 / 派生物语义未标注）；并勘误 CO-147 R2 最劣值 0.2577 与 R3 叙述 0.0205（见 boundary §28）。；**CO-153（L2 自裁 · K9 覆盖缺口关闭）**：co124 K9 新增 `declared`（证据须锚定）+ `conservative_ge`（保守实现闭式证明）两支 + 牙齿 T12/T12b/T13/T13b；台账 DV-ENGINE-INT_PAIR_PITCH 归一等价可证；`p3_v57_co146_ledger_add.py` 并入规范序 ⇒ 证据 pin 自动刷新。关闭 TOOL_DEFECT：`co124_k9_declared_kind_has_no_evidence_check`。",
+  "updated_by": "CO-127..CO-133 + **CO-134（整改通知 #09：③ 重新定性 = 工程换算错误 → REQ-R3-2 忠实实现 + 需求/实现分家规矩 + co124 K9）**；登记簿随 co124 每次运行校验；CO-134 续：4 项已声明定值补 rule_key + 台账溯源；**CO-136（L2 自裁 · 闸卫生续）**：登记并关闭 CO-135 F5(b)/F6 两条 TOOL_DEFECT（co124 标签 / co106 陈旧牙齿）；F4（handoff pin 失准）与 F5(a)（③ 根因叙述）属叙述类，保留在 CO-135 记录，不入本登记簿（非 SPEC/工具缺陷）。；**CO-139**：+1 TOOL_DEFECT（K9 豁免未锚定）并 CLOSED（hash-pin + T9）。；**CO-141**：更正 IMPLEMENTATION_DEVIATION 范围（24 平行对-对，非 3）+ 新增 OPEN TOOL_DEFECT（路由器列距基准漏 3W）。；**CO-142（L2 只读）**：对间 <3W 违规逐条明细 + 构造阶段归因；**CO-143（L2 只读）**：更正 `k2_router_escape_fan_omits_3w` 定位（f13 pair_xorder → escape-fan 落位判据 `p3_v57_co10_west_fan_probe.py:check()`）+ 施加可行性研究（可满足但须重派生策略；PDN 障碍 + 贪心夹死）。；**CO-146（监理指令 #10 · JLC 打样就绪）**：+2 IMPLEMENTATION_DEVIATION（OPEN：盲/埋孔 vs JLC 标准不支持 = 结构/工艺类别；阻焊桥 1 处 vs JLC 0.09mm）；外部输入定性更正（撤回「等券」表述，改绑 JLC 阻抗控制服务 + 监理定值）；登记簿随 co124 每次运行校验。；**CO-147（L2 自裁）**：三题裁定（R1 过孔策略维持盲/埋孔 ⇒ 渠道绑定 JLC advanced；R2 J2 landing 对间适用域 ACCEPT_L2；R3 阻焊桥 ACCEPT_L2_WITH_FAB_REVIEW）；登记簿 3 项转 CLOSED。；**CO-148**：U6 手册输入（TI SNLS683）⇒ 热 Tj 121.8–161.8°C 超上限 120°C ⇒ 登记 +2（热超限 HIGH / K9 无热域模型 MED）。；**CO-149（L2 自裁 · 热机械派生）**：自然对流全档不可达（两路线互校 θJA≈17.2 vs 手册 17.4）⇒ 派生出系统散热要求（h_eff ≥ 8.2–16.4 W/m²K 或 顶部散热片预算 ≤ 4.9–10.5 °C/W）；监理定值 Ta=40°C 不变；登记簿热项 CLOSED（OPEN 余 K9 热域缺口）；台账 DV-CO146-THERMAL 可达性 = 声明散热方案域。（1ff34801833d07b5）；**CO-150（L2 闸硬化）**：co124 K9 扩 `thermal_option_domain` + `drop_domain` 两域并加负控 T10/T10b/T11/T11b ⇒ 关闭 K9 缺口登记项。（记录 （本次生成））；**CO-152（L2 自裁 · CO-151 findings 处置）**：3 项 TOOL_DEFECT 登记并 CLOSED（记录内嵌下游快照致 pin 漂移 / co120 pin 覆盖面缺 *_sha16 快照键 + 豁免依据分级 / 派生物语义未标注）；并勘误 CO-147 R2 最劣值 0.2577 与 R3 叙述 0.0205（见 boundary §28）。；**CO-153（L2 自裁 · K9 覆盖缺口关闭）**：co124 K9 新增 `declared`（证据须锚定）+ `conservative_ge`（保守实现闭式证明）两支 + 牙齿 T12/T12b/T13/T13b；台账 DV-ENGINE-INT_PAIR_PITCH 归一等价可证；`p3_v57_co146_ledger_add.py` 并入规范序 ⇒ 证据 pin 自动刷新。关闭 TOOL_DEFECT：`co124_k9_declared_kind_has_no_evidence_check`。；**CO-155（L2 自裁 · executor · CO-154 复评处置）**：F-1 CLOSED（co150 崩溃修复）；F-2 工件侧（co147/co148 下游计数快照移除）完成、闸覆盖侧 OPEN；F-3..F-7 OPEN。登记 `co154:F-1..F-7`。",
   "counts": {
    "SPEC_DEFECT": 5,
    "PROVED_THRESHOLD": 5,
-   "TOOL_DEFECT": 16,
+   "TOOL_DEFECT": 23,
    "IMPLEMENTATION_DEVIATION": 4,
-   "OPEN": 0,
-   "total": 30
+   "OPEN": 6,
+   "total": 37
   }
  },
  "verdict": null

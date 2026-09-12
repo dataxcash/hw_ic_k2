@@ -58,7 +58,6 @@ def main() -> int:
             "F1": {"target": "co77 表格行 citation 覆盖", "fix": "正则扩内联+表格 + 负控牙齿", "rev": co77["revision"],
                    "teeth": co77["teeth"]},
         },
-        "register": {"n_items": len(reg["items"]), "kinds": reg.get("meta", {}).get("counts", {})},
         "checks": checks, "verdict": verdict,
         "redline": "只读；不改 SPEC/板/冻结源；零坐标搜索；本记录不读 boundary（可被 §14 引用）",
         # 注：不放 co77 记录 sha —— 其含 boundary doc_sha16 ⇒ 与「§14 引用本记录」形成传递不动点。

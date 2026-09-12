@@ -180,14 +180,13 @@ def main() -> int:
            "doc": DOC.name, "doc_sha16": s16(DOC), "board_sha16": s16(BOARD),
            "spec_sha16": "5f72182a2616392c", "rulings": rulings,
            "mask_measure": mask,
-           "register": {"file": REG.name, "items_ruled": hit,
-                        "open_total": sum(1 for i in reg["items"] if i.get("status") == "OPEN")},
+           "register": {"file": REG.name, "items_ruled": hit},  # CO-155：下游计数快照（open_total）已移除
            "owner_visible_items": 0, "teeth": teeth,
            "redline": "只读板/SPEC（逐字节不变）；不改几何；零坐标搜索；裁定只写 L2 政策层与登记簿。"}
     REC.write_text(json.dumps(rec, ensure_ascii=False, indent=1) + "\n")
     print("rulings:", [r["id"] for r in rulings], "| register ruled:", hit)
     print("mask gap:", mask["closest"]["gap_mm"], "vs", mask["jlc_min_mm"], "shortfall", mask["shortfall_mm"])
-    print("register sha:", s16(REG), "| open_total:", rec["register"]["open_total"], "| teeth:", teeth)
+    print("register sha:", s16(REG), "| teeth:", teeth)
     return 0 if all(teeth.values()) and len(hit) == 3 else 1
 
 
