@@ -20,7 +20,7 @@ from pathlib import Path
 
 K2 = Path("/home/fila/jqdDev_2025/ic_hw/k2")
 STEP2 = K2 / "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2"
-SPEC = K2 / "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-13.json"
+SPEC = K2 / "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-14.json"
 FIXTURE = STEP2 / "m13_v57_co37_escape_domain.json"
 BOARD = K2 / "k2_v4_8L.l4.kicad_pcb"
 DRU = K2 / "k2_v4_8L.l4.kicad_dru"

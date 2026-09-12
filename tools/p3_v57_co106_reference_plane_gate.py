@@ -23,10 +23,10 @@ from pathlib import Path
 K2 = Path(__file__).resolve().parents[1]
 L3 = K2 / "pm_gate/artifacts/k2_v4/L3"
 STEP2 = L3 / "mcio_feas_step2"
-SPEC_CUR = L3 / "SPEC_k2_v4.spec-rev-13.json"
+SPEC_CUR = L3 / "SPEC_k2_v4.spec-rev-14.json"
 DRAWING = STEP2 / "m13_v57_w3_joint_assignment.json"
 BOARD = K2 / "k2_v4_8L.l4.kicad_pcb"
-BASE = {"spec_rev13": "7943be727a4f8ef9", "board": "0e636a67c1472462"}
+BASE = {"spec_current": "188b01deb34c9fba", "board": "0e636a67c1472462"}
 
 
 def s16(p) -> str:
@@ -212,12 +212,12 @@ def main(argv=None) -> int:
         "note": "CO-87 自报判据含「参考平面」但矩阵无该行 ⇒ 本闸补上该判据（覆盖性缺口）；本项 ok 恒真（补全动作本身）"}
 
     teeth["teeth_ok"] = all(v for k, v in teeth.items())
-    mismatch = {k: {"expect": v, "actual": s16({"spec_rev13": SPEC_CUR, "board": BOARD}[k])}
-                for k, v in BASE.items() if s16({"spec_rev13": SPEC_CUR, "board": BOARD}[k]) != v}
+    mismatch = {k: {"expect": v, "actual": s16({"spec_current": SPEC_CUR, "board": BOARD}[k])}
+                for k, v in BASE.items() if s16({"spec_current": SPEC_CUR, "board": BOARD}[k]) != v}
     hard = all(v["ok"] for v in checks.values()) and teeth["teeth_ok"]
     rec = {"artifact": "m13_v57_co106_reference_plane_gate", "schema": 1, "revision": "CO-106.1",
            "nature": "L2 合格标准覆盖性补全（ch.2「参考平面」）+ 参考平面连续性/板框一致性机判",
-           "inputs": {"spec_rev13": s16(SPEC_CUR), "drawing": s16(DRAWING), "board": s16(BOARD)},
+           "inputs": {"spec_current": s16(SPEC_CUR), "drawing": s16(DRAWING), "board": s16(BOARD)},
            "base_pins": BASE, "pin_mismatch": mismatch, "checks": checks, "teeth": teeth,
            "verdict": ("PASS" if hard else
                         ("FAIL_DECLARED_COPPER_MISSING" if cls_count.get("declared_copper_missing", 0) > 0

@@ -25,10 +25,10 @@ from pathlib import Path
 K2 = Path(__file__).resolve().parents[1]
 L3 = K2 / "pm_gate/artifacts/k2_v4/L3"
 STEP2 = L3 / "mcio_feas_step2"
-SPEC_CUR = L3 / "SPEC_k2_v4.spec-rev-13.json"
+SPEC_CUR = L3 / "SPEC_k2_v4.spec-rev-14.json"
 CO102P = K2 / "tools/p3_v57_co102_pdn_apply_local.py"
 FROZEN = K2.parent / "_shared/eda_core/pdn_apply.py"
-BASE = {"spec_rev13": "7943be727a4f8ef9", "board": "0e636a67c1472462"}
+BASE = {"spec_current": "188b01deb34c9fba", "board": "0e636a67c1472462"}
 
 
 def s16(p) -> str:
@@ -102,11 +102,11 @@ def main(argv=None) -> int:
         "note": "6 项 ruling 中 R1.2 依赖自由文本（CO-96 F3），其根因=电源域/区域归属 ⇒ L1（不在本件）"}
 
     teeth["teeth_ok"] = all(v for k, v in teeth.items())
-    mismatch = {k: {"expect": v, "actual": s16({"spec_rev13": SPEC_CUR, "board": K2 / "k2_v4_8L.l4.kicad_pcb"}[k])}
-                for k, v in BASE.items() if s16({"spec_rev13": SPEC_CUR, "board": K2 / "k2_v4_8L.l4.kicad_pcb"}[k]) != v}
+    mismatch = {k: {"expect": v, "actual": s16({"spec_current": SPEC_CUR, "board": K2 / "k2_v4_8L.l4.kicad_pcb"}[k])}
+                for k, v in BASE.items() if s16({"spec_current": SPEC_CUR, "board": K2 / "k2_v4_8L.l4.kicad_pcb"}[k]) != v}
     rec = {"artifact": "m13_v57_co105_f4_scope_disposition", "schema": 1, "revision": "CO-105.1",
            "nature": "L2 自裁（PDN 建模）：CO-96 F4（可达性 requirement scope）落定 = 语义不可适用 + 几何待 L3（无需扩展动作）",
-           "inputs": {"spec_rev13": s16(SPEC_CUR), "board": s16(K2 / "k2_v4_8L.l4.kicad_pcb"),
+           "inputs": {"spec_current": s16(SPEC_CUR), "board": s16(K2 / "k2_v4_8L.l4.kicad_pcb"),
                       "co98_record": s16(STEP2 / "m13_v57_co98_reachability_status_report.json")},
            "base_pins": BASE, "pin_mismatch": mismatch, "checks": checks, "teeth": teeth,
            "DISPOSITION": {"item": "CO-96 F4（可达性 scope 缺口，严重度=中）", "decision": "CLOSE_NO_SCOPE_EXTENSION",

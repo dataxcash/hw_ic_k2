@@ -19,7 +19,7 @@ from pathlib import Path
 
 K2 = Path(__file__).resolve().parents[1]
 L3 = K2 / "pm_gate/artifacts/k2_v4/L3"
-DEFAULT_SPEC = L3 / "SPEC_k2_v4.spec-rev-13.json"
+DEFAULT_SPEC = L3 / "SPEC_k2_v4.spec-rev-14.json"
 DEFAULT_OUT = L3 / "mcio_feas_step2/m13_v57_co95_in4_reachability.json"
 GND = "GND"
 
