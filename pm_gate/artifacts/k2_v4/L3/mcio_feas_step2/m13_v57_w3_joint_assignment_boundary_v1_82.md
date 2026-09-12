@@ -360,7 +360,7 @@ End of boundary **v1.81**（含 CO-67..CO-115；+ CO-114 非执行者对抗复�
 
 **板实旁证**：交付板 `k2_v4_8L.l4.kicad_pcb` `a3ce9ab803045a0a`（**CO-133 施工后**）= 图纸 2708 track/252 via **+** PDN 185 短段/241 via/9 zone（In4 含 `12V_IN_IN4_CARRIER`/`P3V3_AUX_WEST`/两桥区，3 区 `fill_priority=1`）；**施工前** `0e636a67c1472462` 为零 PDN 铜 ⇒ 本议题的承载/归属裁决仍属 **SPEC 声明层**，板实为其确定性物理实现。
 
-**L2 过程闸（CO-120，新）**：`p3_v57_co120_provenance_pin_gate.py` `020f3d1ee29eedd1`、记录 `m13_v57_co120_provenance_pin_gate.json` `915dec11d8b644db`、卡 `m13_v57_CO120_provenance_pin_gate.md` `bc6ca56de45fda27` —— 关闭 CO-108/CO-114 **F-6 盲区**（记录内 inter-record provenance pin 一致性）；首跑 **PASS**（pins 12：match 8 / 豁免历史 3 / 未声明陈旧 0 / 解析歧义 1；牙齿 2/2）。
+**L2 过程闸（CO-120，新）**：`p3_v57_co120_provenance_pin_gate.py` `020f3d1ee29eedd1`、记录 `m13_v57_co120_provenance_pin_gate.json` `3f5e7d80a69c5259`、卡 `m13_v57_CO120_provenance_pin_gate.md` `bc6ca56de45fda27` —— 关闭 CO-108/CO-114 **F-6 盲区**（记录内 inter-record provenance pin 一致性）；首跑 **PASS**（pins 12：match 8 / 豁免历史 3 / 未声明陈旧 0 / 解析歧义 1；牙齿 2/2）。
 
 ## 11. CO-133（L2 自裁 · 施工期物理施加）当前态引用
 
@@ -394,7 +394,7 @@ CO-49 `canonicalize_board` ⇒ 净板/已施工板两次投喂**同一字节**�
 | `m13_v57_co102_pdn_local_apply.json` | `44002f7eac6cfa49` |
 | `m13_v57_co105_f4_scope_disposition.json` | `8453cc7dd6061767` |
 | `m13_v57_co106_reference_plane_gate.json` | `c5ef3a2319b5a011` |
-| `m13_v57_co120_provenance_pin_gate.json` | `915dec11d8b644db` |
+| `m13_v57_co120_provenance_pin_gate.json` | `3f5e7d80a69c5259` |
 | `m13_v57_co124_input_selfcheck_gate.json` | `56bdba2de3fd0a87` |
 | `m13_v57_co88_pdn_board_reality_gate.json` | `17719cf7f8e3e702` |
 | `m13_v57_co78_layer_role_drift_gate.json` | `6fa4cf4abb7d8e78` |
@@ -459,8 +459,8 @@ SPEC **rev-19** `5f72182a2616392c`（白名单外 0 改动；0.875 退役留存 
 | 登记簿 `input_defect_register_v1.json`（17 项） | `15b888e276d33e2d` |
 | 工具 `p3_v57_co77_closure_declaration_sweep.py`（CO-77.5） | `51e48591c323fb43` |
 | 工具 `p3_v57_co136_gate_hygiene.py` | `4b65e75a64b3b686` |
-| 记录 `m13_v57_co136_gate_hygiene.json` | `9c39b4e0efda8622` |
-| 卡 `m13_v57_CO136_gate_hygiene.md` | `02ddecca9386784a` |
+| 记录 `m13_v57_co136_gate_hygiene.json` | `3f825d35dbfa3a89` |
+| 卡 `m13_v57_CO136_gate_hygiene.md` | `e2124a06aa45c4b8` |
 
 
 ## 13. CO-135（非执行者复评 · rev-19 + CO-134｜L2 声明/工具卫生修正）当前态引用
