@@ -51,10 +51,21 @@ def main(argv=None) -> int:
             if "." not in key:                  # 目标为**裸 ref**（如 "R29"）才以 ref 匹配；
                 targets.setdefault(f"@{key}", z.get("zone", "?"))   # "U2.pad5" 不得放行 U2 其它 pad
 
+    def _pip(pg, x, y):
+        """射线法真·点在多边形内（CO-98 F6 硬化：取代 bbox 近似；现行 2 个显式 polygon 均轴对齐矩形 ⇒ 输出逐字节不变）。"""
+        inside = False
+        n = len(pg)
+        for i in range(n):
+            x1, y1 = pg[i]
+            x2, y2 = pg[(i + 1) % n]
+            if (y1 > y) != (y2 > y):
+                if x < x1 + (y - y1) * (x2 - x1) / (y2 - y1):
+                    inside = not inside
+        return inside
+
     def in_poly(net, x, y):
         for name, pg in poly.get(net, []):
-            if min(p[0] for p in pg) <= x <= max(p[0] for p in pg) and \
-               min(p[1] for p in pg) <= y <= max(p[1] for p in pg):
+            if _pip(pg, x, y):
                 return name
         return None
 

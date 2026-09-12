@@ -1,0 +1,125 @@
+{
+ "artifact": "m13_v57_co98_reachability_status_report",
+ "baseline_expectations": {
+  "board": "0e636a67c1472462",
+  "co95_record": "61db48a283beeaae",
+  "spec": "d85f10f722ba22b0"
+ },
+ "baseline_mismatch": {},
+ "baseline_ok": true,
+ "co95_summary": {
+  "covered_bridge_target": 8,
+  "covered_explicit": 35,
+  "l3_obligation": 6,
+  "needs_region_ruling": 6,
+  "power_entries": 55,
+  "unresolved_total": 12
+ },
+ "inputs": {
+  "board": "0e636a67c1472462",
+  "co95_record": "61db48a283beeaae",
+  "spec": "d85f10f722ba22b0"
+ },
+ "integrity": {
+  "classified": 55,
+  "non_gnd_entries": 55,
+  "ok": true
+ },
+ "nature": "L2 PDN：In4 平面可达性义务状态报告（机判化 CO-96 F2/F3/F4；只读 co95 权威记录）",
+ "non_claims": [
+  "只读；不改 SPEC/板/阈值/冻结源/co95 记录",
+  "本件不判 L3 几何是否已建；不含坐标搜索",
+  "scope 扩展（F4）属 SPEC 变更，未施加"
+ ],
+ "recommendation": "F2 几何闭合 = L3 派生（8 zone target + 6 band 义务）；F3 建议以机判谓词（net 无区 / via 落异网区）替换文本子串，R1.2 为唯一 text_only 项需补判据；F4 若纳入 scope 需 SPEC 变更（rev-12）。本件不施加。",
+ "revision": "CO-98.1",
+ "ruling_basis": {
+  "breakdown": {
+   "machine": 5,
+   "text_only": 1
+  },
+  "rows": [
+   {
+    "basis": "machine:net_has_no_in4_region",
+    "machine_derived": true,
+    "net": "12V_IN",
+    "pad": "C88.1",
+    "via_pos": [
+     28.275,
+     41.5
+    ]
+   },
+   {
+    "basis": "machine:net_has_no_in4_region",
+    "machine_derived": true,
+    "net": "12V_IN",
+    "pad": "U2.4",
+    "via_pos": [
+     31.05,
+     39.83
+    ]
+   },
+   {
+    "basis": "machine:net_has_no_in4_region",
+    "machine_derived": true,
+    "net": "12V_IN",
+    "pad": "U2.6",
+    "via_pos": [
+     35.725,
+     37.635
+    ]
+   },
+   {
+    "basis": "machine:via_inside_other_net_in4_polygon(MCU_VDD:MCU_VDD_WEST)",
+    "machine_derived": true,
+    "net": "P3V3_AUX",
+    "pad": "C90.1",
+    "via_pos": [
+     28.975,
+     53.0
+    ]
+   },
+   {
+    "basis": "text_only:declared_in_plane_reachability_status",
+    "machine_derived": false,
+    "net": "P3V3_AUX",
+    "pad": "R1.2",
+    "via_pos": [
+     51.725,
+     37.0
+    ]
+   },
+   {
+    "basis": "machine:via_inside_other_net_in4_polygon(MCU_VDD:MCU_VDD_WEST)",
+    "machine_derived": true,
+    "net": "P3V3_AUX",
+    "pad": "U1.15",
+    "via_pos": [
+     39.425,
+     53.25
+    ]
+   }
+  ]
+ },
+ "schema": 1,
+ "scope_exclusions": {
+  "decoupling_vias": 0,
+  "gnd_stitch_via_realized": 40,
+  "note": "同依赖平面覆盖但不在本 requirement 内；GND 走 GND 平面、zone via 由 zone 多边形自证（其多边形当前未建）。",
+  "power_zones_vias": 17,
+  "requirement_scope": "power_pad_connect.entries(non-GND)"
+ },
+ "teeth": {
+  "integrity_detects_miscount": true,
+  "pip_rejects_bbox_approx": true
+ },
+ "teeth_ok": true,
+ "three_state": {
+  "declared_pending_l3": 14,
+  "geometric_covered": 35,
+  "machine_closable_today": false,
+  "note": "declared_pending_l3 = 声明覆盖（zone targets）或 band 退役义务，几何由 L3 确定性派生、当前未建 ⇒ ≠ 已满足；ruling_pending_l1 = 电源域/区域归属裁决。",
+  "ruling_pending_l1": 6
+ },
+ "verdict": "OPEN_GEOMETRY_PENDING_L3_AND_RULING_PENDING_L1"
+}
