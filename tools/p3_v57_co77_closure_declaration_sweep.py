@@ -81,7 +81,10 @@ def main(argv=None) -> int:
             bad.append(label)
     # CO-82 补强：**全量** sha16 引用校验 —— 任何 `file` `sha16` 形式必须等于实际文件，
     # 除非该行**显式标注历史**（原/已取代/历史/应为/实为）。12 项 claim 只是子集，本项覆盖全文。
-    CITE = re.compile(r"`([A-Za-z0-9][A-Za-z0-9_./\-]*\.(?:json|md|py|kicad_pcb|kicad_pro|kicad_dru))`\s*`([0-9a-f]{16})`")
+    # CO-135：原正则仅覆盖「`file` `sha`」内联式；markdown 表格「| `file` | `sha` |」及
+    # 「`file`（注） | `sha`」均**未覆盖** ⇒ 收口件链表的**当前态** pin 漂移被静默放过。
+    # 扩展为内联 + 表格两类；表格行不得再漏。
+    CITE = re.compile(r"`([A-Za-z0-9][A-Za-z0-9_./\-]*\.(?:json|md|py|kicad_pcb|kicad_pro|kicad_dru))`(?:[^|`\n]*\|\s*|\s+)`([0-9a-f]{16})`")
     # CO-90 F5：历史豁免必须**按引用**判定（校验紧跟该 sha 之后的标记窗口），不得按整行判定 ——
     # 行级判定会把「现行值 + 同行括号里记录旧值已取代」这类行的**现行值**一并豁免
     # ⇒ 现行 sha 漂移被静默放过（CO-90 实测：co88 记录 d320c812…→b9990766… 漂移未被发现）。
@@ -95,7 +98,8 @@ def main(argv=None) -> int:
             continue
         n = Path(name)
         cands = [n, Path(n.name), L3 / n.name, L3 / "mcio_feas_step2" / n.name,
-                 L2 / n.name, K2 / "tools" / n.name, K2 / n.name]
+                 L2 / n.name, K2 / "tools" / n.name, K2 / n.name,
+                 K2 / "_shared" / "eda_core" / n.name, K2.parent / "_shared" / "eda_core" / n.name]
         hit = next((c for c in cands if c.exists()), None)
         real = s16(hit) if hit else None
         ok = bool(hit) and real == sha
@@ -106,7 +110,7 @@ def main(argv=None) -> int:
     cite_floor_ok = (len(cite_rows) + cite_hist) >= CITE_FLOOR
     if not cite_floor_ok:
         cite_bad = cite_bad + ["__CITE_FLOOR_FAILED__"]
-    rec = {"artifact": "m13_v57_co77_closure_declaration_sweep", "schema": 1, "revision": "CO-77.3",
+    rec = {"artifact": "m13_v57_co77_closure_declaration_sweep", "schema": 1, "revision": "CO-77.4",
            "nature": "L2 收口声明件当前态身份引用机判扫描",
            "doc": str(Path(doc).relative_to(K2)), "doc_sha16": s16(doc),
            "claims": rows, "stale_claims": bad,

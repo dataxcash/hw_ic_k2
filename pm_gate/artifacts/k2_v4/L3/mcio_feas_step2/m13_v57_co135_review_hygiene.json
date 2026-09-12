@@ -1,0 +1,179 @@
+{
+ "artifact": "m13_v57_co135_review_hygiene",
+ "schema": 1,
+ "revision": "CO-135",
+ "nature": "非执行者复评（rev-19 + CO-134 全链）+ L2 声明/工具卫生修正",
+ "reviewer": "另一会话（context 归零续接；非 CO-134 执行者）",
+ "V1_frozen_and_spec": {
+  "frozen_4of4": true,
+  "frozen": {
+   "SPEC_k2_v4.json": {
+    "expected": "0bd52ed48e720b8c",
+    "actual": "0bd52ed48e720b8c",
+    "ok": true
+   },
+   "s1_page_manifest.json": {
+    "expected": "a8ef3ea8ecff99d7",
+    "actual": "a8ef3ea8ecff99d7",
+    "ok": true
+   },
+   "k2_v4_8L.kicad_pcb": {
+    "expected": "fb07d25ac426ff84",
+    "actual": "fb07d25ac426ff84",
+    "ok": true
+   },
+   "_shared/eda_core/drc_rules.json": {
+    "expected": "0a459839e15960b8",
+    "actual": "0a459839e15960b8",
+    "ok": true
+   }
+  },
+  "spec_rev19_sha16": "5f72182a2616392c",
+  "changed_keys": [
+   "/net_classes/PCIe85/inter_pair_derivation_v1",
+   "/net_classes/PCIe85/inter_pair_spacing_mm",
+   "/net_classes/PCIe85/inter_pair_spacing_scope",
+   "/retired_inter_pair_spacing_0p875_v1",
+   "/spec_version"
+  ],
+  "whitelist_outside_zero": true,
+  "unexpected": []
+ },
+ "V2_faithful_derivation": {
+  "edge_by_layer_mm": {
+   "F.Cu": 0.41,
+   "In2.Cu": 0.32,
+   "In5.Cu": 0.32,
+   "B.Cu": 0.41
+  },
+  "center_by_layer_mm": {
+   "F.Cu": 0.615,
+   "In2.Cu": 0.48,
+   "In5.Cu": 0.48,
+   "B.Cu": 0.615
+  },
+  "dv_edge_matches_ledger": true,
+  "domains": [
+   {
+    "id": "EAST_CHIP_TO_J2",
+    "recomputed_margin": 0.684,
+    "recorded_margin": 0.684,
+    "match": true,
+    "exempt": false,
+    "ok": true
+   },
+   {
+    "id": "WEST_MCIO_TO_CHIP",
+    "recomputed_margin": 0.285,
+    "recorded_margin": 0.285,
+    "match": true,
+    "exempt": false,
+    "ok": true
+   },
+   {
+    "id": "pad_field",
+    "recomputed_margin": -0.165,
+    "recorded_margin": -0.165,
+    "match": true,
+    "exempt": true,
+    "ok": true
+   }
+  ],
+  "reachable": true
+ },
+ "V3_boundary_citations": {
+  "mismatches": [],
+  "n_historical_marked": true,
+  "boundary_version": "v1.88",
+  "clean": true
+ },
+ "V4_rebaseline_completeness": {
+  "gate_spec_pins": {
+   "co78_layer_role_drift_gate": [
+    "spec-rev-19"
+   ],
+   "co81_project_rules_gate": [
+    "spec-rev-19"
+   ],
+   "co84_dru_domain_gate": [
+    "spec-rev-19"
+   ]
+  },
+  "all_pin_rev19": true,
+  "l5_fab_construction_pin": "cb8874255bd89f07",
+  "current_l4_construction": "cb8874255bd89f07",
+  "fab_pin_current": true
+ },
+ "V5_known_weakness": {
+  "co106_verdict": "INDETERMINATE_REGION_SCOPED",
+  "co106_teeth_ok": false,
+  "co106_false_teeth": [
+   "continuity_detector",
+   "teeth_ok"
+  ],
+  "co99_float_note": "dry-run violation total 随 zone refill/UUID 浮动 ⇒ 不入记录（已声明）",
+  "pad_field_exemption": "pad_field cap 0.6 < req 0.765 ⇒ 仅凭 regime 串含 ECN-001 豁免；co124 T6 为负控（无豁免即 FAIL）；终判 = SI/板厂券"
+ },
+ "findings": [
+  {
+   "id": "F1",
+   "cls": "TOOL_DEFECT",
+   "verdict": "FIXED",
+   "what": "co77 收口声明扫描的正则仅覆盖内联 `file` `sha`，**未覆盖 markdown 表格行**（`| `file` | `sha` |` 及 `| `file`（注） | `sha` |`）⇒ boundary 链表中过期 pin 被静默放过",
+   "evidence": "扩正则后 co77 立报 22 处 mismatch（14 个不同旧值）；修复前 verdict=PASS",
+   "action": "co77 CITE 正则扩为 内联+表格（revision CO-77.4）+ 候选解析补 _shared；boundary pin 全量刷新（v1.88）"
+  },
+  {
+   "id": "F2",
+   "cls": "PROCESS_DEFECT",
+   "verdict": "FIXED",
+   "what": "rev-19 重基线不完备：9185bc8 提交态 co78/co81/co84 记录仍 pin **SPEC rev-18**（未对 rev-19 重跑）",
+   "evidence": "git show HEAD:<rec> 含 spec-rev-18；复评重跑后 = rev-19（PASS）",
+   "action": "按项目规则（SPEC 变更须重跑相关闸）重跑 co78/co81/co84 against rev-19 ⇒ 全 PASS"
+  },
+  {
+   "id": "F3",
+   "cls": "PROCESS_DEFECT",
+   "verdict": "FIXED",
+   "what": "L5 fab 记录 pin 陈旧 L4 construction（305a42a890593552），未随 L4 重基线（cb8874255bd89f07）刷新",
+   "evidence": "git diff 显示重跑前 construction=305a42a8…，重跑后 = cb887425…",
+   "action": "重跑 L5 ⇒ fab/SI 记录与现行链一致"
+  },
+  {
+   "id": "F4",
+   "cls": "CITATION_DEFECT",
+   "verdict": "REPORT",
+   "what": "handoff-z20 自身 pin 失准：(a) G5=4d5abd85e1d47705 在**全仓无对应工件**（实际 G5 工件 m13_v57_w3_validation.json = 75ce1c2af42de55e）；(b) §7 co133 记录 1fab64009ecb9048 = 旧值（现行 cfc26393255c7e2a）；(c) §7 ledger/记录/卡/register pin 均为 70fe1fb 提交前旧值",
+   "evidence": "全仓 grep 4d5abd85e1d47705 仅命中 handoff/ledger 文本，无工件；co133 记录 git log 显示 70fe1fb 已改",
+   "action": "基线 pin 以后续 handoff 从**现行文件实算**为准；本件不复改历史 handoff"
+  },
+  {
+   "id": "F5",
+   "cls": "DOC_ACCURACY",
+   "verdict": "REPORT",
+   "what": "(a) ③ 根因叙述「0.875 = 2×0.4375」与来源件不符：`_shared/docs/PCB_DESIGN_RULES.md` R3-2 原文为「对间间距 ≥ 5×线距（3W 原则） | ≥0.875mm」，其算式为 5×0.175；(b) co124 记录仍标定义件为「v1.0 提议件」，实际文件为 v1.1；(c) 整改通知 #09 验收引板 0e636a67，现行板 a3ce9ab8（CO-133 施工后）",
+   "evidence": "PCB_DESIGN_RULES.md L53；co124 record definition_doc.status；rectification-09.md 末段",
+   "action": "叙述与标签修正建议（不改结论：5×0.175 与 2×0.4375 均非 3W 的忠实实现 ⇒ 退役 0.875 不变）"
+  },
+  {
+   "id": "F6",
+   "cls": "DECLARED_SCOPE",
+   "verdict": "CONFIRM_EXTERNAL",
+   "what": "pad_field（cap 0.6）对间可达性为**声明豁免**（regime 串含 ECN-001 即豁免，无闭式 margin 判据）；同时 co106 teeth_ok=False（continuity_detector 未触发）",
+   "evidence": "co124 K9 exempt 分支；co106 teeth.continuity_detector=false",
+   "action": "豁免物理上可辩护（逃逸/焊盘场短程非长平行；co84 已把 dru 放宽域钉死），终判 = SI/板厂券；co106 弱点已自披露"
+  }
+ ],
+ "findings_fixed": [
+  "F1",
+  "F2",
+  "F3"
+ ],
+ "substantive_conclusion": {
+  "chain_reproduced": "G4 0074dad9067af737 / G5 75ce1c2af42de55e / L4 val 313666e68dd610e6 viol 0 / L5 DFM new=0·SI 0.1300 / co124 findings 0（T1..T8）/ co95 55/55 / co98 55/0/0 / PDN co88/91/99/102(+0)/104/105/106 / co69 10/10 / co120 PASS",
+  "q3_recharacterization": "整改通知 #09（监理指令）明确 ③=工程换算错误、撤回 owner 升级 ⇒ CO-134 属**执行指令**，非越权需求变更；0.875 退役结论不受 F5 叙述瑕疵影响",
+  "asbuilt_disposition": "域外 3 处偏差（F.Cu 0.3294 / B.Cu 0.3450 / In5 0.3125）经本会话独立重算复现，登记 OPEN_ENGINEERING 妥当（路由 SI/板厂券 或另开几何 CO）"
+ },
+ "redline": "只读除本件记录/卡；不改 SPEC/几何/板/冻结四源；零坐标搜索；牙齿/负控只动内存副本",
+ "verdict": "PASS_WITH_FINDINGS"
+}
