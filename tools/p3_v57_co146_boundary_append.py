@@ -987,6 +987,43 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body43
     txt = txt.replace("W3 Boundary **v2.14**", "W3 Boundary **v2.15**")
+    # ── §44 CO-170（交付物绑定：03_stackup 叠层图 ↔ 声明定值表） ─────────────
+    MARK44 = "## 44. CO-170"
+    _rc44 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    _ord170 = ('co146_impedance_table → co146_pm_eval → co146_ledger_add → co153_k9_domain_coverage → co148_u6_datasheet_inputs → co148_thermal_ruling → co149_thermal_mitigation_derive → co147_l2_ruling → co146_jlc_dfm_gate → co146_jlc_fab_package → co152_findings_disposition → co155_co154_findings_disposition → co156_co154_open_disposition → co157_gate_hardening_3 → co158_l5_packet_selfcontained → co159_rev19_co156_co157_co158_review → co160_co159_findings_disposition → co161_gap_hardening_4 → co162_verdict_binding → co163_binding_to_order_notes → co166_rev19_co159_co165_review → co167_co166_findings_disposition → co168_register_consistency → co169_step_output_oracle → co170_stackup_binding → co124_input_selfcheck_gate → co150_k9_domain_gate → co146_boundary_append → co77_closure_declaration_sweep → co120_provenance_pin_gate → co135_review_hygiene → co136_gate_hygiene → co78_layer_role_drift_gate → co81_project_rules_gate → co84_dru_domain_gate → co95_in4_reachability → co98_reachability_status_report → co106_reference_plane_gate → co146_boundary_append')
+    sec44 = [MARK44 + "（**L2 自裁 · 交付物绑定**：叠层图 ↔ 声明定值表）", "",
+             "- 实测缺口（修前，机判）：**G-1** `stackup_svg(spec)` **只接收 SPEC**，其「外层 1oz / 内层 0.5oz」与铜厚矩形高度为"
+             "**硬编码字面量**；声明定值表 `jlc_prototype_parameters_v1.json` 改铜厚时叠层图**不跟随**，且当时 13 项牙齿"
+             "**无一项**读取该图（t09 只绑定 `ORDER_NOTES.md`）。备注 §1/§2 与叠层图**同时**随单提交 ⇒ 制造侧可能按陈旧铜厚施工"
+             "（与 CO-163 G-1 同族，对象从备注扩到**制造图**）。",
+             "- 处置（**CO-170**）：`p3_v57_co146_jlc_fab_package.py` 升 **CO146-PKG.6** —— 抽出 `_tok_match`，新增纯谓词 "
+             "`stackup_svg_binding_checks(svg_text, binding)`（叠层图须逐项含声明表记号：叠层码 / 成品厚 / 外层铜 / 内层铜）；"
+             "牙齿 `t11_stackup_svg_declared_binding` + `t11b`（声明铜厚漂移 ⇒ 必判不通过）；记录落 `declared_binding.stackup_svg_checks`。",
+             f"- 复核：现行声明 **4/4 命中**（打样包牙齿 **15/15**）；声明铜厚改 2oz ⇒ `outer_copper=False`（t11 抓住）；"
+             f"叠层图 sha16 `44370475b258848f` **逐字节不变**。登记簿 **{_rc44['total']} 项 / OPEN {_rc44['OPEN']}**。", "",
+             "> **R-CO170-1**：随单提交的**每一件**制造/工程输入（备注 / 叠层图 / 阻抗表 / 裁定件）内的工程定值，"
+             "均须与声明定值表（或其 SPEC 来源）机判绑定；新增交付图/表须同步加绑定牙齿。",
+             "> **R-CO170-2**：绑定判据一律用 CO-167 的**有锚正则**（数值边界 + 柔性空白），不得裸子串。",
+             "> **R-CO170-3**（复现序，取代 R-CO169-3；步骤集新增 co170）：规范复现序 = `" + _ord170 + "`，**循环至 sha 稳定**"
+             "（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2）。", "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows44 = [("工具 `p3_v57_co170_stackup_binding.py`", K2 / "tools/p3_v57_co170_stackup_binding.py"),
+               ("工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.6 / `stackup_svg_binding_checks` + t11/t11b）",
+                K2 / "tools/p3_v57_co146_jlc_fab_package.py"),
+               ("叠层图 `L5/jlc_package/03_stackup/JLC08161H_stackup.svg`", L5 / "jlc_package" / "03_stackup" / "JLC08161H_stackup.svg"),
+               ("记录 `m13_v57_co146_jlc_fab_package.json`（重建）", STEP2 / "m13_v57_co146_jlc_fab_package.json"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc44['total']} 项 / OPEN {_rc44['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows44:
+        if pth.exists():
+            sec44.append(f"| {label} | `{s16(pth)}` |")
+    sec44.append("")
+    body44 = "\n".join(sec44)
+    if MARK44 in txt:
+        txt = re.sub(re.escape(MARK44) + r"[\s\S]*?(?=\n## |\Z)", body44, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body44
+    txt = txt.replace("W3 Boundary **v2.15**", "W3 Boundary **v2.16**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
     return 0

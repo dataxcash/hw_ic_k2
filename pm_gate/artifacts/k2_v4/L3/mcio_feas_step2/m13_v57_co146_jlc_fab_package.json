@@ -1,7 +1,7 @@
 {
  "artifact": "m13_v57_co146_jlc_fab_package",
  "schema": 1,
- "revision": "CO146-PKG.5",
+ "revision": "CO146-PKG.6",
  "nature": "JLC 打样包（监理指令 #10 动作 3）；只出交付物，不改板/SPEC",
  "board": "k2_v4_8L.l4.kicad_pcb",
  "board_sha16": "d4e81f647be7f980",
@@ -52,6 +52,8 @@
   "t09b_binding_param_detector_sensitivity": true,
   "t10_declared_binding_source_pinned": true,
   "t10b_binding_source_pin_discriminates": true,
+  "t11_stackup_svg_declared_binding": true,
+  "t11b_stackup_svg_binding_sensitivity": true,
   "t02_8_copper_gerbers": true,
   "t03_drill_present": true,
   "t04_all_hashed": true
@@ -96,6 +98,12 @@
    "zdiff": true,
    "tolerance": true,
    "surface": true
+  },
+  "stackup_svg_checks": {
+   "stackup_code": true,
+   "thickness": true,
+   "outer_copper": true,
+   "inner_copper": true
   },
   "source_instruction": {
    "path": "/home/fila/jqdDev_2025/ic_hw/.omo/supervision/ledger/instruction-10-jlc-prototype-ready.md",

@@ -155,12 +155,29 @@ def _tok_re(tok: str) -> str:
     return r
 
 
+def _tok_match(text: str, tok: str) -> bool:
+    """CO-170：记号是否出现（复用 CO-167 的有锚正则）。"""
+    return bool(tok) and re.search(_tok_re(tok), text) is not None
+
+
+# CO-170（G-1）：03_stackup 图（**随单提交的制造输入**）须携带的声明记号子集
+STACKUP_SVG_BINDING_KEYS = ("stackup_code", "thickness", "outer_copper", "inner_copper")
+
+
+def stackup_svg_binding_checks(svg_text: str, binding: dict) -> dict:
+    """CO-170（G-1）：叠层图（03_）须逐项携带声明定值表的记号。
+
+    缘起：`stackup_svg(spec)` **只接收 SPEC**，其「外层 1oz / 内层 0.5oz」为硬编码字面量 ——
+    声明定值表即使改铜厚，叠层图也不会跟随，且当时无任何牙齿覆盖该图（t09 只读 ORDER_NOTES）。
+    """
+    t = binding_tokens(binding)
+    return {k: _tok_match(svg_text, t[k]) for k in STACKUP_SVG_BINDING_KEYS}
+
+
 def binding_param_checks(note: str, binding: dict) -> dict:
     """CO-163（G-1）+ CO-167（F-4/F-5）：ORDER_NOTES 必须逐项含声明定值表的参数记号。"""
     t = binding_tokens(binding)
-
-    def _has(tok: str) -> bool:
-        return bool(tok) and re.search(_tok_re(tok), note) is not None
+    _has = lambda tok: _tok_match(note, tok)
 
     # CO-167（F-4）：容差记号须出现在 zdiff 记号**邻域**内（防被厚度公差「（公差 ±10%）」误满足）
     _tol_near = False
@@ -266,7 +283,8 @@ def main() -> int:
     export_drill(ddir)
     n_canon = canonicalize(gdir) + canonicalize(ddir)
     (OUT / "03_stackup").mkdir(parents=True, exist_ok=True)
-    (OUT / "03_stackup" / "JLC08161H_stackup.svg").write_text(stackup_svg(spec))
+    _svg = stackup_svg(spec)                                             # CO-170（G-1）
+    (OUT / "03_stackup" / "JLC08161H_stackup.svg").write_text(_svg)
     (OUT / "04_impedance").mkdir(parents=True, exist_ok=True)
     shutil.copy(STEP2 / "m13_v57_co146_impedance_table.md", OUT / "04_impedance/impedance_table.md")
     shutil.copy(STEP2 / "m13_v57_co146_impedance_table.json", OUT / "04_impedance/impedance_table.json")
@@ -314,10 +332,14 @@ def main() -> int:
                  and sha16(INSTRUCTION) == jp["supervisor_instruction"].get("sha16"),
              "t10b_binding_source_pin_discriminates": bool(jp.get("supervisor_instruction"))
                  and sha16(JP) != jp["supervisor_instruction"].get("sha16"),
+             # CO-170（G-1）：叠层图（03_，随单提交的制造输入）须与声明定值表绑定
+             "t11_stackup_svg_declared_binding": all(stackup_svg_binding_checks(_svg, jp_binding).values()),
+             "t11b_stackup_svg_binding_sensitivity": (not all(stackup_svg_binding_checks(
+                 _svg, {**jp_binding, "copper": {**(jp_binding.get("copper") or {}), "outer_oz": 2.0}}).values())),
              "t02_8_copper_gerbers": len(cu) >= 8,
              "t03_drill_present": len(drl) >= 1,
              "t04_all_hashed": all(v.get("sha256") for v in m1.values())}
-    rec = {"artifact": "m13_v57_co146_jlc_fab_package", "schema": 1, "revision": "CO146-PKG.5",
+    rec = {"artifact": "m13_v57_co146_jlc_fab_package", "schema": 1, "revision": "CO146-PKG.6",
            "nature": "JLC 打样包（监理指令 #10 动作 3）；只出交付物，不改板/SPEC",
            "board": BOARD.name, "board_sha16": sha16(BOARD),
            "package_dir": str(OUT.relative_to(K2)), "n_files": len(m1),
@@ -334,6 +356,7 @@ def main() -> int:
            "declared_refs": {"files": refs, "dirs": dir_refs, "rulings_parity": rulings_parity},
            "declared_binding": {"table": str(JP.relative_to(K2)), "tokens": binding_tokens(jp_binding),
                                 "order_notes_checks": binding_param_checks(notes_txt, jp_binding),
+                                "stackup_svg_checks": stackup_svg_binding_checks(_svg, jp_binding),
                                 "source_instruction": {"path": str(INSTRUCTION), "available": INSTRUCTION.exists(),
                                                        "declared_sha16": (jp.get("supervisor_instruction") or {}).get("sha16")}},
            "orderable_at_jlc_standard": not dfm["fails"],
