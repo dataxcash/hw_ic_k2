@@ -1,0 +1,326 @@
+{
+ "artifact": "m13_v57_co116_band_ownership_interface_brief",
+ "checks": {
+  "A_keepout_inset_matches_live_zones": {
+   "corridor_x": [
+    49.8,
+    88.37
+   ],
+   "east_zone_west_edge": 88.37,
+   "keepout_band_x": [
+    50.0,
+    88.17
+   ],
+   "keepout_band_y": [
+    43.44,
+    65.1
+   ],
+   "note": "走廊空洞两侧边界 = 退役 keepout 的 0.2mm 内缩（CO-115 算术独立复现）",
+   "ok": true,
+   "rule": "两侧各留 POWER clearance 0.2",
+   "west_zone_east_edge": 49.8
+  },
+  "B_free_gap_exists_therefore_L1": {
+   "forced": {
+    "MCU_VDD_east_min": 57.75,
+    "P3V3_west_max": 85.2
+   },
+   "free_gap": [
+    57.75,
+    85.2
+   ],
+   "gap_width_mm": 27.45,
+   "note": "自由区间内**无任何声明目标** ⇒ 其归属无法由声明源唯一确定 ⇒ 依《宪法》ch.2『电源域划分』= L1、ch.1 规则一『下层永远不发明决策』⇒ 须 owner 裁决",
+   "ok": true
+  },
+  "C_band_targets_from_declared_sources": {
+   "MCU_VDD": {
+    "source": "bcu_bridge_bands bbox",
+    "targets": [
+     "R29",
+     "R31",
+     "R32",
+     "R33",
+     "R34"
+    ],
+    "x_range": [
+     50.2,
+     57.55
+    ],
+    "zone": "MCU_VDD_BCU_RESISTORS_IN4"
+   },
+   "P3V3": {
+    "pads": [
+     "U6.AC17",
+     "U6.AC20",
+     "U6.AK17",
+     "U6.AK20",
+     "U6.T17",
+     "U6.T20"
+    ],
+    "source": "power_pad_connect.entries pad_pos/via_pos",
+    "x_range": [
+     85.4,
+     88.275
+    ],
+    "zone": "plane_reachability_status.unresolved[P3V3]"
+   },
+   "P3V3_AUX": {
+    "in_band_via_x": {
+     "basis": "2026-08-23 T2-ECN-2 PM 裁决: P3V3_AUX 经 B.Cu 铜皮到 J3/J4 A9 pad。上带 y∈[47.75,52.35] x∈[46,62] = DN_OUT2_P@47.55 与 STRAP_EQ0_U7@52.5 之间的横贯通道, 承接 In4 西区 drop via + J3.A9 via; 下带 y∈[61.9,64.35] x∈[53.75,62] 覆盖 J4.A9 via(上距 DN_OUT4_N@61.2 0.7/下距 PERSTB#@64.5 0.15, 左界= I2C2_SDA@53.65 净距 0.1); B.Cu 走线带内 I2C1_SDA(x54.35)/I2C1_SCL(x55.9) 长竖线 + STRAP 簇 + DN_OUT 车道使同层铜皮连续连接不可达 → 显式 In6 跨层搭桥(in6_segments + HOP vias, 确定性坐标, 非求解器); 净空校验 PASS: 全部 polygon 与 B.Cu 冻结段净距达标。⚠ 施工注意: In4 西区平面 zone net 现为 SPEC 既有 'P3V3_AUX_MCU_VDD'(板上无此网, 与 P3V3_AUX/MCU_VDD 双网不一致的既有语义), 本裁决 drop via 记 net=P3V3_AUX; 施工期须将 In4 西区平面 net 落定为板上真实网 P3V3_AUX(MCU_VDD 负载经 U4 ORing 独立路径) 或经 ECN 修订, 否则 S3 DRC 报跨网 short — 显式标注待施工确认, 非本裁决静默假设; 2026-08-23 西扩 x[23.3,46] y[45,63] 覆盖 J11/C90/U1.15",
+     "bcu_bridge_bands": [
+      [
+       [
+        46.0,
+        47.75
+       ],
+       [
+        62.0,
+        47.75
+       ],
+       [
+        62.0,
+        52.35
+       ],
+       [
+        46.0,
+        52.35
+       ]
+      ],
+      [
+       [
+        53.75,
+        61.9
+       ],
+       [
+        62.0,
+        61.9
+       ],
+       [
+        62.0,
+        64.35
+       ],
+       [
+        53.75,
+        64.35
+       ]
+      ]
+     ],
+     "bcu_bridge_bands_source": "basis_text",
+     "bridge_layer": "B.Cu",
+     "carrier_change": {
+      "basis": "LID REV6（方案(a)）下 B.Cu = 高速信号层（承载 dn 带逃逸/落段；CO-62 实测 32/68 高速网 290.21mm 铜）⇒ 禁止电力铺铜；而 In4 在 REV6 下**无布线**（引擎 LAYER_PALETTE=F/In2/In5/B，交付板 In4.Cu 段数 0）⇒ 6L 时代『In4 走线带 x∈[50,88.17] 阻断跨带铜皮』前提消失，电力铜改由 In4 承载。",
+      "co": "CO-74",
+      "direction_scope": "REV6 下方向选择（In4 内分区/西区小岛/西侧 annex）不涉及电源域集合与层数 ⇒ L2（CO-67 不变量）。",
+      "from": "B.Cu",
+      "to": "In4.Cu",
+      "voided_premise": "T2-ECN-1/2 (2026-08-23) 裁决前提 = 6L『In4 走线带阻断跨带铜皮』+ SPEC B.Cu=POWER_POUR；二者在 LID REV6 下均已失效（见 probes）。PM 裁决原文保留于 pd.ecn_pending_items，不改。"
+     },
+     "derivation": "In4 区域多边形 + 贯通孔反焊盘净空 = L3 施工确定性派生（非求解器、零坐标搜索）；要求：① 覆盖 targets 全部 pad；② 与 In4 上全部贯孔反焊盘按 shop 判据净空；③ 与异网 In4 区域铜边净距 ≥0.2mm（POWER 判据，不得放宽）；④ 同网各区须连续（无孤岛未连）。",
+     "geometry_status": "L3_CONSTRUCTION_DERIVED",
+     "layer": "In4.Cu",
+     "net": "P3V3_AUX",
+     "polygons": [],
+     "retired_in6_segments_bcu": [
+      {
+       "basis": "T4.4 重设计: 原桥段 (54,50)→(56.2,50)→(56.2,62.7) 与新 T3 In6 走廊墙(x∈[37,97]) 交叉; 改走 x=34.5 左通道(避 I2C2_SDA 走廊 x∈[34.75,56.45] y=62.55), 换层点 (54,48.8) 上带内/(56.2,63.2) 下带内",
+       "net": "P3V3_AUX",
+       "pts": [
+        [
+         54.0,
+         48.8
+        ],
+        [
+         34.5,
+         48.8
+        ],
+        [
+         34.5,
+         63.2
+        ],
+        [
+         56.2,
+         63.2
+        ]
+       ]
+      }
+     ],
+     "retired_polygons_bcu": [
+      [
+       [
+        46.0,
+        47.75
+       ],
+       [
+        62.0,
+        47.75
+       ],
+       [
+        62.0,
+        52.35
+       ],
+       [
+        46.0,
+        52.35
+       ]
+      ],
+      [
+       [
+        53.75,
+        61.9
+       ],
+       [
+        62.0,
+        61.9
+       ],
+       [
+        62.0,
+        64.35
+       ],
+       [
+        53.75,
+        64.35
+       ]
+      ],
+      [
+       [
+        23.3,
+        45.0
+       ],
+       [
+        46.0,
+        45.0
+       ],
+       [
+        46.0,
+        63.0
+       ],
+       [
+        23.3,
+        63.0
+       ]
+      ]
+     ],
+     "segments": [],
+     "targets": [
+      "J3.A9(P3V3_AUX, 板实测 60.1,45.75)",
+      "J4.A9(P3V3_AUX, 58.9,61.45)"
+     ],
+     "vias": [
+      {
+       "pos": [
+        47.0,
+        49.0
+       ]
+      },
+      {
+       "old_pos": [
+        47.0,
+        49.0
+       ],
+       "pos": [
+        47.6,
+        49.0
+       ]
+      },
+      {
+       "pos": [
+        58.9,
+        63.0
+       ]
+      },
+      {
+       "pos": [
+        55.6,
+        49.8
+       ]
+      },
+      {
+       "pos": [
+        57.8,
+        63.1
+       ]
+      },
+      {
+       "pos": [
+        26.5,
+        61.57
+       ]
+      },
+      {
+       "pos": [
+        29.65,
+        53.0
+       ]
+      },
+      {
+       "old_pos": [
+        39.3,
+        53.25
+       ],
+       "pos": [
+        39.9,
+        53.25
+       ]
+      }
+     ],
+     "vias_note": "落点坐标为 6L 口径（原落 B.Cu）；REV6 下须落 **In4 平面**（贯孔至 In4），坐标于 L3 重导。原坐标保留以便对账，禁止静默放弃。",
+     "zone": "P3V3_AUX_BCU_BRIDGE_IN4"
+    },
+    "note": "桥接层=B.Cu（CO-109 R1）⇒ 不产生该带 In4 铜；此处仅为潜在异网净距源",
+    "zone": "P3V3_AUX_BCU_BRIDGE_IN4"
+   },
+   "note": "全部坐标取自声明 palette（power_zones / power_pad_connect / plane_reachability），零搜索",
+   "ok": true
+  },
+  "D_recommendation_fills_corridor": {
+   "alternative": {
+    "kind": "leave_free_gap_void",
+    "note": "各网仅扩至自身目标 ⇒ 中间 x∈(57.75,85.2) 仍无铜；CO-109 记录 In5←In4 miss 点y 峰 35-50 / x 峰 60-80 正落此区 ⇒ 只能部分修复 CO-111 的 40.14% 暴露。"
+   },
+   "ok": true,
+   "recommendation": {
+    "MCU_VDD_WEST_east_edge": 57.75,
+    "P3V3_EAST_west_edge": 57.95,
+    "corridor_full_fill_pct": 99.4815,
+    "interface_mid_x": 57.85,
+    "kind": "single_boundary__middle_to_P3V3",
+    "rationale": "MCU_VDD 只扩到其 band 目标（R29/R31-R34, x≤57.55）+0.2 ⇒ 57.75；P3V3 承接余下走廊 ⇒ 单条新边界、零新增 zone、band 内除 0.2mm 异网净距外全填 ⇒ In5 走廊参考 100% 恢复（CO-111 单参考暴露可修，非永久缺口）。"
+   }
+  },
+  "E_si_exposure_recompute": {
+   "declared_in5_len_mm": 2727.316,
+   "declared_unref_len_mm": 1094.812,
+   "declared_unref_pct": 0.4014,
+   "n_nets": 16,
+   "note": "CO-111 量化独立复算（与 CO-114 E 面一致）；本件不重做 SI 数值（终判=SI9000+板厂券）",
+   "ok": true,
+   "recomputed_unref_pct": 0.401425
+  }
+ },
+ "constraints": {
+  "power_clearance_mm": 0.2,
+  "red_line": "0.2 不得放宽",
+  "zero_coordinate_search": true
+ },
+ "inputs": {
+  "spec_rev14": "188b01deb34c9fba"
+ },
+ "l1_question_one_line": "band x∈(50.0,88.17) 的 In4 铺铜是否按『MCU_VDD 扩至 57.75 / 余下走廊归 P3V3』（单边界，全填）裁决？",
+ "nature": "L2 预备 + L1 升级：band In4 铺铜归属界面（一句话可裁简报）",
+ "non_declaration": [
+  "只读；不改 SPEC/板/阈值/冻结源",
+  "不代填界面（band 归属未写入任何 SPEC 键）",
+  "不派生几何（L3 施工确定性派生；本件仅给区间约束）",
+  "不重做 CO-90..CO-115；不再断言走廊空洞=按设计"
+ ],
+ "revision": "CO-116.1",
+ "schema": 1,
+ "teeth": {
+  "coverage_positive_control": true,
+  "free_gap_positive_control": true,
+  "inset_arithmetic_control": true,
+  "teeth_ok": true
+ },
+ "verdict": "L1_INTERFACE_REQUIRED__L2_RECOMMENDATION_READY"
+}
