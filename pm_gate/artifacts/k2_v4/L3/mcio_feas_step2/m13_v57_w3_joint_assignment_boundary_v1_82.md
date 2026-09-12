@@ -1158,8 +1158,8 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co166_rev19_co159_co165_review.py`（只读复评；对象钉 `e427909`） | `5bef31b7e7a2c04e` |
-| 记录 `m13_v57_co166_rev19_co159_co165_review.json`（重建） | `03ee6399bc67e62d` |
+| 工具 `p3_v57_co166_rev19_co159_co165_review.py`（只读复评；对象钉 `e427909`） | `eef9b2fb7d263b4e` |
+| 记录 `m13_v57_co166_rev19_co159_co165_review.json`（重建） | `0c4efc8c9ec8521e` |
 | 卡 `m13_v57_CO166_rev19_co159_co165_review.md`（重建） | `4391594ca4be86c6` |
 | 登记簿 `input_defect_register_v1.json`（71 项 / OPEN 0） | `7b533fc7ac5dc20b` |
 
