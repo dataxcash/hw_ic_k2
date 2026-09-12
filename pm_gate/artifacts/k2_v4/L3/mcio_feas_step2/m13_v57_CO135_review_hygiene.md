@@ -2,7 +2,7 @@
 
 - verdict：**PASS_WITH_FINDINGS**
 - 冻结四源：4/4 MATCH；SPEC rev-19 白名单外 0 改动：True
-- 收口件 citation：mismatches 0（含表格行；计数不记录以免不动点）
+- 收口件 citation：clean=True（含表格行；明细见 co77）
 - rev-19 重基线：co78/co81/co84 pin=rev-19 → True；L5 fab pin 现行 → True
 
 | id | 类 | 判定 | 摘要 |

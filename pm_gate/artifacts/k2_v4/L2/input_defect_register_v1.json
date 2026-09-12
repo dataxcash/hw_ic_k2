@@ -313,6 +313,36 @@
     "CO-134 m13_v57_co134_req_impl_separation.json as_built.deviations_open_engineering"
    ],
    "closed_by": []
+  },
+  {
+   "finding": "tool_defect:co124_definition_doc_version_label",
+   "kind": "TOOL_DEFECT",
+   "severity": "low",
+   "what": "co124 记录硬编码定义件为「v1.0 提议件」，实际在册件为 `L2/BASIC_SKILL_VS_REDLINE_v1.1.md`（整改通知 #09 bump）⇒ 记录标签与实件不符（CO-135 F5(b)）",
+   "refs": [
+    "CO-135",
+    "CO-136"
+   ],
+   "disposition": "已由 CO-136 修正：版本从文件名派生（DOC_VER），K1 docstring/scan_scope/卡 同步去硬编码；revision CO-124.2",
+   "status": "CLOSED",
+   "next": "无（标签类）",
+   "closed_by": "CO-136"
+  },
+  {
+   "finding": "tool_defect:co106_continuity_tooth_stale_point",
+   "kind": "TOOL_DEFECT",
+   "severity": "medium",
+   "what": "co106 连续性检测器牙齿把板内定点 (60.0,50.0) 钉为「In4 无铜」前提；`P3V3@P3V3_EAST` 铺铜随 CO-107（板框对齐 70.7→78.7）/CO-117 扩展后覆盖该点 ⇒ 牙齿假阴性、`teeth_ok=False` 长期带病（CO-135 F6）",
+   "refs": [
+    "CO-135",
+    "CO-136",
+    "CO-107",
+    "CO-117"
+   ],
+   "disposition": "已由 CO-136 修正：改为**数据无关的合成正/负控**（只测 pip 分类原语分「有铜/无铜」，不再依赖 SPEC/板几何假设）；rev CO-106.2，teeth 4/4 全真",
+   "status": "CLOSED",
+   "next": "无（工具类）",
+   "closed_by": "CO-136"
   }
  ],
  "closed_items": [
@@ -330,6 +360,14 @@
   "owner": "ARCHER（L2 自裁执行侧）",
   "approval": "定义件 v1.0 待监理裁定/owner 批准；登记簿随闸每次运行校验",
   "mandatory_trigger": "任何 SPEC / drc_rules 变更后必须跑 tools/p3_v57_co124_input_selfcheck_gate.py 并 PASS",
-  "updated_by": "CO-127..CO-133 + **CO-134（整改通知 #09：③ 重新定性 = 工程换算错误 → REQ-R3-2 忠实实现 + 需求/实现分家规矩 + co124 K9）**；登记簿随 co124 每次运行校验；CO-134 续：4 项已声明定值补 rule_key + 台账溯源"
+  "updated_by": "CO-127..CO-133 + **CO-134（整改通知 #09：③ 重新定性 = 工程换算错误 → REQ-R3-2 忠实实现 + 需求/实现分家规矩 + co124 K9）**；登记簿随 co124 每次运行校验；CO-134 续：4 项已声明定值补 rule_key + 台账溯源；**CO-136（L2 自裁 · 闸卫生续）**：登记并关闭 CO-135 F5(b)/F6 两条 TOOL_DEFECT（co124 标签 / co106 陈旧牙齿）；F4（handoff pin 失准）与 F5(a)（③ 根因叙述）属叙述类，保留在 CO-135 记录，不入本登记簿（非 SPEC/工具缺陷）。",
+  "counts": {
+   "SPEC_DEFECT": 5,
+   "TOOL_DEFECT": 6,
+   "PROVED_THRESHOLD": 5,
+   "IMPLEMENTATION_DEVIATION": 1,
+   "OPEN": 1,
+   "total": 17
+  }
  }
 }

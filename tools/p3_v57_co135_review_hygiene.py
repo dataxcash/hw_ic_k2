@@ -107,8 +107,8 @@ def main() -> int:
             cite_bad.append({"ref": name, "cited": sha, "actual": s16(hit) if hit else None})
     # 注：不记录引用计数（随 boundary §13 增删而变 ⇒ 与「边界引本记录 sha」形成不动点）；
     # 只记 mismatch 结论，使本记录与 boundary 文本长度无关（稳定可被 §13 引用）。
-    v3 = {"mismatches": cite_bad, "n_historical_marked": cite_hist > 0,
-          "boundary_version": "v1.88", "clean": not cite_bad}
+    v3 = {"citation_scan_clean": not cite_bad,
+          "detail_ref": "m13_v57_co77_closure_declaration_sweep.json（逐条 mismatch 明细；本记录不存计数以免不动点）"}
 
     # --- V4 rev-19 重基线完备性 ---
     def pinned_spec(p):
@@ -165,9 +165,9 @@ def main() -> int:
          "action": "豁免物理上可辩护（逃逸/焊盘场短程非长平行；co84 已把 dru 放宽域钉死），终判 = SI/板厂券；co106 弱点已自披露"},
     ]
     verdict = "PASS_WITH_FINDINGS" if (v1["frozen_4of4"] and v1["whitelist_outside_zero"]
-                                       and v2["reachable"] and v3["clean"] and v4["all_pin_rev19"]
+                                       and v2["reachable"] and v3["citation_scan_clean"] and v4["all_pin_rev19"]
                                        and v4["fab_pin_current"]) else "FAIL"
-    rec = {"artifact": "m13_v57_co135_review_hygiene", "schema": 1, "revision": "CO-135",
+    rec = {"artifact": "m13_v57_co135_review_hygiene", "schema": 1, "revision": "CO-135.1",
            "nature": "非执行者复评（rev-19 + CO-134 全链）+ L2 声明/工具卫生修正",
            "reviewer": "另一会话（context 归零续接；非 CO-134 执行者）",
            "V1_frozen_and_spec": v1, "V2_faithful_derivation": v2, "V3_boundary_citations": v3,
@@ -187,7 +187,7 @@ def main() -> int:
     lines = ["# CO-135 — 非执行者复评（rev-19 + CO-134）+ L2 卫生修正", "",
              f"- verdict：**{verdict}**", f"- 冻结四源：{'4/4 MATCH' if v1['frozen_4of4'] else 'MISMATCH'}；"
              f"SPEC rev-19 白名单外 0 改动：{v1['whitelist_outside_zero']}",
-             f"- 收口件 citation：mismatches {len(v3['mismatches'])}（含表格行；计数不记录以免不动点）",
+             f"- 收口件 citation：clean={v3['citation_scan_clean']}（含表格行；明细见 co77）",
              f"- rev-19 重基线：co78/co81/co84 pin=rev-19 → {v4['all_pin_rev19']}；L5 fab pin 现行 → {v4['fab_pin_current']}", "",
              "| id | 类 | 判定 | 摘要 |", "|---|---|---|---|"]
     for f in findings:
@@ -198,7 +198,7 @@ def main() -> int:
     CARD.write_text("\n".join(lines), encoding="utf-8")
     print(json.dumps({"verdict": verdict, "frozen_4of4": v1["frozen_4of4"],
                       "spec_outside_whitelist": v1["unexpected"], "reachable": v2["reachable"],
-                      "cite_mismatch": len(v3["mismatches"]),
+                      "cite_clean": v3["citation_scan_clean"],
                       "rebase_rev19": v4["all_pin_rev19"], "fab_current": v4["fab_pin_current"],
                       "rec_sha16": s16(REC), "card_sha16": s16(CARD)}, ensure_ascii=False, indent=1))
     return 0

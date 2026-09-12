@@ -110,16 +110,22 @@ def main(argv=None) -> int:
     cite_floor_ok = (len(cite_rows) + cite_hist) >= CITE_FLOOR
     if not cite_floor_ok:
         cite_bad = cite_bad + ["__CITE_FLOOR_FAILED__"]
-    rec = {"artifact": "m13_v57_co77_closure_declaration_sweep", "schema": 1, "revision": "CO-77.4",
+    # CO-136 牙齿：合成一处「markdown 表格行 + 漂移 sha16」⇒ 新覆盖（表格行）必须抓得住。
+    # 数据无关：不依赖 boundary 当前内容；正则退化即 teeth=False ⇒ verdict FAIL。
+    _probe = "| `SELF_TEST.json` | `" + "0" * 16 + "` |\n"
+    teeth = {"table_row_citation_detected": [m.group(2) for m in CITE.finditer(_probe)] == ["0" * 16]}
+    teeth_ok = all(teeth.values())
+    rec = {"artifact": "m13_v57_co77_closure_declaration_sweep", "schema": 1, "revision": "CO-77.5",
            "nature": "L2 收口声明件当前态身份引用机判扫描",
            "doc": str(Path(doc).relative_to(K2)), "doc_sha16": s16(doc),
            "claims": rows, "stale_claims": bad,
+           "teeth": teeth, "teeth_ok": teeth_ok,
            "citation_check": {"n_citations": len(cite_rows) + cite_hist,
                               "n_checked": len(cite_rows), "n_marked_historical": cite_hist,
                               "mismatches": cite_bad, "rows": cite_rows,
                               "floor": CITE_FLOOR, "floor_ok": cite_floor_ok},
-           "verdict": ("PASS" if (not bad and not cite_bad) else
-                       "STALE" if bad else "CITATION_MISMATCH"),
+           "verdict": ("PASS" if (not bad and not cite_bad and teeth_ok) else
+                       "TEETH_FAIL" if not teeth_ok else "STALE" if bad else "CITATION_MISMATCH"),
            "redline": "只读；仅比对 sha16；不改任何工件。"}
     OUT.write_text(json.dumps(rec, ensure_ascii=False, indent=1, sort_keys=True), encoding="utf-8")
     print(json.dumps({"doc": rec["doc"], "doc_sha16": rec["doc_sha16"],

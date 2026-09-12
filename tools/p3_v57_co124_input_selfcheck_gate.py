@@ -2,7 +2,7 @@
 """CO-124：【输入自检闸】规格 / 规则**自身**的自洽 + 物理可达 + 缺陷登记完备性（整改通知 #08 第 2/3 条）。
 
 设计原则：**只验输出是洞**。本闸量的是**输入**：
-  K1 定义件在册（`L2/BASIC_SKILL_VS_REDLINE_v1.0.md` 五节锚点齐全）
+  K1 定义件在册（`L2/BASIC_SKILL_VS_REDLINE_v<ver>.md` 五节锚点齐全）
   K2 网级净距口径两源一致（SPEC `net_classes` ↔ 冻结 `drc_rules.json` `clearance.net_classes`）
   K3 层角色自洽（GND 平面层 ∩ 电源平面层 = ∅；叠层文本声明的 In4 网集 ⊇ 实际 In4 zone 网集）
   K4 政策自洽（`bcu_power_copper_policy=PROHIBITED` ⇒ 不得有 zone 声明 B.Cu 载体）
@@ -31,6 +31,7 @@ DOC = L2 / "BASIC_SKILL_VS_REDLINE_v1.1.md"
 REG = L2 / "input_defect_register_v1.json"
 LED = L2 / "derived_value_ledger_v1.json"   # CO-134：需求/实现分家台账
 REC = STEP2 / "m13_v57_co124_input_selfcheck_gate.json"
+DOC_VER = "v" + DOC.stem.split("_v")[-1]      # CO-136：版本从文件名派生（原硬编码 v1.0 与 v1.1 件不符）
 CARD = STEP2 / "m13_v57_CO124_input_selfcheck_gate.md"
 ANCHORS = ("## §1 红线", "## §2 基本功", "## §3 划界", "## §4 重新定性", "## §5 生效")
 # 声明阈值集合：值取自现行声明源（L1 硬约束 / L2 结构 / SPEC constraints / 冻结规则）
@@ -231,9 +232,9 @@ def main() -> int:
     verdict = "PASS" if (not unreg and not reg_bad and teeth_ok) else (
         "FAIL_UNREGISTERED_INPUT_DEFECT" if unreg else "FAIL_REGISTER_MALFORMED" if reg_bad else "TEETH_FAIL")
     rec = {
-        "artifact": "m13_v57_co124_input_selfcheck_gate", "schema": 1, "revision": "CO-124.1",
+        "artifact": "m13_v57_co124_input_selfcheck_gate", "schema": 1, "revision": "CO-124.2",
         "nature": "输入自检闸：规格/规则自身自洽 + 物理可达登记 + 缺陷登记完备（整改通知 #08 第 2/3 条）",
-        "definition_doc": {"path": str(DOC.relative_to(K2)), "sha16": s16(DOC), "status": "v1.0 提议件（待监理裁定/owner 批准）"},
+        "definition_doc": {"path": str(DOC.relative_to(K2)), "sha16": s16(DOC), "status": f"{DOC_VER} 提议件（待监理裁定/owner 批准）"},
         "inputs": {"spec": str(SPEC.relative_to(K2)), "spec_sha16": s16(SPEC),
                    "rules_sha16": s16(RULES), "register": str(REG.relative_to(K2)),
                    "register_sha16": s16(REG) if REG.exists() else None},
@@ -248,7 +249,7 @@ def main() -> int:
             "scanned": ["SPEC rev-16：pd.zone_defs(power_zones/gnd_planes/power_pad_connect/plane_reachability_status/"
                         "bcu_power_copper_policy)、net_classes、stackup、board、constraints",
                         "冻结 drc_rules.json：clearance.net_classes / board_min / hole_clearance.min / manufacturing",
-                        "L2/BASIC_SKILL_VS_REDLINE_v1.0.md 锚点",
+                        f"L2/{DOC.name} 锚点",
                         "L2/input_defect_register_v1.json 登记完备性"],
             "not_scanned_and_why": ["L3/L4 几何与制造件（属输出侧闸：G4..G7/DFM/SI 已覆盖）",
                                     "L1 v1.0 归档件（已作废，语义经 L1 v2.0 结转）"],
@@ -258,7 +259,7 @@ def main() -> int:
     }
     REC.write_text(json.dumps(rec, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     lines = ["# CO-124 — 输入自检闸（规格/规则自身）", "",
-             f"- verdict：**{verdict}**", f"- 定义件：`{rec['definition_doc']['path']}` `{rec['definition_doc']['sha16']}`（v1.0 提议件）",
+             f"- verdict：**{verdict}**", f"- 定义件：`{rec['definition_doc']['path']}` `{rec['definition_doc']['sha16']}`（{rec['definition_doc']['status']}）",
              f"- findings：{len(findings)}（未登记 {len(unreg)}）", f"- 牙齿：{json.dumps(teeth, ensure_ascii=False)}", "",
              "| # | check | finding | detail | 已登记 |", "|---|---|---|---|---|"]
     for c, i_, det in findings:

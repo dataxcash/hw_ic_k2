@@ -1,19 +1,19 @@
 {
  "artifact": "m13_v57_co124_input_selfcheck_gate",
  "schema": 1,
- "revision": "CO-124.1",
+ "revision": "CO-124.2",
  "nature": "输入自检闸：规格/规则自身自洽 + 物理可达登记 + 缺陷登记完备（整改通知 #08 第 2/3 条）",
  "definition_doc": {
   "path": "pm_gate/artifacts/k2_v4/L2/BASIC_SKILL_VS_REDLINE_v1.1.md",
   "sha16": "348735156c9d9b1d",
-  "status": "v1.0 提议件（待监理裁定/owner 批准）"
+  "status": "v1.1 提议件（待监理裁定/owner 批准）"
  },
  "inputs": {
   "spec": "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-19.json",
   "spec_sha16": "5f72182a2616392c",
   "rules_sha16": "0a459839e15960b8",
   "register": "pm_gate/artifacts/k2_v4/L2/input_defect_register_v1.json",
-  "register_sha16": "3fbc2bf0c582e8b8"
+  "register_sha16": "15b888e276d33e2d"
  },
  "checks": {
   "k1_definition_in_place": true,
@@ -45,7 +45,7 @@
   "scanned": [
    "SPEC rev-16：pd.zone_defs(power_zones/gnd_planes/power_pad_connect/plane_reachability_status/bcu_power_copper_policy)、net_classes、stackup、board、constraints",
    "冻结 drc_rules.json：clearance.net_classes / board_min / hole_clearance.min / manufacturing",
-   "L2/BASIC_SKILL_VS_REDLINE_v1.0.md 锚点",
+   "L2/BASIC_SKILL_VS_REDLINE_v1.1.md 锚点",
    "L2/input_defect_register_v1.json 登记完备性"
   ],
   "not_scanned_and_why": [

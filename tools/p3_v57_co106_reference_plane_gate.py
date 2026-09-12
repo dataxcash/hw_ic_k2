@@ -118,16 +118,13 @@ def main(argv=None) -> int:
     sdev = [{"obj": s["obj"], "bottom": round(expect["y"][1] - s["y"][1], 3)} for s in synth
             if abs(s["y"][1] - expect["y"][1]) > 1e-6]
     teeth["frame_inset_detector"] = len(sdev) == 1 and sdev[0]["bottom"] == 8.0
-    _cu = collections.defaultdict(list)                      # 牙齿自带铜表（不依赖后文 cu 定义顺序）
-    for g in zd.get("gnd_planes", []):
-        for poly in polys_of(g):
-            _cu[g["layer"]].append(poly)
-    for z in zd["power_zones"]:
-        for poly in polys_of(z):
-            _cu[z["layer"]].append(poly)
+    # CO-136：原牙齿把板内定点 (60.0,50.0) 钉为「In4 无铜」前提；P3V3_EAST 铺铜随 CO-107（板框对齐 70.7→78.7）
+    # / CO-117 扩展后覆盖该点 ⇒ 前提失效、牙齿假阴性（teeth_ok=False 长期带病）。改为**数据无关的合成正/负控**：
+    # 只测连续性分类原语 pip 能否分「有铜/无铜」，不再依赖任何 SPEC/板几何假设（不会随几何演进失效）。
+    _SQ = [[0.0, 0.0], [10.0, 0.0], [10.0, 10.0], [0.0, 10.0]]
     teeth["continuity_detector"] = (
-        not any(pip((60.0, 50.0), poly) for poly in _cu.get("In4.Cu", []))       # 合成：In4 中段无铜
-        and any(pip((60.0, 50.0), poly) for poly in _cu.get("In1.Cu", [])))      # 合成：In1 覆盖
+        any(pip((5.0, 5.0), poly) for poly in [_SQ])               # 合成：方形内 ⇒ 必须判「有铜」
+        and not any(pip((20.0, 20.0), poly) for poly in [_SQ]))    # 合成：方形外 ⇒ 必须判「无铜」
     teeth["classifier_detector"] = ("GND_PLANE" in str(spec["stackup"]["In1.Cu"])) is True and (
         "GND_PLANE" not in str(spec["stackup"]["In4.Cu"]))
 
@@ -234,7 +231,7 @@ def main(argv=None) -> int:
     mismatch = {k: {"expect": v, "actual": s16({"spec_current": SPEC_CUR, "board": BOARD}[k])}
                 for k, v in BASE.items() if s16({"spec_current": SPEC_CUR, "board": BOARD}[k]) != v}
     hard = all(v["ok"] for v in checks.values()) and teeth["teeth_ok"]
-    rec = {"artifact": "m13_v57_co106_reference_plane_gate", "schema": 1, "revision": "CO-106.1",
+    rec = {"artifact": "m13_v57_co106_reference_plane_gate", "schema": 1, "revision": "CO-106.2",
            "nature": "L2 合格标准覆盖性补全（ch.2「参考平面」）+ 参考平面连续性/板框一致性机判",
            "inputs": {"spec_current": s16(SPEC_CUR), "drawing": s16(DRAWING), "board": s16(BOARD)},
            "base_pins": BASE, "pin_mismatch": mismatch, "checks": checks, "teeth": teeth,

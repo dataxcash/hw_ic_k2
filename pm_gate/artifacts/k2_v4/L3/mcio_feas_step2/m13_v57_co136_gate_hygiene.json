@@ -1,0 +1,56 @@
+{
+ "artifact": "m13_v57_co136_gate_hygiene",
+ "schema": 1,
+ "revision": "CO-136",
+ "nature": "L2 自裁 · 闸卫生续：关闭 CO-135 F5(b)/F6、强化 F1 牙齿、登记簿闭环",
+ "closed_findings": {
+  "F6": {
+   "target": "co106 continuity tooth",
+   "fix": "数据无关合成正/负控",
+   "rev": "CO-106.2",
+   "teeth": {
+    "classifier_detector": true,
+    "continuity_detector": true,
+    "frame_inset_detector": true,
+    "teeth_ok": true
+   }
+  },
+  "F5b": {
+   "target": "co124 definition_doc 版本标签",
+   "fix": "版本由文件名派生",
+   "rev": "CO-124.2",
+   "status": "v1.1 提议件（待监理裁定/owner 批准）"
+  },
+  "F1": {
+   "target": "co77 表格行 citation 覆盖",
+   "fix": "正则扩内联+表格 + 负控牙齿",
+   "rev": "CO-77.5",
+   "teeth": {
+    "table_row_citation_detected": true
+   }
+  }
+ },
+ "register": {
+  "n_items": 17,
+  "kinds": {
+   "SPEC_DEFECT": 5,
+   "TOOL_DEFECT": 6,
+   "PROVED_THRESHOLD": 5,
+   "IMPLEMENTATION_DEVIATION": 1,
+   "OPEN": 1,
+   "total": 17
+  }
+ },
+ "checks": {
+  "F6_co106_teeth_all_true": true,
+  "F6_co106_teeth_no_stale_point": true,
+  "F5b_co124_doc_version": true,
+  "F5b_co124_findings_still_zero": true,
+  "F1_co77_table_teeth": true,
+  "F1_co77_no_mismatch": true,
+  "REG_co124_label_closed": true,
+  "REG_co106_tooth_closed": true
+ },
+ "verdict": "PASS",
+ "redline": "只读；不改 SPEC/板/冻结源；零坐标搜索；本记录不读 boundary（可被 §14 引用）"
+}
