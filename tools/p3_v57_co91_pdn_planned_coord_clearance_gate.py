@@ -28,7 +28,7 @@ K2 = Path(__file__).resolve().parents[1]
 SHARED = K2 / "_shared"                 # k2 链约定：tools/* 一律读 K2/_shared
 SHARED_ALT = K2.parent / "_shared"      # 容器共享层（handoff §1 的冻结源口径）
 sys.path.insert(0, str(SHARED))
-DEFAULT_SPEC = K2 / "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-18.json"
+DEFAULT_SPEC = K2 / "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-19.json"
 DEFAULT_BOARD = K2 / "k2_v4_8L.l4.kicad_pcb"
 DEFAULT_OUT = (K2 / "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2"
                / "m13_v57_co91_pdn_planned_coord_clearance_gate.json")

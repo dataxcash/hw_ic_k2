@@ -23,10 +23,10 @@ from pathlib import Path
 K2 = Path(__file__).resolve().parents[1]
 L3 = K2 / "pm_gate/artifacts/k2_v4/L3"
 STEP2 = L3 / "mcio_feas_step2"
-SPEC_CUR = L3 / "SPEC_k2_v4.spec-rev-18.json"
+SPEC_CUR = L3 / "SPEC_k2_v4.spec-rev-19.json"
 DRAWING = STEP2 / "m13_v57_w3_joint_assignment.json"
 BOARD = K2 / "k2_v4_8L.l4.kicad_pcb"
-BASE = {"spec_current": "500f3da8179fe19c", "board": "a3ce9ab803045a0a"}
+BASE = {"spec_current": "5f72182a2616392c", "board": "a3ce9ab803045a0a"}
 
 
 def s16(p) -> str:

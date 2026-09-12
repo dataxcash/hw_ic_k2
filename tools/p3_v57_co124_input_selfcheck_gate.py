@@ -8,6 +8,8 @@
   K4 政策自洽（`bcu_power_copper_policy=PROHIBITED` ⇒ 不得有 zone 声明 B.Cu 载体）
   K5 可达性自洽（未决网不得已有显式 In4 多边形；未决 pad 数 == 该网缺载体 entry 数）
   K6 阈值可达性登记（每个声明阈值须「已机判证明」或「已登记缺陷」；不得静默）
+  K9 需求/实现分家（整改通知 #09）：派生值台账逐条 (a) 可溯源到需求原则 id；(b) 派生式对现行输入**可达**（闭式重算）；
+     需求条目**不得携带定值**（conflation 即 FAIL）
   K7 缺陷登记簿完备（K1..K6 的每个 finding 必须在 `input_defect_register_v1.json` 有登记 + 定性 + 处置）
 判定：**仅当无「未登记 finding」且牙齿全数按预期触发** ⇒ PASS；否则 FAIL。
 牙齿（合成注入，只动内存副本，不写盘）：T1 网级净距漂移 ⇒ K2 触发；T2 政策互斥且未登记 ⇒ K7 FAIL；
@@ -23,17 +25,18 @@ K2 = Path(__file__).resolve().parents[1]
 L2 = K2 / "pm_gate/artifacts/k2_v4/L2"
 L3 = K2 / "pm_gate/artifacts/k2_v4/L3"
 STEP2 = L3 / "mcio_feas_step2"
-SPEC = L3 / "SPEC_k2_v4.spec-rev-18.json"
+SPEC = L3 / "SPEC_k2_v4.spec-rev-19.json"
 RULES = K2 / "_shared/eda_core/drc_rules.json"
-DOC = L2 / "BASIC_SKILL_VS_REDLINE_v1.0.md"
+DOC = L2 / "BASIC_SKILL_VS_REDLINE_v1.1.md"
 REG = L2 / "input_defect_register_v1.json"
+LED = L2 / "derived_value_ledger_v1.json"   # CO-134：需求/实现分家台账
 REC = STEP2 / "m13_v57_co124_input_selfcheck_gate.json"
 CARD = STEP2 / "m13_v57_CO124_input_selfcheck_gate.md"
 ANCHORS = ("## §1 红线", "## §2 基本功", "## §3 划界", "## §4 重新定性", "## §5 生效")
 # 声明阈值集合：值取自现行声明源（L1 硬约束 / L2 结构 / SPEC constraints / 冻结规则）
 THRESHOLDS = [
     ("inter_pair_spacing_mm", 1.46, "L1_TOPOLOGY_v2.0 硬约束2（v22 用户裁决）"),
-    ("pair_copper_edge_clearance_mm", 0.875, "L1_TOPOLOGY_v1.0 硬约束3 / R3-2 3W 强条"),
+    ("pair_copper_edge_clearance_mm", 0.410, "L2 derived_value_ledger_v1 DV-INTPAIR-EDGE（REQ-R3-2 忠实实现：铜边 ≥ 2w，外层最严）"),
     ("pair_cross_mm", 0.585, "L1_TOPOLOGY_v2.0 硬约束2（0.585+0.875=1.46）"),
     ("power_clearance_mm", 0.2, "drc_rules.clearance.net_classes[POWER]"),
     ("pcb_edge_copper_min_mm", 0.3, "L1_TOPOLOGY_v2.0 硬约束4 / drc_rules.manufacturing"),
@@ -45,7 +48,45 @@ def s16(p) -> str:
     return hashlib.sha256(Path(p).read_bytes()).hexdigest()[:16]
 
 
-def check(spec: dict, rules: dict, doc_text: str, reg: dict) -> list:
+def k9_findings(led: dict) -> list:
+    """K9：需求/实现分家机判（纯函数，便于负控注入）。"""
+    f = []
+    reqs = led.get("requirements", [])
+    ids = {r.get("id") for r in reqs}
+    for r in reqs:
+        if ("computed" in r) or ("value" in r):
+            f.append(("K9", f"requirement_carries_derived_value:{r.get('id')}",
+                      {"id": r.get("id"), "keys": sorted(set(r) & {"computed", "value"})}))
+    for dv in led.get("derived_values", []):
+        rid = dv.get("requirement")
+        if rid not in ids:
+            f.append(("K9", f"derived_value_without_principle:{dv.get('id')}",
+                      {"requirement": rid, "known": sorted(x for x in ids if x)}))
+            continue
+        rc = dv.get("reachability") or {}
+        doms = rc.get("domains")
+        if doms is not None:
+            span = (dv.get("inputs") or {}).get("span_min_mm")
+            edge = (dv.get("computed") or {}).get("edge_outer_binding_mm")
+            bad = []
+            for d in doms:
+                exempt = "ECN-001" in str(d.get("regime", ""))
+                try:
+                    exp = round(float(d["pitch_cap_mm"]) - float(span) - float(edge), 4)
+                except (KeyError, TypeError, ValueError):
+                    bad.append({"domain": d.get("id"), "why": "unparsable"}); continue
+                if abs(exp - float(d.get("margin_mm", 1e9))) > 5e-4:
+                    bad.append({"domain": d.get("id"), "why": "margin_not_recomputed", "expect": exp,
+                                "got": d.get("margin_mm")})
+                elif (exp < 0) and not exempt:
+                    bad.append({"domain": d.get("id"), "why": "unreachable", "margin": exp})
+            if rc.get("verdict") != "REACHABLE" or bad:
+                f.append(("K9", f"derived_value_unreachable:{dv.get('id')}",
+                          {"verdict": rc.get("verdict"), "bad": bad}))
+    return f
+
+
+def check(spec: dict, rules: dict, doc_text: str, reg: dict, led: dict | None = None) -> list:
     zd = spec["pd"]["zone_defs"]
     f = []
     # K1 定义件
@@ -103,13 +144,17 @@ def check(spec: dict, rules: dict, doc_text: str, reg: dict) -> list:
                        "fix_hint": "净类前缀补 12V_IN（或显式 override）"}))
     # K6 阈值可达性登记
     reg_thr = {it.get("rule_key") for it in reg.get("items", [])}
-    identities = {"inter_pair_spacing_mm": 0.585 + 0.875}
+    # CO-134：对中心距 = 保守实现 ⇒ 判据改为「≥ span + 忠实铜边下界」（不再用 0.585+0.875 恒等式）
+    identity_ok = {"inter_pair_spacing_mm": lambda v: v >= 0.585 + 0.410 - 1e-9}
     for key, val, src in THRESHOLDS:
         if key in reg_thr:
             continue
-        if key in identities and abs(identities[key] - val) < 1e-9:
+        if key in identity_ok and identity_ok[key](val):
             continue
         f.append(("K6", f"threshold_unproved_unregistered:{key}", {"rule_key": key, "value": val, "source": src}))
+    # K9 需求/实现分家（整改通知 #09）
+    led = led if led is not None else (json.loads(LED.read_text(encoding="utf-8")) if LED.exists() else {})
+    f.extend(k9_findings(led))
     return f
 
 
@@ -123,7 +168,7 @@ def main() -> int:
     reg_ids = {it.get("finding") for it in reg.get("items", [])}
     unreg = [dict(zip(("check", "id", "detail"), x)) for x in findings if x[1] not in reg_ids]
     reg_bad = [it.get("finding") for it in reg.get("items", [])
-               if it.get("kind") not in ("SPEC_DEFECT", "TOOL_DEFECT", "PROVED_THRESHOLD") or not it.get("refs")
+               if it.get("kind") not in ("SPEC_DEFECT", "TOOL_DEFECT", "PROVED_THRESHOLD", "IMPLEMENTATION_DEVIATION") or not it.get("refs")
                or not it.get("disposition")]
     # 牙齿（内存副本）
     teeth = {}
@@ -142,6 +187,23 @@ def main() -> int:
          "vias": [], "bridge_layer": "B.Cu", "basis": "SYNTH"})
     f4 = check(s4, rules, doc_text, reg)
     teeth["T2_unregistered_finding_detected"] = bool([x for x in f4 if x[1] not in reg_ids])
+    # CO-134 负控（整改通知 #09 要求）：K9 必须能抓住「无原则 / 不可达 / 需求携带定值」
+    _led = json.loads(LED.read_text(encoding="utf-8")) if LED.exists() else {"requirements": [], "derived_values": []}
+    _l5 = copy.deepcopy(_led); _l5["derived_values"] = _l5.get("derived_values", []) + [
+        {"id": "T5_INJECT", "requirement": "REQ-DOES-NOT-EXIST", "reachability": {"verdict": "REACHABLE"}}]
+    teeth["T5_derived_without_principle"] = any(x[1].startswith("derived_value_without_principle") for x in k9_findings(_l5))
+    _l6 = copy.deepcopy(_led)
+    for _dv in _l6.get("derived_values", []):
+        if _dv.get("reachability", {}).get("domains"):
+            _dv["reachability"]["domains"] = [dict(d) for d in _dv["reachability"]["domains"]]
+            _dv["reachability"]["domains"].append({"id": "T6_INJECT_UNREACHABLE", "pitch_cap_mm": 0.6,
+                                                   "required_pitch_mm": 0.765, "margin_mm": -0.165, "ok": True,
+                                                   "regime": "R3-2 适用域（无豁免）"})
+            break
+    teeth["T6_unreachable_derived"] = any(x[1].startswith("derived_value_unreachable") for x in k9_findings(_l6))
+    _l7 = copy.deepcopy(_led); _l7["requirements"] = _l7.get("requirements", []) + [
+        {"id": "T7_INJECT_REQ_WITH_VALUE", "statement": "x", "value": 0.875}]
+    teeth["T7_requirement_carries_value"] = any(x[1].startswith("requirement_carries_derived_value") for x in k9_findings(_l7))
     teeth_ok = all(teeth.values())
     verdict = "PASS" if (not unreg and not reg_bad and teeth_ok) else (
         "FAIL_UNREGISTERED_INPUT_DEFECT" if unreg else "FAIL_REGISTER_MALFORMED" if reg_bad else "TEETH_FAIL")

@@ -2,11 +2,12 @@
  "schema": 1,
  "name": "input_defect_register_v1",
  "purpose": "整改通知 #08 第 3 条：现行 SPEC / 冻结规则的规约缺陷与阈值证明的**显式登记**。未登记者 = 静默缺陷（违 R-5）⇒ 由 co124 输入自检闸判 FAIL。",
- "scope": "SPEC_k2_v4.spec-rev-18.json + 冻结 _shared/eda_core/drc_rules.json（rev 随现行 bump；CO-133 起含施工期）",
+ "scope": "SPEC_k2_v4.spec-rev-19.json + 冻结 _shared/eda_core/drc_rules.json（rev 随现行 bump）",
  "kinds": {
   "SPEC_DEFECT": "规格自身缺陷（矛盾/文本不自洽/阈值几何不可达）",
   "TOOL_DEFECT": "工具能力缺陷（基本功缺口，非物理不可行）",
-  "PROVED_THRESHOLD": "阈值已由机判闸证明可达（须给 refs 指向可复算的闸记录）"
+  "PROVED_THRESHOLD": "阈值已由机判闸证明可达（须给 refs 指向可复算的闸记录）",
+  "IMPLEMENTATION_DEVIATION": "实现（定值/几何/派生）与需求原则的偏差；非 SPEC 缺陷、非 owner 项，路由 = 工程迭代或外部输入"
  },
  "items": [
   {
@@ -106,19 +107,25 @@
   },
   {
    "finding": "threshold_unproved_unregistered:pair_copper_edge_clearance_mm",
-   "kind": "SPEC_DEFECT",
+   "kind": "PROVED_THRESHOLD",
    "severity": "high",
-   "what": "L1 硬约束『对间铜边净空 0.875mm』（R3-2 3W 强条）在现行走廊/焊盘场几何内**不可达**：CO-86 机判 L2 六域无剩余变量，最小缺额 WEST +0.232 / 焊盘场 +0.682",
+   "what": "L1 硬约束『对间铜边净空 0.875mm』（旧 R3-2 换算）在现行走廊/焊盘场几何内不可达 —— **根因更正（整改通知 #09）**：这不是需求（对间不串扰 = R3-2「3W 原则」= 对间中心距 ≥ 3×线宽），而是**工程换算错误**：0.875 = 2×0.4375，本板无任何层/带使用 w=0.4375（实际 w=0.16/0.205，带内 w_min=0.09）",
    "refs": [
     "CO-86",
     "L1_TOPOLOGY_v1.0 硬约束3",
     "L1_TOPOLOGY_v2.0 硬约束2"
    ],
-   "disposition": "规格缺陷（阈值几何不可达）——**确定性自证已交**（CO-129，§4 五项）：焊盘场 = 模型自由全 span 不可达（pitch 上限 0.600 < 0.875）；WEST = 声明一阶阻抗模型下带内最小 span=0.355 ⇒ 缺额 ≥ 0.18（CO-86 名义 85Ω 解缺额 0.232，两者同号）；**口径修订提案已出**：P1（建议，3W 原义「铜边净空 ≥ 2·w」）/ P2（备选，分域可达上限 cap−span_min）；批准归 owner（L1 红线）。SI9000/板厂券到货后复核 w_min。",
-   "status": "OPEN",
-   "next": "owner 裁定 P1/P2（或另定）；SI9000/券到货后复核 w_min/span_min",
+   "disposition": "**撤回 owner 升级**（③ = 工程问题，非 owner 决策项）。CO-134 按 REQ-R3-2 忠实实现：对间铜边净空 ≥ 2×w（按层：外层 0.410 / In2/In5 0.320；带内下界 0.180）；SPEC rev-19 `5f72182a2616392c` 已施加（0.875 退役留存）；可达性闭式复算 REACHABLE（域外 0.355+0.410=0.765 ≤ cap 1.05/1.449；焊盘场属 ECN-001 escape 域）；规矩 `L2/REQUIREMENT_IMPLEMENTATION_SEPARATION_v1.0.md` + 台账 `L2/derived_value_ledger_v1.json`；机判 co124 K9（负控 T5/T6/T7）",
+   "status": "PROVED",
+   "next": "无（co129 的 P1 已作为工程实现落地；P2 不需；无 owner 项）",
    "evidence": [
-    "CO-129 m13_v57_co129_threshold_selfproof.json 5e2f92e5e03f0ab9（牙齿 T1..T4 全过；CO-86 逐字节复现）"
+    "CO-134 m13_v57_co134_req_impl_separation.json（faithful_derivation / reachability / as_built）",
+    "SPEC rev-19 5f72182a2616392c（inter_pair_derivation_v1 + retired_inter_pair_spacing_0p875_v1）",
+    "L2/derived_value_ledger_v1.json DV-INTPAIR-EDGE（reachability REACHABLE）"
+   ],
+   "rule_key": "pair_copper_edge_clearance_mm",
+   "closed_by": [
+    "CO-134"
    ]
   },
   {
@@ -272,6 +279,24 @@
    "closed_by": [
     "CO-133"
    ]
+  },
+  {
+   "finding": "implementation_deviation:R3-2_asbuilt_interpair_edge",
+   "kind": "IMPLEMENTATION_DEVIATION",
+   "severity": "medium",
+   "what": "交付板域外对间铜边实测低于 REQ-R3-2 忠实口径 3 处：F.Cu 0.3294（−0.0806 @137.24,59.575）/ B.Cu 0.3450（−0.0650 @92.15,47.912）/ In5.Cu 0.3125（−0.0075 @74.75,40.8）",
+   "refs": [
+    "CO-134",
+    "CO-53",
+    "CO-54"
+   ],
+   "disposition": "**工程开放项（非 owner）**：SI/板厂券复核（外部输入）判定可接受性；若判须改几何 ⇒ 另开 CO（本件不动几何，板保持 a3ce9ab803045a0a）",
+   "status": "OPEN",
+   "next": "外部输入（SI9000/板厂券）到位后复核；或后续几何迭代",
+   "evidence": [
+    "CO-134 m13_v57_co134_req_impl_separation.json as_built.deviations_open_engineering"
+   ],
+   "closed_by": []
   }
  ],
  "closed_items": [
@@ -289,6 +314,6 @@
   "owner": "ARCHER（L2 自裁执行侧）",
   "approval": "定义件 v1.0 待监理裁定/owner 批准；登记簿随闸每次运行校验",
   "mandatory_trigger": "任何 SPEC / drc_rules 变更后必须跑 tools/p3_v57_co124_input_selfcheck_gate.py 并 PASS",
-  "updated_by": "CO-127/128/129/130/131/132（§4A 1-4 + R1 In4 承载几何派生）+ CO-133（施工期物理施加 + 连带工具缺陷登记）；登记簿随 co124 每次运行校验"
+  "updated_by": "CO-127..CO-133 + **CO-134（整改通知 #09：③ 重新定性 = 工程换算错误 → REQ-R3-2 忠实实现 + 需求/实现分家规矩 + co124 K9）**；登记簿随 co124 每次运行校验"
  }
 }

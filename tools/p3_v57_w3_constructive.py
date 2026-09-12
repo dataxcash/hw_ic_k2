@@ -26,7 +26,7 @@ K2 = Path("/home/fila/jqdDev_2025/ic_hw/k2")
 L3 = K2 / "pm_gate" / "artifacts" / "k2_v4" / "L3"
 STEP2 = L3 / "mcio_feas_step2"
 F = {
-    "spec": L3 / "SPEC_k2_v4.spec-rev-18.json",   # ECO SPEC-REV-9（CO-89：PDN live 决策板实化）
+    "spec": L3 / "SPEC_k2_v4.spec-rev-19.json",   # ECO SPEC-REV-9（CO-89：PDN live 决策板实化）
     "rules": K2 / "_shared" / "eda_core" / "drc_rules.json",
     "manifest": STEP2 / "m13_v57_s1_page_manifest.json",
     "w0r_model": STEP2 / "m13_v57_big_w0r_corridor_model.json",
@@ -43,7 +43,7 @@ F = {
     "coherent_rows": STEP2 / "m13_v57_f13_r3_coherent_rows.json",
 }
 FROZEN_SHA = {
-    "spec": "500f3da8179fe19c2f03fceb0a98ed1afb25b8a8b6fa953e5da1904779e6b7f8",
+    "spec": "5f72182a2616392cbcc223ec9233b41422657ff13a5faff1e6f10d6904dc33e6",   # CO-134：rev-19（③ 忠实实现）
     "rules": "0a459839e15960b8fbfe0e1f5bb154a02b30cbafa1cbb0d56c2b810a71228448",
     "manifest": "a8ef3ea8ecff99d7549d4122043c972c1bb68346dc4dcc3f36fdd9bacde49890",
     "w0r_model": "80ee9adb78a7e9ad94c27d426295592eee21af3d1e3ce88fe3042183160f0efa",
