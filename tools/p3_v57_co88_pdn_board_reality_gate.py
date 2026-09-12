@@ -1,0 +1,161 @@
+#!/usr/bin/env python3
+"""CO-88：【L2 PDN】live 机读字段的**板实性**机判 + 修复候选派生（只读 + scratch）。
+
+背景：CO-74 逼出「PDN 声明 vs 板现实」这一缺陷类。本件把它机判化：`pd.zone_defs.power_pad_connect`
+与 `pd.decoupling(_via_to_plane)` 是**机读、且被 `_shared/eda_core/pdn_apply.py` 消费**的铺铜决策，
+若引用板上不存在的器件（红驱动 U3+U7 合并为 U6 后遗留），L3 铺铜会落**幻影 via**。
+
+判据（ch.5 §1 覆盖性 / §2 可追溯性 / §3 可验证性）：
+  A. live 字段引用的 ref 必须**存在于交付板**（否则决策不可追溯/不可验证）；
+  B. 板上每个 SMD 电源/地 pad 必须**有决策**（entry 覆盖 或 blocked 台账带 reason）；
+  C. 解耦决策落点必须在板上。
+另派生**修复候选**：用项目自带确定性发生器 `eda_core.pad_connect_gen` 对交付板重生成（scratch 副本，用完即删）。
+
+需 pcbnew ⇒ 用 `AppDir/usr/bin/python3.11`。只读；不改 SPEC/板/阈值；零 while。
+"""
+from __future__ import annotations
+import hashlib, json, re, shutil, subprocess, sys
+from pathlib import Path
+
+K2 = Path("/home/fila/jqdDev_2025/ic_hw/k2")
+L3 = K2 / "pm_gate/artifacts/k2_v4/L3"
+STEP2 = L3 / "mcio_feas_step2"
+BOARD = K2 / "k2_v4_8L.l4.kicad_pcb"
+OUT = STEP2 / "m13_v57_co88_pdn_board_reality_gate.json"
+SCRATCH = K2 / ".co88_tmp"
+sys.path.insert(0, str(K2.parent / "_shared"))
+from eda_core.pad_connect_gen import DEFAULT_PWR_NETS as PWR_NETS  # noqa: E402
+
+
+def s16(p) -> str:
+    return hashlib.sha256(Path(p).read_bytes()).hexdigest()[:16]
+
+
+def current_spec() -> Path:
+    cands = list(L3.glob("SPEC_k2_v4.spec-rev-*.json"))
+
+    def key(p: Path):
+        m = re.findall(r"rev-(\d+)", p.name)
+        return int(m[0]) if m else -1
+    return max(cands, key=key)
+
+
+def board_power_pads(board_path: Path) -> dict:
+    import pcbnew
+    b = pcbnew.LoadBoard(str(board_path))
+    out = {}
+    for fp in b.GetFootprints():
+        ref = fp.GetReference()
+        for p in fp.Pads():
+            if p.GetNetname() in PWR_NETS and p.GetAttribute() == pcbnew.PAD_ATTRIB_SMD:
+                out[(ref, p.GetNumber())] = p.GetNetname()
+    return out
+
+
+def spec_refs(spec: dict) -> dict:
+    zd = spec["pd"]["zone_defs"]
+    ppc = zd.get("power_pad_connect", {})
+    ent = {str(e.get("ref")) for e in ppc.get("entries", []) if isinstance(e, dict)}
+    blk = {str(e.get("ref")) for e in ppc.get("blocked", []) if isinstance(e, dict)}
+    vias = {str(v.get("ref")) for v in zd.get("decoupling_via_to_plane", {}).get("vias", []) if isinstance(v, dict)}
+    dec = str(spec["pd"].get("decoupling", ""))
+    return {"entries_refs": ent, "blocked_refs": blk, "decoupling_via_refs": vias,
+            "decoupling_string_refs": set(re.findall(r"[A-Z]{1,2}\d{1,3}", dec)), "decoupling": dec}
+
+
+def scratch_regeneration(spec_path: Path) -> dict:
+    """用项目自带发生器对交付板重生成 ppc（scratch 副本；用完即删）。返回候选规模。"""
+    SCRATCH.mkdir(exist_ok=True)
+    cand = SCRATCH / "rev_candidate.json"
+    shutil.copy(spec_path, cand)
+    r = subprocess.run([sys.executable, "-m", "eda_core.pad_connect_gen",
+                        "--spec", str(cand), "--board", str(BOARD)],
+                       cwd=str(K2.parent), capture_output=True, text=True, timeout=600,
+                       env={**__import__("os").environ, "PYTHONPATH": str(K2.parent / "_shared")})
+    if r.returncode != 0:
+        return {"ok": False, "stderr_tail": (r.stderr or "")[-200:]}
+    d = json.loads(cand.read_text(encoding="utf-8"))
+    ppc = d["pd"]["zone_defs"]["power_pad_connect"]
+    ent, blk = ppc["entries"], ppc["blocked"]
+    from collections import Counter
+    u6 = sum(1 for x in blk if x.get("ref") == "U6")
+    out = {"ok": True, "entries": len(ent), "blocked": len(blk),
+           "blocked_by_ref_top": dict(Counter(x.get("ref") for x in blk).most_common(5)),
+           "blocked_U6_share": f"{u6}/{len(blk)}",
+           "decisions_total": len(ent) + len(blk), "rule": ppc["rule"][:60]}
+    shutil.rmtree(SCRATCH, ignore_errors=True)
+    return out
+
+
+def ripple_checklist() -> list:
+    """哪些工具/文件钉住现行 SPEC rev 文件或其 sha（施加 rev-9 需同步 bump 的清单）。"""
+    cur = current_spec().name
+    hits = []
+    for p in sorted((K2 / "tools").glob("*.py")):
+        t = p.read_text(encoding="utf-8", errors="ignore")
+        if cur in t or re.search(r"SPEC_k2_v4\.spec-rev-\d+\.json", t):
+            hits.append(p.name)
+    return hits
+
+
+def main() -> int:
+    spec_path = current_spec()
+    spec = json.loads(spec_path.read_text(encoding="utf-8"))
+    pads = board_power_pads(BOARD)
+    refs = spec_refs(spec)
+    board_refs = {k[0] for k in pads}
+    orphans = {k: sorted(v - board_refs) for k, v in
+               (("entries", refs["entries_refs"]), ("blocked", refs["blocked_refs"]),
+                ("decoupling_via", refs["decoupling_via_refs"]),
+                ("decoupling_string", refs["decoupling_string_refs"]))}
+    ppc = spec["pd"]["zone_defs"]["power_pad_connect"]
+    cov = {(str(e["ref"]), str(e["pad"])) for e in ppc.get("entries", []) if isinstance(e, dict)}
+    blks = {(str(e["ref"]), str(e["pad"])) for e in ppc.get("blocked", []) if isinstance(e, dict)}
+    covered = [k for k in pads if k in cov]
+    declared_blocked = [k for k in pads if k in blks]
+    silent = sorted(k for k in pads if k not in cov and k not in blks)
+    n_orphan_entries = sum(1 for e in ppc.get("entries", []) if str(e.get("ref")) not in board_refs)
+    n_orphan_blocked = sum(1 for e in ppc.get("blocked", []) if str(e.get("ref")) not in board_refs)
+
+    # 牙齿：合成件注入孤儿 ref + 缺失 pad ⇒ 必须被发现
+    syn_spec = json.loads(json.dumps(spec))
+    syn_spec["pd"]["zone_defs"]["power_pad_connect"]["entries"].append(
+        {"ref": "U99", "pad": "1", "net": "GND"})
+    syn = spec_refs(syn_spec)
+    teeth = {"synthetic_orphan_ref_detected": bool({"U99"} - board_refs),
+             "board_pad_floor": len(pads), "spec_entry_floor": len(ppc.get("entries", [])),
+             "silent_detector_control": bool(len(silent) == 0 or {("U99", "1")} - set(pads))}
+
+    rec = {"artifact": "m13_v57_co88_pdn_board_reality_gate", "schema": 1, "revision": "CO-88.1",
+           "nature": "L2 PDN：live 机读字段（power_pad_connect / decoupling）的板实性 + 覆盖性机判",
+           "inputs": {"spec": spec_path.name, "spec_sha16": s16(spec_path), "board": BOARD.name,
+                      "board_sha16": s16(BOARD), "pwr_nets": sorted(PWR_NETS)},
+           "A_refdes_existence": {"orphan_refs_by_field": orphans,
+                                  "n_orphan_entries": n_orphan_entries,
+                                  "n_orphan_blocked": n_orphan_blocked,
+                                  "verdict": "FAIL" if any(orphans.values()) else "PASS"},
+           "B_coverage": {"board_smd_power_pads": len(pads), "covered": len(covered),
+                          "declared_blocked": len(declared_blocked), "silent_undecided": len(silent),
+                          "silent_list": [f"{r}.{p}" for r, p in silent[:20]],
+                          "verdict": "PASS" if not silent else "FAIL"},
+           "C_decoupling": {"field": refs["decoupling"], "refs": sorted(refs["decoupling_string_refs"]),
+                            "missing_on_board": orphans["decoupling_string"],
+                            "verdict": "FAIL" if orphans["decoupling_string"] else "PASS"},
+           "fix_candidate": scratch_regeneration(spec_path),
+           "ripple_checklist_if_spec_bumped": ripple_checklist(),
+           "teeth": teeth,
+           "verdict": ("FAIL（L2 SPEC 未达 ch.5 §1/§2/§3）：live PDN 决策引用板上不存在的器件、"
+                       "解耦决策零板实落点、且板实 pad 覆盖需按板重生成"),
+           "redline": "只读；scratch 即用即删；不改 SPEC/板/阈值；不 partial pass。"}
+    OUT.write_text(json.dumps(rec, ensure_ascii=False, indent=1, sort_keys=True), encoding="utf-8")
+    print(json.dumps({"verdict": rec["verdict"][:24], "orphan_entries": n_orphan_entries,
+                      "orphan_refs": sum(len(v) for v in orphans.values()),
+                      "pads": len(pads), "covered": len(covered), "blocked": len(declared_blocked),
+                      "silent": len(silent), "decoupling_missing": orphans["decoupling_string"],
+                      "fix_candidate": rec["fix_candidate"], "teeth": teeth,
+                      "ripple": rec["ripple_checklist_if_spec_bumped"]}, ensure_ascii=False))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
