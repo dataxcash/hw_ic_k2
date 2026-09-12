@@ -1,0 +1,107 @@
+{
+ "artifact": "m13_v57_co87_l2_acceptance_coverage",
+ "constitution": {
+  "ch2_l2_criteria": "物理可行性：走廊闭合、等长预算、参考平面、PDN 压降、热",
+  "ch5_4": "数学闭合：容量总和 ≥ 需求；长度预算闭合；过孔预算闭合；PDN 压降达标。任何一条不等式不闭合，整层作废。",
+  "file": "LAYOUT_CONSTITUTION.md",
+  "sha16": "3b0a8550e61a7637"
+ },
+ "input_absence_scan": {
+  "n_spec_fields_scanned": 3962,
+  "requirement_source": "LAYOUT_CONSTITUTION.md ch.5 §4（PDN 压降达标）/ ch.2（L2 裁判标准含 热）",
+  "spec_rev8_hits": [],
+  "spec_sha16": "3ec8e35e676cf89d"
+ },
+ "matrix": [
+  {
+   "evidence": "drawing verdict=FEASIBLE_ALL failed=[]（A-CN.1d 32/32 / 2a/2b 0）",
+   "item": "容量总和 ≥ 需求（走廊闭合）",
+   "status": "CLOSED"
+  },
+  {
+   "evidence": "L5 SI record max intra-pair skew = 0.13 mm ≤ 0.15（CO-70 判据=按层加权电气长度）",
+   "item": "长度预算闭合（等长窗口）",
+   "status": "CLOSED"
+  },
+  {
+   "evidence": "L4-F checks['L4-F']=True via_budget.over=None total_vias=252",
+   "item": "过孔预算闭合",
+   "status": "CLOSED"
+  },
+  {
+   "evidence": "全仓无 load 电流/允许压降预算输入（SPEC 扫描命中 0 项；本项需外部数据）",
+   "item": "PDN 压降达标（ch.5 §4）",
+   "status": "NOT_DEMONSTRATED"
+  },
+  {
+   "evidence": "全仓无功耗/热阻/环境温度/温升判据输入（SPEC 扫描命中 0；需求条款见宪法 ch.2 L2 裁判标准）",
+   "item": "热（ch.2 L2 裁判标准）",
+   "status": "NOT_DEMONSTRATED"
+  }
+ ],
+ "n_closed": 3,
+ "n_open": 2,
+ "nature": "L2 合格标准（宪法 ch.5 §4 数学闭合四项 + ch.2 热）覆盖性机判与缺口登记",
+ "redline": "只读；不改 SPEC/板/图纸/阈值；禁止以假设值代填缺输入；不 partial pass。",
+ "required_inputs_for_PDN_and_thermal": {
+  "needed": [
+   "各轨负载电流（U3/U7 redriver 静态+动态、MCU/存储、J3/J4 MCIO A9 供电、去耦/上拉）",
+   "允许压降预算（V/%；P3V3 ±5% 等）与采样点定义",
+   "In4 铜厚/温度修正与平面几何（L3 派生后）用于压降终算",
+   "热：各器件功耗、环境温度/风速、可接受温升与热阻路径判据"
+  ],
+  "rails": {
+   "MCU_VDD_BCU_RESISTORS_IN4": {
+    "geometry_status": "L3_CONSTRUCTION_DERIVED",
+    "layer": "In4.Cu",
+    "net": "MCU_VDD",
+    "targets": [
+     "R29",
+     "R31",
+     "R32",
+     "R33",
+     "R34"
+    ]
+   },
+   "MCU_VDD_WEST": {
+    "geometry_status": null,
+    "layer": "In4.Cu",
+    "net": "MCU_VDD",
+    "targets": []
+   },
+   "P3V3_AUX_BCU_BRIDGE_IN4": {
+    "geometry_status": "L3_CONSTRUCTION_DERIVED",
+    "layer": "In4.Cu",
+    "net": "P3V3_AUX",
+    "targets": [
+     "J3.A9(P3V3_AUX, 板实测 60.1,45.75)",
+     "J4.A9(P3V3_AUX, 58.9,61.45)"
+    ]
+   },
+   "P3V3_BCU_BRIDGE_IN4": {
+    "geometry_status": "L3_CONSTRUCTION_DERIVED",
+    "layer": "In4.Cu",
+    "net": "P3V3",
+    "targets": [
+     "U2.pad5(P3V3,33,37)",
+     "U4.pad3(P3V3,40,37)",
+     "C84.pad1(P3V3,44,40)"
+    ]
+   },
+   "P3V3_EAST": {
+    "geometry_status": null,
+    "layer": "In4.Cu",
+    "net": "P3V3",
+    "targets": []
+   }
+  }
+ },
+ "revision": "CO-87.1",
+ "schema": 1,
+ "teeth": {
+  "requirement_text_found_in_constitution": true,
+  "spec_scan_field_floor": 3962,
+  "synthetic_current_detected": true
+ },
+ "verdict": "L2 结构决策已终结（CO-63..CO-86），但 ch.5 §4 数学闭合的 **PDN 压降** 与 ch.2 的 **热** **NOT_DEMONSTRATED（缺输入）** ⇒ 显式登记，不得当作已闭合；本件不代填假设值。"
+}
