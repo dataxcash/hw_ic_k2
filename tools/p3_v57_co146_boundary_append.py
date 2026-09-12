@@ -146,7 +146,7 @@ def main() -> int:
              f"{tr['worst']['required_theta_ja_cur_placeholder'] if False else tr['cases'][tr['worst']['case']]['required_theta_ja_C_per_W']}–"
              f"{tr['cases'][tr['best']['case']]['required_theta_ja_C_per_W']}°C/W；b 环境 ≤ {tr['cases'][tr['best']['case']]['Ta_max_C']}°C；c 复核 EQ/功耗假设）。"
              "**PDN 侧不受影响**：手册电流（P3V3 2.23A）下四轨压降 0.007–0.69% ≪ 3%（I_max@3% 4.3–62.6A）。", "",
-             f"**登记**：+2（`{tr['register']['items_added'][0]}` HIGH；`{tr['register']['items_added'][1] if len(tr['register']['items_added'])>1 else 'K9 热域缺口'}` MED）"
+             f"**登记**：+2（`{tr['co148_items'][0]}` HIGH；`{tr['co148_items'][1]}` MED）"
              f"⇒ 登记簿 {tr['register']['items_total']} 项 / OPEN {tr['register']['open_total']}；台账 DV-CO146-THERMAL = `UNREACHABLE_REGISTERED`。", "",
              "| 工件 | sha16 |", "|---|---|"]
     for label, pth in [("L2 裁定件 `L2_RULING_u6_thermal_v1.md`", L2 / "L2_RULING_u6_thermal_v1.md"),

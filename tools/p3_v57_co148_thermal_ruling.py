@@ -114,7 +114,7 @@ def main() -> int:
                         "在扩判据前，本类不可达性以登记簿显式承接（不得静默）。",
          "status": "OPEN",
          "next": "L2：K9 扩热/压降域模型（含负控）——独立于本件的闸硬化任务。",
-         "evidence": [f"co124 定义 {s16(S2 / 'm13_v57_co124_input_selfcheck_gate.json')}", "本件 §3"],
+         "evidence": ["co124 定义件（不复述 sha：register↔co124 记录互钉会形成不动点；见 boundary §25 表）", "本件 §3"],
          "closed_by": []},
     ]
     have = {it["finding"] for it in reg["items"]}
@@ -160,7 +160,8 @@ def main() -> int:
            "cases": cases, "worst": {"case": worst[0], "Tj_C": worst[1]["Tj_C"]},
            "best": {"case": best[0], "Tj_C": best[1]["Tj_C"]}, "Tj_limit_C": limit,
            "paths_cross_check": th["routes"], "thermal_path": path,
-           "register": {"file": REG.name, "sha16_after": s16(REG), "items_added": [i["finding"] for i in added],
+           "co148_items": list(IDS), "items_added_this_run": [i["finding"] for i in added],
+           "register": {"file": REG.name, "sha16_after": s16(REG),
                         "items_total": len(reg["items"]), "open_total": sum(1 for i in reg["items"] if i["status"] == "OPEN")},
            "ledger": {"file": LED.name, "sha16_after": s16(LED)},
            "owner_visible_input_conflict": "40°C 自然对流（监理定值）vs 器件手册 ⇒ 须重裁环境/风冷输入（R4-2）",
