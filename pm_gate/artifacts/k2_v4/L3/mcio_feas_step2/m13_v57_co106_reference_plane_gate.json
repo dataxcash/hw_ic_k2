@@ -6,26 +6,11 @@
  },
  "checks": {
   "A_frame_inset_consistency": {
-   "deviations": [
-    {
-     "inset_dev_mm": {
-      "bottom": -38.45,
-      "left": -0.0,
-      "right": -0.0,
-      "top": -0.721
-     },
-     "obj": "power_zone P3V3@P3V3_BCU_BRIDGE_IN4"
-    },
-    {
-     "inset_dev_mm": {
-      "bottom": -16.175,
-      "left": -0.0,
-      "right": -0.0,
-      "top": -18.721
-     },
-     "obj": "power_zone P3V3_AUX@P3V3_AUX_BCU_BRIDGE_IN4"
-    }
-   ],
+   "declared_non_full_plane_registry": {
+    "P3V3_AUX_BCU_BRIDGE_IN4": "T2-ECN-2 PM 裁决：P3V3_AUX 经 B.Cu 铜皮到 J3/J4 A9 pad（局部承载，非整面）",
+    "P3V3_BCU_BRIDGE_IN4": "T2-ECN-1 PM 裁决：P3V3 经 B.Cu POWER_POUR 桥接（局部承载，非整面）"
+   },
+   "deviations": [],
    "expected_inset_polygon": {
     "x": [
      23.3,
@@ -38,20 +23,35 @@
    },
    "interior_carriers_exempt": [
     {
+     "declared_carrier": true,
+     "interior_of": null,
+     "obj": "power_zone P3V3@P3V3_BCU_BRIDGE_IN4",
+     "why": "已声明非整面承载区（注册表 + 冻结 SPEC pin）：T2-ECN-1 PM 裁决：P3V3 经 B.Cu POWER_POUR 桥接（局部承载，非整面）"
+    },
+    {
+     "declared_carrier": true,
+     "interior_of": null,
+     "obj": "power_zone P3V3_AUX@P3V3_AUX_BCU_BRIDGE_IN4",
+     "why": "已声明非整面承载区（注册表 + 冻结 SPEC pin）：T2-ECN-2 PM 裁决：P3V3_AUX 经 B.Cu 铜皮到 J3/J4 A9 pad（局部承载，非整面）"
+    },
+    {
+     "declared_carrier": false,
      "interior_of": "MCU_VDD_WEST",
      "obj": "power_zone P3V3_AUX@P3V3_AUX_WEST",
      "why": "内岛承载区（L2 走廊/区域分配）⇒ 非整面平面，不适用板边内缩判据"
     },
     {
+     "declared_carrier": false,
      "interior_of": "MCU_VDD_WEST",
      "obj": "power_zone 12V_IN@12V_IN_IN4_CARRIER",
      "why": "内岛承载区（L2 走廊/区域分配）⇒ 非整面平面，不适用板边内缩判据"
     }
    ],
-   "n_interior_carriers_exempt": 2,
+   "n_interior_carriers_exempt": 4,
    "n_zone_polygons": 9,
    "note": "basis 明文「整面铺铜 + 板边内缩 edge_copper_min」；板框取 SPEC board.outline_x/y（v28 ECO：y 38mm→46mm）；内岛承载区（carve-out）显式豁免并登记",
-   "ok": false
+   "ok": true,
+   "spec_pin_ok": true
   },
   "B_reference_continuity": {
    "class_counts": {},
@@ -100,6 +100,8 @@
    "ok": true
   }
  },
+ "checks_ok": true,
+ "hard": true,
  "inputs": {
   "board": "d4e81f647be7f980",
   "drawing": "60cbd331836e52b7",
@@ -112,13 +114,17 @@
   "一阶判据：点采样（端点+相邻中点）；不做网格/有限元"
  ],
  "pin_mismatch": {},
- "revision": "CO-106.3",
+ "revision": "CO-106.4",
  "schema": 1,
  "teeth": {
+  "baseline_pin_binding": true,
+  "carrier_exemption_declared_only": true,
   "classifier_detector": true,
   "continuity_detector": true,
+  "fail_open_closed": true,
   "frame_inset_detector": true,
-  "teeth_ok": true
+  "teeth_ok": true,
+  "verdict_positive_control": true
  },
  "verdict": "PASS"
 }

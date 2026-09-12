@@ -667,6 +667,51 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body35
     txt = txt.replace("W3 Boundary **v2.06**", "W3 Boundary **v2.07**")
+    # ── §36 CO-162（查漏型 L2 闸硬化 5） ───────────────────────────────────
+    MARK36 = "## 36. CO-162"
+    _rc36 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    sec36 = [MARK36 + "（**L2 自裁 · 查漏型闸硬化 5**：verdict 基线约束 + 已声明承载区豁免）", "",
+             f"- 实测缺口（修前，均机判）：**G-1** co106 的 verdict 阶梯 `PASS if hard else (... else PASS)` 在 `hard=False ∧ cls_count 空` 时"
+             f"仍判 **PASS** —— 记录自身即 `A_frame_inset_consistency.ok = False`（2 处内缩偏差）而 verdict=PASS；且把 `BASE['spec_current']` "
+             f"改成伪值（基线 pin 漂移）后仍 verdict=PASS / rc=0（`pin_mismatch` 只记录、不参与判定）⇒ 「基线可复现」与「检查通过」同时失效。"
+             f"**G-2** 桥接承载区（`P3V3_BCU_BRIDGE_IN4` / `P3V3_AUX_BCU_BRIDGE_IN4`，T2-ECN-1/2 PM 裁决的局部承载 pour）被算作内缩偏差却"
+             f"只记录不判定 ⇒ 偏差被静默容忍（既无登记也无 pin，违 CO-139 口径）。",
+             f"- 处置（**CO-162**）：① 抽纯函数 `verdict_of(checks_ok, teeth_ok, pin_mismatch, cls_count)` —— `pin_mismatch` 非空 ⇒ "
+             f"`BASELINE_MISMATCH`；`teeth_ok=False` ⇒ `FAIL(teeth)`；任一 check 失败 ⇒ `FAIL_DECLARED_COPPER_MISSING` / "
+             f"`INDETERMINATE_REGION_SCOPED` / `FAIL_CHECKS`（**不再回落 PASS**）；增牙齿 `baseline_pin_binding` / `fail_open_closed` / "
+             f"`verdict_positive_control`；② 增 `DECLARED_NON_FULL_PLANE` 注册表 + **冻结 SPEC pin 锚定**（SPEC pin 不成立则豁免自动失效）"
+             f"+ 牙齿 `carrier_exemption_declared_only`。co106 升 **CO-106.4**。",
+             f"- 复核：真基线 **verdict=PASS / rc=0**（A dev=0、豁免 4 条：2 内岛 + 2 桥接承载、牙齿 8/8）；注入伪 spec pin ⇒ "
+             f"**verdict=BASELINE_MISMATCH / rc=1**。登记簿 **{_rc36['total']} 项 / OPEN {_rc36['OPEN']}**。", "",
+             "> **R-CO162-1**：凡记录内带 `base_pins` 的闸，其 verdict **必须显式消费 pin 漂移**（不等即 `BASELINE_MISMATCH`，非 PASS）；"
+             "任一 check 失败不得回落 PASS（由 co106 `verdict_of` 纯函数 + 牙齿 `baseline_pin_binding`/`fail_open_closed` 机判）。",
+             "> **R-CO162-2**：非整面承载区（桥接/局部 pour）的板框内缩豁免须**登记进注册表**（`DECLARED_NON_FULL_PLANE`）并**锚定冻结源 pin**，"
+             "豁免逐条入记录；不得静默容忍偏差（违者按 G-2 同族处理）。",
+             "> **R-CO162-3**（复现序，取代 R-CO161-3）：规范复现序 = `co146_impedance_table → co146_pm_eval → co146_ledger_add → "
+             "co153_k9_domain_coverage → co148_u6_datasheet_inputs → co148_thermal_ruling → co149_thermal_mitigation_derive → "
+             "co147_l2_ruling → co146_jlc_dfm_gate → co146_jlc_fab_package → co152_findings_disposition → co155_co154_findings_disposition → "
+             "co156_co154_open_disposition → co157_gate_hardening_3 → co158_l5_packet_selfcontained → co159_rev19_review → "
+             "co160_co159_findings_disposition → co161_gap_hardening_4 → **co162_verdict_binding** → co124_input_selfcheck_gate → "
+             "co150_k9_domain_gate → co146_boundary_append → co77_closure_declaration_sweep → co120_provenance_pin_gate → co135_review_hygiene → "
+             "co136_gate_hygiene → co78_layer_role_drift_gate → co81_project_rules_gate → co84_dru_domain_gate → co95_in4_reachability → "
+             "co98_reachability_status_report → co106_reference_plane_gate → co146_boundary_append`，**循环至 sha 稳定**。",
+             "", "| 工件 | sha16 |", "|---|---|"]
+    _rows36 = [("工具 `p3_v57_co162_verdict_binding.py`", K2 / "tools/p3_v57_co162_verdict_binding.py"),
+               ("工具 `p3_v57_co106_reference_plane_gate.py`（CO-106.4 / verdict_of + DECLARED_NON_FULL_PLANE）",
+                K2 / "tools/p3_v57_co106_reference_plane_gate.py"),
+               ("记录 `m13_v57_co106_reference_plane_gate.json`", STEP2 / "m13_v57_co106_reference_plane_gate.json"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc36['total']} 项 / OPEN {_rc36['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows36:
+        if pth.exists():
+            sec36.append(f"| {label} | `{s16(pth)}` |")
+    sec36.append("")
+    body36 = "\n".join(sec36)
+    if MARK36 in txt:
+        txt = re.sub(re.escape(MARK36) + r"[\s\S]*?(?=\n## |\Z)", body36, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body36
+    txt = txt.replace("W3 Boundary **v2.07**", "W3 Boundary **v2.08**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
     return 0

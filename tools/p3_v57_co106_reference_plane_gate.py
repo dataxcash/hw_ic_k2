@@ -27,6 +27,27 @@ SPEC_CUR = L3 / "SPEC_k2_v4.spec-rev-19.json"
 DRAWING = STEP2 / "m13_v57_w3_joint_assignment.json"
 BOARD = K2 / "k2_v4_8L.l4.kicad_pcb"
 BASE = {"spec_current": "5f72182a2616392c", "board": "d4e81f647be7f980"}
+# CO-162（G-2）：**已声明非整面承载区**注册表 —— 桥接/局部承载 pour 不适用「整面铺铜 + 板边内缩」判据。
+# 豁免须**锚定冻结 SPEC**（`s16(SPEC_CUR) == BASE["spec_current"]`），不得只靠自由文本（CO-139 口径）。
+DECLARED_NON_FULL_PLANE = {
+    "P3V3_BCU_BRIDGE_IN4": "T2-ECN-1 PM 裁决：P3V3 经 B.Cu POWER_POUR 桥接（局部承载，非整面）",
+    "P3V3_AUX_BCU_BRIDGE_IN4": "T2-ECN-2 PM 裁决：P3V3_AUX 经 B.Cu 铜皮到 J3/J4 A9 pad（局部承载，非整面）",
+}
+
+
+def verdict_of(checks_ok: bool, teeth_ok: bool, pin_mismatch: dict, cls_count: dict) -> str:
+    """CO-162（G-1）：诚实的 verdict 阶梯 —— 任何 check 失败 / 基线 pin 漂移 / 牙齿失败一律**非 PASS**。
+
+    旧阶梯 `PASS if hard else (... else PASS)` 在 `hard=False ∧ cls_count 空` 时仍给 PASS（fail-open）。
+    """
+    if pin_mismatch:
+        return "BASELINE_MISMATCH"
+    if not teeth_ok:
+        return "FAIL(teeth)"
+    if not checks_ok:
+        return ("FAIL_DECLARED_COPPER_MISSING" if (cls_count or {}).get("declared_copper_missing", 0) > 0
+                else ("INDETERMINATE_REGION_SCOPED" if cls_count else "FAIL_CHECKS"))
+    return "PASS"
 
 
 def s16(p) -> str:
@@ -80,6 +101,7 @@ def main(argv=None) -> int:
     # CO-122b：**内岛承载区**（strictly inside 另一电源区多边形的 carve-out，如 P3V3_AUX_WEST@MCU_VDD_WEST）
     # 不适用「整面铺铜 + 板边内缩」判据（该判据针对整面平面）⇒ **显式登记豁免**（非静默跳过）。
     _zp = [(z.get("zone"), poly) for z in zd["power_zones"] for poly in polys_of(z)]
+    _spec_pin_ok = s16(SPEC_CUR) == BASE["spec_current"]   # CO-162：豁免须锚定冻结 SPEC
     exempt = []
     for z in zd["power_zones"]:
         for poly in polys_of(z):
@@ -92,15 +114,19 @@ def main(argv=None) -> int:
                         continue
                     if pip((cx, cy), pp) and all(pip(pt, pp) for pt in poly):
                         inner = zz; break
-            rows.append({"obj": f"power_zone {z['net']}@{z.get('zone')}", "basis": z.get("basis", "")[:40],
+            _zid = z.get("zone")
+            _declared = _zid in DECLARED_NON_FULL_PLANE and _spec_pin_ok
+            rows.append({"obj": f"power_zone {z['net']}@{_zid}", "basis": z.get("basis", "")[:40],
                          "x": [min(xs), max(xs)], "y": [min(ys), max(ys)],
-                         "y_only": True, "interior_of": inner})
-            if inner:
-                exempt.append({"obj": f"power_zone {z['net']}@{z.get('zone')}", "interior_of": inner,
-                               "why": "内岛承载区（L2 走廊/区域分配）⇒ 非整面平面，不适用板边内缩判据"})
+                         "y_only": True, "interior_of": inner, "declared_carrier": _declared})
+            if inner or _declared:
+                exempt.append({"obj": f"power_zone {z['net']}@{_zid}", "interior_of": inner,
+                               "declared_carrier": _declared,
+                               "why": ("内岛承载区（L2 走廊/区域分配）⇒ 非整面平面，不适用板边内缩判据" if inner
+                                       else "已声明非整面承载区（注册表 + 冻结 SPEC pin）：" + DECLARED_NON_FULL_PLANE.get(_zid, ""))})
     dev = []
     for r in rows:
-        if r.get("interior_of"):
+        if r.get("interior_of") or r.get("declared_carrier"):
             continue
         dy = [round(r["y"][0] - expect["y"][0], 3), round(expect["y"][1] - r["y"][1], 3)]
         dx = ([0.0, 0.0] if r.get("y_only") else
@@ -111,6 +137,7 @@ def main(argv=None) -> int:
         "ok": not dev, "expected_inset_polygon": expect, "n_zone_polygons": len(rows),
         "deviations": dev, "interior_carriers_exempt": exempt,
         "n_interior_carriers_exempt": len(exempt),
+        "declared_non_full_plane_registry": DECLARED_NON_FULL_PLANE, "spec_pin_ok": _spec_pin_ok,
         "note": "basis 明文「整面铺铜 + 板边内缩 edge_copper_min」；板框取 SPEC board.outline_x/y（v28 ECO：y 38mm→46mm）；"
                 "内岛承载区（carve-out）显式豁免并登记"}
     # 牙齿（合成负控/正控，独立于数据状态）：内缩检测器必须能抓"错内缩"，连续性检测器必须能分"无铜/有铜"
@@ -230,14 +257,22 @@ def main(argv=None) -> int:
     teeth["teeth_ok"] = all(v for k, v in teeth.items())
     mismatch = {k: {"expect": v, "actual": s16({"spec_current": SPEC_CUR, "board": BOARD}[k])}
                 for k, v in BASE.items() if s16({"spec_current": SPEC_CUR, "board": BOARD}[k]) != v}
-    hard = all(v["ok"] for v in checks.values()) and teeth["teeth_ok"]
-    rec = {"artifact": "m13_v57_co106_reference_plane_gate", "schema": 1, "revision": "CO-106.3",
+    checks_ok = all(v["ok"] for v in checks.values())
+    hard = checks_ok and teeth["teeth_ok"]
+    # CO-162（G-1）牙齿：① 基线 pin 漂移必须非 PASS；② check 失败必须非 PASS（旧阶梯此处 fail-open）；③ 正控 PASS
+    teeth["baseline_pin_binding"] = verdict_of(True, True, {"spec_current": {"expect": "x", "actual": "y"}}, {}) == "BASELINE_MISMATCH"
+    teeth["fail_open_closed"] = verdict_of(False, True, {}, {}) != "PASS"
+    teeth["verdict_positive_control"] = verdict_of(True, True, {}, {}) == "PASS"
+    # CO-162（G-2）牙齿：注册表豁免只认登记项（伪造 id 不得豁免）
+    teeth["carrier_exemption_declared_only"] = (
+        ("P3V3_BCU_BRIDGE_IN4" in DECLARED_NON_FULL_PLANE)
+        and ("NOT_REGISTERED_ZONE" not in DECLARED_NON_FULL_PLANE))
+    rec = {"artifact": "m13_v57_co106_reference_plane_gate", "schema": 1, "revision": "CO-106.4",
            "nature": "L2 合格标准覆盖性补全（ch.2「参考平面」）+ 参考平面连续性/板框一致性机判",
            "inputs": {"spec_current": s16(SPEC_CUR), "drawing": s16(DRAWING), "board": s16(BOARD)},
            "base_pins": BASE, "pin_mismatch": mismatch, "checks": checks, "teeth": teeth,
-           "verdict": ("PASS" if hard else
-                        ("FAIL_DECLARED_COPPER_MISSING" if cls_count.get("declared_copper_missing", 0) > 0
-                         else ("INDETERMINATE_REGION_SCOPED" if cls_count else "PASS"))),
+           "verdict": verdict_of(checks_ok, teeth["teeth_ok"], mismatch, cls_count),
+           "checks_ok": checks_ok, "hard": hard,
            "non_claims": ["只读；不改 SPEC/板/阈值/冻结源", "桥区 polygons=[] 的缺失归 CO-98 declared_pending_l3 桶，不在本件重复计缺陷",
                           "一阶判据：点采样（端点+相邻中点）；不做网格/有限元"]}
     Path(a.out).write_text(json.dumps(rec, ensure_ascii=False, indent=1, sort_keys=True) + "\n")
