@@ -1,0 +1,72 @@
+{
+ "artifact": "m13_v57_co138_interpair_scope_probe",
+ "schema": 1,
+ "revision": "CO-138",
+ "nature": "L2 分析（只读）：as-built 对间偏差的耦合几何画像（角度 / 平行耦合长度）",
+ "declared_basis": {
+  "spec_scope": "域外对间长平行；域内（SPEC constraints.escape_transition_zone，ECN-001）按声明放宽 0.075",
+  "step_mm": 0.02,
+  "proximity_mm": 0.1,
+  "note": "「长平行」的**量化阈值**属 SI 域（工程未声明）⇒ 本件只给客观量，不擅自定阈值"
+ },
+ "inputs": {
+  "board": "a3ce9ab803045a0a",
+  "spec": "5f72182a2616392c",
+  "co134_record": "5dd6cc22c57da4a5"
+ },
+ "rows": [
+  {
+   "layer": "B.Cu",
+   "at": [
+    92.15,
+    47.912
+   ],
+   "pairs": [
+    "PCIE_DN_OUT6_N_MCIO",
+    "PCIE_DN_OUT7_P_MCIO"
+   ],
+   "required_edge_mm": 0.41,
+   "min_edge_mm": 0.345,
+   "angle_at_min_deg": 0.0,
+   "coupled_len_mm": 6.923,
+   "parallel_frac_le10deg": 1.0,
+   "parallel_frac_le20deg": 1.0
+  },
+  {
+   "layer": "F.Cu",
+   "at": [
+    137.24,
+    59.575
+   ],
+   "pairs": [
+    "PCIE_DN4_N",
+    "PCIE_DN5_P"
+   ],
+   "required_edge_mm": 0.41,
+   "min_edge_mm": 0.3295,
+   "angle_at_min_deg": 1.1,
+   "coupled_len_mm": 3.766,
+   "parallel_frac_le10deg": 1.0,
+   "parallel_frac_le20deg": 1.0
+  },
+  {
+   "layer": "In5.Cu",
+   "at": [
+    74.75,
+    40.8
+   ],
+   "pairs": [
+    "PCIE_DN_OUT0_N_MCIO",
+    "PCIE_DN_OUT1_P_MCIO"
+   ],
+   "required_edge_mm": 0.32,
+   "min_edge_mm": 0.3125,
+   "angle_at_min_deg": 21.8,
+   "coupled_len_mm": 3.46,
+   "parallel_frac_le10deg": 0.0,
+   "parallel_frac_le20deg": 0.0
+  }
+ ],
+ "verdict": "DATA_ONLY",
+ "redline": "只读；不改板/SPEC/冻结源；无随机、无坐标搜索（固定 0.02mm 步长积分式测量）"
+}
