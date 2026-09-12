@@ -13,7 +13,8 @@ from pathlib import Path
 
 K2 = Path("/home/fila/jqdDev_2025/ic_hw/k2")
 STEP2 = K2 / "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2"
-SPEC = K2 / "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-8.json"
+SPEC = max((K2 / "pm_gate/artifacts/k2_v4/L3").glob("SPEC_k2_v4.spec-rev-*.json"),
+            key=lambda p: int(p.name.split("rev-")[1].split(".")[0]))   # CO-89: 取最新 rev（避免逐版改钉）
 CONST = K2.parent / "_shared/docs/LAYOUT_CONSTITUTION.md"
 OUT = STEP2 / "m13_v57_co87_l2_acceptance_coverage.json"
 # 电流/压降/热 输入的键名或单位特征（刻意排除 power_plane_layer / power_zones 等**几何/分区**键）

@@ -57,10 +57,14 @@ def spec_refs(spec: dict) -> dict:
     ppc = zd.get("power_pad_connect", {})
     ent = {str(e.get("ref")) for e in ppc.get("entries", []) if isinstance(e, dict)}
     blk = {str(e.get("ref")) for e in ppc.get("blocked", []) if isinstance(e, dict)}
-    vias = {str(v.get("ref")) for v in zd.get("decoupling_via_to_plane", {}).get("vias", []) if isinstance(v, dict)}
+    dv = zd.get("decoupling_via_to_plane", {})
+    vias = {str(v.get("ref")) for v in dv.get("vias", []) if isinstance(v, dict)}
+    # 解耦决策集：优先取**结构化** targets（CO-89 起）；vias 为空时不以 prose 串反推 ref（防 P3V3→P3/V3 误抓）
+    targets = {str(x) for x in dv.get("targets", []) if isinstance(x, str)}
     dec = str(spec["pd"].get("decoupling", ""))
-    return {"entries_refs": ent, "blocked_refs": blk, "decoupling_via_refs": vias,
-            "decoupling_string_refs": set(re.findall(r"[A-Z]{1,2}\d{1,3}", dec)), "decoupling": dec}
+    return {"entries_refs": ent, "blocked_refs": blk, "decoupling_via_refs": vias | targets,
+            "decoupling_string_refs": set(), "decoupling": dec,
+            "decoupling_targets": sorted(targets)}
 
 
 def scratch_regeneration(spec_path: Path) -> dict:
@@ -138,20 +142,22 @@ def main() -> int:
                           "declared_blocked": len(declared_blocked), "silent_undecided": len(silent),
                           "silent_list": [f"{r}.{p}" for r, p in silent[:20]],
                           "verdict": "PASS" if not silent else "FAIL"},
-           "C_decoupling": {"field": refs["decoupling"], "refs": sorted(refs["decoupling_string_refs"]),
-                            "missing_on_board": orphans["decoupling_string"],
-                            "verdict": "FAIL" if orphans["decoupling_string"] else "PASS"},
+           "C_decoupling": {"field": refs["decoupling"], "targets": refs["decoupling_targets"],
+                            "n_targets": len(refs["decoupling_targets"]),
+                            "missing_on_board": orphans["decoupling_via"],
+                            "verdict": "PASS" if (refs["decoupling_targets"] and not orphans["decoupling_via"]) else "FAIL"},
            "fix_candidate": scratch_regeneration(spec_path),
            "ripple_checklist_if_spec_bumped": ripple_checklist(),
            "teeth": teeth,
-           "verdict": ("FAIL（L2 SPEC 未达 ch.5 §1/§2/§3）：live PDN 决策引用板上不存在的器件、"
-                       "解耦决策零板实落点、且板实 pad 覆盖需按板重生成"),
+           "verdict": ("PASS（三项均合规：引用全板实 / 板实 pad 全有决策 / 解耦目标板实）"
+                       if not any(orphans.values()) and not silent and orphans["decoupling_via"] == []
+                       else "FAIL（L2 SPEC 未达 ch.5 §1/§2/§3）"),
            "redline": "只读；scratch 即用即删；不改 SPEC/板/阈值；不 partial pass。"}
     OUT.write_text(json.dumps(rec, ensure_ascii=False, indent=1, sort_keys=True), encoding="utf-8")
     print(json.dumps({"verdict": rec["verdict"][:24], "orphan_entries": n_orphan_entries,
                       "orphan_refs": sum(len(v) for v in orphans.values()),
                       "pads": len(pads), "covered": len(covered), "blocked": len(declared_blocked),
-                      "silent": len(silent), "decoupling_missing": orphans["decoupling_string"],
+                      "silent": len(silent), "decoupling_missing": orphans["decoupling_via"],
                       "fix_candidate": rec["fix_candidate"], "teeth": teeth,
                       "ripple": rec["ripple_checklist_if_spec_bumped"]}, ensure_ascii=False))
     return 0
