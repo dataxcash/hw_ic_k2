@@ -1,0 +1,423 @@
+{
+ "artifact": "m13_v57_co131_mcu_vdd_resistor_coverage",
+ "schema": 1,
+ "revision": "CO-131.1",
+ "nature": "MCU_VDD_BCU_RESISTORS_IN4 退载体前置：R29/R31-R34 是否已在 MCU_VDD_WEST 覆盖内（确定性机判）",
+ "host_zone": "MCU_VDD_WEST",
+ "host_polygon": [
+  [
+   23.3,
+   33.3
+  ],
+  [
+   57.75,
+   33.3
+  ],
+  [
+   57.75,
+   78.7
+  ],
+  [
+   23.3,
+   78.7
+  ]
+ ],
+ "host_basis": "覆盖声明目标 R29/R31-R34 东缘 57.55 + POWER clearance 0.2",
+ "targets": [
+  "R29",
+  "R31",
+  "R32",
+  "R33",
+  "R34"
+ ],
+ "margin_mm": 0.2,
+ "rows": [
+  {
+   "target": "R31",
+   "kind": "pd.zone_defs.power_pad_connect.entries[137]:pad_pos",
+   "pos": [
+    55.95,
+    66.5
+   ],
+   "inside": true,
+   "edge_mm": 1.8,
+   "ok": true
+  },
+  {
+   "target": "R31",
+   "kind": "pd.zone_defs.power_pad_connect.entries[137]:via_pos",
+   "pos": [
+    56.725,
+    66.5
+   ],
+   "inside": true,
+   "edge_mm": 1.025,
+   "ok": true
+  },
+  {
+   "target": "R32",
+   "kind": "pd.zone_defs.power_pad_connect.entries[138]:pad_pos",
+   "pos": [
+    55.95,
+    67.5
+   ],
+   "inside": true,
+   "edge_mm": 1.8,
+   "ok": true
+  },
+  {
+   "target": "R32",
+   "kind": "pd.zone_defs.power_pad_connect.entries[138]:via_pos",
+   "pos": [
+    56.725,
+    67.5
+   ],
+   "inside": true,
+   "edge_mm": 1.025,
+   "ok": true
+  },
+  {
+   "target": "R33",
+   "kind": "pd.zone_defs.power_pad_connect.entries[139]:pad_pos",
+   "pos": [
+    55.95,
+    68.5
+   ],
+   "inside": true,
+   "edge_mm": 1.8,
+   "ok": true
+  },
+  {
+   "target": "R33",
+   "kind": "pd.zone_defs.power_pad_connect.entries[139]:via_pos",
+   "pos": [
+    56.725,
+    68.5
+   ],
+   "inside": true,
+   "edge_mm": 1.025,
+   "ok": true
+  },
+  {
+   "target": "R34",
+   "kind": "pd.zone_defs.power_pad_connect.entries[140]:pad_pos",
+   "pos": [
+    55.95,
+    69.5
+   ],
+   "inside": true,
+   "edge_mm": 1.8,
+   "ok": true
+  },
+  {
+   "target": "R34",
+   "kind": "pd.zone_defs.power_pad_connect.entries[140]:via_pos",
+   "pos": [
+    56.725,
+    69.5
+   ],
+   "inside": true,
+   "edge_mm": 1.025,
+   "ok": true
+  },
+  {
+   "target": "R29",
+   "kind": "pd.zone_defs.power_pad_connect.blocked[37]:pad_pos",
+   "pos": [
+    53.95,
+    41.0
+   ],
+   "inside": true,
+   "edge_mm": 3.8,
+   "ok": true
+  },
+  {
+   "target": "R31",
+   "kind": "pd.zone_defs.power_pad_connect.retired_superseded_clearance_v1.entries[138]:pad_pos",
+   "pos": [
+    55.95,
+    66.5
+   ],
+   "inside": true,
+   "edge_mm": 1.8,
+   "ok": true
+  },
+  {
+   "target": "R31",
+   "kind": "pd.zone_defs.power_pad_connect.retired_superseded_clearance_v1.entries[138]:via_pos",
+   "pos": [
+    56.725,
+    66.5
+   ],
+   "inside": true,
+   "edge_mm": 1.025,
+   "ok": true
+  },
+  {
+   "target": "R33",
+   "kind": "pd.zone_defs.power_pad_connect.retired_superseded_clearance_v1.entries[162]:pad_pos",
+   "pos": [
+    55.95,
+    68.5
+   ],
+   "inside": true,
+   "edge_mm": 1.8,
+   "ok": true
+  },
+  {
+   "target": "R33",
+   "kind": "pd.zone_defs.power_pad_connect.retired_superseded_clearance_v1.entries[162]:via_pos",
+   "pos": [
+    56.725,
+    68.5
+   ],
+   "inside": true,
+   "edge_mm": 1.025,
+   "ok": true
+  },
+  {
+   "target": "R32",
+   "kind": "pd.zone_defs.power_pad_connect.retired_superseded_clearance_v1.entries[165]:pad_pos",
+   "pos": [
+    55.95,
+    67.5
+   ],
+   "inside": true,
+   "edge_mm": 1.8,
+   "ok": true
+  },
+  {
+   "target": "R32",
+   "kind": "pd.zone_defs.power_pad_connect.retired_superseded_clearance_v1.entries[165]:via_pos",
+   "pos": [
+    56.725,
+    67.5
+   ],
+   "inside": true,
+   "edge_mm": 1.025,
+   "ok": true
+  },
+  {
+   "target": "R34",
+   "kind": "pd.zone_defs.power_pad_connect.retired_superseded_clearance_v1.entries[171]:pad_pos",
+   "pos": [
+    55.95,
+    69.5
+   ],
+   "inside": true,
+   "edge_mm": 1.8,
+   "ok": true
+  },
+  {
+   "target": "R34",
+   "kind": "pd.zone_defs.power_pad_connect.retired_superseded_clearance_v1.entries[171]:via_pos",
+   "pos": [
+    56.725,
+    69.5
+   ],
+   "inside": true,
+   "edge_mm": 1.025,
+   "ok": true
+  },
+  {
+   "target": "R29",
+   "kind": "pd.zone_defs.power_pad_connect.retired_superseded_clearance_v1.blocked[65]:pad_pos",
+   "pos": [
+    53.95,
+    41.0
+   ],
+   "inside": true,
+   "edge_mm": 3.8,
+   "ok": true
+  },
+  {
+   "target": "R31",
+   "kind": "pd.zone_defs.power_pad_connect.retired_superseded_bom.entries[97]:pad_pos",
+   "pos": [
+    55.95,
+    66.5
+   ],
+   "inside": true,
+   "edge_mm": 1.8,
+   "ok": true
+  },
+  {
+   "target": "R31",
+   "kind": "pd.zone_defs.power_pad_connect.retired_superseded_bom.entries[97]:via_pos",
+   "pos": [
+    56.725,
+    66.5
+   ],
+   "inside": true,
+   "edge_mm": 1.025,
+   "ok": true
+  },
+  {
+   "target": "R32",
+   "kind": "pd.zone_defs.power_pad_connect.retired_superseded_bom.entries[98]:pad_pos",
+   "pos": [
+    55.95,
+    67.5
+   ],
+   "inside": true,
+   "edge_mm": 1.8,
+   "ok": true
+  },
+  {
+   "target": "R32",
+   "kind": "pd.zone_defs.power_pad_connect.retired_superseded_bom.entries[98]:via_pos",
+   "pos": [
+    56.725,
+    67.5
+   ],
+   "inside": true,
+   "edge_mm": 1.025,
+   "ok": true
+  },
+  {
+   "target": "R34",
+   "kind": "pd.zone_defs.power_pad_connect.retired_superseded_bom.entries[99]:pad_pos",
+   "pos": [
+    55.95,
+    69.5
+   ],
+   "inside": true,
+   "edge_mm": 1.8,
+   "ok": true
+  },
+  {
+   "target": "R34",
+   "kind": "pd.zone_defs.power_pad_connect.retired_superseded_bom.entries[99]:via_pos",
+   "pos": [
+    56.725,
+    69.5
+   ],
+   "inside": true,
+   "edge_mm": 1.025,
+   "ok": true
+  },
+  {
+   "target": "R29",
+   "kind": "pd.zone_defs.power_pad_connect.retired_superseded_bom.entries[106]:pad_pos",
+   "pos": [
+    53.95,
+    41.0
+   ],
+   "inside": true,
+   "edge_mm": 3.8,
+   "ok": true
+  },
+  {
+   "target": "R29",
+   "kind": "pd.zone_defs.power_pad_connect.retired_superseded_bom.entries[106]:via_pos",
+   "pos": [
+    53.95,
+    41.825
+   ],
+   "inside": true,
+   "edge_mm": 3.8,
+   "ok": true
+  },
+  {
+   "target": "R33",
+   "kind": "pd.zone_defs.power_pad_connect.retired_superseded_bom.entries[107]:pad_pos",
+   "pos": [
+    55.95,
+    68.5
+   ],
+   "inside": true,
+   "edge_mm": 1.8,
+   "ok": true
+  },
+  {
+   "target": "R33",
+   "kind": "pd.zone_defs.power_pad_connect.retired_superseded_bom.entries[107]:via_pos",
+   "pos": [
+    56.725,
+    68.5
+   ],
+   "inside": true,
+   "edge_mm": 1.025,
+   "ok": true
+  },
+  {
+   "target": "zone#v0",
+   "kind": "zone_via",
+   "pos": [
+    51.0,
+    40.0
+   ],
+   "inside": true,
+   "edge_mm": 6.7,
+   "ok": true
+  },
+  {
+   "target": "zone#v1",
+   "kind": "zone_via",
+   "pos": [
+    50.2,
+    69.5
+   ],
+   "inside": true,
+   "edge_mm": 7.55,
+   "ok": true
+  },
+  {
+   "target": "zone#v2",
+   "kind": "zone_via",
+   "pos": [
+    56.95,
+    70.5
+   ],
+   "inside": true,
+   "edge_mm": 0.8,
+   "ok": true
+  },
+  {
+   "target": "zone#v3",
+   "kind": "zone_via",
+   "pos": [
+    55.95,
+    65.9
+   ],
+   "inside": true,
+   "edge_mm": 1.8,
+   "ok": true
+  },
+  {
+   "target": "zone#v4",
+   "kind": "zone_via",
+   "pos": [
+    55.75,
+    66.7
+   ],
+   "inside": true,
+   "edge_mm": 2.0,
+   "ok": true
+  },
+  {
+   "target": "zone#v5",
+   "kind": "zone_via",
+   "pos": [
+    57.55,
+    68.5
+   ],
+   "inside": true,
+   "edge_mm": 0.2,
+   "ok": true
+  }
+ ],
+ "n_rows": 34,
+ "n_ok": 34,
+ "teeth": {
+  "T1_negative_control_outside": true,
+  "T2_covered_floor": true,
+  "T3_margin_binding": true
+ },
+ "teeth_ok": true,
+ "verdict": "MCU_VDD_RESISTOR_TARGETS_COVERED_BY_WEST",
+ "purpose": "为 rev-17 退役该 zone 的 B.Cu 载体声明提供登记项要求的『先核覆盖』证据",
+ "spec_sha16": "9fea9fd20149c736",
+ "board_sha16": "0e636a67c1472462",
+ "redline": "只读；不改 SPEC/阈值/板/冻结源；零坐标搜索"
+}
