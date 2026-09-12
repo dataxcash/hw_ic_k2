@@ -2,23 +2,23 @@
  "artifact": "m13_v57_co98_reachability_status_report",
  "baseline_expectations": {
   "board": "0e636a67c1472462",
-  "co95_record": "6bba8c878bdc2034",
-  "spec": "188b01deb34c9fba"
+  "co95_record": "7bb1d00b697b0c6e",
+  "spec": "48d6fc7c565c8862"
  },
  "baseline_mismatch": {},
  "baseline_ok": true,
  "co95_summary": {
-  "covered_bridge_target": 8,
-  "covered_explicit": 35,
-  "l3_obligation": 6,
+  "covered_bridge_target": 4,
+  "covered_explicit": 45,
+  "l3_obligation": 0,
   "needs_region_ruling": 6,
   "power_entries": 55,
-  "unresolved_total": 12
+  "unresolved_total": 6
  },
  "inputs": {
   "board": "0e636a67c1472462",
-  "co95_record": "6bba8c878bdc2034",
-  "spec": "188b01deb34c9fba"
+  "co95_record": "7bb1d00b697b0c6e",
+  "spec": "48d6fc7c565c8862"
  },
  "integrity": {
   "classified": 55,
@@ -35,8 +35,8 @@
  "revision": "CO-98.1",
  "ruling_basis": {
   "breakdown": {
-   "machine": 5,
-   "text_only": 1
+   "machine": 6,
+   "text_only": 0
   },
   "rows": [
    {
@@ -80,8 +80,8 @@
     ]
    },
    {
-    "basis": "text_only:declared_in_plane_reachability_status",
-    "machine_derived": false,
+    "basis": "machine:via_inside_other_net_in4_polygon(MCU_VDD:MCU_VDD_WEST)",
+    "machine_derived": true,
     "net": "P3V3_AUX",
     "pad": "R1.2",
     "via_pos": [
@@ -115,8 +115,8 @@
  },
  "teeth_ok": true,
  "three_state": {
-  "declared_pending_l3": 14,
-  "geometric_covered": 35,
+  "declared_pending_l3": 4,
+  "geometric_covered": 45,
   "machine_closable_today": false,
   "note": "declared_pending_l3 = 声明覆盖（zone targets）或 band 退役义务，几何由 L3 确定性派生、当前未建 ⇒ ≠ 已满足；ruling_pending_l1 = 电源域/区域归属裁决。",
   "ruling_pending_l1": 6

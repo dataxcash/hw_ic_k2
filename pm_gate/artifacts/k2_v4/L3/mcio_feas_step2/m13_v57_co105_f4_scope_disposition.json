@@ -9,7 +9,7 @@
  "artifact": "m13_v57_co105_f4_scope_disposition",
  "base_pins": {
   "board": "0e636a67c1472462",
-  "spec_current": "188b01deb34c9fba"
+  "spec_current": "48d6fc7c565c8862"
  },
  "checks": {
   "V1_gnd_has_no_in4_plane": {
@@ -220,7 +220,7 @@
    "spec_candidate_method": "从冻结 wp1_escape_nets 每网 vias 列表(44 个换层 via) + j2_escape_nets 换层点(56) 推导伴行位: 每换层 via 0.6mm 正交 4 向确定性候选(排除 GND 网障碍), 逐障碍按网级净距(PCIe85 0.175/低速 0.1)校验, 取余量最大候选; 逐坐标已对 k2_v4 重建板 pad/segment 几何核对"
   },
   "V4_f3_r1_2_is_l1": {
-   "declared_pending_l3": 14,
+   "declared_pending_l3": 4,
    "note": "6 项 ruling 中 R1.2 依赖自由文本（CO-96 F3），其根因=电源域/区域归属 ⇒ L1（不在本件）",
    "ok": true,
    "ruling_pending_l1": 6
@@ -228,8 +228,8 @@
  },
  "inputs": {
   "board": "0e636a67c1472462",
-  "co98_record": "48b5bd29009a9eb8",
-  "spec_current": "188b01deb34c9fba"
+  "co98_record": "4c6cbfdb48cf03ad",
+  "spec_current": "48d6fc7c565c8862"
  },
  "nature": "L2 自裁（PDN 建模）：CO-96 F4（可达性 requirement scope）落定 = 语义不可适用 + 几何待 L3（无需扩展动作）",
  "pin_mismatch": {},

@@ -7,10 +7,10 @@
   "sha16": "3b0a8550e61a7637"
  },
  "input_absence_scan": {
-  "n_spec_fields_scanned": 8542,
+  "n_spec_fields_scanned": 8565,
   "requirement_source": "LAYOUT_CONSTITUTION.md ch.5 §4（PDN 压降达标）/ ch.2（L2 裁判标准含 热）",
   "spec_rev8_hits": [],
-  "spec_sha16": "188b01deb34c9fba"
+  "spec_sha16": "48d6fc7c565c8862"
  },
  "matrix": [
   {
@@ -29,7 +29,7 @@
    "status": "CLOSED"
   },
   {
-   "evidence": "CO-106 参考平面连续性闸 verdict=INDETERMINATE_REGION_SCOPED；declared_copper_missing=0；残余 {'In5.Cu<-In4.Cu': 54} ⇒ CO-110 判为按设计 In4 走廊空洞（bridge zone = B.Cu）",
+   "evidence": "CO-106 参考平面连续性闸 verdict=INDETERMINATE_REGION_SCOPED；declared_copper_missing=0；残余 {'In5.Cu<-In4.Cu': 1} = CO-117 band 归属后的 **0.2mm POWER 异网净距缝**（原『走廊空洞 = 按设计』判定已由 CO-115 更正为失效 keepout 残留、CO-117 按网归属铺设）；In5 走廊阻抗终判 = SI9000 + 板厂阻抗券",
    "item": "参考平面（ch.2 L2 裁判标准）",
    "status": "INDETERMINATE"
   },
@@ -106,7 +106,7 @@
  "teeth": {
   "ch2_criteria_all_have_rows": true,
   "requirement_text_found_in_constitution": true,
-  "spec_scan_field_floor": 8542,
+  "spec_scan_field_floor": 8565,
   "synthetic_current_detected": true
  },
  "verdict": "L2 结构决策已终结（CO-63..CO-86），但 ch.5 §4 数学闭合的 **PDN 压降** 与 ch.2 的 **热** **NOT_DEMONSTRATED（缺输入）** ⇒ 显式登记，不得当作已闭合；本件不代填假设值。"

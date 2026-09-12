@@ -1,0 +1,212 @@
+{
+ "allocation": {
+  "MCU_VDD_WEST_east_edge": {
+   "after": 57.75,
+   "before": 49.8
+  },
+  "P3V3_EAST_west_edge": {
+   "after": 57.95,
+   "before": 88.37
+  },
+  "chosen": "free_gap → P3V3（东侧既有权域）",
+  "forced_interval": {
+   "MCU_VDD_east_min": 57.75,
+   "P3V3_west_max": 85.2
+  },
+  "free_gap": [
+   57.75,
+   85.2
+  ],
+  "interface_mid_x": 57.85
+ },
+ "artifact": "m13_v57_co117_band_allocation_rev15",
+ "findings_addressed": {
+  "F-1": "rev-14 错误键 in4_corridor_void_by_design_v1 已退役留存，取代键 = in4_band_copper_allocation_v1",
+  "F-2": "co87 矩阵『参考平面』行证据文本陈旧（下同→由 CO-117b 随重基线重跑 co87 一并更正）",
+  "F-3": "CO-113 记录 new_keys 少声明 bcu_bridge_bands_source：本件记录显式补登（历史 CO-113 记录按红线不改）",
+  "F-4": "CO-111 措辞『无逐线阻抗核验字段』应收敛为『区域条件阻抗未验』：本件记录显式补正（历史 CO-111 记录按红线不改）",
+  "F-6": "4 记录 5 处 inputs.*_record provenance pin：由重基线重跑相应闸记录刷新（见 co117 记录 spec_chain 段）"
+ },
+ "historical_pins": {
+  "note": "F-6：下列 inter-record provenance pin 指向已被取代的上游记录版本（被引值均为 git 内真实历史版本，非伪造）；记录本体已由 CO-115/CO-117 取代 ⇒ 按红线『历史工件不改』显式标注为**历史 pin**，不回写、不重跑。live 链 pin（co98←co95 / co105←co98）已于本次重基线刷新。",
+  "pins": [
+   {
+    "cited": "fa0ef14cb38dcb1c",
+    "file": "m13_v57_co109_in4_void_l2_ruling.json",
+    "key": "co106_record"
+   },
+   {
+    "cited": "fa0ef14cb38dcb1c",
+    "file": "m13_v57_co110_l2_coverage_closure.json",
+    "key": "co106_record"
+   },
+   {
+    "cited": "dd562f526705abef",
+    "file": "m13_v57_co110_l2_coverage_closure.json",
+    "key": "co109_record"
+   },
+   {
+    "cited": "d4849456357c84cc",
+    "file": "m13_v57_co110_l2_coverage_closure.json",
+    "key": "co87_record"
+   },
+   {
+    "cited": "9ae53dbf3cfc48e1",
+    "file": "m13_v57_co112_bcu_bridge_declaration.json",
+    "key": "co111_record"
+   },
+   {
+    "cited": "73f9b59ed5f6f3ce",
+    "file": "m13_v57_co111_in5_pcie_corridor_exposure.json",
+    "key": "l5_si_record"
+   }
+  ]
+ },
+ "in5_reference": {
+  "note": "CO-111 的 In5 单参考暴露在**声明模型内**归零；实体 In4 铜 = L3 施工派生",
+  "residual_width_mm": 0.2,
+  "rev14_total_mm": 2727.316,
+  "rev14_unref_mm": 1094.812,
+  "rev14_unref_pct": 0.4014,
+  "rev15_residual_midpoints_x": [
+   57.9229
+  ],
+  "rev15_total_mm": 2727.316,
+  "rev15_unref_mm": 5.846,
+  "rev15_unref_pct": 0.0021
+ },
+ "l2_si_note": "残余 0.2mm 缝 = **POWER 异网净距（强制，不可消除）**的参考平面分割；In5 走线跨越该分割 属**新增 L2 登记 SI 项**，终判 = SI9000 + 板厂阻抗券（不得以假设值代填）",
+ "level": {
+  "basis": "《宪法》ch.2：L2=走廊分配/PDN 架构，L2 裁判标准含『参考平面』；冻结 L1=粗分区+域集合，本件域集合不变 ⇒ L2（先例 CO-74：层数/平面数/电源域集合/信号层数全不变 ⇒ L2）",
+  "ruling": "L2",
+  "supersedes": "CO-115/CO-116 的『band 归属 = L1』归口（判定过高）"
+ },
+ "nature": "L2 自裁施加：band In4 铺铜归属分配 + SPEC rev-15（更正 rev-14 错误键 + 闭合 In5 走廊参考缺失）",
+ "out": "SPEC_k2_v4.spec-rev-15.json",
+ "out_sha16": "48d6fc7c565c8862",
+ "redline": "不改板/阈值/冻结源；历史工件不改；零坐标搜索；L3 几何不代填",
+ "revision": "CO-117.1",
+ "schema": 1,
+ "spec_changes": {
+  "board_untouched": true,
+  "changed_paths": [
+   ".pd.zone_defs.in4_band_copper_allocation_v1.allocation[0].basis",
+   ".pd.zone_defs.in4_band_copper_allocation_v1.allocation[0].net",
+   ".pd.zone_defs.in4_band_copper_allocation_v1.allocation[0].x_range[0]",
+   ".pd.zone_defs.in4_band_copper_allocation_v1.allocation[0].x_range[1]",
+   ".pd.zone_defs.in4_band_copper_allocation_v1.allocation[0].zone",
+   ".pd.zone_defs.in4_band_copper_allocation_v1.allocation[1].basis",
+   ".pd.zone_defs.in4_band_copper_allocation_v1.allocation[1].net",
+   ".pd.zone_defs.in4_band_copper_allocation_v1.allocation[1].x_range[0]",
+   ".pd.zone_defs.in4_band_copper_allocation_v1.allocation[1].x_range[1]",
+   ".pd.zone_defs.in4_band_copper_allocation_v1.allocation[1].zone",
+   ".pd.zone_defs.in4_band_copper_allocation_v1.band_x[0]",
+   ".pd.zone_defs.in4_band_copper_allocation_v1.band_x[1]",
+   ".pd.zone_defs.in4_band_copper_allocation_v1.band_y[0]",
+   ".pd.zone_defs.in4_band_copper_allocation_v1.band_y[1]",
+   ".pd.zone_defs.in4_band_copper_allocation_v1.corridor_x[0]",
+   ".pd.zone_defs.in4_band_copper_allocation_v1.corridor_x[1]",
+   ".pd.zone_defs.in4_band_copper_allocation_v1.domain_set_unchanged[0]",
+   ".pd.zone_defs.in4_band_copper_allocation_v1.domain_set_unchanged[1]",
+   ".pd.zone_defs.in4_band_copper_allocation_v1.domain_set_unchanged[2]",
+   ".pd.zone_defs.in4_band_copper_allocation_v1.interface_mid_x",
+   ".pd.zone_defs.in4_band_copper_allocation_v1.l3_derivation",
+   ".pd.zone_defs.in4_band_copper_allocation_v1.level_basis",
+   ".pd.zone_defs.in4_band_copper_allocation_v1.note",
+   ".pd.zone_defs.in4_band_copper_allocation_v1.refs[0]",
+   ".pd.zone_defs.in4_band_copper_allocation_v1.refs[1]",
+   ".pd.zone_defs.in4_band_copper_allocation_v1.refs[2]",
+   ".pd.zone_defs.in4_band_copper_allocation_v1.refs[3]",
+   ".pd.zone_defs.in4_corridor_void_by_design_v1.corridor_x[0]",
+   ".pd.zone_defs.in4_corridor_void_by_design_v1.corridor_x[1]",
+   ".pd.zone_defs.in4_corridor_void_by_design_v1.disposition",
+   ".pd.zone_defs.in4_corridor_void_by_design_v1.evidence_in5_pcie.in5_len_mm",
+   ".pd.zone_defs.in4_corridor_void_by_design_v1.evidence_in5_pcie.n_nets",
+   ".pd.zone_defs.in4_corridor_void_by_design_v1.evidence_in5_pcie.unref_len_mm",
+   ".pd.zone_defs.in4_corridor_void_by_design_v1.evidence_in5_pcie.unref_pct",
+   ".pd.zone_defs.in4_corridor_void_by_design_v1.frame_y[0]",
+   ".pd.zone_defs.in4_corridor_void_by_design_v1.frame_y[1]",
+   ".pd.zone_defs.in4_corridor_void_by_design_v1.in4_declared_copper_x_ranges.MCU_VDD_WEST[0]",
+   ".pd.zone_defs.in4_corridor_void_by_design_v1.in4_declared_copper_x_ranges.MCU_VDD_WEST[1]",
+   ".pd.zone_defs.in4_corridor_void_by_design_v1.in4_declared_copper_x_ranges.P3V3_EAST[0]",
+   ".pd.zone_defs.in4_corridor_void_by_design_v1.in4_declared_copper_x_ranges.P3V3_EAST[1]",
+   ".pd.zone_defs.in4_corridor_void_by_design_v1.note",
+   ".pd.zone_defs.in4_corridor_void_by_design_v1.refs[0]",
+   ".pd.zone_defs.in4_corridor_void_by_design_v1.refs[1]",
+   ".pd.zone_defs.in4_corridor_void_by_design_v1.refs[2]",
+   ".pd.zone_defs.in4_corridor_void_by_design_v1.refs[3]",
+   ".pd.zone_defs.plane_reachability_status.na_scope_v1.in5_corridor_reference.note",
+   ".pd.zone_defs.plane_reachability_status.na_scope_v1.in5_corridor_reference.ref",
+   ".pd.zone_defs.plane_reachability_status.na_scope_v1.in5_corridor_reference.supersedes",
+   ".pd.zone_defs.plane_reachability_status.resolved_by_co117[0].how",
+   ".pd.zone_defs.plane_reachability_status.resolved_by_co117[0].net",
+   ".pd.zone_defs.plane_reachability_status.resolved_by_co117[0].pads[0]",
+   ".pd.zone_defs.plane_reachability_status.resolved_by_co117[0].pads[1]",
+   ".pd.zone_defs.plane_reachability_status.resolved_by_co117[0].pads[2]",
+   ".pd.zone_defs.plane_reachability_status.resolved_by_co117[0].pads[3]",
+   ".pd.zone_defs.plane_reachability_status.resolved_by_co117[0].pads[4]",
+   ".pd.zone_defs.plane_reachability_status.resolved_by_co117[0].pads[5]",
+   ".pd.zone_defs.plane_reachability_status.unresolved[1].net",
+   ".pd.zone_defs.plane_reachability_status.unresolved[1].pads[0]",
+   ".pd.zone_defs.plane_reachability_status.unresolved[1].pads[1]",
+   ".pd.zone_defs.plane_reachability_status.unresolved[1].pads[2]",
+   ".pd.zone_defs.plane_reachability_status.unresolved[1].pads[3]",
+   ".pd.zone_defs.plane_reachability_status.unresolved[1].pads[4]",
+   ".pd.zone_defs.plane_reachability_status.unresolved[1].pads[5]",
+   ".pd.zone_defs.plane_reachability_status.unresolved[1].why",
+   ".pd.zone_defs.plane_reachability_status.unresolved[2].net",
+   ".pd.zone_defs.plane_reachability_status.unresolved[2].pads[0]",
+   ".pd.zone_defs.plane_reachability_status.unresolved[2].pads[1]",
+   ".pd.zone_defs.plane_reachability_status.unresolved[2].pads[2]",
+   ".pd.zone_defs.plane_reachability_status.unresolved[2].why",
+   ".pd.zone_defs.power_zones[0].polygon[0][0]",
+   ".pd.zone_defs.power_zones[0].polygon[3][0]",
+   ".pd.zone_defs.power_zones[1].polygon[1][0]",
+   ".pd.zone_defs.power_zones[1].polygon[2][0]",
+   ".pd.zone_defs.retired_in4_corridor_void_by_design_v1.corridor_x[0]",
+   ".pd.zone_defs.retired_in4_corridor_void_by_design_v1.corridor_x[1]",
+   ".pd.zone_defs.retired_in4_corridor_void_by_design_v1.disposition",
+   ".pd.zone_defs.retired_in4_corridor_void_by_design_v1.evidence_in5_pcie.in5_len_mm",
+   ".pd.zone_defs.retired_in4_corridor_void_by_design_v1.evidence_in5_pcie.n_nets",
+   ".pd.zone_defs.retired_in4_corridor_void_by_design_v1.evidence_in5_pcie.unref_len_mm",
+   ".pd.zone_defs.retired_in4_corridor_void_by_design_v1.evidence_in5_pcie.unref_pct",
+   ".pd.zone_defs.retired_in4_corridor_void_by_design_v1.frame_y[0]",
+   ".pd.zone_defs.retired_in4_corridor_void_by_design_v1.frame_y[1]",
+   ".pd.zone_defs.retired_in4_corridor_void_by_design_v1.in4_declared_copper_x_ranges.MCU_VDD_WEST[0]",
+   ".pd.zone_defs.retired_in4_corridor_void_by_design_v1.in4_declared_copper_x_ranges.MCU_VDD_WEST[1]",
+   ".pd.zone_defs.retired_in4_corridor_void_by_design_v1.in4_declared_copper_x_ranges.P3V3_EAST[0]",
+   ".pd.zone_defs.retired_in4_corridor_void_by_design_v1.in4_declared_copper_x_ranges.P3V3_EAST[1]",
+   ".pd.zone_defs.retired_in4_corridor_void_by_design_v1.note",
+   ".pd.zone_defs.retired_in4_corridor_void_by_design_v1.refs[0]",
+   ".pd.zone_defs.retired_in4_corridor_void_by_design_v1.refs[1]",
+   ".pd.zone_defs.retired_in4_corridor_void_by_design_v1.refs[2]",
+   ".pd.zone_defs.retired_in4_corridor_void_by_design_v1.refs[3]",
+   ".pd.zone_defs.retired_in4_corridor_void_by_design_v1.retired_by",
+   ".pd.zone_defs.retired_in4_corridor_void_by_design_v1.retired_reason",
+   ".spec_version"
+  ],
+  "new_keys": [
+   "pd.zone_defs.in4_band_copper_allocation_v1",
+   "pd.zone_defs.retired_in4_corridor_void_by_design_v1",
+   "pd.zone_defs.plane_reachability_status.resolved_by_co117"
+  ],
+  "polygons_changed": [
+   "power_zones[0].polygon(P3V3_EAST)",
+   "power_zones[1].polygon(MCU_VDD_WEST)"
+  ],
+  "thresholds_unchanged": true,
+  "vias_unchanged": true,
+  "whitelist_ok": true
+ },
+ "src": "SPEC_k2_v4.spec-rev-14.json",
+ "src_sha16": "188b01deb34c9fba",
+ "teeth": {
+  "exposure_positive_control_rev14": true,
+  "exposure_reduced_ge_99pct": true,
+  "free_gap_nonempty": true,
+  "inter_net_clearance_exact": true,
+  "residual_confined_to_clearance_sliver": true,
+  "teeth_ok": true
+ },
+ "verdict": "L2_ALLOCATED_REV15_WRITTEN"
+}

@@ -88,7 +88,9 @@ def main() -> int:
         _b = _c106["checks"]["B_reference_continuity"]
         rp_ev = (f"CO-106 参考平面连续性闸 verdict={_c106.get('verdict')}；"
                  f"declared_copper_missing={_b.get('n_declared_copper_missing_points')}；"
-                 f"残余 {_b.get('violations_per_layer_ref')} ⇒ CO-110 判为按设计 In4 走廊空洞（bridge zone = B.Cu）")
+                 f"残余 {_b.get('violations_per_layer_ref')} = CO-117 band 归属后的 **0.2mm POWER 异网净距缝**"
+                 f"（原『走廊空洞 = 按设计』判定已由 CO-115 更正为失效 keepout 残留、CO-117 按网归属铺设）；"
+                 f"In5 走廊阻抗终判 = SI9000 + 板厂阻抗券")
         rp_status = "INDETERMINATE"
     except Exception as _ex:
         rp_ev, rp_status = f"CO-106 记录不可读：{_ex}", "UNDETERMINED"
