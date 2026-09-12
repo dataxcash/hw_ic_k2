@@ -25,13 +25,15 @@ from pathlib import Path
 import pcbnew
 
 K2 = Path(__file__).resolve().parents[1]
-SHARED = K2.parent / "_shared"
+SHARED = K2 / "_shared"                 # k2 链约定：tools/* 一律读 K2/_shared
+SHARED_ALT = K2.parent / "_shared"      # 容器共享层（handoff §1 的冻结源口径）
 sys.path.insert(0, str(SHARED))
 DEFAULT_SPEC = K2 / "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-9.json"
 DEFAULT_BOARD = K2 / "k2_v4_8L.l4.kicad_pcb"
 DEFAULT_OUT = (K2 / "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2"
                / "m13_v57_co91_pdn_planned_coord_clearance_gate.json")
 RULES = SHARED / "eda_core/drc_rules.json"
+RULES_ALT = SHARED_ALT / "eda_core/drc_rules.json"
 STUB_W = 0.5
 
 
@@ -229,6 +231,12 @@ def main(argv=None) -> int:
     import eda_core.pdn_apply as pa
 
     rules = Rules(json.loads(RULES.read_text()))
+    # 规则源唯一性（fail-closed）：k2/_shared 与容器 _shared 的 drc_rules 必须同字节；
+    # 若漂移则本闸不可判（verdict=FAIL），避免「以哪份规则判」歧义。
+    cons = {"k2_shared": str(RULES.relative_to(K2.parent)), "k2_shared_sha16": s16(RULES),
+            "container_shared": str(RULES_ALT.relative_to(K2.parent)),
+            "container_shared_sha16": s16(RULES_ALT),
+            "agree": s16(RULES) == s16(RULES_ALT)}
     board = pcbnew.LoadBoard(a.board)
     sp, bp = Path(a.spec), Path(a.board)
     zd = json.loads(sp.read_text())["pd"]["zone_defs"]
@@ -294,19 +302,22 @@ def main(argv=None) -> int:
     by_kind = {k: {"n": sum(1 for r in rows if r["kind"] == k),
                    "n_viol": sum(1 for r in bad if r["kind"] == k)}
                for k in sorted({r["kind"] for r in rows})}
-    verd = "FAIL" if (bad or sbad) else "PASS"
+    verd = "PASS" if (not bad and not sbad and cons["agree"]) else "FAIL"
     rec = {"artifact": "m13_v57_co91_pdn_planned_coord_clearance_gate", "schema": 1,
            "revision": "CO-91.1",
            "nature": "L2 PDN：pd.zone_defs 计划坐标（pdn_apply 实落集）对权威净距（netclass clearance + min_hole_clearance）的机判",
            "inputs": {"spec": sp.name, "spec_sha16": s16(sp), "board": bp.name,
                       "board_sha16": s16(bp), "rules": RULES.name, "rules_sha16": s16(RULES),
+                      "rules_source_consistency": cons,
                       "via_dia": pa.VIA_DIA, "via_drill": pa.VIA_DRILL, "stub_width": STUB_W,
                       "materializer": "eda_core/pdn_apply.py（坐标逐字取自 SPEC）"},
            "counts": {"by_kind": by_kind, "n_via_targets": len(rows), "n_via_violations": len(bad),
                       "n_stub_targets": len(srows), "n_stub_violations": len(sbad)},
            "via_violations": sorted(bad, key=lambda r: (r["kind"], r["ref"], str(r["pad"]))),
            "stub_violations": sorted(sbad, key=lambda r: r["clr_margin"]),
-           "fix_candidate": fx, "teeth": teeth, "verdict": verd,
+           "fix_candidate": fx, "teeth": teeth,
+           "verdict": verd if cons["agree"] else "FAIL(规则源漂移，不可判)",
+           "rules_source_note": "k2/_shared 与容器 _shared 的 drc_rules 必须同字节；本闸据此断言（fail-closed）。",
            "non_claims": ["不改 SPEC/板/阈值/冻结源；不改 _shared 引擎模型（只登记修复候选）",
                           "判『计划坐标』；板未施工（PDN 实体 = L3 派生）⇒ 非『已交付板不合规』",
                           "引擎净距口径借用 drc_rules.json 语义核（已对齐 kicad DRC 430/430 + 106/106）"],

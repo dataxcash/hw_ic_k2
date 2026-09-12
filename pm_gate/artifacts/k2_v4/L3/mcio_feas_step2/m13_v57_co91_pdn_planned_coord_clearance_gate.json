@@ -559,6 +559,13 @@
     "materializer": "eda_core/pdn_apply.py（坐标逐字取自 SPEC）",
     "rules": "drc_rules.json",
     "rules_sha16": "0a459839e15960b8",
+    "rules_source_consistency": {
+      "agree": true,
+      "container_shared": "_shared/eda_core/drc_rules.json",
+      "container_shared_sha16": "0a459839e15960b8",
+      "k2_shared": "k2/_shared/eda_core/drc_rules.json",
+      "k2_shared_sha16": "0a459839e15960b8"
+    },
     "spec": "SPEC_k2_v4.spec-rev-9.json",
     "spec_sha16": "77f5c54df88bb0ca",
     "stub_width": 0.5,
@@ -573,6 +580,7 @@
   ],
   "redline": "零几何（只读）；无 while 搜索；无坐标搜索；输出确定性（sorted）。",
   "revision": "CO-91.1",
+  "rules_source_note": "k2/_shared 与容器 _shared 的 drc_rules 必须同字节；本闸据此断言（fail-closed）。",
   "schema": 1,
   "stub_violations": [
     {

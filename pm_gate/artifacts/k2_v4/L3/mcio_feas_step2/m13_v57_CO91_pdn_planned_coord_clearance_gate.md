@@ -1,7 +1,7 @@
 # CO-91（L2 自裁 · PDN 计划坐标净距）— `pdn_apply` 实落集的**权威净距闸** = **FAIL**
 
-> 日期 2026-09-12｜工具 `tools/p3_v57_co91_pdn_planned_coord_clearance_gate.py` `4c5c6de9e1056096`（需 AppDir pcbnew；只读 + 确定性）
-> 记录 `m13_v57_co91_pdn_planned_coord_clearance_gate.json` `14307586ac0439cc`｜SPEC **rev-9** `77f5c54df88bb0ca`｜板 `0e636a67c1472462`｜规则源 `_shared/eda_core/drc_rules.json` `0a459839e15960b8`
+> 日期 2026-09-12｜工具 `tools/p3_v57_co91_pdn_planned_coord_clearance_gate.py` `2fb35b544e41f748`（需 AppDir pcbnew；只读 + 确定性）
+> 记录 `m13_v57_co91_pdn_planned_coord_clearance_gate.json` `94ff582e4b23d7d1`｜SPEC **rev-9** `77f5c54df88bb0ca`｜板 `0e636a67c1472462`｜规则源 `_shared/eda_core/drc_rules.json` `0a459839e15960b8`
 
 ## 1. 立件理由（覆盖缺口）
 CO-88 判定 `pd.zone_defs` 机读决策的**板实性**（引用存在性 / 覆盖性 / 解耦落点），CO-89 把 SPEC 升到 rev-9 板实化，
@@ -16,6 +16,8 @@ CO-90（pass 3/3）复核 rev-9 事实与 CO-89 幂等（V6：重跑发生器 `2
 - via 尺寸取自实化器常量 `eda_core.pdn_apply.VIA_DIA=0.35 / VIA_DRILL=0.2`（本闸断言一致，非自定）。
 - **层语义**（`drc_rules.layer_interaction`：两元素共享任一铜层才检）：via 可为盲/埋孔 ⇒ 判定段时必须做**层集相交**。
 - 几何精确：pad = 轴对齐外接矩形、via = 圆、段 = 线段（rect-vs-seg / seg-vs-seg 精确，非采样）。
+- **规则源唯一性（fail-closed）**：`K2/_shared`（k2 链约定，`tools/*` 一致）与容器 `_shared`（handoff §1 冻结源口径）的 `drc_rules.json`
+  必须**同字节**；本闸记录两路 sha 并断言一致，**漂移即不可判**（verdict=FAIL）。实测两路同值 `0a459839e15960b8`。
 
 ## 3. 结果（rev-9 × 交付板；verdict = **FAIL**）
 | 实落集 | 目标数 | 违规 | 例（净距余量 mm） |
@@ -44,6 +46,8 @@ CO-90（pass 3/3）复核 rev-9 事实与 CO-89 幂等（V6：重跑发生器 `2
 ## 6. 自我捕获（本件自查两处检测器缺陷，均在发布前修正）
 - 首版**忽略层语义**（`layer_interaction`）⇒ 把 F.Cu 短段与 B.Cu 走线误判为冲突：短段违规 107 → **75**（29 例假阳）。
 - 进一步发现障碍可为**盲孔**（例：`PCIE_UP_OUT0_N_J2` 为 In5→B.Cu）⇒ 对 F.Cu 短段**无共享层**、不构成冲突；补层集相交后 78 → **75**。
+- 第三处（本件自查）：首版读容器 `_shared` 而非 k2 链约定的 `K2/_shared` ⇒ 规则源在闸内**有歧义**（两处内容当时同字节故判定未受影响）。
+  修正为 k2 约定 + **双源同字节断言（fail-closed）**，并作为 CO-91.2 记录入册（`94ff582e4b23d7d1`）。
 - 独立交叉验证：**`kicad-cli pcb drc` 对交付板 = 42 条（全部 lib_footprint_* / silk_edge），铜层违规 0** ⇒ 交付板本身干净，本件判的是**计划坐标**，不是已交付板。
 
 ## 7. 非声明 / 残余
