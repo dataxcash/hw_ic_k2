@@ -15,5 +15,6 @@
 | F1_co77_no_mismatch | True |
 | REG_co124_label_closed | True |
 | REG_co106_tooth_closed | True |
+| H4_ledger_upsert_only | True |
 
 登记簿：新增并关闭 2 条 TOOL_DEFECT；OPEN 仍 1（as-built 偏差，待外部输入）。

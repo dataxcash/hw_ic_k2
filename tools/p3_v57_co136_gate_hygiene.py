@@ -11,7 +11,7 @@
 CLI: python3 tools/p3_v57_co136_gate_hygiene.py
 """
 from __future__ import annotations
-import hashlib, json
+import hashlib, json, re
 from pathlib import Path
 
 K2 = Path(__file__).resolve().parents[1]
@@ -19,6 +19,21 @@ L2 = K2 / "pm_gate/artifacts/k2_v4/L2"
 S2 = K2 / "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2"
 REC = S2 / "m13_v57_co136_gate_hygiene.json"
 CARD = S2 / "m13_v57_CO136_gate_hygiene.md"
+
+
+# CO-157（H-4）：R-CO156-3 的**机判** —— 写台账的工具必须先读台账（禁止整表重写）。
+# 说明：这是**源码级**守卫（静态、启发式），只保证「未读即写」不再出现；不替代语义审查。
+_LED_WRITE = re.compile(r"^\s*(LED|LEDGER)\s*\.write_text", re.M)
+_LED_READ = re.compile(r"(LED|LEDGER)\s*\.read_text")
+
+
+def ledger_upsert_violations(tools_dir, extra_sources=None) -> list:
+    """返回「写台账但未先读台账」的工具名（R-CO156-3 违规面）。"""
+    srcs = {f.name: f.read_text(encoding="utf-8", errors="replace")
+            for f in sorted(Path(tools_dir).glob("p3_v57_*.py"))}
+    if extra_sources:
+        srcs.update(extra_sources)
+    return sorted(n for n, src in srcs.items() if _LED_WRITE.search(src) and not _LED_READ.search(src))
 
 
 def s16(p) -> str:
@@ -45,11 +60,18 @@ def main() -> int:
                                   and regf.get("tool_defect:co124_definition_doc_version_label", {}).get("status") == "CLOSED",
         "REG_co106_tooth_closed": regf.get("tool_defect:co106_continuity_tooth_stale_point", {}).get("kind") == "TOOL_DEFECT"
                                   and regf.get("tool_defect:co106_continuity_tooth_stale_point", {}).get("status") == "CLOSED",
+        "H4_ledger_upsert_only": ledger_upsert_violations(K2 / "tools") == [],
     }
-    verdict = "PASS" if all(checks.values()) else "FAIL"
+    # CO-157（H-4）牙齿：合成「只写不读」源码必被抓；合成「读后写」必须放行
+    h4_neg_hit = "synthetic_write_only.py" in ledger_upsert_violations(
+        K2 / "tools", extra_sources={"synthetic_write_only.py": 'LED.write_text("x")\n'})
+    h4_pos_ok = ledger_upsert_violations(
+        K2 / "tools", extra_sources={"synthetic_upsert.py": "led = LED.read_text()\nLED.write_text(led)\n"}) == []
+    teeth = {"H4_negative_control_write_only_caught": h4_neg_hit, "H4_positive_control_upsert_ok": h4_pos_ok}
+    verdict = "PASS" if (all(checks.values()) and h4_neg_hit and h4_pos_ok) else "FAIL"
     rec = {
-        "artifact": "m13_v57_co136_gate_hygiene", "schema": 1, "revision": "CO-136",
-        "nature": "L2 自裁 · 闸卫生续：关闭 CO-135 F5(b)/F6、强化 F1 牙齿、登记簿闭环",
+        "artifact": "m13_v57_co136_gate_hygiene", "schema": 1, "revision": "CO-136.1",
+        "nature": "L2 自裁 · 闸卫生续：关闭 CO-135 F5(b)/F6、强化 F1 牙齿、登记簿闭环；CO-157 增 R-CO156-3 机判（台账 upsert-only 源码守卫）",
         "closed_findings": {
             "F6": {"target": "co106 continuity tooth", "fix": "数据无关合成正/负控", "rev": "CO-106.2",
                    "teeth": co106["teeth"]},
@@ -58,7 +80,7 @@ def main() -> int:
             "F1": {"target": "co77 表格行 citation 覆盖", "fix": "正则扩内联+表格 + 负控牙齿", "rev": co77["revision"],
                    "teeth": co77["teeth"]},
         },
-        "checks": checks, "verdict": verdict,
+        "checks": checks, "teeth": teeth, "verdict": verdict,
         "redline": "只读；不改 SPEC/板/冻结源；零坐标搜索；本记录不读 boundary（可被 §14 引用）",
         # 注：不放 co77 记录 sha —— 其含 boundary doc_sha16 ⇒ 与「§14 引用本记录」形成传递不动点。
     }

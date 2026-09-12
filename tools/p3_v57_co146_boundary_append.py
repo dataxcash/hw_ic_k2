@@ -451,12 +451,56 @@ def main() -> int:
         txt = re.sub(re.escape(MARK31) + r"[\s\S]*?(?=\n## |\Z)", body31, txt, count=1)
     else:
         txt = txt.rstrip("\n") + "\n\n" + body31
+    # ── §32 CO-157（查漏型闸硬化 3） ────────────────────────────────────────
+    MARK32 = "## 32. CO-157"
+    _rc32 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    sec32 = [MARK32 + "（**L2 自裁 · 查漏型闸硬化（第 3 轮）**：4 项实测缺口 H-1..H-4 全处置）", "",
+             "| # | 实测缺口（修前） | 处置 | 状态 |", "|---|---|---|---|",
+             "| H-1 | K9 `process_floor`（`derived_value_evidence_bad`）与 `identity_unparsable` **无负控牙齿**（判据存在但无回归保护） | "
+             "T17/T17b + **元牙齿** T18（逐 finder id 注入，断言全覆盖）/T18b/T18c ⇒ 牙齿 24→**29** | **CLOSED** |",
+             "| H-2 | 判据声明失实：CO-153 称 `declared`「与 process_floor 同口径」，实际后者不验 basis/key_path | "
+             "co124 注释就地订正（declared **严于** process_floor）+ 本 §32 记录 | **CLOSED** |",
+             "| H-3 | co120 `board_superseded` 弱判：任意自由文本（`board=\"superseded\"`）即可成立豁免 | "
+             "收严为**板 sha16 格式**（`[0-9a-f]{16}`）且 ≠ 交付板 + 负控/正控牙齿；co120 升 **CO-120.4** | **CLOSED** |",
+             "| H-4 | R-CO156-3（禁整表重写台账）**无机判**（仅声明） | co136 增源码守卫 `H4_ledger_upsert_only`（写台账须先读）+ 正负控；co136 升 **CO-136.1** | **CLOSED** |", "",
+             f"- 复核：co124 = **PASS / findings 0 / 牙齿 29/29**；co120 = **PASS**（basis_not_ok 0 / teeth 9-9）；co136 = **PASS**；登记簿 "
+             f"**{_rc32['total']} 项 / OPEN {_rc32['OPEN']}**。", "",
+             "> **R-CO157-1**（取代 R-CO156-1 的复现序）：规范复现序 = `co146_impedance_table → co146_pm_eval → co146_ledger_add → "
+             "co153_k9_domain_coverage → co148_u6_datasheet_inputs → co148_thermal_ruling → co149_thermal_mitigation_derive → "
+             "co147_l2_ruling → co146_jlc_dfm_gate → co152_findings_disposition → co155_co154_findings_disposition → "
+             "co156_co154_open_disposition → **co157_gate_hardening_3** → co124_input_selfcheck_gate → co150_k9_domain_gate → "
+             "co146_boundary_append → co77_closure_declaration_sweep → co120_provenance_pin_gate → co135_review_hygiene → "
+             "co136_gate_hygiene → co146_boundary_append`，**循环至 sha 稳定**。",
+             "> **R-CO157-2**：新增 K9 判据须同时登记进 `K9_FINDER_IDS` 并提供负控（由元牙齿 T18 机判）；"
+             "`board_superseded` 豁免须给可比对的板 sha16。",
+             "> **R-CO157-3**（R-CO156-3 的机判面）：台账写者必须先读台账 —— 由 co136 `H4_ledger_upsert_only` **源码级**把关；"
+             "⚠ 该守卫为静态启发式（**部分机判**），不替代语义审查；整表重写须在 boundary 显式豁免。", "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows32 = [("工具 `p3_v57_co157_gate_hardening_3.py`", K2 / "tools/p3_v57_co157_gate_hardening_3.py"),
+               ("工具 `p3_v57_co124_input_selfcheck_gate.py`（CO-124.7 / 牙齿 29 / T18 元牙齿）", K2 / "tools/p3_v57_co124_input_selfcheck_gate.py"),
+               ("工具 `p3_v57_co120_provenance_pin_gate.py`（CO-120.4）", K2 / "tools/p3_v57_co120_provenance_pin_gate.py"),
+               ("工具 `p3_v57_co136_gate_hygiene.py`（CO-136.1 / H4 源码守卫）", K2 / "tools/p3_v57_co136_gate_hygiene.py"),
+               ("co124 输入自检 `m13_v57_co124_input_selfcheck_gate.json`（CO-124.7）", STEP2 / "m13_v57_co124_input_selfcheck_gate.json"),
+               ("co120 闸 `m13_v57_co120_provenance_pin_gate.json`（CO-120.4）", STEP2 / "m13_v57_co120_provenance_pin_gate.json"),
+               ("co136 闸卫生 `m13_v57_co136_gate_hygiene.json`（CO-136.1）", STEP2 / "m13_v57_co136_gate_hygiene.json"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc32['total']} 项 / OPEN {_rc32['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows32:
+        if pth.exists():
+            sec32.append(f"| {label} | `{s16(pth)}` |")
+    sec32.append("")
+    body32 = "\n".join(sec32)
+    if MARK32 in txt:
+        txt = re.sub(re.escape(MARK32) + r"[\s\S]*?(?=\n## |\Z)", body32, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body32
     txt = txt.replace("W3 Boundary **v2.00**", "W3 Boundary **v2.01**")
     txt = txt.replace("W3 Boundary **v1.99**", "W3 Boundary **v2.00**")
     txt = txt.replace("W3 Boundary **v1.98**", "W3 Boundary **v1.99**")
     txt = txt.replace("W3 Boundary **v1.97**", "W3 Boundary **v1.98**")
     txt = txt.replace("W3 Boundary **v2.01**", "W3 Boundary **v2.02**")
     txt = txt.replace("W3 Boundary **v2.02**", "W3 Boundary **v2.03**")
+    txt = txt.replace("W3 Boundary **v2.03**", "W3 Boundary **v2.04**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
     return 0

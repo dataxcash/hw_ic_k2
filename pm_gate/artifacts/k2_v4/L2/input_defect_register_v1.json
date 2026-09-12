@@ -799,6 +799,94 @@
    "closed_by": [
     "CO-156"
    ]
+  },
+  {
+   "finding": "co157:H-1",
+   "sev": "medium",
+   "kind": "TOOL_DEFECT",
+   "what": "co124 K9 的 `process_floor` 分支（`derived_value_evidence_bad`）与 `identity_unparsable` **无任何负控牙齿** ⇒ 该两类判据虽存在，却未被「牙齿全数按预期触发」覆盖（违 CO-153 以来「每类必带负控」的自定规矩）；即新增/改动这两支时无回归保护。",
+   "disposition": "CO-157：① 新增 `T17_process_floor_evidence_teeth`（合成陈旧 pin 必抓）+ `T17b_..._no_false_positive`；② 新增**元牙齿** `T18_k9_finder_id_coverage`（对 `K9_FINDER_IDS` 十类逐类注入，断言全部被触发）、`T18b_k9_finder_id_no_undeclared`（无未申报 finder id）、`T18c_k9_finder_battery_nonempty`。co124 牙齿 24 → **29**，全 True；verdict PASS / findings 0。",
+   "next": "新增 K9 判据时必须同时登记进 `K9_FINDER_IDS` 并保证 T18 通过。",
+   "refs": [
+    "CO-157",
+    "CO-156",
+    "CO-154",
+    "CO-152"
+   ],
+   "status": "CLOSED",
+   "evidence": [
+    "CO-157 实测缺口（H-1）",
+    "CO-157 复核：co124 teeth / co120 teeth / co136 teeth"
+   ],
+   "closed_by": [
+    "CO-157"
+   ]
+  },
+  {
+   "finding": "co157:H-2",
+   "sev": "low",
+   "kind": "TOOL_DEFECT",
+   "what": "判据声明失实：CO-153 记录称 `declared` 判据「与 process_floor 同口径」，但 `process_floor` 实际只验 `path` 可解析 + `sha16` 现行（**不验 basis、不验 key_path**）⇒ 二者并非同口径（declared 严格更严）。",
+   "disposition": "CO-157：① 在 co124 该分支就地订正注释（明示 declared **严于** process_floor）；② 本处置 + boundary §32 记录订正。判据本身不变（不为此给 process_floor 追加无验证增益的 basis 仪式）。",
+   "next": "记录内不得再出现与实现不符的口径声明。",
+   "refs": [
+    "CO-157",
+    "CO-156",
+    "CO-154",
+    "CO-152"
+   ],
+   "status": "CLOSED",
+   "evidence": [
+    "CO-157 实测缺口（H-2）",
+    "CO-157 复核：co124 teeth / co120 teeth / co136 teeth"
+   ],
+   "closed_by": [
+    "CO-157"
+   ]
+  },
+  {
+   "finding": "co157:H-3",
+   "sev": "medium",
+   "kind": "TOOL_DEFECT",
+   "what": "co120 的 `board_superseded` 豁免「机判可证」实为**弱判**：`bool(board) and board != DELIVERED_BOARD` ⇒ 任意自由文本（如 `board=\"superseded\"`）即可成立豁免类别（实测 basis_ok=True）；该字段本应为板 sha16。",
+   "disposition": "CO-157：收严为 `board` 须**匹配板 sha16 格式**（`[0-9a-f]{16}`）且 ≠ 交付板；新增负控/正控牙齿 `negative_control_freetext_board_basis_rejected` / `positive_control_board_sha_basis_accepted`。co120 升 **CO-120.4**：verdict PASS（basis_not_ok 0 / teeth 9-9）。",
+   "next": "新增 `board_superseded` 豁免须给**可比对的板 sha16**。",
+   "refs": [
+    "CO-157",
+    "CO-156",
+    "CO-154",
+    "CO-152"
+   ],
+   "status": "CLOSED",
+   "evidence": [
+    "CO-157 实测缺口（H-3）",
+    "CO-157 复核：co124 teeth / co120 teeth / co136 teeth"
+   ],
+   "closed_by": [
+    "CO-157"
+   ]
+  },
+  {
+   "finding": "co157:H-4",
+   "sev": "medium",
+   "kind": "TOOL_DEFECT",
+   "what": "CO-156 新增的 R-CO156-3（派生物生产者「只准 upsert、禁整表重写」）**无机判**（仅声明）——与被其处置的 F-4/F-5 同类缺陷。",
+   "disposition": "CO-157：co136 增**源码级守卫** `H4_ledger_upsert_only`（写台账的工具必须先读台账；行首 `(LED|LEDGER).write_text` 且全文无 `.read_text` 即违规）+ 负控/正控牙齿（`H4_negative_control_write_only_caught` / `H4_positive_control_upsert_ok`）；co136 升 **CO-136.1**，verdict PASS。⚠ 声明其**范围**：静态启发式，只保证「未读即写」不出现，不替代语义审查，故 §32 标注为**部分机判**。",
+   "next": "新增台账写者必须先读台账；整表重写须在 boundary 显式豁免并说明。",
+   "refs": [
+    "CO-157",
+    "CO-156",
+    "CO-154",
+    "CO-152"
+   ],
+   "status": "CLOSED",
+   "evidence": [
+    "CO-157 实测缺口（H-4）",
+    "CO-157 复核：co124 teeth / co120 teeth / co136 teeth"
+   ],
+   "closed_by": [
+    "CO-157"
+   ]
   }
  ],
  "closed_items": [
@@ -816,14 +904,14 @@
   "owner": "ARCHER（L2 自裁执行侧）",
   "approval": "定义件 v1.0 待监理裁定/owner 批准；登记簿随闸每次运行校验",
   "mandatory_trigger": "任何 SPEC / drc_rules 变更后必须跑 tools/p3_v57_co124_input_selfcheck_gate.py 并 PASS",
-  "updated_by": "CO-127..CO-133 + **CO-134（整改通知 #09：③ 重新定性 = 工程换算错误 → REQ-R3-2 忠实实现 + 需求/实现分家规矩 + co124 K9）**；登记簿随 co124 每次运行校验；CO-134 续：4 项已声明定值补 rule_key + 台账溯源；**CO-136（L2 自裁 · 闸卫生续）**：登记并关闭 CO-135 F5(b)/F6 两条 TOOL_DEFECT（co124 标签 / co106 陈旧牙齿）；F4（handoff pin 失准）与 F5(a)（③ 根因叙述）属叙述类，保留在 CO-135 记录，不入本登记簿（非 SPEC/工具缺陷）。；**CO-139**：+1 TOOL_DEFECT（K9 豁免未锚定）并 CLOSED（hash-pin + T9）。；**CO-141**：更正 IMPLEMENTATION_DEVIATION 范围（24 平行对-对，非 3）+ 新增 OPEN TOOL_DEFECT（路由器列距基准漏 3W）。；**CO-142（L2 只读）**：对间 <3W 违规逐条明细 + 构造阶段归因；**CO-143（L2 只读）**：更正 `k2_router_escape_fan_omits_3w` 定位（f13 pair_xorder → escape-fan 落位判据 `p3_v57_co10_west_fan_probe.py:check()`）+ 施加可行性研究（可满足但须重派生策略；PDN 障碍 + 贪心夹死）。；**CO-146（监理指令 #10 · JLC 打样就绪）**：+2 IMPLEMENTATION_DEVIATION（OPEN：盲/埋孔 vs JLC 标准不支持 = 结构/工艺类别；阻焊桥 1 处 vs JLC 0.09mm）；外部输入定性更正（撤回「等券」表述，改绑 JLC 阻抗控制服务 + 监理定值）；登记簿随 co124 每次运行校验。；**CO-147（L2 自裁）**：三题裁定（R1 过孔策略维持盲/埋孔 ⇒ 渠道绑定 JLC advanced；R2 J2 landing 对间适用域 ACCEPT_L2；R3 阻焊桥 ACCEPT_L2_WITH_FAB_REVIEW）；登记簿 3 项转 CLOSED。；**CO-148**：U6 手册输入（TI SNLS683）⇒ 热 Tj 121.8–161.8°C 超上限 120°C ⇒ 登记 +2（热超限 HIGH / K9 无热域模型 MED）。；**CO-149（L2 自裁 · 热机械派生）**：自然对流全档不可达（两路线互校 θJA≈17.2 vs 手册 17.4）⇒ 派生出系统散热要求（h_eff ≥ 8.2–16.4 W/m²K 或 顶部散热片预算 ≤ 4.9–10.5 °C/W）；监理定值 Ta=40°C 不变；登记簿热项 CLOSED（OPEN 余 K9 热域缺口）；台账 DV-CO146-THERMAL 可达性 = 声明散热方案域。（1ff34801833d07b5）；**CO-150（L2 闸硬化）**：co124 K9 扩 `thermal_option_domain` + `drop_domain` 两域并加负控 T10/T10b/T11/T11b ⇒ 关闭 K9 缺口登记项。（记录 （本次生成））；**CO-152（L2 自裁 · CO-151 findings 处置）**：3 项 TOOL_DEFECT 登记并 CLOSED（记录内嵌下游快照致 pin 漂移 / co120 pin 覆盖面缺 *_sha16 快照键 + 豁免依据分级 / 派生物语义未标注）；并勘误 CO-147 R2 最劣值 0.2577 与 R3 叙述 0.0205（见 boundary §28）。；**CO-153（L2 自裁 · K9 覆盖缺口关闭）**：co124 K9 新增 `declared`（证据须锚定）+ `conservative_ge`（保守实现闭式证明）两支 + 牙齿 T12/T12b/T13/T13b；台账 DV-ENGINE-INT_PAIR_PITCH 归一等价可证；`p3_v57_co146_ledger_add.py` 并入规范序 ⇒ 证据 pin 自动刷新。关闭 TOOL_DEFECT：`co124_k9_declared_kind_has_no_evidence_check`。；**CO-155（L2 自裁 · executor · CO-154 复评处置）**：F-1 CLOSED（co150 崩溃修复）；F-2 工件侧（co147/co148 下游计数快照移除）完成、闸覆盖侧 OPEN；F-3..F-7 OPEN。登记 `co154:F-1..F-7`。；**CO-156（L2 自裁 · 闸硬化 · CO-154 剩余 OPEN 处置）**：F-2（co120 下游快照键通用化 = CO-120.3）/ F-3（co124→CO-124.6）/F-4（co134 只 upsert + co153 产出七域 kind）/ F-5（K9 域覆盖）/ F-6（declared 值-证据绑定）/ F-7（conservative_ge 引用权威 DV）全部 CLOSED ⇒ 登记簿 OPEN 0；co124 牙齿 24/24。",
+  "updated_by": "CO-127..CO-133 + **CO-134（整改通知 #09：③ 重新定性 = 工程换算错误 → REQ-R3-2 忠实实现 + 需求/实现分家规矩 + co124 K9）**；登记簿随 co124 每次运行校验；CO-134 续：4 项已声明定值补 rule_key + 台账溯源；**CO-136（L2 自裁 · 闸卫生续）**：登记并关闭 CO-135 F5(b)/F6 两条 TOOL_DEFECT（co124 标签 / co106 陈旧牙齿）；F4（handoff pin 失准）与 F5(a)（③ 根因叙述）属叙述类，保留在 CO-135 记录，不入本登记簿（非 SPEC/工具缺陷）。；**CO-139**：+1 TOOL_DEFECT（K9 豁免未锚定）并 CLOSED（hash-pin + T9）。；**CO-141**：更正 IMPLEMENTATION_DEVIATION 范围（24 平行对-对，非 3）+ 新增 OPEN TOOL_DEFECT（路由器列距基准漏 3W）。；**CO-142（L2 只读）**：对间 <3W 违规逐条明细 + 构造阶段归因；**CO-143（L2 只读）**：更正 `k2_router_escape_fan_omits_3w` 定位（f13 pair_xorder → escape-fan 落位判据 `p3_v57_co10_west_fan_probe.py:check()`）+ 施加可行性研究（可满足但须重派生策略；PDN 障碍 + 贪心夹死）。；**CO-146（监理指令 #10 · JLC 打样就绪）**：+2 IMPLEMENTATION_DEVIATION（OPEN：盲/埋孔 vs JLC 标准不支持 = 结构/工艺类别；阻焊桥 1 处 vs JLC 0.09mm）；外部输入定性更正（撤回「等券」表述，改绑 JLC 阻抗控制服务 + 监理定值）；登记簿随 co124 每次运行校验。；**CO-147（L2 自裁）**：三题裁定（R1 过孔策略维持盲/埋孔 ⇒ 渠道绑定 JLC advanced；R2 J2 landing 对间适用域 ACCEPT_L2；R3 阻焊桥 ACCEPT_L2_WITH_FAB_REVIEW）；登记簿 3 项转 CLOSED。；**CO-148**：U6 手册输入（TI SNLS683）⇒ 热 Tj 121.8–161.8°C 超上限 120°C ⇒ 登记 +2（热超限 HIGH / K9 无热域模型 MED）。；**CO-149（L2 自裁 · 热机械派生）**：自然对流全档不可达（两路线互校 θJA≈17.2 vs 手册 17.4）⇒ 派生出系统散热要求（h_eff ≥ 8.2–16.4 W/m²K 或 顶部散热片预算 ≤ 4.9–10.5 °C/W）；监理定值 Ta=40°C 不变；登记簿热项 CLOSED（OPEN 余 K9 热域缺口）；台账 DV-CO146-THERMAL 可达性 = 声明散热方案域。（1ff34801833d07b5）；**CO-150（L2 闸硬化）**：co124 K9 扩 `thermal_option_domain` + `drop_domain` 两域并加负控 T10/T10b/T11/T11b ⇒ 关闭 K9 缺口登记项。（记录 （本次生成））；**CO-152（L2 自裁 · CO-151 findings 处置）**：3 项 TOOL_DEFECT 登记并 CLOSED（记录内嵌下游快照致 pin 漂移 / co120 pin 覆盖面缺 *_sha16 快照键 + 豁免依据分级 / 派生物语义未标注）；并勘误 CO-147 R2 最劣值 0.2577 与 R3 叙述 0.0205（见 boundary §28）。；**CO-153（L2 自裁 · K9 覆盖缺口关闭）**：co124 K9 新增 `declared`（证据须锚定）+ `conservative_ge`（保守实现闭式证明）两支 + 牙齿 T12/T12b/T13/T13b；台账 DV-ENGINE-INT_PAIR_PITCH 归一等价可证；`p3_v57_co146_ledger_add.py` 并入规范序 ⇒ 证据 pin 自动刷新。关闭 TOOL_DEFECT：`co124_k9_declared_kind_has_no_evidence_check`。；**CO-155（L2 自裁 · executor · CO-154 复评处置）**：F-1 CLOSED（co150 崩溃修复）；F-2 工件侧（co147/co148 下游计数快照移除）完成、闸覆盖侧 OPEN；F-3..F-7 OPEN。登记 `co154:F-1..F-7`。；**CO-156（L2 自裁 · 闸硬化 · CO-154 剩余 OPEN 处置）**：F-2（co120 下游快照键通用化 = CO-120.3）/ F-3（co124→CO-124.6）/F-4（co134 只 upsert + co153 产出七域 kind）/ F-5（K9 域覆盖）/ F-6（declared 值-证据绑定）/ F-7（conservative_ge 引用权威 DV）全部 CLOSED ⇒ 登记簿 OPEN 0；co124 牙齿 24/24。；**CO-157（L2 自裁 · 闸硬化 3）**：H-1 K9 finder-id 覆盖元牙齿（T17/T17b + T18/T18b/T18c，牙齿 24→29）；H-2 判据声明失实订正（declared 严于 process_floor）；H-3 co120 `board_superseded` 收严为板 sha16（CO-120.4）；H-4 R-CO156-3 机判化（co136 CO-136.1 源码守卫 + 正负控）⇒ 4 项 CLOSED。",
   "counts": {
    "SPEC_DEFECT": 5,
    "PROVED_THRESHOLD": 5,
-   "TOOL_DEFECT": 23,
+   "TOOL_DEFECT": 27,
    "IMPLEMENTATION_DEVIATION": 4,
    "OPEN": 0,
-   "total": 37
+   "total": 41
   }
  },
  "verdict": null

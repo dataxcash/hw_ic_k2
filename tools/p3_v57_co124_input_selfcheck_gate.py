@@ -50,8 +50,70 @@ def s16(p) -> str:
 
 
 # CO-156（F-5）：K9 七域白名单 —— kind 必须 ∈ 本集，且 domain_cap 必带非空 domains。
+# CO-157（H-1）：k9_findings **可产出的全部 finder id** —— T18 元牙齿据此断言「每个 id 都有负控」
+K9_FINDER_IDS = (
+    "requirement_carries_derived_value", "derived_value_without_principle", "derived_value_kind_unknown",
+    "derived_value_domain_cap_empty", "derived_value_identity_drift", "derived_value_identity_unparsable",
+    "derived_value_evidence_bad", "derived_value_unreachable", "derived_value_declared_unpinned",
+    "derived_value_conservative_unproved",
+)
+
 KNOWN_KINDS = ("domain_cap", "identity", "process_floor", "declared",
                "conservative_ge", "drop_domain", "thermal_option_domain")
+
+
+def _k9_battery(base: dict) -> dict:
+    """CO-157（H-1）：逐 finder id 的**合成注入电池**（只动内存副本）——T18 元牙齿据此断言覆盖完备。"""
+    out = {}
+    l = copy.deepcopy(base)
+    l["requirements"] = l.get("requirements", []) + [{"id": "TB_REQ", "statement": "x", "value": 1}]
+    out["requirement_carries_derived_value"] = l
+    l = copy.deepcopy(base)
+    l["derived_values"] = l.get("derived_values", []) + [{"id": "TB1", "requirement": "NOPE", "reachability": {"kind": "declared"}}]
+    out["derived_value_without_principle"] = l
+    l = copy.deepcopy(base)
+    l["derived_values"] = l.get("derived_values", []) + [{"id": "TB2", "requirement": "REQ-R3-2", "reachability": {"kind": "zzz", "verdict": "REACHABLE"}}]
+    out["derived_value_kind_unknown"] = l
+    l = copy.deepcopy(base)
+    l["derived_values"] = l.get("derived_values", []) + [{"id": "TB3", "requirement": "REQ-R3-2", "reachability": {"kind": "domain_cap", "verdict": "REACHABLE"}}]
+    out["derived_value_domain_cap_empty"] = l
+    l = copy.deepcopy(base)
+    l["derived_values"] = l.get("derived_values", []) + [{"id": "TB4", "requirement": "REQ-DEF-PAIR-GEOM",
+        "form": "span = 2×p_width + p_gap", "inputs": {"p_width_mm": 1.0, "p_gap_mm": 1.0},
+        "computed": {"span_mm": 9.0}, "reachability": {"kind": "identity", "verdict": "REACHABLE"}}]
+    out["derived_value_identity_drift"] = l
+    l = copy.deepcopy(base)
+    l["derived_values"] = l.get("derived_values", []) + [{"id": "TB5", "requirement": "REQ-DEF-PAIR-GEOM",
+        "form": "span = 2×p_width + p_gap", "inputs": {}, "computed": {},
+        "reachability": {"kind": "identity", "verdict": "REACHABLE"}}]
+    out["derived_value_identity_unparsable"] = l
+    l = copy.deepcopy(base)
+    l["derived_values"] = l.get("derived_values", []) + [{"id": "TB6", "requirement": "REQ-EDGE-COPPER",
+        "computed": {"value_mm": 0.3},
+        "reachability": {"kind": "process_floor", "verdict": "REACHABLE",
+                         "evidence_ref": {"path": "m13_v57_l4_validation.json", "sha16": "0" * 16}}}]
+    out["derived_value_evidence_bad"] = l
+    l = copy.deepcopy(base)
+    for _d in l["derived_values"]:
+        if (_d.get("reachability") or {}).get("domains"):
+            _d["reachability"]["domains"].append({"id": "TB7", "pitch_cap_mm": 0.1, "required_pitch_mm": 0.9,
+                                                  "margin_mm": -0.8, "ok": False, "regime": "R3-2 适用域"})
+            break
+    out["derived_value_unreachable"] = l
+    l = copy.deepcopy(base)
+    l["derived_values"] = l.get("derived_values", []) + [{"id": "TB8", "requirement": "REQ-ZDIFF",
+        "computed": {"a": 1},
+        "reachability": {"kind": "declared", "verdict": "REACHABLE", "basis": "x",
+                         "evidence_ref": {"path": "m13_v57_co146_impedance_table.json",
+                                          "sha16": "0" * 16, "key_path": "artifact"}}}]
+    out["derived_value_declared_unpinned"] = l
+    l = copy.deepcopy(base)
+    l["derived_values"] = l.get("derived_values", []) + [{"id": "TB9", "requirement": "REQ-R3-2",
+        "inputs": {"span_mm": 0.585, "w_outer_mm": 0.205, "span_src": "x", "w_outer_src": "x"},
+        "computed": {"value_mm": 0.1, "faithful_min_mm": 0.995},
+        "reachability": {"kind": "conservative_ge", "verdict": "CONSERVATIVE_OK"}}]
+    out["derived_value_conservative_unproved"] = l
+    return out
 
 
 def _contains(ev, dv) -> bool:
@@ -185,6 +247,7 @@ def k9_findings(led: dict) -> list:
         if kind == "declared":
             # CO-153：声明类可达性不得无证据（关闭「声明即通过」缺口）。
             # CO-156（F-6）：仅「钉一个现行文件」仍无语义关联 ⇒ 追加 `key_path` 指向证据件内**须递归包含该 DV computed** 的对象。
+            # ⚠ CO-157（H-2）：本判据**严于** `process_floor`（后者只验 path+sha，不验 basis/key_path）——原「同口径」表述失实，此处订正。
             ev = rc.get("evidence_ref") or {}
             pth, hitc = _resolve(ev.get("path"))
             kp = ev.get("key_path")
@@ -483,11 +546,36 @@ def main() -> int:
         x[1].startswith("derived_value_conservative_unproved") for x in k9_findings(_l16))
     teeth["T16b_faithful_provenance_no_false_positive"] = not any(
         x[1].startswith("derived_value_conservative_unproved") for x in k9_findings(copy.deepcopy(_led)))
+    # CO-157（H-1）负控 T17：process_floor 证据陈旧 ⇒ 必抓；T17b：现行台账不得误报
+    _l17 = copy.deepcopy(_led)
+    _hit17 = False
+    for _dv in _l17.get("derived_values", []):
+        if (_dv.get("reachability") or {}).get("kind") == "process_floor":
+            _dv["reachability"].setdefault("evidence_ref", {})["sha16"] = "0" * 16
+            _hit17 = True
+            break
+    if not _hit17:
+        _l17["derived_values"].append({"id": "T17_INJECT", "requirement": "REQ-EDGE-COPPER",
+            "computed": {"value_mm": 0.3},
+            "reachability": {"kind": "process_floor", "verdict": "REACHABLE",
+                             "evidence_ref": {"path": "m13_v57_l4_validation.json", "sha16": "0" * 16}}})
+    teeth["T17_process_floor_evidence_teeth"] = any(
+        x[1].startswith("derived_value_evidence_bad") for x in k9_findings(_l17))
+    teeth["T17b_process_floor_no_false_positive"] = not any(
+        x[1].startswith("derived_value_evidence_bad") for x in k9_findings(copy.deepcopy(_led)))
+    # CO-157（H-1）元牙齿 T18：**每个** K9 finder id 都必须被负控实际触发（防「新增判据无牙齿」）
+    _bat = _k9_battery(_led)
+    _provoked = set()
+    for _bled in _bat.values():
+        _provoked.update(x[1].split(":")[0] for x in k9_findings(_bled))
+    teeth["T18_k9_finder_id_coverage"] = set(K9_FINDER_IDS) <= _provoked
+    teeth["T18b_k9_finder_id_no_undeclared"] = _provoked <= set(K9_FINDER_IDS)
+    teeth["T18c_k9_finder_battery_nonempty"] = all(bool(_bat[k]) for k in K9_FINDER_IDS)
     teeth_ok = all(teeth.values())
     verdict = "PASS" if (not unreg and not reg_bad and teeth_ok) else (
         "FAIL_UNREGISTERED_INPUT_DEFECT" if unreg else "FAIL_REGISTER_MALFORMED" if reg_bad else "TEETH_FAIL")
     rec = {
-        "artifact": "m13_v57_co124_input_selfcheck_gate", "schema": 1, "revision": "CO-124.6",
+        "artifact": "m13_v57_co124_input_selfcheck_gate", "schema": 1, "revision": "CO-124.7",
         "nature": "输入自检闸：规格/规则自身自洽 + 物理可达登记 + 缺陷登记完备（整改通知 #08 第 2/3 条）",
         "definition_doc": {"path": str(DOC.relative_to(K2)), "sha16": s16(DOC), "status": f"{DOC_VER} 提议件（待监理裁定/owner 批准）"},
         "inputs": {"spec": str(SPEC.relative_to(K2)), "spec_sha16": s16(SPEC),

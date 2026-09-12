@@ -65,6 +65,8 @@ SNAPSHOT_DECLARED = {
     "m13_v57_co146_jlc_rebind.json": "历史：register 时点快照；CO-152 起同类字段一律禁止，本件留存为历史",
 }
 DELIVERED_BOARD = "d4e81f647be7f980"
+# CO-157（H-3）：`board_superseded` 的「机判可证」须是**格式可判的板 sha16**，自由文本不算证据。
+BOARD_RE = re.compile(r"[0-9a-f]{16}")
 
 
 # CO-156（F-2b）：下游快照键的**通用**判据 —— 除 `*_sha16_after` 外，`register.*` / `ledger.*` 下的
@@ -114,8 +116,8 @@ def basis_of(records: dict) -> list:
         board = (d.get("inputs") or {}).get("board") or d.get("board_sha16") or d.get("board")
         for key in pins:
             cls = (EXEMPT_BASIS.get(name) or {}).get(key, "undeclared")
-            ok = (cls == "board_superseded" and bool(board) and board != DELIVERED_BOARD) or \
-                 (cls == "declared_historical")
+            ok = (cls == "board_superseded" and isinstance(board, str) and bool(BOARD_RE.fullmatch(board))
+                  and board != DELIVERED_BOARD) or (cls == "declared_historical")
             out.append({"record": name, "key": key, "basis": cls, "basis_ok": ok,
                         "declared_board": board})
     return out
@@ -206,9 +208,14 @@ def main(argv=None) -> int:
     pos_snap2 = scan_snapshots({k: {"register": {"items_total": 1}} for k in list(SNAPSHOT_DECLARED)[:1]})
     pos_snap2_ok = bool(pos_snap2) and all(s2["declared"] for s2 in pos_snap2)
     snap_ok = snap_ok and neg_snap2_hit and pos_snap2_ok
-    teeth_ok = neg_hit and pos_ok and snap_ok
+    # CO-157（H-3）负控/正控：`board_superseded` 依据须为板 sha16（自由文本必拒）
+    neg_basis = basis_of({"m13_v57_co137_interpair_fixspace.json": {"inputs": {"board": "superseded"}}})
+    neg_basis_hit = bool(neg_basis) and not neg_basis[0]["basis_ok"]
+    pos_basis = basis_of({"m13_v57_co137_interpair_fixspace.json": {"inputs": {"board": "a3ce9ab803045a0a"}}})
+    pos_basis_ok = bool(pos_basis) and pos_basis[0]["basis_ok"]
+    teeth_ok = neg_hit and pos_ok and snap_ok and neg_basis_hit and pos_basis_ok
     rec = {
-        "artifact": "m13_v57_co120_provenance_pin_gate", "schema": 1, "revision": "CO-120.3",
+        "artifact": "m13_v57_co120_provenance_pin_gate", "schema": 1, "revision": "CO-120.4",
         "nature": "L2 过程闸：记录内 inter-record provenance pin 一致性（关闭 CO-108/CO-114 F-6 盲区）",
         "pins_total": len(rows), "n_match": sum(1 for r in rows if r["status"] == "match"),
         "n_exempt_historical": sum(1 for r in rows if r["status"] == "exempt_historical"),
@@ -226,6 +233,8 @@ def main(argv=None) -> int:
                   "negative_control_undeclared_snapshot_caught": neg_snap_hit,
                   "negative_control_register_snapshot_caught": neg_snap2_hit,
                   "positive_control_declared_register_snapshot_passes": pos_snap2_ok,
+                  "negative_control_freetext_board_basis_rejected": neg_basis_hit,
+                  "positive_control_board_sha_basis_accepted": pos_basis_ok,
                   "positive_control_declared_snapshot_passes": pos_snap_ok,
                   "teeth_ok": teeth_ok},
         "verdict": ("FAIL_STALE_PROVENANCE_PIN" if stale else
