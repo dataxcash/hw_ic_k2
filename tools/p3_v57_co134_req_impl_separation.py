@@ -119,9 +119,17 @@ def main() -> int:
     for did, cap in sorted(caps.items()):
         m = round(cap - req_pitch, 4)
         exempt = (did == "pad_field")
-        doms.append({"id": did, "pitch_cap_mm": cap, "required_pitch_mm": req_pitch, "margin_mm": m,
-                     "ok": bool(m >= 0) or exempt,
-                     "regime": "ECN-001 escape_transition_zone 放宽（已声明，非该原则适用域）" if exempt else "R3-2 适用域"})
+        dd = {"id": did, "pitch_cap_mm": cap, "required_pitch_mm": req_pitch, "margin_mm": m,
+              "ok": bool(m >= 0) or exempt,
+              "regime": ("ECN-001 escape_transition_zone（已声明；evidence_ref 已 hash-pin）⇒ 非该原则适用域"
+                         if exempt else "R3-2 适用域")}
+        if exempt:
+            # CO-139 硬化（K9/co124）：豁免域不得只凭 regime 自由文本 ⇒ 必须 hash-pin 到已声明依据。
+            # 本生成器须与该硬化同构（否则重跑会回退豁免锚定 ⇒ 非幂等）。
+            dd["evidence_ref"] = {"path": SPEC_OUT.name, "sha16": s16(SPEC_OUT) if SPEC_OUT.exists() else None,
+                                  "basis": "SPEC constraints.escape_transition_zone（escape_clearance_mm=0.075；"
+                                           "焊盘场节距 0.4/0.6 为封装固有）⇒ 该域非 REQ-R3-2「域外长平行」适用域"}
+        doms.append(dd)
     reachable = all(d["ok"] for d in doms)
 
     rects = [(d["id"], *d["rect_mm"]) for d in json.loads(CO37.read_text(encoding="utf-8"))["domains"]]

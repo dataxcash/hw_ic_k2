@@ -73,6 +73,91 @@ _HOLE_GAP = float(__import__("os").environ.get("CO10_HOLE_GAP", "0"))   # 同网
 TT = WID + CLEAR; TT_E = WID + ESC
 VT = VIA_R + CLEAR + WID / 2; VT_E = VIA_R + ESC + WID / 2
 VV = 2 * VIA_R + CLEAR; TOL = 1e-9
+
+# CO-143（L2 自裁）：逃生扇「对间 3W」并入（SPEC net_classes.PCIe85.inter_pair_derivation_v1：
+#   对间中心距 >= 3*w(layer) ⇔ 对间铜边 >= 2*w）。命中域 = 同层、**异页（异对）**、双方均**非 pad-access**
+#   （逃生竖列 / lane / stub 等路由骨干）且夹角 <= 10°（SPEC「长平行」口径）。pad-access（F.Cu
+#   pad->via1 / landing->conn）不计 3W：那是接口固有节距（J2 0.6 < 3w，L1，路由不可消除；ECN-001 逃逸域口径）。
+#   默认 "" = 旧行为（ALLOC.1..7 逐字节可复现）。
+_IP3W = __import__("os").environ.get("CO10_IP3W", "") not in ("", "0")
+_PAR_SIN = math.sin(math.radians(10.0))
+_WBY = json.loads(W.F["spec"].read_text(encoding="utf-8"))["impedance"]["width_mm_by_layer"]
+
+# CO-143b（L2 自裁）：把 SPEC 已声明的 **PDN 铜**（`pd.zone_defs` 的 zone vias / power_pad_connect
+#   entries / 未 blocked 的 gnd_stitch via 与 ppc F.Cu 短段）作为**固定障碍**喂入落位判据。
+#   背景：PDN 决策（rev-18 / CO-133）晚于本扇几何（ALLOC.5），扇此前对 PDN via 视而不见；
+#   CO-143 的三排并入 3W 使 UP0 N 西移 0.30 撞上 GND stitch via（DRC clearance 0.1587<0.175）。
+#   默认 "" = 旧行为（ALLOC.1..7 可复现）。
+_PDN_OBS = __import__("os").environ.get("CO10_PDN_OBS", "") not in ("", "0")
+PDN_LABEL = "__PDN__"
+
+# CO-144（L2 自裁 · 逃生扇落位策略重派生）：**分带单调 carry**（opt-in）。
+#   背景（CO-143）：单遍贪心 + 按 pad 邻近选列在「对间 3W + PDN 障碍」下 31/32（rev）或 30/32（xasc），
+#   但分带 DP 机判两带均有合法单调解 ⇒ 缺陷在**落位策略**而非几何不可行。
+#   本策略：按 (corridor, band) 分带、带内按 pad-x 升序处理；维护**带内游标** cur = 已落位列 x 的最大值；
+#   候选行须满足 min(px,nx) >= cur + 3*w(escape layer)，并**按 max(px,nx) 升序**取首可行
+#   ⇒ 西→东单调 carry（零回溯，确定性）。游标下界 >= 3W ⇒ 带内**任意两页**的对应竖列间距 >= 3W。
+#   默认 "" = 旧行为（ALLOC.1..7 逐字节可复现）。
+_STRAT = __import__("os").environ.get("CO10_FAN_STRAT", "")
+_CARRY = _STRAT == "carry"
+_CARRY_CUR = {}
+_CARRY_DIR = {}
+# 命中域（依据 co141/co142 实测）：只有**外层逃逸带**（3W 界 = 0.615）需要 carry；
+# 内层 In2/In5（3W 界 = 0.48）实测对间 0 违规且 carry 会扰动跨带 via 净距 ⇒ 保持 canonical 单遍。
+_CARRY_W3_MIN = 0.615 - 1e-9
+
+
+def _band_key(f):
+    return (f["corridor"], f["band"])
+
+
+def _band_carry(f):
+    """该带是否启用 carry：escape 层 3W 界 >= 0.615（外层 F/B）。"""
+    return 3.0 * _WBY.get(esc_layer(f), 0.0) >= _CARRY_W3_MIN
+
+
+def _pdn_obstacles():
+    """SPEC pd.zone_defs -> (vias, segs)，坐标逐字取自 SPEC（与 co133 spec_expectation 同源同式）。"""
+    spec = json.loads(W.F["spec"].read_text(encoding="utf-8"))
+    zd = spec["pd"]["zone_defs"]
+    vias = []
+    for z in zd.get("power_zones", []):
+        for v in z.get("vias", []):
+            pos = v["pos"]; seq = pos if (pos and isinstance(pos[0], list)) else [pos]
+            for x, y in seq:
+                vias.append((float(x), float(y)))
+    for v in zd.get("decoupling_via_to_plane", {}).get("vias", []):
+        vias.append((float(v["pos"][0]), float(v["pos"][1])))
+    for c in zd.get("gnd_stitch_via", {}).get("coordinates", []):
+        if c.get("blocked") or c.get("status") == "blocked":
+            continue
+        vias.append((float(c["x"]), float(c["y"])))
+    for e in zd["power_pad_connect"]["entries"]:
+        vias.append((float(e["via_pos"][0]), float(e["via_pos"][1])))
+    stub_w = float(zd["power_pad_connect"].get("stub_width_mm", 0.5))
+    segs = []
+    for e in zd["power_pad_connect"]["entries"]:
+        a = (float(e["pad_pos"][0]), float(e["pad_pos"][1]))
+        b = (float(e["via_pos"][0]), float(e["via_pos"][1]))
+        segs.append(("F.Cu", a[0], a[1], b[0], b[1], False, "X", stub_w))
+    return vias, segs
+
+
+def _seed_pdn(st):
+    """把 PDN 障碍写入 Store（via 全层 mask；F.Cu 短段）。"""
+    import numpy as _np
+    vias, segs = _pdn_obstacles()
+    allmask = 0
+    for l in LAYERS:
+        allmask |= 1 << LI[l]
+    for (x, y) in vias:
+        st.vlab.append(PDN_LABEL)
+        st.vx = _np.append(st.vx, x); st.vy = _np.append(st.vy, y); st.vm = _np.append(st.vm, allmask)
+    for (lay, x1, y1, x2, y2, pa, pol, wid) in segs:
+        st.S[lay] = _np.vstack([st.S[lay], [x1, y1, x2, y2]])
+        st.SP[lay] = _np.append(st.SP[lay], False)
+        st.SLAB[lay].append(PDN_LABEL)
+    return {"n_pdn_vias": len(vias), "n_pdn_segs": len(segs)}
 LAYERS = ["B.Cu", "In2.Cu", "In6.Cu", "F.Cu"]; LI = {l: i for i, l in enumerate(LAYERS)}
 
 _p = PADF["pads"]
@@ -530,7 +615,7 @@ def build(f, px, py, nx, ny):
     return vias, segs, np.array(own)
 
 
-def check(vias, segs, own, st):
+def check(vias, segs, own, st, pid=None):
     if _HOLE_GAP > 0:      # L2（CO-23）：同网钻孔距（同极性 via 对）=> 逃逸/落位竖段 >= HOLE_GAP
         for i in range(len(vias)):
             for j in range(i + 1, len(vias)):
@@ -596,7 +681,18 @@ def check(vias, segs, own, st):
         X = st.S[lay]
         if not len(X): continue
         d = seg_seg((x1, y1), (x2, y2), X[:, 0], X[:, 1], X[:, 2], X[:, 3])
-        bad = np.nonzero(d < np.where(st.SP[lay] | pa, TT_E, TT) - TOL)[0]
+        thr = np.where(st.SP[lay] | pa, TT_E, TT).astype(float)
+        if _IP3W and pid is not None and (not pa) and lay in _WBY:
+            cdx, cdy = x2 - x1, y2 - y1
+            cl = math.hypot(cdx, cdy)
+            if cl > TOL:
+                sdx = X[:, 2] - X[:, 0]; sdy = X[:, 3] - X[:, 1]
+                sl = np.hypot(sdx, sdy)
+                cross = np.abs(sdx * cdy - sdy * cdx)
+                par = (sl > TOL) & (cross <= _PAR_SIN * sl * cl + TOL)
+                other = np.array([str(v).rsplit(".", 1)[0] != str(pid) for v in st.SLAB[lay]])
+                thr = np.where((~st.SP[lay]) & par & other, max(TT, 3.0 * _WBY[lay]), thr)
+        bad = np.nonzero(d < thr - TOL)[0]
         if len(bad):
             return ("tt_placed", (lay, x1, y1, x2, y2, pol), st.SLAB[lay][int(bad[0])], round(float(d[bad[0]]), 4))
     for (lay, x1, y1, x2, y2, pa, pol) in segs:
@@ -676,18 +772,71 @@ def alloc_closed_form():
     return out
 
 
+_IP3W_TGT = {}
+
+
+def _ip3w_targets():
+    """CO-143c：按 (corridor, conn_ref, band) 分带、按 pad-x 升序的**闭式单调列目标**：
+    nxt_k = max(padN_k, prev_P + 3w)；pxt_k = max(padP_k, nxt_k + VT)。
+    单遍、确定性、零回溯（把「对间 3W」化为列目标的 carry 而非事后搜索）。"""
+    out = {}
+    bands = {}
+    for p, f in FACTS.items():
+        bands.setdefault((f["corridor"], f["conn_ref"], f["band"]), []).append(p)
+    for key, pids in bands.items():
+        escL = esc_layer(FACTS[pids[0]])
+        w = _WBY.get(escL)
+        if w is None:
+            continue
+        prev_P = None
+        for p in sorted(pids, key=lambda q: min(FACTS[q]["pad"]["N"][0], FACTS[q]["pad"]["P"][0])):
+            f = FACTS[p]
+            nxt = f["pad"]["N"][0]
+            if prev_P is not None:
+                nxt = max(nxt, prev_P + 3.0 * w)
+            pxt = max(f["pad"]["P"][0], nxt + VT)
+            out[p] = (nxt, pxt)
+            prev_P = pxt
+    return out
+
+
 def probe(rule="d3", order="engine", verbose=False):
     global R3
     R3 = r3_build(rule)
+    global _IP3W_TGT
+    _IP3W_TGT = _ip3w_targets() if _IP3W else {}
     if order == "fewest":
         seq = sorted(FACTS, key=lambda p: (len(PAIR_DOMAIN[p]["pair_rows"]), p))
     elif order == "laneidx":
         seq = sorted(FACTS, key=lambda p: LANES[p]["lane_index"])
     elif order == "rev":
         seq = sorted(FACTS, key=lambda p: (FACTS[p]["corridor"], FACTS[p]["conn_ref"], FACTS[p]["band"], p), reverse=True)
+    elif order == "xasc":
+        # CO-143c：带内按 pad-x 升序（西->东）；带间仍按 (corridor,conn_ref,band)。
+        # 依据：对间 3W 的 carry 必须从**受约束端**（窄侧）向自由端推进，否则末页被夹死。
+        seq = sorted(FACTS, key=lambda p: (FACTS[p]["corridor"], FACTS[p]["conn_ref"], FACTS[p]["band"],
+                                          min(FACTS[p]["pad"]["N"][0], FACTS[p]["pad"]["P"][0]), p))
+    elif order == "carry":
+        # CO-144：**带优先**（(corridor,band) 连续处理）+ 带内 pad-x 升序。
+        # 带间次序 = (corridor,band) 规范序；同带跨 conn_ref（J3/J4）连续 ⇒ 共享游标。
+        seq = sorted(FACTS, key=lambda p: (FACTS[p]["corridor"], FACTS[p]["band"], FACTS[p]["conn_ref"],
+                                          min(FACTS[p]["pad"]["N"][0], FACTS[p]["pad"]["P"][0]), p))
     else:
         seq = sorted(FACTS, key=lambda p: (FACTS[p]["corridor"], FACTS[p]["conn_ref"], FACTS[p]["band"], p))
-    st = Store(); placed = {}; failed = {}; GEOM = {}
+    global _CARRY_CUR, _CARRY_DIR
+    _CARRY_CUR = {}; _CARRY_DIR = {}
+    if _CARRY:
+        _bg = {}
+        for _p in seq:
+            _bg.setdefault(_band_key(FACTS[_p]), []).append(_p)
+        for _k, _ps in _bg.items():
+            if not _band_carry(FACTS[_ps[0]]):
+                continue
+            _xs = [min(FACTS[_q]["pad"]["N"][0], FACTS[_q]["pad"]["P"][0]) for _q in _ps]
+            _CARRY_DIR[_k] = 1 if _xs[-1] >= _xs[0] else -1
+    st = Store()
+    PDN_SEED = _seed_pdn(st) if _PDN_OBS else {"n_pdn_vias": 0, "n_pdn_segs": 0}
+    placed = {}; failed = {}; GEOM = {}
     global ALLOC
     ALLOC = alloc_closed_form() if (rule != "co10" and __import__("os").environ.get("CO10_ALLOC")) else None
     XALLOC = alloc_x() if rule == "co10" else {}
@@ -709,7 +858,7 @@ def probe(rule="d3", order="engine", verbose=False):
                     if math.hypot(px - nx, py - ny) < VV - TOL: continue
                     b = build(f, px, py, nx, ny)
                     if b is None: continue
-                    err = check(*b, st)
+                    err = check(*b, st, pid)
                     if err is None:
                         hit = (px, py, nx, ny, b); break
                     reasons.setdefault(err[0], err)
@@ -727,6 +876,8 @@ def probe(rule="d3", order="engine", verbose=False):
             if verbose: print("OK  ", pid, esc_layer(f), stub_layer(f), (px, py), (nx, ny))
             continue
         _by = y_bias(f)
+        _ck = _band_key(f) if _CARRY else None
+        _cdir = _CARRY_DIR.get(_ck, 0) if _CARRY else 0
         if ALLOC:
             _xw = float(__import__("os").environ.get("CO10_XWIN", "0"))
             if _xw > 0:
@@ -767,16 +918,38 @@ def probe(rule="d3", order="engine", verbose=False):
                                                                    + abs(float(r[3]) - ALLOC[(pid, "N")][1])))[:400]]
             seen = set(); rows = [r for r in rows if not (tuple(r) in seen or seen.add(tuple(r)))]
         else:
+            # CO-144c：carry 带的目标由 carry 游标给出（filter+sort），不再用 _ip3w_targets 的
+            # P 前缀目标（其 P=N+VT 与「P/N 不翻转」相悖，会把锚页推离 pad）。非 carry 带照旧。
+            _tp = _IP3W_TGT.get(pid) if (_IP3W_TGT and not _cdir) else None
+            _tx_p = _tp[1] if _tp else f["pad"]["P"][0]
+            _tx_n = _tp[0] if _tp else f["pad"]["N"][0]
             rows = sorted(PAIR_DOMAIN[pid]["pair_rows"],
-                          key=lambda r: (abs(float(r[0]) - f["pad"]["P"][0]) + abs(float(r[1]) - f["pad"]["N"][0])
+                          key=lambda r: (abs(float(r[0]) - _tx_p) + abs(float(r[1]) - _tx_n)
                                          + abs(float(r[2]) - (f["pad"]["P"][1] + _by))
                                          + abs(float(r[3]) - (f["pad"]["N"][1] + _by)),
                                          float(r[0]), float(r[1])))
+        # 带首页（游标未建立）保持**原偏好序**（就近 pad/目标）；其后才按 carry 方向重排。
+        # 理由：若首页即取极值列，会把整带锚到窗口外（CO-144 首版 DN7 N→95.6 的教训）。
+        if _cdir and _CARRY_CUR.get(_ck) is not None:
+            # 稳定排序：正向（西->东）以 max(列 x) 升序；反向以 max(列 x) 降序。
+            # 同键保留原偏好序（稳定排序）。
+            rows = sorted(rows, key=lambda r: max(float(r[0]), float(r[1])), reverse=(_cdir < 0))
         hit = None; reasons = {}
+        _ccur = _CARRY_CUR.get(_ck) if _cdir else None
+        _cw = 3.0 * _WBY.get(esc_layer(f), 0.16) if _cdir else 0.0
         for r in rows:
             px, nx, py, ny, dd = (float(r[0]), float(r[1]), float(r[2]), float(r[3]), float(r[4]))
             if dd < VV - TOL or abs(px - nx) < 0.38 - TOL: continue
             if abs(py - f["pad"]["P"][1]) > YWIN or abs(ny - f["pad"]["N"][1]) > YWIN: continue
+            # CO-144b：carry 只搬列**不翻转对向**（P/N 逃逸列相对 pad 的左右次序须保持）
+            #   —— 翻转会改变对内走线拓扑（实测 DN7 对向翻转 => L5 SI skew 0.328 > 0.15）。
+            if _cdir and (px - nx) * (f["pad"]["P"][0] - f["pad"]["N"][0]) <= 0:
+                continue
+            if _cdir and _ccur is not None:
+                if _cdir > 0 and min(px, nx) < _ccur + _cw - TOL:
+                    continue
+                if _cdir < 0 and max(px, nx) > _ccur - _cw + TOL:
+                    continue
             if _HOLE_GAP > 0:      # L2: 同网钻孔间距 => 逃逸竖段 >= gap（升/降段不得短到 via 钻孔相撞）
                 _ly = LANES[pid]["lane_y"]
                 if abs(py - (_ly + pol_off(f, "P"))) < _HOLE_GAP - TOL \
@@ -784,7 +957,7 @@ def probe(rule="d3", order="engine", verbose=False):
                     continue
             b = build(f, px, py, nx, ny)
             if b is None: continue
-            err = check(*b, st)
+            err = check(*b, st, pid)
             if err is None:
                 hit = (px, py, nx, ny, b); break
             reasons.setdefault(err[0], err)
@@ -798,16 +971,22 @@ def probe(rule="d3", order="engine", verbose=False):
                        "land": {"P": land_meta(f)["P"], "N": land_meta(f)["N"]}}
         GEOM[pid] = geom_rec(b, f)
         st.add(b[0], b[1], pid)
+        if _cdir > 0:
+            _CARRY_CUR[_ck] = max(px, nx)
+        elif _cdir < 0:
+            _CARRY_CUR[_ck] = min(px, nx)
         if verbose: print("OK  ", pid, esc_layer(f), stub_layer(f), (px, py), (nx, ny))
     return {"rule": rule, "order": order, "n_pages": len(FACTS), "n_placed": len(placed), "geom": GEOM,
             "n_failed": len(failed), "placed": placed, "failed": failed,
+            "pdn_obstacles": PDN_SEED, "redline_ip3w": _IP3W, "redline_pdn_obs": _PDN_OBS,
+            "redline_fan_strat": _STRAT,
             "verdict": "PROBE_PLACED_ALL" if not failed else "PROBE_RESIDUAL"}
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--rule", choices=["d3", "fan", "co10"], default="d3")
-    ap.add_argument("--order", choices=["engine", "fewest", "laneidx", "rev"], default="engine")
+    ap.add_argument("--order", choices=["engine", "fewest", "laneidx", "rev", "xasc", "carry"], default="engine")
     ap.add_argument("--out", default=None)
     ap.add_argument("--verbose", action="store_true")
     a = ap.parse_args()

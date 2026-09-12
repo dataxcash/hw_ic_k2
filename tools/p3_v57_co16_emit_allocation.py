@@ -33,7 +33,13 @@ for _k, _e in (("CO10_PAIR", "CO16_PAIR"), ("CO10_WSTEP", "CO16_WSTEP"), ("CO10_
 # CO-23 旋钮（默认 = 旧行为；**仅在显式指定时写入 config**，保 ALLOC.1/2/3 逐字节可复现）
 # CO-36 旋钮（默认 = 旧行为；仅显式指定时写入 config，保 ALLOC.1..4 逐字节可复现）
 for _k, _e in (("CO10_COLMODE", "CO16_COLMODE"), ("CO10_WSWAP", "CO16_WSWAP"),
-               ("CO10_HOLE_GAP", "CO16_HOLE_GAP"), ("CO10_LXPRIO", "CO16_LXPRIO")):
+               ("CO10_HOLE_GAP", "CO16_HOLE_GAP"), ("CO10_LXPRIO", "CO16_LXPRIO"),
+               # CO-143（L2 自裁）：逃生扇并入「对间 3W」下界（默认关 => ALLOC.1..7 逐字节可复现）
+               ("CO10_IP3W", "CO16_IP3W"),
+               # CO-144（L2 自裁）：逃生扇落位策略 = 分带单调 carry（默认关 => ALLOC.1..7 逐字节可复现）
+               ("CO10_FAN_STRAT", "CO16_FAN_STRAT"),
+               # CO-144：PDN 固定障碍场须随落位策略一并透传（否则扇对 PDN 视而不见 => 板级 DRC 回归）
+               ("CO10_PDN_OBS", "CO16_PDN_OBS")):
     if os.environ.get(_e):
         CFG[_k] = os.environ[_e]
 REVISION = os.environ.get("CO16_REV", "CO16-ALLOC.1")
@@ -55,7 +61,8 @@ def main() -> int:
     import importlib.util
     spec = importlib.util.spec_from_file_location("probe", str(K2 / "tools/p3_v57_co10_west_fan_probe.py"))
     probe = importlib.util.module_from_spec(spec); spec.loader.exec_module(probe)
-    res = probe.probe(rule="fan", order="rev", verbose=False)
+    _ord = os.environ.get("CO16_ORDER", "rev")
+    res = probe.probe(rule="fan", order=_ord, verbose=False)
     if res["n_placed"] != res["n_pages"]:
         print("NOT FULLY PLACED:", res["n_failed"], res["failed"]); return 1
     G = res["geom"]
@@ -79,7 +86,9 @@ def main() -> int:
         "status": "EMITTED", "status_kind": "VERIFIED_FULL_PLACEMENT_32of32",
         "authority": {"co15_ruling": "m13_v57_CO15_joint_allocation_ruling.md"},
         "method": {"name": "single_pass_deterministic_greedy",
-                   "order": "canonical reverse (corridor, conn_ref, band, page_id)",
+                   "order": ("band-major monotone carry (corridor, band, conn_ref, pad-x asc)"
+                             if os.environ.get("CO16_FAN_STRAT") == "carry"
+                             else "canonical reverse (corridor, conn_ref, band, page_id)"),
                    "no_backtracking": True, "no_retry": True,
                    "lane_offset_rule": "CO10_POLMODE=lx（方向感知 P/N 排序；见 CFG note）",
                    "note": "候选按固定键序；首可行即取。执行器（引擎）按本工件 O(1) 取用，零搜索。"},

@@ -1,6 +1,6 @@
 # G7 / L5 记录 — k2 v57（8L）
 
-> revision **L5-G7.7**｜图纸 **W3-CN.41** `0074dad9067af737`｜L4 板 `a3ce9ab803045a0a`（含 SPEC 逃逸区规则域 CO-37）
+> revision **L5-G7.7**｜图纸 **W3-CN.42** `28d35252641ec48d`｜L4 板 `76cdf64cc4c5043b`（含 SPEC 逃逸区规则域 CO-37）
 > 产生：`tools/p3_v57_l5_signoff.py`（kicad-cli 10.0.5，L5-DFM.6）——**随 L5 每次重跑确定性重生成**
 > ｜历史 FAIL 叙事见 CO-37/CO-43/CO-44/CO-45 变更单与 git（本件取代 L5-G7.5 的 new=60 口径）。
 
@@ -17,7 +17,7 @@
 | 项 | 值 |
 |---|---|
 | copper layers | 8 = F/B/In1/In2/In3/In4/In5/In6（In1/In3/In6=GND、In4=P3V3；方案(a) 层数/平面数/电源域不变）|
-| tracks / vias | 2708 / 493（drill ['0.2']）|
+| tracks / vias | 2688 / 493（drill ['0.2']）|
 | L4 rule areas（非铜） | 4 = ESC_J2 / ESC_J3 / ESC_J4 / ESC_U6（F.Cu；SPEC 逃逸域）|
 | 在册网（L4 施工） | 68（来源 `m13_v57_l4_construction.json: nets`）|
 | 未连项（全板） | 179（范围外 GND/P3V3/NO_CONNECT/MCU_VDD 等，见 boundary §6.4）|
@@ -31,14 +31,14 @@
 - 域工件 `m13_v57_co37_escape_domain.json` `5616a9f873c9b844`；冻结基线板不加载 `.kicad_dru`。
 
 ## 4. 独立复算
-- G5 `p3_v57_w3_constructive_validator_v2.py`（不 import 引擎）：`m13_v57_w3_validation.json` `75ce1c2af42de55e`（G-M1..6、A1.2/A1.3/A1.4、frozen）。
-- G6 `p3_v57_l4_validator.py`：`m13_v57_l4_validation.json` `313666e68dd610e6`（L4-A..E viol=0）。
+- G5 `p3_v57_w3_constructive_validator_v2.py`（不 import 引擎）：`m13_v57_w3_validation.json` `4fa6d8195e178e0e`（G-M1..6、A1.2/A1.3/A1.4、frozen）。
+- G6 `p3_v57_l4_validator.py`：`m13_v57_l4_validation.json` `6511f81854c605a3`（L4-A..E viol=0）。
 - 跨层 DRC：`kicad-cli pcb drc --format json --severity-all --refill-zones`（冻结板 vs L4，按类型差分；CO-47 起退出码=判定）。
 
 ## 5. 指纹
-图纸 `0074dad9067af737`｜landing `0475b15dd9f7f1e4`｜G5 `75ce1c2af42de55e`
-｜L4 construction `cb8874255bd89f07`｜L4 validation `313666e68dd610e6`｜L4 板 `a3ce9ab803045a0a`
-｜fab `e47bab4fce4e4995`｜dfm `ea6bcd09fa537e13`｜si `b5797a58d627ab55`
+图纸 `28d35252641ec48d`｜landing `ab9d40531fb83fbc`｜G5 `4fa6d8195e178e0e`
+｜L4 construction `c660e6eb83d9f787`｜L4 validation `6511f81854c605a3`｜L4 板 `76cdf64cc4c5043b`
+｜fab `3fd21d0b61202efa`｜dfm `ea6bcd09fa537e13`｜si `87483571325e8f14`
 ｜`.kicad_dru` `3148703240d54420`
 冻结四源 `0bd52ed48e720b8c / a8ef3ea8ecff99d7 / fb07d25ac426ff84 / 0a459839e15960b8`（未改）。
 

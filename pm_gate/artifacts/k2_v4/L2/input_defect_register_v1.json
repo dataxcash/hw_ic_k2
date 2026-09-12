@@ -300,20 +300,23 @@
    "finding": "implementation_deviation:R3-2_asbuilt_interpair_edge",
    "kind": "IMPLEMENTATION_DEVIATION",
    "severity": "medium",
-   "what": "交付板域外对间铜边低于 REQ-R3-2 忠实口径 —— **CO-141 全量审计更正范围**：co134 每层只报一个最小值 ⇒ 原「3 处」为**下界**；全量枚举得**平行(≤10°) 且 <2w 的组合 24 个、涉及 24 个对-对**（F.Cu 10 / B.Cu 14 / In2 0）；In5 的 1138 个 <2w 组合**全为斜交(>10°)** ⇒ 不属 SPEC「长平行」口径。",
+   "what": "交付板域外对间铜边低于 REQ-R3-2 忠实口径 —— **CO-144 后范围**：B.Cu 逃生竖列已由 CO-144 关闭（原 14 对 <2w ⇒ 0）；残留 **F.Cu 10 对**（J2 接口 0.6 节距 land 段，路由不可消除 = L1）与 In5 斜交口径（CO-141：In5 <2w 组合全为斜交 >10°，不属「长平行」）。",
    "refs": [
     "CO-134",
     "CO-53",
     "CO-54"
    ],
-   "disposition": "**工程开放项（非 owner）**：SI/板厂券复核（外部输入）判定可接受性；若判须改几何 ⇒ 另开 CO（本件不动几何，板保持 a3ce9ab803045a0a）",
+   "disposition": "**工程开放项**：① B.Cu 逃生竖列 = CO-144 已几何闭合；② F.Cu J2 接口 = L1/owner（J2 3W 适用域，接口固有节距 0.6 < 3w）；③ 外部：SI/板厂券判可接受性 + 「长平行」阈值。板现 76cdf64cc4c5043b（CO-144）。",
    "status": "OPEN",
-   "next": "① L2：路由器 escape-fan/landing 列距基准须并入 3W 下界（见下述 TOOL_DEFECT）；② L1：J2 接口 0.6 节距段（接口固有）；③ 外部：SI 判可接受性 + 「长平行」阈值",
+   "next": "① L1/owner：J2 接口 3W 适用域（F.Cu 偏差）；② 外部：SI/板厂券 + 长平行阈值。B.Cu（L2）已闭合。",
    "evidence": [
-    "CO-134 m13_v57_co134_req_impl_separation.json as_built.deviations_open_engineering",
-    "CO-141 全量审计（UNDER_REPORTED 6f8535535a58aaf7）"
+    "CO-134 m13_v57_co134_req_impl_separation.json as_built.deviations_open_engineering（CO-144 后 B.Cu ok）",
+    "CO-141 全量审计（UNDER_REPORTED 6f8535535a58aaf7）",
+    "CO-144 m13_v57_co144_escape_fan_carry_rederive.json（B.Cu 0 违规）"
    ],
-   "closed_by": []
+   "closed_by": [
+    "CO-144(B.Cu 部分)"
+   ]
   },
   {
    "finding": "tool_defect:co124_definition_doc_version_label",
@@ -363,16 +366,30 @@
    "finding": "tool_defect:k2_router_escape_fan_omits_3w",
    "kind": "TOOL_DEFECT",
    "severity": "high",
-   "what": "w3_constructive 的 chip escape-fan / landing 列距基准取 via 净距（0.35+0.175=0.525，网格取整 0.6），**未并入 REQ-R3-2 的 3W 下界 0.615**（该件自身在 MEANDER_PITCH 已声明 3w=0.615）⇒ 逃生扇/落列实际列距 0.6 < 0.615，造成 24 个对-对的长平行 3W 不达标（CO-141）",
+   "what": "**定位更正（CO-143，取代 CO-141 附记2）**：现行 G4 基线走 `--r1-5-shape co16`，其 R1 逃生列由 `co16_prepare()` O(1) 消费 CO16-ALLOC.7（`m13_v57_co16_channel_allocation_v7.json`）——`r1_place()` / f13 `pair_xorder` 在 co16 路径**不执行**（附记2 两次实验为 no-op）。真实产生阶段 = `p3_v57_co10_west_fan_probe.py` 的单遍落位判据 `check()`：track-track 取 `TT = WID+CLEAR = 0.38`（净距口径）**无 3*w(layer) 项** ⇒ 逃生竖列对间中心距 0.55/0.6 < 3*w(B.Cu)=0.615。CO-142 逐条归因：24 个平行对-对 = B.Cu 14（逃生竖列，L2 可改）+ F.Cu 10（J2 接口 land，0.6 节距 < 3w，L1 固有）。",
    "refs": [
     "CO-141",
+    "CO-142",
+    "CO-143",
     "CO-134",
-    "CO-11",
-    "CO-16"
+    "CO-16",
+    "CO-10"
    ],
-   "status": "OPEN",
-   "disposition": "确定性可修（L2）：列距基准改 max(via 净距, 3w)=0.615 → 需路由器 CO + 全链重基线；J2 焊盘端 0.6 为连接器节距（接口固有，L1）",
-   "next": "另开 L2 几何 CO（escape-fan/landing 列距基准并入 3W）"
+   "status": "CLOSED",
+   "disposition": "CO-144 关闭：逃生扇落位策略重派生（`p3_v57_co10_west_fan_probe.py` opt-in 分带单调 carry + PDN 固定障碍场）=> CO16-ALLOC.8；32/32 落位；B.Cu 对间平行(≤10°)最小中心距 0.65 ≥ 3w 0.615（<2w 对-对 14 => 0）；板级 DRC 中性（kicad-cli 42->42，0 新增）；L4 viol 0；L5 DFM new=0 / SI 0.1300。",
+   "next": "无（B.Cu 3W 已几何闭合）；残留 F.Cu = L1/owner（见 implementation_deviation:R3-2_asbuilt_interpair_edge）",
+   "evidence": [
+    "co144: m13_v57_co144_escape_fan_carry_rederive.json（2a2689c4bc842158→重发射后见记录）",
+    "alloc8: m13_v57_co16_channel_allocation_v8.json",
+    "board: k2_v4_8L.l4.kicad_pcb 76cdf64cc4c5043b（CO-144 后）",
+    "g4: m13_v57_w3_joint_assignment.json（W3-CN.42）",
+    "l4val: m13_v57_l4_validation.json viol 0",
+    "l5: m13_v57_l5_dfm_dft_record.json new=0 / m13_v57_l5_si_pi_emc_record.json SI 0.1300 PASS",
+    "drc: kicad-cli 42->42（CO-133 B_drc_neutral）"
+   ],
+   "closed_by": [
+    "CO-144"
+   ]
   }
  ],
  "closed_items": [
@@ -390,7 +407,7 @@
   "owner": "ARCHER（L2 自裁执行侧）",
   "approval": "定义件 v1.0 待监理裁定/owner 批准；登记簿随闸每次运行校验",
   "mandatory_trigger": "任何 SPEC / drc_rules 变更后必须跑 tools/p3_v57_co124_input_selfcheck_gate.py 并 PASS",
-  "updated_by": "CO-127..CO-133 + **CO-134（整改通知 #09：③ 重新定性 = 工程换算错误 → REQ-R3-2 忠实实现 + 需求/实现分家规矩 + co124 K9）**；登记簿随 co124 每次运行校验；CO-134 续：4 项已声明定值补 rule_key + 台账溯源；**CO-136（L2 自裁 · 闸卫生续）**：登记并关闭 CO-135 F5(b)/F6 两条 TOOL_DEFECT（co124 标签 / co106 陈旧牙齿）；F4（handoff pin 失准）与 F5(a)（③ 根因叙述）属叙述类，保留在 CO-135 记录，不入本登记簿（非 SPEC/工具缺陷）。；**CO-139**：+1 TOOL_DEFECT（K9 豁免未锚定）并 CLOSED（hash-pin + T9）。；**CO-141**：更正 IMPLEMENTATION_DEVIATION 范围（24 平行对-对，非 3）+ 新增 OPEN TOOL_DEFECT（路由器列距基准漏 3W）。",
+  "updated_by": "CO-127..CO-133 + **CO-134（整改通知 #09：③ 重新定性 = 工程换算错误 → REQ-R3-2 忠实实现 + 需求/实现分家规矩 + co124 K9）**；登记簿随 co124 每次运行校验；CO-134 续：4 项已声明定值补 rule_key + 台账溯源；**CO-136（L2 自裁 · 闸卫生续）**：登记并关闭 CO-135 F5(b)/F6 两条 TOOL_DEFECT（co124 标签 / co106 陈旧牙齿）；F4（handoff pin 失准）与 F5(a)（③ 根因叙述）属叙述类，保留在 CO-135 记录，不入本登记簿（非 SPEC/工具缺陷）。；**CO-139**：+1 TOOL_DEFECT（K9 豁免未锚定）并 CLOSED（hash-pin + T9）。；**CO-141**：更正 IMPLEMENTATION_DEVIATION 范围（24 平行对-对，非 3）+ 新增 OPEN TOOL_DEFECT（路由器列距基准漏 3W）。；**CO-142（L2 只读）**：对间 <3W 违规逐条明细 + 构造阶段归因；**CO-143（L2 只读）**：更正 `k2_router_escape_fan_omits_3w` 定位（f13 pair_xorder → escape-fan 落位判据 `p3_v57_co10_west_fan_probe.py:check()`）+ 施加可行性研究（可满足但须重派生策略；PDN 障碍 + 贪心夹死）。",
   "counts": {
    "SPEC_DEFECT": 5,
    "TOOL_DEFECT": 8,

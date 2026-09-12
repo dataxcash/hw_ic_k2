@@ -14,14 +14,14 @@
  },
  "inputs": {
   "spec_in": "500f3da8179fe19c",
-  "board": "a3ce9ab803045a0a",
+  "board": "76cdf64cc4c5043b",
   "co129": "5e2f92e5e03f0ab9",
   "co37": "5616a9f873c9b844"
  },
  "outputs": {
   "spec_out": "5f72182a2616392c",
-  "ledger": "860c7b1e30a2c915",
-  "rule_doc": "53153475e37dcb72"
+  "ledger": "94bf57f659476084",
+  "rule_doc": "a1909cb0a0f49269"
  },
  "faithful_derivation": {
   "edge_by_layer_mm": {
@@ -65,47 +65,52 @@
     "required_pitch_mm": 0.765,
     "margin_mm": -0.165,
     "ok": true,
-    "regime": "ECN-001 escape_transition_zone 放宽（已声明，非该原则适用域）"
+    "regime": "ECN-001 escape_transition_zone（已声明；evidence_ref 已 hash-pin）⇒ 非该原则适用域",
+    "evidence_ref": {
+     "path": "SPEC_k2_v4.spec-rev-19.json",
+     "sha16": "5f72182a2616392c",
+     "basis": "SPEC constraints.escape_transition_zone（escape_clearance_mm=0.075；焊盘场节距 0.4/0.6 为封装固有）⇒ 该域非 REQ-R3-2「域外长平行」适用域"
+    }
    }
   ],
   "verdict": "REACHABLE"
  },
  "as_built": {
-  "source": "L4 board a3ce9ab803045a0a（CO-134 实测，零搜索）",
+  "source": "L4 board 76cdf64cc4c5043b（CO-134 实测，零搜索）",
   "rows": [
    {
     "layer": "B.Cu",
     "scope": "all",
-    "min_edge_mm": 0.345,
+    "min_edge_mm": 0.445,
     "pairs": [
-     "PCIE_DN_OUT6_N_MCIO",
-     "PCIE_DN_OUT7_P_MCIO"
+     "PCIE_DN_OUT4_N_MCIO",
+     "PCIE_DN_OUT5_P_MCIO"
     ],
     "at": [
-     92.15,
-     47.912
+     89.65,
+     46.886
     ],
     "inside_escape_xy": false,
     "required_edge_mm": 0.41,
-    "margin_mm": -0.065,
-    "ok": false
+    "margin_mm": 0.035,
+    "ok": true
    },
    {
     "layer": "B.Cu",
     "scope": "outside_escape",
-    "min_edge_mm": 0.345,
+    "min_edge_mm": 0.445,
     "pairs": [
-     "PCIE_DN_OUT6_N_MCIO",
-     "PCIE_DN_OUT7_P_MCIO"
+     "PCIE_DN_OUT4_N_MCIO",
+     "PCIE_DN_OUT5_P_MCIO"
     ],
     "at": [
-     92.15,
-     47.912
+     89.65,
+     46.886
     ],
     "inside_escape_xy": false,
     "required_edge_mm": 0.41,
-    "margin_mm": -0.065,
-    "ok": false
+    "margin_mm": 0.035,
+    "ok": true
    },
    {
     "layer": "F.Cu",
@@ -184,7 +189,7 @@
      "PCIE_DN_OUT1_P_MCIO"
     ],
     "at": [
-     74.75,
+     74.725,
      40.8
     ],
     "inside_escape_xy": false,
@@ -201,7 +206,7 @@
      "PCIE_DN_OUT1_P_MCIO"
     ],
     "at": [
-     74.75,
+     74.725,
      40.8
     ],
     "inside_escape_xy": false,
@@ -211,21 +216,6 @@
    }
   ],
   "deviations_open_engineering": [
-   {
-    "layer": "B.Cu",
-    "min_edge_mm": 0.345,
-    "required_edge_mm": 0.41,
-    "margin_mm": -0.065,
-    "pairs": [
-     "PCIE_DN_OUT6_N_MCIO",
-     "PCIE_DN_OUT7_P_MCIO"
-    ],
-    "at": [
-     92.15,
-     47.912
-    ],
-    "disposition": "OPEN_ENGINEERING：域外实测低于忠实口径 ⇒ SI/板厂券复核（外部输入，CO-53/54）或后续几何迭代（须另开 CO）"
-   },
    {
     "layer": "F.Cu",
     "min_edge_mm": 0.3294,
@@ -251,7 +241,7 @@
      "PCIE_DN_OUT1_P_MCIO"
     ],
     "at": [
-     74.75,
+     74.725,
      40.8
     ],
     "disposition": "OPEN_ENGINEERING：域外实测低于忠实口径 ⇒ SI/板厂券复核（外部输入，CO-53/54）或后续几何迭代（须另开 CO）"

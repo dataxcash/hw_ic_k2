@@ -1,0 +1,65 @@
+{
+ "artifact": "m13_v57_co144_escape_fan_carry_rederive",
+ "schema": 1,
+ "revision": "CO-144",
+ "nature": "L2 自裁（过孔策略-走廊重派生）：逃生扇分带单调 carry + PDN 障碍场 -> CO16-ALLOC.8",
+ "closes": {
+  "finding": "tool_defect:k2_router_escape_fan_omits_3w",
+  "status": "CLOSED_BY_GEOMETRY",
+  "evidence": [
+   "m13_v57_co16_channel_allocation_v8.json",
+   "板级 DRC 中性（L4 apply + PDN apply + kicad-cli）"
+  ]
+ },
+ "inputs": {
+  "spec": "5f72182a2616392c",
+  "probe": "d335ade502ceebcb",
+  "alloc7": "a765af4c9bf61e64",
+  "emit": "64d75dd9f9d26875"
+ },
+ "strategy": {
+  "name": "band_monotone_carry_plus_pdn_field",
+  "domain": "外层逃逸带（escape 3W 界 0.615 = B.Cu）；内层 In2/In5(0.48) 实测已合规保持 canonical",
+  "carry": "带内 (corridor,band) 连续 + 处理序自适应方向；游标 cur=已落位列极值；候选 min/max(列x) 距 cur >= 3w；游标增量最小取首可行（零回溯）",
+  "pdn_obstacles": {
+   "n_pdn_vias": 241,
+   "n_pdn_segs": 185
+  }
+ },
+ "machine_check": {
+  "placed": "32/32",
+  "failed": [],
+  "parallel_gaps": {
+   "B.Cu": {
+    "min_center_mm": 0.65,
+    "min_pair": [
+     "PCIE_UP4/out_J2",
+     "PCIE_UP3/out_J2"
+    ],
+    "n_below_3w": 0,
+    "three_w_mm": 0.615
+   },
+   "In2.Cu": {
+    "min_center_mm": 0.58,
+    "min_pair": [
+     "PCIE_DN1/input",
+     "PCIE_DN0/input"
+    ],
+    "n_below_3w": 0,
+    "three_w_mm": 0.48
+   }
+  }
+ },
+ "outputs": {
+  "alloc8_sha256": "3307d19a226f60fca84d20e12486a3a6b7c22190eea546ff8fee487ca2245d66",
+  "alloc8_sha16": "3307d19a226f60fc",
+  "stub_migrated_pages": [
+   "PCIE_UP4/input",
+   "PCIE_UP5/input",
+   "PCIE_UP6/input",
+   "PCIE_UP7/input"
+  ]
+ },
+ "verdict": "PASS",
+ "redline": "不改 SPEC/阈值/冻结四源；carry/PDN 为 opt-in（默认关 => ALLOC.1..7 逐字节可复现）"
+}

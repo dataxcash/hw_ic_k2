@@ -30,6 +30,12 @@ EXEMPT = {
     "m13_v57_co110_l2_coverage_closure.json": {"co106_record": "CO-110 依赖被 CO-115 取代的前提 ⇒ 历史",
                                               "co109_record": "CO-109 已被 CO-115 取代 ⇒ 历史",
                                               "co87_record": "CO-110 时点 co87 版本 ⇒ 历史（co87 已随后续 rev 重跑）"},
+    # CO-144（L2 重基线）：CO-140/141 是对 **CO-134 板 a3ce9ab8** 的归因/全量审计（结论驱动 CO-143/144）；
+    # 板随 CO-144 重建（76cdf64c）且 co134 记录重派生 ⇒ 其 co134_record pin 属历史。
+    "m13_v57_co140_deviation_attribution.json": {"co134_record": "CO-144 重基线前的板 a3ce9ab8 归因 ⇒ 历史（结论已由 CO-144 关闭 B.Cu）"},
+    "m13_v57_co141_interpair_conformance_audit.json": {"co134_record": "CO-144 重基线前的板 a3ce9ab8 全量审计 ⇒ 历史（B.Cu 违规已由 CO-144 消除）"},
+    "m13_v57_co137_interpair_fixspace.json": {"co134_record": "CO-137 对 CO-134 板 a3ce9ab8 的偏差几何可行性分析 ⇒ 历史（CO-144 已改几何）"},
+    "m13_v57_co138_interpair_scope_probe.json": {"co134_record": "CO-138 对 CO-134 板 a3ce9ab8 的耦合几何画像 ⇒ 历史（CO-144 已改几何）"},
 }
 
 

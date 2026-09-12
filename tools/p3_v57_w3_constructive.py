@@ -62,7 +62,7 @@ OUT_MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
 OUT_LANDING = STEP2 / "m13_v57_w3_chip_landing_rows.json"
 
 REVISION = "W3-CN.30"   # 默认（t2）路径不动；CO-16 见 REVISION_CO16
-REVISION_CO16 = "W3-CN.41"   # CO-45：远端 N 折线补入 3D nodes（修 CO-43 图纸/nodes 不一致）+ REFCLK 对内 0.5/dip 解耦；CO-68: LID REV6 层集 F/In2/In5/B（方案(a)）
+REVISION_CO16 = "W3-CN.42"   # CO-45：远端 N 折线补入 3D nodes（修 CO-43 图纸/nodes 不一致）+ REFCLK 对内 0.5/dip 解耦；CO-68: LID REV6 层集 F/In2/In5/B（方案(a)）
 ECS_VIA1_X = 133.825        # 两列缝中线（距两侧 pad 边各 0.35 >= vias.high_speed.pad_edge_clearance_mm 0.3）
 ECS_VIA2_X_MAX = 131.525    # 内列 pad 西缘 132.0 - via 半径 0.175 - pad_edge_clearance 0.3
 ECS_VIA_R = 0.175           # vias.std: drill 0.2 + 2*annular 0.075
@@ -156,8 +156,8 @@ TOL = 1e-9
 SUPERSEDED = {"artifact": "m13_v57_w3_joint_assignment.json", "revision": "W3-JA.2",
                "sha256": "d081618c7b961d770c8e2f180f93b92125b316bc0eeec181f9d1d191a0ee6acc",
                "reason": "method-level iron-law violation (search-based); retained, not rewritten"}
-CO16_ALLOC = STEP2 / "m13_v57_co16_channel_allocation_v7.json"   # CO16-ALLOC.7（CO-69：stub 层 In6->In5，随 LID REV6）
-CO16_ALLOC_SHA = "a765af4c9bf61e642780ad2ebbea177e8a2c76125eda93feca9641e7dfd0185a"
+CO16_ALLOC = STEP2 / "m13_v57_co16_channel_allocation_v8.json"   # CO16-ALLOC.8（CO-144：逃生扇 carry + PDN 障碍场；stub In5）
+CO16_ALLOC_SHA = "3307d19a226f60fca84d20e12486a3a6b7c22190eea546ff8fee487ca2245d66"
 CORRIDOR = {
     "EAST_CHIP_TO_J2": {"bounds": (105.25, 132.65), "x_domain": (93.55, 105.25)},
     "WEST_MCIO_TO_CHIP": {"bounds": (65.05, 82.35), "x_domain": (82.35, 93.55)},

@@ -14,10 +14,22 @@
   },
   "m13_v57_co118_bcu_bridge_conflict_check.json": {
    "co95_record": "CO-118 的 B.Cu 桥冲突已由 CO-130/CO-132 取代（B.Cu 载体退役 + In4 承载）⇒ 本记录为历史；CO-132 重跑 co95 后 pin 属历史"
+  },
+  "m13_v57_co137_interpair_fixspace.json": {
+   "co134_record": "CO-137 对 CO-134 板 a3ce9ab8 的偏差几何可行性分析 ⇒ 历史（CO-144 已改几何）"
+  },
+  "m13_v57_co138_interpair_scope_probe.json": {
+   "co134_record": "CO-138 对 CO-134 板 a3ce9ab8 的耦合几何画像 ⇒ 历史（CO-144 已改几何）"
+  },
+  "m13_v57_co140_deviation_attribution.json": {
+   "co134_record": "CO-144 重基线前的板 a3ce9ab8 归因 ⇒ 历史（结论已由 CO-144 关闭 B.Cu）"
+  },
+  "m13_v57_co141_interpair_conformance_audit.json": {
+   "co134_record": "CO-144 重基线前的板 a3ce9ab8 全量审计 ⇒ 历史（B.Cu 违规已由 CO-144 消除）"
   }
  },
- "n_exempt_historical": 5,
- "n_match": 11,
+ "n_exempt_historical": 9,
+ "n_match": 7,
  "n_stale_undeclared": 0,
  "n_unresolved_key": 1,
  "nature": "L2 过程闸：记录内 inter-record provenance pin 一致性（关闭 CO-108/CO-114 F-6 盲区）",
@@ -38,15 +50,15 @@
    "status": "match"
   },
   {
-   "actual": "786714126e831299",
-   "cited": "786714126e831299",
+   "actual": "1eaf00f34c882474",
+   "cited": "1eaf00f34c882474",
    "key": "co98_record",
    "record": "m13_v57_co105_f4_scope_disposition.json",
    "resolved": "m13_v57_co98_reachability_status_report.json",
    "status": "match"
   },
   {
-   "actual": "c5ef3a2319b5a011",
+   "actual": "71dcc7218938754a",
    "cited": "fa0ef14cb38dcb1c",
    "key": "co106_record",
    "record": "m13_v57_co109_in4_void_l2_ruling.json",
@@ -54,7 +66,7 @@
    "status": "exempt_historical"
   },
   {
-   "actual": "c5ef3a2319b5a011",
+   "actual": "71dcc7218938754a",
    "cited": "fa0ef14cb38dcb1c",
    "key": "co106_record",
    "record": "m13_v57_co110_l2_coverage_closure.json",
@@ -78,7 +90,7 @@
    "status": "exempt_historical"
   },
   {
-   "actual": "b5797a58d627ab55",
+   "actual": "87483571325e8f14",
    "cited": "73f9b59ed5f6f3ce",
    "key": "l5_si_record",
    "record": "m13_v57_co111_in5_pcie_corridor_exposure.json",
@@ -102,28 +114,28 @@
    "status": "exempt_historical"
   },
   {
-   "actual": "5dd6cc22c57da4a5",
+   "actual": "c605252251c35a3f",
    "cited": "5dd6cc22c57da4a5",
    "key": "co134_record",
    "record": "m13_v57_co137_interpair_fixspace.json",
    "resolved": "m13_v57_co134_req_impl_separation.json",
-   "status": "match"
+   "status": "exempt_historical"
   },
   {
-   "actual": "5dd6cc22c57da4a5",
+   "actual": "c605252251c35a3f",
    "cited": "5dd6cc22c57da4a5",
    "key": "co134_record",
    "record": "m13_v57_co138_interpair_scope_probe.json",
    "resolved": "m13_v57_co134_req_impl_separation.json",
-   "status": "match"
+   "status": "exempt_historical"
   },
   {
-   "actual": "5dd6cc22c57da4a5",
+   "actual": "c605252251c35a3f",
    "cited": "5dd6cc22c57da4a5",
    "key": "co134_record",
    "record": "m13_v57_co140_deviation_attribution.json",
    "resolved": "m13_v57_co134_req_impl_separation.json",
-   "status": "match"
+   "status": "exempt_historical"
   },
   {
    "actual": "7573907fdf3d0192",
@@ -134,12 +146,12 @@
    "status": "match"
   },
   {
-   "actual": "5dd6cc22c57da4a5",
+   "actual": "c605252251c35a3f",
    "cited": "5dd6cc22c57da4a5",
    "key": "co134_record",
    "record": "m13_v57_co141_interpair_conformance_audit.json",
    "resolved": "m13_v57_co134_req_impl_separation.json",
-   "status": "match"
+   "status": "exempt_historical"
   },
   {
    "actual": null,

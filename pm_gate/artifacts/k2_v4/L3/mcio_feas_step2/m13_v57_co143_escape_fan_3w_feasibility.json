@@ -1,0 +1,121 @@
+{
+ "artifact": "m13_v57_co143_escape_fan_3w_feasibility",
+ "schema": 1,
+ "revision": "CO-143",
+ "nature": "L2 分析（只读）：逃生扇对间 3W 缺陷**定位修正** + 施加可行性研究",
+ "corrects": {
+  "prior_localization": "CO-141 附记2：f13 pair_xorder / p3_v57_f13_r1_pair_xorder.py",
+  "why_invalid": "co16 形状的 R1 逃生列 = co16_prepare() O(1) 消费 CO16-ALLOC.7；r1_place()/pair_xorder 在 co16 路径不执行 ⇒ 附记2 两次实验为 no-op",
+  "true_locus": "p3_v57_co10_west_fan_probe.py check()（逃生竖列落位判据） → CO16-ALLOC → G4(co16) → L4"
+ },
+ "inputs": {
+  "spec": "5f72182a2616392c",
+  "alloc7": "a765af4c9bf61e64",
+  "probe": "3cd76810ee8ca05f"
+ },
+ "A_defect_present": {
+  "baseline_placed": "32/32",
+  "bcu": {
+   "min_center_mm": 0.55,
+   "min_pair": [
+    "PCIE_DN6/out_MCIO",
+    "PCIE_DN7/out_MCIO"
+   ],
+   "n_below_3w": 14,
+   "three_w_mm": 0.615
+  },
+  "alloc7_match": true,
+  "fan_check_3w_term": "ABSENT（check() track-track 判据 = TT=WID+CLEAR=0.38；无 3*w(layer) 项）"
+ },
+ "B_3w_only": {
+  "placed": "32/32",
+  "bcu": {
+   "min_center_mm": 0.65,
+   "min_pair": [
+    "PCIE_UP2/out_J2",
+    "PCIE_UP3/out_J2"
+   ],
+   "n_below_3w": 0,
+   "three_w_mm": 0.615
+  }
+ },
+ "C_3w_plus_pdn": {
+  "rev_pdn": {
+   "placed": "31/32",
+   "failed": [
+    "PCIE_UP0/out_J2"
+   ],
+   "bcu": {
+    "min_center_mm": 0.65,
+    "min_pair": [
+     "PCIE_UP2/out_J2",
+     "PCIE_UP3/out_J2"
+    ],
+    "n_below_3w": 0,
+    "three_w_mm": 0.615
+   }
+  },
+  "xasc_pdn": {
+   "placed": "30/32",
+   "failed": [
+    "PCIE_UP3/input",
+    "PCIE_UP7/input"
+   ],
+   "bcu": {
+    "min_center_mm": 0.65,
+    "min_pair": [
+     "PCIE_UP5/out_J2",
+     "PCIE_UP6/out_J2"
+    ],
+    "n_below_3w": 0,
+    "three_w_mm": 0.615
+   }
+  },
+  "failure_reasons": {
+   "PCIE_UP0/out_J2": [
+    "pad_via",
+    "tt_placed",
+    "vt2_placed",
+    "vt_intra",
+    "vt_placed",
+    "vv_placed"
+   ],
+   "PCIE_UP3/input": [
+    "vt2_placed",
+    "vt_placed",
+    "vv_placed"
+   ],
+   "PCIE_UP7/input": [
+    "vv_intra",
+    "vv_placed"
+   ]
+  }
+ },
+ "D_dp_feasibility": {
+  "('EAST_CHIP_TO_J2', 'up')": {
+   "pages": 8,
+   "legal_rows_total": 3589,
+   "dp_end_states": 428,
+   "feasible": true
+  },
+  "('WEST_MCIO_TO_CHIP', 'dn')": {
+   "pages": 8,
+   "legal_rows_total": 3670,
+   "dp_end_states": 386,
+   "feasible": true
+  }
+ },
+ "E_applied_experiment_reverted": {
+  "what": "把 3W 并入 check（CO10_IP3W=1）并重生成 ALLOC.8 → G4 → L4 板 → co133 --apply",
+  "drc_before_after": {
+   "baseline": 42,
+   "after": 45
+  },
+  "new_violations": "3× clearance：UP0/out_J2 N corner via × GND stitch via (83.575,56.516)，铜距 0.1587 < 0.175（= 中心距 0.5087 < VV 0.525）",
+  "disposition": "**已还原**：ALLOC.8/v8_raw/板 全部回退到 rev-19 基线（板 a3ce9ab803045a0a；G4 0074dad9067af737）；本实验工件不保留",
+  "lesson": "3W 并入后扇列西移 0.30 ⇒ 撞上 PDN GND stitch via ⇒ 必须同时做 PDN 障碍感知"
+ },
+ "verdict": "FEASIBLE_BUT_REQUIRES_FAN_REDERIVATION",
+ "conclusion": "对间 3W 约束**可满足**（DP 机判两带均有合法单调解；单独并入 3W 亦 32/32）。但**单遍贪心 + 按 pad 邻近选列**的策略在「3W + PDN 障碍」下无法 32/32，且存在「差分仅 0.0025mm 而候选网格 0.05mm」的网格夹死 ⇒ 关闭本 TOOL_DEFECT 须**重派生扇落位策略**（闭式单调 carry / 分带次序 / PDN 障碍场），属 L2 过孔策略-走廊重派生，非阈值参数追加。",
+ "redline": "只读分析；不改板/SPEC/冻结四源；DP 仅为分析证据（生产器仍为单遍闭式）"
+}

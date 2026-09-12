@@ -28,7 +28,7 @@ STEP2 = L3 / "mcio_feas_step2"
 SPEC_CUR = L3 / "SPEC_k2_v4.spec-rev-19.json"
 CO102P = K2 / "tools/p3_v57_co102_pdn_apply_local.py"
 FROZEN = K2.parent / "_shared/eda_core/pdn_apply.py"
-BASE = {"spec_current": "5f72182a2616392c", "board": "a3ce9ab803045a0a"}
+BASE = {"spec_current": "5f72182a2616392c", "board": "76cdf64cc4c5043b"}
 
 
 def s16(p) -> str:
