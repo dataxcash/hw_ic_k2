@@ -29,6 +29,11 @@
    "status": "CLOSED"
   },
   {
+   "evidence": "CO-106 参考平面连续性闸 verdict=INDETERMINATE_REGION_SCOPED；declared_copper_missing=0；残余 {'In5.Cu<-In4.Cu': 54} ⇒ CO-110 判为按设计 In4 走廊空洞（bridge zone = B.Cu）",
+   "item": "参考平面（ch.2 L2 裁判标准）",
+   "status": "INDETERMINATE"
+  },
+  {
    "evidence": "全仓无 load 电流/允许压降预算输入（SPEC 扫描命中 0 项；本项需外部数据）",
    "item": "PDN 压降达标（ch.5 §4）",
    "status": "NOT_DEMONSTRATED"
@@ -40,8 +45,8 @@
   }
  ],
  "n_closed": 3,
- "n_open": 2,
- "nature": "L2 合格标准（宪法 ch.5 §4 数学闭合四项 + ch.2 热）覆盖性机判与缺口登记",
+ "n_open": 3,
+ "nature": "L2 合格标准（宪法 ch.5 §4 数学闭合四项 + ch.2 物理可行性五项含「参考平面」）覆盖性机判与缺口登记",
  "redline": "只读；不改 SPEC/板/图纸/阈值；禁止以假设值代填缺输入；不 partial pass。",
  "required_inputs_for_PDN_and_thermal": {
   "needed": [
@@ -96,9 +101,10 @@
    }
   }
  },
- "revision": "CO-87.1",
+ "revision": "CO-87.2",
  "schema": 1,
  "teeth": {
+  "ch2_criteria_all_have_rows": true,
   "requirement_text_found_in_constitution": true,
   "spec_scan_field_floor": 8506,
   "synthetic_current_detected": true

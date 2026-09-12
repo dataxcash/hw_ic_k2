@@ -58,9 +58,16 @@
    "void_band_mm": 0.3
   },
   "D_acceptance_matrix_coverage": {
-   "co87_ch2_criteria": "",
-   "co87_has_reference_plane_row": null,
-   "co87_matrix_items": [],
+   "co87_ch2_criteria": "物理可行性：走廊闭合、等长预算、参考平面、PDN 压降、热",
+   "co87_has_reference_plane_row": true,
+   "co87_matrix_items": [
+    "容量总和 ≥ 需求（走廊闭合）",
+    "长度预算闭合（等长窗口）",
+    "过孔预算闭合",
+    "参考平面（ch.2 L2 裁判标准）",
+    "PDN 压降达标（ch.5 §4）",
+    "热（ch.2 L2 裁判标准）"
+   ],
    "note": "CO-87 自报判据含「参考平面」但矩阵无该行 ⇒ 本闸补上该判据（覆盖性缺口）；本项 ok 恒真（补全动作本身）",
    "ok": true
   }

@@ -201,8 +201,8 @@ def main(argv=None) -> int:
     # ---------- D：覆盖性补全（CO-87 矩阵缺「参考平面」行） ----------
     try:
         co87 = json.loads((STEP2 / "m13_v57_co87_l2_acceptance_coverage.json").read_text())
-        crit = co87["inputs"]["ch2_l2_criteria"]
-        items = [r["item"] for r in co87["inputs"]["matrix"]]
+        crit = co87["constitution"]["ch2_l2_criteria"]
+        items = [r["item"] for r in co87["matrix"]]
         has_ref = any("参考平面" in i for i in items)
     except Exception:
         crit, has_ref, items = "", None, []

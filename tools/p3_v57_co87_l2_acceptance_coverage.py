@@ -82,10 +82,23 @@ def main() -> int:
         {"item": "热（ch.2 L2 裁判标准）", "status": "NOT_DEMONSTRATED",
          "evidence": "全仓无功耗/热阻/环境温度/温升判据输入（SPEC 扫描命中 0；需求条款见宪法 ch.2 L2 裁判标准）"},
     ]
+    # CO-110（F-C）：ch.2 判据「参考平面」补行 —— 证据机取自 CO-106 闸记录（不得空真/手填）
+    try:
+        _c106 = json.loads((STEP2 / "m13_v57_co106_reference_plane_gate.json").read_text())
+        _b = _c106["checks"]["B_reference_continuity"]
+        rp_ev = (f"CO-106 参考平面连续性闸 verdict={_c106.get('verdict')}；"
+                 f"declared_copper_missing={_b.get('n_declared_copper_missing_points')}；"
+                 f"残余 {_b.get('violations_per_layer_ref')} ⇒ CO-110 判为按设计 In4 走廊空洞（bridge zone = B.Cu）")
+        rp_status = "INDETERMINATE"
+    except Exception as _ex:
+        rp_ev, rp_status = f"CO-106 记录不可读：{_ex}", "UNDETERMINED"
+    matrix.insert(3, {"item": "参考平面（ch.2 L2 裁判标准）", "status": rp_status, "evidence": rp_ev})
+    teeth["ch2_criteria_all_have_rows"] = all(
+        k in " ".join(r["item"] for r in matrix) for k in ("走廊", "等长", "参考平面", "PDN 降压".replace("降压", "压降"), "热"))
     n_closed = sum(1 for r in matrix if r["status"] == "CLOSED")
     n_open = sum(1 for r in matrix if r["status"] != "CLOSED")
-    rec = {"artifact": "m13_v57_co87_l2_acceptance_coverage", "schema": 1, "revision": "CO-87.1",
-           "nature": "L2 合格标准（宪法 ch.5 §4 数学闭合四项 + ch.2 热）覆盖性机判与缺口登记",
+    rec = {"artifact": "m13_v57_co87_l2_acceptance_coverage", "schema": 1, "revision": "CO-87.2",
+           "nature": "L2 合格标准（宪法 ch.5 §4 数学闭合四项 + ch.2 物理可行性五项含「参考平面」）覆盖性机判与缺口登记",
            "constitution": {"file": "LAYOUT_CONSTITUTION.md", "sha16": s16(CONST),
                             "ch5_4": "数学闭合：容量总和 ≥ 需求；长度预算闭合；过孔预算闭合；PDN 压降达标。任何一条不等式不闭合，整层作废。",
                             "ch2_l2_criteria": "物理可行性：走廊闭合、等长预算、参考平面、PDN 压降、热"},

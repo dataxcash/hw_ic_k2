@@ -1,0 +1,72 @@
+{
+ "artifact": "m13_v57_co110_l2_coverage_closure",
+ "changes": {
+  "board_changed": false,
+  "rebuild_required": false,
+  "spec_changed": false,
+  "tools": [
+   "p3_v57_co87_l2_acceptance_coverage.py",
+   "p3_v57_co106_reference_plane_gate.py"
+  ]
+ },
+ "checks": {
+  "A_r5_prime_ruled": {
+   "bridge_layer": "B.Cu",
+   "decision": "R5'（L2）：不开 In4 走廊铜（确认 PM T2-ECN-1/2 既有设计）；CO-109 的 OWNER 升级撤回——该选择不反转 PM 裁决。In5 在该带 = In6-单参考域；SI 终判 = 外部（SI9000 + 板厂阻抗券）。",
+   "evidence": {
+    "frac_inside_corridor_polygon": 1.0,
+    "frac_inside_declared_bands": 0.0595
+   },
+   "ok": true,
+   "withdrawn_escalation": "CO-109 R5（OWNER）→ 撤回"
+  },
+  "B_fc_reference_plane_row": {
+   "ch2_all_covered": true,
+   "co87_matrix_items": [
+    "容量总和 ≥ 需求（走廊闭合）",
+    "长度预算闭合（等长窗口）",
+    "过孔预算闭合",
+    "参考平面（ch.2 L2 裁判标准）",
+    "PDN 压降达标（ch.5 §4）",
+    "热（ch.2 L2 裁判标准）"
+   ],
+   "n_closed": 3,
+   "n_open": 3,
+   "ok": true
+  },
+  "C_fe_co106_d_readpath": {
+   "co87_has_reference_plane_row": true,
+   "d_items_n": 6,
+   "ok": true,
+   "readpath_note": "CO-106 现读 constitution.ch2_l2_criteria + 顶层 matrix（原 inputs.* 恒空真）"
+  },
+  "D_fd_by_design_void": {
+   "disposition": "In5←In4 残余 = 按设计 In4 走廊空洞（非『待 L3 派生』）；CO-106 的 region_scoped_indeterminate 由本件声明叠加为 by-design（改判属后续 rev）",
+   "n_in5_in4_miss_points": 1260,
+   "n_inside_corridor_polygon": 1260,
+   "n_inside_declared_bands": 75,
+   "ok": true
+  }
+ },
+ "inputs": {
+  "board": "0e636a67c1472462",
+  "co106_record": "fa0ef14cb38dcb1c",
+  "co109_record": "dd562f526705abef",
+  "co87_record": "d4849456357c84cc",
+  "spec_rev13": "7943be727a4f8ef9"
+ },
+ "nature": "L2 自裁施加：参考平面判据入 CO-87 矩阵 + CO-106 D 读径修复 + In4 走廊空洞按设计定案（R5'）",
+ "non_claims": [
+  "零 SPEC/板/阈值/冻结源改动 ⇒ 不重基线（先例 CO-105）",
+  "不改 CO-106 分类字节（by-design 叠加声明由本件承载；改判属后续 rev）",
+  "不做 SI/阻抗数值计算（终判 = SI9000 + 板厂券）"
+ ],
+ "revision": "CO-110.1",
+ "schema": 1,
+ "teeth": {
+  "ch2_keyword_floor": true,
+  "row_absent_detector": true,
+  "teeth_ok": true
+ },
+ "verdict": "L2_CLOSED_NO_SPEC_CHANGE_NO_REBASELINE"
+}
