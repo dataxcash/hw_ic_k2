@@ -122,6 +122,33 @@ def layer_sequence(spec: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
+# CO-163（G-1/G-2）：下单参数**声明定值表**（监理指令 #10 绑定）与来源 pin。
+JP = K2 / "pm_gate/artifacts/k2_v4/L2" / "jlc_prototype_parameters_v1.json"
+INSTRUCTION = K2.parent / ".omo/supervision/ledger/instruction-10-jlc-prototype-ready.md"
+
+
+def binding_tokens(binding: dict) -> dict:
+    """把声明定值表渲染成 ORDER_NOTES 内使用的记号（:`g` 数字格式与备注文本一致）。"""
+    imp_b = binding.get("impedance") or {}
+    cu = binding.get("copper") or {}
+    return {"stackup_code": str(binding.get("stackup", "")).split("（")[0],
+            "thickness": f"{float(binding.get('total_thickness_mm', 0)):g} mm",
+            "outer_copper": f"外层 {float(cu.get('outer_oz', 0)):g}oz",
+            "inner_copper": f"内层 {float(cu.get('inner_oz', 0)):g}oz",
+            "zdiff": f"{float(imp_b.get('target_zdiff', 0)):g}Ω",
+            "tolerance": f"±{float(imp_b.get('tolerance_pct', 0)):g}%",
+            "surface": "沉金" if "ENIG" in str(binding.get("surface_finish", "")).upper() else str(binding.get("surface_finish", ""))}
+
+
+def binding_param_checks(note: str, binding: dict) -> dict:
+    """CO-163（G-1）：ORDER_NOTES 必须逐项含声明定值表的参数记号（客户可见交付物与定值来源绑定）。"""
+    t = binding_tokens(binding)
+    return {"stackup": bool(t["stackup_code"]) and t["stackup_code"] in note,
+            "thickness": t["thickness"] in note, "outer_copper": t["outer_copper"] in note,
+            "inner_copper": t["inner_copper"] in note, "zdiff": t["zdiff"] in note,
+            "tolerance": t["tolerance"] in note, "surface": bool(t["surface"]) and t["surface"] in note}
+
+
 def order_notes(spec: dict, dfm: dict, imp: dict) -> str:
     b = dfm["as_built"]
     try:
@@ -206,6 +233,8 @@ def main() -> int:
     spec = json.loads(SPEC.read_text())
     dfm = json.loads((STEP2 / "m13_v57_co146_jlc_dfm_gate.json").read_text())
     imp = json.loads((STEP2 / "m13_v57_co146_impedance_table.json").read_text())
+    jp = json.loads(JP.read_text()) if JP.exists() else {}
+    jp_binding = jp.get("binding") or {}
     if OUT.exists():
         shutil.rmtree(OUT)
     gdir, ddir = OUT / "01_gerber_rs274x", OUT / "02_drill_excellon"
@@ -251,10 +280,20 @@ def main() -> int:
              "t07_packaged_rulings_match_sources": all(rulings_parity.values()),
              "t07b_parity_detector_sensitivity": parity_sensitivity,
              "t08_declared_dirs_present": bool(dir_refs) and all(any(OUT.glob(f"{d}*")) for d in dir_refs),
+             # CO-163（G-1）：下单参数须与声明定值表一致（t09 正控 + t09b 灵敏度）
+             "t09_order_notes_binding_params": all(binding_param_checks(notes_txt, jp_binding).values()),
+             "t09b_binding_param_detector_sensitivity": (
+                 not all(binding_param_checks(notes_txt.replace(binding_tokens(jp_binding).get("zdiff", "\0"), "999Ω"),
+                                              jp_binding).values())),
+             # CO-163（G-2）：定值来源 pin（声明表 → 监理指令件）必须可核验（t10 正控 + t10b 判据可辨）
+             "t10_declared_binding_source_pinned": bool(INSTRUCTION.exists()) and bool(jp.get("supervisor_instruction"))
+                 and sha16(INSTRUCTION) == jp["supervisor_instruction"].get("sha16"),
+             "t10b_binding_source_pin_discriminates": bool(jp.get("supervisor_instruction"))
+                 and sha16(JP) != jp["supervisor_instruction"].get("sha16"),
              "t02_8_copper_gerbers": len(cu) >= 8,
              "t03_drill_present": len(drl) >= 1,
              "t04_all_hashed": all(v.get("sha256") for v in m1.values())}
-    rec = {"artifact": "m13_v57_co146_jlc_fab_package", "schema": 1, "revision": "CO146-PKG.3",
+    rec = {"artifact": "m13_v57_co146_jlc_fab_package", "schema": 1, "revision": "CO146-PKG.4",
            "nature": "JLC 打样包（监理指令 #10 动作 3）；只出交付物，不改板/SPEC",
            "board": BOARD.name, "board_sha16": sha16(BOARD),
            "package_dir": str(OUT.relative_to(K2)), "n_files": len(m1),
@@ -269,6 +308,10 @@ def main() -> int:
            "stackup_svg_sha16": sha16(OUT / "03_stackup/JLC08161H_stackup.svg"),
            "teeth": teeth,
            "declared_refs": {"files": refs, "dirs": dir_refs, "rulings_parity": rulings_parity},
+           "declared_binding": {"table": str(JP.relative_to(K2)), "tokens": binding_tokens(jp_binding),
+                                "order_notes_checks": binding_param_checks(notes_txt, jp_binding),
+                                "source_instruction": {"path": str(INSTRUCTION), "available": INSTRUCTION.exists(),
+                                                       "declared_sha16": (jp.get("supervisor_instruction") or {}).get("sha16")}},
            "orderable_at_jlc_standard": not dfm["fails"],
            "blockers": dfm["fails"],
            "manifest": m1,

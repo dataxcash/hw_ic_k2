@@ -586,7 +586,7 @@ def main() -> int:
              "> **R-CO159-5**（复现序，取代 R-CO158-1）：规范复现序 = `co146_impedance_table → co146_pm_eval → co146_ledger_add → "
              "co153_k9_domain_coverage → co148_u6_datasheet_inputs → co148_thermal_ruling → co149_thermal_mitigation_derive → "
              "co147_l2_ruling → co146_jlc_dfm_gate → co146_jlc_fab_package → co152_findings_disposition → co155_co154_findings_disposition → "
-             "co156_co154_open_disposition → co157_gate_hardening_3 → co158_l5_packet_selfcontained → **co159_rev19_review** → "
+             "co156_co154_open_disposition → co157_gate_hardening_3 → co158_l5_packet_selfcontained → **co159_rev19_co156_co157_co158_review** → "
              "**co160_co159_findings_disposition** → co124_input_selfcheck_gate → co150_k9_domain_gate → co146_boundary_append → "
              "co77_closure_declaration_sweep → co120_provenance_pin_gate → co135_review_hygiene → co136_gate_hygiene → "
              "co78_layer_role_drift_gate → co81_project_rules_gate → co84_dru_domain_gate → co95_in4_reachability → "
@@ -641,7 +641,7 @@ def main() -> int:
              "> **R-CO161-3**（复现序，取代 R-CO159-5）：规范复现序 = `co146_impedance_table → co146_pm_eval → co146_ledger_add → "
              "co153_k9_domain_coverage → co148_u6_datasheet_inputs → co148_thermal_ruling → co149_thermal_mitigation_derive → "
              "co147_l2_ruling → co146_jlc_dfm_gate → co146_jlc_fab_package → co152_findings_disposition → co155_co154_findings_disposition → "
-             "co156_co154_open_disposition → co157_gate_hardening_3 → co158_l5_packet_selfcontained → co159_rev19_review → "
+             "co156_co154_open_disposition → co157_gate_hardening_3 → co158_l5_packet_selfcontained → co159_rev19_co156_co157_co158_review → "
              "co160_co159_findings_disposition → **co161_gap_hardening_4** → co124_input_selfcheck_gate → co150_k9_domain_gate → "
              "co146_boundary_append → co77_closure_declaration_sweep → co120_provenance_pin_gate → co135_review_hygiene → co136_gate_hygiene → "
              "co78_layer_role_drift_gate → co81_project_rules_gate → co84_dru_domain_gate → co95_in4_reachability → "
@@ -690,7 +690,7 @@ def main() -> int:
              "> **R-CO162-3**（复现序，取代 R-CO161-3）：规范复现序 = `co146_impedance_table → co146_pm_eval → co146_ledger_add → "
              "co153_k9_domain_coverage → co148_u6_datasheet_inputs → co148_thermal_ruling → co149_thermal_mitigation_derive → "
              "co147_l2_ruling → co146_jlc_dfm_gate → co146_jlc_fab_package → co152_findings_disposition → co155_co154_findings_disposition → "
-             "co156_co154_open_disposition → co157_gate_hardening_3 → co158_l5_packet_selfcontained → co159_rev19_review → "
+             "co156_co154_open_disposition → co157_gate_hardening_3 → co158_l5_packet_selfcontained → co159_rev19_co156_co157_co158_review → "
              "co160_co159_findings_disposition → co161_gap_hardening_4 → **co162_verdict_binding** → co124_input_selfcheck_gate → "
              "co150_k9_domain_gate → co146_boundary_append → co77_closure_declaration_sweep → co120_provenance_pin_gate → co135_review_hygiene → "
              "co136_gate_hygiene → co78_layer_role_drift_gate → co81_project_rules_gate → co84_dru_domain_gate → co95_in4_reachability → "
@@ -712,6 +712,93 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body36
     txt = txt.replace("W3 Boundary **v2.07**", "W3 Boundary **v2.08**")
+    # ── §37 CO-163（查漏型 L2 闸硬化 6） ───────────────────────────────────
+    MARK37 = "## 37. CO-163"
+    _rc37 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    sec37 = [MARK37 + "（**L2 自裁 · 查漏型闸硬化 6**：下单备注↔声明定值表绑定）", "",
+             f"- 实测缺口（修前，均机判）：**G-1** `ORDER_NOTES.md` 的「下单参数」表把 `85Ω 差分 ±10%` / `JLC08161H` / `1.6 mm` / "
+             f"`外层 1oz 内层 0.5oz` / `沉金 ENIG` 写为**字面量**，与 L2 政策件 `jlc_prototype_parameters_v1.json`（监理指令 #10 定值绑定）"
+             f"无绑定、无牙齿 —— 实测把目标阻抗改成 100Ω 后重生成的备注**仍写 85Ω** ⇒ 定值变更会静默产出**客户可见**的陈旧下单备注；"
+             f"**G-2** 该定值表的 `supervisor_instruction.sha16` 声明链从未被核验。",
+             f"- 处置（**CO-163**）：`p3_v57_co146_jlc_fab_package.py` 升 **CO146-PKG.4** —— 载入声明定值表 + 纯谓词 "
+             f"`binding_params_in_note`/`binding_tokens`；牙齿 `t09_order_notes_binding_params`（备注须逐项命中叠层码/厚度/外内层铜/目标阻抗/"
+             f"容差/表面处理）+ `t09b` 漂移灵敏度 + `t10_declared_binding_source_pinned`（定值表来源 sha16 == 监理指令件 sha16 `35aafe268ff52f89`）"
+             f"+ `t10b` 判据可辨；记录落 `declared_binding`（含 `source_instruction`: path/available/declared_sha16）。",
+             f"- 复核：打样包 teeth **13/13**（t01..t10b 全 True），订单备注正文与 gerber/drill 逐字节不变；"
+             f"注入定值漂移（100Ω/2.0mm）⇒ t09 立即 FAIL。登记簿 **{_rc37['total']} 项 / OPEN {_rc37['OPEN']}**。", "",
+             "> **R-CO163-1**：客户可见交付物（L5 打样包/下单备注）内的**工程定值**必须与**声明定值表**逐项一致，由 t09/t09b 机判；"
+             "定值表变更而备注未同步即 FAIL（禁止字面量单向复制导致静默陈旧）。",
+             "> **R-CO163-2**：声明定值表的**来源 pin**（`supervisor_instruction.sha16`）必须可核验（t10/t10b）；"
+             "跨仓来源不可达时 fail-closed 并在记录内显式登记 `available=false`。",
+             "> **R-CO163-3**（复现序，取代 R-CO162-3）：规范复现序 = `co146_impedance_table → co146_pm_eval → co146_ledger_add → "
+             "co153_k9_domain_coverage → co148_u6_datasheet_inputs → co148_thermal_ruling → co149_thermal_mitigation_derive → "
+             "co147_l2_ruling → co146_jlc_dfm_gate → co146_jlc_fab_package → co152_findings_disposition → co155_co154_findings_disposition → "
+             "co156_co154_open_disposition → co157_gate_hardening_3 → co158_l5_packet_selfcontained → co159_rev19_co156_co157_co158_review → "
+             "co160_co159_findings_disposition → co161_gap_hardening_4 → co162_verdict_binding → **co163_binding_to_order_notes** → "
+             "co124_input_selfcheck_gate → co150_k9_domain_gate → co146_boundary_append → co77_closure_declaration_sweep → "
+             "co120_provenance_pin_gate → co135_review_hygiene → co136_gate_hygiene → co78_layer_role_drift_gate → co81_project_rules_gate → "
+             "co84_dru_domain_gate → co95_in4_reachability → co98_reachability_status_report → co106_reference_plane_gate → "
+             "co146_boundary_append`，**循环至 sha 稳定**。",
+             "", "| 工件 | sha16 |", "|---|---|"]
+    _rows37 = [("工具 `p3_v57_co163_binding_to_order_notes.py`", K2 / "tools/p3_v57_co163_binding_to_order_notes.py"),
+               ("工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.4 / t09+t09b+t10+t10b）",
+                K2 / "tools/p3_v57_co146_jlc_fab_package.py"),
+               ("打样包 MANIFEST `L5/jlc_package/MANIFEST.json`", L5 / "jlc_package" / "MANIFEST.json"),
+               ("下单备注 `L5/jlc_package/ORDER_NOTES.md`", L5 / "jlc_package" / "ORDER_NOTES.md"),
+               ("记录 `m13_v57_co146_jlc_fab_package.json`", STEP2 / "m13_v57_co146_jlc_fab_package.json"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc37['total']} 项 / OPEN {_rc37['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows37:
+        if pth.exists():
+            sec37.append(f"| {label} | `{s16(pth)}` |")
+    sec37.append("")
+    body37 = "\n".join(sec37)
+    if MARK37 in txt:
+        txt = re.sub(re.escape(MARK37) + r"[\s\S]*?(?=\n## |\Z)", body37, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body37
+    txt = txt.replace("W3 Boundary **v2.08**", "W3 Boundary **v2.09**")
+    # ── §38 CO-164（收敛判定硬化） ─────────────────────────────────────────
+    MARK38 = "## 38. CO-164"
+    _rc38 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    sec38 = [MARK38 + "（**L2 自裁 · 收敛判定硬化**：规范复现序 rc 机判执行器）", "",
+             f"- 实测事故（CO-163 期间，机判）：`p3_v57_co146_boundary_append.py` 因 §37 文本内 f-string 花括号语法错误**每轮 rc=1 崩溃** ⇒ 第 37 节从未写入、"
+             f"boundary 停在 v2.08、pin 表陈旧（co77 = CITATION_MISMATCH、co135/co136 = FAIL）；而「幂等循环」只看 boundary/记录 sha ⇒ 报 CONVERGED。"
+             f"即 **「以 sha 稳定替代 rc 检查」= 假收敛**；本会话由一个独立 rc 复核发现（自查也据此复现并修复）。",
+             f"- 处置（**CO-164**）：新增 `p3_v57_co164_order_runner.py`（**不在**规范序内运行，避免自递归；报告落 `.archer_tmp/`，**不被 boundary 引用** ⇒ 不构成下游快照/不动点）："
+             f"① rc 策略 `EXPECTED_NONZERO = {{co146_jlc_dfm_gate}}`（verdict=FAIL 属预期），其余任一步非零 ⇒ **立即停机**并报门名/rc/stderr 尾；"
+             f"② **真收敛** = rc 全合规 ∧ 受控 sha 逐轮稳定；③ `--check` 静态体检 t01..t06（步骤存在/可编译/rc 策略/判据灵敏度/稳定性判据/序文本一致）。",
+             f"- 复核：`--check` **6/6 True**（t06 当场抓到本文档序与执行器 ORDER 的短别名漂移 `co159_rev19_review`，已改为实际步骤名）；"
+             f"端到端负控：把 `co78` 步替换为 rc=3 合成件 ⇒ **abort（rc=1，iterations=1）不报收敛**；登记簿 **{_rc38['total']} 项 / OPEN {_rc38['OPEN']}**。", "",
+             "> **R-CO164-1**：复现序收敛判定**rc 优先** —— 除 `EXPECTED_NONZERO` 白名单（当前仅 `co146_jlc_dfm_gate`，其 verdict=FAIL 属预期）外，"
+             "任一步 rc≠0 即**立即停机**；**禁止**以「sha 稳定」单独判收敛。",
+             "> **R-CO164-2**：规范序**文本**与执行器 `ORDER` 须**有序一致**（由 runner `--check` t06 机判）；新增/变更步骤须同步 runner 与本 boundary。",
+             "> **R-CO164-3**（复现序，取代 R-CO163-3；步骤集不变）：规范复现序 = `co146_impedance_table → co146_pm_eval → co146_ledger_add → "
+             "co153_k9_domain_coverage → co148_u6_datasheet_inputs → co148_thermal_ruling → co149_thermal_mitigation_derive → "
+             "co147_l2_ruling → co146_jlc_dfm_gate → co146_jlc_fab_package → co152_findings_disposition → co155_co154_findings_disposition → "
+             "co156_co154_open_disposition → co157_gate_hardening_3 → co158_l5_packet_selfcontained → co159_rev19_co156_co157_co158_review → "
+             "co160_co159_findings_disposition → co161_gap_hardening_4 → co162_verdict_binding → co163_binding_to_order_notes → "
+             "co124_input_selfcheck_gate → co150_k9_domain_gate → co146_boundary_append → co77_closure_declaration_sweep → "
+             "co120_provenance_pin_gate → co135_review_hygiene → co136_gate_hygiene → co78_layer_role_drift_gate → co81_project_rules_gate → "
+             "co84_dru_domain_gate → co95_in4_reachability → co98_reachability_status_report → co106_reference_plane_gate → "
+             "co146_boundary_append`，**循环至 sha 稳定**（收敛判定须遵 R-CO164-1：以 rc 为准）。",
+             "", "| 工件 | sha16 |", "|---|---|"]
+    _rows38 = [("工具 `p3_v57_co164_order_runner.py`（rc 策略 + 真收敛 + `--check` t01..t06）",
+                K2 / "tools/p3_v57_co164_order_runner.py"),
+               ("工具 `p3_v57_co164_disposition.py`", K2 / "tools/p3_v57_co164_disposition.py"),
+               ("工具 `p3_v57_co146_boundary_append.py`（§38 + 序文本订正）", K2 / "tools/p3_v57_co146_boundary_append.py"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc38['total']} 项 / OPEN {_rc38['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows38:
+        if pth.exists():
+            sec38.append(f"| {label} | `{s16(pth)}` |")
+    sec38.append("")
+    body38 = "\n".join(sec38)
+    if MARK38 in txt:
+        txt = re.sub(re.escape(MARK38) + r"[\s\S]*?(?=\n## |\Z)", body38, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body38
+    txt = txt.replace("W3 Boundary **v2.09**", "W3 Boundary **v2.10**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
     return 0

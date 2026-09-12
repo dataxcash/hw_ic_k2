@@ -1,7 +1,7 @@
 {
  "artifact": "m13_v57_co146_jlc_fab_package",
  "schema": 1,
- "revision": "CO146-PKG.3",
+ "revision": "CO146-PKG.4",
  "nature": "JLC 打样包（监理指令 #10 动作 3）；只出交付物，不改板/SPEC",
  "board": "k2_v4_8L.l4.kicad_pcb",
  "board_sha16": "d4e81f647be7f980",
@@ -48,6 +48,10 @@
   "t07_packaged_rulings_match_sources": true,
   "t07b_parity_detector_sensitivity": true,
   "t08_declared_dirs_present": true,
+  "t09_order_notes_binding_params": true,
+  "t09b_binding_param_detector_sensitivity": true,
+  "t10_declared_binding_source_pinned": true,
+  "t10b_binding_source_pin_discriminates": true,
   "t02_8_copper_gerbers": true,
   "t03_drill_present": true,
   "t04_all_hashed": true
@@ -71,6 +75,32 @@
    "L2_RULING_u6_thermal_v1.md": true,
    "L2_RULING_u6_thermal_mitigation_v1.md": true,
    "m13_v57_co146_jlc_dfm_gate.json": true
+  }
+ },
+ "declared_binding": {
+  "table": "pm_gate/artifacts/k2_v4/L2/jlc_prototype_parameters_v1.json",
+  "tokens": {
+   "stackup_code": "JLC08161H",
+   "thickness": "1.6 mm",
+   "outer_copper": "外层 1oz",
+   "inner_copper": "内层 0.5oz",
+   "zdiff": "85Ω",
+   "tolerance": "±10%",
+   "surface": "沉金"
+  },
+  "order_notes_checks": {
+   "stackup": true,
+   "thickness": true,
+   "outer_copper": true,
+   "inner_copper": true,
+   "zdiff": true,
+   "tolerance": true,
+   "surface": true
+  },
+  "source_instruction": {
+   "path": "/home/fila/jqdDev_2025/ic_hw/.omo/supervision/ledger/instruction-10-jlc-prototype-ready.md",
+   "available": true,
+   "declared_sha16": "35aafe268ff52f89"
   }
  },
  "orderable_at_jlc_standard": false,
