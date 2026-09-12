@@ -195,6 +195,78 @@
    "severity": "low",
    "statement": "CO-87 L2 合格标准覆盖矩阵仍为五行、无「参考平面」行；CO-106 的 D 项 `ok` 恒真（『补全动作本身』），故**登记册**本身仍不完整（属 CO-106 已**声明**的缺口，非静默）。",
    "target": "co87 矩阵（建议下一 rev 补行）"
+  },
+  {
+   "disposition": "OPEN_QUESTION_FOR_L3_WORK_ORDER",
+   "evidence": {
+    "bridge_zones": [
+     {
+      "basis_has_B_Cu": true,
+      "basis_says_In4_not_crossed": true,
+      "layer": "In4.Cu",
+      "name_has_BCU": true,
+      "net": "P3V3",
+      "polygons_empty": true,
+      "targets": [
+       "U2.pad5(P3V3,33,37)",
+       "U4.pad3(P3V3,40,37)",
+       "C84.pad1(P3V3,44,40)"
+      ],
+      "zone": "P3V3_BCU_BRIDGE_IN4"
+     },
+     {
+      "basis_has_B_Cu": true,
+      "basis_says_In4_not_crossed": false,
+      "layer": "In4.Cu",
+      "name_has_BCU": true,
+      "net": "P3V3_AUX",
+      "polygons_empty": true,
+      "targets": [
+       "J3.A9(P3V3_AUX, 板实测 60.1,45.75)",
+       "J4.A9(P3V3_AUX, 58.9,61.45)"
+      ],
+      "zone": "P3V3_AUX_BCU_BRIDGE_IN4"
+     },
+     {
+      "basis_has_B_Cu": true,
+      "basis_says_In4_not_crossed": false,
+      "layer": "In4.Cu",
+      "name_has_BCU": true,
+      "net": "MCU_VDD",
+      "polygons_empty": true,
+      "targets": [
+       "R29",
+       "R31",
+       "R32",
+       "R33",
+       "R34"
+      ],
+      "zone": "MCU_VDD_BCU_RESISTORS_IN4"
+     }
+    ],
+    "in4_declared_copper_x_ranges": [
+     [
+      "P3V3",
+      88.37,
+      142.7
+     ],
+     [
+      "MCU_VDD",
+      23.3,
+      49.8
+     ]
+    ],
+    "in5_in4_residual_points": 1260,
+    "in5_in4_residual_segments": 54,
+    "residual_x_range_mm": [
+     53.2,
+     88.35
+    ]
+   },
+   "id": "F-D",
+   "severity": "medium",
+   "statement": "CO-106/CO-98 将 In5←In4 残余 54 段归入 `region_scoped_indeterminate`（语义＝『几何待 L3 派生，非缺陷』）；但 3 个 bridge zone 的**自身声明互矛盾**：`layer` 字段 = `In4.Cu`，而 zone 名含 `BCU`、basis 明文经 **B.Cu** 桥接（`P3V3_BCU_BRIDGE_IN4` 更明示『In4 走线带 x∈[50,88.17] 不跨』）⇒『L3 派生会补出该带 In4 铜』这一分类前提**未证实且与 basis 冲突**。若派生对象取 basis 口径（B.Cu），则 54 段 In5←In4 属**永久**参考缺失，应升级 L2（参考平面/阻抗建模）裁定，而非继续标注 `declared_pending_l3`。**本件不改判**：CO-98 已明示该桶『≠ 已满足』（非静默掩护），故列为须在 L3 派生 work order 前澄清的未决前提。",
+   "target": "L3 桥区几何派生 work order；须先裁 bridge zone 派生层归属（In4 vs B.Cu）"
   }
  ],
  "nature": "L2 非执行者对抗复评：rev-13 新基线（对象 = CO-106/107 + 链 pin 前移 + 几何/板不变性）",

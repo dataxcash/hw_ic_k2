@@ -273,6 +273,12 @@ def main(argv=None) -> int:
                                     and pip((200.0, 50.0), [[49.8, 33.3], [88.37, 33.3], [88.37, 78.7], [49.8, 78.7]]) is False)
     teeth["teeth_ok"] = all(bool(v) for k, v in teeth.items() if k != "teeth_ok")
 
+    zd13 = s13["pd"]["zone_defs"]
+    bridge = [{"zone": z.get("zone"), "net": z.get("net"), "layer": z.get("layer"),
+               "name_has_BCU": "BCU" in str(z.get("zone")), "basis_has_B_Cu": "B.Cu" in str(z.get("basis")),
+               "basis_says_In4_not_crossed": "不跨" in str(z.get("basis")),
+               "polygons_empty": not z.get("polygons"), "targets": z.get("targets")}
+              for z in zd13["power_zones"] if z.get("geometry_status") == "L3_CONSTRUCTION_DERIVED"]
     findings = [
         {"id": "F-A", "severity": "low", "disposition": "CORRECTED_IN_THIS_REVIEW",
          "statement": "CO-105 记录的 provenance pin `inputs.co98_record` 在执行者提交态 04d0ee1 为 `267f86b5c02b8fc3`，"
@@ -294,7 +300,22 @@ def main(argv=None) -> int:
          "evidence": {"co87_matrix_items": ["容量总和 ≥ 需求（走廊闭合）", "长度预算闭合（等长窗口）", "过孔预算闭合",
                                             "PDN 压降达标（ch.5 §4）", "热（ch.2 L2 裁判标准）"],
                       "ch2_criteria": "物理可行性：走廊闭合、等长预算、参考平面、PDN 压降、热"},
-         "target": "co87 矩阵（建议下一 rev 补行）"},
+         "target": "co87 矩阵（建议下一 rev 补行）"},        {"id": "F-D", "severity": "medium", "disposition": "OPEN_QUESTION_FOR_L3_WORK_ORDER",
+         "statement": "CO-106/CO-98 将 In5←In4 残余 54 段归入 `region_scoped_indeterminate`（语义＝『几何待 L3 派生，非缺陷』）；"
+                      "但 3 个 bridge zone 的**自身声明互矛盾**：`layer` 字段 = `In4.Cu`，而 zone 名含 `BCU`、basis 明文经 **B.Cu** 桥接"
+                      "（`P3V3_BCU_BRIDGE_IN4` 更明示『In4 走线带 x∈[50,88.17] 不跨』）⇒『L3 派生会补出该带 In4 铜』这一分类前提"
+                      "**未证实且与 basis 冲突**。若派生对象取 basis 口径（B.Cu），则 54 段 In5←In4 属**永久**参考缺失，应升级 L2"
+                      "（参考平面/阻抗建模）裁定，而非继续标注 `declared_pending_l3`。**本件不改判**：CO-98 已明示该桶『≠ 已满足』"
+                      "（非静默掩护），故列为须在 L3 派生 work order 前澄清的未决前提。",
+         "evidence": {"bridge_zones": bridge,
+                      "in5_in4_residual_segments": seg13.get(("In5.Cu", "In4.Cu")),
+                      "in5_in4_residual_points": pts13.get(("In5.Cu", "In4.Cu")),
+                      "residual_x_range_mm": [round(min(q[0] for q in in5_in4_miss), 3),
+                                              round(max(q[0] for q in in5_in4_miss), 3)],
+                      "in4_declared_copper_x_ranges": [[n, min(p[0] for p in ps), max(p[0] for p in ps)]
+                                                       for n, ps in cu13["In4.Cu"]]},
+         "target": "L3 桥区几何派生 work order；须先裁 bridge zone 派生层归属（In4 vs B.Cu）"},
+
     ]
     hard = all(v["ok"] for v in checks.values()) and teeth["teeth_ok"]
     rec = {"artifact": "m13_v57_co108_rev13_nonexecutor_review", "schema": 1, "revision": "CO-108.1",
