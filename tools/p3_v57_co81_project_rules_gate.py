@@ -20,6 +20,7 @@ K2 = Path("/home/fila/jqdDev_2025/ic_hw/k2")
 RULES = K2.parent / "_shared/eda_core/drc_rules.json"
 TEMPLATE = K2 / "tools/k2_jlc_template.kicad_pro"
 INTENT_PRO = K2 / "k2_v4_8L.kicad_pro"   # 意图工程（含 4 网类 + 网-类指派）
+SPEC = K2 / "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-8.json"   # 红线 SPEC（net_classes 权威）
 TEMPLATE_EXEMPT = "tools/k2_jlc_template.kicad_pro"
 OUT = K2 / "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_co81_project_rules_gate.json"
 
@@ -59,6 +60,33 @@ def netclass_guard(ns: dict, intent_ns: dict) -> dict:
     return out
 
 
+# CO-83：工程网类 -> SPEC net_classes 的 DRC 相关字段映射
+NC_SPEC_MAP = {"LOW_SPEED": [("clearance", ("clearance",)), ("track_width", ("width",))],
+               "PCIe85": [("clearance", ("clearance",)), ("track_width", ("width",)),
+                          ("diff_pair_gap", ("diff_pair", "p_gap")),
+                          ("diff_pair_width", ("diff_pair", "p_width"))],
+               "POWER": [("clearance", ("clearance",)), ("track_width", ("width",))]}
+
+
+def netclass_vs_spec(ns: dict, spec_nc: dict) -> dict:
+    """工程网类（DRC 相关字段）vs 红线 SPEC net_classes；返回失配（空 = 通过）。"""
+    byname = {c.get("name"): c for c in (ns.get("classes") or [])}
+    out = {}
+    for cls, fields in NC_SPEC_MAP.items():
+        c = byname.get(cls)
+        if c is None:
+            out[cls] = "class missing in project"
+            continue
+        sp = spec_nc.get(cls) or {}
+        for pkey, path in fields:
+            v = sp
+            for k in path:
+                v = (v or {}).get(k) if isinstance(v, dict) else None
+            if c.get(pkey) != v:
+                out["%s.%s" % (cls, pkey)] = [c.get(pkey), v]
+    return out
+
+
 def guard(pro_rules: dict, expect: dict) -> dict:
     """返回 {key: (actual, expected)} 的失配集；空 = 通过（纯函数，便于负控）。"""
     return {k: (pro_rules.get(k), expect.get(k)) for k in expect if pro_rules.get(k) != expect.get(k)}
@@ -70,6 +98,8 @@ def main() -> int:
     tmpl = json.loads(TEMPLATE.read_text(encoding="utf-8"))["board"]["design_settings"]
     tmpl_sev = dict(tmpl["rule_severities"])
     intent_ns = json.loads(INTENT_PRO.read_text(encoding="utf-8"))["net_settings"]
+    spec_nc = json.loads(SPEC.read_text(encoding="utf-8"))["net_classes"]
+    spec_vs = netclass_vs_spec(intent_ns, spec_nc)
     tracked = subprocess.run(["git", "ls-files", "*.kicad_pro"], cwd=str(K2),
                              capture_output=True, text=True).stdout.split()
     rows, bad = [], []
@@ -81,6 +111,8 @@ def main() -> int:
             nc = {}          # 模板只承载规则，不含 4 网类/指派（设计如此，显式豁免）
         else:
             nc = netclass_guard(json.loads(p.read_text(encoding="utf-8"))["net_settings"], intent_ns)
+            nc.update({"__vs_spec__:" + k: v for k, v in
+                       netclass_vs_spec(json.loads(p.read_text(encoding="utf-8"))["net_settings"], spec_nc).items()})
         sev = {k: (d["rule_severities"].get(k), tmpl_sev.get(k))
                for k in tmpl_sev if d["rule_severities"].get(k) != tmpl_sev.get(k)}
         ok = not miss and not sev and not nc
@@ -105,6 +137,10 @@ def main() -> int:
                       intent_ns.get("netclass_assignments") or {})
                   and any(k.startswith("class:") for k in nc_hist))
     teeth = teeth and nc_hist_ok
+    # CO-83 负控：篡改 SPEC 侧期望值必须被抓到
+    spec_neg = netclass_vs_spec(intent_ns, {**spec_nc,
+                                           "PCIe85": {**spec_nc["PCIe85"], "clearance": 0.2}})
+    teeth = teeth and (spec_neg == {"PCIe85.clearance": [0.175, 0.2]})
     teeth = teeth and hist_ok
     rec = {"artifact": "m13_v57_co81_project_rules_gate", "schema": 1, "revision": "CO-81.1",
            "nature": "L2 可审计性：受控工程文件设计规则 = 红线规则源 的回归闸",
@@ -122,6 +158,9 @@ def main() -> int:
            "verdict": "PASS" if (not bad and teeth) else "FAIL",
            "rationale": "kicad-cli 对 <board>.kicad_pcb 自动选取同名 .kicad_pro；规则不符则自然核查命令大面积误报（F-80-1）；"
                         "网类/指派缺失则 DRC 根本不施加 netclass 语义（F-82-1）。CO-81 原只覆盖 rules/severities，CO-82 补网类后覆盖完整。",
+           "netclass_vs_spec": {"spec": str(SPEC.relative_to(K2)), "sha16": s16(SPEC),
+                                "intent_project_mismatch": spec_vs,
+                                "map": {k: [p for p, _ in v] for k, v in NC_SPEC_MAP.items()}},
            "netclass_reference": {"file": "k2_v4_8L.kicad_pro", "sha16": s16(INTENT_PRO),
                                   "note": "模板 %s 豁免网类检查（只承载规则）" % TEMPLATE_EXEMPT},
            "redline": "只读；不改任何工件；阈值取自红线规则源，不放宽。"}

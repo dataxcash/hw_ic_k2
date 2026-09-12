@@ -15,7 +15,16 @@ K2 = Path("/home/fila/jqdDev_2025/ic_hw/k2")
 L3 = K2 / "pm_gate/artifacts/k2_v4/L3"
 L2 = K2 / "pm_gate/artifacts/k2_v4/L2"
 STEP2 = L3 / "mcio_feas_step2"
-DEFAULT_DOC = STEP2 / "m13_v57_w3_joint_assignment_boundary_v1_47.md"
+def _latest_boundary() -> Path:
+    """默认对象 = 最新版 boundary（避免闸默认指向过期版本 —— 一种自造漂移）。"""
+    cands = list(STEP2.glob("m13_v57_w3_joint_assignment_boundary_v1_*.md"))
+    def key(q: Path):
+        m = re.findall(r"v1_(\d+)", q.name)
+        return int(m[0]) if m else -1
+    return max(cands, key=key) if cands else STEP2 / "m13_v57_w3_joint_assignment_boundary_v1_48.md"
+
+
+DEFAULT_DOC = _latest_boundary()
 OUT = STEP2 / "m13_v57_co77_closure_declaration_sweep.json"
 
 
