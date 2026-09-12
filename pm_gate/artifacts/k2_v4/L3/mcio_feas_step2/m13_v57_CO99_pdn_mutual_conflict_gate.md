@@ -5,6 +5,8 @@
 > 基线：SPEC rev-11 `d85f10f722ba22b0`｜板 `0e636a67c1472462`（**交付板逐字节不变**；dry-run 用 scratch）
 > **verdict = `FAIL_MUTUAL_SHORT`**
 
+> ※ **时点说明**：本卡记录 **rev-11**（互冲 FAIL）态。工具默认 spec 已随 CO-101 指向 **rev-12**（该基线 = `PASS`）；rev-11 的 FAIL 证据见本卡正文与 git 历史。
+
 ## 1. 两个覆盖缺口（为何此前全绿）
 所有既有 PDN 闸（CO-88/91/92/95/98）与 CO-96 复评都只判 **「计划几何 vs 板*已有*铜」**，因此有两处看不见：
 - **G1 计划集内部互冲**：CO-91 `Scene` 仅由板 pads/segs/vias 构造 ⇒ **via-via / stub-via / stub-stub 互相零判**。

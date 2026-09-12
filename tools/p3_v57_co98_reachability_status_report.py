@@ -24,9 +24,9 @@ K2 = Path(__file__).resolve().parents[1]
 L3 = K2 / "pm_gate/artifacts/k2_v4/L3"
 STEP2 = L3 / "mcio_feas_step2"
 OUT = STEP2 / "m13_v57_co98_reachability_status_report.json"
-SPEC = L3 / "SPEC_k2_v4.spec-rev-11.json"
+SPEC = L3 / "SPEC_k2_v4.spec-rev-12.json"
 CO95 = STEP2 / "m13_v57_co95_in4_reachability.json"
-BASE = {"spec": "d85f10f722ba22b0", "co95_record": "61db48a283beeaae", "board": "0e636a67c1472462"}
+BASE = {"spec": "1a381b06454dbe2c", "co95_record": "f1c0c17ee7b379a4", "board": "0e636a67c1472462"}
 GND = "GND"
 
 

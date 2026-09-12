@@ -63,7 +63,7 @@ def main(argv=None) -> int:
     items = []
     for e in zd.get("power_pad_connect", {}).get("entries", []):
         items.append({"kind": "ppc", "net": e["net"], "ref": e["ref"], "pad": str(e["pad"]),
-                      "pad": e["pad_pos"], "pos": list(e["via_pos"])})
+                      "pad_pos": e["pad_pos"], "pos": list(e["via_pos"])})
     items.sort(key=lambda i: (0, i["net"], i["ref"], i["pad"]))
     st = [c for c in zd.get("gnd_stitch_via", {}).get("coordinates", [])
           if not (c.get("blocked") or c.get("status") == "blocked") and c.get("x") is not None]
@@ -116,7 +116,7 @@ def main(argv=None) -> int:
     def candidates(it):
         p = it["pos"]
         if it["kind"] == "ppc":
-            p0 = it["pad"]
+            p0 = it["pad_pos"]
             cands = [tuple(p)]
             for r in (R + 0.3, 0.6):
                 for ux, uy in CARD:
@@ -135,21 +135,22 @@ def main(argv=None) -> int:
             if not via_ok(it["net"], cx, cy):
                 continue
             if it["kind"] == "ppc":
-                p0 = it["pad"]
+                p0 = it["pad_pos"]
                 if not stub_ok(it["net"], p0[0], p0[1], cx, cy):
                     continue
             hit = (cx, cy)
             break
         if hit is None:
             rows.append({"kind": it["kind"], "net": it["net"], "ref": it["ref"], "pad": it["pad"],
-                         "old": it["pos"], "new": None, "status": "blocked"})
+                         "pad_pos": it.get("pad_pos"), "old": it["pos"], "new": None, "status": "blocked"})
             continue
         moved = hit != tuple(it["pos"])
         placed_vias.append((it["net"], hit[0], hit[1]))
         if it["kind"] == "ppc":
-            placed_stubs.append((it["net"], it["pad"][0], it["pad"][1], hit[0], hit[1]))
+            placed_stubs.append((it["net"], it["pad_pos"][0], it["pad_pos"][1], hit[0], hit[1]))
         rows.append({"kind": it["kind"], "net": it["net"], "ref": it["ref"], "pad": it["pad"],
-                     "old": it["pos"], "new": [hit[0], hit[1]], "status": "relocated" if moved else "kept"})
+                     "pad_pos": it.get("pad_pos"), "old": it["pos"], "new": [hit[0], hit[1]],
+                     "status": "relocated" if moved else "kept"})
 
     tally = collections.Counter((r["kind"], r["status"]) for r in rows)
     # 结果集互判（与 CO-99 同判据）：应 0 overlap
@@ -172,6 +173,7 @@ def main(argv=None) -> int:
         "baseline_expectations": BASE, "baseline_mismatch": mismatch,
         "tally": {f"{k[0]}_{k[1]}": v for k, v in sorted(tally.items())},
         "blocked_detail": blocked[:40],
+        "rows": rows,
         "residual_mutual_overlap": ov,
         "verdict": ("BASELINE_MISMATCH" if mismatch else
                     ("TEETH_FAIL" if not tooth else

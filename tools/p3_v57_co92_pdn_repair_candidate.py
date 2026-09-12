@@ -25,7 +25,7 @@ import pcbnew
 
 K2 = Path(__file__).resolve().parents[1]
 CO91 = K2 / "tools/p3_v57_co91_pdn_planned_coord_clearance_gate.py"
-DEFAULT_SPEC = K2 / "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-11.json"
+DEFAULT_SPEC = K2 / "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-12.json"
 DEFAULT_BOARD = K2 / "k2_v4_8L.l4.kicad_pcb"
 DEFAULT_OUT = (K2 / "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2"
                / "m13_v57_co92_pdn_repair_candidate.json")

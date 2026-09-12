@@ -4,6 +4,8 @@
 > 记录 `m13_v57_co100_pdn_mutual_repair_candidate.json` `f8b6b2f3b11d09a9`
 > 基线：SPEC rev-11 `d85f10f722ba22b0`｜板 `0e636a67c1472462`｜**scratch 机判，不改 canonical**
 
+> ※ **时点说明**：本卡记录 **rev-11**（互冲 FAIL）态。工具默认 spec 已随 CO-101 指向 **rev-12**（该基线 = `PASS`）；rev-11 的 FAIL 证据见本卡正文与 git 历史。
+
 ## 1. 问题
 CO-99 判 rev-11 PDN **计划集互相冲突 = FAIL**（7 异网重叠 + 39 孔距）。本件回答：**能否在 L2 手段内（声明 palette、零坐标搜索）自解**，还是必须并入 L1/工艺？
 
