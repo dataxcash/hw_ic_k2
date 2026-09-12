@@ -83,8 +83,12 @@
     "L1_TOPOLOGY_v1.0 硬约束3",
     "L1_TOPOLOGY_v2.0 硬约束2"
    ],
-   "disposition": "属**规格缺陷（阈值几何不可达）**；按 BASIC_SKILL_VS_REDLINE §4 须先做**确定性可达性自证**（闭式 + 走廊容量账），再提**口径修订提案**（0.875 铜边净空的等价可执行口径或降级口径）；口径修订属 L1 红线（用户 2026-08-15 强条）⇒ 我方出提案，批准归 owner",
-   "status": "OPEN"
+   "disposition": "规格缺陷（阈值几何不可达）——**确定性自证已交**（CO-129，§4 五项）：焊盘场 = 模型自由全 span 不可达（pitch 上限 0.600 < 0.875）；WEST = 声明一阶阻抗模型下带内最小 span=0.355 ⇒ 缺额 ≥ 0.18（CO-86 名义 85Ω 解缺额 0.232，两者同号）；**口径修订提案已出**：P1（建议，3W 原义「铜边净空 ≥ 2·w」）/ P2（备选，分域可达上限 cap−span_min）；批准归 owner（L1 红线）。SI9000/板厂券到货后复核 w_min。",
+   "status": "OPEN",
+   "next": "owner 裁定 P1/P2（或另定）；SI9000/券到货后复核 w_min/span_min",
+   "evidence": [
+    "CO-129 m13_v57_co129_threshold_selfproof.json 5e2f92e5e03f0ab9（牙齿 T1..T4 全过；CO-86 逐字节复现）"
+   ]
   },
   {
    "finding": "threshold_unproved_unregistered:power_clearance_mm",

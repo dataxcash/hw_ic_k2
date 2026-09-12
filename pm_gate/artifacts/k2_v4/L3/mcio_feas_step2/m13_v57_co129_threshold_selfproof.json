@@ -1,0 +1,173 @@
+{
+ "artifact": "m13_v57_co129_threshold_selfproof",
+ "schema": 1,
+ "revision": "CO-129.1",
+ "nature": "③ 对间铜边净空 0.875 的确定性可达性自证（§4 五项）+ 口径修订提案",
+ "definition_doc": {
+  "path": "pm_gate/artifacts/k2_v4/L2/BASIC_SKILL_VS_REDLINE_v1.0.md",
+  "sha16": "9ad91da8a49510a5"
+ },
+ "self_proof_4": {
+  "predicate": "∃ L2 构造：对间铜边净空 ≥ 0.875mm（可机判）",
+  "identity": "净空 = 走廊轨距(pitch) − 铜跨(span) ⇒ pitch_required = span + 0.875（CO-86 恒等式）",
+  "inputs": {
+   "pitch_caps_mm": {
+    "WEST_MCIO_TO_CHIP": 1.05,
+    "EAST_CHIP_TO_J2": 1.449,
+    "pad_field": 0.6
+   },
+   "pitch_caps_source": "CO-85 V6（球栅逃逸 WEST / 图纸 lane.y EAST）+ 连接器引脚节距 pad_field",
+   "span_min_mm": 0.355,
+   "span_min_source": "声明的一阶阻抗模型（_shared/eda_core/stackup stripline 85±10%Ω，gap=0.175）",
+   "co85_sha16": "41fba6aed57d32be",
+   "co86_sha16": "d0a59f85b74687d5"
+  },
+  "completeness": {
+   "A_pad_field_model_free": "pitch ≤ 0.600 且 span ≥ 0 ⇒ 净空 ≤ 0.600 < 0.875 ⇒ ∀span 不可达（与阻抗/家族无关）",
+   "B_west_under_declared_impedance": "净空 ≥ 0.875 ⇒ span ≤ 1.050−0.875 = 0.175；Z(w) 严格递减 ⇒ 带内最小 w=0.09（Z≈93.24Ω，仍属 85±10%）⇒ span ≥ 2w_min+gap = 0.355 ⇒ 缺额 ≥ 0.18 > 0（对全体 span 成立；CO-86 的名义 85Ω 解 span=0.407 给出更大缺额 0.232）",
+   "C_east": "pitch ≤ 1.449 ⇒ span ≤ 0.574；交付 span 0.705 缺额 0.131（非主约束）",
+   "why_not_family_limit": "WEST/焊盘场用**区间单调性 + 闭式相交**导出全 span 界，非枚举候选；焊盘场结论完全无需阻抗模型",
+   "caveat": "WEST 的 span_min 依赖**一阶阻抗模型**；SI9000/板厂券（外部输入）到货后须复核 w_min（缺该输入不影响焊盘场结论）"
+  },
+  "failures": []
+ },
+ "impedance_resolution": {
+  "band_ohm": [
+   76.5,
+   93.50000000000001
+  ],
+  "w_min_mm": 0.09,
+  "span_min_mm": 0.355,
+  "zdiff_at_w_min_ohm": 93.24,
+  "w_nominal_85ohm_mm": 0.116,
+  "span_nominal_85ohm_mm": 0.407,
+  "note": "完备性下界用带内最小 span（对可行性最有利）；CO-86 用名义 85Ω 解"
+ },
+ "domain_caps": [
+  {
+   "domain": "WEST_MCIO_TO_CHIP",
+   "pitch_cap_mm": 1.05,
+   "span_min_mm": 0.355,
+   "max_achievable_edge_mm": 0.695,
+   "deficit_vs_0p875": 0.18,
+   "note": "pitch 上限 1.05 ⇒ span ≤ 0.175 但 span_min=0.355"
+  },
+  {
+   "domain": "EAST_CHIP_TO_J2",
+   "pitch_cap_mm": 1.449,
+   "span_min_mm": 0.355,
+   "max_achievable_edge_mm": 1.094,
+   "deficit_vs_0p875": -0.219,
+   "note": "pitch 上限 1.449 ⇒ span ≤ 0.574 但 span_min=0.355"
+  },
+  {
+   "domain": "pad_field",
+   "pitch_cap_mm": 0.6,
+   "span_min_mm": 0.355,
+   "max_achievable_edge_mm": 0.245,
+   "deficit_vs_0p875": 0.63,
+   "note": "pitch 上限 0.600 < 0.875 ⇒ 与 span 无关，恒不可达"
+  }
+ ],
+ "rows": [
+  {
+   "label": "delivered_0.705",
+   "span_mm": 0.705,
+   "pitch_required_mm": 1.58,
+   "deficit_vs_WEST": 0.53,
+   "deficit_vs_EAST": 0.131,
+   "deficit_vs_pad_field": 0.98,
+   "passes_all_caps": false
+  },
+  {
+   "label": "option_p_gap_0.585",
+   "span_mm": 0.585,
+   "pitch_required_mm": 1.46,
+   "deficit_vs_WEST": 0.41,
+   "deficit_vs_EAST": 0.011,
+   "deficit_vs_pad_field": 0.86,
+   "passes_all_caps": false
+  },
+  {
+   "label": "impedance_band_span_min",
+   "span_mm": 0.355,
+   "pitch_required_mm": 1.23,
+   "deficit_vs_WEST": 0.18,
+   "deficit_vs_EAST": -0.219,
+   "deficit_vs_pad_field": 0.63,
+   "passes_all_caps": false
+  },
+  {
+   "label": "impedance_nominal_85ohm",
+   "span_mm": 0.407,
+   "pitch_required_mm": 1.282,
+   "deficit_vs_WEST": 0.232,
+   "deficit_vs_EAST": -0.167,
+   "deficit_vs_pad_field": 0.682,
+   "passes_all_caps": false
+  }
+ ],
+ "proposal": {
+  "status": "待 owner 批准（L1 红线：口径修订权在 owner）",
+  "P1_recommended": {
+   "form": "以 3W **原义**为主口径：对间铜边净空 ≥ 2·w_对（等价于中心距 ≥ 3W）；0.875 降为「w ≥ 0.4375 时的推论」",
+   "why": "0.875 = 2×0.4375 只在铜宽 0.4375 时与原义一致；实际对内 w = 0.116..0.205 ⇒ 原义要求净空 0.232..0.410，几何可达",
+   "executable_check": "edge_clearance_mm ≥ 2 × trace_width_mm（可机判；厂可核）"
+  },
+  "P2_alternative": {
+   "form": "保留绝对阈值但改为**分域可达上限**（cap − span_min）：WEST_MCIO_TO_CHIP ≤ 0.695；EAST_CHIP_TO_J2 ≤ 1.094；pad_field ≤ 0.245",
+   "why": "若必须保留绝对口径，则以 L2 可达上限为界；但焊盘场上限极小（见上表），说明绝对口径不是合适的可执行形式",
+   "risk": "分域阈值随 span/叠层变动，维护成本高，且仍不是 3W 原义"
+  },
+  "evidence_table": [
+   {
+    "label": "delivered_0.705",
+    "span_mm": 0.705,
+    "pitch_required_mm": 1.58,
+    "deficit_vs_WEST": 0.53,
+    "deficit_vs_EAST": 0.131,
+    "deficit_vs_pad_field": 0.98,
+    "passes_all_caps": false
+   },
+   {
+    "label": "option_p_gap_0.585",
+    "span_mm": 0.585,
+    "pitch_required_mm": 1.46,
+    "deficit_vs_WEST": 0.41,
+    "deficit_vs_EAST": 0.011,
+    "deficit_vs_pad_field": 0.86,
+    "passes_all_caps": false
+   },
+   {
+    "label": "impedance_band_span_min",
+    "span_mm": 0.355,
+    "pitch_required_mm": 1.23,
+    "deficit_vs_WEST": 0.18,
+    "deficit_vs_EAST": -0.219,
+    "deficit_vs_pad_field": 0.63,
+    "passes_all_caps": false
+   },
+   {
+    "label": "impedance_nominal_85ohm",
+    "span_mm": 0.407,
+    "pitch_required_mm": 1.282,
+    "deficit_vs_WEST": 0.232,
+    "deficit_vs_EAST": -0.167,
+    "deficit_vs_pad_field": 0.682,
+    "passes_all_caps": false
+   }
+  ],
+  "pending_external": "SI9000/板厂阻抗券 ⇒ 复核 w_min/span_min（CO-86 已标记一阶模型）"
+ },
+ "teeth": {
+  "T3_impedance_monotone_decreasing": true,
+  "T1_pad_field_span_independent": true,
+  "T2_hypothetical_control_reachable": true,
+  "T4_co86_reproduced_byte_identical": true
+ },
+ "teeth_ok": true,
+ "verdict": "THRESHOLD_0p875_PROVED_UNREACHABLE_PROPOSAL_ISSUED",
+ "spec_sha16": "5748828a23161250",
+ "board_sha16": "0e636a67c1472462",
+ "redline": "只读；不改 SPEC/阈值/板/冻结源；无随机、零坐标搜索；提案不改任何冻结值"
+}
