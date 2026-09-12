@@ -1,0 +1,263 @@
+{
+ "V1_chain_byte_reproduction": {
+  "applier_wrote_proof": "k2_v4_8L.l4.kicad_pcb 与 construction 的 mtime 在复跑时被更新（08:17:27）⇒ 确为落盘重写而非短路缓存",
+  "commands": [
+   "python3 tools/p3_v57_w3_constructive.py --r1-5-shape co16",
+   "python3 tools/p3_v57_w3_constructive_validator_v2.py",
+   "../AppDir/usr/bin/python3.11 tools/p3_v57_l4_apply_drawing.py --board --escape-domain pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_co37_escape_domain.json",
+   "../AppDir/usr/bin/python3.11 tools/p3_v57_l4_validator.py",
+   "../AppDir/usr/bin/python3.11 tools/p3_v57_l5_signoff.py"
+  ],
+  "gates": {
+   "G4": "FEASIBLE_ALL 34 pages / crossings 0 / work 546-546 / drawing 22c2a15835857f99",
+   "G5": "PASS G-M1..6 True / frozen=True / eac5eee6f8203d01",
+   "G6": "PASS viol 0 / 68 nets / 2523 segs / 252 vias / board 0e636a67c1472462",
+   "G7": "FAB ok / DFM PASS new=0 disappeared=0 / in_scope_unconnected 0/68 / SI PASS skew 0.1300 (9501f66f1e87a838 / 40445f87be664f31 / 73f9b59ed5f6f3ce)"
+  },
+  "post_sha16": {
+   "board": "0e636a67c1472462",
+   "construction": "082fc5ae217e6ad8",
+   "dfm": "40445f87be664f31",
+   "drawing": "22c2a15835857f99",
+   "dru": "3148703240d54420",
+   "fab": "9501f66f1e87a838",
+   "g7": "4c9fe4ea4acecb3f",
+   "l4val": "c5845039ab81c01a",
+   "landing": "b71834b43a8f2455",
+   "pro": "ce2c2bf0da79a1ff",
+   "si": "73f9b59ed5f6f3ce",
+   "w3val": "eac5eee6f8203d01"
+  },
+  "verdict": "12/12 canonical artifacts byte-identical to pre-run snapshot；`git status` 对 pm_gate/板/dru/pro 零 tracked 漂移"
+ },
+ "V2_gate_teeth": {
+  "co69_probes": "PASS 10/10（A1..A10，含 A10 守卫负控）",
+  "co77_closure_sweep": "PASS；12 项 claim 全中、全量引用 61 条检查/71 条（10 条显式历史）、floor 30 ok、0 mismatch",
+  "co77_note": "记录复跑于 boundary v1.50 终版（doc_sha16=5c5994ba46abc08e）之上⇒记录 sha 随 doc 更新；其余闸记录复跑前后逐字节不变",
+  "co78_layer_role": "PASS 0 flag；阳性对照（历史 SPEC_k2_v4_8L_LID1.json，In6=signal）DETECTED 1 项 ⇒ 有齿",
+  "co81_project_rules": "PASS teeth_ok=True（正控空/负控命中）",
+  "co84_dru_domain": "PASS teeth_ok=True；4 个定点负控各命中 1（extra_area/clearance_off/no_refclk_exclusion/rect_drift）；域 = ESC_J2/J3/J4/U6",
+  "note": "全部闸记录复跑后与复跑前逐字节一致（git 零漂移）⇒ 闸判定可复现",
+  "record_sha16": {
+   "co69": "18a86c998dd6b4de",
+   "co77": "3cb51dbf0e7cff3d",
+   "co78": "2e5127c91e0b8e00",
+   "co81": "ebd163058efaad14",
+   "co84": "87cab84cf6c237de"
+  }
+ },
+ "V3_board_facts_independent": {
+  "In4_or_In6_segments": 0,
+  "copper_zones": 0,
+  "note": "4 个 zone 全部为 ESC_ 规则域（无 net、无 filled_polygon）⇒ 平面铜未铺（与 boundary §6-4 声明一致）",
+  "segments_per_layer": {
+   "B.Cu": 39,
+   "F.Cu": 174,
+   "In2.Cu": 106,
+   "In5.Cu": 2204
+  },
+  "segments_total": 2523,
+  "via_layer_pairs": {
+   "F-B": 32,
+   "F-In2": 92,
+   "F-In5": 8,
+   "In2-In5": 88,
+   "In5-B": 32
+  },
+  "vias_total": 252,
+  "zones_all_rule_area": [
+   "ESC_J2",
+   "ESC_J3",
+   "ESC_J4",
+   "ESC_U6"
+  ],
+  "zones_total": 4
+ },
+ "V4_spec_rev8_facts_independent": {
+  "bcu_power_copper_policy": "PROHIBITED",
+  "escape_clearance_mm": 0.075,
+  "inter_pair_spacing_mm": 0.875,
+  "inter_pair_spacing_scope": "0.875 = 对间铜边净空设计基线（容量/新布线口径）；as-built 走廊轨距 1.20 ⇒ 交付对间最小铜边 0.345",
+  "power_zones_layer": "In4.Cu (net P3V3)",
+  "retired_keys": [
+   "retired_in6_segments_bcu",
+   "retired_polygons_bcu",
+   "retired_segments_bcu"
+  ]
+ },
+ "V5_co75_negative_rerun": {
+  "baseline": {
+   "EAST_y": [
+    56.334,
+    78.569
+   ],
+   "WEST_y": [
+    33.45,
+    49.7
+   ],
+   "in_board_band": true,
+   "placed_32of32": true,
+   "scratch_sha16": "2ce9fcb75b100d89"
+  },
+  "n_pass": 0,
+  "n_placed": 0,
+  "n_probes": 23,
+  "note": "负结果（WSTEP=1.580 × 12×3×5×3 = 23 组合 0 命中）独立复跑复现",
+  "record": "c59e9955d344d75f",
+  "record_unchanged": true
+ },
+ "V6_corridor_pitch_independent": {
+  "EAST_CHIP_TO_J2": {
+   "edge_clearance_mm": 0.744,
+   "lane_y_range": [
+    56.584,
+    78.319
+   ],
+   "n": 16,
+   "pitch_distinct": [
+    1.449
+   ],
+   "pitch_mm": 1.449
+  },
+  "WEST_MCIO_TO_CHIP": {
+   "edge_clearance_mm": 0.345,
+   "lane_y_range": [
+    33.7,
+    49.45
+   ],
+   "n": 16,
+   "pitch_distinct": [
+    1.05
+   ],
+   "pitch_mm": 1.05
+  },
+  "note": "独立复算与 boundary §6-6 记录的 EAST 1.449 / WEST 1.050 一致",
+  "pitch_1580_reanchor_check": "以 EAST y_min=56.584 锚定，16 lane @1.580 ⇒ y_max = 80.284（含半对宽 +0.25 = 80.534）> 板边可用 78.5975 ⇒ 越界 ≥1.687mm",
+  "source": "图纸 pages[*].lane.y（16 lane/走廊）"
+ },
+ "V7_layer_geometry_independent": {
+  "F_Cu_definition_search": "未有任何口径复现 1.124：全局最小 0.4627/0.4921；x≤127（走廊内）0.9；len≥10mm 4.9；overlap≥10mm 4.9；仅水平 3.457；图纸 route_geometry 0.4627",
+  "convention": "同层、不同 channel、方向差 ≤5°（共平行）的走线中心最小距；edge = center - 0.205",
+  "inter_pair": {
+   "B.Cu": {
+    "center_mm": 0.55,
+    "edge_mm": 0.345,
+    "match": true,
+    "recorded": "0.550 / +0.345"
+   },
+   "F.Cu": {
+    "center_mm": 0.4921,
+    "drawing_route_geometry_min": {
+     "center_mm": 0.4627,
+     "edge_mm": 0.2577,
+     "witness": [
+      "PCIE_DN6/input#fcu_land N",
+      "PCIE_DN7/input#fcu_land P"
+     ]
+    },
+    "edge_mm": 0.2871,
+    "match": false,
+    "overlap_mm": 1.542,
+    "recorded": "1.124 / +0.919（达 0.875）",
+    "witness": [
+     "PCIE_UP_OUT6_N_J2",
+     "PCIE_UP_OUT7_P_J2"
+    ]
+   },
+   "In2.Cu": {
+    "center_mm": 0.58,
+    "edge_mm": 0.375,
+    "match": true,
+    "recorded": "0.580 / +0.375"
+   },
+   "In5.Cu": {
+    "center_mm": 0.55,
+    "edge_mm": 0.345,
+    "match": true,
+    "recorded": "0.550 / +0.345"
+   }
+  },
+  "intra_pair_control": {
+   "B.Cu": {
+    "center_mm": 0.55,
+    "edge_mm": 0.345
+   },
+   "F.Cu": {
+    "center_mm": 0.5,
+    "edge_mm": 0.295
+   },
+   "In2.Cu": {
+    "center_mm": 0.5,
+    "edge_mm": 0.295
+   },
+   "In5.Cu": {
+    "center_mm": 0.5,
+    "edge_mm": 0.295
+   },
+   "note": "与 SPEC inter_pair_spacing_scope 记录『交付对内中心 0.500（边距 0.295）』一致"
+  }
+ },
+ "artifact": "m13_v57_co85_nonexecutor_review_pass2",
+ "boundary_v1_50_sha16": "5c5994ba46abc08e",
+ "findings": {
+  "F1_F_Cu_row_unsupported": {
+   "class": "measurement/statement correctness（L2 证据表）",
+   "consequence": "R3-2 0.875 违反层数 3/4 → **4/4**；F.Cu『达 0.875』不得使用",
+   "counter_evidence": "按产生其余三行的同一口径独立实测：F.Cu = 0.4921 / +0.2871（板；witness PCIE_UP_OUT6_N_J2 vs PCIE_UP_OUT7_P_J2，重叠 1.542mm）；图纸 route_geometry = 0.4627 / +0.2577",
+   "evidence_before_fix": "boundary §6-6『CO-70/71 补强证据』F.Cu 行 = 1.124 / +0.919（达 0.875）⇒ 结论『4 个信号层中 3 层违反』",
+   "fix": "boundary §6-6 文本更正为实测值 + 显式标注原 1.124 不可复现；零几何/零阈值改动；L1 ① 判定不变",
+   "severity": "medium",
+   "status": "fixed_in_boundary_v1_50",
+   "teeth_control": "同口径精确复现其余三行（0.550/0.580/0.550）⇒ 该度量非空真、F.Cu 行不是口径差异所能解释"
+  },
+  "F2_connector_pad_field_hard_limit": {
+   "class": "new geometric hard limit（L1 相关证据，L2 无法自解）",
+   "decision_relevance": "owner 选项 A（走廊对间距重开至 1.580）单独**不能**使整板满足 0.875：须把 R3-2 口径限定到走廊，或改连接器引脚场（L1）",
+   "evidence": "J2 74 pad / J3 38 pad / J4 38 pad 最小焊盘中心距 = 0.6mm（J2 pad 1.3×0.35；J3/J4 0.3×0.7）—— 连接器引脚场节距",
+   "implication": "焊盘场中相邻不同对走线的铜边净空上限 = 0.6 − 0.205 = 0.395mm < 0.875 ⇒ **R3-2 0.875 作为同层绝对规则在连接器焊盘场几何上不可达（与走廊轨距无关）**",
+   "severity": "high(裁决相关)",
+   "status": "recorded（L1 相关证据；L2 无可行解，未做任何放宽）"
+  }
+ },
+ "method": {
+  "independent_recompute": "由本会话以自写解析器独立测得的几何/事实（板 S 表达式直解、图纸 route_geometry、SPEC/域工件字段、封装焊盘场）",
+  "same_code_rerun": "全链与各闸为同代码复跑（验证确定性/字节可复现），非独立实现；已在 non_claims 显式声明"
+ },
+ "nature": "非执行者侧对抗评审 pass 2/2（L2_STRUCTURE_v2.0.md:137 的第二路）；对象 CO-67..CO-84（含 pass 1 因执行者身份排除的 CO-74/CO-75）",
+ "non_claims": [
+  "不声称对间净空合规；未放宽任何阈值/口径（inter_pair_spacing 0.875 原样）；未改冻结四源与 L1 冻结源",
+  "未改任何几何/网表；未重开层数；未做 L1 裁定",
+  "V1/V2/V5 为同代码复跑（确定性验证），非独立实现；独立部分为 V3/V4/V6/V7 的自写度量",
+  "F2 为一阶几何论证（焊盘节距 vs 0.205 线宽），未经 SI9000/板厂券"
+ ],
+ "redline": "只读评审 + 文本更正；不改几何/阈值；不 partial pass",
+ "residual": [
+  "L1 ①（对间净空 0.875 = 中心距 1.580）仍待 owner：西侧球栅逃逸硬限（CO-60/61/75 复现）+ 东侧越板边（本件独立复算 y_max 80.284 > 78.5975）+ **本件新增 F2 连接器焊盘场硬限**",
+  "板厂阻抗券（CO-71 --build 接口就绪）— 外部",
+  "pd In4 电力铜实体几何 = L3 施工确定性派生（一阶，未经 SI9000/券）"
+ ],
+ "reviewer_independence": {
+  "excluded_from_scope": "本次由本会话新增的 CO-85 记录/卡与 boundary v1.50 文本更正（自审不入评审对象）",
+  "pass1_by": "CO-76（cf5b4ec0e880e5d2 / 32d5868a1a2880b4，该会话为 CO-74/75 执行者，故未覆盖 CO-74/75）",
+  "session": "context 重置后续接会话；未执行 CO-67..CO-84 任何变更"
+ },
+ "revision": "CO-85.1",
+ "schema": 1,
+ "self_caught_measurement_slips": [
+  {
+   "cause": "正则把 4 个 `(vias ...)` 记号当 via 块",
+   "class": "同 CO-84 rect 序错自捕获类",
+   "fix": "改为精确块解析 ⇒ 252（与 L4/L5 记录一致）",
+   "id": "S1",
+   "slip": "首版以 `grep -c '\\s*(via'` 计 via = 256 ≠ 252"
+  },
+  {
+   "cause": "未排除同网相邻段（P vs P 共享端点）",
+   "class": "对照缺失导致的伪发现",
+   "fix": "排除同网后 F/In2/In5 = 0.500 / B = 0.550 ⇒ 无短接",
+   "id": "S2",
+   "slip": "首版 intra-pair 最小距出现 0.0（伪短接）"
+  }
+ ],
+ "verdict": "PASS（pass 2/2 完成；F1 更正、F2 入册；无阈值/几何改动）"
+}
