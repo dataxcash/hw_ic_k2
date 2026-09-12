@@ -1,0 +1,219 @@
+{
+ "artifact": "m13_v57_co125_12vin_carrier_router",
+ "schema": 1,
+ "revision": "CO-125.1",
+ "nature": "① 12V_IN In4 承载：确定性绕障分配（《BASIC_SKILL_VS_REDLINE v1.0》B-1 示范）",
+ "definition_doc": {
+  "path": "pm_gate/artifacts/k2_v4/L2/BASIC_SKILL_VS_REDLINE_v1.0.md",
+  "sha16": "9ad91da8a49510a5"
+ },
+ "algorithm": {
+  "grid_from": "声明数据派生（障碍中心 ± required / target / 窗口边界）",
+  "cell_blocked_rule": "点到矩形精确距离 ≤ 该障碍 required",
+  "search": "Dijkstra 单位代价 + 固定邻居序 E,S,W,N + 队列定序（确定性）",
+  "region": "A→B/A→C 路径单元格并集 → 矩形并集 → 单环闭式追踪",
+  "determinism": "无随机、无未声明参数；同输入两次运行逐字节一致"
+ },
+ "clearance": {
+  "required_per_foreign": {
+   "MCU_VDD": 0.375,
+   "P3V3": 0.375,
+   "P3V3_AUX": 0.375,
+   "GND": 0.35
+  }
+ },
+ "window": [
+  25.275,
+  34.635,
+  38.725,
+  44.5
+ ],
+ "n_cells": 182,
+ "n_clear_cells": 122,
+ "n_region_cells": 8,
+ "region_rects": [
+  [
+   25.275,
+   41.15,
+   30.375,
+   41.5
+  ],
+  [
+   28.275,
+   40.205,
+   33.575,
+   41.15
+  ],
+  [
+   30.375,
+   39.455,
+   31.05,
+   39.83
+  ],
+  [
+   30.375,
+   39.83,
+   31.05,
+   40.205
+  ],
+  [
+   32.175,
+   37.635,
+   35.725,
+   39.455
+  ],
+  [
+   32.175,
+   39.455,
+   33.575,
+   39.83
+  ],
+  [
+   32.175,
+   39.83,
+   33.575,
+   40.205
+  ],
+  [
+   35.325,
+   36.715,
+   35.725,
+   37.635
+  ]
+ ],
+ "ring": [
+  [
+   25.275,
+   41.15
+  ],
+  [
+   28.275,
+   41.15
+  ],
+  [
+   28.275,
+   40.205
+  ],
+  [
+   30.375,
+   40.205
+  ],
+  [
+   30.375,
+   39.455
+  ],
+  [
+   31.05,
+   39.455
+  ],
+  [
+   31.05,
+   40.205
+  ],
+  [
+   32.175,
+   40.205
+  ],
+  [
+   32.175,
+   37.635
+  ],
+  [
+   35.325,
+   37.635
+  ],
+  [
+   35.325,
+   36.715
+  ],
+  [
+   35.725,
+   36.715
+  ],
+  [
+   35.725,
+   39.455
+  ],
+  [
+   33.575,
+   39.455
+  ],
+  [
+   33.575,
+   41.15
+  ],
+  [
+   30.375,
+   41.15
+  ],
+  [
+   30.375,
+   41.5
+  ],
+  [
+   25.275,
+   41.5
+  ]
+ ],
+ "path_cells": {
+  "C88.1": 1,
+  "U2.4": 6,
+  "U2.6": 15
+ },
+ "preconditions": [
+  {
+   "target": "C88.1",
+   "via": [
+    28.275,
+    41.5
+   ],
+   "blocking_foreign_within_required": []
+  },
+  {
+   "target": "U2.4",
+   "via": [
+    31.05,
+    39.83
+   ],
+   "blocking_foreign_within_required": []
+  },
+  {
+   "target": "U2.6",
+   "via": [
+    35.725,
+    37.635
+   ],
+   "blocking_foreign_within_required": []
+  }
+ ],
+ "judge": {
+  "a_coverage": [],
+  "b_clearance": [],
+  "c_mcu_continuity": true,
+  "d_aux_connectivity": true,
+  "n_aux_cells": 150,
+  "n_free_components": 1,
+  "worst_margin": {
+   "via": "C88.2(GND)",
+   "margin_mm": -0.025
+  },
+  "e_manufacturable_merge": true,
+  "min_merge_depth_mm": null,
+  "ok": true,
+  "b_clearance_uniform_0.375_by_co121": [
+   "C88.2(GND) d=0.350 < 0.375"
+  ],
+  "clearance_rule": "required(foreign) 按本方 LOW_SPEED 类闭式：POWER 异网 0.375 / 其余 0.35",
+  "min_rect_dim_mm": 0.35,
+  "min_feature_mm": 0.15
+ },
+ "teeth": {
+  "T1_structural_infeasible_detected": true,
+  "T2_output_clearance_recheck": true
+ },
+ "teeth_ok": true,
+ "verdict": "FEASIBLE_BY_DETERMINISTIC_ROUTER",
+ "spec_sha16": "5748828a23161250",
+ "board_sha16": "0e636a67c1472462",
+ "redline": "只读；不改 SPEC/板/阈值/冻结源；无随机、无坐标试错；本件不施加（SPEC 写入另开 CO）"
+}

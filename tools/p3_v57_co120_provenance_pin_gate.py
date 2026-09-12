@@ -67,22 +67,36 @@ SNAPSHOT_DECLARED = {
 DELIVERED_BOARD = "d4e81f647be7f980"
 
 
+# CO-156（F-2b）：下游快照键的**通用**判据 —— 除 `*_sha16_after` 外，`register.*` / `ledger.*` 下的
+# `sha16*` 与计数键（items_total / open_total / n_items）同属下游时点观测，未声明一律 FAIL。
+DOWNSTREAM_CONTAINER = ("register", "ledger")
+DOWNSTREAM_COUNT_KEYS = ("items_total", "open_total", "n_items")
+
+
+def _is_downstream_snapshot(path: list, key: str) -> bool:
+    k = str(key)
+    if k.endswith("sha16_after"):
+        return True
+    return any(seg in DOWNSTREAM_CONTAINER for seg in path) and \
+        (k.endswith("sha16") or k in DOWNSTREAM_COUNT_KEYS)
+
+
 def scan_snapshots(records: dict) -> list:
-    """F-1b：扫描 `*_sha16_after` 下游快照键；未声明者 = 违规。"""
+    """F-1b / CO-156：扫描下游快照键（sha16_after ∪ register/ledger 下 sha16|计数）；未声明者 = 违规。"""
     rows = []
     for name in sorted(records):
         keys = set()
 
-        def w(o):
+        def w(o, path):
             if isinstance(o, dict):
                 for k, v in o.items():
-                    if str(k).endswith("sha16_after"):
-                        keys.add(k)
-                    w(v)
+                    if _is_downstream_snapshot(path, k):
+                        keys.add(".".join(path + [str(k)]))
+                    w(v, path + [str(k)])
             elif isinstance(o, list):
                 for v in o:
-                    w(v)
-        w(records[name])
+                    w(v, path)
+        w(records[name], [])
         if keys:
             rows.append({"record": name, "keys": sorted(keys), "declared": name in SNAPSHOT_DECLARED,
                          "reason": SNAPSHOT_DECLARED.get(name, "")})
@@ -186,9 +200,15 @@ def main(argv=None) -> int:
     pos_snap = scan_snapshots({k: {"x_sha16_after": "0" * 16} for k in list(SNAPSHOT_DECLARED)[:1]})
     pos_snap_ok = bool(pos_snap) and all(s["declared"] for s in pos_snap)
     snap_ok = neg_snap_hit and pos_snap_ok
+    # CO-156（F-2b）：`register.*`/`ledger.*` 下的非 `_after` 下游键（sha16/计数）亦须被抓
+    neg_snap2 = scan_snapshots({"synthetic_probe.json": {"register": {"open_total": 3, "sha16": "0" * 16}}})
+    neg_snap2_hit = any(not s2["declared"] for s2 in neg_snap2)
+    pos_snap2 = scan_snapshots({k: {"register": {"items_total": 1}} for k in list(SNAPSHOT_DECLARED)[:1]})
+    pos_snap2_ok = bool(pos_snap2) and all(s2["declared"] for s2 in pos_snap2)
+    snap_ok = snap_ok and neg_snap2_hit and pos_snap2_ok
     teeth_ok = neg_hit and pos_ok and snap_ok
     rec = {
-        "artifact": "m13_v57_co120_provenance_pin_gate", "schema": 1, "revision": "CO-120.2",
+        "artifact": "m13_v57_co120_provenance_pin_gate", "schema": 1, "revision": "CO-120.3",
         "nature": "L2 过程闸：记录内 inter-record provenance pin 一致性（关闭 CO-108/CO-114 F-6 盲区）",
         "pins_total": len(rows), "n_match": sum(1 for r in rows if r["status"] == "match"),
         "n_exempt_historical": sum(1 for r in rows if r["status"] == "exempt_historical"),
@@ -204,6 +224,8 @@ def main(argv=None) -> int:
         "teeth": {"negative_control_undeclared_stale_caught": neg_hit,
                   "positive_control_matching_pin_passes": pos_ok,
                   "negative_control_undeclared_snapshot_caught": neg_snap_hit,
+                  "negative_control_register_snapshot_caught": neg_snap2_hit,
+                  "positive_control_declared_register_snapshot_passes": pos_snap2_ok,
                   "positive_control_declared_snapshot_passes": pos_snap_ok,
                   "teeth_ok": teeth_ok},
         "verdict": ("FAIL_STALE_PROVENANCE_PIN" if stale else
@@ -211,7 +233,8 @@ def main(argv=None) -> int:
                     "FAIL_EXEMPTION_BASIS" if basis_bad else
                     "PASS" if teeth_ok else "FAIL(teeth)"),
         "non_claims": ["只读；不改任何记录/SPEC/板/阈值/冻结源",
-                       "F-1b：记录内**下游时点快照**键（`*_sha16_after`）必须在本闸 SNAPSHOT_DECLARED 声明"
+                       "CO-156（F-2b）：下游快照键 = `*_sha16_after` ∪ `register.*`/`ledger.*` 下的 `sha16*`/`items_total`/`open_total`/`n_items`；"
+                       "后者必须在本闸 SNAPSHOT_DECLARED 声明（未声明一律 FAIL）"
                        "（理由：该类快照使记录 sha 随运行序漂移 ⇒ 提交 pin 不可复现）；未声明一律 FAIL",
                        "F-7：豁免依据分 `board_superseded`（机判可证）与 `declared_historical`（无板级依据，计数明示）两类",
                        "豁免仅限『记录本体已被后续 CO 取代 ⇒ pin 属历史』并在本闸注册表明文；未声明陈旧 pin 一律 FAIL",

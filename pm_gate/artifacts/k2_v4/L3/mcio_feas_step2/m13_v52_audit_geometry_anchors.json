@@ -1,0 +1,238 @@
+{
+ "meta": {
+  "board_sha_expected": "6c387dff",
+  "report": "pm_gate/artifacts/k2_v4/L3/p3_real_board_e2e/p3_real_board_e2e_report.json",
+  "date": "2026-09-08"
+ },
+ "q5_geometry": {
+  "chip_pad_grid_notes": "U6 x∈[82.91,104.69], 0.3×0.3 F.Cu SMD, signal ball col pitch 1.2mm, P/N intra-pair 0.4mm",
+  "dn0_out_chip_pads": {
+   "P": [
+    84.6,
+    52.366
+   ],
+   "N": [
+    85.0,
+    51.673
+   ]
+  },
+  "dn0_input_cols": {
+   "P": 84.85,
+   "N": 85.15,
+   "stub_y_range": [
+    56.67,
+    58.49
+   ],
+   "trunk_y": [
+    58.11,
+    58.49
+   ]
+  },
+  "clearance": {
+   "netclass": 0.175,
+   "pn_min_edge_ok": 0.155,
+   "width": 0.205,
+   "via_od": 0.35,
+   "via_drill": 0.2
+  },
+  "corridor_WEST_MCIO_TO_CHIP": {
+   "x": [
+    65.05,
+    82.35
+   ],
+   "dn_tracks": [
+    58.7,
+    59.9,
+    61.1,
+    62.3,
+    63.5,
+    64.7,
+    65.9,
+    67.1
+   ],
+   "layer": "In2.Cu"
+  },
+  "corridor_EAST_CHIP_TO_J2": {
+   "x": [
+    105.25,
+    132.65
+   ],
+   "dn_tracks": [
+    58.3,
+    59.5,
+    60.7,
+    61.9,
+    63.1,
+    64.3,
+    65.5,
+    66.7
+   ],
+   "layer": "In2.Cu"
+  }
+ },
+ "q5_anchors_27": {
+  "note": "v51 F10: 28 P/N 段端字节零变更；其中 DN0-4/6 input + UP0-3/6/7 out_J2 + REFCLK0/1 为 alloc/landing 保锚",
+  "segments_solved_report": [
+   {
+    "base": "PCIE_DN0",
+    "seg": "input",
+    "track_y": 58.3,
+    "chip_cols": {
+     "P": 84.85,
+     "N": 85.15
+    },
+    "status": "SOLVED(保锚)"
+   },
+   {
+    "base": "PCIE_DN1",
+    "seg": "input",
+    "track_y": 59.5,
+    "chip_cols": {
+     "P": 86.05,
+     "N": 86.35
+    },
+    "status": "SOLVED(保锚)"
+   },
+   {
+    "base": "PCIE_DN2",
+    "seg": "input",
+    "track_y": 60.7,
+    "chip_cols": {
+     "P": 87.55
+    },
+    "status": "SOLVED(保锚)"
+   },
+   {
+    "base": "PCIE_DN3",
+    "seg": "input",
+    "track_y": 61.9,
+    "chip_cols": {
+     "P": 88.75,
+     "N": 88.45
+    },
+    "status": "SOLVED(保锚)"
+   },
+   {
+    "base": "PCIE_DN4",
+    "seg": "input",
+    "track_y": 63.1,
+    "chip_cols": {
+     "P": 89.65
+    },
+    "status": "SOLVED(保锚)"
+   },
+   {
+    "base": "PCIE_DN6",
+    "seg": "input",
+    "track_y": 65.5,
+    "chip_cols": {
+     "P": 92.35,
+     "N": 92.05,
+     "jog": 92.8
+    },
+    "status": "SOLVED(保锚)"
+   },
+   {
+    "base": "PCIE_UP0",
+    "seg": "out_J2",
+    "track_y": 40.3,
+    "chip_cols": {
+     "P": 85.0,
+     "N": 84.6
+    },
+    "status": "SOLVED(保锚)"
+   },
+   {
+    "base": "PCIE_UP1",
+    "seg": "out_J2",
+    "track_y": 41.5,
+    "chip_cols": {
+     "P": 86.2,
+     "N": 85.8
+    },
+    "status": "SOLVED(保锚)"
+   },
+   {
+    "base": "PCIE_UP2",
+    "seg": "out_J2",
+    "track_y": 42.7,
+    "chip_cols": {
+     "P": 87.4,
+     "N": 87.0
+    },
+    "status": "SOLVED(保锚)"
+   },
+   {
+    "base": "PCIE_UP3",
+    "seg": "out_J2",
+    "track_y": 43.9,
+    "chip_cols": {
+     "P": 88.6,
+     "N": 88.2
+    },
+    "status": "SOLVED(保锚)"
+   },
+   {
+    "base": "PCIE_UP6",
+    "seg": "out_J2",
+    "track_y": 47.5,
+    "chip_cols": {
+     "P": 92.2,
+     "N": 91.8
+    },
+    "status": "SOLVED(保锚)"
+   },
+   {
+    "base": "PCIE_UP7",
+    "seg": "out_J2",
+    "track_y": 48.7,
+    "chip_cols": {
+     "P": 93.4,
+     "N": 93.0
+    },
+    "status": "SOLVED(保锚)"
+   },
+   {
+    "base": "PCIE_REFCLK0",
+    "seg": "input",
+    "track_y": 45.7,
+    "status": "SOLVED(保锚)"
+   },
+   {
+    "base": "PCIE_REFCLK1",
+    "seg": "input",
+    "track_y": 50.5,
+    "status": "SOLVED(保锚)"
+   }
+  ],
+  "dn56_out_also_preserve": [
+   {
+    "base": "PCIE_DN5",
+    "seg": "out_MCIO",
+    "right_via_cols": [
+     90.6,
+     91.0
+    ],
+    "drop": null
+   },
+   {
+    "base": "PCIE_DN6",
+    "seg": "out_MCIO",
+    "right_via_cols": [
+     91.2,
+     91.6
+    ],
+    "drop": [
+     82.75,
+     82.35
+    ]
+   }
+  ]
+ },
+ "q5_dn7_stacked_via": {
+  "reason": "DN7 input 落点净空校验失败 P/N=(133.825,63.9)/(133.825,64.5) fail-closed",
+  "collision_col": 133.825,
+  "collision": "DN6 全解后 input 段 J2 landing stub F.Cu 竖线 y63.3→65.31@x133.825 穿 DN7 落点 via(133.825,63.9/64.5)",
+  "root": "alloc 双记录复用同列 133.825 (DN6/DN7) → 同列 via 堆叠"
+ }
+}

@@ -151,6 +151,12 @@ def main() -> int:
            "rows": rows, "sensitivity": sens, "verdict": "PASS" if not fails else "FAIL", "fails": fails,
            "verdict_basis": "as-built 对内净距（gap_mm_delivered 下界 0.295 外层 / 0.34 内层，= 交付实测口径）双模型均落 85Ω±10%",
            "watch": watch,
+           # CO-156（F-6）：供 DV-CO146-ZDIFF 的 `evidence_ref.key_path` 绑定（证据件须含该 computed）
+           "dv_computed_zdiff": {"window_ohm": [lo_ok, hi_ok],
+                                 "zdiff": {r["layer"]: r["zdiff"] for r in rows},
+                                 "nominal_w_for_85": {r["layer"]: r["nominal_w_for_85"] for r in rows},
+                                 "deviation_pct": {r["layer"]: r["deviation_pct"] for r in rows},
+                                 "watch_nominal_max": watch},
            "models": {"M1_IPC2141": "IPC-2141 边耦微带/对称带状线（与 eda_core/stackup.py 同族）",
                       "M2_HJ_Cohn": "Hammerstad–Jensen 微带（含铜厚修正）+ Cohn 带状线"},
            "limits": ("两模型均为一阶闭式工程近似（±5~10% 量级）；**终判 = JLC 阻抗控制服务**"

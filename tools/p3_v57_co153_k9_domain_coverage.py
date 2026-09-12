@@ -99,11 +99,28 @@ def main() -> int:
     led = json.loads(LED.read_text())
     norm = []
     pm = json.loads((K2 / "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_co146_pm_eval.json").read_text())
+    # CO-156（F-4）：本件成为 K9 **全部七域** `kind` 的规范序内具名生产者（此前仅 drop_domain/conservative_ge），
+    # 使 R-CO153-1「各域均由规范序内具名生产者产出」成立；域内容（computed/domains）仍归各派生 CO。
+    KIND_EXPECT = {
+        "DV-INTPAIR-EDGE": "domain_cap", "DV-PAIR-CROSS": "identity",
+        "DV-CLR-POWER": "process_floor", "DV-EDGE-COPPER": "process_floor",
+        "DV-M3-KEEPOUT": "process_floor", "DV-ENGINE-INT_PAIR_PITCH": "conservative_ge",
+        "DV-CO146-ZDIFF": "declared", "DV-CO146-PDN-DROP": "drop_domain",
+        "DV-CO146-THERMAL": "thermal_option_domain",
+    }
+    assert set(KIND_EXPECT.values()) == {"domain_cap", "identity", "process_floor", "declared",
+                                         "conservative_ge", "drop_domain", "thermal_option_domain"}
+    _by_id = {d["id"]: d for d in led["derived_values"]}
+    _auth_edge = ((_by_id.get("DV-INTPAIR-EDGE") or {}).get("computed") or {}).get("edge_outer_binding_mm")
+    _auth_span = ((_by_id.get("DV-PAIR-CROSS") or {}).get("computed") or {}).get("span_mm")
     for dv in led["derived_values"]:
+        rc = dv.setdefault("reachability", {})
+        want = KIND_EXPECT.get(dv["id"])
+        if want and rc.get("kind") != want:
+            rc["kind"] = want
+            norm.append(dv["id"] + ":kind")
         if dv["id"] == "DV-CO146-PDN-DROP":
-            # CO-153：`drop_domain` 此前**无生产者**（一次性写入）⇒ 任何台账重写即静默丢失、T11 牙齿失效。
-            # 本件成为其归一生产者：kind + 证据 pin（pm_eval 记录）。
-            rc = dv.setdefault("reachability", {})
+            # CO-153：`drop_domain` 此前无生产者（一次性写入）⇒ 本件为其归一生产者（kind + 证据 pin）。
             if rc.get("kind") != "drop_domain":
                 rc["kind"] = "drop_domain"
                 rc["predicate"] = "每轨 ΔV% ≤ 预算%（监理指令 #10 定值）"
@@ -114,11 +131,19 @@ def main() -> int:
                 rc.setdefault("basis", "几何取自交付板 zone 声明域；电流为显式声明值（非实测）")
                 norm.append(dv["id"] + ":pin")
         if dv["id"] == "DV-ENGINE-INT_PAIR_PITCH":
-            rc = dv.setdefault("reachability", {})
-            if rc.get("kind") != "conservative_ge":
-                rc["kind"] = "conservative_ge"
-                rc["predicate"] = "value_mm ≥ span + 2·w_outer（忠实下界，闭式重算）"
-                norm.append(dv["id"])
+            # CO-153：可闭式证明的保守实现（K9 新判据）；CO-156（F-7）：span/w_outer 须**引用**权威 DV 并显式标注来源。
+            rc["kind"] = "conservative_ge"
+            rc.setdefault("predicate", "value_mm ≥ span + 2·w_outer（忠实下界，闭式重算）")
+            inp = dv.setdefault("inputs", {})
+            if isinstance(_auth_span, (int, float)):
+                inp["span_mm"] = round(float(_auth_span), 4)
+                inp["span_src"] = "DV-PAIR-CROSS.computed.span_mm"
+            if isinstance(_auth_edge, (int, float)):
+                inp["w_outer_mm"] = round(float(_auth_edge) / 2.0, 4)
+                inp["w_outer_src"] = "DV-INTPAIR-EDGE.computed.edge_outer_binding_mm/2"
+            if isinstance(inp.get("span_mm"), (int, float)) and isinstance(inp.get("w_outer_mm"), (int, float)):
+                dv.setdefault("computed", {})["faithful_min_mm"] = round(float(inp["span_mm"]) + 2.0 * float(inp["w_outer_mm"]), 4)
+            norm.append(dv["id"] + ":binding")
     LED.write_text(json.dumps(led, ensure_ascii=False, indent=1) + "\n")
 
     reg = json.loads(REG.read_text())

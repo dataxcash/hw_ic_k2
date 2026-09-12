@@ -49,11 +49,34 @@ def s16(p) -> str:
     return hashlib.sha256(Path(p).read_bytes()).hexdigest()[:16]
 
 
+# CO-156（F-5）：K9 七域白名单 —— kind 必须 ∈ 本集，且 domain_cap 必带非空 domains。
+KNOWN_KINDS = ("domain_cap", "identity", "process_floor", "declared",
+               "conservative_ge", "drop_domain", "thermal_option_domain")
+
+
+def _contains(ev, dv) -> bool:
+    """CO-156（F-6）：证据对象须**递归包含** DV 的 computed（子集语义）。"""
+    if isinstance(dv, dict):
+        return isinstance(ev, dict) and all(k in ev and _contains(ev[k], v) for k, v in dv.items())
+    if isinstance(dv, list):
+        return isinstance(ev, list) and len(ev) == len(dv) and all(_contains(a, b) for a, b in zip(ev, dv))
+    return ev == dv
+
+
+def _resolve(path):
+    pth = str(path) if path else None
+    return pth, next((c for c in [STEP2 / str(pth), L3 / str(pth), L2 / str(pth)] if pth and c.exists()), None)
+
+
 def k9_findings(led: dict) -> list:
     """K9：需求/实现分家机判（纯函数，便于负控注入）。"""
     f = []
     reqs = led.get("requirements", [])
     ids = {r.get("id") for r in reqs}
+    _dvs = {d.get("id"): d for d in led.get("derived_values", [])}
+    # CO-156（F-7）：conservative_ge 的 faithful 口径须绑定权威 DV，而非自带常数
+    auth_edge = (((_dvs.get("DV-INTPAIR-EDGE") or {}).get("computed") or {}).get("edge_outer_binding_mm"))
+    auth_span = (((_dvs.get("DV-PAIR-CROSS") or {}).get("computed") or {}).get("span_mm"))
     for r in reqs:
         if ("computed" in r) or ("value" in r):
             f.append(("K9", f"requirement_carries_derived_value:{r.get('id')}",
@@ -66,6 +89,12 @@ def k9_findings(led: dict) -> list:
             continue
         rc = dv.get("reachability") or {}
         kind = rc.get("kind", "domain_cap" if rc.get("domains") is not None else "declared")
+        # CO-156（F-5）：域覆盖牙齿 —— 未列 kind / 空 domains 不再静默通过
+        if kind not in KNOWN_KINDS:
+            f.append(("K9", f"derived_value_kind_unknown:{dv.get('id')}",
+                      {"kind": kind, "known": list(KNOWN_KINDS)}))
+        if kind == "domain_cap" and not rc.get("domains"):
+            f.append(("K9", f"derived_value_domain_cap_empty:{dv.get('id')}", {"domains": rc.get("domains")}))
         if kind == "identity":
             form, comp = dv.get("form", ""), (dv.get("computed") or {})
             inp = dv.get("inputs") or {}
@@ -112,21 +141,19 @@ def k9_findings(led: dict) -> list:
                 f.append(("K9", f"derived_value_unreachable:{dv.get('id')}",
                           {"verdict": rc.get("verdict"), "bad": bad}))
         if rc.get("kind") == "thermal_option_domain":
-            # CO-150：热/散热方案域。判据：∃ 声明方案 θJA_eff ≤ 最重工况所需 θJA；且若「现状(asbuilt)」不达标，
-            # 必须显式声明 required_mitigation（不得声称可达却不给实现条件）。
             cases = (dv.get("computed") or {}).get("cases") or {}
             dom_list = rc.get("domains") or []
             _req_of = lambda c: c.get("theta_ja_required_C_per_W", c.get("required_theta_ja_C_per_W"))
-            reqs = [_req_of(c) for c in cases.values() if isinstance(_req_of(c), (int, float))]
+            treqs = [_req_of(c) for c in cases.values() if isinstance(_req_of(c), (int, float))]
             effs = [d.get("theta_ja_eff_C_per_W") for d in dom_list
                     if isinstance(d.get("theta_ja_eff_C_per_W"), (int, float))]
             mit = (rc.get("required_mitigation") or "").strip()
             asbuilt_ok = any(d.get("ok") for d in dom_list if "asbuilt" in str(d.get("id", "")).lower())
             bad_t = []
-            if not reqs or not effs:
-                bad_t.append({"why": "unparsable", "reqs": len(reqs), "effs": len(effs)})
+            if not treqs or not effs:
+                bad_t.append({"why": "unparsable", "reqs": len(treqs), "effs": len(effs)})
             else:
-                hardest, best = max(reqs), min(effs)
+                hardest, best = max(treqs), min(effs)
                 if best > hardest:
                     bad_t.append({"why": "no_declared_option_covers_hardest_case", "best_theta_eff": best,
                                   "hardest_required": hardest})
@@ -136,7 +163,6 @@ def k9_findings(led: dict) -> list:
                 f.append(("K9", f"derived_value_unreachable:{dv.get('id')}",
                           {"verdict": rc.get("verdict"), "bad": bad_t, "kind": "thermal_option_domain"}))
         if rc.get("kind") == "drop_domain":
-            # CO-150：压降域。判据：每轨 ΔV% ≤ 预算%（监理指令 #10 定值）；全轨可解析且达标才 REACHABLE。
             rails_c = dv.get("computed") or {}
             budget = (dv.get("inputs") or {}).get("drop_budget_pct")
             bad_d, n_ok = [], 0
@@ -157,30 +183,55 @@ def k9_findings(led: dict) -> list:
                 f.append(("K9", f"derived_value_unreachable:{dv.get('id')}",
                           {"verdict": rc.get("verdict"), "bad": bad_d, "kind": "drop_domain"}))
         if kind == "declared":
-            # CO-153：声明类可达性不得无证据（关闭「声明即通过」缺口）。判据同 process_floor：
-            # evidence_ref 须可解析 + sha16 与现行一致 + basis 非空。
+            # CO-153：声明类可达性不得无证据（关闭「声明即通过」缺口）。
+            # CO-156（F-6）：仅「钉一个现行文件」仍无语义关联 ⇒ 追加 `key_path` 指向证据件内**须递归包含该 DV computed** 的对象。
             ev = rc.get("evidence_ref") or {}
-            pth = ev.get("path")
-            hitc = next((c for c in [STEP2 / str(pth), L3 / str(pth), L2 / str(pth)] if pth and c.exists()), None)
-            if hitc is None or s16(hitc) != ev.get("sha16") or not str(rc.get("basis") or "").strip():
-                f.append(("K9", f"derived_value_declared_unpinned:{dv.get('id')}",
-                          {"path": pth, "cited": ev.get("sha16"), "actual": s16(hitc) if hitc else None,
-                           "basis_nonempty": bool(str(rc.get("basis") or "").strip())}))
+            pth, hitc = _resolve(ev.get("path"))
+            kp = ev.get("key_path")
+            bad_d = []
+            if hitc is None or s16(hitc) != ev.get("sha16"):
+                bad_d.append({"why": "evidence_unresolved_or_stale", "path": pth,
+                              "cited": ev.get("sha16"), "actual": s16(hitc) if hitc else None})
+            if not str(rc.get("basis") or "").strip():
+                bad_d.append({"why": "basis_empty"})
+            if not kp:
+                bad_d.append({"why": "key_path_missing"})
+            elif hitc is not None:
+                try:
+                    obj = json.loads(hitc.read_text(encoding="utf-8"))
+                    for part in str(kp).split("."):
+                        obj = obj[int(part)] if isinstance(obj, list) and part.lstrip("-").isdigit() else obj[part]
+                    if not _contains(obj, dv.get("computed") or {}):
+                        bad_d.append({"why": "evidence_binding_mismatch", "key_path": kp})
+                except (KeyError, IndexError, TypeError, ValueError):
+                    bad_d.append({"why": "key_path_unresolvable", "key_path": kp})
+            if bad_d:
+                f.append(("K9", f"derived_value_declared_unpinned:{dv.get('id')}", {"bad": bad_d}))
         if kind == "conservative_ge":
             # CO-153：保守实现须闭式证明 value >= 忠实下界（faithful = span + 2*w_outer）且 cited 一致。
+            # CO-156（F-7）：faithful 的 span/w_outer 须**引用**权威 DV（DV-PAIR-CROSS / DV-INTPAIR-EDGE），非自带常数。
             inp = dv.get("inputs") or {}
             comp = dv.get("computed") or {}
+            span = inp.get("span_mm"); w = inp.get("w_outer_mm"); val = comp.get("value_mm")
             bad_c = []
             try:
-                span = float(inp["span_mm"]); w = float(inp["w_outer_mm"]); val = float(comp["value_mm"])
-                faithful = round(span + 2.0 * w, 4)
-                if val < faithful - 1e-9:
-                    bad_c.append({"why": "value_lt_faithful", "value_mm": val, "faithful_mm": faithful})
+                span_f, w_f, val_f = float(span), float(w), float(val)
+                faithful = round(span_f + 2.0 * w_f, 4)
+                if val_f < faithful - 1e-9:
+                    bad_c.append({"why": "value_lt_faithful", "value_mm": val_f, "faithful_mm": faithful})
                 cited = comp.get("faithful_min_mm")
                 if cited is None or abs(float(cited) - faithful) > 5e-4:
                     bad_c.append({"why": "faithful_cited_mismatch", "expect": faithful, "got": cited})
-            except (KeyError, TypeError, ValueError):
+            except (TypeError, ValueError):
                 bad_c.append({"why": "unparsable"})
+            if not (str(inp.get("span_src") or "").strip() and str(inp.get("w_outer_src") or "").strip()):
+                bad_c.append({"why": "missing_src_binding"})
+            if isinstance(auth_edge, (int, float)) and not (isinstance(w, (int, float))
+                                                           and abs(2.0 * float(w) - float(auth_edge)) <= 5e-4):
+                bad_c.append({"why": "w_outer_not_bound_to_INTPAIR_EDGE", "w_outer_mm": w, "auth_edge_mm": auth_edge})
+            if isinstance(auth_span, (int, float)) and not (isinstance(span, (int, float))
+                                                           and abs(float(span) - float(auth_span)) <= 5e-4):
+                bad_c.append({"why": "span_not_bound_to_PAIR_CROSS", "span_mm": span, "auth_span_mm": auth_span})
             if rc.get("verdict") != "CONSERVATIVE_OK" or bad_c:
                 f.append(("K9", f"derived_value_conservative_unproved:{dv.get('id')}",
                           {"verdict": rc.get("verdict"), "bad": bad_c}))
@@ -386,11 +437,57 @@ def main() -> int:
         x[1].startswith("derived_value_declared_unpinned") for x in k9_findings(copy.deepcopy(_led)))
     teeth["T13b_conservative_no_false_positive"] = not any(
         x[1].startswith("derived_value_conservative_unproved") for x in k9_findings(copy.deepcopy(_led)))
+    # CO-156（F-5）负控 T14/T14b：未列 kind / domain_cap 缺 domains ⇒ 必抓；T14c：现行台账不得误报
+    _l14 = copy.deepcopy(_led)
+    _l14["derived_values"] = _l14.get("derived_values", []) + [
+        {"id": "T14_INJECT_KIND", "requirement": "REQ-R3-2", "reachability": {"kind": "bogus_domain", "verdict": "REACHABLE"}}]
+    teeth["T14_unknown_kind_teeth"] = any(x[1].startswith("derived_value_kind_unknown") for x in k9_findings(_l14))
+    _l14b = copy.deepcopy(_led)
+    _l14b["derived_values"] = _l14b.get("derived_values", []) + [
+        {"id": "T14_INJECT_CAP", "requirement": "REQ-R3-2", "reachability": {"kind": "domain_cap", "verdict": "REACHABLE"}}]
+    teeth["T14b_empty_domain_cap_teeth"] = any(x[1].startswith("derived_value_domain_cap_empty") for x in k9_findings(_l14b))
+    teeth["T14c_kind_coverage_no_false_positive"] = not any(
+        x[1].startswith(("derived_value_kind_unknown", "derived_value_domain_cap_empty"))
+        for x in k9_findings(copy.deepcopy(_led)))
+    # CO-156（F-6）负控 T15：declared 的 key_path 不含 computed ⇒ 必抓；T15b：现行台账不得误报
+    _l15 = copy.deepcopy(_led)
+    _hit15 = False
+    for _dv in _l15.get("derived_values", []):
+        if (_dv.get("reachability") or {}).get("kind") == "declared":
+            _dv["reachability"]["evidence_ref"]["key_path"] = "artifact"
+            _hit15 = True
+            break
+    if not _hit15:
+        _l15["derived_values"].append({"id": "T15_INJECT", "requirement": "REQ-R3-2", "computed": {"x": 1},
+            "reachability": {"kind": "declared", "verdict": "REACHABLE", "basis": "x",
+                             "evidence_ref": {"path": "m13_v57_co146_impedance_table.json",
+                                              "sha16": "0" * 16, "key_path": "artifact"}}})
+    teeth["T15_declared_binding_teeth"] = any(
+        x[1].startswith("derived_value_declared_unpinned") for x in k9_findings(_l15))
+    teeth["T15b_declared_binding_no_false_positive"] = not any(
+        x[1].startswith("derived_value_declared_unpinned") for x in k9_findings(copy.deepcopy(_led)))
+    # CO-156（F-7）负控 T16：conservative_ge 的 w_outer 与权威 DV 不符 ⇒ 必抓；T16b：现行台账不得误报
+    _l16 = copy.deepcopy(_led)
+    _hit16 = False
+    for _dv in _l16.get("derived_values", []):
+        if (_dv.get("reachability") or {}).get("kind") == "conservative_ge":
+            _dv.setdefault("inputs", {})["w_outer_mm"] = 0.15
+            _hit16 = True
+            break
+    if not _hit16:
+        _l16["derived_values"].append({"id": "T16_INJECT", "requirement": "REQ-R3-2",
+            "inputs": {"span_mm": 0.585, "w_outer_mm": 0.15, "span_src": "x", "w_outer_src": "x"},
+            "computed": {"value_mm": 1.46, "faithful_min_mm": 0.885},
+            "reachability": {"kind": "conservative_ge", "verdict": "CONSERVATIVE_OK"}})
+    teeth["T16_faithful_provenance_teeth"] = any(
+        x[1].startswith("derived_value_conservative_unproved") for x in k9_findings(_l16))
+    teeth["T16b_faithful_provenance_no_false_positive"] = not any(
+        x[1].startswith("derived_value_conservative_unproved") for x in k9_findings(copy.deepcopy(_led)))
     teeth_ok = all(teeth.values())
     verdict = "PASS" if (not unreg and not reg_bad and teeth_ok) else (
         "FAIL_UNREGISTERED_INPUT_DEFECT" if unreg else "FAIL_REGISTER_MALFORMED" if reg_bad else "TEETH_FAIL")
     rec = {
-        "artifact": "m13_v57_co124_input_selfcheck_gate", "schema": 1, "revision": "CO-124.5",
+        "artifact": "m13_v57_co124_input_selfcheck_gate", "schema": 1, "revision": "CO-124.6",
         "nature": "输入自检闸：规格/规则自身自洽 + 物理可达登记 + 缺陷登记完备（整改通知 #08 第 2/3 条）",
         "definition_doc": {"path": str(DOC.relative_to(K2)), "sha16": s16(DOC), "status": f"{DOC_VER} 提议件（待监理裁定/owner 批准）"},
         "inputs": {"spec": str(SPEC.relative_to(K2)), "spec_sha16": s16(SPEC),

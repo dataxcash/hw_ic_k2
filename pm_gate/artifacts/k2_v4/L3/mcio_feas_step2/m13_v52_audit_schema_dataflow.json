@@ -1,0 +1,82 @@
+{
+ "meta": {
+  "project": "k2",
+  "card": "v52 架构审计",
+  "外部AI问题": true
+ },
+ "q1_plan_schema": {
+  "alloc_record_fields": [
+   "net(base)",
+   "band",
+   "channel",
+   "corridor",
+   "layer",
+   "track_y",
+   "status",
+   "solve_ref"
+  ],
+  "landing_record_fields": [
+   "net",
+   "base",
+   "pad[xy]",
+   "pad_column",
+   "polarity",
+   "region",
+   "segment",
+   "segname",
+   "landing{x,y,anchor,verify,...}",
+   "status"
+  ],
+  "field_owner": {
+   "net": "真板网名 (SPEC/board, ENG 只读)",
+   "segment 划分": "ModelConfig.chain_pattern 推导 _chain_segments (施工层运行时)",
+   "corridor/band/layer/track_y": "channel_alloc (阶段③)",
+   "pad 锚": "escape_landing region 派生, max-x pad (阶段④) ← B1 缺陷源",
+   "landing via x/y": "escape_landing 隙列枚举 66.555 (阶段④)",
+   "chip_side_escape_column": "无字段, 不存在 ← 审计核心缺口",
+   "ownership": "_landing_pair_usable pad ε0.02 + _fcu_stub_ok (施工层运行时)",
+   "pinned/locked": "无字段; 保锚靠 alloc 输入不变+前馈顺序隐式维持",
+   "layer transition": "施工构造 (via 由施工插)"
+  },
+  "mandatory_vs_optional": {
+   "mandatory (缺则 INFRA_ERROR)": [
+    "net 存在",
+    "alloc 通道 (track_y)"
+   ],
+   "optional+fallback": [
+    "landing 落点 (缺失/拒→自搜)",
+    "chip_side 落点 (从未提供→恒自搜)"
+   ]
+  },
+  "施工可重新搜索吗": "是——_escape_pair fallback 链 DIRECT→VIA→LONG→LSWAP→LSWAP_V→COL_STACK→PAD_ROW_DIP→INFEASIBLE, landing 被拒即回退自搜"
+ },
+ "q2_eng_input": {
+  "feasibility 输出 (RoutingTopologyGate.plan)": {
+   "verdict": "INFEASIBLE/FEASIBLE/FEASIBLE_WITH_MORPH_GAP",
+   "resources": {
+    "tracks": {},
+    "layers": {},
+    "escape_zones": {},
+    "bga_escape": {}
+   },
+   "chains": "base→[segname...]",
+   "constraints": "7 检查: track_capacity/escape_slots/pn_polarity/via_spacing/cap_coordination/bga_group/bga_per_ball",
+   "allocation": "定性分配"
+  },
+  "per-segment chip-side escape 约束": "不存在——plan() 无字段表达'某 out_MCIO 段芯片侧需 N 列逃逸'",
+  "out_MCIO chip escape requirement 何时推导": "施工层运行时 _escape_pair 触发门 (direction<0 & pad 东于 corr_x) 才出现 → 信息在 Plan 层丢失",
+  "base/domain/keepout/layer/spacing": {
+   "base": "有(alloc net)",
+   "domain": "无显式",
+   "keepout": "仅 escape_env_keepout(dormant 关)",
+   "layer": "corridor band",
+   "spacing": "rules netclass 0.175",
+   "diff_pair": "spec impedance 0.205"
+  }
+ },
+ "q3_dataflow": {
+  "链": "SPEC+escape_spec+真板 → spec_to_route_input (RouteInput) → SolvePipeline: ①RoutingTopologyGate ②CapacityAudit ③channel_alloc ④EscapeLandingAllocator ⑤HSRouteModel.solve_all_v4",
+  "缺节点行为": "landing 缺失或被归属门拒 → 不 FAIL, _escape_pair 回退自搜 (search/fallback 合法路径); 全形态败 → INFEASIBLE 带 reason",
+  "DN0 实际调用链": "landing out_MCIO pad=CHIP(84.6/85.0) anchor=GAP via=66.555 → solve_pair_v4 芯片侧 _escape_pair: landing 归属门拒(pad≠chip侧ep? 实=chip ep 但 stub 18mm 不可达) → 自搜 → DIRECT败 → VIA 交叉@84.66 → col_stack In1 竖腿撞保锚 input 段(84.85/85.15) → dip drop 列[82.35..84.3]撞 GND 球(84.2/84.25)+input 段 → INFEASIBLE"
+ }
+}

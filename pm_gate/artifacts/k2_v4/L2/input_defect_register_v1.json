@@ -670,16 +670,20 @@
    "refs": [
     "CO-154",
     "CO-155",
+    "CO-156",
     "CO-153",
     "CO-152"
    ],
-   "disposition": "CO-155（工件侧）：移除 co147 `register.open_total`、co148 `register.items_total`、co136 `register.{n_items,kinds}` ⇒ 三件记录不再嵌下游计数快照；并修复 boundary §25 对 co148 计数快照的消费者（co146_boundary_append）。**闸覆盖侧仍 OPEN**：co120 P1 仅抽 `*_record` 键、P5 仅扫 `*_sha16_after` ⇒ `register.*`/`open_total`/`items_total`/嵌套 `sha16` 类下游快照无闸（另实测残留：co136 `register.n_items`/`kinds` —— 已由 CO-155 一并移除；co150 `co124.{revision,verdict,n_findings}` 属**上游**记录引用，键名规范问题另计）。",
-   "status": "OPEN",
-   "next": "另开执行 CO：定义「下游快照」机判口径（建议：键名带 `_after`/`snapshot` 标记 + SNAPSHOT_DECLARED 声明册，或显式上游允许表）并给负控；实施前以人工复核承接。",
+   "disposition": "CO-156：**闸覆盖侧机判化** —— co120 升 CO-120.3，下游快照键 = `*_sha16_after` ∪ `register.*`/`ledger.*` 下的 `sha16*`/`items_total`/`open_total`/`n_items`，未在 SNAPSHOT_DECLARED 声明即 FAIL_UNDECLARED_DOWNSTREAM_SNAPSHOT；牙齿增 `negative_control_register_snapshot_caught` / `positive_control_declared_register_snapshot_passes`。复核 verdict PASS（snaps 8 / undeclared 0 / teeth 7-7）。工件侧（CO-155）已去计数快照 ⇒ co147 记录可复现。",
+   "status": "CLOSED",
+   "next": "无（已闭）。新增下游快照须在 SNAPSHOT_DECLARED 明文声明。",
    "evidence": [
-    "CO-154 复评件（F-2）"
+    "CO-154 复评件（F-2）",
+    "CO-156 复核：co124 teeth / co120 teeth / co134 stub 复跑"
    ],
-   "closed_by": []
+   "closed_by": [
+    "CO-156"
+   ]
   },
   {
    "finding": "co154:F-3",
@@ -689,16 +693,20 @@
    "refs": [
     "CO-154",
     "CO-155",
+    "CO-156",
     "CO-153",
     "CO-152"
    ],
-   "disposition": "CO-155 未处置（须二择一并全链同步：bump 实件 revision 或订正标签）。§30 pin 表已按**实件**记 CO-124.5 / CO-147.1。",
-   "status": "OPEN",
-   "next": "另开执行 CO 二择一对齐（若视为新版则 bump 实件 + 同步 co150/卡/handoff）。",
+   "disposition": "CO-156：**按实件对齐** —— co124 判据扩展 ⇒ 实件 revision bump 至 **CO-124.6**（与 §29 pin 表标签一致；§26 处 `CO-124.5` 为 CO-150 时点的历史陈述，保留不删）。co147 以实件 **CO-147.1** 记入 §31 pin 表与 z30/z31 handoff。",
+   "status": "CLOSED",
+   "next": "无（已闭）。修订号变更须同步 bump 实件、卡与 pin 表。",
    "evidence": [
-    "CO-154 复评件（F-3）"
+    "CO-154 复评件（F-3）",
+    "CO-156 复核：co124 teeth / co120 teeth / co134 stub 复跑"
    ],
-   "closed_by": []
+   "closed_by": [
+    "CO-156"
+   ]
   },
   {
    "finding": "co154:F-4",
@@ -708,16 +716,20 @@
    "refs": [
     "CO-154",
     "CO-155",
+    "CO-156",
     "CO-153",
     "CO-152"
    ],
-   "disposition": "CO-155 未处置（须收窄 co134 为只 upsert 自有三域 + 纳入规范序 + 增 K9 域生产者牙齿）。",
-   "status": "OPEN",
-   "next": "另开执行 CO：co134 收窄 + 入序 + 牙齿「七域各有规范序内生产者」。",
+   "disposition": "CO-156：① `p3_v57_co134_req_impl_separation.py` 改**只 upsert 自有条目**（需求 + 其 6 个 DV），保留他 CO 归属的 DV —— 受控 stub 复跑实测 9 DV 全保留、DV-CO146-THERMAL.kind 保留（原先整表重写会静默删除）；② `p3_v57_co153_k9_domain_coverage.py` 扩为 K9 **全部七域** `kind` 的**规范序内具名生产者**（`KIND_EXPECT` 覆盖九 DV / 七域并 assert），使 R-CO153-1 成立。",
+   "status": "CLOSED",
+   "next": "无（已闭）；域**内容**（computed/domains）仍归各派生 CO。",
    "evidence": [
-    "CO-154 复评件（F-4）"
+    "CO-154 复评件（F-4）",
+    "CO-156 复核：co124 teeth / co120 teeth / co134 stub 复跑"
    ],
-   "closed_by": []
+   "closed_by": [
+    "CO-156"
+   ]
   },
   {
    "finding": "co154:F-5",
@@ -727,16 +739,20 @@
    "refs": [
     "CO-154",
     "CO-155",
+    "CO-156",
     "CO-153",
     "CO-152"
    ],
-   "disposition": "CO-155 未处置。",
-   "status": "OPEN",
-   "next": "另开执行 CO：K9 增 T14（kind 白名单 + domain_cap 必带非空 domains + 负控）。",
+   "disposition": "CO-156：co124 K9 增**域覆盖**判据 —— `kind` 须 ∈ 七域白名单（`KNOWN_KINDS`），且 `domain_cap` 必带非空 `domains`；牙齿 `T14_unknown_kind_teeth` / `T14b_empty_domain_cap_teeth` / `T14c_kind_coverage_no_false_positive`。co124 牙齿 17 → **24**，全 True。",
+   "status": "CLOSED",
+   "next": "无（已闭）。",
    "evidence": [
-    "CO-154 复评件（F-5）"
+    "CO-154 复评件（F-5）",
+    "CO-156 复核：co124 teeth / co120 teeth / co134 stub 复跑"
    ],
-   "closed_by": []
+   "closed_by": [
+    "CO-156"
+   ]
   },
   {
    "finding": "co154:F-6",
@@ -746,16 +762,20 @@
    "refs": [
     "CO-154",
     "CO-155",
+    "CO-156",
     "CO-153",
     "CO-152"
    ],
-   "disposition": "CO-155 未处置。",
-   "status": "OPEN",
-   "next": "另开执行 CO：declared 增「证据件须可解析出与值相关字段」或显式降级为未验证类并计数。",
+   "disposition": "CO-156：`declared` 判据由「钉一个现行文件」升级为**值-证据绑定** —— 须带 `evidence_ref.key_path`，且该路径在证据件中的对象须**递归包含**该 DV 的 `computed`（`_contains`）。生产者同批：`co146_impedance_table` 增 `dv_computed_zdiff` 块、`co146_ledger_add` 以其为 `computed` 并置 `key_path`；牙齿 `T15_declared_binding_teeth` / `T15b_declared_binding_no_false_positive`。",
+   "status": "CLOSED",
+   "next": "无（已闭）。新增 declared 派生值必须给 key_path 且证据件含其 computed。",
    "evidence": [
-    "CO-154 复评件（F-6）"
+    "CO-154 复评件（F-6）",
+    "CO-156 复核：co124 teeth / co120 teeth / co134 stub 复跑"
    ],
-   "closed_by": []
+   "closed_by": [
+    "CO-156"
+   ]
   },
   {
    "finding": "co154:F-7",
@@ -765,16 +785,20 @@
    "refs": [
     "CO-154",
     "CO-155",
+    "CO-156",
     "CO-153",
     "CO-152"
    ],
-   "disposition": "CO-155 未处置。",
-   "status": "OPEN",
-   "next": "另开执行 CO：faithful 直引 DV-INTPAIR-EDGE 的权威字段并交叉校验。",
+   "disposition": "CO-156：`conservative_ge` 的 faithful 口径改为**引用权威 DV** —— 必带 `inputs.span_src`/`w_outer_src`，且数值须与 `DV-PAIR-CROSS.computed.span_mm` 及 `DV-INTPAIR-EDGE.computed.edge_outer_binding_mm/2` 一致（±5e-4）；`p3_v57_co153_k9_domain_coverage.py` 为其生产者（自台账权威 DV 取值回写，取代自带常数）；牙齿 `T16_faithful_provenance_teeth` / `T16b_faithful_provenance_no_false_positive`。",
+   "status": "CLOSED",
+   "next": "无（已闭）。",
    "evidence": [
-    "CO-154 复评件（F-7）"
+    "CO-154 复评件（F-7）",
+    "CO-156 复核：co124 teeth / co120 teeth / co134 stub 复跑"
    ],
-   "closed_by": []
+   "closed_by": [
+    "CO-156"
+   ]
   }
  ],
  "closed_items": [
@@ -792,13 +816,13 @@
   "owner": "ARCHER（L2 自裁执行侧）",
   "approval": "定义件 v1.0 待监理裁定/owner 批准；登记簿随闸每次运行校验",
   "mandatory_trigger": "任何 SPEC / drc_rules 变更后必须跑 tools/p3_v57_co124_input_selfcheck_gate.py 并 PASS",
-  "updated_by": "CO-127..CO-133 + **CO-134（整改通知 #09：③ 重新定性 = 工程换算错误 → REQ-R3-2 忠实实现 + 需求/实现分家规矩 + co124 K9）**；登记簿随 co124 每次运行校验；CO-134 续：4 项已声明定值补 rule_key + 台账溯源；**CO-136（L2 自裁 · 闸卫生续）**：登记并关闭 CO-135 F5(b)/F6 两条 TOOL_DEFECT（co124 标签 / co106 陈旧牙齿）；F4（handoff pin 失准）与 F5(a)（③ 根因叙述）属叙述类，保留在 CO-135 记录，不入本登记簿（非 SPEC/工具缺陷）。；**CO-139**：+1 TOOL_DEFECT（K9 豁免未锚定）并 CLOSED（hash-pin + T9）。；**CO-141**：更正 IMPLEMENTATION_DEVIATION 范围（24 平行对-对，非 3）+ 新增 OPEN TOOL_DEFECT（路由器列距基准漏 3W）。；**CO-142（L2 只读）**：对间 <3W 违规逐条明细 + 构造阶段归因；**CO-143（L2 只读）**：更正 `k2_router_escape_fan_omits_3w` 定位（f13 pair_xorder → escape-fan 落位判据 `p3_v57_co10_west_fan_probe.py:check()`）+ 施加可行性研究（可满足但须重派生策略；PDN 障碍 + 贪心夹死）。；**CO-146（监理指令 #10 · JLC 打样就绪）**：+2 IMPLEMENTATION_DEVIATION（OPEN：盲/埋孔 vs JLC 标准不支持 = 结构/工艺类别；阻焊桥 1 处 vs JLC 0.09mm）；外部输入定性更正（撤回「等券」表述，改绑 JLC 阻抗控制服务 + 监理定值）；登记簿随 co124 每次运行校验。；**CO-147（L2 自裁）**：三题裁定（R1 过孔策略维持盲/埋孔 ⇒ 渠道绑定 JLC advanced；R2 J2 landing 对间适用域 ACCEPT_L2；R3 阻焊桥 ACCEPT_L2_WITH_FAB_REVIEW）；登记簿 3 项转 CLOSED。；**CO-148**：U6 手册输入（TI SNLS683）⇒ 热 Tj 121.8–161.8°C 超上限 120°C ⇒ 登记 +2（热超限 HIGH / K9 无热域模型 MED）。；**CO-149（L2 自裁 · 热机械派生）**：自然对流全档不可达（两路线互校 θJA≈17.2 vs 手册 17.4）⇒ 派生出系统散热要求（h_eff ≥ 8.2–16.4 W/m²K 或 顶部散热片预算 ≤ 4.9–10.5 °C/W）；监理定值 Ta=40°C 不变；登记簿热项 CLOSED（OPEN 余 K9 热域缺口）；台账 DV-CO146-THERMAL 可达性 = 声明散热方案域。（1ff34801833d07b5）；**CO-150（L2 闸硬化）**：co124 K9 扩 `thermal_option_domain` + `drop_domain` 两域并加负控 T10/T10b/T11/T11b ⇒ 关闭 K9 缺口登记项。（记录 （本次生成））；**CO-152（L2 自裁 · CO-151 findings 处置）**：3 项 TOOL_DEFECT 登记并 CLOSED（记录内嵌下游快照致 pin 漂移 / co120 pin 覆盖面缺 *_sha16 快照键 + 豁免依据分级 / 派生物语义未标注）；并勘误 CO-147 R2 最劣值 0.2577 与 R3 叙述 0.0205（见 boundary §28）。；**CO-153（L2 自裁 · K9 覆盖缺口关闭）**：co124 K9 新增 `declared`（证据须锚定）+ `conservative_ge`（保守实现闭式证明）两支 + 牙齿 T12/T12b/T13/T13b；台账 DV-ENGINE-INT_PAIR_PITCH 归一等价可证；`p3_v57_co146_ledger_add.py` 并入规范序 ⇒ 证据 pin 自动刷新。关闭 TOOL_DEFECT：`co124_k9_declared_kind_has_no_evidence_check`。；**CO-155（L2 自裁 · executor · CO-154 复评处置）**：F-1 CLOSED（co150 崩溃修复）；F-2 工件侧（co147/co148 下游计数快照移除）完成、闸覆盖侧 OPEN；F-3..F-7 OPEN。登记 `co154:F-1..F-7`。",
+  "updated_by": "CO-127..CO-133 + **CO-134（整改通知 #09：③ 重新定性 = 工程换算错误 → REQ-R3-2 忠实实现 + 需求/实现分家规矩 + co124 K9）**；登记簿随 co124 每次运行校验；CO-134 续：4 项已声明定值补 rule_key + 台账溯源；**CO-136（L2 自裁 · 闸卫生续）**：登记并关闭 CO-135 F5(b)/F6 两条 TOOL_DEFECT（co124 标签 / co106 陈旧牙齿）；F4（handoff pin 失准）与 F5(a)（③ 根因叙述）属叙述类，保留在 CO-135 记录，不入本登记簿（非 SPEC/工具缺陷）。；**CO-139**：+1 TOOL_DEFECT（K9 豁免未锚定）并 CLOSED（hash-pin + T9）。；**CO-141**：更正 IMPLEMENTATION_DEVIATION 范围（24 平行对-对，非 3）+ 新增 OPEN TOOL_DEFECT（路由器列距基准漏 3W）。；**CO-142（L2 只读）**：对间 <3W 违规逐条明细 + 构造阶段归因；**CO-143（L2 只读）**：更正 `k2_router_escape_fan_omits_3w` 定位（f13 pair_xorder → escape-fan 落位判据 `p3_v57_co10_west_fan_probe.py:check()`）+ 施加可行性研究（可满足但须重派生策略；PDN 障碍 + 贪心夹死）。；**CO-146（监理指令 #10 · JLC 打样就绪）**：+2 IMPLEMENTATION_DEVIATION（OPEN：盲/埋孔 vs JLC 标准不支持 = 结构/工艺类别；阻焊桥 1 处 vs JLC 0.09mm）；外部输入定性更正（撤回「等券」表述，改绑 JLC 阻抗控制服务 + 监理定值）；登记簿随 co124 每次运行校验。；**CO-147（L2 自裁）**：三题裁定（R1 过孔策略维持盲/埋孔 ⇒ 渠道绑定 JLC advanced；R2 J2 landing 对间适用域 ACCEPT_L2；R3 阻焊桥 ACCEPT_L2_WITH_FAB_REVIEW）；登记簿 3 项转 CLOSED。；**CO-148**：U6 手册输入（TI SNLS683）⇒ 热 Tj 121.8–161.8°C 超上限 120°C ⇒ 登记 +2（热超限 HIGH / K9 无热域模型 MED）。；**CO-149（L2 自裁 · 热机械派生）**：自然对流全档不可达（两路线互校 θJA≈17.2 vs 手册 17.4）⇒ 派生出系统散热要求（h_eff ≥ 8.2–16.4 W/m²K 或 顶部散热片预算 ≤ 4.9–10.5 °C/W）；监理定值 Ta=40°C 不变；登记簿热项 CLOSED（OPEN 余 K9 热域缺口）；台账 DV-CO146-THERMAL 可达性 = 声明散热方案域。（1ff34801833d07b5）；**CO-150（L2 闸硬化）**：co124 K9 扩 `thermal_option_domain` + `drop_domain` 两域并加负控 T10/T10b/T11/T11b ⇒ 关闭 K9 缺口登记项。（记录 （本次生成））；**CO-152（L2 自裁 · CO-151 findings 处置）**：3 项 TOOL_DEFECT 登记并 CLOSED（记录内嵌下游快照致 pin 漂移 / co120 pin 覆盖面缺 *_sha16 快照键 + 豁免依据分级 / 派生物语义未标注）；并勘误 CO-147 R2 最劣值 0.2577 与 R3 叙述 0.0205（见 boundary §28）。；**CO-153（L2 自裁 · K9 覆盖缺口关闭）**：co124 K9 新增 `declared`（证据须锚定）+ `conservative_ge`（保守实现闭式证明）两支 + 牙齿 T12/T12b/T13/T13b；台账 DV-ENGINE-INT_PAIR_PITCH 归一等价可证；`p3_v57_co146_ledger_add.py` 并入规范序 ⇒ 证据 pin 自动刷新。关闭 TOOL_DEFECT：`co124_k9_declared_kind_has_no_evidence_check`。；**CO-155（L2 自裁 · executor · CO-154 复评处置）**：F-1 CLOSED（co150 崩溃修复）；F-2 工件侧（co147/co148 下游计数快照移除）完成、闸覆盖侧 OPEN；F-3..F-7 OPEN。登记 `co154:F-1..F-7`。；**CO-156（L2 自裁 · 闸硬化 · CO-154 剩余 OPEN 处置）**：F-2（co120 下游快照键通用化 = CO-120.3）/ F-3（co124→CO-124.6）/F-4（co134 只 upsert + co153 产出七域 kind）/ F-5（K9 域覆盖）/ F-6（declared 值-证据绑定）/ F-7（conservative_ge 引用权威 DV）全部 CLOSED ⇒ 登记簿 OPEN 0；co124 牙齿 24/24。",
   "counts": {
    "SPEC_DEFECT": 5,
    "PROVED_THRESHOLD": 5,
    "TOOL_DEFECT": 23,
    "IMPLEMENTATION_DEVIATION": 4,
-   "OPEN": 6,
+   "OPEN": 0,
    "total": 37
   }
  },

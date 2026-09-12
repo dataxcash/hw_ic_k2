@@ -1,0 +1,57 @@
+{
+  "schema": "construction_fact",
+  "version": "ccf-v1",
+  "generated_by": "M13 v52 architecture target (design only, no code)",
+  "mandatory_fields": {
+    "identity": ["fact_id", "base", "segment", "net.P", "net.N", "schema_version"],
+    "anchors": ["anchors.source.P/N", "anchors.destination.P/N", "anchors.source.side", "anchors.destination.side"],
+    "corridor": ["corridor.id", "corridor.band", "corridor.layer", "corridor.track_y.P/N"],
+    "chip_side": ["chip_side.kind", "chip_side.escape_column.P/N",
+                  "chip_side.landing.via1.P/N", "chip_side.landing.via2.P/N"],
+    "connector_side": ["connector_side.kind", "connector_side.via.P/N"],
+    "ownership": ["ownership.alloc_id", "ownership.escape_id"],
+    "lock": ["pinned"],
+    "construction": ["construction.connect_only", "construction.node_sequence.P/N"]
+  },
+  "derivable_fields": {
+    "stub_geometry": "from escape_column + chip pad + landing.via1",
+    "vertical_leg": "from landing.via1/via2 (COL_STACK) or landing.via1 + drop (PAD_ROW_DIP)",
+    "drop_geometry": "from landing.via1 + corridor.track_y (PAD_ROW_DIP kind)",
+    "trunk_centerline": "from corridor x_range + track_y",
+    "node_sequence": "from kind + all node geometries (assembled by plan, consumed by construction)"
+  },
+  "never_construction_derived": [
+    "escape_column (allocation decision)",
+    "chip_side landing via positions",
+    "escape kind (COL_STACK vs PAD_ROW_DIP vs ...)",
+    "track_y / corridor / layer",
+    "any via placement",
+    "ownership / allocation identity",
+    "pinned state"
+  ],
+  "resource_tables": {
+    "AllocTable": {"role": "track allocation (corridor/band/layer/track_y)", "change": "none"},
+    "LandingTable": {"role": "connector-side landing (via x/y, anchor fix)", "change": "fix B1 pad anchor on 10 MCIO records"},
+    "EscapeTable_NEW": {
+      "role": "chip-side escape allocation (primary resource)",
+      "per_record": ["base", "segment", "net.P/N", "chip_pad.P/N", "kind",
+                     "escape_column.P/N", "landing.via1.P/N", "landing.via2.P/N",
+                     "status(ASSIGNED/NO_ESCAPE)", "pinned", "reservations_dep",
+                     "no_escape_reason"]
+    },
+    "ColumnBook_NEW": {
+      "role": "chip-side column reservation ledger (x∈[82,104], per 0.01 col)",
+      "occupants": ["anchor_segment(27)", "solved_out(DN5/6)", "gnd/pwr_ball",
+                    "escape_reservation", "via_forbidden(DN7-style)"]
+    }
+  },
+  "construction_contract": {
+    "allowed": ["connect declared nodes", "seg_ok recheck", "pn_min_edge >= 0.155 recheck", "assemble output"],
+    "forbidden": ["create escape_column", "search unknown chip landing", "select kind",
+                  "fallback escape chain", "modify allocation", "add undeclared bends"]
+  },
+  "plan_fail_semantics": {
+    "NO_ESCAPE": "candidate domain empty after ColumnBook conflict check",
+    "must_report": ["nearest obstacle net/dist/req", "forbidden mask snapshot", "attempted domain"]
+  }
+}

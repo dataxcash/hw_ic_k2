@@ -131,14 +131,14 @@
  "nature": "L2 过程闸：记录内 inter-record provenance pin 一致性（关闭 CO-108/CO-114 F-6 盲区）",
  "non_claims": [
   "只读；不改任何记录/SPEC/板/阈值/冻结源",
-  "F-1b：记录内**下游时点快照**键（`*_sha16_after`）必须在本闸 SNAPSHOT_DECLARED 声明（理由：该类快照使记录 sha 随运行序漂移 ⇒ 提交 pin 不可复现）；未声明一律 FAIL",
+  "CO-156（F-2b）：下游快照键 = `*_sha16_after` ∪ `register.*`/`ledger.*` 下的 `sha16*`/`items_total`/`open_total`/`n_items`；后者必须在本闸 SNAPSHOT_DECLARED 声明（未声明一律 FAIL）（理由：该类快照使记录 sha 随运行序漂移 ⇒ 提交 pin 不可复现）；未声明一律 FAIL",
   "F-7：豁免依据分 `board_superseded`（机判可证）与 `declared_historical`（无板级依据，计数明示）两类",
   "豁免仅限『记录本体已被后续 CO 取代 ⇒ pin 属历史』并在本闸注册表明文；未声明陈旧 pin 一律 FAIL",
   "pin→文件解析失败（歧义/无候选）记 unresolved_key，不计失败但入记录",
   "扫描范围（CO-153 声明）：仅 STEP2 下 m13_v57_co*.json 记录的 `*_record` 键；台账（L2/derived_value_ledger_v1.json）内 DV 的 reachability.evidence_ref pin 由 co124 K9 的 declared/process_floor 判据覆盖（CO-153）"
  ],
  "pins_total": 17,
- "revision": "CO-120.2",
+ "revision": "CO-120.3",
  "rows": [
   {
    "actual": "7f481be259865941",
@@ -299,7 +299,9 @@
   {
    "declared": true,
    "keys": [
-    "sha16_after"
+    "register.items_total",
+    "register.open_total",
+    "register.sha16_after"
    ],
    "reason": "历史：register 时点快照；CO-152 起同类字段一律禁止，本件留存为历史",
    "record": "m13_v57_co146_jlc_rebind.json"
@@ -307,8 +309,8 @@
   {
    "declared": true,
    "keys": [
-    "lid_rev5_sha16_after",
-    "spec_rev4_sha16_after"
+    "unchanged_check.lid_rev5_sha16_after",
+    "unchanged_check.spec_rev4_sha16_after"
    ],
    "reason": "历史：lid_rev5/spec_rev4 时点快照，已被 CO-113+ 取代",
    "record": "m13_v57_co68_option_a_execute_derive.json"
@@ -340,7 +342,7 @@
   {
    "declared": true,
    "keys": [
-    "sha16_after"
+    "l4_project.sha16_after"
    ],
    "reason": "历史：l4_project 时点快照（工程文件随后续 rev 重生成）",
    "record": "m13_v57_co80_l4_project_rule_align.json"
@@ -348,7 +350,7 @@
   {
    "declared": true,
    "keys": [
-    "sha16_after"
+    "l4_project.sha16_after"
    ],
    "reason": "历史：l4_project 时点快照（同上）",
    "record": "m13_v57_co82_l4_project_netclass_align.json"
@@ -356,8 +358,10 @@
  ],
  "stale_undeclared": [],
  "teeth": {
+  "negative_control_register_snapshot_caught": true,
   "negative_control_undeclared_snapshot_caught": true,
   "negative_control_undeclared_stale_caught": true,
+  "positive_control_declared_register_snapshot_passes": true,
   "positive_control_declared_snapshot_passes": true,
   "positive_control_matching_pin_passes": true,
   "teeth_ok": true

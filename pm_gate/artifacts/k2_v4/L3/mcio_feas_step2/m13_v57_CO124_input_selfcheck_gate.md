@@ -3,7 +3,7 @@
 - verdict：**PASS**
 - 定义件：`pm_gate/artifacts/k2_v4/L2/BASIC_SKILL_VS_REDLINE_v1.1.md` `348735156c9d9b1d`（v1.1 提议件（待监理裁定/owner 批准））
 - findings：0（未登记 0）
-- 牙齿：{"T1_netclass_drift": true, "T3_threshold_unregistered": true, "T4_doc_anchor_missing": true, "T2_unregistered_finding_detected": true, "T5_derived_without_principle": true, "T6_unreachable_derived": true, "T7_requirement_carries_value": true, "T8_identity_drift": true, "T9_exemption_unpinned": true, "T10_thermal_option_domain_teeth": true, "T11_drop_domain_teeth": true, "T11b_drop_domain_no_false_positive": true, "T10b_thermal_domain_no_false_positive": true, "T12_declared_unpinned_teeth": true, "T13_conservative_unproved_teeth": true, "T12b_declared_no_false_positive": true, "T13b_conservative_no_false_positive": true}
+- 牙齿：{"T1_netclass_drift": true, "T3_threshold_unregistered": true, "T4_doc_anchor_missing": true, "T2_unregistered_finding_detected": true, "T5_derived_without_principle": true, "T6_unreachable_derived": true, "T7_requirement_carries_value": true, "T8_identity_drift": true, "T9_exemption_unpinned": true, "T10_thermal_option_domain_teeth": true, "T11_drop_domain_teeth": true, "T11b_drop_domain_no_false_positive": true, "T10b_thermal_domain_no_false_positive": true, "T12_declared_unpinned_teeth": true, "T13_conservative_unproved_teeth": true, "T12b_declared_no_false_positive": true, "T13b_conservative_no_false_positive": true, "T14_unknown_kind_teeth": true, "T14b_empty_domain_cap_teeth": true, "T14c_kind_coverage_no_false_positive": true, "T15_declared_binding_teeth": true, "T15b_declared_binding_no_false_positive": true, "T16_faithful_provenance_teeth": true, "T16b_faithful_provenance_no_false_positive": true}
 
 | # | check | finding | detail | 已登记 |
 |---|---|---|---|---|

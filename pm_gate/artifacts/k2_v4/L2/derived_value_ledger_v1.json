@@ -120,7 +120,8 @@
       }
      }
     ],
-    "verdict": "REACHABLE"
+    "verdict": "REACHABLE",
+    "kind": "domain_cap"
    },
    "supersedes": {
     "value": 0.875,
@@ -211,7 +212,9 @@
    "form": "capacity/新布线 对中心距（工程保守实现，本件不改几何）",
    "inputs": {
     "span_mm": 0.585,
-    "w_outer_mm": 0.205
+    "w_outer_mm": 0.205,
+    "span_src": "DV-PAIR-CROSS.computed.span_mm",
+    "w_outer_src": "DV-INTPAIR-EDGE.computed.edge_outer_binding_mm/2"
    },
    "computed": {
     "value_mm": 1.46,
@@ -385,7 +388,8 @@
     "method": "闭式一阶工程近似；终判 = JLC 阻抗控制服务（±10%）",
     "evidence_ref": {
      "path": "m13_v57_co146_impedance_table.json",
-     "sha16": "dcd307530cd2a9e9"
+     "sha16": "794132ded5a0ce61",
+     "key_path": "dv_computed_zdiff"
     }
    }
   },

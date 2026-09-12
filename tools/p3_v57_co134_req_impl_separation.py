@@ -12,7 +12,7 @@
   C. SPEC rev-18 → **rev-19**：`net_classes.PCIe85.inter_pair_spacing_mm` 0.875 → **0.410**（= 2×0.205 外层，最严层）
      + `inter_pair_derivation_v1`（原则/派生式/按层/口径）+ 0.875 退役留存块；位白名单外零改动。
   D. 交付板**板实实测**（pcbnew，零搜索）：逐层对间铜边最小净空 + 位置 + 逃逸域归属 ⇒ 偏差显式登记（不静默）。
-只读除 SPEC_L2/台账/规矩件；**不动几何/板/冻结四源**。CLI: ../AppDir/usr/bin/python3.11 <此文件>
+只读除 SPEC_L2/台账/规矩件；**不动几何/板/冻结四源**。CO-156：台账改为**只 upsert 自有条目**（禁止整表重写）。CLI: ../AppDir/usr/bin/python3.11 <此文件>
 """
 from __future__ import annotations
 import hashlib, json, math, re, sys
@@ -214,7 +214,9 @@ def main() -> int:
                                                "sha16": s16(STEP2 / "m13_v57_l4_validation.json")}}},
             {"id": "DV-ENGINE-INT_PAIR_PITCH", "requirement": "REQ-R3-2",
              "form": "capacity/新布线 对中心距（工程保守实现，本件不改几何）",
-             "inputs": {"span_mm": 0.585, "w_outer_mm": 0.205},
+             "inputs": {"span_mm": 0.585, "w_outer_mm": 0.205,
+                        "span_src": "DV-PAIR-CROSS.computed.span_mm",
+                        "w_outer_src": "DV-INTPAIR-EDGE.computed.edge_outer_binding_mm/2"},
              "computed": {"value_mm": 1.46, "faithful_min_mm": round(0.585 + edge_outer, 4)},
              "reachability": {"kind": "conservative_ge",   # CO-153：可闭式证明的保守实现（K9 新判据）
                               "predicate": "value ≥ span + 2·w_outer（忠实下界，闭式重算）",
@@ -232,7 +234,17 @@ def main() -> int:
             "R5": "机判：tools/p3_v57_co124_input_selfcheck_gate.py K9（+ 负控 T5/T6/T7）"},
         "verdict": "PASS" if reachable else "FAIL",
     }
-    LEDGER.write_text(json.dumps(ledger, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    # CO-156（F-4）：**只 upsert 自有条目**，保留他 CO 归属的 DV（CO-146/149/153），绝不整表重写。
+    _base = json.loads(LEDGER.read_text(encoding="utf-8")) if LEDGER.exists() else {}
+    _merged = dict(_base)
+    _merged.update({k: v for k, v in ledger.items() if k not in ("requirements", "derived_values")})
+    _rq = {r["id"]: r for r in _base.get("requirements", [])}
+    _rq.update({r["id"]: r for r in ledger["requirements"]})
+    _dv = {d["id"]: d for d in _base.get("derived_values", [])}
+    _dv.update({d["id"]: d for d in ledger["derived_values"]})
+    _merged["requirements"] = [_rq[k] for k in sorted(_rq)]
+    _merged["derived_values"] = [_dv[k] for k in sorted(_dv)]
+    LEDGER.write_text(json.dumps(_merged, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
 
     rule_md = f"""# L2 规矩：需求 / 实现分家（v1.0）
 

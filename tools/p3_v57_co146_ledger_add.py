@@ -57,16 +57,13 @@ def main() -> int:
                     "target_zdiff": imp["target_zdiff"], "tolerance_pct": imp["tolerance_pct"],
                     "cu_t_m": {"outer": 3.5e-5, "inner": 1.75e-5},
                     "source": "SPEC impedance.per_layer / stackup.dielectric_8l（JLC08161H）"},
-         "computed": {"window_ohm": imp["window_ohm"],
-                      "zdiff": {r["layer"]: r["zdiff"] for r in imp["rows"]},
-                      "nominal_w_for_85": {r["layer"]: r["nominal_w_for_85"] for r in imp["rows"]},
-                      "deviation_pct": {r["layer"]: r["deviation_pct"] for r in imp["rows"]},
-                      "watch_nominal_max": imp.get("watch", [])},
+         "computed": imp["dv_computed_zdiff"],   # CO-156（F-6）：与 evidence_ref.key_path 指向的证据块同源
          "reachability": {"kind": "declared", "verdict": "REACHABLE",
                           "predicate": "as-built 对内净距下，两模型 Zdiff 均落 85Ω±10%（见 computed）",
                           "basis": imp.get("verdict_basis"),
                           "method": "闭式一阶工程近似；终判 = JLC 阻抗控制服务（±10%）",
-                          "evidence_ref": {"path": IMP.name, "sha16": s16(IMP)}}},
+                          "evidence_ref": {"path": IMP.name, "sha16": s16(IMP),
+                                            "key_path": "dv_computed_zdiff"}}},
     ]   # CO-153：本件**仅**维护 DV-CO146-ZDIFF 证据 pin；PDN-DROP/THERMAL 可达性归 CO-149/CO-150/CO-153
 
     # CO-153：pm_eval schema 自 CO-148 起改用 routes/T_board（无 Tj/hotspot_Tj_C）⇒ 该 DV 归 CO-148/CO-149 拥有；
@@ -87,7 +84,8 @@ def main() -> int:
              "reachability": {"kind": "declared", "verdict": "REACHABLE",
                               "predicate": "热点 Tj < Tj_limit（见 computed）",
                               "basis": "P/θJA/h 为显式声明值（非实测）⇒ 器件手册到位后须替换重跑",
-                              "evidence_ref": {"path": PM.name, "sha16": s16(PM)}}})
+                              "evidence_ref": {"path": PM.name, "sha16": s16(PM),
+                                               "key_path": "thermal"}}})
     else:
         print("note(CO-153): pm_eval 无 Tj/hotspot_Tj_C（CO-148 起 schema）⇒ 跳过 DV-CO146-THERMAL（归 CO-148/CO-149 拥有）")
     have = {d["id"]: i for i, d in enumerate(led["derived_values"])}
