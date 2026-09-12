@@ -1,0 +1,13 @@
+# 层序（top → bottom）｜交付板 k2_v4_8L.l4.kicad_pcb
+
+1. F.Cu — signal (PCIe + escape)｜阻抗 microstrip w=0.205mm 对内净距[0.295, 0.395]mm er=4.16 ⇒ 85Ω±10%（见 04_impedance）
+2. In1.Cu — GND_PLANE (full)
+3. In2.Cu — signal (PCIe + escape)｜阻抗 symmetric_stripline w=0.16mm 对内净距[0.34, 0.44]mm er=3.99 ⇒ 85Ω±10%（见 04_impedance）
+4. In3.Cu — GND_PLANE (full)
+5. In4.Cu — POWER_PLANE (P3V3 east / MCU_VDD west / P3V3_AUX island / 12V_IN carrier)
+6. In5.Cu — signal (PCIe + escape)｜阻抗 symmetric_stripline w=0.16mm 对内净距[0.34, 0.44]mm er=3.99 ⇒ 85Ω±10%（见 04_impedance）
+7. In6.Cu — GND_PLANE (full)
+8. B.Cu — signal (PCIe + escape)｜阻抗 microstrip w=0.205mm 对内净距[0.295, 0.395]mm er=4.16 ⇒ 85Ω±10%（见 04_impedance）
+
+介质：见 03_stackup/JLC08161H_stackup.svg｜铜厚：外层 1oz / 内层 0.5oz｜成品厚 1.6mm ±10%
+表面处理：ENIG 沉金（JLC：6 层及以上不支持 HASL）

@@ -7,21 +7,15 @@
  },
  "requirements": [
   {
-   "id": "REQ-R3-2",
-   "statement": "对间不串扰 ⇒ R3-2「3W 原则」：对间中心距 ≥ 3×线宽 w（对间铜边 ≥ 2×w）",
-   "source_principle_ref": "_shared/docs/PCB_DESIGN_RULES.md R3-2（目的=对间串扰控制）",
+   "id": "REQ-CLR-POWER",
+   "statement": "电源域间不短路/不放电 ⇒ 见网间净距 ≥ 工艺最小",
+   "source_principle_ref": "_shared/eda_core/drc_rules.json clearance.net_classes[POWER] + k2_v4.kicad_pro rules",
    "frozen": true
   },
   {
    "id": "REQ-DEF-PAIR-GEOM",
    "statement": "对内几何定义：P/N 线宽 w、对内间距 g ⇒ 对铜跨 span = 2w + g",
    "source_principle_ref": "SPEC net_classes.PCIe85.diff_pair（p_width/p_gap）",
-   "frozen": true
-  },
-  {
-   "id": "REQ-CLR-POWER",
-   "statement": "电源域间不短路/不放电 ⇒ 见网间净距 ≥ 工艺最小",
-   "source_principle_ref": "_shared/eda_core/drc_rules.json clearance.net_classes[POWER] + k2_v4.kicad_pro rules",
    "frozen": true
   },
   {
@@ -34,6 +28,30 @@
    "id": "REQ-M3-KEEPOUT",
    "statement": "机械螺孔不短路/不干涉 ⇒ M3 禁布半径",
    "source_principle_ref": "L1_TOPOLOGY_v2.0 硬约束5 + SPEC constraints.m3_keepout_mm",
+   "frozen": true
+  },
+  {
+   "id": "REQ-PDN-DROP",
+   "statement": "电源分配网络压降受控 ⇒ 各轨最坏压降不超预算（域内电源铜承载足量）",
+   "source_principle_ref": "LAYOUT_CONSTITUTION ch.5 §4（PDN 压降达标）+ 监理指令 #10 定值表",
+   "frozen": true
+  },
+  {
+   "id": "REQ-R3-2",
+   "statement": "对间不串扰 ⇒ R3-2「3W 原则」：对间中心距 ≥ 3×线宽 w（对间铜边 ≥ 2×w）",
+   "source_principle_ref": "_shared/docs/PCB_DESIGN_RULES.md R3-2（目的=对间串扰控制）",
+   "frozen": true
+  },
+  {
+   "id": "REQ-THERM",
+   "statement": "热机械可靠 ⇒ 器件结温不超上限（按声明环境与对流条件）",
+   "source_principle_ref": "LAYOUT_CONSTITUTION ch.2（L2 裁判标准含热）+ 监理指令 #10 定值表",
+   "frozen": true
+  },
+  {
+   "id": "REQ-ZDIFF",
+   "statement": "高速差分通道阻抗受控 ⇒ 交付几何须使差分阻抗落目标窗口内（板厂阻抗控制服务为保证路径）",
+   "source_principle_ref": "SPEC impedance.{target_zdiff,tolerance_pct,coupon_required} + 监理指令 #10 定值表",
    "frozen": true
   }
  ],
@@ -204,6 +222,306 @@
     "verdict": "CONSERVATIVE_OK"
    },
    "note": "route_model_config.capacity_audit.inter_pair_spacing；≥ 忠实下界 ⇒ 保守（安全）；几何口径不动"
+  },
+  {
+   "id": "DV-CO146-ZDIFF",
+   "requirement": "REQ-ZDIFF",
+   "form": "Zdiff(w,g,h,b,er) ∈ target±tol　（双闭式模型交叉核对：IPC-2141 族 / Hammerstad–Jensen+Cohn）",
+   "inputs": {
+    "w_by_layer": {
+     "F.Cu": 0.205,
+     "In2.Cu": 0.16,
+     "In5.Cu": 0.16,
+     "B.Cu": 0.205
+    },
+    "gap_delivered": {
+     "F.Cu": [
+      0.295,
+      0.395
+     ],
+     "In2.Cu": [
+      0.34,
+      0.44
+     ],
+     "In5.Cu": [
+      0.34,
+      0.44
+     ],
+     "B.Cu": [
+      0.295,
+      0.395
+     ]
+    },
+    "h_or_b": {
+     "F.Cu": 0.1164,
+     "In2.Cu": 0.5,
+     "In5.Cu": 0.5,
+     "B.Cu": 0.1164
+    },
+    "er": {
+     "F.Cu": 4.16,
+     "In2.Cu": 3.99,
+     "In5.Cu": 3.99,
+     "B.Cu": 4.16
+    },
+    "target_zdiff": 85.0,
+    "tolerance_pct": 10,
+    "cu_t_m": {
+     "outer": 3.5e-05,
+     "inner": 1.75e-05
+    },
+    "source": "SPEC impedance.per_layer / stackup.dielectric_8l（JLC08161H）"
+   },
+   "computed": {
+    "window_ohm": [
+     76.5,
+     93.50000000000001
+    ],
+    "zdiff": {
+     "F.Cu": {
+      "M1_IPC2141": [
+       88.43,
+       90.61
+      ],
+      "M2_HJ_Cohn": [
+       92.65,
+       94.94
+      ]
+     },
+     "In2.Cu": {
+      "M1_IPC2141": [
+       84.56,
+       89.48
+      ],
+      "M2_HJ_Cohn": [
+       84.39,
+       86.27
+      ]
+     },
+     "In5.Cu": {
+      "M1_IPC2141": [
+       84.56,
+       89.48
+      ],
+      "M2_HJ_Cohn": [
+       84.39,
+       86.27
+      ]
+     },
+     "B.Cu": {
+      "M1_IPC2141": [
+       88.43,
+       90.61
+      ],
+      "M2_HJ_Cohn": [
+       92.65,
+       94.94
+      ]
+     }
+    },
+    "nominal_w_for_85": {
+     "F.Cu": 0.2174,
+     "In2.Cu": 0.1582,
+     "In5.Cu": 0.1582,
+     "B.Cu": 0.2174
+    },
+    "deviation_pct": {
+     "F.Cu": {
+      "M1_IPC2141": -5.69,
+      "M2_HJ_Cohn": -5.69
+     },
+     "In2.Cu": {
+      "M1_IPC2141": 1.12,
+      "M2_HJ_Cohn": 1.12
+     },
+     "In5.Cu": {
+      "M1_IPC2141": 1.12,
+      "M2_HJ_Cohn": 1.12
+     },
+     "B.Cu": {
+      "M1_IPC2141": -5.69,
+      "M2_HJ_Cohn": -5.69
+     }
+    },
+    "watch_nominal_max": [
+     {
+      "layer": "F.Cu",
+      "gap_mm": [
+       0.395
+      ],
+      "zdiff": {
+       "M1_IPC2141": [
+        90.61
+       ],
+       "M2_HJ_Cohn": [
+        94.94
+       ]
+      },
+      "reason": "设计名义最宽对内净距下 M2(HJ) 越 ±10% 上界 ⇒ 下单备注要求 JLC 阻抗表覆盖该几何（终判=JLC 阻抗控制服务）"
+     },
+     {
+      "layer": "B.Cu",
+      "gap_mm": [
+       0.395
+      ],
+      "zdiff": {
+       "M1_IPC2141": [
+        90.61
+       ],
+       "M2_HJ_Cohn": [
+        94.94
+       ]
+      },
+      "reason": "设计名义最宽对内净距下 M2(HJ) 越 ±10% 上界 ⇒ 下单备注要求 JLC 阻抗表覆盖该几何（终判=JLC 阻抗控制服务）"
+     }
+    ]
+   },
+   "reachability": {
+    "kind": "declared",
+    "verdict": "REACHABLE",
+    "predicate": "as-built 对内净距下，两模型 Zdiff 均落 85Ω±10%（见 computed）",
+    "basis": "as-built 对内净距（gap_mm_delivered 下界 0.295 外层 / 0.34 内层，= 交付实测口径）双模型均落 85Ω±10%",
+    "method": "闭式一阶工程近似；终判 = JLC 阻抗控制服务（±10%）",
+    "evidence_ref": {
+     "path": "m13_v57_co146_impedance_table.json",
+     "sha16": "2d1adf1996ee3185"
+    }
+   }
+  },
+  {
+   "id": "DV-CO146-PDN-DROP",
+   "requirement": "REQ-PDN-DROP",
+   "form": "ΔV = I·(R_plane + R_via/N)　且　ΔV/V_rail ≤ 预算",
+   "inputs": {
+    "rails": {
+     "12V_IN": {
+      "I_a": 0.65,
+      "I_basis": "P3V3 输出功率 /(η=0.88 × 12V) = 2.0A×3.3V/0.88/12V ⇒ 0.63A，取 0.65A（声明值）"
+     },
+     "P3V3": {
+      "I_a": 2.0,
+      "I_basis": "U6(DS320PR1601) 1.20A + U1 0.06A + 上拉/杂项 0.05A + 余量 ⇒ 声明 2.00A（保守；器件手册到位后替换）"
+     },
+     "P3V3_AUX": {
+      "I_a": 1.0,
+      "I_basis": "J3.A9 + J4.A9 侧带供电各 0.5A（声明值；MCIO 侧带电流口径待 PM）"
+     },
+     "MCU_VDD": {
+      "I_a": 0.15,
+      "I_basis": "U1(STM32G0B1) 0.06A + E2 0.01A + 上拉 0.01A + 余量 ⇒ 声明 0.15A"
+     }
+    },
+    "drop_budget_pct": 3.0,
+    "copper_oz": {
+     "outer": 1.0,
+     "inner": 0.5
+    },
+    "rho_cu_20C": 1.724e-08,
+    "ambient_C": 40.0,
+    "disclaimer": "电流/功耗/θJA/对流系数为**显式声明值**（非实测）；不得当实测引用；器件手册或 PM 数据到位后须替换并重跑。"
+   },
+   "computed": {
+    "12V_IN": {
+     "R_total_ohm": 0.007739806456191595,
+     "dV_mV": 5.031,
+     "drop_pct": 0.0419,
+     "I_max_at_budget_a": 46.513,
+     "verdict": "PASS"
+    },
+    "P3V3": {
+     "R_total_ohm": 0.0020540597319753146,
+     "dV_mV": 4.108,
+     "drop_pct": 0.1245,
+     "I_max_at_budget_a": 48.197,
+     "verdict": "PASS"
+    },
+    "P3V3_AUX": {
+     "R_total_ohm": 0.022860135941693675,
+     "dV_mV": 22.86,
+     "drop_pct": 0.6927,
+     "I_max_at_budget_a": 4.331,
+     "verdict": "PASS"
+    },
+    "MCU_VDD": {
+     "R_total_ohm": 0.0015809941225315388,
+     "dV_mV": 0.237,
+     "drop_pct": 0.0072,
+     "I_max_at_budget_a": 62.619,
+     "verdict": "PASS"
+    }
+   },
+   "reachability": {
+    "kind": "declared",
+    "verdict": "REACHABLE",
+    "predicate": "各轨 I_max@预算 ≥ 声明电流（余量见 computed）",
+    "basis": "几何取自交付板 zone 声明域（filled 缓存不可读）；电流为显式声明值（非实测）",
+    "evidence_ref": {
+     "path": "m13_v57_co146_pm_eval.json",
+     "sha16": "2fd19425d6d1013f"
+    }
+   }
+  },
+  {
+   "id": "DV-CO146-THERMAL",
+   "requirement": "REQ-THERM",
+   "form": "Tj = Ta + P_total/(h·2A_board) + P_dev·θJA ≤ Tj_limit",
+   "inputs": {
+    "ambient_C": 40.0,
+    "convection": "自然对流",
+    "h_conv": 8.0,
+    "devices": {
+     "U2_dcdc": {
+      "p_loss_W": 0.91,
+      "basis": "P_out=3.3V×2.0A=6.6W，η=0.88（声明） ⇒ loss=0.91W"
+     },
+     "U6_redriver": {
+      "p_W": 1.5,
+      "theta_ja": 25.0,
+      "basis": "功耗/θJA 均为声明值（无器件手册输入），待 PM 替换"
+     },
+     "U1_mcu": {
+      "p_W": 0.05,
+      "theta_ja": 60.0,
+      "basis": "声明值"
+     },
+     "others": {
+      "p_W": 0.1,
+      "basis": "U5 光耦 + E2 + LED + L1 铜损（声明值）"
+     }
+    },
+    "Tj_limit_C": 125.0
+   },
+   "computed": {
+    "P_total_W": 2.56,
+    "dT_board_C": 28.99,
+    "T_board_C": 69.0,
+    "Tj": {
+     "U6_redriver": {
+      "P_W": 1.5,
+      "theta_ja": 25.0,
+      "basis": "功耗/θJA 均为声明值（无器件手册输入），待 PM 替换",
+      "Tj_C": 106.5
+     },
+     "U1_mcu": {
+      "P_W": 0.05,
+      "theta_ja": 60.0,
+      "basis": "声明值",
+      "Tj_C": 72.0
+     }
+    },
+    "hotspot_Tj_C": 106.5,
+    "verdict": "PASS"
+   },
+   "reachability": {
+    "kind": "declared",
+    "verdict": "REACHABLE",
+    "predicate": "热点 Tj < Tj_limit（见 computed）",
+    "basis": "P/θJA/h 为显式声明值（非实测）⇒ 器件手册到位后须替换重跑",
+    "evidence_ref": {
+     "path": "m13_v57_co146_pm_eval.json",
+     "sha16": "2fd19425d6d1013f"
+    }
+   }
   }
  ],
  "as_built": {

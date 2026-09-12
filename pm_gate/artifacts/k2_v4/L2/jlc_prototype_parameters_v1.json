@@ -1,0 +1,80 @@
+{
+ "artifact": "jlc_prototype_parameters_v1",
+ "schema": 1,
+ "revision": "v1.0",
+ "nature": "监理指令 #10 定值绑定 + 外部输入定性更正（撤回「外部输入阻塞」表述）",
+ "supervisor_instruction": {
+  "title": "JLC 8 层打样就绪 —— 外部输入改绑 JLC 工艺 + 出打样包",
+  "file": ".omo/supervision/ledger/instruction-10-jlc-prototype-ready.md",
+  "sha16": "35aafe268ff52f89",
+  "due": "下一轮"
+ },
+ "binding": {
+  "stackup": "JLC08161H（南亚 NP-155F）",
+  "total_thickness_mm": 1.6,
+  "copper": {
+   "outer_oz": 1.0,
+   "inner_oz": 0.5
+  },
+  "impedance": {
+   "target_zdiff": 85.0,
+   "tolerance_pct": 10,
+   "order_option": "勾选阻抗控制"
+  },
+  "surface_finish": "ENIG（沉金）",
+  "drop_budget_pct": 3.0,
+  "thermal_env": {
+   "ambient_C": 40.0,
+   "convection": "自然对流"
+  },
+  "rails": [
+   "12V_IN",
+   "P3V3",
+   "P3V3_AUX",
+   "MCU_VDD"
+  ],
+  "rail_currents": "由设计/器件手册导出；无数据时按保守值并显式声明（本件 CO-146 已按此登记）"
+ },
+ "rebinding": [
+  {
+   "item": "阻抗终判",
+   "from": "SI9000 + 板厂阻抗券（`coupon_required=true`，语义 = 等外部券）",
+   "to": "**JLC 阻抗控制服务**（免费标准阻抗测试 / ±10% 控制）+ 监理定值叠层 JLC08161H",
+   "spec_unchanged": "SPEC rev-19 `impedance.coupon_required=true` **逐字节不变**（冻结四源）；改绑的是**解释与签署路径**：coupon_required=true 现行解释 = 必须走 JLC 阻抗控制服务（其标准阻抗测试即 coupon），不再是「等外部券 ⇒ 阻塞」。",
+   "evidence": [
+    "m13_v57_co146_impedance_table.json",
+    "m13_v57_co146_jlc8_capability.json"
+   ]
+  },
+  {
+   "item": "PDN 压降 · 热",
+   "from": "外部 PM 输入（CO-87 两项 NOT_DEMONSTRATED）",
+   "to": "监理定值（压降 3% / 40°C 自然对流 / 外层 1oz+内层 0.5oz）+ CO-146 一阶确定性评估",
+   "evidence": [
+    "m13_v57_co146_pm_eval.json"
+   ]
+  },
+  {
+   "item": "「外部输入阻塞」表述",
+   "from": "「板厂券 / PM 数据 = 外部阻塞」（CO-105/CO-107/CO-133 等记录残留表述）",
+   "to": "**撤回**（改绑 JLC 工艺 + 监理定值）。**同时登记新发现的真实阻塞项**：盲/埋孔 —— JLC 标准服务不支持（见登记簿 OPEN 项 + co146_through_via_probe）。",
+   "evidence": [
+    "m13_v57_co146_jlc_dfm_gate.json",
+    "m13_v57_co146_through_via_probe.json"
+   ]
+  }
+ ],
+ "jlc_capability_source": {
+  "url": "https://jlcpcb.com/capabilities/pcb-capabilities",
+  "fetched": "2026-09-12",
+  "file": "m13_v57_co146_jlc_capability_source.html",
+  "sha256": "7d1d5a9193f3c212",
+  "note": "抓取件全文存于 L3/mcio_feas_step2/；逐条引用见 m13_v57_co146_jlc8_capability.json"
+ },
+ "frozen_sources": {
+  "SPEC_k2_v4.spec-rev-19.json": "5f72182a2616392c",
+  "k2_v4_8L.l4.kicad_pcb": "d4e81f647be7f980",
+  "note": "本件未改冻结四源；SPEC 逐字节不变"
+ },
+ "redline": "本件只写 L2 政策层 + 登记簿；不改板/图纸/SPEC/冻结四源。"
+}

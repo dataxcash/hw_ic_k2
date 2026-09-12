@@ -1,0 +1,56 @@
+{
+ "artifact": "m13_v57_co146_jlc_fab_package",
+ "schema": 1,
+ "revision": "CO146-PKG.1",
+ "nature": "JLC 打样包（监理指令 #10 动作 3）；只出交付物，不改板/SPEC",
+ "board": "k2_v4_8L.l4.kicad_pcb",
+ "board_sha16": "d4e81f647be7f980",
+ "package_dir": "pm_gate/artifacts/k2_v4/L5/jlc_package",
+ "n_files": 30,
+ "commands": {
+  "gerber": "kicad-cli pcb export gerbers --board-plot-params --no-x2 --layers F.Cu,In1.Cu,In2.Cu,In3.Cu,In4.Cu,In5.Cu,In6.Cu,B.Cu,F.Paste,B.Paste,F.Silkscreen,B.Silkscreen,F.Mask,B.Mask,Edge.Cuts",
+  "drill": "kicad-cli pcb export drill --format excellon --excellon-units mm --generate-map --map-format svg --generate-report"
+ },
+ "kicad_version": "10.0.5",
+ "gerbers": [
+  "k2_v4_8L.l4-B_Cu.gbr",
+  "k2_v4_8L.l4-B_Mask.gbr",
+  "k2_v4_8L.l4-B_Silkscreen.gbr",
+  "k2_v4_8L.l4-Edge_Cuts.gbr",
+  "k2_v4_8L.l4-F_Cu.gbr",
+  "k2_v4_8L.l4-F_Mask.gbr",
+  "k2_v4_8L.l4-F_Silkscreen.gbr",
+  "k2_v4_8L.l4-In1_Cu.gbr",
+  "k2_v4_8L.l4-In2_Cu.gbr",
+  "k2_v4_8L.l4-In3_Cu.gbr",
+  "k2_v4_8L.l4-In4_Cu.gbr",
+  "k2_v4_8L.l4-In5_Cu.gbr",
+  "k2_v4_8L.l4-In6_Cu.gbr"
+ ],
+ "drills": [
+  "k2_v4_8L.l4-back-in5.drl",
+  "k2_v4_8L.l4-front-in2.drl",
+  "k2_v4_8L.l4-front-in5.drl",
+  "k2_v4_8L.l4-in2-in5.drl",
+  "k2_v4_8L.l4.drl"
+ ],
+ "canonicalization": {
+  "date_pattern": "\\d{4}-\\d{2}-\\d{2}[ T]\\d{2}:\\d{2}:\\d{2}(?:[+-]\\d{2}:\\d{2})?",
+  "replacement": "2026-09-12T00:00:00+08:00",
+  "files_normalized": 25,
+  "reason": "KiCad 导出件内嵌墙钟时间戳 ⇒ 规范化以保证命令+sha 可复现；制造语义不受影响"
+ },
+ "stackup_svg_sha16": "44370475b258848f",
+ "teeth": {
+  "t01_idempotent": true,
+  "t02_8_copper_gerbers": true,
+  "t03_drill_present": true,
+  "t04_all_hashed": true
+ },
+ "orderable_at_jlc_standard": false,
+ "blockers": [
+  "阻焊桥 / 阻焊-铜净距",
+  "**过孔类型（盲/埋孔）**"
+ ],
+ "redline": "只读板；零坐标搜索；不改板/图纸/SPEC/冻结四源（输出全在 L5 交付目录）。"
+}

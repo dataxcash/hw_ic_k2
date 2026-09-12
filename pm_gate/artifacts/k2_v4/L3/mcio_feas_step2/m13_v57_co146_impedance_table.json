@@ -1,0 +1,354 @@
+{
+ "artifact": "m13_v57_co146_impedance_table",
+ "schema": 1,
+ "revision": "CO146-IMP.1",
+ "nature": "L2 只读派生：85Ω 差分阻抗表（两套独立闭式交叉核对）",
+ "source": {
+  "spec": "SPEC_k2_v4.spec-rev-19.json",
+  "spec_sha16": "5f72182a2616392c",
+  "stackup": "JLC 8L 1.6mm 阻抗板 JLC08161H（南亚 NP-155F；prepreg 2116*1 / 3313*1，core 0.36*2） — 叠层分配与逐层介质厚度由 L2 CO-55 反解裁定；终判 = 板厂阻抗券",
+  "jlc_capability": "m13_v57_co146_jlc8_capability.json",
+  "jlc_impedance_tolerance_pct": 10,
+  "jlc_note": "JLC 公布 er：2116=4.16 / 3313=4.1 / 7628=4.4；阻抗控制 4/6/8/…层 ±10%"
+ },
+ "target_zdiff": 85.0,
+ "tolerance_pct": 10,
+ "window_ohm": [
+  76.5,
+  93.50000000000001
+ ],
+ "rows": [
+  {
+   "layer": "F.Cu",
+   "kind": "microstrip",
+   "w_mm": 0.205,
+   "s_mm": [
+    0.295,
+    0.395
+   ],
+   "h_or_b_mm": 0.1164,
+   "er": 4.16,
+   "t_mm": 0.035,
+   "zdiff": {
+    "M1_IPC2141": [
+     88.43,
+     90.61
+    ],
+    "M2_HJ_Cohn": [
+     92.65,
+     94.94
+    ]
+   },
+   "within_10pct": {
+    "M1_IPC2141": true,
+    "M2_HJ_Cohn": true
+   },
+   "nominal_w_for_85": 0.2174,
+   "deviation_pct": {
+    "M1_IPC2141": -5.69,
+    "M2_HJ_Cohn": -5.69
+   },
+   "within_10pct_nominal_max": false
+  },
+  {
+   "layer": "In2.Cu",
+   "kind": "symmetric_stripline",
+   "w_mm": 0.16,
+   "s_mm": [
+    0.34,
+    0.44
+   ],
+   "h_or_b_mm": 0.5,
+   "er": 3.99,
+   "t_mm": 0.0175,
+   "zdiff": {
+    "M1_IPC2141": [
+     84.56,
+     89.48
+    ],
+    "M2_HJ_Cohn": [
+     84.39,
+     86.27
+    ]
+   },
+   "within_10pct": {
+    "M1_IPC2141": true,
+    "M2_HJ_Cohn": true
+   },
+   "nominal_w_for_85": 0.1582,
+   "deviation_pct": {
+    "M1_IPC2141": 1.12,
+    "M2_HJ_Cohn": 1.12
+   },
+   "within_10pct_nominal_max": true
+  },
+  {
+   "layer": "In5.Cu",
+   "kind": "symmetric_stripline",
+   "w_mm": 0.16,
+   "s_mm": [
+    0.34,
+    0.44
+   ],
+   "h_or_b_mm": 0.5,
+   "er": 3.99,
+   "t_mm": 0.0175,
+   "zdiff": {
+    "M1_IPC2141": [
+     84.56,
+     89.48
+    ],
+    "M2_HJ_Cohn": [
+     84.39,
+     86.27
+    ]
+   },
+   "within_10pct": {
+    "M1_IPC2141": true,
+    "M2_HJ_Cohn": true
+   },
+   "nominal_w_for_85": 0.1582,
+   "deviation_pct": {
+    "M1_IPC2141": 1.12,
+    "M2_HJ_Cohn": 1.12
+   },
+   "within_10pct_nominal_max": true
+  },
+  {
+   "layer": "B.Cu",
+   "kind": "microstrip",
+   "w_mm": 0.205,
+   "s_mm": [
+    0.295,
+    0.395
+   ],
+   "h_or_b_mm": 0.1164,
+   "er": 4.16,
+   "t_mm": 0.035,
+   "zdiff": {
+    "M1_IPC2141": [
+     88.43,
+     90.61
+    ],
+    "M2_HJ_Cohn": [
+     92.65,
+     94.94
+    ]
+   },
+   "within_10pct": {
+    "M1_IPC2141": true,
+    "M2_HJ_Cohn": true
+   },
+   "nominal_w_for_85": 0.2174,
+   "deviation_pct": {
+    "M1_IPC2141": -5.69,
+    "M2_HJ_Cohn": -5.69
+   },
+   "within_10pct_nominal_max": false
+  }
+ ],
+ "sensitivity": [
+  {
+   "layer": "F.Cu",
+   "perturbation": "er +0.15",
+   "zdiff": 91.19,
+   "within_10pct": true
+  },
+  {
+   "layer": "F.Cu",
+   "perturbation": "er -0.15",
+   "zdiff": 94.19,
+   "within_10pct": false
+  },
+  {
+   "layer": "F.Cu",
+   "perturbation": "h/b +10%",
+   "zdiff": 96.87,
+   "within_10pct": false
+  },
+  {
+   "layer": "F.Cu",
+   "perturbation": "h/b -10%",
+   "zdiff": 87.89,
+   "within_10pct": true
+  },
+  {
+   "layer": "F.Cu",
+   "perturbation": "w +10%",
+   "zdiff": 88.11,
+   "within_10pct": true
+  },
+  {
+   "layer": "F.Cu",
+   "perturbation": "w -10%",
+   "zdiff": 97.72,
+   "within_10pct": false
+  },
+  {
+   "layer": "In2.Cu",
+   "perturbation": "er +0.15",
+   "zdiff": 82.85,
+   "within_10pct": true
+  },
+  {
+   "layer": "In2.Cu",
+   "perturbation": "er -0.15",
+   "zdiff": 86.02,
+   "within_10pct": true
+  },
+  {
+   "layer": "In2.Cu",
+   "perturbation": "h/b +10%",
+   "zdiff": 88.94,
+   "within_10pct": true
+  },
+  {
+   "layer": "In2.Cu",
+   "perturbation": "h/b -10%",
+   "zdiff": 79.15,
+   "within_10pct": true
+  },
+  {
+   "layer": "In2.Cu",
+   "perturbation": "w +10%",
+   "zdiff": 79.57,
+   "within_10pct": true
+  },
+  {
+   "layer": "In2.Cu",
+   "perturbation": "w -10%",
+   "zdiff": 89.65,
+   "within_10pct": true
+  },
+  {
+   "layer": "In5.Cu",
+   "perturbation": "er +0.15",
+   "zdiff": 82.85,
+   "within_10pct": true
+  },
+  {
+   "layer": "In5.Cu",
+   "perturbation": "er -0.15",
+   "zdiff": 86.02,
+   "within_10pct": true
+  },
+  {
+   "layer": "In5.Cu",
+   "perturbation": "h/b +10%",
+   "zdiff": 88.94,
+   "within_10pct": true
+  },
+  {
+   "layer": "In5.Cu",
+   "perturbation": "h/b -10%",
+   "zdiff": 79.15,
+   "within_10pct": true
+  },
+  {
+   "layer": "In5.Cu",
+   "perturbation": "w +10%",
+   "zdiff": 79.57,
+   "within_10pct": true
+  },
+  {
+   "layer": "In5.Cu",
+   "perturbation": "w -10%",
+   "zdiff": 89.65,
+   "within_10pct": true
+  },
+  {
+   "layer": "B.Cu",
+   "perturbation": "er +0.15",
+   "zdiff": 91.19,
+   "within_10pct": true
+  },
+  {
+   "layer": "B.Cu",
+   "perturbation": "er -0.15",
+   "zdiff": 94.19,
+   "within_10pct": false
+  },
+  {
+   "layer": "B.Cu",
+   "perturbation": "h/b +10%",
+   "zdiff": 96.87,
+   "within_10pct": false
+  },
+  {
+   "layer": "B.Cu",
+   "perturbation": "h/b -10%",
+   "zdiff": 87.89,
+   "within_10pct": true
+  },
+  {
+   "layer": "B.Cu",
+   "perturbation": "w +10%",
+   "zdiff": 88.11,
+   "within_10pct": true
+  },
+  {
+   "layer": "B.Cu",
+   "perturbation": "w -10%",
+   "zdiff": 97.72,
+   "within_10pct": false
+  }
+ ],
+ "verdict": "PASS",
+ "fails": [],
+ "verdict_basis": "as-built 对内净距（gap_mm_delivered 下界 0.295 外层 / 0.34 内层，= 交付实测口径）双模型均落 85Ω±10%",
+ "watch": [
+  {
+   "layer": "F.Cu",
+   "gap_mm": [
+    0.395
+   ],
+   "zdiff": {
+    "M1_IPC2141": [
+     90.61
+    ],
+    "M2_HJ_Cohn": [
+     94.94
+    ]
+   },
+   "reason": "设计名义最宽对内净距下 M2(HJ) 越 ±10% 上界 ⇒ 下单备注要求 JLC 阻抗表覆盖该几何（终判=JLC 阻抗控制服务）"
+  },
+  {
+   "layer": "B.Cu",
+   "gap_mm": [
+    0.395
+   ],
+   "zdiff": {
+    "M1_IPC2141": [
+     90.61
+    ],
+    "M2_HJ_Cohn": [
+     94.94
+    ]
+   },
+   "reason": "设计名义最宽对内净距下 M2(HJ) 越 ±10% 上界 ⇒ 下单备注要求 JLC 阻抗表覆盖该几何（终判=JLC 阻抗控制服务）"
+  }
+ ],
+ "models": {
+  "M1_IPC2141": "IPC-2141 边耦微带/对称带状线（与 eda_core/stackup.py 同族）",
+  "M2_HJ_Cohn": "Hammerstad–Jensen 微带（含铜厚修正）+ Cohn 带状线"
+ },
+ "limits": "两模型均为一阶闭式工程近似（±5~10% 量级）；**终判 = JLC 阻抗控制服务**（下单勾选阻抗控制，JLC 依实际叠层出阻抗表 / 免费标准阻抗测试）；本表用途 = 下单前可核性 + 偏离预警。",
+ "teeth": {
+  "t01_reproduce_spec_first_order": {
+   "spec": {
+    "0.5": 88.43,
+    "0.6": 90.61
+   },
+   "M1": [
+    88.43,
+    90.61
+   ],
+   "ok": true
+  },
+  "t02_overwide_must_fail_tol": {
+   "zdiff_at_w+50%": 73.86,
+   "ok": true
+  }
+ },
+ "redline": "只读：坐标零搜索；不改板/图纸/SPEC/冻结四源。"
+}

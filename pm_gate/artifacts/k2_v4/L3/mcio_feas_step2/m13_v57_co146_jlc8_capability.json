@@ -1,0 +1,118 @@
+{
+ "artifact": "m13_v57_co146_jlc8_capability",
+ "schema": 1,
+ "source_url": "https://jlcpcb.com/capabilities/pcb-capabilities",
+ "fetched": "2026-09-12",
+ "source_page_file": "m13_v57_co146_jlc_capability_source.html",
+ "source_page_sha256": "7d1d5a9193f3c2123367b1b306e9e3c67863fd31da6e577ad7c4f197fab8ac9d",
+ "source_page_bytes": 135508,
+ "note": "抓取件为 JLC 公布能力页（jlcpcb.com/capabilities/pcb-capabilities）；下表逐条引用原文。",
+ "capability": {
+  "layer_count": {
+   "min": 1,
+   "max": 32,
+   "quote": "Layer count 1-32 Layers"
+  },
+  "impedance_control_layers": {
+   "value": "4/6/8/10/12/.../32",
+   "quote": "Controlled Impedance 4/6/8/10/12/14/16/18/20/.../32 layers"
+  },
+  "impedance_tolerance_pct": {
+   "value": 10,
+   "quote": "Impedance Tolerance ±10%"
+  },
+  "board_max_mm": {
+   "w": 656.0,
+   "h": 586.0,
+   "quote": "FR4(6-layer and above): 656 × 586 mm"
+  },
+  "board_min_mm": {
+   "w": 3.0,
+   "h": 3.0,
+   "quote": "Minimum Dimensions FR4/Rogers/PTFE: 3 × 3 mm"
+  },
+  "thickness_mm": {
+   "value": 1.6,
+   "range": "0.4 – 4.5",
+   "tol_pct": 10,
+   "quote": "Thickness 0.4 – 4.5 mm ... 1.6 ... Thickness Tolerance (Thickness≥1.0mm) ± 10%"
+  },
+  "outer_copper_oz": {
+   "value": 1.0,
+   "allowed": "1 oz / 2 oz",
+   "quote": "Finished Outer Layer Copper Multi-layer: 1 oz / 2 oz"
+  },
+  "inner_copper_oz": {
+   "value": 0.5,
+   "allowed": "0.5 oz / 1 oz / 2 oz",
+   "quote": "Finished Inner Layer Copper 0.5 oz / 1 oz / 2 oz ... 0.5oz by default"
+  },
+  "min_track_width_mm": {
+   "value": 0.09,
+   "quote": "Min. track width and spacing (1 oz) Multilayer: 0.09 / 0.09 mm (3.5 / 3.5 mil). 3 mil is acceptable in BGA fan-outs."
+  },
+  "min_track_spacing_mm": {
+   "value": 0.09,
+   "quote": "同上（3.5 mil）；BGA fan-out 可 3 mil (0.0762mm)"
+  },
+  "min_via_hole_mm": {
+   "value": 0.15,
+   "preferred": 0.2,
+   "quote": "Min. Via hole size/diameter 0.15mm / 0.25mm ... ② Preferred Min. Via hole size: 0.2mm"
+  },
+  "min_via_diameter_mm": {
+   "value": 0.25,
+   "quote": "Min. Via hole size/diameter 0.15mm / 0.25mm"
+  },
+  "via_annular_note": {
+   "value": 0.15,
+   "quote": "① Via diameter should be 0.1mm(0.15mm preferred) larger than Via hole size"
+  },
+  "via_hole_to_hole_mm": {
+   "value": 0.2,
+   "quote": "Via Hole-to-Hole Spacing 0.2mm"
+  },
+  "pad_hole_to_hole_mm": {
+   "value": 0.45,
+   "quote": "Pad Hole-to-Hole Spacing 0.45mm"
+  },
+  "min_npth_mm": {
+   "value": 0.5,
+   "quote": "Min. Non-plated holes 0.50mm"
+  },
+  "min_plated_slot_mm": {
+   "value": 0.35,
+   "quote": "Min. Plated Slots Width ... Multi-layer: 0.35mm"
+  },
+  "copper_edge_clearance_mm": {
+   "value": 0.2,
+   "quote": "Copper clearance from routed board edges: ≧0.2 mm"
+  },
+  "solder_mask_to_copper_mm": {
+   "value": 0.09,
+   "quote": "Keep at least 0.09 mm clearance between soldermask openings and neighboring traces"
+  },
+  "solder_mask_bridge_mm": {
+   "value": 0.1,
+   "quote": "Soldermask bridge 0.10mm 1oz: Min. pad spacing: 0.10 mm"
+  },
+  "surface_finish": {
+   "value": "ENIG",
+   "quote": "Surface Finish HASL ... FR-4/HDI boards with 6 or more layers ... do not support HASL"
+  },
+  "er_table": {
+   "2116": 4.16,
+   "3313": 4.1,
+   "7628": 4.4,
+   "quote": "FR-4 Dielectric Constants ... 7628 Prepreg 4.4 3313 Perpreg 4.1 2116 Perpreg 4.16"
+  },
+  "blind_buried": {
+   "supported": false,
+   "quote": "Blind/Buried Vias Not supported Currently we don't support Blind/Buried Vias, only make through holes."
+  },
+  "blind_buried_faq": {
+   "note": "FAQ：blind/buried、HDI(laser vias) 属 advanced options，须 DFM review，成本/交期上升",
+   "quote": "Advanced options such as blind/buried vias, HDI (laser vias) ... require DFM review and may increase both cost and production time."
+  }
+ }
+}

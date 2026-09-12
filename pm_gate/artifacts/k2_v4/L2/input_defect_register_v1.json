@@ -414,6 +414,43 @@
    "closed_by": [
     "CO-145"
    ]
+  },
+  {
+   "finding": "implementation_deviation:asbuilt_via_strategy_requires_blind_buried",
+   "kind": "IMPLEMENTATION_DEVIATION",
+   "severity": "high",
+   "what": "交付板 220/493 支过孔为**非通孔**（F.Cu→In2.Cu 92 / **In2.Cu→In5.Cu 88（埋孔）** / In5.Cu→B.Cu 32 / F.Cu→In5.Cu 8），而 **JLC 标准服务不支持盲/埋孔**（公布能力页：Blind/Buried Vias Not supported, only make through holes；FAQ 归为 advanced option 须 DFM review）；原地改通孔（坐标零改动）实测 **111 项 shorting_items** ⇒ 现行 W3 派生**结构上依赖盲/埋孔**。项目全部可行性分析（CO-93/94/100/104）按「通孔工艺」口径 ⇒ 口径与实际不一致。",
+   "refs": [
+    "CO-146",
+    "CO-145",
+    "CO-104",
+    "UC-01 v2 §4"
+   ],
+   "disposition": "**停（勿擅改几何）**：出路由两条 —— (a) 按 JLC advanced/盲埋孔通道下单（须 JLC 工程评审 + 报价，叠层/阻抗绑定需重确认）；(b) **重开 W3 派生**（加通孔工艺约束后重解并重证可行性，可行性未证）。层级：结构/工艺类别（CO-104 先例「层数（HDI）才是 L1」）⇒ **需 owner 一句话**。",
+   "status": "OPEN",
+   "next": "owner：裁 (a) 走 JLC advanced 盲埋孔通道 / (b) 重开 W3 通孔化派生；L2 侧不得擅改几何（红线段）。",
+   "evidence": [
+    "CO-146 DFM 闸 1692424817eaa89f（过孔类型项 FAIL）",
+    "CO-146 通孔化反证探针 fd82d5200294919e（converted 220 / shorts +111）",
+    "JLC 能力抓取件 7d1d5a9193f3c212（Blind/Buried Vias Not supported）"
+   ],
+   "closed_by": []
+  },
+  {
+   "finding": "implementation_deviation:solder_mask_bridge_jlc_min_1x",
+   "kind": "IMPLEMENTATION_DEVIATION",
+   "severity": "medium",
+   "what": "在 **JLC 下限**（阻焊开窗到邻近铜 ≥0.09mm）下 DRC 报 1 项 `solder_mask_bridge`：F.Cu 走线 `PCIE_UP3_N` × `R3` pad2（`PWR_BTN_ISO`）开窗。板规 `solder_mask_to_copper_clearance=0.0`（未设判据）⇒ 此前无闸发现；非几何重排项。",
+   "refs": [
+    "CO-146"
+   ],
+   "disposition": "工程可修（调 R3 开窗/间距或局部丝印-开窗几何），不改走廊/层序 ⇒ 若施加须走上游声明件 + G4 + 全链重基线；当前**登记不擅改**，随打样包 ORDER_NOTES 交板厂确认。",
+   "status": "OPEN",
+   "next": "L2：确认是否随下一轮几何修订一并施加（或经 JLC DFM review 接受）。",
+   "evidence": [
+    "CO-146 DFM 闸 1692424817eaa89f（drc_jlc_limits.samples: solder_mask_bridge ×1）"
+   ],
+   "closed_by": []
   }
  ],
  "closed_items": [
@@ -431,7 +468,7 @@
   "owner": "ARCHER（L2 自裁执行侧）",
   "approval": "定义件 v1.0 待监理裁定/owner 批准；登记簿随闸每次运行校验",
   "mandatory_trigger": "任何 SPEC / drc_rules 变更后必须跑 tools/p3_v57_co124_input_selfcheck_gate.py 并 PASS",
-  "updated_by": "CO-127..CO-133 + **CO-134（整改通知 #09：③ 重新定性 = 工程换算错误 → REQ-R3-2 忠实实现 + 需求/实现分家规矩 + co124 K9）**；登记簿随 co124 每次运行校验；CO-134 续：4 项已声明定值补 rule_key + 台账溯源；**CO-136（L2 自裁 · 闸卫生续）**：登记并关闭 CO-135 F5(b)/F6 两条 TOOL_DEFECT（co124 标签 / co106 陈旧牙齿）；F4（handoff pin 失准）与 F5(a)（③ 根因叙述）属叙述类，保留在 CO-135 记录，不入本登记簿（非 SPEC/工具缺陷）。；**CO-139**：+1 TOOL_DEFECT（K9 豁免未锚定）并 CLOSED（hash-pin + T9）。；**CO-141**：更正 IMPLEMENTATION_DEVIATION 范围（24 平行对-对，非 3）+ 新增 OPEN TOOL_DEFECT（路由器列距基准漏 3W）。；**CO-142（L2 只读）**：对间 <3W 违规逐条明细 + 构造阶段归因；**CO-143（L2 只读）**：更正 `k2_router_escape_fan_omits_3w` 定位（f13 pair_xorder → escape-fan 落位判据 `p3_v57_co10_west_fan_probe.py:check()`）+ 施加可行性研究（可满足但须重派生策略；PDN 障碍 + 贪心夹死）。",
+  "updated_by": "CO-127..CO-133 + **CO-134（整改通知 #09：③ 重新定性 = 工程换算错误 → REQ-R3-2 忠实实现 + 需求/实现分家规矩 + co124 K9）**；登记簿随 co124 每次运行校验；CO-134 续：4 项已声明定值补 rule_key + 台账溯源；**CO-136（L2 自裁 · 闸卫生续）**：登记并关闭 CO-135 F5(b)/F6 两条 TOOL_DEFECT（co124 标签 / co106 陈旧牙齿）；F4（handoff pin 失准）与 F5(a)（③ 根因叙述）属叙述类，保留在 CO-135 记录，不入本登记簿（非 SPEC/工具缺陷）。；**CO-139**：+1 TOOL_DEFECT（K9 豁免未锚定）并 CLOSED（hash-pin + T9）。；**CO-141**：更正 IMPLEMENTATION_DEVIATION 范围（24 平行对-对，非 3）+ 新增 OPEN TOOL_DEFECT（路由器列距基准漏 3W）。；**CO-142（L2 只读）**：对间 <3W 违规逐条明细 + 构造阶段归因；**CO-143（L2 只读）**：更正 `k2_router_escape_fan_omits_3w` 定位（f13 pair_xorder → escape-fan 落位判据 `p3_v57_co10_west_fan_probe.py:check()`）+ 施加可行性研究（可满足但须重派生策略；PDN 障碍 + 贪心夹死）。；**CO-146（监理指令 #10 · JLC 打样就绪）**：+2 IMPLEMENTATION_DEVIATION（OPEN：盲/埋孔 vs JLC 标准不支持 = 结构/工艺类别；阻焊桥 1 处 vs JLC 0.09mm）；外部输入定性更正（撤回「等券」表述，改绑 JLC 阻抗控制服务 + 监理定值）；登记簿随 co124 每次运行校验。",
   "counts": {
    "SPEC_DEFECT": 5,
    "TOOL_DEFECT": 8,

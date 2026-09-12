@@ -1,0 +1,47 @@
+{
+ "artifact": "m13_v57_co146_through_via_probe",
+ "schema": 1,
+ "revision": "CO146-PROBE.1",
+ "nature": "只读反证：盲/埋孔原地改通孔的可行性（坐标零改动、零搜索）",
+ "board": "k2_v4_8L.l4.kicad_pcb",
+ "board_sha16": "d4e81f647be7f980",
+ "converted_vias": 220,
+ "non_through_left_after": 0,
+ "drc_baseline": {
+  "n": 42,
+  "by_type": {
+   "lib_footprint_issues": 12,
+   "lib_footprint_mismatch": 29,
+   "silk_edge_clearance": 1
+  }
+ },
+ "drc_through_variant": {
+  "n": 251,
+  "by_type": {
+   "clearance": 55,
+   "copper_edge_clearance": 4,
+   "hole_clearance": 23,
+   "hole_to_hole": 2,
+   "lib_footprint_issues": 12,
+   "lib_footprint_mismatch": 29,
+   "shorting_items": 111,
+   "silk_edge_clearance": 1,
+   "solder_mask_bridge": 14
+  }
+ },
+ "delta_by_type": {
+  "clearance": 55,
+  "copper_edge_clearance": 4,
+  "hole_clearance": 23,
+  "hole_to_hole": 2,
+  "shorting_items": 111,
+  "solder_mask_bridge": 14
+ },
+ "verdict": "THROUGH_ONLY_INFEASIBLE_AT_UNCHANGED_COORDS",
+ "teeth": {
+  "t01_no_non_through_left": true,
+  "t02_new_shorts": true
+ },
+ "note": "scratch 板写在 /tmp（未触碰仓库任何受控件）；含逃逸域 dru（0.075），与 as-designed 基线同判据。",
+ "redline": "只读板；零坐标搜索；不改板/图纸/SPEC/冻结四源。"
+}

@@ -1,0 +1,72 @@
+{
+ "artifact": "m13_v57_co146_jlc_rebind",
+ "schema": 1,
+ "revision": "CO146-REBIND.1",
+ "nature": "定性更正 + 登记簿登记（监理指令 #10 动作 5）",
+ "register": {
+  "file": "L2/input_defect_register_v1.json",
+  "sha16_before": null,
+  "sha16_after": "864c7ae0d3a45091",
+  "items_before": 20,
+  "items_added": [
+   "implementation_deviation:asbuilt_via_strategy_requires_blind_buried",
+   "implementation_deviation:solder_mask_bridge_jlc_min_1x"
+  ],
+  "items_total": 22,
+  "open_total": 3
+ },
+ "l2_binding_artifact": {
+  "file": "L2/jlc_prototype_parameters_v1.json",
+  "sha16": "e9bf5019aeddbd16"
+ },
+ "rebinding": [
+  {
+   "item": "阻抗终判",
+   "from": "SI9000 + 板厂阻抗券（`coupon_required=true`，语义 = 等外部券）",
+   "to": "**JLC 阻抗控制服务**（免费标准阻抗测试 / ±10% 控制）+ 监理定值叠层 JLC08161H",
+   "spec_unchanged": "SPEC rev-19 `impedance.coupon_required=true` **逐字节不变**（冻结四源）；改绑的是**解释与签署路径**：coupon_required=true 现行解释 = 必须走 JLC 阻抗控制服务（其标准阻抗测试即 coupon），不再是「等外部券 ⇒ 阻塞」。",
+   "evidence": [
+    "m13_v57_co146_impedance_table.json",
+    "m13_v57_co146_jlc8_capability.json"
+   ]
+  },
+  {
+   "item": "PDN 压降 · 热",
+   "from": "外部 PM 输入（CO-87 两项 NOT_DEMONSTRATED）",
+   "to": "监理定值（压降 3% / 40°C 自然对流 / 外层 1oz+内层 0.5oz）+ CO-146 一阶确定性评估",
+   "evidence": [
+    "m13_v57_co146_pm_eval.json"
+   ]
+  },
+  {
+   "item": "「外部输入阻塞」表述",
+   "from": "「板厂券 / PM 数据 = 外部阻塞」（CO-105/CO-107/CO-133 等记录残留表述）",
+   "to": "**撤回**（改绑 JLC 工艺 + 监理定值）。**同时登记新发现的真实阻塞项**：盲/埋孔 —— JLC 标准服务不支持（见登记簿 OPEN 项 + co146_through_via_probe）。",
+   "evidence": [
+    "m13_v57_co146_jlc_dfm_gate.json",
+    "m13_v57_co146_through_via_probe.json"
+   ]
+  }
+ ],
+ "spec_sha16": "5f72182a2616392c",
+ "board_sha16": "d4e81f647be7f980",
+ "deliverables": {
+  "impedance_table": "2d1adf1996ee3185",
+  "pm_eval": "2fd19425d6d1013f",
+  "dfm_gate": "1692424817eaa89f",
+  "fab_package": "c8d029254085efea",
+  "through_probe": "fd82d5200294919e"
+ },
+ "verdicts": {
+  "impedance": "PASS",
+  "pm": "PASS",
+  "dfm": "FAIL",
+  "through_only_feasible": false,
+  "orderable_at_jlc_standard": false
+ },
+ "teeth": {
+  "t01_register_written": true,
+  "t02_idempotent_items": true
+ },
+ "redline": "只写 L2 政策层 + 登记簿；冻结四源逐字节不变（SPEC 前后同 sha）。"
+}

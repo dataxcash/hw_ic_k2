@@ -1,0 +1,178 @@
+{
+ "artifact": "m13_v57_co146_jlc_fab_package",
+ "schema": 1,
+ "revision": "CO146-PKG.1",
+ "nature": "JLC 打样包（监理指令 #10 动作 3）；只出交付物，不改板/SPEC",
+ "board": "k2_v4_8L.l4.kicad_pcb",
+ "board_sha16": "d4e81f647be7f980",
+ "package_dir": "pm_gate/artifacts/k2_v4/L5/jlc_package",
+ "n_files": 30,
+ "commands": {
+  "gerber": "kicad-cli pcb export gerbers --board-plot-params --no-x2 --layers F.Cu,In1.Cu,In2.Cu,In3.Cu,In4.Cu,In5.Cu,In6.Cu,B.Cu,F.Paste,B.Paste,F.Silkscreen,B.Silkscreen,F.Mask,B.Mask,Edge.Cuts",
+  "drill": "kicad-cli pcb export drill --format excellon --excellon-units mm --generate-map --map-format svg --generate-report"
+ },
+ "kicad_version": "10.0.5",
+ "gerbers": [
+  "k2_v4_8L.l4-B_Cu.gbr",
+  "k2_v4_8L.l4-B_Mask.gbr",
+  "k2_v4_8L.l4-B_Silkscreen.gbr",
+  "k2_v4_8L.l4-Edge_Cuts.gbr",
+  "k2_v4_8L.l4-F_Cu.gbr",
+  "k2_v4_8L.l4-F_Mask.gbr",
+  "k2_v4_8L.l4-F_Silkscreen.gbr",
+  "k2_v4_8L.l4-In1_Cu.gbr",
+  "k2_v4_8L.l4-In2_Cu.gbr",
+  "k2_v4_8L.l4-In3_Cu.gbr",
+  "k2_v4_8L.l4-In4_Cu.gbr",
+  "k2_v4_8L.l4-In5_Cu.gbr",
+  "k2_v4_8L.l4-In6_Cu.gbr"
+ ],
+ "drills": [
+  "k2_v4_8L.l4-back-in5.drl",
+  "k2_v4_8L.l4-front-in2.drl",
+  "k2_v4_8L.l4-front-in5.drl",
+  "k2_v4_8L.l4-in2-in5.drl",
+  "k2_v4_8L.l4.drl"
+ ],
+ "canonicalization": {
+  "date_pattern": "\\d{4}-\\d{2}-\\d{2}[ T]\\d{2}:\\d{2}:\\d{2}(?:[+-]\\d{2}:\\d{2})?",
+  "replacement": "2026-09-12T00:00:00+08:00",
+  "files_normalized": 25,
+  "reason": "KiCad 导出件内嵌墙钟时间戳 ⇒ 规范化以保证命令+sha 可复现；制造语义不受影响"
+ },
+ "stackup_svg_sha16": "44370475b258848f",
+ "teeth": {
+  "t01_idempotent": true,
+  "t02_8_copper_gerbers": true,
+  "t03_drill_present": true,
+  "t04_all_hashed": true
+ },
+ "orderable_at_jlc_standard": false,
+ "blockers": [
+  "阻焊桥 / 阻焊-铜净距",
+  "**过孔类型（盲/埋孔）**"
+ ],
+ "manifest": {
+  "01_gerber_rs274x/k2_v4_8L.l4-B_Cu.gbr": {
+   "sha256": "38a7222f47202d7aaa5d39c17eca95c035b369064dcc6e08649331ee252177b4",
+   "bytes": 19090
+  },
+  "01_gerber_rs274x/k2_v4_8L.l4-B_Mask.gbr": {
+   "sha256": "c73ed0cb13a3567e63e7967d463ccb0dcd37453611e55d3ff89ac3c4b631375a",
+   "bytes": 467
+  },
+  "01_gerber_rs274x/k2_v4_8L.l4-B_Silkscreen.gbr": {
+   "sha256": "5f23975dc36a29a6afb5cdc1117a7182582d1606f9e4127e4536bafc4303a8b7",
+   "bytes": 463
+  },
+  "01_gerber_rs274x/k2_v4_8L.l4-Edge_Cuts.gbr": {
+   "sha256": "2157c564f4543bf21970a0efdc0fc72d34cbda6faf2762fbfa05a83ea77349ac",
+   "bytes": 688
+  },
+  "01_gerber_rs274x/k2_v4_8L.l4-F_Cu.gbr": {
+   "sha256": "de454f2892aae063b337220d0f66a560eeca6a96c3bed58fbed4605c88de7893",
+   "bytes": 71423
+  },
+  "01_gerber_rs274x/k2_v4_8L.l4-F_Mask.gbr": {
+   "sha256": "ea9b2e1ea6d8154d77c854f8594bfda04d473eddb9cfd8649d337447ae36a335",
+   "bytes": 289186
+  },
+  "01_gerber_rs274x/k2_v4_8L.l4-F_Silkscreen.gbr": {
+   "sha256": "f3f2ad57b3322624e39d59680f3a6dca66931304593a43d828215a03fd345407",
+   "bytes": 70314
+  },
+  "01_gerber_rs274x/k2_v4_8L.l4-In1_Cu.gbr": {
+   "sha256": "243f5d51ffe009cc6f8608cc8284e30661f0ba28af6648d4cf788a9e197b7458",
+   "bytes": 20279
+  },
+  "01_gerber_rs274x/k2_v4_8L.l4-In2_Cu.gbr": {
+   "sha256": "4db09f035407ed4fdd0e815f443aeee0f425ed3d8740b74e86db3b9be90beeca",
+   "bytes": 31312
+  },
+  "01_gerber_rs274x/k2_v4_8L.l4-In3_Cu.gbr": {
+   "sha256": "ca824576b8f5ea9d077c8f627cac7a36864ba26d05edbb976ae67662e19d1a19",
+   "bytes": 20033
+  },
+  "01_gerber_rs274x/k2_v4_8L.l4-In4_Cu.gbr": {
+   "sha256": "269ace3fa542156bbc18ab787f9a47456d427f717a2c60883e39f07187a928cf",
+   "bytes": 20033
+  },
+  "01_gerber_rs274x/k2_v4_8L.l4-In5_Cu.gbr": {
+   "sha256": "038c4c60fbb49de2fb91c50392ae6936d570a7bb9f18dbb39d494c2e77e1f3e2",
+   "bytes": 121378
+  },
+  "01_gerber_rs274x/k2_v4_8L.l4-In6_Cu.gbr": {
+   "sha256": "8ec2840c1704acb9151573f8b1a6c1a24a72f07be63901a0625b14f6a9b5780e",
+   "bytes": 16289
+  },
+  "01_gerber_rs274x/k2_v4_8L.l4-job.gbrjob": {
+   "sha256": "8038da300aa4abd2fe6e03a3e387653060413a85e0a1304e8d79a9dd79a87840",
+   "bytes": 4860
+  },
+  "02_drill_excellon/drill_report.txt": {
+   "sha256": "bc817c22cc133b707bc5aee77f669aa36a6c54d1cf34ae7b4e0cf9115873731f",
+   "bytes": 1884
+  },
+  "02_drill_excellon/k2_v4_8L.l4-back-in5-drl_map.svg": {
+   "sha256": "6bd178c154a14e579e222a83c2bfb2c56246d1e4f2b1566a698cd505f7a3ebff",
+   "bytes": 23335
+  },
+  "02_drill_excellon/k2_v4_8L.l4-back-in5.drl": {
+   "sha256": "4990adf3f0532a476216851e8655f309c4ae3131bf15d30add05b0f08d0916d6",
+   "bytes": 768
+  },
+  "02_drill_excellon/k2_v4_8L.l4-drl_map.svg": {
+   "sha256": "23ffdd975bc9407fa05f1ef2e3e57bb940ea1689530442655ac382e03f34ed46",
+   "bytes": 47234
+  },
+  "02_drill_excellon/k2_v4_8L.l4-front-in2-drl_map.svg": {
+   "sha256": "4083dd77cabdb51743558810c37ce5750db15b03e49f97c269b02d00fc4fb61f",
+   "bytes": 29672
+  },
+  "02_drill_excellon/k2_v4_8L.l4-front-in2.drl": {
+   "sha256": "157b7b18b13c5ef6101d81c41437a979cbabb2f8162938db6b94f4424fa6cb06",
+   "bytes": 1581
+  },
+  "02_drill_excellon/k2_v4_8L.l4-front-in5-drl_map.svg": {
+   "sha256": "c13a1bbc225e59a2700f8dfd87298af34f913dcdc51911bfff72017fe22ee9b8",
+   "bytes": 21314
+  },
+  "02_drill_excellon/k2_v4_8L.l4-front-in5.drl": {
+   "sha256": "e8ae502788488a29d3ceab6f020b05f0689722bd6283a3585b694c9c1762faad",
+   "bytes": 421
+  },
+  "02_drill_excellon/k2_v4_8L.l4-in2-in5-drl_map.svg": {
+   "sha256": "13aced066e23283fdb45a99731ed26479df40eab004470fcd2e10e069fc875bc",
+   "bytes": 30900
+  },
+  "02_drill_excellon/k2_v4_8L.l4-in2-in5.drl": {
+   "sha256": "12b81002cc7a604e55b73c57948142beebaad0faf5908c066218fb5850a546d6",
+   "bytes": 1584
+  },
+  "02_drill_excellon/k2_v4_8L.l4.drl": {
+   "sha256": "068a932f0257e8c5ba36b73074f72e807f9725067e3c8ec1bfd995ee4803f4b9",
+   "bytes": 4246
+  },
+  "03_stackup/JLC08161H_stackup.svg": {
+   "sha256": "44370475b258848f3763df9442ef874b14af4eb56374c60e54373f752b40b5b9",
+   "bytes": 3091
+  },
+  "04_impedance/impedance_table.json": {
+   "sha256": "2d1adf1996ee3185d37c84b88c637cfaac802b934c493ab64c2f13b65b16f1f1",
+   "bytes": 6915
+  },
+  "04_impedance/impedance_table.md": {
+   "sha256": "fa44a665d84254fdb6a7e3ac70d8b79a51e06ff3f75ce46bbd18010aece7b748",
+   "bytes": 2733
+  },
+  "05_layer_sequence.txt": {
+   "sha256": "6b33690f950c90fcaec3706e844c713fe1b82a4c36b1bdb890179a0617dbf20a",
+   "bytes": 988
+  },
+  "ORDER_NOTES.md": {
+   "sha256": "039923410448f882bdec3c93b7fed1b07322b772842b2b335da467fc8a0137e2",
+   "bytes": 2552
+  }
+ },
+ "redline": "只读板；零坐标搜索；不改板/图纸/SPEC/冻结四源（输出全在 L5 交付目录）。"
+}

@@ -1,0 +1,231 @@
+{
+ "artifact": "m13_v57_co146_pm_eval",
+ "schema": 1,
+ "revision": "CO146-PM.1",
+ "nature": "L2 一阶确定性评估：PDN 压降 + 热（监理指令 #10 动作 2）",
+ "board_sha16": "d4e81f647be7f980",
+ "declared_inputs": {
+  "supervisor_values_指令10": {
+   "drop_budget_pct": 3.0,
+   "ambient_C": 40.0,
+   "convection": "自然对流",
+   "outer_copper_oz": 1.0,
+   "inner_copper_oz": 0.5,
+   "surface_finish": "ENIG"
+  },
+  "engineering_declared": {
+   "rho_cu_20C": {
+    "value": 1.724e-08,
+    "unit": "Ω·m",
+    "basis": "Cu 标准电阻率（工程常数）"
+   },
+   "alpha_cu": {
+    "value": 0.00393,
+    "unit": "1/K",
+    "basis": "Cu 电阻温度系数（工程常数）"
+   },
+   "plating_um": {
+    "value": 18.0,
+    "unit": "µm",
+    "basis": "JLC 公布 平均孔铜厚 18µm"
+   },
+   "h_conv": {
+    "value": 8.0,
+    "unit": "W/m²K",
+    "basis": "自然对流工程声明值（两面）"
+   },
+   "tj_limit_C": {
+    "value": 125.0,
+    "unit": "°C",
+    "basis": "器件常规上限声明值"
+   }
+  },
+  "rails": {
+   "12V_IN": {
+    "I_a": 0.65,
+    "I_basis": "P3V3 输出功率 /(η=0.88 × 12V) = 2.0A×3.3V/0.88/12V ⇒ 0.63A，取 0.65A（声明值）"
+   },
+   "P3V3": {
+    "I_a": 2.0,
+    "I_basis": "U6(DS320PR1601) 1.20A + U1 0.06A + 上拉/杂项 0.05A + 余量 ⇒ 声明 2.00A（保守；器件手册到位后替换）"
+   },
+   "P3V3_AUX": {
+    "I_a": 1.0,
+    "I_basis": "J3.A9 + J4.A9 侧带供电各 0.5A（声明值；MCIO 侧带电流口径待 PM）"
+   },
+   "MCU_VDD": {
+    "I_a": 0.15,
+    "I_basis": "U1(STM32G0B1) 0.06A + E2 0.01A + 上拉 0.01A + 余量 ⇒ 声明 0.15A"
+   }
+  },
+  "thermal_devices": {
+   "U2_dcdc": {
+    "p_loss_W": 0.91,
+    "basis": "P_out=3.3V×2.0A=6.6W，η=0.88（声明） ⇒ loss=0.91W"
+   },
+   "U6_redriver": {
+    "p_W": 1.5,
+    "theta_ja": 25.0,
+    "basis": "功耗/θJA 均为声明值（无器件手册输入），待 PM 替换"
+   },
+   "U1_mcu": {
+    "p_W": 0.05,
+    "theta_ja": 60.0,
+    "basis": "声明值"
+   },
+   "others": {
+    "p_W": 0.1,
+    "basis": "U5 光耦 + E2 + LED + L1 铜损（声明值）"
+   }
+  },
+  "DISCLAIMER": "电流/功耗/θJA/对流系数为**显式声明值**（非实测）；不得当实测引用；器件手册或 PM 数据到位后须替换并重跑。"
+ },
+ "method": {
+  "plane": "Rs=ρ(T)/t；R_plane=Rs·L/W_eq，L=铜皮包络长边，W_eq=A/L（A=交付板 zone 声明域轮廓面积；filled 缓存不可读）",
+  "via": "R_via=ρ·1.6mm/A_铜壁，A_铜壁=π((d/2)²-(d/2-18µm)²)，d=0.2mm；N 支并联",
+  "drop": "ΔV=I·(R_plane+R_via/N)；预算 3%（监理定值）",
+  "thermal": "ΔT_board=P_total/(h·2A_board)；Tj=Ta+ΔT_board+P·θJA",
+  "nature": "几何一阶解析（非仿真；不含去耦电容动态/AC 阻抗/平面谐振）"
+ },
+ "rails": {
+  "12V_IN": {
+   "rail": "12V_IN",
+   "plane": {
+    "layers": [
+     "In4.Cu"
+    ],
+    "area_m2": 1.88e-05,
+    "L_m": 0.01095,
+    "W_eq_m": 0.00172,
+    "t_cu_m": 1.7500000000000002e-05,
+    "Rs_ohm_sq": 0.001063
+   },
+   "n_plane_vias": 3,
+   "rho_ohm_m_at_T": 1.86e-08,
+   "R_plane_ohm": 0.006776193480136194,
+   "R_via_each_ohm": 0.002890838928166205,
+   "R_via_eff_ohm": 0.0009636129760554017,
+   "R_total_ohm": 0.007739806456191595,
+   "I_a": 0.65,
+   "I_basis": "P3V3 输出功率 /(η=0.88 × 12V) = 2.0A×3.3V/0.88/12V ⇒ 0.63A，取 0.65A（声明值）",
+   "V_rail": 12.0,
+   "dV_mV": 5.031,
+   "drop_pct": 0.0419,
+   "budget_pct": 3.0,
+   "verdict": "PASS",
+   "I_max_at_budget_a": 46.513
+  },
+  "P3V3": {
+   "rail": "P3V3",
+   "plane": {
+    "layers": [
+     "In4.Cu"
+    ],
+    "area_m2": 0.00384765,
+    "L_m": 0.08475,
+    "W_eq_m": 0.0454,
+    "t_cu_m": 1.7500000000000002e-05,
+    "Rs_ohm_sq": 0.001063
+   },
+   "n_plane_vias": 41,
+   "rho_ohm_m_at_T": 1.86e-08,
+   "R_plane_ohm": 0.0019835514654346752,
+   "R_via_each_ohm": 0.002890838928166205,
+   "R_via_eff_ohm": 7.050826654063915e-05,
+   "R_total_ohm": 0.0020540597319753146,
+   "I_a": 2.0,
+   "I_basis": "U6(DS320PR1601) 1.20A + U1 0.06A + 上拉/杂项 0.05A + 余量 ⇒ 声明 2.00A（保守；器件手册到位后替换）",
+   "V_rail": 3.3,
+   "dV_mV": 4.108,
+   "drop_pct": 0.1245,
+   "budget_pct": 3.0,
+   "verdict": "PASS",
+   "I_max_at_budget_a": 48.197
+  },
+  "P3V3_AUX": {
+   "rail": "P3V3_AUX",
+   "plane": {
+    "layers": [
+     "In4.Cu"
+    ],
+    "area_m2": 2.889e-05,
+    "L_m": 0.0248,
+    "W_eq_m": 0.00117,
+    "t_cu_m": 1.7500000000000002e-05,
+    "Rs_ohm_sq": 0.001063
+   },
+   "n_plane_vias": 12,
+   "rho_ohm_m_at_T": 1.86e-08,
+   "R_plane_ohm": 0.022619232697679823,
+   "R_via_each_ohm": 0.002890838928166205,
+   "R_via_eff_ohm": 0.00024090324401385043,
+   "R_total_ohm": 0.022860135941693675,
+   "I_a": 1.0,
+   "I_basis": "J3.A9 + J4.A9 侧带供电各 0.5A（声明值；MCIO 侧带电流口径待 PM）",
+   "V_rail": 3.3,
+   "dV_mV": 22.86,
+   "drop_pct": 0.6927,
+   "budget_pct": 3.0,
+   "verdict": "PASS",
+   "I_max_at_budget_a": 4.331
+  },
+  "MCU_VDD": {
+   "rail": "MCU_VDD",
+   "plane": {
+    "layers": [
+     "In4.Cu"
+    ],
+    "area_m2": 0.00156403,
+    "L_m": 0.0454,
+    "W_eq_m": 0.03445,
+    "t_cu_m": 1.7500000000000002e-05,
+    "Rs_ohm_sq": 0.001063
+   },
+   "n_plane_vias": 16,
+   "rho_ohm_m_at_T": 1.86e-08,
+   "R_plane_ohm": 0.001400316689521151,
+   "R_via_each_ohm": 0.002890838928166205,
+   "R_via_eff_ohm": 0.00018067743301038782,
+   "R_total_ohm": 0.0015809941225315388,
+   "I_a": 0.15,
+   "I_basis": "U1(STM32G0B1) 0.06A + E2 0.01A + 上拉 0.01A + 余量 ⇒ 声明 0.15A",
+   "V_rail": 3.3,
+   "dV_mV": 0.237,
+   "drop_pct": 0.0072,
+   "budget_pct": 3.0,
+   "verdict": "PASS",
+   "I_max_at_budget_a": 62.619
+  }
+ },
+ "thermal": {
+  "P_total_W": 2.56,
+  "A_board_m2": 0.00552,
+  "dT_board_C": 28.99,
+  "T_board_C": 69.0,
+  "Tj": {
+   "U6_redriver": {
+    "P_W": 1.5,
+    "theta_ja": 25.0,
+    "basis": "功耗/θJA 均为声明值（无器件手册输入），待 PM 替换",
+    "Tj_C": 106.5
+   },
+   "U1_mcu": {
+    "P_W": 0.05,
+    "theta_ja": 60.0,
+    "basis": "声明值",
+    "Tj_C": 72.0
+   }
+  },
+  "hotspot_Tj_C": 106.5,
+  "Tj_limit_C": 125.0,
+  "verdict": "PASS"
+ },
+ "verdict": "PASS",
+ "rail_fails": [],
+ "teeth": {
+  "t01_linear_in_I": true,
+  "t02_copper_thickness_monotone": true,
+  "t03_plane_geometry_from_board": true
+ },
+ "redline": "只读：几何取自交付板；零坐标搜索；不改板/图纸/SPEC/冻结四源。"
+}
