@@ -46,6 +46,32 @@ def plane_net(s):
     return None
 
 
+# ---- CO-79 加固：可测"空真通过"（vacuous pass）的守卫纯函数 --------------------------
+# 教训（CO-76 F2 / CO-78）：断言只查"它恰好知道的东西"时，未知/未覆盖输入会被静默跳过。
+SIGNAL_LAYERS = {"F.Cu", "In2.Cu", "In5.Cu", "B.Cu"}
+
+
+def width_coverage_guard(present_layers, wmap):
+    """板上出现、但 SPEC 线宽表没有的层 = 静默漏检。返回 (ok, uncovered)。"""
+    uncovered = sorted(set(present_layers) - set(wmap))
+    return (not uncovered), uncovered
+
+
+def map_scope_guard(wmap):
+    """线宽表必须恰好覆盖 LID REV6 的 4 个信号层（多/少都判失配）。"""
+    return set(wmap) == SIGNAL_LAYERS
+
+
+def numeric_floor_guard(n, floor=95):
+    """数值漂移比对必须真比到足够多键；键集萎缩时不得空真通过。"""
+    return n >= floor
+
+
+def unknown_layer_guard(layers_seen, pl):
+    """阻抗口径表未覆盖的层（原实现静默 fallback 到 er=4.0）。返回未覆盖层清单。"""
+    return sorted(l for l in set(layers_seen) if l not in pl)
+
+
 def main() -> int:
     from collections import Counter
     s4 = json.loads(SPEC4.read_text(encoding="utf-8"))
@@ -94,8 +120,10 @@ def main() -> int:
            "inter_pair_spacing_mm": (s4["net_classes"]["PCIe85"]["inter_pair_spacing_mm"],
                                      s5["net_classes"]["PCIe85"]["inter_pair_spacing_mm"])}
     thr_ok = all(a == b for a, b in thr.values())
+    a2_floor = numeric_floor_guard(len(common))
     add("A2", "rev4->rev5: no numeric threshold changed (excl. L2-mandated impedance.per_layer geometry)",
-        (not drift) and thr_ok, {"common_numeric_keys_checked": len(common), "drift": drift, "thresholds": thr})
+        (not drift) and thr_ok and a2_floor,
+        {"common_numeric_keys_checked": len(common), "floor_ok": a2_floor, "drift": drift, "thresholds": thr})
 
     # A3 closure
     cu = 2 * 0.035 + 6 * 0.0175
@@ -107,6 +135,7 @@ def main() -> int:
     sys.path.insert(0, str(ROOT / "_shared"))
     from eda_core.stackup import _edge_coupled_microstrip_z0 as MS, _symmetric_stripline_z0 as SL
     pl = s5["impedance"]["per_layer"]
+    a4_scope = map_scope_guard(pl)
     zbad = {}
     for lyr, m in pl.items():
         for c in (0.5, 0.6):
@@ -117,8 +146,10 @@ def main() -> int:
                 SL(float(m["w_mm"]), var, t, float(m["er"]), s)
             if abs(z - 85.0) > 8.5:
                 zbad[f"{lyr}@{c}"] = round(z, 2)
-    add("A4", "per-layer Zdiff in 85+-10% at delivered pair centers {0.5,0.6}", not zbad,
-        {"bad": zbad, "widths": s5["impedance"]["width_mm_by_layer"]})
+    add("A4", "per-layer Zdiff in 85+-10% at delivered pair centers {0.5,0.6}",
+        (not zbad) and a4_scope,
+        {"bad": zbad, "layers_checked": sorted(pl), "scope_ok": a4_scope,
+         "widths": s5["impedance"]["width_mm_by_layer"]})
 
     # A5 engine（CO-76 加固：原断言只查**带引号**字面量 `"In6.Cu"`，无法发现
     #   未加引号的层角色文本（如 emitted `up=In6.Cu`）与陈旧注释；改为裸 token 扫描 + 显式豁免）
@@ -136,15 +167,25 @@ def main() -> int:
         import pcbnew
         b = pcbnew.LoadBoard(str(K2 / "k2_v4_8L.l4.kicad_pcb"))
         wmap = s5["impedance"]["width_mm_by_layer"]
-        bad = {}
+        bad, present, n_via = {}, set(), 0
         for t in b.GetTracks():
-            if t.GetClass() != "PCB_TRACK" or not t.GetNetname().startswith("PCIE"):
+            if not t.GetNetname().startswith("PCIE"):
+                continue
+            if t.GetClass() != "PCB_TRACK":
+                n_via += 1                      # CO-79: 显式计数（原实现静默跳过）
                 continue
             L = b.GetLayerName(t.GetLayer())
+            present.add(L)
             exp = wmap.get(L)
-            if exp is not None and abs(pcbnew.ToMM(t.GetWidth()) - exp) > 1e-6:
+            if exp is None:                     # CO-79: 不再静默跳过
                 bad[L] = bad.get(L, 0) + 1
-        add("A6", "L4 board PCIE track width == SPEC width_mm_by_layer", not bad, {"mismatch": bad})
+            elif abs(pcbnew.ToMM(t.GetWidth()) - exp) > 1e-6:
+                bad[L] = bad.get(L, 0) + 1
+        cov_ok, uncovered = width_coverage_guard(present, wmap)
+        add("A6", "L4 board PCIE track width == SPEC width_mm_by_layer（且层覆盖无静默跳过）",
+            (not bad) and cov_ok and map_scope_guard(wmap),
+            {"mismatch": bad, "layers_present": sorted(present), "uncovered_layers": uncovered,
+             "wmap_scope_ok": map_scope_guard(wmap), "pcie_vias_skipped_documented": n_via})
     except ImportError:
         add("A6", "L4 board width (pcbnew unavailable -> run under AppDir python)", False, {"skipped": True})
 
@@ -176,7 +217,9 @@ def main() -> int:
             d = math.hypot(s["b"][0] - s["a"][0], s["b"][1] - s["a"][1])
             t += d * sqer(s["layer"]) / 299.792458
         return t
-    worst = 0.0
+    _used_layers = {s["layer"] for segs in rec["segments"].values() for s in segs}
+    _unknown = unknown_layer_guard(_used_layers, pl)
+    n_pages_seen, worst = 0, 0.0
     for pg in art["pages"]:
         if pg["kind"] == "data":
             nets = mp[pg["page_id"]]["nets"]
@@ -186,15 +229,43 @@ def main() -> int:
             continue
         d = abs(tlen(nets["P"]) - tlen(nets["N"]))
         worst = max(worst, d * 299.792458 / math.sqrt(3.99))
+        n_pages_seen += 1
     add("A8", "independent electrical skew (from L4 construction) == SI record max",
-        abs(round(worst, 4) - si["SI"]["max_intra_pair_skew_mm"]) < 1e-6,
-        {"recomputed": round(worst, 4), "si_record": si["SI"]["max_intra_pair_skew_mm"]})
+        abs(round(worst, 4) - si["SI"]["max_intra_pair_skew_mm"]) < 1e-6
+        and not _unknown and n_pages_seen > 0 and worst > 0,
+        {"recomputed": round(worst, 4), "si_record": si["SI"]["max_intra_pair_skew_mm"],
+         "pages_measured": n_pages_seen, "unknown_layers": _unknown,
+         "skew_pages_checked_record": si["SI"]["skew_pages_checked"]})
 
     # A9 DFM
     dfm = json.loads((STEP2 / "m13_v57_l5_dfm_dft_record.json").read_text(encoding="utf-8"))
     add("A9", "DFM new_total=0 and disappeared_total=0",
         dfm["drc"]["new_total"] == 0 and dfm["drc"]["disappeared_total"] == 0,
         {"new_total": dfm["drc"]["new_total"], "disappeared_total": dfm["drc"]["disappeared_total"]})
+
+    # A10（CO-79）：守卫**负控** —— 每个守卫必须能抓到对应的坏输入，否则不得宣称有效
+    WM = s5["impedance"]["width_mm_by_layer"]
+    neg = {
+        "width_coverage_guard": width_coverage_guard({"F.Cu", "In6.Cu"}, WM),
+        "map_scope_guard_missing": map_scope_guard({"F.Cu": 0.205}),
+        "map_scope_guard_extra": map_scope_guard({**WM, "In6.Cu": 0.205}),
+        "numeric_floor_guard": numeric_floor_guard(10),
+        "unknown_layer_guard": unknown_layer_guard({"F.Cu", "In6.Cu"}, pl),
+    }
+    pos = {
+        "width_coverage_guard": width_coverage_guard({"F.Cu", "In2.Cu"}, WM),
+        "map_scope_guard": map_scope_guard(WM),
+        "numeric_floor_guard": numeric_floor_guard(len(common)),
+        "unknown_layer_guard": unknown_layer_guard({"F.Cu", "In2.Cu"}, pl),
+    }
+    teeth = (neg["width_coverage_guard"][0] is False and neg["width_coverage_guard"][1] == ["In6.Cu"]
+             and neg["map_scope_guard_missing"] is False and neg["map_scope_guard_extra"] is False
+             and neg["numeric_floor_guard"] is False and neg["unknown_layer_guard"] == ["In6.Cu"]
+             and pos["width_coverage_guard"][0] is True and pos["map_scope_guard"] is True
+             and pos["numeric_floor_guard"] is True and pos["unknown_layer_guard"] == [])
+    add("A10", "CO-79 守卫负控：坏输入必须被抓到（有齿），好输入必须通过", teeth,
+        {"negative_controls": {k: str(v) for k, v in neg.items()},
+         "positive_controls": {k: str(v) for k, v in pos.items()}})
 
     verdict = "PASS" if all(p["pass"] for p in probes) else "FAIL"
     res = {"artifact": "m13_v57_co69_adversarial_review", "schema": 1, "revision": "CO-69-AR.1",

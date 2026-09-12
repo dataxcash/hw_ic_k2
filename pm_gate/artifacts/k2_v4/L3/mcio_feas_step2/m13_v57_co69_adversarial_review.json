@@ -32,6 +32,7 @@
    "detail": {
     "common_numeric_keys_checked": 95,
     "drift": {},
+    "floor_ok": true,
     "thresholds": {
      "inter_pair_spacing_mm": [
       0.875,
@@ -64,6 +65,13 @@
    "desc": "per-layer Zdiff in 85+-10% at delivered pair centers {0.5,0.6}",
    "detail": {
     "bad": {},
+    "layers_checked": [
+     "B.Cu",
+     "F.Cu",
+     "In2.Cu",
+     "In5.Cu"
+    ],
+    "scope_ok": true,
     "widths": {
      "B.Cu": 0.205,
      "F.Cu": 0.205,
@@ -86,9 +94,18 @@
    "pass": true
   },
   {
-   "desc": "L4 board PCIE track width == SPEC width_mm_by_layer",
+   "desc": "L4 board PCIE track width == SPEC width_mm_by_layer（且层覆盖无静默跳过）",
    "detail": {
-    "mismatch": {}
+    "layers_present": [
+     "B.Cu",
+     "F.Cu",
+     "In2.Cu",
+     "In5.Cu"
+    ],
+    "mismatch": {},
+    "pcie_vias_skipped_documented": 252,
+    "uncovered_layers": [],
+    "wmap_scope_ok": true
    },
    "id": "A6",
    "pass": true
@@ -119,8 +136,11 @@
   {
    "desc": "independent electrical skew (from L4 construction) == SI record max",
    "detail": {
+    "pages_measured": 34,
     "recomputed": 0.13,
-    "si_record": 0.13
+    "si_record": 0.13,
+    "skew_pages_checked_record": 34,
+    "unknown_layers": []
    },
    "id": "A8",
    "pass": true
@@ -132,6 +152,26 @@
     "new_total": 0
    },
    "id": "A9",
+   "pass": true
+  },
+  {
+   "desc": "CO-79 守卫负控：坏输入必须被抓到（有齿），好输入必须通过",
+   "detail": {
+    "negative_controls": {
+     "map_scope_guard_extra": "False",
+     "map_scope_guard_missing": "False",
+     "numeric_floor_guard": "False",
+     "unknown_layer_guard": "['In6.Cu']",
+     "width_coverage_guard": "(False, ['In6.Cu'])"
+    },
+    "positive_controls": {
+     "map_scope_guard": "True",
+     "numeric_floor_guard": "True",
+     "unknown_layer_guard": "[]",
+     "width_coverage_guard": "(True, [])"
+    }
+   },
+   "id": "A10",
    "pass": true
   }
  ],
