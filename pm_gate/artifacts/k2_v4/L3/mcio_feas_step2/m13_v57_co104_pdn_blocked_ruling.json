@@ -1,0 +1,249 @@
+{
+ "RULING": {
+  "basis": "① 非板铜不可连接（自身位置对板干净，CO-103 F-B / 本件 V1）；② 唯一可行出路 A 仅 1/4 对可行（V2）；③ 换序无改善（V3，禁搜索）；④ 出路 C 违红线或称 L1 且无证据（V4）；⑤ 与既有 120 项同类（V5）",
+  "decision": "ACCEPT_L2_NO_HDI",
+  "deferred": "出路 A 的 1 对（FB34~FA32）可作候选保留：若未来重基线，可按声明规则「同网孔距冲突对 → 取两 pad 中心中点派生位共享单孔 + 双短段」一并施加",
+  "effects": "rev-12 不变（无 SPEC/板/阈值/冻结源改动）；不需重基线；不需新复评",
+  "owner_action": "无（本项不再构成 L1 问题）；若日后 R3/PDN 要求「U6 GND 球 100% 独立 via」为硬需求，须走 SPEC 变更 + 全链重基线 + 换会话复评",
+  "scope": "4 项 U6 ppc blocked（FB34/FF14/FF21/H12）+ 1 项 J2 扇出 GND stitch blocked"
+ },
+ "artifact": "m13_v57_co104_pdn_blocked_ruling",
+ "base_pins": {
+  "board": "0e636a67c1472462",
+  "spec_rev11": "d85f10f722ba22b0",
+  "spec_rev12": "1a381b06454dbe2c"
+ },
+ "checks": {
+  "V1_attribution": {
+   "four_ppc": {
+    "U6.FB34": {
+     "net": "GND",
+     "own_rev11_pos_board_clean": {
+      "stub_ok": true,
+      "via_ok": true
+     },
+     "same_net_hole_partners": [
+      {
+       "d_mm": 0.4031,
+       "pad_center_dist_mm": 0.702,
+       "partner": "U6.FA32"
+      }
+     ]
+    },
+    "U6.FF14": {
+     "net": "GND",
+     "own_rev11_pos_board_clean": {
+      "stub_ok": true,
+      "via_ok": true
+     },
+     "same_net_hole_partners": [
+      {
+       "d_mm": 0.2947,
+       "pad_center_dist_mm": 1.039,
+       "partner": "U6.FC9"
+      }
+     ]
+    },
+    "U6.FF21": {
+     "net": "GND",
+     "own_rev11_pos_board_clean": {
+      "stub_ok": true,
+      "via_ok": true
+     },
+     "same_net_hole_partners": [
+      {
+       "d_mm": 0.2046,
+       "pad_center_dist_mm": 0.599,
+       "partner": "U6.FC19"
+      }
+     ]
+    },
+    "U6.H12": {
+     "net": "GND",
+     "own_rev11_pos_board_clean": {
+      "stub_ok": true,
+      "via_ok": true
+     },
+     "same_net_hole_partners": [
+      {
+       "d_mm": 0.3418,
+       "pad_center_dist_mm": 0.599,
+       "partner": "U6.E14"
+      }
+     ]
+    }
+   },
+   "note": "自身位置对板干净 + 阻塞全为同网 GND 计划孔距 ⇒ 非板铜不可连接类；stitch 项为同址重孔对（3 项 stitch 退役留存中的新增项）",
+   "ok": true,
+   "stitch_new_blocked": [
+    {
+     "net": "GND",
+     "retired_pos": [
+      133.83,
+      59.1
+     ]
+    }
+   ]
+  },
+  "V2_option_A_shared_via": {
+   "detail": {
+    "FB34~FA32": {
+     "feasible": true,
+     "mid": [
+      103.425,
+      50.63
+     ],
+     "mid_conflicts": [],
+     "stubs": {
+      "U6.FA32": {
+       "binding": "pad U6.EV34()",
+       "margin": 0.2699,
+       "ok": true,
+       "vs_other_plan": []
+      },
+      "U6.FB34": {
+       "binding": "pad U6.EY35()",
+       "margin": 0.1992,
+       "ok": true,
+       "vs_other_plan": []
+      }
+     }
+    },
+    "FF14~FC9": {
+     "feasible": false,
+     "mid": [
+      103.91,
+      54.94
+     ],
+     "mid_conflicts": [
+      "board_via:pad U6.FF11() d_edge=0.1104 min=-0.2396"
+     ],
+     "stubs": {
+      "U6.FC9": {
+       "binding": "pad U6.FF11()",
+       "margin": -0.0896,
+       "ok": false,
+       "vs_other_plan": []
+      },
+      "U6.FF14": {
+       "binding": "pad U6.FF11()",
+       "margin": -0.1044,
+       "ok": false,
+       "vs_other_plan": []
+      }
+     }
+    },
+    "FF21~FC19": {
+     "feasible": false,
+     "mid": [
+      103.91,
+      53.44
+     ],
+     "mid_conflicts": [
+      "board_via:pad U6.FF18() d_edge=0.3197 min=-0.0303"
+     ],
+     "stubs": {
+      "U6.FC19": {
+       "binding": "pad U6.FF18()",
+       "margin": 0.1149,
+       "ok": true,
+       "vs_other_plan": []
+      },
+      "U6.FF21": {
+       "binding": "pad U6.FF18()",
+       "margin": 0.1197,
+       "ok": true,
+       "vs_other_plan": []
+      }
+     }
+    },
+    "H12~E14": {
+     "feasible": false,
+     "mid": [
+      83.69,
+      54.64
+     ],
+     "mid_conflicts": [
+      "board_via:pad U6.E11() d_edge=0.3197 min=-0.0303"
+     ],
+     "stubs": {
+      "U6.E14": {
+       "binding": "pad U6.E11()",
+       "margin": 0.1197,
+       "ok": true,
+       "vs_other_plan": []
+      },
+      "U6.H12": {
+       "binding": "pad U6.E11()",
+       "margin": 0.1149,
+       "ok": true,
+       "vs_other_plan": []
+      }
+     }
+    }
+   },
+   "feasible_pairs": 1,
+   "n_pairs": 4,
+   "ok": true,
+   "verdict": "仅 1/4 可行 ⇒ 收益 = 1 个 GND 球，代价 = 全链重基线 + 换会话复评 ⇒ 不成比例"
+  },
+  "V3_option_B_reorder": {
+   "ok": true,
+   "runs": [
+    {
+     "n_other_blocked": 1,
+     "n_ppc_blocked": 4,
+     "order": "canonical (net,ref,pad)"
+    },
+    {
+     "n_other_blocked": 1,
+     "n_ppc_blocked": 13,
+     "order": "pos(x,y)"
+    },
+    {
+     "n_other_blocked": 1,
+     "n_ppc_blocked": 8,
+     "order": "-pos(x,y)"
+    },
+    {
+     "n_other_blocked": 1,
+     "n_ppc_blocked": 13,
+     "order": "ref,pad"
+    }
+   ],
+   "verdict": "canonical 已为所试最优；换序使 blocked 增至 8/13/13 ⇒ 无免费解（禁搜索，故不做全序/全组合优化）"
+  },
+  "V4_option_C_policy": {
+   "cost_of_accept": "4 个 U6 GND 球无独立 via（与既有 120 项 blocked 同类处理）+ 1 项 stitch 冗余；不损任何非 GND 连接",
+   "hdi_layer_count": "驳回：层数裁决 = L1；且本件 V1/V2 证明「须 HDI」缺乏证据",
+   "ok": true,
+   "via_in_pad": "驳回：需工艺能力 + SI/PI 证据（未提供）",
+   "wider_palette": "驳回：把搜索写进决策（CO-93/CO-94 已判违零坐标搜索红线）"
+  },
+  "V5_acceptance_consistency": {
+   "accepted_pre_existing": 120,
+   "blocked_rev12": 124,
+   "newly_accepted": 4,
+   "note": "既有 120 项 blocked 已由 CO-94 裁定维持（L1/工艺）；本 4 项为同网孔距竞争，L2 直接裁定接受，并显式登记（不静默）",
+   "ok": true,
+   "stitch_blocked_rev12": 61
+  }
+ },
+ "inputs": {
+  "board": "0e636a67c1472462",
+  "co103_record": "7f481be259865941",
+  "spec_rev11": "d85f10f722ba22b0",
+  "spec_rev12": "1a381b06454dbe2c"
+ },
+ "nature": "L2 自裁（过孔策略/PDN）：rev-12 新增 5 项 blocked 的裁定 = 接受，不升 owner、不采 via-in-pad/HDI",
+ "pin_mismatch": {},
+ "revision": "CO-104.1",
+ "schema": 1,
+ "teeth": {
+  "own_clean_detector": true,
+  "reorder_detector_discriminates": true,
+  "shared_via_detector_negative": true,
+  "shared_via_detector_positive": true,
+  "teeth_ok": true
+ }
+}

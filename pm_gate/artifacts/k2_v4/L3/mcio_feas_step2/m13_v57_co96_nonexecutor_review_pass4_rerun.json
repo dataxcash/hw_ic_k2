@@ -1,0 +1,233 @@
+{
+ "artifact": "m13_v57_co96_nonexecutor_review_pass4",
+ "baseline_expectations": {
+  "board": "0e636a67c1472462",
+  "boundary_v1_61": "18c55bf4cb1bc77d",
+  "co95_json": "61db48a283beeaae",
+  "drc_rules": "0a459839e15960b8",
+  "spec_frozen": "0bd52ed48e720b8c",
+  "spec_rev10": "4416e42eed10cb8c",
+  "spec_rev11": "d85f10f722ba22b0"
+ },
+ "baseline_mismatch": {
+  "co95_json": {
+   "actual": "f1c0c17ee7b379a4",
+   "expect": "61db48a283beeaae"
+  }
+ },
+ "baseline_ok": false,
+ "chain_gates_state": "G4..G7 全 PASS；板 0e636a67c1472462 逐字节不变（本件只读复核，未重跑链路）",
+ "findings": {
+  "F1_retired_key_dropped": {
+   "co93_tool_references_key": false,
+   "detected": true,
+   "finding": "rev-10 重建 ppc 时静默丢弃 CO-89 的退役留存键 retired_superseded_bom",
+   "recoverable_from_co89_record": true,
+   "recoverable_from_frozen_source": true,
+   "registered_in_change_note": false,
+   "rev10_has_key": false,
+   "rev11_has_key": false,
+   "rev9_has_key": true,
+   "rev9_retained": {
+    "n_blocked": 9,
+    "n_entries": 173,
+    "n_orphan_blocked": 2,
+    "n_orphan_entries": 55
+   },
+   "severity": "medium",
+   "teeth": true,
+   "teeth_negctrl": {
+    "backfilled_has10_has11": true,
+    "detector_fires_after_backfill": false
+   }
+  },
+  "F2_requirement_not_geometry_closable": {
+   "bridge_targets_with_unbuilt_geometry": 8,
+   "declared_pending_l3": 14,
+   "detail": [
+    {
+     "net": "MCU_VDD",
+     "pad": "2",
+     "ref": "R31",
+     "zone": "MCU_VDD_BCU_RESISTORS_IN4"
+    },
+    {
+     "net": "MCU_VDD",
+     "pad": "2",
+     "ref": "R32",
+     "zone": "MCU_VDD_BCU_RESISTORS_IN4"
+    },
+    {
+     "net": "MCU_VDD",
+     "pad": "2",
+     "ref": "R33",
+     "zone": "MCU_VDD_BCU_RESISTORS_IN4"
+    },
+    {
+     "net": "MCU_VDD",
+     "pad": "2",
+     "ref": "R34",
+     "zone": "MCU_VDD_BCU_RESISTORS_IN4"
+    },
+    {
+     "net": "P3V3",
+     "pad": "1",
+     "ref": "C84",
+     "zone": "P3V3_BCU_BRIDGE_IN4"
+    },
+    {
+     "net": "P3V3",
+     "pad": "5",
+     "ref": "U2",
+     "zone": "P3V3_BCU_BRIDGE_IN4"
+    },
+    {
+     "net": "P3V3",
+     "pad": "3",
+     "ref": "U4",
+     "zone": "P3V3_BCU_BRIDGE_IN4"
+    },
+    {
+     "net": "P3V3_AUX",
+     "pad": "A9",
+     "ref": "J4",
+     "zone": "P3V3_AUX_BCU_BRIDGE_IN4"
+    }
+   ],
+   "detected": true,
+   "finding": "plane_reachability_requirement 为『声明可闭合』而非『几何可闭合』；gate 恒不返回 PASS",
+   "gate": "tools/p3_v57_co95_in4_reachability.py",
+   "gate_verdict_on_rev11": "OPEN_needs_region_ruling",
+   "geometrically_covered_now": 35,
+   "machine_closable_today": false,
+   "ruling_pending_l1": 6,
+   "teeth": true
+  },
+  "F3_needs_region_ruling_text_dependent": {
+   "detected": true,
+   "finding": "needs_region_ruling 判定对 P3V3_AUX 依赖 why 文本子串（非机判谓词）",
+   "flip_risk": "去除 why 中『须裁/需要』⇒ 3 pad 静默改判 l3_obligation（L1→L3 降级）",
+   "p3v3_aux_has_region": true,
+   "p3v3_aux_pads_by_text": 3,
+   "teeth": true,
+   "text_dependency": {
+    "12V_IN": {
+     "flag_by_text": false,
+     "why_head": "该网**无任何 In4 区** ⇒ 需先裁其承载（In4 区域分配 = 区域/电"
+    },
+    "P3V3": {
+     "flag_by_text": false,
+     "why_head": "原落在已退役 band 内；band 退役后由 L3 派生覆盖（本件已解除阻断）"
+    },
+    "P3V3_AUX": {
+     "flag_by_text": true,
+     "why_head": "P3V3_AUX 无西区 In4 区；西区名义网 = MCU_VDD 而 bas"
+    }
+   }
+  },
+  "F4_reachability_scope_gap": {
+   "covered_scan_targets": 55,
+   "detected": true,
+   "finding": "可达性要求 scope 仅 ppc entries（非 GND）；stitch/zone/decoupling via 无闸",
+   "requirement_scope": "power_pad_connect.entries(non-GND)",
+   "teeth": true,
+   "uncovered_decoupling_vias": 0,
+   "uncovered_stitch_realized": 40,
+   "uncovered_zone_vias": 17
+  },
+  "F5_board_realized_stale": {
+   "board_realized": {
+    "co": "CO-89",
+    "n_blocked": 86,
+    "n_entries": 223
+   },
+   "carried_over_unmodified": true,
+   "consumed_by_pdn_apply": false,
+   "decisions": {
+    "n_blocked": 120,
+    "n_entries": 189
+   },
+   "detected": true,
+   "finding": "live 机读块 board_realized 仍记 CO-89 的 223/86，与 rev-11 决策 189/120 矛盾",
+   "teeth": true
+  },
+  "F6_bbox_not_pip_latent": {
+   "detected": true,
+   "explicit_polygons": 2,
+   "finding": "co95 in_poly 用 bbox 而非真点在多边形内（latent）",
+   "live_impact": "none",
+   "non_axis_aligned_rect": [],
+   "teeth": true,
+   "teeth_synthetic": {
+    "in_bbox": true,
+    "in_pip": false
+   }
+  }
+ },
+ "findings_open": [
+  "F1_retired_key_dropped",
+  "F2_requirement_not_geometry_closable",
+  "F3_needs_region_ruling_text_dependent",
+  "F4_reachability_scope_gap",
+  "F5_board_realized_stale",
+  "F6_bbox_not_pip_latent"
+ ],
+ "inputs": {
+  "board": "0e636a67c1472462",
+  "boundary_v1_61": "18c55bf4cb1bc77d",
+  "co95_json": "f1c0c17ee7b379a4",
+  "drc_rules": "0a459839e15960b8",
+  "spec_frozen": "0bd52ed48e720b8c",
+  "spec_rev10": "4416e42eed10cb8c",
+  "spec_rev11": "d85f10f722ba22b0"
+ },
+ "nature": "非执行者侧对抗评审 pass 4/4（对象 = rev-11 基线 CO-91/92/93/94/95 + 全链 + 不变量）",
+ "non_claims": [
+  "只读评审；不改 SPEC/板/阈值/冻结源/引擎",
+  "未重跑全链（handoff §9 命令由执行者侧负责；本件核对指纹）",
+  "F2 的『声明可闭合』有 SPEC 文本支撑（含 L3 派生区域）——本件不判其违规，只登记其不可机判闭合"
+ ],
+ "questions_answered": {
+  "Q1_plane_reachability_machine_closable": false,
+  "Q2_unregistered_drift_between_rebaselines": [
+   "rev-10 重建 ppc 时静默丢弃 CO-89 的退役留存键 retired_superseded_bom"
+  ],
+  "Q3_co95_classification_complete": true
+ },
+ "recommendation": "F1 需 rev-12 变更单：回填 retired_superseded_bom 或显式声明其移除并登记（红线要求显式留存）；F2/F3 建议 co95 闸改为三分态（geometric/declared-pending/ruling-pending）+ 去文本依赖（机判谓词）；F4 建议扩展可达性 scope 或声明排除理由；F5 建议 rev-12 同步 board_realized；F6 低危 latent。",
+ "reviewer_identity": "独立会话（rev-10/rev-11 由 CO-93/CO-95 执行；本件 context 归零续接）",
+ "revision": "CO-96.1",
+ "schema": 1,
+ "teeth_ok": true,
+ "verdict": "BASELINE_MISMATCH",
+ "verifications": {
+  "V1_pd_outside_invariance": {
+   "detail": [],
+   "rev10_to_rev11_outside_pd": 0,
+   "rev9_to_rev10_outside_pd": 0
+  },
+  "V2_co95_classification_complete": {
+   "classes": {
+    "covered_bridge_target": 8,
+    "covered_explicit": 35,
+    "l3_obligation": 6,
+    "needs_region_ruling": 6
+   },
+   "complete": true,
+   "non_gnd_entries": 55,
+   "rows": 55
+  },
+  "V3_stitch_blocked_schema_aligned": {
+   "schema_aligned": true,
+   "stitch_applied": 40,
+   "stitch_blocked_by_consumer_semantics": 60,
+   "stitch_total": 100
+  },
+  "V4_stitch_dup_intentional": {
+   "documented_shared_hole": true,
+   "stitch_duplicate_positions": {
+    "133.83,59.1": 2
+   }
+  }
+ }
+}

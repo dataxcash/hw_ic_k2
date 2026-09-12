@@ -43,7 +43,9 @@ from pathlib import Path
 K2 = Path(__file__).resolve().parents[1]
 L3 = K2 / "pm_gate/artifacts/k2_v4/L3"
 STEP2 = L3 / "mcio_feas_step2"
-OUT = STEP2 / "m13_v57_co96_nonexecutor_review_pass4.json"
+OUT = STEP2 / "m13_v57_co96_nonexecutor_review_pass4.json"   # 历史证书(rev-11 基线)，不得静默覆盖
+OUT_RERUN = STEP2 / "m13_v57_co96_nonexecutor_review_pass4_rerun.json"  # CO-104 加固：默认落点 = 重跑件
+CANONICAL_LOCK = True  # 覆盖 canonical 需显式 --overwrite-canonical (fail-closed)
 
 SPEC9 = L3 / "SPEC_k2_v4.spec-rev-9.json"
 SPEC10 = L3 / "SPEC_k2_v4.spec-rev-10.json"
@@ -142,7 +144,10 @@ def pip_test(poly, x, y) -> bool:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--out", default=str(OUT))
+    ap.add_argument("--out", default=str(OUT_RERUN),
+                    help="默认写重跑件(历史证书不被覆盖)；显式 --out 可指定他处")
+    ap.add_argument("--overwrite-canonical", action="store_true",
+                    help="仅当确需覆盖历史证书时使用(默认拒绝)")
     a = ap.parse_args(argv)
 
     # ---------- 身份（fail-closed） ----------
@@ -340,6 +345,12 @@ def main(argv=None) -> int:
                        "F2 的『声明可闭合』有 SPEC 文本支撑（含 L3 派生区域）——本件不判其违规，只登记其不可机判闭合"],
         "verdict": verdict,
     }
+    if CANONICAL_LOCK and Path(a.out).resolve() == OUT.resolve() and not a.overwrite_canonical:
+        print("[fail-closed] 拒绝覆盖历史证书 %s (CO-104 加固)：历史件不改。"
+              % OUT.name)
+        print("  请用默认落点(重跑件 %s) 或 --out <新路径>；确需覆盖加 --overwrite-canonical。"
+              % OUT_RERUN.name)
+        return 2
     Path(a.out).write_text(json.dumps(rec, ensure_ascii=False, indent=1, sort_keys=True) + "\n")
     print("CO-96 verdict=%s findings_open=%s teeth_ok=%s baseline_ok=%s" % (verdict, findings_open, teeth_ok, baseline_ok))
     print("V1 pd-outside changes:", len(v1_r9r10), len(v1_r10r11), "V2 complete:", V2["complete"],
