@@ -17,6 +17,7 @@
  "files_checked": [
   {
    "file": "k2_v4.kicad_pro",
+   "netclass_mismatch": {},
    "ok": true,
    "rules_mismatch": {},
    "severity_mismatch": {},
@@ -24,6 +25,7 @@
   },
   {
    "file": "k2_v4.l4.kicad_pro",
+   "netclass_mismatch": {},
    "ok": true,
    "rules_mismatch": {},
    "severity_mismatch": {},
@@ -31,6 +33,7 @@
   },
   {
    "file": "k2_v4_8L.kicad_pro",
+   "netclass_mismatch": {},
    "ok": true,
    "rules_mismatch": {},
    "severity_mismatch": {},
@@ -38,13 +41,15 @@
   },
   {
    "file": "k2_v4_8L.l4.kicad_pro",
+   "netclass_mismatch": {},
    "ok": true,
    "rules_mismatch": {},
    "severity_mismatch": {},
-   "sha16": "4704dec4dd043c59"
+   "sha16": "ce2c2bf0da79a1ff"
   },
   {
    "file": "tools/k2_jlc_template.kicad_pro",
+   "netclass_mismatch": {},
    "ok": true,
    "rules_mismatch": {},
    "severity_mismatch": {},
@@ -89,6 +94,10 @@
    "min_via_diameter": 0.5
   }
  },
+ "historical_control_F82_1_netclass": {
+  "assignments_n_differing": 146,
+  "n_class_keys_flagged": 4
+ },
  "nature": "L2 可审计性：受控工程文件设计规则 = 红线规则源 的回归闸",
  "negative_control": {
   "min_track_width": [
@@ -96,8 +105,13 @@
    0.09
   ]
  },
+ "netclass_reference": {
+  "file": "k2_v4_8L.kicad_pro",
+  "note": "模板 tools/k2_jlc_template.kicad_pro 豁免网类检查（只承载规则）",
+  "sha16": "f54404024191ea64"
+ },
  "positive_control": {},
- "rationale": "kicad-cli 对 <board>.kicad_pcb 自动选取同名 .kicad_pro；规则不符则自然核查命令大面积误报（F-80-1）。",
+ "rationale": "kicad-cli 对 <board>.kicad_pcb 自动选取同名 .kicad_pro；规则不符则自然核查命令大面积误报（F-80-1）；网类/指派缺失则 DRC 根本不施加 netclass 语义（F-82-1）。CO-81 原只覆盖 rules/severities，CO-82 补网类后覆盖完整。",
  "redline": "只读；不改任何工件；阈值取自红线规则源，不放宽。",
  "revision": "CO-81.1",
  "schema": 1,

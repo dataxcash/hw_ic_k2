@@ -15,7 +15,7 @@ K2 = Path("/home/fila/jqdDev_2025/ic_hw/k2")
 L3 = K2 / "pm_gate/artifacts/k2_v4/L3"
 L2 = K2 / "pm_gate/artifacts/k2_v4/L2"
 STEP2 = L3 / "mcio_feas_step2"
-DEFAULT_DOC = STEP2 / "m13_v57_w3_joint_assignment_boundary_v1_42.md"
+DEFAULT_DOC = STEP2 / "m13_v57_w3_joint_assignment_boundary_v1_47.md"
 OUT = STEP2 / "m13_v57_co77_closure_declaration_sweep.json"
 
 
@@ -70,15 +70,52 @@ def main(argv=None) -> int:
                      "source": str(Path(src))})
         if not ok:
             bad.append(label)
-    rec = {"artifact": "m13_v57_co77_closure_declaration_sweep", "schema": 1, "revision": "CO-77.1",
+    # CO-82 补强：**全量** sha16 引用校验 —— 任何 `file` `sha16` 形式必须等于实际文件，
+    # 除非该行**显式标注历史**（原/已取代/历史/应为/实为）。12 项 claim 只是子集，本项覆盖全文。
+    CITE = re.compile(r"`([A-Za-z0-9][A-Za-z0-9_./\-]*\.(?:json|md|py|kicad_pcb|kicad_pro|kicad_dru))`\s*`([0-9a-f]{16})`")
+    STALE = ("已取代", "历史", "原 ", "应为", "实为")
+    lines = txt.splitlines()
+    def _line_of(pos: int) -> str:
+        c = 0
+        for ln in lines:
+            if c <= pos < c + len(ln) + 1:
+                return ln
+            c += len(ln) + 1
+        return ""
+    cite_rows, cite_bad, cite_hist = [], [], 0
+    for m in CITE.finditer(txt):
+        name, sha = m.group(1), m.group(2)
+        _after = txt[m.end():m.end() + 8]
+        if any(s in _line_of(m.start()) for s in STALE) or ("→" in _after) or ("->" in _after):
+            cite_hist += 1      # 历史，或 "before → after" 变更记法
+            continue
+        n = Path(name)
+        cands = [n, Path(n.name), L3 / n.name, L3 / "mcio_feas_step2" / n.name,
+                 L2 / n.name, K2 / "tools" / n.name, K2 / n.name]
+        hit = next((c for c in cands if c.exists()), None)
+        real = s16(hit) if hit else None
+        ok = bool(hit) and real == sha
+        cite_rows.append({"ref": name, "cited": sha, "actual": real, "ok": ok})
+        if not ok:
+            cite_bad.append(name)
+    CITE_FLOOR = 30                      # 非空真下限：正则失效时不得通过
+    cite_floor_ok = (len(cite_rows) + cite_hist) >= CITE_FLOOR
+    if not cite_floor_ok:
+        cite_bad = cite_bad + ["__CITE_FLOOR_FAILED__"]
+    rec = {"artifact": "m13_v57_co77_closure_declaration_sweep", "schema": 1, "revision": "CO-77.2",
            "nature": "L2 收口声明件当前态身份引用机判扫描",
            "doc": str(Path(doc).relative_to(K2)), "doc_sha16": s16(doc),
            "claims": rows, "stale_claims": bad,
-           "verdict": "PASS" if not bad else "STALE",
+           "citation_check": {"n_citations": len(cite_rows) + cite_hist,
+                              "n_checked": len(cite_rows), "n_marked_historical": cite_hist,
+                              "mismatches": cite_bad, "rows": cite_rows,
+                              "floor": CITE_FLOOR, "floor_ok": cite_floor_ok},
+           "verdict": ("PASS" if (not bad and not cite_bad) else
+                       "STALE" if bad else "CITATION_MISMATCH"),
            "redline": "只读；仅比对 sha16；不改任何工件。"}
     OUT.write_text(json.dumps(rec, ensure_ascii=False, indent=1, sort_keys=True), encoding="utf-8")
     print(json.dumps({"doc": rec["doc"], "doc_sha16": rec["doc_sha16"],
-                      "verdict": rec["verdict"], "stale": bad,
+                      "verdict": rec["verdict"], "stale": bad, "citation_mismatch": cite_bad,
                       "detail": {r["claim"]: {"exp": r["expected"], "found": r["found"]}
                                  for r in rows if not r["ok"]}}, ensure_ascii=False))
     return 0 if not bad else 0

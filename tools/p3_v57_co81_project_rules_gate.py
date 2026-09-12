@@ -19,6 +19,8 @@ from pathlib import Path
 K2 = Path("/home/fila/jqdDev_2025/ic_hw/k2")
 RULES = K2.parent / "_shared/eda_core/drc_rules.json"
 TEMPLATE = K2 / "tools/k2_jlc_template.kicad_pro"
+INTENT_PRO = K2 / "k2_v4_8L.kicad_pro"   # 意图工程（含 4 网类 + 网-类指派）
+TEMPLATE_EXEMPT = "tools/k2_jlc_template.kicad_pro"
 OUT = K2 / "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_co81_project_rules_gate.json"
 
 # 工程文件键 -> drc_rules.json 路径
@@ -37,6 +39,26 @@ def s16(p) -> str:
     return hashlib.sha256(Path(p).read_bytes()).hexdigest()[:16]
 
 
+def netclass_guard(ns: dict, intent_ns: dict) -> dict:
+    """网类定义 + 网-类指派 与意图件比对；返回失配描述（空 = 通过）。"""
+    def byname(classes):
+        return {c.get("name"): {k: v for k, v in c.items() if k != "name"} for c in (classes or [])}
+    a, b = byname(ns.get("classes")), byname(intent_ns.get("classes"))
+    out = {}
+    for n in sorted(set(a) | set(b)):
+        if a.get(n) != b.get(n):
+            ka = a.get(n) or {}
+            kb = b.get(n) or {}
+            out["class:" + str(n)] = {k: [ka.get(k), kb.get(k)] for k in set(ka) | set(kb)
+                                      if ka.get(k) != kb.get(k)}
+    asg, iasg = ns.get("netclass_assignments") or {}, intent_ns.get("netclass_assignments") or {}
+    if asg != iasg:
+        diff = {k: [asg.get(k), iasg.get(k)] for k in set(asg) | set(iasg) if asg.get(k) != iasg.get(k)}
+        out["netclass_assignments"] = {"n_file": len(asg), "n_intent": len(iasg),
+                                       "n_differing": len(diff), "sample": dict(list(diff.items())[:5])}
+    return out
+
+
 def guard(pro_rules: dict, expect: dict) -> dict:
     """返回 {key: (actual, expected)} 的失配集；空 = 通过（纯函数，便于负控）。"""
     return {k: (pro_rules.get(k), expect.get(k)) for k in expect if pro_rules.get(k) != expect.get(k)}
@@ -47,6 +69,7 @@ def main() -> int:
     expect = {k: rr[a][b] for k, (a, b) in KEYMAP.items()}
     tmpl = json.loads(TEMPLATE.read_text(encoding="utf-8"))["board"]["design_settings"]
     tmpl_sev = dict(tmpl["rule_severities"])
+    intent_ns = json.loads(INTENT_PRO.read_text(encoding="utf-8"))["net_settings"]
     tracked = subprocess.run(["git", "ls-files", "*.kicad_pro"], cwd=str(K2),
                              capture_output=True, text=True).stdout.split()
     rows, bad = [], []
@@ -54,11 +77,15 @@ def main() -> int:
         p = K2 / rel
         d = json.loads(p.read_text(encoding="utf-8"))["board"]["design_settings"]
         miss = guard(d["rules"], expect)
+        if rel == TEMPLATE_EXEMPT:
+            nc = {}          # 模板只承载规则，不含 4 网类/指派（设计如此，显式豁免）
+        else:
+            nc = netclass_guard(json.loads(p.read_text(encoding="utf-8"))["net_settings"], intent_ns)
         sev = {k: (d["rule_severities"].get(k), tmpl_sev.get(k))
                for k in tmpl_sev if d["rule_severities"].get(k) != tmpl_sev.get(k)}
-        ok = not miss and not sev
+        ok = not miss and not sev and not nc
         rows.append({"file": rel, "sha16": s16(p), "ok": ok,
-                     "rules_mismatch": miss, "severity_mismatch": sev})
+                     "rules_mismatch": miss, "severity_mismatch": sev, "netclass_mismatch": nc})
         if not ok:
             bad.append(rel)
     # 负控（有齿）：喂坏输入必须被抓到
@@ -71,6 +98,13 @@ def main() -> int:
              "min_clearance": 0.0, "min_hole_clearance": 0.25}
     hist = guard(f80_1, expect)
     hist_ok = len(hist) == 6      # min_hole_clearance 原本就一致
+    # CO-82：网类历史对照 = 修复前状态（仅 Default、无指派）
+    nc_hist = netclass_guard({"classes": [{"name": "Default"}], "netclass_assignments": {}}, intent_ns)
+    nc_hist_ok = ("netclass_assignments" in nc_hist
+                  and nc_hist["netclass_assignments"]["n_differing"] == len(
+                      intent_ns.get("netclass_assignments") or {})
+                  and any(k.startswith("class:") for k in nc_hist))
+    teeth = teeth and nc_hist_ok
     teeth = teeth and hist_ok
     rec = {"artifact": "m13_v57_co81_project_rules_gate", "schema": 1, "revision": "CO-81.1",
            "nature": "L2 可审计性：受控工程文件设计规则 = 红线规则源 的回归闸",
@@ -81,9 +115,15 @@ def main() -> int:
            "violations": bad,
            "negative_control": neg, "positive_control": pos,
            "historical_control_F80_1": {"rules": f80_1, "mismatch": hist, "n_mismatch": len(hist)},
+           "historical_control_F82_1_netclass": {
+               "n_class_keys_flagged": sum(1 for k in nc_hist if k.startswith("class:")),
+               "assignments_n_differing": nc_hist.get("netclass_assignments", {}).get("n_differing")},
            "teeth_ok": teeth,
            "verdict": "PASS" if (not bad and teeth) else "FAIL",
-           "rationale": "kicad-cli 对 <board>.kicad_pcb 自动选取同名 .kicad_pro；规则不符则自然核查命令大面积误报（F-80-1）。",
+           "rationale": "kicad-cli 对 <board>.kicad_pcb 自动选取同名 .kicad_pro；规则不符则自然核查命令大面积误报（F-80-1）；"
+                        "网类/指派缺失则 DRC 根本不施加 netclass 语义（F-82-1）。CO-81 原只覆盖 rules/severities，CO-82 补网类后覆盖完整。",
+           "netclass_reference": {"file": "k2_v4_8L.kicad_pro", "sha16": s16(INTENT_PRO),
+                                  "note": "模板 %s 豁免网类检查（只承载规则）" % TEMPLATE_EXEMPT},
            "redline": "只读；不改任何工件；阈值取自红线规则源，不放宽。"}
     OUT.write_text(json.dumps(rec, ensure_ascii=False, indent=1, sort_keys=True), encoding="utf-8")
     print(json.dumps({"verdict": rec["verdict"], "files": len(rows), "violations": bad,

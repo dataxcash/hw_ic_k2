@@ -1,0 +1,29 @@
+{
+ "artifact": "m13_v57_co82_l4_project_netclass_align",
+ "assignments_after": 146,
+ "assignments_before": 0,
+ "classes_after": [
+  "Default",
+  "LOW_SPEED",
+  "PCIe85",
+  "POWER"
+ ],
+ "classes_before": [
+  "Default"
+ ],
+ "finding": "F-82-1：.l4.kicad_pro 仅 Default 网类且无指派 ⇒ DRC 不施加 PCIe85/LOW_SPEED/POWER 语义；CO-81 闸仅覆盖 design_settings.rules/rule_severities，存在覆盖盲区",
+ "geometry_impact": "none（不改板/图纸；仅工程文件网类设置）",
+ "intent_project": {
+  "file": "k2_v4_8L.kicad_pro",
+  "sha16": "f54404024191ea64"
+ },
+ "l4_project": {
+  "file": "k2_v4_8L.l4.kicad_pro",
+  "sha16_after": "ce2c2bf0da79a1ff",
+  "sha16_before": "4704dec4dd043c59"
+ },
+ "nature": "L2 可审计性：L4 工程文件 net_settings 对齐意图",
+ "redline": "意图件只读；阈值取自意图件，不放宽。",
+ "revision": "CO-82.1",
+ "schema": 1
+}
