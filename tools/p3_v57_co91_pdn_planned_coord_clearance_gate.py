@@ -105,8 +105,11 @@ CU_IDS = [pcbnew.F_Cu, pcbnew.In1_Cu, pcbnew.In2_Cu, pcbnew.In3_Cu,
 class Scene:
     """board 铜元素。pad 记录其铜层集合；段记录单层；via 视为贯穿 F..B（共享任一铜层）。"""
 
-    def __init__(self, board, rules: Rules, via_r: float, drill_r: float):
+    def __init__(self, board, rules: Rules, via_r: float, drill_r: float, exclude_nets=None):
+        # CO-133：exclude_nets 用于「计划件自检」场景（CO-104 replay）——把**计划自身**落于板上的
+        # 铜排除出障碍集，使判据与**施工前**板态等价（板态无关）；默认 None = 全量障碍（CO-91 原口径）。
         self.rules, self.via_r, self.drill_r = rules, via_r, drill_r
+        self.excl = frozenset(exclude_nets or ())
         self.pads, self.segs, self.vias = [], [], []
         for fp in board.GetFootprints():
             for p in fp.Pads():
@@ -115,6 +118,8 @@ class Scene:
                 self.pads.append((fp.GetReference(), p.GetNumber(), p.GetNetname(),
                                   x0, y0, x1, y1, lyr))
         for t in board.GetTracks():
+            if t.GetNetname() in self.excl:
+                continue
             if isinstance(t, pcbnew.PCB_VIA):
                 vl = frozenset(board.GetLayerName(i) for i in CU_IDS if t.IsOnLayer(i))
                 self.vias.append((t.GetNetname(), pcbnew.ToMM(t.GetCenter().x),
@@ -152,7 +157,11 @@ class Scene:
                 continue
             d = math.hypot(vx - x2, vy - y2) - r
             c = d - r - self.rules.req(net, vnet)
-            h = d - self.drill_r - self.via_r - self.rules.hole_min
+            # CO-133 更正：d 已扣去**对方 via 铜半径** ⇒ 孔缘-对方铜缘 = d - drill_r（
+            # drc_rules.json geometry_translation: |c1-c2| >= 0.25 + drill1_r + via2_od/2）。
+            # 原实现多扣一次 self.via_r（等价按 via2_od 而非 od/2）⇒ 对相邻 BGA 电源 via
+            # 产生假阳性（实测真值 +0.284 vs 错误 -0.141），且与 kicad-cli DRC 不符。
+            h = d - self.drill_r - self.rules.hole_min
             if c < worst_c:
                 worst_c, bc = c, f"via({vnet}) d_edge={d:.4f}"
             if h < worst_h:

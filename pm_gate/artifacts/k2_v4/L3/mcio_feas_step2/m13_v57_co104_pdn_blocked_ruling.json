@@ -9,7 +9,7 @@
  },
  "artifact": "m13_v57_co104_pdn_blocked_ruling",
  "base_pins": {
-  "board": "0e636a67c1472462",
+  "board": "a3ce9ab803045a0a",
   "spec_current": "500f3da8179fe19c",
   "spec_rev11": "d85f10f722ba22b0"
  },
@@ -188,11 +188,14 @@
    "verdict": "仅 1/4 可行 ⇒ 收益 = 1 个 GND 球，代价 = 全链重基线 + 换会话复评 ⇒ 不成比例"
   },
   "V3_option_B_reorder": {
+   "canonical_blocked": 3,
+   "co133_note": "canonical replay 3 vs 声明 4：更正后检测器偏松 1 项 ⇒ 声明偏保守（CO-133 登记）",
+   "declared_blocked": 4,
    "ok": true,
    "runs": [
     {
      "n_other_blocked": 1,
-     "n_ppc_blocked": 4,
+     "n_ppc_blocked": 3,
      "order": "canonical (net,ref,pad)"
     },
     {
@@ -202,16 +205,16 @@
     },
     {
      "n_other_blocked": 1,
-     "n_ppc_blocked": 8,
+     "n_ppc_blocked": 7,
      "order": "-pos(x,y)"
     },
     {
      "n_other_blocked": 1,
-     "n_ppc_blocked": 13,
+     "n_ppc_blocked": 12,
      "order": "ref,pad"
     }
    ],
-   "verdict": "canonical 已为所试最优；换序使 blocked 增至 8/13/13 ⇒ 无免费解（禁搜索，故不做全序/全组合优化）"
+   "verdict": "canonical 已为所试最优；换序 blocked = 13/7/12 ⇒ 无免费解（禁搜索，故不做全序/全组合优化）"
   },
   "V4_option_C_policy": {
    "cost_of_accept": "4 个 U6 GND 球无独立 via（与既有 120 项 blocked 同类处理）+ 1 项 stitch 冗余；不损任何非 GND 连接",
@@ -230,7 +233,7 @@
   }
  },
  "inputs": {
-  "board": "0e636a67c1472462",
+  "board": "a3ce9ab803045a0a",
   "co103_record": "7f481be259865941",
   "spec_current": "500f3da8179fe19c",
   "spec_rev11": "d85f10f722ba22b0"

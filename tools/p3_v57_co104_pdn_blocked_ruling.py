@@ -30,7 +30,7 @@ STEP2 = L3 / "mcio_feas_step2"
 SPEC_CUR, SPEC11 = L3 / "SPEC_k2_v4.spec-rev-18.json", L3 / "SPEC_k2_v4.spec-rev-11.json"
 BOARD = K2 / "k2_v4_8L.l4.kicad_pcb"
 CO91P = K2 / "tools/p3_v57_co91_pdn_planned_coord_clearance_gate.py"
-BASE = {"spec_current": "500f3da8179fe19c", "spec_rev11": "d85f10f722ba22b0", "board": "0e636a67c1472462"}
+BASE = {"spec_current": "500f3da8179fe19c", "spec_rev11": "d85f10f722ba22b0", "board": "a3ce9ab803045a0a"}
 CARD = [(1, 0), (-1, 0), (0, 1), (0, -1)]
 TARGETS = [("U6", "FB34"), ("U6", "FF14"), ("U6", "FF21"), ("U6", "H12")]
 
@@ -61,7 +61,12 @@ def main(argv=None) -> int:
     z11 = json.loads(SPEC11.read_text())["pd"]["zone_defs"]
     z12 = json.loads(SPEC_CUR.read_text())["pd"]["zone_defs"]
     w = float(z12["power_pad_connect"]["stub_width_mm"])
-    scene = C.Scene(pcbnew.LoadBoard(str(BOARD)), rules, R, DR)
+    # CO-133：自检/replay 场景排除**计划自身网**（施工后板上已含计划铜）
+    # ⇒ 判据与「施工前板态」等价、板态无关（施工前后同判）。
+    PWR_PLAN_NETS = {e["net"] for e in z11["power_pad_connect"]["entries"] if isinstance(e.get("net"), str)}
+    PWR_PLAN_NETS |= {z["net"] for z in z11["power_zones"]}
+    PWR_PLAN_NETS |= {"GND"}
+    scene = C.Scene(pcbnew.LoadBoard(str(BOARD)), rules, R, DR, exclude_nets=PWR_PLAN_NETS)
     e11 = {(e["ref"], str(e["pad"])): e for e in z11["power_pad_connect"]["entries"]}
     e12 = {(e["ref"], str(e["pad"])): e for e in z12["power_pad_connect"]["entries"]}
     b12 = {(b["ref"], str(b["pad"])): b for b in z12["power_pad_connect"]["blocked"]}
@@ -219,9 +224,17 @@ def main(argv=None) -> int:
               ("ref,pad", lambda i: (i["key"][0], i["key"][2], i["key"][3], i["key"][1]))]
     rs = [replay(o, l) for l, o in orders]
     checks["V3_option_B_reorder"] = {
-        "ok": rs[0]["n_ppc_blocked"] == 4 and all(r["n_ppc_blocked"] >= 4 for r in rs[1:]),
+        # CO-133：判据改为**数据派生**（canonical 为所试最优 ⇒ 换序无改善），不再硬编码 ==4。
+        # 缘起：CO-91 孔缘-铜缘公式更正（CO-133）后，同一 replay 的 canonical 由 4 → 3
+        # ⇒ 声明 blocked 4 项中 1 项在更正后检测器下可放置（**偏保守**、无功能影响，已登记；
+        #   未改 SPEC/板）。本项断言「换序无改善」这一 V3 命题本身，仍然成立。
+        "ok": all(r["n_ppc_blocked"] >= rs[0]["n_ppc_blocked"] for r in rs[1:]),
+        "canonical_blocked": rs[0]["n_ppc_blocked"],
+        "declared_blocked": 4,
+        "co133_note": "canonical replay 3 vs 声明 4：更正后检测器偏松 1 项 ⇒ 声明偏保守（CO-133 登记）",
         "runs": [{k: v for k, v in r.items() if k != "blocked"} for r in rs],
-        "verdict": "canonical 已为所试最优；换序使 blocked 增至 8/13/13 ⇒ 无免费解（禁搜索，故不做全序/全组合优化）"}
+        "verdict": ("canonical 已为所试最优；换序 blocked = %s ⇒ 无免费解（禁搜索，故不做全序/全组合优化）"
+                    % "/".join(str(r["n_ppc_blocked"]) for r in rs[1:]))}
     teeth["reorder_detector_discriminates"] = len({r["n_ppc_blocked"] for r in rs}) > 1
 
     # ---------- V4：出路 C —— 加宽 palette / VIP / HDI（政策闸） ----------

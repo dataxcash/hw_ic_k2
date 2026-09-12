@@ -25,6 +25,8 @@ PIN = re.compile(r'"([a-z0-9_]*(?:record|_record))"\s*:\s*"([0-9a-f]{16})"')
 # 已声明豁免：{被引记录文件: {pin_key: 理由}} —— 仅限「记录本体已被后续 CO 取代 ⇒ pin 属历史」
 EXEMPT = {
     "m13_v57_co109_in4_void_l2_ruling.json": {"co106_record": "CO-109 R2『按设计』已被 CO-115 更正 ⇒ 本记录为历史；pin 属历史"},
+    "m13_v57_co111_in5_pcie_corridor_exposure.json": {"l5_si_record": "CO-111 时点 SI 记录；CO-133 施工后 L5 SI 记录随板重跑 ⇒ pin 属历史"},
+    "m13_v57_co118_bcu_bridge_conflict_check.json": {"co95_record": "CO-118 的 B.Cu 桥冲突已由 CO-130/CO-132 取代（B.Cu 载体退役 + In4 承载）⇒ 本记录为历史；CO-132 重跑 co95 后 pin 属历史"},
     "m13_v57_co110_l2_coverage_closure.json": {"co106_record": "CO-110 依赖被 CO-115 取代的前提 ⇒ 历史",
                                               "co109_record": "CO-109 已被 CO-115 取代 ⇒ 历史",
                                               "co87_record": "CO-110 时点 co87 版本 ⇒ 历史（co87 已随后续 rev 重跑）"},

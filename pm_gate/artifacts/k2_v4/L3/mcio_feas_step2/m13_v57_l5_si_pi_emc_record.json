@@ -13,8 +13,8 @@
  "PI": {
   "hole_clearance_violations": 0,
   "pdn_note": "CO-50 事实核验：冻结源与 L4 均无铜铺铜 zone（平面层为**保留层**，铺铜属后续阶段 WP2）；L4 仅新增 4 个非铜 rule area + tracks ⇒ 无平面铜被改写",
-  "pdn_plane_copper_untouched": true,
-  "pdn_status": "reserved_not_poured",
+  "pdn_plane_copper_untouched": false,
+  "pdn_status": "poured",
   "plane_layers_reserved": [
    "In1.Cu",
    "In3.Cu",
@@ -29,10 +29,15 @@
     "total": 0
    },
    "l4": {
-    "copper_pour": 0,
-    "pour_layers": {},
+    "copper_pour": 9,
+    "pour_layers": {
+     "In1.Cu": 1,
+     "In3.Cu": 1,
+     "In4.Cu": 6,
+     "In6.Cu": 1
+    },
     "rule_area": 4,
-    "total": 4
+    "total": 13
    }
   }
  },

@@ -6,7 +6,10 @@
   ② via **不去重**（同网同址重复落孔）；
   ③ 与 `gnd_stitch_gen` 的 blocked schema 不对齐（本件从 SPEC 读 blocked）。
 本件按既定自裁（`_shared` **不解冻**、施工侧**改由项目内引擎承载**）提供**项目内**施加器：
-坐标**逐字取自 SPEC**（零搜索、零自由度），仅修正上述三处施工侧口径。
+坐标**逐字取自 SPEC**（零搜索、零自由度），仅修正上述施工侧口径。
+CO-133 追加④**幂等性**（purge-then-add）：施加前先删除**本阶段将重发**的 PDN 网铜（zone/via/track），
+与 `l4_apply_drawing`「删该网旧 track/via → 按图纸落」同构 ⇒ 板已含 PDN 铜时重跑为不动点，
+`--verify` 三态在任何起态下均可复现（避免重复落孔/重复铺铜把 DRC 抬升）。
 
 CLI:
   ../AppDir/usr/bin/python3.11 tools/p3_v57_co102_pdn_apply_local.py --spec S --board B [--stage all]
@@ -64,6 +67,58 @@ def add_zone(board, netname, layer, pts, priority=0):
     board.Add(z)
 
 
+def pdn_nets(zd: dict) -> set:
+    """SPEC `pd.zone_defs` 全量 PDN 网集合（确定性；供幂等 purge 用）。"""
+    nets = set()
+    for g in zd.get("gnd_planes", []):
+        nets.add(g["net"])
+    for z in zd.get("power_zones", []):
+        nets.add(z["net"])
+    for e in zd.get("power_pad_connect", {}).get("entries", []):
+        nets.add(e["net"])
+    for v in zd.get("decoupling_via_to_plane", {}).get("vias", []):
+        nets.add(v.get("net", "GND"))
+    for c in zd.get("gnd_stitch_via", {}).get("coordinates", []):
+        nets.add(c.get("net", "GND"))
+    return nets
+
+
+def purge(b, nets, stage: str) -> dict:
+    """幂等：删除**本阶段将重发**的 PDN 网铜（④）。
+
+    - stage 含 zone    -> 删 PDN 网 zone（gnd_planes + power_zones 重发）
+    - stage 含 zone/connect -> 删 PDN 网 via（两阶段均发 via：power_zone/decoupling/stitch/ppc）
+    - stage 含 connect -> 删 PDN 网 track（ppc F.Cu 短段重发）
+    仅按**网名**删除，绝不触碰图纸网（PCIE_*）；确定性、零坐标搜索。
+    """
+    st = {"zones_purged": 0, "tracks_purged": 0, "vias_purged": 0}
+
+    def _drop(item):
+        """pcbnew 删除必须走 SWIG 安全路径：`Remove` 会泄漏 ZONE*/PCB_TRACK* 并使
+        后续 `GetTracks()` 退化为不可迭代的 SwigPyObject（CO-133 实测）
+        ⇒ 优先 `RemoveNative`（所有权转 C++），退化 `Delete`。"""
+        for api in ("RemoveNative", "Delete"):
+            fn = getattr(b, api, None)
+            if fn is not None:
+                fn(item)
+                return
+        b.Remove(item)
+
+    if stage in ("zone", "all"):
+        for z in list(b.Zones()):
+            if z.GetNetname() in nets:
+                _drop(z)
+                st["zones_purged"] += 1
+    if stage in ("zone", "connect", "all"):
+        for t in list(b.GetTracks()):
+            if t.GetNetname() not in nets:
+                continue
+            is_via = t.GetClass() == "PCB_VIA"
+            _drop(t)
+            st["vias_purged" if is_via else "tracks_purged"] += 1
+    return st
+
+
 class Placer:
     def __init__(self, board):
         self.b = board
@@ -97,6 +152,7 @@ def apply(spec_path: str, board_path: str, stage: str = "all") -> dict:
     stub_w = float(zd.get("power_pad_connect", {}).get("stub_width_mm", 0.5))   # ② 读 SPEC
     b = pcbnew.LoadBoard(board_path)
     P = Placer(b)
+    P.stats.update(purge(b, pdn_nets(zd), stage))       # CO-133 ④ 幂等 purge-then-add
     if stage in ("zone", "all"):
         for g in zd.get("gnd_planes", []):
             add_zone(b, g["net"], g["layer"], g["polygon"]); P.stats["zones"] += 1

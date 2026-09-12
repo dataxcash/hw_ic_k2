@@ -8,10 +8,16 @@
    "co106_record": "CO-110 依赖被 CO-115 取代的前提 ⇒ 历史",
    "co109_record": "CO-109 已被 CO-115 取代 ⇒ 历史",
    "co87_record": "CO-110 时点 co87 版本 ⇒ 历史（co87 已随后续 rev 重跑）"
+  },
+  "m13_v57_co111_in5_pcie_corridor_exposure.json": {
+   "l5_si_record": "CO-111 时点 SI 记录；CO-133 施工后 L5 SI 记录随板重跑 ⇒ pin 属历史"
+  },
+  "m13_v57_co118_bcu_bridge_conflict_check.json": {
+   "co95_record": "CO-118 的 B.Cu 桥冲突已由 CO-130/CO-132 取代（B.Cu 载体退役 + In4 承载）⇒ 本记录为历史；CO-132 重跑 co95 后 pin 属历史"
   }
  },
- "n_exempt_historical": 3,
- "n_match": 8,
+ "n_exempt_historical": 5,
+ "n_match": 6,
  "n_stale_undeclared": 0,
  "n_unresolved_key": 1,
  "nature": "L2 过程闸：记录内 inter-record provenance pin 一致性（关闭 CO-108/CO-114 F-6 盲区）",
@@ -32,15 +38,15 @@
    "status": "match"
   },
   {
-   "actual": "4c6cbfdb48cf03ad",
-   "cited": "4c6cbfdb48cf03ad",
+   "actual": "5b4ae070e4542840",
+   "cited": "5b4ae070e4542840",
    "key": "co98_record",
    "record": "m13_v57_co105_f4_scope_disposition.json",
    "resolved": "m13_v57_co98_reachability_status_report.json",
    "status": "match"
   },
   {
-   "actual": "a3e2576f456de4c9",
+   "actual": "84ac2e83a7cf94cb",
    "cited": "fa0ef14cb38dcb1c",
    "key": "co106_record",
    "record": "m13_v57_co109_in4_void_l2_ruling.json",
@@ -48,7 +54,7 @@
    "status": "exempt_historical"
   },
   {
-   "actual": "a3e2576f456de4c9",
+   "actual": "84ac2e83a7cf94cb",
    "cited": "fa0ef14cb38dcb1c",
    "key": "co106_record",
    "record": "m13_v57_co110_l2_coverage_closure.json",
@@ -64,7 +70,7 @@
    "status": "match"
   },
   {
-   "actual": "268b2bf76e893ed0",
+   "actual": "46d15557477d164b",
    "cited": "d4849456357c84cc",
    "key": "co87_record",
    "record": "m13_v57_co110_l2_coverage_closure.json",
@@ -72,12 +78,12 @@
    "status": "exempt_historical"
   },
   {
-   "actual": "73f9b59ed5f6f3ce",
+   "actual": "b5797a58d627ab55",
    "cited": "73f9b59ed5f6f3ce",
    "key": "l5_si_record",
    "record": "m13_v57_co111_in5_pcie_corridor_exposure.json",
    "resolved": "m13_v57_l5_si_pi_emc_record.json",
-   "status": "match"
+   "status": "exempt_historical"
   },
   {
    "actual": "9ae53dbf3cfc48e1",
@@ -88,12 +94,12 @@
    "status": "match"
   },
   {
-   "actual": "7bb1d00b697b0c6e",
+   "actual": "0bc98d2037ce5b47",
    "cited": "7bb1d00b697b0c6e",
    "key": "co95_record",
    "record": "m13_v57_co118_bcu_bridge_conflict_check.json",
    "resolved": "m13_v57_co95_in4_reachability.json",
-   "status": "match"
+   "status": "exempt_historical"
   },
   {
    "actual": null,
@@ -103,16 +109,16 @@
    "status": "unresolved_key"
   },
   {
-   "actual": "7bb1d00b697b0c6e",
-   "cited": "7bb1d00b697b0c6e",
+   "actual": "0bc98d2037ce5b47",
+   "cited": "0bc98d2037ce5b47",
    "key": "co95_record",
    "record": "m13_v57_co98_reachability_status_report.json",
    "resolved": "m13_v57_co95_in4_reachability.json",
    "status": "match"
   },
   {
-   "actual": "7bb1d00b697b0c6e",
-   "cited": "7bb1d00b697b0c6e",
+   "actual": "0bc98d2037ce5b47",
+   "cited": "0bc98d2037ce5b47",
    "key": "co95_record",
    "record": "m13_v57_co98_reachability_status_report.json",
    "resolved": "m13_v57_co95_in4_reachability.json",

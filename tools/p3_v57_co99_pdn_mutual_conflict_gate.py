@@ -40,7 +40,7 @@ BOARD = K2 / "k2_v4_8L.l4.kicad_pcb"
 OUT = STEP2 / "m13_v57_co99_pdn_mutual_conflict_gate.json"
 SCRATCH = K2 / ".co99_dryrun"
 KICAD_CLI = K2.parent / "AppDir/bin/kicad-cli"
-BASE = {"spec": "500f3da8179fe19c", "board": "0e636a67c1472462"}
+BASE = {"spec": "500f3da8179fe19c", "board": "a3ce9ab803045a0a"}
 
 
 def s16(p: Path) -> str:

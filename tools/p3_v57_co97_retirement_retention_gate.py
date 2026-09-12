@@ -33,7 +33,7 @@ STEP2 = L3 / "mcio_feas_step2"
 DEFAULT_REGISTRY = L3 / "m13_v57_retirement_registry.json"
 DEFAULT_OUT = STEP2 / "m13_v57_co97_retirement_retention_gate.json"
 
-BASE = {"spec_rev11": "d85f10f722ba22b0", "board": "0e636a67c1472462",
+BASE = {"spec_rev11": "d85f10f722ba22b0", "board": "a3ce9ab803045a0a",
         "spec_frozen": "0bd52ed48e720b8c", "drc_rules": "0a459839e15960b8"}
 
 
