@@ -1,0 +1,187 @@
+{
+ "artifact": "m13_v57_co118_bcu_bridge_conflict_check",
+ "checks": {
+  "A_policy_prohibits_bridging": {
+   "basis": "LID REV6：B.Cu = 高速信号层（In6=GND 参考，85Ω 可控），不得铺电力铜/搭桥。",
+   "co": "CO-74",
+   "note": "CO-74：B.Cu = 高速信号层 ⇒ **不得铺电力铜/搭桥**",
+   "ok": true,
+   "policy": "PROHIBITED"
+  },
+  "B_zones_declare_bcu_bridge": {
+   "note": "CO-112 D1：3 个 zone = B.Cu 桥（含声明几何带）",
+   "ok": true,
+   "zones": [
+    {
+     "bridge_layer": "B.Cu",
+     "n_bands": 1,
+     "source": "basis_text",
+     "targets": [
+      "U2.pad5(P3V3,33,37)",
+      "U4.pad3(P3V3,40,37)",
+      "C84.pad1(P3V3,44,40)"
+     ],
+     "zone": "P3V3_BCU_BRIDGE_IN4"
+    },
+    {
+     "bridge_layer": "B.Cu",
+     "n_bands": 2,
+     "source": "basis_text",
+     "targets": [
+      "J3.A9(P3V3_AUX, 板实测 60.1,45.75)",
+      "J4.A9(P3V3_AUX, 58.9,61.45)"
+     ],
+     "zone": "P3V3_AUX_BCU_BRIDGE_IN4"
+    },
+    {
+     "bridge_layer": "B.Cu",
+     "n_bands": 1,
+     "source": "declared_via_bbox(provisional)",
+     "targets": [
+      "R29",
+      "R31",
+      "R32",
+      "R33",
+      "R34"
+     ],
+     "zone": "MCU_VDD_BCU_RESISTORS_IN4"
+    }
+   ]
+  },
+  "C_same_zones_assert_in4_carrier": {
+   "note": "同批 zone 的 `carrier_change`（CO-74）断言现行载体 = **In4** ⇒ 与 B 互斥",
+   "ok": true,
+   "zones": [
+    {
+     "from": "B.Cu",
+     "to": "In4.Cu",
+     "zone": "P3V3_BCU_BRIDGE_IN4"
+    },
+    {
+     "from": "B.Cu",
+     "to": "In4.Cu",
+     "zone": "P3V3_AUX_BCU_BRIDGE_IN4"
+    },
+    {
+     "from": "B.Cu",
+     "to": "In4.Cu",
+     "zone": "MCU_VDD_BCU_RESISTORS_IN4"
+    }
+   ]
+  },
+  "D_na_scope_depends_on_bcu": {
+   "basis": "经 B.Cu 桥接 ⇒ 无需本网 In4 铜覆盖",
+   "note": "N/A（无需 In4 铜）**依赖 B.Cu 桥**；若 CO-74 红线成立则 N/A 不成立",
+   "ok": true,
+   "ref": "CO-112"
+  },
+  "E_affected_targets_uncovered_if_bcu_forbidden": {
+   "n": 4,
+   "note": "这些 target 的 In4 可达性**仅**靠 CO-112 的 B.Cu 桥 N/A 裁定；若 CO-74 禁令成立 ⇒ 其载体缺失（当前不在任何 In4 polygon 内）",
+   "ok": true,
+   "targets": [
+    {
+     "inside_in4_net_zone": [
+      "MCU_VDD:MCU_VDD_WEST"
+     ],
+     "net": "P3V3",
+     "reach": "covered_bridge_target",
+     "target": "C84.1",
+     "via_pos": [
+      42.525,
+      40.0
+     ],
+     "zone": null
+    },
+    {
+     "inside_in4_net_zone": [
+      "MCU_VDD:MCU_VDD_WEST"
+     ],
+     "net": "P3V3",
+     "reach": "covered_bridge_target",
+     "target": "U2.5",
+     "via_pos": [
+      34.95,
+      39.83
+     ],
+     "zone": null
+    },
+    {
+     "inside_in4_net_zone": [
+      "MCU_VDD:MCU_VDD_WEST"
+     ],
+     "net": "P3V3",
+     "reach": "covered_bridge_target",
+     "target": "U4.3",
+     "via_pos": [
+      40.0,
+      35.225
+     ],
+     "zone": null
+    },
+    {
+     "inside_in4_net_zone": [
+      "P3V3:P3V3_EAST"
+     ],
+     "net": "P3V3_AUX",
+     "reach": "covered_bridge_target",
+     "target": "J4.A9",
+     "via_pos": [
+      58.9,
+      62.275
+     ],
+     "zone": "P3V3_AUX_BCU_BRIDGE_IN4"
+    }
+   ]
+  },
+  "F_bcu_zone_targets_now_in4_covered": {
+   "covered_by_in4_now": [
+    "R31.2",
+    "R32.2",
+    "R33.2",
+    "R34.2"
+   ],
+   "note": "CO-117 把 MCU_VDD_WEST 东缘扩到 57.75 ⇒ R29/R31-R34 已被 In4 覆盖 ⇒ 该 zone 的 B.Cu 桥声明**已过时**（勿再依赖）",
+   "ok": true
+  }
+ },
+ "fail_closed_consequence": "CO-74 basis 明文『不得铺电力铜/**搭桥**』为红线（不得放宽）⇒ B.Cu 桥不可依赖 ⇒ CO-112 的 N/A 裁定不成立 ⇒ E 中 4 个 target（P3V3: C84.1/U2.5/U4.3；P3V3_AUX: J4.A9）成为 **In4 覆盖义务**且当前未覆盖（D 依赖项失效）",
+ "inputs": {
+  "co95_record": "7bb1d00b697b0c6e",
+  "spec": "SPEC_k2_v4.spec-rev-15.json",
+  "spec_sha16": "48d6fc7c565c8862"
+ },
+ "nature": "L2 对抗一致性检查：B.Cu 电力铜/搭桥禁令（CO-74）↔ B.Cu 桥声明 + N/A 裁定（CO-112）",
+ "non_claims": [
+  "只读；不改 SPEC/板/阈值/冻结源",
+  "本件只登记冲突与后果，不代 owner 做 R2 的红线放宽",
+  "零坐标搜索；坐标只取自声明 palette"
+ ],
+ "resolution_options": [
+  {
+   "action": "撤 `na_scope_v1.bcu_bridge_zone_targets` N/A，把 4 target 转为 In4 覆盖义务 ⇒ rev-16 派生 In4 小区域几何（P3V3 西区 pocket ×3 + P3V3_AUX band pocket ×1，异网 ≥0.2、同网连通），再全链重基线",
+   "id": "R1",
+   "level": "L2"
+  },
+  {
+   "action": "为『限定桥带』开 CO-74 例外（= 放宽『不得搭桥』红线）⇒ 须 owner/PM 明确授权，L2 不得自放宽",
+   "id": "R2",
+   "level": "OWNER/红线"
+  },
+  {
+   "action": "只撤『bridge_layer=B.Cu』过时字段并保留 carrier_change=In4（CO-117 已覆盖 MCU_VDD 电阻区）——但 P3V3/P3V3_AUX 的 3 target 仍未覆盖，不闭合 R1 的实质",
+   "id": "R3",
+   "level": "L2/流程"
+  }
+ ],
+ "revision": "CO-118.1",
+ "schema": 1,
+ "teeth": {
+  "conflict_detected": true,
+  "na_scope_relies_on_bcu": true,
+  "policy_detector_negative_control": true,
+  "policy_detector_nonvacuous": true,
+  "teeth_ok": true
+ },
+ "verdict": "L2_DECLARATION_CONFLICT_OPEN__FAIL_CLOSED_4_TARGETS_UNCOVERED"
+}
