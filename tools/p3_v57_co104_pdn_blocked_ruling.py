@@ -27,10 +27,10 @@ from pathlib import Path
 K2 = Path(__file__).resolve().parents[1]
 L3 = K2 / "pm_gate/artifacts/k2_v4/L3"
 STEP2 = L3 / "mcio_feas_step2"
-SPEC12, SPEC11 = L3 / "SPEC_k2_v4.spec-rev-12.json", L3 / "SPEC_k2_v4.spec-rev-11.json"
+SPEC_CUR, SPEC11 = L3 / "SPEC_k2_v4.spec-rev-13.json", L3 / "SPEC_k2_v4.spec-rev-11.json"
 BOARD = K2 / "k2_v4_8L.l4.kicad_pcb"
 CO91P = K2 / "tools/p3_v57_co91_pdn_planned_coord_clearance_gate.py"
-BASE = {"spec_rev12": "1a381b06454dbe2c", "spec_rev11": "d85f10f722ba22b0", "board": "0e636a67c1472462"}
+BASE = {"spec_rev13": "7943be727a4f8ef9", "spec_rev11": "d85f10f722ba22b0", "board": "0e636a67c1472462"}
 CARD = [(1, 0), (-1, 0), (0, 1), (0, -1)]
 TARGETS = [("U6", "FB34"), ("U6", "FF14"), ("U6", "FF21"), ("U6", "H12")]
 
@@ -59,7 +59,7 @@ def main(argv=None) -> int:
     R, DR = pa.VIA_DIA / 2.0, pa.VIA_DRILL / 2.0
     HOLEC = pa.VIA_DRILL + 0.25
     z11 = json.loads(SPEC11.read_text())["pd"]["zone_defs"]
-    z12 = json.loads(SPEC12.read_text())["pd"]["zone_defs"]
+    z12 = json.loads(SPEC_CUR.read_text())["pd"]["zone_defs"]
     w = float(z12["power_pad_connect"]["stub_width_mm"])
     scene = C.Scene(pcbnew.LoadBoard(str(BOARD)), rules, R, DR)
     e11 = {(e["ref"], str(e["pad"])): e for e in z11["power_pad_connect"]["entries"]}
@@ -242,11 +242,11 @@ def main(argv=None) -> int:
 
     teeth["own_clean_detector"] = all(v["own_rev11_pos_board_clean"]["via_ok"] for v in attr.values())
     teeth["teeth_ok"] = all(v for k, v in teeth.items())
-    mismatch = {k: {"expect": v, "actual": s16({"spec_rev12": SPEC12, "spec_rev11": SPEC11, "board": BOARD}[k])}
-                for k, v in BASE.items() if s16({"spec_rev12": SPEC12, "spec_rev11": SPEC11, "board": BOARD}[k]) != v}
+    mismatch = {k: {"expect": v, "actual": s16({"spec_rev13": SPEC_CUR, "spec_rev11": SPEC11, "board": BOARD}[k])}
+                for k, v in BASE.items() if s16({"spec_rev13": SPEC_CUR, "spec_rev11": SPEC11, "board": BOARD}[k]) != v}
     rec = {"artifact": "m13_v57_co104_pdn_blocked_ruling", "schema": 1, "revision": "CO-104.1",
            "nature": "L2 自裁（过孔策略/PDN）：rev-12 新增 5 项 blocked 的裁定 = 接受，不升 owner、不采 via-in-pad/HDI",
-           "inputs": {"spec_rev12": s16(SPEC12), "spec_rev11": s16(SPEC11), "board": s16(BOARD),
+           "inputs": {"spec_rev13": s16(SPEC_CUR), "spec_rev11": s16(SPEC11), "board": s16(BOARD),
                       "co103_record": s16(STEP2 / "m13_v57_co103_rev12_nonexecutor_review.json")},
            "base_pins": BASE, "pin_mismatch": mismatch, "checks": checks, "teeth": teeth,
            "RULING": {"decision": "ACCEPT_L2_NO_HDI",

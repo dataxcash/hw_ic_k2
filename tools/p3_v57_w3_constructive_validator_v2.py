@@ -27,13 +27,13 @@ W0R = STEP2 / "m13_v57_big_w0r_corridor_model.json"
 # （`k2_v4.kicad_pcb`），既未覆盖宪法红线 SPEC 原件，也未覆盖 CO-03 版本 bump 后的 8L 冻结板
 # （L4 施工真实源）。本修正**只增不减**：补 `spec_orig`（SPEC 原件）与 `pcb`（8L 基线），
 # 原 6L 上游钉扎保留为 `pcb_6l`。判据强度只升不降。
-FROZEN = {"spec": L3 / "SPEC_k2_v4.spec-rev-12.json",         # 引擎消费的 ECO spec（CO-89 PDN 板实化）
+FROZEN = {"spec": L3 / "SPEC_k2_v4.spec-rev-13.json",         # 引擎消费的 ECO spec（CO-89 PDN 板实化）
           "spec_orig": L3 / "SPEC_k2_v4.json",               # 宪法红线 SPEC 原件
           "rules": K2 / "_shared/eda_core/drc_rules.json",
           "manifest": STEP2 / "m13_v57_s1_page_manifest.json",
           "pcb": K2 / "k2_v4_8L.kicad_pcb",                  # 宪法红线 8L 冻结板（CO-03）
           "pcb_6l": K2 / "k2_v4.kicad_pcb"}                  # 8L 派生的上游历史件（未动）
-FROZEN_SHA_PREFIX = {"spec": "1a381b06454dbe2c", "spec_orig": "0bd52ed48e720b8c",
+FROZEN_SHA_PREFIX = {"spec": "7943be727a4f8ef9", "spec_orig": "0bd52ed48e720b8c",
                      "manifest": "a8ef3ea8ecff99d7", "pcb": "fb07d25ac426ff84",
                      "pcb_6l": "f6273de613f43d05", "rules": "0a459839e15960b8"}
 STEP, LANE_LO, N_USED = 1.46, 33.3, 16
