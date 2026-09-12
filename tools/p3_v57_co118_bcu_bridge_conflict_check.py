@@ -102,6 +102,36 @@ def main(argv=None) -> int:
         "note": "CO-117 把 MCU_VDD_WEST 东缘扩到 57.75 ⇒ R29/R31-R34 已被 In4 覆盖 ⇒ 该 zone 的 B.Cu 桥声明**已过时**（勿再依赖）"}
     def _detect(pol_obj):
         return pol_obj.get("policy") == "PROHIBITED" and "搭桥" in str(pol_obj.get("basis", ""))
+    # G：目标簇内是否夹有异网 ppc via（⇒ 凸 pocket 会围住异网 via ⇒ 同网连通 / 异网净距需绕行）
+    inter = []
+    for b in bcu_assert:
+        pts = []
+        for t in (b["targets"] or []):
+            key = t.split("(")[0].strip()
+            ref, _, pad = key.partition(".")
+            pad = pad.replace("pad", "")
+            for e in zd["power_pad_connect"]["entries"]:
+                hit = (e["ref"] == ref and str(e["pad"]) == pad) if pad else (e["ref"] == ref)
+                if hit and e.get("via_pos"):
+                    pts.append((f"{e['ref']}.{e['pad']}", e["net"], e["via_pos"]))
+        if not pts:
+            continue
+        xs = [pp[2][0] for pp in pts]; ys = [pp[2][1] for pp in pts]
+        bbox = [min(xs), min(ys), max(xs), max(ys)]
+        nets = {pp[1] for pp in pts}
+        foreign = []
+        for e in zd["power_pad_connect"]["entries"]:
+            if e.get("net") in nets or not e.get("via_pos"):
+                continue
+            x, y = e["via_pos"]
+            if bbox[0] <= x <= bbox[2] and bbox[1] <= y <= bbox[3]:
+                foreign.append({"ref": e["ref"], "pad": str(e["pad"]), "net": e["net"], "via_pos": e["via_pos"]})
+        inter.append({"zone": b["zone"], "cluster_bbox": bbox, "target_nets": sorted(nets),
+                      "foreign_vias_inside": foreign})
+    checks["G_foreign_vias_interleaved_in_cluster"] = {
+        "ok": bool(inter), "clusters": inter,
+        "note": "目标簇 bbox 内的异网 via ⇒ 覆盖该簇的**凸 pocket 会围住异网 via**（须绕行留通道）"
+                "⇒ pocket 形状非闭式（依赖走线搜索）⇒ 触及『零坐标搜索』红线，L2 不可自裁"}
     teeth = {
         "policy_detector_nonvacuous": _detect(pol),
         "policy_detector_negative_control": _detect({"policy": "ALLOWED", "basis": "B.Cu 允许电力铜（bridging OK）"}) is False,

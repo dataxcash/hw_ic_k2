@@ -143,6 +143,70 @@
    ],
    "note": "CO-117 把 MCU_VDD_WEST 东缘扩到 57.75 ⇒ R29/R31-R34 已被 In4 覆盖 ⇒ 该 zone 的 B.Cu 桥声明**已过时**（勿再依赖）",
    "ok": true
+  },
+  "G_foreign_vias_interleaved_in_cluster": {
+   "clusters": [
+    {
+     "cluster_bbox": [
+      34.95,
+      35.225,
+      42.525,
+      40.0
+     ],
+     "foreign_vias_inside": [
+      {
+       "net": "12V_IN",
+       "pad": "6",
+       "ref": "U2",
+       "via_pos": [
+        35.725,
+        37.635
+       ]
+      },
+      {
+       "net": "MCU_VDD",
+       "pad": "2",
+       "ref": "U4",
+       "via_pos": [
+        40.95,
+        38.775
+       ]
+      }
+     ],
+     "target_nets": [
+      "P3V3"
+     ],
+     "zone": "P3V3_BCU_BRIDGE_IN4"
+    },
+    {
+     "cluster_bbox": [
+      58.9,
+      62.275,
+      58.9,
+      62.275
+     ],
+     "foreign_vias_inside": [],
+     "target_nets": [
+      "P3V3_AUX"
+     ],
+     "zone": "P3V3_AUX_BCU_BRIDGE_IN4"
+    },
+    {
+     "cluster_bbox": [
+      56.725,
+      66.5,
+      56.725,
+      69.5
+     ],
+     "foreign_vias_inside": [],
+     "target_nets": [
+      "MCU_VDD"
+     ],
+     "zone": "MCU_VDD_BCU_RESISTORS_IN4"
+    }
+   ],
+   "note": "目标簇 bbox 内的异网 via ⇒ 覆盖该簇的**凸 pocket 会围住异网 via**（须绕行留通道）⇒ pocket 形状非闭式（依赖走线搜索）⇒ 触及『零坐标搜索』红线，L2 不可自裁",
+   "ok": true
   }
  },
  "fail_closed_consequence": "CO-74 basis 明文『不得铺电力铜/**搭桥**』为红线（不得放宽）⇒ B.Cu 桥不可依赖 ⇒ CO-112 的 N/A 裁定不成立 ⇒ E 中 4 个 target（P3V3: C84.1/U2.5/U4.3；P3V3_AUX: J4.A9）成为 **In4 覆盖义务**且当前未覆盖（D 依赖项失效）",
