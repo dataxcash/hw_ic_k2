@@ -518,9 +518,12 @@ def main() -> int:
              frozen_paths={k: str(fp[k]) for k in FROZEN},
              delivered_board=s16(BOARD_L4), delivered_ok=s16(BOARD_L4) == DELIVERED_BOARD,
              living={n: s16(p) for n, p in {"register": L2 / "input_defect_register_v1.json",
-                                            "ledger": LEDGER, "boundary": STEP2 / "m13_v57_w3_joint_assignment_boundary_v1_82.md",
+                                            "ledger": LEDGER,
                                             "r1_doc": L2 / "L2_RULING_via_channel_and_interpair_domain_v1.md",
-                                            "thermal_doc": L2 / "L2_RULING_u6_thermal_mitigation_v1.md"}.items()})
+                                            "thermal_doc": L2 / "L2_RULING_u6_thermal_mitigation_v1.md"}.items()},
+             # boundary 是**本件的下游消费者**（§27 登记本件记录 sha）⇒ 本件**不**快照 boundary，
+             # 否则 boundary↔本记录互钉 = 2-循环不动点（同 handoff §5.4『记录内嵌下游快照』陷阱）。
+             downstream_not_snapshotted=["m13_v57_w3_joint_assignment_boundary_v1_82.md"])
     A["verdict"] = "PASS" if all(A["frozen"].values()) and A["delivered_ok"] else "FAIL"
     A["teeth"] = dict(t01_all_frozen=all(A["frozen"].values()), t02_delivered_pinned=A["delivered_ok"],
                       t03_negative_control_detects=(s16(SPEC) != "0000000000000000"))
