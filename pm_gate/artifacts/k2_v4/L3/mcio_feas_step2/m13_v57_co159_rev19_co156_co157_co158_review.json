@@ -1,0 +1,288 @@
+{
+ "artifact": "m13_v57_co159_rev19_co156_co157_co158_review",
+ "schema": 1,
+ "revision": "CO-159.1",
+ "nature": "非执行者对抗复评（另一会话产出）：CO-156（K9 域覆盖/值-证据绑定/co134 upsert/co120 快照键）+ CO-157（T17/T18 元牙齿/board_superseded 收严/H4 机判）+ CO-158（L5 包自足/citation 候选/闸 rc）",
+ "reviewed_rev": "c4e951c",
+ "reviewer": "独立会话（handoff-z34 §5 第 1 步；禁自评条款由本会话满足）",
+ "scope": {
+  "reviewed": [
+   "CO-156",
+   "CO-157",
+   "CO-158"
+  ],
+  "spec_rev": "rev-19",
+  "focus": [
+   "T18 元牙齿可否被绕过",
+   "co120 board_superseded 板 sha16 判据",
+   "declared key_path 绑定是否防双改",
+   "co134 upsert 收窄",
+   "L5 包 06_rulings 是否足以 JLC 评审",
+   "rc 语义与 runner 兼容性",
+   "co77/co135 双份 citation 扫描是否应合一"
+  ]
+ },
+ "board_sha16": "d4e81f647be7f980",
+ "spec_sha16": "5f72182a2616392c",
+ "checks": {
+  "V0_frozen_4of4_and_delivered_board": {
+   "frozen_ok": {
+    "SPEC_k2_v4.spec-rev-19.json": true,
+    "m13_v57_s1_page_manifest.json": true,
+    "k2_v4_8L.kicad_pcb": true,
+    "_shared/eda_core/drc_rules.json": true
+   },
+   "delivered_board_sha16": "d4e81f647be7f980",
+   "delivered_matches": true
+  },
+  "V1_claims_hold_as_found": {
+   "co124": {
+    "revision": "CO-124.7",
+    "verdict": "PASS",
+    "n_findings": 0,
+    "teeth_true": 29,
+    "teeth_total": 29,
+    "ok": true
+   },
+   "co120": {
+    "revision": "CO-120.4",
+    "verdict": "PASS",
+    "teeth_ok": true
+   },
+   "co77": {
+    "revision": "CO-77.6",
+    "verdict": "PASS",
+    "mismatches": []
+   },
+   "co135": {
+    "revision": "CO-135.2",
+    "citation_clean": true
+   },
+   "co136": {
+    "revision": "CO-136.1",
+    "verdict": "PASS"
+   },
+   "package": {
+    "revision": "CO146-PKG.2",
+    "n_files": 34,
+    "teeth": {
+     "t01_idempotent": true,
+     "t05_declared_rulings_packaged": true,
+     "t06_order_notes_refs_resolve_in_package": true,
+     "t02_8_copper_gerbers": true,
+     "t03_drill_present": true,
+     "t04_all_hashed": true
+    }
+   },
+   "register": {
+    "n_items": 44,
+    "open": 0
+   },
+   "ledger": {
+    "n_dv": 9,
+    "kinds": {
+     "DV-INTPAIR-EDGE": "domain_cap",
+     "DV-PAIR-CROSS": "identity",
+     "DV-CLR-POWER": "process_floor",
+     "DV-EDGE-COPPER": "process_floor",
+     "DV-M3-KEEPOUT": "process_floor",
+     "DV-ENGINE-INT_PAIR_PITCH": "conservative_ge",
+     "DV-CO146-ZDIFF": "declared",
+     "DV-CO146-PDN-DROP": "drop_domain",
+     "DV-CO146-THERMAL": "thermal_option_domain"
+    }
+   }
+  },
+  "V2_co158_gerber_drill_bytewise_unchanged": {
+   "n_files": [
+    30,
+    34
+   ],
+   "added": [
+    "06_rulings/L2_RULING_u6_thermal_mitigation_v1.md",
+    "06_rulings/L2_RULING_u6_thermal_v1.md",
+    "06_rulings/L2_RULING_via_channel_and_interpair_domain_v1.md",
+    "06_rulings/m13_v57_co146_jlc_dfm_gate.json"
+   ],
+   "removed": [],
+   "gerber_drill_entries": 25,
+   "all_identical": true,
+   "changed_non_gdr": [
+    "04_impedance/impedance_table.json",
+    "ORDER_NOTES.md"
+   ]
+  },
+  "P1_declared_empty_computed_bypass": {
+   "findings": {
+    "missing_computed": [],
+    "empty_computed": []
+   },
+   "evasion_succeeds": true
+  },
+  "P2_conservative_binding_conditional": {
+   "findings": [],
+   "evasion_succeeds": true
+  },
+  "P3_t18_meta_tooth_bypass": {
+   "T18_coverage": true,
+   "T18b_no_undeclared": true,
+   "hidden_finder_provoked": false,
+   "evasion_succeeds": true
+  },
+  "P4_h4_upsert_only_gap": {
+   "violations": [],
+   "rewrite_after_read_passes": true
+  },
+  "P5_snapshot_key_container_dependent": {
+   "probe": {
+    "is_downstream_top_level_register_sha16": false,
+    "is_downstream_top_level_open_total": false
+   },
+   "evasion_succeeds": true
+  },
+  "P6_board_superseded_format_only": {
+   "probe": {
+    "0000000000000000": true,
+    "deadbeefdeadbeef": true,
+    "superseded": false
+   },
+   "fake_sha_accepted": true
+  },
+  "P7_rc_blind_to_verdict": {
+   "dfm_gate_rc_ignores_verdict": true,
+   "regression_gates_unconditional_0": {
+    "co78_layer_role_drift_gate": true,
+    "co81_project_rules_gate": true,
+    "co84_dru_domain_gate": true,
+    "co95_in4_reachability": true,
+    "co98_reachability_status_report": true,
+    "co106_reference_plane_gate": true
+   },
+   "live_probe": "as-found 实测 co146_jlc_dfm_gate verdict=FAIL 而 rc=0；co98 verdict=BASELINE_MISMATCH 而 rc=0"
+  },
+  "P8_package_teeth_scope": {
+   "no_source_parity_tooth": true,
+   "no_dir_ref_tooth": true,
+   "t06_regex_only_06_rulings": true
+  },
+  "P10_citation_scan_duplication": {
+   "co77_has_container_parent_candidate": true,
+   "co135_has_container_parent_candidate": false,
+   "co135_cross_checks_co77": false,
+   "co135_hardcodes_boundary_v1_82": true,
+   "co135_has_stale_chain_pins": true
+  }
+ },
+ "findings": [
+  {
+   "id": "F-1",
+   "sev": "medium",
+   "kind": "gate-weakness",
+   "what": "CO-156（F-6）的 `declared` 值-证据绑定可被**省略值**绕过：`_contains(evidence[key_path], dv.computed)` 在 `computed` 缺失或为 `{}` 时**恒真**（空子集语义），且该分支不要求 `computed` 非空 ⇒ 声明的值本身无任何约束。实测：一个 declared DV 只钉现行证据件 + 任意 basis + key_path 即 0 findings 通过。",
+   "evidence": "P1 as-found 注入（c4e951c）：missing_computed/empty_computed → {'missing_computed': [], 'empty_computed': []}",
+   "fix": "co124 declared 分支加「`computed` 非空」判据 + 负控牙齿 T15c（CO-160 已实施）。"
+  },
+  {
+   "id": "F-10",
+   "sev": "low",
+   "kind": "drift-risk",
+   "what": "CO-158（J-2）把 L5 包补进了 **co77 与 co135 各自维护**的 citation 候选表：两份表已现分歧面（co77 含 container-parent `_shared` 候选，co135 不含）且无一致性牙齿。当前对 boundary 全量引用的解析一致（本会话独立复算 divergent=0），但任一侧日后补目录即可能「同引用一闸过一闸不过」。",
+   "evidence": "P10 as-found：候选表差异面（co77 ⊃ co135）；现行 boundary 引用交叉解析一致",
+   "fix": "保留两份独立实现（独立复评价值），另加**交叉一致性牙齿**（co135 与 co77 候选表逐引用比对）（CO-160 已实施）。"
+  },
+  {
+   "id": "F-11",
+   "sev": "medium",
+   "kind": "rule-unenforced",
+   "what": "handoff §6「复现命令」块内的回归闸 co106_reference_plane_gate/co78_layer_role_drift_gate/co81_project_rules_gate/co84_dru_domain_gate/co95_in4_reachability/co98_reachability_status_report 退出码**恒 0**、不反映 verdict ⇒ 若纳入复现序则违 R-CO158-3（co98 语义为三态报告，正确判据应为 `baseline_ok and teeth_ok`，而非 verdict==PASS）。",
+   "evidence": "P7 as-found：六件均以裸 `return 0` 收尾（无 verdict 分支）",
+   "fix": "六件改为按各自 verdict/基线谓词返回（CO-160 已实施；实测全 rc=0，co95 记录 sha 变更后 co98 基线 pin 同步刷新）。"
+  },
+  {
+   "id": "F-12",
+   "sev": "low",
+   "kind": "record-hygiene",
+   "what": "CO-135 复评件虽是规范序内**现行**闸，却内嵌 CO-134 时点**硬编码链 pin**（如 `G4 0074dad9067af737 / G5 75ce1c2af42de55e`，现行为 `60cbd331836e52b7` / `8b385d6c554ac527`）与**硬编码 boundary 文件名** `...v1_82.md` ⇒ 记录随运行序陈旧、boundary 改名即静默失配（co77 已用「取最新版」口径，co135 未同步）。",
+   "evidence": "P10 as-found：co135 源码含 `0074dad9067af737` 与 `boundary_v1_82.md` 硬编码",
+   "fix": "co135 链 pin 改为由现行记录派生 + boundary 取最新版（CO-160 已实施）。"
+  },
+  {
+   "id": "F-2",
+   "sev": "medium",
+   "kind": "gate-weakness",
+   "what": "CO-156（F-7）的权威交叉校验**仅在权威 DV 存在时生效**：`auth_edge`/`auth_span` 从台账现取，缺失（如 upsert 误删、手工编辑）时两处 `isinstance(...)` 判据被静默跳过 ⇒ F-7 的原规避（缩小自声明 span/w）复活；而本闸并无「九 DV 齐备 / 权威 DV 存在」牙齿。",
+   "evidence": "P2 as-found 注入（删 DV-INTPAIR-EDGE/DV-PAIR-CROSS）→ []",
+   "fix": "co124 conservative_ge 分支在权威 DV 缺失时显式 FAIL + 负控 T16c（CO-160 已实施）。"
+  },
+  {
+   "id": "F-3",
+   "sev": "medium",
+   "kind": "gate-coverage",
+   "what": "CO-157（H-1）的元牙齿 T18 只断言「**合成电池触发集 == K9_FINDER_IDS**」，不比对**源码**可产出的 finder 集：在 k9_findings 里新增一个**电池未覆盖的条件分支** finder（如仅在某个 un-modeled 状态下触发），T18/T18b 仍全 True ⇒ 「每个 K9 判据都有负控」的自定规矩可被绕过。",
+   "evidence": "P3 as-found：注入隐藏条件分支 finder 后 T18=True / T18b=True（该 finder 未被任何电池触发）",
+   "fix": "co124 增 T18d（源码正则抽取 finder id 集 == K9_FINDER_IDS）+ T18e（抽取器灵敏度负控）（CO-160 已实施）。"
+  },
+  {
+   "id": "F-4",
+   "sev": "medium",
+   "kind": "rule-vs-machine",
+   "what": "CO-157（H-4）的 `H4_ledger_upsert_only` 只拦「写台账但未先读台账」；**读后整表重写**（正是 R-CO156-3 条文所禁、F-4 的原始失败模式）仍判无违规。规则条文与机判面不一致（CO-157 已在处置文字中声明「部分机判」，但 boundary 规则文本 R-CO156-3 仍写「禁止对台账/记录做整表重写」而无判据）。",
+   "evidence": "P4 as-found：合成「read→整表重写→write」→ violations=[]",
+   "fix": "对齐规则文本与机判面（声明语义面无自动判据、由复评/stub 复跑承接）；不引入会误伤合法 upsert 的脆弱语法判据（CO-160）。"
+  },
+  {
+   "id": "F-5",
+   "sev": "low",
+   "kind": "gate-coverage",
+   "what": "CO-156（F-2b）的下游快照键判据依赖**嵌套容器**（path 段 ∈ {register,ledger}）：顶层或其它容器下的 `register_sha16`/`open_total`/`ledger_sha16` 等（R-CO156-2 字面禁止）不被抓。当前记录 0 例（无 live 违规），属覆盖面缺口。",
+   "evidence": "P5 as-found：`_is_downstream_snapshot([], 'register_sha16')` = False",
+   "fix": "键名面判据（正则，不依赖容器）+ 负控/正控牙齿（CO-160 已实施）。"
+  },
+  {
+   "id": "F-6",
+   "sev": "low",
+   "kind": "gate-weakness",
+   "what": "CO-157（H-3）把 `board_superseded` 收严为「16-hex 且 ≠ 交付板」，仍是**格式判**：任意 16-hex（`0000…`、`deadbeef…`）即成立豁免，未与**真实被取代板**比对 ⇒ 「机判可证」表述偏强。",
+   "evidence": "P6 as-found：basis_ok 探针 = {'0000000000000000': True, 'deadbeefdeadbeef': True, 'superseded': False}",
+   "fix": "co120 增 `SUPERSEDED_BOARDS` 白名单（已登记被取代板 sha + 依据）并要求成员资格 + 伪造 sha 负控（CO-160 已实施）。"
+  },
+  {
+   "id": "F-7",
+   "sev": "medium",
+   "kind": "rule-unenforced",
+   "what": "**R-CO158-3（CO-158 J-3 自定）对规范序内的 `co146_jlc_dfm_gate` 不成立**：其 verdict 允许 FAIL（当前即 FAIL 两项 DFM 阻塞），但 `return 0 if (teeth_ok and teeth2_ok) else 1` 使 rc=0 ⇒ 复现序无法据 rc 发现该 FAIL；CO-158 J-3 的修复清单遗漏此件（handoff §6 甚至注「rc!=0 属预期」，与实测不符）。",
+   "evidence": "P7 as-found：源代码 return 不含 verdict；实测该闸 verdict=FAIL 且 rc=0",
+   "fix": "`return 0 if (rec['verdict']=='PASS' and teeth_ok and teeth2_ok) else 1`（CO-160 已实施；实测 FAIL ⇒ rc=1）。"
+  },
+  {
+   "id": "F-8",
+   "sev": "low",
+   "kind": "gate-coverage",
+   "what": "CO-158（J-1）新增 `06_rulings/` 后，牙齿 t05 只验**存在**、t06 只验包内可解析：若 L2 裁定件/DFM 记录在打包后修订，包内副本陈旧**无任何牙齿**（J-1 的陈旧阻抗表副本即同类已实测发生）。",
+   "evidence": "P8 as-found：包牙齿无「副本 == 来源」内容一致性判据",
+   "fix": "增 `t07_packaged_rulings_match_sources` + 灵敏度负控（CO-160 已实施）。"
+  },
+  {
+   "id": "F-9",
+   "sev": "low",
+   "kind": "gate-coverage",
+   "what": "ORDER_NOTES 的**目录级声明**（`01_`..`06_`，如「叠层图(03_) + 阻抗表(04_)」）不在 t06 覆盖内（t06 只解析 `06_rulings/*` 文件引用）；当前目录均在包内，属覆盖面缺口。",
+   "evidence": "P8 as-found：t06 正则仅 `06_rulings/...`；ORDER_NOTES 含 `03_`/`04_` 目录声明",
+   "fix": "增 `t08_declared_dirs_present`（CO-160 已实施）。"
+  }
+ ],
+ "n_findings": 12,
+ "verdict": "PASS_WITH_FINDINGS",
+ "independent_confirmations": [
+  "冻结四源 4/4 MATCH（含 drc_rules 0a459839e15960b8）；交付板 = d4e81f647be7f980",
+  "as-found 记录逐条复核成立：co124 CO-124.7 PASS/29 牙齿/0 findings；co120 CO-120.4 PASS（teeth 9-9）；co77 CO-77.6 PASS（mismatches []）；co135 CO-135.2 citation clean；co136 CO-136.1 PASS；MANIFEST CO146-PKG.2 n_files 34/teeth 6-6；登记簿 44 项 OPEN 0；台账 9 DV / 七域",
+  "CO-158 的「gerber/drill 逐字节未变」经 CO-157→CO-158 MANIFEST 差分独立复核：25 件 gerber/drill 全同、新增 4 件 06_rulings、n_files 30→34、仅 04_impedance 副本与 ORDER_NOTES 变（与声明一致）",
+  "co134 upsert 收窄成立（源码读台账后按 id 合并、非字面整表重写）；co77/co135 现行 boundary 引用解析一致（divergent=0）"
+ ],
+ "co134_note": "co134 不在 R-CO158-1 规范序内（其域由 co153 KIND_EXPECT 承接），收窄后重跑不再 clobber 他 CO 归属 DV ⇒ 该项按设计成立。",
+ "reproduce": [
+  "python3 tools/p3_v57_co159_rev19_co156_co157_co158_review.py（只读；对象钉在 c4e951c）"
+ ],
+ "as_found": "本件以 `git show c4e951c:<path>` 重放受评基线 ⇒ 结论**可重放且不随后续修复漂移**；findings 为 as-found 快照，其处置见 CO-160（登记簿 co159:F-* 与本件记录）。",
+ "redline": "只读；不改 SPEC/板/冻结四源/台账/登记簿/他人记录；注入一律内存、零落盘、零坐标搜索。"
+}

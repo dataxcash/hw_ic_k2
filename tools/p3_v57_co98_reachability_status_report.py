@@ -26,7 +26,7 @@ STEP2 = L3 / "mcio_feas_step2"
 OUT = STEP2 / "m13_v57_co98_reachability_status_report.json"
 SPEC = L3 / "SPEC_k2_v4.spec-rev-19.json"
 CO95 = STEP2 / "m13_v57_co95_in4_reachability.json"
-BASE = {"spec": "5f72182a2616392c", "co95_record": "c9eba916a9866808", "board": "d4e81f647be7f980"}
+BASE = {"spec": "5f72182a2616392c", "co95_record": "4525e38330ee599f", "board": "d4e81f647be7f980"}
 GND = "GND"
 
 
@@ -115,7 +115,7 @@ def main(argv=None) -> int:
                 ("OPEN_GEOMETRY_PENDING_L3_AND_RULING_PENDING_L1"
                  if (three_state["declared_pending_l3"] or three_state["ruling_pending_l1"]) else "PASS")))
     rec = {
-        "artifact": "m13_v57_co98_reachability_status_report", "schema": 1, "revision": "CO-98.1",
+        "artifact": "m13_v57_co98_reachability_status_report", "schema": 1, "revision": "CO-98.2",
         "nature": "L2 PDN：In4 平面可达性义务状态报告（机判化 CO-96 F2/F3/F4；只读 co95 权威记录）",
         "inputs": {**ident}, "baseline_expectations": BASE, "baseline_mismatch": mismatch,
         "co95_summary": co95["summary"], "integrity": {"non_gnd_entries": n_nongnd, "classified": len(rows), "ok": integrity_ok},
@@ -131,7 +131,8 @@ def main(argv=None) -> int:
     Path(a.out).write_text(json.dumps(rec, ensure_ascii=False, indent=1, sort_keys=True) + "\n")
     print("CO-98 verdict=%s three_state=%s basis=%s teeth_ok=%s baseline_ok=%s" %
           (verdict, json.dumps(three_state), json.dumps(basis_counts), teeth_ok, not mismatch))
-    return 0
+    # CO-159（F-11）：R-CO158-3 —— 退出码须反映 verdict
+    return 0 if (rec["baseline_ok"] and rec["teeth_ok"]) else 1
 
 
 if __name__ == "__main__":

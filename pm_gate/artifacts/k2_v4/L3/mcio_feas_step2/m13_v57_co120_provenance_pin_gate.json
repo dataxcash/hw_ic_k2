@@ -133,12 +133,14 @@
   "只读；不改任何记录/SPEC/板/阈值/冻结源",
   "CO-156（F-2b）：下游快照键 = `*_sha16_after` ∪ `register.*`/`ledger.*` 下的 `sha16*`/`items_total`/`open_total`/`n_items`；后者必须在本闸 SNAPSHOT_DECLARED 声明（未声明一律 FAIL）（理由：该类快照使记录 sha 随运行序漂移 ⇒ 提交 pin 不可复现）；未声明一律 FAIL",
   "F-7：豁免依据分 `board_superseded`（机判可证）与 `declared_historical`（无板级依据，计数明示）两类",
+  "CO-159（F-6）：`board_superseded` 的板 sha16 须在 `SUPERSEDED_BOARDS` 白名单（可比对）；未登记 16-hex 一律不成立",
+  "CO-159（F-5）：下游快照键判据为键名面（`*_sha16_after` ∪ `register|ledger[_…]_sha16|items_total|open_total|n_items`），不依赖嵌套容器",
   "豁免仅限『记录本体已被后续 CO 取代 ⇒ pin 属历史』并在本闸注册表明文；未声明陈旧 pin 一律 FAIL",
   "pin→文件解析失败（歧义/无候选）记 unresolved_key，不计失败但入记录",
   "扫描范围（CO-153 声明）：仅 STEP2 下 m13_v57_co*.json 记录的 `*_record` 键；台账（L2/derived_value_ledger_v1.json）内 DV 的 reachability.evidence_ref pin 由 co124 K9 的 declared/process_floor 判据覆盖（CO-153）"
  ],
  "pins_total": 17,
- "revision": "CO-120.4",
+ "revision": "CO-120.5",
  "rows": [
   {
    "actual": "7f481be259865941",
@@ -149,15 +151,15 @@
    "status": "match"
   },
   {
-   "actual": "c652f4b1b572912a",
-   "cited": "c652f4b1b572912a",
+   "actual": "a29b802163bca3d9",
+   "cited": "a29b802163bca3d9",
    "key": "co98_record",
    "record": "m13_v57_co105_f4_scope_disposition.json",
    "resolved": "m13_v57_co98_reachability_status_report.json",
    "status": "match"
   },
   {
-   "actual": "b01774449669c10a",
+   "actual": "942203f4791597a9",
    "cited": "fa0ef14cb38dcb1c",
    "key": "co106_record",
    "record": "m13_v57_co109_in4_void_l2_ruling.json",
@@ -165,7 +167,7 @@
    "status": "exempt_historical"
   },
   {
-   "actual": "b01774449669c10a",
+   "actual": "942203f4791597a9",
    "cited": "fa0ef14cb38dcb1c",
    "key": "co106_record",
    "record": "m13_v57_co110_l2_coverage_closure.json",
@@ -205,7 +207,7 @@
    "status": "match"
   },
   {
-   "actual": "c9eba916a9866808",
+   "actual": "4525e38330ee599f",
    "cited": "7bb1d00b697b0c6e",
    "key": "co95_record",
    "record": "m13_v57_co118_bcu_bridge_conflict_check.json",
@@ -260,16 +262,16 @@
    "status": "unresolved_key"
   },
   {
-   "actual": "c9eba916a9866808",
-   "cited": "c9eba916a9866808",
+   "actual": "4525e38330ee599f",
+   "cited": "4525e38330ee599f",
    "key": "co95_record",
    "record": "m13_v57_co98_reachability_status_report.json",
    "resolved": "m13_v57_co95_in4_reachability.json",
    "status": "match"
   },
   {
-   "actual": "c9eba916a9866808",
-   "cited": "c9eba916a9866808",
+   "actual": "4525e38330ee599f",
+   "cited": "4525e38330ee599f",
    "key": "co95_record",
    "record": "m13_v57_co98_reachability_status_report.json",
    "resolved": "m13_v57_co95_in4_reachability.json",
@@ -280,6 +282,7 @@
  "snapshot_declared": {
   "m13_v57_co133_pdn_construction_apply.json": "上游稳定：board_sha16_after = 交付板 d4e81f647be7f980（非下游漂移）",
   "m13_v57_co146_jlc_rebind.json": "历史：register 时点快照；CO-152 起同类字段一律禁止，本件留存为历史",
+  "m13_v57_co159_rev19_co156_co157_co158_review.json": "CO-159 复评件：`register` 计数取自 as-found 锚点（`git show c4e951c`），为不可变历史值（非下游时点观测）⇒ 不随运行序漂移",
   "m13_v57_co68_option_a_execute_derive.json": "历史：lid_rev5/spec_rev4 时点快照，已被 CO-113+ 取代",
   "m13_v57_co72_pdn_align.json": "历史：spec_rev5 时点快照，已被 CO-113+ 取代",
   "m13_v57_co73_layer_role_consistency.json": "历史：spec_rev6 时点快照，已被 CO-113+ 取代",
@@ -305,6 +308,14 @@
    ],
    "reason": "历史：register 时点快照；CO-152 起同类字段一律禁止，本件留存为历史",
    "record": "m13_v57_co146_jlc_rebind.json"
+  },
+  {
+   "declared": true,
+   "keys": [
+    "checks.V1_claims_hold_as_found.register.n_items"
+   ],
+   "reason": "CO-159 复评件：`register` 计数取自 as-found 锚点（`git show c4e951c`），为不可变历史值（非下游时点观测）⇒ 不随运行序漂移",
+   "record": "m13_v57_co159_rev19_co156_co157_co158_review.json"
   },
   {
    "declared": true,
@@ -357,15 +368,21 @@
   }
  ],
  "stale_undeclared": [],
+ "superseded_boards": {
+  "a3ce9ab803045a0a": "CO-144 重建前的 PDN/载体板（B.Cu 载体 + In4 承载改造前）"
+ },
  "teeth": {
   "negative_control_freetext_board_basis_rejected": true,
   "negative_control_register_snapshot_caught": true,
+  "negative_control_top_level_register_snapshot_caught": true,
   "negative_control_undeclared_snapshot_caught": true,
   "negative_control_undeclared_stale_caught": true,
+  "negative_control_unregistered_board_sha_rejected": true,
   "positive_control_board_sha_basis_accepted": true,
   "positive_control_declared_register_snapshot_passes": true,
   "positive_control_declared_snapshot_passes": true,
   "positive_control_matching_pin_passes": true,
+  "positive_control_note_key_not_snapshot": true,
   "teeth_ok": true
  },
  "unresolved_key": [

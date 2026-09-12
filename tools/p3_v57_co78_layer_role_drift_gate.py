@@ -105,7 +105,7 @@ def main(argv=None) -> int:
     # 对照（历史件）必须被抓到 —— 证明闸有齿
     ctl = Path(a.control_historical)
     ctl_flags = scan_json(ctl) if ctl.exists() else []
-    rec = {"artifact": "m13_v57_co78_layer_role_drift_gate", "schema": 1, "revision": "CO-78.1",
+    rec = {"artifact": "m13_v57_co78_layer_role_drift_gate", "schema": 1, "revision": "CO-78.2",
            "nature": "L2 层角色漂移回归闸（当前态工件）",
            "policy": {"signal": sorted(SIGNAL), "gnd_plane": sorted(PLANE), "power": sorted(POWER)},
            "scope": [str(f) for f in files], "per_file": per,
@@ -120,7 +120,8 @@ def main(argv=None) -> int:
     print(json.dumps({"verdict": rec["verdict"], "total_flags": len(total),
                       "tooth_control_detected": rec["teeth_ok"],
                       "control_flags": len(ctl_flags), "record": s16(OUT)}, ensure_ascii=False))
-    return 0
+    # CO-159（F-11）：R-CO158-3 —— 退出码须反映 verdict
+    return 0 if (rec["verdict"] == "PASS" and rec["teeth_ok"]) else 1
 
 
 if __name__ == "__main__":

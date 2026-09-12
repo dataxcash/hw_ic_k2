@@ -239,13 +239,22 @@ def main() -> int:
     drl = sorted(p.name for p in ddir.glob("*.drl"))
     notes_txt = (OUT / "ORDER_NOTES.md").read_text()
     refs = sorted(set(re.findall(r"`(06_rulings/[A-Za-z0-9_.\-]+)`", notes_txt)))
+    # CO-159（F-9）：ORDER_NOTES 里的**目录级**声明（`01_`..`06_`）也须落包内（原先只覆盖 `06_rulings/*` 文件引用）
+    dir_refs = sorted(set(re.findall(r"\b(0[1-6]_)", notes_txt)))
+    # CO-159（F-8）：随单附件副本须与来源**内容一致**（防「来源已修订而包内副本陈旧」——J-1 同类已实测发生）
+    rulings_parity = {d: (sha256(OUT / "06_rulings" / d) == sha256(src)) for src, d in RULINGS}
+    # t07 灵敏度负控：不同文件必须比较为不等（否则 parity 函数恒真）
+    parity_sensitivity = (sha256(OUT / "06_rulings" / RULINGS[0][1]) != sha256(OUT / "ORDER_NOTES.md"))
     teeth = {"t01_idempotent": ident,
              "t05_declared_rulings_packaged": all((OUT / "06_rulings" / d).exists() for _, d in RULINGS),
              "t06_order_notes_refs_resolve_in_package": bool(refs) and all((OUT / r).exists() for r in refs),
+             "t07_packaged_rulings_match_sources": all(rulings_parity.values()),
+             "t07b_parity_detector_sensitivity": parity_sensitivity,
+             "t08_declared_dirs_present": bool(dir_refs) and all(any(OUT.glob(f"{d}*")) for d in dir_refs),
              "t02_8_copper_gerbers": len(cu) >= 8,
              "t03_drill_present": len(drl) >= 1,
              "t04_all_hashed": all(v.get("sha256") for v in m1.values())}
-    rec = {"artifact": "m13_v57_co146_jlc_fab_package", "schema": 1, "revision": "CO146-PKG.2",
+    rec = {"artifact": "m13_v57_co146_jlc_fab_package", "schema": 1, "revision": "CO146-PKG.3",
            "nature": "JLC 打样包（监理指令 #10 动作 3）；只出交付物，不改板/SPEC",
            "board": BOARD.name, "board_sha16": sha16(BOARD),
            "package_dir": str(OUT.relative_to(K2)), "n_files": len(m1),
@@ -259,6 +268,7 @@ def main() -> int:
                                "reason": "KiCad 导出件内嵌墙钟时间戳 ⇒ 规范化以保证命令+sha 可复现；制造语义不受影响"},
            "stackup_svg_sha16": sha16(OUT / "03_stackup/JLC08161H_stackup.svg"),
            "teeth": teeth,
+           "declared_refs": {"files": refs, "dirs": dir_refs, "rulings_parity": rulings_parity},
            "orderable_at_jlc_standard": not dfm["fails"],
            "blockers": dfm["fails"],
            "manifest": m1,

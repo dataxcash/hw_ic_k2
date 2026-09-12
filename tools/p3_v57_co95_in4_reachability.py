@@ -105,7 +105,7 @@ def main(argv=None) -> int:
     # 牙齿：合成注入（真跑 classify）
     teeth_bad = classify("T9", "1", "12V_IN", 60.0, 50.0)[0] == "needs_region_ruling"
     teeth_ok = classify("T9", "1", "P3V3", 120.0, 50.0)[0] == "covered_explicit"
-    rec = {"artifact": "m13_v57_co95_in4_reachability", "schema": 1, "revision": "CO-95.1",
+    rec = {"artifact": "m13_v57_co95_in4_reachability", "schema": 1, "revision": "CO-95.2",
            "nature": "L2 PDN：power entry 的 In4 平面可达性机判（via 是否被本网 In4 铜覆盖）",
            "inputs": {"spec": sp.name, "spec_sha16": s16(sp),
                       "explicit_polygons": {k: [n for n, _ in v] for k, v in poly.items()},
@@ -133,7 +133,8 @@ def main(argv=None) -> int:
     print("teeth:", rec["teeth"])
     for r in gaps:
         print(f"   GAP {r['net']:9s} {r['ref']}.{r['pad']} @{r['via_pos']} :: {r['detail']}")
-    return 0
+    # CO-159（F-11）：R-CO158-3 —— 退出码须反映 verdict
+    return 0 if rec["verdict"] == "PASS" else 1
 
 
 if __name__ == "__main__":

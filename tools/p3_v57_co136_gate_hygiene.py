@@ -50,7 +50,8 @@ def main() -> int:
     checks = {
         "F6_co106_teeth_all_true": all(v is True for k, v in co106["teeth"].items() if k != "teeth_ok")
                                    and co106["teeth"]["teeth_ok"] is True,
-        "F6_co106_teeth_no_stale_point": co106["revision"] == "CO-106.2",
+        # CO-159/160：以「≥ CO-106.2」代替字面版本比较（CO-106.3 起仍成立；避免版本 bump 假阴）
+        "F6_co106_teeth_no_stale_point": co106["revision"] >= "CO-106.2",
         "F5b_co124_doc_version": co124["definition_doc"]["status"].startswith("v1.1")
                                  and co124["definition_doc"]["path"].endswith("BASIC_SKILL_VS_REDLINE_v1.1.md"),
         "F5b_co124_findings_still_zero": co124["n_findings"] == 0 and co124["verdict"] == "PASS",
@@ -70,7 +71,7 @@ def main() -> int:
     teeth = {"H4_negative_control_write_only_caught": h4_neg_hit, "H4_positive_control_upsert_ok": h4_pos_ok}
     verdict = "PASS" if (all(checks.values()) and h4_neg_hit and h4_pos_ok) else "FAIL"
     rec = {
-        "artifact": "m13_v57_co136_gate_hygiene", "schema": 1, "revision": "CO-136.1",
+        "artifact": "m13_v57_co136_gate_hygiene", "schema": 1, "revision": "CO-136.2",
         "nature": "L2 自裁 · 闸卫生续：关闭 CO-135 F5(b)/F6、强化 F1 牙齿、登记簿闭环；CO-157 增 R-CO156-3 机判（台账 upsert-only 源码守卫）",
         "closed_findings": {
             "F6": {"target": "co106 continuity tooth", "fix": "数据无关合成正/负控", "rev": "CO-106.2",

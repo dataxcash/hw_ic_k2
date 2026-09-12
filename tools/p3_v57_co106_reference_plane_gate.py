@@ -231,7 +231,7 @@ def main(argv=None) -> int:
     mismatch = {k: {"expect": v, "actual": s16({"spec_current": SPEC_CUR, "board": BOARD}[k])}
                 for k, v in BASE.items() if s16({"spec_current": SPEC_CUR, "board": BOARD}[k]) != v}
     hard = all(v["ok"] for v in checks.values()) and teeth["teeth_ok"]
-    rec = {"artifact": "m13_v57_co106_reference_plane_gate", "schema": 1, "revision": "CO-106.2",
+    rec = {"artifact": "m13_v57_co106_reference_plane_gate", "schema": 1, "revision": "CO-106.3",
            "nature": "L2 合格标准覆盖性补全（ch.2「参考平面」）+ 参考平面连续性/板框一致性机判",
            "inputs": {"spec_current": s16(SPEC_CUR), "drawing": s16(DRAWING), "board": s16(BOARD)},
            "base_pins": BASE, "pin_mismatch": mismatch, "checks": checks, "teeth": teeth,
@@ -248,7 +248,8 @@ def main(argv=None) -> int:
     print("   frame deviations:", json.dumps(dev, ensure_ascii=False))
     print("   viol:", json.dumps({f"{k[0]}<-{k[1]}": v for k, v in sorted(viol.items())}, ensure_ascii=False))
     print("   realized below plane bottom:", json.dumps(realized, ensure_ascii=False))
-    return 0
+    # CO-159（F-11）：R-CO158-3 —— 退出码须反映 verdict
+    return 0 if rec["verdict"] == "PASS" else 1
 
 
 if __name__ == "__main__":

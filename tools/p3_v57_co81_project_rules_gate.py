@@ -142,7 +142,7 @@ def main() -> int:
                                            "PCIe85": {**spec_nc["PCIe85"], "clearance": 0.2}})
     teeth = teeth and (spec_neg == {"PCIe85.clearance": [0.175, 0.2]})
     teeth = teeth and hist_ok
-    rec = {"artifact": "m13_v57_co81_project_rules_gate", "schema": 1, "revision": "CO-81.1",
+    rec = {"artifact": "m13_v57_co81_project_rules_gate", "schema": 1, "revision": "CO-81.2",
            "nature": "L2 可审计性：受控工程文件设计规则 = 红线规则源 的回归闸",
            "authority_source": {"file": str(RULES.relative_to(K2.parent)), "sha16": s16(RULES),
                                 "section": "manufacturing + hole_clearance:min"},
@@ -167,7 +167,8 @@ def main() -> int:
     OUT.write_text(json.dumps(rec, ensure_ascii=False, indent=1, sort_keys=True), encoding="utf-8")
     print(json.dumps({"verdict": rec["verdict"], "files": len(rows), "violations": bad,
                       "teeth_ok": teeth, "record": s16(OUT)}, ensure_ascii=False))
-    return 0
+    # CO-159（F-11）：R-CO158-3 —— 退出码须反映 verdict
+    return 0 if rec["verdict"] == "PASS" else 1
 
 
 if __name__ == "__main__":

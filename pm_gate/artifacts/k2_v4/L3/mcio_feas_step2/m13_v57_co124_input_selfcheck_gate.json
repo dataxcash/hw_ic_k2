@@ -1,7 +1,7 @@
 {
  "artifact": "m13_v57_co124_input_selfcheck_gate",
  "schema": 1,
- "revision": "CO-124.7",
+ "revision": "CO-124.8",
  "nature": "输入自检闸：规格/规则自身自洽 + 物理可达登记 + 缺陷登记完备（整改通知 #08 第 2/3 条）",
  "definition_doc": {
   "path": "pm_gate/artifacts/k2_v4/L2/BASIC_SKILL_VS_REDLINE_v1.1.md",
@@ -52,13 +52,17 @@
   "T14c_kind_coverage_no_false_positive": true,
   "T15_declared_binding_teeth": true,
   "T15b_declared_binding_no_false_positive": true,
+  "T15c_declared_empty_computed_teeth": true,
   "T16_faithful_provenance_teeth": true,
   "T16b_faithful_provenance_no_false_positive": true,
+  "T16c_authoritative_dv_missing_teeth": true,
   "T17_process_floor_evidence_teeth": true,
   "T17b_process_floor_no_false_positive": true,
   "T18_k9_finder_id_coverage": true,
   "T18b_k9_finder_id_no_undeclared": true,
-  "T18c_k9_finder_battery_nonempty": true
+  "T18c_k9_finder_battery_nonempty": true,
+  "T18d_k9_finder_ids_source_complete": true,
+  "T18e_k9_finder_id_extractor_sensitivity": true
  },
  "teeth_ok": true,
  "verdict": "PASS",

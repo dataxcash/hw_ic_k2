@@ -63,10 +63,17 @@ SNAPSHOT_DECLARED = {
     "m13_v57_co82_l4_project_netclass_align.json": "历史：l4_project 时点快照（同上）",
     "m13_v57_co133_pdn_construction_apply.json": "上游稳定：board_sha16_after = 交付板 d4e81f647be7f980（非下游漂移）",
     "m13_v57_co146_jlc_rebind.json": "历史：register 时点快照；CO-152 起同类字段一律禁止，本件留存为历史",
+    "m13_v57_co159_rev19_co156_co157_co158_review.json": "CO-159 复评件：`register` 计数取自 as-found 锚点（`git show c4e951c`），"
+                                                         "为不可变历史值（非下游时点观测）⇒ 不随运行序漂移",
 }
 DELIVERED_BOARD = "d4e81f647be7f980"
 # CO-157（H-3）：`board_superseded` 的「机判可证」须是**格式可判的板 sha16**，自由文本不算证据。
 BOARD_RE = re.compile(r"[0-9a-f]{16}")
+# CO-159（F-6）：格式判仍被任意 16-hex（`0000…`/`deadbeef…`）满足 ⇒ 收为**已登记被取代板白名单**（可比对）。
+# 登记依据：该 sha 在 co88/co99/co137/co138/co140/co141/co142/co143 记录中一致出现（CO-144 重建前的板）。
+SUPERSEDED_BOARDS = {
+    "a3ce9ab803045a0a": "CO-144 重建前的 PDN/载体板（B.Cu 载体 + In4 承载改造前）",
+}
 
 
 # CO-156（F-2b）：下游快照键的**通用**判据 —— 除 `*_sha16_after` 外，`register.*` / `ledger.*` 下的
@@ -75,9 +82,17 @@ DOWNSTREAM_CONTAINER = ("register", "ledger")
 DOWNSTREAM_COUNT_KEYS = ("items_total", "open_total", "n_items")
 
 
+# CO-159（F-5）：键名面判据（不再要求嵌在 `register`/`ledger` 容器内）——
+# 顶层/其它容器下的 `register_sha16` / `open_total` 等同属规则禁止的下游快照。
+_DOWNSTREAM_KEY_RE = re.compile(
+    r"^(register|ledger)(_[a-z0-9_]+)?_?(sha16|items_total|open_total|n_items)$")
+
+
 def _is_downstream_snapshot(path: list, key: str) -> bool:
     k = str(key)
     if k.endswith("sha16_after"):
+        return True
+    if _DOWNSTREAM_KEY_RE.fullmatch(k):
         return True
     return any(seg in DOWNSTREAM_CONTAINER for seg in path) and \
         (k.endswith("sha16") or k in DOWNSTREAM_COUNT_KEYS)
@@ -116,8 +131,9 @@ def basis_of(records: dict) -> list:
         board = (d.get("inputs") or {}).get("board") or d.get("board_sha16") or d.get("board")
         for key in pins:
             cls = (EXEMPT_BASIS.get(name) or {}).get(key, "undeclared")
-            ok = (cls == "board_superseded" and isinstance(board, str) and bool(BOARD_RE.fullmatch(board))
-                  and board != DELIVERED_BOARD) or (cls == "declared_historical")
+            ok = ((cls == "board_superseded" and isinstance(board, str) and bool(BOARD_RE.fullmatch(board))
+                   and board != DELIVERED_BOARD and board in SUPERSEDED_BOARDS)
+                  or (cls == "declared_historical"))
             out.append({"record": name, "key": key, "basis": cls, "basis_ok": ok,
                         "declared_board": board})
     return out
@@ -213,15 +229,23 @@ def main(argv=None) -> int:
     neg_basis_hit = bool(neg_basis) and not neg_basis[0]["basis_ok"]
     pos_basis = basis_of({"m13_v57_co137_interpair_fixspace.json": {"inputs": {"board": "a3ce9ab803045a0a"}}})
     pos_basis_ok = bool(pos_basis) and pos_basis[0]["basis_ok"]
-    teeth_ok = neg_hit and pos_ok and snap_ok and neg_basis_hit and pos_basis_ok
+    # CO-159（F-6）负控：未登记（伪造）的 16-hex 板 sha 不得成立豁免
+    fake_basis = basis_of({"m13_v57_co137_interpair_fixspace.json": {"inputs": {"board": "deadbeefdeadbeef"}}})
+    fake_basis_hit = bool(fake_basis) and not fake_basis[0]["basis_ok"]
+    # CO-159（F-5）负控/正控：顶层（非容器）下游键必须被抓；带 `_note` 后缀的说明键不得误报
+    neg_snap3 = scan_snapshots({"synthetic_probe.json": {"register_sha16": "0" * 16}})
+    neg_snap3_hit = any(not s3["declared"] for s3 in neg_snap3)
+    pos_snap3_ok = scan_snapshots({"synthetic_probe.json": {"register_sha16_note": "说明，非快照"}}) == []
+    teeth_ok = (neg_hit and pos_ok and snap_ok and neg_basis_hit and pos_basis_ok
+                and fake_basis_hit and neg_snap3_hit and pos_snap3_ok)
     rec = {
-        "artifact": "m13_v57_co120_provenance_pin_gate", "schema": 1, "revision": "CO-120.4",
+        "artifact": "m13_v57_co120_provenance_pin_gate", "schema": 1, "revision": "CO-120.5",
         "nature": "L2 过程闸：记录内 inter-record provenance pin 一致性（关闭 CO-108/CO-114 F-6 盲区）",
         "pins_total": len(rows), "n_match": sum(1 for r in rows if r["status"] == "match"),
         "n_exempt_historical": sum(1 for r in rows if r["status"] == "exempt_historical"),
         "n_stale_undeclared": len(stale), "n_unresolved_key": len(unresolved),
         "stale_undeclared": stale, "unresolved_key": unresolved,
-        "exemption_registry": EXEMPT,
+        "exemption_registry": EXEMPT, "superseded_boards": SUPERSEDED_BOARDS,
         "exemption_basis": {"classes": EXEMPT_BASIS, "rows": basis,
                            "n_declared_historical": n_decl_hist,
                            "n_basis_not_ok": len(basis_bad)},
@@ -234,6 +258,9 @@ def main(argv=None) -> int:
                   "negative_control_register_snapshot_caught": neg_snap2_hit,
                   "positive_control_declared_register_snapshot_passes": pos_snap2_ok,
                   "negative_control_freetext_board_basis_rejected": neg_basis_hit,
+                  "negative_control_unregistered_board_sha_rejected": fake_basis_hit,
+                  "negative_control_top_level_register_snapshot_caught": neg_snap3_hit,
+                  "positive_control_note_key_not_snapshot": pos_snap3_ok,
                   "positive_control_board_sha_basis_accepted": pos_basis_ok,
                   "positive_control_declared_snapshot_passes": pos_snap_ok,
                   "teeth_ok": teeth_ok},
@@ -246,6 +273,8 @@ def main(argv=None) -> int:
                        "后者必须在本闸 SNAPSHOT_DECLARED 声明（未声明一律 FAIL）"
                        "（理由：该类快照使记录 sha 随运行序漂移 ⇒ 提交 pin 不可复现）；未声明一律 FAIL",
                        "F-7：豁免依据分 `board_superseded`（机判可证）与 `declared_historical`（无板级依据，计数明示）两类",
+                       "CO-159（F-6）：`board_superseded` 的板 sha16 须在 `SUPERSEDED_BOARDS` 白名单（可比对）；未登记 16-hex 一律不成立",
+                       "CO-159（F-5）：下游快照键判据为键名面（`*_sha16_after` ∪ `register|ledger[_…]_sha16|items_total|open_total|n_items`），不依赖嵌套容器",
                        "豁免仅限『记录本体已被后续 CO 取代 ⇒ pin 属历史』并在本闸注册表明文；未声明陈旧 pin 一律 FAIL",
                        "pin→文件解析失败（歧义/无候选）记 unresolved_key，不计失败但入记录",
                        "扫描范围（CO-153 声明）：仅 STEP2 下 m13_v57_co*.json 记录的 `*_record` 键；"

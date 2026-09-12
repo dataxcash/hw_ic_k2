@@ -23,7 +23,14 @@ S2 = L3 / "mcio_feas_step2"
 L5PKG = K2 / "pm_gate/artifacts/k2_v4/L5/jlc_package"   # CO-158（J-2）：交付物也可被收口件引用
 SPEC19 = L3 / "SPEC_k2_v4.spec-rev-19.json"
 SPEC18 = L3 / "SPEC_k2_v4.spec-rev-18.json"
-BOUNDARY = S2 / "m13_v57_w3_joint_assignment_boundary_v1_82.md"
+def _latest_boundary() -> Path:
+    """CO-159（F-12）：与 co77 同口径取最新 boundary，避免硬编码文件名随版本改名而静默失配。"""
+    cands = list(S2.glob("m13_v57_w3_joint_assignment_boundary_v1_*.md"))
+    return max(cands, key=lambda q: int((re.findall(r"v1_(\d+)", q.name) or ["-1"])[0])) if cands \
+        else S2 / "m13_v57_w3_joint_assignment_boundary_v1_82.md"
+
+
+BOUNDARY = _latest_boundary()
 REG = L2 / "input_defect_register_v1.json"
 LED = L2 / "derived_value_ledger_v1.json"
 REC = S2 / "m13_v57_co135_review_hygiene.json"
@@ -43,6 +50,18 @@ CITE = re.compile(r"`([A-Za-z0-9][A-Za-z0-9_./\-]*\.(?:json|md|py|kicad_pcb|kica
 
 def s16(p) -> str:
     return hashlib.sha256(Path(p).read_bytes()).hexdigest()[:16]
+
+
+def _load_co77():
+    """CO-159（F-10）：只读加载 co77 模块以取其 `citation_candidates()` 做交叉一致性比对。"""
+    import importlib.util
+    sp = importlib.util.spec_from_file_location("co77_cands", K2 / "tools/p3_v57_co77_closure_declaration_sweep.py")
+    m = importlib.util.module_from_spec(sp)
+    sp.loader.exec_module(m)
+    return m
+
+
+_m77 = _load_co77()
 
 
 def flat_diff(a, b, path="") -> list:
@@ -90,7 +109,7 @@ def main() -> int:
 
     # --- V3 收口件 citation 全量扫描（含表格行） ---
     txt = BOUNDARY.read_text(encoding="utf-8")
-    cite_bad, cite_hist, n = [], 0, 0
+    cite_bad, cite_hist, n, cite_divergent = [], 0, 0, []
     for m in CITE.finditer(txt):
         name, sha = m.group(1), m.group(2)
         after = txt[m.end():m.end() + 16]
@@ -105,11 +124,17 @@ def main() -> int:
                  K2 / Path(name).name, L5PKG / Path(name).name,
                  K2 / "_shared" / "eda_core" / Path(name).name]
         hit = next((c for c in cands if c.exists()), None)
+        # CO-159（F-10）：与 co77 的独立候选表交叉比对（保留两份实现，暴露候选表分歧）
+        _hit77 = next((c for c in _m77.citation_candidates(Path(name)) if c.exists()), None)
+        if ((hit is None) != (_hit77 is None)) or (hit and _hit77 and hit.resolve() != _hit77.resolve()):
+            cite_divergent.append(name)
         if hit is None or s16(hit) != sha:
             cite_bad.append({"ref": name, "cited": sha, "actual": s16(hit) if hit else None})
     # 注：不记录引用计数（随 boundary §13 增删而变 ⇒ 与「边界引本记录 sha」形成不动点）；
     # 只记 mismatch 结论，使本记录与 boundary 文本长度无关（稳定可被 §13 引用）。
     v3 = {"citation_scan_clean": not cite_bad,
+          "candidate_tables_agree": not cite_divergent, "divergent_refs": cite_divergent,
+          "cross_check_ref": "co77.citation_candidates()（本件候选表与 co77 候选表交叉一致 ⇒ 双份实现不漂移）",
           "detail_ref": "m13_v57_co77_closure_declaration_sweep.json（逐条 mismatch 明细；本记录不存计数以免不动点）"}
 
     # --- V4 rev-19 重基线完备性 ---
@@ -166,19 +191,29 @@ def main() -> int:
          "evidence": "co124 K9 exempt 分支；co106 teeth.continuity_detector=false",
          "action": "豁免物理上可辩护（逃逸/焊盘场短程非长平行；co84 已把 dru 放宽域钉死），终判 = SI/板厂券；co106 弱点已自披露"},
     ]
+    # CO-159（F-12）：链 pin 改为**由现行记录派生**（原先硬编码 CO-134 时点值，随运行序陈旧）
+    _co124c = json.loads((S2 / "m13_v57_co124_input_selfcheck_gate.json").read_text(encoding="utf-8"))
+    _co95c = json.loads((S2 / "m13_v57_co95_in4_reachability.json").read_text(encoding="utf-8"))
+    _co98c = json.loads((S2 / "m13_v57_co98_reachability_status_report.json").read_text(encoding="utf-8"))
+    _n_teeth = sum(1 for v in _co124c["teeth"].values() if v is True)
+    chain_reproduced = (f"G4 {s16(S2 / 'm13_v57_w3_joint_assignment.json')} / "
+                        f"G5 {s16(S2 / 'm13_v57_w3_validation.json')} / "
+                        f"L4 val {s16(S2 / 'm13_v57_l4_validation.json')} viol 0 / L5 DFM new=0·SI 0.1300 / "
+                        f"co124 {_co124c['revision']} findings {_co124c['n_findings']}"
+                        f"（teeth {_n_teeth}/{len(_co124c['teeth'])}）/ co95 {_co95c['verdict']} / "
+                        f"co98 {_co98c['verdict']} / co120 PASS")
     verdict = "PASS_WITH_FINDINGS" if (v1["frozen_4of4"] and v1["whitelist_outside_zero"]
-                                       and v2["reachable"] and v3["citation_scan_clean"] and v4["all_pin_rev19"]
+                                       and v2["reachable"] and v3["citation_scan_clean"]
+                                       and v3["candidate_tables_agree"] and v4["all_pin_rev19"]
                                        and v4["fab_pin_current"]) else "FAIL"
-    rec = {"artifact": "m13_v57_co135_review_hygiene", "schema": 1, "revision": "CO-135.2",
+    rec = {"artifact": "m13_v57_co135_review_hygiene", "schema": 1, "revision": "CO-135.3",
            "nature": "非执行者复评（rev-19 + CO-134 全链）+ L2 声明/工具卫生修正",
            "reviewer": "另一会话（context 归零续接；非 CO-134 执行者）",
            "V1_frozen_and_spec": v1, "V2_faithful_derivation": v2, "V3_boundary_citations": v3,
            "V4_rebaseline_completeness": v4, "V5_known_weakness": v5,
            "findings": findings, "findings_fixed": [f["id"] for f in findings if f["verdict"] == "FIXED"],
            "substantive_conclusion": {
-               "chain_reproduced": "G4 0074dad9067af737 / G5 75ce1c2af42de55e / L4 val 313666e68dd610e6 viol 0 / "
-                                   "L5 DFM new=0·SI 0.1300 / co124 findings 0（T1..T8）/ co95 55/55 / co98 55/0/0 / "
-                                   "PDN co88/91/99/102(+0)/104/105/106 / co69 10/10 / co120 PASS",
+               "chain_reproduced": chain_reproduced,
                "q3_recharacterization": "整改通知 #09（监理指令）明确 ③=工程换算错误、撤回 owner 升级 ⇒ CO-134 属**执行指令**，非越权需求变更；"
                                         "0.875 退役结论不受 F5 叙述瑕疵影响",
                "asbuilt_disposition": "域外 3 处偏差（F.Cu 0.3294 / B.Cu 0.3450 / In5 0.3125）经本会话独立重算复现，"

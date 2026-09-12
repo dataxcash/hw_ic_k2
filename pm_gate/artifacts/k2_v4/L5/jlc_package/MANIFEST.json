@@ -1,7 +1,7 @@
 {
  "artifact": "m13_v57_co146_jlc_fab_package",
  "schema": 1,
- "revision": "CO146-PKG.2",
+ "revision": "CO146-PKG.3",
  "nature": "JLC 打样包（监理指令 #10 动作 3）；只出交付物，不改板/SPEC",
  "board": "k2_v4_8L.l4.kicad_pcb",
  "board_sha16": "d4e81f647be7f980",
@@ -45,9 +45,33 @@
   "t01_idempotent": true,
   "t05_declared_rulings_packaged": true,
   "t06_order_notes_refs_resolve_in_package": true,
+  "t07_packaged_rulings_match_sources": true,
+  "t07b_parity_detector_sensitivity": true,
+  "t08_declared_dirs_present": true,
   "t02_8_copper_gerbers": true,
   "t03_drill_present": true,
   "t04_all_hashed": true
+ },
+ "declared_refs": {
+  "files": [
+   "06_rulings/L2_RULING_u6_thermal_mitigation_v1.md",
+   "06_rulings/L2_RULING_u6_thermal_v1.md",
+   "06_rulings/L2_RULING_via_channel_and_interpair_domain_v1.md",
+   "06_rulings/m13_v57_co146_jlc_dfm_gate.json"
+  ],
+  "dirs": [
+   "01_",
+   "02_",
+   "03_",
+   "04_",
+   "06_"
+  ],
+  "rulings_parity": {
+   "L2_RULING_via_channel_and_interpair_domain_v1.md": true,
+   "L2_RULING_u6_thermal_v1.md": true,
+   "L2_RULING_u6_thermal_mitigation_v1.md": true,
+   "m13_v57_co146_jlc_dfm_gate.json": true
+  }
  },
  "orderable_at_jlc_standard": false,
  "blockers": [

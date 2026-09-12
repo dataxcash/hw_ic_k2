@@ -556,6 +556,69 @@ def main() -> int:
     txt = txt.replace("W3 Boundary **v2.02**", "W3 Boundary **v2.03**")
     txt = txt.replace("W3 Boundary **v2.03**", "W3 Boundary **v2.04**")
     txt = txt.replace("W3 Boundary **v2.04**", "W3 Boundary **v2.05**")
+    # ── §34 CO-159 / CO-160（非执行者对抗复评 + 处置） ─────────────────────
+    MARK34 = "## 34. CO-159 / CO-160"
+    _rc34 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    sec34 = [MARK34 + "（**非执行者对抗复评 CO-156/157/158 + L2 自裁处置**）", "",
+             f"- 复评（**CO-159**，as-found 钉在 k2 `c4e951c`；`git show` 重放受评基线 ⇒ 不随后续修复漂移）：**12 findings**（F-1..F-12）——"
+             f"① K9 `declared` 空 `computed` 绕过值-证据绑定；② `conservative_ge` 权威 DV 缺失即跳过交叉校验；③ T18 元牙齿只比电池触发集、"
+             f"源码条件分支 finder 可绕过；④ R-CO156-3「禁整表重写」无机判（H4 只拦未读即写）；⑤ co120 快照键判据依赖嵌套容器；"
+             f"⑥ `board_superseded` 仅格式判（任意 16-hex 成立）；⑦ **co146_jlc_dfm_gate verdict=FAIL 而 rc=0**（违 R-CO158-3）；"
+             f"⑧ 打样包 `06_rulings/` 无来源一致性牙齿；⑨ ORDER_NOTES 目录级声明未覆盖；⑩ co77/co135 候选表已现分歧面无一致性牙齿；"
+             f"⑪ §6 回归块 co78/co81/co84/co95/co98/co106 rc 恒 0；⑫ co135 内嵌 CO-134 时点链 pin + 硬编码 boundary 文件名。",
+             f"- 处置（**CO-160**，逐项）：co124 牙齿 29→**33**（T15c/T16c/T18d/T18e，升 **CO-124.8**）；co120 升 **CO-120.5**"
+             f"（快照键名面判据 + `SUPERSEDED_BOARDS` 白名单 + 伪造 sha 负控）；co146_jlc_dfm_gate **rc 反映 verdict**（FAIL ⇒ rc=1）；"
+             f"co146_jlc_fab_package 升 **CO146-PKG.3**（`t07` 副本来源一致性 + `t08` 目录级声明）；co135 升 **CO-135.3**"
+             f"（co77 候选表交叉一致性 + 链 pin 由现行记录派生 + boundary 取最新版）；六件回归闸 rc 反映 verdict"
+             f"（CO-78.2/81.2/84.2/95.2/98.2/106.3，co98 按 `baseline_ok and teeth_ok`）。",
+             f"- 复核：co124 = **PASS / findings 0 / 牙齿 33/33**；co120 = PASS（teeth 12-12）；co77 = PASS（mismatches []）；"
+             f"co135 = PASS_WITH_FINDINGS（候选表一致）；co136 = PASS；DFM 闸 rc=1（FAIL 属预期）；打样包 teeth **9/9**；"
+             f"登记簿 **{_rc34['total']} 项 / OPEN {_rc34['OPEN']}**。", "",
+             "> **R-CO159-1**：K9 `declared` 派生值须带**非空** `computed`（值-证据绑定不得空过）；`conservative_ge` 的权威 DV"
+             "（`DV-INTPAIR-EDGE` / `DV-PAIR-CROSS`）缺失即 FAIL（不得静默降级）；K9 判据集另由 `T18d` 以**源码**面机判"
+             "（新增 finder 未登记 `K9_FINDER_IDS` 即 FAIL）。",
+             "> **R-CO159-2**：R-CO156-3 的**机判面** = co136 `H4`（写台账须先读台账）+ CO-156 的 co134 stub 复跑证据；"
+             "「整表重写」的**语义面**无自动判据（已声明，由复评/登记承接）——规则文本不得表述为已机判。",
+             "> **R-CO159-3**：下游快照键判据取**键名面**（`*_sha16_after` ∪ `register|ledger[_…]_sha16|items_total|open_total|n_items`），"
+             "与嵌套位置无关；`board_superseded` 的板 sha16 须在 `SUPERSEDED_BOARDS` 白名单（未登记 16-hex 不成立）。",
+             "> **R-CO159-4**：复现序内**所有**闸（含 `co146_jlc_dfm_gate` 与 §6 回归块 co78/co81/co84/co95/co98/co106）退出码须反映 verdict/基线；"
+             "`co98` 按 `baseline_ok and teeth_ok` 判定（三态报告不因 OPEN 状态返回非 0）。",
+             "> **R-CO159-5**（复现序，取代 R-CO158-1）：规范复现序 = `co146_impedance_table → co146_pm_eval → co146_ledger_add → "
+             "co153_k9_domain_coverage → co148_u6_datasheet_inputs → co148_thermal_ruling → co149_thermal_mitigation_derive → "
+             "co147_l2_ruling → co146_jlc_dfm_gate → co146_jlc_fab_package → co152_findings_disposition → co155_co154_findings_disposition → "
+             "co156_co154_open_disposition → co157_gate_hardening_3 → co158_l5_packet_selfcontained → **co159_rev19_review** → "
+             "**co160_co159_findings_disposition** → co124_input_selfcheck_gate → co150_k9_domain_gate → co146_boundary_append → "
+             "co77_closure_declaration_sweep → co120_provenance_pin_gate → co135_review_hygiene → co136_gate_hygiene → "
+             "co78_layer_role_drift_gate → co81_project_rules_gate → co84_dru_domain_gate → co95_in4_reachability → "
+             "co98_reachability_status_report → co106_reference_plane_gate → co146_boundary_append`，**循环至 sha 稳定**。",
+             "", "| 工件 | sha16 |", "|---|---|"]
+    _rows34 = [("工具 `p3_v57_co159_rev19_co156_co157_co158_review.py`（as-found 复评）",
+                K2 / "tools/p3_v57_co159_rev19_co156_co157_co158_review.py"),
+               ("记录 `m13_v57_co159_rev19_co156_co157_co158_review.json`",
+                STEP2 / "m13_v57_co159_rev19_co156_co157_co158_review.json"),
+               ("工具 `p3_v57_co160_co159_findings_disposition.py`",
+                K2 / "tools/p3_v57_co160_co159_findings_disposition.py"),
+               ("工具 `p3_v57_co124_input_selfcheck_gate.py`（CO-124.8 / T15c+T16c+T18d+T18e）",
+                K2 / "tools/p3_v57_co124_input_selfcheck_gate.py"),
+               ("工具 `p3_v57_co120_provenance_pin_gate.py`（CO-120.5 / 键名面 + SUPERSEDED_BOARDS）",
+                K2 / "tools/p3_v57_co120_provenance_pin_gate.py"),
+               ("工具 `p3_v57_co135_review_hygiene.py`（CO-135.3 / 候选表交叉一致性 + 链 pin 派生）",
+                K2 / "tools/p3_v57_co135_review_hygiene.py"),
+               ("工具 `p3_v57_co146_jlc_dfm_gate.py`（rc 反映 verdict）", K2 / "tools/p3_v57_co146_jlc_dfm_gate.py"),
+               ("工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.3 / t07+t08）",
+                K2 / "tools/p3_v57_co146_jlc_fab_package.py"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc34['total']} 项 / OPEN {_rc34['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows34:
+        if pth.exists():
+            sec34.append(f"| {label} | `{s16(pth)}` |")
+    sec34.append("")
+    body34 = "\n".join(sec34)
+    if MARK34 in txt:
+        txt = re.sub(re.escape(MARK34) + r"[\s\S]*?(?=\n## |\Z)", body34, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body34
+    txt = txt.replace("W3 Boundary **v2.05**", "W3 Boundary **v2.06**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
     return 0

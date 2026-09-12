@@ -303,7 +303,9 @@ def main() -> int:
           "| annular:", m["min_via_annular_mm"], "| via h2h:", m["min_via_hole_to_hole_mm"])
     print("non-through vias:", m["n_non_through_vias"], m["via_type_census"])
     print("teeth:", teeth_ok, teeth2_ok)
-    return 0 if (teeth_ok and teeth2_ok) else 1
+    # CO-159（F-7）：R-CO158-3 —— 退出码须反映 verdict（本件 verdict 允许为 FAIL（DFM 阻塞项）⇒ rc=1；
+    # 此前 `return 0 if teeth else 1` 使 FAIL 时 rc 仍 0，复现序无法 fail-fast）。
+    return 0 if (rec["verdict"] == "PASS" and teeth_ok and teeth2_ok) else 1
 
 
 if __name__ == "__main__":

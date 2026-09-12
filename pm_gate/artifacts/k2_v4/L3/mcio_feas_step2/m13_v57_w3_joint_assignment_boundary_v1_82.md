@@ -1,4 +1,4 @@
-# m13 v57 — W3 Boundary **v2.05**（文件名沿用 v1.82 以保持 co77 身份链；CO-121/121.1/122/122b + CO-124..CO-132（D-6 定案 + rev-17 退役 B.Cu 载体 + rev-18 R1 In4 承载几何派生）+ **CO-133（L2 自裁 · 施工期物理施加：rev-18 声明 PDN 铜落板 `d4e81f647be7f980` + 幂等/板实合规机判）已登记**；**CO-134（整改通知 #09：③ 重新定性 = 工程换算错误 → REQ-R3-2 忠实实现（铜边 ≥ 2w 按层）+ 需求/实现分家规矩 + co124 K9）已登记**）（+ **CO-135（非执行者复评 rev-19 + CO-134｜L2 声明/工具卫生修正：co77 覆盖扩至 markdown 表格行、链路 pin 全量刷新、co78/co81/co84 对 rev-19 重跑、L5 fab pin 刷新）已登记**；**CO-136（L2 自裁 · 闸卫生续：co106 陈旧牙齿改数据无关合成控 / co124 定义件版本派生 / co77 表格行 citation 负控牙齿 / 登记簿 +2 TOOL_DEFECT）已登记**；**CO-137（L2 只读分析：as-built 对间偏差几何修正可行性 = MIXED）已登记**；**CO-138（L2 只读分析：偏差耦合几何画像 —— B.Cu/F.Cu = 长平行在域内；In5 = 21.8° 斜交扇出）已登记**；**CO-139（L2 自裁 · K9 硬化：豁免域须 hash-pin 依据 + 负控 T9）已登记**；**CO-140（L2 只读分析：as-built 偏差归因 —— 1 接口固有 / 1 路由可改 / 1 斜交）已登记；F.Cu 项升 L1（J2 接口节距）**；**CO-141（L2 只读审计：对间 2w 符合性全量 —— 原「3 处」为下界，实为 24 个平行对-对；根因 = 路由器列距基准漏 3W）已登记**；**CO-142（L2 只读：对间 <3W 违规逐条明细 + 构造阶段归因 —— B.Cu 14 逃生竖列 / F.Cu 10 J2 land）已登记**；**CO-143（L2 只读：纠正 CO-141 附记2 的 f13 pair_xorder 定位 → 真实所在 = escape-fan 落位判据 `p3_v57_co10_west_fan_probe.py:check()`；施加可行性 = 3W 可满足但单遍贪心+PDN 障碍下无法 32/32，须重派生扇落位策略；登记簿该项保持 OPEN）已登记**）（+ **CO-117（L2 自裁）：band In4 铺铜归属 + SPEC rev-15**；**CO-114 非执行者对抗复评 rev-14 = PASS_WITH_FINDINGS（6 发现）**；W3-CN.41 收口 + CO-67..CO-71 方案(a) 全链执行/判据/判定接口 + CO-72 PDN 平面对齐 rev-6 + CO-73 层角色声明一致性终扫（rev-7）+ CO-74 B.Cu 电力铜退役/In4 承载（SPEC rev-8）；CO-72-PDN-1 归口 L1→L2 并闭合 + CO-75 西侧 1.580 未覆盖维搜索（负结果，L1 ① 证据补强）+ **CO-76 非执行者侧对抗评审 pass 1/2（F1/F2/F3 发现并修复）** + **CO-77 收口声明件当前态身份引用校正** + CO-78 层角色漂移回归闸（F1 缺陷类关闭） + CO-79 探针空真通过加固（守卫负控 A10） + CO-80 L4 工程文件规则对齐 + 独立 kicad-cli 复现 DFM + CO-81 受控工程文件规则回归闸 + CO-82 L4 工程文件网类缺失修复 + 闸覆盖补全（net_settings） + CO-83 工程网类↔红线 SPEC net_classes 交叉校验 + **CO-84 DRC 放宽域一致性闸（dru↔域工件↔板 rule area↔SPEC）** + **CO-85 非执行者侧对抗评审 pass 2/2（V1 全链 12/12 逐字节复现 + V2 闸牙齿复核 + F1 F.Cu 行更正 + F2 连接器焊盘场 0.6mm 硬限）** + **CO-86 L2 备选闭合判定（铜跨 0.705→0.585/0.407 均不可达 0.875：WEST 差 +0.232 / 焊盘场差 +0.682）** + **CO-87 L2 合格标准覆盖性机判（ch.5 §4 PDN 压降 / ch.2 热 = NOT_DEMONSTRATED：缺输入，已登记）** + **CO-88 PDN live 字段板实性机判（FAIL：55 孤儿 entry / 184 板实 pad 无决策 / 解耦零板实落点；修复候选+波及清单已派生）** + **CO-89 SPEC rev-9 PDN 板实化（ppc 重生成 223+86=309/309 覆盖、旧 BOM 退役留存；板逐字节不变；全链重基线）** + **CO-89b 复现重跑产物入库（12/12 逐字节一致）** + **CO-90 非执行者侧对抗评审 pass 3/3（对象 rev-9 新基线；全链 12/12 逐字节复现 + CO-88/89 事实独立复核 + 闸注入突变 4/4；F1/F2 修复（CO-88.2）+ F3 覆盖口径登记）** + **CO-91 PDN 计划坐标权威净距闸（pdn_apply 实落集 × 冻结规则源 `drc_rules.json`；判 FAIL：ppc via 35/223、stitch via 41/69、zone via 7/20、F.Cu 短段 75/223；修复候选 35/35 可重定位、PDN 覆盖不退化；覆盖缺口补齐）** + **CO-91.2 规则源唯一性 fail-closed（`K2/_shared` ↔ 容器 `_shared` 的 `drc_rules.json` 同字节断言；实测同值 `0a459839e15960b8`；漂移即不可判）** + **CO-91.3 闸/修复分离（移除内嵌 fix_candidate；其 8 向×半径梯读数违「零坐标搜索」红线，已作废）** + **CO-92 PDN rev-10 修复候选（声明式有限 palette 机判；ppc 223 → kept 188 / relocated 1 / blocked 34；stitch 28/12/29；zone 13/4/3；短段 0.5→75、0.2→13）** + **CO-95 In4 平面可达性机判 + 陈旧 keepout band 退役（premise 已被 CO-74 判失效）→ SPEC rev-11 `d85f10f722ba22b0`：55 power entry = 35 显式 polygon / 8 桥区 target / 6 L3 可达性义务 / 6 需区域裁决；新增 plane_reachability_requirement；全链重基线 PASS、板逐字节不变** + **CO-94 blocked pad 可连接性闭合判定 + 裁定（维持 blocked：34 中 15 在宽松有限家族内可连，但余量低至 13.6µm 且 7 个仅在家族上限命中 ⇒ 采用即把「搜索」写进决策，违零坐标搜索红线；故 34 判为 L2 手段内不可连接，升级 L1/工艺）** + **CO-93【L2 自裁 · PDN 权威净距重落 = 施加 rev-10】SPEC rev-10 `4416e42eed10cb8c`：ppc 223→189 entries（blocked 86→120，已连接 223→189）、stitch 69→40 落/60 blocked、zone 20→17/3、短段宽 0.5→声明 0.2；CO-91 对 rev-10 = PASS（0/0，牙齿 4/4）、CO-92 对 rev-10 = 不动点；全链 G4→G7 重基线 PASS、板逐字节不变；新基线非执行者复评欠（CO-94）** + **CO-96 非执行者侧对抗评审 pass 4/4（对象 rev-11 基线：6 项发现 F1..F6 —— F1 退役键谱系断裂 / F2 可达性要求不可机判闭合 / F3 文本依赖 / F4 scope 缺口 / F5 陈旧 board_realized / F6 latent bbox；V1/V2/V3/V4 复核 OK；CO-94/CO-95 复评义务已履行）** + **CO-97 退役留存完整性闸 + 显式登记册（把红线『退役决策须显式留存』机判化；CO-96 F1 的『静默』面以显式登记关闭；L2 自裁：不解冻 `_shared`，施工侧改项目内承载、施工期激活）** + **CO-98 In4 平面可达性义务状态报告（机判化 CO-96 F2/F3/F4：三态 35/14/6 + scope 排除 40/17/0 + 裁决依据 5 机判/1 文本；co95 PIP 行为中性加固关闭 F6）** + **CO-99 PDN 计划集互相冲突闸 + 施工 dry-run（两个覆盖缺口 G1 计划集互判 / G2 孔距 net-agnostic；实测 FAIL_MUTUAL_SHORT：7 异网重叠 + 35 净距 + 39 孔距；pdn_apply 实落 DRC 42→274）** + **CO-100 互障感知修复候选（residual 重叠 0；新增 blocked **5** 项 = 4 ppc + 1 stitch —— CO-103 校正原「6 项 / 全在 U6 0.5mm 场」为过期读数）** + **CO-101【L2 自裁 · 施加】rev-11 → rev-12 计划集互障重导（ppc entries 189→185 / relocated 61 / 新增 blocked 4；stitch relocated 5 + blocked 1；zone relocated 4；退役留存 + F5 同步 + F1 回填；全链重基线 PASS、板逐字节不变；CO-99 由 FAIL → PASS）** + **CO-102【L2 自裁 · 项目内引擎承载】修正版 PDN 施加器（短段宽读 SPEC 0.2 + via 去重 + blocked 口径对齐；scratch 三态 DRC：baseline 42 / 冻结 76(+34) / 项目内 42(+0)）** + **CO-103 非执行者对抗复评（对象 rev-12 = CO-99/100/101/102 + 链 pin + 收口声明；verdict `PASS_WITH_FINDINGS`；F-A 声明漂移 / F-B 升级证据不足 / F-C co95 身份引用陈旧）** + **CO-108 非执行者对抗复评（rev-13 基线 = `PASS_WITH_FINDINGS`；F-A 记录内 provenance pin 漂移已校正 + F-B 信息性 + F-C 登记）** + **CO-108 补记 F-D（bridge zone 层归属张力 = L3 派生前未决前提）** + **CO-109（L2 自裁）In5←In4 走廊空洞 = 按设计（非待 L3 派生）；bridge zone = B.Cu；step ② 重定范围 + owner 升级** + **CO-110（L2 施加）参考平面入 CO-87 矩阵 + CO-106 D 读径修复 + In4 走廊空洞按设计定案（R5'）** + **CO-111（L2 量化）In5 PCIe 走廊参考缺失 = 40.1%（1094.8/2727.3mm）；L5 未签阻抗 ⇒ 外部终判** + **CO-112（L2 声明）3 bridge zone = B.Cu 桥（step ②c）+ In5 区域条件参考口径 + 走廊 worklist** + **CO-113（L2 施加）SPEC rev-14：裁定写入 canonical SPEC；几何与板逐字节不变** + **CO-115（L2 更正）In4 走廊空洞 = 失效 keepout 残留（待 L3 派生），非按设计；归属界面 = L1（owner）**）
+# m13 v57 — W3 Boundary **v2.06**（文件名沿用 v1.82 以保持 co77 身份链；CO-121/121.1/122/122b + CO-124..CO-132（D-6 定案 + rev-17 退役 B.Cu 载体 + rev-18 R1 In4 承载几何派生）+ **CO-133（L2 自裁 · 施工期物理施加：rev-18 声明 PDN 铜落板 `d4e81f647be7f980` + 幂等/板实合规机判）已登记**；**CO-134（整改通知 #09：③ 重新定性 = 工程换算错误 → REQ-R3-2 忠实实现（铜边 ≥ 2w 按层）+ 需求/实现分家规矩 + co124 K9）已登记**）（+ **CO-135（非执行者复评 rev-19 + CO-134｜L2 声明/工具卫生修正：co77 覆盖扩至 markdown 表格行、链路 pin 全量刷新、co78/co81/co84 对 rev-19 重跑、L5 fab pin 刷新）已登记**；**CO-136（L2 自裁 · 闸卫生续：co106 陈旧牙齿改数据无关合成控 / co124 定义件版本派生 / co77 表格行 citation 负控牙齿 / 登记簿 +2 TOOL_DEFECT）已登记**；**CO-137（L2 只读分析：as-built 对间偏差几何修正可行性 = MIXED）已登记**；**CO-138（L2 只读分析：偏差耦合几何画像 —— B.Cu/F.Cu = 长平行在域内；In5 = 21.8° 斜交扇出）已登记**；**CO-139（L2 自裁 · K9 硬化：豁免域须 hash-pin 依据 + 负控 T9）已登记**；**CO-140（L2 只读分析：as-built 偏差归因 —— 1 接口固有 / 1 路由可改 / 1 斜交）已登记；F.Cu 项升 L1（J2 接口节距）**；**CO-141（L2 只读审计：对间 2w 符合性全量 —— 原「3 处」为下界，实为 24 个平行对-对；根因 = 路由器列距基准漏 3W）已登记**；**CO-142（L2 只读：对间 <3W 违规逐条明细 + 构造阶段归因 —— B.Cu 14 逃生竖列 / F.Cu 10 J2 land）已登记**；**CO-143（L2 只读：纠正 CO-141 附记2 的 f13 pair_xorder 定位 → 真实所在 = escape-fan 落位判据 `p3_v57_co10_west_fan_probe.py:check()`；施加可行性 = 3W 可满足但单遍贪心+PDN 障碍下无法 32/32，须重派生扇落位策略；登记簿该项保持 OPEN）已登记**）（+ **CO-117（L2 自裁）：band In4 铺铜归属 + SPEC rev-15**；**CO-114 非执行者对抗复评 rev-14 = PASS_WITH_FINDINGS（6 发现）**；W3-CN.41 收口 + CO-67..CO-71 方案(a) 全链执行/判据/判定接口 + CO-72 PDN 平面对齐 rev-6 + CO-73 层角色声明一致性终扫（rev-7）+ CO-74 B.Cu 电力铜退役/In4 承载（SPEC rev-8）；CO-72-PDN-1 归口 L1→L2 并闭合 + CO-75 西侧 1.580 未覆盖维搜索（负结果，L1 ① 证据补强）+ **CO-76 非执行者侧对抗评审 pass 1/2（F1/F2/F3 发现并修复）** + **CO-77 收口声明件当前态身份引用校正** + CO-78 层角色漂移回归闸（F1 缺陷类关闭） + CO-79 探针空真通过加固（守卫负控 A10） + CO-80 L4 工程文件规则对齐 + 独立 kicad-cli 复现 DFM + CO-81 受控工程文件规则回归闸 + CO-82 L4 工程文件网类缺失修复 + 闸覆盖补全（net_settings） + CO-83 工程网类↔红线 SPEC net_classes 交叉校验 + **CO-84 DRC 放宽域一致性闸（dru↔域工件↔板 rule area↔SPEC）** + **CO-85 非执行者侧对抗评审 pass 2/2（V1 全链 12/12 逐字节复现 + V2 闸牙齿复核 + F1 F.Cu 行更正 + F2 连接器焊盘场 0.6mm 硬限）** + **CO-86 L2 备选闭合判定（铜跨 0.705→0.585/0.407 均不可达 0.875：WEST 差 +0.232 / 焊盘场差 +0.682）** + **CO-87 L2 合格标准覆盖性机判（ch.5 §4 PDN 压降 / ch.2 热 = NOT_DEMONSTRATED：缺输入，已登记）** + **CO-88 PDN live 字段板实性机判（FAIL：55 孤儿 entry / 184 板实 pad 无决策 / 解耦零板实落点；修复候选+波及清单已派生）** + **CO-89 SPEC rev-9 PDN 板实化（ppc 重生成 223+86=309/309 覆盖、旧 BOM 退役留存；板逐字节不变；全链重基线）** + **CO-89b 复现重跑产物入库（12/12 逐字节一致）** + **CO-90 非执行者侧对抗评审 pass 3/3（对象 rev-9 新基线；全链 12/12 逐字节复现 + CO-88/89 事实独立复核 + 闸注入突变 4/4；F1/F2 修复（CO-88.2）+ F3 覆盖口径登记）** + **CO-91 PDN 计划坐标权威净距闸（pdn_apply 实落集 × 冻结规则源 `drc_rules.json`；判 FAIL：ppc via 35/223、stitch via 41/69、zone via 7/20、F.Cu 短段 75/223；修复候选 35/35 可重定位、PDN 覆盖不退化；覆盖缺口补齐）** + **CO-91.2 规则源唯一性 fail-closed（`K2/_shared` ↔ 容器 `_shared` 的 `drc_rules.json` 同字节断言；实测同值 `0a459839e15960b8`；漂移即不可判）** + **CO-91.3 闸/修复分离（移除内嵌 fix_candidate；其 8 向×半径梯读数违「零坐标搜索」红线，已作废）** + **CO-92 PDN rev-10 修复候选（声明式有限 palette 机判；ppc 223 → kept 188 / relocated 1 / blocked 34；stitch 28/12/29；zone 13/4/3；短段 0.5→75、0.2→13）** + **CO-95 In4 平面可达性机判 + 陈旧 keepout band 退役（premise 已被 CO-74 判失效）→ SPEC rev-11 `d85f10f722ba22b0`：55 power entry = 35 显式 polygon / 8 桥区 target / 6 L3 可达性义务 / 6 需区域裁决；新增 plane_reachability_requirement；全链重基线 PASS、板逐字节不变** + **CO-94 blocked pad 可连接性闭合判定 + 裁定（维持 blocked：34 中 15 在宽松有限家族内可连，但余量低至 13.6µm 且 7 个仅在家族上限命中 ⇒ 采用即把「搜索」写进决策，违零坐标搜索红线；故 34 判为 L2 手段内不可连接，升级 L1/工艺）** + **CO-93【L2 自裁 · PDN 权威净距重落 = 施加 rev-10】SPEC rev-10 `4416e42eed10cb8c`：ppc 223→189 entries（blocked 86→120，已连接 223→189）、stitch 69→40 落/60 blocked、zone 20→17/3、短段宽 0.5→声明 0.2；CO-91 对 rev-10 = PASS（0/0，牙齿 4/4）、CO-92 对 rev-10 = 不动点；全链 G4→G7 重基线 PASS、板逐字节不变；新基线非执行者复评欠（CO-94）** + **CO-96 非执行者侧对抗评审 pass 4/4（对象 rev-11 基线：6 项发现 F1..F6 —— F1 退役键谱系断裂 / F2 可达性要求不可机判闭合 / F3 文本依赖 / F4 scope 缺口 / F5 陈旧 board_realized / F6 latent bbox；V1/V2/V3/V4 复核 OK；CO-94/CO-95 复评义务已履行）** + **CO-97 退役留存完整性闸 + 显式登记册（把红线『退役决策须显式留存』机判化；CO-96 F1 的『静默』面以显式登记关闭；L2 自裁：不解冻 `_shared`，施工侧改项目内承载、施工期激活）** + **CO-98 In4 平面可达性义务状态报告（机判化 CO-96 F2/F3/F4：三态 35/14/6 + scope 排除 40/17/0 + 裁决依据 5 机判/1 文本；co95 PIP 行为中性加固关闭 F6）** + **CO-99 PDN 计划集互相冲突闸 + 施工 dry-run（两个覆盖缺口 G1 计划集互判 / G2 孔距 net-agnostic；实测 FAIL_MUTUAL_SHORT：7 异网重叠 + 35 净距 + 39 孔距；pdn_apply 实落 DRC 42→274）** + **CO-100 互障感知修复候选（residual 重叠 0；新增 blocked **5** 项 = 4 ppc + 1 stitch —— CO-103 校正原「6 项 / 全在 U6 0.5mm 场」为过期读数）** + **CO-101【L2 自裁 · 施加】rev-11 → rev-12 计划集互障重导（ppc entries 189→185 / relocated 61 / 新增 blocked 4；stitch relocated 5 + blocked 1；zone relocated 4；退役留存 + F5 同步 + F1 回填；全链重基线 PASS、板逐字节不变；CO-99 由 FAIL → PASS）** + **CO-102【L2 自裁 · 项目内引擎承载】修正版 PDN 施加器（短段宽读 SPEC 0.2 + via 去重 + blocked 口径对齐；scratch 三态 DRC：baseline 42 / 冻结 76(+34) / 项目内 42(+0)）** + **CO-103 非执行者对抗复评（对象 rev-12 = CO-99/100/101/102 + 链 pin + 收口声明；verdict `PASS_WITH_FINDINGS`；F-A 声明漂移 / F-B 升级证据不足 / F-C co95 身份引用陈旧）** + **CO-108 非执行者对抗复评（rev-13 基线 = `PASS_WITH_FINDINGS`；F-A 记录内 provenance pin 漂移已校正 + F-B 信息性 + F-C 登记）** + **CO-108 补记 F-D（bridge zone 层归属张力 = L3 派生前未决前提）** + **CO-109（L2 自裁）In5←In4 走廊空洞 = 按设计（非待 L3 派生）；bridge zone = B.Cu；step ② 重定范围 + owner 升级** + **CO-110（L2 施加）参考平面入 CO-87 矩阵 + CO-106 D 读径修复 + In4 走廊空洞按设计定案（R5'）** + **CO-111（L2 量化）In5 PCIe 走廊参考缺失 = 40.1%（1094.8/2727.3mm）；L5 未签阻抗 ⇒ 外部终判** + **CO-112（L2 声明）3 bridge zone = B.Cu 桥（step ②c）+ In5 区域条件参考口径 + 走廊 worklist** + **CO-113（L2 施加）SPEC rev-14：裁定写入 canonical SPEC；几何与板逐字节不变** + **CO-115（L2 更正）In4 走廊空洞 = 失效 keepout 残留（待 L3 派生），非按设计；归属界面 = L1（owner）**）
 
 > 契约 `m13_v57_w3_kickoff_card_v1_28.md`（冻结，未改 `0ae3016379cd1db2`）｜引擎 rev **W3-CN.41**
 > ｜**取代 v1.37**（本件补 CO-59：**残余②（B.Cu/In6 并行）机器闭合 PASS** + **口径出处再基** —— 机判 `route_model_config.json` 证 1.08 是 `channel_alloc.pitch_fallback`（回退值）**而非要求量**；要求量语义 = R3-2 **铜边 0.875**，1.46 为其在冻结铜跨 0.585 下的换算 ⇒ CO-58「走廊与冻结口径一致」结论**更正**：EAST 1.449 / WEST 1.050 在 1.46 与 0.875 两读数下**均不达标**）。
@@ -19,14 +19,14 @@
 > ⑪ **CO-75（L2 走廊分配/过孔策略 · 负结果）**：补足 CO-60/61 的**未覆盖维** —— 二者 WLO 恒钉 33.70（单旋钮）；WSTEP=1.580 下 lane 块仅跨 11.06mm 而板边可用带高 45.2mm ⇒ WLO 是独立自由度。以**真发射器**扫 `WLO(12) × WSWAP/COLMODE(3) × FANY_J3(5) × HOLE_GAP(3) = 23 组合`，**0 组 32/32 落位**（保真断言：1.05@33.70 = 32/32 PASS）；失败签名恒在芯片输入 via 区 `x∈[84,93]/y∈[50,58]`（`vt_intra`/`pad_via`/`vv_placed`/`vt_placed`，行扫 1.4e4~1.8e4 耗尽）⇒ **球栅逃逸硬限**，与 WLO/fan 旋钮无关。**① 仍维持 L1**（剩余自由度 = 逃逸层重导/球重映射/落列/板框/层数）。记录 `m13_v57_co75_west_pitch_origin_search.json` `c59e9955d344d75f` / 卡 `m13_v57_CO75_L2_west_pitch_origin_search.md`。
 > ⑫ **CO-76（非执行者侧对抗评审 pass 1/2，CO-67..CO-75）**：宪法 `L2_STRUCTURE_v2.0.md:137` 要求重开层重过对抗评审，CO-69 仅执行者侧。本会话与 CO-67..73 执行者**非同一会话** ⇒ 具非执行者资格。**发现 3 项并修复**：**F1（中）** 引擎把陈旧层角色 `up=In6.Cu` 写进**生产图纸** `decision_contract.r1_5_layer_rule`（REV6 下 In6=GND，而实现本即 `up->In5.Cu`）⇒ 与 CO-72/73 同类缺陷但落在引擎/图纸；**F2（中）** CO-69 A5 只断言**带引号** `"In6.Cu"`，CO-68 改字面量后恒真 ⇒ 结构上漏检**未加引号**层角色文本（实测 14 处裸 `In6`）；**F3（低）** 10+ 处注释与同行代码矛盾。修复 = 文本类零几何（11 处改 In5；A5 改**裸 token 扫描** + 豁免 `In6->In5` 迁移注）。**机判 11/11 PASS** （C1..C11：层集/图纸字段/板层卫生/探针/引擎输入/①负结果/四源/while-free/阈值/rev-8 PDN）。全链重基线 G4 `22c2a158` / G5 `eac5eee6` / G6 板**逐字节同** `0e636a67` / G7 DFM new=0 + SI 0.1300；delta 精确 = `pages`/`route_geometry` 逐字节同、`decision_contract` 仅一字符串。记录 `m13_v57_co76_nonexecutor_review.json` `cf5b4ec0e880e5d2` / 卡 `m13_v57_CO76_nonexecutor_adversarial_review.md` `32d5868a1a2880b4`。**残余：pass 2/2（另一非执行者）仍欠**。
 > ⑬ **CO-77（L2 声明一致性）**：把 CO-76 的判据扫到**收口声明件** —— boundary 中凡以「现行/主件/交付」口径引用的 sha16 必须等于当前实际文件。机判 `tools/p3_v57_co77_closure_declaration_sweep.py`（12 项身份断言）实测 v1.41 **4 项陈旧**：§6-1『现行 L4 板』`cdcb869e9827ec87`（实为 `0e636a67c1472462`）、§1 ⑤ 执行者对抗评审记录 `50ff390f2803f25d`（实为 `6daec5df8bf0d118`）、§1 ⑩ 链记录 `9b1a284d2bb61e67`（实为 `51dbb2076bc379e4`）、§1 CO-69 卡 `d472f16e73a57f3e`（实为 `661ad6c57e0e2418`）；且 v1.41 §1 与 §7 互不一致（同一工件两个 sha）。**本件全部校正并显式标注历史**，扫描 v1.42 = **PASS/0 陈旧**。记录 `m13_v57_co77_closure_declaration_sweep.json` / 卡 `m13_v57_CO77_closure_declaration_sweep.md`。
-> ⑭ **CO-78（L2 声明一致性 · 回归闸）**：把 CO-72/73/76 的缺陷类固化为**可重复闸** —— 当前态工件中「平面层当信号层」或「信号层当平面层」的角色声明一律 FAIL（口径：signal=F/In2/In5/B；GND plane=In1/In3/In6；PWR=In4）。范围 = boundary §2 现行输入 + 链输出 + 引擎源码（共 22 件）。结果：**当前态 0 flag（PASS）**；阳性对照（历史 `SPEC_k2_v4_8L_LID1.json`，LID.1 下 In6=信号层）**DETECTED**（`/stackup/In6.Cu` = `"signal (PCIe + escape)"`）⇒ 闸有齿。**自检教训**：首版 walker 只扫字符串*值*，漏掉 `key->value` 编码的角色声明（对照件 0 命中 ⇒ 无齿），修正为同时扫 key 后才成立 —— **无阳性对照的闸不得宣称有效**。⇒ CO-72/73（SPEC）+ CO-76（引擎/图纸）+ CO-78（全范围闸）**关闭 F1 缺陷类**。记录 `m13_v57_co78_layer_role_drift_gate.json` `38c11158ce1bbb55` / 卡 `m13_v57_CO78_layer_role_drift_gate.md` `0185363ec8ddf5f7`。
+> ⑭ **CO-78（L2 声明一致性 · 回归闸）**：把 CO-72/73/76 的缺陷类固化为**可重复闸** —— 当前态工件中「平面层当信号层」或「信号层当平面层」的角色声明一律 FAIL（口径：signal=F/In2/In5/B；GND plane=In1/In3/In6；PWR=In4）。范围 = boundary §2 现行输入 + 链输出 + 引擎源码（共 22 件）。结果：**当前态 0 flag（PASS）**；阳性对照（历史 `SPEC_k2_v4_8L_LID1.json`，LID.1 下 In6=信号层）**DETECTED**（`/stackup/In6.Cu` = `"signal (PCIe + escape)"`）⇒ 闸有齿。**自检教训**：首版 walker 只扫字符串*值*，漏掉 `key->value` 编码的角色声明（对照件 0 命中 ⇒ 无齿），修正为同时扫 key 后才成立 —— **无阳性对照的闸不得宣称有效**。⇒ CO-72/73（SPEC）+ CO-76（引擎/图纸）+ CO-78（全范围闸）**关闭 F1 缺陷类**。记录 `m13_v57_co78_layer_role_drift_gate.json` `1235a9a957fcc0cd` / 卡 `m13_v57_CO78_layer_role_drift_gate.md` `0185363ec8ddf5f7`。
 > ⑮ **CO-79（L2 验证质量 · 空真加固）**：把 CO-76 F2/CO-78 的教训（断言只查"它恰好知道的东西" ⇒ 未知输入被静默跳过）系统审计 A1..A9，发现并修 3 处空真路径：**H1 A6** `wmap.get(L); if exp is not None` ⇒ 线宽表外的层被静默跳过；**H2 A8** `sqer()` 未知层静默 `return 2.0`（伪装 er=4.0）且未断言真测到页面；**H3 A2/A4** 无覆盖下限。加固 = 守卫纯函数（`width_coverage_guard`/`map_scope_guard`/`numeric_floor_guard`/`unknown_layer_guard`）同时用于实检与负控；A6 另**显式计数**被跳过的 PCIE 过孔（实测 **252**，原静默）。新增 **A10 守卫负控**：坏输入必被抓到（如 `width_coverage_guard({"F","In6"},WM) → (False,['In6.Cu'])`），好输入必通过 ⇒ 守卫**自带可执行牙齿证明**。套件 **10/10 PASS**。记录 `m13_v57_co69_adversarial_review.json` `18a86c998dd6b4de` / 卡 `m13_v57_CO79_probe_vacuity_hardening.md`。
 > ⑯ **CO-80（L2 可审计性）**：`k2_v4_8L.l4.kicad_pro` 是**受控**工件且被 `kicad-cli` 对 L4 板 DRC 时**自动选取**，但其设计规则与工艺意图不一致（`min_track_width` 0.09→**0.2**、`min_via_diameter` 0.35→**0.5**、`min_via_annular_width` 0.075→**0.1**、`min_through_hole_diameter` 0.2→**0.3**、`min_copper_edge_clearance` 0.3→**0.5**、`min_clearance` 0.1→**0.0**；另 4 项 silk/copper/via severity 由 ignore 变 warning）⇒ **最自然的独立命令**报 **880 条违规**（annular_width/drill_out_of_range/track_width/via_diameter 各 199 + copper_edge 11 + silk 警告），审计者会误判板子不合格。**先证伪自己**：在正确 staged（工程=意图件 + `.kicad_dru`）下用外部工具独立重跑并自算多重集差 —— 基线 42 / L4 42、**new=0 / disappeared=0** ⇒ 项目 DFM 判定被外部复现，880 条确系**规则设置产物**。**修复** = 把意图规则/severity 对齐进 `.l4.kicad_pro`（`62132712a65853b0` → `4704dec4dd043c59`，方向为采用意图件既有值，**未放宽任何阈值**）；修复后最自然的命令实测 42/42、new=0。**链不受影响**：板 sha `0e636a67` 不变、DFM `40445f87`/SI `73f9b59e` 逐字节不变、L4 applier 不覆写工程文件。记录 `m13_v57_co80_l4_project_rule_align.json` `d617a4c5e4e4523f` / 卡 `m13_v57_CO80_l4_project_rule_align.md`。
 > ⑰ **CO-81（L2 可审计性 · 回归闸）**：把 CO-80 的 F-80-1 固化为闸 —— 每个**受版本控制**的 `*.kicad_pro` 的 DRC 设计规则必须等于**红线规则源** `_shared/eda_core/drc_rules.json`（`manufacturing` + `hole_clearance:min`，7 项，含键映射 `min_via_annular_width↔min_annular_width`），且 `rule_severities` 必须等于 JLC 模板 `tools/k2_jlc_template.kicad_pro`。理由：`kicad-cli` 对 `<board>.kicad_pcb` **自动选取**同名 `.kicad_pro`，规则不符则最自然的独立核查命令大面积误报。结果：**5/5 受控工程文件 PASS**（含模板与 CO-80 修复后的 `.l4.kicad_pro`）；牙齿：负控（`min_track_width=0.2`）抓 1 项、**历史对照 = F-80-1 修复前实测原值 → 抓 6 项失配**，即闸对真实发生过的缺陷状态可复现报警。记录 `m13_v57_co81_project_rules_gate.json` `a9161a86271c068b`（历史·CO-82 补网类后；原 `1f25c6a9db6923f0` 已取代）/ 卡 `m13_v57_CO81_project_rules_gate.md`。
 > ⑱ **CO-82（L2 可审计性 · 补闸）**：`k2_v4_8L.l4.kicad_pro` 的 **net_settings 与意图件不一致** —— 仅 `Default` 一个网类、**`netclass_assignments` 为空**（意图件 4 类 + **146 条指派**），且 `Default` 自身偏严（clearance 0.2 vs 0.1、track 0.2 vs 0.09、via 0.6/0.3 vs 0.35/0.2）⇒ 用该受控文件跑 DRC 时 **PCIe85/LOW_SPEED/POWER 语义完全不生效**。**本件同时自认**：CO-81 的闸只覆盖 `design_settings.rules` + `rule_severities`，**未覆盖 `net_settings`**，故这条同类缺陷从闸下漏过 —— 本件一并**补闸**（新增 `netclass_guard`：按网类名逐字段 + 指派全量比对；模板显式豁免网类检查并记录理由）。修复：`.l4.kicad_pro` `4704dec4dd043c59` → **`ce2c2bf0da79a1ff`**（网类 1→4、指派 0→146）。**关键验证**：对齐后用最自然的命令重跑 = 基线 42 / L4 42、**new=0**，即施加完整 netclass 语义后板仍零新增违规 ⇒ 缺陷确系工件层；链不受影响（板 `0e636a67` 逐字节不变、DFM `40445f87`/SI `73f9b59e` 不变）。闸结果 **5/5 PASS**，牙齿：F-80-1 原值抓 6 项、**F-82-1 原状态抓 4 网类键 + 146 指派失配**。记录 `m13_v57_co82_l4_project_netclass_align.json` `0c8745064785ee57` / 闸 `a9161a86271c068b` / 卡 `m13_v57_CO82_project_netclass_gap.md`。
 　同时**补强 CO-77 闸**：由「12 项 claim 模式」扩展为**全量 sha16 引用校验**（文中任何 `file` `sha16` 必须等于实际文件，除非显式标注历史或为「before → after」记法）—— 起因是发现 CO-82 卡片 sha 曾被写错而旧闸覆盖不到；v1.47 **65 条引用全数匹配 PASS**，牙齿：v1.46（引用被取代的 CO-81 闸记录）判 **CITATION_MISMATCH**。过程中我首次写该正则时双重转义致其匹配为空、v1.46 反而 PASS（**又一次空真**），已改正并加**非空真下限** `CITE_FLOOR=30`。
-> ⑲ **CO-83（L2 可审计性 · 补最后一向）**：工程文件闸此前只比「工程 ↔ 意图工程」，未与**红线条文**交叉校验。本件令工程网类的 DRC 相关字段（`LOW_SPEED.clearance/track_width`、`PCIe85.clearance/track_width/diff_pair_gap/diff_pair_width`、`POWER.clearance/track_width`）必须等于 **SPEC `net_classes`**。结果：**0 失配**（PCIe85 clearance 0.175 / width 0.205 / p_gap 0.175 / p_width 0.205 等全中）。**疑似分歧已排除**：工程 `PCIe85.track_width=0.205`（标量）vs SPEC 内层交付 0.16 —— SPEC `p_width_scope` 已显式声明为设计意图（CO-68 对称叠层 85Ω 闭合），非缺陷。牙齿：**SPEC 侧负控**（篡改 `PCIe85.clearance`→0.2）被抓到 `[0.175, 0.2]`；连同 CO-81/82 的规则/网类负控，工程文件闸现覆盖 4 向（rules↔红线规则源 / severities↔模板 / net_settings↔意图工程 / **net_settings↔红线 SPEC**）。记录 `m13_v57_co81_project_rules_gate.json` `093dd05224455b9d`（CO-83 时值为 `ebd163058efaad14`，已取代） / 卡 `m13_v57_CO83_netclass_vs_spec_gate.md`。
-> ⑳ **CO-84（L2 可审计性 · 放宽域闸）**：`k2_v4_8L.l4.kicad_dru` **放宽**逃逸区净距至 0.075（SPEC ECN-001）；**放宽类规则作用域过宽会掩盖真实违规**，故其必须与授权来源逐项一致。本件四向机判：净距（SPEC `escape_clearance_mm` = 域工件 = dru `min 0.075mm`）、域集合（dru `intersectsArea` = 域工件 `domains[].id` = **板内 4 个 rule area 名**）、层（全 F.Cu）、REFCLK 排除（域工件 `excluded_nets` = dru 条件）、溯源（dru 注释引用 sha256 = 域工件实件）、几何（域工件 `rect_mm` 与板内 zone bbox **逐值一致** tol 1e-6）—— **0 失配**，即放宽范围恰好等于被授权域。牙齿：4 个定点负控各命中 1 项（作用域过宽 / 净距 0.075→0.1 / 丢 REFCLK 排除 / 矩形漂移）。过程中自捕获一次**我自己的比较口径错**（`rect_mm` 序 `[x0,y0,x1,y1]` vs 我构造的 `[minx,maxx,miny,maxy]`）—— 归一后 0 失配，否则会把「一致」误报为「不一致」。记录 `m13_v57_co84_dru_domain_gate.json` `9471fcfec54cbaee` / 卡 `m13_v57_CO84_dru_domain_gate.md` `996bee590912e823`。
+> ⑲ **CO-83（L2 可审计性 · 补最后一向）**：工程文件闸此前只比「工程 ↔ 意图工程」，未与**红线条文**交叉校验。本件令工程网类的 DRC 相关字段（`LOW_SPEED.clearance/track_width`、`PCIe85.clearance/track_width/diff_pair_gap/diff_pair_width`、`POWER.clearance/track_width`）必须等于 **SPEC `net_classes`**。结果：**0 失配**（PCIe85 clearance 0.175 / width 0.205 / p_gap 0.175 / p_width 0.205 等全中）。**疑似分歧已排除**：工程 `PCIe85.track_width=0.205`（标量）vs SPEC 内层交付 0.16 —— SPEC `p_width_scope` 已显式声明为设计意图（CO-68 对称叠层 85Ω 闭合），非缺陷。牙齿：**SPEC 侧负控**（篡改 `PCIe85.clearance`→0.2）被抓到 `[0.175, 0.2]`；连同 CO-81/82 的规则/网类负控，工程文件闸现覆盖 4 向（rules↔红线规则源 / severities↔模板 / net_settings↔意图工程 / **net_settings↔红线 SPEC**）。记录 `m13_v57_co81_project_rules_gate.json` `adba2152d4f10fd4`（CO-83 时值为 `ebd163058efaad14`，已取代） / 卡 `m13_v57_CO83_netclass_vs_spec_gate.md`。
+> ⑳ **CO-84（L2 可审计性 · 放宽域闸）**：`k2_v4_8L.l4.kicad_dru` **放宽**逃逸区净距至 0.075（SPEC ECN-001）；**放宽类规则作用域过宽会掩盖真实违规**，故其必须与授权来源逐项一致。本件四向机判：净距（SPEC `escape_clearance_mm` = 域工件 = dru `min 0.075mm`）、域集合（dru `intersectsArea` = 域工件 `domains[].id` = **板内 4 个 rule area 名**）、层（全 F.Cu）、REFCLK 排除（域工件 `excluded_nets` = dru 条件）、溯源（dru 注释引用 sha256 = 域工件实件）、几何（域工件 `rect_mm` 与板内 zone bbox **逐值一致** tol 1e-6）—— **0 失配**，即放宽范围恰好等于被授权域。牙齿：4 个定点负控各命中 1 项（作用域过宽 / 净距 0.075→0.1 / 丢 REFCLK 排除 / 矩形漂移）。过程中自捕获一次**我自己的比较口径错**（`rect_mm` 序 `[x0,y0,x1,y1]` vs 我构造的 `[minx,maxx,miny,maxy]`）—— 归一后 0 失配，否则会把「一致」误报为「不一致」。记录 `m13_v57_co84_dru_domain_gate.json` `6f1a2ccfaf916627` / 卡 `m13_v57_CO84_dru_domain_gate.md` `996bee590912e823`。
 > ㉑ **CO-85（非执行者侧对抗评审 pass 2/2）**：对象 CO-67..CO-84（含 pass 1 因执行者身份排除的 CO-74/CO-75）。**V1 全链复现**（handoff §9 命令，G4→G7）：**12/12 交付件逐字节一致** —— drawing `22c2a15835857f99`（**CO-89 重基线后已取代**，现 `3d452429bbc934c3`；板/DFM/SI 仍逐字节同）、板 `0e636a67c1472462`、DFM `40445f87be664f31`、SI `73f9b59ed5f6f3ce` 等；**CO-89 已按新基线重跑全链并机判几何不变（板逐字节同）**；非执行者 pass 2/2 对**新基线**的复评仍欠（CO-85 复现基线随 rev-9 失效）；applier 复跑确为落盘重写（mtime 更新）非缓存短路；`git status` 零 tracked 漂移。**V2 闸牙齿**：co77（61/71 引用、floor 30、0 mismatch）/ co78（0 flag + 历史 LID.1 阳性对照 DETECTED）/ co81 / co84（4 定点负控各命中 1）/ co69 A1..A10 全 PASS。**V3 板事实独立直解**：2523 段（In4/In6 = 0）/ 252 via / zone 4 个全为 ESC_ 规则域 ⇒ **铜 zone = 0**。**V4** SPEC rev-8：power_zones=In4.Cu、`bcu_power_copper_policy=PROHIBITED`、`escape_clearance_mm=0.075`、`inter_pair_spacing_mm=0.875` 未放宽。**V5** CO-75 负结果独立复跑（23 探针 / 0 命中，基线 32/32）。**V6** 图纸 lane.y 独立复算：EAST 1.449（铜边 0.744）/ WEST 1.050（0.345）；1.580 重锚 ⇒ EAST y_max 80.284 > 78.5975 ⇒ 越板边 ≥1.687mm。**V7 逐层对间几何独立复算**：In5 0.550/+0.345、In2 0.580/+0.375、B 0.550/+0.345 **复现**；**F.Cu 实测 0.4921/+0.2871（板）/ 0.4627/+0.2577（图纸）**（见 F1/F2 与 §6-6）。**F1（中）**：原 F.Cu 行 1.124/+0.919「达 0.875」**不可由任何口径复现**（含全局/走廊内/长并行/水平等 7 种口径）⇒ 违反层数 **3/4 → 4/4**，文本已更正（零几何/零阈值）。**F2（高，裁决相关）**：J2/J3/J4 **焊盘节距 0.6mm** ⇒ 焊盘场同层对间铜边净空上限 0.6−0.205 = **0.395 < 0.875** ⇒ R3-2 作绝对规则在连接器引脚场**几何不可达**（与走廊轨距无关）。**自我捕获**：S1 via 首计 256≠252（`(vias` 记号误计，改精确块解析）；S2 intra-pair 伪 0.0（未排除同网共享端点）—— 均自捕获。本件零几何/零阈值/零冻结源改动，**不做 L1 裁定**。记录 `m13_v57_co85_nonexecutor_review_pass2.json` / 卡 `m13_v57_CO85_nonexecutor_adversarial_review_pass2.md`。
 > ㉒ **CO-86（L2 自裁 · 走廊分配/叠层 SI）**：机判 handoff §6.6 Q1 的「备选」（铜跨 0.705→0.585 使 1.46 给 0.875，原注「L2 但需重定 8L 阻抗」）是否成立。判据闭式：**对间铜边 = 走廊轨距 − 铜跨 ⇒ 需 pitch ≥ span + 0.875**；硬上限全部取自 CO-85 独立实测（WEST 1.050 / 焊盘场 0.600 / EAST 1.449，机判保真断言）。结果 **`n_pass_all_caps = 0`**：span 0.705→需 1.580（WEST 差 +0.530、焊盘场 +0.980）；span 0.585（SPEC p_gap，w 不变）→需 1.460（WEST +0.410、焊盘场 +0.860）；gap 0.175 且重解 w 回 85Ω：外层 span'=0.561→需 1.436（WEST +0.386）、内层 span'=0.407→需 1.282（WEST **+0.232**、焊盘场 **+0.682**）。**焊盘场 0.600 < 0.875 与 span 无关 ⇒ 恒不可达（L1 级硬限）**；牙齿：可行 span 区间 [0.407, 0.705] 以 1µm 网格**全量**验证所需轨距 > WEST 上限（真下界非抽样）+ 3 项保真断言。附加发现：备选非免费 —— gap 0.295→0.175 在 w 不变下 Zdiff 88.4/82.0 → **81.9/74.1Ω**（内层出 85±10% 带）⇒ 须重解 w/叠层 + 券。⇒ **L2 侧无出口**；R3-2 0.875 只能由 L1 或红线口径修订解决。记录 `m13_v57_co86_l2_span_option_closure.json` `d0a59f85b74687d5` / 卡 `m13_v57_CO86_l2_span_option_closure.md` `0d1fd3b33fb802fe`。
 > ㉓ **CO-87（L2 自裁 · 合格标准覆盖性）**：按《宪法》ch.5 §4（数学闭合：容量/长度/过孔/**PDN 压降**）与 ch.2（L2 裁判含 **热**）机判覆盖性：**CLOSED 3**（容量 `verdict=FEASIBLE_ALL`/failed=[]；长度 SI skew 0.13 ≤ 0.15；过孔 L4-F True/over=[]/total 252）+ **NOT_DEMONSTRATED 2**（**PDN 压降**、**热**：SPEC rev-8 全字段扫描 **0 命中**，扫描字段 3962）⇒ 显式登记为已知限制（§6-8），**不宣称 PASS、不判 FAIL、不以假设值代填**。牙齿：合成件注入 `load_currents` ⇒ 命中 ≥2（证明 0 命中是真缺）；宪法文本确含 `PDN 压降达标`（证明条款存在）；非空真下限 = 实扫 3962 字段；记录复跑逐字节一致。所需输入清单由 SPEC `power_zones[*].targets` **机器提取**。⇒ 本件不改变 G4..G7 判定，不触 L1；缺的是**数据**（PM/owner 提供），不是拓扑裁决。记录 `m13_v57_co87_l2_acceptance_coverage.json` `46d15557477d164b` / 卡 `m13_v57_CO87_l2_acceptance_coverage.md` `322baa098740b259`。
@@ -65,10 +65,10 @@
 
 > ㉗ **CO-94（L2 自裁 · PDN 可连接性闭合判定 + 裁定）**：rev-10 把 34 个 pad 转 `blocked`（已连接 223→189）后，L2 必须回答「在 L2 手段内（外部通孔 + F.Cu 短段，**不含** via-in-pad / HDI）这 34 个是否真的不可连接」。以**存在性判定**（宽松有限家族：8 向 × r=0.30…1.80 step 0.05；判据 = CO-91 同一权威检测器，via **且** 短段合法）逐 pad 取最小可行半径：**全部 120 blocked 中 28 可连 / 92 不可；本轮关注的 34 中 15 可连 / 19 不可**。**裁定 = 维持 `blocked`**，三条理由：① 可连位只存在于**未声明的 31 档半径搜索式家族**中（且 **7 个仅在家族上限 1.80mm 命中**）⇒ 采用即把「搜索」写入决策，**违「零坐标搜索 / 一次求解」红线**；② 可连者净距余量低至 **0.0136mm（13.6µm）**、短段余量低至 **0.012mm**，属「规则内、工艺外」贴线解；③ 需 **1.35–1.80mm** 长 F.Cu 短段穿越 0.5/0.6mm 节距球栅场（电感/回流一阶影响，未经 SI9000/券），换 15 pad 不划算。⇒ **34（及 92/120）在 L2 手段内判为不可连接**（`blocked` 为诚实处置，非 PASS）。**升级（L1/工艺）**：U6（0.5mm 节距 354 球）与 J2/J3/J4（0.6mm 节距）的 blocked 电源/地球若须连接，只能靠 **via-in-pad（板厂工艺能力 + SI/PI 证据）** 或 **HDI/微孔（层数·叠层裁决，属 L1）** ⇒ 监理升级人工。记录 `m13_v57_co94_blocked_recoverability.json` `617e0973e6132e46` / 卡 `m13_v57_CO94_blocked_recoverability_ruling.md` `cbfb27c1f0db0fc5`。
 
-> ㉘ **CO-95（L2 自裁 · PDN）In4 平面可达性 + 陈旧 keepout band 退役 / SPEC rev-11**：`power_pad_connect.entries` 的 via 必须落在**本网 In4 铜**上才构成真实连接，而既有闸（CO-88/89/90/91）**只判引用/覆盖/净距**，无闸判**平面可达性**。机判（`co95_in4_reachability`，牙齿 2/2）55 个 power entry：**35 `covered_explicit` / 8 `covered_bridge_target` / 6 `l3_obligation` / 6 `needs_region_ruling`**。**L2 裁定**：① `in4_pcie_keepout_band` 的启用前提（「wp1_escape_nets 在 In4 有 14 段走线」）**已被 CO-74 判定失效**（引擎 palette 无 In4 / 交付板 In4 段数 0 / layer_plan 仅把 In4 声明为 PDN 平面）⇒ **退役**（band 范围 + void 理由留存 `retired_in4_keepout_band_6l`）；② 废止 `P3V3_EAST` 由 band 推导的西界（88.17+0.2），改由**「与异网 In4 铜边 ≥0.2mm」**决定、落点 L3 派生；③ 新增 `plane_reachability_requirement`（via 须被本网 In4 铜覆盖 / 同网连续 / 异网 ≥0.2mm / L3 确定性派生）；④ 登记残余 12 项。**效果**：6 个 U6 P3V3 球（AC17/AC20/AK17/AK20/T17/T20）原被失效 band 排除在 In4 之外 ⇒ 退役后转为 **L3 可达性义务**。**SPEC rev-11** `d85f10f722ba22b0`（`pd` 外仅 `spec_version` 变）。**验证**：G4 `FEASIBLE_ALL` `e0a4dfd7936372f9` / G5 PASS frozen=True `a252ba52d0d05442` / L4 viol 0 `09ed9530f6da65f3` / L5 fab `afe849cfd5228515` + **DFM new=0（不变）** + **SI 0.1300（不变）**；**板逐字节 `0e636a67c1472462` 不变**；闸态 co78 `25f72d58a6a68b06` / co81 `8e7f4108610d4a5d` / co84 `18ffce1d876f53fc` / co87 `f9fd3f87cea224b0` / co88 `4db0a5d796d75f28` 全 PASS、co69 10/10 指纹不变、**CO-91 对 rev-11 PASS（0/0）**、CO-92 对 rev-11 不动点、CO-95 = `OPEN_needs_region_ruling`。**升级（一句话，L1/区域划分）**：6 项 `needs_region_ruling` ⇒ `12V_IN` **无任何 In4 区**（C88.1/U2.4/U2.6，且板上无该网铜）需裁承载；`P3V3_AUX` 西侧 3 pad（C90.1/R1.2/U1.15）所需区域与**西区名义网 MCU_VDD** 冲突需裁归属。记录 `m13_v57_co95_in4_reachability.json` `c9eba916a9866808` / `m13_v57_co95_spec_rev11_band_retire.json` `0ec682d3d15f84d5` / 卡 `m13_v57_CO95_in4_plane_reachability.md` `0bdac108e4563238`。
+> ㉘ **CO-95（L2 自裁 · PDN）In4 平面可达性 + 陈旧 keepout band 退役 / SPEC rev-11**：`power_pad_connect.entries` 的 via 必须落在**本网 In4 铜**上才构成真实连接，而既有闸（CO-88/89/90/91）**只判引用/覆盖/净距**，无闸判**平面可达性**。机判（`co95_in4_reachability`，牙齿 2/2）55 个 power entry：**35 `covered_explicit` / 8 `covered_bridge_target` / 6 `l3_obligation` / 6 `needs_region_ruling`**。**L2 裁定**：① `in4_pcie_keepout_band` 的启用前提（「wp1_escape_nets 在 In4 有 14 段走线」）**已被 CO-74 判定失效**（引擎 palette 无 In4 / 交付板 In4 段数 0 / layer_plan 仅把 In4 声明为 PDN 平面）⇒ **退役**（band 范围 + void 理由留存 `retired_in4_keepout_band_6l`）；② 废止 `P3V3_EAST` 由 band 推导的西界（88.17+0.2），改由**「与异网 In4 铜边 ≥0.2mm」**决定、落点 L3 派生；③ 新增 `plane_reachability_requirement`（via 须被本网 In4 铜覆盖 / 同网连续 / 异网 ≥0.2mm / L3 确定性派生）；④ 登记残余 12 项。**效果**：6 个 U6 P3V3 球（AC17/AC20/AK17/AK20/T17/T20）原被失效 band 排除在 In4 之外 ⇒ 退役后转为 **L3 可达性义务**。**SPEC rev-11** `d85f10f722ba22b0`（`pd` 外仅 `spec_version` 变）。**验证**：G4 `FEASIBLE_ALL` `e0a4dfd7936372f9` / G5 PASS frozen=True `a252ba52d0d05442` / L4 viol 0 `09ed9530f6da65f3` / L5 fab `afe849cfd5228515` + **DFM new=0（不变）** + **SI 0.1300（不变）**；**板逐字节 `0e636a67c1472462` 不变**；闸态 co78 `25f72d58a6a68b06` / co81 `8e7f4108610d4a5d` / co84 `18ffce1d876f53fc` / co87 `f9fd3f87cea224b0` / co88 `4db0a5d796d75f28` 全 PASS、co69 10/10 指纹不变、**CO-91 对 rev-11 PASS（0/0）**、CO-92 对 rev-11 不动点、CO-95 = `OPEN_needs_region_ruling`。**升级（一句话，L1/区域划分）**：6 项 `needs_region_ruling` ⇒ `12V_IN` **无任何 In4 区**（C88.1/U2.4/U2.6，且板上无该网铜）需裁承载；`P3V3_AUX` 西侧 3 pad（C90.1/R1.2/U1.15）所需区域与**西区名义网 MCU_VDD** 冲突需裁归属。记录 `m13_v57_co95_in4_reachability.json` `4525e38330ee599f` / `m13_v57_co95_spec_rev11_band_retire.json` `0ec682d3d15f84d5` / 卡 `m13_v57_CO95_in4_plane_reachability.md` `0bdac108e4563238`。
 > ㉙ **CO-96（非执行者侧对抗评审 pass 4/4 · 对象 rev-11）**：独立会话（非 rev-10/rev-11 执行者）对 CO-91/92/93/94/95 + 全链 + 不变量做对抗复核，判 **`REVIEW_DONE_FINDINGS_OPEN`**（基线身份 OK / 牙齿 OK）。**指定三问**：Q1 `plane_reachability_requirement` **不可机判闭合**（几何真覆盖仅 35/55，14 待 L3、6 待 L1；gate 恒不返回 PASS）；Q2 两次重基线间**有 1 处未登记漂移**（F1）+ 1 处陈旧（F5）；Q3 CO-95 分类**完整**（55=35+8+6+6）。**6 项发现**：**F1**（中·谱系/红线邻近）rev-10 重建 ppc 时**静默丢弃** CO-89 的退役留存键 `retired_superseded_bom`（pre-rev-9 冻结 BOM 173/9 + 孤儿 55/2；`p3_v57_co93_pdn_rev10_derive.py` 零引用、变更说明未登记）⇒ 现行谱系断链，数据可由冻结源 + CO-89 记录找回；**F2**（中）可达性要求为「声明可闭合」——8 个 `covered_bridge_target` 命中桥区 `polygon=None`（几何未建）；**F3**（中）`needs_region_ruling` 对 P3V3_AUX 西侧 3 pad 依赖 `why` 自由文本子串（改文本即 L1→L3 静默降级）；**F4**（中）可达性 scope 仅 ppc entries，`gnd_stitch_via` 实落 40 / `power_zones[].vias` 17 无闸；**F5**（低）`board_realized` 仍记 223/86（决策 189/120，未被 pdn_apply 消费）；**F6**（低·潜在）co95 `in_poly` 用 bbox 非真 PIP（现行 polygon 均轴对齐矩形 ⇒ 无实害）。**复核 OK**：V1 rev-9→rev-10→rev-11 `pd` 外**递归深比 0 变更**；V2 分类完整；V3 SPEC stitch blocked schema 与 `pdn_apply` **对齐**（60 跳过/40 施加；§6-16「schema 未对齐」仅指上游 `gnd_stitch_gen`）；V4 gnd_stitch 重复坐标 (133.83,59.1)×2 系**声明共享单孔**（非缺陷）；V5 冻结四源 4/4 MATCH。**只读；不改 SPEC/板/阈值/冻结源/引擎；F1 须 rev-12 变更单闭合。** 记录 `m13_v57_co96_nonexecutor_review_pass4.json` `8b591e5030aca11d` / 卡 `m13_v57_CO96_nonexecutor_review_pass4.md` `56d1a1b421dda943` / 工具 `p3_v57_co96_nonexecutor_review_pass4.py` `4fc740b459624691`。
 > ㉚ **CO-97（L2 自裁 · 可审计性）退役留存完整性闸 + 显式登记册（关闭 CO-96 F1 的『静默』面）**：把红线「退役几何/决策必须**显式留存**（不得静默放弃）」固化为**可重复机判闸**——逐版枚举退役留存块（首段含 `retired`）、逐相邻版本求 drop，**任一 drop 必须在登记册显式登记**（键 + `from_rev→to_rev` + reason + recovery），另拒**陈旧登记项**与**不可解析找回指针**；另带牙齿 3/3（未登记 drop 必抓 / 已登记必放行 / 陈旧项必抓，均合成注入）。**L2 自裁**：选 CO-96 F1 的『**或显式登记其移除**』分支，而非为纯溯源字段单独重基线——该键与 `board_realized` **均不被 `pdn_apply` 消费**（无几何/功能影响），重基线会使刚出具的 CO-96 证书失效并新增复评债 ⇒ **不成比例**；「SPEC 内回填」列为可选后续、随下一次构建期 SPEC bump 一并处理。**结果**：退役块 rev-8 5 → rev-9 8 → rev-10 13 → rev-11 15；**drop 恰 1 处**（`power_pad_connect.retired_superseded_bom`，rev-9→rev-10）**已登记 + 3 条找回指针全可解析** ⇒ **verdict PASS**（undeclared 0 / stale 0 / recovery_bad 0）。**附带**：登记册显式记 `board_realized` 为 CO-89 派生记录（非现行决策），消除 CO-96 F5 的误读。**零 SPEC/板/阈值/冻结源/引擎改动**；不重跑链路。**L2 自裁（`_shared` 处置）**：**不解冻冻结副本**；施工侧三项（`gnd_stitch_gen` 障碍集改交付板实际铜 / `pdn_apply` 短段宽度读 SPEC / blocked schema 对齐）**改由项目内引擎承载**，且**仅在 PDN 施工期激活**（当前板逐字节不变、PDN 未施工 ⇒ 非在役缺口）。记录 `m13_v57_co97_retirement_retention_gate.json` `4b1ee8924147a4f4` / 登记册 `m13_v57_retirement_registry.json` `4b13b538ba8e28ce` / 卡 `m13_v57_CO97_retirement_retention_gate.md` `2bc80fbe0c62bfd4` / 工具 `p3_v57_co97_retirement_retention_gate.py` `e9427f0f18087a18`。
-> ㉛ **CO-98（L2 自裁 · PDN 可审计性）In4 平面可达性义务状态报告（机判化 CO-96 F2/F3/F4；关闭 F6）**：**F6 修复** —— co95 `in_poly` 由 **bbox 近似**改为**真·射线法 PIP**（工具 `tools/p3_v57_co95_in4_reachability.py` `4d890025aa246563`，取代 `a2e16d6e08eef731`）；现行 2 个显式 polygon 均轴对齐矩形 ⇒ **输出逐字节不变**（co95 记录 sha 于该时点为 `61db48a283beeaae`（已取代；现行 = `f1c0c17ee7b379a4`），CO-95/CO-96 该次引用不失效）= **行为中性加固**。**F2/F4 机判化（不改 requirement；改 scope/谓词属 SPEC 变更 = 后续 rev-12）**：新增只读报告闸 co98（**不改 co95 记录字节**），输出 **三态** `geometric_covered` **35** / `declared_pending_l3` **14**（8 桥区 target 声明 + 6 band 退役义务，几何待 L3 派生）/ `ruling_pending_l1` **6**，`machine_closable_today=false`（verdict **永不 PASS**）；**scope 排除** `gnd_stitch_via_realized` **40** / `power_zones_vias` **17** / `decoupling_vias` **0**（本 requirement 只覆盖 ppc 非 GND entry）。**F3 裁决依据分解**：6 项 ruling 中 **5 机判可判**（3× `net_has_no_in4_region`(12V_IN) + 2× `via_inside_other_net_in4_polygon(MCU_VDD:MCU_VDD_WEST)`(P3V3_AUX 西侧 C90.1/U1.15)）、**1 仅文本**（`P3V3_AUX R1.2` @[51.725,37.0]）⇒ 建议改机判谓词并补 R1.2 判据。牙齿 2/2（PIP 拒 bbox 假阳 / 完整性抓计数不符）。**零 SPEC/板/阈值/冻结源改动**；**不改 co95 记录字节**。记录 `m13_v57_co98_reachability_status_report.json` `c652f4b1b572912a` / 卡 `m13_v57_CO98_reachability_status_report.md` `84a609e6f5e54503` / 工具 `p3_v57_co98_reachability_status_report.py` `9f60da548330b436`。
+> ㉛ **CO-98（L2 自裁 · PDN 可审计性）In4 平面可达性义务状态报告（机判化 CO-96 F2/F3/F4；关闭 F6）**：**F6 修复** —— co95 `in_poly` 由 **bbox 近似**改为**真·射线法 PIP**（工具 `tools/p3_v57_co95_in4_reachability.py` `4d87484ff2f1ecc7`，取代 `a2e16d6e08eef731`）；现行 2 个显式 polygon 均轴对齐矩形 ⇒ **输出逐字节不变**（co95 记录 sha 于该时点为 `61db48a283beeaae`（已取代；现行 = `f1c0c17ee7b379a4`），CO-95/CO-96 该次引用不失效）= **行为中性加固**。**F2/F4 机判化（不改 requirement；改 scope/谓词属 SPEC 变更 = 后续 rev-12）**：新增只读报告闸 co98（**不改 co95 记录字节**），输出 **三态** `geometric_covered` **35** / `declared_pending_l3` **14**（8 桥区 target 声明 + 6 band 退役义务，几何待 L3 派生）/ `ruling_pending_l1` **6**，`machine_closable_today=false`（verdict **永不 PASS**）；**scope 排除** `gnd_stitch_via_realized` **40** / `power_zones_vias` **17** / `decoupling_vias` **0**（本 requirement 只覆盖 ppc 非 GND entry）。**F3 裁决依据分解**：6 项 ruling 中 **5 机判可判**（3× `net_has_no_in4_region`(12V_IN) + 2× `via_inside_other_net_in4_polygon(MCU_VDD:MCU_VDD_WEST)`(P3V3_AUX 西侧 C90.1/U1.15)）、**1 仅文本**（`P3V3_AUX R1.2` @[51.725,37.0]）⇒ 建议改机判谓词并补 R1.2 判据。牙齿 2/2（PIP 拒 bbox 假阳 / 完整性抓计数不符）。**零 SPEC/板/阈值/冻结源改动**；**不改 co95 记录字节**。记录 `m13_v57_co98_reachability_status_report.json` `a29b802163bca3d9` / 卡 `m13_v57_CO98_reachability_status_report.md` `84a609e6f5e54503` / 工具 `p3_v57_co98_reachability_status_report.py` `2091c72253930b08`。
 > ㉜ **CO-99（L2 自裁 · PDN 施工就绪性）计划集互相冲突闸 + 施工 dry-run（两个覆盖缺口）**：既有 PDN 闸（CO-88/91/92/95/98）与 CO-96 复评**都只判「计划几何 vs 板*已有*铜」** ⇒ 两处盲区：**G1** CO-91 `Scene` 仅由板构造 ⇒ **via-via / stub-via / stub-stub 互相零判**；**G2** 项目规则源 `drc_rules.json` 的 `hole_clearance.same_net_exempt=True` **不含** KiCad 板配置 `min_hole_to_hole=0.25`（net-agnostic）⇒ 同网 stitch 靠太近不可见。⇒ **CO-91 PASS 不蕴含可施工**。本件把工件驱动过真实消费面（`eda_core.pdn_apply` + `kicad-cli pcb drc`，scratch，交付板逐字节不变）：**verdict = `FAIL_MUTUAL_SHORT`** —— SPEC 宽 0.2 ⇒ **7 异网重叠（3 via-via + 4 stub-via）+ 35 净距 + 39 孔距（含 2 同址）**；引擎实落宽 0.5 ⇒ 13 + 127。7 个重叠全在 **U6 0.5mm 球栅场**（如 `P3V3@(84.775,53.5)` vs `GND@(84.574,53.59)`，d=**0.2202 < 0.35**）；2 同址孔 = CO-96 记为『声明共享单孔』的 `(133.83,59.1)`/`[47.0,49.0]`（声明可解释、`pdn_apply` 仍落两 via）。**施工 dry-run**：DRC **42→274（+232）**、未连 348→191（逐类型参考：clearance ~124–131 / shorting_items ~43–47 / hole_to_hole 37 / hole_clearance ~19–22 / holes_co_located 2）。**根因**：① 计划集互避缺失；② 短段宽 0.5 未读 SPEC；③ stitch 互距/去重缺失；④ 规则源缺 `min_hole_to_hole`。**修补未施加**（见 CO-100）。牙齿 2/2。记录 `m13_v57_co99_pdn_mutual_conflict_gate.json` `1d256de815b1ed87` / 卡 `m13_v57_CO99_pdn_mutual_conflict_gate.md` `c47249d3538c1d8c` / 工具 `p3_v57_co99_pdn_mutual_conflict_gate.py` `78762b3d9de90fd4`。
 > ㉝ **CO-100（L2 自裁 · PDN）CO-99 互冲的互障感知修复候选 —— rev-12 能否自解？**：用与 CO-92 同一套**声明 palette**（ppc：current → pad 4 正交 @(R+0.3) → @0.6；stitch/zone：current → 原位 4 正交 @0.6）+ **互障 = 板已有铜 + 已接受计划件** + **孔距 net-agnostic ≥0.45**，按**声明固定序**确定性重放（零 while/零搜索）。**结果 = `PARTIAL`**：残余异网重叠 **0**（互冲可清）；ppc kept **124** / relocated **61** / blocked **4**，stitch 34/5/**1**，zone 13/4/0 ⇒ **5 项新增 blocked（4 ppc + 1 stitch）**（**CO-103 校正**：原记 kept 126 / relocated 58 / blocked 5 ⇒「6 项、全在 U6 0.5mm 场」为过期读数；CO-100 记录 tally 重跑**逐字节可复现**）。**裁定**：互冲本身 **L2 可解**。**CO-103（证据链校正）**：4 项 U6 ppc 新增 blocked 的自身 rev-11 位置对板铜**干净**，阻塞全为**同网 GND 相邻 U6 计划孔距互障**（d=0.180–0.403 < 0.45mm），另 1 项为 J2 扇出 GND stitch 同址重孔对 ⇒ 属**同网冗余竞争**，与 CO-94 的 120 项板铜阻塞**不同类**；固定序探针（同 palette/同检测器仅换序）显示 canonical 的 4 项为所试最优、但每对幸存成员随序翻转 ⇒「保连接数须 via-in-pad/HDI」**未被证明**。⇒ rev-12 决策点：`(a)` 显式登记接受 5 blocked（纯 L2）或 `(b)` L2 冗余归并裁定（相邻 GND 球择一/桥接）；**不得**未加证明即升 owner 取裁 HDI（层数）。**本件不施加**。记录 `m13_v57_co100_pdn_mutual_repair_candidate.json` `11e21f3b97bac66b` / 卡 `m13_v57_CO100_pdn_mutual_repair_candidate.md` `ff1c267f74f578dc` / 工具 `p3_v57_co100_pdn_mutual_repair_candidate.py` `341314590ceb154a`。
 > ㉞ **CO-101（L2 自裁 · PDN 施加）rev-11 → rev-12 计划集互障重导**：把 CO-100 的候选**施加**为 SPEC rev-12 —— ppc entries **189→185**（kept 124 / **relocated 61** / **新增 blocked 4**；blocked 120→**124**）、`clearance` 按板侧 Scene 重算；stitch **relocated 5 + 新增 blocked 1**（原 60 blocked 保留）；power_zones vias **relocated 4**；rev-11 原坐标显式留存（`retired_superseded_mutual_conflict_v1` / `power_zones_via_retired_mutual_conflict_v1`，禁静默放弃）；**F5** `board_realized` 同步为 rev-12 决策数；**F1** 自 rev-9 回填 `retired_superseded_bom`。**验证**：G4 `FEASIBLE_ALL` `cb955e9af8782d08`（34 页/crossings 0/work 546/546）、G5 PASS frozen=True、L4 viol 0、L5 DFM new=0 + SI 0.1300；**板逐字节 `0e636a67c1472462` 不变**；**CO-99 由 `FAIL_MUTUAL_SHORT` → `PASS`**（重叠/净距/孔距 全 0）；CO-91 PASS、CO-92 `CANDIDATE`、CO-95/98 不变、co88/co97 PASS。**残余（非 PASS）**：引擎 `add_track(width=0.5)` 字面量 + 不去重 ⇒ dry-run 仍 **+34**（rev-11 = +232），属施工侧项目内引擎承载；**5 项新增 blocked（4 ppc + 1 stitch；同网孔距竞争，见 CO-103 F-B）** 需 L2 冗余归并或显式登记接受（**不得**未加证明即称需 via-in-pad/HDI）。**review debt = CO-102**（本件为执行者，不得自评；co96 对 rev-11 的证书随之失效、现按 fail-closed 报 BASELINE_MISMATCH）。零几何搜索（坐标全来自 CO-100 声明 palette 重放）；历史件不改。SPEC rev-12 `1a381b06454dbe2c`；记录 `m13_v57_co101_pdn_rev12_derive.json` `cdeea6a3950f04f6`；卡 `m13_v57_CO101_pdn_rev12_derive.md` `d47eda01e3092114`；工具 `p3_v57_co101_pdn_rev12_derive.py` `977ee54f0ecdb414`。
@@ -77,8 +77,8 @@
 > ㊱ **CO-103（L2 · 非执行者对抗复评）rev-12 新基线（对象 CO-99/100/101/102 + 链 pin + 收口声明）= `PASS_WITH_FINDINGS`**：9 项机判（V1 幂等重导逐字节 / V2 palette 归属+固定序独立重放 / V3 登记完整性 / V4 clearance 与 CO-91 一致 / V5 计划集互判 / V6 CO-102 发射集等价 + 三态 DRC 42 / 76(+34) / 42(+0) / V7 blocked 成因分类 / V8 声明漂移扫描 / V9 链 pin）**全过**，牙齿 7/7；**0 项 pin 漂移**。**发现**：**F-A（中）**声明漂移 —— 原记「6 项新增 blocked（5 ppc + 1 stitch，全在 U6 0.5mm 场）」实为 **5 项（4 ppc + 1 stitch）**，第 5 项在 **J2 扇出** `(133.83,59.1)`；v1.69 已校正。**F-B（高）**4 项 U6 新增 blocked 的自身位置**对板铜干净**、阻塞全为**同网 GND 计划孔距互障**（相邻 U6 GND 计划 via，d=0.180–0.403 < 0.45）⇒「须 via-in-pad/HDI」**缺乏存在性证据**（换序探针 8/13/13 且每对幸存成员翻转）；与 CO-94 板铜类不同。**F-C（中）**收口件 §1 ㉛/§6-20 的 co95 现行身份引用陈旧（`61db48a283beeaae` → 现行 `f1c0c17ee7b379a4`）、CO-96 证书未声明自身失效，且 CO-77 的 `CITE` 抓不到散文式引用；v1.69 已注明已取代。**另记**：同网孔距口径经**合成注入实测**验证（kicad-cli 对同网 GND 孔对报 `hole_to_hole`，0.080 < 0.2495）⇒ CO-99 A4 口径忠实。工具 `p3_v57_co103_rev12_nonexecutor_review.py` `5e3f91d39130b83a` / 记录 `m13_v57_co103_rev12_nonexecutor_review.json` `7f481be259865941` / 卡 `m13_v57_CO103_rev12_nonexecutor_review.md` `6ac046a885508dc6`。
 
 > ㊲ **CO-104（L2 自裁 · 过孔策略/PDN）rev-12 新增 5 项 blocked 的裁定 = `ACCEPT_L2_NO_HDI`**：依 `LAYOUT_CONSTITUTION` 第二章（过孔策略 / PDN 承载 = L2；层数 = L1）对 CO-103 F-B 的 4 项 U6 ppc + 1 项 J2 扇出 stitch 作裁。**三条出路逐条量化**：**A 共享单孔**（两 pad 中心**中点**派生位 + 双短段；零自由度、非搜索）仅 **1/4 对**可行（`FB34~FA32` 可行；其余 3 对的中点正落在 U6 另一球 pad `FF11`/`FF18`/`E11` 上）⇒ 收益 = 1 个 GND 球；**B 改声明固定序**（同 palette、同检测器）canonical **4** vs 13 / 8 / 13 ⇒ canonical 已最优、无免费解；**C 加宽 palette / via-in-pad / HDI** ⇒ 违零坐标搜索红线（CO-93/94 已驳）/ 无工艺 + SI-PI 证据 / 属 L1 且本件已证「须 HDI」不成立。**裁定 = 接受**（与既有 120 项 blocked 同类处理，显式登记不静默），**不升 owner、不重基线、rev-12 不变**；本项**不再构成 L1 问题**（若日后要求「U6 GND 球 100% 独立 via」为硬需求，须走 SPEC 变更 + 全链重基线 + 换会话复评）。**附带加固（CO-103 F-C 收口，fail-closed）**：co96 默认落点改为**重跑件**，显式指向历史证书即**拒绝写入（rc=2）**，除非 `--overwrite-canonical`⇒ 历史证书 `8b591e5030aca11d` 不再会被静默改写；重跑件 `m13_v57_co96_nonexecutor_review_pass4_rerun.json` `636b1ad728f0fa91` 即 CO-96 失效的**机判化声明**（verdict `BASELINE_MISMATCH`，`co95_json` 61db48a283beeaae → f1c0c17ee7b379a4）。工具 `p3_v57_co104_pdn_blocked_ruling.py` `7b2f3ff18e0ede04` / 记录 `m13_v57_co104_pdn_blocked_ruling.json` `7254226692cb8f93` / 卡 `m13_v57_CO104_pdn_blocked_ruling.md` `ed2587023fe05ed6`。
-> ㊳ **CO-105（L2 自裁 · PDN 建模）CO-96 F4 落定 = `CLOSE_NO_SCOPE_EXTENSION`**：把 CO-98 的「声明排除」机判化。**V1 语义不可适用**：requirement 判据 =「落于本网 In4 铜」，而 GND 平面层 = `In1/In3/In6`、In4 仅 `P3V3/MCU_VDD/P3V3_AUX` ⇒ 对 **130 GND ppc entry + 40 GND stitch via** 无可判定（≠『未覆盖』）；requirement 对象 = 非 GND ppc entry **55**。**V2 几何待 L3**：17 个 `power_zones[].vias` **17/17** 位于 3 个 bridge zone（`P3V3_BCU_BRIDGE_IN4` 3 / `P3V3_AUX_BCU_BRIDGE_IN4` 8 / `MCU_VDD_BCU_RESISTORS_IN4` 6），其 `polygons=[]`、`geometry_status=L3_CONSTRUCTION_DERIVED` ⇒ 与 CO-98 `declared_pending_l3` 同桶；扩 scope 只并入待派生清单、不新增可判缺陷。**V3** 施工路径对 `gnd_stitch_gen` 的**代码引用 = 0**（散文复盘 1）⇒ 生成端缺陷 latent、不在在役路径。**V4** `R1.2` 判据根因 = 电源域/区域归属 = **L1**（不在本件）。**裁定 = 关闭 F4，不做 scope 扩展**；零 SPEC/板/阈值/冻结源改动、不需重基线、不需新复评。牙齿 2/2（GND 平层不含 In4 而 In4 确被占 / 17 项空几何而存在有几何 zone）。工具 `p3_v57_co105_f4_scope_disposition.py` `f357f81142161e61` / 记录 `m13_v57_co105_f4_scope_disposition.json` `8655cff7560b11ff` / 卡 `m13_v57_CO105_f4_scope_disposition.md` `c40b94566b0ba3e9`。
-> ㊴ **CO-106（L2 · 合格标准覆盖性补全）参考平面判据 + 参考平面连续性机判 = `INDETERMINATE_REGION_SCOPED`**：ch.2 的 L2 裁判标准含「参考平面」，而 CO-87 记录**自报**的判据集含该词、覆盖矩阵却只有五行（参考平面无决策行/无闸）⇒ 本件补上判据并机判：**A 板框一致性**（声明多边形 = 冻结板框按 `edge_copper_min` 内缩）＋ **B 参考平面连续性**（每条规划走线每点须落在其 `impedance.per_layer[layer].refs` 任一参考层声明铜内；分类 `declared_copper_missing`（GND 整面层缺铜=缺陷）vs `region_scoped_indeterminate`（In4 按电源区裁剪/桥区待派生））＋ **C 板实佐证** ＋ **D 覆盖性补全声明**；牙齿 3/3（合成负控/正控）。**rev-12 判 `FAIL_DECLARED_COPPER_MISSING`**：60 点/36 段（In2 24 + In5 12）；根因 = 3×GND + 2×In4 多边形下边 **70.7 = 33+38−0.3**（旧 38mm 板框）而现行板框 `outline_y [33,79]`（v28 ECO y 38→46mm）⇒ 按自身 basis 应为 **78.7**；后果 = 框内平面外 **8.3mm 带无参考平面**，而施工已用该带（板实 **In5 316 段 + In2 12 段 + 24 via**，PCIe `PCIE_DN2..DN7` 蛇形恰在其中）。修复 = CO-107。工具 `p3_v57_co106_reference_plane_gate.py` `44356d38d2e87698` / 记录 `m13_v57_co106_reference_plane_gate.json` `b01774449669c10a` / 卡 `m13_v57_CO106_reference_plane_gate.md` `08b46fff2a07e45a`。
+> ㊳ **CO-105（L2 自裁 · PDN 建模）CO-96 F4 落定 = `CLOSE_NO_SCOPE_EXTENSION`**：把 CO-98 的「声明排除」机判化。**V1 语义不可适用**：requirement 判据 =「落于本网 In4 铜」，而 GND 平面层 = `In1/In3/In6`、In4 仅 `P3V3/MCU_VDD/P3V3_AUX` ⇒ 对 **130 GND ppc entry + 40 GND stitch via** 无可判定（≠『未覆盖』）；requirement 对象 = 非 GND ppc entry **55**。**V2 几何待 L3**：17 个 `power_zones[].vias` **17/17** 位于 3 个 bridge zone（`P3V3_BCU_BRIDGE_IN4` 3 / `P3V3_AUX_BCU_BRIDGE_IN4` 8 / `MCU_VDD_BCU_RESISTORS_IN4` 6），其 `polygons=[]`、`geometry_status=L3_CONSTRUCTION_DERIVED` ⇒ 与 CO-98 `declared_pending_l3` 同桶；扩 scope 只并入待派生清单、不新增可判缺陷。**V3** 施工路径对 `gnd_stitch_gen` 的**代码引用 = 0**（散文复盘 1）⇒ 生成端缺陷 latent、不在在役路径。**V4** `R1.2` 判据根因 = 电源域/区域归属 = **L1**（不在本件）。**裁定 = 关闭 F4，不做 scope 扩展**；零 SPEC/板/阈值/冻结源改动、不需重基线、不需新复评。牙齿 2/2（GND 平层不含 In4 而 In4 确被占 / 17 项空几何而存在有几何 zone）。工具 `p3_v57_co105_f4_scope_disposition.py` `f357f81142161e61` / 记录 `m13_v57_co105_f4_scope_disposition.json` `116f83fae67d1bb8` / 卡 `m13_v57_CO105_f4_scope_disposition.md` `c40b94566b0ba3e9`。
+> ㊴ **CO-106（L2 · 合格标准覆盖性补全）参考平面判据 + 参考平面连续性机判 = `INDETERMINATE_REGION_SCOPED`**：ch.2 的 L2 裁判标准含「参考平面」，而 CO-87 记录**自报**的判据集含该词、覆盖矩阵却只有五行（参考平面无决策行/无闸）⇒ 本件补上判据并机判：**A 板框一致性**（声明多边形 = 冻结板框按 `edge_copper_min` 内缩）＋ **B 参考平面连续性**（每条规划走线每点须落在其 `impedance.per_layer[layer].refs` 任一参考层声明铜内；分类 `declared_copper_missing`（GND 整面层缺铜=缺陷）vs `region_scoped_indeterminate`（In4 按电源区裁剪/桥区待派生））＋ **C 板实佐证** ＋ **D 覆盖性补全声明**；牙齿 3/3（合成负控/正控）。**rev-12 判 `FAIL_DECLARED_COPPER_MISSING`**：60 点/36 段（In2 24 + In5 12）；根因 = 3×GND + 2×In4 多边形下边 **70.7 = 33+38−0.3**（旧 38mm 板框）而现行板框 `outline_y [33,79]`（v28 ECO y 38→46mm）⇒ 按自身 basis 应为 **78.7**；后果 = 框内平面外 **8.3mm 带无参考平面**，而施工已用该带（板实 **In5 316 段 + In2 12 段 + 24 via**，PCIe `PCIE_DN2..DN7` 蛇形恰在其中）。修复 = CO-107。工具 `p3_v57_co106_reference_plane_gate.py` `cd1b163a1c37adf7` / 记录 `m13_v57_co106_reference_plane_gate.json` `942203f4791597a9` / 卡 `m13_v57_CO106_reference_plane_gate.md` `08b46fff2a07e45a`。
 > ㊵ **CO-107（L2 自裁 · PDN/平面分配）SPEC rev-13 = 平面随板框对齐（CO-106 FAIL 的施加）**：把 3×GND(In1/In3/In6) + 2×In4(`P3V3_EAST`/`MCU_VDD_WEST`) 多边形下边 **70.7 → 78.7**（与各自 basis「整面铺铜 + 板边内缩 0.3」一致），rev-12 原多边形**退役留存** `pd.zone_defs.retired_superseded_frame_extent_v1`；**只改 polygon 顶点 + `spec_version`**（阈值/网/层角色/坐标集/短段宽/blocked 台账/冻结源未动）。**几何不变性机判**：新图纸 `route_geometry`/`pages`/`landing_rows` 与 rev-12 **逐字节同**（仅 `inputs_sha.spec` 与 `frozen_sha_check` 变）⇒ 板 **`0e636a67c1472462` 逐字节不变**。SPEC rev-13 `7943be727a4f8ef9`；G4 **FEASIBLE_ALL**（34 页/crossings 0/work 546/546）主件 `73c0066df83fa8c2`；G5 PASS frozen=True；G6 PASS viol 0；G7 FAB ok + DFM new=0 + 在册未连 0/68 + SI skew 0.1300；**CO-106 复判 → `INDETERMINATE_REGION_SCOPED`（`declared_copper_missing`=0）**；链 pin 同批前移（引擎 `/FROZEN_SHA`、validator `/prefix`+`FROZEN`、闸默认 spec co78/81/84/91/92/95/98/99/102/104/105/106、co77 正则）。**复评债 = CO-108（须另一会话）**。工具 `p3_v57_co107_spec_rev13_frame_align.py` / 记录 `m13_v57_co107_spec_rev13_frame_align.json` / 卡 `m13_v57_CO107_spec_rev13_frame_align.md`。
 > ㊶ **CO-108（L2 · 非执行者对抗复评）rev-13 新基线 = `PASS_WITH_FINDINGS`**：独立（不复用执行者断言）机判六面全 True —— **A** rev-13 vs rev-12 标量差分恰为 10 polygon 顶点 + `spec_version`（无增删键）；**A2** 退役留存 5 项（`old_polygon`=rev-12 逐值 / `new_polygon`=rev-13 逐值 / 无 70.7 未登记 / 无残留）；**B** `route_geometry`/`pages`/`landing_rows` 与 rev-12 **逐字节同** + 板 `0e636a67c1472462` 逐字节不变 + frozen drift=∅；**C** 无工具仍以 rev-12 为现行（仅 CO-103 历史件合法持有 `1a381b06454dbe2c`）、记录内 `inputs.*_record` provenance pin 全数一致；**D** 参考平面独立**点级全量**重算 GND 整面层缺铜 **0**、残余 54 段/1260 点 **100%** 落 L3 桥带 x∈(49.8,88.37)；**E** rev-12 FAIL 独立复现（60 项/36 段；板实 (70.7,79.0] = In5 316 / In2 12 / VIA 24）⇒ CO-107 为真修复；**F** 牙齿 3/3。**发现**：**F-A（low，已校正）** CO-105 记录 provenance pin `inputs.co98_record` 在执行者提交态 `04d0ee1` 为 `267f86b5…`（非当时 co98 `48b5bd29…`、亦非任何已提交版本）⇒ 确定性重跑既有工具（无新代码路径）恢复一致，boundary v1.73 同批更新引用；**F-B（信息性）** CO-106 记录字段实计 (段,参考层) 项数而非采样点数（判据成立性不受影响）；**F-C（low，已声明）** co87 矩阵仍无「参考平面」行（登记册缺口）。**F-D（medium，未决前提）** 3 个 bridge zone `layer=In4.Cu` 但名含 `BCU`、`basis` 明文经 **B.Cu** 桥接（P3V3 明示『In4 走线带不跨』）⇒ CO-106 归 `region_scoped_indeterminate` 的『几何待 L3 派生』前提**未证实且与 basis 冲突**；须在 L3 桥区派生 work order 前先裁 bridge zone 派生层归属（若取 basis 口径则 54 段 In5←In4 为**永久**参考缺失 ⇒ 升级 L2 参考平面/阻抗裁定）。工具 `p3_v57_co108_rev13_nonexecutor_review.py` `a745c2695e92b0e6` / 记录 `m13_v57_co108_rev13_nonexecutor_review.json` `f1ff40a43614a9e8` / 卡 `m13_v57_CO108_rev13_nonexecutor_review.md` `a00d7d89a5106c7d`。
 > ㊷ **CO-109（L2 自裁 · 参考平面/PDN）In5←In4 走廊空洞 = 按设计（非「待 L3 派生」）；bridge zone = B.Cu**：触发 = CO-108 F-D。客观证据：3 个 bridge zone（`layer=In4.Cu` 但名含 `BCU`、basis 明文经 B.Cu）声明的 3 条 band 仅覆盖 In5←In4 miss 点 **6.0%**（75/1260），而 In4 走廊 x∈(49.8,88.37) 覆盖 **100.0%**；板 L4 zone 数 0（平面未落）⇒ 无声明走廊 In4 几何可派生。**裁定**：**R1** 3 bridge zone 桥接层 = **B.Cu**（`layer` 字段仅 In4-可达性簿记）；**R2** 走廊空洞 = 按设计（basis 记 PM T2-ECN-1/2『In4 走线带不跨』）；**R3** 桥区几何派生**不能**清除 In5←In4 残余；**R4** ⇒ CO-106 `region_scoped_indeterminate` 前提不成立 —— 该带 In5 实为**仅 In6 参考**、与 declared `symmetric_stripline(refs=[In4,In6])` 不符，应改判『按设计 In4 空洞』并登记 SI 待验项（终判 = SI9000 + 板厂券，不得代填）；**R5（OWNER，停）** 走廊补 In4 铜 = 反转已记录 PM 裁决 ⇒ owner。**step ② 重定范围**：②a 声明修正（L2，新 rev 重基线）/②b 走廊 In5 SI 终判（外部）/②c bridge zone B.Cu 几何声明（L2，**缺 palette**）/②d 换会话复评。工具 `p3_v57_co109_in4_void_l2_ruling.py` `2e35c139476ae016` / 记录 `m13_v57_co109_in4_void_l2_ruling.json` `dd562f526705abef` / 卡 `m13_v57_CO109_in4_void_l2_ruling.md` `583ac243a4cf3428`。
@@ -211,7 +211,7 @@ L4 板 `kicad-cli` 实跑：仅冻结基线 42 条 lib/silk，**铜层违规 0**
 
 19. **✅ CO-97（L2 自裁）退役留存完整性闸 + 显式登记册 + `_shared` 处置自裁**：把红线「退役决策须显式留存」机判化（逐版枚举退役块 → 逐相邻版求 drop → 未登记即 FAIL；拒陈旧登记项与不可解析找回指针；牙齿 3/3 合成注入）。**结果 PASS**：退役块 rev-8 5 → rev-9 8 → rev-10 13 → rev-11 15；**drop 恰 1 处**（`power_pad_connect.retired_superseded_bom` rev-9→rev-10）**已登记**（reason + 3 找回指针，冻结源 173/9、CO-89 记录 55/2、rev-9 原件均可用）⇒ **CO-96 F1 的『静默』违反面关闭**；`board_realized` 显式记为 CO-89 派生记录（消除 F5 误读）。**L2 自裁两条**：① 选 F1 的『显式登记』分支，不为纯溯源字段单独重基线（该键/`board_realized` 均不被 `pdn_apply` 消费；重基线会作废刚出具的 CO-96 证书并新增复评债 ⇒ 不成比例）；② **`_shared` 不解冻**，施工侧三项 **改由项目内引擎承载**且**仅施工期激活**（当前板逐字节不变、PDN 未施工 ⇒ 非在役缺口）。**仍未闭合（登记待办，非 PASS）**：F2/F4（可达性几何闭合 35/55 与 scope 扩展，属 L3 施工期 + 闸扩展）、F6（co95 bbox→真 PIP，latent）。记录 `m13_v57_co97_retirement_retention_gate.json` `4b1ee8924147a4f4` / 登记册 `m13_v57_retirement_registry.json` `4b13b538ba8e28ce` / 卡 `m13_v57_CO97_retirement_retention_gate.md` `2bc80fbe0c62bfd4` / 工具 `p3_v57_co97_retirement_retention_gate.py` `e9427f0f18087a18`。
 
-20. **✅ CO-98（L2 自裁 · PDN 可审计性）可达性义务状态报告 + F6 关闭**：① **F6** = co95 `in_poly` bbox→**真 PIP**（`d5b102a1f23bb5dd`），**输出逐字节不变**（该时点 co95 记录 sha `61db48a283beeaae`（已取代；现行 = `f1c0c17ee7b379a4`））⇒ 行为中性加固；② **F2/F4 机判化**：新增只读 co98 报告（不改 co95 记录字节）—— 三态 `geometric_covered` **35** / `declared_pending_l3` **14** / `ruling_pending_l1` **6**，`machine_closable_today=false`（verdict 永不 PASS）；scope 排除 `gnd_stitch_via_realized` 40 / `power_zones_vias` 17 / `decoupling_vias` 0；③ **F3**：6 项 ruling = 5 机判（3 无区 + 2 异网冲突）+ **1 文本**（`P3V3_AUX R1.2`）。牙齿 2/2。**仍未闭合（非 PASS）**：F2 几何闭合（14 = L3 派生）、F4 scope 扩展（SPEC 变更）、F3 R1.2 判据。记录 `m13_v57_co98_reachability_status_report.json` `c652f4b1b572912a` / 卡 `m13_v57_CO98_reachability_status_report.md` `84a609e6f5e54503` / 工具 `p3_v57_co98_reachability_status_report.py` `9f60da548330b436`；co95 工具 `p3_v57_co95_in4_reachability.py` `4d890025aa246563`（取代 `a2e16d6e08eef731`）。
+20. **✅ CO-98（L2 自裁 · PDN 可审计性）可达性义务状态报告 + F6 关闭**：① **F6** = co95 `in_poly` bbox→**真 PIP**（`d5b102a1f23bb5dd`），**输出逐字节不变**（该时点 co95 记录 sha `61db48a283beeaae`（已取代；现行 = `f1c0c17ee7b379a4`））⇒ 行为中性加固；② **F2/F4 机判化**：新增只读 co98 报告（不改 co95 记录字节）—— 三态 `geometric_covered` **35** / `declared_pending_l3` **14** / `ruling_pending_l1` **6**，`machine_closable_today=false`（verdict 永不 PASS）；scope 排除 `gnd_stitch_via_realized` 40 / `power_zones_vias` 17 / `decoupling_vias` 0；③ **F3**：6 项 ruling = 5 机判（3 无区 + 2 异网冲突）+ **1 文本**（`P3V3_AUX R1.2`）。牙齿 2/2。**仍未闭合（非 PASS）**：F2 几何闭合（14 = L3 派生）、F4 scope 扩展（SPEC 变更）、F3 R1.2 判据。记录 `m13_v57_co98_reachability_status_report.json` `a29b802163bca3d9` / 卡 `m13_v57_CO98_reachability_status_report.md` `84a609e6f5e54503` / 工具 `p3_v57_co98_reachability_status_report.py` `2091c72253930b08`；co95 工具 `p3_v57_co95_in4_reachability.py` `4d87484ff2f1ecc7`（取代 `a2e16d6e08eef731`）。
 
 21. **⚠⚠ CO-99（L2 自裁 · PDN 施工就绪性）两个覆盖缺口 ⇒ PDN「可施工」= FAIL**：**G1** 既有闸只判 plan-vs-board（CO-91 `Scene` 仅由板构建）⇒ 计划集内部互冲零判；**G2** 项目规则源 `hole_clearance.same_net_exempt=True` 不含 KiCad 板配置 `min_hole_to_hole=0.25`（net-agnostic）⇒ 同网孔距盲。实测（scratch，交付板不变）：SPEC 宽 0.2 ⇒ **7 异网重叠（短路）+ 35 净距 + 39 孔距（2 同址）**；引擎宽 0.5 ⇒ 13 + 127；7 重叠全在 **U6 0.5mm 场**。**dry-run**：`pdn_apply` 实落后 DRC **42→274（+232）**、未连 348→191。**根因**：① 计划集互避缺失；② 短段宽 0.5 未读 SPEC；③ stitch 互距/去重缺失；④ 规则源缺 `min_hole_to_hole`。**影响**：布线链 G4..G7 PASS 不变；**PDN 可施工 = FAIL**。记录 `m13_v57_co99_pdn_mutual_conflict_gate.json` `1d256de815b1ed87` / 卡 `m13_v57_CO99_pdn_mutual_conflict_gate.md` `c47249d3538c1d8c` / 工具 `p3_v57_co99_pdn_mutual_conflict_gate.py` `78762b3d9de90fd4`。
 22. **⚠ CO-100（L2 自裁 · PDN）互障感知修复候选 = `PARTIAL`**：声明 palette + 互障（板 + 已接受计划件）+ 孔距约束的确定性重放 ⇒ **残余异网重叠 0**，但 **5 项新增 blocked（4 ppc + 1 stitch）**（kept **124**/34/13、relocated **61**/5/4）（**CO-103 校正**：原记「6 项 / 5 ppc / 全在 U6 0.5mm 场」为过期读数）。**裁定**：互冲 L2 可解。**CO-103 校正**：该 5 项为**同网冗余竞争**（4 项 U6 相邻 GND 计划孔距互障 + 1 项 J2 扇出同址重孔对），与 CO-94 的板铜阻塞不同类；「须 via-in-pad/HDI」未被证明。**rev-12 决策点**：`(a)` 登记接受 5 blocked（纯 L2）或 `(b)` L2 冗余归并裁定。**未施加**。记录 `m13_v57_co100_pdn_mutual_repair_candidate.json` `11e21f3b97bac66b` / 卡 `m13_v57_CO100_pdn_mutual_repair_candidate.md` `ff1c267f74f578dc` / 工具 `p3_v57_co100_pdn_mutual_repair_candidate.py` `341314590ceb154a`。
@@ -223,8 +223,8 @@ L4 板 `kicad-cli` 实跑：仅冻结基线 42 条 lib/silk，**铜层违规 0**
 25. **✅ CO-103（L2 · 非执行者对抗复评）rev-12 新基线 = `PASS_WITH_FINDINGS`**：9 项机判（V1 幂等重导逐字节 / V2 palette 归属+固定序独立重放 / V3 登记完整性 / V4 clearance 与 CO-91 一致 / V5 计划集互判 / V6 CO-102 发射集等价 + 三态 DRC 42 / 76(+34) / 42(+0) / V7 blocked 成因分类 / V8 声明漂移扫描 / V9 链 pin）**全过**，牙齿 7/7；**0 项 pin 漂移**。**发现**：**F-A（中）**声明漂移 —— 原记「6 项新增 blocked（5 ppc + 1 stitch，全在 U6 0.5mm 场）」实为 **5 项（4 ppc + 1 stitch）**，第 5 项在 **J2 扇出** `(133.83,59.1)`；v1.69 已校正。**F-B（高）**4 项 U6 新增 blocked 的自身位置**对板铜干净**、阻塞全为**同网 GND 计划孔距互障**（相邻 U6 GND 计划 via，d=0.180–0.403 < 0.45）⇒「须 via-in-pad/HDI」**缺乏存在性证据**（换序探针 8/13/13 且每对幸存成员翻转）；与 CO-94 板铜类不同。**F-C（中）**收口件 §1 ㉛/§6-20 的 co95 现行身份引用陈旧（`61db48a283beeaae` → 现行 `f1c0c17ee7b379a4`）、CO-96 证书未声明自身失效，且 CO-77 的 `CITE` 抓不到散文式引用；v1.69 已注明已取代。**另记**：同网孔距口径经**合成注入实测**验证（kicad-cli 对同网 GND 孔对报 `hole_to_hole`，0.080 < 0.2495）⇒ CO-99 A4 口径忠实。工具 `p3_v57_co103_rev12_nonexecutor_review.py` `5e3f91d39130b83a` / 记录 `m13_v57_co103_rev12_nonexecutor_review.json` `7f481be259865941` / 卡 `m13_v57_CO103_rev12_nonexecutor_review.md` `6ac046a885508dc6`。
 
 26. **✅ CO-104（L2 自裁 · 过孔策略/PDN）rev-12 新增 5 项 blocked 裁定 = `ACCEPT_L2_NO_HDI` + co96 fail-closed 加固**：依 `LAYOUT_CONSTITUTION` 第二章（过孔策略 / PDN 承载 = L2；层数 = L1）对 CO-103 F-B 的 4 项 U6 ppc + 1 项 J2 扇出 stitch 作裁。**三条出路逐条量化**：**A 共享单孔**（两 pad 中心**中点**派生位 + 双短段；零自由度、非搜索）仅 **1/4 对**可行（`FB34~FA32` 可行；其余 3 对的中点正落在 U6 另一球 pad `FF11`/`FF18`/`E11` 上）⇒ 收益 = 1 个 GND 球；**B 改声明固定序**（同 palette、同检测器）canonical **4** vs 13 / 8 / 13 ⇒ canonical 已最优、无免费解；**C 加宽 palette / via-in-pad / HDI** ⇒ 违零坐标搜索红线（CO-93/94 已驳）/ 无工艺 + SI-PI 证据 / 属 L1 且本件已证「须 HDI」不成立。**裁定 = 接受**（与既有 120 项 blocked 同类处理，显式登记不静默），**不升 owner、不重基线、rev-12 不变**；本项**不再构成 L1 问题**（若日后要求「U6 GND 球 100% 独立 via」为硬需求，须走 SPEC 变更 + 全链重基线 + 换会话复评）。**附带加固（CO-103 F-C 收口，fail-closed）**：co96 默认落点改为**重跑件**，显式指向历史证书即**拒绝写入（rc=2）**，除非 `--overwrite-canonical`⇒ 历史证书 `8b591e5030aca11d` 不再会被静默改写；重跑件 `m13_v57_co96_nonexecutor_review_pass4_rerun.json` `636b1ad728f0fa91` 即 CO-96 失效的**机判化声明**（verdict `BASELINE_MISMATCH`，`co95_json` 61db48a283beeaae → f1c0c17ee7b379a4）。工具 `p3_v57_co104_pdn_blocked_ruling.py` `7b2f3ff18e0ede04` / 记录 `m13_v57_co104_pdn_blocked_ruling.json` `7254226692cb8f93` / 卡 `m13_v57_CO104_pdn_blocked_ruling.md` `ed2587023fe05ed6`。
-27. **✅ CO-105（L2 自裁 · PDN 建模）CO-96 F4 落定 = `CLOSE_NO_SCOPE_EXTENSION`**：把 CO-98 的「声明排除」机判化。**V1 语义不可适用**：requirement 判据 =「落于本网 In4 铜」，而 GND 平面层 = `In1/In3/In6`、In4 仅 `P3V3/MCU_VDD/P3V3_AUX` ⇒ 对 **130 GND ppc entry + 40 GND stitch via** 无可判定（≠『未覆盖』）；requirement 对象 = 非 GND ppc entry **55**。**V2 几何待 L3**：17 个 `power_zones[].vias` **17/17** 位于 3 个 bridge zone（`P3V3_BCU_BRIDGE_IN4` 3 / `P3V3_AUX_BCU_BRIDGE_IN4` 8 / `MCU_VDD_BCU_RESISTORS_IN4` 6），其 `polygons=[]`、`geometry_status=L3_CONSTRUCTION_DERIVED` ⇒ 与 CO-98 `declared_pending_l3` 同桶；扩 scope 只并入待派生清单、不新增可判缺陷。**V3** 施工路径对 `gnd_stitch_gen` 的**代码引用 = 0**（散文复盘 1）⇒ 生成端缺陷 latent、不在在役路径。**V4** `R1.2` 判据根因 = 电源域/区域归属 = **L1**（不在本件）。**裁定 = 关闭 F4，不做 scope 扩展**；零 SPEC/板/阈值/冻结源改动、不需重基线、不需新复评。牙齿 2/2（GND 平层不含 In4 而 In4 确被占 / 17 项空几何而存在有几何 zone）。工具 `p3_v57_co105_f4_scope_disposition.py` `f357f81142161e61` / 记录 `m13_v57_co105_f4_scope_disposition.json` `8655cff7560b11ff` / 卡 `m13_v57_CO105_f4_scope_disposition.md` `c40b94566b0ba3e9`。
-28. **⚠→✅ CO-106（L2 · 覆盖性补全）参考平面判据 + 连续性机判**：ch.2 的 L2 裁判标准含「参考平面」，而 CO-87 记录**自报**的判据集含该词、覆盖矩阵却只有五行（参考平面无决策行/无闸）⇒ 本件补上判据并机判：**A 板框一致性**（声明多边形 = 冻结板框按 `edge_copper_min` 内缩）＋ **B 参考平面连续性**（每条规划走线每点须落在其 `impedance.per_layer[layer].refs` 任一参考层声明铜内；分类 `declared_copper_missing`（GND 整面层缺铜=缺陷）vs `region_scoped_indeterminate`（In4 按电源区裁剪/桥区待派生））＋ **C 板实佐证** ＋ **D 覆盖性补全声明**；牙齿 3/3（合成负控/正控）。**rev-12 判 `FAIL_DECLARED_COPPER_MISSING`**：60 点/36 段（In2 24 + In5 12）；根因 = 3×GND + 2×In4 多边形下边 **70.7 = 33+38−0.3**（旧 38mm 板框）而现行板框 `outline_y [33,79]`（v28 ECO y 38→46mm）⇒ 按自身 basis 应为 **78.7**；后果 = 框内平面外 **8.3mm 带无参考平面**，而施工已用该带（板实 **In5 316 段 + In2 12 段 + 24 via**，PCIe `PCIE_DN2..DN7` 蛇形恰在其中）。修复 = CO-107。工具 `p3_v57_co106_reference_plane_gate.py` `44356d38d2e87698` / 记录 `m13_v57_co106_reference_plane_gate.json` `b01774449669c10a` / 卡 `m13_v57_CO106_reference_plane_gate.md` `08b46fff2a07e45a`。
+27. **✅ CO-105（L2 自裁 · PDN 建模）CO-96 F4 落定 = `CLOSE_NO_SCOPE_EXTENSION`**：把 CO-98 的「声明排除」机判化。**V1 语义不可适用**：requirement 判据 =「落于本网 In4 铜」，而 GND 平面层 = `In1/In3/In6`、In4 仅 `P3V3/MCU_VDD/P3V3_AUX` ⇒ 对 **130 GND ppc entry + 40 GND stitch via** 无可判定（≠『未覆盖』）；requirement 对象 = 非 GND ppc entry **55**。**V2 几何待 L3**：17 个 `power_zones[].vias` **17/17** 位于 3 个 bridge zone（`P3V3_BCU_BRIDGE_IN4` 3 / `P3V3_AUX_BCU_BRIDGE_IN4` 8 / `MCU_VDD_BCU_RESISTORS_IN4` 6），其 `polygons=[]`、`geometry_status=L3_CONSTRUCTION_DERIVED` ⇒ 与 CO-98 `declared_pending_l3` 同桶；扩 scope 只并入待派生清单、不新增可判缺陷。**V3** 施工路径对 `gnd_stitch_gen` 的**代码引用 = 0**（散文复盘 1）⇒ 生成端缺陷 latent、不在在役路径。**V4** `R1.2` 判据根因 = 电源域/区域归属 = **L1**（不在本件）。**裁定 = 关闭 F4，不做 scope 扩展**；零 SPEC/板/阈值/冻结源改动、不需重基线、不需新复评。牙齿 2/2（GND 平层不含 In4 而 In4 确被占 / 17 项空几何而存在有几何 zone）。工具 `p3_v57_co105_f4_scope_disposition.py` `f357f81142161e61` / 记录 `m13_v57_co105_f4_scope_disposition.json` `116f83fae67d1bb8` / 卡 `m13_v57_CO105_f4_scope_disposition.md` `c40b94566b0ba3e9`。
+28. **⚠→✅ CO-106（L2 · 覆盖性补全）参考平面判据 + 连续性机判**：ch.2 的 L2 裁判标准含「参考平面」，而 CO-87 记录**自报**的判据集含该词、覆盖矩阵却只有五行（参考平面无决策行/无闸）⇒ 本件补上判据并机判：**A 板框一致性**（声明多边形 = 冻结板框按 `edge_copper_min` 内缩）＋ **B 参考平面连续性**（每条规划走线每点须落在其 `impedance.per_layer[layer].refs` 任一参考层声明铜内；分类 `declared_copper_missing`（GND 整面层缺铜=缺陷）vs `region_scoped_indeterminate`（In4 按电源区裁剪/桥区待派生））＋ **C 板实佐证** ＋ **D 覆盖性补全声明**；牙齿 3/3（合成负控/正控）。**rev-12 判 `FAIL_DECLARED_COPPER_MISSING`**：60 点/36 段（In2 24 + In5 12）；根因 = 3×GND + 2×In4 多边形下边 **70.7 = 33+38−0.3**（旧 38mm 板框）而现行板框 `outline_y [33,79]`（v28 ECO y 38→46mm）⇒ 按自身 basis 应为 **78.7**；后果 = 框内平面外 **8.3mm 带无参考平面**，而施工已用该带（板实 **In5 316 段 + In2 12 段 + 24 via**，PCIe `PCIE_DN2..DN7` 蛇形恰在其中）。修复 = CO-107。工具 `p3_v57_co106_reference_plane_gate.py` `cd1b163a1c37adf7` / 记录 `m13_v57_co106_reference_plane_gate.json` `942203f4791597a9` / 卡 `m13_v57_CO106_reference_plane_gate.md` `08b46fff2a07e45a`。
 
 29. **✅ CO-107（L2 自裁 · PDN/平面分配）SPEC rev-13 = 平面随板框对齐**：把 3×GND(In1/In3/In6) + 2×In4(`P3V3_EAST`/`MCU_VDD_WEST`) 多边形下边 **70.7 → 78.7**（与各自 basis「整面铺铜 + 板边内缩 0.3」一致），rev-12 原多边形**退役留存** `pd.zone_defs.retired_superseded_frame_extent_v1`；**只改 polygon 顶点 + `spec_version`**（阈值/网/层角色/坐标集/短段宽/blocked 台账/冻结源未动）。**几何不变性机判**：新图纸 `route_geometry`/`pages`/`landing_rows` 与 rev-12 **逐字节同**（仅 `inputs_sha.spec` 与 `frozen_sha_check` 变）⇒ 板 **`0e636a67c1472462` 逐字节不变**。SPEC rev-13 `7943be727a4f8ef9`；G4 **FEASIBLE_ALL**（34 页/crossings 0/work 546/546）主件 `73c0066df83fa8c2`；G5 PASS frozen=True；G6 PASS viol 0；G7 FAB ok + DFM new=0 + 在册未连 0/68 + SI skew 0.1300；**CO-106 复判 → `INDETERMINATE_REGION_SCOPED`（`declared_copper_missing`=0）**；链 pin 同批前移（引擎 `/FROZEN_SHA`、validator `/prefix`+`FROZEN`、闸默认 spec co78/81/84/91/92/95/98/99/102/104/105/106、co77 正则）。**复评债 = CO-108（须另一会话）**。工具 `p3_v57_co107_spec_rev13_frame_align.py` / 记录 `m13_v57_co107_spec_rev13_frame_align.json` / 卡 `m13_v57_CO107_spec_rev13_frame_align.md`。
 30. **⚠→✅ CO-108（L2 · 非执行者对抗复评）rev-13 新基线 = `PASS_WITH_FINDINGS`**：独立机判 —— rev-13 差分恰为 10 polygon 顶点 + `spec_version`；退役留存 5 项完整（old=rev-12 / new=rev-13，无静默放弃）；几何（`route_geometry`/`pages`/`landing_rows`）与板 `0e636a67c1472462` 逐字节不变；链 pin 全数前移（记录内 provenance pin 全一致）；**参考平面独立点级全量重算 GND 面缺铜 = 0**、残余 54 段 100% 落 L3 桥带；**rev-12 FAIL 独立复现**（60 项/36 段 + 板实已用 8.3mm 带 In5 316 / In2 12 / VIA 24）⇒ CO-107 真修复；牙齿 3/3。**F-A（low，已校正）**：CO-105 记录 `inputs.co98_record` 在 `04d0ee1` 为陈旧值（非当时 co98）⇒ 确定性重跑恢复 `48b5bd29009a9eb8`、记录 sha→`a53f7e3b75d3d427`，本件 v1.73 同步引用。**F-B（信息性）** CO-106 字段计法非点数（不影响结论）。**F-C（low，已声明）** co87 矩阵无「参考平面」行。**F-D（medium，未决前提）** bridge zone `layer=In4.Cu` vs 名/`basis` 经 **B.Cu** 桥接（P3V3『In4 走线带不跨』）⇒『几何待 L3 派生』前提未证实；L3 派生 work order 须先裁派生层归属（若取 basis 口径则 54 段 In5←In4 为永久参考缺失 ⇒ L2）。工具 `p3_v57_co108_rev13_nonexecutor_review.py` `a745c2695e92b0e6` / 记录 `m13_v57_co108_rev13_nonexecutor_review.json` `f1ff40a43614a9e8` / 卡 `m13_v57_CO108_rev13_nonexecutor_review.md` `a00d7d89a5106c7d`。
@@ -265,18 +265,18 @@ L4 板 `kicad-cli` 实跑：仅冻结基线 42 条 lib/silk，**铜层违规 0**
 `m13_v57_co77_closure_declaration_sweep.json` /
 `m13_v57_CO77_closure_declaration_sweep.md` /
 `m13_v57_CO78_layer_role_drift_gate.md` `0185363ec8ddf5f7` /
-`m13_v57_co78_layer_role_drift_gate.json` `38c11158ce1bbb55` /
+`m13_v57_co78_layer_role_drift_gate.json` `1235a9a957fcc0cd` /
 `m13_v57_CO79_probe_vacuity_hardening.md` /
 `m13_v57_co69_adversarial_review.json` `18a86c998dd6b4de`（CO-79 加固后） /
 `m13_v57_CO80_l4_project_rule_align.md` `07cbdea3d139927a` /
 `m13_v57_co80_l4_project_rule_align.json` `d617a4c5e4e4523f` /
 `m13_v57_CO81_project_rules_gate.md` /
-`m13_v57_co81_project_rules_gate.json` `093dd05224455b9d`（CO-89 重扫 rev-9 后；原 `ebd163058efaad14`、`a9161a86271c068b`、`1f25c6a9db6923f0` 已取代） /
+`m13_v57_co81_project_rules_gate.json` `adba2152d4f10fd4`（CO-89 重扫 rev-9 后；原 `ebd163058efaad14`、`a9161a86271c068b`、`1f25c6a9db6923f0` 已取代） /
 `m13_v57_CO82_project_netclass_gap.md` `0d0d6e7640fa970e` /
 `m13_v57_co82_l4_project_netclass_align.json` `0c8745064785ee57` /
 `m13_v57_CO83_netclass_vs_spec_gate.md` `47ebff527cc431ef` /
 `m13_v57_CO84_dru_domain_gate.md` `996bee590912e823` /
-`m13_v57_co84_dru_domain_gate.json` `9471fcfec54cbaee` /
+`m13_v57_co84_dru_domain_gate.json` `6f1a2ccfaf916627` /
 `m13_v57_co85_nonexecutor_review_pass2.json` /
 `m13_v57_CO85_nonexecutor_adversarial_review_pass2.md` /
 `m13_v57_co86_l2_span_option_closure.json` `d0a59f85b74687d5` /
@@ -323,11 +323,11 @@ End of boundary **v1.81**（含 CO-67..CO-115；+ CO-114 非执行者对抗复�
 - L4 校验 `m13_v57_l4_validation.json` `aa666a49e36883c7`
 - L5 fab `m13_v57_l5_fab_record.json` `791012e88b514faa`
 - L5 SI `m13_v57_l5_si_pi_emc_record.json` `261b58e745c67aea`
-- co95 记录 `m13_v57_co95_in4_reachability.json` `c9eba916a9866808`
-- co98 记录 `m13_v57_co98_reachability_status_report.json` `c652f4b1b572912a`
+- co95 记录 `m13_v57_co95_in4_reachability.json` `4525e38330ee599f`
+- co98 记录 `m13_v57_co98_reachability_status_report.json` `a29b802163bca3d9`
 - co87 记录 `m13_v57_co87_l2_acceptance_coverage.json` `46d15557477d164b`
-- co105 记录 `m13_v57_co105_f4_scope_disposition.json` `8655cff7560b11ff`
-- co106 记录 `m13_v57_co106_reference_plane_gate.json` `b01774449669c10a`
+- co105 记录 `m13_v57_co105_f4_scope_disposition.json` `116f83fae67d1bb8`
+- co106 记录 `m13_v57_co106_reference_plane_gate.json` `942203f4791597a9`
 - co99 记录 `m13_v57_co99_pdn_mutual_conflict_gate.json` `1d256de815b1ed87`
 - co91 记录 `m13_v57_co91_pdn_planned_coord_clearance_gate.json` `3ede251a830108f1`
 - co92 记录 `m13_v57_co92_pdn_repair_candidate.json` `7aaacd8f34559763`
@@ -360,7 +360,7 @@ End of boundary **v1.81**（含 CO-67..CO-115；+ CO-114 非执行者对抗复�
 
 **板实旁证**：交付板 `k2_v4_8L.l4.kicad_pcb` `d4e81f647be7f980`（**CO-133 施工后**）= 图纸 2708 track/252 via **+** PDN 185 短段/241 via/9 zone（In4 含 `12V_IN_IN4_CARRIER`/`P3V3_AUX_WEST`/两桥区，3 区 `fill_priority=1`）；**施工前** `0e636a67c1472462` 为零 PDN 铜 ⇒ 本议题的承载/归属裁决仍属 **SPEC 声明层**，板实为其确定性物理实现。
 
-**L2 过程闸（CO-120，新）**：`p3_v57_co120_provenance_pin_gate.py` `e1b85ef36d54533c`、记录 `m13_v57_co120_provenance_pin_gate.json` `03882ecebf18af33`、卡 `m13_v57_CO120_provenance_pin_gate.md` `bc6ca56de45fda27` —— 关闭 CO-108/CO-114 **F-6 盲区**（记录内 inter-record provenance pin 一致性）；首跑 **PASS**（pins 12：match 8 / 豁免历史 3 / 未声明陈旧 0 / 解析歧义 1；牙齿 2/2）。
+**L2 过程闸（CO-120，新）**：`p3_v57_co120_provenance_pin_gate.py` `0775970667f2552f`、记录 `m13_v57_co120_provenance_pin_gate.json` `f54338c618db52d6`、卡 `m13_v57_CO120_provenance_pin_gate.md` `bc6ca56de45fda27` —— 关闭 CO-108/CO-114 **F-6 盲区**（记录内 inter-record provenance pin 一致性）；首跑 **PASS**（pins 12：match 8 / 豁免历史 3 / 未声明陈旧 0 / 解析歧义 1；牙齿 2/2）。
 
 ## 11. CO-133（L2 自裁 · 施工期物理施加）当前态引用
 
@@ -389,18 +389,18 @@ CO-49 `canonicalize_board` ⇒ 净板/已施工板两次投喂**同一字节**�
 | `m13_v57_co91_pdn_planned_coord_clearance_gate.json` | `3ede251a830108f1` |
 | `m13_v57_co104_pdn_blocked_ruling.json` | `7254226692cb8f93` |
 | `m13_v57_co97_retirement_retention_gate.json` | `4b1ee8924147a4f4` |
-| `m13_v57_co98_reachability_status_report.json` | `c652f4b1b572912a` |
+| `m13_v57_co98_reachability_status_report.json` | `a29b802163bca3d9` |
 | `m13_v57_co99_pdn_mutual_conflict_gate.json` | `1d256de815b1ed87` |
 | `m13_v57_co102_pdn_local_apply.json` | `44002f7eac6cfa49` |
-| `m13_v57_co105_f4_scope_disposition.json` | `8655cff7560b11ff` |
-| `m13_v57_co106_reference_plane_gate.json` | `b01774449669c10a` |
-| `m13_v57_co120_provenance_pin_gate.json` | `03882ecebf18af33` |
-| `m13_v57_co124_input_selfcheck_gate.json` | `ef06154683b84cde` |
+| `m13_v57_co105_f4_scope_disposition.json` | `116f83fae67d1bb8` |
+| `m13_v57_co106_reference_plane_gate.json` | `942203f4791597a9` |
+| `m13_v57_co120_provenance_pin_gate.json` | `f54338c618db52d6` |
+| `m13_v57_co124_input_selfcheck_gate.json` | `629a0da5159b8812` |
 | `m13_v57_co88_pdn_board_reality_gate.json` | `17719cf7f8e3e702` |
-| `m13_v57_co78_layer_role_drift_gate.json` | `38c11158ce1bbb55` |
-| `m13_v57_co81_project_rules_gate.json` | `093dd05224455b9d` |
-| `m13_v57_co84_dru_domain_gate.json` | `9471fcfec54cbaee` |
-| `input_defect_register_v1.json`（含 CO-133 三条工具缺陷登记） | `4176340f7dc6853d` |
+| `m13_v57_co78_layer_role_drift_gate.json` | `1235a9a957fcc0cd` |
+| `m13_v57_co81_project_rules_gate.json` | `adba2152d4f10fd4` |
+| `m13_v57_co84_dru_domain_gate.json` | `6f1a2ccfaf916627` |
+| `input_defect_register_v1.json`（含 CO-133 三条工具缺陷登记） | `ec1beed1499342b3` |
 
 **未决（不变）**：非执行者复评（本件 + rev-18 新基线）；③ 已撤回 owner 升级（CO-134 判为工程换算错误并落地忠实实现）；外部输入（板厂券/SI9000、PM 压降·热）。
 
@@ -422,7 +422,7 @@ SPEC **rev-19** `5f72182a2616392c`（白名单外 0 改动；0.875 退役留存 
 | 工具 `p3_v57_co134_req_impl_separation.py` | `8f59c5be82fe9d06` |
 | 记录 `m13_v57_co134_req_impl_separation.json` | `1e5aa8503d211411` |
 | 卡 `m13_v57_CO134_req_impl_separation.md` | `813e66a5eb4b0e60` |
-| 登记簿 `input_defect_register_v1.json` | `4176340f7dc6853d` |
+| 登记簿 `input_defect_register_v1.json` | `ec1beed1499342b3` |
 | `SPEC_k2_v4.spec-rev-19.json` | `5f72182a2616392c` |
 | `m13_v57_w3_joint_assignment.json`（G4 重基线） | `60cbd331836e52b7` |
 | `m13_v57_w3_validation.json`（G5） | `8b385d6c554ac527` |
@@ -430,13 +430,13 @@ SPEC **rev-19** `5f72182a2616392c`（白名单外 0 改动；0.875 退役留存 
 | `m13_v57_l4_validation.json` | `aa666a49e36883c7` |
 | `m13_v57_l5_fab_record.json` | `791012e88b514faa` |
 | `m13_v57_l5_si_pi_emc_record.json` | `261b58e745c67aea` |
-| `m13_v57_co124_input_selfcheck_gate.json`（K9 + T5/T6/T7） | `ef06154683b84cde` |
-| `m13_v57_co95_in4_reachability.json` | `c9eba916a9866808` |
-| `m13_v57_co98_reachability_status_report.json` | `c652f4b1b572912a` |
+| `m13_v57_co124_input_selfcheck_gate.json`（K9 + T5/T6/T7） | `629a0da5159b8812` |
+| `m13_v57_co95_in4_reachability.json` | `4525e38330ee599f` |
+| `m13_v57_co98_reachability_status_report.json` | `a29b802163bca3d9` |
 | `m13_v57_co99_pdn_mutual_conflict_gate.json` | `1d256de815b1ed87` |
 | `m13_v57_co104_pdn_blocked_ruling.json` | `7254226692cb8f93` |
-| `m13_v57_co105_f4_scope_disposition.json` | `8655cff7560b11ff` |
-| `m13_v57_co106_reference_plane_gate.json` | `b01774449669c10a` |
+| `m13_v57_co105_f4_scope_disposition.json` | `116f83fae67d1bb8` |
+| `m13_v57_co106_reference_plane_gate.json` | `942203f4791597a9` |
 | `m13_v57_co91_pdn_planned_coord_clearance_gate.json` | `3ede251a830108f1` |
 | `m13_v57_co88_pdn_board_reality_gate.json` | `17719cf7f8e3e702` |
 
@@ -453,14 +453,14 @@ SPEC **rev-19** `5f72182a2616392c`（白名单外 0 改动；0.875 退役留存 
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co106_reference_plane_gate.py`（CO-106.2） | `44356d38d2e87698` |
-| 记录 `m13_v57_co106_reference_plane_gate.json` | `b01774449669c10a` |
-| 记录 `m13_v57_co124_input_selfcheck_gate.json`（CO-124.2） | `ef06154683b84cde` |
-| 登记簿 `input_defect_register_v1.json`（17 项） | `4176340f7dc6853d` |
+| 工具 `p3_v57_co106_reference_plane_gate.py`（CO-106.2） | `cd1b163a1c37adf7` |
+| 记录 `m13_v57_co106_reference_plane_gate.json` | `942203f4791597a9` |
+| 记录 `m13_v57_co124_input_selfcheck_gate.json`（CO-124.2） | `629a0da5159b8812` |
+| 登记簿 `input_defect_register_v1.json`（17 项） | `ec1beed1499342b3` |
 | 工具 `p3_v57_co77_closure_declaration_sweep.py`（CO-77.5） | `5459595adc50b392` |
-| 工具 `p3_v57_co136_gate_hygiene.py` | `12f6c7300f67a225` |
-| 记录 `m13_v57_co136_gate_hygiene.json` | `e2241dd8f53cd1ad` |
-| 卡 `m13_v57_CO136_gate_hygiene.md` | `4d065534b99afa6e` |
+| 工具 `p3_v57_co136_gate_hygiene.py` | `a5b712e48119fdfb` |
+| 记录 `m13_v57_co136_gate_hygiene.json` | `8ade87856e25edf8` |
+| 卡 `m13_v57_CO136_gate_hygiene.md` | `742e966f43a51948` |
 
 
 ## 13. CO-135（非执行者复评 · rev-19 + CO-134｜L2 声明/工具卫生修正）当前态引用
@@ -479,13 +479,13 @@ co69 10/10 / co120 PASS；冻结四源 **4/4**；SPEC rev-19 白名单外 **0** 
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co135_review_hygiene.py` | `b2db682890b986fc` |
-| 记录 `m13_v57_co135_review_hygiene.json` | `5c441c5eed3ef703` |
-| 卡 `m13_v57_CO135_review_hygiene.md` | `b088151d62420392` |
+| 工具 `p3_v57_co135_review_hygiene.py` | `827a49520c8e2cd5` |
+| 记录 `m13_v57_co135_review_hygiene.json` | `85a0de9f9833c8c1` |
+| 卡 `m13_v57_CO135_review_hygiene.md` | `ca2763819f3b9188` |
 | 工具 `p3_v57_co77_closure_declaration_sweep.py`（CO-77.4） | `5459595adc50b392` |
-| `m13_v57_co78_layer_role_drift_gate.json`（对 rev-19 重跑） | `38c11158ce1bbb55` |
-| `m13_v57_co81_project_rules_gate.json`（对 rev-19 重跑） | `093dd05224455b9d` |
-| `m13_v57_co84_dru_domain_gate.json`（对 rev-19 重跑） | `9471fcfec54cbaee` |
+| `m13_v57_co78_layer_role_drift_gate.json`（对 rev-19 重跑） | `1235a9a957fcc0cd` |
+| `m13_v57_co81_project_rules_gate.json`（对 rev-19 重跑） | `adba2152d4f10fd4` |
+| `m13_v57_co84_dru_domain_gate.json`（对 rev-19 重跑） | `6f1a2ccfaf916627` |
 | `m13_v57_l5_fab_record.json`（construction pin 刷新） | `791012e88b514faa` |
 | `m13_v57_l5_si_pi_emc_record.json` | `261b58e745c67aea` |
 
@@ -542,10 +542,10 @@ CO-135 F6 后半：K9 的「域外」豁免原本**只凭 regime 自由文本含
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co124_input_selfcheck_gate.py`（CO-124.3） | `610ff503dbca5516` |
-| 记录 `m13_v57_co124_input_selfcheck_gate.json` | `ef06154683b84cde` |
+| 工具 `p3_v57_co124_input_selfcheck_gate.py`（CO-124.3） | `ef61e2b2566326a3` |
+| 记录 `m13_v57_co124_input_selfcheck_gate.json` | `629a0da5159b8812` |
 | 台账 `derived_value_ledger_v1.json`（pad_field 已锚定） | `b88d69dbc7a0dd51` |
-| 登记簿 `input_defect_register_v1.json` | `4176340f7dc6853d` |
+| 登记簿 `input_defect_register_v1.json` | `ec1beed1499342b3` |
 
 
 ## 18. CO-140（L2 分析 · 只读：as-built 偏差归因）当前态引用
@@ -643,7 +643,7 @@ opt-in 旋钮 `CO10_IP3W` / `CO10_PDN_OBS` / `--order xasc` 已入库（默认�
 | 卡 `m13_v57_CO143_escape_fan_3w_feasibility.md` | `3f9e35914b01a95c` |
 | 探针 `p3_v57_co10_west_fan_probe.py`（+opt-in 3W/PDN 旋钮/xasc） | `d335ade502ceebcb` |
 | 分配器 `p3_v57_co16_emit_allocation.py`（+CO16_IP3W 映射） | `64d75dd9f9d26875` |
-| 登记簿 `input_defect_register_v1.json`（定位更正；OPEN 保持） | `4176340f7dc6853d` |
+| 登记簿 `input_defect_register_v1.json`（定位更正；OPEN 保持） | `ec1beed1499342b3` |
 
 ---
 
@@ -671,7 +671,7 @@ CO-144 以**分带单调 carry**（带内 (corridor,band) 连续 + 处理序自�
 | 引擎 `p3_v57_w3_constructive.py`（CO16_ALLOC→v8 / W3-CN.42） | `481617515038dad5` |
 | 探针 `p3_v57_co10_west_fan_probe.py`（+carry/orientation） | `d335ade502ceebcb` |
 | 分配器 `p3_v57_co16_emit_allocation.py`（+FAN_STRAT/PDN_OBS/ORDER 映射） | `64d75dd9f9d26875` |
-| 登记簿 `input_defect_register_v1.json`（该 TOOL_DEFECT **CLOSED**；OPEN 1 = F.Cu/owner） | `4176340f7dc6853d` |
+| 登记簿 `input_defect_register_v1.json`（该 TOOL_DEFECT **CLOSED**；OPEN 1 = F.Cu/owner） | `ec1beed1499342b3` |
 | 台账 `derived_value_ledger_v1.json`（as-built B.Cu ok；evidence pin 刷新） | `b88d69dbc7a0dd51` |
 
 ---
@@ -700,7 +700,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | L4 校验 `m13_v57_l4_validation.json` | `aa666a49e36883c7` |
 | L5 SI `m13_v57_l5_si_pi_emc_record.json` | `261b58e745c67aea` |
 | 引擎 `p3_v57_w3_constructive.py`（3W 蛇形守卫 + W3-CN.43） `p3_v57_w3_constructive.py` | `481617515038dad5` |
-| 登记簿 `input_defect_register_v1.json`（+CO-145 项 CLOSED；OPEN 1 = F.Cu/L1） `input_defect_register_v1.json` | `4176340f7dc6853d` |
+| 登记簿 `input_defect_register_v1.json`（+CO-145 项 CLOSED；OPEN 1 = F.Cu/L1） `input_defect_register_v1.json` | `ec1beed1499342b3` |
 
 ## 23. CO-146（L2 · 监理指令 #10「JLC 8 层打样就绪」）：阻抗表 / PM 评估 / 打样包 / DFM 闸 / 定性更正
 
@@ -727,15 +727,15 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | DFM 闸 `m13_v57_co146_jlc_dfm_gate.json` | `1692424817eaa89f` |
 | JLC 能力表 `m13_v57_co146_jlc8_capability.json` | `b35130f9303d9726` |
 | 通孔化反证 `m13_v57_co146_through_via_probe.json` | `fd82d5200294919e` |
-| 打样包记录 `m13_v57_co146_jlc_fab_package.json` | `7461d82be00c7b96` |
+| 打样包记录 `m13_v57_co146_jlc_fab_package.json` | `ddbde2fec12db30a` |
 | 定性更正 `m13_v57_co146_jlc_rebind.json` | `a0a0f6114223ef05` |
 | L2 定值绑定 `jlc_prototype_parameters_v1.json` | `e9bf5019aeddbd16` |
-| 登记簿 `input_defect_register_v1.json`(+2 OPEN) | `4176340f7dc6853d` |
-| co124 输入自检 `m13_v57_co124_input_selfcheck_gate.json` | `ef06154683b84cde` |
-| 工具 `p3_v57_co146_jlc_dfm_gate.py` | `dd58383fb637451b` |
+| 登记簿 `input_defect_register_v1.json`(+2 OPEN) | `ec1beed1499342b3` |
+| co124 输入自检 `m13_v57_co124_input_selfcheck_gate.json` | `629a0da5159b8812` |
+| 工具 `p3_v57_co146_jlc_dfm_gate.py` | `22fad27342bc0203` |
 | 工具 `p3_v57_co146_impedance_table.py` | `a1a432504f7ff6f2` |
 | 工具 `p3_v57_co146_pm_eval.py` | `214cd888f6f49be3` |
-| 工具 `p3_v57_co146_jlc_fab_package.py` | `b1af13b72b3b01f7` |
+| 工具 `p3_v57_co146_jlc_fab_package.py` | `2678f0d432afad41` |
 | 工具 `p3_v57_co146_through_via_probe.py` | `e6a53875c47319ae` |
 | 工具 `p3_v57_co146_closeout.py` | `18220ee964ead702` |
 
@@ -753,10 +753,10 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 |---|---|
 | L2 裁定件 `L2_RULING_via_channel_and_interpair_domain_v1.md` | `e8e16228bf1ea0eb` |
 | 记录 `m13_v57_co147_l2_ruling.json` | `6d3b58ba530483f2` |
-| 登记簿 `input_defect_register_v1.json`(3 项 CLOSED / OPEN 0) | `4176340f7dc6853d` |
+| 登记簿 `input_defect_register_v1.json`(3 项 CLOSED / OPEN 0) | `ec1beed1499342b3` |
 | DFM 闸 `m13_v57_co146_jlc_dfm_gate.json` | `1692424817eaa89f` |
 | 通孔化反证 `m13_v57_co146_through_via_probe.json` | `fd82d5200294919e` |
-| 打样包记录 `m13_v57_co146_jlc_fab_package.json` | `7461d82be00c7b96` |
+| 打样包记录 `m13_v57_co146_jlc_fab_package.json` | `ddbde2fec12db30a` |
 | 工具 `p3_v57_co147_l2_ruling.py` | `fbc81bdff63fc0d3` |
 
 ## 25. CO-148（L2 · **PM 输入升级为器件手册值** ⇒ U6 热超限）：热裁定 + 登记 + 台账
@@ -767,7 +767,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 **L2 裁定**：R4-1 PCB 散热路径义务（U6 域 GND via 阵列补强 / GND 平面覆盖 / 铜面最大化，随下一轮几何修订 + G4 重基线）；R4-2 **输入冲突上报**：40°C 自然对流与手册不相容 ⇒ 须重裁环境/风冷输入（选项：a 强制风冷/散热片使 θJA_eff ≤ 11.43–17.02°C/W；b 环境 ≤ 38.2°C；c 复核 EQ/功耗假设）。**PDN 侧不受影响**：手册电流（P3V3 2.23A）下四轨压降 0.007–0.69% ≪ 3%（I_max@3% 4.3–62.6A）。
 
-**登记**：+2（`thermal_defect:u6_ds320pr1601_tj_exceeds_limit_at_40c_natural_convection` HIGH；`tool_defect:co124_k9_has_no_thermal_or_drop_domain_model` MED）⇒ 登记簿 44 项（现行值，CO-155 去下游快照后改读登记簿）；台账 DV-CO146-THERMAL = `UNREACHABLE_REGISTERED`。
+**登记**：+2（`thermal_defect:u6_ds320pr1601_tj_exceeds_limit_at_40c_natural_convection` HIGH；`tool_defect:co124_k9_has_no_thermal_or_drop_domain_model` MED）⇒ 登记簿 56 项（现行值，CO-155 去下游快照后改读登记簿）；台账 DV-CO146-THERMAL = `UNREACHABLE_REGISTERED`。
 
 | 工件 | sha16 |
 |---|---|
@@ -775,7 +775,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 记录 `m13_v57_co148_thermal_ruling.json` | `7b58f89fbe204131` |
 | 手册输入 `m13_v57_co148_u6_ds320pr1601_inputs.json` | `d98677fd7f7d51ba` |
 | PM 评估 `m13_v57_co146_pm_eval.json`（手册输入） | `76a6b6860f071298` |
-| 登记簿 `input_defect_register_v1.json` | `4176340f7dc6853d` |
+| 登记簿 `input_defect_register_v1.json` | `ec1beed1499342b3` |
 | 台账 `derived_value_ledger_v1.json` | `b88d69dbc7a0dd51` |
 | 工具 `p3_v57_co148_u6_datasheet_inputs.py` | `b6eedc2bce42e85b` |
 | 工具 `p3_v57_co148_thermal_ruling.py` | `968dac508e9b8218` |
@@ -788,15 +788,15 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 - 方案（声明值）：O0 现状 17.22（0/4 档）、O1 风冷 11.56（3/4 档）、**O2 散热片+风冷 11.0（4/4 档 ✓）**⇒ **自然对流全档不可达 ⇒ 系统散热为必需项**（非可选项）。
 - **R5-3**：PCB 侧**不改几何**（瓶颈为板→空气；U6 域热过孔仅影响 ψJB 项）⇒ CO-148 R4-1「GND via 阵列」由义务降为**可选**，避免为边际收益触发 G4 全链重基线。终判 = 实板热测/仿真。
 
-**CO-150（闸硬化）**：co124 K9 扩 `thermal_option_domain`（∃ 声明散热方案覆盖最重工况；现状不达标须显式声明 required_mitigation）与 `drop_domain`（每轨 ΔV% ≤ 预算%）+ 负控 T10/T10b/T11/T11b ⇒ co124 rev **CO-124.7** verdict PASS findings 0；关闭 CO-148 登记的 K9 缺口项 ⇒ **登记簿 OPEN 0**。
+**CO-150（闸硬化）**：co124 K9 扩 `thermal_option_domain`（∃ 声明散热方案覆盖最重工况；现状不达标须显式声明 required_mitigation）与 `drop_domain`（每轨 ΔV% ≤ 预算%）+ 负控 T10/T10b/T11/T11b ⇒ co124 rev **CO-124.8** verdict PASS findings 0；关闭 CO-148 登记的 K9 缺口项 ⇒ **登记簿 OPEN 0**。
 
 | 工件 | sha16 |
 |---|---|
 | L2 裁定件 `L2_RULING_u6_thermal_mitigation_v1.md` | `bf029700941f5145` |
 | 记录 `m13_v57_co149_u6_thermal_mitigation.json` | `206269d4bbc1a04b` |
-| 记录 `m13_v57_co150_k9_domain_gate.json` | `abd9c7380f6a1075` |
-| co124 输入自检 `m13_v57_co124_input_selfcheck_gate.json` | `ef06154683b84cde` |
-| 登记簿 `input_defect_register_v1.json`(OPEN 0) | `4176340f7dc6853d` |
+| 记录 `m13_v57_co150_k9_domain_gate.json` | `2a83626d8a197c16` |
+| co124 输入自检 `m13_v57_co124_input_selfcheck_gate.json` | `629a0da5159b8812` |
+| 登记簿 `input_defect_register_v1.json`(OPEN 0) | `ec1beed1499342b3` |
 | 台账 `derived_value_ledger_v1.json` | `b88d69dbc7a0dd51` |
 | 工具 `p3_v57_co149_thermal_mitigation_derive.py` | `c6b5915d43e2a292` |
 | 工具 `p3_v57_co150_k9_domain_gate.py` | `efde9dfca19c808a` |
@@ -834,8 +834,8 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 工具 `p3_v57_co151_rev19_nonexecutor_review.py` | `0c6531f94869b1bb` |
 | 记录 `m13_v57_co151_rev19_nonexecutor_review.json` | `195a8102720ed140` |
 | 卡 `m13_v57_CO151_rev19_nonexecutor_review.md` | `512943d2bc24b463` |
-| co120 provenance 闸 `m13_v57_co120_provenance_pin_gate.json` | `03882ecebf18af33` |
-| 登记簿 `input_defect_register_v1.json`(复评未改) | `4176340f7dc6853d` |
+| co120 provenance 闸 `m13_v57_co120_provenance_pin_gate.json` | `f54338c618db52d6` |
+| 登记簿 `input_defect_register_v1.json`(复评未改) | `ec1beed1499342b3` |
 | 台账 `derived_value_ledger_v1.json`(复评未改) | `b88d69dbc7a0dd51` |
 
 ## 28. CO-152（**L2 自裁 · executor**：CO-151 findings 处置 = 记录/闸/语义卫生 + 2 项勘误）
@@ -865,18 +865,18 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 工件 | sha16 |
 |---|---|
 | co152 处置工具 `p3_v57_co152_findings_disposition.py` | `1a38f32effc7362a` |
-| co120 闸 `m13_v57_co120_provenance_pin_gate.json`（CO-120.2） | `03882ecebf18af33` |
-| co124 `m13_v57_co124_input_selfcheck_gate.json` | `ef06154683b84cde` |
+| co120 闸 `m13_v57_co120_provenance_pin_gate.json`（CO-120.2） | `f54338c618db52d6` |
+| co124 `m13_v57_co124_input_selfcheck_gate.json` | `629a0da5159b8812` |
 | co147 `m13_v57_co147_l2_ruling.json` | `6d3b58ba530483f2` |
 | co148 `m13_v57_co148_thermal_ruling.json` | `7b58f89fbe204131` |
 | co149 `m13_v57_co149_u6_thermal_mitigation.json` | `206269d4bbc1a04b` |
-| co150 `m13_v57_co150_k9_domain_gate.json` | `abd9c7380f6a1075` |
+| co150 `m13_v57_co150_k9_domain_gate.json` | `2a83626d8a197c16` |
 | co146 阻抗表 `m13_v57_co146_impedance_table.json` | `794132ded5a0ce61` |
 | co146 PM 评估 `m13_v57_co146_pm_eval.json` | `76a6b6860f071298` |
 | 手册输入 `m13_v57_co148_u6_ds320pr1601_inputs.json` | `d98677fd7f7d51ba` |
 | L2 裁定件 `L2_RULING_via_channel_and_interpair_domain_v1.md` | `e8e16228bf1ea0eb` |
 | L2 裁定件 `L2_RULING_u6_thermal_mitigation_v1.md` | `bf029700941f5145` |
-| 登记簿 `input_defect_register_v1.json`（27 项 / OPEN 0） | `4176340f7dc6853d` |
+| 登记簿 `input_defect_register_v1.json`（27 项 / OPEN 0） | `ec1beed1499342b3` |
 | 台账 `derived_value_ledger_v1.json` | `b88d69dbc7a0dd51` |
 
 > **复评债**：本件（CO-152）自身须由**另一会话**复评（禁自评）：重点 = 三处语义标注是否足够、co120 P5 是否真能防复发、R2 最劣值勘误是否改变 R2 结论（预期不变）。
@@ -904,10 +904,10 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 工具 `p3_v57_co153_k9_domain_coverage.py` | `7df71c503bfd9669` |
 | 工具 `p3_v57_co146_ledger_add.py`（收窄） | `146a3c06d1a9a905` |
 | 工具 `p3_v57_co134_req_impl_separation.py`（生产者直出 kind） | `8f59c5be82fe9d06` |
-| co124 输入自检 `m13_v57_co124_input_selfcheck_gate.json`（CO-124.6） | `ef06154683b84cde` |
-| co120 闸 `m13_v57_co120_provenance_pin_gate.json` | `03882ecebf18af33` |
+| co124 输入自检 `m13_v57_co124_input_selfcheck_gate.json`（CO-124.6） | `629a0da5159b8812` |
+| co120 闸 `m13_v57_co120_provenance_pin_gate.json` | `f54338c618db52d6` |
 | 台账 `derived_value_ledger_v1.json`（9 DV 全域覆盖） | `b88d69dbc7a0dd51` |
-| 登记簿 `input_defect_register_v1.json`（30 项 / OPEN 0） | `4176340f7dc6853d` |
+| 登记簿 `input_defect_register_v1.json`（30 项 / OPEN 0） | `ec1beed1499342b3` |
 
 > **复评债**：本件（CO-153）自身须由**另一会话**复评（禁自评）：重点 = 新判据是否可被规避、`conservative_ge` 的 faithful 口径是否等同于 DV-INTPAIR-EDGE 的忠实下界、域生产者归一后是否仍存在「一次性写入」残留。
 
@@ -941,8 +941,8 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 工具 `p3_v57_co147_l2_ruling.py`（去计数快照） | `fbc81bdff63fc0d3` |
 | 工具 `p3_v57_co148_thermal_ruling.py`（去计数快照） | `968dac508e9b8218` |
 | co147 裁定 `m13_v57_co147_l2_ruling.json`（修订号实件 CO-147.1） | `6d3b58ba530483f2` |
-| co124 输入自检 `m13_v57_co124_input_selfcheck_gate.json`（修订号实件 CO-124.5） | `ef06154683b84cde` |
-| 登记簿 `input_defect_register_v1.json`（44 项 / OPEN 0） | `4176340f7dc6853d` |
+| co124 输入自检 `m13_v57_co124_input_selfcheck_gate.json`（修订号实件 CO-124.5） | `629a0da5159b8812` |
+| 登记簿 `input_defect_register_v1.json`（56 项 / OPEN 0） | `ec1beed1499342b3` |
 
 ## 31. CO-156（**L2 自裁 · 闸硬化**：CO-154 剩余 OPEN 6 项全部处置）
 
@@ -955,7 +955,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | F-2 | co120 升 **CO-120.3**：下游快照键 = `*_sha16_after` ∪ `register.*`/`ledger.*` 下的 `sha16*`/`items_total`/`open_total`/`n_items`，未声明即 FAIL | 新增 register-snapshot 负控/正控牙齿 | **CLOSED** |
 | F-3 | co124 实件 revision **CO-124.6**（与 §29 pin 表标签一致，§26 `CO-124.5` 为历史陈述）；co147 以实件 **CO-147.1** 记 | — | **CLOSED** |
 
-- 复核：co124 = **PASS / findings 0 / 牙齿 24/24**；co120 = **PASS**（snaps 8 / undeclared 0 / teeth 7-7）；登记簿 **44 项 / OPEN 0**。
+- 复核：co124 = **PASS / findings 0 / 牙齿 24/24**；co120 = **PASS**（snaps 8 / undeclared 0 / teeth 7-7）；登记簿 **56 项 / OPEN 0**。
 
 > **R-CO156-1**（取代 R-CO155-1 的复现序）：规范复现序 = `co146_impedance_table → co146_pm_eval → co146_ledger_add → co153_k9_domain_coverage → co148_u6_datasheet_inputs → co148_thermal_ruling → co149_thermal_mitigation_derive → co147_l2_ruling → co146_jlc_dfm_gate → co152_findings_disposition → co155_co154_findings_disposition → **co156_co154_open_disposition** → co124_input_selfcheck_gate → co150_k9_domain_gate → co146_boundary_append → co77_closure_declaration_sweep → co120_provenance_pin_gate → co135_review_hygiene → co136_gate_hygiene → co146_boundary_append`，**循环至 sha 稳定**。
 > **R-CO156-2**（取代 R-CO155-2 的闸覆盖缺口项）：下游快照键（sha **与**计数/版本）由 co120 CO-120.3 **机判**；记录不得内嵌下游 sha/计数/版本快照，新增须在 `SNAPSHOT_DECLARED` 声明。
@@ -964,17 +964,17 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 工件 | sha16 |
 |---|---|
 | 工具 `p3_v57_co156_co154_open_disposition.py` | `064ac9a59645a9b7` |
-| 工具 `p3_v57_co124_input_selfcheck_gate.py`（CO-124.6 / 牙齿 24） | `610ff503dbca5516` |
-| 工具 `p3_v57_co120_provenance_pin_gate.py`（CO-120.3） | `e1b85ef36d54533c` |
+| 工具 `p3_v57_co124_input_selfcheck_gate.py`（CO-124.6 / 牙齿 24） | `ef61e2b2566326a3` |
+| 工具 `p3_v57_co120_provenance_pin_gate.py`（CO-120.3） | `0775970667f2552f` |
 | 工具 `p3_v57_co134_req_impl_separation.py`（只 upsert） | `8f59c5be82fe9d06` |
 | 工具 `p3_v57_co153_k9_domain_coverage.py`（七域 kind 生产者） | `7df71c503bfd9669` |
 | 工具 `p3_v57_co146_impedance_table.py`（+dv_computed_zdiff） | `a1a432504f7ff6f2` |
 | 工具 `p3_v57_co146_ledger_add.py`（key_path 绑定） | `146a3c06d1a9a905` |
-| co124 输入自检 `m13_v57_co124_input_selfcheck_gate.json`（CO-124.6） | `ef06154683b84cde` |
-| co120 闸 `m13_v57_co120_provenance_pin_gate.json`（CO-120.3） | `03882ecebf18af33` |
+| co124 输入自检 `m13_v57_co124_input_selfcheck_gate.json`（CO-124.6） | `629a0da5159b8812` |
+| co120 闸 `m13_v57_co120_provenance_pin_gate.json`（CO-120.3） | `f54338c618db52d6` |
 | co147 裁定 `m13_v57_co147_l2_ruling.json`（CO-147.1 实件） | `6d3b58ba530483f2` |
 | 台账 `derived_value_ledger_v1.json`（9 DV 全域覆盖） | `b88d69dbc7a0dd51` |
-| 登记簿 `input_defect_register_v1.json`（44 项 / OPEN 0） | `4176340f7dc6853d` |
+| 登记簿 `input_defect_register_v1.json`（56 项 / OPEN 0） | `ec1beed1499342b3` |
 
 ## 32. CO-157（**L2 自裁 · 查漏型闸硬化（第 3 轮）**：4 项实测缺口 H-1..H-4 全处置）
 
@@ -985,7 +985,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | H-3 | co120 `board_superseded` 弱判：任意自由文本（`board="superseded"`）即可成立豁免 | 收严为**板 sha16 格式**（`[0-9a-f]{16}`）且 ≠ 交付板 + 负控/正控牙齿；co120 升 **CO-120.4** | **CLOSED** |
 | H-4 | R-CO156-3（禁整表重写台账）**无机判**（仅声明） | co136 增源码守卫 `H4_ledger_upsert_only`（写台账须先读）+ 正负控；co136 升 **CO-136.1** | **CLOSED** |
 
-- 复核：co124 = **PASS / findings 0 / 牙齿 29/29**；co120 = **PASS**（basis_not_ok 0 / teeth 9-9）；co136 = **PASS**；登记簿 **44 项 / OPEN 0**。
+- 复核：co124 = **PASS / findings 0 / 牙齿 29/29**；co120 = **PASS**（basis_not_ok 0 / teeth 9-9）；co136 = **PASS**；登记簿 **56 项 / OPEN 0**。
 
 > **R-CO157-1**（取代 R-CO156-1 的复现序）：规范复现序 = `co146_impedance_table → co146_pm_eval → co146_ledger_add → co153_k9_domain_coverage → co148_u6_datasheet_inputs → co148_thermal_ruling → co149_thermal_mitigation_derive → co147_l2_ruling → co146_jlc_dfm_gate → co152_findings_disposition → co155_co154_findings_disposition → co156_co154_open_disposition → **co157_gate_hardening_3** → co124_input_selfcheck_gate → co150_k9_domain_gate → co146_boundary_append → co77_closure_declaration_sweep → co120_provenance_pin_gate → co135_review_hygiene → co136_gate_hygiene → co146_boundary_append`，**循环至 sha 稳定**。
 > **R-CO157-2**：新增 K9 判据须同时登记进 `K9_FINDER_IDS` 并提供负控（由元牙齿 T18 机判）；`board_superseded` 豁免须给可比对的板 sha16。
@@ -994,19 +994,19 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 工件 | sha16 |
 |---|---|
 | 工具 `p3_v57_co157_gate_hardening_3.py` | `f532051e46bc7001` |
-| 工具 `p3_v57_co124_input_selfcheck_gate.py`（CO-124.7 / 牙齿 29 / T18 元牙齿） | `610ff503dbca5516` |
-| 工具 `p3_v57_co120_provenance_pin_gate.py`（CO-120.4） | `e1b85ef36d54533c` |
-| 工具 `p3_v57_co136_gate_hygiene.py`（CO-136.1 / H4 源码守卫） | `12f6c7300f67a225` |
-| co124 输入自检 `m13_v57_co124_input_selfcheck_gate.json`（CO-124.7） | `ef06154683b84cde` |
-| co120 闸 `m13_v57_co120_provenance_pin_gate.json`（CO-120.4） | `03882ecebf18af33` |
-| co136 闸卫生 `m13_v57_co136_gate_hygiene.json`（CO-136.1） | `e2241dd8f53cd1ad` |
-| 登记簿 `input_defect_register_v1.json`（44 项 / OPEN 0） | `4176340f7dc6853d` |
+| 工具 `p3_v57_co124_input_selfcheck_gate.py`（CO-124.7 / 牙齿 29 / T18 元牙齿） | `ef61e2b2566326a3` |
+| 工具 `p3_v57_co120_provenance_pin_gate.py`（CO-120.4） | `0775970667f2552f` |
+| 工具 `p3_v57_co136_gate_hygiene.py`（CO-136.1 / H4 源码守卫） | `a5b712e48119fdfb` |
+| co124 输入自检 `m13_v57_co124_input_selfcheck_gate.json`（CO-124.7） | `629a0da5159b8812` |
+| co120 闸 `m13_v57_co120_provenance_pin_gate.json`（CO-120.4） | `f54338c618db52d6` |
+| co136 闸卫生 `m13_v57_co136_gate_hygiene.json`（CO-136.1） | `8ade87856e25edf8` |
+| 登记簿 `input_defect_register_v1.json`（56 项 / OPEN 0） | `ec1beed1499342b3` |
 
 ## 33. CO-158（**L2 自裁 · 交付物完整性**：L5 打样包自足）
 
 - 实测缺口（修前）：`ORDER_NOTES.md` §2 声明「随单提交 … L2 裁定件」，§3/§6 另引 DFM 记录与 U6 热裁定，但 `jlc_package/` 内**均无该等文件**（in-package=False）⇒ 下单时 silent omission；包内阻抗表副本亦为 CO-156 前陈旧件。
 - 处置（**CO146-PKG.2**）：新增 `06_rulings/`（3 份 L2 裁定件 + DFM 记录）+ ORDER_NOTES 引用改**包内路径** + 牙齿 `t05_declared_rulings_packaged` / `t06_order_notes_refs_resolve_in_package`；打包工具**并入规范序**。
-- 复核：**全 gerber/drill 逐字节未变**（纯增量）；MANIFEST n_files = **34**，teeth = {"t01_idempotent": true, "t05_declared_rulings_packaged": true, "t06_order_notes_refs_resolve_in_package": true, "t02_8_copper_gerbers": true, "t03_drill_present": true, "t04_all_hashed": true}；登记簿 **44 项 / OPEN 0**。
+- 复核：**全 gerber/drill 逐字节未变**（纯增量）；MANIFEST n_files = **34**，teeth = {"t01_idempotent": true, "t05_declared_rulings_packaged": true, "t06_order_notes_refs_resolve_in_package": true, "t07_packaged_rulings_match_sources": true, "t07b_parity_detector_sensitivity": true, "t08_declared_dirs_present": true, "t02_8_copper_gerbers": true, "t03_drill_present": true, "t04_all_hashed": true}；登记簿 **56 项 / OPEN 0**。
 
 **同 CO 另处置 2 项闸卫生**（实测缺陷）：
 
@@ -1022,12 +1022,36 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 工件 | sha16 |
 |---|---|
 | 工具 `p3_v57_co158_l5_packet_selfcontained.py` | `5f9a909c1dac2505` |
-| 工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.2 / 06_rulings + t05/t06） | `b1af13b72b3b01f7` |
+| 工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.2 / 06_rulings + t05/t06） | `2678f0d432afad41` |
 | 工具 `p3_v57_co77_closure_declaration_sweep.py`（CO-77.6 / L5 citation + rc） | `5459595adc50b392` |
-| 工具 `p3_v57_co124_input_selfcheck_gate.py`（rc 反映 verdict） | `610ff503dbca5516` |
-| 工具 `p3_v57_co135_review_hygiene.py`（rc） | `b2db682890b986fc` |
-| 工具 `p3_v57_co136_gate_hygiene.py`（rc） | `12f6c7300f67a225` |
-| 打样包 MANIFEST `L5/jlc_package/MANIFEST.json` | `9f396cdde07e4306` |
+| 工具 `p3_v57_co124_input_selfcheck_gate.py`（rc 反映 verdict） | `ef61e2b2566326a3` |
+| 工具 `p3_v57_co135_review_hygiene.py`（rc） | `827a49520c8e2cd5` |
+| 工具 `p3_v57_co136_gate_hygiene.py`（rc） | `a5b712e48119fdfb` |
+| 打样包 MANIFEST `L5/jlc_package/MANIFEST.json` | `730184cc01d04e57` |
 | 下单备注 `L5/jlc_package/ORDER_NOTES.md` | `42ffae9eb22db38a` |
-| 打样包记录 `m13_v57_co146_jlc_fab_package.json` | `7461d82be00c7b96` |
-| 登记簿 `input_defect_register_v1.json`（44 项 / OPEN 0） | `4176340f7dc6853d` |
+| 打样包记录 `m13_v57_co146_jlc_fab_package.json` | `ddbde2fec12db30a` |
+| 登记簿 `input_defect_register_v1.json`（56 项 / OPEN 0） | `ec1beed1499342b3` |
+
+## 34. CO-159 / CO-160（**非执行者对抗复评 CO-156/157/158 + L2 自裁处置**）
+
+- 复评（**CO-159**，as-found 钉在 k2 `c4e951c`；`git show` 重放受评基线 ⇒ 不随后续修复漂移）：**12 findings**（F-1..F-12）——① K9 `declared` 空 `computed` 绕过值-证据绑定；② `conservative_ge` 权威 DV 缺失即跳过交叉校验；③ T18 元牙齿只比电池触发集、源码条件分支 finder 可绕过；④ R-CO156-3「禁整表重写」无机判（H4 只拦未读即写）；⑤ co120 快照键判据依赖嵌套容器；⑥ `board_superseded` 仅格式判（任意 16-hex 成立）；⑦ **co146_jlc_dfm_gate verdict=FAIL 而 rc=0**（违 R-CO158-3）；⑧ 打样包 `06_rulings/` 无来源一致性牙齿；⑨ ORDER_NOTES 目录级声明未覆盖；⑩ co77/co135 候选表已现分歧面无一致性牙齿；⑪ §6 回归块 co78/co81/co84/co95/co98/co106 rc 恒 0；⑫ co135 内嵌 CO-134 时点链 pin + 硬编码 boundary 文件名。
+- 处置（**CO-160**，逐项）：co124 牙齿 29→**33**（T15c/T16c/T18d/T18e，升 **CO-124.8**）；co120 升 **CO-120.5**（快照键名面判据 + `SUPERSEDED_BOARDS` 白名单 + 伪造 sha 负控）；co146_jlc_dfm_gate **rc 反映 verdict**（FAIL ⇒ rc=1）；co146_jlc_fab_package 升 **CO146-PKG.3**（`t07` 副本来源一致性 + `t08` 目录级声明）；co135 升 **CO-135.3**（co77 候选表交叉一致性 + 链 pin 由现行记录派生 + boundary 取最新版）；六件回归闸 rc 反映 verdict（CO-78.2/81.2/84.2/95.2/98.2/106.3，co98 按 `baseline_ok and teeth_ok`）。
+- 复核：co124 = **PASS / findings 0 / 牙齿 33/33**；co120 = PASS（teeth 12-12）；co77 = PASS（mismatches []）；co135 = PASS_WITH_FINDINGS（候选表一致）；co136 = PASS；DFM 闸 rc=1（FAIL 属预期）；打样包 teeth **9/9**；登记簿 **56 项 / OPEN 0**。
+
+> **R-CO159-1**：K9 `declared` 派生值须带**非空** `computed`（值-证据绑定不得空过）；`conservative_ge` 的权威 DV（`DV-INTPAIR-EDGE` / `DV-PAIR-CROSS`）缺失即 FAIL（不得静默降级）；K9 判据集另由 `T18d` 以**源码**面机判（新增 finder 未登记 `K9_FINDER_IDS` 即 FAIL）。
+> **R-CO159-2**：R-CO156-3 的**机判面** = co136 `H4`（写台账须先读台账）+ CO-156 的 co134 stub 复跑证据；「整表重写」的**语义面**无自动判据（已声明，由复评/登记承接）——规则文本不得表述为已机判。
+> **R-CO159-3**：下游快照键判据取**键名面**（`*_sha16_after` ∪ `register|ledger[_…]_sha16|items_total|open_total|n_items`），与嵌套位置无关；`board_superseded` 的板 sha16 须在 `SUPERSEDED_BOARDS` 白名单（未登记 16-hex 不成立）。
+> **R-CO159-4**：复现序内**所有**闸（含 `co146_jlc_dfm_gate` 与 §6 回归块 co78/co81/co84/co95/co98/co106）退出码须反映 verdict/基线；`co98` 按 `baseline_ok and teeth_ok` 判定（三态报告不因 OPEN 状态返回非 0）。
+> **R-CO159-5**（复现序，取代 R-CO158-1）：规范复现序 = `co146_impedance_table → co146_pm_eval → co146_ledger_add → co153_k9_domain_coverage → co148_u6_datasheet_inputs → co148_thermal_ruling → co149_thermal_mitigation_derive → co147_l2_ruling → co146_jlc_dfm_gate → co146_jlc_fab_package → co152_findings_disposition → co155_co154_findings_disposition → co156_co154_open_disposition → co157_gate_hardening_3 → co158_l5_packet_selfcontained → **co159_rev19_review** → **co160_co159_findings_disposition** → co124_input_selfcheck_gate → co150_k9_domain_gate → co146_boundary_append → co77_closure_declaration_sweep → co120_provenance_pin_gate → co135_review_hygiene → co136_gate_hygiene → co78_layer_role_drift_gate → co81_project_rules_gate → co84_dru_domain_gate → co95_in4_reachability → co98_reachability_status_report → co106_reference_plane_gate → co146_boundary_append`，**循环至 sha 稳定**。
+
+| 工件 | sha16 |
+|---|---|
+| 工具 `p3_v57_co159_rev19_co156_co157_co158_review.py`（as-found 复评） | `56e8a976e7b0c48c` |
+| 记录 `m13_v57_co159_rev19_co156_co157_co158_review.json` | `ca37c1e0a90bff22` |
+| 工具 `p3_v57_co160_co159_findings_disposition.py` | `5ba953dc4fdc4ddf` |
+| 工具 `p3_v57_co124_input_selfcheck_gate.py`（CO-124.8 / T15c+T16c+T18d+T18e） | `ef61e2b2566326a3` |
+| 工具 `p3_v57_co120_provenance_pin_gate.py`（CO-120.5 / 键名面 + SUPERSEDED_BOARDS） | `0775970667f2552f` |
+| 工具 `p3_v57_co135_review_hygiene.py`（CO-135.3 / 候选表交叉一致性 + 链 pin 派生） | `827a49520c8e2cd5` |
+| 工具 `p3_v57_co146_jlc_dfm_gate.py`（rc 反映 verdict） | `22fad27342bc0203` |
+| 工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.3 / t07+t08） | `2678f0d432afad41` |
+| 登记簿 `input_defect_register_v1.json`（56 项 / OPEN 0） | `ec1beed1499342b3` |

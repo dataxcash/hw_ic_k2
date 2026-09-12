@@ -18,7 +18,7 @@
 CLI: python3 tools/p3_v57_co124_input_selfcheck_gate.py
 """
 from __future__ import annotations
-import copy, hashlib, json
+import copy, hashlib, json, re
 from pathlib import Path
 
 K2 = Path(__file__).resolve().parents[1]
@@ -60,6 +60,13 @@ K9_FINDER_IDS = (
 
 KNOWN_KINDS = ("domain_cap", "identity", "process_floor", "declared",
                "conservative_ge", "drop_domain", "thermal_option_domain")
+# CO-159（F-3）：从**源码**抽取 K9 全部 finder id。T18 元牙齿只比对「合成电池触发集」与声明表，
+# 无法发现「电池未触发的条件分支」新增 finder；本正则给出源码面真值，供 T18d 断言。
+_K9_FINDER_ID_RE = re.compile(r'\("K9",\s*f?"([a-z0-9_]+):')
+
+
+def _finder_ids_in_source(text: str) -> list:
+    return sorted(set(_K9_FINDER_ID_RE.findall(text)))
 
 
 def _k9_battery(base: dict) -> dict:
@@ -257,6 +264,9 @@ def k9_findings(led: dict) -> list:
                               "cited": ev.get("sha16"), "actual": s16(hitc) if hitc else None})
             if not str(rc.get("basis") or "").strip():
                 bad_d.append({"why": "basis_empty"})
+            # CO-159（F-1）：`computed` 缺失/空字典时 `_contains()` 恒真 ⇒ 值-证据绑定空过。
+            if not (dv.get("computed") or {}):
+                bad_d.append({"why": "computed_empty_for_declared"})
             if not kp:
                 bad_d.append({"why": "key_path_missing"})
             elif hitc is not None:
@@ -289,6 +299,10 @@ def k9_findings(led: dict) -> list:
                 bad_c.append({"why": "unparsable"})
             if not (str(inp.get("span_src") or "").strip() and str(inp.get("w_outer_src") or "").strip()):
                 bad_c.append({"why": "missing_src_binding"})
+            # CO-159（F-2）：权威 DV 缺失时下述交叉校验被静默跳过 ⇒ F-7 的原规避复活；改为显式 FAIL。
+            if not isinstance(auth_edge, (int, float)) or not isinstance(auth_span, (int, float)):
+                bad_c.append({"why": "authoritative_dv_missing",
+                              "auth_edge_mm": auth_edge, "auth_span_mm": auth_span})
             if isinstance(auth_edge, (int, float)) and not (isinstance(w, (int, float))
                                                            and abs(2.0 * float(w) - float(auth_edge)) <= 5e-4):
                 bad_c.append({"why": "w_outer_not_bound_to_INTPAIR_EDGE", "w_outer_mm": w, "auth_edge_mm": auth_edge})
@@ -529,6 +543,22 @@ def main() -> int:
         x[1].startswith("derived_value_declared_unpinned") for x in k9_findings(_l15))
     teeth["T15b_declared_binding_no_false_positive"] = not any(
         x[1].startswith("derived_value_declared_unpinned") for x in k9_findings(copy.deepcopy(_led)))
+    # CO-159（F-1）负控 T15c：declared 缺 `computed`（空绑定）⇒ 必抓
+    _l15c = copy.deepcopy(_led)
+    _hit15c = False
+    for _dv in _l15c.get("derived_values", []):
+        if (_dv.get("reachability") or {}).get("kind") == "declared":
+            _dv.pop("computed", None)
+            _hit15c = True
+            break
+    if not _hit15c:
+        _l15c["derived_values"].append({"id": "T15C_INJECT", "requirement": "REQ-R3-2",
+            "reachability": {"kind": "declared", "verdict": "REACHABLE", "basis": "x",
+                             "evidence_ref": {"path": "m13_v57_co146_impedance_table.json",
+                                              "sha16": s16(STEP2 / "m13_v57_co146_impedance_table.json"),
+                                              "key_path": "dv_computed_zdiff"}}})
+    teeth["T15c_declared_empty_computed_teeth"] = any(
+        x[1].startswith("derived_value_declared_unpinned") for x in k9_findings(_l15c))
     # CO-156（F-7）负控 T16：conservative_ge 的 w_outer 与权威 DV 不符 ⇒ 必抓；T16b：现行台账不得误报
     _l16 = copy.deepcopy(_led)
     _hit16 = False
@@ -546,6 +576,12 @@ def main() -> int:
         x[1].startswith("derived_value_conservative_unproved") for x in k9_findings(_l16))
     teeth["T16b_faithful_provenance_no_false_positive"] = not any(
         x[1].startswith("derived_value_conservative_unproved") for x in k9_findings(copy.deepcopy(_led)))
+    # CO-159（F-2）负控 T16c：权威 DV（DV-INTPAIR-EDGE / DV-PAIR-CROSS）缺失 ⇒ 必抓
+    _l16c = copy.deepcopy(_led)
+    _l16c["derived_values"] = [d for d in _l16c["derived_values"]
+                               if d.get("id") not in ("DV-INTPAIR-EDGE", "DV-PAIR-CROSS")]
+    teeth["T16c_authoritative_dv_missing_teeth"] = any(
+        x[1].startswith("derived_value_conservative_unproved") for x in k9_findings(_l16c))
     # CO-157（H-1）负控 T17：process_floor 证据陈旧 ⇒ 必抓；T17b：现行台账不得误报
     _l17 = copy.deepcopy(_led)
     _hit17 = False
@@ -571,11 +607,17 @@ def main() -> int:
     teeth["T18_k9_finder_id_coverage"] = set(K9_FINDER_IDS) <= _provoked
     teeth["T18b_k9_finder_id_no_undeclared"] = _provoked <= set(K9_FINDER_IDS)
     teeth["T18c_k9_finder_battery_nonempty"] = all(bool(_bat[k]) for k in K9_FINDER_IDS)
+    # CO-159（F-3）：T18d 断言**源码**可产出的 finder id 集 == K9_FINDER_IDS（补 T18/T18b 的证明力边界）；
+    # T18e 为该抽取器的灵敏度负控（合成新增 id 必须被抽出）。
+    teeth["T18d_k9_finder_ids_source_complete"] = _finder_ids_in_source(
+        Path(__file__).read_text(encoding="utf-8")) == sorted(K9_FINDER_IDS)
+    _probe_src = 'f.append((' + '"K9", f"' + 'zzz_probe:x", {}))'  # 拼接构造：避免被 _K9_FINDER_ID_RE 自匹配
+    teeth["T18e_k9_finder_id_extractor_sensitivity"] = _finder_ids_in_source(_probe_src) == ["zzz_probe"]
     teeth_ok = all(teeth.values())
     verdict = "PASS" if (not unreg and not reg_bad and teeth_ok) else (
         "FAIL_UNREGISTERED_INPUT_DEFECT" if unreg else "FAIL_REGISTER_MALFORMED" if reg_bad else "TEETH_FAIL")
     rec = {
-        "artifact": "m13_v57_co124_input_selfcheck_gate", "schema": 1, "revision": "CO-124.7",
+        "artifact": "m13_v57_co124_input_selfcheck_gate", "schema": 1, "revision": "CO-124.8",
         "nature": "输入自检闸：规格/规则自身自洽 + 物理可达登记 + 缺陷登记完备（整改通知 #08 第 2/3 条）",
         "definition_doc": {"path": str(DOC.relative_to(K2)), "sha16": s16(DOC), "status": f"{DOC_VER} 提议件（待监理裁定/owner 批准）"},
         "inputs": {"spec": str(SPEC.relative_to(K2)), "spec_sha16": s16(SPEC),

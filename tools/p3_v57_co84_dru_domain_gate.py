@@ -106,7 +106,7 @@ def main() -> int:
         "rect_drift": gate(dru, copy.deepcopy({**fix, "domains": [{**fix["domains"][0], "rect_mm": [0.0, 1.0, 2.0, 3.0]}] + fix["domains"][1:]}), board, spec_clr),
     }
     teeth = all(len(v) > 0 for v in negs.values())
-    rec = {"artifact": "m13_v57_co84_dru_domain_gate", "schema": 1, "revision": "CO-84.1",
+    rec = {"artifact": "m13_v57_co84_dru_domain_gate", "schema": 1, "revision": "CO-84.2",
            "nature": "L2 可审计性：DRC 放宽域一致性（dru ↔ 域工件 ↔ 板 rule area ↔ SPEC）",
            "inputs": {"dru": {"file": str(DRU.relative_to(K2)), "sha256": s256(DRU)},
                       "fixture": {"file": str(FIXTURE.relative_to(K2)), "sha256": s256(FIXTURE)},
@@ -122,7 +122,8 @@ def main() -> int:
     print(json.dumps({"verdict": rec["verdict"], "mismatches": bad, "teeth_ok": teeth,
                       "neg": {k: len(v) for k, v in negs.items()}, "areas": dru["areas"],
                       "record": hashlib.sha256(OUT.read_bytes()).hexdigest()[:16]}, ensure_ascii=False))
-    return 0
+    # CO-159（F-11）：R-CO158-3 —— 退出码须反映 verdict
+    return 0 if rec["verdict"] == "PASS" else 1
 
 
 if __name__ == "__main__":

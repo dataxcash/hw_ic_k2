@@ -16,6 +16,6 @@
 
 ## 实质结论
 
-- 全链复现：G4 0074dad9067af737 / G5 75ce1c2af42de55e / L4 val 313666e68dd610e6 viol 0 / L5 DFM new=0·SI 0.1300 / co124 findings 0（T1..T8）/ co95 55/55 / co98 55/0/0 / PDN co88/91/99/102(+0)/104/105/106 / co69 10/10 / co120 PASS
+- 全链复现：G4 60cbd331836e52b7 / G5 8b385d6c554ac527 / L4 val aa666a49e36883c7 viol 0 / L5 DFM new=0·SI 0.1300 / co124 CO-124.8 findings 0（teeth 33/33）/ co95 PASS / co98 PASS / co120 PASS
 - ③ 定性：整改通知 #09（监理指令）明确 ③=工程换算错误、撤回 owner 升级 ⇒ CO-134 属**执行指令**，非越权需求变更；0.875 退役结论不受 F5 叙述瑕疵影响
 - as-built 处置：域外 3 处偏差（F.Cu 0.3294 / B.Cu 0.3450 / In5 0.3125）经本会话独立重算复现，登记 OPEN_ENGINEERING 妥当（路由 SI/板厂券 或另开几何 CO）
