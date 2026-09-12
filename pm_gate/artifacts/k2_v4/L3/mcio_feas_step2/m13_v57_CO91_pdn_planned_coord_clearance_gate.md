@@ -1,7 +1,10 @@
 # CO-91（L2 自裁 · PDN 计划坐标净距）— `pdn_apply` 实落集的**权威净距闸** = **FAIL**
 
-> 日期 2026-09-12｜工具 `tools/p3_v57_co91_pdn_planned_coord_clearance_gate.py` `2fb35b544e41f748`（需 AppDir pcbnew；只读 + 确定性）
-> 记录 `m13_v57_co91_pdn_planned_coord_clearance_gate.json` `94ff582e4b23d7d1`｜SPEC **rev-9** `77f5c54df88bb0ca`｜板 `0e636a67c1472462`｜规则源 `_shared/eda_core/drc_rules.json` `0a459839e15960b8`
+> **CO-91.3 更正**：本闸**只判定**；修复候选移交 **CO-92**（`m13_v57_co92_pdn_repair_candidate.json`）。
+> CO-91.1 曾内嵌 `fix_candidate`（8 向 × 半径梯 0.30–2.00）——该形式**违「零坐标搜索」红线**（且会给出可达但非声明策略的位移），**已作废**；
+> 采用「声明式有限候选 palette」后，ppc 35 例仅 **1 例可重定位、34 例应转 blocked**（见 CO-92），与 0 例 blocked 的旧读数**相反**。
+> 日期 2026-09-12｜工具 `tools/p3_v57_co91_pdn_planned_coord_clearance_gate.py` `5821902d133d09e9`（需 AppDir pcbnew；只读 + 确定性）
+> 记录 `m13_v57_co91_pdn_planned_coord_clearance_gate.json` `36b276bea871d816`｜SPEC **rev-9** `77f5c54df88bb0ca`｜板 `0e636a67c1472462`｜规则源 `_shared/eda_core/drc_rules.json` `0a459839e15960b8`
 
 ## 1. 立件理由（覆盖缺口）
 CO-88 判定 `pd.zone_defs` 机读决策的**板实性**（引用存在性 / 覆盖性 / 解耦落点），CO-89 把 SPEC 升到 rev-9 板实化，
@@ -38,7 +41,9 @@ CO-90（pass 3/3）复核 rev-9 事实与 CO-89 幂等（V6：重跑发生器 `2
 5. 短段宽度 `0.5mm`（`pdn_apply` 默认）在 0.5–0.6mm 节距 ball field 内不可能合法（本件 75 例）。
 
 ## 5. 修复候选（**只登记，未施加**；施加 = SPEC rev-10 + 全链重基线 + 重新过对抗评审）
-- **ppc 35 例：可重定位 35/35、无新增 blocked** ⇒ 修引擎（补 via 障碍 + netclass/hole 口径 + 受控候选集）后 **PDN 覆盖不退化**。
+- **ppc 35 例（CO-92 更正读数）**：在**声明式有限 palette**（原位 → 4 正交点 @(VIA_R+0.3) → 4 正交点 @0.6）下仅 **1 例可重定位、34 例应转 `blocked`**
+  ⇒ **旧的「35/35 可重定位、覆盖不退化」不成立**（那是搜索式读数的产物）。**blocked 仍是合法决策**（板实 pad 仍有决策 ⇒ 决策覆盖 309/309 不退化），
+  但**已连接数会从 223 降至 189**；若要保持连接数，须走 **via-in-pad / 平面直连**口径 ⇒ 属**工艺/口径裁决**（需 owner/PM + 板厂能力）。
 - **stitch 41 例 / zone 7 例：不能只靠重定位** ⇒ 须以当前交付板**重派生** StitchSet / power-zone vias（并保留退役集），属独立变更单。
 - **短段宽度**：须由「0.5mm 全宽」改为与节距相称的口径或改由平面直连 ⇒ 与（1）同批。
 - 门禁：本件（CO-91）即为该缺口的**回归闸**（现判 FAIL；修复后可转 PASS）。

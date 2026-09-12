@@ -276,35 +276,12 @@ def main(argv=None) -> int:
              "detector_stub_clean_passes": bool(scc is not None and scc >= 0),
              "n_via_targets": len(targets), "n_stub_targets": len(stubs)}
 
-    dirs = [(1, 0), (-1, 0), (0, 1), (0, -1), (0.70710678, 0.70710678),
-            (-0.70710678, 0.70710678), (0.70710678, -0.70710678), (-0.70710678, -0.70710678)]
-    fx = {"n_violating_ppc": 0, "n_reusable": 0, "n_would_block": 0, "detail": [],
-          "candidate_policy": "8 向 × r=0.30..2.00 step 0.05（权威口径，确定性）"}
-    for r in bad:
-        if r["kind"] != "ppc_via":
-            continue
-        fx["n_violating_ppc"] += 1
-        found = None
-        for ux, uy in dirs:
-            for k in range(35):
-                rr = 0.30 + k * 0.05
-                ok, c, h, _ = scene.via_at(r["pos"][0] + ux * rr, r["pos"][1] + uy * rr, r["net"])
-                if ok:
-                    found = [round(r["pos"][0] + ux * rr, 3), round(r["pos"][1] + uy * rr, 3), c, h]
-                    break
-            if found:
-                break
-        fx["n_reusable" if found else "n_would_block"] += 1
-        fx["detail"].append({"ref": r["ref"], "pad": r["pad"], "from": r["pos"], "to": found,
-                             "resolution": "relocate" if found else "blocked"})
-    fx["detail"].sort(key=lambda d: (d["ref"], str(d["pad"])))
-
     by_kind = {k: {"n": sum(1 for r in rows if r["kind"] == k),
                    "n_viol": sum(1 for r in bad if r["kind"] == k)}
                for k in sorted({r["kind"] for r in rows})}
     verd = "PASS" if (not bad and not sbad and cons["agree"]) else "FAIL"
     rec = {"artifact": "m13_v57_co91_pdn_planned_coord_clearance_gate", "schema": 1,
-           "revision": "CO-91.1",
+           "revision": "CO-91.3",
            "nature": "L2 PDN：pd.zone_defs 计划坐标（pdn_apply 实落集）对权威净距（netclass clearance + min_hole_clearance）的机判",
            "inputs": {"spec": sp.name, "spec_sha16": s16(sp), "board": bp.name,
                       "board_sha16": s16(bp), "rules": RULES.name, "rules_sha16": s16(RULES),
@@ -315,10 +292,13 @@ def main(argv=None) -> int:
                       "n_stub_targets": len(srows), "n_stub_violations": len(sbad)},
            "via_violations": sorted(bad, key=lambda r: (r["kind"], r["ref"], str(r["pad"]))),
            "stub_violations": sorted(sbad, key=lambda r: r["clr_margin"]),
-           "fix_candidate": fx, "teeth": teeth,
+           "teeth": teeth,
            "verdict": verd if cons["agree"] else "FAIL(规则源漂移，不可判)",
            "rules_source_note": "k2/_shared 与容器 _shared 的 drc_rules 必须同字节；本闸据此断言（fail-closed）。",
-           "non_claims": ["不改 SPEC/板/阈值/冻结源；不改 _shared 引擎模型（只登记修复候选）",
+           "repair_candidate_ref": ("CO-92（m13_v57_co92_pdn_repair_candidate.json）："
+                                    "修复候选归 CO-92；CO-91.1 的 fix_candidate（8 向 × 半径梯 0.30-2.00）"
+                                    "违「零坐标搜索」红线，**已作废**，改由 CO-92 的声明式有限 palette 给出。"),
+           "non_claims": ["不改 SPEC/板/阈值/冻结源；不改 _shared 引擎模型",
                           "判『计划坐标』；板未施工（PDN 实体 = L3 派生）⇒ 非『已交付板不合规』",
                           "引擎净距口径借用 drc_rules.json 语义核（已对齐 kicad DRC 430/430 + 106/106）"],
            "redline": "零几何（只读）；无 while 搜索；无坐标搜索；输出确定性（sorted）。"}
@@ -328,7 +308,6 @@ def main(argv=None) -> int:
     for r in sorted(bad, key=lambda r: min(r["clr_margin"], r["hole_margin"]))[:8]:
         print(f"  {r['kind']} {r['ref']}.{r['pad']} {r['net']} @{r['pos']} "
               f"clr={r['clr_margin']} hole={r['hole_margin']} :: {r['binding']}")
-    print(f"  fix_candidate={ {k: fx[k] for k in ('n_violating_ppc','n_reusable','n_would_block')} }")
     print(f"  teeth={teeth}")
     return 0 if verd == "PASS" else 1
 
