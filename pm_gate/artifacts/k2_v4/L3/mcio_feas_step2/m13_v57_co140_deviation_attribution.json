@@ -1,0 +1,102 @@
+{
+ "artifact": "m13_v57_co140_deviation_attribution",
+ "schema": 1,
+ "revision": "CO-140",
+ "nature": "L2 分析（只读）：as-built 对间偏差归因分类（接口固有 / 斜交 / 路由可改）",
+ "inputs": {
+  "board": "a3ce9ab803045a0a",
+  "spec": "5f72182a2616392c",
+  "co134_record": "5dd6cc22c57da4a5",
+  "co138_record": "7573907fdf3d0192"
+ },
+ "rows": [
+  {
+   "layer": "B.Cu",
+   "at": [
+    92.15,
+    47.912
+   ],
+   "pairs": [
+    "PCIE_DN_OUT6_N_MCIO",
+    "PCIE_DN_OUT7_P_MCIO"
+   ],
+   "w_mm": 0.205,
+   "three_w_mm": 0.615,
+   "min_pad_pitch_mm": 1.0583,
+   "pad_pair": [
+    "U6",
+    "BT29",
+    "U6",
+    "CA26"
+   ],
+   "in_escape_rect": [],
+   "min_achievable_edge_mm": 0.8533,
+   "parallel_frac_le10deg": 1.0,
+   "angle_at_min_deg": 0.0,
+   "delta_needed_mm": -0.065,
+   "classification": "ROUTING_FIXABLE",
+   "why": "焊盘中心距 1.0583 ≥ 3w=0.6150 且耦合区平行（占比 1.0）⇒ 走廊/间距构造性调整可满足 2w"
+  },
+  {
+   "layer": "F.Cu",
+   "at": [
+    137.24,
+    59.575
+   ],
+   "pairs": [
+    "PCIE_DN4_N",
+    "PCIE_DN5_P"
+   ],
+   "w_mm": 0.205,
+   "three_w_mm": 0.615,
+   "min_pad_pitch_mm": 0.6,
+   "pad_pair": [
+    "J2",
+    "58",
+    "J2",
+    "60"
+   ],
+   "in_escape_rect": [],
+   "min_achievable_edge_mm": 0.395,
+   "parallel_frac_le10deg": 1.0,
+   "angle_at_min_deg": 1.1,
+   "delta_needed_mm": -0.0806,
+   "classification": "INHERENT_INTERFACE_PITCH",
+   "why": "两网最近焊盘中心距 0.6 < 3w=0.6150 ⇒ 3W 在该焊盘墙数学不可能；最小可达铜边 = 0.395 < 2w=0.41 ⇒ 路由无法消除"
+  },
+  {
+   "layer": "In5.Cu",
+   "at": [
+    74.75,
+    40.8
+   ],
+   "pairs": [
+    "PCIE_DN_OUT0_N_MCIO",
+    "PCIE_DN_OUT1_P_MCIO"
+   ],
+   "w_mm": 0.16,
+   "three_w_mm": 0.48,
+   "min_pad_pitch_mm": 1.0583,
+   "pad_pair": [
+    "U6",
+    "P29",
+    "U6",
+    "W26"
+   ],
+   "in_escape_rect": [],
+   "min_achievable_edge_mm": 0.8983,
+   "parallel_frac_le10deg": 0.0,
+   "angle_at_min_deg": 21.8,
+   "delta_needed_mm": -0.0075,
+   "classification": "OBLIQUE_OUT_OF_LONG_PARALLEL",
+   "why": "耦合区平行占比(≤10°)=0.0（该点夹角 21.8°）⇒ 不属 SPEC「长平行」口径"
+  }
+ ],
+ "counts": {
+  "INHERENT_INTERFACE_PITCH": 1,
+  "OBLIQUE_OUT_OF_LONG_PARALLEL": 1,
+  "ROUTING_FIXABLE": 1
+ },
+ "verdict": "ATTRIBUTED",
+ "redline": "只读；不改板/SPEC/冻结源；零坐标搜索"
+}
