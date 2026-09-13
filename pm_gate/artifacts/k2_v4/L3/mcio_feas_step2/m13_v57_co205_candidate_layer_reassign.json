@@ -4,6 +4,22 @@
   "handoff": ".omo/handoffs/k2-v57-handoff-z69-20260913-rev19-co204l.md §6",
   "ruling": "CO-204 R3（全过孔 = 通孔+背钻；0 盲埋孔；残桩 <0.15mm）"
  },
+ "candidate_C_design": {
+  "88 处的构成": "32 = 角（up/east-dn 逃逸层 In2 -> lane In5）+ 56 = 落（lane In5 -> stub In2）。",
+  "construction_per_location": "In2 -> [via In2<->B] -> 短 B 段 -> [via B<->In5] -> lane；两孔均外层锚定 ⇒ 过孔策略合法。",
+  "expected_impact": "角桥 32 处需该偏移；落桥 56 处在落列（连接器侧，与 chip 侧逃逸列正交分离）预计无需偏移。",
+  "id": "C（双孔桥）——由 CO-205 分析收敛出的**唯一未排除**方向",
+  "key_constraint_evidence": "候选 B(span) 失败面 = 『UP 的 In2<->B 角孔』砸『DN 在 B/In5 的同列竖段』，两列**共用 chip pad 同 x**（实测 UP7 x≈93.6 = DN7 x≈93.6，间距 0.0–0.35 < VT 0.4525）。",
+  "required_L2_decision（走廊/竖列分配，L2 自裁）": "**竖列分色偏移**：up 带逃逸列取 pad_x+δ、dn 带取 pad_x-δ（δ→0.35，SPEC 逃逸窗上界）⇒ 两带列距 0.7 ≥ VT 0.4525 ⇒ 桥孔不再砸对带竖段。同带内列距不变（整体平移）⇒ 不扰动现行 3W 与 make-carry。",
+  "residual_risk": "桥使每线 via 数 +2（88 处 ⇒ +176 孔）；须复核 DFM（孔距/密度）与残桩仍 <0.15mm。",
+  "verification_plan": [
+   "探针加入 bridge 构造（面跨层模型）+ 竖列分色偏移旋钮 ⇒ 判据 32/32 且 0 同层交叉",
+   "构造器 co16_nodes 加 bridge 分支（工件驱动，零搜索）",
+   "完整链（L4 apply + escape domain + co133）⇒ 期望 census 仅 {F<->B, F<->In2, F<->In5, B<->In2, B<->In5}",
+   "板厂能力绑定闸 PASS + KiCad DRC **不新增 shorting_items/clearance**（对照冻结 47 项基线）"
+  ],
+  "why_it_escapes_the_capacity_wall": "桥的 B.Cu 段极短（<1mm）⇒ 不落入 REQ-R3-2「长平行 3W」命中域（3W 只约束域外长平行）；而候选 A′/D 把**长竖段**搬去外层 ⇒ 吃满 3W=0.615 ⇒ 容量墙。"
+ },
  "candidates": [
   {
    "failed_pages": [
