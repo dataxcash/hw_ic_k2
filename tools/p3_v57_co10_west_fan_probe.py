@@ -254,6 +254,11 @@ _STUB_LANE = __import__("os").environ.get("CO10_STUB_LANE", "") not in ("", "0")
 _STUB_B = __import__("os").environ.get("CO10_STUB_B", "") not in ("", "0")
 # CO-205h：桥的**第二孔外移**（沿 lane/stub 按比例）——避开 chip 侧扇面局部孔拥塞。
 _BRX2 = float(__import__("os").environ.get("CO10_BRX2", "0"))
+# CO-205i（L2 自裁 · 拓扑 E，无桥）：**每带自持 straddle** ——
+#   In2 逃逸带：escape=In2, lane=F.Cu,  stub=In2  ⇒ 全 4 孔 F<->In2（span 仅 F..In2）
+#   B   逃逸带：escape=B,   lane=In5.Cu, stub=B   ⇒ 全 4 孔外层锚定（span 仅 In5..B）
+#   两带 span 互不覆盖对方轨道层 ⇒ 无桥、无内层<->内层、无 3W 外层竖段代价。
+_TOPOE = __import__("os").environ.get("CO10_TOPOE", "") not in ("", "0")
 # 竖列分色偏移（L2 走廊/竖列分配）：up 带目标 x += BOFF，dn 带 -= BOFF（> VT 0.4525/2 两侧合计）
 _BOFF = float(__import__("os").environ.get("CO10_BOFF", "0"))
 
@@ -300,6 +305,8 @@ def row_group(f):
 
 
 def stub_layer(f):
+    if _TOPOE:
+        return "In2.Cu" if esc_layer(f) == "In2.Cu" else "B.Cu"   # CO-205i：stub = 逃逸层
     if _STUB_B:
         return "B.Cu"      # CO-205g：stub 全落外层 B
     if _STUB_LANE:
@@ -409,6 +416,8 @@ def r3_build(rule):
 
 
 def _stub_layer_of(a):
+    if _TOPOE:
+        return "In2.Cu" if esc_layer(FACTS[a["page"]]) == "In2.Cu" else "B.Cu"   # CO-205i
     if _STUB_B:
         return "B.Cu"      # CO-205g
     if _STUB_LANE:
@@ -675,6 +684,25 @@ def build(f, px, py, nx, ny):
         ly = W.fp(LANES[f["page_id"]]["lane_y"] + pol_off(f, pol))
         own += [(round(f["pad"][pol][0], 3), round(f["pad"][pol][1], 3)),
                 (round(f["conn_pad"][pol][0], 3), round(f["conn_pad"][pol][1], 3))]
+        if _TOPOE:
+            # 拓扑 E：lane 层按逃逸带取（In2 带 -> F.Cu；B 带 -> In5.Cu），stub = 逃逸层。
+            if E == "In2.Cu":
+                L, S = "F.Cu", "In2.Cu"
+            else:
+                L, S = "In5.Cu", "B.Cu"
+            vias.append((vx, vy, pol, _sp("F.Cu", E)))
+            if E != L:
+                vias.append((vx, ly, pol, _sp(E, L)))
+            if S != L:
+                vias.append((lx, ly, pol, _sp(L, S)))
+            if S != "F.Cu":
+                vias.append((lx, ll, pol, _sp(S, "F.Cu")))
+            segs.append(("F.Cu", f["pad"][pol][0], f["pad"][pol][1], vx, vy, True, pol))
+            segs.append((E, vx, vy, vx, ly, False, pol))
+            segs.append((L, vx, ly, lx, ly, False, pol))
+            segs.append((S, lx, ly, lx, ll, False, pol))
+            segs.append(("F.Cu", lx, ll, f["conn_pad"][pol][0], f["conn_pad"][pol][1], True, pol))
+            continue
         if _BRIDGE:
             # CO-205e 候选 C：冻结层计划 + 双孔桥（仅替换内层<->内层 corner/drop）
             B, L = "B.Cu", "In5.Cu"
