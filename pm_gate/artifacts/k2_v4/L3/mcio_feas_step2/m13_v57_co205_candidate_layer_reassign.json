@@ -180,6 +180,14 @@
   "note": "完整链 = 冻结板 d4e81f647be7f980 逐字节复现（L4 252 via -> PDN 后 493 via）。"
  },
  "redline": "只读冻结四源；未改层分配（交付板仍 d4e81f647be7f980，不可送样）；默认路径（无新旋钮）仍与 v9 逐页逐字段同。",
+ "rejected_shortcuts": [
+  {
+   "guardrail": "任何「只改过孔声明端点层、不动物理桶内铜」的方案一律否决；残桩须按**信号进出层**判定，而非按 via 声明端点层。建议把该口径写入 boundary（闸的 class_stub 需按 net 实际进出层计算）。",
+   "id": "extend_inner_inner_via_to_F",
+   "idea": "把 88 支内层<->内层孔改声明为 F<->In5（同一钻，仅改背钻深度），使其在闸模型下成为「外层锚定、残桩 0」。",
+   "why_rejected": "SI 上无效 = 赌闸模型：用于 In2<->In5 通路时，F..In2 段（0.3664mm）仍留在桶内且 F 端无铜连接（dead-end）⇒ 实为 0.3664mm 开路残桩 >= 0.15mm，正是 R3 要消除的缺陷；而闸的 class_stub() 仅按两端点层判「外层锚定 ⇒ 0」，会把该缺陷判为 PASS ⇒ 判据与实现绑定被绕过。"
+  }
+ ],
  "revision": "CO-205",
  "schema": 1,
  "structural_lemma": {
