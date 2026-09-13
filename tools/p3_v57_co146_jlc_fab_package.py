@@ -34,6 +34,7 @@ PLOT_LAYERS = ",".join(COPPER + ["F.Paste", "B.Paste", "F.Silkscreen", "B.Silksc
 CO147 = STEP2 / "m13_v57_co147_l2_ruling.json"
 CO148 = STEP2 / "m13_v57_co148_thermal_ruling.json"
 CO149 = STEP2 / "m13_v57_co149_u6_thermal_mitigation.json"
+CO204 = STEP2 / "m13_v57_co204_thermal_verification.json"   # CO-210：O2 定案之机读记录（结温 + θJA_eff）
 CAP = STEP2 / "m13_v57_co146_jlc8_capability.json"
 RULES = Path("/home/fila/jqdDev_2025/ic_hw/_shared/eda_core/drc_rules.json")
 OZ_TO_MM = 0.035
@@ -270,7 +271,8 @@ def _num(x) -> bool:
 
 def order_notes_record_figures(note: str, imp: dict, dfm: dict, co147: dict | None = None,
                                co148: dict | None = None, co149: dict | None = None,
-                               cap: dict | None = None, rules: dict | None = None) -> dict:
+                               cap: dict | None = None, rules: dict | None = None,
+                               co204: dict | None = None) -> dict:
     """CO-171 + CO-172：`ORDER_NOTES` 内**记录派生数字**须与来源记录一致（有锚正则）。
 
     CO-171（t12）覆盖 §5 阻抗偏离% 与 §7 DRC 计数；CO-172 扩到 §5 模型间 spread、§2 过孔 span 分解、
@@ -318,6 +320,14 @@ def order_notes_record_figures(note: str, imp: dict, dfm: dict, co147: dict | No
                 out[key] = _tok_match(note, probe(tf))
             except (TypeError, ValueError):
                 pass
+    if co204 is not None:          # CO-210：§6 之 O2 定案数字须绑定散热验证闸记录（缺件即不产出该项）
+        try:
+            _th = co204["o2"]["theta_ja_eff_C_per_W"]
+            _tj = [c["Tj_C"] for c in (co204.get("cases") or {}).values() if _num(c.get("Tj_C"))]
+            out["o2_theta_ja_eff"] = _tok_match(note, f"θJA_eff = {_th:.1f} ℃/W")
+            out["o2_Tj_max"] = _tok_match(note, f"{max(_tj):.1f} ℃") if _tj else False
+        except (KeyError, TypeError, ValueError):
+            pass
     if cap is not None and rules is not None:
         try:
             c = cap["capability"]
@@ -436,10 +446,15 @@ anchor 逐条为抓取件归一原文子串）。
 见 04_impedance/。
 
 ## 6. 系统级事项（非制造/非本单阻塞，但影响可用性）
-**U6（DS320PR1601）热超限（CO-148）**：手册 PACT 4.7–7.0W / θJA(high-K) 17.4°C/W / Tj 上限 120°C；
-按监理定值 40°C 自然对流 ⇒ Tj 121.8–161.8°C **全档超限**（ψJB+h 交叉路线 173.6°C）。
-⇒ 须（a）系统强制风冷/顶部散热片 或（b）环境降额，并在下一轮几何修订中补强 U6 域 GND via 阵列。
-详见包内 `06_rulings/L2_RULING_u6_thermal_v1.md`（缓解口径 `06_rulings/L2_RULING_u6_thermal_mitigation_v1.md`）与登记簿 HIGH 项。本板仍建议打样（散热路径实证需要实板）。
+**U6（DS320PR1601）热 — 问题定性（CO-148）+ 定案 O2（CO-204）**
+- **问题**：手册 PACT 4.7–7.0W / θJA(high-K) 17.4°C/W / Tj 上限 120°C；按监理定值 40°C 自然对流 ⇒
+  Tj 121.8–161.8°C **全档超限**（ψJB+h 交叉路线 173.6°C）。
+- **定案（O2）**：**30×30mm 铝散热片 + 界面垫 1.0 ℃/W + ~2 m/s 风冷** ⇒ **θJA_eff = 11.0 ℃/W**；
+  四工况 Tj = 91.7 / 106.0 / 103.8 / 117.0 ℃（限 120.0 ℃）**全部 PASS**（最重工况余量 3.0 ℃）。
+- ⇒ **系统装配须按 O2 实施**（顶部散热 + 风冷）；另建议下一轮几何修订补强 U6 域 GND via 阵列。
+- 详见包内 `06_rulings/L2_RULING_u6_thermal_mitigation_v2.md`（**定案**；取代 v1.0 之「推荐/待定」口径）
+  与 `06_rulings/L2_RULING_u6_thermal_v1.md`（问题定性）。登记簿该项 = **CLOSED**（CO-149 / CO-150 关闭）。
+  本板仍建议打样（散热路径实证需要实板）。
 
 ## 7. 已知板级非 DFM 事实（如实登记，非本单阻塞）
 - 本板无 PTH/NPTH 焊盘：`J6/J9/J11/J12/J13` 为无焊盘占位（netlist 骨架），板上无安装孔。
@@ -550,9 +565,10 @@ def main() -> int:
     _co147 = json.loads(CO147.read_text()) if CO147.exists() else None
     _co148 = json.loads(CO148.read_text()) if CO148.exists() else None
     _co149 = json.loads(CO149.read_text()) if CO149.exists() else None
+    _co204 = json.loads(CO204.read_text()) if CO204.exists() else None
     _cap = json.loads(CAP.read_text()) if CAP.exists() else None
     _rules = json.loads(RULES.read_text()) if RULES.exists() else None
-    _figs = order_notes_record_figures(notes_txt, imp, dfm, _co147, _co148, _co149, _cap, _rules)
+    _figs = order_notes_record_figures(notes_txt, imp, dfm, _co147, _co148, _co149, _cap, _rules, _co204)
 
     def _perturb(base, path, val):
         """CO-172：内存注入（零落盘）—— 沿 path 复制并改一个值，供灵敏度牙齿使用。"""

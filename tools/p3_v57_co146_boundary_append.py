@@ -2896,6 +2896,43 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body82
 
+    # ── §83 CO-210（L2 自裁 · 随单 NOTES 热声明滞后 ⇒ 引现行定案 + O2 数字记录绑定） ──
+    MARK83 = "## 83. CO-210"
+    _rc83 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    sec83 = [MARK83 + "（**L2 自裁 · 随单 NOTES（ORDER_NOTES §6）热声明滞后于 O2 定案 ⇒ 声明↔内容修正 + 记录绑定**）", "",
+             "- **缺陷（G-1，low）**：CO-204 已把 U6 热**采 O2**（30×30 铝散热片 + 界面垫 1.0 ℃/W + ~2 m/s 风冷 ⇒ θJA_eff 11.0、四工况 ≤120）"
+             "并作 `L2_RULING_u6_thermal_mitigation_v2.md`（取代 v1.0 之「推荐/待定」口径），该 v2 亦**已随包**（`06_rulings/`）；"
+             "但生成器 §6 仍 ① 只引 **v1** 两件、② 以「⇒ 须（a）… 或（b）…」**未定口径**叙述、③ 引「登记簿 HIGH 项」而该项已由 CO-149/CO-150 **CLOSED**、"
+             "④ O2 之 θJA_eff 与最重工况 Tj **无记录绑定**（CO-172 F-4 只绑了 CO-148/CO-149 的六个数字）⇒ **板厂/装配方读到已废口径**，且与本包自带之定案自相矛盾。",
+             "- **处置**：① §6 改写为「问题定性（CO-148）+ **定案 O2（CO-204）**」两段式；② 按 CO-172 F-4 原则补**记录绑定** —— "
+             "`order_notes_record_figures` 增 `co204`（散热验证闸记录）源 ⇒ 新增 **`o2_theta_ja_eff`**（`θJA_eff = 11.0 ℃/W`）与 **`o2_Tj_max`**（`117.0 ℃`）"
+             "两项有锚判据，并入既有 **t12** 之 `all(figures)` 面（**不新增齿**，齿数仍 29）；③ 经生成器重出打样包（37 文件 / 29 牙齿全 True）。",
+             "- **负控（判别力）**：θJA_eff 注入 12.0 ⇒ `o2_theta_ja_eff`=False；最重工况 Tj 注入 99.0 ⇒ `o2_Tj_max`=False；**旧（未定）§6 文本** ⇒ 两项皆 False ⇒ 绑定非空真。",
+             "- **不影响**：Gerber/钻孔/叠层图/阻抗表**逐字节未变**（仅 ORDER_NOTES 文本 + 生成器变更）；板 `d4e81f647be7f980` 未动。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows83 = [("生成器 `p3_v57_co146_jlc_fab_package.py`（§6 + `co204` 记录绑定）", K2 / "tools/p3_v57_co146_jlc_fab_package.py"),
+               ("随单 `jlc_package/ORDER_NOTES.md`（§6 修正后）", L5 / "jlc_package" / "ORDER_NOTES.md"),
+               ("包记录 `m13_v57_co146_jlc_fab_package.json`（牙齿 29/29）", STEP2 / "m13_v57_co146_jlc_fab_package.json"),
+               ("记录 `m13_v57_co204_thermal_verification.json`（O2 定案；新增绑定之源）", STEP2 / "m13_v57_co204_thermal_verification.json"),
+               ("裁定 `L2_RULING_u6_thermal_mitigation_v2.md`（O2 定案 v2.0）", L2 / "L2_RULING_u6_thermal_mitigation_v2.md"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc83['total']} 项 / OPEN {_rc83['OPEN']}）", L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows83:
+        if pth.exists():
+            sec83.append(f"| {label} | `{s16(pth)}` |")
+    sec83.append("")
+    sec83.append("> **R-CO210-1**：凡**随单提交**（交付/打样）文本所引之口径，须引**现行定案件**（不得引其被取代之前身）；"
+                 "由机读记录派生的系统级数字须与板级数字**同受**有锚绑定（承 CO-172 F-4 / R-CO208-1）。")
+    sec83.append("")
+    sec83.append("> **序不变**：本件未改步骤集/序列（承 §82 之 R-CO209-2）。")
+    sec83.append("")
+    body83 = "\n".join(sec83)
+    if MARK83 in txt:
+        txt = re.sub(re.escape(MARK83) + r"[\s\S]*?(?=\n## |\Z)", body83, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body83
+
+    txt = txt.replace("W3 Boundary **v2.50**", "W3 Boundary **v2.51**")
     txt = txt.replace("W3 Boundary **v2.49**", "W3 Boundary **v2.50**")
     txt = txt.replace("W3 Boundary **v2.48**", "W3 Boundary **v2.49**")
     txt = txt.replace("W3 Boundary **v2.47**", "W3 Boundary **v2.48**")
