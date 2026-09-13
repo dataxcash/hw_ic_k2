@@ -247,6 +247,8 @@ if len(_VA) != 4:
 _BRIDGE = __import__("os").environ.get("CO10_BRIDGE", "") not in ("", "0")
 _BR_JOG = float(__import__("os").environ.get("CO10_BRJOG", "0.5"))
 _BR_FLIP = __import__("os").environ.get("CO10_BRFLIP", "") not in ("", "0")
+# CO-205f：**全部 stub 落 lane 层（In5）** ⇒ 无 drop 孔（消除 56 处内层<->内层），仅余 32 处 corner 待桥。
+_STUB_LANE = __import__("os").environ.get("CO10_STUB_LANE", "") not in ("", "0")
 # 竖列分色偏移（L2 走廊/竖列分配）：up 带目标 x += BOFF，dn 带 -= BOFF（> VT 0.4525/2 两侧合计）
 _BOFF = float(__import__("os").environ.get("CO10_BOFF", "0"))
 
@@ -293,6 +295,8 @@ def row_group(f):
 
 
 def stub_layer(f):
+    if _STUB_LANE:
+        return "In5.Cu"    # CO-205f：stub 全落 lane 层
     if _VOUT:
         return _va(f["band"] == "up", 1)     # CO-205d 外层竖段指派
     if _ALLB:
@@ -398,6 +402,8 @@ def r3_build(rule):
 
 
 def _stub_layer_of(a):
+    if _STUB_LANE:
+        return "In5.Cu"    # CO-205f
     if _VOUT:
         return _va(FACTS[a["page"]]["band"] == "up", 1)   # CO-205d 外层竖段指派
     if _ALLI2:
