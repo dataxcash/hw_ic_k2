@@ -249,6 +249,11 @@ _BR_JOG = float(__import__("os").environ.get("CO10_BRJOG", "0.5"))
 _BR_FLIP = __import__("os").environ.get("CO10_BRFLIP", "") not in ("", "0")
 # CO-205f：**全部 stub 落 lane 层（In5）** ⇒ 无 drop 孔（消除 56 处内层<->内层），仅余 32 处 corner 待桥。
 _STUB_LANE = __import__("os").environ.get("CO10_STUB_LANE", "") not in ("", "0")
+# CO-205g：**全部 stub 落 B.Cu**（外层）⇒ drop = In5<->B（外层锚定，**不加孔**）⇒ 消 56 处内层<->内层；
+#   代价 = 落列吃外层 3W=0.615。仅余 32 处 corner 待桥（孔数最少解）。
+_STUB_B = __import__("os").environ.get("CO10_STUB_B", "") not in ("", "0")
+# CO-205h：桥的**第二孔外移**（沿 lane/stub 按比例）——避开 chip 侧扇面局部孔拥塞。
+_BRX2 = float(__import__("os").environ.get("CO10_BRX2", "0"))
 # 竖列分色偏移（L2 走廊/竖列分配）：up 带目标 x += BOFF，dn 带 -= BOFF（> VT 0.4525/2 两侧合计）
 _BOFF = float(__import__("os").environ.get("CO10_BOFF", "0"))
 
@@ -295,6 +300,8 @@ def row_group(f):
 
 
 def stub_layer(f):
+    if _STUB_B:
+        return "B.Cu"      # CO-205g：stub 全落外层 B
     if _STUB_LANE:
         return "In5.Cu"    # CO-205f：stub 全落 lane 层
     if _VOUT:
@@ -402,6 +409,8 @@ def r3_build(rule):
 
 
 def _stub_layer_of(a):
+    if _STUB_B:
+        return "B.Cu"      # CO-205g
     if _STUB_LANE:
         return "In5.Cu"    # CO-205f
     if _VOUT:
@@ -678,14 +687,14 @@ def build(f, px, py, nx, ny):
             elif E == "In2.Cu":
                 # 桥走 **F.Cu**（顶层，走廊区空闲）：In2<->F + 短F横段 + F<->In5。
                 # 关键：避免占用 B.Cu 竖列（对带 B 逃逸列与 chip pad 同 x ⇒ 必砸）。
-                _cx = vx + _jd * _BR_JOG
+                _cx = (vx + _BRX2 * (lx - vx)) if _BRX2 > 0 else (vx + _jd * _BR_JOG)
                 vias.append((vx, ly, pol, _sp("In2.Cu", "F.Cu")))
                 vias.append((_cx, ly, pol, _sp("F.Cu", L)))
             else:                                                       # E == L：无 corner
                 _cx = vx
             if S == "In2.Cu":
                 # 桥走 F.Cu：In5<->F + 短F竖段 + F<->In2
-                _sy = ly + _BR_JOG
+                _sy = (ly + _BRX2 * (ll - ly)) if _BRX2 > 0 else (ly + _BR_JOG)
                 vias.append((lx, ly, pol, _sp(L, "F.Cu")))
                 vias.append((lx, _sy, pol, _sp("F.Cu", "In2.Cu")))
             else:
