@@ -2193,8 +2193,63 @@ def main() -> int:
         txt = re.sub(re.escape(MARK67) + r"[\s\S]*?(?=\n## |\Z)", body67, txt, count=1)
     else:
         txt = txt.rstrip("\n") + "\n\n" + body67
+    # ── §68 CO-195（L2 自裁 · 固定点唯一性 oracle） ──────────────────────────
+    MARK68 = "## 68. CO-195"
+    _rc68 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    _ord195 = _ord190          # 步集/序列不变（50 次）
+    _fx = STEP2 / "m13_v57_co195_fixpoint_uniqueness.json"
+    sec68 = [MARK68 + "（**L2 自裁 · 固定点唯一性（路径无关）oracle**）", "",
+             "- **I-1（low）·键名判据所欲保证的语义性质无独立闸**：co120 P5「下游快照」为**键名启发式**（`*_sha16_after` / `*_current_sha16` / "
+             "register|ledger 面），其真正要防的失效模式（CO-151：按文档化序连跑两遍得**另一稳定不动点** ⇒ 提交 pin 不可复现）**无任何闸直接判**。"
+             "实测**值域判据不可行**：35 条记录内嵌**受控集**未来 sha，但绝大多数是**冻结历史件 / 自身产物**的合法 pin（co16/co37/co69/co95/co98 之 record pin、"
+             "各步 `doc_sha16` / `stackup_svg_sha16` / `pm_eval.sha16`）⇒ 值域判据会大面积误报，**不可机判为非法**。",
+             "- **处置**：新增 `tools/p3_v57_co195_fixpoint_uniqueness_oracle.py`（**不在规范序内**）—— 直接判**语义性质**：从**扰动态**启动规范序"
+             "（登记簿 `meta.counts` 注入越界值 999/OPEN 7）⇒ 要求 rc=0 + converged + `snapshot()` 复原规范 sha + 登记簿**逐字节**复原；"
+             "6 牙齿 = 注入有效 / 收敛 rc=0 / 不动点复原 / 登记簿逐字节复原 / **判别力**合成控（唯一 vs 非唯一不动点模型）/"
+             "**排除非空转**。"
+             "工具**自我保护**：`finally` 无条件复原登记簿（绝不留在扰动态）。co120 键名判据作**廉价前置代理**保留（不倒桩），语义保证由本 oracle 承载。",
+             "- **I-2（low）·oracle 记录自指 + §68 误 pin 可变件（自捕获）**：初版 oracle 的判据快照含**本记录自身** ⇒ 记录写回后自身字节即变，"
+             "记录的 `sha_canon` **永不等于**其所在状态的实际 sha（实测 `2d23a14ffdc821cd` ≠ `6c282601e50911d5`）；且 §68 初版 pin 了该记录 ⇒ "
+             "oracle 重跑后 `boundary_append` 以新记录 sha 重 pin ⇒ **规范序不动点随「oracle 是否刚跑」漂移**（实测 boundary `6608cd8e`→`3e5ca535`、"
+             "co77 `137b4949`→`c8ffe1ce` 双件漂移）。**处置**：① oracle 判据快照**排除本记录自身**（自指防护）+ 记录声明 `snapshot_scope` + 牙齿 "
+             "`t06_self_exclusion_nonvacuous`；② §68 **不 pin** 该记录（同 runner report 先例：随规范态变化的证据件不入 pin 表）。",
+             f"- **登记簿**：+2（`co195:I-1` + `co195:I-2`，全 CLOSED；**{_rc68['total']} 项 / OPEN {_rc68['OPEN']}**）。",
+             "- **实测（本件证据）**：`sha_canon`=`f48af2c1a41de4c6` → 注入后 `sha_perturbed`=`880d1ec8cbc27698` → 跑序后 `sha_after`=`f48af2c1a41de4c6`"
+             "（**逐字节复原**、rc=0 / converged / 2 轮）。**残余如实登记**：本 oracle 只扰**一个**扰动量（登记簿 counts）⇒ 未覆盖的路径相关性"
+             "（如未来新形态的自指 pin）须**扩扰动量**；触发 = 出现新的自指/链式 pin 写法。",
+             "",
+             "> **R-CO195-0**（I-2）：**随规范态变化的证据件不得入 pin 表**（oracle/runner 报告类）；判据快照须**排除证据件自身**（自指防护）。",
+             "> **R-CO195-1**：规范序的**不动点唯一性（路径无关）**须由 `co195` oracle 直接判（扰动启动 ⇒ 收敛须复原规范态 + 逐字节复原件）；"
+             "键名判据仅为**前置代理**，不得替代语义判据；新自指/链式 pin 形态须扩扰动量。",
+             "> **R-CO195-2**（复现序，取代 R-CO194-3；**步集/序列不变，序内出现 50 次**）：规范复现序 = `" + _ord195 + "`，"
+             "**循环至 sha 稳定**（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1 "
+             "+ R-CO175-1 + R-CO176-1/2 + R-CO177-1 + R-CO178-1 + R-CO179-1/2 + R-CO180-1/2 + R-CO181-1/2 + R-CO182-1 "
+             "+ R-CO183-1 + R-CO184-1 + R-CO185-1/2 + R-CO186-1 + R-CO187-1/2/3 + R-CO188-1 + R-CO189-1 + R-CO190-1 "
+             "+ R-CO191-1 + R-CO192-1 + R-CO193-1/2/3/4 + R-CO194-1/2 + R-CO195-1）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    # CO-195（I-2）：记录 **不被 pin** —— 其内容随规范态（`sha_canon`/`sha_after`）变化，若入 pin 表则
+    # boundary_append 会用「oracle 上次跑后的记录」重 pin ⇒ 规范序不动点随 oracle 是否刚跑而漂移
+    # （实测 boundary + co77 双件漂移）。同 runner report 先例：随规范态变化的证据件一律不入 pin 表。
+    _rows68 = [("工具 `p3_v57_co195_fixpoint_uniqueness_oracle.py`（扰动启动 ⇒ 复原规范态 + 7 牙齿：结算/注入/收敛/复原/逐字节/判别力/自排除）",
+                K2 / "tools/p3_v57_co195_fixpoint_uniqueness_oracle.py"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc68['total']} 项 / OPEN {_rc68['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    _rows68_excl = [("证据件 `m13_v57_co195_fixpoint_uniqueness.json`（**不被 pin**：内容随规范态变化，同 runner report 先例）",
+                     _fx)]
+    for label, pth in _rows68:
+        if pth.exists():
+            sec68.append(f"| {label} | `{s16(pth)}` |")
+    sec68.append("")
+    sec68 += ["> **注（I-2）**：" + lab for lab, _ in _rows68_excl]
+    sec68.append("")
+    body68 = "\n".join(sec68)
+    if MARK68 in txt:
+        txt = re.sub(re.escape(MARK68) + r"[\s\S]*?(?=\n## |\Z)", body68, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body68
+    txt = txt.replace("W3 Boundary **v2.39**", "W3 Boundary **v2.40**")
     txt = txt.replace("W3 Boundary **v2.38**", "W3 Boundary **v2.39**")
-    txt = txt.replace("W3 Boundary **v2.37**", "W3 Boundary **v2.38**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
     return 0

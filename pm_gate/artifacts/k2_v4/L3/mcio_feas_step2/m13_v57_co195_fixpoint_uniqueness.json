@@ -1,0 +1,47 @@
+{
+ "artifact": "m13_v57_co195_fixpoint_uniqueness",
+ "schema": 1,
+ "revision": "CO-195",
+ "nature": "固定点唯一性（路径无关）oracle：扰动启动 ⇒ 收敛须复原规范态（CO-151 失效模式的直接判据）",
+ "target_repro_order": "R-CO195-2（步集/序列不变）",
+ "snapshot_scope": "watch_paths() - {本记录}（CO-195 I-2：自指防护，判据不含本证据件）",
+ "perturbation": {
+  "artifact": "pm_gate/artifacts/k2_v4/L2/input_defect_register_v1.json",
+  "field": "meta.counts",
+  "canonical": {
+   "SPEC_DEFECT": 5,
+   "PROVED_THRESHOLD": 5,
+   "TOOL_DEFECT": 113,
+   "IMPLEMENTATION_DEVIATION": 4,
+   "OPEN": 0,
+   "total": 127
+  },
+  "injected": {
+   "total": 999,
+   "OPEN": 7
+  }
+ },
+ "sha_canon": "36be583feb899e2c",
+ "sha_perturbed": "eb5f7a91373ab1e2",
+ "sha_after": "36be583feb899e2c",
+ "settle": {
+  "rc": 0,
+  "converged": true,
+  "iterations": 2
+ },
+ "order_rc": 0,
+ "order_converged": true,
+ "order_iterations": 2,
+ "teeth": {
+  "t00_settle_converged": true,
+  "t01_injection_effective": true,
+  "t02_order_converged_rc0": true,
+  "t03_fixpoint_restored": true,
+  "t04_register_byte_restored": true,
+  "t05_discriminates_path_dependence": true,
+  "t06_self_exclusion_nonvacuous": true,
+  "teeth_ok": true
+ },
+ "verdict": "PASS",
+ "redline": "只扰动受控件（登记簿 counts）且 finally 无条件复原；不改冻结四源/板/SPEC；本记录不被 ORDER 改写。"
+}
