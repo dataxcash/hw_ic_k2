@@ -242,6 +242,14 @@ _VA = [t.strip().upper() for t in __import__("os").environ.get(
 if len(_VA) != 4:
     _VA = ["F", "B", "F", "B"]
 
+# CO-205e（L2 自裁 · 候选 C）：双孔桥 —— 内层<->内层 corner/drop 改 In2->[In2<->B]->短B段->[B<->In5]->lane。
+#   桥之 B 段 <1mm ⇒ 不入「长平行 3W」命中域 ⇒ 绕开外层竖段容量墙（A′/D 之死因）。
+_BRIDGE = __import__("os").environ.get("CO10_BRIDGE", "") not in ("", "0")
+_BR_JOG = float(__import__("os").environ.get("CO10_BRJOG", "0.5"))
+_BR_FLIP = __import__("os").environ.get("CO10_BRFLIP", "") not in ("", "0")
+# 竖列分色偏移（L2 走廊/竖列分配）：up 带目标 x += BOFF，dn 带 -= BOFF（> VT 0.4525/2 两侧合计）
+_BOFF = float(__import__("os").environ.get("CO10_BOFF", "0"))
+
 def _va(up_band: bool, kind: int):
     """kind 0=escape,1=stub：返回该带竖段所用的外层（F.Cu/B.Cu）。"""
     i = (0 if up_band else 1) + (0 if kind == 0 else 2)
@@ -652,6 +660,43 @@ def build(f, px, py, nx, ny):
         ly = W.fp(LANES[f["page_id"]]["lane_y"] + pol_off(f, pol))
         own += [(round(f["pad"][pol][0], 3), round(f["pad"][pol][1], 3)),
                 (round(f["conn_pad"][pol][0], 3), round(f["conn_pad"][pol][1], 3))]
+        if _BRIDGE:
+            # CO-205e 候选 C：冻结层计划 + 双孔桥（仅替换内层<->内层 corner/drop）
+            B, L = "B.Cu", "In5.Cu"
+            up = f["band"] == "up"
+            _jd = (1.0 if pol == "P" else -1.0) if _BR_FLIP else (1.0 if up else -1.0)
+            vias.append((vx, vy, pol, _sp("F.Cu", E)))                 # via1（E==B 时为通孔）
+            if E == B:
+                _cx = vx
+                vias.append((vx, ly, pol, _sp(B, L)))                  # corner B<->In5（已外层锚定）
+            elif E == "In2.Cu":
+                # 桥走 **F.Cu**（顶层，走廊区空闲）：In2<->F + 短F横段 + F<->In5。
+                # 关键：避免占用 B.Cu 竖列（对带 B 逃逸列与 chip pad 同 x ⇒ 必砸）。
+                _cx = vx + _jd * _BR_JOG
+                vias.append((vx, ly, pol, _sp("In2.Cu", "F.Cu")))
+                vias.append((_cx, ly, pol, _sp("F.Cu", L)))
+            else:                                                       # E == L：无 corner
+                _cx = vx
+            if S == "In2.Cu":
+                # 桥走 F.Cu：In5<->F + 短F竖段 + F<->In2
+                _sy = ly + _BR_JOG
+                vias.append((lx, ly, pol, _sp(L, "F.Cu")))
+                vias.append((lx, _sy, pol, _sp("F.Cu", "In2.Cu")))
+            else:
+                _sy = ly
+                if S != L:
+                    vias.append((lx, ly, pol, _sp(L, S)))
+            vias.append((lx, ll, pol, _sp(S, "F.Cu")))                  # land
+            segs.append(("F.Cu", f["pad"][pol][0], f["pad"][pol][1], vx, vy, True, pol))
+            segs.append((E, vx, vy, vx, ly, False, pol))
+            if abs(_cx - vx) > TOL:
+                segs.append(("F.Cu", vx, ly, _cx, ly, False, pol))      # 桥之 F 横段
+            segs.append((L, _cx, ly, lx, ly, False, pol))
+            if S == "In2.Cu":
+                segs.append(("F.Cu", lx, ly, lx, _sy, False, pol))      # 桥之 F 竖段
+            segs.append((S, lx, _sy, lx, ll, False, pol))
+            segs.append(("F.Cu", lx, ll, f["conn_pad"][pol][0], f["conn_pad"][pol][1], True, pol))
+            continue
         if _VOUT:
             # CO-205c 候选 D：竖段层 E,S ∈ {F,B}（外层），lane = In5.Cu（内层）。
             #   pad(F) -> [via1 F<->E，仅 E!=F 时] -> escape(E) -> corner E<->In5
@@ -852,7 +897,8 @@ def alloc_closed_form():
             ty = py - 0.4 if f["band"] == "up" else py + 0.0
             ty = min(max(ty, py - YWIN), py + YWIN)
             ty = min(ty, yv) if mode == "le" else max(ty, yv)
-            out[(pid, pol)] = (f["pad"][pol][0], ty)
+            _tx = f["pad"][pol][0] + (_BOFF if f["band"] == "up" else -_BOFF)
+            out[(pid, pol)] = (_tx, ty)
     return out
 
 
@@ -1005,8 +1051,9 @@ def probe(rule="d3", order="engine", verbose=False):
             # CO-144c：carry 带的目标由 carry 游标给出（filter+sort），不再用 _ip3w_targets 的
             # P 前缀目标（其 P=N+VT 与「P/N 不翻转」相悖，会把锚页推离 pad）。非 carry 带照旧。
             _tp = _IP3W_TGT.get(pid) if (_IP3W_TGT and not _cdir) else None
-            _tx_p = _tp[1] if _tp else f["pad"]["P"][0]
-            _tx_n = _tp[0] if _tp else f["pad"]["N"][0]
+            _bx = _BOFF if f["band"] == "up" else -_BOFF     # CO-205e 竖列分色偏移
+            _tx_p = (_tp[1] if _tp else f["pad"]["P"][0]) + _bx
+            _tx_n = (_tp[0] if _tp else f["pad"]["N"][0]) + _bx
             rows = sorted(PAIR_DOMAIN[pid]["pair_rows"],
                           key=lambda r: (abs(float(r[0]) - _tx_p) + abs(float(r[1]) - _tx_n)
                                          + abs(float(r[2]) - (f["pad"]["P"][1] + _by))

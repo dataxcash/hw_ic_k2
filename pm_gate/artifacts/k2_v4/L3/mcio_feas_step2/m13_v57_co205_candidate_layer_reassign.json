@@ -9,7 +9,34 @@
   "construction_per_location": "In2 -> [via In2<->B] -> 短 B 段 -> [via B<->In5] -> lane；两孔均外层锚定 ⇒ 过孔策略合法。",
   "expected_impact": "角桥 32 处需该偏移；落桥 56 处在落列（连接器侧，与 chip 侧逃逸列正交分离）预计无需偏移。",
   "id": "C（双孔桥）——由 CO-205 分析收敛出的**唯一未排除**方向",
+  "impl_status": "已实现探针侧（CO10_BRIDGE / CO10_BRJOG / CO10_BRIDGE 桥走层 / CO10_BOFF 竖列分色偏移），构造器侧未实施",
   "key_constraint_evidence": "候选 B(span) 失败面 = 『UP 的 In2<->B 角孔』砸『DN 在 B/In5 的同列竖段』，两列**共用 chip pad 同 x**（实测 UP7 x≈93.6 = DN7 x≈93.6，间距 0.0–0.35 < VT 0.4525）。",
+  "measurements": {
+   "冻结层计划 + span 模型（无桥）": "32/32 落位，但 88 支内层<->内层（不可制）",
+   "桥走 B.Cu（In2->B->In5）": "7/32 落位 —— 桥孔占 B，砸对带同列 B 逃逸竖段（chip pad 同 x，实测间距 0.0–0.35 < VT 0.4525）",
+   "桥走 F.Cu（In2->F->In5，顶层走廊空闲）": "**24/32 落位**（jog 0.5–0.6、BOFF 0/±0.35、jog 方向 band/pol 皆约 24/32）",
+   "角桥 F + 落桥 B（混合）": "10/32（更差）"
+  },
+  "next": [
+   "桥孔数减半：每处仅 1 个新增孔（例如 F 桥改为「逃逸竖段直接落 F」= 逃逸层 F，则 corner 为 F<->In5 一孔；代价 = 该带逃逸竖段吃外层 3W=0.615 ⇒ 需复核容量）",
+   "或桥孔错位：P/N 桥孔按极性分向（已试，仍 24/32）与 lane 行错位（0.25 半距）联合求解",
+   "或仅对**其中一类**（corner 32 处 / drop 56 处）加桥，另一类改用外层竖段",
+   "判据不变：32/32 + 0 同层交叉 + 完整链 0 内层<->内层 + 板厂闸 PASS + DRC 不新增"
+  ],
+  "remaining_8_failures": {
+   "note": "失败面全为 **input 页（In2 逃逸带）**，与 B(span) 的 6 页失败面（DN out_MCIO + UP0）不同 ⇒ 桥换了瓶颈。",
+   "pages": [
+    "PCIE_UP0/input",
+    "PCIE_UP2/input",
+    "PCIE_UP3/input",
+    "PCIE_UP6/input",
+    "PCIE_DN2/input",
+    "PCIE_DN3/input",
+    "PCIE_DN4/input",
+    "PCIE_DN5/input"
+   ],
+   "root_cause": "**过孔拥塞**（非 3W/容量）：桥把每处 1 孔变 2 孔 ⇒ ① 页内 P/N 桥孔 ~0.51 < VV 0.525（vv_intra）；② 跨页桥孔 0.30–0.50 < VV（vv_placed）；③ 少数 hh_intra（同网孔距 < 0.4495）/ vt2_placed。"
+  },
   "required_L2_decision（走廊/竖列分配，L2 自裁）": "**竖列分色偏移**：up 带逃逸列取 pad_x+δ、dn 带取 pad_x-δ（δ→0.35，SPEC 逃逸窗上界）⇒ 两带列距 0.7 ≥ VT 0.4525 ⇒ 桥孔不再砸对带竖段。同带内列距不变（整体平移）⇒ 不扰动现行 3W 与 make-carry。",
   "residual_risk": "桥使每线 via 数 +2（88 处 ⇒ +176 孔）；须复核 DFM（孔距/密度）与残桩仍 <0.15mm。",
   "verification_plan": [
@@ -120,7 +147,7 @@
   "frozen_board_sha16": "d4e81f647be7f980",
   "note": "完整链 = 冻结板 d4e81f647be7f980 逐字节复现（L4 252 via -> PDN 后 493 via）。"
  },
- "redline": "只读冻结四源；未改层分配（交付板仍 d4e81f647be7f980，不可送样）。",
+ "redline": "只读冻结四源；未改层分配（交付板仍 d4e81f647be7f980，不可送样）；默认路径（无新旋钮）仍与 v9 逐页逐字段同。",
  "revision": "CO-205",
  "schema": 1,
  "structural_lemma": {

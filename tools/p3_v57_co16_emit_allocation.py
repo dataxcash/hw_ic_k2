@@ -49,7 +49,10 @@ for _k, _e in (("CO10_COLMODE", "CO16_COLMODE"), ("CO10_WSWAP", "CO16_WSWAP"),
                # CO-205c（L2 自裁 · 候选 D）：竖段落两外层 F/B、lane 维持内层 In5
                ("CO10_VOUT", "CO16_VOUT"),
                # CO-204L/CO-205：竖段层全落 B.Cu（候选 A′，最小修正 = 消除 88 支内层<->内层）
-               ("CO10_ALLB", "CO16_ALLB")):
+               ("CO10_ALLB", "CO16_ALLB"),
+               # CO-205e（L2 自裁 · 候选 C）：双孔桥 + 竖列分色偏移
+               ("CO10_BRIDGE", "CO16_BRIDGE"), ("CO10_BRJOG", "CO16_BRJOG"),
+               ("CO10_BOFF", "CO16_BOFF")):
     if os.environ.get(_e):
         CFG[_k] = os.environ[_e]
 REVISION = os.environ.get("CO16_REV", "CO16-ALLOC.1")
