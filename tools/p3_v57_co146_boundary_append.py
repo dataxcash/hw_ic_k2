@@ -2382,8 +2382,49 @@ def main() -> int:
         txt = re.sub(re.escape(MARK70) + r"[\s\S]*?(?=\n## |\Z)", body70, txt, count=1)
     else:
         txt = txt.rstrip("\n") + "\n\n" + body70
+    # ── §71 CO-198（L2 自裁 · 代理 ↔ 语义闸关系机判化） ────────────────────────────
+    MARK71 = "## 71. CO-198"
+    _rc71 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    sec71 = [MARK71 + "（**L2 自裁 · 代理 ↔ 语义闸关系机判化**）", "",
+             "- **E-1（low）·代理判据 ↔ 语义闸的绑定只存在于散文、无机判**：co120 的 P5「下游快照」为**键名启发式**"
+             "（廉价前置代理），其要保证的语义性质（复现序**不动点唯一/路径无关**）由 co195 oracle 承载 —— 但该「代理 ↔ 语义闸」"
+             "关系**无机判**：判官工具被移除/改名、其语义齿被删、或代理自身 fail-closed 齿从 pin 表消失，**均无人发现**；"
+             "残余（更名可逃逸）虽已如实登记（CO-193 G-4 / CO-195 I-1），却**无声明面强制**（可被误读为判据完备）。"
+             "属「声明↔实现绑定」未收尾。",
+             "- **处置**：runner 升 **CO-198.1** —— 新增 `PROXY_SEMANTIC_BINDING`（导出**残余**（不得宣称完备）+ 语义判官工具 "
+             "+ **源内声明**的语义齿名 + 代理齿所在记录）+ 纯判据 `proxy_binding_decision()`（`tool_ok`/`src_has`/`proxy_teeth` "
+             "可注入 ⇒ 合成控）+ 静态齿 **t29**（正控 + 缺声明/残余空/判官缺/齿名未声明/代理齿未 pin 之负控）。"
+             "**只读判官源**，不读其证据件（R-CO196-1：禁验证循环）。",
+             f"- **登记簿**：+1（`co198:E-1`，low，CLOSED；**{_rc71['total']} 项 / OPEN {_rc71['OPEN']}**）。",
+             "- **实测（本件证据）**：修前改写/删除 co195 齿名或移除判官工具，`--check` **仍全 True**（无机判）；修后 "
+             "`--check` **t01..t29 全 True（31 项）**，t29 四类负控均判 False ⇒ 判据**可证伪**且只涉结构性事实。",
+             "",
+             "> **R-CO198-1**：凡**代理判据**（启发式 / 近似 / 廉价前置）代替语义判据之处，须登记 `PROXY_SEMANTIC_BINDING` —— "
+             "**残余显式**（禁宣称完备）+ **外部语义判官**（工具 + **源内声明**的齿名）+ 代理自身 fail-closed 齿**在 pin 表**；"
+             "静态齿 **t29** 机判，否则 fail-closed。判官**证据件**一律不读（R-CO196-1）。",
+             "> **R-CO198-2**（复现序，取代 R-CO197-3；**步集/序列不变，序内出现 50 次**）：规范复现序 = `" + _ord190 + "`，"
+             "**循环至 sha 稳定**（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1 "
+             "+ R-CO175-1 + R-CO176-1/2 + R-CO177-1 + R-CO178-1 + R-CO179-1/2 + R-CO180-1/2 + R-CO181-1/2 + R-CO182-1 "
+             "+ R-CO183-1 + R-CO184-1 + R-CO185-1/2 + R-CO186-1 + R-CO187-1/2/3 + R-CO188-1 + R-CO189-1 + R-CO190-1 "
+             "+ R-CO191-1 + R-CO192-1 + R-CO193-1/2/3/4 + R-CO194-1/2 + R-CO195-0/1 + R-CO196-1/2/4/5 + R-CO197-1/2/4 "
+             "+ R-CO198-1）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows71 = [("工具 `p3_v57_co164_order_runner.py`（CO-198.1 / 代理↔语义闸绑定 + 静态齿 t29）",
+                K2 / "tools/p3_v57_co164_order_runner.py"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc71['total']} 项 / OPEN {_rc71['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows71:
+        if pth.exists():
+            sec71.append(f"| {label} | `{s16(pth)}` |")
+    sec71.append("")
+    body71 = "\n".join(sec71)
+    if MARK71 in txt:
+        txt = re.sub(re.escape(MARK71) + r"[\s\S]*?(?=\n## |\Z)", body71, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body71
+    txt = txt.replace("W3 Boundary **v2.42**", "W3 Boundary **v2.43**")
     txt = txt.replace("W3 Boundary **v2.41**", "W3 Boundary **v2.42**")
-    txt = txt.replace("W3 Boundary **v2.40**", "W3 Boundary **v2.41**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
     return 0

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CO-164/CO-167/CO-169/CO-174/CO-180/CO-181/CO-182/CO-183/CO-187/CO-188/CO-189/CO-190/CO-191/CO-192/CO-193/CO-194/CO-195/CO-196/CO-197 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
+"""CO-164/CO-167/CO-169/CO-174/CO-180/CO-181/CO-182/CO-183/CO-187/CO-188/CO-189/CO-190/CO-191/CO-192/CO-193/CO-194/CO-195/CO-196/CO-197/CO-198 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
 
 缘起（实测事故，CO-163）：`co146_boundary_append.py` 因 §37 文本里的 f-string 花括号语法错误**每次崩溃（rc=1）**，
 但收敛判定只看 boundary/记录 sha ⇒ sha 恒不变 ⇒ 报「CONVERGED」，边界 §37 实际从未写入、pin 表陈旧（co77/co135/co136 判 FAIL）。
@@ -35,6 +35,8 @@
 ⑬ CO-197（K-1/K-2，**复评 CO-192..CO-195 产物之形态完备性**）：① `teeth_hygiene_scan` 补关键字解包形态
      `dict(**{...})` / `.update(**{...})`；② `md_write_scan` 补 `io.open(<md>, "w")` 与 `Path(...)/路径别名.replace|rename(<md>)`
      目的；t18/t20 合成控同步扩展（含 `"a.md".replace(".md","")` 字符串操作**不得误报**之对偶负控）。
+⑭ CO-198（R-CO198-1，**代理 ↔ 语义闸绑定机判化**）：凡**代理判据**代替语义判据之处，须显式声明**残余**（不得宣称完备）
+     + 承载该语义性质的**外部判官**（工具 + **源内声明**的齿名）+ 代理自身 fail-closed 齿所在记录（须在 pin 表）；静态齿 **t29**。
 CLI:
   python3 tools/p3_v57_co164_order_runner.py [--check] [--max-iter 5]
 """
@@ -726,6 +728,50 @@ def oracle_tool_ok(path) -> bool:
         return src_compiles(p.read_text(encoding="utf-8"), str(p))
     except Exception:
         return False
+
+
+# CO-198（R-CO198-1）：**代理 ↔ 语义闸绑定**。凡**代理判据**（如键名启发式、廉价前置）代替语义判据之处，
+# 须显式声明 ① 残余（**不得宣称完备**）② 承载该语义性质的外部判官（工具 + **源内声明**的齿名）③ 代理自身的
+# fail-closed 齿所在记录（须在 pin 表内），并由静态齿 **t29** 机判。**不读判官证据件**（R-CO196-1：禁验证循环）。
+PROXY_SEMANTIC_BINDING = {
+    "co120_provenance_pin_gate": {
+        "proxy": "_is_downstream_snapshot（键名启发式：`*_sha16_after` / `*_(current|live|latest|now)_sha16` / "
+                 "register|ledger 容器面）",
+        "residual": "**键名启发式**：更名（如 `*_state_sha16` / `*_snapshot_sha16`）或换容器名即可逃逸；判据**不判语义**"
+                    "（「记录是否随文档化复现序漂移」）。**不作完备性声明**。",
+        "semantic_judge": "tools/p3_v57_co195_fixpoint_uniqueness_oracle.py",
+        "semantic_teeth": ["t00_settle_converged", "t02_A_converged_and_restored", "t03_B_converged_and_restored",
+                           "t04_C_converged_and_restored", "t07_no_residual_perturbation"],
+        "artifact": "m13_v57_co120_provenance_pin_gate.json",
+        "why": "co120 P5 为**廉价前置代理**（键名面）；其要保证的语义性质 =『复现序不动点唯一（路径无关）』，由 co195 "
+               "oracle 以「扰动启动 ⇒ 收敛须复原规范态」**直接判**（R-CO195-1）；本表把该「代理↔语义闸」关系机判化。",
+    },
+}
+
+
+def proxy_binding_decision(gate: str, decl, *, tool_ok=None, src_has=None, proxy_teeth=None) -> str:
+    """CO-198（R-CO198-1）纯判据：代理判据 ↔ 语义闸绑定的**可执行性**（`tool_ok`/`src_has`/`proxy_teeth` 可注入 ⇒ 合成控）。
+
+    返回 `ok` / `declaration_incomplete`（缺 proxy/residual/semantic_judge/semantic_teeth/artifact/why）/
+    `no_semantic_judge`（判官工具不存在或不可编译）/ `semantic_tooth_undeclared`（齿名未在该判官**源内**声明）/
+    `proxy_teeth_unpinned`（代理自身 fail-closed 齿未入 pin 表）。**只读判官源**，不读其证据件。
+    """
+    if not isinstance(decl, dict):
+        return "declaration_incomplete"
+    if any(not decl.get(k) for k in ("proxy", "residual", "semantic_judge", "artifact", "why")) \
+            or not isinstance(decl.get("semantic_teeth"), list) or not decl["semantic_teeth"]:
+        return "declaration_incomplete"
+    judge = K2 / decl["semantic_judge"]
+    if not (oracle_tool_ok(judge) if tool_ok is None else bool(tool_ok(judge))):
+        return "no_semantic_judge"
+    src = judge.read_text(encoding="utf-8") if judge.exists() else ""
+    has = (lambda name: name in src) if src_has is None else src_has
+    if not all(has(x) for x in decl["semantic_teeth"]):
+        return "semantic_tooth_undeclared"
+    teeth = EXPECTED_TEETH.get(Path(decl["artifact"]).name, []) if proxy_teeth is None else list(proxy_teeth)
+    if not any(str(x).startswith("negative_control") for x in teeth):
+        return "proxy_teeth_unpinned"
+    return "ok"
 
 
 def all_verdicts_gate(cls: str, step: str, verdicts=None) -> tuple:
@@ -1445,6 +1491,21 @@ def main(argv=None) -> int:
         and not oracle_tool_ok(K2 / "tools/__no_such_oracle__.py")
         and not src_compiles("def (:", "<synthetic_syntax_error>")
         and src_compiles("x = 1", "<synthetic_ok>"))
+    # CO-198（R-CO198-1）：代理 ↔ 语义闸绑定须机判（残余显式 + 外部语义判官存在且**源内声明**其齿 + 代理齿在 pin 表）
+    _pj = "tools/p3_v57_co195_fixpoint_uniqueness_oracle.py"
+    _pbase = {"proxy": "p", "residual": "r（非完备）", "semantic_judge": _pj,
+              "semantic_teeth": ["t00_settle_converged"], "artifact": "m13_v57_co120_provenance_pin_gate.json", "why": "w"}
+    checks["t29_proxy_semantic_binding"] = (
+        set(PROXY_SEMANTIC_BINDING) <= set(ORDER)
+        and all(proxy_binding_decision(g, d) == "ok" for g, d in PROXY_SEMANTIC_BINDING.items())
+        # 合成正/负控（可证伪；只涉**结构性事实**，R-CO196-1）
+        and proxy_binding_decision("__nc__", dict(_pbase)) == "ok"
+        and proxy_binding_decision("__nc__", {"residual": "r"}) == "declaration_incomplete"
+        and proxy_binding_decision("__nc__", {**_pbase, "residual": ""}) == "declaration_incomplete"
+        and proxy_binding_decision("__nc__", {**_pbase, "semantic_teeth": []}) == "declaration_incomplete"
+        and proxy_binding_decision("__nc__", _pbase, tool_ok=lambda _p: False) == "no_semantic_judge"
+        and proxy_binding_decision("__nc__", {**_pbase, "semantic_teeth": ["__no_such_tooth__"]}) == "semantic_tooth_undeclared"
+        and proxy_binding_decision("__nc__", _pbase, proxy_teeth=[]) == "proxy_teeth_unpinned")
     checks["t05_stability_oracle"] = (stable("x", "x") and not stable("x", "y") and not stable("", ""))
     # CO-164（t06）：执行器 ORDER 必须与 boundary 规范复现序**有序一致**（文档↔执行器防漂移）
     _bdy = boundary_order_steps()
