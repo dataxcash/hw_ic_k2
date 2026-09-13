@@ -5,6 +5,10 @@
   {
    "by": "CO-206b",
    "what": "B 路 lane 落外层须按外层 3W 计 ⇒ 26/32 更正为 24/32（乐观值来源：lane 置于私有内层）"
+  },
+  {
+   "by": "CO-206c",
+   "what": "登记价格取数尝试（判据可复现：记录已试端点，避免重复试探）"
   }
  ],
  "cost_model": {
@@ -146,8 +150,45 @@
    }
   }
  },
+ "price_probe_log": {
+  "attempted": "2026-09-14",
+  "conclusion": "单价/交期**不可从公开页面机取**（服务端不返回价格）⇒ 三路 cost/lead_time 参数维持 `INPUT_REQUIRED`，须**人工报价**（JLC 报价单/客服）后回填。",
+  "endpoints": [
+   {
+    "bytes": 135107,
+    "http": 200,
+    "result": "SPA 外壳；正文含能力表 + FAQ（已用作 anchor）",
+    "url": "https://jlcpcb.com/capabilities/pcb-capabilities"
+   },
+   {
+    "bytes": 135013,
+    "http": 200,
+    "result": "同一 SPA 外壳，无 HDI 阶数/孔径/价格",
+    "url": "https://jlcpcb.com/capabilities/pcb-hdi"
+   },
+   {
+    "bytes": 14207,
+    "http": 404,
+    "result": "无此端点",
+    "url": "https://jlcpcb.com/pcb-price"
+   },
+   {
+    "bytes": 14237,
+    "http": 404,
+    "result": "无此端点",
+    "url": "https://jlcpcb.com/advanced-pcb"
+   },
+   {
+    "bytes": 180796,
+    "http": 200,
+    "result": "SPA 报价器：仅渲染 'Calculated Price $0.00' 占位，价格由前端 API 生成 ⇒ **不可机取**",
+    "url": "https://cart.jlcpcb.com/quote"
+   }
+  ],
+  "hint_in_corpus": "能力页有定性锚：'hole size with via diameter less than 0.45mm, will cost more'（仅定性）"
+ },
  "purpose": "给定设计约束，输出工艺路线的 可行性/成本/交期/性能/风险 对比 + 推荐。判据先行、可复现、可复用（非一次性）。",
- "revision": "v1.1",
+ "revision": "v1.2",
  "risk_catalog": {
   "A_advanced_hdi": [
    "DFM review 结论未知（可能退回改设计）",
