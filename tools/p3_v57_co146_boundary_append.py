@@ -1923,6 +1923,47 @@ def main() -> int:
         txt = txt.rstrip("\n") + "\n\n" + body61
     txt = txt.replace("W3 Boundary **v2.32**", "W3 Boundary **v2.33**")
     txt = txt.replace("W3 Boundary **v2.31**", "W3 Boundary **v2.32**")
+    # ── §62 CO-189（L2 自裁 · 受控集外写入可见性） ────────────────────────────
+    MARK62 = "## 62. CO-189"
+    _rc62 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    _ord189 = _ord188          # 步集/序列不变（50 次）
+    sec62 = [MARK62 + "（**L2 自裁 · 受控集外写入可见性**）", "",
+             "- **G-1（medium）·承载根内写入不可见**：步骤在受控产物**承载根**（`pm_gate/artifacts/k2_v4`）内写"
+             "**非受控件**（不在 `watch_paths()`、无豁免）时，既不入收敛 sha、也不产生 `stray` 证据（stray 只比较受控集）"
+             "⇒ **完全不可见**。CO-186 只覆盖 md 卡片、CO-188 只覆盖受控集**内**越界 ⇒ R-CO186-1「各步写出的全部产物"
+             "须入受控集」的**受控集外**方向仍无判据。",
+             "- **实测钉定（本件证据）**：全序逐步 shadow 差分 ⇒ 仅 `co146_jlc_fab_package` 写受控集外 **32 件**"
+             "（全在 `L5/jlc_package/`：Gerber 13 / Excellon 10 / 04_impedance 2 / `05_layer_sequence.txt` / 06_rulings 4）；"
+             "其余 47 步 **0 件**。该 32 件由**受控 `MANIFEST.json` 的 `manifest` 键（34 件逐文件 sha256）**覆盖 ⇒ 豁免依据成立。",
+             "- **处置**：runner 升 **CO-189.1** —— ① `WRITE_SHADOW_ROOT` + **stat 轻量 shadow**（mtime/ctime/size，不哈希；"
+             "承载根 ~1.8k 件逐步快照，成本 +~3s）；② `WRITE_SHADOW_EXEMPT`（5 前缀，各带 `why` + `covered_by`）；"
+             "③ 纯判据 `shadow_exempt()`/`uncontrolled_decision()`；④ 运行时停机类 **`uncontrolled_write`**（对白名单步亦生效）；"
+             "⑤ 静态齿 **t23**（shadow 根 ⊇ 受控集；豁免表完备 + 正负控）。",
+             f"- **登记簿**：+1（`co189:G-1`，CLOSED；**{_rc62['total']} 项 / OPEN {_rc62['OPEN']}**）。",
+             "",
+             "> **R-CO189-1**：步骤在承载根内的写入须**全部可见** —— 属受控集（收敛 sha/stray）或入 `WRITE_SHADOW_EXEMPT`"
+             "（显式理由 + `covered_by` 受控件/牙齿）；否则运行时 `uncontrolled_write` 停机（t23 机判）。",
+             "> **R-CO189-2**（复现序，取代 R-CO188-2；**步集/序列不变，序内出现 50 次**）：规范复现序 = `" + _ord189 + "`，"
+             "**循环至 sha 稳定**（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1 "
+             "+ R-CO175-1 + R-CO176-1/2 + R-CO177-1 + R-CO178-1 + R-CO179-1/2 + R-CO180-1/2 + R-CO181-1/2 + R-CO182-1 "
+             "+ R-CO183-1 + R-CO184-1 + R-CO185-1/2 + R-CO186-1 + R-CO187-1/2/3 + R-CO188-1 + R-CO189-1）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows62 = [("工具 `p3_v57_co164_order_runner.py`（CO-189.1 / 承载根 stat shadow + `uncontrolled_write` + `WRITE_SHADOW_EXEMPT` + t23）",
+                K2 / "tools/p3_v57_co164_order_runner.py"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc62['total']} 项 / OPEN {_rc62['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows62:
+        if pth.exists():
+            sec62.append(f"| {label} | `{s16(pth)}` |")
+    sec62.append("")
+    body62 = "\n".join(sec62)
+    if MARK62 in txt:
+        txt = re.sub(re.escape(MARK62) + r"[\s\S]*?(?=\n## |\Z)", body62, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body62
+    txt = txt.replace("W3 Boundary **v2.33**", "W3 Boundary **v2.34**")
+    txt = txt.replace("W3 Boundary **v2.32**", "W3 Boundary **v2.33**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
     return 0

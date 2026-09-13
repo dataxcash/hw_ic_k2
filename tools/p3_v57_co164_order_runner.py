@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CO-164/CO-167/CO-169/CO-174/CO-180/CO-181/CO-182/CO-183/CO-187/CO-188 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
+"""CO-164/CO-167/CO-169/CO-174/CO-180/CO-181/CO-182/CO-183/CO-187/CO-188/CO-189 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
 
 缘起（实测事故，CO-163）：`co146_boundary_append.py` 因 §37 文本里的 f-string 花括号语法错误**每次崩溃（rc=1）**，
 但收敛判定只看 boundary/记录 sha ⇒ sha 恒不变 ⇒ 报「CONVERGED」，边界 §37 实际从未写入、pin 表陈旧（co77/co135/co136 判 FAIL）。
@@ -16,6 +16,8 @@
   ⑤ CO-188（R-CO188-1）：**越界写**（步骤写其 `STEP_ARTIFACTS` **未声明**的受控件）⇒ 运行时停机类 `stray_write`
      + 静态齿 **t22**（合成正负控 + `STRAY_WRITE_ALLOWED` 例外表完备）。理由：确定性越界写不破 sha 收敛、亦不被
      步本地 `did_work` 归因抓到 ⇒ 可与「sha 稳定」共存而**假通过**。
+  ⑥ CO-189（R-CO189-1）：**受控集外写入**（承载根内、非受控件、非豁免）⇒ 运行时停机类 `uncontrolled_write`
+     （stat 轻量 shadow 快照）+ 静态齿 **t23**（shadow 根 ⊇ 受控集；`WRITE_SHADOW_EXEMPT` 完备性 + 正负控）。
 CLI:
   python3 tools/p3_v57_co164_order_runner.py [--check] [--max-iter 5]
 """
@@ -623,6 +625,57 @@ def stray_decision(step: str, stray, allowed: dict | None = None) -> str:
     return "stray_write" if (set(stray) - allow) else "ok"
 
 
+# CO-189（R-CO189-1）：**受控集外写入可见性** —— 步骤在受控产物**承载根**内写**非受控件**（既非 `watch_paths()`、
+# 又非显式豁免）时：不入收敛 sha、不产生 `stray` 证据（stray 只比较受控集）⇒ **完全不可见**
+# （CO-186 只覆盖 md 卡片、CO-188 只覆盖受控集**内**越界）。shadow 用 **stat 轻量指纹**（mtime/ctime/size、不哈希）
+# ⇒ 承载根 ~1.8k 件可逐步快照。
+WRITE_SHADOW_ROOT = K2 / "pm_gate/artifacts/k2_v4"
+# 显式豁免（**实测钉定** @ CO-189：全序实测仅 `co146_jlc_fab_package` 在受控集外写 32 件、全在打样包内）：
+# 这些件由**受控 `MANIFEST.json` 逐文件 sha256 覆盖**（其 `manifest` 键 34 件）⇒ 任何变更经 MANIFEST sha 可见。
+WRITE_SHADOW_EXEMPT = (
+    {"prefix": "pm_gate/artifacts/k2_v4/L5/jlc_package/01_gerber_rs274x", "covered_by": "MANIFEST.json",
+     "why": "Gerber 输出（fab 步生成；逐文件 sha 由受控 MANIFEST.json 覆盖）"},
+    {"prefix": "pm_gate/artifacts/k2_v4/L5/jlc_package/02_drill_excellon", "covered_by": "MANIFEST.json",
+     "why": "Excellon 钻孔 + 图（同上）"},
+    {"prefix": "pm_gate/artifacts/k2_v4/L5/jlc_package/04_impedance", "covered_by": "MANIFEST.json",
+     "why": "阻抗表副本（MANIFEST 覆盖 + fab 齿 t15 与受控源逐字节 parity）"},
+    {"prefix": "pm_gate/artifacts/k2_v4/L5/jlc_package/05_layer_sequence.txt", "covered_by": "MANIFEST.json",
+     "why": "叠层次序派生件（MANIFEST 覆盖 + fab 齿 t16 由冻结 SPEC 重算 parity）"},
+    {"prefix": "pm_gate/artifacts/k2_v4/L5/jlc_package/06_rulings", "covered_by": "MANIFEST.json",
+     "why": "裁定副本（MANIFEST 覆盖 + fab 齿 t07 与受控源逐字节 parity）"},
+)
+
+
+def shadow_paths() -> list:
+    """CO-189：承载根内全部文件（相对 K2 posix），供 stat 轻量快照。"""
+    return sorted(p.relative_to(K2).as_posix() for p in WRITE_SHADOW_ROOT.rglob("*") if p.is_file())
+
+
+def write_shadow_snapshot() -> dict:
+    """CO-189：`{rel_posix: (mtime_ns, ctime_ns, size)}`（**stat 轻量**，不哈希）。"""
+    out = {}
+    for p in WRITE_SHADOW_ROOT.rglob("*"):
+        if not p.is_file():
+            continue
+        st = p.stat()
+        out[p.relative_to(K2).as_posix()] = (st.st_mtime_ns, st.st_ctime_ns, st.st_size)
+    return out
+
+
+def shadow_exempt(rel: str, table=None) -> bool:
+    """CO-189：`rel` 是否落入显式豁免前缀（`rel == prefix` 或其子路径）。"""
+    for e in (WRITE_SHADOW_EXEMPT if table is None else table):
+        pre = str(e.get("prefix") or "").rstrip("/")
+        if pre and (rel == pre or rel.startswith(pre + "/")):
+            return True
+    return False
+
+
+def uncontrolled_decision(changes, exempt=None) -> str:
+    """CO-189 纯判据：承载根内、受控集外的变更若不在豁免内 ⇒ `uncontrolled_write`。"""
+    return "uncontrolled_write" if any(not shadow_exempt(c, exempt) for c in changes) else "ok"
+
+
 
 def md_write_scan(src: str) -> list:
     """CO-186/CO-187：静态提取该工具 **`.md` 写/拷目标**（模块级 Name 常量一并解析）。
@@ -936,6 +989,24 @@ def main(argv=None) -> int:
         and stray_decision("__s__", ["a/b.json"], {"__s__": {"paths": ["a/b.json"], "why": "w"}}) == "ok"
         and stray_decision("__s__", ["a/b.json", "c.json"],
                            {"__s__": {"paths": ["a/b.json"], "why": "w"}}) == "stray_write")
+    # CO-189（R-CO189-1）：受控集外写入可见性 —— shadow 根须 ⊇ 受控集；豁免表完备；纯判据正负控
+    _shadow_root_ok = all(str(p).startswith(str(WRITE_SHADOW_ROOT) + "/") for p in watch_paths())
+    _cov_ok = ({q.name for q in watch_paths()} | {t for v in EXPECTED_TEETH.values() for t in v})
+    _exp_ok = all(
+        isinstance(e, dict) and str(e.get("prefix") or "").strip() and str(e.get("why") or "").strip()
+        and str(e.get("covered_by") or "").strip() and e["covered_by"] in _cov_ok
+        and (K2 / e["prefix"]).exists()
+        for e in WRITE_SHADOW_EXEMPT)
+    checks["t23_write_shadow_visible"] = (
+        _shadow_root_ok and _exp_ok
+        and uncontrolled_decision([]) == "ok"
+        and uncontrolled_decision(["pm_gate/artifacts/k2_v4/L9_none/x.json"]) == "uncontrolled_write"
+        and uncontrolled_decision(["pm_gate/artifacts/k2_v4/L5/jlc_package/06_rulings/a.md"]) == "ok"
+        and uncontrolled_decision(["pm_gate/artifacts/k2_v4/L5/jlc_package/06_rulings/a.md",
+                                   "pm_gate/artifacts/k2_v4/elsewhere.json"]) == "uncontrolled_write"
+        and shadow_exempt("pm_gate/artifacts/k2_v4/L5/jlc_package/01_gerber_rs274x/x.gbr")
+        and shadow_exempt("pm_gate/artifacts/k2_v4/L5/jlc_package/05_layer_sequence.txt")
+        and not shadow_exempt("pm_gate/artifacts/k2_v4/L5/jlc_package/07_new/x.txt"))
     checks["t05_stability_oracle"] = (stable("x", "x") and not stable("x", "y") and not stable("", ""))
     # CO-164（t06）：执行器 ORDER 必须与 boundary 规范复现序**有序一致**（文档↔执行器防漂移）
     _bdy = boundary_order_steps()
@@ -953,8 +1024,10 @@ def main(argv=None) -> int:
     iterations, abort = [], None
     prev = ""
     converged = False
+    _watched_rel = {p.relative_to(K2).as_posix() for p in watch_paths()}
     for it in range(1, a.max_iter + 1):
         rcs, unexpected = {}, None
+        _sh_prev = write_shadow_snapshot()   # CO-189：承载根 stat 快照（跨步复用：上步 after = 本步 before）
         for step in ORDER:
             p = tool_path(step)
             _exp = EXPECTED_NONZERO.get(step) or {}
@@ -965,6 +1038,9 @@ def main(argv=None) -> int:
             _w_before = {k: _ball.get(k) for k in _decl_set}
             r = subprocess.run([str(PY), str(p)], cwd=K2, capture_output=True, text=True)
             _aall = _snap_watched()
+            _sh_cur = write_shadow_snapshot()                          # CO-189
+            _sh_changes = sorted(rel for rel in set(_sh_prev) | set(_sh_cur)
+                                 if _sh_prev.get(rel) != _sh_cur.get(rel) and rel not in _watched_rel)
             _w_after = {k: _aall.get(k) for k in _decl_set}
             _did = step_did_work(_w_before, _w_after)                          # 步本地归因（CO-174）
             # CO-167（F-2）：变更检测（非绝对 mtime）
@@ -988,12 +1064,17 @@ def main(argv=None) -> int:
             # CO-188（R-CO188-1）：越界写（未声明受控件）⇒ 停机（确定性越界写不破收敛、亦不被步本地归因抓到）
             if cls in ("ok", "expected_nonzero") and _stray and stray_decision(step, _stray) != "ok":
                 cls = "stray_write"
+            # CO-189（R-CO189-1）：承载根内、受控集外的写（非豁免）⇒ 停机（不入 sha、不产生 stray ⇒ 完全不可见）
+            if cls in ("ok", "expected_nonzero") and uncontrolled_decision(_sh_changes) != "ok":
+                cls = "uncontrolled_write"
             if cls == "ok" and not _did:
                 cls = zero_rc_class(False)     # CO-169（G-1）：rc==0 但未写出任何受控产物 ⇒ 立即停机
             rcs[step] = {"rc": r.returncode, "class": cls, "did_work": _did,
                          "declared_changed": sorted(Path(k).relative_to(K2).as_posix()
                                                     for k in _decl_set if _w_before.get(k) != _w_after.get(k)),
-                         "stray_changed": _stray}
+                         "stray_changed": _stray,
+                         "uncontrolled_writes": [c for c in _sh_changes if not shadow_exempt(c)]}
+            _sh_prev = _sh_cur
             if cls not in ("ok", "expected_nonzero"):
                 unexpected = {"step": step, "rc": r.returncode, "class": cls,
                               "stderr_tail": (r.stderr or "")[-600:]}
@@ -1007,7 +1088,7 @@ def main(argv=None) -> int:
             converged = True
             break
         prev = cur
-    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-188.1",
+    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-189.1",
               "nature": "规范复现序机判执行器（rc 策略 + 真收敛判定）；报告落 .archer_tmp/ 且**不被 boundary 引用**（避免不动点）",
               "order": ORDER, "expected_nonzero": EXPECTED_NONZERO,
               "checks": checks, "iterations": iterations, "abort": abort, "converged": converged,
