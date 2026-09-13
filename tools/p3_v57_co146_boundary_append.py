@@ -2248,8 +2248,72 @@ def main() -> int:
         txt = re.sub(re.escape(MARK68) + r"[\s\S]*?(?=\n## |\Z)", body68, txt, count=1)
     else:
         txt = txt.rstrip("\n") + "\n\n" + body68
+    # ── §69 CO-196（L2 自裁 · 验证循环修正 + 扩扰动量） ────────────────────────
+    MARK69 = "## 69. CO-196"
+    _rc69 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    _ord196 = _ord190          # 步集/序列不变（50 次）
+    _orc = K2 / "tools/p3_v57_co195_fixpoint_uniqueness_oracle.py"
+    sec69 = [MARK69 + "（**L2 自裁 · 验证循环修正 + 扩扰动量**）", "",
+             "- **J-1（medium）·验证循环 ⇒ 不可恢复锁死**：CO-195 的静态齿 **t28** 以 oracle **证据件的 `verdict`** 为输入，而 oracle 自身"
+             "**前置「先结算」**（须规范序成功跑通），规范序的静态前置**又包含 t28** ⇒ 证据件一旦 FAIL（或损坏/缺失）即：t28 拒 ⇒ "
+             "`aborted=static_precheck_failed` ⇒ oracle 无法运行 ⇒ **永久无法自愈**（须人工改记录）。**实测复现**：某次 oracle FAIL 后，"
+             "`--check` t28=False、order 报 `static_precheck_failed`、oracle 连跑 **1.7s** 即 `t00_settle_converged=False`（全部案牙齿 False）。"
+             "属「**验证者以被验证证据为前置**」反模式。",
+             "- **J-2（low）·单扰动量覆盖面不足（触发达成）**：z60 §4 已裁定「co195 只扰一个扰动量 ⇒ 未覆盖的路径相关性须扩扰动量；"
+             "触发 = 出现新的自指/链式 pin 写法」。该触发**已发生** —— CO-195 的 I-2（oracle 证据自指 + §68 误 pin 可变件）正是自指/链式 pin 实例，"
+             "而单扰动量（仅登记簿 counts）无法在扰动实验内暴露该类。",
+             "- **处置**：① runner 升 **CO-196.2** —— t28 改**结构性**判据 `oracle_tool_ok(path)`（**只判工具存在 + 可编译**，**不读证据件**）"
+             "+ **逐分支可证伪负控**（缺件 / 语法错各一，见 J-4）；证据件 PASS 由 oracle 自身与复核清单承载。② oracle 扩为**多扰动量 3 案** —— A 登记簿 `meta.counts`；"
+             "B **单个 ORDER 步自持记录**注入；C **双件同时**注入；每案独立要求「收敛 rc=0 + 目标件**逐字节**复原 + 排除自身快照复原」，"
+             "**任一案失败即停**；牙齿 8 项；逐案 `finally` 无条件复原。",
+             "- **J-3（low）·证据件仍含自指字段 ⇒ 非幂等（I-2 同族更深层）**：I-2 只修**判据快照**，却仍在记录里落盘 "
+             "`sha_incl_self = snapshot()`（**含证据件自身**）⇒ 记录内容依赖自身字节 ⇒ **非幂等**（实测连跑 `3f1f9b37869f93ea` → `35549fe1c938139b`）；"
+             "因该件不入 pin 表而不破收敛，但**证据不可复现、误导复核**。处置：移除该字段（含自身的 sha 一律不落盘），只落**布尔** `t06` 结论 ⇒ 连跑恒 `5d8f953c12dafba0`（幂等）。",
+             "- **J-4（low）·t28 合成负控**恒真**（不可证伪）**（续接会话自捕获）：J-1 声称「附可证伪负控（不存在 / 语法错 ⇒ False）」，"
+             "实现却是 `not oracle_tool_ok(tools/__bad_oracle__.py)` —— 该文件在任何规范态下**都不存在**（无序内步创建）⇒ 该控只**重复**"
+             "「缺件 ⇒ False」分支（FileNotFoundError），**语法错分支（SyntaxError）从未被行使** ⇒ 声称的可证伪不成立。处置：新增**纯内存**判据 "
+             "`src_compiles(src, name)`（`compile()`，**不触盘**），t28 改**逐返回路径**各一控：缺件 `not oracle_tool_ok(<不存在>)`、"
+             "**语法错** `not src_compiles(<非法源>)`、正控 `src_compiles(<合法源>)`；`oracle_tool_ok` 复用 `src_compiles`。",
+             "- **J-5（low）·处置工具注解 upsert 被存在性守卫吞掉**（续接会话自捕获）：`co196_findings_disposition.py` 以「CO-196 标记 ∈ updated_by?」"
+             "为守卫追加注解 ⇒ 注解文本变更（+2 → +3）后**不重写** ⇒ `meta.updated_by` **停留在旧文本**（实测 3 条 co196 条目而注解仍称「+2」）。"
+             "处置：改**可重入** upsert（trim 旧 CO-196 注解段 + append 现注解）⇒ 幂等且注解恒与 `ADD` 一致。",
+             f"- **登记簿**：+5（`co196:J-1`(medium) / `J-2`,`J-3`,`J-4`,`J-5`(low)，全 CLOSED；**{_rc69['total']} 项 / OPEN {_rc69['OPEN']}**）。",
+             "- **实测（本件证据）**：3 案 `injection_effective` / `order_converged` / `targets_byte_restored` / `snapshot_restored` **全 True**"
+             "（`sha_canon`=`59772fb78183d518`）；修后同一 FAIL 证据件下 `--check` 全 True、order 正常跑通 ⇒ oracle **可自愈**；"
+             "`--check` **t01..t28 全 True（30 项）**。证据件 `m13_v57_co195_fixpoint_uniqueness.json` 仍**不入 pin 表**（R-CO195-0）。",
+             "",
+             "> **R-CO196-1**（红线）：**静态闸不得以被验证证据为输入**（禁验证循环）—— `--check` 只判**结构性事实**（文件存在/可编译/集合关系）；"
+             "证据件内容（verdict / sha）一律不作 `--check` 输入；否则证据 FAIL 即锁死验证链。",
+             "> **R-CO196-1b**：证据/报告类工件**不得落盘任何含自身的 sha**（自指字段一律换成布尔结论），并须**逐案验证幂等**（连跑记录 sha 不变）。",
+             "> **R-CO196-4**：合成正/负控须与被测判据的**每条返回路径一一对应**（缺件 / 语法错 / 类型错 各一）—— "
+             "**不得以「不存在的路径」冒充某一分支**（恒真控）；且 `--check` 类静态判据须**零落盘副作用**。",
+             "> **R-CO196-5**：meta 注解类 upsert 须**可重入**（先 trim 旧注解段再 append 现注解），使重复运行**幂等**且**自述恒与条目实况一致**；"
+             "不得依赖「标记存在即跳过」。",
+             "> **R-CO196-2**：不动点唯一性 oracle 须**多扰动量**（≥ 跨件 pin 链 + 单步自持记录 + 双件交互），逐案独立判「收敛 + 逐字节复原 + 快照复原」，"
+             "任一案失败即停；新增扰动量须入 `CASES`。",
+             "> **R-CO196-3**（复现序，取代 R-CO195-2；**步集/序列不变，序内出现 50 次**）：规范复现序 = `" + _ord196 + "`，"
+             "**循环至 sha 稳定**（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1 "
+             "+ R-CO175-1 + R-CO176-1/2 + R-CO177-1 + R-CO178-1 + R-CO179-1/2 + R-CO180-1/2 + R-CO181-1/2 + R-CO182-1 "
+             "+ R-CO183-1 + R-CO184-1 + R-CO185-1/2 + R-CO186-1 + R-CO187-1/2/3 + R-CO188-1 + R-CO189-1 + R-CO190-1 "
+             "+ R-CO191-1 + R-CO192-1 + R-CO193-1/2/3/4 + R-CO194-1/2 + R-CO195-0/1 + R-CO196-1/2/4/5）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows69 = [("工具 `p3_v57_co164_order_runner.py`（CO-196.2 / t28 结构性 + J-4 逐分支可控）",
+                K2 / "tools/p3_v57_co164_order_runner.py"),
+               ("工具 `p3_v57_co195_fixpoint_uniqueness_oracle.py`（多扰动量 3 案 + 8 牙齿）", _orc),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc69['total']} 项 / OPEN {_rc69['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows69:
+        if pth.exists():
+            sec69.append(f"| {label} | `{s16(pth)}` |")
+    sec69.append("")
+    body69 = "\n".join(sec69)
+    if MARK69 in txt:
+        txt = re.sub(re.escape(MARK69) + r"[\s\S]*?(?=\n## |\Z)", body69, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body69
+    txt = txt.replace("W3 Boundary **v2.40**", "W3 Boundary **v2.41**")
     txt = txt.replace("W3 Boundary **v2.39**", "W3 Boundary **v2.40**")
-    txt = txt.replace("W3 Boundary **v2.38**", "W3 Boundary **v2.39**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
     return 0

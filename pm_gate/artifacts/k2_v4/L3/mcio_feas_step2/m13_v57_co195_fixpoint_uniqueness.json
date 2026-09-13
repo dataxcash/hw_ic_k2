@@ -1,47 +1,76 @@
 {
  "artifact": "m13_v57_co195_fixpoint_uniqueness",
  "schema": 1,
- "revision": "CO-195",
- "nature": "固定点唯一性（路径无关）oracle：扰动启动 ⇒ 收敛须复原规范态（CO-151 失效模式的直接判据）",
- "target_repro_order": "R-CO195-2（步集/序列不变）",
- "snapshot_scope": "watch_paths() - {本记录}（CO-195 I-2：自指防护，判据不含本证据件）",
- "perturbation": {
-  "artifact": "pm_gate/artifacts/k2_v4/L2/input_defect_register_v1.json",
-  "field": "meta.counts",
-  "canonical": {
-   "SPEC_DEFECT": 5,
-   "PROVED_THRESHOLD": 5,
-   "TOOL_DEFECT": 113,
-   "IMPLEMENTATION_DEVIATION": 4,
-   "OPEN": 0,
-   "total": 127
+ "revision": "CO-196",
+ "nature": "固定点唯一性（路径无关）oracle：**多扰动量**（3 案）扰动启动 ⇒ 收敛须复原规范态（CO-151 失效模式的直接判据）",
+ "trigger": "CO-196：CO-195 的 I-2（oracle 证据自指）即「自指/链式 pin 写法」实例 ⇒ 已登记的扩扰动量触发条件达成",
+ "snapshot_scope": "watch_paths() - {本记录}（自指防护，判据不含本证据件）",
+ "precondition": "先结算（t00）：工作树须已收敛为不动点",
+ "sha_canon": "6b06fb23aa9c39e2",
+ "cases": [
+  {
+   "id": "A_register_counts",
+   "why": "登记簿 meta.counts（跨件 pin 链最敏感）",
+   "targets": [
+    "pm_gate/artifacts/k2_v4/L2/input_defect_register_v1.json"
+   ],
+   "sha_perturbed": "4ccf3af31f8a16f4",
+   "injection_effective": true,
+   "order_rc": 0,
+   "order_converged": true,
+   "targets_byte_restored": {
+    "/home/fila/jqdDev_2025/ic_hw/k2/pm_gate/artifacts/k2_v4/L2/input_defect_register_v1.json": true
+   },
+   "snapshot_restored": true,
+   "restored": true
   },
-  "injected": {
-   "total": 999,
-   "OPEN": 7
+  {
+   "id": "B_step_record",
+   "why": "单个 ORDER 步自持记录（步内全量重写 ⇒ 应自愈）",
+   "targets": [
+    "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_co146_impedance_table.json"
+   ],
+   "sha_perturbed": "0e7dc6e4246f52d2",
+   "injection_effective": true,
+   "order_rc": 0,
+   "order_converged": true,
+   "targets_byte_restored": {
+    "/home/fila/jqdDev_2025/ic_hw/k2/pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_co146_impedance_table.json": true
+   },
+   "snapshot_restored": true,
+   "restored": true
+  },
+  {
+   "id": "C_double",
+   "why": "同时扰动（两件交互）",
+   "targets": [
+    "pm_gate/artifacts/k2_v4/L2/input_defect_register_v1.json",
+    "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_co146_impedance_table.json"
+   ],
+   "sha_perturbed": "888e2c17099a81dc",
+   "injection_effective": true,
+   "order_rc": 0,
+   "order_converged": true,
+   "targets_byte_restored": {
+    "/home/fila/jqdDev_2025/ic_hw/k2/pm_gate/artifacts/k2_v4/L2/input_defect_register_v1.json": true,
+    "/home/fila/jqdDev_2025/ic_hw/k2/pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_co146_impedance_table.json": true
+   },
+   "snapshot_restored": true,
+   "restored": true
   }
- },
- "sha_canon": "36be583feb899e2c",
- "sha_perturbed": "eb5f7a91373ab1e2",
- "sha_after": "36be583feb899e2c",
- "settle": {
-  "rc": 0,
-  "converged": true,
-  "iterations": 2
- },
- "order_rc": 0,
- "order_converged": true,
- "order_iterations": 2,
+ ],
+ "aborted_case": null,
  "teeth": {
   "t00_settle_converged": true,
-  "t01_injection_effective": true,
-  "t02_order_converged_rc0": true,
-  "t03_fixpoint_restored": true,
-  "t04_register_byte_restored": true,
+  "t01_injections_effective": true,
+  "t02_A_converged_and_restored": true,
+  "t03_B_converged_and_restored": true,
+  "t04_C_converged_and_restored": true,
   "t05_discriminates_path_dependence": true,
   "t06_self_exclusion_nonvacuous": true,
+  "t07_no_residual_perturbation": true,
   "teeth_ok": true
  },
  "verdict": "PASS",
- "redline": "只扰动受控件（登记簿 counts）且 finally 无条件复原；不改冻结四源/板/SPEC；本记录不被 ORDER 改写。"
+ "redline": "只扰动**受控**件且逐案 `finally` 无条件复原；不改冻结四源/板/SPEC；本证据件**不入 pin 表**（R-CO195-0）。"
 }

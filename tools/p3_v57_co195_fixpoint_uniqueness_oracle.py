@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
-"""CO-195 — **固定点唯一性（路径无关）oracle**（L2 自裁）。
+"""CO-195/CO-196 — **固定点唯一性（路径无关）oracle**（L2 自裁）。
 
-缘起：co120 的 P5「下游快照」判据为**键名启发式**（`*_sha16_after` / `*_current_sha16` / register|ledger 面），
-其真正要保证的**语义**性质是：文档化复现序的**不动点唯一**（CO-151 失效模式 = 「按序连跑两遍得**另一稳定不动点**，
-提交 pin 不可复现」）。键名判据无法直接判该性质，且值域判据经实测**不可行**（35 条记录内嵌**受控集**未来 sha，
-但其中绝大多数是**冻结历史件/自身产物**的合法 pin ⇒ 会误报）。
+缘起：co120 的 P5「下游快照」判据为**键名启发式**（廉价前置代理），其真正要保证的**语义**性质是：文档化复现序的
+**不动点唯一**（CO-151 失效模式 = 「按序连跑两遍得**另一稳定不动点**，提交 pin 不可复现」）。键名判据无法直接判该
+性质，且**值域判据经实测不可行**（35 条记录内嵌受控集未来 sha，但绝大多数是冻结历史件/自身产物的合法 pin ⇒ 误报）。
 本 oracle 直接判**语义性质**：从**扰动态**启动规范序，要求收敛回**与规范态逐字节相同**的不动点。
 
-方法（**自我保护**）：① 取规范态 `snapshot()` 与登记簿字节；② 注入登记簿 `meta.counts`（越界值）；③ 跑规范序
-（`--max-iter`）；④ 要求 rc=0 + converged + `snapshot()` 复原 + 登记簿**逐字节**复原；⑤ `finally` 无条件复原
-（不掉入扰动态）。含**判别力**合成控（唯一/非唯一不动点模型）。
+CO-196（**触发已发生**：CO-195 的 I-2 缺陷即「自指/链式 pin 写法」实例 ⇒ 扩扰动量）：**多扰动量**（3 案）
+—— A 登记簿 `meta.counts`；B 单个 ORDER 步记录注入；C **同时**注入（交互）。每案独立要求「收敛 + 目标件逐字节复原 +
+排除自身快照复原」，且**任一案失败即停**（后续案不再在非规范态上开跑）。
+
+方法（**自我保护**）：先**结算**（工作树先收敛为不动点，再作扰动实验）；每案 `finally` 无条件复原该案目标件，
+**绝不留在扰动态**。含**判别力**合成控（唯一 vs 非唯一不动点模型）。
 CLI: python3 tools/p3_v57_co195_fixpoint_uniqueness_oracle.py [--plan] [--max-iter 5]
 """
 from __future__ import annotations
@@ -19,7 +21,16 @@ from pathlib import Path
 K2 = Path(__file__).resolve().parents[1]
 RUNNER = K2 / "tools/p3_v57_co164_order_runner.py"
 REG = K2 / "pm_gate/artifacts/k2_v4/L2/input_defect_register_v1.json"
-REC = K2 / "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_co195_fixpoint_uniqueness.json"
+STEP2 = K2 / "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2"
+REC = STEP2 / "m13_v57_co195_fixpoint_uniqueness.json"
+IMP = STEP2 / "m13_v57_co146_impedance_table.json"        # ORDER 步（co146_impedance_table）自持记录：每次全量重写
+BOGUS_COUNTS = {"SPEC_DEFECT": 999, "PROVED_THRESHOLD": 999, "TOOL_DEFECT": 999,
+                "IMPLEMENTATION_DEVIATION": 999, "OPEN": 7, "total": 999}
+CASES = (
+    {"id": "A_register_counts", "why": "登记簿 meta.counts（跨件 pin 链最敏感）", "targets": (REG,)},
+    {"id": "B_step_record", "why": "单个 ORDER 步自持记录（步内全量重写 ⇒ 应自愈）", "targets": (IMP,)},
+    {"id": "C_double", "why": "同时扰动（两件交互）", "targets": (REG, IMP)},
+)
 
 
 def _load(name: str, path: Path) -> types.ModuleType:
@@ -33,15 +44,24 @@ def _s16(b: bytes) -> str:
     return hashlib.sha256(b).hexdigest()[:16]
 
 
-def _snap_excl_self(cur, rec: Path, paths) -> str:
-    """CO-195（I-2）：**排除本记录自身**的受控集快照（防自指：本记录写回后自身字节即变 ⇒
-    若把自身计入，记录的 `sha_canon` **永不等于**其所在状态的实际 sha，且 §68 pin 随记录改写漂移）。"""
+def _snap_excl(cur, rec: Path) -> str:
+    """判据快照 = `watch_paths()` **排除本记录自身**（CO-195 I-2：防自指 —— 本记录写回后自身字节即变，
+    若计入则记录内的 `sha_canon` 永不等于其所在状态的实际 sha，且 pin 随记录改写漂移）。"""
     h = hashlib.sha256()
-    for p in paths:
+    for p in cur.watch_paths():
         if Path(p) == rec:
             continue
         h.update(Path(p).read_bytes() if Path(p).exists() else b"<missing>")
     return h.hexdigest()[:16]
+
+
+def _run_order(cur, max_iter: int):
+    r = subprocess.run([str(cur.PY), str(RUNNER), "--max-iter", str(max_iter)],
+                       cwd=K2, capture_output=True, text=True)
+    try:
+        return r.returncode, json.loads(r.stdout)
+    except Exception:
+        return r.returncode, None
 
 
 def _fixpoint(fn, start, n: int = 300):
@@ -54,95 +74,106 @@ def _fixpoint(fn, start, n: int = 300):
     return x
 
 
-def _run_order(cur, max_iter: int):
-    """跑规范序一次，返回 (rc, stdout_json|None)。"""
-    r = subprocess.run([str(cur.PY), str(RUNNER), "--max-iter", str(max_iter)],
-                       cwd=K2, capture_output=True, text=True)
-    try:
-        return r.returncode, json.loads(r.stdout)
-    except Exception:
-        return r.returncode, None
-
-
 def uniqueness_discriminates() -> bool:
-    """判别力负控：同一判据（两起点收敛值比较）须**唯一**判 True、**非唯一**判 False。"""
-    uniq = lambda x: 42                       # 恒定收敛 ⇒ 唯一不动点
-    nonuniq = lambda x: (x if x in (0, 1) else 0)   # 两个不动点 {0, 1} ⇒ 路径相关
+    """判别力负控：同一判据（两起点收敛值比较）须对**唯一**判 True、对**非唯一**（两不动点）判 False。"""
+    uniq = lambda x: 42
+    nonuniq = lambda x: (x if x in (0, 1) else 0)
     return (_fixpoint(uniq, 3) == _fixpoint(uniq, 7)) and \
            (_fixpoint(nonuniq, 0) != _fixpoint(nonuniq, 1))
 
 
+def _inject(target: Path) -> None:
+    """按目标件类型注入：登记簿改 `meta.counts`；ORDER 步记录加探针键（步将全量重写 ⇒ 应消失）。"""
+    d = json.loads(target.read_text(encoding="utf-8"))
+    if target == REG:
+        d["meta"]["counts"] = dict(BOGUS_COUNTS)
+    else:
+        d["__probe_196__"] = "INJECTED"
+    target.write_text(json.dumps(d, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--plan", action="store_true", help="只打印注入计划（不改盘、不跑序）")
+    ap.add_argument("--plan", action="store_true", help="只打印扰动计划（不改盘、不跑序）")
     ap.add_argument("--max-iter", type=int, default=5)
     a = ap.parse_args(argv)
 
     cur = _load("co164_runner", RUNNER)
-    # CO-195（前置）：**先结算** —— 若工作树处于「改动后未收敛」中途态，首次跑序会落到**另一**稳定态；
-    # 本 oracle 的自变量是「扰动态 vs 规范态」，故须先把规范态结算成不动点，再作扰动实验（否则测的是结算，不是路径无关）。
-    settle_rc, settle_json = _run_order(cur, a.max_iter)
-    canon_bytes = REG.read_bytes()
-    canon = json.loads(canon_bytes.decode())
-    canon_counts = canon["meta"]["counts"]
-    wpaths = cur.watch_paths()
-    # CO-195（I-2）：判据快照**排除本记录自身**（自指防护）；`sha_incl` 仅作「排除非空转」证据
-    sha_canon = _snap_excl_self(cur, REC, wpaths)
-    sha_incl = cur.snapshot()
-
     if a.plan:
-        print(json.dumps({"mode": "plan", "register": str(REG.relative_to(K2)),
-                          "canonical_counts": canon_counts, "sha_canon": sha_canon,
-                          "inject": "meta.counts := 越界值（999 / OPEN 7）",
-                          "snapshot_scope": "watch_paths() - {本记录}"}, ensure_ascii=False))
+        print(json.dumps({"mode": "plan", "cases": [{"id": c["id"], "why": c["why"],
+                                                     "targets": [str(t.relative_to(K2)) for t in c["targets"]]}
+                                                    for c in CASES],
+                          "snapshot_scope": "watch_paths() - {本记录}",
+                          "precondition": "先结算（工作树须已收敛为不动点）"}, ensure_ascii=False, indent=1))
         return 0
 
-    t = {"t00_settle_converged": (settle_rc == 0 and bool(settle_json) and bool(settle_json.get("converged"))),
-         "t01_injection_effective": False, "t02_order_converged_rc0": False,
-         "t03_fixpoint_restored": False, "t04_register_byte_restored": False,
-         "t05_discriminates_path_dependence": uniqueness_discriminates(),
-         "t06_self_exclusion_nonvacuous": (not REC.exists()) or (sha_canon != sha_incl)}
-    sha_pert, sha_after, run_rc, run_json = None, None, None, None
-    try:
-        inj = json.loads(canon_bytes.decode())
-        inj["meta"]["counts"] = {"SPEC_DEFECT": 999, "PROVED_THRESHOLD": 999, "TOOL_DEFECT": 999,
-                                 "IMPLEMENTATION_DEVIATION": 999, "OPEN": 7, "total": 999}
-        REG.write_text(json.dumps(inj, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
-        sha_pert = _snap_excl_self(cur, REC, wpaths)
-        t["t01_injection_effective"] = (sha_pert != sha_canon)
+    t = {"t00_settle_converged": False, "t01_injections_effective": False,
+         "t02_A_converged_and_restored": False, "t03_B_converged_and_restored": False,
+         "t04_C_converged_and_restored": False, "t05_discriminates_path_dependence":
+             uniqueness_discriminates(), "t06_self_exclusion_nonvacuous": False,
+         "t07_no_residual_perturbation": False}
 
-        run_rc, run_json = _run_order(cur, a.max_iter)
-        t["t02_order_converged_rc0"] = (run_rc == 0 and bool(run_json) and bool(run_json.get("converged")))
+    # ① 先结算：工作树须已是规范序不动点，否则测的是「结算」而非「路径无关」
+    settle_rc, settle_json = _run_order(cur, a.max_iter)
+    t["t00_settle_converged"] = (settle_rc == 0 and bool(settle_json) and bool(settle_json.get("converged")))
 
-        sha_after = _snap_excl_self(cur, REC, wpaths)
-        t["t03_fixpoint_restored"] = (sha_after == sha_canon)
-        t["t04_register_byte_restored"] = (REG.read_bytes() == canon_bytes)
-    finally:
-        if REG.read_bytes() != canon_bytes:      # 自我保护：绝不留在扰动态
-            REG.write_bytes(canon_bytes)
+    canon_bytes = {str(p): p.read_bytes() for p in {tgt for c in CASES for tgt in c["targets"]}}
+    sha_canon = _snap_excl(cur, REC)
+    sha_incl = cur.snapshot()
+    t["t06_self_exclusion_nonvacuous"] = (not REC.exists()) or (sha_canon != sha_incl)
 
+    rows, all_inj_effective, aborted = [], True, None
+    for idx, case in enumerate(CASES):
+        tgts = list(case["targets"])
+        saved = {str(p): p.read_bytes() for p in tgts}
+        row = {"id": case["id"], "why": case["why"], "targets": [str(p.relative_to(K2)) for p in tgts]}
+        try:
+            for p in tgts:
+                _inject(p)
+            row["sha_perturbed"] = _snap_excl(cur, REC)
+            row["injection_effective"] = (row["sha_perturbed"] != sha_canon)
+            all_inj_effective = all_inj_effective and row["injection_effective"]
+            rc, j = _run_order(cur, a.max_iter)
+            row["order_rc"] = rc
+            row["order_converged"] = bool(j) and bool(j.get("converged"))
+            row["targets_byte_restored"] = {str(p): (p.read_bytes() == saved[str(p)]) for p in tgts}
+            row["snapshot_restored"] = (_snap_excl(cur, REC) == sha_canon)
+            row["restored"] = (row["order_converged"]
+                               and all(row["targets_byte_restored"].values())
+                               and row["snapshot_restored"])
+        finally:
+            for p in tgts:                      # 自我保护：每案无条件复原，绝不留在扰动态
+                if p.read_bytes() != saved[str(p)]:
+                    p.write_bytes(saved[str(p)])
+        rows.append(row)
+        t[f"t0{2 + idx}_{'ABC'[idx]}_converged_and_restored"] = row["restored"]
+        if not row["restored"]:
+            aborted = case["id"]
+            break
+    t["t01_injections_effective"] = all_inj_effective
+    t["t07_no_residual_perturbation"] = all(
+        p.read_bytes() == canon_bytes[str(p)] for c in CASES for p in c["targets"])
     teeth_ok = all(t.values())
+
     rec = {
-        "artifact": "m13_v57_co195_fixpoint_uniqueness", "schema": 1, "revision": "CO-195",
-        "nature": "固定点唯一性（路径无关）oracle：扰动启动 ⇒ 收敛须复原规范态（CO-151 失效模式的直接判据）",
-        "target_repro_order": "R-CO195-2（步集/序列不变）",
-        "snapshot_scope": "watch_paths() - {本记录}（CO-195 I-2：自指防护，判据不含本证据件）",
-        "perturbation": {"artifact": str(REG.relative_to(K2)), "field": "meta.counts",
-                         "canonical": canon_counts, "injected": {"total": 999, "OPEN": 7}},
-        "sha_canon": sha_canon, "sha_perturbed": sha_pert, "sha_after": sha_after,
-        "settle": {"rc": settle_rc, "converged": (settle_json or {}).get("converged"),
-                   "iterations": (settle_json or {}).get("iterations")},
-        "order_rc": run_rc, "order_converged": (run_json or {}).get("converged"),
-        "order_iterations": (run_json or {}).get("iterations"),
+        "artifact": "m13_v57_co195_fixpoint_uniqueness", "schema": 1, "revision": "CO-196",
+        "nature": "固定点唯一性（路径无关）oracle：**多扰动量**（3 案）扰动启动 ⇒ 收敛须复原规范态（CO-151 失效模式的直接判据）",
+        "trigger": "CO-196：CO-195 的 I-2（oracle 证据自指）即「自指/链式 pin 写法」实例 ⇒ 已登记的扩扰动量触发条件达成",
+        "snapshot_scope": "watch_paths() - {本记录}（自指防护，判据不含本证据件）",
+        "precondition": "先结算（t00）：工作树须已收敛为不动点",
+        # CO-196（J-3）：**不落盘任何含本记录自身的 sha** —— `sha_incl`（= snapshot() 含证据件自身）会使记录内容依赖
+        # 自身字节 ⇒ 记录**非幂等**（实测连跑 3f1f9b37869f93ea → 35549fe1c938139b）。自排除的**判据**在运行期算（t06），
+        # 只落**布尔结论**，不落原始自指 sha。
+        "sha_canon": sha_canon,
+        "cases": rows, "aborted_case": aborted,
         "teeth": {**t, "teeth_ok": teeth_ok},
         "verdict": "PASS" if teeth_ok else "FAIL_FIXPOINT_PATH_DEPENDENT_OR_ABORT",
-        "redline": "只扰动受控件（登记簿 counts）且 finally 无条件复原；不改冻结四源/板/SPEC；本记录不被 ORDER 改写。",
+        "redline": "只扰动**受控**件且逐案 `finally` 无条件复原；不改冻结四源/板/SPEC；本证据件**不入 pin 表**（R-CO195-0）。",
     }
     REC.write_text(json.dumps(rec, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
-    print(json.dumps({"verdict": rec["verdict"], "teeth": t,
-                      "sha_canon": sha_canon, "sha_perturbed": sha_pert, "sha_after": sha_after,
-                      "order_rc": run_rc, "order_converged": rec["order_converged"],
-                      "rec_sha16": _s16(REC.read_bytes())}, ensure_ascii=False, indent=1))
+    print(json.dumps({"verdict": rec["verdict"], "teeth": t, "cases": rows,
+                      "sha_canon": sha_canon, "rec_sha16": _s16(REC.read_bytes())},
+                     ensure_ascii=False, indent=1))
     return 0 if teeth_ok else 1
 
 

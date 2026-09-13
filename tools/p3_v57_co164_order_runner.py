@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CO-164/CO-167/CO-169/CO-174/CO-180/CO-181/CO-182/CO-183/CO-187/CO-188/CO-189/CO-190/CO-191/CO-192/CO-193/CO-194/CO-195 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
+"""CO-164/CO-167/CO-169/CO-174/CO-180/CO-181/CO-182/CO-183/CO-187/CO-188/CO-189/CO-190/CO-191/CO-192/CO-193/CO-194/CO-195/CO-196 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
 
 缘起（实测事故，CO-163）：`co146_boundary_append.py` 因 §37 文本里的 f-string 花括号语法错误**每次崩溃（rc=1）**，
 但收敛判定只看 boundary/记录 sha ⇒ sha 恒不变 ⇒ 报「CONVERGED」，边界 §37 实际从未写入、pin 表陈旧（co77/co135/co136 判 FAIL）。
@@ -27,8 +27,11 @@
   ⑩ CO-193（R-CO193-1/2，**声明↔实现绑定的可执行性**）：① `JUDGMENT_DOWNSTREAM` 下游声明须**可执行** —— 每条给被judged工件 basename，ref 须在序内**晚于**声明步（存在性）且 ref 步工具**确实读取**该工件，否则 fail-closed；② `EXPECTED_NONZERO` 证据须**本步绑定** —— `record` 须 ∈ `STEP_ARTIFACTS[step]`、`teeth_path` 须在记录内**可解析**。静态齿 **t26**。
   ⑪ CO-194（R-CO194-1/2，**基据↔判官 + 声明↔工具能力**）：① 每个**基据类别**须显式声明其**判官**（`BASIS_JUDGE_DECLARED`）并机判 —— 判官须在序内、须读被judged件、且**自身有**机判基据（否则 fail-closed；`register_consistency` 系 latent 类别，当前不可达但须绑定）；② `EXPECTED_NONZERO` 声明的 verdict 字面须出现在该步**工具源**（声明不得指向工具不可能产出的 verdict）。静态齿 **t27**。
   ⑫ CO-195（R-CO195-1，**固定点唯一性 oracle 绑定**）：规范序的**不动点唯一性（路径无关）**（CO-151 失效模式：按序连跑两遍得
-     **另一稳定不动点**）由 `tools/p3_v57_co195_fixpoint_uniqueness_oracle.py` **直接判**（扰动启动 ⇒ 收敛须复原规范态）；静态齿 **t28**
-     要求该 oracle 存在、可编译、且其记录 `verdict=PASS` + `teeth` 全 True（**语义闸纳入 `--check`**）。证据件本身**不入 pin 表**（内容随规范态变化）。
+     **另一稳定不动点**）由 `tools/p3_v57_co195_fixpoint_uniqueness_oracle.py` **直接判**（扰动启动 ⇒ 收敛须复原规范态）。
+     **CO-196（J-1）修正**：静态齿 **t28** 只判「oracle 工具**存在 + 可编译**」——**不得读其证据件**（`--check` 以被验证证据为输入会构成
+     **验证循环**：证据 FAIL ⇒ t28 拒 ⇒ 规范序静态前置失败 ⇒ oracle 无法跑 ⇒ 永久锁死；实测已复现）。证据件的 PASS 由 oracle 自身承载。
+     **CO-196（J-4）修正**：t28 的合成控须**逐返回路径**对应（缺件 → `oracle_tool_ok`；语法错 → 内存 `src_compiles`）——
+     以「不存在的路径」充作语法错控是**恒真**（仅重复缺件分支），故新增纯内存判据 `src_compiles()`。
 CLI:
   python3 tools/p3_v57_co164_order_runner.py [--check] [--max-iter 5]
 """
@@ -690,10 +693,29 @@ def all_verdicts_decision(step: str, verdicts=None) -> str:
     return "ok"
 
 
-def oracle_record_ok(rec) -> bool:
-    """CO-195（R-CO195-1）：oracle 证据件的**机判通过**判据（`verdict=PASS` 且 `teeth` 全 True）。"""
-    return (isinstance(rec, dict) and str(rec.get("verdict")) == "PASS"
-            and teeth_all_true(rec.get("teeth", {})) is True)
+def src_compiles(src: str, name: str = "<synthetic>") -> bool:
+    """CO-196（**J-4**）：源文本**可编译**判据（**纯内存**，不触盘、无副作用）。
+
+    供 t28 的**语法错分支**负控使用：以「不存在的路径」充当语法错控是**恒真**的反模式
+    （缺件走的是 `FileNotFoundError`，与语法错是**不同返回路径**）。"""
+    try:
+        compile(src, name, "exec")
+        return True
+    except Exception:
+        return False
+
+
+def oracle_tool_ok(path) -> bool:
+    """CO-195/CO-196（R-CO195-1 / R-CO196-1）：oracle **工具**可判定 —— 存在 + 可编译。
+
+    **只判工具本体，不读其证据件**：`--check` 若以被验证证据（oracle 记录 verdict）为输入，则证据 FAIL ⇒ t28 拒 ⇒
+    规范序静态前置失败 ⇒ oracle 无法运行 ⇒ 永久锁死（实测：上一案 FAIL 后 oracle 连跑 1.7s 即 `settle failed`）。
+    证据件的 PASS 由 oracle 自身 + 复核清单承载。"""
+    try:
+        p = Path(path)
+        return src_compiles(p.read_text(encoding="utf-8"), str(p))
+    except Exception:
+        return False
 
 
 def all_verdicts_gate(cls: str, step: str, verdicts=None) -> tuple:
@@ -1361,28 +1383,17 @@ def main(argv=None) -> int:
         and basis_judge_decision("x", {"judge": "J"}) == "declaration_incomplete"
         # 声明↔工具绑定负控：工具不可能产出的 verdict 不得通过
         and not declared_verdict_in_tool("co146_jlc_dfm_gate", {"verdict": "TOTALLY_BROKEN"}))
-    # CO-195（R-CO195-1）：固定点唯一性 oracle 存在 + 可编译 + 上次运行 PASS（语义闸纳入 --check）
+    # CO-195/CO-196（R-CO195-1 / R-CO196-1）：固定点唯一性 oracle 工具**存在 + 可编译** —— **不读其证据件**（禁验证循环）
     _oracle = K2 / "tools/p3_v57_co195_fixpoint_uniqueness_oracle.py"
-    _orec = STEP2 / "m13_v57_co195_fixpoint_uniqueness.json"
-    _oracle_compiles = False
-    if _oracle.exists():
-        try:
-            compile(_oracle.read_text(encoding="utf-8"), str(_oracle), "exec")
-            _oracle_compiles = True
-        except SyntaxError:
-            _oracle_compiles = False
-    try:
-        _od = json.loads(_orec.read_text(encoding="utf-8"))
-    except Exception:
-        _od = None
     checks["t28_fixpoint_uniqueness_oracle"] = (
-        _oracle_compiles and oracle_record_ok(_od)
-        and any(p == _orec for p in watch_paths())      # 属受控集（收敛可见；证据件本身**不入 pin 表**）
-        # 合成正/负控：PASS+全 True ⇒ True；FAIL / teeth False / 缺件 ⇒ False
-        and oracle_record_ok({"verdict": "PASS", "teeth": {"a": True, "teeth_ok": True}})
-        and not oracle_record_ok({"verdict": "FAIL", "teeth": {"a": True, "teeth_ok": True}})
-        and not oracle_record_ok({"verdict": "PASS", "teeth": {"a": False, "teeth_ok": False}})
-        and not oracle_record_ok(None))
+        oracle_tool_ok(_oracle)
+        # CO-196（J-4）：合成控须**逐返回路径可证伪**，且**与证据件内容无关**。
+        #   缺件分支（FileNotFoundError）→ `not oracle_tool_ok(<不存在>)`；
+        #   语法错分支（SyntaxError）→ `not src_compiles(<内存非法源>)` —— 用**内存**合成源，
+        #   不得以「不存在的路径」冒充语法错控（旧版恒真：该文件在任何规范态下都不存在）。
+        and not oracle_tool_ok(K2 / "tools/__no_such_oracle__.py")
+        and not src_compiles("def (:", "<synthetic_syntax_error>")
+        and src_compiles("x = 1", "<synthetic_ok>"))
     checks["t05_stability_oracle"] = (stable("x", "x") and not stable("x", "y") and not stable("", ""))
     # CO-164（t06）：执行器 ORDER 必须与 boundary 规范复现序**有序一致**（文档↔执行器防漂移）
     _bdy = boundary_order_steps()
@@ -1471,7 +1482,7 @@ def main(argv=None) -> int:
             converged = True
             break
         prev = cur
-    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-195.1",
+    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-196.1",
               "nature": "规范复现序机判执行器（rc 策略 + 真收敛判定）；报告落 .archer_tmp/ 且**不被 boundary 引用**（避免不动点）",
               "order": ORDER, "expected_nonzero": EXPECTED_NONZERO,
               "checks": checks, "iterations": iterations, "abort": abort, "converged": converged,
