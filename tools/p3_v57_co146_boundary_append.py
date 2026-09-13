@@ -3347,6 +3347,36 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body92
 
+
+    # ── §93 CO-220（L2 自裁 · 跨页 y 交错：rev-19 不动 + 触发） ──
+    MARK93 = "## 93. CO-220"
+    sec93 = [MARK93 + "（**L2 自裁 · 跨页 y 交错：rev-19 不动 + 触发**）", "",
+             "- **对象**：§77/§82 所记**唯一剩余 L2 自由度** =「**跨页 y 交错**」（lane 之 y 序跨页交错；须改几何、非旋钮可达）。属 **L2**（走廊分配 / 层分配 / 几何）⇒ 依 `LAYOUT_CONSTITUTION` 第二章由本会话**自裁**，不以「等外部输入」悬置。",
+             "- **裁定**：**rev-19 不启动该几何变更**，附**触发**。理由 = ① **驱动缺席**（现行定案 A=HDI **无需改设计**；交付件——板 / 打样包 37 payload / L5 三记录 / 全 pin 链——**完备且逐字节稳定**，唯一阻断为外部报价与 DFM 答复；几何变更将**取代**可下单交付态并使打样包与全部 pin 失效，CO-144 改板之教训）；"
+             "② **受益面窄且已行使**（该自由度只影响 B 路；B 之族上限 **≤24/32** 已由 CO-209 **直接行使**证，§82；A 不依赖 B）；③ 无驱动之「为证而证」不合宪（问题回模型；DRC/探针是核对不是驱动器）。",
+             "- **备择项**（皆 **rev 级**，故同此裁）：以该自由度救 B 至 32/32（若成立**可免除外部阻断**，改走标准通道）、层分配重指派以降 HDI 阶数（现需 **3** 次层压）。",
+             "- **触发**（满足其一即**立即开新 rev**，并以该几何变更为首动作）：**T1** = A 之 JLC advanced/HDI **DFM 答复否决**（或明示现行 3 阶/孔径不可制）⇒ 转救 B（仍不足则改拓扑 = **L1**，升级 owner）；**T2** = 报价显示 A 代价不可接受**且** B 被救至 32/32 之概率非零 ⇒ 先对该几何族做**直接行使**（承 R-CO209-1）。",
+             "- **边界（诚实）**：本裁定**不**声称「跨页 y 交错无益」；仅裁「**rev-19 无驱动、不以此代价开新 rev**」。该自由度**保留**，触发即用。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows93 = [("裁定 `L2_RULING_cross_page_y_interleave_v1.md`", L2 / "L2_RULING_cross_page_y_interleave_v1.md"),
+               ("交付板 `k2_v4_8L.l4.kicad_pcb`（本裁定**未改**）", K2 / "k2_v4_8L.l4.kicad_pcb"),
+               ("runner `p3_v57_co164_order_runner.py`", K2 / "tools/p3_v57_co164_order_runner.py")]
+    for label, pth in _rows93:
+        if pth.exists():
+            sec93.append(f"| {label} | `{s16(pth)}` |")
+    sec93.append("")
+    sec93.append("> **R-CO220-1**：L2 自由度之「**不动**」须以**自裁 + 触发**落 boundary；**禁**以「等外部输入/等 owner」形式**悬置**（承第二章定层裁定）。")
+    sec93.append("")
+    sec93.append("> **序不变**：本件未改步骤集/序列（承 §82 之 R-CO209-2）。")
+    sec93.append("")
+    body93 = "\n".join(sec93)
+    if MARK93 in txt:
+        txt = re.sub(re.escape(MARK93) + r"[\s\S]*?(?=\n## |\Z)", body93, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body93
+
+    txt = txt.replace("W3 Boundary **v2.60**", "W3 Boundary **v2.61**")
     txt = txt.replace("W3 Boundary **v2.59**", "W3 Boundary **v2.60**")
     txt = txt.replace("W3 Boundary **v2.58**", "W3 Boundary **v2.59**")
     txt = txt.replace("W3 Boundary **v2.57**", "W3 Boundary **v2.58**")
