@@ -313,7 +313,8 @@ def main() -> int:
     CARD.write_text("\n".join(lines), encoding="utf-8")
     print(json.dumps({"verdict": verdict, "n_findings": n, "findings": [f["id"] for f in findings],
                       "rec_sha16": s16(REC), "card_sha16": s16(CARD)}, ensure_ascii=False, indent=1))
-    return 0
+    # CO-185（R-CO185-1）：复评步**退出码须反映 verdict**（PASS / PASS_WITH_FINDINGS 为通过档；其余停机）
+    return 0 if verdict in ("PASS", "PASS_WITH_FINDINGS") else 1
 
 
 if __name__ == "__main__":

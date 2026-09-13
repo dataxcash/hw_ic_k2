@@ -1734,6 +1734,54 @@ def main() -> int:
         txt = re.sub(re.escape(MARK57) + r"[\s\S]*?(?=\n## |\Z)", body57, txt, count=1)
     else:
         txt = txt.rstrip("\n") + "\n\n" + body57
+    # ── §58 CO-185（复评步 rc↔verdict 耦合 + 非 PASS 类别显式化） ─────────────
+    MARK58 = "## 58. CO-185"
+    _rc58 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    _ord185 = _ord184          # 步集/序列不变（50 次）
+    sec58 = [MARK58 + "（**L2 自裁 · 退出码语义完整性**）", "",
+             "- **G-1（medium）·复评步 rc 不反映 verdict**：`co159`/`co166`/`co172` 三个非执行者复评步**恒 `return 0`**"
+             "（CO-159 F-11 的「退出码须反映 verdict」只落到闸，漏了复评步）⇒ 其复评结论若为 FAIL / REJECT，"
+             "规范序仍判**收敛**（假通过方向）。**处置**：三件改 "
+             "`return 0 if verdict in (\"PASS\", \"PASS_WITH_FINDINGS\") else 1`（与 `co135`/`co136` 同口径；"
+             "现行三件均 PASS_WITH_FINDINGS，行为不变）。",
+             "- **G-2（low）·「非 PASS 但 rc==0」类别静默**：`co146_pm_eval` 的热结论 verdict=**FAIL**（U6 热超限，"
+             "属**已登记结论** co148）而 rc=0 —— 该类别（步自身通过、记录承载已登记缺陷）此前**无显式声明**，"
+             "审阅者易误判为漏洞，且**新增同类步不会被截**。**处置**：runner 升 **CO-185.1** —— 增 "
+             "`PASS_VERDICTS`（通过档）+ `DECLARED_NONPASS_OK`（**显式声明**：`why` + `register` + `key_path`）"
+             "+ 纯判据 `nonpass_decision()` + 运行时停机类 **`undeclared_nonpass_verdict`** + 静态齿 **t19**"
+             "（白名单/声明集**互斥**、依据齐备、合成正负控、现状全序零未声明）。",
+             f"- **登记簿**：+2（`co185:G-1`/`co185:G-2`，全 CLOSED；{_rc58['total']} 项 / OPEN {_rc58['OPEN']}）。",
+             "",
+             "> **R-CO185-1**：**复评/结论步**的退出码须反映其 `verdict`（`PASS`/`PASS_WITH_FINDINGS` 为通过档）；"
+             "禁恒 `return 0`。",
+             "> **R-CO185-2**：「**非 PASS 但 rc==0**」须在 `DECLARED_NONPASS_OK` **显式声明**（须给 `why` + 登记依据 `register`）；"
+             "未声明 ⇒ 停机（`undeclared_nonpass_verdict`）；t19 机判（含合成正负控）。",
+             "> **R-CO185-3**（复现序，取代 R-CO184-2；**步集/序列不变，序内出现 50 次**）：规范复现序 = `" + _ord185 + "`，"
+             "**循环至 sha 稳定**（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1 "
+             "+ R-CO175-1 + R-CO176-1/2 + R-CO177-1 + R-CO178-1 + R-CO179-1/2 + R-CO180-1/2 + R-CO181-1/2 + R-CO182-1 "
+             "+ R-CO183-1 + R-CO184-1 + R-CO185-1/2）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows58 = [("工具 `p3_v57_co164_order_runner.py`（CO-185.1 / PASS_VERDICTS + DECLARED_NONPASS_OK + nonpass_decision + t19）",
+                K2 / "tools/p3_v57_co164_order_runner.py"),
+               ("工具 `p3_v57_co159_rev19_co156_co157_co158_review.py`（rc↔verdict）",
+                K2 / "tools/p3_v57_co159_rev19_co156_co157_co158_review.py"),
+               ("工具 `p3_v57_co166_rev19_co159_co165_review.py`（rc↔verdict）",
+                K2 / "tools/p3_v57_co166_rev19_co159_co165_review.py"),
+               ("工具 `p3_v57_co172_rev19_co166_co171_review.py`（rc↔verdict）",
+                K2 / "tools/p3_v57_co172_rev19_co166_co171_review.py"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc58['total']} 项 / OPEN {_rc58['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows58:
+        if pth.exists():
+            sec58.append(f"| {label} | `{s16(pth)}` |")
+    sec58.append("")
+    body58 = "\n".join(sec58)
+    if MARK58 in txt:
+        txt = re.sub(re.escape(MARK58) + r"[\s\S]*?(?=\n## |\Z)", body58, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body58
+    txt = txt.replace("W3 Boundary **v2.29**", "W3 Boundary **v2.30**")
     txt = txt.replace("W3 Boundary **v2.28**", "W3 Boundary **v2.29**")
     txt = txt.replace("W3 Boundary **v2.27**", "W3 Boundary **v2.28**")
     txt = txt.replace("W3 Boundary **v2.26**", "W3 Boundary **v2.27**")
