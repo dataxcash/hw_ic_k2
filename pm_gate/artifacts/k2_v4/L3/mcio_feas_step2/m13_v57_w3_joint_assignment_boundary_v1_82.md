@@ -641,7 +641,7 @@ opt-in 旋钮 `CO10_IP3W` / `CO10_PDN_OBS` / `--order xasc` 已入库（默认�
 | 工具 `p3_v57_co143_escape_fan_3w_feasibility.py` | `51f532e026f3670e` |
 | 记录 `m13_v57_co143_escape_fan_3w_feasibility.json` | `0f9fd90cc0abd93c` |
 | 卡 `m13_v57_CO143_escape_fan_3w_feasibility.md` | `3f9e35914b01a95c` |
-| 探针 `p3_v57_co10_west_fan_probe.py`（+opt-in 3W/PDN 旋钮/xasc） | `d335ade502ceebcb` |
+| 探针 `p3_v57_co10_west_fan_probe.py`（+opt-in 3W/PDN 旋钮/xasc） | `d17ca2daae5fa330` |
 | 分配器 `p3_v57_co16_emit_allocation.py`（+CO16_IP3W 映射） | `64d75dd9f9d26875` |
 | 登记簿 `input_defect_register_v1.json`（定位更正；OPEN 保持） | `8913d40f36fe0c0e` |
 
@@ -669,7 +669,7 @@ CO-144 以**分带单调 carry**（带内 (corridor,band) 连续 + 处理序自�
 | L5 fab `m13_v57_l5_fab_record.json` | `791012e88b514faa` |
 | L5 SI `m13_v57_l5_si_pi_emc_record.json` | `261b58e745c67aea` |
 | 引擎 `p3_v57_w3_constructive.py`（CO16_ALLOC→v8 / W3-CN.42） | `481617515038dad5` |
-| 探针 `p3_v57_co10_west_fan_probe.py`（+carry/orientation） | `d335ade502ceebcb` |
+| 探针 `p3_v57_co10_west_fan_probe.py`（+carry/orientation） | `d17ca2daae5fa330` |
 | 分配器 `p3_v57_co16_emit_allocation.py`（+FAN_STRAT/PDN_OBS/ORDER 映射） | `64d75dd9f9d26875` |
 | 登记簿 `input_defect_register_v1.json`（该 TOOL_DEFECT **CLOSED**；OPEN 1 = F.Cu/owner） | `8913d40f36fe0c0e` |
 | 台账 `derived_value_ledger_v1.json`（as-built B.Cu ok；evidence pin 刷新） | `725b78b26752cd1d` |
@@ -1027,7 +1027,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 工具 `p3_v57_co124_input_selfcheck_gate.py`（rc 反映 verdict） | `446eac06ca0a90db` |
 | 工具 `p3_v57_co135_review_hygiene.py`（rc） | `827a49520c8e2cd5` |
 | 工具 `p3_v57_co136_gate_hygiene.py`（rc） | `a5b712e48119fdfb` |
-| 打样包 MANIFEST `L5/jlc_package/MANIFEST.json` | `28942d7e961c7ea0` |
+| 打样包 MANIFEST `L5/jlc_package/MANIFEST.json` | `c94199b8ec9d349c` |
 | 下单备注 `L5/jlc_package/ORDER_NOTES.md` | `b81087a701e6a2d6` |
 | 打样包记录 `m13_v57_co146_jlc_fab_package.json` | `aacdcba1b414d99b` |
 | 登记簿 `input_defect_register_v1.json`（145 项 / OPEN 0） | `8913d40f36fe0c0e` |
@@ -1108,7 +1108,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 |---|---|
 | 工具 `p3_v57_co163_binding_to_order_notes.py` | `d01c050fb1578c87` |
 | 工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.4 / t09+t09b+t10+t10b） | `0510b5dfa4941ad5` |
-| 打样包 MANIFEST `L5/jlc_package/MANIFEST.json` | `28942d7e961c7ea0` |
+| 打样包 MANIFEST `L5/jlc_package/MANIFEST.json` | `c94199b8ec9d349c` |
 | 下单备注 `L5/jlc_package/ORDER_NOTES.md` | `b81087a701e6a2d6` |
 | 记录 `m13_v57_co146_jlc_fab_package.json` | `aacdcba1b414d99b` |
 | 登记簿 `input_defect_register_v1.json`（145 项 / OPEN 0） | `8913d40f36fe0c0e` |
