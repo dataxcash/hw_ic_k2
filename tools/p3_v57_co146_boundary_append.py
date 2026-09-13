@@ -3396,6 +3396,36 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body94
 
+
+    # ── §95 CO-222（L2 自裁 · U6 域 GND via 阵列：散文建议 ⇒ 裁定 + 量化触发） ──
+    MARK95 = "## 95. CO-222"
+    sec95 = [MARK95 + "（**L2 自裁 · U6 域 GND 过孔阵列：散文建议升格为裁定 + 量化触发**）", "",
+             "- **对象**：`L5/jlc_package/ORDER_NOTES.md` §6 与 U6 热定案所载「另建议下一轮几何修订补强 U6 域 GND via 阵列」——**仅散文**（无裁定/触发/量）。属 **L2**（热机械 / 过孔策略 / 几何）⇒ 自体行使自裁。",
+             "- **现状**：定案 O2（30×30 铝散热片 + 1.0 ℃/W 垫 + ~2 m/s 风冷，`θJA_eff=11.0`）下四工况 Tj = 91.7 / 106.0 / 103.8 / **117.0** ℃（上限 120）⇒ 最重余量 **3.0 ℃**（薄）。",
+             "- **裁定**：① **rev-19 不改几何**（承 CO-220 之据：驱动缺席；交付件完备逐字节稳定；改板取代可下单交付态）；"
+             "② 建议**升格为条件动作** + **量化目标**：**T1** 首件实测 `Tj(U6) > 117.0 ℃` 或散热路径未按 O2 实施 ⇒ 立即开新 rev，"
+             "以「GND via 阵列使 `θJA_eff ≤ 9.5 ℃/W`（最重工况余量 ≥ 8 ℃）」为首动作（阵列密度/节距由热模型重跑定，禁拍脑袋）；"
+             "**T2** 若 U6 域几何因他因修订 ⇒ 同 rev 一并补阵（零边际成本）；③ 门限取 **117 ℃** 以留裕度。",
+             "- **边界（诚实）**：本件**未**做阵列之热-电耦合量化（须热模型重跑，属新 rev 前置）；仅把散文建议升格为**带门限与量化目标之动作**。阵列仅增 GND 缝合，不改信号层分配 ⇒ 不影响现行 SI/PDN 结论。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows95 = [("裁定 `L2_RULING_u6_gnd_via_array_v1.md`", L2 / "L2_RULING_u6_gnd_via_array_v1.md"),
+               ("U6 热定案 `L2_RULING_u6_thermal_mitigation_v2.md`", L2 / "L2_RULING_u6_thermal_mitigation_v2.md"),
+               ("交付板 `k2_v4_8L.l4.kicad_pcb`（本裁定**未改**）", K2 / "k2_v4_8L.l4.kicad_pcb")]
+    for label, pth in _rows95:
+        if pth.exists():
+            sec95.append(f"| {label} | `{s16(pth)}` |")
+    sec95.append("")
+    sec95.append("> **R-CO222-1**：裁定文件/随单内之**工程建议**若涉及几何或工艺动作，须以「**裁定 + 触发（含门限/量化目标）**」落入 boundary；**禁**以散文建议悬置（承 R-CO220-1）。")
+    sec95.append("")
+    sec95.append("> **序不变**：本件未改步骤集/序列（承 §82 之 R-CO209-2）。")
+    body95 = "\n".join(sec95)
+    if MARK95 in txt:
+        txt = re.sub(re.escape(MARK95) + r"[\s\S]*?(?=\n## |\Z)", body95, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body95
+
+    txt = txt.replace("W3 Boundary **v2.62**", "W3 Boundary **v2.63**")
     txt = txt.replace("W3 Boundary **v2.61**", "W3 Boundary **v2.62**")
     txt = txt.replace("W3 Boundary **v2.60**", "W3 Boundary **v2.61**")
     txt = txt.replace("W3 Boundary **v2.59**", "W3 Boundary **v2.60**")
