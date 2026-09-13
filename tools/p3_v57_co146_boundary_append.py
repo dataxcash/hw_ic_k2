@@ -1147,6 +1147,56 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body46
     txt = txt.replace("W3 Boundary **v2.17**", "W3 Boundary **v2.18**")
+    # ── §47 CO-174（复现序归因硬化：did_work 步本地化） ─────────────────────────
+    MARK47 = "## 47. CO-174"
+    _rc47 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    _ord174 = ("co146_impedance_table → co146_pm_eval → co146_ledger_add → co153_k9_domain_coverage → "
+               "co148_u6_datasheet_inputs → co148_thermal_ruling → co149_thermal_mitigation_derive → co147_l2_ruling → "
+               "co146_jlc_dfm_gate → co146_jlc_fab_package → co152_findings_disposition → co155_co154_findings_disposition → "
+               "co156_co154_open_disposition → co157_gate_hardening_3 → co158_l5_packet_selfcontained → "
+               "co159_rev19_co156_co157_co158_review → co160_co159_findings_disposition → co161_gap_hardening_4 → "
+               "co162_verdict_binding → co163_binding_to_order_notes → co166_rev19_co159_co165_review → "
+               "co167_co166_findings_disposition → co168_register_consistency → co169_step_output_oracle → co170_stackup_binding → "
+               "co171_order_notes_record_figures → co172_rev19_co166_co171_review → co173_co172_findings_disposition → "
+               "co174_step_artifact_attribution → co124_input_selfcheck_gate → co150_k9_domain_gate → "
+               "co146_boundary_append → co77_closure_declaration_sweep → co120_provenance_pin_gate → co135_review_hygiene → "
+               "co136_gate_hygiene → co78_layer_role_drift_gate → co81_project_rules_gate → co84_dru_domain_gate → "
+               "co95_in4_reachability → co98_reachability_status_report → co106_reference_plane_gate → co146_boundary_append")
+    sec47 = [MARK47 + "（**L2 自裁 · 复现序归因硬化**）", "",
+             "- **问题（CO-172 F-7 残余）**：`step_did_work` 的受控集是**全局** `watch_paths()` ⇒ 并发/他人写**任一**受控件"
+             "都会被误判为「本步做了事」（假通过方向）。",
+             "- **处置**：`p3_v57_co164_order_runner.py` 升 **CO-169.3** ——",
+             "  ① `STEP_ARTIFACTS`：**每步主产物集**（由实测探针逐步跑 ORDER **钉定**，非猜测；42 步无一步为空）；",
+             "  ② `_snap_watched(paths)` 参数化；执行循环中 `did_work` 归因**仅限本步声明集**（全局集仅保留给收敛 sha，R-CO165 不变）；",
+             "  ③ 报告增 `declared_changed` / `stray_changed`（后者 = 本步窗口内**非声明**受控件的变动证据）；",
+             "  ④ 牙齿 **t13**（每步声明完备 + ⊆ 全局受控集）/ **t13b**（步本地负控：非声明件变动不得归因本步）/ "
+             "**t13c**（共享件残余枚举一致）。",
+             "- **残余（如实登记）**：处置类 17 步的唯一主产物是**共享**登记簿（台账另被 4 步共享）⇒ 共享件上的他写仍可误判；"
+             "已显式枚举于 `SHARED_ARTIFACT_RESIDUAL` 并 t13c 机判（防静默遗忘）；彻底关闭须每步独立标记件（下轮候选）。",
+             f"- **登记簿**：+2（`co174:G-1/G-2`，全 CLOSED；{_rc47['total']} 项 / OPEN {_rc47['OPEN']}）。",
+             "",
+             "> **R-CO174-1**：复现序执行器的 `did_work` **归因**须**步本地**（仅本步声明的主产物集）；"
+             "以全局受控集代为背书**不成立**。共享主产物上的他写属**已登记残余**，须**显式枚举**且机判（禁静默遗忘）。",
+             "> **R-CO174-2**（复现序，取代 R-CO172-4；步骤集新增 co174）：规范复现序 = `" + _ord174 + "`，**循环至 sha 稳定**"
+             "（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows47 = [("工具 `p3_v57_co164_order_runner.py`（CO-169.3 / STEP_ARTIFACTS + 步本地归因 / 43 步）",
+                K2 / "tools/p3_v57_co164_order_runner.py"),
+               ("工具 `p3_v57_co174_step_artifact_attribution.py`",
+                K2 / "tools/p3_v57_co174_step_artifact_attribution.py"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc47['total']} 项 / OPEN {_rc47['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows47:
+        if pth.exists():
+            sec47.append(f"| {label} | `{s16(pth)}` |")
+    sec47.append("")
+    body47 = "\n".join(sec47)
+    if MARK47 in txt:
+        txt = re.sub(re.escape(MARK47) + r"[\s\S]*?(?=\n## |\Z)", body47, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body47
+    txt = txt.replace("W3 Boundary **v2.18**", "W3 Boundary **v2.19**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
     return 0

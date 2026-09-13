@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CO-164/CO-167/CO-169 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2 + R-CO169-1）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
+"""CO-164/CO-167/CO-169/CO-174 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
 
 缘起（实测事故，CO-163）：`co146_boundary_append.py` 因 §37 文本里的 f-string 花括号语法错误**每次崩溃（rc=1）**，
 但收敛判定只看 boundary/记录 sha ⇒ sha 恒不变 ⇒ 报「CONVERGED」，边界 §37 实际从未写入、pin 表陈旧（co77/co135/co136 判 FAIL）。
@@ -9,7 +9,10 @@
   ① 依 R-CO163-3 顺序逐步执行（子进程），rc 策略：`EXPECTED_NONZERO = {co146_jlc_dfm_gate}`（verdict=FAIL 属预期），
      其余任一步非零 ⇒ **立即停机**并报出门名/rc/stderr 尾（fail-fast，禁"继续跑完再说"）；
   ② 每轮迭代后比对受控 sha（boundary + 关键记录 + 台账/登记簿）；**仅当** rc 全合规**且** sha 逐轮稳定 ⇒ 判 CONVERGED；
-  ③ `--check` 只做静态体检：步骤文件存在 + 可编译 + rc 策略声明完备（零执行、零落盘），可作轻量 sanity。
+  ③ `--check` 只做静态体检：步骤文件存在 + 可编译 + rc 策略声明完备（零执行、零落盘），可作轻量 sanity；
+  ④ CO-174（R-CO174-1）：`did_work` 归因**仅限本步声明的主产物集**（非全局受控集）⇒ 并发/他人写**其它**受控件
+     不再被误判为「本步做了事」（关闭 CO-172 F-7 的假通过方向）；报告另记 `declared_changed` / `stray_changed` 证据。
+     全局受控集仍保留用于收敛 sha（R-CO165）；**残余如实登记**：共享主产物（台账/登记簿）上的并发写仍可误判。
 CLI:
   python3 tools/p3_v57_co164_order_runner.py [--check] [--max-iter 5]
 """
@@ -30,7 +33,7 @@ ORDER = ["co146_impedance_table", "co146_pm_eval", "co146_ledger_add", "co153_k9
          "co159_rev19_co156_co157_co158_review", "co160_co159_findings_disposition", "co161_gap_hardening_4",
          "co162_verdict_binding", "co163_binding_to_order_notes", "co166_rev19_co159_co165_review",
          "co167_co166_findings_disposition", "co168_register_consistency", "co169_step_output_oracle", "co170_stackup_binding", "co171_order_notes_record_figures",
-         "co172_rev19_co166_co171_review", "co173_co172_findings_disposition",
+         "co172_rev19_co166_co171_review", "co173_co172_findings_disposition", "co174_step_artifact_attribution",
          "co124_input_selfcheck_gate", "co150_k9_domain_gate",
          "co146_boundary_append", "co77_closure_declaration_sweep", "co120_provenance_pin_gate", "co135_review_hygiene",
          "co136_gate_hygiene", "co78_layer_role_drift_gate", "co81_project_rules_gate", "co84_dru_domain_gate",
@@ -41,13 +44,79 @@ EXPECTED_NONZERO = {
                            "why": "verdict=FAIL（DFM 两项阻塞）属预期；rc=1 即 R-CO158-3/R-CO159-4 生效"},
 }
 
+# ── CO-174（R-CO174-1）：**每步主产物集**（步本地归因；集合由实测探针逐步跑 ORDER 钉定，非猜测） ──
+_A = "pm_gate/artifacts/k2_v4/"
+_S2 = _A + "L3/mcio_feas_step2/"
+_A2 = _A + "L2/"
+_A5 = _A + "L5/jlc_package/"
+_REG = _A2 + "input_defect_register_v1.json"
+_LED = _A2 + "derived_value_ledger_v1.json"
+_SVG = _A5 + "03_stackup/JLC08161H_stackup.svg"
+STEP_ARTIFACTS = {
+    "co146_impedance_table": [_S2 + "m13_v57_co146_impedance_table.json"],
+    "co146_pm_eval": [_S2 + "m13_v57_co146_pm_eval.json"],
+    "co146_ledger_add": [_LED],
+    "co153_k9_domain_coverage": [_LED, _REG],
+    "co148_u6_datasheet_inputs": [_S2 + "m13_v57_co148_u6_ds320pr1601_inputs.json"],
+    "co148_thermal_ruling": [_LED, _REG, _S2 + "m13_v57_co148_thermal_ruling.json"],
+    "co149_thermal_mitigation_derive": [_LED, _REG, _S2 + "m13_v57_co149_u6_thermal_mitigation.json"],
+    "co147_l2_ruling": [_REG, _S2 + "m13_v57_co147_l2_ruling.json"],
+    "co146_jlc_dfm_gate": [_S2 + "m13_v57_co146_jlc8_capability.json", _S2 + "m13_v57_co146_jlc_dfm_gate.json"],
+    "co146_jlc_fab_package": [_S2 + "m13_v57_co146_jlc_fab_package.json",
+                              _A5 + "MANIFEST.json", _A5 + "ORDER_NOTES.md", _SVG],
+    "co152_findings_disposition": [_REG],
+    "co155_co154_findings_disposition": [_REG],
+    "co156_co154_open_disposition": [_REG],
+    "co157_gate_hardening_3": [_REG],
+    "co158_l5_packet_selfcontained": [_REG],
+    "co159_rev19_co156_co157_co158_review": [_S2 + "m13_v57_co159_rev19_co156_co157_co158_review.json"],
+    "co160_co159_findings_disposition": [_REG],
+    "co161_gap_hardening_4": [_REG],
+    "co162_verdict_binding": [_REG],
+    "co163_binding_to_order_notes": [_REG],
+    "co166_rev19_co159_co165_review": [_S2 + "m13_v57_co166_rev19_co159_co165_review.json"],
+    "co167_co166_findings_disposition": [_REG],
+    "co168_register_consistency": [_REG],
+    "co169_step_output_oracle": [_REG],
+    "co170_stackup_binding": [_REG],
+    "co171_order_notes_record_figures": [_REG],
+    "co172_rev19_co166_co171_review": [_S2 + "m13_v57_co172_rev19_co166_co171_review.json"],
+    "co173_co172_findings_disposition": [_REG],
+    "co174_step_artifact_attribution": [_REG],
+    "co124_input_selfcheck_gate": [_S2 + "m13_v57_co124_input_selfcheck_gate.json"],
+    "co150_k9_domain_gate": [_REG, _S2 + "m13_v57_co150_k9_domain_gate.json"],
+    "co146_boundary_append": [_S2 + "m13_v57_w3_joint_assignment_boundary_v1_82.md"],
+    "co77_closure_declaration_sweep": [_S2 + "m13_v57_co77_closure_declaration_sweep.json"],
+    "co120_provenance_pin_gate": [_S2 + "m13_v57_co120_provenance_pin_gate.json"],
+    "co135_review_hygiene": [_S2 + "m13_v57_co135_review_hygiene.json"],
+    "co136_gate_hygiene": [_S2 + "m13_v57_co136_gate_hygiene.json"],
+    "co78_layer_role_drift_gate": [_S2 + "m13_v57_co78_layer_role_drift_gate.json"],
+    "co81_project_rules_gate": [_S2 + "m13_v57_co81_project_rules_gate.json"],
+    "co84_dru_domain_gate": [_S2 + "m13_v57_co84_dru_domain_gate.json"],
+    "co95_in4_reachability": [_S2 + "m13_v57_co95_in4_reachability.json"],
+    "co98_reachability_status_report": [_S2 + "m13_v57_co98_reachability_status_report.json"],
+    "co106_reference_plane_gate": [_S2 + "m13_v57_co106_reference_plane_gate.json"],
+}
+# CO-174 残余（如实登记）：主产物**被多步共享**时，他人对该件的写仍会被误判为「本步做了事」。
+# 彻底关闭须每步写独立标记件（未做）；本表即该残余的**显式枚举**，t13c 机判防其被静默遗忘。
+SHARED_ARTIFACT_RESIDUAL = {
+    _LED: "共享主产物（co146_ledger_add / co153 / co148_thermal / co149）：他人写台账仍可误判",
+    _REG: "共享主产物（co152..co174 处置类 17 步）：他人写登记簿仍可误判",
+}
+
 
 def watch_paths() -> list:
-    """CO-165（t08）：受控 sha 覆盖**全部**规范序会写入的产物（边界 + 全部 co*.json 记录 + 台账/登记簿 + 打样包件）。"""
+    """CO-165（t08）：受控 sha 覆盖**全部**规范序会写入的产物（边界 + 全部 co*.json 记录 + 台账/登记簿 + 打样包件）。
+
+    CO-174：补入 `03_stackup` 叠层图 —— fab 包**直接生成**的制造输入件（此前仅被 boundary 表计 sha，
+    **未**纳入收敛受控集 ⇒ fab 步静默停写该图时收敛不可见）。文本副本（04/05/06_*，均为已受控源的拷贝）
+    不纳入，其一致性由 fab 牙齿 t07/t07b 把关。
+    """
     out = [STEP2 / "m13_v57_w3_joint_assignment_boundary_v1_82.md",
            L2 / "input_defect_register_v1.json", L2 / "derived_value_ledger_v1.json",
            K2 / "pm_gate/artifacts/k2_v4/L5/jlc_package/MANIFEST.json",
-           K2 / "pm_gate/artifacts/k2_v4/L5/jlc_package/ORDER_NOTES.md"]
+           K2 / "pm_gate/artifacts/k2_v4/L5/jlc_package/ORDER_NOTES.md",
+           K2 / "pm_gate/artifacts/k2_v4/L5/jlc_package/03_stackup/JLC08161H_stackup.svg"]
     out += sorted(STEP2.glob("m13_v57_co*.json"))
     return out
 
@@ -107,9 +176,18 @@ def _artifact_stamp(p) -> dict | None:
     return {"mtime_ns": st.st_mtime_ns, "ctime_ns": st.st_ctime_ns, "size": st.st_size, "sha16": sha}
 
 
-def _snap_watched() -> dict:
-    """CO-169/CO-172：受控产物集 (路径 -> 多信号指纹) 快照。"""
-    return {str(p): _artifact_stamp(p) for p in watch_paths()}
+def _snap_watched(paths=None) -> dict:
+    """CO-169/CO-172/CO-174：产物集 (路径 -> 多信号指纹) 快照。
+
+    `paths=None` ⇒ 全局受控集（收敛 sha 用，R-CO165）；传入步本地主产物集 ⇒ 步本地归因（R-CO174-1）。
+    """
+    ps = watch_paths() if paths is None else paths
+    return {str(p): _artifact_stamp(p) for p in ps}
+
+
+def step_paths(step: str) -> list:
+    """CO-174（R-CO174-1）：该步**主产物集**（步本地归因用；由实测探针钉定，非猜测）。"""
+    return [K2 / rel for rel in STEP_ARTIFACTS.get(step, [])]
 
 
 def step_did_work(before: dict, after: dict) -> bool:
@@ -242,7 +320,9 @@ def main(argv=None) -> int:
     _w = [p.as_posix() for p in watch_paths()]
     checks["t08_watch_covers_records"] = (len(_w) >= 20
                                           and any(p.endswith("m13_v57_co106_reference_plane_gate.json") for p in _w)
-                                          and any(p.endswith("jlc_package/MANIFEST.json") for p in _w))
+                                          and any(p.endswith("jlc_package/MANIFEST.json") for p in _w)
+                                          # CO-174：fab 直接生成的制造输入件（叠层图）亦须在受控集内
+                                          and any(p.endswith("03_stackup/JLC08161H_stackup.svg") for p in _w))
     # CO-167（F-3）：白名单记录必须 ⊆ 受控集（防未来白名单项指向 glob 外件 ⇒ 收敛盲区）
     checks["t09_allowlist_records_watched"] = (
         bool(EXPECTED_NONZERO)
@@ -268,6 +348,28 @@ def main(argv=None) -> int:
         and step_did_work({"p": _s0}, {"p": {**_s0, "ctime_ns": 9}})              # ctime 前进
         and step_did_work({"p": _s0}, {"p": {**_s0, "size": 6}})                  # size 变
         and not step_did_work({"p": _s0}, {"p": dict(_s0)}))                      # 全同 ⇒ 未做事
+    # CO-174（G-1）：每步须声明**主产物集**（步本地归因；禁全局集合代为背书）
+    _watch = {p.resolve() for p in watch_paths()}
+    checks["t13_step_artifacts_declared"] = (
+        set(ORDER) <= set(STEP_ARTIFACTS)
+        and all(STEP_ARTIFACTS[s] for s in set(ORDER))
+        and all((K2 / rel).resolve() in _watch for s in STEP_ARTIFACTS for rel in STEP_ARTIFACTS[s]))
+    # CO-174（G-1）负控：快照**只含**本步声明集 —— 非声明受控件的变动**不得**归因于本步
+    _demo = next(s for s in ORDER if len(step_paths(s)) == 1)
+    _dp = step_paths(_demo)
+    _dps = {str(q) for q in _dp}
+    _other = {str(q) for q in watch_paths() if str(q) not in _dps}
+    _s0 = {"mtime_ns": 1, "ctime_ns": 1, "size": 5, "sha16": "a"}
+    checks["t13b_step_local_attribution"] = (
+        bool(_dp) and bool(_other)
+        and set(_snap_watched(_dp)) == _dps                                  # 快照仅声明集 ⇒ 无 strays
+        and not (set(_snap_watched(_dp)) & _other)
+        and step_did_work({_dp[0].as_posix(): _s0}, {_dp[0].as_posix(): {**_s0, "sha16": "b"}})
+        and not step_did_work({_dp[0].as_posix(): _s0}, {_dp[0].as_posix(): dict(_s0)}))
+    # CO-174（G-1）残余如实登记：共享主产物须**显式枚举**（防静默遗忘；新增共享件即 fail）
+    _shared = [rel for s in STEP_ARTIFACTS for rel in STEP_ARTIFACTS[s]]
+    _multi = sorted({rel for rel in _shared if _shared.count(rel) > 1})
+    checks["t13c_shared_artifact_residual_enumerated"] = (_multi == sorted(SHARED_ARTIFACT_RESIDUAL))
     checks["t05_stability_oracle"] = (stable("x", "x") and not stable("x", "y") and not stable("", ""))
     # CO-164（t06）：执行器 ORDER 必须与 boundary 规范复现序**有序一致**（文档↔执行器防漂移）
     _bdy = boundary_order_steps()
@@ -291,15 +393,25 @@ def main(argv=None) -> int:
             p = tool_path(step)
             _exp = EXPECTED_NONZERO.get(step) or {}
             _before = _record_snap(_exp["record"]) if _exp.get("record") else None
-            _w_before = _snap_watched()                                        # CO-169（G-1）
+            # CO-174（G-1）：did_work 归因**仅限本步主产物集**（禁全局集合代为背书）
+            _decl_set = {str(q) for q in step_paths(step)}
+            _ball = _snap_watched()                                            # 全局：仅用于 stray 证据
+            _w_before = {k: _ball.get(k) for k in _decl_set}
             r = subprocess.run([str(PY), str(p)], cwd=K2, capture_output=True, text=True)
-            _did = step_did_work(_w_before, _snap_watched())                   # CO-169（G-1）
+            _aall = _snap_watched()
+            _w_after = {k: _aall.get(k) for k in _decl_set}
+            _did = step_did_work(_w_before, _w_after)                          # 步本地归因（CO-174）
             # CO-167（F-2）：变更检测（非绝对 mtime）
             _fresh = record_refreshed(_before, _record_snap(_exp["record"])) if _exp.get("record") else True
             cls = allowlist_decision(step, r.returncode, r.stderr, record_verdict(_exp.get("record")), _fresh)
             if cls == "ok" and not _did:
                 cls = zero_rc_class(False)     # CO-169（G-1）：rc==0 但未写出任何受控产物 ⇒ 立即停机
-            rcs[step] = {"rc": r.returncode, "class": cls, "did_work": _did}
+            rcs[step] = {"rc": r.returncode, "class": cls, "did_work": _did,
+                         "declared_changed": sorted(Path(k).relative_to(K2).as_posix()
+                                                    for k in _decl_set if _w_before.get(k) != _w_after.get(k)),
+                         "stray_changed": sorted(Path(k).relative_to(K2).as_posix()
+                                                 for k in set(_ball) | set(_aall)
+                                                 if k not in _decl_set and _ball.get(k) != _aall.get(k))}
             if cls not in ("ok", "expected_nonzero"):
                 unexpected = {"step": step, "rc": r.returncode, "class": cls,
                               "stderr_tail": (r.stderr or "")[-600:]}
@@ -313,7 +425,7 @@ def main(argv=None) -> int:
             converged = True
             break
         prev = cur
-    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-169.2",
+    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-169.3",
               "nature": "规范复现序机判执行器（rc 策略 + 真收敛判定）；报告落 .archer_tmp/ 且**不被 boundary 引用**（避免不动点）",
               "order": ORDER, "expected_nonzero": EXPECTED_NONZERO,
               "checks": checks, "iterations": iterations, "abort": abort, "converged": converged,
