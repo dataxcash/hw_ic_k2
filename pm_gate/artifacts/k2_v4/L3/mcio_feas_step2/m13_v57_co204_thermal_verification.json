@@ -1,0 +1,68 @@
+{
+ "artifact": "m13_v57_co204_thermal_verification",
+ "schema": 1,
+ "revision": "CO-204",
+ "nature": "散热验证闸（设计期算结温；输入显式声明）+ U6 热定案 O2 冻结 —— 监理指令 #12 动作 4/5",
+ "declared_inputs": {
+  "ta_C": 40.0,
+  "tj_max_C": 120.0,
+  "pact_W": {
+   "0-2": {
+    "typ": 4.7,
+    "max": 6.0
+   },
+   "5-19": {
+    "typ": 5.8,
+    "max": 7.0
+   }
+  },
+  "theta_jc_top_C_per_W": 6.5,
+  "r_interface_C_per_W": 1.0,
+  "theta_hs_C_per_W": 3.5,
+  "source": "m13_v57_co148_u6_ds320pr1601_inputs.json",
+  "source_sha16": "d98677fd7f7d51ba",
+  "datasheet": "TI DS320PR1601, SNLS683 – JUNE 2023",
+  "datasheet_sha256": "f61599c4356edb395e07c9300999ab818898986a4adde71753bae7a080c039da"
+ },
+ "o2": {
+  "theta_jc_top_C_per_W": 6.5,
+  "r_interface_C_per_W": 1.0,
+  "theta_hs_C_per_W": 3.5,
+  "heatsink": "30×30mm 铝散热片 + 界面垫 1.0 ℃/W",
+  "airflow": "~2 m/s 风冷（owner 确认有风冷）",
+  "theta_ja_eff_C_per_W": 11.0
+ },
+ "cases": {
+  "U6_EQ0-2_typ": {
+   "P_W": 4.7,
+   "Tj_C": 91.7,
+   "limit_C": 120.0,
+   "ok": true
+  },
+  "U6_EQ0-2_max": {
+   "P_W": 6.0,
+   "Tj_C": 106.0,
+   "limit_C": 120.0,
+   "ok": true
+  },
+  "U6_EQ5-19_typ": {
+   "P_W": 5.8,
+   "Tj_C": 103.8,
+   "limit_C": 120.0,
+   "ok": true
+  },
+  "U6_EQ5-19_max": {
+   "P_W": 7.0,
+   "Tj_C": 117.0,
+   "limit_C": 120.0,
+   "ok": true
+  }
+ },
+ "verdict": "PASS",
+ "teeth": {
+  "four_cases_all_covered": true,
+  "o2_beats_worst_required": true,
+  "inputs_explicit": true
+ },
+ "redline": "只读输入件 + 闭式一阶计算；零坐标搜索；不改 SPEC/板/冻结四源。"
+}

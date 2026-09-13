@@ -465,6 +465,32 @@ def item_limit_derivation_checks(m: dict, asd: dict, jlcrun: dict) -> dict:
     return out
 
 
+
+def _backdrill_capability(page: str) -> dict:
+    """CO-204（监理指令 #12 动作 1）：JLC 能力页**同页明文**之 Backdrill 规则（anchor = 归一原文子串）。"""
+    i = page.find("Backdrill Backdrill uses a secondary drilling process")
+    seg = page[i:i + 2000] if i >= 0 else ""
+
+    def g(pat):
+        m = re.search(pat, seg)
+        return m.group(0) if m else None
+
+    a = {"intro": g(r"Backdrill uses a secondary drilling process[^\u2460]*"),
+         "layers_thickness": g(r"Supports 4-32-layer FR4 boards with a thickness of \u22650\.8mm"),
+         "diameter": g(r"Through-Hole Diaemter\(D\):\s*0\.2-0\.5mm"),
+         "w_over": g(r"Backdrill Diameter\(W\):\s*typically 0\.2mm larger than through-hole diameter"),
+         "depth": g(r"Backdrill Depth\(L\):\s*layers with backdrilling, customizable"),
+         "dielectric_t": g(r"Dielectric Thickness\(T\):\s*\u22650\.15mm"),
+         "safety_s": g(r"Safety Distance\(S\):\s*\u22650\.2mm")}
+    return {"supported": bool(i >= 0 and all(a.values())),
+            "layers_min": 4, "layers_max": 32, "thickness_min_mm": 0.8,
+            "via_drill_d_mm": [0.2, 0.5], "backdrill_w_over_d_mm": 0.2,
+            "dielectric_t_min_mm": 0.15, "safety_s_min_mm": 0.2,
+            "anchor": a,
+            "note": "背钻 = 二次钻控深、去余铜以降信号干扰（JLC 能力页明文）；冻结过孔策略 = 通孔 + 背钻（CO-204）。"}
+
+
+
 def main() -> int:
     board_text = BOARD.read_text()
     pro_text = PRO.read_text()
@@ -548,7 +574,7 @@ def main() -> int:
     (STEP2 / "m13_v57_co146_jlc_dfm_gate.json").write_text(
         json.dumps(rec, ensure_ascii=False, indent=1) + "\n")
     srcfile = CAP_SRC_HTML
-    cap = {"artifact": "m13_v57_co146_jlc8_capability", "schema": 1, "revision": "CO146-CAP.3",
+    cap = {"artifact": "m13_v57_co146_jlc8_capability", "schema": 1, "revision": "CO146-CAP.4",
            "source_url": JLC_URL, "fetched": JLC_FETCH_DATE,
            "source_page_file": srcfile.name,
            "source_page_sha256": sha(srcfile) if srcfile.exists() else None,
@@ -567,7 +593,7 @@ def main() -> int:
                                                                and _norm(JLC8[k]["quote"]) in _page)]),
                         "not_verbatim": {k: v for k, v in sorted(CAPABILITY_QUOTE_NOT_VERBATIM.items())},
                         "checks": _cite},
-           "capability": JLC8}
+           "capability": JLC8, "backdrill_capability": _backdrill_capability(_page)}   # CO-204
     (STEP2 / "m13_v57_co146_jlc8_capability.json").write_text(
         json.dumps(cap, ensure_ascii=False, indent=1) + "\n")
     card = [f"# CO-146 卡 · DFM 对照 JLC 8 层能力（监理指令 #10 动作 4）", "",

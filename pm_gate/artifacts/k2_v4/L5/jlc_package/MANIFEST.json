@@ -6,7 +6,7 @@
  "board": "k2_v4_8L.l4.kicad_pcb",
  "board_sha16": "d4e81f647be7f980",
  "package_dir": "pm_gate/artifacts/k2_v4/L5/jlc_package",
- "n_files": 34,
+ "n_files": 36,
  "commands": {
   "gerber": "kicad-cli pcb export gerbers --board-plot-params --no-x2 --layers F.Cu,In1.Cu,In2.Cu,In3.Cu,In4.Cu,In5.Cu,In6.Cu,B.Cu,F.Paste,B.Paste,F.Silkscreen,B.Silkscreen,F.Mask,B.Mask,Edge.Cuts",
   "drill": "kicad-cli pcb export drill --format excellon --excellon-units mm --generate-map --map-format svg --generate-report"
@@ -76,7 +76,6 @@
   "files": [
    "06_rulings/L2_RULING_u6_thermal_mitigation_v1.md",
    "06_rulings/L2_RULING_u6_thermal_v1.md",
-   "06_rulings/L2_RULING_via_channel_and_interpair_domain_v1.md",
    "06_rulings/m13_v57_co146_jlc_dfm_gate.json"
   ],
   "dirs": [
@@ -90,6 +89,8 @@
    "L2_RULING_via_channel_and_interpair_domain_v1.md": true,
    "L2_RULING_u6_thermal_v1.md": true,
    "L2_RULING_u6_thermal_mitigation_v1.md": true,
+   "L2_RULING_jlc_standard_through_backdrill_v1.md": true,
+   "L2_RULING_u6_thermal_mitigation_v2.md": true,
    "m13_v57_co146_jlc_dfm_gate.json": true
   },
   "impedance_copy_parity": {
@@ -330,9 +331,17 @@
    "sha256": "6b33690f950c90fcaec3706e844c713fe1b82a4c36b1bdb890179a0617dbf20a",
    "bytes": 988
   },
+  "06_rulings/L2_RULING_jlc_standard_through_backdrill_v1.md": {
+   "sha256": "f1be957707b9cd746c6030d2317044a2c9ab5b18d95983bbbbf58427e55d77bf",
+   "bytes": 4465
+  },
   "06_rulings/L2_RULING_u6_thermal_mitigation_v1.md": {
    "sha256": "bf029700941f5145fe54dc2740a68b826b2bb88397034147ff861a4099933160",
    "bytes": 2715
+  },
+  "06_rulings/L2_RULING_u6_thermal_mitigation_v2.md": {
+   "sha256": "cec7bd86d39b71c85aedaaf64b9aa76f84208ceae86361e2677d6792ff3adac4",
+   "bytes": 1463
   },
   "06_rulings/L2_RULING_u6_thermal_v1.md": {
    "sha256": "aa00f0207bc37e6f724155d4556a4288bec6133e02ea4d5d9d8b3cd4ff9d646a",
@@ -347,8 +356,8 @@
    "bytes": 8839
   },
   "ORDER_NOTES.md": {
-   "sha256": "b7d86151d97b32a621f657e4b86195d4899e38e5a80cfbfb9f3c46434ac95ff2",
-   "bytes": 3789
+   "sha256": "b81087a701e6a2d67b2dabfbf7691bd766d5f5a1bd632f45e43177e1295e2fa7",
+   "bytes": 4025
   }
  },
  "redline": "只读板；零坐标搜索；不改板/图纸/SPEC/冻结四源（输出全在 L5 交付目录）。"

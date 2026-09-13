@@ -13,17 +13,18 @@
 | 尺寸 | 120.1 × 46.1 mm |
 | 阻抗 | **85Ω 差分 ±10%，下单勾选「阻抗控制」** |
 | 表面处理 | 沉金 ENIG |
-| 文件 | Gerber RS-274X（01_）+ Excellon 钻孔（02_）+ 本叠层图（03_）+ 阻抗表（04_） |
+| 文件 | Gerber RS-274X（01_）+ Excellon 钻孔（02_）+ **背钻钻孔文件** + 本叠层图（03_）+ 阻抗表（04_） |
 
-## 2. 下单渠道（CO-147 L2 裁定 R1，生效）
+## 2. 下单渠道（CO-204 L2 裁定，**取代** CO-147 R1）
+**绑定 JLC 标准（通孔 + 背钻）**：JLC 能力页明文 *"Blind/Buried Vias Not supported … only make through holes"*，
+同页明文 **Backdrill 支持**（4–32 层 / 板厚 ≥0.8mm / D 0.2–0.5mm / W = D+0.2mm / T ≥0.15mm / S ≥0.2mm，
+anchor 逐条为抓取件归一原文子串）⇒ **不存在**「JLC advanced / 盲埋孔通道」；该表述及据其之旧裁定**已撤销**。
+
 本板 220/493 支过孔为**非通孔**（`F.Cu→In2.Cu` 92、`In2.Cu→In5.Cu` 88（埋孔）、
-`In5.Cu→B.Cu` 32、`F.Cu→In5.Cu` 8）；JLC 公布能力页明写 *"Blind/Buried Vias Not supported … only make through holes"*，
-FAQ 将 blind/buried 列为 **advanced options（须 DFM review，成本/交期上升）**。
-
-⇒ **下单走 JLC advanced / 盲埋孔通道**（L2 自裁 = 过孔策略），随单提交：本备注 + 叠层图(03_) + 阻抗表(04_) +
-L2 裁定件 `06_rulings/L2_RULING_via_channel_and_interpair_domain_v1.md`（R1/R2/R3 全文）；接受其 DFM review 与重报价。
-若只接受标准通孔工艺 ⇒ 须重开 W3 **通孔化派生**（独立 L2 候选；前置 = 引擎通孔模型 + 可行性证明；
-原地通孔化实测 111 项 shorting_items ⇒ 不可直接降级）。
+`In5.Cu→B.Cu` 32、`F.Cu→In5.Cu` 8）⇒ **本包不可下单**：既非 JLC 标准可造、亦不满足残桩 <0.15mm（In2→In5 残桩 0.3664mm）。
+**须按 CO-204 R3 重派生层分配**（全部过孔 = 通孔(F↔B) + 按需背钻，目标 0 盲埋孔）后重出本包；
+闸 = `p3_v57_co204_fab_capability_binding_gate.py`（现行板预期 FAIL）。
+随单文件（重派生后）：Gerber(01_) + 钻孔(02_) + **背钻钻孔文件** + 叠层图(03_) + 阻抗表(04_) + 本备注 + 散热要求。
 
 ## 3. 板级 DFM 项（CO-147 L2 裁定 R3，随板厂评审提交）
 **阻焊开窗-邻铜净距 1 处**：`R3.pad2`(`PWR_BTN_ISO`) 开窗缘 ↔ `PCIE_UP3_N` 铜缘 = **0.0695mm** < JLC 0.09mm

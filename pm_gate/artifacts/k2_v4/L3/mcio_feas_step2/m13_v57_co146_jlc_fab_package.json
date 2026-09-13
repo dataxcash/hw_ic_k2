@@ -6,7 +6,7 @@
  "board": "k2_v4_8L.l4.kicad_pcb",
  "board_sha16": "d4e81f647be7f980",
  "package_dir": "pm_gate/artifacts/k2_v4/L5/jlc_package",
- "n_files": 34,
+ "n_files": 36,
  "commands": {
   "gerber": "kicad-cli pcb export gerbers --board-plot-params --no-x2 --layers F.Cu,In1.Cu,In2.Cu,In3.Cu,In4.Cu,In5.Cu,In6.Cu,B.Cu,F.Paste,B.Paste,F.Silkscreen,B.Silkscreen,F.Mask,B.Mask,Edge.Cuts",
   "drill": "kicad-cli pcb export drill --format excellon --excellon-units mm --generate-map --map-format svg --generate-report"
@@ -76,7 +76,6 @@
   "files": [
    "06_rulings/L2_RULING_u6_thermal_mitigation_v1.md",
    "06_rulings/L2_RULING_u6_thermal_v1.md",
-   "06_rulings/L2_RULING_via_channel_and_interpair_domain_v1.md",
    "06_rulings/m13_v57_co146_jlc_dfm_gate.json"
   ],
   "dirs": [
@@ -90,6 +89,8 @@
    "L2_RULING_via_channel_and_interpair_domain_v1.md": true,
    "L2_RULING_u6_thermal_v1.md": true,
    "L2_RULING_u6_thermal_mitigation_v1.md": true,
+   "L2_RULING_jlc_standard_through_backdrill_v1.md": true,
+   "L2_RULING_u6_thermal_mitigation_v2.md": true,
    "m13_v57_co146_jlc_dfm_gate.json": true
   },
   "impedance_copy_parity": {
