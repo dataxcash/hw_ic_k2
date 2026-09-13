@@ -1426,6 +1426,65 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body51
     txt = txt.replace("W3 Boundary **v2.22**", "W3 Boundary **v2.23**")
+    # ── §52 CO-179（灵敏度牙齿系统性加严） ───────────────────────────────────
+    MARK52 = "## 52. CO-179"
+    _rc52 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    _ord179 = ("co146_impedance_table → co146_pm_eval → co146_ledger_add → co153_k9_domain_coverage → "
+               "co148_u6_datasheet_inputs → co148_thermal_ruling → co149_thermal_mitigation_derive → co147_l2_ruling → "
+               "co146_jlc_dfm_gate → co146_jlc_fab_package → co152_findings_disposition → co155_co154_findings_disposition → "
+               "co156_co154_open_disposition → co157_gate_hardening_3 → co158_l5_packet_selfcontained → "
+               "co159_rev19_co156_co157_co158_review → co160_co159_findings_disposition → co161_gap_hardening_4 → "
+               "co162_verdict_binding → co163_binding_to_order_notes → co166_rev19_co159_co165_review → "
+               "co167_co166_findings_disposition → co168_register_consistency → co169_step_output_oracle → co170_stackup_binding → "
+               "co171_order_notes_record_figures → co172_rev19_co166_co171_review → co173_co172_findings_disposition → "
+               "co174_step_artifact_attribution → co175_package_parity_binding → co176_gate_selfcheck_evidence → "
+               "co177_capability_value_binding → co178_drc_item_limit_derivation → co179_sensitivity_teeth_hardening → "
+               "co124_input_selfcheck_gate → co150_k9_domain_gate → co146_boundary_append → co77_closure_declaration_sweep → "
+               "co120_provenance_pin_gate → co135_review_hygiene → co136_gate_hygiene → co78_layer_role_drift_gate → "
+               "co81_project_rules_gate → co84_dru_domain_gate → co95_in4_reachability → co98_reachability_status_report → "
+               "co106_reference_plane_gate → co146_boundary_append")
+    sec52 = [MARK52 + "（**L2 自裁 · 灵敏度牙齿系统性加严**）", "",
+             "- **G-1（medium）弱判据**：`t07b` 比较**两个不同文件**（`sha256(包内副本) != sha256(ORDER_NOTES.md)`）⇒ 恒真式，"
+             "**不检验 parity 判据本身**；`t10b` 只证 `sha16(JP) != 声明 pin`（pin 非自身），**不检验 pin 判据**能否拒绝错误 pin。",
+             "  **处置**：`p3_v57_co146_jlc_fab_package.py` 升 **CO146-PKG.10** —— parity/pin 判据**函数化**"
+             "（`packaged_parity_checks()` / `instruction_pin_ok()`），灵敏度牙齿改为**同件近失**证明"
+             "（来源做「同长单字节翻转」临时件 / pin 做「单 hex 位翻转」）；**变异实测**：把 `copy_parity` 改为恒真 ⇒ "
+             "**t07b 与 t15b 双双击穿**（rc=1）。",
+             "- **G-2（low）不点名**：九处灵敏度牙齿用 `not all(...)`（不点名须翻转项）⇒ 若目标项被写死而扰动偶发翻转他项，"
+             "旧形仍判通过（CO-178 教训同族）。**处置**：九处改**成分级点名**（t09b→`zdiff`；t11b→`outer_copper`；"
+             "t11d→`geometry_matches_binding`；t12b→`drc_as_designed_total`；t12c→`impedance_spread_pct`；"
+             "t12d→`via_census_F.Cu→In2.Cu`；t12e→`mask_gap_mm`；t12f→`thermal_Tj_best_worst`；"
+             "t12g→`jlc_min_track_width_mil`；t12h→`rule_copper_edge_clearance`，逐项**实测**确认该键翻转）。",
+             f"- **登记簿**：+2（`co179:G-1/G-2`，全 CLOSED；{_rc52['total']} 项 / OPEN {_rc52['OPEN']}）。",
+             "",
+             "> **R-CO179-1**：凡「灵敏度/负控」牙齿须对**同一被判对象**做**近失扰动**并断言判据**翻转**；"
+             "禁「比较两个不同对象」「非自身」等恒真式弱判据；判据须**函数化**以便真件与近失共用同一实现。",
+             "> **R-CO179-2**：灵敏度牙齿须**点名**须翻转的检查项（成分级）；不得仅用 `not all(...)`。",
+             "> **R-CO179-3**（复现序，取代 R-CO178-2；步骤集新增 co179）：规范复现序 = `" + _ord179 + "`，**循环至 sha 稳定**"
+             "（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1 + R-CO175-1 + R-CO176-1/2 "
+             "+ R-CO177-1 + R-CO178-1 + R-CO179-1/2）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows52 = [("工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.10 / 近失 + 点名加严；29 牙齿）",
+                K2 / "tools/p3_v57_co146_jlc_fab_package.py"),
+               ("工具 `p3_v57_co179_sensitivity_teeth_hardening.py`",
+                K2 / "tools/p3_v57_co179_sensitivity_teeth_hardening.py"),
+               ("工具 `p3_v57_co164_order_runner.py`（CO-169.4 / 48 步）",
+                K2 / "tools/p3_v57_co164_order_runner.py"),
+               ("包记录 `m13_v57_co146_jlc_fab_package.json`（CO146-PKG.10）",
+                STEP2 / "m13_v57_co146_jlc_fab_package.json"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc52['total']} 项 / OPEN {_rc52['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows52:
+        if pth.exists():
+            sec52.append(f"| {label} | `{s16(pth)}` |")
+    sec52.append("")
+    body52 = "\n".join(sec52)
+    if MARK52 in txt:
+        txt = re.sub(re.escape(MARK52) + r"[\s\S]*?(?=\n## |\Z)", body52, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body52
+    txt = txt.replace("W3 Boundary **v2.23**", "W3 Boundary **v2.24**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
     return 0

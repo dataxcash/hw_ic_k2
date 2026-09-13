@@ -15,7 +15,7 @@
       ③ 目录内任何 sha 缺失即 FAIL。
 """
 from __future__ import annotations
-import copy, hashlib, json, re, shutil, subprocess, sys
+import copy, hashlib, json, re, shutil, subprocess, sys, tempfile
 from pathlib import Path
 
 ROOT = Path("/home/fila/jqdDev_2025/ic_hw")
@@ -468,6 +468,24 @@ def copy_parity(copy_bytes: bytes | None, source_bytes: bytes | None) -> bool:
     return copy_bytes is not None and source_bytes is not None and copy_bytes == source_bytes
 
 
+def packaged_parity_checks(out_dir: Path, rulings: list) -> dict:
+    """CO-179：交付包**副本 parity** 判据（**同一函数**既用于真件，亦用于近失证明）。
+
+    恒真式实现（如误写为比较自身）会在**近失来源**下仍返回 True ⇒ 被 t07b 击穿。
+    """
+    return {d: copy_parity(_read_bytes_or_none(out_dir / "06_rulings" / d),
+                           _read_bytes_or_none(src)) for src, d in rulings}
+
+
+def instruction_pin_ok(instruction_path: Path, declared_sha: str | None) -> bool:
+    """CO-179：来源 pin 判据（纯函数）—— 声明须为 16 位 hex 且**等于来源件 sha16**；缺件/缺声明一律 False。"""
+    if not instruction_path.exists() or not declared_sha:
+        return False
+    if not re.fullmatch(r"[0-9a-f]{16}", str(declared_sha)):
+        return False
+    return sha16(instruction_path) == str(declared_sha)
+
+
 def _read_bytes_or_none(p: Path) -> bytes | None:
     try:
         return p.read_bytes()
@@ -546,9 +564,22 @@ def main() -> int:
     # CO-159（F-9）：ORDER_NOTES 里的**目录级**声明（`01_`..`06_`）也须落包内（原先只覆盖 `06_rulings/*` 文件引用）
     dir_refs = sorted(set(re.findall(r"\b(0[1-6]_)", notes_txt)))
     # CO-159（F-8）：随单附件副本须与来源**内容一致**（防「来源已修订而包内副本陈旧」——J-1 同类已实测发生）
-    rulings_parity = {d: (sha256(OUT / "06_rulings" / d) == sha256(src)) for src, d in RULINGS}
-    # t07 灵敏度负控：不同文件必须比较为不等（否则 parity 函数恒真）
-    parity_sensitivity = (sha256(OUT / "06_rulings" / RULINGS[0][1]) != sha256(OUT / "ORDER_NOTES.md"))
+    # CO-179：parity 判据函数化（真件与近失用**同一函数**）
+    rulings_parity = packaged_parity_checks(OUT, RULINGS)
+    # t07b 近失证明：真件 ⇒ True；**近失来源（同长单字节翻转）** ⇒ 经**同一函数**必判 False
+    _rb0 = _read_bytes_or_none(RULINGS[0][0]) or b""
+    _sbox = Path(tempfile.mkdtemp(prefix="co179_parity_"))
+    _sf = _sbox / RULINGS[0][1]
+    _sf.write_bytes((_rb0[:-1] + bytes([_rb0[-1] ^ 0x01])) if _rb0 else b"x")
+    _near = packaged_parity_checks(OUT, [(_sf, RULINGS[0][1])])[RULINGS[0][1]]
+    shutil.rmtree(_sbox, ignore_errors=True)
+    parity_sensitivity = (packaged_parity_checks(OUT, RULINGS)[RULINGS[0][1]] is True
+                          and _near is False
+                          and copy_parity(_rb0, _rb0)
+                          and not copy_parity(_rb0 + b"\x00", _rb0))
+    _pin_declared = (jp.get("supervisor_instruction") or {}).get("sha16")
+    _pin_flip = ((("0" if str(_pin_declared)[:1] != "0" else "1") + str(_pin_declared)[1:])
+                 if _pin_declared else None)
     teeth = {"t01_idempotent": ident,
              "t05_declared_rulings_packaged": all((OUT / "06_rulings" / d).exists() for _, d in RULINGS),
              "t06_order_notes_refs_resolve_in_package": bool(refs) and all((OUT / r).exists() for r in refs),
@@ -557,49 +588,59 @@ def main() -> int:
              "t08_declared_dirs_present": bool(dir_refs) and all(any(OUT.glob(f"{d}*")) for d in dir_refs),
              # CO-163（G-1）：下单参数须与声明定值表一致（t09 正控 + t09b 灵敏度）
              "t09_order_notes_binding_params": all(binding_param_checks(notes_txt, jp_binding).values()),
+             # CO-179：成分级 —— 点名 **zdiff** 项必须翻 False（非 `not all(...)`）
              "t09b_binding_param_detector_sensitivity": (
-                 not all(binding_param_checks(notes_txt.replace(binding_tokens(jp_binding).get("zdiff", "\0"), "999Ω"),
-                                              jp_binding).values())),
+                 binding_param_checks(notes_txt.replace(binding_tokens(jp_binding).get("zdiff", "\0"), "999Ω"),
+                                      jp_binding).get("zdiff") is False),
              # CO-163（G-2）：定值来源 pin（声明表 → 监理指令件）必须可核验（t10 正控 + t10b 判据可辨）
-             "t10_declared_binding_source_pinned": bool(INSTRUCTION.exists()) and bool(jp.get("supervisor_instruction"))
-                 and sha16(INSTRUCTION) == jp["supervisor_instruction"].get("sha16"),
-             "t10b_binding_source_pin_discriminates": bool(jp.get("supervisor_instruction"))
-                 and sha16(JP) != jp["supervisor_instruction"].get("sha16"),
+             "t10_declared_binding_source_pinned": instruction_pin_ok(INSTRUCTION, _pin_declared),
+             # CO-179：近失证明（同一判据）—— 正确 pin ⇒ True；**单 hex 位翻转** ⇒ False；缺/非法 ⇒ False
+             "t10b_binding_source_pin_discriminates": (instruction_pin_ok(INSTRUCTION, _pin_declared)
+                                                       and not instruction_pin_ok(INSTRUCTION, _pin_flip)
+                                                       and not instruction_pin_ok(INSTRUCTION, None)
+                                                       and not instruction_pin_ok(INSTRUCTION, "ZZZZ")),
              # CO-170（G-1）：叠层图（03_，随单提交的制造输入）须与声明定值表绑定
              "t11_stackup_svg_declared_binding": all(stackup_svg_binding_checks(_svg, jp_binding).values()),
-             "t11b_stackup_svg_binding_sensitivity": (not all(stackup_svg_binding_checks(
-                 _svg, {**jp_binding, "copper": {**(jp_binding.get("copper") or {}), "outer_oz": 2.0}}).values())),
+             # CO-179：成分级 —— 点名 **outer_copper** 项
+             "t11b_stackup_svg_binding_sensitivity": (stackup_svg_binding_checks(
+                 _svg, {**jp_binding, "copper": {**(jp_binding.get("copper") or {}), "outer_oz": 2.0}}
+             ).get("outer_copper") is False),
              # CO-171（G-1/G-2）：ORDER_NOTES 内的**记录派生数字**须与来源记录一致
              "t12_order_notes_record_figures": all(_figs.values()),
-             "t12b_record_figure_binding_sensitivity": (not all(order_notes_record_figures(
+             # CO-179：成分级 —— 逐项**点名须翻转的检查项**（非 `not all(...)`）
+             "t12b_record_figure_binding_sensitivity": (order_notes_record_figures(
                  notes_txt, imp, {**dfm, "drc_as_designed": {**(dfm.get("drc_as_designed") or {}), "n": 9999}},
-                 _co147, _co148, _co149, _cap, _rules).values())),
+                 _co147, _co148, _co149, _cap, _rules).get("drc_as_designed_total") is False),
              # CO-172（F-1..F-5）：逐来源记录的**灵敏度**（任一来源漂移即须判不通过）
-             "t12c_impedance_spread_binding_sensitivity": (not all(order_notes_record_figures(
+             "t12c_impedance_spread_binding_sensitivity": (order_notes_record_figures(
                  notes_txt, _perturb(imp, ["watch", 0, "zdiff", "M2_HJ_Cohn"], [100.0]),
-                 dfm, _co147, _co148, _co149, _cap, _rules).values())),
-             "t12d_via_census_binding_sensitivity": (not all(order_notes_record_figures(
+                 dfm, _co147, _co148, _co149, _cap, _rules).get("impedance_spread_pct") is False),
+             "t12d_via_census_binding_sensitivity": (order_notes_record_figures(
                  notes_txt, imp,
                  _perturb(dfm, ["as_built", "via_type_census", "F.Cu->In2.Cu|BLIND_BURIED"], 93),
-                 _co147, _co148, _co149, _cap, _rules).values())),
-             "t12e_mask_facts_binding_sensitivity": (not all(order_notes_record_figures(
+                 _co147, _co148, _co149, _cap, _rules).get("via_census_F.Cu→In2.Cu") is False),
+             "t12e_mask_facts_binding_sensitivity": (order_notes_record_figures(
                  notes_txt, imp, dfm,
                  _perturb(_co147, ["mask_measure", "closest", "gap_mm"], 0.0694),
-                 _co148, _co149, _cap, _rules).values())),
-             "t12f_thermal_figures_binding_sensitivity": (not all(order_notes_record_figures(
+                 _co148, _co149, _cap, _rules).get("mask_gap_mm") is False),
+             "t12f_thermal_figures_binding_sensitivity": (order_notes_record_figures(
                  notes_txt, imp, dfm, _co147, _perturb(_co148, ["worst", "Tj_C"], 165.0),
-                 _co149, _cap, _rules).values())),
-             "t12g_jlc_capability_binding_sensitivity": (not all(order_notes_record_figures(
+                 _co149, _cap, _rules).get("thermal_Tj_best_worst") is False),
+             "t12g_jlc_capability_binding_sensitivity": (order_notes_record_figures(
                  notes_txt, imp, dfm, _co147, _co148, _co149,
-                 _perturb(_cap, ["capability", "min_track_width_mm", "value"], 0.10), _rules).values())),
-             "t12h_drc_rules_edge_binding_sensitivity": (not all(order_notes_record_figures(
+                 _perturb(_cap, ["capability", "min_track_width_mm", "value"], 0.10),
+                 _rules).get("jlc_min_track_width_mil") is False),
+             "t12h_drc_rules_edge_binding_sensitivity": (order_notes_record_figures(
                  notes_txt, imp, dfm, _co147, _co148, _co149, _cap,
-                 _perturb(_rules, ["manufacturing", "min_copper_edge_clearance"], 0.25)).values())),
+                 _perturb(_rules, ["manufacturing", "min_copper_edge_clearance"], 0.25)
+             ).get("rule_copper_edge_clearance") is False),
              # CO-172（F-6）：叠层图**铜厚矩形几何** vs 声明定值（正控 + 灵敏度）
              "t11c_stackup_svg_copper_geometry_binding": all(
                  stackup_svg_copper_geometry_checks(_svg, jp_binding).values()),
-             "t11d_stackup_svg_copper_geometry_sensitivity": (not all(stackup_svg_copper_geometry_checks(
-                 _svg, {**jp_binding, "copper": {**(jp_binding.get("copper") or {}), "outer_oz": 2.0}}).values())),
+             # CO-179：成分级 —— 点名 **geometry_matches_binding** 项
+             "t11d_stackup_svg_copper_geometry_sensitivity": (stackup_svg_copper_geometry_checks(
+                 _svg, {**jp_binding, "copper": {**(jp_binding.get("copper") or {}), "outer_oz": 2.0}}
+             ).get("geometry_matches_binding") is False),
              # CO-175（G-1）：随单阻抗表副本须与来源记录逐字节一致（正控 + 灵敏度）
              "t15_impedance_copy_parity": all(_imp_parity.values()),
              "t15b_impedance_copy_parity_sensitivity": (copy_parity(b"a", b"a") and not copy_parity(b"a", b"b")
@@ -610,7 +651,7 @@ def main() -> int:
              "t02_8_copper_gerbers": len(cu) >= 8,
              "t03_drill_present": len(drl) >= 1,
              "t04_all_hashed": all(v.get("sha256") for v in m1.values())}
-    rec = {"artifact": "m13_v57_co146_jlc_fab_package", "schema": 1, "revision": "CO146-PKG.9",
+    rec = {"artifact": "m13_v57_co146_jlc_fab_package", "schema": 1, "revision": "CO146-PKG.10",
            "nature": "JLC 打样包（监理指令 #10 动作 3）；只出交付物，不改板/SPEC",
            "board": BOARD.name, "board_sha16": sha16(BOARD),
            "package_dir": str(OUT.relative_to(K2)), "n_files": len(m1),
