@@ -1,0 +1,93 @@
+{
+ "artifact": "m13_v57_co205r_bridge_joint_solve",
+ "authority": {
+  "handoff": ".omo/handoffs/k2-v57-handoff-z70-20260913-rev19-co205.md §6",
+  "layer_ruling": "L2 自裁（叠层/走廊/过孔策略/列分配）；owner 闸 0"
+ },
+ "date": "2026-09-13",
+ "measurements": {
+  "baseline_candC_rev": "24/32（8 页：UP0/2/3/6 input, DN2/3/4/5 input）",
+  "candC_brcol_binding_reasons": {
+   "PCIE_DN2/input": "vv_placed (141.22,57.65,N) vs UP0/out_J2.P 0.316（连接器侧）",
+   "PCIE_DN3/input": "vt2_placed F 段 (140.64,58.25)-(135.0,58.5) vs UP1/out_J2.N 0.0184（连接器侧）",
+   "PCIE_DN4/input": "vt_placed In2 vs DN6 0.20；vt2_placed F 段 vs UP2/out_J2.N；vv_placed DN6 0.502",
+   "PCIE_DN5/input": "vv_placed DN6 0.304；vt_placed DN6 0.15；vt2_placed UP2/out_J2.P 0.0944",
+   "PCIE_UP0/input": "vt_intra（本页 P via1 距 N In2 竖段 0.40 < VT 0.4525）；vt_placed UP1 0.25",
+   "PCIE_UP2/input": "vt2_placed In2 段 vs UP4 0.25；vv_placed UP4 0.5",
+   "PCIE_UP3/input": "hh_intra (55.0,34.45,P)-(55.0,34.5,P) 0.05（落桥孔与 land 孔重合）",
+   "PCIE_UP6/input": "vv_placed UP7 bridge2_P 0.508（差 0.017）"
+  },
+  "candC_brcol_exposure_best_store_via_margin": {
+   "PCIE_DN2/input": -0.209,
+   "PCIE_DN3/input": 0.042,
+   "PCIE_DN4/input": 0.142,
+   "PCIE_DN5/input": 0.393,
+   "PCIE_UP0/input": 0.269,
+   "PCIE_UP2/input": 1.3155,
+   "PCIE_UP3/input": 1.025,
+   "PCIE_UP6/input": -0.017,
+   "note": "margin = 该页 15150 行中『候选 via vs 已落 via 净距 - VV』的最大值；6/8 > 0 ⇒ 其阻断非 via 拥塞，而是轨道/页内约束"
+  },
+  "candC_brcol_rev": "24/32（同 8 页，但 vv_intra 全消 ⇒ 瓶颈归因更准）"
+ },
+ "negative_results": {
+  "BR2 / BR2D": "20 / 19",
+  "BRAWAY 0/1 × BR_JOG 0.35..0.8": "≤24（BRAWAY 对失败页为 no-op：其最优行最小跨极性距已 >= VV）",
+  "BRDROP=1": "24（消 hh_intra + vt_intra，但页面转嫁到跨页 vv_placed/vt_placed）",
+  "BR_JOG 0.4": "0/32（hh_intra 全页：同网孔距 < HOLE_GAP 0.4495）",
+  "BVERT 混合（逐页竖段落 B）": "无 BRCOL 时 24；配 BRCOL 时 16（B 竖段 3W=0.615 吃容量）",
+  "CARRYALL 全带 carry": "rev 15 / carry 18 / xasc 18 / engine 18（carry 位移扰动跨带 via 净距，与原记录一致）",
+  "POL_OFF 0.2625/0.27/0.30/0.35": "24/23/18/17 — vv_intra 确被消（0.2625 起）但 lane y 扰动了 J2 列区间图着色 ⇒ 净负",
+  "XMIN 0.38/0.4525/0.5": "24/24/24（无关行被更早筛掉）"
+ },
+ "new_knobs": {
+  "CO10_BR2": "桥孔 x 对齐逃逸列 + y 侧移 BR_JOG（联合闭式；默认关）",
+  "CO10_BR2D": "落桥孔 y 侧移（默认随 BR2）",
+  "CO10_BRCOL": "桥孔 jog 按列序取远离方向（工具缺陷 ③ 修复）",
+  "CO10_BRDROP": "条件式落桥孔修复（仅 |ly+BR_JOG-ll| < HOLE_GAP 时反向偏；零回归修 hh_intra）",
+  "CO10_BVERT": "逐页竖段（escape+stub）整体落 B.Cu（混合拓扑开关）",
+  "CO10_CARRYALL": "band 级单调 carry 全带启用（游标间距 max(3W,VV)，计入桥孔足迹延伸）",
+  "CO10_POL_OFF": "对内 lane y 偏移（默认 0.25 = 旧行为）；判据 2*POL_OFF >= VV ⇒ 0.2625+",
+  "CO10_XMIN": "逃逸列间最小 x 距（默认 0.38 = 旧行为）",
+  "all_default_off": true,
+  "emitter": "CO16_{POL_OFF,BRCOL,BR2,BR2D,BRDROP,XMIN,BVERT} 透传已加"
+ },
+ "next": [
+  "① 连接器侧瓶颈（DN2..DN5 的 vt2/vv vs UP*/out_J2 在 x≈127-141, y≈58）：须与 J2 列区间图着色（alloc_x / _lx_separate）联合求解 —— 这是本次未动的自由度",
+  "② 近芯片侧：若坚持桥方案，唯一出路是让邻页共享 x（交错 y 行）——需把「列 + 桥孔(x,y)」作为 band 级联合闭式（本次 CARRYALL 仅做 x 单调游标，未含 y 交错）",
+  "③ 或逐页混合：少数页改「逃逸竖段落 B」（BVERT 已验证无效，因 3W 吃容量）⇒ 需先定确定性选择规则并复核 3W 预算",
+  "④ 复评债 = CO-202..CO-205（+CO-205r）；须另一会话，禁自评"
+ ],
+ "redline": "只读冻结四源；未改 canonical 图纸 / 交付板；未改构造器；无 sign-off",
+ "regression": {
+  "boundary": "v2.48 §76 pin 表随 CO-205r 重指（probe/emitter 两行）",
+  "default_path_bytes": "CO16-ALLOC.9-REPRO pages 与 v9 逐页逐字段同（d3cd1e5a312f253a）；仅 revision 标签异",
+  "delivered_board": "d4e81f647be7f980 逐字节未变",
+  "dfm_gate": "rc=1；stderr 0 字节",
+  "fab_gate": "FAIL rc=1（inner_inner_via_class(88) / residual_stub_ge_0.15mm / blind_buried_required）；C5=True；rec 420f809c9c77beab",
+  "frozen_four": "4/4 MATCH（5f72182a2616392c / a8ef3ea8ecff99d7 / fb07d25ac426ff84 / 0a459839e15960b8）",
+  "runner_check": "ok=true（t01..t33 + t05/t06）",
+  "runner_converge": "rc=0；2 轮；only expected nonzero = co146 DFM rc=1；stray/uncontrolled 全空",
+  "thermal_gate": "PASS rc=0"
+ },
+ "revision": "CO-205r",
+ "schema": 1,
+ "scope": "候选 C（F 桥）桥孔 jog 方向缺陷修复 + 列/桥孔联合求解全族复测（5 项旋钮 × 20 组）",
+ "status": "BLOCKED（L2 自裁范围内已穷尽 5 旋钮 × 20 组；最优仍 = 候选 C 24/32）",
+ "structural_lemma": {
+  "budget": "西 UP 带 chip pad 跨距 84.85..93.55 = 8.70mm / 7 间隔 = 1.24mm pitch ⇒ 超预算 0.26mm/页（IC 侧局部）",
+  "conclusion": "四信号层内、以「每内层<->内层孔加一桥孔」的方式不可闭合；与 CO-205 结论一致但根因定位更细（非单纯容量，而是近芯片 x 足迹 vs pad pitch）",
+  "consequence": "同向 jog（默认/BRAWAY）或互向 jog（BRCOL）都会把桥孔推入邻页单元；BRCOL 消 vv_intra 但把紧邻页 squeeze（UP6 差 0.017）",
+  "escape_route_tried": "BR2（桥孔 x 对齐逃逸列、y 侧移 BR_JOG，使跨极性 dy = BR_JOG + 2*POL_OFF >= VV，理论上解除 x 耦合）：实测 20/32（仅 corner）/19/32（corner+drop）——x 压力转为与邻页 F/In5 轨道的 vt_placed 冲突",
+  "statement": "两孔桥把每页近芯片 x 足迹由 {vx} 扩到 [min(px,nx)-BR_JOG, max(px,nx)+BR_JOG]；|px-nx| 最紧页取到 0.5（UP7: 93.25/93.75）⇒ 足迹 1.5mm。"
+ },
+ "tool_defect_3": {
+  "default": "关（保候选 C 记录 24/32 逐字节可复现）",
+  "evidence": "BRAWAY 实测确实改坐标（86.85 vs 87.15）但仍留 vv_intra；列序相反页 s=0.5 时 P bridge 恰落在 N 列 x 上",
+  "fix": "CO10_BRCOL=1：P 桥孔朝远离 N 列方向偏 BR_JOG，N 反之（由行内 px,nx 决定，非 pad 序）",
+  "id": "bridge_jog_direction_from_pad_order",
+  "root_cause": "桥孔 jog 方向由 **pad 序**推出（BRAWAY/_BR_FLIP）或 band 固定；In2 逃逸带的 3W 界 0.48 < 0.615 ⇒ _band_carry=False ⇒ 行内逃逸列序 (px,nx) 可与 pad 序相反 ⇒ P/N 桥孔 jog 指向彼此，|vx_P - cx_N| = |s - BR_JOG| 塌到 0.05-0.15",
+  "symptom": "候选 C 下 7/8 失败页 reason = vv_intra（本页 P/N 桥孔互距 0.5025-0.5220 < VV 0.525）",
+  "verification": "candC+BRCOL：(xv_intra 出现次数 7 → 0)；8 页失败面全部改为跨页类（vv_placed/vt_placed/vt2_placed/hh_intra）"
+ }
+}

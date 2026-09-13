@@ -112,7 +112,9 @@ def _band_key(f):
 
 
 def _band_carry(f):
-    """该带是否启用 carry：escape 层 3W 界 >= 0.615（外层 F/B）。"""
+    """该带是否启用 carry：escape 层 3W 界 >= 0.615（外层 F/B）；CARRYALL 时全带启用。"""
+    if _CARRYALL:
+        return True
     return 3.0 * _WBY.get(esc_layer(f), 0.0) >= _CARRY_W3_MIN
 
 
@@ -173,7 +175,9 @@ GAP = {"J3": 44.5, "J4": 62.7}
 J2L, J2R, J2_IN, J2_OUT, J2P = 131.65, 136.0, 132.65, 135.0, 0.525
 
 
-POL_OFF = 0.25            # L2 参数：对内 lane y 偏移 >= vt(0.4525)/2；0.19->0.25（原 0.38 < 0.4525）
+# CO-205n（L2 自裁 · 联合求解）：对内 lane y 偏移可调（默认 0.25 = 旧行为，保 ALLOC.1..9/rev-19 逐字节）。
+#   判据：P/N 同 y 侧结构（桥孔/落孔）互距 = 2*POL_OFF ⇒ 需 >= VV(0.525) ⇒ POL_OFF >= 0.2625。
+POL_OFF = float(__import__("os").environ.get("CO10_POL_OFF", "0.25"))
 # CO-15 只读旋钮（默认 "" = 原行为）：POLMODE="lx" ⇒ 方向感知 P/N lane 排序。
 # 目的：当 stub 层 == lane 层（In6）时，竖直 stub 必穿过对面极性水平 lane（CO-11 §13.2 UP6/UP7 自叉）。
 # 规则（闭式，由几何推导）：stub 朝上（ll>lane_y）⇒ landing lx 较大者取上层 lane（+POL_OFF）、较小者取下（-POL_OFF）；
@@ -263,6 +267,40 @@ _BRX2 = float(__import__("os").environ.get("CO10_BRX2", "0"))
 _TOPOE = __import__("os").environ.get("CO10_TOPOE", "") not in ("", "0")
 # 竖列分色偏移（L2 走廊/竖列分配）：up 带目标 x += BOFF，dn 带 -= BOFF（> VT 0.4525/2 两侧合计）
 _BOFF = float(__import__("os").environ.get("CO10_BOFF", "0"))
+# CO-205n（L2 自裁 · 联合求解）：**逐页逐极性的桥孔几何覆盖**（仅探查用；默认 {} = 关闭 ⇒ 逐字节可复现）。
+#   语义：{page_id: {"cx": {"P":dx,"N":dx}, "sy": {"P":dy,"N":dy}}}
+#   cx: E==In2 时角桥第二孔 x = vx + dx（dx 可负，>0 表示朝 lane 方向）；缺省回退 _jd*_BR_JOG。
+#   sy: S==In2 时落桥第二孔 y = ly + dy；缺省回退 ly+_BR_JOG。
+_BRMAP = json.loads(__import__("os").environ.get("CO10_BRMAP") or "{}")
+# CO-205o（L2 自裁 · 联合求解 · 候选 B）：**逐页竖段层覆盖**（esc/stub 着色自由度）。
+#   语义 {page_id: {"esc": "In2.Cu"|"In5.Cu"|"B.Cu", "stub": 同}}（"B.Cu" 在 _V2B 下映射为探针私有 lane 层 _V2）。
+#   默认 {} = 关闭 ⇒ 逐字节可复现。
+_LMAP = json.loads(__import__("os").environ.get("CO10_LMAP") or "{}")
+# CO-205p（L2 自裁 · 逐页混合拓扑）：把指定页的**两条竖段**（escape+stub）整体落外层 B.Cu
+#   ⇒ 该页 corner = B<->In5、drop = In5<->B、via1 = F<->B（通孔）全外层锚定，无需桥。
+#   语义 pid 列表（逗号分隔）；默认 "" = 关闭 ⇒ 旧行为逐字节可复现。
+_BVERT = {_t.strip() for _t in __import__("os").environ.get("CO10_BVERT", "").split(",") if _t.strip()}
+# CO-205q（L2 自裁 · 工具缺陷 ③）：桥孔 jog **按列序**取远离方向（BRAWAY 按 pad 序号取，
+#   In2 带不启用 carry ⇒ 行内列序可与 pad 序相反 ⇒ jog 反向互撞，vv_intra 复现）。
+#   语义：P 的桥孔朝远离 N 逃逸列的方向偏 BR_JOG，N 反之 ⇒ 四种跨极性组合全部 >= ±BR_JOG。
+#   默认关 ⇒ 候选 C 记录（24/32）逐字节可复现。
+_BRCOL = __import__("os").environ.get("CO10_BRCOL", "") not in ("", "0")
+# CO-205r（L2 自裁 · 列+桥孔联合闭式求解）：桥孔 **x 对齐逃逸列 + y 侧移**。
+#   动机：候选 C 的 x 向 jog 使每页近芯片 x 足迹由 ~1.0mm 扩到 ~1.5mm > pad pitch 1.2mm
+#   ⇒ 与邻页列必然互撞（vv_placed）。y 侧移把跨极性耦合解除（dy = BR_JOG + 2*POL_OFF >= VV），
+#   同网孔距由 BR_JOG(0.5) 保证 ⇒ 桥孔 x 可取逃逸列 x（零 x 扩张），近芯片足迹不增。
+#   同时落桥孔朝**远离 land**方向偏 ⇒ |sy-ll| >= BR_JOG（消 hh_intra，UP3 型）。默认关 ⇒ 候选 C 记录可复现。
+_BR2 = __import__("os").environ.get("CO10_BR2", "") not in ("", "0")
+_BR2D = __import__("os").environ.get("CO10_BR2D", "1" if _BR2 else "0") not in ("", "0")
+# CO-205r：条件式落桥孔修复（仅当默认 ly+BR_JOG 与 land 孔距 < HOLE_GAP 时反向偏）⇒ 零回归修 hh_intra。
+_BRDROP = __import__("os").environ.get("CO10_BRDROP", "") not in ("", "0")
+# CO-205r：逃逸列间最小 x 距（默认 0.38 = 旧行为；VT=0.4525 时防 via-vs-In2 竖段 vt_intra）。
+_XMIN = float(__import__("os").environ.get("CO10_XMIN", "0.38"))
+# CO-205r（L2 自裁 · 列+桥孔联合闭式求解）：**band 级单调 carry 全带启用**（原仅外层 3W 带）。
+#   游标间距 = max(3*w(layer), VV)；且计入桥孔向外 BR_JOG 的足迹延伸（BRCOL 时）。零回溯。
+_CARRYALL = __import__("os").environ.get("CO10_CARRYALL", "") not in ("", "0")
+_BEXT = _BR_JOG if (_BRIDGE and _BRCOL) else 0.0
+
 
 def _va(up_band: bool, kind: int):
     """kind 0=escape,1=stub：返回该带竖段所用的外层（F.Cu/B.Cu）。"""
@@ -271,6 +309,11 @@ def _va(up_band: bool, kind: int):
 
 
 def esc_layer(f):
+    if f["page_id"] in _BVERT:
+        return "B.Cu"
+    _ov = _LMAP.get(f["page_id"], {}).get("esc")
+    if _ov:
+        return _V2 if _ov == "B.Cu" else _ov
     if _VOUT:
         return _va(f["band"] == "up", 0)     # CO-205d 外层竖段指派
     if _ALLB:
@@ -307,6 +350,11 @@ def row_group(f):
 
 
 def stub_layer(f):
+    if f["page_id"] in _BVERT:
+        return "B.Cu"
+    _ov = _LMAP.get(f["page_id"], {}).get("stub")
+    if _ov:
+        return _V2 if _ov == "B.Cu" else _ov
     if _TOPOE:
         return "In2.Cu" if esc_layer(f) == "In2.Cu" else "B.Cu"   # CO-205i：stub = 逃逸层
     if _STUB_B:
@@ -709,26 +757,52 @@ def build(f, px, py, nx, ny):
             # CO-205e 候选 C：冻结层计划 + 双孔桥（仅替换内层<->内层 corner/drop）
             B, L = "B.Cu", "In5.Cu"
             up = f["band"] == "up"
-            if _BR_AWAY:
+            if _BRCOL:
+                # 列序感知：P 朝远离 N 列方向偏，N 反之（px = P 列, nx = N 列）
+                _sgn = 1.0 if px > nx else -1.0
+                _jd = _sgn if pol == "P" else -_sgn
+            elif _BR_AWAY:
                 _sr = 1.0 if f["pad"]["P"][0] >= f["pad"]["N"][0] else -1.0
                 _jd = _sr * (1.0 if pol == "P" else -1.0)
             else:
                 _jd = (1.0 if pol == "P" else -1.0) if _BR_FLIP else (1.0 if up else -1.0)
+            _lyo = LANES[f["page_id"]]["lane_y"] + pol_off(f, "N" if pol == "P" else "P")
             vias.append((vx, vy, pol, _sp("F.Cu", E)))                 # via1（E==B 时为通孔）
+            _cy = ly
             if E == B:
                 _cx = vx
                 vias.append((vx, ly, pol, _sp(B, L)))                  # corner B<->In5（已外层锚定）
             elif E == "In2.Cu":
-                # 桥走 **F.Cu**（顶层，走廊区空闲）：In2<->F + 短F横段 + F<->In5。
+                # 桥走 **F.Cu**（顶层，走廊区空闲）：In2<->F + 短 F 段 + F<->In5。
                 # 关键：避免占用 B.Cu 竖列（对带 B 逃逸列与 chip pad 同 x ⇒ 必砸）。
-                _cx = (vx + _BRX2 * (lx - vx)) if _BRX2 > 0 else (vx + _jd * _BR_JOG)
+                _ov = _BRMAP.get(f["page_id"], {}).get("cx", {}).get(pol)
+                if _ov is not None:
+                    _cx = vx + float(_ov)
+                elif _BR2:
+                    # CO-205r 闭式：桥孔 x = 逃逸列 x（零 x 扩张 ⇒ 不抢邻页列位）；
+                    #   y 朝远离对面极性 lane 行方向偏 BR_JOG ⇒ 跨极性任意组合 dy >= BR_JOG + 2*POL_OFF。
+                    _cx = vx
+                    _cy = ly - (1.0 if _lyo > ly else -1.0) * _BR_JOG
+                elif _BRX2 > 0:
+                    _cx = vx + _BRX2 * (lx - vx)
+                else:
+                    _cx = vx + _jd * _BR_JOG
                 vias.append((vx, ly, pol, _sp("In2.Cu", "F.Cu")))
-                vias.append((_cx, ly, pol, _sp("F.Cu", L)))
+                vias.append((_cx, _cy, pol, _sp("F.Cu", L)))
             else:                                                       # E == L：无 corner
                 _cx = vx
             if S == "In2.Cu":
-                # 桥走 F.Cu：In5<->F + 短F竖段 + F<->In2
-                _sy = (ly + _BRX2 * (ll - ly)) if _BRX2 > 0 else (ly + _BR_JOG)
+                # 桥走 F.Cu：In5<->F + 短 F 段 + F<->In2
+                _ov2 = _BRMAP.get(f["page_id"], {}).get("sy", {}).get(pol)
+                if _ov2 is not None:
+                    _sy = ly + float(_ov2)
+                elif _BR2D or (_BRDROP and abs((ly + _BR_JOG) - ll) < _HOLE_GAP):
+                    # CO-205r 闭式：落桥孔朝远离 land 方向偏 ⇒ |sy - ll| >= BR_JOG、|sy - ly| = BR_JOG。
+                    _sy = ly - (1.0 if ll > ly else -1.0) * _BR_JOG
+                elif _BRX2 > 0:
+                    _sy = ly + _BRX2 * (ll - ly)
+                else:
+                    _sy = ly + _BR_JOG
                 vias.append((lx, ly, pol, _sp(L, "F.Cu")))
                 vias.append((lx, _sy, pol, _sp("F.Cu", "In2.Cu")))
             else:
@@ -738,9 +812,9 @@ def build(f, px, py, nx, ny):
             vias.append((lx, ll, pol, _sp(S, "F.Cu")))                  # land
             segs.append(("F.Cu", f["pad"][pol][0], f["pad"][pol][1], vx, vy, True, pol))
             segs.append((E, vx, vy, vx, ly, False, pol))
-            if abs(_cx - vx) > TOL:
-                segs.append(("F.Cu", vx, ly, _cx, ly, False, pol))      # 桥之 F 横段
-            segs.append((L, _cx, ly, lx, ly, False, pol))
+            if abs(_cx - vx) > TOL or abs(_cy - ly) > TOL:
+                segs.append(("F.Cu", vx, ly, _cx, _cy, False, pol))     # 桥之 F 段
+            segs.append((L, _cx, _cy, lx, ly, False, pol))
             if S == "In2.Cu":
                 segs.append(("F.Cu", lx, ly, lx, _sy, False, pol))      # 桥之 F 竖段
             segs.append((S, lx, _sy, lx, ll, False, pol))
@@ -1116,19 +1190,20 @@ def probe(rule="d3", order="engine", verbose=False):
             rows = sorted(rows, key=lambda r: max(float(r[0]), float(r[1])), reverse=(_cdir < 0))
         hit = None; reasons = {}
         _ccur = _CARRY_CUR.get(_ck) if _cdir else None
-        _cw = 3.0 * _WBY.get(esc_layer(f), 0.16) if _cdir else 0.0
+        _cw = ((max(3.0 * _WBY.get(esc_layer(f), 0.16), VV) if _CARRYALL
+                else 3.0 * _WBY.get(esc_layer(f), 0.16))) if _cdir else 0.0
         for r in rows:
             px, nx, py, ny, dd = (float(r[0]), float(r[1]), float(r[2]), float(r[3]), float(r[4]))
-            if dd < VV - TOL or abs(px - nx) < 0.38 - TOL: continue
+            if dd < VV - TOL or abs(px - nx) < _XMIN - TOL: continue
             if abs(py - f["pad"]["P"][1]) > YWIN or abs(ny - f["pad"]["N"][1]) > YWIN: continue
             # CO-144b：carry 只搬列**不翻转对向**（P/N 逃逸列相对 pad 的左右次序须保持）
             #   —— 翻转会改变对内走线拓扑（实测 DN7 对向翻转 => L5 SI skew 0.328 > 0.15）。
             if _cdir and (px - nx) * (f["pad"]["P"][0] - f["pad"]["N"][0]) <= 0:
                 continue
             if _cdir and _ccur is not None:
-                if _cdir > 0 and min(px, nx) < _ccur + _cw - TOL:
+                if _cdir > 0 and min(px, nx) - _BEXT < _ccur + _cw - TOL:
                     continue
-                if _cdir < 0 and max(px, nx) > _ccur - _cw + TOL:
+                if _cdir < 0 and max(px, nx) + _BEXT > _ccur - _cw + TOL:
                     continue
             if _HOLE_GAP > 0:      # L2: 同网钻孔间距 => 逃逸竖段 >= gap（升/降段不得短到 via 钻孔相撞）
                 _ly = LANES[pid]["lane_y"]
@@ -1152,9 +1227,9 @@ def probe(rule="d3", order="engine", verbose=False):
         GEOM[pid] = geom_rec(b, f)
         st.add(b[0], b[1], pid)
         if _cdir > 0:
-            _CARRY_CUR[_ck] = max(px, nx)
+            _CARRY_CUR[_ck] = max(px, nx) + _BEXT
         elif _cdir < 0:
-            _CARRY_CUR[_ck] = min(px, nx)
+            _CARRY_CUR[_ck] = min(px, nx) - _BEXT
         if verbose: print("OK  ", pid, esc_layer(f), stub_layer(f), (px, py), (nx, ny))
     return {"rule": rule, "order": order, "n_pages": len(FACTS), "n_placed": len(placed), "geom": GEOM,
             "n_failed": len(failed), "placed": placed, "failed": failed,

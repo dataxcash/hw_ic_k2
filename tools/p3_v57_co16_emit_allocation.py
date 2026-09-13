@@ -52,6 +52,14 @@ for _k, _e in (("CO10_COLMODE", "CO16_COLMODE"), ("CO10_WSWAP", "CO16_WSWAP"),
                ("CO10_ALLB", "CO16_ALLB"),
                # CO-205e（L2 自裁 · 候选 C）：双孔桥 + 竖列分色偏移
                ("CO10_BRIDGE", "CO16_BRIDGE"), ("CO10_BRJOG", "CO16_BRJOG"),
+               # CO-205r（L2 自裁 · 桥孔联合求解 / 工具缺陷 ③）：
+               ("CO10_BRCOL", "CO16_BRCOL"),      # 桥孔 jog 按**列序**取远离方向（修 pad 序反向互撞）
+               ("CO10_BR2", "CO16_BR2"),          # 桥孔 x 对齐逃逸列 + y 侧移（联合闭式；默认关）
+               ("CO10_BR2D", "CO16_BR2D"),        # 落桥孔 y 侧移（默认随 BR2）
+               ("CO10_BRDROP", "CO16_BRDROP"),    # 条件式落桥孔修复（仅 hh_intra 时反向）
+               ("CO10_XMIN", "CO16_XMIN"),        # 逃逸列间最小 x 距（默认 0.38 旧行为）
+               ("CO10_POL_OFF", "CO16_POL_OFF"),  # 对内 lane y 偏移（默认 0.25 旧行为）
+               ("CO10_BVERT", "CO16_BVERT"),      # 逐页竖段整体落 B（混合拓扑）
                ("CO10_BOFF", "CO16_BOFF"), ("CO10_STUB_LANE", "CO16_STUB_LANE"), ("CO10_STUB_B", "CO16_STUB_B"), ("CO10_BRX2", "CO16_BRX2"), ("CO10_TOPOE", "CO16_TOPOE"), ("CO10_BRAWAY", "CO16_BRAWAY")):
     if os.environ.get(_e):
         CFG[_k] = os.environ[_e]
