@@ -66,13 +66,13 @@
   "board": "k2_v4_8L.l4.kicad_pcb",
   "board_sha16": "d4e81f647be7f980",
   "criteria": "pm_gate/artifacts/k2_v4/L2/process_route_criteria_v1.json",
-  "criteria_sha16": "8f65c8f5131ce877",
+  "criteria_sha16": "e53fc2354e8efd59",
   "stackup_dielectric_total_mm": 1.425
  },
  "nature": "工艺路线 A/B/C 对比 + 推荐（只读；零坐标搜索；不改板/图纸/SPEC/冻结四源）",
  "recommendation": {
   "basis": [
-   "① 可行性：A 是本设计**唯一无需重派生**即可落地的路（现行图纸即盲埋孔形态；B 可行性未证 26/32；C 不能替埋孔）",
+   "① 可行性：A 是本设计**唯一无需重派生**即可落地的路（现行图纸即盲埋孔形态；B 可行性未证 —— lane 落外层口径 **24/32**（CO-206b）；C 不能替埋孔）",
    "② 性能：A 无背钻残桩，SI 按现行 SPEC 不变；B 需把 lane 移外层（微带）并重签阻抗",
    "③ 风险：A 的风险集中在**报价与 DFM review 结论**（可询价收敛）；B 的风险是整层重派生回归 + 可行性未证",
    "④ 成本：三路单价参数均未获验证来源 ⇒ **不作伪排序**；决策规则 = 若 10L 标准报价 + 重派生代价 < HDI 加价，则改 B"
@@ -86,8 +86,8 @@
   "pick": "A",
   "runner_up": "B"
  },
- "redline": "只读冻结四源；未改 canonical 图纸 / 交付板 / 构造器；无 sign-off",
- "revision": "CO-206.1",
+ "redline": "只读冻结四源；未改 canonical 图纸 / 交付板 / 构造器；无 sign-off；承 R-CO208-1（同一量多处引用须同 commit 同步口径）",
+ "revision": "CO-206.2",
  "routes": {
   "A": {
    "cost": {
@@ -227,7 +227,7 @@
     "stub_mm": 0.0
    },
    "risk": [
-    "可行性未证：现行模型 26/32（lane 落外层候选，修正 span 模型）",
+    "可行性未证：lane 落外层口径 **24/32**（CO-206b 口径修正；原 26/32 系 lane 置**私有内层** In6 所取之乐观值）",
     "须整层重派生 ⇒ 回归面大",
     "外层 lane ⇒ 阻抗重签 + 微带 SI 评估",
     "新叠层成本/交期未知"

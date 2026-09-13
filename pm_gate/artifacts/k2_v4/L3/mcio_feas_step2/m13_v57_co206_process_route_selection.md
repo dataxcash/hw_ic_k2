@@ -1,6 +1,6 @@
-# CO-206.1 工艺选型 / 性价比对比（A/B/C）
+# CO-206.2 工艺选型 / 性价比对比（A/B/C）
 
-板 `k2_v4_8L.l4.kicad_pcb` sha16 `d4e81f647be7f980`｜判据件 `pm_gate/artifacts/k2_v4/L2/process_route_criteria_v1.json` sha16 `8f65c8f5131ce877`｜介质总厚 1.425mm
+板 `k2_v4_8L.l4.kicad_pcb` sha16 `d4e81f647be7f980`｜判据件 `pm_gate/artifacts/k2_v4/L2/process_route_criteria_v1.json` sha16 `e53fc2354e8efd59`｜介质总厚 1.425mm
 
 过孔普查：493 支；通孔+背钻可制 **405**；需盲/埋孔 **88**（其中两端内层=埋孔，层压次数下界 >= 3）
 
@@ -17,7 +17,7 @@
 | 路 | 可行性 | 成本 | 交期 | 性能（残桩/SI） | 风险（摘要） |
 |---|---|---|---|---|---|
 | **A** JLC advanced/HDI 盲埋孔（专属通道） | FEASIBLE_PENDING_DFM | INPUT_REQUIRED | INPUT_REQUIRED | 盲埋孔为设计意图形态，无背钻残桩；SI 按现行 SPEC 不变 | DFM review 结论未知（可能退回改设计） |
-| **B** 加信号层全通孔（如 10L） | UNPROVEN | INPUT_REQUIRED | INPUT_REQUIRED | 全通孔+背钻 ⇒ 残桩可至 0；但 lane 落外层 = 微带，须重签阻抗与 SI | 可行性未证：现行模型 26/32（lane 落外层候选，修正 span 模型） |
+| **B** 加信号层全通孔（如 10L） | UNPROVEN | INPUT_REQUIRED | INPUT_REQUIRED | 全通孔+背钻 ⇒ 残桩可至 0；但 lane 落外层 = 微带，须重签阻抗与 SI | 可行性未证：lane 落外层口径 **24/32**（CO-206b 口径修正；原 26/32 系 lane 置**私有内层** In6 所取之乐观值） |
 | **C** 盘中孔 via-in-pad（6+ 层成熟工艺） | PARTIAL_INSUFFICIENT_ALONE | INPUT_REQUIRED | INPUT_REQUIRED | 不改变残桩性质；解决的是布线密度 | 不能替代 88 支埋孔 ⇒ 单独不足以解阻断 |
 
 ## 依据（可行性）
@@ -42,7 +42,7 @@
 
 **A**（次选 B）
 
-- ① 可行性：A 是本设计**唯一无需重派生**即可落地的路（现行图纸即盲埋孔形态；B 可行性未证 26/32；C 不能替埋孔）
+- ① 可行性：A 是本设计**唯一无需重派生**即可落地的路（现行图纸即盲埋孔形态；B 可行性未证 —— lane 落外层口径 **24/32**（CO-206b）；C 不能替埋孔）
 - ② 性能：A 无背钻残桩，SI 按现行 SPEC 不变；B 需把 lane 移外层（微带）并重签阻抗
 - ③ 风险：A 的风险集中在**报价与 DFM review 结论**（可询价收敛）；B 的风险是整层重派生回归 + 可行性未证
 - ④ 成本：三路单价参数均未获验证来源 ⇒ **不作伪排序**；决策规则 = 若 10L 标准报价 + 重派生代价 < HDI 加价，则改 B

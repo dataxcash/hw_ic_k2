@@ -9,6 +9,10 @@
   {
    "by": "CO-206c",
    "what": "登记价格取数尝试（判据可复现：记录已试端点，避免重复试探）"
+  },
+  {
+   "by": "CO-208",
+   "what": "口径同步补完：`risk_catalog.B[0]`（与工具 `recommend()` 依据①）之 26/32 → 24/32，与 CO-206b 主判据字段一致；自声明面 v1.2 → v1.3"
   }
  ],
  "cost_model": {
@@ -188,7 +192,7 @@
   "hint_in_corpus": "能力页有定性锚：'hole size with via diameter less than 0.45mm, will cost more'（仅定性）"
  },
  "purpose": "给定设计约束，输出工艺路线的 可行性/成本/交期/性能/风险 对比 + 推荐。判据先行、可复现、可复用（非一次性）。",
- "revision": "v1.2",
+ "revision": "v1.3",
  "risk_catalog": {
   "A_advanced_hdi": [
    "DFM review 结论未知（可能退回改设计）",
@@ -197,7 +201,7 @@
    "交期未知"
   ],
   "B_add_signal_layers_all_through": [
-   "可行性未证：现行模型 26/32（lane 落外层候选，修正 span 模型）",
+   "可行性未证：lane 落外层口径 **24/32**（CO-206b 口径修正；原 26/32 系 lane 置**私有内层** In6 所取之乐观值）",
    "须整层重派生 ⇒ 回归面大",
    "外层 lane ⇒ 阻抗重签 + 微带 SI 评估",
    "新叠层成本/交期未知"

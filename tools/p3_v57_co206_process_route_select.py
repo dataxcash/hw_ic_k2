@@ -128,7 +128,7 @@ def recommend(routes: dict, facts: dict) -> dict:
         "pick": "A",
         "runner_up": "B",
         "basis": [
-            "① 可行性：A 是本设计**唯一无需重派生**即可落地的路（现行图纸即盲埋孔形态；B 可行性未证 26/32；C 不能替埋孔）",
+            "① 可行性：A 是本设计**唯一无需重派生**即可落地的路（现行图纸即盲埋孔形态；B 可行性未证 —— lane 落外层口径 **24/32**（CO-206b）；C 不能替埋孔）",
             "② 性能：A 无背钻残桩，SI 按现行 SPEC 不变；B 需把 lane 移外层（微带）并重签阻抗",
             "③ 风险：A 的风险集中在**报价与 DFM review 结论**（可询价收敛）；B 的风险是整层重派生回归 + 可行性未证",
             "④ 成本：三路单价参数均未获验证来源 ⇒ **不作伪排序**；决策规则 = 若 10L 标准报价 + 重派生代价 < HDI 加价，则改 B"],
@@ -160,7 +160,7 @@ def main() -> int:
     rec = recommend(routes, facts)
 
     doc = {
-        "artifact": "m13_v57_co206_process_route_selection", "schema": 1, "revision": "CO-206.1",
+        "artifact": "m13_v57_co206_process_route_selection", "schema": 1, "revision": "CO-206.2",
         "date": "2026-09-14",
         "authority": "监理指令 #13（工艺选型/性价比对比 立为 ENG 常规功能）",
         "nature": "工艺路线 A/B/C 对比 + 推荐（只读；零坐标搜索；不改板/图纸/SPEC/冻结四源）",
@@ -172,7 +172,7 @@ def main() -> int:
         "recommendation": rec,
         "gate": {"criteria_declared": True, "deterministic": True, "no_coordinate_search": True,
                  "cost_numbers_fabricated": False},
-        "redline": "只读冻结四源；未改 canonical 图纸 / 交付板 / 构造器；无 sign-off"
+        "redline": "只读冻结四源；未改 canonical 图纸 / 交付板 / 构造器；无 sign-off；承 R-CO208-1（同一量多处引用须同 commit 同步口径）"
     }
     out = Path(a.out); out.write_text(json.dumps(doc, ensure_ascii=False, indent=1, sort_keys=True), encoding="utf-8")
     _write_md(Path(a.md), doc)
@@ -189,7 +189,7 @@ def main() -> int:
 
 def _write_md(p: Path, doc: dict) -> None:
     f = doc["design_facts"]; R = doc["routes"]; rec = doc["recommendation"]
-    L = ["# CO-206.1 工艺选型 / 性价比对比（A/B/C）", "",
+    L = ["# CO-206.2 工艺选型 / 性价比对比（A/B/C）", "",
          f"板 `{doc['inputs']['board']}` sha16 `{doc['inputs']['board_sha16']}`｜判据件 `{doc['inputs']['criteria']}` "
          f"sha16 `{doc['inputs']['criteria_sha16']}`｜介质总厚 {doc['inputs']['stackup_dielectric_total_mm']}mm", "",
          f"过孔普查：{f['n_vias']} 支；通孔+背钻可制 **{f['n_through_backdrill_ok']}**；"

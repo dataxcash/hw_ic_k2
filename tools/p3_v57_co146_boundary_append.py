@@ -2645,6 +2645,209 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body76
 
+    # ── §77 CO-204（L2 自裁 · 打样渠道重绑 JLC 标准 = 通孔 + 背钻 + 层分配裁决 + 两闸 + U6 热 O2） ──
+    MARK77 = "## 77. CO-204"
+    _rc77 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    sec77 = [MARK77 + "（**L2 自裁 · 打样渠道重绑 JLC 标准 = 通孔 + 背钻 + 层分配变更裁决 + 两闸 + U6 热 O2 定案**）", "",
+             "- **渠道重绑（同一抓取件）**：`m13_v57_co146_jlc_capability_source.html` 同页明文二者 —— blind/buried **Not supported**"
+             "（only make through holes）与 **Backdrill 支持**（4–32 层 FR4 / 板厚 ≥0.8mm / D 0.2–0.5mm / W=D+0.2mm / **T≥0.15mm** / S≥0.2mm）。"
+             "旧能力件 CO146-CAP.3 **漏** Backdrill 段 ⇒ 催生不存在的「JLC advanced/盲埋孔通道」（CO-147 R1）⇒ **已撤销**，能力件升 **CO146-CAP.4**。"
+             "（**注**：本条「标准通道不含盲/埋孔」之定性已由 CO-206 §0 更正为「advanced 通道能做但贵」——见 §79。）",
+             "- **设计事实（机判，板 `d4e81f647be7f980`）**：493 via = F→B 273 / F→In2 92 / F→In5 8 / **In2→In5 88** / In5→B 32 ⇒ 220 非通孔；"
+             "In2↔In5 两端内层 ⇒ 最小残桩 **0.3664mm ≥ 0.15mm** ⇒ 标准通道不可制。",
+             "- **层分配裁决（CO-204 时点；续见 §78）**：自写 proper-intersection 核（未 import 引擎）把图纸 2276 段投单层 ⇒ **1298 处相交** ⇒"
+             "「逃逸层 == run 层」不可行；via1 列位 44 列 / 跨 9.55mm 中 **43** 处列距 <0.615（外层 3W）⇒「竖段全落单外层」容量不可行；"
+             "候选 A′（竖段全落 B.Cu，run 仍 In5）实测 = `NOT FULLY PLACED`（**20/32 页不可落位 ⇒ 落位 8/32**）⇒ 竖段须分色于 ≥2 层。候选族 A/B/C 遴选，实施路由 = WORKER（禁暴力迭代）。",
+             "- **U6 热定案 O2**：30×30 散热片 + 界面垫 1.0 + ~2m/s 风冷 ⇒ θJA_eff = 6.5+1.0+3.5 = **11.0** ⇒ 四工况 Tj 91.7 / 106.0 / 103.8 / **117.0 ℃** 全 ≤120；"
+             "`L2_RULING_u6_thermal_mitigation_v2.md`（v1.0 → v2.0）。",
+             "- **两闸入库（防再犯）**：**板厂能力绑定闸** `p3_v57_co204_fab_capability_binding_gate.py`（C0 能力源绑定 / C1 类别合法性 / C2 残桩 <0.15 / C3 背钻工艺限 / C4 禁盲埋孔；"
+             "CO-205 补 **C5 端声明↔实现绑定**）—— **现行板 FAIL rc=1**（`inner_inner_via_class(88)` / `residual_stub_ge_0.15mm` / `blind_buried_required`；C5=True）；"
+             "**散热验证闸** `p3_v57_co204_thermal_o2_freeze_and_gate.py` —— **PASS**（四工况 ≤120）。",
+             "- **红线（本件工件内 verbatim，不代拟编号）**：能力闸 `redline` = 「只读判据（不改 SPEC/板/冻结四源）；零坐标搜索；能力值一律由 pinned 抓取件原文抽得。」；"
+             "散热件 `redline` = 「只读输入件 + 闭式一阶计算；零坐标搜索；不改 SPEC/板/冻结四源。」；**R-CO205-1**（过孔端声明↔实现绑定，C5 机判）。",
+             "- **记录面（如实登记）**：交接件 z71 §5 引「`R-CO204-1..4`」为 CO-204 之红线编号，但树内**无其规范文本**（CO-204 未落 § 即 §80 F-3 之因）；"
+             "本 § 以工件 `redline` 字段原文代替编号，**不代拟未声明之条文**。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows77 = [("工具 `p3_v57_co204_fab_capability_binding_gate.py`（CO-205 版 / C0..C5）", K2 / "tools/p3_v57_co204_fab_capability_binding_gate.py"),
+               ("记录 `m13_v57_co204_fab_capability_binding.json`（**FAIL rc=1；C5=True**）", STEP2 / "m13_v57_co204_fab_capability_binding.json"),
+               ("工具 `p3_v57_co204_thermal_o2_freeze_and_gate.py`（U6 O2 闸）", K2 / "tools/p3_v57_co204_thermal_o2_freeze_and_gate.py"),
+               ("记录 `m13_v57_co204_thermal_verification.json`（**PASS**；四工况 ≤120）", STEP2 / "m13_v57_co204_thermal_verification.json"),
+               ("裁定 `L2_RULING_jlc_standard_through_backdrill_v1.md`（R1 定性已由 CO-206 §0 更正）", L2 / "L2_RULING_jlc_standard_through_backdrill_v1.md"),
+               ("裁定 `L2_RULING_u6_thermal_mitigation_v2.md`（U6 O2 定案 v2.0）", L2 / "L2_RULING_u6_thermal_mitigation_v2.md"),
+               ("能力件 `m13_v57_co146_jlc8_capability.json`（**CO146-CAP.4**，含 backdrill 段）", STEP2 / "m13_v57_co146_jlc8_capability.json"),
+               ("证据 `m13_v57_co204l_candidate_Aprime_infeasible.json`（候选 A′ 20/32）", STEP2 / "m13_v57_co204l_candidate_Aprime_infeasible.json"),
+               ("证据 `m13_v57_co204_l2_ruling.json`", STEP2 / "m13_v57_co204_l2_ruling.json"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc77['total']} 项 / OPEN {_rc77['OPEN']}）", L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows77:
+        if pth.exists():
+            sec77.append(f"| {label} | `{s16(pth)}` |")
+    sec77.append("")
+    body77 = "\n".join(sec77)
+    if MARK77 in txt:
+        txt = re.sub(re.escape(MARK77) + r"[\s\S]*?(?=\n## |\Z)", body77, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body77
+
+    # ── §78 CO-205（L2 自裁 · 层分配族穷尽 + 工具缺陷 ①..④） ──
+    MARK78 = "## 78. CO-205"
+    _rc78 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    sec78 = [MARK78 + "（**L2 自裁 · 层分配重指派全族探索 + 工具缺陷 ①..④ 修复；族闭合 = 24/32（修正模型 23/32）**）", "",
+             "- **族闭合（L2 可自裁空间内穷尽）**：拓扑族（A / A′ / B / C / D / E + escape=F 混合）× 桥孔 jog（方向/幅度 / x-含 y-侧移 / 条件修复）"
+             "× 列分配（CARRYALL / 逐极性游标 / XMIN / 顺序）× 层参数（POL_OFF）⇒ **上限 24/32（含桥孔占位之修正模型 23/32）**。",
+             "- **硬限论证（结构性）**：竖段须落内层（外层 3W=0.615 吃容量）、lane 亦须落内层（同理）、且二者须异层（否则竖段穿邻页 lane 产生真交叉）"
+             "⇒ corner 必为内层↔内层 ⇒ 在 R3 过孔策略下不可制；**增内层不改变该结论**（每支跨内层孔仍须经 F/B 拆分）⇒ L2 叠层决策收益为零。"
+             "剩余路径 = **L1**（球重映射/信号流向，owner）或外部工艺输入。",
+             "- **候选复测（关键负结果）**：候选 A（run 维持 In5 + 竖段全 In2，`CO16_ALLI2`）= **17/32** INFEASIBLE；"
+             "候选 B（run In5→B.Cu + 竖段 In2/In5 分色，`CO16_V2B`）= 端点层模型 32/32 且走完整链（L4 apply + co133 PDN ⇒ 501 via / 0 内层↔内层 / 能力闸 PASS）**但 KiCad DRC 抓出 7 shorting_items + 4 clearance** ⇒ **REJECTED**；"
+             "候选 D（`CO16_VOUT`+`SPAN`）= **14/32**（F 逃逸撞 pad 场/PDN）。两闸 + 冻结四源回归：默认路径与 v9 逐页同，交付板 `d4e81f647be7f980` 逐字节未变。",
+             "- **工具缺陷 ①（已修，默认关 `CO10_SPAN`/`CO16_SPAN` 透传）·过孔占用层 = 端点层**：探针以过孔**两端点层**建 mask/判据，而通孔+背钻实际占用**起止层之间全部层** ⇒ 假可行"
+             "（候选 B 旧模型 32/32 ↔ 真板 KiCad DRC 7 short 为反证）；修后候选 B = **26/32**（失败面与 DRC 命中面一致）。",
+             "- **工具缺陷 ②（已修）·lane 层标签漂移**（探针 In6 vs 真板 In5）⇒ 现行发射器工件构造器无法消费（KeyError）；修后发射器输出与 v9 逐页逐字段同、"
+             "构造器产出与冻结图纸**逐字节同**（`60cbd331836e52b7`）。",
+             "- **工具缺陷 ③（已修，opt-in `CO10_BRCOL` / 透传 `CO16_BRCOL`）`bridge_jog_direction_from_pad_order`**：桥孔 jog 方向原由 **pad 序**（BRAWAY/_BR_FLIP）或 band 固定推出；"
+             "In2 逃逸带 3W=0.48<0.615 ⇒ `_band_carry=False` ⇒ 行内逃逸列序 (px,nx) 可与 pad 序相反 ⇒ P/N 桥孔 jog 指向彼此，`|vx_P-cx_N| = |s-BR_JOG|` 塌到 0.05–0.15"
+             "（症状 = 候选 C 下 7/8 失败页 reason = `vv_intra`）。修后 `vv_intra` **7 → 0**，失败面全改跨页类（`vv_placed`/`vt_placed`/`vt2_placed`/`hh_intra`）。",
+             "- **工具缺陷 ④（已修，opt-in `CO10_COLFIX`）`connector_column_coloring_ignores_bridge_hole_y`**：J2 区间图贪心着色（`r3_build`, EASTSPLIT=in2c）"
+             "与 J3/J4 落列分离器（`_lx_separate`）之占位区间**只取 {lane_y, land_y}**，桥在 lane 行 ±BR_JOG 处另加一孔（落桥孔）落在区间之外 ⇒ 两页被着同色却在桥孔上撞"
+             "（症状 = DN2/input `vv_placed` vs UP0/out_J2.P 0.316）。修后（含桥孔占位）最优 = **23/32** ⇒ **记录的 24/32 是欠预留之乐观值**；"
+             "负控：把判据退化为「仅比 via y」⇒ 24 → **14/32**（同列两页竖段共线重叠）已回退。",
+             "- **回归修复（CO-205s）**：`carryall_bridge_extent_leak`（CO-205r 提交 `3f32c0a` 内 `_BEXT` 未加 `_CARRYALL` 门控，静默改写 BRCOL 单用结果 24 → **16/32**）⇒ 修后 `candC+BRCOL` 恢复 **24/32** 且 `vv_intra = 0`。",
+             "- **CO-205t（band 级逐极性游标 `CO10_CARRYP`）**：设计意图达成（跨页 via1 撞类 `vv_placed` **6 → 1**），但单调推进把 1 页挤出可行域 ⇒ 净 **−1**（23/32）⇒ 本族仍不过 24/32。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows78 = [("证据 `m13_v57_co205_candidate_layer_reassign.json`（候选 A/B/D 复测 + 结构引理）", STEP2 / "m13_v57_co205_candidate_layer_reassign.json"),
+               ("证据 `m13_v57_co205r_bridge_joint_solve.json`（工具缺陷 ③ / 桥族上限 24/32）", STEP2 / "m13_v57_co205r_bridge_joint_solve.json"),
+               ("证据 `m13_v57_co205s_connector_column_model.json`（工具缺陷 ④ + 回归修复 → 23/32）", STEP2 / "m13_v57_co205s_connector_column_model.json"),
+               ("证据 `m13_v57_co205t_per_polarity_cursor.json`（逐极性游标 / 族闭合）", STEP2 / "m13_v57_co205t_per_polarity_cursor.json"),
+               ("探针 `p3_v57_co10_west_fan_probe.py`（+11 只读旋钮，全默认关）", K2 / "tools/p3_v57_co10_west_fan_probe.py"),
+               ("发射器 `p3_v57_co16_emit_allocation.py`（+9 旋钮透传）", K2 / "tools/p3_v57_co16_emit_allocation.py"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc78['total']} 项 / OPEN {_rc78['OPEN']}）", L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows78:
+        if pth.exists():
+            sec78.append(f"| {label} | `{s16(pth)}` |")
+    sec78.append("")
+    body78 = "\n".join(sec78)
+    if MARK78 in txt:
+        txt = re.sub(re.escape(MARK78) + r"[\s\S]*?(?=\n## |\Z)", body78, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body78
+
+    # ── §79 CO-206（L2 自裁 · 工艺选型/性价比对比 常规功能 + A/B/C 定案 + 口径修正 + 取数留痕） ──
+    MARK79 = "## 79. CO-206"
+    _rc79 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    sec79 = [MARK79 + "（**L2 自裁 · 工艺选型/性价比对比 立为 ENG 常规功能（监理指令 #13）+ 打样路径 A/B/C 定案 + 口径修正 + 价格取数留痕**）", "",
+             "- **定性更正（§0，最高优先级）**：撤销一切「JLC 无 HDI/盲埋孔通道」表述。准确三层 = ① **标准通道不支持**盲/埋孔"
+             "（能力表原文 *\"Blind/Buried Vias Not supported … only make through holes\"*）；② **advanced 通道支持**盲/埋孔与 **HDI（激光孔）**"
+             "（同页 FAQ 原文 *\"Advanced options such as blind/buried vias, HDI (laser vias), … typically require DFM review and may increase both cost and production time.\"*）"
+             "⇒「做不了」不成立，正确命题 =「HDI 能做但贵，评估更便宜的路」；③ HDI **阶数/激光孔径/盲埋孔 DFM 限值/交期/加价** 本工程语料未获证 ⇒ `INPUT_REQUIRED`。",
+             "- **常规功能入库**：判据件 `process_route_criteria_v1.json`（判据/参数与工具分离，换板换厂可替换、**零板级特判**）+ 执行器 "
+             "`p3_v57_co206_process_route_select.py --criteria <json> [--board <pcb>]`；输出 可行性/成本/交期/性能/风险 + 推荐 + 所需输入清单；同输入 ⇒ 同输出（**幂等实测**：连跑同 sha）。"
+             "**单一真源** = 复用能力闸之 census / layer_span / class_stub（防两处口径漂移）。",
+             "- **设计事实（机判，板 `d4e81f647be7f980`）**：493 via / 通孔+背钻可制 **405** / 需盲/埋孔 **88**（全为 In2↔In5 两端内层 = 埋孔；层压次数下界 **3** ⇒ 等效 HDI 阶数 ≥2，指示性映射须板厂确认）。",
+             "- **A/B/C 定案**：**A**（JLC advanced/HDI 盲埋孔）= `FEASIBLE_PENDING_DFM`（残桩 0 / SI 不变 / **零重派生**）；"
+             "**B**（加层全通孔，如 10L）= `UNPROVEN`（充分条件 = 存在层分配使每支孔外层锚定；必要条件 = lane 须落外层，否则 corner 必为内层↔内层；实测未全落位）；"
+             "**C**（盘中孔 via-in-pad）= `PARTIAL_INSUFFICIENT_ALONE`（仅可替盲孔 **132** 支，**埋孔 88 支不可替** —— 埋孔不在任何外层焊盘之下）。",
+             "- **推荐**：**A 为默认打样路径**（唯一无需重派生；现行图纸即盲埋孔形态；SI 不变）；B 为报价驱动候选，可复现规则 "
+             "`quote(10L std) + cost(重派生) < quote(HDI 8L) ⇒ B 否则 A`（已编码，填参后自动复算）；C 仅辅助，不与 A/B 并列。**成本/交期禁编造**（无验证来源 ⇒ 全 `INPUT_REQUIRED`，只出模型 + 所需输入清单）。",
+             "- **CO-206b 口径修正**：B 路 lane 既须落外层，就须吃 **外层 3W = 0.615**；探针 `_V2B` 把 lane 置于**私有内层** In6（3W 取内层 0.48）所测 **26/32** 为**乐观值**；"
+             "按外层口径复测（新增旋钮 `CO10_LANE_OUTER`）⇒ **24/32**（失败面 DN0/2/5/7 `out_MCIO` + UP0/2/4/6 `input`）⇒ B 相对 A 之吸引力进一步下降（非便宜快路，须整层重派生且可行性未证），**推荐 A 不变**。"
+             "（裁定 v2 增 §2b；判据件 B 路 `measured` 双口径并列。）",
+             "- **CO-206c 价格取数留痕**：试 5 端点（capabilities / pcb-hdi / pcb-price / advanced-pcb / cart quote；http 码与字节逐条留痕于判据件 `price_probe_log`）"
+             "⇒ JLC 站点为 SPA，**服务端不返回价格**（报价器仅渲染 'Calculated Price $0.00' 占位）⇒ 三路 cost/lead_time **不可机取**，维持 `INPUT_REQUIRED`，须**人工报价**回填（留痕以免重复试探）。",
+             "- **CO-208 口径同步补完（本 § 之 part）**：CO-206b 只改了主判据字段，`recommendation.basis[0]` 与判据件 `risk_catalog.B[0]` 仍滞留 26/32 ⇒ CO-208 补齐"
+             "（执行器 **CO-206.2** / 判据件 **v1.3**）⇒ 明细见 §81 F-1 处置。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows79 = [("判据件 `process_route_criteria_v1.json`（**v1.3**）", L2 / "process_route_criteria_v1.json"),
+               ("执行器 `p3_v57_co206_process_route_select.py`（**CO-206.2**）", K2 / "tools/p3_v57_co206_process_route_select.py"),
+               ("证据 `m13_v57_co206_process_route_selection.json`", STEP2 / "m13_v57_co206_process_route_selection.json"),
+               ("证据 `m13_v57_co206_process_route_selection.md`", STEP2 / "m13_v57_co206_process_route_selection.md"),
+               ("裁定 `L2_RULING_process_route_selection_v2.md`（§0 更正 + §1 定案 + §2b 口径）", L2 / "L2_RULING_process_route_selection_v2.md"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc79['total']} 项 / OPEN {_rc79['OPEN']}）", L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows79:
+        if pth.exists():
+            sec79.append(f"| {label} | `{s16(pth)}` |")
+    sec79.append("")
+    body79 = "\n".join(sec79)
+    if MARK79 in txt:
+        txt = re.sub(re.escape(MARK79) + r"[\s\S]*?(?=\n## |\Z)", body79, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body79
+
+    # ── §80 CO-207（非执行者对抗复评 CO-202..CO-206c） ──
+    MARK80 = "## 80. CO-207"
+    _rc80 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    sec80 = [MARK80 + "（**非执行者对抗复评 CO-202..CO-206c；as-found 钉 `add6e33`**）", "",
+             "- **复评方**：context 归零之续接会话（本谱系 z60..z71 **之外** ⇒ 满足「复评须另一会话，禁自评」）；**as-found 快照 = `add6e33`**（CO-206c），"
+             "一切「现行态」判定皆由该快照重放（`git show` 内存重放 + 自板 pcbnew 普查 / 自算术 / 自源 AST / 自跑工具与探针）。",
+             "- **verdict = PASS_WITH_FINDINGS**｜findings **3**（F-1/F-2/F-3，全 low）｜观察 **2**（O-1 交接件齿数表述陈旧：称 25 / 实测 29；O-2「增内层不改变 24/32」之反证责任留在 B 路）。",
+             "- **正控 V1..V9**：V1 独立 via 普查 = **False**、V2 散热复算 = True、V3 oracle 复现 = **False**、V4 runner `--check` + 登记簿 = **False**、V5 冻结四源 + 板 = True、"
+             "V6 登记簿复算 = True、V7 判据件无编造数 = True、V8 打样包完整性 = **False**、V9 L2 族独立复现 = True（v9 默认 **32/32**；candC+BRCOL **24/32**；+COLFIX **23/32**；B 路 lane-outer **24/32**）。",
+             "- **负控 P1..P8 全 True**（内存注入、零落盘）：修订号抽取 / 陈旧数探测 / § 存在性 / 编造探测 / stub 齿 / 热齿 / census 齿 / 键字面量抽取之判别力均成立。",
+             "- **findings（三项；原文见复评件）**：**F-1** B 路口径修正不完整（同族引用滞留 26/32 + 自声明面滞留）；**F-2** R-CO203-1 登记条款与 t33 互斥（条款不可满足且无齿）；"
+             "**F-3** CO-204..CO-206c 无 boundary §（本文件 §77..§79 之缺即其证）。处置 = §81（CO-208）。",
+             "- **R-CO207-1**：复评件须钉**被评态快照**且一切「现行态」判定皆由该快照重放；禁内嵌处置态之 sha（承 R-CO193-3）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows80 = [("复评件 `m13_v57_co207_rev19_co202_co206_review.json`（机判证据）", STEP2 / "m13_v57_co207_rev19_co202_co206_review.json"),
+               ("复评卡片 `m13_v57_CO207_rev19_co202_co206_review.md`（结论 + findings 表）", STEP2 / "m13_v57_CO207_rev19_co202_co206_review.md"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc80['total']} 项 / OPEN {_rc80['OPEN']}）", L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows80:
+        if pth.exists():
+            sec80.append(f"| {label} | `{s16(pth)}` |")
+    sec80.append("")
+    body80 = "\n".join(sec80)
+    if MARK80 in txt:
+        txt = re.sub(re.escape(MARK80) + r"[\s\S]*?(?=\n## |\Z)", body80, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body80
+
+    # ── §81 CO-208（L2 自裁 · CO-207 复评 F-1..F-3 处置） ──
+    MARK81 = "## 81. CO-208"
+    _rc81 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    sec81 = [MARK81 + "（**L2 自裁 · CO-207 复评 F-1..F-3 处置：声明↔内容同步 + R-CO203-1 适用域收窄 + boundary 记录链收口**）", "",
+             "- **F-1 处置（声明↔内容同步）**：① 执行器 `recommend()` 依据① 与判据件 `risk_catalog.B[0]` 之 26/32 → **24/32**（显式注明口径）；"
+             "② 自声明面 sync：执行器 `revision` **CO-206.1 → CO-206.2**、判据件 **v1.2 → v1.3**（含 changelog）；"
+             "③ 重生成 `m13_v57_co206_process_route_selection.{json,md}`（幂等实测：连跑同 sha）。**红线 R-CO208-1**。",
+             "- **F-2 处置（R-CO203-1 适用域收窄）**：R-CO203-1 之登记义务**收窄**至「其自声明 `revision` 为**机判/记录消费面**者」——"
+             "现域 = **不动点 oracle 单件**（其记录由 t28/t33 消费）；t33 之单件断言即该域之**显式不变量**。"
+             "文义「凡自声明者皆须登记」不可实现（本会话 AST 复算：`tools/p3_v57_*.py` 含 `revision` dict 字面量者 **155 / 229**）⇒ 该文义作废。**红线 R-CO208-2**。",
+             "- **F-3 处置（记录链收口）**：补 §77（CO-204）/ §78（CO-205 + r/s/t）/ §79（CO-206 + b/c）/ §80（CO-207）/ §81（本节 = CO-208）；boundary **v2.48 → v2.49**。**红线 R-CO208-3**。",
+             "- **记录面（如实登记）**：§77 指出的 `R-CO204-1..4` 与承接 CO-206 之 `R-CO206-1` 均无树内规范文本；CO-208 **不代拟**该两族编号条文"
+             "（CO-204 族以工件 `redline` 原文代替；CO-206 之「工艺可行性/成本须走判据件 + 工具、禁编造单价」义务由本节 R-CO208-1/本判据件承载）。",
+             f"- **登记簿**：+3（`co207:F-1`/`F-2`/`F-3`，全 low，全 CLOSED；**{_rc81['total']} 项 / OPEN {_rc81['OPEN']}**）。",
+             "- **实测（本件证据）**：修后 —— `--check` **t01..t33 全 True（35 项）**；规范序收敛 rc=0 / 2 轮（唯一非零 = co146 DFM rc=1 预期、**stderr 0 字节**）；"
+             "co124 登记簿自检 PASS；oracle PASS 且幂等；能力闸 **FAIL 预期（C5=True）**；散热闸 PASS；打样包牙齿全 True；冻结四源 **4/4 MATCH**；交付板 `d4e81f647be7f980` 逐字节未变。",
+             "",
+             "> **R-CO208-1**（承 F-1）：**同一量多处引用者，改口径须逐处同步**；工具/判据件之自声明面（`revision`）随内容升级须**同 commit bump**；域内工具由 `tool_revision_bound`（t33）机判。",
+             "> **R-CO208-2**（承 F-2，收窄 R-CO203-1）：R-CO203-1 之登记适用域 = 「其自声明 `revision` 为机判/记录消费面者」（现 = 不动点 oracle 单件）；"
+             "域内新增工具时 `TOOL_REVISION_DECLARED` 与 t33 断言集须**同 commit 同源扩容**（禁单侧更新）；域外工具不适用该登记义务。",
+             "> **R-CO208-3**（承 F-3）：**新 CO 收口即须落 boundary §（同一 commit）**；boundary 须自足到「冻结四源 + gate 链态可只读 boundary 得到」。",
+             "> **R-CO208-4**（复现序，取代 R-CO203-2；**步集/序列不变，序内出现 50 次**）：规范复现序 = `" + _ord190 + "`，"
+             "**循环至 sha 稳定**（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1 + R-CO175-1 + R-CO176-1/2 "
+             "+ R-CO177-1 + R-CO178-1 + R-CO179-1/2 + R-CO180-1/2 + R-CO181-1/2 + R-CO182-1 + R-CO183-1 + R-CO184-1 + R-CO185-1/2 "
+             "+ R-CO186-1 + R-CO187-1/2/3 + R-CO188-1 + R-CO189-1 + R-CO190-1 + R-CO191-1 + R-CO192-1 + R-CO193-1/2/3/4 + R-CO194-1/2 "
+             "+ R-CO195-0/1 + R-CO196-1/2/4/5 + R-CO197-1/2/4 + R-CO198-1 + R-CO199-1 + R-CO200-1 + R-CO201-1/2 + R-CO202-1/2/3/4 "
+             "+ R-CO203-1 + R-CO207-1 + R-CO208-1/2/3）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows81 = [("执行器 `p3_v57_co206_process_route_select.py`（CO-206.2）", K2 / "tools/p3_v57_co206_process_route_select.py"),
+               ("判据件 `process_route_criteria_v1.json`（v1.3）", L2 / "process_route_criteria_v1.json"),
+               ("生成器 `p3_v57_co146_boundary_append.py`（本节写入器）", K2 / "tools/p3_v57_co146_boundary_append.py"),
+               ("runner `p3_v57_co164_order_runner.py`（CO-203.1 / t33 域不变量）", K2 / "tools/p3_v57_co164_order_runner.py"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc81['total']} 项 / OPEN {_rc81['OPEN']}）", L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows81:
+        if pth.exists():
+            sec81.append(f"| {label} | `{s16(pth)}` |")
+    sec81.append("")
+    body81 = "\n".join(sec81)
+    if MARK81 in txt:
+        txt = re.sub(re.escape(MARK81) + r"[\s\S]*?(?=\n## |\Z)", body81, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body81
+
+    txt = txt.replace("W3 Boundary **v2.48**", "W3 Boundary **v2.49**")
     txt = txt.replace("W3 Boundary **v2.47**", "W3 Boundary **v2.48**")
     txt = txt.replace("W3 Boundary **v2.46**", "W3 Boundary **v2.47**")
     txt = txt.replace("W3 Boundary **v2.45**", "W3 Boundary **v2.46**")
