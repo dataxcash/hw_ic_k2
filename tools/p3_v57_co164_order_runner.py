@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CO-164/CO-167/CO-169/CO-174/CO-180/CO-181/CO-182/CO-183/CO-187/CO-188/CO-189/CO-190/CO-191 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
+"""CO-164/CO-167/CO-169/CO-174/CO-180/CO-181/CO-182/CO-183/CO-187/CO-188/CO-189/CO-190/CO-191/CO-192 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
 
 缘起（实测事故，CO-163）：`co146_boundary_append.py` 因 §37 文本里的 f-string 花括号语法错误**每次崩溃（rc=1）**，
 但收敛判定只看 boundary/记录 sha ⇒ sha 恒不变 ⇒ 报「CONVERGED」，边界 §37 实际从未写入、pin 表陈旧（co77/co135/co136 判 FAIL）。
@@ -22,6 +22,7 @@
      记录 + 静态齿 **t24**（超时值带 + 正负控）。缺超时 = 挂起步使 runner 永久阻塞而非 fail-closed。
   ⑧ CO-191（R-CO191-1）：**判定基据完备性** —— ① 步骤**全部**声明 verdict 一律判决（禁只判首个 ⇒ 隐藏非 PASS 可逃逸）；
      ② 每步须有可机判基据（`teeth`/`verdict`/登记簿自洽/**显式下游** `JUDGMENT_DOWNSTREAM`）⇒ 禁「静默步」；静态齿 **t25**。
+  ⑨ CO-192（R-CO192-1，**非执行者对抗复评 CO-187..CO-191 的处置**）：① 静态扫描**形态完备性**续加固——牙齿棘轮补 `|=`/嵌套下标/推导/`__setitem__`/Attribute/下标赋别名；md 写补 `Path.open(w)`/`shutil.move`/`os.replace|rename`；boundary 读补 `.open().read()`/`io.open`；② **放行档一律判全 verdict**（`all_verdicts_gate`：`ok` **与** `expected_nonzero` 均判 ⇒ 白名单步副 verdict 不得逃逸）。t18/t20/t21/t25 合成控同步扩展。
 CLI:
   python3 tools/p3_v57_co164_order_runner.py [--check] [--max-iter 5]
 """
@@ -514,66 +515,97 @@ def _tooth_call_pairs(c) -> list:
 
 
 def teeth_hygiene_scan(src: str) -> dict:
-    """CO-183/CO-187：牙齿卫生静态扫描（AST、**只读**）——
+    """CO-183/CO-187/CO-192：牙齿卫生静态扫描（AST、**只读**）——
     ① **常量齿**：值式子树**不含动态输入**（纯字面量/纯算符，含 `1 == 1`）⇒ 恒真/恒假齿候选；
     ② **提前结算**：`all/any(牙齿容器…)` 聚合之后**仍**向同一容器加齿。
     CO-187（F-1）加固**容器形态覆盖**：别名容器（`{"teeth": <Name>}`）、`AnnAssign`、`dict(...)`、
     `.update({...})`、`.setdefault(k, v)` 的下标/增量赋值一律纳扫（旧式仅认裸 `teeth` + 下标）。
+    CO-192（F-1）续加固：`|=`（AugAssign）、**嵌套下标**（`rec["teeth"][k]`）、**dict 推导**、`__setitem__`、
+    **Attribute 目标**（`self.teeth[k]`）、**下标赋别名**（`rec["teeth"] = <Name>`）一律纳扫。
     返回 {"n_teeth": int, "constant_teeth": [...], "premature_agg": [...]}。
     """
     tree = ast.parse(src)
-    tooth_vars = set()          # {'teeth': <Name>} ⇒ 该 Name 亦为牙齿容器（co81/co84 风格）
+    tooth_vars = set()          # {'teeth': <Name>} / rec["teeth"] = <Name> ⇒ 该 Name 亦为牙齿容器
     for n in ast.walk(tree):
         if isinstance(n, ast.Dict):
             for k, v in zip(n.keys, n.values):
                 if isinstance(k, ast.Constant) and k.value == "teeth" and isinstance(v, ast.Name):
                     tooth_vars.add(v.id)
+        if isinstance(n, ast.Assign):
+            for t in n.targets:
+                if (isinstance(t, ast.Subscript) and isinstance(t.slice, ast.Constant)
+                        and t.slice.value == "teeth" and isinstance(n.value, ast.Name)):
+                    tooth_vars.add(n.value.id)
 
-    def _is_container(name: str) -> bool:
-        return name == "teeth" or name in tooth_vars
+    def _is_container(node) -> bool:
+        """CO-192（F-1）：牙齿容器判据改为**节点形态无关**（Name / `self.teeth` Attribute）。"""
+        if isinstance(node, ast.Name):
+            return node.id == "teeth" or node.id in tooth_vars
+        if isinstance(node, ast.Attribute):
+            return node.attr == "teeth"
+        return False
+
+    def _is_teeth_subscript(node) -> bool:
+        return (isinstance(node, ast.Subscript) and isinstance(node.slice, ast.Constant)
+                and node.slice.value == "teeth")
+
+    def _key(node):
+        return node.value if isinstance(node, ast.Constant) else None
 
     pairs, stores = [], []
+
+    def _add(key, value, lineno):
+        pairs.append((key, value)); stores.append(lineno)
+
     for n in ast.walk(tree):
         if isinstance(n, ast.Assign):
             for t in n.targets:
-                if (isinstance(t, ast.Subscript) and isinstance(t.value, ast.Name)
-                        and _is_container(t.value.id)):
-                    key = t.slice.value if isinstance(t.slice, ast.Constant) else None
-                    pairs.append((key, n.value)); stores.append(n.lineno)
-                elif isinstance(t, ast.Name) and _is_container(t.id):
+                if isinstance(t, ast.Subscript) and _is_container(t.value):
+                    _add(_key(t.slice), n.value, n.lineno)
+                elif isinstance(t, ast.Subscript) and _is_teeth_subscript(t.value):
+                    _add(_key(t.slice), n.value, n.lineno)          # 嵌套下标 rec["teeth"][k]
+                elif isinstance(t, ast.Name) and _is_container(t):
                     if isinstance(n.value, ast.Dict):
                         pairs += _tooth_dict_pairs(n.value)
                     elif isinstance(n.value, ast.Call) and isinstance(n.value.func, ast.Name) \
                             and n.value.func.id == "dict":
                         pairs += _tooth_call_pairs(n.value)
-        elif isinstance(n, ast.AnnAssign) and isinstance(n.target, ast.Name) and _is_container(n.target.id):
+                    elif isinstance(n.value, ast.DictComp):
+                        _add(None, n.value.value, n.lineno)         # 推导齿矩阵
+        elif isinstance(n, ast.AnnAssign) and isinstance(n.target, ast.Name) and _is_container(n.target):
             if isinstance(n.value, ast.Dict):
                 pairs += _tooth_dict_pairs(n.value)
             elif isinstance(n.value, ast.Call) and isinstance(n.value.func, ast.Name) \
                     and n.value.func.id == "dict":
                 pairs += _tooth_call_pairs(n.value)
+        elif isinstance(n, ast.AugAssign):
+            # `teeth |= {...}` / `rec["teeth"] |= {...}` —— 增量加齿（CO-192 F-1）
+            if isinstance(n.value, ast.Dict) and (
+                    (isinstance(n.target, ast.Name) and _is_container(n.target))
+                    or (isinstance(n.target, ast.Subscript)
+                        and (_is_container(n.target.value) or _is_teeth_subscript(n.target.value)))):
+                pairs += _tooth_dict_pairs(n.value); stores.append(n.lineno)
         elif isinstance(n, ast.Call):
             fn = n.func
-            if isinstance(fn, ast.Attribute) and isinstance(fn.value, ast.Name) and _is_container(fn.value.id):
+            if isinstance(fn, ast.Attribute) and _is_container(fn.value):
                 if fn.attr == "update":
                     for a in n.args:
                         if isinstance(a, ast.Dict):
                             pairs += _tooth_dict_pairs(a)
                     for kw in n.keywords:
                         if kw.arg is not None:
-                            pairs.append((kw.arg, kw.value))
+                            _add(kw.arg, kw.value, n.lineno)
                     stores.append(n.lineno)
-                elif fn.attr == "setdefault" and len(n.args) >= 2:
-                    key = n.args[0].value if isinstance(n.args[0], ast.Constant) else None
-                    pairs.append((key, n.args[1])); stores.append(n.lineno)
+                elif fn.attr in ("setdefault", "__setitem__") and len(n.args) >= 2:
+                    _add(_key(n.args[0]), n.args[1], n.lineno)
         if isinstance(n, ast.Dict):
             for k, v in zip(n.keys, n.values):
                 if isinstance(k, ast.Constant) and k.value == "teeth" and isinstance(v, ast.Dict):
                     pairs += _tooth_dict_pairs(v)
-    # 同一值式去重（Dict 字面量可能被多条分支命中）
+    # 同一值式去重（Dict 字面量可能被多条分支命中；None 值式 = 无键聚合）
     _seen, uniq = set(), []
     for k, v in pairs:
-        if id(v) in _seen:
+        if v is None or id(v) in _seen:
             continue
         _seen.add(id(v)); uniq.append((k, v))
     pairs = uniq
@@ -583,7 +615,7 @@ def teeth_hygiene_scan(src: str) -> dict:
     premature_agg = []
     for n in ast.walk(tree):
         if (isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and n.func.id in ("all", "any")
-                and any(isinstance(x, ast.Name) and _is_container(x.id) for x in ast.walk(n))
+                and any(isinstance(x, ast.Name) and (x.id == "teeth" or x.id in tooth_vars) for x in ast.walk(n))
                 and id(n) not in tooth_ids):
             later = [ln for ln in stores if ln > n.lineno]
             if later:
@@ -636,6 +668,17 @@ def all_verdicts_decision(step: str, verdicts=None) -> str:
         if nonpass_decision(step, v) == "undeclared_nonpass":
             return "undeclared_nonpass"
     return "ok"
+
+
+def all_verdicts_gate(cls: str, step: str, verdicts=None) -> tuple:
+    """CO-192（F-4）：**放行档**（`ok` / `expected_nonzero`）一律施加「全声明 verdict」判决。
+
+    CO-191 只在 `cls == "ok"` 时调 `all_verdicts_decision` ⇒ 白名单步（rc≠0 预期 FAIL）的**副**声明产物
+    verdict 不被运行期判决，与 R-CO191-1「**全部**声明 verdict 一律判决」不符。返回 (cls, decision)。
+    """
+    if cls in ("ok", "expected_nonzero") and all_verdicts_decision(step, verdicts) == "undeclared_nonpass":
+        return "undeclared_nonpass_verdict", "undeclared_nonpass"
+    return cls, "ok"
 
 
 def judgment_basis(step: str) -> str:
@@ -735,9 +778,10 @@ def uncontrolled_decision(changes, exempt=None) -> str:
 
 
 def md_write_scan(src: str) -> list:
-    """CO-186/CO-187：静态提取该工具 **`.md` 写/拷目标**（模块级 Name 常量一并解析）。
+    """CO-186/CO-187/CO-192：静态提取该工具 **`.md` 写/拷目标**（模块级 Name 常量一并解析）。
 
     覆盖面（CO-187 F-2 加固）：`write_text`/`write_bytes`、写模式 `open(...)`、`shutil.copy*` 的**目的**参数。
+    CO-192（F-2）续加固：`Path.open(w)`、`shutil.move`、`os.replace`/`os.rename` 的**目的**参数。
     仅看**写**上下文 ⇒ 只读引用（BASIC_SKILL_VS_REDLINE / boundary 读取 / 只读 open）不误报。
     """
     tree = ast.parse(src)
@@ -756,6 +800,10 @@ def md_write_scan(src: str) -> list:
                 return Path(c.value).name
         return None
 
+    def _is_write_mode(nodes) -> bool:
+        return any(isinstance(a, ast.Constant) and isinstance(a.value, str)
+                   and any(ch in a.value for ch in "wax+") for a in nodes)
+
     found = set()
     for n in ast.walk(tree):
         if not isinstance(n, ast.Call):
@@ -766,14 +814,21 @@ def md_write_scan(src: str) -> list:
             if nm:
                 found.add(nm)
         elif isinstance(fn, ast.Name) and fn.id == "open" and n.args:
-            mode_w = any(isinstance(a, ast.Constant) and isinstance(a.value, str)
-                         and any(ch in a.value for ch in "wax+") for a in n.args[1:])
-            if mode_w:
+            if _is_write_mode(n.args[1:]):
                 nm = _target_name(n.args[0])
                 if nm:
                     found.add(nm)
-        elif isinstance(fn, ast.Attribute) and fn.attr in ("copy", "copy2", "copyfile") and len(n.args) >= 2:
+        elif isinstance(fn, ast.Attribute) and fn.attr == "open" and _is_write_mode(n.args):
+            nm = _target_name(fn.value)                      # CO-192（F-2）：Path.open(w)
+            if nm:
+                found.add(nm)
+        elif isinstance(fn, ast.Attribute) and fn.attr in ("copy", "copy2", "copyfile", "move") and len(n.args) >= 2:
             nm = _target_name(n.args[1])
+            if nm:
+                found.add(nm)
+        elif isinstance(fn, ast.Attribute) and isinstance(fn.value, ast.Name) and fn.value.id == "os" \
+                and fn.attr in ("replace", "rename") and len(n.args) >= 2:
+            nm = _target_name(n.args[1])                     # CO-192（F-2）：os.replace/rename 目的
             if nm:
                 found.add(nm)
     return sorted(found)
@@ -784,7 +839,14 @@ _BOUNDARY_REF_RE = re.compile(r"w3_joint_assignment_boundary|_latest_boundary")
 
 
 def boundary_read_scan(src: str) -> bool:
-    return bool(_BOUNDARY_REF_RE.search(src)) and ("read_text" in src or "read_bytes" in src)
+    """CO-187（F-3）/ CO-192（F-3）：工具源是否**读取** boundary。
+
+    读指标 = 显式 `read_text`/`read_bytes`，或 `Path.open().read()` / `io.open(...).read()` 形态（CO-192 补）。
+    仅引用 boundary 名（写/常量）**不**计读取者。
+    """
+    if not _BOUNDARY_REF_RE.search(src):
+        return False
+    return any(t in src for t in ("read_text", "read_bytes", ".read(", "io.open("))
 
 
 def boundary_readers() -> list:
@@ -957,6 +1019,16 @@ def main(argv=None) -> int:
     _p_dictc = 'def f():\n    teeth=dict(t01=True)\n    return teeth\n'
     _p_setd = 'def f():\n    teeth={}\n    teeth.setdefault("t01",True)\n    return teeth\n'
     _p_lit = 'def f(d):\n    teeth={"t01":(1==1),"t02":d["a"]>0}\n    return teeth\n'
+    # CO-192（F-1）：续加固形态一律须纳扫（`|=` / 嵌套下标 / dict 推导 / __setitem__ / Attribute / 下标赋别名）
+    _p_192 = [
+        'def f():\n    teeth={}\n    teeth |= {"t01": True}\n    return teeth\n',
+        'def f():\n    rec={"teeth":{}}\n    rec["teeth"]["t01"]=True\n    return rec\n',
+        'def f(ks):\n    teeth={k: True for k in ks}\n    return teeth\n',
+        'def f():\n    teeth={}\n    teeth.__setitem__("t01", True)\n    return teeth\n',
+        'def f(self):\n    self.teeth["t01"]=True\n    return self.teeth\n',
+        'TEETH={"t01":True}\ndef f():\n    rec={}\n    rec["teeth"]=TEETH\n    return rec\n',
+    ]
+    _ev192 = [teeth_hygiene_scan(x) for x in _p_192]
     _g = teeth_hygiene_scan(_p_good); _c = teeth_hygiene_scan(_p_const)
     _m = teeth_hygiene_scan(_p_prem); _f = teeth_hygiene_scan(_p_foreign)
     _ev = [teeth_hygiene_scan(x) for x in (_p_alias, _p_upd, _p_ann, _p_dictc, _p_setd)]
@@ -964,7 +1036,8 @@ def main(argv=None) -> int:
                 and len(_c["constant_teeth"]) == 1 and not _c["premature_agg"]
                 and len(_m["premature_agg"]) == 1 and not _f["constant_teeth"] and not _f["premature_agg"]
                 and all([x["key"] for x in r["constant_teeth"]] == ["t01"] for r in _ev)
-                and [x["key"] for x in teeth_hygiene_scan(_p_lit)["constant_teeth"]] == ["t01"])
+                and [x["key"] for x in teeth_hygiene_scan(_p_lit)["constant_teeth"]] == ["t01"]
+                and all(r["n_teeth"] >= 1 and r["constant_teeth"] for r in _ev192))
     _own = {}
     for _s in set(ORDER):
         for _r in STEP_ARTIFACTS.get(_s, []):
@@ -1020,7 +1093,12 @@ def main(argv=None) -> int:
         and md_write_scan('open("probe.md","w").write("x")') == ["probe.md"]
         and md_write_scan('shutil.copy(S2 / "a.md", OUT / "imp/table.md")') == ["table.md"]
         and md_write_scan('x = (STEP2 / "read_only.md").read_text()\n') == []
-        and md_write_scan('open("ro.md").read()\n') == [])
+        and md_write_scan('open("ro.md").read()\n') == []
+        # CO-192（F-2）：Path.open(w) / shutil.move / os.replace|rename 目的亦须纳扫
+        and md_write_scan('CARD = S2 / "x.md"\nf = CARD.open("w")') == ["x.md"]
+        and md_write_scan('shutil.move(S2 / "a.md", OUT / "b.md")') == ["b.md"]
+        and md_write_scan('os.replace(S2 / "a.md", OUT / "b.md")') == ["b.md"]
+        and md_write_scan('CARD = S2 / "x.md"\nf = CARD.open("r")') == [])
     # CO-187（F-3）：读取 boundary 的步须**显式归类**（扫描步 ⇒ 紧跟刷新；非扫描步 ⇒ 声明理由）—— t21
     checks["t21_boundary_reader_declared"] = (
         set(boundary_readers()) == (set(BOUNDARY_SCAN_GUARDED) | set(BOUNDARY_READ_DECLARED))
@@ -1032,7 +1110,10 @@ def main(argv=None) -> int:
         and boundary_read_scan('B = _latest_boundary()\nx = B.read_bytes()')
         and not boundary_read_scan('x = (STEP2 / "other.md").read_text()')
         and not boundary_read_scan('DOC.write_text("x")')
-        and not boundary_read_scan('BOUNDARY_STEP = "co146_boundary_append"\n'))
+        and not boundary_read_scan('BOUNDARY_STEP = "co146_boundary_append"\n')
+        # CO-192（F-3）：Path.open().read() / io.open(...).read() 形态亦须计入读取者
+        and boundary_read_scan('DOC = STEP2 / "m13_v57_w3_joint_assignment_boundary_v1_82.md"\nt = DOC.open().read()')
+        and boundary_read_scan('B = _latest_boundary()\nt = io.open(B).read()'))
     # CO-188（R-CO188-1）：越界写（stray）须 fail-closed；显式例外表须完备（键/理由/受控/不与声明重叠）
     _watch_abs = {p.as_posix() for p in watch_paths()}
     _stray_tbl_ok = all(
@@ -1084,6 +1165,18 @@ def main(argv=None) -> int:
         and all_verdicts_decision("__nc__", [("a", "PASS"), ("b", "FAIL")]) == "undeclared_nonpass"
         and all_verdicts_decision("__nc__", [("a", "PASS"), ("b", "PASS_WITH_FINDINGS")]) == "ok"
         and all_verdicts_decision("co146_pm_eval", [("x", "FAIL")]) == "ok")   # 已声明非 PASS 放行
+    # CO-192（F-4）：**放行档**（ok / expected_nonzero）一律判全 verdict（白名单步副 verdict 不得逃逸）
+    checks["t25_judgment_basis_declared"] = checks["t25_judgment_basis_declared"] and (
+        # 白名单步：副 verdict 须为**不同于**其声明 FAIL 的非 PASS 值（同值属 declared_whitelist，不可分）
+        all_verdicts_gate("expected_nonzero", "co146_jlc_dfm_gate", [("a", "PASS"), ("b", "ERROR")])
+        == ("undeclared_nonpass_verdict", "undeclared_nonpass")
+        and all_verdicts_gate("expected_nonzero", "co146_jlc_dfm_gate", [("a", "PASS")])
+        == ("expected_nonzero", "ok")
+        and all_verdicts_gate("ok", "__x__", [("a", "FAIL")])
+        == ("undeclared_nonpass_verdict", "undeclared_nonpass")
+        and all_verdicts_gate("ok", "co146_pm_eval", [("x", "FAIL")]) == ("ok", "ok")
+        and all_verdicts_gate("step_timeout", "co146_jlc_dfm_gate", [("a", "ERROR")])
+        == ("step_timeout", "ok"))
     checks["t05_stability_oracle"] = (stable("x", "x") and not stable("x", "y") and not stable("", ""))
     # CO-164（t06）：执行器 ORDER 必须与 boundary 规范复现序**有序一致**（文档↔执行器防漂移）
     _bdy = boundary_order_steps()
@@ -1141,10 +1234,9 @@ def main(argv=None) -> int:
             _stray = sorted(Path(k).relative_to(K2).as_posix()
                             for k in set(_ball) | set(_aall)
                             if k not in _decl_set and _ball.get(k) != _aall.get(k))
-            if cls == "ok":
-                # CO-185（R-CO185-2）+ CO-191（R-CO191-1）：**全部**声明 verdict 一律判决（禁只判首个/借用共享件）
-                if all_verdicts_decision(step) == "undeclared_nonpass":
-                    cls = "undeclared_nonpass_verdict"
+            # CO-185（R-CO185-2）+ CO-191（R-CO191-1）+ CO-192（F-4）：**全部**声明 verdict 一律判决
+            # （放行档 `ok` **与** `expected_nonzero` 均判；禁只判首个、禁白名单步副 verdict 逃逸）
+            cls, _ = all_verdicts_gate(cls, step)
             # CO-188（R-CO188-1）：越界写（未声明受控件）⇒ 停机（确定性越界写不破收敛、亦不被步本地归因抓到）
             if cls in ("ok", "expected_nonzero") and _stray and stray_decision(step, _stray) != "ok":
                 cls = "stray_write"
@@ -1173,7 +1265,7 @@ def main(argv=None) -> int:
             converged = True
             break
         prev = cur
-    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-191.1",
+    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-192.1",
               "nature": "规范复现序机判执行器（rc 策略 + 真收敛判定）；报告落 .archer_tmp/ 且**不被 boundary 引用**（避免不动点）",
               "order": ORDER, "expected_nonzero": EXPECTED_NONZERO,
               "checks": checks, "iterations": iterations, "abort": abort, "converged": converged,

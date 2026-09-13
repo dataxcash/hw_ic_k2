@@ -2041,8 +2041,55 @@ def main() -> int:
         txt = re.sub(re.escape(MARK64) + r"[\s\S]*?(?=\n## |\Z)", body64, txt, count=1)
     else:
         txt = txt.rstrip("\n") + "\n\n" + body64
+    # ── §65 CO-192（非执行者对抗复评 CO-187..CO-191 + L2 自裁处置） ────────────
+    MARK65 = "## 65. CO-192"
+    _rc65 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    _ord192 = _ord190          # 步集/序列不变（50 次）
+    _rev192 = STEP2 / "m13_v57_co192_rev19_co187_co191_review.json"
+    sec65 = [MARK65 + "（**非执行者对抗复评 CO-187..CO-191 + L2 自裁处置**）", "",
+             "- **复评方**：context 归零的续接会话（满足「复评须另一会话，禁自评」）；对象钉 `52235b5`（`git show` 内存重放 ⇒ 结论**不随处置漂移**）。"
+             "方法：正控 **V1..V8**（独立复算）+ 负控 **P1..P6c**（内存注入、零落盘、零坐标搜索）。verdict **PASS_WITH_FINDINGS**｜findings **4**（F-1..F-4，全 low）。",
+             "- **成立件（无 medium+）**：V1 牙齿棘轮零违规 + 逐工具齿数 ≥ pin；V2 md 产物 ∈ pin∪豁免、豁免绑实存补偿齿；"
+             "V3 boundary 读取者全集 = 扫描步 ∪ 声明（互斥）；V4 越界写 fail-closed；V5 承载根 ⊇ 受控集 + 豁免完备；"
+             "V6 超时 fail-closed + 子进程接线；V7 每步基据非 none + 下游声明合法；V8 冻结四源 4/4 + ORDER==boundary 序 + `--check` 全 True。",
+             "- **F-1（low）·牙齿棘轮形态仍漏计**：`|=`（AugAssign）/ 嵌套下标 `rec[\"teeth\"][k]` / dict 推导 / `__setitem__` / "
+             "Attribute（`self.teeth[k]`）/ 下标赋别名 一律 `n_teeth=0` ⇒ 恒真齿经这些形态加入不被 t18 截。**处置**：`teeth_hygiene_scan` "
+             "容器判据改**节点形态无关** + 6 类纳扫 + t18 合成正控扩展。",
+             "- **F-2（low）·md 写/拷形态仍漏计**：`Path.open(w)` / `shutil.move` / `os.replace|rename` 目的 `md_write_scan()`==[] "
+             "⇒ 该类 `.md` 可落出受控集、t20 不截（实测现行 ORDER 工具 0 命中 = 潜在面）。**处置**：补 3 类 + t20 正控扩展。",
+             "- **F-3（low）·boundary 读取者判据可绕过**：`D.open().read()` / `io.open(B).read()`（源内无 `read_text`/`read_bytes` 字面）判 False。"
+             "**处置**：读指标补 `.read(` / `io.open(` + t21 正控扩展。",
+             "- **F-4（low）·全 verdict 判决对白名单步不生效**：主循环以 `if cls == \"ok\"` 为门槛 ⇒ `expected_nonzero` 步"
+             "（`co146_jlc_dfm_gate`）的**副**声明 verdict 不被运行期判决（副值 ≠ 其声明 FAIL 的非 PASS 值即逃逸），违 R-CO191-1。"
+             "**处置**：`all_verdicts_gate` —— **放行档**（`ok` **与** `expected_nonzero`）一律判全 verdict + t25 正负控扩展。",
+             f"- **登记簿**：+4（`co192:F-1..F-4`，全 CLOSED；**{_rc65['total']} 项 / OPEN {_rc65['OPEN']}**）。",
+             "",
+             "> **R-CO192-1**：静态扫描须**形态完备**（牙齿：下标/别名/AnnAssign/dict()/update/setdefault/`|=`/嵌套下标/推导/`__setitem__`/"
+             "Attribute/下标赋别名；md 写：write_text/write_bytes/open(w)/`Path.open(w)`/copy*/`move`/`os.replace|rename`；boundary 读："
+             "read_text/read_bytes/`.read(`/`io.open`）；且**放行档一律判全声明 verdict**（`ok` **与** `expected_nonzero`）。",
+             "> **R-CO192-2**（复现序，取代 R-CO191-2；**步集/序列不变，序内出现 50 次**）：规范复现序 = `" + _ord192 + "`，"
+             "**循环至 sha 稳定**（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1 "
+             "+ R-CO175-1 + R-CO176-1/2 + R-CO177-1 + R-CO178-1 + R-CO179-1/2 + R-CO180-1/2 + R-CO181-1/2 + R-CO182-1 "
+             "+ R-CO183-1 + R-CO184-1 + R-CO185-1/2 + R-CO186-1 + R-CO187-1/2/3 + R-CO188-1 + R-CO189-1 + R-CO190-1 "
+             "+ R-CO191-1 + R-CO192-1）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows65 = [("工具 `p3_v57_co164_order_runner.py`（CO-192.1 / 扫描形态完备 + `all_verdicts_gate` + t18/t20/t21/t25 扩展）",
+                K2 / "tools/p3_v57_co164_order_runner.py"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc65['total']} 项 / OPEN {_rc65['OPEN']}）",
+                L2 / "input_defect_register_v1.json"),
+               ("复评件 `m13_v57_co192_rev19_co187_co191_review.json`（PASS_WITH_FINDINGS / 4）", _rev192)]
+    for label, pth in _rows65:
+        if pth.exists():
+            sec65.append(f"| {label} | `{s16(pth)}` |")
+    sec65.append("")
+    body65 = "\n".join(sec65)
+    if MARK65 in txt:
+        txt = re.sub(re.escape(MARK65) + r"[\s\S]*?(?=\n## |\Z)", body65, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body65
+    txt = txt.replace("W3 Boundary **v2.36**", "W3 Boundary **v2.37**")
     txt = txt.replace("W3 Boundary **v2.35**", "W3 Boundary **v2.36**")
-    txt = txt.replace("W3 Boundary **v2.34**", "W3 Boundary **v2.35**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
     return 0
