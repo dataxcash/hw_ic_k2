@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CO-164/CO-167/CO-169/CO-174/CO-180/CO-181/CO-182/CO-183/CO-187/CO-188/CO-189/CO-190/CO-191/CO-192/CO-193 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
+"""CO-164/CO-167/CO-169/CO-174/CO-180/CO-181/CO-182/CO-183/CO-187/CO-188/CO-189/CO-190/CO-191/CO-192/CO-193/CO-194 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
 
 缘起（实测事故，CO-163）：`co146_boundary_append.py` 因 §37 文本里的 f-string 花括号语法错误**每次崩溃（rc=1）**，
 但收敛判定只看 boundary/记录 sha ⇒ sha 恒不变 ⇒ 报「CONVERGED」，边界 §37 实际从未写入、pin 表陈旧（co77/co135/co136 判 FAIL）。
@@ -24,6 +24,8 @@
      ② 每步须有可机判基据（`teeth`/`verdict`/登记簿自洽/**显式下游** `JUDGMENT_DOWNSTREAM`）⇒ 禁「静默步」；静态齿 **t25**。
   ⑨ CO-192（R-CO192-1，**非执行者对抗复评 CO-187..CO-191 的处置**）：① 静态扫描**形态完备性**续加固——牙齿棘轮补 `|=`/嵌套下标/推导/`__setitem__`/Attribute/下标赋别名；md 写补 `Path.open(w)`/`shutil.move`/`os.replace|rename`；boundary 读补 `.open().read()`/`io.open`；② **放行档一律判全 verdict**（`all_verdicts_gate`：`ok` **与** `expected_nonzero` 均判 ⇒ 白名单步副 verdict 不得逃逸）。t18/t20/t21/t25 合成控同步扩展。
   ⑩ CO-193（R-CO193-1/2，**声明↔实现绑定的可执行性**）：① `JUDGMENT_DOWNSTREAM` 下游声明须**可执行** —— 每条给被judged工件 basename，ref 须在序内**晚于**声明步（存在性）且 ref 步工具**确实读取**该工件，否则 fail-closed；② `EXPECTED_NONZERO` 证据须**本步绑定** —— `record` 须 ∈ `STEP_ARTIFACTS[step]`、`teeth_path` 须在记录内**可解析**。静态齿 **t26**。
+  ⑩ CO-193（R-CO193-1/2，**声明↔实现绑定的可执行性**）：① `JUDGMENT_DOWNSTREAM` 下游声明须**可执行** —— 每条给被judged工件 basename，ref 须在序内**晚于**声明步（存在性）且 ref 步工具**确实读取**该工件，否则 fail-closed；② `EXPECTED_NONZERO` 证据须**本步绑定** —— `record` 须 ∈ `STEP_ARTIFACTS[step]`、`teeth_path` 须在记录内**可解析**。静态齿 **t26**。
+  ⑪ CO-194（R-CO194-1/2，**基据↔判官 + 声明↔工具能力**）：① 每个**基据类别**须显式声明其**判官**（`BASIS_JUDGE_DECLARED`）并机判 —— 判官须在序内、须读被judged件、且**自身有**机判基据（否则 fail-closed；`register_consistency` 系 latent 类别，当前不可达但须绑定）；② `EXPECTED_NONZERO` 声明的 verdict 字面须出现在该步**工具源**（声明不得指向工具不可能产出的 verdict）。静态齿 **t27**。
 CLI:
   python3 tools/p3_v57_co164_order_runner.py [--check] [--max-iter 5]
 """
@@ -83,6 +85,17 @@ JUDGMENT_DOWNSTREAM = {
     "co146_boundary_append": {"ref": ["co77_closure_declaration_sweep", "co135_review_hygiene"],
                               "artifact": BOUNDARY_BASENAME,   # CO-193（R-CO193-1）：被judged工件（须被 ref 工具读取）
                               "why": "本步只做 pin 再对齐 + §节登记；boundary 引用一致性由 co77/co135 的 citation 扫描判"},
+}
+
+# CO-194（R-CO194-1）：**基据↔判官**显式绑定 —— 每个基据类别（见 `judgment_basis`）须声明其判定机制；
+# `judge=None` = 由运行时自检/声明逐条判（teeth / verdict / downstream）；外部判官须在序内、须读被judged件、且自身有机判基据。
+# 缘起：`register_consistency` 分支此前**无判官绑定**（当前不可达：27 个写登记簿步皆先命中 `verdict`；一旦可达即「空真」基据）。
+BASIS_JUDGE_DECLARED = {
+    "teeth": {"judge": None, "why": "运行时 `step_declared_teeth`（声明产物 teeth 须全 True）"},
+    "verdict": {"judge": None, "why": "运行时 `all_verdicts_decision`（**全部**声明 verdict 一律判决）"},
+    "register_consistency": {"judge": "co124_input_selfcheck_gate", "artifact": "input_defect_register_v1.json",
+                             "why": "登记簿自洽由 `co124.register_consistency()` 机判（其 T21/T21b 牙齿）"},
+    "downstream": {"judge": None, "why": "由 `JUDGMENT_DOWNSTREAM` 逐条声明（t26 判方向 + 可执行）"},
 }
 
 # 允许非零的步骤（**须带 verdict 证据**：rc≠0 不等于预期 FAIL —— CO-165）
@@ -707,6 +720,39 @@ def _source_strings(src: str) -> list:
             if isinstance(n, ast.Constant) and isinstance(n.value, str)]
 
 
+def basis_judge_decision(category: str, decl, order=None, readers=None, judge_basis=None) -> str:
+    """CO-194（R-CO194-1）纯判据：基据类别的判官**可执行性**（`order`/`readers`/`judge_basis` 可注入 ⇒ 合成控）。
+
+    `judge=None` ⇒ 该类别由运行时自检/声明判（须给 `why`）；外部判官须：在序内 → 读被judged件（若声明 `artifact`）→
+    自身有机判基据。返回 `ok` / `declaration_incomplete` / `judge_not_in_order` /
+    `judge_does_not_read_artifact` / `judge_has_no_basis`。
+    """
+    _order = list(ORDER) if order is None else list(order)
+    if not isinstance(decl, dict) or not str(decl.get("why") or "").strip():
+        return "declaration_incomplete"
+    judge = decl.get("judge")
+    if judge is None:
+        return "ok"
+    if judge not in _order:
+        return "judge_not_in_order"
+    art = decl.get("artifact")
+    if art and judge not in set(artifact_readers(art) if readers is None else readers):
+        return "judge_does_not_read_artifact"
+    jb = judgment_basis(judge) if judge_basis is None else judge_basis
+    if not jb or jb == "none":
+        return "judge_has_no_basis"
+    return "ok"
+
+
+def declared_verdict_in_tool(step: str, decl) -> bool:
+    """CO-194（R-CO194-2）：`EXPECTED_NONZERO` 声明的 verdict 字面须出现在该步**工具源**（声明↔工具能力绑定）。"""
+    p = tool_path(step)
+    if p is None:
+        return False
+    v = str((decl or {}).get("verdict") or "").strip()
+    return bool(v) and v in p.read_text(encoding="utf-8")
+
+
 def artifact_readers(basename: str) -> list:
     """CO-193（R-CO193-1）：源内**引用**该工件 basename 的规范序步（**语法代理**，非运行时读确认）。
 
@@ -1286,6 +1332,26 @@ def main(argv=None) -> int:
         and expected_nonzero_binding("co146_jlc_dfm_gate",
                                      {**EXPECTED_NONZERO["co146_jlc_dfm_gate"],
                                       "teeth_path": ["nope"]}) == "teeth_path_unresolved")
+    # CO-194（R-CO194-1/2）：基据↔判官绑定 + 白名单声明↔工具源绑定 —— 静态齿 t27
+    _bj = {c: basis_judge_decision(c, d) for c, d in BASIS_JUDGE_DECLARED.items()}
+    checks["t27_basis_judge_and_verdict_binding"] = (
+        set(BASIS_JUDGE_DECLARED) == {"teeth", "verdict", "register_consistency", "downstream"}
+        and all(v == "ok" for v in _bj.values())
+        and all(declared_verdict_in_tool(s, v) for s, v in EXPECTED_NONZERO.items())
+        # 合成正控：外部判官在序 + 读件 + 自身有基据 ⇒ ok；judge=None 类别给 why ⇒ ok
+        and basis_judge_decision("x", {"judge": "J", "artifact": "a.json", "why": "w"},
+                                 order=["J"], readers=["J"], judge_basis="teeth") == "ok"
+        and basis_judge_decision("x", {"judge": None, "why": "w"}) == "ok"
+        # 合成负控：判官不在序 / 不读件 / 自身无基据 / 声明不完整
+        and basis_judge_decision("x", {"judge": "J", "artifact": "a.json", "why": "w"},
+                                 order=["K"], readers=["J"], judge_basis="teeth") == "judge_not_in_order"
+        and basis_judge_decision("x", {"judge": "J", "artifact": "a.json", "why": "w"},
+                                 order=["J"], readers=["K"], judge_basis="teeth") == "judge_does_not_read_artifact"
+        and basis_judge_decision("x", {"judge": "J", "artifact": "a.json", "why": "w"},
+                                 order=["J"], readers=["J"], judge_basis="none") == "judge_has_no_basis"
+        and basis_judge_decision("x", {"judge": "J"}) == "declaration_incomplete"
+        # 声明↔工具绑定负控：工具不可能产出的 verdict 不得通过
+        and not declared_verdict_in_tool("co146_jlc_dfm_gate", {"verdict": "TOTALLY_BROKEN"}))
     checks["t05_stability_oracle"] = (stable("x", "x") and not stable("x", "y") and not stable("", ""))
     # CO-164（t06）：执行器 ORDER 必须与 boundary 规范复现序**有序一致**（文档↔执行器防漂移）
     _bdy = boundary_order_steps()
@@ -1374,7 +1440,7 @@ def main(argv=None) -> int:
             converged = True
             break
         prev = cur
-    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-193.1",
+    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-194.1",
               "nature": "规范复现序机判执行器（rc 策略 + 真收敛判定）；报告落 .archer_tmp/ 且**不被 boundary 引用**（避免不动点）",
               "order": ORDER, "expected_nonzero": EXPECTED_NONZERO,
               "checks": checks, "iterations": iterations, "abort": abort, "converged": converged,

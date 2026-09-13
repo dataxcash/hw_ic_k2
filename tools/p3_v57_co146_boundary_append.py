@@ -2149,8 +2149,52 @@ def main() -> int:
         txt = re.sub(re.escape(MARK66) + r"[\s\S]*?(?=\n## |\Z)", body66, txt, count=1)
     else:
         txt = txt.rstrip("\n") + "\n\n" + body66
+    # ── §67 CO-194（L2 自裁 · 基据↔判官 + 声明↔工具能力） ─────────────────────
+    MARK67 = "## 67. CO-194"
+    _rc67 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    _ord194 = _ord190          # 步集/序列不变（50 次）
+    sec67 = [MARK67 + "（**L2 自裁 · 基据↔判官 + 声明↔工具能力**）", "",
+             "- **H-1（low，latent）·基据类别无判官绑定**：`judgment_basis()` 的 `register_consistency` 类别仅凭 `_REG ∈ STEP_ARTIFACTS[step]` "
+             "认定，**未绑定任何判官**（登记簿自洽实际由 co124 机判）。实测：该分支当前**不可达** —— `judgment_basis` 分布 = "
+             "{teeth:19, verdict:28, downstream:1, register_consistency:**0**}（27 个写登记簿步皆先命中 `verdict` ⇒ 死码）；且把 co124 移出 ORDER 后 "
+             "`all(basis != none)` 仍 True ⇒ **无判官亦成立**。一旦该分支可达（某步只写登记簿而无 teeth/verdict），其基据即空真，"
+             "违 t25「每步须有可机判基据」之目的。",
+             "- **H-2（low）·白名单声明与工具能力无静态绑定**：`EXPECTED_NONZERO` 的 `verdict` 只受形状约束（非 PASS + 运行期记录一致），"
+             "**不要求**该字面出现在该步**工具源**内。实测：伪造 `verdict=TOTALLY_BROKEN` / `ERROR` ⇒ 旧静态条款（t03/t07/t09/t14）**全过**"
+             "（仅运行期以 `expected_step_verdict_mismatch` fail-closed ⇒ 声明面未绑定、诊断滞后到执行期）。",
+             "- **处置**：runner 升 **CO-194.1** —— ① 新增 `BASIS_JUDGE_DECLARED`（每基据类别显式声明判定机制；外部判官须在序内、须**读**被judged件、"
+             "且**自身有机判基据**）+ 纯函数 `basis_judge_decision()`（`register_consistency` 判官 = `co124_input_selfcheck_gate`）；② 新增 "
+             "`declared_verdict_in_tool()`（声明 verdict 字面须 ∈ 该步工具源）；③ 静态齿 **t27**（正控 + 判官不在序/不读件/自身无基据/声明不完整/"
+             "伪造 verdict 负控）。",
+             f"- **登记簿**：+2（`co194:H-1/H-2`，全 CLOSED；**{_rc67['total']} 项 / OPEN {_rc67['OPEN']}**）。",
+             "- **实测（本件证据）**：修后 `basis_judge_decision` 四类别全 **ok**、`declared_verdict_in_tool('co146_jlc_dfm_gate', FAIL)`=True"
+             "（零基线冲击）；`--check` **t01..t27 全 True（29 项）**。",
+             "",
+             "> **R-CO194-1**：每个**基据类别**须显式声明其判定机制（`BASIS_JUDGE_DECLARED`）；外部判官须**在序内**、**读被judged件**、"
+             "且**自身有机判基据**；否则 fail-closed；t27 机判。",
+             "> **R-CO194-2**：`EXPECTED_NONZERO` 声明的 verdict 字面须出现在该步**工具源**（声明不得指向工具不可能产出的 verdict）；t27 机判。",
+             "> **R-CO194-3**（复现序，取代 R-CO193-5；**步集/序列不变，序内出现 50 次**）：规范复现序 = `" + _ord194 + "`，"
+             "**循环至 sha 稳定**（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1 "
+             "+ R-CO175-1 + R-CO176-1/2 + R-CO177-1 + R-CO178-1 + R-CO179-1/2 + R-CO180-1/2 + R-CO181-1/2 + R-CO182-1 "
+             "+ R-CO183-1 + R-CO184-1 + R-CO185-1/2 + R-CO186-1 + R-CO187-1/2/3 + R-CO188-1 + R-CO189-1 + R-CO190-1 "
+             "+ R-CO191-1 + R-CO192-1 + R-CO193-1/2/3/4 + R-CO194-1/2）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows67 = [("工具 `p3_v57_co164_order_runner.py`（CO-194.1 / 基据↔判官 + 声明↔工具 + t27）",
+                K2 / "tools/p3_v57_co164_order_runner.py"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc67['total']} 项 / OPEN {_rc67['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows67:
+        if pth.exists():
+            sec67.append(f"| {label} | `{s16(pth)}` |")
+    sec67.append("")
+    body67 = "\n".join(sec67)
+    if MARK67 in txt:
+        txt = re.sub(re.escape(MARK67) + r"[\s\S]*?(?=\n## |\Z)", body67, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body67
+    txt = txt.replace("W3 Boundary **v2.38**", "W3 Boundary **v2.39**")
     txt = txt.replace("W3 Boundary **v2.37**", "W3 Boundary **v2.38**")
-    txt = txt.replace("W3 Boundary **v2.36**", "W3 Boundary **v2.37**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
     return 0
