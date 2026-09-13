@@ -62,6 +62,7 @@ for _k, _e in (("CO10_COLMODE", "CO16_COLMODE"), ("CO10_WSWAP", "CO16_WSWAP"),
                ("CO10_BVERT", "CO16_BVERT"),      # 逐页竖段整体落 B（混合拓扑）
                ("CO10_COLFIX", "CO16_COLFIX"),    # 连接器列分配区间含桥孔 y（工具缺陷 ④）
                ("CO10_CARRYP", "CO16_CARRYP"),      # 逐极性单调列游标（band 级列联合求解）
+               ("CO10_CARRYALL", "CO16_CARRYALL"),  # CO-209：全带 carry 游标（计入桥孔足迹）⇒ 与 CARRYP 合成「列 × 桥孔 x」联合形态
                ("CO10_BOFF", "CO16_BOFF"), ("CO10_STUB_LANE", "CO16_STUB_LANE"), ("CO10_STUB_B", "CO16_STUB_B"), ("CO10_BRX2", "CO16_BRX2"), ("CO10_TOPOE", "CO16_TOPOE"), ("CO10_BRAWAY", "CO16_BRAWAY")):
     if os.environ.get(_e):
         CFG[_k] = os.environ[_e]

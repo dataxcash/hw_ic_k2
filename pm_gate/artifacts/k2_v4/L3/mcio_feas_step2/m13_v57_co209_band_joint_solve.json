@@ -1,0 +1,410 @@
+{
+ "artifact": "m13_v57_co209_band_joint_solve",
+ "authority": "z71 §6.3（L2 内唯一未动自由度 = band 级联合求解器）/ CO-207 O-2（该上限系结构性论证、未直接行使）",
+ "conclusion": "在 R3 过孔策略 + 4 信号层下，**列 × 桥孔 x 联合游标形态不改善族上限**：JOINT 各案 19–20/32，低于候选 C+BRCOL 之 24/32（亦低于 CARRYP 单用 23/32）——单调游标计入桥孔足迹后过度推进，把失败面从 chip 侧 input 页转嫁到连接器/走廊侧（out_J2 / out_MCIO）。⇒ **族闭合（≤24/32）在直接行使下成立**；路径 B 仍不可达 32/32 ⇒ 打样路径 A 之定案不变。残余自由度 = 跨页 y 交错（须改几何）与 L1（球重映射/信号流向）。",
+ "date": "2026-09-14",
+ "model_note": "游标形态 = 逐极性单调游标（CO10_CARRYP）并计桥孔向外足迹（CO10_CARRYALL ⇒ _BEXT=BR_JOG）；不含跨页 y 交错（须改几何，非旋钮可达）。逐案 fresh-import 探针 ⇒ 逐案隔离；零落盘。",
+ "nature": "L2 自裁 · 族闭合复核：行使「列 × 桥孔 x 同解」闭式形态（确定性、禁回溯、零坐标搜索）",
+ "probe_sha16": "b0ef06180cda787a",
+ "redline": "只读冻结四源；未改 canonical 图纸 / 交付板 / 构造器 / SPEC；零坐标搜索；禁暴力迭代。",
+ "results": [
+  {
+   "case": "v9_default",
+   "deterministic_rerun": null,
+   "failed": [],
+   "knobs": {},
+   "n_failed": 0,
+   "n_pages": 32,
+   "n_placed": 32,
+   "order": "rev"
+  },
+  {
+   "case": "candC_BRCOL",
+   "deterministic_rerun": null,
+   "failed": [
+    "PCIE_DN2/input",
+    "PCIE_DN3/input",
+    "PCIE_DN4/input",
+    "PCIE_DN5/input",
+    "PCIE_UP0/input",
+    "PCIE_UP2/input",
+    "PCIE_UP3/input",
+    "PCIE_UP6/input"
+   ],
+   "knobs": {
+    "CO10_BRCOL": "1",
+    "CO10_BRIDGE": "1",
+    "CO10_BRJOG": "0.5",
+    "CO10_SPAN": "1"
+   },
+   "n_failed": 8,
+   "n_pages": 32,
+   "n_placed": 24,
+   "order": "rev"
+  },
+  {
+   "case": "candC_BRCOL_COLFIX",
+   "deterministic_rerun": null,
+   "failed": [
+    "PCIE_DN2/input",
+    "PCIE_DN3/input",
+    "PCIE_DN4/input",
+    "PCIE_DN5/input",
+    "PCIE_UP0/input",
+    "PCIE_UP0/out_J2",
+    "PCIE_UP2/input",
+    "PCIE_UP3/input",
+    "PCIE_UP6/input"
+   ],
+   "knobs": {
+    "CO10_BRCOL": "1",
+    "CO10_BRIDGE": "1",
+    "CO10_BRJOG": "0.5",
+    "CO10_COLFIX": "1",
+    "CO10_SPAN": "1"
+   },
+   "n_failed": 9,
+   "n_pages": 32,
+   "n_placed": 23,
+   "order": "rev"
+  },
+  {
+   "case": "CARRYP_only",
+   "deterministic_rerun": null,
+   "failed": [
+    "PCIE_DN0/input",
+    "PCIE_DN2/input",
+    "PCIE_DN3/input",
+    "PCIE_DN4/input",
+    "PCIE_DN5/input",
+    "PCIE_UP0/input",
+    "PCIE_UP2/input",
+    "PCIE_UP3/input",
+    "PCIE_UP6/input"
+   ],
+   "knobs": {
+    "CO10_BRCOL": "1",
+    "CO10_BRIDGE": "1",
+    "CO10_BRJOG": "0.5",
+    "CO10_CARRYP": "1",
+    "CO10_SPAN": "1"
+   },
+   "n_failed": 9,
+   "n_pages": 32,
+   "n_placed": 23,
+   "order": "rev"
+  },
+  {
+   "case": "CARRYALL_only",
+   "deterministic_rerun": null,
+   "failed": [
+    "PCIE_DN0/input",
+    "PCIE_DN0/out_MCIO",
+    "PCIE_DN2/input",
+    "PCIE_DN2/out_MCIO",
+    "PCIE_DN3/input",
+    "PCIE_DN4/out_MCIO",
+    "PCIE_DN5/input",
+    "PCIE_DN6/out_MCIO",
+    "PCIE_UP0/input",
+    "PCIE_UP0/out_J2",
+    "PCIE_UP1/out_J2",
+    "PCIE_UP2/input",
+    "PCIE_UP2/out_J2",
+    "PCIE_UP3/input",
+    "PCIE_UP4/out_J2",
+    "PCIE_UP5/out_J2",
+    "PCIE_UP6/input"
+   ],
+   "knobs": {
+    "CO10_BRCOL": "1",
+    "CO10_BRIDGE": "1",
+    "CO10_BRJOG": "0.5",
+    "CO10_CARRYALL": "1",
+    "CO10_SPAN": "1"
+   },
+   "n_failed": 17,
+   "n_pages": 32,
+   "n_placed": 15,
+   "order": "rev"
+  },
+  {
+   "case": "JOINT_rev",
+   "deterministic_rerun": {
+    "failed": [
+     "PCIE_DN0/input",
+     "PCIE_DN2/input",
+     "PCIE_DN2/out_MCIO",
+     "PCIE_DN4/input",
+     "PCIE_DN5/input",
+     "PCIE_DN5/out_MCIO",
+     "PCIE_UP0/input",
+     "PCIE_UP0/out_J2",
+     "PCIE_UP1/out_J2",
+     "PCIE_UP2/out_J2",
+     "PCIE_UP3/input",
+     "PCIE_UP4/out_J2",
+     "PCIE_UP6/input"
+    ],
+    "n_placed": 19
+   },
+   "failed": [
+    "PCIE_DN0/input",
+    "PCIE_DN2/input",
+    "PCIE_DN2/out_MCIO",
+    "PCIE_DN4/input",
+    "PCIE_DN5/input",
+    "PCIE_DN5/out_MCIO",
+    "PCIE_UP0/input",
+    "PCIE_UP0/out_J2",
+    "PCIE_UP1/out_J2",
+    "PCIE_UP2/out_J2",
+    "PCIE_UP3/input",
+    "PCIE_UP4/out_J2",
+    "PCIE_UP6/input"
+   ],
+   "knobs": {
+    "CO10_BRCOL": "1",
+    "CO10_BRIDGE": "1",
+    "CO10_BRJOG": "0.5",
+    "CO10_CARRYALL": "1",
+    "CO10_CARRYP": "1",
+    "CO10_SPAN": "1"
+   },
+   "n_failed": 13,
+   "n_pages": 32,
+   "n_placed": 19,
+   "order": "rev"
+  },
+  {
+   "case": "JOINT_carry",
+   "deterministic_rerun": null,
+   "failed": [
+    "PCIE_DN2/input",
+    "PCIE_DN2/out_MCIO",
+    "PCIE_DN4/input",
+    "PCIE_DN6/input",
+    "PCIE_DN6/out_MCIO",
+    "PCIE_UP0/input",
+    "PCIE_UP1/out_J2",
+    "PCIE_UP2/input",
+    "PCIE_UP2/out_J2",
+    "PCIE_UP3/input",
+    "PCIE_UP3/out_J2",
+    "PCIE_UP6/input"
+   ],
+   "knobs": {
+    "CO10_BRCOL": "1",
+    "CO10_BRIDGE": "1",
+    "CO10_BRJOG": "0.5",
+    "CO10_CARRYALL": "1",
+    "CO10_CARRYP": "1",
+    "CO10_SPAN": "1"
+   },
+   "n_failed": 12,
+   "n_pages": 32,
+   "n_placed": 20,
+   "order": "carry"
+  },
+  {
+   "case": "JOINT_xasc",
+   "deterministic_rerun": null,
+   "failed": [
+    "PCIE_DN2/input",
+    "PCIE_DN2/out_MCIO",
+    "PCIE_DN4/input",
+    "PCIE_DN5/out_MCIO",
+    "PCIE_DN6/input",
+    "PCIE_UP0/input",
+    "PCIE_UP1/out_J2",
+    "PCIE_UP2/out_J2",
+    "PCIE_UP3/input",
+    "PCIE_UP3/out_J2",
+    "PCIE_UP5/input",
+    "PCIE_UP6/input"
+   ],
+   "knobs": {
+    "CO10_BRCOL": "1",
+    "CO10_BRIDGE": "1",
+    "CO10_BRJOG": "0.5",
+    "CO10_CARRYALL": "1",
+    "CO10_CARRYP": "1",
+    "CO10_SPAN": "1"
+   },
+   "n_failed": 12,
+   "n_pages": 32,
+   "n_placed": 20,
+   "order": "xasc"
+  },
+  {
+   "case": "JOINT_engine",
+   "deterministic_rerun": null,
+   "failed": [
+    "PCIE_DN2/input",
+    "PCIE_DN2/out_MCIO",
+    "PCIE_DN4/input",
+    "PCIE_DN5/out_MCIO",
+    "PCIE_DN6/input",
+    "PCIE_UP0/input",
+    "PCIE_UP1/out_J2",
+    "PCIE_UP2/out_J2",
+    "PCIE_UP3/input",
+    "PCIE_UP3/out_J2",
+    "PCIE_UP5/input",
+    "PCIE_UP6/input"
+   ],
+   "knobs": {
+    "CO10_BRCOL": "1",
+    "CO10_BRIDGE": "1",
+    "CO10_BRJOG": "0.5",
+    "CO10_CARRYALL": "1",
+    "CO10_CARRYP": "1",
+    "CO10_SPAN": "1"
+   },
+   "n_failed": 12,
+   "n_pages": 32,
+   "n_placed": 20,
+   "order": "engine"
+  },
+  {
+   "case": "JOINT_COLFIX",
+   "deterministic_rerun": null,
+   "failed": [
+    "PCIE_DN0/input",
+    "PCIE_DN2/input",
+    "PCIE_DN2/out_MCIO",
+    "PCIE_DN4/input",
+    "PCIE_DN5/input",
+    "PCIE_DN5/out_MCIO",
+    "PCIE_UP0/input",
+    "PCIE_UP0/out_J2",
+    "PCIE_UP1/out_J2",
+    "PCIE_UP2/out_J2",
+    "PCIE_UP3/input",
+    "PCIE_UP4/out_J2",
+    "PCIE_UP6/input"
+   ],
+   "knobs": {
+    "CO10_BRCOL": "1",
+    "CO10_BRIDGE": "1",
+    "CO10_BRJOG": "0.5",
+    "CO10_CARRYALL": "1",
+    "CO10_CARRYP": "1",
+    "CO10_COLFIX": "1",
+    "CO10_SPAN": "1"
+   },
+   "n_failed": 13,
+   "n_pages": 32,
+   "n_placed": 19,
+   "order": "rev"
+  },
+  {
+   "case": "JOINT_BRDROP",
+   "deterministic_rerun": null,
+   "failed": [
+    "PCIE_DN0/input",
+    "PCIE_DN2/input",
+    "PCIE_DN2/out_MCIO",
+    "PCIE_DN4/input",
+    "PCIE_DN5/input",
+    "PCIE_DN5/out_MCIO",
+    "PCIE_UP0/input",
+    "PCIE_UP0/out_J2",
+    "PCIE_UP1/out_J2",
+    "PCIE_UP2/out_J2",
+    "PCIE_UP3/input",
+    "PCIE_UP4/out_J2",
+    "PCIE_UP6/input"
+   ],
+   "knobs": {
+    "CO10_BRCOL": "1",
+    "CO10_BRDROP": "1",
+    "CO10_BRIDGE": "1",
+    "CO10_BRJOG": "0.5",
+    "CO10_CARRYALL": "1",
+    "CO10_CARRYP": "1",
+    "CO10_SPAN": "1"
+   },
+   "n_failed": 13,
+   "n_pages": 32,
+   "n_placed": 19,
+   "order": "rev"
+  },
+  {
+   "case": "JOINT_BR2",
+   "deterministic_rerun": null,
+   "failed": [
+    "PCIE_DN0/out_MCIO",
+    "PCIE_DN1/input",
+    "PCIE_DN3/input",
+    "PCIE_DN3/out_MCIO",
+    "PCIE_DN5/input",
+    "PCIE_DN5/out_MCIO",
+    "PCIE_DN6/input",
+    "PCIE_UP0/input",
+    "PCIE_UP0/out_J2",
+    "PCIE_UP1/input",
+    "PCIE_UP1/out_J2",
+    "PCIE_UP2/input",
+    "PCIE_UP2/out_J2",
+    "PCIE_UP3/input",
+    "PCIE_UP4/input",
+    "PCIE_UP4/out_J2",
+    "PCIE_UP6/input"
+   ],
+   "knobs": {
+    "CO10_BR2": "1",
+    "CO10_BRCOL": "1",
+    "CO10_BRIDGE": "1",
+    "CO10_BRJOG": "0.5",
+    "CO10_CARRYALL": "1",
+    "CO10_CARRYP": "1",
+    "CO10_SPAN": "1"
+   },
+   "n_failed": 17,
+   "n_pages": 32,
+   "n_placed": 15,
+   "order": "rev"
+  },
+  {
+   "case": "JOINT_POLOFF_2625",
+   "deterministic_rerun": null,
+   "failed": [
+    "PCIE_DN0/input",
+    "PCIE_DN2/input",
+    "PCIE_DN2/out_MCIO",
+    "PCIE_DN4/input",
+    "PCIE_DN5/input",
+    "PCIE_DN5/out_MCIO",
+    "PCIE_UP0/input",
+    "PCIE_UP0/out_J2",
+    "PCIE_UP1/out_J2",
+    "PCIE_UP2/out_J2",
+    "PCIE_UP3/input",
+    "PCIE_UP4/out_J2",
+    "PCIE_UP6/input"
+   ],
+   "knobs": {
+    "CO10_BRCOL": "1",
+    "CO10_BRIDGE": "1",
+    "CO10_BRJOG": "0.5",
+    "CO10_CARRYALL": "1",
+    "CO10_CARRYP": "1",
+    "CO10_POL_OFF": "0.2625",
+    "CO10_SPAN": "1"
+   },
+   "n_failed": 13,
+   "n_pages": 32,
+   "n_placed": 19,
+   "order": "rev"
+  }
+ ],
+ "revision": "CO-209",
+ "schema": 1,
+ "teeth": {
+  "t00_baselines_reproduce": true,
+  "t01_no_family_member_fully_placed": true,
+  "t02_joint_not_better_than_candc": true,
+  "t03_deterministic": true
+ }
+}

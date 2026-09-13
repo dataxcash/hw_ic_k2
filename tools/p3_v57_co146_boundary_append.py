@@ -2847,6 +2847,56 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body81
 
+    # ── §82 CO-209（L2 自裁 · band 级「列 × 桥孔」联合求解形态之直接行使 ⇒ 族闭合复核） ──
+    MARK82 = "## 82. CO-209"
+    _rc82 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    sec82 = [MARK82 + "（**L2 自裁 · band 级「列 × 桥孔 x」联合求解之直接行使（族闭合复核）+ 发射器透传补齐**）", "",
+             "- **缘起**：z71 §6.3 指「L2 内唯一未动自由度 = band 级联合求解器（列 + 桥孔 (x,y) 同解；确定性、禁回溯）」，"
+             "且 CO-207 之观察 **O-2** 明记「族上限 ≤24/32 属**结构性论证**、未直接行使（未构造反例）」。本 CO 消除该「论证 vs 实测」缺口。",
+             "- **行使形态（全部闭式：确定性、零回溯、零重试、零坐标搜索）**：逐极性单调游标（`CO10_CARRYP`）**并计入桥孔向外足迹**"
+             "（`CO10_CARRYALL` ⇒ `_BEXT = BR_JOG`）= 「列游标与桥孔 x 同解」；另复测顺序（rev / carry / xasc / engine）"
+             "与既有修复旋钮（COLFIX / BRDROP / BR2 / POL_OFF）。**不含**跨页 y 交错（该轴须改几何，非旋钮可达）。",
+             "- **结果（机判，探针 `b0ef06180cda787a`；`m13_v57_co209_band_joint_solve.json`）**：v9 默认 **32/32**；"
+             "候选 C+BRCOL **24/32**（族最优，未变）；+COLFIX **23/32**；`CARRYP` 单用 **23/32**；`CARRYALL` 单用 **15/32**；"
+             "**JOINT 组合 19/32（rev）/ 20/32（carry·xasc·engine）/ 19/32（+COLFIX / +BRDROP / +POL_OFF 0.2625）/ 15/32（+BR2）**。",
+             "- **结论**：联合游标形态**不改善族上限**（JOINT 19–20/32 < 候选 C+BRCOL 24/32）：单调游标计入桥孔足迹后**过度推进**，"
+             "把失败面由 chip 侧 input 页**转嫁**到连接器/走廊侧（`out_J2` / `out_MCIO`）。与 CO-205r 之暴露度分析一致 ——"
+             "8 个失败页中 **6 页 > 0 余量**（阻断来自轨道/页内约束，非 via 拥塞）⇒ x 向联合求解**触不到**瓶颈。"
+             "⇒ **族闭合（≤24/32）在直接行使下成立**；路径 B 仍不可达 32/32 ⇒ **打样路径 A 之定案不变**。"
+             "残余自由度 = 跨页 y 交错（须改几何）与 **L1**（球重映射 / 信号流向）。",
+             "- **工具面（同 CO 补齐）**：发射器 `p3_v57_co16_emit_allocation.py` 补 `CO10_CARRYALL → CO16_CARRYALL` 透传"
+             "（原仅透传 `CARRYP`）⇒ 该联合形态**可由规范分配路径表达**；回归实测：v9 默认复现仍 **32/32 / 0 page diffs**。",
+             "- **登记簿**：本件为**负结果**（无缺陷可登）⇒ 不入登记簿（诚实登记，勿虚增计数）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows82 = [("工具 `p3_v57_co209_band_joint_solve.py`（形态矩阵 + 4 牙齿）", K2 / "tools/p3_v57_co209_band_joint_solve.py"),
+               ("证据 `m13_v57_co209_band_joint_solve.json`（13 案结果 + 牙齿全 True）", STEP2 / "m13_v57_co209_band_joint_solve.json"),
+               ("探针 `p3_v57_co10_west_fan_probe.py`（+11 只读旋钮，全默认关）", K2 / "tools/p3_v57_co10_west_fan_probe.py"),
+               ("发射器 `p3_v57_co16_emit_allocation.py`（+10 旋钮透传，含新补 `CARRYALL`）", K2 / "tools/p3_v57_co16_emit_allocation.py"),
+               ("现行分配 `m13_v57_co16_channel_allocation_v9.json`（回归基准）", STEP2 / "m13_v57_co16_channel_allocation_v9.json"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc82['total']} 项 / OPEN {_rc82['OPEN']}）", L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows82:
+        if pth.exists():
+            sec82.append(f"| {label} | `{s16(pth)}` |")
+    sec82.append("")
+    sec82.append("> **R-CO209-1**（承 z71 §6.3 / CO-207 O-2）：**族上限之「结构性论证」不得代替直接行使** —— "
+                 "凡宣示某族在给定策略下不可达 32/32 者，须附可复算的形态矩阵（确定性、禁回溯）或等价机判；"
+                 "矩阵扩展须同步判据件/工具，并保持默认路径逐字节可复现。")
+    sec82.append("")
+    sec82.append("> **R-CO209-2**（复现序，取代 R-CO208-4；**步集/序列不变，序内出现 50 次**）：规范复现序 = `" + _ord190 + "`，"
+                 "**循环至 sha 稳定**（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1 + R-CO175-1 + R-CO176-1/2 "
+                 "+ R-CO177-1 + R-CO178-1 + R-CO179-1/2 + R-CO180-1/2 + R-CO181-1/2 + R-CO182-1 + R-CO183-1 + R-CO184-1 + R-CO185-1/2 "
+                 "+ R-CO186-1 + R-CO187-1/2/3 + R-CO188-1 + R-CO189-1 + R-CO190-1 + R-CO191-1 + R-CO192-1 + R-CO193-1/2/3/4 + R-CO194-1/2 "
+                 "+ R-CO195-0/1 + R-CO196-1/2/4/5 + R-CO197-1/2/4 + R-CO198-1 + R-CO199-1 + R-CO200-1 + R-CO201-1/2 + R-CO202-1/2/3/4 "
+                 "+ R-CO203-1 + R-CO207-1 + R-CO208-1/2/3 + R-CO209-1）。")
+    sec82.append("")
+    body82 = "\n".join(sec82)
+    if MARK82 in txt:
+        txt = re.sub(re.escape(MARK82) + r"[\s\S]*?(?=\n## |\Z)", body82, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body82
+
+    txt = txt.replace("W3 Boundary **v2.49**", "W3 Boundary **v2.50**")
     txt = txt.replace("W3 Boundary **v2.48**", "W3 Boundary **v2.49**")
     txt = txt.replace("W3 Boundary **v2.47**", "W3 Boundary **v2.48**")
     txt = txt.replace("W3 Boundary **v2.46**", "W3 Boundary **v2.47**")
