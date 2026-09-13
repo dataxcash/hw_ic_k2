@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CO-164/CO-167/CO-169/CO-174/CO-180/CO-181/CO-182 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
+"""CO-164/CO-167/CO-169/CO-174/CO-180/CO-181/CO-182/CO-183 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
 
 缘起（实测事故，CO-163）：`co146_boundary_append.py` 因 §37 文本里的 f-string 花括号语法错误**每次崩溃（rc=1）**，
 但收敛判定只看 boundary/记录 sha ⇒ sha 恒不变 ⇒ 报「CONVERGED」，边界 §37 实际从未写入、pin 表陈旧（co77/co135/co136 判 FAIL）。
@@ -17,7 +17,7 @@ CLI:
   python3 tools/p3_v57_co164_order_runner.py [--check] [--max-iter 5]
 """
 from __future__ import annotations
-import argparse, hashlib, json, re, subprocess, sys
+import argparse, ast, hashlib, json, re, subprocess, sys
 from pathlib import Path
 
 K2 = Path(__file__).resolve().parents[1]
@@ -411,6 +411,55 @@ def boundary_order_steps() -> list:
     return out
 
 
+
+_VARISH_NODES = ("Name", "Attribute", "Subscript", "Call", "Compare", "BoolOp", "BinOp",
+                 "IfExp", "GeneratorExp", "ListComp", "DictComp", "SetComp")
+
+
+def teeth_hygiene_scan(src: str) -> dict:
+    """CO-183：牙齿卫生静态扫描（AST、**只读**）——
+    ① **常量齿**：牙齿值式为纯字面量（无变量/调用/下标）⇒ 恒真/恒假齿候选；
+    ② **提前结算**：`all/any(teeth…)` 聚合之后**仍**向同一容器 `teeth[k]=…` 加齿。
+    返回 {"n_teeth": int, "constant_teeth": [...], "premature_agg": [...]}。
+    """
+    tree = ast.parse(src)
+    tooth_vars = set()          # {'teeth': <Name>} ⇒ 该 Name 亦为牙齿容器（co81/co84 风格）
+    for n in ast.walk(tree):
+        if isinstance(n, ast.Dict):
+            for k, v in zip(n.keys, n.values):
+                if isinstance(k, ast.Constant) and k.value == "teeth" and isinstance(v, ast.Name):
+                    tooth_vars.add(v.id)
+    pairs, stores = [], []
+    for n in ast.walk(tree):
+        if isinstance(n, ast.Assign):
+            for t in n.targets:
+                if isinstance(t, ast.Subscript) and isinstance(t.value, ast.Name) and t.value.id == "teeth":
+                    if isinstance(t.slice, ast.Constant):
+                        pairs.append((t.slice.value, n.value)); stores.append(n.lineno)
+                elif isinstance(t, ast.Name) and isinstance(n.value, ast.Dict) and (t.id == "teeth" or t.id in tooth_vars):
+                    for k, v in zip(n.value.keys, n.value.values):
+                        if isinstance(k, ast.Constant):
+                            pairs.append((k.value, v))
+        if isinstance(n, ast.Dict):
+            for k, v in zip(n.keys, n.values):
+                if isinstance(k, ast.Constant) and k.value == "teeth" and isinstance(v, ast.Dict):
+                    for k2, v2 in zip(v.keys, v.values):
+                        if isinstance(k2, ast.Constant):
+                            pairs.append((k2.value, v2))
+    constant_teeth = [{"key": k, "expr": ast.unparse(v)[:60]} for k, v in pairs
+                      if not ({type(x).__name__ for x in ast.walk(v)} & set(_VARISH_NODES))]
+    tooth_ids = {id(v) for _, v in pairs}
+    premature_agg = []
+    for n in ast.walk(tree):
+        if (isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and n.func.id in ("all", "any")
+                and any(isinstance(x, ast.Name) and x.id == "teeth" for x in ast.walk(n))
+                and id(n) not in tooth_ids):
+            later = [ln for ln in stores if ln > n.lineno]
+            if later:
+                premature_agg.append({"line": n.lineno, "later_tooth_line": min(later)})
+    return {"n_teeth": len(pairs), "constant_teeth": constant_teeth, "premature_agg": premature_agg}
+
+
 def tool_path(step: str) -> Path | None:
     direct = K2 / "tools" / f"p3_v57_{step}.py"
     if direct.exists():
@@ -560,6 +609,28 @@ def main(argv=None) -> int:
     checks["t17_boundary_scan_follows_refresh"] = (
         len(_gi) == len(BOUNDARY_SCAN_GUARDED)
         and all(i > 0 and ORDER[i - 1] == BOUNDARY_REFRESH_STEP for i in _gi))
+    # CO-183（R-CO183-1）：牙齿卫生**棘轮**（常量齿 / 提前结算）—— 合成正负控 + 现行零违规 + 齿数下限
+    _p_good = 'def f(d):\n    teeth={}\n    teeth["t01"]=d["a"]>0\n    teeth["t02"]=all(isinstance(v,bool) for v in teeth.values())\n    return all(teeth.values())\n'
+    _p_const = 'def f(d):\n    teeth={"t01":True,"t02":d["a"]>0}\n    return all(teeth.values())\n'
+    _p_prem = 'def f(d):\n    teeth={"t01":d["a"]>0}\n    ok=all(teeth.values())\n    teeth["t02"]=d["b"]>0\n    return ok\n'
+    _p_foreign = 'def f(c):\n    teeth=c.get("teeth",{})\n    ok=all(teeth.get(k) is True for k in ("a",))\n    rec={"teeth":{"t01":ok}}\n    return rec\n'
+    _g, _c, _m, _f = (teeth_hygiene_scan(_p_good), teeth_hygiene_scan(_p_const),
+                      teeth_hygiene_scan(_p_prem), teeth_hygiene_scan(_p_foreign))
+    _scan_ok = (not _g["constant_teeth"] and not _g["premature_agg"]
+                and len(_c["constant_teeth"]) == 1 and not _c["premature_agg"]
+                and len(_m["premature_agg"]) == 1 and not _f["constant_teeth"] and not _f["premature_agg"])
+    _own = {}
+    for _s in set(ORDER):
+        for _r in STEP_ARTIFACTS.get(_s, []):
+            if Path(_r).name in EXPECTED_TEETH:
+                _tp = tool_path(_s)
+                if _tp is not None:
+                    _own[Path(_r).name] = _tp
+    _live = [teeth_hygiene_scan(q.read_text(encoding="utf-8")) for q in set(_own.values())]
+    checks["t18_teeth_hygiene_ratchet"] = (
+        _scan_ok and set(_own) == set(EXPECTED_TEETH)
+        and sum(v["n_teeth"] for v in _live) >= 100
+        and all(not v["constant_teeth"] and not v["premature_agg"] for v in _live))
     checks["t05_stability_oracle"] = (stable("x", "x") and not stable("x", "y") and not stable("", ""))
     # CO-164（t06）：执行器 ORDER 必须与 boundary 规范复现序**有序一致**（文档↔执行器防漂移）
     _bdy = boundary_order_steps()
@@ -623,7 +694,7 @@ def main(argv=None) -> int:
             converged = True
             break
         prev = cur
-    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-182.1",
+    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-183.1",
               "nature": "规范复现序机判执行器（rc 策略 + 真收敛判定）；报告落 .archer_tmp/ 且**不被 boundary 引用**（避免不动点）",
               "order": ORDER, "expected_nonzero": EXPECTED_NONZERO,
               "checks": checks, "iterations": iterations, "abort": abort, "converged": converged,

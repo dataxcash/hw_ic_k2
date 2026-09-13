@@ -1645,6 +1645,54 @@ def main() -> int:
         txt = re.sub(re.escape(MARK55) + r"[\s\S]*?(?=\n## |\Z)", body55, txt, count=1)
     else:
         txt = txt.rstrip("\n") + "\n\n" + body55
+    # ── §56 CO-183（全域审计机判化：牙齿卫生棘轮 + 残余裁定） ──────────────
+    MARK56 = "## 56. CO-183"
+    _rc56 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    _ord183 = _ord182          # 步集/序列不变（50 次）
+    sec56 = [MARK56 + "（**L2 自裁 · 审计机判化 + 残余裁定**）", "",
+             "- **G-1（low）·审计无全域棘轮**：牙齿卫生（常量齿 / 提前结算 / 记录冒充判据）此前仅在 CO-180/CO-181 逐件人审；"
+             "**新增工具或改齿**可再引入同类病灶而不被发现。**处置**：runner 升 **CO-183.1** —— "
+             "纯函数 `teeth_hygiene_scan()`（**AST、只读**）检测 ① 常量齿（值式为纯字面量）② 提前结算"
+             "（`all/any(teeth…)` 聚合后仍 `teeth[k]=…` 加齿）；静态齿 **t18**（合成正控/负控 + "
+             "「聚合的是**他件** teeth」假阳排除 + 现行 **19 工具 / 182 齿 / 0 违规** + 齿数下限 ≥100）。",
+             "- **本轮全域机械审计（证据）**：对全部 20 件声明齿件所属 19 个工具做 AST 扫描 ⇒ **0 违规**；"
+             "并逐件复核「记录冒充判据」：`co124` 的 `\"ok\": True` 位于**合成负控电池**内（非判据）、"
+             "`co106` 两项已标 `judging: False` 并从 `checks_ok` 显式排除 ⇒ **无新增病灶**。",
+             "- **残余裁定 1（`co174` 共享件归因）·有据延后**：彻底闭合须为 **26 个共享件步**各写**步本地标记件**"
+             "（改动覆盖每一步的写路径）。threat = **并发写者**误判 `did_work`；现行运行模式为**单写者序**，"
+             "且残余已由 `SHARED_ARTIFACT_RESIDUAL` + 齿 **t13c** 机判（防静默遗忘）⇒ 收益/回归面不成比例，"
+             "**裁定延后**；闭合法与规模已勘定在案，**触发条件 = 出现并发写者误判事件**。",
+             "- **残余裁定 2（`co177` 值绑定为人工正则）·已足够约束**：绑定式**自带上下文原文**"
+             "（如 `Min\\. Via hole size/diameter (0\\.15)mm / 0\\.25mm`），并有 t04（锚点须原文子串）+ "
+             "t06（逐值相等）+ t07（灵敏度）三重判据 ⇒ **静默错值不可达**（声明值必须由原文抽出且等于原文数字）。"
+             "剩余风险 = 同锚短语在页面多处出现时取**首匹配**，登记为**可接受残余**。",
+             f"- **登记簿**：+1（`co183:G-1`，CLOSED；{_rc56['total']} 项 / OPEN {_rc56['OPEN']}）。",
+             "",
+             "> **R-CO183-1**：牙齿卫生须**机判化**（t18：常量齿 / 提前结算）；审计判据须**自证**"
+             "（合成正/负控 + 假阳排除用例），禁以一次性人审代替棘轮。",
+             "> **R-CO183-2**：`co174` 共享件归因残余**有据延后**（闭合法 = 26 步步本地标记件；触发 = 并发写者误判事件）；"
+             "既有 `SHARED_ARTIFACT_RESIDUAL` + t13c 机判不得移除。",
+             "> **R-CO183-3**：`co177` 值绑定残余**判定可接受**（绑定式自带上下文 + t04/t06/t07 三重判据 ⇒ 静默错值不可达）；"
+             "若出现「同锚多处取首匹配」引发的事实偏差，须重开。",
+             "> **R-CO183-4**（复现序，取代 R-CO182-2；**步集/序列不变，序内出现 50 次**）：规范复现序 = `" + _ord183 + "`，"
+             "**循环至 sha 稳定**（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1 "
+             "+ R-CO175-1 + R-CO176-1/2 + R-CO177-1 + R-CO178-1 + R-CO179-1/2 + R-CO180-1/2 + R-CO181-1/2 + R-CO182-1 + R-CO183-1）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows56 = [("工具 `p3_v57_co164_order_runner.py`（CO-183.1 / 牙齿卫生棘轮 t18；序内 50 次）",
+                K2 / "tools/p3_v57_co164_order_runner.py"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc56['total']} 项 / OPEN {_rc56['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows56:
+        if pth.exists():
+            sec56.append(f"| {label} | `{s16(pth)}` |")
+    sec56.append("")
+    body56 = "\n".join(sec56)
+    if MARK56 in txt:
+        txt = re.sub(re.escape(MARK56) + r"[\s\S]*?(?=\n## |\Z)", body56, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body56
+    txt = txt.replace("W3 Boundary **v2.27**", "W3 Boundary **v2.28**")
     txt = txt.replace("W3 Boundary **v2.26**", "W3 Boundary **v2.27**")
     txt = txt.replace("W3 Boundary **v2.25**", "W3 Boundary **v2.26**")
     txt = txt.replace("W3 Boundary **v2.24**", "W3 Boundary **v2.25**")
