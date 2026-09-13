@@ -1,0 +1,44 @@
+# CO-197 — 非执行者对抗复评（CO-192..CO-195）｜as-found @ `5e6ddde`
+
+- verdict：**PASS_WITH_FINDINGS**｜findings：2（K-1/K-2，全 low）｜观察项：1（已由 CO-196 登记，**不重复计数**）
+- 方法：正控 V1..V8（独立复算）+ 负控 P1..P6（内存注入、零落盘、零坐标搜索）
+
+| 控 | 结论 |
+|---|---|
+| V1_CO192F1_teeth_ratchet_live_clean_floor_and_forms | True |
+| V2_CO192F2_md_products_controlled_and_forms | True |
+| V3_CO192F3_boundary_readers_enumerated | True |
+| V4_CO192F4_all_verdicts_gate_on_release_classes | True |
+| V5_CO193G1_judgment_downstream_binding | True |
+| V6_CO193G2_expected_nonzero_binding | True |
+| V7_CO194H1H2_basis_judge_and_verdict_in_tool | True |
+| V8_CO195_frozen_order_check_and_oracle_evidence | True |
+| P1_as_found_teeth_miss_kwargs_forms | True |
+| P1b_current_teeth_catch_kwargs_forms | True |
+| P2_as_found_md_miss_kwargs_forms | True |
+| P2b_current_md_catch_kwargs_forms | True |
+| P3_as_found_boundary_read_miss | True |
+| P3b_current_boundary_read_catch | True |
+| P4_as_found_t28_reads_evidence_record | True |
+| P4b_current_t28_structural_only | True |
+| P5_as_found_no_binding_judges | True |
+| P5b_current_binding_judges_present | True |
+| P6_as_found_no_declared_verdict_binding | True |
+| P6b_current_rejects_fake_verdict | True |
+| P1c_k1_miss_persists_at_CO195_state | True |
+| P2c_k2_miss_persists_at_CO195_state | True |
+
+## Findings（as-found）
+
+| id | sev | 对象 | what |
+|---|---|---|---|
+| K-1 | low | CO-192 | `teeth_hygiene_scan` 对**关键字解包**形态漏计：`dict(**{"t01": True})` 与 `teeth.update(**{"t01": True})`（`kw.arg is None`）一律 `n_teeth=0` ⇒ 经此形态加入的**恒真齿**既不被计数亦不被 constancy 检；R-CO192-1 列举了 `dict(...)`/`update(...)` 为受覆盖形态，而其**解包子形态**未实现 ⇒ 「**全部**容器形态」为过强声明（同族：CO-187 F-1 / CO-192 F-1）。 |
+| K-2 | low | CO-192 | `md_write_scan` 对**同族写/拷形态**漏计：`io.open(<md>, "w")`、`Path(...).replace|rename(<md>)` 以及**路径别名** `P = Path(...); P.replace|rename(<md>)` 一律 `==[]` ⇒ 此类 `.md` 产物既不入 pin、t20 亦不截（可落出受控集）；且 `io.open` 在 **boundary 读取**侧已纳扫、在 **md 写**侧未覆盖（不对称）。R-CO192-1 列举 `open(w)`/`os.replace|rename` 为受覆盖形态 ⇒ 其 pathlib/io 同族未实现。 |
+
+## 观察（不改判 verdict；均已被 CO-196 登记关闭）
+
+- **O-1（CO-195，已由 CO-196 J-1 登记并 CLOSED（不重复计数））**：as-found `5e6ddde` 的静态齿 t28 以 oracle **证据件 verdict** 为输入 ⇒ 与 oracle 前置「先结算」构成**验证循环**（证据 FAIL ⇒ t28 拒 ⇒ 静态前置失败 ⇒ oracle 无法运行 ⇒ 永久锁死）；本复评以 P4 独立复现。
+
+## 处置（CO-197，L2 自裁）
+
+CO-197（L2 自裁）：runner 升 **CO-197.1** —— ① `teeth_hygiene_scan` 补关键字**解包**形态（`dict(**{...})` / `.update(**{...})`）；② `md_write_scan` 补 `io.open(<md>,"w")` 与 `Path(...)`/路径别名 `.replace|rename(<md>)` 目的；t18/t20 合成控同步扩展（含 `"a.md".replace(".md","")` **字符串操作不得误报**之对偶负控）。findings 均 CLOSED。

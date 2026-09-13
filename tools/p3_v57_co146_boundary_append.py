@@ -2312,8 +2312,78 @@ def main() -> int:
         txt = re.sub(re.escape(MARK69) + r"[\s\S]*?(?=\n## |\Z)", body69, txt, count=1)
     else:
         txt = txt.rstrip("\n") + "\n\n" + body69
+    # ── §70 CO-197（非执行者对抗复评 CO-192..CO-195 + L2 自裁处置） ───────────────
+    MARK70 = "## 70. CO-197"
+    _rc70 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    _ord197 = _ord190          # 步集/序列不变（50 次）
+    sec70 = [MARK70 + "（**非执行者对抗复评 CO-192..CO-195 + L2 自裁处置**）", "",
+             "- **复评方**：context 归零的续接会话（满足「复评须另一会话，禁自评」—— 本会话未参与 CO-192..CO-195 之创作）；"
+             "对象钉 `5e6ddde`（CO-195 定稿件），逐件 as-found 另取 `52235b5`（CO-192）/ `3e4f747`（CO-193）/ `334ed74`（CO-194）；"
+             "`git show` **内存重放** ⇒ 结论**不随后续处置漂移**。方法：正控 **V1..V8**（独立复算）+ 负控 **P1..P6c**（内存注入、"
+             "**零落盘**、零坐标搜索）。verdict **PASS_WITH_FINDINGS**｜findings **2**（K-1/K-2，全 low）。",
+             "- **成立件（无 medium+；CO-192..CO-195 之处置经独立复算成立）**：V1 牙齿棘轮现行零违规 + 逐工具齿数 ≥ pin + 全列形态纳扫；"
+             "V2 md 产物 = pin ∪ 豁免、豁免绑实存补偿齿；V3 boundary 读取者全集 = 扫描步 ∪ 声明（互斥）；"
+             "V4 放行档（`ok` **与** `expected_nonzero`）一律判**全**声明 verdict；V5 `judgment_downstream_binding` 全 ok + 方向/可执行负控；"
+             "V6 `expected_nonzero_binding` 全 ok + 错件/坏键负控；V7 `basis_judge_decision` 四类别全 ok + 声明 verdict 须在**工具源**；"
+             "V8 冻结四源 4/4 + ORDER==boundary 序 + `--check` 全 True + oracle 工具可编译、证据件 PASS 且 teeth 全 True、"
+             "**无自指字段**（R-CO195-0 / R-CO196-1b）。负控 P1..P6c 全 True（as-found 漏 ↔ 现行抓）。",
+             "- **K-1（low）·牙齿扫描漏计关键字解包形态**：`teeth_hygiene_scan` 对 `dict(**{\"t01\": True})` 与 "
+             "`teeth.update(**{\"t01\": True})`（AST `keyword.arg is None`）一律 `n_teeth=0` ⇒ 经该形态加入的**恒真齿**"
+             "既不被计数、亦不被 constancy 检 ⇒ t18 的「逐工具齿数下限 + 常量齿零违规」一并被绕过。R-CO192-1 列举 "
+             "`dict(...)` / `.update(...)` 为受覆盖形态，其**解包子形态**未实现 ⇒ 「**全部**容器形态」为过强声明。"
+             "**复评实测**：as-found `52235b5` 与 `5e6ddde` 均 `n_teeth=0`（CO-192.1 未闭合）。",
+             "- **K-2（low）·md 写/拷扫描漏计同族形态**：`md_write_scan` 对 `io.open(<md>, \"w\")`、"
+             "`Path(...).replace|rename(<md>)` 及**路径别名** `P = Path(...); P.replace|rename(<md>)` 一律 `==[]` ⇒ 此类 `.md` "
+             "产物既不入 pin、t20 亦不截（可落出受控集）；且 `io.open` 在 **boundary 读取**侧已纳扫、**md 写**侧未覆盖（**不对称**）。"
+             "**复评实测**：as-found `52235b5` 与 `5e6ddde` 均 `==[]`（CO-192.1 未闭合）。",
+             "- **观察 O-1（不改判 verdict；已由 CO-196 登记关闭，不重复计数）**：as-found `5e6ddde` 的静态齿 t28 以 oracle "
+             "**证据件 verdict** 为输入 ⇒ 与 oracle 前置「先结算」构成**验证循环**（证据 FAIL 即不可恢复锁死）；本次复评以负控 P4 "
+             "**独立复现**（`oracle_record_ok` 存在于 as-found、现行只判结构性）。",
+             "- **处置**：runner 升 **CO-197.1** —— ① `teeth_hygiene_scan` 补关键字**解包**形态（`dict(**{...})` / `.update(**{...})`）；"
+             "② `md_write_scan` 补 `io.open(<md>, \"w\")` 与 `Path(...)`/路径别名 `.replace|rename(<md>)` 目的；"
+             "t18/t20 合成控同步扩展（含 `\"a.md\".replace(\".md\",\"\")` **字符串操作不得误报**、只读 `io.open` 不得误报之**对偶负控**）。",
+             "- **K-3（low，本件**实现期自捕获**）·注解 upsert 段边界**：J-5 把注解 upsert 改为「trim 旧段 + append」，"
+             "而 trim 取 `updated_by[:index(标记)]`（**裁到末尾**）⇒ 其后另有 CO 追加注解时，重跑本 CO 的 disposition 会"
+             "连同**他人注解段一并静默删除**（实测：co197 注解写入后再跑 co196 disposition ⇒ `；**CO-197（…）**` 整段消失，"
+             "条目 `co197:K-1/K-2` 仍在）；且「裁掉再追加」会把本段**移到末尾** ⇒ 登记簿 sha 随「最后跑的是哪个 CO」而变"
+             "（**顺序敏感、不可复现**）。处置：改**原位替换**（右界 = 下一 `；**CO-` 起点 / 末尾），两件同步落地。",
+             f"- **登记簿**：+3（`co197:K-1`,`K-2`,`K-3`，全 low、全 CLOSED；**{_rc70['total']} 项 / OPEN {_rc70['OPEN']}**）。",
+             "- **实测（本件证据）**：复评件**幂等**（连跑记录 sha 恒 `de625cb63e0df8f5`）；K-1 两形态修后 `n_teeth=1` 且报常量齿、"
+             "K-2 三形态修后分别 `==[\"probe.md\"]` / `==[\"dst.md\"]` / `==[\"dst.md\"]`；**零误报核对**：现行 ORDER 全工具的 md 命中集"
+             "与齿数**逐工具不变**；co196 ↔ co197 注解 upsert **交替重跑**（两种次序）⇒ 登记簿 sha **恒定**"
+             "（顺序无关幂等）、两段注解保位；`--check` **t01..t28 全 True（30 项）**。",
+             "",
+             "> **R-CO197-1**：静态扫描器的「已列形态」须**逐子形态**落地并合成控覆盖 —— `keyword.arg is None`（`**` 解包）等"
+             "子形态属必测集；漏计即停机（同族 R-CO192-1 之收严）。",
+             "> **R-CO197-2**：md 写/拷形态须覆盖 **builtins / io / pathlib** 三族**及其别名**；新增形态须同时补"
+             "**对偶负控**（字符串操作、只读引用**不得误报**）。",
+             "> **R-CO197-4**：注解类 upsert 须**原位**改**本段**（右界 = 下一 `；**CO-` 注解起点 / 末尾）—— "
+             "**禁**无界裁尾（删除他人注解）、**禁**「裁掉再追加」（移段 ⇒ 顺序敏感）；须以「交替重跑两 CO」验证"
+             "**保位 + 顺序无关幂等**。",
+             "> **R-CO197-3**（复现序，取代 R-CO196-3；**步集/序列不变，序内出现 50 次**）：规范复现序 = `" + _ord197 + "`，"
+             "**循环至 sha 稳定**（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1 "
+             "+ R-CO175-1 + R-CO176-1/2 + R-CO177-1 + R-CO178-1 + R-CO179-1/2 + R-CO180-1/2 + R-CO181-1/2 + R-CO182-1 "
+             "+ R-CO183-1 + R-CO184-1 + R-CO185-1/2 + R-CO186-1 + R-CO187-1/2/3 + R-CO188-1 + R-CO189-1 + R-CO190-1 "
+             "+ R-CO191-1 + R-CO192-1 + R-CO193-1/2/3/4 + R-CO194-1/2 + R-CO195-0/1 + R-CO196-1/2/4/5 + R-CO197-1/2/4）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows70 = [("工具 `p3_v57_co164_order_runner.py`（CO-197.1 / 解包形态 + io·pathlib md 形态）",
+                K2 / "tools/p3_v57_co164_order_runner.py"),
+               ("复评件 `m13_v57_co197_rev19_co192_co195_review.json`（as-found 幂等）",
+                STEP2 / "m13_v57_co197_rev19_co192_co195_review.json"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc70['total']} 项 / OPEN {_rc70['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows70:
+        if pth.exists():
+            sec70.append(f"| {label} | `{s16(pth)}` |")
+    sec70.append("")
+    body70 = "\n".join(sec70)
+    if MARK70 in txt:
+        txt = re.sub(re.escape(MARK70) + r"[\s\S]*?(?=\n## |\Z)", body70, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body70
+    txt = txt.replace("W3 Boundary **v2.41**", "W3 Boundary **v2.42**")
     txt = txt.replace("W3 Boundary **v2.40**", "W3 Boundary **v2.41**")
-    txt = txt.replace("W3 Boundary **v2.39**", "W3 Boundary **v2.40**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
     return 0

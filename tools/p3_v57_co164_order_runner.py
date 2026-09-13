@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CO-164/CO-167/CO-169/CO-174/CO-180/CO-181/CO-182/CO-183/CO-187/CO-188/CO-189/CO-190/CO-191/CO-192/CO-193/CO-194/CO-195/CO-196 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
+"""CO-164/CO-167/CO-169/CO-174/CO-180/CO-181/CO-182/CO-183/CO-187/CO-188/CO-189/CO-190/CO-191/CO-192/CO-193/CO-194/CO-195/CO-196/CO-197 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
 
 缘起（实测事故，CO-163）：`co146_boundary_append.py` 因 §37 文本里的 f-string 花括号语法错误**每次崩溃（rc=1）**，
 但收敛判定只看 boundary/记录 sha ⇒ sha 恒不变 ⇒ 报「CONVERGED」，边界 §37 实际从未写入、pin 表陈旧（co77/co135/co136 判 FAIL）。
@@ -32,6 +32,9 @@
      **验证循环**：证据 FAIL ⇒ t28 拒 ⇒ 规范序静态前置失败 ⇒ oracle 无法跑 ⇒ 永久锁死；实测已复现）。证据件的 PASS 由 oracle 自身承载。
      **CO-196（J-4）修正**：t28 的合成控须**逐返回路径**对应（缺件 → `oracle_tool_ok`；语法错 → 内存 `src_compiles`）——
      以「不存在的路径」充作语法错控是**恒真**（仅重复缺件分支），故新增纯内存判据 `src_compiles()`。
+⑬ CO-197（K-1/K-2，**复评 CO-192..CO-195 产物之形态完备性**）：① `teeth_hygiene_scan` 补关键字解包形态
+     `dict(**{...})` / `.update(**{...})`；② `md_write_scan` 补 `io.open(<md>, "w")` 与 `Path(...)/路径别名.replace|rename(<md>)`
+     目的；t18/t20 合成控同步扩展（含 `"a.md".replace(".md","")` 字符串操作**不得误报**之对偶负控）。
 CLI:
   python3 tools/p3_v57_co164_order_runner.py [--check] [--max-iter 5]
 """
@@ -534,6 +537,9 @@ def _tooth_call_pairs(c) -> list:
     for kw in c.keywords:
         if kw.arg is not None:
             out.append((kw.arg, kw.value))
+        else:
+            # CO-197（K-1）：关键字**解包** `dict(**{"t01": True})` —— kw.arg is None，旧式直接跳过 ⇒ 漏计。
+            out += _tooth_dict_pairs(kw.value)
     return out
 
 
@@ -545,6 +551,7 @@ def teeth_hygiene_scan(src: str) -> dict:
     `.update({...})`、`.setdefault(k, v)` 的下标/增量赋值一律纳扫（旧式仅认裸 `teeth` + 下标）。
     CO-192（F-1）续加固：`|=`（AugAssign）、**嵌套下标**（`rec["teeth"][k]`）、**dict 推导**、`__setitem__`、
     **Attribute 目标**（`self.teeth[k]`）、**下标赋别名**（`rec["teeth"] = <Name>`）一律纳扫。
+    CO-197（K-1）续加固：关键字**解包**形态 `dict(**{...})` / `.update(**{...})`（`kw.arg is None`）一律纳扫。
     返回 {"n_teeth": int, "constant_teeth": [...], "premature_agg": [...]}。
     """
     tree = ast.parse(src)
@@ -618,6 +625,9 @@ def teeth_hygiene_scan(src: str) -> dict:
                     for kw in n.keywords:
                         if kw.arg is not None:
                             _add(kw.arg, kw.value, n.lineno)
+                        else:
+                            # CO-197（K-1）：`update(**{"t01": True})` 关键字解包（旧式漏计）
+                            pairs += _tooth_dict_pairs(kw.value)
                     stores.append(n.lineno)
                 elif fn.attr in ("setdefault", "__setitem__") and len(n.args) >= 2:
                     _add(_key(n.args[0]), n.args[1], n.lineno)
@@ -940,6 +950,7 @@ def md_write_scan(src: str) -> list:
 
     覆盖面（CO-187 F-2 加固）：`write_text`/`write_bytes`、写模式 `open(...)`、`shutil.copy*` 的**目的**参数。
     CO-192（F-2）续加固：`Path.open(w)`、`shutil.move`、`os.replace`/`os.rename` 的**目的**参数。
+    CO-197（K-2）续加固：`io.open(<md>, "w")`、`Path(...)`/路径别名 `.replace|rename(<md>)` 的**目的**参数。
     仅看**写**上下文 ⇒ 只读引用（BASIC_SKILL_VS_REDLINE / boundary 读取 / 只读 open）不误报。
     """
     tree = ast.parse(src)
@@ -949,6 +960,25 @@ def md_write_scan(src: str) -> list:
             for c in ast.walk(n.value):
                 if isinstance(c, ast.Constant) and isinstance(c.value, str) and c.value.endswith(".md"):
                     namemap[n.targets[0].id] = Path(c.value).name
+
+    # CO-197（K-2）：`Path(...)`/`pathlib.Path(...)` 构造及其**模块级别名** ⇒ `X.replace/rename(<md>)` 纳扫
+    _pathvars = set()
+    for n in ast.walk(tree):
+        if (isinstance(n, ast.Assign) and len(n.targets) == 1 and isinstance(n.targets[0], ast.Name)
+                and isinstance(n.value, ast.Call)
+                and ((isinstance(n.value.func, ast.Name) and n.value.func.id == "Path")
+                     or (isinstance(n.value.func, ast.Attribute) and n.value.func.attr == "Path"))):
+            _pathvars.add(n.targets[0].id)
+
+    def _is_path_ctor(node) -> bool:
+        """`Path(...)` / `pathlib.Path(...)` 调用，或绑定该构造的模块级名（CO-197 K-2）。
+
+        只认**路径构造**接收者 ⇒ `"a.md".replace(".md","")` 之类字符串操作**不**误报。"""
+        if isinstance(node, ast.Name):
+            return node.id in _pathvars
+        return (isinstance(node, ast.Call)
+                and ((isinstance(node.func, ast.Name) and node.func.id == "Path")
+                     or (isinstance(node.func, ast.Attribute) and node.func.attr == "Path")))
 
     def _target_name(node):
         if isinstance(node, ast.Name) and node.id in namemap:
@@ -976,6 +1006,12 @@ def md_write_scan(src: str) -> list:
                 nm = _target_name(n.args[0])
                 if nm:
                     found.add(nm)
+        elif (isinstance(fn, ast.Attribute) and fn.attr == "open" and isinstance(fn.value, ast.Name)
+                and fn.value.id == "io" and n.args):
+            if _is_write_mode(n.args[1:]):                    # CO-197（K-2）：io.open(<md>, "w")
+                nm = _target_name(n.args[0])
+                if nm:
+                    found.add(nm)
         elif isinstance(fn, ast.Attribute) and fn.attr == "open" and _is_write_mode(n.args):
             nm = _target_name(fn.value)                      # CO-192（F-2）：Path.open(w)
             if nm:
@@ -987,6 +1023,11 @@ def md_write_scan(src: str) -> list:
         elif isinstance(fn, ast.Attribute) and isinstance(fn.value, ast.Name) and fn.value.id == "os" \
                 and fn.attr in ("replace", "rename") and len(n.args) >= 2:
             nm = _target_name(n.args[1])                     # CO-192（F-2）：os.replace/rename 目的
+            if nm:
+                found.add(nm)
+        elif isinstance(fn, ast.Attribute) and fn.attr in ("replace", "rename") \
+                and _is_path_ctor(fn.value) and n.args:
+            nm = _target_name(n.args[0])                     # CO-197（K-2）：Path(...).replace|rename(目的)
             if nm:
                 found.add(nm)
     return sorted(found)
@@ -1185,6 +1226,9 @@ def main(argv=None) -> int:
         'def f():\n    teeth={}\n    teeth.__setitem__("t01", True)\n    return teeth\n',
         'def f(self):\n    self.teeth["t01"]=True\n    return self.teeth\n',
         'TEETH={"t01":True}\ndef f():\n    rec={}\n    rec["teeth"]=TEETH\n    return rec\n',
+        # CO-197（K-1）：关键字**解包**形态（kw.arg is None）亦须纳扫 —— dict(**{...}) / update(**{...})
+        'def f():\n    teeth=dict(**{"t01": True})\n    return teeth\n',
+        'def f():\n    teeth={}\n    teeth.update(**{"t01": True})\n    return teeth\n',
     ]
     _ev192 = [teeth_hygiene_scan(x) for x in _p_192]
     _g = teeth_hygiene_scan(_p_good); _c = teeth_hygiene_scan(_p_const)
@@ -1256,7 +1300,14 @@ def main(argv=None) -> int:
         and md_write_scan('CARD = S2 / "x.md"\nf = CARD.open("w")') == ["x.md"]
         and md_write_scan('shutil.move(S2 / "a.md", OUT / "b.md")') == ["b.md"]
         and md_write_scan('os.replace(S2 / "a.md", OUT / "b.md")') == ["b.md"]
-        and md_write_scan('CARD = S2 / "x.md"\nf = CARD.open("r")') == [])
+        and md_write_scan('CARD = S2 / "x.md"\nf = CARD.open("r")') == []
+        # CO-197（K-2）：io.open(w) / Path(...).replace|rename 目的亦须纳扫；只读 / 非 .md 目的不得误报
+        and md_write_scan('import io\nf = io.open("probe.md","w")') == ["probe.md"]
+        and md_write_scan('Path("a.md").replace("dst.md")') == ["dst.md"]
+        and md_write_scan('P = Path("a.md")\nP.rename("dst.md")') == ["dst.md"]
+        and md_write_scan('import io\nf = io.open("ro.md")') == []
+        and md_write_scan('Path("a.md").replace("b.txt")') == []
+        and md_write_scan('s = "a.md".replace(".md", "")') == [])
     # CO-187（F-3）：读取 boundary 的步须**显式归类**（扫描步 ⇒ 紧跟刷新；非扫描步 ⇒ 声明理由）—— t21
     checks["t21_boundary_reader_declared"] = (
         set(boundary_readers()) == (set(BOUNDARY_SCAN_GUARDED) | set(BOUNDARY_READ_DECLARED))

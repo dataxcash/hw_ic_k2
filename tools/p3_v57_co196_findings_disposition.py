@@ -101,9 +101,16 @@ def main() -> int:
     # 会在注解文本变更（+2 → +3 → +5）时吞掉更新，致自述↔实况失一致（实测：3 条条目而注解仍称「+2」）。
     _MARK = "；**CO-196（L2 自裁 · 验证循环"
     _ub = reg["meta"].get("updated_by", "")
+    # CO-197（K-3）：本注解段**原位替换**（右界 = 下一 `；**CO-` 注解起点 / 末尾）。
+    # ① 不得无界裁尾（会静默删除**他人**注解段）；② 不得「裁掉再追加」（会把本段**移到末尾** ⇒ 状态随
+    # 「最后跑的是哪个 CO 的 disposition」而变 ⇒ 登记簿 sha / 由它派生的 pin **顺序敏感、不可复现**）。
     if _MARK in _ub:
-        _ub = _ub[: _ub.index(_MARK)]
-    reg["meta"]["updated_by"] = _ub + note
+        _i = _ub.index(_MARK)
+        _j = _ub.find("；**CO-", _i + len(_MARK))
+        _ub = _ub[:_i] + note + (_ub[_j:] if _j != -1 else "")
+    else:
+        _ub = _ub + note
+    reg["meta"]["updated_by"] = _ub
     reg["meta"]["counts"] = dict(collections.Counter(i["kind"] for i in reg["items"]))
     reg["meta"]["counts"]["OPEN"] = sum(1 for i in reg["items"] if i["status"] == "OPEN")
     reg["meta"]["counts"]["total"] = len(reg["items"])
