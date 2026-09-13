@@ -1197,6 +1197,62 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body47
     txt = txt.replace("W3 Boundary **v2.18**", "W3 Boundary **v2.19**")
+    # ── §48 CO-175（交付包 parity / 派生绑定补强） ─────────────────────────────
+    MARK48 = "## 48. CO-175"
+    _rc48 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    _ord175 = ("co146_impedance_table → co146_pm_eval → co146_ledger_add → co153_k9_domain_coverage → "
+               "co148_u6_datasheet_inputs → co148_thermal_ruling → co149_thermal_mitigation_derive → co147_l2_ruling → "
+               "co146_jlc_dfm_gate → co146_jlc_fab_package → co152_findings_disposition → co155_co154_findings_disposition → "
+               "co156_co154_open_disposition → co157_gate_hardening_3 → co158_l5_packet_selfcontained → "
+               "co159_rev19_co156_co157_co158_review → co160_co159_findings_disposition → co161_gap_hardening_4 → "
+               "co162_verdict_binding → co163_binding_to_order_notes → co166_rev19_co159_co165_review → "
+               "co167_co166_findings_disposition → co168_register_consistency → co169_step_output_oracle → co170_stackup_binding → "
+               "co171_order_notes_record_figures → co172_rev19_co166_co171_review → co173_co172_findings_disposition → "
+               "co174_step_artifact_attribution → co175_package_parity_binding → co124_input_selfcheck_gate → "
+               "co150_k9_domain_gate → co146_boundary_append → co77_closure_declaration_sweep → co120_provenance_pin_gate → "
+               "co135_review_hygiene → co136_gate_hygiene → co78_layer_role_drift_gate → co81_project_rules_gate → "
+               "co84_dru_domain_gate → co95_in4_reachability → co98_reachability_status_report → co106_reference_plane_gate → "
+               "co146_boundary_append")
+    sec48 = [MARK48 + "（**L2 自裁 · 交付物绑定补强**）", "",
+             "- **问题（查漏实测）**：交付包内 `04_impedance/impedance_table.{json,md}` 为**随单件**（ORDER_NOTES §1/§2 明列；"
+             "板厂**据此控阻抗**），却是 `shutil.copy` 来源副本且**无 parity 牙齿**（对照 `06_rulings/*` 有 t07/t07b）⇒ "
+             "包被独立提交/手改时与来源脱钩**不可见**；`05_layer_sequence.txt` 由冻结 SPEC 派生，**亦无派生一致性牙齿**。",
+             "- **处置**：`p3_v57_co146_jlc_fab_package.py` 升 **CO146-PKG.9** ——",
+             "  ① 纯谓词 `copy_parity()`（缺件 fail-closed）+ 牙齿 **t15**（`04_impedance` 两副本与来源**逐字节一致**）/ "
+             "**t15b**（判据灵敏度：同 True、异 False、缺件 False）；",
+             "  ② 牙齿 **t16**（`05_layer_sequence.txt` == `layer_sequence(spec)` **重算**）/ **t16b**（扰动 SPEC stackup 角色 ⇒ 重算必不同）；",
+             "  ③ 包记录增 `declared_refs.impedance_copy_parity` 与 `declared_refs.layer_sequence_sha16`。",
+             "  ④ **如实说明**：`05_layer_sequence.txt` **不**在 ORDER_NOTES §1/§2 声明为随单件 ⇒ 本项只做**包内自洽**绑定，"
+             "**不**改变下单提交口径；`ORDER_NOTES.md` **逐字节不变**。",
+             f"- **登记簿**：+2（`co175:G-1/G-2`，全 CLOSED；{_rc48['total']} 项 / OPEN {_rc48['OPEN']}）。",
+             "",
+             "> **R-CO175-1**：交付包内凡**副本类**件（不限 `06_rulings`）须与来源**逐字节**绑定的**牙齿**；凡**派生类**件须与 "
+             "来源**重算**一致。缺件一律 fail-closed；仅「在包内」**不成立**。",
+             "> **R-CO175-2**（复现序，取代 R-CO174-2；步骤集新增 co175）：规范复现序 = `" + _ord175 + "`，**循环至 sha 稳定**"
+             "（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1 + R-CO175-1）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows48 = [("工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.9 / t15/t15b + t16/t16b；29 牙齿）",
+                K2 / "tools/p3_v57_co146_jlc_fab_package.py"),
+               ("工具 `p3_v57_co175_package_parity_binding.py`",
+                K2 / "tools/p3_v57_co175_package_parity_binding.py"),
+               ("工具 `p3_v57_co164_order_runner.py`（CO-169.3 / 44 步）",
+                K2 / "tools/p3_v57_co164_order_runner.py"),
+               ("包记录 `m13_v57_co146_jlc_fab_package.json`（CO146-PKG.9）",
+                STEP2 / "m13_v57_co146_jlc_fab_package.json"),
+               ("下单备注 `L5/jlc_package/ORDER_NOTES.md`（**逐字节不变**）", L5 / "jlc_package" / "ORDER_NOTES.md"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc48['total']} 项 / OPEN {_rc48['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows48:
+        if pth.exists():
+            sec48.append(f"| {label} | `{s16(pth)}` |")
+    sec48.append("")
+    body48 = "\n".join(sec48)
+    if MARK48 in txt:
+        txt = re.sub(re.escape(MARK48) + r"[\s\S]*?(?=\n## |\Z)", body48, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body48
+    txt = txt.replace("W3 Boundary **v2.19**", "W3 Boundary **v2.20**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
     return 0

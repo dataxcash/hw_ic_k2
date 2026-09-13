@@ -457,6 +457,24 @@ def manifest(root: Path) -> dict:
     return files
 
 
+# CO-175（G-1/G-2）：交付包内**副本件**（与来源逐字节一致）与**派生件**（与 SPEC 重算一致）的绑定判据。
+IMP_SRC_JSON = STEP2 / "m13_v57_co146_impedance_table.json"
+IMP_SRC_MD = STEP2 / "m13_v57_co146_impedance_table.md"
+LAYER_SEQ_REL = "05_layer_sequence.txt"
+
+
+def copy_parity(copy_bytes: bytes | None, source_bytes: bytes | None) -> bool:
+    """CO-175：包内副本须与来源**逐字节一致**；缺件/失联一律 False（fail-closed）。"""
+    return copy_bytes is not None and source_bytes is not None and copy_bytes == source_bytes
+
+
+def _read_bytes_or_none(p: Path) -> bytes | None:
+    try:
+        return p.read_bytes()
+    except OSError:
+        return None
+
+
 def main() -> int:
     spec = json.loads(SPEC.read_text())
     dfm = json.loads((STEP2 / "m13_v57_co146_jlc_dfm_gate.json").read_text())
@@ -475,7 +493,8 @@ def main() -> int:
     (OUT / "04_impedance").mkdir(parents=True, exist_ok=True)
     shutil.copy(STEP2 / "m13_v57_co146_impedance_table.md", OUT / "04_impedance/impedance_table.md")
     shutil.copy(STEP2 / "m13_v57_co146_impedance_table.json", OUT / "04_impedance/impedance_table.json")
-    (OUT / "05_layer_sequence.txt").write_text(layer_sequence(spec))
+    _layer_seq = layer_sequence(spec)
+    (OUT / "05_layer_sequence.txt").write_text(_layer_seq)
     (OUT / "06_rulings").mkdir(parents=True, exist_ok=True)
     for _src, _dst in RULINGS:
         shutil.copy(_src, OUT / "06_rulings" / _dst)
@@ -512,6 +531,17 @@ def main() -> int:
             cur = cur[k]
         cur[path[-1]] = val
         return d
+    # CO-175（G-1）：随单阻抗表副本（04_，板厂控阻抗依据）须与来源记录逐字节一致
+    _imp_parity = {
+        "impedance_table.json": copy_parity(_read_bytes_or_none(OUT / "04_impedance/impedance_table.json"),
+                                            _read_bytes_or_none(IMP_SRC_JSON)),
+        "impedance_table.md": copy_parity(_read_bytes_or_none(OUT / "04_impedance/impedance_table.md"),
+                                          _read_bytes_or_none(IMP_SRC_MD)),
+    }
+    # CO-175（G-2）：05_layer_sequence（由冻结 SPEC 的 stackup/impedance 派生）须与**重算**逐字节一致
+    _layer_seq_pkg = (OUT / LAYER_SEQ_REL).read_text()
+    _spec_perturbed = copy.deepcopy(spec)
+    _spec_perturbed["stackup"][COPPER[0]] = str(_spec_perturbed["stackup"].get(COPPER[0], "")) + " [PERTURBED]"
     refs = sorted(set(re.findall(r"`(06_rulings/[A-Za-z0-9_.\-]+)`", notes_txt)))
     # CO-159（F-9）：ORDER_NOTES 里的**目录级**声明（`01_`..`06_`）也须落包内（原先只覆盖 `06_rulings/*` 文件引用）
     dir_refs = sorted(set(re.findall(r"\b(0[1-6]_)", notes_txt)))
@@ -570,10 +600,17 @@ def main() -> int:
                  stackup_svg_copper_geometry_checks(_svg, jp_binding).values()),
              "t11d_stackup_svg_copper_geometry_sensitivity": (not all(stackup_svg_copper_geometry_checks(
                  _svg, {**jp_binding, "copper": {**(jp_binding.get("copper") or {}), "outer_oz": 2.0}}).values())),
+             # CO-175（G-1）：随单阻抗表副本须与来源记录逐字节一致（正控 + 灵敏度）
+             "t15_impedance_copy_parity": all(_imp_parity.values()),
+             "t15b_impedance_copy_parity_sensitivity": (copy_parity(b"a", b"a") and not copy_parity(b"a", b"b")
+                                                        and not copy_parity(None, b"b")),
+             # CO-175（G-2）：05_layer_sequence 须与 SPEC 重算一致（正控 + 灵敏度）
+             "t16_layer_sequence_derivation": (_layer_seq_pkg == _layer_seq),
+             "t16b_layer_sequence_sensitivity": (layer_sequence(_spec_perturbed) != _layer_seq_pkg),
              "t02_8_copper_gerbers": len(cu) >= 8,
              "t03_drill_present": len(drl) >= 1,
              "t04_all_hashed": all(v.get("sha256") for v in m1.values())}
-    rec = {"artifact": "m13_v57_co146_jlc_fab_package", "schema": 1, "revision": "CO146-PKG.8",
+    rec = {"artifact": "m13_v57_co146_jlc_fab_package", "schema": 1, "revision": "CO146-PKG.9",
            "nature": "JLC 打样包（监理指令 #10 动作 3）；只出交付物，不改板/SPEC",
            "board": BOARD.name, "board_sha16": sha16(BOARD),
            "package_dir": str(OUT.relative_to(K2)), "n_files": len(m1),
@@ -587,7 +624,9 @@ def main() -> int:
                                "reason": "KiCad 导出件内嵌墙钟时间戳 ⇒ 规范化以保证命令+sha 可复现；制造语义不受影响"},
            "stackup_svg_sha16": sha16(OUT / "03_stackup/JLC08161H_stackup.svg"),
            "teeth": teeth,
-           "declared_refs": {"files": refs, "dirs": dir_refs, "rulings_parity": rulings_parity},
+           "declared_refs": {"files": refs, "dirs": dir_refs, "rulings_parity": rulings_parity,
+                             "impedance_copy_parity": _imp_parity,
+                             "layer_sequence_sha16": sha16(OUT / LAYER_SEQ_REL)},
            "record_figures": {"impedance_watch": impedance_watch_figure(imp),
                               "impedance_spread_pct": impedance_spread_pct(imp),
                               "drc_as_designed_n": (dfm.get("drc_as_designed") or {}).get("n"),

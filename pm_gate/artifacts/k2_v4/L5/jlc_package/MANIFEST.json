@@ -1,7 +1,7 @@
 {
  "artifact": "m13_v57_co146_jlc_fab_package",
  "schema": 1,
- "revision": "CO146-PKG.8",
+ "revision": "CO146-PKG.9",
  "nature": "JLC 打样包（监理指令 #10 动作 3）；只出交付物，不改板/SPEC",
  "board": "k2_v4_8L.l4.kicad_pcb",
  "board_sha16": "d4e81f647be7f980",
@@ -64,6 +64,10 @@
   "t12h_drc_rules_edge_binding_sensitivity": true,
   "t11c_stackup_svg_copper_geometry_binding": true,
   "t11d_stackup_svg_copper_geometry_sensitivity": true,
+  "t15_impedance_copy_parity": true,
+  "t15b_impedance_copy_parity_sensitivity": true,
+  "t16_layer_sequence_derivation": true,
+  "t16b_layer_sequence_sensitivity": true,
   "t02_8_copper_gerbers": true,
   "t03_drill_present": true,
   "t04_all_hashed": true
@@ -87,7 +91,12 @@
    "L2_RULING_u6_thermal_v1.md": true,
    "L2_RULING_u6_thermal_mitigation_v1.md": true,
    "m13_v57_co146_jlc_dfm_gate.json": true
-  }
+  },
+  "impedance_copy_parity": {
+   "impedance_table.json": true,
+   "impedance_table.md": true
+  },
+  "layer_sequence_sha16": "6b33690f950c90fc"
  },
  "record_figures": {
   "impedance_watch": {
