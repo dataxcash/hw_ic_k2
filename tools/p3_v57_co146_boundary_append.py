@@ -2932,6 +2932,46 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body83
 
+    # ── §84 CO-211（L2 自裁 · 决策规则求值化：声明式规则求值 + 可行性前置 + 安全求值器 + 求值齿） ──
+    MARK84 = "## 84. CO-211"
+    _rc84 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    sec84 = [MARK84 + "（**L2 自裁 · 工艺选型决策规则求值化：声明式规则求值 + B 可行性前置 + 闭式安全求值器 + 求值齿**）", "",
+             "- **缺陷（H-1，low）**：执行器自述 `decision_rule_reproducible` =「填入 `cost_model.parameters` 后重跑本工具即得成本序；**规则已编码**，可复现」，"
+             "交办件/裁定亦沿用该表述；但**实测（内存注入、零落盘）把全部参数填满**（`missing` 皆空）后，三路 `cost.value` / `lead_time.value` **仍恒为 None**、`pick` **恒为 `A`** "
+             "⇒ 即**表达式从未求值、`conditional` 从未判定**；且文档规则引用之 `cost(重派生)` 在 `cost_model.parameters` 中**无对应参数** ⇒ 该规则以现行模型**不可表达**。"
+             "（决策面之「声明↔实现」漂移，承 R-CO194-1 / R-CO208-1 / R-CO210-1。）",
+             "- **处置**：① 判据件 **v1.3 → v1.4**：cost expr 补 `+ k_rederivation*G`、新增参数 **`k_rederivation`**（`INPUT_REQUIRED`，USD / 整层重派生遍）、"
+             "新增 **`decision`** 块（`rule_id` = `B_if_feasible_and_cheaper_else_A` / 可行性前置 / 禁编造 / 变量语义）；"
+             "② 执行器 **CO-206.2 → CO-206.3**：新增**闭式安全求值器** `_eval_expr`（白名单记号 + 递归下降，**无 eval**；未知记号/变量或除零 ⇒ None，fail-closed）、"
+             "按符号绑定求值 cost/lead、`recommend()` 改为**求值声明式规则**（**B 前置 = 可行性已证**）+ **6 项求值齿**（rc 随齿全绿 fail-closed）；③ 重生成证据件；④ 随单裁定补前置注记。",
+             "- **判据（修后实测）**：参数缺失 ⇒ 三路 `value` = None 且 `pick` = A（**不伪排序**）；参数齐备而 **B 未证** ⇒ `pick` = **A**（前置不满足）；"
+             "参数齐备且 B **假设已证** ⇒ C_A = **394.0** / C_B = **125.0** ⇒ `pick` = **B**（规则确已求值）。**6 齿全 True**（t01 规则声明绑定 / t02 缺参不伪排序 / t03 齐备可求值 / t04 B 前置 / t05 求值器 fail-closed / t06 表达式变量全可解析）；连跑同 sha（幂等）。",
+             "- **意义**：打样路径 A/B 之决策面此前**只有文档、没有实现**；现「填参 ⇒ 出数并可能改判」为真（但 **B 仍须先证 32/32**，现行 24/32 ⇒ 前置不满足 ⇒ 恒 A）；外部报价回填后即刻可算。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows84 = [("判据件 `process_route_criteria_v1.json`（**v1.4**：+`k_rederivation` / +`decision` 块 / cost expr 补项）", L2 / "process_route_criteria_v1.json"),
+               ("执行器 `p3_v57_co206_process_route_select.py`（**CO-206.3**：求值器 + 规则求值 + 6 齿）", K2 / "tools/p3_v57_co206_process_route_select.py"),
+               ("证据 `m13_v57_co206_process_route_selection.json`", STEP2 / "m13_v57_co206_process_route_selection.json"),
+               ("证据 `m13_v57_co206_process_route_selection.md`", STEP2 / "m13_v57_co206_process_route_selection.md"),
+               ("裁定 `L2_RULING_process_route_selection_v2.md`（§2 R3′ 补可行性前置注记）", L2 / "L2_RULING_process_route_selection_v2.md"),
+               ("包记录 `m13_v57_co146_jlc_fab_package.json`（牙齿 29/29）", STEP2 / "m13_v57_co146_jlc_fab_package.json"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc84['total']} 项 / OPEN {_rc84['OPEN']}）", L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows84:
+        if pth.exists():
+            sec84.append(f"| {label} | `{s16(pth)}` |")
+    sec84.append("")
+    sec84.append("> **R-CO211-1**：「XX 已编码 / 可复现」类声明须有**求值齿**支撑 —— 正控 = 填参即出数且可改判，负控 = 缺参恒 None 不排序、"
+                 "前置不满足恒取保守路；规则须与其**前置条件同处声明**（判据件 `decision` 块），实现与声明以 `rule_id` 同源。")
+    sec84.append("")
+    sec84.append("> **序不变**：本件未改步骤集/序列（承 §82 之 R-CO209-2）。")
+    sec84.append("")
+    body84 = "\n".join(sec84)
+    if MARK84 in txt:
+        txt = re.sub(re.escape(MARK84) + r"[\s\S]*?(?=\n## |\Z)", body84, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body84
+
+    txt = txt.replace("W3 Boundary **v2.51**", "W3 Boundary **v2.52**")
     txt = txt.replace("W3 Boundary **v2.50**", "W3 Boundary **v2.51**")
     txt = txt.replace("W3 Boundary **v2.49**", "W3 Boundary **v2.50**")
     txt = txt.replace("W3 Boundary **v2.48**", "W3 Boundary **v2.49**")
