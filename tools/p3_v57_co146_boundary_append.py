@@ -1692,6 +1692,49 @@ def main() -> int:
         txt = re.sub(re.escape(MARK56) + r"[\s\S]*?(?=\n## |\Z)", body56, txt, count=1)
     else:
         txt = txt.rstrip("\n") + "\n\n" + body56
+    # ── §57 CO-184（能力表值绑定的上下文约束：机判闭合 CO-177 残余） ──────────
+    MARK57 = "## 57. CO-184"
+    _rc57 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    _ord184 = _ord183          # 步集/序列不变（50 次）
+    sec57 = [MARK57 + "（**L2 自裁 · 值绑定上下文约束**）", "",
+             "- **G-1（low）·上下文无约束**：`capability_value_bind_checks()` 用 `re.search(pat, page_text)` **全页首匹配** ⇒ "
+             "若某条锚短语在抓取件**多处出现**，其值可被绑定到**远处置同值数字**，而 t06（逐值相等）仍过 —— "
+             "声明值确实等于「某处」原文数字，但**非该条上下文**（CO-177/`co183:G-3` 残余的具体化）。",
+             "- **实测（本件证据）**：现行 24 条锚点在抓取件 `m13_v57_co146_jlc_capability_source.html` 中**均唯一出现**"
+             "（`anchor_occ=1`），且全部值绑定匹配距锚点 **≤281 字符** ⇒ 现值**无事实偏差**，但判据本身**无上下文约束**。",
+             "- **处置**：`p3_v57_co146_jlc_dfm_gate.py` 升 **CO146-JLC-DFM.6** —— `capability_value_bind_checks()` 增 "
+             "`anchors` 参数与两判据：① **`anchor_localizes_uniquely`**（锚点须在抓取件**唯一**出现，否则 fail-closed）；"
+             "② **`value_within_anchor_window`**（每条值绑定匹配须落在锚点定位处 **±400 字符**内）；两判据折入 **t06**，"
+             "并加灵敏度齿 **t07b**（合成正/负控：唯一+邻近⇒True；锚点重复⇒判不唯一；值远置⇒判越窗）。DFM 闸 **9 齿**。",
+             "- **结论**：`co183:G-3` 的「人工正则上下文风险」由**机判闭合**（不再依赖人审裁定）。",
+             f"- **登记簿**：+1（`co184:G-1`，CLOSED；{_rc57['total']} 项 / OPEN {_rc57['OPEN']}）。",
+             "",
+             "> **R-CO184-1**：能力表**值绑定**须**上下文受约束**（锚点唯一定位 + 值在锚点邻域内）；判据须配"
+             "**合成正/负控**（唯一+邻近 / 重复锚 / 远置值）。禁以「全页首匹配」充当上下文绑定。",
+             "> **R-CO184-2**（复现序，取代 R-CO183-4；**步集/序列不变，序内出现 50 次**）：规范复现序 = `" + _ord184 + "`，"
+             "**循环至 sha 稳定**（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1 "
+             "+ R-CO175-1 + R-CO176-1/2 + R-CO177-1 + R-CO178-1 + R-CO179-1/2 + R-CO180-1/2 + R-CO181-1/2 + R-CO182-1 "
+             "+ R-CO183-1 + R-CO184-1）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows57 = [("工具 `p3_v57_co146_jlc_dfm_gate.py`（CO146-JLC-DFM.6 / 锚点唯一 + 值邻域 + t07b；9 齿）",
+                K2 / "tools/p3_v57_co146_jlc_dfm_gate.py"),
+               ("工具 `p3_v57_co164_order_runner.py`（CO-183.1 / EXPECTED_TEETH 含 DFM 9 齿；序内 50 次）",
+                K2 / "tools/p3_v57_co164_order_runner.py"),
+               ("DFM 闸记录 `m13_v57_co146_jlc_dfm_gate.json`（DFM.6 / 9 齿 / verdict FAIL 预期）",
+                STEP2 / "m13_v57_co146_jlc_dfm_gate.json"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc57['total']} 项 / OPEN {_rc57['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows57:
+        if pth.exists():
+            sec57.append(f"| {label} | `{s16(pth)}` |")
+    sec57.append("")
+    body57 = "\n".join(sec57)
+    if MARK57 in txt:
+        txt = re.sub(re.escape(MARK57) + r"[\s\S]*?(?=\n## |\Z)", body57, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body57
+    txt = txt.replace("W3 Boundary **v2.28**", "W3 Boundary **v2.29**")
     txt = txt.replace("W3 Boundary **v2.27**", "W3 Boundary **v2.28**")
     txt = txt.replace("W3 Boundary **v2.26**", "W3 Boundary **v2.27**")
     txt = txt.replace("W3 Boundary **v2.25**", "W3 Boundary **v2.26**")

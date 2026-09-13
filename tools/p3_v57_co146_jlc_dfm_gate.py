@@ -147,11 +147,16 @@ def _val_eq(a, b) -> bool:
         return str(a).strip() == str(b).strip()
 
 
-def capability_value_bind_checks(page_text: str, capability: dict, bind: dict) -> dict:
-    """CO-177：能力表的**值**须**可由抓取件原文抽取**得到（防手录值与原文脱钩）。
+ANCHOR_WINDOW = 400      # CO-184：值绑定匹配须落在其锚点定位处的邻域内（字符）
+
+
+def capability_value_bind_checks(page_text: str, capability: dict, bind: dict, anchors: dict) -> dict:
+    """CO-177/CO-184：能力表的**值**须**可由抓取件原文抽取**得到，且**上下文受约束**。
 
     ① 绑定须覆盖全部条目且非空；② 每条字面量须出现 / 每条正则须匹配；③ 捕获组数须与期望数一致且**逐值相等**；
-    ④ 捕获组总数须 ≥ 下限（防退化绑定，如正则恒不捕获）。
+    ④ 捕获组总数须 ≥ 下限（防退化绑定，如正则恒不捕获）；
+    ⑤ **CO-184**：锚点须在抓取件中**唯一**定位（否则「原文子串」不可定位值）；⑥ 值绑定匹配须落在
+    锚点邻域（±`ANCHOR_WINDOW`）内 —— 防「同锚多处时取到远处置同值数字」。
     """
     keys = sorted(capability)
     out = {"bind_covers_capability": set(bind) == set(capability),
@@ -172,6 +177,21 @@ def capability_value_bind_checks(page_text: str, capability: dict, bind: dict) -
                     ok = False; out[f"{k}.value_mismatch"] = False
     out["bind_all_resolved"] = ok
     out["bind_group_floor"] = n_groups >= 25
+    # CO-184：上下文约束（锚点唯一定位 + 值须在锚点邻域）—— fail-closed
+    uniq, local = True, True
+    for k in keys:
+        a = _norm(anchors.get(k) or "")
+        if not a or page_text.count(a) != 1:
+            uniq = False; out[f"{k}.anchor_not_uniquely_located"] = False
+            continue
+        a0 = page_text.index(a)
+        for r in (bind.get(k) or []):
+            pat = re.escape(r) if isinstance(r, str) else r[0]
+            mm = re.search(pat, page_text)
+            if mm is not None and abs(mm.start() - a0) > ANCHOR_WINDOW:
+                local = False; out[f"{k}.value_outside_anchor_window"] = False
+    out["anchor_localizes_uniquely"] = uniq
+    out["value_within_anchor_window"] = local
     return out
 
 
@@ -469,18 +489,33 @@ def main() -> int:
         {**CAPABILITY_ANCHORS, "layer_count": CAPABILITY_ANCHORS["layer_count"] + "ZZZZ"},
         CAPABILITY_QUOTE_NOT_VERBATIM).values())
     # CO-177：能力表**值**须可由抓取件原文抽取核验（正则捕获 ↔ 声明值）+ 灵敏度
-    _bind = capability_value_bind_checks(_page, JLC8, CAPABILITY_VALUE_BIND)
+    _bind = capability_value_bind_checks(_page, JLC8, CAPABILITY_VALUE_BIND, CAPABILITY_ANCHORS)
     _bind_sens = not all(capability_value_bind_checks(
         _page, JLC8,
         {**CAPABILITY_VALUE_BIND,
-         "min_track_width_mm": [("Multilayer: (0\\.09) / 0\\.09 mm \\(3\\.5 / 3\\.5 mil\\)", ["0.10"])]}).values())
+         "min_track_width_mm": [("Multilayer: (0\\.09) / 0\\.09 mm \\(3\\.5 / 3\\.5 mil\\)", ["0.10"])]},
+        CAPABILITY_ANCHORS).values())
+    # CO-184：上下文约束判据的**合成正/负控**（数据无关）——唯一锚点+邻近⇒True；锚点重复⇒不唯一；值远置⇒越窗
+    _syn_cap = {"k": {"value": 0.09, "quote": "Beta 0.09 mm"}}
+    _syn_anc = {"k": "Beta 0.09 mm"}
+    _syn_bind = {"k": [("Beta (0\\.09) mm", ["0.09"])]}
+    _pg_ok = "Prefix Beta 0.09 mm suffix"
+    _pg_dup = "Beta 0.09 mm " + ("pad " * 150) + "Beta 0.09 mm"
+    _pg_far = "Beta 0.09 mm " + ("pad " * 150) + "Other 0.09 mm"
+    _syn_far = {"k": [("Other (0\\.09) mm", ["0.09"])]}
+    _ok_chk = capability_value_bind_checks(_pg_ok, _syn_cap, _syn_bind, _syn_anc)
+    _ctx_ok = bool(_ok_chk["anchor_localizes_uniquely"] and _ok_chk["value_within_anchor_window"]
+                   and _ok_chk["bind_all_resolved"])
+    _ctx_dup = not capability_value_bind_checks(_pg_dup, _syn_cap, _syn_bind, _syn_anc)["anchor_localizes_uniquely"]
+    _ctx_far = not capability_value_bind_checks(_pg_far, _syn_cap, _syn_far, _syn_anc)["value_within_anchor_window"]
+    _ctx_sens = _ctx_ok and _ctx_dup and _ctx_far
     # CO-178：`_items()` 限值须由能力表派生（逐项扰动证明）
     _deriv = item_limit_derivation_checks(m, asd, jlcrun)
     fails = [i["item"] for i in items if i["verdict"] == "FAIL"]
     # 牙齿②：过孔类型项必须 FAIL（本板 220 非通孔）
     teeth2_ok = "**过孔类型（盲/埋孔）**" in fails
     rec = {
-        "artifact": "m13_v57_co146_jlc_dfm_gate", "schema": 1, "revision": "CO146-JLC-DFM.5",
+        "artifact": "m13_v57_co146_jlc_dfm_gate", "schema": 1, "revision": "CO146-JLC-DFM.6",
         "nature": "L2 只读机判：DFM 对照 JLC 8 层公布能力（监理指令 #10 动作 4）",
         "board": BOARD.name, "board_sha16": sha16(BOARD), "board_sha256": sha(BOARD),
         "as_built": m,
@@ -501,6 +536,11 @@ def main() -> int:
                   "t06_capability_value_bound": {"ok": all(_bind.values()), "checks": _bind,
                                                  "rules": sum(len(CAPABILITY_VALUE_BIND[k]) for k in CAPABILITY_VALUE_BIND)},
                   "t07_capability_value_bind_sensitivity": {"ok": _bind_sens},
+                  "t07b_anchor_localization_sensitivity": {"ok": _ctx_sens,
+                                                           "window_chars": ANCHOR_WINDOW,
+                                                           "controls": {"unique_and_near": _ctx_ok,
+                                                                        "duplicate_anchor_detected": _ctx_dup,
+                                                                        "far_value_detected": _ctx_far}},
                   "t08_drc_item_limits_derived": {"ok": all(_deriv.values()),
                                                   "cases": len(ITEM_DERIVATION_CASES), "checks": _deriv}},
         "redline": "只读：仅读板/kicad-cli DRC；坐标零搜索；不改板/图纸/SPEC/冻结四源。",
@@ -508,7 +548,7 @@ def main() -> int:
     (STEP2 / "m13_v57_co146_jlc_dfm_gate.json").write_text(
         json.dumps(rec, ensure_ascii=False, indent=1) + "\n")
     srcfile = CAP_SRC_HTML
-    cap = {"artifact": "m13_v57_co146_jlc8_capability", "schema": 1, "revision": "CO146-CAP.2",
+    cap = {"artifact": "m13_v57_co146_jlc8_capability", "schema": 1, "revision": "CO146-CAP.3",
            "source_url": JLC_URL, "fetched": JLC_FETCH_DATE,
            "source_page_file": srcfile.name,
            "source_page_sha256": sha(srcfile) if srcfile.exists() else None,

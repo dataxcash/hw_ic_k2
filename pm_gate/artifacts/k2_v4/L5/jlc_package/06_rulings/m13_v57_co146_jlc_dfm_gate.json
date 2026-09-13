@@ -1,7 +1,7 @@
 {
  "artifact": "m13_v57_co146_jlc_dfm_gate",
  "schema": 1,
- "revision": "CO146-JLC-DFM.5",
+ "revision": "CO146-JLC-DFM.6",
  "nature": "L2 只读机判：DFM 对照 JLC 8 层公布能力（监理指令 #10 动作 4）",
  "board": "k2_v4_8L.l4.kicad_pcb",
  "board_sha16": "d4e81f647be7f980",
@@ -295,12 +295,23 @@
     "bind_covers_capability": true,
     "bind_nonempty": true,
     "bind_all_resolved": true,
-    "bind_group_floor": true
+    "bind_group_floor": true,
+    "anchor_localizes_uniquely": true,
+    "value_within_anchor_window": true
    },
    "rules": 27
   },
   "t07_capability_value_bind_sensitivity": {
    "ok": true
+  },
+  "t07b_anchor_localization_sensitivity": {
+   "ok": true,
+   "window_chars": 400,
+   "controls": {
+    "unique_and_near": true,
+    "duplicate_anchor_detected": true,
+    "far_value_detected": true
+   }
   },
   "t08_drc_item_limits_derived": {
    "ok": true,
