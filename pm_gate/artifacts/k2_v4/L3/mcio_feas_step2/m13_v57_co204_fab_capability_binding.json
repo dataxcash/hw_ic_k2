@@ -1,8 +1,8 @@
 {
  "artifact": "m13_v57_co204_fab_capability_binding",
  "schema": 1,
- "revision": "CO-204",
- "nature": "板厂能力绑定闸（设计定稿前逐项对 JLC 标准能力：通孔 + 背钻）—— 监理指令 #12 动作 1/5",
+ "revision": "CO-205",
+ "nature": "板厂能力绑定闸（设计定稿前逐项对 JLC 标准能力：通孔 + 背钻）+ CO-205 C5 端声明↔实现绑定（R-CO205-1）",
  "jlc_standard": {
   "source_html": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_co146_jlc_capability_source.html",
   "source_page_sha256": "7d1d5a9193f3c2123367b1b306e9e3c67863fd31da6e577ad7c4f197fab8ac9d",
@@ -68,7 +68,14 @@
   "C1_via_class_legality": false,
   "C2_residual_stub_lt_0.15": false,
   "C3_backdrill_process_limits": true,
-  "C4_no_blind_buried": false
+  "C4_no_blind_buried": false,
+  "C5_endpoint_copper_binding": true
+ },
+ "C5": {
+  "scope": "L4 图纸路由网（68）",
+  "n_vias_in_scope": 252,
+  "n_dangling": 0,
+  "offenders_sample": []
  },
  "verdict": "FAIL",
  "fails": [
@@ -79,7 +86,8 @@
  "teeth": {
   "inner_inner_class_cannot_be_through_backdrilled_stub_free": true,
   "outer_anchored_classes_are_stub_free": true,
-  "backdrill_anchors_verbatim": true
+  "backdrill_anchors_verbatim": true,
+  "endpoint_binding_catches_dangling_end": true
  },
  "redline": "只读判据（不改 SPEC/板/冻结四源）；零坐标搜索；能力值一律由 pinned 抓取件原文抽得。"
 }
