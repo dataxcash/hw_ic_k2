@@ -1825,6 +1825,63 @@ def main() -> int:
     txt = txt.replace("W3 Boundary **v2.26**", "W3 Boundary **v2.27**")
     txt = txt.replace("W3 Boundary **v2.25**", "W3 Boundary **v2.26**")
     txt = txt.replace("W3 Boundary **v2.24**", "W3 Boundary **v2.25**")
+    # ── §60 CO-187（非执行者对抗复评 CO-181..CO-186 + L2 自裁处置） ──────────
+    MARK60 = "## 60. CO-187"
+    _rc60 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    _ord187 = _ord186          # 步集/序列不变（50 次）
+    sec60 = [MARK60 + "（**非执行者对抗复评 CO-181..CO-186 + L2 自裁处置**）", "",
+             "- **复评方**：context 归零的续接会话（满足 handoff-z50 §6「另一会话，禁自评」）；对象钉 `4c581c7`"
+             "（`git show` 内存重放 ⇒ 结论**不随后续修复漂移**）。方法：正控 **V1..V6**（独立复算）+ 负控 **P1..P6**"
+             "（内存注入、零落盘、零坐标搜索）。verdict **PASS_WITH_FINDINGS**｜findings **3**（F-1..F-3，全 low）。",
+             "- **六件成立（无 medium+）**：V1 齿集 pin + fail-closed（不可解析/漂移/`teeth_ok` 冒充 ⇒ False）；"
+             "V2 扫描步紧跟刷新步 **且** 刷新步做 **pin 再对齐**（`CITE.sub` + `s16(hit)` ⇒ 单调用收敛机制）；"
+             "V3 卫生棘轮零违规 + 逐工具齿数 ≥ pin；V4 24 锚点唯一定位、值距 ≤281 字符 ≤ 400 窗口；"
+             "V5 非 PASS 显式 + 复评步 rc↔verdict；V6 md 产物 ∈ pin ∪ 豁免。",
+             "- **F-1（low）·棘轮容器形态漏计**：as-found `teeth_hygiene_scan()` 只认裸 `teeth` 下标/内联 dict ⇒ **别名容器下标**"
+             "（`tooth[k]=…`；实测 co81 5 齿仅计 2）、`AnnAssign`、`dict(...)`、`.update({...})`、`.setdefault(k,v)`、"
+             "字面恒真式（`1==1`）**一律漏计**（以这些形态加入常量齿不被 t18 截）。**处置**：runner 升 **CO-187.1** —— "
+             "容器形态全覆盖 + t18 **逐工具齿数下限**（`n_teeth ≥ pin` 齿数，漏计即停机）+ 六类形态合成正控。",
+             "- **F-2（low）·md 扫描形态漏计**：as-found `md_write_scan()` 仅认 `write_text` ⇒ `open(...,'w')` / `shutil.copy*` "
+             "目的 `.md` 产物不在 pin、t20 亦不截（R-CO186-1 静默违反；实测 fab 包 `04_impedance/impedance_table.md` 副本不被旧扫描见）。"
+             "**处置**：扩至 `write_text`/`write_bytes` + 写模式 `open` + `copy` 目的；新增 `ORDER_MD_PRODUCT_EXEMPT`"
+             "（显式豁免 + 绑定**实存**补偿牙齿 `t15_impedance_copy_parity`）+ t20 加固。",
+             "- **F-3（low）·读取者全集无机判**：`BOUNDARY_SCAN_GUARDED` 为手工枚举 ⇒ 新增读取/扫描 boundary 的步可静默绕开 t17。"
+             "**处置**：新增 `BOUNDARY_READ_DECLARED`（co146_boundary_append / co166 / co172）+ `boundary_read_scan()` + 静态齿 **t21**"
+             "（读取者集 == 扫描步 ∪ 声明；互斥；合成正负控）。",
+             f"- **登记簿**：+3（`co187:F-1..F-3`，全 CLOSED；**{_rc60['total']} 项 / OPEN {_rc60['OPEN']}**）。",
+             "- **实测**：`--check` **t01..t21 全 True（23 项）**；注入 co81 别名常量齿 ⇒ t18=False；"
+             "注入 co124 写模式 open 写入 ⇒ t20=False（负控实测、已还原）。",
+             "",
+             "> **R-CO187-1**：牙齿卫生棘轮须覆盖**全部容器形态**（别名/AnnAssign/dict/update/setdefault/纯字面量表达式），"
+             "并设**逐工具齿数下限**（漏计即停机，禁「静默少扫」）。",
+             "> **R-CO187-2**：md 产物扫描须覆盖**全部写/拷形态**（write_text/write_bytes/写模式 open/copy 目的）；"
+             "受控集外的 md 产物须入 `ORDER_MD_PRODUCT_EXEMPT` 并**绑定实存补偿牙齿**（t20）。",
+             "> **R-CO187-3**：boundary **读取者全集**须机判（t21）：扫描步 ⇒ 紧跟刷新；非扫描步 ⇒ 入 `BOUNDARY_READ_DECLARED`。",
+             "> **R-CO187-4**（复现序，取代 R-CO186-2；**步集/序列不变，序内出现 50 次**）：规范复现序 = `" + _ord187 + "`，"
+             "**循环至 sha 稳定**（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1 "
+             "+ R-CO175-1 + R-CO176-1/2 + R-CO177-1 + R-CO178-1 + R-CO179-1/2 + R-CO180-1/2 + R-CO181-1/2 + R-CO182-1 "
+             "+ R-CO183-1 + R-CO184-1 + R-CO185-1/2 + R-CO186-1 + R-CO187-1/2/3）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows60 = [("工具 `p3_v57_co164_order_runner.py`（CO-187.1 / t18 齿数下限 + t20 全写形态 + t21 读取者全集）",
+                K2 / "tools/p3_v57_co164_order_runner.py"),
+               ("复评工具 `p3_v57_co187_rev19_co181_co186_review.py`",
+                K2 / "tools/p3_v57_co187_rev19_co181_co186_review.py"),
+               ("复评记录 `m13_v57_co187_rev19_co181_co186_review.json`",
+                STEP2 / "m13_v57_co187_rev19_co181_co186_review.json"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc60['total']} 项 / OPEN {_rc60['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows60:
+        if pth.exists():
+            sec60.append(f"| {label} | `{s16(pth)}` |")
+    sec60.append("")
+    body60 = "\n".join(sec60)
+    if MARK60 in txt:
+        txt = re.sub(re.escape(MARK60) + r"[\s\S]*?(?=\n## |\Z)", body60, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body60
+    txt = txt.replace("W3 Boundary **v2.31**", "W3 Boundary **v2.32**")
+    txt = txt.replace("W3 Boundary **v2.30**", "W3 Boundary **v2.31**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
     return 0
