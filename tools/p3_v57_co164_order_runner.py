@@ -60,6 +60,26 @@ EXPECTED_NONZERO = {
                            "why": "verdict=FAIL（DFM 两项阻塞）属预期；rc=1 即 R-CO158-3/R-CO159-4 生效"},
 }
 
+# CO-186（R-CO186-1）：规范序各步**写出的 md 卡片产物**（R-CO165「受控 sha 覆盖全部产物」）。
+# 由实测（mtime 变化）钉定；全部须在 `watch_paths()` 内（收敛 sha + did_work 归因），并**步本地声明**。
+ORDER_MD_PRODUCTS = {
+    "co146_impedance_table": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_co146_impedance_table.md",
+    "co146_pm_eval": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_co146_pm_eval.md",
+    "co147_l2_ruling": "pm_gate/artifacts/k2_v4/L2/L2_RULING_via_channel_and_interpair_domain_v1.md",
+    "co148_thermal_ruling": "pm_gate/artifacts/k2_v4/L2/L2_RULING_u6_thermal_v1.md",
+    "co149_thermal_mitigation_derive": "pm_gate/artifacts/k2_v4/L2/L2_RULING_u6_thermal_mitigation_v1.md",
+    "co146_jlc_dfm_gate": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_co146_jlc_dfm_gate.md",
+    "co146_jlc_fab_package": "pm_gate/artifacts/k2_v4/L5/jlc_package/ORDER_NOTES.md",
+    "co124_input_selfcheck_gate": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_CO124_input_selfcheck_gate.md",
+    "co150_k9_domain_gate": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_CO150_k9_domain_gate.md",
+    "co146_boundary_append": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_joint_assignment_boundary_v1_82.md",
+    "co135_review_hygiene": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_CO135_review_hygiene.md",
+    "co136_gate_hygiene": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_CO136_gate_hygiene.md",
+    "co159_rev19_co156_co157_co158_review": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_CO159_rev19_co156_co157_co158_review.md",
+    "co166_rev19_co159_co165_review": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_CO166_rev19_co159_co165_review.md",
+    "co172_rev19_co166_co171_review": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_CO172_rev19_co166_co171_review.md",
+}
+
 # ── CO-174（R-CO174-1）：**每步主产物集**（步本地归因；集合由实测探针逐步跑 ORDER 钉定，非猜测） ──
 _A = "pm_gate/artifacts/k2_v4/"
 _S2 = _A + "L3/mcio_feas_step2/"
@@ -68,16 +88,18 @@ _A5 = _A + "L5/jlc_package/"
 _REG = _A2 + "input_defect_register_v1.json"
 _LED = _A2 + "derived_value_ledger_v1.json"
 _SVG = _A5 + "03_stackup/JLC08161H_stackup.svg"
+_MD = {k: K2 / v for k, v in ORDER_MD_PRODUCTS.items()}
+
 STEP_ARTIFACTS = {
-    "co146_impedance_table": [_S2 + "m13_v57_co146_impedance_table.json"],
-    "co146_pm_eval": [_S2 + "m13_v57_co146_pm_eval.json"],
+    "co146_impedance_table": [_S2 + "m13_v57_co146_impedance_table.json", _MD["co146_impedance_table"]],
+    "co146_pm_eval": [_S2 + "m13_v57_co146_pm_eval.json", _MD["co146_pm_eval"]],
     "co146_ledger_add": [_LED],
     "co153_k9_domain_coverage": [_LED, _REG],
     "co148_u6_datasheet_inputs": [_S2 + "m13_v57_co148_u6_ds320pr1601_inputs.json"],
-    "co148_thermal_ruling": [_LED, _REG, _S2 + "m13_v57_co148_thermal_ruling.json"],
-    "co149_thermal_mitigation_derive": [_LED, _REG, _S2 + "m13_v57_co149_u6_thermal_mitigation.json"],
-    "co147_l2_ruling": [_REG, _S2 + "m13_v57_co147_l2_ruling.json"],
-    "co146_jlc_dfm_gate": [_S2 + "m13_v57_co146_jlc8_capability.json", _S2 + "m13_v57_co146_jlc_dfm_gate.json"],
+    "co148_thermal_ruling": [_LED, _REG, _S2 + "m13_v57_co148_thermal_ruling.json", _MD["co148_thermal_ruling"]],
+    "co149_thermal_mitigation_derive": [_LED, _REG, _S2 + "m13_v57_co149_u6_thermal_mitigation.json", _MD["co149_thermal_mitigation_derive"]],
+    "co147_l2_ruling": [_REG, _S2 + "m13_v57_co147_l2_ruling.json", _MD["co147_l2_ruling"]],
+    "co146_jlc_dfm_gate": [_S2 + "m13_v57_co146_jlc8_capability.json", _S2 + "m13_v57_co146_jlc_dfm_gate.json", _MD["co146_jlc_dfm_gate"]],
     "co146_jlc_fab_package": [_S2 + "m13_v57_co146_jlc_fab_package.json",
                               _A5 + "MANIFEST.json", _A5 + "ORDER_NOTES.md", _SVG],
     "co152_findings_disposition": [_REG],
@@ -85,18 +107,18 @@ STEP_ARTIFACTS = {
     "co156_co154_open_disposition": [_REG],
     "co157_gate_hardening_3": [_REG],
     "co158_l5_packet_selfcontained": [_REG],
-    "co159_rev19_co156_co157_co158_review": [_S2 + "m13_v57_co159_rev19_co156_co157_co158_review.json"],
+    "co159_rev19_co156_co157_co158_review": [_S2 + "m13_v57_co159_rev19_co156_co157_co158_review.json", _MD["co159_rev19_co156_co157_co158_review"]],
     "co160_co159_findings_disposition": [_REG],
     "co161_gap_hardening_4": [_REG],
     "co162_verdict_binding": [_REG],
     "co163_binding_to_order_notes": [_REG],
-    "co166_rev19_co159_co165_review": [_S2 + "m13_v57_co166_rev19_co159_co165_review.json"],
+    "co166_rev19_co159_co165_review": [_S2 + "m13_v57_co166_rev19_co159_co165_review.json", _MD["co166_rev19_co159_co165_review"]],
     "co167_co166_findings_disposition": [_REG],
     "co168_register_consistency": [_REG],
     "co169_step_output_oracle": [_REG],
     "co170_stackup_binding": [_REG],
     "co171_order_notes_record_figures": [_REG],
-    "co172_rev19_co166_co171_review": [_S2 + "m13_v57_co172_rev19_co166_co171_review.json"],
+    "co172_rev19_co166_co171_review": [_S2 + "m13_v57_co172_rev19_co166_co171_review.json", _MD["co172_rev19_co166_co171_review"]],
     "co173_co172_findings_disposition": [_REG],
     "co174_step_artifact_attribution": [_REG],
     "co175_package_parity_binding": [_REG],
@@ -105,13 +127,13 @@ STEP_ARTIFACTS = {
     "co178_drc_item_limit_derivation": [_REG],
     "co179_sensitivity_teeth_hardening": [_REG],
     "co180_teeth_judgment_integrity": [_REG],
-    "co124_input_selfcheck_gate": [_S2 + "m13_v57_co124_input_selfcheck_gate.json"],
-    "co150_k9_domain_gate": [_REG, _S2 + "m13_v57_co150_k9_domain_gate.json"],
+    "co124_input_selfcheck_gate": [_S2 + "m13_v57_co124_input_selfcheck_gate.json", _MD["co124_input_selfcheck_gate"]],
+    "co150_k9_domain_gate": [_REG, _S2 + "m13_v57_co150_k9_domain_gate.json", _MD["co150_k9_domain_gate"]],
     "co146_boundary_append": [_S2 + "m13_v57_w3_joint_assignment_boundary_v1_82.md"],
     "co77_closure_declaration_sweep": [_S2 + "m13_v57_co77_closure_declaration_sweep.json"],
     "co120_provenance_pin_gate": [_S2 + "m13_v57_co120_provenance_pin_gate.json"],
-    "co135_review_hygiene": [_S2 + "m13_v57_co135_review_hygiene.json"],
-    "co136_gate_hygiene": [_S2 + "m13_v57_co136_gate_hygiene.json"],
+    "co135_review_hygiene": [_S2 + "m13_v57_co135_review_hygiene.json", _MD["co135_review_hygiene"]],
+    "co136_gate_hygiene": [_S2 + "m13_v57_co136_gate_hygiene.json", _MD["co136_gate_hygiene"]],
     "co78_layer_role_drift_gate": [_S2 + "m13_v57_co78_layer_role_drift_gate.json"],
     "co81_project_rules_gate": [_S2 + "m13_v57_co81_project_rules_gate.json"],
     "co84_dru_domain_gate": [_S2 + "m13_v57_co84_dru_domain_gate.json"],
@@ -165,6 +187,8 @@ def watch_paths() -> list:
            K2 / "pm_gate/artifacts/k2_v4/L5/jlc_package/ORDER_NOTES.md",
            K2 / "pm_gate/artifacts/k2_v4/L5/jlc_package/03_stackup/JLC08161H_stackup.svg"]
     out += sorted(STEP2.glob("m13_v57_co*.json"))
+    # CO-186：规范序写出的 md 卡片产物亦须入受控集（R-CO165「覆盖全部产物」）
+    out += [K2 / v for v in ORDER_MD_PRODUCTS.values() if (K2 / v) not in out]
     return out
 
 
@@ -506,6 +530,31 @@ def nonpass_decision(step: str, verdict) -> str:
     return "undeclared_nonpass"
 
 
+
+def md_write_scan(src: str) -> list:
+    """CO-186：静态提取该工具 **`write_text` 目标**中的 `.md` 工件名（模块级 Name 常量一并解析）。
+
+    仅看**写**上下文 ⇒ 只读引用（如 BASIC_SKILL_VS_REDLINE / boundary 的读取）不误报。
+    """
+    tree = ast.parse(src)
+    namemap = {}
+    for n in ast.walk(tree):
+        if isinstance(n, ast.Assign) and len(n.targets) == 1 and isinstance(n.targets[0], ast.Name):
+            for c in ast.walk(n.value):
+                if isinstance(c, ast.Constant) and isinstance(c.value, str) and c.value.endswith(".md"):
+                    namemap[n.targets[0].id] = Path(c.value).name
+    found = set()
+    for n in ast.walk(tree):
+        if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute) and n.func.attr == "write_text":
+            obj = n.func.value
+            if isinstance(obj, ast.Name) and obj.id in namemap:
+                found.add(namemap[obj.id])
+            for c in ast.walk(obj):
+                if isinstance(c, ast.Constant) and isinstance(c.value, str) and c.value.endswith(".md"):
+                    found.add(Path(c.value).name)
+    return sorted(found)
+
+
 def tool_path(step: str) -> Path | None:
     direct = K2 / "tools" / f"p3_v57_{step}.py"
     if direct.exists():
@@ -691,6 +740,20 @@ def main(argv=None) -> int:
         and nonpass_decision("__x__", None) == "pass_band"
         # 现状：全序各步的记录 verdict 均属通过档或已声明
         and all(nonpass_decision(s, step_verdict(s)) != "undeclared_nonpass" for s in set(ORDER)))
+    # CO-186（R-CO186-1）：规范序 md 产物须**全部受控 + 步本地声明**（静态棘轮 + 合成正负控）
+    _md_scan = {_s: md_write_scan(_tp.read_text(encoding="utf-8"))
+                for _s in set(ORDER) if (_tp := tool_path(_s)) is not None}
+    _md_found = {b for v in _md_scan.values() for b in v}
+    checks["t20_order_md_products_controlled"] = (
+        set(ORDER_MD_PRODUCTS) == {_s for _s, v in _md_scan.items() if v}
+        and _md_found == {Path(v).name for v in ORDER_MD_PRODUCTS.values()}
+        and {Path(v).name for v in ORDER_MD_PRODUCTS.values()} <= {q.name for q in watch_paths()}
+        and all((K2 / v).exists() for v in ORDER_MD_PRODUCTS.values())
+        and all(Path(v).name in {q.name for q in step_paths(_s)} for _s, v in ORDER_MD_PRODUCTS.items())
+        # 合成正/负控：写上下文必被抽出；只读引用不得误报
+        and md_write_scan('CARD = S2 / "probe.md"\nCARD.write_text("x")') == ["probe.md"]
+        and md_write_scan('(STEP2 / "inline.md").write_text("x")') == ["inline.md"]
+        and md_write_scan('x = (STEP2 / "read_only.md").read_text()\n') == [])
     checks["t05_stability_oracle"] = (stable("x", "x") and not stable("x", "y") and not stable("", ""))
     # CO-164（t06）：执行器 ORDER 必须与 boundary 规范复现序**有序一致**（文档↔执行器防漂移）
     _bdy = boundary_order_steps()
@@ -758,7 +821,7 @@ def main(argv=None) -> int:
             converged = True
             break
         prev = cur
-    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-185.1",
+    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-186.1",
               "nature": "规范复现序机判执行器（rc 策略 + 真收敛判定）；报告落 .archer_tmp/ 且**不被 boundary 引用**（避免不动点）",
               "order": ORDER, "expected_nonzero": EXPECTED_NONZERO,
               "checks": checks, "iterations": iterations, "abort": abort, "converged": converged,

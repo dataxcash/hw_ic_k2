@@ -1781,6 +1781,44 @@ def main() -> int:
         txt = re.sub(re.escape(MARK58) + r"[\s\S]*?(?=\n## |\Z)", body58, txt, count=1)
     else:
         txt = txt.rstrip("\n") + "\n\n" + body58
+    # ── §59 CO-186（受控集补全：规范序 md 卡片产物） ─────────────────────────
+    MARK59 = "## 59. CO-186"
+    _rc59 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    _ord186 = _ord185          # 步集/序列不变（50 次）
+    sec59 = [MARK59 + "（**L2 自裁 · 受控集覆盖完备性**）", "",
+             "- **G-1（medium）·受控集漏 md 产物**：R-CO165 要求受控 sha 覆盖**全部产物**，但规范序实际写出的 "
+             "**13 件 md 卡片**（`impedance_table`/`pm_eval`/`jlc_dfm_gate`/`CO124`/`CO135`/`CO136`/`CO150`/`CO159`/`CO166`/`CO172` 卡 + "
+             "`L2_RULING_via_channel_and_interpair_domain_v1`/`L2_RULING_u6_thermal_v1`/`L2_RULING_u6_thermal_mitigation_v1`）"
+             "**不在 `watch_paths()`** ⇒ 既不入收敛 sha、亦无 `did_work` 归因、也不产生 `stray` 证据 ⇒ 某步**静默停写/写坏卡片**仍判「收敛」"
+             "（假通过方向）。**实测**：全序写出 **14 件 md/txt**，其中仅 boundary 在受控集。",
+             "- **处置**：runner 升 **CO-186.1** —— ① 新增 `ORDER_MD_PRODUCTS`（**15 件**：13 新 + boundary + `ORDER_NOTES.md`，由实测 mtime 钉定）；"
+             "② `watch_paths()` 纳入；③ 各产出步 `STEP_ARTIFACTS` **步本地声明**其 md（`did_work` 归因回到步本地）；"
+             "④ 静态齿 **t20**（写上下文扫描 `md_write_scan()`：pin 步集 == 扫描步集、名集相等、pin ⊆ 受控集、件存在、步本地声明、"
+             "合成正负控[写上下文必抽 / 只读引用不误报]）。",
+             f"- **登记簿**：+1（`co186:G-1`，CLOSED；{_rc59['total']} 项 / OPEN {_rc59['OPEN']}）。",
+             "",
+             "> **R-CO186-1**：规范序各步**写出的全部产物**（含 md 卡片）须入 `watch_paths()` 并**步本地声明**；"
+             "新增产物须先入 `ORDER_MD_PRODUCTS`（t20 机判），禁「产物在受控集外」。",
+             "> **R-CO186-2**（复现序，取代 R-CO185-3；**步集/序列不变，序内出现 50 次**）：规范复现序 = `" + _ord186 + "`，"
+             "**循环至 sha 稳定**（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1 "
+             "+ R-CO175-1 + R-CO176-1/2 + R-CO177-1 + R-CO178-1 + R-CO179-1/2 + R-CO180-1/2 + R-CO181-1/2 + R-CO182-1 "
+             "+ R-CO183-1 + R-CO184-1 + R-CO185-1/2 + R-CO186-1）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows59 = [("工具 `p3_v57_co164_order_runner.py`（CO-186.1 / `ORDER_MD_PRODUCTS` + 受控集补全 + t20）",
+                K2 / "tools/p3_v57_co164_order_runner.py"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc59['total']} 项 / OPEN {_rc59['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows59:
+        if pth.exists():
+            sec59.append(f"| {label} | `{s16(pth)}` |")
+    sec59.append("")
+    body59 = "\n".join(sec59)
+    if MARK59 in txt:
+        txt = re.sub(re.escape(MARK59) + r"[\s\S]*?(?=\n## |\Z)", body59, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body59
+    txt = txt.replace("W3 Boundary **v2.30**", "W3 Boundary **v2.31**")
     txt = txt.replace("W3 Boundary **v2.29**", "W3 Boundary **v2.30**")
     txt = txt.replace("W3 Boundary **v2.28**", "W3 Boundary **v2.29**")
     txt = txt.replace("W3 Boundary **v2.27**", "W3 Boundary **v2.28**")
