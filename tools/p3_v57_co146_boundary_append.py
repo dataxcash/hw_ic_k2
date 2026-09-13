@@ -2545,6 +2545,65 @@ def main() -> int:
         txt = re.sub(re.escape(MARK74) + r"[\s\S]*?(?=\n## |\Z)", body74, txt, count=1)
     else:
         txt = txt.rstrip("\n") + "\n\n" + body74
+    # ── §75 CO-202（非执行者对抗复评 CO-196..CO-201 + L2 自裁处置） ──────────────
+    MARK75 = "## 75. CO-202"
+    _rc75 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    sec75 = [MARK75 + "（**非执行者对抗复评 CO-196..CO-201 + L2 自裁处置**）", "",
+             "- **复评方**：context 归零之续接会话（本谱系 z60..z67 **之外** ⇒ 满足「复评须另一会话，禁自评」）；对象**逐件**钉 as-found"
+             "（CO-196→`5e6ddde`/`2898392`；CO-197→`2898392`；CO-198→`c922116`；CO-199→`87148cb`；CO-200→`68e2952`/`3734a2f`；CO-201→`8a4cc3c`）；"
+             "`git show` **内存重放** ⇒ 结论**不随后续处置漂移**。方法：正控 **V1..V8**（独立复算）+ 负控 **P1..P10**（内存注入、**零落盘**、零坐标搜索）。"
+             "verdict **PASS_WITH_FINDINGS**｜findings **4**（L-1..L-4，全 low）；CO-196..CO-201 之处置**经独立复算成立**（V1..V6、P1..P6 全 True）。",
+             "- **成立件（独立复算）**：V1（CO-196 J-1 验证循环已除 —— t28 只判**结构性事实**、`oracle_tool_ok` 不读证据件）；"
+             "V2（CO-197 K-1/K-2 扫描族已补且**对偶负控**不误报）；V3（CO-198 代理↔语义闸绑定成立）；V4（CO-199 白名单 rc 类语义）；"
+             "V5（CO-200 md 产物案已扩）；V6（CO-201 出口语义 + 豁免前缀**段边界**正/负控）；V7（登记簿卫生：counts 据 items 复算、OPEN 0、13 条 co196..co201 全 CLOSED）；"
+             "V8（冻结四源 4/4 + `--check` 全 True + oracle PASS）。**另**：六件 disposition 于**全 720 排列**下均复现**逐字节同一**登记簿（顺序无关幂等、零落盘）。",
+             "- **L-1（low）·t28 谓词级控欠覆盖**：R-CO196-4 明列「缺件 / 语法错 / 类型错 各一」，而 t28 对谓词 `oracle_tool_ok` 仅行使**缺件** + 正控；"
+             "「语法错」控挂在**共享子程序** `src_compiles`（不证**传播**）、「类型错」**无控**（as-found 实测：谓词级 compile/type 控各 False，而实现正确 ⇒ 不可证伪）。",
+             "- **L-2（low）·运行期新停机类无合成控**：CO-199 之 `expected_step_rc_undeclared` 在 runner 源内**仅出现 1 次**（其自身 return）⇒ 该 return 分支不可证伪"
+             "（回归时被 `expected_step_rc_mismatch` 静默吸收，分类永不生效）。",
+             "- **L-3（low）·「源内声明」为原文子串代理**：`proxy_binding_decision` 默认 `name in src` ⇒ 判官齿名仅见**注释/散文**即满足 R-CO198-1"
+             "（实测注释串注入 ⇒ `ok`）⇒ 该「机判」判据本身是**文本代理**、非语义。",
+             "- **L-4（low）·oracle 扰动量类别覆盖不足**：受控集类别 {.json,.md,**.svg**} 而 `CASES` 仅扰前二者 ⇒ `.svg`（图）产物（CO-174 入 pin）"
+             "只受**结构** pin、**从未**被语义扰动行使 ⇒ 违 R-CO200-1「覆盖面 = 类别数」（谱系交接件 §4 之触发条件实已于 CO-174 达成）。",
+             "- **处置**：runner 升 **CO-202.1** —— ① t28 补**谓词自身**之逐返回路径控（`_NONCOMPILE_PROBE` 存在但不可编译 / `oracle_tool_ok(None)` 类型错）；"
+             "② `allowlist_decision(..., decl=)` 增**可注入声明面** + t30 控 `expected_step_rc_undeclared`；③ `proxy_binding_decision` 默认改 **AST 字面量集**"
+             "（`_source_strings` ⇒ 注释/散文不满足）；④ 新增静态齿 **t32**（受控集类别 ⊆ oracle 扰动量类别）；report revision → CO-202.1。"
+             "oracle 升 **CO-202** —— `CASES` 第 5 案 `E_svg_product`（目标 = 图/.svg 产物，注入内容行）+ 牙齿 9 → **10**。",
+             f"- **登记簿**：+4（`co202:L-1`..`L-4`，low，CLOSED；**{_rc75['total']} 项 / OPEN {_rc75['OPEN']}**）。",
+             "- **实测（本件证据）**：修前 as-found 记实（AST/内存复算，零落盘）—— t28 谓词级 compile/type 控 False；`expected_step_rc_undeclared` 计数 1；"
+             "注释串注入 ⇒ `ok`；受控集类别 {.json,.md,.svg} ⊄ `CASES` 类别 {.json,.md}。修后 —— `--check` **t01..t32 全 True（34 项）**；"
+             "oracle **5 案 / 10 牙齿全 True / verdict PASS / 幂等**（连跑记录 sha 恒定）；规范序收敛 rc=0、48 步 `did_work` 全 True、stray/uncontrolled 全空；"
+             "复评件**幂等**（连跑记录 sha 恒定）。**残余如实登记（O-1）**：stdout 形态之错误出口未约束（触发 = 出现 stdout 错误外壳之白名单步）。",
+             "",
+             "> **R-CO202-1**：谓词级负控须覆盖**谓词自身**每条返回路径（含「存在但不可编译」「类型错」），不得仅控其共享子程序；t28 机判。",
+             "> **R-CO202-2**：运行期新停机类（新 return 分支）须合成控覆盖（声明面可注入）；不得以「当前不可达」免控；t30 机判。",
+             "> **R-CO202-3**：受控集产物**类别数** ⊆ oracle 扰动量类别数（逐类别 ≥1 案）；t32 机判（新增产物类别即须同步增扰动量）。",
+             "> **R-CO202-4**：「源内声明的名称」类判据须以 **AST 字面量集**判（注释/散文不得满足）；原文子串 `in src` 禁作声明性判据；t29 机判。",
+             "> **R-CO202-5**（复现序，取代 R-CO201-3；**步集/序列不变，序内出现 50 次**）：规范复现序 = `" + _ord190 + "`，"
+             "**循环至 sha 稳定**（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1 "
+             "+ R-CO175-1 + R-CO176-1/2 + R-CO177-1 + R-CO178-1 + R-CO179-1/2 + R-CO180-1/2 + R-CO181-1/2 + R-CO182-1 "
+             "+ R-CO183-1 + R-CO184-1 + R-CO185-1/2 + R-CO186-1 + R-CO187-1/2/3 + R-CO188-1 + R-CO189-1 + R-CO190-1 "
+             "+ R-CO191-1 + R-CO192-1 + R-CO193-1/2/3/4 + R-CO194-1/2 + R-CO195-0/1 + R-CO196-1/2/4/5 + R-CO197-1/2/4 "
+             "+ R-CO198-1 + R-CO199-1 + R-CO200-1 + R-CO201-1/2 + R-CO202-1/2/3/4）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows75 = [("工具 `p3_v57_co164_order_runner.py`（CO-202.1 / t28 谓词级逐返回路径控 + decl 注入 + proxy AST 字面量集 + 静态齿 t32）",
+                K2 / "tools/p3_v57_co164_order_runner.py"),
+               ("工具 `p3_v57_co195_fixpoint_uniqueness_oracle.py`（CO-202 / 5 案 + 10 牙齿：含 图（.svg）类别）",
+                K2 / "tools/p3_v57_co195_fixpoint_uniqueness_oracle.py"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc75['total']} 项 / OPEN {_rc75['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows75:
+        if pth.exists():
+            sec75.append(f"| {label} | `{s16(pth)}` |")
+    sec75.append("")
+    body75 = "\n".join(sec75)
+    if MARK75 in txt:
+        txt = re.sub(re.escape(MARK75) + r"[\s\S]*?(?=\n## |\Z)", body75, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body75
+
+    txt = txt.replace("W3 Boundary **v2.46**", "W3 Boundary **v2.47**")
     txt = txt.replace("W3 Boundary **v2.45**", "W3 Boundary **v2.46**")
     txt = txt.replace("W3 Boundary **v2.44**", "W3 Boundary **v2.45**")
     DOC.write_text(txt)

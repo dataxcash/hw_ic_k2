@@ -45,7 +45,7 @@ CLI:
   python3 tools/p3_v57_co164_order_runner.py [--check] [--max-iter 5]
 """
 from __future__ import annotations
-import argparse, ast, fnmatch, hashlib, json, re, subprocess, sys, time
+import argparse, ast, fnmatch, hashlib, json, re, subprocess, sys, time, types
 from pathlib import Path
 
 K2 = Path(__file__).resolve().parents[1]
@@ -72,6 +72,9 @@ BOUNDARY_SCAN_GUARDED = ("co77_closure_declaration_sweep", "co135_review_hygiene
 BOUNDARY_REFRESH_STEP = "co146_boundary_append"
 # CO-193（R-CO193-1）：boundary 工件 basename（`JUDGMENT_DOWNSTREAM.artifact` 与 `BOUNDARY` 共用，防两处漂移）。
 BOUNDARY_BASENAME = "m13_v57_w3_joint_assignment_boundary_v1_82.md"
+# CO-202（L-1/R-CO202-1）：oracle 工具路径（恒常引用）+ 「存在但不可编译」探针件（boundary md 非 Python）。
+ORACLE_TOOL = K2 / "tools/p3_v57_co195_fixpoint_uniqueness_oracle.py"
+_NONCOMPILE_PROBE = STEP2 / BOUNDARY_BASENAME
 
 # CO-187（F-3）：**读取 boundary 但非 citation 扫描步**的显式声明（禁「隐式读取者」漏网）。
 # t21 机判：工具源内读取 boundary 的步集 == BOUNDARY_SCAN_GUARDED ∪ BOUNDARY_READ_DECLARED（互斥）。
@@ -455,7 +458,7 @@ def record_verdict(path):
 
 
 def allowlist_decision(step: str, rc: int, stderr: str, verdict, record_fresh: bool = True,
-                       teeth_ok: bool | None = None, timed_out: bool = False) -> str:
+                       teeth_ok: bool | None = None, timed_out: bool = False, decl=None) -> str:
     """CO-165 核心判据（纯函数）：
     非白名单步：rc==0 ⇒ ok，否则 unexpected_nonzero；
     白名单步：须 rc≠0 **且** 无 Traceback **且** 记录由**本次执行**产出（mtime 新鲜）
@@ -464,14 +467,17 @@ def allowlist_decision(step: str, rc: int, stderr: str, verdict, record_fresh: b
     其余 ⇒ expected_step_* 失败（**不得把崩溃 / 未产出记录（陈旧 verdict 从盘上读取）/ 错误判决 / 自检失败当预期 FAIL**）。"""
     if timed_out:                       # CO-190（R-CO190-1）：超时优先 ⇒ fail-closed（禁以「仍在跑」冒充可判）
         return "step_timeout"
-    if step not in EXPECTED_NONZERO:
+    # CO-202（L-2 / R-CO202-2）：白名单**声明面可注入**（`decl=`）⇒ 运行期**每个** return 分支（含
+    # `expected_step_rc_undeclared`）均可由合成控逐分支行使；否则「当前不可达」之分支永远不可证伪。
+    # 运行期调用（`decl=None`）语义不变。
+    exp = EXPECTED_NONZERO.get(step) if decl is None else decl
+    if exp is None:
         if rc != 0:
             return "unexpected_nonzero"
         # CO-180：非白名单步亦须**声明产物内牙齿全 True**（此前只记不判）
         if teeth_ok is False:
             return "step_teeth_failed"
         return "ok"
-    exp = EXPECTED_NONZERO[step]
     if rc == 0:
         return "expected_step_returned_zero"
     # CO-199（F-1）：**rc 类语义** —— 白名单只豁免**声明的那一个** rc 值；其余非零（内部错误 / 参数错 / 其他出口）
@@ -784,7 +790,9 @@ def proxy_binding_decision(gate: str, decl, *, tool_ok=None, src_has=None, proxy
     if not (oracle_tool_ok(judge) if tool_ok is None else bool(tool_ok(judge))):
         return "no_semantic_judge"
     src = judge.read_text(encoding="utf-8") if judge.exists() else ""
-    has = (lambda name: name in src) if src_has is None else src_has
+    # CO-202（L-3 / R-CO202-4）：默认「源内**声明**其齿名」须以 **AST 字面量集**判 —— 原文子串 `name in src`
+    # 会被**注释/散文**满足（实测：注释提及齿名即通过）⇒ 非语义判据。
+    has = (lambda name: name in set(_source_strings(src))) if src_has is None else src_has
     if not all(has(x) for x in decl["semantic_teeth"]):
         return "semantic_tooth_undeclared"
     teeth = EXPECTED_TEETH.get(Path(decl["artifact"]).name, []) if proxy_teeth is None else list(proxy_teeth)
@@ -1516,7 +1524,13 @@ def main(argv=None) -> int:
         #   不得以「不存在的路径」冒充语法错控（旧版恒真：该文件在任何规范态下都不存在）。
         and not oracle_tool_ok(K2 / "tools/__no_such_oracle__.py")
         and not src_compiles("def (:", "<synthetic_syntax_error>")
-        and src_compiles("x = 1", "<synthetic_ok>"))
+        and src_compiles("x = 1", "<synthetic_ok>")
+        # CO-202（L-1 / R-CO202-1）：谓词**自身**之逐返回路径控 —— 「存在但不可编译」与「类型错」各一
+        # （旧控只把「语法错」挂在共享子程序 `src_compiles` 上 ⇒ 谓词之编译失败**传播**不可证伪）。
+        and _NONCOMPILE_PROBE.exists()
+        and not src_compiles(_NONCOMPILE_PROBE.read_text(encoding="utf-8"), _NONCOMPILE_PROBE.name)
+        and oracle_tool_ok(_NONCOMPILE_PROBE) is False
+        and oracle_tool_ok(None) is False)
     # CO-198（R-CO198-1）：代理 ↔ 语义闸绑定须机判（残余显式 + 外部语义判官存在且**源内声明**其齿 + 代理齿在 pin 表）
     _pj = "tools/p3_v57_co195_fixpoint_uniqueness_oracle.py"
     _pbase = {"proxy": "p", "residual": "r（非完备）", "semantic_judge": _pj,
@@ -1531,7 +1545,10 @@ def main(argv=None) -> int:
         and proxy_binding_decision("__nc__", {**_pbase, "semantic_teeth": []}) == "declaration_incomplete"
         and proxy_binding_decision("__nc__", _pbase, tool_ok=lambda _p: False) == "no_semantic_judge"
         and proxy_binding_decision("__nc__", {**_pbase, "semantic_teeth": ["__no_such_tooth__"]}) == "semantic_tooth_undeclared"
-        and proxy_binding_decision("__nc__", _pbase, proxy_teeth=[]) == "proxy_teeth_unpinned")
+        and proxy_binding_decision("__nc__", _pbase, proxy_teeth=[]) == "proxy_teeth_unpinned"
+        # CO-202（L-3 / R-CO202-4）：**注释/散文不得满足**「源内声明」（AST 字面量集之判别力）
+        and "t00_settle_converged" not in set(_source_strings("# t00_settle_converged  （仅注释，非声明）"))
+        and "t00_settle_converged" in set(_source_strings("t = {'t00_settle_converged': False}")))
     # CO-199（F-1）：白名单须声明**预期 rc 类**（rc≠0 不等于预期 FAIL —— 别的原因失败须停机）
     _d199 = dict(EXPECTED_NONZERO["co146_jlc_dfm_gate"])
     checks["t30_expected_nonzero_rc_class"] = (
@@ -1545,7 +1562,12 @@ def main(argv=None) -> int:
         and allowlist_decision("co146_jlc_dfm_gate", 1, "", "FAIL", True, True) == "expected_nonzero"
         and allowlist_decision("co146_jlc_dfm_gate", 2, "", "FAIL", True, True) == "expected_step_rc_mismatch"
         and allowlist_decision("co146_jlc_dfm_gate", 127, "", "FAIL", True, True) == "expected_step_rc_mismatch"
-        and allowlist_decision("co146_jlc_dfm_gate", 0, "", "FAIL", True, True) == "expected_step_returned_zero")
+        and allowlist_decision("co146_jlc_dfm_gate", 0, "", "FAIL", True, True) == "expected_step_returned_zero"
+        # CO-202（L-2 / R-CO202-2）：**运行期**分支 `expected_step_rc_undeclared` 须由可注入声明面行使
+        and allowlist_decision("__nc_rc__", 1, "", "FAIL", True, True, False,
+                               {k: v for k, v in _d199.items() if k != "rc"}) == "expected_step_rc_undeclared"
+        and allowlist_decision("__nc_rc__", 1, "", "FAIL", True, True, False,
+                               {**_d199, "rc": 0}) == "expected_step_rc_undeclared")
     # CO-201（G-1）：白名单**预期非零出口**须**无错误输出**（设计出口 vs 错误路径的机判面）
     checks["t31_expected_nonzero_error_free"] = (
         allowlist_decision("co146_jlc_dfm_gate", 1, "", "FAIL", True, True) == "expected_nonzero"
@@ -1554,6 +1576,16 @@ def main(argv=None) -> int:
         and allowlist_decision("co146_jlc_dfm_gate", 1, "Traceback (most recent call last):\n", "FAIL", True, True)
             == "expected_step_crashed"
         and allowlist_decision("co146_jlc_dfm_gate", 1, "   \n", "FAIL", True, True) == "expected_nonzero")
+    # CO-202（L-4 / R-CO202-3）：受控集产物**类别数** == oracle 扰动量类别数（逐类别 ≥1 案）
+    # （R-CO200-1「覆盖面 = 类别数」之机判面：新增/既有类别未被 oracle 扰动量覆盖 ⇒ 停机）
+    try:
+        _orc = types.ModuleType("oracle_probe")
+        _orc.__file__ = str(ORACLE_TOOL)
+        exec(compile(ORACLE_TOOL.read_text(encoding="utf-8"), str(ORACLE_TOOL), "exec"), _orc.__dict__)
+        _case_cat = {Path(t).suffix for _c in _orc.CASES for t in _c["targets"]}
+        checks["t32_oracle_category_coverage"] = bool(_case_cat) and {p.suffix for p in watch_paths()} <= _case_cat
+    except Exception:
+        checks["t32_oracle_category_coverage"] = False   # fail-closed（不可判即不通过）
     checks["t05_stability_oracle"] = (stable("x", "x") and not stable("x", "y") and not stable("", ""))
     # CO-164（t06）：执行器 ORDER 必须与 boundary 规范复现序**有序一致**（文档↔执行器防漂移）
     _bdy = boundary_order_steps()
@@ -1642,7 +1674,7 @@ def main(argv=None) -> int:
             converged = True
             break
         prev = cur
-    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-196.1",
+    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-202.1",
               "nature": "规范复现序机判执行器（rc 策略 + 真收敛判定）；报告落 .archer_tmp/ 且**不被 boundary 引用**（避免不动点）",
               "order": ORDER, "expected_nonzero": EXPECTED_NONZERO,
               "checks": checks, "iterations": iterations, "abort": abort, "converged": converged,

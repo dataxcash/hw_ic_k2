@@ -1,0 +1,117 @@
+{
+ "artifact": "m13_v57_co202_rev19_co196_co201_review",
+ "schema": 1,
+ "revision": "CO-202",
+ "nature": "非执行者对抗复评 CO-196..CO-201（本谱系 z60..z67 之外之新会话；`git show` 内存重放 + 内存注入、零落盘）",
+ "as_found": {
+  "objects": {
+   "CO-196": [
+    "5e6ddde",
+    "2898392"
+   ],
+   "CO-197": [
+    "2898392"
+   ],
+   "CO-198": [
+    "c922116"
+   ],
+   "CO-199": [
+    "87148cb"
+   ],
+   "CO-200": [
+    "68e2952",
+    "3734a2f"
+   ],
+   "CO-201": [
+    "8a4cc3c"
+   ]
+  },
+  "runner_af_sha16": {
+   "5e6ddde": "d82b2c1f7787cbe5",
+   "2898392": "c4ad0f3d5a2847da",
+   "c922116": "66d97949328a8b4d",
+   "87148cb": "36a60f8415e78b72",
+   "68e2952": "2ee6d711b2a3b524",
+   "3734a2f": "2ee6d711b2a3b524",
+   "8a4cc3c": "859d0bac1a1d2766"
+  },
+  "oracle_af_sha16": {
+   "68e2952": "fc4dd2bba61c64b6",
+   "3734a2f": "32b2705fb84f9fb8"
+  }
+ },
+ "objects": [
+  "CO-196",
+  "CO-197",
+  "CO-198",
+  "CO-199",
+  "CO-200",
+  "CO-201"
+ ],
+ "positive_controls": {
+  "V1_CO196J1_no_verification_cycle": true,
+  "V2_CO197K1K2_scan_family_landed": true,
+  "V3_CO198E1_proxy_semantic_binding": true,
+  "V4_CO199F1_rc_class_declared": true,
+  "V5_CO200G1_md_case_landed": true,
+  "V6_CO201G1G2_exit_and_boundary": true,
+  "V7_register_hygiene": true,
+  "V8_chain_health": true
+ },
+ "negative_controls": {
+  "P1_as_found_verification_cycle": true,
+  "P2_as_found_teeth_miss_kwargs": true,
+  "P3_as_found_md_miss_io_pathlib": true,
+  "P4_as_found_rc_class_absent": true,
+  "P5_as_found_oracle_3_cases_json_only": true,
+  "P6_as_found_exit_proxy_and_boundary_vacuous": true,
+  "P7_t28_predicate_path_controls_absent": true,
+  "P8_rc_undeclared_branch_uncontrolled": true,
+  "P9_proxy_tooth_substring_proxy": true,
+  "P10_oracle_category_coverage_gap": true
+ },
+ "findings": [
+  {
+   "id": "L-1",
+   "sev": "low",
+   "object": "CO-196",
+   "what": "**t28 谓词级合成控欠覆盖**：R-CO196-4 明列「缺件 / 语法错 / **类型错** 各一」，而 t28 对被测谓词 `oracle_tool_ok` 仅行使**缺件**与正控；「语法错」控挂在**共享子程序** `src_compiles` 上（不证明谓词的编译失败传播），「类型错」分支**无任何控**（实测 as-found：谓词级 compile/type 控各 False，而 `oracle_tool_ok(<存在但不可编译件>)`确返 False ⇒ 实现正确、判据不可证伪）。"
+  },
+  {
+   "id": "L-2",
+   "sev": "low",
+   "object": "CO-199",
+   "what": "**运行期新停机类无合成控**：CO-199 新增之 `expected_step_rc_undeclared`（`allowlist_decision` 之 return 路径）在 runner 源内**仅出现 1 次**（即其自身 return）⇒ 无任何合成控行使该分支（声明面之 `rc_not_declared` 控不覆盖运行期分支）⇒ 违 R-CO196-4「每条返回路径一一对应」，该分支不可证伪。"
+  },
+  {
+   "id": "L-3",
+   "sev": "low",
+   "object": "CO-198",
+   "what": "**「源内声明」以原文子串代理**：`proxy_binding_decision` 默认 `has = lambda name: name in src`（**裸子串**）⇒ 齿名仅出现于**注释/散文**（实测 `src_has` 注入 `\"# t00_settle_converged  （仅注释，非声明）\"` ⇒ `ok`）亦可满足 R-CO198-1「判官**源内声明的齿名**」⇒ 该判据非语义（注释即通过）；同文件已备 AST 字面量抽取器 `_source_strings` 却未用。"
+  },
+  {
+   "id": "L-4",
+   "sev": "low",
+   "object": "CO-200",
+   "what": "**oracle 扰动量类别覆盖不足**：R-CO200-1 宣示「覆盖面 = 类别数（md / 报告 / **图** / 二进制）」，而受控集含 `.json`/`.md`/**`.svg`（图）** 三类、oracle `CASES` 仅扰 `.json`/`.md` 两类 ⇒ `.svg` 产物（`JLC08161H_stackup.svg`，CO-174 入 pin）只受**结构** pin（t08/t20），**从未**被「扰动启动 ⇒ 逐字节复原」语义实验行使（其全量重写性未被证）。（亦与本谱系交接件 §4 之延后触发条件『受控集新增**另一类**产物（报告/图/二进制）』已于 CO-174 达成相矛盾。）"
+  }
+ ],
+ "n_findings": 4,
+ "observations": [
+  {
+   "id": "O-1",
+   "object": "CO-201",
+   "status": "残余（本件登记，非 finding）",
+   "what": "G-1 之修只约束 **stderr**（R-CO201-1 明示）；若某步将错误文本写 **stdout** 而 stderr 空、rc 恰为声明值 ⇒ 仍作预期出口放行（`allowlist_decision` 未收 stdout）。语义上「设计出口 vs 错误出口」仍未由单一开关完全区分；触发 = 出现 stdout 错误外壳之白名单步。"
+  },
+  {
+   "id": "O-2",
+   "object": "CO-196",
+   "status": "已由本 CO 之 L-1 合并处置",
+   "what": "同 L-1：谓词级控欠覆盖（存在但不可编译 / 类型错）；本 CO 补控后闭合。"
+  }
+ ],
+ "verdict": "PASS_WITH_FINDINGS",
+ "disposition": "CO-202（L2 自裁）：runner 升 **CO-202.1** —— ① t28 补**谓词级**逐返回路径控（存在但不可编译 / 类型错）；② `allowlist_decision` 增**可注入声明面** `decl=`，t30 补 `expected_step_rc_undeclared` 控；③ `proxy_binding_decision` 默认「源内声明」改 **AST 字面量集**（`_source_strings`，注释/散文不满足）；④ 新增静态齿 **t32**（受控集产物**类别数** == oracle 扰动量类别数）；oracle 升 **CO-202** —— `CASES` 扩第 5 案 `E_svg_product`（`.svg`/图 类别，注入内容行）+ 牙齿 9 → **10**。findings 均 CLOSED。",
+ "redline": "只读 as-found（`git show`）+ 内存注入、零落盘、零坐标搜索；不改他人记录/登记簿/冻结四源。"
+}

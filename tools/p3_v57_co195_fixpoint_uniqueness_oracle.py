@@ -25,6 +25,8 @@ STEP2 = K2 / "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2"
 REC = STEP2 / "m13_v57_co195_fixpoint_uniqueness.json"
 IMP = STEP2 / "m13_v57_co146_impedance_table.json"        # ORDER 步（co146_impedance_table）自持记录：每次全量重写
 IMP_MD = STEP2 / "m13_v57_co146_impedance_table.md"     # CO-200（G-1）：同一步的 **md 卡片产物**（CO-186 起受控且入 pin）
+# CO-202（L-4）：受控集含 **图（.svg）** 类别（CO-174 入 pin）—— 旧四案只扰 json/md ⇒ 补第 5 案（R-CO200-1 覆盖面=类别数）。
+SVG = K2 / "pm_gate/artifacts/k2_v4/L5/jlc_package/03_stackup/JLC08161H_stackup.svg"
 BOGUS_COUNTS = {"SPEC_DEFECT": 999, "PROVED_THRESHOLD": 999, "TOOL_DEFECT": 999,
                 "IMPLEMENTATION_DEVIATION": 999, "OPEN": 7, "total": 999}
 CASES = (
@@ -38,6 +40,9 @@ CASES = (
     # 该项判「步是否**真正全量重写**其 md 产物」（追加式/增量式写 ⇒ 注入行残留 ⇒ 复原失败 ⇒ 停机）。
     {"id": "D_md_card_product", "why": "受控 md 卡片产物（步内全量重写 ⇒ 应自愈；追加式写即被本项抓）",
      "targets": (IMP_MD,), "tooth": "t08_D_md_restored"},
+    # CO-202（L-4 / R-CO202-3）：受控 **图（.svg）** 产物类别（fab 步生成）—— 追加式写即被本项抓。
+    {"id": "E_svg_product", "why": "受控 图（.svg）产物类别（fab 步全量重写 ⇒ 应自愈）",
+     "targets": (SVG,), "tooth": "t09_E_svg_restored"},
 )
 
 
@@ -92,8 +97,8 @@ def uniqueness_discriminates() -> bool:
 
 def _inject(target: Path) -> None:
     """按目标件类型注入：登记簿改 `meta.counts`；ORDER 步记录加探针键（步将全量重写 ⇒ 应消失）。"""
-    if target.suffix == ".md":               # CO-200：md 产物注入**内容行**（步若全量重写 ⇒ 该行应消失）
-        target.write_text(target.read_text(encoding="utf-8") + "\n<!-- CO-200 injection probe -->\n", encoding="utf-8")
+    if target.suffix in (".md", ".svg"):     # CO-200 md / CO-202 svg（图）：注入**内容行**（步若全量重写 ⇒ 该行应消失）
+        target.write_text(target.read_text(encoding="utf-8") + "\n<!-- CO-202 injection probe -->\n", encoding="utf-8")
         return
     d = json.loads(target.read_text(encoding="utf-8"))
     if target == REG:
@@ -122,7 +127,8 @@ def main(argv=None) -> int:
          "t02_A_converged_and_restored": False, "t03_B_converged_and_restored": False,
          "t04_C_converged_and_restored": False, "t05_discriminates_path_dependence":
              uniqueness_discriminates(), "t06_self_exclusion_nonvacuous": False,
-         "t07_no_residual_perturbation": False, "t08_D_md_restored": False}   # CO-200（G-1）
+         "t07_no_residual_perturbation": False, "t08_D_md_restored": False,   # CO-200（G-1）
+         "t09_E_svg_restored": False}                                        # CO-202（L-4）
 
     # ① 先结算：工作树须已是规范序不动点，否则测的是「结算」而非「路径无关」
     settle_rc, settle_json = _run_order(cur, a.max_iter)
