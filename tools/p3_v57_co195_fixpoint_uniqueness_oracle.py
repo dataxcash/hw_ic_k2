@@ -135,6 +135,22 @@ def main(argv=None) -> int:
     settle_rc, settle_json = _run_order(cur, a.max_iter)
     t["t00_settle_converged"] = (settle_rc == 0 and bool(settle_json) and bool(settle_json.get("converged")))
 
+    # CO-219（F-2）：前置未达 ⇒ **fail-fast**：不注入、不度量、不落「以污染态为基线」的 `sha_canon`
+    #（否则记录把非规范态重锚为 canonical，且逐案 `finally` 只复原到**案前（污染）态** ⇒ 污染不自愈）。
+    if not t["t00_settle_converged"]:
+        rec = {"artifact": "m13_v57_co195_fixpoint_uniqueness", "schema": 1, "revision": "CO-219",
+               "nature": "固定点唯一性（路径无关）oracle：**多扰动量**（5 案）扰动启动 ⇒ 收敛须复原规范态（CO-151 失效模式的直接判据）",
+               "precondition": "先结算（t00）：工作树须已收敛为不动点",
+               "teeth": {**t, "teeth_ok": False}, "cases": [],
+               "aborted_case": "precondition_settle_not_converged",
+               "verdict": "FAIL_SETTLE_NOT_CONVERGED",
+               "how_to_recover": "先以 p3_v57_co164_order_runner.py --max-iter 收敛（或 git checkout 复原被扰件）后重跑本 oracle",
+               "redline": "只扰动**受控**件且逐案 `finally` 无条件复原；不改冻结四源/板/SPEC；本证据件**不入 pin 表**（R-CO195-0）。"}
+        REC.write_text(json.dumps(rec, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+        print(json.dumps({"verdict": rec["verdict"], "teeth": t, "cases": [],
+                          "rec_sha16": _s16(REC.read_bytes())}, ensure_ascii=False, indent=1))
+        return 1
+
     canon_bytes = {str(p): p.read_bytes() for p in {tgt for c in CASES for tgt in c["targets"]}}
     sha_canon = _snap_excl(cur, REC)
     sha_incl = cur.snapshot()
@@ -174,7 +190,7 @@ def main(argv=None) -> int:
     teeth_ok = all(t.values())
 
     rec = {
-        "artifact": "m13_v57_co195_fixpoint_uniqueness", "schema": 1, "revision": "CO-202",
+        "artifact": "m13_v57_co195_fixpoint_uniqueness", "schema": 1, "revision": "CO-219",
         "nature": "固定点唯一性（路径无关）oracle：**多扰动量**（5 案）扰动启动 ⇒ 收敛须复原规范态（CO-151 失效模式的直接判据）",
         "trigger": "CO-196（I-2 自指/链式 pin）起，**CO-200（G-1）**再扩：受控集含 **md 卡片产物**（CO-186 入 pin）而旧三案只扰 json 记录 ⇒ 该受控面从未被扰动实验行使；**CO-202（L-4）**再扩：受控集另含 **图/`.svg`** 类别（CO-174 入 pin）而四案只扰 json/md ⇒ 补第 5 案",
         "snapshot_scope": "watch_paths() - {本记录}（自指防护，判据不含本证据件）",

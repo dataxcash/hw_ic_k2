@@ -312,12 +312,14 @@ def main(argv=None) -> int:
     neg_l5b_hit = any(not r["ok"] for r in neg_l5b)
     neg_l5c = l5_board_binding(md_text=_md.replace(_l4f[:16], _srcf[:16]))
     neg_l5c_hit = any(not r["ok"] for r in neg_l5c)
-    teeth_ok = (neg_hit and pos_ok and snap_ok and neg_basis_hit and pos_basis_ok
+    # CO-219（F-1）：消费面之**枚举表须名集钉定** —— 原判据只遍历表内记录 ⇒ 清表（仅余 md 行）时 `all_ok` 恒真。
+    _recs_pinned = set(L5_RECORD_JSON) == {"m13_v57_l5_dfm_dft_record.json", "m13_v57_l5_si_pi_emc_record.json"}
+    teeth_ok = (_recs_pinned and neg_hit and pos_ok and snap_ok and neg_basis_hit and pos_basis_ok
                 and fake_basis_hit and neg_snap3_hit and pos_snap3_ok
                 and neg_snap4_hit and pos_snap4_ok and up_snap4_ok
                 and pos_l5_ok and neg_l5_hit and neg_l5b_hit and neg_l5c_hit)
     rec = {
-        "artifact": "m13_v57_co120_provenance_pin_gate", "schema": 1, "revision": "CO-120.7",
+        "artifact": "m13_v57_co120_provenance_pin_gate", "schema": 1, "revision": "CO-120.8",
         "nature": "L2 过程闸：记录内 inter-record provenance pin 一致性（关闭 CO-108/CO-114 F-6 盲区）",
         "pins_total": len(rows), "n_match": sum(1 for r in rows if r["status"] == "match"),
         "n_exempt_historical": sum(1 for r in rows if r["status"] == "exempt_historical"),

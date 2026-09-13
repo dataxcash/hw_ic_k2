@@ -141,7 +141,7 @@ BASIS_JUDGE_DECLARED = {
 # （内容升级而自声明滞留即漂移；此为 CO-202 处置所遗漏之面。）
 TOOL_REVISION_DECLARED = {
     "tools/p3_v57_co195_fixpoint_uniqueness_oracle.py":
-        {"artifact": "m13_v57_co195_fixpoint_uniqueness", "revision": "CO-202"},
+        {"artifact": "m13_v57_co195_fixpoint_uniqueness", "revision": "CO-219"},
 }
 
 # 允许非零的步骤（**须带 verdict 证据**：rc≠0 不等于预期 FAIL —— CO-165）
@@ -838,6 +838,7 @@ PROXY_RESIDUAL_EXPLICIT = {
 }
 
 
+# CO-219（F-1）：锚点表/覆盖面表**名集钉定**（原只判「已登记项自洽」⇒ 删项即空真，本仓他处用集合等式）。
 # CO-218（R-CO218-1）：**冻结源**（判定基据之锚点）—— 路径（K2 相对）→ sha16 pin。
 # 缘起：跨会话仅由人手复核 + CO-91.2 一次性断言 ⇒ 漂移不使序失败（序消费当下内容仍可收敛）⇒ 基据失锚。
 FROZEN_SOURCES = {
@@ -1775,6 +1776,10 @@ def main(argv=None) -> int:
         and "t00_settle_converged" not in set(_source_strings("# t00_settle_converged  （仅注释，非声明）"))
         and "t00_settle_converged" in set(_source_strings("t = {'t00_settle_converged': False}"))
         # CO-215（R-CO215-1）：代理帮助函数**覆盖面** —— 每枚须恰登记于一表；残余条目字段须完备
+        # CO-219（F-1）：覆盖面表须**名集钉定** —— 原判据只遍历已登记项 ⇒ 清表/删项即**空真**
+        #（与同档 t27 之 `set(BASIS_JUDGE_DECLARED) == {…}`、t21 之集合等式同制）。
+        and set(PROXY_HELPERS_PINNED) == {"artifact_readers", "boundary_read_scan", "declared_verdict_in_tool"}
+        and set(PROXY_RESIDUAL_EXPLICIT) == set(PROXY_HELPERS_PINNED)
         and proxy_coverage_decision(PROXY_HELPERS_PINNED, PROXY_SEMANTIC_BINDING, PROXY_RESIDUAL_EXPLICIT) == "ok"
         and set(PROXY_HELPERS_PINNED.values()) <= set(
             _source_strings(Path(__file__).read_text(encoding="utf-8")))
@@ -1843,7 +1848,13 @@ def main(argv=None) -> int:
         raise OSError("synthetic-missing")
 
     checks["t34_frozen_sources_pinned"] = (
-        frozen_sources_decision(FROZEN_SOURCES, _fs_sha, FROZEN_SRC_COPIES, _fs_bytes) == "ok"
+        # CO-219（F-1）：**锚点表须名集钉定** —— 原判据只遍历 pin 表 ⇒ 删项（如 CO-217 之 SPEC pin）/清表
+        # 即**空真**（该源之不变性静默失锚；实测删 SPEC pin 后注入漂移仍返回 ok）。
+        set(FROZEN_SOURCES) == {"pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-19.json",
+                                "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_s1_page_manifest.json",
+                                "k2_v4_8L.kicad_pcb", "_shared/eda_core/drc_rules.json"}
+        and set(FROZEN_SRC_COPIES) == {"_shared/eda_core/drc_rules.json"}
+        and frozen_sources_decision(FROZEN_SOURCES, _fs_sha, FROZEN_SRC_COPIES, _fs_bytes) == "ok"
         # 正控：pin 命中 ⇒ ok；副本同字节 ⇒ ok
         and frozen_sources_decision({"a": "x"}, lambda _r: "x") == "ok"
         and frozen_sources_decision({}, lambda _r: "x", {"a": "b"}, lambda _r: b"same") == "ok"
@@ -1940,7 +1951,7 @@ def main(argv=None) -> int:
             converged = True
             break
         prev = cur
-    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-203.1",
+    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-203.2",
               "nature": "规范复现序机判执行器（rc 策略 + 真收敛判定）；报告落 .archer_tmp/ 且**不被 boundary 引用**（避免不动点）",
               "order": ORDER, "expected_nonzero": EXPECTED_NONZERO,
               "checks": checks, "iterations": iterations, "abort": abort, "converged": converged,

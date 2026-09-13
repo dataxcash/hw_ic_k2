@@ -3302,6 +3302,52 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body91
 
+
+    # ── §92 CO-219（非执行者对抗复评 CO-213..CO-218 + 同会话处置） ──
+    MARK92 = "## 92. CO-219"
+    _rc92 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    sec92 = [MARK92 + "（**非执行者对抗复评 CO-213..CO-218 + 同会话处置**）", "",
+             "- **对象**：CO-213（复评件与处置）/ CO-214（L5 板指纹消费面机判）/ CO-215（代理面收窄 + 覆盖面齿）/ "
+             "CO-216（源面判据 AST 收窄）/ CO-217（L5 判据源绑定）/ CO-218（冻结源不变性 + 规则源唯一性）。"
+             "复评者 = **z79..z84 谱系之外**之 context 归零续接会话；as-found 逐件钉 `3d68891`（sha16 复核一致）；扰动一律**内存注入**（零落盘）。",
+             "- **判决 = PASS_WITH_FINDINGS**（findings 2，皆 low）：正控 11 全 True（冻结四源 4/4、交付板未变、`--check` 36/36、序收敛 rc=0 零 diff、"
+             "oracle PASS 11/11 幂等、co120 PASS 19 齿 `l5_bad=0`、l5_signoff 判别力 True、co206 7/7 + B 前置数据驱动、登记簿 counts 可复算、co124 PASS）；负控 6 全触发。",
+             "- **F-1（TOOL_DEFECT · low）表项未名集钉定 ⇒ 删项即空真**：`frozen_sources_decision()`（CO-218）/ `proxy_coverage_decision()`（CO-215）/ "
+             "`l5_board_binding()`（CO-214）皆**只遍历已登记项** ⇒ 清表或**删单枚 pin**（如期 CO-217 之 SPEC pin）时对应齿仍 **True**；"
+             "实测最重后果：**删 SPEC pin 后注入 SPEC 漂移仍返 `ok`**（该源不变性检出率**归零**）。同档 t27/t21/t16 **已有**集合等式制 ⇒ 此三处为遗漏。"
+             "**处置**：三表各加**名集等式**（**不新增齿**，齿数仍 36）+ 自声明面 bump（runner `CO-203.2` / co120 `CO-120.8`）。",
+             "- **F-2（TOOL_DEFECT · low）不动点 oracle 前置未达不阻断 + 基线重锚**：`t00` 不成立仍注入/度量，且 `sha_canon` 取自**污染态**"
+             "（实测 `914b65197ad76b19` ≠ as-found `3b02b97dc9f1f4bc`）；逐案 `finally` 只复原到**案前（污染）态** ⇒ 污染不自愈；"
+             "实证后果 = 某已闭合登记项被重开为 OPEN 而 `counts.OPEN=0` ⇒ **co124 FAIL_REGISTER_STALE**，人工复原 HEAD 后全绿（上游写入者**未根因定位**，只据可复现工具行为立据）。"
+             "**处置**：增**前置 fail-fast**（`FAIL_SETTLE_NOT_CONVERGED` + `how_to_recover`；不注入/不度量/不重锚）+ oracle bump `CO-219`（runner `TOOL_REVISION_DECLARED` 双侧同步）。",
+             "- **O-1（诚实边界）**：`drc_rules.json` 容器内实存 **5 份**（k2/k1/pciesw4/key_v2 + 根 `_shared`，5/5 同字节）而 `FROZEN_SRC_COPIES` 只钉 **2/5**；"
+             "K2 各闸仅消费 K2 份 ⇒ 非缺陷（触发 = 改读他份或副本分歧）。**O-3**：未复核 B 路 10L 实做（L1/几何）与外部报价面；CO-219 自身须下一轮复评（禁自评）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows92 = [("runner `p3_v57_co164_order_runner.py`（**CO-203.2**：t29/t34 **名集钉定**）", K2 / "tools/p3_v57_co164_order_runner.py"),
+               ("co120 闸 `p3_v57_co120_provenance_pin_gate.py`（**CO-120.8**：P5 `L5_RECORD_JSON` 名集钉定）", K2 / "tools/p3_v57_co120_provenance_pin_gate.py"),
+               ("oracle `p3_v57_co195_fixpoint_uniqueness_oracle.py`（**CO-219**：前置 fail-fast）", K2 / "tools/p3_v57_co195_fixpoint_uniqueness_oracle.py"),
+               ("复评件 `m13_v57_CO219_rev19_co213_co218_review.json`", STEP2 / "m13_v57_CO219_rev19_co213_co218_review.json"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc92['total']} 项 / OPEN {_rc92['OPEN']}）", L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows92:
+        if pth.exists():
+            sec92.append(f"| {label} | `{s16(pth)}` |")
+    sec92.append("")
+    sec92.append("> **R-CO219-1**：凡**覆盖面 / 判定基据锚点 / 消费面**之**枚举表**，须以**名集（或集合）等式**机判其内容 —— "
+                 "不得以「已登记项自洽」代替「登记面完整」（纯判据对空表返 `ok` 属合理设计，但**齿**须钉实表内容）。")
+    sec92.append("")
+    sec92.append("> **R-CO219-2**：**先结算**类前置（不动点/收敛类判据）须**fail-closed 阻断**：前置不成立即停（不注入、不度量、不落基线）"
+                 "并给复原指引；禁以**污染态**充当 canonical。")
+    sec92.append("")
+    sec92.append("> **序不变**：本件未改步骤集/序列（承 §82 之 R-CO209-2）。")
+    sec92.append("")
+    body92 = "\n".join(sec92)
+    if MARK92 in txt:
+        txt = re.sub(re.escape(MARK92) + r"[\s\S]*?(?=\n## |\Z)", body92, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body92
+
+    txt = txt.replace("W3 Boundary **v2.59**", "W3 Boundary **v2.60**")
     txt = txt.replace("W3 Boundary **v2.58**", "W3 Boundary **v2.59**")
     txt = txt.replace("W3 Boundary **v2.57**", "W3 Boundary **v2.58**")
     txt = txt.replace("W3 Boundary **v2.56**", "W3 Boundary **v2.57**")
