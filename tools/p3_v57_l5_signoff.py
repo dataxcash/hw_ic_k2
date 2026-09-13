@@ -13,6 +13,11 @@ SI/PI/EMC 与 DFM/DFT 之 PASS 无从判定「评的是哪一块板」⇒ 板变
 CO-213（L2 自裁 · 复评 F-4 处置）：CO-212 之判别齿只判「板指纹 ≠ 全零哨兵」⇒ 不判别**评的是冻结源还是交付板**
 （二者可互换而齿不响）。现以 DFM 记录之 `baseline_sha256`（冻结源板）为**对照**：须 baseline 确为冻结源板、
 被评板 ≠ 冻结源板、三件皆钉被评板且非退化 ⇒ 「评错板」即 fail-closed（L5-DFM.7 → .8 / L5-SI.7 → .8 / L5-G7.7 → .8）。
+CO-217（L2 自裁 · 判据源绑定 + 退役定值留存）：本工具原读**硬编码旧 rev** `SPEC_k2_v4.spec-rev-7.json`
+（且 SI 记录自述源为 rev-5）⇒ 其 `net_classes.PCIe85.inter_pair_spacing_mm` = **已退役** legacy `0.875`
+（rev-19 现行 = `0.41`，见 `retired_inter_pair_spacing_0p875_v1` / ledger `DV-INTPAIR-EDGE`）⇒ 判定记录把**退役定值**
+呈现为现行口径（记录面 fail-open；硬编码旧 rev 亦为潜在陈旧阈值源）。现改为读**现行冻结 SPEC（rev-19）**并**钉 sha16**，
+缺件/漂移 ⇒ fail-closed；SI 记录增 `inter_pair_derivation` + `retired_inter_pair_spacing` 两项显式留存。
 CLI: run under KiCad python (pcbnew); kicad-cli auto-found.
 """
 from __future__ import annotations
@@ -30,6 +35,27 @@ REC = STEP2 / "m13_v57_l4_construction.json"
 RULES = ROOT / "_shared/eda_core/drc_rules.json"
 CLI = ROOT / "AppDir/bin/kicad-cli"
 L4_DRU = K2 / "k2_v4_8L.l4.kicad_dru"   # CO-37: SPEC 逃逸区规则域（只随 L4 板；冻结基线不适用）
+# CO-217（L2 自裁）：L5 判据之 SPEC 源 = **现行冻结源**（boundary「冻结四源」之 SPEC 槽）+ **sha16 pin**。
+# 注：`SPEC_k2_v4.json`（spec_version 1.1.spec-rev-1，sha16 `0bd52ed48e720b8c`）为**监理级原始冻结点**（watch.py FROZEN），
+# 与设计现行源**语义不同**，不得混用（本工具判据一律取 rev-19）。
+SPEC_SRC = STEP2.parent / "SPEC_k2_v4.spec-rev-19.json"
+SPEC_SRC_SHA16 = "5f72182a2616392c"
+
+
+def spec_src_pinned(path: Path = SPEC_SRC, pin16: str = SPEC_SRC_SHA16, data: bytes | None = None) -> bool:
+    """CO-217 纯判据（`data` 可注入 ⇒ 合成控零落盘）：SPEC 源**可读**且其 sha16 == pin（缺件/漂移 ⇒ False）。"""
+    try:
+        b = data if data is not None else Path(path).read_bytes()
+    except OSError:
+        return False
+    return hashlib.sha256(b).hexdigest()[:16] == pin16
+
+
+def load_spec() -> dict:
+    """CO-217：读**现行冻结 SPEC** 并校验 sha16 == pin；缺件/漂移 ⇒ fail-closed（禁静默降级到旧 rev）。"""
+    if not spec_src_pinned():
+        raise SystemExit(f"L5: SPEC 源不可读或漂移（expect {SPEC_SRC.name} sha16 {SPEC_SRC_SHA16}）⇒ fail-closed")
+    return json.loads(SPEC_SRC.read_text(encoding="utf-8"))
 
 
 def sha(p): return hashlib.sha256(Path(p).read_bytes()).hexdigest()
@@ -203,7 +229,7 @@ def main() -> int:
 
     # ---- SI/PI/EMC record ----
     # CO-68：分层线宽 + **按层加权电气长度**（CO-62 §4）——判据用 mm-equivalent（er_ref=3.99 带状线）
-    _specw = json.loads((STEP2.parent / "SPEC_k2_v4.spec-rev-7.json").read_text(encoding="utf-8"))
+    _specw = load_spec()          # CO-217：现行冻结 SPEC（rev-19）+ sha pin
     _wmap = _specw["impedance"]["width_mm_by_layer"]
     _pl = _specw["impedance"]["per_layer"]
     _C_MM_PS = 299.792458
@@ -244,10 +270,10 @@ def main() -> int:
     skew_max = max((s["skew_mm"] for s in skew), default=0)                 # 电气（按层加权，判据）
     skew_phys_max = max((s["phys_skew_mm"] for s in skew), default=0)       # 物理（保留报告，CO-62 §4）
     planes = [l for l in cu if l in ("In1.Cu", "In3.Cu", "In4.Cu", "In6.Cu")]
-    _spec = json.loads((STEP2.parent / "SPEC_k2_v4.spec-rev-7.json").read_text(encoding="utf-8"))
+    _spec = load_spec()           # CO-217：现行冻结 SPEC（rev-19）+ sha pin
     _spec_nc = _spec["net_classes"]["PCIe85"]
     _pg = _pair_geometry(rec["segments"])          # CO-53: 对内/对间几何实测
-    si = {"artifact": "m13_v57_l5_si_pi_emc_record", "schema": 1, "revision": "L5-SI.8",
+    si = {"artifact": "m13_v57_l5_si_pi_emc_record", "schema": 1, "revision": "L5-SI.9",
           # CO-212：同上 —— 等长/线宽/平面 verdict 须钉被评板（原缺）
           "board": str(L4_PCB.relative_to(K2)), "board_sha256": sha(L4_PCB),
           "SI": {"track_width_rule_mm_by_layer": _wmap, "all_pcie_tracks_match_spec_width": widths_ok,
@@ -269,7 +295,11 @@ def main() -> int:
                               "impedance_model": _spec["impedance"]["model"],
                               "impedance_gap_mm": _spec["impedance"]["gap_mm"],
                               "stackup": _spec["stackup"]["material"]},
-                     "source": "SPEC_k2_v4.spec-rev-5.json (CO-68) net_classes.PCIe85 / impedance(per_layer) / stackup(dielectric_8l)",
+                     "source": (f"SPEC_k2_v4.spec-rev-19.json (sha16 {SPEC_SRC_SHA16}) "
+                                "net_classes.PCIe85 / impedance(per_layer) / stackup(dielectric_8l)"),
+                     # CO-217：现行对间口径（rev-19：0.41 外层绑定 + 逐层推导）与**已退役** legacy 0.875 一并显式留存
+                     "inter_pair_derivation": _spec_nc.get("inter_pair_derivation_v1"),
+                     "retired_inter_pair_spacing": _spec.get("retired_inter_pair_spacing_0p875_v1"),
                      "conformance": "DESIGN_CONFORMANT_FIRST_ORDER_PENDING_COUPON",
                      "per_layer_impedance": _spec["impedance"].get("per_layer"),
                      "stackup_build": _spec["stackup"].get("dielectric_8l"),
@@ -309,7 +339,7 @@ def main() -> int:
                "物理长度判据仍 PASS，缺陷根因 = 等长补偿只按物理长度（未按层加权）")
     g7 = f"""# G7 / L5 记录 — k2 v57（8L）
 
-> revision **L5-G7.8**｜图纸 **{art['revision']}** `{s16(DRAWING)}`｜L4 板 `{s16(L4_PCB)}`（含 SPEC 逃逸区规则域 CO-37）
+> revision **L5-G7.9**｜图纸 **{art['revision']}** `{s16(DRAWING)}`｜L4 板 `{s16(L4_PCB)}`（含 SPEC 逃逸区规则域 CO-37）
 > 产生：`tools/p3_v57_l5_signoff.py`（{dfm['drc']['tool']}，{dfm['revision']}）——**随 L5 每次重跑确定性重生成**
 > ｜历史 FAIL 叙事见 CO-37/CO-43/CO-44/CO-45 变更单与 git（本件取代 L5-G7.5 的 new=60 口径）。
 
@@ -335,6 +365,7 @@ def main() -> int:
 | **new violations** | **{dfm['drc']['new_total']}** {dfm['drc']['new_violations']}（多重集差；基线消失 **{dfm['drc']['disappeared_total']}**）|
 
 ## 3. 判据（未放宽）
+- **L5 SI 判据源 = `SPEC_k2_v4.spec-rev-19.json`（sha16 `{SPEC_SRC_SHA16}`）**（CO-217：原读硬编码 rev-7 ⇒ 已退役 `inter_pair_spacing_mm=0.875` 被当作现行口径；现行 = `0.41`，见 `inter_pair_derivation_v1`）。
 - `.kicad_dru` `{s16(L4_DRU)}`：实现 SPEC `constraints.escape_transition_zone`（ECN-001，`escape_clearance_mm=0.075`）+ 4 具名 rule area（J2/J3/J4/U6 pad 场）。
 - **条件显式排除 `PCIE_REFCLK*`** ⇒ REFCLK 仍按 shop/netclass 判据；其 0 违规由 CO-40..CO-45 几何收敛达成（**非**借道放宽；见 CO-45 §5）。
 - 域工件 `m13_v57_co37_escape_domain.json` `{s16(STEP2 / 'm13_v57_co37_escape_domain.json')}`；冻结基线板不加载 `.kicad_dru`。
@@ -351,7 +382,7 @@ def main() -> int:
 ｜`.kicad_dru` `{s16(L4_DRU)}`
 冻结四源 `{s16(STEP2.parent / 'SPEC_k2_v4.json')} / {s16(STEP2 / 'm13_v57_s1_page_manifest.json')} / {s16(SRC_PCB)} / {s16(RULES)}`（未改）。
 
-End of G7 record（L5-G7.8，机器生成）。
+End of G7 record（L5-G7.9，机器生成）。
 """
     (STEP2 / "m13_v57_l5_g7_record.md").write_text(g7, encoding="utf-8")
     print("L5: FAB ok | DFM verdict=%s new=%d (disappeared=%d) %s | in_scope_unconnected=%d/%d nets | SI verdict=%s skew=%.4f" %
@@ -365,10 +396,14 @@ End of G7 record（L5-G7.8，机器生成）。
     board_pin_discriminates = (dfm.get("baseline_sha256") == _bs and _bs != _bp
                                and all(p != _bs for p in _pins)
                                and all(isinstance(p, str) and p and p != "0" * 64 for p in _pins))
+    # CO-217：判据源绑定齿 —— 现行冻结 SPEC 须就位且 sha 命中；判别力 = 注入伪造字节必判否（非恒真）
+    spec_src_ok = spec_src_pinned()
+    spec_src_discriminates = (not spec_src_pinned(data=b"{}")) and spec_src_ok
     # CO-47：签核脚本退出码须等于门禁判定（原实现无条件 return 0，CI 无法据此判失败）
     _ok = (dfm["verdict"] == "PASS" and si["verdict"] == "PASS" and board_pin_ok
-           and board_pin_discriminates)
-    print("L5 teeth: board_pin_ok=%s board_pin_discriminates=%s" % (board_pin_ok, board_pin_discriminates))
+           and board_pin_discriminates and spec_src_ok and spec_src_discriminates)
+    print("L5 teeth: board_pin_ok=%s board_pin_discriminates=%s spec_src_ok=%s spec_src_discriminates=%s" %
+          (board_pin_ok, board_pin_discriminates, spec_src_ok, spec_src_discriminates))
     return 0 if _ok else 1
 
 

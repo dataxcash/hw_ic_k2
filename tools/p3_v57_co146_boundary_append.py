@@ -3214,6 +3214,55 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body89
 
+    # ── §90 CO-217（L2 自裁 · L5 判据源绑定 + 退役定值留存） ──
+    MARK90 = "## 90. CO-217"
+    _rc90 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    sec90 = [MARK90 + "（**L2 自裁 · L5 判据源绑定 + 退役定值留存**）", "",
+             "- **缘起**：§89（CO-216）在 runner 内做「源面判据之 AST 收窄」后，续查**判据源版本面** ⇒ 发现 L5 SI 判定记录之"
+             "**判据源为硬编码旧 rev**。",
+             "- **缺陷 N-1（TOOL_DEFECT · low）**：`p3_v57_l5_signoff.py` 读 `SPEC_k2_v4.spec-rev-7.json`（而记录之 "
+             "`netclass_geometry.source` 又自述 **rev-5** ⇒ 自述源与实现源**亦不一致**），其 `net_classes.PCIe85.inter_pair_spacing_mm` = **0.875** "
+             "系**已退役** legacy（rev-19 `retired_inter_pair_spacing_0p875_v1` 标 `LEGACY_DERIVED`；ledger `DV-INTPAIR-EDGE.supersedes` 同判；"
+             "rev-19 现行绑定 = **0.41**（外层 2×0.205），逐层 0.41/0.32）⇒ 判定记录把**退役定值**呈现为**现行口径**（记录面 **fail-open**："
+             "人/机读者据以误判对间规则 —— 承 CO-210「须引现行定案」同族，但面 = **判定记录**）；且硬编码旧 rev 为**潜在陈旧阈值源**"
+             "（**实测非惰性**：`net_classes` 在 rev-7/rev-19 间不同）。",
+             "- **影响面（如实）**：SI verdict = `widths_ok ∧ skew ≤ drc_rules.diff_pair.intra_pair_skew_mm`，二者皆不取 `net_classes`"
+             "（`impedance.width_mm_by_layer` 跨 rev **逐字节同**）⇒ **判决未变**（PASS / skew `0.1300 ≤ 0.15` / 34 页）；本件为**记录正确性 + 漂移防护**，非判决翻转。",
+             "- **处置**：① 判据源改读现行冻结源 `SPEC_k2_v4.spec-rev-19.json` 并**钉 sha16**（`SPEC_SRC`/`SPEC_SRC_SHA16` + `load_spec()`："
+             "缺件/漂移 ⇒ `SystemExit`，**fail-closed**，禁静默降级到旧 rev）；② SI 记录增 `inter_pair_derivation`（现行逐层 0.41/0.32）与 "
+             "`retired_inter_pair_spacing`（0.875 / `LEGACY_DERIVED` / `replaced_by`，**显式留存** —— 承「退役决策须显式留存」红线）；"
+             "③ `source` 自述改指 rev-19 + sha16；④ 齿 **+2**（`spec_src_ok` / `spec_src_discriminates`（注入伪造字节必判否 ⇒ 非恒真））并入 rc；"
+             "⑤ SI 记录 **L5-SI.8→.9**、G7 记录 **L5-G7.8→.9** 且 G7 增「L5 SI 判据源」行。**序不变（仍 50 次）**。",
+             "- **修后实测**：SI **verdict=PASS**（`widths_match=True` / `skew 0.1300 ≤ 0.15` / 34 页）；记录 `spec.inter_pair_spacing_mm=**0.41**`、"
+             "`inter_pair_derivation.by_layer_edge_mm={F.Cu:0.41,B.Cu:0.41,In2.Cu:0.32,In5.Cu:0.32}`、`retired_inter_pair_spacing` 显式留存、"
+             "`source` = rev-19 + sha16；齿 **4/4 全 True**（含新 2 枚）；独立探针：错 pin16 ⇒ False、注入伪造空 JSON 字节串 ⇒ False（sha **确被比较**）。",
+             "- **并存事实（登记，免误判）**：`SPEC_k2_v4.json`（spec_version **1.1.spec-rev-1**，sha16 `0bd52ed48e720b8c`）= **监理级原始冻结点**"
+             "（`watch.py` FROZEN 所钉）；设计现行源 = `SPEC_k2_v4.spec-rev-19.json`（boundary 冻结四源）。二者**语义不同**，本工具判据一律取 **rev-19**；"
+             "G7 §5「冻结四源」行沿用 rev-1 冻结点（监理级语义），**不得**与设计现行源混用。",
+             "- **诚实边界**：只保证「判据源 = 冻结 rev-19 且 sha 命中」，**不**重判 SI 数值本身；SPEC 升 rev 时须**同 commit** 更新 "
+             "`SPEC_SRC`/`SPEC_SRC_SHA16`（否则本工具 fail-closed 报错，属**有意**）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows90 = [("工具 `p3_v57_l5_signoff.py`（**CO-217**：判据源 → 冻结 rev-19 + sha pin + 齿 +2 + 退役值留存）", K2 / "tools/p3_v57_l5_signoff.py"),
+               ("记录 `m13_v57_l5_si_pi_emc_record.json`（**L5-SI.9**：`inter_pair_spacing_mm=0.41` + retired 留存）", STEP2 / "m13_v57_l5_si_pi_emc_record.json"),
+               ("记录 `m13_v57_l5_g7_record.md`（**L5-G7.9**：+「L5 SI 判据源」行）", STEP2 / "m13_v57_l5_g7_record.md"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc90['total']} 项 / OPEN {_rc90['OPEN']}）", L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows90:
+        if pth.exists():
+            sec90.append(f"| {label} | `{s16(pth)}` |")
+    sec90.append("")
+    sec90.append("> **R-CO217-1**：凡产出判据性 verdict 之工具，其**判据源**须为**现行冻结源**且**钉 sha**（缺件/漂移 ⇒ fail-closed，禁静默降级）；"
+                 "源升级须**同 commit** 双侧更新（源常数 + pin）；**退役定值不得以现行口径呈现**（须标 `kind`/`replaced_by` 并显式留存）。")
+    sec90.append("")
+    sec90.append("> **序不变**：本件未改步骤集/序列（承 §82 之 R-CO209-2）。")
+    sec90.append("")
+    body90 = "\n".join(sec90)
+    if MARK90 in txt:
+        txt = re.sub(re.escape(MARK90) + r"[\s\S]*?(?=\n## |\Z)", body90, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body90
+
+    txt = txt.replace("W3 Boundary **v2.57**", "W3 Boundary **v2.58**")
     txt = txt.replace("W3 Boundary **v2.56**", "W3 Boundary **v2.57**")
     txt = txt.replace("W3 Boundary **v2.55**", "W3 Boundary **v2.56**")
     txt = txt.replace("W3 Boundary **v2.54**", "W3 Boundary **v2.55**")

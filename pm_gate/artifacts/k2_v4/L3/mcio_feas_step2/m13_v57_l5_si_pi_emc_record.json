@@ -68,6 +68,29 @@
     "pairs_measured": 34
    },
    "evidence": "m13_v57_co68_option_a_execute_derive.json cab5ce0e6cbd5e38 / m13_v57_CO68_L2_option_a_execute.md 17965908fd5d5635 / m13_v57_CO67_L2_redline_ruling.md c562419d70a41ab9",
+   "inter_pair_derivation": {
+    "band_edge_min_mm": 0.18,
+    "binding_outer_mm": 0.41,
+    "by_layer_center_mm": {
+     "B.Cu": 0.615,
+     "F.Cu": 0.615,
+     "In2.Cu": 0.48,
+     "In5.Cu": 0.48
+    },
+    "by_layer_edge_mm": {
+     "B.Cu": 0.41,
+     "F.Cu": 0.41,
+     "In2.Cu": 0.32,
+     "In5.Cu": 0.32
+    },
+    "implementation_form": "对间铜边净空 ≥ 2×w（⇔ 中心距 ≥ 3×w）；w = 该对在该层的线宽",
+    "ledger_ref": "L2/derived_value_ledger_v1.json DV-INTPAIR-EDGE",
+    "requirement": "对间不串扰 ⇒ 3W 原则：对间中心距 ≥ 3×线宽 w",
+    "requirement_id": "REQ-R3-2",
+    "scope": "域外对间长平行；域内（SPEC constraints.escape_transition_zone，ECN-001）按声明放宽 0.075",
+    "separation_rule_ref": "L2/REQUIREMENT_IMPLEMENTATION_SEPARATION_v1.0.md",
+    "w_source": "impedance.width_mm_by_layer"
+   },
    "note": "CO-68：方案(a) 对称叠层（铜厚自洽修正）⇒ 4 信号层全参考；交付各层一阶落 85Ω±10%（F/B 0.205 微带 88.4/90.6；In2/In5 0.16 对称带状线 84.6/89.5）；**终判 = 板厂阻抗券**（coupon_required=true）。对内 skew = **按层加权电气长度**（CO-62 §4）。",
    "p_gap_semantics": "lower_bound",
    "per_layer_impedance": {
@@ -130,11 +153,18 @@
      "w_mm": 0.16
     }
    },
-   "source": "SPEC_k2_v4.spec-rev-5.json (CO-68) net_classes.PCIe85 / impedance(per_layer) / stackup(dielectric_8l)",
+   "retired_inter_pair_spacing": {
+    "kind": "LEGACY_DERIVED",
+    "note": "退役留存（红线：退役决策须显式留存，不销毁）",
+    "replaced_by": "net_classes.PCIe85.inter_pair_derivation_v1（CO-134，rev-19）",
+    "value": 0.875,
+    "why": "legacy 换算定值：0.875 = 2×0.4375（等价 5×0.175 线距）；本板 w_by_layer={'F.Cu': 0.205, 'In2.Cu': 0.16, 'In5.Cu': 0.16, 'B.Cu': 0.205} 与带内 w_min=0.09 均无 0.4375 ⇒ 非 REQ-R3-2 的忠实实现"
+   },
+   "source": "SPEC_k2_v4.spec-rev-19.json (sha16 5f72182a2616392c) net_classes.PCIe85 / impedance(per_layer) / stackup(dielectric_8l)",
    "spec": {
     "impedance_gap_mm": 0.175,
     "impedance_model": "JLC_SI9000_H1_5.0mil_Er1_4.3",
-    "inter_pair_spacing_mm": 0.875,
+    "inter_pair_spacing_mm": 0.41,
     "p_gap_mm": 0.175,
     "p_width_mm": 0.205,
     "stackup": "JLC 8L 1.6mm 阻抗板 JLC08161H（南亚 NP-155F；prepreg 2116*1 / 3313*1，core 0.36*2） — 叠层分配与逐层介质厚度由 L2 CO-55 反解裁定；终判 = 板厂阻抗券",
@@ -404,7 +434,7 @@
  "artifact": "m13_v57_l5_si_pi_emc_record",
  "board": "k2_v4_8L.l4.kicad_pcb",
  "board_sha256": "d4e81f647be7f9809aef72affb55fdf442a0cf743baead02d8e44fb130de18fc",
- "revision": "L5-SI.8",
+ "revision": "L5-SI.9",
  "schema": 1,
  "skew_metric": "layer-weighted electrical length -> mm-equivalent @ er_ref=3.99 (CO-62 §4 / CO-68)",
  "verdict": "PASS"
