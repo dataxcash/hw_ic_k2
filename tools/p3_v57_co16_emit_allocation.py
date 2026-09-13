@@ -52,7 +52,7 @@ for _k, _e in (("CO10_COLMODE", "CO16_COLMODE"), ("CO10_WSWAP", "CO16_WSWAP"),
                ("CO10_ALLB", "CO16_ALLB"),
                # CO-205e（L2 自裁 · 候选 C）：双孔桥 + 竖列分色偏移
                ("CO10_BRIDGE", "CO16_BRIDGE"), ("CO10_BRJOG", "CO16_BRJOG"),
-               ("CO10_BOFF", "CO16_BOFF"), ("CO10_STUB_LANE", "CO16_STUB_LANE"), ("CO10_STUB_B", "CO16_STUB_B"), ("CO10_BRX2", "CO16_BRX2"), ("CO10_TOPOE", "CO16_TOPOE")):
+               ("CO10_BOFF", "CO16_BOFF"), ("CO10_STUB_LANE", "CO16_STUB_LANE"), ("CO10_STUB_B", "CO16_STUB_B"), ("CO10_BRX2", "CO16_BRX2"), ("CO10_TOPOE", "CO16_TOPOE"), ("CO10_BRAWAY", "CO16_BRAWAY")):
     if os.environ.get(_e):
         CFG[_k] = os.environ[_e]
 REVISION = os.environ.get("CO16_REV", "CO16-ALLOC.1")

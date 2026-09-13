@@ -247,6 +247,8 @@ if len(_VA) != 4:
 _BRIDGE = __import__("os").environ.get("CO10_BRIDGE", "") not in ("", "0")
 _BR_JOG = float(__import__("os").environ.get("CO10_BRJOG", "0.5"))
 _BR_FLIP = __import__("os").environ.get("CO10_BRFLIP", "") not in ("", "0")
+# CO-205k：桥孔「**离对偶**」闭式规则（P 与 N 各自朝远离对方的方向 jog）——加宽本页 P/N 桥孔间距。
+_BR_AWAY = __import__("os").environ.get("CO10_BRAWAY", "") not in ("", "0")
 # CO-205f：**全部 stub 落 lane 层（In5）** ⇒ 无 drop 孔（消除 56 处内层<->内层），仅余 32 处 corner 待桥。
 _STUB_LANE = __import__("os").environ.get("CO10_STUB_LANE", "") not in ("", "0")
 # CO-205g：**全部 stub 落 B.Cu**（外层）⇒ drop = In5<->B（外层锚定，**不加孔**）⇒ 消 56 处内层<->内层；
@@ -707,7 +709,11 @@ def build(f, px, py, nx, ny):
             # CO-205e 候选 C：冻结层计划 + 双孔桥（仅替换内层<->内层 corner/drop）
             B, L = "B.Cu", "In5.Cu"
             up = f["band"] == "up"
-            _jd = (1.0 if pol == "P" else -1.0) if _BR_FLIP else (1.0 if up else -1.0)
+            if _BR_AWAY:
+                _sr = 1.0 if f["pad"]["P"][0] >= f["pad"]["N"][0] else -1.0
+                _jd = _sr * (1.0 if pol == "P" else -1.0)
+            else:
+                _jd = (1.0 if pol == "P" else -1.0) if _BR_FLIP else (1.0 if up else -1.0)
             vias.append((vx, vy, pol, _sp("F.Cu", E)))                 # via1（E==B 时为通孔）
             if E == B:
                 _cx = vx
