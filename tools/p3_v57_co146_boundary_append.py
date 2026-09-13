@@ -2971,6 +2971,43 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body84
 
+    # ── §85 CO-212（L2 自裁 · L5 sign-off 记录钉被评板指纹：判定基据可追溯） ──
+    MARK85 = "## 85. CO-212"
+    _rc85 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    sec85 = [MARK85 + "（**L2 自裁 · L5 sign-off 记录补被评板指纹绑定：SI/PI/EMC 与 DFM/DFT 之 verdict 可追溯**）", "",
+             "- **缺陷（I-1，low）**：`p3_v57_l5_signoff.py` 产出三件记录，**仅** `m13_v57_l5_fab_record.json` 含 `board`/`board_sha256`；"
+             "`m13_v57_l5_dfm_dft_record.json`（keys = artifact/dft/drc/manufacturing_conformance/revision/schema/verdict）与 "
+             "`m13_v57_l5_si_pi_emc_record.json`（keys = EMC/PI/SI/artifact/revision/schema/skew_metric/verdict）**皆无板指纹** ⇒ "
+             "板若变更，二件之 PASS（含 **等长 `max_intra_pair_skew_mm = 0.13 ≤ 0.15`** 与 DFM/DFT PASS）**不会可见地失效**；"
+             "而交办件之「写件时复核」恰以「**L5 全绿**」为放行依据（承 R-CO193-3 / R-CO207-1「被评态须钉快照」/ CO-172 F-4「跨记录派生数字须绑定」）。",
+             "- **处置**：① 为 **DFM/DFT（L5-DFM.6 → .7）** 与 **SI/PI/EMC（L5-SI.6 → .7）** 记录补 `board` + `board_sha256`（与 FAB 记录同构；DFM 另补 `baseline_sha256`）；"
+             "② 新增 **fail-closed 自检**：三件之 `board_sha256` 须皆等于当前 L4 板且非退化值，否则 rc≠0（L5-G7.6 → G7.7）；③ 重出三件记录 + G7 记录。",
+             "- **修后实测**：三件 `board_sha256` = `d4e81f647be7f980…`（= 现行 L4 板）；自检 `board_pin_ok=True` / `board_pin_discriminates=True`；rc=0（DFM PASS / SI PASS，skew **0.1300 ≤ 0.15**）。",
+             "- **并存事实（如实登记，非缺陷）**：SI 判据读 `SPEC_k2_v4.spec-rev-7.json` 之 impedance 块 —— 实测 rev-7 与 rev-19 之 `impedance` **逐字节同** ⇒ 该旧 rev 引用**不影响**判据。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows85 = [("工具 `p3_v57_l5_signoff.py`（CO-212：三件记录均钉板 + fail-closed 自检）", K2 / "tools/p3_v57_l5_signoff.py"),
+               ("记录 `m13_v57_l5_fab_record.json`（L5-FAB.2，原即含板指纹）", STEP2 / "m13_v57_l5_fab_record.json"),
+               ("记录 `m13_v57_l5_dfm_dft_record.json`（**L5-DFM.7**，新补板指纹；PASS）", STEP2 / "m13_v57_l5_dfm_dft_record.json"),
+               ("记录 `m13_v57_l5_si_pi_emc_record.json`（**L5-SI.7**，新补板指纹；PASS，skew 0.13）", STEP2 / "m13_v57_l5_si_pi_emc_record.json"),
+               ("G7 记录 `m13_v57_l5_g7_record.md`（L5-G7.7）", STEP2 / "m13_v57_l5_g7_record.md"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc85['total']} 项 / OPEN {_rc85['OPEN']}）", L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows85:
+        if pth.exists():
+            sec85.append(f"| {label} | `{s16(pth)}` |")
+    sec85.append("")
+    sec85.append("> **R-CO212-1**：任何 verdict 记录须与**被评态**在**同记录内**钉指纹（板/图纸/来源）；跨件引用（证据件 sha）不得替代被评态绑定；"
+                 "pin 漂移或缺失即 fail-closed。")
+    sec85.append("")
+    sec85.append("> **序不变**：本件未改步骤集/序列（承 §82 之 R-CO209-2）。")
+    sec85.append("")
+    body85 = "\n".join(sec85)
+    if MARK85 in txt:
+        txt = re.sub(re.escape(MARK85) + r"[\s\S]*?(?=\n## |\Z)", body85, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body85
+
+    txt = txt.replace("W3 Boundary **v2.52**", "W3 Boundary **v2.53**")
     txt = txt.replace("W3 Boundary **v2.51**", "W3 Boundary **v2.52**")
     txt = txt.replace("W3 Boundary **v2.50**", "W3 Boundary **v2.51**")
     txt = txt.replace("W3 Boundary **v2.49**", "W3 Boundary **v2.50**")
