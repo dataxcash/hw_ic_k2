@@ -39,7 +39,15 @@ for _k, _e in (("CO10_COLMODE", "CO16_COLMODE"), ("CO10_WSWAP", "CO16_WSWAP"),
                # CO-144（L2 自裁）：逃生扇落位策略 = 分带单调 carry（默认关 => ALLOC.1..7 逐字节可复现）
                ("CO10_FAN_STRAT", "CO16_FAN_STRAT"),
                # CO-144：PDN 固定障碍场须随落位策略一并透传（否则扇对 PDN 视而不见 => 板级 DRC 回归）
-               ("CO10_PDN_OBS", "CO16_PDN_OBS")):
+               ("CO10_PDN_OBS", "CO16_PDN_OBS"),
+               # CO-205（L2 自裁 · 候选 A）：竖段层全落 In2（escape/stub）
+               ("CO10_ALLI2", "CO16_ALLI2"),
+               # CO-205（L2 自裁 · 候选 B）：run 层改 B.Cu + 竖段 In2/In5 分色
+               ("CO10_V2B", "CO16_V2B"),
+               # CO-205b（L2 自裁 · 工具缺陷修复）：过孔占用 = 起止层之间全部层
+               ("CO10_SPAN", "CO16_SPAN"),
+               # CO-205c（L2 自裁 · 候选 D）：竖段落两外层 F/B、lane 维持内层 In5
+               ("CO10_VOUT", "CO16_VOUT")):
     if os.environ.get(_e):
         CFG[_k] = os.environ[_e]
 REVISION = os.environ.get("CO16_REV", "CO16-ALLOC.1")

@@ -156,8 +156,13 @@ TOL = 1e-9
 SUPERSEDED = {"artifact": "m13_v57_w3_joint_assignment.json", "revision": "W3-JA.2",
                "sha256": "d081618c7b961d770c8e2f180f93b92125b316bc0eeec181f9d1d191a0ee6acc",
                "reason": "method-level iron-law violation (search-based); retained, not rewritten"}
-CO16_ALLOC = STEP2 / "m13_v57_co16_channel_allocation_v9.json"   # CO16-ALLOC.9（CO-145：lane 步距 1.07；CO-144 carry + PDN 障碍场）
-CO16_ALLOC_SHA = "d3cd1e5a312f253aa3720e5d3d6418286065fe16ce3cbc5c111e09179b5a3078"
+CO16_ALLOC = STEP2 / __import__("os").environ.get(
+    "CO16_ALLOC_FILE", "m13_v57_co16_channel_allocation_v9.json")   # CO16-ALLOC.9（CO-145：lane 步距 1.07；CO-144 carry + PDN 障碍场）
+CO16_ALLOC_SHA = __import__("os").environ.get(
+    "CO16_ALLOC_SHA", "d3cd1e5a312f253aa3720e5d3d6418286065fe16ce3cbc5c111e09179b5a3078")
+# CO-205（L2 自裁 · 候选 B）：lane/run 层（默认 In5.Cu = 现行；候选 B 置 B.Cu）。
+#   仅影响 shape=co16 路径；默认值保证 t2/co16 现行行为逐字节可复现。
+CO16_LANE = __import__("os").environ.get("CO16_LANE", "In5.Cu")
 CORRIDOR = {
     "EAST_CHIP_TO_J2": {"bounds": (105.25, 132.65), "x_domain": (93.55, 105.25)},
     "WEST_MCIO_TO_CHIP": {"bounds": (65.05, 82.35), "x_domain": (82.35, 93.55)},
@@ -405,13 +410,13 @@ def co16_o4_plan(alloc):
             # CO-69：**按层加权电气长度**（各段乘 sqrt(er_eff)）——修复只按物理长度补偿的电气 skew
             length[pol] = (math.hypot(pad[0] - v[0], pad[1] - v[1]) * _sqrt_er("F.Cu")
                            + abs(ly - v[1]) * _sqrt_er(E)
-                           + abs(lx - v[0]) * _sqrt_er("In5.Cu")
+                           + abs(lx - v[0]) * _sqrt_er(CO16_LANE)
                            + abs(ll - ly) * _sqrt_er(S)
                            + math.hypot(cp[0] - lx, cp[1] - ll) * _sqrt_er("F.Cu"))
         sh = "P" if length["P"] < length["N"] else "N"
         other = "N" if sh == "P" else "P"
         # 主蛇形落 lane(In5)；把电气缺口换算为 In5 上的物理长度
-        extra = abs(length["P"] - length["N"]) / _sqrt_er("In5.Cu")
+        extra = abs(length["P"] - length["N"]) / _sqrt_er(CO16_LANE)
         if extra <= TOL:
             continue
         r_lane = abs(a["landing"][sh][0] - a["via1"][sh][0])
@@ -462,6 +467,25 @@ def co16_nodes(f, pol, v1, esc_pts, lane_pts, stub_pts, esc_l, stub_l, land, con
     end = esc_pts[-1]
     lx, ly_l = land
     lane_y = lane_pts[-1][1]
+    if CO16_LANE != "In5.Cu":
+        # CO-205 候选 B：run 层 = CO16_LANE（B.Cu），竖段层 ∈ {In2, In5}（由工件给出）。
+        # 规范拓扑（逐段单层变点 ⇒ 全类外层锚定）：
+        #   pad(F) -> via1 F<->esc_l -> escape(esc_l) -> corner esc_l<->L -> lane(L)
+        #   -> drop L<->stub_l -> stub(stub_l) -> land stub_l<->F -> conn(F)
+        n = [[f["pad"][pol][0], f["pad"][pol][1], "F.Cu"],
+             [vx, vy, "F.Cu"], [vx, vy, esc_l]]
+        for q in esc_pts[1:]:
+            n.append([q[0], q[1], esc_l])
+        n.append([end[0], end[1], CO16_LANE])             # corner via esc_l <-> L
+        for q in lane_pts[1:]:
+            n.append([q[0], q[1], CO16_LANE])
+        if stub_l != CO16_LANE:
+            n.append([lx, lane_y, stub_l])                # drop L -> stub_l
+        for q in stub_pts[1:]:
+            n.append([q[0], q[1], stub_l])
+        n.append([lx, ly_l, "F.Cu"])                      # land stub_l -> F
+        n.append([conn[0], conn[1], "F.Cu"])
+        return n
     n = [[f["pad"][pol][0], f["pad"][pol][1], "F.Cu"],
          [vx, vy, "F.Cu"], [vx, vy, "In2.Cu"]]
     if esc_l == "B.Cu":
@@ -506,7 +530,7 @@ def _lane_3w_min() -> float:
     spec = json.loads(F["spec"].read_text(encoding="utf-8"))
     pc = spec["net_classes"]["PCIe85"]
     dp = pc.get("diff_pair") or {}
-    w = float((dp.get("p_width_mm_by_layer") or {}).get("In5.Cu", dp.get("p_width", pc["width"])))
+    w = float((dp.get("p_width_mm_by_layer") or {}).get(CO16_LANE, dp.get("p_width", pc["width"])))
     return 3.0 * w
 
 
@@ -682,7 +706,7 @@ def co16_build_routes(facts, alloc, lanes):
                               "scope_note": "本构造规则下不可行（列距/层距不足）；非全局不可能性证明"})
             _CO16_PTS[(pid, pol)] = {"esc": esc_pts, "lane": lane_pts, "stub": stub_pts}
             paths[(pid, pol)] = [E, esc_pts]
-            paths[(pid + "#lane", pol)] = ["In5.Cu", lane_pts]
+            paths[(pid + "#lane", pol)] = [CO16_LANE, lane_pts]
             paths[(pid + "#stub", pol)] = [S, stub_pts]
             paths[(pid + "#fcu_pad", pol)] = ["F.Cu",
                 [[f["pad"][pol][0], f["pad"][pol][1]], [vx, vy]]]

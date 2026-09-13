@@ -19,9 +19,9 @@ from pathlib import Path
 
 K2 = Path("/home/fila/jqdDev_2025/ic_hw/k2")
 STEP2 = K2 / "pm_gate" / "artifacts" / "k2_v4" / "L3" / "mcio_feas_step2"
-MAIN = STEP2 / "m13_v57_w3_joint_assignment.json"
+MAIN = STEP2 / __import__("os").environ.get("L4_MAIN", "m13_v57_w3_joint_assignment.json")
 MANIFEST = STEP2 / "m13_v57_s1_page_manifest.json"
-OUT = STEP2 / "m13_v57_l4_construction.json"
+OUT = STEP2 / __import__("os").environ.get("L4_OUT", "m13_v57_l4_construction.json")
 SRC_PCB = K2 / "k2_v4_8L.kicad_pcb"
 SPEC = K2 / "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-5.json"   # CO-68: 分层线宽口径
 DST_PCB = K2 / "k2_v4_8L.l4.kicad_pcb"
