@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CO-164/CO-167/CO-169/CO-174/CO-180/CO-181/CO-182/CO-183/CO-187/CO-188/CO-189/CO-190/CO-191/CO-192/CO-193/CO-194/CO-195/CO-196/CO-197/CO-198 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
+"""CO-164/CO-167/CO-169/CO-174/CO-180/CO-181/CO-182/CO-183/CO-187/CO-188/CO-189/CO-190/CO-191/CO-192/CO-193/CO-194/CO-195/CO-196/CO-197/CO-198/CO-199 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
 
 缘起（实测事故，CO-163）：`co146_boundary_append.py` 因 §37 文本里的 f-string 花括号语法错误**每次崩溃（rc=1）**，
 但收敛判定只看 boundary/记录 sha ⇒ sha 恒不变 ⇒ 报「CONVERGED」，边界 §37 实际从未写入、pin 表陈旧（co77/co135/co136 判 FAIL）。
@@ -37,6 +37,8 @@
      目的；t18/t20 合成控同步扩展（含 `"a.md".replace(".md","")` 字符串操作**不得误报**之对偶负控）。
 ⑭ CO-198（R-CO198-1，**代理 ↔ 语义闸绑定机判化**）：凡**代理判据**代替语义判据之处，须显式声明**残余**（不得宣称完备）
      + 承载该语义性质的**外部判官**（工具 + **源内声明**的齿名）+ 代理自身 fail-closed 齿所在记录（须在 pin 表）；静态齿 **t29**。
+⑮ CO-199（R-CO199-1，**白名单 rc 类语义**）：`EXPECTED_NONZERO` 须显式声明**预期 rc 值**（= 该判决的规格化出口），
+     运行期 **只**豁免该 rc；其余非零一律 `expected_step_rc_mismatch` 停机（禁以「rc≠0」笼统放行）。静态齿 **t30**。
 CLI:
   python3 tools/p3_v57_co164_order_runner.py [--check] [--max-iter 5]
 """
@@ -114,6 +116,9 @@ EXPECTED_NONZERO = {
     "co146_jlc_dfm_gate": {"verdict": "FAIL", "record": str(STEP2 / "m13_v57_co146_jlc_dfm_gate.json"),
                            # CO-176（G-1）：rc≠0 只豁免 **verdict**，不豁免该步**自检牙齿**（须全 True）
                            "teeth_path": ["teeth"],
+                           # CO-199（F-1）：须声明**预期 rc 值**（= 该判决的规格化出口）；只认「非零」会把别的原因
+                           # （内部错误 / 参数错 / sys.exit(2)）当预期 FAIL 放行 —— 语义：rc=1 是「闸判 FAIL」之出口。
+                           "rc": 1,
                            "why": "verdict=FAIL（DFM 两项阻塞）属预期；rc=1 即 R-CO158-3/R-CO159-4 生效"},
 }
 
@@ -467,6 +472,13 @@ def allowlist_decision(step: str, rc: int, stderr: str, verdict, record_fresh: b
     exp = EXPECTED_NONZERO[step]
     if rc == 0:
         return "expected_step_returned_zero"
+    # CO-199（F-1）：**rc 类语义** —— 白名单只豁免**声明的那一个** rc 值；其余非零（内部错误 / 参数错 / 其他出口）
+    # 一律停机（否则「别的原因失败」会被当预期 FAIL 放行，rc 语义被架空）。
+    _erc = exp.get("rc")
+    if not (isinstance(_erc, int) and not isinstance(_erc, bool) and _erc != 0):
+        return "expected_step_rc_undeclared"
+    if rc != _erc:
+        return "expected_step_rc_mismatch"
     if "Traceback (most recent call last)" in (stderr or ""):
         return "expected_step_crashed"
     if not record_fresh:
@@ -905,6 +917,9 @@ def expected_nonzero_binding(step: str, decl) -> str:
     tp = (decl or {}).get("teeth_path")
     if not tp or record_json_path(rec, tp) is None:
         return "teeth_path_unresolved"
+    _rc = (decl or {}).get("rc")                      # CO-199（F-1）：预期 rc 类须显式声明且非零
+    if not (isinstance(_rc, int) and not isinstance(_rc, bool) and _rc != 0):
+        return "rc_not_declared"
     return "ok"
 
 
@@ -1506,6 +1521,20 @@ def main(argv=None) -> int:
         and proxy_binding_decision("__nc__", _pbase, tool_ok=lambda _p: False) == "no_semantic_judge"
         and proxy_binding_decision("__nc__", {**_pbase, "semantic_teeth": ["__no_such_tooth__"]}) == "semantic_tooth_undeclared"
         and proxy_binding_decision("__nc__", _pbase, proxy_teeth=[]) == "proxy_teeth_unpinned")
+    # CO-199（F-1）：白名单须声明**预期 rc 类**（rc≠0 不等于预期 FAIL —— 别的原因失败须停机）
+    _d199 = dict(EXPECTED_NONZERO["co146_jlc_dfm_gate"])
+    checks["t30_expected_nonzero_rc_class"] = (
+        all(isinstance(d.get("rc"), int) and not isinstance(d.get("rc"), bool) and d["rc"] != 0
+            for d in EXPECTED_NONZERO.values())
+        and all(expected_nonzero_binding(s, d) == "ok" for s, d in EXPECTED_NONZERO.items())
+        # 声明面负控：rc 缺失 / rc=0（「成功」不得充当预期）⇒ rc_not_declared
+        and expected_nonzero_binding("co146_jlc_dfm_gate", {**_d199, "rc": 0}) == "rc_not_declared"
+        and expected_nonzero_binding("co146_jlc_dfm_gate", {k: v for k, v in _d199.items() if k != "rc"}) == "rc_not_declared"
+        # 运行期正/负控：声明 rc 匹配 ⇒ 放行；其余非零 ⇒ 停机；rc=0 ⇒ 停机
+        and allowlist_decision("co146_jlc_dfm_gate", 1, "", "FAIL", True, True) == "expected_nonzero"
+        and allowlist_decision("co146_jlc_dfm_gate", 2, "", "FAIL", True, True) == "expected_step_rc_mismatch"
+        and allowlist_decision("co146_jlc_dfm_gate", 127, "", "FAIL", True, True) == "expected_step_rc_mismatch"
+        and allowlist_decision("co146_jlc_dfm_gate", 0, "", "FAIL", True, True) == "expected_step_returned_zero")
     checks["t05_stability_oracle"] = (stable("x", "x") and not stable("x", "y") and not stable("", ""))
     # CO-164（t06）：执行器 ORDER 必须与 boundary 规范复现序**有序一致**（文档↔执行器防漂移）
     _bdy = boundary_order_steps()

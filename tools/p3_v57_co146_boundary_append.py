@@ -2423,8 +2423,49 @@ def main() -> int:
         txt = re.sub(re.escape(MARK71) + r"[\s\S]*?(?=\n## |\Z)", body71, txt, count=1)
     else:
         txt = txt.rstrip("\n") + "\n\n" + body71
+    # ── §72 CO-199（L2 自裁 · 白名单 rc 类语义） ─────────────────────────────────
+    MARK72 = "## 72. CO-199"
+    _rc72 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    sec72 = [MARK72 + "（**L2 自裁 · 白名单 rc 类语义**）", "",
+             "- **F-1（low）·白名单 rc 语义未声明**：`EXPECTED_NONZERO` 只声明 `verdict`（+ `record`/`teeth_path`），"
+             "**不声明预期 rc 值** ⇒ `allowlist_decision()` 对白名单步仅判 `rc != 0` ⇒ **任何**非零退出"
+             "（内部错误 / 参数错 / `sys.exit(2)` / 127）只要 verdict 相符、无 Traceback、牙齿全 True 即被放行 ⇒ "
+             "**rc 语义被架空**：「因别的原因失败」与「预期判决 FAIL」不可区分（`why` 之『rc=1 即生效』为散文、无机判）。"
+             "此前各次收严（CO-165/167/176/185/193/194）都在**同一 rc 值域**内，未约束**值本身**。",
+             "- **处置**：runner 升 **CO-199.1** —— ① `EXPECTED_NONZERO` 每条须显式声明 `rc`（非零 int = 该判决的**规格化出口**）；"
+             "② `allowlist_decision()` 增 `expected_step_rc_undeclared` / `expected_step_rc_mismatch` 两停机类；"
+             "③ `expected_nonzero_binding()` 增 `rc_not_declared`（声明面完备性）；④ 静态齿 **t30**。",
+             f"- **登记簿**：+1（`co199:F-1`，low，CLOSED；**{_rc72['total']} 项 / OPEN {_rc72['OPEN']}**）。",
+             "- **实测（本件证据）**：修前 `allowlist_decision('co146_jlc_dfm_gate', 2|127, '', 'FAIL', True, True)` 均返回 "
+             "`expected_nonzero`（与 rc=1 不可区分）；修后 rc=1 ⇒ `expected_nonzero`、rc=2/127 ⇒ `expected_step_rc_mismatch`、"
+             "rc=0 ⇒ `expected_step_returned_zero`、声明缺失/为零 ⇒ `rc_not_declared`；`--check` **t01..t30 全 True（32 项）**、"
+             "规范序收敛 rc=0（co146 步仍以 rc=1 放行）。",
+             "",
+             "> **R-CO199-1**：白名单类豁免须**逐项声明语义出口**（rc 值等）；「非零 / 非 PASS / 非空」等**笼统判据**"
+             "不得充当豁免边界 —— 否则「因别的原因失败」与「预期判决」不可区分；t30 机判。",
+             "> **R-CO199-2**（复现序，取代 R-CO198-2；**步集/序列不变，序内出现 50 次**）：规范复现序 = `" + _ord190 + "`，"
+             "**循环至 sha 稳定**（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1 "
+             "+ R-CO175-1 + R-CO176-1/2 + R-CO177-1 + R-CO178-1 + R-CO179-1/2 + R-CO180-1/2 + R-CO181-1/2 + R-CO182-1 "
+             "+ R-CO183-1 + R-CO184-1 + R-CO185-1/2 + R-CO186-1 + R-CO187-1/2/3 + R-CO188-1 + R-CO189-1 + R-CO190-1 "
+             "+ R-CO191-1 + R-CO192-1 + R-CO193-1/2/3/4 + R-CO194-1/2 + R-CO195-0/1 + R-CO196-1/2/4/5 + R-CO197-1/2/4 "
+             "+ R-CO198-1 + R-CO199-1）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows72 = [("工具 `p3_v57_co164_order_runner.py`（CO-199.1 / 白名单 rc 类语义 + 静态齿 t30）",
+                K2 / "tools/p3_v57_co164_order_runner.py"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc72['total']} 项 / OPEN {_rc72['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows72:
+        if pth.exists():
+            sec72.append(f"| {label} | `{s16(pth)}` |")
+    sec72.append("")
+    body72 = "\n".join(sec72)
+    if MARK72 in txt:
+        txt = re.sub(re.escape(MARK72) + r"[\s\S]*?(?=\n## |\Z)", body72, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body72
+    txt = txt.replace("W3 Boundary **v2.43**", "W3 Boundary **v2.44**")
     txt = txt.replace("W3 Boundary **v2.42**", "W3 Boundary **v2.43**")
-    txt = txt.replace("W3 Boundary **v2.41**", "W3 Boundary **v2.42**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
     return 0
