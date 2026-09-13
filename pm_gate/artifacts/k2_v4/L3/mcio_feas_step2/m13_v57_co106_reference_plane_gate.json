@@ -81,6 +81,7 @@
    "board_entities_inside_void_band": {},
    "declared_polygon_bottom_y": 78.7,
    "frozen_outline_y_max": 79.0,
+   "judging": false,
    "note": "板实（L4 交付板）在平面下边界以下的铜实体计数 ⇒ 佐证该带已被施工使用",
    "ok": true,
    "void_band_mm": 0.3
@@ -96,6 +97,7 @@
     "PDN 压降达标（ch.5 §4）",
     "热（ch.2 L2 裁判标准）"
    ],
+   "judging": false,
    "note": "CO-87 自报判据含「参考平面」但矩阵无该行 ⇒ 本闸补上该判据（覆盖性缺口）；本项 ok 恒真（补全动作本身）",
    "ok": true
   }
@@ -114,7 +116,7 @@
   "一阶判据：点采样（端点+相邻中点）；不做网格/有限元"
  ],
  "pin_mismatch": {},
- "revision": "CO-106.4",
+ "revision": "CO-106.5",
  "schema": 1,
  "teeth": {
   "baseline_pin_binding": true,
@@ -123,8 +125,10 @@
   "continuity_detector": true,
   "fail_open_closed": true,
   "frame_inset_detector": true,
+  "teeth_are_bool_only": true,
   "teeth_ok": true,
   "verdict_positive_control": true
  },
+ "teeth_count": 9,
  "verdict": "PASS"
 }

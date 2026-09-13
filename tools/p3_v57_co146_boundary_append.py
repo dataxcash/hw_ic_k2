@@ -1485,6 +1485,68 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body52
     txt = txt.replace("W3 Boundary **v2.23**", "W3 Boundary **v2.24**")
+    # ── §53 CO-180（牙齿判决完整性） ─────────────────────────────────────────
+    MARK53 = "## 53. CO-180"
+    _rc53 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    _ord180 = ("co146_impedance_table → co146_pm_eval → co146_ledger_add → co153_k9_domain_coverage → "
+               "co148_u6_datasheet_inputs → co148_thermal_ruling → co149_thermal_mitigation_derive → co147_l2_ruling → "
+               "co146_jlc_dfm_gate → co146_jlc_fab_package → co152_findings_disposition → co155_co154_findings_disposition → "
+               "co156_co154_open_disposition → co157_gate_hardening_3 → co158_l5_packet_selfcontained → "
+               "co159_rev19_co156_co157_co158_review → co160_co159_findings_disposition → co161_gap_hardening_4 → "
+               "co162_verdict_binding → co163_binding_to_order_notes → co166_rev19_co159_co165_review → "
+               "co167_co166_findings_disposition → co168_register_consistency → co169_step_output_oracle → co170_stackup_binding → "
+               "co171_order_notes_record_figures → co172_rev19_co166_co171_review → co173_co172_findings_disposition → "
+               "co174_step_artifact_attribution → co175_package_parity_binding → co176_gate_selfcheck_evidence → "
+               "co177_capability_value_binding → co178_drc_item_limit_derivation → co179_sensitivity_teeth_hardening → "
+               "co180_teeth_judgment_integrity → co124_input_selfcheck_gate → co150_k9_domain_gate → co146_boundary_append → "
+               "co77_closure_declaration_sweep → co120_provenance_pin_gate → co135_review_hygiene → co136_gate_hygiene → "
+               "co78_layer_role_drift_gate → co81_project_rules_gate → co84_dru_domain_gate → co95_in4_reachability → "
+               "co98_reachability_status_report → co106_reference_plane_gate → co146_boundary_append")
+    sec53 = [MARK53 + "（**L2 自裁 · 牙齿判决完整性**）", "",
+             "- **G-1（medium）**：复现序只对**白名单步**强制记录 `teeth` 全 True（CO-176）；其余**含 `teeth` 的 15+ 步**"
+             "（impedance_table / pm_eval / co147 / co148 / co124 / co150 / co77 / co120 / co136 / co95 / co98 / co106 / fab 包…）"
+             "的**自检只记不判** ⇒ 自检崩坏时收敛照过。**处置**：`p3_v57_co164_order_runner.py` 升 **CO-169.5** —— "
+             "纯函数 `step_declared_teeth(step)`（自 **CO-174 的 `STEP_ARTIFACTS`** 派生；含 `teeth` 者须全 True，"
+             "无 ⇒ None，未全 True/形状不明 ⇒ False fail-closed）+ `allowlist_decision()` 非白名单分支 **`step_teeth_failed`** "
+             "+ 静态齿 **t15**（含现状普查）。",
+             "- **G-2（medium）**：`co106` —— ① `teeth_ok` 在**前 3 齿**后即结算 ⇒ 其后 4 齿（`baseline_pin_binding` / "
+             "`fail_open_closed` / `verdict_positive_control` / `carrier_exemption_declared_only`）**记录在案但不参与判决**；"
+             "② 聚合键 `teeth_ok` **混入 `teeth`**；③ 两项 `checks`（`C_realized_corroboration` / `D_acceptance_matrix_coverage`）"
+             "`ok` **恒真**（记录冒充判据）。**处置**：**CO-106.5** —— 聚合移至全部齿后、聚合键移出、加不变量齿 "
+             "`teeth_are_bool_only`、修 `hard` 引用顺序；C/D 标 **`judging: False`** 并自 `checks_ok` 显式排除"
+             "（**行为不变**：verdict 仍 PASS；键保留以兼容 co110）。",
+             "- **G-3（low）**：`co78` 的 `teeth` 为**散文串**（冒充牙齿）⇒ **CO-78.3**：归真齿 dict + 散文移 `teeth_note`。",
+             f"- **登记簿**：+3（`co180:G-1/G-2/G-3`，全 CLOSED；{_rc53['total']} 项 / OPEN {_rc53['OPEN']}）。",
+             "",
+             "> **R-CO180-1**：记录暴露的自检牙齿**一律参与判决**（不限白名单步）；判据依**声明产物**派生（CO-174），"
+             "不可判一律 fail-closed。",
+             "> **R-CO180-2**：`teeth` 字段须为**布尔牙齿 dict**（散文移 `teeth_note`）；**全部自检须参与本记录判决折算**（禁提前结算/漏折）；"
+             "判据项与记录项须以 `judging` 标记区分，记录项不得自 `checks_ok` 折算。",
+             "> **R-CO180-3**（复现序，取代 R-CO179-3；步骤集新增 co180）：规范复现序 = `" + _ord180 + "`，**循环至 sha 稳定**"
+             "（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1 + R-CO175-1 + R-CO176-1/2 "
+             "+ R-CO177-1 + R-CO178-1 + R-CO179-1/2 + R-CO180-1/2）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows53 = [("工具 `p3_v57_co164_order_runner.py`（CO-169.5 / 声明产物牙齿纳入判决 + t15；49 步）",
+                K2 / "tools/p3_v57_co164_order_runner.py"),
+               ("工具 `p3_v57_co106_reference_plane_gate.py`（CO-106.5 / 判决完整性）",
+                K2 / "tools/p3_v57_co106_reference_plane_gate.py"),
+               ("工具 `p3_v57_co78_layer_role_drift_gate.py`（CO-78.3 / teeth 归真齿 dict）",
+                K2 / "tools/p3_v57_co78_layer_role_drift_gate.py"),
+               ("工具 `p3_v57_co180_teeth_judgment_integrity.py`",
+                K2 / "tools/p3_v57_co180_teeth_judgment_integrity.py"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc53['total']} 项 / OPEN {_rc53['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows53:
+        if pth.exists():
+            sec53.append(f"| {label} | `{s16(pth)}` |")
+    sec53.append("")
+    body53 = "\n".join(sec53)
+    if MARK53 in txt:
+        txt = re.sub(re.escape(MARK53) + r"[\s\S]*?(?=\n## |\Z)", body53, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body53
+    txt = txt.replace("W3 Boundary **v2.24**", "W3 Boundary **v2.25**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
     return 0

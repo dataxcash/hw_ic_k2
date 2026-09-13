@@ -105,7 +105,7 @@ def main(argv=None) -> int:
     # 对照（历史件）必须被抓到 —— 证明闸有齿
     ctl = Path(a.control_historical)
     ctl_flags = scan_json(ctl) if ctl.exists() else []
-    rec = {"artifact": "m13_v57_co78_layer_role_drift_gate", "schema": 1, "revision": "CO-78.2",
+    rec = {"artifact": "m13_v57_co78_layer_role_drift_gate", "schema": 1, "revision": "CO-78.3",
            "nature": "L2 层角色漂移回归闸（当前态工件）",
            "policy": {"signal": sorted(SIGNAL), "gnd_plane": sorted(PLANE), "power": sorted(POWER)},
            "scope": [str(f) for f in files], "per_file": per,
@@ -113,9 +113,10 @@ def main(argv=None) -> int:
            "control_historical": {"file": str(ctl), "n_flags": len(ctl_flags),
                                   "detected": len(ctl_flags) > 0},
            "verdict": "PASS" if not total else "FAIL",
-           "teeth": "对照历史件（LID.1 下 In6=信号层）应被抓到；否则闸无效",
+           "teeth": {"control_historical_detected": len(ctl_flags) > 0},
+           "teeth_note": "对照历史件（LID.1 下 In6=信号层）应被抓到；否则闸无效（CO-180 G-3：teeth 归真齿 dict）",
            "redline": "只读；不改工件；零几何/阈值改动。"}
-    rec["teeth_ok"] = rec["control_historical"]["detected"]
+    rec["teeth_ok"] = all(rec["teeth"].values())   # CO-180（G-3）：聚合自**真齿 dict**
     OUT.write_text(json.dumps(rec, ensure_ascii=False, indent=1, sort_keys=True), encoding="utf-8")
     print(json.dumps({"verdict": rec["verdict"], "total_flags": len(total),
                       "tooth_control_detected": rec["teeth_ok"],

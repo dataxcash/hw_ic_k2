@@ -94,7 +94,7 @@
   ]
  },
  "redline": "只读；不改工件；零几何/阈值改动。",
- "revision": "CO-78.2",
+ "revision": "CO-78.3",
  "schema": 1,
  "scope": [
   "/home/fila/jqdDev_2025/ic_hw/k2/pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json",
@@ -115,7 +115,10 @@
   "/home/fila/jqdDev_2025/ic_hw/k2/pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_l5_si_pi_emc_record.json",
   "/home/fila/jqdDev_2025/ic_hw/k2/tools/p3_v57_w3_constructive.py"
  ],
- "teeth": "对照历史件（LID.1 下 In6=信号层）应被抓到；否则闸无效",
+ "teeth": {
+  "control_historical_detected": true
+ },
+ "teeth_note": "对照历史件（LID.1 下 In6=信号层）应被抓到；否则闸无效（CO-180 G-3：teeth 归真齿 dict）",
  "teeth_ok": true,
  "total_flags": 0,
  "verdict": "PASS"

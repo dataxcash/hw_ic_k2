@@ -236,7 +236,8 @@ def main(argv=None) -> int:
     except Exception as ex:  # pragma: no cover
         realized = {"error": str(ex)}
     checks["C_realized_corroboration"] = {
-        "ok": True, "declared_polygon_bottom_y": poly_bottom, "frozen_outline_y_max": y1,
+        "ok": True, "judging": False,  # CO-180（G-2）：**记录项**（恒真）⇒ 不参与 checks_ok 折算，明示非判据
+        "declared_polygon_bottom_y": poly_bottom, "frozen_outline_y_max": y1,
         "void_band_mm": round(y1 - poly_bottom, 3) if poly_bottom else None,
         "board_entities_inside_void_band": realized,
         "note": "板实（L4 交付板）在平面下边界以下的铜实体计数 ⇒ 佐证该带已被施工使用"}
@@ -250,15 +251,15 @@ def main(argv=None) -> int:
     except Exception:
         crit, has_ref, items = "", None, []
     checks["D_acceptance_matrix_coverage"] = {
-        "ok": True, "co87_ch2_criteria": crit, "co87_matrix_items": items,
+        "ok": True, "judging": False,  # CO-180（G-2）：**记录项**（补全动作本身）⇒ 不参与折算
+        "co87_ch2_criteria": crit, "co87_matrix_items": items,
         "co87_has_reference_plane_row": has_ref,
         "note": "CO-87 自报判据含「参考平面」但矩阵无该行 ⇒ 本闸补上该判据（覆盖性缺口）；本项 ok 恒真（补全动作本身）"}
 
-    teeth["teeth_ok"] = all(v for k, v in teeth.items())
     mismatch = {k: {"expect": v, "actual": s16({"spec_current": SPEC_CUR, "board": BOARD}[k])}
                 for k, v in BASE.items() if s16({"spec_current": SPEC_CUR, "board": BOARD}[k]) != v}
-    checks_ok = all(v["ok"] for v in checks.values())
-    hard = checks_ok and teeth["teeth_ok"]
+    # CO-180（G-2）：`checks_ok` 只折**判据项**（`judging: False` 为记录项，显式排除）
+    checks_ok = all(v["ok"] for v in checks.values() if v.get("judging", True))
     # CO-162（G-1）牙齿：① 基线 pin 漂移必须非 PASS；② check 失败必须非 PASS（旧阶梯此处 fail-open）；③ 正控 PASS
     teeth["baseline_pin_binding"] = verdict_of(True, True, {"spec_current": {"expect": "x", "actual": "y"}}, {}) == "BASELINE_MISMATCH"
     teeth["fail_open_closed"] = verdict_of(False, True, {}, {}) != "PASS"
@@ -267,17 +268,22 @@ def main(argv=None) -> int:
     teeth["carrier_exemption_declared_only"] = (
         ("P3V3_BCU_BRIDGE_IN4" in DECLARED_NON_FULL_PLANE)
         and ("NOT_REGISTERED_ZONE" not in DECLARED_NON_FULL_PLANE))
-    rec = {"artifact": "m13_v57_co106_reference_plane_gate", "schema": 1, "revision": "CO-106.4",
+    # CO-180（G-2）：**全部**个体齿定义后方可结算聚合（此前提前结算 ⇒ 后 4 齿记录在案却不参与判决）
+    teeth["teeth_are_bool_only"] = all(isinstance(v, bool) for v in teeth.values())
+    teeth["teeth_ok"] = all(v for k, v in teeth.items() if k != "teeth_ok")
+    teeth_ok = teeth["teeth_ok"]
+    hard = checks_ok and teeth_ok
+    rec = {"artifact": "m13_v57_co106_reference_plane_gate", "schema": 1, "revision": "CO-106.5",
            "nature": "L2 合格标准覆盖性补全（ch.2「参考平面」）+ 参考平面连续性/板框一致性机判",
            "inputs": {"spec_current": s16(SPEC_CUR), "drawing": s16(DRAWING), "board": s16(BOARD)},
-           "base_pins": BASE, "pin_mismatch": mismatch, "checks": checks, "teeth": teeth,
-           "verdict": verdict_of(checks_ok, teeth["teeth_ok"], mismatch, cls_count),
+           "base_pins": BASE, "pin_mismatch": mismatch, "checks": checks, "teeth": teeth, "teeth_count": len(teeth),
+           "verdict": verdict_of(checks_ok, teeth_ok, mismatch, cls_count),
            "checks_ok": checks_ok, "hard": hard,
            "non_claims": ["只读；不改 SPEC/板/阈值/冻结源", "桥区 polygons=[] 的缺失归 CO-98 declared_pending_l3 桶，不在本件重复计缺陷",
                           "一阶判据：点采样（端点+相邻中点）；不做网格/有限元"]}
     Path(a.out).write_text(json.dumps(rec, ensure_ascii=False, indent=1, sort_keys=True) + "\n")
     print("CO-106 verdict=%s | A dev=%d | B full_void_segs=%d missing_pts=%d (viol groups=%d) | teeth=%s" % (
-        rec["verdict"], len(dev), len(full_void), len(in_board_void), len(viol), teeth["teeth_ok"]))
+        rec["verdict"], len(dev), len(full_void), len(in_board_void), len(viol), teeth_ok))
     for k in ("A_frame_inset_consistency", "B_reference_continuity"):
         print("  ", k, "ok=", checks[k]["ok"])
     print("   frame deviations:", json.dumps(dev, ensure_ascii=False))
