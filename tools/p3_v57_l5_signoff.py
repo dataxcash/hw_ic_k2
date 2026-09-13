@@ -9,6 +9,10 @@
 CO-212（L2 自裁）：三条记录均须**钉被评板指纹**（`board` / `board_sha256`）── 原仅 FAB 记录有，
 SI/PI/EMC 与 DFM/DFT 之 PASS 无从判定「评的是哪一块板」⇒ 板变更后不会可见地失效；现补齐并加 fail-closed 自检。
   m13_v57_l5_g7_record.md            G7 记录（verdict：证据 → 是否需回上层）
+
+CO-213（L2 自裁 · 复评 F-4 处置）：CO-212 之判别齿只判「板指纹 ≠ 全零哨兵」⇒ 不判别**评的是冻结源还是交付板**
+（二者可互换而齿不响）。现以 DFM 记录之 `baseline_sha256`（冻结源板）为**对照**：须 baseline 确为冻结源板、
+被评板 ≠ 冻结源板、三件皆钉被评板且非退化 ⇒ 「评错板」即 fail-closed（L5-DFM.7 → .8 / L5-SI.7 → .8 / L5-G7.7 → .8）。
 CLI: run under KiCad python (pcbnew); kicad-cli auto-found.
 """
 from __future__ import annotations
@@ -161,7 +165,7 @@ def main() -> int:
             if _m and _m.group(1) in in_scope:
                 _ins_uc[_m.group(1)] = _ins_uc.get(_m.group(1), 0) + 1
     _ins_uc_items = sum(_ins_uc.values())
-    dfm = {"artifact": "m13_v57_l5_dfm_dft_record", "schema": 1, "revision": "L5-DFM.7",
+    dfm = {"artifact": "m13_v57_l5_dfm_dft_record", "schema": 1, "revision": "L5-DFM.8",
            # CO-212：判定基据须钉**被评态**（原缺板指纹 ⇒ 板变更后本 verdict 不会可见地失效；与 FAB 记录同构）
            "board": str(L4_PCB.relative_to(K2)), "board_sha256": sha(L4_PCB), "baseline_sha256": sha(SRC_PCB),
            "drc": {"tool": f"kicad-cli {subprocess.run([str(CLI),'--version'],capture_output=True,text=True).stdout.strip()}",
@@ -243,7 +247,7 @@ def main() -> int:
     _spec = json.loads((STEP2.parent / "SPEC_k2_v4.spec-rev-7.json").read_text(encoding="utf-8"))
     _spec_nc = _spec["net_classes"]["PCIe85"]
     _pg = _pair_geometry(rec["segments"])          # CO-53: 对内/对间几何实测
-    si = {"artifact": "m13_v57_l5_si_pi_emc_record", "schema": 1, "revision": "L5-SI.7",
+    si = {"artifact": "m13_v57_l5_si_pi_emc_record", "schema": 1, "revision": "L5-SI.8",
           # CO-212：同上 —— 等长/线宽/平面 verdict 须钉被评板（原缺）
           "board": str(L4_PCB.relative_to(K2)), "board_sha256": sha(L4_PCB),
           "SI": {"track_width_rule_mm_by_layer": _wmap, "all_pcie_tracks_match_spec_width": widths_ok,
@@ -305,7 +309,7 @@ def main() -> int:
                "物理长度判据仍 PASS，缺陷根因 = 等长补偿只按物理长度（未按层加权）")
     g7 = f"""# G7 / L5 记录 — k2 v57（8L）
 
-> revision **L5-G7.7**｜图纸 **{art['revision']}** `{s16(DRAWING)}`｜L4 板 `{s16(L4_PCB)}`（含 SPEC 逃逸区规则域 CO-37）
+> revision **L5-G7.8**｜图纸 **{art['revision']}** `{s16(DRAWING)}`｜L4 板 `{s16(L4_PCB)}`（含 SPEC 逃逸区规则域 CO-37）
 > 产生：`tools/p3_v57_l5_signoff.py`（{dfm['drc']['tool']}，{dfm['revision']}）——**随 L5 每次重跑确定性重生成**
 > ｜历史 FAIL 叙事见 CO-37/CO-43/CO-44/CO-45 变更单与 git（本件取代 L5-G7.5 的 new=60 口径）。
 
@@ -347,16 +351,20 @@ def main() -> int:
 ｜`.kicad_dru` `{s16(L4_DRU)}`
 冻结四源 `{s16(STEP2.parent / 'SPEC_k2_v4.json')} / {s16(STEP2 / 'm13_v57_s1_page_manifest.json')} / {s16(SRC_PCB)} / {s16(RULES)}`（未改）。
 
-End of G7 record（L5-G7.7，机器生成）。
+End of G7 record（L5-G7.8，机器生成）。
 """
     (STEP2 / "m13_v57_l5_g7_record.md").write_text(g7, encoding="utf-8")
     print("L5: FAB ok | DFM verdict=%s new=%d (disappeared=%d) %s | in_scope_unconnected=%d/%d nets | SI verdict=%s skew=%.4f" %
           (dfm["verdict"], dfm["drc"]["new_total"], dfm["drc"]["disappeared_total"], dfm["drc"]["new_violations"],
            dfm["dft"]["in_scope_unconnected_nets"], dfm["dft"]["in_scope_nets"], si["verdict"], skew_max))
     # CO-212：三条记录**均须**钉被评板指纹，且与当前板一致（判定基据 = 被评态）── 缺/漂移即 fail-closed。
-    _bp = sha(L4_PCB)
-    board_pin_ok = all(r.get("board_sha256") == _bp for r in (fab, dfm, si))
-    board_pin_discriminates = (dfm.get("board_sha256") != "0" * 64)
+    # CO-213：判别齿以**冻结源板**为对照（原齿仅判「≠ 全零哨兵」⇒ 评错板不响）。
+    _bp, _bs = sha(L4_PCB), sha(SRC_PCB)
+    _pins = [r.get("board_sha256") for r in (fab, dfm, si)]
+    board_pin_ok = all(p == _bp for p in _pins)
+    board_pin_discriminates = (dfm.get("baseline_sha256") == _bs and _bs != _bp
+                               and all(p != _bs for p in _pins)
+                               and all(isinstance(p, str) and p and p != "0" * 64 for p in _pins))
     # CO-47：签核脚本退出码须等于门禁判定（原实现无条件 return 0，CI 无法据此判失败）
     _ok = (dfm["verdict"] == "PASS" and si["verdict"] == "PASS" and board_pin_ok
            and board_pin_discriminates)

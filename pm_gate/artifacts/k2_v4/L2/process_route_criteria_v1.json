@@ -17,6 +17,10 @@
   {
    "by": "CO-211",
    "what": "决策规则**求值化**：cost expr 补 `+ k_rederivation*G`（原规则引用 `cost(重派生)` 而无对应参数，规则不可表达）+ 新增参数 `k_rederivation`（INPUT_REQUIRED）+ 新增 `decision` 块（规则/前置/禁编造）；自声明面 v1.3 → v1.4"
+  },
+  {
+   "by": "CO-213",
+   "what": "B 可行性前置**求值化（数据驱动）**：`F4_route_predicates.B` 增机读 `measured_placement{placed,total}`，`decision` 增 `precondition`（谓词 = placed == total，缺字段 fail-closed）；执行器改由该字段求值前置（原为代码常量 ⇒ 判据件侧任何编辑都无法改判）；自声明面 v1.4 → v1.5"
   }
  ],
  "cost_model": {
@@ -94,6 +98,12 @@
     "design_change": "REQUIRED（层分配 + 走廊/列重派生 + 阻抗重签）",
     "feasible_if": "存在层分配使**每一支孔都外层锚定**（F1 全过）",
     "measured": "D 族（竖段落外层）<=14/32；lane 落外层族 = 26/32（lane 置于**私有内层** In6 ⇒ 3W 取内层 0.48，**乐观**）/ **24/32**（lane 按**外层** 3W=0.615 复测，CO10_LANE_OUTER）",
+    "measured_placement": {
+     "placed": 24,
+     "total": 32,
+     "measure": "lane 落外层族（外层 3W=0.615 口径）= 族最优",
+     "source_ref": "CO-206b 口径修正 / CO-209 族闭合直接行使（§82）"
+    },
     "structural_note": "竖段与 lane 须异层（否则真交叉）；corner 须外层锚定 ⇒ （E 或 L 外层）且（L 或 S 外层）⇒ 该路只有两族：D 族（E,S 落外层，lane 内层）与 lane 落外层族。",
     "unverified_inputs": [
      "10L 叠层与阻抗表",
@@ -201,7 +211,7 @@
   "hint_in_corpus": "能力页有定性锚：'hole size with via diameter less than 0.45mm, will cost more'（仅定性）"
  },
  "purpose": "给定设计约束，输出工艺路线的 可行性/成本/交期/性能/风险 对比 + 推荐。判据先行、可复现、可复用（非一次性）。",
- "revision": "v1.4",
+ "revision": "v1.5",
  "risk_catalog": {
   "A_advanced_hdi": [
    "DFM review 结论未知（可能退回改设计）",
@@ -228,6 +238,12 @@
   "rule_id": "B_if_feasible_and_cheaper_else_A",
   "rule": "B 优于 A ⇔ （B 可行性已证：每支孔外层锚定 = 32/32 全落位）且（C_B < C_A）；否则 A。",
   "precondition_note": "B 现行最优 = 24/32 ⇒ **未证** ⇒ 前置不满足 ⇒ 规则恒取 A（与成本无关）。",
+  "precondition": {
+   "route": "B",
+   "field": "criteria.F4_route_predicates.B_add_signal_layers_all_through.measured_placement",
+   "predicate": "placed == total（全落位方为已证）",
+   "fail_closed": "字段缺失/退化（total<=0）⇒ 视为未证 ⇒ 恒取保守路 A"
+  },
   "no_fabrication": "任一参数 value=null ⇒ 该路成本/交期 value=null，**不作伪排序**（只出模型 + 所需输入清单）。",
   "vars": {
    "L": "信号层数",

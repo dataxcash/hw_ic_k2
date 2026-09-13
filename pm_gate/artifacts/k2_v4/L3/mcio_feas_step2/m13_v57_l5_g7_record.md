@@ -1,7 +1,7 @@
 # G7 / L5 记录 — k2 v57（8L）
 
-> revision **L5-G7.7**｜图纸 **W3-CN.43** `60cbd331836e52b7`｜L4 板 `d4e81f647be7f980`（含 SPEC 逃逸区规则域 CO-37）
-> 产生：`tools/p3_v57_l5_signoff.py`（kicad-cli 10.0.5，L5-DFM.7）——**随 L5 每次重跑确定性重生成**
+> revision **L5-G7.8**｜图纸 **W3-CN.43** `60cbd331836e52b7`｜L4 板 `d4e81f647be7f980`（含 SPEC 逃逸区规则域 CO-37）
+> 产生：`tools/p3_v57_l5_signoff.py`（kicad-cli 10.0.5，L5-DFM.8）——**随 L5 每次重跑确定性重生成**
 > ｜历史 FAIL 叙事见 CO-37/CO-43/CO-44/CO-45 变更单与 git（本件取代 L5-G7.5 的 new=60 口径）。
 
 ## 1. 结论（G7 PASS）
@@ -38,8 +38,8 @@
 ## 5. 指纹
 图纸 `60cbd331836e52b7`｜landing `f3d05a7701b4d788`｜G5 `8b385d6c554ac527`
 ｜L4 construction `d11a38519482b0cf`｜L4 validation `aa666a49e36883c7`｜L4 板 `d4e81f647be7f980`
-｜fab `791012e88b514faa`｜dfm `3671c02a22463372`｜si `f54183a16b9bf12e`
+｜fab `791012e88b514faa`｜dfm `6632179e1ef63183`｜si `378617404f6019d5`
 ｜`.kicad_dru` `3148703240d54420`
 冻结四源 `0bd52ed48e720b8c / a8ef3ea8ecff99d7 / fb07d25ac426ff84 / 0a459839e15960b8`（未改）。
 
-End of G7 record（L5-G7.7，机器生成）。
+End of G7 record（L5-G7.8，机器生成）。

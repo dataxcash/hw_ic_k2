@@ -65,6 +65,9 @@ SNAPSHOT_DECLARED = {
     "m13_v57_co146_jlc_rebind.json": "历史：register 时点快照；CO-152 起同类字段一律禁止，本件留存为历史",
     "m13_v57_co159_rev19_co156_co157_co158_review.json": "CO-159 复评件：`register` 计数取自 as-found 锚点（`git show c4e951c`），"
                                                          "为不可变历史值（非下游时点观测）⇒ 不随运行序漂移",
+    "m13_v57_co213_rev19_co207_co212_review.json": "CO-213 复评件：`as_found.*`（含 `register_sha16` / `boundary_sha16` / `runner_sha16` 等）"
+                                                   "均取自 **as-found 快照 `f0016ae`**（`git show`）之不可变历史值（非下游时点观测）"
+                                                   "⇒ 不随运行序漂移（同 CO-159 声明口径）",
 }
 DELIVERED_BOARD = "d4e81f647be7f980"
 # CO-157（H-3）：`board_superseded` 的「机判可证」须是**格式可判的板 sha16**，自由文本不算证据。

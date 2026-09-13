@@ -3,6 +3,9 @@
 
 CO-211（L2 自裁）：把**决策规则求值化** —— 原实现恒返回 cost/lead value=None 且 pick="A"（规则从未求值，
 与「规则已编码、填参后复算」之声明不符）；现按 `criteria.decision` 求值（含「B 须先证 32/32」前置）+ 闭式安全求值器 + 求值齿。
+CO-213（L2 自裁 · 复评 F-1 处置）：前置**再求值化** —— CO-211 之 `_proven["B"]` 仍为代码常量
+（判据件侧任何编辑都无法改判，仅内存注入可达）；现改由判据件机读字段 `F4_route_predicates.B.measured_placement`
+求值（`placed == total`；缺字段/退化 ⇒ fail-closed 视为未证），并加**数据驱动**求值齿 t07（零代码改动即改判）。
 
 给定设计约束（叠层 + 过孔普查 + 判据件），输出工艺路线的
   可行性 / 成本 / 交期 / 性能 / 风险 对比 + 推荐；**判据先行、可复现、可复用**。
@@ -151,6 +154,21 @@ def _eval_expr(expr: str, vars: dict):
     return None if (v is None or pos[0] != len(toks)) else v
 
 
+def b_feasibility(criteria: dict):
+    """CO-213：B 可行性前置**求值自判据件机读字段**（非代码常量）。
+
+    谓词 = `F4_route_predicates.B_add_signal_layers_all_through.measured_placement`
+    之 `placed == total`（全落位 32/32 方为「已证」）；字段缺失/类型错/退化(total<=0)
+    ⇒ 视为未证（fail-closed）—— 与 `decision.precondition` 声明同源（规则与其前置同处声明）。
+    """
+    try:
+        mp = criteria["criteria"]["F4_route_predicates"]["B_add_signal_layers_all_through"]["measured_placement"]
+        placed, total = int(mp["placed"]), int(mp["total"])
+    except (KeyError, TypeError, ValueError):
+        return False, None
+    return (total > 0 and placed >= total), {"placed": placed, "total": total}
+
+
 def evaluate(criteria: dict, facts: dict) -> dict:
     """三路 A/B/C 的可行性 / 性能 / 风险（成本与交期走参数模型；缺参则只出模型+所需输入）。"""
     cm, lm = criteria["cost_model"], criteria["lead_time_model"]
@@ -211,7 +229,9 @@ def evaluate(criteria: dict, facts: dict) -> dict:
         "verification": ["须与另一路组合（埋孔仍需 A 或 B 处置）"]}
 
     # CO-211：按符号绑定**求值**（缺参 ⇒ value=None 且列缺失；不越权编造）；并标注可行性是否已证。
-    _proven = {"A": None, "B": False, "C": False}     # B 须 32/32 全落位方为 True；A 为「待 DFM」而非未证
+    # CO-213：前置**取自判据件**（原为代码常量 ⇒ 判据件侧编辑无法改判）；A 为「待 DFM」而非未证。
+    b_proven, b_placement = b_feasibility(criteria)
+    _proven = {"A": None, "B": b_proven, "C": False}
     for k, rt in routes.items():
         v = route_vars(k, facts)
         cmiss = [n for n, p in cm["parameters"].items() if p["value"] is None]
@@ -225,6 +245,8 @@ def evaluate(criteria: dict, facts: dict) -> dict:
         rt["lead_time"]["value"] = None if lmiss else _eval_expr(
             lm["expr"], {**v, **{n: p["value"] for n, p in lm["parameters"].items()}})
         rt["feasibility"]["proven"] = _proven[k]
+        if k == "B":
+            rt["feasibility"]["measured_placement"] = b_placement   # CO-213：前置之来源（可追溯）
     return routes
 
 
@@ -301,6 +323,18 @@ def main() -> int:
     _r_full = evaluate(_with_params(criteria, _vals), facts)          # 参数齐备（B 明显更省）
     _r_provenB = _copy.deepcopy(_r_full)
     _r_provenB["B"]["feasibility"]["proven"] = True                   # 假设 B 已证 32/32
+    def _set_placement(c: dict, placed: int, total: int) -> dict:
+        """CO-213：只改判据件**数据**（零代码改动）—— 用于 t07 数据驱动正/负控。"""
+        d = _copy.deepcopy(c)
+        d["criteria"]["F4_route_predicates"]["B_add_signal_layers_all_through"]["measured_placement"] = {
+            "placed": placed, "total": total}
+        return d
+
+    def _drop_placement(c: dict) -> dict:
+        d = _copy.deepcopy(c)
+        d["criteria"]["F4_route_predicates"]["B_add_signal_layers_all_through"].pop("measured_placement", None)
+        return d
+
     def _dummies(pars: dict) -> dict:
         return {n: (p["value"] if p["value"] is not None else 1.0) for n, p in pars.items()}
     teeth = {
@@ -319,6 +353,16 @@ def main() -> int:
             and _eval_expr("C = k_layer*L + bogus", {"k_layer": 1, "L": 8}) is None
             and _eval_expr("C = 1/0", {}) is None
             and _eval_expr("C = __import__('os')", {}) is None),
+        "t07_precondition_evaluated_from_criteria": (
+            # 正控（**只改判据件数据、零代码改动**）：placed==total ⇒ 前置成立 ⇒ 可改判为 B
+            recommend(evaluate(_set_placement(_with_params(criteria, _vals), 32, 32), facts), facts)["pick"] == "B"
+            # 负控：placed<total（现行 24/32）⇒ 前置不成立 ⇒ 保守路 A
+            and recommend(evaluate(_set_placement(_with_params(criteria, _vals), 24, 32), facts), facts)["pick"] == "A"
+            # 负控：字段缺失（退化）⇒ fail-closed 视为未证 ⇒ A（不得因缺字段而误判「已证」）
+            and recommend(evaluate(_drop_placement(_with_params(criteria, _vals)), facts), facts)["pick"] == "A"
+            # 判别力：字段确实被读（24/32 vs 32/32 前置不同）
+            and b_feasibility(_set_placement(criteria, 24, 32))[0] is False
+            and b_feasibility(_set_placement(criteria, 32, 32))[0] is True),
         "t06_expr_vars_all_bound": all(
             _eval_expr(criteria["cost_model"]["expr"],
                        {**route_vars(k, facts), **_dummies(criteria["cost_model"]["parameters"])}) is not None
@@ -327,7 +371,7 @@ def main() -> int:
             for k in "ABC"),
     }
     doc = {
-        "artifact": "m13_v57_co206_process_route_selection", "schema": 1, "revision": "CO-206.3",
+        "artifact": "m13_v57_co206_process_route_selection", "schema": 1, "revision": "CO-206.4",
         "date": "2026-09-14",
         "authority": "监理指令 #13（工艺选型/性价比对比 立为 ENG 常规功能）",
         "nature": "工艺路线 A/B/C 对比 + 推荐（只读；零坐标搜索；不改板/图纸/SPEC/冻结四源）",
@@ -340,7 +384,7 @@ def main() -> int:
         "gate": {"criteria_declared": True, "deterministic": True, "no_coordinate_search": True,
                  "cost_numbers_fabricated": False, "decision_rule_evaluated": True},
         "teeth": teeth,
-        "redline": "只读冻结四源；未改 canonical 图纸 / 交付板 / 构造器；无 sign-off；承 R-CO208-1（同一量多处引用须同 commit 同步口径）"
+        "redline": "只读冻结四源；未改 canonical 图纸 / 交付板 / 构造器；无 sign-off；承 R-CO208-1（同一量多处引用须同 commit 同步口径）+ R-CO213-1（决策前置须自判据件求值，禁代码常量）"
     }
     out = Path(a.out); out.write_text(json.dumps(doc, ensure_ascii=False, indent=1, sort_keys=True), encoding="utf-8")
     _write_md(Path(a.md), doc)

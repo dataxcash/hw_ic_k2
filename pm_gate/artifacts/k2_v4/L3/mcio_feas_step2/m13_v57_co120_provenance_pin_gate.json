@@ -191,7 +191,7 @@
    "status": "exempt_historical"
   },
   {
-   "actual": "f54183a16b9bf12e",
+   "actual": "378617404f6019d5",
    "cited": "73f9b59ed5f6f3ce",
    "key": "l5_si_record",
    "record": "m13_v57_co111_in5_pcie_corridor_exposure.json",
@@ -283,6 +283,7 @@
   "m13_v57_co133_pdn_construction_apply.json": "上游稳定：board_sha16_after = 交付板 d4e81f647be7f980（非下游漂移）",
   "m13_v57_co146_jlc_rebind.json": "历史：register 时点快照；CO-152 起同类字段一律禁止，本件留存为历史",
   "m13_v57_co159_rev19_co156_co157_co158_review.json": "CO-159 复评件：`register` 计数取自 as-found 锚点（`git show c4e951c`），为不可变历史值（非下游时点观测）⇒ 不随运行序漂移",
+  "m13_v57_co213_rev19_co207_co212_review.json": "CO-213 复评件：`as_found.*`（含 `register_sha16` / `boundary_sha16` / `runner_sha16` 等）均取自 **as-found 快照 `f0016ae`**（`git show`）之不可变历史值（非下游时点观测）⇒ 不随运行序漂移（同 CO-159 声明口径）",
   "m13_v57_co68_option_a_execute_derive.json": "历史：lid_rev5/spec_rev4 时点快照，已被 CO-113+ 取代",
   "m13_v57_co72_pdn_align.json": "历史：spec_rev5 时点快照，已被 CO-113+ 取代",
   "m13_v57_co73_layer_role_consistency.json": "历史：spec_rev6 时点快照，已被 CO-113+ 取代",
@@ -316,6 +317,14 @@
    ],
    "reason": "CO-159 复评件：`register` 计数取自 as-found 锚点（`git show c4e951c`），为不可变历史值（非下游时点观测）⇒ 不随运行序漂移",
    "record": "m13_v57_co159_rev19_co156_co157_co158_review.json"
+  },
+  {
+   "declared": true,
+   "keys": [
+    "as_found.register_sha16"
+   ],
+   "reason": "CO-213 复评件：`as_found.*`（含 `register_sha16` / `boundary_sha16` / `runner_sha16` 等）均取自 **as-found 快照 `f0016ae`**（`git show`）之不可变历史值（非下游时点观测）⇒ 不随运行序漂移（同 CO-159 声明口径）",
+   "record": "m13_v57_co213_rev19_co207_co212_review.json"
   },
   {
    "declared": true,

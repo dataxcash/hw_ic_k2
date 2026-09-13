@@ -2758,6 +2758,10 @@ def main() -> int:
              "- **CO-208 口径同步补完（本 § 之 part）**：CO-206b 只改了主判据字段，`recommendation.basis[0]` 与判据件 `risk_catalog.B[0]` 仍滞留 26/32 ⇒ CO-208 补齐"
              "（执行器 **CO-206.2** / 判据件 **v1.3**）⇒ 明细见 §81 F-1 处置。",
              "",
+             "- **CO-213 追注（pin 语义，勿误读）**：本表 sha 由本写入器之「**现行态 pin 再对齐**」机制**实时**取自当前实件 ⇒ "
+             "同排之**历史版本标签**（如 `CO-206.2` / `v1.3`）与 sha **可能不同版**（标签 = 本节成文时之口径；sha = 现行实件）。"
+             "本节所涉两件之**现行**版本 = **执行器 CO-206.4 / 判据件 v1.5**（见 §86，R-CO213-2）。",
+             "",
              "| 工件 | sha16 |", "|---|---|"]
     _rows79 = [("判据件 `process_route_criteria_v1.json`（**v1.3**）", L2 / "process_route_criteria_v1.json"),
                ("执行器 `p3_v57_co206_process_route_select.py`（**CO-206.2**）", K2 / "tools/p3_v57_co206_process_route_select.py"),
@@ -3007,6 +3011,79 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body85
 
+    # ── §86 CO-213（非执行者对抗复评 CO-207..CO-212 + 处置） ──
+    MARK86 = "## 86. CO-213"
+    _rc86 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    sec86 = [MARK86 + "（**非执行者对抗复评 CO-207..CO-212 + 同会话处置**）", "",
+             "- **性质/授权**：本谱系（z60..z77）之外之续接会话（context 归零）复评 **CO-207..CO-212**（CO-202..CO-206c 已由 CO-207 复评、"
+             "由 CO-208 收口）并**同会话处置**全部 findings —— 被评 CO 之作者谱系与本件无交集（非自评）。",
+             "- **as-found（R-CO207-1 / R-CO193-3）**：被评态快照 = **`f0016ae`**（CO-212）；一切「现行态」判定皆由该快照重放"
+             "（`git show f0016ae:<path>`）或本会话独立复算，**不引用**被评记录之结论。",
+             "- **正控（独立复算，全 True）**：V1 冻结四源 4/4 MATCH；V2 交付板 = `d4e81f647be7f980`（逐字节未变）；V3 runner `--check` t01..t33 全 True（35）；"
+             "V4 工艺选型执行器**幂等**（连跑同 sha）且齿全 True；V5 CO-209 族闭合求解器**幂等**（证据 sha 恒 `73a78fa1b6c1e90c`）且数值复算 = §82 所载"
+             "（v9 32/32 · candC+BRCOL 24/32 · +COLFIX 23/32 · CARRYALL 15/32 · JOINT 19–20/32）；V6 L5 三件记录 `board_sha256` = 现行 L4 板；"
+             "V7 打样包 37 payload / 牙齿 **29/29**；V8 登记簿 151 项 / OPEN 0（co124 PASS、co168 rc=0）；V9 包内裁定副本与源**逐字节同**；"
+             "V10 `SPEC_k2_v4.spec-rev-7` 与 `-rev-19` 之 `impedance` **逐字节同**（CO-212 并存事实成立）。",
+             "- **负控（判别力；内存注入、零落盘）**：P1 交接件 pin 解析器对伪造 sha 判否；P2「同文件同 sha 多标签」探测器对无冲突样本不误报；"
+             "P3「前置可否由判据件**数据**翻转」探测器：as-found **否**（= F-1 证据）、注入机读字段后**是**；P4 全工具集 `board_sha256` 之**消费面** = ∅（= F-4 证据）。",
+             "- **F-1（TOOL_DEFECT · low）前置仍是代码常量**：`recommend()` 之 B 前置取 `_proven = {\"B\": False}` 字面量，判据件 `decision.precondition_note` 仅为散文 ⇒ "
+             "**判据件侧任何编辑（含把 `measured` 改为 32/32）皆不能改判**，唯一可翻转者 = 改 Python 常量或 t04 之内存注入 ⇒ CO-211 修了**成本臂**，"
+             "**可行性臂**仍属「声明↔实现」漂移（违 R-CO211-1「规则与其前置同处声明、实现与声明同源」）。**处置**：判据件 `F4_route_predicates.B` 增机读 "
+             "`measured_placement{placed,total}` + `decision.precondition`（谓词 = `placed == total`；缺字段/退化 ⇒ fail-closed 视为未证）；执行器 "
+             "**CO-206.3 → CO-206.4** 改由该字段求值 `proven`，并加**数据驱动**求值齿 **t07**（只改判据件数据即改判为 B；placed<total 或字段缺失 ⇒ 保守路 A）；"
+             "判据件 **v1.4 → v1.5**；重出证据件 ⇒ 齿 **7/7**。**R-CO213-1**。",
+             "- **F-2（RECORD_HYGIENE · low）交接件政策层 pin 陈旧**：z77 §1 之 `L2_RULING_process_route_selection_v2.md` pin = `1542a84cf4859de6`"
+             "（= CO-206b `14bd37c` 之内容）；CO-211（`86d612b`）追加 §2 R3′ 前置注记后现行 = `d258f67957a448d0` ⇒ z77 自称修正 2 处陈旧 pin 后**仍残留 1 处**。"
+             "**处置**：于 z78 更正该 pin，并把「写件时复核」扩至**政策层表格**（原仅查 canonical 工件表）。",
+             "- **F-3（RECORD_HYGIENE · low）现行态 pin 再对齐之标签↔sha 同排不一致（系统性）**：本写入器之再对齐只重写 sha、不改同排**历史版本标签** ⇒ "
+             "同排标签与 sha 可不同版（实测：§79 两行标 `CO-206.2`/`v1.3` 而 pin 已为 CO-206.3/v1.4 之内容；全表同文件同 sha 对多枚历史标签之行数十处，"
+             "如 runner 一行一 sha 而标签跨 CO-164..CO-203.1）；§79 亦残留 CO-211 已证伪之「（已编码，填参后自动复算）」表述而无 §84 指针 ⇒ 读者可能据行内标签误判版本。"
+             "**处置**：机制**不改**（现行态对齐为**有意**设计；逐行改写 456 处历史标签反致伪史）⇒ §79 补**追注**（标签 = 成文时口径；sha = 现行实件）+ 本节显式登记该语义。**R-CO213-2**。",
+             "- **F-4（TOOL_DEFECT · low）CO-212 之板指纹在消费面无机判、且判别齿过弱**：其判别齿只判「≠ 全零哨兵」，**不判别「评的是冻结源还是交付板」**（二者互换而齿不响）；"
+             "且全工具集扫描 `board_sha256` 之**消费者 = ∅**（仅 L5 工具自身自检；序内/各闸皆不读三件记录之板指纹）⇒ 板变更后记录不刷新仍**只对人眼可见**。"
+             "**处置**：自检改**真判别** —— DFM `baseline_sha256` 须 = 冻结源板、被评板 ≠ 冻结源板、三件皆钉被评板且非退化（「评错板」即 rc≠0）；"
+             "记录 **L5-DFM.7→.8 / L5-SI.7→.8 / L5-G7.7→.8**；**消费面机判**列为**有据延后**（触发 = 板变更或下次 L5 重跑）。",
+             "- **本件自捕获（处置期，如实登记）**：复评件自身之 `as_found.register_sha16`（**as-found 锚点**）触发 co120 之**下游快照键名启发式** ⇒ "
+             "依 CO-159 先例于 co120 `SNAPSHOT_DECLARED` **声明**（理由 = 取自 `git show f0016ae` 之不可变历史值，非下游时点观测）；co120 复归 **PASS**"
+             "（`unresolved_key` 1 项（co85 记录）**as-found 即存在**且判据明示「不计失败」）。",
+             "- **不成立之疑点（如实登记，免后误判）**：① z77「收敛 sha `645d544efcdacbdf`」**非**报告文件自身 sha，而是报告 `iterations[*].sha`（受控集快照）—— 实测一致，"
+             "**非缺陷**（措辞易误读；z78 改称「收敛快照 sha」）；② §79 与 §84 对同一文件给两枚不同标签但**同一 sha** ⇒ 属 F-3 之现象，非两处独立定值。",
+             "- **未复核项（诚实边界）**：B 路 10L 叠层之**实做**（须 L1/几何）、跨页 y 交错（须改几何）不在本件域；外部 JLC advanced/HDI 人工报价仍为唯一外部阻断。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows86 = [("判据件 `process_route_criteria_v1.json`（**v1.5**：+机读 `measured_placement` / +`decision.precondition`）", L2 / "process_route_criteria_v1.json"),
+               ("执行器 `p3_v57_co206_process_route_select.py`（**CO-206.4**：前置自判据件求值 + 数据驱动齿 t07）", K2 / "tools/p3_v57_co206_process_route_select.py"),
+               ("证据 `m13_v57_co206_process_route_selection.json`（7 齿全 True）", STEP2 / "m13_v57_co206_process_route_selection.json"),
+               ("证据 `m13_v57_co206_process_route_selection.md`", STEP2 / "m13_v57_co206_process_route_selection.md"),
+               ("工具 `p3_v57_l5_signoff.py`（CO-213：板指纹**真判别**（对照冻结源））", K2 / "tools/p3_v57_l5_signoff.py"),
+               ("记录 `m13_v57_l5_dfm_dft_record.json`（**L5-DFM.8**）", STEP2 / "m13_v57_l5_dfm_dft_record.json"),
+               ("记录 `m13_v57_l5_si_pi_emc_record.json`（**L5-SI.8**）", STEP2 / "m13_v57_l5_si_pi_emc_record.json"),
+               ("G7 记录 `m13_v57_l5_g7_record.md`（L5-G7.8）", STEP2 / "m13_v57_l5_g7_record.md"),
+               ("复评件 `m13_v57_co213_rev19_co207_co212_review.json`", STEP2 / "m13_v57_co213_rev19_co207_co212_review.json"),
+               ("复评卡 `m13_v57_CO213_rev19_co207_co212_review.md`", STEP2 / "m13_v57_CO213_rev19_co207_co212_review.md"),
+               ("复评工具 `p3_v57_co213_rev19_co207_co212_review.py`", K2 / "tools/p3_v57_co213_rev19_co207_co212_review.py"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc86['total']} 项 / OPEN {_rc86['OPEN']}）", L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows86:
+        if pth.exists():
+            sec86.append(f"| {label} | `{s16(pth)}` |")
+    sec86.append("")
+    sec86.append("> **R-CO213-1**：决策规则之**前置**（可行性/门限类）须与规则**同处声明**，并由**判据件机读字段**求值；"
+                 "禁以代码常量表达前置（否则「填报即改判」为伪）；前置语义变更须**同 commit 双侧**（判据件 + 执行器）同步。")
+    sec86.append("")
+    sec86.append("> **R-CO213-2**：boundary 内为**现行态对齐**（sha 实时取自实件）—— 同排**历史版本标签**不得用作 sha 之版本判据；"
+                 "判版本须读该节之现行版本注（如 §79 追注）或对应 CO 节。")
+    sec86.append("")
+    sec86.append("> **R-CO213-3**：复评件须钉**被评态快照**（承 R-CO207-1）；findings 之「修后」证据须为**本会话实测**（禁引被评记录之自述）。")
+    sec86.append("")
+    sec86.append("> **序不变**：本件未改步骤集/序列（承 §82 之 R-CO209-2）。")
+    sec86.append("")
+    body86 = "\n".join(sec86)
+    if MARK86 in txt:
+        txt = re.sub(re.escape(MARK86) + r"[\s\S]*?(?=\n## |\Z)", body86, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body86
+
+    txt = txt.replace("W3 Boundary **v2.53**", "W3 Boundary **v2.54**")
     txt = txt.replace("W3 Boundary **v2.52**", "W3 Boundary **v2.53**")
     txt = txt.replace("W3 Boundary **v2.51**", "W3 Boundary **v2.52**")
     txt = txt.replace("W3 Boundary **v2.50**", "W3 Boundary **v2.51**")
