@@ -1,0 +1,51 @@
+# CO-206.1 工艺选型 / 性价比对比（A/B/C）
+
+板 `k2_v4_8L.l4.kicad_pcb` sha16 `d4e81f647be7f980`｜判据件 `pm_gate/artifacts/k2_v4/L2/process_route_criteria_v1.json` sha16 `5c2091f0fad5c962`｜介质总厚 1.425mm
+
+过孔普查：493 支；通孔+背钻可制 **405**；需盲/埋孔 **88**（其中两端内层=埋孔，层压次数下界 >= 3）
+
+| 类 | 支数 | 外层锚定 | 残桩 mm | 通孔+背钻可制 |
+|---|---|---|---|---|
+| F.Cu->B.Cu | 273 | 是 | 0.0 | 可 |
+| F.Cu->In2.Cu | 92 | 是 | 0.0 | 可 |
+| F.Cu->In5.Cu | 8 | 是 | 0.0 | 可 |
+| In2.Cu->In5.Cu | 88 | **否** | 0.3664 | **不可** |
+| In5.Cu->B.Cu | 32 | 是 | 0.0 | 可 |
+
+## A/B/C 对比
+
+| 路 | 可行性 | 成本 | 交期 | 性能（残桩/SI） | 风险（摘要） |
+|---|---|---|---|---|---|
+| **A** JLC advanced/HDI 盲埋孔（专属通道） | FEASIBLE_PENDING_DFM | INPUT_REQUIRED | INPUT_REQUIRED | 盲埋孔为设计意图形态，无背钻残桩；SI 按现行 SPEC 不变 | DFM review 结论未知（可能退回改设计） |
+| **B** 加信号层全通孔（如 10L） | UNPROVEN | INPUT_REQUIRED | INPUT_REQUIRED | 全通孔+背钻 ⇒ 残桩可至 0；但 lane 落外层 = 微带，须重签阻抗与 SI | 可行性未证：现行模型 26/32（lane 落外层候选，修正 span 模型） |
+| **C** 盘中孔 via-in-pad（6+ 层成熟工艺） | PARTIAL_INSUFFICIENT_ALONE | INPUT_REQUIRED | INPUT_REQUIRED | 不改变残桩性质；解决的是布线密度 | 不能替代 88 支埋孔 ⇒ 单独不足以解阻断 |
+
+## 依据（可行性）
+
+**A**
+- 需盲/埋孔支数 = 88（不在标准通道可制集内）
+- 物理层序推得**层压次数下界 = 3**（In2..In5 腔：上方跳 F,In1 / 下方跳 In6,B 各 2 层）
+- 等效 HDI 阶数 >= 2（指示性映射，须板厂确认；本工程抓取件未声明阶数上限）
+- 抓取件 FAQ 明列 advanced options 含 blind/buried vias 与 HDI (laser vias)，须 DFM review
+
+**B**
+- 充分条件：存在层分配使每支孔外层锚定（F1 全过）
+- 必要条件（确定性）：lane 必须落外层，否则 corner 为内层<->内层 ⇒ 该路无解
+- 实测（现行模型，修正 span）：lane 落外层的候选 = 26/32 落位 ⇒ 未达全落位，可行性未证
+
+**C**
+- 可替代：仅**盲孔**（一端外层）= 132 支
+- 不可替代：**埋孔**（两端内层）= 88 支 —— 埋孔不在任何外层焊盘之下
+- 抓取件明列 Via-in-Pad Process（epoxy/copper paste filled & capped，4-32 层，可在 BGA 焊盘内放孔）
+
+## 推荐
+
+**A**（次选 B）
+
+- ① 可行性：A 是本设计**唯一无需重派生**即可落地的路（现行图纸即盲埋孔形态；B 可行性未证 26/32；C 不能替埋孔）
+- ② 性能：A 无背钻残桩，SI 按现行 SPEC 不变；B 需把 lane 移外层（微带）并重签阻抗
+- ③ 风险：A 的风险集中在**报价与 DFM review 结论**（可询价收敛）；B 的风险是整层重派生回归 + 可行性未证
+- ④ 成本：三路单价参数均未获验证来源 ⇒ **不作伪排序**；决策规则 = 若 10L 标准报价 + 重派生代价 < HDI 加价，则改 B
+
+可复现决策规则：`quote(10L std) + cost(re-derivation) < quote(HDI 8L)` ⇒ `B`；否则 `A`。
+

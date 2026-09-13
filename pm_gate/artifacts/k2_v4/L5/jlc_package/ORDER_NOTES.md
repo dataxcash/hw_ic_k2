@@ -15,15 +15,22 @@
 | 表面处理 | 沉金 ENIG |
 | 文件 | Gerber RS-274X（01_）+ Excellon 钻孔（02_）+ **背钻钻孔文件** + 本叠层图（03_）+ 阻抗表（04_） |
 
-## 2. 下单渠道（CO-204 L2 裁定，**取代** CO-147 R1）
-**绑定 JLC 标准（通孔 + 背钻）**：JLC 能力页明文 *"Blind/Buried Vias Not supported … only make through holes"*，
+## 2. 下单渠道（CO-204 L2 裁定 → **CO-206 §0 更正**）
+**标准通道不支持盲/埋孔**：JLC 能力页明文 *"Blind/Buried Vias Not supported … only make through holes"*；
 同页明文 **Backdrill 支持**（4–32 层 / 板厚 ≥0.8mm / D 0.2–0.5mm / W = D+0.2mm / T ≥0.15mm / S ≥0.2mm，
-anchor 逐条为抓取件归一原文子串）⇒ **不存在**「JLC advanced / 盲埋孔通道」；该表述及据其之旧裁定**已撤销**。
+anchor 逐条为抓取件归一原文子串）。
+
+> ⚠️ **更正（CO-206 / 监理指令 #13）**：本段原写「⇒ **不存在**「JLC advanced / 盲埋孔通道」；该表述及据其之旧裁定**已撤销**」**有误，该表述已撤销**。
+> 准确表述：**advanced 通道支持**盲/埋孔与 **HDI（激光孔）** —— 同页 FAQ 原文 *"Advanced options such as blind/buried vias,
+> HDI (laser vias), … typically require DFM review and may increase both cost and production time."*
+> ⇒ 「JLC 做不了」**不成立**；正确命题 =「**HDI 能做但贵，评估更便宜的路**」。
+> 路径 A/B/C 对比与定案见 `06_rulings/L2_RULING_process_route_selection_v2.md`。
 
 本板 220/493 支过孔为**非通孔**（`F.Cu→In2.Cu` 92、`In2.Cu→In5.Cu` 88（埋孔）、
-`In5.Cu→B.Cu` 32、`F.Cu→In5.Cu` 8）⇒ **本包不可下单**：既非 JLC 标准可造、亦不满足残桩 <0.15mm（In2→In5 残桩 0.3664mm）。
-**须按 CO-204 R3 重派生层分配**（全部过孔 = 通孔(F↔B) + 按需背钻，目标 0 盲埋孔）后重出本包；
-闸 = `p3_v57_co204_fab_capability_binding_gate.py`（现行板预期 FAIL）。
+`In5.Cu→B.Cu` 32、`F.Cu→In5.Cu` 8）⇒ **本包不可按「标准通道」下单**；
+**打样路径（CO-206 定案）= A：JLC advanced/HDI 通道**（须 DFM review 与重报价；阶数/孔径限值待板厂确认）；
+标准通道口径下既非可造、亦不满足残桩 <0.15mm（In2→In5 残桩 0.3664mm）。
+闸 = `p3_v57_co204_fab_capability_binding_gate.py`（现行板对标准通道预期 FAIL；改挂 HDI 能力源后须重跑）。
 随单文件（重派生后）：Gerber(01_) + 钻孔(02_) + **背钻钻孔文件** + 叠层图(03_) + 阻抗表(04_) + 本备注 + 散热要求。
 
 ## 3. 板级 DFM 项（CO-147 L2 裁定 R3，随板厂评审提交）

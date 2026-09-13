@@ -1,100 +1,106 @@
 {
  "artifact": "m13_v57_co204_l2_ruling",
- "schema": 1,
- "revision": "CO-204",
- "level": "L2",
- "nature": "打样渠道重绑（JLC 标准 = 通孔 + 背钻）+ 层分配变更裁决（消内层↔内层跨层）—— 监理指令 #12 动作 1/2/3/6",
- "supersedes": {
-  "doc": "L2_RULING_via_channel_and_interpair_domain_v1.md",
-  "clause": "R1（过孔策略/打样渠道）",
-  "reason": "JLC 无 advanced/盲埋孔通道（能力页明文 only through holes）；该绑定不成立"
- },
+ "blocker": "交付板仍 220/493 非通孔 ⇒ **不可送样**（板厂能力绑定闸 FAIL）；须 WORKER 按 R3 候选 A 重派生层分配。",
  "capability": {
-  "backdrill_supported": true,
   "backdrill_limits": {
-   "layers_min": 4,
+   "backdrill_w_over_d_mm": 0.2,
+   "dielectric_t_min_mm": 0.15,
    "layers_max": 32,
+   "layers_min": 4,
+   "safety_s_min_mm": 0.2,
    "thickness_min_mm": 0.8,
    "via_drill_d_mm": [
     0.2,
     0.5
-   ],
-   "backdrill_w_over_d_mm": 0.2,
-   "dielectric_t_min_mm": 0.15,
-   "safety_s_min_mm": 0.2
+   ]
   },
+  "backdrill_supported": true,
   "blind_buried_supported": false
  },
+ "corrections": [
+  {
+   "authority": "L2/L2_RULING_process_route_selection_v2.md §0",
+   "by": "CO-206",
+   "instruction": "#13",
+   "path": "ruling.R1",
+   "reason": "撤销「JLC 无 HDI/盲埋孔通道」定性（标准通道不支持 ≠ 板厂做不了）"
+  }
+ ],
  "evidence": {
   "P1_same_layer_flattened": {
-   "n_segments": 2276,
-   "n_proper_crossings_if_flattened": 1298
+   "n_proper_crossings_if_flattened": 1298,
+   "n_segments": 2276
   },
   "P3_escape_columns": {
-   "n_columns": 44,
-   "x_span_mm": 9.55,
    "min_gap_mm": 0.05,
+   "n_columns": 44,
+   "n_gaps_lt_0.48": 39,
    "n_gaps_lt_0.615": 43,
-   "n_gaps_lt_0.48": 39
+   "x_span_mm": 9.55
   },
   "stackup_layer_distance_mm": {
-   "from_F": {
-    "F.Cu": 0.0,
-    "In1.Cu": 0.1164,
-    "In2.Cu": 0.3664,
-    "In3.Cu": 0.6164,
-    "In4.Cu": 0.8086,
-    "In5.Cu": 1.0586,
-    "In6.Cu": 1.3086,
-    "B.Cu": 1.425
-   },
    "from_B": {
+    "B.Cu": 0.0,
     "F.Cu": 1.425,
     "In1.Cu": 1.3086,
     "In2.Cu": 1.0586,
     "In3.Cu": 0.8086,
     "In4.Cu": 0.6164,
     "In5.Cu": 0.3664,
-    "In6.Cu": 0.1164,
-    "B.Cu": 0.0
+    "In6.Cu": 0.1164
+   },
+   "from_F": {
+    "B.Cu": 1.425,
+    "F.Cu": 0.0,
+    "In1.Cu": 0.1164,
+    "In2.Cu": 0.3664,
+    "In3.Cu": 0.6164,
+    "In4.Cu": 0.8086,
+    "In5.Cu": 1.0586,
+    "In6.Cu": 1.3086
    },
    "total": 1.425
   },
   "via_class_table": {
    "F.Cu->B.Cu": {
     "n": 273,
-    "stub_min_mm": 0.0,
-    "outer_anchored": true
+    "outer_anchored": true,
+    "stub_min_mm": 0.0
    },
    "F.Cu->In2.Cu": {
     "n": 92,
-    "stub_min_mm": 0.0,
-    "outer_anchored": true
+    "outer_anchored": true,
+    "stub_min_mm": 0.0
    },
    "F.Cu->In5.Cu": {
     "n": 8,
-    "stub_min_mm": 0.0,
-    "outer_anchored": true
+    "outer_anchored": true,
+    "stub_min_mm": 0.0
    },
    "In2.Cu->In5.Cu": {
     "n": 88,
-    "stub_min_mm": 0.3664,
-    "outer_anchored": false
+    "outer_anchored": false,
+    "stub_min_mm": 0.3664
    },
    "In5.Cu->B.Cu": {
     "n": 32,
-    "stub_min_mm": 0.0,
-    "outer_anchored": true
+    "outer_anchored": true,
+    "stub_min_mm": 0.0
    }
   }
  },
+ "level": "L2",
+ "nature": "打样渠道重绑（JLC 标准 = 通孔 + 背钻）+ 层分配变更裁决（消内层↔内层跨层）—— 监理指令 #12 动作 1/2/3/6",
+ "redline": "只读分析（未改 SPEC/板/冻结四源）；零坐标搜索；结论由自写判据重算，不引用被评记录。",
+ "revision": "CO-204",
  "ruling": {
-  "R1": "**撤销 CO-147 R1**（JLC advanced / 盲埋孔通道不存在）。打样渠道**绑定 JLC 标准 = 通孔 + 背钻**。",
+  "R1": "**撤销 CO-147 R1**（原写「JLC advanced / 盲埋孔通道不存在」）。打样渠道**绑定 JLC 标准 = 通孔 + 背钻**。 ⚠️ **CO-206 更正（监理指令 #13）**：上列「通道不存在」之定性**有误、已撤销** —— 标准通道不支持盲/埋孔，但 advanced 通道**支持**盲/埋孔与 HDI（激光孔），须 DFM review 且可能加价/加期（抓取件 FAQ 原文）。本 R1 的**排他绑定已由 CO-206 §2 R1′ 解除**；技术要求（外层锚定/残桩）保留为择优目标。详见 L2/L2_RULING_process_route_selection_v2.md。",
   "R2": "**层分配须消内层↔内层跨层**：全部过孔 = 通孔(F↔B) + 按需背钻；目标 **0 盲埋孔**；残桩 <0.15mm。",
   "R3": "「逃逸层 == 走廊 run 层」**不可行**（P1：投影单层 1296 处相交）⇒ 采**等价手段**：把层间转移**锚到外层**（候选 A：走廊 run → B.Cu，竖段留 In2；候选 B：run→B.Cu，竖段 In2/In5 分色；候选 C：每处 In2↔In5 改为 In2→B→In5 双孔桥）。择优 = **A**（竖段单层 In2：3W 内层界 0.48 可容；B.Cu 仅跑横段 ⇒ 无同层交叉；全类外层锚定 ⇒ 残桩 0）。**候选 A/B 改变走廊 run 层 ⇒ 须改 SPEC impedance.per_layer + 阻抗重签**。",
   "R4": "**实施 = WORKER**（层分配重派生）：G4 图纸重派生 → DRC → L4 → L5；本件只裁决策与判据，不代实施。",
   "R5": "**两闸**：板厂能力绑定闸 `p3_v57_co204_fab_capability_binding_gate.py`（已入库；现行板预期 FAIL）+ 散热验证闸（设计期结温）。**复评债**：本件 + CO-202/CO-203（另一会话）。"
  },
+ "schema": 1,
  "self_proof_5": [
   "① 现象：交付板 493 via 中 88 支内层↔内层（In2.Cu→In5.Cu），残桩 0.3664mm ≥ 0.15mm ⇒ 高速 SI 不达标；JLC 不支持盲埋孔。",
   "② 结构归因：图纸每线 = F→In2(竖段)→In5(横 run)→(B)；竖段与横段**必相交** ⇒ 必须异层（P1 独立复算）；而竖段容量须 ≥2 层（P3 列位间距 < 外层 3W 0.615）⇒ 至少一层为内层 ⇒ 其与外层锚定之外的层间转移即内层↔内层。",
@@ -102,7 +108,10 @@
   "④ 候选：A/B/C（见 R3）；择优 A（外层锚定、残桩 0、无同层交叉）；B/C 备选。",
   "⑤ 处置：裁决 R2/R3 冻结 → WORKER 重派生一次（禁暴力迭代，宪法第八章第 8 条）→ 两闸复核 → 包重出。"
  ],
- "verdict": "ORDER_NOTES_NOT_REBOUND",
- "blocker": "交付板仍 220/493 非通孔 ⇒ **不可送样**（板厂能力绑定闸 FAIL）；须 WORKER 按 R3 候选 A 重派生层分配。",
- "redline": "只读分析（未改 SPEC/板/冻结四源）；零坐标搜索；结论由自写判据重算，不引用被评记录。"
+ "supersedes": {
+  "clause": "R1（过孔策略/打样渠道）",
+  "doc": "L2_RULING_via_channel_and_interpair_domain_v1.md",
+  "reason": "JLC 无 advanced/盲埋孔通道（能力页明文 only through holes）；该绑定不成立"
+ },
+ "verdict": "ORDER_NOTES_NOT_REBOUND"
 }

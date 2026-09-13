@@ -4,9 +4,14 @@
 > 板 `d4e81f647be7f980`（**未改动**）｜SPEC rev-19 `5f72182a2616392c`（未改动）｜零坐标搜索｜只读分析
 
 ## R1 撤销（打样渠道）
-- **撤销**：CO-147 R1 之「维持盲/埋孔 + 绑定 JLC advanced / 盲埋孔通道」。**JLC 无该通道**：能力页明文
+- **撤销**：CO-147 R1 之「维持盲/埋孔 + 绑定 JLC advanced / 盲埋孔通道」。
+> ⚠️ **本行定性已由 CO-206 更正**（监理指令 #13）：原写「JLC **无该通道**」**有误、已撤销**。
+> 准确表述：① **标准通道**不支持盲/埋孔（上引能力表明文）；② **advanced 通道支持**盲/埋孔与 HDI（激光孔）——
+> 同页 FAQ 原文 *"Advanced options such as blind/buried vias, HDI (laser vias), … typically require DFM review and may
+> increase both cost and production time."* ⇒ **「JLC 做不了」不成立**，正确命题 = **「HDI 能做但贵，评估更便宜的路」**；
+> ③ HDI 阶数 / 激光孔径等限值本工程语料**未获证** ⇒ `INPUT_REQUIRED`。详见 `L2_RULING_process_route_selection_v2.md` §0。
   *"Blind/Buried Vias Not supported … only make through holes"*。
-- **新绑**：打样渠道 = **JLC 标准（通孔 + 背钻）**。能力页同页明文 Backdrill 支持：
+- **新绑（CO-204 时之排他绑定；已由 CO-206 §2 R1′ 解除排他性）**：打样渠道 = **JLC 标准（通孔 + 背钻）**。能力页同页明文 Backdrill 支持：
   4–32 层 FR4 / 板厚 ≥0.8mm / D 0.2–0.5mm /
   W = D+0.2mm / **T ≥0.15mm** / S ≥0.2mm
   （anchor 逐条为抓取件归一原文子串，见 `m13_v57_co146_jlc8_capability.json`）。

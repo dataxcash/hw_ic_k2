@@ -1,0 +1,165 @@
+{
+ "artifact": "process_route_criteria",
+ "authority": "监理指令 #13（工艺选型 / 性价比对比 立为 ENG 常规功能）",
+ "cost_model": {
+  "expr": "C = k_layer*L + k_hdi_order*H + k_adv_review*R + k_via_nonstd*N + k_vipp*P + k_imp",
+  "kind": "relative_index",
+  "parameters": {
+   "k_adv_review": {
+    "provenance": "INPUT_REQUIRED",
+    "unit": "USD per advanced DFM review",
+    "value": null
+   },
+   "k_hdi_order": {
+    "provenance": "INPUT_REQUIRED",
+    "unit": "USD per HDI order (0/1/2)",
+    "value": null
+   },
+   "k_imp": {
+    "provenance": "INPUT_REQUIRED",
+    "unit": "USD impedance-control adder",
+    "value": null
+   },
+   "k_layer": {
+    "provenance": "INPUT_REQUIRED",
+    "unit": "USD per copper layer (panel/qty basis)",
+    "value": null
+   },
+   "k_via_nonstd": {
+    "provenance": "INPUT_REQUIRED",
+    "unit": "USD per blind/buried via",
+    "value": null
+   },
+   "k_vipp": {
+    "provenance": "INPUT_REQUIRED",
+    "unit": "USD per via-in-pad via",
+    "value": null
+   }
+  },
+  "qualitative_anchor": "抓取件原文：advanced options（含 blind/buried、HDI）‘typically require DFM review and may increase both cost and production time’。",
+  "rule": "禁编造单价：未获报价的参数一律 null；本工具在参数缺失时输出模型与所需输入清单，不输出伪数字。"
+ },
+ "criteria": {
+  "F1_via_class_manufacturable_through_backdrill": {
+   "deterministic": true,
+   "predicate": "outer_anchored(top,bot) := top in outer or bot in outer",
+   "rule": "「通孔 + 背钻」可制 ⟺ 过孔至少一端为外层(F.Cu/B.Cu)；此时残桩可背钻至 0。"
+  },
+  "F2_buried_requires_sequential_lamination": {
+   "deterministic": true,
+   "order_formula": "1 + min(idx(top) - 1, total - idx(bot))",
+   "predicate": "buried(top,bot) := top not in outer and bot not in outer",
+   "rule": "两端皆内层者 = 埋孔；须「顺序层压」造腔，属盲埋孔工艺。所需阶数 = 1 + min(上方隔板层数, 下方隔板层数)（按物理层序）。"
+  },
+  "F3_stub_limit": {
+   "ref": "L2_RULING_jlc_standard_through_backdrill_v1.md R2；SPEC rev-19 冻结",
+   "rule": "残桩 <= stub_limit_mm 方满足高速 SI 不降级。",
+   "stub_limit_mm": 0.15
+  },
+  "F4_route_predicates": {
+   "A_advanced_hdi": {
+    "design_change": "NONE（现行图纸即盲埋孔形态）",
+    "evidence_bound": "抓取件 FAQ：advanced options 含 blind/buried vias 与 HDI (laser vias)，须 DFM review 且可能增加成本与生产时间",
+    "feasible_if": "板厂 advanced/HDI 通道接受 blind+buried 且 阶数 >= F2 所需阶数",
+    "unverified_inputs": [
+     "HDI 阶数上限与定价",
+     "激光孔直径范围与纵横比",
+     "盲埋孔 DFM 限值（环宽/层对/介质厚）"
+    ]
+   },
+   "B_add_signal_layers_all_through": {
+    "design_change": "REQUIRED（层分配 + 走廊/列重派生 + 阻抗重签）",
+    "feasible_if": "存在层分配使**每一支孔都外层锚定**（F1 全过）",
+    "structural_note": "竖段与 lane 须异层（否则真交叉）且 lane 须落外层（否则 corner 为内层↔内层）⇒ lane 落外层是 B 路的必要条件；外层 3W(0.615) 与焊盘区间拥挤为主要风险",
+    "unverified_inputs": [
+     "10L 叠层与阻抗表",
+     "外层 lane 的 3W 可容性（需重派生后实测）"
+    ]
+   },
+   "C_via_in_pad": {
+    "cannot_replace": "**埋孔**（两端皆内层）—— 埋孔不在任何外层焊盘之下",
+    "design_change": "PARTIAL（进盘孔可释放近焊盘区；但**埋孔不可由 via-in-pad 替代**）",
+    "evidence_bound": "抓取件 Via-in-Pad Process：Epoxy/Copper paste Filled & Capped；4-32 层 FR4 / 板厚 ≥0.8mm；Vias can be placed within BGA pads",
+    "feasible_if": "板厂提供 via-in-pad 工艺（抓取件有 Via-in-Pad Process 段）",
+    "replaces": "仅**盲孔**（一端外层）"
+   }
+  }
+ },
+ "date": "2026-09-14",
+ "layer_stack": {
+  "outer": [
+   "F.Cu",
+   "B.Cu"
+  ],
+  "physical_order_top_to_bottom": [
+   "F.Cu",
+   "In1.Cu",
+   "In2.Cu",
+   "In3.Cu",
+   "In4.Cu",
+   "In5.Cu",
+   "In6.Cu",
+   "B.Cu"
+  ],
+  "plane": [
+   "In1.Cu",
+   "In3.Cu",
+   "In4.Cu",
+   "In6.Cu"
+  ],
+  "signal_used": [
+   "F.Cu",
+   "In2.Cu",
+   "In5.Cu",
+   "B.Cu"
+  ],
+  "source": "L5/jlc_package/05_layer_sequence.txt + 板 (layers) 块；介质厚度取 SPEC stackup.dielectric_8l",
+  "total_copper": 8
+ },
+ "lead_time_model": {
+  "expr": "T = t_base*L/8 + t_hdi*H + t_review*R + t_derivation*G",
+  "kind": "days_index",
+  "parameters": {
+   "t_base": {
+    "provenance": "INPUT_REQUIRED",
+    "value": null
+   },
+   "t_derivation": {
+    "provenance": "INPUT_REQUIRED",
+    "unit": "days per full layer-plan re-derivation",
+    "value": null
+   },
+   "t_hdi": {
+    "provenance": "INPUT_REQUIRED",
+    "value": null
+   },
+   "t_review": {
+    "provenance": "INPUT_REQUIRED",
+    "value": null
+   }
+  }
+ },
+ "purpose": "给定设计约束，输出工艺路线的 可行性/成本/交期/性能/风险 对比 + 推荐。判据先行、可复现、可复用（非一次性）。",
+ "revision": "v1.0",
+ "risk_catalog": {
+  "A_advanced_hdi": [
+   "DFM review 结论未知（可能退回改设计）",
+   "报价未知（可能显著高于标准通道）",
+   "阶数/激光孔限值未获证 ⇒ 88 支埋孔是否落在可制区间未知",
+   "交期未知"
+  ],
+  "B_add_signal_layers_all_through": [
+   "可行性未证：现行模型 26/32（lane 落外层候选，修正 span 模型）",
+   "须整层重派生 ⇒ 回归面大",
+   "外层 lane ⇒ 阻抗重签 + 微带 SI 评估",
+   "新叠层成本/交期未知"
+  ],
+  "C_via_in_pad": [
+   "不能替代 88 支埋孔 ⇒ 单独不足以解阻断",
+   "进盘孔须树脂塞孔+电镀盖帽 ⇒ 成本与良率风险",
+   "仅缓解近焊盘布线密度"
+  ]
+ },
+ "schema": 1,
+ "usage": "tools/p3_v57_co206_process_route_select.py --criteria <本件> [--board <pcb>] [--out <json>] [--md <md>]"
+}
