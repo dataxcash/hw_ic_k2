@@ -3376,6 +3376,27 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body93
 
+
+    # ── §94 CO-221（L2 自裁 · L5 记录自声明面与登记簿同步） ──
+    MARK94 = "## 94. CO-221"
+    sec94 = [MARK94 + "（**L2 自裁 · L5 判据记录之自声明面与登记簿同步**）", "",
+             "- **缺陷 F-1（TOOL_DEFECT · low）**：`tools/p3_v57_l5_signoff.py` 所生成之 SI/PI/EMC 记录**硬编码**「阻抗符合性 **NOT_DEMONSTRATED**（**开放项 CO-53**）」；"
+             "而登记簿对应项 `implementation_deviation:R3-2_asbuilt_interpair_edge` 早已 **CLOSED**（域声明由 CO-147 R2 在 L2 内裁定；B.Cu/In5 已几何闭合；终判交 **JLC 阻抗控制服务**）"
+             "⇒ **已闭项以「开放项」口径呈现**（承 R-CO217-1「退役/已闭定值不得以现行口径呈现」；与 CO-213 F-2 同族之陈旧自声明）。方向 = **fail-open**（读者/板厂据记录误判尚欠工程项）。",
+             "- **处置**：口径**逐处同步**至登记簿现行表述（本工程**不自证**阻抗符合性 ⇒ 交 JLC 阻抗控制服务终判；原「开放项 CO-53」表述**已撤**）；记录经生成器重出，boundary pin 再对齐。**R-CO221-1**。",
+             "- **修后实测**：记录内**不再**出现「开放项 CO-53」；`--check` **36/36 全 True**；序收敛 rc=0 / 2 轮；co120 P5 消费面机判仍 PASS（`l5_bad=0`）。",
+             "- **边界（诚实）**：本次仅**同步口径**，未改阻抗符合性之判据（终判本就在 JLC 服务侧），亦未触动几何。",
+             "",
+             "> **R-CO221-1**：判据记录之**自声明文本**须与**登记簿现行状态**同源同步（已闭项不得以「开放项」呈现）；生成器硬编码之状态词须随裁定**同 commit** 更新（承 R-CO208-1 / R-CO217-1）。",
+             "",
+             "> **序不变**：本件未改步骤集/序列（承 §82 之 R-CO209-2）。"]
+    body94 = "\n".join(sec94)
+    if MARK94 in txt:
+        txt = re.sub(re.escape(MARK94) + r"[\s\S]*?(?=\n## |\Z)", body94, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body94
+
+    txt = txt.replace("W3 Boundary **v2.61**", "W3 Boundary **v2.62**")
     txt = txt.replace("W3 Boundary **v2.60**", "W3 Boundary **v2.61**")
     txt = txt.replace("W3 Boundary **v2.59**", "W3 Boundary **v2.60**")
     txt = txt.replace("W3 Boundary **v2.58**", "W3 Boundary **v2.59**")
