@@ -3171,6 +3171,50 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body88
 
+    # ── §89 CO-216（L2 自裁 · 源面判据之 AST 收窄（续）+ 源面帮助函数覆盖登记） ──
+    MARK89 = "## 89. CO-216"
+    _rc89 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    sec89 = [MARK89 + "（**L2 自裁 · 源面判据之 AST 收窄（续）**）", "",
+             "- **缘起（CO-215 之未竟面）**：CO-215 只收窄了 `artifact_readers()`；runner 内**另有两枚源面帮助函数**仍以**原文**判事 —— "
+             "`declared_verdict_in_tool()`（R-CO194-2「声明↔工具能力」）取 `v in src`；`boundary_read_scan()`（CO-187/CO-192，判「该步读取 boundary」）"
+             "以 `re` 扫**原文**判引用 + 以 `read_text`/`read_bytes`/`.read(`/`io.open(` 之**原文子串**判读取。",
+             "- **缺陷 M-1（TOOL_DEFECT · low）**：① 前者 ⇒ 源内**注释**含该 verdict 字面即满足（如 `# FAIL here`）⇒ **t27 该臂近乎空真**"
+             "（t27 之正控即 `all(declared_verdict_in_tool(...))`，而环境内任一含 `FAIL` 注释者皆可满足）；"
+             "② 后者 ⇒ **注释即可伪造引用与读取者身份**（t21 之读取者集可被散文污染；实测 `'# w3_joint_assignment_boundary\n# read_text'` 旧判 = True），"
+             "反向：以**无可匹配字面量**之完全动态方式引用者**漏判** ⇒ t21 之等式**静默漏过**未声明读者。二者皆与 **R-CO202-4** 同源。",
+             "- **处置（CO-216）**：① `declared_verdict_in_tool()` 改判 **AST 字符串字面量集**（`_source_strings`），`src` 可注入；"
+             "② `boundary_read_scan()` 改判 **AST 形态** —— 引用面 = 字面量命中族正则 **或** `_latest_boundary` **标识符**；"
+             "读取面 = `Attribute.attr ∈ READ_ATTRS`（`read_text`/`read_bytes`/`read`/`readline`/`readlines`）**或** `io.open(...)` 调用；"
+             "③ 两枚一并纳入 `PROXY_HELPERS_PINNED`（消费齿 = **t27** / **t21**）+ `PROXY_RESIDUAL_EXPLICIT`（残余显式：动态引用漏判 fail-closed / "
+             "非读取语境误判 fail-open；字面量出现 ≠ 可产出 verdict），由 t29 覆盖面齿机判（3 枚帮助函数皆已登记）；"
+             "④ t21 增 **4 控**（注释伪造负控 / 字面量+注释混杂正控 / 仅引用无读取负控 / 动态引用如实登记），t27 增 **3 控**（注释负控 / 字面量正控 / 空源负控）。"
+             "**序不变（仍 50 次）/ 齿数不变（t01..t33 = 35 项）**。",
+             "- **修后实测**：读取者集 = `BOUNDARY_SCAN_GUARDED ∪ BOUNDARY_READ_DECLARED`（**5 步，与修前逐字节同**）；"
+             "`declared_verdict_in_tool` 真声明 = ok；**注释-only ⇒ 两面皆 False**；字面量/`_latest_boundary` ⇒ 命中；`base / suffix` 动态引用 ⇒ False（残余如实登记）；"
+             "`--check` **35/35 全 True**（t21/t27/t29 含新控）；`proxy_coverage_decision` = ok。",
+             "- **诚实边界**：两枚残余（**动态引用漏判** / **非读取语境之字面量误判**）**未消除**，仅**显式登记** + 覆盖齿约束；"
+             "其语义判官支路（运行时**读观测** / 出口**verdict 采样**）列为**有据延后**（触发 = 引入上述观测机制）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows89 = [("runner `p3_v57_co164_order_runner.py`（**CO-216**：`declared_verdict_in_tool`→AST 字面量；`boundary_read_scan`→AST 形态；两枚入覆盖登记）",
+                K2 / "tools/p3_v57_co164_order_runner.py"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc89['total']} 项 / OPEN {_rc89['OPEN']}）", L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows89:
+        if pth.exists():
+            sec89.append(f"| {label} | `{s16(pth)}` |")
+    sec89.append("")
+    sec89.append("> **R-CO216-1**：凡**源面判据**（扫工具源以判声明 / 能力 / 读者身份者）一律以 **AST 形态或字面量**判，**禁原文子串或原文正则**；"
+                 "新增此类帮助函数须入 `PROXY_HELPERS_PINNED` + `PROXY_RESIDUAL_EXPLICIT`（承 R-CO215-1）。")
+    sec89.append("")
+    sec89.append("> **序不变**：本件未改步骤集/序列（承 §82 之 R-CO209-2）。")
+    sec89.append("")
+    body89 = "\n".join(sec89)
+    if MARK89 in txt:
+        txt = re.sub(re.escape(MARK89) + r"[\s\S]*?(?=\n## |\Z)", body89, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body89
+
+    txt = txt.replace("W3 Boundary **v2.56**", "W3 Boundary **v2.57**")
     txt = txt.replace("W3 Boundary **v2.55**", "W3 Boundary **v2.56**")
     txt = txt.replace("W3 Boundary **v2.54**", "W3 Boundary **v2.55**")
     txt = txt.replace("W3 Boundary **v2.53**", "W3 Boundary **v2.54**")

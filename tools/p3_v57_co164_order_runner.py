@@ -52,6 +52,11 @@
      收窄为 **AST 字面量集**（`_source_strings`）匹配 + glob 字面量；并把该帮助函数之**残余显式登记**
      （`PROXY_RESIDUAL_EXPLICIT`：动态构造漏判 / 非读取语境误判，**不宣称完备**）以 `PROXY_HELPERS_PINNED` **覆盖面齿**机判
      （每枚帮助函数须恰登记于 `PROXY_SEMANTIC_BINDING`（有语义判官）或 `PROXY_RESIDUAL_EXPLICIT`（显式残余）之一）。
+⑳ CO-216（R-CO216-1，**源面判据之 AST 收窄（续）**）：把 R-CO215-1 之纪律推广到 runner 内**其余两枚源面帮助函数** ——
+     `declared_verdict_in_tool()`（原 `v in src` ⇒ **注释含 verdict 字面即满足**，令 t27 之「声明↔工具能力」臂近乎空真）
+     改判 **AST 字符串字面量集**；`boundary_read_scan()`（原 `re` 扫**原文** + `read_text` 等**原文子串**判读取者 ⇒ 注释可伪造引用/读取）
+     改判 **AST 形态**（引用 = 字面量或 `_latest_boundary` 标识符；读取 = `Attribute.attr ∈ READ_ATTRS` 或 `io.open` 调用）。
+     两枚一并纳入 `PROXY_HELPERS_PINNED` + `PROXY_RESIDUAL_EXPLICIT`（消费齿 = t27 / t21）。
 CLI:
   python3 tools/p3_v57_co164_order_runner.py [--check] [--max-iter 5]
 """
@@ -797,6 +802,9 @@ PROXY_SEMANTIC_BINDING = {
 # 值 = 消费该代理的 fail-closed 静态齿名（须为本工具源内字面量 ⇒ 机判）。
 PROXY_HELPERS_PINNED = {
     "artifact_readers": "t26_judgment_binding_executable",
+    # CO-216：其余两枚源面帮助函数（CO-187/CO-194 引入）一并纳入覆盖登记
+    "boundary_read_scan": "t21_boundary_reader_declared",
+    "declared_verdict_in_tool": "t27_basis_judge_and_verdict_binding",
 }
 PROXY_RESIDUAL_EXPLICIT = {
     "artifact_readers": {
@@ -806,6 +814,21 @@ PROXY_RESIDUAL_EXPLICIT = {
         "basis": "语义性质 =『该步**运行时确实读取**该工件』；直判须**运行时读观测**（本器无该机制）"
                  "⇒ 按 R-CO215-1 登记为**显式残余**，**不虚造**语义判官（R-CO198-1 之判官支路在此不可达）。",
         "deferral_trigger": "引入步骤子进程**运行时读观测**（access tracing）时，须改挂 `PROXY_SEMANTIC_BINDING` 之语义判官支路。",
+    },
+    # CO-216：两枚源面帮助函数（判据已收窄为 AST 形态；残余如实登记，不宣称完备）
+    "boundary_read_scan": {
+        "residual": "**源面形态上界**：① 以**无可匹配字面量**之完全动态方式引用 boundary 者 ⇒ **漏判**"
+                    "（方向 = fail-closed：读者未被识别，t21 之等式可静默漏过）；② 引用字面量出现于**非读取语境**"
+                    "（日志/映射表）而该文件恰有任意读取调用 ⇒ **误判为读者**（方向 = fail-open）。**不宣称完备**。",
+        "basis": "语义性质 =『该步在**运行时确实读取** boundary 文件』；直判须**运行时读观测**（本器无）"
+                 "⇒ 按 R-CO216-1 承 R-CO215-1 登记为**显式残余**，**不虚造**语义判官。",
+        "deferral_trigger": "引入步骤子进程**运行时读观测**（access tracing）时，须改挂 `PROXY_SEMANTIC_BINDING` 之语义判官支路。",
+    },
+    "declared_verdict_in_tool": {
+        "residual": "**字面量上界**：字面量出现 ≠ 该工具**能产出**该 verdict（工具可以动态拼接 verdict、或含字面量却永不产出）"
+                    "⇒ 本判据只否证「源内毫无该字面量」，**不宣称**能力等价。",
+        "basis": "语义性质 =『该步工具**实际可产出**其声明之 verdict』；直判须**运行时出口观测** ⇒ 按 R-CO216-1 承 R-CO215-1 登记为**显式残余**。",
+        "deferral_trigger": "引入步骤出口观测（子进程 verdict/rc 采样矩阵）时，须改挂 `PROXY_SEMANTIC_BINDING` 之语义判官支路。",
     },
 }
 
@@ -914,13 +937,23 @@ def basis_judge_decision(category: str, decl, order=None, readers=None, judge_ba
     return "ok"
 
 
-def declared_verdict_in_tool(step: str, decl) -> bool:
-    """CO-194（R-CO194-2）：`EXPECTED_NONZERO` 声明的 verdict 字面须出现在该步**工具源**（声明↔工具能力绑定）。"""
-    p = tool_path(step)
-    if p is None:
-        return False
+def declared_verdict_in_tool(step: str, decl, src: str | None = None) -> bool:
+    """CO-194（R-CO194-2）／CO-216（R-CO216-1）：`EXPECTED_NONZERO` 声明的 verdict 字面须出现在该步**工具源**（声明↔工具能力绑定）。
+
+    判据（CO-216 收窄） = 该 verdict 出现在源的 **AST 字符串字面量集**内 —— 原判据为**原文子串** `v in src`，
+    实测「注释含该词」即满足（如 `# FAIL here`）⇒ 该臂近乎空真（与 R-CO202-4 同源缺陷）。`src` 可注入 ⇒ 合成控（零落盘）。
+
+    **残余（显式登记于 `PROXY_RESIDUAL_EXPLICIT`）**：字面量出现 ≠ 该工具**能产出**该 verdict（无运行时出口观测）。
+    """
     v = str((decl or {}).get("verdict") or "").strip()
-    return bool(v) and v in p.read_text(encoding="utf-8")
+    if not v:
+        return False
+    if src is None:
+        p = tool_path(step)
+        if p is None:
+            return False
+        src = p.read_text(encoding="utf-8")
+    return v in set(_source_strings(src))
 
 
 def revision_literal_from_src(src: str, artifact: str):
@@ -1212,19 +1245,51 @@ def md_write_scan(src: str) -> list:
     return sorted(found)
 
 
-# CO-187（F-3）：工具源是否**读取** boundary（引用 boundary 名/族 + 有 read_text/read_bytes）。
+# CO-187（F-3）：工具源是否**读取** boundary（引用 boundary 名/族 + 有读取调用）。
 _BOUNDARY_REF_RE = re.compile(r"w3_joint_assignment_boundary|_latest_boundary")
+# CO-216（R-CO216-1）：读取指标以 **AST 形态**判（属性名/调用），**不得**以原文子串判（注释可伪造）。
+READ_ATTRS = ("read_text", "read_bytes", "read", "readline", "readlines")
+
+
+def _boundary_ref_ast(tree) -> bool:
+    """引用面（CO-216）：AST **字面量**（族正则命中）**或** `_latest_boundary` **标识符** —— 注释/散文不能伪造。"""
+    for n in ast.walk(tree):
+        if isinstance(n, ast.Constant) and isinstance(n.value, str) and _BOUNDARY_REF_RE.search(n.value):
+            return True
+        if isinstance(n, ast.Name) and n.id == "_latest_boundary":
+            return True
+        if isinstance(n, ast.Attribute) and n.attr == "_latest_boundary":
+            return True
+    return False
+
+
+def _read_shape_ast(tree) -> bool:
+    """读取面（CO-216）：`Attribute.attr ∈ READ_ATTRS` 或 `io.open(...)` 调用（CO-192 之开口/read 形态同覆盖）。"""
+    for n in ast.walk(tree):
+        if isinstance(n, ast.Attribute) and n.attr in READ_ATTRS:
+            return True
+        if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute) and n.func.attr == "open" \
+                and isinstance(n.func.value, ast.Name) and n.func.value.id == "io":
+            return True
+    return False
 
 
 def boundary_read_scan(src: str) -> bool:
-    """CO-187（F-3）/ CO-192（F-3）：工具源是否**读取** boundary。
+    """CO-187（F-3）/ CO-192（F-3）／CO-216（R-CO216-1）：工具源是否**读取** boundary。
 
-    读指标 = 显式 `read_text`/`read_bytes`，或 `Path.open().read()` / `io.open(...).read()` 形态（CO-192 补）。
-    仅引用 boundary 名（写/常量）**不**计读取者。
+    判据（CO-216 收窄为 AST 形态） = **引用**（字面量命中族正则，或 `_latest_boundary` 标识符）
+    **且 读取**（`Attribute.attr ∈ READ_ATTRS`，或 `io.open` 调用）。仅引用 boundary 名（写/常量）**不**计读取者。
+    原判据为 `re` 扫**原文** + `read_text` 等**原文子串** ⇒ **注释即可伪造引用与读取**（CO-216 实测复现）。
+
+    **残余（显式登记于 `PROXY_RESIDUAL_EXPLICIT`）**：① 以**无可匹配字面量**之完全动态方式引用者**漏判**
+    （方向 = fail-closed：读者未被识别 ⇒ t21 之等式可静默漏过）；② 字面量出现于**非读取语境**而该文件恰有
+    任意读取调用者**误判为读者**（方向 = fail-open）。**不宣称完备**。
     """
-    if not _BOUNDARY_REF_RE.search(src):
+    try:
+        tree = ast.parse(src)
+    except SyntaxError:
         return False
-    return any(t in src for t in ("read_text", "read_bytes", ".read(", "io.open("))
+    return _boundary_ref_ast(tree) and _read_shape_ast(tree)
 
 
 def boundary_readers() -> list:
@@ -1501,7 +1566,13 @@ def main(argv=None) -> int:
         and not boundary_read_scan('BOUNDARY_STEP = "co146_boundary_append"\n')
         # CO-192（F-3）：Path.open().read() / io.open(...).read() 形态亦须计入读取者
         and boundary_read_scan('DOC = STEP2 / "m13_v57_w3_joint_assignment_boundary_v1_82.md"\nt = DOC.open().read()')
-        and boundary_read_scan('B = _latest_boundary()\nt = io.open(B).read()'))
+        and boundary_read_scan('B = _latest_boundary()\nt = io.open(B).read()')
+        # CO-216（R-CO216-1）：**注释/散文不得伪造**引用与读取（AST 形态判据）
+        and not boundary_read_scan('# w3_joint_assignment_boundary  （仅注释）\n# read_text\n')
+        and boundary_read_scan('DOC = STEP2 / "m13_v57_w3_joint_assignment_boundary_v1_82.md"  # read_text\nt = DOC.read_bytes()')
+        and not boundary_read_scan('DOC = STEP2 / "m13_v57_w3_joint_assignment_boundary_v1_82.md"\n')
+        # 残余如实登记（方向）：无匹配字面量之动态引用 ⇒ 漏判（fail-closed）；不作完备性声明
+        and not boundary_read_scan('DOC = base / suffix\nt = DOC.read_text()\n'))
     # CO-188（R-CO188-1）：越界写（stray）须 fail-closed；显式例外表须完备（键/理由/受控/不与声明重叠）
     _watch_abs = {p.as_posix() for p in watch_paths()}
     _stray_tbl_ok = all(
@@ -1609,6 +1680,10 @@ def main(argv=None) -> int:
         set(BASIS_JUDGE_DECLARED) == {"teeth", "verdict", "register_consistency", "downstream"}
         and all(v == "ok" for v in _bj.values())
         and all(declared_verdict_in_tool(s, v) for s, v in EXPECTED_NONZERO.items())
+        # CO-216（R-CO216-1）：**注释含 verdict 字面不得满足**（AST 字面量集；原原文子串判据此处近乎空真）
+        and declared_verdict_in_tool('S', {'verdict': 'FAIL'}, src='# FAIL  （仅注释）\n') is False
+        and declared_verdict_in_tool('S', {'verdict': 'FAIL'}, src='v = "FAIL"\n') is True
+        and declared_verdict_in_tool('S', {'verdict': 'FAIL'}, src='') is False
         # 合成正控：外部判官在序 + 读件 + 自身有基据 ⇒ ok；judge=None 类别给 why ⇒ ok
         and basis_judge_decision("x", {"judge": "J", "artifact": "a.json", "why": "w"},
                                  order=["J"], readers=["J"], judge_basis="teeth") == "ok"
