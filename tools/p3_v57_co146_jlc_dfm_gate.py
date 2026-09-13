@@ -105,6 +105,75 @@ def capability_citation_checks(page_text: str, capability: dict, anchors: dict, 
     return out
 
 
+# CO-177：能力表的**数值/文本主张**须由抓取件**原文抽取**核验（正则捕获 ↔ 声明值）。
+# 形如 [(pattern, [expected...]), ...] 或 ["literal substring"]；见 capability_value_bind_checks()。
+CAPABILITY_VALUE_BIND = {
+    "layer_count": [("Layer count (1)-(32) Layers", ["1", "32"])],
+    "impedance_control_layers": ["Controlled Impedance 4/6/8/10/12/14/16/18/20/.../32 layers"],
+    "impedance_tolerance_pct": [("Impedance Tolerance ±(10)%", ["10"])],
+    "board_max_mm": [("FR4\\(6-layer and above\\): (656) × (586) mm", ["656", "586"])],
+    "board_min_mm": [("Minimum Dimensions FR4/Rogers/PTFE: (3) × (3) mm", ["3", "3"])],
+    "thickness_mm": [("Thickness (0\\.4) – (4\\.5) mm", ["0.4", "4.5"]),
+                     ("Thickness Tolerance \\(Thickness≥1\\.0mm\\) ± (10)%", ["10"]),
+                     ("0\\.4/0\\.6/0\\.8/1\\.0/1\\.2/(1\\.6)/2\\.0 mm", ["1.6"])],
+    "outer_copper_oz": [("Multi-layer: (1) oz / (2) oz", ["1", "2"])],
+    "inner_copper_oz": [("Finished Inner Layer Copper (0\\.5) oz / (1) oz / (2) oz", ["0.5", "1", "2"])],
+    "min_track_width_mm": [("Multilayer: (0\\.09) / 0\\.09 mm \\(3\\.5 / 3\\.5 mil\\)", ["0.09"])],
+    "min_track_spacing_mm": [("Multilayer: 0\\.09 / (0\\.09) mm \\(3\\.5 / 3\\.5 mil\\)", ["0.09"])],
+    "min_via_hole_mm": [("Min\\. Via hole size/diameter (0\\.15)mm / 0\\.25mm", ["0.15"]),
+                        ("Preferred Min\\. Via hole size: (0\\.2)mm", ["0.2"])],
+    "min_via_diameter_mm": [("Min\\. Via hole size/diameter 0\\.15mm / (0\\.25)mm", ["0.25"])],
+    "via_annular_note": [("0\\.1mm\\((0\\.15)mm preferred\\) larger than Via hole size", ["0.15"])],
+    "via_hole_to_hole_mm": [("Via Hole-to-Hole Spacing (0\\.2)mm", ["0.2"])],
+    "pad_hole_to_hole_mm": [("Pad Hole-to-Hole Spacing (0\\.45)mm", ["0.45"])],
+    "min_npth_mm": [("Min\\. Non-plated holes (0\\.50)mm", ["0.50"])],
+    "min_plated_slot_mm": [("Min\\. Plated Slots Width 2-layer: 0\\.5mm Multi-layer: (0\\.35)mm", ["0.35"])],
+    "copper_edge_clearance_mm": [("Copper clearance from routed board edges: ≧(0\\.2) mm", ["0.2"])],
+    "solder_mask_to_copper_mm": [("Keep at least (0\\.09) mm clearance between soldermask openings", ["0.09"])],
+    "solder_mask_bridge_mm": [("Soldermask bridge (0\\.10)mm 1oz", ["0.10"])],
+    "surface_finish": ["Surface Finish HASL (leaded / lead-free), ENlG, OSP"],
+    "er_table": ["7628 Prepreg 4.4 3313 Perpreg 4.1 2116 Perpreg 4.16"],
+    "blind_buried": ["Blind/Buried Vias Not supported"],
+    "blind_buried_faq": ["Advanced options such as blind/buried vias, HDI (laser vias)"],
+}
+
+
+def _val_eq(a, b) -> bool:
+    """数值按 float 比较（0.50 == 0.5），否则字符串归一比较。"""
+    try:
+        return float(a) == float(b)
+    except (TypeError, ValueError):
+        return str(a).strip() == str(b).strip()
+
+
+def capability_value_bind_checks(page_text: str, capability: dict, bind: dict) -> dict:
+    """CO-177：能力表的**值**须**可由抓取件原文抽取**得到（防手录值与原文脱钩）。
+
+    ① 绑定须覆盖全部条目且非空；② 每条字面量须出现 / 每条正则须匹配；③ 捕获组数须与期望数一致且**逐值相等**；
+    ④ 捕获组总数须 ≥ 下限（防退化绑定，如正则恒不捕获）。
+    """
+    keys = sorted(capability)
+    out = {"bind_covers_capability": set(bind) == set(capability),
+           "bind_nonempty": all(bind.get(k) for k in keys)}
+    n_groups, ok = 0, True
+    for k in keys:
+        for r in (bind.get(k) or []):
+            if isinstance(r, str):
+                if r not in page_text:
+                    ok = False; out[f"{k}.literal_missing"] = False
+            else:
+                pat, exp = r
+                m = re.search(pat, page_text)
+                if not m:
+                    ok = False; out[f"{k}.nomatch"] = False; continue
+                g = list(m.groups()); n_groups += len(g)
+                if len(g) != len(exp) or not all(_val_eq(x, y) for x, y in zip(g, exp)):
+                    ok = False; out[f"{k}.value_mismatch"] = False
+    out["bind_all_resolved"] = ok
+    out["bind_group_floor"] = n_groups >= 25
+    return out
+
+
 def edge_rule_bound_checks(items: list, rule_mm: float) -> dict:
     """CO-172（F-5）：DFM 记录的「铜到板边」实测文本须携带**由冻结规则派生的**板规值。"""
     txt = next((it.get("measured", "") for it in items if it.get("item") == "铜到板边"), "")
@@ -351,11 +420,17 @@ def main() -> int:
         _page, JLC8,
         {**CAPABILITY_ANCHORS, "layer_count": CAPABILITY_ANCHORS["layer_count"] + "ZZZZ"},
         CAPABILITY_QUOTE_NOT_VERBATIM).values())
+    # CO-177：能力表**值**须可由抓取件原文抽取核验（正则捕获 ↔ 声明值）+ 灵敏度
+    _bind = capability_value_bind_checks(_page, JLC8, CAPABILITY_VALUE_BIND)
+    _bind_sens = not all(capability_value_bind_checks(
+        _page, JLC8,
+        {**CAPABILITY_VALUE_BIND,
+         "min_track_width_mm": [("Multilayer: (0\\.09) / 0\\.09 mm \\(3\\.5 / 3\\.5 mil\\)", ["0.10"])]}).values())
     fails = [i["item"] for i in items if i["verdict"] == "FAIL"]
     # 牙齿②：过孔类型项必须 FAIL（本板 220 非通孔）
     teeth2_ok = "**过孔类型（盲/埋孔）**" in fails
     rec = {
-        "artifact": "m13_v57_co146_jlc_dfm_gate", "schema": 1, "revision": "CO146-JLC-DFM.3",
+        "artifact": "m13_v57_co146_jlc_dfm_gate", "schema": 1, "revision": "CO146-JLC-DFM.4",
         "nature": "L2 只读机判：DFM 对照 JLC 8 层公布能力（监理指令 #10 动作 4）",
         "board": BOARD.name, "board_sha16": sha16(BOARD), "board_sha256": sha(BOARD),
         "as_built": m,
@@ -372,17 +447,24 @@ def main() -> int:
                   "t04_capability_citation_bound": {"ok": all(_cite.values()), "checks": _cite,
                                                     "anchors": len(CAPABILITY_ANCHORS),
                                                     "not_verbatim": sorted(CAPABILITY_QUOTE_NOT_VERBATIM)},
-                  "t05_capability_citation_sensitivity": {"ok": _cite_sens}},
+                  "t05_capability_citation_sensitivity": {"ok": _cite_sens},
+                  "t06_capability_value_bound": {"ok": all(_bind.values()), "checks": _bind,
+                                                 "rules": sum(len(CAPABILITY_VALUE_BIND[k]) for k in CAPABILITY_VALUE_BIND)},
+                  "t07_capability_value_bind_sensitivity": {"ok": _bind_sens}},
         "redline": "只读：仅读板/kicad-cli DRC；坐标零搜索；不改板/图纸/SPEC/冻结四源。",
     }
     (STEP2 / "m13_v57_co146_jlc_dfm_gate.json").write_text(
         json.dumps(rec, ensure_ascii=False, indent=1) + "\n")
     srcfile = CAP_SRC_HTML
-    cap = {"artifact": "m13_v57_co146_jlc8_capability", "schema": 1, "revision": "CO146-CAP.1",
+    cap = {"artifact": "m13_v57_co146_jlc8_capability", "schema": 1, "revision": "CO146-CAP.2",
            "source_url": JLC_URL, "fetched": JLC_FETCH_DATE,
            "source_page_file": srcfile.name,
            "source_page_sha256": sha(srcfile) if srcfile.exists() else None,
            "source_page_bytes": srcfile.stat().st_size if srcfile.exists() else None,
+           "value_bind": {"n_rules": sum(len(CAPABILITY_VALUE_BIND[k]) for k in CAPABILITY_VALUE_BIND),
+                          "n_capture_groups": 29, "floor": 25,
+                          "scheme": "值/文本主张须由抓取件原文**正则抽取**得到（t06 逐条核验；t07 灵敏度）",
+                          "checks": _bind},
            "note": "抓取件为 JLC 公布能力页（jlcpcb.com/capabilities/pcb-capabilities）。CO-176（G-2）订正："
                    "每条 `anchor` 为抓取件**原文子串**（机判 t04 逐条核验）；`quote` 为可读引文，"
                    "**非原文者**列于 `citation.not_verbatim` 并给理由（禁静默删改/改写）。",
@@ -408,7 +490,9 @@ def main() -> int:
              f"- T2 过孔类型项必须 FAIL：ok={teeth2_ok}",
              f"- T3 板规铜-板边值须由冻结 drc_rules 派生（{EDGE_CLEARANCE_RULE_MM:.2f}mm）：ok={teeth3_ok}",
              f"- T4 能力表引证逐条绑定抓取件（anchor 原文子串 + 非原文显式标注）：ok={all(_cite.values())}",
-             f"- T5 引证判据灵敏度（篡改 anchor 即判不通过）：ok={_cite_sens}", ""]
+             f"- T5 引证判据灵敏度（篡改 anchor 即判不通过）：ok={_cite_sens}",
+             f"- T6 能力表**值**可由抓取件原文抽取核验（29 捕获组 ↔ 声明值）：ok={all(_bind.values())}",
+             f"- T7 值绑定灵敏度（篡改期望值即判不通过）：ok={_bind_sens}", ""]
     (STEP2 / "m13_v57_co146_jlc_dfm_gate.md").write_text("\n".join(card) + "\n")
     print("verdict:", rec["verdict"], "| fails:", fails)
     print("as-designed:", asd["n"], asd["by_type"])
@@ -416,7 +500,7 @@ def main() -> int:
     print("min track:", m["min_track_width_mm"], "| min via drill/dia:", m["min_via_drill_mm"], m["min_via_diameter_mm"],
           "| annular:", m["min_via_annular_mm"], "| via h2h:", m["min_via_hole_to_hole_mm"])
     print("non-through vias:", m["n_non_through_vias"], m["via_type_census"])
-    print("teeth:", teeth_ok, teeth2_ok, teeth3_ok, all(_cite.values()), _cite_sens)
+    print("teeth:", teeth_ok, teeth2_ok, teeth3_ok, all(_cite.values()), _cite_sens, all(_bind.values()), _bind_sens)
     # CO-159（F-7）：R-CO158-3 —— 退出码须反映 verdict（本件 verdict 允许为 FAIL（DFM 阻塞项）⇒ rc=1；
     # 此前 `return 0 if teeth else 1` 使 FAIL 时 rc 仍 0，复现序无法 fail-fast）。
     return 0 if (rec["verdict"] == "PASS" and teeth_ok and teeth2_ok and teeth3_ok) else 1

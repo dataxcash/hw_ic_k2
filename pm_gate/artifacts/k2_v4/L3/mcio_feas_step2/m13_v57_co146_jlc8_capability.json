@@ -1,12 +1,24 @@
 {
  "artifact": "m13_v57_co146_jlc8_capability",
  "schema": 1,
- "revision": "CO146-CAP.1",
+ "revision": "CO146-CAP.2",
  "source_url": "https://jlcpcb.com/capabilities/pcb-capabilities",
  "fetched": "2026-09-12",
  "source_page_file": "m13_v57_co146_jlc_capability_source.html",
  "source_page_sha256": "7d1d5a9193f3c2123367b1b306e9e3c67863fd31da6e577ad7c4f197fab8ac9d",
  "source_page_bytes": 135508,
+ "value_bind": {
+  "n_rules": 27,
+  "n_capture_groups": 29,
+  "floor": 25,
+  "scheme": "值/文本主张须由抓取件原文**正则抽取**得到（t06 逐条核验；t07 灵敏度）",
+  "checks": {
+   "bind_covers_capability": true,
+   "bind_nonempty": true,
+   "bind_all_resolved": true,
+   "bind_group_floor": true
+  }
+ },
  "note": "抓取件为 JLC 公布能力页（jlcpcb.com/capabilities/pcb-capabilities）。CO-176（G-2）订正：每条 `anchor` 为抓取件**原文子串**（机判 t04 逐条核验）；`quote` 为可读引文，**非原文者**列于 `citation.not_verbatim` 并给理由（禁静默删改/改写）。",
  "citation": {
   "anchor_scheme": "anchor 须为抓取件（去标签+空白归一）原文子串；非原文引证须显式标注",

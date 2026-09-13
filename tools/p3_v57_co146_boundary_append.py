@@ -1312,6 +1312,62 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body49
     txt = txt.replace("W3 Boundary **v2.20**", "W3 Boundary **v2.21**")
+    # ── §50 CO-177（能力表值的原文抽取绑定） ─────────────────────────────────
+    MARK50 = "## 50. CO-177"
+    _rc50 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    _ord177 = ("co146_impedance_table → co146_pm_eval → co146_ledger_add → co153_k9_domain_coverage → "
+               "co148_u6_datasheet_inputs → co148_thermal_ruling → co149_thermal_mitigation_derive → co147_l2_ruling → "
+               "co146_jlc_dfm_gate → co146_jlc_fab_package → co152_findings_disposition → co155_co154_findings_disposition → "
+               "co156_co154_open_disposition → co157_gate_hardening_3 → co158_l5_packet_selfcontained → "
+               "co159_rev19_co156_co157_co158_review → co160_co159_findings_disposition → co161_gap_hardening_4 → "
+               "co162_verdict_binding → co163_binding_to_order_notes → co166_rev19_co159_co165_review → "
+               "co167_co166_findings_disposition → co168_register_consistency → co169_step_output_oracle → co170_stackup_binding → "
+               "co171_order_notes_record_figures → co172_rev19_co166_co171_review → co173_co172_findings_disposition → "
+               "co174_step_artifact_attribution → co175_package_parity_binding → co176_gate_selfcheck_evidence → "
+               "co177_capability_value_binding → co124_input_selfcheck_gate → co150_k9_domain_gate → co146_boundary_append → "
+               "co77_closure_declaration_sweep → co120_provenance_pin_gate → co135_review_hygiene → co136_gate_hygiene → "
+               "co78_layer_role_drift_gate → co81_project_rules_gate → co84_dru_domain_gate → co95_in4_reachability → "
+               "co98_reachability_status_report → co106_reference_plane_gate → co146_boundary_append")
+    sec50 = [MARK50 + "（**L2 自裁 · 引证可核验性续**）", "",
+             "- **问题（CO-176 G-2 残余）**：CO-176 只绑**引证 anchor**；能力表的**数值/文本主张**（`value`/`min`/`max`/`allowed`…）"
+             "仍是**手录** ⇒ 手录值与抓取件脱钩（如 0.09 误录为 0.10）时 anchor 仍命中、**不可检出**"
+             "（DFM 判定随单进包，其限值依据仍不完全可核验）。",
+             "- **处置**：`p3_v57_co146_jlc_dfm_gate.py` 升 **CO146-JLC-DFM.4** ——",
+             "  ① `CAPABILITY_VALUE_BIND`：每条 `[(正则, [期望值…])]` 或字面量，**24/24 覆盖、29 个捕获组**；",
+             "  ② 纯函数 `_val_eq()`（数值按 float 比较）/ `capability_value_bind_checks()`；",
+             "  ③ 牙齿 **t06**（覆盖/非空/字面量存在/正则匹配/捕获组数一致且**逐值相等**/捕获组总数下限 25）/ "
+             "**t07**（灵敏度：改期望值即判不通过）；",
+             "  ④ capability 记录升 **CO146-CAP.2** + `value_bind` 块；人读卡/打印补 T6/T7。",
+             f"- **登记簿**：+1（`co177:G-1`，CLOSED；{_rc50['total']} 项 / OPEN {_rc50['OPEN']}）。",
+             "",
+             "> **R-CO177-1**：记录内**工程值主张**须**可由来源原文抽取**得到（正则捕获 ↔ 声明值，逐值机判）；"
+             "仅绑 anchor（引证）**不成立**。绑定为人工编写者须**如实登记**（能力页改版后须人工复核）。",
+             "> **R-CO177-2**（复现序，取代 R-CO176-3；步骤集新增 co177）：规范复现序 = `" + _ord177 + "`，**循环至 sha 稳定**"
+             "（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1 + R-CO175-1 + R-CO176-1/2 + R-CO177-1）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows50 = [("工具 `p3_v57_co146_jlc_dfm_gate.py`（CO146-JLC-DFM.4 / 值绑定 t06/t07）",
+                K2 / "tools/p3_v57_co146_jlc_dfm_gate.py"),
+               ("工具 `p3_v57_co177_capability_value_binding.py`",
+                K2 / "tools/p3_v57_co177_capability_value_binding.py"),
+               ("工具 `p3_v57_co164_order_runner.py`（CO-169.4 / 46 步）",
+                K2 / "tools/p3_v57_co164_order_runner.py"),
+               ("能力表 `m13_v57_co146_jlc8_capability.json`（CO146-CAP.2 / 值绑定）",
+                STEP2 / "m13_v57_co146_jlc8_capability.json"),
+               ("DFM 闸记录 `m13_v57_co146_jlc_dfm_gate.json`（DFM.4 / 7 牙齿）",
+                STEP2 / "m13_v57_co146_jlc_dfm_gate.json"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc50['total']} 项 / OPEN {_rc50['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows50:
+        if pth.exists():
+            sec50.append(f"| {label} | `{s16(pth)}` |")
+    sec50.append("")
+    body50 = "\n".join(sec50)
+    if MARK50 in txt:
+        txt = re.sub(re.escape(MARK50) + r"[\s\S]*?(?=\n## |\Z)", body50, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body50
+    txt = txt.replace("W3 Boundary **v2.21**", "W3 Boundary **v2.22**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
     return 0
