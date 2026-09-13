@@ -47,6 +47,11 @@
 ⑱ CO-203（R-CO203-1，**自声明修订号绑定**）：凡工具**自声明 `revision`** 者，其记录 dict 字面量之修订号（**AST 抽取**；
      注释/散文不得满足 —— 承 R-CO202-4）须等于 `TOOL_REVISION_DECLARED` 之声明 —— 防「内容已升级、自声明滞留」
      （CO-202 之残余：oracle 内容已 CO-202 而 `revision` 仍 CO-200）。静态齿 **t33**。
+⑲ CO-215（R-CO215-1，**代理帮助函数之源面收窄 + 覆盖面机判**）：`artifact_readers()`（判「某步**确实读取**该工件」之**语法代理**）
+     原按**原文子串** `basename in src` 判 ⇒ **注释/散文即可满足**（与 R-CO202-4「注释不得满足源内声明」同源缺陷，CO-215 实测复现）⇒
+     收窄为 **AST 字面量集**（`_source_strings`）匹配 + glob 字面量；并把该帮助函数之**残余显式登记**
+     （`PROXY_RESIDUAL_EXPLICIT`：动态构造漏判 / 非读取语境误判，**不宣称完备**）以 `PROXY_HELPERS_PINNED` **覆盖面齿**机判
+     （每枚帮助函数须恰登记于 `PROXY_SEMANTIC_BINDING`（有语义判官）或 `PROXY_RESIDUAL_EXPLICIT`（显式残余）之一）。
 CLI:
   python3 tools/p3_v57_co164_order_runner.py [--check] [--max-iter 5]
 """
@@ -786,6 +791,44 @@ PROXY_SEMANTIC_BINDING = {
     },
 }
 
+# CO-215（R-CO215-1）：**代理帮助函数**（启发式/廉价前置之实现函数）之**覆盖面齿** —— 每枚须**恰**登记于
+# `PROXY_SEMANTIC_BINDING`（有外部语义判官 + 其源内齿 + 代理齿在 pin 表）**或** `PROXY_RESIDUAL_EXPLICIT`
+# （判官支路当前不可达时：**残余显式** + 依据 + **consumer 齿**）；二者**互斥**且完备覆盖本表。
+# 值 = 消费该代理的 fail-closed 静态齿名（须为本工具源内字面量 ⇒ 机判）。
+PROXY_HELPERS_PINNED = {
+    "artifact_readers": "t26_judgment_binding_executable",
+}
+PROXY_RESIDUAL_EXPLICIT = {
+    "artifact_readers": {
+        "residual": "源面**字面量上界**：① 动态构造路径（f-string / 变量 / 外部来源）⇒ **漏判**"
+                    "（方向 = fail-closed：声明被判「不可执行」）；② 字面量出现于**非读取语境**"
+                    "（`os.path.join` 片段 / 日志与异常文案）⇒ 仍**误判为读者**（方向 = fail-open）。**不宣称完备**。",
+        "basis": "语义性质 =『该步**运行时确实读取**该工件』；直判须**运行时读观测**（本器无该机制）"
+                 "⇒ 按 R-CO215-1 登记为**显式残余**，**不虚造**语义判官（R-CO198-1 之判官支路在此不可达）。",
+        "deferral_trigger": "引入步骤子进程**运行时读观测**（access tracing）时，须改挂 `PROXY_SEMANTIC_BINDING` 之语义判官支路。",
+    },
+}
+
+
+def proxy_coverage_decision(helpers, declared, residual) -> str:
+    """CO-215（R-CO215-1）纯判据：代理帮助函数之登记**互斥完备性**（`helpers`/`declared`/`residual` 可注入 ⇒ 合成控）。
+
+    返回 `ok` / `no_fail_closed_tooth`（该帮助函数未 pin 消费齿）/ `helper_registration_not_exclusive`
+    （两表皆无 **或** 两表皆有 = 互斥违例）/ `residual_incomplete`（残余条目缺 residual/basis/deferral_trigger）。
+    """
+    for h, tooth in dict(helpers).items():
+        if not str(tooth or "").strip():
+            return "no_fail_closed_tooth"
+        in_d, in_r = h in declared, h in residual
+        if in_d == in_r:
+            return "helper_registration_not_exclusive"
+        if in_r:
+            d = residual[h]
+            if not isinstance(d, dict) or not all(str(d.get(k) or "").strip()
+                                                  for k in ("residual", "basis", "deferral_trigger")):
+                return "residual_incomplete"
+    return "ok"
+
 
 def proxy_binding_decision(gate: str, decl, *, tool_ok=None, src_has=None, proxy_teeth=None) -> str:
     """CO-198（R-CO198-1）纯判据：代理判据 ↔ 语义闸绑定的**可执行性**（`tool_ok`/`src_has`/`proxy_teeth` 可注入 ⇒ 合成控）。
@@ -915,22 +958,34 @@ def tool_revision_bound(rel: str, decl) -> str:
     return "ok" if rev == _d.get("revision") else "revision_mismatch"
 
 
-def artifact_readers(basename: str) -> list:
-    """CO-193（R-CO193-1）：源内**引用**该工件 basename 的规范序步（**语法代理**，非运行时读确认）。
+def artifact_readers(basename: str, sources=None) -> list:
+    """CO-193（R-CO193-1）／CO-215（R-CO215-1）：源内**引用**该工件 basename 的规范序步（**语法代理**，非运行时读确认）。
 
-    判据 = 源内出现该 basename 字面，**或**出现可 `fnmatch` 命中的 glob 字符串（如 co77 经
-    `m13_v57_w3_joint_assignment_boundary_v1_*.md` 定位最新版 ⇒ 须计入）。writer 亦会命中 ⇒ 作**上界**用。
+    判据（CO-215 收窄） = 源内 **AST 字符串字面量集**含该 basename，**或**含可 `fnmatch` 命中的 glob 字面量
+    （如 co77 经 `m13_v57_w3_joint_assignment_boundary_v1_*.md` 定位最新版 ⇒ 须计入）。**注释/散文一律不计**
+    —— 原判据按**原文子串** `basename in src`，实测「注释提及 basename」即可满足（与 R-CO202-4 同源缺陷）。
+    writer 亦会命中 ⇒ 作**上界**用。`sources`（step→源码）可注入 ⇒ 合成控（零落盘）。
+
+    **残余（显式登记于 `PROXY_RESIDUAL_EXPLICIT`；不作完备性声明）**：① 以**动态构造**路径读取者**漏判**
+    （方向 = fail-closed：声明被判「不可执行」）；② 字面量出现于**非读取语境**（`os.path.join` 片段 / 错误文案）
+    仍可**误判为读者**（方向 = fail-open）。语义性质（运行时确实读取）须**运行时读观测**直判 —— 列为有据延后。
     """
     out = []
-    for st in sorted(set(ORDER)):
-        p = tool_path(st)
-        if p is None:
-            continue
-        src = p.read_text(encoding="utf-8")
-        if basename in src:
+    for st in (sorted(sources) if sources is not None else sorted(set(ORDER))):
+        if sources is None:
+            p = tool_path(st)
+            if p is None:
+                continue
+            src = p.read_text(encoding="utf-8")
+        else:
+            src = sources.get(st)
+            if src is None:
+                continue
+        lits = _source_strings(src)
+        if basename in lits:
             out.append(st)
             continue
-        for lit in _source_strings(src):
+        for lit in lits:
             if ("*" in lit or "?" in lit) and "/" not in lit and fnmatch.fnmatch(basename, lit):
                 out.append(st)
                 break
@@ -1541,7 +1596,13 @@ def main(argv=None) -> int:
                                       "teeth_path": ["teeth"]}) == "record_not_step_artifact"
         and expected_nonzero_binding("co146_jlc_dfm_gate",
                                      {**EXPECTED_NONZERO["co146_jlc_dfm_gate"],
-                                      "teeth_path": ["nope"]}) == "teeth_path_unresolved")
+                                      "teeth_path": ["nope"]}) == "teeth_path_unresolved"
+        # CO-215（R-CO215-1）：**注释/散文不得满足**「该步读取该工件」（AST 字面量集；原文子串判据实测被注释满足）
+        and artifact_readers("x.md", sources={"S": "# x.md  （仅注释，非读取）\n"}) == []
+        and artifact_readers("x.md", sources={"S": "p = ROOT / 'x.md'\n"}) == ["S"]
+        and artifact_readers("x_v1.md", sources={"S": "g = 'x_*.md'\n"}) == ["S"]
+        # 残余如实登记（方向）：动态构造 ⇒ 漏判（fail-closed）；不作完备性声明
+        and artifact_readers("x.md", sources={"S": "p = f'{pre}/x.md'\n"}) == [])
     # CO-194（R-CO194-1/2）：基据↔判官绑定 + 白名单声明↔工具源绑定 —— 静态齿 t27
     _bj = {c: basis_judge_decision(c, d) for c, d in BASIS_JUDGE_DECLARED.items()}
     checks["t27_basis_judge_and_verdict_binding"] = (
@@ -1596,7 +1657,17 @@ def main(argv=None) -> int:
         and proxy_binding_decision("__nc__", _pbase, proxy_teeth=[]) == "proxy_teeth_unpinned"
         # CO-202（L-3 / R-CO202-4）：**注释/散文不得满足**「源内声明」（AST 字面量集之判别力）
         and "t00_settle_converged" not in set(_source_strings("# t00_settle_converged  （仅注释，非声明）"))
-        and "t00_settle_converged" in set(_source_strings("t = {'t00_settle_converged': False}")))
+        and "t00_settle_converged" in set(_source_strings("t = {'t00_settle_converged': False}"))
+        # CO-215（R-CO215-1）：代理帮助函数**覆盖面** —— 每枚须恰登记于一表；残余条目字段须完备
+        and proxy_coverage_decision(PROXY_HELPERS_PINNED, PROXY_SEMANTIC_BINDING, PROXY_RESIDUAL_EXPLICIT) == "ok"
+        and set(PROXY_HELPERS_PINNED.values()) <= set(
+            _source_strings(Path(__file__).read_text(encoding="utf-8")))
+        and proxy_coverage_decision({"h": "t26"}, {"h": 1}, {}) == "ok"
+        and proxy_coverage_decision({"h": "t26"}, {}, {"h": {"residual": "r", "basis": "b", "deferral_trigger": "t"}}) == "ok"
+        and proxy_coverage_decision({"h": "t26"}, {}, {}) == "helper_registration_not_exclusive"
+        and proxy_coverage_decision({"h": "t26"}, {"h": 1}, {"h": {}}) == "helper_registration_not_exclusive"
+        and proxy_coverage_decision({"h": "t26"}, {}, {"h": {"residual": "r", "basis": "b"}}) == "residual_incomplete"
+        and proxy_coverage_decision({"h": ""}, {}, {}) == "no_fail_closed_tooth")
     # CO-199（F-1）：白名单须声明**预期 rc 类**（rc≠0 不等于预期 FAIL —— 别的原因失败须停机）
     _d199 = dict(EXPECTED_NONZERO["co146_jlc_dfm_gate"])
     checks["t30_expected_nonzero_rc_class"] = (

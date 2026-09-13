@@ -3124,6 +3124,54 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body87
 
+    # ── §88 CO-215（L2 自裁 · 代理帮助函数源面收窄 + 覆盖面机判） ──
+    MARK88 = "## 88. CO-215"
+    _rc88 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    sec88 = [MARK88 + "（**L2 自裁 · 代理帮助函数之源面收窄 + 覆盖面机判**）", "",
+             "- **缘起（R-CO198-1 之未登记代理）**：CO-198 立「凡代理判据代替语义判据之处须登记 `PROXY_SEMANTIC_BINDING`」，"
+             "但 `artifact_readers()`（判「某步**确实读取**该工件」之**语法代理**，供 t26 `judgment_downstream_binding` 消费）"
+             "**未入该表**，历件仅以「有据延后」带过 ⇒ 本件查明其根因并处置。",
+             "- **缺陷 L-1（TOOL_DEFECT · low）源面判据过宽 ⇒ 注释/散文即可满足**：原实现按**原文子串** `basename in src` 判「该步读取该工件」"
+             "（实测复现：源内仅一行**注释** `# x.md` 即使该式成真）⇒ 与 **R-CO202-4**「源内**声明**须以 AST 字面量集判；注释/散文不得满足」"
+             "**同源缺陷**；后果 = t26 之 `refs_not_reading_artifact` 面（下游声明「可执行性」）**可由散文满足**（方向 = fail-open：声明被误认为可执行）。",
+             "- **处置**：① `artifact_readers()` 收窄为 **AST 字符串字面量集**（`_source_strings`）匹配 **+ glob 字面量**匹配，"
+             "**注释/散文一律不计**；并支持 `sources`（step→源码）注入 ⇒ 牙齿合成控**零落盘**。"
+             "② t26 增 **4 项控**：注释负控（⇒ `[]`）/ 路径字面量正控（⇒ 该步）/ glob 字面量正控（`x_*.md` ⊇ `x_v1.md`）/ "
+             "动态构造**如实登记**（`f'{pre}/x.md'` ⇒ `[]`，即残余方向 fail-closed）。"
+             "③ **残余显式登记**（`PROXY_RESIDUAL_EXPLICIT`）：① 动态构造路径 ⇒ **漏判**（方向 fail-closed）；"
+             "② 字面量出现于**非读取语境**（`os.path.join` 片段 / 日志与异常文案）⇒ 仍**误判为读者**（方向 fail-open）；**不宣称完备**。"
+             "④ **覆盖面机判**（`PROXY_HELPERS_PINNED` + `proxy_coverage_decision()`，入 **t29**）：每枚代理帮助函数须**恰**登记于 "
+             "`PROXY_SEMANTIC_BINDING`（有外部语义判官）**或** `PROXY_RESIDUAL_EXPLICIT`（残余显式）之一（互斥 + 完备覆盖本表）；"
+             "残余条目三字段（residual/basis/deferral_trigger）须非空；**消费齿须为本工具源内字面量**（AST 判）。"
+             "**序不变**：未增删步、未改序列（仍 50 次）；**齿数不变**（静态齿仍 t01..t33 = 35 项，仅 t26/t29 内加控）。",
+             "- **修后实测**：真声明 `judgment_downstream_binding(" + "`co146_boundary_append`" + ")` = **ok**（boundary 读者集 7 步："
+             "co77/co124/co135/co136/co146_boundary_append/co146_jlc_fab_package/co166）；**注释-only 不再满足**（⇒ `[]`）；"
+             "`--check` **35/35 全 True**（t26/t29 含新控）；`proxy_coverage_decision` = ok。",
+             "- **诚实边界**：残余（动态构造漏判 / 非读取语境误判）**未消除**，仅**显式登记** + 覆盖面齿约束；"
+             "其语义判官支路（**运行时读观测**）列为**有据延后**（触发 = 引入步骤子进程 access tracing）。"
+             "另：runner 自声明 `revision` 仍为 `CO-203.1` —— 按 CO-208（R-CO208-2）收窄后之登记域（须为**机判/记录消费面**者），"
+             "本器报告**不被 pin**、亦无消费者 ⇒ **不在登记义务内**，非遗漏（此处明示以免复评误判）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows88 = [("runner `p3_v57_co164_order_runner.py`（**CO-215**：`artifact_readers` 收窄为 AST 字面量 + 代理覆盖面齿 t26/t29）", K2 / "tools/p3_v57_co164_order_runner.py"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc88['total']} 项 / OPEN {_rc88['OPEN']}）", L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows88:
+        if pth.exists():
+            sec88.append(f"| {label} | `{s16(pth)}` |")
+    sec88.append("")
+    sec88.append("> **R-CO215-1**：凡**代理帮助函数**（启发式 / 廉价前置之实现）须**恰**登记于 `PROXY_SEMANTIC_BINDING`（有外部语义判官）"
+                 "**或** `PROXY_RESIDUAL_EXPLICIT`（残余显式 + 依据 + 触发 + **消费齿**）之一，由覆盖面齿机判；"
+                 "**源面判据不得以原文子串判**（注释/散文不得满足 —— 承 R-CO202-4）；残余不得宣称完备。")
+    sec88.append("")
+    sec88.append("> **序不变**：本件未改步骤集/序列（承 §82 之 R-CO209-2）。")
+    sec88.append("")
+    body88 = "\n".join(sec88)
+    if MARK88 in txt:
+        txt = re.sub(re.escape(MARK88) + r"[\s\S]*?(?=\n## |\Z)", body88, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body88
+
+    txt = txt.replace("W3 Boundary **v2.55**", "W3 Boundary **v2.56**")
     txt = txt.replace("W3 Boundary **v2.54**", "W3 Boundary **v2.55**")
     txt = txt.replace("W3 Boundary **v2.53**", "W3 Boundary **v2.54**")
     txt = txt.replace("W3 Boundary **v2.52**", "W3 Boundary **v2.53**")
