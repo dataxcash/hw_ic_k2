@@ -214,9 +214,14 @@ def pol_off(f, pol):
 
 
 _EFL = __import__("os").environ.get("CO10_EFLIP", "") not in ("", "0")
+# CO-204（L2 自裁 · 监理指令 #12）：竖段层**全落 B.Cu**（候选 A′）。run 层不变（仍 In5）⇒ 阻抗/几何不变；
+# 每线 via = F↔B(通孔) + B↔In5(背钻) ⇒ 全类外层锚定、残桩 0、0 盲埋孔。
+_ALLB = __import__("os").environ.get("CO10_ALLB", "") not in ("", "0")
 
 
 def esc_layer(f):
+    if _ALLB:
+        return "B.Cu"      # CO-204：竖段层全落 B.Cu（run 仍 In5）
     # CO-16 候选：东侧 escape 层对调（up→In2 / dn→B），配合 up stub→B ⇒ 每线 via ≤6
     if _EFL and f["corridor"] == "EAST_CHIP_TO_J2":
         return "In2.Cu" if f["band"] == "up" else "B.Cu"
@@ -244,6 +249,8 @@ def row_group(f):
 
 
 def stub_layer(f):
+    if _ALLB:
+        return "B.Cu"      # CO-204：竖段层全落 B.Cu（run 仍 In5）
     if f["conn_ref"] == "J2":
         if not EASTSPLIT:
             return "In2.Cu"

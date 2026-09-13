@@ -34,6 +34,11 @@
   - C：保留 run=In5，把每处 In2↔In5 改为 **In2→B→In5 双孔桥**（不动 run 层，但增孔）。
 - **代价（A/B）**：走廊 run 层由 In5（带状线，参考 In4/In6）改为 B.Cu（外层微带）⇒ **须改 SPEC `impedance.per_layer` + 阻抗重签**。
 
+### R3 附（CO-204L · 实测负结果）
+- **候选 A′（竖段全落 B.Cu，run 仍 In5）经现有模型一次求解 = NOT FULLY PLACED（20/32 页不可落位）**，约束绑定于 B.Cu 竖段×异网竖段（0.0–0.6）与竖段×PDN via（0.025–0.505）⇒ **B.Cu 容量不足**。
+- ⇒ 竖段**必须分色于 ≥2 层**；因 run 层须异于竖段层，合法解只能来自：**候选 A（run → B.Cu，竖段 In2）** 或 **候选 B（run → B.Cu，竖段 In2/In5 分色）**；候选 C（In2→B→In5 双孔桥）为不动 run 层之备选。
+- 裁决序：先测 **候选 A**（In2 单层容量，3W 内层界 0.48）；不足再测 B。证据件 `m13_v57_co204l_candidate_Aprime_infeasible.json`。
+
 ## R4 两闸（防再犯）
 - **板厂能力绑定闸**：`tools/p3_v57_co204_fab_capability_binding_gate.py`（C0 能力源绑定 / C1 类别合法性 /
   C2 残桩 / C3 背钻工艺限 / C4 禁盲埋孔）。**现行板预期 FAIL**（内层↔内层 88）。
