@@ -1063,6 +1063,90 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body45
     txt = txt.replace("W3 Boundary **v2.16**", "W3 Boundary **v2.17**")
+    # ── §46 CO-172 / CO-173（非执行者对抗复评 + 记录派生数字绑定补强） ──────────
+    MARK46 = "## 46. CO-172 / CO-173"
+    _rc46 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    _ord172 = ("co146_impedance_table → co146_pm_eval → co146_ledger_add → co153_k9_domain_coverage → co148_u6_datasheet_inputs → "
+               "co148_thermal_ruling → co149_thermal_mitigation_derive → co147_l2_ruling → co146_jlc_dfm_gate → co146_jlc_fab_package → "
+               "co152_findings_disposition → co155_co154_findings_disposition → co156_co154_open_disposition → co157_gate_hardening_3 → "
+               "co158_l5_packet_selfcontained → co159_rev19_co156_co157_co158_review → co160_co159_findings_disposition → "
+               "co161_gap_hardening_4 → co162_verdict_binding → co163_binding_to_order_notes → co166_rev19_co159_co165_review → "
+               "co167_co166_findings_disposition → co168_register_consistency → co169_step_output_oracle → co170_stackup_binding → "
+               "co171_order_notes_record_figures → co172_rev19_co166_co171_review → co173_co172_findings_disposition → "
+               "co124_input_selfcheck_gate → co150_k9_domain_gate → co146_boundary_append → co77_closure_declaration_sweep → "
+               "co120_provenance_pin_gate → co135_review_hygiene → co136_gate_hygiene → co78_layer_role_drift_gate → "
+               "co81_project_rules_gate → co84_dru_domain_gate → co95_in4_reachability → co98_reachability_status_report → "
+               "co106_reference_plane_gate → co146_boundary_append")
+    sec46 = [MARK46 + "（**L2 自裁 · 非执行者对抗复评 + 记录派生数字绑定补强**）", "",
+             "- **复评（CO-172，非执行者会话、as-found 钉在 `7bffb75`；`git show` 取源 + 内存注入、零落盘、零坐标搜索）**："
+             "对象 = CO-166..CO-171；verdict **PASS_WITH_FINDINGS**（7 findings）。handoff §4.2 指定关注点逐一裁定：",
+             "  **F-1**（medium）§5「模型间 spread ≈4.8%」为记录派生数字但**无来源记录串、亦无牙齿**（t12 只绑 dev% +11.7%）"
+             "⇒ R-CO171-1 在本备注内**仍有未绑定项**（P1：仅改 spread、不动 dev% ⇒ as-found 判据全 True）；",
+             "  **F-2**（medium）§2 非通孔过孔**逐 span 分解**（92/88/32/8）硬编码，源 = DFM 记录 `via_type_census` —— "
+             "**总量绑定 ≠ 分量绑定**（P2）；",
+             "  **F-3**（medium）§3 阻焊净距 0.0695 / 欠 0.0205 / 回退 0.0995 / 开窗 0.05→0.02mm 硬编码，源 = CO-147 记录 `mask_measure`（P3）；",
+             "  **F-4**（medium）§6 U6 热数字（PACT 4.7–7.0W / θJA 17.4 / Tj 限 120 / 121.8–161.8 / ψJB 路线 173.6 / Ta 40°C）硬编码，"
+             "源 = CO-148 + CO-149（P4）；",
+             "  **F-5**（low）§4 JLC 限值散文与「板规铜-板边 0.30mm」（源 = JLC 能力记录 + **冻结** `drc_rules.manufacturing.min_copper_edge_clearance`）"
+             "在**备注与 DFM 闸工具两处**均硬编码（P5/P6）；",
+             "  **F-6**（medium）叠层图（03_，**随单提交的制造输入**）**铜厚矩形几何**硬编码 `0.035`/`0.0175`mm，t11 只绑**文本**（P7）"
+             "⇒ 声明铜厚变更时图与声明在**几何上**脱钩、制造侧按图施工；",
+             "  **F-7**（low）runner `step_did_work` 快照**单信号 mtime_ns**（P8：值为标量 int）⇒ 粗粒度/网络 FS 同刻重写、mtime 规范化/回写、"
+             "时钟回拨下**假停机**（fail-closed，不致假通过）；且受控集为**全局集合、非步本地** ⇒ 并发会话写受控件可被误判为「本步做了事」（假通过方向）。"
+             "　关注点④（`REGISTER_STATUSES` / `counts` 复算键集）裁定 = **不过严**（并集比对 ⇒ 多写/少写键均 fail-closed；as-found 复算逐项一致）。",
+             "- **处置（CO-173）**：",
+             "  ① `p3_v57_co146_jlc_fab_package.py` 升 **CO146-PKG.8** —— 新增纯谓词 `impedance_spread_pct` / `via_census_figures` / "
+             "`mask_clearance_figures` / `thermal_figures` 与 capability+rules 派生判据；牙齿 **t12c..t12h**（逐来源负控）与 "
+             "**t11c/t11d**（叠层图**几何**正控/负控）；`stackup_svg(spec, binding)` 的铜厚矩形高度与标题 oz 改由**声明定值表**派生"
+             "（1oz=0.035mm 标称；当前 1oz/0.5oz ⇒ 21.00/10.50 px）。",
+             "  ② `p3_v57_co146_jlc_dfm_gate.py` 升 **CO146-JLC-DFM.2** —— 「板规铜-板边」值由冻结 `drc_rules` 派生 + 牙齿 **t03**（正控/灵敏度）。",
+             "  ③ `p3_v57_co164_order_runner.py` 升 **CO-169.2** —— `_artifact_stamp` 多信号指纹（mtime_ns + ctime_ns + size + 内容 sha16）、"
+             "`_snap_watched` 返回指纹字典 + 静态齿 **t12**。",
+             f"  ④ **复核**：打样包牙齿 **25/25**；`ORDER_NOTES.md` 与叠层图**输出逐字节不变**"
+             f"（`{s16(L5 / 'jlc_package' / 'ORDER_NOTES.md')}` / `{s16(L5 / 'jlc_package' / '03_stackup' / 'JLC08161H_stackup.svg')}`）；"
+             f"DFM 闸 rc=1（预期 FAIL）且 t01..t03 全 True；登记簿 **{_rc46['total']} 项 / OPEN {_rc46['OPEN']}**（+7 TOOL_DEFECT，全 CLOSED）。",
+             "",
+             "> **R-CO172-1**：客户可见交付物内**凡可由记录复算的数字**（含**导出量**：模型间 spread、分量计数、回退净距）一律绑定来源记录并配**负控**；"
+             "仅绑定总量、或只绑「主」数字，**视为未绑定**。",
+             "> **R-CO172-2**：随单提交的**制造输入**不仅**文本**、其**几何**亦须由声明定值派生（或至少具备几何牙齿）；"
+             "「文本已绑定 ⇒ 视为已绑」不成立。",
+             "> **R-CO172-3**：复现序执行器的「做了事」判据快照须为**多信号**（mtime_ns + ctime_ns + size + 内容指纹）；"
+             "残余（全局受控集、非步本地归因）须**如实登记**，不得以「已硬化」掩盖。",
+             "> **R-CO172-4**（复现序，取代 R-CO171-3；步骤集新增 co172/co173）：规范复现序 = `" + _ord172 + "`，**循环至 sha 稳定**"
+             "（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows46 = [("工具 `p3_v57_co172_rev19_co166_co171_review.py`（CO-172.1）",
+                K2 / "tools/p3_v57_co172_rev19_co166_co171_review.py"),
+               ("工具 `p3_v57_co173_co172_findings_disposition.py`",
+                K2 / "tools/p3_v57_co173_co172_findings_disposition.py"),
+               ("复评记录 `m13_v57_co172_rev19_co166_co171_review.json`",
+                STEP2 / "m13_v57_co172_rev19_co166_co171_review.json"),
+               ("工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.8 / t12c..t12h + t11c/t11d）",
+                K2 / "tools/p3_v57_co146_jlc_fab_package.py"),
+               ("工具 `p3_v57_co146_jlc_dfm_gate.py`（CO146-JLC-DFM.2 / 板规铜-板边派生 + t03）",
+                K2 / "tools/p3_v57_co146_jlc_dfm_gate.py"),
+               ("工具 `p3_v57_co164_order_runner.py`（CO-169.2 / 多信号快照 + t12；42 步）",
+                K2 / "tools/p3_v57_co164_order_runner.py"),
+               ("下单备注 `L5/jlc_package/ORDER_NOTES.md`（**逐字节不变**）", L5 / "jlc_package" / "ORDER_NOTES.md"),
+               ("叠层图 `03_stackup/JLC08161H_stackup.svg`（**逐字节不变**）",
+                L5 / "jlc_package" / "03_stackup" / "JLC08161H_stackup.svg"),
+               ("打样包记录 `m13_v57_co146_jlc_fab_package.json`（重建 / PKG.8）",
+                STEP2 / "m13_v57_co146_jlc_fab_package.json"),
+               ("DFM 闸记录 `m13_v57_co146_jlc_dfm_gate.json`（DFM.2）",
+                STEP2 / "m13_v57_co146_jlc_dfm_gate.json"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc46['total']} 项 / OPEN {_rc46['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows46:
+        if pth.exists():
+            sec46.append(f"| {label} | `{s16(pth)}` |")
+    sec46.append("")
+    body46 = "\n".join(sec46)
+    if MARK46 in txt:
+        txt = re.sub(re.escape(MARK46) + r"[\s\S]*?(?=\n## |\Z)", body46, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body46
+    txt = txt.replace("W3 Boundary **v2.17**", "W3 Boundary **v2.18**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
     return 0

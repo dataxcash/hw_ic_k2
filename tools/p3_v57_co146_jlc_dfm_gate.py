@@ -26,6 +26,18 @@ CLI = ROOT / "AppDir/bin/kicad-cli"
 BOARD = K2 / "k2_v4_8L.l4.kicad_pcb"
 PRO = K2 / "k2_v4_8L.l4.kicad_pro"
 DRU = K2 / "k2_v4_8L.l4.kicad_dru"
+# CO-172（F-5）：板规铜-板边净距须由**冻结 drc_rules** 派生（原为硬编码 "0.30mm" 字面量）
+RULES_FILE = ROOT / "_shared/eda_core/drc_rules.json"
+BOARD_RULES = json.loads(RULES_FILE.read_text())
+EDGE_CLEARANCE_RULE_MM = float(BOARD_RULES["manufacturing"]["min_copper_edge_clearance"])
+
+
+def edge_rule_bound_checks(items: list, rule_mm: float) -> dict:
+    """CO-172（F-5）：DFM 记录的「铜到板边」实测文本须携带**由冻结规则派生的**板规值。"""
+    txt = next((it.get("measured", "") for it in items if it.get("item") == "铜到板边"), "")
+    return {"measured_carries_board_rule": f"{rule_mm:.2f}mm" in txt}
+
+
 JLC_URL = "https://jlcpcb.com/capabilities/pcb-capabilities"
 JLC_FETCH_DATE = "2026-09-12"
 
@@ -225,7 +237,7 @@ def _items(m: dict, asd: dict, jlcrun: dict) -> list[dict]:
         f"{m['min_npth_drill_mm']}mm（{list(m['npth_drill_hist_mm'])}）",
         m["min_npth_drill_mm"] is None or m["min_npth_drill_mm"] >= j["min_npth_mm"]["value"])
     add("铜到板边", f"≥{j['copper_edge_clearance_mm']['value']}mm",
-        f"板规 min_copper_edge_clearance=0.30mm；JLC 限 DRC copper_edge_clearance 违规 = "
+        f"板规 min_copper_edge_clearance={EDGE_CLEARANCE_RULE_MM:.2f}mm；JLC 限 DRC copper_edge_clearance 违规 = "
         f"{jlcrun['by_type'].get('copper_edge_clearance', 0)}",
         jlcrun["by_type"].get("copper_edge_clearance", 0) == 0)
     add("阻焊桥 / 阻焊-铜净距", f"桥 ≥{j['solder_mask_bridge_mm']['value']}mm；开窗到邻近铜 ≥{j['solder_mask_to_copper_mm']['value']}mm",
@@ -256,11 +268,14 @@ def main() -> int:
     tooth = _run_drc(board_text, json.dumps(tooth_pro, indent=2), dru_text)
     teeth_ok = tooth["by_type"].get("track_width", 0) > 0
     items = _items(m, asd, jlcrun)
+    edge_bound = edge_rule_bound_checks(items, EDGE_CLEARANCE_RULE_MM)
+    teeth3_ok = all(edge_bound.values()) and not all(
+        edge_rule_bound_checks(items, EDGE_CLEARANCE_RULE_MM + 0.05).values())
     fails = [i["item"] for i in items if i["verdict"] == "FAIL"]
     # 牙齿②：过孔类型项必须 FAIL（本板 220 非通孔）
     teeth2_ok = "**过孔类型（盲/埋孔）**" in fails
     rec = {
-        "artifact": "m13_v57_co146_jlc_dfm_gate", "schema": 1, "revision": "CO146-JLC-DFM.1",
+        "artifact": "m13_v57_co146_jlc_dfm_gate", "schema": 1, "revision": "CO146-JLC-DFM.2",
         "nature": "L2 只读机判：DFM 对照 JLC 8 层公布能力（监理指令 #10 动作 4）",
         "board": BOARD.name, "board_sha16": sha16(BOARD), "board_sha256": sha(BOARD),
         "as_built": m,
@@ -270,7 +285,10 @@ def main() -> int:
         "verdict": "PASS" if not fails else "FAIL",
         "fails": fails,
         "teeth": {"t01_track_width_limit_teeth": {"ok": teeth_ok, "evidence": tooth["by_type"]},
-                  "t02_blind_via_item_fails": {"ok": teeth2_ok}},
+                  "t02_blind_via_item_fails": {"ok": teeth2_ok},
+                  "t03_board_rule_edge_bound": {"ok": teeth3_ok, "checks": edge_bound,
+                                                "board_rule_mm": EDGE_CLEARANCE_RULE_MM,
+                                                "source": str(RULES_FILE.relative_to(ROOT))}},
         "redline": "只读：仅读板/kicad-cli DRC；坐标零搜索；不改板/图纸/SPEC/冻结四源。",
     }
     (STEP2 / "m13_v57_co146_jlc_dfm_gate.json").write_text(
@@ -294,7 +312,8 @@ def main() -> int:
     for i, it in enumerate(items, 1):
         card.append(f"| {i} | {it['item']} | {it['jlc_limit']} | {it['measured']} | **{it['verdict']}** |")
     card += ["", "## 牙齿", f"- T1 线宽限抬到 0.5mm ⇒ track_width 违规 {tooth['by_type'].get('track_width',0)}（>0 ok={teeth_ok}）",
-             f"- T2 过孔类型项必须 FAIL：ok={teeth2_ok}", ""]
+             f"- T2 过孔类型项必须 FAIL：ok={teeth2_ok}",
+             f"- T3 板规铜-板边值须由冻结 drc_rules 派生（{EDGE_CLEARANCE_RULE_MM:.2f}mm）：ok={teeth3_ok}", ""]
     (STEP2 / "m13_v57_co146_jlc_dfm_gate.md").write_text("\n".join(card) + "\n")
     print("verdict:", rec["verdict"], "| fails:", fails)
     print("as-designed:", asd["n"], asd["by_type"])
@@ -302,10 +321,10 @@ def main() -> int:
     print("min track:", m["min_track_width_mm"], "| min via drill/dia:", m["min_via_drill_mm"], m["min_via_diameter_mm"],
           "| annular:", m["min_via_annular_mm"], "| via h2h:", m["min_via_hole_to_hole_mm"])
     print("non-through vias:", m["n_non_through_vias"], m["via_type_census"])
-    print("teeth:", teeth_ok, teeth2_ok)
+    print("teeth:", teeth_ok, teeth2_ok, teeth3_ok)
     # CO-159（F-7）：R-CO158-3 —— 退出码须反映 verdict（本件 verdict 允许为 FAIL（DFM 阻塞项）⇒ rc=1；
     # 此前 `return 0 if teeth else 1` 使 FAIL 时 rc 仍 0，复现序无法 fail-fast）。
-    return 0 if (rec["verdict"] == "PASS" and teeth_ok and teeth2_ok) else 1
+    return 0 if (rec["verdict"] == "PASS" and teeth_ok and teeth2_ok and teeth3_ok) else 1
 
 
 if __name__ == "__main__":

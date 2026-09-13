@@ -28,4 +28,5 @@
 ## 牙齿
 - T1 线宽限抬到 0.5mm ⇒ track_width 违规 199（>0 ok=True）
 - T2 过孔类型项必须 FAIL：ok=True
+- T3 板规铜-板边值须由冻结 drc_rules 派生（0.30mm）：ok=True
 

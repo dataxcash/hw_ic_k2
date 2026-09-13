@@ -30,6 +30,7 @@ ORDER = ["co146_impedance_table", "co146_pm_eval", "co146_ledger_add", "co153_k9
          "co159_rev19_co156_co157_co158_review", "co160_co159_findings_disposition", "co161_gap_hardening_4",
          "co162_verdict_binding", "co163_binding_to_order_notes", "co166_rev19_co159_co165_review",
          "co167_co166_findings_disposition", "co168_register_consistency", "co169_step_output_oracle", "co170_stackup_binding", "co171_order_notes_record_figures",
+         "co172_rev19_co166_co171_review", "co173_co172_findings_disposition",
          "co124_input_selfcheck_gate", "co150_k9_domain_gate",
          "co146_boundary_append", "co77_closure_declaration_sweep", "co120_provenance_pin_gate", "co135_review_hygiene",
          "co136_gate_hygiene", "co78_layer_role_drift_gate", "co81_project_rules_gate", "co84_dru_domain_gate",
@@ -86,19 +87,33 @@ def record_refreshed(before: dict, after: dict) -> bool:
     return after.get("mtime_ns") != before.get("mtime_ns") or after.get("sha") != before.get("sha")
 
 
+def _artifact_stamp(p) -> dict | None:
+    """CO-172（F-7）：受控产物的**多信号**指纹（mtime_ns + ctime_ns + size + 内容 sha16）。
+
+    缘起（CO-169 单用 mtime_ns 的灵敏度缺口）：① 粗粒度/网络 FS 上同一时刻内重写可能**不前进**；
+    ② 某步把 mtime 回写/规范化为定值（utime）而内容已变 ⇒ mtime 不变 ⇒ 被误判「未做事」而假停机；
+    ③ mtime 易受系统时钟回拨/异机写入影响。加入 ctime/size/内容指纹后上述三类仍可判「做了事」。
+    残余（如实登记）：**字节完全相同**的重写在粗粒度 FS 上仍与 no-op 不可分 —— 该残余只会导致
+    **假停机（fail-closed）**，不会造成假通过；且收敛另由「循环至 sha 稳定」判定（R-CO164-1）。
+    """
+    try:
+        st = p.stat()
+    except OSError:
+        return None
+    try:
+        sha = s16(p)
+    except OSError:
+        sha = None
+    return {"mtime_ns": st.st_mtime_ns, "ctime_ns": st.st_ctime_ns, "size": st.st_size, "sha16": sha}
+
+
 def _snap_watched() -> dict:
-    """CO-169（G-1）：受控产物集的 (路径 -> mtime_ns|None) 快照。"""
-    d = {}
-    for p in watch_paths():
-        try:
-            d[str(p)] = p.stat().st_mtime_ns
-        except OSError:
-            d[str(p)] = None
-    return d
+    """CO-169/CO-172：受控产物集 (路径 -> 多信号指纹) 快照。"""
+    return {str(p): _artifact_stamp(p) for p in watch_paths()}
 
 
 def step_did_work(before: dict, after: dict) -> bool:
-    """CO-169（G-1）：该步须**写出**至少一个受控产物（mtime_ns 前进 / 新增 / 删除）。
+    """CO-169/CO-172：该步须**写出**至少一个受控产物（新增 / 删除 / 任一指纹信号变化）。
 
     `rc == 0` 本身不证明「做了事」：一个静默返回的步（早退/漏写）会因产物 sha 不变而被
     「sha 稳定 ⇒ 收敛」**背书**（与 CO-164 的教训同族，但故障类是「不崩也不写」）。
@@ -246,6 +261,13 @@ def main(argv=None) -> int:
         and step_did_work({"a": 1}, {"a": 1, "b": 7})      # 新增受控产物
         and step_did_work({"a": 1}, {"a": None})           # 产物被删/失联
         and zero_rc_class(True) == "ok" and zero_rc_class(False) == "step_wrote_nothing")
+    # CO-172（F-7）：快照须为**多信号**（mtime 不变而内容/ctime/size 变 ⇒ 仍须判「做了事」）
+    _s0 = {"mtime_ns": 1, "ctime_ns": 1, "size": 5, "sha16": "a"}
+    checks["t12_watched_snapshot_multisignal"] = (
+        step_did_work({"p": _s0}, {"p": {**_s0, "sha16": "b"}})                    # 内容变、mtime 未动
+        and step_did_work({"p": _s0}, {"p": {**_s0, "ctime_ns": 9}})              # ctime 前进
+        and step_did_work({"p": _s0}, {"p": {**_s0, "size": 6}})                  # size 变
+        and not step_did_work({"p": _s0}, {"p": dict(_s0)}))                      # 全同 ⇒ 未做事
     checks["t05_stability_oracle"] = (stable("x", "x") and not stable("x", "y") and not stable("", ""))
     # CO-164（t06）：执行器 ORDER 必须与 boundary 规范复现序**有序一致**（文档↔执行器防漂移）
     _bdy = boundary_order_steps()
@@ -291,7 +313,7 @@ def main(argv=None) -> int:
             converged = True
             break
         prev = cur
-    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-169.1",
+    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-169.2",
               "nature": "规范复现序机判执行器（rc 策略 + 真收敛判定）；报告落 .archer_tmp/ 且**不被 boundary 引用**（避免不动点）",
               "order": ORDER, "expected_nonzero": EXPECTED_NONZERO,
               "checks": checks, "iterations": iterations, "abort": abort, "converged": converged,

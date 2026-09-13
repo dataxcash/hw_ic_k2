@@ -15,7 +15,7 @@
       ③ 目录内任何 sha 缺失即 FAIL。
 """
 from __future__ import annotations
-import hashlib, json, re, shutil, subprocess, sys
+import copy, hashlib, json, re, shutil, subprocess, sys
 from pathlib import Path
 
 ROOT = Path("/home/fila/jqdDev_2025/ic_hw")
@@ -29,6 +29,16 @@ SPEC = K2 / "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-19.json"
 COPPER = ["F.Cu", "In1.Cu", "In2.Cu", "In3.Cu", "In4.Cu", "In5.Cu", "In6.Cu", "B.Cu"]
 PLOT_LAYERS = ",".join(COPPER + ["F.Paste", "B.Paste", "F.Silkscreen", "B.Silkscreen",
                                  "F.Mask", "B.Mask", "Edge.Cuts"])
+
+# CO-172（F-1..F-6）来源记录 + 冻结规则；OZ_TO_MM = 1oz 铜标称厚度（叠层图几何换算）
+CO147 = STEP2 / "m13_v57_co147_l2_ruling.json"
+CO148 = STEP2 / "m13_v57_co148_thermal_ruling.json"
+CO149 = STEP2 / "m13_v57_co149_u6_thermal_mitigation.json"
+CAP = STEP2 / "m13_v57_co146_jlc8_capability.json"
+RULES = Path("/home/fila/jqdDev_2025/ic_hw/_shared/eda_core/drc_rules.json")
+OZ_TO_MM = 0.035
+MASK_EXPANSION_REWORK_MM = 0.02   # CO-172：R3 回退方案名义新开窗量（L2 提案，非记录字段）
+MIL_MM = 0.0254
 
 
 CANON_DATE = "2026-09-12T00:00:00+08:00"
@@ -80,7 +90,12 @@ def export_drill(d: Path) -> None:
          "--report-path", str(d / "drill_report.txt"), "--output", str(d), str(BOARD)])
 
 
-def stackup_svg(spec: dict) -> str:
+def stackup_svg(spec: dict, binding: dict | None = None) -> str:
+    """叠层图（CO-170 / CO-172 F-6）：铜厚矩形**几何**与标题铜厚均由**声明定值表** copper oz 派生
+    （1oz = 0.035mm 标称），非硬编码字面量 ⇒ 声明铜厚变更即随动，并由 t11c 几何牙齿复核。"""
+    _cu = (binding or {}).get("copper") or {}
+    outer_oz, inner_oz = float(_cu.get("outer_oz", 1.0)), float(_cu.get("inner_oz", 0.5))
+    th_outer, th_inner = outer_oz * OZ_TO_MM, inner_oz * OZ_TO_MM
     dz = spec["stackup"]["dielectric_8l"]
     order = ["F.Cu", "d(F.Cu-In1.Cu)", "In1.Cu", "d(In1.Cu-In2.Cu)", "In2.Cu", "d(In2.Cu-In3.Cu)",
              "In3.Cu", "d(In3.Cu-In4.Cu)", "In4.Cu", "d(In4.Cu-In5.Cu)", "In5.Cu",
@@ -89,7 +104,7 @@ def stackup_svg(spec: dict) -> str:
     rows, y = [], top
     for name in order:
         if name.endswith("Cu"):
-            th, fill, label = 0.035 if name in ("F.Cu", "B.Cu") else 0.0175, "#c8811e", name
+            th, fill, label = (th_outer if name in ("F.Cu", "B.Cu") else th_inner), "#c8811e", name
         else:
             c = dz[name]
             th, fill, label = c["mm"], "#d8e8d8", f'{c["material"]} {c["mm"]}mm er={c["er"]}'
@@ -102,7 +117,7 @@ def stackup_svg(spec: dict) -> str:
     return (f'<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="{total + 80:.0f}">'
             f'<rect width="100%" height="100%" fill="white"/>'
             f'<text x="40" y="24" font-size="15" font-weight="bold">JLC08161H 8L 1.6mm 叠层（南亚 NP-155F）'
-            f'｜外层 1oz / 内层 0.5oz｜总厚 {spec["stackup"]["total_thickness_mm"]}mm｜单边比例 {scale:.0f}px/mm</text>'
+            f'｜外层 {outer_oz:g}oz / 内层 {inner_oz:g}oz｜总厚 {spec["stackup"]["total_thickness_mm"]}mm｜单边比例 {scale:.0f}px/mm</text>'
             + "".join(rows) + '</svg>')
 
 
@@ -174,6 +189,157 @@ def stackup_svg_binding_checks(svg_text: str, binding: dict) -> dict:
     return {k: _tok_match(svg_text, t[k]) for k in STACKUP_SVG_BINDING_KEYS}
 
 
+SVG_CU_RECT_RE = re.compile(r'<rect x="40"[^>]*?fill="#c8811e"[^>]*/>')
+SVG_SCALE_RE = re.compile(r"单边比例 (\d+)px/mm")
+
+
+def stackup_svg_copper_geometry_checks(svg_text: str, binding: dict) -> dict:
+    """CO-172（F-6）：叠层图**铜厚矩形几何**须与声明定值表 copper oz 一致（1oz=0.035mm 标称 × 比例）。
+
+    缘起：t11 只绑**文本**（「外层 1oz」）；铜厚矩形高度原为硬编码 `0.035`/`0.0175`（现改由声明派生），
+    若未来声明变动而几何未随动，图与声明在**几何上**脱钩、制造侧按图施工 ⇒ 本牙齿把「几何 vs 声明」纳入机判。
+    """
+    cu = binding.get("copper") or {}
+    outer_oz, inner_oz = float(cu.get("outer_oz", 1.0)), float(cu.get("inner_oz", 0.5))
+    m = SVG_SCALE_RE.search(svg_text)
+    scale = float(m.group(1)) if m else 0.0
+    hs = [float(re.search(r'height="([0-9.]+)"', r).group(1)) for r in SVG_CU_RECT_RE.findall(svg_text)]
+    exp = ([outer_oz * OZ_TO_MM * scale] + [inner_oz * OZ_TO_MM * scale] * 6
+           + [outer_oz * OZ_TO_MM * scale])
+    return {"n_copper_rects": len(hs), "scale_px_per_mm": scale,
+            "geometry_matches_binding": bool(scale) and len(hs) == 8
+                                          and all(abs(a - b) <= 0.01 for a, b in zip(hs, exp))}
+
+
+def impedance_spread_pct(imp: dict) -> float | None:
+    """CO-172（F-1）：watch（最宽间距）下**模型间**相对 spread%（以同几何模型最小值归一）。"""
+    best = None
+    for w in (imp.get("watch") or []):
+        vals = []
+        for zs in (w.get("zdiff") or {}).values():
+            vals += [float(z) for z in (zs if isinstance(zs, list) else [zs])
+                     if isinstance(z, (int, float)) and z > 0]
+        if len(vals) >= 2:
+            sp = (max(vals) - min(vals)) / min(vals) * 100.0
+            best = sp if best is None or sp > best else best
+    return round(best, 2) if best is not None else None
+
+
+def via_census_figures(dfm: dict) -> dict:
+    """CO-172（F-2）：**非通孔**过孔逐 span 计数（来源 = DFM 记录 `as_built.via_type_census`）。"""
+    vc = ((dfm.get("as_built") or {}).get("via_type_census") or {})
+    out = {}
+    for key, n in vc.items():
+        span, _, kind = str(key).partition("|")
+        if kind != "THROUGH" and isinstance(n, int):
+            out[span.replace("->", "→")] = n
+    return out
+
+
+# CO-172：§2 备注排版中每个 span 计数之后的字面分隔（防前缀匹配；亦为备注事实的一部分）
+VIA_SPAN_SUFFIX = {"F.Cu→In2.Cu": "、", "In2.Cu→In5.Cu": "（埋孔）", "In5.Cu→B.Cu": "、", "F.Cu→In5.Cu": "）"}
+
+
+def mask_clearance_figures(co147: dict) -> dict:
+    """CO-172（F-3）：阻焊开窗-邻铜净距（来源 = CO-147 裁定记录 `mask_measure`）。"""
+    m = co147.get("mask_measure") or {}
+    gap = (m.get("closest") or {}).get("gap_mm")
+    exp = m.get("mask_expansion_mm")
+    rework = (round(gap + exp - MASK_EXPANSION_REWORK_MM, 4)
+              if isinstance(gap, (int, float)) and isinstance(exp, (int, float)) else None)
+    return {"gap_mm": gap, "shortfall_mm": m.get("shortfall_mm"), "jlc_min_mm": m.get("jlc_min_mm"),
+            "mask_expansion_mm": exp, "rework_gap_mm": rework}
+
+
+def thermal_figures(co148: dict, co149: dict) -> dict:
+    """CO-172（F-4）：U6 热数字（来源 = CO-148 热裁定 + CO-149 缓解派生）。"""
+    ps = [c.get("P_U6_W") for c in (co148.get("cases") or {}).values()
+          if isinstance(c.get("P_U6_W"), (int, float))]
+    return {"P_min_W": min(ps) if ps else None, "P_max_W": max(ps) if ps else None,
+            "theta_ja_datasheet_C_per_W": (co149.get("routes") or {}).get("datasheet_theta_ja"),
+            "Tj_limit_C": co148.get("Tj_limit_C"),
+            "Tj_best_C": (co148.get("best") or {}).get("Tj_C"),
+            "Tj_worst_C": (co148.get("worst") or {}).get("Tj_C"),
+            "psi_jb_route_Tj_C": (co148.get("paths_cross_check") or {}).get("psi_jb_plus_board_route_Tj_C"),
+            "ta_C": co149.get("ta_C")}
+
+
+def _num(x) -> bool:
+    return isinstance(x, (int, float))
+
+
+def order_notes_record_figures(note: str, imp: dict, dfm: dict, co147: dict | None = None,
+                               co148: dict | None = None, co149: dict | None = None,
+                               cap: dict | None = None, rules: dict | None = None) -> dict:
+    """CO-171 + CO-172：`ORDER_NOTES` 内**记录派生数字**须与来源记录一致（有锚正则）。
+
+    CO-171（t12）覆盖 §5 阻抗偏离% 与 §7 DRC 计数；CO-172 扩到 §5 模型间 spread、§2 过孔 span 分解、
+    §3 阻焊净距/欠量/回退净距、§6 U6 热数字、§4 JLC 限值 / 板规铜-板边、§7 silk 计数。
+    扩展项仅在**来源记录齐备**时参与判定（缺件即不产出该项 —— 不以缺失冒充通过）。
+    """
+    fig = impedance_watch_figure(imp)
+    drc = dfm.get("drc_as_designed") or {}
+    by = drc.get("by_type") or {}
+    n = drc.get("n")
+    lf = sum(v for k, v in by.items() if str(k).startswith("lib_footprint") and isinstance(v, int))
+    silk = by.get("silk_edge_clearance")
+    out = {"impedance_watch_dev_pct": bool(fig) and _tok_match(note, f"{abs(fig['dev_pct']):.1f}%"),
+           "drc_as_designed_total": isinstance(n, int) and _tok_match(note, f"{n} 项"),
+           "drc_lib_footprint_sum": bool(by) and _tok_match(note, f"({lf})"),
+           "drc_silk_edge_clearance": isinstance(silk, int)
+                                       and _tok_match(note, f"`silk_edge_clearance`({silk})")}
+    spread = impedance_spread_pct(imp)
+    if spread is not None:
+        out["impedance_spread_pct"] = _tok_match(note, f"spread ≈{spread:.1f}%")
+    for span, cnt in (via_census_figures(dfm) if co147 is not None else {}).items():
+        out[f"via_census_{span}"] = _tok_match(note, f"`{span}` {cnt}{VIA_SPAN_SUFFIX.get(span, '')}")
+    if co147 is not None:
+        mf = mask_clearance_figures(co147)
+        if _num(mf["gap_mm"]):
+            out["mask_gap_mm"] = _tok_match(note, f"{mf['gap_mm']:g}mm")
+        if _num(mf["shortfall_mm"]):
+            out["mask_shortfall_mm"] = _tok_match(note, f"{mf['shortfall_mm']:g}")
+        if _num(mf["jlc_min_mm"]):
+            out["mask_jlc_min_mm"] = _tok_match(note, f"{mf['jlc_min_mm']:g}mm")
+        if _num(mf["mask_expansion_mm"]) and _num(mf["rework_gap_mm"]):
+            out["mask_rework_path"] = _tok_match(
+                note, f"{mf['mask_expansion_mm']:g}→{MASK_EXPANSION_REWORK_MM:g}mm")
+            out["mask_rework_gap_mm"] = _tok_match(note, f"{mf['rework_gap_mm']:g}")
+    if co148 is not None and co149 is not None:
+        tf = thermal_figures(co148, co149)
+        for key, probe in (("thermal_P_range", lambda t: f"{t['P_min_W']:.1f}–{t['P_max_W']:.1f}W"),
+                           ("thermal_theta_ja_datasheet",
+                            lambda t: f"θJA(high-K) {t['theta_ja_datasheet_C_per_W']:g}°C/W"),
+                           ("thermal_Tj_limit", lambda t: f"Tj 上限 {t['Tj_limit_C']:g}°C"),
+                           ("thermal_ta", lambda t: f"{t['ta_C']:g}°C 自然对流"),
+                           ("thermal_Tj_best_worst", lambda t: f"Tj {t['Tj_best_C']:g}–{t['Tj_worst_C']:g}°C"),
+                           ("thermal_psi_jb_route", lambda t: f"路线 {t['psi_jb_route_Tj_C']:g}°C")):
+            try:
+                out[key] = _tok_match(note, probe(tf))
+            except (TypeError, ValueError):
+                pass
+    if cap is not None and rules is not None:
+        try:
+            c = cap["capability"]
+            tw = c["min_track_width_mm"]["value"]
+            vh = c["min_via_hole_mm"]["value"]
+            vd = c["min_via_diameter_mm"]["value"]
+            ann = c["via_annular_note"]["value"]
+            h2h = c["via_hole_to_hole_mm"]["value"]
+            edge = c["copper_edge_clearance_mm"]["value"]
+            redge = rules["manufacturing"]["min_copper_edge_clearance"]
+            out["jlc_min_track_width_mil"] = _tok_match(note, f"≥{tw / MIL_MM:.1f}mil")
+            out["jlc_min_via_hole"] = _tok_match(note, f"孔 ≥{vh:g}")
+            out["jlc_min_via_diameter"] = _tok_match(note, f"盘径 ≥{vd:g}")
+            out["jlc_via_annular_note"] = _tok_match(note, f"孔径+{ann:g}")
+            out["jlc_via_hole_to_hole"] = _tok_match(note, f"mm(≥{h2h:g})")
+            out["rule_copper_edge_clearance"] = _tok_match(note, f"板规铜-板边 {redge:.2f}mm")
+            out["jlc_copper_edge_clearance"] = _tok_match(note, f"mm(≥{edge:g})")
+        except (KeyError, TypeError, ValueError):
+            pass
+    return out
+
+
 def impedance_watch_figure(imp: dict) -> dict:
     """CO-171（G-1）：从阻抗表记录派生「watch（最宽间距）下模型相对目标的**最大偏离%**」及其来源。
 
@@ -193,18 +359,6 @@ def impedance_watch_figure(imp: dict) -> dict:
                     best = {"layer": w.get("layer"), "model": model, "gap_mm": w.get("gap_mm"),
                             "zdiff": z, "target_zdiff": tgt, "dev_pct": round(dev, 2)}
     return best
-
-
-def order_notes_record_figures(note: str, imp: dict, dfm: dict) -> dict:
-    """CO-171（G-1/G-2）：`ORDER_NOTES` 内的**记录派生数字**须与其来源记录一致（有锚正则）。"""
-    fig = impedance_watch_figure(imp)
-    drc = dfm.get("drc_as_designed") or {}
-    by = drc.get("by_type") or {}
-    n = drc.get("n")
-    lf = sum(v for k, v in by.items() if str(k).startswith("lib_footprint") and isinstance(v, int))
-    return {"impedance_watch_dev_pct": bool(fig) and _tok_match(note, f"{abs(fig['dev_pct']):.1f}%"),
-            "drc_as_designed_total": isinstance(n, int) and _tok_match(note, f"{n} 项"),
-            "drc_lib_footprint_sum": bool(by) and _tok_match(note, f"({lf})")}
 
 
 def binding_param_checks(note: str, binding: dict) -> dict:
@@ -316,7 +470,7 @@ def main() -> int:
     export_drill(ddir)
     n_canon = canonicalize(gdir) + canonicalize(ddir)
     (OUT / "03_stackup").mkdir(parents=True, exist_ok=True)
-    _svg = stackup_svg(spec)                                             # CO-170（G-1）
+    _svg = stackup_svg(spec, jp_binding)                                 # CO-170/CO-172（F-6）
     (OUT / "03_stackup" / "JLC08161H_stackup.svg").write_text(_svg)
     (OUT / "04_impedance").mkdir(parents=True, exist_ok=True)
     shutil.copy(STEP2 / "m13_v57_co146_impedance_table.md", OUT / "04_impedance/impedance_table.md")
@@ -342,6 +496,22 @@ def main() -> int:
     cu = [n for n in gbr if any(n.endswith(f"-{l.replace('.', '_')}.gbr") for l in COPPER)]
     drl = sorted(p.name for p in ddir.glob("*.drl"))
     notes_txt = (OUT / "ORDER_NOTES.md").read_text()
+    # CO-172：记录派生数字的全部来源记录（缺件即不产出该项判据）
+    _co147 = json.loads(CO147.read_text()) if CO147.exists() else None
+    _co148 = json.loads(CO148.read_text()) if CO148.exists() else None
+    _co149 = json.loads(CO149.read_text()) if CO149.exists() else None
+    _cap = json.loads(CAP.read_text()) if CAP.exists() else None
+    _rules = json.loads(RULES.read_text()) if RULES.exists() else None
+    _figs = order_notes_record_figures(notes_txt, imp, dfm, _co147, _co148, _co149, _cap, _rules)
+
+    def _perturb(base, path, val):
+        """CO-172：内存注入（零落盘）—— 沿 path 复制并改一个值，供灵敏度牙齿使用。"""
+        d = copy.deepcopy(base)
+        cur = d
+        for k in path[:-1]:
+            cur = cur[k]
+        cur[path[-1]] = val
+        return d
     refs = sorted(set(re.findall(r"`(06_rulings/[A-Za-z0-9_.\-]+)`", notes_txt)))
     # CO-159（F-9）：ORDER_NOTES 里的**目录级**声明（`01_`..`06_`）也须落包内（原先只覆盖 `06_rulings/*` 文件引用）
     dir_refs = sorted(set(re.findall(r"\b(0[1-6]_)", notes_txt)))
@@ -370,13 +540,40 @@ def main() -> int:
              "t11b_stackup_svg_binding_sensitivity": (not all(stackup_svg_binding_checks(
                  _svg, {**jp_binding, "copper": {**(jp_binding.get("copper") or {}), "outer_oz": 2.0}}).values())),
              # CO-171（G-1/G-2）：ORDER_NOTES 内的**记录派生数字**须与来源记录一致
-             "t12_order_notes_record_figures": all(order_notes_record_figures(notes_txt, imp, dfm).values()),
+             "t12_order_notes_record_figures": all(_figs.values()),
              "t12b_record_figure_binding_sensitivity": (not all(order_notes_record_figures(
-                 notes_txt, imp, {**dfm, "drc_as_designed": {**(dfm.get("drc_as_designed") or {}), "n": 9999}}).values())),
+                 notes_txt, imp, {**dfm, "drc_as_designed": {**(dfm.get("drc_as_designed") or {}), "n": 9999}},
+                 _co147, _co148, _co149, _cap, _rules).values())),
+             # CO-172（F-1..F-5）：逐来源记录的**灵敏度**（任一来源漂移即须判不通过）
+             "t12c_impedance_spread_binding_sensitivity": (not all(order_notes_record_figures(
+                 notes_txt, _perturb(imp, ["watch", 0, "zdiff", "M2_HJ_Cohn"], [100.0]),
+                 dfm, _co147, _co148, _co149, _cap, _rules).values())),
+             "t12d_via_census_binding_sensitivity": (not all(order_notes_record_figures(
+                 notes_txt, imp,
+                 _perturb(dfm, ["as_built", "via_type_census", "F.Cu->In2.Cu|BLIND_BURIED"], 93),
+                 _co147, _co148, _co149, _cap, _rules).values())),
+             "t12e_mask_facts_binding_sensitivity": (not all(order_notes_record_figures(
+                 notes_txt, imp, dfm,
+                 _perturb(_co147, ["mask_measure", "closest", "gap_mm"], 0.0694),
+                 _co148, _co149, _cap, _rules).values())),
+             "t12f_thermal_figures_binding_sensitivity": (not all(order_notes_record_figures(
+                 notes_txt, imp, dfm, _co147, _perturb(_co148, ["worst", "Tj_C"], 165.0),
+                 _co149, _cap, _rules).values())),
+             "t12g_jlc_capability_binding_sensitivity": (not all(order_notes_record_figures(
+                 notes_txt, imp, dfm, _co147, _co148, _co149,
+                 _perturb(_cap, ["capability", "min_track_width_mm", "value"], 0.10), _rules).values())),
+             "t12h_drc_rules_edge_binding_sensitivity": (not all(order_notes_record_figures(
+                 notes_txt, imp, dfm, _co147, _co148, _co149, _cap,
+                 _perturb(_rules, ["manufacturing", "min_copper_edge_clearance"], 0.25)).values())),
+             # CO-172（F-6）：叠层图**铜厚矩形几何** vs 声明定值（正控 + 灵敏度）
+             "t11c_stackup_svg_copper_geometry_binding": all(
+                 stackup_svg_copper_geometry_checks(_svg, jp_binding).values()),
+             "t11d_stackup_svg_copper_geometry_sensitivity": (not all(stackup_svg_copper_geometry_checks(
+                 _svg, {**jp_binding, "copper": {**(jp_binding.get("copper") or {}), "outer_oz": 2.0}}).values())),
              "t02_8_copper_gerbers": len(cu) >= 8,
              "t03_drill_present": len(drl) >= 1,
              "t04_all_hashed": all(v.get("sha256") for v in m1.values())}
-    rec = {"artifact": "m13_v57_co146_jlc_fab_package", "schema": 1, "revision": "CO146-PKG.7",
+    rec = {"artifact": "m13_v57_co146_jlc_fab_package", "schema": 1, "revision": "CO146-PKG.8",
            "nature": "JLC 打样包（监理指令 #10 动作 3）；只出交付物，不改板/SPEC",
            "board": BOARD.name, "board_sha16": sha16(BOARD),
            "package_dir": str(OUT.relative_to(K2)), "n_files": len(m1),
@@ -392,11 +589,19 @@ def main() -> int:
            "teeth": teeth,
            "declared_refs": {"files": refs, "dirs": dir_refs, "rulings_parity": rulings_parity},
            "record_figures": {"impedance_watch": impedance_watch_figure(imp),
+                              "impedance_spread_pct": impedance_spread_pct(imp),
                               "drc_as_designed_n": (dfm.get("drc_as_designed") or {}).get("n"),
-                              "order_notes_checks": order_notes_record_figures(notes_txt, imp, dfm)},
+                              "via_census": via_census_figures(dfm),
+                              "mask_clearance": mask_clearance_figures(_co147) if _co147 else None,
+                              "thermal": thermal_figures(_co148, _co149) if (_co148 and _co149) else None,
+                              "order_notes_checks": _figs},
            "declared_binding": {"table": str(JP.relative_to(K2)), "tokens": binding_tokens(jp_binding),
                                 "order_notes_checks": binding_param_checks(notes_txt, jp_binding),
                                 "stackup_svg_checks": stackup_svg_binding_checks(_svg, jp_binding),
+                                "stackup_svg_copper_geometry_checks": stackup_svg_copper_geometry_checks(_svg, jp_binding),
+                                "record_figure_sources": {"co147": str(CO147.relative_to(K2)), "co148": str(CO148.relative_to(K2)),
+                                                          "co149": str(CO149.relative_to(K2)), "jlc_capability": str(CAP.relative_to(K2)),
+                                                          "drc_rules": str(RULES)},
                                 "source_instruction": {"path": str(INSTRUCTION), "available": INSTRUCTION.exists(),
                                                        "declared_sha16": (jp.get("supervisor_instruction") or {}).get("sha16")}},
            "orderable_at_jlc_standard": not dfm["fails"],

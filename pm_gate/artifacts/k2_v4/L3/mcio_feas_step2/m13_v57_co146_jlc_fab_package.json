@@ -1,7 +1,7 @@
 {
  "artifact": "m13_v57_co146_jlc_fab_package",
  "schema": 1,
- "revision": "CO146-PKG.7",
+ "revision": "CO146-PKG.8",
  "nature": "JLC 打样包（监理指令 #10 动作 3）；只出交付物，不改板/SPEC",
  "board": "k2_v4_8L.l4.kicad_pcb",
  "board_sha16": "d4e81f647be7f980",
@@ -56,6 +56,14 @@
   "t11b_stackup_svg_binding_sensitivity": true,
   "t12_order_notes_record_figures": true,
   "t12b_record_figure_binding_sensitivity": true,
+  "t12c_impedance_spread_binding_sensitivity": true,
+  "t12d_via_census_binding_sensitivity": true,
+  "t12e_mask_facts_binding_sensitivity": true,
+  "t12f_thermal_figures_binding_sensitivity": true,
+  "t12g_jlc_capability_binding_sensitivity": true,
+  "t12h_drc_rules_edge_binding_sensitivity": true,
+  "t11c_stackup_svg_copper_geometry_binding": true,
+  "t11d_stackup_svg_copper_geometry_sensitivity": true,
   "t02_8_copper_gerbers": true,
   "t03_drill_present": true,
   "t04_all_hashed": true
@@ -92,11 +100,59 @@
    "target_zdiff": 85.0,
    "dev_pct": 11.69
   },
+  "impedance_spread_pct": 4.78,
   "drc_as_designed_n": 42,
+  "via_census": {
+   "F.Cu→In2.Cu": 92,
+   "F.Cu→In5.Cu": 8,
+   "In2.Cu→In5.Cu": 88,
+   "In5.Cu→B.Cu": 32
+  },
+  "mask_clearance": {
+   "gap_mm": 0.0695,
+   "shortfall_mm": 0.0205,
+   "jlc_min_mm": 0.09,
+   "mask_expansion_mm": 0.05,
+   "rework_gap_mm": 0.0995
+  },
+  "thermal": {
+   "P_min_W": 4.7,
+   "P_max_W": 7.0,
+   "theta_ja_datasheet_C_per_W": 17.4,
+   "Tj_limit_C": 120,
+   "Tj_best_C": 121.8,
+   "Tj_worst_C": 161.8,
+   "psi_jb_route_Tj_C": 173.6,
+   "ta_C": 40.0
+  },
   "order_notes_checks": {
    "impedance_watch_dev_pct": true,
    "drc_as_designed_total": true,
-   "drc_lib_footprint_sum": true
+   "drc_lib_footprint_sum": true,
+   "drc_silk_edge_clearance": true,
+   "impedance_spread_pct": true,
+   "via_census_F.Cu→In2.Cu": true,
+   "via_census_F.Cu→In5.Cu": true,
+   "via_census_In2.Cu→In5.Cu": true,
+   "via_census_In5.Cu→B.Cu": true,
+   "mask_gap_mm": true,
+   "mask_shortfall_mm": true,
+   "mask_jlc_min_mm": true,
+   "mask_rework_path": true,
+   "mask_rework_gap_mm": true,
+   "thermal_P_range": true,
+   "thermal_theta_ja_datasheet": true,
+   "thermal_Tj_limit": true,
+   "thermal_ta": true,
+   "thermal_Tj_best_worst": true,
+   "thermal_psi_jb_route": true,
+   "jlc_min_track_width_mil": true,
+   "jlc_min_via_hole": true,
+   "jlc_min_via_diameter": true,
+   "jlc_via_annular_note": true,
+   "jlc_via_hole_to_hole": true,
+   "rule_copper_edge_clearance": true,
+   "jlc_copper_edge_clearance": true
   }
  },
  "declared_binding": {
@@ -124,6 +180,18 @@
    "thickness": true,
    "outer_copper": true,
    "inner_copper": true
+  },
+  "stackup_svg_copper_geometry_checks": {
+   "n_copper_rects": 8,
+   "scale_px_per_mm": 600.0,
+   "geometry_matches_binding": true
+  },
+  "record_figure_sources": {
+   "co147": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_co147_l2_ruling.json",
+   "co148": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_co148_thermal_ruling.json",
+   "co149": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_co149_u6_thermal_mitigation.json",
+   "jlc_capability": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_co146_jlc8_capability.json",
+   "drc_rules": "/home/fila/jqdDev_2025/ic_hw/_shared/eda_core/drc_rules.json"
   },
   "source_instruction": {
    "path": "/home/fila/jqdDev_2025/ic_hw/.omo/supervision/ledger/instruction-10-jlc-prototype-ready.md",
