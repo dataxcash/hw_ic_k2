@@ -1,7 +1,7 @@
 {
  "artifact": "m13_v57_co205_candidate_layer_reassign",
  "authority": {
-  "handoff": ".omo/handoffs/k2-v57-handoff-z69-20260913-rev19-co204l.md §6 步骤 1/2",
+  "handoff": ".omo/handoffs/k2-v57-handoff-z69-20260913-rev19-co204l.md §6",
   "ruling": "CO-204 R3（全过孔 = 通孔+背钻；0 盲埋孔；残桩 <0.15mm）"
  },
  "candidates": [
@@ -24,49 +24,37 @@
     "PCIE_UP2/input"
    ],
    "id": "A",
-   "model": "现行端点层模型",
+   "model": "端点层",
    "n_failed": 15,
-   "n_pages": 32,
    "n_placed": 17,
-   "reading": "In2 **单层**无法容纳全部竖段。",
-   "representative_reasons": [
-    "vt2_placed：In2 竖段 x 撞同列另一竖段（up 与 dn 逃逸共用 chip pad 同 x 列 ⇒ 同层重叠）",
-    "vv_placed：In2 竖段 vs __PDN__ all-layer via",
-    "vt_placed：In2 竖段 vs 异网 In2 段"
-   ],
-   "spec": "run 维持 In5 + 竖段(escape/stub) 全 In2；旋钮 CO16_ALLI2=1",
+   "spec": "run 维持 In5 + 竖段全 In2（CO16_ALLI2=1）",
+   "verdict": "INFEASIBLE"
+  },
+  {
+   "id": "A′",
+   "model": "面跨层（正确）",
+   "n_failed": 24,
+   "n_placed": 8,
+   "reading": "外层竖段受 REQ-R3-2「对间 3W」=3*0.205=**0.615**（内层仅 0.48）⇒ 再把 16 页副竖段搬去 B 后列距不足。逃逸区放宽 0.075 仅覆盖 F.Cu pad-access 区（co37 四域全为 F.Cu），不覆盖 In2/B 竖段。",
+   "spec": "run 维持 In5 + 竖段全 B.Cu（CO16_ALLB=1，= 消除 88 支内层<->内层的最小修正）",
    "verdict": "INFEASIBLE"
   },
   {
    "board": {
     "after_pdn_vias": 501,
-    "fab_capability_gate": "PASS（C0..C4 全 True）",
-    "inner_inner": 0,
-    "kicad_drc_vs_frozen": {
-     "candidate_total": 58,
-     "delta_by_type": {
-      "clearance": 4,
-      "shorting_items": 7
-     },
-     "frozen_total": 47,
-     "shape": "全部为『In2.Cu - B.Cu 上的盲孔 [PCIE_UP*]』vs『In5.Cu 走线 [PCIE_DN_OUT*]』：In2<->B 过孔**物理占用 In5**，砸中 DN 页 In5 逃逸竖段"
+    "drc_delta_vs_frozen": {
+     "clearance": 4,
+     "shorting_items": 7
     },
-    "l4_only_vias": 260,
-    "via_census": {
-     "F.Cu->B.Cu": 241,
-     "F.Cu->In2.Cu": 92,
-     "F.Cu->In5.Cu": 40,
-     "In2.Cu->B.Cu": 88,
-     "In5.Cu->B.Cu": 40
-    }
+    "fab_gate": "PASS",
+    "inner_inner": 0
    },
    "id": "B",
-   "model": "现行端点层模型",
+   "model": "端点层",
    "n_failed": 0,
-   "n_pages": 32,
    "n_placed": 32,
-   "reading": "端点层模型给出**假可行**；KiCad DRC 抓出 7 处真实短路 ⇒ 板不可用。",
-   "spec": "run In5->B.Cu + 竖段 In2/In5 分色（原 B 竖段改 In5）；旋钮 CO16_V2B=1 + CO16_LANE=B.Cu",
+   "reading": "旧模型假可行；DRC 7 短路（In2<->B 孔占 In5）。",
+   "spec": "run In5->B.Cu + 竖段 In2/In5 分色（CO16_V2B=1 + CO16_LANE=B.Cu）",
    "verdict": "REJECTED_BY_DRC"
   },
   {
@@ -79,48 +67,21 @@
     "PCIE_UP0/input"
    ],
    "id": "B(span)",
-   "model": "面跨层（物理正确）模型",
+   "model": "面跨层",
    "n_failed": 6,
-   "n_pages": 32,
    "n_placed": 26,
-   "reading": "修正模型后 B 亦不可行，失败面与 DRC 命中面一致（DN 的 In5 竖段被 UP 的 In2<->B 过孔 span 堵死）。",
-   "spec": "同 B，过孔占用层 = 起止层之间**全部层**（旋钮 CO16_SPAN=1）",
+   "spec": "同 B + CO16_SPAN=1",
    "verdict": "INFEASIBLE"
   },
   {
-   "failed_pages": [
-    "PCIE_DN1/input",
-    "PCIE_DN1/out_MCIO",
-    "PCIE_DN2/out_MCIO",
-    "PCIE_DN3/input",
-    "PCIE_DN3/out_MCIO",
-    "PCIE_DN5/out_MCIO",
-    "PCIE_DN7/out_MCIO",
-    "PCIE_UP0/out_J2",
-    "PCIE_UP1/out_J2",
-    "PCIE_UP2/input",
-    "PCIE_UP2/out_J2",
-    "PCIE_UP3/out_J2",
-    "PCIE_UP4/input",
-    "PCIE_UP4/out_J2",
-    "PCIE_UP5/out_J2",
-    "PCIE_UP6/input",
-    "PCIE_UP6/out_J2",
-    "PCIE_UP7/out_J2"
-   ],
-   "id": "D",
-   "model": "面跨层（物理正确）模型",
-   "n_failed": 18,
-   "n_pages": 32,
-   "n_placed": 14,
-   "reading": "**结构上唯一自洽**的拓扑（见 structural_lemma）在**现行 lane 几何 + 现行「pad->via1 短段」F 层用法**下不可落位：F.Cu 逃逸竖段需穿 pad-access 扇与 PDN。⇒ 须**重新求解 F 层逃逸几何**（非 drop-in 替换），属一次求解范畴。",
-   "representative_reasons": [
-    "pad_seg / vt_intra：F.Cu 逃逸竖段撞 pad 场 / 异网 F 段（F 层扇区拥挤）",
-    "tt_placed / vv_placed：F.Cu 段 vs __PDN__",
-    "vt_placed：F.Cu 段 vs 异网 F 段"
-   ],
-   "spec": "竖段落**两外层**（up->F.Cu / dn->B.Cu）、lane 维持内层 In5.Cu；旋钮 CO16_VOUT=1 + CO16_SPAN=1",
-   "verdict": "INFEASIBLE_AS_CONSTRUCTED（拓扑自洽但几何未重派生）"
+   "best": "esc=F/B stub=F/B",
+   "best_placed": 14,
+   "id": "D-family",
+   "model": "面跨层",
+   "n_combos": 16,
+   "reading": "F.Cu 逃逸竖段须穿 pad 场与 PDN（pad_seg/vt_intra/tt_placed vs __PDN__）；且外层竖段同样吃 3W=0.615。",
+   "spec": "竖段落两外层 F/B（16 组穷举：CO16_VOUT=1 + CO10_VASSIGN）",
+   "verdict": "INFEASIBLE（现行 lane 几何/pad 用法下）"
   }
  ],
  "date": "2026-09-13",
@@ -128,41 +89,53 @@
   "alloc_v9": "d3cd1e5a312f253a",
   "board_frozen": "d4e81f647be7f980",
   "constructor": "223e71bdc655a0fc",
-  "emitter": "172c28320af5a616",
-  "fab_gate": "276a7d0c42681b8b",
+  "emitter": "22ba5f17aff68cec",
   "joint_assignment_frozen": "60cbd331836e52b7",
-  "l4_apply": "fe60d85065b5e6d5",
-  "probe": "6ebe8b6bc9c7dcc7",
+  "probe": "7a5501dbbb29410b",
   "spec_rev19": "5f72182a2616392c"
  },
- "nature": "L2 自裁（层分配重指派候选的**模型级可行性筛查**）：run 层 In5->B.Cu（候选 A/B）+ 过孔占用层模型缺陷发现与修复 + 候选 D（竖段落两外层）初测。零冻结源修改（SPEC rev-19 已有 B.Cu 行，无需改）。",
+ "nature": "L2 自裁（层分配重指派候选的模型级可行性筛查 + 两项工具缺陷修复）。零冻结源修改。",
  "pipeline_reproduced": {
   "cmd": [
-   "python3 tools/p3_v57_l4_apply_drawing.py --board --escape-domain <co37> --out-board B",
-   "python3 tools/p3_v57_co133_pdn_construction_apply.py --board B --apply"
+   "L4 apply --board --escape-domain co37",
+   "co133 PDN apply --apply"
   ],
-  "frozen_board_sha16_reproduced": "d4e81f647be7f980",
-  "note": "L4 apply（含 escape domain）+ CO-133 PDN 施加 = 冻结交付板 d4e81f647be7f980 逐字节复现（仅 L4 apply 得 252 via；PDN 施加后 493 via）。**故候选评估须走完整链（含 co133）**。",
-  "regression": "默认（无新旋钮）构造器输出与冻结 m13_v57_w3_joint_assignment.json **逐字节同**（60cbd331836e52b7）。"
+  "default_regression": "默认（无新旋钮）构造器输出与冻结 ja 逐字节同 60cbd331836e52b7；发射器输出与 v9 逐页同。",
+  "frozen_board_sha16": "d4e81f647be7f980",
+  "note": "完整链 = 冻结板 d4e81f647be7f980 逐字节复现（L4 252 via -> PDN 后 493 via）。"
  },
- "redline": "只读冻结四源；工件仅记录实验矩阵 + 工具缺陷 + 结构引理；**未改层分配**（交付板仍 d4e81f647be7f980，不可送样）。",
+ "redline": "只读冻结四源；未改层分配（交付板仍 d4e81f647be7f980，不可送样）。",
  "revision": "CO-205",
  "schema": 1,
  "structural_lemma": {
+  "conclusion": "在现行 4 信号层叠层内，层分配重指派**不足以解除阻断**：容量最优解（冻结 3 层分色）必然产生内层<->内层 corner；可制造解要求竖段落外层，又受 3W 与 F 层拥挤双重限制。",
   "consequence": [
-   "① lane=外层（B.Cu）⇒ corner range 覆盖其间**全部**内层 ⇒ 只允许**单一**竖段层 ⇒ 容量不足（候选 A 17/32、A′ 20/32 失败；候选 B span 模型 26/32 失败）。",
-   "② lane=内层（现行 In5）⇒ 内层竖段 V 的 corner V<->L 为**内层<->内层**（不可制）⇒ 现行板 88 支 In2<->In5。候选 C（In2->B->In5 双孔桥）之 In2<->B 孔 span 覆盖 B ⇒砸中 B 上 dn 逃逸竖段，同样不可行（同列）。",
-   "③ 唯一同时满足两约束者：竖段落**两个外层** F/B、lane 落内层（候选 D）——但需 F 层逃逸几何重派生。"
+   "lane 外层（B）⇒ corner 覆盖其间全部内层 ⇒ 只允许单一竖段层（容量不足；且外层竖段 3W=0.615 更差）。",
+   "lane 内层（In5）⇒ 内层竖段 corner 必为内层<->内层（不可制）；候选 C 双孔桥的 In2<->B 孔 span 覆盖 B ⇒ 砸 B 上 dn 竖段。",
+   "唯一同时满足两约束者 = 竖段落两外层 F/B + lane 内层（候选 D）⇒ 但 F 层逃逸几何不可落位。"
   ],
-  "proposed_next": "候选 D 的**几何重派生**（一次求解，L2 自裁）：以「F 层逃逸竖段」为对象重新求解 escape/land 列与 pad-access，必要时 F 逃逸仅承载一部分页、其余落 B（F/B 分色），lane 维持 In5；判据 = span 模型 32/32 + 完整链（L4+co133）0 内层<->内层 + DRC 不新增 short。",
-  "statement": "lane 层 L 为内层时，竖段层 V 的 corner 过孔占用 [min(V,L), max(V,L)]。欲该 range 不覆盖另一竖段层 W ⇒ V、W 须分居 L 两侧（straddle）；欲 corner **外层锚定**（CO-204 R3）⇒ V 或 L 之一须为外层。"
+  "next_options": [
+   "(a) 叠层增信号层（L2；需重签阻抗/厚度/JLC 能力/热）",
+   "(b) 减少竖段数（拓扑重构：更少换层）",
+   "(c) 复核 REQ-R3-2 对**逃生竖段**的适用域"
+  ],
+  "statement": "lane 层 L 内层时，竖段层 V 的 corner 孔占 [min(V,L),max(V,L)]；欲不覆盖另一竖段层 W ⇒ V,W 分居 L 两侧（straddle）；欲 corner 外层锚定 ⇒ V 或 L 为外层。"
  },
- "tool_defect": {
-  "fix": "新增 _SPAN：build() 内 _sp(a,b) 把 (lo,hi) 展开为 [F,In2,In5,In6,B] 连续段（mask 与逐层 vt 判据同源）。",
-  "id": "probe_via_occupancy_endpoint_only",
-  "implication": "CO-204L（A′ 20/32）与 CO-205 A 结论方向不变（其失败为容量/同层碰撞，不依赖该缺陷）；但**任何「外层锚定即安全」的候选**必须用 span 模型复评（本轮 B 即为反例）。",
-  "kind": "TOOL_DEFECT",
-  "status": "FIXED_BY_CO205b（CO10_SPAN/CO16_SPAN；默认关以保 ALLOC.1..9 逐字节可复现）",
-  "what": "p3_v57_co10_west_fan_probe.py 的 check()/Store.add() 以过孔**两端点层**建 mask 与 vt/vv 判据；通孔+背钻的实际铜面为起止层之间的**全部层** ⇒ 系统性低估冲突。本轮实证：模型假可行 → 7 处 DRC 短路。"
- }
+ "tool_defects": [
+  {
+   "evidence": "候选 B 旧模型 32/32 且板厂闸 PASS，KiCad DRC 却抓 7 shorting_items（In2<->B 孔 vs In5 走线）。",
+   "id": "probe_via_occupancy_endpoint_only",
+   "implication": "任何『外层锚定即安全』的候选必须用 span 模型复评。",
+   "kind": "TOOL_DEFECT",
+   "status": "FIXED_BY_CO205b（CO10_SPAN/CO16_SPAN，默认关）",
+   "what": "check()/Store.add() 以过孔两端点层建 mask/净距判据；通孔+背钻实际占用起止层之间全部层。"
+  },
+  {
+   "fix": "探针 lane 标签统一为真板 In5.Cu；发射器输出与 v9 逐页逐字段同（0 page diffs）。验证：再生工件喂构造器 ⇒ nodes/vias 与冻结 ja 完全相同（仅 inputs_sha 元数据随工件字节变）。",
+   "id": "emitter_lane_layer_label_drift",
+   "kind": "TOOL_DEFECT",
+   "status": "FIXED_BY_CO205d",
+   "what": "探针把「stub 层 == lane 层」标为私有名 In6.Cu 并原样发射；真板 lane = In5.Cu，构造器 _LI 无 In6 ⇒ KeyError 'In6.Cu'（4 页）。冻结 v9 工件记 In5.Cu（旧探针），故现行发射器无法再生可被构造器消费的工件。"
+  }
+ ]
 }

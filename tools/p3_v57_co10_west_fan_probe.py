@@ -236,11 +236,21 @@ _SI = {l: i for i, l in enumerate(_SPAN_ORDER)}
 # CO-205c（L2 自裁 · 候选 D）：**竖段落两外层**（up->F.Cu / dn->B.Cu）、lane 维持内层 In5.Cu。
 #   由 CO-205 结构引理：仅此拓扑同时满足「span 不互砸」（straddle lane）与「corner 外层锚定」。
 _VOUT = __import__("os").environ.get("CO10_VOUT", "") not in ("", "0")
+# CO-205d：外层竖段**指派**（穷举结构空间用；不落交付）。格式 "eUp,eDn,sUp,sDn"，各 ∈ {F,B}。
+_VA = [t.strip().upper() for t in __import__("os").environ.get(
+    "CO10_VASSIGN", "F,B,F,B").split(",")]
+if len(_VA) != 4:
+    _VA = ["F", "B", "F", "B"]
+
+def _va(up_band: bool, kind: int):
+    """kind 0=escape,1=stub：返回该带竖段所用的外层（F.Cu/B.Cu）。"""
+    i = (0 if up_band else 1) + (0 if kind == 0 else 2)
+    return "F.Cu" if _VA[i] == "F" else "B.Cu"
 
 
 def esc_layer(f):
     if _VOUT:
-        return "F.Cu" if f["band"] == "up" else "B.Cu"     # CO-205c 候选 D
+        return _va(f["band"] == "up", 0)     # CO-205d 外层竖段指派
     if _ALLB:
         return "B.Cu"      # CO-204：竖段层全落 B.Cu（run 仍 In5）
     if _ALLI2:
@@ -276,7 +286,7 @@ def row_group(f):
 
 def stub_layer(f):
     if _VOUT:
-        return "F.Cu" if f["band"] == "up" else "B.Cu"     # CO-205c 候选 D
+        return _va(f["band"] == "up", 1)     # CO-205d 外层竖段指派
     if _ALLB:
         return "B.Cu"      # CO-204：竖段层全落 B.Cu（run 仍 In5）
     if _ALLI2:
@@ -295,7 +305,7 @@ def stub_layer(f):
         if EASTSPLIT == "b":                 # CO-16 候选：up stub In2 / dn stub B（无 In6 stub ⇒ 不穿 lane）
             return "In2.Cu" if f["band"] == "up" else "B.Cu"
         return "In6.Cu" if f["band"] == "up" else "In2.Cu"
-    return "In2.Cu" if GS_IN2[row_group(f)] else (_V2 if _V2B else "In6.Cu")
+    return "In2.Cu" if GS_IN2[row_group(f)] else (_V2 if _V2B else "In5.Cu")   # 真板 lane 层
 
 
 def r3_build(rule):
@@ -381,7 +391,7 @@ def r3_build(rule):
 
 def _stub_layer_of(a):
     if _VOUT:
-        return "F.Cu" if FACTS[a["page"]]["band"] == "up" else "B.Cu"   # CO-205c 候选 D
+        return _va(FACTS[a["page"]]["band"] == "up", 1)   # CO-205d 外层竖段指派
     if _ALLI2:
         return "In2.Cu"    # CO-205：竖段层全落 In2（候选 A）
     if a["ref"] == "J2":
@@ -400,7 +410,7 @@ def _stub_layer_of(a):
         return "In6.Cu" if FACTS[a["page"]]["band"] == "up" else "In2.Cu"
     mid = GAP[a["ref"]]
     g = (a["ref"], "U" if a["pad_y"] < mid else "L")
-    return "In2.Cu" if GS_IN2[g] else (_V2 if _V2B else "In6.Cu")
+    return "In2.Cu" if GS_IN2[g] else (_V2 if _V2B else "In5.Cu")   # 真板 lane 层
 
 
 def _lx_separate(A):
@@ -636,7 +646,7 @@ def build(f, px, py, nx, ny):
         return tuple(_SPAN_ORDER[i:j + 1])
 
     vias, segs, own = [], [], []
-    L = "In5.Cu" if _VOUT else (_LANE_V2 if _V2B else "In6.Cu")
+    L = _LANE_V2 if _V2B else "In5.Cu"      # 真板 lane 层（_V2B 用私有层占位）
     for pol, vx, vy in (("P", px, py), ("N", nx, ny)):
         lx, ll = lm[pol]
         ly = W.fp(LANES[f["page_id"]]["lane_y"] + pol_off(f, pol))
@@ -667,19 +677,19 @@ def build(f, px, py, nx, ny):
         else:
             vias.append((vx, vy, pol, _sp("F.Cu", "In2.Cu")))
             if E == "B.Cu":
-                vias.append((vx, vy, pol, _sp("In2.Cu", "In6.Cu")))
-                vias.append((vx, vy, pol, _sp("In6.Cu", "B.Cu")))
-            vias.append((vx, ly, pol, _sp(E, "In6.Cu")))
+                vias.append((vx, vy, pol, _sp("In2.Cu", "In5.Cu")))
+                vias.append((vx, vy, pol, _sp("In5.Cu", "B.Cu")))
+            vias.append((vx, ly, pol, _sp(E, "In5.Cu")))
             if S == "In2.Cu":                                   # lane(In6) -> drop -> In2 stub -> land
-                vias.append((lx, ly, pol, _sp("In6.Cu", "In2.Cu")))
+                vias.append((lx, ly, pol, _sp("In5.Cu", "In2.Cu")))
                 vias.append((lx, ll, pol, _sp("In2.Cu", "F.Cu")))
             elif S == "B.Cu":                                   # lane(In6)->drop->B stub->land(B<->In6<->In2<->F，安全 hop)
-                vias.append((lx, ly, pol, _sp("In6.Cu", "B.Cu")))
-                vias.append((lx, ll, pol, _sp("B.Cu", "In6.Cu")))
-                vias.append((lx, ll, pol, _sp("In6.Cu", "In2.Cu")))
+                vias.append((lx, ly, pol, _sp("In5.Cu", "B.Cu")))
+                vias.append((lx, ll, pol, _sp("B.Cu", "In5.Cu")))
+                vias.append((lx, ll, pol, _sp("In5.Cu", "In2.Cu")))
                 vias.append((lx, ll, pol, _sp("In2.Cu", "F.Cu")))
             else:                                               # lane(In6) -> In6 stub -> land stack
-                vias.append((lx, ll, pol, _sp("In6.Cu", "In2.Cu")))
+                vias.append((lx, ll, pol, _sp("In5.Cu", "In2.Cu")))
                 vias.append((lx, ll, pol, _sp("In2.Cu", "F.Cu")))
         segs.append(("F.Cu", f["pad"][pol][0], f["pad"][pol][1], vx, vy, True, pol))
         segs.append((E, vx, vy, vx, ly, False, pol))
