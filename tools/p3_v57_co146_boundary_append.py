@@ -3425,6 +3425,25 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body95
 
+
+    # ── §96 CO-223（L2 自裁 · U6 阵列义务之时点对账） ──
+    MARK96 = "## 96. CO-223"
+    sec96 = [MARK96 + "（**L2 自裁 · U6 域 GND via 阵列之「义务时点」对账**）", "",
+             "- **对象**：`L2_RULING_u6_thermal_v1.md` §R4-1 将「U6 域 GND via 阵列补强」列为**既定义务**，与 §95（CO-222）之「rev-19 **不改几何** + 条件动作」构成**口径分歧**（承 R-CO208-1 口径逐处同步）。",
+             "- **处置**：对旧件**只加追注、不重写历史正文**（承 CO-213 F-3 之伪史防范）；追注明载「**本节口径以 CO-222 为准**」：阵列不在 rev-19 交付范围（现行板按 O2 达成 Tj 117.0 ℃ ≤ 120），"
+             "改为条件动作（T1 门限 117.0 ℃ / 量化目标 `θJA_eff ≤ 9.5 ℃/W`；T2 同 rev 一并补阵）。**R-CO223-1**。",
+             "- **修后实测**：全 L2 裁定件扫描**不再有**与 §95 冲突之「义务时点」表述；`--check` **36/36 全 True**；序收敛 rc=0 / 2 轮。",
+             "",
+             "> **R-CO223-1**：同一工程动作之**义务时点**（既定义务 / 条件动作 / 已撤）在**全部裁定件与随单**须**同源一致**；版本升级致口径变更者，须对旧件加**追注**明示以何件为准（禁重写历史正文，承 CO-213 F-3）。",
+             "",
+             "> **序不变**：本件未改步骤集/序列（承 §82 之 R-CO209-2）。"]
+    body96 = "\n".join(sec96)
+    if MARK96 in txt:
+        txt = re.sub(re.escape(MARK96) + r"[\s\S]*?(?=\n## |\Z)", body96, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body96
+
+    txt = txt.replace("W3 Boundary **v2.63**", "W3 Boundary **v2.64**")
     txt = txt.replace("W3 Boundary **v2.62**", "W3 Boundary **v2.63**")
     txt = txt.replace("W3 Boundary **v2.61**", "W3 Boundary **v2.62**")
     txt = txt.replace("W3 Boundary **v2.60**", "W3 Boundary **v2.61**")
