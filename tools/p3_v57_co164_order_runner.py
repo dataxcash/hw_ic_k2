@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CO-164/CO-167/CO-169/CO-174/CO-180/CO-181/CO-182/CO-183/CO-187/CO-188/CO-189/CO-190/CO-191/CO-192/CO-193/CO-194/CO-195/CO-196/CO-197/CO-198/CO-199 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
+"""CO-164/CO-167/CO-169/CO-174/CO-180/CO-181/CO-182/CO-183/CO-187/CO-188/CO-189/CO-190/CO-191/CO-192/CO-193/CO-194/CO-195/CO-196/CO-197/CO-198/CO-199/CO-201 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
 
 缘起（实测事故，CO-163）：`co146_boundary_append.py` 因 §37 文本里的 f-string 花括号语法错误**每次崩溃（rc=1）**，
 但收敛判定只看 boundary/记录 sha ⇒ sha 恒不变 ⇒ 报「CONVERGED」，边界 §37 实际从未写入、pin 表陈旧（co77/co135/co136 判 FAIL）。
@@ -39,6 +39,8 @@
      + 承载该语义性质的**外部判官**（工具 + **源内声明**的齿名）+ 代理自身 fail-closed 齿所在记录（须在 pin 表）；静态齿 **t29**。
 ⑮ CO-199（R-CO199-1，**白名单 rc 类语义**）：`EXPECTED_NONZERO` 须显式声明**预期 rc 值**（= 该判决的规格化出口），
      运行期 **只**豁免该 rc；其余非零一律 `expected_step_rc_mismatch` 停机（禁以「rc≠0」笼统放行）。静态齿 **t30**。
+⑯ CO-201（R-CO201-1/2，**出口语义与豁免边界**）：① 白名单**预期非零出口**须**无任何错误输出**（stderr 空），
+     旧 Traceback 子串代理不足；② 写影子**豁免前缀**的**段边界**分支须入合成控。静态齿 **t31** + t23 扩展。
 CLI:
   python3 tools/p3_v57_co164_order_runner.py [--check] [--max-iter 5]
 """
@@ -481,6 +483,11 @@ def allowlist_decision(step: str, rc: int, stderr: str, verdict, record_fresh: b
         return "expected_step_rc_mismatch"
     if "Traceback (most recent call last)" in (stderr or ""):
         return "expected_step_crashed"
+    # CO-201（G-1）：**预期非零出口 = 设计出口，不得伴生任何错误输出** —— 旧判据仅认 CPython 的
+    # `Traceback (most recent call last)` 子串，`sys.exit("msg")` / 解释器外错误 / 库级 SystemExit 等
+    # **非表头形态**的错误出口可逃逸（只要该步已把记录先落盘且 rc 恰为声明值）。此处收紧为 stderr 必须为空。
+    if (stderr or "").strip():
+        return "expected_step_error_output"
     if not record_fresh:
         return "expected_step_record_not_produced"
     # CO-167（F-6）：白名单不得把「成功」当预期 —— 声明的 expected verdict 为 PASS，或记录 verdict 为 PASS，
@@ -1416,7 +1423,11 @@ def main(argv=None) -> int:
                                    "pm_gate/artifacts/k2_v4/elsewhere.json"]) == "uncontrolled_write"
         and shadow_exempt("pm_gate/artifacts/k2_v4/L5/jlc_package/01_gerber_rs274x/x.gbr")
         and shadow_exempt("pm_gate/artifacts/k2_v4/L5/jlc_package/05_layer_sequence.txt")
-        and not shadow_exempt("pm_gate/artifacts/k2_v4/L5/jlc_package/07_new/x.txt"))
+        and not shadow_exempt("pm_gate/artifacts/k2_v4/L5/jlc_package/07_new/x.txt")
+        # CO-201（G-2）：豁免前缀的**段边界**分支须有负控（防回归为裸 `startswith(pre)` ⇒ 兄弟路径被误豁免）
+        and shadow_exempt("pm_gate/artifacts/k2_v4/L5/jlc_package/06_rulings/sub/a.md")
+        and not shadow_exempt("pm_gate/artifacts/k2_v4/L5/jlc_package/06_rulingsX/a.md")
+        and not shadow_exempt("pm_gate/artifacts/k2_v4/L5/jlc_package/05_layer_sequence.txtX"))
     # CO-190（R-CO190-1）：步骤超时须 fail-closed（正控 timed_out ⇒ step_timeout；负控 ⇒ 不误报；超时值须在带内）
     checks["t24_step_timeout_fail_closed"] = (
         isinstance(STEP_TIMEOUT_S, int) and 60 <= STEP_TIMEOUT_S <= 3600
@@ -1535,6 +1546,14 @@ def main(argv=None) -> int:
         and allowlist_decision("co146_jlc_dfm_gate", 2, "", "FAIL", True, True) == "expected_step_rc_mismatch"
         and allowlist_decision("co146_jlc_dfm_gate", 127, "", "FAIL", True, True) == "expected_step_rc_mismatch"
         and allowlist_decision("co146_jlc_dfm_gate", 0, "", "FAIL", True, True) == "expected_step_returned_zero")
+    # CO-201（G-1）：白名单**预期非零出口**须**无错误输出**（设计出口 vs 错误路径的机判面）
+    checks["t31_expected_nonzero_error_free"] = (
+        allowlist_decision("co146_jlc_dfm_gate", 1, "", "FAIL", True, True) == "expected_nonzero"
+        and allowlist_decision("co146_jlc_dfm_gate", 1, "Error: boom\n", "FAIL", True, True)
+            == "expected_step_error_output"
+        and allowlist_decision("co146_jlc_dfm_gate", 1, "Traceback (most recent call last):\n", "FAIL", True, True)
+            == "expected_step_crashed"
+        and allowlist_decision("co146_jlc_dfm_gate", 1, "   \n", "FAIL", True, True) == "expected_nonzero")
     checks["t05_stability_oracle"] = (stable("x", "x") and not stable("x", "y") and not stable("", ""))
     # CO-164（t06）：执行器 ORDER 必须与 boundary 规范复现序**有序一致**（文档↔执行器防漂移）
     _bdy = boundary_order_steps()

@@ -2503,8 +2503,50 @@ def main() -> int:
         txt = re.sub(re.escape(MARK73) + r"[\s\S]*?(?=\n## |\Z)", body73, txt, count=1)
     else:
         txt = txt.rstrip("\n") + "\n\n" + body73
+    # ── §74 CO-201（L2 自裁 · 出口语义 + 豁免边界） ──────────────────────────────
+    MARK74 = "## 74. CO-201"
+    _rc74 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    sec74 = [MARK74 + "（**L2 自裁 · 出口语义 + 豁免边界**）", "",
+             "- **G-1（low）·白名单出口语义靠文本子串代理**：`allowlist_decision()` 对白名单步的「崩溃」判据仅查 stderr 是否含 CPython 表头 "
+             "`Traceback (most recent call last)`，**其余 stderr 内容一概不看** ⇒ 非表头形态的错误出口（`sys.exit('msg')`、库抛 SystemExit、"
+             "解释器外错误）在与声明 rc 相同、记录已先落盘、verdict 与牙齿相符时**冒充「预期判决出口」**。仅 rc **值**已在 CO-199 收紧，"
+             "该出口**是否伴生错误**仍无判据。",
+             "- **G-2（low）·豁免前缀的段边界分支无合成控**：`shadow_exempt()` 实现正确（`rel == pre or rel.startswith(pre + '/')`），"
+             "但 t23 只行使了**接受**分支 ⇒ 回归为裸 `rel.startswith(pre)`（兄弟目录 / 同前缀文件名被误豁免）时 `--check` **仍全 True**"
+             "（判据该分支不可证伪）—— 违 R-CO197-1「合成控须逐分支覆盖」。",
+             "- **处置**：runner 升 **CO-201.1** —— ① 白名单**预期非零出口须 stderr 全空**，新增停机类 `expected_step_error_output`"
+             "（置于 `expected_step_crashed` 之后）+ 静态齿 **t31**；② t23 补段边界正/负控（子路径须豁免；`…06_rulingsX/`、"
+             "`…05_layer_sequence.txtX` 不得豁免）。",
+             f"- **登记簿**：+2（`co201:G-1`/`G-2`，low，CLOSED；**{_rc74['total']} 项 / OPEN {_rc74['OPEN']}**）。",
+             "- **实测（本件证据）**：修前 `allowlist_decision('co146_jlc_dfm_gate', 1, 'Error: boom', 'FAIL', True, True)` ⇒ `expected_nonzero`（放行）；"
+             "修后 ⇒ `expected_step_error_output`（Traceback 者 ⇒ `expected_step_crashed`；空/纯空白 ⇒ `expected_nonzero`）。"
+             "**零基线冲击**：`co146_jlc_dfm_gate` stderr = **0 字节**（stdout 628 / rc=1）；规范序收敛 rc=0。",
+             "",
+             "> **R-CO201-1**：「预期出口」须同时绑定 **rc 值** 与 **无错误输出**（stderr 空）；新增白名单步须实测 stderr 为空并留证据。",
+             "> **R-CO201-2**：字符串前缀 / 集合归属类判据须对**两种拒绝形态**（等长不同名 / 同前缀更长路径）各给负控；t31/t23 机判。",
+             "> **R-CO201-3**（复现序，取代 R-CO200-2；**步集/序列不变，序内出现 50 次**）：规范复现序 = `" + _ord190 + "`，"
+             "**循环至 sha 稳定**（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1 "
+             "+ R-CO175-1 + R-CO176-1/2 + R-CO177-1 + R-CO178-1 + R-CO179-1/2 + R-CO180-1/2 + R-CO181-1/2 + R-CO182-1 "
+             "+ R-CO183-1 + R-CO184-1 + R-CO185-1/2 + R-CO186-1 + R-CO187-1/2/3 + R-CO188-1 + R-CO189-1 + R-CO190-1 "
+             "+ R-CO191-1 + R-CO192-1 + R-CO193-1/2/3/4 + R-CO194-1/2 + R-CO195-0/1 + R-CO196-1/2/4/5 + R-CO197-1/2/4 "
+             "+ R-CO198-1 + R-CO199-1 + R-CO200-1 + R-CO201-1/2）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows74 = [("工具 `p3_v57_co164_order_runner.py`（CO-201.1 / 出口语义 + 边界负控 + 静态齿 t31）",
+                K2 / "tools/p3_v57_co164_order_runner.py"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc74['total']} 项 / OPEN {_rc74['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows74:
+        if pth.exists():
+            sec74.append(f"| {label} | `{s16(pth)}` |")
+    sec74.append("")
+    body74 = "\n".join(sec74)
+    if MARK74 in txt:
+        txt = re.sub(re.escape(MARK74) + r"[\s\S]*?(?=\n## |\Z)", body74, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body74
+    txt = txt.replace("W3 Boundary **v2.45**", "W3 Boundary **v2.46**")
     txt = txt.replace("W3 Boundary **v2.44**", "W3 Boundary **v2.45**")
-    txt = txt.replace("W3 Boundary **v2.43**", "W3 Boundary **v2.44**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
     return 0
