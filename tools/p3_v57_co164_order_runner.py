@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CO-164/CO-167/CO-169/CO-174/CO-180/CO-181/CO-182/CO-183/CO-187/CO-188/CO-189/CO-190/CO-191/CO-192/CO-193/CO-194/CO-195/CO-196/CO-197/CO-198/CO-199/CO-201 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
+"""CO-164/CO-167/CO-169/CO-174/CO-180/CO-181/CO-182/CO-183/CO-187/CO-188/CO-189/CO-190/CO-191/CO-192/CO-193/CO-194/CO-195/CO-196/CO-197/CO-198/CO-199/CO-200/CO-201/CO-202/CO-203 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
 
 缘起（实测事故，CO-163）：`co146_boundary_append.py` 因 §37 文本里的 f-string 花括号语法错误**每次崩溃（rc=1）**，
 但收敛判定只看 boundary/记录 sha ⇒ sha 恒不变 ⇒ 报「CONVERGED」，边界 §37 实际从未写入、pin 表陈旧（co77/co135/co136 判 FAIL）。
@@ -41,6 +41,12 @@
      运行期 **只**豁免该 rc；其余非零一律 `expected_step_rc_mismatch` 停机（禁以「rc≠0」笼统放行）。静态齿 **t30**。
 ⑯ CO-201（R-CO201-1/2，**出口语义与豁免边界**）：① 白名单**预期非零出口**须**无任何错误输出**（stderr 空），
      旧 Traceback 子串代理不足；② 写影子**豁免前缀**的**段边界**分支须入合成控。静态齿 **t31** + t23 扩展。
+⑰ CO-202（R-CO202-1/2/3/4，**非执行者复评 CO-196..CO-201 之处置**）：t28 谓词级逐返回路径控（存在但不可编译 / 类型错）；
+     `allowlist_decision(decl=)` 可注入声明面 + t30 控 `expected_step_rc_undeclared`；proxy「源内声明」改 **AST 字面量集**
+     （注释/散文不得满足）；静态齿 **t32**（受控集产物类别 ⊆ oracle 扰动量类别）。
+⑱ CO-203（R-CO203-1，**自声明修订号绑定**）：凡工具**自声明 `revision`** 者，其记录 dict 字面量之修订号（**AST 抽取**；
+     注释/散文不得满足 —— 承 R-CO202-4）须等于 `TOOL_REVISION_DECLARED` 之声明 —— 防「内容已升级、自声明滞留」
+     （CO-202 之残余：oracle 内容已 CO-202 而 `revision` 仍 CO-200）。静态齿 **t33**。
 CLI:
   python3 tools/p3_v57_co164_order_runner.py [--check] [--max-iter 5]
 """
@@ -114,6 +120,13 @@ BASIS_JUDGE_DECLARED = {
     "register_consistency": {"judge": "co124_input_selfcheck_gate", "artifact": "input_defect_register_v1.json",
                              "why": "登记簿自洽由 `co124.register_consistency()` 机判（其 T21/T21b 牙齿）"},
     "downstream": {"judge": None, "why": "由 `JUDGMENT_DOWNSTREAM` 逐条声明（t26 判方向 + 可执行）"},
+}
+
+# CO-203（R-CO203-1）：**自声明修订号**类工具 —— 其记录字面 `revision` 须等于此处之声明。
+# （内容升级而自声明滞留即漂移；此为 CO-202 处置所遗漏之面。）
+TOOL_REVISION_DECLARED = {
+    "tools/p3_v57_co195_fixpoint_uniqueness_oracle.py":
+        {"artifact": "m13_v57_co195_fixpoint_uniqueness", "revision": "CO-202"},
 }
 
 # 允许非零的步骤（**须带 verdict 证据**：rc≠0 不等于预期 FAIL —— CO-165）
@@ -867,6 +880,41 @@ def declared_verdict_in_tool(step: str, decl) -> bool:
     return bool(v) and v in p.read_text(encoding="utf-8")
 
 
+def revision_literal_from_src(src: str, artifact: str):
+    """CO-203（R-CO203-1）纯判据：AST 抽取**记录 dict 字面量**内之 `revision`（注释/散文不得满足 —— R-CO202-4）。
+    返回 `(artifact 字面量存在, revision 字面量)`；不可解析 ⇒ `(False, None)`（fail-closed）。"""
+    try:
+        tree = ast.parse(src)
+    except SyntaxError:
+        return (False, None)
+    found, rev = False, None
+    for n in ast.walk(tree):
+        if not isinstance(n, ast.Dict):
+            continue
+        kv = {(k.value if isinstance(k, ast.Constant) else None):
+              (v.value if isinstance(v, ast.Constant) else None) for k, v in zip(n.keys, n.values)}
+        if kv.get("artifact") == artifact:
+            found = True
+            if isinstance(kv.get("revision"), str):
+                rev = kv["revision"]
+    return (found, rev)
+
+
+def tool_revision_bound(rel: str, decl) -> str:
+    """CO-203（R-CO203-1）：工具**自声明修订号**须等于 runner 之声明。
+    返回 `ok` / `tool_missing` / `artifact_literal_absent` / `revision_absent` / `revision_mismatch`（不可判一律 fail-closed）。"""
+    p = K2 / rel
+    if not p.exists():
+        return "tool_missing"
+    _d = decl or {}
+    found, rev = revision_literal_from_src(p.read_text(encoding="utf-8"), str(_d.get("artifact") or ""))
+    if not found:
+        return "artifact_literal_absent"
+    if not rev:
+        return "revision_absent"
+    return "ok" if rev == _d.get("revision") else "revision_mismatch"
+
+
 def artifact_readers(basename: str) -> list:
     """CO-193（R-CO193-1）：源内**引用**该工件 basename 的规范序步（**语法代理**，非运行时读确认）。
 
@@ -1586,6 +1634,20 @@ def main(argv=None) -> int:
         checks["t32_oracle_category_coverage"] = bool(_case_cat) and {p.suffix for p in watch_paths()} <= _case_cat
     except Exception:
         checks["t32_oracle_category_coverage"] = False   # fail-closed（不可判即不通过）
+    # CO-203（R-CO203-1）：工具**自声明修订号**须与 runner 之声明一致（内容升级而自声明滞留 ⇒ 停机）
+    _orc_rel = "tools/p3_v57_co195_fixpoint_uniqueness_oracle.py"
+    _oc = "m13_v57_co195_fixpoint_uniqueness"
+    checks["t33_tool_revision_bound"] = (
+        set(TOOL_REVISION_DECLARED) == {_orc_rel}
+        and all(tool_revision_bound(k, d) == "ok" for k, d in TOOL_REVISION_DECLARED.items())
+        # 正控：AST 字面量抽取（dict 内 revision）
+        and revision_literal_from_src('D = {"artifact": "%s", "revision": "CO-202"}' % _oc, _oc) == (True, "CO-202")
+        # 负控：自声明不符 / artifact 字面量缺失 / 工具缺失
+        and tool_revision_bound(_orc_rel, {"artifact": _oc, "revision": "CO-999"}) == "revision_mismatch"
+        and tool_revision_bound(_orc_rel, {"artifact": "__absent__", "revision": "CO-202"}) == "artifact_literal_absent"
+        and tool_revision_bound("tools/__no_such_tool__.py", {"artifact": _oc, "revision": "CO-202"}) == "tool_missing"
+        # 判别力控（承 R-CO202-4）：注释/散文提及修订号与 artifact 名**不得**满足（AST 无 dict 字面 ⇒ 不可抽）
+        and revision_literal_from_src('"""revision: CO-202（仅散文，非声明）"""\n# artifact: %s' % _oc, _oc) == (False, None))
     checks["t05_stability_oracle"] = (stable("x", "x") and not stable("x", "y") and not stable("", ""))
     # CO-164（t06）：执行器 ORDER 必须与 boundary 规范复现序**有序一致**（文档↔执行器防漂移）
     _bdy = boundary_order_steps()
@@ -1674,7 +1736,7 @@ def main(argv=None) -> int:
             converged = True
             break
         prev = cur
-    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-202.1",
+    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-203.1",
               "nature": "规范复现序机判执行器（rc 策略 + 真收敛判定）；报告落 .archer_tmp/ 且**不被 boundary 引用**（避免不动点）",
               "order": ORDER, "expected_nonzero": EXPECTED_NONZERO,
               "checks": checks, "iterations": iterations, "abort": abort, "converged": converged,

@@ -2603,6 +2603,49 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body75
 
+    # ── §76 CO-203（L2 自裁 · 工具自声明修订号（自声明面）↔ 内容 同步） ──────────────
+    _ord191 = _ord190          # 步集/序列不变（50 次）
+    MARK76 = "## 76. CO-203"
+    _rc76 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    sec76 = [MARK76 + "（**L2 自裁 · 自声明修订号（自声明面）↔ 内容 同步 + 机判齿 t33**）", "",
+             "- **M-1（low）·工具自声明修订号面与内容不同步**：CO-202 处置已把 oracle 内容升为按 CO-202（`CASES` **5 案** / 牙齿 **10**），"
+             "而其记录自声明 `revision` 仍 **CO-200**（`nature` 仍「4 案」、`trigger` 未述第 5 案、docstring 仍「3 案」）；"
+             "runner 头部修订清单亦漏 CO-200/CO-202 ⇒ 下游读「oracle revision」者见 CO-200，"
+             "会误判第 5 案（图/`.svg`）**未被覆盖** —— 即「声明↔实现」在**自声明面**之漂移（承 R-CO194-1/2）。",
+             "- **处置**：① oracle 自声明面 sync（`revision` → **CO-202**、`nature` → **5 案**、`trigger` 补 CO-202（L-4）条款、docstring 五案化）；"
+             "② runner 增 `TOOL_REVISION_DECLARED`（自声明修订号类工具之**权威声明**） + 纯判据 `tool_revision_bound()`（**AST** 抽取记录 dict 字面量之 `revision`；"
+             "注释/散文不得满足 —— 承 R-CO202-4） + 静态齿 **t33**；runner 头部修订清单补 CO-200/CO-202/CO-203。report revision → CO-203.1。",
+             f"- **登记簿**：+1（`co203:M-1`，low，CLOSED；**{_rc76['total']} 项 / OPEN {_rc76['OPEN']}**）。",
+             "- **实测（本件证据）**：修前（AST 复算，零落盘）as-found `27e9fe3` 记录字面 `revision=\"CO-200\"` 而内容 5 案/10 牙齿 ⇒ "
+             "`tool_revision_bound(<oracle>, rev=CO-200)` = `revision_mismatch`；修后抽取字面 `(True, 'CO-202')`、`rev=CO-202` ⇒ `ok`；"
+             "注释/散文源 ⇒ `(False, None)`（判别力控）；`--check` **t01..t33 全 True（35）**；oracle 记录 `revision` = CO-202、5 案 / 10 牙齿 PASS。",
+             "",
+             "> **R-CO203-1**：凡工具**自声明 `revision`** 者，其内容升级须同 commit 同步**自声明面**（记录 `revision` / `nature` / `trigger` / 头部修订清单）；"
+             "抽取一律以 **AST 字面量**判（注释/散文不得满足，承 R-CO202-4），新增此类工具须入 runner `TOOL_REVISION_DECLARED`；t33 机判。",
+             "> **R-CO203-2**（复现序，取代 R-CO202-5；**步集/序列不变，序内出现 50 次**）：规范复现序 = `" + _ord191 + "`，"
+             "**循环至 sha 稳定**（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1 + R-CO175-1 + R-CO176-1/2 "
+             "+ R-CO177-1 + R-CO178-1 + R-CO179-1/2 + R-CO180-1/2 + R-CO181-1/2 + R-CO182-1 + R-CO183-1 + R-CO184-1 + R-CO185-1/2 "
+             "+ R-CO186-1 + R-CO187-1/2/3 + R-CO188-1 + R-CO189-1 + R-CO190-1 + R-CO191-1 + R-CO192-1 + R-CO193-1/2/3/4 + R-CO194-1/2 "
+             "+ R-CO195-0/1 + R-CO196-1/2/4/5 + R-CO197-1/2/4 + R-CO198-1 + R-CO199-1 + R-CO200-1 + R-CO201-1/2 + R-CO202-1/2/3/4 + R-CO203-1）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows76 = [("工具 `p3_v57_co164_order_runner.py`（CO-203.1 / 自声明修订号绑定：`TOOL_REVISION_DECLARED` + `tool_revision_bound` + 静态齿 t33）",
+                K2 / "tools/p3_v57_co164_order_runner.py"),
+               ("工具 `p3_v57_co195_fixpoint_uniqueness_oracle.py`（CO-202 / 5 案 + 10 牙齿；自声明 `revision`=CO-202）",
+                K2 / "tools/p3_v57_co195_fixpoint_uniqueness_oracle.py"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc76['total']} 项 / OPEN {_rc76['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows76:
+        if pth.exists():
+            sec76.append(f"| {label} | `{s16(pth)}` |")
+    sec76.append("")
+    body76 = "\n".join(sec76)
+    if MARK76 in txt:
+        txt = re.sub(re.escape(MARK76) + r"[\s\S]*?(?=\n## |\Z)", body76, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body76
+
+    txt = txt.replace("W3 Boundary **v2.47**", "W3 Boundary **v2.48**")
     txt = txt.replace("W3 Boundary **v2.46**", "W3 Boundary **v2.47**")
     txt = txt.replace("W3 Boundary **v2.45**", "W3 Boundary **v2.46**")
     txt = txt.replace("W3 Boundary **v2.44**", "W3 Boundary **v2.45**")
