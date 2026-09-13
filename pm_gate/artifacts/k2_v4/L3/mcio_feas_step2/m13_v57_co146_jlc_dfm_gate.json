@@ -1,7 +1,7 @@
 {
  "artifact": "m13_v57_co146_jlc_dfm_gate",
  "schema": 1,
- "revision": "CO146-JLC-DFM.4",
+ "revision": "CO146-JLC-DFM.5",
  "nature": "L2 只读机判：DFM 对照 JLC 8 层公布能力（监理指令 #10 动作 4）",
  "board": "k2_v4_8L.l4.kicad_pcb",
  "board_sha16": "d4e81f647be7f980",
@@ -95,14 +95,14 @@
  "items": [
   {
    "item": "板尺寸",
-   "jlc_limit": "≤656.0×586.0mm 且 ≥3×3mm",
+   "jlc_limit": "≤656×586mm 且 ≥3×3mm",
    "measured": "120.1×46.1mm",
    "verdict": "PASS",
    "note": ""
   },
   {
    "item": "层数",
-   "jlc_limit": "1–32 层（阻抗控制支持 4/6/8/…）",
+   "jlc_limit": "1–32 层（阻抗控制支持 4/6/8/10/12/32）",
    "measured": "8 层",
    "verdict": "PASS",
    "note": ""
@@ -144,7 +144,7 @@
   },
   {
    "item": "最小过孔孔壁",
-   "jlc_limit": "≥0.15mm（建议 ≥0.2mm）",
+   "jlc_limit": "≥0.15mm（本板按 JLC 建议值 ≥0.2mm 判）",
    "measured": "0.2mm",
    "verdict": "PASS",
    "note": ""
@@ -301,6 +301,26 @@
   },
   "t07_capability_value_bind_sensitivity": {
    "ok": true
+  },
+  "t08_drc_item_limits_derived": {
+   "ok": true,
+   "cases": 13,
+   "checks": {
+    "case0_板尺寸": true,
+    "case1_板尺寸": true,
+    "case2_层数": true,
+    "case3_最小线宽": true,
+    "case4_最小过孔孔壁": true,
+    "case5_最小过孔盘径": true,
+    "case6_过孔环宽（单边）": true,
+    "case7_过孔孔到孔": true,
+    "case8_NPTH 最小孔径": true,
+    "case9_铜到板边": true,
+    "case10_阻焊桥 / 阻焊-铜净距": true,
+    "case11_表面处理": true,
+    "case12_阻抗控制": true,
+    "items_present": true
+   }
   }
  },
  "redline": "只读：仅读板/kicad-cli DRC；坐标零搜索；不改板/图纸/SPEC/冻结四源。"

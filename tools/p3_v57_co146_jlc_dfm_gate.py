@@ -30,6 +30,7 @@ DRU = K2 / "k2_v4_8L.l4.kicad_dru"
 RULES_FILE = ROOT / "_shared/eda_core/drc_rules.json"
 BOARD_RULES = json.loads(RULES_FILE.read_text())
 EDGE_CLEARANCE_RULE_MM = float(BOARD_RULES["manufacturing"]["min_copper_edge_clearance"])
+MIL_MM = 0.0254   # CO-178：mil↔mm 换算（禁在限值文本内硬编码 mil 数）
 # CO-176（G-2）：能力表引证须**逐条绑定**抓取件 —— 每条给一个**原文子串**锚点；非原文引证须**显式标注**。
 CAP_SRC_HTML = STEP2 / "m13_v57_co146_jlc_capability_source.html"
 CAPABILITY_ANCHORS = {
@@ -344,8 +345,9 @@ def jlc_limit_drc(board_text: str, pro_text: str, dru_text: str,
     return _run_drc(board_text, json.dumps(pro, indent=2), dru)
 
 
-def _items(m: dict, asd: dict, jlcrun: dict) -> list[dict]:
-    j = JLC8
+def _items(m: dict, asd: dict, jlcrun: dict, j: dict | None = None) -> list[dict]:
+    """CO-178：全部限值**由能力表派生**（禁内嵌硬编码派生值）；`j` 可注入（供牙齿 t08 的扰动证明）。"""
+    j = j or JLC8
     out = []
 
     def add(item, limit, measured, ok, note=""):
@@ -353,24 +355,28 @@ def _items(m: dict, asd: dict, jlcrun: dict) -> list[dict]:
                     "verdict": "PASS" if ok else "FAIL", "note": note})
 
     size = m["board_size_mm"]
-    add("板尺寸", f"≤{j['board_max_mm']['w']}×{j['board_max_mm']['h']}mm 且 ≥3×3mm",
+    add("板尺寸", f"≤{j['board_max_mm']['w']:g}×{j['board_max_mm']['h']:g}mm"
+                  f" 且 ≥{j['board_min_mm']['w']:g}×{j['board_min_mm']['h']:g}mm",
         f"{size[0]}×{size[1]}mm", size[0] <= j["board_max_mm"]["w"] and size[1] <= j["board_max_mm"]["h"]
-        and size[0] >= 3.0 and size[1] >= 3.0)
-    add("层数", f"{j['layer_count']['min']}–{j['layer_count']['max']} 层（阻抗控制支持 4/6/8/…）",
-        f"{m['n_copper_layers']} 层", m["n_copper_layers"] in (4, 6, 8, 10, 12, 14, 16, 18, 20, 32))
+        and size[0] >= j["board_min_mm"]["w"] and size[1] >= j["board_min_mm"]["h"])
+    _imp_layers = sorted({int(x) for x in re.findall(r"\d+", j["impedance_control_layers"]["value"])})
+    add("层数", f"{j['layer_count']['min']}–{j['layer_count']['max']} 层"
+                f"（阻抗控制支持 {'/'.join(str(x) for x in _imp_layers)}）",
+        f"{m['n_copper_layers']} 层", m["n_copper_layers"] in _imp_layers)
     add("外层铜厚", j["outer_copper_oz"]["allowed"], "1 oz（SPEC stackup / 监理定值）", True, "声明值=监理定值")
     add("内层铜厚", j["inner_copper_oz"]["allowed"], "0.5 oz（SPEC stackup / JLC 默认）", True, "声明值=监理定值")
     add("成品板厚", f"{j['thickness_mm']['value']}mm ±{j['thickness_mm']['tol_pct']}%", "1.6mm（JLC08161H）", True, "声明值")
-    add("最小线宽", f"≥{j['min_track_width_mm']['value']}mm (3.5mil)",
+    add("最小线宽", f"≥{j['min_track_width_mm']['value']}mm ({j['min_track_width_mm']['value']/MIL_MM:.1f}mil)",
         f"{m['min_track_width_mm']}mm", m["min_track_width_mm"] >= j["min_track_width_mm"]["value"])
     add("最小线距（域外，netclass 0.1/0.175/0.2 全 ≥3.5mil）", f"≥{j['min_track_spacing_mm']['value']}mm",
         f"JLC 限 DRC clearance 违规 = {jlcrun['by_type'].get('clearance', 0)}",
         jlcrun["by_type"].get("clearance", 0) == 0, "含逃逸域按 0.09mm 收紧后重跑")
-    add("最小过孔孔壁", f"≥{j['min_via_hole_mm']['value']}mm（建议 ≥{j['min_via_hole_mm']['preferred']}mm）",
+    add("最小过孔孔壁", f"≥{j['min_via_hole_mm']['value']}mm（本板按 JLC 建议值 ≥{j['min_via_hole_mm']['preferred']}mm 判）",
         f"{m['min_via_drill_mm']}mm", m["min_via_drill_mm"] >= j["min_via_hole_mm"]["preferred"])
     add("最小过孔盘径", f"≥{j['min_via_diameter_mm']['value']}mm", f"{m['min_via_diameter_mm']}mm",
         m["min_via_diameter_mm"] >= j["min_via_diameter_mm"]["value"])
-    add("过孔环宽（单边）", f"盘径 ≥ 孔径+{j['via_annular_note']['value']}mm（⇒ 单边 ≥0.075mm）",
+    add("过孔环宽（单边）", f"盘径 ≥ 孔径+{j['via_annular_note']['value']}mm"
+                           f"（⇒ 单边 ≥{j['via_annular_note']['value'] / 2:.3f}mm）",
         f"{m['min_via_annular_mm']}mm",
         m["min_via_diameter_mm"] - m["min_via_drill_mm"] >= j["via_annular_note"]["value"] - 1e-9)
     add("过孔孔到孔", f"≥{j['via_hole_to_hole_mm']['value']}mm", f"{m['min_via_hole_to_hole_mm']}mm",
@@ -385,7 +391,9 @@ def _items(m: dict, asd: dict, jlcrun: dict) -> list[dict]:
     add("阻焊桥 / 阻焊-铜净距", f"桥 ≥{j['solder_mask_bridge_mm']['value']}mm；开窗到邻近铜 ≥{j['solder_mask_to_copper_mm']['value']}mm",
         f"JLC 限 DRC solder_mask_bridge 违规 = {jlcrun['by_type'].get('solder_mask_bridge', 0)}",
         jlcrun["by_type"].get("solder_mask_bridge", 0) == 0)
-    add("表面处理", "6 层及以上不支持 HASL ⇒ 须 ENIG", "沉金 ENIG", True, "监理定值一致")
+    _hasl = re.search(r"with (\d+) or more layers", j["surface_finish"].get("quote", ""))
+    add("表面处理", f"{_hasl.group(1) if _hasl else '?'} 层及以上不支持 HASL ⇒ 须 {j['surface_finish']['value']}",
+        f"沉金 {j['surface_finish']['value']}", True, "监理定值一致")
     add("阻抗控制", f"支持层数 {j['impedance_control_layers']['value']}，公差 ±{j['impedance_tolerance_pct']['value']}%",
         "8 层 + 85Ω±10%（见 CO-146 阻抗表）", True, "终判 = JLC 阻抗控制服务")
     nt = m["n_non_through_vias"]
@@ -394,6 +402,46 @@ def _items(m: dict, asd: dict, jlcrun: dict) -> list[dict]:
             f"{k}={v}" for k, v in m["via_type_census"].items() if "BLIND" in k),
         nt == 0,
         "JLC 公布能力页：Blind/Buried Vias Not supported / 仅通孔；FAQ 列为 advanced option 须 DFM review")
+    return out
+
+
+# CO-178：`_items()` 的限值文本**必须**由能力表派生。判据为**成分级**（非「文本是否变化」）：
+# 扰动后，该项 `jlc_limit` 须**含**由扰动值派生出的**具体成分串**，且**基线文本不含该串**。
+# 缘起（自测加严）：首版仅查「文本是否变化」⇒ **部分硬编码**（如把 `3.5mil` 写死而 mm 段仍派生）可逃逸；
+# 改为成分级断言 + 基线否定后，「mil 写死」类回归必被击穿。
+ITEM_DERIVATION_CASES = [
+    ("板尺寸", {"board_min_mm": {"w": 9.0, "h": 9.0}}, ["≥9×9mm"]),
+    ("板尺寸", {"board_max_mm": {"w": 10.0, "h": 10.0}}, ["≤10×10mm"]),
+    ("层数", {"impedance_control_layers": {"value": "4/6/8/10/12/14/16/18/20/24/32"}}, ["20/24"]),
+    ("最小线宽", {"min_track_width_mm": {"value": 0.075}}, ["≥0.075mm", "(3.0mil)"]),
+    ("最小过孔孔壁", {"min_via_hole_mm": {"value": 0.12, "preferred": 0.18}}, ["≥0.12mm", "≥0.18mm"]),
+    ("最小过孔盘径", {"min_via_diameter_mm": {"value": 0.20}}, ["≥0.2mm"]),
+    ("过孔环宽（单边）", {"via_annular_note": {"value": 0.20}}, ["单边 ≥0.100mm"]),
+    ("过孔孔到孔", {"via_hole_to_hole_mm": {"value": 0.25}}, ["≥0.25mm"]),
+    ("NPTH 最小孔径", {"min_npth_mm": {"value": 0.60}}, ["≥0.6mm"]),
+    ("铜到板边", {"copper_edge_clearance_mm": {"value": 0.25}}, ["≥0.25mm"]),
+    ("阻焊桥 / 阻焊-铜净距", {"solder_mask_bridge_mm": {"value": 0.15}}, ["≥0.15mm"]),
+    ("表面处理", {"surface_finish": {"value": "沉金"}}, ["须 沉金"]),
+    ("阻抗控制", {"impedance_tolerance_pct": {"value": 5}}, ["±5%"]),
+]
+
+
+def item_limit_derivation_checks(m: dict, asd: dict, jlcrun: dict) -> dict:
+    """CO-178：**成分级**派生性判据（含基线否定，防「部分硬编码」逃逸）。
+
+    对每个情形：扰动能力表字段 ⇒ 该项 `jlc_limit` 须**含**由扰动值派生的**具体成分串**（`must`），
+    且**基线文本不得含该串**。若该成分被硬编码，扰动后不会出现新成分串 ⇒ 判不通过。
+    """
+    base = {it["item"]: it for it in _items(m, asd, jlcrun)}
+    out = {}
+    for i, (item, patch, must) in enumerate(ITEM_DERIVATION_CASES):
+        pert = {k: ({**JLC8[k], **v} if k in JLC8 else v) for k, v in patch.items()}
+        cand = {it["item"]: it for it in _items(m, asd, jlcrun, j={**JLC8, **pert})}
+        b, c = base.get(item), cand.get(item)
+        bt = b["jlc_limit"] if b else ""
+        ct = c["jlc_limit"] if c else ""
+        out[f"case{i}_{item}"] = bool(b and c and all(s in ct for s in must) and not any(s in bt for s in must))
+    out["items_present"] = len(base) >= 12
     return out
 
 
@@ -426,11 +474,13 @@ def main() -> int:
         _page, JLC8,
         {**CAPABILITY_VALUE_BIND,
          "min_track_width_mm": [("Multilayer: (0\\.09) / 0\\.09 mm \\(3\\.5 / 3\\.5 mil\\)", ["0.10"])]}).values())
+    # CO-178：`_items()` 限值须由能力表派生（逐项扰动证明）
+    _deriv = item_limit_derivation_checks(m, asd, jlcrun)
     fails = [i["item"] for i in items if i["verdict"] == "FAIL"]
     # 牙齿②：过孔类型项必须 FAIL（本板 220 非通孔）
     teeth2_ok = "**过孔类型（盲/埋孔）**" in fails
     rec = {
-        "artifact": "m13_v57_co146_jlc_dfm_gate", "schema": 1, "revision": "CO146-JLC-DFM.4",
+        "artifact": "m13_v57_co146_jlc_dfm_gate", "schema": 1, "revision": "CO146-JLC-DFM.5",
         "nature": "L2 只读机判：DFM 对照 JLC 8 层公布能力（监理指令 #10 动作 4）",
         "board": BOARD.name, "board_sha16": sha16(BOARD), "board_sha256": sha(BOARD),
         "as_built": m,
@@ -450,7 +500,9 @@ def main() -> int:
                   "t05_capability_citation_sensitivity": {"ok": _cite_sens},
                   "t06_capability_value_bound": {"ok": all(_bind.values()), "checks": _bind,
                                                  "rules": sum(len(CAPABILITY_VALUE_BIND[k]) for k in CAPABILITY_VALUE_BIND)},
-                  "t07_capability_value_bind_sensitivity": {"ok": _bind_sens}},
+                  "t07_capability_value_bind_sensitivity": {"ok": _bind_sens},
+                  "t08_drc_item_limits_derived": {"ok": all(_deriv.values()),
+                                                  "cases": len(ITEM_DERIVATION_CASES), "checks": _deriv}},
         "redline": "只读：仅读板/kicad-cli DRC；坐标零搜索；不改板/图纸/SPEC/冻结四源。",
     }
     (STEP2 / "m13_v57_co146_jlc_dfm_gate.json").write_text(
@@ -492,7 +544,8 @@ def main() -> int:
              f"- T4 能力表引证逐条绑定抓取件（anchor 原文子串 + 非原文显式标注）：ok={all(_cite.values())}",
              f"- T5 引证判据灵敏度（篡改 anchor 即判不通过）：ok={_cite_sens}",
              f"- T6 能力表**值**可由抓取件原文抽取核验（29 捕获组 ↔ 声明值）：ok={all(_bind.values())}",
-             f"- T7 值绑定灵敏度（篡改期望值即判不通过）：ok={_bind_sens}", ""]
+             f"- T7 值绑定灵敏度（篡改期望值即判不通过）：ok={_bind_sens}",
+             f"- T8 逐项限值须由能力表派生（{len(ITEM_DERIVATION_CASES)} 扰动情形）：ok={all(_deriv.values())}", ""]
     (STEP2 / "m13_v57_co146_jlc_dfm_gate.md").write_text("\n".join(card) + "\n")
     print("verdict:", rec["verdict"], "| fails:", fails)
     print("as-designed:", asd["n"], asd["by_type"])
@@ -500,7 +553,8 @@ def main() -> int:
     print("min track:", m["min_track_width_mm"], "| min via drill/dia:", m["min_via_drill_mm"], m["min_via_diameter_mm"],
           "| annular:", m["min_via_annular_mm"], "| via h2h:", m["min_via_hole_to_hole_mm"])
     print("non-through vias:", m["n_non_through_vias"], m["via_type_census"])
-    print("teeth:", teeth_ok, teeth2_ok, teeth3_ok, all(_cite.values()), _cite_sens, all(_bind.values()), _bind_sens)
+    print("teeth:", teeth_ok, teeth2_ok, teeth3_ok, all(_cite.values()), _cite_sens, all(_bind.values()),
+          _bind_sens, all(_deriv.values()))
     # CO-159（F-7）：R-CO158-3 —— 退出码须反映 verdict（本件 verdict 允许为 FAIL（DFM 阻塞项）⇒ rc=1；
     # 此前 `return 0 if teeth else 1` 使 FAIL 时 rc 仍 0，复现序无法 fail-fast）。
     return 0 if (rec["verdict"] == "PASS" and teeth_ok and teeth2_ok and teeth3_ok) else 1

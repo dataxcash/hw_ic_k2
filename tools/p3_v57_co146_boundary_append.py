@@ -1368,6 +1368,64 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body50
     txt = txt.replace("W3 Boundary **v2.21**", "W3 Boundary **v2.22**")
+    # ── §51 CO-178（DFM 逐项限值须由能力表派生） ─────────────────────────────
+    MARK51 = "## 51. CO-178"
+    _rc51 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    _ord178 = ("co146_impedance_table → co146_pm_eval → co146_ledger_add → co153_k9_domain_coverage → "
+               "co148_u6_datasheet_inputs → co148_thermal_ruling → co149_thermal_mitigation_derive → co147_l2_ruling → "
+               "co146_jlc_dfm_gate → co146_jlc_fab_package → co152_findings_disposition → co155_co154_findings_disposition → "
+               "co156_co154_open_disposition → co157_gate_hardening_3 → co158_l5_packet_selfcontained → "
+               "co159_rev19_co156_co157_co158_review → co160_co159_findings_disposition → co161_gap_hardening_4 → "
+               "co162_verdict_binding → co163_binding_to_order_notes → co166_rev19_co159_co165_review → "
+               "co167_co166_findings_disposition → co168_register_consistency → co169_step_output_oracle → co170_stackup_binding → "
+               "co171_order_notes_record_figures → co172_rev19_co166_co171_review → co173_co172_findings_disposition → "
+               "co174_step_artifact_attribution → co175_package_parity_binding → co176_gate_selfcheck_evidence → "
+               "co177_capability_value_binding → co178_drc_item_limit_derivation → co124_input_selfcheck_gate → "
+               "co150_k9_domain_gate → co146_boundary_append → co77_closure_declaration_sweep → co120_provenance_pin_gate → "
+               "co135_review_hygiene → co136_gate_hygiene → co78_layer_role_drift_gate → co81_project_rules_gate → "
+               "co84_dru_domain_gate → co95_in4_reachability → co98_reachability_status_report → co106_reference_plane_gate → "
+               "co146_boundary_append")
+    sec51 = [MARK51 + "（**L2 自裁 · 记录派生数字绑定续**）", "",
+             "- **问题（查漏实测）**：DFM 闸 `_items()` 的逐项判定表内嵌**硬编码派生值** —— 板尺寸下限 `≥3×3mm`/`3.0`、"
+             "阻抗控制层集 `(4,6,…,20,32)`、最小线宽 `3.5mil`、环宽 `单边 ≥0.075mm`、表面处理 `6 层及以上`、"
+             "最小过孔孔壁文本 `≥0.15mm` 而**判据实为 ≥0.2mm**（文本 ≠ 强制限）⇒ 能力表（其值已由 CO-177 绑到抓取件）"
+             "与**判定表文本**脱钩。",
+             "- **处置**：`p3_v57_co146_jlc_dfm_gate.py` 升 **CO146-JLC-DFM.5** ——",
+             "  ① `_items(m, asd, jlcrun, j=None)` 可注入能力表；硬编码一律由 `JLC8`（+ `MIL_MM`）派生"
+             "（下限取 `board_min_mm`、层集解析 `impedance_control_layers.value`、mil 由 `MIL_MM` 换算、"
+             "单边环宽取 `via_annular_note.value/2`、HASL 层数解析 `surface_finish.quote`、孔壁文本明示判定口径）；",
+             "  ② `ITEM_DERIVATION_CASES`（**13 情形**）+ 纯函数 `item_limit_derivation_checks()` + 牙齿 **t08**"
+             "（**成分级**：扰动能力表字段 ⇒ 该项 `jlc_limit` 须**含由扰动值派生的具体成分串**，且**基线不含该串**）。",
+             "     **自测加严（如实记录）**：t08 首版仅查「文本是否变化」⇒ **部分硬编码**（把 `3.5mil` 写死而 mm 段仍派生）"
+             "**可逃逸**（实测发现）；改为成分级断言 + 基线否定后，该回归必被击穿（同一变异复测 ⇒ 停机）。",
+             f"- **登记簿**：+1（`co178:G-1`，CLOSED；{_rc51['total']} 项 / OPEN {_rc51['OPEN']}）。",
+             "",
+             "> **R-CO178-1**：判定表/备注内的**限值文本**须与**判据同源**且由来源记录**派生**（禁止内嵌硬编码派生值）；"
+             "派生性须有**扰动证明**（扰动来源 ⇒ 文本必变）。",
+             "> **R-CO178-2**（复现序，取代 R-CO177-2；步骤集新增 co178）：规范复现序 = `" + _ord178 + "`，**循环至 sha 稳定**"
+             "（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1 + R-CO175-1 + R-CO176-1/2 + R-CO177-1 + R-CO178-1）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows51 = [("工具 `p3_v57_co146_jlc_dfm_gate.py`（CO146-JLC-DFM.5 / 限值派生 t08）",
+                K2 / "tools/p3_v57_co146_jlc_dfm_gate.py"),
+               ("工具 `p3_v57_co178_drc_item_limit_derivation.py`",
+                K2 / "tools/p3_v57_co178_drc_item_limit_derivation.py"),
+               ("工具 `p3_v57_co164_order_runner.py`（CO-169.4 / 47 步）",
+                K2 / "tools/p3_v57_co164_order_runner.py"),
+               ("DFM 闸记录 `m13_v57_co146_jlc_dfm_gate.json`（DFM.5 / 8 牙齿）",
+                STEP2 / "m13_v57_co146_jlc_dfm_gate.json"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc51['total']} 项 / OPEN {_rc51['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows51:
+        if pth.exists():
+            sec51.append(f"| {label} | `{s16(pth)}` |")
+    sec51.append("")
+    body51 = "\n".join(sec51)
+    if MARK51 in txt:
+        txt = re.sub(re.escape(MARK51) + r"[\s\S]*?(?=\n## |\Z)", body51, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body51
+    txt = txt.replace("W3 Boundary **v2.22**", "W3 Boundary **v2.23**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
     return 0
