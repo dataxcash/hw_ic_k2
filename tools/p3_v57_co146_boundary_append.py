@@ -3262,6 +3262,47 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body90
 
+    # ── §91 CO-218（L2 自裁 · 冻结源不变性 + 规则源唯一性入机判） ──
+    MARK91 = "## 91. CO-218"
+    _rc91 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    sec91 = [MARK91 + "（**L2 自裁 · 冻结源不变性 + 规则源唯一性入机判**）", "",
+             "- **缘起**：§90（CO-217）确立「判据源须为现行冻结源且钉 sha」后，续查**冻结源本身**是否受机判保护 ⇒ 发现其仅由人手复核承载。",
+             "- **缺陷 O-1（TOOL_DEFECT · low）**：冻结四源（`SPEC_k2_v4.spec-rev-19.json` / `m13_v57_s1_page_manifest.json` / "
+             "冻结板 `k2_v4_8L.kicad_pcb` / `_shared/eda_core/drc_rules.json`）之**不变性**在规范序内**无机判** —— 跨会话仅由"
+             "**人手复核**（各件「写件时复核」之「4/4 MATCH」）+ **CO-91.2 之一次性断言**（K2 ↔ 容器 `drc_rules.json` 同字节）承载 ⇒ "
+             "源漂移**不使序失败**（序只消费当下内容，仍可收敛，boundary 亦仍可写「4/4」）⇒ **判定基据失锚**。"
+             "**可达性**：K2 副本為**可写**（`-rw-rw-r--`）而容器副本**只读**（`-r--r--r--`）⇒ 「单向漂移」路径真实存在。",
+             "- **处置**：runner 增 ① `FROZEN_SOURCES`（4 源 → sha16 pin）+ `FROZEN_SRC_COPIES`（K2 ↔ 容器 `drc_rules` 同字节）；"
+             "② 纯判据 `frozen_sources_decision()`（`sha16_of`/`bytes_of` 可注入 ⇒ 合成控零落盘；出口 = `ok` / `frozen_source_missing` / "
+             "`frozen_source_drift` / `rule_source_not_unique`）；③ **静态齿 t34**（缺件 / 漂移 / 副本不同字节 ⇒ 序停机 "
+             "`static_precheck_failed`，**fail-closed**）；④ 报告增 `frozen_sources` 证据块（逐源 pin/actual + 副本 `identical`）。"
+             "**齿数 35 → 36（t01..t34）**；**序不变（仍 50 次）**。",
+             "- **修后实测**：`frozen_sources_decision(FROZEN_SOURCES, …)` = **ok**；4/4 pin 命中；K2 ↔ 容器副本 `identical=True`；"
+             "负控（独立探针，内存注入）：错 pin ⇒ `frozen_source_drift`、伪造副本字节 ⇒ `rule_source_not_unique`、缺件 ⇒ `frozen_source_missing`；"
+             "`--check` **36/36 全 True**（t34 = `t34_frozen_sources_pinned`）。",
+             "- **边界（诚实）**：本齿只锚**冻结源**（输入）；**交付板** `k2_v4_8L.l4.kicad_pcb` 属**产物**（随 rev 合法变更 —— CO-144 曾改板）"
+             "⇒ **不**入冻结 pin；其「本 rev 内不变」由 co120 P5 + 各记录板指纹 + 人手复核承载。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows91 = [("runner `p3_v57_co164_order_runner.py`（**CO-218**：`FROZEN_SOURCES`/`FROZEN_SRC_COPIES`/`frozen_sources_decision` + 静态齿 t34）",
+                K2 / "tools/p3_v57_co164_order_runner.py"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc91['total']} 项 / OPEN {_rc91['OPEN']}）", L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows91:
+        if pth.exists():
+            sec91.append(f"| {label} | `{s16(pth)}` |")
+    sec91.append("")
+    sec91.append("> **R-CO218-1**：凡「**判定基据之锚点**」（冻结输入 / 规则源 / 唯一性断言）须**入规范序机判**（fail-closed），"
+                 "不得仅以人手复核或一次性断言承载；源之**唯一性**（多副本）须机判**同字节**；**产物**（随 rev 合法变更者）不得混入冻结 pin。")
+    sec91.append("")
+    sec91.append("> **序不变**：本件未改步骤集/序列（承 §82 之 R-CO209-2）。")
+    sec91.append("")
+    body91 = "\n".join(sec91)
+    if MARK91 in txt:
+        txt = re.sub(re.escape(MARK91) + r"[\s\S]*?(?=\n## |\Z)", body91, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body91
+
+    txt = txt.replace("W3 Boundary **v2.58**", "W3 Boundary **v2.59**")
     txt = txt.replace("W3 Boundary **v2.57**", "W3 Boundary **v2.58**")
     txt = txt.replace("W3 Boundary **v2.56**", "W3 Boundary **v2.57**")
     txt = txt.replace("W3 Boundary **v2.55**", "W3 Boundary **v2.56**")

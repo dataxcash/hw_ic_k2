@@ -57,6 +57,11 @@
      改判 **AST 字符串字面量集**；`boundary_read_scan()`（原 `re` 扫**原文** + `read_text` 等**原文子串**判读取者 ⇒ 注释可伪造引用/读取）
      改判 **AST 形态**（引用 = 字面量或 `_latest_boundary` 标识符；读取 = `Attribute.attr ∈ READ_ATTRS` 或 `io.open` 调用）。
      两枚一并纳入 `PROXY_HELPERS_PINNED` + `PROXY_RESIDUAL_EXPLICIT`（消费齿 = t27 / t21）。
+㉑ CO-218（R-CO218-1，**冻结源不变性 + 规则源唯一性入机判**）：冻结四源跨会话仅由**人手复核**（各件「写件时复核」之
+     「4/4 MATCH」）+ CO-91.2 之**一次性**断言 ⇒ 源漂移（SPEC / 清单 / 冻结板 / 规则）**不使规范序失败**
+     （序只消费当下内容，仍可收敛）⇒ 判定基据**失锚**。现以 `FROZEN_SOURCES`（pin 表）+ `FROZEN_SRC_COPIES`
+     （K2 ↔ 容器 `drc_rules.json` 同字节）+ 纯判据 `frozen_sources_decision()` 入**静态齿 t34**（fail-closed），
+     并把解析结果写入报告 `frozen_sources` 证据块。
 CLI:
   python3 tools/p3_v57_co164_order_runner.py [--check] [--max-iter 5]
 """
@@ -831,6 +836,42 @@ PROXY_RESIDUAL_EXPLICIT = {
         "deferral_trigger": "引入步骤出口观测（子进程 verdict/rc 采样矩阵）时，须改挂 `PROXY_SEMANTIC_BINDING` 之语义判官支路。",
     },
 }
+
+
+# CO-218（R-CO218-1）：**冻结源**（判定基据之锚点）—— 路径（K2 相对）→ sha16 pin。
+# 缘起：跨会话仅由人手复核 + CO-91.2 一次性断言 ⇒ 漂移不使序失败（序消费当下内容仍可收敛）⇒ 基据失锚。
+FROZEN_SOURCES = {
+    "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-19.json": "5f72182a2616392c",
+    "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_s1_page_manifest.json": "a8ef3ea8ecff99d7",
+    "k2_v4_8L.kicad_pcb": "fb07d25ac426ff84",
+    "_shared/eda_core/drc_rules.json": "0a459839e15960b8",
+}
+# CO-91.2 之「规则源唯一性」：下列副本须与首个路径**同字节**（原为一次性断言 ⇒ 现入机判）。
+FROZEN_SRC_COPIES = {
+    "_shared/eda_core/drc_rules.json": "../_shared/eda_core/drc_rules.json",
+}
+
+
+def frozen_sources_decision(pins, sha16_of, copies=None, bytes_of=None) -> str:
+    """CO-218（R-CO218-1）纯判据：**冻结源不变性 + 规则源唯一性**（`sha16_of`/`bytes_of` 可注入 ⇒ 合成控零落盘）。
+
+    返回 `ok` / `frozen_source_missing`（不可读）/ `frozen_source_drift`（sha16 ≠ pin）/
+    `rule_source_not_unique`（声明为同一源之副本**不同字节**）。
+    """
+    for rel, pin in dict(pins).items():
+        try:
+            got = sha16_of(rel)
+        except OSError:
+            return "frozen_source_missing"
+        if got != pin:
+            return "frozen_source_drift"
+    for a, b in dict(copies or {}).items():
+        try:
+            if bytes_of(a) != bytes_of(b):
+                return "rule_source_not_unique"
+        except OSError:
+            return "frozen_source_missing"
+    return "ok"
 
 
 def proxy_coverage_decision(helpers, declared, residual) -> str:
@@ -1794,6 +1835,23 @@ def main(argv=None) -> int:
         and tool_revision_bound("tools/__no_such_tool__.py", {"artifact": _oc, "revision": "CO-202"}) == "tool_missing"
         # 判别力控（承 R-CO202-4）：注释/散文提及修订号与 artifact 名**不得**满足（AST 无 dict 字面 ⇒ 不可抽）
         and revision_literal_from_src('"""revision: CO-202（仅散文，非声明）"""\n# artifact: %s' % _oc, _oc) == (False, None))
+    # CO-218（R-CO218-1）：**冻结源不变性 + 规则源唯一性**须机判（原仅人手复核 + CO-91.2 一次性断言）
+    _fs_sha = lambda rel: hashlib.sha256((K2 / rel).read_bytes()).hexdigest()[:16]        # noqa: E731
+    _fs_bytes = lambda rel: (K2 / rel).read_bytes()                                      # noqa: E731
+
+    def _fs_raise(_rel):
+        raise OSError("synthetic-missing")
+
+    checks["t34_frozen_sources_pinned"] = (
+        frozen_sources_decision(FROZEN_SOURCES, _fs_sha, FROZEN_SRC_COPIES, _fs_bytes) == "ok"
+        # 正控：pin 命中 ⇒ ok；副本同字节 ⇒ ok
+        and frozen_sources_decision({"a": "x"}, lambda _r: "x") == "ok"
+        and frozen_sources_decision({}, lambda _r: "x", {"a": "b"}, lambda _r: b"same") == "ok"
+        # 负控：sha 漂移 / 缺件 / 副本不同字节
+        and frozen_sources_decision({"a": "x"}, lambda _r: "y") == "frozen_source_drift"
+        and frozen_sources_decision({"a": "x"}, _fs_raise) == "frozen_source_missing"
+        and frozen_sources_decision({}, lambda _r: "x", {"a": "b"},
+                                    lambda r: b"1" if r == "a" else b"2") == "rule_source_not_unique")
     checks["t05_stability_oracle"] = (stable("x", "x") and not stable("x", "y") and not stable("", ""))
     # CO-164（t06）：执行器 ORDER 必须与 boundary 规范复现序**有序一致**（文档↔执行器防漂移）
     _bdy = boundary_order_steps()
@@ -1886,6 +1944,15 @@ def main(argv=None) -> int:
               "nature": "规范复现序机判执行器（rc 策略 + 真收敛判定）；报告落 .archer_tmp/ 且**不被 boundary 引用**（避免不动点）",
               "order": ORDER, "expected_nonzero": EXPECTED_NONZERO,
               "checks": checks, "iterations": iterations, "abort": abort, "converged": converged,
+              # CO-218：冻结源证据块（判定基据之锚点解析结果；报告不参与 pin 表）
+              "frozen_sources": {
+                  "pins": FROZEN_SOURCES,
+                  "resolved": {rel: (hashlib.sha256((K2 / rel).read_bytes()).hexdigest()[:16]
+                                     if (K2 / rel).exists() else None) for rel in FROZEN_SOURCES},
+                  "copy_uniqueness": {a: {"peer": b,
+                                          "identical": ((K2 / a).read_bytes() == (K2 / b).read_bytes()
+                                                        if (K2 / a).exists() and (K2 / b).exists() else None)}
+                                      for a, b in FROZEN_SRC_COPIES.items()}},
               "watched": [str(p.relative_to(K2)) for p in watch_paths()],
               "redline": "只读工具源；执行序内写记录/边界（即规范序本身）；本报告不参与 pin 表。"}
     REPORT.parent.mkdir(parents=True, exist_ok=True)
