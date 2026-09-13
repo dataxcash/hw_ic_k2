@@ -1882,6 +1882,47 @@ def main() -> int:
         txt = txt.rstrip("\n") + "\n\n" + body60
     txt = txt.replace("W3 Boundary **v2.31**", "W3 Boundary **v2.32**")
     txt = txt.replace("W3 Boundary **v2.30**", "W3 Boundary **v2.31**")
+    # ── §61 CO-188（L2 自裁 · 越界写 fail-closed：声明↔实现绑定续） ──────────
+    MARK61 = "## 61. CO-188"
+    _rc61 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    _ord188 = _ord187          # 步集/序列不变（50 次）
+    sec61 = [MARK61 + "（**L2 自裁 · 越界写 fail-closed：声明↔实现绑定续**）", "",
+             "- **G-1（medium）·越界写只记证据不判**：规范序步骤对**其未声明**的受控件写（= 写他步专属件，或本步**漏声明**）"
+             "只记入 `stray_changed` 证据、**不参与判决** ⇒ **确定性**越界写（每轮写同内容）**不破 sha 收敛**、且 `did_work` "
+             "由本步声明件决定仍 True ⇒ 该件变更**无人归因**、可**静默通过**。这是 CO-174/CO-172 F-7 的**反方向**残余："
+             "CO-174 只解决「他步写**本步**件被误判 `did_work`」，未解决「**本步写他步件**无人判」。",
+             "- **实测（本件证据）**：现行规范序 run（sha `87223c46e457ed51`）逐轮 `stray_changed` **全空** ⇒ 加 fail-closed "
+             "对现基线零冲击；受控注入复现：向首步 `co146_impedance_table` 注入对 `m13_v57_co78_layer_role_drift_gate.json` 的写 "
+             "⇒ runner **首步即停** `class=stray_write`（rc=1），已还原。",
+             "- **处置**：runner 升 **CO-188.1** —— ① `STRAY_WRITE_ALLOWED`（**显式**例外表，当前为空；新增须 `why`+`paths`，"
+             "且不得与该步声明件重叠）；② 纯判据 `stray_decision()`；③ 运行时：凡 `stray` 命中例外外之受控件 ⇒ 停机类 "
+             "**`stray_write`**（对白名单步亦生效）；④ 静态齿 **t22**（合成正负控：空⇒ok / 越界⇒stray_write / 例外内⇒ok / "
+             "部分越界⇒stray_write；例外表完备性）。",
+             f"- **登记簿**：+1（`co188:G-1`，CLOSED；**{_rc61['total']} 项 / OPEN {_rc61['OPEN']}**）。",
+             "",
+             "> **R-CO188-1**：步骤**只可写**其 `STEP_ARTIFACTS` 声明件；对任何**未声明**受控件的写 ⇒ 运行时 `stray_write` 停机"
+             "（禁「只记 stray 证据」）；例外须入 `STRAY_WRITE_ALLOWED`（显式理由），t22 机判。",
+             "> **R-CO188-2**（复现序，取代 R-CO187-4；**步集/序列不变，序内出现 50 次**）：规范复现序 = `" + _ord188 + "`，"
+             "**循环至 sha 稳定**（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1 "
+             "+ R-CO175-1 + R-CO176-1/2 + R-CO177-1 + R-CO178-1 + R-CO179-1/2 + R-CO180-1/2 + R-CO181-1/2 + R-CO182-1 "
+             "+ R-CO183-1 + R-CO184-1 + R-CO185-1/2 + R-CO186-1 + R-CO187-1/2/3 + R-CO188-1）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows61 = [("工具 `p3_v57_co164_order_runner.py`（CO-188.1 / `stray_write` 停机类 + `STRAY_WRITE_ALLOWED` + t22）",
+                K2 / "tools/p3_v57_co164_order_runner.py"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc61['total']} 项 / OPEN {_rc61['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows61:
+        if pth.exists():
+            sec61.append(f"| {label} | `{s16(pth)}` |")
+    sec61.append("")
+    body61 = "\n".join(sec61)
+    if MARK61 in txt:
+        txt = re.sub(re.escape(MARK61) + r"[\s\S]*?(?=\n## |\Z)", body61, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body61
+    txt = txt.replace("W3 Boundary **v2.32**", "W3 Boundary **v2.33**")
+    txt = txt.replace("W3 Boundary **v2.31**", "W3 Boundary **v2.32**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
     return 0

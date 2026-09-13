@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CO-164/CO-167/CO-169/CO-174/CO-180/CO-181/CO-182/CO-183/CO-187 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
+"""CO-164/CO-167/CO-169/CO-174/CO-180/CO-181/CO-182/CO-183/CO-187/CO-188 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
 
 缘起（实测事故，CO-163）：`co146_boundary_append.py` 因 §37 文本里的 f-string 花括号语法错误**每次崩溃（rc=1）**，
 但收敛判定只看 boundary/记录 sha ⇒ sha 恒不变 ⇒ 报「CONVERGED」，边界 §37 实际从未写入、pin 表陈旧（co77/co135/co136 判 FAIL）。
@@ -13,6 +13,9 @@
   ④ CO-174（R-CO174-1）：`did_work` 归因**仅限本步声明的主产物集**（非全局受控集）⇒ 并发/他人写**其它**受控件
      不再被误判为「本步做了事」（关闭 CO-172 F-7 的假通过方向）；报告另记 `declared_changed` / `stray_changed` 证据。
      全局受控集仍保留用于收敛 sha（R-CO165）；**残余如实登记**：共享主产物（台账/登记簿）上的并发写仍可误判。
+  ⑤ CO-188（R-CO188-1）：**越界写**（步骤写其 `STEP_ARTIFACTS` **未声明**的受控件）⇒ 运行时停机类 `stray_write`
+     + 静态齿 **t22**（合成正负控 + `STRAY_WRITE_ALLOWED` 例外表完备）。理由：确定性越界写不破 sha 收敛、亦不被
+     步本地 `did_work` 归因抓到 ⇒ 可与「sha 稳定」共存而**假通过**。
 CLI:
   python3 tools/p3_v57_co164_order_runner.py [--check] [--max-iter 5]
 """
@@ -606,6 +609,20 @@ def nonpass_decision(step: str, verdict) -> str:
     return "undeclared_nonpass"
 
 
+# CO-188（R-CO188-1）：**越界写 fail-closed** —— 步骤写其**未声明**的受控件 = 越界（写他步专属件）或**漏声明**
+# （声明不完整）。二者都使该件变更**无人归因**；且收敛只比较 sha ⇒ **确定性**越界写（每轮同内容）可静默通过
+# （`did_work` 由本步声明件决定，仍 True）⇒ 故须独立判决。合法写集 = `STEP_ARTIFACTS[step]`；
+# 下表为**显式**例外（当前为空；新增须给理由 `why` + `paths`，且不得与该步声明件重叠）。
+STRAY_WRITE_ALLOWED = {}
+
+
+def stray_decision(step: str, stray, allowed: dict | None = None) -> str:
+    """CO-188 纯判据：`stray`（相对 K2 的受控件路径）中凡不在该步声明/显式例外内者 ⇒ `stray_write`。"""
+    table = STRAY_WRITE_ALLOWED if allowed is None else allowed
+    allow = set((table.get(step) or {}).get("paths", []))
+    return "stray_write" if (set(stray) - allow) else "ok"
+
+
 
 def md_write_scan(src: str) -> list:
     """CO-186/CO-187：静态提取该工具 **`.md` 写/拷目标**（模块级 Name 常量一并解析）。
@@ -904,6 +921,21 @@ def main(argv=None) -> int:
         and not boundary_read_scan('x = (STEP2 / "other.md").read_text()')
         and not boundary_read_scan('DOC.write_text("x")')
         and not boundary_read_scan('BOUNDARY_STEP = "co146_boundary_append"\n'))
+    # CO-188（R-CO188-1）：越界写（stray）须 fail-closed；显式例外表须完备（键/理由/受控/不与声明重叠）
+    _watch_abs = {p.as_posix() for p in watch_paths()}
+    _stray_tbl_ok = all(
+        k in set(ORDER) and isinstance(v, dict) and str(v.get("why") or "").strip()
+        and isinstance(v.get("paths"), list)
+        and set(v["paths"]) <= _watch_abs
+        and not (set(v["paths"]) & set(STEP_ARTIFACTS.get(k, [])))
+        for k, v in STRAY_WRITE_ALLOWED.items())
+    checks["t22_stray_write_fail_closed"] = (
+        _stray_tbl_ok
+        and stray_decision("__s__", []) == "ok"
+        and stray_decision("__s__", ["a/b.json"]) == "stray_write"
+        and stray_decision("__s__", ["a/b.json"], {"__s__": {"paths": ["a/b.json"], "why": "w"}}) == "ok"
+        and stray_decision("__s__", ["a/b.json", "c.json"],
+                           {"__s__": {"paths": ["a/b.json"], "why": "w"}}) == "stray_write")
     checks["t05_stability_oracle"] = (stable("x", "x") and not stable("x", "y") and not stable("", ""))
     # CO-164（t06）：执行器 ORDER 必须与 boundary 规范复现序**有序一致**（文档↔执行器防漂移）
     _bdy = boundary_order_steps()
@@ -946,18 +978,22 @@ def main(argv=None) -> int:
             _teeth_ok = all(_tcand) if _tcand else None
             cls = allowlist_decision(step, r.returncode, r.stderr, record_verdict(_exp.get("record")),
                                      _fresh, _teeth_ok)
+            _stray = sorted(Path(k).relative_to(K2).as_posix()
+                            for k in set(_ball) | set(_aall)
+                            if k not in _decl_set and _ball.get(k) != _aall.get(k))
             if cls == "ok":
                 _np = nonpass_decision(step, step_verdict(step))
                 if _np == "undeclared_nonpass":        # CO-185（R-CO185-2）：未声明的非 PASS ⇒ 停机
                     cls = "undeclared_nonpass_verdict"
+            # CO-188（R-CO188-1）：越界写（未声明受控件）⇒ 停机（确定性越界写不破收敛、亦不被步本地归因抓到）
+            if cls in ("ok", "expected_nonzero") and _stray and stray_decision(step, _stray) != "ok":
+                cls = "stray_write"
             if cls == "ok" and not _did:
                 cls = zero_rc_class(False)     # CO-169（G-1）：rc==0 但未写出任何受控产物 ⇒ 立即停机
             rcs[step] = {"rc": r.returncode, "class": cls, "did_work": _did,
                          "declared_changed": sorted(Path(k).relative_to(K2).as_posix()
                                                     for k in _decl_set if _w_before.get(k) != _w_after.get(k)),
-                         "stray_changed": sorted(Path(k).relative_to(K2).as_posix()
-                                                 for k in set(_ball) | set(_aall)
-                                                 if k not in _decl_set and _ball.get(k) != _aall.get(k))}
+                         "stray_changed": _stray}
             if cls not in ("ok", "expected_nonzero"):
                 unexpected = {"step": step, "rc": r.returncode, "class": cls,
                               "stderr_tail": (r.stderr or "")[-600:]}
@@ -971,7 +1007,7 @@ def main(argv=None) -> int:
             converged = True
             break
         prev = cur
-    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-187.1",
+    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-188.1",
               "nature": "规范复现序机判执行器（rc 策略 + 真收敛判定）；报告落 .archer_tmp/ 且**不被 boundary 引用**（避免不动点）",
               "order": ORDER, "expected_nonzero": EXPECTED_NONZERO,
               "checks": checks, "iterations": iterations, "abort": abort, "converged": converged,
