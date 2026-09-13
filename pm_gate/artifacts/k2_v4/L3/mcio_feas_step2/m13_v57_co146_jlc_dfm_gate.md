@@ -29,4 +29,6 @@
 - T1 线宽限抬到 0.5mm ⇒ track_width 违规 199（>0 ok=True）
 - T2 过孔类型项必须 FAIL：ok=True
 - T3 板规铜-板边值须由冻结 drc_rules 派生（0.30mm）：ok=True
+- T4 能力表引证逐条绑定抓取件（anchor 原文子串 + 非原文显式标注）：ok=True
+- T5 引证判据灵敏度（篡改 anchor 即判不通过）：ok=True
 

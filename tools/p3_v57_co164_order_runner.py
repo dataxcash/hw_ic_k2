@@ -33,7 +33,7 @@ ORDER = ["co146_impedance_table", "co146_pm_eval", "co146_ledger_add", "co153_k9
          "co159_rev19_co156_co157_co158_review", "co160_co159_findings_disposition", "co161_gap_hardening_4",
          "co162_verdict_binding", "co163_binding_to_order_notes", "co166_rev19_co159_co165_review",
          "co167_co166_findings_disposition", "co168_register_consistency", "co169_step_output_oracle", "co170_stackup_binding", "co171_order_notes_record_figures",
-         "co172_rev19_co166_co171_review", "co173_co172_findings_disposition", "co174_step_artifact_attribution", "co175_package_parity_binding",
+         "co172_rev19_co166_co171_review", "co173_co172_findings_disposition", "co174_step_artifact_attribution", "co175_package_parity_binding", "co176_gate_selfcheck_evidence",
          "co124_input_selfcheck_gate", "co150_k9_domain_gate",
          "co146_boundary_append", "co77_closure_declaration_sweep", "co120_provenance_pin_gate", "co135_review_hygiene",
          "co136_gate_hygiene", "co78_layer_role_drift_gate", "co81_project_rules_gate", "co84_dru_domain_gate",
@@ -41,6 +41,8 @@ ORDER = ["co146_impedance_table", "co146_pm_eval", "co146_ledger_add", "co153_k9
 # 允许非零的步骤（**须带 verdict 证据**：rc≠0 不等于预期 FAIL —— CO-165）
 EXPECTED_NONZERO = {
     "co146_jlc_dfm_gate": {"verdict": "FAIL", "record": str(STEP2 / "m13_v57_co146_jlc_dfm_gate.json"),
+                           # CO-176（G-1）：rc≠0 只豁免 **verdict**，不豁免该步**自检牙齿**（须全 True）
+                           "teeth_path": ["teeth"],
                            "why": "verdict=FAIL（DFM 两项阻塞）属预期；rc=1 即 R-CO158-3/R-CO159-4 生效"},
 }
 
@@ -84,6 +86,7 @@ STEP_ARTIFACTS = {
     "co173_co172_findings_disposition": [_REG],
     "co174_step_artifact_attribution": [_REG],
     "co175_package_parity_binding": [_REG],
+    "co176_gate_selfcheck_evidence": [_REG],
     "co124_input_selfcheck_gate": [_S2 + "m13_v57_co124_input_selfcheck_gate.json"],
     "co150_k9_domain_gate": [_REG, _S2 + "m13_v57_co150_k9_domain_gate.json"],
     "co146_boundary_append": [_S2 + "m13_v57_w3_joint_assignment_boundary_v1_82.md"],
@@ -206,6 +209,38 @@ def zero_rc_class(did_work: bool) -> str:
     return "ok" if did_work else "step_wrote_nothing"
 
 
+def record_json_path(rec_path, keys) -> object:
+    """CO-176（G-1）：从记录文件按 keys 逐层取值（缺文件/缺键/不可解析 ⇒ None）。"""
+    try:
+        node = json.loads(Path(rec_path).read_text(encoding="utf-8"))
+    except Exception:
+        return None
+    for k in keys:
+        if isinstance(node, dict) and k in node:
+            node = node[k]
+        else:
+            return None
+    return node
+
+
+def teeth_all_true(node) -> bool | None:
+    """CO-176（G-1）：记录内自检牙齿须**全 True**（值为 bool，或为含 `ok` 的 dict）。
+
+    空/形状不明 ⇒ None（**fail-closed**：不可判即不通过）。
+    """
+    if not isinstance(node, dict) or not node:
+        return None
+    vals = []
+    for v in node.values():
+        if isinstance(v, bool):
+            vals.append(v)
+        elif isinstance(v, dict) and isinstance(v.get("ok"), bool):
+            vals.append(v["ok"])
+        else:
+            return None
+    return all(vals)
+
+
 def record_verdict(path):
     try:
         return json.loads(Path(path).read_text(encoding="utf-8")).get("verdict")
@@ -213,12 +248,14 @@ def record_verdict(path):
         return None
 
 
-def allowlist_decision(step: str, rc: int, stderr: str, verdict, record_fresh: bool = True) -> str:
+def allowlist_decision(step: str, rc: int, stderr: str, verdict, record_fresh: bool = True,
+                       teeth_ok: bool | None = None) -> str:
     """CO-165 核心判据（纯函数）：
     非白名单步：rc==0 ⇒ ok，否则 unexpected_nonzero；
     白名单步：须 rc≠0 **且** 无 Traceback **且** 记录由**本次执行**产出（mtime 新鲜）
-              **且** 记录 verdict == 声明 verdict ⇒ expected_nonzero；
-    其余 ⇒ expected_step_* 失败（**不得把崩溃 / 未产出记录（陈旧 verdict 从盘上读取）/ 错误判决当预期 FAIL**）。"""
+              **且** 记录 verdict == 声明 verdict
+              **且** （CO-176 G-1）该步**自检牙齿全 True** ⇒ expected_nonzero；
+    其余 ⇒ expected_step_* 失败（**不得把崩溃 / 未产出记录（陈旧 verdict 从盘上读取）/ 错误判决 / 自检失败当预期 FAIL**）。"""
     if step not in EXPECTED_NONZERO:
         return "ok" if rc == 0 else "unexpected_nonzero"
     exp = EXPECTED_NONZERO[step]
@@ -234,6 +271,9 @@ def allowlist_decision(step: str, rc: int, stderr: str, verdict, record_fresh: b
         return "expected_verdict_pass_forbidden"
     if verdict != exp.get("verdict"):
         return "expected_step_verdict_mismatch"
+    # CO-176（G-1）：白名单豁免的是 **verdict**，不是该步**自检**；牙齿未全 True（含不可判）⇒ 停机
+    if exp.get("teeth_path") and teeth_ok is not True:
+        return "expected_step_teeth_failed"
     return "expected_nonzero"
 
 
@@ -311,7 +351,7 @@ def main(argv=None) -> int:
         and allowlist_decision("co146_jlc_dfm_gate", 1, "", "INDETERMINATE", True) == "expected_step_verdict_mismatch"
         and allowlist_decision("co146_jlc_dfm_gate", 1, "", "PASS", True) == "expected_verdict_pass_forbidden"
         and allowlist_decision("co146_jlc_dfm_gate", 1, "", "FAIL", False) == "expected_step_record_not_produced"
-        and allowlist_decision("co146_jlc_dfm_gate", 1, "", "FAIL", True) == "expected_nonzero"
+        and allowlist_decision("co146_jlc_dfm_gate", 1, "", "FAIL", True, True) == "expected_nonzero"
         and allowlist_decision("co146_jlc_dfm_gate", 1, "", "PASS", True) == "expected_verdict_pass_forbidden"
         and all(("verdict" in v and "record" in v) for v in EXPECTED_NONZERO.values())
         and all(str(v.get("verdict", "")).upper() != "PASS" for v in EXPECTED_NONZERO.values())
@@ -371,6 +411,17 @@ def main(argv=None) -> int:
     _shared = [rel for s in STEP_ARTIFACTS for rel in STEP_ARTIFACTS[s]]
     _multi = sorted({rel for rel in _shared if _shared.count(rel) > 1})
     checks["t13c_shared_artifact_residual_enumerated"] = (_multi == sorted(SHARED_ARTIFACT_RESIDUAL))
+    # CO-176（G-1）：白名单步**自检牙齿**须机判全 True —— 正控/负控/形状不明 fail-closed
+    checks["t14_allowlist_teeth_enforced"] = (
+        allowlist_decision("co146_jlc_dfm_gate", 1, "", "FAIL", True,
+                           teeth_all_true({"t01": {"ok": True}})) == "expected_nonzero"
+        and allowlist_decision("co146_jlc_dfm_gate", 1, "", "FAIL", True,
+                               teeth_all_true({"t01": {"ok": False}})) == "expected_step_teeth_failed"
+        and allowlist_decision("co146_jlc_dfm_gate", 1, "", "FAIL", True, None) == "expected_step_teeth_failed"
+        and all("teeth_path" in v for v in EXPECTED_NONZERO.values())
+        and teeth_all_true({"t": True, "u": {"ok": True}}) is True
+        and teeth_all_true({"t": True, "u": {"ok": False}}) is False
+        and teeth_all_true({}) is None and teeth_all_true({"t": 1}) is None and teeth_all_true("x") is None)
     checks["t05_stability_oracle"] = (stable("x", "x") and not stable("x", "y") and not stable("", ""))
     # CO-164（t06）：执行器 ORDER 必须与 boundary 规范复现序**有序一致**（文档↔执行器防漂移）
     _bdy = boundary_order_steps()
@@ -404,7 +455,11 @@ def main(argv=None) -> int:
             _did = step_did_work(_w_before, _w_after)                          # 步本地归因（CO-174）
             # CO-167（F-2）：变更检测（非绝对 mtime）
             _fresh = record_refreshed(_before, _record_snap(_exp["record"])) if _exp.get("record") else True
-            cls = allowlist_decision(step, r.returncode, r.stderr, record_verdict(_exp.get("record")), _fresh)
+            # CO-176（G-1）：白名单步**自检牙齿**须机判全 True（rc≠0 只豁免 verdict，不豁免自检）
+            _teeth_ok = (teeth_all_true(record_json_path(_exp["record"], _exp["teeth_path"]))
+                         if _exp.get("teeth_path") else None)
+            cls = allowlist_decision(step, r.returncode, r.stderr, record_verdict(_exp.get("record")),
+                                     _fresh, _teeth_ok)
             if cls == "ok" and not _did:
                 cls = zero_rc_class(False)     # CO-169（G-1）：rc==0 但未写出任何受控产物 ⇒ 立即停机
             rcs[step] = {"rc": r.returncode, "class": cls, "did_work": _did,
@@ -426,7 +481,7 @@ def main(argv=None) -> int:
             converged = True
             break
         prev = cur
-    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-169.3",
+    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-169.4",
               "nature": "规范复现序机判执行器（rc 策略 + 真收敛判定）；报告落 .archer_tmp/ 且**不被 boundary 引用**（避免不动点）",
               "order": ORDER, "expected_nonzero": EXPECTED_NONZERO,
               "checks": checks, "iterations": iterations, "abort": abort, "converged": converged,

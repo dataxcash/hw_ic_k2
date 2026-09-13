@@ -1,7 +1,7 @@
 {
  "artifact": "m13_v57_co146_jlc_dfm_gate",
  "schema": 1,
- "revision": "CO146-JLC-DFM.2",
+ "revision": "CO146-JLC-DFM.3",
  "nature": "L2 只读机判：DFM 对照 JLC 8 层公布能力（监理指令 #10 动作 4）",
  "board": "k2_v4_8L.l4.kicad_pcb",
  "board_sha16": "d4e81f647be7f980",
@@ -238,6 +238,56 @@
    },
    "board_rule_mm": 0.3,
    "source": "_shared/eda_core/drc_rules.json"
+  },
+  "t04_capability_citation_bound": {
+   "ok": true,
+   "checks": {
+    "anchors_cover_capability": true,
+    "anchors_nonempty": true,
+    "blind_buried.anchor_verbatim": true,
+    "blind_buried_faq.anchor_verbatim": true,
+    "board_max_mm.anchor_verbatim": true,
+    "board_min_mm.anchor_verbatim": true,
+    "copper_edge_clearance_mm.anchor_verbatim": true,
+    "er_table.anchor_verbatim": true,
+    "impedance_control_layers.anchor_verbatim": true,
+    "impedance_tolerance_pct.anchor_verbatim": true,
+    "inner_copper_oz.anchor_verbatim": true,
+    "layer_count.anchor_verbatim": true,
+    "min_npth_mm.anchor_verbatim": true,
+    "min_plated_slot_mm.anchor_verbatim": true,
+    "min_track_spacing_mm.anchor_verbatim": true,
+    "min_track_width_mm.anchor_verbatim": true,
+    "min_via_diameter_mm.anchor_verbatim": true,
+    "min_via_hole_mm.anchor_verbatim": true,
+    "outer_copper_oz.anchor_verbatim": true,
+    "pad_hole_to_hole_mm.anchor_verbatim": true,
+    "solder_mask_bridge_mm.anchor_verbatim": true,
+    "solder_mask_to_copper_mm.anchor_verbatim": true,
+    "surface_finish.anchor_verbatim": true,
+    "thickness_mm.anchor_verbatim": true,
+    "via_annular_note.anchor_verbatim": true,
+    "via_hole_to_hole_mm.anchor_verbatim": true,
+    "not_verbatim_declared_exactly": true,
+    "not_verbatim_reasons_present": true,
+    "verbatim_floor": true
+   },
+   "anchors": 24,
+   "not_verbatim": [
+    "blind_buried_faq",
+    "er_table",
+    "inner_copper_oz",
+    "min_plated_slot_mm",
+    "min_track_spacing_mm",
+    "min_track_width_mm",
+    "min_via_hole_mm",
+    "outer_copper_oz",
+    "surface_finish",
+    "thickness_mm"
+   ]
+  },
+  "t05_capability_citation_sensitivity": {
+   "ok": true
   }
  },
  "redline": "只读：仅读板/kicad-cli DRC；坐标零搜索；不改板/图纸/SPEC/冻结四源。"
