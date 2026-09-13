@@ -1,0 +1,38 @@
+{
+ "artifact": "m13_v57_co205t_per_polarity_cursor",
+ "authority": {
+  "handoff": ".omo/handoffs/k2-v57-handoff-z70-20260913-rev19-co205.md §6",
+  "layer_ruling": "L2 自裁（band 级走廊/列分配）"
+ },
+ "date": "2026-09-14",
+ "family_closure": {
+  "hard_limit_arg": "竖段须落内层（外层 3W=0.615 吃容量）、lane 亦须落内层（同理）、且二者须异层（否则竖段穿邻页 lane 产生真交叉）⇒ corner 必为内层<->内层 ⇒ 在 R3 下不可制。**增内层不改变该结论**（每支跨内层孔仍须经 F/B 拆分），故 L2 叠层决策收益为零。",
+  "remaining_routes": [
+   "L1：球重映射 / 信号流向（owner）⇒ 可把跨内层 transition 的需求本身消掉",
+   "外部：板厂盲埋孔/顺序层压能力（CO-204 已判不存在 ⇒ 无新输入即否决）"
+  ],
+  "statement": "L2 可自裁空间内已穷尽：拓扑族（A/A′/B/C/D/E + escape=F 混合）× 桥孔 jog（方向/幅度/x-含 y-侧移/条件修复）× 列分配（CARRYALL/逐极性游标/XMIN/顺序）× 层参数（POL_OFF）——**上限 24/32（修正模型 23/32）**"
+ },
+ "measurements": {
+  "CARRYP=0 BRCOL=0 COLFIX=0": "24/32；vv_placed 6",
+  "CARRYP=1 BRCOL=0 COLFIX=0": "23/32；**vv_placed 6 -> 1**（跨页 via1 撞类基本消除）",
+  "CARRYP=1 BRCOL=0 COLFIX=1": "22/32",
+  "CARRYP=1 BRCOL=1 COLFIX=0": "23/32",
+  "conclusion": "逐极性游标**确实**消除跨页 via1 撞（设计意图达成），但单调推进把 1 页挤出可行域 ⇒ 净 -1；本族仍不过 24/32",
+  "order_scan_CARRYP+BRCOL": "rev 23 / carry 22 / xasc 22 / engine 22 / laneidx 21"
+ },
+ "next": [
+  "复评债 = CO-202..CO-205t（另一会话，禁自评）"
+ ],
+ "rationale": {
+  "budget": "西 UP 带 16 支 via1 / 8.70mm 宽 @0.525 = 8.40mm ⇒ 几何上恰好可行（余量 0.30mm）",
+  "fix": "CO10_CARRYP=1：按极性各维护一个单调游标，只对同极性列施加 >= VV 的推进",
+  "observation": "同带各页 via1 的 py / ny **相同**（实测 UP6 via1P y=50.88 = UP7 via1P y=50.88）⇒ 跨页约束 = 「同极性列两两 >= VV 0.525」；P 列 vs N 列因 |py-ny| ~1.4 > VV 而互不约束",
+  "why_carryall_failed": "CARRYALL 用单个 min/max(px,nx) 游标把两种极性混在一起 ⇒ 过度约束（15-18/32）"
+ },
+ "redline": "只读冻结四源；未改 canonical 图纸 / 交付板 / 构造器；无 sign-off",
+ "revision": "CO-205t",
+ "schema": 1,
+ "scope": "band 级列联合求解：逐极性单调游标（修正 CARRYALL 的极性混用过度约束）",
+ "status": "BLOCKED（L2 已穷尽；修正模型最优 23/32；唯一剩余路径为 L1 或外部工艺输入）"
+}

@@ -641,8 +641,8 @@ opt-in 旋钮 `CO10_IP3W` / `CO10_PDN_OBS` / `--order xasc` 已入库（默认�
 | 工具 `p3_v57_co143_escape_fan_3w_feasibility.py` | `51f532e026f3670e` |
 | 记录 `m13_v57_co143_escape_fan_3w_feasibility.json` | `0f9fd90cc0abd93c` |
 | 卡 `m13_v57_CO143_escape_fan_3w_feasibility.md` | `3f9e35914b01a95c` |
-| 探针 `p3_v57_co10_west_fan_probe.py`（+opt-in 3W/PDN 旋钮/xasc） | `c790b9e50b53903a` |
-| 分配器 `p3_v57_co16_emit_allocation.py`（+CO16_IP3W 映射） | `0955b06badadd7b1` |
+| 探针 `p3_v57_co10_west_fan_probe.py`（+opt-in 3W/PDN 旋钮/xasc） | `3d907bc9e0aa2f41` |
+| 分配器 `p3_v57_co16_emit_allocation.py`（+CO16_IP3W 映射） | `984db5f61335e2e2` |
 | 登记簿 `input_defect_register_v1.json`（定位更正；OPEN 保持） | `8913d40f36fe0c0e` |
 
 ---
@@ -669,8 +669,8 @@ CO-144 以**分带单调 carry**（带内 (corridor,band) 连续 + 处理序自�
 | L5 fab `m13_v57_l5_fab_record.json` | `791012e88b514faa` |
 | L5 SI `m13_v57_l5_si_pi_emc_record.json` | `261b58e745c67aea` |
 | 引擎 `p3_v57_w3_constructive.py`（CO16_ALLOC→v8 / W3-CN.42） | `223e71bdc655a0fc` |
-| 探针 `p3_v57_co10_west_fan_probe.py`（+carry/orientation） | `c790b9e50b53903a` |
-| 分配器 `p3_v57_co16_emit_allocation.py`（+FAN_STRAT/PDN_OBS/ORDER 映射） | `0955b06badadd7b1` |
+| 探针 `p3_v57_co10_west_fan_probe.py`（+carry/orientation） | `3d907bc9e0aa2f41` |
+| 分配器 `p3_v57_co16_emit_allocation.py`（+FAN_STRAT/PDN_OBS/ORDER 映射） | `984db5f61335e2e2` |
 | 登记簿 `input_defect_register_v1.json`（该 TOOL_DEFECT **CLOSED**；OPEN 1 = F.Cu/owner） | `8913d40f36fe0c0e` |
 | 台账 `derived_value_ledger_v1.json`（as-built B.Cu ok；evidence pin 刷新） | `725b78b26752cd1d` |
 

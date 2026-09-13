@@ -112,8 +112,8 @@ def _band_key(f):
 
 
 def _band_carry(f):
-    """该带是否启用 carry：escape 层 3W 界 >= 0.615（外层 F/B）；CARRYALL 时全带启用。"""
-    if _CARRYALL:
+    """该带是否启用 carry：escape 层 3W 界 >= 0.615（外层 F/B）；CARRYALL/CARRYP 时全带启用。"""
+    if _CARRYALL or _CARRYP:
         return True
     return 3.0 * _WBY.get(esc_layer(f), 0.0) >= _CARRY_W3_MIN
 
@@ -304,6 +304,12 @@ _CARRYALL = __import__("os").environ.get("CO10_CARRYALL", "") not in ("", "0")
 #   在桥孔上撞（实测 DN2_N (141.22,57.65) × UP0/out_J2.P = 0.316）。开启后区间含桥孔 y。
 #   默认关 ⇒ 候选 C 记录（24/32）逐字节可复现。
 _COLFIX = __import__("os").environ.get("CO10_COLFIX", "") not in ("", "0")
+# CO-205t（L2 自裁 · band 级列联合求解）：**逐极性单调列游标**。
+#   依据（实测）：同带各页 via1 的 py / ny **相同** ⇒ 跨页约束是「同极性列两两 >= VV」，
+#   而 P 列 vs N 列因 |py-ny| 足够大而不互相约束。CARRYALL 用 min/max(px,nx) 单游标把两种
+#   极性混在一起 ⇒ 过度约束（实测 15-18/32）。本旋钮按极性各维护一个游标。
+_CARRYP = __import__("os").environ.get("CO10_CARRYP", "") not in ("", "0")
+_CARRY_CURP = {}
 _BEXT = _BR_JOG if (_CARRYALL and _BRIDGE and _BRCOL) else 0.0   # 仅 CARRYALL 生效 ⇒ 不扰动 BRCOL 单用
 
 
@@ -1224,8 +1230,8 @@ def probe(rule="d3", order="engine", verbose=False):
             rows = sorted(rows, key=lambda r: max(float(r[0]), float(r[1])), reverse=(_cdir < 0))
         hit = None; reasons = {}
         _ccur = _CARRY_CUR.get(_ck) if _cdir else None
-        _cw = ((max(3.0 * _WBY.get(esc_layer(f), 0.16), VV) if _CARRYALL
-                else 3.0 * _WBY.get(esc_layer(f), 0.16))) if _cdir else 0.0
+        _cw = 0.0 if _CARRYP else (((max(3.0 * _WBY.get(esc_layer(f), 0.16), VV) if _CARRYALL
+                else 3.0 * _WBY.get(esc_layer(f), 0.16))) if _cdir else 0.0)
         for r in rows:
             px, nx, py, ny, dd = (float(r[0]), float(r[1]), float(r[2]), float(r[3]), float(r[4]))
             if dd < VV - TOL or abs(px - nx) < _XMIN - TOL: continue
@@ -1238,6 +1244,18 @@ def probe(rule="d3", order="engine", verbose=False):
                 if _cdir > 0 and min(px, nx) - _BEXT < _ccur + _cw - TOL:
                     continue
                 if _cdir < 0 and max(px, nx) + _BEXT > _ccur - _cw + TOL:
+                    continue
+            if _CARRYP:          # CO-205t：逐极性单调游标（同极性列两两 >= VV）
+                _badp = False
+                for _pl, _xv in (("P", px), ("N", nx)):
+                    _cur = _CARRY_CURP.get((_ck, _pl))
+                    if _cur is None:
+                        continue
+                    if _cdir > 0 and _xv < _cur + VV - TOL:
+                        _badp = True
+                    if _cdir < 0 and _xv > _cur - VV + TOL:
+                        _badp = True
+                if _badp:
                     continue
             if _HOLE_GAP > 0:      # L2: 同网钻孔间距 => 逃逸竖段 >= gap（升/降段不得短到 via 钻孔相撞）
                 _ly = LANES[pid]["lane_y"]
@@ -1264,6 +1282,9 @@ def probe(rule="d3", order="engine", verbose=False):
             _CARRY_CUR[_ck] = max(px, nx) + _BEXT
         elif _cdir < 0:
             _CARRY_CUR[_ck] = min(px, nx) - _BEXT
+        if _CARRYP:
+            for _pl, _xv in (("P", px), ("N", nx)):
+                _CARRY_CURP[(_ck, _pl)] = _xv
         if verbose: print("OK  ", pid, esc_layer(f), stub_layer(f), (px, py), (nx, ny))
     return {"rule": rule, "order": order, "n_pages": len(FACTS), "n_placed": len(placed), "geom": GEOM,
             "n_failed": len(failed), "placed": placed, "failed": failed,
