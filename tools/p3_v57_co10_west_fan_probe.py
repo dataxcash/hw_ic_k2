@@ -299,7 +299,12 @@ _XMIN = float(__import__("os").environ.get("CO10_XMIN", "0.38"))
 # CO-205r（L2 自裁 · 列+桥孔联合闭式求解）：**band 级单调 carry 全带启用**（原仅外层 3W 带）。
 #   游标间距 = max(3*w(layer), VV)；且计入桥孔向外 BR_JOG 的足迹延伸（BRCOL 时）。零回溯。
 _CARRYALL = __import__("os").environ.get("CO10_CARRYALL", "") not in ("", "0")
-_BEXT = _BR_JOG if (_BRIDGE and _BRCOL) else 0.0
+# CO-205s（L2 自裁 · 工具缺陷 ④）：连接器侧列分配（J2 区间图着色 / J3·J4 _lx_separate）的
+#   着色区间原只用 {lane_y, land_y}，漏计**桥孔 y**（lane 行 ±BR_JOG）⇒ 两页可被着同色却
+#   在桥孔上撞（实测 DN2_N (141.22,57.65) × UP0/out_J2.P = 0.316）。开启后区间含桥孔 y。
+#   默认关 ⇒ 候选 C 记录（24/32）逐字节可复现。
+_COLFIX = __import__("os").environ.get("CO10_COLFIX", "") not in ("", "0")
+_BEXT = _BR_JOG if (_CARRYALL and _BRIDGE and _BRCOL) else 0.0   # 仅 CARRYALL 生效 ⇒ 不扰动 BRCOL 单用
 
 
 def _va(up_band: bool, kind: int):
@@ -396,18 +401,34 @@ def r3_build(rule):
             ly = LANES[a["page"]]["lane_y"]; lx0, ll = a["column_x"], a["landing"][1]
             if _COLMODE == "pol":
                 ly += pol_off(f, a["pol"])
+            # CO-205s（L2 自裁 · 列+桥孔联合求解）：着色区间须含**桥孔 y**。
+            #   桥在 lane 行 ±BR_JOG 处另加一孔；原区间只用 {lane_y, land_y} ⇒ 桥孔落在区间外 ⇒
+            #   两页可被着同色却在桥孔上撞（实测 DN2_N (141.22,57.65) × UP0/out_J2.P = 0.316）。
+            _ys = [ly, ll]
+            if _COLFIX and _BRIDGE and _stub_layer_of(a) == "In2.Cu":
+                _dh = ly + _BR_JOG
+                if _BR2D or (_BRDROP and abs(_dh - ll) < _HOLE_GAP):
+                    _dh = ly - (1.0 if ll > ly else -1.0) * _BR_JOG
+                _ys.append(_dh)
             _ent.append({"k": k, "side": 0 if abs(a["pad_x"] - J2_IN) < 1e-6 else 1,
-                         "vx": max(f["pad"]["P"][0], f["pad"]["N"][0]),
-                         "lo": min(ly, ll) - VV / 2.0, "hi": max(ly, ll) + VV / 2.0})
+                         "vx": max(f["pad"]["P"][0], f["pad"]["N"][0]), "ys": _ys,
+                         "lo": min(_ys) - VV / 2.0, "hi": max(_ys) + VV / 2.0})
+        def _conf(e, u):
+            """同色两页是否冲突：COLFIX 用**精确 via y 集**判据（充分且必要），
+            否则用旧区间重叠判据（保守过头）。"""
+            # 只判 y 区间重叠（= 竖段/落段占位）；**不可**退化为「仅比 via y」——
+            # 否则同列两页的竖段（lx 常量、y 跨越 [ly,ll]）会共线重叠（实测 24 -> 14）。
+            return (e["lo"] < u["hi"] - TOL and u["lo"] < e["hi"] - TOL)
+
         _col = {}
         for side in (0, 1):
             sub = sorted([e for e in _ent if e["side"] == side], key=lambda e: (e["lo"], e["k"]))
-            used = []                                     # list of (k, lo, hi)
+            used = []                                     # list of (k, lo, hi, ent)
             for e in sub:
                 kk = 0
-                while any(abs(kk - u[0]) < 1 and e["lo"] < u[2] - TOL and u[1] < e["hi"] - TOL for u in used):
+                while any(abs(kk - u[0]) < 1 and _conf(e, u[3]) for u in used):
                     kk += 1
-                _col[e["k"]] = kk; used.append((kk, e["lo"], e["hi"]))
+                _col[e["k"]] = kk; used.append((kk, e["lo"], e["hi"], e))
             # O4 感知：真着色对色值置换不变 ⇒ 按组内最大 pad_x 降序重排色值（大 vx 页取小 offset ⇒ R 大、ΔL 小）
             _grp = {}
             for e in sub:
@@ -532,6 +553,12 @@ def _lx_separate(A):
         ly = LANES[pg]["lane_y"]
         lo = min(min(ly, g["a"]["landing"][1]) for g in grp)
         hi = max(max(ly, g["a"]["landing"][1]) for g in grp)
+        if _COLFIX and _BRIDGE and _stub_layer_of(grp[0]["a"]) == "In2.Cu":   # CO-205s：含桥孔 y
+            _dh = ly + _BR_JOG
+            _ll0 = grp[0]["a"]["landing"][1]
+            if _BR2D or (_BRDROP and abs(_dh - _ll0) < _HOLE_GAP):
+                _dh = ly - (1.0 if _ll0 > ly else -1.0) * _BR_JOG
+            lo = min(lo, _dh); hi = max(hi, _dh)
         best = None
         for d in (0.0, 0.6, -0.6, 1.2, -1.2, 1.8, -1.8, 2.4, -2.4, 3.0, -3.0, 3.6, -3.6):
             xs = [g["a"]["column_x"] + d for g in grp]
@@ -767,11 +794,18 @@ def build(f, px, py, nx, ny):
             else:
                 _jd = (1.0 if pol == "P" else -1.0) if _BR_FLIP else (1.0 if up else -1.0)
             _lyo = LANES[f["page_id"]]["lane_y"] + pol_off(f, "N" if pol == "P" else "P")
-            vias.append((vx, vy, pol, _sp("F.Cu", E)))                 # via1（E==B 时为通孔）
+            if E != "F.Cu":
+                vias.append((vx, vy, pol, _sp("F.Cu", E)))             # via1（E==B 时为通孔；E==F 时无孔）
             _cy = ly
             if E == B:
                 _cx = vx
                 vias.append((vx, ly, pol, _sp(B, L)))                  # corner B<->In5（已外层锚定）
+            elif E == "F.Cu":
+                # CO-205s（L2 自裁 · 近芯片孔密度）：**逃逸段落 F**（短逃逸页；西侧 ~1.9mm）
+                #   ⇒ 近芯片每极性孔数 3 -> 1（仅 F<->In5），无 via1、无 corner 桥；
+                #   代价 = 逃逸 F 竖段（长度 = |pad_y - lane_y|）占用顶层走廊。
+                _cx = vx
+                vias.append((vx, ly, pol, _sp("F.Cu", L)))             # corner F<->In5（外层锚定）
             elif E == "In2.Cu":
                 # 桥走 **F.Cu**（顶层，走廊区空闲）：In2<->F + 短 F 段 + F<->In5。
                 # 关键：避免占用 B.Cu 竖列（对带 B 逃逸列与 chip pad 同 x ⇒ 必砸）。

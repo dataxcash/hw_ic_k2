@@ -1,0 +1,47 @@
+{
+ "artifact": "m13_v57_co205s_connector_column_model",
+ "authority": {
+  "handoff": ".omo/handoffs/k2-v57-handoff-z70-20260913-rev19-co205.md §6",
+  "layer_ruling": "L2 自裁（走廊/列分配、过孔策略、工具缺陷修复）；owner 闸 0"
+ },
+ "date": "2026-09-14",
+ "measurements": {
+  "candC+BRCOL, COLFIX=0": "24/32（8 页：UP0/2/3/6 input, DN2/3/4/5 input）",
+  "candC+BRCOL, COLFIX=1": "23/32（同 8 页 + UP0/out_J2；DN2 的 vv_placed 类消失，转为 vt2_placed）",
+  "conclusion": "**记录的 24/32 是欠预留的乐观值**；含桥孔占位的修正模型下最优 = **23/32**",
+  "escape_on_F_retest": "LMAP esc=F（W4/ALL8）：24/32（与 BRCOL 同），近芯片每极性孔数 3→1 但 F 逃逸竖段撞邻页 F pad-access / 自身 pad 场（pad_seg 0.0），净中性",
+  "order_rescan_with_fix": "rev/carry/xasc/engine 均 24/32（失败面不同）；laneidx 21；fewest 15",
+  "pol_off": "0.25/0.2625/0.27/0.30/0.35 → 24/24/23/18/17",
+  "stub_to_lane_retest": "LMAP stub=In5（W4/ALL8/东侧 4）：24/32 不变 ⇒ 失败面不在落桥侧",
+  "xmin_floor": "0.38/0.5 → 24；0.6/0.66/0.8/1.0 → 23/21/19/18 ⇒ 行筛收窄无益"
+ },
+ "next": [
+  "① band 级联合求解器（列 + 桥孔 (x,y) 同时解，须确定性、禁回溯）——本次已提供全部闭式自由度与暴露度量，可直接消费",
+  "② 或 L1 决策（球重映射/信号流向 ⇒ owner）：把每带每极性的桥孔需求降到 1 孔/极性以下",
+  "③ 复评债 = CO-202..CO-205s（另一会话，禁自评）"
+ ],
+ "redline": "只读冻结四源；未改 canonical 图纸 / 交付板 / 构造器；无 sign-off",
+ "regression_fixed": {
+  "fix": "_BEXT = _BR_JOG if (_CARRYALL and _BRIDGE and _BRCOL) else 0.0",
+  "id": "carryall_bridge_extent_leak",
+  "symptom": "CO-205r 提交 3f32c0a 内 `_BEXT`（为 CARRYALL 引入的桥孔足迹延伸）未加 `_CARRYALL` 门控，静默改写 BRCOL 单用结果 24 → 16/32",
+  "verification": "candC+BRCOL 恢复 24/32 且 vv_intra = 0"
+ },
+ "revision": "CO-205s",
+ "schema": 1,
+ "scope": "连接器侧列分配模型缺陷（工具缺陷 ④）修复 + BRCOL 回归修复 + 修正后容量复测",
+ "status": "BLOCKED（L2 可自裁范围内已穷尽；修正模型最优 = 23/32）",
+ "structural_conclusion": {
+  "binding": "① 连接器侧列占位（已修模型）；② 近芯片 2D 孔密度（UP6 暴露度 -0.017）；③ 页内轨道（UP0 vt_intra / UP3 hh_intra）",
+  "note": "增内层不增加外层锚定孔容量（每支跨内层孔仍须经 F/B 拆分）⇒ L2 叠层决策收益有限，与 CO-205 判断一致",
+  "statement": "在 4 信号层（F/In2/In5/B）+ R3 过孔策略（通孔+背钻、0 盲埋孔、残桩<0.15mm）下，『每个内层<->内层孔加一外层锚定桥孔』的全族（escape∈{In2,B,F} × stub∈{In2,In5,B} × lane∈{In5,B,F} × jog 方向/幅度 × 列序 × 列距下限 × POL_OFF × 顺序）实测上限 ≤24/32（修正模型 23/32）"
+ },
+ "tool_defect_4": {
+  "default": "关（保候选 C 记录 24/32 逐字节可复现）",
+  "falsified_variant": "把判据退化为『仅比 via y 精确对』⇒ 24 → 14/32：同列两页的**竖段**（x=lx 常量、y 跨 [ly,ll]）共线重叠。故占位必须用 y 区间（含竖段），不可只比 via。已回退该变体。",
+  "fix": "CO10_COLFIX=1：占位区间并入桥孔 y（落桥孔 = ly + BR_JOG，BR2D/BRDROP 生效时取 ly - sign(ll-ly)*BR_JOG）",
+  "id": "connector_column_coloring_ignores_bridge_hole_y",
+  "root_cause": "J2 列 = 区间图贪心着色（r3_build, EASTSPLIT=in2c）与 J3/J4 落列分离器（_lx_separate）的**占位区间只取 {lane_y, land_y}**；桥在 lane 行 ±BR_JOG 处另加一孔（落桥孔），该孔 y 落在区间之外 ⇒ 两页被着同色却在桥孔上撞",
+  "symptom": "候选 C：DN2/input 报 vv_placed (141.22,57.65,N) vs UP0/out_J2.P 0.316（连接器侧同列 via 撞）"
+ }
+}
