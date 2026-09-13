@@ -345,7 +345,7 @@ def main() -> int:
 
 ## 1. 结论（G7 {_g7v}）
 - SI（对内等长）：**{si['verdict']}** — `max_intra_pair_skew_mm(加权电气长度) = {skew_max:.4f} <= {rules['diff_pair']['intra_pair_skew_mm']}`（{si['SI']['skew_pages_checked']} 页，含 REFCLK）。
-  几何实测（CO-53）：对内中心 `{si['SI']['netclass_geometry']['delivered']['intra_center_max_mm']}` mm（边距 `{si['SI']['netclass_geometry']['delivered']['intra_edge_gap_mm']}`）vs SPEC p_gap `{si['SI']['netclass_geometry']['spec']['p_gap_mm']}`；对间最小中心 `{si['SI']['netclass_geometry']['delivered']['min_inter_pair_center_mm']}` vs SPEC inter_pair `{si['SI']['netclass_geometry']['spec']['inter_pair_spacing_mm']}` ⇒ 本工程**不自证**阻抗符合性；按登记簿 `implementation_deviation:R3-2_asbuilt_interpair_edge`（**CLOSED**；域声明由 CO-147 R2 在 L2 内裁定；B.Cu/In5 已几何闭合）交 **JLC 阻抗控制服务终判**（CO-221 口径同步；原「JLC 阻抗控制服务终判」表述已撤）。
+  几何实测（CO-53）：对内中心 `{si['SI']['netclass_geometry']['delivered']['intra_center_max_mm']}` mm（边距 `{si['SI']['netclass_geometry']['delivered']['intra_edge_gap_mm']}`）vs SPEC p_gap `{si['SI']['netclass_geometry']['spec']['p_gap_mm']}`；对间最小中心 `{si['SI']['netclass_geometry']['delivered']['min_inter_pair_center_mm']}` vs SPEC inter_pair `{si['SI']['netclass_geometry']['spec']['inter_pair_spacing_mm']}` ⇒ 本工程**不自证**阻抗符合性；按登记簿 `implementation_deviation:R3-2_asbuilt_interpair_edge`（**CLOSED**；域声明由 CO-147 R2 在 L2 内裁定；B.Cu/In5 已几何闭合）交 **JLC 阻抗控制服务终判**（CO-221 口径同步）。
 - DFM：**{dfm['verdict']}** — `new_total = {dfm['drc']['new_total']}`；L4 违规 by_type `{dfm['drc']['l4_applied']['by_type']}`（= 冻结基线 lib/silk，计入不计）。
 - DFT（施工连通性，CO-47 谓词）：在册网未连项 **{_dft['in_scope_unconnected_nets']}/{_dft['in_scope_nets']}**（{_dft['rule']}）。
 - EMC：solder_mask_bridge `{si['EMC']['solder_mask_bridge_violations']}` / copper_edge `{si['EMC']['copper_edge_violations']}`；

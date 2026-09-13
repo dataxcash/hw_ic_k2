@@ -6,7 +6,7 @@
 
 ## 1. 结论（G7 PASS）
 - SI（对内等长）：**PASS** — `max_intra_pair_skew_mm(加权电气长度) = 0.1300 <= 0.15`（34 页，含 REFCLK）。
-  几何实测（CO-53）：对内中心 `0.5` mm（边距 `0.295`）vs SPEC p_gap `0.175`；对间最小中心 `0.57` vs SPEC inter_pair `0.41` ⇒ 本工程**不自证**阻抗符合性；按登记簿 `implementation_deviation:R3-2_asbuilt_interpair_edge`（**CLOSED**；域声明由 CO-147 R2 在 L2 内裁定；B.Cu/In5 已几何闭合）交 **JLC 阻抗控制服务终判**（CO-221 口径同步；原「JLC 阻抗控制服务终判」表述已撤）。
+  几何实测（CO-53）：对内中心 `0.5` mm（边距 `0.295`）vs SPEC p_gap `0.175`；对间最小中心 `0.57` vs SPEC inter_pair `0.41` ⇒ 本工程**不自证**阻抗符合性；按登记簿 `implementation_deviation:R3-2_asbuilt_interpair_edge`（**CLOSED**；域声明由 CO-147 R2 在 L2 内裁定；B.Cu/In5 已几何闭合）交 **JLC 阻抗控制服务终判**（CO-221 口径同步）。
 - DFM：**PASS** — `new_total = 0`；L4 违规 by_type `{'silk_edge_clearance': 1, 'lib_footprint_mismatch': 29, 'lib_footprint_issues': 12}`（= 冻结基线 lib/silk，计入不计）。
 - DFT（施工连通性，CO-47 谓词）：在册网未连项 **0/68**（CO-47：在册（L4 施工）网必须 0 未连项（kicad-cli unconnected_items 网名解析）；范围外网不计）。
 - EMC：solder_mask_bridge `0` / copper_edge `0`；
