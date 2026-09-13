@@ -2003,6 +2003,46 @@ def main() -> int:
         txt = txt.rstrip("\n") + "\n\n" + body63
     txt = txt.replace("W3 Boundary **v2.34**", "W3 Boundary **v2.35**")
     txt = txt.replace("W3 Boundary **v2.33**", "W3 Boundary **v2.34**")
+    # ── §64 CO-191（L2 自裁 · 判定基据完备性） ────────────────────────────────
+    MARK64 = "## 64. CO-191"
+    _rc64 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    _ord191 = _ord190          # 步集/序列不变（50 次）
+    sec64 = [MARK64 + "（**L2 自裁 · 判定基据完备性**）", "",
+             "- **G-1（low）·判定面不完备**：① `step_verdict`/`nonpass_decision` **只判首个**声明 verdict ⇒ 步骤其他声明产物"
+             "（副记录 / 共享件）若含非 PASS verdict 可**静默逃逸**；② 普查 **23/48 步**「无 teeth、无 verdict」仅有 "
+             "rc + `did_work` 判，其**判定基据未显式绑定**（新增此类步可静默无判 = CO-79「空真」在执行器层面的残余）。",
+             "- **处置**：runner 升 **CO-191.1** —— ① `declared_verdicts()` + `all_verdicts_decision()`：**全部**声明 verdict "
+             "一律判决（t19 现状 clause 同步）；② `judgment_basis()` + `JUDGMENT_DOWNSTREAM`（**显式**下游声明）+ 静态齿 **t25**"
+             "（每步基据 ≠ none；下游声明须有理由且指向在序步；合成正负控）。",
+             "- **实测（本件证据）**：**端到端负控（旧↔新判别）** —— 注入副声明产物 `verdict=FAIL`（precheck PASS、FAIL 于**运行期**写出）"
+             "⇒ 停 `class=undeclared_nonpass_verdict`；同时实测 `step_verdict`=**PASS**（旧路径**不判**）↔ "
+             "`all_verdicts_decision`=**undeclared_nonpass**（新路径判）。预写失败 verdict 则由静态 t19 更早拦下。零基线冲击"
+             "（现行 3 步多 verdict 产物均为通过档，见登记簿证据）。",
+             f"- **登记簿**：+1（`co191:G-1`，CLOSED；**{_rc64['total']} 项 / OPEN {_rc64['OPEN']}**）。",
+             "",
+             "> **R-CO191-1**：步骤判定基据须**可机判**（`teeth` / 声明产物 `verdict` / 登记簿自洽 / **显式下游** `JUDGMENT_DOWNSTREAM`）；"
+             "且**全部**声明 verdict 一律判决（禁只判首个 ⇒ 隐藏非 PASS 逃逸）；t25 机判。",
+             "> **R-CO191-2**（复现序，取代 R-CO190-2；**步集/序列不变，序内出现 50 次**）：规范复现序 = `" + _ord191 + "`，"
+             "**循环至 sha 稳定**（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1 "
+             "+ R-CO175-1 + R-CO176-1/2 + R-CO177-1 + R-CO178-1 + R-CO179-1/2 + R-CO180-1/2 + R-CO181-1/2 + R-CO182-1 "
+             "+ R-CO183-1 + R-CO184-1 + R-CO185-1/2 + R-CO186-1 + R-CO187-1/2/3 + R-CO188-1 + R-CO189-1 + R-CO190-1 + R-CO191-1）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows64 = [("工具 `p3_v57_co164_order_runner.py`（CO-191.1 / 全 verdict 全判 + `JUDGMENT_DOWNSTREAM` + t25）",
+                K2 / "tools/p3_v57_co164_order_runner.py"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc64['total']} 项 / OPEN {_rc64['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows64:
+        if pth.exists():
+            sec64.append(f"| {label} | `{s16(pth)}` |")
+    sec64.append("")
+    body64 = "\n".join(sec64)
+    if MARK64 in txt:
+        txt = re.sub(re.escape(MARK64) + r"[\s\S]*?(?=\n## |\Z)", body64, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body64
+    txt = txt.replace("W3 Boundary **v2.35**", "W3 Boundary **v2.36**")
+    txt = txt.replace("W3 Boundary **v2.34**", "W3 Boundary **v2.35**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
     return 0

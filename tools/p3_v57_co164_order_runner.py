@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CO-164/CO-167/CO-169/CO-174/CO-180/CO-181/CO-182/CO-183/CO-187/CO-188/CO-189/CO-190 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
+"""CO-164/CO-167/CO-169/CO-174/CO-180/CO-181/CO-182/CO-183/CO-187/CO-188/CO-189/CO-190/CO-191 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
 
 缘起（实测事故，CO-163）：`co146_boundary_append.py` 因 §37 文本里的 f-string 花括号语法错误**每次崩溃（rc=1）**，
 但收敛判定只看 boundary/记录 sha ⇒ sha 恒不变 ⇒ 报「CONVERGED」，边界 §37 实际从未写入、pin 表陈旧（co77/co135/co136 判 FAIL）。
@@ -20,6 +20,8 @@
      （stat 轻量 shadow 快照）+ 静态齿 **t23**（shadow 根 ⊇ 受控集；`WRITE_SHADOW_EXEMPT` 完备性 + 正负控）。
   ⑦ CO-190（R-CO190-1）：**步骤超时**（`STEP_TIMEOUT_S`）⇒ 杀子进程 + 停机类 `step_timeout` + 每步 `duration_s`
      记录 + 静态齿 **t24**（超时值带 + 正负控）。缺超时 = 挂起步使 runner 永久阻塞而非 fail-closed。
+  ⑧ CO-191（R-CO191-1）：**判定基据完备性** —— ① 步骤**全部**声明 verdict 一律判决（禁只判首个 ⇒ 隐藏非 PASS 可逃逸）；
+     ② 每步须有可机判基据（`teeth`/`verdict`/登记簿自洽/**显式下游** `JUDGMENT_DOWNSTREAM`）⇒ 禁「静默步」；静态齿 **t25**。
 CLI:
   python3 tools/p3_v57_co164_order_runner.py [--check] [--max-iter 5]
 """
@@ -69,6 +71,13 @@ DECLARED_NONPASS_OK = {
     "co146_pm_eval": {"verdict": "FAIL", "register": "co148", "key_path": "thermal.verdict",
                       "why": "U6 热超限属**已登记结论**（co148 / L2 裁定：须系统/机械散热）；"
                              "该步 rc 另受 PDN 压降 + 牙齿把关，热结论不属「步失败」"},
+}
+
+# CO-191（R-CO191-1）：**判定基据显式化** —— 每步须有可机判基据（`teeth` / 声明产物 `verdict` / 登记簿自洽 / **显式下游**）；
+# 禁「无 teeth、无 verdict、无登记簿、无下游声明」的静默步（CO-79「空真」在**执行器层面**的收口）。
+JUDGMENT_DOWNSTREAM = {
+    "co146_boundary_append": {"ref": ["co77_closure_declaration_sweep", "co135_review_hygiene"],
+                              "why": "本步只做 pin 再对齐 + §节登记；boundary 引用一致性由 co77/co135 的 citation 扫描判"},
 }
 
 # 允许非零的步骤（**须带 verdict 证据**：rc≠0 不等于预期 FAIL —— CO-165）
@@ -602,6 +611,46 @@ def step_verdict(step: str):
     return min(cands, key=lambda t: t[0])[1]      # 仅按「是否步自身记录」取优，避免 verdict 间比较
 
 
+def declared_verdicts(step: str) -> list:
+    """CO-191：该步**全部声明产物**中携带 `verdict` 键者（(basename, verdict) 有序）。"""
+    out = []
+    for rel in STEP_ARTIFACTS.get(step, []):
+        if not str(rel).endswith(".json"):
+            continue
+        p = K2 / rel
+        if not p.exists():
+            continue
+        try:
+            d = json.loads(p.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        if isinstance(d, dict) and "verdict" in d:
+            out.append((p.name, d["verdict"]))
+    return out
+
+
+def all_verdicts_decision(step: str, verdicts=None) -> str:
+    """CO-191 纯判据：**所有**声明 verdict 一律判决（非首个）——任一未声明非 PASS ⇒ `undeclared_nonpass`。"""
+    vs = declared_verdicts(step) if verdicts is None else verdicts
+    for _, v in vs:
+        if nonpass_decision(step, v) == "undeclared_nonpass":
+            return "undeclared_nonpass"
+    return "ok"
+
+
+def judgment_basis(step: str) -> str:
+    """CO-191：该步的机判基据类别（teeth / verdict / register_consistency / downstream / none）。"""
+    if step_declared_teeth(step) is not None:
+        return "teeth"
+    if declared_verdicts(step):
+        return "verdict"
+    if _REG in STEP_ARTIFACTS.get(step, []):
+        return "register_consistency"
+    if step in JUDGMENT_DOWNSTREAM:
+        return "downstream"
+    return "none"
+
+
 def nonpass_decision(step: str, verdict) -> str:
     """CO-185（R-CO185-2）纯判据：非 PASS verdict 的**显式性**判定。
 
@@ -945,7 +994,9 @@ def main(argv=None) -> int:
         and nonpass_decision("__x__", "PASS") == "pass_band"
         and nonpass_decision("__x__", None) == "pass_band"
         # 现状：全序各步的记录 verdict 均属通过档或已声明
-        and all(nonpass_decision(s, step_verdict(s)) != "undeclared_nonpass" for s in set(ORDER)))
+        and all(nonpass_decision(s, step_verdict(s)) != "undeclared_nonpass" for s in set(ORDER))
+        # CO-191：**全部**声明 verdict 亦须零未声明（非首个）
+        and all(all_verdicts_decision(s) != "undeclared_nonpass" for s in set(ORDER)))
     # CO-186（R-CO186-1）/ CO-187（F-2）：规范序 md 产物须**全部受控**（pin ∪ 显式豁免）**且步本地声明**
     _md_scan = {_s: md_write_scan(_tp.read_text(encoding="utf-8"))
                 for _s in set(ORDER) if (_tp := tool_path(_s)) is not None}
@@ -1022,6 +1073,17 @@ def main(argv=None) -> int:
         and allowlist_decision("co146_jlc_dfm_gate", 0, "", "FAIL", True, True, True) == "step_timeout"
         and allowlist_decision("co77_closure_declaration_sweep", 0, "", "PASS") == "ok"
         and allowlist_decision("co146_jlc_dfm_gate", 1, "", "FAIL", True, True, False) == "expected_nonzero")
+    # CO-191（R-CO191-1）：判定基据完备性 —— 每步须有可机判基据（禁静默步；下游声明须有理由且指向在序步）
+    _basis = {s: judgment_basis(s) for s in set(ORDER)}
+    _dn_ok = all(str(v.get("why") or "").strip() and isinstance(v.get("ref"), list) and bool(v["ref"])
+                 and set(v["ref"]) <= set(ORDER) for v in JUDGMENT_DOWNSTREAM.values())
+    checks["t25_judgment_basis_declared"] = (
+        all(b != "none" for b in _basis.values())
+        and set(JUDGMENT_DOWNSTREAM) <= set(ORDER) and _dn_ok
+        # 合成正/负控：多产物 verdict 全判（隐藏的非 PASS 必被截；全通过档不误报）
+        and all_verdicts_decision("__nc__", [("a", "PASS"), ("b", "FAIL")]) == "undeclared_nonpass"
+        and all_verdicts_decision("__nc__", [("a", "PASS"), ("b", "PASS_WITH_FINDINGS")]) == "ok"
+        and all_verdicts_decision("co146_pm_eval", [("x", "FAIL")]) == "ok")   # 已声明非 PASS 放行
     checks["t05_stability_oracle"] = (stable("x", "x") and not stable("x", "y") and not stable("", ""))
     # CO-164（t06）：执行器 ORDER 必须与 boundary 规范复现序**有序一致**（文档↔执行器防漂移）
     _bdy = boundary_order_steps()
@@ -1080,8 +1142,8 @@ def main(argv=None) -> int:
                             for k in set(_ball) | set(_aall)
                             if k not in _decl_set and _ball.get(k) != _aall.get(k))
             if cls == "ok":
-                _np = nonpass_decision(step, step_verdict(step))
-                if _np == "undeclared_nonpass":        # CO-185（R-CO185-2）：未声明的非 PASS ⇒ 停机
+                # CO-185（R-CO185-2）+ CO-191（R-CO191-1）：**全部**声明 verdict 一律判决（禁只判首个/借用共享件）
+                if all_verdicts_decision(step) == "undeclared_nonpass":
                     cls = "undeclared_nonpass_verdict"
             # CO-188（R-CO188-1）：越界写（未声明受控件）⇒ 停机（确定性越界写不破收敛、亦不被步本地归因抓到）
             if cls in ("ok", "expected_nonzero") and _stray and stray_decision(step, _stray) != "ok":
@@ -1111,7 +1173,7 @@ def main(argv=None) -> int:
             converged = True
             break
         prev = cur
-    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-190.1",
+    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-191.1",
               "nature": "规范复现序机判执行器（rc 策略 + 真收敛判定）；报告落 .archer_tmp/ 且**不被 boundary 引用**（避免不动点）",
               "order": ORDER, "expected_nonzero": EXPECTED_NONZERO,
               "checks": checks, "iterations": iterations, "abort": abort, "converged": converged,
