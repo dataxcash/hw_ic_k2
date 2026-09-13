@@ -225,8 +225,9 @@ def main() -> int:
     rec = {
         "artifact": "m13_v57_co192_rev19_co187_co191_review", "schema": 1, "revision": "CO-192",
         "nature": "非执行者对抗复评 CO-187..CO-191（另一会话；as-found `git show` 重放 + 内存注入、零落盘）",
-        "as_found": {"k2": AS_FOUND_REV, "runner_as_found_sha16": s16b(af_src.encode()),
-                     "runner_current_sha16": s16p(TOOL)},
+        # CO-193（G-3）：复评件为 **as-found 证据**，只钉被评对象；**不得**内嵌处置态 sha（否则记录 sha
+        # 随后续 CO 漂移，违 CO-152「记录内禁止下游 sha 快照」规则）。处置态现行 sha 一律由 boundary pin 表承载。
+        "as_found": {"k2": AS_FOUND_REV, "runner_as_found_sha16": s16b(af_src.encode())},
         "objects": ["CO-187", "CO-188", "CO-189", "CO-190", "CO-191"],
         "positive_controls": V, "negative_controls": P, "findings": F, "n_findings": len(F),
         "verdict": verdict,

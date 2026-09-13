@@ -86,11 +86,18 @@ DOWNSTREAM_COUNT_KEYS = ("items_total", "open_total", "n_items")
 # 顶层/其它容器下的 `register_sha16` / `open_total` 等同属规则禁止的下游快照。
 _DOWNSTREAM_KEY_RE = re.compile(
     r"^(register|ledger)(_[a-z0-9_]+)?_?(sha16|items_total|open_total|n_items)$")
+# CO-193（G-4）：**显式现行/时点语义**的键名（`*_current_sha16` / `*_sha16_current` / `*_live_sha16` …）
+# 同属下游时点快照（CO-152 规则）；旧判据只认 `*_sha16_after` + register/ledger 面 ⇒ 漏（实测 CO-192 复评件
+# 内嵌 `as_found.runner_current_sha16` 逃逸，记录 sha 随 runner 变更漂移）。上游输入 pin（`inputs.*`/`board_sha16` …）不受影响。
+_DOWNSTREAM_LIVE_KEY_RE = re.compile(
+    r"^(?:.*_)?(current|live|latest|now)_?sha16$|^.*_sha16_(?:current|live|latest|now)$")
 
 
 def _is_downstream_snapshot(path: list, key: str) -> bool:
     k = str(key)
     if k.endswith("sha16_after"):
+        return True
+    if _DOWNSTREAM_LIVE_KEY_RE.fullmatch(k):      # CO-193（G-4）：显式现行态键
         return True
     if _DOWNSTREAM_KEY_RE.fullmatch(k):
         return True
@@ -236,10 +243,19 @@ def main(argv=None) -> int:
     neg_snap3 = scan_snapshots({"synthetic_probe.json": {"register_sha16": "0" * 16}})
     neg_snap3_hit = any(not s3["declared"] for s3 in neg_snap3)
     pos_snap3_ok = scan_snapshots({"synthetic_probe.json": {"register_sha16_note": "说明，非快照"}}) == []
+    # CO-193（G-4）负控/正控：显式现行态键（`*_current_sha16`）须被抓；已声明放行；**上游输入 pin 不得误报**
+    neg_snap4 = scan_snapshots({"synthetic_probe.json": {"as_found": {"runner_current_sha16": "0" * 16}}})
+    neg_snap4_hit = any(not s4["declared"] for s4 in neg_snap4)
+    pos_snap4 = scan_snapshots({k: {"as_found": {"runner_current_sha16": "0" * 16}}
+                                for k in list(SNAPSHOT_DECLARED)[:1]})
+    pos_snap4_ok = bool(pos_snap4) and all(s4["declared"] for s4 in pos_snap4)
+    up_snap4_ok = scan_snapshots({"synthetic_probe.json": {"inputs": {"spec_sha16": "0" * 16},
+                                                           "board_sha16": "0" * 16}}) == []
     teeth_ok = (neg_hit and pos_ok and snap_ok and neg_basis_hit and pos_basis_ok
-                and fake_basis_hit and neg_snap3_hit and pos_snap3_ok)
+                and fake_basis_hit and neg_snap3_hit and pos_snap3_ok
+                and neg_snap4_hit and pos_snap4_ok and up_snap4_ok)
     rec = {
-        "artifact": "m13_v57_co120_provenance_pin_gate", "schema": 1, "revision": "CO-120.5",
+        "artifact": "m13_v57_co120_provenance_pin_gate", "schema": 1, "revision": "CO-120.6",
         "nature": "L2 过程闸：记录内 inter-record provenance pin 一致性（关闭 CO-108/CO-114 F-6 盲区）",
         "pins_total": len(rows), "n_match": sum(1 for r in rows if r["status"] == "match"),
         "n_exempt_historical": sum(1 for r in rows if r["status"] == "exempt_historical"),
@@ -263,6 +279,9 @@ def main(argv=None) -> int:
                   "positive_control_note_key_not_snapshot": pos_snap3_ok,
                   "positive_control_board_sha_basis_accepted": pos_basis_ok,
                   "positive_control_declared_snapshot_passes": pos_snap_ok,
+                  "negative_control_live_state_snapshot_caught": neg_snap4_hit,
+                  "positive_control_declared_live_snapshot_passes": pos_snap4_ok,
+                  "positive_control_upstream_input_pin_not_snapshot": up_snap4_ok,
                   "teeth_ok": teeth_ok},
         "verdict": ("FAIL_STALE_PROVENANCE_PIN" if stale else
                     "FAIL_UNDECLARED_DOWNSTREAM_SNAPSHOT" if snap_undeclared else

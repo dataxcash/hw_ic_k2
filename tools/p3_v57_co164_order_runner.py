@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CO-164/CO-167/CO-169/CO-174/CO-180/CO-181/CO-182/CO-183/CO-187/CO-188/CO-189/CO-190/CO-191/CO-192 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
+"""CO-164/CO-167/CO-169/CO-174/CO-180/CO-181/CO-182/CO-183/CO-187/CO-188/CO-189/CO-190/CO-191/CO-192/CO-193 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
 
 缘起（实测事故，CO-163）：`co146_boundary_append.py` 因 §37 文本里的 f-string 花括号语法错误**每次崩溃（rc=1）**，
 但收敛判定只看 boundary/记录 sha ⇒ sha 恒不变 ⇒ 报「CONVERGED」，边界 §37 实际从未写入、pin 表陈旧（co77/co135/co136 判 FAIL）。
@@ -23,11 +23,12 @@
   ⑧ CO-191（R-CO191-1）：**判定基据完备性** —— ① 步骤**全部**声明 verdict 一律判决（禁只判首个 ⇒ 隐藏非 PASS 可逃逸）；
      ② 每步须有可机判基据（`teeth`/`verdict`/登记簿自洽/**显式下游** `JUDGMENT_DOWNSTREAM`）⇒ 禁「静默步」；静态齿 **t25**。
   ⑨ CO-192（R-CO192-1，**非执行者对抗复评 CO-187..CO-191 的处置**）：① 静态扫描**形态完备性**续加固——牙齿棘轮补 `|=`/嵌套下标/推导/`__setitem__`/Attribute/下标赋别名；md 写补 `Path.open(w)`/`shutil.move`/`os.replace|rename`；boundary 读补 `.open().read()`/`io.open`；② **放行档一律判全 verdict**（`all_verdicts_gate`：`ok` **与** `expected_nonzero` 均判 ⇒ 白名单步副 verdict 不得逃逸）。t18/t20/t21/t25 合成控同步扩展。
+  ⑩ CO-193（R-CO193-1/2，**声明↔实现绑定的可执行性**）：① `JUDGMENT_DOWNSTREAM` 下游声明须**可执行** —— 每条给被judged工件 basename，ref 须在序内**晚于**声明步（存在性）且 ref 步工具**确实读取**该工件，否则 fail-closed；② `EXPECTED_NONZERO` 证据须**本步绑定** —— `record` 须 ∈ `STEP_ARTIFACTS[step]`、`teeth_path` 须在记录内**可解析**。静态齿 **t26**。
 CLI:
   python3 tools/p3_v57_co164_order_runner.py [--check] [--max-iter 5]
 """
 from __future__ import annotations
-import argparse, ast, hashlib, json, re, subprocess, sys, time
+import argparse, ast, fnmatch, hashlib, json, re, subprocess, sys, time
 from pathlib import Path
 
 K2 = Path(__file__).resolve().parents[1]
@@ -52,6 +53,8 @@ ORDER = ["co146_impedance_table", "co146_pm_eval", "co146_ledger_add", "co153_k9
 # 刷新步在其前、co77/co120 在其后改写被引记录 ⇒ co135 见 pin 瞬时陈旧 ⇒ 首轮停机）。
 BOUNDARY_SCAN_GUARDED = ("co77_closure_declaration_sweep", "co135_review_hygiene")
 BOUNDARY_REFRESH_STEP = "co146_boundary_append"
+# CO-193（R-CO193-1）：boundary 工件 basename（`JUDGMENT_DOWNSTREAM.artifact` 与 `BOUNDARY` 共用，防两处漂移）。
+BOUNDARY_BASENAME = "m13_v57_w3_joint_assignment_boundary_v1_82.md"
 
 # CO-187（F-3）：**读取 boundary 但非 citation 扫描步**的显式声明（禁「隐式读取者」漏网）。
 # t21 机判：工具源内读取 boundary 的步集 == BOUNDARY_SCAN_GUARDED ∪ BOUNDARY_READ_DECLARED（互斥）。
@@ -78,6 +81,7 @@ DECLARED_NONPASS_OK = {
 # 禁「无 teeth、无 verdict、无登记簿、无下游声明」的静默步（CO-79「空真」在**执行器层面**的收口）。
 JUDGMENT_DOWNSTREAM = {
     "co146_boundary_append": {"ref": ["co77_closure_declaration_sweep", "co135_review_hygiene"],
+                              "artifact": BOUNDARY_BASENAME,   # CO-193（R-CO193-1）：被judged工件（须被 ref 工具读取）
                               "why": "本步只做 pin 再对齐 + §节登记；boundary 引用一致性由 co77/co135 的 citation 扫描判"},
 }
 
@@ -192,7 +196,7 @@ SHARED_ARTIFACT_RESIDUAL = {
 EXPECTED_TEETH = {
     "MANIFEST.json": ['t01_idempotent', 't02_8_copper_gerbers', 't03_drill_present', 't04_all_hashed', 't05_declared_rulings_packaged', 't06_order_notes_refs_resolve_in_package', 't07_packaged_rulings_match_sources', 't07b_parity_detector_sensitivity', 't08_declared_dirs_present', 't09_order_notes_binding_params', 't09b_binding_param_detector_sensitivity', 't10_declared_binding_source_pinned', 't10b_binding_source_pin_discriminates', 't11_stackup_svg_declared_binding', 't11b_stackup_svg_binding_sensitivity', 't11c_stackup_svg_copper_geometry_binding', 't11d_stackup_svg_copper_geometry_sensitivity', 't12_order_notes_record_figures', 't12b_record_figure_binding_sensitivity', 't12c_impedance_spread_binding_sensitivity', 't12d_via_census_binding_sensitivity', 't12e_mask_facts_binding_sensitivity', 't12f_thermal_figures_binding_sensitivity', 't12g_jlc_capability_binding_sensitivity', 't12h_drc_rules_edge_binding_sensitivity', 't15_impedance_copy_parity', 't15b_impedance_copy_parity_sensitivity', 't16_layer_sequence_derivation', 't16b_layer_sequence_sensitivity'],
     "m13_v57_co106_reference_plane_gate.json": ['baseline_pin_binding', 'carrier_exemption_declared_only', 'classifier_detector', 'continuity_detector', 'fail_open_closed', 'frame_inset_detector', 'teeth_are_bool_only', 'teeth_ok', 'verdict_positive_control'],
-    "m13_v57_co120_provenance_pin_gate.json": ['negative_control_freetext_board_basis_rejected', 'negative_control_register_snapshot_caught', 'negative_control_top_level_register_snapshot_caught', 'negative_control_undeclared_snapshot_caught', 'negative_control_undeclared_stale_caught', 'negative_control_unregistered_board_sha_rejected', 'positive_control_board_sha_basis_accepted', 'positive_control_declared_register_snapshot_passes', 'positive_control_declared_snapshot_passes', 'positive_control_matching_pin_passes', 'positive_control_note_key_not_snapshot', 'teeth_ok'],
+    "m13_v57_co120_provenance_pin_gate.json": ['negative_control_freetext_board_basis_rejected', 'negative_control_live_state_snapshot_caught', 'negative_control_register_snapshot_caught', 'negative_control_top_level_register_snapshot_caught', 'negative_control_undeclared_snapshot_caught', 'negative_control_undeclared_stale_caught', 'negative_control_unregistered_board_sha_rejected', 'positive_control_board_sha_basis_accepted', 'positive_control_declared_live_snapshot_passes', 'positive_control_declared_register_snapshot_passes', 'positive_control_declared_snapshot_passes', 'positive_control_matching_pin_passes', 'positive_control_note_key_not_snapshot', 'positive_control_upstream_input_pin_not_snapshot', 'teeth_ok'],
     "m13_v57_co124_input_selfcheck_gate.json": ['T10_thermal_option_domain_teeth', 'T10b_thermal_domain_no_false_positive', 'T11_drop_domain_teeth', 'T11b_drop_domain_no_false_positive', 'T12_declared_unpinned_teeth', 'T12b_declared_no_false_positive', 'T13_conservative_unproved_teeth', 'T13b_conservative_no_false_positive', 'T14_unknown_kind_teeth', 'T14b_empty_domain_cap_teeth', 'T14c_kind_coverage_no_false_positive', 'T15_declared_binding_teeth', 'T15b_declared_binding_no_false_positive', 'T15c_declared_empty_computed_teeth', 'T16_faithful_provenance_teeth', 'T16b_faithful_provenance_no_false_positive', 'T16c_authoritative_dv_missing_teeth', 'T17_process_floor_evidence_teeth', 'T17b_process_floor_no_false_positive', 'T18_k9_finder_id_coverage', 'T18b_k9_finder_id_no_undeclared', 'T18c_k9_finder_battery_nonempty', 'T18d_k9_finder_ids_source_complete', 'T18e_k9_finder_id_extractor_sensitivity', 'T19_dv_inventory_teeth', 'T19b_dv_inventory_no_false_positive', 'T1_netclass_drift', 'T20_identity_unhandled_form_teeth', 'T20b_identity_unhandled_no_false_positive', 'T21_register_status_vocabulary', 'T21b_register_counts_rederived', 'T21c_register_consistency_no_false_positive', 'T2_unregistered_finding_detected', 'T3_threshold_unregistered', 'T4_doc_anchor_missing', 'T5_derived_without_principle', 'T6_unreachable_derived', 'T7_requirement_carries_value', 'T8_identity_drift', 'T9_exemption_unpinned'],
     "m13_v57_co136_gate_hygiene.json": ['H4_negative_control_write_only_caught', 'H4_positive_control_upsert_ok'],
     "m13_v57_co146_impedance_table.json": ['t01_reproduce_spec_first_order', 't02_overwide_must_fail_tol'],
@@ -459,7 +463,7 @@ def stable(prev: str, cur: str) -> bool:
     return bool(prev) and prev == cur
 
 
-BOUNDARY = STEP2 / "m13_v57_w3_joint_assignment_boundary_v1_82.md"
+BOUNDARY = STEP2 / BOUNDARY_BASENAME
 
 
 def boundary_order_steps() -> list:
@@ -692,6 +696,83 @@ def judgment_basis(step: str) -> str:
     if step in JUDGMENT_DOWNSTREAM:
         return "downstream"
     return "none"
+
+
+def _source_strings(src: str) -> list:
+    try:
+        tree = ast.parse(src)
+    except SyntaxError:
+        return []
+    return [n.value for n in ast.walk(tree)
+            if isinstance(n, ast.Constant) and isinstance(n.value, str)]
+
+
+def artifact_readers(basename: str) -> list:
+    """CO-193（R-CO193-1）：源内**引用**该工件 basename 的规范序步（**语法代理**，非运行时读确认）。
+
+    判据 = 源内出现该 basename 字面，**或**出现可 `fnmatch` 命中的 glob 字符串（如 co77 经
+    `m13_v57_w3_joint_assignment_boundary_v1_*.md` 定位最新版 ⇒ 须计入）。writer 亦会命中 ⇒ 作**上界**用。
+    """
+    out = []
+    for st in sorted(set(ORDER)):
+        p = tool_path(st)
+        if p is None:
+            continue
+        src = p.read_text(encoding="utf-8")
+        if basename in src:
+            out.append(st)
+            continue
+        for lit in _source_strings(src):
+            if ("*" in lit or "?" in lit) and "/" not in lit and fnmatch.fnmatch(basename, lit):
+                out.append(st)
+                break
+    return out
+
+
+def downstream_refs_after(order: list, step: str, refs) -> bool:
+    """CO-193（R-CO193-1）：**方向**判据 —— 存在 step 的某一出现位置，使其后**全部** refs 在序内。
+
+    步可在序内多次出现（如 `co146_boundary_append`）：只要**有一次**其后覆盖全部 refs 即可（存在性）。
+    """
+    pos = [i for i, x in enumerate(order) if x == step]
+    return any(all(r in order[i + 1:] for r in refs) for i in pos)
+
+
+def judgment_downstream_binding(step: str, decl, order=None, readers=None) -> str:
+    """CO-193（R-CO193-1）纯判据：下游声明**可执行性**（`order`/`readers` 可注入 ⇒ 合成控）。
+
+    返回 `ok` / `declaration_incomplete`（缺 ref/artifact/why 或 artifact 非 basename）/
+    `refs_not_downstream`（无任一出现位置在其后覆盖全部 refs）/
+    `refs_not_reading_artifact`（某 ref 步工具未引用该工件 ⇒ 声明不可执行 = 静默步漂移）。
+    """
+    _order = list(ORDER) if order is None else list(order)
+    refs = decl.get("ref") if isinstance(decl, dict) else None
+    art = decl.get("artifact") if isinstance(decl, dict) else None
+    if not (isinstance(refs, list) and bool(refs) and isinstance(art, str) and art.strip()
+            and "/" not in art and str(decl.get("why") or "").strip()):
+        return "declaration_incomplete"
+    if not downstream_refs_after(_order, step, refs):
+        return "refs_not_downstream"
+    rd = set(artifact_readers(art) if readers is None else readers)
+    if not set(refs) <= rd:
+        return "refs_not_reading_artifact"
+    return "ok"
+
+
+def expected_nonzero_binding(step: str, decl) -> str:
+    """CO-193（R-CO193-2）纯判据：白名单声明↔**本步**声明产物绑定。
+
+    返回 `ok` / `record_not_step_artifact`（`record` 非该步 `STEP_ARTIFACTS` 之一 ⇒ 步本地归因/新鲜度测错件）/
+    `teeth_path_unresolved`（`teeth_path` 缺失或在其记录内**取不到值** ⇒ 自检牙齿判据静默降级）。
+    """
+    arts = {Path(r).name for r in STEP_ARTIFACTS.get(step, [])}
+    rec = (decl or {}).get("record")
+    if rec is None or Path(rec).name not in arts:
+        return "record_not_step_artifact"
+    tp = (decl or {}).get("teeth_path")
+    if not tp or record_json_path(rec, tp) is None:
+        return "teeth_path_unresolved"
+    return "ok"
 
 
 def nonpass_decision(step: str, verdict) -> str:
@@ -1177,6 +1258,34 @@ def main(argv=None) -> int:
         and all_verdicts_gate("ok", "co146_pm_eval", [("x", "FAIL")]) == ("ok", "ok")
         and all_verdicts_gate("step_timeout", "co146_jlc_dfm_gate", [("a", "ERROR")])
         == ("step_timeout", "ok"))
+    # CO-193（R-CO193-1/2）：下游声明**可执行** + 白名单证据**本步绑定** —— 静态齿 t26
+    _dn_bind = {k: judgment_downstream_binding(k, v) for k, v in JUDGMENT_DOWNSTREAM.items()}
+    _exp_bind = {k: expected_nonzero_binding(k, v) for k, v in EXPECTED_NONZERO.items()}
+    checks["t26_judgment_binding_executable"] = (
+        all(v == "ok" for v in _dn_bind.values()) and all(v == "ok" for v in _exp_bind.values())
+        # 合成正控：方向对 + ref 读工件 ⇒ ok
+        and judgment_downstream_binding("S", {"ref": ["A"], "artifact": "x.md", "why": "w"},
+                                        order=["S", "A"], readers=["A"]) == "ok"
+        # 合成负控：方向错（ref 在上游）
+        and judgment_downstream_binding("S", {"ref": ["A"], "artifact": "x.md", "why": "w"},
+                                        order=["A", "S"], readers=["A"]) == "refs_not_downstream"
+        # 合成负控：不可执行（ref 工具不引用工件）
+        and judgment_downstream_binding("S", {"ref": ["A"], "artifact": "x.md", "why": "w"},
+                                        order=["S", "A"], readers=["B"]) == "refs_not_reading_artifact"
+        # 合成负控：声明不完整（缺 artifact）
+        and judgment_downstream_binding("S", {"ref": ["A"], "why": "w"},
+                                        order=["S", "A"], readers=["A"]) == "declaration_incomplete"
+        # 多次出现存在性：S 在第 0/2 位，ref 仅在末次之后 ⇒ ok
+        and judgment_downstream_binding("S", {"ref": ["A"], "artifact": "x.md", "why": "w"},
+                                        order=["S", "B", "S", "A"], readers=["A"]) == "ok"
+        # 白名单证据绑定：正控 + 负控（record 非本步声明 / teeth_path 不可解析）
+        and expected_nonzero_binding("co146_jlc_dfm_gate", EXPECTED_NONZERO["co146_jlc_dfm_gate"]) == "ok"
+        and expected_nonzero_binding("co146_jlc_dfm_gate",
+                                     {"record": str(STEP2 / "m13_v57_co146_impedance_table.json"),
+                                      "teeth_path": ["teeth"]}) == "record_not_step_artifact"
+        and expected_nonzero_binding("co146_jlc_dfm_gate",
+                                     {**EXPECTED_NONZERO["co146_jlc_dfm_gate"],
+                                      "teeth_path": ["nope"]}) == "teeth_path_unresolved")
     checks["t05_stability_oracle"] = (stable("x", "x") and not stable("x", "y") and not stable("", ""))
     # CO-164（t06）：执行器 ORDER 必须与 boundary 规范复现序**有序一致**（文档↔执行器防漂移）
     _bdy = boundary_order_steps()
@@ -1265,7 +1374,7 @@ def main(argv=None) -> int:
             converged = True
             break
         prev = cur
-    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-192.1",
+    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-193.1",
               "nature": "规范复现序机判执行器（rc 策略 + 真收敛判定）；报告落 .archer_tmp/ 且**不被 boundary 引用**（避免不动点）",
               "order": ORDER, "expected_nonzero": EXPECTED_NONZERO,
               "checks": checks, "iterations": iterations, "abort": abort, "converged": converged,

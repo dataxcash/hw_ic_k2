@@ -2088,8 +2088,69 @@ def main() -> int:
         txt = re.sub(re.escape(MARK65) + r"[\s\S]*?(?=\n## |\Z)", body65, txt, count=1)
     else:
         txt = txt.rstrip("\n") + "\n\n" + body65
+    # ── §66 CO-193（L2 自裁 · 声明↔实现绑定的可执行性） ────────────────────────
+    MARK66 = "## 66. CO-193"
+    _rc66 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    _ord193 = _ord190          # 步集/序列不变（50 次）
+    sec66 = [MARK66 + "（**L2 自裁 · 声明↔实现绑定的可执行性**）", "",
+             "- **G-1（low）·下游声明只查形状、无方向/可执行机判**：`JUDGMENT_DOWNSTREAM` 旧判据仅 `why` 非空 + `ref` 非空 list + "
+             "`ref ⊆ ORDER`。实测负控：ref 改为**上游**步 `co146_impedance_table`（位 0，声明步位 37/40/49）⇒ 旧 t25 仍 True；ref 改为"
+             "**不引用** boundary 的 `co136_gate_hygiene` ⇒ 旧 t25 仍 True。⇒ 任一步可被声明「由下游判」而实际**无步判它**，静默逃逸 t25。",
+             "- **G-2（low）·白名单证据未本步绑定**：`record` 只须 ∈ `watch_paths()`（t09）而**不须** ∈ `STEP_ARTIFACTS[step]` ⇒ "
+             "证据记录可指向**他步**产物（实测旧 t09 仍 True，步本地归因/新鲜度测错件）；`teeth_path` 只须**键存在**（t14）而不须在记录内"
+             "**可解析** ⇒ 坏 key 时 `_tcand` 过滤 None 后**静默回落**到 `step_declared_teeth`（自检判据降级）。",
+             "- **G-3（low）·复评件内嵌处置态 sha ⇒ 记录漂移（已闭缺陷类复发）**：CO-192 复评件 `as_found` 内嵌 `runner_current_sha16`，"
+             "实测改 runner 后同命令重跑得**另一记录 sha**（`db887764c8693176` → `2e43deda4f73fd76`）；该 sha 已入 §65 pin 表 ⇒ 复跑即失配。"
+             "违 CO-152 已闭规则「新记录不得再嵌下游 sha 快照」（先例 `records_snapshot_downstream_sha_causes_pin_drift`）。",
+             "- **G-4（low）·守卫命名面盲区**：co120 `_is_downstream_snapshot()` 只认 `*_sha16_after` + `register/ledger` 面 ⇒ 显式现行态键"
+             "（`*_current_sha16` …）漏判，使 G-3 逃逸（corpus 全扫仅此 1 处）。",
+             "- **处置**：① runner 升 **CO-193.1** —— `JUDGMENT_DOWNSTREAM` 每条增 `artifact`（被judged工件 basename）；新增 "
+             "`downstream_refs_after()`（多次出现**存在性**方向判据）+ `judgment_downstream_binding()`（缺件/方向错/ref 不引用工件 ⇒ fail-closed）；"
+             "`artifact_readers()` 为**语法代理**（basename 字面 **或** 可 `fnmatch` 命中的 glob）；新增 `expected_nonzero_binding()`"
+             "（`record` ∈ `STEP_ARTIFACTS[step]`；`teeth_path` 经 `record_json_path()` 可解析）；静态齿 **t26**（正控 + 方向/可执行/不完整/"
+             "多出现/坏证据 负控）。② 复评件回归 **as-found 证据**语义（去 `runner_current_sha16`；处置态 sha 由 boundary pin 表承载），"
+             "改后复评命令**幂等**（`b58a374c337d75e8`）。③ co120 升 **CO-120.6** —— 新增 `_DOWNSTREAM_LIVE_KEY_RE` + 负控/正控/对偶控"
+             "（上游输入 pin 不得误报）；**残余如实登记**：键名启发式，改名仍可逃逸（触发 = 记录随复现序漂移事件）。",
+             f"- **登记簿**：+4（`co193:G-1..G-4`，全 CLOSED；**{_rc66['total']} 项 / OPEN {_rc66['OPEN']}**）。",
+             "- **实测（本件证据）**：修后真声明 `judgment_downstream_binding`=**ok**、`expected_nonzero_binding`=**ok**、co120.6 verdict=**PASS**"
+             "（`n_snapshot_undeclared`=0）；`--check` **t01..t26 全 True（28 项）**。**实现期自捕获**：`artifact_readers` 初版按 basename 子串匹配"
+             " **漏 co77**（其经 `…_v1_*.md` glob 定位最新版）⇒ 真声明被误判 `refs_not_reading_artifact`；改 glob-aware 后计入。",
+             "- **注**：本件含**对既有复评件（CO-192 产物）的稳定性修正**（G-3），非对 CO-192 的复评 ⇒ CO-192 复评债**不因此清偿**。",
+             "",
+             "> **R-CO193-1**：`JUDGMENT_DOWNSTREAM` 下游声明须**可执行** —— 每条给被judged工件 basename，ref 须在序内**晚于**声明步"
+             "（多次出现取**存在性**）且 ref 步工具**确实引用**该工件（字面或可 `fnmatch` 的 glob）；否则 fail-closed；t26 机判。",
+             "> **R-CO193-2**：`EXPECTED_NONZERO` 证据须**本步绑定** —— `record` ∈ `STEP_ARTIFACTS[step]` 且 `teeth_path` 在记录内**可解析**；"
+             "否则 fail-closed；t26 机判。",
+             "> **R-CO193-3**：证据/复评件只钉**被评对象（as-found）**；处置态/跨件**现行** sha 一律由 boundary pin 表承载，**禁内嵌**（CO-152 规则）；"
+             "复评件须**幂等**（同命令重跑逐字节相同）。",
+             "> **R-CO193-4**：下游快照键的**命名面**须由 co120 判据 + 合成控覆盖（含**上游输入 pin 不得误报**对偶）；新命名形态须先入判据；"
+             "键名启发式为**如实登记之残余**。",
+             "> **R-CO193-5**（复现序，取代 R-CO192-2；**步集/序列不变，序内出现 50 次**）：规范复现序 = `" + _ord193 + "`，"
+             "**循环至 sha 稳定**（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1 "
+             "+ R-CO175-1 + R-CO176-1/2 + R-CO177-1 + R-CO178-1 + R-CO179-1/2 + R-CO180-1/2 + R-CO181-1/2 + R-CO182-1 "
+             "+ R-CO183-1 + R-CO184-1 + R-CO185-1/2 + R-CO186-1 + R-CO187-1/2/3 + R-CO188-1 + R-CO189-1 + R-CO190-1 "
+             "+ R-CO191-1 + R-CO192-1 + R-CO193-1/2/3/4）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows66 = [("工具 `p3_v57_co164_order_runner.py`（CO-193.1 / 下游声明可执行 + 白名单证据本步绑定 + t26）",
+                K2 / "tools/p3_v57_co164_order_runner.py"),
+               ("工具 `p3_v57_co120_provenance_pin_gate.py` + 记录（CO-120.6 / 现行态键判据 + 对偶控）",
+                K2 / "tools/p3_v57_co120_provenance_pin_gate.py"),
+               ("复评件 `m13_v57_co192_rev19_co187_co191_review.json`（去处置态 sha ⇒ as-found 幂等）",
+                STEP2 / "m13_v57_co192_rev19_co187_co191_review.json"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc66['total']} 项 / OPEN {_rc66['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows66:
+        if pth.exists():
+            sec66.append(f"| {label} | `{s16(pth)}` |")
+    sec66.append("")
+    body66 = "\n".join(sec66)
+    if MARK66 in txt:
+        txt = re.sub(re.escape(MARK66) + r"[\s\S]*?(?=\n## |\Z)", body66, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body66
+    txt = txt.replace("W3 Boundary **v2.37**", "W3 Boundary **v2.38**")
     txt = txt.replace("W3 Boundary **v2.36**", "W3 Boundary **v2.37**")
-    txt = txt.replace("W3 Boundary **v2.35**", "W3 Boundary **v2.36**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
     return 0
