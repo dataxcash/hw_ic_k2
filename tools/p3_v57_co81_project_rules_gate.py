@@ -123,7 +123,9 @@ def main() -> int:
     # 负控（有齿）：喂坏输入必须被抓到
     neg = guard({**expect, "min_track_width": 0.2}, expect)
     pos = guard(dict(expect), expect)
-    teeth = (neg == {"min_track_width": (0.2, expect["min_track_width"])}) and (pos == {})
+    # CO-181（F-4 处置）：自检归**真齿 dict**（原 `teeth_ok` 单标量 ⇒ 不参与 R-CO180-1 判决）
+    tooth = {"min_track_width_negative_control": neg == {"min_track_width": (0.2, expect["min_track_width"])},
+             "positive_control_clean": pos == {}}
     # 历史对照（F-80-1 实测原值，见 CO-80 记录）：闸必须抓到该状态
     f80_1 = {"min_track_width": 0.2, "min_via_diameter": 0.5, "min_via_annular_width": 0.1,
              "min_through_hole_diameter": 0.3, "min_copper_edge_clearance": 0.5,
@@ -136,13 +138,14 @@ def main() -> int:
                   and nc_hist["netclass_assignments"]["n_differing"] == len(
                       intent_ns.get("netclass_assignments") or {})
                   and any(k.startswith("class:") for k in nc_hist))
-    teeth = teeth and nc_hist_ok
+    tooth["hist_netclass_detected"] = nc_hist_ok
     # CO-83 负控：篡改 SPEC 侧期望值必须被抓到
     spec_neg = netclass_vs_spec(intent_ns, {**spec_nc,
                                            "PCIe85": {**spec_nc["PCIe85"], "clearance": 0.2}})
-    teeth = teeth and (spec_neg == {"PCIe85.clearance": [0.175, 0.2]})
-    teeth = teeth and hist_ok
-    rec = {"artifact": "m13_v57_co81_project_rules_gate", "schema": 1, "revision": "CO-81.2",
+    tooth["spec_drift_detected"] = spec_neg == {"PCIe85.clearance": [0.175, 0.2]}
+    tooth["hist_rules_detected"] = hist_ok
+    teeth = all(tooth.values())
+    rec = {"artifact": "m13_v57_co81_project_rules_gate", "schema": 1, "revision": "CO-81.3",
            "nature": "L2 可审计性：受控工程文件设计规则 = 红线规则源 的回归闸",
            "authority_source": {"file": str(RULES.relative_to(K2.parent)), "sha16": s16(RULES),
                                 "section": "manufacturing + hole_clearance:min"},
@@ -154,7 +157,7 @@ def main() -> int:
            "historical_control_F82_1_netclass": {
                "n_class_keys_flagged": sum(1 for k in nc_hist if k.startswith("class:")),
                "assignments_n_differing": nc_hist.get("netclass_assignments", {}).get("n_differing")},
-           "teeth_ok": teeth,
+           "teeth": tooth, "teeth_ok": teeth,
            "verdict": "PASS" if (not bad and teeth) else "FAIL",
            "rationale": "kicad-cli 对 <board>.kicad_pcb 自动选取同名 .kicad_pro；规则不符则自然核查命令大面积误报（F-80-1）；"
                         "网类/指派缺失则 DRC 根本不施加 netclass 语义（F-82-1）。CO-81 原只覆盖 rules/severities，CO-82 补网类后覆盖完整。",

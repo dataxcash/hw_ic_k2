@@ -134,11 +134,18 @@
  "positive_control": {},
  "rationale": "kicad-cli 对 <board>.kicad_pcb 自动选取同名 .kicad_pro；规则不符则自然核查命令大面积误报（F-80-1）；网类/指派缺失则 DRC 根本不施加 netclass 语义（F-82-1）。CO-81 原只覆盖 rules/severities，CO-82 补网类后覆盖完整。",
  "redline": "只读；不改任何工件；阈值取自红线规则源，不放宽。",
- "revision": "CO-81.2",
+ "revision": "CO-81.3",
  "schema": 1,
  "severity_reference": {
   "file": "tools/k2_jlc_template.kicad_pro",
   "sha16": "206dd0f26e245658"
+ },
+ "teeth": {
+  "hist_netclass_detected": true,
+  "hist_rules_detected": true,
+  "min_track_width_negative_control": true,
+  "positive_control_clean": true,
+  "spec_drift_detected": true
  },
  "teeth_ok": true,
  "verdict": "PASS",

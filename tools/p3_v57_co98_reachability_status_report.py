@@ -107,7 +107,14 @@ def main(argv=None) -> int:
     bbox_hit = (min(p[0] for p in lpoly) <= probe[0] <= max(p[0] for p in lpoly) and
                 min(p[1] for p in lpoly) <= probe[1] <= max(p[1] for p in lpoly))
     tooth_pip = bbox_hit and not pip(lpoly, *probe)
-    tooth_integrity = (not integrity_ok) or (len(rows) != n_nongnd + 1)  # 注入 +1 必判不完整
+    # CO-181（F-2 处置）：原式 `(not A) or (not B)`（A=len==n、B=len==n+1）**恒真** ⇒ 改为
+    # **判别式**：真数据须判完整 **且** 注入 +1 行（同一被判对象近失）须判不完整（判据函数化，可翻转）。
+    def _integrity(rws) -> bool:
+        c = {k: sum(1 for r in rws if r["reach"] == k)
+             for k in ("covered_explicit", "covered_bridge_target", "l3_obligation", "needs_region_ruling")}
+        return len(rws) == n_nongnd and sum(c.values()) == n_nongnd
+
+    tooth_integrity = _integrity(rows) and not _integrity(rows + [dict(rows[0])])
     teeth_ok = tooth_pip and tooth_integrity
 
     verdict = ("BASELINE_MISMATCH" if mismatch else
@@ -115,7 +122,7 @@ def main(argv=None) -> int:
                 ("OPEN_GEOMETRY_PENDING_L3_AND_RULING_PENDING_L1"
                  if (three_state["declared_pending_l3"] or three_state["ruling_pending_l1"]) else "PASS")))
     rec = {
-        "artifact": "m13_v57_co98_reachability_status_report", "schema": 1, "revision": "CO-98.2",
+        "artifact": "m13_v57_co98_reachability_status_report", "schema": 1, "revision": "CO-98.3",
         "nature": "L2 PDN：In4 平面可达性义务状态报告（机判化 CO-96 F2/F3/F4；只读 co95 权威记录）",
         "inputs": {**ident}, "baseline_expectations": BASE, "baseline_mismatch": mismatch,
         "co95_summary": co95["summary"], "integrity": {"non_gnd_entries": n_nongnd, "classified": len(rows), "ok": integrity_ok},

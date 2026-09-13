@@ -10,7 +10,9 @@
   压降 ΔV = I·(R_plane + R_via/√N_near)（N_near = 该网过孔数）；判据 = 监理定值 3%
 热：ΔT_board = P_total/(h·A_both_sides)（h=自然对流声明值）；Tj = Ta + ΔT_board + P_dev·θJA
 产出：m13_v57_co146_pm_eval.json / .md
-牙齿：① 电流 ×2 ⇒ 压降 ×2（线性）；② 铜厚 1oz→0.5oz 加厚/变薄方向必须使压降单调变化。
+牙齿（CO-181 去恒真：判据函数化 + 近失必翻转，R-CO179-1）：
+  ① 电流 ×2 ⇒ 压降 ×2（经模型函数）；② 铜厚减半 ⇒ 方阻/平面电阻单调升（+ 反向近失必翻转）；
+  ③ 平面几何取自交付板（+ 无此网负控为空）。
 """
 from __future__ import annotations
 import hashlib, json, sys
@@ -156,17 +158,32 @@ def main() -> int:
     dT_board = P_tot / (h * 2.0 * A_board)
     T_board = t_amb + dT_board
     xcheck_Tj = round(T_board + worst_W * (psi_jb or 5.9), 1)
-    # 牙齿
+    # 牙齿（CO-181：去恒真 —— 判据函数化，正控 + **近失负控必翻转**）
     r = rails["P3V3"]
-    lin = abs((2 * r["I_a"] * r["R_total_ohm"]) / (r["I_a"] * r["R_total_ohm"]) - 2.0) < 1e-9
+    rho_t = r["rho_ohm_m_at_T"]
+    _rp_lw = r["plane"]["L_m"] / r["plane"]["W_eq_m"]
+
+    def _rs_of(oz: float) -> float:
+        """方阻 Rs = ρ/t（t = oz·35µm）—— 被判对象函数化（真件与近失共用）。"""
+        return rho_t / (oz * 0.035 / 1000.0)
+
+    def _r_plane_of(oz: float) -> float:
+        return _rs_of(oz) * _rp_lw
+
+    def _drop_of(i_a: float) -> float:
+        return i_a * r["R_total_ohm"]
+
+    _lin = lambda f: abs(f(2.0) - 2.0 * f(1.0)) < 1e-12
+    _mono = lambda g: g(0.5) > g(1.0)
     geom = plane_geometry("P3V3")
-    teeth = {"t01_linear_in_I": lin,
-             "t02_copper_thickness_monotone": True,
-             "t03_plane_geometry_from_board": bool(geom),
+    geom_negative = plane_geometry("__CO181_NO_SUCH_NET__")
+    teeth = {"t01_current_doubling_linear": _lin(_drop_of) and not _lin(lambda i: i ** 1.5),
+             "t02_copper_thickness_monotone": _mono(_r_plane_of) and not _mono(lambda oz: -_r_plane_of(oz)),
+             "t03_plane_geometry_from_board": bool(geom) and geom[0]["area_m2"] > 0 and geom_negative == [],
              "t04_datasheet_input_flips_verdict": bool(t_amb + 1.5 * th_ja <= tj_limit and hot > tj_limit),
              "t05_psi_route_agrees_fail": xcheck_Tj > tj_limit}
     fails = [n for n, r_ in rails.items() if r_["verdict"] != "PASS"]
-    rec = {"artifact": "m13_v57_co146_pm_eval", "schema": 1, "revision": "CO148-PM.2",
+    rec = {"artifact": "m13_v57_co146_pm_eval", "schema": 1, "revision": "CO148-PM.3",
            "nature": "L2 一阶确定性评估：PDN 压降 + 热（监理指令 #10 动作 2；CO-148：U6 用数据手册值）",
            "board_sha16": hashlib.sha256(BOARD.read_bytes()).hexdigest()[:16],
            "declared_inputs": {"supervisor_values_指令10": SUP, "engineering_declared": DECL,
@@ -222,8 +239,10 @@ def main() -> int:
                   f"{v['required_theta_ja_C_per_W']} |")
     md += ["", f"- 热点 Tj = **{hot}°C** vs 手册上限 {tj_limit}°C ⇒ **{rec['thermal']['verdict']}**"
                f"（θJA 路线 {hot}°C / ψJB+h 路线 {xcheck_Tj}°C 两路一致）",
-           "", "## 牙齿", f"- T1 压降对电流线性：{teeth['t01_linear_in_I']}",
-           f"- T3 平面几何取自交付板：{teeth['t03_plane_geometry_from_board']}",
+           "", "## 牙齿（CO-181：去恒真 · 判据函数化 + 近失必翻转）",
+           f"- T1 电流 ×2 ⇒ 压降 ×2（非线性近失必翻转）：{teeth['t01_current_doubling_linear']}",
+           f"- T2 铜厚减半 ⇒ 平面电阻单调升（反向近失必翻转）：{teeth['t02_copper_thickness_monotone']}",
+           f"- T3 平面几何取自交付板（无此网负控为空）：{teeth['t03_plane_geometry_from_board']}",
            f"- T4 手册输入翻转结论（旧声明 1.5W ⇒ PASS，手册最坏 ⇒ FAIL）：{teeth['t04_datasheet_input_flips_verdict']}",
            f"- T5 ψJB 交叉路线同为 FAIL：{teeth['t05_psi_route_agrees_fail']}", ""]
     (STEP2 / "m13_v57_co146_pm_eval.md").write_text("\n".join(md) + "\n")

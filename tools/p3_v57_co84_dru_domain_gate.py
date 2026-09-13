@@ -105,8 +105,13 @@ def main() -> int:
         "no_refclk_exclusion": gate({**dru, "refclk_exclusion": None}, fix, board, spec_clr),
         "rect_drift": gate(dru, copy.deepcopy({**fix, "domains": [{**fix["domains"][0], "rect_mm": [0.0, 1.0, 2.0, 3.0]}] + fix["domains"][1:]}), board, spec_clr),
     }
-    teeth = all(len(v) > 0 for v in negs.values())
-    rec = {"artifact": "m13_v57_co84_dru_domain_gate", "schema": 1, "revision": "CO-84.2",
+    # CO-181（F-4 处置）：自检归**真齿 dict**（原 `teeth_ok` 单标量 ⇒ 不参与 R-CO180-1 判决）
+    tooth = {"extra_area_detected": len(negs["extra_area"]) > 0,
+             "clearance_off_detected": len(negs["clearance_off"]) > 0,
+             "no_refclk_exclusion_detected": len(negs["no_refclk_exclusion"]) > 0,
+             "rect_drift_detected": len(negs["rect_drift"]) > 0}
+    teeth = all(tooth.values())
+    rec = {"artifact": "m13_v57_co84_dru_domain_gate", "schema": 1, "revision": "CO-84.3",
            "nature": "L2 可审计性：DRC 放宽域一致性（dru ↔ 域工件 ↔ 板 rule area ↔ SPEC）",
            "inputs": {"dru": {"file": str(DRU.relative_to(K2)), "sha256": s256(DRU)},
                       "fixture": {"file": str(FIXTURE.relative_to(K2)), "sha256": s256(FIXTURE)},
@@ -115,7 +120,7 @@ def main() -> int:
            "parsed": {"dru": dru, "spec_clearance_mm": spec_clr, "board_areas": board,
                       "fixture_domains": sorted(d["id"] for d in fix["domains"])},
            "mismatches": bad, "negative_controls": {k: len(v) for k, v in negs.items()},
-           "teeth_ok": teeth, "verdict": "PASS" if (not bad and teeth) else "FAIL",
+           "teeth": tooth, "teeth_ok": teeth, "verdict": "PASS" if (not bad and teeth) else "FAIL",
            "rationale": "dru 放宽净距；作用域过宽会掩盖真实违规，过窄则对授权区误报。",
            "redline": "只读；不改任何工件；净距值取自红线 SPEC，不放宽。"}
     OUT.write_text(json.dumps(rec, ensure_ascii=False, indent=1, sort_keys=True), encoding="utf-8")

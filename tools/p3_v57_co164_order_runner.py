@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CO-164/CO-167/CO-169/CO-174 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
+"""CO-164/CO-167/CO-169/CO-174/CO-180/CO-181 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
 
 缘起（实测事故，CO-163）：`co146_boundary_append.py` 因 §37 文本里的 f-string 花括号语法错误**每次崩溃（rc=1）**，
 但收敛判定只看 boundary/记录 sha ⇒ sha 恒不变 ⇒ 报「CONVERGED」，边界 §37 实际从未写入、pin 表陈旧（co77/co135/co136 判 FAIL）。
@@ -110,6 +110,31 @@ STEP_ARTIFACTS = {
 SHARED_ARTIFACT_RESIDUAL = {
     _LED: "共享主产物（co146_ledger_add / co153 / co148_thermal / co149）：他人写台账仍可误判",
     _REG: "共享主产物（co152..co174 处置类 17 步）：他人写登记簿仍可误判",
+}
+
+# CO-181（F-3）：**声明产物齿集 pin**（键 = 工件 basename；值 = 齿名有序集）——
+# 判据不得自指：记录自定齿集 ⇒ 静默删齿/改名即可规避。任一漂移 ⇒ 该步 fail-closed（t16 机判）。
+EXPECTED_TEETH = {
+    "MANIFEST.json": ['t01_idempotent', 't02_8_copper_gerbers', 't03_drill_present', 't04_all_hashed', 't05_declared_rulings_packaged', 't06_order_notes_refs_resolve_in_package', 't07_packaged_rulings_match_sources', 't07b_parity_detector_sensitivity', 't08_declared_dirs_present', 't09_order_notes_binding_params', 't09b_binding_param_detector_sensitivity', 't10_declared_binding_source_pinned', 't10b_binding_source_pin_discriminates', 't11_stackup_svg_declared_binding', 't11b_stackup_svg_binding_sensitivity', 't11c_stackup_svg_copper_geometry_binding', 't11d_stackup_svg_copper_geometry_sensitivity', 't12_order_notes_record_figures', 't12b_record_figure_binding_sensitivity', 't12c_impedance_spread_binding_sensitivity', 't12d_via_census_binding_sensitivity', 't12e_mask_facts_binding_sensitivity', 't12f_thermal_figures_binding_sensitivity', 't12g_jlc_capability_binding_sensitivity', 't12h_drc_rules_edge_binding_sensitivity', 't15_impedance_copy_parity', 't15b_impedance_copy_parity_sensitivity', 't16_layer_sequence_derivation', 't16b_layer_sequence_sensitivity'],
+    "m13_v57_co106_reference_plane_gate.json": ['baseline_pin_binding', 'carrier_exemption_declared_only', 'classifier_detector', 'continuity_detector', 'fail_open_closed', 'frame_inset_detector', 'teeth_are_bool_only', 'teeth_ok', 'verdict_positive_control'],
+    "m13_v57_co120_provenance_pin_gate.json": ['negative_control_freetext_board_basis_rejected', 'negative_control_register_snapshot_caught', 'negative_control_top_level_register_snapshot_caught', 'negative_control_undeclared_snapshot_caught', 'negative_control_undeclared_stale_caught', 'negative_control_unregistered_board_sha_rejected', 'positive_control_board_sha_basis_accepted', 'positive_control_declared_register_snapshot_passes', 'positive_control_declared_snapshot_passes', 'positive_control_matching_pin_passes', 'positive_control_note_key_not_snapshot', 'teeth_ok'],
+    "m13_v57_co124_input_selfcheck_gate.json": ['T10_thermal_option_domain_teeth', 'T10b_thermal_domain_no_false_positive', 'T11_drop_domain_teeth', 'T11b_drop_domain_no_false_positive', 'T12_declared_unpinned_teeth', 'T12b_declared_no_false_positive', 'T13_conservative_unproved_teeth', 'T13b_conservative_no_false_positive', 'T14_unknown_kind_teeth', 'T14b_empty_domain_cap_teeth', 'T14c_kind_coverage_no_false_positive', 'T15_declared_binding_teeth', 'T15b_declared_binding_no_false_positive', 'T15c_declared_empty_computed_teeth', 'T16_faithful_provenance_teeth', 'T16b_faithful_provenance_no_false_positive', 'T16c_authoritative_dv_missing_teeth', 'T17_process_floor_evidence_teeth', 'T17b_process_floor_no_false_positive', 'T18_k9_finder_id_coverage', 'T18b_k9_finder_id_no_undeclared', 'T18c_k9_finder_battery_nonempty', 'T18d_k9_finder_ids_source_complete', 'T18e_k9_finder_id_extractor_sensitivity', 'T19_dv_inventory_teeth', 'T19b_dv_inventory_no_false_positive', 'T1_netclass_drift', 'T20_identity_unhandled_form_teeth', 'T20b_identity_unhandled_no_false_positive', 'T21_register_status_vocabulary', 'T21b_register_counts_rederived', 'T21c_register_consistency_no_false_positive', 'T2_unregistered_finding_detected', 'T3_threshold_unregistered', 'T4_doc_anchor_missing', 'T5_derived_without_principle', 'T6_unreachable_derived', 'T7_requirement_carries_value', 'T8_identity_drift', 'T9_exemption_unpinned'],
+    "m13_v57_co136_gate_hygiene.json": ['H4_negative_control_write_only_caught', 'H4_positive_control_upsert_ok'],
+    "m13_v57_co146_impedance_table.json": ['t01_reproduce_spec_first_order', 't02_overwide_must_fail_tol'],
+    "m13_v57_co146_jlc_dfm_gate.json": ['t01_track_width_limit_teeth', 't02_blind_via_item_fails', 't03_board_rule_edge_bound', 't04_capability_citation_bound', 't05_capability_citation_sensitivity', 't06_capability_value_bound', 't07_capability_value_bind_sensitivity', 't08_drc_item_limits_derived'],
+    "m13_v57_co146_jlc_fab_package.json": ['t01_idempotent', 't02_8_copper_gerbers', 't03_drill_present', 't04_all_hashed', 't05_declared_rulings_packaged', 't06_order_notes_refs_resolve_in_package', 't07_packaged_rulings_match_sources', 't07b_parity_detector_sensitivity', 't08_declared_dirs_present', 't09_order_notes_binding_params', 't09b_binding_param_detector_sensitivity', 't10_declared_binding_source_pinned', 't10b_binding_source_pin_discriminates', 't11_stackup_svg_declared_binding', 't11b_stackup_svg_binding_sensitivity', 't11c_stackup_svg_copper_geometry_binding', 't11d_stackup_svg_copper_geometry_sensitivity', 't12_order_notes_record_figures', 't12b_record_figure_binding_sensitivity', 't12c_impedance_spread_binding_sensitivity', 't12d_via_census_binding_sensitivity', 't12e_mask_facts_binding_sensitivity', 't12f_thermal_figures_binding_sensitivity', 't12g_jlc_capability_binding_sensitivity', 't12h_drc_rules_edge_binding_sensitivity', 't15_impedance_copy_parity', 't15b_impedance_copy_parity_sensitivity', 't16_layer_sequence_derivation', 't16b_layer_sequence_sensitivity'],
+    "m13_v57_co146_pm_eval.json": ['t01_current_doubling_linear', 't02_copper_thickness_monotone', 't03_plane_geometry_from_board', 't04_datasheet_input_flips_verdict', 't05_psi_route_agrees_fail'],
+    "m13_v57_co147_l2_ruling.json": ['t01_mask_measured_below_jlc'],
+    "m13_v57_co148_thermal_ruling.json": ['t01_worst_tj_over_limit', 't02_gnd_via_deficit'],
+    "m13_v57_co148_u6_ds320pr1601_inputs.json": ['t01_seven_values', 't02_all_pact_rows'],
+    "m13_v57_co149_u6_thermal_mitigation.json": ['t01_two_routes_agree', 't02_asbuilt_unreachable_all', 't03_declared_option_covers_all', 't04_rjb_more_demanding', 't05_sensitivity_disclosed'],
+    "m13_v57_co150_k9_domain_gate.json": ['t01_k9_teeth_all_true', 't02_register_item_closed', 't03_ledger_domain_kinds_expected', 't04_dv_inventory_matches_producer', 't05_inventory_drift_detectable'],
+    "m13_v57_co77_closure_declaration_sweep.json": ['l5_packet_citation_resolvable', 'table_row_citation_detected'],
+    "m13_v57_co78_layer_role_drift_gate.json": ['control_historical_detected'],
+    "m13_v57_co81_project_rules_gate.json": ['hist_netclass_detected', 'hist_rules_detected', 'min_track_width_negative_control', 'positive_control_clean', 'spec_drift_detected'],
+    "m13_v57_co84_dru_domain_gate.json": ['clearance_off_detected', 'extra_area_detected', 'no_refclk_exclusion_detected', 'rect_drift_detected'],
+    "m13_v57_co95_in4_reachability.json": ['band_point_flagged', 'east_point_passes'],
+    "m13_v57_co98_reachability_status_report.json": ['integrity_detects_miscount', 'pip_rejects_bbox_approx'],
 }
 
 
@@ -245,25 +270,68 @@ def teeth_all_true(node) -> bool | None:
     return all(vals)
 
 
-def step_declared_teeth(step: str) -> bool | None:
-    """CO-180：该步**声明产物**（CO-174 的 STEP_ARTIFACTS）中凡含 `teeth` 键者，须机判**全 True**。
+def _teeth_pin_negative_controls() -> bool:
+    """CO-181（F-3）负控（**内存桩件、零落盘**）：pin 命中⇒True；齿集漂移 / 不可解析 / teeth_ok 冒充 ⇒ False。"""
+    global step_paths
+    _name = sorted(EXPECTED_TEETH)[0]
+    _keys = EXPECTED_TEETH[_name]
 
-    返回 `True` = 有声明产物含 teeth 且全 True；`None` = 无任何声明产物含 teeth（不适用）；
-    `False` = 含 teeth 但**未全 True**（含形状不明） ⇒ 该步不得通过（fail-closed）。
-    说明：不可解析的 json 跳过（其余闸已校验记录可读性）；`.md`/非 json 产物不适用。
+    class _P:
+        suffix = ".json"
+        def __init__(self, text):
+            self._t, self.name = text, _name
+        def exists(self) -> bool:
+            return True
+        def read_text(self, encoding: str | None = None) -> str:
+            if self._t is None:
+                raise ValueError("injected unparsable payload")
+            return self._t
+
+    orig = step_paths
+    try:
+        step_paths = lambda step: [_P(json.dumps({"teeth": {k: True for k in _keys}}))]
+        ok_hit = step_declared_teeth("__nc__") is True
+        step_paths = lambda step: [_P(json.dumps({"teeth": {k: True for k in _keys[:-1]}}))]
+        drift = step_declared_teeth("__nc__") is False
+        step_paths = lambda step: [_P(None)]
+        unparsable = step_declared_teeth("__nc__") is False
+        step_paths = lambda step: [_P(json.dumps({"teeth_ok": True, "verdict": "PASS"}))]
+        fake = step_declared_teeth("__nc__") is False
+    finally:
+        step_paths = orig
+    return ok_hit and drift and unparsable and fake
+
+
+def step_declared_teeth(step: str) -> bool | None:
+    """CO-180/CO-181：该步**声明产物**中凡含 `teeth` 键者，须机判**全 True**（R-CO180-1）。
+
+    CO-181 加固（F-2/F-3/F-4）：
+      ① 声明 json **缺失 / 不可解析 / 非 dict** ⇒ **False**（`不可判一律 fail-closed`，禁静默跳过）；
+      ② 齿集须**命中 `EXPECTED_TEETH` pin**（防**静默删齿 / 改名**——判据不得自指）；
+      ③ 以 `teeth_ok` 冒充齿（无 `teeth` 布尔齿 dict）⇒ False（R-CO180-2 形状）。
+    返回 True = 有声明齿且全 True；None = 无任何声明产物含 teeth（不适用）。
     """
     seen = False
     for p in step_paths(step):
-        if getattr(p, "suffix", "") != ".json" or not p.exists():
+        if getattr(p, "suffix", "") != ".json":
             continue
+        if not p.exists():
+            return False
         try:
             d = json.loads(p.read_text(encoding="utf-8"))
         except Exception:
-            continue
-        if isinstance(d, dict) and "teeth" in d:
-            seen = True
-            if teeth_all_true(d["teeth"]) is not True:
+            return False
+        if not isinstance(d, dict):
+            return False
+        if "teeth" not in d:
+            if "teeth_ok" in d:
                 return False
+            continue
+        seen = True
+        if EXPECTED_TEETH.get(p.name) != sorted(d["teeth"]):
+            return False
+        if teeth_all_true(d["teeth"]) is not True:
+            return False
     return True if seen else None
 
 
@@ -465,6 +533,23 @@ def main(argv=None) -> int:
         and step_declared_teeth("co146_ledger_add") is None
         and sum(1 for s in set(ORDER) if step_declared_teeth(s) is True) >= 13
         and sum(1 for s in set(ORDER) if step_declared_teeth(s) is False) == 0)
+    # CO-181（F-3）：齿集 pin 覆盖一致 + fail-closed（不可判/删齿/改名/teeth_ok 冒充一律不通过）
+    _decl_teeth = set()
+    for _s in set(ORDER):
+        for _r in STEP_ARTIFACTS.get(_s, []):
+            if not str(_r).endswith(".json"):
+                continue
+            try:
+                _d = json.loads((K2 / _r).read_text(encoding="utf-8"))
+            except Exception:
+                continue
+            if isinstance(_d, dict) and "teeth" in _d:
+                _decl_teeth.add(Path(_r).name)
+    checks["t16_teeth_set_pinned"] = (
+        set(EXPECTED_TEETH) == _decl_teeth
+        and all(step_declared_teeth(s) is not False for s in set(ORDER))
+        and step_declared_teeth("__UNKNOWN__") is None
+        and _teeth_pin_negative_controls())
     checks["t05_stability_oracle"] = (stable("x", "x") and not stable("x", "y") and not stable("", ""))
     # CO-164（t06）：执行器 ORDER 必须与 boundary 规范复现序**有序一致**（文档↔执行器防漂移）
     _bdy = boundary_order_steps()
@@ -528,7 +613,7 @@ def main(argv=None) -> int:
             converged = True
             break
         prev = cur
-    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-169.5",
+    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-181.1",
               "nature": "规范复现序机判执行器（rc 策略 + 真收敛判定）；报告落 .archer_tmp/ 且**不被 boundary 引用**（避免不动点）",
               "order": ORDER, "expected_nonzero": EXPECTED_NONZERO,
               "checks": checks, "iterations": iterations, "abort": abort, "converged": converged,

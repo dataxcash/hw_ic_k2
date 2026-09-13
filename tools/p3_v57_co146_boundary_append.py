@@ -1527,7 +1527,7 @@ def main() -> int:
              "+ R-CO177-1 + R-CO178-1 + R-CO179-1/2 + R-CO180-1/2）。",
              "",
              "| 工件 | sha16 |", "|---|---|"]
-    _rows53 = [("工具 `p3_v57_co164_order_runner.py`（CO-169.5 / 声明产物牙齿纳入判决 + t15；49 步）",
+    _rows53 = [("工具 `p3_v57_co164_order_runner.py`（CO-181.1 / 声明产物牙齿纳入判决 + t15/t16；49 步）",
                 K2 / "tools/p3_v57_co164_order_runner.py"),
                ("工具 `p3_v57_co106_reference_plane_gate.py`（CO-106.5 / 判决完整性）",
                 K2 / "tools/p3_v57_co106_reference_plane_gate.py"),
@@ -1546,6 +1546,67 @@ def main() -> int:
         txt = re.sub(re.escape(MARK53) + r"[\s\S]*?(?=\n## |\Z)", body53, txt, count=1)
     else:
         txt = txt.rstrip("\n") + "\n\n" + body53
+    # ── §54 CO-181（非执行者对抗复评 CO-166..CO-180 + 判决完整性续） ──────────
+    MARK54 = "## 54. CO-181"
+    _rc54 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    sec54 = [MARK54 + "（**非执行者对抗复评 + L2 自裁处置 · 判决完整性续**）", "",
+             "- **复评方**：context 归零的续接会话（满足 handoff-z46 §5「另一会话，禁自评」）；对象钉 `6bf482d`"
+             "（`git show` 内存重放，结论不随后续修复漂移）。方法：正控 **V0..V9**（独立重算）+ 负控 **P1..P8**"
+             "（内存注入、零落盘、零坐标搜索）。verdict **PASS_WITH_FINDINGS**｜findings **5**（F-1..F-5）。",
+             "- **F-1（medium）·弱/恒真牙齿**：CO-180 G-1 已将声明齿纳入判决，但被纳入的牙齿有**非判别齿** —— "
+             "`co146_pm_eval` t01 代数恒真、t02 **字面 `True`**、t03 `bool(非空 dict)` 近恒真（5 齿中 3 齿永不翻转）；"
+             "`co98` `integrity_detects_miscount` = `(not A) or (not B)`（A/B 互斥）**恒真** ⇒ +1 注入检测未真正实现。"
+             "**处置**：`co146_pm_eval` 升 **CO148-PM.3**（齿判据**函数化** + 近失负控必翻转）；"
+             "`co98` 升 **CO-98.3**（判别式 `integrity(rows) and not integrity(rows+1)`）。",
+             "- **F-2（medium）·不可判 fail-open**：`step_declared_teeth` 对**不可解析**声明 json 静默跳过 ⇒ None（不判），"
+             "违 R-CO180-1「不可判一律 fail-closed」。**处置**：runner 升 **CO-181.1** —— 声明 json 缺失/不可解析/非 dict ⇒ **False**。",
+             "- **F-3（low）·判据自指**：仅要求「现有齿全 True」无齿集下界 ⇒ **静默删齿/改名**可规避。"
+             "**处置**：runner 增 **`EXPECTED_TEETH`**（20 件声明齿件的齿名有序集 pin）+ 静态齿 **t16**"
+             "（覆盖一致 + 内存桩件负控：pin 命中⇒True；齿集漂移/不可解析/`teeth_ok` 冒充⇒False）。",
+             "- **F-4（low）·漏扫**：规范序步 `co81`/`co84` 自检以 `teeth_ok` 单标量暴露、无 `teeth` 布尔齿 dict ⇒ "
+             "不参与 R-CO180-1 判决（CO-180 G-3 只扫了 co78）。**处置**：`co81` 升 **CO-81.3** / `co84` 升 **CO-84.3**"
+             "（归真齿 dict，`teeth_ok` 自真齿聚合）；runner 另加「`teeth_ok` 冒充齿 ⇒ False」守卫。",
+             "- **F-5（low）·结构性残余**：**固有一轮 pin 滞后**（= 既有 `co180:G-4`）复现 —— 复评方实测：**未变更态**"
+             "2 轮收敛且 **182/182 件逐字节幂等**；**upstream 记录变更后首轮**在 `co135_review_hygiene` 停机（`unexpected_nonzero`），"
+             "重跑即收敛（本轮实测：abort → 3 轮收敛）。**如实登记为残余**（消除 = 受控 warm-up 轮 / co135 显式接受滞后 + 齿证明，下轮候选）。",
+             f"- **登记簿**：+4（`co181:F-1..F-4`，全 CLOSED；{_rc54['total']} 项 / OPEN {_rc54['OPEN']}）。"
+             "F-5 为既有 `co180:G-4` 残余复现，不重复登记。",
+             "",
+             "> **R-CO181-1**：被纳入判决的牙齿须为**可翻转判据**（函数化 + 近失/负控**必翻转**）；"
+             "恒真式 / 字面 `True` / 恒 `True` 记录冒充一律视为缺陷（CO-179 R-CO179-1 的**牙齿质量面**）。",
+             "> **R-CO181-2**：`step_declared_teeth` 判据**不得自指** —— 齿集须命中 `EXPECTED_TEETH` pin；"
+             "声明 json 缺失/不可解析/非 dict、或以 `teeth_ok` 冒充齿，一律 **fail-closed**。",
+             "> **R-CO181-3**（复现序，取代 R-CO180-3；**步骤集不变 49 步**，co181 为非执行者复评不入执行序）："
+             "规范复现序 = `" + _ord180 + "`，**循环至 sha 稳定**（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 "
+             "+ R-CO169-1/2 + R-CO174-1 + R-CO175-1 + R-CO176-1/2 + R-CO177-1 + R-CO178-1 + R-CO179-1/2 + R-CO180-1/2 + R-CO181-1/2）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows54 = [("复评工具 `p3_v57_co181_rev19_co166_co180_review.py`（只读 as-found + 内存注入；V10/P8）",
+                K2 / "tools/p3_v57_co181_rev19_co166_co180_review.py"),
+               ("复评记录 `m13_v57_co181_rev19_co166_co180_review.json`",
+                STEP2 / "m13_v57_co181_rev19_co166_co180_review.json"),
+               ("工具 `p3_v57_co164_order_runner.py`（CO-181.1 / fail-closed + EXPECTED_TEETH pin + t16；49 步）",
+                K2 / "tools/p3_v57_co164_order_runner.py"),
+               ("工具 `p3_v57_co146_pm_eval.py`（CO148-PM.3 / 去恒真齿）",
+                K2 / "tools/p3_v57_co146_pm_eval.py"),
+               ("工具 `p3_v57_co98_reachability_status_report.py`（CO-98.3 / 判别式齿）",
+                K2 / "tools/p3_v57_co98_reachability_status_report.py"),
+               ("工具 `p3_v57_co81_project_rules_gate.py`（CO-81.3 / 归真齿 dict）",
+                K2 / "tools/p3_v57_co81_project_rules_gate.py"),
+               ("工具 `p3_v57_co84_dru_domain_gate.py`（CO-84.3 / 归真齿 dict）",
+                K2 / "tools/p3_v57_co84_dru_domain_gate.py"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc54['total']} 项 / OPEN {_rc54['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows54:
+        if pth.exists():
+            sec54.append(f"| {label} | `{s16(pth)}` |")
+    sec54.append("")
+    body54 = "\n".join(sec54)
+    if MARK54 in txt:
+        txt = re.sub(re.escape(MARK54) + r"[\s\S]*?(?=\n## |\Z)", body54, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body54
+    txt = txt.replace("W3 Boundary **v2.25**", "W3 Boundary **v2.26**")
     txt = txt.replace("W3 Boundary **v2.24**", "W3 Boundary **v2.25**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
