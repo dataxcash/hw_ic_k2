@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CO-164/CO-167/CO-169/CO-174/CO-180/CO-181/CO-182/CO-183/CO-187/CO-188/CO-189 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
+"""CO-164/CO-167/CO-169/CO-174/CO-180/CO-181/CO-182/CO-183/CO-187/CO-188/CO-189/CO-190 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
 
 缘起（实测事故，CO-163）：`co146_boundary_append.py` 因 §37 文本里的 f-string 花括号语法错误**每次崩溃（rc=1）**，
 但收敛判定只看 boundary/记录 sha ⇒ sha 恒不变 ⇒ 报「CONVERGED」，边界 §37 实际从未写入、pin 表陈旧（co77/co135/co136 判 FAIL）。
@@ -18,11 +18,13 @@
      步本地 `did_work` 归因抓到 ⇒ 可与「sha 稳定」共存而**假通过**。
   ⑥ CO-189（R-CO189-1）：**受控集外写入**（承载根内、非受控件、非豁免）⇒ 运行时停机类 `uncontrolled_write`
      （stat 轻量 shadow 快照）+ 静态齿 **t23**（shadow 根 ⊇ 受控集；`WRITE_SHADOW_EXEMPT` 完备性 + 正负控）。
+  ⑦ CO-190（R-CO190-1）：**步骤超时**（`STEP_TIMEOUT_S`）⇒ 杀子进程 + 停机类 `step_timeout` + 每步 `duration_s`
+     记录 + 静态齿 **t24**（超时值带 + 正负控）。缺超时 = 挂起步使 runner 永久阻塞而非 fail-closed。
 CLI:
   python3 tools/p3_v57_co164_order_runner.py [--check] [--max-iter 5]
 """
 from __future__ import annotations
-import argparse, ast, hashlib, json, re, subprocess, sys
+import argparse, ast, hashlib, json, re, subprocess, sys, time
 from pathlib import Path
 
 K2 = Path(__file__).resolve().parents[1]
@@ -57,6 +59,10 @@ BOUNDARY_READ_DECLARED = {
 }
 
 PASS_VERDICTS = ("PASS", "PASS_WITH_FINDINGS")
+# CO-190（R-CO190-1）：**步骤超时 fail-closed** —— 规范序缺超时 ⇒ 任一挂起/无限迭代步使 runner **永久阻塞**
+# 而非停机（违「冲突即停机」精神；「暴力迭代」是明令禁止形态，其症状面正是长跑/挂起）。超时值须 ≫ 最慢合法步
+# （实测最慢 = DFM 闸 ~数秒）；`timed_out` ⇒ 停机类 `step_timeout`（对白名单步亦生效）。
+STEP_TIMEOUT_S = 300
 # CO-185（R-CO185-2）：**非 PASS 但 rc==0** 的类别须**显式声明**（禁静默）——
 # 该步自评通过（rc=0），但其记录承载**已登记的缺陷结论**（故非 PASS）；须给 `why` + `register` 依据。
 DECLARED_NONPASS_OK = {
@@ -404,13 +410,15 @@ def record_verdict(path):
 
 
 def allowlist_decision(step: str, rc: int, stderr: str, verdict, record_fresh: bool = True,
-                       teeth_ok: bool | None = None) -> str:
+                       teeth_ok: bool | None = None, timed_out: bool = False) -> str:
     """CO-165 核心判据（纯函数）：
     非白名单步：rc==0 ⇒ ok，否则 unexpected_nonzero；
     白名单步：须 rc≠0 **且** 无 Traceback **且** 记录由**本次执行**产出（mtime 新鲜）
               **且** 记录 verdict == 声明 verdict
               **且** （CO-176 G-1）该步**自检牙齿全 True** ⇒ expected_nonzero；
     其余 ⇒ expected_step_* 失败（**不得把崩溃 / 未产出记录（陈旧 verdict 从盘上读取）/ 错误判决 / 自检失败当预期 FAIL**）。"""
+    if timed_out:                       # CO-190（R-CO190-1）：超时优先 ⇒ fail-closed（禁以「仍在跑」冒充可判）
+        return "step_timeout"
     if step not in EXPECTED_NONZERO:
         if rc != 0:
             return "unexpected_nonzero"
@@ -1007,6 +1015,13 @@ def main(argv=None) -> int:
         and shadow_exempt("pm_gate/artifacts/k2_v4/L5/jlc_package/01_gerber_rs274x/x.gbr")
         and shadow_exempt("pm_gate/artifacts/k2_v4/L5/jlc_package/05_layer_sequence.txt")
         and not shadow_exempt("pm_gate/artifacts/k2_v4/L5/jlc_package/07_new/x.txt"))
+    # CO-190（R-CO190-1）：步骤超时须 fail-closed（正控 timed_out ⇒ step_timeout；负控 ⇒ 不误报；超时值须在带内）
+    checks["t24_step_timeout_fail_closed"] = (
+        isinstance(STEP_TIMEOUT_S, int) and 60 <= STEP_TIMEOUT_S <= 3600
+        and allowlist_decision("co77_closure_declaration_sweep", 0, "", "PASS", True, None, True) == "step_timeout"
+        and allowlist_decision("co146_jlc_dfm_gate", 0, "", "FAIL", True, True, True) == "step_timeout"
+        and allowlist_decision("co77_closure_declaration_sweep", 0, "", "PASS") == "ok"
+        and allowlist_decision("co146_jlc_dfm_gate", 1, "", "FAIL", True, True, False) == "expected_nonzero")
     checks["t05_stability_oracle"] = (stable("x", "x") and not stable("x", "y") and not stable("", ""))
     # CO-164（t06）：执行器 ORDER 必须与 boundary 规范复现序**有序一致**（文档↔执行器防漂移）
     _bdy = boundary_order_steps()
@@ -1036,7 +1051,14 @@ def main(argv=None) -> int:
             _decl_set = {str(q) for q in step_paths(step)}
             _ball = _snap_watched()                                            # 全局：仅用于 stray 证据
             _w_before = {k: _ball.get(k) for k in _decl_set}
-            r = subprocess.run([str(PY), str(p)], cwd=K2, capture_output=True, text=True)
+            _t0 = time.monotonic()
+            try:                            # CO-190（R-CO190-1）：步骤须在 STEP_TIMEOUT_S 内结束；超时 ⇒ 杀子进程 + 停机
+                r = subprocess.run([str(PY), str(p)], cwd=K2, capture_output=True, text=True,
+                                   timeout=STEP_TIMEOUT_S)
+                _to, _rc, _err = False, r.returncode, r.stderr
+            except subprocess.TimeoutExpired:
+                _to, _rc, _err = True, None, f"STEP_TIMEOUT after {STEP_TIMEOUT_S}s"
+            _dur = round(time.monotonic() - _t0, 3)
             _aall = _snap_watched()
             _sh_cur = write_shadow_snapshot()                          # CO-189
             _sh_changes = sorted(rel for rel in set(_sh_prev) | set(_sh_cur)
@@ -1052,8 +1074,8 @@ def main(argv=None) -> int:
             _tcand.append(step_declared_teeth(step))
             _tcand = [c for c in _tcand if c is not None]
             _teeth_ok = all(_tcand) if _tcand else None
-            cls = allowlist_decision(step, r.returncode, r.stderr, record_verdict(_exp.get("record")),
-                                     _fresh, _teeth_ok)
+            cls = allowlist_decision(step, _rc, _err, record_verdict(_exp.get("record")),
+                                     _fresh, _teeth_ok, _to)
             _stray = sorted(Path(k).relative_to(K2).as_posix()
                             for k in set(_ball) | set(_aall)
                             if k not in _decl_set and _ball.get(k) != _aall.get(k))
@@ -1069,15 +1091,16 @@ def main(argv=None) -> int:
                 cls = "uncontrolled_write"
             if cls == "ok" and not _did:
                 cls = zero_rc_class(False)     # CO-169（G-1）：rc==0 但未写出任何受控产物 ⇒ 立即停机
-            rcs[step] = {"rc": r.returncode, "class": cls, "did_work": _did,
+            rcs[step] = {"rc": _rc, "class": cls, "did_work": _did,
+                         "duration_s": _dur, "timed_out": _to,
                          "declared_changed": sorted(Path(k).relative_to(K2).as_posix()
                                                     for k in _decl_set if _w_before.get(k) != _w_after.get(k)),
                          "stray_changed": _stray,
                          "uncontrolled_writes": [c for c in _sh_changes if not shadow_exempt(c)]}
             _sh_prev = _sh_cur
             if cls not in ("ok", "expected_nonzero"):
-                unexpected = {"step": step, "rc": r.returncode, "class": cls,
-                              "stderr_tail": (r.stderr or "")[-600:]}
+                unexpected = {"step": step, "rc": _rc, "class": cls, "timed_out": _to,
+                              "stderr_tail": (_err or "")[-600:]}
                 break
         cur = snapshot()
         iterations.append({"iter": it, "rcs": rcs, "sha": cur, "unexpected": unexpected})
@@ -1088,7 +1111,7 @@ def main(argv=None) -> int:
             converged = True
             break
         prev = cur
-    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-189.1",
+    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-190.1",
               "nature": "规范复现序机判执行器（rc 策略 + 真收敛判定）；报告落 .archer_tmp/ 且**不被 boundary 引用**（避免不动点）",
               "order": ORDER, "expected_nonzero": EXPECTED_NONZERO,
               "checks": checks, "iterations": iterations, "abort": abort, "converged": converged,

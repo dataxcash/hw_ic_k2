@@ -1964,6 +1964,45 @@ def main() -> int:
         txt = txt.rstrip("\n") + "\n\n" + body62
     txt = txt.replace("W3 Boundary **v2.33**", "W3 Boundary **v2.34**")
     txt = txt.replace("W3 Boundary **v2.32**", "W3 Boundary **v2.33**")
+    # ── §63 CO-190（L2 自裁 · 步骤超时 fail-closed：复现序可靠性） ────────────
+    MARK63 = "## 63. CO-190"
+    _rc63 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    _ord190 = _ord189          # 步集/序列不变（50 次）
+    sec63 = [MARK63 + "（**L2 自裁 · 步骤超时 fail-closed：复现序可靠性**）", "",
+             "- **G-1（low）·无步骤超时**：执行器对步骤 `subprocess.run` **无 `timeout`** ⇒ 任一挂起 / 无限迭代步使 "
+             "runner **永久阻塞**而非 fail-closed（违「冲突即停机」精神；「禁暴力迭代」的症状面正是长跑/挂起）；"
+             "且无逐步耗时证据可判「异常长跑」。",
+             "- **处置**：runner 升 **CO-190.1** —— ① `STEP_TIMEOUT_S = 300`（≫ 最慢合法步）；② `subprocess.run(timeout=)` "
+             "⇒ 超时**杀子进程** + 停机类 **`step_timeout`**（对白名单步亦生效，**优先于** verdict/teeth 判据）；"
+             "③ 逐步 `duration_s` / `timed_out` 证据；④ 静态齿 **t24**（超时值带 60..3600 + 正控/负控）。",
+             "- **实测（本件证据）**：实现期端到端负控**抓到实现缺陷** —— 超时分支仍读未赋值的 `r.stderr` ⇒ `UnboundLocalError`"
+             "（首轮负控 rc=1 但报告未写出）；已修为 `_err`。修复后负控：T=60（带内）+ 首步注入 120s 挂起 ⇒ "
+             "**60.8s 后停 `class=step_timeout` / `timed_out=true`**；T=5（越带）⇒ 静态 t24 直接拒（`static_precheck_failed`），不上路。",
+             f"- **登记簿**：+1（`co190:G-1`，CLOSED；**{_rc63['total']} 项 / OPEN {_rc63['OPEN']}**）。",
+             "",
+             "> **R-CO190-1**：规范序每一步须在 `STEP_TIMEOUT_S` 内返回；超时 ⇒ 杀子进程 + `step_timeout` 停机（禁「永久阻塞」）；"
+             "逐步耗时须记录（t24 机判超时值带 + 正负控）。",
+             "> **R-CO190-2**（复现序，取代 R-CO189-2；**步集/序列不变，序内出现 50 次**）：规范复现序 = `" + _ord190 + "`，"
+             "**循环至 sha 稳定**（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1 "
+             "+ R-CO175-1 + R-CO176-1/2 + R-CO177-1 + R-CO178-1 + R-CO179-1/2 + R-CO180-1/2 + R-CO181-1/2 + R-CO182-1 "
+             "+ R-CO183-1 + R-CO184-1 + R-CO185-1/2 + R-CO186-1 + R-CO187-1/2/3 + R-CO188-1 + R-CO189-1 + R-CO190-1）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows63 = [("工具 `p3_v57_co164_order_runner.py`（CO-190.1 / `STEP_TIMEOUT_S` + `step_timeout` + 逐步 `duration_s` + t24）",
+                K2 / "tools/p3_v57_co164_order_runner.py"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc63['total']} 项 / OPEN {_rc63['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows63:
+        if pth.exists():
+            sec63.append(f"| {label} | `{s16(pth)}` |")
+    sec63.append("")
+    body63 = "\n".join(sec63)
+    if MARK63 in txt:
+        txt = re.sub(re.escape(MARK63) + r"[\s\S]*?(?=\n## |\Z)", body63, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body63
+    txt = txt.replace("W3 Boundary **v2.34**", "W3 Boundary **v2.35**")
+    txt = txt.replace("W3 Boundary **v2.33**", "W3 Boundary **v2.34**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
     return 0
