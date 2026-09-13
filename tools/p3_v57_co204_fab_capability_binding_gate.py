@@ -15,6 +15,9 @@
   C2 残桩（SI）：逐类残桩（据叠层介质累计距**独立重算**）须 **<0.15mm**；外层锚定类恒 0。
   C3 背钻工艺限：D∈[0.2,0.5]、W≥D+0.2、T≥0.15（目标层至下一内层介质）、S≥0.2、板厚≥0.8、层数∈[4,32]。
   C4 禁用面：设计**不得**要求 blind/buried（能力页明文 not supported）。
+  C5 端声明↔实现绑定（CO-205 / R-CO205-1）：每支过孔的**每个声明端点层**在该点须有同网铜连通，
+      否则该端为悬空残桩 ⇒ C2 的「外层锚定 ⇒ 残桩 0」会被「只改声明端点层」绕过。
+      判据域 = L4 图纸路由的 68 信号网（平面/PDN 缝合孔由 co133 A 判；本板 zone 未填充，无法在此机判）。
 
 CLI: python3 tools/p3_v57_co204_fab_capability_binding_gate.py
 exit 0 = PASS；exit 1 = FAIL（如现行板 220/493 内层↔内层 ⇒ 预期 FAIL，直到层分配重派生）
@@ -34,6 +37,7 @@ BOARD = K2 / __import__("os").environ.get("FAB_BOARD", "k2_v4_8L.l4.kicad_pcb")
 REC = S2 / __import__("os").environ.get("FAB_REC", "m13_v57_co204_fab_capability_binding.json")
 PHYS = ["F.Cu", "In1.Cu", "In2.Cu", "In3.Cu", "In4.Cu", "In5.Cu", "In6.Cu", "B.Cu"]
 STUB_MAX_MM = 0.15          # 监理验收判据：残桩 <0.15mm（高速 SI 不降级）
+BIND_TOL_MM = 0.005         # C5 端声明↔实现绑定容差（L4 施工的端点坐标精度）
 D_MIN, D_MAX, W_OVER, T_MIN, S_MIN, THK_MIN, LAY_MIN, LAY_MAX = 0.2, 0.5, 0.2, 0.15, 0.2, 0.8, 4, 32
 
 
@@ -88,6 +92,59 @@ def class_stub(top: str, bot: str, span: dict) -> float:
     if top in outer or bot in outer:
         return 0.0
     return round(min(span["from_F"][top], span["from_B"][bot]), 6)
+
+
+def endpoint_binding(board, scope_nets=None) -> list:
+    """CO-205（R-CO205-1）：**端声明↔实现绑定** —— 每支过孔的**每个声明端点层**，在该点须有同网铜
+    （track 端点 / 焊盘）连通；否则该端为**悬空残桩**（声明了层对而物理上是一段开路桶），
+    C2 的「外层锚定 ⇒ 残桩 0」会被绕过（实测缺陷：把内层<->内层孔改声明为 F<->In5）。
+
+    scope_nets：限定判据域（默认 = L4 图纸路由的 68 个信号网）。平面/PDN 缝合孔由 co133 A 判，
+    不在此列（其铜面为 zone pour，本板 zone 未填充（IsFilled False）⇒ 无法在此机判）。"""
+    import math
+    import pcbnew
+    from collections import defaultdict
+    by_layer = defaultdict(list)
+    for t in board.GetTracks():
+        if isinstance(t, pcbnew.PCB_VIA):
+            continue
+        nm = board.GetLayerName(t.GetLayer())
+        s0, e0 = t.GetStart(), t.GetEnd()
+        by_layer[nm].append((t.GetNetCode(), pcbnew.ToMM(s0.x), pcbnew.ToMM(s0.y),
+                             pcbnew.ToMM(e0.x), pcbnew.ToMM(e0.y)))
+    pads = board.GetPads()
+    zones = [z for z in board.Zones() if z.IsFilled()]
+
+    def _copper(nm, lid, x, y, nc):
+        if any(n == nc and (math.hypot(xs - x, ys - y) < BIND_TOL_MM
+                            or math.hypot(xe - x, ye - y) < BIND_TOL_MM)
+               for (n, xs, ys, xe, ye) in by_layer[nm]):
+            return True
+        p = pcbnew.VECTOR2I(pcbnew.FromMM(x), pcbnew.FromMM(y))
+        for pad in pads:
+            if pad.GetNetCode() == nc and pad.IsOnLayer(lid) and pad.HitTest(p):
+                return True
+        for z in zones:
+            if z.GetNetCode() == nc and z.HitTestFilledArea(lid, p):
+                return True
+        return False
+
+    bad = []
+    for v in board.GetTracks():
+        if not isinstance(v, pcbnew.PCB_VIA):
+            continue
+        pos = v.GetPosition()
+        x, y = pcbnew.ToMM(pos.x), pcbnew.ToMM(pos.y)
+        nc = v.GetNetCode()
+        if scope_nets is not None and v.GetNetname() not in scope_nets:
+            continue                      # 判据域外（平面/PDN/其它）由 co133 A 判
+        for lid in (v.TopLayer(), v.BottomLayer()):
+            nm = board.GetLayerName(lid)
+            if not _copper(nm, lid, x, y, nc):
+                bad.append({"layer": nm, "x": round(x, 4), "y": round(y, 4),
+                            "top": board.GetLayerName(v.TopLayer()),
+                            "bottom": board.GetLayerName(v.BottomLayer())})
+    return bad
 
 
 def board_census() -> dict:
@@ -145,6 +202,27 @@ def main() -> int:
           and span["from_F"]["In2.Cu"] >= T_MIN and span["from_F"]["In5.Cu"] - span["from_F"]["In4.Cu"] >= T_MIN
           and thk >= THK_MIN and LAY_MIN <= nL <= LAY_MAX)
 
+    # C5 端声明↔实现绑定（R-CO205-1）：防「改声明绕过 C2」
+    import pcbnew as _pcb
+    _b = _pcb.LoadBoard(str(BOARD))
+    _l4 = json.loads((K2 / "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_l4_construction.json").read_text())
+    _scope = set(_l4["nets"])
+    bind_bad = endpoint_binding(_b, _scope)
+    c5 = len(bind_bad) == 0
+    # teeth：把一支本网 In2<->In5 孔在内存里改声明为 F<->In5 ⇒ C5 必须抓到（证明判据有牙齿）
+    _tooth = False
+    for _v in _b.GetTracks():
+        if not isinstance(_v, _pcb.PCB_VIA) or _v.GetNetname() not in _scope:
+            continue
+        if {_b.GetLayerName(_v.TopLayer()), _b.GetLayerName(_v.BottomLayer())} == {"In2.Cu", "In5.Cu"}:
+            _v.SetLayerPair(_pcb.F_Cu, _pcb.In5_Cu)
+            _ls = _pcb.LSET()
+            for _ln in PHYS[0:PHYS.index("In5.Cu") + 1]:
+                _ls.AddLayer(getattr(_pcb, _ln.replace(".", "_")))
+            _v.SetLayerSet(_ls)
+            _tooth = len(endpoint_binding(_b, _scope)) > 0
+            break
+
     # C4 禁用面：0 盲埋孔
     c4 = bc["n_inner_inner"] == 0 and all(
         not k.startswith("BLIND") for k in ())
@@ -154,9 +232,10 @@ def main() -> int:
     if not c2: fails.append("residual_stub_ge_0.15mm")
     if not c3: fails.append("backdrill_process_limit")
     if not c4: fails.append("blind_buried_required")
+    if not c5: fails.append(f"dangling_via_endpoint({len(bind_bad)})")
     rec = {
-        "artifact": "m13_v57_co204_fab_capability_binding", "schema": 1, "revision": "CO-204",
-        "nature": "板厂能力绑定闸（设计定稿前逐项对 JLC 标准能力：通孔 + 背钻）—— 监理指令 #12 动作 1/5",
+        "artifact": "m13_v57_co204_fab_capability_binding", "schema": 1, "revision": "CO-205",
+        "nature": "板厂能力绑定闸（设计定稿前逐项对 JLC 标准能力：通孔 + 背钻）+ CO-205 C5 端声明↔实现绑定（R-CO205-1）",
         "jlc_standard": {"source_html": str(SRC.relative_to(K2)), "source_page_sha256": sha256(SRC),
                          "blind_buried": "Not supported（仅通孔）", "backdrill": "支持（4–32 层 / 板厚 ≥0.8mm）",
                          "anchors": anchors},
@@ -167,13 +246,18 @@ def main() -> int:
         "via_class_stub_mm": stubs,
         "checks": {"C0_capability_binding": c0, "C1_via_class_legality": c1,
                    "C2_residual_stub_lt_0.15": c2, "C3_backdrill_process_limits": c3,
-                   "C4_no_blind_buried": c4},
+                   "C4_no_blind_buried": c4, "C5_endpoint_copper_binding": c5},
+        "C5": {"scope": "L4 图纸路由网（68）", "n_vias_in_scope": sum(
+                   1 for _t in _b.GetTracks()
+                   if isinstance(_t, _pcb.PCB_VIA) and _t.GetNetname() in _scope),
+               "n_dangling": len(bind_bad), "offenders_sample": bind_bad[:8]},
         "verdict": "PASS" if not fails else "FAIL", "fails": fails,
         "teeth": {"inner_inner_class_cannot_be_through_backdrilled_stub_free":
                   class_stub("In2.Cu", "In5.Cu", span) >= STUB_MAX_MM,
                   "outer_anchored_classes_are_stub_free": all(
                       class_stub(a, b, span) == 0.0 for a, b in (("F.Cu", "In2.Cu"), ("In5.Cu", "B.Cu"), ("F.Cu", "B.Cu"))),
-                  "backdrill_anchors_verbatim": all(anchors[k] for k in ("diameter", "dielectric_t"))},
+                  "backdrill_anchors_verbatim": all(anchors[k] for k in ("diameter", "dielectric_t")),
+                  "endpoint_binding_catches_dangling_end": _tooth},
         "redline": "只读判据（不改 SPEC/板/冻结四源）；零坐标搜索；能力值一律由 pinned 抓取件原文抽得。",
     }
     REC.write_text(json.dumps(rec, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")

@@ -160,6 +160,10 @@
   }
  ],
  "date": "2026-09-13",
+ "input_sha16_update": {
+  "fab_binding_rec": "420f809c9c77beab",
+  "fab_gate": "093b069570744506"
+ },
  "inputs_sha16": {
   "alloc_v9": "d3cd1e5a312f253a",
   "board_frozen": "d4e81f647be7f980",
@@ -185,6 +189,7 @@
    "guardrail": "任何「只改过孔声明端点层、不动物理桶内铜」的方案一律否决；残桩须按**信号进出层**判定，而非按 via 声明端点层。建议把该口径写入 boundary（闸的 class_stub 需按 net 实际进出层计算）。",
    "id": "extend_inner_inner_via_to_F",
    "idea": "把 88 支内层<->内层孔改声明为 F<->In5（同一钻，仅改背钻深度），使其在闸模型下成为「外层锚定、残桩 0」。",
+   "status": "**已实现为闸的硬判据 C5**（板厂能力绑定闸 CO-205，`endpoint_binding()`）：判据域 = L4 图纸路由的 68 信号网；每支过孔每个声明端点层须有同网铜（track 端点/焊盘）在该点连通。校准：冻结板 n_vias_in_scope=252 / n_dangling=0 ⇒ C5=True，且闸的 verdict/fails 与基线完全一致（不误伤）。牙齿 `endpoint_binding_catches_dangling_end`=True：把一支本网 In2<->In5 孔在内存改声明为 F<->In5 ⇒ C5 立即抓到。局限：平面/PDN 缝合孔不在域内（其铜面为 zone pour，本板 zone 未填充）⇒ 由 co133 A 判。",
    "why_rejected": "SI 上无效 = 赌闸模型：用于 In2<->In5 通路时，F..In2 段（0.3664mm）仍留在桶内且 F 端无铜连接（dead-end）⇒ 实为 0.3664mm 开路残桩 >= 0.15mm，正是 R3 要消除的缺陷；而闸的 class_stub() 仅按两端点层判「外层锚定 ⇒ 0」，会把该缺陷判为 PASS ⇒ 判据与实现绑定被绕过。"
   }
  ],
