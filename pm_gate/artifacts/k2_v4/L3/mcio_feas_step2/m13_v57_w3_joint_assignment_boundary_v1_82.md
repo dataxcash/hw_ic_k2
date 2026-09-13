@@ -2023,11 +2023,11 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_l5_signoff.py`（CO-212：三件记录均钉板 + fail-closed 自检） | `4b3bb9d18bfc396b` |
+| 工具 `p3_v57_l5_signoff.py`（CO-212：三件记录均钉板 + fail-closed 自检） | `b1e6ad849c238e13` |
 | 记录 `m13_v57_l5_fab_record.json`（L5-FAB.2，原即含板指纹） | `791012e88b514faa` |
 | 记录 `m13_v57_l5_dfm_dft_record.json`（**L5-DFM.7**，新补板指纹；PASS） | `6632179e1ef63183` |
 | 记录 `m13_v57_l5_si_pi_emc_record.json`（**L5-SI.7**，新补板指纹；PASS，skew 0.13） | `8a40bb6b12c471f8` |
-| G7 记录 `m13_v57_l5_g7_record.md`（L5-G7.7） | `eec602aac442ed5e` |
+| G7 记录 `m13_v57_l5_g7_record.md`（L5-G7.7） | `df79f5341b502742` |
 | 登记簿 `input_defect_register_v1.json`（162 项 / OPEN 0） | `a5fdd97aff08f1ae` |
 
 > **R-CO212-1**：任何 verdict 记录须与**被评态**在**同记录内**钉指纹（板/图纸/来源）；跨件引用（证据件 sha）不得替代被评态绑定；pin 漂移或缺失即 fail-closed。
@@ -2054,10 +2054,10 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 执行器 `p3_v57_co206_process_route_select.py`（**CO-206.4**：前置自判据件求值 + 数据驱动齿 t07） | `83dba4f108663e6d` |
 | 证据 `m13_v57_co206_process_route_selection.json`（7 齿全 True） | `3914834c6604de33` |
 | 证据 `m13_v57_co206_process_route_selection.md` | `2edb39d9fe0ac70e` |
-| 工具 `p3_v57_l5_signoff.py`（CO-213：板指纹**真判别**（对照冻结源）） | `4b3bb9d18bfc396b` |
+| 工具 `p3_v57_l5_signoff.py`（CO-213：板指纹**真判别**（对照冻结源）） | `b1e6ad849c238e13` |
 | 记录 `m13_v57_l5_dfm_dft_record.json`（**L5-DFM.8**） | `6632179e1ef63183` |
 | 记录 `m13_v57_l5_si_pi_emc_record.json`（**L5-SI.8**） | `8a40bb6b12c471f8` |
-| G7 记录 `m13_v57_l5_g7_record.md`（L5-G7.8） | `eec602aac442ed5e` |
+| G7 记录 `m13_v57_l5_g7_record.md`（L5-G7.8） | `df79f5341b502742` |
 | 复评件 `m13_v57_co213_rev19_co207_co212_review.json` | `2be2baf97fe08947` |
 | 复评卡 `m13_v57_CO213_rev19_co207_co212_review.md` | `24832881a3bffeaa` |
 | 复评工具 `p3_v57_co213_rev19_co207_co212_review.py` | `f007d21fb3ad1865` |
@@ -2138,9 +2138,9 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_l5_signoff.py`（**CO-217**：判据源 → 冻结 rev-19 + sha pin + 齿 +2 + 退役值留存） | `4b3bb9d18bfc396b` |
+| 工具 `p3_v57_l5_signoff.py`（**CO-217**：判据源 → 冻结 rev-19 + sha pin + 齿 +2 + 退役值留存） | `b1e6ad849c238e13` |
 | 记录 `m13_v57_l5_si_pi_emc_record.json`（**L5-SI.9**：`inter_pair_spacing_mm=0.41` + retired 留存） | `8a40bb6b12c471f8` |
-| 记录 `m13_v57_l5_g7_record.md`（**L5-G7.9**：+「L5 SI 判据源」行） | `eec602aac442ed5e` |
+| 记录 `m13_v57_l5_g7_record.md`（**L5-G7.9**：+「L5 SI 判据源」行） | `df79f5341b502742` |
 | 登记簿 `input_defect_register_v1.json`（162 项 / OPEN 0） | `a5fdd97aff08f1ae` |
 
 > **R-CO217-1**：凡产出判据性 verdict 之工具，其**判据源**须为**现行冻结源**且**钉 sha**（缺件/漂移 ⇒ fail-closed，禁静默降级）；源升级须**同 commit** 双侧更新（源常数 + pin）；**退役定值不得以现行口径呈现**（须标 `kind`/`replaced_by` 并显式留存）。

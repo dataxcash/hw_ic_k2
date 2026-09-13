@@ -1,0 +1,81 @@
+{
+ "artifact": "m13_v57_co204_fab_capability_binding",
+ "schema": 1,
+ "revision": "CO-204",
+ "nature": "板厂能力绑定闸（设计定稿前逐项对 JLC 标准能力：通孔 + 背钻）—— 监理指令 #12 动作 1/5",
+ "jlc_standard": {
+  "source_html": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_co146_jlc_capability_source.html",
+  "source_page_sha256": "7d1d5a9193f3c2123367b1b306e9e3c67863fd31da6e577ad7c4f197fab8ac9d",
+  "blind_buried": "Not supported（仅通孔）",
+  "backdrill": "支持（4–32 层 / 板厚 ≥0.8mm）",
+  "anchors": {
+   "present": true,
+   "intro": "Backdrill uses a secondary drilling process to control the depth of the hole, removing excess copper from the other layers of the via, thereby reducing its interference with the signal. ",
+   "layers_thickness": "Supports 4-32-layer FR4 boards with a thickness of ≥0.8mm",
+   "diameter": "Through-Hole Diaemter(D): 0.2-0.5mm",
+   "w_over": "Backdrill Diameter(W): typically 0.2mm larger than through-hole diameter",
+   "depth": "Backdrill Depth(L):layers with backdrilling, customizable",
+   "dielectric_t": "Dielectric Thickness(T): ≥0.15mm",
+   "safety_s": "Safety Distance(S): ≥0.2mm"
+  }
+ },
+ "board": {
+  "path": "step_l4_candB.kicad_pcb",
+  "sha256": "27cda51d25452e18592bfcab7bc367872bf4298a70cf8ae9c6af7c6d355282b8",
+  "n_vias": 501,
+  "census": {
+   "F.Cu->B.Cu": 241,
+   "F.Cu->In2.Cu": 92,
+   "F.Cu->In5.Cu": 40,
+   "In2.Cu->B.Cu": 88,
+   "In5.Cu->B.Cu": 40
+  },
+  "n_outer_anchored": 501,
+  "n_inner_inner": 0
+ },
+ "stackup_dielectric_mm": {
+  "from_F": {
+   "F.Cu": 0.0,
+   "In1.Cu": 0.1164,
+   "In2.Cu": 0.3664,
+   "In3.Cu": 0.6164,
+   "In4.Cu": 0.8086,
+   "In5.Cu": 1.0586,
+   "In6.Cu": 1.3086,
+   "B.Cu": 1.425
+  },
+  "from_B": {
+   "F.Cu": 1.425,
+   "In1.Cu": 1.3086,
+   "In2.Cu": 1.0586,
+   "In3.Cu": 0.8086,
+   "In4.Cu": 0.6164,
+   "In5.Cu": 0.3664,
+   "In6.Cu": 0.1164,
+   "B.Cu": 0.0
+  },
+  "total_mm": 1.425
+ },
+ "via_class_stub_mm": {
+  "F.Cu->B.Cu": 0.0,
+  "F.Cu->In2.Cu": 0.0,
+  "F.Cu->In5.Cu": 0.0,
+  "In2.Cu->B.Cu": 0.0,
+  "In5.Cu->B.Cu": 0.0
+ },
+ "checks": {
+  "C0_capability_binding": true,
+  "C1_via_class_legality": true,
+  "C2_residual_stub_lt_0.15": true,
+  "C3_backdrill_process_limits": true,
+  "C4_no_blind_buried": true
+ },
+ "verdict": "PASS",
+ "fails": [],
+ "teeth": {
+  "inner_inner_class_cannot_be_through_backdrilled_stub_free": true,
+  "outer_anchored_classes_are_stub_free": true,
+  "backdrill_anchors_verbatim": true
+ },
+ "redline": "只读判据（不改 SPEC/板/冻结四源）；零坐标搜索；能力值一律由 pinned 抓取件原文抽得。"
+}
