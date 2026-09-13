@@ -91,7 +91,8 @@ def evaluate(criteria: dict, facts: dict) -> dict:
         "feasibility": {"verdict": "UNPROVEN",
                         "basis": ["充分条件：存在层分配使每支孔外层锚定（F1 全过）",
                                   "必要条件（确定性）：lane 必须落外层，否则 corner 为内层<->内层 ⇒ 该路无解",
-                                  "实测（现行模型，修正 span）：lane 落外层的候选 = 26/32 落位 ⇒ 未达全落位，可行性未证"],
+                                  "实测（修正 span）：lane 落外层候选 = **26/32**；但 lane 落外层须吃**外层 3W(0.615)**，"
+                                  "按外层口径复测（CO10_LANE_OUTER）⇒ **24/32** ⇒ 未达全落位，可行性未证"],
                         "unverified_inputs": criteria["criteria"]["F4_route_predicates"]["B_add_signal_layers_all_through"]["unverified_inputs"]},
         "design_change": "REQUIRED（层分配 + 走廊/列 + 阻抗重派生；属 WORKER 实施）",
         "performance": {"stub_mm": 0.0, "note": "全通孔+背钻 ⇒ 残桩可至 0；但 lane 落外层 = 微带，须重签阻抗与 SI"},

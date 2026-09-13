@@ -1,6 +1,6 @@
 # CO-206.1 工艺选型 / 性价比对比（A/B/C）
 
-板 `k2_v4_8L.l4.kicad_pcb` sha16 `d4e81f647be7f980`｜判据件 `pm_gate/artifacts/k2_v4/L2/process_route_criteria_v1.json` sha16 `5c2091f0fad5c962`｜介质总厚 1.425mm
+板 `k2_v4_8L.l4.kicad_pcb` sha16 `d4e81f647be7f980`｜判据件 `pm_gate/artifacts/k2_v4/L2/process_route_criteria_v1.json` sha16 `c2e7b928253f2de4`｜介质总厚 1.425mm
 
 过孔普查：493 支；通孔+背钻可制 **405**；需盲/埋孔 **88**（其中两端内层=埋孔，层压次数下界 >= 3）
 
@@ -31,7 +31,7 @@
 **B**
 - 充分条件：存在层分配使每支孔外层锚定（F1 全过）
 - 必要条件（确定性）：lane 必须落外层，否则 corner 为内层<->内层 ⇒ 该路无解
-- 实测（现行模型，修正 span）：lane 落外层的候选 = 26/32 落位 ⇒ 未达全落位，可行性未证
+- 实测（修正 span）：lane 落外层候选 = **26/32**；但 lane 落外层须吃**外层 3W(0.615)**，按外层口径复测（CO10_LANE_OUTER）⇒ **24/32** ⇒ 未达全落位，可行性未证
 
 **C**
 - 可替代：仅**盲孔**（一端外层）= 132 支

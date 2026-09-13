@@ -1,6 +1,12 @@
 {
  "artifact": "process_route_criteria",
  "authority": "监理指令 #13（工艺选型 / 性价比对比 立为 ENG 常规功能）",
+ "changelog": [
+  {
+   "by": "CO-206b",
+   "what": "B 路 lane 落外层须按外层 3W 计 ⇒ 26/32 更正为 24/32（乐观值来源：lane 置于私有内层）"
+  }
+ ],
  "cost_model": {
   "expr": "C = k_layer*L + k_hdi_order*H + k_adv_review*R + k_via_nonstd*N + k_vipp*P + k_imp",
   "kind": "relative_index",
@@ -70,10 +76,11 @@
    "B_add_signal_layers_all_through": {
     "design_change": "REQUIRED（层分配 + 走廊/列重派生 + 阻抗重签）",
     "feasible_if": "存在层分配使**每一支孔都外层锚定**（F1 全过）",
-    "structural_note": "竖段与 lane 须异层（否则真交叉）且 lane 须落外层（否则 corner 为内层↔内层）⇒ lane 落外层是 B 路的必要条件；外层 3W(0.615) 与焊盘区间拥挤为主要风险",
+    "measured": "D 族（竖段落外层）<=14/32；lane 落外层族 = 26/32（lane 置于**私有内层** In6 ⇒ 3W 取内层 0.48，**乐观**）/ **24/32**（lane 按**外层** 3W=0.615 复测，CO10_LANE_OUTER）",
+    "structural_note": "竖段与 lane 须异层（否则真交叉）；corner 须外层锚定 ⇒ （E 或 L 外层）且（L 或 S 外层）⇒ 该路只有两族：D 族（E,S 落外层，lane 内层）与 lane 落外层族。",
     "unverified_inputs": [
      "10L 叠层与阻抗表",
-     "外层 lane 的 3W 可容性（需重派生后实测）"
+     "外层 lane 的 3W 可容性（重派生后实测；现行 24/32）"
     ]
    },
    "C_via_in_pad": {
@@ -140,7 +147,7 @@
   }
  },
  "purpose": "给定设计约束，输出工艺路线的 可行性/成本/交期/性能/风险 对比 + 推荐。判据先行、可复现、可复用（非一次性）。",
- "revision": "v1.0",
+ "revision": "v1.1",
  "risk_catalog": {
   "A_advanced_hdi": [
    "DFM review 结论未知（可能退回改设计）",

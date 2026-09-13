@@ -231,6 +231,12 @@ _ALLI2 = __import__("os").environ.get("CO10_ALLI2", "") not in ("", "0")
 _V2B = __import__("os").environ.get("CO10_V2B", "") not in ("", "0")
 _LANE_V2 = __import__("os").environ.get("CO10_LANE_V2", "In6.Cu")   # 探针私有 lane 层（真板 = B.Cu）
 _V2 = "In5.Cu"                                                       # 第二竖段层（真板 = In5.Cu）
+# CO-206b（L2 自裁 · 工艺选型口径修正）：B 路（加层全通孔）的 lane **落外层**（否则 corner 必为
+#   内层<->内层）⇒ 真板 lane 受外层 3W(0.615) 约束。探针 _V2B 把 lane 放在**私有内层** In6 上，
+#   其 3W 界取内层 0.48 ⇒ 26/32 为**乐观值**。本旋钮把 lane 层的 3W 宽度按外层取（0.205）。
+_LANE_OUTER = __import__("os").environ.get("CO10_LANE_OUTER", "") not in ("", "0")
+if _LANE_OUTER:
+    _WBY[_LANE_V2] = 0.205
 # CO-205b（L2 自裁 · 工具缺陷修复）：过孔占用 = **起止层之间的全部层**（通孔+背钻的物理事实），
 #   而非仅两端点层。原模型只取端点层 ⇒ 系统性低估冲突（co204 候选 B 实测被 KiCad DRC 抓出 7 short）。
 #   默认关 => 现行模型/ALLOC.1..9 逐字节可复现；置 1 启用面跨层模型。
