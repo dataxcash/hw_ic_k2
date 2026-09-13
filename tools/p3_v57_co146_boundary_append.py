@@ -148,6 +148,8 @@ def main() -> int:
              f"{tr['worst']['required_theta_ja_cur_placeholder'] if False else tr['cases'][tr['worst']['case']]['required_theta_ja_C_per_W']}–"
              f"{tr['cases'][tr['best']['case']]['required_theta_ja_C_per_W']}°C/W；b 环境 ≤ {tr['cases'][tr['best']['case']]['Ta_max_C']}°C；c 复核 EQ/功耗假设）。"
              "**PDN 侧不受影响**：手册电流（P3V3 2.23A）下四轨压降 0.007–0.69% ≪ 3%（I_max@3% 4.3–62.6A）。", "",
+             "- **追注（CO-224 / 承 R-CO223-1）**：上列 R4-1 中「U6 域 GND via 阵列」之**义务时点**现行口径**以 CO-222 为准**"
+             "（boundary §95）= **条件动作**（T1/T2）；上列「义务」为**成文时口径**，历史正文不改（承 CO-213 F-3）。", "",
              f"**登记**：+2（`{tr['co148_items'][0]}` HIGH；`{tr['co148_items'][1]}` MED）"
              f"⇒ 登记簿 {_regc25['total']} 项（现行值，CO-155 去下游快照后改读登记簿）；台账 DV-CO146-THERMAL = `UNREACHABLE_REGISTERED`。", "",
              "| 工件 | sha16 |", "|---|---|"]
@@ -185,6 +187,8 @@ def main() -> int:
              "⇒ **自然对流全档不可达 ⇒ 系统散热为必需项**（非可选项）。",
              "- **R5-3**：PCB 侧**不改几何**（瓶颈为板→空气；U6 域热过孔仅影响 ψJB 项）⇒ CO-148 R4-1「GND via 阵列」"
              "由义务降为**可选**，避免为边际收益触发 G4 全链重基线。终判 = 实板热测/仿真。", "",
+             "- **追注（CO-224 / 承 R-CO223-1）**：上列 R5-3 之「由义务降为**可选**」为**成文时口径**；现行口径**以 CO-222 为准**"
+             "（boundary §95）= **条件动作**（T1/T2）。历史正文不改（承 CO-213 F-3）。", "",
              f"**CO-150（闸硬化）**：co124 K9 扩 `thermal_option_domain`（∃ 声明散热方案覆盖最重工况；现状不达标须显式声明 "
              f"required_mitigation）与 `drop_domain`（每轨 ΔV% ≤ 预算%）+ 负控 T10/T10b/T11/T11b ⇒ "
              f"co124 rev **{c124['revision']}** verdict {c124['verdict']} findings {c124['n_findings']}；"
@@ -3443,6 +3447,40 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body96
 
+    # ── §97 CO-224（L2 自裁 · U6 阵列义务时点：CO-223 声明↔实现 divergence 补正 + 随单口径同步） ──
+    MARK97 = "## 97. CO-224"
+    _obl_sites = [("L2 裁定件 `L2_RULING_u6_thermal_v1.md`（§R4-1 + CO-224 追注）", L2 / "L2_RULING_u6_thermal_v1.md"),
+                  ("L2 裁定件 `L2_RULING_u6_thermal_mitigation_v1.md`（§R5-3 + CO-224 追注）", L2 / "L2_RULING_u6_thermal_mitigation_v1.md"),
+                  ("L2 裁定件 `L2_RULING_u6_gnd_via_array_v1.md`（CO-222 定案件）", L2 / "L2_RULING_u6_gnd_via_array_v1.md"),
+                  ("随单 `L5/jlc_package/ORDER_NOTES.md` §6（条件动作 + 门限）", L5 / "jlc_package" / "ORDER_NOTES.md"),
+                  ("包内裁定副本 `06_rulings/L2_RULING_u6_thermal_v1.md`", L5 / "jlc_package" / "06_rulings" / "L2_RULING_u6_thermal_v1.md"),
+                  ("包内裁定副本 `06_rulings/L2_RULING_u6_thermal_mitigation_v1.md`", L5 / "jlc_package" / "06_rulings" / "L2_RULING_u6_thermal_mitigation_v1.md"),
+                  ]
+    sec97 = [MARK97 + "（**L2 自裁 · U6 阵列「义务时点」：CO-223 声明↔实现 divergence 补正 + 随单口径同步**）", "",
+             "- **对象（承 R-CO223-1；as-found `d95f719`）**：§96（CO-223）声明「对旧件**只加追注、不重写历史正文**」+「**修后实测**：全 L2 裁定件扫描**不再有**与 §95 冲突之「义务时点」表述」。**本会话实测证伪**：① `L2_RULING_u6_thermal_v1.md` §R4-1 仍载「**既定义务**」（无追注）；② `L2_RULING_u6_thermal_mitigation_v1.md` §R5-3 仍载「由**义务**降为**可选项**」（**第三种**口径，无追注）；③ 随单 `ORDER_NOTES.md` §6 仍载散文「另建议下一轮几何修订补强 U6 域 GND via 阵列」⇒ 声明↔实现漂移，方向 fail-open（承 R-CO208-1 / R-CO213-3 / R-CO217-1 / R-CO221-1）。",
+             "- **根因**：①② 两件裁定 md 为**序内生成物**（步 `co148_thermal_ruling` / `co149_thermal_mitigation_derive`）—— 手改**产物**会被下一次收敛覆写；CO-223 未触及**生成器** ⇒ 追注**从未落地**（故 §96「修后实测」当时**不成立**）。",
+             "- **处置**：① 追注写入**生成器**（`p3_v57_co148_thermal_ruling.py` / `p3_v57_co149_thermal_mitigation_derive.py`），明载「义务时点**以 CO-222 为准**（条件动作 T1/T2）」；② §25（CO-148 记录）/§26（CO-149 记录）历史正文加**追注**；③ 随单 §6 改述为**条件动作 + 门限**（撤散文建议）；④ 三处自声明面同 commit bump：CO-148.1→**CO-148.2**、CO-149.1→**CO-149.2**、CO146-PKG.10→**CO146-PKG.11**（承 R-CO208-1）。**R-CO224-1**。",
+             f"- **载明面名集（{len(_obl_sites) + 1} 处 = {len(_obl_sites)} 个可 pin 面 + 本件 boundary；R-CO219-1 式枚举 —— 删项即空真，故以名集等式对账）**：", "| 载明面 | sha16 |", "|---|---|"]
+    for _lbl, _pth in _obl_sites:
+        sec97.append(f"| {_lbl} | `{s16(_pth)}` |" if _pth.exists() else f"| {_lbl} | **MISSING** |")
+    # 本件 boundary 自身**不 pin sha**：自指 sha 会使 §97 文本随写入而变 ⇒ 序**永不收敛**（实测：5 轮 sha 各异）。
+    sec97.append(f"| 本件 boundary（§25/§26 追注 + §95/§96/§97；自身不 pin sha） | — |")
+    sec97 += ["",
+              "- **修后实测（本会话，命令可复现）**：`grep -rn 'GND via 阵列' pm_gate/artifacts/k2_v4/L2/*.md pm_gate/artifacts/k2_v4/L5/jlc_package/ORDER_NOTES.md pm_gate/artifacts/k2_v4/L5/jlc_package/06_rulings/*.md pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_joint_assignment_boundary_v1_82.md` "
+              f"⇒ 命中面**恰为上表 {len(_obl_sites) + 1} 处**（名集等式：无未登记载明面、无缺项）；逐处皆载「**以 CO-222 为准**」或 T1/T2 门限。"
+              "`--check` **36/36 全 True**；序收敛 rc=0 / 2 轮；打样包牙齿全 True；交付板 `d4e81f647be7f980` **逐字节未变**。",
+              "- **边界（诚实）**：本件只做**口径对账 + 追注**，**不改几何/不改板**（承 CO-220/CO-222 之据）；阵列热-电耦合量化仍属新 rev 前置（见 §95）。",
+              "",
+              "> **R-CO224-1**：声明「已对旧件加追注 / 全件同源」者，其修后证据须为**本会话实测**（承 R-CO213-3）；被声明的载明面若为**序内生成物**，追注须写入**生成器**（不得只改产物），同 commit bump 自声明面（承 R-CO208-1）；载明面须以**名集等式**枚举对账（承 R-CO219-1：不得只遍历已登记项）。",
+              "",
+              "> **序不变**：本件未改步骤集/序列（承 §82 之 R-CO209-2）。"]
+    body97 = "\n".join(sec97)
+    if MARK97 in txt:
+        txt = re.sub(re.escape(MARK97) + r"[\s\S]*?(?=\n## |\Z)", body97, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body97
+
+    txt = txt.replace("W3 Boundary **v2.64**", "W3 Boundary **v2.65**")
     txt = txt.replace("W3 Boundary **v2.63**", "W3 Boundary **v2.64**")
     txt = txt.replace("W3 Boundary **v2.62**", "W3 Boundary **v2.63**")
     txt = txt.replace("W3 Boundary **v2.61**", "W3 Boundary **v2.62**")

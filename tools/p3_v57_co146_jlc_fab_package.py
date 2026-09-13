@@ -451,7 +451,7 @@ anchor 逐条为抓取件归一原文子串）。
   Tj 121.8–161.8°C **全档超限**（ψJB+h 交叉路线 173.6°C）。
 - **定案（O2）**：**30×30mm 铝散热片 + 界面垫 1.0 ℃/W + ~2 m/s 风冷** ⇒ **θJA_eff = 11.0 ℃/W**；
   四工况 Tj = 91.7 / 106.0 / 103.8 / 117.0 ℃（限 120.0 ℃）**全部 PASS**（最重工况余量 3.0 ℃）。
-- ⇒ **系统装配须按 O2 实施**（顶部散热 + 风冷）；另建议下一轮几何修订补强 U6 域 GND via 阵列。
+- ⇒ **系统装配须按 O2 实施**（顶部散热 + 风冷）；**U6 域 GND via 阵列不在 rev-19 交付范围**，为**条件动作**（**以 CO-222 为准** / boundary §95）：**T1** 首件实测 `Tj(U6) > 117.0 ℃` 或未按 O2 实施 ⇒ 立即开新 rev，量化目标 `θJA_eff ≤ 9.5 ℃/W`；**T2** U6 域几何因他因修订 ⇒ 同 rev 一并补阵。
 - 详见包内 `06_rulings/L2_RULING_u6_thermal_mitigation_v2.md`（**定案**；取代 v1.0 之「推荐/待定」口径）
   与 `06_rulings/L2_RULING_u6_thermal_v1.md`（问题定性）。登记簿该项 = **CLOSED**（CO-149 / CO-150 关闭）。
   本板仍建议打样（散热路径实证需要实板）。
@@ -680,7 +680,7 @@ def main() -> int:
              "t02_8_copper_gerbers": len(cu) >= 8,
              "t03_drill_present": len(drl) >= 1,
              "t04_all_hashed": all(v.get("sha256") for v in m1.values())}
-    rec = {"artifact": "m13_v57_co146_jlc_fab_package", "schema": 1, "revision": "CO146-PKG.10",
+    rec = {"artifact": "m13_v57_co146_jlc_fab_package", "schema": 1, "revision": "CO146-PKG.11",
            "nature": "JLC 打样包（监理指令 #10 动作 3）；只出交付物，不改板/SPEC",
            "board": BOARD.name, "board_sha16": sha16(BOARD),
            "package_dir": str(OUT.relative_to(K2)), "n_files": len(m1),

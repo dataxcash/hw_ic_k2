@@ -76,6 +76,9 @@ def main() -> int:
            "**R4-1（工程侧，本轮自裁）**：PCB 散热路径为**既定义务**：① U6 域 GND via 阵列补强（在现行「零坐标搜索 + 声明 palette」"
            "口径下由 L3 派生落点）；② 保留并扩大 In1/In3/In6 GND 平面在 U6 域的散热覆盖；③ 底部/U6 域铜面最大化。"
            "**触发条件**：仅当需求方确认仍要 40°C 自然对流或要求风冷/散热片时，随下一轮几何修订一并施加（改几何 ⇒ G4 全链重基线）。", "",
+           "**追注（CO-224 / 承 R-CO223-1）**：上列 R4-1 中「U6 域 GND via 阵列」之**义务时点**已变更 —— 现行口径**以 CO-222 为准**"
+           "（boundary §95）：阵列**不在 rev-19 交付范围**，改列为**条件动作**（**T1** 首件实测 `Tj(U6) > 117.0 ℃` 或未按 O2 实施 ⇒ 开新 rev，"
+           "量化目标 `θJA_eff ≤ 9.5 ℃/W`；**T2** U6 域几何因他因修订 ⇒ 同 rev 一并补阵）。上列「既定义务」为**成文时口径**，历史正文不改（承 CO-213 F-3）。", "",
            "**R4-2（输入冲突，须监理/需求方重裁 input）**：监理指令 #10 定值「40°C、自然对流」与器件手册**不相容**"
            f"（最轻档 EQ0-2 typ 4.7W 即需 Ta ≤ {best[1]['Ta_max_C']}°C；最重档 EQ5-19 max 7.0W 需 θJA_eff ≤ "
            f"{worst[1]['required_theta_ja_C_per_W']}°C/W ≪ 手册 17.4）。**处置选项**：(a) 系统强制风冷/顶部散热片（走 θJC "
@@ -98,12 +101,12 @@ def main() -> int:
                  f"（ψJB+h 交叉路线 {th['routes']['psi_jb_plus_board_route_Tj_C']}°C）。CO-146 的 U6 声明功耗 1.5W 偏低约 3–4.7 倍"
                  "（PM 输入缺陷，已由手册值替换）。",
          "refs": ["CO-146", "CO-148", "监理指令 #10"],
-         "disposition": "L2 工程侧：PCB 散热路径义务（U6 域 GND via 补强 / GND 平面覆盖 / 铜面最大化）随下一轮几何修订施加；"
+         "disposition": "L2 工程侧：PCB 散热路径（U6 域 GND via 补强 / GND 平面覆盖 / 铜面最大化）—— GND via 阵列之义务时点**以 CO-222 为准**（条件动作 T1/T2，boundary §95；rev-19 不改几何）；"
                         "**系统侧须监理重裁定值**：40°C 自然对流与手册不相容 ⇒ (a) 强制风冷/顶部散热片使 θJA_eff ≤ "
                         f"{worst[1]['required_theta_ja_C_per_W']}–{best[1]['required_theta_ja_C_per_W']}°C/W，"
                         f"或 (b) 环境 ≤ {best[1]['Ta_max_C']}°C（仅最轻档），或 (c) 复核 EQ/功耗假设。",
          "status": "OPEN",
-         "next": "① 监理/需求方重裁环境/风冷输入（一句话）⇒ 重跑 co146_pm_eval；② L2：U6 域热过孔阵列随几何修订施加。",
+         "next": "① 监理/需求方重裁环境/风冷输入（一句话）⇒ 重跑 co146_pm_eval；② L2：U6 域热过孔阵列 = 条件动作（T1/T2，以 CO-222 为准；见 boundary §95）。",
          "evidence": [f"手册入库件 {U6IN.name} {s16(U6IN)}", f"PM 评估 {PMR.name} {s16(PMR)}"],
          "closed_by": []},
         {"finding": IDS[1], "kind": "TOOL_DEFECT", "severity": "medium",
@@ -152,7 +155,7 @@ def main() -> int:
                                   "gate_gap": "co124 K9 无热域模型 ⇒ 本项不可达性由登记簿承接（见 TOOL_DEFECT 项）",
                                   "evidence_ref": {"path": REG.name, "sha16": s16(REG)}}
     LED.write_text(json.dumps(led, ensure_ascii=False, indent=1) + "\n")
-    rec = {"artifact": "m13_v57_co148_thermal_ruling", "schema": 1, "revision": "CO-148.1",
+    rec = {"artifact": "m13_v57_co148_thermal_ruling", "schema": 1, "revision": "CO-148.2",
            "nature": "L2 裁定：U6 手册输入下的热超限（登记 + 处置 + 台账）",
            "doc": DOC.name, "doc_sha16": s16(DOC), "board_sha16": s16(BOARD),
            "u6_inputs": {"artifact": U6IN.name, "sha16": s16(U6IN)},

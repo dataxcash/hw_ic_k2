@@ -137,6 +137,8 @@ def main() -> int:
             "**R5-3**：PCB 侧**不做几何改动**：散热瓶颈为「板→空气」（占 θJA 的 "
             f"{r_sa_nat / th_ja_est * 100:.0f}%），U6 域热过孔仅影响 ψJB（{psi_jb} 项，≤ 数 °C/W 收益）⇒ "
             "为边际收益触发 G4 全链重基线不成立；CO-148 R4-1 的「GND via 阵列」由**义务**降为**可选项**。",
+            "**追注（CO-224 / 承 R-CO223-1）**：R5-3 中「GND via 阵列」之**义务时点**现行口径**以 CO-222 为准**（boundary §95）= "
+            "**条件动作**（T1/T2），既非本节旧述之「可选项」，亦非 CO-148 §R4-1 之「既定义务」；本节正文不改（承 CO-213 F-3）。",
             f"**R5-4**：终判需实板热测/仿真（本件为闭式一阶派生）；监理定值 Ta={ta}°C 与压降 3% 均不变。", ""]
     DOC.write_text("\n".join(doc) + "\n")
     # ── 登记簿：热项 CLOSED（派生实现要求） ────────────────────────────────
@@ -175,7 +177,7 @@ def main() -> int:
                              "ok": o["covers_all"], "desc": o["desc"]} for o in OPTIONS],
                 "evidence_ref": {"path": DOC.name, "sha16": s16(DOC)}}
     LED.write_text(json.dumps(led, ensure_ascii=False, indent=1) + "\n")
-    rec = {"artifact": "m13_v57_co149_u6_thermal_mitigation", "schema": 1, "revision": "CO-149.1",
+    rec = {"artifact": "m13_v57_co149_u6_thermal_mitigation", "schema": 1, "revision": "CO-149.2",
            "nature": "L2 自裁：U6 热机械派生实现要求（解 CO-148 R4-2；监理定值不变）",
            "doc": DOC.name, "doc_sha16": s16(DOC), "ta_C": ta, "tj_limit_C": tj_lim,
            "routes": {"datasheet_theta_ja": th_ja_ds, "board_first_order_theta_ja": round(th_ja_est, 2),
