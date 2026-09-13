@@ -2464,8 +2464,47 @@ def main() -> int:
         txt = re.sub(re.escape(MARK72) + r"[\s\S]*?(?=\n## |\Z)", body72, txt, count=1)
     else:
         txt = txt.rstrip("\n") + "\n\n" + body72
+    # ── §73 CO-200（L2 自裁 · 不动点 oracle 扩扰动量：受控 md 卡片产物） ─────────────
+    MARK73 = "## 73. CO-200"
+    _rc73 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    sec73 = [MARK73 + "（**L2 自裁 · 不动点 oracle 扩扰动量：受控 md 卡片产物**）", "",
+             "- **G-1（low）·扰动实验覆盖面缺 md 卡片产物**：受控集自 CO-186 起把各步 **md 卡片产物**入 pin（`ORDER_MD_PRODUCTS`，t20 判），"
+             "而 `co195` oracle 的三案（A 登记簿 `meta.counts` / B 单步自持 json 记录 / C 双件交互）**只扰 json 记录** ⇒ "
+             "「步是否**真正全量重写**其 md 产物」**从未被扰动实验行使**（追加式/增量式写会在扰动态残留注入行而无人测）⇒ "
+             "R-CO186-1「受控 sha 覆盖**全部**产物」在**语义层**存在覆盖面缺口（结构已 pin、语义未扰）。",
+             "- **处置**：oracle 升 **CO-200** —— `CASES` 扩第 4 案 **D_md_card_product**（目标 = `co146_impedance_table` 的 md 卡片产物；"
+             "注入**内容行**），与其余案同判「收敛 rc=0 + 目标件**逐字节**复原 + 排除自身快照复原」，**任一案失败即停**；"
+             "牙齿 8 → **9**（`t08_D_md_restored`）；`CASES` 逐案显式 `tooth` 名（新增案不挤占既有齿名 ⇒ 保 CO-198 绑定名稳定）。",
+             f"- **登记簿**：+1（`co200:G-1`，low，CLOSED；**{_rc73['total']} 项 / OPEN {_rc73['OPEN']}**）。",
+             "- **实测（本件证据）**：4 案 `injection_effective` / `order_converged` / `targets_byte_restored` / `snapshot_restored` **全 True**；"
+             "牙齿 **9 项全 True** / verdict **PASS** / rc=0；D 案证实该 md 产物为**全量重写**（注入行消失、逐字节复原）；"
+             "`t07_no_residual_perturbation` 现覆盖 4 案全部目标件。",
+             "",
+             "> **R-CO200-1**：受控集每新增**产物类别**（md / 报告 / 图 / 二进制），oracle `CASES` 须同步增对应扰动量 —— "
+             "否则该面只受**结构** pin、不受**语义**扰动（覆盖面 = 类别数）。",
+             "> **R-CO200-2**（复现序，取代 R-CO199-2；**步集/序列不变，序内出现 50 次**）：规范复现序 = `" + _ord190 + "`，"
+             "**循环至 sha 稳定**（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1 "
+             "+ R-CO175-1 + R-CO176-1/2 + R-CO177-1 + R-CO178-1 + R-CO179-1/2 + R-CO180-1/2 + R-CO181-1/2 + R-CO182-1 "
+             "+ R-CO183-1 + R-CO184-1 + R-CO185-1/2 + R-CO186-1 + R-CO187-1/2/3 + R-CO188-1 + R-CO189-1 + R-CO190-1 "
+             "+ R-CO191-1 + R-CO192-1 + R-CO193-1/2/3/4 + R-CO194-1/2 + R-CO195-0/1 + R-CO196-1/2/4/5 + R-CO197-1/2/4 "
+             "+ R-CO198-1 + R-CO199-1 + R-CO200-1）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows73 = [("工具 `p3_v57_co195_fixpoint_uniqueness_oracle.py`（CO-200 / 4 案 + 9 牙齿）",
+                K2 / "tools/p3_v57_co195_fixpoint_uniqueness_oracle.py"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc73['total']} 项 / OPEN {_rc73['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows73:
+        if pth.exists():
+            sec73.append(f"| {label} | `{s16(pth)}` |")
+    sec73.append("")
+    body73 = "\n".join(sec73)
+    if MARK73 in txt:
+        txt = re.sub(re.escape(MARK73) + r"[\s\S]*?(?=\n## |\Z)", body73, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body73
+    txt = txt.replace("W3 Boundary **v2.44**", "W3 Boundary **v2.45**")
     txt = txt.replace("W3 Boundary **v2.43**", "W3 Boundary **v2.44**")
-    txt = txt.replace("W3 Boundary **v2.42**", "W3 Boundary **v2.43**")
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
     return 0

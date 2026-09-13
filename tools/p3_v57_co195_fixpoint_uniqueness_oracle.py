@@ -24,12 +24,20 @@ REG = K2 / "pm_gate/artifacts/k2_v4/L2/input_defect_register_v1.json"
 STEP2 = K2 / "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2"
 REC = STEP2 / "m13_v57_co195_fixpoint_uniqueness.json"
 IMP = STEP2 / "m13_v57_co146_impedance_table.json"        # ORDER 步（co146_impedance_table）自持记录：每次全量重写
+IMP_MD = STEP2 / "m13_v57_co146_impedance_table.md"     # CO-200（G-1）：同一步的 **md 卡片产物**（CO-186 起受控且入 pin）
 BOGUS_COUNTS = {"SPEC_DEFECT": 999, "PROVED_THRESHOLD": 999, "TOOL_DEFECT": 999,
                 "IMPLEMENTATION_DEVIATION": 999, "OPEN": 7, "total": 999}
 CASES = (
-    {"id": "A_register_counts", "why": "登记簿 meta.counts（跨件 pin 链最敏感）", "targets": (REG,)},
-    {"id": "B_step_record", "why": "单个 ORDER 步自持记录（步内全量重写 ⇒ 应自愈）", "targets": (IMP,)},
-    {"id": "C_double", "why": "同时扰动（两件交互）", "targets": (REG, IMP)},
+    {"id": "A_register_counts", "why": "登记簿 meta.counts（跨件 pin 链最敏感）", "targets": (REG,),
+     "tooth": "t02_A_converged_and_restored"},
+    {"id": "B_step_record", "why": "单个 ORDER 步自持记录（步内全量重写 ⇒ 应自愈）", "targets": (IMP,),
+     "tooth": "t03_B_converged_and_restored"},
+    {"id": "C_double", "why": "同时扰动（两件交互）", "targets": (REG, IMP),
+     "tooth": "t04_C_converged_and_restored"},
+    # CO-200（G-1）：**md 卡片产物**（CO-186 起受控并入 pin）此前**从未**被扰动实验行使 —— 旧三案只扰 json 记录。
+    # 该项判「步是否**真正全量重写**其 md 产物」（追加式/增量式写 ⇒ 注入行残留 ⇒ 复原失败 ⇒ 停机）。
+    {"id": "D_md_card_product", "why": "受控 md 卡片产物（步内全量重写 ⇒ 应自愈；追加式写即被本项抓）",
+     "targets": (IMP_MD,), "tooth": "t08_D_md_restored"},
 )
 
 
@@ -84,6 +92,9 @@ def uniqueness_discriminates() -> bool:
 
 def _inject(target: Path) -> None:
     """按目标件类型注入：登记簿改 `meta.counts`；ORDER 步记录加探针键（步将全量重写 ⇒ 应消失）。"""
+    if target.suffix == ".md":               # CO-200：md 产物注入**内容行**（步若全量重写 ⇒ 该行应消失）
+        target.write_text(target.read_text(encoding="utf-8") + "\n<!-- CO-200 injection probe -->\n", encoding="utf-8")
+        return
     d = json.loads(target.read_text(encoding="utf-8"))
     if target == REG:
         d["meta"]["counts"] = dict(BOGUS_COUNTS)
@@ -111,7 +122,7 @@ def main(argv=None) -> int:
          "t02_A_converged_and_restored": False, "t03_B_converged_and_restored": False,
          "t04_C_converged_and_restored": False, "t05_discriminates_path_dependence":
              uniqueness_discriminates(), "t06_self_exclusion_nonvacuous": False,
-         "t07_no_residual_perturbation": False}
+         "t07_no_residual_perturbation": False, "t08_D_md_restored": False}   # CO-200（G-1）
 
     # ① 先结算：工作树须已是规范序不动点，否则测的是「结算」而非「路径无关」
     settle_rc, settle_json = _run_order(cur, a.max_iter)
@@ -146,7 +157,7 @@ def main(argv=None) -> int:
                 if p.read_bytes() != saved[str(p)]:
                     p.write_bytes(saved[str(p)])
         rows.append(row)
-        t[f"t0{2 + idx}_{'ABC'[idx]}_converged_and_restored"] = row["restored"]
+        t[case["tooth"]] = row["restored"]          # CO-200：齿名由 CASES 显式给出（新增案不再挤占既有齿名）
         if not row["restored"]:
             aborted = case["id"]
             break
@@ -156,9 +167,9 @@ def main(argv=None) -> int:
     teeth_ok = all(t.values())
 
     rec = {
-        "artifact": "m13_v57_co195_fixpoint_uniqueness", "schema": 1, "revision": "CO-196",
-        "nature": "固定点唯一性（路径无关）oracle：**多扰动量**（3 案）扰动启动 ⇒ 收敛须复原规范态（CO-151 失效模式的直接判据）",
-        "trigger": "CO-196：CO-195 的 I-2（oracle 证据自指）即「自指/链式 pin 写法」实例 ⇒ 已登记的扩扰动量触发条件达成",
+        "artifact": "m13_v57_co195_fixpoint_uniqueness", "schema": 1, "revision": "CO-200",
+        "nature": "固定点唯一性（路径无关）oracle：**多扰动量**（4 案）扰动启动 ⇒ 收敛须复原规范态（CO-151 失效模式的直接判据）",
+        "trigger": "CO-196（I-2 自指/链式 pin）起，**CO-200（G-1）**再扩：受控集含 **md 卡片产物**（CO-186 入 pin）而旧三案只扰 json 记录 ⇒ 该受控面从未被扰动实验行使",
         "snapshot_scope": "watch_paths() - {本记录}（自指防护，判据不含本证据件）",
         "precondition": "先结算（t00）：工作树须已收敛为不动点",
         # CO-196（J-3）：**不落盘任何含本记录自身的 sha** —— `sha_incl`（= snapshot() 含证据件自身）会使记录内容依赖
