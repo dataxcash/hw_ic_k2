@@ -11,6 +11,8 @@
   P3 现行 pin 必须等于被引文件**当前** sha16；不等 ⇒ 必须是**已声明豁免**（`EXEMPT` 注册表：记录本体已被后续 CO 取代、
       pin 属历史，理由明文）；
   P4 牙齿：注入一个**未声明**的陈旧 pin 必须被判 FAIL（负控）；注入匹配 pin 必须 PASS（正控）。
+  P5（CO-214）**消费面机判**：三件 L5 verdict 记录（DFM/DFT、SI/PI/EMC、G7）之被评板指纹须钉**现行** L4 板
+     （非冻结源板、非退化）——关闭 CO-213 F-4「消费者 = ∅」缺口（板变更后记录不刷新只对人眼可见）。
 只读；不改任何工件。CLI: python3 tools/p3_v57_co120_provenance_pin_gate.py
 """
 from __future__ import annotations
@@ -70,6 +72,12 @@ SNAPSHOT_DECLARED = {
                                                    "⇒ 不随运行序漂移（同 CO-159 声明口径）",
 }
 DELIVERED_BOARD = "d4e81f647be7f980"
+# CO-214（L2 自裁）：CO-213 F-4 判定 L5 三件记录之板指纹**消费面 = ∅**（仅生产者自检）⇒ 板变更后记录
+# 不刷新只对人眼可见。本闸补**消费面机判**：三件 L5 verdict 记录之被评板指纹须 = **现行** L4 板。
+L4_PCB = K2 / "k2_v4_8L.l4.kicad_pcb"
+SRC_PCB = K2 / "k2_v4_8L.kicad_pcb"
+L5_RECORD_JSON = ("m13_v57_l5_dfm_dft_record.json", "m13_v57_l5_si_pi_emc_record.json")
+L5_RECORD_MD = "m13_v57_l5_g7_record.md"
 # CO-157（H-3）：`board_superseded` 的「机判可证」须是**格式可判的板 sha16**，自由文本不算证据。
 BOARD_RE = re.compile(r"[0-9a-f]{16}")
 # CO-159（F-6）：格式判仍被任意 16-hex（`0000…`/`deadbeef…`）满足 ⇒ 收为**已登记被取代板白名单**（可比对）。
@@ -151,6 +159,40 @@ def basis_of(records: dict) -> list:
 
 def s16(p) -> str:
     return hashlib.sha256(Path(p).read_bytes()).hexdigest()[:16]
+
+
+def l5_board_binding(recs=None, md_text=None) -> list:
+    """CO-214：消费面机判 —— L5 verdict 记录之被评板指纹须钉**现行** L4 板。
+
+    `recs`/`md_text` 可注入（牙齿正负控；None = 读实件）。判定：JSON 记录之 `board_sha256`
+    （全 64-hex）须 == 现行 L4 板 sha256 且 != 冻结源板；md 记录须含现行 L4 板 sha16。
+    缺件 / 不可解析 / 退化 ⇒ 该行 `ok=False`（fail-closed，禁静默跳过）。
+    """
+    l4_full = hashlib.sha256(Path(L4_PCB).read_bytes()).hexdigest()
+    src_full = hashlib.sha256(Path(SRC_PCB).read_bytes()).hexdigest()
+    rows = []
+    for name in L5_RECORD_JSON:
+        if recs is not None:
+            d = recs.get(name)
+        else:
+            try:
+                d = json.loads((STEP2 / name).read_text(encoding="utf-8"))
+            except Exception:
+                d = None
+        pinned = d.get("board_sha256") if isinstance(d, dict) else None
+        rows.append({"record": name, "kind": "json", "pinned_sha256": pinned,
+                     "expected_sha256": l4_full,
+                     "ok": isinstance(pinned, str) and pinned == l4_full and pinned != src_full})
+    if md_text is None:
+        try:
+            md_text = (STEP2 / L5_RECORD_MD).read_text(encoding="utf-8")
+        except Exception:
+            md_text = ""
+    l4_16 = l4_full[:16]
+    rows.append({"record": L5_RECORD_MD, "kind": "md", "pinned_sha256": None,
+                 "expected_sha16": l4_16,
+                 "ok": bool(md_text) and l4_16 in md_text})
+    return rows
 
 
 # 歧义 key 的显式目标（globs 命中 >1；零搜索：显式登记，guarded by 存在性）
@@ -254,11 +296,28 @@ def main(argv=None) -> int:
     pos_snap4_ok = bool(pos_snap4) and all(s4["declared"] for s4 in pos_snap4)
     up_snap4_ok = scan_snapshots({"synthetic_probe.json": {"inputs": {"spec_sha16": "0" * 16},
                                                            "board_sha16": "0" * 16}}) == []
+    # CO-214：消费面机判 —— L5 三件记录之被评板指纹须钉现行 L4 板（板变更 ⇒ 本闸 rc≠0）
+    _l4f = hashlib.sha256(Path(L4_PCB).read_bytes()).hexdigest()
+    _srcf = hashlib.sha256(Path(SRC_PCB).read_bytes()).hexdigest()
+    try:
+        _md = (STEP2 / L5_RECORD_MD).read_text(encoding="utf-8")
+    except Exception:
+        _md = ""
+    l5_rows = l5_board_binding()
+    l5_bad = [r for r in l5_rows if not r["ok"]]
+    pos_l5_ok = not l5_bad
+    neg_l5 = l5_board_binding(recs={n: {"board_sha256": _srcf} for n in L5_RECORD_JSON}, md_text=_md)
+    neg_l5_hit = any(not r["ok"] for r in neg_l5)
+    neg_l5b = l5_board_binding(recs={n: {"board_sha256": "0" * 64} for n in L5_RECORD_JSON}, md_text=_md)
+    neg_l5b_hit = any(not r["ok"] for r in neg_l5b)
+    neg_l5c = l5_board_binding(md_text=_md.replace(_l4f[:16], _srcf[:16]))
+    neg_l5c_hit = any(not r["ok"] for r in neg_l5c)
     teeth_ok = (neg_hit and pos_ok and snap_ok and neg_basis_hit and pos_basis_ok
                 and fake_basis_hit and neg_snap3_hit and pos_snap3_ok
-                and neg_snap4_hit and pos_snap4_ok and up_snap4_ok)
+                and neg_snap4_hit and pos_snap4_ok and up_snap4_ok
+                and pos_l5_ok and neg_l5_hit and neg_l5b_hit and neg_l5c_hit)
     rec = {
-        "artifact": "m13_v57_co120_provenance_pin_gate", "schema": 1, "revision": "CO-120.6",
+        "artifact": "m13_v57_co120_provenance_pin_gate", "schema": 1, "revision": "CO-120.7",
         "nature": "L2 过程闸：记录内 inter-record provenance pin 一致性（关闭 CO-108/CO-114 F-6 盲区）",
         "pins_total": len(rows), "n_match": sum(1 for r in rows if r["status"] == "match"),
         "n_exempt_historical": sum(1 for r in rows if r["status"] == "exempt_historical"),
@@ -268,6 +327,8 @@ def main(argv=None) -> int:
         "exemption_basis": {"classes": EXEMPT_BASIS, "rows": basis,
                            "n_declared_historical": n_decl_hist,
                            "n_basis_not_ok": len(basis_bad)},
+        "l5_board_binding": {"rows": l5_rows, "all_ok": pos_l5_ok, "n_not_ok": len(l5_bad),
+                             "current_board_sha256": _l4f, "frozen_source_sha256": _srcf},
         "snapshot_declared": SNAPSHOT_DECLARED,
         "snapshot_rows": snaps, "n_snapshot_undeclared": len(snap_undeclared),
         "rows": rows,
@@ -285,8 +346,13 @@ def main(argv=None) -> int:
                   "negative_control_live_state_snapshot_caught": neg_snap4_hit,
                   "positive_control_declared_live_snapshot_passes": pos_snap4_ok,
                   "positive_control_upstream_input_pin_not_snapshot": up_snap4_ok,
+                  "positive_control_l5_records_pin_current_board": pos_l5_ok,
+                  "negative_control_l5_stale_board_caught": neg_l5_hit,
+                  "negative_control_l5_degenerate_board_caught": neg_l5b_hit,
+                  "negative_control_l5_md_board_caught": neg_l5c_hit,
                   "teeth_ok": teeth_ok},
-        "verdict": ("FAIL_STALE_PROVENANCE_PIN" if stale else
+        "verdict": ("FAIL_L5_RECORD_BOARD_BINDING" if l5_bad else
+                    "FAIL_STALE_PROVENANCE_PIN" if stale else
                     "FAIL_UNDECLARED_DOWNSTREAM_SNAPSHOT" if snap_undeclared else
                     "FAIL_EXEMPTION_BASIS" if basis_bad else
                     "PASS" if teeth_ok else "FAIL(teeth)"),
@@ -301,11 +367,14 @@ def main(argv=None) -> int:
                        "pin→文件解析失败（歧义/无候选）记 unresolved_key，不计失败但入记录",
                        "扫描范围（CO-153 声明）：仅 STEP2 下 m13_v57_co*.json 记录的 `*_record` 键；"
                        "台账（L2/derived_value_ledger_v1.json）内 DV 的 reachability.evidence_ref pin "
-                       "由 co124 K9 的 declared/process_floor 判据覆盖（CO-153）"],
+                       "由 co124 K9 的 declared/process_floor 判据覆盖（CO-153）",
+                       "CO-214（L5 板指纹**消费面机判**）：三件 L5 verdict 记录（DFM/DFT、SI/PI/EMC、G7）之被评板指纹"
+                       "须 = **现行** L4 板（JSON 比全 64-hex、md 比 sha16），且 != 冻结源板；缺件/退化 ⇒ 本闸 rc≠0"
+                       "（关闭 CO-213 F-4「消费者 = ∅」：原只有生产者自检 ⇒ 板变更后记录不刷新只对人眼可见）"],
     }
     Path(a.out).write_text(json.dumps(rec, ensure_ascii=False, indent=1, sort_keys=True) + "\n")
     print(f"CO-120 verdict={rec['verdict']} | snaps={len(snaps)} undeclared={len(snap_undeclared)} "
-          f"basis_not_ok={len(basis_bad)} | pins={len(rows)} match={rec['n_match']} exempt={rec['n_exempt_historical']} stale_undeclared={rec['n_stale_undeclared']} unresolved={rec['n_unresolved_key']} teeth={teeth_ok}")
+          f"basis_not_ok={len(basis_bad)} | l5_bad={len(l5_bad)} | pins={len(rows)} match={rec['n_match']} exempt={rec['n_exempt_historical']} stale_undeclared={rec['n_stale_undeclared']} unresolved={rec['n_unresolved_key']} teeth={teeth_ok}")
     for r in stale:
         print("   STALE", r["record"], r["key"], r["cited"], "->", r["actual"])
     with_out = rec["n_exempt_historical"]

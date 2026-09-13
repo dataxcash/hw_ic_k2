@@ -3083,6 +3083,48 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body86
 
+    # ── §87 CO-214（L2 自裁 · L5 verdict 记录之板指纹**消费面机判**） ──
+    MARK87 = "## 87. CO-214"
+    _rc87 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    sec87 = [MARK87 + "（**L2 自裁 · 关闭 CO-213 F-4 之「有据延后」：L5 记录板指纹消费面机判**）", "",
+             "- **缘起（CO-213 F-4 之处置留白）**：CO-213 判定「三件 L5 verdict 记录之板指纹**消费者 = ∅**」"
+             "（读记录 ∩ 含板指纹，除生产者外无一件）⇒ 板变更后 L5 记录不刷新仍**只对人眼可见**；该修复列**有据延后**，"
+             "触发 = 「板变更 **或** 下次 L5 重跑」。本会话按令续接时 L5 sign-off 已重跑（`.8` 版记录）⇒ **触发成立**，故就地关闭该项。",
+             "- **缺口（机判）**：CO-212/CO-213 只把板指纹钉**进**记录（生产者侧），序内无任何步**读**该指纹 ⇒ "
+             "「记录钉的是不是**现行**板」在复现序内**不可判**；被评板变更（新 rev）时 L5 的 PASS（含等长 0.15 内、DFM PASS）**不会可见地失效**。",
+             "- **处置（消费面机判入序）**：`p3_v57_co120_provenance_pin_gate.py` 升 **CO-120.7**，补判据 **P5 / `l5_board_binding()`**："
+             "① 两件 JSON 记录（DFM/DFT、SI/PI/EMC）之 `board_sha256`（**全 64-hex**）须 == **现行** L4 板 sha256 且 != **冻结源板** sha256；"
+             "② G7 md 记录须含**现行** L4 板 sha16；③ 缺件 / 不可解析 / 退化（全零）⇒ 该行 `ok=False`（**fail-closed**，禁静默跳过）。"
+             "任一不合格 ⇒ 本闸 verdict = `FAIL_L5_RECORD_BOARD_BINDING`（rc≠0）而**非** PASS。齿 **+4**（1 正控 = 实件全 ok；"
+             "3 负控 = JSON 面退回冻结源板 / 退化全零 / md 面以冻结源 sha16 顶替 —— 皆须被抓）；runner `EXPECTED_TEETH` 同步（co120 **15 → 19 齿**）。"
+             "**序不变**：未增删步、未改序列（仍 50 次；只改既有步之判据与齿集）。",
+             "- **修后实测**：co120 **PASS**（`l5_bad=0`；19 齿全 True）；独立判别探针（直调 `l5_board_binding()` 注入）"
+             "：注入冻结源板 ⇒ `all_ok=False`、注入全零 ⇒ `all_ok=False`、实件 ⇒ `all_ok=True` ⇒ 负控**判别力成立**（非恒真）。",
+             "- **诚实边界（未声称）**：本判据只保证「记录所钉之板 = 现行 L4 板」，**不**重跑 DFM/SI 判据本身；"
+             "亦不覆盖 HDI 报价（外部输入）。被评板变更时本闸会**先于** L5 重跑报 FAIL（这正是设计意图：暴露陈旧）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows87 = [("闸 `p3_v57_co120_provenance_pin_gate.py`（**CO-120.7**：+P5 L5 板指纹消费面机判 + 4 齿）", K2 / "tools/p3_v57_co120_provenance_pin_gate.py"),
+               ("记录 `m13_v57_co120_provenance_pin_gate.json`（**CO-120.7**：19 齿全 True / `l5_bad=0`）", STEP2 / "m13_v57_co120_provenance_pin_gate.json"),
+               ("runner `p3_v57_co164_order_runner.py`（`EXPECTED_TEETH` co120 15→19 齿）", K2 / "tools/p3_v57_co164_order_runner.py"),
+               ("被消费 L5 记录（DFM/DFT、SI/PI/EMC、G7）", STEP2 / "m13_v57_l5_dfm_dft_record.json"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc87['total']} 项 / OPEN {_rc87['OPEN']}）", L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows87:
+        if pth.exists():
+            sec87.append(f"| {label} | `{s16(pth)}` |")
+    sec87.append("")
+    sec87.append("> **R-CO214-1**：凡产出 **verdict 记录**（L5 sign-off / L4 图纸 / 闸记录等）之**被评态指纹**，须有**至少一个序内或闸内消费者**"
+                 "以机判核对（禁只由生产者自检）；被评态记录的**生产者与消费者须同 commit 双侧**同步，缺消费者即 fail-closed。")
+    sec87.append("")
+    sec87.append("> **序不变**：本件未改步骤集/序列（承 §82 之 R-CO209-2）。")
+    sec87.append("")
+    body87 = "\n".join(sec87)
+    if MARK87 in txt:
+        txt = re.sub(re.escape(MARK87) + r"[\s\S]*?(?=\n## |\Z)", body87, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body87
+
+    txt = txt.replace("W3 Boundary **v2.54**", "W3 Boundary **v2.55**")
     txt = txt.replace("W3 Boundary **v2.53**", "W3 Boundary **v2.54**")
     txt = txt.replace("W3 Boundary **v2.52**", "W3 Boundary **v2.53**")
     txt = txt.replace("W3 Boundary **v2.51**", "W3 Boundary **v2.52**")

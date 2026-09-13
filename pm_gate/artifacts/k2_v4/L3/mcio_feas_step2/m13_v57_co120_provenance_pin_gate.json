@@ -123,6 +123,35 @@
    "co134_record": "CO-144 重基线前的板 a3ce9ab8 全量审计 ⇒ 历史（B.Cu 违规已由 CO-144 消除）"
   }
  },
+ "l5_board_binding": {
+  "all_ok": true,
+  "current_board_sha256": "d4e81f647be7f9809aef72affb55fdf442a0cf743baead02d8e44fb130de18fc",
+  "frozen_source_sha256": "fb07d25ac426ff84905200a9af88e04dd9e6b9216986c4f4459fd7d556a88c34",
+  "n_not_ok": 0,
+  "rows": [
+   {
+    "expected_sha256": "d4e81f647be7f9809aef72affb55fdf442a0cf743baead02d8e44fb130de18fc",
+    "kind": "json",
+    "ok": true,
+    "pinned_sha256": "d4e81f647be7f9809aef72affb55fdf442a0cf743baead02d8e44fb130de18fc",
+    "record": "m13_v57_l5_dfm_dft_record.json"
+   },
+   {
+    "expected_sha256": "d4e81f647be7f9809aef72affb55fdf442a0cf743baead02d8e44fb130de18fc",
+    "kind": "json",
+    "ok": true,
+    "pinned_sha256": "d4e81f647be7f9809aef72affb55fdf442a0cf743baead02d8e44fb130de18fc",
+    "record": "m13_v57_l5_si_pi_emc_record.json"
+   },
+   {
+    "expected_sha16": "d4e81f647be7f980",
+    "kind": "md",
+    "ok": true,
+    "pinned_sha256": null,
+    "record": "m13_v57_l5_g7_record.md"
+   }
+  ]
+ },
  "n_exempt_historical": 9,
  "n_match": 7,
  "n_snapshot_undeclared": 0,
@@ -137,10 +166,11 @@
   "CO-159（F-5）：下游快照键判据为键名面（`*_sha16_after` ∪ `register|ledger[_…]_sha16|items_total|open_total|n_items`），不依赖嵌套容器",
   "豁免仅限『记录本体已被后续 CO 取代 ⇒ pin 属历史』并在本闸注册表明文；未声明陈旧 pin 一律 FAIL",
   "pin→文件解析失败（歧义/无候选）记 unresolved_key，不计失败但入记录",
-  "扫描范围（CO-153 声明）：仅 STEP2 下 m13_v57_co*.json 记录的 `*_record` 键；台账（L2/derived_value_ledger_v1.json）内 DV 的 reachability.evidence_ref pin 由 co124 K9 的 declared/process_floor 判据覆盖（CO-153）"
+  "扫描范围（CO-153 声明）：仅 STEP2 下 m13_v57_co*.json 记录的 `*_record` 键；台账（L2/derived_value_ledger_v1.json）内 DV 的 reachability.evidence_ref pin 由 co124 K9 的 declared/process_floor 判据覆盖（CO-153）",
+  "CO-214（L5 板指纹**消费面机判**）：三件 L5 verdict 记录（DFM/DFT、SI/PI/EMC、G7）之被评板指纹须 = **现行** L4 板（JSON 比全 64-hex、md 比 sha16），且 != 冻结源板；缺件/退化 ⇒ 本闸 rc≠0（关闭 CO-213 F-4「消费者 = ∅」：原只有生产者自检 ⇒ 板变更后记录不刷新只对人眼可见）"
  ],
  "pins_total": 17,
- "revision": "CO-120.6",
+ "revision": "CO-120.7",
  "rows": [
   {
    "actual": "7f481be259865941",
@@ -382,6 +412,9 @@
  },
  "teeth": {
   "negative_control_freetext_board_basis_rejected": true,
+  "negative_control_l5_degenerate_board_caught": true,
+  "negative_control_l5_md_board_caught": true,
+  "negative_control_l5_stale_board_caught": true,
   "negative_control_live_state_snapshot_caught": true,
   "negative_control_register_snapshot_caught": true,
   "negative_control_top_level_register_snapshot_caught": true,
@@ -392,6 +425,7 @@
   "positive_control_declared_live_snapshot_passes": true,
   "positive_control_declared_register_snapshot_passes": true,
   "positive_control_declared_snapshot_passes": true,
+  "positive_control_l5_records_pin_current_board": true,
   "positive_control_matching_pin_passes": true,
   "positive_control_note_key_not_snapshot": true,
   "positive_control_upstream_input_pin_not_snapshot": true,
