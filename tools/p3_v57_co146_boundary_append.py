@@ -1606,6 +1606,46 @@ def main() -> int:
         txt = re.sub(re.escape(MARK54) + r"[\s\S]*?(?=\n## |\Z)", body54, txt, count=1)
     else:
         txt = txt.rstrip("\n") + "\n\n" + body54
+    # ── §55 CO-182（结构性消除「固有一轮 pin 滞后」= co180:G-4） ────────────
+    MARK55 = "## 55. CO-182"
+    _rc55 = json.loads((L2 / "input_defect_register_v1.json").read_text())["meta"]["counts"]
+    _ord182 = _ord180.replace("co120_provenance_pin_gate → co135_review_hygiene",
+                              "co120_provenance_pin_gate → co146_boundary_append → co135_review_hygiene")
+    sec55 = [MARK55 + "（**L2 自裁 · 复现序结构重排：消除一轮 pin 滞后**）", "",
+             "- **G-1（medium）·固有一轮 pin 滞后（= 既有 `co180:G-4`）根因机判化**：boundary 由 "
+             "`co146_boundary_append`（序内 idx 37）刷新，但其后 `co77`/`co120` **仍改写被 boundary 引用的记录**；"
+             "`co135`（idx 41）读 boundary 时 co120 的 pin 已**瞬时陈旧** ⇒ `V3 citation_scan_clean=False` ⇒ rc=1 ⇒ **首轮停机**"
+             "（须人工重跑）。复评/复核方**受控瞬态复现**：把 `co120` 记录回滚为 as-found（`8469fb63b19664c0`）⇒ "
+             "旧序**迭代 1 即停 `co135` / `unexpected_nonzero`**（与 handoff-z46 开篇「已知特性」一致）。",
+             "- **处置（纯重排，不引入容忍、不掩盖）**：在 `co120_provenance_pin_gate` 与 `co135_review_hygiene` 之间**插入**"
+             " `co146_boundary_append`，使**每个 boundary citation 扫描步紧跟刷新步** —— "
+             "序内出现 **50 次**（步集 distinct 不变；`co146_boundary_append` 出现 3 次）；"
+             "runner 增声明 `BOUNDARY_SCAN_GUARDED`/`BOUNDARY_REFRESH_STEP` + 静态齿 **t17**（受保护步须 i>0 且 `ORDER[i-1]` = 刷新步）。",
+             "- **对照实测**：同一瞬态（co120 回滚）下**旧序** abort@co135；**新序**（CO-182.1）**单次调用即收敛**"
+             "（rc=0；见 R-CO182-2），不再需要「重跑」。",
+             f"- **登记簿**：+1（`co182:G-1`，CLOSED；{_rc55['total']} 项 / OPEN {_rc55['OPEN']}）。",
+             "",
+             "> **R-CO182-1**：凡**扫描 boundary citation 的步**（`co77`/`co135`）须**紧跟** `co146_boundary_append`；"
+             "t17 机判。**禁**以「容忍一轮滞后」「放宽扫描判据」代替重排（禁静默让步）。",
+             "> **R-CO182-2**（复现序，取代 R-CO181-3；**步集 distinct 不变，序内出现 50 次**）：规范复现序 = `" + _ord182 + "`，"
+             "**循环至 sha 稳定**（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1 "
+             "+ R-CO175-1 + R-CO176-1/2 + R-CO177-1 + R-CO178-1 + R-CO179-1/2 + R-CO180-1/2 + R-CO181-1/2 + R-CO182-1）。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    _rows55 = [("工具 `p3_v57_co164_order_runner.py`（CO-182.1 / boundary 扫描步紧跟刷新步 + t17；序内 50 次）",
+                K2 / "tools/p3_v57_co164_order_runner.py"),
+               (f"登记簿 `input_defect_register_v1.json`（{_rc55['total']} 项 / OPEN {_rc55['OPEN']}）",
+                L2 / "input_defect_register_v1.json")]
+    for label, pth in _rows55:
+        if pth.exists():
+            sec55.append(f"| {label} | `{s16(pth)}` |")
+    sec55.append("")
+    body55 = "\n".join(sec55)
+    if MARK55 in txt:
+        txt = re.sub(re.escape(MARK55) + r"[\s\S]*?(?=\n## |\Z)", body55, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body55
+    txt = txt.replace("W3 Boundary **v2.26**", "W3 Boundary **v2.27**")
     txt = txt.replace("W3 Boundary **v2.25**", "W3 Boundary **v2.26**")
     txt = txt.replace("W3 Boundary **v2.24**", "W3 Boundary **v2.25**")
     DOC.write_text(txt)

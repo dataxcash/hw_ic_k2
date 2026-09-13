@@ -1,4 +1,4 @@
-# m13 v57 — W3 Boundary **v2.26**（文件名沿用 v1.82 以保持 co77 身份链；CO-121/121.1/122/122b + CO-124..CO-132（D-6 定案 + rev-17 退役 B.Cu 载体 + rev-18 R1 In4 承载几何派生）+ **CO-133（L2 自裁 · 施工期物理施加：rev-18 声明 PDN 铜落板 `d4e81f647be7f980` + 幂等/板实合规机判）已登记**；**CO-134（整改通知 #09：③ 重新定性 = 工程换算错误 → REQ-R3-2 忠实实现（铜边 ≥ 2w 按层）+ 需求/实现分家规矩 + co124 K9）已登记**）（+ **CO-135（非执行者复评 rev-19 + CO-134｜L2 声明/工具卫生修正：co77 覆盖扩至 markdown 表格行、链路 pin 全量刷新、co78/co81/co84 对 rev-19 重跑、L5 fab pin 刷新）已登记**；**CO-136（L2 自裁 · 闸卫生续：co106 陈旧牙齿改数据无关合成控 / co124 定义件版本派生 / co77 表格行 citation 负控牙齿 / 登记簿 +2 TOOL_DEFECT）已登记**；**CO-137（L2 只读分析：as-built 对间偏差几何修正可行性 = MIXED）已登记**；**CO-138（L2 只读分析：偏差耦合几何画像 —— B.Cu/F.Cu = 长平行在域内；In5 = 21.8° 斜交扇出）已登记**；**CO-139（L2 自裁 · K9 硬化：豁免域须 hash-pin 依据 + 负控 T9）已登记**；**CO-140（L2 只读分析：as-built 偏差归因 —— 1 接口固有 / 1 路由可改 / 1 斜交）已登记；F.Cu 项升 L1（J2 接口节距）**；**CO-141（L2 只读审计：对间 2w 符合性全量 —— 原「3 处」为下界，实为 24 个平行对-对；根因 = 路由器列距基准漏 3W）已登记**；**CO-142（L2 只读：对间 <3W 违规逐条明细 + 构造阶段归因 —— B.Cu 14 逃生竖列 / F.Cu 10 J2 land）已登记**；**CO-143（L2 只读：纠正 CO-141 附记2 的 f13 pair_xorder 定位 → 真实所在 = escape-fan 落位判据 `p3_v57_co10_west_fan_probe.py:check()`；施加可行性 = 3W 可满足但单遍贪心+PDN 障碍下无法 32/32，须重派生扇落位策略；登记簿该项保持 OPEN）已登记**）（+ **CO-117（L2 自裁）：band In4 铺铜归属 + SPEC rev-15**；**CO-114 非执行者对抗复评 rev-14 = PASS_WITH_FINDINGS（6 发现）**；W3-CN.41 收口 + CO-67..CO-71 方案(a) 全链执行/判据/判定接口 + CO-72 PDN 平面对齐 rev-6 + CO-73 层角色声明一致性终扫（rev-7）+ CO-74 B.Cu 电力铜退役/In4 承载（SPEC rev-8）；CO-72-PDN-1 归口 L1→L2 并闭合 + CO-75 西侧 1.580 未覆盖维搜索（负结果，L1 ① 证据补强）+ **CO-76 非执行者侧对抗评审 pass 1/2（F1/F2/F3 发现并修复）** + **CO-77 收口声明件当前态身份引用校正** + CO-78 层角色漂移回归闸（F1 缺陷类关闭） + CO-79 探针空真通过加固（守卫负控 A10） + CO-80 L4 工程文件规则对齐 + 独立 kicad-cli 复现 DFM + CO-81 受控工程文件规则回归闸 + CO-82 L4 工程文件网类缺失修复 + 闸覆盖补全（net_settings） + CO-83 工程网类↔红线 SPEC net_classes 交叉校验 + **CO-84 DRC 放宽域一致性闸（dru↔域工件↔板 rule area↔SPEC）** + **CO-85 非执行者侧对抗评审 pass 2/2（V1 全链 12/12 逐字节复现 + V2 闸牙齿复核 + F1 F.Cu 行更正 + F2 连接器焊盘场 0.6mm 硬限）** + **CO-86 L2 备选闭合判定（铜跨 0.705→0.585/0.407 均不可达 0.875：WEST 差 +0.232 / 焊盘场差 +0.682）** + **CO-87 L2 合格标准覆盖性机判（ch.5 §4 PDN 压降 / ch.2 热 = NOT_DEMONSTRATED：缺输入，已登记）** + **CO-88 PDN live 字段板实性机判（FAIL：55 孤儿 entry / 184 板实 pad 无决策 / 解耦零板实落点；修复候选+波及清单已派生）** + **CO-89 SPEC rev-9 PDN 板实化（ppc 重生成 223+86=309/309 覆盖、旧 BOM 退役留存；板逐字节不变；全链重基线）** + **CO-89b 复现重跑产物入库（12/12 逐字节一致）** + **CO-90 非执行者侧对抗评审 pass 3/3（对象 rev-9 新基线；全链 12/12 逐字节复现 + CO-88/89 事实独立复核 + 闸注入突变 4/4；F1/F2 修复（CO-88.2）+ F3 覆盖口径登记）** + **CO-91 PDN 计划坐标权威净距闸（pdn_apply 实落集 × 冻结规则源 `drc_rules.json`；判 FAIL：ppc via 35/223、stitch via 41/69、zone via 7/20、F.Cu 短段 75/223；修复候选 35/35 可重定位、PDN 覆盖不退化；覆盖缺口补齐）** + **CO-91.2 规则源唯一性 fail-closed（`K2/_shared` ↔ 容器 `_shared` 的 `drc_rules.json` 同字节断言；实测同值 `0a459839e15960b8`；漂移即不可判）** + **CO-91.3 闸/修复分离（移除内嵌 fix_candidate；其 8 向×半径梯读数违「零坐标搜索」红线，已作废）** + **CO-92 PDN rev-10 修复候选（声明式有限 palette 机判；ppc 223 → kept 188 / relocated 1 / blocked 34；stitch 28/12/29；zone 13/4/3；短段 0.5→75、0.2→13）** + **CO-95 In4 平面可达性机判 + 陈旧 keepout band 退役（premise 已被 CO-74 判失效）→ SPEC rev-11 `d85f10f722ba22b0`：55 power entry = 35 显式 polygon / 8 桥区 target / 6 L3 可达性义务 / 6 需区域裁决；新增 plane_reachability_requirement；全链重基线 PASS、板逐字节不变** + **CO-94 blocked pad 可连接性闭合判定 + 裁定（维持 blocked：34 中 15 在宽松有限家族内可连，但余量低至 13.6µm 且 7 个仅在家族上限命中 ⇒ 采用即把「搜索」写进决策，违零坐标搜索红线；故 34 判为 L2 手段内不可连接，升级 L1/工艺）** + **CO-93【L2 自裁 · PDN 权威净距重落 = 施加 rev-10】SPEC rev-10 `4416e42eed10cb8c`：ppc 223→189 entries（blocked 86→120，已连接 223→189）、stitch 69→40 落/60 blocked、zone 20→17/3、短段宽 0.5→声明 0.2；CO-91 对 rev-10 = PASS（0/0，牙齿 4/4）、CO-92 对 rev-10 = 不动点；全链 G4→G7 重基线 PASS、板逐字节不变；新基线非执行者复评欠（CO-94）** + **CO-96 非执行者侧对抗评审 pass 4/4（对象 rev-11 基线：6 项发现 F1..F6 —— F1 退役键谱系断裂 / F2 可达性要求不可机判闭合 / F3 文本依赖 / F4 scope 缺口 / F5 陈旧 board_realized / F6 latent bbox；V1/V2/V3/V4 复核 OK；CO-94/CO-95 复评义务已履行）** + **CO-97 退役留存完整性闸 + 显式登记册（把红线『退役决策须显式留存』机判化；CO-96 F1 的『静默』面以显式登记关闭；L2 自裁：不解冻 `_shared`，施工侧改项目内承载、施工期激活）** + **CO-98 In4 平面可达性义务状态报告（机判化 CO-96 F2/F3/F4：三态 35/14/6 + scope 排除 40/17/0 + 裁决依据 5 机判/1 文本；co95 PIP 行为中性加固关闭 F6）** + **CO-99 PDN 计划集互相冲突闸 + 施工 dry-run（两个覆盖缺口 G1 计划集互判 / G2 孔距 net-agnostic；实测 FAIL_MUTUAL_SHORT：7 异网重叠 + 35 净距 + 39 孔距；pdn_apply 实落 DRC 42→274）** + **CO-100 互障感知修复候选（residual 重叠 0；新增 blocked **5** 项 = 4 ppc + 1 stitch —— CO-103 校正原「6 项 / 全在 U6 0.5mm 场」为过期读数）** + **CO-101【L2 自裁 · 施加】rev-11 → rev-12 计划集互障重导（ppc entries 189→185 / relocated 61 / 新增 blocked 4；stitch relocated 5 + blocked 1；zone relocated 4；退役留存 + F5 同步 + F1 回填；全链重基线 PASS、板逐字节不变；CO-99 由 FAIL → PASS）** + **CO-102【L2 自裁 · 项目内引擎承载】修正版 PDN 施加器（短段宽读 SPEC 0.2 + via 去重 + blocked 口径对齐；scratch 三态 DRC：baseline 42 / 冻结 76(+34) / 项目内 42(+0)）** + **CO-103 非执行者对抗复评（对象 rev-12 = CO-99/100/101/102 + 链 pin + 收口声明；verdict `PASS_WITH_FINDINGS`；F-A 声明漂移 / F-B 升级证据不足 / F-C co95 身份引用陈旧）** + **CO-108 非执行者对抗复评（rev-13 基线 = `PASS_WITH_FINDINGS`；F-A 记录内 provenance pin 漂移已校正 + F-B 信息性 + F-C 登记）** + **CO-108 补记 F-D（bridge zone 层归属张力 = L3 派生前未决前提）** + **CO-109（L2 自裁）In5←In4 走廊空洞 = 按设计（非待 L3 派生）；bridge zone = B.Cu；step ② 重定范围 + owner 升级** + **CO-110（L2 施加）参考平面入 CO-87 矩阵 + CO-106 D 读径修复 + In4 走廊空洞按设计定案（R5'）** + **CO-111（L2 量化）In5 PCIe 走廊参考缺失 = 40.1%（1094.8/2727.3mm）；L5 未签阻抗 ⇒ 外部终判** + **CO-112（L2 声明）3 bridge zone = B.Cu 桥（step ②c）+ In5 区域条件参考口径 + 走廊 worklist** + **CO-113（L2 施加）SPEC rev-14：裁定写入 canonical SPEC；几何与板逐字节不变** + **CO-115（L2 更正）In4 走廊空洞 = 失效 keepout 残留（待 L3 派生），非按设计；归属界面 = L1（owner）**）
+# m13 v57 — W3 Boundary **v2.27**（文件名沿用 v1.82 以保持 co77 身份链；CO-121/121.1/122/122b + CO-124..CO-132（D-6 定案 + rev-17 退役 B.Cu 载体 + rev-18 R1 In4 承载几何派生）+ **CO-133（L2 自裁 · 施工期物理施加：rev-18 声明 PDN 铜落板 `d4e81f647be7f980` + 幂等/板实合规机判）已登记**；**CO-134（整改通知 #09：③ 重新定性 = 工程换算错误 → REQ-R3-2 忠实实现（铜边 ≥ 2w 按层）+ 需求/实现分家规矩 + co124 K9）已登记**）（+ **CO-135（非执行者复评 rev-19 + CO-134｜L2 声明/工具卫生修正：co77 覆盖扩至 markdown 表格行、链路 pin 全量刷新、co78/co81/co84 对 rev-19 重跑、L5 fab pin 刷新）已登记**；**CO-136（L2 自裁 · 闸卫生续：co106 陈旧牙齿改数据无关合成控 / co124 定义件版本派生 / co77 表格行 citation 负控牙齿 / 登记簿 +2 TOOL_DEFECT）已登记**；**CO-137（L2 只读分析：as-built 对间偏差几何修正可行性 = MIXED）已登记**；**CO-138（L2 只读分析：偏差耦合几何画像 —— B.Cu/F.Cu = 长平行在域内；In5 = 21.8° 斜交扇出）已登记**；**CO-139（L2 自裁 · K9 硬化：豁免域须 hash-pin 依据 + 负控 T9）已登记**；**CO-140（L2 只读分析：as-built 偏差归因 —— 1 接口固有 / 1 路由可改 / 1 斜交）已登记；F.Cu 项升 L1（J2 接口节距）**；**CO-141（L2 只读审计：对间 2w 符合性全量 —— 原「3 处」为下界，实为 24 个平行对-对；根因 = 路由器列距基准漏 3W）已登记**；**CO-142（L2 只读：对间 <3W 违规逐条明细 + 构造阶段归因 —— B.Cu 14 逃生竖列 / F.Cu 10 J2 land）已登记**；**CO-143（L2 只读：纠正 CO-141 附记2 的 f13 pair_xorder 定位 → 真实所在 = escape-fan 落位判据 `p3_v57_co10_west_fan_probe.py:check()`；施加可行性 = 3W 可满足但单遍贪心+PDN 障碍下无法 32/32，须重派生扇落位策略；登记簿该项保持 OPEN）已登记**）（+ **CO-117（L2 自裁）：band In4 铺铜归属 + SPEC rev-15**；**CO-114 非执行者对抗复评 rev-14 = PASS_WITH_FINDINGS（6 发现）**；W3-CN.41 收口 + CO-67..CO-71 方案(a) 全链执行/判据/判定接口 + CO-72 PDN 平面对齐 rev-6 + CO-73 层角色声明一致性终扫（rev-7）+ CO-74 B.Cu 电力铜退役/In4 承载（SPEC rev-8）；CO-72-PDN-1 归口 L1→L2 并闭合 + CO-75 西侧 1.580 未覆盖维搜索（负结果，L1 ① 证据补强）+ **CO-76 非执行者侧对抗评审 pass 1/2（F1/F2/F3 发现并修复）** + **CO-77 收口声明件当前态身份引用校正** + CO-78 层角色漂移回归闸（F1 缺陷类关闭） + CO-79 探针空真通过加固（守卫负控 A10） + CO-80 L4 工程文件规则对齐 + 独立 kicad-cli 复现 DFM + CO-81 受控工程文件规则回归闸 + CO-82 L4 工程文件网类缺失修复 + 闸覆盖补全（net_settings） + CO-83 工程网类↔红线 SPEC net_classes 交叉校验 + **CO-84 DRC 放宽域一致性闸（dru↔域工件↔板 rule area↔SPEC）** + **CO-85 非执行者侧对抗评审 pass 2/2（V1 全链 12/12 逐字节复现 + V2 闸牙齿复核 + F1 F.Cu 行更正 + F2 连接器焊盘场 0.6mm 硬限）** + **CO-86 L2 备选闭合判定（铜跨 0.705→0.585/0.407 均不可达 0.875：WEST 差 +0.232 / 焊盘场差 +0.682）** + **CO-87 L2 合格标准覆盖性机判（ch.5 §4 PDN 压降 / ch.2 热 = NOT_DEMONSTRATED：缺输入，已登记）** + **CO-88 PDN live 字段板实性机判（FAIL：55 孤儿 entry / 184 板实 pad 无决策 / 解耦零板实落点；修复候选+波及清单已派生）** + **CO-89 SPEC rev-9 PDN 板实化（ppc 重生成 223+86=309/309 覆盖、旧 BOM 退役留存；板逐字节不变；全链重基线）** + **CO-89b 复现重跑产物入库（12/12 逐字节一致）** + **CO-90 非执行者侧对抗评审 pass 3/3（对象 rev-9 新基线；全链 12/12 逐字节复现 + CO-88/89 事实独立复核 + 闸注入突变 4/4；F1/F2 修复（CO-88.2）+ F3 覆盖口径登记）** + **CO-91 PDN 计划坐标权威净距闸（pdn_apply 实落集 × 冻结规则源 `drc_rules.json`；判 FAIL：ppc via 35/223、stitch via 41/69、zone via 7/20、F.Cu 短段 75/223；修复候选 35/35 可重定位、PDN 覆盖不退化；覆盖缺口补齐）** + **CO-91.2 规则源唯一性 fail-closed（`K2/_shared` ↔ 容器 `_shared` 的 `drc_rules.json` 同字节断言；实测同值 `0a459839e15960b8`；漂移即不可判）** + **CO-91.3 闸/修复分离（移除内嵌 fix_candidate；其 8 向×半径梯读数违「零坐标搜索」红线，已作废）** + **CO-92 PDN rev-10 修复候选（声明式有限 palette 机判；ppc 223 → kept 188 / relocated 1 / blocked 34；stitch 28/12/29；zone 13/4/3；短段 0.5→75、0.2→13）** + **CO-95 In4 平面可达性机判 + 陈旧 keepout band 退役（premise 已被 CO-74 判失效）→ SPEC rev-11 `d85f10f722ba22b0`：55 power entry = 35 显式 polygon / 8 桥区 target / 6 L3 可达性义务 / 6 需区域裁决；新增 plane_reachability_requirement；全链重基线 PASS、板逐字节不变** + **CO-94 blocked pad 可连接性闭合判定 + 裁定（维持 blocked：34 中 15 在宽松有限家族内可连，但余量低至 13.6µm 且 7 个仅在家族上限命中 ⇒ 采用即把「搜索」写进决策，违零坐标搜索红线；故 34 判为 L2 手段内不可连接，升级 L1/工艺）** + **CO-93【L2 自裁 · PDN 权威净距重落 = 施加 rev-10】SPEC rev-10 `4416e42eed10cb8c`：ppc 223→189 entries（blocked 86→120，已连接 223→189）、stitch 69→40 落/60 blocked、zone 20→17/3、短段宽 0.5→声明 0.2；CO-91 对 rev-10 = PASS（0/0，牙齿 4/4）、CO-92 对 rev-10 = 不动点；全链 G4→G7 重基线 PASS、板逐字节不变；新基线非执行者复评欠（CO-94）** + **CO-96 非执行者侧对抗评审 pass 4/4（对象 rev-11 基线：6 项发现 F1..F6 —— F1 退役键谱系断裂 / F2 可达性要求不可机判闭合 / F3 文本依赖 / F4 scope 缺口 / F5 陈旧 board_realized / F6 latent bbox；V1/V2/V3/V4 复核 OK；CO-94/CO-95 复评义务已履行）** + **CO-97 退役留存完整性闸 + 显式登记册（把红线『退役决策须显式留存』机判化；CO-96 F1 的『静默』面以显式登记关闭；L2 自裁：不解冻 `_shared`，施工侧改项目内承载、施工期激活）** + **CO-98 In4 平面可达性义务状态报告（机判化 CO-96 F2/F3/F4：三态 35/14/6 + scope 排除 40/17/0 + 裁决依据 5 机判/1 文本；co95 PIP 行为中性加固关闭 F6）** + **CO-99 PDN 计划集互相冲突闸 + 施工 dry-run（两个覆盖缺口 G1 计划集互判 / G2 孔距 net-agnostic；实测 FAIL_MUTUAL_SHORT：7 异网重叠 + 35 净距 + 39 孔距；pdn_apply 实落 DRC 42→274）** + **CO-100 互障感知修复候选（residual 重叠 0；新增 blocked **5** 项 = 4 ppc + 1 stitch —— CO-103 校正原「6 项 / 全在 U6 0.5mm 场」为过期读数）** + **CO-101【L2 自裁 · 施加】rev-11 → rev-12 计划集互障重导（ppc entries 189→185 / relocated 61 / 新增 blocked 4；stitch relocated 5 + blocked 1；zone relocated 4；退役留存 + F5 同步 + F1 回填；全链重基线 PASS、板逐字节不变；CO-99 由 FAIL → PASS）** + **CO-102【L2 自裁 · 项目内引擎承载】修正版 PDN 施加器（短段宽读 SPEC 0.2 + via 去重 + blocked 口径对齐；scratch 三态 DRC：baseline 42 / 冻结 76(+34) / 项目内 42(+0)）** + **CO-103 非执行者对抗复评（对象 rev-12 = CO-99/100/101/102 + 链 pin + 收口声明；verdict `PASS_WITH_FINDINGS`；F-A 声明漂移 / F-B 升级证据不足 / F-C co95 身份引用陈旧）** + **CO-108 非执行者对抗复评（rev-13 基线 = `PASS_WITH_FINDINGS`；F-A 记录内 provenance pin 漂移已校正 + F-B 信息性 + F-C 登记）** + **CO-108 补记 F-D（bridge zone 层归属张力 = L3 派生前未决前提）** + **CO-109（L2 自裁）In5←In4 走廊空洞 = 按设计（非待 L3 派生）；bridge zone = B.Cu；step ② 重定范围 + owner 升级** + **CO-110（L2 施加）参考平面入 CO-87 矩阵 + CO-106 D 读径修复 + In4 走廊空洞按设计定案（R5'）** + **CO-111（L2 量化）In5 PCIe 走廊参考缺失 = 40.1%（1094.8/2727.3mm）；L5 未签阻抗 ⇒ 外部终判** + **CO-112（L2 声明）3 bridge zone = B.Cu 桥（step ②c）+ In5 区域条件参考口径 + 走廊 worklist** + **CO-113（L2 施加）SPEC rev-14：裁定写入 canonical SPEC；几何与板逐字节不变** + **CO-115（L2 更正）In4 走廊空洞 = 失效 keepout 残留（待 L3 派生），非按设计；归属界面 = L1（owner）**）
 
 > 契约 `m13_v57_w3_kickoff_card_v1_28.md`（冻结，未改 `0ae3016379cd1db2`）｜引擎 rev **W3-CN.41**
 > ｜**取代 v1.37**（本件补 CO-59：**残余②（B.Cu/In6 并行）机器闭合 PASS** + **口径出处再基** —— 机判 `route_model_config.json` 证 1.08 是 `channel_alloc.pitch_fallback`（回退值）**而非要求量**；要求量语义 = R3-2 **铜边 0.875**，1.46 为其在冻结铜跨 0.585 下的换算 ⇒ CO-58「走廊与冻结口径一致」结论**更正**：EAST 1.449 / WEST 1.050 在 1.46 与 0.875 两读数下**均不达标**）。
@@ -400,7 +400,7 @@ CO-49 `canonicalize_board` ⇒ 净板/已施工板两次投喂**同一字节**�
 | `m13_v57_co78_layer_role_drift_gate.json` | `37fd56f775955c46` |
 | `m13_v57_co81_project_rules_gate.json` | `3ed42eead8def8cf` |
 | `m13_v57_co84_dru_domain_gate.json` | `45fe68c41a8e1a4c` |
-| `input_defect_register_v1.json`（含 CO-133 三条工具缺陷登记） | `4440e569a0215764` |
+| `input_defect_register_v1.json`（含 CO-133 三条工具缺陷登记） | `813481699dd8bd7e` |
 
 **未决（不变）**：非执行者复评（本件 + rev-18 新基线）；③ 已撤回 owner 升级（CO-134 判为工程换算错误并落地忠实实现）；外部输入（板厂券/SI9000、PM 压降·热）。
 
@@ -422,7 +422,7 @@ SPEC **rev-19** `5f72182a2616392c`（白名单外 0 改动；0.875 退役留存 
 | 工具 `p3_v57_co134_req_impl_separation.py` | `8f59c5be82fe9d06` |
 | 记录 `m13_v57_co134_req_impl_separation.json` | `1e5aa8503d211411` |
 | 卡 `m13_v57_CO134_req_impl_separation.md` | `813e66a5eb4b0e60` |
-| 登记簿 `input_defect_register_v1.json` | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json` | `813481699dd8bd7e` |
 | `SPEC_k2_v4.spec-rev-19.json` | `5f72182a2616392c` |
 | `m13_v57_w3_joint_assignment.json`（G4 重基线） | `60cbd331836e52b7` |
 | `m13_v57_w3_validation.json`（G5） | `8b385d6c554ac527` |
@@ -456,7 +456,7 @@ SPEC **rev-19** `5f72182a2616392c`（白名单外 0 改动；0.875 退役留存 
 | 工具 `p3_v57_co106_reference_plane_gate.py`（CO-106.2） | `d56a1e51ece54d51` |
 | 记录 `m13_v57_co106_reference_plane_gate.json` | `3ad6e35c4bedd72e` |
 | 记录 `m13_v57_co124_input_selfcheck_gate.json`（CO-124.2） | `d64da9e0e9e53f7a` |
-| 登记簿 `input_defect_register_v1.json`（17 项） | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json`（17 项） | `813481699dd8bd7e` |
 | 工具 `p3_v57_co77_closure_declaration_sweep.py`（CO-77.5） | `5459595adc50b392` |
 | 工具 `p3_v57_co136_gate_hygiene.py` | `a5b712e48119fdfb` |
 | 记录 `m13_v57_co136_gate_hygiene.json` | `77b3ad0a49042ba5` |
@@ -545,7 +545,7 @@ CO-135 F6 后半：K9 的「域外」豁免原本**只凭 regime 自由文本含
 | 工具 `p3_v57_co124_input_selfcheck_gate.py`（CO-124.3） | `446eac06ca0a90db` |
 | 记录 `m13_v57_co124_input_selfcheck_gate.json` | `d64da9e0e9e53f7a` |
 | 台账 `derived_value_ledger_v1.json`（pad_field 已锚定） | `725b78b26752cd1d` |
-| 登记簿 `input_defect_register_v1.json` | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json` | `813481699dd8bd7e` |
 
 
 ## 18. CO-140（L2 分析 · 只读：as-built 偏差归因）当前态引用
@@ -643,7 +643,7 @@ opt-in 旋钮 `CO10_IP3W` / `CO10_PDN_OBS` / `--order xasc` 已入库（默认�
 | 卡 `m13_v57_CO143_escape_fan_3w_feasibility.md` | `3f9e35914b01a95c` |
 | 探针 `p3_v57_co10_west_fan_probe.py`（+opt-in 3W/PDN 旋钮/xasc） | `d335ade502ceebcb` |
 | 分配器 `p3_v57_co16_emit_allocation.py`（+CO16_IP3W 映射） | `64d75dd9f9d26875` |
-| 登记簿 `input_defect_register_v1.json`（定位更正；OPEN 保持） | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json`（定位更正；OPEN 保持） | `813481699dd8bd7e` |
 
 ---
 
@@ -671,7 +671,7 @@ CO-144 以**分带单调 carry**（带内 (corridor,band) 连续 + 处理序自�
 | 引擎 `p3_v57_w3_constructive.py`（CO16_ALLOC→v8 / W3-CN.42） | `481617515038dad5` |
 | 探针 `p3_v57_co10_west_fan_probe.py`（+carry/orientation） | `d335ade502ceebcb` |
 | 分配器 `p3_v57_co16_emit_allocation.py`（+FAN_STRAT/PDN_OBS/ORDER 映射） | `64d75dd9f9d26875` |
-| 登记簿 `input_defect_register_v1.json`（该 TOOL_DEFECT **CLOSED**；OPEN 1 = F.Cu/owner） | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json`（该 TOOL_DEFECT **CLOSED**；OPEN 1 = F.Cu/owner） | `813481699dd8bd7e` |
 | 台账 `derived_value_ledger_v1.json`（as-built B.Cu ok；evidence pin 刷新） | `725b78b26752cd1d` |
 
 ---
@@ -700,7 +700,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | L4 校验 `m13_v57_l4_validation.json` | `aa666a49e36883c7` |
 | L5 SI `m13_v57_l5_si_pi_emc_record.json` | `261b58e745c67aea` |
 | 引擎 `p3_v57_w3_constructive.py`（3W 蛇形守卫 + W3-CN.43） `p3_v57_w3_constructive.py` | `481617515038dad5` |
-| 登记簿 `input_defect_register_v1.json`（+CO-145 项 CLOSED；OPEN 1 = F.Cu/L1） `input_defect_register_v1.json` | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json`（+CO-145 项 CLOSED；OPEN 1 = F.Cu/L1） `input_defect_register_v1.json` | `813481699dd8bd7e` |
 
 ## 23. CO-146（L2 · 监理指令 #10「JLC 8 层打样就绪」）：阻抗表 / PM 评估 / 打样包 / DFM 闸 / 定性更正
 
@@ -730,7 +730,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 打样包记录 `m13_v57_co146_jlc_fab_package.json` | `92e8810347f20340` |
 | 定性更正 `m13_v57_co146_jlc_rebind.json` | `a0a0f6114223ef05` |
 | L2 定值绑定 `jlc_prototype_parameters_v1.json` | `e9bf5019aeddbd16` |
-| 登记簿 `input_defect_register_v1.json`(+2 OPEN) | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json`(+2 OPEN) | `813481699dd8bd7e` |
 | co124 输入自检 `m13_v57_co124_input_selfcheck_gate.json` | `d64da9e0e9e53f7a` |
 | 工具 `p3_v57_co146_jlc_dfm_gate.py` | `5b72ac75b683791f` |
 | 工具 `p3_v57_co146_impedance_table.py` | `a1a432504f7ff6f2` |
@@ -753,7 +753,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 |---|---|
 | L2 裁定件 `L2_RULING_via_channel_and_interpair_domain_v1.md` | `e8e16228bf1ea0eb` |
 | 记录 `m13_v57_co147_l2_ruling.json` | `d64d2cd3a113a133` |
-| 登记簿 `input_defect_register_v1.json`(3 项 CLOSED / OPEN 0) | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json`(3 项 CLOSED / OPEN 0) | `813481699dd8bd7e` |
 | DFM 闸 `m13_v57_co146_jlc_dfm_gate.json` | `e8fe854aca93a72c` |
 | 通孔化反证 `m13_v57_co146_through_via_probe.json` | `fd82d5200294919e` |
 | 打样包记录 `m13_v57_co146_jlc_fab_package.json` | `92e8810347f20340` |
@@ -767,7 +767,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 **L2 裁定**：R4-1 PCB 散热路径义务（U6 域 GND via 阵列补强 / GND 平面覆盖 / 铜面最大化，随下一轮几何修订 + G4 重基线）；R4-2 **输入冲突上报**：40°C 自然对流与手册不相容 ⇒ 须重裁环境/风冷输入（选项：a 强制风冷/散热片使 θJA_eff ≤ 11.43–17.02°C/W；b 环境 ≤ 38.2°C；c 复核 EQ/功耗假设）。**PDN 侧不受影响**：手册电流（P3V3 2.23A）下四轨压降 0.007–0.69% ≪ 3%（I_max@3% 4.3–62.6A）。
 
-**登记**：+2（`thermal_defect:u6_ds320pr1601_tj_exceeds_limit_at_40c_natural_convection` HIGH；`tool_defect:co124_k9_has_no_thermal_or_drop_domain_model` MED）⇒ 登记簿 102 项（现行值，CO-155 去下游快照后改读登记簿）；台账 DV-CO146-THERMAL = `UNREACHABLE_REGISTERED`。
+**登记**：+2（`thermal_defect:u6_ds320pr1601_tj_exceeds_limit_at_40c_natural_convection` HIGH；`tool_defect:co124_k9_has_no_thermal_or_drop_domain_model` MED）⇒ 登记簿 103 项（现行值，CO-155 去下游快照后改读登记簿）；台账 DV-CO146-THERMAL = `UNREACHABLE_REGISTERED`。
 
 | 工件 | sha16 |
 |---|---|
@@ -775,7 +775,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 记录 `m13_v57_co148_thermal_ruling.json` | `c548cfdcadd9c670` |
 | 手册输入 `m13_v57_co148_u6_ds320pr1601_inputs.json` | `d98677fd7f7d51ba` |
 | PM 评估 `m13_v57_co146_pm_eval.json`（手册输入） | `bf977116fee2d474` |
-| 登记簿 `input_defect_register_v1.json` | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json` | `813481699dd8bd7e` |
 | 台账 `derived_value_ledger_v1.json` | `725b78b26752cd1d` |
 | 工具 `p3_v57_co148_u6_datasheet_inputs.py` | `b6eedc2bce42e85b` |
 | 工具 `p3_v57_co148_thermal_ruling.py` | `968dac508e9b8218` |
@@ -796,7 +796,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 记录 `m13_v57_co149_u6_thermal_mitigation.json` | `206269d4bbc1a04b` |
 | 记录 `m13_v57_co150_k9_domain_gate.json` | `abf5546afe535c9e` |
 | co124 输入自检 `m13_v57_co124_input_selfcheck_gate.json` | `d64da9e0e9e53f7a` |
-| 登记簿 `input_defect_register_v1.json`(OPEN 0) | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json`(OPEN 0) | `813481699dd8bd7e` |
 | 台账 `derived_value_ledger_v1.json` | `725b78b26752cd1d` |
 | 工具 `p3_v57_co149_thermal_mitigation_derive.py` | `c6b5915d43e2a292` |
 | 工具 `p3_v57_co150_k9_domain_gate.py` | `33d4879bc13deeec` |
@@ -835,7 +835,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 记录 `m13_v57_co151_rev19_nonexecutor_review.json` | `195a8102720ed140` |
 | 卡 `m13_v57_CO151_rev19_nonexecutor_review.md` | `512943d2bc24b463` |
 | co120 provenance 闸 `m13_v57_co120_provenance_pin_gate.json` | `534ec14990265ff8` |
-| 登记簿 `input_defect_register_v1.json`(复评未改) | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json`(复评未改) | `813481699dd8bd7e` |
 | 台账 `derived_value_ledger_v1.json`(复评未改) | `725b78b26752cd1d` |
 
 ## 28. CO-152（**L2 自裁 · executor**：CO-151 findings 处置 = 记录/闸/语义卫生 + 2 项勘误）
@@ -876,7 +876,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 手册输入 `m13_v57_co148_u6_ds320pr1601_inputs.json` | `d98677fd7f7d51ba` |
 | L2 裁定件 `L2_RULING_via_channel_and_interpair_domain_v1.md` | `e8e16228bf1ea0eb` |
 | L2 裁定件 `L2_RULING_u6_thermal_mitigation_v1.md` | `bf029700941f5145` |
-| 登记簿 `input_defect_register_v1.json`（27 项 / OPEN 0） | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json`（27 项 / OPEN 0） | `813481699dd8bd7e` |
 | 台账 `derived_value_ledger_v1.json` | `725b78b26752cd1d` |
 
 > **复评债**：本件（CO-152）自身须由**另一会话**复评（禁自评）：重点 = 三处语义标注是否足够、co120 P5 是否真能防复发、R2 最劣值勘误是否改变 R2 结论（预期不变）。
@@ -907,7 +907,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | co124 输入自检 `m13_v57_co124_input_selfcheck_gate.json`（CO-124.6） | `d64da9e0e9e53f7a` |
 | co120 闸 `m13_v57_co120_provenance_pin_gate.json` | `534ec14990265ff8` |
 | 台账 `derived_value_ledger_v1.json`（9 DV 全域覆盖） | `725b78b26752cd1d` |
-| 登记簿 `input_defect_register_v1.json`（30 项 / OPEN 0） | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json`（30 项 / OPEN 0） | `813481699dd8bd7e` |
 
 > **复评债**：本件（CO-153）自身须由**另一会话**复评（禁自评）：重点 = 新判据是否可被规避、`conservative_ge` 的 faithful 口径是否等同于 DV-INTPAIR-EDGE 的忠实下界、域生产者归一后是否仍存在「一次性写入」残留。
 
@@ -942,7 +942,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 工具 `p3_v57_co148_thermal_ruling.py`（去计数快照） | `968dac508e9b8218` |
 | co147 裁定 `m13_v57_co147_l2_ruling.json`（修订号实件 CO-147.1） | `d64d2cd3a113a133` |
 | co124 输入自检 `m13_v57_co124_input_selfcheck_gate.json`（修订号实件 CO-124.5） | `d64da9e0e9e53f7a` |
-| 登记簿 `input_defect_register_v1.json`（102 项 / OPEN 0） | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json`（103 项 / OPEN 0） | `813481699dd8bd7e` |
 
 ## 31. CO-156（**L2 自裁 · 闸硬化**：CO-154 剩余 OPEN 6 项全部处置）
 
@@ -955,7 +955,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | F-2 | co120 升 **CO-120.3**：下游快照键 = `*_sha16_after` ∪ `register.*`/`ledger.*` 下的 `sha16*`/`items_total`/`open_total`/`n_items`，未声明即 FAIL | 新增 register-snapshot 负控/正控牙齿 | **CLOSED** |
 | F-3 | co124 实件 revision **CO-124.6**（与 §29 pin 表标签一致，§26 `CO-124.5` 为历史陈述）；co147 以实件 **CO-147.1** 记 | — | **CLOSED** |
 
-- 复核：co124 = **PASS / findings 0 / 牙齿 24/24**；co120 = **PASS**（snaps 8 / undeclared 0 / teeth 7-7）；登记簿 **102 项 / OPEN 0**。
+- 复核：co124 = **PASS / findings 0 / 牙齿 24/24**；co120 = **PASS**（snaps 8 / undeclared 0 / teeth 7-7）；登记簿 **103 项 / OPEN 0**。
 
 > **R-CO156-1**（取代 R-CO155-1 的复现序）：规范复现序 = `co146_impedance_table → co146_pm_eval → co146_ledger_add → co153_k9_domain_coverage → co148_u6_datasheet_inputs → co148_thermal_ruling → co149_thermal_mitigation_derive → co147_l2_ruling → co146_jlc_dfm_gate → co152_findings_disposition → co155_co154_findings_disposition → **co156_co154_open_disposition** → co124_input_selfcheck_gate → co150_k9_domain_gate → co146_boundary_append → co77_closure_declaration_sweep → co120_provenance_pin_gate → co135_review_hygiene → co136_gate_hygiene → co146_boundary_append`，**循环至 sha 稳定**。
 > **R-CO156-2**（取代 R-CO155-2 的闸覆盖缺口项）：下游快照键（sha **与**计数/版本）由 co120 CO-120.3 **机判**；记录不得内嵌下游 sha/计数/版本快照，新增须在 `SNAPSHOT_DECLARED` 声明。
@@ -974,7 +974,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | co120 闸 `m13_v57_co120_provenance_pin_gate.json`（CO-120.3） | `534ec14990265ff8` |
 | co147 裁定 `m13_v57_co147_l2_ruling.json`（CO-147.1 实件） | `d64d2cd3a113a133` |
 | 台账 `derived_value_ledger_v1.json`（9 DV 全域覆盖） | `725b78b26752cd1d` |
-| 登记簿 `input_defect_register_v1.json`（102 项 / OPEN 0） | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json`（103 项 / OPEN 0） | `813481699dd8bd7e` |
 
 ## 32. CO-157（**L2 自裁 · 查漏型闸硬化（第 3 轮）**：4 项实测缺口 H-1..H-4 全处置）
 
@@ -985,7 +985,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | H-3 | co120 `board_superseded` 弱判：任意自由文本（`board="superseded"`）即可成立豁免 | 收严为**板 sha16 格式**（`[0-9a-f]{16}`）且 ≠ 交付板 + 负控/正控牙齿；co120 升 **CO-120.4** | **CLOSED** |
 | H-4 | R-CO156-3（禁整表重写台账）**无机判**（仅声明） | co136 增源码守卫 `H4_ledger_upsert_only`（写台账须先读）+ 正负控；co136 升 **CO-136.1** | **CLOSED** |
 
-- 复核：co124 = **PASS / findings 0 / 牙齿 29/29**；co120 = **PASS**（basis_not_ok 0 / teeth 9-9）；co136 = **PASS**；登记簿 **102 项 / OPEN 0**。
+- 复核：co124 = **PASS / findings 0 / 牙齿 29/29**；co120 = **PASS**（basis_not_ok 0 / teeth 9-9）；co136 = **PASS**；登记簿 **103 项 / OPEN 0**。
 
 > **R-CO157-1**（取代 R-CO156-1 的复现序）：规范复现序 = `co146_impedance_table → co146_pm_eval → co146_ledger_add → co153_k9_domain_coverage → co148_u6_datasheet_inputs → co148_thermal_ruling → co149_thermal_mitigation_derive → co147_l2_ruling → co146_jlc_dfm_gate → co152_findings_disposition → co155_co154_findings_disposition → co156_co154_open_disposition → **co157_gate_hardening_3** → co124_input_selfcheck_gate → co150_k9_domain_gate → co146_boundary_append → co77_closure_declaration_sweep → co120_provenance_pin_gate → co135_review_hygiene → co136_gate_hygiene → co146_boundary_append`，**循环至 sha 稳定**。
 > **R-CO157-2**：新增 K9 判据须同时登记进 `K9_FINDER_IDS` 并提供负控（由元牙齿 T18 机判）；`board_superseded` 豁免须给可比对的板 sha16。
@@ -1000,13 +1000,13 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | co124 输入自检 `m13_v57_co124_input_selfcheck_gate.json`（CO-124.7） | `d64da9e0e9e53f7a` |
 | co120 闸 `m13_v57_co120_provenance_pin_gate.json`（CO-120.4） | `534ec14990265ff8` |
 | co136 闸卫生 `m13_v57_co136_gate_hygiene.json`（CO-136.1） | `77b3ad0a49042ba5` |
-| 登记簿 `input_defect_register_v1.json`（102 项 / OPEN 0） | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json`（103 项 / OPEN 0） | `813481699dd8bd7e` |
 
 ## 33. CO-158（**L2 自裁 · 交付物完整性**：L5 打样包自足）
 
 - 实测缺口（修前）：`ORDER_NOTES.md` §2 声明「随单提交 … L2 裁定件」，§3/§6 另引 DFM 记录与 U6 热裁定，但 `jlc_package/` 内**均无该等文件**（in-package=False）⇒ 下单时 silent omission；包内阻抗表副本亦为 CO-156 前陈旧件。
 - 处置（**CO146-PKG.2**）：新增 `06_rulings/`（3 份 L2 裁定件 + DFM 记录）+ ORDER_NOTES 引用改**包内路径** + 牙齿 `t05_declared_rulings_packaged` / `t06_order_notes_refs_resolve_in_package`；打包工具**并入规范序**。
-- 复核：**全 gerber/drill 逐字节未变**（纯增量）；MANIFEST n_files = **34**，teeth = {"t01_idempotent": true, "t05_declared_rulings_packaged": true, "t06_order_notes_refs_resolve_in_package": true, "t07_packaged_rulings_match_sources": true, "t07b_parity_detector_sensitivity": true, "t08_declared_dirs_present": true, "t09_order_notes_binding_params": true, "t09b_binding_param_detector_sensitivity": true, "t10_declared_binding_source_pinned": true, "t10b_binding_source_pin_discriminates": true, "t11_stackup_svg_declared_binding": true, "t11b_stackup_svg_binding_sensitivity": true, "t12_order_notes_record_figures": true, "t12b_record_figure_binding_sensitivity": true, "t12c_impedance_spread_binding_sensitivity": true, "t12d_via_census_binding_sensitivity": true, "t12e_mask_facts_binding_sensitivity": true, "t12f_thermal_figures_binding_sensitivity": true, "t12g_jlc_capability_binding_sensitivity": true, "t12h_drc_rules_edge_binding_sensitivity": true, "t11c_stackup_svg_copper_geometry_binding": true, "t11d_stackup_svg_copper_geometry_sensitivity": true, "t15_impedance_copy_parity": true, "t15b_impedance_copy_parity_sensitivity": true, "t16_layer_sequence_derivation": true, "t16b_layer_sequence_sensitivity": true, "t02_8_copper_gerbers": true, "t03_drill_present": true, "t04_all_hashed": true}；登记簿 **102 项 / OPEN 0**。
+- 复核：**全 gerber/drill 逐字节未变**（纯增量）；MANIFEST n_files = **34**，teeth = {"t01_idempotent": true, "t05_declared_rulings_packaged": true, "t06_order_notes_refs_resolve_in_package": true, "t07_packaged_rulings_match_sources": true, "t07b_parity_detector_sensitivity": true, "t08_declared_dirs_present": true, "t09_order_notes_binding_params": true, "t09b_binding_param_detector_sensitivity": true, "t10_declared_binding_source_pinned": true, "t10b_binding_source_pin_discriminates": true, "t11_stackup_svg_declared_binding": true, "t11b_stackup_svg_binding_sensitivity": true, "t12_order_notes_record_figures": true, "t12b_record_figure_binding_sensitivity": true, "t12c_impedance_spread_binding_sensitivity": true, "t12d_via_census_binding_sensitivity": true, "t12e_mask_facts_binding_sensitivity": true, "t12f_thermal_figures_binding_sensitivity": true, "t12g_jlc_capability_binding_sensitivity": true, "t12h_drc_rules_edge_binding_sensitivity": true, "t11c_stackup_svg_copper_geometry_binding": true, "t11d_stackup_svg_copper_geometry_sensitivity": true, "t15_impedance_copy_parity": true, "t15b_impedance_copy_parity_sensitivity": true, "t16_layer_sequence_derivation": true, "t16b_layer_sequence_sensitivity": true, "t02_8_copper_gerbers": true, "t03_drill_present": true, "t04_all_hashed": true}；登记簿 **103 项 / OPEN 0**。
 
 **同 CO 另处置 2 项闸卫生**（实测缺陷）：
 
@@ -1030,13 +1030,13 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 打样包 MANIFEST `L5/jlc_package/MANIFEST.json` | `727570b08eb82d85` |
 | 下单备注 `L5/jlc_package/ORDER_NOTES.md` | `b7d86151d97b32a6` |
 | 打样包记录 `m13_v57_co146_jlc_fab_package.json` | `92e8810347f20340` |
-| 登记簿 `input_defect_register_v1.json`（102 项 / OPEN 0） | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json`（103 项 / OPEN 0） | `813481699dd8bd7e` |
 
 ## 34. CO-159 / CO-160（**非执行者对抗复评 CO-156/157/158 + L2 自裁处置**）
 
 - 复评（**CO-159**，as-found 钉在 k2 `c4e951c`；`git show` 重放受评基线 ⇒ 不随后续修复漂移）：**12 findings**（F-1..F-12）——① K9 `declared` 空 `computed` 绕过值-证据绑定；② `conservative_ge` 权威 DV 缺失即跳过交叉校验；③ T18 元牙齿只比电池触发集、源码条件分支 finder 可绕过；④ R-CO156-3「禁整表重写」无机判（H4 只拦未读即写）；⑤ co120 快照键判据依赖嵌套容器；⑥ `board_superseded` 仅格式判（任意 16-hex 成立）；⑦ **co146_jlc_dfm_gate verdict=FAIL 而 rc=0**（违 R-CO158-3）；⑧ 打样包 `06_rulings/` 无来源一致性牙齿；⑨ ORDER_NOTES 目录级声明未覆盖；⑩ co77/co135 候选表已现分歧面无一致性牙齿；⑪ §6 回归块 co78/co81/co84/co95/co98/co106 rc 恒 0；⑫ co135 内嵌 CO-134 时点链 pin + 硬编码 boundary 文件名。
 - 处置（**CO-160**，逐项）：co124 牙齿 29→**33**（T15c/T16c/T18d/T18e，升 **CO-124.8**）；co120 升 **CO-120.5**（快照键名面判据 + `SUPERSEDED_BOARDS` 白名单 + 伪造 sha 负控）；co146_jlc_dfm_gate **rc 反映 verdict**（FAIL ⇒ rc=1）；co146_jlc_fab_package 升 **CO146-PKG.3**（`t07` 副本来源一致性 + `t08` 目录级声明）；co135 升 **CO-135.3**（co77 候选表交叉一致性 + 链 pin 由现行记录派生 + boundary 取最新版）；六件回归闸 rc 反映 verdict（CO-78.2/81.2/84.2/95.2/98.2/106.3，co98 按 `baseline_ok and teeth_ok`）。
-- 复核：co124 = **PASS / findings 0 / 牙齿 33/33**；co120 = PASS（teeth 12-12）；co77 = PASS（mismatches []）；co135 = PASS_WITH_FINDINGS（候选表一致）；co136 = PASS；DFM 闸 rc=1（FAIL 属预期）；打样包 teeth **9/9**；登记簿 **102 项 / OPEN 0**。
+- 复核：co124 = **PASS / findings 0 / 牙齿 33/33**；co120 = PASS（teeth 12-12）；co77 = PASS（mismatches []）；co135 = PASS_WITH_FINDINGS（候选表一致）；co136 = PASS；DFM 闸 rc=1（FAIL 属预期）；打样包 teeth **9/9**；登记簿 **103 项 / OPEN 0**。
 
 > **R-CO159-1**：K9 `declared` 派生值须带**非空** `computed`（值-证据绑定不得空过）；`conservative_ge` 的权威 DV（`DV-INTPAIR-EDGE` / `DV-PAIR-CROSS`）缺失即 FAIL（不得静默降级）；K9 判据集另由 `T18d` 以**源码**面机判（新增 finder 未登记 `K9_FINDER_IDS` 即 FAIL）。
 > **R-CO159-2**：R-CO156-3 的**机判面** = co136 `H4`（写台账须先读台账）+ CO-156 的 co134 stub 复跑证据；「整表重写」的**语义面**无自动判据（已声明，由复评/登记承接）——规则文本不得表述为已机判。
@@ -1054,13 +1054,13 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 工具 `p3_v57_co135_review_hygiene.py`（CO-135.3 / 候选表交叉一致性 + 链 pin 派生） | `827a49520c8e2cd5` |
 | 工具 `p3_v57_co146_jlc_dfm_gate.py`（rc 反映 verdict） | `5b72ac75b683791f` |
 | 工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.3 / t07+t08） | `adcba5bc4030702a` |
-| 登记簿 `input_defect_register_v1.json`（102 项 / OPEN 0） | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json`（103 项 / OPEN 0） | `813481699dd8bd7e` |
 
 ## 35. CO-161（**L2 自裁 · 查漏型闸硬化 4**：K9 覆盖完备性 + identity fail-closed）
 
 - 实测缺口（修前，均机判）：**G-1** K9 无「必需 DV 清单」牙齿 —— 台账删 `DV-CO146-THERMAL` / `DV-CO146-PDN-DROP` / `DV-ENGINE-INT_PAIR_PITCH` 任一项时 co124 K9 = 0 findings、co150 `t01` 仍 True（T10/T11 负控用合成注入，不依赖真 DV 存在）⇒ 热/压降/保守实现三域覆盖可被一次 upsert 误删**无声**抹掉；**G-2** `identity` 类 fail-open —— `form` 未识别（如 `q = a + b`）或缺失时无判据命中、静默通过。
 - 处置（**CO-161**）：① co124 增 `REQUIRED_DV_IDS`（9 项）与 `derived_value_inventory_missing` 判据 + 负控 T19/T19b；② `co153.KIND_EXPECT` **提为模块级**（必需 DV 清单的单一真值）；③ co150 增 `t03`（两域 kind 断言）/`t04`（co124 `required_dv_ids` == co153 `KIND_EXPECT` 键集）/`t05`（漂移可辨）；④ co124 `identity` 改 **fail-closed**（缺 `form` ⇒ unparsable；未识别 ⇒ 新判据 `derived_value_identity_unhandled_form`，并入 `K9_FINDER_IDS`）+ 负控 T20/T20b。
-- 复核：co124 升 **CO-124.9**（牙齿 33→**37/37**，PASS/0 findings）；co150 升 **CO-150.2**（5 牙齿 True，rc=0）；co153 升 **CO-153.2**；登记簿 **102 项 / OPEN 0**。
+- 复核：co124 升 **CO-124.9**（牙齿 33→**37/37**，PASS/0 findings）；co150 升 **CO-150.2**（5 牙齿 True，rc=0）；co153 升 **CO-153.2**；登记簿 **103 项 / OPEN 0**。
 - 修订号对账：§30 的 CO-150 条与 §34 所记 `CO-124.8` 为各自时点陈述；co124 **现行 = CO-124.9**（本 §35）。
 
 > **R-CO161-1**：K9 **必需 DV 清单**完备性 —— 台账须含全部 9 项必需 DV（`co153.KIND_EXPECT` 键集为**单一真值**）；缺任一项即 `derived_value_inventory_missing` FAIL；co124 的 `required_dv_ids` 须与 co153 `KIND_EXPECT` 逐项一致（co150 `t04`）。
@@ -1075,13 +1075,13 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 工具 `p3_v57_co150_k9_domain_gate.py`（CO-150.2 / t03+t04+t05） | `33d4879bc13deeec` |
 | 记录 `m13_v57_co124_input_selfcheck_gate.json` | `d64da9e0e9e53f7a` |
 | 记录 `m13_v57_co150_k9_domain_gate.json` | `abf5546afe535c9e` |
-| 登记簿 `input_defect_register_v1.json`（102 项 / OPEN 0） | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json`（103 项 / OPEN 0） | `813481699dd8bd7e` |
 
 ## 36. CO-162（**L2 自裁 · 查漏型闸硬化 5**：verdict 基线约束 + 已声明承载区豁免）
 
 - 实测缺口（修前，均机判）：**G-1** co106 的 verdict 阶梯 `PASS if hard else (... else PASS)` 在 `hard=False ∧ cls_count 空` 时仍判 **PASS** —— 记录自身即 `A_frame_inset_consistency.ok = False`（2 处内缩偏差）而 verdict=PASS；且把 `BASE['spec_current']` 改成伪值（基线 pin 漂移）后仍 verdict=PASS / rc=0（`pin_mismatch` 只记录、不参与判定）⇒ 「基线可复现」与「检查通过」同时失效。**G-2** 桥接承载区（`P3V3_BCU_BRIDGE_IN4` / `P3V3_AUX_BCU_BRIDGE_IN4`，T2-ECN-1/2 PM 裁决的局部承载 pour）被算作内缩偏差却只记录不判定 ⇒ 偏差被静默容忍（既无登记也无 pin，违 CO-139 口径）。
 - 处置（**CO-162**）：① 抽纯函数 `verdict_of(checks_ok, teeth_ok, pin_mismatch, cls_count)` —— `pin_mismatch` 非空 ⇒ `BASELINE_MISMATCH`；`teeth_ok=False` ⇒ `FAIL(teeth)`；任一 check 失败 ⇒ `FAIL_DECLARED_COPPER_MISSING` / `INDETERMINATE_REGION_SCOPED` / `FAIL_CHECKS`（**不再回落 PASS**）；增牙齿 `baseline_pin_binding` / `fail_open_closed` / `verdict_positive_control`；② 增 `DECLARED_NON_FULL_PLANE` 注册表 + **冻结 SPEC pin 锚定**（SPEC pin 不成立则豁免自动失效）+ 牙齿 `carrier_exemption_declared_only`。co106 升 **CO-106.4**。
-- 复核：真基线 **verdict=PASS / rc=0**（A dev=0、豁免 4 条：2 内岛 + 2 桥接承载、牙齿 8/8）；注入伪 spec pin ⇒ **verdict=BASELINE_MISMATCH / rc=1**。登记簿 **102 项 / OPEN 0**。
+- 复核：真基线 **verdict=PASS / rc=0**（A dev=0、豁免 4 条：2 内岛 + 2 桥接承载、牙齿 8/8）；注入伪 spec pin ⇒ **verdict=BASELINE_MISMATCH / rc=1**。登记簿 **103 项 / OPEN 0**。
 
 > **R-CO162-1**：凡记录内带 `base_pins` 的闸，其 verdict **必须显式消费 pin 漂移**（不等即 `BASELINE_MISMATCH`，非 PASS）；任一 check 失败不得回落 PASS（由 co106 `verdict_of` 纯函数 + 牙齿 `baseline_pin_binding`/`fail_open_closed` 机判）。
 > **R-CO162-2**：非整面承载区（桥接/局部 pour）的板框内缩豁免须**登记进注册表**（`DECLARED_NON_FULL_PLANE`）并**锚定冻结源 pin**，豁免逐条入记录；不得静默容忍偏差（违者按 G-2 同族处理）。
@@ -1092,13 +1092,13 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 工具 `p3_v57_co162_verdict_binding.py` | `03cfd9b937e6b32b` |
 | 工具 `p3_v57_co106_reference_plane_gate.py`（CO-106.4 / verdict_of + DECLARED_NON_FULL_PLANE） | `d56a1e51ece54d51` |
 | 记录 `m13_v57_co106_reference_plane_gate.json` | `3ad6e35c4bedd72e` |
-| 登记簿 `input_defect_register_v1.json`（102 项 / OPEN 0） | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json`（103 项 / OPEN 0） | `813481699dd8bd7e` |
 
 ## 37. CO-163（**L2 自裁 · 查漏型闸硬化 6**：下单备注↔声明定值表绑定）
 
 - 实测缺口（修前，均机判）：**G-1** `ORDER_NOTES.md` 的「下单参数」表把 `85Ω 差分 ±10%` / `JLC08161H` / `1.6 mm` / `外层 1oz 内层 0.5oz` / `沉金 ENIG` 写为**字面量**，与 L2 政策件 `jlc_prototype_parameters_v1.json`（监理指令 #10 定值绑定）无绑定、无牙齿 —— 实测把目标阻抗改成 100Ω 后重生成的备注**仍写 85Ω** ⇒ 定值变更会静默产出**客户可见**的陈旧下单备注；**G-2** 该定值表的 `supervisor_instruction.sha16` 声明链从未被核验。
 - 处置（**CO-163**）：`p3_v57_co146_jlc_fab_package.py` 升 **CO146-PKG.4** —— 载入声明定值表 + 纯谓词 `binding_params_in_note`/`binding_tokens`；牙齿 `t09_order_notes_binding_params`（备注须逐项命中叠层码/厚度/外内层铜/目标阻抗/容差/表面处理）+ `t09b` 漂移灵敏度 + `t10_declared_binding_source_pinned`（定值表来源 sha16 == 监理指令件 sha16 `35aafe268ff52f89`）+ `t10b` 判据可辨；记录落 `declared_binding`（含 `source_instruction`: path/available/declared_sha16）。
-- 复核：打样包 teeth **13/13**（t01..t10b 全 True），订单备注正文与 gerber/drill 逐字节不变；注入定值漂移（100Ω/2.0mm）⇒ t09 立即 FAIL。登记簿 **102 项 / OPEN 0**。
+- 复核：打样包 teeth **13/13**（t01..t10b 全 True），订单备注正文与 gerber/drill 逐字节不变；注入定值漂移（100Ω/2.0mm）⇒ t09 立即 FAIL。登记簿 **103 项 / OPEN 0**。
 
 > **R-CO163-1**：客户可见交付物（L5 打样包/下单备注）内的**工程定值**必须与**声明定值表**逐项一致，由 t09/t09b 机判；定值表变更而备注未同步即 FAIL（禁止字面量单向复制导致静默陈旧）。
 > **R-CO163-2**：声明定值表的**来源 pin**（`supervisor_instruction.sha16`）必须可核验（t10/t10b）；跨仓来源不可达时 fail-closed 并在记录内显式登记 `available=false`。
@@ -1111,13 +1111,13 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 打样包 MANIFEST `L5/jlc_package/MANIFEST.json` | `727570b08eb82d85` |
 | 下单备注 `L5/jlc_package/ORDER_NOTES.md` | `b7d86151d97b32a6` |
 | 记录 `m13_v57_co146_jlc_fab_package.json` | `92e8810347f20340` |
-| 登记簿 `input_defect_register_v1.json`（102 项 / OPEN 0） | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json`（103 项 / OPEN 0） | `813481699dd8bd7e` |
 
 ## 38. CO-164（**L2 自裁 · 收敛判定硬化**：规范复现序 rc 机判执行器）
 
 - 实测事故（CO-163 期间，机判）：`p3_v57_co146_boundary_append.py` 因 §37 文本内 f-string 花括号语法错误**每轮 rc=1 崩溃** ⇒ 第 37 节从未写入、boundary 停在 v2.08、pin 表陈旧（co77 = CITATION_MISMATCH、co135/co136 = FAIL）；而「幂等循环」只看 boundary/记录 sha ⇒ 报 CONVERGED。即 **「以 sha 稳定替代 rc 检查」= 假收敛**；本会话由一个独立 rc 复核发现（自查也据此复现并修复）。
 - 处置（**CO-164**）：新增 `p3_v57_co164_order_runner.py`（**不在**规范序内运行，避免自递归；报告落 `.archer_tmp/`，**不被 boundary 引用** ⇒ 不构成下游快照/不动点）：① rc 策略 `EXPECTED_NONZERO = {co146_jlc_dfm_gate}`（verdict=FAIL 属预期），其余任一步非零 ⇒ **立即停机**并报门名/rc/stderr 尾；② **真收敛** = rc 全合规 ∧ 受控 sha 逐轮稳定；③ `--check` 静态体检 t01..t06（步骤存在/可编译/rc 策略/判据灵敏度/稳定性判据/序文本一致）。
-- 复核：`--check` **6/6 True**（t06 当场抓到本文档序与执行器 ORDER 的短别名漂移 `co159_rev19_review`，已改为实际步骤名）；端到端负控：把 `co78` 步替换为 rc=3 合成件 ⇒ **abort（rc=1，iterations=1）不报收敛**；登记簿 **102 项 / OPEN 0**。
+- 复核：`--check` **6/6 True**（t06 当场抓到本文档序与执行器 ORDER 的短别名漂移 `co159_rev19_review`，已改为实际步骤名）；端到端负控：把 `co78` 步替换为 rc=3 合成件 ⇒ **abort（rc=1，iterations=1）不报收敛**；登记簿 **103 项 / OPEN 0**。
 
 > **R-CO164-1**：复现序收敛判定**rc 优先** —— 除 `EXPECTED_NONZERO` 白名单（当前仅 `co146_jlc_dfm_gate`，其 verdict=FAIL 属预期）外，任一步 rc≠0 即**立即停机**；**禁止**以「sha 稳定」单独判收敛。
 > **R-CO164-2**：规范序**文本**与执行器 `ORDER` 须**有序一致**（由 runner `--check` t06 机判）；新增/变更步骤须同步 runner 与本 boundary。
@@ -1125,16 +1125,16 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co164_order_runner.py`（rc 策略 + 真收敛 + `--check` t01..t06） | `296fb0bdf78677b5` |
+| 工具 `p3_v57_co164_order_runner.py`（rc 策略 + 真收敛 + `--check` t01..t06） | `46c14651743adb63` |
 | 工具 `p3_v57_co164_disposition.py` | `47356d70e9d684c5` |
-| 工具 `p3_v57_co146_boundary_append.py`（§38 + 序文本订正） | `86334dcbbd1c1b03` |
-| 登记簿 `input_defect_register_v1.json`（102 项 / OPEN 0） | `4440e569a0215764` |
+| 工具 `p3_v57_co146_boundary_append.py`（§38 + 序文本订正） | `8b641e1a2f845132` |
+| 登记簿 `input_defect_register_v1.json`（103 项 / OPEN 0） | `813481699dd8bd7e` |
 
 ## 39. CO-165（**L2 自裁 · 收敛执行器加固**：白名单证据 + 受控 sha 全域）
 
 - 实测缺口（修前，均机判）：**G-1** CO-164 执行器的白名单只按 `rc≠0` 放行 ⇒ 白名单步（当前仅 `co146_jlc_dfm_gate`）的**任何**非零——含崩溃/静默失败——都被当「预期 FAIL」。负控：把 DFM 闸替换为 `raise SystemExit('boom')`（rc=1、stderr 无 traceback）⇒ **旧判据放行**；仅加 Traceback 检测**仍不足**（不打印 traceback 的失败会让盘上**陈旧** FAIL 记录充当 verdict 证据 —— 由本会话自己的端到端负控当场证伪）。**G-2** 受控 sha 仅 7 件（漏 co106/co150/打样包件）⇒ 未受控文件的 2-循环/抖动对收敛判定**不可见**。
 - 处置（**CO-165**，执行器升 **CO-164.2**）：白名单项改 `verdict/record/why` 结构化 + 纯判据 `allowlist_decision(step, rc, stderr, verdict, record_fresh)` —— 白名单步须 **rc≠0 ∧ 无 Traceback ∧ 记录由本次执行产出（mtime 新鲜）∧ 记录 verdict == 声明 verdict** 方判 `expected_nonzero`，否则判 `expected_step_returned_zero`/`expected_step_crashed`/`expected_step_record_not_produced`/`expected_step_verdict_mismatch` 并**立即停机**；`watch_paths()` 覆盖 boundary + **全部**记录 + 台账/登记簿 + 打样包 MANIFEST/ORDER_NOTES；`--check` 增 **t07**（四类伪通过负控 + 恒真正控）/ **t08**（受控集覆盖记录类产物）。
-- 复核：`--check` **8/8 True**；负控 A（co78 步 rc=3 合成件）⇒ abort(rc=1)；负控 B（DFM 步 `SystemExit('boom')`）⇒ abort class=`expected_step_record_not_produced`；正控：真 DFM 闸（重写记录、verdict=FAIL）判 `expected_nonzero` 且整序 **converged（iterations 2 / rc=0）**。登记簿 **102 项 / OPEN 0**（注：`co148` 登记项在序内为 OPEN、由 `co150` 收口 ⇒ 中途 OPEN 属正常，须以整序收敛后为准）。
+- 复核：`--check` **8/8 True**；负控 A（co78 步 rc=3 合成件）⇒ abort(rc=1)；负控 B（DFM 步 `SystemExit('boom')`）⇒ abort class=`expected_step_record_not_produced`；正控：真 DFM 闸（重写记录、verdict=FAIL）判 `expected_nonzero` 且整序 **converged（iterations 2 / rc=0）**。登记簿 **103 项 / OPEN 0**（注：`co148` 登记项在序内为 OPEN、由 `co150` 收口 ⇒ 中途 OPEN 属正常，须以整序收敛后为准）。
 
 > **R-CO165-1**：`EXPECTED_NONZERO` 白名单步须给**双重证据** —— 期望 `verdict` **且** 记录由**本次执行产出**（mtime 新鲜）；`rc≠0` 本身不构成预期 FAIL 的证据（崩溃/静默失败不得被放行）。
 > **R-CO165-2**：收敛判定的受控 sha 须覆盖**全部**序内产物（boundary + 全部 `m13_v57_co*.json` + 台账/登记簿 + 打样包件）；新增产物须落入 `watch_paths()`。
@@ -1142,15 +1142,15 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co164_order_runner.py`（CO-164.2 / `allowlist_decision` + `watch_paths` + t07/t08） | `296fb0bdf78677b5` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-164.2 / `allowlist_decision` + `watch_paths` + t07/t08） | `46c14651743adb63` |
 | 工具 `p3_v57_co165_runner_hardening.py` | `3cb331ff39b0c824` |
-| 登记簿 `input_defect_register_v1.json`（102 项 / OPEN 0） | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json`（103 项 / OPEN 0） | `813481699dd8bd7e` |
 
 ## 40. CO-166（**非执行者对抗复评**：CO-159..CO-165；as-found @ `e427909`）
 
 - 复评方：context 归零的续接会话（满足 handoff-z39 §5「另一会话，禁自评」）；对象钉在受评基线 commit，`git show` 内存重放 ⇒ 结论**可重放、不随后续修复漂移**。方法：正控 V0..V6 + 负控 P1..P6（内存注入、零落盘、零坐标搜索）。
 - 结论：verdict **PASS_WITH_FINDINGS**；findings **6**（F-1..F-6）。独立确认含：冻结四源 4/4、co124 CO-124.9（37 牙齿/0 findings）、co150 CO-150.2（5/5）、co106 CO-106.4（8/8）、co120（12/12）、co77 PASS、co135 CO-135.3、co136 PASS、打样包 CO146-PKG.4（34 件/13 牙齿）、登记簿 65 项/OPEN 0（co159:F-1..F-12 全 CLOSED）、co124 必需 DV 清单 == co153 `KIND_EXPECT`、t10 来源 pin 正控、co146_boundary_append **只读重放逐字节幂等且仅写 boundary**。
-- findings 处置见 §41（CO-167）。登记簿 **102 项 / OPEN 0**。
+- findings 处置见 §41（CO-167）。登记簿 **103 项 / OPEN 0**。
 
 > **R-CO166-1**：复评必须由**另一会话**（context 归零）执行，且对象钉在受评基线 commit（`git show` 重放）⇒ 结论可重放、不随后续修复漂移。
 > **R-CO166-2**：负控须为**内存注入**（零落盘/零坐标搜索）；不得以「记录自证」充当独立证据。
@@ -1161,13 +1161,13 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 工具 `p3_v57_co166_rev19_co159_co165_review.py`（只读复评；对象钉 `e427909`） | `35a79c96406fefed` |
 | 记录 `m13_v57_co166_rev19_co159_co165_review.json`（重建） | `a93114a9d57d582a` |
 | 卡 `m13_v57_CO166_rev19_co159_co165_review.md`（重建） | `4391594ca4be86c6` |
-| 登记簿 `input_defect_register_v1.json`（102 项 / OPEN 0） | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json`（103 项 / OPEN 0） | `813481699dd8bd7e` |
 
 ## 41. CO-167（**L2 自裁 · CO-166 findings 处置**：收敛判据加固）
 
 - 实测缺口（CO-166 复评，均机判内存注入）：**F-1**（medium）序解析器取「最后一条含字面量 `规范复现序` 赋值的行」⇒ 更新的 R-COxxx-3 若改措辞即被**回落到更旧序行**，t06 假通过；**F-2**（low）白名单「记录由本次执行产出」用绝对 mtime `≥ t0-1.0` ⇒ 记录 mtime 落在**未来**（时钟回拨/网络盘/异机）时，**崩溃**步仍被判 `expected_nonzero`；**F-3**（low）白名单记录 ⊆ `watch_paths()` 无牙齿；**F-4**（low）t09 无锚子串（`185Ω`/`11.6 mm` 误命中）+ 容差记号被厚度公差满足；**F-5**（low）t09 对措辞敏感（`1.6mm`/`外层1oz`）；**F-6**（low）白名单 expected verdict 允许写成 `PASS`。
 - 处置（**CO-167**）：① 序解析器增「末条可解析序行之后仍有其它 `规范复现序` 提及 ⇒ 返回 []」fail-closed（F-1）；② 白名单刷新判据改**变更检测** `record_refreshed(before, after)`（exists / mtime_ns / 内容 sha16，与时钟无关）（F-2）；③ `--check` 增 **t09**（白名单记录 ⊆ 受控集）（F-3）/ **t10**（刷新判据变更检测灵敏度）（F-2）；④ `binding_param_checks` 记号改**有锚正则 + 柔性空白 + 容差须在 zdiff 邻域**（F-4/F-5）；⑤ `allowlist_decision` 与 t07 禁 expected verdict = `PASS`（F-6）。打样包升 **CO146-PKG.5**；执行器升 **CO-167.1**。
-- 复核：`--check` **t01..t10 全 True**；`binding_param_checks` 现行备注 7/7、改排版仍 7/7、`185Ω`/`11.6 mm`/容差漂移均不通过；整序 **converged**（rc 策略不变）。登记簿 **102 项 / OPEN 0**。
+- 复核：`--check` **t01..t10 全 True**；`binding_param_checks` 现行备注 7/7、改排版仍 7/7、`185Ω`/`11.6 mm`/容差漂移均不通过；整序 **converged**（rc 策略不变）。登记簿 **103 项 / OPEN 0**。
 
 > **R-CO167-1**：白名单「记录由本次执行产出」一律用**变更检测**（exists/mtime_ns/sha），**禁止**绝对时间比较（未来 mtime 可伪新鲜）。
 > **R-CO167-2**：白名单记录须 ⊆ `watch_paths()`；expected `verdict` 不得为 `PASS`。
@@ -1176,16 +1176,16 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 工件 | sha16 |
 |---|---|
 | 工具 `p3_v57_co167_co166_findings_disposition.py` | `7f25190574691959` |
-| 工具 `p3_v57_co164_order_runner.py`（CO-167.1 / `record_refreshed` + t09/t10 + 序解析 fail-closed） | `296fb0bdf78677b5` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-167.1 / `record_refreshed` + t09/t10 + 序解析 fail-closed） | `46c14651743adb63` |
 | 工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.5 / t09 有锚正则） | `adcba5bc4030702a` |
 | 记录 `m13_v57_co146_jlc_fab_package.json`（重建） | `92e8810347f20340` |
-| 登记簿 `input_defect_register_v1.json`（102 项 / OPEN 0） | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json`（103 项 / OPEN 0） | `813481699dd8bd7e` |
 
 ## 42. CO-168（**L2 自裁 · 登记簿自洽性硬化**：status 词汇 + counts 复算）
 
 - 实测缺口（修前，均机判）：**G-1** 登记簿 `status` 无词汇机判 —— 任一项 status 改成 `open`/`Closed` 后 co124 仍 PASS / 0 findings，该项**静默落出** `counts` 的 OPEN 计数（未结缺陷被算作已结）⇒ handoff/§ 节引用的「OPEN 0」不可信；**G-2** `meta.counts` 为自述摘要、无闸据 `items` 复算 —— 改 `total=999` / `OPEN=7` 后仍 PASS（该摘要被当权威引用）。
 - 处置（**CO-168**）：co124 升 **CO-124.10** —— 增纯函数 `register_consistency(reg)` + 词汇 `REGISTER_STATUSES = (OPEN, CLOSED, PROVED)`：① status 越词汇 ⇒ `status_not_in_vocabulary`；② `meta.counts` 须与据 items 复算的（kind / OPEN / total 三元）**键集与值逐项一致**，否则 `counts_not_rederived_from_items`；任一 ⇒ `FAIL_REGISTER_STALE`（记录落 `register_stale`）。牙齿增 T21 / T21b / T21c（co124 40/40）。
-- 复核：真登记簿 `register_stale == []`（102 项 / OPEN 0 复算一致）；注入 status 拼写错 / counts 漂移 ⇒ 分别判 `status_not_in_vocabulary` / `counts_not_rederived_from_items`。
+- 复核：真登记簿 `register_stale == []`（103 项 / OPEN 0 复算一致）；注入 status 拼写错 / counts 漂移 ⇒ 分别判 `status_not_in_vocabulary` / `counts_not_rederived_from_items`。
 
 > **R-CO168-1**：登记簿每项 `status` 须 ∈ `REGISTER_STATUSES`；新增状态须先入词汇（禁拼写自由文本）。
 > **R-CO168-2**：`meta.counts` 为**派生**字段，须与据 `items` 的复算逐项一致；写登记簿的步骤须在写后重算。
@@ -1196,13 +1196,13 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 工具 `p3_v57_co168_register_consistency.py` | `85505f217fe8c434` |
 | 工具 `p3_v57_co124_input_selfcheck_gate.py`（CO-124.10 / `register_consistency` + T21 系列） | `446eac06ca0a90db` |
 | 记录 `m13_v57_co124_input_selfcheck_gate.json`（重建） | `d64da9e0e9e53f7a` |
-| 登记簿 `input_defect_register_v1.json`（102 项 / OPEN 0） | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json`（103 项 / OPEN 0） | `813481699dd8bd7e` |
 
 ## 43. CO-169（**L2 自裁 · 收敛判据硬化**：逐步产物产出证据）
 
 - 实测缺口（机判探针）：CO-165/CO-167 的「记录由本次执行产出」（`record_refreshed` 变更检测）**只作用于白名单步**；其余诸步的契约仅为 `rc == 0`。一个**不崩也不写**的步（早退分支 / 漏写 / 被改成只读检查）会因产物 sha 不变而被「sha 稳定 ⇒ 收敛」**背书**（与 CO-164 假收敛同族，故障类相反：CO-164 = 崩而 sha 不变）。
 - 处置（**CO-169**）：执行器升 **CO-169.1** —— 增纯判据 `step_did_work(before, after)`（受控产物集 `watch_paths()` 的 mtime_ns 快照；前进 / 新增 / 删除任一即算做事）与 `zero_rc_class`；运行循环逐步取受控快照，`rc==0` 而**零产物变动** ⇒ 类 `step_wrote_nothing` 并**立即停机**；报告内逐步落 `did_work` 证据；`--check` 增 **t11**。
-- 复核：真序 37 步逐步探针 `did_work` **全 True**（每步至少刷写 1 件受控产物）；合成「rc=0 不写」步 ⇒ `step_wrote_nothing` 停机；整序 **converged**。登记簿 **102 项 / OPEN 0**。
+- 复核：真序 37 步逐步探针 `did_work` **全 True**（每步至少刷写 1 件受控产物）；合成「rc=0 不写」步 ⇒ `step_wrote_nothing` 停机；整序 **converged**。登记簿 **103 项 / OPEN 0**。
 
 > **R-CO169-1**：规范序**每步**须写出至少一个受控产物（`watch_paths()` 覆盖内）；`rc==0` 不构成「做了事」的证据；纯只读步骤须显式登记豁免，不得默认放行。
 > **R-CO169-2**：新增步骤须确保其产物在 `watch_paths()` 覆盖内，否则判 `step_wrote_nothing` 停机。
@@ -1211,14 +1211,14 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 工件 | sha16 |
 |---|---|
 | 工具 `p3_v57_co169_step_output_oracle.py` | `0cefe789442ba53c` |
-| 工具 `p3_v57_co164_order_runner.py`（CO-169.1 / `step_did_work` + t11） | `296fb0bdf78677b5` |
-| 登记簿 `input_defect_register_v1.json`（102 项 / OPEN 0） | `4440e569a0215764` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-169.1 / `step_did_work` + t11） | `46c14651743adb63` |
+| 登记簿 `input_defect_register_v1.json`（103 项 / OPEN 0） | `813481699dd8bd7e` |
 
 ## 44. CO-170（**L2 自裁 · 交付物绑定**：叠层图 ↔ 声明定值表）
 
 - 实测缺口（修前，机判）：**G-1** `stackup_svg(spec)` **只接收 SPEC**，其「外层 1oz / 内层 0.5oz」与铜厚矩形高度为**硬编码字面量**；声明定值表 `jlc_prototype_parameters_v1.json` 改铜厚时叠层图**不跟随**，且当时 13 项牙齿**无一项**读取该图（t09 只绑定 `ORDER_NOTES.md`）。备注 §1/§2 与叠层图**同时**随单提交 ⇒ 制造侧可能按陈旧铜厚施工（与 CO-163 G-1 同族，对象从备注扩到**制造图**）。
 - 处置（**CO-170**）：`p3_v57_co146_jlc_fab_package.py` 升 **CO146-PKG.6** —— 抽出 `_tok_match`，新增纯谓词 `stackup_svg_binding_checks(svg_text, binding)`（叠层图须逐项含声明表记号：叠层码 / 成品厚 / 外层铜 / 内层铜）；牙齿 `t11_stackup_svg_declared_binding` + `t11b`（声明铜厚漂移 ⇒ 必判不通过）；记录落 `declared_binding.stackup_svg_checks`。
-- 复核：现行声明 **4/4 命中**（打样包牙齿 **15/15**）；声明铜厚改 2oz ⇒ `outer_copper=False`（t11 抓住）；叠层图 sha16 `44370475b258848f` **逐字节不变**。登记簿 **102 项 / OPEN 0**。
+- 复核：现行声明 **4/4 命中**（打样包牙齿 **15/15**）；声明铜厚改 2oz ⇒ `outer_copper=False`（t11 抓住）；叠层图 sha16 `44370475b258848f` **逐字节不变**。登记簿 **103 项 / OPEN 0**。
 
 > **R-CO170-1**：随单提交的**每一件**制造/工程输入（备注 / 叠层图 / 阻抗表 / 裁定件）内的工程定值，均须与声明定值表（或其 SPEC 来源）机判绑定；新增交付图/表须同步加绑定牙齿。
 > **R-CO170-2**：绑定判据一律用 CO-167 的**有锚正则**（数值边界 + 柔性空白），不得裸子串。
@@ -1230,13 +1230,13 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.6 / `stackup_svg_binding_checks` + t11/t11b） | `adcba5bc4030702a` |
 | 叠层图 `L5/jlc_package/03_stackup/JLC08161H_stackup.svg` | `44370475b258848f` |
 | 记录 `m13_v57_co146_jlc_fab_package.json`（重建） | `92e8810347f20340` |
-| 登记簿 `input_defect_register_v1.json`（102 项 / OPEN 0） | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json`（103 项 / OPEN 0） | `813481699dd8bd7e` |
 
 ## 45. CO-171（**L2 自裁 · 交付物绑定**：备注内记录派生数字 ↔ 来源记录）
 
 - 实测缺口（修前，机判）：**G-1** `ORDER_NOTES` §5 写死「model-spread 观察值（**+11.6%**）」，该串**不存在于任何记录**（`grep 11.6` 在 L2/L3 记录零命中）；阻抗表记录自身在 s=0.395mm（设计名义最宽间距）M2(HJ)=94.94Ω 对目标 85Ω 即 **+11.69%**，且「模型间 spread」≈4.8% ⇒ 客户可见的阻抗告警数字**无源且已陈旧**，措辞亦失实（CO-163 的 t09 只绑声明定值表 7 记号，不覆盖记录派生值）。**G-2** §7 的 DRC 计数（42 项 / `lib_footprint_*` 41 / silk 1）无牙齿绑定（现态一致，但无护栏）。
 - 处置（**CO-171**）：`p3_v57_co146_jlc_fab_package.py` 升 **CO146-PKG.7** —— 新增 `impedance_watch_figure(imp)`（由记录派生 watch 下模型相对目标的最大偏离）与 `order_notes_record_figures(note, imp, dfm)`；**订正备注字面量**（+11.6% → **+11.7%**，措辞订正为「模型偏离观察值（M2(HJ) 相对目标）」+ 补「模型间 spread ≈4.8%」）；牙齿 `t12_order_notes_record_figures` + `t12b`（灵敏度）；记录落 `record_figures`。
-- 复核：`record_figures.impedance_watch.dev_pct = 11.69`（F.Cu / M2_HJ_Cohn / 0.395mm）；`record_figures.drc_as_designed_n = 42`；打样包牙齿 **17/17**。登记簿 **102 项 / OPEN 0**。
+- 复核：`record_figures.impedance_watch.dev_pct = 11.69`（F.Cu / M2_HJ_Cohn / 0.395mm）；`record_figures.drc_as_designed_n = 42`；打样包牙齿 **17/17**。登记簿 **103 项 / OPEN 0**。
 
 > **R-CO171-1**：客户可见备注/图中的**记录派生**数字（观察值/计数/边界值）须绑定其来源记录；来源记录变更而备注未同步即 FAIL。
 > **R-CO171-2**：订正客户可见数值须同时留下「来源记录 → 数字」的可重算路径（本件：`impedance_watch_figure` / t12）。
@@ -1249,7 +1249,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 下单备注 `L5/jlc_package/ORDER_NOTES.md`（**§5 数值已订正**） | `b7d86151d97b32a6` |
 | 记录 `m13_v57_co146_jlc_fab_package.json`（重建） | `92e8810347f20340` |
 | 阻抗表 `m13_v57_co146_impedance_table.json`（来源记录） | `794132ded5a0ce61` |
-| 登记簿 `input_defect_register_v1.json`（102 项 / OPEN 0） | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json`（103 项 / OPEN 0） | `813481699dd8bd7e` |
 
 ## 46. CO-172 / CO-173（**L2 自裁 · 非执行者对抗复评 + 记录派生数字绑定补强**）
 
@@ -1265,7 +1265,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
   ① `p3_v57_co146_jlc_fab_package.py` 升 **CO146-PKG.8** —— 新增纯谓词 `impedance_spread_pct` / `via_census_figures` / `mask_clearance_figures` / `thermal_figures` 与 capability+rules 派生判据；牙齿 **t12c..t12h**（逐来源负控）与 **t11c/t11d**（叠层图**几何**正控/负控）；`stackup_svg(spec, binding)` 的铜厚矩形高度与标题 oz 改由**声明定值表**派生（1oz=0.035mm 标称；当前 1oz/0.5oz ⇒ 21.00/10.50 px）。
   ② `p3_v57_co146_jlc_dfm_gate.py` 升 **CO146-JLC-DFM.2** —— 「板规铜-板边」值由冻结 `drc_rules` 派生 + 牙齿 **t03**（正控/灵敏度）。
   ③ `p3_v57_co164_order_runner.py` 升 **CO-169.2** —— `_artifact_stamp` 多信号指纹（mtime_ns + ctime_ns + size + 内容 sha16）、`_snap_watched` 返回指纹字典 + 静态齿 **t12**。
-  ④ **复核**：打样包牙齿 **25/25**；`ORDER_NOTES.md` 与叠层图**输出逐字节不变**（`b7d86151d97b32a6` / `44370475b258848f`）；DFM 闸 rc=1（预期 FAIL）且 t01..t03 全 True；登记簿 **102 项 / OPEN 0**（+7 TOOL_DEFECT，全 CLOSED）。
+  ④ **复核**：打样包牙齿 **25/25**；`ORDER_NOTES.md` 与叠层图**输出逐字节不变**（`b7d86151d97b32a6` / `44370475b258848f`）；DFM 闸 rc=1（预期 FAIL）且 t01..t03 全 True；登记簿 **103 项 / OPEN 0**（+7 TOOL_DEFECT，全 CLOSED）。
 
 > **R-CO172-1**：客户可见交付物内**凡可由记录复算的数字**（含**导出量**：模型间 spread、分量计数、回退净距）一律绑定来源记录并配**负控**；仅绑定总量、或只绑「主」数字，**视为未绑定**。
 > **R-CO172-2**：随单提交的**制造输入**不仅**文本**、其**几何**亦须由声明定值派生（或至少具备几何牙齿）；「文本已绑定 ⇒ 视为已绑」不成立。
@@ -1279,12 +1279,12 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 复评记录 `m13_v57_co172_rev19_co166_co171_review.json` | `e7bca2e46eaac2af` |
 | 工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.8 / t12c..t12h + t11c/t11d） | `adcba5bc4030702a` |
 | 工具 `p3_v57_co146_jlc_dfm_gate.py`（CO146-JLC-DFM.2 / 板规铜-板边派生 + t03） | `5b72ac75b683791f` |
-| 工具 `p3_v57_co164_order_runner.py`（CO-169.2 / 多信号快照 + t12；42 步） | `296fb0bdf78677b5` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-169.2 / 多信号快照 + t12；42 步） | `46c14651743adb63` |
 | 下单备注 `L5/jlc_package/ORDER_NOTES.md`（**逐字节不变**） | `b7d86151d97b32a6` |
 | 叠层图 `03_stackup/JLC08161H_stackup.svg`（**逐字节不变**） | `44370475b258848f` |
 | 打样包记录 `m13_v57_co146_jlc_fab_package.json`（重建 / PKG.8） | `92e8810347f20340` |
 | DFM 闸记录 `m13_v57_co146_jlc_dfm_gate.json`（DFM.2） | `e8fe854aca93a72c` |
-| 登记簿 `input_defect_register_v1.json`（102 项 / OPEN 0） | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json`（103 项 / OPEN 0） | `813481699dd8bd7e` |
 
 ## 47. CO-174（**L2 自裁 · 复现序归因硬化**）
 
@@ -1295,16 +1295,16 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
   ③ 报告增 `declared_changed` / `stray_changed`（后者 = 本步窗口内**非声明**受控件的变动证据）；
   ④ 牙齿 **t13**（每步声明完备 + ⊆ 全局受控集）/ **t13b**（步本地负控：非声明件变动不得归因本步）/ **t13c**（共享件残余枚举一致）。
 - **残余（如实登记）**：处置类 17 步的唯一主产物是**共享**登记簿（台账另被 4 步共享）⇒ 共享件上的他写仍可误判；已显式枚举于 `SHARED_ARTIFACT_RESIDUAL` 并 t13c 机判（防静默遗忘）；彻底关闭须每步独立标记件（下轮候选）。
-- **登记簿**：+2（`co174:G-1/G-2`，全 CLOSED；102 项 / OPEN 0）。
+- **登记簿**：+2（`co174:G-1/G-2`，全 CLOSED；103 项 / OPEN 0）。
 
 > **R-CO174-1**：复现序执行器的 `did_work` **归因**须**步本地**（仅本步声明的主产物集）；以全局受控集代为背书**不成立**。共享主产物上的他写属**已登记残余**，须**显式枚举**且机判（禁静默遗忘）。
 > **R-CO174-2**（复现序，取代 R-CO172-4；步骤集新增 co174）：规范复现序 = `co146_impedance_table → co146_pm_eval → co146_ledger_add → co153_k9_domain_coverage → co148_u6_datasheet_inputs → co148_thermal_ruling → co149_thermal_mitigation_derive → co147_l2_ruling → co146_jlc_dfm_gate → co146_jlc_fab_package → co152_findings_disposition → co155_co154_findings_disposition → co156_co154_open_disposition → co157_gate_hardening_3 → co158_l5_packet_selfcontained → co159_rev19_co156_co157_co158_review → co160_co159_findings_disposition → co161_gap_hardening_4 → co162_verdict_binding → co163_binding_to_order_notes → co166_rev19_co159_co165_review → co167_co166_findings_disposition → co168_register_consistency → co169_step_output_oracle → co170_stackup_binding → co171_order_notes_record_figures → co172_rev19_co166_co171_review → co173_co172_findings_disposition → co174_step_artifact_attribution → co124_input_selfcheck_gate → co150_k9_domain_gate → co146_boundary_append → co77_closure_declaration_sweep → co120_provenance_pin_gate → co135_review_hygiene → co136_gate_hygiene → co78_layer_role_drift_gate → co81_project_rules_gate → co84_dru_domain_gate → co95_in4_reachability → co98_reachability_status_report → co106_reference_plane_gate → co146_boundary_append`，**循环至 sha 稳定**（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1）。
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co164_order_runner.py`（CO-169.3 / STEP_ARTIFACTS + 步本地归因 / 43 步） | `296fb0bdf78677b5` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-169.3 / STEP_ARTIFACTS + 步本地归因 / 43 步） | `46c14651743adb63` |
 | 工具 `p3_v57_co174_step_artifact_attribution.py` | `112dd67ac3af0f42` |
-| 登记簿 `input_defect_register_v1.json`（102 项 / OPEN 0） | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json`（103 项 / OPEN 0） | `813481699dd8bd7e` |
 
 ## 48. CO-175（**L2 自裁 · 交付物绑定补强**）
 
@@ -1314,7 +1314,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
   ② 牙齿 **t16**（`05_layer_sequence.txt` == `layer_sequence(spec)` **重算**）/ **t16b**（扰动 SPEC stackup 角色 ⇒ 重算必不同）；
   ③ 包记录增 `declared_refs.impedance_copy_parity` 与 `declared_refs.layer_sequence_sha16`。
   ④ **如实说明**：`05_layer_sequence.txt` **不**在 ORDER_NOTES §1/§2 声明为随单件 ⇒ 本项只做**包内自洽**绑定，**不**改变下单提交口径；`ORDER_NOTES.md` **逐字节不变**。
-- **登记簿**：+2（`co175:G-1/G-2`，全 CLOSED；102 项 / OPEN 0）。
+- **登记簿**：+2（`co175:G-1/G-2`，全 CLOSED；103 项 / OPEN 0）。
 
 > **R-CO175-1**：交付包内凡**副本类**件（不限 `06_rulings`）须与来源**逐字节**绑定的**牙齿**；凡**派生类**件须与 来源**重算**一致。缺件一律 fail-closed；仅「在包内」**不成立**。
 > **R-CO175-2**（复现序，取代 R-CO174-2；步骤集新增 co175）：规范复现序 = `co146_impedance_table → co146_pm_eval → co146_ledger_add → co153_k9_domain_coverage → co148_u6_datasheet_inputs → co148_thermal_ruling → co149_thermal_mitigation_derive → co147_l2_ruling → co146_jlc_dfm_gate → co146_jlc_fab_package → co152_findings_disposition → co155_co154_findings_disposition → co156_co154_open_disposition → co157_gate_hardening_3 → co158_l5_packet_selfcontained → co159_rev19_co156_co157_co158_review → co160_co159_findings_disposition → co161_gap_hardening_4 → co162_verdict_binding → co163_binding_to_order_notes → co166_rev19_co159_co165_review → co167_co166_findings_disposition → co168_register_consistency → co169_step_output_oracle → co170_stackup_binding → co171_order_notes_record_figures → co172_rev19_co166_co171_review → co173_co172_findings_disposition → co174_step_artifact_attribution → co175_package_parity_binding → co124_input_selfcheck_gate → co150_k9_domain_gate → co146_boundary_append → co77_closure_declaration_sweep → co120_provenance_pin_gate → co135_review_hygiene → co136_gate_hygiene → co78_layer_role_drift_gate → co81_project_rules_gate → co84_dru_domain_gate → co95_in4_reachability → co98_reachability_status_report → co106_reference_plane_gate → co146_boundary_append`，**循环至 sha 稳定**（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1 + R-CO175-1）。
@@ -1323,10 +1323,10 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 |---|---|
 | 工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.9 / t15/t15b + t16/t16b；29 牙齿） | `adcba5bc4030702a` |
 | 工具 `p3_v57_co175_package_parity_binding.py` | `406d044590c30bd4` |
-| 工具 `p3_v57_co164_order_runner.py`（CO-169.3 / 44 步） | `296fb0bdf78677b5` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-169.3 / 44 步） | `46c14651743adb63` |
 | 包记录 `m13_v57_co146_jlc_fab_package.json`（CO146-PKG.9） | `92e8810347f20340` |
 | 下单备注 `L5/jlc_package/ORDER_NOTES.md`（**逐字节不变**） | `b7d86151d97b32a6` |
-| 登记簿 `input_defect_register_v1.json`（102 项 / OPEN 0） | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json`（103 项 / OPEN 0） | `813481699dd8bd7e` |
 
 ## 49. CO-176（**L2 自裁 · 闸自检强制 + 引证可核验性**）
 
@@ -1334,7 +1334,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
   **处置**：`p3_v57_co164_order_runner.py` 升 **CO-169.4** —— `EXPECTED_NONZERO.teeth_path` + 纯函数 `teeth_all_true()`（bool / 含 `ok` 的 dict；空/形状不明 ⇒ None fail-closed）+ `record_json_path()`；`allowlist_decision()` 判 **`expected_step_teeth_failed`** ⇒ 停机；静态齿 **t14**。
 - **G-2（medium）**：JLC 能力表 `note` 声称「逐条引用原文」，实测**10/24 非原文**（2 条**静默删改**无省略标记）⇒ DFM 判定（记录**随单进包**）的限值依据**不可独立核验**且声明失实（CO-171 同族）。
   **处置**：`p3_v57_co146_jlc_dfm_gate.py` 升 **CO146-JLC-DFM.3** —— 每条增 **`anchor`**（抓取件**原文子串**，24/24 实测命中）+ `capability_citation_checks()` + 牙齿 **t04**（覆盖/非空/逐条原文/实测非原文集==声明集/理由齐备/原文数下限）/ **t05**（灵敏度）；`note` **订正**；`citation` 块（n_verbatim 14/24 + 理由）；capability 记录升 **CO146-CAP.1**。
-- **登记簿**：+2（`co176:G-1/G-2`，全 CLOSED；102 项 / OPEN 0）。
+- **登记簿**：+2（`co176:G-1/G-2`，全 CLOSED；103 项 / OPEN 0）。
 
 > **R-CO176-1**：白名单步的 rc≠0 **只豁免 verdict**、**不豁免自检** —— 该步记录内 `teeth` 须**机判全 True**；不可判（缺字段/形状不明）一律 **fail-closed**。
 > **R-CO176-2**：记录内**引证**须逐条绑定来源**原文锚点**（机判）；**非原文**引证须**显式标注**并给理由（禁静默删改/改写）；记录**不得**声称超出实际核验能力的引证口径。
@@ -1342,12 +1342,12 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co164_order_runner.py`（CO-169.4 / 白名单自检强制 + t14；45 步） | `296fb0bdf78677b5` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-169.4 / 白名单自检强制 + t14；45 步） | `46c14651743adb63` |
 | 工具 `p3_v57_co146_jlc_dfm_gate.py`（CO146-JLC-DFM.3 / 引证锚点 t04/t05） | `5b72ac75b683791f` |
 | 工具 `p3_v57_co176_gate_selfcheck_evidence.py` | `3110269c1565b493` |
 | 能力表 `m13_v57_co146_jlc8_capability.json`（CO146-CAP.1 / 引证锚点） | `fa5b9167dd4686ef` |
 | DFM 闸记录 `m13_v57_co146_jlc_dfm_gate.json`（DFM.3） | `e8fe854aca93a72c` |
-| 登记簿 `input_defect_register_v1.json`（102 项 / OPEN 0） | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json`（103 项 / OPEN 0） | `813481699dd8bd7e` |
 
 ## 50. CO-177（**L2 自裁 · 引证可核验性续**）
 
@@ -1357,7 +1357,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
   ② 纯函数 `_val_eq()`（数值按 float 比较）/ `capability_value_bind_checks()`；
   ③ 牙齿 **t06**（覆盖/非空/字面量存在/正则匹配/捕获组数一致且**逐值相等**/捕获组总数下限 25）/ **t07**（灵敏度：改期望值即判不通过）；
   ④ capability 记录升 **CO146-CAP.2** + `value_bind` 块；人读卡/打印补 T6/T7。
-- **登记簿**：+1（`co177:G-1`，CLOSED；102 项 / OPEN 0）。
+- **登记簿**：+1（`co177:G-1`，CLOSED；103 项 / OPEN 0）。
 
 > **R-CO177-1**：记录内**工程值主张**须**可由来源原文抽取**得到（正则捕获 ↔ 声明值，逐值机判）；仅绑 anchor（引证）**不成立**。绑定为人工编写者须**如实登记**（能力页改版后须人工复核）。
 > **R-CO177-2**（复现序，取代 R-CO176-3；步骤集新增 co177）：规范复现序 = `co146_impedance_table → co146_pm_eval → co146_ledger_add → co153_k9_domain_coverage → co148_u6_datasheet_inputs → co148_thermal_ruling → co149_thermal_mitigation_derive → co147_l2_ruling → co146_jlc_dfm_gate → co146_jlc_fab_package → co152_findings_disposition → co155_co154_findings_disposition → co156_co154_open_disposition → co157_gate_hardening_3 → co158_l5_packet_selfcontained → co159_rev19_co156_co157_co158_review → co160_co159_findings_disposition → co161_gap_hardening_4 → co162_verdict_binding → co163_binding_to_order_notes → co166_rev19_co159_co165_review → co167_co166_findings_disposition → co168_register_consistency → co169_step_output_oracle → co170_stackup_binding → co171_order_notes_record_figures → co172_rev19_co166_co171_review → co173_co172_findings_disposition → co174_step_artifact_attribution → co175_package_parity_binding → co176_gate_selfcheck_evidence → co177_capability_value_binding → co124_input_selfcheck_gate → co150_k9_domain_gate → co146_boundary_append → co77_closure_declaration_sweep → co120_provenance_pin_gate → co135_review_hygiene → co136_gate_hygiene → co78_layer_role_drift_gate → co81_project_rules_gate → co84_dru_domain_gate → co95_in4_reachability → co98_reachability_status_report → co106_reference_plane_gate → co146_boundary_append`，**循环至 sha 稳定**（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1 + R-CO175-1 + R-CO176-1/2 + R-CO177-1）。
@@ -1366,10 +1366,10 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 |---|---|
 | 工具 `p3_v57_co146_jlc_dfm_gate.py`（CO146-JLC-DFM.4 / 值绑定 t06/t07） | `5b72ac75b683791f` |
 | 工具 `p3_v57_co177_capability_value_binding.py` | `7a825f76de8503d7` |
-| 工具 `p3_v57_co164_order_runner.py`（CO-169.4 / 46 步） | `296fb0bdf78677b5` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-169.4 / 46 步） | `46c14651743adb63` |
 | 能力表 `m13_v57_co146_jlc8_capability.json`（CO146-CAP.2 / 值绑定） | `fa5b9167dd4686ef` |
 | DFM 闸记录 `m13_v57_co146_jlc_dfm_gate.json`（DFM.4 / 7 牙齿） | `e8fe854aca93a72c` |
-| 登记簿 `input_defect_register_v1.json`（102 项 / OPEN 0） | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json`（103 项 / OPEN 0） | `813481699dd8bd7e` |
 
 ## 51. CO-178（**L2 自裁 · 记录派生数字绑定续**）
 
@@ -1378,7 +1378,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
   ① `_items(m, asd, jlcrun, j=None)` 可注入能力表；硬编码一律由 `JLC8`（+ `MIL_MM`）派生（下限取 `board_min_mm`、层集解析 `impedance_control_layers.value`、mil 由 `MIL_MM` 换算、单边环宽取 `via_annular_note.value/2`、HASL 层数解析 `surface_finish.quote`、孔壁文本明示判定口径）；
   ② `ITEM_DERIVATION_CASES`（**13 情形**）+ 纯函数 `item_limit_derivation_checks()` + 牙齿 **t08**（**成分级**：扰动能力表字段 ⇒ 该项 `jlc_limit` 须**含由扰动值派生的具体成分串**，且**基线不含该串**）。
      **自测加严（如实记录）**：t08 首版仅查「文本是否变化」⇒ **部分硬编码**（把 `3.5mil` 写死而 mm 段仍派生）**可逃逸**（实测发现）；改为成分级断言 + 基线否定后，该回归必被击穿（同一变异复测 ⇒ 停机）。
-- **登记簿**：+1（`co178:G-1`，CLOSED；102 项 / OPEN 0）。
+- **登记簿**：+1（`co178:G-1`，CLOSED；103 项 / OPEN 0）。
 
 > **R-CO178-1**：判定表/备注内的**限值文本**须与**判据同源**且由来源记录**派生**（禁止内嵌硬编码派生值）；派生性须有**扰动证明**（扰动来源 ⇒ 文本必变）。
 > **R-CO178-2**（复现序，取代 R-CO177-2；步骤集新增 co178）：规范复现序 = `co146_impedance_table → co146_pm_eval → co146_ledger_add → co153_k9_domain_coverage → co148_u6_datasheet_inputs → co148_thermal_ruling → co149_thermal_mitigation_derive → co147_l2_ruling → co146_jlc_dfm_gate → co146_jlc_fab_package → co152_findings_disposition → co155_co154_findings_disposition → co156_co154_open_disposition → co157_gate_hardening_3 → co158_l5_packet_selfcontained → co159_rev19_co156_co157_co158_review → co160_co159_findings_disposition → co161_gap_hardening_4 → co162_verdict_binding → co163_binding_to_order_notes → co166_rev19_co159_co165_review → co167_co166_findings_disposition → co168_register_consistency → co169_step_output_oracle → co170_stackup_binding → co171_order_notes_record_figures → co172_rev19_co166_co171_review → co173_co172_findings_disposition → co174_step_artifact_attribution → co175_package_parity_binding → co176_gate_selfcheck_evidence → co177_capability_value_binding → co178_drc_item_limit_derivation → co124_input_selfcheck_gate → co150_k9_domain_gate → co146_boundary_append → co77_closure_declaration_sweep → co120_provenance_pin_gate → co135_review_hygiene → co136_gate_hygiene → co78_layer_role_drift_gate → co81_project_rules_gate → co84_dru_domain_gate → co95_in4_reachability → co98_reachability_status_report → co106_reference_plane_gate → co146_boundary_append`，**循环至 sha 稳定**（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1 + R-CO175-1 + R-CO176-1/2 + R-CO177-1 + R-CO178-1）。
@@ -1387,16 +1387,16 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 |---|---|
 | 工具 `p3_v57_co146_jlc_dfm_gate.py`（CO146-JLC-DFM.5 / 限值派生 t08） | `5b72ac75b683791f` |
 | 工具 `p3_v57_co178_drc_item_limit_derivation.py` | `edd00136850f772f` |
-| 工具 `p3_v57_co164_order_runner.py`（CO-169.4 / 47 步） | `296fb0bdf78677b5` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-169.4 / 47 步） | `46c14651743adb63` |
 | DFM 闸记录 `m13_v57_co146_jlc_dfm_gate.json`（DFM.5 / 8 牙齿） | `e8fe854aca93a72c` |
-| 登记簿 `input_defect_register_v1.json`（102 项 / OPEN 0） | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json`（103 项 / OPEN 0） | `813481699dd8bd7e` |
 
 ## 52. CO-179（**L2 自裁 · 灵敏度牙齿系统性加严**）
 
 - **G-1（medium）弱判据**：`t07b` 比较**两个不同文件**（`sha256(包内副本) != sha256(ORDER_NOTES.md)`）⇒ 恒真式，**不检验 parity 判据本身**；`t10b` 只证 `sha16(JP) != 声明 pin`（pin 非自身），**不检验 pin 判据**能否拒绝错误 pin。
   **处置**：`p3_v57_co146_jlc_fab_package.py` 升 **CO146-PKG.10** —— parity/pin 判据**函数化**（`packaged_parity_checks()` / `instruction_pin_ok()`），灵敏度牙齿改为**同件近失**证明（来源做「同长单字节翻转」临时件 / pin 做「单 hex 位翻转」）；**变异实测**：把 `copy_parity` 改为恒真 ⇒ **t07b 与 t15b 双双击穿**（rc=1）。
 - **G-2（low）不点名**：九处灵敏度牙齿用 `not all(...)`（不点名须翻转项）⇒ 若目标项被写死而扰动偶发翻转他项，旧形仍判通过（CO-178 教训同族）。**处置**：九处改**成分级点名**（t09b→`zdiff`；t11b→`outer_copper`；t11d→`geometry_matches_binding`；t12b→`drc_as_designed_total`；t12c→`impedance_spread_pct`；t12d→`via_census_F.Cu→In2.Cu`；t12e→`mask_gap_mm`；t12f→`thermal_Tj_best_worst`；t12g→`jlc_min_track_width_mil`；t12h→`rule_copper_edge_clearance`，逐项**实测**确认该键翻转）。
-- **登记簿**：+2（`co179:G-1/G-2`，全 CLOSED；102 项 / OPEN 0）。
+- **登记簿**：+2（`co179:G-1/G-2`，全 CLOSED；103 项 / OPEN 0）。
 
 > **R-CO179-1**：凡「灵敏度/负控」牙齿须对**同一被判对象**做**近失扰动**并断言判据**翻转**；禁「比较两个不同对象」「非自身」等恒真式弱判据；判据须**函数化**以便真件与近失共用同一实现。
 > **R-CO179-2**：灵敏度牙齿须**点名**须翻转的检查项（成分级）；不得仅用 `not all(...)`。
@@ -1406,16 +1406,16 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 |---|---|
 | 工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.10 / 近失 + 点名加严；29 牙齿） | `adcba5bc4030702a` |
 | 工具 `p3_v57_co179_sensitivity_teeth_hardening.py` | `73876c43bae6ed4f` |
-| 工具 `p3_v57_co164_order_runner.py`（CO-169.4 / 48 步） | `296fb0bdf78677b5` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-169.4 / 48 步） | `46c14651743adb63` |
 | 包记录 `m13_v57_co146_jlc_fab_package.json`（CO146-PKG.10） | `92e8810347f20340` |
-| 登记簿 `input_defect_register_v1.json`（102 项 / OPEN 0） | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json`（103 项 / OPEN 0） | `813481699dd8bd7e` |
 
 ## 53. CO-180（**L2 自裁 · 牙齿判决完整性**）
 
 - **G-1（medium）**：复现序只对**白名单步**强制记录 `teeth` 全 True（CO-176）；其余**含 `teeth` 的 15+ 步**（impedance_table / pm_eval / co147 / co148 / co124 / co150 / co77 / co120 / co136 / co95 / co98 / co106 / fab 包…）的**自检只记不判** ⇒ 自检崩坏时收敛照过。**处置**：`p3_v57_co164_order_runner.py` 升 **CO-169.5** —— 纯函数 `step_declared_teeth(step)`（自 **CO-174 的 `STEP_ARTIFACTS`** 派生；含 `teeth` 者须全 True，无 ⇒ None，未全 True/形状不明 ⇒ False fail-closed）+ `allowlist_decision()` 非白名单分支 **`step_teeth_failed`** + 静态齿 **t15**（含现状普查）。
 - **G-2（medium）**：`co106` —— ① `teeth_ok` 在**前 3 齿**后即结算 ⇒ 其后 4 齿（`baseline_pin_binding` / `fail_open_closed` / `verdict_positive_control` / `carrier_exemption_declared_only`）**记录在案但不参与判决**；② 聚合键 `teeth_ok` **混入 `teeth`**；③ 两项 `checks`（`C_realized_corroboration` / `D_acceptance_matrix_coverage`）`ok` **恒真**（记录冒充判据）。**处置**：**CO-106.5** —— 聚合移至全部齿后、聚合键移出、加不变量齿 `teeth_are_bool_only`、修 `hard` 引用顺序；C/D 标 **`judging: False`** 并自 `checks_ok` 显式排除（**行为不变**：verdict 仍 PASS；键保留以兼容 co110）。
 - **G-3（low）**：`co78` 的 `teeth` 为**散文串**（冒充牙齿）⇒ **CO-78.3**：归真齿 dict + 散文移 `teeth_note`。
-- **登记簿**：+3（`co180:G-1/G-2/G-3`，全 CLOSED；102 项 / OPEN 0）。
+- **登记簿**：+3（`co180:G-1/G-2/G-3`，全 CLOSED；103 项 / OPEN 0）。
 
 > **R-CO180-1**：记录暴露的自检牙齿**一律参与判决**（不限白名单步）；判据依**声明产物**派生（CO-174），不可判一律 fail-closed。
 > **R-CO180-2**：`teeth` 字段须为**布尔牙齿 dict**（散文移 `teeth_note`）；**全部自检须参与本记录判决折算**（禁提前结算/漏折）；判据项与记录项须以 `judging` 标记区分，记录项不得自 `checks_ok` 折算。
@@ -1423,11 +1423,11 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co164_order_runner.py`（CO-181.1 / 声明产物牙齿纳入判决 + t15/t16；49 步） | `296fb0bdf78677b5` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-181.1 / 声明产物牙齿纳入判决 + t15/t16；49 步） | `46c14651743adb63` |
 | 工具 `p3_v57_co106_reference_plane_gate.py`（CO-106.5 / 判决完整性） | `d56a1e51ece54d51` |
 | 工具 `p3_v57_co78_layer_role_drift_gate.py`（CO-78.3 / teeth 归真齿 dict） | `b78354dea818848a` |
 | 工具 `p3_v57_co180_teeth_judgment_integrity.py` | `9911c54efba46e4a` |
-| 登记簿 `input_defect_register_v1.json`（102 项 / OPEN 0） | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json`（103 项 / OPEN 0） | `813481699dd8bd7e` |
 
 ## 54. CO-181（**非执行者对抗复评 + L2 自裁处置 · 判决完整性续**）
 
@@ -1437,7 +1437,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 - **F-3（low）·判据自指**：仅要求「现有齿全 True」无齿集下界 ⇒ **静默删齿/改名**可规避。**处置**：runner 增 **`EXPECTED_TEETH`**（20 件声明齿件的齿名有序集 pin）+ 静态齿 **t16**（覆盖一致 + 内存桩件负控：pin 命中⇒True；齿集漂移/不可解析/`teeth_ok` 冒充⇒False）。
 - **F-4（low）·漏扫**：规范序步 `co81`/`co84` 自检以 `teeth_ok` 单标量暴露、无 `teeth` 布尔齿 dict ⇒ 不参与 R-CO180-1 判决（CO-180 G-3 只扫了 co78）。**处置**：`co81` 升 **CO-81.3** / `co84` 升 **CO-84.3**（归真齿 dict，`teeth_ok` 自真齿聚合）；runner 另加「`teeth_ok` 冒充齿 ⇒ False」守卫。
 - **F-5（low）·结构性残余**：**固有一轮 pin 滞后**（= 既有 `co180:G-4`）复现 —— 复评方实测：**未变更态**2 轮收敛且 **182/182 件逐字节幂等**；**upstream 记录变更后首轮**在 `co135_review_hygiene` 停机（`unexpected_nonzero`），重跑即收敛（本轮实测：abort → 3 轮收敛）。**如实登记为残余**（消除 = 受控 warm-up 轮 / co135 显式接受滞后 + 齿证明，下轮候选）。
-- **登记簿**：+4（`co181:F-1..F-4`，全 CLOSED；102 项 / OPEN 0）。F-5 为既有 `co180:G-4` 残余复现，不重复登记。
+- **登记簿**：+4（`co181:F-1..F-4`，全 CLOSED；103 项 / OPEN 0）。F-5 为既有 `co180:G-4` 残余复现，不重复登记。
 
 > **R-CO181-1**：被纳入判决的牙齿须为**可翻转判据**（函数化 + 近失/负控**必翻转**）；恒真式 / 字面 `True` / 恒 `True` 记录冒充一律视为缺陷（CO-179 R-CO179-1 的**牙齿质量面**）。
 > **R-CO181-2**：`step_declared_teeth` 判据**不得自指** —— 齿集须命中 `EXPECTED_TEETH` pin；声明 json 缺失/不可解析/非 dict、或以 `teeth_ok` 冒充齿，一律 **fail-closed**。
@@ -1447,9 +1447,24 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 |---|---|
 | 复评工具 `p3_v57_co181_rev19_co166_co180_review.py`（只读 as-found + 内存注入；V10/P8） | `41611edf97ca93df` |
 | 复评记录 `m13_v57_co181_rev19_co166_co180_review.json` | `9a331200b90e84dc` |
-| 工具 `p3_v57_co164_order_runner.py`（CO-181.1 / fail-closed + EXPECTED_TEETH pin + t16；49 步） | `296fb0bdf78677b5` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-181.1 / fail-closed + EXPECTED_TEETH pin + t16；49 步） | `46c14651743adb63` |
 | 工具 `p3_v57_co146_pm_eval.py`（CO148-PM.3 / 去恒真齿） | `06b2fe1859861a90` |
 | 工具 `p3_v57_co98_reachability_status_report.py`（CO-98.3 / 判别式齿） | `11bfb844d542df6f` |
 | 工具 `p3_v57_co81_project_rules_gate.py`（CO-81.3 / 归真齿 dict） | `1c3e3f2eb2dacf6a` |
 | 工具 `p3_v57_co84_dru_domain_gate.py`（CO-84.3 / 归真齿 dict） | `90c89c3987b217b6` |
-| 登记簿 `input_defect_register_v1.json`（102 项 / OPEN 0） | `4440e569a0215764` |
+| 登记簿 `input_defect_register_v1.json`（103 项 / OPEN 0） | `813481699dd8bd7e` |
+
+## 55. CO-182（**L2 自裁 · 复现序结构重排：消除一轮 pin 滞后**）
+
+- **G-1（medium）·固有一轮 pin 滞后（= 既有 `co180:G-4`）根因机判化**：boundary 由 `co146_boundary_append`（序内 idx 37）刷新，但其后 `co77`/`co120` **仍改写被 boundary 引用的记录**；`co135`（idx 41）读 boundary 时 co120 的 pin 已**瞬时陈旧** ⇒ `V3 citation_scan_clean=False` ⇒ rc=1 ⇒ **首轮停机**（须人工重跑）。复评/复核方**受控瞬态复现**：把 `co120` 记录回滚为 as-found（`8469fb63b19664c0`）⇒ 旧序**迭代 1 即停 `co135` / `unexpected_nonzero`**（与 handoff-z46 开篇「已知特性」一致）。
+- **处置（纯重排，不引入容忍、不掩盖）**：在 `co120_provenance_pin_gate` 与 `co135_review_hygiene` 之间**插入** `co146_boundary_append`，使**每个 boundary citation 扫描步紧跟刷新步** —— 序内出现 **50 次**（步集 distinct 不变；`co146_boundary_append` 出现 3 次）；runner 增声明 `BOUNDARY_SCAN_GUARDED`/`BOUNDARY_REFRESH_STEP` + 静态齿 **t17**（受保护步须 i>0 且 `ORDER[i-1]` = 刷新步）。
+- **对照实测**：同一瞬态（co120 回滚）下**旧序** abort@co135；**新序**（CO-182.1）**单次调用即收敛**（rc=0；见 R-CO182-2），不再需要「重跑」。
+- **登记簿**：+1（`co182:G-1`，CLOSED；103 项 / OPEN 0）。
+
+> **R-CO182-1**：凡**扫描 boundary citation 的步**（`co77`/`co135`）须**紧跟** `co146_boundary_append`；t17 机判。**禁**以「容忍一轮滞后」「放宽扫描判据」代替重排（禁静默让步）。
+> **R-CO182-2**（复现序，取代 R-CO181-3；**步集 distinct 不变，序内出现 50 次**）：规范复现序 = `co146_impedance_table → co146_pm_eval → co146_ledger_add → co153_k9_domain_coverage → co148_u6_datasheet_inputs → co148_thermal_ruling → co149_thermal_mitigation_derive → co147_l2_ruling → co146_jlc_dfm_gate → co146_jlc_fab_package → co152_findings_disposition → co155_co154_findings_disposition → co156_co154_open_disposition → co157_gate_hardening_3 → co158_l5_packet_selfcontained → co159_rev19_co156_co157_co158_review → co160_co159_findings_disposition → co161_gap_hardening_4 → co162_verdict_binding → co163_binding_to_order_notes → co166_rev19_co159_co165_review → co167_co166_findings_disposition → co168_register_consistency → co169_step_output_oracle → co170_stackup_binding → co171_order_notes_record_figures → co172_rev19_co166_co171_review → co173_co172_findings_disposition → co174_step_artifact_attribution → co175_package_parity_binding → co176_gate_selfcheck_evidence → co177_capability_value_binding → co178_drc_item_limit_derivation → co179_sensitivity_teeth_hardening → co180_teeth_judgment_integrity → co124_input_selfcheck_gate → co150_k9_domain_gate → co146_boundary_append → co77_closure_declaration_sweep → co120_provenance_pin_gate → co146_boundary_append → co135_review_hygiene → co136_gate_hygiene → co78_layer_role_drift_gate → co81_project_rules_gate → co84_dru_domain_gate → co95_in4_reachability → co98_reachability_status_report → co106_reference_plane_gate → co146_boundary_append`，**循环至 sha 稳定**（收敛判定须遵 R-CO164-1 + R-CO165-1/2 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1 + R-CO175-1 + R-CO176-1/2 + R-CO177-1 + R-CO178-1 + R-CO179-1/2 + R-CO180-1/2 + R-CO181-1/2 + R-CO182-1）。
+
+| 工件 | sha16 |
+|---|---|
+| 工具 `p3_v57_co164_order_runner.py`（CO-182.1 / boundary 扫描步紧跟刷新步 + t17；序内 50 次） | `46c14651743adb63` |
+| 登记簿 `input_defect_register_v1.json`（103 项 / OPEN 0） | `813481699dd8bd7e` |

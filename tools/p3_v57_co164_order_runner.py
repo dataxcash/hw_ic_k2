@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CO-164/CO-167/CO-169/CO-174/CO-180/CO-181 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
+"""CO-164/CO-167/CO-169/CO-174/CO-180/CO-181/CO-182 — **规范复现序机判执行器**（R-CO164-1 + R-CO167-1/2 + R-CO169-1/2 + R-CO174-1）：以 rc 为准判定收敛，禁「sha 稳定即收敛」。
 
 缘起（实测事故，CO-163）：`co146_boundary_append.py` 因 §37 文本里的 f-string 花括号语法错误**每次崩溃（rc=1）**，
 但收敛判定只看 boundary/记录 sha ⇒ sha 恒不变 ⇒ 报「CONVERGED」，边界 §37 实际从未写入、pin 表陈旧（co77/co135/co136 判 FAIL）。
@@ -35,9 +35,14 @@ ORDER = ["co146_impedance_table", "co146_pm_eval", "co146_ledger_add", "co153_k9
          "co167_co166_findings_disposition", "co168_register_consistency", "co169_step_output_oracle", "co170_stackup_binding", "co171_order_notes_record_figures",
          "co172_rev19_co166_co171_review", "co173_co172_findings_disposition", "co174_step_artifact_attribution", "co175_package_parity_binding", "co176_gate_selfcheck_evidence", "co177_capability_value_binding", "co178_drc_item_limit_derivation", "co179_sensitivity_teeth_hardening", "co180_teeth_judgment_integrity",
          "co124_input_selfcheck_gate", "co150_k9_domain_gate",
-         "co146_boundary_append", "co77_closure_declaration_sweep", "co120_provenance_pin_gate", "co135_review_hygiene",
+         "co146_boundary_append", "co77_closure_declaration_sweep", "co120_provenance_pin_gate", "co146_boundary_append", "co135_review_hygiene",
          "co136_gate_hygiene", "co78_layer_role_drift_gate", "co81_project_rules_gate", "co84_dru_domain_gate",
          "co95_in4_reachability", "co98_reachability_status_report", "co106_reference_plane_gate", "co146_boundary_append"]
+# CO-182（R-CO182-1）：**扫描 boundary citation 的步**须**紧跟 boundary 刷新步**（原滞后根因：
+# 刷新步在其前、co77/co120 在其后改写被引记录 ⇒ co135 见 pin 瞬时陈旧 ⇒ 首轮停机）。
+BOUNDARY_SCAN_GUARDED = ("co77_closure_declaration_sweep", "co135_review_hygiene")
+BOUNDARY_REFRESH_STEP = "co146_boundary_append"
+
 # 允许非零的步骤（**须带 verdict 证据**：rc≠0 不等于预期 FAIL —— CO-165）
 EXPECTED_NONZERO = {
     "co146_jlc_dfm_gate": {"verdict": "FAIL", "record": str(STEP2 / "m13_v57_co146_jlc_dfm_gate.json"),
@@ -550,6 +555,11 @@ def main(argv=None) -> int:
         and all(step_declared_teeth(s) is not False for s in set(ORDER))
         and step_declared_teeth("__UNKNOWN__") is None
         and _teeth_pin_negative_controls())
+    # CO-182（R-CO182-1）：boundary citation 扫描步须**紧跟**boundary 刷新步（消除一轮 pin 滞后）
+    _gi = [i for i, s in enumerate(ORDER) if s in BOUNDARY_SCAN_GUARDED]
+    checks["t17_boundary_scan_follows_refresh"] = (
+        len(_gi) == len(BOUNDARY_SCAN_GUARDED)
+        and all(i > 0 and ORDER[i - 1] == BOUNDARY_REFRESH_STEP for i in _gi))
     checks["t05_stability_oracle"] = (stable("x", "x") and not stable("x", "y") and not stable("", ""))
     # CO-164（t06）：执行器 ORDER 必须与 boundary 规范复现序**有序一致**（文档↔执行器防漂移）
     _bdy = boundary_order_steps()
@@ -613,7 +623,7 @@ def main(argv=None) -> int:
             converged = True
             break
         prev = cur
-    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-181.1",
+    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-182.1",
               "nature": "规范复现序机判执行器（rc 策略 + 真收敛判定）；报告落 .archer_tmp/ 且**不被 boundary 引用**（避免不动点）",
               "order": ORDER, "expected_nonzero": EXPECTED_NONZERO,
               "checks": checks, "iterations": iterations, "abort": abort, "converged": converged,
