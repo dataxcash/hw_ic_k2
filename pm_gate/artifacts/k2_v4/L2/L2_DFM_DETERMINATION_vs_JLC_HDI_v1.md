@@ -51,3 +51,10 @@
 - 命令：`python3 tools/p3_v57_co146_jlc_dfm_hdi_report.py`（rc=0）。前置 P0..P3（冻结 A / 闸记录属交付板 / HDI 锚为抓取件归一原文 / 阻焊处置有已裁定依据）皆 True，任一不成立即 FAIL(fail-closed)。
 - 负控实测：移除裁定件中 `ACCEPT_L2_WITH_FAB_REVIEW` ⇒ P3=False、`verdict=FAIL`、rc=1（复原后 rc=0 且记录 sha 逐字节回同值）⇒ 非橡皮图章。
 - 来源：`m13_v57_co146_jlc_dfm_hdi.json`（本件之机器产出）、`m13_v57_co146_jlc_dfm_gate.json`（底层实测）、`m13_v57_co146_jlc8_capability.json` + `..._source.html`（pinned 抓取件）。
+
+## 6. HDI 通道限值：**不可机取**（实测，确定性结论）
+命令：`curl -sS -m 25 -A "Mozilla/5.0" https://jlcpcb.com/capabilities/hdi-pcb -o hdi.html`（本环境网络可达；http=200，135017 B）。
+归一化比对（对 pinned 标准能力抓取件 `m13_v57_co146_jlc_capability_source.html`）：
+- 两页**含相同**标准内容：`Blind/Buried Vias Not supported` / `Min. Via hole size/diameter 0.15mm / 0.25mm` / `Advanced options such as blind/buried vias, HDI (laser vias)`；
+- HDI 专属限值（**激光孔径 / 阶数上限 / 盲埋孔环宽 / 介质厚 / 叠层结构**）**两页皆无**（所命中之 `stack-up` 均为 FAQ 泛述）。
+⇒ **结论（不可行证明）**：JLC **HDI 通道之具体限值不由公开页发布**；其获取途径 = **板厂 HDI 工程评审 / 报价流程**（即路线 A 已定义之 `须 DFM review`）。故本项**非「待定」，而是「已判定为外部流程输入」**；设计侧合法性已由 §1–§4 判 PASS。
