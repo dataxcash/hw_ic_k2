@@ -90,6 +90,10 @@
 ㉝ CO-237（R-CO237-1，承 R-CO225-1 / R-CO193-3 / R-CO234-1）：t44 之**域**原为手写 2 件声明 ⇒ **覆盖面无机判**（新增复评件不被强制纳入；同类已实测两次漏项：
      z96 漏 CO-231 / CO-235 F-2）。现补：域 = **boundary pin 面**之 `*_review.json` 受 pin 件（非自述）+ 域成员须 ∈ 声明集 ∪ **显式豁免集**
      （名集等式 + 理由 + 同源锚）+ **域下限**（防删 pin 行即空真）；扩 **t44** 之覆盖面臂（不新增齿）。report revision → CO-203.14。
+㉞ CO-238（R-CO238-1，非执行者对抗复评 CO-235..CO-237 · 承 R-CO202-4 / R-CO236-1）：t44 之**工具绑定臂**（`_tool_ok`）原 = **原文子串**
+     `f'AF = "{rev}"' in _tsrc` ⇒ **注释/散文即可满足**（与 R-CO202-4「源内声明之代理须 AST 字面量」同源缺陷；实测：真绑定改注释 ⇒ t44 仍 True）。
+     现补：绑定判据改 **AST 赋值**（`AF` 之 `Assign`/`AnnAssign` 值须为 == rev 之**字符串常量**；注释/散文/拼接一律不满足，不可编译 ⇒ fail-closed）
+     + 合成正/负控（含 AST 负控）；扩 t44 之绑定臂（不新增齿）。report revision → CO-203.15。
 ⑲ CO-215（R-CO215-1，**代理帮助函数之源面收窄 + 覆盖面机判**）：`artifact_readers()`（判「某步**确实读取**该工件」之**语法代理**）
      原按**原文子串** `basename in src` 判 ⇒ **注释/散文即可满足**（与 R-CO202-4「注释不得满足源内声明」同源缺陷，CO-215 实测复现）⇒
      收窄为 **AST 字面量集**（`_source_strings`）匹配 + glob 字面量；并把该帮助函数之**残余显式登记**
@@ -953,6 +957,10 @@ REISSUE_RECORDS_DECLARED = {
         {"tool": "tools/p3_v57_co235_rev19_co231_co234_review.py", "as_found": "03f8d39",
          "why": "复评件：只钉 as-found（现行 `--check` **计数**已移除，行普查自 as-found 重放）",
          "anchor": "t43_pin_row_format_covered"},
+    "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_CO238_rev19_co235_co237_review.json":
+        {"tool": "tools/p3_v57_co238_rev19_co235_co237_review.py", "as_found": "ab9c421",
+         "why": "复评件：只钉 as-found（逐件自 `git show ab9c421` 重放；内容为被评对象之纯函数，无现行链派生键）",
+         "anchor": "t44_reissue_records_as_found_pure"},
 }
 # CO-237（R-CO237-1，承 R-CO225-1 / R-CO193-3 / R-CO234-1）：t44 之**域**原 = 手写 2 件声明 ⇒ 覆盖面无机判（**新增复评件不被强制纳入**；同类已实测两次漏项：z96 漏 CO-231 / CO-235 F-2）。
 # 现补：域 = **boundary pin 面**中一切 `*_review.json` 受 pin 件（**非**由声明自述给出，承 R-CO230-1）；域成员须 ∈ 声明集 ∪ **显式豁免集**；域须设**下限**防「删 pin 行即空真」。
@@ -1003,7 +1011,7 @@ BOUNDARY_SECTIONS_DECLARED = frozenset({
     74, 75, 76, 77, 78, 79, 80, 81, 82, 83,
     84, 85, 86, 87, 88, 89, 90, 91, 92, 93,
     94, 95, 96, 97, 98, 99, 100, 101, 102, 103,
-    104, 105, 106, 107, 108, 109, 110,
+    104, 105, 106, 107, 108, 109, 110, 111,
 })
 STATIC_CHECKS_DECLARED = frozenset({
     "t01_steps_exist", "t02_steps_compile", "t03_expected_nonzero_policy_declared",
@@ -1356,6 +1364,30 @@ def reissue_record_key_scan(obj) -> set:
         for v in obj:
             out |= reissue_record_key_scan(v)
     return out
+
+
+def reissue_tool_binding_decision(src: str, rev: str, name: str = "AF") -> str:
+    """CO-238（R-CO238-1，承 R-CO202-4）：复评工具源内 **as-found 绑定**须为 **AST 赋值**（非原文子串）。
+
+    判据 = 存在 `name`（默认 `AF`）之 `Assign`/`AnnAssign`，其值为**字符串常量**且 == `rev`。**注释/散文/拼接一律不满足**
+    （R-CO202-4：源内声明之代理判据不得由注释满足）；不可编译 ⇒ fail-closed。纯判据（可注入合成控制，零落盘）。
+    返回 `ok` / `tool_binding_missing` / `tool_binding_uncompilable`。
+    """
+    try:
+        tree = ast.parse(src)
+    except SyntaxError:
+        return "tool_binding_uncompilable"
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Assign):
+            tgt, val = node.targets, node.value
+        elif isinstance(node, ast.AnnAssign):
+            tgt, val = [node.target], node.value
+        else:
+            continue
+        if any(isinstance(t, ast.Name) and t.id == name for t in tgt) \
+           and isinstance(val, ast.Constant) and isinstance(val.value, str) and val.value == rev:
+            return "ok"
+    return "tool_binding_missing"
 
 
 def boundary_head_decision(first_line, ok_pattern) -> str:
@@ -2664,13 +2696,14 @@ def main(argv=None) -> int:
             _tsrc = (K2 / _d["tool"]).read_text(encoding="utf-8")
         except OSError:
             _tsrc = ""
-        _tool_ok[_rel] = (f'AF = "{_d["as_found"]}"' in _tsrc)
+        _tool_ok[_rel] = (reissue_tool_binding_decision(_tsrc, _d["as_found"]) == "ok")   # CO-238：AST 绑定（非子串）
     checks["t44_reissue_records_as_found_pure"] = (
         # ① 声明集**名集钉定**（显式；新增复评件须入本集）+ 每项须有理由与同源锚
         bool(REISSUE_RECORDS_DECLARED)
         and set(REISSUE_RECORDS_DECLARED) == {
             "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_CO230_rev19_co225_co229_review.json",
-            "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_CO235_rev19_co231_co234_review.json"}
+            "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_CO235_rev19_co231_co234_review.json",
+            "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_CO238_rev19_co235_co237_review.json"}
         and all(str(_d.get("why") or "").strip() and _d.get("anchor") in STATIC_CHECKS_DECLARED
                 for _d in REISSUE_RECORDS_DECLARED.values())
         # ② 实件：as-found 绑定（记录 rev + 工具 AF 声明一致）且**无链派生键**
@@ -2686,7 +2719,15 @@ def main(argv=None) -> int:
         # 正/负控（合成，零落盘）：键扫描判别力 —— 链派生键命中 / as-found 键不命中
         and reissue_record_key_scan({"a": {"n_sections_now": 1}}) & _dk == {"n_sections_now"}
         and reissue_record_key_scan({"x": [{"V3_check": 1}]}) & _dk == {"V3_check"}
-        and not (reissue_record_key_scan({"as_found": {"rev": "x"}, "controls": {"V4": True}}) & _dk))
+        and not (reissue_record_key_scan({"as_found": {"rev": "x"}, "controls": {"V4": True}}) & _dk)
+        # CO-238（R-CO238-1）：工具绑定须为 **AST 赋值**（注释/散文不得满足 —— 承 R-CO202-4）
+        and reissue_tool_binding_decision('AF = "abc"', "abc") == "ok"
+        and reissue_tool_binding_decision('AF: str = "abc"', "abc") == "ok"
+        and reissue_tool_binding_decision('# AF = "abc"', "abc") == "tool_binding_missing"
+        and reissue_tool_binding_decision('"""AF = "abc" prose"""', "abc") == "tool_binding_missing"
+        and reissue_tool_binding_decision('AF = "xyz"', "abc") == "tool_binding_missing"
+        and reissue_tool_binding_decision('AF = "a" + "bc"', "abc") == "tool_binding_missing"
+        and reissue_tool_binding_decision('def f(:', "abc") == "tool_binding_uncompilable")
     # CO-225（R-CO225-1）：判定面完整性之**名集钉定**（① boundary 节指纹 ② runner 静态齿名集）
     _bdy_secs = boundary_sections_with_fp()
     _present = set(checks)          # t35 之前已建齿名（用于静态齿名集等式）
@@ -2792,7 +2833,7 @@ def main(argv=None) -> int:
             converged = True
             break
         prev = cur
-    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-203.14",
+    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-203.15",
               "nature": "规范复现序机判执行器（rc 策略 + 真收敛判定）；报告落 .archer_tmp/ 且**不被 boundary 引用**（避免不动点）",
               "order": ORDER, "expected_nonzero": EXPECTED_NONZERO,
               "checks": checks, "iterations": iterations, "abort": abort, "converged": converged,

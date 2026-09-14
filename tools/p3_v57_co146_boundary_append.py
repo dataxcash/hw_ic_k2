@@ -3973,6 +3973,36 @@ def main(argv=None) -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body110
 
+    # ── §111 CO-238（非执行者对抗复评 CO-235..CO-237 · L2 自裁：t44 工具绑定臂改 AST） ──
+    MARK111 = "## 111. CO-238"
+    sec111 = [MARK111 + "（**非执行者对抗复评 CO-235..CO-237 · L2 自裁 · 承 R-CO202-4 / R-CO236-1**）", "",
+              "- **缘起**：CO-236 之 t44 **工具绑定臂** `_tool_ok[_rel] = (f'AF = \"{rev}\"' in _tsrc)` 为**原文子串** ⇒ 真绑定可被**注释/散文**替代而不失 pass（本会话纯复算：真绑定→注释 ⇒ 子串判据仍 True）。承 **R-CO202-4**（源内声明之代理判据须 AST 字面量）+ **CO-215**（同源缺陷：子串即可满足）。",
+              "- **F-1（TOOL_DEFECT · mid · CLOSED）**：同上（复评覆盖 CO-235..CO-237，as-found 钉 `ab9c421`；非执行者、禁自评）。",
+              "- **处置（L2 自裁）**：① 绑定判据改 **AST 赋值**（`AF` 之 `Assign`/`AnnAssign` 值须为 == rev 之**字符串常量**；注释/散文/拼接不满足；`SyntaxError` ⇒ **fail-closed**）；② 合成正/负控 6 项；③ 扩 **t44** 绑定臂（**不新增齿**，仍 46）；④ report revision → **CO-203.15**；登记簿 `co238:F-1` CLOSED；**R-CO238-1**。",
+              "- **判别力（实测）**：as-found 子串判据对「真绑定→注释」= **True**（漏洞）；修复判据（AST）对注释/docstring/错值/拼接 = **拒**、对真绑定/AnnAssign = **认**。",
+              "- **残余（显式）**：① 绑定认字符串常量赋值 ⇒ 非字面量构造不视为绑定（方向 = fail-closed）；② 键名启发式 / 域以文件名形态界定（承 CO-236/CO-237）。",
+              "",
+              "| 工件 | sha16 |", "|---|---|"]
+    for _l, _p in [("runner `p3_v57_co164_order_runner.py`（**CO-203.15** / t44 绑定臂：AST 绑定）", K2 / "tools/p3_v57_co164_order_runner.py"),
+                   ("boundary 生成器 `p3_v57_co146_boundary_append.py`（+§111）", K2 / "tools/p3_v57_co146_boundary_append.py"),
+                   ("登记簿 `input_defect_register_v1.json`（+co238:F-1）", L2 / "input_defect_register_v1.json"),
+                   ("复评件 `m13_v57_CO238_rev19_co235_co237_review.json`", STEP2 / "m13_v57_CO238_rev19_co235_co237_review.json"),
+                   ("复评卡 `m13_v57_CO238_rev19_co235_co237_review.md`", STEP2 / "m13_v57_CO238_rev19_co235_co237_review.md"),
+                   ("复评工具 `p3_v57_co238_rev19_co235_co237_review.py`", K2 / "tools/p3_v57_co238_rev19_co235_co237_review.py"),
+                   ("交付板 `k2_v4_8L.l4.kicad_pcb`（本件**未改**）", K2 / "k2_v4_8L.l4.kicad_pcb")]:
+        if _p.exists():
+            sec111.append(f"| {_l} | `{s16(_p)}` |")
+    sec111 += ["",
+               "> **R-CO238-1**：**源内声明之代理判据须为 AST 绑定** —— 复评/重出件工具之 as-found 绑定须以 **AST 赋值 + 字符串常量** 机判；**注释/散文/拼接一律不得满足**（承 R-CO202-4）；此形态须有机判齿（t44 绑定臂），承 R-CO225-1。",
+               "",
+               "> **序不变**：本件未改步骤集/序列（承 §82 之 R-CO209-2）。"]
+    body111 = "\n".join(sec111)
+    if MARK111 in txt:
+        txt = re.sub(re.escape(MARK111) + r"[\s\S]*?(?=\n## |\Z)", body111, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body111
+
+    txt = txt.replace("W3 Boundary **v2.78**", "W3 Boundary **v2.79**")
     txt = txt.replace("W3 Boundary **v2.77**", "W3 Boundary **v2.78**")
     txt = txt.replace("W3 Boundary **v2.76**", "W3 Boundary **v2.77**")
     txt = txt.replace("W3 Boundary **v2.75**", "W3 Boundary **v2.76**")

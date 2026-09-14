@@ -1,0 +1,145 @@
+{
+ "artifact": "m13_v57_CO238_rev19_co235_co237_review",
+ "schema": 1,
+ "revision": "CO-238",
+ "nature": "非执行者对抗复评 CO-235..CO-237（context 归零之新会话，未参与该三节之撰写 ⇒ 无自评豁免面）；as-found 逐件重放 + 漏洞形态纯复算 + 修复判据判别力；只读。",
+ "as_found": {
+  "rev": "ab9c421",
+  "pins": {
+   "tools/p3_v57_co164_order_runner.py": {
+    "want": "2c0a68e6979ca102",
+    "got": "2c0a68e6979ca102",
+    "ok": true
+   },
+   "tools/p3_v57_co146_boundary_append.py": {
+    "want": "0d3ff8dcf676dff6",
+    "got": "0d3ff8dcf676dff6",
+    "ok": true
+   },
+   "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_joint_assignment_boundary_v1_82.md": {
+    "want": "34fe365c4a575dd2",
+    "got": "34fe365c4a575dd2",
+    "ok": true
+   },
+   "pm_gate/artifacts/k2_v4/L2/input_defect_register_v1.json": {
+    "want": "4523da1913ac2e40",
+    "got": "4523da1913ac2e40",
+    "ok": true
+   },
+   "tools/p3_v57_co230_rev19_co225_co229_review.py": {
+    "want": "35426723f58445a8",
+    "got": "35426723f58445a8",
+    "ok": true
+   },
+   "tools/p3_v57_co235_rev19_co231_co234_review.py": {
+    "want": "a04b9eabf0590781",
+    "got": "a04b9eabf0590781",
+    "ok": true
+   },
+   "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_CO230_rev19_co225_co229_review.json": {
+    "want": "3b816ee2247eb7f1",
+    "got": "3b816ee2247eb7f1",
+    "ok": true
+   },
+   "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_CO235_rev19_co231_co234_review.json": {
+    "want": "d6de768766e927f1",
+    "got": "d6de768766e927f1",
+    "ok": true
+   },
+   "tools/p3_v57_co195_fixpoint_uniqueness_oracle.py": {
+    "want": "585b983de844603d",
+    "got": "585b983de844603d",
+    "ok": true
+   },
+   "tools/p3_v57_co120_provenance_pin_gate.py": {
+    "want": "28d6211f32318d9b",
+    "got": "28d6211f32318d9b",
+    "ok": true
+   },
+   "tools/p3_v57_l5_signoff.py": {
+    "want": "7618070712518194",
+    "got": "7618070712518194",
+    "ok": true
+   },
+   "tools/p3_v57_co206_process_route_select.py": {
+    "want": "83dba4f108663e6d",
+    "got": "83dba4f108663e6d",
+    "ok": true
+   },
+   "k2_v4_8L.l4.kicad_pcb": {
+    "want": "d4e81f647be7f980",
+    "got": "d4e81f647be7f980",
+    "ok": true
+   }
+  },
+  "live_now": {
+   "note": "本会话已按 F-1 处置（runner 改 AST 绑定）⇒ 现行 ≠ as-found 属预期；现行 sha 由 boundary §111 pin 表承载（承 R-CO152-1）。"
+  }
+ },
+ "verdict": "PASS_WITH_FINDINGS",
+ "n_findings": 1,
+ "findings": [
+  {
+   "id": "F-1",
+   "sev": "mid",
+   "kind": "TOOL_DEFECT",
+   "status": "CLOSED",
+   "what": "t44 之**工具绑定臂**（`_tool_ok`）为**原文子串** `f'AF = \"{rev}\"' in _tsrc` ⇒ 真绑定可被**注释/散文**替代而不失 pass （承 R-CO202-4：源内声明之代理判据不得由注释满足；与 CO-215 同源缺陷）。",
+   "evidence": [
+    "V3 纯复算：真绑定→注释 ⇒ as-found 子串判据 = True（True ⇒ 静默通过）",
+    "V3：改名且加注释 ⇒ True（True）",
+    "V4 修复判据（AST）判别力：{'real_binding_ok': True, 'annotated_binding_ok': True, 'comment_only_rejected': True, 'docstring_rejected': True, 'wrong_value_rejected': True, 'concat_rejected': True, 'syntax_error_rejected': True, 'discriminating': True}"
+   ],
+   "disposition": "绑定判据改 **AST 赋值**（`AF` 之 `Assign`/`AnnAssign` 值须为 == rev 之字符串常量；注释/散文/拼接不满足；不可编译 ⇒ fail-closed）+ 合成正/负控；扩 t44 绑定臂（不新增齿，仍 46）；report revision → **CO-203.15**；**R-CO238-1**。"
+  }
+ ],
+ "controls": {
+  "V1_as_found_replay_ok": true,
+  "V2_frozen_four": 4,
+  "V2_drc_copy_identical": true,
+  "V2_board_unchanged": true,
+  "V3_root_cause": {
+   "af_pred_is_substring_form": true,
+   "af_pred_real_binding_ok": true,
+   "af_pred_comment_only_ok": true,
+   "af_pred_renamed_no_comment_ok": false,
+   "renamed_with_comment_ok": true,
+   "vulnerable": true
+  },
+  "V4_fix_discriminating_power": {
+   "real_binding_ok": true,
+   "annotated_binding_ok": true,
+   "comment_only_rejected": true,
+   "docstring_rejected": true,
+   "wrong_value_rejected": true,
+   "concat_rejected": true,
+   "syntax_error_rejected": true,
+   "discriminating": true
+  },
+  "V5_records_clean": {
+   "m13_v57_CO230_rev19_co225_co229_review.json": {
+    "rev_ok": true,
+    "chain_keys": []
+   },
+   "m13_v57_CO235_rev19_co231_co234_review.json": {
+    "rev_ok": true,
+    "chain_keys": []
+   }
+  },
+  "V6_domain_declared_equality": {
+   "n_pinned_reviews": 14,
+   "n_declared_or_exempt_literals": 14,
+   "domain_minus_declared": [],
+   "floor_12_ok": true,
+   "equality_ok": true
+  }
+ },
+ "observations": [
+  "O-1（as-found 诚实性）：CO-235..CO-237 之 canonical 件共 13 件，逐件 sha16 自 `git show ab9c421` 重放 **全 MATCH**；本会话未参与其撰写。",
+  "O-2（CO-235 有效性）：其处置以「声明格式集 + 生成器 realign 同域 + t43 fail-closed」闭合该 F-1；本件 V1/V6 独立经手其产物，未见回归。",
+  "O-3（CO-236 残余之界）：结构臂（as-found.rev 绑定 + 链派生键名集）与实况一致（V5：二记录 rev 合规、零链派生键）；其**工具绑定臂**为本件 F-1。",
+  "O-4（CO-237 之域）：as-found pin 面之 `*_review.json` 受 pin 件 14 件；声明/豁免字面并集 14 件；域−声明 = ∅（V6）⇒ 名集等式成立。",
+  "O-5（残余，未闭，界定）：① 域以**文件名形态**界定（异名逃逸）；② 键名启发式（更名逃逸）；③ 绑定判据认 `AF` 之**字符串常量**赋值（非字面量构造不视为绑定 ⇒ fail-closed）。"
+ ],
+ "redline": "R-CO238-1：**源内声明之代理判据须为 AST 绑定** —— 复评/重出件工具之 as-found 绑定（如 `AF = \"<rev>\"`）须以 **AST 赋值 + 字符串常量** 机判；**注释/散文/拼接一律不得满足**（承 R-CO202-4）；此形态须有机判齿（t44 绑定臂），承 R-CO225-1。"
+}
