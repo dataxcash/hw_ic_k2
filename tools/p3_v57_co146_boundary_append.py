@@ -3674,6 +3674,42 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body101
 
+    # ── §102 CO-229（L2 自裁 · 承 R-CO218-1：等长判定几何源之锚点入规范序机判） ──
+    MARK102 = "## 102. CO-229"
+    sec102 = [MARK102 + "（**L2 自裁 · 承 R-CO218-1：等长判定几何源之锚点入规范序机判**）", "",
+              "- **缘起（闭 CO-228 残余）**：§101 记「覆盖源 `m13_v57_w3_joint_assignment.json` **非冻结源、非序内 watch** ⇒ 其**身份**无机判 pin」为**未闭残余**。本件处置之："
+              "SI 等长判定之**几何**取自该件，而其身份与上游锚点仅以该件**自述**（`inputs_sha` / `frozen_sha_check`）承载 ⇒ 属 **R-CO218-1** 所指"
+              "「一次性断言 / 人手复核」形态，漂移不可见（方向 fail-open）。",
+              "- **实测（本会话）**：该件自述 **16 项**上游指纹**全部可核**（按其声明 sha256 于 L3 树 / `_shared/eda_core` 反查命中，逐项内容一致）；"
+              "其 `frozen_sha_check.match` **14/14 全 True**、`drift = []`；**身份 sha16 = `60cbd331836e52b7`**（与 §78 所记「构造器产出与冻结图纸逐字节同」一致）。"
+              "判别力：篡改声明值 ⇒ `provenance_self_declaration_mismatch`；自述缺一键 ⇒ `provenance_key_drift`；实件内容漂移 ⇒ `provenance_drift`；不可读 ⇒ `provenance_unreadable`。",
+              "- **裁定（L2 自裁）**：① **身份 pin**：`SI_GEOM_SOURCE_SHA16 = 60cbd331836e52b7`（漂移即停机）；② **上游锚点逐项独立复算**：`SI_GEOM_PROVENANCE_DECLARED`（**16 项**逻辑键 → 路径 + sha256）"
+              "与图纸自述做**键集等式 + 自述↔实件一致**（缺件/漂移即停机）；③ **自述诚实性**：`match` 须全 True 且 `drift` 为空；④ 入机判 runner 静态齿 **t39_si_geom_source_anchored**（正/负控齐备，零落盘）。"
+              "自声明面同步：runner `CO-203.6 → CO-203.7`。**R-CO229-1**。",
+              "- **边界（诚实·残余）**：① 本件钉**身份**与**上游锚点**，**不**重算几何正确性（几何由 CO-62/§78 族证据承载）；② 上游 16 项中多数为 L3 早期件（非序内 watch）⇒ 本件使其**内容一致性**机判化，"
+              "但其**再生/版本**语义仍属 L3 阶段（本件不声称覆盖 L3 全链复现）；③ 该 pin 为 **rev-19 专属**：新 rev 变更该件须**显式**更新 pin 与锚点表（否则 t39 停机）。",
+              "",
+              "| 工件 | sha16 |", "|---|---|"]
+    for _l, _p in [("runner `p3_v57_co164_order_runner.py`（**CO-203.7** / t39 几何源锚定）", K2 / "tools/p3_v57_co164_order_runner.py"),
+                   ("几何源 `m13_v57_w3_joint_assignment.json`（**身份 pin**）", STEP2 / "m13_v57_w3_joint_assignment.json"),
+                   ("上游锚点 `m13_v57_s1_page_manifest.json`（冻结源）", STEP2 / "m13_v57_s1_page_manifest.json"),
+                   ("上游锚点 `SPEC_k2_v4.spec-rev-19.json`（冻结源）", STEP2.parent / "SPEC_k2_v4.spec-rev-19.json"),
+                   ("登记簿 `input_defect_register_v1.json`（+co229:F-1）", L2 / "input_defect_register_v1.json"),
+                   ("交付板 `k2_v4_8L.l4.kicad_pcb`（本件**未改**）", K2 / "k2_v4_8L.l4.kicad_pcb")]:
+        if _p.exists():
+            sec102.append(f"| {_l} | `{s16(_p)}` |")
+    sec102 += ["",
+               "> **R-CO229-1**：凡**判定性 verdict** 所消费之工件，若**非冻结源且不在序内 watch**，其**身份**（sha pin）与**上游锚点**（逐项 sha256 独立复算 + 键集等式 + 自述↔实件一致）须**入规范序机判**"
+               "（fail-closed）—— 禁以工件**自述**（`inputs_sha` / 自检块）充当唯一基据（承 R-CO218-1「判定基据之锚点须入规范序机判」/ R-CO228-1 覆盖面）。",
+               "",
+               "> **序不变**：本件未改步骤集/序列（承 §82 之 R-CO209-2）。"]
+    body102 = "\n".join(sec102)
+    if MARK102 in txt:
+        txt = re.sub(re.escape(MARK102) + r"[\s\S]*?(?=\n## |\Z)", body102, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body102
+
+    txt = txt.replace("W3 Boundary **v2.69**", "W3 Boundary **v2.70**")
     txt = txt.replace("W3 Boundary **v2.68**", "W3 Boundary **v2.69**")
     txt = txt.replace("W3 Boundary **v2.67**", "W3 Boundary **v2.68**")
     txt = txt.replace("W3 Boundary **v2.66**", "W3 Boundary **v2.67**")

@@ -61,6 +61,9 @@
      `m13_v57_w3_joint_assignment.json`（**非冻结、非序内 watch** 之 L3 件），而**冻结页清单** `m13_v57_s1_page_manifest.json`（`n_pages`=34）另用**不同 kind 词表**
      （`refclk_pass` vs `refclk`）⇒ 两套页枚举**无机判绑定**、且 SI 循环对未识别 kind **静默跳过**（覆盖面可无声缩水）。现以名集等式 + 词表双向钉定入机判。
      静态齿 **t38**；report revision → CO-203.6。
+㉖ CO-229（R-CO229-1，承 R-CO218-1 · **等长判定几何源之锚点入规范序机判**）：SI 等长之几何取自
+     `m13_v57_w3_joint_assignment.json`（**非冻结、非序内 watch**）⇒ CO-228 残留「覆盖源身份 pin」未闭；现以**身份 pin** + 其自述 **16 项上游指纹逐项独立复算**
+     （键集等式 + 自述↔实件一致）入机判（缺件/漂移即停机）。静态齿 **t39**；report revision → CO-203.7。
 ⑲ CO-215（R-CO215-1，**代理帮助函数之源面收窄 + 覆盖面机判**）：`artifact_readers()`（判「某步**确实读取**该工件」之**语法代理**）
      原按**原文子串** `basename in src` 判 ⇒ **注释/散文即可满足**（与 R-CO202-4「注释不得满足源内声明」同源缺陷，CO-215 实测复现）⇒
      收窄为 **AST 字面量集**（`_source_strings`）匹配 + glob 字面量；并把该帮助函数之**残余显式登记**
@@ -884,7 +887,7 @@ STATIC_CHECKS_DECLARED = frozenset({
     "t29_proxy_semantic_binding", "t30_expected_nonzero_rc_class", "t31_expected_nonzero_error_free",
     "t32_oracle_category_coverage", "t33_tool_revision_bound", "t34_frozen_sources_pinned",
     "t35_judgment_surface_pinned", "t36_cross_source_semantics_bound", "t37_obligation_same_source_bound",
-    "t38_page_coverage_bound",
+    "t38_page_coverage_bound", "t39_si_geom_source_anchored",
 })
 _FP_ROW_RE = re.compile(r"^\|\s*[^|\n]+\|\s*sha16\s*\|", re.M)
 
@@ -1000,6 +1003,53 @@ def page_kind_vocab_decision(manifest_kinds, drawing_kinds, vocab) -> str:
         return "manifest_kind_undeclared"
     if set(vocab.values()) != set(drawing_kinds):
         return "drawing_kind_unmapped"
+    return "ok"
+
+
+# CO-229（R-CO229-1，承 R-CO218-1 / 闭 CO-228 残余）：**等长判定几何源之判据锚点入规范序机判**。
+# 缘起：SI 等长判定之几何取自 `m13_v57_w3_joint_assignment.json`（**非冻结源、非序内 watch**）⇒ 其**身份**与**上游锚点**
+# 仅以该件**自述**（`inputs_sha` / `frozen_sha_check`）承载，属 R-CO218-1 所指「一次性断言」形态 ⇒ 漂移不可见。
+# 现：① 身份 pin（sha16 fail-closed）；② 自述 16 项上游指纹**逐项独立复算**（键集等式 + 自述↔实件一致）；③ 自述 `match`/`drift` 诚实性核对。
+SI_GEOM_SOURCE_REL = "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_joint_assignment.json"
+SI_GEOM_SOURCE_SHA16 = "60cbd331836e52b7"
+SI_GEOM_PROVENANCE_DECLARED = {
+    "card": ("pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_kickoff_card_v1_28.md", "0ae3016379cd1db27ba6004e2d86336466aad0c877bcee1fddf784879bbc90c2"),
+    "co16_alloc": ("pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_co16_channel_allocation_v9.json", "d3cd1e5a312f253aa3720e5d3d6418286065fe16ce3cbc5c111e09179b5a3078"),
+    "coherent_rows": ("pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_f13_r3_coherent_rows.json", "014a14b317e1c3df3d4400d45d6877ffc81f4ca92d533da4c7c7e4af67319c9a"),
+    "f6b_report": ("pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_f6b_report.json", "9070ed53f970f480e88b1de3aa19792f8b637de51857935fa6b7c51fa8a015d6"),
+    "lane_frame": ("pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_f3_lane_frame.json", "ff804e1edfacbf02e4227f10359a9217347ecdf0473801d655ef3a71ddf5cb6c"),
+    "layer_intent": ("pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_layer_intent_rev6.json", "05009687a3f01583d0cdf562f1510d7354995926be0629407fddb741a477dd0b"),
+    "manifest": ("pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_s1_page_manifest.json", "a8ef3ea8ecff99d7549d4122043c972c1bb68346dc4dcc3f36fdd9bacde49890"),
+    "pair_coupling": ("pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_f13_r1_pair_coupling.json", "82e11c4cbdb4e8d44df1997f660c97fb75a47d33661223c9e5cf5fb0cb9c0d14"),
+    "pair_xorder": ("pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_f13_r1_pair_coupling_v1_1.json", "662c7839185260ae9c0d68edf6a323ac79743707a913cc1bd5f90b62714ebce3"),
+    "param_trace": ("pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_f13_r1_param_trace.json", "e288ffa5421c22972075a7a3bef503a4b472aa32ea148c2ed0502090a3d98cae"),
+    "r3_base": ("pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_f8_r3_gap_candidates.json", "8a31632907b171483cd40a053231c702e378f944af33f92598a6141bd052cdeb"),
+    "r3_gaps": ("pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_f8_r3_gap_candidates_r3x2.json", "5511c8c30c21f9144c8b5e81d951649c50cc8ee427cdd94677cb4f65e06a2e05"),
+    "rules": ("_shared/eda_core/drc_rules.json", "0a459839e15960b8fbfe0e1f5bb154a02b30cbafa1cbb0d56c2b810a71228448"),
+    "spec": ("pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-19.json", "5f72182a2616392cbcc223ec9233b41422657ff13a5faff1e6f10d6904dc33e6"),
+    "verdict": ("pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_s1_r1_via_verdict_r2.json", "f2e2632506457e31c145b491284c9ecbf1cb72cc09d96ccdfb3251ef80a5556a"),
+    "w0r_model": ("pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_big_w0r_corridor_model.json", "80ee9adb78a7e9ad94c27d426295592eee21af3d1e3ce88fe3042183160f0efa"),
+}
+
+
+def geom_provenance_decision(declared, drawing_declared, sha256_of) -> str:
+    """CO-229 纯判据：几何源上游锚点之**键集等式** + 自述↔实件一致（`sha256_of` 可注入 ⇒ 合成控零落盘）。
+
+    返回 `ok` / `provenance_key_drift`（键集不符）/ `provenance_self_declaration_mismatch`（自述值 ≠ 声明值）/
+    `provenance_drift`（实件内容 ≠ 声明值）/ `provenance_unreadable`（不可读）。
+    """
+    if set(declared) != set(drawing_declared):
+        return "provenance_key_drift"
+    for k in sorted(declared):
+        rel, want = declared[k]
+        if str(drawing_declared.get(k)) != str(want):
+            return "provenance_self_declaration_mismatch"
+        try:
+            got = sha256_of(rel)
+        except OSError:
+            return "provenance_unreadable"
+        if got != want:
+            return "provenance_drift"
     return "ok"
 
 
@@ -2217,6 +2267,39 @@ def main(argv=None) -> int:
         # 判别力注记（CO-45 之形态）：若词表漏 `refclk_pass` ⇒ 清单 kind 未入词表 ⇒ 停机（非静默跳过）
         and page_kind_vocab_decision({"data", "refclk_pass"}, {"data", "refclk"}, {"data": "data"})
             == "manifest_kind_undeclared")
+    # CO-229（R-CO229-1）：等长几何源**身份 pin** + **上游锚点 16 项独立复算**（承 R-CO218-1：基据锚点须入规范序机判）
+    _gp_ok, _gp_match, _gp_drift = True, True, True
+    try:
+        _g = json.loads((K2 / SI_GEOM_SOURCE_REL).read_text(encoding="utf-8"))
+        _g_decl = {}
+        for k, v in _g.get("inputs_sha", {}).items():
+            _g_decl.setdefault(k, str(v))
+        for k, v in _g.get("frozen_sha_check", {}).get("actual", {}).items():
+            _g_decl.setdefault(k, str(v))
+        _fsc = _g.get("frozen_sha_check", {})
+        _gp_match = all(bool(x) for x in (_fsc.get("match") or {}).values()) if _fsc.get("match") else False
+        _gp_drift = (_fsc.get("drift", []) == [])
+        _gp_sha16 = hashlib.sha256((K2 / SI_GEOM_SOURCE_REL).read_bytes()).hexdigest()[:16]
+    except Exception:
+        _g_decl, _gp_ok, _gp_sha16 = {}, False, ""
+    _gp_sha256 = lambda rel: hashlib.sha256((K2 / rel).read_bytes()).hexdigest()          # noqa: E731
+    checks["t39_si_geom_source_anchored"] = (
+        _gp_ok and bool(_g_decl)
+        # ① 身份 pin（漂移即停机）
+        and _gp_sha16 == SI_GEOM_SOURCE_SHA16
+        # ② 自述诚实性：`match` 全 True 且 `drift` 为空（自述与实件相符之**必要条件**）
+        and _gp_match and _gp_drift
+        # ③ 上游锚点逐项独立复算（键集等式 + 自述↔实件一致）
+        and geom_provenance_decision(SI_GEOM_PROVENANCE_DECLARED, _g_decl, _gp_sha256) == "ok"
+        # 正控：全等 ⇒ ok（合成，零落盘）
+        and geom_provenance_decision({"a": ("p", "s")}, {"a": "s"}, lambda _p: "s") == "ok"
+        # 负控：键集漂移 / 自述值不符 / 实件漂移 / 不可读
+        and geom_provenance_decision({"a": ("p", "s")}, {"a": "s", "b": "t"}, lambda _p: "s") == "provenance_key_drift"
+        and geom_provenance_decision({"a": ("p", "s")}, {"a": "t"}, lambda _p: "s") == "provenance_self_declaration_mismatch"
+        and geom_provenance_decision({"a": ("p", "s")}, {"a": "s"}, lambda _p: "x") == "provenance_drift"
+        and geom_provenance_decision({"a": ("p", "s")}, {"a": "s"}, lambda _p: (_ for _ in ()).throw(OSError())) == "provenance_unreadable"
+        # 判别力注记（CO-228 残余之形态）：几何源身份漂移 ⇒ ① 臂即 Fail（pin 钉定，非自述）
+        and ("" != SI_GEOM_SOURCE_SHA16))
     # CO-225（R-CO225-1）：判定面完整性之**名集钉定**（① boundary 节指纹 ② runner 静态齿名集）
     _bdy_secs = boundary_sections_with_fp()
     _present = set(checks)          # t35 之前已建齿名（用于静态齿名集等式）
@@ -2230,7 +2313,7 @@ def main(argv=None) -> int:
         and boundary_fp_missing([(9, True)], frozenset()) == []
         # ② 静态齿名集钉定（防**静默删齿** ⇒ 判据面空真）
         and _present == set(STATIC_CHECKS_DECLARED) - {"t35_judgment_surface_pinned"}
-        and len(STATIC_CHECKS_DECLARED) == 40
+        and len(STATIC_CHECKS_DECLARED) == 41
         # ② 负控：集合等式对「少一枚」有判别力
         and (_present - {"t01_steps_exist"}) != set(STATIC_CHECKS_DECLARED) - {"t35_judgment_surface_pinned"})
     static_ok = all(checks.values())
@@ -2317,7 +2400,7 @@ def main(argv=None) -> int:
             converged = True
             break
         prev = cur
-    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-203.6",
+    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-203.7",
               "nature": "规范复现序机判执行器（rc 策略 + 真收敛判定）；报告落 .archer_tmp/ 且**不被 boundary 引用**（避免不动点）",
               "order": ORDER, "expected_nonzero": EXPECTED_NONZERO,
               "checks": checks, "iterations": iterations, "abort": abort, "converged": converged,
