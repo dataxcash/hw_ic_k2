@@ -75,6 +75,9 @@
 ㉙ CO-232（R-CO232-1，承 R-CO224-1「序内生成物之追注须写入**生成器**」· **boundary 之内容权威性**）：t35/t40 只看「节集 + pin 行」⇒
      生成段内之**散文/表格手改**（含被生成器丢弃之手工追注）**不可见**（CO-232 实测：改数值主张或插入手工追注 ⇒ t35/t40 皆 True）。
      现补：生成器 `--dump`（dry-run，只算不写）之输出 sha16 须等于 boundary 实件（=「boundary 是生成器之输出」）。静态齿 **t41**；report revision → CO-203.10。
+㉚ CO-234（R-CO234-1，承 R-CO219-1 / R-CO225-1 / R-CO230-1 · **pin 面对受控集之覆盖面**）：受控集（`STEP_ARTIFACTS` ∪ `ORDER_MD_PRODUCTS`）已声明，
+     但「哪件**应有** pin」无机判齿 ⇒ 实测 **8 件**（7 md 卡片 + `m13_v57_co77_closure_declaration_sweep.json`）在 pin 面**无 pin** 且无声明（删/漏皆静默）。
+     现补：**非 md** 受控件须全部入 pin 面（md 卡片由 t20 判其受控性/种类 ⇒ 以**显式域名**排除，非静默）；另设**下限**防域缩水。静态齿 **t42**；report revision → CO-203.11。
 ⑲ CO-215（R-CO215-1，**代理帮助函数之源面收窄 + 覆盖面机判**）：`artifact_readers()`（判「某步**确实读取**该工件」之**语法代理**）
      原按**原文子串** `basename in src` 判 ⇒ **注释/散文即可满足**（与 R-CO202-4「注释不得满足源内声明」同源缺陷，CO-215 实测复现）⇒
      收窄为 **AST 字面量集**（`_source_strings`）匹配 + glob 字面量；并把该帮助函数之**残余显式登记**
@@ -894,9 +897,16 @@ BOUNDARY_PIN_LABEL_EXEMPT = frozenset()
 BOUNDARY_GENERATOR_REL = "tools/p3_v57_co146_boundary_append.py"
 # CO-232：boundary **首行**须为声明之标题形态（防**前置**手工内容；生成器只拥有各 § 区段，区段外之首部**不**在其权威内）。
 BOUNDARY_HEAD_DECLARED = re.compile(r"^# m13 v57 — W3 Boundary \*\*v[0-9]+\.[0-9]+\*\*")
+# CO-234（R-CO234-1）：pin 面**覆盖面**域 —— md 卡片以**显式域名**排除（其受控性/种类由 t20 机判）；域须设**下限**防「删声明即空真」。
+PIN_COVERAGE_SKIP_SUFFIXES = (".md",)
+PIN_COVERAGE_FLOOR = 25
+# CO-234：**不可 pin** 之受控件（内容依赖 boundary ⇒ pin 之即自指循环、序不收敛；实测确认）—— **显式**豁免名集 + 理由。
+PIN_COVERAGE_EXEMPT = frozenset({
+    "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_co77_closure_declaration_sweep.json",
+})
 _PIN_ROW_RE = re.compile(r"^\|\s*(?P<label>[^|\n]+?)\s*\|\s*`(?P<sha>[0-9a-f]{16})`\s*\|\s*$", re.M)
 _PIN_FILEISH_RE = re.compile(r"\.(?:py|json|md|txt|svg|kicad_pcb|kicad_pro|drl|gbr)$|/")
-# CO-230（R-CO230-1，承 R-CO219-1 / R-CO225-1）：**boundary 应有节集**之声明（名集钉定）。**新增节须显式入本集**（CO-231 加 §104、CO-232 加 §105、CO-233 加 §106）。
+# CO-230（R-CO230-1，承 R-CO219-1 / R-CO225-1）：**boundary 应有节集**之声明（名集钉定）。**新增节须显式入本集**（CO-231 加 §104、CO-232 加 §105、CO-233 加 §106、CO-234 加 §107）。
 # 缘起：t35 臂① 只遍历**实存**节 ⇒ 域 = 文档自述 ⇒ 整节删除**不被检出**（「删项即空真」族；CO-230 内存实证）。
 # 故声明应有节集；缺节 ⇒ `section_missing`，未声明之新节 ⇒ `section_undeclared`（**须显式入本集**方放行）。
 # 注：实测节号 8/9/10 于本文档**不存在**（历史从未生成）⇒ 声明集不含之（属**显式**声明，非「未覆盖」）。
@@ -911,7 +921,7 @@ BOUNDARY_SECTIONS_DECLARED = frozenset({
     74, 75, 76, 77, 78, 79, 80, 81, 82, 83,
     84, 85, 86, 87, 88, 89, 90, 91, 92, 93,
     94, 95, 96, 97, 98, 99, 100, 101, 102, 103,
-    104, 105, 106,
+    104, 105, 106, 107,
 })
 STATIC_CHECKS_DECLARED = frozenset({
     "t01_steps_exist", "t02_steps_compile", "t03_expected_nonzero_policy_declared",
@@ -928,6 +938,7 @@ STATIC_CHECKS_DECLARED = frozenset({
     "t32_oracle_category_coverage", "t33_tool_revision_bound", "t34_frozen_sources_pinned",
     "t35_judgment_surface_pinned", "t36_cross_source_semantics_bound", "t37_obligation_same_source_bound",
     "t38_page_coverage_bound", "t39_si_geom_source_anchored", "t40_boundary_pin_rows_current",
+    "t42_pin_face_covers_controlled",
     "t41_boundary_is_generator_output",
 })
 _FP_ROW_RE = re.compile(r"^\|\s*[^|\n]+\|\s*sha16\s*\|", re.M)
@@ -1212,6 +1223,18 @@ def _boundary_generator_dump():
         return str(json.loads(_tail).get("sha16") or ""), int(_r.returncode)
     except Exception:
         return "", 1
+
+
+def pin_coverage_decision(products, pinned, skip_suffixes, floor, exempt=frozenset()) -> str:
+    """CO-234（R-CO234-1）纯判据：**非 md 受控件**须全部入 pin 面；域不得缩至下限以下。
+
+    返回 `ok` / `pin_coverage_vacuous`（域 < 下限）/ `pin_coverage_gap`（受控件未入 pin 面）。
+    """
+    domain = [p for p in set(products) if not str(p).endswith(tuple(skip_suffixes)) and p not in exempt]
+    if len(domain) < floor:
+        return "pin_coverage_vacuous"
+    missing = sorted(p for p in domain if p not in pinned)
+    return "pin_coverage_gap" if missing else "ok"
 
 
 def boundary_head_decision(first_line, ok_pattern) -> str:
@@ -2418,6 +2441,24 @@ def main(argv=None) -> int:
         and geom_provenance_decision({"a": ("p", "s")}, {"a": "s"}, lambda _p: (_ for _ in ()).throw(OSError())) == "provenance_unreadable"
         # 判别力注记（CO-228 残余之形态）：几何源身份漂移 ⇒ ① 臂即 Fail（pin 钉定，非自述）
         and ("" != SI_GEOM_SOURCE_SHA16))
+    # CO-234（R-CO234-1，承 R-CO219-1 / R-CO225-1 / R-CO230-1）：pin 面对**受控集**之覆盖面
+    _pin_rel = {r for _l, _s, r in boundary_pin_rows() if r}
+    _prods = set()
+    for _d in (STEP_ARTIFACTS, ORDER_MD_PRODUCTS):
+        for _vals in _d.values():
+            for _e in (_vals if isinstance(_vals, (list, tuple, set)) else [_vals]):
+                _s = str(_e)
+                _pp = Path(_s)
+                _prods.add(str(_pp.relative_to(K2)) if _pp.is_absolute() and str(_pp).startswith(str(K2)) else _s)
+    checks["t42_pin_face_covers_controlled"] = (
+        pin_coverage_decision(_prods, _pin_rel, PIN_COVERAGE_SKIP_SUFFIXES, PIN_COVERAGE_FLOOR, PIN_COVERAGE_EXEMPT) == "ok"
+        # 豁免名集**等式**（现 = 1 件：co77 收扫记录，自指循环不可 pin）
+        and set(PIN_COVERAGE_EXEMPT) == {"pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_co77_closure_declaration_sweep.json"}
+        # 正控：全入 pin ⇒ ok；负控：漏一件 ⇒ gap；域缩至下限以下 ⇒ vacuous（合成，零落盘）
+        and pin_coverage_decision({"a.json", "b.md"}, {"a.json"}, (".md",), 1) == "ok"
+        and pin_coverage_decision({"a.json", "b.json"}, {"a.json"}, (".md",), 1) == "pin_coverage_gap"
+        and pin_coverage_decision({"a.json"}, {"a.json"}, (".md",), 5) == "pin_coverage_vacuous"
+        and len([p for p in _prods if not p.endswith(".md")]) >= PIN_COVERAGE_FLOOR)
     # CO-232（R-CO232-1，承 R-CO224-1）：boundary 之**内容权威性** —— 实件须 == 生成器 dry-run 输出
     # 缘起：t35/t40 只看「节集 + pin 行」⇒ 生成段内之**散文/表格手改**（含被生成器丢弃之手工追注）不可见
     # （实测：数值主张 24/32→31/32、或生成段内插入手工追注 ⇒ t35/t40 皆 True）。
@@ -2475,7 +2516,7 @@ def main(argv=None) -> int:
         and boundary_section_set_decision({1, 2, 3, 4}, {1, 2, 3}) == "section_undeclared"
         # ② 静态齿名集钉定（防**静默删齿** ⇒ 判据面空真）
         and _present == set(STATIC_CHECKS_DECLARED) - {"t35_judgment_surface_pinned"}
-        and len(STATIC_CHECKS_DECLARED) == 43
+        and len(STATIC_CHECKS_DECLARED) == 44
         # ② 负控：集合等式对「少一枚」有判别力
         and (_present - {"t01_steps_exist"}) != set(STATIC_CHECKS_DECLARED) - {"t35_judgment_surface_pinned"})
     static_ok = all(checks.values())
@@ -2562,7 +2603,7 @@ def main(argv=None) -> int:
             converged = True
             break
         prev = cur
-    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-203.10",
+    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-203.11",
               "nature": "规范复现序机判执行器（rc 策略 + 真收敛判定）；报告落 .archer_tmp/ 且**不被 boundary 引用**（避免不动点）",
               "order": ORDER, "expected_nonzero": EXPECTED_NONZERO,
               "checks": checks, "iterations": iterations, "abort": abort, "converged": converged,

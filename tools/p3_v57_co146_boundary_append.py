@@ -3851,6 +3851,34 @@ def main(argv=None) -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body106
 
+    # ── §107 CO-234（L2 自裁 · pin 面对受控集之覆盖面） ──
+    MARK107 = "## 107. CO-234"
+    sec107 = [MARK107 + "（**L2 自裁 · pin 面对受控集之覆盖面入机判**）", "",
+              "- **缘起**：受控集（`STEP_ARTIFACTS` ∪ `ORDER_MD_PRODUCTS`）已声明，但「哪件**应有** pin」**无机判齿** ⇒ 件可**静默漏钉**（承 R-CO219-1 枚举面名集等式 / R-CO225-1「无机判齿即空真」/ R-CO230-1）。",
+              "- **实测（本会话，只读）**：**43 件**受控产物中 **8 件**在 pin 面**无任何 pin** —— 7 枚 `.md` 卡片（CO124 / CO150 / CO159 / CO172 / co146_impedance_table / co146_jlc_dfm_gate / co146_pm_eval）"
+              "与本件所补之 **`m13_v57_co77_closure_declaration_sweep.json`**（**收口扫描记录**，判定性产物）。",
+              "- **裁定（L2 自裁）**：① **域名显式**：覆盖面钉定以「**非 `.md` 受控件**」为域（`.md` 卡片之受控性与种类由 t20 机判 ⇒ 以**显式域名**排除，**非**静默跳过）；"
+              "② **显式豁免（附理由，非静默）**：`co77` 收口扫描记录 **不可 pin** —— 其内容依赖 boundary 而 boundary 若 pin 其 sha 即构成**自指循环**（实测：首版补钉后序**不收敛**：5 轮 sha 各异；oracle `FAIL_SETTLE_NOT_CONVERGED`）⇒ 列入 `PIN_COVERAGE_EXEMPT`；③ **入机判** runner 静态齿 **t42_pin_face_covers_controlled**（覆盖 + **域下限** `PIN_COVERAGE_FLOOR` 防「删声明即空真」；正/负控齐备）；④ 自声明面同步 runner report revision → **CO-203.11**；⑤ **R-CO234-1**。",
+              "- **边界（诚实·残余）**：① 域由 runner **声明**（`STEP_ARTIFACTS`/`ORDER_MD_PRODUCTS`）承载 ⇒ **域缩水**仅由**下限**部分拦阻（非名集等式；完整名集钉定留待后续 CO）；② 本件判**覆盖面**，**不**判各件内容之正确性（可由 t41 类模式逐件扩展）；③ `.md` 卡片面无 pin 判据（其受控性由 t20 承接，非本件域）。",
+              "",
+              "| 工件 | sha16 |", "|---|---|"]
+    for _l, _p in [                   ("runner `p3_v57_co164_order_runner.py`（**CO-203.11** / t42 覆盖面齿）", K2 / "tools/p3_v57_co164_order_runner.py"),
+                   ("登记簿 `input_defect_register_v1.json`（+co234:F-1）", L2 / "input_defect_register_v1.json"),
+                   ("交付板 `k2_v4_8L.l4.kicad_pcb`（本件**未改**）", K2 / "k2_v4_8L.l4.kicad_pcb")]:
+        if _p.exists():
+            sec107.append(f"| {_l} | `{s16(_p)}` |")
+    sec107 += ["",
+               "> **R-CO234-1**：**受控集之 pin 覆盖面须机判** —— 凡序内受控产物（`STEP_ARTIFACTS`/`ORDER_MD_PRODUCTS` 所声明者），除**显式域名**（如 `.md` 卡片：其受控性由 t20 承接）外，须**全部**入 boundary pin 面；"
+               "且域须设**下限**防「删声明即空真」；**不可 pin 者**（内容依赖 boundary ⇒ 自指循环）须入**显式豁免名集**（名集等式 + 理由）。承 R-CO219-1 / R-CO225-1 / R-CO230-1 / R-CO231-1 / R-CO152-1（避自指）。",
+               "",
+               "> **序不变**：本件未改步骤集/序列（承 §82 之 R-CO209-2）。"]
+    body107 = "\n".join(sec107)
+    if MARK107 in txt:
+        txt = re.sub(re.escape(MARK107) + r"[\s\S]*?(?=\n## |\Z)", body107, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body107
+
+    txt = txt.replace("W3 Boundary **v2.74**", "W3 Boundary **v2.75**")
     txt = txt.replace("W3 Boundary **v2.73**", "W3 Boundary **v2.74**")
     txt = txt.replace("W3 Boundary **v2.72**", "W3 Boundary **v2.73**")
     txt = txt.replace("W3 Boundary **v2.71**", "W3 Boundary **v2.72**")
