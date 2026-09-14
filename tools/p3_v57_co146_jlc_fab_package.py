@@ -482,7 +482,7 @@ def order_notes(spec: dict, dfm: dict, imp: dict) -> str:
 ## 4. 其余 DFM 项（对照 JLC 8 层能力，实测 PASS）
 最小线宽 {b['min_track_width_mm']}mm(≥3.5mil)；过孔 {b['min_via_drill_mm']}/{b['min_via_diameter_mm']}mm（孔 ≥0.15、盘径 ≥0.25、环宽 0.075=JLC「盘径 ≥ 孔径+0.15」）；
 孔到孔 {b['min_via_hole_to_hole_mm']}mm(≥0.2)；板规铜-板边 0.30mm(≥0.2)；层数/尺寸/铜厚/板厚/表面处理均落 JLC 能力。
-逐项见包内 `06_rulings/m13_v57_co146_jlc_dfm_gate.json`。
+**逐项（对 JLC HDI 通道）见包内 `06_rulings/m13_v57_co146_jlc_dfm_hdi.json`**（`PASS_HDI`：16 PASS + 1 ACCEPT（§3）+ 0 FAIL；`ACCEPT` = 已裁定接受并随单评审，非 PASS、非静默）。底层机器实测（标准通道口径）见 `06_rulings/m13_v57_co146_jlc_dfm_gate.json`。
 
 ## 5. 阻抗
 85Ω 差分两套独立闭式模型（IPC-2141 族 / Hammerstad–Jensen+Cohn）均落 ±10%（as-built 对内净距），
@@ -534,7 +534,8 @@ RULINGS = [
     (L2 / "L2_RULING_u6_thermal_mitigation_v2.md", "L2_RULING_u6_thermal_mitigation_v2.md"),
     # CO-206：工艺选型 A/B/C 定案 + CO-204 R1 定性更正（随单）
     (L2 / "L2_RULING_process_route_selection_v2.md", "L2_RULING_process_route_selection_v2.md"),
-    # DIR-14（owner 裁定）：工艺 A 冻结（JLC HDI 盲埋孔）随单裁定
+    # DIR-14（owner 裁定）：工艺 A 冻结（JLC HDI 盲埋孔）随单裁定 + **DFM 对 HDI 通道之逐项判定**
+    (STEP2 / "m13_v57_co146_jlc_dfm_hdi.json", "m13_v57_co146_jlc_dfm_hdi.json"),
     (L2 / "L2_RULING_process_route_A_frozen_hdi_v1.md", "L2_RULING_process_route_A_frozen_hdi_v1.md"),
     (STEP2 / "m13_v57_co146_jlc_dfm_gate.json", "m13_v57_co146_jlc_dfm_gate.json"),
 ]

@@ -6,7 +6,7 @@
  "board": "k2_v4_8L.l4.kicad_pcb",
  "board_sha16": "d4e81f647be7f980",
  "package_dir": "pm_gate/artifacts/k2_v4/L5/jlc_package",
- "n_files": 39,
+ "n_files": 40,
  "commands": {
   "gerber": "kicad-cli pcb export gerbers --board-plot-params --no-x2 --layers F.Cu,In1.Cu,In2.Cu,In3.Cu,In4.Cu,In5.Cu,In6.Cu,B.Cu,F.Paste,B.Paste,F.Silkscreen,B.Silkscreen,F.Mask,B.Mask,Edge.Cuts",
   "drill": "kicad-cli pcb export drill --format excellon --excellon-units mm --generate-map --map-format svg --generate-report"
@@ -77,7 +77,8 @@
    "06_rulings/L2_RULING_process_route_A_frozen_hdi_v1.md",
    "06_rulings/L2_RULING_u6_thermal_mitigation_v2.md",
    "06_rulings/L2_RULING_u6_thermal_v1.md",
-   "06_rulings/m13_v57_co146_jlc_dfm_gate.json"
+   "06_rulings/m13_v57_co146_jlc_dfm_gate.json",
+   "06_rulings/m13_v57_co146_jlc_dfm_hdi.json"
   ],
   "dirs": [
    "01_",
@@ -93,6 +94,7 @@
    "L2_RULING_jlc_standard_through_backdrill_v1.md": true,
    "L2_RULING_u6_thermal_mitigation_v2.md": true,
    "L2_RULING_process_route_selection_v2.md": true,
+   "m13_v57_co146_jlc_dfm_hdi.json": true,
    "L2_RULING_process_route_A_frozen_hdi_v1.md": true,
    "m13_v57_co146_jlc_dfm_gate.json": true
   },
@@ -372,9 +374,13 @@
    "sha256": "0f548bf44d041512ab4f252fe415b07b52b149e4d2d2adcccf0f8b118ca8df3e",
    "bytes": 8839
   },
+  "06_rulings/m13_v57_co146_jlc_dfm_hdi.json": {
+   "sha256": "55a7d54e5af47c0f3c81934667b4e9eb88146770c131a13f210523d3f9fdc787",
+   "bytes": 5208
+  },
   "ORDER_NOTES.md": {
-   "sha256": "008693e931741f387eb32e8090bbfd4e61daec0d937093f3bc4efdaa1df4a730",
-   "bytes": 6429
+   "sha256": "c492e661d10b5ed4b5ef6b1e0153f550f2bafe45ff24302ff3254b060c49a592",
+   "bytes": 6670
   }
  },
  "redline": "只读板；零坐标搜索；不改板/图纸/SPEC/冻结四源（输出全在 L5 交付目录）。"
