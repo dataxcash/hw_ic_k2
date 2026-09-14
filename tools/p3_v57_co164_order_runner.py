@@ -64,6 +64,10 @@
 ㉖ CO-229（R-CO229-1，承 R-CO218-1 · **等长判定几何源之锚点入规范序机判**）：SI 等长之几何取自
      `m13_v57_w3_joint_assignment.json`（**非冻结、非序内 watch**）⇒ CO-228 残留「覆盖源身份 pin」未闭；现以**身份 pin** + 其自述 **16 项上游指纹逐项独立复算**
      （键集等式 + 自述↔实件一致）入机判（缺件/漂移即停机）。静态齿 **t39**；report revision → CO-203.7。
+㉗ CO-230（R-CO230-1，承 R-CO219-1 / R-CO225-1 · **boundary 节集本身须名集钉定**）：t35 臂① 只判「**已存在**之节」是否带在记录内指纹
+     ⇒ 枚举域 = 文档自述之节集 ⇒ **整节删除 / 重编号**不被检出（空真；CO-230 实测：删 §95 或 §98..§102 ⇒ 臂① 仍 `[]`）。
+     现补 `BOUNDARY_SECTIONS_DECLARED`（应有节集）+ 纯判据 `boundary_section_set_decision()` 双向等式入 t35 臂①。
+     静态齿 **t35**（扩臂，不加齿）；report revision → CO-203.8。
 ⑲ CO-215（R-CO215-1，**代理帮助函数之源面收窄 + 覆盖面机判**）：`artifact_readers()`（判「某步**确实读取**该工件」之**语法代理**）
      原按**原文子串** `basename in src` 判 ⇒ **注释/散文即可满足**（与 R-CO202-4「注释不得满足源内声明」同源缺陷，CO-215 实测复现）⇒
      收窄为 **AST 字面量集**（`_source_strings`）匹配 + glob 字面量；并把该帮助函数之**残余显式登记**
@@ -873,6 +877,22 @@ FROZEN_SRC_COPIES = {
 # ① boundary 每节须带**在记录内指纹**（承 R-CO212-1「pin 漂移或缺失即 fail-closed」）—— 缺者须在**历史豁免名集**；
 # ② runner 自身**静态齿名集**须钉定（防静默删齿 ⇒ 判据面空真；残余：删「齿 + 声明」仍静默，属自指边界）。
 BOUNDARY_SECTION_FP_EXEMPT = frozenset({1, 2, 3, 4, 5, 6, 7})   # 早期节（pin 表制式确立前；**显式豁免**，非「未覆盖」）
+# CO-230（R-CO230-1，承 R-CO219-1 / R-CO225-1）：**boundary 应有节集**之声明（名集钉定）。
+# 缘起：t35 臂① 只遍历**实存**节 ⇒ 域 = 文档自述 ⇒ 整节删除**不被检出**（「删项即空真」族；CO-230 内存实证）。
+# 故声明应有节集；缺节 ⇒ `section_missing`，未声明之新节 ⇒ `section_undeclared`（**须显式入本集**方放行）。
+# 注：实测节号 8/9/10 于本文档**不存在**（历史从未生成）⇒ 声明集不含之（属**显式**声明，非「未覆盖」）。
+BOUNDARY_SECTIONS_DECLARED = frozenset({
+    1, 2, 3, 4, 5, 6, 7, 11, 12, 13,
+    14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
+    24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
+    34, 35, 36, 37, 38, 39, 40, 41, 42, 43,
+    44, 45, 46, 47, 48, 49, 50, 51, 52, 53,
+    54, 55, 56, 57, 58, 59, 60, 61, 62, 63,
+    64, 65, 66, 67, 68, 69, 70, 71, 72, 73,
+    74, 75, 76, 77, 78, 79, 80, 81, 82, 83,
+    84, 85, 86, 87, 88, 89, 90, 91, 92, 93,
+    94, 95, 96, 97, 98, 99, 100, 101, 102, 103,
+})
 STATIC_CHECKS_DECLARED = frozenset({
     "t01_steps_exist", "t02_steps_compile", "t03_expected_nonzero_policy_declared",
     "t04_unexpected_nonzero_detected", "t05_stability_oracle", "t06_order_matches_boundary",
@@ -1127,6 +1147,18 @@ def boundary_sections_with_fp() -> list:
 def boundary_fp_missing(sections, exempt) -> list:
     """缺「在记录内指纹」之节号（空 = ok）。纯判据（可注入合成面 ⇒ 正/负控）。"""
     return sorted(n for n, ok in sections if not ok and n not in exempt)
+
+
+def boundary_section_set_decision(found, declared) -> str:
+    """CO-230（R-CO230-1）纯判据：boundary **实存节集**须 == **声明节集**（双向）。
+
+    返回 `ok` / `section_missing`（声明之节不存在 ⇒ 整节被删，臂① 之空真面）/ `section_undeclared`（实存未声明之新节）。
+    """
+    if set(declared) - set(found):
+        return "section_missing"
+    if set(found) - set(declared):
+        return "section_undeclared"
+    return "ok"
 
 
 def frozen_sources_decision(pins, sha16_of, copies=None, bytes_of=None) -> str:
@@ -2311,6 +2343,11 @@ def main(argv=None) -> int:
         and boundary_fp_missing([(1, False), (8, True)], BOUNDARY_SECTION_FP_EXEMPT) == []
         and boundary_fp_missing([(1, True), (8, False), (9, False)], BOUNDARY_SECTION_FP_EXEMPT) == [8, 9]
         and boundary_fp_missing([(9, True)], frozenset()) == []
+        # ①b CO-230（R-CO230-1）：**节集本身**亦须名集钉定（臂① 只判「已存在之节」⇒ 整节删除不被检出；同「删项即空真」族）
+        and boundary_section_set_decision([n for n, _ in _bdy_secs], BOUNDARY_SECTIONS_DECLARED) == "ok"
+        and boundary_section_set_decision({1, 2, 3}, {1, 2, 3}) == "ok"
+        and boundary_section_set_decision({1, 2}, {1, 2, 3}) == "section_missing"
+        and boundary_section_set_decision({1, 2, 3, 4}, {1, 2, 3}) == "section_undeclared"
         # ② 静态齿名集钉定（防**静默删齿** ⇒ 判据面空真）
         and _present == set(STATIC_CHECKS_DECLARED) - {"t35_judgment_surface_pinned"}
         and len(STATIC_CHECKS_DECLARED) == 41
@@ -2400,7 +2437,7 @@ def main(argv=None) -> int:
             converged = True
             break
         prev = cur
-    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-203.7",
+    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-203.8",
               "nature": "规范复现序机判执行器（rc 策略 + 真收敛判定）；报告落 .archer_tmp/ 且**不被 boundary 引用**（避免不动点）",
               "order": ORDER, "expected_nonzero": EXPECTED_NONZERO,
               "checks": checks, "iterations": iterations, "abort": abort, "converged": converged,

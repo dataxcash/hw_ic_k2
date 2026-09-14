@@ -3709,6 +3709,49 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body102
 
+    # ── §103 CO-230（非执行者对抗复评 CO-225..CO-229 + 同会话处置） ──
+    MARK103 = "## 103. CO-230"
+    sec103 = [MARK103 + "（**非执行者对抗复评 CO-225..CO-229 + 同会话处置**）", "",
+              "- **缘起**：handoff z92 §5.5 复评债 =「下一轮复评须覆盖 **CO-225..CO-229**（另一会话，禁自评；as-found 钉 `fdb72a2`）」⇒ 本件承该债并清偿（同 CO-219 / CO-225 之例）。",
+              "- **对象（as-found 钉 `fdb72a2`）**：§98..§102（CO-225..CO-229 之记录）+ 三件 L2 裁定件 + 打样包随单 + `--check` 静态齿面（41 齿）。"
+              "复评者 = **非执行者**（context 归零之**新会话**；**未参与 CO-225..CO-229 之任何撰写**）⇒ 五节**全部**在对象内，无自评豁免面。",
+              "- **F-1（TOOL_DEFECT · 中）**：t35 **臂① 之枚举域 = boundary 文档自述之节集**（`boundary_sections_with_fp()` 只返回**实存**节）⇒ "
+              "**整节删除 / 重编号不被检出**（「删项即空真」；CO-225 F-1 / CO-219 F-1 同族）。**本会话内存实证（零落盘）**：实存 99 节、`missing=[]`；"
+              "注入删 §95 ⇒ 臂① 仍 `missing=[]`（PASS）；删 §98..§102 五节 ⇒ 仍 PASS。**grep 证实 runner 内无任何齿**声明「应有之节集/节数」；"
+              "且实测节集 = `{1..7, 11..102}`（**8/9/10 不存在**）而**无声明** ⇒ 该枚举面**从未被钉定**。承 **R-CO219-1**（枚举面须名集等式）/ **R-CO225-1**（判定面完整性须名集钉定）。",
+              "- **处置**：① 新增 **`BOUNDARY_SECTIONS_DECLARED`**（100 节 = 实存 99 + 本节 §103）+ 纯判据 **`boundary_section_set_decision()`**（双向等式）"
+              "并**扩 t35 臂①**（正/负控齐备；**不新增齿**，齿数仍 **41**）；② 登记簿入册 **`co230:F-1`**（TOOL_DEFECT、CLOSED）；"
+              "③ 自声明面同步：runner report revision → **CO-203.8**；④ **R-CO230-1**。",
+              "- **正控（本会话独立实测）**：as-found 逐件 sha16 全对（runner `5dc43f6e3aedd50d` / boundary `e5fe950356777eff` / 登记簿 `ecf2963e9165f6f4` / "
+              "几何源 `60cbd331836e52b7` / 交付板 `d4e81f647be7f980`）；冻结四源 **4/4 MATCH**；`--check` **41/41 True**；序收敛 **rc=0 / 2 轮**；"
+              "oracle **PASS**（11 齿；rc=0、受控件逐字节复原）；co120 **PASS**（19 齿）；co124 **PASS**；L5 签署 FAB/DFM/SI 全 **PASS**（skew 0.1300）；"
+              "co206 **7/7**（A=FEASIBLE_PENDING_DFM 定案不变）；打样包 29/29 齿 / 37 payload；登记簿 **169 / OPEN 0**。",
+              "- **观测（在册项之复核，非本件新发现）**：登记簿已载「boundary **现行态 pin 再对齐**」之标签语义项（写入器只重写 sha、不改同排历史标签）⇒ §98 标签 `CO-203.3` 而 pin = 现行 "
+              "`5dc43f6e3aedd50d`（该行于 `e4a65f7` 时 = `2a99e5fb3d9b32a6`）属**已知在册形态**，判版本须读该节现行版本注或对应 CO 节。",
+              "- **边界（诚实·残余）**：① 本件所钉为「**节集名集等式**」，**不**判节内叙述之完备性（由各节自身 / co120 / co135 citation 扫描承载）；"
+              "② 新增节须**显式**入 `BOUNDARY_SECTIONS_DECLARED` 方放行（属有意 fail-closed 之人工闸）；③ 本件**不**声称已覆盖「红线是否被机判」之全部形态。",
+              "",
+              "| 工件 | sha16 |", "|---|---|"]
+    for _l, _p in [("runner `p3_v57_co164_order_runner.py`（**CO-203.8** / 节集名集钉定）", K2 / "tools/p3_v57_co164_order_runner.py"),
+                   ("复评件 `m13_v57_CO230_rev19_co225_co229_review.json`", STEP2 / "m13_v57_CO230_rev19_co225_co229_review.json"),
+                   ("boundary 写入器 `p3_v57_co146_boundary_append.py`", K2 / "tools/p3_v57_co146_boundary_append.py"),
+                   ("登记簿 `input_defect_register_v1.json`（+co230:F-1）", L2 / "input_defect_register_v1.json"),
+                   ("交付板 `k2_v4_8L.l4.kicad_pcb`（本件**未改**）", K2 / "k2_v4_8L.l4.kicad_pcb")]:
+        if _p.exists():
+            sec103.append(f"| {_l} | `{s16(_p)}` |")
+    sec103 += ["",
+               "> **R-CO230-1**：**枚举面之「应有集」须独立声明**（承 R-CO219-1 / R-CO225-1）—— 凡以文档/工件**自述**为其枚举域者"
+               "（如 boundary 之节集），须另立 `*_DECLARED` 名集做**双向等式**（缺项 ⇒ `*_missing`；未声明之新增 ⇒ `*_undeclared`），"
+               "否则「删项即空真」；判据面之**域**不得由被判对象自身给出。",
+               "",
+               "> **序不变**：本件未改步骤集/序列（承 §82 之 R-CO209-2）。"]
+    body103 = "\n".join(sec103)
+    if MARK103 in txt:
+        txt = re.sub(re.escape(MARK103) + r"[\s\S]*?(?=\n## |\Z)", body103, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body103
+
+    txt = txt.replace("W3 Boundary **v2.70**", "W3 Boundary **v2.71**")
     txt = txt.replace("W3 Boundary **v2.69**", "W3 Boundary **v2.70**")
     txt = txt.replace("W3 Boundary **v2.68**", "W3 Boundary **v2.69**")
     txt = txt.replace("W3 Boundary **v2.67**", "W3 Boundary **v2.68**")

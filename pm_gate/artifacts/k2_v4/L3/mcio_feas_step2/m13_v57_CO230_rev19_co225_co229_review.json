@@ -1,0 +1,255 @@
+{
+ "artifact": "m13_v57_co230_rev19_co225_co229_review",
+ "schema": 1,
+ "revision": "CO-230",
+ "nature": "非执行者对抗复评 CO-225..CO-229（context 归零之新会话，未参与该五节之撰写 ⇒ 无自评豁免面；as-found 逐件重放 + 实件内存注入）",
+ "as_found": {
+  "rev": "fdb72a2",
+  "pins": {
+   "tools/p3_v57_co164_order_runner.py": {
+    "want": "5dc43f6e3aedd50d",
+    "got": "5dc43f6e3aedd50d",
+    "ok": true,
+    "src": "git show fdb72a2"
+   },
+   "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_joint_assignment_boundary_v1_82.md": {
+    "want": "e5fe950356777eff",
+    "got": "e5fe950356777eff",
+    "ok": true,
+    "src": "git show fdb72a2"
+   },
+   "pm_gate/artifacts/k2_v4/L2/input_defect_register_v1.json": {
+    "want": "ecf2963e9165f6f4",
+    "got": "ecf2963e9165f6f4",
+    "ok": true,
+    "src": "git show fdb72a2"
+   },
+   "tools/p3_v57_l5_signoff.py": {
+    "want": "7618070712518194",
+    "got": "7618070712518194",
+    "ok": true,
+    "src": "git show fdb72a2"
+   },
+   "tools/p3_v57_co120_provenance_pin_gate.py": {
+    "want": "28d6211f32318d9b",
+    "got": "28d6211f32318d9b",
+    "ok": true,
+    "src": "git show fdb72a2"
+   },
+   "tools/p3_v57_co195_fixpoint_uniqueness_oracle.py": {
+    "want": "c24f3e983c31e589",
+    "got": "c24f3e983c31e589",
+    "ok": true,
+    "src": "git show fdb72a2"
+   },
+   "k2_v4_8L.l4.kicad_pcb": {
+    "want": "d4e81f647be7f980",
+    "got": "d4e81f647be7f980",
+    "ok": true,
+    "src": "git show fdb72a2"
+   }
+  },
+  "live_now": {
+   "note": "本会话已按 F-1 处置（runner / boundary 已改）⇒ 现行 ≠ as-found 属预期；现行 sha 一律由 boundary §103 pin 表承载（承 R-CO152-1）"
+  }
+ },
+ "positive_controls": {
+  "V1_as_found_pins_replayed": {
+   "ok": true,
+   "detail": {
+    "tools/p3_v57_co164_order_runner.py": {
+     "want": "5dc43f6e3aedd50d",
+     "got": "5dc43f6e3aedd50d",
+     "ok": true,
+     "src": "git show fdb72a2"
+    },
+    "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_joint_assignment_boundary_v1_82.md": {
+     "want": "e5fe950356777eff",
+     "got": "e5fe950356777eff",
+     "ok": true,
+     "src": "git show fdb72a2"
+    },
+    "pm_gate/artifacts/k2_v4/L2/input_defect_register_v1.json": {
+     "want": "ecf2963e9165f6f4",
+     "got": "ecf2963e9165f6f4",
+     "ok": true,
+     "src": "git show fdb72a2"
+    },
+    "tools/p3_v57_l5_signoff.py": {
+     "want": "7618070712518194",
+     "got": "7618070712518194",
+     "ok": true,
+     "src": "git show fdb72a2"
+    },
+    "tools/p3_v57_co120_provenance_pin_gate.py": {
+     "want": "28d6211f32318d9b",
+     "got": "28d6211f32318d9b",
+     "ok": true,
+     "src": "git show fdb72a2"
+    },
+    "tools/p3_v57_co195_fixpoint_uniqueness_oracle.py": {
+     "want": "c24f3e983c31e589",
+     "got": "c24f3e983c31e589",
+     "ok": true,
+     "src": "git show fdb72a2"
+    },
+    "k2_v4_8L.l4.kicad_pcb": {
+     "want": "d4e81f647be7f980",
+     "got": "d4e81f647be7f980",
+     "ok": true,
+     "src": "git show fdb72a2"
+    }
+   }
+  },
+  "V2_frozen_four": {
+   "ok": true,
+   "detail": {
+    "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-19.json": {
+     "want": "5f72182a2616392c",
+     "got": "5f72182a2616392c",
+     "ok": true
+    },
+    "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_s1_page_manifest.json": {
+     "want": "a8ef3ea8ecff99d7",
+     "got": "a8ef3ea8ecff99d7",
+     "ok": true
+    },
+    "k2_v4_8L.kicad_pcb": {
+     "want": "fb07d25ac426ff84",
+     "got": "fb07d25ac426ff84",
+     "ok": true
+    },
+    "_shared/eda_core/drc_rules.json": {
+     "want": "0a459839e15960b8",
+     "got": "0a459839e15960b8",
+     "ok": true
+    }
+   },
+   "copy_unique": true,
+   "board_unchanged": true
+  },
+  "V3_t36_real_paths": {
+   "real_domain": "ok",
+   "real_semantics": "ok",
+   "inj_copy_new_key": "unmapped_key_undeclared",
+   "inj_consumed_drift": "consumed_key_drift",
+   "inj_divergence_unregistered": "divergence_unregistered"
+  },
+  "V4_t37_real_paths": {
+   "real_hits": [
+    "pm_gate/artifacts/k2_v4/L2/L2_RULING_u6_gnd_via_array_v1.md",
+    "pm_gate/artifacts/k2_v4/L2/L2_RULING_u6_thermal_mitigation_v1.md",
+    "pm_gate/artifacts/k2_v4/L2/L2_RULING_u6_thermal_v1.md",
+    "pm_gate/artifacts/k2_v4/L2/input_defect_register_v1.json",
+    "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_joint_assignment_boundary_v1_82.md",
+    "pm_gate/artifacts/k2_v4/L5/jlc_package/06_rulings/L2_RULING_u6_thermal_mitigation_v1.md",
+    "pm_gate/artifacts/k2_v4/L5/jlc_package/06_rulings/L2_RULING_u6_thermal_v1.md",
+    "pm_gate/artifacts/k2_v4/L5/jlc_package/ORDER_NOTES.md"
+   ],
+   "real_domain": "ok",
+   "inj_extra_hit": "undeclared_surface",
+   "inj_declared_absent": "declared_surface_absent"
+  },
+  "V5_t38_real_paths": {
+   "n_manifest": 34,
+   "n_drawing": 34,
+   "real_page_cov": "ok",
+   "real_kind_vocab": "ok",
+   "inj_page_deleted": "page_missing_in_drawing",
+   "inj_extra_page": "page_undeclared_in_manifest",
+   "inj_kind_undeclared": "manifest_kind_undeclared"
+  },
+  "V6_t39_real_paths": {
+   "identity_pin_ok": true,
+   "n_declared_keys": 16,
+   "n_pin_table": 16,
+   "real_provenance": "ok",
+   "inj_decl_value_tampered": "provenance_self_declaration_mismatch",
+   "inj_live_content_drift": "provenance_drift"
+  },
+  "V7_static_check_face": {
+   "n_static_declared": 41,
+   "has_new_arm_const": true
+  }
+ },
+ "negative_controls": {
+  "P1_t36": {
+   "real_domain": "ok",
+   "real_semantics": "ok",
+   "inj_copy_new_key": "unmapped_key_undeclared",
+   "inj_consumed_drift": "consumed_key_drift",
+   "inj_divergence_unregistered": "divergence_unregistered"
+  },
+  "P2_t37": {
+   "real_hits": [
+    "pm_gate/artifacts/k2_v4/L2/L2_RULING_u6_gnd_via_array_v1.md",
+    "pm_gate/artifacts/k2_v4/L2/L2_RULING_u6_thermal_mitigation_v1.md",
+    "pm_gate/artifacts/k2_v4/L2/L2_RULING_u6_thermal_v1.md",
+    "pm_gate/artifacts/k2_v4/L2/input_defect_register_v1.json",
+    "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_joint_assignment_boundary_v1_82.md",
+    "pm_gate/artifacts/k2_v4/L5/jlc_package/06_rulings/L2_RULING_u6_thermal_mitigation_v1.md",
+    "pm_gate/artifacts/k2_v4/L5/jlc_package/06_rulings/L2_RULING_u6_thermal_v1.md",
+    "pm_gate/artifacts/k2_v4/L5/jlc_package/ORDER_NOTES.md"
+   ],
+   "real_domain": "ok",
+   "inj_extra_hit": "undeclared_surface",
+   "inj_declared_absent": "declared_surface_absent"
+  },
+  "P3_t38": {
+   "n_manifest": 34,
+   "n_drawing": 34,
+   "real_page_cov": "ok",
+   "real_kind_vocab": "ok",
+   "inj_page_deleted": "page_missing_in_drawing",
+   "inj_extra_page": "page_undeclared_in_manifest",
+   "inj_kind_undeclared": "manifest_kind_undeclared"
+  },
+  "P4_t39": {
+   "identity_pin_ok": true,
+   "n_declared_keys": 16,
+   "n_pin_table": 16,
+   "real_provenance": "ok",
+   "inj_decl_value_tampered": "provenance_self_declaration_mismatch",
+   "inj_live_content_drift": "provenance_drift"
+  },
+  "P5_t35_section_set": {
+   "n_sections_now": 100,
+   "old_arm_after_delete_95": [],
+   "new_arm_after_delete_95": "section_missing",
+   "new_arm_after_delete_95_to_102": "section_missing",
+   "new_arm_after_add_ghost": "section_undeclared",
+   "declared_n": 100,
+   "missing_numbers": [
+    8,
+    9,
+    10
+   ]
+  }
+ },
+ "findings": [
+  {
+   "id": "F-1",
+   "sev": "mid",
+   "kind": "TOOL_DEFECT",
+   "status": "CLOSED",
+   "object": [
+    "CO-225",
+    "boundary §98..§102"
+   ],
+   "what": "t35 臂① 之**枚举域 = boundary 文档自述之节集**（`boundary_sections_with_fp()` 只返回实存节）⇒ **整节删除 / 重编号不被检出**（空真）。实测：删 §95 ⇒ 臂① `[]`（PASS）；删 §98..§102 ⇒ 仍 PASS；runner 内无任何齿声明「应有节集/节数」；实测节集 `{1..7, 11..102}`（8/9/10 不存在）而无声明。",
+   "disposition": "新增 `BOUNDARY_SECTIONS_DECLARED`（100 节）+ 纯判据 `boundary_section_set_decision()`（双向）扩 t35 臂①（正/负控齐备；不新增齿）；register `co230:F-1`；runner report revision → CO-203.8。",
+   "carries": [
+    "R-CO219-1",
+    "R-CO225-1"
+   ]
+  }
+ ],
+ "n_findings": 1,
+ "observations": [
+  "O-1（在册项复核，**非新发现**）：§98 之「标签 `CO-203.3` ↔ pin = 现行 `5dc43f6e3aedd50d`」属 boundary**现行态 pin 再对齐**之已在册形态（该行于 `e4a65f7` 时 = `2a99e5fb3d9b32a6`）；在册处置 = 判版本须读该节现行版本注或对应 CO 节，不得以同排历史标签为 sha 之版本判据。本件独立复现同现象。",
+  "O-2（正控通过）：t36/t37/t38/t39 之**实件路径**（非仅合成控）在真数据上皆 `ok`，且实件数据 + 内存扰动皆按预期 fail-closed；t37 之载明面域经全树扫描 = 恰为声明 8 面（`.archer_tmp/` 等未跟踪工作区不在域内，属设计）⇒ CO-225 F-4 之域收窄已闭。",
+  "O-3（诚实边界）：本件**不**复评 B 路 10L 实做与外部工艺/报价面（外部输入）；**不**判 boundary 节内叙述之完备性；CO-230 自身须下一轮复评（禁自评）。"
+ ],
+ "verdict": "PASS_WITH_FINDINGS",
+ "redline": "as-found 以 `git show fdb72a2` 逐件钉定 + sha16 复核；扰动一律**内存注入**（零落盘）；不改冻结四源 / SPEC / 板；他件处置同日另 commit。"
+}
