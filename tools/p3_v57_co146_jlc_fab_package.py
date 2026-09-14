@@ -444,12 +444,12 @@ def order_notes(spec: dict, dfm: dict, imp: dict) -> str:
             "delta_by_type"].get("shorting_items")
     except Exception:
         probe_shorts = "N/A"
-    return f"""# JLC（嘉立创）8 层打样下单备注 — k2_v4_8L.l4
+    return f"""# JLC（嘉立创）8 层打样**制造备注** — k2_v4_8L.l4
 
 > 生成：tools/p3_v57_co146_jlc_fab_package.py｜板 `{b['board_sha16']}`｜SPEC rev-19
 > 定值来源：监理指令 #10「JLC 8 层打样就绪」定值表（叠层/铜厚/阻抗/表面处理/压降/环境）
 
-## 1. 下单参数（监理定值）
+## 1. 制造参数（监理定值）
 | 项 | 值 |
 |---|---|
 | 层数 | 8 |
@@ -457,22 +457,22 @@ def order_notes(spec: dict, dfm: dict, imp: dict) -> str:
 | 成品厚 | 1.6 mm（公差 ±10%） |
 | 铜厚 | 外层 1oz / 内层 0.5oz |
 | 尺寸 | {b['board_size_mm'][0]} × {b['board_size_mm'][1]} mm |
-| 阻抗 | **85Ω 差分 ±10%，下单勾选「阻抗控制」** |
+| 阻抗 | **85Ω 差分 ±10%（商务下单时勾选「阻抗控制」）** |
 | 表面处理 | 沉金 ENIG |
 | 工艺通道 | **A：JLC HDI 盲埋孔（叠层阶数 ≥2）—— 监理指令 #14 owner 冻结** |
-| 文件 | Gerber RS-274X（01_）+ Excellon 钻孔（02_：含 4 类盲埋孔分片 .drl + drill map SVG）+ **HDI 叠层/阶数图（03_）** + 阻抗表（04_）+ 本下单说明 + 随单裁定（06_） |
+| 文件 | Gerber RS-274X（01_）+ Excellon 钻孔（02_：含 4 类盲埋孔分片 .drl + drill map SVG）+ **HDI 叠层/阶数图（03_）** + 阻抗表（04_）+ 本制造备注 + 随单裁定（06_） |
 
-## 2. 下单渠道（**监理指令 #14：工艺冻结为 A**）
+## 2. 制造通道（**监理指令 #14：工艺冻结为 A**）
 **通道 = JLC HDI 盲埋孔（advanced/HDI 专属通道），叠层阶数 ≥2。** 本板 {b['n_non_through_vias']}/{b['n_vias']} 支为**非通孔**
 （`F.Cu→In2.Cu` 92、`In2.Cu→In5.Cu` 88（埋孔）、`In5.Cu→B.Cu` 32、`F.Cu→In5.Cu` 8）；`F.Cu→B.Cu` 通孔 273 支。
 其中 `In2.Cu→In5.Cu`（埋孔）需 **3 次层压**（阶数 ≥2）；标准通道口径下亦不满足残桩 <0.15mm（`In2.Cu→In5.Cu` 残桩 0.3664mm）——A 冻结后该点由 HDI 通道消解。
 - **标准通道（仅通孔）不使用**；其能力页明文 *"Blind/Buried Vias Not supported"* 与 *Backdrill* 支持，均与 A 冻结后之口径无关。
 - JLC 页 FAQ 原文 *"Advanced options such as blind/buried vias, HDI (laser vias), … typically require DFM review and may increase both cost and production time."* ⇒ HDI/advanced **支持**盲埋孔，须 **HDI DFM review**。
 - 路径 A/B/C 之对比已成历史：**A 由 owner（监理指令 #14）冻结**，B/C 闭项。定案见 `06_rulings/L2_RULING_process_route_A_frozen_hdi_v1.md`。
-- 报价 / 交期 = **外部输入**，下单时填写，**不阻塞出包**（禁编造单价：判据件参数保持 null）。
+- 报价 / 交期 / 下单 / 凭据 = **商务范畴，非 ENG 任务**（**监理指令 #15**）：不作 ENG 交付项、不作 ENG 阻塞项（判据件单价参数保持 null）。
 - DFM 逐项对 HDI 通道之日判见 `06_rulings/` 同包之 `m13_v57_co146_jlc_dfm_gate.json` 与本备注 §3/§4。
 
-> **监理指令 #14 终止项**：不再新增检查齿（t45+）；「每轮复评上轮 CO」之复评债机制**本轮终止**；残余复评债 = **owner 豁免（关闭）**，不阻塞交付。完工定义 = **能送样**（出包 → 下单 → 投递验证）。
+> **监理指令 #14 终止项**：不再新增检查齿（t45+）；「每轮复评上轮 CO」之复评债机制**本轮终止**；残余复评债 = **owner 豁免（关闭）**，不阻塞交付。**完工定义（#15）= Gerber 包齐**（本包 01_/02_/03_/04_ + `MANIFEST.json`；逐文件 sha256 在案）。
 
 ## 3. 板级 DFM 项（CO-147 L2 裁定 R3，随板厂评审提交）
 **阻焊开窗-邻铜净距 1 处**：`R3.pad2`(`PWR_BTN_ISO`) 开窗缘 ↔ `PCIE_UP3_N` 铜缘 = **0.0695mm** < JLC 0.09mm
@@ -486,7 +486,7 @@ def order_notes(spec: dict, dfm: dict, imp: dict) -> str:
 
 ## 5. 阻抗
 85Ω 差分两套独立闭式模型（IPC-2141 族 / Hammerstad–Jensen+Cohn）均落 ±10%（as-built 对内净距），
-设计名义最宽间距下有 1 项模型偏离观察值（M2(HJ) 相对目标 **+11.7%**；模型间 spread ≈4.8%），已列下单备注：
+设计名义最宽间距下有 1 项模型偏离观察值（M2(HJ) 相对目标 **+11.7%**；模型间 spread ≈4.8%），已列制造备注：
 **请 JLC 阻抗表覆盖最宽对内间距（0.6mm 中心）的几何**。终判 = JLC 阻抗控制服务。
 见 04_impedance/。
 
@@ -505,7 +505,7 @@ def order_notes(spec: dict, dfm: dict, imp: dict) -> str:
 - 本板无 PTH/NPTH 焊盘：`J6/J9/J11/J12/J13` 为无焊盘占位（netlist 骨架），板上无安装孔。
 - DRC（as-designed，含逃逸域 dru）：42 项，全部为 `lib_footprint_*`(41) + `silk_edge_clearance`(1)，无铜几何违规。
 
-## 8. 下单字段（JLC HDI 通道，照填）
+## 8. 制造参数清单（JLC HDI 通道；供 fab / 商务）
 | 字段 | 值 |
 |---|---|
 | 板子类型 | 8 层 **HDI（盲埋孔）** |
@@ -519,7 +519,6 @@ def order_notes(spec: dict, dfm: dict, imp: dict) -> str:
 | 表面处理 | 沉金 ENIG |
 | 文件 | Gerber（`01_gerber_rs274x/`）+ 钻孔（`02_drill_excellon/`）+ **HDI 叠层/阶数图（`03_stackup/`）** + 阻抗表（`04_impedance/`） |
 | 工程评审 | ① 阻焊开窗 1 处（`R3.pad2` ↔ `PCIE_UP3_N` = 0.0695mm < 0.09mm，见 §3）；② HDI 阶数/孔径/介质厚限值确认 |
-| 订单号 / 回执 | **下单后回填**（本包不含；见交付状态） |
 """
 
 

@@ -57,4 +57,4 @@
 归一化比对（对 pinned 标准能力抓取件 `m13_v57_co146_jlc_capability_source.html`）：
 - 两页**含相同**标准内容：`Blind/Buried Vias Not supported` / `Min. Via hole size/diameter 0.15mm / 0.25mm` / `Advanced options such as blind/buried vias, HDI (laser vias)`；
 - HDI 专属限值（**激光孔径 / 阶数上限 / 盲埋孔环宽 / 介质厚 / 叠层结构**）**两页皆无**（所命中之 `stack-up` 均为 FAQ 泛述）。
-⇒ **结论（不可行证明）**：JLC **HDI 通道之具体限值不由公开页发布**；其获取途径 = **板厂 HDI 工程评审 / 报价流程**（即路线 A 已定义之 `须 DFM review`）。故本项**非「待定」，而是「已判定为外部流程输入」**；设计侧合法性已由 §1–§4 判 PASS。
+⇒ **结论（不可行证明）**：JLC **HDI 通道之具体限值不由公开页发布**；其获取途径 = **板厂 HDI 工程评审**（即路线 A 已定义之 `须 DFM review`）。故本项**非「待定」，而是「已判定为外部流程输入」**；设计侧合法性已由 §1–§4 判 PASS。

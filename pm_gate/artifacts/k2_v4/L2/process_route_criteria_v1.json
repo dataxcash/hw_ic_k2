@@ -25,6 +25,10 @@
   {
    "by": "DIR-14（owner 裁定）",
    "what": "工艺冻结为 A（JLC HDI 盲埋孔，>=2 阶）：新增 `owner_ruling` 块（取代 #12/#13 之工艺面；报价/交期=外部输入非阻塞；自检/复评债终止）；`decision.frozen=A`；自声明面 v1.5 -> v1.6。禁编造单价：cost/lead 参数保持 null。"
+  },
+  {
+   "by": "DIR-15（owner 裁定）",
+   "what": "完工定义**最终更正**：ENG 交付 = **Gerber 包齐**（8 铜层+阻焊/丝印/边框/job + 钻孔 + 叠层 + 阻抗 + MANIFEST）；**下单/报价/交期/凭据 = 商务范畴，移出 ENG 范围**（#14 之相关要求作废）；自声明面 v1.6 -> v1.7。"
   }
  ],
  "cost_model": {
@@ -68,7 +72,8 @@
    }
   },
   "qualitative_anchor": "抓取件原文：advanced options（含 blind/buried、HDI）‘typically require DFM review and may increase both cost and production time’。",
-  "rule": "禁编造单价：未获报价的参数一律 null；本工具在参数缺失时输出模型与所需输入清单，不输出伪数字。"
+  "rule": "禁编造单价：未获报价的参数一律 null；本工具在参数缺失时输出模型与所需输入清单，不输出伪数字。",
+  "scope": "BUSINESS（报价属商务，非 ENG 任务/阻塞项；监理指令 #15）"
  },
  "criteria": {
   "F1_via_class_manufacturable_through_backdrill": {
@@ -175,7 +180,8 @@
     "provenance": "INPUT_REQUIRED",
     "value": null
    }
-  }
+  },
+  "scope": "BUSINESS（交期属商务，非 ENG 任务/阻塞项；监理指令 #15）"
  },
  "price_probe_log": {
   "attempted": "2026-09-14",
@@ -214,8 +220,8 @@
   ],
   "hint_in_corpus": "能力页有定性锚：'hole size with via diameter less than 0.45mm, will cost more'（仅定性）"
  },
- "purpose": "给定设计约束，输出工艺路线的 可行性/成本/交期/性能/风险 对比 + 推荐。判据先行、可复现、可复用（非一次性）。",
- "revision": "v1.6",
+ "purpose": "给定设计约束，输出工艺路线的 可行性/成本/交期/性能/风险 对比 + 推荐。判据先行、可复现、可复用（非一次性）。 ｜ **#15 更正**：ENG 交付 = **Gerber 包齐**；本件之 cost/lead 模型属**商务**（非 ENG、非阻塞）。",
+ "revision": "v1.7",
  "risk_catalog": {
   "A_advanced_hdi": [
    "DFM review 结论未知（可能退回改设计）",
@@ -261,21 +267,23 @@
   "frozen_note": "原规则（B_if_feasible_and_cheaper_else_A）仍留作可替换判据；现行 A 之地位由 owner 冻结，不再由规则求值翻转。"
  },
  "owner_ruling": {
-  "directive": "监理指令 #14（owner 裁定，最高优先）",
+  "directive": "监理指令 #14 + #15（owner 裁定，最高优先）",
   "date": "2026-09-14",
   "decision": "工艺冻结为 A：JLC HDI 盲埋孔专属通道，叠层阶数 >=2",
   "route_frozen": "A",
   "supersedes": [
    "#12（要求 0 盲/埋孔 + 背钻）",
-   "#13（工艺未决 ⇒ A/B/C 性价比对比）"
+   "#13（工艺未决 ⇒ A/B/C 性价比对比）",
+   "#14 之『下单 / 报价 / 交期 / 凭据』要求（#15 作废）"
   ],
-  "cost_lead_external": "报价/交期 = 外部输入，下单时填写；非阻塞（cost_model/lead_time_model 参数保持 null，禁编造）",
   "terminated": [
    "新增检查齿（t45+）",
    "每轮复评上轮 CO 之复评债机制（本轮终止；残余复评债 = owner 豁免/关闭，不阻塞交付）"
   ],
-  "completion_definition": "能送样：出包 -> 下单 -> 投递验证",
+  "completion_definition": "ENG 交付 = **Gerber 包齐**：`01_gerber_rs274x/`（8 铜层 + 阻焊 + 丝印 + 边框 + gbrjob） + `02_drill_excellon/`（含 HDI 盲埋孔钻孔）+ `03_stackup/` + `04_impedance/` + `MANIFEST.json`（逐文件 sha256）—— #15",
   "consequence": "B（加层全通孔）/ C（via-in-pad）不再为候选；「免除 HDI 依赖 / 改叠层拓扑」之未决讨论终止",
-  "record": "L2_RULING_process_route_A_frozen_hdi_v1.md"
+  "record": "L2_RULING_process_route_A_frozen_hdi_v1.md",
+  "business_out_of_scope": "下单 / 报价 / 交期 / 凭据 = **商务范畴，非 ENG 任务**（#15）：不作 ENG 交付项、不作 ENG 阻塞项；`cost_model`/`lead_time_model` 参数保持 null（禁编造）",
+  "completion_record": "L2_RULING_process_route_A_frozen_hdi_v1.md"
  }
 }
