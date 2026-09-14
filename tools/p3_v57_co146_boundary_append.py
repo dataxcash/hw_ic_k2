@@ -3111,7 +3111,9 @@ def main() -> int:
     _rows87 = [("闸 `p3_v57_co120_provenance_pin_gate.py`（**CO-120.7**：+P5 L5 板指纹消费面机判 + 4 齿）", K2 / "tools/p3_v57_co120_provenance_pin_gate.py"),
                ("记录 `m13_v57_co120_provenance_pin_gate.json`（**CO-120.7**：19 齿全 True / `l5_bad=0`）", STEP2 / "m13_v57_co120_provenance_pin_gate.json"),
                ("runner `p3_v57_co164_order_runner.py`（`EXPECTED_TEETH` co120 15→19 齿）", K2 / "tools/p3_v57_co164_order_runner.py"),
-               ("被消费 L5 记录（DFM/DFT、SI/PI/EMC、G7）", STEP2 / "m13_v57_l5_dfm_dft_record.json"),
+               ("被消费 L5 记录 `m13_v57_l5_dfm_dft_record.json`（DFM/DFT）", STEP2 / "m13_v57_l5_dfm_dft_record.json"),
+               ("被消费 L5 记录 `m13_v57_l5_si_pi_emc_record.json`（SI/PI/EMC）", STEP2 / "m13_v57_l5_si_pi_emc_record.json"),
+               ("被消费 L5 记录 `m13_v57_l5_g7_record.md`（G7）", STEP2 / "m13_v57_l5_g7_record.md"),
                (f"登记簿 `input_defect_register_v1.json`（{_rc87['total']} 项 / OPEN {_rc87['OPEN']}）", L2 / "input_defect_register_v1.json")]
     for label, pth in _rows87:
         if pth.exists():
@@ -3751,6 +3753,41 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body103
 
+    # ── §104 CO-231（L2 自裁 · 承 R-CO212-1/R-CO152-1/R-CO230-1：boundary pin 表**内容**入机判） ──
+    MARK104 = "## 104. CO-231"
+    sec104 = [MARK104 + "（**L2 自裁 · 承 R-CO212-1 / R-CO152-1 / R-CO230-1：boundary pin 表之内容入机判**）", "",
+              "- **缘起（闭 §103 残余）**：§103「诚实·残余」自认「本件只钉**节集**，不判 pin 表**内容**」；而 R-CO152-1 明定「现行 sha 一律由 boundary pin 表单一承载」"
+              "⇒ 该表**内容**之正确性（所列值是否等于实件、指称是否唯一）**无机判齿**（承 R-CO212-1「pin 须可核」/ R-CO230-1「判据面之域不得由被判对象自述给出」）。",
+              "- **实测（本会话，只读复核）**：逐行复核 pin 表 **539 行**：**538 行**可解析且所列 sha16 **== 实件**（0 陈旧）；**1 行不可复核** = §87「被消费 L5 记录（DFM/DFT、SI/PI/EMC、G7）| `6632179e1ef63183`」——"
+              "标签声称**三件**而所列 sha16 实为 `m13_v57_l5_dfm_dft_record.json` **一件** ⇒ ① 该行**名实不符**（指称不唯一 ⇒ 不可复核，$R-CO208-1 同族）；② 就 §87 节而言 SI/PI/EMC 与 G7 两件**未钉**（他节有钉，故非全链缺口）。",
+              "- **裁定（L2 自裁）**：① **生成器**拆分该行为三行（各带唯一指称）；② 入机判 runner 静态齿 **t40_boundary_pin_rows_current**：pin 行标签须**恰一个**文件指称"
+              "（于声明根集 `BOUNDARY_PIN_ROOTS` 唯一解析）且所列 sha16 **== 实件**；不可解析之标签须入**显式豁免名集** `BOUNDARY_PIN_LABEL_EXEMPT`（**名集等式**，现为**空**）；③ 自声明面同步：runner report revision → **CO-203.9**；④ **R-CO231-1**。",
+              "- **判别力（本会话实测）**：手改/陈旧值 ⇒ `pin_value_stale`；指称不唯一或无指称而未豁免 ⇒ `pin_reference_unresolved`；实件 539 行 ⇒ `ok`；正/负控皆备。",
+              "- **边界（诚实·残余）**：① 本件判「**所列值 == 实件**」与「**指称唯一**」，**不**判 pin 表之**完备性**（哪件**应有** pin 由各节自身 / co120 / co135 citation 扫描承载）；② 解析根集为**显式声明域**，新增根须显式加入（否则该行判 `pin_reference_unresolved`）；③ 本件**不**声称已覆盖「红线是否被机判」之全部形态。",
+              "",
+              "| 工件 | sha16 |", "|---|---|"]
+    for _l, _p in [("runner `p3_v57_co164_order_runner.py`（**CO-203.9** / t40 pin 行内容齿）", K2 / "tools/p3_v57_co164_order_runner.py"),
+                   ("boundary 写入器 `p3_v57_co146_boundary_append.py`（§87 行拆分 + §104）", K2 / "tools/p3_v57_co146_boundary_append.py"),
+                   ("被消费 L5 记录 `m13_v57_l5_dfm_dft_record.json`（§87 拆行）", STEP2 / "m13_v57_l5_dfm_dft_record.json"),
+                   ("被消费 L5 记录 `m13_v57_l5_si_pi_emc_record.json`（§87 拆行）", STEP2 / "m13_v57_l5_si_pi_emc_record.json"),
+                   ("被消费 L5 记录 `m13_v57_l5_g7_record.md`（§87 拆行）", STEP2 / "m13_v57_l5_g7_record.md"),
+                   ("登记簿 `input_defect_register_v1.json`（+co231:F-1）", L2 / "input_defect_register_v1.json"),
+                   ("交付板 `k2_v4_8L.l4.kicad_pcb`（本件**未改**）", K2 / "k2_v4_8L.l4.kicad_pcb")]:
+        if _p.exists():
+            sec104.append(f"| {_l} | `{s16(_p)}` |")
+    sec104 += ["",
+               "> **R-CO231-1**：boundary pin 表（R-CO152-1 之**唯一**现行 sha 承载面）**内容须机判**：每行标签须**恰一个**文件指称、"
+               "且所列 sha16 **等于实件**；不可解析 / 指称不唯一之标签须入**显式豁免名集**（名集等式，禁静默）。"
+               "—— 「有 pin 表」≠「pin 可核」（承 R-CO212-1 / R-CO152-1 / R-CO230-1）。",
+               "",
+               "> **序不变**：本件未改步骤集/序列（承 §82 之 R-CO209-2）。"]
+    body104 = "\n".join(sec104)
+    if MARK104 in txt:
+        txt = re.sub(re.escape(MARK104) + r"[\s\S]*?(?=\n## |\Z)", body104, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body104
+
+    txt = txt.replace("W3 Boundary **v2.71**", "W3 Boundary **v2.72**")
     txt = txt.replace("W3 Boundary **v2.70**", "W3 Boundary **v2.71**")
     txt = txt.replace("W3 Boundary **v2.69**", "W3 Boundary **v2.70**")
     txt = txt.replace("W3 Boundary **v2.68**", "W3 Boundary **v2.69**")

@@ -68,6 +68,10 @@
      ⇒ 枚举域 = 文档自述之节集 ⇒ **整节删除 / 重编号**不被检出（空真；CO-230 实测：删 §95 或 §98..§102 ⇒ 臂① 仍 `[]`）。
      现补 `BOUNDARY_SECTIONS_DECLARED`（应有节集）+ 纯判据 `boundary_section_set_decision()` 双向等式入 t35 臂①。
      静态齿 **t35**（扩臂，不加齿）；report revision → CO-203.8。
+㉘ CO-231（R-CO231-1，承 R-CO212-1 / R-CO152-1 / R-CO230-1 · **boundary pin 表内容须机判**）：t35 只判「每节**有** pin 表」⇒
+     表**内容**无机判齿：① 手改 / 序中途 abort（末步 boundary_append 未跑）⇒ 陈旧或伪造值可静默存在；② §87 一行「被消费 L5 记录
+     （DFM/DFT、SI/PI/EMC、G7）」**名实不符**（标签三件、实钉 DFM/DFT 一件）⇒ 该行不可复核（指称不唯一）。
+     现补：标签须**恰一个**文件指称且 sha16 == 实件；不可解析之标签须入**显式豁免名集**（名集等式，现为空）。静态齿 **t40**；report revision → CO-203.9。
 ⑲ CO-215（R-CO215-1，**代理帮助函数之源面收窄 + 覆盖面机判**）：`artifact_readers()`（判「某步**确实读取**该工件」之**语法代理**）
      原按**原文子串** `basename in src` 判 ⇒ **注释/散文即可满足**（与 R-CO202-4「注释不得满足源内声明」同源缺陷，CO-215 实测复现）⇒
      收窄为 **AST 字面量集**（`_source_strings`）匹配 + glob 字面量；并把该帮助函数之**残余显式登记**
@@ -877,7 +881,15 @@ FROZEN_SRC_COPIES = {
 # ① boundary 每节须带**在记录内指纹**（承 R-CO212-1「pin 漂移或缺失即 fail-closed」）—— 缺者须在**历史豁免名集**；
 # ② runner 自身**静态齿名集**须钉定（防静默删齿 ⇒ 判据面空真；残余：删「齿 + 声明」仍静默，属自指边界）。
 BOUNDARY_SECTION_FP_EXEMPT = frozenset({1, 2, 3, 4, 5, 6, 7})   # 早期节（pin 表制式确立前；**显式豁免**，非「未覆盖」）
-# CO-230（R-CO230-1，承 R-CO219-1 / R-CO225-1）：**boundary 应有节集**之声明（名集钉定）。
+# CO-231（R-CO231-1）：boundary pin 表**行内容**之判据域。
+# 解析根（**声明域**；新增根须显式加入）+ 指称不唯一/无指称标签之**显式豁免名集**（现为**空** ⇒ 任何此类行即停机）。
+BOUNDARY_PIN_ROOTS = ("tools", "", "pm_gate/artifacts/k2_v4", "pm_gate/artifacts/k2_v4/L2",
+                      "pm_gate/artifacts/k2_v4/L3", "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2",
+                      "pm_gate/artifacts/k2_v4/L5", "pm_gate/artifacts/k2_v4/L5/jlc_package")
+BOUNDARY_PIN_LABEL_EXEMPT = frozenset()
+_PIN_ROW_RE = re.compile(r"^\|\s*(?P<label>[^|\n]+?)\s*\|\s*`(?P<sha>[0-9a-f]{16})`\s*\|\s*$", re.M)
+_PIN_FILEISH_RE = re.compile(r"\.(?:py|json|md|txt|svg|kicad_pcb|kicad_pro|drl|gbr)$|/")
+# CO-230（R-CO230-1，承 R-CO219-1 / R-CO225-1）：**boundary 应有节集**之声明（名集钉定）。**新增节须显式入本集**（CO-231 加 §104）。
 # 缘起：t35 臂① 只遍历**实存**节 ⇒ 域 = 文档自述 ⇒ 整节删除**不被检出**（「删项即空真」族；CO-230 内存实证）。
 # 故声明应有节集；缺节 ⇒ `section_missing`，未声明之新节 ⇒ `section_undeclared`（**须显式入本集**方放行）。
 # 注：实测节号 8/9/10 于本文档**不存在**（历史从未生成）⇒ 声明集不含之（属**显式**声明，非「未覆盖」）。
@@ -892,6 +904,7 @@ BOUNDARY_SECTIONS_DECLARED = frozenset({
     74, 75, 76, 77, 78, 79, 80, 81, 82, 83,
     84, 85, 86, 87, 88, 89, 90, 91, 92, 93,
     94, 95, 96, 97, 98, 99, 100, 101, 102, 103,
+    104,
 })
 STATIC_CHECKS_DECLARED = frozenset({
     "t01_steps_exist", "t02_steps_compile", "t03_expected_nonzero_policy_declared",
@@ -907,7 +920,7 @@ STATIC_CHECKS_DECLARED = frozenset({
     "t29_proxy_semantic_binding", "t30_expected_nonzero_rc_class", "t31_expected_nonzero_error_free",
     "t32_oracle_category_coverage", "t33_tool_revision_bound", "t34_frozen_sources_pinned",
     "t35_judgment_surface_pinned", "t36_cross_source_semantics_bound", "t37_obligation_same_source_bound",
-    "t38_page_coverage_bound", "t39_si_geom_source_anchored",
+    "t38_page_coverage_bound", "t39_si_geom_source_anchored", "t40_boundary_pin_rows_current",
 })
 _FP_ROW_RE = re.compile(r"^\|\s*[^|\n]+\|\s*sha16\s*\|", re.M)
 
@@ -1158,6 +1171,43 @@ def boundary_section_set_decision(found, declared) -> str:
         return "section_missing"
     if set(found) - set(declared):
         return "section_undeclared"
+    return "ok"
+
+
+def _resolve_pin_ref(label: str):
+    """标签 → 实件路径（K2 相对）；指称不唯一 / 解析不唯一 ⇒ None（须入显式豁免名集）。"""
+    names = list(dict.fromkeys(x for x in re.findall(r"`([^`]+)`", label) if _PIN_FILEISH_RE.search(x)))
+    if len(names) != 1:
+        return None
+    rel = names[0]
+    hits = [r for r in BOUNDARY_PIN_ROOTS if (K2 / r / rel).is_file()] if rel[0] != "/" else []
+    hits = [str(Path(r) / rel) if r else rel for r in hits]
+    return hits[0] if len(hits) == 1 else None
+
+
+def boundary_pin_rows() -> list:
+    """boundary 每枚 pin 表行 → [(label, listed_sha16, rel_or_None)]（不可读 ⇒ 空表 ⇒ fail-closed）。"""
+    try:
+        txt = (STEP2 / BOUNDARY_BASENAME).read_text(encoding="utf-8")
+    except OSError:
+        return []
+    return [(m.group("label").strip(), m.group("sha"), _resolve_pin_ref(m.group("label")))
+            for m in _PIN_ROW_RE.finditer(txt)]
+
+
+def boundary_pin_row_decision(rows, exempt, sha16_of) -> str:
+    """CO-231（R-CO231-1）纯判据：pin 表行**指称须唯一且所列 sha16 == 实件**。
+
+    返回 `ok` / `pin_reference_unresolved`（指称不唯一或不可解析且**未**入显式豁免名集）/ `pin_value_stale`。
+    `sha16_of` 可注入 ⇒ 合成控**零落盘**。
+    """
+    for label, listed, rel in rows:
+        if rel is None:
+            if label not in exempt:
+                return "pin_reference_unresolved"
+            continue
+        if sha16_of(rel) != listed:
+            return "pin_value_stale"
     return "ok"
 
 
@@ -2332,6 +2382,25 @@ def main(argv=None) -> int:
         and geom_provenance_decision({"a": ("p", "s")}, {"a": "s"}, lambda _p: (_ for _ in ()).throw(OSError())) == "provenance_unreadable"
         # 判别力注记（CO-228 残余之形态）：几何源身份漂移 ⇒ ① 臂即 Fail（pin 钉定，非自述）
         and ("" != SI_GEOM_SOURCE_SHA16))
+    # CO-231（R-CO231-1，承 R-CO212-1 / R-CO152-1 / R-CO230-1）：boundary pin 表**内容**机判
+    # 缘起：t35 只判「每节有 pin 表」⇒ 表**内容**（所列 sha 是否等于实件 / 指称是否唯一）无机判齿：
+    #   ① 手改 / 序中途 abort（末步 boundary_append 未跑）⇒ 陈旧或伪造 sha 可静默存在；
+    #   ② §87 一行「被消费 L5 记录（DFM/DFT、SI/PI/EMC、G7）」名实不符（标签三件、实钉 DFM/DFT 一件）⇒ 该行不可复核。
+    _pin_rows = boundary_pin_rows()
+    checks["t40_boundary_pin_rows_current"] = (
+        bool(_pin_rows)
+        # ① 名集等式：指称不唯一/无指称之标签须**显式**入 `BOUNDARY_PIN_LABEL_EXEMPT`（现为空 ⇒ 任何此类行即停机）
+        and set(l for l, _s, r in _pin_rows if r is None) == set(BOUNDARY_PIN_LABEL_EXEMPT)
+        # ② 所列 sha16 须 == 实件
+        and boundary_pin_row_decision(_pin_rows, BOUNDARY_PIN_LABEL_EXEMPT,
+                                      lambda rel: hashlib.sha256((K2 / rel).read_bytes()).hexdigest()[:16]) == "ok"
+        # 正控：指称唯一且值符 ⇒ ok；不可解析而**已豁免** ⇒ ok（合成，零落盘）
+        and boundary_pin_row_decision([("a `x.py`", "aa", "tools/x.py")], frozenset(), lambda _r: "aa") == "ok"
+        and boundary_pin_row_decision([("lbl", "aa", None)], frozenset({"lbl"}), lambda _r: "bb") == "ok"
+        # 负控：值陈旧 / 不可解析而未豁免（含「指称不唯一」之 None 形态）
+        and boundary_pin_row_decision([("a `x.py`", "bb", "tools/x.py")], frozenset(), lambda _r: "aa") == "pin_value_stale"
+        and boundary_pin_row_decision([("lbl", "aa", None)], frozenset(), lambda _r: "aa") == "pin_reference_unresolved"
+        and boundary_pin_row_decision([("a `x.py`", "aa", None)], frozenset(), lambda _r: "aa") == "pin_reference_unresolved")
     # CO-225（R-CO225-1）：判定面完整性之**名集钉定**（① boundary 节指纹 ② runner 静态齿名集）
     _bdy_secs = boundary_sections_with_fp()
     _present = set(checks)          # t35 之前已建齿名（用于静态齿名集等式）
@@ -2350,7 +2419,7 @@ def main(argv=None) -> int:
         and boundary_section_set_decision({1, 2, 3, 4}, {1, 2, 3}) == "section_undeclared"
         # ② 静态齿名集钉定（防**静默删齿** ⇒ 判据面空真）
         and _present == set(STATIC_CHECKS_DECLARED) - {"t35_judgment_surface_pinned"}
-        and len(STATIC_CHECKS_DECLARED) == 41
+        and len(STATIC_CHECKS_DECLARED) == 42
         # ② 负控：集合等式对「少一枚」有判别力
         and (_present - {"t01_steps_exist"}) != set(STATIC_CHECKS_DECLARED) - {"t35_judgment_surface_pinned"})
     static_ok = all(checks.values())
@@ -2437,7 +2506,7 @@ def main(argv=None) -> int:
             converged = True
             break
         prev = cur
-    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-203.8",
+    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-203.9",
               "nature": "规范复现序机判执行器（rc 策略 + 真收敛判定）；报告落 .archer_tmp/ 且**不被 boundary 引用**（避免不动点）",
               "order": ORDER, "expected_nonzero": EXPECTED_NONZERO,
               "checks": checks, "iterations": iterations, "abort": abort, "converged": converged,
