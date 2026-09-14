@@ -1,0 +1,42 @@
+{
+ "base": "PCIE_REFCLK1",
+ "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+ "solve_time_s": 46.929,
+ "result": {
+  "base": "REFCLK1",
+  "status": "INFEASIBLE",
+  "segments": [
+   {
+    "status": "INFEASIBLE",
+    "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (60.544,60.707)）",
+    "name": "input",
+    "esc": {
+     "status": "INFEASIBLE",
+     "kind": "VIA",
+     "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (60.544,60.707)）",
+     "cross_evidence": {
+      "min_edge": -0.205,
+      "point": [
+       60.544,
+       60.707
+      ],
+      "req": 0.175
+     },
+     "nearest": {
+      "kind": "seg",
+      "net": "PCIE_REFCLK0_P",
+      "desc": "seg:PCIE_REFCLK0_P (In6.Cu)",
+      "dist": 4.489999999999999,
+      "req": 0.175
+     }
+    },
+    "flip": true
+   }
+  ],
+  "lenP": 0,
+  "lenN": 0,
+  "skew": null,
+  "skew_ok": false,
+  "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24"
+ }
+}

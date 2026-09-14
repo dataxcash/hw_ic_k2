@@ -1,0 +1,3380 @@
+{
+ "probe": "channel_alloc_capacity_diag",
+ "version": "3.0",
+ "date": "2026-08-30",
+ "board": {
+  "path": "k2/k2_v4.kicad_pcb",
+  "sha256_prefix": "6c387df",
+  "status": "落位板（k2_gen_v5 + 电容墙复摆，M13 求解唯一输入）"
+ },
+ "inputs": {
+  "spec": "SPEC_k2_v4.json",
+  "alloc": "channel_alloc_v4/channel_alloc.json",
+  "rules": "eda_core/drc_rules.json",
+  "pro": "k2_v4.kicad_pro",
+  "config": "L2/route_model_config.json"
+ },
+ "method": "模型 API：probe_path_clearance + nearest_obstacle（build_hs_field 同口径，clear_nets=段实际 P/N 网 + 关联网；PCIe85 净距 0.175）",
+ "summary": {
+  "total_escape_paths": 32,
+  "blocked_escape": 31,
+  "clear_escape": 1,
+  "track_lines_checked": 144,
+  "track_lines_blocked": 0,
+  "encroach_values_mm": [
+   0.25
+  ],
+  "blocked_by_seg": {
+   "input": 15,
+   "out_J2": 16
+  },
+  "blocked_by_net": {
+   "PCIE_DN0": 2,
+   "PCIE_DN1": 2,
+   "PCIE_DN2": 2,
+   "PCIE_DN3": 2,
+   "PCIE_DN4": 2,
+   "PCIE_DN5": 2,
+   "PCIE_DN6": 2,
+   "PCIE_DN7": 1,
+   "PCIE_UP0": 2,
+   "PCIE_UP1": 2,
+   "PCIE_UP2": 2,
+   "PCIE_UP3": 2,
+   "PCIE_UP4": 2,
+   "PCIE_UP5": 2,
+   "PCIE_UP6": 2,
+   "PCIE_UP7": 2
+  },
+  "blocked_by_obstacle": {
+   "GND": 18,
+   "PCIE_DN1_P": 1,
+   "I2C1_SCL": 1,
+   "PCIE_DN3_P": 1,
+   "PCIE_DN4_P": 1,
+   "PCIE_DN5_P": 1,
+   "NO_CONNECT": 1,
+   "PCIE_DN7_N": 1,
+   "PCIE_UP_OUT1_P_J2": 1,
+   "PCIE_REFCLK0_P": 3,
+   "PCIE_UP_OUT0_N_J2": 2
+  },
+  "j2_pad_heap": {
+   "cols": [
+    132.65,
+    135.0
+   ],
+   "up_rx_y_range": [
+    42.9,
+    53.1
+   ],
+   "dn_tx_y_range": [
+    54.3,
+    64.5
+   ],
+   "up_pad_count": 20,
+   "dn_pad_count": 16,
+   "gnd_pads_in_escape_zone": 32
+  }
+ },
+ "conflicts": [
+  {
+   "net": "PCIE_DN0",
+   "seg": "input",
+   "track_y": 58.3,
+   "corridor": "J2_TO_U",
+   "pn": "N",
+   "target_pad_net": "PCIE_DN0_N",
+   "target_pad": [
+    135.0,
+    54.300000000000004
+   ],
+   "escape_zone_x": [
+    131.5,
+    135.0
+   ],
+   "obstacle_kind": "pad",
+   "obstacle_net": "PCIE_DN1_P",
+   "obstacle_edge_dist_mm": -0.075,
+   "required_clearance_mm": 0.175,
+   "encroach_mm": 0.25,
+   "escaped": false
+  },
+  {
+   "net": "PCIE_DN0",
+   "seg": "input",
+   "track_y": 58.3,
+   "corridor": "J2_TO_U",
+   "pn": "P",
+   "target_pad_net": "PCIE_DN0_P",
+   "target_pad": [
+    132.64999999999998,
+    54.300000000000004
+   ],
+   "escape_zone_x": [
+    131.5,
+    132.64999999999998
+   ],
+   "obstacle_kind": "pad",
+   "obstacle_net": "GND",
+   "obstacle_edge_dist_mm": -0.075,
+   "required_clearance_mm": 0.175,
+   "encroach_mm": 0.25,
+   "escaped": false
+  },
+  {
+   "net": "PCIE_DN1",
+   "seg": "input",
+   "track_y": 59.5,
+   "corridor": "J2_TO_U",
+   "pn": "N",
+   "target_pad_net": "PCIE_DN1_N",
+   "target_pad": [
+    132.64999999999998,
+    55.5
+   ],
+   "escape_zone_x": [
+    131.5,
+    132.64999999999998
+   ],
+   "obstacle_kind": "pad",
+   "obstacle_net": "I2C1_SCL",
+   "obstacle_edge_dist_mm": -0.075,
+   "required_clearance_mm": 0.175,
+   "encroach_mm": 0.25,
+   "escaped": false
+  },
+  {
+   "net": "PCIE_DN1",
+   "seg": "input",
+   "track_y": 59.5,
+   "corridor": "J2_TO_U",
+   "pn": "P",
+   "target_pad_net": "PCIE_DN1_P",
+   "target_pad": [
+    135.0,
+    54.900000000000006
+   ],
+   "escape_zone_x": [
+    131.5,
+    135.0
+   ],
+   "obstacle_kind": "pad",
+   "obstacle_net": "GND",
+   "obstacle_edge_dist_mm": -0.075,
+   "required_clearance_mm": 0.175,
+   "encroach_mm": 0.25,
+   "escaped": false
+  },
+  {
+   "net": "PCIE_DN2",
+   "seg": "input",
+   "track_y": 60.7,
+   "corridor": "J2_TO_U",
+   "pn": "N",
+   "target_pad_net": "PCIE_DN2_N",
+   "target_pad": [
+    135.0,
+    57.900000000000006
+   ],
+   "escape_zone_x": [
+    131.5,
+    135.0
+   ],
+   "obstacle_kind": "pad",
+   "obstacle_net": "PCIE_DN3_P",
+   "obstacle_edge_dist_mm": -0.075,
+   "required_clearance_mm": 0.175,
+   "encroach_mm": 0.25,
+   "escaped": false
+  },
+  {
+   "net": "PCIE_DN2",
+   "seg": "input",
+   "track_y": 60.7,
+   "corridor": "J2_TO_U",
+   "pn": "P",
+   "target_pad_net": "PCIE_DN2_P",
+   "target_pad": [
+    132.64999999999998,
+    57.900000000000006
+   ],
+   "escape_zone_x": [
+    131.5,
+    132.64999999999998
+   ],
+   "obstacle_kind": "pad",
+   "obstacle_net": "GND",
+   "obstacle_edge_dist_mm": -0.075,
+   "required_clearance_mm": 0.175,
+   "encroach_mm": 0.25,
+   "escaped": false
+  },
+  {
+   "net": "PCIE_DN3",
+   "seg": "input",
+   "track_y": 61.9,
+   "corridor": "J2_TO_U",
+   "pn": "N",
+   "target_pad_net": "PCIE_DN3_N",
+   "target_pad": [
+    132.64999999999998,
+    59.1
+   ],
+   "escape_zone_x": [
+    131.5,
+    132.64999999999998
+   ],
+   "obstacle_kind": "pad",
+   "obstacle_net": "PCIE_DN4_P",
+   "obstacle_edge_dist_mm": -0.075,
+   "required_clearance_mm": 0.175,
+   "encroach_mm": 0.25,
+   "escaped": false
+  },
+  {
+   "net": "PCIE_DN3",
+   "seg": "input",
+   "track_y": 61.9,
+   "corridor": "J2_TO_U",
+   "pn": "P",
+   "target_pad_net": "PCIE_DN3_P",
+   "target_pad": [
+    135.0,
+    58.5
+   ],
+   "escape_zone_x": [
+    131.5,
+    135.0
+   ],
+   "obstacle_kind": "pad",
+   "obstacle_net": "GND",
+   "obstacle_edge_dist_mm": -0.075,
+   "required_clearance_mm": 0.175,
+   "encroach_mm": 0.25,
+   "escaped": false
+  },
+  {
+   "net": "PCIE_DN4",
+   "seg": "input",
+   "track_y": 63.1,
+   "corridor": "J2_TO_U",
+   "pn": "N",
+   "target_pad_net": "PCIE_DN4_N",
+   "target_pad": [
+    135.0,
+    59.7
+   ],
+   "escape_zone_x": [
+    131.5,
+    135.0
+   ],
+   "obstacle_kind": "pad",
+   "obstacle_net": "PCIE_DN5_P",
+   "obstacle_edge_dist_mm": -0.075,
+   "required_clearance_mm": 0.175,
+   "encroach_mm": 0.25,
+   "escaped": false
+  },
+  {
+   "net": "PCIE_DN4",
+   "seg": "input",
+   "track_y": 63.1,
+   "corridor": "J2_TO_U",
+   "pn": "P",
+   "target_pad_net": "PCIE_DN4_P",
+   "target_pad": [
+    132.64999999999998,
+    59.7
+   ],
+   "escape_zone_x": [
+    131.5,
+    132.64999999999998
+   ],
+   "obstacle_kind": "pad",
+   "obstacle_net": "GND",
+   "obstacle_edge_dist_mm": -0.075,
+   "required_clearance_mm": 0.175,
+   "encroach_mm": 0.25,
+   "escaped": false
+  },
+  {
+   "net": "PCIE_DN5",
+   "seg": "input",
+   "track_y": 64.3,
+   "corridor": "J2_TO_U",
+   "pn": "N",
+   "target_pad_net": "PCIE_DN5_N",
+   "target_pad": [
+    132.64999999999998,
+    60.900000000000006
+   ],
+   "escape_zone_x": [
+    131.5,
+    132.64999999999998
+   ],
+   "obstacle_kind": "pad",
+   "obstacle_net": "NO_CONNECT",
+   "obstacle_edge_dist_mm": -0.075,
+   "required_clearance_mm": 0.175,
+   "encroach_mm": 0.25,
+   "escaped": false
+  },
+  {
+   "net": "PCIE_DN5",
+   "seg": "input",
+   "track_y": 64.3,
+   "corridor": "J2_TO_U",
+   "pn": "P",
+   "target_pad_net": "PCIE_DN5_P",
+   "target_pad": [
+    135.0,
+    60.300000000000004
+   ],
+   "escape_zone_x": [
+    131.5,
+    135.0
+   ],
+   "obstacle_kind": "pad",
+   "obstacle_net": "GND",
+   "obstacle_edge_dist_mm": -0.075,
+   "required_clearance_mm": 0.175,
+   "encroach_mm": 0.25,
+   "escaped": false
+  },
+  {
+   "net": "PCIE_DN6",
+   "seg": "input",
+   "track_y": 65.5,
+   "corridor": "J2_TO_U",
+   "pn": "N",
+   "target_pad_net": "PCIE_DN6_N",
+   "target_pad": [
+    135.0,
+    63.300000000000004
+   ],
+   "escape_zone_x": [
+    131.5,
+    135.0
+   ],
+   "obstacle_kind": "pad",
+   "obstacle_net": "PCIE_DN7_N",
+   "obstacle_edge_dist_mm": -0.075,
+   "required_clearance_mm": 0.175,
+   "encroach_mm": 0.25,
+   "escaped": false
+  },
+  {
+   "net": "PCIE_DN6",
+   "seg": "input",
+   "track_y": 65.5,
+   "corridor": "J2_TO_U",
+   "pn": "P",
+   "target_pad_net": "PCIE_DN6_P",
+   "target_pad": [
+    132.64999999999998,
+    63.300000000000004
+   ],
+   "escape_zone_x": [
+    131.5,
+    132.64999999999998
+   ],
+   "obstacle_kind": "pad",
+   "obstacle_net": "GND",
+   "obstacle_edge_dist_mm": -0.075,
+   "required_clearance_mm": 0.175,
+   "encroach_mm": 0.25,
+   "escaped": false
+  },
+  {
+   "net": "PCIE_DN7",
+   "seg": "input",
+   "track_y": 66.7,
+   "corridor": "J2_TO_U",
+   "pn": "N",
+   "target_pad_net": "PCIE_DN7_N",
+   "target_pad": [
+    132.64999999999998,
+    64.5
+   ],
+   "escape_zone_x": [
+    131.5,
+    132.64999999999998
+   ],
+   "obstacle_kind": null,
+   "obstacle_net": null,
+   "obstacle_edge_dist_mm": null,
+   "required_clearance_mm": null,
+   "encroach_mm": 0.0,
+   "escaped": true
+  },
+  {
+   "net": "PCIE_DN7",
+   "seg": "input",
+   "track_y": 66.7,
+   "corridor": "J2_TO_U",
+   "pn": "P",
+   "target_pad_net": "PCIE_DN7_P",
+   "target_pad": [
+    135.0,
+    63.900000000000006
+   ],
+   "escape_zone_x": [
+    131.5,
+    135.0
+   ],
+   "obstacle_kind": "pad",
+   "obstacle_net": "GND",
+   "obstacle_edge_dist_mm": -0.075,
+   "required_clearance_mm": 0.175,
+   "encroach_mm": 0.25,
+   "escaped": false
+  },
+  {
+   "net": "PCIE_UP0",
+   "seg": "out_J2",
+   "track_y": 48.7,
+   "corridor": "J2_TO_U",
+   "pn": "N",
+   "target_pad_net": "PCIE_UP_OUT0_N_J2",
+   "target_pad": [
+    132.64999999999998,
+    43.5
+   ],
+   "escape_zone_x": [
+    131.5,
+    132.64999999999998
+   ],
+   "obstacle_kind": "pad",
+   "obstacle_net": "PCIE_UP_OUT1_P_J2",
+   "obstacle_edge_dist_mm": -0.075,
+   "required_clearance_mm": 0.175,
+   "encroach_mm": 0.25,
+   "escaped": false
+  },
+  {
+   "net": "PCIE_UP0",
+   "seg": "out_J2",
+   "track_y": 48.7,
+   "corridor": "J2_TO_U",
+   "pn": "P",
+   "target_pad_net": "PCIE_UP_OUT0_P_J2",
+   "target_pad": [
+    135.0,
+    42.900000000000006
+   ],
+   "escape_zone_x": [
+    131.5,
+    135.0
+   ],
+   "obstacle_kind": "pad",
+   "obstacle_net": "GND",
+   "obstacle_edge_dist_mm": -0.075,
+   "required_clearance_mm": 0.175,
+   "encroach_mm": 0.25,
+   "escaped": false
+  },
+  {
+   "net": "PCIE_UP1",
+   "seg": "out_J2",
+   "track_y": 47.5,
+   "corridor": "J2_TO_U",
+   "pn": "N",
+   "target_pad_net": "PCIE_UP_OUT1_N_J2",
+   "target_pad": [
+    135.0,
+    44.1
+   ],
+   "escape_zone_x": [
+    131.5,
+    135.0
+   ],
+   "obstacle_kind": "pad",
+   "obstacle_net": "GND",
+   "obstacle_edge_dist_mm": -0.075,
+   "required_clearance_mm": 0.175,
+   "encroach_mm": 0.25,
+   "escaped": false
+  },
+  {
+   "net": "PCIE_UP1",
+   "seg": "out_J2",
+   "track_y": 47.5,
+   "corridor": "J2_TO_U",
+   "pn": "P",
+   "target_pad_net": "PCIE_UP_OUT1_P_J2",
+   "target_pad": [
+    132.64999999999998,
+    44.1
+   ],
+   "escape_zone_x": [
+    131.5,
+    132.64999999999998
+   ],
+   "obstacle_kind": "pad",
+   "obstacle_net": "GND",
+   "obstacle_edge_dist_mm": -0.075,
+   "required_clearance_mm": 0.175,
+   "encroach_mm": 0.25,
+   "escaped": false
+  },
+  {
+   "net": "PCIE_UP2",
+   "seg": "out_J2",
+   "track_y": 46.3,
+   "corridor": "J2_TO_U",
+   "pn": "N",
+   "target_pad_net": "PCIE_UP_OUT2_N_J2",
+   "target_pad": [
+    132.64999999999998,
+    47.1
+   ],
+   "escape_zone_x": [
+    131.5,
+    132.64999999999998
+   ],
+   "obstacle_kind": "pad",
+   "obstacle_net": "GND",
+   "obstacle_edge_dist_mm": -0.075,
+   "required_clearance_mm": 0.175,
+   "encroach_mm": 0.25,
+   "escaped": false
+  },
+  {
+   "net": "PCIE_UP2",
+   "seg": "out_J2",
+   "track_y": 46.3,
+   "corridor": "J2_TO_U",
+   "pn": "P",
+   "target_pad_net": "PCIE_UP_OUT2_P_J2",
+   "target_pad": [
+    135.0,
+    46.5
+   ],
+   "escape_zone_x": [
+    131.5,
+    135.0
+   ],
+   "obstacle_kind": "pad",
+   "obstacle_net": "GND",
+   "obstacle_edge_dist_mm": -0.075,
+   "required_clearance_mm": 0.175,
+   "encroach_mm": 0.25,
+   "escaped": false
+  },
+  {
+   "net": "PCIE_UP3",
+   "seg": "out_J2",
+   "track_y": 45.1,
+   "corridor": "J2_TO_U",
+   "pn": "N",
+   "target_pad_net": "PCIE_UP_OUT3_N_J2",
+   "target_pad": [
+    135.0,
+    47.7
+   ],
+   "escape_zone_x": [
+    131.5,
+    135.0
+   ],
+   "obstacle_kind": "pad",
+   "obstacle_net": "GND",
+   "obstacle_edge_dist_mm": -0.075,
+   "required_clearance_mm": 0.175,
+   "encroach_mm": 0.25,
+   "escaped": false
+  },
+  {
+   "net": "PCIE_UP3",
+   "seg": "out_J2",
+   "track_y": 45.1,
+   "corridor": "J2_TO_U",
+   "pn": "P",
+   "target_pad_net": "PCIE_UP_OUT3_P_J2",
+   "target_pad": [
+    132.64999999999998,
+    47.7
+   ],
+   "escape_zone_x": [
+    131.5,
+    132.64999999999998
+   ],
+   "obstacle_kind": "pad",
+   "obstacle_net": "GND",
+   "obstacle_edge_dist_mm": -0.075,
+   "required_clearance_mm": 0.175,
+   "encroach_mm": 0.25,
+   "escaped": false
+  },
+  {
+   "net": "PCIE_UP4",
+   "seg": "out_J2",
+   "track_y": 43.9,
+   "corridor": "J2_TO_U",
+   "pn": "N",
+   "target_pad_net": "PCIE_UP_OUT4_N_J2",
+   "target_pad": [
+    132.64999999999998,
+    48.900000000000006
+   ],
+   "escape_zone_x": [
+    131.5,
+    132.64999999999998
+   ],
+   "obstacle_kind": "pad",
+   "obstacle_net": "PCIE_REFCLK0_P",
+   "obstacle_edge_dist_mm": -0.075,
+   "required_clearance_mm": 0.175,
+   "encroach_mm": 0.25,
+   "escaped": false
+  },
+  {
+   "net": "PCIE_UP4",
+   "seg": "out_J2",
+   "track_y": 43.9,
+   "corridor": "J2_TO_U",
+   "pn": "P",
+   "target_pad_net": "PCIE_UP_OUT4_P_J2",
+   "target_pad": [
+    135.0,
+    48.300000000000004
+   ],
+   "escape_zone_x": [
+    131.5,
+    135.0
+   ],
+   "obstacle_kind": "pad",
+   "obstacle_net": "GND",
+   "obstacle_edge_dist_mm": -0.075,
+   "required_clearance_mm": 0.175,
+   "encroach_mm": 0.25,
+   "escaped": false
+  },
+  {
+   "net": "PCIE_UP5",
+   "seg": "out_J2",
+   "track_y": 42.7,
+   "corridor": "J2_TO_U",
+   "pn": "N",
+   "target_pad_net": "PCIE_UP_OUT5_N_J2",
+   "target_pad": [
+    135.0,
+    49.5
+   ],
+   "escape_zone_x": [
+    131.5,
+    135.0
+   ],
+   "obstacle_kind": "pad",
+   "obstacle_net": "PCIE_UP_OUT0_N_J2",
+   "obstacle_edge_dist_mm": -0.075,
+   "required_clearance_mm": 0.175,
+   "encroach_mm": 0.25,
+   "escaped": false
+  },
+  {
+   "net": "PCIE_UP5",
+   "seg": "out_J2",
+   "track_y": 42.7,
+   "corridor": "J2_TO_U",
+   "pn": "P",
+   "target_pad_net": "PCIE_UP_OUT5_P_J2",
+   "target_pad": [
+    132.64999999999998,
+    49.5
+   ],
+   "escape_zone_x": [
+    131.5,
+    132.64999999999998
+   ],
+   "obstacle_kind": "pad",
+   "obstacle_net": "PCIE_REFCLK0_P",
+   "obstacle_edge_dist_mm": -0.075,
+   "required_clearance_mm": 0.175,
+   "encroach_mm": 0.25,
+   "escaped": false
+  },
+  {
+   "net": "PCIE_UP6",
+   "seg": "out_J2",
+   "track_y": 41.5,
+   "corridor": "J2_TO_U",
+   "pn": "N",
+   "target_pad_net": "PCIE_UP_OUT6_N_J2",
+   "target_pad": [
+    132.64999999999998,
+    52.5
+   ],
+   "escape_zone_x": [
+    131.5,
+    132.64999999999998
+   ],
+   "obstacle_kind": "pad",
+   "obstacle_net": "GND",
+   "obstacle_edge_dist_mm": -0.075,
+   "required_clearance_mm": 0.175,
+   "encroach_mm": 0.25,
+   "escaped": false
+  },
+  {
+   "net": "PCIE_UP6",
+   "seg": "out_J2",
+   "track_y": 41.5,
+   "corridor": "J2_TO_U",
+   "pn": "P",
+   "target_pad_net": "PCIE_UP_OUT6_P_J2",
+   "target_pad": [
+    135.0,
+    51.900000000000006
+   ],
+   "escape_zone_x": [
+    131.5,
+    135.0
+   ],
+   "obstacle_kind": "pad",
+   "obstacle_net": "PCIE_UP_OUT0_N_J2",
+   "obstacle_edge_dist_mm": -0.075,
+   "required_clearance_mm": 0.175,
+   "encroach_mm": 0.25,
+   "escaped": false
+  },
+  {
+   "net": "PCIE_UP7",
+   "seg": "out_J2",
+   "track_y": 40.3,
+   "corridor": "J2_TO_U",
+   "pn": "N",
+   "target_pad_net": "PCIE_UP_OUT7_N_J2",
+   "target_pad": [
+    135.0,
+    53.1
+   ],
+   "escape_zone_x": [
+    131.5,
+    135.0
+   ],
+   "obstacle_kind": "pad",
+   "obstacle_net": "GND",
+   "obstacle_edge_dist_mm": -0.075,
+   "required_clearance_mm": 0.175,
+   "encroach_mm": 0.25,
+   "escaped": false
+  },
+  {
+   "net": "PCIE_UP7",
+   "seg": "out_J2",
+   "track_y": 40.3,
+   "corridor": "J2_TO_U",
+   "pn": "P",
+   "target_pad_net": "PCIE_UP_OUT7_P_J2",
+   "target_pad": [
+    132.64999999999998,
+    53.1
+   ],
+   "escape_zone_x": [
+    131.5,
+    132.64999999999998
+   ],
+   "obstacle_kind": "pad",
+   "obstacle_net": "PCIE_REFCLK0_P",
+   "obstacle_edge_dist_mm": -0.075,
+   "required_clearance_mm": 0.175,
+   "encroach_mm": 0.25,
+   "escaped": false
+  }
+ ],
+ "track_checks": [
+  {
+   "net": "PCIE_DN0",
+   "seg": "input",
+   "line": "center",
+   "corridor": "J2_TO_U",
+   "track_y": 58.3,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG1_U3",
+    "dist": 0.4000000000000085,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN0",
+   "seg": "input",
+   "line": "P",
+   "corridor": "J2_TO_U",
+   "track_y": 58.3,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG1_U3",
+    "dist": 0.2100000000000108,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN0",
+   "seg": "input",
+   "line": "N",
+   "corridor": "J2_TO_U",
+   "track_y": 58.3,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "PCIE_DN2_P",
+    "dist": 0.4262235030402817,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_DN0",
+   "seg": "out_U3",
+   "line": "center",
+   "corridor": "U_TO_MCIO",
+   "track_y": 58.7,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.4000000000000014,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_DN0",
+   "seg": "out_U3",
+   "line": "P",
+   "corridor": "U_TO_MCIO",
+   "track_y": 58.7,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.21000000000000368,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_DN0",
+   "seg": "out_U3",
+   "line": "N",
+   "corridor": "U_TO_MCIO",
+   "track_y": 58.7,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.21000000000000368,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_DN0",
+   "seg": "out_MCIO",
+   "line": "center",
+   "corridor": "U_TO_MCIO",
+   "track_y": 58.7,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.4000000000000014,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_DN0",
+   "seg": "out_MCIO",
+   "line": "P",
+   "corridor": "U_TO_MCIO",
+   "track_y": 58.7,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.21000000000000368,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_DN0",
+   "seg": "out_MCIO",
+   "line": "N",
+   "corridor": "U_TO_MCIO",
+   "track_y": 58.7,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.21000000000000368,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_DN1",
+   "seg": "input",
+   "line": "center",
+   "corridor": "J2_TO_U",
+   "track_y": 59.5,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG1_U3",
+    "dist": 0.3999999999999943,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN1",
+   "seg": "input",
+   "line": "P",
+   "corridor": "J2_TO_U",
+   "track_y": 59.5,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "P3V3",
+    "dist": 0.21000000000000368,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN1",
+   "seg": "input",
+   "line": "N",
+   "corridor": "J2_TO_U",
+   "track_y": 59.5,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG1_U3",
+    "dist": 0.20999999999999658,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN1",
+   "seg": "out_U3",
+   "line": "center",
+   "corridor": "U_TO_MCIO",
+   "track_y": 59.9,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.3999999999999943,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_DN1",
+   "seg": "out_U3",
+   "line": "P",
+   "corridor": "U_TO_MCIO",
+   "track_y": 59.9,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "P3V3",
+    "dist": 0.21000000000000368,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN1",
+   "seg": "out_U3",
+   "line": "N",
+   "corridor": "U_TO_MCIO",
+   "track_y": 59.9,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.20999999999999658,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_DN1",
+   "seg": "out_MCIO",
+   "line": "center",
+   "corridor": "U_TO_MCIO",
+   "track_y": 59.9,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.3999999999999943,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_DN1",
+   "seg": "out_MCIO",
+   "line": "P",
+   "corridor": "U_TO_MCIO",
+   "track_y": 59.9,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "P3V3",
+    "dist": 0.21000000000000368,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN1",
+   "seg": "out_MCIO",
+   "line": "N",
+   "corridor": "U_TO_MCIO",
+   "track_y": 59.9,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.20999999999999658,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_DN2",
+   "seg": "input",
+   "line": "center",
+   "corridor": "J2_TO_U",
+   "track_y": 60.7,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "P3V3",
+    "dist": 0.4000000000000014,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN2",
+   "seg": "input",
+   "line": "P",
+   "corridor": "J2_TO_U",
+   "track_y": 60.7,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.21000000000000368,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_DN2",
+   "seg": "input",
+   "line": "N",
+   "corridor": "J2_TO_U",
+   "track_y": 60.7,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "P3V3",
+    "dist": 0.21000000000000368,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN2",
+   "seg": "out_U3",
+   "line": "center",
+   "corridor": "U_TO_MCIO",
+   "track_y": 61.1,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG2_U3",
+    "dist": 0.3450000000000017,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN2",
+   "seg": "out_U3",
+   "line": "P",
+   "corridor": "U_TO_MCIO",
+   "track_y": 61.1,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG1_U3",
+    "dist": 0.21000000000000368,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN2",
+   "seg": "out_U3",
+   "line": "N",
+   "corridor": "U_TO_MCIO",
+   "track_y": 61.1,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "P3V3",
+    "dist": 0.21000000000000368,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN2",
+   "seg": "out_MCIO",
+   "line": "center",
+   "corridor": "U_TO_MCIO",
+   "track_y": 61.1,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG2_U3",
+    "dist": 0.3450000000000017,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN2",
+   "seg": "out_MCIO",
+   "line": "P",
+   "corridor": "U_TO_MCIO",
+   "track_y": 61.1,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG1_U3",
+    "dist": 0.21000000000000368,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN2",
+   "seg": "out_MCIO",
+   "line": "N",
+   "corridor": "U_TO_MCIO",
+   "track_y": 61.1,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "P3V3",
+    "dist": 0.21000000000000368,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN3",
+   "seg": "input",
+   "line": "center",
+   "corridor": "J2_TO_U",
+   "track_y": 61.9,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.3999999999999943,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_DN3",
+   "seg": "input",
+   "line": "P",
+   "corridor": "J2_TO_U",
+   "track_y": 61.9,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.21000000000000368,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_DN3",
+   "seg": "input",
+   "line": "N",
+   "corridor": "J2_TO_U",
+   "track_y": 61.9,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.20999999999999658,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_DN3",
+   "seg": "out_U3",
+   "line": "center",
+   "corridor": "U_TO_MCIO",
+   "track_y": 62.3,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG1_U3",
+    "dist": 0.3999999999999943,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN3",
+   "seg": "out_U3",
+   "line": "P",
+   "corridor": "U_TO_MCIO",
+   "track_y": 62.3,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.2100000000000108,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_DN3",
+   "seg": "out_U3",
+   "line": "N",
+   "corridor": "U_TO_MCIO",
+   "track_y": 62.3,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG1_U3",
+    "dist": 0.20999999999999658,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN3",
+   "seg": "out_MCIO",
+   "line": "center",
+   "corridor": "U_TO_MCIO",
+   "track_y": 62.3,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG1_U3",
+    "dist": 0.3999999999999943,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN3",
+   "seg": "out_MCIO",
+   "line": "P",
+   "corridor": "U_TO_MCIO",
+   "track_y": 62.3,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.2100000000000108,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_DN3",
+   "seg": "out_MCIO",
+   "line": "N",
+   "corridor": "U_TO_MCIO",
+   "track_y": 62.3,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG1_U3",
+    "dist": 0.20999999999999658,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN4",
+   "seg": "input",
+   "line": "center",
+   "corridor": "J2_TO_U",
+   "track_y": 63.1,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.4000000000000014,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_DN4",
+   "seg": "input",
+   "line": "P",
+   "corridor": "J2_TO_U",
+   "track_y": 63.1,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG2_U3",
+    "dist": 0.21000000000000368,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN4",
+   "seg": "input",
+   "line": "N",
+   "corridor": "J2_TO_U",
+   "track_y": 63.1,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.21000000000000368,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_DN4",
+   "seg": "out_U3",
+   "line": "center",
+   "corridor": "U_TO_MCIO",
+   "track_y": 63.5,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.38597722286463354,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_DN4",
+   "seg": "out_U3",
+   "line": "P",
+   "corridor": "U_TO_MCIO",
+   "track_y": 63.5,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.2100000000000108,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_DN4",
+   "seg": "out_U3",
+   "line": "N",
+   "corridor": "U_TO_MCIO",
+   "track_y": 63.5,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.20999999999999658,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_DN4",
+   "seg": "out_MCIO",
+   "line": "center",
+   "corridor": "U_TO_MCIO",
+   "track_y": 63.5,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.38597722286463354,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_DN4",
+   "seg": "out_MCIO",
+   "line": "P",
+   "corridor": "U_TO_MCIO",
+   "track_y": 63.5,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.2100000000000108,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_DN4",
+   "seg": "out_MCIO",
+   "line": "N",
+   "corridor": "U_TO_MCIO",
+   "track_y": 63.5,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.20999999999999658,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_DN5",
+   "seg": "input",
+   "line": "center",
+   "corridor": "J2_TO_U",
+   "track_y": 64.3,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG2_U3",
+    "dist": 0.3999999999999943,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN5",
+   "seg": "input",
+   "line": "P",
+   "corridor": "J2_TO_U",
+   "track_y": 64.3,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "P3V3",
+    "dist": 0.2100000000000108,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN5",
+   "seg": "input",
+   "line": "N",
+   "corridor": "J2_TO_U",
+   "track_y": 64.3,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG2_U3",
+    "dist": 0.20999999999999658,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN5",
+   "seg": "out_U3",
+   "line": "center",
+   "corridor": "U_TO_MCIO",
+   "track_y": 64.7,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "P3V3",
+    "dist": 0.3999999999999943,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN5",
+   "seg": "out_U3",
+   "line": "P",
+   "corridor": "U_TO_MCIO",
+   "track_y": 64.7,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "P3V3",
+    "dist": 0.20999999999999658,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN5",
+   "seg": "out_U3",
+   "line": "N",
+   "corridor": "U_TO_MCIO",
+   "track_y": 64.7,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.20999999999999658,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_DN5",
+   "seg": "out_MCIO",
+   "line": "center",
+   "corridor": "U_TO_MCIO",
+   "track_y": 64.7,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "P3V3",
+    "dist": 0.3999999999999943,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN5",
+   "seg": "out_MCIO",
+   "line": "P",
+   "corridor": "U_TO_MCIO",
+   "track_y": 64.7,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "P3V3",
+    "dist": 0.20999999999999658,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN5",
+   "seg": "out_MCIO",
+   "line": "N",
+   "corridor": "U_TO_MCIO",
+   "track_y": 64.7,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.20999999999999658,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_DN6",
+   "seg": "input",
+   "line": "center",
+   "corridor": "J2_TO_U",
+   "track_y": 65.5,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "P3V3",
+    "dist": 0.3999999999999943,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN6",
+   "seg": "input",
+   "line": "P",
+   "corridor": "J2_TO_U",
+   "track_y": 65.5,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.2100000000000108,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_DN6",
+   "seg": "input",
+   "line": "N",
+   "corridor": "J2_TO_U",
+   "track_y": 65.5,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "P3V3",
+    "dist": 0.20999999999999658,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN6",
+   "seg": "out_U3",
+   "line": "center",
+   "corridor": "U_TO_MCIO",
+   "track_y": 65.9,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG2_U3",
+    "dist": 0.3999999999999943,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN6",
+   "seg": "out_U3",
+   "line": "P",
+   "corridor": "U_TO_MCIO",
+   "track_y": 65.9,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG2_U3",
+    "dist": 0.20999999999999658,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN6",
+   "seg": "out_U3",
+   "line": "N",
+   "corridor": "U_TO_MCIO",
+   "track_y": 65.9,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "P3V3",
+    "dist": 0.2100000000000108,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN6",
+   "seg": "out_MCIO",
+   "line": "center",
+   "corridor": "U_TO_MCIO",
+   "track_y": 65.9,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG2_U3",
+    "dist": 0.3999999999999943,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN6",
+   "seg": "out_MCIO",
+   "line": "P",
+   "corridor": "U_TO_MCIO",
+   "track_y": 65.9,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG2_U3",
+    "dist": 0.20999999999999658,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN6",
+   "seg": "out_MCIO",
+   "line": "N",
+   "corridor": "U_TO_MCIO",
+   "track_y": 65.9,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "P3V3",
+    "dist": 0.2100000000000108,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN7",
+   "seg": "input",
+   "line": "center",
+   "corridor": "J2_TO_U",
+   "track_y": 66.7,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.3999999999999943,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_DN7",
+   "seg": "input",
+   "line": "P",
+   "corridor": "J2_TO_U",
+   "track_y": 66.7,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.20999999999999658,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_DN7",
+   "seg": "input",
+   "line": "N",
+   "corridor": "J2_TO_U",
+   "track_y": 66.7,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.20999999999999658,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_DN7",
+   "seg": "out_U3",
+   "line": "center",
+   "corridor": "U_TO_MCIO",
+   "track_y": 67.1,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG2_U3",
+    "dist": 0.3999999999999943,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN7",
+   "seg": "out_U3",
+   "line": "P",
+   "corridor": "U_TO_MCIO",
+   "track_y": 67.1,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "PCIE_DN_OUT4_P_U3",
+    "dist": 0.38500000000000795,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_DN7",
+   "seg": "out_U3",
+   "line": "N",
+   "corridor": "U_TO_MCIO",
+   "track_y": 67.1,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG2_U3",
+    "dist": 0.20999999999999658,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN7",
+   "seg": "out_MCIO",
+   "line": "center",
+   "corridor": "U_TO_MCIO",
+   "track_y": 67.1,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG2_U3",
+    "dist": 0.3999999999999943,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_DN7",
+   "seg": "out_MCIO",
+   "line": "P",
+   "corridor": "U_TO_MCIO",
+   "track_y": 67.1,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "PCIE_DN_OUT4_P_U3",
+    "dist": 0.38500000000000795,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_DN7",
+   "seg": "out_MCIO",
+   "line": "N",
+   "corridor": "U_TO_MCIO",
+   "track_y": 67.1,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG2_U3",
+    "dist": 0.20999999999999658,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP0",
+   "seg": "input",
+   "line": "center",
+   "corridor": "U_TO_MCIO",
+   "track_y": 49.1,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG1_U7",
+    "dist": 0.4000000000000014,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP0",
+   "seg": "input",
+   "line": "P",
+   "corridor": "U_TO_MCIO",
+   "track_y": 49.1,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG1_U7",
+    "dist": 0.5899999999999992,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP0",
+   "seg": "input",
+   "line": "N",
+   "corridor": "U_TO_MCIO",
+   "track_y": 49.1,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG1_U7",
+    "dist": 0.21000000000000368,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP0",
+   "seg": "out_U7",
+   "line": "center",
+   "corridor": "J2_TO_U",
+   "track_y": 48.7,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.4000000000000014,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_UP0",
+   "seg": "out_U7",
+   "line": "P",
+   "corridor": "J2_TO_U",
+   "track_y": 48.7,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.21000000000000368,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_UP0",
+   "seg": "out_U7",
+   "line": "N",
+   "corridor": "J2_TO_U",
+   "track_y": 48.7,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.21000000000000368,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_UP0",
+   "seg": "out_J2",
+   "line": "center",
+   "corridor": "J2_TO_U",
+   "track_y": 48.7,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.4000000000000014,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_UP0",
+   "seg": "out_J2",
+   "line": "P",
+   "corridor": "J2_TO_U",
+   "track_y": 48.7,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.21000000000000368,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_UP0",
+   "seg": "out_J2",
+   "line": "N",
+   "corridor": "J2_TO_U",
+   "track_y": 48.7,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.21000000000000368,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_UP1",
+   "seg": "input",
+   "line": "center",
+   "corridor": "U_TO_MCIO",
+   "track_y": 47.9,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "P3V3",
+    "dist": 0.3999999999999943,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP1",
+   "seg": "input",
+   "line": "P",
+   "corridor": "U_TO_MCIO",
+   "track_y": 47.9,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG1_U7",
+    "dist": 0.21000000000000368,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP1",
+   "seg": "input",
+   "line": "N",
+   "corridor": "U_TO_MCIO",
+   "track_y": 47.9,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "P3V3",
+    "dist": 0.20999999999999658,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP1",
+   "seg": "out_U7",
+   "line": "center",
+   "corridor": "J2_TO_U",
+   "track_y": 47.5,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "P3V3",
+    "dist": 0.3999999999999943,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP1",
+   "seg": "out_U7",
+   "line": "P",
+   "corridor": "J2_TO_U",
+   "track_y": 47.5,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.21000000000000368,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_UP1",
+   "seg": "out_U7",
+   "line": "N",
+   "corridor": "J2_TO_U",
+   "track_y": 47.5,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "P3V3",
+    "dist": 0.20999999999999658,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP1",
+   "seg": "out_J2",
+   "line": "center",
+   "corridor": "J2_TO_U",
+   "track_y": 47.5,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "P3V3",
+    "dist": 0.3999999999999943,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP1",
+   "seg": "out_J2",
+   "line": "P",
+   "corridor": "J2_TO_U",
+   "track_y": 47.5,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.21000000000000368,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_UP1",
+   "seg": "out_J2",
+   "line": "N",
+   "corridor": "J2_TO_U",
+   "track_y": 47.5,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "P3V3",
+    "dist": 0.20999999999999658,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP2",
+   "seg": "input",
+   "line": "center",
+   "corridor": "U_TO_MCIO",
+   "track_y": 46.7,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "P3V3",
+    "dist": 0.4000000000000014,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP2",
+   "seg": "input",
+   "line": "P",
+   "corridor": "U_TO_MCIO",
+   "track_y": 46.7,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "P3V3",
+    "dist": 0.21000000000000368,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP2",
+   "seg": "input",
+   "line": "N",
+   "corridor": "U_TO_MCIO",
+   "track_y": 46.7,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.21000000000000368,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_UP2",
+   "seg": "out_U7",
+   "line": "center",
+   "corridor": "J2_TO_U",
+   "track_y": 46.3,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.3799999999999983,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_UP2",
+   "seg": "out_U7",
+   "line": "P",
+   "corridor": "J2_TO_U",
+   "track_y": 46.3,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "P3V3",
+    "dist": 0.2100000000000108,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP2",
+   "seg": "out_U7",
+   "line": "N",
+   "corridor": "J2_TO_U",
+   "track_y": 46.3,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG1_U7",
+    "dist": 0.20999999999999658,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP2",
+   "seg": "out_J2",
+   "line": "center",
+   "corridor": "J2_TO_U",
+   "track_y": 46.3,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.3799999999999983,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_UP2",
+   "seg": "out_J2",
+   "line": "P",
+   "corridor": "J2_TO_U",
+   "track_y": 46.3,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "P3V3",
+    "dist": 0.2100000000000108,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP2",
+   "seg": "out_J2",
+   "line": "N",
+   "corridor": "J2_TO_U",
+   "track_y": 46.3,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG1_U7",
+    "dist": 0.20999999999999658,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP3",
+   "seg": "input",
+   "line": "center",
+   "corridor": "U_TO_MCIO",
+   "track_y": 45.5,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.3749999999999886,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_UP3",
+   "seg": "input",
+   "line": "P",
+   "corridor": "U_TO_MCIO",
+   "track_y": 45.5,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.21000000000000368,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_UP3",
+   "seg": "input",
+   "line": "N",
+   "corridor": "U_TO_MCIO",
+   "track_y": 45.5,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.20999999999999658,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_UP3",
+   "seg": "out_U7",
+   "line": "center",
+   "corridor": "J2_TO_U",
+   "track_y": 45.1,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.4000000000000014,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_UP3",
+   "seg": "out_U7",
+   "line": "P",
+   "corridor": "J2_TO_U",
+   "track_y": 45.1,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG1_U7",
+    "dist": 0.21000000000000368,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP3",
+   "seg": "out_U7",
+   "line": "N",
+   "corridor": "J2_TO_U",
+   "track_y": 45.1,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.21000000000000368,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_UP3",
+   "seg": "out_J2",
+   "line": "center",
+   "corridor": "J2_TO_U",
+   "track_y": 45.1,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.4000000000000014,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_UP3",
+   "seg": "out_J2",
+   "line": "P",
+   "corridor": "J2_TO_U",
+   "track_y": 45.1,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG1_U7",
+    "dist": 0.21000000000000368,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP3",
+   "seg": "out_J2",
+   "line": "N",
+   "corridor": "J2_TO_U",
+   "track_y": 45.1,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.21000000000000368,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_UP4",
+   "seg": "input",
+   "line": "center",
+   "corridor": "U_TO_MCIO",
+   "track_y": 44.3,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG2_U7",
+    "dist": 0.3999999999999943,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP4",
+   "seg": "input",
+   "line": "P",
+   "corridor": "U_TO_MCIO",
+   "track_y": 44.3,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.2100000000000108,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_UP4",
+   "seg": "input",
+   "line": "N",
+   "corridor": "U_TO_MCIO",
+   "track_y": 44.3,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG2_U7",
+    "dist": 0.20999999999999658,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP4",
+   "seg": "out_U7",
+   "line": "center",
+   "corridor": "J2_TO_U",
+   "track_y": 43.9,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.3999999999999943,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_UP4",
+   "seg": "out_U7",
+   "line": "P",
+   "corridor": "J2_TO_U",
+   "track_y": 43.9,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.21000000000000368,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_UP4",
+   "seg": "out_U7",
+   "line": "N",
+   "corridor": "J2_TO_U",
+   "track_y": 43.9,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.20999999999999658,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_UP4",
+   "seg": "out_J2",
+   "line": "center",
+   "corridor": "J2_TO_U",
+   "track_y": 43.9,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.3999999999999943,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_UP4",
+   "seg": "out_J2",
+   "line": "P",
+   "corridor": "J2_TO_U",
+   "track_y": 43.9,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.21000000000000368,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_UP4",
+   "seg": "out_J2",
+   "line": "N",
+   "corridor": "J2_TO_U",
+   "track_y": 43.9,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.20999999999999658,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_UP5",
+   "seg": "input",
+   "line": "center",
+   "corridor": "U_TO_MCIO",
+   "track_y": 43.1,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.3749999999999886,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_UP5",
+   "seg": "input",
+   "line": "P",
+   "corridor": "U_TO_MCIO",
+   "track_y": 43.1,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG2_U7",
+    "dist": 0.21000000000000368,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP5",
+   "seg": "input",
+   "line": "N",
+   "corridor": "U_TO_MCIO",
+   "track_y": 43.1,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "P3V3",
+    "dist": 0.21000000000000368,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP5",
+   "seg": "out_U7",
+   "line": "center",
+   "corridor": "J2_TO_U",
+   "track_y": 42.7,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "P3V3",
+    "dist": 0.4000000000000014,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP5",
+   "seg": "out_U7",
+   "line": "P",
+   "corridor": "J2_TO_U",
+   "track_y": 42.7,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.21000000000000368,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_UP5",
+   "seg": "out_U7",
+   "line": "N",
+   "corridor": "J2_TO_U",
+   "track_y": 42.7,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "P3V3",
+    "dist": 0.21000000000000368,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP5",
+   "seg": "out_J2",
+   "line": "center",
+   "corridor": "J2_TO_U",
+   "track_y": 42.7,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "P3V3",
+    "dist": 0.4000000000000014,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP5",
+   "seg": "out_J2",
+   "line": "P",
+   "corridor": "J2_TO_U",
+   "track_y": 42.7,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.21000000000000368,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_UP5",
+   "seg": "out_J2",
+   "line": "N",
+   "corridor": "J2_TO_U",
+   "track_y": 42.7,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "P3V3",
+    "dist": 0.21000000000000368,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP6",
+   "seg": "input",
+   "line": "center",
+   "corridor": "U_TO_MCIO",
+   "track_y": 41.9,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.3999999999999943,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_UP6",
+   "seg": "input",
+   "line": "P",
+   "corridor": "U_TO_MCIO",
+   "track_y": 41.9,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "P3V3",
+    "dist": 0.21000000000000368,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP6",
+   "seg": "input",
+   "line": "N",
+   "corridor": "U_TO_MCIO",
+   "track_y": 41.9,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.20999999999999658,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_UP6",
+   "seg": "out_U7",
+   "line": "center",
+   "corridor": "J2_TO_U",
+   "track_y": 41.5,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG2_U7",
+    "dist": 0.3999999999999943,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP6",
+   "seg": "out_U7",
+   "line": "P",
+   "corridor": "J2_TO_U",
+   "track_y": 41.5,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "P3V3",
+    "dist": 0.21000000000000368,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP6",
+   "seg": "out_U7",
+   "line": "N",
+   "corridor": "J2_TO_U",
+   "track_y": 41.5,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG2_U7",
+    "dist": 0.20999999999999658,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP6",
+   "seg": "out_J2",
+   "line": "center",
+   "corridor": "J2_TO_U",
+   "track_y": 41.5,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG2_U7",
+    "dist": 0.3999999999999943,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP6",
+   "seg": "out_J2",
+   "line": "P",
+   "corridor": "J2_TO_U",
+   "track_y": 41.5,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "P3V3",
+    "dist": 0.21000000000000368,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP6",
+   "seg": "out_J2",
+   "line": "N",
+   "corridor": "J2_TO_U",
+   "track_y": 41.5,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG2_U7",
+    "dist": 0.20999999999999658,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP7",
+   "seg": "input",
+   "line": "center",
+   "corridor": "U_TO_MCIO",
+   "track_y": 40.7,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.4000000000000014,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_UP7",
+   "seg": "input",
+   "line": "P",
+   "corridor": "U_TO_MCIO",
+   "track_y": 40.7,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.21000000000000368,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_UP7",
+   "seg": "input",
+   "line": "N",
+   "corridor": "U_TO_MCIO",
+   "track_y": 40.7,
+   "x_range": [
+    65.5,
+    88.83
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "GND",
+    "dist": 0.21000000000000368,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_UP7",
+   "seg": "out_U7",
+   "line": "center",
+   "corridor": "J2_TO_U",
+   "track_y": 40.3,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG2_U7",
+    "dist": 0.4000000000000085,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP7",
+   "seg": "out_U7",
+   "line": "P",
+   "corridor": "J2_TO_U",
+   "track_y": 40.3,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG2_U7",
+    "dist": 0.2100000000000108,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP7",
+   "seg": "out_U7",
+   "line": "N",
+   "corridor": "J2_TO_U",
+   "track_y": 40.3,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "PCIE_UP_OUT0_P_U7",
+    "dist": 0.38500000000000084,
+    "req": 0.175
+   }
+  },
+  {
+   "net": "PCIE_UP7",
+   "seg": "out_J2",
+   "line": "center",
+   "corridor": "J2_TO_U",
+   "track_y": 40.3,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG2_U7",
+    "dist": 0.4000000000000085,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP7",
+   "seg": "out_J2",
+   "line": "P",
+   "corridor": "J2_TO_U",
+   "track_y": 40.3,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "VREG2_U7",
+    "dist": 0.2100000000000108,
+    "req": 0.2
+   }
+  },
+  {
+   "net": "PCIE_UP7",
+   "seg": "out_J2",
+   "line": "N",
+   "corridor": "J2_TO_U",
+   "track_y": 40.3,
+   "x_range": [
+    98.83,
+    131.5
+   ],
+   "ok": true,
+   "nearest": {
+    "kind": "pad",
+    "net": "PCIE_UP_OUT0_P_U7",
+    "dist": 0.38500000000000084,
+    "req": 0.175
+   }
+  }
+ ]
+}

@@ -1,0 +1,85 @@
+{
+ "base": "PCIE_UP6",
+ "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+ "solve_time_s": 46.929,
+ "result": {
+  "base": "UP6",
+  "status": "INFEASIBLE",
+  "segments": [
+   {
+    "status": "INFEASIBLE",
+    "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (62.219,63.209)）",
+    "name": "input",
+    "esc": {
+     "status": "INFEASIBLE",
+     "kind": "VIA",
+     "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (62.219,63.209)）",
+     "cross_evidence": {
+      "min_edge": -0.205,
+      "point": [
+       62.219,
+       63.209
+      ],
+      "req": 0.175
+     },
+     "nearest": {
+      "kind": "pad",
+      "net": "GND",
+      "desc": "pad:GND (F.Cu)",
+      "dist": -0.075,
+      "req": 0.175
+     }
+    },
+    "flip": true
+   },
+   {
+    "status": "INFEASIBLE",
+    "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(98.825,41.500) → cv=(98.825,41.500) dir=1 flip=True pn_dist=0.400）",
+    "name": "out_U7",
+    "esc": {
+     "status": "INFEASIBLE",
+     "reason": "对级对称逃逸无净空（M=(98.825,41.500) → cv=(98.825,41.500) dir=1 flip=True pn_dist=0.400）",
+     "nearest": {
+      "kind": "pad",
+      "net": "VREG2_U7",
+      "desc": "pad:VREG2_U7 (F.Cu)",
+      "dist": 0.3999999999999943,
+      "req": 0.2
+     }
+    },
+    "flip": true
+   },
+   {
+    "status": "INFEASIBLE",
+    "reason": "左逃逸对级失败(flip=True) via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (116.883,39.976)）",
+    "name": "out_J2",
+    "esc": {
+     "status": "INFEASIBLE",
+     "kind": "VIA",
+     "reason": "via 换层 P/N 极性不一致（flip=True 逃逸出口排序与轨道分配相向交叉 min 边缘距 -0.2050 < 0.175 @ (116.883,39.976)）",
+     "cross_evidence": {
+      "min_edge": -0.205,
+      "point": [
+       116.883,
+       39.976
+      ],
+      "req": 0.175
+     },
+     "nearest": {
+      "kind": "pad",
+      "net": "PCIE_UP_OUT6_P_U7",
+      "desc": "pad:PCIE_UP_OUT6_P_U7 (F.Cu)",
+      "dist": -0.075,
+      "req": 0.175
+     }
+    },
+    "flip": true
+   }
+  ],
+  "lenP": 0,
+  "lenN": 0,
+  "skew": null,
+  "skew_ok": false,
+  "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24"
+ }
+}

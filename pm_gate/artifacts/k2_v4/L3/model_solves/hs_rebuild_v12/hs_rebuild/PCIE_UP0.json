@@ -1,0 +1,362 @@
+{
+ "base": "PCIE_UP0",
+ "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+ "solve_time_s": 64.762,
+ "result": {
+  "base": "UP0",
+  "status": "INFEASIBLE",
+  "segments": [
+   {
+    "name": "input",
+    "status": "SOLVED",
+    "corridor": "U_TO_MCIO",
+    "track_y": 49.1,
+    "layer": "F.Cu",
+    "flip": false,
+    "P": {
+     "net": "PCIE_UP0_P",
+     "path": [
+      [
+       64.3,
+       43.25
+      ],
+      [
+       64.3,
+       43.9
+      ],
+      [
+       64.3,
+       49.29
+      ],
+      [
+       88.83,
+       49.29
+      ]
+     ],
+     "layers": [
+      "F.Cu",
+      "In2.Cu",
+      "F.Cu"
+     ],
+     "length": 30.57,
+     "solve_ref": "e791a2471e58eda98fa80976305ea2a7a19aaf9daa7e924a3617034d2722b848"
+    },
+    "N": {
+     "net": "PCIE_UP0_N",
+     "path": [
+      [
+       63.7,
+       43.25
+      ],
+      [
+       63.7,
+       43.9
+      ],
+      [
+       63.7,
+       48.910000000000004
+      ],
+      [
+       64.3,
+       48.910000000000004
+      ],
+      [
+       88.83,
+       48.910000000000004
+      ]
+     ],
+     "layers": [
+      "F.Cu",
+      "In2.Cu",
+      "F.Cu",
+      "F.Cu"
+     ],
+     "length": 30.79,
+     "solve_ref": "13d34e6ce0bb8bf01d4fbdeb4e8de7fbf54b21acb0196d3f7434ec02d8e868ac"
+    },
+    "skew": 0.22,
+    "skew_ok": false,
+    "width": 0.205,
+    "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+    "vias": [
+     [
+      64.3,
+      43.9
+     ],
+     [
+      64.3,
+      49.29
+     ],
+     [
+      63.7,
+      43.9
+     ],
+     [
+      63.7,
+      48.91
+     ]
+    ],
+    "escape": {
+     "layer": "In2.Cu",
+     "segments": {
+      "left": {
+       "P": {
+        "kind": "LSWAP_V",
+        "n_nodes": 0,
+        "length": 6.04,
+        "via": [
+         [
+          64.3,
+          43.9
+         ],
+         [
+          64.3,
+          49.29
+         ]
+        ]
+       },
+       "N": {
+        "kind": "LSWAP_V",
+        "n_nodes": 0,
+        "length": 6.26,
+        "via": [
+         [
+          63.7,
+          43.9
+         ],
+         [
+          63.7,
+          48.91
+         ]
+        ]
+       }
+      }
+     }
+    }
+   },
+   {
+    "status": "INFEASIBLE",
+    "reason": "左逃逸对级失败(flip=True) 对级对称逃逸无净空（M=(98.825,48.700) → cv=(98.825,48.700) dir=1 flip=True pn_dist=0.400）",
+    "name": "out_U7",
+    "esc": {
+     "status": "INFEASIBLE",
+     "reason": "对级对称逃逸无净空（M=(98.825,48.700) → cv=(98.825,48.700) dir=1 flip=True pn_dist=0.400）",
+     "nearest": {
+      "kind": "pad",
+      "net": "GND",
+      "desc": "pad:GND (F.Cu)",
+      "dist": 0.4000000000000014,
+      "req": 0.175
+     }
+    },
+    "flip": true
+   },
+   {
+    "name": "out_J2",
+    "status": "SOLVED",
+    "corridor": "J2_TO_U",
+    "track_y": 48.7,
+    "layer": "F.Cu",
+    "flip": false,
+    "P": {
+     "net": "PCIE_UP_OUT0_P_J2",
+     "path": [
+      [
+       101.14999999999999,
+       39.4
+      ],
+      [
+       101.14999999999999,
+       39.95
+      ],
+      [
+       101.15,
+       48.89
+      ],
+      [
+       131.27,
+       48.89
+      ],
+      [
+       131.57,
+       48.89
+      ],
+      [
+       134.05,
+       42.900000000000006
+      ],
+      [
+       135.0,
+       42.900000000000006
+      ]
+     ],
+     "layers": [
+      "F.Cu",
+      "In2.Cu",
+      "F.Cu",
+      "F.Cu",
+      "In2.Cu",
+      "F.Cu"
+     ],
+     "length": 47.3431,
+     "solve_ref": "326addacdbd627669609c204b2f39c08193cf93def2b531b1bc6dab51cb9c957"
+    },
+    "N": {
+     "net": "PCIE_UP_OUT0_N_J2",
+     "path": [
+      [
+       99.85,
+       39.4
+      ],
+      [
+       99.85,
+       39.95
+      ],
+      [
+       100.55,
+       48.510000000000005
+      ],
+      [
+       101.15,
+       48.510000000000005
+      ],
+      [
+       131.27,
+       48.510000000000005
+      ],
+      [
+       131.7,
+       43.5
+      ],
+      [
+       132.64999999999998,
+       43.5
+      ]
+     ],
+     "layers": [
+      "F.Cu",
+      "In2.Cu",
+      "F.Cu",
+      "F.Cu",
+      "In2.Cu",
+      "F.Cu"
+     ],
+     "length": 45.837,
+     "solve_ref": "38b5c901b25fc3a8efc3227e42ed17617eff3b6e17776f1deb5c36bf17d43995"
+    },
+    "skew": 1.5061,
+    "skew_ok": false,
+    "width": 0.205,
+    "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24",
+    "vias": [
+     [
+      101.15,
+      39.95
+     ],
+     [
+      101.15,
+      48.89
+     ],
+     [
+      131.57,
+      48.89
+     ],
+     [
+      134.05,
+      42.9
+     ],
+     [
+      99.85,
+      39.95
+     ],
+     [
+      100.55,
+      48.51
+     ],
+     [
+      131.27,
+      48.51
+     ],
+     [
+      131.7,
+      43.5
+     ]
+    ],
+    "escape": {
+     "layer": "In2.Cu",
+     "segments": {
+      "left": {
+       "P": {
+        "kind": "LSWAP_V",
+        "n_nodes": 0,
+        "length": 9.49,
+        "via": [
+         [
+          101.15,
+          39.95
+         ],
+         [
+          101.15,
+          48.89
+         ]
+        ]
+       },
+       "N": {
+        "kind": "LSWAP_V",
+        "n_nodes": 0,
+        "length": 9.7386,
+        "via": [
+         [
+          99.85,
+          39.95
+         ],
+         [
+          100.55,
+          48.51
+         ]
+        ]
+       }
+      },
+      "right": {
+       "P": {
+        "kind": "LSWAP",
+        "n_nodes": 0,
+        "length": 7.7331,
+        "via": [
+         [
+          134.05,
+          42.9
+         ],
+         [
+          131.57,
+          48.89
+         ]
+        ]
+       },
+       "N": {
+        "kind": "LSWAP",
+        "n_nodes": 0,
+        "length": 5.9784,
+        "via": [
+         [
+          131.7,
+          43.5
+         ],
+         [
+          131.27,
+          48.51
+         ]
+        ]
+       }
+      }
+     }
+    }
+   }
+  ],
+  "lenP": 77.9131,
+  "lenN": 76.627,
+  "skew": null,
+  "skew_ok": false,
+  "input_fp": "6c387dff2d7ebdde97a753eb0a5294197785b3a0ad241152a5969a2f9bffdc24"
+ }
+}

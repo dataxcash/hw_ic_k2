@@ -1,0 +1,30 @@
+k2_v4_8L.l4  GERBER DELIVERY  SHA256 LIST
+generated: 2026-09-14 (Asia/Taipei)   board: k2_v4_8L.l4.kicad_pcb  sha16 d4e81f647be7f980
+package payload: 40 files   per-file sha256 list: jlc_package/MANIFEST.json
+
+payload_sha_list                   61ed16118f13611f3b5cdf4a31b493a3d92f36debebf37bf365185b5f5c305b4  (61ed16118f13611f)  pm_gate/artifacts/k2_v4/L5/jlc_package/MANIFEST.json
+gerber_archive                     4aa083f5077eef11df96791c4a48126e69d2ef7abe176c38cf822441bac3c7b7  (4aa083f5077eef11)  pm_gate/artifacts/k2_v4/L5/DELIVERY/k2_v4_8L.l4_gerber_package.tar.gz
+delivered_board                    d4e81f647be7f9809aef72affb55fdf442a0cf743baead02d8e44fb130de18fc  (d4e81f647be7f980)  k2_v4_8L.l4.kicad_pcb
+source_board                       fb07d25ac426ff84905200a9af88e04dd9e6b9216986c4f4459fd7d556a88c34  (fb07d25ac426ff84)  k2_v4_8L.kicad_pcb
+frozen_src_SPEC_rev19              5f72182a2616392cbcc223ec9233b41422657ff13a5faff1e6f10d6904dc33e6  (5f72182a2616392c)  pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-19.json
+frozen_src_s1_page_manifest        a8ef3ea8ecff99d7549d4122043c972c1bb68346dc4dcc3f36fdd9bacde49890  (a8ef3ea8ecff99d7)  pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_s1_page_manifest.json
+frozen_src_drc_rules               0a459839e15960b8fbfe0e1f5bb154a02b30cbafa1cbb0d56c2b810a71228448  (0a459839e15960b8)  _shared/eda_core/drc_rules.json
+criteria_v1_7                      65d6dd73f16660685a4c958c21a899e731fa5f702093851ef4b9841fb97b7116  (65d6dd73f1666068)  pm_gate/artifacts/k2_v4/L2/process_route_criteria_v1.json
+ruling_process_route_A_frozen_hdi  ef48da8f83393580328d828b6e13ea4a15a117405c9ca57c9f43844ce880162c  (ef48da8f83393580)  pm_gate/artifacts/k2_v4/L2/L2_RULING_process_route_A_frozen_hdi_v1.md
+ruling_fab_capability_binding      ecb13e81b09a27da728315028d22936e4f9f02a6bf1b2d625dbdb9977a97c11a  (ecb13e81b09a27da)  pm_gate/artifacts/k2_v4/L2/L2_RULING_fab_capability_binding_A_hdi_v1.md
+dfm_determination_vs_jlc_hdi       e731178bc2461bc11b62d40204484ddce8cde90c8bd71e21f80485bb18a8a540  (e731178bc2461bc1)  pm_gate/artifacts/k2_v4/L2/L2_DFM_DETERMINATION_vs_JLC_HDI_v1.md
+hdi_dfm_evidence                   55a7d54e5af47c0f3c81934667b4e9eb88146770c131a13f210523d3f9fdc787  (55a7d54e5af47c0f)  pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_co146_jlc_dfm_hdi.json
+order_runner                       db80604b81e805e90028664ca9a1dac975980b8139c6d0c3aea610ff40d3da87  (db80604b81e805e9)  tools/p3_v57_co164_order_runner.py
+
+verification (this session):
+  payload 40 == MANIFEST n_files 40 == disk 40; missing/extra/sha/size mismatch = none
+  gerber archive round-trip: 40/40 payload byte-identical; rebuild -> identical archive sha256
+  package teeth 29/29 True; runner --check 46/46 True
+  order runner: rc=0, 2 iterations, cross-iteration sha 2ec154dbf4e2922f, converged=True
+  frozen four sources 4/4 MATCH; delivered board hash unchanged (d4e81f647be7f980)
+  HDI DFM vs JLC HDI channel: PASS_HDI 16 PASS + 1 ACCEPT + 0 FAIL (rc=0), rec 55a7d54e5af47c0f
+
+non-blocking disclosure: solder mask 1 item R3.pad2 <-> PCIE_UP3_N = 0.0695mm < 0.09mm
+  => ACCEPT_L2_WITH_FAB_REVIEW (submitted with the order for fab review; does not touch copper geometry)
+
+delivery_readme                    ee348eefd6bc43d3076b2f638cdf271f344d93f4b8cc2a5e37260e4068c3e2b6  (ee348eefd6bc43d3)  pm_gate/artifacts/k2_v4/L5/DELIVERY/README.md
