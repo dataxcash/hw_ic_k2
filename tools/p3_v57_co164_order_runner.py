@@ -50,6 +50,10 @@
 ㉒ CO-225（R-CO225-1，**判定面完整性之名集钉定**）：① boundary **每节**须带「在记录内指纹」（承 R-CO212-1「pin 缺失即 fail-closed」；
      缺者须在**历史豁免名集** `BOUNDARY_SECTION_FP_EXEMPT`）；② runner **静态齿名集**须等于 `STATIC_CHECKS_DECLARED`
      （防静默删齿 ⇒ 判据面空真）。两臂皆带正/负控。静态齿 **t35**；report revision → CO-203.3。
+㉓ CO-226（R-CO226-1，承 R-CO217-1 · **跨源判据语义绑定 + 退役显式留存**）：判据源 = **SPEC 真源**，共享规则件
+     `_shared/eda_core/drc_rules.json` 之 `diff_pair` 仅**副本** ⇒ 键映射**名集钉定**（`CROSS_SOURCE_KEYMAP`）+ 副本键**域钉定**
+     （`CROSS_SOURCE_KEYMAP ∪ CROSS_SOURCE_UNMAPPED_DECLARED` 集合等式 ⇒ 新增/删键即停机）+ 被消费键一致（分歧即 fail-closed）
+     + 其余两侧分歧须入**显式分歧登记**（含退役依据）。静态齿 **t36**；report revision → CO-203.4。
 ⑲ CO-215（R-CO215-1，**代理帮助函数之源面收窄 + 覆盖面机判**）：`artifact_readers()`（判「某步**确实读取**该工件」之**语法代理**）
      原按**原文子串** `basename in src` 判 ⇒ **注释/散文即可满足**（与 R-CO202-4「注释不得满足源内声明」同源缺陷，CO-215 实测复现）⇒
      收窄为 **AST 字面量集**（`_source_strings`）匹配 + glob 字面量；并把该帮助函数之**残余显式登记**
@@ -872,9 +876,108 @@ STATIC_CHECKS_DECLARED = frozenset({
     "t26_judgment_binding_executable", "t27_basis_judge_and_verdict_binding", "t28_fixpoint_uniqueness_oracle",
     "t29_proxy_semantic_binding", "t30_expected_nonzero_rc_class", "t31_expected_nonzero_error_free",
     "t32_oracle_category_coverage", "t33_tool_revision_bound", "t34_frozen_sources_pinned",
-    "t35_judgment_surface_pinned",
+    "t35_judgment_surface_pinned", "t36_cross_source_semantics_bound",
 })
 _FP_ROW_RE = re.compile(r"^\|\s*[^|\n]+\|\s*sha16\s*\|", re.M)
+
+# CO-226（R-CO226-1，承 R-CO217-1）：**跨源判据语义绑定 + 退役显式留存**。
+# 缘起：SI 等长窗口原**直接消费** `drc_rules.diff_pair.intra_pair_skew_mm`（副本）⇒ 真源（SPEC）升级时判据**静默失锚**；
+# 且该副本把 **SPEC 已显式退役**之 legacy 0.875（`retired_inter_pair_spacing_0p875_v1`）以**现行口径**呈现（副本键名同语义）。
+# 判据分三层：① **键映射名集**（副本键 → SPEC 真源路径）钉定；② 副本键**域钉定**（映射集 ∪ 非判据键名集 == 副本实键集）；
+# ③ **被消费键**（K2 现行 verdict 面）两侧相等；其余两侧分歧须在**显式分歧登记**内且字段完备、登记值 == 副本现值。
+_SPEC_REL_226 = "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-19.json"
+_RULES_REL_226 = "_shared/eda_core/drc_rules.json"
+CROSS_SOURCE_KEYMAP = {
+    # 副本 `drc_rules.diff_pair` 之键 → SPEC 现行真源之点分路径（**名集**：删项即 t36 FAIL）
+    "p_gap": "net_classes.PCIe85.diff_pair.p_gap",
+    "p_width": "net_classes.PCIe85.diff_pair.p_width",
+    "intra_pair_skew_mm": "net_classes.PCIe85.intra_pair_skew_mm",
+    "inter_pair_spacing": "net_classes.PCIe85.inter_pair_spacing_mm",
+    "target_zdiff": "impedance.target_zdiff",
+}
+# 副本内**非判据**键（工具级/叙述级；**显式声明**域，非「未覆盖」）。新增语义键未入两集之一 ⇒ t36 停机。
+CROSS_SOURCE_UNMAPPED_DECLARED = {
+    "description": "叙述（人读；真源 = 本表 + 键映射）",
+    "enabled": "工具级开关（无 SPEC 对应量）",
+    "net_prefix": "工具识别前缀（SPEC net_classes 无此字段）",
+    "pair_suffix": "工具识别后缀（同上）",
+    "source": "副本自述来源（**非真源**；真源 = SPEC，承 R-CO217-1）",
+    "gap_check": "工具级判据注记（含 M10 遗留基线叙述）",
+    "reserved": "工具级保留位",
+}
+# **被消费键**：K2 现行 verdict 面实际取用者（l5_signoff 等长窗口 / co81 .kicad_pro 网类规则比对）。
+CROSS_SOURCE_CONSUMED = {"p_gap", "p_width", "intra_pair_skew_mm"}
+# **显式分歧登记**（副本值 ≠ SPEC 现行值者必入；字段完备且登记值须 == 副本现值）。
+CROSS_SOURCE_DIVERGENT_DECLARED = {
+    "inter_pair_spacing": {
+        "copy_value": 0.875,
+        "spec_field": "net_classes.PCIe85.inter_pair_spacing_mm",
+        "spec_value": 0.41,
+        "spec_retired_ref": "retired_inter_pair_spacing_0p875_v1",
+        "consumed_by_live_verdict": False,
+        "why": "共享规则件仍载 legacy 换算值 0.875（L1 v22 对间铜边净空旧口径）；SPEC rev-19 按 REQ-R3-2 改 0.41 外层 / 0.32 内层"
+               "并显式留存 retired_inter_pair_spacing_0p875_v1（kind=LEGACY_DERIVED）⇒ 副本漂移为**已退役定值以现行口径呈现**",
+        "action": "容器级：`_shared/eda_core/drc_rules.json` 为 5 工程同字节冻结件且内含单板特判（违容器 AGENTS.md §3「共享层零单板特判」）"
+                  "⇒ K2 侧**不改共享件**，登记待容器侧处置；K2 侧已改为不消费该键作判据（见 §99）",
+    },
+}
+
+
+def _dot_get(obj, path):
+    """点分路径取值（缺路径 ⇒ KeyError ⇒ 调用侧 fail-closed）。"""
+    for seg in str(path).split("."):
+        obj = obj[seg]
+    return obj
+
+
+def cross_source_domain_decision(copy_keys, keymap, unmapped) -> str:
+    """CO-226 纯判据（域）：副本实键集须 == 键映射名集 ∪ 非判据键名集（新增/删键即停机）。"""
+    if not set(keymap) <= set(copy_keys):
+        return "mapped_key_absent"
+    if set(copy_keys) != set(keymap) | set(unmapped):
+        return "unmapped_key_undeclared"
+    return "ok"
+
+
+def cross_source_semantics_decision(spec_view, copy_view, consumed, divergent) -> str:
+    """CO-226（R-CO226-1）纯判据（语义）：被消费键两侧相等；其余两侧分歧须在显式登记内且字段完备、登记值 == 副本现值。
+
+    返回 `ok` / `consumed_key_missing` / `consumed_key_drift` / `divergence_unregistered` / `divergence_registry_incomplete`。
+    `spec_view`/`copy_view`/`consumed`/`divergent` 皆可注入 ⇒ 合成控**零落盘**。
+    """
+    for k in sorted(consumed):
+        if k not in spec_view or k not in copy_view:
+            return "consumed_key_missing"
+        try:
+            same = abs(float(spec_view[k]) - float(copy_view[k])) <= 1e-9
+        except (TypeError, ValueError):
+            same = spec_view[k] == copy_view[k]
+        if not same:
+            return "consumed_key_drift"
+    for k in sorted(set(spec_view) & set(copy_view)):
+        if k in consumed:
+            continue
+        try:
+            same = abs(float(spec_view[k]) - float(copy_view[k])) <= 1e-9
+        except (TypeError, ValueError):
+            same = spec_view[k] == copy_view[k]
+        if same:
+            continue
+        if k not in divergent:
+            return "divergence_unregistered"                 # 未登记（与「登记不完备」分列，判别力靠负控钉定）
+        d = divergent[k]
+        if not isinstance(d, dict) or any(d.get(f) in (None, "") for f in
+                                          ("copy_value", "spec_field", "spec_value", "why", "action")):
+            return "divergence_registry_incomplete"
+        try:
+            if abs(float(d["copy_value"]) - float(copy_view[k])) > 1e-9:
+                return "divergence_registry_incomplete"      # 登记值须 == 副本现值（防「登记一次、此后任意」）
+        except (TypeError, ValueError):
+            if d["copy_value"] != copy_view[k]:
+                return "divergence_registry_incomplete"
+    return "ok"
+
+
 
 
 def boundary_sections_with_fp() -> list:
@@ -1910,6 +2013,50 @@ def main(argv=None) -> int:
     # CO-164（t06）：执行器 ORDER 必须与 boundary 规范复现序**有序一致**（文档↔执行器防漂移）
     _bdy = boundary_order_steps()
     checks["t06_order_matches_boundary"] = bool(_bdy) and _bdy == ORDER
+    # CO-226（R-CO226-1）：**跨源判据语义绑定**（SPEC 真源 ↔ 共享规则件副本）—— 键映射名集 + 副本域钉定 + 被消费键一致 + 分歧显式登记
+    try:
+        _spec_root = json.loads((K2 / _SPEC_REL_226).read_text(encoding="utf-8"))
+        _copy_root = json.loads((K2 / _RULES_REL_226).read_text(encoding="utf-8"))["diff_pair"]
+        _spec_view = {k: _dot_get(_spec_root, _p) for k, _p in CROSS_SOURCE_KEYMAP.items()}
+        _copy_view = {k: _copy_root[k] for k in CROSS_SOURCE_KEYMAP}
+        _src_readable = True
+    except Exception:
+        _spec_view, _copy_view, _copy_root, _src_readable = {}, {}, {}, False      # fail-closed：不可读 ⇒ 不通过
+    checks["t36_cross_source_semantics_bound"] = (
+        _src_readable and bool(_spec_view) and bool(_copy_view)
+        # ① 真源/副本皆为**冻结源**（承 R-CO218-1：判据锚点须入规范序机判）
+        and _SPEC_REL_226 in FROZEN_SOURCES and _RULES_REL_226 in FROZEN_SOURCES
+        # ② 域钉定（副本实键集 == 映射名集 ∪ 非判据名集）
+        and cross_source_domain_decision(set(_copy_root), CROSS_SOURCE_KEYMAP,
+                                          CROSS_SOURCE_UNMAPPED_DECLARED) == "ok"
+        # ③ 语义绑定（被消费键一致 + 分歧显式登记）
+        and cross_source_semantics_decision(_spec_view, _copy_view, CROSS_SOURCE_CONSUMED,
+                                            CROSS_SOURCE_DIVERGENT_DECLARED) == "ok"
+        # 正控：映射名集须恰覆盖副本键（例：删 inter_pair_spacing 映射 ⇒ 域控/语义控应检出）
+        and cross_source_domain_decision(set(CROSS_SOURCE_KEYMAP) | set(CROSS_SOURCE_UNMAPPED_DECLARED),
+                                          CROSS_SOURCE_KEYMAP, CROSS_SOURCE_UNMAPPED_DECLARED) == "ok"
+        # 正控：全等 ⇒ ok；已登记分歧 ⇒ ok；非数值键相等 ⇒ ok
+        and cross_source_semantics_decision({"p_gap": 0.175}, {"p_gap": 0.175}, {"p_gap"}, {}) == "ok"
+        and cross_source_semantics_decision({"p_gap": 0.175, "x": 1.0}, {"p_gap": 0.175, "x": 2.0}, {"p_gap"},
+                                            {"x": {"copy_value": 2.0, "spec_value": 1.0, "spec_field": "f",
+                                                   "why": "w", "action": "a"}}) == "ok"
+        and cross_source_semantics_decision({"net_prefix": "PCIE"}, {"net_prefix": "PCIE"}, set(), {}) == "ok"
+        # 负控（域）：映射键缺失 / 副本新增语义键未登记
+        and cross_source_domain_decision({"p_gap"}, CROSS_SOURCE_KEYMAP, {}) == "mapped_key_absent"
+        and cross_source_domain_decision(set(CROSS_SOURCE_KEYMAP) | set(CROSS_SOURCE_UNMAPPED_DECLARED) | {"new_semantic"},
+                                          CROSS_SOURCE_KEYMAP, CROSS_SOURCE_UNMAPPED_DECLARED) == "unmapped_key_undeclared"
+        # 负控（语义）：被消费键缺 / 被消费键漂移 / 未登记分歧 / 登记不完备 / 登记值 ≠ 副本现值
+        and cross_source_semantics_decision({"p_gap": 0.175}, {}, {"p_gap"}, {}) == "consumed_key_missing"
+        and cross_source_semantics_decision({"p_gap": 0.175}, {"p_gap": 0.160}, {"p_gap"}, {}) == "consumed_key_drift"
+        and cross_source_semantics_decision({"p_gap": 0.175, "x": 1.0}, {"p_gap": 0.175, "x": 2.0}, {"p_gap"}, {})
+            == "divergence_unregistered"
+        and cross_source_semantics_decision({"p_gap": 0.175, "x": 1.0}, {"p_gap": 0.175, "x": 2.0}, {"p_gap"},
+                                            {"x": {"copy_value": 2.0, "spec_value": 1.0}}
+                                            ) == "divergence_registry_incomplete"
+        and cross_source_semantics_decision({"p_gap": 0.175, "x": 1.0}, {"p_gap": 0.175, "x": 2.0}, {"p_gap"},
+                                            {"x": {"copy_value": 9.0, "spec_value": 1.0, "spec_field": "f",
+                                                   "why": "w", "action": "a"}}
+                                            ) == "divergence_registry_incomplete")
     # CO-225（R-CO225-1）：判定面完整性之**名集钉定**（① boundary 节指纹 ② runner 静态齿名集）
     _bdy_secs = boundary_sections_with_fp()
     _present = set(checks)          # t35 之前已建齿名（用于静态齿名集等式）
@@ -1923,7 +2070,7 @@ def main(argv=None) -> int:
         and boundary_fp_missing([(9, True)], frozenset()) == []
         # ② 静态齿名集钉定（防**静默删齿** ⇒ 判据面空真）
         and _present == set(STATIC_CHECKS_DECLARED) - {"t35_judgment_surface_pinned"}
-        and len(STATIC_CHECKS_DECLARED) == 37
+        and len(STATIC_CHECKS_DECLARED) == 38
         # ② 负控：集合等式对「少一枚」有判别力
         and (_present - {"t01_steps_exist"}) != set(STATIC_CHECKS_DECLARED) - {"t35_judgment_surface_pinned"})
     static_ok = all(checks.values())
@@ -2010,7 +2157,7 @@ def main(argv=None) -> int:
             converged = True
             break
         prev = cur
-    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-203.3",
+    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-203.4",
               "nature": "规范复现序机判执行器（rc 策略 + 真收敛判定）；报告落 .archer_tmp/ 且**不被 boundary 引用**（避免不动点）",
               "order": ORDER, "expected_nonzero": EXPECTED_NONZERO,
               "checks": checks, "iterations": iterations, "abort": abort, "converged": converged,

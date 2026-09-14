@@ -18,6 +18,10 @@ CO-217（L2 自裁 · 判据源绑定 + 退役定值留存）：本工具原读*
 （rev-19 现行 = `0.41`，见 `retired_inter_pair_spacing_0p875_v1` / ledger `DV-INTPAIR-EDGE`）⇒ 判定记录把**退役定值**
 呈现为现行口径（记录面 fail-open；硬编码旧 rev 亦为潜在陈旧阈值源）。现改为读**现行冻结 SPEC（rev-19）**并**钉 sha16**，
 缺件/漂移 ⇒ fail-closed；SI 记录增 `inter_pair_derivation` + `retired_inter_pair_spacing` 两项显式留存。
+CO-226（L2 自裁 · 承 R-CO217-1 / R-CO226-1）：CO-217 只把**判据源**改为 SPEC（记录面），但 **SI 等长窗口判据**仍直接消费
+`_shared/eda_core/drc_rules.json` 之 `diff_pair.intra_pair_skew_mm`（**副本**）⇒ 真源升级时判据**静默失锚**；且该副本把 SPEC 已显式退役之
+legacy `0.875`（`retired_inter_pair_spacing_0p875_v1`）以**现行口径**呈现。现：等长窗口判据 = **SPEC 真源**（`net_classes.PCIe85.intra_pair_skew_mm`，
+sha 由 `load_spec()` 钉），副本值**交叉校验**（分歧 ⇒ SystemExit fail-closed），两者一并入记录（`skew_rule_mm`/`skew_rule_copy_mm` + 源绑定）。
 CLI: run under KiCad python (pcbnew); kicad-cli auto-found.
 """
 from __future__ import annotations
@@ -231,6 +235,13 @@ def main() -> int:
     # CO-68：分层线宽 + **按层加权电气长度**（CO-62 §4）——判据用 mm-equivalent（er_ref=3.99 带状线）
     _specw = load_spec()          # CO-217：现行冻结 SPEC（rev-19）+ sha pin
     _wmap = _specw["impedance"]["width_mm_by_layer"]
+    # CO-226（R-CO226-1）：**等长窗口之判据源 = SPEC 真源**；共享规则件为副本 ⇒ 分歧即 fail-closed（禁静默降级）
+    _skew_rule_spec = float(_specw["net_classes"]["PCIe85"]["intra_pair_skew_mm"])
+    _skew_rule_copy = float(rules["diff_pair"]["intra_pair_skew_mm"])
+    if abs(_skew_rule_spec - _skew_rule_copy) > 1e-9:
+        raise SystemExit("[CO-226 fail-closed] 等长窗口判据源分歧：SPEC 真源 = %r vs _shared/eda_core/drc_rules.json 副本 = %r"
+                         "（R-CO217-1：判据源须为现行冻结源；副本漂移须同 commit 双侧更新，禁静默使用副本）"
+                         % (_skew_rule_spec, _skew_rule_copy))
     _pl = _specw["impedance"]["per_layer"]
     _C_MM_PS = 299.792458
     _ER_REF = 3.99
@@ -273,13 +284,19 @@ def main() -> int:
     _spec = load_spec()           # CO-217：现行冻结 SPEC（rev-19）+ sha pin
     _spec_nc = _spec["net_classes"]["PCIe85"]
     _pg = _pair_geometry(rec["segments"])          # CO-53: 对内/对间几何实测
-    si = {"artifact": "m13_v57_l5_si_pi_emc_record", "schema": 1, "revision": "L5-SI.9",
+    si = {"artifact": "m13_v57_l5_si_pi_emc_record", "schema": 1, "revision": "L5-SI.10",
           # CO-212：同上 —— 等长/线宽/平面 verdict 须钉被评板（原缺）
           "board": str(L4_PCB.relative_to(K2)), "board_sha256": sha(L4_PCB),
           "SI": {"track_width_rule_mm_by_layer": _wmap, "all_pcie_tracks_match_spec_width": widths_ok,
-                 "max_intra_pair_skew_mm": skew_max, "skew_rule_mm": rules["diff_pair"]["intra_pair_skew_mm"],
+                 "max_intra_pair_skew_mm": skew_max, "skew_rule_mm": _skew_rule_spec,
+                 # CO-226（R-CO226-1）：判据源 = SPEC 真源（sha 已由 load_spec() 钉）；共享规则件副本另列并交叉校验
+                 "skew_rule_source": (f"SPEC_k2_v4.spec-rev-19.json (sha16 {SPEC_SRC_SHA16}) "
+                                      "net_classes.PCIe85.intra_pair_skew_mm"),
+                 "skew_rule_copy_mm": _skew_rule_copy,
+                 "skew_rule_copy_source": ("_shared/eda_core/drc_rules.json diff_pair.intra_pair_skew_mm"
+                                           "（**副本**，非真源；与真源分歧即 fail-closed，见 runner 静态齿 t36）"),
                  "max_intra_pair_skew_phys_mm": skew_phys_max,
-                 "skew_ok": skew_max <= rules["diff_pair"]["intra_pair_skew_mm"] + 1e-9,
+                 "skew_ok": skew_max <= _skew_rule_spec + 1e-9,
                  "skew_pages_checked": len(skew), "skew_pages": skew,
                  "layer_transitions_per_line": {"via1/corner/drop/land": 4},
                  # CO-53：对内/对间几何实测 vs SPEC 声明（几何项为**事实报告**；阻抗符合性 NOT_DEMONSTRATED）
@@ -322,7 +339,7 @@ def main() -> int:
                   "reference_plane_adjacency": "F.Cu<->In1.Cu; In2.Cu<->In1.Cu+In3.Cu; In5.Cu<->In4.Cu+In6.Cu; B.Cu<->In6.Cu (8L stack, LID REV6 / CO-68 方案(a))",
                   "solder_mask_bridge_violations": dfm["drc"]["new_violations"].get("solder_mask_bridge", 0),
                   "copper_edge_violations": dfm["drc"]["new_violations"].get("copper_edge_clearance", 0)},
-          "verdict": "PASS" if (widths_ok and skew_max <= rules["diff_pair"]["intra_pair_skew_mm"] + 1e-9) else "FAIL",
+          "verdict": "PASS" if (widths_ok and skew_max <= _skew_rule_spec + 1e-9) else "FAIL",
           "skew_metric": "layer-weighted electrical length -> mm-equivalent @ er_ref=3.99 (CO-62 §4 / CO-68)"}
 
     for name, obj in (("m13_v57_l5_fab_record.json", fab), ("m13_v57_l5_dfm_dft_record.json", dfm),
@@ -335,16 +352,16 @@ def main() -> int:
     _g7v = 'PASS' if (dfm['verdict'] == 'PASS' and si['verdict'] == 'PASS') else 'FAIL'
     _g7note = ('无需回上层（G4..G7 全 PASS）' if _g7v == 'PASS' else
                f"**G7 FAIL**：SI（按层加权电气长度）实测 max skew {skew_max:.4f}mm-eq > 规则 "
-               f"{rules['diff_pair']['intra_pair_skew_mm']}mm ⇒ **L2 等长整改（属 L2 自裁范围）**；"
+               f"{_skew_rule_spec}mm ⇒ **L2 等长整改（属 L2 自裁范围）**；"
                "物理长度判据仍 PASS，缺陷根因 = 等长补偿只按物理长度（未按层加权）")
     g7 = f"""# G7 / L5 记录 — k2 v57（8L）
 
-> revision **L5-G7.9**｜图纸 **{art['revision']}** `{s16(DRAWING)}`｜L4 板 `{s16(L4_PCB)}`（含 SPEC 逃逸区规则域 CO-37）
+> revision **L5-G7.10**｜图纸 **{art['revision']}** `{s16(DRAWING)}`｜L4 板 `{s16(L4_PCB)}`（含 SPEC 逃逸区规则域 CO-37）
 > 产生：`tools/p3_v57_l5_signoff.py`（{dfm['drc']['tool']}，{dfm['revision']}）——**随 L5 每次重跑确定性重生成**
 > ｜历史 FAIL 叙事见 CO-37/CO-43/CO-44/CO-45 变更单与 git（本件取代 L5-G7.5 的 new=60 口径）。
 
 ## 1. 结论（G7 {_g7v}）
-- SI（对内等长）：**{si['verdict']}** — `max_intra_pair_skew_mm(加权电气长度) = {skew_max:.4f} <= {rules['diff_pair']['intra_pair_skew_mm']}`（{si['SI']['skew_pages_checked']} 页，含 REFCLK）。
+- SI（对内等长）：**{si['verdict']}** — `max_intra_pair_skew_mm(加权电气长度) = {skew_max:.4f} <= {_skew_rule_spec}`（{si['SI']['skew_pages_checked']} 页，含 REFCLK）。
   几何实测（CO-53）：对内中心 `{si['SI']['netclass_geometry']['delivered']['intra_center_max_mm']}` mm（边距 `{si['SI']['netclass_geometry']['delivered']['intra_edge_gap_mm']}`）vs SPEC p_gap `{si['SI']['netclass_geometry']['spec']['p_gap_mm']}`；对间最小中心 `{si['SI']['netclass_geometry']['delivered']['min_inter_pair_center_mm']}` vs SPEC inter_pair `{si['SI']['netclass_geometry']['spec']['inter_pair_spacing_mm']}` ⇒ 本工程**不自证**阻抗符合性；按登记簿 `implementation_deviation:R3-2_asbuilt_interpair_edge`（**CLOSED**；域声明由 CO-147 R2 在 L2 内裁定；B.Cu/In5 已几何闭合）交 **JLC 阻抗控制服务终判**（CO-221 口径同步）。
 - DFM：**{dfm['verdict']}** — `new_total = {dfm['drc']['new_total']}`；L4 违规 by_type `{dfm['drc']['l4_applied']['by_type']}`（= 冻结基线 lib/silk，计入不计）。
 - DFT（施工连通性，CO-47 谓词）：在册网未连项 **{_dft['in_scope_unconnected_nets']}/{_dft['in_scope_nets']}**（{_dft['rule']}）。
@@ -382,7 +399,7 @@ def main() -> int:
 ｜`.kicad_dru` `{s16(L4_DRU)}`
 冻结四源 `{s16(STEP2.parent / 'SPEC_k2_v4.json')} / {s16(STEP2 / 'm13_v57_s1_page_manifest.json')} / {s16(SRC_PCB)} / {s16(RULES)}`（未改）。
 
-End of G7 record（L5-G7.9，机器生成）。
+End of G7 record（L5-G7.10，机器生成）。
 """
     (STEP2 / "m13_v57_l5_g7_record.md").write_text(g7, encoding="utf-8")
     print("L5: FAB ok | DFM verdict=%s new=%d (disappeared=%d) %s | in_scope_unconnected=%d/%d nets | SI verdict=%s skew=%.4f" %

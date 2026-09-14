@@ -3560,6 +3560,50 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body98
 
+    # ── §99 CO-226（L2 自裁 · 承 R-CO217-1：跨源判据语义绑定 + 退役显式留存 ⇒ 机判化） ──
+    MARK99 = "## 99. CO-226"
+    sec99 = [MARK99 + "（**L2 自裁 · 承 R-CO217-1：跨源判据语义绑定 + 退役显式留存 ⇒ 机判化**）", "",
+             "- **对象/缘起**：R-CO217-1 要求「凡产出判据性 verdict 之工具，其**判据源**须为**现行冻结源**且钉 sha；**退役定值不得以现行口径呈现**」。"
+             "CO-217 只把 L5 工具之 **SPEC 读取**改为现行源，但 **SI 等长窗口判据**仍**直接消费**共享规则件 `_shared/eda_core/drc_rules.json` 之 "
+             "`diff_pair.intra_pair_skew_mm`（**副本**）；且该副本把 SPEC **已显式退役**之 legacy `0.875`（`retired_inter_pair_spacing_0p875_v1`，kind=LEGACY_DERIVED）"
+             "以**现行口径**呈现（副本 `inter_pair_spacing` = 0.875 vs SPEC rev-19 = 0.41）⇒ 两处红线**无机判齿**（属 R-CO225-1 之「空真」族）。",
+             "- **机判实测（本会话，判别力）**：① 真源/副本**逐键对照**（键映射名集）：`p_gap` 0.175/0.175、`p_width` 0.205/0.205、`intra_pair_skew_mm` 0.15/0.15、"
+             "`target_zdiff` 85.0/85.0 **皆等**；`inter_pair_spacing` = **SPEC 0.41 vs 副本 0.875**（**分歧**）⇒ 以**空分歧登记**注入纯判据 = `divergence_unregistered`"
+             "（**修前 FAIL**，证明齿非空真）；② 副本注入漂移（`intra_pair_skew_mm` 0.99）驱动 L5 工具 ⇒ `SystemExit`（**fail-closed**，且**记录零污染**：实测记录仍 `L5-SI.10` / 0.15/0.15 / PASS）。",
+             "- **裁定（L2 自裁）**：① **等长窗口判据源 = SPEC 真源**（`net_classes.PCIe85.intra_pair_skew_mm`，sha 由 `load_spec()` 钉）；`drc_rules` 副本**降为交叉校验面**"
+             "（分歧 ⇒ fail-closed，禁静默降级）；两者一并入 SI 记录（`skew_rule_mm` / `skew_rule_source` / `skew_rule_copy_mm` / `skew_rule_copy_source`）。"
+             "② **跨源绑定入机判**（runner 静态齿 **t36_cross_source_semantics_bound**）：键映射**名集钉定**（`CROSS_SOURCE_KEYMAP`）+ 副本键**域钉定**"
+             "（映射集 ∪ 非判据名集 == 副本实键集 ⇒ 新增/删键即停机）+ **被消费键**（`p_gap` / `p_width` / `intra_pair_skew_mm`）两侧相等 + 其余两侧分歧须入"
+             "**显式分歧登记**（字段完备且登记值 == 副本现值）。③ **分歧显式留存**：`inter_pair_spacing` 登记为副本漂移（SPEC 已退役 0.875；现行 **0.41 外层 / 0.32 内层**）。"
+             "④ 自声明面同步：`L5-SI.9 → L5-SI.10`（G7 记录 `L5-G7.9 → L5-G7.10`）/ runner `CO-203.3 → CO-203.4`。**R-CO226-1**。",
+             "- **名集等式（实测）**：被消费键名集 `{p_gap, p_width, intra_pair_skew_mm}` 对两侧消费者对应（`l5_signoff` 等长窗口 / `co81` .kicad_pro 网类规则比对）；"
+             "副本实键集 == 映射名集 ∪ 非判据名集（`cross_source_domain_decision` 实测 `ok`）。",
+             "- **边界（诚实·残余）**：① 本件**不改共享件**（`_shared/eda_core/drc_rules.json` 为 **5 工程同字节**冻结件，K2 侧无单方面改动权）；该副本之**单板特判**"
+             "（含 K2 SPEC 派生量 + `net_prefix=PCIE`）违容器 AGENTS.md §3「共享层零单板特判」⇒ 登记为**容器级**待处置（登记簿 `co226:F-1.next`）。"
+             "② t36 只判**键级**语义一致（数值相等 / 已登记分歧），不判**同名异义**之语义漂移。③ 分歧登记为**显式白名单**（登记即放行）⇒ 防护依赖「新增分歧必入登记」之自律"
+             "+ **域钉定**（副本新增键即停机）之机判。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    for _l, _p in [("runner `p3_v57_co164_order_runner.py`（**CO-203.4** / t36 跨源绑定）", K2 / "tools/p3_v57_co164_order_runner.py"),
+                   ("L5 签署 `tools/p3_v57_l5_signoff.py`（**L5-SI.10** / 等长窗口真源绑定）", K2 / "tools/p3_v57_l5_signoff.py"),
+                   ("真源 `SPEC_k2_v4.spec-rev-19.json`", STEP2.parent / "SPEC_k2_v4.spec-rev-19.json"),
+                   ("副本 `_shared/eda_core/drc_rules.json`", K2 / "_shared/eda_core/drc_rules.json"),
+                   ("登记簿 `input_defect_register_v1.json`（+co226:F-1）", L2 / "input_defect_register_v1.json"),
+                   ("交付板 `k2_v4_8L.l4.kicad_pcb`（本件**未改**）", K2 / "k2_v4_8L.l4.kicad_pcb")]:
+        if _p.exists():
+            sec99.append(f"| {_l} | `{s16(_p)}` |")
+    sec99 += ["",
+              "> **R-CO226-1**：判据源与**共享层副本**并存者，须以「**键映射名集 + 副本域钉定 + 被消费键一致性**」机判绑定；真源升级致副本漂移时，副本**须显式登记**"
+              "（含退役依据与取代者）后方可放行 —— 禁「副本**静默**充当判据源」（承 R-CO217-1「判据源须为现行冻结源」/ R-CO219-1 名集等式 / R-CO225-1 无机判齿即空真）。",
+              "",
+              "> **序不变**：本件未改步骤集/序列（承 §82 之 R-CO209-2）。"]
+    body99 = "\n".join(sec99)
+    if MARK99 in txt:
+        txt = re.sub(re.escape(MARK99) + r"[\s\S]*?(?=\n## |\Z)", body99, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body99
+
+    txt = txt.replace("W3 Boundary **v2.66**", "W3 Boundary **v2.67**")
     txt = txt.replace("W3 Boundary **v2.65**", "W3 Boundary **v2.66**")
     txt = txt.replace("W3 Boundary **v2.64**", "W3 Boundary **v2.65**")
     txt = txt.replace("W3 Boundary **v2.63**", "W3 Boundary **v2.64**")
