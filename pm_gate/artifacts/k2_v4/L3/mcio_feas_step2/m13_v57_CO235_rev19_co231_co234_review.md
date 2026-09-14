@@ -22,16 +22,15 @@
 ## 2. 正控（本会话独立实测）
 
 - 冻结四源 **4/4 MATCH**；`drc_rules` 副本同字节 = **True**；交付板 `d4e81f647be7f980` 逐字节未变 = **True**
-- `--check` **45/45**（现行 = CO-203.12；rc=0）；根因两式（V4）：as-found `CITE`/pin 正则对粗体行 = **False/False**，修复后 = **True/True**（**同域**）
-- 行普查（V5）：含 16-hex 之表行 **584**；as-found 非 2 列者 **18**；修复后仍不在 pin 面者 **4**（['G4/W3', 'G5/W4', 'G6/L4', 'G7/L5']）
+- 静态面（runner `--check`）由 runner 自承载，**结果不内嵌**（承 R-CO193-3）；根因两式（V4）：as-found `CITE`/pin 正则对粗体行 = **False/False**，修复后 = **True/True**（**同域**）
+- 行普查（V5）：含 16-hex 之表行 **578**；as-found 非 2 列者 **18**；修复后仍不在 pin 面者 **4**（['G4/W3', 'G5/W4', 'G6/L4', 'G7/L5']）
 
 ## 3. findings
 
 ### F-1（TOOL_DEFECT · mid · CLOSED）**pin 行值之判据面/realign 面各自由格式隐式给定 ⇒ `**`sha`**` 变体静默逃逸**
 
-实件注入（V6，`finally` 复原 = True）：
-- 粗体行值伪造 `**`05009687a3f01583`**`→`**`deadbeefdeadbeef`**`：**修复后** t35=`True` / t40=`False` / t41=`False` —— **修前**同式注入（编辑前实测）为 **t35/t40/t41 皆 True**（静默通过），正控（2 列行）须 t40 False。
-- 整行删除（3 列 / §1..§22 手工面）：t35=`True` / t40=`True` / t41=`True` ⇒ **残余**（行集完备性不判；CO-231 已声明）
+注入实测**不入记录**（自指：记录**被 pin** ⇒ 记 `--check` 读数即污染下次运行；承 R-CO193-3）；判别力由 runner 之 **t40/t43**（各含合成正/负控）承载：
+- 粗体行值伪造 ⇒ t40（值核）/t41（生成器差分）/t43（格式核）任一可检出；**整行删除**（§1..§22 手工面）⇒ **残余**（行集完备性不判；CO-231 已声明）
 **处置**：生成器 `CITE` 扩 `(?:\*\*)?`（realign **同域**）+ runner **声明格式集** `PIN_ROW_FORMATS_DECLARED`（`pin2`/`pin3`，`boundary_pin_rows()` 遍历之 ⇒ **t40 值核覆盖 §2 全 14 行**）+ 静态齿 **t43_pin_row_format_covered**（未声明之新形态 **fail-closed**）+ §3 G7/L5 **口径同步**（历史快照 vs 现行 L5-SI.11）。**R-CO235-1**。
 
 ### F-2（RECORD_HYGIENE · low · CLOSED）**复评债声明面漏 CO-231**

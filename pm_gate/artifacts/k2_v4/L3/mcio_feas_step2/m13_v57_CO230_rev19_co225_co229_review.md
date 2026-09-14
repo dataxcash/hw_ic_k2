@@ -27,8 +27,8 @@
 ### F-1（TOOL_DEFECT · 中 · CLOSED）**节集枚举域由被判对象自述 ⇒ 整节删除不被检出（空真）**
 
 `boundary_sections_with_fp()` 之域 = boundary **文档自身**实存节集 ⇒ 整节删除后该节**同时**从域与现实中消失。实测：
-删 §95 ⇒ 旧臂 `[]`（**PASS**）；删 §98..§102 ⇒ 仍 PASS；现声明集 100 节，
-实测缺号 = [8, 9, 10]（无任何齿声明之）。承 **R-CO219-1**（枚举面须名集等式）/ **R-CO225-1**（判定面完整性须名集钉定）。
+删 §95 ⇒ 旧臂 `[]`（**PASS**）；删 §98..§102 ⇒ 仍 PASS；声明集为**显式名集**（节数不内嵌；承 R-CO193-3），
+as-found 实测缺号 = [8, 9, 10]（无任何齿声明之）。承 **R-CO219-1**（枚举面须名集等式）/ **R-CO225-1**（判定面完整性须名集钉定）。
 **处置**：`BOUNDARY_SECTIONS_DECLARED` + `boundary_section_set_decision()`（双向）扩 t35 臂①；**不新增齿**（仍 41）；runner report revision → **CO-203.8**。
 **修后判别力**：同一注入 ⇒ 删 §95 `section_missing` / 删 §95..§102 `section_missing` / 增 §900 `section_undeclared`
 

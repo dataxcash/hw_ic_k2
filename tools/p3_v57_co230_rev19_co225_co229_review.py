@@ -49,6 +49,19 @@ def load_runner():
     return mod
 
 
+def sections_from(text: str) -> list:
+    """CO-236（R-CO193-3）：由**给定 boundary 文本**取 [(节号, 是否带 pin 表)] —— as-found 重放，**不读工作区**。
+
+    （旧式 `m.boundary_sections_with_fp()` 读**现行** boundary ⇒ 记录随链成长漂移、重跑非幂等、改写被 pin 之记录。）
+    """
+    out = []
+    for part in re.split(r"\n(?=## \d+\. )", text):
+        mm = re.match(r"## (\d+)\. ", part)
+        if mm:
+            out.append((int(mm.group(1)), bool(re.search(r"^\|\s*[^|\n]+\|\s*sha16\s*\|", part, re.M))))
+    return out
+
+
 def main() -> int:
     m = load_runner()
     out: dict = {"artifact": "m13_v57_co230_rev19_co225_co229_review", "schema": 1, "revision": "CO-230",
@@ -71,7 +84,8 @@ def main() -> int:
           "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_s1_page_manifest.json": "a8ef3ea8ecff99d7",
           "k2_v4_8L.kicad_pcb": "fb07d25ac426ff84",
           "_shared/eda_core/drc_rules.json": "0a459839e15960b8"}
-    fs_res = {rel: {"want": w, "got": s16f(K2 / rel), "ok": s16f(K2 / rel) == w} for rel, w in fs.items()}
+    # CO-236（R-CO193-3）：**不内嵌现行 sha**（记录只留声明值 + 布尔判定；现行 sha 由 boundary pin 表承载）
+    fs_res = {rel: {"want": w, "ok": s16f(K2 / rel) == w} for rel, w in fs.items()}
     copy_ok = (s16b((K2 / "_shared/eda_core/drc_rules.json").read_bytes())
                == s16b((K2.parent / "_shared/eda_core/drc_rules.json").read_bytes()))
     board_ok = s16f(K2 / "k2_v4_8L.l4.kicad_pcb") == "d4e81f647be7f980"
@@ -137,24 +151,30 @@ def main() -> int:
           "inj_live_content_drift": m.geom_provenance_decision(
               m.SI_GEOM_PROVENANCE_DECLARED, g_decl, lambda rel: "0" * 64)}
     # P5 t35 节集（F-1 之判别力：修前空真 / 修后检出）
-    secs = m.boundary_sections_with_fp()
+    # CO-236（R-CO193-3）：节集由 **as-found boundary** 重放（非现行）⇒ 记录可重放、重跑幂等
+    secs = sections_from(git(BDY_REL).decode("utf-8"))
     found = [n for n, _ in secs]
     dropped = [n for n in found if n != 95]
-    p5 = {"n_sections_now": len(secs), "old_arm_after_delete_95": m.boundary_fp_missing(
+    # CO-236（R-CO193-3）：**去链派生计数**（`n_sections_now`/`declared_n`/`n_static_declared` ⇒ 链一成长即漂移）
+    # ⇒ 改：as-found 节数 + 布尔关系（含判定**结果枚举**；现行声明集仅作**控制输入**、不入记录）。
+    _declared_synth = set(found)            # 控制输入：**合成**声明集（纯；避免混入现行链数据）
+    p5 = {"n_sections_as_found": len(secs),
+          "as_found_sections_subset_of_declared": set(found) <= set(m.BOUNDARY_SECTIONS_DECLARED),
+          "old_arm_after_delete_95": m.boundary_fp_missing(
               [(n, ok) for n, ok in secs if n != 95], m.BOUNDARY_SECTION_FP_EXEMPT),
-          "new_arm_after_delete_95": m.boundary_section_set_decision(dropped, m.BOUNDARY_SECTIONS_DECLARED),
+          "new_arm_after_delete_95": m.boundary_section_set_decision(dropped, _declared_synth),
           "new_arm_after_delete_95_to_102": m.boundary_section_set_decision(
-              [n for n in found if n < 95], m.BOUNDARY_SECTIONS_DECLARED),
-          "new_arm_after_add_ghost": m.boundary_section_set_decision(found + [900], m.BOUNDARY_SECTIONS_DECLARED),
-          "declared_n": len(m.BOUNDARY_SECTIONS_DECLARED),
-          "missing_numbers": sorted(set(range(1, max(found) + 1)) - set(found))}
+              [n for n in found if n < 95], _declared_synth),
+          "new_arm_after_add_ghost": m.boundary_section_set_decision(found + [900], _declared_synth),
+          "missing_numbers_as_found": sorted(set(range(1, max(found) + 1)) - set(found))}
 
     out["positive_controls"] = {
         "V1_as_found_pins_replayed": {"ok": v1_ok, "detail": v1},
         "V2_frozen_four": {"ok": all(x["ok"] for x in fs_res.values()) and copy_ok, "detail": fs_res,
                            "copy_unique": copy_ok, "board_unchanged": board_ok},
         "V3_t36_real_paths": p1, "V4_t37_real_paths": p2, "V5_t38_real_paths": p3, "V6_t39_real_paths": p4,
-        "V7_static_check_face": {"n_static_declared": len(m.STATIC_CHECKS_DECLARED),
+        # CO-236（R-CO193-3）：去现行计数（`n_static_declared` ⇒ 齿面成长即漂移）；留结构性布尔
+        "V7_static_check_face": {"static_face_declared": hasattr(m, "STATIC_CHECKS_DECLARED"),
                                  "has_new_arm_const": hasattr(m, "BOUNDARY_SECTIONS_DECLARED")},
     }
     out["negative_controls"] = {"P1_t36": p1, "P2_t37": p2, "P3_t38": p3, "P4_t39": p4, "P5_t35_section_set": p5}
@@ -213,8 +233,8 @@ def main() -> int:
     L.append("## 3. findings\n")
     L.append("### F-1（TOOL_DEFECT · 中 · CLOSED）**节集枚举域由被判对象自述 ⇒ 整节删除不被检出（空真）**\n")
     L.append(f"`boundary_sections_with_fp()` 之域 = boundary **文档自身**实存节集 ⇒ 整节删除后该节**同时**从域与现实中消失。实测：")
-    L.append(f"删 §95 ⇒ 旧臂 `{p5['old_arm_after_delete_95']}`（**PASS**）；删 §98..§102 ⇒ 仍 PASS；现声明集 {p5['declared_n']} 节，")
-    L.append(f"实测缺号 = {p5['missing_numbers']}（无任何齿声明之）。承 **R-CO219-1**（枚举面须名集等式）/ **R-CO225-1**（判定面完整性须名集钉定）。")
+    L.append(f"删 §95 ⇒ 旧臂 `{p5['old_arm_after_delete_95']}`（**PASS**）；删 §98..§102 ⇒ 仍 PASS；声明集为**显式名集**（节数不内嵌；承 R-CO193-3），")
+    L.append(f"as-found 实测缺号 = {p5['missing_numbers_as_found']}（无任何齿声明之）。承 **R-CO219-1**（枚举面须名集等式）/ **R-CO225-1**（判定面完整性须名集钉定）。")
     L.append(f"**处置**：`BOUNDARY_SECTIONS_DECLARED` + `boundary_section_set_decision()`（双向）扩 t35 臂①；**不新增齿**（仍 41）；runner report revision → **CO-203.8**。")
     L.append(f"**修后判别力**：同一注入 ⇒ 删 §95 `{p5['new_arm_after_delete_95']}` / 删 §95..§102 `{p5['new_arm_after_delete_95_to_102']}` / 增 §900 `{p5['new_arm_after_add_ghost']}`\n")
     L.append("## 4. 观测\n")

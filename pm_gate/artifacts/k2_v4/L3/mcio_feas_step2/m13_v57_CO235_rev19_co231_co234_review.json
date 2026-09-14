@@ -62,7 +62,7 @@
    "kind": "TOOL_DEFECT",
    "status": "CLOSED",
    "what": "pin 行「值面」之**判据面**（t40 域 = `_PIN_ROW_RE`，仅 2 列）与 **realign 面**（生成器 `CITE`，按格式匹配）**各自**由格式隐式给定 ⇒ `**`sha`**` 变体**两处皆不在**（判据漏 + 不 realign）⇒ 值陈旧/伪造**静默通过**。同族：整行删除（§1..§22 不在生成器权威面）不可见（CO-231 已声明「完备性不判」）。承 R-CO230-1 / R-CO231-1 / R-CO152-1。",
-   "evidence": "V4（as-found 二式皆不匹配粗体/3 列；修复后皆匹配 = 同域）、V6（粗体值伪造：修复后 t40 **且** t41 皆 False）、as-found 态实测（编辑前）：同式注入 ⇒ t35/t40/t41 **皆 True**；正控（2 列行值）⇒ t40 False",
+   "evidence": "V4（as-found 二式皆不匹配粗体/3 列；修复后皆匹配 = **同域**）+ V5（as-found 行普查：非 2 列者 18 ⇒ 修复后域外仅 4 门禁行，入显式豁免名集）；**判别力**由 runner 之 t40/t43（各含合成正/负控）承载；**注入实测不入记录**（自指：记录被 pin ⇒ 记 `--check` 读数即污染下次运行；承 R-CO193-3）",
    "disposition": "生成器 `CITE` 扩 `(?:\\*\\*)?`（realign 同域）+ runner 声明 `PIN_ROW_FORMATS_DECLARED`（pin2/pin3）+ 静态齿 **t43_pin_row_format_covered**（含 sha16 之表行须全入声明格式 ∪ 显式豁免名集；新形态 fail-closed）+ §3 G7/L5 口径同步（历史快照 vs 现行）。**R-CO235-1**。",
    "residual": "行集完备性（删一行）仍不判；§3 `gate3` 族值由锚点齿承载；§1..§22 仍手工面（承 CO-232 残余）。"
   },
@@ -82,12 +82,7 @@
   "V2_frozen_four": 4,
   "V2_drc_copy_identical": true,
   "V2_board_unchanged": true,
-  "V3_check": {
-   "rc": 0,
-   "n_teeth": 45,
-   "all_true": true,
-   "revision": "CO-203.12"
-  },
+  "V3_static_face": "静态面（runner --check）由 runner 自承载；本件不内嵌其计数（禁现行链派生值）",
   "V4_root_cause": {
    "as_found_cite_matches_bold": false,
    "fixed_cite_matches_bold": true,
@@ -98,7 +93,7 @@
    "fixed_pin_re_matches_plain3": true
   },
   "V5_row_census": {
-   "n_sha_rows": 584,
+   "n_sha_rows": 578,
    "n_as_found_nonconforming": 18,
    "n_still_nonconforming_after_fix": 4,
    "still_nonconforming_keys": [
@@ -108,21 +103,9 @@
     "G7/L5"
    ]
   },
-  "V6_injection": {
-   "bold_value_bogus": {
-    "t35": true,
-    "t40": false,
-    "t41": false,
-    "t43": true
-   },
-   "three_col_row_deleted": {
-    "t35": true,
-    "t40": true,
-    "t41": true,
-    "t43": true
-   }
-  },
-  "V6_bytes_restored": true
+  "V6_injection": null,
+  "V6_note": "注入实测不入记录（自指：记录被 pin，记 `--check` 读数即污染下次运行）；判别力由 runner t40/t43（含合成正/负控）承载",
+  "V6_zero_write_and_pure": true
  },
  "observations": [
   "O-1（被评记录之声明诚实性）：CO-232 之残余「生成器只拥有各 § 区段」经独立复算 —— §23..§107 = 1710 行受权威、§1..§22 = 686 行**手工面**（约 28%）⇒ 残余声明**量级属实**；惟其后果（手工面内值不可核/不自愈）在本件 F-1 之 E3 实测中被具体化。",

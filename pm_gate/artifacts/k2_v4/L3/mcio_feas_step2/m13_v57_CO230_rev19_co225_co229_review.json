@@ -106,22 +106,18 @@
    "detail": {
     "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-19.json": {
      "want": "5f72182a2616392c",
-     "got": "5f72182a2616392c",
      "ok": true
     },
     "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_s1_page_manifest.json": {
      "want": "a8ef3ea8ecff99d7",
-     "got": "a8ef3ea8ecff99d7",
      "ok": true
     },
     "k2_v4_8L.kicad_pcb": {
      "want": "fb07d25ac426ff84",
-     "got": "fb07d25ac426ff84",
      "ok": true
     },
     "_shared/eda_core/drc_rules.json": {
      "want": "0a459839e15960b8",
-     "got": "0a459839e15960b8",
      "ok": true
     }
    },
@@ -168,7 +164,7 @@
    "inj_live_content_drift": "provenance_drift"
   },
   "V7_static_check_face": {
-   "n_static_declared": 41,
+   "static_face_declared": true,
    "has_new_arm_const": true
   }
  },
@@ -213,13 +209,13 @@
    "inj_live_content_drift": "provenance_drift"
   },
   "P5_t35_section_set": {
-   "n_sections_now": 100,
+   "n_sections_as_found": 99,
+   "as_found_sections_subset_of_declared": true,
    "old_arm_after_delete_95": [],
    "new_arm_after_delete_95": "section_missing",
    "new_arm_after_delete_95_to_102": "section_missing",
    "new_arm_after_add_ghost": "section_undeclared",
-   "declared_n": 100,
-   "missing_numbers": [
+   "missing_numbers_as_found": [
     8,
     9,
     10

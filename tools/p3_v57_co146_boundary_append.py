@@ -3911,6 +3911,39 @@ def main(argv=None) -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body108
 
+    # ── §109 CO-236（L2 自裁 · 承 R-CO193-3/R-CO225-1：复评/重出件 as-found 幂等入机判） ──
+    MARK109 = "## 109. CO-236"
+    sec109 = [MARK109 + "（**L2 自裁 · 承 R-CO193-3 / R-CO225-1：复评/重出件 as-found 幂等入机判**）", "",
+              "- **缘起**：**R-CO193-3**「证据/复评件只钉**被评对象（as-found）**；处置态/跨件**现行** sha **禁内嵌**；**复评件须幂等**（同命令重跑逐字节相同）」之**形态无机判齿** ⇒ 空真（承 R-CO225-1：红线之形态无机判齿即空真）。",
+              "- **F-1（TOOL_DEFECT · mid · CLOSED）**：`tools/p3_v57_co230_rev19_co225_co229_review.py` 与 `p3_v57_co235_rev19_co231_co234_review.py` 之复评件内嵌**现行链派生值**（`n_sections_now`/`declared_n`/`n_static_declared` 读**现行** runner+boundary；`V3_check.{rc,n_teeth}` 跑**现行** `--check`；行普查读**现行** boundary）⇒ **链一成长即漂移**；而该二命令**列于规范复现基线** ⇒ 重跑即**改写被 pin 之记录** ⇒ t40（pin ≠ 实件）+ t41（boundary ≠ 生成器输出）Fail ⇒ 序静态前置停机 rc=1。**实测**：co230 复评件 sha 由 `0302e5d87eb81758` 漂至 `86376b12e4cc9ac8`；co235 于失同步态重跑 ⇒ `ff30672798f5f65c`→`3abec28adc9a2d6c`。",
+              "- **处置（L2 自裁）**：① **co230**：节集/缺号自 **as-found（`git show fdb72a2`）重放**；**去链派生计数**（`n_sections_now`→`n_sections_as_found`；`declared_n`→布尔 `as_found_sections_subset_of_declared`；`n_static_declared`→布尔 `static_face_declared`）；控制输入改**合成声明集**（纯）；V2 **不内嵌现行 sha**（只留声明值 + 布尔）。② **co235**：**去现行 `--check` 计数**（`V3_check` 不再内嵌）、行普查自 **as-found 重放**、V2 不内嵌现行 sha。③ 新增静态齿 **t44_reissue_records_as_found_pure**（`REISSUE_RECORDS_DECLARED` **名集钉定** + as-found 绑定（记录 rev ∧ 工具 `AF` 声明）+ **链派生键名集** `REISSUE_CHAIN_DERIVED_KEYS` 不得出现 + 残余 `REISSUE_PURITY_RESIDUAL` **显式** + 合成正/负控）。④ report revision → **CO-203.13**（齿面 45→46）；登记簿 `co236:F-1` CLOSED；**R-CO236-1**。",
+              "- **判别力实测（非空真）**：修后二工具**同命令重跑逐字节相同**（co230 `3b816ee2247eb7f1`×2；co235 `d6de768766e927f1`×2），且**重跑 co230 重出**不再失同步（修前 ⇒ t40/t41 Fail）。t44 **负控**：合成记录含 `n_sections_now`/`V3_check` ⇒ 命中（fail-closed）；**正控**：仅 as-found 键 ⇒ 不命中。",
+              "- **注入实测**改**移出记录**（同 CO）：以现行 `--check` 评估注入态 ⇒ 记录**被 pin** ⇒ **记录一变即污染下次读数**（自指；CO-234 co77 同族）⇒ 非幂等 ⇒ 本件将 V6 型注入实测移出复评记录（**判别力由 runner 之 t40/t43（含合成正/负控）承载**）。"
+              "**若**要跑 V6 型注入实测，**须于一致态**运行方为真（本会话实测：失同步态之读数为**污染值**，据此可误判 teeth 判别力）。真残余不变 = **§1..§22 手写面之散文/无 sha 行**删除（行集完备性不判；CO-231 已声明）。",
+              "- **残余（显式，承 R-CO215-1 之「代理 + 残余显式」）**：① 禁法为**键名**启发式（更名即逃逸；须先入 `REISSUE_CHAIN_DERIVED_KEYS`）；② 控制输入仍读**冻结/受 pin** 工件、并对**注入态**跑 `--check`（其值在**一致态**下稳定）。",
+              "",
+              "| 工件 | sha16 |", "|---|---|"]
+    for _l, _p in [("runner `p3_v57_co164_order_runner.py`（**CO-203.13** / t44 + 声明集/键名集/残余）", K2 / "tools/p3_v57_co164_order_runner.py"),
+                   ("boundary 生成器 `p3_v57_co146_boundary_append.py`（+§109）", K2 / "tools/p3_v57_co146_boundary_append.py"),
+                   ("登记簿 `input_defect_register_v1.json`（+co236:F-1）", L2 / "input_defect_register_v1.json"),
+                   ("复评件 `m13_v57_CO230_rev19_co225_co229_review.json`（as-found 幂等化）", STEP2 / "m13_v57_CO230_rev19_co225_co229_review.json"),
+                   ("复评卡 `m13_v57_CO230_rev19_co225_co229_review.md`", STEP2 / "m13_v57_CO230_rev19_co225_co229_review.md"),
+                   ("复评件 `m13_v57_CO235_rev19_co231_co234_review.json`（as-found 幂等化）", STEP2 / "m13_v57_CO235_rev19_co231_co234_review.json"),
+                   ("复评卡 `m13_v57_CO235_rev19_co231_co234_review.md`", STEP2 / "m13_v57_CO235_rev19_co231_co234_review.md"),
+                   ("交付板 `k2_v4_8L.l4.kicad_pcb`（本件**未改**）", K2 / "k2_v4_8L.l4.kicad_pcb")]:
+        if _p.exists():
+            sec109.append(f"| {_l} | `{s16(_p)}` |")
+    sec109 += ["",
+               "> **R-CO236-1**：**复评/重出件须 as-found 幂等**（承 R-CO193-3）—— 其内容须为**被评对象（as-found）之纯函数**：一切记录值须自 `git show <as-found>` 重放或为**链无关**布尔；**禁**内嵌现行链派生量（计数 / 现行 sha）；**同命令重跑须逐字节相同**。红线之此形态**须有机判齿**（`t44`：声明集名集钉定 + as-found 绑定 + 链派生键名集不得出现 + 残余显式），承 R-CO225-1。",
+               "",
+               "> **序不变**：本件未改步骤集/序列（承 §82 之 R-CO209-2）。"]
+    body109 = "\n".join(sec109)
+    if MARK109 in txt:
+        txt = re.sub(re.escape(MARK109) + r"[\s\S]*?(?=\n## |\Z)", body109, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body109
+
+    txt = txt.replace("W3 Boundary **v2.76**", "W3 Boundary **v2.77**")
     txt = txt.replace("W3 Boundary **v2.75**", "W3 Boundary **v2.76**")
     txt = txt.replace("W3 Boundary **v2.74**", "W3 Boundary **v2.75**")
     txt = txt.replace("W3 Boundary **v2.73**", "W3 Boundary **v2.74**")

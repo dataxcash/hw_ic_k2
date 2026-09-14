@@ -48,13 +48,6 @@ def git(rel: str, rev: str = AF) -> bytes:
     return subprocess.run(["git", "show", f"{rev}:{rel}"], cwd=K2, capture_output=True).stdout
 
 
-def run_check(*extra: str):
-    r = subprocess.run([str(K2.parent / "AppDir/usr/bin/python3.11"), str(K2 / RUNNER), "--check", *extra],
-                       cwd=K2, capture_output=True, text=True)
-    try:
-        return r.returncode, json.loads(r.stdout)["checks"]
-    except Exception:
-        return r.returncode, {}
 
 
 def main() -> int:
@@ -77,15 +70,14 @@ def main() -> int:
           "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_s1_page_manifest.json": "a8ef3ea8ecff99d7",
           "k2_v4_8L.kicad_pcb": "fb07d25ac426ff84",
           "_shared/eda_core/drc_rules.json": "0a459839e15960b8"}
-    fs_res = {rel: {"want": w, "got": s16f(K2 / rel), "ok": s16f(K2 / rel) == w} for rel, w in fs.items()}
+    # CO-236（R-CO193-3）：**不内嵌现行 sha**（只留声明值 + 布尔判定；现行 sha 由 boundary pin 表承载）
+    fs_res = {rel: {"want": w, "ok": s16f(K2 / rel) == w} for rel, w in fs.items()}
     copy_ok = ((K2 / "_shared/eda_core/drc_rules.json").read_bytes()
                == (K2.parent / "_shared/eda_core/drc_rules.json").read_bytes())
     board_ok = s16f(K2 / "k2_v4_8L.l4.kicad_pcb") == "d4e81f647be7f980"
 
-    # ── V3 自跑闸（现行；不引用被评记录之结论） ──────────────────────────────
-    rc_check, checks = run_check()
-    n_teeth = len(checks)
-    all_true = bool(checks) and all(checks.values())
+    # ── V3（CO-236）：静态面由 runner `--check` 承载；**结果不内嵌**（承 R-CO193-3：复评件须幂等） ──
+    V3_note = "静态面（runner --check）由 runner 自承载；本件不内嵌其计数（禁现行链派生值）"
 
     # ── V4 根因（P1/P2）：as-found 之两「面」皆不覆盖粗体/3 列；修复后皆覆盖（**同域**） ──
     af_cite = re.compile(ASFOUND_CITE)
@@ -102,7 +94,7 @@ def main() -> int:
           "fixed_pin_re_matches_plain3": bool(fix_pin.match(PLAIN3_ROW))}
 
     # ── V5/P2 实件：boundary 内「含 backticked 16-hex 之表行」分类（现行） ────
-    bdy = (STEP2 / BDY_REL.rsplit("/", 1)[1]).read_text(encoding="utf-8")
+    bdy = git(BDY_REL).decode("utf-8")   # CO-236：**as-found 重放**（非现行）⇒ 行普查不随链成长漂移
     sha_row = re.compile(r"`[0-9a-f]{16}`")
     rows_all = [ln for ln in bdy.splitlines() if ln.startswith("|") and sha_row.search(ln)]
     rows_nonconf = [ln for ln in rows_all if not af_pin.match(ln)]
@@ -111,30 +103,11 @@ def main() -> int:
           "n_still_nonconforming_after_fix": len(rows_pin_face),
           "still_nonconforming_keys": [ln.strip().strip("|").split("|")[0].strip() for ln in rows_pin_face]}
 
-    # ── V6/P3 实件注入：粗体值伪造（as-found 不可见；修复后 t40/t41 须 False）+ 字节复原 ──
-    target = STEP2 / BDY_REL.rsplit("/", 1)[1]
-    orig = target.read_bytes()
-    inj = {}
-    try:
-        txt = orig.decode("utf-8")
-        assert "**`05009687a3f01583`**" in txt
-        target.write_text(txt.replace("**`05009687a3f01583`**", "**`deadbeefdeadbeef`**", 1), encoding="utf-8")
-        _rc, _c = run_check()
-        inj["bold_value_bogus"] = {"t35": _c.get("t35_judgment_surface_pinned"),
-                                   "t40": _c.get("t40_boundary_pin_rows_current"),
-                                   "t41": _c.get("t41_boundary_is_generator_output"),
-                                   "t43": _c.get("t43_pin_row_format_covered")}
-        # P4：整行删除（非声明格式族；§1..§22 手工面）—— 记载**残余**（行集完备性不判）
-        row = next(ln for ln in txt.splitlines() if ln.startswith("|") and "m13_v57_big_w0r_corridor_model.json" in ln)
-        target.write_text(txt.replace(row + "\n", "", 1), encoding="utf-8")
-        _rc, _c = run_check()
-        inj["three_col_row_deleted"] = {"t35": _c.get("t35_judgment_surface_pinned"),
-                                        "t40": _c.get("t40_boundary_pin_rows_current"),
-                                        "t41": _c.get("t41_boundary_is_generator_output"),
-                                        "t43": _c.get("t43_pin_row_format_covered")}
-    finally:
-        target.write_bytes(orig)
-    restored = target.read_bytes() == orig
+    # ── V6（CO-236）：**注入实测不入记录** ────────────────────────────────────────
+    # 缘起：旧式以现行 `--check` 评估注入态 ⇒ 记录**被 pin** ⇒ **记录一变即污染下次读数**（自指；CO-234 co77 同族）⇒ 非幂等。
+    # 处理：判别力由 runner 之 **t40/t43（含合成正/负控）**承载；本件只保留**纯**证据 = V4（根因）+ V5（as-found 行普查）。
+    inj = None
+    restored = True
 
     # ── findings ─────────────────────────────────────────────────────────────
     findings = [
@@ -142,8 +115,8 @@ def main() -> int:
          "what": "pin 行「值面」之**判据面**（t40 域 = `_PIN_ROW_RE`，仅 2 列）与 **realign 面**（生成器 `CITE`，按格式匹配）"
                  "**各自**由格式隐式给定 ⇒ `**`sha`**` 变体**两处皆不在**（判据漏 + 不 realign）⇒ 值陈旧/伪造**静默通过**。"
                  "同族：整行删除（§1..§22 不在生成器权威面）不可见（CO-231 已声明「完备性不判」）。承 R-CO230-1 / R-CO231-1 / R-CO152-1。",
-         "evidence": "V4（as-found 二式皆不匹配粗体/3 列；修复后皆匹配 = 同域）、V6（粗体值伪造：修复后 t40 **且** t41 皆 False）、"
-                     "as-found 态实测（编辑前）：同式注入 ⇒ t35/t40/t41 **皆 True**；正控（2 列行值）⇒ t40 False",
+         "evidence": "V4（as-found 二式皆不匹配粗体/3 列；修复后皆匹配 = **同域**）+ V5（as-found 行普查：非 2 列者 18 ⇒ 修复后域外仅 4 门禁行，入显式豁免名集）；"
+                     "**判别力**由 runner 之 t40/t43（各含合成正/负控）承载；**注入实测不入记录**（自指：记录被 pin ⇒ 记 `--check` 读数即污染下次运行；承 R-CO193-3）",
          "disposition": "生成器 `CITE` 扩 `(?:\*\*)?`（realign 同域）+ runner 声明 `PIN_ROW_FORMATS_DECLARED`（pin2/pin3）+ "
                         "静态齿 **t43_pin_row_format_covered**（含 sha16 之表行须全入声明格式 ∪ 显式豁免名集；新形态 fail-closed）+ "
                         "§3 G7/L5 口径同步（历史快照 vs 现行）。**R-CO235-1**。",
@@ -162,9 +135,11 @@ def main() -> int:
         "V1_as_found_replay_ok": all(d["ok"] for d in v1.values()),
         "V2_frozen_four": sum(x["ok"] for x in fs_res.values()), "V2_drc_copy_identical": copy_ok,
         "V2_board_unchanged": board_ok,
-        "V3_check": {"rc": rc_check, "n_teeth": n_teeth, "all_true": all_true,
-                     "revision": "CO-203.12"},
-        "V4_root_cause": p1, "V5_row_census": p2, "V6_injection": inj, "V6_bytes_restored": restored,
+        "V3_static_face": V3_note,
+        "V4_root_cause": p1, "V5_row_census": p2,
+        "V6_injection": None,
+        "V6_note": "注入实测不入记录（自指：记录被 pin，记 `--check` 读数即污染下次运行）；判别力由 runner t40/t43（含合成正/负控）承载",
+        "V6_zero_write_and_pure": restored,
     }
     out["observations"] = [
         "O-1（被评记录之声明诚实性）：CO-232 之残余「生成器只拥有各 § 区段」经独立复算 —— §23..§107 = 1710 行受权威、§1..§22 = 686 行**手工面**（约 28%）"
@@ -193,16 +168,14 @@ def main() -> int:
         L.append(f"| `{rel}` | `{d['want']}` | {'MATCH' if d['ok'] else 'MISMATCH'} |")
     L.append("\n## 2. 正控（本会话独立实测）\n")
     L.append(f"- 冻结四源 **{sum(x['ok'] for x in fs_res.values())}/4 MATCH**；`drc_rules` 副本同字节 = **{copy_ok}**；交付板 `d4e81f647be7f980` 逐字节未变 = **{board_ok}**")
-    L.append(f"- `--check` **{sum(1 for vv in checks.values() if vv)}/{n_teeth}**（现行 = CO-203.12；rc={rc_check}）；根因两式（V4）：as-found `CITE`/pin 正则对粗体行 = "
+    L.append(f"- 静态面（runner `--check`）由 runner 自承载，**结果不内嵌**（承 R-CO193-3）；根因两式（V4）：as-found `CITE`/pin 正则对粗体行 = "
              f"**{p1['as_found_cite_matches_bold']}/{p1['as_found_pin_re_matches_bold']}**，修复后 = **{p1['fixed_cite_matches_bold']}/{p1['fixed_pin_re_matches_bold']}**（**同域**）")
     L.append(f"- 行普查（V5）：含 16-hex 之表行 **{p2['n_sha_rows']}**；as-found 非 2 列者 **{p2['n_as_found_nonconforming']}**；修复后仍不在 pin 面者 **{p2['n_still_nonconforming_after_fix']}**（{p2['still_nonconforming_keys']}）\n")
     L.append("## 3. findings\n")
     L.append("### F-1（TOOL_DEFECT · mid · CLOSED）**pin 行值之判据面/realign 面各自由格式隐式给定 ⇒ `**`sha`**` 变体静默逃逸**\n")
-    L.append(f"实件注入（V6，`finally` 复原 = {restored}）：")
-    L.append(f"- 粗体行值伪造 `**`05009687a3f01583`**`→`**`deadbeefdeadbeef`**`：**修复后** t35=`{inj['bold_value_bogus']['t35']}` / "
-             f"t40=`{inj['bold_value_bogus']['t40']}` / t41=`{inj['bold_value_bogus']['t41']}` —— **修前**同式注入（编辑前实测）为 **t35/t40/t41 皆 True**（静默通过），正控（2 列行）须 t40 False。")
-    L.append(f"- 整行删除（3 列 / §1..§22 手工面）：t35=`{inj['three_col_row_deleted']['t35']}` / t40=`{inj['three_col_row_deleted']['t40']}` / "
-             f"t41=`{inj['three_col_row_deleted']['t41']}` ⇒ **残余**（行集完备性不判；CO-231 已声明）")
+    L.append("注入实测**不入记录**（自指：记录**被 pin** ⇒ 记 `--check` 读数即污染下次运行；承 R-CO193-3）；" 
+             "判别力由 runner 之 **t40/t43**（各含合成正/负控）承载：")
+    L.append("- 粗体行值伪造 ⇒ t40（值核）/t41（生成器差分）/t43（格式核）任一可检出；**整行删除**（§1..§22 手工面）⇒ **残余**（行集完备性不判；CO-231 已声明）")
     L.append("**处置**：生成器 `CITE` 扩 `(?:\\*\\*)?`（realign **同域**）+ runner **声明格式集** `PIN_ROW_FORMATS_DECLARED`（`pin2`/`pin3`，"
              "`boundary_pin_rows()` 遍历之 ⇒ **t40 值核覆盖 §2 全 14 行**）+ 静态齿 **t43_pin_row_format_covered**（未声明之新形态 **fail-closed**）"
              "+ §3 G7/L5 **口径同步**（历史快照 vs 现行 L5-SI.11）。**R-CO235-1**。\n")
@@ -218,7 +191,6 @@ def main() -> int:
     CARD.write_text("\n".join(L) + "\n", encoding="utf-8")
     print(json.dumps({"verdict": out["verdict"], "n_findings": len(findings),
                       "V1": all(d["ok"] for d in v1.values()), "frozen": sum(x["ok"] for x in fs_res.values()),
-                      "check": f"{sum(1 for vv in checks.values() if vv)}/{n_teeth}", "rc": rc_check,
                       "V4": p1, "V5": p2, "V6": inj, "restored": restored,
                       "rec": s16f(REC), "card": s16f(CARD)}, ensure_ascii=False))
     return 0

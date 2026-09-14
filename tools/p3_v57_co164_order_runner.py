@@ -82,6 +82,11 @@
      `**`sha`**` 之 pin 行**两处皆不在**（值陈旧/伪造**静默通过**；CO-235 实测 E1）。现补：**声明格式集** `PIN_ROW_FORMATS_DECLARED`
      （`boundary_pin_rows()` 遍历之 ⇒ t40 值核覆盖 3 列 pin 行）+ 静态齿 **t43_pin_row_format_covered**（含 sha16 之表行须全入
      「声明格式 ∪ 显式豁免名集」；未声明之新形态 fail-closed）。report revision → CO-203.12。
+㉜ CO-236（R-CO236-1，承 R-CO193-3「复评件须幂等 / 只钉 as-found」+ R-CO225-1「红线之形态无机判齿即空真」）：R-CO193-3 之**幂等/纯性**
+     形态**无机判齿** ⇒ 空真。实测：`p3_v57_co230_*` / `p3_v57_co235_*` 之复评件内嵌**现行链派生值**（`n_sections_now`/`declared_n`/
+     `n_static_declared`/`V3_check`）⇒ 链一成长即漂移；重跑（**该二命令列于复现基线**）会**改写被 pin 之记录** ⇒ t40/t41 Fail ⇒ 序停机。
+     现补：二复评件改 **as-found 幂等**（节集/行普查自 `git show` 重放、现行计数去化）+ `REISSUE_RECORDS_DECLARED` + 链派生键名集
+     `REISSUE_CHAIN_DERIVED_KEYS` + 残余显式登记；静态齿 **t44_reissue_records_as_found_pure**。report revision → CO-203.13。
 ⑲ CO-215（R-CO215-1，**代理帮助函数之源面收窄 + 覆盖面机判**）：`artifact_readers()`（判「某步**确实读取**该工件」之**语法代理**）
      原按**原文子串** `basename in src` 判 ⇒ **注释/散文即可满足**（与 R-CO202-4「注释不得满足源内声明」同源缺陷，CO-215 实测复现）⇒
      收窄为 **AST 字面量集**（`_source_strings`）匹配 + glob 字面量；并把该帮助函数之**残余显式登记**
@@ -934,6 +939,25 @@ PIN_ROW_FORMAT_EXEMPT = {
     "G7/L5": {"why": "verdict 叙述行（**历史快照** L5-SI.6 / L5-DFM.6，非现行）；现行 L5 sha 由 §104 pin 面承载",
               "anchor": "t40_boundary_pin_rows_current"},
 }
+# CO-236（R-CO236-1，承 R-CO193-3 / R-CO225-1）：**复评/重出件须 as-found 幂等**（R-CO193-3：「同命令重跑逐字节相同」+「禁内嵌处置态/现行 sha」）。
+# 缘起（本会话实测）：`p3_v57_co230_*` / `p3_v57_co235_*` 之复评件内嵌**现行链派生值** ⇒ 链一成长即漂移；重跑即改写被 pin 之记录 ⇒ t40/t41 Fail、序停机。
+REISSUE_RECORDS_DECLARED = {
+    "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_CO230_rev19_co225_co229_review.json":
+        {"tool": "tools/p3_v57_co230_rev19_co225_co229_review.py", "as_found": "fdb72a2",
+         "why": "复评件：只钉 as-found（现行链派生**计数**已移除，节集自 as-found 重放）",
+         "anchor": "t43_pin_row_format_covered"},
+    "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_CO235_rev19_co231_co234_review.json":
+        {"tool": "tools/p3_v57_co235_rev19_co231_co234_review.py", "as_found": "03f8d39",
+         "why": "复评件：只钉 as-found（现行 `--check` **计数**已移除，行普查自 as-found 重放）",
+         "anchor": "t43_pin_row_format_covered"},
+}
+# 链派生键名集（**禁**出现于声明之复评件内；名集 == 已测之漂移面；新增形态须先入本集）
+REISSUE_CHAIN_DERIVED_KEYS = ("n_sections_now", "declared_n", "n_static_declared", "V3_check")
+# 残余（**显式**登记，承 R-CO215-1「代理 + 残余显式」）
+REISSUE_PURITY_RESIDUAL = {
+    "key_name_heuristic": "禁法为**键名**启发式 ⇒ 更名（如 `section_count_live`）即逃逸（须先入 REISSUE_CHAIN_DERIVED_KEYS）",
+    "live_control_inputs": "控制输入仍读**冻结/受 pin** 工件、并对**注入态**跑 `--check`（其值在**一致态**下稳定；失同步态重跑则变）",
+}
 # CO-230（R-CO230-1，承 R-CO219-1 / R-CO225-1）：**boundary 应有节集**之声明（名集钉定）。**新增节须显式入本集**（CO-231 加 §104、CO-232 加 §105、CO-233 加 §106、CO-234 加 §107）。
 # 缘起：t35 臂① 只遍历**实存**节 ⇒ 域 = 文档自述 ⇒ 整节删除**不被检出**（「删项即空真」族；CO-230 内存实证）。
 # 故声明应有节集；缺节 ⇒ `section_missing`，未声明之新节 ⇒ `section_undeclared`（**须显式入本集**方放行）。
@@ -949,7 +973,7 @@ BOUNDARY_SECTIONS_DECLARED = frozenset({
     74, 75, 76, 77, 78, 79, 80, 81, 82, 83,
     84, 85, 86, 87, 88, 89, 90, 91, 92, 93,
     94, 95, 96, 97, 98, 99, 100, 101, 102, 103,
-    104, 105, 106, 107, 108,
+    104, 105, 106, 107, 108, 109,
 })
 STATIC_CHECKS_DECLARED = frozenset({
     "t01_steps_exist", "t02_steps_compile", "t03_expected_nonzero_policy_declared",
@@ -969,6 +993,7 @@ STATIC_CHECKS_DECLARED = frozenset({
     "t42_pin_face_covers_controlled",
     "t41_boundary_is_generator_output",
     "t43_pin_row_format_covered",
+    "t44_reissue_records_as_found_pure",
 })
 _FP_ROW_RE = re.compile(r"^\|\s*[^|\n]+\|\s*sha16\s*\|", re.M)
 
@@ -1289,6 +1314,18 @@ def pin_row_format_coverage_decision(row_lines, formats, exempt_keys) -> str:
         if _line.strip().strip("|").split("|")[0].strip() not in exempt_keys:
             return "pin_row_format_undeclared"
     return "ok"
+
+
+def reissue_record_key_scan(obj) -> set:
+    """CO-236 纯判据：递归收集 JSON 之**键名集**（供「链派生键」名集检查；可注入 ⇒ 合成正/负控，零落盘）。"""
+    out = set()
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            out.add(str(k)); out |= reissue_record_key_scan(v)
+    elif isinstance(obj, (list, tuple, set)):
+        for v in obj:
+            out |= reissue_record_key_scan(v)
+    return out
 
 
 def boundary_head_decision(first_line, ok_pattern) -> str:
@@ -2579,6 +2616,38 @@ def main(argv=None) -> int:
         and pin_row_format_coverage_decision(["| G4/W3 | **PASS** | 主件 **`0123456789abcdef`** |"],
                                              PIN_ROW_FORMATS_DECLARED, {"G4/W3"}) == "ok"
         and pin_row_format_coverage_decision(["| 纯散文行，无 sha |"], PIN_ROW_FORMATS_DECLARED, frozenset()) == "ok")
+    # CO-236（R-CO236-1，承 R-CO193-3 / R-CO225-1）：**复评/重出件 as-found 幂等**入机判（防「重跑即改写被 pin 之记录」）
+    _dk = set(REISSUE_CHAIN_DERIVED_KEYS)
+    _rec_ok, _tool_ok = {}, {}
+    for _rel, _d in REISSUE_RECORDS_DECLARED.items():
+        try:
+            _rec = json.loads((K2 / _rel).read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            _rec = None                                  # fail-closed
+        _rec_ok[_rel] = (isinstance(_rec, dict)
+                         and (_rec.get("as_found") or {}).get("rev") == _d["as_found"]
+                         and not (reissue_record_key_scan(_rec) & _dk))
+        try:
+            _tsrc = (K2 / _d["tool"]).read_text(encoding="utf-8")
+        except OSError:
+            _tsrc = ""
+        _tool_ok[_rel] = (f'AF = "{_d["as_found"]}"' in _tsrc)
+    checks["t44_reissue_records_as_found_pure"] = (
+        # ① 声明集**名集钉定**（显式；新增复评件须入本集）+ 每项须有理由与同源锚
+        bool(REISSUE_RECORDS_DECLARED)
+        and set(REISSUE_RECORDS_DECLARED) == {
+            "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_CO230_rev19_co225_co229_review.json",
+            "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_CO235_rev19_co231_co234_review.json"}
+        and all(str(_d.get("why") or "").strip() and _d.get("anchor") in STATIC_CHECKS_DECLARED
+                for _d in REISSUE_RECORDS_DECLARED.values())
+        # ② 实件：as-found 绑定（记录 rev + 工具 AF 声明一致）且**无链派生键**
+        and all(_rec_ok.values()) and all(_tool_ok.values())
+        # ③ 残余**显式**登记（非空 + 每项有理由）
+        and bool(REISSUE_PURITY_RESIDUAL) and all(str(v).strip() for v in REISSUE_PURITY_RESIDUAL.values())
+        # 正/负控（合成，零落盘）：键扫描判别力 —— 链派生键命中 / as-found 键不命中
+        and reissue_record_key_scan({"a": {"n_sections_now": 1}}) & _dk == {"n_sections_now"}
+        and reissue_record_key_scan({"x": [{"V3_check": 1}]}) & _dk == {"V3_check"}
+        and not (reissue_record_key_scan({"as_found": {"rev": "x"}, "controls": {"V4": True}}) & _dk))
     # CO-225（R-CO225-1）：判定面完整性之**名集钉定**（① boundary 节指纹 ② runner 静态齿名集）
     _bdy_secs = boundary_sections_with_fp()
     _present = set(checks)          # t35 之前已建齿名（用于静态齿名集等式）
@@ -2597,7 +2666,7 @@ def main(argv=None) -> int:
         and boundary_section_set_decision({1, 2, 3, 4}, {1, 2, 3}) == "section_undeclared"
         # ② 静态齿名集钉定（防**静默删齿** ⇒ 判据面空真）
         and _present == set(STATIC_CHECKS_DECLARED) - {"t35_judgment_surface_pinned"}
-        and len(STATIC_CHECKS_DECLARED) == 45
+        and len(STATIC_CHECKS_DECLARED) == 46
         # ② 负控：集合等式对「少一枚」有判别力
         and (_present - {"t01_steps_exist"}) != set(STATIC_CHECKS_DECLARED) - {"t35_judgment_surface_pinned"})
     static_ok = all(checks.values())
@@ -2684,7 +2753,7 @@ def main(argv=None) -> int:
             converged = True
             break
         prev = cur
-    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-203.12",
+    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-203.13",
               "nature": "规范复现序机判执行器（rc 策略 + 真收敛判定）；报告落 .archer_tmp/ 且**不被 boundary 引用**（避免不动点）",
               "order": ORDER, "expected_nonzero": EXPECTED_NONZERO,
               "checks": checks, "iterations": iterations, "abort": abort, "converged": converged,
