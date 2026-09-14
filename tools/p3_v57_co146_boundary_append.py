@@ -3359,7 +3359,7 @@ def main() -> int:
              "- **裁定**：**rev-19 不启动该几何变更**，附**触发**。理由 = ① **驱动缺席**（现行定案 A=HDI **无需改设计**；交付件——板 / 打样包 37 payload / L5 三记录 / 全 pin 链——**完备且逐字节稳定**，唯一阻断为外部报价与 DFM 答复；几何变更将**取代**可下单交付态并使打样包与全部 pin 失效，CO-144 改板之教训）；"
              "② **受益面窄且已行使**（该自由度只影响 B 路；B 之族上限 **≤24/32** 已由 CO-209 **直接行使**证，§82；A 不依赖 B）；③ 无驱动之「为证而证」不合宪（问题回模型；DRC/探针是核对不是驱动器）。",
              "- **备择项**（皆 **rev 级**，故同此裁）：以该自由度救 B 至 32/32（若成立**可免除外部阻断**，改走标准通道）、层分配重指派以降 HDI 阶数（现需 **3** 次层压）。",
-             "- **触发**（满足其一即**立即开新 rev**，并以该几何变更为首动作）：**T1** = A 之 JLC advanced/HDI **DFM 答复否决**（或明示现行 3 阶/孔径不可制）⇒ 转救 B（仍不足则改拓扑 = **L1**，升级 owner）；**T2** = 报价显示 A 代价不可接受**且** B 被救至 32/32 之概率非零 ⇒ 先对该几何族做**直接行使**（承 R-CO209-1）。",
+             "- **触发**（满足其一即**立即开新 rev**，并以该几何变更为首动作）：**T1** = A 之 JLC advanced/HDI **DFM 答复否决**（或明示现行 3 阶/孔径不可制）⇒ 转救 B（仍不足则改拓扑 = **L1**，升级 owner）；**T2** = 报价显示 A 代价不可接受**且** B 被救至 32/32 之概率非零 ⇒ 先对该几何族做**直接行使**（承 R-CO209-1）；**T3**（**CO-225 补**：§3「层分配重指派以降 HDI 阶数」原**无触发**，且不采理由为「未知项属**外部** DFM 答复」= **R-CO220-1** 明文所禁之**悬置**形态）= DFM 答复或成本序显示**现行 3 次层压代价不可接受** ⇒ 以「层分配重指派以降 HDI 阶数（**保持 8 层**）」为首动作开新 rev（量化目标：层压次数 **3 → ≤2**）；**若须改层数/叠层拓扑 ⇒ 属 L1，升级 owner**（§78 全族探索之 24/32 系「救 B」目标之证据，非本路径之证据）。",
              "- **边界（诚实）**：本裁定**不**声称「跨页 y 交错无益」；仅裁「**rev-19 无驱动、不以此代价开新 rev**」。该自由度**保留**，触发即用。",
              "",
              "| 工件 | sha16 |", "|---|---|"]
@@ -3391,9 +3391,20 @@ def main() -> int:
              "- **修后实测**：记录内**不再**出现「开放项 CO-53」；`--check` **36/36 全 True**；序收敛 rc=0 / 2 轮；co120 P5 消费面机判仍 PASS（`l5_bad=0`）。",
              "- **边界（诚实）**：本次仅**同步口径**，未改阻抗符合性之判据（终判本就在 JLC 服务侧），亦未触动几何。",
              "",
-             "> **R-CO221-1**：判据记录之**自声明文本**须与**登记簿现行状态**同源同步（已闭项不得以「开放项」呈现）；生成器硬编码之状态词须随裁定**同 commit** 更新（承 R-CO208-1 / R-CO217-1）。",
-             "",
-             "> **序不变**：本件未改步骤集/序列（承 §82 之 R-CO209-2）。"]
+             "| 工件 | sha16 |", "|---|---|"]
+    # CO-225（F-1 处置）：补**在记录内指纹**（原 0 处 sha16 ⇒ 违 R-CO212-1；见 §98）
+    for _l, _p in [("L5 生成器 `tools/p3_v57_l5_signoff.py`", K2 / "tools/p3_v57_l5_signoff.py"),
+                   ("L5 SI/PI/EMC 记录 `m13_v57_l5_si_pi_emc_record.json`", STEP2 / "m13_v57_l5_si_pi_emc_record.json"),
+                   ("L5 DFM/DFT 记录 `m13_v57_l5_dfm_dft_record.json`", STEP2 / "m13_v57_l5_dfm_dft_record.json"),
+                   ("L5 FAB 记录 `m13_v57_l5_fab_record.json`", STEP2 / "m13_v57_l5_fab_record.json"),
+                   ("登记簿 `input_defect_register_v1.json`", L2 / "input_defect_register_v1.json"),
+                   ("交付板 `k2_v4_8L.l4.kicad_pcb`（本件**未改**）", K2 / "k2_v4_8L.l4.kicad_pcb")]:
+        if _p.exists():
+            sec94.append(f"| {_l} | `{s16(_p)}` |")
+    sec94 += ["",
+              "> **R-CO221-1**：判据记录之**自声明文本**须与**登记簿现行状态**同源同步（已闭项不得以「开放项」呈现）；生成器硬编码之状态词须随裁定**同 commit** 更新（承 R-CO208-1 / R-CO217-1）。",
+              "",
+              "> **序不变**：本件未改步骤集/序列（承 §82 之 R-CO209-2）。"]
     body94 = "\n".join(sec94)
     if MARK94 in txt:
         txt = re.sub(re.escape(MARK94) + r"[\s\S]*?(?=\n## |\Z)", body94, txt, count=1)
@@ -3438,9 +3449,17 @@ def main() -> int:
              "改为条件动作（T1 门限 117.0 ℃ / 量化目标 `θJA_eff ≤ 9.5 ℃/W`；T2 同 rev 一并补阵）。**R-CO223-1**。",
              "- **修后实测**：全 L2 裁定件扫描**不再有**与 §95 冲突之「义务时点」表述；`--check` **36/36 全 True**；序收敛 rc=0 / 2 轮。",
              "",
-             "> **R-CO223-1**：同一工程动作之**义务时点**（既定义务 / 条件动作 / 已撤）在**全部裁定件与随单**须**同源一致**；版本升级致口径变更者，须对旧件加**追注**明示以何件为准（禁重写历史正文，承 CO-213 F-3）。",
-             "",
-             "> **序不变**：本件未改步骤集/序列（承 §82 之 R-CO209-2）。"]
+             "| 工件 | sha16 |", "|---|---|"]
+    # CO-225（F-1 处置）：补**在记录内指纹**（原 0 处 sha16 ⇒ 违 R-CO212-1；见 §98）
+    for _l, _p in [("L2 裁定 `L2_RULING_u6_thermal_v1.md`", L2 / "L2_RULING_u6_thermal_v1.md"),
+                   ("L2 裁定 `L2_RULING_u6_thermal_mitigation_v1.md`", L2 / "L2_RULING_u6_thermal_mitigation_v1.md"),
+                   ("随单 `L5/jlc_package/ORDER_NOTES.md`", L5 / "jlc_package" / "ORDER_NOTES.md"),
+                   ("交付板 `k2_v4_8L.l4.kicad_pcb`（本件**未改**）", K2 / "k2_v4_8L.l4.kicad_pcb")]:
+        if _p.exists():
+            sec96.append(f"| {_l} | `{s16(_p)}` |")
+    sec96 += ["> **R-CO223-1**：同一工程动作之**义务时点**（既定义务 / 条件动作 / 已撤）在**全部裁定件与随单**须**同源一致**；版本升级致口径变更者，须对旧件加**追注**明示以何件为准（禁重写历史正文，承 CO-213 F-3）。",
+              "",
+              "> **序不变**：本件未改步骤集/序列（承 §82 之 R-CO209-2）。"]
     body96 = "\n".join(sec96)
     if MARK96 in txt:
         txt = re.sub(re.escape(MARK96) + r"[\s\S]*?(?=\n## |\Z)", body96, txt, count=1)
@@ -3465,6 +3484,11 @@ def main() -> int:
         sec97.append(f"| {_lbl} | `{s16(_pth)}` |" if _pth.exists() else f"| {_lbl} | **MISSING** |")
     # 本件 boundary 自身**不 pin sha**：自指 sha 会使 §97 文本随写入而变 ⇒ 序**永不收敛**（实测：5 轮 sha 各异）。
     sec97.append(f"| 本件 boundary（§25/§26 追注 + §95/§96/§97；自身不 pin sha） | — |")
+    # CO-225（F-4 处置）：名集**域**须显式声明（原声明之 grep 域 = md 件，未含登记簿）
+    sec97 += ["",
+              "- **追注（CO-225 · F-4）**：上表名集之**域** = 所声明 grep 目标（`L2/*.md` + 随单 + 包内副本 + boundary）—— **不含** `L2/input_defect_register_v1.json`；"
+              "实测该件 `items[22].disposition` 亦载同一义务时点口径（与 CO-222 一致，**无 fail-open**）⇒ 名集**域**须显式声明；该第 8 面之 pin 见 §98"
+              "（承 R-CO219-1 名集等式；与 CO-96 F-4「scope 缺口」同族）。"]
     sec97 += ["",
               "- **修后实测（本会话，命令可复现）**：`grep -rn 'GND via 阵列' pm_gate/artifacts/k2_v4/L2/*.md pm_gate/artifacts/k2_v4/L5/jlc_package/ORDER_NOTES.md pm_gate/artifacts/k2_v4/L5/jlc_package/06_rulings/*.md pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_joint_assignment_boundary_v1_82.md` "
               f"⇒ 命中面**恰为上表 {len(_obl_sites) + 1} 处**（名集等式：无未登记载明面、无缺项）；逐处皆载「**以 CO-222 为准**」或 T1/T2 门限。"
@@ -3480,6 +3504,63 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body97
 
+    # ── §98 CO-225（非执行者对抗复评 CO-219..CO-224 + 同会话处置） ──
+    MARK98 = "## 98. CO-225"
+    sec98 = [MARK98 + "（**非执行者对抗复评 CO-219..CO-224 + 同会话处置**）", "",
+             "- **对象（as-found 钉 `3fe75ff`）**：§92..§97（CO-219..CO-224 之记录）+ 三件 L2 裁定件 + 打样包随单 + `--check` 静态齿面。"
+             "复评者 = **context 归零之非执行者会话**（与 §92..§97 作者谱系无重叠 ⇒ 六节**全部**在对象内，无自评豁免面）。",
+             "- **F-1（TOOL_DEFECT · 中）**：§94（CO-221）与 §96（CO-223）**在记录内指纹数 = 0**；boundary 全 **94 节**中带 `| 工件 | sha16 |` 表者 **85**"
+             "（例外仅 §1..§7 早期节）⇒ 两节为**唯一现代例外**，违 **R-CO212-1**（pin 缺失即 fail-closed）。**根因**：该红线**无机判齿** ⇒ 违例态下 `--check` 仍全绿"
+             "（同 CO-219 F-1「空真」族）。**本会话实测判别力**：HEAD 版 runner `--check` = **36/36 全 True**（违例不可见）；工作树版（+t35）= **FAIL**，"
+             "逐臂诊断唯一失败臂 = ① 实件面（`boundary_fp_missing() == [94, 96]`），② 名集等式臂与正/负控皆 True（36 齿 == 声明−t35）⇒ **齿非空真**。"
+             "**处置** = ① §94/§96 补指纹表；② 入机判 t35。",
+             "- **F-2（TOOL_DEFECT · 低）**：§93 §3 备择项「层分配重指派以降 HDI 阶数」**无触发**，不采理由为「**未知项属外部** DFM 答复」= **R-CO220-1** 明文所禁之**悬置**形态；"
+             "且该表述**同源于手写裁定件** `L2_RULING_cross_page_y_interleave_v1.md`（第 17 行）—— 只补 boundary = 同源只补一半，反蹈 CO-223/224 覆辙。"
+             "**处置** = ① §93 补 **T3**；② 裁定件加**追注**（T3 + 明示「不构成悬置」）；③ §98 以名集等式对账两处（见下）。",
+             "- **F-3（叙述 · 已闭；不入簿）**：§96（CO-223）之「修后实测」当时**不成立**（追注未落生成器）—— 已由 **CO-224**（§97）证伪并闭合；本节不复裁。",
+             "- **F-4（TOOL_DEFECT · 低；本会话新发现）**：§97 声明「命中面**恰为上表 7 处**（无未登记载明面）」，但其名集**域** = 所声明 grep 目标（md 件）⇒ **漏**"
+             " `L2/input_defect_register_v1.json`（`items[22].disposition` 亦载该义务时点口径；实测与 CO-222 一致 ⇒ **无 fail-open**，属**名集域收窄**之「声明强于实测」）。"
+             "承 R-CO219-1 名集等式 / CO-96 F-4「scope 缺口」同族。**处置** = ① §97 加**追注**明示名集域 + 登记该第 8 面；② §98 以名集等式复核（8 面）。",
+             "- **正控（本会话实测）**：§92 pin 逐件对上（runner 动态 pin / co120 `28d6211f32318d9b` / oracle `c24f3e983c31e589` / 复评件 `826b5e625bec0fd9` / 登记簿 `03d0b7455130d319`）；"
+             "CO-219 F-1 之三处**名集等式**（t34 `FROZEN_SOURCES` / t29 `PROXY_HELPERS_PINNED`+`PROXY_RESIDUAL_EXPLICIT` / co120 `_recs_pinned`）**在场**；"
+             "oracle 前置 fail-fast（`FAIL_SETTLE_NOT_CONVERGED` + `how_to_recover`，`revision` = `CO-219`）在场；§93 pin 3/3、§95 pin 2/2 与实件一致；"
+             "§94「记录内不再出现『开放项 CO-53』」**实测成立**（L5 记录命中 **0**；登记簿 `co221:F-1` = CLOSED）；CO-222 门限（T1 **117.0 ℃** / 目标 `θJA_eff ≤ 9.5 ℃/W`）在裁定件在场。",
+             "- **处置**：① **补** §94/§96 在记录内指纹表；② §93 **+T3** 且裁定件**追注同步**（F-2）；③ §97 **追注**（F-4）；"
+             "④ **入机判**：runner 静态齿 **t35_judgment_surface_pinned**（**名集钉定双臂** —— (i) boundary **每节**须带在记录内指纹，缺者须在**显式历史豁免名集** "
+             "`BOUNDARY_SECTION_FP_EXEMPT = {1..7}`；(ii) runner **静态齿名集**须等于 `STATIC_CHECKS_DECLARED`（防静默删齿）；两臂皆带正/负控）；"
+             "⑤ 登记簿入册 **`co225:F-1/F-2/F-4`**（TOOL_DEFECT、CLOSED；F-3 为叙述类不入簿）；⑥ report revision → **CO-203.3**。**R-CO225-1**。",
+             "- **修后实测（本会话，命令可复现）**：t35 **修前 FAIL / 修后 PASS**；`--check` **37/37 全 True**；序收敛 rc=0 / **2 轮**；oracle PASS（11 齿 / 幂等）；"
+             "co120 / co124 / L5 签署全绿；打样包 **29/29**（37 payload）；冻结四源 **4/4**；交付板 `d4e81f647be7f980` **逐字节未变**。",
+             "- **边界（诚实·残余）**：(i) 臂只判「该节**有** pin 表」—— pin 表**内容**之完备性由各节自身 / co120 / co135 citation 扫描判；"
+             "(ii) 臂有**自指边界**（删「齿 **及**其声明」仍静默，同 CO-215 惯例）；§94/§96/§98 之 pin 行以 `if _p.exists()` 门控 ⇒ **不可读即静默删行**"
+             "（非 fail-closed；补偿 = co124 对登记簿/裁定件之缺件机判）。本件**不**声称已覆盖「红线是否被机判」之全部形态，仅覆盖「记录内指纹 + 静态齿名集」两面。",
+             "",
+             "| 工件 | sha16 |", "|---|---|"]
+    for _l, _p in [("runner `p3_v57_co164_order_runner.py`（**CO-203.3** / t35 名集钉定）", K2 / "tools/p3_v57_co164_order_runner.py"),
+                   ("裁定 `L2_RULING_cross_page_y_interleave_v1.md`（**+F-2 追注 / T3**）", L2 / "L2_RULING_cross_page_y_interleave_v1.md"),
+                   ("裁定 `L2_RULING_u6_gnd_via_array_v1.md`（CO-222 定案件；未改）", L2 / "L2_RULING_u6_gnd_via_array_v1.md"),
+                   ("登记簿 `input_defect_register_v1.json`（+co225:F-1/F-2/F-4）", L2 / "input_defect_register_v1.json"),
+                   ("打样包 `L5/jlc_package/MANIFEST.json`", L5 / "jlc_package" / "MANIFEST.json"),
+                   ("随单 `L5/jlc_package/ORDER_NOTES.md`", L5 / "jlc_package" / "ORDER_NOTES.md"),
+                   ("交付板 `k2_v4_8L.l4.kicad_pcb`（本件**未改**）", K2 / "k2_v4_8L.l4.kicad_pcb")]:
+        if _p.exists():
+            sec98.append(f"| {_l} | `{s16(_p)}` |")
+    sec98 += ["",
+              "- **名集等式（F-2 / F-4 处置之对账面）**：以 `grep -rn '层分配重指派' pm_gate/artifacts/k2_v4/L2/L2_RULING_cross_page_y_interleave_v1.md "
+              "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_joint_assignment_boundary_v1_82.md` 判 —— 两处**皆须**载 T3 / 追注"
+              "（无未登记载明面、无缺项）；本件实测两处皆备。",
+              "",
+              "> **R-CO225-1**：**判定面之完整性须名集钉定** —— ① boundary **每节**须带「在记录内指纹」（承 R-CO212-1「pin 缺失即 fail-closed」），缺者须在**显式历史豁免名集**；"
+              "② 执行器**静态齿名集**须钉定（防静默删齿 ⇒ 判据面空真）；两臂皆须正/负控。**红线所禁/所要求之形态若无机判齿，即为空真。**",
+              "",
+              "> **序不变**：本件未改步骤集/序列（承 §82 之 R-CO209-2）。"]
+    body98 = "\n".join(sec98)
+    if MARK98 in txt:
+        txt = re.sub(re.escape(MARK98) + r"[\s\S]*?(?=\n## |\Z)", body98, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body98
+
+    txt = txt.replace("W3 Boundary **v2.65**", "W3 Boundary **v2.66**")
     txt = txt.replace("W3 Boundary **v2.64**", "W3 Boundary **v2.65**")
     txt = txt.replace("W3 Boundary **v2.63**", "W3 Boundary **v2.64**")
     txt = txt.replace("W3 Boundary **v2.62**", "W3 Boundary **v2.63**")

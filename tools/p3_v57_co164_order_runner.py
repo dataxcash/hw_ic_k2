@@ -47,6 +47,9 @@
 ⑱ CO-203（R-CO203-1，**自声明修订号绑定**）：凡工具**自声明 `revision`** 者，其记录 dict 字面量之修订号（**AST 抽取**；
      注释/散文不得满足 —— 承 R-CO202-4）须等于 `TOOL_REVISION_DECLARED` 之声明 —— 防「内容已升级、自声明滞留」
      （CO-202 之残余：oracle 内容已 CO-202 而 `revision` 仍 CO-200）。静态齿 **t33**。
+㉒ CO-225（R-CO225-1，**判定面完整性之名集钉定**）：① boundary **每节**须带「在记录内指纹」（承 R-CO212-1「pin 缺失即 fail-closed」；
+     缺者须在**历史豁免名集** `BOUNDARY_SECTION_FP_EXEMPT`）；② runner **静态齿名集**须等于 `STATIC_CHECKS_DECLARED`
+     （防静默删齿 ⇒ 判据面空真）。两臂皆带正/负控。静态齿 **t35**；report revision → CO-203.3。
 ⑲ CO-215（R-CO215-1，**代理帮助函数之源面收窄 + 覆盖面机判**）：`artifact_readers()`（判「某步**确实读取**该工件」之**语法代理**）
      原按**原文子串** `basename in src` 判 ⇒ **注释/散文即可满足**（与 R-CO202-4「注释不得满足源内声明」同源缺陷，CO-215 实测复现）⇒
      收窄为 **AST 字面量集**（`_source_strings`）匹配 + glob 字面量；并把该帮助函数之**残余显式登记**
@@ -851,6 +854,46 @@ FROZEN_SOURCES = {
 FROZEN_SRC_COPIES = {
     "_shared/eda_core/drc_rules.json": "../_shared/eda_core/drc_rules.json",
 }
+
+# CO-225（R-CO225-1）：**判定面之完整性须名集钉定**（承 R-CO219-1：不得只遍历「已登记项」）。
+# ① boundary 每节须带**在记录内指纹**（承 R-CO212-1「pin 漂移或缺失即 fail-closed」）—— 缺者须在**历史豁免名集**；
+# ② runner 自身**静态齿名集**须钉定（防静默删齿 ⇒ 判据面空真；残余：删「齿 + 声明」仍静默，属自指边界）。
+BOUNDARY_SECTION_FP_EXEMPT = frozenset({1, 2, 3, 4, 5, 6, 7})   # 早期节（pin 表制式确立前；**显式豁免**，非「未覆盖」）
+STATIC_CHECKS_DECLARED = frozenset({
+    "t01_steps_exist", "t02_steps_compile", "t03_expected_nonzero_policy_declared",
+    "t04_unexpected_nonzero_detected", "t05_stability_oracle", "t06_order_matches_boundary",
+    "t07_allowlist_evidence_enforced", "t08_watch_covers_records", "t09_allowlist_records_watched",
+    "t10_record_refresh_change_detection", "t11_step_output_oracle", "t12_watched_snapshot_multisignal",
+    "t13_step_artifacts_declared", "t13b_step_local_attribution", "t13c_shared_artifact_residual_enumerated",
+    "t14_allowlist_teeth_enforced", "t15_step_declared_teeth_enforced", "t16_teeth_set_pinned",
+    "t17_boundary_scan_follows_refresh", "t18_teeth_hygiene_ratchet", "t19_nonpass_verdict_declared",
+    "t20_order_md_products_controlled", "t21_boundary_reader_declared", "t22_stray_write_fail_closed",
+    "t23_write_shadow_visible", "t24_step_timeout_fail_closed", "t25_judgment_basis_declared",
+    "t26_judgment_binding_executable", "t27_basis_judge_and_verdict_binding", "t28_fixpoint_uniqueness_oracle",
+    "t29_proxy_semantic_binding", "t30_expected_nonzero_rc_class", "t31_expected_nonzero_error_free",
+    "t32_oracle_category_coverage", "t33_tool_revision_bound", "t34_frozen_sources_pinned",
+    "t35_judgment_surface_pinned",
+})
+_FP_ROW_RE = re.compile(r"^\|\s*[^|\n]+\|\s*sha16\s*\|", re.M)
+
+
+def boundary_sections_with_fp() -> list:
+    """boundary 各节 → [(节号, 是否带 pin 表)]（节指纹之**名集**来源；不可读 ⇒ 空表 ⇒ fail-closed）。"""
+    try:
+        txt = (STEP2 / BOUNDARY_BASENAME).read_text(encoding="utf-8")
+    except OSError:
+        return []
+    out = []
+    for part in re.split(r"\n(?=## \d+\. )", txt):
+        m = re.match(r"## (\d+)\. ", part)
+        if m:
+            out.append((int(m.group(1)), bool(_FP_ROW_RE.search(part))))
+    return out
+
+
+def boundary_fp_missing(sections, exempt) -> list:
+    """缺「在记录内指纹」之节号（空 = ok）。纯判据（可注入合成面 ⇒ 正/负控）。"""
+    return sorted(n for n, ok in sections if not ok and n not in exempt)
 
 
 def frozen_sources_decision(pins, sha16_of, copies=None, bytes_of=None) -> str:
@@ -1867,6 +1910,22 @@ def main(argv=None) -> int:
     # CO-164（t06）：执行器 ORDER 必须与 boundary 规范复现序**有序一致**（文档↔执行器防漂移）
     _bdy = boundary_order_steps()
     checks["t06_order_matches_boundary"] = bool(_bdy) and _bdy == ORDER
+    # CO-225（R-CO225-1）：判定面完整性之**名集钉定**（① boundary 节指纹 ② runner 静态齿名集）
+    _bdy_secs = boundary_sections_with_fp()
+    _present = set(checks)          # t35 之前已建齿名（用于静态齿名集等式）
+    checks["t35_judgment_surface_pinned"] = (
+        # ① 实件：各节须带 pin 表（缺者须在**历史豁免名集**）
+        bool(_bdy_secs)
+        and boundary_fp_missing(_bdy_secs, BOUNDARY_SECTION_FP_EXEMPT) == []
+        # ① 正控 / 负控（合成节集：豁免项不得被误判；非豁免缺项必被检出）
+        and boundary_fp_missing([(1, False), (8, True)], BOUNDARY_SECTION_FP_EXEMPT) == []
+        and boundary_fp_missing([(1, True), (8, False), (9, False)], BOUNDARY_SECTION_FP_EXEMPT) == [8, 9]
+        and boundary_fp_missing([(9, True)], frozenset()) == []
+        # ② 静态齿名集钉定（防**静默删齿** ⇒ 判据面空真）
+        and _present == set(STATIC_CHECKS_DECLARED) - {"t35_judgment_surface_pinned"}
+        and len(STATIC_CHECKS_DECLARED) == 37
+        # ② 负控：集合等式对「少一枚」有判别力
+        and (_present - {"t01_steps_exist"}) != set(STATIC_CHECKS_DECLARED) - {"t35_judgment_surface_pinned"})
     static_ok = all(checks.values())
     if a.check:
         print(json.dumps({"mode": "check", "checks": checks, "missing": missing,
@@ -1951,7 +2010,7 @@ def main(argv=None) -> int:
             converged = True
             break
         prev = cur
-    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-203.2",
+    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-203.3",
               "nature": "规范复现序机判执行器（rc 策略 + 真收敛判定）；报告落 .archer_tmp/ 且**不被 boundary 引用**（避免不动点）",
               "order": ORDER, "expected_nonzero": EXPECTED_NONZERO,
               "checks": checks, "iterations": iterations, "abort": abort, "converged": converged,
