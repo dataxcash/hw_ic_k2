@@ -54,6 +54,9 @@
      `_shared/eda_core/drc_rules.json` 之 `diff_pair` 仅**副本** ⇒ 键映射**名集钉定**（`CROSS_SOURCE_KEYMAP`）+ 副本键**域钉定**
      （`CROSS_SOURCE_KEYMAP ∪ CROSS_SOURCE_UNMAPPED_DECLARED` 集合等式 ⇒ 新增/删键即停机）+ 被消费键一致（分歧即 fail-closed）
      + 其余两侧分歧须入**显式分歧登记**（含退役依据）。静态齿 **t36**；report revision → CO-203.4。
+㉔ CO-227（R-CO227-1，承 R-CO223-1 / R-CO224-1 · **义务时点跨载明面同源 + 载明面名集等式**）：同一工程动作（首例 = CO-222 U6 域 GND via 阵列）
+     之「义务时点」须在**全部载明面**同源（`OBLIGATION_MARKERS_DECLARED`）+ 载明面**域显式**（域内命中集 == 声明集 ∪ 显式豁免 ⇒ 域收窄即停机，
+     防 CO-225 F-4 复发）。静态齿 **t37**；report revision → CO-203.5。
 ⑲ CO-215（R-CO215-1，**代理帮助函数之源面收窄 + 覆盖面机判**）：`artifact_readers()`（判「某步**确实读取**该工件」之**语法代理**）
      原按**原文子串** `basename in src` 判 ⇒ **注释/散文即可满足**（与 R-CO202-4「注释不得满足源内声明」同源缺陷，CO-215 实测复现）⇒
      收窄为 **AST 字面量集**（`_source_strings`）匹配 + glob 字面量；并把该帮助函数之**残余显式登记**
@@ -876,7 +879,7 @@ STATIC_CHECKS_DECLARED = frozenset({
     "t26_judgment_binding_executable", "t27_basis_judge_and_verdict_binding", "t28_fixpoint_uniqueness_oracle",
     "t29_proxy_semantic_binding", "t30_expected_nonzero_rc_class", "t31_expected_nonzero_error_free",
     "t32_oracle_category_coverage", "t33_tool_revision_bound", "t34_frozen_sources_pinned",
-    "t35_judgment_surface_pinned", "t36_cross_source_semantics_bound",
+    "t35_judgment_surface_pinned", "t36_cross_source_semantics_bound", "t37_obligation_same_source_bound",
 })
 _FP_ROW_RE = re.compile(r"^\|\s*[^|\n]+\|\s*sha16\s*\|", re.M)
 
@@ -921,6 +924,44 @@ CROSS_SOURCE_DIVERGENT_DECLARED = {
                   "⇒ K2 侧**不改共享件**，登记待容器侧处置；K2 侧已改为不消费该键作判据（见 §99）",
     },
 }
+
+
+# CO-227（R-CO227-1，承 R-CO223-1 / R-CO224-1）：**义务时点跨载明面同源 + 载明面名集等式**。
+# 缘起：CO-222 之 U6 域 GND via 阵列义务时点，其载明面枚举**无机判齿** ⇒ CO-224 之「7 面名集等式」实为**域收窄**
+# （漏登记簿第 8 面，CO-225 F-4 实测）；承 R-CO223-1（义务时点须跨件同源）与 R-CO224-1（载明面须名集等式枚举）。
+OBLIGATION_PHRASE = "GND via 阵列"
+OBLIGATION_DOMAIN_ROOTS = (
+    "pm_gate/artifacts/k2_v4/L2",                              # 裁定件 + 登记簿
+    "pm_gate/artifacts/k2_v4/L5/jlc_package",                  # 随单 + 包内副本
+    "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_joint_assignment_boundary_v1_82.md",   # boundary 自身
+)
+_SUF = {".md", ".json"}
+OBLIGATION_MARKERS_DECLARED = {
+    # 载明面（K2 相对）→ 必含之**同源标记**（≥1 命中即满足；空 = 仅须含 phrase）
+    "pm_gate/artifacts/k2_v4/L2/L2_RULING_u6_gnd_via_array_v1.md": ("CO-222", "条件动作"),
+    "pm_gate/artifacts/k2_v4/L2/L2_RULING_u6_thermal_v1.md": ("CO-222", "条件动作"),
+    "pm_gate/artifacts/k2_v4/L2/L2_RULING_u6_thermal_mitigation_v1.md": ("CO-222", "条件动作"),
+    "pm_gate/artifacts/k2_v4/L2/input_defect_register_v1.json": ("CO-222", "条件动作"),
+    "pm_gate/artifacts/k2_v4/L5/jlc_package/ORDER_NOTES.md": ("CO-222", "条件动作"),
+    "pm_gate/artifacts/k2_v4/L5/jlc_package/06_rulings/L2_RULING_u6_thermal_v1.md": ("CO-222", "条件动作"),
+    "pm_gate/artifacts/k2_v4/L5/jlc_package/06_rulings/L2_RULING_u6_thermal_mitigation_v1.md": ("CO-222", "条件动作"),
+    "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_joint_assignment_boundary_v1_82.md": ("CO-222", "条件动作"),
+}
+OBLIGATION_DOMAIN_EXEMPT = {}          # 域内命中但**不**上表者（须显式 + 理由）
+
+
+def obligation_domain_decision(hits, declared, exempt) -> str:
+    """CO-227 纯判据（域）：域内命中集 == 声明集 ∪ 显式豁免（**双向**）。"""
+    if set(hits) - (set(declared) | set(exempt)):
+        return "undeclared_surface"      # 域内出现未登记载明面（CO-225 F-4 之形态）
+    if set(declared) - set(hits):
+        return "declared_surface_absent"  # 声明面不含该义务（或已改口径）
+    return "ok"
+
+
+def obligation_marker_decision(misses) -> str:
+    """CO-227 纯判据（标记）：每面须至少命中一个声明标记（`misses` = [(面, 标记)]）。"""
+    return "marker_absent" if list(misses) else "ok"
 
 
 def _dot_get(obj, path):
@@ -2057,6 +2098,54 @@ def main(argv=None) -> int:
                                             {"x": {"copy_value": 9.0, "spec_value": 1.0, "spec_field": "f",
                                                    "why": "w", "action": "a"}}
                                             ) == "divergence_registry_incomplete")
+    # CO-227（R-CO227-1）：义务时点**跨载明面同源** + **载明面名集等式**（域内命中集 == 声明集 ∪ 豁免）
+    _obl_hits, _obl_misses, _obl_scan_ok = set(), [], True
+    _obl_seen = []
+    for _root in OBLIGATION_DOMAIN_ROOTS:
+        _rp = K2 / _root
+        try:
+            if _rp.is_file():
+                _obl_seen.append(_rp)
+            else:
+                _obl_seen += [q for q in sorted(_rp.rglob("*")) if q.is_file() and q.suffix in _SUF]
+        except OSError:
+            _obl_scan_ok = False
+    _obl_text = {}
+    for _q in _obl_seen:
+        try:
+            _t = _q.read_text(encoding="utf-8")
+        except OSError:
+            _obl_scan_ok = False
+            continue
+        if OBLIGATION_PHRASE in _t:
+            _rel = str(_q.relative_to(K2))
+            _obl_hits.add(_rel)
+            _obl_text[_rel] = _t
+    for _rel, _markers in OBLIGATION_MARKERS_DECLARED.items():
+        _t = _obl_text.get(_rel)
+        if _t is None:
+            _obl_misses.append((_rel, "<surface>"))
+            continue
+        if _markers and not any(m in _t for m in _markers):
+            _obl_misses.append((_rel, "|".join(_markers)))
+    checks["t37_obligation_same_source_bound"] = (
+        _obl_scan_ok and bool(_obl_hits)
+        and obligation_domain_decision(_obl_hits, set(OBLIGATION_MARKERS_DECLARED),
+                                       set(OBLIGATION_DOMAIN_EXEMPT)) == "ok"
+        and obligation_marker_decision(_obl_misses) == "ok"
+        # 正控：域与声明一致 ⇒ ok；豁免覆盖域外命中 ⇒ ok；无缺标记 ⇒ ok
+        and obligation_domain_decision({"a", "b"}, {"a", "b"}, set()) == "ok"
+        and obligation_domain_decision({"a", "b"}, {"a"}, {"b"}) == "ok"
+        and obligation_marker_decision([]) == "ok"
+        # 负控：域内未登记面 / 声明面缺席 / 标记缺
+        and obligation_domain_decision({"a", "b"}, {"a"}, set()) == "undeclared_surface"
+        and obligation_domain_decision({"a"}, {"a", "b"}, set()) == "declared_surface_absent"
+        and obligation_marker_decision([("a", "CO-222")]) == "marker_absent"
+        # 判别力注记（CO-225 F-4 之形态）：若域只声明 md 面而漏登记簿 ⇒ 必判 `undeclared_surface`
+        and obligation_domain_decision(
+            set(OBLIGATION_MARKERS_DECLARED),
+            set(OBLIGATION_MARKERS_DECLARED) - {"pm_gate/artifacts/k2_v4/L2/input_defect_register_v1.json"},
+            set()) == "undeclared_surface")
     # CO-225（R-CO225-1）：判定面完整性之**名集钉定**（① boundary 节指纹 ② runner 静态齿名集）
     _bdy_secs = boundary_sections_with_fp()
     _present = set(checks)          # t35 之前已建齿名（用于静态齿名集等式）
@@ -2070,7 +2159,7 @@ def main(argv=None) -> int:
         and boundary_fp_missing([(9, True)], frozenset()) == []
         # ② 静态齿名集钉定（防**静默删齿** ⇒ 判据面空真）
         and _present == set(STATIC_CHECKS_DECLARED) - {"t35_judgment_surface_pinned"}
-        and len(STATIC_CHECKS_DECLARED) == 38
+        and len(STATIC_CHECKS_DECLARED) == 39
         # ② 负控：集合等式对「少一枚」有判别力
         and (_present - {"t01_steps_exist"}) != set(STATIC_CHECKS_DECLARED) - {"t35_judgment_surface_pinned"})
     static_ok = all(checks.values())
@@ -2157,7 +2246,7 @@ def main(argv=None) -> int:
             converged = True
             break
         prev = cur
-    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-203.4",
+    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-203.5",
               "nature": "规范复现序机判执行器（rc 策略 + 真收敛判定）；报告落 .archer_tmp/ 且**不被 boundary 引用**（避免不动点）",
               "order": ORDER, "expected_nonzero": EXPECTED_NONZERO,
               "checks": checks, "iterations": iterations, "abort": abort, "converged": converged,

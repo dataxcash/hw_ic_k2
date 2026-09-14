@@ -3603,6 +3603,41 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body99
 
+    # ── §100 CO-227（L2 自裁 · 承 R-CO223-1 / R-CO224-1：义务时点跨载明面同源 + 载明面名集等式 ⇒ 机判化） ──
+    MARK100 = "## 100. CO-227"
+    sec100 = [MARK100 + "（**L2 自裁 · 承 R-CO223-1 / R-CO224-1：义务时点跨载明面同源 + 载明面名集等式 ⇒ 机判化**）", "",
+              "- **缘起**：CO-222 之 U6 域 GND via 阵列义务时点，其**载明面枚举**自 CO-224 起以「名集等式」自称（§97 之 7 面），但该等式**无机判齿**；"
+              "CO-225 F-4 实测证明其域 = 「所声明 grep 目标」= **域收窄**（漏 `L2/input_defect_register_v1.json` 第 8 面）⇒ 承 **R-CO223-1**（同一动作之义务时点须跨件同源）"
+              "与 **R-CO224-1**（载明面须名集等式枚举）之形态**无机判齿即为空真**（R-CO225-1）。",
+              "- **裁定（L2 自裁）**：① 义务载明面**域显式**（`OBLIGATION_DOMAIN_ROOTS` = L2 裁定件+登记簿 / 打样包 / boundary 自身）+ **名集等式**"
+              "（域内命中集 == `OBLIGATION_MARKERS_DECLARED` ∪ `OBLIGATION_DOMAIN_EXEMPT`，**双向**：既禁未登记载明面，亦禁声明面缺席）；② 每面须命中**同源锚**"
+              "（`CO-222` ∧ `条件动作`）；③ 入机判 runner 静态齿 **t37_obligation_same_source_bound**（正/负控齐备）；④ 机制**通用**：后续同类义务（条件动作 + 触发）"
+              "以同一登记表扩展 —— 新增载明面未入表即停机。**R-CO227-1**。",
+              "- **实测（判别力，本会话）**：实件域内命中 = **8 面**、逐面同源锚（`CO-222` / `条件动作`）齐备 ⇒ t37 **PASS**；以 CO-224 之**7 面 md 域**"
+              "（F-4 之形态）驱动纯判据 ⇒ `undeclared_surface`（**修前形态必 FAIL**）；把漏面**显式豁免** ⇒ `ok`（豁免须显式，非静默通过）；声明面缺席 ⇒ `declared_surface_absent`。",
+              "- **未做（诚实）**：本件不改几何/板/共享件；亦**不**为其余红线建全量映射（全量 173 条手工映射违「问题回模型」且必流于形式）⇒ 按需逐案机判化，"
+              "**不**声称红线面已完备覆盖；t37 只判「载明面同源 + 域显式」，**不**判义务本身之工程正确性（由 §95 定案件与 T1/T2 触发承载）。",
+              "",
+              "| 工件 | sha16 |", "|---|---|"]
+    for _l, _p in [("runner `p3_v57_co164_order_runner.py`（**CO-203.5** / t37 义务同源齿）", K2 / "tools/p3_v57_co164_order_runner.py"),
+                   ("登记簿 `input_defect_register_v1.json`（+co227:F-1）", L2 / "input_defect_register_v1.json"),
+                   ("定案件 `L2_RULING_u6_gnd_via_array_v1.md`", L2 / "L2_RULING_u6_gnd_via_array_v1.md"),
+                   ("随单 `L5/jlc_package/ORDER_NOTES.md`", L5 / "jlc_package" / "ORDER_NOTES.md"),
+                   ("交付板 `k2_v4_8L.l4.kicad_pcb`（本件**未改**）", K2 / "k2_v4_8L.l4.kicad_pcb")]:
+        if _p.exists():
+            sec100.append(f"| {_l} | `{s16(_p)}` |")
+    sec100 += ["",
+               "> **R-CO227-1**：同一工程动作之「义务时点」类记录，其**载明面须域显式 + 名集等式机判**，且每面须命中**同源锚**；后续同类义务以**同一登记表**扩展"
+               "（承 R-CO223-1 跨件同源 / R-CO224-1 名集等式 / R-CO219-1 枚举完整性 / R-CO225-1 无机判齿即空真）。",
+               "",
+               "> **序不变**：本件未改步骤集/序列（承 §82 之 R-CO209-2）。"]
+    body100 = "\n".join(sec100)
+    if MARK100 in txt:
+        txt = re.sub(re.escape(MARK100) + r"[\s\S]*?(?=\n## |\Z)", body100, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body100
+
+    txt = txt.replace("W3 Boundary **v2.67**", "W3 Boundary **v2.68**")
     txt = txt.replace("W3 Boundary **v2.66**", "W3 Boundary **v2.67**")
     txt = txt.replace("W3 Boundary **v2.65**", "W3 Boundary **v2.66**")
     txt = txt.replace("W3 Boundary **v2.64**", "W3 Boundary **v2.65**")
