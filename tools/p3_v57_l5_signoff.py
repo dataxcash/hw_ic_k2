@@ -18,7 +18,10 @@ CO-217（L2 自裁 · 判据源绑定 + 退役定值留存）：本工具原读*
 （rev-19 现行 = `0.41`，见 `retired_inter_pair_spacing_0p875_v1` / ledger `DV-INTPAIR-EDGE`）⇒ 判定记录把**退役定值**
 呈现为现行口径（记录面 fail-open；硬编码旧 rev 亦为潜在陈旧阈值源）。现改为读**现行冻结 SPEC（rev-19）**并**钉 sha16**，
 缺件/漂移 ⇒ fail-closed；SI 记录增 `inter_pair_derivation` + `retired_inter_pair_spacing` 两项显式留存。
-CO-226（L2 自裁 · 承 R-CO217-1 / R-CO226-1）：CO-217 只把**判据源**改为 SPEC（记录面），但 **SI 等长窗口判据**仍直接消费
+CO-228（L2 自裁 · 承 R-CO228-1 / R-CO219-1）：SI 等长判定之**页覆盖面**原由本循环之 `kind` 过滤**隐含定义**，未识别 kind 一律 `continue`（**静默跳过**）
+且与**冻结页清单** `m13_v57_s1_page_manifest.json`（`n_pages` = 34）之间**无机判绑定**（两件 kind 词表亦异：清单 `refclk_pass` / 图纸 `refclk`）⇒ 覆盖面可**无声缩水**。现：
+① 未识别 kind ⇒ `SystemExit`（fail-closed，禁静默跳过）；② **名集等式**（冻结清单页集 == 实测覆盖页集，双向）不成立即停；③ 记录增 `skew_pages_expected` 与覆盖源指纹（清单 / 图纸 sha16）。
+CO-217 只把**判据源**改为 SPEC（记录面），但 **SI 等长窗口判据**仍直接消费
 `_shared/eda_core/drc_rules.json` 之 `diff_pair.intra_pair_skew_mm`（**副本**）⇒ 真源升级时判据**静默失锚**；且该副本把 SPEC 已显式退役之
 legacy `0.875`（`retired_inter_pair_spacing_0p875_v1`）以**现行口径**呈现。现：等长窗口判据 = **SPEC 真源**（`net_classes.PCIe85.intra_pair_skew_mm`，
 sha 由 `load_spec()` 钉），副本值**交叉校验**（分歧 ⇒ SystemExit fail-closed），两者一并入记录（`skew_rule_mm`/`skew_rule_copy_mm` + 源绑定）。
@@ -257,6 +260,15 @@ def main() -> int:
 
     widths_ok = all(abs(pcbnew.ToMM(t.GetWidth()) - _wmap.get(b.GetLayerName(t.GetLayer()), 0.205)) < 1e-6
                     for t in tracks if t.GetNetname().startswith("PCIE"))
+    # CO-228（R-CO228-1）：覆盖面之 kind 词表须**显式**（图纸 kind 集须有清单 counterpart）；未识别 kind ⇒ fail-closed（禁静默跳过）
+    _man = json.loads((STEP2 / "m13_v57_s1_page_manifest.json").read_text(encoding="utf-8"))
+    _WANT_KINDS = {"data", "refclk"}          # 对应冻结清单 kind 词表 data / refclk_pass 之**交付图纸**词表
+    _unknown_kinds = sorted({pg.get("kind") for pg in art["pages"]} - _WANT_KINDS)
+    if _unknown_kinds:
+        raise SystemExit("[CO-228 fail-closed] 交付图纸 %s 出现未登记 kind %s ⇒ 等长覆盖面不可判定"
+                         "（承 R-CO228-1：禁静默跳过；须先入词表白名单）"
+                         % (DRAWING.name, _unknown_kinds))
+
     skew = []
     for pg in art["pages"]:
         if pg["kind"] == "data":
@@ -278,13 +290,21 @@ def main() -> int:
         _dt = abs(_tP - _tN)
         skew.append({"page": pg["page_id"], "skew_mm": round(_dt * _C_MM_PS / math.sqrt(_ER_REF), 4),
                      "skew_ps": round(_dt, 4), "phys_skew_mm": round(abs(_pP - _pN), 4)})
+    # CO-228（R-CO228-1）：**名集等式**（冻结清单页集 == 实测覆盖页集，双向）—— 覆盖面缩水即停机
+    _man_ids = sorted(p["page_id"] for p in _man["pages"])
+    _cov_ids = sorted(sk["page"] for sk in skew)
+    if _man_ids != _cov_ids:
+        raise SystemExit("[CO-228 fail-closed] 等长覆盖面名集等式不成立：冻结清单 %d 页 vs 实测覆盖 %d 页"
+                         "（清单独有 %s / 实测独有 %s）"
+                         % (len(_man_ids), len(_cov_ids),
+                            sorted(set(_man_ids) - set(_cov_ids))[:8], sorted(set(_cov_ids) - set(_man_ids))[:8]))
     skew_max = max((s["skew_mm"] for s in skew), default=0)                 # 电气（按层加权，判据）
     skew_phys_max = max((s["phys_skew_mm"] for s in skew), default=0)       # 物理（保留报告，CO-62 §4）
     planes = [l for l in cu if l in ("In1.Cu", "In3.Cu", "In4.Cu", "In6.Cu")]
     _spec = load_spec()           # CO-217：现行冻结 SPEC（rev-19）+ sha pin
     _spec_nc = _spec["net_classes"]["PCIe85"]
     _pg = _pair_geometry(rec["segments"])          # CO-53: 对内/对间几何实测
-    si = {"artifact": "m13_v57_l5_si_pi_emc_record", "schema": 1, "revision": "L5-SI.10",
+    si = {"artifact": "m13_v57_l5_si_pi_emc_record", "schema": 1, "revision": "L5-SI.11",
           # CO-212：同上 —— 等长/线宽/平面 verdict 须钉被评板（原缺）
           "board": str(L4_PCB.relative_to(K2)), "board_sha256": sha(L4_PCB),
           "SI": {"track_width_rule_mm_by_layer": _wmap, "all_pcie_tracks_match_spec_width": widths_ok,
@@ -297,7 +317,14 @@ def main() -> int:
                                            "（**副本**，非真源；与真源分歧即 fail-closed，见 runner 静态齿 t36）"),
                  "max_intra_pair_skew_phys_mm": skew_phys_max,
                  "skew_ok": skew_max <= _skew_rule_spec + 1e-9,
+                 # CO-228（R-CO228-1）：覆盖面之**期望名集**与**覆盖源指纹**（原记录只有一个数，无从判覆盖面是否完整）
                  "skew_pages_checked": len(skew), "skew_pages": skew,
+                 "skew_pages_expected": len(_man_ids),
+                 "skew_pages_expected_sha16": hashlib.sha256("|".join(_man_ids).encode()).hexdigest()[:16],
+                 "skew_pages_coverage_source": {
+                     "drawing": f"{DRAWING.name} (sha16 {sha(DRAWING)[:16]})",
+                     "manifest": f"m13_v57_s1_page_manifest.json (sha16 {sha(STEP2 / 'm13_v57_s1_page_manifest.json')[:16]})",
+                     "kind_vocab": "清单 data/refclk_pass → 图纸 data/refclk（未识别 kind ⇒ fail-closed）"},
                  "layer_transitions_per_line": {"via1/corner/drop/land": 4},
                  # CO-53：对内/对间几何实测 vs SPEC 声明（几何项为**事实报告**；阻抗符合性 NOT_DEMONSTRATED）
                  "netclass_geometry": {
@@ -356,7 +383,7 @@ def main() -> int:
                "物理长度判据仍 PASS，缺陷根因 = 等长补偿只按物理长度（未按层加权）")
     g7 = f"""# G7 / L5 记录 — k2 v57（8L）
 
-> revision **L5-G7.10**｜图纸 **{art['revision']}** `{s16(DRAWING)}`｜L4 板 `{s16(L4_PCB)}`（含 SPEC 逃逸区规则域 CO-37）
+> revision **L5-G7.11**｜图纸 **{art['revision']}** `{s16(DRAWING)}`｜L4 板 `{s16(L4_PCB)}`（含 SPEC 逃逸区规则域 CO-37）
 > 产生：`tools/p3_v57_l5_signoff.py`（{dfm['drc']['tool']}，{dfm['revision']}）——**随 L5 每次重跑确定性重生成**
 > ｜历史 FAIL 叙事见 CO-37/CO-43/CO-44/CO-45 变更单与 git（本件取代 L5-G7.5 的 new=60 口径）。
 
@@ -399,7 +426,7 @@ def main() -> int:
 ｜`.kicad_dru` `{s16(L4_DRU)}`
 冻结四源 `{s16(STEP2.parent / 'SPEC_k2_v4.json')} / {s16(STEP2 / 'm13_v57_s1_page_manifest.json')} / {s16(SRC_PCB)} / {s16(RULES)}`（未改）。
 
-End of G7 record（L5-G7.10，机器生成）。
+End of G7 record（L5-G7.11，机器生成）。
 """
     (STEP2 / "m13_v57_l5_g7_record.md").write_text(g7, encoding="utf-8")
     print("L5: FAB ok | DFM verdict=%s new=%d (disappeared=%d) %s | in_scope_unconnected=%d/%d nets | SI verdict=%s skew=%.4f" %

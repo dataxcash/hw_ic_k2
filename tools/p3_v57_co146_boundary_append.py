@@ -3637,6 +3637,44 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body100
 
+    # ── §101 CO-228（L2 自裁 · 承 R-CO219-1：等长覆盖面名集等式 + kind 词表域钉定 ⇒ 机判化） ──
+    MARK101 = "## 101. CO-228"
+    sec101 = [MARK101 + "（**L2 自裁 · 承 R-CO219-1：等长覆盖面名集等式 + kind 词表域钉定 ⇒ 机判化**）", "",
+              "- **发现 F-1（TOOL_DEFECT · low-mid）**：SI 等长判定之**页覆盖面**由 `m13_v57_w3_joint_assignment.json`（**非冻结、非序内 watch** 之 L3 件）之 `kind` 过滤**隐含定义**："
+              "① 未识别 kind 一律 `else: continue` ⇒ **静默跳过**；② 该件与**冻结页清单** `m13_v57_s1_page_manifest.json`（`n_pages` = 34）之间**无机判绑定**；"
+              "③ 两件 kind 词表**不一致**（清单 `refclk_pass` / 图纸 `refclk`）且无声明映射。⇒ 覆盖面可**无声缩水**而 `skew_ok = skew_max ≤ rule` 仍 PASS"
+              "（方向 fail-open；承 R-CO219-1 名集等式 / R-CO225-1「无机判齿即空真」）。",
+              "- **实测（判别力，本会话）**：实件两件 page_id 集**完全相同**（34/34，双向差集空）⇒ t38 **PASS**；**注入**未识别 kind ⇒ l5 `SystemExit`"
+              "（`未登记 kind ['weird_kind']`）；**注入**删一页 ⇒ `SystemExit`（`冻结清单 34 页 vs 实测覆盖 33 页，清单独有 ['PCIE_REFCLK1/input']`）——两路径皆**记录零污染**。",
+              "- **裁定（L2 自裁）**：① **词表域钉定**：`PAGE_KIND_VOCAB_DECLARED`（清单 kind → 图纸 kind）**双向**（键集 == 清单 kind 集 ∧ 值集 == 图纸 kind 集）；"
+              "② **名集等式**：冻结清单页集 == 图纸页集（**双向**）+ `n_pages` 自述一致；③ **l5 端 fail-closed**：未识别 kind 与名集不等**皆停机**（禁静默跳过 / 禁静默缩水）；"
+              "④ 记录增 `skew_pages_expected` / `skew_pages_expected_sha16` / `skew_pages_coverage_source`（覆盖源指纹：图纸 sha16 + 清单 sha16 + 词表映射）；"
+              "⑤ 入机判 runner 静态齿 **t38_page_coverage_bound**（正/负控齐备）。自声明面同步：`L5-SI.10 → L5-SI.11`（G7 `L5-G7.10 → .11`）/ runner `CO-203.5 → CO-203.6`。**R-CO228-1**。",
+              "- **边界（诚实·残余）**：① 本件所钉为**两件之一致性**（不变量：图纸页集 == 冻结清单页集）；`m13_v57_w3_joint_assignment.json` 本身**非冻结源、亦不在序内 watch 名单** ⇒ 其**身份**"
+              "（内容变更而页集不变者）**仍无机判 pin** —— 该 pin 面登记为残余（登记簿 `co228:F-1.next`）。② 覆盖为**页**粒度，不判页内**差对存在性**（页内缺 P/N 会 `KeyError` 而非静默）。",
+              "",
+              "| 工件 | sha16 |", "|---|---|"]
+    for _l, _p in [("runner `p3_v57_co164_order_runner.py`（**CO-203.6** / t38 覆盖面齿）", K2 / "tools/p3_v57_co164_order_runner.py"),
+                   ("L5 签署 `tools/p3_v57_l5_signoff.py`（**L5-SI.11** / 覆盖面 fail-closed）", K2 / "tools/p3_v57_l5_signoff.py"),
+                   ("L5 SI 记录 `m13_v57_l5_si_pi_emc_record.json`", STEP2 / "m13_v57_l5_si_pi_emc_record.json"),
+                   ("冻结页清单 `m13_v57_s1_page_manifest.json`", STEP2 / "m13_v57_s1_page_manifest.json"),
+                   ("覆盖源 `m13_v57_w3_joint_assignment.json`（**非冻结**）", STEP2 / "m13_v57_w3_joint_assignment.json"),
+                   ("登记簿 `input_defect_register_v1.json`（+co228:F-1）", L2 / "input_defect_register_v1.json"),
+                   ("交付板 `k2_v4_8L.l4.kicad_pcb`（本件**未改**）", K2 / "k2_v4_8L.l4.kicad_pcb")]:
+        if _p.exists():
+            sec101.append(f"| {_l} | `{s16(_p)}` |")
+    sec101 += ["",
+               "> **R-CO228-1**：**覆盖面之枚举面**（页/条目/格）与**其声明源**之间须以**名集等式（双向）+ 词表域钉定（双向）**机判；未识别枚举值**禁静默跳过**（须 fail-closed 或入显式白名单）"
+               "—— 覆盖面缩水不得使 verdict 仍 PASS（承 R-CO219-1 / R-CO225-1 / R-CO227-1）。",
+               "",
+               "> **序不变**：本件未改步骤集/序列（承 §82 之 R-CO209-2）。"]
+    body101 = "\n".join(sec101)
+    if MARK101 in txt:
+        txt = re.sub(re.escape(MARK101) + r"[\s\S]*?(?=\n## |\Z)", body101, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body101
+
+    txt = txt.replace("W3 Boundary **v2.68**", "W3 Boundary **v2.69**")
     txt = txt.replace("W3 Boundary **v2.67**", "W3 Boundary **v2.68**")
     txt = txt.replace("W3 Boundary **v2.66**", "W3 Boundary **v2.67**")
     txt = txt.replace("W3 Boundary **v2.65**", "W3 Boundary **v2.66**")

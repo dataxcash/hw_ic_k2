@@ -57,6 +57,10 @@
 ㉔ CO-227（R-CO227-1，承 R-CO223-1 / R-CO224-1 · **义务时点跨载明面同源 + 载明面名集等式**）：同一工程动作（首例 = CO-222 U6 域 GND via 阵列）
      之「义务时点」须在**全部载明面**同源（`OBLIGATION_MARKERS_DECLARED`）+ 载明面**域显式**（域内命中集 == 声明集 ∪ 显式豁免 ⇒ 域收窄即停机，
      防 CO-225 F-4 复发）。静态齿 **t37**；report revision → CO-203.5。
+㉕ CO-228（R-CO228-1，承 R-CO219-1 · **等长覆盖面名集等式 + kind 词表域钉定**）：SI 等长判定之**页覆盖面**派生自
+     `m13_v57_w3_joint_assignment.json`（**非冻结、非序内 watch** 之 L3 件），而**冻结页清单** `m13_v57_s1_page_manifest.json`（`n_pages`=34）另用**不同 kind 词表**
+     （`refclk_pass` vs `refclk`）⇒ 两套页枚举**无机判绑定**、且 SI 循环对未识别 kind **静默跳过**（覆盖面可无声缩水）。现以名集等式 + 词表双向钉定入机判。
+     静态齿 **t38**；report revision → CO-203.6。
 ⑲ CO-215（R-CO215-1，**代理帮助函数之源面收窄 + 覆盖面机判**）：`artifact_readers()`（判「某步**确实读取**该工件」之**语法代理**）
      原按**原文子串** `basename in src` 判 ⇒ **注释/散文即可满足**（与 R-CO202-4「注释不得满足源内声明」同源缺陷，CO-215 实测复现）⇒
      收窄为 **AST 字面量集**（`_source_strings`）匹配 + glob 字面量；并把该帮助函数之**残余显式登记**
@@ -880,6 +884,7 @@ STATIC_CHECKS_DECLARED = frozenset({
     "t29_proxy_semantic_binding", "t30_expected_nonzero_rc_class", "t31_expected_nonzero_error_free",
     "t32_oracle_category_coverage", "t33_tool_revision_bound", "t34_frozen_sources_pinned",
     "t35_judgment_surface_pinned", "t36_cross_source_semantics_bound", "t37_obligation_same_source_bound",
+    "t38_page_coverage_bound",
 })
 _FP_ROW_RE = re.compile(r"^\|\s*[^|\n]+\|\s*sha16\s*\|", re.M)
 
@@ -962,6 +967,40 @@ def obligation_domain_decision(hits, declared, exempt) -> str:
 def obligation_marker_decision(misses) -> str:
     """CO-227 纯判据（标记）：每面须至少命中一个声明标记（`misses` = [(面, 标记)]）。"""
     return "marker_absent" if list(misses) else "ok"
+
+
+# CO-228（R-CO228-1，承 R-CO219-1）：**等长覆盖面名集等式 + kind 词表域钉定**。
+# 缘起：SI 等长判定之页覆盖面派生自 `m13_v57_w3_joint_assignment.json`（非冻结、非序内 watch），而**冻结**页清单
+# `m13_v57_s1_page_manifest.json`（`n_pages` = 34）另用不同 kind 词表 ⇒ 两套页枚举无机判绑定；SI 循环对**未识别 kind 静默跳过**
+# ⇒ 覆盖面可无声缩水（判定面 fail-open）。承 R-CO219-1（枚举面须名集等式）。
+PAGE_MANIFEST_REL_228 = "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_s1_page_manifest.json"
+PAGE_DRAWING_REL_228 = "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_joint_assignment.json"
+PAGE_KIND_VOCAB_DECLARED = {          # 冻结清单 kind → 交付图纸 kind（**双向**钉定：键集 == 清单 kind 集；值集 == 图纸 kind 集）
+    "data": "data",
+    "refclk_pass": "refclk",
+}
+
+
+def page_coverage_decision(manifest_ids, drawing_ids) -> str:
+    """CO-228 纯判据（名集等式，**双向**）：冻结清单页集 == 图纸页集。"""
+    only_m = set(manifest_ids) - set(drawing_ids)
+    only_d = set(drawing_ids) - set(manifest_ids)
+    if only_m and only_d:
+        return "page_set_drift"
+    if only_m:
+        return "page_missing_in_drawing"       # 清单声明之页在图纸缺席 ⇒ 判定面缩水
+    if only_d:
+        return "page_undeclared_in_manifest"   # 图纸多出未声明页 ⇒ 域漏洞
+    return "ok"
+
+
+def page_kind_vocab_decision(manifest_kinds, drawing_kinds, vocab) -> str:
+    """CO-228 纯判据（词表域钉定，**双向**）：词表键集 == 清单 kind 集 ∧ 词表值集 == 图纸 kind 集。"""
+    if set(vocab) != set(manifest_kinds):
+        return "manifest_kind_undeclared"
+    if set(vocab.values()) != set(drawing_kinds):
+        return "drawing_kind_unmapped"
+    return "ok"
 
 
 def _dot_get(obj, path):
@@ -2146,6 +2185,38 @@ def main(argv=None) -> int:
             set(OBLIGATION_MARKERS_DECLARED),
             set(OBLIGATION_MARKERS_DECLARED) - {"pm_gate/artifacts/k2_v4/L2/input_defect_register_v1.json"},
             set()) == "undeclared_surface")
+    # CO-228（R-CO228-1）：等长**覆盖面名集等式** + **kind 词表域钉定**（冻结清单 ↔ 交付图纸两套页枚举）
+    try:
+        _man = json.loads((K2 / PAGE_MANIFEST_REL_228).read_text(encoding="utf-8"))
+        _drw = json.loads((K2 / PAGE_DRAWING_REL_228).read_text(encoding="utf-8"))
+        _man_pages, _drw_pages = _man["pages"], _drw["pages"]
+        _pc_ok = True
+    except Exception:
+        _man_pages, _drw_pages, _pc_ok = [], [], False           # fail-closed：不可读 ⇒ 不通过
+    _man_ids = [p.get("page_id") for p in _man_pages]
+    _drw_ids = [p.get("page_id") for p in _drw_pages]
+    _man_kinds = {p.get("kind") for p in _man_pages}
+    _drw_kinds = {p.get("kind") for p in _drw_pages}
+    checks["t38_page_coverage_bound"] = (
+        _pc_ok and bool(_man_ids) and bool(_drw_ids)
+        # ① 名集等式（双向）+ 清单自述页数一致
+        and page_coverage_decision(_man_ids, _drw_ids) == "ok"
+        and _man.get("n_pages") == len(_man_ids)
+        # ② 词表域钉定（双向）
+        and page_kind_vocab_decision(_man_kinds, _drw_kinds, PAGE_KIND_VOCAB_DECLARED) == "ok"
+        # 正控：集相等 ⇒ ok；词表双向齐备 ⇒ ok
+        and page_coverage_decision(["a", "b"], ["b", "a"]) == "ok"
+        and page_kind_vocab_decision({"k1"}, {"k2"}, {"k1": "k2"}) == "ok"
+        # 负控：清单多页 / 图纸多页 / 双向皆差 ⇒ 各自可判
+        and page_coverage_decision(["a", "b"], ["a"]) == "page_missing_in_drawing"
+        and page_coverage_decision(["a"], ["a", "b"]) == "page_undeclared_in_manifest"
+        and page_coverage_decision(["a", "b"], ["c"]) == "page_set_drift"
+        # 负控：清单 kind 未入词表 / 图纸 kind 无对应（词表域收窄或图纸新增 kind）
+        and page_kind_vocab_decision({"k1", "k2"}, {"k2"}, {"k1": "k2"}) == "manifest_kind_undeclared"
+        and page_kind_vocab_decision({"k1"}, {"k2", "k3"}, {"k1": "k2"}) == "drawing_kind_unmapped"
+        # 判别力注记（CO-45 之形态）：若词表漏 `refclk_pass` ⇒ 清单 kind 未入词表 ⇒ 停机（非静默跳过）
+        and page_kind_vocab_decision({"data", "refclk_pass"}, {"data", "refclk"}, {"data": "data"})
+            == "manifest_kind_undeclared")
     # CO-225（R-CO225-1）：判定面完整性之**名集钉定**（① boundary 节指纹 ② runner 静态齿名集）
     _bdy_secs = boundary_sections_with_fp()
     _present = set(checks)          # t35 之前已建齿名（用于静态齿名集等式）
@@ -2159,7 +2230,7 @@ def main(argv=None) -> int:
         and boundary_fp_missing([(9, True)], frozenset()) == []
         # ② 静态齿名集钉定（防**静默删齿** ⇒ 判据面空真）
         and _present == set(STATIC_CHECKS_DECLARED) - {"t35_judgment_surface_pinned"}
-        and len(STATIC_CHECKS_DECLARED) == 39
+        and len(STATIC_CHECKS_DECLARED) == 40
         # ② 负控：集合等式对「少一枚」有判别力
         and (_present - {"t01_steps_exist"}) != set(STATIC_CHECKS_DECLARED) - {"t35_judgment_surface_pinned"})
     static_ok = all(checks.values())
@@ -2246,7 +2317,7 @@ def main(argv=None) -> int:
             converged = True
             break
         prev = cur
-    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-203.5",
+    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-203.6",
               "nature": "规范复现序机判执行器（rc 策略 + 真收敛判定）；报告落 .archer_tmp/ 且**不被 boundary 引用**（避免不动点）",
               "order": ORDER, "expected_nonzero": EXPECTED_NONZERO,
               "checks": checks, "iterations": iterations, "abort": abort, "converged": converged,
