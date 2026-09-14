@@ -3943,6 +3943,37 @@ def main(argv=None) -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body109
 
+    # ── §110 CO-237（L2 自裁 · 承 R-CO225-1/R-CO193-3/R-CO234-1：复评件覆盖面入机判） ──
+    MARK110 = "## 110. CO-237"
+    sec110 = [MARK110 + "（**L2 自裁 · 承 R-CO225-1 / R-CO193-3 / R-CO234-1：复评件覆盖面入机判**）", "",
+              "- **缘起**：CO-236 新增静态齿 **t44**（复评/重出件 as-found 幂等）之**域** = 手写 **2 件**声明 ⇒ **覆盖面无机判** —— 而 boundary pin 面实测受 pin 之 `*_review.json` 共 **14 件** ⇒ 12 件**域外**（无声明臂、无最低覆盖面）⇒ **新增复评件可不经声明而落于 t44 之外**（「域由声明自述给出」= **R-CO230-1** 所禁；「覆盖面须机判 + 域下限」= **R-CO234-1** 所立；「红线之形态无机判齿即空真」= **R-CO225-1**）。",
+              "- **F-1（TOOL_DEFECT · mid · CLOSED）**：同上。**同类已实测两次漏项**：z96 之复评债声明面**漏 CO-231**（CO-235 F-2 实测）；复评债之**连续性**无机判齿。",
+              "- **处置（L2 自裁）**：① t44 **域显式化** —— 域 = **boundary pin 面**中一切 `*_review.json` 受 pin 件（**非**由声明自述给出，承 R-CO230-1）；② 域成员须 ∈ `REISSUE_RECORDS_DECLARED` ∪ **显式豁免集** `REISSUE_RECORDS_EXEMPT`（**名集等式** = 域 − 声明，防静默缩域/漏项；每项须有 `why` + **同源锚**）；③ **域下限** `REISSUE_DOMAIN_FLOOR = 12`（防「删 pin 行即空真」）；④ 12 件既有复评件（CO-236 前）**显式豁免**并附理由（as-found 内嵌于 `nature`/`as_found` 散文、非 `.rev` 结构；工具经**只读复核无现行链读取**）—— 属**如实登记之残余**；⑤ 扩 **t44** 之覆盖面臂（**不新增齿**，仍 46）；⑥ report revision → **CO-203.14**；登记簿 `co237:F-1` CLOSED；**R-CO237-1**。",
+              "- **判别力（实测）**：域 = **14**；声明 **2** + 豁免 **12** ⇒ 名集等式 `set(EXEMPT) == set(domain) − set(DECLARED)` 成立；**负控**：域成员未列 ⇒ 等式不成立 ⇒ t44 Fail（fail-closed）。",
+              "- **残余（显式）**：① 域以**文件名形态** `*_review.json` 界定 ⇒ 异名复评件（改命名约定）可逃逸（须先入域规则）；② 豁免之 12 件为**既有**复评件，其 as-found 纯性未逐一入结构臂。",
+              "",
+              "| 工件 | sha16 |", "|---|---|"]
+    for _l, _p in [("runner `p3_v57_co164_order_runner.py`（**CO-203.14** / t44 覆盖面臂：域 + 名集等式 + 域下限）", K2 / "tools/p3_v57_co164_order_runner.py"),
+                   ("boundary 生成器 `p3_v57_co146_boundary_append.py`（+§110）", K2 / "tools/p3_v57_co146_boundary_append.py"),
+                   ("登记簿 `input_defect_register_v1.json`（+co237:F-1）", L2 / "input_defect_register_v1.json"),
+                   ("复评件 `m13_v57_CO230_rev19_co225_co229_review.json` / 卡", STEP2 / "m13_v57_CO230_rev19_co225_co229_review.json"),
+                   ("复评卡 `m13_v57_CO230_rev19_co225_co229_review.md`", STEP2 / "m13_v57_CO230_rev19_co225_co229_review.md"),
+                   ("复评件 `m13_v57_CO235_rev19_co231_co234_review.json` / 卡", STEP2 / "m13_v57_CO235_rev19_co231_co234_review.json"),
+                   ("复评卡 `m13_v57_CO235_rev19_co231_co234_review.md`", STEP2 / "m13_v57_CO235_rev19_co231_co234_review.md"),
+                   ("交付板 `k2_v4_8L.l4.kicad_pcb`（本件**未改**）", K2 / "k2_v4_8L.l4.kicad_pcb")]:
+        if _p.exists():
+            sec110.append(f"| {_l} | `{s16(_p)}` |")
+    sec110 += ["",
+               "> **R-CO237-1**：**复评件之覆盖面须机判** —— 域须由**受 pin 面**给出（**不得**由声明/自述给出，承 R-CO230-1）；域成员须 ∈ **声明集 ∪ 显式豁免集**（**名集等式** + 理由 + **同源锚**）且设**域下限**（防「删 pin 行即空真」，承 R-CO234-1）；此形态须有机判齿（**t44** 覆盖面臂），承 R-CO225-1。",
+               "",
+               "> **序不变**：本件未改步骤集/序列（承 §82 之 R-CO209-2）。"]
+    body110 = "\n".join(sec110)
+    if MARK110 in txt:
+        txt = re.sub(re.escape(MARK110) + r"[\s\S]*?(?=\n## |\Z)", body110, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body110
+
+    txt = txt.replace("W3 Boundary **v2.77**", "W3 Boundary **v2.78**")
     txt = txt.replace("W3 Boundary **v2.76**", "W3 Boundary **v2.77**")
     txt = txt.replace("W3 Boundary **v2.75**", "W3 Boundary **v2.76**")
     txt = txt.replace("W3 Boundary **v2.74**", "W3 Boundary **v2.75**")
