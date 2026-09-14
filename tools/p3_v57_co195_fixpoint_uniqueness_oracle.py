@@ -78,6 +78,14 @@ def _run_order(cur, max_iter: int):
         return r.returncode, None
 
 
+def _realign(cur) -> None:
+    """CO-233：状态齿（t40 pin 行现行值 / t41 生成器输出）依赖派生件 boundary 之**现行一致态** ⇒
+    扰动受控件后须先**重跑 boundary 生成器**（realign）再跑序，否则静态前置以「pin 与实件不符」**停机**（rc=1），
+    使本 oracle 之扰动协议与新增状态齿不相容（实测：不改则 case A `order_rc=1` ⇒ FAIL）。"""
+    subprocess.run([str(cur.PY), str(K2 / "tools/p3_v57_co146_boundary_append.py")],
+                   cwd=K2, capture_output=True, text=True)
+
+
 def _fixpoint(fn, start, n: int = 300):
     x = start
     for _ in range(n):
@@ -138,7 +146,7 @@ def main(argv=None) -> int:
     # CO-219（F-2）：前置未达 ⇒ **fail-fast**：不注入、不度量、不落「以污染态为基线」的 `sha_canon`
     #（否则记录把非规范态重锚为 canonical，且逐案 `finally` 只复原到**案前（污染）态** ⇒ 污染不自愈）。
     if not t["t00_settle_converged"]:
-        rec = {"artifact": "m13_v57_co195_fixpoint_uniqueness", "schema": 1, "revision": "CO-219",
+        rec = {"artifact": "m13_v57_co195_fixpoint_uniqueness", "schema": 1, "revision": "CO-232",
                "nature": "固定点唯一性（路径无关）oracle：**多扰动量**（5 案）扰动启动 ⇒ 收敛须复原规范态（CO-151 失效模式的直接判据）",
                "precondition": "先结算（t00）：工作树须已收敛为不动点",
                "teeth": {**t, "teeth_ok": False}, "cases": [],
@@ -164,6 +172,8 @@ def main(argv=None) -> int:
         try:
             for p in tgts:
                 _inject(p)
+            _realign(cur)                    # CO-233：扰动后先 realign 派生件（boundary pin 行）再跑序
+            row["realigned_before_order"] = True
             row["sha_perturbed"] = _snap_excl(cur, REC)
             row["injection_effective"] = (row["sha_perturbed"] != sha_canon)
             all_inj_effective = all_inj_effective and row["injection_effective"]
@@ -179,6 +189,9 @@ def main(argv=None) -> int:
             for p in tgts:                      # 自我保护：每案无条件复原，绝不留在扰动态
                 if p.read_bytes() != saved[str(p)]:
                     p.write_bytes(saved[str(p)])
+            # CO-233：复原受控件后**再 realign** —— 使派生件（boundary 之 pin 行/内容）回到规范态。
+            # 否则异常/中断路径会把 boundary 留在「已 realign 到扰动态」⇒ t40/t41 停机（实测踩中）。
+            _realign(cur)
         rows.append(row)
         t[case["tooth"]] = row["restored"]          # CO-200：齿名由 CASES 显式给出（新增案不再挤占既有齿名）
         if not row["restored"]:
@@ -190,7 +203,7 @@ def main(argv=None) -> int:
     teeth_ok = all(t.values())
 
     rec = {
-        "artifact": "m13_v57_co195_fixpoint_uniqueness", "schema": 1, "revision": "CO-219",
+        "artifact": "m13_v57_co195_fixpoint_uniqueness", "schema": 1, "revision": "CO-232",
         "nature": "固定点唯一性（路径无关）oracle：**多扰动量**（5 案）扰动启动 ⇒ 收敛须复原规范态（CO-151 失效模式的直接判据）",
         "trigger": "CO-196（I-2 自指/链式 pin）起，**CO-200（G-1）**再扩：受控集含 **md 卡片产物**（CO-186 入 pin）而旧三案只扰 json 记录 ⇒ 该受控面从未被扰动实验行使；**CO-202（L-4）**再扩：受控集另含 **图/`.svg`** 类别（CO-174 入 pin）而四案只扰 json/md ⇒ 补第 5 案",
         "snapshot_scope": "watch_paths() - {本记录}（自指防护，判据不含本证据件）",

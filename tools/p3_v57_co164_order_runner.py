@@ -72,6 +72,9 @@
      表**内容**无机判齿：① 手改 / 序中途 abort（末步 boundary_append 未跑）⇒ 陈旧或伪造值可静默存在；② §87 一行「被消费 L5 记录
      （DFM/DFT、SI/PI/EMC、G7）」**名实不符**（标签三件、实钉 DFM/DFT 一件）⇒ 该行不可复核（指称不唯一）。
      现补：标签须**恰一个**文件指称且 sha16 == 实件；不可解析之标签须入**显式豁免名集**（名集等式，现为空）。静态齿 **t40**；report revision → CO-203.9。
+㉙ CO-232（R-CO232-1，承 R-CO224-1「序内生成物之追注须写入**生成器**」· **boundary 之内容权威性**）：t35/t40 只看「节集 + pin 行」⇒
+     生成段内之**散文/表格手改**（含被生成器丢弃之手工追注）**不可见**（CO-232 实测：改数值主张或插入手工追注 ⇒ t35/t40 皆 True）。
+     现补：生成器 `--dump`（dry-run，只算不写）之输出 sha16 须等于 boundary 实件（=「boundary 是生成器之输出」）。静态齿 **t41**；report revision → CO-203.10。
 ⑲ CO-215（R-CO215-1，**代理帮助函数之源面收窄 + 覆盖面机判**）：`artifact_readers()`（判「某步**确实读取**该工件」之**语法代理**）
      原按**原文子串** `basename in src` 判 ⇒ **注释/散文即可满足**（与 R-CO202-4「注释不得满足源内声明」同源缺陷，CO-215 实测复现）⇒
      收窄为 **AST 字面量集**（`_source_strings`）匹配 + glob 字面量；并把该帮助函数之**残余显式登记**
@@ -166,7 +169,7 @@ BASIS_JUDGE_DECLARED = {
 # （内容升级而自声明滞留即漂移；此为 CO-202 处置所遗漏之面。）
 TOOL_REVISION_DECLARED = {
     "tools/p3_v57_co195_fixpoint_uniqueness_oracle.py":
-        {"artifact": "m13_v57_co195_fixpoint_uniqueness", "revision": "CO-219"},
+        {"artifact": "m13_v57_co195_fixpoint_uniqueness", "revision": "CO-232"},
 }
 
 # 允许非零的步骤（**须带 verdict 证据**：rc≠0 不等于预期 FAIL —— CO-165）
@@ -887,9 +890,13 @@ BOUNDARY_PIN_ROOTS = ("tools", "", "pm_gate/artifacts/k2_v4", "pm_gate/artifacts
                       "pm_gate/artifacts/k2_v4/L3", "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2",
                       "pm_gate/artifacts/k2_v4/L5", "pm_gate/artifacts/k2_v4/L5/jlc_package")
 BOUNDARY_PIN_LABEL_EXEMPT = frozenset()
+# CO-232（R-CO232-1）：boundary 生成器（**唯一**内容权威）之相对路径。
+BOUNDARY_GENERATOR_REL = "tools/p3_v57_co146_boundary_append.py"
+# CO-232：boundary **首行**须为声明之标题形态（防**前置**手工内容；生成器只拥有各 § 区段，区段外之首部**不**在其权威内）。
+BOUNDARY_HEAD_DECLARED = re.compile(r"^# m13 v57 — W3 Boundary \*\*v[0-9]+\.[0-9]+\*\*")
 _PIN_ROW_RE = re.compile(r"^\|\s*(?P<label>[^|\n]+?)\s*\|\s*`(?P<sha>[0-9a-f]{16})`\s*\|\s*$", re.M)
 _PIN_FILEISH_RE = re.compile(r"\.(?:py|json|md|txt|svg|kicad_pcb|kicad_pro|drl|gbr)$|/")
-# CO-230（R-CO230-1，承 R-CO219-1 / R-CO225-1）：**boundary 应有节集**之声明（名集钉定）。**新增节须显式入本集**（CO-231 加 §104）。
+# CO-230（R-CO230-1，承 R-CO219-1 / R-CO225-1）：**boundary 应有节集**之声明（名集钉定）。**新增节须显式入本集**（CO-231 加 §104、CO-232 加 §105、CO-233 加 §106）。
 # 缘起：t35 臂① 只遍历**实存**节 ⇒ 域 = 文档自述 ⇒ 整节删除**不被检出**（「删项即空真」族；CO-230 内存实证）。
 # 故声明应有节集；缺节 ⇒ `section_missing`，未声明之新节 ⇒ `section_undeclared`（**须显式入本集**方放行）。
 # 注：实测节号 8/9/10 于本文档**不存在**（历史从未生成）⇒ 声明集不含之（属**显式**声明，非「未覆盖」）。
@@ -904,7 +911,7 @@ BOUNDARY_SECTIONS_DECLARED = frozenset({
     74, 75, 76, 77, 78, 79, 80, 81, 82, 83,
     84, 85, 86, 87, 88, 89, 90, 91, 92, 93,
     94, 95, 96, 97, 98, 99, 100, 101, 102, 103,
-    104,
+    104, 105, 106,
 })
 STATIC_CHECKS_DECLARED = frozenset({
     "t01_steps_exist", "t02_steps_compile", "t03_expected_nonzero_policy_declared",
@@ -921,6 +928,7 @@ STATIC_CHECKS_DECLARED = frozenset({
     "t32_oracle_category_coverage", "t33_tool_revision_bound", "t34_frozen_sources_pinned",
     "t35_judgment_surface_pinned", "t36_cross_source_semantics_bound", "t37_obligation_same_source_bound",
     "t38_page_coverage_bound", "t39_si_geom_source_anchored", "t40_boundary_pin_rows_current",
+    "t41_boundary_is_generator_output",
 })
 _FP_ROW_RE = re.compile(r"^\|\s*[^|\n]+\|\s*sha16\s*\|", re.M)
 
@@ -1193,6 +1201,34 @@ def boundary_pin_rows() -> list:
         return []
     return [(m.group("label").strip(), m.group("sha"), _resolve_pin_ref(m.group("label")))
             for m in _PIN_ROW_RE.finditer(txt)]
+
+
+def _boundary_generator_dump():
+    """运行 boundary 生成器之 `--dump`（**dry-run，只算不写**）⇒ (sha16, rc)；任何异常 ⇒ ("", 1)（fail-closed）。"""
+    try:
+        _r = subprocess.run([str(PY), str(K2 / BOUNDARY_GENERATOR_REL), "--dump"],
+                            cwd=K2, capture_output=True, text=True, timeout=600)
+        _tail = (_r.stdout.strip().splitlines() or [""])[-1]
+        return str(json.loads(_tail).get("sha16") or ""), int(_r.returncode)
+    except Exception:
+        return "", 1
+
+
+def boundary_head_decision(first_line, ok_pattern) -> str:
+    """CO-232 纯判据：boundary **首行**须为声明的标题形态（防**前置**未声明内容）。"""
+
+    return "ok" if ok_pattern.match(str(first_line)) else "boundary_head_undeclared"
+
+
+def boundary_generator_fixedpoint_decision(on_disk_sha, dry_sha, rc) -> str:
+    """CO-232（R-CO232-1）纯判据：boundary 实件 sha16 须 == 生成器 dry-run 输出 sha16。
+
+    返回 `ok` / `generator_dump_failed`（生成器不可用或未输出）/ `boundary_not_generator_output`
+    （**生成段内手改、或手工追注未落入生成器、或实件非生成器所出**）。
+    """
+    if rc != 0 or not dry_sha:
+        return "generator_dump_failed"
+    return "ok" if on_disk_sha == dry_sha else "boundary_not_generator_output"
 
 
 def boundary_pin_row_decision(rows, exempt, sha16_of) -> str:
@@ -2382,6 +2418,26 @@ def main(argv=None) -> int:
         and geom_provenance_decision({"a": ("p", "s")}, {"a": "s"}, lambda _p: (_ for _ in ()).throw(OSError())) == "provenance_unreadable"
         # 判别力注记（CO-228 残余之形态）：几何源身份漂移 ⇒ ① 臂即 Fail（pin 钉定，非自述）
         and ("" != SI_GEOM_SOURCE_SHA16))
+    # CO-232（R-CO232-1，承 R-CO224-1）：boundary 之**内容权威性** —— 实件须 == 生成器 dry-run 输出
+    # 缘起：t35/t40 只看「节集 + pin 行」⇒ 生成段内之**散文/表格手改**（含被生成器丢弃之手工追注）不可见
+    # （实测：数值主张 24/32→31/32、或生成段内插入手工追注 ⇒ t35/t40 皆 True）。
+    _gen_sha, _gen_rc = _boundary_generator_dump()
+    try:
+        _bdy_head = ((STEP2 / BOUNDARY_BASENAME).read_text(encoding="utf-8").splitlines() or [""])[0]
+    except OSError:
+        _bdy_head = ""                      # fail-closed
+    checks["t41_boundary_is_generator_output"] = (
+        # ① 内容权威性：实件 sha16 == 生成器 dry-run 输出（覆盖各生成段内之手改/追注**与尾部**新增）
+        boundary_generator_fixedpoint_decision(s16(STEP2 / BOUNDARY_BASENAME), _gen_sha, _gen_rc) == "ok"
+        # ② 首部完整性：首行须为声明标题（覆盖**前置**新增；生成器不拥有区段外之首部）
+        and boundary_head_decision(_bdy_head, BOUNDARY_HEAD_DECLARED) == "ok"
+        # 正/负控（②）：标题形态 ⇒ ok；前置任意文本 ⇒ 可判
+        and boundary_head_decision("# m13 v57 — W3 Boundary **v2.72**（x）", BOUNDARY_HEAD_DECLARED) == "ok"
+        and boundary_head_decision("> 手写追注：本行手工添加", BOUNDARY_HEAD_DECLARED) == "boundary_head_undeclared"
+        # 正控：同值 ⇒ ok；负控：dry-run 失败 / 输出 ≠ 实件 ⇒ 各自可判（合成，零落盘）
+        and boundary_generator_fixedpoint_decision("aa", "aa", 0) == "ok"
+        and boundary_generator_fixedpoint_decision("aa", "", 1) == "generator_dump_failed"
+        and boundary_generator_fixedpoint_decision("aa", "bb", 0) == "boundary_not_generator_output")
     # CO-231（R-CO231-1，承 R-CO212-1 / R-CO152-1 / R-CO230-1）：boundary pin 表**内容**机判
     # 缘起：t35 只判「每节有 pin 表」⇒ 表**内容**（所列 sha 是否等于实件 / 指称是否唯一）无机判齿：
     #   ① 手改 / 序中途 abort（末步 boundary_append 未跑）⇒ 陈旧或伪造 sha 可静默存在；
@@ -2419,7 +2475,7 @@ def main(argv=None) -> int:
         and boundary_section_set_decision({1, 2, 3, 4}, {1, 2, 3}) == "section_undeclared"
         # ② 静态齿名集钉定（防**静默删齿** ⇒ 判据面空真）
         and _present == set(STATIC_CHECKS_DECLARED) - {"t35_judgment_surface_pinned"}
-        and len(STATIC_CHECKS_DECLARED) == 42
+        and len(STATIC_CHECKS_DECLARED) == 43
         # ② 负控：集合等式对「少一枚」有判别力
         and (_present - {"t01_steps_exist"}) != set(STATIC_CHECKS_DECLARED) - {"t35_judgment_surface_pinned"})
     static_ok = all(checks.values())
@@ -2506,7 +2562,7 @@ def main(argv=None) -> int:
             converged = True
             break
         prev = cur
-    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-203.9",
+    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-203.10",
               "nature": "规范复现序机判执行器（rc 策略 + 真收敛判定）；报告落 .archer_tmp/ 且**不被 boundary 引用**（避免不动点）",
               "order": ORDER, "expected_nonzero": EXPECTED_NONZERO,
               "checks": checks, "iterations": iterations, "abort": abort, "converged": converged,

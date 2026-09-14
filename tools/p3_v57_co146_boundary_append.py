@@ -2,6 +2,8 @@
 """CO-146 — boundary 收口件登记（§23）+ 现行态 pin 再对齐（co77 口径）。
 
 幂等：§23 已存在则整段替换；pin 重对齐按「文件→当前 sha16」表逐条替换**非历史**引用。
+
+`--dump`：**dry-run**（只算不写，打印 `{dry_run, sha16, lines}`）—— 供 CO-232 静态齿判「boundary 实件是否为生成器之输出」。
 """
 from __future__ import annotations
 import hashlib, json, re, sys
@@ -20,7 +22,7 @@ def s16(p) -> str:
     return hashlib.sha256(Path(p).read_bytes()).hexdigest()[:16]
 
 
-def main() -> int:
+def main(argv=None) -> int:
     txt = DOC.read_text()
     # ── 1. 现行态 pin 再对齐（只改「文件 <-> 旧 sha」这种当前态引用） ─────────
     realign_files = None   # None = 全量（现行态引用一律对齐当前实件 sha16；历史引用跳过）
@@ -3787,6 +3789,70 @@ def main() -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body104
 
+    # ── §105 CO-232（L2 自裁 · 承 R-CO224-1：boundary 之内容权威性入机判） ──
+    MARK105 = "## 105. CO-232"
+    sec105 = [MARK105 + "（**L2 自裁 · 承 R-CO224-1：boundary 之内容权威性入机判**）", "",
+              "- **缘起**：R-CO224-1 要求「序内生成物之追注须写入**生成器**」，但 boundary 之**内容权威性**无机判齿 —— t35/t40 只看「**节集** + **pin 行**」"
+              "⇒ 生成段内之**散文/表格手改**（含被生成器丢弃之手工追注）**不可见**（承 R-CO208-1「口径逐处同步」/ CO-230/231 同族「无机判齿即空真」）。",
+              "- **实测（本会话）**：① 变更生成段内之数值主张（`24/32` → `31/32`）或插入手工追注 ⇒ t35 / t40 **皆 True**（不可见）；"
+              "② 生成器**只拥有各 § 区段**（`re.sub` 以「MARK + 区段正则」替换该区段，止于下一 `## ` 或 EOF）⇒ 区段**外**之首部/尾部手工内容**不**被取代（实测：前置于首行前之追注在重生成后**存活**）。",
+              "- **裁定（L2 自裁）**：① 生成器增 **`--dump`**（**dry-run**，只算不写；输出 `{dry_run, sha16, lines}`）；② 入机判 runner 静态齿 **t41_boundary_is_generator_output**"
+              "（**双臂**：① 实件 sha16 **== 生成器 dry-run 输出**（覆盖各生成段内手改与**尾部**新增）；② **首行**须为声明之标题形态 `BOUNDARY_HEAD_DECLARED`（覆盖**前置**新增）；正/负控皆备）；"
+              "③ 自声明面同步：runner report revision → **CO-203.10**；④ **R-CO232-1**。",
+              "- **判别力（本会话实测）**：（a）**前置**追注 ⇒ t41 **False**；（b）§104 区段内插入追注 ⇒ t41 **False**；回复（重跑生成器）⇒ **True**（`--check` **43/43**；实件 sha16 回至 `39cb8380dd1c1fc9`）。",
+              "- **边界（诚实·残余）**：① 生成器**只拥有**各 § 区段 ⇒ 区段**外**（首部除首行、他工具产出区）内容**不**在本件权威面内；② 本件**不**判节内叙述之**完备性**；"
+              "③ `--check` 之 t41 须在**生成器已跑**之态评估（序之**末步**即生成器 ⇒ 收敛态成立；落后态即 fail-closed，属有意）；④ t40 亦对同一落后态报警（两者冗余但语义不同：t40 判 pin 行值，t41 判整件内容权威性）。",
+              "",
+              "| 工件 | sha16 |", "|---|---|"]
+    for _l, _p in [("runner `p3_v57_co164_order_runner.py`（**CO-203.10** / t41 生成器输出齿）", K2 / "tools/p3_v57_co164_order_runner.py"),
+                   ("boundary 生成器 `p3_v57_co146_boundary_append.py`（+`--dump` dry-run / +§105）", K2 / "tools/p3_v57_co146_boundary_append.py"),
+                   ("登记簿 `input_defect_register_v1.json`（+co232:F-1）", L2 / "input_defect_register_v1.json"),
+                   ("交付板 `k2_v4_8L.l4.kicad_pcb`（本件**未改**）", K2 / "k2_v4_8L.l4.kicad_pcb")]:
+        if _p.exists():
+            sec105.append(f"| {_l} | `{s16(_p)}` |")
+    sec105 += ["",
+               "> **R-CO232-1**：**序内生成物之内容权威性须机判** —— 凡由生成器产出之正典件（如 boundary），其实件内容须**等于生成器之输出**（`--dump` 式 dry-run 比对，双臂：**整件 sha16** + **首行**形态），"
+               "否则「生成段内手改 / 区段外前置追注」皆可静默混入正典（承 R-CO224-1「追注须写入生成器」/ R-CO230-1 / R-CO231-1）。",
+               "",
+               "> **序不变**：本件未改步骤集/序列（承 §82 之 R-CO209-2）。"]
+    body105 = "\n".join(sec105)
+    if MARK105 in txt:
+        txt = re.sub(re.escape(MARK105) + r"[\s\S]*?(?=\n## |\Z)", body105, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body105
+
+    # ── §106 CO-233（L2 自裁 · 状态齿与扰动实验协议之相容性） ──
+    MARK106 = "## 106. CO-233"
+    sec106 = [MARK106 + "（**L2 自裁 · 状态齿与扰动实验协议之相容性**）", "",
+              "- **缘起（新齿引入之相容性缺陷）**：CO-231/CO-232 新增**状态齿**（t40 = pin 行值须 == 实件；t41 = boundary 须 == 生成器输出）—— 二者皆依赖派生件 boundary 之**现行一致态**。"
+              "而序之**静态前置**含全部齿（`static_ok = all(checks)`）⇒ 扰动受控件即令 pin 与实件不符 ⇒ **序停机 rc=1**。",
+              "- **实测（本会话）**：不动点 oracle 之 case A（扰登记簿）⇒ `order_rc=1`、`order_converged=false`、`restored=false` ⇒ oracle **FAIL**（`FAIL_FIXPOINT_PATH_DEPENDENT_OR_ABORT`）——即**新增状态齿与扰动实验协议不相容**；"
+              "且该不相容**已存在于 `c1a880b`（CO-231）**（当时未复跑 oracle 故未现），本件一并修正。另实测异常路径：`finally` 只复原**受控件**而**未**复原**派生件** ⇒ boundary 留「已 realign 到扰动态」之 stale（t40/t41 随即停机）。",
+              "- **裁定（L2 自裁）**：① oracle 每案**注入后**先 **`_realign`**（重跑 boundary 生成器）**再**跑序；② `finally` 复原受控件后**再 realign**（异常/中断路径亦不留 stale）；③ oracle 自声明 revision `CO-219 → CO-232`，与 runner `TOOL_REVISION_DECLARED` **双侧同步**（t33 机判）；④ **R-CO233-1**。",
+              "- **判别力（本会话实测）**：修前 oracle **FAIL**（case A rc=1 / restored=false）；修后 **PASS**（5 案 `order_rc=0` 全复原、10 齿全 True、rc=0）。",
+              "- **边界（诚实·残余）**：① 本件为**相容性**修正，**不**改 t40/t41 之判据强度（停机语义保留：规范态下违例仍 fail-closed）；② **教训（入红线）**：凡新增**状态齿**（依赖受控件现行值者）须**同 commit 复查**与 oracle 扰动协议之相容性；"
+              "③ oracle 仍**不**扰动冻结四源/板/SPEC（R-CO195-0 不变）。",
+              "",
+              "| 工件 | sha16 |", "|---|---|"]
+    for _l, _p in [("runner `p3_v57_co164_order_runner.py`（CO-203.10 / +oracle revision 绑定 CO-232）", K2 / "tools/p3_v57_co164_order_runner.py"),
+                   ("oracle `p3_v57_co195_fixpoint_uniqueness_oracle.py`（**CO-232**：扰动后 realign + finally realign）", K2 / "tools/p3_v57_co195_fixpoint_uniqueness_oracle.py"),
+                   ("boundary 生成器 `p3_v57_co146_boundary_append.py`（+§106）", K2 / "tools/p3_v57_co146_boundary_append.py"),
+                   ("登记簿 `input_defect_register_v1.json`（+co233:F-1 / +co232:F-1）", L2 / "input_defect_register_v1.json"),
+                   ("交付板 `k2_v4_8L.l4.kicad_pcb`（本件**未改**）", K2 / "k2_v4_8L.l4.kicad_pcb")]:
+        if _p.exists():
+            sec106.append(f"| {_l} | `{s16(_p)}` |")
+    sec106 += ["",
+               "> **R-CO233-1**：凡**状态齿**（其判据依赖**受控件之现行值**者，如 pin 行现值、生成器输出一致性）——新增/修改时须**同 commit 复查与扰动实验（不动点 oracle）之相容性**：扰动受控件必使派生件（boundary）失同步，故扰动后须先**重跑派生件生成器（realign）**再跑序，**复原路径亦须 realign**（否则派生件留 stale ⇒ 状态齿停机）。禁以「新齿与 oracle 各自皆绿」之**分别**证据代替**相容性**证据（承 R-CO195-0/1、CO-219 F-2、CO-233 实测）。",
+               "",
+               "> **序不变**：本件未改步骤集/序列（承 §82 之 R-CO209-2）。"]
+    body106 = "\n".join(sec106)
+    if MARK106 in txt:
+        txt = re.sub(re.escape(MARK106) + r"[\s\S]*?(?=\n## |\Z)", body106, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body106
+
+    txt = txt.replace("W3 Boundary **v2.73**", "W3 Boundary **v2.74**")
+    txt = txt.replace("W3 Boundary **v2.72**", "W3 Boundary **v2.73**")
     txt = txt.replace("W3 Boundary **v2.71**", "W3 Boundary **v2.72**")
     txt = txt.replace("W3 Boundary **v2.70**", "W3 Boundary **v2.71**")
     txt = txt.replace("W3 Boundary **v2.69**", "W3 Boundary **v2.70**")
@@ -3815,6 +3881,11 @@ def main() -> int:
     txt = txt.replace("W3 Boundary **v2.46**", "W3 Boundary **v2.47**")
     txt = txt.replace("W3 Boundary **v2.45**", "W3 Boundary **v2.46**")
     txt = txt.replace("W3 Boundary **v2.44**", "W3 Boundary **v2.45**")
+    # CO-232（R-CO232-1）：`--dump` = **dry-run**（只算不写）⇒ 供 runner 静态齿判「boundary 是否为生成器之输出」。
+    if "--dump" in (sys.argv[1:] if argv is None else argv):
+        print(json.dumps({"dry_run": True, "sha16": hashlib.sha256(txt.encode("utf-8")).hexdigest()[:16],
+                          "lines": len(txt.splitlines())}, ensure_ascii=False))
+        return 0
     DOC.write_text(txt)
     print("boundary sha16:", s16(DOC), "| lines:", len(txt.splitlines()))
     return 0
