@@ -6,7 +6,7 @@
  "board": "k2_v4_8L.l4.kicad_pcb",
  "board_sha16": "d4e81f647be7f980",
  "package_dir": "pm_gate/artifacts/k2_v4/L5/jlc_package",
- "n_files": 37,
+ "n_files": 39,
  "commands": {
   "gerber": "kicad-cli pcb export gerbers --board-plot-params --no-x2 --layers F.Cu,In1.Cu,In2.Cu,In3.Cu,In4.Cu,In5.Cu,In6.Cu,B.Cu,F.Paste,B.Paste,F.Silkscreen,B.Silkscreen,F.Mask,B.Mask,Edge.Cuts",
   "drill": "kicad-cli pcb export drill --format excellon --excellon-units mm --generate-map --map-format svg --generate-report"
@@ -74,7 +74,7 @@
  },
  "declared_refs": {
   "files": [
-   "06_rulings/L2_RULING_process_route_selection_v2.md",
+   "06_rulings/L2_RULING_process_route_A_frozen_hdi_v1.md",
    "06_rulings/L2_RULING_u6_thermal_mitigation_v2.md",
    "06_rulings/L2_RULING_u6_thermal_v1.md",
    "06_rulings/m13_v57_co146_jlc_dfm_gate.json"
@@ -93,6 +93,7 @@
    "L2_RULING_jlc_standard_through_backdrill_v1.md": true,
    "L2_RULING_u6_thermal_mitigation_v2.md": true,
    "L2_RULING_process_route_selection_v2.md": true,
+   "L2_RULING_process_route_A_frozen_hdi_v1.md": true,
    "m13_v57_co146_jlc_dfm_gate.json": true
   },
   "impedance_copy_parity": {
@@ -319,6 +320,10 @@
    "sha256": "068a932f0257e8c5ba36b73074f72e807f9725067e3c8ec1bfd995ee4803f4b9",
    "bytes": 4246
   },
+  "03_stackup/HDI_stage_diagram.svg": {
+   "sha256": "236e8f90811df3fadf1caf3cda46c1523cc61816f3514647424a29d2b6dc652d",
+   "bytes": 3722
+  },
   "03_stackup/JLC08161H_stackup.svg": {
    "sha256": "44370475b258848f3763df9442ef874b14af4eb56374c60e54373f752b40b5b9",
    "bytes": 3091
@@ -338,6 +343,10 @@
   "06_rulings/L2_RULING_jlc_standard_through_backdrill_v1.md": {
    "sha256": "c379c0114e1bdabecb0f20edfdc8cbeeaf2f84a50f6b70235c72e28532c7bf7b",
    "bytes": 5932
+  },
+  "06_rulings/L2_RULING_process_route_A_frozen_hdi_v1.md": {
+   "sha256": "3170e3f3da642bd9d84d89399a0f9c38fc9977bfb95e5039c333c21132acd5af",
+   "bytes": 2992
   },
   "06_rulings/L2_RULING_process_route_selection_v2.md": {
    "sha256": "d258f67957a448d0125032739a8ed71c769a642791fd97695fd26458d33138cf",
@@ -364,8 +373,8 @@
    "bytes": 8839
   },
   "ORDER_NOTES.md": {
-   "sha256": "f9e60e330b061b50e5cf3bc14dee11506c215ebb06506e7030d4888d34701519",
-   "bytes": 5305
+   "sha256": "008693e931741f387eb32e8090bbfd4e61daec0d937093f3bc4efdaa1df4a730",
+   "bytes": 6429
   }
  },
  "redline": "只读板；零坐标搜索；不改板/图纸/SPEC/冻结四源（输出全在 L5 交付目录）。"

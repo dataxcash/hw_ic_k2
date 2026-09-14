@@ -727,7 +727,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | DFM 闸 `m13_v57_co146_jlc_dfm_gate.json` | `0f548bf44d041512` |
 | JLC 能力表 `m13_v57_co146_jlc8_capability.json` | `fe67e5add2597d1f` |
 | 通孔化反证 `m13_v57_co146_through_via_probe.json` | `fd82d5200294919e` |
-| 打样包记录 `m13_v57_co146_jlc_fab_package.json` | `17cae12b4efb75ac` |
+| 打样包记录 `m13_v57_co146_jlc_fab_package.json` | `24258a835f54eebc` |
 | 定性更正 `m13_v57_co146_jlc_rebind.json` | `a0a0f6114223ef05` |
 | L2 定值绑定 `jlc_prototype_parameters_v1.json` | `e9bf5019aeddbd16` |
 | 登记簿 `input_defect_register_v1.json`(+2 OPEN) | `b1d8c7130240c4d0` |
@@ -735,7 +735,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 工具 `p3_v57_co146_jlc_dfm_gate.py` | `309beb6fb0d6cef4` |
 | 工具 `p3_v57_co146_impedance_table.py` | `a1a432504f7ff6f2` |
 | 工具 `p3_v57_co146_pm_eval.py` | `06b2fe1859861a90` |
-| 工具 `p3_v57_co146_jlc_fab_package.py` | `11e814dd3c545f63` |
+| 工具 `p3_v57_co146_jlc_fab_package.py` | `968cb2b19c444750` |
 | 工具 `p3_v57_co146_through_via_probe.py` | `e6a53875c47319ae` |
 | 工具 `p3_v57_co146_closeout.py` | `18220ee964ead702` |
 
@@ -756,7 +756,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 登记簿 `input_defect_register_v1.json`(3 项 CLOSED / OPEN 0) | `b1d8c7130240c4d0` |
 | DFM 闸 `m13_v57_co146_jlc_dfm_gate.json` | `0f548bf44d041512` |
 | 通孔化反证 `m13_v57_co146_through_via_probe.json` | `fd82d5200294919e` |
-| 打样包记录 `m13_v57_co146_jlc_fab_package.json` | `17cae12b4efb75ac` |
+| 打样包记录 `m13_v57_co146_jlc_fab_package.json` | `24258a835f54eebc` |
 | 工具 `p3_v57_co147_l2_ruling.py` | `fbc81bdff63fc0d3` |
 
 ## 25. CO-148（L2 · **PM 输入升级为器件手册值** ⇒ U6 热超限）：热裁定 + 登记 + 台账
@@ -1010,7 +1010,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 - 实测缺口（修前）：`ORDER_NOTES.md` §2 声明「随单提交 … L2 裁定件」，§3/§6 另引 DFM 记录与 U6 热裁定，但 `jlc_package/` 内**均无该等文件**（in-package=False）⇒ 下单时 silent omission；包内阻抗表副本亦为 CO-156 前陈旧件。
 - 处置（**CO146-PKG.2**）：新增 `06_rulings/`（3 份 L2 裁定件 + DFM 记录）+ ORDER_NOTES 引用改**包内路径** + 牙齿 `t05_declared_rulings_packaged` / `t06_order_notes_refs_resolve_in_package`；打包工具**并入规范序**。
-- 复核：**全 gerber/drill 逐字节未变**（纯增量）；MANIFEST n_files = **37**，teeth = {"t01_idempotent": true, "t05_declared_rulings_packaged": true, "t06_order_notes_refs_resolve_in_package": true, "t07_packaged_rulings_match_sources": true, "t07b_parity_detector_sensitivity": true, "t08_declared_dirs_present": true, "t09_order_notes_binding_params": true, "t09b_binding_param_detector_sensitivity": true, "t10_declared_binding_source_pinned": true, "t10b_binding_source_pin_discriminates": true, "t11_stackup_svg_declared_binding": true, "t11b_stackup_svg_binding_sensitivity": true, "t12_order_notes_record_figures": true, "t12b_record_figure_binding_sensitivity": true, "t12c_impedance_spread_binding_sensitivity": true, "t12d_via_census_binding_sensitivity": true, "t12e_mask_facts_binding_sensitivity": true, "t12f_thermal_figures_binding_sensitivity": true, "t12g_jlc_capability_binding_sensitivity": true, "t12h_drc_rules_edge_binding_sensitivity": true, "t11c_stackup_svg_copper_geometry_binding": true, "t11d_stackup_svg_copper_geometry_sensitivity": true, "t15_impedance_copy_parity": true, "t15b_impedance_copy_parity_sensitivity": true, "t16_layer_sequence_derivation": true, "t16b_layer_sequence_sensitivity": true, "t02_8_copper_gerbers": true, "t03_drill_present": true, "t04_all_hashed": true}；登记簿 **178 项 / OPEN 0**。
+- 复核：**全 gerber/drill 逐字节未变**（纯增量）；MANIFEST n_files = **39**，teeth = {"t01_idempotent": true, "t05_declared_rulings_packaged": true, "t06_order_notes_refs_resolve_in_package": true, "t07_packaged_rulings_match_sources": true, "t07b_parity_detector_sensitivity": true, "t08_declared_dirs_present": true, "t09_order_notes_binding_params": true, "t09b_binding_param_detector_sensitivity": true, "t10_declared_binding_source_pinned": true, "t10b_binding_source_pin_discriminates": true, "t11_stackup_svg_declared_binding": true, "t11b_stackup_svg_binding_sensitivity": true, "t12_order_notes_record_figures": true, "t12b_record_figure_binding_sensitivity": true, "t12c_impedance_spread_binding_sensitivity": true, "t12d_via_census_binding_sensitivity": true, "t12e_mask_facts_binding_sensitivity": true, "t12f_thermal_figures_binding_sensitivity": true, "t12g_jlc_capability_binding_sensitivity": true, "t12h_drc_rules_edge_binding_sensitivity": true, "t11c_stackup_svg_copper_geometry_binding": true, "t11d_stackup_svg_copper_geometry_sensitivity": true, "t15_impedance_copy_parity": true, "t15b_impedance_copy_parity_sensitivity": true, "t16_layer_sequence_derivation": true, "t16b_layer_sequence_sensitivity": true, "t02_8_copper_gerbers": true, "t03_drill_present": true, "t04_all_hashed": true}；登记簿 **178 项 / OPEN 0**。
 
 **同 CO 另处置 2 项闸卫生**（实测缺陷）：
 
@@ -1026,14 +1026,14 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 工件 | sha16 |
 |---|---|
 | 工具 `p3_v57_co158_l5_packet_selfcontained.py` | `5f9a909c1dac2505` |
-| 工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.2 / 06_rulings + t05/t06） | `11e814dd3c545f63` |
+| 工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.2 / 06_rulings + t05/t06） | `968cb2b19c444750` |
 | 工具 `p3_v57_co77_closure_declaration_sweep.py`（CO-77.6 / L5 citation + rc） | `5459595adc50b392` |
 | 工具 `p3_v57_co124_input_selfcheck_gate.py`（rc 反映 verdict） | `446eac06ca0a90db` |
 | 工具 `p3_v57_co135_review_hygiene.py`（rc） | `827a49520c8e2cd5` |
 | 工具 `p3_v57_co136_gate_hygiene.py`（rc） | `a5b712e48119fdfb` |
-| 打样包 MANIFEST `L5/jlc_package/MANIFEST.json` | `210d4ef285973497` |
-| 下单备注 `L5/jlc_package/ORDER_NOTES.md` | `f9e60e330b061b50` |
-| 打样包记录 `m13_v57_co146_jlc_fab_package.json` | `17cae12b4efb75ac` |
+| 打样包 MANIFEST `L5/jlc_package/MANIFEST.json` | `acce45fdc8c8de1b` |
+| 下单备注 `L5/jlc_package/ORDER_NOTES.md` | `008693e931741f38` |
+| 打样包记录 `m13_v57_co146_jlc_fab_package.json` | `24258a835f54eebc` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 
 ## 34. CO-159 / CO-160（**非执行者对抗复评 CO-156/157/158 + L2 自裁处置**）
@@ -1057,7 +1057,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 工具 `p3_v57_co120_provenance_pin_gate.py`（CO-120.5 / 键名面 + SUPERSEDED_BOARDS） | `28d6211f32318d9b` |
 | 工具 `p3_v57_co135_review_hygiene.py`（CO-135.3 / 候选表交叉一致性 + 链 pin 派生） | `827a49520c8e2cd5` |
 | 工具 `p3_v57_co146_jlc_dfm_gate.py`（rc 反映 verdict） | `309beb6fb0d6cef4` |
-| 工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.3 / t07+t08） | `11e814dd3c545f63` |
+| 工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.3 / t07+t08） | `968cb2b19c444750` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 
 ## 35. CO-161（**L2 自裁 · 查漏型闸硬化 4**：K9 覆盖完备性 + identity fail-closed）
@@ -1111,10 +1111,10 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 工件 | sha16 |
 |---|---|
 | 工具 `p3_v57_co163_binding_to_order_notes.py` | `d01c050fb1578c87` |
-| 工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.4 / t09+t09b+t10+t10b） | `11e814dd3c545f63` |
-| 打样包 MANIFEST `L5/jlc_package/MANIFEST.json` | `210d4ef285973497` |
-| 下单备注 `L5/jlc_package/ORDER_NOTES.md` | `f9e60e330b061b50` |
-| 记录 `m13_v57_co146_jlc_fab_package.json` | `17cae12b4efb75ac` |
+| 工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.4 / t09+t09b+t10+t10b） | `968cb2b19c444750` |
+| 打样包 MANIFEST `L5/jlc_package/MANIFEST.json` | `acce45fdc8c8de1b` |
+| 下单备注 `L5/jlc_package/ORDER_NOTES.md` | `008693e931741f38` |
+| 记录 `m13_v57_co146_jlc_fab_package.json` | `24258a835f54eebc` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 
 ## 38. CO-164（**L2 自裁 · 收敛判定硬化**：规范复现序 rc 机判执行器）
@@ -1129,7 +1129,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co164_order_runner.py`（rc 策略 + 真收敛 + `--check` t01..t06） | `65ed41f3e88fbe66` |
+| 工具 `p3_v57_co164_order_runner.py`（rc 策略 + 真收敛 + `--check` t01..t06） | `db80604b81e805e9` |
 | 工具 `p3_v57_co164_disposition.py` | `47356d70e9d684c5` |
 | 工具 `p3_v57_co146_boundary_append.py`（§38 + 序文本订正） | `00fa05ab54fdf13c` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
@@ -1146,7 +1146,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co164_order_runner.py`（CO-164.2 / `allowlist_decision` + `watch_paths` + t07/t08） | `65ed41f3e88fbe66` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-164.2 / `allowlist_decision` + `watch_paths` + t07/t08） | `db80604b81e805e9` |
 | 工具 `p3_v57_co165_runner_hardening.py` | `3cb331ff39b0c824` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 
@@ -1180,9 +1180,9 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 工件 | sha16 |
 |---|---|
 | 工具 `p3_v57_co167_co166_findings_disposition.py` | `7f25190574691959` |
-| 工具 `p3_v57_co164_order_runner.py`（CO-167.1 / `record_refreshed` + t09/t10 + 序解析 fail-closed） | `65ed41f3e88fbe66` |
-| 工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.5 / t09 有锚正则） | `11e814dd3c545f63` |
-| 记录 `m13_v57_co146_jlc_fab_package.json`（重建） | `17cae12b4efb75ac` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-167.1 / `record_refreshed` + t09/t10 + 序解析 fail-closed） | `db80604b81e805e9` |
+| 工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.5 / t09 有锚正则） | `968cb2b19c444750` |
+| 记录 `m13_v57_co146_jlc_fab_package.json`（重建） | `24258a835f54eebc` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 
 ## 42. CO-168（**L2 自裁 · 登记簿自洽性硬化**：status 词汇 + counts 复算）
@@ -1215,7 +1215,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 工件 | sha16 |
 |---|---|
 | 工具 `p3_v57_co169_step_output_oracle.py` | `0cefe789442ba53c` |
-| 工具 `p3_v57_co164_order_runner.py`（CO-169.1 / `step_did_work` + t11） | `65ed41f3e88fbe66` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-169.1 / `step_did_work` + t11） | `db80604b81e805e9` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 
 ## 44. CO-170（**L2 自裁 · 交付物绑定**：叠层图 ↔ 声明定值表）
@@ -1231,9 +1231,9 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 工件 | sha16 |
 |---|---|
 | 工具 `p3_v57_co170_stackup_binding.py` | `abfa76433aef6d2e` |
-| 工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.6 / `stackup_svg_binding_checks` + t11/t11b） | `11e814dd3c545f63` |
+| 工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.6 / `stackup_svg_binding_checks` + t11/t11b） | `968cb2b19c444750` |
 | 叠层图 `L5/jlc_package/03_stackup/JLC08161H_stackup.svg` | `44370475b258848f` |
-| 记录 `m13_v57_co146_jlc_fab_package.json`（重建） | `17cae12b4efb75ac` |
+| 记录 `m13_v57_co146_jlc_fab_package.json`（重建） | `24258a835f54eebc` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 
 ## 45. CO-171（**L2 自裁 · 交付物绑定**：备注内记录派生数字 ↔ 来源记录）
@@ -1249,9 +1249,9 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 工件 | sha16 |
 |---|---|
 | 工具 `p3_v57_co171_order_notes_record_figures.py` | `a48cc84cc3fad741` |
-| 工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.7 / `order_notes_record_figures` + t12/t12b） | `11e814dd3c545f63` |
-| 下单备注 `L5/jlc_package/ORDER_NOTES.md`（**§5 数值已订正**） | `f9e60e330b061b50` |
-| 记录 `m13_v57_co146_jlc_fab_package.json`（重建） | `17cae12b4efb75ac` |
+| 工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.7 / `order_notes_record_figures` + t12/t12b） | `968cb2b19c444750` |
+| 下单备注 `L5/jlc_package/ORDER_NOTES.md`（**§5 数值已订正**） | `008693e931741f38` |
+| 记录 `m13_v57_co146_jlc_fab_package.json`（重建） | `24258a835f54eebc` |
 | 阻抗表 `m13_v57_co146_impedance_table.json`（来源记录） | `794132ded5a0ce61` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 
@@ -1269,7 +1269,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
   ① `p3_v57_co146_jlc_fab_package.py` 升 **CO146-PKG.8** —— 新增纯谓词 `impedance_spread_pct` / `via_census_figures` / `mask_clearance_figures` / `thermal_figures` 与 capability+rules 派生判据；牙齿 **t12c..t12h**（逐来源负控）与 **t11c/t11d**（叠层图**几何**正控/负控）；`stackup_svg(spec, binding)` 的铜厚矩形高度与标题 oz 改由**声明定值表**派生（1oz=0.035mm 标称；当前 1oz/0.5oz ⇒ 21.00/10.50 px）。
   ② `p3_v57_co146_jlc_dfm_gate.py` 升 **CO146-JLC-DFM.2** —— 「板规铜-板边」值由冻结 `drc_rules` 派生 + 牙齿 **t03**（正控/灵敏度）。
   ③ `p3_v57_co164_order_runner.py` 升 **CO-169.2** —— `_artifact_stamp` 多信号指纹（mtime_ns + ctime_ns + size + 内容 sha16）、`_snap_watched` 返回指纹字典 + 静态齿 **t12**。
-  ④ **复核**：打样包牙齿 **25/25**；`ORDER_NOTES.md` 与叠层图**输出逐字节不变**（`f9e60e330b061b50` / `44370475b258848f`）；DFM 闸 rc=1（预期 FAIL）且 t01..t03 全 True；登记簿 **178 项 / OPEN 0**（+7 TOOL_DEFECT，全 CLOSED）。
+  ④ **复核**：打样包牙齿 **25/25**；`ORDER_NOTES.md` 与叠层图**输出逐字节不变**（`008693e931741f38` / `44370475b258848f`）；DFM 闸 rc=1（预期 FAIL）且 t01..t03 全 True；登记簿 **178 项 / OPEN 0**（+7 TOOL_DEFECT，全 CLOSED）。
 
 > **R-CO172-1**：客户可见交付物内**凡可由记录复算的数字**（含**导出量**：模型间 spread、分量计数、回退净距）一律绑定来源记录并配**负控**；仅绑定总量、或只绑「主」数字，**视为未绑定**。
 > **R-CO172-2**：随单提交的**制造输入**不仅**文本**、其**几何**亦须由声明定值派生（或至少具备几何牙齿）；「文本已绑定 ⇒ 视为已绑」不成立。
@@ -1281,12 +1281,12 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 工具 `p3_v57_co172_rev19_co166_co171_review.py`（CO-172.1） | `94410c75a4b0acb2` |
 | 工具 `p3_v57_co173_co172_findings_disposition.py` | `039eefbf28ae5d5a` |
 | 复评记录 `m13_v57_co172_rev19_co166_co171_review.json` | `e7bca2e46eaac2af` |
-| 工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.8 / t12c..t12h + t11c/t11d） | `11e814dd3c545f63` |
+| 工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.8 / t12c..t12h + t11c/t11d） | `968cb2b19c444750` |
 | 工具 `p3_v57_co146_jlc_dfm_gate.py`（CO146-JLC-DFM.2 / 板规铜-板边派生 + t03） | `309beb6fb0d6cef4` |
-| 工具 `p3_v57_co164_order_runner.py`（CO-169.2 / 多信号快照 + t12；42 步） | `65ed41f3e88fbe66` |
-| 下单备注 `L5/jlc_package/ORDER_NOTES.md`（**逐字节不变**） | `f9e60e330b061b50` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-169.2 / 多信号快照 + t12；42 步） | `db80604b81e805e9` |
+| 下单备注 `L5/jlc_package/ORDER_NOTES.md`（**逐字节不变**） | `008693e931741f38` |
 | 叠层图 `03_stackup/JLC08161H_stackup.svg`（**逐字节不变**） | `44370475b258848f` |
-| 打样包记录 `m13_v57_co146_jlc_fab_package.json`（重建 / PKG.8） | `17cae12b4efb75ac` |
+| 打样包记录 `m13_v57_co146_jlc_fab_package.json`（重建 / PKG.8） | `24258a835f54eebc` |
 | DFM 闸记录 `m13_v57_co146_jlc_dfm_gate.json`（DFM.2） | `0f548bf44d041512` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 
@@ -1306,7 +1306,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co164_order_runner.py`（CO-169.3 / STEP_ARTIFACTS + 步本地归因 / 43 步） | `65ed41f3e88fbe66` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-169.3 / STEP_ARTIFACTS + 步本地归因 / 43 步） | `db80604b81e805e9` |
 | 工具 `p3_v57_co174_step_artifact_attribution.py` | `112dd67ac3af0f42` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 
@@ -1325,11 +1325,11 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.9 / t15/t15b + t16/t16b；29 牙齿） | `11e814dd3c545f63` |
+| 工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.9 / t15/t15b + t16/t16b；29 牙齿） | `968cb2b19c444750` |
 | 工具 `p3_v57_co175_package_parity_binding.py` | `406d044590c30bd4` |
-| 工具 `p3_v57_co164_order_runner.py`（CO-169.3 / 44 步） | `65ed41f3e88fbe66` |
-| 包记录 `m13_v57_co146_jlc_fab_package.json`（CO146-PKG.9） | `17cae12b4efb75ac` |
-| 下单备注 `L5/jlc_package/ORDER_NOTES.md`（**逐字节不变**） | `f9e60e330b061b50` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-169.3 / 44 步） | `db80604b81e805e9` |
+| 包记录 `m13_v57_co146_jlc_fab_package.json`（CO146-PKG.9） | `24258a835f54eebc` |
+| 下单备注 `L5/jlc_package/ORDER_NOTES.md`（**逐字节不变**） | `008693e931741f38` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 
 ## 49. CO-176（**L2 自裁 · 闸自检强制 + 引证可核验性**）
@@ -1346,7 +1346,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co164_order_runner.py`（CO-169.4 / 白名单自检强制 + t14；45 步） | `65ed41f3e88fbe66` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-169.4 / 白名单自检强制 + t14；45 步） | `db80604b81e805e9` |
 | 工具 `p3_v57_co146_jlc_dfm_gate.py`（CO146-JLC-DFM.3 / 引证锚点 t04/t05） | `309beb6fb0d6cef4` |
 | 工具 `p3_v57_co176_gate_selfcheck_evidence.py` | `3110269c1565b493` |
 | 能力表 `m13_v57_co146_jlc8_capability.json`（CO146-CAP.1 / 引证锚点） | `fe67e5add2597d1f` |
@@ -1370,7 +1370,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 |---|---|
 | 工具 `p3_v57_co146_jlc_dfm_gate.py`（CO146-JLC-DFM.4 / 值绑定 t06/t07） | `309beb6fb0d6cef4` |
 | 工具 `p3_v57_co177_capability_value_binding.py` | `7a825f76de8503d7` |
-| 工具 `p3_v57_co164_order_runner.py`（CO-169.4 / 46 步） | `65ed41f3e88fbe66` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-169.4 / 46 步） | `db80604b81e805e9` |
 | 能力表 `m13_v57_co146_jlc8_capability.json`（CO146-CAP.2 / 值绑定） | `fe67e5add2597d1f` |
 | DFM 闸记录 `m13_v57_co146_jlc_dfm_gate.json`（DFM.4 / 7 牙齿） | `0f548bf44d041512` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
@@ -1391,7 +1391,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 |---|---|
 | 工具 `p3_v57_co146_jlc_dfm_gate.py`（CO146-JLC-DFM.5 / 限值派生 t08） | `309beb6fb0d6cef4` |
 | 工具 `p3_v57_co178_drc_item_limit_derivation.py` | `edd00136850f772f` |
-| 工具 `p3_v57_co164_order_runner.py`（CO-169.4 / 47 步） | `65ed41f3e88fbe66` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-169.4 / 47 步） | `db80604b81e805e9` |
 | DFM 闸记录 `m13_v57_co146_jlc_dfm_gate.json`（DFM.5 / 8 牙齿） | `0f548bf44d041512` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 
@@ -1408,10 +1408,10 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.10 / 近失 + 点名加严；29 牙齿） | `11e814dd3c545f63` |
+| 工具 `p3_v57_co146_jlc_fab_package.py`（CO146-PKG.10 / 近失 + 点名加严；29 牙齿） | `968cb2b19c444750` |
 | 工具 `p3_v57_co179_sensitivity_teeth_hardening.py` | `73876c43bae6ed4f` |
-| 工具 `p3_v57_co164_order_runner.py`（CO-169.4 / 48 步） | `65ed41f3e88fbe66` |
-| 包记录 `m13_v57_co146_jlc_fab_package.json`（CO146-PKG.10） | `17cae12b4efb75ac` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-169.4 / 48 步） | `db80604b81e805e9` |
+| 包记录 `m13_v57_co146_jlc_fab_package.json`（CO146-PKG.10） | `24258a835f54eebc` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 
 ## 53. CO-180（**L2 自裁 · 牙齿判决完整性**）
@@ -1427,7 +1427,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co164_order_runner.py`（CO-181.1 / 声明产物牙齿纳入判决 + t15/t16；49 步） | `65ed41f3e88fbe66` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-181.1 / 声明产物牙齿纳入判决 + t15/t16；49 步） | `db80604b81e805e9` |
 | 工具 `p3_v57_co106_reference_plane_gate.py`（CO-106.5 / 判决完整性） | `d56a1e51ece54d51` |
 | 工具 `p3_v57_co78_layer_role_drift_gate.py`（CO-78.3 / teeth 归真齿 dict） | `b78354dea818848a` |
 | 工具 `p3_v57_co180_teeth_judgment_integrity.py` | `9911c54efba46e4a` |
@@ -1451,7 +1451,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 |---|---|
 | 复评工具 `p3_v57_co181_rev19_co166_co180_review.py`（只读 as-found + 内存注入；V10/P8） | `41611edf97ca93df` |
 | 复评记录 `m13_v57_co181_rev19_co166_co180_review.json` | `9a331200b90e84dc` |
-| 工具 `p3_v57_co164_order_runner.py`（CO-181.1 / fail-closed + EXPECTED_TEETH pin + t16；49 步） | `65ed41f3e88fbe66` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-181.1 / fail-closed + EXPECTED_TEETH pin + t16；49 步） | `db80604b81e805e9` |
 | 工具 `p3_v57_co146_pm_eval.py`（CO148-PM.3 / 去恒真齿） | `06b2fe1859861a90` |
 | 工具 `p3_v57_co98_reachability_status_report.py`（CO-98.3 / 判别式齿） | `11bfb844d542df6f` |
 | 工具 `p3_v57_co81_project_rules_gate.py`（CO-81.3 / 归真齿 dict） | `1c3e3f2eb2dacf6a` |
@@ -1470,7 +1470,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co164_order_runner.py`（CO-182.1 / boundary 扫描步紧跟刷新步 + t17；序内 50 次） | `65ed41f3e88fbe66` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-182.1 / boundary 扫描步紧跟刷新步 + t17；序内 50 次） | `db80604b81e805e9` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 
 ## 56. CO-183（**L2 自裁 · 审计机判化 + 残余裁定**）
@@ -1488,7 +1488,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co164_order_runner.py`（CO-183.1 / 牙齿卫生棘轮 t18；序内 50 次） | `65ed41f3e88fbe66` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-183.1 / 牙齿卫生棘轮 t18；序内 50 次） | `db80604b81e805e9` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 
 ## 57. CO-184（**L2 自裁 · 值绑定上下文约束**）
@@ -1505,7 +1505,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 工件 | sha16 |
 |---|---|
 | 工具 `p3_v57_co146_jlc_dfm_gate.py`（CO146-JLC-DFM.6 / 锚点唯一 + 值邻域 + t07b；9 齿） | `309beb6fb0d6cef4` |
-| 工具 `p3_v57_co164_order_runner.py`（CO-183.1 / EXPECTED_TEETH 含 DFM 9 齿；序内 50 次） | `65ed41f3e88fbe66` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-183.1 / EXPECTED_TEETH 含 DFM 9 齿；序内 50 次） | `db80604b81e805e9` |
 | DFM 闸记录 `m13_v57_co146_jlc_dfm_gate.json`（DFM.6 / 9 齿 / verdict FAIL 预期） | `0f548bf44d041512` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 
@@ -1521,7 +1521,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co164_order_runner.py`（CO-185.1 / PASS_VERDICTS + DECLARED_NONPASS_OK + nonpass_decision + t19） | `65ed41f3e88fbe66` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-185.1 / PASS_VERDICTS + DECLARED_NONPASS_OK + nonpass_decision + t19） | `db80604b81e805e9` |
 | 工具 `p3_v57_co159_rev19_co156_co157_co158_review.py`（rc↔verdict） | `9fc2285004a5146f` |
 | 工具 `p3_v57_co166_rev19_co159_co165_review.py`（rc↔verdict） | `21100cc0ca5d7d21` |
 | 工具 `p3_v57_co172_rev19_co166_co171_review.py`（rc↔verdict） | `94410c75a4b0acb2` |
@@ -1538,7 +1538,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co164_order_runner.py`（CO-186.1 / `ORDER_MD_PRODUCTS` + 受控集补全 + t20） | `65ed41f3e88fbe66` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-186.1 / `ORDER_MD_PRODUCTS` + 受控集补全 + t20） | `db80604b81e805e9` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 
 ## 60. CO-187（**非执行者对抗复评 CO-181..CO-186 + L2 自裁处置**）
@@ -1558,7 +1558,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co164_order_runner.py`（CO-187.1 / t18 齿数下限 + t20 全写形态 + t21 读取者全集） | `65ed41f3e88fbe66` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-187.1 / t18 齿数下限 + t20 全写形态 + t21 读取者全集） | `db80604b81e805e9` |
 | 复评工具 `p3_v57_co187_rev19_co181_co186_review.py` | `c2933e4cc21d1035` |
 | 复评记录 `m13_v57_co187_rev19_co181_co186_review.json` | `6643bf07db7ee762` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
@@ -1575,7 +1575,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co164_order_runner.py`（CO-188.1 / `stray_write` 停机类 + `STRAY_WRITE_ALLOWED` + t22） | `65ed41f3e88fbe66` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-188.1 / `stray_write` 停机类 + `STRAY_WRITE_ALLOWED` + t22） | `db80604b81e805e9` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 
 ## 62. CO-189（**L2 自裁 · 受控集外写入可见性**）
@@ -1590,7 +1590,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co164_order_runner.py`（CO-189.1 / 承载根 stat shadow + `uncontrolled_write` + `WRITE_SHADOW_EXEMPT` + t23） | `65ed41f3e88fbe66` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-189.1 / 承载根 stat shadow + `uncontrolled_write` + `WRITE_SHADOW_EXEMPT` + t23） | `db80604b81e805e9` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 
 ## 63. CO-190（**L2 自裁 · 步骤超时 fail-closed：复现序可靠性**）
@@ -1605,7 +1605,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co164_order_runner.py`（CO-190.1 / `STEP_TIMEOUT_S` + `step_timeout` + 逐步 `duration_s` + t24） | `65ed41f3e88fbe66` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-190.1 / `STEP_TIMEOUT_S` + `step_timeout` + 逐步 `duration_s` + t24） | `db80604b81e805e9` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 
 ## 64. CO-191（**L2 自裁 · 判定基据完备性**）
@@ -1620,7 +1620,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co164_order_runner.py`（CO-191.1 / 全 verdict 全判 + `JUDGMENT_DOWNSTREAM` + t25） | `65ed41f3e88fbe66` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-191.1 / 全 verdict 全判 + `JUDGMENT_DOWNSTREAM` + t25） | `db80604b81e805e9` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 
 ## 65. CO-192（**非执行者对抗复评 CO-187..CO-191 + L2 自裁处置**）
@@ -1638,7 +1638,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co164_order_runner.py`（CO-192.1 / 扫描形态完备 + `all_verdicts_gate` + t18/t20/t21/t25 扩展） | `65ed41f3e88fbe66` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-192.1 / 扫描形态完备 + `all_verdicts_gate` + t18/t20/t21/t25 扩展） | `db80604b81e805e9` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 | 复评件 `m13_v57_co192_rev19_co187_co191_review.json`（PASS_WITH_FINDINGS / 4） | `b58a374c337d75e8` |
 
@@ -1661,7 +1661,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co164_order_runner.py`（CO-193.1 / 下游声明可执行 + 白名单证据本步绑定 + t26） | `65ed41f3e88fbe66` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-193.1 / 下游声明可执行 + 白名单证据本步绑定 + t26） | `db80604b81e805e9` |
 | 工具 `p3_v57_co120_provenance_pin_gate.py` + 记录（CO-120.6 / 现行态键判据 + 对偶控） | `28d6211f32318d9b` |
 | 复评件 `m13_v57_co192_rev19_co187_co191_review.json`（去处置态 sha ⇒ as-found 幂等） | `b58a374c337d75e8` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
@@ -1680,7 +1680,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co164_order_runner.py`（CO-194.1 / 基据↔判官 + 声明↔工具 + t27） | `65ed41f3e88fbe66` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-194.1 / 基据↔判官 + 声明↔工具 + t27） | `db80604b81e805e9` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 
 ## 68. CO-195（**L2 自裁 · 固定点唯一性（路径无关）oracle**）
@@ -1722,7 +1722,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co164_order_runner.py`（CO-196.2 / t28 结构性 + J-4 逐分支可控） | `65ed41f3e88fbe66` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-196.2 / t28 结构性 + J-4 逐分支可控） | `db80604b81e805e9` |
 | 工具 `p3_v57_co195_fixpoint_uniqueness_oracle.py`（多扰动量 3 案 + 8 牙齿） | `585b983de844603d` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 
@@ -1745,7 +1745,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co164_order_runner.py`（CO-197.1 / 解包形态 + io·pathlib md 形态） | `65ed41f3e88fbe66` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-197.1 / 解包形态 + io·pathlib md 形态） | `db80604b81e805e9` |
 | 复评件 `m13_v57_co197_rev19_co192_co195_review.json`（as-found 幂等） | `de625cb63e0df8f5` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 
@@ -1761,7 +1761,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co164_order_runner.py`（CO-198.1 / 代理↔语义闸绑定 + 静态齿 t29） | `65ed41f3e88fbe66` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-198.1 / 代理↔语义闸绑定 + 静态齿 t29） | `db80604b81e805e9` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 
 ## 72. CO-199（**L2 自裁 · 白名单 rc 类语义**）
@@ -1776,7 +1776,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co164_order_runner.py`（CO-199.1 / 白名单 rc 类语义 + 静态齿 t30） | `65ed41f3e88fbe66` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-199.1 / 白名单 rc 类语义 + 静态齿 t30） | `db80604b81e805e9` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 
 ## 73. CO-200（**L2 自裁 · 不动点 oracle 扩扰动量：受控 md 卡片产物**）
@@ -1808,7 +1808,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co164_order_runner.py`（CO-201.1 / 出口语义 + 边界负控 + 静态齿 t31） | `65ed41f3e88fbe66` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-201.1 / 出口语义 + 边界负控 + 静态齿 t31） | `db80604b81e805e9` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 
 ## 75. CO-202（**非执行者对抗复评 CO-196..CO-201 + L2 自裁处置**）
@@ -1831,7 +1831,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co164_order_runner.py`（CO-202.1 / t28 谓词级逐返回路径控 + decl 注入 + proxy AST 字面量集 + 静态齿 t32） | `65ed41f3e88fbe66` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-202.1 / t28 谓词级逐返回路径控 + decl 注入 + proxy AST 字面量集 + 静态齿 t32） | `db80604b81e805e9` |
 | 工具 `p3_v57_co195_fixpoint_uniqueness_oracle.py`（CO-202 / 5 案 + 10 牙齿：含 图（.svg）类别） | `585b983de844603d` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 
@@ -1847,7 +1847,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 工具 `p3_v57_co164_order_runner.py`（CO-203.1 / 自声明修订号绑定：`TOOL_REVISION_DECLARED` + `tool_revision_bound` + 静态齿 t33） | `65ed41f3e88fbe66` |
+| 工具 `p3_v57_co164_order_runner.py`（CO-203.1 / 自声明修订号绑定：`TOOL_REVISION_DECLARED` + `tool_revision_bound` + 静态齿 t33） | `db80604b81e805e9` |
 | 工具 `p3_v57_co195_fixpoint_uniqueness_oracle.py`（CO-202 / 5 案 + 10 牙齿；自声明 `revision`=CO-202） | `585b983de844603d` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 
@@ -1911,10 +1911,10 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 判据件 `process_route_criteria_v1.json`（**v1.3**） | `e4654aeda2cab72d` |
+| 判据件 `process_route_criteria_v1.json`（**v1.3**） | `3928f8f7507056ca` |
 | 执行器 `p3_v57_co206_process_route_select.py`（**CO-206.2**） | `83dba4f108663e6d` |
-| 证据 `m13_v57_co206_process_route_selection.json` | `3914834c6604de33` |
-| 证据 `m13_v57_co206_process_route_selection.md` | `2edb39d9fe0ac70e` |
+| 证据 `m13_v57_co206_process_route_selection.json` | `aea3853af9644634` |
+| 证据 `m13_v57_co206_process_route_selection.md` | `ea90f84d6f0b7798` |
 | 裁定 `L2_RULING_process_route_selection_v2.md`（§0 更正 + §1 定案 + §2b 口径） | `d258f67957a448d0` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 
@@ -1950,9 +1950,9 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | 工件 | sha16 |
 |---|---|
 | 执行器 `p3_v57_co206_process_route_select.py`（CO-206.2） | `83dba4f108663e6d` |
-| 判据件 `process_route_criteria_v1.json`（v1.3） | `e4654aeda2cab72d` |
+| 判据件 `process_route_criteria_v1.json`（v1.3） | `3928f8f7507056ca` |
 | 生成器 `p3_v57_co146_boundary_append.py`（本节写入器） | `00fa05ab54fdf13c` |
-| runner `p3_v57_co164_order_runner.py`（CO-203.1 / t33 域不变量） | `65ed41f3e88fbe66` |
+| runner `p3_v57_co164_order_runner.py`（CO-203.1 / t33 域不变量） | `db80604b81e805e9` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 
 ## 82. CO-209（**L2 自裁 · band 级「列 × 桥孔 x」联合求解之直接行使（族闭合复核）+ 发射器透传补齐**）
@@ -1986,9 +1986,9 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 生成器 `p3_v57_co146_jlc_fab_package.py`（§6 + `co204` 记录绑定） | `11e814dd3c545f63` |
-| 随单 `jlc_package/ORDER_NOTES.md`（§6 修正后） | `f9e60e330b061b50` |
-| 包记录 `m13_v57_co146_jlc_fab_package.json`（牙齿 29/29） | `17cae12b4efb75ac` |
+| 生成器 `p3_v57_co146_jlc_fab_package.py`（§6 + `co204` 记录绑定） | `968cb2b19c444750` |
+| 随单 `jlc_package/ORDER_NOTES.md`（§6 修正后） | `008693e931741f38` |
+| 包记录 `m13_v57_co146_jlc_fab_package.json`（牙齿 29/29） | `24258a835f54eebc` |
 | 记录 `m13_v57_co204_thermal_verification.json`（O2 定案；新增绑定之源） | `abf47be9b33e62a6` |
 | 裁定 `L2_RULING_u6_thermal_mitigation_v2.md`（O2 定案 v2.0） | `cec7bd86d39b71c8` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
@@ -2006,12 +2006,12 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 判据件 `process_route_criteria_v1.json`（**v1.4**：+`k_rederivation` / +`decision` 块 / cost expr 补项） | `e4654aeda2cab72d` |
+| 判据件 `process_route_criteria_v1.json`（**v1.4**：+`k_rederivation` / +`decision` 块 / cost expr 补项） | `3928f8f7507056ca` |
 | 执行器 `p3_v57_co206_process_route_select.py`（**CO-206.3**：求值器 + 规则求值 + 6 齿） | `83dba4f108663e6d` |
-| 证据 `m13_v57_co206_process_route_selection.json` | `3914834c6604de33` |
-| 证据 `m13_v57_co206_process_route_selection.md` | `2edb39d9fe0ac70e` |
+| 证据 `m13_v57_co206_process_route_selection.json` | `aea3853af9644634` |
+| 证据 `m13_v57_co206_process_route_selection.md` | `ea90f84d6f0b7798` |
 | 裁定 `L2_RULING_process_route_selection_v2.md`（§2 R3′ 补可行性前置注记） | `d258f67957a448d0` |
-| 包记录 `m13_v57_co146_jlc_fab_package.json`（牙齿 29/29） | `17cae12b4efb75ac` |
+| 包记录 `m13_v57_co146_jlc_fab_package.json`（牙齿 29/29） | `24258a835f54eebc` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 
 > **R-CO211-1**：「XX 已编码 / 可复现」类声明须有**求值齿**支撑 —— 正控 = 填参即出数且可改判，负控 = 缺参恒 None 不排序、前置不满足恒取保守路；规则须与其**前置条件同处声明**（判据件 `decision` 块），实现与声明以 `rule_id` 同源。
@@ -2054,10 +2054,10 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| 判据件 `process_route_criteria_v1.json`（**v1.5**：+机读 `measured_placement` / +`decision.precondition`） | `e4654aeda2cab72d` |
+| 判据件 `process_route_criteria_v1.json`（**v1.5**：+机读 `measured_placement` / +`decision.precondition`） | `3928f8f7507056ca` |
 | 执行器 `p3_v57_co206_process_route_select.py`（**CO-206.4**：前置自判据件求值 + 数据驱动齿 t07） | `83dba4f108663e6d` |
-| 证据 `m13_v57_co206_process_route_selection.json`（7 齿全 True） | `3914834c6604de33` |
-| 证据 `m13_v57_co206_process_route_selection.md` | `2edb39d9fe0ac70e` |
+| 证据 `m13_v57_co206_process_route_selection.json`（7 齿全 True） | `aea3853af9644634` |
+| 证据 `m13_v57_co206_process_route_selection.md` | `ea90f84d6f0b7798` |
 | 工具 `p3_v57_l5_signoff.py`（CO-213：板指纹**真判别**（对照冻结源）） | `7618070712518194` |
 | 记录 `m13_v57_l5_dfm_dft_record.json`（**L5-DFM.8**） | `6632179e1ef63183` |
 | 记录 `m13_v57_l5_si_pi_emc_record.json`（**L5-SI.8**） | `97c867e89fc6df6c` |
@@ -2087,7 +2087,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 |---|---|
 | 闸 `p3_v57_co120_provenance_pin_gate.py`（**CO-120.7**：+P5 L5 板指纹消费面机判 + 4 齿） | `28d6211f32318d9b` |
 | 记录 `m13_v57_co120_provenance_pin_gate.json`（**CO-120.7**：19 齿全 True / `l5_bad=0`） | `df6c9135bc02bbe4` |
-| runner `p3_v57_co164_order_runner.py`（`EXPECTED_TEETH` co120 15→19 齿） | `65ed41f3e88fbe66` |
+| runner `p3_v57_co164_order_runner.py`（`EXPECTED_TEETH` co120 15→19 齿） | `db80604b81e805e9` |
 | 被消费 L5 记录 `m13_v57_l5_dfm_dft_record.json`（DFM/DFT） | `6632179e1ef63183` |
 | 被消费 L5 记录 `m13_v57_l5_si_pi_emc_record.json`（SI/PI/EMC） | `97c867e89fc6df6c` |
 | 被消费 L5 记录 `m13_v57_l5_g7_record.md`（G7） | `2ab7a29e745b70ff` |
@@ -2107,7 +2107,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| runner `p3_v57_co164_order_runner.py`（**CO-215**：`artifact_readers` 收窄为 AST 字面量 + 代理覆盖面齿 t26/t29） | `65ed41f3e88fbe66` |
+| runner `p3_v57_co164_order_runner.py`（**CO-215**：`artifact_readers` 收窄为 AST 字面量 + 代理覆盖面齿 t26/t29） | `db80604b81e805e9` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 
 > **R-CO215-1**：凡**代理帮助函数**（启发式 / 廉价前置之实现）须**恰**登记于 `PROXY_SEMANTIC_BINDING`（有外部语义判官）**或** `PROXY_RESIDUAL_EXPLICIT`（残余显式 + 依据 + 触发 + **消费齿**）之一，由覆盖面齿机判；**源面判据不得以原文子串判**（注释/散文不得满足 —— 承 R-CO202-4）；残余不得宣称完备。
@@ -2125,7 +2125,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| runner `p3_v57_co164_order_runner.py`（**CO-216**：`declared_verdict_in_tool`→AST 字面量；`boundary_read_scan`→AST 形态；两枚入覆盖登记） | `65ed41f3e88fbe66` |
+| runner `p3_v57_co164_order_runner.py`（**CO-216**：`declared_verdict_in_tool`→AST 字面量；`boundary_read_scan`→AST 形态；两枚入覆盖登记） | `db80604b81e805e9` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 
 > **R-CO216-1**：凡**源面判据**（扫工具源以判声明 / 能力 / 读者身份者）一律以 **AST 形态或字面量**判，**禁原文子串或原文正则**；新增此类帮助函数须入 `PROXY_HELPERS_PINNED` + `PROXY_RESIDUAL_EXPLICIT`（承 R-CO215-1）。
@@ -2163,7 +2163,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| runner `p3_v57_co164_order_runner.py`（**CO-218**：`FROZEN_SOURCES`/`FROZEN_SRC_COPIES`/`frozen_sources_decision` + 静态齿 t34） | `65ed41f3e88fbe66` |
+| runner `p3_v57_co164_order_runner.py`（**CO-218**：`FROZEN_SOURCES`/`FROZEN_SRC_COPIES`/`frozen_sources_decision` + 静态齿 t34） | `db80604b81e805e9` |
 | 登记簿 `input_defect_register_v1.json`（178 项 / OPEN 0） | `b1d8c7130240c4d0` |
 
 > **R-CO218-1**：凡「**判定基据之锚点**」（冻结输入 / 规则源 / 唯一性断言）须**入规范序机判**（fail-closed），不得仅以人手复核或一次性断言承载；源之**唯一性**（多副本）须机判**同字节**；**产物**（随 rev 合法变更者）不得混入冻结 pin。
@@ -2180,7 +2180,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| runner `p3_v57_co164_order_runner.py`（**CO-203.2**：t29/t34 **名集钉定**） | `65ed41f3e88fbe66` |
+| runner `p3_v57_co164_order_runner.py`（**CO-203.2**：t29/t34 **名集钉定**） | `db80604b81e805e9` |
 | co120 闸 `p3_v57_co120_provenance_pin_gate.py`（**CO-120.8**：P5 `L5_RECORD_JSON` 名集钉定） | `28d6211f32318d9b` |
 | oracle `p3_v57_co195_fixpoint_uniqueness_oracle.py`（**CO-219**：前置 fail-fast） | `585b983de844603d` |
 | 复评件 `m13_v57_CO219_rev19_co213_co218_review.json` | `826b5e625bec0fd9` |
@@ -2204,7 +2204,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 |---|---|
 | 裁定 `L2_RULING_cross_page_y_interleave_v1.md` | `7d9932dab61508c5` |
 | 交付板 `k2_v4_8L.l4.kicad_pcb`（本裁定**未改**） | `d4e81f647be7f980` |
-| runner `p3_v57_co164_order_runner.py` | `65ed41f3e88fbe66` |
+| runner `p3_v57_co164_order_runner.py` | `db80604b81e805e9` |
 
 > **R-CO220-1**：L2 自由度之「**不动**」须以**自裁 + 触发**落 boundary；**禁**以「等外部输入/等 owner」形式**悬置**（承第二章定层裁定）。
 
@@ -2255,7 +2255,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 |---|---|
 | L2 裁定 `L2_RULING_u6_thermal_v1.md` | `2c41056fc3a4de05` |
 | L2 裁定 `L2_RULING_u6_thermal_mitigation_v1.md` | `1273cd81a755108b` |
-| 随单 `L5/jlc_package/ORDER_NOTES.md` | `f9e60e330b061b50` |
+| 随单 `L5/jlc_package/ORDER_NOTES.md` | `008693e931741f38` |
 | 交付板 `k2_v4_8L.l4.kicad_pcb`（本件**未改**） | `d4e81f647be7f980` |
 > **R-CO223-1**：同一工程动作之**义务时点**（既定义务 / 条件动作 / 已撤）在**全部裁定件与随单**须**同源一致**；版本升级致口径变更者，须对旧件加**追注**明示以何件为准（禁重写历史正文，承 CO-213 F-3）。
 
@@ -2271,7 +2271,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 | L2 裁定件 `L2_RULING_u6_thermal_v1.md`（§R4-1 + CO-224 追注） | `2c41056fc3a4de05` |
 | L2 裁定件 `L2_RULING_u6_thermal_mitigation_v1.md`（§R5-3 + CO-224 追注） | `1273cd81a755108b` |
 | L2 裁定件 `L2_RULING_u6_gnd_via_array_v1.md`（CO-222 定案件） | `9c74ed4031298084` |
-| 随单 `L5/jlc_package/ORDER_NOTES.md` §6（条件动作 + 门限） | `f9e60e330b061b50` |
+| 随单 `L5/jlc_package/ORDER_NOTES.md` §6（条件动作 + 门限） | `008693e931741f38` |
 | 包内裁定副本 `06_rulings/L2_RULING_u6_thermal_v1.md` | `2c41056fc3a4de05` |
 | 包内裁定副本 `06_rulings/L2_RULING_u6_thermal_mitigation_v1.md` | `1273cd81a755108b` |
 | 本件 boundary（§25/§26 追注 + §95/§96/§97；自身不 pin sha） | — |
@@ -2298,12 +2298,12 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| runner `p3_v57_co164_order_runner.py`（**CO-203.3** / t35 名集钉定） | `65ed41f3e88fbe66` |
+| runner `p3_v57_co164_order_runner.py`（**CO-203.3** / t35 名集钉定） | `db80604b81e805e9` |
 | 裁定 `L2_RULING_cross_page_y_interleave_v1.md`（**+F-2 追注 / T3**） | `7d9932dab61508c5` |
 | 裁定 `L2_RULING_u6_gnd_via_array_v1.md`（CO-222 定案件；未改） | `9c74ed4031298084` |
 | 登记簿 `input_defect_register_v1.json`（+co225:F-1/F-2/F-4） | `b1d8c7130240c4d0` |
-| 打样包 `L5/jlc_package/MANIFEST.json` | `210d4ef285973497` |
-| 随单 `L5/jlc_package/ORDER_NOTES.md` | `f9e60e330b061b50` |
+| 打样包 `L5/jlc_package/MANIFEST.json` | `acce45fdc8c8de1b` |
+| 随单 `L5/jlc_package/ORDER_NOTES.md` | `008693e931741f38` |
 | 交付板 `k2_v4_8L.l4.kicad_pcb`（本件**未改**） | `d4e81f647be7f980` |
 
 - **名集等式（F-2 / F-4 处置之对账面）**：以 `grep -rn '层分配重指派' pm_gate/artifacts/k2_v4/L2/L2_RULING_cross_page_y_interleave_v1.md pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_joint_assignment_boundary_v1_82.md` 判 —— 两处**皆须**载 T3 / 追注（无未登记载明面、无缺项）；本件实测两处皆备。
@@ -2321,7 +2321,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| runner `p3_v57_co164_order_runner.py`（**CO-203.4** / t36 跨源绑定） | `65ed41f3e88fbe66` |
+| runner `p3_v57_co164_order_runner.py`（**CO-203.4** / t36 跨源绑定） | `db80604b81e805e9` |
 | L5 签署 `tools/p3_v57_l5_signoff.py`（**L5-SI.10** / 等长窗口真源绑定） | `7618070712518194` |
 | 真源 `SPEC_k2_v4.spec-rev-19.json` | `5f72182a2616392c` |
 | 副本 `_shared/eda_core/drc_rules.json` | `0a459839e15960b8` |
@@ -2340,10 +2340,10 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| runner `p3_v57_co164_order_runner.py`（**CO-203.5** / t37 义务同源齿） | `65ed41f3e88fbe66` |
+| runner `p3_v57_co164_order_runner.py`（**CO-203.5** / t37 义务同源齿） | `db80604b81e805e9` |
 | 登记簿 `input_defect_register_v1.json`（+co227:F-1） | `b1d8c7130240c4d0` |
 | 定案件 `L2_RULING_u6_gnd_via_array_v1.md` | `9c74ed4031298084` |
-| 随单 `L5/jlc_package/ORDER_NOTES.md` | `f9e60e330b061b50` |
+| 随单 `L5/jlc_package/ORDER_NOTES.md` | `008693e931741f38` |
 | 交付板 `k2_v4_8L.l4.kicad_pcb`（本件**未改**） | `d4e81f647be7f980` |
 
 > **R-CO227-1**：同一工程动作之「义务时点」类记录，其**载明面须域显式 + 名集等式机判**，且每面须命中**同源锚**；后续同类义务以**同一登记表**扩展（承 R-CO223-1 跨件同源 / R-CO224-1 名集等式 / R-CO219-1 枚举完整性 / R-CO225-1 无机判齿即空真）。
@@ -2358,7 +2358,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| runner `p3_v57_co164_order_runner.py`（**CO-203.6** / t38 覆盖面齿） | `65ed41f3e88fbe66` |
+| runner `p3_v57_co164_order_runner.py`（**CO-203.6** / t38 覆盖面齿） | `db80604b81e805e9` |
 | L5 签署 `tools/p3_v57_l5_signoff.py`（**L5-SI.11** / 覆盖面 fail-closed） | `7618070712518194` |
 | L5 SI 记录 `m13_v57_l5_si_pi_emc_record.json` | `97c867e89fc6df6c` |
 | 冻结页清单 `m13_v57_s1_page_manifest.json` | `a8ef3ea8ecff99d7` |
@@ -2378,7 +2378,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| runner `p3_v57_co164_order_runner.py`（**CO-203.7** / t39 几何源锚定） | `65ed41f3e88fbe66` |
+| runner `p3_v57_co164_order_runner.py`（**CO-203.7** / t39 几何源锚定） | `db80604b81e805e9` |
 | 几何源 `m13_v57_w3_joint_assignment.json`（**身份 pin**） | `60cbd331836e52b7` |
 | 上游锚点 `m13_v57_s1_page_manifest.json`（冻结源） | `a8ef3ea8ecff99d7` |
 | 上游锚点 `SPEC_k2_v4.spec-rev-19.json`（冻结源） | `5f72182a2616392c` |
@@ -2400,7 +2400,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| runner `p3_v57_co164_order_runner.py`（**CO-203.8** / 节集名集钉定） | `65ed41f3e88fbe66` |
+| runner `p3_v57_co164_order_runner.py`（**CO-203.8** / 节集名集钉定） | `db80604b81e805e9` |
 | 复评件 `m13_v57_CO230_rev19_co225_co229_review.json` | `3b816ee2247eb7f1` |
 | boundary 写入器 `p3_v57_co146_boundary_append.py` | `00fa05ab54fdf13c` |
 | 登记簿 `input_defect_register_v1.json`（+co230:F-1） | `b1d8c7130240c4d0` |
@@ -2419,7 +2419,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| runner `p3_v57_co164_order_runner.py`（**CO-203.9** / t40 pin 行内容齿） | `65ed41f3e88fbe66` |
+| runner `p3_v57_co164_order_runner.py`（**CO-203.9** / t40 pin 行内容齿） | `db80604b81e805e9` |
 | boundary 写入器 `p3_v57_co146_boundary_append.py`（§87 行拆分 + §104） | `00fa05ab54fdf13c` |
 | 被消费 L5 记录 `m13_v57_l5_dfm_dft_record.json`（§87 拆行） | `6632179e1ef63183` |
 | 被消费 L5 记录 `m13_v57_l5_si_pi_emc_record.json`（§87 拆行） | `97c867e89fc6df6c` |
@@ -2440,7 +2440,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| runner `p3_v57_co164_order_runner.py`（**CO-203.10** / t41 生成器输出齿） | `65ed41f3e88fbe66` |
+| runner `p3_v57_co164_order_runner.py`（**CO-203.10** / t41 生成器输出齿） | `db80604b81e805e9` |
 | boundary 生成器 `p3_v57_co146_boundary_append.py`（+`--dump` dry-run / +§105） | `00fa05ab54fdf13c` |
 | 登记簿 `input_defect_register_v1.json`（+co232:F-1） | `b1d8c7130240c4d0` |
 | 交付板 `k2_v4_8L.l4.kicad_pcb`（本件**未改**） | `d4e81f647be7f980` |
@@ -2458,7 +2458,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| runner `p3_v57_co164_order_runner.py`（CO-203.10 / +oracle revision 绑定 CO-232） | `65ed41f3e88fbe66` |
+| runner `p3_v57_co164_order_runner.py`（CO-203.10 / +oracle revision 绑定 CO-232） | `db80604b81e805e9` |
 | oracle `p3_v57_co195_fixpoint_uniqueness_oracle.py`（**CO-232**：扰动后 realign + finally realign） | `585b983de844603d` |
 | boundary 生成器 `p3_v57_co146_boundary_append.py`（+§106） | `00fa05ab54fdf13c` |
 | 登记簿 `input_defect_register_v1.json`（+co233:F-1 / +co232:F-1） | `b1d8c7130240c4d0` |
@@ -2476,7 +2476,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| runner `p3_v57_co164_order_runner.py`（**CO-203.11** / t42 覆盖面齿） | `65ed41f3e88fbe66` |
+| runner `p3_v57_co164_order_runner.py`（**CO-203.11** / t42 覆盖面齿） | `db80604b81e805e9` |
 | 登记簿 `input_defect_register_v1.json`（+co234:F-1） | `b1d8c7130240c4d0` |
 | 交付板 `k2_v4_8L.l4.kicad_pcb`（本件**未改**） | `d4e81f647be7f980` |
 
@@ -2496,7 +2496,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| runner `p3_v57_co164_order_runner.py`（**CO-203.12** / t43 pin 行格式面齿 + boundary_pin_rows 遍历声明格式） | `65ed41f3e88fbe66` |
+| runner `p3_v57_co164_order_runner.py`（**CO-203.12** / t43 pin 行格式面齿 + boundary_pin_rows 遍历声明格式） | `db80604b81e805e9` |
 | boundary 生成器 `p3_v57_co146_boundary_append.py`（`CITE` 扩粗体 realign / +§108） | `00fa05ab54fdf13c` |
 | 登记簿 `input_defect_register_v1.json`（+co235:F-1） | `b1d8c7130240c4d0` |
 | 复评件 `m13_v57_CO235_rev19_co231_co234_review.json`（CO-235） | `d6de768766e927f1` |
@@ -2517,7 +2517,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| runner `p3_v57_co164_order_runner.py`（**CO-203.13** / t44 + 声明集/键名集/残余） | `65ed41f3e88fbe66` |
+| runner `p3_v57_co164_order_runner.py`（**CO-203.13** / t44 + 声明集/键名集/残余） | `db80604b81e805e9` |
 | boundary 生成器 `p3_v57_co146_boundary_append.py`（+§109） | `00fa05ab54fdf13c` |
 | 登记簿 `input_defect_register_v1.json`（+co236:F-1） | `b1d8c7130240c4d0` |
 | 复评件 `m13_v57_CO230_rev19_co225_co229_review.json`（as-found 幂等化） | `3b816ee2247eb7f1` |
@@ -2539,7 +2539,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| runner `p3_v57_co164_order_runner.py`（**CO-203.14** / t44 覆盖面臂：域 + 名集等式 + 域下限） | `65ed41f3e88fbe66` |
+| runner `p3_v57_co164_order_runner.py`（**CO-203.14** / t44 覆盖面臂：域 + 名集等式 + 域下限） | `db80604b81e805e9` |
 | boundary 生成器 `p3_v57_co146_boundary_append.py`（+§110） | `00fa05ab54fdf13c` |
 | 登记簿 `input_defect_register_v1.json`（+co237:F-1） | `b1d8c7130240c4d0` |
 | 复评件 `m13_v57_CO230_rev19_co225_co229_review.json` / 卡 | `3b816ee2247eb7f1` |
@@ -2561,7 +2561,7 @@ lane-run 蛇形幅度守卫只按 `VT_TRACK=0.4525`（净距口径）限定邻�
 
 | 工件 | sha16 |
 |---|---|
-| runner `p3_v57_co164_order_runner.py`（**CO-203.15** / t44 绑定臂：AST 绑定） | `65ed41f3e88fbe66` |
+| runner `p3_v57_co164_order_runner.py`（**CO-203.15** / t44 绑定臂：AST 绑定） | `db80604b81e805e9` |
 | boundary 生成器 `p3_v57_co146_boundary_append.py`（+§111） | `00fa05ab54fdf13c` |
 | 登记簿 `input_defect_register_v1.json`（+co238:F-1） | `b1d8c7130240c4d0` |
 | 复评件 `m13_v57_CO238_rev19_co235_co237_review.json` | `9ed47d8047b06bd4` |

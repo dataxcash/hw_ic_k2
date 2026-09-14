@@ -1729,6 +1729,8 @@ WRITE_SHADOW_EXEMPT = (
      "why": "Gerber 输出（fab 步生成；逐文件 sha 由受控 MANIFEST.json 覆盖）"},
     {"prefix": "pm_gate/artifacts/k2_v4/L5/jlc_package/02_drill_excellon", "covered_by": "MANIFEST.json",
      "why": "Excellon 钻孔 + 图（同上）"},
+    {"prefix": "pm_gate/artifacts/k2_v4/L5/jlc_package/03_stackup", "covered_by": "MANIFEST.json",
+     "why": "叠层图 + **HDI 盲埋孔叠层/阶数图**（DIR-14 增；MANIFEST 覆盖；主叠层图另为受控 `_SVG`）"},
     {"prefix": "pm_gate/artifacts/k2_v4/L5/jlc_package/04_impedance", "covered_by": "MANIFEST.json",
      "why": "阻抗表副本（MANIFEST 覆盖 + fab 齿 t15 与受控源逐字节 parity）"},
     {"prefix": "pm_gate/artifacts/k2_v4/L5/jlc_package/05_layer_sequence.txt", "covered_by": "MANIFEST.json",

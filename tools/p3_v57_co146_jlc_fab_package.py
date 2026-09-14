@@ -122,6 +122,56 @@ def stackup_svg(spec: dict, binding: dict | None = None) -> str:
             + "".join(rows) + '</svg>')
 
 
+def hdi_stage_svg(dfm: dict) -> str:
+    """DIR-14（监理指令 #14）：**HDI 盲埋孔叠层/阶数图**（确定性；输入 = 交付板 DFM 实测 census）。
+
+    不作几何推算：仅按 `as_built.copper_layers` 之层序与 `via_type_census` 之层对/支数绘制。
+    """
+    b = dfm["as_built"]
+    layers = b["copper_layers"]
+    idx = {n: i for i, n in enumerate(layers)}
+    census = b["via_type_census"]
+    row_h, top = 40, 74
+    W = 980
+    H = int(top + row_h * (len(layers) - 1) + 60 + 16 * len(census) + 40)
+
+    def y(i: int) -> float:
+        return top + i * row_h
+
+    p = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}">',
+         f'<rect width="{W}" height="{H}" fill="#ffffff"/>',
+         '<text x="20" y="28" font-size="16" font-weight="bold">'
+         'k2_v4_8L.l4 — HDI 盲埋孔叠层/阶数图（工艺 A 冻结 · 监理指令 #14）</text>',
+         f'<text x="20" y="50" font-size="12">board {b["board_sha16"]} | 8 copper layers | '
+         f'non-through {b["n_non_through_vias"]}/{b["n_vias"]} | top=F.Cu</text>']
+    for i, ln in enumerate(layers):
+        p.append(f'<rect x="150" y="{y(i) - 7:.0f}" width="360" height="14" fill="#c0392b" stroke="#222" stroke-width="1"/>')
+        p.append(f'<text x="20" y="{y(i) + 4:.0f}" font-size="12">{i + 1}. {ln}</text>')
+    classes = sorted(census.items(), key=lambda kv: (idx.get(kv[0].split("->")[0], 99),
+                                                     idx.get(kv[0].split("->")[1].split("|")[0], 99)))
+    colors = ["#2980b9", "#27ae60", "#8e44ad", "#e67e22", "#7f8c8d", "#16a085"]
+    lx = 545
+    for k, (key, cnt) in enumerate(classes):
+        src, rest = key.split("->")
+        dst, vtype = rest.split("|")
+        x = lx + k * 72
+        y0, y1 = y(idx[src]), y(idx[dst])
+        col = colors[k % len(colors)]
+        p.append(f'<line x1="{x}" y1="{y0:.0f}" x2="{x}" y2="{y1:.0f}" stroke="{col}" stroke-width="5"/>')
+        for yy in (y0, y1):
+            p.append(f'<circle cx="{x}" cy="{yy:.0f}" r="5" fill="{col}"/>')
+        p.append(f'<text x="{x}" y="{y1 + 22:.0f}" font-size="10" text-anchor="middle" '
+                 f'fill="{col}">{cnt}</text>')
+        p.append(f'<text x="{x}" y="{y1 + 34:.0f}" font-size="9" text-anchor="middle" '
+                 f'fill="#555">{vtype.replace("_", "")[:7]}</text>')
+    ly = y(len(layers) - 1) + 58
+    p.append(f'<text x="20" y="{ly:.0f}" font-size="12" font-weight="bold">层对 → 支数（as-built）</text>')
+    for k, (key, cnt) in enumerate(classes):
+        p.append(f'<text x="20" y="{ly + 18 + k * 16:.0f}" font-size="11">{key} = {cnt}</text>')
+    p.append('</svg>')
+    return "\n".join(p)
+
+
 def layer_sequence(spec: dict) -> str:
     imp = spec["impedance"]["per_layer"]
     lines = ["# 层序（top → bottom）｜交付板 k2_v4_8L.l4.kicad_pcb", ""]
@@ -409,25 +459,20 @@ def order_notes(spec: dict, dfm: dict, imp: dict) -> str:
 | 尺寸 | {b['board_size_mm'][0]} × {b['board_size_mm'][1]} mm |
 | 阻抗 | **85Ω 差分 ±10%，下单勾选「阻抗控制」** |
 | 表面处理 | 沉金 ENIG |
-| 文件 | Gerber RS-274X（01_）+ Excellon 钻孔（02_）+ **背钻钻孔文件** + 本叠层图（03_）+ 阻抗表（04_） |
+| 工艺通道 | **A：JLC HDI 盲埋孔（叠层阶数 ≥2）—— 监理指令 #14 owner 冻结** |
+| 文件 | Gerber RS-274X（01_）+ Excellon 钻孔（02_：含 4 类盲埋孔分片 .drl + drill map SVG）+ **HDI 叠层/阶数图（03_）** + 阻抗表（04_）+ 本下单说明 + 随单裁定（06_） |
 
-## 2. 下单渠道（CO-204 L2 裁定 → **CO-206 §0 更正**）
-**标准通道不支持盲/埋孔**：JLC 能力页明文 *"Blind/Buried Vias Not supported … only make through holes"*；
-同页明文 **Backdrill 支持**（4–32 层 / 板厚 ≥0.8mm / D 0.2–0.5mm / W = D+0.2mm / T ≥0.15mm / S ≥0.2mm，
-anchor 逐条为抓取件归一原文子串）。
+## 2. 下单渠道（**监理指令 #14：工艺冻结为 A**）
+**通道 = JLC HDI 盲埋孔（advanced/HDI 专属通道），叠层阶数 ≥2。** 本板 {b['n_non_through_vias']}/{b['n_vias']} 支为**非通孔**
+（`F.Cu→In2.Cu` 92、`In2.Cu→In5.Cu` 88（埋孔）、`In5.Cu→B.Cu` 32、`F.Cu→In5.Cu` 8）；`F.Cu→B.Cu` 通孔 273 支。
+其中 `In2.Cu→In5.Cu`（埋孔）需 **3 次层压**（阶数 ≥2）；标准通道口径下亦不满足残桩 <0.15mm（`In2.Cu→In5.Cu` 残桩 0.3664mm）——A 冻结后该点由 HDI 通道消解。
+- **标准通道（仅通孔）不使用**；其能力页明文 *"Blind/Buried Vias Not supported"* 与 *Backdrill* 支持，均与 A 冻结后之口径无关。
+- JLC 页 FAQ 原文 *"Advanced options such as blind/buried vias, HDI (laser vias), … typically require DFM review and may increase both cost and production time."* ⇒ HDI/advanced **支持**盲埋孔，须 **HDI DFM review**。
+- 路径 A/B/C 之对比已成历史：**A 由 owner（监理指令 #14）冻结**，B/C 闭项。定案见 `06_rulings/L2_RULING_process_route_A_frozen_hdi_v1.md`。
+- 报价 / 交期 = **外部输入**，下单时填写，**不阻塞出包**（禁编造单价：判据件参数保持 null）。
+- DFM 逐项对 HDI 通道之日判见 `06_rulings/` 同包之 `m13_v57_co146_jlc_dfm_gate.json` 与本备注 §3/§4。
 
-> ⚠️ **更正（CO-206 / 监理指令 #13）**：本段原写「⇒ **不存在**「JLC advanced / 盲埋孔通道」；该表述及据其之旧裁定**已撤销**」**有误，该表述已撤销**。
-> 准确表述：**advanced 通道支持**盲/埋孔与 **HDI（激光孔）** —— 同页 FAQ 原文 *"Advanced options such as blind/buried vias,
-> HDI (laser vias), … typically require DFM review and may increase both cost and production time."*
-> ⇒ 「JLC 做不了」**不成立**；正确命题 =「**HDI 能做但贵，评估更便宜的路**」。
-> 路径 A/B/C 对比与定案见 `06_rulings/L2_RULING_process_route_selection_v2.md`。
-
-本板 {b['n_non_through_vias']}/{b['n_vias']} 支过孔为**非通孔**（`F.Cu→In2.Cu` 92、`In2.Cu→In5.Cu` 88（埋孔）、
-`In5.Cu→B.Cu` 32、`F.Cu→In5.Cu` 8）⇒ **本包不可按「标准通道」下单**；
-**打样路径（CO-206 定案）= A：JLC advanced/HDI 通道**（须 DFM review 与重报价；阶数/孔径限值待板厂确认）；
-标准通道口径下既非可造、亦不满足残桩 <0.15mm（In2→In5 残桩 0.3664mm）。
-闸 = `p3_v57_co204_fab_capability_binding_gate.py`（现行板对标准通道预期 FAIL；改挂 HDI 能力源后须重跑）。
-随单文件（重派生后）：Gerber(01_) + 钻孔(02_) + **背钻钻孔文件** + 叠层图(03_) + 阻抗表(04_) + 本备注 + 散热要求。
+> **监理指令 #14 终止项**：不再新增检查齿（t45+）；「每轮复评上轮 CO」之复评债机制**本轮终止**；残余复评债 = **owner 豁免（关闭）**，不阻塞交付。完工定义 = **能送样**（出包 → 下单 → 投递验证）。
 
 ## 3. 板级 DFM 项（CO-147 L2 裁定 R3，随板厂评审提交）
 **阻焊开窗-邻铜净距 1 处**：`R3.pad2`(`PWR_BTN_ISO`) 开窗缘 ↔ `PCIE_UP3_N` 铜缘 = **0.0695mm** < JLC 0.09mm
@@ -459,6 +504,22 @@ anchor 逐条为抓取件归一原文子串）。
 ## 7. 已知板级非 DFM 事实（如实登记，非本单阻塞）
 - 本板无 PTH/NPTH 焊盘：`J6/J9/J11/J12/J13` 为无焊盘占位（netlist 骨架），板上无安装孔。
 - DRC（as-designed，含逃逸域 dru）：42 项，全部为 `lib_footprint_*`(41) + `silk_edge_clearance`(1)，无铜几何违规。
+
+## 8. 下单字段（JLC HDI 通道，照填）
+| 字段 | 值 |
+|---|---|
+| 板子类型 | 8 层 **HDI（盲埋孔）** |
+| 叠层 | JLC08161H（南亚 NP-155F）；成品厚 1.6mm ±10% |
+| 铜厚 | 外层 1oz / 内层 0.5oz |
+| 尺寸 | {b['board_size_mm'][0]} × {b['board_size_mm'][1]} mm |
+| 盲埋孔阶数 | **≥2 阶**（设计需 3 次层压：`In2.Cu→In5.Cu`） |
+| 过孔 | 0.2mm 孔 / 0.35mm 盘（环宽 0.075mm）；孔到孔 0.25mm |
+| 最小线宽 / 线距 | 0.16mm / ≥0.09mm（JLC 限 DRC clearance 违规 = 0） |
+| 阻抗 | 勾选「**阻抗控制**」；**85Ω 差分 ±10%**（见 `04_impedance/`；请覆盖最宽对内间距 0.6mm 中心几何） |
+| 表面处理 | 沉金 ENIG |
+| 文件 | Gerber（`01_gerber_rs274x/`）+ 钻孔（`02_drill_excellon/`）+ **HDI 叠层/阶数图（`03_stackup/`）** + 阻抗表（`04_impedance/`） |
+| 工程评审 | ① 阻焊开窗 1 处（`R3.pad2` ↔ `PCIE_UP3_N` = 0.0695mm < 0.09mm，见 §3）；② HDI 阶数/孔径/介质厚限值确认 |
+| 订单号 / 回执 | **下单后回填**（本包不含；见交付状态） |
 """
 
 
@@ -473,6 +534,8 @@ RULINGS = [
     (L2 / "L2_RULING_u6_thermal_mitigation_v2.md", "L2_RULING_u6_thermal_mitigation_v2.md"),
     # CO-206：工艺选型 A/B/C 定案 + CO-204 R1 定性更正（随单）
     (L2 / "L2_RULING_process_route_selection_v2.md", "L2_RULING_process_route_selection_v2.md"),
+    # DIR-14（owner 裁定）：工艺 A 冻结（JLC HDI 盲埋孔）随单裁定
+    (L2 / "L2_RULING_process_route_A_frozen_hdi_v1.md", "L2_RULING_process_route_A_frozen_hdi_v1.md"),
     (STEP2 / "m13_v57_co146_jlc_dfm_gate.json", "m13_v57_co146_jlc_dfm_gate.json"),
 ]
 
@@ -536,6 +599,7 @@ def main() -> int:
     (OUT / "03_stackup").mkdir(parents=True, exist_ok=True)
     _svg = stackup_svg(spec, jp_binding)                                 # CO-170/CO-172（F-6）
     (OUT / "03_stackup" / "JLC08161H_stackup.svg").write_text(_svg)
+    (OUT / "03_stackup" / "HDI_stage_diagram.svg").write_text(hdi_stage_svg(dfm))   # DIR-14
     (OUT / "04_impedance").mkdir(parents=True, exist_ok=True)
     shutil.copy(STEP2 / "m13_v57_co146_impedance_table.md", OUT / "04_impedance/impedance_table.md")
     shutil.copy(STEP2 / "m13_v57_co146_impedance_table.json", OUT / "04_impedance/impedance_table.json")
