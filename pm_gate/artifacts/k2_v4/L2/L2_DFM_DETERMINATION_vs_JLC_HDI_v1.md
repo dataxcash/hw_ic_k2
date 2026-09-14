@@ -1,7 +1,9 @@
 # L2 DFM 逐项判定 — 交付板 vs **JLC HDI 通道**（工艺 A 冻结，监理指令 #14）
 
 > 输入：交付板 `k2_v4_8L.l4.kicad_pcb` = `d4e81f647be7f980`（未变）。
-> 复现：`PY=../AppDir/usr/bin/python3.11; $PY tools/p3_v57_co146_jlc_dfm_gate.py` ⇒ `rc=1`、`stderr` 空；记录 `m13_v57_co146_jlc_dfm_gate.json` sha16 `0f548bf44d041512`。
+> **可复现命令（HDI 通道判定，rc=0）**：`PY=../AppDir/usr/bin/python3.11; $PY tools/p3_v57_co146_jlc_dfm_hdi_report.py`
+> ⇒ 原始输出 `verdict=PASS_HDI / 16 PASS + 1 ACCEPT + 0 FAIL`；证据件 `m13_v57_co146_jlc_dfm_hdi.json` sha16 `55a7d54e5af47c0f`（幂等）。
+> 底层机器实测（标准通道口径，rc=1 / stderr 空）：`$PY tools/p3_v57_co146_jlc_dfm_gate.py` ⇒ `m13_v57_co146_jlc_dfm_gate.json` sha16 `0f548bf44d041512`。
 > 原始逐项证据 = 该记录之 `items[]`（`jlc_limit` / `measured` / `verdict`）与 `fails[]`；本件为其**对 HDI 通道之映射**，不改写机器判决。
 
 ## 1. 逐项判定（17 项）
@@ -44,3 +46,8 @@
 - 对 **JLC HDI 通道**：**能做**。逐项判据如上；唯一非 PASS 之几何项（第 16 项）已由现行 L2 裁定 `ACCEPT_L2_WITH_FAB_REVIEW` 处置并随单提交，另有登记之最小修法兜底。
 - **不阻塞出包**；无需改板几何。
 - 待板厂回填：JLC HDI 通道之阶数/孔径/介质厚限值（外部 DFM 答复）与阻焊项评审结论。
+
+## 5. 证据链（可复现）
+- 命令：`python3 tools/p3_v57_co146_jlc_dfm_hdi_report.py`（rc=0）。前置 P0..P3（冻结 A / 闸记录属交付板 / HDI 锚为抓取件归一原文 / 阻焊处置有已裁定依据）皆 True，任一不成立即 FAIL(fail-closed)。
+- 负控实测：移除裁定件中 `ACCEPT_L2_WITH_FAB_REVIEW` ⇒ P3=False、`verdict=FAIL`、rc=1（复原后 rc=0 且记录 sha 逐字节回同值）⇒ 非橡皮图章。
+- 来源：`m13_v57_co146_jlc_dfm_hdi.json`（本件之机器产出）、`m13_v57_co146_jlc_dfm_gate.json`（底层实测）、`m13_v57_co146_jlc8_capability.json` + `..._source.html`（pinned 抓取件）。

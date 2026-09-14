@@ -1,0 +1,169 @@
+{
+ "artifact": "m13_v57_co146_jlc_dfm_hdi",
+ "schema": 1,
+ "revision": "DIR-14",
+ "nature": "DFM 逐项判定对 **JLC HDI 通道**（工艺 A 冻结）；消费既有闸机器实测 + 通道语义 + 已裁定处置",
+ "board": {
+  "path": "k2_v4_8L.l4.kicad_pcb",
+  "sha16": "d4e81f647be7f980"
+ },
+ "preconditions": {
+  "P0_frozen_A": true,
+  "P1_gate_board_is_delivery": true,
+  "P2_hdi_anchor_verbatim": true,
+  "P3_mask_disposition_ruled": true
+ },
+ "evidence": {
+  "gate_record": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_co146_jlc_dfm_gate.json",
+  "gate_record_sha16": "0f548bf44d041512",
+  "capability_source_sha256": "7d1d5a9193f3c2123367b1b306e9e3c67863fd31da6e577ad7c4f197fab8ac9d",
+  "mask_ruling": "pm_gate/artifacts/k2_v4/L2/L2_RULING_fab_capability_binding_A_hdi_v1.md"
+ },
+ "items": [
+  {
+   "item": "板尺寸",
+   "jlc_limit_std": "≤656×586mm 且 ≥3×3mm",
+   "measured": "120.1×46.1mm",
+   "machine_std": "PASS",
+   "hdi": "PASS",
+   "basis": "沿用机器实测（通道无关）"
+  },
+  {
+   "item": "层数",
+   "jlc_limit_std": "1–32 层（阻抗控制支持 4/6/8/10/12/32）",
+   "measured": "8 层",
+   "machine_std": "PASS",
+   "hdi": "PASS",
+   "basis": "沿用机器实测（通道无关）"
+  },
+  {
+   "item": "外层铜厚",
+   "jlc_limit_std": "1 oz / 2 oz",
+   "measured": "1 oz（SPEC stackup / 监理定值）",
+   "machine_std": "PASS",
+   "hdi": "PASS",
+   "basis": "沿用机器实测（通道无关）"
+  },
+  {
+   "item": "内层铜厚",
+   "jlc_limit_std": "0.5 oz / 1 oz / 2 oz",
+   "measured": "0.5 oz（SPEC stackup / JLC 默认）",
+   "machine_std": "PASS",
+   "hdi": "PASS",
+   "basis": "沿用机器实测（通道无关）"
+  },
+  {
+   "item": "成品板厚",
+   "jlc_limit_std": "1.6mm ±10%",
+   "measured": "1.6mm（JLC08161H）",
+   "machine_std": "PASS",
+   "hdi": "PASS",
+   "basis": "沿用机器实测（通道无关）"
+  },
+  {
+   "item": "最小线宽",
+   "jlc_limit_std": "≥0.09mm (3.5mil)",
+   "measured": "0.16mm",
+   "machine_std": "PASS",
+   "hdi": "PASS",
+   "basis": "沿用机器实测（通道无关）"
+  },
+  {
+   "item": "最小线距（域外，netclass 0.1/0.175/0.2 全 ≥3.5mil）",
+   "jlc_limit_std": "≥0.09mm",
+   "measured": "JLC 限 DRC clearance 违规 = 0",
+   "machine_std": "PASS",
+   "hdi": "PASS",
+   "basis": "沿用机器实测（通道无关）"
+  },
+  {
+   "item": "最小过孔孔壁",
+   "jlc_limit_std": "≥0.15mm（本板按 JLC 建议值 ≥0.2mm 判）",
+   "measured": "0.2mm",
+   "machine_std": "PASS",
+   "hdi": "PASS",
+   "basis": "沿用机器实测（通道无关）"
+  },
+  {
+   "item": "最小过孔盘径",
+   "jlc_limit_std": "≥0.25mm",
+   "measured": "0.35mm",
+   "machine_std": "PASS",
+   "hdi": "PASS",
+   "basis": "沿用机器实测（通道无关）"
+  },
+  {
+   "item": "过孔环宽（单边）",
+   "jlc_limit_std": "盘径 ≥ 孔径+0.15mm（⇒ 单边 ≥0.075mm）",
+   "measured": "0.075mm",
+   "machine_std": "PASS",
+   "hdi": "PASS",
+   "basis": "沿用机器实测（通道无关）"
+  },
+  {
+   "item": "过孔孔到孔",
+   "jlc_limit_std": "≥0.2mm",
+   "measured": "0.25mm",
+   "machine_std": "PASS",
+   "hdi": "PASS",
+   "basis": "沿用机器实测（通道无关）"
+  },
+  {
+   "item": "NPTH 最小孔径",
+   "jlc_limit_std": "≥0.5mm",
+   "measured": "Nonemm（[]）",
+   "machine_std": "PASS",
+   "hdi": "PASS",
+   "basis": "沿用机器实测（通道无关）"
+  },
+  {
+   "item": "铜到板边",
+   "jlc_limit_std": "≥0.2mm",
+   "measured": "板规 min_copper_edge_clearance=0.30mm；JLC 限 DRC copper_edge_clearance 违规 = 0",
+   "machine_std": "PASS",
+   "hdi": "PASS",
+   "basis": "沿用机器实测（通道无关）"
+  },
+  {
+   "item": "阻焊桥 / 阻焊-铜净距",
+   "jlc_limit_std": "桥 ≥0.1mm；开窗到邻近铜 ≥0.09mm",
+   "measured": "JLC 限 DRC solder_mask_bridge 违规 = 1",
+   "machine_std": "FAIL",
+   "hdi": "ACCEPT_L2_WITH_FAB_REVIEW",
+   "basis": "既有 L2 裁定（CO-147 R3）：随板厂工程评审提交，不触铜几何（P3）"
+  },
+  {
+   "item": "表面处理",
+   "jlc_limit_std": "6 层及以上不支持 HASL ⇒ 须 ENIG",
+   "measured": "沉金 ENIG",
+   "machine_std": "PASS",
+   "hdi": "PASS",
+   "basis": "沿用机器实测（通道无关）"
+  },
+  {
+   "item": "阻抗控制",
+   "jlc_limit_std": "支持层数 4/6/8/10/12/.../32，公差 ±10%",
+   "measured": "8 层 + 85Ω±10%（见 CO-146 阻抗表）",
+   "machine_std": "PASS",
+   "hdi": "PASS",
+   "basis": "沿用机器实测（通道无关）"
+  },
+  {
+   "item": "**过孔类型（盲/埋孔）**",
+   "jlc_limit_std": "**不支持盲/埋孔（仅通孔）**",
+   "measured": "**非通孔 220/493 支**：F.Cu->In2.Cu|BLIND_BURIED=92；F.Cu->In5.Cu|BLIND_BURIED=8；In2.Cu->In5.Cu|BLIND_BURIED=88；In5.Cu->B.Cu|BLIND_BURIED=32",
+   "machine_std": "FAIL",
+   "hdi": "PASS",
+   "basis": "HDI/advanced 通道支持盲埋孔（抓取件归一原文锚；P2）"
+  }
+ ],
+ "summary": {
+  "n_items": 17,
+  "n_pass": 16,
+  "n_accept": 1,
+  "n_fail": 0
+ },
+ "verdict": "PASS_HDI",
+ "rc": 0,
+ "redline": "只读；不改板/SPEC/冻结四源；不把 ACCEPT 记作 PASS；判据值一律锚在 pinned 抓取件/已裁定件。"
+}
