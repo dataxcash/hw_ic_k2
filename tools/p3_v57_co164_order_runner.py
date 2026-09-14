@@ -78,6 +78,10 @@
 ㉚ CO-234（R-CO234-1，承 R-CO219-1 / R-CO225-1 / R-CO230-1 · **pin 面对受控集之覆盖面**）：受控集（`STEP_ARTIFACTS` ∪ `ORDER_MD_PRODUCTS`）已声明，
      但「哪件**应有** pin」无机判齿 ⇒ 实测 **8 件**（7 md 卡片 + `m13_v57_co77_closure_declaration_sweep.json`）在 pin 面**无 pin** 且无声明（删/漏皆静默）。
      现补：**非 md** 受控件须全部入 pin 面（md 卡片由 t20 判其受控性/种类 ⇒ 以**显式域名**排除，非静默）；另设**下限**防域缩水。静态齿 **t42**；report revision → CO-203.11。
+㉛ CO-235（R-CO235-1，承 R-CO230-1：**判据面与 realign 面须同域**）：t40 之「域」= 单一行正则（仅 2 列）、生成器 `CITE` 亦按格式匹配 ⇒
+     `**`sha`**` 之 pin 行**两处皆不在**（值陈旧/伪造**静默通过**；CO-235 实测 E1）。现补：**声明格式集** `PIN_ROW_FORMATS_DECLARED`
+     （`boundary_pin_rows()` 遍历之 ⇒ t40 值核覆盖 3 列 pin 行）+ 静态齿 **t43_pin_row_format_covered**（含 sha16 之表行须全入
+     「声明格式 ∪ 显式豁免名集」；未声明之新形态 fail-closed）。report revision → CO-203.12。
 ⑲ CO-215（R-CO215-1，**代理帮助函数之源面收窄 + 覆盖面机判**）：`artifact_readers()`（判「某步**确实读取**该工件」之**语法代理**）
      原按**原文子串** `basename in src` 判 ⇒ **注释/散文即可满足**（与 R-CO202-4「注释不得满足源内声明」同源缺陷，CO-215 实测复现）⇒
      收窄为 **AST 字面量集**（`_source_strings`）匹配 + glob 字面量；并把该帮助函数之**残余显式登记**
@@ -906,6 +910,30 @@ PIN_COVERAGE_EXEMPT = frozenset({
 })
 _PIN_ROW_RE = re.compile(r"^\|\s*(?P<label>[^|\n]+?)\s*\|\s*`(?P<sha>[0-9a-f]{16})`\s*\|\s*$", re.M)
 _PIN_FILEISH_RE = re.compile(r"\.(?:py|json|md|txt|svg|kicad_pcb|kicad_pro|drl|gbr)$|/")
+# CO-235（R-CO235-1，承 R-CO230-1）：**pin 行格式面**须**显式声明** —— 判据面之「域」**不得**由单一行正则隐式给定。
+# 缘起（CO-235 实测）：旧域 = `_PIN_ROW_RE`（**仅 2 列**）⇒ §2 之 3 列 pin 行（14 行，含 `**`sha`**` 变体）**不在域内**；
+# 且粗体变体亦**不**被生成器 `CITE` realign ⇒ 值陈旧/伪造**静默通过**（内存改 `**`05009687a3f01583`**` ⇒ t35/t40/t41 皆 True）。
+# 现补：声明格式集（`pin2` = 2 列现状；`pin3` = 3 列 / sha 为第 3 单元格，可粗体、可带尾注）⇒ `boundary_pin_rows()` 遍历之 ⇒
+# t40 之**值核**自动覆盖之；凡「含 backticked 16-hex 之表行」未匹配任一声明格式者须入 `PIN_ROW_FORMAT_EXEMPT`（名集等式 + 理由 +
+# 同源锚），否则静态齿 **t43** 停机（未声明之新形态 ⇒ fail-closed）。
+_PIN_ROW3_RE = re.compile(r"^\|\s*(?P<label>[^|\n]+?\|[^|\n]+?)\s*\|\s*\*{0,2}`(?P<sha>[0-9a-f]{16})`\*{0,2}[^|\n]*\|\s*$", re.M)
+_PIN_ROW_SHA_RE = re.compile(r"`[0-9a-f]{16}`")
+PIN_ROW_FORMATS_DECLARED = (
+    ("pin2", _PIN_ROW_RE, "| a `x.py` | `0123456789abcdef` |", "| a | `0123456789abcdef` | x |"),
+    ("pin3", _PIN_ROW3_RE, "| 项 | `x.py`（n） | **`0123456789abcdef`** |", "| 项 | `x.py`（n） | 值 0123456789abcdef |"),
+)
+# CO-235：**非声明格式**之 pin 面行（其字面值不可由 t40 核者）—— **显式**名集（首单元格）+ 理由 + **同源锚**（补偿牙齿，须实存）。
+# 现 = §3「整链门禁」之 4 门禁行：sha 内嵌散文（无文件指称，或指称须按格位解读）⇒ 值由**他齿**承载（G7 = 历史快照，现行 L5 sha 由 §104 pin 面承载）。
+PIN_ROW_FORMAT_EXEMPT = {
+    "G4/W3": {"why": "verdict 叙述行（sha 内嵌散文，无文件指称）；值 == SI 几何源 pin",
+              "anchor": "t39_si_geom_source_anchored"},
+    "G5/W4": {"why": "verdict 叙述行（sha 内嵌散文）；值 == 实件且同值已入 pin 面（t40 核）",
+              "anchor": "t40_boundary_pin_rows_current"},
+    "G6/L4": {"why": "verdict 叙述行（sha 内嵌散文）；值 == 交付板且同值已入 pin 面（t40 核）",
+              "anchor": "t40_boundary_pin_rows_current"},
+    "G7/L5": {"why": "verdict 叙述行（**历史快照** L5-SI.6 / L5-DFM.6，非现行）；现行 L5 sha 由 §104 pin 面承载",
+              "anchor": "t40_boundary_pin_rows_current"},
+}
 # CO-230（R-CO230-1，承 R-CO219-1 / R-CO225-1）：**boundary 应有节集**之声明（名集钉定）。**新增节须显式入本集**（CO-231 加 §104、CO-232 加 §105、CO-233 加 §106、CO-234 加 §107）。
 # 缘起：t35 臂① 只遍历**实存**节 ⇒ 域 = 文档自述 ⇒ 整节删除**不被检出**（「删项即空真」族；CO-230 内存实证）。
 # 故声明应有节集；缺节 ⇒ `section_missing`，未声明之新节 ⇒ `section_undeclared`（**须显式入本集**方放行）。
@@ -921,7 +949,7 @@ BOUNDARY_SECTIONS_DECLARED = frozenset({
     74, 75, 76, 77, 78, 79, 80, 81, 82, 83,
     84, 85, 86, 87, 88, 89, 90, 91, 92, 93,
     94, 95, 96, 97, 98, 99, 100, 101, 102, 103,
-    104, 105, 106, 107,
+    104, 105, 106, 107, 108,
 })
 STATIC_CHECKS_DECLARED = frozenset({
     "t01_steps_exist", "t02_steps_compile", "t03_expected_nonzero_policy_declared",
@@ -940,6 +968,7 @@ STATIC_CHECKS_DECLARED = frozenset({
     "t38_page_coverage_bound", "t39_si_geom_source_anchored", "t40_boundary_pin_rows_current",
     "t42_pin_face_covers_controlled",
     "t41_boundary_is_generator_output",
+    "t43_pin_row_format_covered",
 })
 _FP_ROW_RE = re.compile(r"^\|\s*[^|\n]+\|\s*sha16\s*\|", re.M)
 
@@ -1205,13 +1234,23 @@ def _resolve_pin_ref(label: str):
 
 
 def boundary_pin_rows() -> list:
-    """boundary 每枚 pin 表行 → [(label, listed_sha16, rel_or_None)]（不可读 ⇒ 空表 ⇒ fail-closed）。"""
+    """boundary 每枚 pin 表行 → [(label, listed_sha16, rel_or_None)]（不可读 ⇒ 空表 ⇒ fail-closed）。
+
+    CO-235（R-CO235-1）：域 = **声明格式集** `PIN_ROW_FORMATS_DECLARED`（**非**单一正则）—— 防「域由格式隐式给定」
+    （旧式只认 2 列 ⇒ 3 列/粗体 pin 行静默不在域内、值不可核）。
+    """
     try:
         txt = (STEP2 / BOUNDARY_BASENAME).read_text(encoding="utf-8")
     except OSError:
         return []
-    return [(m.group("label").strip(), m.group("sha"), _resolve_pin_ref(m.group("label")))
-            for m in _PIN_ROW_RE.finditer(txt)]
+    _seen, _out = set(), []
+    for _name, _rx, _pos, _neg in PIN_ROW_FORMATS_DECLARED:
+        for m in _rx.finditer(txt):
+            if m.span() in _seen:
+                continue
+            _seen.add(m.span())
+            _out.append((m.group("label").strip(), m.group("sha"), _resolve_pin_ref(m.group("label"))))
+    return _out
 
 
 def _boundary_generator_dump():
@@ -1235,6 +1274,21 @@ def pin_coverage_decision(products, pinned, skip_suffixes, floor, exempt=frozens
         return "pin_coverage_vacuous"
     missing = sorted(p for p in domain if p not in pinned)
     return "pin_coverage_gap" if missing else "ok"
+
+
+def pin_row_format_coverage_decision(row_lines, formats, exempt_keys) -> str:
+    """CO-235（R-CO235-1）纯判据：boundary 内**含 backticked 16-hex 之表行**须匹配**恰一**声明格式，否则须入显式豁免名集。
+
+    返回 `ok` / `pin_row_format_undeclared`（未声明之**新形态** ⇒ fail-closed）。`row_lines` 可注入 ⇒ 合成正/负控（零落盘）。
+    """
+    for _line in row_lines:
+        if not _PIN_ROW_SHA_RE.search(_line):
+            continue
+        if any(_rx.match(_line) for _n, _rx, _pos, _neg in formats):
+            continue
+        if _line.strip().strip("|").split("|")[0].strip() not in exempt_keys:
+            return "pin_row_format_undeclared"
+    return "ok"
 
 
 def boundary_head_decision(first_line, ok_pattern) -> str:
@@ -2498,6 +2552,33 @@ def main(argv=None) -> int:
         and boundary_pin_row_decision([("a `x.py`", "bb", "tools/x.py")], frozenset(), lambda _r: "aa") == "pin_value_stale"
         and boundary_pin_row_decision([("lbl", "aa", None)], frozenset(), lambda _r: "aa") == "pin_reference_unresolved"
         and boundary_pin_row_decision([("a `x.py`", "aa", None)], frozenset(), lambda _r: "aa") == "pin_reference_unresolved")
+    # CO-235（R-CO235-1，承 R-CO230-1）：pin 行**格式面**入机判 —— 「域」须**显式声明**（非由单一行正则隐式给定）。
+    # 缘起（实测）：`**`sha`**` 变体落于 t40 域**外**、亦不被生成器 `CITE` realign ⇒ 值陈旧/伪造**静默通过**。
+    try:
+        _bdy_lines = (STEP2 / BOUNDARY_BASENAME).read_text(encoding="utf-8").splitlines()
+    except OSError:
+        _bdy_lines = []                                  # fail-closed
+    _sha_row_lines = [ln for ln in _bdy_lines if ln.startswith("|") and _PIN_ROW_SHA_RE.search(ln)]
+    checks["t43_pin_row_format_covered"] = (
+        # ① 每声明格式：正控**命中**、负控**不**命中（判别力）
+        all(_rx.match(_pos) and not _rx.match(_neg) for _n, _rx, _pos, _neg in PIN_ROW_FORMATS_DECLARED)
+        # ② 实件：含 sha16 之表行须**全**入「声明格式 ∪ 显式豁免」（域外无可载同语义之对象）
+        and bool(_sha_row_lines)
+        and pin_row_format_coverage_decision(_sha_row_lines, PIN_ROW_FORMATS_DECLARED, set(PIN_ROW_FORMAT_EXEMPT)) == "ok"
+        # ③ 豁免名集**等式**（现 = §3 之 4 门禁行；新增豁免须显式改本集）+ 每项须有理由与**实存**补偿牙齿
+        and set(PIN_ROW_FORMAT_EXEMPT) == {"G4/W3", "G5/W4", "G6/L4", "G7/L5"}
+        and all(str(_e.get("why") or "").strip() and _e.get("anchor") in STATIC_CHECKS_DECLARED
+                for _e in PIN_ROW_FORMAT_EXEMPT.values())
+        # 合成正控：声明格式行 ⇒ ok；负控：未声明之新形态（4 列 sha 行）⇒ 停机；豁免键命中 ⇒ ok；无 sha 之行不受影响
+        and pin_row_format_coverage_decision(["| a `x.py` | `0123456789abcdef` |"],
+                                             PIN_ROW_FORMATS_DECLARED, frozenset()) == "ok"
+        and pin_row_format_coverage_decision(["| 项 | `x.py`（n） | **`0123456789abcdef`** |"],
+                                             PIN_ROW_FORMATS_DECLARED, frozenset()) == "ok"
+        and pin_row_format_coverage_decision(["| a | b | `0123456789abcdef` | c |"],
+                                             PIN_ROW_FORMATS_DECLARED, frozenset()) == "pin_row_format_undeclared"
+        and pin_row_format_coverage_decision(["| G4/W3 | **PASS** | 主件 **`0123456789abcdef`** |"],
+                                             PIN_ROW_FORMATS_DECLARED, {"G4/W3"}) == "ok"
+        and pin_row_format_coverage_decision(["| 纯散文行，无 sha |"], PIN_ROW_FORMATS_DECLARED, frozenset()) == "ok")
     # CO-225（R-CO225-1）：判定面完整性之**名集钉定**（① boundary 节指纹 ② runner 静态齿名集）
     _bdy_secs = boundary_sections_with_fp()
     _present = set(checks)          # t35 之前已建齿名（用于静态齿名集等式）
@@ -2516,7 +2597,7 @@ def main(argv=None) -> int:
         and boundary_section_set_decision({1, 2, 3, 4}, {1, 2, 3}) == "section_undeclared"
         # ② 静态齿名集钉定（防**静默删齿** ⇒ 判据面空真）
         and _present == set(STATIC_CHECKS_DECLARED) - {"t35_judgment_surface_pinned"}
-        and len(STATIC_CHECKS_DECLARED) == 44
+        and len(STATIC_CHECKS_DECLARED) == 45
         # ② 负控：集合等式对「少一枚」有判别力
         and (_present - {"t01_steps_exist"}) != set(STATIC_CHECKS_DECLARED) - {"t35_judgment_surface_pinned"})
     static_ok = all(checks.values())
@@ -2603,7 +2684,7 @@ def main(argv=None) -> int:
             converged = True
             break
         prev = cur
-    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-203.11",
+    report = {"artifact": "m13_v57_co164_order_runner_report", "schema": 1, "revision": "CO-203.12",
               "nature": "规范复现序机判执行器（rc 策略 + 真收敛判定）；报告落 .archer_tmp/ 且**不被 boundary 引用**（避免不动点）",
               "order": ORDER, "expected_nonzero": EXPECTED_NONZERO,
               "checks": checks, "iterations": iterations, "abort": abort, "converged": converged,

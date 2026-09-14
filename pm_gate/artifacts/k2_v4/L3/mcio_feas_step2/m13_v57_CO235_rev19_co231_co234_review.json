@@ -1,0 +1,134 @@
+{
+ "artifact": "m13_v57_CO235_rev19_co231_co234_review",
+ "schema": 1,
+ "revision": "CO-235",
+ "nature": "非执行者对抗复评 CO-231..CO-234（context 归零之新会话，未参与该四节之撰写 ⇒ 无自评豁免面；as-found 逐件重放 + 实件内存注入/字节复原）；**复评范围补正**：复评链上一段 = CO-230 覆盖 CO-225..229，其**后** `c1a880b`（CO-231）**未入任何复评声明面**（z96 之复评债声明面漏之）⇒ 本件补足 = CO-231..CO-234",
+ "as_found": {
+  "rev": "03f8d39",
+  "pins": {
+   "tools/p3_v57_co164_order_runner.py": {
+    "want": "08c104cda26d2940",
+    "got": "08c104cda26d2940",
+    "src": "git show 03f8d39",
+    "ok": true
+   },
+   "tools/p3_v57_co146_boundary_append.py": {
+    "want": "f8ad3b96c289ce51",
+    "got": "f8ad3b96c289ce51",
+    "src": "git show 03f8d39",
+    "ok": true
+   },
+   "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_joint_assignment_boundary_v1_82.md": {
+    "want": "17924a8d4a0246e7",
+    "got": "17924a8d4a0246e7",
+    "src": "git show 03f8d39",
+    "ok": true
+   },
+   "pm_gate/artifacts/k2_v4/L2/input_defect_register_v1.json": {
+    "want": "b6477520967efafc",
+    "got": "b6477520967efafc",
+    "src": "git show 03f8d39",
+    "ok": true
+   },
+   "tools/p3_v57_co195_fixpoint_uniqueness_oracle.py": {
+    "want": "585b983de844603d",
+    "got": "585b983de844603d",
+    "src": "git show 03f8d39",
+    "ok": true
+   },
+   "tools/p3_v57_co120_provenance_pin_gate.py": {
+    "want": "28d6211f32318d9b",
+    "got": "28d6211f32318d9b",
+    "src": "git show 03f8d39",
+    "ok": true
+   },
+   "k2_v4_8L.l4.kicad_pcb": {
+    "want": "d4e81f647be7f980",
+    "got": "d4e81f647be7f980",
+    "src": "git show 03f8d39",
+    "ok": true
+   }
+  },
+  "live_now": {
+   "note": "本会话已按 F-1 处置（runner/generator/register 已改）⇒ 现行 ≠ as-found 属预期；现行 sha 一律由 boundary §108 pin 表承载（承 R-CO152-1）"
+  }
+ },
+ "verdict": "PASS_WITH_FINDINGS",
+ "n_findings": 2,
+ "findings": [
+  {
+   "id": "co235:F-1",
+   "sev": "mid",
+   "kind": "TOOL_DEFECT",
+   "status": "CLOSED",
+   "what": "pin 行「值面」之**判据面**（t40 域 = `_PIN_ROW_RE`，仅 2 列）与 **realign 面**（生成器 `CITE`，按格式匹配）**各自**由格式隐式给定 ⇒ `**`sha`**` 变体**两处皆不在**（判据漏 + 不 realign）⇒ 值陈旧/伪造**静默通过**。同族：整行删除（§1..§22 不在生成器权威面）不可见（CO-231 已声明「完备性不判」）。承 R-CO230-1 / R-CO231-1 / R-CO152-1。",
+   "evidence": "V4（as-found 二式皆不匹配粗体/3 列；修复后皆匹配 = 同域）、V6（粗体值伪造：修复后 t40 **且** t41 皆 False）、as-found 态实测（编辑前）：同式注入 ⇒ t35/t40/t41 **皆 True**；正控（2 列行值）⇒ t40 False",
+   "disposition": "生成器 `CITE` 扩 `(?:\\*\\*)?`（realign 同域）+ runner 声明 `PIN_ROW_FORMATS_DECLARED`（pin2/pin3）+ 静态齿 **t43_pin_row_format_covered**（含 sha16 之表行须全入声明格式 ∪ 显式豁免名集；新形态 fail-closed）+ §3 G7/L5 口径同步（历史快照 vs 现行）。**R-CO235-1**。",
+   "residual": "行集完备性（删一行）仍不判；§3 `gate3` 族值由锚点齿承载；§1..§22 仍手工面（承 CO-232 残余）。"
+  },
+  {
+   "id": "co235:F-2",
+   "sev": "low",
+   "kind": "RECORD_HYGIENE",
+   "status": "CLOSED",
+   "what": "**复评债声明面漏 CO-231**：复评链上一段 = CO-230 覆盖 CO-225..CO-229；其**后** `c1a880b`（CO-231）**未入任何复评声明面**，而 z96 handoff 之复评债仅声「CO-232/233/234」⇒ 枚举面缺项（承 R-CO219-1/R-CO230-1：**应有集须独立声明**）。",
+   "evidence": "复评链谱（boundary §82..§107 之标题）：CO-202..206 / CO-207..212 / CO-213..218 / CO-219..224 / CO-225..229 — 无一段含 CO-231",
+   "disposition": "本件**补足**复评范围 = **CO-231..CO-234**；叙述/记录类**不入登记簿**（承 CO-213 F-2 先例）；handoff z97 更正复评债声明。",
+   "residual": "复评债之**连续性**仍无机判齿（属 handoff/流程面，非 repo 工件）。"
+  }
+ ],
+ "controls": {
+  "V1_as_found_replay_ok": true,
+  "V2_frozen_four": 4,
+  "V2_drc_copy_identical": true,
+  "V2_board_unchanged": true,
+  "V3_check": {
+   "rc": 0,
+   "n_teeth": 45,
+   "all_true": true,
+   "revision": "CO-203.12"
+  },
+  "V4_root_cause": {
+   "as_found_cite_matches_bold": false,
+   "fixed_cite_matches_bold": true,
+   "as_found_cite_matches_plain3": true,
+   "as_found_pin_re_matches_bold": false,
+   "fixed_pin_re_matches_bold": true,
+   "as_found_pin_re_matches_plain3": false,
+   "fixed_pin_re_matches_plain3": true
+  },
+  "V5_row_census": {
+   "n_sha_rows": 584,
+   "n_as_found_nonconforming": 18,
+   "n_still_nonconforming_after_fix": 4,
+   "still_nonconforming_keys": [
+    "G4/W3",
+    "G5/W4",
+    "G6/L4",
+    "G7/L5"
+   ]
+  },
+  "V6_injection": {
+   "bold_value_bogus": {
+    "t35": true,
+    "t40": false,
+    "t41": false,
+    "t43": true
+   },
+   "three_col_row_deleted": {
+    "t35": true,
+    "t40": true,
+    "t41": true,
+    "t43": true
+   }
+  },
+  "V6_bytes_restored": true
+ },
+ "observations": [
+  "O-1（被评记录之声明诚实性）：CO-232 之残余「生成器只拥有各 § 区段」经独立复算 —— §23..§107 = 1710 行受权威、§1..§22 = 686 行**手工面**（约 28%）⇒ 残余声明**量级属实**；惟其后果（手工面内值不可核/不自愈）在本件 F-1 之 E3 实测中被具体化。",
+  "O-2（CO-233 相容性）：oracle 之 realign（注入后 + finally）使扰动协议与新增状态齿相容；本件 V3 之 `--check` 与 oracle 记录（PASS / 5 案）**不含**互相替代之证据 —— 相容性由 oracle 全跑承载，本件不重跑（其受控件扰动 ~4 min，避并发）。",
+  "O-3（CO-234 残余之界定）：`.md` 受控件以**显式域名**排除（其受控性由 t20 承接），且 7 枚 md 卡片在 pin 面**无 pin**、§2 表内亦**零次**出现 —— 属**已声明**之域排除（R-CO234-1 允许「显式域名除外」），**非**本件缺陷；域缩水仅由下限（25）部分拦阻（z96 已登记为残余）。",
+  "O-4（诚实边界）：本件**不**复评 B 路 10L 实做、外部工艺/报价面（外部输入）；**不**判 boundary 节内叙述之完备性；**CO-235 自身须下一轮复评**（禁自评）。"
+ ],
+ "redline": "as-found 以 `git show 03f8d39` 逐件钉定 + sha16 复核；扰动一律**实件注入 + 字节复原**（`finally` 无条件复原，V6 后断言逐字节回原）；不改冻结四源 / SPEC / 板；他件处置同 commit。"
+}

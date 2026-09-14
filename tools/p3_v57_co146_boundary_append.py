@@ -26,8 +26,10 @@ def main(argv=None) -> int:
     txt = DOC.read_text()
     # ── 1. 现行态 pin 再对齐（只改「文件 <-> 旧 sha」这种当前态引用） ─────────
     realign_files = None   # None = 全量（现行态引用一律对齐当前实件 sha16；历史引用跳过）
+    # CO-235（R-CO235-1）：sha 前允许 `**` 粗体（§2/§3 之 pin 行写法）—— 旧式 realign 之域由**格式**隐式给定 ⇒
+    # `| k | v | **`sha`** |` 既不被 realign、亦不在 runner t40 之域 ⇒ 值陈旧/伪造**静默通过**（CO-235 实测）。
     CITE = re.compile(r"`([A-Za-z0-9][A-Za-z0-9_./\-]*\.(?:json|md|py|kicad_pcb|kicad_pro|kicad_dru))`"
-                      r"(?:[^|`\n]*\|\s*|\s+)`([0-9a-f]{16})`")
+                      r"(?:[^|`\n]*\|\s*|\s+)(?:\*\*)?`([0-9a-f]{16})`")
     HIST_AFTER = re.compile(r"^[\s）)】,，、/]*[（(]?\s*(已取代|历史|应为|实为)")
 
     def _fix(m: re.Match) -> str:
@@ -3878,6 +3880,38 @@ def main(argv=None) -> int:
     else:
         txt = txt.rstrip("\n") + "\n\n" + body107
 
+    # ── §108 CO-235（非执行者对抗复评 CO-231..CO-234 + 同会话处置） ──
+    MARK108 = "## 108. CO-235"
+    sec108 = [MARK108 + "（**非执行者对抗复评 CO-231..CO-234 + 同会话处置 · pin 行值之判据面/realign 面同域化**）", "",
+              "- **复评者**：context 归零之**新会话**（未参与 CO-231..CO-234 之任何撰写 ⇒ 四节全在对象内，无自评豁免面）；as-found 逐件钉 `03f8d39`（`git show` 重放）；扰动一律**内存注入 + 字节复原**（零残留、零坐标搜索）。",
+              "- **复评范围补正（F-2 · RECORD_HYGIENE）**：复评链上一段 = CO-230 覆盖 CO-225..CO-229；其**后**新增 `c1a880b`（CO-231）未入任何复评声明面 —— 而 z96 之复评债声明面**漏 CO-231**（承 R-CO219-1/R-CO230-1：**枚举面之应有集须独立声明**）。本件**补足**：复评范围 = **CO-231..CO-234**（叙述/记录类 ⇒ 不入登记簿，承 CO-213 F-2 先例）。",
+              "- **F-1（TOOL_DEFECT · mid · CLOSED）· pin 行「值面」之判据面与 realign 面**各自**由格式隐式给定 ⇒ `**`sha`**` 变体静默逃逸**：",
+              "  - **E1（本会话实测）**：内存改 §2 粗体行值（`m13_v57_layer_intent_rev6.json` 之 `**`05009687a3f01583`**` → `deadbeefdeadbeef`）⇒ **t35 / t40 / t41 皆 True**（**不可见**）；**E4 正控**（同法改一枚 2 列 pin 行值）⇒ t40 **False**（可见）。根因：t40 之域 = `_PIN_ROW_RE`（**仅 2 列**）；生成器 `CITE`（realign）亦**不**匹配粗体 `**` ⇒ 该值**两处皆不在**。",
+              "  - **同族（E2/E3）**：普通 3 列行值伪造 ⇒ t41 **False**（realign 差分可见，因 `CITE` 命中）；**整行删除**（§1..§22 不在生成器权威面）⇒ t35/t40/t41 **皆 True**（不可见；属 CO-231 已声明之「完备性不判」范畴，本件仅以**格式面名集**拦阻**新形态**）。",
+              "  - **裁定（L2 自裁）**：① 生成器 `CITE` 之 sha 组前允许 `(?:\*\*)?` ⇒ realign 面覆盖粗体（值**自愈**，且由 t41 整件比对覆盖）；② runner **声明** `PIN_ROW_FORMATS_DECLARED`（`pin2` = 2 列现状；`pin3` = 3 列 / sha 为第 3 单元格，可粗体、可带尾注），`boundary_pin_rows()` **遍历声明格式** ⇒ **t40 之值核覆盖 §2 全 14 行**（本会话实测 14/14 值 == 实件）；③ 新增静态齿 **t43_pin_row_format_covered**：boundary 内**一切含 backticked 16-hex 之表行**须匹配**恰一**声明格式，否则须入 **`PIN_ROW_FORMAT_EXEMPT`**（**名集等式** + 理由 + **同源锚**（补偿牙齿须实存））⇒ 未声明之**新形态 fail-closed**（域**显式**，承 R-CO230-1）；④ **口径同步**（承 R-CO152-1 现行 sha **单一承载** / R-CO208-1 口径逐处同步）：§3 之 G7/L5 行为 **L5-SI.6 / L5-DFM.6 历史快照**（其值 `6d85160413770fa5` / `73f9b59ed5f6f3ce` / `40445f87be664f31` **全树无对应件**）⇒ 显式标注历史快照 + 指向 §104 pin 面之**现行** L5（**L5-SI.11** `97c867e89fc6df6c` / L5-DFM.8 `6632179e1ef63183` / L5-FAB.2 `791012e88b514faa` / L5-G7.11 `2ab7a29e745b70ff`）；⑤ 自声明面同步：runner report revision → **CO-203.12**；⑥ **R-CO235-1**。",
+              "- **判别力（本会话实测）**：修后 E1 同式注入 ⇒ t41 **False**（realign 差分）；§2 之 14 行值皆被 t40 核（值 == 实件）；t43 正控（声明格式行）⇒ `ok`、负控（未声明之 4 列 sha 行）⇒ `pin_row_format_undeclared`。",
+              "- **边界（诚实·残余）**：① **行集完备性**仍不判（删一行无人知 —— CO-231 已声明；本件只拦**新形态**）；② `gate3` 族（§3 门禁叙述行）之值**由锚点齿承载**（G4 == t39 几何源 pin；G5/G6 == t40 pin 面同值；G7 = 历史快照）⇒ 本件不重核其字面；③ 生成器**仍只拥有**各 § 区段（§1..§22 为手工面；承 CO-232 残余）；④ 本件为 CO-231..CO-234 之复评处置，**CO-235 自身须下一轮复评**（禁自评）。",
+              "",
+              "| 工件 | sha16 |", "|---|---|"]
+    for _l, _p in [("runner `p3_v57_co164_order_runner.py`（**CO-203.12** / t43 pin 行格式面齿 + boundary_pin_rows 遍历声明格式）", K2 / "tools/p3_v57_co164_order_runner.py"),
+                   ("boundary 生成器 `p3_v57_co146_boundary_append.py`（`CITE` 扩粗体 realign / +§108）", K2 / "tools/p3_v57_co146_boundary_append.py"),
+                   ("登记簿 `input_defect_register_v1.json`（+co235:F-1）", L2 / "input_defect_register_v1.json"),
+                   ("复评件 `m13_v57_CO235_rev19_co231_co234_review.json`（CO-235）", STEP2 / "m13_v57_CO235_rev19_co231_co234_review.json"),
+                   ("复评卡 `m13_v57_CO235_rev19_co231_co234_review.md`（CO-235）", STEP2 / "m13_v57_CO235_rev19_co231_co234_review.md"),
+                   ("交付板 `k2_v4_8L.l4.kicad_pcb`（本件**未改**）", K2 / "k2_v4_8L.l4.kicad_pcb")]:
+        if _p.exists():
+            sec108.append(f"| {_l} | `{s16(_p)}` |")
+    sec108 += ["",
+               "> **R-CO235-1**：**判据面与 realign 面须同域** —— 凡以「行的形态」界定判定域者（如 boundary 之 pin 行），须**显式声明格式名集**（非由单一行正则隐式给定），并以**覆盖面臂**保证「域外无 carrying-同语义之对象」（未声明之新形态 ⇒ **fail-closed**）；且**值面**（现行 sha）之 realign 面须与判据面**同域** —— 不得一方覆盖、另一方漏过（漏过即**静默陈旧**）。承 R-CO230-1（判据面之域不得由被判对象自述给出）/ R-CO231-1（pin 须可核）/ R-CO152-1（现行 sha 单一承载）。",
+               "",
+               "> **序不变**：本件未改步骤集/序列（承 §82 之 R-CO209-2）。"]
+    body108 = "\n".join(sec108)
+    if MARK108 in txt:
+        txt = re.sub(re.escape(MARK108) + r"[\s\S]*?(?=\n## |\Z)", body108, txt, count=1)
+    else:
+        txt = txt.rstrip("\n") + "\n\n" + body108
+
+    txt = txt.replace("W3 Boundary **v2.75**", "W3 Boundary **v2.76**")
     txt = txt.replace("W3 Boundary **v2.74**", "W3 Boundary **v2.75**")
     txt = txt.replace("W3 Boundary **v2.73**", "W3 Boundary **v2.74**")
     txt = txt.replace("W3 Boundary **v2.72**", "W3 Boundary **v2.73**")
