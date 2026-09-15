@@ -17,8 +17,8 @@ Top view of the fabrication release board (`hw/k2_v4_8L.l4.kicad_pcb`, 120 × 46
 
 ![K2 PCB — 3D render (top)](docs/images/k2_pcb_3d.png)
 
-*3D renders use KiCad stock models. The MCIO and SlimSAS connectors have no vendor
-3D models and are shown as simplified blocks.*
+*3D renders use KiCad stock models for standard packages. The MCIO (SFF-1016) and
+SlimSAS (SFF-8654) connectors have no vendor 3D models and are represented by simplified models derived from their footprint geometry.*
 
 ## Overview
 

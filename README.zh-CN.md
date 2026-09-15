@@ -16,7 +16,7 @@
 
 ![K2 PCB — 3D 渲染（顶视）](docs/images/k2_pcb_3d.png)
 
-*3D 渲染使用 KiCad 官方模型；MCIO 与 SlimSAS 连接器无厂商 3D 模型，以简化方块代替。*
+*3D 渲染对标准封装使用 KiCad 官方模型；MCIO（SFF-1016）与 SlimSAS（SFF-8654）连接器无厂商 3D 模型，由封装几何自建的简化模型代替。*
 
 ## 概述
 
