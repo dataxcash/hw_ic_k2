@@ -7,6 +7,14 @@ worker-side data-plane card in the IOCONVERT V2.0 1-Master-to-4-Worker chained
 NTB cluster. It takes one x8 host link and fans it out to two x4 MCIO ports,
 redriven for PCIe Gen4 signal integrity.
 
+## Preview
+
+Top view of the fabrication release board (`hw/k2_v4_8L.l4.kicad_pcb`, 120 × 46 mm):
+
+![K2 PCB — 2D top view](docs/images/k2_pcb_top.png)
+
+![K2 PCB — 3D render (top)](docs/images/k2_pcb_3d.png)
+
 ## Overview
 
 K2 sits between the master host and the worker devices. A single SlimSAS x8
@@ -27,7 +35,7 @@ sideband, out-of-band UART, I2C and the FRU EEPROM.
 
 ## Key Features
 
-- **Form factor**: 8-layer PCB, 85Ω ±10% differential impedance
+- **Form factor**: 8-layer PCB, 120 × 46 mm, 85Ω ±10% differential impedance
 - **Uplink**: 1× SlimSAS x8 (SFF-8654) — 8 PCIe Gen4 lanes + 2 reference clocks
 - **Downlink**: 2× MCIO 4i (SFF-1016) — the x8 link is bifurcated into 2× x4
 - **Redrivers**: dual DS160PR810 (U7 upstream / U3 downstream), AC coupling per lane
