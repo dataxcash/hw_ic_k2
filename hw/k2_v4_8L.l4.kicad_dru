@@ -1,0 +1,12 @@
+(version 1)
+
+# CO-37 / L2 自裁：实现 SPEC constraints.escape_transition_zone（ECN-001，escape_clearance_mm=0.075）。
+# 域：ESC_J2/ESC_J3/ESC_J4/ESC_U6（pad 场矩形，F.Cu，per_pin_vertical_escape + no_via）；域外维持 shop/netclass 判据。
+# 排除：REFCLK 网（SPEC.constraints.refclk_isolated=true）⇒ 其冲突属几何缺陷（D3a），不享受逃逸区放宽。
+# 域工件：m13_v57_co37_escape_domain.json sha256=5616a9f873c9b84460f8ffedd8ceb865c3ddc6a7f4e177ba354aadad34bfa821
+
+(rule "SPEC escape_transition_zone 0.075 (ECN-001) [CO37-ESC.1]"
+	(layer "F.Cu")
+	(constraint clearance (min 0.075mm) )
+	(condition "(A.intersectsArea('ESC_J2') || A.intersectsArea('ESC_J3') || A.intersectsArea('ESC_J4') || A.intersectsArea('ESC_U6') || B.intersectsArea('ESC_J2') || B.intersectsArea('ESC_J3') || B.intersectsArea('ESC_J4') || B.intersectsArea('ESC_U6')) && !(A.NetName == 'PCIE_REFCLK*') && !(B.NetName == 'PCIE_REFCLK*')")
+)
