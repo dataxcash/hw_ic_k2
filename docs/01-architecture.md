@@ -7,6 +7,7 @@
 **K2 = PCIe Gen4 converter card (Card 2)**, an 8-layer board.
 
 - Carries **dual DS160PR810 ReDrivers** (U3 / U7) for PCIe Gen4 signal redriving/equalization.
+- Takes one **x8** host link (SlimSAS, SFF-8654) and fans it out to **2× x4** MCIO 4i (SFF-1016) downlinks.
 - Differential impedance target **85Ω ±10%**.
 - Belongs to the IOCONVERT converter-card family alongside K1 (the gate card); K2 is the data-plane card.
 
