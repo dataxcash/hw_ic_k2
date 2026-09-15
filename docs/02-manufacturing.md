@@ -1,31 +1,33 @@
-# K2 制造说明
+# K2 Manufacturing Notes
 
-## 叠层（8 层）
+**English** | [简体中文](02-manufacturing.zh-CN.md)
 
-| 层 | 内容 |
+## Stackup (8 Layers)
+
+| Layer | Contents |
 |---|---|
-| `F.Cu` | 高速差分 + 逃逸 + 周边低速 |
-| `In1`–`In6` | 内层（信号 / 平面） |
-| `B.Cu` | 低速 / 边带 |
+| `F.Cu` | High-speed differential + escape routing + surrounding low-speed |
+| `In1`–`In6` | Inner layers (signal / plane) |
+| `B.Cu` | Low-speed / sideband |
 
-## 工艺
+## Process
 
-| 项 | 值 |
+| Item | Value |
 |---|---|
-| 差分阻抗 | **85Ω ±10%**（需阻抗控制 + 测试片） |
-| 最小线宽 / 线距 | 0.09mm / 0.10mm |
-| 板边铜 / 孔环 | 0.30mm / 0.075mm |
-| 过孔 | 标准 0.20mm 钻孔 / 0.35mm 外径 |
-| 板厂 / 通道 | JLC — **HDI 盲埋孔通道（≥2 阶）** |
+| Differential impedance | **85Ω ±10%** (impedance control + test coupon required) |
+| Minimum trace width / spacing | 0.09mm / 0.10mm |
+| Board-edge copper / annular ring | 0.30mm / 0.075mm |
+| Vias | Standard 0.20mm drill / 0.35mm outer diameter |
+| Fab house / channel | JLC — **HDI blind/buried via channel (≥2 stage)** |
 
-## 交付
+## Delivery
 
-- **交付板**：`hw/k2_v4_8L.l4.kicad_pcb`
-- **交付物**：Gerber 包 = 8 铜层 + 阻焊 / 丝印 / 边框 / job + Excellon 钻孔（含 HDI 盲埋孔）+ 叠层图 + 阻抗表 + MANIFEST（逐文件 sha256）
+- **Release board**: `hw/k2_v4_8L.l4.kicad_pcb`
+- **Deliverables**: Gerber package = 8 copper layers + solder mask / silkscreen / outline / job + Excellon drill (incl. HDI blind/buried vias) + stackup drawing + impedance table + MANIFEST (per-file sha256)
 
-## 已知处置项（随单披露）
+## Known Dispositions (Disclosed With the Order)
 
-| 项 | 处置 |
+| Item | Disposition |
 |---|---|
-| 掩膜桥 `R3.pad2 ↔ PCIE_UP3_N` = 0.0695mm < 0.09mm | L2 已接受（`ACCEPT_L2_WITH_FAB_REVIEW`，随单提交，板厂复核） |
-| 阻抗符合性 | 本工程不自行认证；交板厂阻抗控制服务终判 |
+| Solder mask sliver `R3.pad2 ↔ PCIE_UP3_N` = 0.0695mm < 0.09mm | Accepted at L2 (`ACCEPT_L2_WITH_FAB_REVIEW`, submitted with the order, fab review) |
+| Impedance compliance | This project does not self-certify; final judgment by the fab house's impedance control service |

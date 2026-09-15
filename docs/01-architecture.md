@@ -1,33 +1,35 @@
-# K2 架构
+# K2 Architecture
 
-## 这是什么
+**English** | [简体中文](01-architecture.zh-CN.md)
 
-**K2 = PCIe Gen4 转换卡（卡 2）**，8 层板。
+## What This Is
 
-- 板载**双 DS160PR810 ReDriver**（U3 / U7），用于 PCIe Gen4 信号中继/均衡。
-- 差分阻抗目标 **85Ω ±10%**。
-- 与 K1（门禁卡）同属 IOCONVERT 转换卡家族；K2 为数据面卡。
+**K2 = PCIe Gen4 converter card (Card 2)**, an 8-layer board.
 
-## 目录与文件
+- Carries **dual DS160PR810 ReDrivers** (U3 / U7) for PCIe Gen4 signal redriving/equalization.
+- Differential impedance target **85Ω ±10%**.
+- Belongs to the IOCONVERT converter-card family alongside K1 (the gate card); K2 is the data-plane card.
+
+## Directories and Files
 
 ```
-hw/                          KiCad 工程（当前版 8L）
-  k2_v4_8L.kicad_pro             工程文件
-  k2_v4_8L.kicad_pcb             设计源（冻结输入）
-  k2_v4_8L.l4.kicad_pcb          施工交付板
-  k2_v4_8L.l4.kicad_dru          设计规则（板级）
-  sch/                           原理图（根页 + 电源/连接器/MCU/AC 耦合 等）
-  lib/                           符号库 + 封装库
-  data/                          网表 / 工程配置（yaml）
-archive/k2_v4_6L/            历史 6L 版（被 8L 取代）
-docs/                        本目录
+hw/                          KiCad project (current 8L revision)
+  k2_v4_8L.kicad_pro             Project file
+  k2_v4_8L.kicad_pcb             Design source (frozen input)
+  k2_v4_8L.l4.kicad_pcb          Fabrication release board
+  k2_v4_8L.l4.kicad_dru          Design rules (board level)
+  sch/                           Schematics (root page + power / connectors / MCU / AC coupling, etc.)
+  lib/                           Symbol + footprint libraries
+  data/                          Netlist / project configuration (yaml)
+archive/k2_v4_6L/            Historical 6L revision (superseded by 8L)
+docs/                        This directory
 ```
 
-## 版本沿革
+## Revision History
 
-| 版本 | 状态 | 说明 |
+| Revision | Status | Notes |
 |---|---|---|
-| 6L（`k2_v4.*`） | **历史** | 早期 6 层版，已归档 `archive/k2_v4_6L/` |
-| **8L（`k2_v4_8L.*`）** | **当前** | 8 层版；设计源 + 施工交付板 |
+| 6L (`k2_v4.*`) | **Historical** | Early 6-layer revision, archived under `archive/k2_v4_6L/` |
+| **8L (`k2_v4_8L.*`)** | **Current** | 8-layer revision; design source + fabrication release board |
 
-> `.l4` 后缀 = L4 施工阶段输出（由设计源派生），非独立设计。
+> The `.l4` suffix = L4 fabrication-stage output (derived from the design source), not an independent design.
