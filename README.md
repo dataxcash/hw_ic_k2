@@ -13,7 +13,12 @@ Top view of the fabrication release board (`hw/k2_v4_8L.l4.kicad_pcb`, 120 × 46
 
 ![K2 PCB — 2D top view](docs/images/k2_pcb_top.png)
 
+![K2 PCB — 3D render (isometric)](docs/images/k2_pcb_3d_iso.png)
+
 ![K2 PCB — 3D render (top)](docs/images/k2_pcb_3d.png)
+
+*3D renders use KiCad stock models. The MCIO and SlimSAS connectors have no vendor
+3D models and are shown as simplified blocks.*
 
 ## Overview
 

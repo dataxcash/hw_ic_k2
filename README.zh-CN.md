@@ -12,7 +12,11 @@
 
 ![K2 PCB — 2D 顶视图](docs/images/k2_pcb_top.png)
 
+![K2 PCB — 3D 渲染（等轴测）](docs/images/k2_pcb_3d_iso.png)
+
 ![K2 PCB — 3D 渲染（顶视）](docs/images/k2_pcb_3d.png)
+
+*3D 渲染使用 KiCad 官方模型；MCIO 与 SlimSAS 连接器无厂商 3D 模型，以简化方块代替。*
 
 ## 概述
 
