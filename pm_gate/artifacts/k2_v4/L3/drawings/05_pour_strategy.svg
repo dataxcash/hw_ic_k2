@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="780" height="336" viewBox="0 0 780 336">
+<rect width="780" height="336" fill="#0d1117"/>
+<text x="30" y="20" fill="#e6edf3" font-family="monospace" font-size="14">P3-05 敷铜策略（L2-5；GND In1/In3/In6 + 电源 In4）</text>
+<g transform="translate(30,30)">
+<text x="10.0" y="20.0" fill="#58a6ff" font-family="monospace" font-size="9" text-anchor="start">In1/In3/In6 = 整板 GND 平面 | In4 = 分区电源（P3V3 东 / MCU_VDD 西 / P3V3_AUX 岛 / 12V_IN 载体）</text>
+<text x="10.0" y="36.0" fill="#8b949e" font-family="monospace" font-size="8" text-anchor="start">去耦: board_real_per_net: P3V3{C74-C75-C76-C77-C78-C79-C80-C81-C82-C83-C84} / MCU_VDD{C85-C86} /</text>
+<text x="10.0" y="50.0" fill="#8b949e" font-family="monospace" font-size="8" text-anchor="start">GND 伴行 via: {"candidates_file": "j2_via_gnd_stitch_v8.json", "rule": "差分换层处硬性 GND 伴行 via (每换层点 ≥1, 2026-08-19 8 层定案)", "vi</text>
+<text x="10.0" y="64.0" fill="#f0883e" font-family="monospace" font-size="9" text-anchor="start">出 Gerber 前置（审计 §10.5）：13 zone 全 filled_polygon>=1 且 net 非空</text>
+</g></svg>

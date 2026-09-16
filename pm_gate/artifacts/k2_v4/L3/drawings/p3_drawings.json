@@ -1,0 +1,2393 @@
+{
+ "spec": {
+  "name": "SPEC_k2_v4.spec-rev-22.json",
+  "sha16": "9f0179e2afb7d766"
+ },
+ "board_frame": {
+  "outline_x": [
+   23.0,
+   143.0
+  ],
+  "outline_y": [
+   33.0,
+   79.0
+  ],
+  "size_mm": [
+   120.0,
+   46.0
+  ]
+ },
+ "mounting_holes": {
+  "count": 4,
+  "drill_mm": 3.2,
+  "keepout_dia_mm": 6.0,
+  "edge_material_min_mm": 1.5,
+  "positions": {
+   "H1": [
+    26.1,
+    75.6
+   ],
+   "H2": [
+    139.6,
+    39.6
+   ],
+   "H3": [
+    26.1,
+    36.1
+   ],
+   "H4": [
+    114.6,
+    36.1
+   ]
+  },
+  "note": "右下角不可放孔（In5 PCIe 布线占用 y≥74.5 ∧ x≥86）⇒ 右侧不对称（审计 §10.2 诚实披露）"
+ },
+ "devices": {
+  "C73": {
+   "sheet": "MCU & Sideband",
+   "symbol": "C_100N",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": [
+    28.5,
+    47.0
+   ],
+   "rot": 0.0,
+   "pad_aabb": [
+    27.75,
+    46.65,
+    29.25,
+    47.35
+   ],
+   "geom_src": "board(as-built)",
+   "status": "move_pending_L2-3",
+   "note": "L2-3 已裁须移位（仍在左带内）；新坐标待解（L2 自裁域），图纸标为待定",
+   "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
+   "footprint_pads": 2
+  },
+  "C74": {
+   "sheet": "Power Decoupling (ReDriver VCC)",
+   "symbol": "C_100N",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": [
+    91.0,
+    40.0
+   ],
+   "rot": 0.0,
+   "src": "anchor(设计源板)",
+   "board_pads": 2,
+   "status": "placed",
+   "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    90.45,
+    39.75,
+    91.55,
+    40.25
+   ],
+   "geom_src": "board(as-built)"
+  },
+  "C75": {
+   "sheet": "Power Decoupling (ReDriver VCC)",
+   "symbol": "C_100N",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": [
+    91.0,
+    41.0
+   ],
+   "rot": 0.0,
+   "src": "anchor(设计源板)",
+   "board_pads": 2,
+   "status": "placed",
+   "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    90.45,
+    40.75,
+    91.55,
+    41.25
+   ],
+   "geom_src": "board(as-built)"
+  },
+  "C76": {
+   "sheet": "Power Decoupling (ReDriver VCC)",
+   "symbol": "C_100N",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": [
+    91.0,
+    42.0
+   ],
+   "rot": 0.0,
+   "src": "anchor(设计源板)",
+   "board_pads": 2,
+   "status": "placed",
+   "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    90.45,
+    41.75,
+    91.55,
+    42.25
+   ],
+   "geom_src": "board(as-built)"
+  },
+  "C77": {
+   "sheet": "Power Decoupling (ReDriver VCC)",
+   "symbol": "C_100N",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": [
+    91.0,
+    43.0
+   ],
+   "rot": 0.0,
+   "src": "anchor(设计源板)",
+   "board_pads": 2,
+   "status": "placed",
+   "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    90.45,
+    42.75,
+    91.55,
+    43.25
+   ],
+   "geom_src": "board(as-built)"
+  },
+  "C78": {
+   "sheet": "Power Decoupling (ReDriver VCC)",
+   "symbol": "C_1U",
+   "footprint": "Capacitor_SMD:C_0603_1608Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": [
+    91.0,
+    38.5
+   ],
+   "rot": 0.0,
+   "src": "anchor(设计源板)",
+   "board_pads": 2,
+   "status": "placed",
+   "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    90.25,
+    38.15,
+    91.75,
+    38.85
+   ],
+   "geom_src": "board(as-built)"
+  },
+  "C79": {
+   "sheet": "Power Decoupling (ReDriver VCC)",
+   "symbol": "C_100N",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": [
+    91.0,
+    61.0
+   ],
+   "rot": 0.0,
+   "src": "anchor(设计源板)",
+   "board_pads": 2,
+   "status": "placed",
+   "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    90.45,
+    60.75,
+    91.55,
+    61.25
+   ],
+   "geom_src": "board(as-built)"
+  },
+  "C80": {
+   "sheet": "Power Decoupling (ReDriver VCC)",
+   "symbol": "C_100N",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": [
+    91.0,
+    59.0
+   ],
+   "rot": 0.0,
+   "src": "anchor(设计源板)",
+   "board_pads": 2,
+   "status": "placed",
+   "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    90.45,
+    58.75,
+    91.55,
+    59.25
+   ],
+   "geom_src": "board(as-built)"
+  },
+  "C81": {
+   "sheet": "Power Decoupling (ReDriver VCC)",
+   "symbol": "C_100N",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": [
+    91.0,
+    60.0
+   ],
+   "rot": 0.0,
+   "src": "anchor(设计源板)",
+   "board_pads": 2,
+   "status": "placed",
+   "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    90.45,
+    59.75,
+    91.55,
+    60.25
+   ],
+   "geom_src": "board(as-built)"
+  },
+  "C82": {
+   "sheet": "Power Decoupling (ReDriver VCC)",
+   "symbol": "C_100N",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": [
+    91.0,
+    64.0
+   ],
+   "rot": 0.0,
+   "src": "anchor(设计源板)",
+   "board_pads": 2,
+   "status": "placed",
+   "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    90.45,
+    63.75,
+    91.55,
+    64.25
+   ],
+   "geom_src": "board(as-built)"
+  },
+  "C83": {
+   "sheet": "Power Decoupling (ReDriver VCC)",
+   "symbol": "C_1U",
+   "footprint": "Capacitor_SMD:C_0603_1608Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": [
+    91.0,
+    62.0
+   ],
+   "rot": 0.0,
+   "src": "anchor(设计源板)",
+   "board_pads": 2,
+   "status": "placed",
+   "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    90.25,
+    61.65,
+    91.75,
+    62.35
+   ],
+   "geom_src": "board(as-built)"
+  },
+  "C84": {
+   "sheet": "Power Decoupling (ReDriver VCC)",
+   "symbol": "C_10U",
+   "footprint": "Capacitor_SMD:C_0805_2012Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": [
+    44.0,
+    40.0
+   ],
+   "rot": 0.0,
+   "src": "anchor(设计源板)",
+   "board_pads": 2,
+   "status": "placed",
+   "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0805_2012Metric.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    43.0,
+    39.55,
+    45.0,
+    40.45
+   ],
+   "geom_src": "board(as-built)"
+  },
+  "C85": {
+   "sheet": "MCU & Sideband",
+   "symbol": "C_100N",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": [
+    31.5,
+    54.5
+   ],
+   "rot": 0.0,
+   "src": "anchor(设计源板)",
+   "board_pads": 2,
+   "status": "placed",
+   "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    30.95,
+    54.25,
+    32.05,
+    54.75
+   ],
+   "geom_src": "board(as-built)"
+  },
+  "C86": {
+   "sheet": "MCU & Sideband",
+   "symbol": "C_4R7",
+   "footprint": "Capacitor_SMD:C_0603_1608Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": [
+    31.5,
+    56.0
+   ],
+   "rot": 0.0,
+   "pad_aabb": [
+    30.75,
+    55.65,
+    32.25,
+    56.35
+   ],
+   "geom_src": "board(as-built)",
+   "status": "move_pending_L2-3",
+   "note": "L2-3 已裁须移位（仍在左带内）；新坐标待解（L2 自裁域），图纸标为待定",
+   "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod",
+   "footprint_pads": 2
+  },
+  "C87": {
+   "sheet": "MCU & Sideband",
+   "symbol": "C_100N",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": [
+    44.0,
+    35.0
+   ],
+   "rot": 0.0,
+   "src": "anchor(设计源板)",
+   "board_pads": 2,
+   "status": "placed",
+   "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    43.45,
+    34.75,
+    44.55,
+    35.25
+   ],
+   "geom_src": "board(as-built)"
+  },
+  "C88": {
+   "sheet": "Power (12V DC-in DCDC 5V LDO 3V3)",
+   "symbol": "C_1U",
+   "footprint": "Capacitor_SMD:C_0603_1608Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": [
+    29.5,
+    41.5
+   ],
+   "rot": 0.0,
+   "src": "anchor(设计源板)",
+   "board_pads": 2,
+   "status": "placed",
+   "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    28.75,
+    41.15,
+    30.25,
+    41.85
+   ],
+   "geom_src": "board(as-built)"
+  },
+  "C89": {
+   "sheet": "Power (12V DC-in DCDC 5V LDO 3V3)",
+   "symbol": "C_4R7",
+   "footprint": "Capacitor_SMD:C_0603_1608Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": [
+    44.0,
+    37.5
+   ],
+   "rot": 0.0,
+   "src": "anchor(设计源板)",
+   "board_pads": 2,
+   "status": "placed",
+   "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    43.25,
+    37.15,
+    44.75,
+    37.85
+   ],
+   "geom_src": "board(as-built)"
+  },
+  "C90": {
+   "sheet": "Power Decoupling (ReDriver VCC)",
+   "symbol": "C_100N",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": [
+    30.0,
+    53.0
+   ],
+   "rot": 0.0,
+   "src": "anchor(设计源板)",
+   "board_pads": 2,
+   "status": "placed",
+   "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    29.45,
+    52.75,
+    30.55,
+    53.25
+   ],
+   "geom_src": "board(as-built)"
+  },
+  "D1": {
+   "sheet": "MCU & Sideband",
+   "symbol": "LED",
+   "footprint": "LED_SMD:LED_0603_1608Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": [
+    48.5,
+    66.5
+   ],
+   "rot": 0.0,
+   "src": "anchor(设计源板)",
+   "board_pads": 2,
+   "status": "placed",
+   "footprint_file": "AppDir/share/kicad/footprints/LED_SMD.pretty/LED_0603_1608Metric.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    47.75,
+    66.15,
+    49.25,
+    66.85
+   ],
+   "geom_src": "board(as-built)"
+  },
+  "D2": {
+   "sheet": "Power (12V DC-in DCDC 5V LDO 3V3)",
+   "symbol": "D_SCHOTTKY",
+   "footprint": "Diode_SMD:D_SMA",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": null,
+   "src": "无",
+   "status": "coord_pending",
+   "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
+   "footprint_file": "AppDir/share/kicad/footprints/Diode_SMD.pretty/D_SMA.kicad_mod",
+   "footprint_pads": 2
+  },
+  "E2": {
+   "sheet": "MCU & Sideband",
+   "symbol": "FRU_EEPROM",
+   "footprint": "ForgeOS:SOIC8_FRU",
+   "symbol_pins": 8,
+   "symbol_pin_nums": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8"
+   ],
+   "at": [
+    44.0,
+    60.0
+   ],
+   "rot": 0.0,
+   "src": "anchor(设计源板)",
+   "board_pads": 8,
+   "status": "placed",
+   "footprint_file": "k2/hw/lib/ForgeOS.pretty/SOIC8_FRU.kicad_mod",
+   "footprint_pads": 8,
+   "pad_aabb": [
+    41.75,
+    57.645,
+    46.25,
+    62.355
+   ],
+   "geom_src": "board(as-built)"
+  },
+  "J11": {
+   "sheet": "MCU & Sideband",
+   "symbol": "HEADER_4PIN_EC",
+   "footprint": "ForgeOS:PinHeader_1x04",
+   "symbol_pins": 4,
+   "symbol_pin_nums": [
+    "1",
+    "2",
+    "3",
+    "4"
+   ],
+   "at": [
+    27.94,
+    65.38
+   ],
+   "rot": 90,
+   "src": "SPEC pin_headers.positions（column_x 由 L2-3 修正 26.5→27.94）",
+   "board_pads": 0,
+   "status": "placed",
+   "footprint_file": "k2/hw/lib/ForgeOS.pretty/PinHeader_1x04.kicad_mod",
+   "footprint_pads": 4,
+   "pad_aabb": [
+    23.380000000000003,
+    64.63,
+    32.5,
+    66.13
+   ],
+   "geom_src": "lib(未落件占位)"
+  },
+  "J12": {
+   "sheet": "Power (12V DC-in DCDC 5V LDO 3V3)",
+   "symbol": "HEADER_2PIN_12V",
+   "footprint": "ForgeOS:PinHeader_1x02",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": [
+    27.94,
+    35.32
+   ],
+   "rot": 90,
+   "src": "SPEC pin_headers.positions（column_x 由 L2-3 修正 26.5→27.94）",
+   "board_pads": 0,
+   "status": "placed",
+   "footprint_file": "k2/hw/lib/ForgeOS.pretty/PinHeader_1x02.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    25.92,
+    34.57,
+    29.96,
+    36.07
+   ],
+   "geom_src": "lib(未落件占位)"
+  },
+  "J13": {
+   "sheet": "MCU & Sideband",
+   "symbol": "HEADER_4PIN",
+   "footprint": "ForgeOS:PinHeader_1x04",
+   "symbol_pins": 4,
+   "symbol_pin_nums": [
+    "1",
+    "2",
+    "3",
+    "4"
+   ],
+   "at": [
+    27.94,
+    46.54
+   ],
+   "rot": 90,
+   "src": "SPEC pin_headers.positions（column_x 由 L2-3 修正 26.5→27.94）",
+   "board_pads": 0,
+   "status": "placed",
+   "footprint_file": "k2/hw/lib/ForgeOS.pretty/PinHeader_1x04.kicad_mod",
+   "footprint_pads": 4,
+   "pad_aabb": [
+    23.380000000000003,
+    45.79,
+    32.5,
+    47.29
+   ],
+   "geom_src": "lib(未落件占位)"
+  },
+  "J2": {
+   "sheet": "Connectors",
+   "symbol": "SlimSAS_x8",
+   "footprint": "ForgeOS:SlimSAS_x8_SFF-8654_74pin_RASide",
+   "symbol_pins": 74,
+   "symbol_pin_nums": [
+    "1",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+    "2",
+    "20",
+    "21",
+    "22",
+    "23",
+    "24",
+    "25",
+    "26",
+    "27",
+    "28",
+    "29",
+    "3",
+    "30",
+    "31",
+    "32",
+    "33",
+    "34",
+    "35",
+    "36",
+    "37",
+    "38",
+    "39",
+    "4",
+    "40",
+    "41",
+    "42",
+    "43",
+    "44",
+    "45",
+    "46",
+    "47",
+    "48",
+    "49",
+    "5",
+    "50",
+    "51",
+    "52",
+    "53",
+    "54",
+    "55",
+    "56",
+    "57",
+    "58",
+    "59",
+    "6",
+    "60",
+    "61",
+    "62",
+    "63",
+    "64",
+    "65",
+    "66",
+    "67",
+    "68",
+    "69",
+    "7",
+    "70",
+    "71",
+    "72",
+    "73",
+    "74",
+    "8",
+    "9"
+   ],
+   "at": [
+    133.825,
+    53.7
+   ],
+   "rot": 0.0,
+   "src": "anchor(设计源板)",
+   "board_pads": 74,
+   "status": "placed",
+   "footprint_file": "k2/hw/lib/ForgeOS.pretty/SlimSAS_x8_SFF-8654_74pin_RASide.kicad_mod",
+   "footprint_pads": 74,
+   "pad_aabb": [
+    132.0,
+    42.725,
+    135.65,
+    64.675
+   ],
+   "geom_src": "board(as-built)"
+  },
+  "J3": {
+   "sheet": "Connectors",
+   "symbol": "MCIO_4i",
+   "footprint": "ForgeOS:MCIO_4i_SFF-1016_RASide",
+   "symbol_pins": 38,
+   "symbol_pin_nums": [
+    "1",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+    "2",
+    "20",
+    "21",
+    "22",
+    "23",
+    "24",
+    "25",
+    "26",
+    "27",
+    "28",
+    "29",
+    "3",
+    "30",
+    "31",
+    "32",
+    "33",
+    "34",
+    "35",
+    "36",
+    "37",
+    "38",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9"
+   ],
+   "at": [
+    59.5,
+    44.5
+   ],
+   "rot": 180.0,
+   "src": "anchor(设计源板)",
+   "board_pads": 38,
+   "status": "placed",
+   "footprint_file": "k2/hw/lib/ForgeOS.pretty/MCIO_4i_SFF-1016_RASide.kicad_mod",
+   "footprint_pads": 38,
+   "pad_aabb": [
+    53.95,
+    42.9,
+    65.05,
+    46.1
+   ],
+   "geom_src": "board(as-built)"
+  },
+  "J4": {
+   "sheet": "Connectors",
+   "symbol": "MCIO_4i",
+   "footprint": "ForgeOS:MCIO_4i_SFF-1016_RASide",
+   "symbol_pins": 38,
+   "symbol_pin_nums": [
+    "1",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+    "2",
+    "20",
+    "21",
+    "22",
+    "23",
+    "24",
+    "25",
+    "26",
+    "27",
+    "28",
+    "29",
+    "3",
+    "30",
+    "31",
+    "32",
+    "33",
+    "34",
+    "35",
+    "36",
+    "37",
+    "38",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9"
+   ],
+   "at": [
+    59.5,
+    62.7
+   ],
+   "rot": 0.0,
+   "src": "anchor(设计源板)",
+   "board_pads": 38,
+   "status": "placed",
+   "footprint_file": "k2/hw/lib/ForgeOS.pretty/MCIO_4i_SFF-1016_RASide.kicad_mod",
+   "footprint_pads": 38,
+   "pad_aabb": [
+    53.95,
+    61.1,
+    65.05,
+    64.3
+   ],
+   "geom_src": "board(as-built)"
+  },
+  "J6": {
+   "sheet": "MCU & Sideband",
+   "symbol": "HEADER_2PIN",
+   "footprint": "ForgeOS:PinHeader_1x02",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": [
+    27.94,
+    39.66
+   ],
+   "rot": 90,
+   "src": "SPEC pin_headers.positions（column_x 由 L2-3 修正 26.5→27.94）",
+   "board_pads": 0,
+   "status": "placed",
+   "footprint_file": "k2/hw/lib/ForgeOS.pretty/PinHeader_1x02.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    25.92,
+    38.91,
+    29.96,
+    40.41
+   ],
+   "geom_src": "lib(未落件占位)"
+  },
+  "J9": {
+   "sheet": "MCU & Sideband",
+   "symbol": "HEADER_4PIN",
+   "footprint": "ForgeOS:PinHeader_1x04",
+   "symbol_pins": 4,
+   "symbol_pin_nums": [
+    "1",
+    "2",
+    "3",
+    "4"
+   ],
+   "at": [
+    27.94,
+    55.96
+   ],
+   "rot": 90,
+   "src": "SPEC pin_headers.positions（column_x 由 L2-3 修正 26.5→27.94）",
+   "board_pads": 0,
+   "status": "placed",
+   "footprint_file": "k2/hw/lib/ForgeOS.pretty/PinHeader_1x04.kicad_mod",
+   "footprint_pads": 4,
+   "pad_aabb": [
+    23.380000000000003,
+    55.21,
+    32.5,
+    56.71
+   ],
+   "geom_src": "lib(未落件占位)"
+  },
+  "L1": {
+   "sheet": "Power (12V DC-in DCDC 5V LDO 3V3)",
+   "symbol": "L_10U",
+   "footprint": "Inductor_SMD:L_0805_2012Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": null,
+   "src": "无",
+   "status": "coord_pending",
+   "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
+   "footprint_file": "AppDir/share/kicad/footprints/Inductor_SMD.pretty/L_0805_2012Metric.kicad_mod",
+   "footprint_pads": 2
+  },
+  "R1": {
+   "sheet": "MCU & Sideband",
+   "symbol": "R_10K",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": [
+    50.5,
+    37.0
+   ],
+   "rot": 0.0,
+   "src": "anchor(设计源板)",
+   "board_pads": 2,
+   "status": "placed",
+   "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    49.75,
+    36.65,
+    51.25,
+    37.35
+   ],
+   "geom_src": "board(as-built)"
+  },
+  "R21": {
+   "sheet": "MCU & Sideband",
+   "symbol": "R_LED",
+   "footprint": "Resistor_SMD:R_0603_1608Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": [
+    45.5,
+    66.5
+   ],
+   "rot": 0.0,
+   "src": "anchor(设计源板)",
+   "board_pads": 2,
+   "status": "placed",
+   "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    44.75,
+    66.15,
+    46.25,
+    66.85
+   ],
+   "geom_src": "board(as-built)"
+  },
+  "R28": {
+   "sheet": "MCU & Sideband",
+   "symbol": "R_10K",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": [
+    50.5,
+    41.0
+   ],
+   "rot": 0.0,
+   "src": "anchor(设计源板)",
+   "board_pads": 2,
+   "status": "placed",
+   "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    49.75,
+    40.65,
+    51.25,
+    41.35
+   ],
+   "geom_src": "board(as-built)"
+  },
+  "R29": {
+   "sheet": "MCU & Sideband",
+   "symbol": "R_10K",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": [
+    53.5,
+    41.0
+   ],
+   "rot": 0.0,
+   "src": "anchor(设计源板)",
+   "board_pads": 2,
+   "status": "placed",
+   "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    52.75,
+    40.65,
+    54.25,
+    41.35
+   ],
+   "geom_src": "board(as-built)"
+  },
+  "R3": {
+   "sheet": "MCU & Sideband",
+   "symbol": "R_220",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": [
+    53.5,
+    37.0
+   ],
+   "rot": 0.0,
+   "src": "anchor(设计源板)",
+   "board_pads": 2,
+   "status": "placed",
+   "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    52.75,
+    36.65,
+    54.25,
+    37.35
+   ],
+   "geom_src": "board(as-built)"
+  },
+  "R31": {
+   "sheet": "MCU & Sideband",
+   "symbol": "R_4K7",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": [
+    55.5,
+    66.5
+   ],
+   "rot": 0.0,
+   "src": "anchor(设计源板)",
+   "board_pads": 2,
+   "status": "placed",
+   "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    54.75,
+    66.15,
+    56.25,
+    66.85
+   ],
+   "geom_src": "board(as-built)"
+  },
+  "R32": {
+   "sheet": "MCU & Sideband",
+   "symbol": "R_4K7",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": [
+    55.5,
+    67.5
+   ],
+   "rot": 0.0,
+   "src": "anchor(设计源板)",
+   "board_pads": 2,
+   "status": "placed",
+   "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    54.75,
+    67.15,
+    56.25,
+    67.85
+   ],
+   "geom_src": "board(as-built)"
+  },
+  "R33": {
+   "sheet": "MCU & Sideband",
+   "symbol": "R_4K7",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": [
+    55.5,
+    68.5
+   ],
+   "rot": 0.0,
+   "src": "anchor(设计源板)",
+   "board_pads": 2,
+   "status": "placed",
+   "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    54.75,
+    68.15,
+    56.25,
+    68.85
+   ],
+   "geom_src": "board(as-built)"
+  },
+  "R34": {
+   "sheet": "MCU & Sideband",
+   "symbol": "R_4K7",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": [
+    55.5,
+    69.5
+   ],
+   "rot": 0.0,
+   "src": "anchor(设计源板)",
+   "board_pads": 2,
+   "status": "placed",
+   "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    54.75,
+    69.15,
+    56.25,
+    69.85
+   ],
+   "geom_src": "board(as-built)"
+  },
+  "R35": {
+   "sheet": "ReDriver DS320PR1601 & Sideband Strap",
+   "symbol": "R_6K19",
+   "footprint": "R_0402_1005Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": null,
+   "src": "无",
+   "status": "coord_pending",
+   "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
+   "footprint_file": null,
+   "footprint_pads": 0
+  },
+  "R36": {
+   "sheet": "ReDriver DS320PR1601 & Sideband Strap",
+   "symbol": "R_1K",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": null,
+   "src": "无",
+   "status": "coord_pending",
+   "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
+   "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
+   "footprint_pads": 2
+  },
+  "R37": {
+   "sheet": "ReDriver DS320PR1601 & Sideband Strap",
+   "symbol": "R_1K",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": null,
+   "src": "无",
+   "status": "coord_pending",
+   "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
+   "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
+   "footprint_pads": 2
+  },
+  "R38": {
+   "sheet": "ReDriver DS320PR1601 & Sideband Strap",
+   "symbol": "R_8K25",
+   "footprint": "R_0402_1005Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": null,
+   "src": "无",
+   "status": "coord_pending",
+   "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
+   "footprint_file": null,
+   "footprint_pads": 0
+  },
+  "R39": {
+   "sheet": "ReDriver DS320PR1601 & Sideband Strap",
+   "symbol": "R_1K",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": null,
+   "src": "无",
+   "status": "coord_pending",
+   "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
+   "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
+   "footprint_pads": 2
+  },
+  "R40": {
+   "sheet": "Power (12V DC-in DCDC 5V LDO 3V3)",
+   "symbol": "R_10K",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": null,
+   "src": "无",
+   "status": "coord_pending",
+   "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
+   "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
+   "footprint_pads": 2
+  },
+  "R41": {
+   "sheet": "Power (12V DC-in DCDC 5V LDO 3V3)",
+   "symbol": "R_5K6",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": null,
+   "src": "无",
+   "status": "coord_pending",
+   "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
+   "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
+   "footprint_pads": 2
+  },
+  "R42": {
+   "sheet": "ReDriver DS320PR1601 & Sideband Strap",
+   "symbol": "R_1K",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": null,
+   "src": "无",
+   "status": "coord_pending",
+   "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
+   "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
+   "footprint_pads": 2
+  },
+  "R43": {
+   "sheet": "ReDriver DS320PR1601 & Sideband Strap",
+   "symbol": "R_1K",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": null,
+   "src": "无",
+   "status": "coord_pending",
+   "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
+   "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
+   "footprint_pads": 2
+  },
+  "R44": {
+   "sheet": "ReDriver DS320PR1601 & Sideband Strap",
+   "symbol": "R_1K",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": null,
+   "src": "无",
+   "status": "coord_pending",
+   "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
+   "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
+   "footprint_pads": 2
+  },
+  "R45": {
+   "sheet": "ReDriver DS320PR1601 & Sideband Strap",
+   "symbol": "R_1K",
+   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "symbol_pins": 2,
+   "symbol_pin_nums": [
+    "1",
+    "2"
+   ],
+   "at": null,
+   "src": "无",
+   "status": "coord_pending",
+   "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
+   "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
+   "footprint_pads": 2
+  },
+  "U1": {
+   "sheet": "MCU & Sideband",
+   "symbol": "MCU_STM32G0_C2",
+   "footprint": "ForgeOS:MCU_STM32G0_LQFP48",
+   "symbol_pins": 27,
+   "symbol_pin_nums": [
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "18",
+    "19",
+    "2",
+    "20",
+    "21",
+    "22",
+    "23",
+    "29",
+    "3",
+    "30",
+    "32",
+    "35",
+    "36",
+    "42",
+    "43",
+    "44",
+    "47",
+    "48",
+    "49",
+    "6",
+    "7"
+   ],
+   "at": [
+    36.0,
+    52.0
+   ],
+   "rot": 0.0,
+   "src": "anchor(设计源板)",
+   "board_pads": 33,
+   "status": "placed",
+   "footprint_file": "k2/hw/lib/ForgeOS.pretty/MCU_STM32G0_LQFP48.kicad_mod",
+   "footprint_pads": 49,
+   "pad_aabb": [
+    33.05,
+    49.05,
+    38.95,
+    54.95
+   ],
+   "geom_src": "board(as-built)"
+  },
+  "U2": {
+   "sheet": "Power (12V DC-in DCDC 5V LDO 3V3)",
+   "symbol": "DCDC_12V_3V3",
+   "footprint": "Package_SO:SOIC-8_5.3x5.3mm_P1.27mm",
+   "symbol_pins": 6,
+   "symbol_pin_nums": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6"
+   ],
+   "at": [
+    33.0,
+    37.0
+   ],
+   "rot": 0.0,
+   "src": "anchor(设计源板)",
+   "board_pads": 8,
+   "status": "placed",
+   "footprint_file": "AppDir/share/kicad/footprints/Package_SO.pretty/SOIC-8_5.3x5.3mm_P1.27mm.kicad_mod",
+   "footprint_pads": 8,
+   "pad_aabb": [
+    30.75,
+    34.645,
+    35.25,
+    39.355
+   ],
+   "geom_src": "board(as-built)"
+  },
+  "U4": {
+   "sheet": "Power (12V DC-in DCDC 5V LDO 3V3)",
+   "symbol": "BAT54C_ORING",
+   "footprint": "ForgeOS:SOT23_BAT54C",
+   "symbol_pins": 3,
+   "symbol_pin_nums": [
+    "1",
+    "2",
+    "3"
+   ],
+   "at": [
+    40.0,
+    37.0
+   ],
+   "rot": 0.0,
+   "src": "anchor(设计源板)",
+   "board_pads": 3,
+   "status": "placed",
+   "footprint_file": "k2/hw/lib/ForgeOS.pretty/SOT23_BAT54C.kicad_mod",
+   "footprint_pads": 3,
+   "pad_aabb": [
+    38.75,
+    35.7,
+    41.25,
+    38.3
+   ],
+   "geom_src": "board(as-built)"
+  },
+  "U5": {
+   "sheet": "MCU & Sideband",
+   "symbol": "OPTO_LTV356T",
+   "footprint": "ForgeOS:OPTO_LTV356T",
+   "symbol_pins": 4,
+   "symbol_pin_nums": [
+    "1",
+    "2",
+    "3",
+    "4"
+   ],
+   "at": [
+    44.5,
+    52.0
+   ],
+   "rot": 0.0,
+   "src": "anchor(设计源板)",
+   "board_pads": 4,
+   "status": "placed",
+   "footprint_file": "k2/hw/lib/ForgeOS.pretty/OPTO_LTV356T.kicad_mod",
+   "footprint_pads": 4,
+   "pad_aabb": [
+    42.95,
+    50.75,
+    46.05,
+    53.25
+   ],
+   "geom_src": "board(as-built)"
+  },
+  "U6": {
+   "sheet": "ReDriver DS320PR1601 & Sideband Strap",
+   "symbol": "DS320PR1601",
+   "footprint": "ForgeOS:DS320PR1601",
+   "symbol_pins": 354,
+   "symbol_pin_nums": [
+    "A1",
+    "A35",
+    "AA10",
+    "AA29",
+    "AB1",
+    "AB35",
+    "AC13",
+    "AC17",
+    "AC20",
+    "AC22",
+    "AC32",
+    "AC4",
+    "AD2",
+    "AD34",
+    "AE1",
+    "AE35",
+    "AF26",
+    "AF7",
+    "AG2",
+    "AG34",
+    "AH10",
+    "AH29",
+    "AJ1",
+    "AJ35",
+    "AK13",
+    "AK17",
+    "AK20",
+    "AK22",
+    "AK32",
+    "AK4",
+    "AL2",
+    "AL34",
+    "AM1",
+    "AM35",
+    "AN26",
+    "AN7",
+    "AP2",
+    "AP34",
+    "AR10",
+    "AR29",
+    "AT1",
+    "AT35",
+    "AU13",
+    "AU17",
+    "AU20",
+    "AU22",
+    "AU32",
+    "AU4",
+    "AV2",
+    "AV34",
+    "AW1",
+    "AW35",
+    "AY26",
+    "AY7",
+    "B12",
+    "B16",
+    "B19",
+    "B23",
+    "B25",
+    "B28",
+    "B3",
+    "B31",
+    "B6",
+    "B9",
+    "BA2",
+    "BA34",
+    "BB10",
+    "BB29",
+    "BC1",
+    "BC35",
+    "BD13",
+    "BD17",
+    "BD20",
+    "BD22",
+    "BD32",
+    "BD4",
+    "BE2",
+    "BE34",
+    "BF1",
+    "BF35",
+    "BG26",
+    "BG7",
+    "BH2",
+    "BH34",
+    "BJ10",
+    "BJ29",
+    "BK1",
+    "BK35",
+    "BL13",
+    "BL17",
+    "BL20",
+    "BL22",
+    "BL32",
+    "BL4",
+    "BM2",
+    "BM34",
+    "BN1",
+    "BN35",
+    "BP26",
+    "BP7",
+    "BR2",
+    "BR34",
+    "BT10",
+    "BT29",
+    "BU1",
+    "BU35",
+    "BV13",
+    "BV17",
+    "BV20",
+    "BV22",
+    "BV32",
+    "BV4",
+    "BW2",
+    "BW34",
+    "BY1",
+    "BY35",
+    "C2",
+    "C34",
+    "CA26",
+    "CA7",
+    "CB2",
+    "CB34",
+    "CC10",
+    "CC29",
+    "CD1",
+    "CD35",
+    "CE13",
+    "CE17",
+    "CE20",
+    "CE22",
+    "CE32",
+    "CE4",
+    "CF2",
+    "CF34",
+    "CG1",
+    "CG35",
+    "CH26",
+    "CH7",
+    "CJ2",
+    "CJ34",
+    "CK10",
+    "CK29",
+    "CL1",
+    "CL35",
+    "CM13",
+    "CM17",
+    "CM20",
+    "CM22",
+    "CM32",
+    "CM4",
+    "CN2",
+    "CN34",
+    "CP1",
+    "CP35",
+    "CR26",
+    "CR7",
+    "CT2",
+    "CT34",
+    "CU10",
+    "CU29",
+    "CV1",
+    "CV35",
+    "CW13",
+    "CW17",
+    "CW20",
+    "CW22",
+    "CW32",
+    "CW4",
+    "CY2",
+    "CY34",
+    "D1",
+    "D35",
+    "DA1",
+    "DA35",
+    "DB26",
+    "DB7",
+    "DC2",
+    "DC34",
+    "DD10",
+    "DD29",
+    "DE1",
+    "DE35",
+    "DF13",
+    "DF17",
+    "DF20",
+    "DF22",
+    "DF32",
+    "DF4",
+    "DG2",
+    "DG34",
+    "DH1",
+    "DH35",
+    "DJ26",
+    "DJ7",
+    "DK2",
+    "DK34",
+    "DL10",
+    "DL29",
+    "DM1",
+    "DM35",
+    "DN13",
+    "DN17",
+    "DN20",
+    "DN22",
+    "DN32",
+    "DN4",
+    "DP2",
+    "DP34",
+    "DR1",
+    "DR35",
+    "DT26",
+    "DT7",
+    "DU2",
+    "DU34",
+    "DV10",
+    "DV29",
+    "DW1",
+    "DW35",
+    "DY13",
+    "DY17",
+    "DY20",
+    "DY22",
+    "DY32",
+    "DY4",
+    "E11",
+    "E14",
+    "E18",
+    "E27",
+    "E30",
+    "E33",
+    "E8",
+    "EA2",
+    "EA34",
+    "EB1",
+    "EB35",
+    "EC26",
+    "EC7",
+    "ED2",
+    "ED34",
+    "EE10",
+    "EE29",
+    "EF1",
+    "EF35",
+    "EG13",
+    "EG17",
+    "EG20",
+    "EG22",
+    "EG32",
+    "EG4",
+    "EH2",
+    "EH34",
+    "EJ1",
+    "EJ35",
+    "EK26",
+    "EK7",
+    "EL2",
+    "EL34",
+    "EM10",
+    "EM29",
+    "EN1",
+    "EN35",
+    "EP13",
+    "EP17",
+    "EP20",
+    "EP22",
+    "EP32",
+    "EP4",
+    "ER2",
+    "ER34",
+    "ET1",
+    "ET35",
+    "EU26",
+    "EU7",
+    "EV2",
+    "EV34",
+    "EW10",
+    "EW29",
+    "EY1",
+    "EY35",
+    "F2",
+    "F34",
+    "FA15",
+    "FA32",
+    "FB2",
+    "FB34",
+    "FC19",
+    "FC23",
+    "FC25",
+    "FC28",
+    "FC3",
+    "FC6",
+    "FC9",
+    "FD1",
+    "FD35",
+    "FE2",
+    "FE34",
+    "FF11",
+    "FF14",
+    "FF18",
+    "FF21",
+    "FF24",
+    "FF27",
+    "FF30",
+    "FF33",
+    "FF5",
+    "FF8",
+    "FG1",
+    "FG35",
+    "FH2",
+    "FH34",
+    "FJ12",
+    "FJ16",
+    "FJ19",
+    "FJ23",
+    "FJ25",
+    "FJ28",
+    "FJ3",
+    "FJ31",
+    "FJ6",
+    "FJ9",
+    "G1",
+    "G35",
+    "H12",
+    "H16",
+    "H19",
+    "H31",
+    "J22",
+    "J4",
+    "K2",
+    "K34",
+    "L1",
+    "L35",
+    "M26",
+    "M7",
+    "N2",
+    "N34",
+    "P10",
+    "P29",
+    "R1",
+    "R35",
+    "T13",
+    "T17",
+    "T20",
+    "T22",
+    "T32",
+    "T4",
+    "U2",
+    "U34",
+    "V1",
+    "V35",
+    "W26",
+    "W7",
+    "Y2",
+    "Y34"
+   ],
+   "at": [
+    93.8,
+    53.7
+   ],
+   "rot": 90.0,
+   "src": "anchor(设计源板)",
+   "board_pads": 354,
+   "status": "placed",
+   "footprint_file": "k2/hw/lib/ForgeOS.pretty/DS320PR1601.kicad_mod",
+   "footprint_pads": 354,
+   "pad_aabb": [
+    82.6,
+    49.61,
+    104.84,
+    57.79
+   ],
+   "geom_src": "board(as-built)"
+  }
+ },
+ "corridors": [
+  {
+   "bands": [
+    {
+     "band": "dn",
+     "band_legacy": "a_per_dn_in",
+     "layer": "In2.Cu",
+     "nets": [
+      "PCIE_DN0",
+      "PCIE_DN1",
+      "PCIE_DN2",
+      "PCIE_DN3",
+      "PCIE_DN4",
+      "PCIE_DN5",
+      "PCIE_DN6",
+      "PCIE_DN7"
+     ],
+     "note": "A_PER -> In2 east crossing (VIA_IN2)",
+     "pairs": 8,
+     "tracks_y": [
+      58.3,
+      59.5,
+      60.7,
+      61.9,
+      63.1,
+      64.3,
+      65.5,
+      66.7
+     ],
+     "tracks_y_basis": "v32 复用老 alloc v4 曾 SOLVED 轨道值 (J2/J3/J4 未动)"
+    },
+    {
+     "band": "up",
+     "band_legacy": "b_pet_up_out",
+     "layer": "In2.Cu",
+     "nets": [
+      "PCIE_UP_OUT0",
+      "PCIE_UP_OUT1",
+      "PCIE_UP_OUT2",
+      "PCIE_UP_OUT3",
+      "PCIE_UP_OUT4",
+      "PCIE_UP_OUT5",
+      "PCIE_UP_OUT6",
+      "PCIE_UP_OUT7"
+     ],
+     "note": "B_PET -> In2 east crossing (VIA_IN2)",
+     "pairs": 8,
+     "tracks_y": [
+      40.3,
+      41.5,
+      42.7,
+      43.9,
+      45.1,
+      46.3,
+      47.5,
+      48.7
+     ],
+     "tracks_y_basis": "v32 复用老 alloc v4 曾 SOLVED 轨道值 (J2/J3/J4 未动)"
+    },
+    {
+     "band": "refclk",
+     "band_legacy": "refclk",
+     "j2_transit": "REFCLK-ECS-001 (F.Cu->In2->F.Cu 单次换层, 仅 J2 pad 场内); 轨 y/layer 不变",
+     "layer": "F.Cu",
+     "layer_note": "per D0-2",
+     "nets": [
+      "PCIE_REFCLK0",
+      "PCIE_REFCLK1"
+     ],
+     "note": "REFCLK0/1 J2<->J3/J4 直通不经芯片",
+     "pairs": 2,
+     "tracks_y": [
+      45.7,
+      50.5
+     ],
+     "tracks_y_basis": "v32 复用老 alloc v4 曾 SOLVED 轨道值 (J2/J3/J4 未动)"
+    }
+   ],
+   "id": "EAST_CHIP_TO_J2",
+   "note": "v31 regen: single DS320 east corridor (L2 v2.0 东走廊 27.40mm); 16 data pairs (DN in A_PER 8 + UP_OUT out B_PET 8) + REFCLK0/1 2 (In2 S翼, L3)",
+   "pairs": 18,
+   "x_range": [
+    105.25,
+    132.65
+   ]
+  },
+  {
+   "bands": [
+    {
+     "band": "up",
+     "band_legacy": "b_per_up_in",
+     "layer": "In2.Cu",
+     "nets": [
+      "PCIE_UP0",
+      "PCIE_UP1",
+      "PCIE_UP2",
+      "PCIE_UP3",
+      "PCIE_UP4",
+      "PCIE_UP5",
+      "PCIE_UP6",
+      "PCIE_UP7"
+     ],
+     "note": "B_PER direct F.Cu west (J3 0-3/J4 4-7)",
+     "pairs": 8,
+     "tracks_y": [
+      40.7,
+      41.9,
+      43.1,
+      44.3,
+      45.5,
+      46.7,
+      47.9,
+      49.1
+     ],
+     "tracks_y_basis": "v32 复用老 alloc v4 曾 SOLVED 轨道值 (J2/J3/J4 未动)"
+    },
+    {
+     "band": "dn",
+     "band_legacy": "a_pet_dn_out",
+     "layer": "In2.Cu",
+     "nets": [
+      "PCIE_DN_OUT0",
+      "PCIE_DN_OUT1",
+      "PCIE_DN_OUT2",
+      "PCIE_DN_OUT3",
+      "PCIE_DN_OUT4",
+      "PCIE_DN_OUT5",
+      "PCIE_DN_OUT6",
+      "PCIE_DN_OUT7"
+     ],
+     "note": "A_PET direct F.Cu west (J3 0-3/J4 4-7)",
+     "pairs": 8,
+     "tracks_y": [
+      58.7,
+      59.9,
+      61.1,
+      62.3,
+      63.5,
+      64.7,
+      65.9,
+      67.1
+     ],
+     "tracks_y_basis": "v32 复用老 alloc v4 曾 SOLVED 轨道值 (J2/J3/J4 未动)"
+    },
+    {
+     "band": "refclk",
+     "band_legacy": "refclk",
+     "layer": "F.Cu",
+     "layer_note": "per D0-2",
+     "nets": [
+      "PCIE_REFCLK0",
+      "PCIE_REFCLK1"
+     ],
+     "note": "REFCLK0/1 直通",
+     "pairs": 2,
+     "tracks_y": [
+      45.7,
+      50.5
+     ],
+     "tracks_y_basis": "v32 复用老 alloc v4 曾 SOLVED 轨道值 (J2/J3/J4 未动)"
+    }
+   ],
+   "id": "WEST_MCIO_TO_CHIP",
+   "note": "v31 regen: single DS320 west corridor (L2 v2.0 西走廊 17.30mm); 16 data pairs (UP in B_PER 8 + DN_OUT out A_PET 8) + REFCLK0/1 2",
+   "pairs": 18,
+   "x_range": [
+    65.05,
+    82.35
+   ]
+  }
+ ],
+ "keepouts": [
+  {
+   "id": "KO-1..4 mounting holes",
+   "count": 4,
+   "shape": "circle Ø6.0",
+   "switches": {
+    "pads": "blocked",
+    "tracks": "blocked",
+    "vias": "blocked",
+    "copper_pour": "blocked",
+    "footprints": "blocked"
+   }
+  },
+  {
+   "id": "KO-5 escape_transition_zone",
+   "count": 1,
+   "shape": "per-pin escape window",
+   "switches": {
+    "pads": "allowed",
+    "tracks": "allowed(escape_clearance_mm=0.075)",
+    "vias": "blocked",
+    "copper_pour": "blocked",
+    "footprints": "blocked"
+   }
+  },
+  {
+   "id": "KO-6 ac_pad_gnd_cutout",
+   "count": 1,
+   "shape": "AC pad GND cut-out",
+   "switches": {
+    "pads": "allowed",
+    "tracks": "allowed",
+    "vias": "allowed",
+    "copper_pour": "blocked",
+    "footprints": "allowed"
+   }
+  },
+  {
+   "id": "KO-7 board edge",
+   "count": 4,
+   "shape": "frame inset edge_copper_min=0.3mm",
+   "switches": {
+    "pads": "allowed",
+    "tracks": "blocked(<0.30mm)",
+    "vias": "blocked(<0.30mm)",
+    "copper_pour": "blocked(<0.30mm)",
+    "footprints": "allowed"
+   }
+  }
+ ],
+ "layer_plan": {
+  "stackup_layers": null,
+  "roles": {
+   "gnd_planes": [
+    "In1.Cu",
+    "In3.Cu",
+    "In6.Cu"
+   ],
+   "power_plane": "In4.Cu",
+   "signal_layers": [
+    "F.Cu",
+    "In2.Cu",
+    "In5.Cu",
+    "B.Cu"
+   ]
+  },
+  "impedance": {
+   "alt_gap_mm": 0.2,
+   "alt_width_mm": 0.215,
+   "coupon_required": true,
+   "gap_mm": 0.175,
+   "model": "JLC_SI9000_H1_5.0mil_Er1_4.3",
+   "target_zdiff": 85.0,
+   "tolerance_pct": 10,
+   "width_mm": 0.205,
+   "gap_mm_semantics": "lower_bound（DRC clearance 0.175）；几何真源 = per_layer[*].gap_mm_delivered",
+   "per_layer": {
+    "F.Cu": {
+     "kind": "microstrip",
+     "refs": [
+      "In1.Cu"
+     ],
+     "w_mm": 0.205,
+     "h_mm": 0.1164,
+     "er": 4.16,
+     "gap_mm_delivered": [
+      0.295,
+      0.395
+     ],
+     "material": "2116*1"
+    },
+    "In2.Cu": {
+     "kind": "symmetric_stripline",
+     "refs": [
+      "In1.Cu",
+      "In3.Cu"
+     ],
+     "w_mm": 0.16,
+     "b_mm": 0.5,
+     "er": 3.99,
+     "gap_mm_delivered": [
+      0.34,
+      0.44
+     ],
+     "material": "core 0.25*2"
+    },
+    "In5.Cu": {
+     "kind": "symmetric_stripline",
+     "refs": [
+      "In4.Cu",
+      "In6.Cu"
+     ],
+     "w_mm": 0.16,
+     "b_mm": 0.5,
+     "er": 3.99,
+     "gap_mm_delivered": [
+      0.34,
+      0.44
+     ],
+     "material": "core 0.25*2"
+    },
+    "B.Cu": {
+     "kind": "microstrip",
+     "refs": [
+      "In6.Cu"
+     ],
+     "w_mm": 0.205,
+     "h_mm": 0.1164,
+     "er": 4.16,
+     "gap_mm_delivered": [
+      0.295,
+      0.395
+     ],
+     "material": "2116*1"
+    }
+   },
+   "per_layer_basis": "CO-68：方案(a) 下 4 信号层**全部有参考平面**（修复 CO-62 的 B.Cu 无参考）；内层线宽 0.205→0.16（铜厚自洽闭合要求）。终判 = 板厂券。",
+   "width_mm_by_layer": {
+    "F.Cu": 0.205,
+    "In2.Cu": 0.16,
+    "In5.Cu": 0.16,
+    "B.Cu": 0.205
+   }
+  },
+  "via_policy": {
+   "max_per_net": 2,
+   "drill_mm": 0.2,
+   "outer_mm": 0.35,
+   "annular_min_mm": 0.075,
+   "back_drill": true,
+   "diff_symmetric": true,
+   "gnd_companion_min": 1,
+   "dangling": "error"
+  },
+  "length_policy": {
+   "intra_pair_max_mm": 0.15,
+   "inter_pair_max_mm": 1.0
+  }
+ },
+ "pour": {
+  "gnd_planes": [
+   "In1.Cu",
+   "In3.Cu",
+   "In6.Cu"
+  ],
+  "power_plane": "In4.Cu",
+  "decoupling": "board_real_per_net: P3V3{C74-C75-C76-C77-C78-C79-C80-C81-C82-C83-C84} / MCU_VDD{C85-C86} / 12V_IN{C88} / P3V3_AUX{C90} → via_to_plane",
+  "power_partition": {
+   "P3V3": "In4 一区 (东侧)",
+   "P3V3_AUX_MCU_VDD": "In4 二区 (西侧)"
+  },
+  "gnd_stitch_via": {
+   "candidates_file": "j2_via_gnd_stitch_v8.json",
+   "rule": "差分换层处硬性 GND 伴行 via (每换层点 ≥1, 2026-08-19 8 层定案)",
+   "via_drill": 0.2,
+   "via_outer": 0.35
+  },
+  "L2_residual": {
+   "basis": "焊盘外接框净距",
+   "west_mm": 17.55,
+   "east_mm": 27.81,
+   "west_basis": "J3/J4 右缘 65.05 → U6 左缘 82.60",
+   "east_basis": "U6 右缘 104.84 → J2 左缘 132.65"
+  },
+  "basis_sha16": "c3ee574455cf6633"
+ },
+ "criteria": {
+  "C3_pad_eq_symbol_pins": {
+   "literal_mismatch": [
+    {
+     "ref": "U1",
+     "symbol_pins": 27,
+     "footprint_pads": 49
+    },
+    {
+     "ref": "U2",
+     "symbol_pins": 6,
+     "footprint_pads": 8
+    }
+   ],
+   "directed_extra": [
+    {
+     "ref": "U1",
+     "extra": 22
+    },
+    {
+     "ref": "U2",
+     "extra": 2
+    }
+   ],
+   "unresolved_footprint": [
+    "R35",
+    "R38"
+   ]
+  },
+  "C1_board_frame": {
+   "size_mm": [
+    120.0,
+    46.0
+   ],
+   "expect": [
+    120.0,
+    46.0
+   ],
+   "y_range": [
+    33.0,
+    79.0
+   ],
+   "pass": true
+  },
+  "C2_mounting_holes": {
+   "count": 4,
+   "drill_mm": 3.2,
+   "min_edge_material_mm": 1.5,
+   "expect_min_mm": 1.5,
+   "per_hole": [
+    {
+     "hole": "H1",
+     "at": [
+      26.1,
+      75.6
+     ],
+     "edge_material_mm": 1.5
+    },
+    {
+     "hole": "H2",
+     "at": [
+      139.6,
+      39.6
+     ],
+     "edge_material_mm": 1.8
+    },
+    {
+     "hole": "H3",
+     "at": [
+      26.1,
+      36.1
+     ],
+     "edge_material_mm": 1.5
+    },
+    {
+     "hole": "H4",
+     "at": [
+      114.6,
+      36.1
+     ],
+     "edge_material_mm": 1.5
+    }
+   ],
+   "pass": true
+  },
+  "C4_interface_inframe": {
+   "inset_mm": 0.3,
+   "violations": [],
+   "note": "排针列 x 由 L2-3 改为 27.94 后重测",
+   "pass": true
+  },
+  "C5_keepout_switches": {
+   "zones": 4,
+   "each_has_non_allowed": true,
+   "pass": true
+  },
+  "C6_corridor_basis": {
+   "declared": {
+    "basis": "焊盘外接框净距",
+    "west_mm": 17.55,
+    "east_mm": 27.81,
+    "west_basis": "J3/J4 右缘 65.05 → U6 左缘 82.60",
+    "east_basis": "U6 右缘 104.84 → J2 左缘 132.65"
+   },
+   "bases_found_in_spec": [],
+   "pass": true,
+   "note": "图纸册按 L2-4 统一口径『焊盘外接框净距』表述（西 17.55 / 东 27.81）"
+  }
+ }
+}
