@@ -2,6 +2,7 @@
 
 > 本件 = **L2 侧 canonical 声明 + 口径澄清**（#K2-12 §三 `L3/README-canonical.md` 的**同型处置**）。
 > **不改冻结件**：`L1/frozen/L1_TOPOLOGY_v2.0.md`、`L2/frozen/L2_STRUCTURE_v2.0.md`（0444）**逐字节不动**；本件只在其外部作口径更正。
+> **修订留痕（2026-09-16）**：v1（`1ad55180c4c74e65`）→ 本版：§3 由「待监理裁」改为**已收口**（In5/In6 层角色，L2 自裁，引 `L2_RULING_in5_in6_role_v1.md`）。
 
 ## 1. canonical 判定
 
@@ -24,9 +25,20 @@
 > `L1_TOPOLOGY_v2.0.md` 内「6L 试用 / 6L 判定流程终定」同属历史（详见 `k2/pm_gate/artifacts/k2_v4/L2/L2-ERRATA-8L-v1.md` `eb9354a6b8ffd535`）。
 > `k2/docs/01-architecture.md` 已正确（6L 标历史）⇒ **不动**。
 
-## 3. **待监理裁（本指引未收口项）**
+## 3. **In5/In6 层角色口径 —— 已收口**（2026-09-16；L2 自裁，**不新增决策**）
 
-owner 裁决件 `stackup_8layer_decision.md` 的**逐层角色表**写作 `F/G/S/G/P/G/S/B`（GND = `In1/In3/In5`、信号含 `In6`），与 canonical/交付板（GND = `In1/In3/In6`、信号含 `In5`）**In5/In6 互换** ⇒ 请监理裁定以何方为准（若 owner 表为准 ⇒ 属层角色/拓扑变更，需 owner）。详见 `L2-ERRATA-8L-v1.md` §4。
+| 项 | 判定 |
+|---|---|
+| **canonical 层角色** | 平面 `GND = In1/In3/In6`；信号 = `F/In2/In5/B`；电源 = `In4`（双区拆分） |
+| owner 裁决件 `stackup_8layer_decision.md`（`552b2fb922cd8f53`）的 `F/G/S/G/P/G/S/B` 表 | **历史口径（层名旧标）** ⇒ 仅逐层字母表作废；「8L 定案」本体 / 料号 `JLC08161H` / SI·成本背书**继续有效** |
+
+- **依据**：`In5 = signal / In6 = GND` 系 **2026-09-12 L2 叠层分配自裁**（CO-67 / CO-68 / CO-73），
+  已在 SPEC `rev-5 / rev-6 / rev-7` 在册（`_spec_rev_5.authority`、`_spec_rev_6` 层名更正、
+  `_spec_rev_7`「In6=GND 平面（在册）」）；交付板 `d4e81f647be7f980` 实测 `In5.Cu 2008 段 / In6.Cu 0 段`
+  且 `In1/In3/In6 = GND` 铜区；`criteria/` 两份对层角色**零引用**。
+- **件**：`L2_RULING_in5_in6_role_v1.md`（本目录，sha256 `5835d392151a0b1946c750f805212ed3ebc66f0c235ea5065bdd05a735eeb1c5`）；
+  `L2-ERRATA-8L-v1.md` §4 的「请监理裁」项由本件收口。
+- 若 owner 主张按 owner 表实作 ⇒ 属 **L1 拓扑变更**（需全板重布）⇒ 走 owner 复议。
 
 ## 4. 与 P3/P4 的关系
 
