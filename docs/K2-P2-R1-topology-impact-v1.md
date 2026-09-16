@@ -1,0 +1,61 @@
+# P2 · R1 落地前置「网拓扑影响」核查 v1（**只读取证**；R1 动作清单须据本件补全）
+
+- **动机**：R1 现口径 = 「原理图删 60 + 补 12」。删除**串联**元件会**断开链路**；若不并网，`E1/E3` 表面「差距变小」而**实际静默断链**
+  （= 红线「不得以删差异达成归零」的机器可检形态）。本件逐件核**删除侧的网拓扑后果**，不落盘。
+- **仪器/数据**：`kicad-cli sch export netlist`（Eeschema 10.0.5，`/tmp/opencode/k2p1/d8/k2_sch.net`）
+  + 网表 `hw/data/k2_sch.yaml`；分析脚本输出 `/tmp/opencode/k2p1/r1_topology_impact.json`。
+- **边界**：未动原理图/网表/板/SPEC/生成器；未写 `.omo/supervision/**`；未派 WORKER；P3 未开。
+
+## 1. 结论（三项，均须并入 R1 动作清单）
+
+| # | 结论 | 后果若忽略 |
+|---|---|---|
+| **T1** | **32×220nF（`C17–C32`,`C49–C64`）全部为「串联」器件**（两脚分属**两个不同网**）⇒ R1 必须**并网 32 对**，保留 **yaml 侧网名**、退役 `*_U3`/`*_U7` 名 | 删符号即**断开 32 条 PCIe 链路**（J2↔U6↔J3/J4），E3 会新增 32 条不一致而 E1 反而「变好」 |
+| **T2** | C 类 18 件中 **4 件非接地 strap**：`R4`(`P3V3`↔`STRAP_READ_EN_U3`)、`R9`(`P3V3`↔`STRAP_READ_EN_U7`)、`R26`(`P3V3`↔`ALL_DONE_N_U3`)、`R27`(`P3V3`↔`ALL_DONE_N_U7`)；其余 14 件 = 一端 `GND` | 删除本 4 件与**真源一致**：冻结 SPEC `strap_domain_v32.non_strap_sideband` 明载 `ALL_DONE_FF27 = NC no-action`、`READ_EN_FJ25 = NC no-action` ⇒ **无上拉需求**，删除成立（须在图注中留痕） |
+| **T3** | 删除 `U3`/`U7` 并补入单颗 `U6` **不是「增删符号」**：原理图链路网名/节点目前绑定 `U3`/`U7` 脚位，真源 yaml 绑定 `U6` **球名** ⇒ 须做 **脚 ↔ 球 重映**（如 `PCIE_DN0_P`: 原理图 `J2↔U3.pin` → yaml `J2/TX0_P ↔ U6/A_PERP0`） | 只删不映 ⇒ 链路网在单颗下**无对端**（悬空网），E3 全面破 |
+
+## 2. T1 明细：32 对并网表（节选；全表见 JSON）
+
+| 串联件 | 网 A | 网 B | **保留名**（= yaml 网名） |
+|---|---|---|---|
+| `C17` | `PCIE_DN_OUT0_P_MCIO` | `PCIE_DN_OUT0_P_U3` | **`PCIE_DN_OUT0_P_MCIO`** |
+| `C18` | `PCIE_DN_OUT0_N_MCIO` | `PCIE_DN_OUT0_N_U3` | **`PCIE_DN_OUT0_N_MCIO`** |
+| `C19` | `PCIE_DN_OUT1_P_MCIO` | `PCIE_DN_OUT1_P_U3` | **`PCIE_DN_OUT1_P_MCIO`** |
+| `C20` | `PCIE_DN_OUT1_N_MCIO` | `PCIE_DN_OUT1_N_U3` | **`PCIE_DN_OUT1_N_MCIO`** |
+| … | …（`C21–C32` 同型：MCIO 侧 ↔ `_U3`） | | |
+| … | …（`C49–C64` 同型：`_J2` ↔ `_U7`） | | |
+
+**统计**：32 对中「**恰一侧名 == yaml 网名**」= **32 / 32**（无例外）⇒ 保留名唯一确定，退役名 = `*_U3` / `*_U7`。
+⇒ R1 的并网动作**完全可机检**：`并网后 (退役名 == ∅) 且 (保留名节点数 +1)`。
+
+## 3. 对 R1 动作清单的补全（**待监理裁定口径**）
+
+| # | 动作 | 件/对 | 备注 |
+|---|---|---|---|
+| R1-a | 删符号 | **60** | A34（32 串联电容 + `U3`/`U7`）+ C18 + D8 |
+| R1-b | **并网**（T1） | **32 对** | 保留 yaml 名；退役 `*_U3`/`*_U7` |
+| R1-c | **脚 ↔ 球 重映**（T3，`U3`/`U7` → `U6`） | 28+28 HS 网 + strap/电源域 | 依 `DS320PR1601` 球映射真源 |
+| R1-d | 补入件 | **12** | `C88`/`C89`/`U6` + `R35–R39`,`R42–R45` |
+| R1-e | 新增网 | **9** | `DS320_STRAP_*`（U6 strap 域，见 SPEC `strap_domain_v32`） |
+
+> **实施路径二选一（须监理裁）**：
+> **(i) 局部编辑**：按 R1-a…e 手工改 3 个 `.kicad_sch`（量大、易错，但零新增工具）；
+> **(ii) 由真源再生**：以 `hw/data/k2_sch.yaml`（+ SPEC/球映射）**再生**原理图（Z1 §2 规则 2 的「派生」语义），
+> 需**新增工具**（= 改工具链 ⇒ 另案放行）。
+> 二者都**不含** E1 目标变化（仍 **55**）；本件不选边，只把「静默断链」风险显式化。
+
+## 4. 复现
+
+```bash
+kicad-cli sch export netlist --format kicadsexpr -o /tmp/opencode/k2p1/d8/k2_sch.net k2/hw/sch/k2_sch.kicad_sch
+python3 - <<'PY'   # 逐件列两脚网名，判定 串联/接地
+import re,collections
+src=open('/tmp/opencode/k2p1/d8/k2_sch.net',encoding='utf-8').read()
+nets=re.findall(r'\(net\s+\(code\s+"?(\d+)"?\)\s+\(name\s+"([^"]*)"\)\s+\(class\s+"[^"]*"\)(.*?)(?=\(net\s+\(code|\Z)',src,re.S)
+pin=collections.defaultdict(dict)
+for c,n,b in nets:
+    if n.startswith('unconnected-'): continue
+    for m in re.finditer(r'\(ref\s+"([^"]+)"\)\s*\(pin\s+"([^"]+)"\)',b): pin[m.group(1)][m.group(2)]=n.split('/')[-1]
+for r in [f'C{i}' for i in list(range(17,33))+list(range(49,65))]: print(r, sorted(set(pin[r].values())))
+PY
+```
