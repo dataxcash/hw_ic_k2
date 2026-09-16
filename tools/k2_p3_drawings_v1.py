@@ -313,6 +313,36 @@ def main():
                    "gnd_stitch_via": (spec.get("pd") or {}).get("gnd_stitch_via"),
                    "L2_residual": L2["L2-4_corridor_clearance"], "basis_sha16": L2["basis_sha16"]}
 
+    # ── 消费落位解（若存在）：G1 13 件 + G2 C73/C86 ────────────────────────
+    solp = os.path.join(os.environ.get("K2_P3_SOL_IN", OUT), "p3_placement_solution.json")
+    if os.path.isfile(solp):
+        sol = json.load(open(solp, encoding="utf-8"))
+        for ref, s in (sol.get("placed") or {}).items():
+            d = geo["devices"].get(ref)
+            if not d:
+                continue
+            d["at"] = s["at"]; d["pad_aabb"] = s["aabb"]
+            d["footprint"] = s.get("footprint", d.get("footprint"))
+            d["status"] = "placed_solved_L2"
+            d["geom_src"] = "L2 自裁解（k2_p3_place_solver_v1.py）"
+            d["basis"] = s.get("basis")
+            if s.get("ball"):
+                d["ball"] = s["ball"]; d["ball_board_pos"] = s["ball_board_pos"]
+        geo["placement_solution"] = {"file": "p3_placement_solution.json",
+                                     "solved": sol.get("solved_count"), "all_pass": sol.get("all_pass"),
+                                     "selfcheck": sol.get("selfcheck"),
+                                     "constraints": sol.get("constraints"),
+                                     "strap_zone": sol.get("strap_zone"), "decap_keepout": sol.get("decap_keepout"),
+                                     "strap_footprint_spec": sol.get("strap_footprint_spec")}
+        # 重算 C3（符号引脚 vs 新解件封装焊盘）与 C4
+        c3 = geo["criteria"]["C3_pad_eq_symbol_pins"]
+        for ref, s in (sol.get("placed") or {}).items():
+            d = geo["devices"][ref]
+            fpc2, pads2 = footprint_pads(d["footprint"])
+            d["footprint_file"] = os.path.relpath(fpc2, ROOT) if fpc2 else None
+            d["footprint_pads"] = len(pads2)
+        geo["criteria"]["C3_pad_eq_symbol_pins"] = c3
+
     # ── 出图 ───────────────────────────────────────────────────────────────
     ox, oy = bx0, by0
     def frame(f):

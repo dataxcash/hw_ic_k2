@@ -53,21 +53,22 @@
     "2"
    ],
    "at": [
-    28.5,
-    47.0
+    28.0,
+    46.1
    ],
    "rot": 0.0,
    "pad_aabb": [
-    27.75,
-    46.65,
-    29.25,
-    47.35
+    27.24,
+    45.79,
+    28.76,
+    46.41
    ],
-   "geom_src": "board(as-built)",
-   "status": "move_pending_L2-3",
+   "geom_src": "L2 自裁解（k2_p3_place_solver_v1.py）",
+   "status": "placed_solved_L2",
    "note": "L2-3 已裁须移位（仍在左带内）；新坐标待解（L2 自裁域），图纸标为待定",
    "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
-   "footprint_pads": 2
+   "footprint_pads": 2,
+   "basis": "L2-3 已裁须移位（排针列 column_x 26.5→27.94）；L2 自裁新坐标：左带内就近原位、避既有 pad"
   },
   "C74": {
    "sheet": "Power Decoupling (ReDriver VCC)",
@@ -396,28 +397,29 @@
   "C86": {
    "sheet": "MCU & Sideband",
    "symbol": "C_4R7",
-   "footprint": "Capacitor_SMD:C_0603_1608Metric",
+   "footprint": "Capacitor_SMD:C_0402_1005Metric",
    "symbol_pins": 2,
    "symbol_pin_nums": [
     "1",
     "2"
    ],
    "at": [
-    31.5,
-    56.0
+    32.4,
+    36.0
    ],
    "rot": 0.0,
    "pad_aabb": [
-    30.75,
-    55.65,
-    32.25,
-    56.35
+    31.64,
+    35.69,
+    33.16,
+    36.31
    ],
-   "geom_src": "board(as-built)",
-   "status": "move_pending_L2-3",
+   "geom_src": "L2 自裁解（k2_p3_place_solver_v1.py）",
+   "status": "placed_solved_L2",
    "note": "L2-3 已裁须移位（仍在左带内）；新坐标待解（L2 自裁域），图纸标为待定",
-   "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod",
-   "footprint_pads": 2
+   "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
+   "footprint_pads": 2,
+   "basis": "L2-3 已裁须移位（排针列 column_x 26.5→27.94）；L2 自裁新坐标：左带内就近原位、避既有 pad"
   },
   "C87": {
    "sheet": "MCU & Sideband",
@@ -563,12 +565,23 @@
     "1",
     "2"
    ],
-   "at": null,
+   "at": [
+    38.7,
+    34.6
+   ],
    "src": "无",
-   "status": "coord_pending",
+   "status": "placed_solved_L2",
    "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
    "footprint_file": "AppDir/share/kicad/footprints/Diode_SMD.pretty/D_SMA.kicad_mod",
-   "footprint_pads": 2
+   "footprint_pads": 2,
+   "pad_aabb": [
+    35.45,
+    33.7,
+    41.95,
+    35.5
+   ],
+   "geom_src": "L2 自裁解（k2_p3_place_solver_v1.py）",
+   "basis": "buck 续流二极管（SW↔GND）；L2 自裁：就近 SW pad"
   },
   "E2": {
    "sheet": "MCU & Sideband",
@@ -978,12 +991,23 @@
     "1",
     "2"
    ],
-   "at": null,
+   "at": [
+    33.0,
+    40.2
+   ],
    "src": "无",
-   "status": "coord_pending",
+   "status": "placed_solved_L2",
    "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
    "footprint_file": "AppDir/share/kicad/footprints/Inductor_SMD.pretty/L_0805_2012Metric.kicad_mod",
-   "footprint_pads": 2
+   "footprint_pads": 2,
+   "pad_aabb": [
+    31.5,
+    39.6,
+    34.5,
+    40.8
+   ],
+   "geom_src": "L2 自裁解（k2_p3_place_solver_v1.py）",
+   "basis": "buck 电感（SW→P3V3）；L2 自裁：就近 SW/P3V3 pad 中点"
   },
   "R1": {
    "sheet": "MCU & Sideband",
@@ -1231,82 +1255,162 @@
   "R35": {
    "sheet": "ReDriver DS320PR1601 & Sideband Strap",
    "symbol": "R_6K19",
-   "footprint": "R_0402_1005Metric",
+   "footprint": "Resistor_SMD:R_0603_1608Metric",
    "symbol_pins": 2,
    "symbol_pin_nums": [
     "1",
     "2"
    ],
-   "at": null,
+   "at": [
+    83.6,
+    60.95
+   ],
    "src": "无",
-   "status": "coord_pending",
+   "status": "placed_solved_L2",
    "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
-   "footprint_file": null,
-   "footprint_pads": 0
+   "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    82.375,
+    60.475,
+    84.825,
+    61.425
+   ],
+   "geom_src": "L2 自裁解（k2_p3_place_solver_v1.py）",
+   "basis": "SPEC layer_plan.strap_domain_v32.placement（域/排法/0603 已裁）+ 就近球求解",
+   "ball": "FF24",
+   "ball_board_pos": [
+    83.43,
+    54.71
+   ]
   },
   "R36": {
    "sheet": "ReDriver DS320PR1601 & Sideband Strap",
    "symbol": "R_1K",
-   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "footprint": "Resistor_SMD:R_0603_1608Metric",
    "symbol_pins": 2,
    "symbol_pin_nums": [
     "1",
     "2"
    ],
-   "at": null,
+   "at": [
+    100.4,
+    58.95
+   ],
    "src": "无",
-   "status": "coord_pending",
+   "status": "placed_solved_L2",
    "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
-   "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
-   "footprint_pads": 2
+   "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    99.175,
+    58.475,
+    101.625,
+    59.425
+   ],
+   "geom_src": "L2 自裁解（k2_p3_place_solver_v1.py）",
+   "basis": "SPEC layer_plan.strap_domain_v32.placement（域/排法/0603 已裁）+ 就近球求解",
+   "ball": "B23",
+   "ball_board_pos": [
+    104.69,
+    54.41
+   ]
   },
   "R37": {
    "sheet": "ReDriver DS320PR1601 & Sideband Strap",
    "symbol": "R_1K",
-   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "footprint": "Resistor_SMD:R_0603_1608Metric",
    "symbol_pins": 2,
    "symbol_pin_nums": [
     "1",
     "2"
    ],
-   "at": null,
+   "at": [
+    103.4,
+    58.95
+   ],
    "src": "无",
-   "status": "coord_pending",
+   "status": "placed_solved_L2",
    "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
-   "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
-   "footprint_pads": 2
+   "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    102.175,
+    58.475,
+    104.625,
+    59.425
+   ],
+   "geom_src": "L2 自裁解（k2_p3_place_solver_v1.py）",
+   "basis": "SPEC layer_plan.strap_domain_v32.placement（域/排法/0603 已裁）+ 就近球求解",
+   "ball": "G1",
+   "ball_board_pos": [
+    103.65,
+    49.76
+   ]
   },
   "R38": {
    "sheet": "ReDriver DS320PR1601 & Sideband Strap",
    "symbol": "R_8K25",
-   "footprint": "R_0402_1005Metric",
+   "footprint": "Resistor_SMD:R_0603_1608Metric",
    "symbol_pins": 2,
    "symbol_pin_nums": [
     "1",
     "2"
    ],
-   "at": null,
+   "at": [
+    103.4,
+    60.95
+   ],
    "src": "无",
-   "status": "coord_pending",
+   "status": "placed_solved_L2",
    "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
-   "footprint_file": null,
-   "footprint_pads": 0
+   "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    102.175,
+    60.475,
+    104.625,
+    61.425
+   ],
+   "geom_src": "L2 自裁解（k2_p3_place_solver_v1.py）",
+   "basis": "SPEC layer_plan.strap_domain_v32.placement（域/排法/0603 已裁）+ 就近球求解",
+   "ball": "B25",
+   "ball_board_pos": [
+    104.69,
+    55.01
+   ]
   },
   "R39": {
    "sheet": "ReDriver DS320PR1601 & Sideband Strap",
    "symbol": "R_1K",
-   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "footprint": "Resistor_SMD:R_0603_1608Metric",
    "symbol_pins": 2,
    "symbol_pin_nums": [
     "1",
     "2"
    ],
-   "at": null,
+   "at": [
+    100.4,
+    60.95
+   ],
    "src": "无",
-   "status": "coord_pending",
+   "status": "placed_solved_L2",
    "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
-   "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
-   "footprint_pads": 2
+   "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    99.175,
+    60.475,
+    101.625,
+    61.425
+   ],
+   "geom_src": "L2 自裁解（k2_p3_place_solver_v1.py）",
+   "basis": "SPEC layer_plan.strap_domain_v32.placement（域/排法/0603 已裁）+ 就近球求解",
+   "ball": "F34",
+   "ball_board_pos": [
+    103.95,
+    57.12
+   ]
   },
   "R40": {
    "sheet": "Power (12V DC-in DCDC 5V LDO 3V3)",
@@ -1317,12 +1421,23 @@
     "1",
     "2"
    ],
-   "at": null,
+   "at": [
+    29.5,
+    38.2
+   ],
    "src": "无",
-   "status": "coord_pending",
+   "status": "placed_solved_L2",
    "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
    "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
-   "footprint_pads": 2
+   "footprint_pads": 2,
+   "pad_aabb": [
+    28.72,
+    37.88,
+    30.28,
+    38.52
+   ],
+   "geom_src": "L2 自裁解（k2_p3_place_solver_v1.py）",
+   "basis": "FB 分压上臂；L2 自裁：就近 FB pad"
   },
   "R41": {
    "sheet": "Power (12V DC-in DCDC 5V LDO 3V3)",
@@ -1333,76 +1448,151 @@
     "1",
     "2"
    ],
-   "at": null,
+   "at": [
+    29.7,
+    34.7
+   ],
    "src": "无",
-   "status": "coord_pending",
+   "status": "placed_solved_L2",
    "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
    "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
-   "footprint_pads": 2
+   "footprint_pads": 2,
+   "pad_aabb": [
+    28.92,
+    34.38,
+    30.48,
+    35.02
+   ],
+   "geom_src": "L2 自裁解（k2_p3_place_solver_v1.py）",
+   "basis": "FB 分压下臂；L2 自裁：就近 FB pad"
   },
   "R42": {
    "sheet": "ReDriver DS320PR1601 & Sideband Strap",
    "symbol": "R_1K",
-   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "footprint": "Resistor_SMD:R_0603_1608Metric",
    "symbol_pins": 2,
    "symbol_pin_nums": [
     "1",
     "2"
    ],
-   "at": null,
+   "at": [
+    86.6,
+    58.95
+   ],
    "src": "无",
-   "status": "coord_pending",
+   "status": "placed_solved_L2",
    "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
-   "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
-   "footprint_pads": 2
+   "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    85.375,
+    58.475,
+    87.825,
+    59.425
+   ],
+   "geom_src": "L2 自裁解（k2_p3_place_solver_v1.py）",
+   "basis": "SPEC layer_plan.strap_domain_v32.placement（域/排法/0603 已裁）+ 就近球求解",
+   "ball": "FF5",
+   "ball_board_pos": [
+    83.43,
+    51.11
+   ]
   },
   "R43": {
    "sheet": "ReDriver DS320PR1601 & Sideband Strap",
    "symbol": "R_1K",
-   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "footprint": "Resistor_SMD:R_0603_1608Metric",
    "symbol_pins": 2,
    "symbol_pin_nums": [
     "1",
     "2"
    ],
-   "at": null,
+   "at": [
+    83.6,
+    58.95
+   ],
    "src": "无",
-   "status": "coord_pending",
+   "status": "placed_solved_L2",
    "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
-   "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
-   "footprint_pads": 2
+   "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    82.375,
+    58.475,
+    84.825,
+    59.425
+   ],
+   "geom_src": "L2 自裁解（k2_p3_place_solver_v1.py）",
+   "basis": "SPEC layer_plan.strap_domain_v32.placement（域/排法/0603 已裁）+ 就近球求解",
+   "ball": "FJ3",
+   "ball_board_pos": [
+    82.91,
+    50.81
+   ]
   },
   "R44": {
    "sheet": "ReDriver DS320PR1601 & Sideband Strap",
    "symbol": "R_1K",
-   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "footprint": "Resistor_SMD:R_0603_1608Metric",
    "symbol_pins": 2,
    "symbol_pin_nums": [
     "1",
     "2"
    ],
-   "at": null,
+   "at": [
+    86.6,
+    60.95
+   ],
    "src": "无",
-   "status": "coord_pending",
+   "status": "placed_solved_L2",
    "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
-   "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
-   "footprint_pads": 2
+   "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    85.375,
+    60.475,
+    87.825,
+    61.425
+   ],
+   "geom_src": "L2 自裁解（k2_p3_place_solver_v1.py）",
+   "basis": "SPEC layer_plan.strap_domain_v32.placement（域/排法/0603 已裁）+ 就近球求解",
+   "ball": "FJ28",
+   "ball_board_pos": [
+    82.91,
+    55.61
+   ]
   },
   "R45": {
    "sheet": "ReDriver DS320PR1601 & Sideband Strap",
    "symbol": "R_1K",
-   "footprint": "Resistor_SMD:R_0402_1005Metric",
+   "footprint": "Resistor_SMD:R_0603_1608Metric",
    "symbol_pins": 2,
    "symbol_pin_nums": [
     "1",
     "2"
    ],
-   "at": null,
+   "at": [
+    93.0,
+    58.95
+   ],
    "src": "无",
-   "status": "coord_pending",
+   "status": "placed_solved_L2",
    "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
-   "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
-   "footprint_pads": 2
+   "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
+   "footprint_pads": 2,
+   "pad_aabb": [
+    91.775,
+    58.475,
+    94.225,
+    59.425
+   ],
+   "geom_src": "L2 自裁解（k2_p3_place_solver_v1.py）",
+   "basis": "SPEC layer_plan.strap_domain_v32.placement（域/排法/0603 已裁）+ 就近球求解",
+   "ball": "FF30",
+   "ball_board_pos": [
+    83.43,
+    55.91
+   ]
   },
   "U1": {
    "sheet": "MCU & Sideband",
@@ -2389,5 +2579,44 @@
    "pass": true,
    "note": "图纸册按 L2-4 统一口径『焊盘外接框净距』表述（西 17.55 / 东 27.81）"
   }
+ },
+ "placement_solution": {
+  "file": "p3_placement_solution.json",
+  "solved": 15,
+  "all_pass": true,
+  "selfcheck": {
+   "in_frame": [],
+   "pad_clearance_violations": [],
+   "part_spacing_violations": [],
+   "hole_ko_violations": [],
+   "decap_ko_violations": []
+  },
+  "constraints": {
+   "inset_mm": 0.3,
+   "pad_clearance_mm": 0.2,
+   "part_spacing_mm": 0.5,
+   "hole_keepout_dia_mm": 6.0
+  },
+  "strap_zone": {
+   "x": [
+    83.0,
+    104.0
+   ],
+   "y": [
+    58.5,
+    66.0
+   ]
+  },
+  "decap_keepout": {
+   "x": [
+    90.25,
+    91.75
+   ],
+   "y": [
+    58.5,
+    64.5
+   ]
+  },
+  "strap_footprint_spec": "Resistor_SMD:R_0603_1608Metric"
  }
 }
