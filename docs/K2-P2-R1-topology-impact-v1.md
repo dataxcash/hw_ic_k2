@@ -59,3 +59,28 @@ for c,n,b in nets:
 for r in [f'C{i}' for i in list(range(17,33))+list(range(49,65))]: print(r, sorted(set(pin[r].values())))
 PY
 ```
+
+## 5. 网名收口闭合校验（v1 追加，2026-09-16 15:5x）—— 并**更正 T4「新增 9 网」为 10 网**
+
+以**网名**维度做 R1 前后闭合推演（原理图真实网 145 vs 网表 101，交集 **91**）：
+
+| 方向 | 条数 | 逐条归属 | R1 后的处理 |
+|---|---|---|---|
+| **网表有、图无** | **10** | 9×`DS320_STRAP_*`（`MODE`+8×`*_ADDR*`，节点 = `U6/<球>` + `R../A`）+ **`PWR_5V_KEY`**（节点 = `C89`） | **须新增**（含 `C88`/`C89` 补入件的网） |
+| **图有、网表无** | **54** | ① **32** = 串联退役网 `PCIE_DN_OUT*_U3` / `PCIE_UP_OUT*_J2`↔`_U7`（由 **T1 并网**吸收）；② **18** = `U3/U7` strap 网（`STRAP_*`/`PD0/PD1`/`ALL_DONE_N_*`，随 C 类件删除）；③ **4** = `VREG1/2_U3`、`VREG1/2_U7`（随 D 类件删除） | **全部消失**（32 并入保留名 / 22 随件移除） |
+
+**闭合结论**：`145 − 54（图-only 全消）= 91` ⇒ `91 ∪ 10（网表-only 全增）= 101 = 网表` **恒等闭合**（网名维度 R1 后**零缺口**）。
+⇒ **T4 更正**：新增网 = **10**（9 strap + `PWR_5V_KEY`），非 §3 表所载 9；`PWR_5V_KEY` 即 `C89`（4.7µF）之网，随「补入 3 件」一并落地。
+⇒ **节点级**闭合仍依赖 **T3 脚↔球重映**（如 `PCIE_DN0_P`: `J2↔U3` → `J2/TX0_P ↔ U6/A_PERP0`）与 T2 处置，本件不重复。
+
+**复现**：
+```bash
+python3 - <<'PY'
+import re,collections,yaml
+src=open('/tmp/opencode/k2p1/d8/k2_sch.net',encoding='utf-8').read()
+nets=re.findall(r'\(net\s+\(code\s+"?(\d+)"?\)\s+\(name\s+"([^"]*)"\)\s+\(class\s+"[^"]*"\)(.*?)(?=\(net\s+\(code|\Z)',src,re.S)
+S={n.split('/')[-1] for c,n,b in nets if not n.startswith('unconnected-')}
+Y=set(yaml.safe_load(open('k2/hw/data/k2_sch.yaml'))['nets'])
+print(len(S),len(Y),len(S&Y));print('网表-图',sorted(Y-S));print('图-网表',len(S-Y))
+PY
+```
