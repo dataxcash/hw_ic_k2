@@ -67,3 +67,31 @@ python3 -c "
 import json;d=json.load(open('k2/pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-19.json'))
 s=d['layer_plan']['strap_domain_v32'];print(len(s['resistors']),[r['resistor'] for r in s['resistors']])"
 ```
+
+## 5. 四向闭合校验（v1 追加，2026-09-16 15:1x）—— 纠偏口径的**独立**验证
+
+| 量 | 实测 | 结论 |
+|---|---|---|
+| `|图| / |网表| / |板|` | `103 / 55 / 42`（`图∩网表 = 43`） | — |
+| **`图 − 网表`** | **60** = `A34∪C18∪D8`（逐件相同） | **删除集 == 图−网表（恒等）** ⇒ 删这 60 件后图侧不再有网表外件 |
+| **`网表 − 图`** | **12** = `{C88,C89,U6} ∪ {R35–R39,R42–R45}`（逐件相同） | **补入集 == 网表−图（恒等）** |
+| **`R1(−60,+12)` 后 `图 == 网表`** | **True** | 源侧同构达成（`55 == 55`） |
+| `网表 − 板` | **13** = `B4 ∪ 9R` | 板侧差（P4 补，含 `U6` 球连线） |
+| `板 − 网表` | **0** | 板侧无网表外件 |
+
+> 该四项**互相独立**地指向同一改动集：`图−板 64 = A34∪B4∪C18∪D8`、`图−网表 60 = A34∪C18∪D8`、
+> `网表−图 12`、`网表−板 13 = B4∪9R` ⇒ **R1(−60,+12)** 是**唯一**能使 `图==网表` 的改动集，
+> 且**每个集逐件相等**（非按数量凑）。任何「少删/多删/漏补」都会使等式破。
+
+**复现**：
+```bash
+AppDir/usr/bin/python3.11 - <<'PY'
+import yaml,pcbnew,re
+d=yaml.safe_load(open('k2/hw/data/k2_sch.yaml'))
+net={p['ref'] for s in d['sheets'] for p in s['placements']}
+sch=set(re.findall(r'\(comp\s+\(ref\s+"([^"]+)"\)',open('/tmp/opencode/k2p1/d8/k2_sch.net',encoding='utf-8').read()))
+brd={f.GetReference() for f in pcbnew.LoadBoard('k2/hw/k2_v4_8L.l4.kicad_pcb').GetFootprints()}
+print(len(sch),len(net),len(brd));print('图-网表',len(sch-net));print('网表-图',len(net-sch))
+print('图-板',len(sch-brd));print('网表-板',len(net-brd),'板-网表',len(brd-net))
+PY
+```
