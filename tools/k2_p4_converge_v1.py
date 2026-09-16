@@ -26,7 +26,7 @@ CLI:
       不派 WORKER；临时仅 /tmp。**判定权归监理**（本器只交测量）。
 """
 from __future__ import annotations
-import argparse, json, math, collections
+import argparse, json, math, collections, re
 import pcbnew
 
 VIA_R, HOLE_R = 0.175, 0.1
@@ -103,7 +103,9 @@ class Board:
             for p in fp.Pads():
                 pos, sz = p.GetPosition(), p.GetSize()
                 circ = p.GetShape() == pcbnew.PAD_SHAPE_CIRCLE
-                self.pads.append(dict(uuid=p.m_Uuid.AsString(), ref=fp.GetReference(), num=p.GetNumber(),
+                _dz = p.GetDrillSize()
+                self.pads.append(dict(hole_r=(MM(_dz.x) / 2.0 if _dz.x > 0 else 0.0),
+                                      uuid=p.m_Uuid.AsString(), ref=fp.GetReference(), num=p.GetNumber(),
                                       net=p.GetNetname(), x=MM(pos.x), y=MM(pos.y), w=MM(sz.x), h=MM(sz.y),
                                       rot=p.GetOrientationDegrees(), circ=circ, obj=p,
                                       poly=None if circ else rect_corners(MM(pos.x), MM(pos.y), MM(sz.x), MM(sz.y), p.GetOrientationDegrees())))
@@ -112,6 +114,7 @@ class Board:
             if isinstance(t, pcbnew.PCB_VIA):
                 pos = t.GetPosition()
                 self.vias.append(dict(uuid=u, net=t.GetNetname(), x=MM(pos.x), y=MM(pos.y),
+                                      hole_r=MM(t.GetDrillValue()) / 2.0,
                                       r=MM(t.GetWidth(pcbnew.F_Cu)) / 2.0, obj=t))
             else:
                 s, e = t.GetStart(), t.GetEnd()
@@ -167,6 +170,16 @@ class Board:
                         if (name, i) not in seen:
                             seen.add((name, i)); yield name, i
 
+    def hole_ok(self, x, y, hole_r, excl):
+        """hole-to-hole ≥ 0.25mm（无同网豁免）"""
+        for v in self.vias:
+            if v["uuid"] in excl: continue
+            if math.hypot(x - v["x"], y - v["y"]) < 0.25 + hole_r + v.get("hole_r", 0.1): return False
+        for q in self.pads:
+            if q["uuid"] in excl or q.get("hole_r", 0.0) <= 0.0: continue
+            if math.hypot(x - q["x"], y - q["y"]) < 0.25 + hole_r + q["hole_r"]: return False
+        return True
+
     def in_zone(self, x, y, net):
         for zn, poly, holes in self.zfill:
             if zn == net and pt_in_poly(x, y, poly) and not any(pt_in_poly(x, y, h) for h in holes):
@@ -182,6 +195,7 @@ class Board:
         return False
 
     def clear_pt(self, x, y, net, excl):
+        if not self.hole_ok(x, y, 0.10, excl): return False
         for es in self.edge:
             if pt_seg_dist(x, y, *es) < 0.3 + VIA_R: return False
         for kind, i in self.near(x, y, x, y):
@@ -265,7 +279,10 @@ class Board:
 
 SEG_RE = None
 
-def canonicalize_new_uuids(path, known_geo):
+VIA_RE = re.compile(r'\t\(via\n\t\t\(at ([\-\d.]+) ([\-\d.]+)\)\n\t\t\(size ([\-\d.]+)\)\n\t\t\(drill ([\-\d.]+)\)\n\t\t\(layers ([^\n]*)\)\n\t\t\(net "([^"]*)"\)\n\t\t\(uuid "([^"]+)"\)\n\t\)')
+
+
+def canonicalize_new_uuids(path, known_geo, known_vgeo=None):
     """写盘后规范化：新走线/过孔的 uuid 由几何确定性派生（uuid5）——复跑逐字节一致。
     known_geo: 输入件的 (start,end,width,layer,net) 几何指纹集合（不改其 uuid）。"""
     import re, uuid
@@ -287,8 +304,24 @@ def canonicalize_new_uuids(path, known_geo):
             n_new += 1
         pos = m.end()
     out.append(txt[pos:])
-    open(path, "w", encoding="utf-8").write("".join(out))
-    return n_new
+    txt2 = "".join(out)
+    if known_vgeo is not None:
+        out2 = []; pos = 0; n_new_v = 0
+        for m in VIA_RE.finditer(txt2):
+            geo = (m.group(1), m.group(2), m.group(3), m.group(4), m.group(5), m.group(6))
+            out2.append(txt2[pos:m.start()])
+            if geo in known_vgeo:
+                out2.append(m.group(0))
+            else:
+                out2.append(m.group(0).replace(m.group(7), str(uuid.uuid5(ns, "via|" + "|".join(geo)))))
+                n_new_v += 1
+            pos = m.end()
+        out2.append(txt2[pos:])
+        txt2 = "".join(out2)
+    else:
+        n_new_v = 0
+    open(path, "w", encoding="utf-8").write(txt2)
+    return {"segments": n_new, "vias": n_new_v}
 
 
 def _ok45(x1, y1, x2, y2):
@@ -456,6 +489,161 @@ def stage_b(B, drc_path, ledger):
     return {"repairs": len(reps), "no_solution": len(no_sol), "skipped": len(skipped)}
 
 
+
+
+# ───────────────────────── 阶段 D：GND 平面接入（微 via，纯增） ─────────────────────────
+MICRO_R, MICRO_HOLE_R, MICRO_W = 0.175, 0.10, 0.20
+_GPAD = re.compile(r'上 ([A-Za-z0-9_#]+) 的焊盘 (\S+) \[([^\]]+)\]')
+
+
+def _paths45(src, dst):
+    ex, ey = src; nx, ny = dst
+    dx, dy = nx - ex, ny - ey
+    m = min(abs(dx), abs(dy))
+    sx = math.copysign(m, dx) if dx else 0.0
+    sy = math.copysign(m, dy) if dy else 0.0
+    out = []
+    if _ok45(ex, ey, nx, ny): out.append([(ex, ey), (nx, ny)])
+    out += [[(ex, ey), (ex + sx, ey + sy), (nx, ny)],
+            [(ex, ey), (nx, ny - sy), (nx, ny)],
+            [(ex, ey), (nx - sx, ny), (nx, ny)],
+            [(ex, ey), (nx, ey), (nx, ny)],
+            [(ex, ey), (ex, ny), (nx, ny)]]
+    out = [p for p in out if all(_ok45(p[i][0], p[i][1], p[i + 1][0], p[i + 1][1]) for i in range(len(p) - 1))]
+    out = [p for p in out if all(math.hypot(p[i + 1][0] - p[i][0], p[i + 1][1] - p[i][1]) >= 0.05 for i in range(len(p) - 1))]
+    return out
+
+
+def stage_d(B, drc_path, ledger):
+    """GND 平面接入：对每个 DRC 未连接的 GND pad 所在铜岛，找**合法微 via 位 + 45° 同网引线**。
+    via 类 = F.Cu→In1.Cu 盲孔 / 0.20 孔 / 0.35 盘（**与板内既有 F.Cu→In2 盲孔同类**，不放松任何 DRC 下限）。"""
+    d = json.load(open(drc_path, encoding="utf-8"))
+    targets = sorted({(m.group(1), m.group(2)) for u in d["unconnected_items"] for it in u["items"]
+                      for m in [_GPAD.search(it.get("description", ""))] if m and m.group(3) == "GND"})
+    added, blocked, done = [], collections.Counter(), set()
+
+    def clear_micro(x, y, net, excl):
+        if not B.hole_ok(x, y, 0.10, excl): return False
+        for es in B.edge:
+            if pt_seg_dist(x, y, *es) < 0.3 + MICRO_R: return False
+        for kind, i in B.near(x, y, x, y):
+            if kind == "p":
+                p = B.pads[i]
+                if p["uuid"] in excl or p["net"] == net: continue
+                need = max(MICRO_R + _req(net, p["net"]), MICRO_HOLE_R + 0.25)
+                if p["circ"]:
+                    if math.hypot(x - p["x"], y - p["y"]) - min(p["w"], p["h"]) / 2.0 < need: return False
+                elif pt_in_poly(x, y, p["poly"]) or pt_poly_dist(x, y, p["poly"]) < need: return False
+            elif kind == "t":
+                t = B.tracks[i]
+                if t["uuid"] in excl or t["net"] == net: continue
+                need = max(MICRO_R + _req(net, t["net"]), MICRO_HOLE_R + 0.25)
+                if pt_seg_dist(x, y, t["x1"], t["y1"], t["x2"], t["y2"]) - t["hw"] < need: return False
+            else:
+                v = B.vias[i]
+                if v["uuid"] in excl or v["net"] == net: continue
+                need = max(MICRO_R + _req(net, v["net"]), MICRO_HOLE_R + 0.25)
+                if math.hypot(x - v["x"], y - v["y"]) - v["r"] < need: return False
+        for poly, dv, dt, _n in B.keepouts:
+            if dv and pt_in_poly(x, y, poly): return False
+        return True
+
+    def add_micro(x, y, net):
+        import uuid as _uuid
+        v = pcbnew.PCB_VIA(B.b)
+        v.SetPosition(pcbnew.VECTOR2I(pcbnew.FromMM(x), pcbnew.FromMM(y)))
+        v.SetWidth(pcbnew.FromMM(0.35)); v.SetDrill(pcbnew.FromMM(0.20))
+        ls = pcbnew.LSET(); ls.AddLayer(pcbnew.F_Cu); ls.AddLayer(pcbnew.In1_Cu)
+        v.SetLayerSet(ls); v.SetNetCode(B.b.GetNetcodeFromNetname(net)); B.b.Add(v)
+        rec = dict(uuid=v.m_Uuid.AsString(), net=net, x=x, y=y, r=MICRO_R, obj=v, micro=True)
+        B.vias.append(rec); B.by_uuid[rec["uuid"]] = rec; B.kind[rec["uuid"]] = "v"
+
+    def island_of(uuid0):
+        isl = set(); stack = [uuid0]
+        while stack:
+            u = stack.pop()
+            if u in isl: continue
+            isl.add(u); it = B.by_uuid[u]; k = B.kind[u]
+            for t in B.tracks:
+                if t["net"] != "GND" or t["uuid"] in isl: continue
+                hit = False
+                if k == "p":
+                    hit = pt_seg_dist(it["x"], it["y"], t["x1"], t["y1"], t["x2"], t["y2"]) <= t["hw"] + max(it["w"], it["h"]) / 2.0 + 0.02
+                elif k == "t":
+                    hit = (abs(t["x1"] - it["x1"]) <= 0.02 and abs(t["y1"] - it["y1"]) <= 0.02) or                           (abs(t["x1"] - it["x2"]) <= 0.02 and abs(t["y1"] - it["y2"]) <= 0.02) or                           (abs(t["x2"] - it["x1"]) <= 0.02 and abs(t["y2"] - it["y1"]) <= 0.02) or                           (abs(t["x2"] - it["x2"]) <= 0.02 and abs(t["y2"] - it["y2"]) <= 0.02)
+                else:
+                    hit = (abs(t["x1"] - it["x"]) <= 0.02 + it["r"] and abs(t["y1"] - it["y"]) <= 0.02 + it["r"]) or \
+                          (abs(t["x2"] - it["x"]) <= 0.02 + it["r"] and abs(t["y2"] - it["y"]) <= 0.02 + it["r"])
+                if hit: stack.append(t["uuid"])
+            for v in B.vias:
+                if v["net"] != "GND" or v["uuid"] in isl: continue
+                if k == "p":
+                    d0 = math.hypot(it["x"] - v["x"], it["y"] - v["y"]) - max(it["w"], it["h"]) / 2.0 - v["r"]
+                elif k == "t":
+                    d0 = pt_seg_dist(v["x"], v["y"], it["x1"], it["y1"], it["x2"], it["y2"]) - it["hw"] - v["r"]
+                else:
+                    d0 = math.hypot(it["x"] - v["x"], it["y"] - v["y"]) - it["r"] - v["r"]
+                if d0 <= 0.02: stack.append(v["uuid"])
+            for q in B.pads:
+                if q["net"] != "GND" or q["uuid"] in isl: continue
+                if k == "p":
+                    d0 = math.hypot(it["x"] - q["x"], it["y"] - q["y"]) - (max(it["w"], it["h"]) + max(q["w"], q["h"])) / 2.0
+                elif k == "t":
+                    d0 = pt_seg_dist(q["x"], q["y"], it["x1"], it["y1"], it["x2"], it["y2"]) - it["hw"] - max(q["w"], q["h"]) / 2.0
+                else:
+                    d0 = math.hypot(it["x"] - q["x"], it["y"] - q["y"]) - it["r"] - max(q["w"], q["h"]) / 2.0
+                if d0 <= 0.02: stack.append(q["uuid"])
+        return isl
+
+    for ref, num in targets:
+        if (ref, num) in done: continue
+        key = next((p["uuid"] for p in B.pads if p["ref"] == ref and p["num"] == num), None)
+        if key is None:
+            blocked["pad-not-found"] += 1; continue
+        isl = island_of(key)
+        if any(B.kind[u] == "v" for u in isl):
+            blocked["island-has-via"] += 1
+            for u in isl:
+                if B.kind[u] == "p": done.add((B.by_uuid[u]["ref"], B.by_uuid[u]["num"]))
+            continue
+        E = sorted({(B.by_uuid[u]["x"], B.by_uuid[u]["y"]) for u in isl if B.kind[u] == "p"} |
+                   {(B.by_uuid[u]["x1"], B.by_uuid[u]["y1"]) for u in isl if B.kind[u] == "t"} |
+                   {(B.by_uuid[u]["x2"], B.by_uuid[u]["y2"]) for u in isl if B.kind[u] == "t"})
+        found = None
+        for (ex, ey) in E:
+            if found: break
+            for r in [round(0.35 + 0.05 * i, 2) for i in range(46)]:
+                if found: break
+                for k in range(16):
+                    a = math.radians(22.5 * k)
+                    vx, vy = ex + r * math.cos(a), ey + r * math.sin(a)
+                    if not clear_micro(vx, vy, "GND", isl): continue
+                    for pp in _paths45((ex, ey), (vx, vy)):
+                        if all(B.clear_seg(pp[i][0], pp[i][1], pp[i + 1][0], pp[i + 1][1], "GND", isl, MICRO_W / 2.0) for i in range(len(pp) - 1)):
+                            found = (vx, vy, pp, (ex, ey)); break
+                    if found: break
+        if found:
+            vx, vy, pp, anchor = found
+            add_micro(vx, vy, "GND")
+            for i in range(len(pp) - 1):
+                tr = pcbnew.PCB_TRACK(B.b)
+                tr.SetStart(pcbnew.VECTOR2I(pcbnew.FromMM(pp[i][0]), pcbnew.FromMM(pp[i][1])))
+                tr.SetEnd(pcbnew.VECTOR2I(pcbnew.FromMM(pp[i + 1][0]), pcbnew.FromMM(pp[i + 1][1])))
+                tr.SetWidth(pcbnew.FromMM(MICRO_W)); tr.SetLayer(pcbnew.F_Cu)
+                tr.SetNetCode(B.b.GetNetcodeFromNetname("GND")); B.b.Add(tr)
+                rec = dict(uuid=tr.m_Uuid.AsString(), net="GND", x1=pp[i][0], y1=pp[i][1], x2=pp[i + 1][0], y2=pp[i + 1][1],
+                           hw=MICRO_W / 2.0, w=MICRO_W, layer=pcbnew.F_Cu, obj=tr)
+                B.tracks.append(rec); B.by_uuid[rec["uuid"]] = rec; B.kind[rec["uuid"]] = "t"
+            done |= {(B.by_uuid[u]["ref"], B.by_uuid[u]["num"]) for u in isl if B.kind[u] == "p"}
+            added.append({"anchor": [round(anchor[0], 3), round(anchor[1], 3)], "via": [round(vx, 3), round(vy, 3)],
+                          "legs": len(pp) - 1, "island_pads": sorted((B.by_uuid[u]["ref"], B.by_uuid[u]["num"]) for u in isl if B.kind[u] == "p")})
+        else:
+            blocked["no-legal-slot"] += 1
+            done |= {(B.by_uuid[u]["ref"], B.by_uuid[u]["num"]) for u in isl if B.kind[u] == "p"}
+    ledger["D"] = {"added": added, "blocked": dict(blocked)}
+    return {"added": len(added), "blocked": dict(blocked)}
+
+
 # ───────────────────────── 阶段 C ─────────────────────────
 def stage_c(B, drc_path, offset=1.0):
     d = json.load(open(drc_path, encoding="utf-8"))
@@ -475,7 +663,7 @@ def stage_c(B, drc_path, offset=1.0):
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description="K2 P4 收敛增量 1（L2 自裁施工修正；确定性、分阶段）")
-    ap.add_argument("--stage", required=True, choices=["A", "B", "C"], help="施工阶段")
+    ap.add_argument("--stage", required=True, choices=["A", "B", "C", "D"], help="施工阶段")
     ap.add_argument("--in", dest="src", required=True, help="输入板")
     ap.add_argument("--drc", help="阶段 B/C 必需：**输入板**的 kicad-cli pcb drc json")
     ap.add_argument("--out", required=True, help="输出板")
@@ -486,6 +674,7 @@ def main(argv=None):
     SEGPAT = _re.compile(r'\t\(segment\n\t\t\(start ([\-\d.]+) ([\-\d.]+)\)\n\t\t\(end ([\-\d.]+) ([\-\d.]+)\)\n\t\t\(width ([\-\d.]+)\)\n\t\t\(layer "([^"]+)"\)\n\t\t\(net "([^"]*)"\)')
     src_txt = open(a.src, encoding="utf-8").read()
     known_geo = {m.group(1, 2, 3, 4, 5, 6, 7) for m in SEGPAT.finditer(src_txt)}
+    know_vgeo = {m.group(1, 2, 3, 4, 5, 6) for m in VIA_RE.finditer(src_txt)}
     if a.stage == "A":
         led = {"stage": "A", "A": stage_a(B)}
         pcbnew.ZONE_FILLER(B.b).Fill(B.b.Zones()); B.b.Save(a.out)
@@ -498,12 +687,18 @@ def main(argv=None):
     if a.stage == "B":
         led = {"stage": "B"}; led["B_summary"] = stage_b(B, a.drc, led)
         pcbnew.ZONE_FILLER(B.b).Fill(B.b.Zones()); B.b.Save(a.out)
-        led["canonicalized_new_uuids"] = canonicalize_new_uuids(a.out, known_geo)
+        led["canonicalized_new_uuids"] = canonicalize_new_uuids(a.out, known_geo, know_vgeo)
         json.dump(led, open(a.ledger, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
         print(json.dumps({"stage": "B", **led["B_summary"]}, ensure_ascii=False)); return 0
+    if a.stage == "D":
+        led = {"stage": "D"}; led["D_summary"] = stage_d(B, a.drc, led)
+        pcbnew.ZONE_FILLER(B.b).Fill(B.b.Zones()); B.b.Save(a.out)
+        led["canonicalized_new_uuids"] = canonicalize_new_uuids(a.out, known_geo, know_vgeo)
+        json.dump(led, open(a.ledger, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+        print(json.dumps({"stage": "D", **led["D_summary"]}, ensure_ascii=False)); return 0
     led = {"stage": "C", "C_silk_moved": stage_c(B, a.drc)}
     pcbnew.ZONE_FILLER(B.b).Fill(B.b.Zones()); B.b.Save(a.out)
-    led["canonicalized_new_uuids"] = canonicalize_new_uuids(a.out, known_geo)
+    led["canonicalized_new_uuids"] = canonicalize_new_uuids(a.out, known_geo, know_vgeo)
     json.dump(led, open(a.ledger, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print(json.dumps({"stage": "C", "moved": len(led["C_silk_moved"]), "items": led["C_silk_moved"]}, ensure_ascii=False)); return 0
 
