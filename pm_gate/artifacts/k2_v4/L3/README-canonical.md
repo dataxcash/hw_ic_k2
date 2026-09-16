@@ -1,0 +1,29 @@
+# L3 SPEC canonical 指引（#K2-12 §四 裁定）
+
+> 本文件**新增**于 2026-09-16（监理 #K2-12 §四）。**不动任何既有 SPEC 字节**。
+
+## 1. canonical 是哪一个
+
+| 角色 | 文件 | sha256（前 16） | 说明 |
+|---|---|---|---|
+| **canonical（现行，8L）** | `SPEC_k2_v4.spec-rev-20.json` | `37dcd9cde5ceed09` | 由 `pm_gate/project.yaml: spec_name` **指向**；引擎据 `pm_gate.config.spec_name()` 解析 |
+| 冻结源（8L，前身） | `SPEC_k2_v4.spec-rev-19.json` | `5f72182a2616392c` | rev-20 = 本件 + 2 处（`spec_version` + `_spec_rev_10` 卡）；**原件不动** |
+| **历史 6L 件 —— 禁直接读取** | `SPEC_k2_v4.json` | `0bd52ed48e720b8c` | **6 层**（层键 F/In1..In4/B；`stackup.In2.Cu` 仍写 *"only internal signal layer"*），**已非 canonical**；仅在溯源时引用 |
+
+## 2. 读取规则（强制）
+
+1. **禁止硬编码** `SPEC_k2_v4.json`（或任何 SPEC 文件名）——一律经
+   `pm_gate.config.spec_name(project)` + `pm_gate.artifacts.path("L3", <name>)` 解析。
+   > 根因登记：`F-14` / `N-05`（生成器硬编码 `SPEC_PATH` 直指 6L 件）。
+2. 任何工具/会话读到 `SPEC_k2_v4.json`（`0bd52ed4…`）即视为**陈旧读取**，须改用 canonical 并告警。
+3. 本目录下 `SPEC_k2_v4.spec-rev-*.json` 为**版本链留档**（rev-2 … rev-20），只增不改：新修订一律**版本 bump 新文件**
+   （宪法第四条），旧件**逐字节不动**。
+4. 判据侧（`criteria/`，只读）与冻结锚比对时，**以 `project.yaml` 解析结果为准**。
+
+## 3. 变更史（近三件）
+
+| rev | 件 | at | 摘要 |
+|---|---|---|---|
+| rev-19 | `spec-rev-19` `5f72182a…` | 2026-09-12 | 8L 收口（含 `_spec_rev_9` PDN 板实化）；冻结源 |
+| **rev-20** | `spec-rev-20` `37dcd9cd…` | **2026-09-16** | **canonical 归零**（Z3）：`spec_version` bump + `_spec_rev_10` 溯源卡；其余逐字节承自 rev-19 |
+| — | `SPEC_k2_v4.json` `0bd52ed4…` | 2026-08–09 | **历史 6L**，禁读 |
