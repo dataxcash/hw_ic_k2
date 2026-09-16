@@ -84,3 +84,39 @@ Y=set(yaml.safe_load(open('k2/hw/data/k2_sch.yaml'))['nets'])
 print(len(S),len(Y),len(S&Y));print('网表-图',sorted(Y-S));print('图-网表',len(S-Y))
 PY
 ```
+
+## 6. 节点（网 × 器件）维度闭合校验（v1 追加，2026-09-16 16:0x）
+
+**方法**：取 91 个交集网，施加计划动作后逐网比较「器件集合」——
+① 并网 32 对（退役名并入保留名、节点取并集）；② 删 60 件（从各网移除）；③ `U3`/`U7` → `U6`；④ 补入 12 件；再与网表逐网比 `refs`。
+
+**结果**：仍不一致 **79** 条，且**全部为「计划内」**（差异集 ⊆ `{U6}` ∪ `{C88,C89}` ∪ `{R35–R39,R42–R45}`），
+**计划外差异 = 0**。典型形态：`PCIE_DN0_P` 图侧 `{J2}` vs 网表 `{J2,U6}`（缺 `U6`）；`PWR_5V_KEY` 图侧 `∅` vs 网表 `{C89}`；
+`GND` 缺 12 件（`C88/C89` + 9 件 strap R + `U6`）。
+
+**含义**：R1 在 **「网 × 器件」维度零缺口** —— 凡差异皆由**计划自身**的补入件解释，**无任何计划外遗漏**。
+**仍欠维度**：**引脚级（脚 ↔ 球）映射**（§3 T3）本件**未验**（需 `DS320PR1601` 球映射 + 设计意图逐脚对齐），R1 落地时须与并网一并完成。
+
+**复现**：
+```bash
+python3 - <<'PY'
+import re,collections,yaml,json
+src=open('/tmp/opencode/k2p1/d8/k2_sch.net',encoding='utf-8').read()
+nets=re.findall(r'\(net\s+\(code\s+"?(\d+)"?\)\s+\(name\s+"([^"]*)"\)\s+\(class\s+"[^"]*"\)(.*?)(?=\(net\s+\(code|\Z)',src,re.S)
+sch=collections.defaultdict(set)
+for c,n,b in nets:
+    if n.startswith('unconnected-'): continue
+    for m in re.finditer(r'\(ref\s+"([^"]+)"\)\s*\(pin\s+"([^"]+)"\)',b): sch[n.split('/')[-1]].add(m.group(1))
+yn={k:{re.sub(r'/.*','',x) for x in v} for k,v in yaml.safe_load(open('k2/hw/data/k2_sch.yaml'))['nets'].items()}
+merge={p['net_b']:p['net_a'] for p in json.load(open('/tmp/opencode/k2p1/r1_topology_impact.json'))['merge_pairs']}
+DEL={f'C{i}' for i in list(range(17,33))+list(range(49,73))}|{'U3','U7','R4','R5','R6','R7','R9','R10','R11','R12','R17','R18','R19','R20','R22','R23','R24','R25','R26','R27'}
+ADD={'C88','C89','U6'}|{'R35','R36','R37','R38','R39','R42','R43','R44','R45'}
+t=collections.defaultdict(set)
+for n,refs in sch.items(): t[merge.get(n,n)] |= refs
+bad=0
+for n in set(t)|set(yn):
+    a={('U6' if x in ('U3','U7') else x) for x in t.get(n,set())-DEL}; b=yn.get(n,set())
+    if a!=b and not (b-a <= ADD and not a-b): bad+=1
+print('计划外差异 =',bad)
+PY
+```
