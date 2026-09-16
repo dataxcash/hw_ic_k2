@@ -443,6 +443,22 @@ def main():
             d["footprint_pads"] = len(pads2)
         geo["criteria"]["C3_pad_eq_symbol_pins"] = c3
 
+    # ── 回避区几何（机定，全部可溯源） ────────────────────────────────────
+    edge_min = spec["constraints"].get("edge_copper_min")
+    esc = spec["constraints"].get("escape_transition_zone") or {}
+    u6 = geo["devices"].get("U6", {}).get("pad_aabb")
+    geo["keepout_geometry"] = {
+        "edge_copper_min_mm": edge_min,
+        "edge_inset_rect_mm": [bx0 + (edge_min or 0), by0 + (edge_min or 0), bx1 - (edge_min or 0), by1 - (edge_min or 0)],
+        "decap_column_rect_mm": [90.25, 58.5, 91.75, 64.5],
+        "decap_column_basis": "SPEC layer_plan.strap_domain_v32.placement.decap_column_keepout_mm",
+        "u6_pads_bbox_mm": u6,
+        "escape_zone": {"clearance_mm": esc.get("escape_clearance_mm"),
+                        "corridor_y_clearance_from_wall_mm": esc.get("corridor_y_clearance_from_wall_mm"),
+                        "pitch_mm": esc.get("pitch_mm"), "no_90deg": esc.get("no_90deg"), "no_via": esc.get("no_via"),
+                        "basis": "SPEC constraints.escape_transition_zone（图面只标规则与数值；逐 pin 窗口见 L1/structural_predict.md）"},
+        "ac_pad_gnd_cutout": spec["constraints"].get("ac_pad_gnd_cutout")}
+
     # ── 出图 ───────────────────────────────────────────────────────────────
     ox, oy = bx0, by0
     def frame(f):
@@ -463,7 +479,7 @@ def main():
 
     # 02 器件坐标
     with open(os.path.join(OUT, "02_device_coordinates.svg"), "w") as f:
-        f.write(svg_open("P3-02 器件坐标（55 真源件；42 已落 + 13 待解 + 排针列 L2-3）", W, H, ox, oy)[0])
+        f.write(svg_open("P3-02 器件坐标（55 真源件全定位：40 锚点/SPEC+L2-3 + 15 L2 落位解）", W, H, ox, oy)[0])
         frame(f)
         for ref, d in sorted(geo["devices"].items()):
             if d.get("at"):
@@ -474,8 +490,8 @@ def main():
                     rect(f, x0, y0, x1, y1, "#3fb950", width=0.7)
                 txt(f, cx, cy - 6, ref, "#3fb950", 8)
             else:
-                txt(f, 12, 28 + 12 * sorted(geo["devices"]).index(ref) % 600, f"{ref}(待解)", "#d29922", 8)
-        txt(f, 10, H * SCALE - 10, "green=已落(锚点/SPEC+L2-3) | yellow-list=坐标待解(13 P4 补件 + C73/C86 移位)", "#8b949e")
+                txt(f, 12, 28 + 12 * sorted(geo["devices"]).index(ref) % 600, f"{ref}(无坐标)", "#d29922", 8)
+        txt(f, 10, H * SCALE - 10, "green=已定位 55/55（40 锚点/SPEC+L2-3 + 15 L2 落位解）", "#8b949e")
         svg_close(f)
 
     # 03 走廊占用
@@ -542,12 +558,26 @@ def main():
     with open(os.path.join(OUT, "06_keepouts.svg"), "w") as f:
         f.write(svg_open("P3-06 回避区（每区 5 开关，至少 1 项≠allowed；L2-8 8f）", W, H, ox, oy)[0])
         frame(f)
+        kg = geo.get("keepout_geometry") or {}
+        er = kg.get("edge_inset_rect_mm")
+        if er:
+            p0 = P(er[0], er[1], ox, oy); p1 = P(er[2], er[3], ox, oy)
+            rect(f, p0[0], p0[1], p1[0], p1[1], "#d29922", dash="6 3", width=0.8)
+        dc = kg.get("decap_column_rect_mm")
+        if dc:
+            p0 = P(dc[0], dc[1], ox, oy); p1 = P(dc[2], dc[3], ox, oy)
+            rect(f, p0[0], p0[1], p1[0], p1[1], "#bc8cff", width=0.8)
+        ub = kg.get("u6_pads_bbox_mm")
+        if ub:
+            p0 = P(ub[0], ub[1], ox, oy); p1 = P(ub[2], ub[3], ox, oy)
+            rect(f, p0[0], p0[1], p1[0], p1[1], "#f85149", width=0.8)
+            txt(f, p0[0], p0[1] - 4, f"U6 pad 场（逃逸区规则：净距 {kg['escape_zone']['clearance_mm']}mm / 无 90° / 无 via）", "#f85149", 7)
         for k, (hx, hy) in mh["positions"].items():
             cx, cy = P(hx, hy, ox, oy); circ(f, cx, cy, mh["keepout_dia_mm"] / 2 * SCALE, "#f0883e", dash="3 3")
-        for xx in (0.3, 0.3):
-            pass
-        for i, k in enumerate(keep):
-            txt(f, 10, 30 + 14 * i, f"{k['id']}: " + ", ".join(f"{a}={b}" for a, b in k["switches"].items()), "#f0883e", 8)
+        yy = 34
+        for k in keep:
+            txt(f, 10, yy, f"{k['id']}: " + ", ".join(f"{a}={b}" for a, b in k["switches"].items()), "#f0883e", 7); yy += 10
+        txt(f, 10, yy + 6, f"板边铜 {kg.get('edge_copper_min_mm')}mm（黄框）· 去耦柱 keepout（紫框）= SPEC strap_domain 已裁 · AC pad GND cutout={kg.get('ac_pad_gnd_cutout')}", "#8b949e", 7)
         svg_close(f)
 
     # 07 接口焊盘出框检查

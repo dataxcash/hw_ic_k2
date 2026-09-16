@@ -1,18 +1,19 @@
-# K2 · P3 施工图集 v5（落位解 + 干涉/口径自检 + **敷铜/层分配/走廊三图补实**；**交监理核图**）
+# K2 · P3 施工图集 v6（落位解 + 干涉/口径自检 + **敷铜/层分配/走廊/回避区四图补实**；**交监理核图**）
 
 > **依据**：监理 **#K2-15 §二**（P3 开）+ 计划 §P3 + L2 裁定（`c3ee574455cf6633` 审计 §十 L2-1..L2-8）。
 > **边界**：未改 SPEC / 原理图 / 板 / 既有生成器 / `criteria/` / 冻结件；未派 WORKER；输出 = `L3/drawings/`。
 > **判据归属**：**P3 判据由监理核，ENG 不自判**；下表只给 ENG 测量。**P3-6 判为「未达」**（需放行 SPEC `rev-23`）。
 > **v4 变更**：修 **排针列未入障碍集** 缺陷（板 0 焊盘 ⇒ `C73` 新位曾压在 `J13` 焊盘行上）后重解；去耦柱 keepout 改 0.3mm pad 级余量；strap 排 1 下移至 `y=59.55`。
-> **v5 变更**：补实三图 —— ③ 走廊占用（逐走廊/逐带/逐轨 `tracks_y`）、④ 层分配（逐层角色 + `kind`/参考层 + `width_mm_by_layer` + 85Ω±10% 模型）、⑤ 敷铜策略（**13 zone 台账** `idx/net/layer/bbox/filled`）；新增 **C7（P4 前置）**。
+> **v5 变更**：补实三图 —— ③ 走廊占用（逐走廊/逐带/逐轨）④ 层分配（逐层角色 + `kind`/参考层 + `width_mm_by_layer` + 85Ω±10%）⑤ 敷铜策略（**13 zone 台账**）；新增 **C7（P4 前置）**。
+> **v6 变更**：补实 **⑥ 回避区** 机定几何（板边铜 `edge_copper_min` 内缩框、去耦柱 keepout 框（SPEC `strap_domain_v32` 已裁）、`U6` pad 场 + 逃逸区规则数值）+ **② 器件坐标** 全 55 件标注（无"待解"残留）。
 
 ## 1. 交付物
 
 | 件 | sha256(16) |
 |---|---|
-| `k2/tools/k2_p3_drawings_v1.py` | `42b47b616ef6e951` |
+| `k2/tools/k2_p3_drawings_v1.py` | `91ba1e79ca7a1282` |
 | `k2/tools/k2_p3_place_solver_v1.py` | `b7435726255744b8` |
-| `k2/pm_gate/artifacts/k2_v4/L3/drawings/p3_drawings.json` | `a0e4468dbad219c8` |
+| `k2/pm_gate/artifacts/k2_v4/L3/drawings/p3_drawings.json` | `da87b6dd3dbfa894` |
 | `k2/pm_gate/artifacts/k2_v4/L3/drawings/p3_placement_solution.json` | `faddc9de5519c5ec` |
 | `k2/pm_gate/artifacts/k2_v4/L3/drawings/01..07_*.svg` | 7 张 |
 

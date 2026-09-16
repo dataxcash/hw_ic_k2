@@ -3154,5 +3154,36 @@
    ]
   },
   "strap_footprint_spec": "Resistor_SMD:R_0603_1608Metric"
+ },
+ "keepout_geometry": {
+  "edge_copper_min_mm": 0.3,
+  "edge_inset_rect_mm": [
+   23.3,
+   33.3,
+   142.7,
+   78.7
+  ],
+  "decap_column_rect_mm": [
+   90.25,
+   58.5,
+   91.75,
+   64.5
+  ],
+  "decap_column_basis": "SPEC layer_plan.strap_domain_v32.placement.decap_column_keepout_mm",
+  "u6_pads_bbox_mm": [
+   82.6,
+   49.61,
+   104.84,
+   57.79
+  ],
+  "escape_zone": {
+   "clearance_mm": 0.075,
+   "corridor_y_clearance_from_wall_mm": 0.1025,
+   "pitch_mm": 0.4,
+   "no_90deg": true,
+   "no_via": true,
+   "basis": "SPEC constraints.escape_transition_zone（图面只标规则与数值；逐 pin 窗口见 L1/structural_predict.md）"
+  },
+  "ac_pad_gnd_cutout": true
  }
 }
