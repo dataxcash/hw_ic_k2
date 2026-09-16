@@ -1,7 +1,8 @@
-# K2 · **P4 施工状态（增量 1+2）** v2 —— 交监理核
+# K2 · **P4 施工状态（增量 1+2+3）** v3 —— 交监理核
 
 > **依据**：监理 **#K2-18 §五（U3 = P4 开工令）** + **§九-3（P4 施工）**；输入清单 `K2-P4-INPUT-PREREQUISITES-v1.md` v4（IN-1..IN-11）。
 > **性质**：施工执行报告（ENG「交测量」，判定权归监理）。**P4 未完工**；本件 = 增量 1 + 增量 2。
+> **修订留痕（v3）**：v2（`0e147b34d80b53bc`）→ 本版：新增 §10（增量 3 = 真源补网 IN-12/13/14）+ §11（剩余 FAIL 的结构性质 / U4-D / J-9 口径）。
 > **修订留痕（v2）**：v1（`68f73746f4609ffc`）→ 本版：新增 §7（增量 2 = **IN-5** 落板赋网）+ §8（DRC 现状）+ §9（**T-1 复跑同一性**）。
 > **冻件**：`k2/hw/k2_v4_8L.l4.kicad_pcb`（`d4e81f647be7f980`）**未动**；`criteria/` 两份只读未动。
 
@@ -94,3 +95,23 @@ AppDir/bin/kicad-cli pcb drc --format json --severity-error --severity-warning k
 
 - **事实**：增量 1 板（`13cf989059c414ed`）两次连跑**逐字节一致**；增量 2 板两次连跑**sha 不同**，差异**仅限**：① 件/段/zone 的**写盘顺序**；② **zone fill 多边形**在 `x≈30, y≈56`（`J9` 紧邻 0.08mm 余量区）处的顶点序列/岛归属（实测 `(net "MCU_VDD")` ↔ `(net "GND")` 归属互换）⇒ 属 **pcbnew zone filler 的非确定性**（非本执行器逻辑随机：几何/网/层/焊盘/keepout/NPTH 项均确定）。
 - **影响**：不影响判据测量（`copper_zones_filled = 9` 两次一致）；影响**复跑 sha 相同**这项纪律。**登记 T-1**，处置候选：填充后固定 polygon 为工件 / 或 fill 前固定连通性构建顺序 / 或对 fill 段做确定性规范化。
+
+## 10. **增量 3：真源补网（IN-12/13/14）**（2026-09-17）
+
+- **IN-12（U1 新 pad 34..48）**：按真源网表赋值 **7 个** pad（含 `35 → SWDIO`、`36 → SWCLK_BOOT0`、`47 → I2C1_SCL`、`48 → I2C1_SDA`；其余为 GND/EP）。
+- **IN-13（5 接口件）**：`J6 2 / J9 4 / J11 4 / J12 2 / J13 4` = **16 pad 全赋网**（此前只有 pad、无网）。
+- **IN-14（U6 侧带球 / gap E）**：**15 个侧带球赋网**（strap 9 网的板侧另一端 + PD/SDA/SCL 类）—— 板侧此前 `net=∅`。
+- **板**：`k2/hw/k2_v4_8L.l5.kicad_pcb = 5c1b044241fa6b08`；台账 `L4/p4_construction_increment3.json`；`SPEC rev-28 = 9f067b237c2da6dd`。
+- **判定变化**：**PASS 5 / FAIL 5**（`net_declared_realized` FAIL → **PASS**：0 焊盘声明网 1 → **0**；<2 焊盘网 15 → **1**）。当前 OK：`device_has_pads`·`drill_count`·`net_declared_realized`·`pin_map_complete`·`verdict_schema`。
+
+## 11. **剩余 5 项 FAIL 的结构性质（请监理裁）**
+
+| 项 | 现状 | 性质 / 归属 |
+|---|---|---|
+| `zone_filled` | 9/17 | **U4-A**（判据口径；owner 批后 = 9/9） |
+| `non45_segments` | 2051/2512 | **U4-D（新，结构）**：按层 `In5 1906` / `F.Cu 126` / `In2 13` / `B.Cu 6`；In5 走廊段系引擎**按冻结 W3 图纸折线原样落段**（引擎自述「原样消费图纸…不改图纸；图纸 sha 作输入校验」+ 宪法「零运行时自由度」）⇒ 45° 归一须**改图纸/重解走廊**（设计层变更）⇒ 请裁：(a) 授权重解走廊折线；(b) 或 J-5 口径收窄（如仅适用指定网类/长度阈值） |
+| `rule_severity_manifest` | 9/62 ignore 未登记豁免 | **J-1/J-4**：`copper_sliver`·`footprint_filters_mismatch`·`footprint_type_mismatch`·`missing_courtyard`·`silk_over_copper`·`silk_overlap`·`track_not_centered_on_via`·`tuning_profile_track_geometries`·`via_dangling` ⇒ 每条**二选一**：修掉违规后开检 / 出**豁免裁定**（manifest 属判据，ENG 只读）。DRC 现状（l5）：**违规 202 + 未连接 208** |
+| `refdes_sets_equal` | 图 55 / 板 59（板有图无 4） | **U4-C**（必需 NPTH `H1..H4` 与原理图口径） |
+| `pipeline_present` | 6 目录无 `pipeline.yaml` | **J-9**：判定器要求**每个含 `.kicad_sch` 的目录**均有该文件 —— `k2/hw/sch` 可出（schema 参照 `key_v2/key_v2/pipeline.yaml` + `_shared/eda_core/pipeline/checks.py`）；**其余 5 个属 k1/pciesw4** ⇒ 请裁 J-9 是否 k2-scoped，或授权跨项目补件 |
+
+**注记**：`PWR_5V_KEY` 真源仅 **1 节点** ⇒ 登记册「每条声明网 ≥2 焊盘」对其不可达（判定器现按 `nets_with_zero == 0` 判 ⇒ 已 PASS）；登记为口径注记，无需改件。

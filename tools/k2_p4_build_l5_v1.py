@@ -322,6 +322,29 @@ def main():
         _fp.SetPosition(pcbnew.VECTOR2I(pcbnew.FromMM(holes[_i][0]), pcbnew.FromMM(holes[_i][1])))
         PRE_MH.append(_fp)      # UUID 由写盘后 canonicalize_uuids() 规范化（本版绑定无 UUID setter）
 
+    # ── IN-12/13/14：**真源补网**（U1 新 pad 34..48 / 5 接口件 pad / U6 侧带球）──
+    SUPP_REFS = ("U1", "J6", "J9", "J11", "J12", "J13", "U6")
+    SUPP = in5_pad_nets(SUPP_REFS)          # ref → {pad:net}（引脚名→pad 号取符号定义）
+    supp_log = {}
+    for ref in SUPP_REFS:
+        want = SUPP[ref]["pad2net"]
+        target = PRE.get(ref) or (by_ref(ref)[0] if by_ref(ref) else None)
+        if target is None:
+            continue
+        n = 0
+        for pp in target.Pads():
+            num = pp.GetNumber()
+            if pp.GetNetname() or num not in want:
+                continue
+            net = b.FindNet(want[num])
+            if net is None:
+                net = pcbnew.NETINFO_ITEM(b, want[num])
+                b.Add(net)
+            pp.SetNet(net)
+            n += 1
+        supp_log[ref] = {"assigned": n, "candidates": len(want),
+                         "note": "U6 = 侧带/未连球（gap E 闭合）" if ref == "U6" else ""}
+
     # ── IN-5 准备：15 件（13 补件落板 + C73/C86 移位）+ 真源赋网 ───────────
     IN5 = in5_pad_nets(sorted(sol["placed"]))
     NEW_FP, MOVE_FP = {}, {}
@@ -374,6 +397,12 @@ def main():
     for ref, mv in sorted(MOVE_FP.items()):
         mv["old"].SetPosition(pcbnew.VECTOR2I(pcbnew.FromMM(mv["at"][0]), pcbnew.FromMM(mv["at"][1])))
         mv["old"].SetOrientationDegrees(mv["rot"])
+    ledger["IN"]["IN-12"] = {"U1 新 pad 赋网": SUPP["U1"]["pad2net"],
+                             "log": supp_log.get("U1")}
+    ledger["IN"]["IN-13"] = {"接口件赋网": {r: SUPP[r]["pad2net"] for r in ("J6", "J9", "J11", "J12", "J13")},
+                             "log": {r: supp_log.get(r) for r in ("J6", "J9", "J11", "J12", "J13")}}
+    ledger["IN"]["IN-14"] = {"U6 侧带球赋网": {"candidates": len(SUPP["U6"]["pad2net"]),
+                                              "log": supp_log.get("U6")}}
     ledger["IN"]["IN-5"] = {
         "placed_new": sorted(NEW_FP), "moved": sorted(MOVE_FP),
         "rows": [{"ref": r, "at": sol["placed"][r]["at"], "rot": sol["placed"][r].get("rot", 0.0),
