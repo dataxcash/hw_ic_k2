@@ -29,7 +29,7 @@ for i in range(32):
     if pcbnew.IsCopperLayer(i): CU[i] = pcbnew.LayerName(i)
 TRACE_W, VIA_W, VIA_D = 0.20, 0.35, 0.20
 HW, VIA_R, HOLE_R = TRACE_W / 2.0, VIA_W / 2.0, VIA_D / 2.0
-STEP, MAXVIA_R = 0.10, 1.5       # 0.10mm 栅格（仅剪枝；几何合规由精确复核保证）
+STEP, MAXVIA_R = 0.10, 2.5       # 0.10mm 栅格（仅剪枝；几何合规由精确复核保证）
 TIME_BUDGET = 900.0               # 总时限（秒）：超时后剩余边登记 deferred-time-budget
 NS = uuid.UUID("6ba7b810-9dad-11d1-80b4-00c04fd430c8")
 VIA_BLOCK = ('\t(via\n\t\t(at {x} {y})\n\t\t(size 0.35)\n\t\t(drill 0.2)\n\t\t(layers "{l1}" "{l2}")\n'
@@ -212,7 +212,11 @@ def astar(ctx, net, layer, a, b, cap=80000):
             if (i, j) in bad: return False
         return True
     def conn(x, y):
-        for cx, cy in ((x, b[1]), (b[0], y)):
+        cands = [(x, b[1]), (b[0], y)]
+        for s_ in (1.0, -1.0):                       # 45°+轴（斜率 ±1）两段变体
+            cands.append((x + s_ * (b[1] - y), b[1]))
+            cands.append((b[0], y + s_ * (b[0] - x)))
+        for cx, cy in cands:
             if seg_clear(x, y, cx, cy) and seg_clear(cx, cy, b[0], b[1]):
                 return [(cx, cy)]
         dx, dy = b[0] - x, b[1] - y            # 直连仅在 0/45/90° 时才合法（否则会引入非 45° 段）
@@ -347,14 +351,14 @@ def run(src, drc_path, out_path, ledger_path):
         # 候选对：既有 B.Cu 点优先（免落孔）；不足则就该端落孔（F→B）
         ref_b = (sum(p[0] for p in (bb or fb)) / len(bb or fb), sum(p[1] for p in (bb or fb)) / len(bb or fb))
         ref_a = (sum(p[0] for p in (ba or fa)) / len(ba or fa), sum(p[1] for p in (ba or fa)) / len(ba or fa))
-        cand_a = [(p, False, None, None) for p in sorted(ba, key=lambda q: math.hypot(q[0] - ref_b[0], q[1] - ref_b[1]))[:3]]
+        cand_a = [(p, False, None, None) for p in sorted(ba, key=lambda q: math.hypot(q[0] - ref_b[0], q[1] - ref_b[1]))[:8]]
         if not cand_a and fa:
-            for p in sorted(fa, key=lambda q: math.hypot(q[0] - ref_b[0], q[1] - ref_b[1]))[:3]:
+            for p in sorted(fa, key=lambda q: math.hypot(q[0] - ref_b[0], q[1] - ref_b[1]))[:8]:
                 got = _via_near(ctx, net, p, ref_b)
                 if got: cand_a = [(got[0], True, got[1], p)]; break
-        cand_b = [(p, False, None, None) for p in sorted(bb, key=lambda q: math.hypot(q[0] - ref_a[0], q[1] - ref_a[1]))[:3]]
+        cand_b = [(p, False, None, None) for p in sorted(bb, key=lambda q: math.hypot(q[0] - ref_a[0], q[1] - ref_a[1]))[:8]]
         if not cand_b and fb:
-            for p in sorted(fb, key=lambda q: math.hypot(q[0] - ref_a[0], q[1] - ref_a[1]))[:3]:
+            for p in sorted(fb, key=lambda q: math.hypot(q[0] - ref_a[0], q[1] - ref_a[1]))[:8]:
                 got = _via_near(ctx, net, p, ref_a)
                 if got: cand_b = [(got[0], True, got[1], p)]; break
         if not cand_a:
