@@ -55,9 +55,26 @@ def spec_load():
     path = art.path("L3", name)
     return name, path, json.load(open(path, encoding="utf-8"))
 
+def yaml_path():
+    """真源 yaml 路径：经 project.yaml `nets_yaml` 指针解析（#K2-16 §五.1 源侧修复）；无指针回退冻结件。"""
+    import yaml as _y
+    pp = os.path.join(K2, "pm_gate/project.yaml")
+    if os.path.isfile(pp):
+        cfg = _y.safe_load(open(pp, encoding="utf-8")) or {}
+        rel = cfg.get("nets_yaml")
+        if rel:
+            cand = os.path.join(K2, rel)
+            if os.path.isfile(cand):
+                return cand
+    return os.path.join(K2, "hw/data/k2_sch.yaml")
+
 def yaml_load():
     import yaml
-    return yaml.safe_load(open(os.path.join(K2, "hw/data/k2_sch.yaml"), encoding="utf-8"))
+    yp = yaml_path()
+    with open(yp, encoding="utf-8") as f:
+        d = yaml.safe_load(f)
+    d["__source_path__"] = os.path.relpath(yp, ROOT)
+    return d
 
 PAD_RE = re.compile(r'\(pad\s+"?([^"\s]+)"?\s+(\S+)\s+(\S+)\s+\(at\s+([-\d.]+)\s+([-\d.]+)(?:\s+([-\d.]+))?\)'
                     r'(?:\s+\(size\s+([-\d.]+)\s+([-\d.]+)\))?', re.S)
@@ -217,7 +234,9 @@ def main():
     by0, by1 = L2["L2-1_board_frame"]["outline_y"]
     W, H = bx1 - bx0, by1 - by0
 
+    ysrc = y.get("__source_path__")
     geo = {"spec": {"name": spec_name, "sha16": hashlib.sha256(open(spec_path, 'rb').read()).hexdigest()[:16]},
+           "nets_yaml": {"path": ysrc, "sha16": hashlib.sha256(open(os.path.join(ROOT, ysrc), 'rb').read()).hexdigest()[:16] if ysrc else None},
            "board_frame": L2["L2-1_board_frame"], "mounting_holes": L2["L2-2_mounting_holes"],
            "devices": {}, "corridors": [], "keepouts": [], "layer_plan": {}, "pour": {}, "criteria": {}}
 
@@ -362,9 +381,17 @@ def main():
                          "power_partition": (spec.get("pd") or {}).get("power_partition"),
                          "decoupling": (spec.get("pd") or {}).get("decoupling"),
                          "gnd_stitch_via": (spec.get("pd") or {}).get("gnd_stitch_via")}
-    geo["criteria"]["C7_pour_zones_filled"] = {"count": len(zones), "filled": sum(z["filled"] for z in zones),
-                                               "expect": "13/13（P4 前置）", "pass": sum(z["filled"] for z in zones) == len(zones),
-                                               "note": "B 判据：出 Gerber 前 13 区必须全填充（本次 = 交付板现状）"}
+    # C7（#K2-16 §四 监理自纠 口径修正）：**9 个铜 zone**（net 非空）全填充；4 个无网 ESC_* keepout 排除（其义务见 P3-5）
+    cu = [z for z in zones if z["net"]]
+    nz = [z for z in zones if not z["net"]]
+    geo["pour_zones"]["copper_zone_count"] = len(cu)
+    geo["pour_zones"]["nonesc_keepout_count"] = len(nz)
+    geo["criteria"]["C7_pour_zones_filled"] = {
+        "count": len(cu), "filled": sum(z["filled"] for z in cu),
+        "expect": f"{len(cu)}/{len(cu)} 铜区全 filled_polygon>=1 且 net 非空（P4 前置）",
+        "excluded_non_net_zones": [{"idx": z["idx"], "layer": z["layer"], "note": "ESC_* keepout（无网，按设计不得填充；义务见 P3-5）"} for z in nz],
+        "pass": len(cu) > 0 and all(z["filled"] for z in cu),
+        "note": "口径 = 9 铜区（#K2-16 §四：原「13 区」含 4 个 ESC keepout ⇒ 自指不可达；监理自纠 2026-09-16）"}
     # ── 层分配：逐层角色 + 阻抗/线宽/参考（SPEC impedance.per_layer） ────────
     imp = spec.get("impedance") or {}
     per = imp.get("per_layer") or {}
@@ -574,7 +601,7 @@ def main():
         f.write(svg_open("P3-05 敷铜策略（L2-5；GND In1/In3/In6 + 电源 In4）", 120, 46, ox, oy)[0])
         pzs = geo.get("pour_zones") or {}
         colors = {"GND": "#3fb950", "P3V3": "#58a6ff", "MCU_VDD": "#d29922", "P3V3_AUX": "#bc8cff", "12V_IN": "#f85149", "": "#8b949e"}
-        txt(f, 10, 20, f"zone 台账 {pzs.get('filled_count')}/{pzs.get('count')} 已填充（现状） | 出 Gerber 前置（审计 §10.5）：13 区全 filled_polygon>=1 且 net 非空", "#f0883e", 8)
+        txt(f, 10, 20, f"zone 台账 铜 {sum(z['filled'] for z in pzs.get('zones',[]) if z['net'])}/{pzs.get('copper_zone_count')} 已填充 + {pzs.get('nonesc_keepout_count')} ESC keepout（排除）| P4 前置：9 铜区全 filled 且 net 非空", "#f0883e", 8)
         yy = 34
         for z in pzs.get("zones", []):
             bbz = z["bbox_mm"]; p0 = P(bbz[0], bbz[1], ox, oy); p1 = P(bbz[2], bbz[3], ox, oy)

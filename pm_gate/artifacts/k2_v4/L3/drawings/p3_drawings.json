@@ -1,7 +1,11 @@
 {
  "spec": {
-  "name": "SPEC_k2_v4.spec-rev-23.json",
-  "sha16": "55c5bda7cf172da1"
+  "name": "SPEC_k2_v4.spec-rev-24.json",
+  "sha16": "317140048c80a569"
+ },
+ "nets_yaml": {
+  "path": "k2/hw/data/k2_sch.errata-1.yaml",
+  "sha16": "17d540f058631a5e"
  },
  "board_frame": {
   "outline_x": [
@@ -3487,11 +3491,33 @@
    "note": "L2-4 统一口径 = 『焊盘外接框净距』（西 17.55 / 东 27.81）。**canonical SPEC 的 corridors[].note 仍写已作废口径**（27.40/17.30）且 x_range 用体宽口径 ⇒ **口径回写未完成**（属 SPEC 变更 ⇒ 须监理放行 rev-23）"
   },
   "C7_pour_zones_filled": {
-   "count": 13,
+   "count": 9,
    "filled": 0,
-   "expect": "13/13（P4 前置）",
+   "expect": "9/9 铜区全 filled_polygon>=1 且 net 非空（P4 前置）",
+   "excluded_non_net_zones": [
+    {
+     "idx": 0,
+     "layer": "F.Cu",
+     "note": "ESC_* keepout（无网，按设计不得填充；义务见 P3-5）"
+    },
+    {
+     "idx": 1,
+     "layer": "F.Cu",
+     "note": "ESC_* keepout（无网，按设计不得填充；义务见 P3-5）"
+    },
+    {
+     "idx": 2,
+     "layer": "F.Cu",
+     "note": "ESC_* keepout（无网，按设计不得填充；义务见 P3-5）"
+    },
+    {
+     "idx": 3,
+     "layer": "F.Cu",
+     "note": "ESC_* keepout（无网，按设计不得填充；义务见 P3-5）"
+    }
+   ],
    "pass": false,
-   "note": "B 判据：出 Gerber 前 13 区必须全填充（本次 = 交付板现状）"
+   "note": "口径 = 9 铜区（#K2-16 §四：原「13 区」含 4 个 ESC keepout ⇒ 自指不可达；监理自纠 2026-09-16）"
   },
   "D1_pinheader_interference": {
    "column_x": 27.94,
@@ -3695,7 +3721,9 @@
    "rule": "差分换层处硬性 GND 伴行 via (每换层点 ≥1, 2026-08-19 8 层定案)",
    "via_drill": 0.2,
    "via_outer": 0.35
-  }
+  },
+  "copper_zone_count": 9,
+  "nonesc_keepout_count": 4
  },
  "layer_assignment": {
   "roles": {
