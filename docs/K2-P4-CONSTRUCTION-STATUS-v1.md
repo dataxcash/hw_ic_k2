@@ -1,7 +1,8 @@
-# K2 · **P4 施工状态（增量 1）** v1 —— 交监理核
+# K2 · **P4 施工状态（增量 1+2）** v2 —— 交监理核
 
 > **依据**：监理 **#K2-18 §五（U3 = P4 开工令）** + **§九-3（P4 施工）**；输入清单 `K2-P4-INPUT-PREREQUISITES-v1.md` v4（IN-1..IN-11）。
-> **性质**：施工执行报告（ENG「交测量」，判定权归监理）。**P4 未完工**；本件 = 增量 1。
+> **性质**：施工执行报告（ENG「交测量」，判定权归监理）。**P4 未完工**；本件 = 增量 1 + 增量 2。
+> **修订留痕（v2）**：v1（`68f73746f4609ffc`）→ 本版：新增 §7（增量 2 = **IN-5** 落板赋网）+ §8（DRC 现状）+ §9（**T-1 复跑同一性**）。
 > **冻件**：`k2/hw/k2_v4_8L.l4.kicad_pcb`（`d4e81f647be7f980`）**未动**；`criteria/` 两份只读未动。
 
 ## 1. 本轮落地（增量 1）
@@ -72,3 +73,24 @@ python3 criteria/adjudicate.py --board k2/hw/k2_v4_8L.l5.kicad_pcb --manifest cr
   --measure-out /tmp/opencode/p4/meas.json --out /tmp/opencode/p4/verdict.json
 ```
 - **边界**：未改冻结件（`d4e81f64`/`fb07d25a`/`dd794c54`/SPEC `rev-19..24` 原件/`criteria/` 两份）· 未派 WORKER · 临时仅 `/tmp/opencode` · **P4 未完工**（不得据本件宣称 P4 绿）。
+
+## 7. **增量 2：IN-5 落板 + 真源赋网**（2026-09-17）
+
+- **动作**：13 件补件（`R35–R39`/`R42–R45` 0603 应变阻 ×9、`L1`、`D2`、`R40`/`R41` 0402）按落位解 `at/rot` 落板；`C73`/`C86` 按 L2-3 解**移位**（→ `(28.0,47.9)` / `(32.4,36.0)`）。
+- **赋网口径（禁猜）**：网名取自**真源网表**（`hw/data/k2_sch.errata-1.yaml`，经 `project.yaml:nets_yaml`）；**引脚名→pad 号**一律取符号 `pins` 定义（实测既有件交叉验证 `A→1 / B→2`，如 `C86`/`R33`/`D1`）。15/15 件 `unmapped = []`；执行器自检 `in5_pad_net_ok = true`（逐 pad 复核 pad 号↔网名）。
+- **板**：`k2/hw/k2_v4_8L.l5.kicad_pcb` = **`1b8400a255fe90fd`**（59 件 = 42 + 13 补件 + 4 固定孔；0 焊盘件 = ∅）；台账 `L4/p4_construction_increment2.json`。
+- **冻结仪器实测变化（增量 1 → 增量 2）**：`pin_map_complete` **FAIL(26) → PASS(0)**；`refdes_sets_equal` 的「图有板无」**13 → 0**（余「板有图无 4」= `H1..H4` ⇒ **U4-C**）；`net_declared_realized` 0 焊盘网 **10 → 1**、<2 焊盘网 **17 → 15**。总计 **PASS 4 / FAIL 6**（余项见 §2 表 + 下节）。
+
+## 8. DRC 现状（`kicad-cli pcb drc`，l5；J-1 证据）
+
+```
+AppDir/bin/kicad-cli pcb drc --format json --severity-error --severity-warning k2/hw/k2_v4_8L.l5.kicad_pcb
+```
+- **违规 202**：`hole_clearance 54` · `solder_mask_bridge 38` · `shorting_items 33` · `lib_footprint_mismatch 29` · `clearance 18` · `items_not_allowed 7` · `lib_footprint_issues 6` · `nonmirrored_text_on_back_layer 5`
+- **未连接项 208**（`unconnected_items`）；`schematic_parity = 0`（网表-板一致性由判定器另判）
+- ⇒ 属 **P4/P5 布线/DRC 收敛**作业面（含 `C73/C86` 移位后的旧走线残段、13 件补件布线、`lib_footprint_*` 封装库对齐）。
+
+## 9. **T-1（工具侧，登记待修）：复跑同一性**
+
+- **事实**：增量 1 板（`13cf989059c414ed`）两次连跑**逐字节一致**；增量 2 板两次连跑**sha 不同**，差异**仅限**：① 件/段/zone 的**写盘顺序**；② **zone fill 多边形**在 `x≈30, y≈56`（`J9` 紧邻 0.08mm 余量区）处的顶点序列/岛归属（实测 `(net "MCU_VDD")` ↔ `(net "GND")` 归属互换）⇒ 属 **pcbnew zone filler 的非确定性**（非本执行器逻辑随机：几何/网/层/焊盘/keepout/NPTH 项均确定）。
+- **影响**：不影响判据测量（`copper_zones_filled = 9` 两次一致）；影响**复跑 sha 相同**这项纪律。**登记 T-1**，处置候选：填充后固定 polygon 为工件 / 或 fill 前固定连通性构建顺序 / 或对 fill 段做确定性规范化。

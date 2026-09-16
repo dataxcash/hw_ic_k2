@@ -97,6 +97,52 @@ def lib_of(fpid):
     raise ValueError(f"lib dir 未找到: {fpid}")
 
 
+def yaml_path():
+    """真源网表路径：经 project.yaml:nets_yaml 指针（#K2-16 §五.1；无指针回退冻结件）。"""
+    import yaml as _y
+    pp = os.path.join(K2, "pm_gate/project.yaml")
+    cfg = _y.safe_load(open(pp, encoding="utf-8")) or {}
+    rel = cfg.get("nets_yaml")
+    cand = os.path.join(K2, rel) if rel else os.path.join(K2, "hw/data/k2_sch.yaml")
+    return cand if os.path.isfile(cand) else os.path.join(K2, "hw/data/k2_sch.yaml")
+
+
+def in5_pad_nets(refs):
+    """IN-5：从**真源网表 + 符号引脚号**派生 ref → {pad 号: 网名}（禁猜：A→1/B→2 等一律由符号 pins 决定）。"""
+    import yaml as _y
+    y = _y.safe_load(open(yaml_path(), encoding="utf-8"))
+    syms = {s["name"]: s for s in y["symbols"]}
+    ref2sym, ref2val = {}, {}
+    for sheet in y["sheets"]:
+        for pl in sheet.get("placements", []):
+            ref2sym[pl["ref"]] = pl["symbol"]
+            ref2val[pl["ref"]] = syms.get(pl["symbol"], {}).get("value", "")
+    pin_num = {}
+    for nm, sd in syms.items():
+        d = {}
+        for side in ("right", "left"):
+            for pin in sd.get("pins", {}).get(side, []):
+                d[str(pin[0])] = str(pin[1])
+        pin_num[nm] = d
+    pin_net = {}
+    for net, mem in (y["nets"] or {}).items():
+        for item in mem:
+            r, pin = item.split("/", 1)
+            pin_net.setdefault(r, {})[pin] = net
+    out = {}
+    for ref in refs:
+        pm, nm = pin_num.get(ref2sym.get(ref), {}), pin_net.get(ref, {})
+        pad2net, unmapped = {}, []
+        for pin, net in nm.items():
+            if pin in pm:
+                pad2net[pm[pin]] = net
+            else:
+                unmapped.append([pin, net])
+        out[ref] = {"pad2net": pad2net, "unmapped": unmapped, "value": ref2val.get(ref, ""),
+                    "symbol": ref2sym.get(ref)}
+    return out
+
+
 def _block_at(txt, i):
     """返回包含位置 i 的顶层 s-expr 块（含括号匹配，跳过字符串）。"""
     j = txt.rfind("(", 0, i + 1)
@@ -276,6 +322,37 @@ def main():
         _fp.SetPosition(pcbnew.VECTOR2I(pcbnew.FromMM(holes[_i][0]), pcbnew.FromMM(holes[_i][1])))
         PRE_MH.append(_fp)      # UUID 由写盘后 canonicalize_uuids() 规范化（本版绑定无 UUID setter）
 
+    # ── IN-5 准备：15 件（13 补件落板 + C73/C86 移位）+ 真源赋网 ───────────
+    IN5 = in5_pad_nets(sorted(sol["placed"]))
+    NEW_FP, MOVE_FP = {}, {}
+    for ref, spec_v in sorted(sol["placed"].items()):
+        at, rot = spec_v["at"], float(spec_v.get("rot") or 0.0)
+        if by_ref(ref):                                   # 板上已有 ⇒ 移位（C73/C86）
+            MOVE_FP[ref] = {"old": by_ref(ref)[0], "at": at, "rot": rot,
+                            "pads_before": len(list(by_ref(ref)[0].Pads())),
+                            "pad2net": IN5[ref]["pad2net"]}
+            continue
+        _lib, _nm = lib_of(spec_v["footprint"])            # 封装经落位解解析（禁硬编码）
+        fp = load_fp(stage_lib(_lib, _nm, ref), _nm)
+        fp.SetReference(ref)
+        fp.SetValue(IN5[ref]["value"] or spec_v["footprint"].split(":")[-1])
+        fp.SetPosition(pcbnew.VECTOR2I(pcbnew.FromMM(at[0]), pcbnew.FromMM(at[1])))
+        fp.SetOrientationDegrees(rot)
+        _pl = list(fp.Pads())
+        _missing_net = []
+        for pp in _pl:
+            nn = IN5[ref]["pad2net"].get(pp.GetNumber())
+            if not nn:
+                continue
+            net = b.FindNet(nn)
+            if net is None:                                # 板上尚未声明的网 ⇒ 新建
+                net = pcbnew.NETINFO_ITEM(b, nn)
+                b.Add(net)
+            pp.SetNet(net)
+        NEW_FP[ref] = fp
+        IN5[ref]["npads"] = len(_pl)
+        IN5[ref]["pad_nums"] = sorted(x.GetNumber() for x in _pl)
+
     # ── 阶段 2：board 变更（Remove 旧件 / Add 新件） ──────────────────────
     for ref in ("U1", "J6", "J12", "J9", "J11", "J13"):
         b.Remove(OLD[ref])
@@ -292,6 +369,17 @@ def main():
                   "pads_before": META[r]["pads_before"], "x_before": round(META[r]["x"], 3),
                   "x_after": COLUMN_X, "y": round(META[r]["y"], 3)}
                  for r in ("J6", "J12", "J9", "J11", "J13")]
+    for ref, fp in sorted(NEW_FP.items()):
+        b.Add(fp)
+    for ref, mv in sorted(MOVE_FP.items()):
+        mv["old"].SetPosition(pcbnew.VECTOR2I(pcbnew.FromMM(mv["at"][0]), pcbnew.FromMM(mv["at"][1])))
+        mv["old"].SetOrientationDegrees(mv["rot"])
+    ledger["IN"]["IN-5"] = {
+        "placed_new": sorted(NEW_FP), "moved": sorted(MOVE_FP),
+        "rows": [{"ref": r, "at": sol["placed"][r]["at"], "rot": sol["placed"][r].get("rot", 0.0),
+                  "footprint": sol["placed"][r]["footprint"], "pads": IN5[r].get("npads", MOVE_FP.get(r, {}).get("pads_before")),
+                  "pad2net": IN5[r]["pad2net"], "unmapped": IN5[r]["unmapped"]} for r in sorted(sol["placed"])],
+        "nets_created": [r for r in sorted(IN5) if IN5[r]["unmapped"]]}
     ledger["IN"]["IN-11"] = {"rows": conn_rows, "pads_added": sum(r["pads"] for r in conn_rows)}
     ledger["IN"]["IN-8"] = {"column_x": COLUMN_X, "moved": [r["ref"] for r in conn_rows]}
 
@@ -365,6 +453,21 @@ def main():
                            "copper_zones_filled": len(filled)}
     if zero_pad:
         raise ValueError(f"自检 FAIL：0 焊盘器件 {zero_pad}")
+    _bad = []
+    for ref in sorted(sol["placed"]):
+        want = IN5[ref]["pad2net"]
+        _ft = by_ref(ref)
+        if not _ft:
+            _bad.append([ref, "missing"])
+            continue
+        got = {pp.GetNumber(): pp.GetNetname() for pp in _ft[0].Pads()}
+        for pn, nn in want.items():
+            if got.get(pn) != nn:
+                _bad.append([ref, pn, nn, got.get(pn)])
+    if _bad:
+        raise ValueError(f"自检 FAIL：IN-5 赋网不符 {_bad[:6]}")
+    ledger["selfcheck"]["in5_refs"] = len(sol["placed"])
+    ledger["selfcheck"]["in5_pad_net_ok"] = True
     if npth < 4:
         raise ValueError(f"自检 FAIL：NPTH = {npth} < 4")
 
@@ -372,7 +475,8 @@ def main():
     pcbnew.SaveBoard(OUT, b)
     ledger["footprints_sorted"] = sort_footprints(OUT)
     ledger["keepout_zones_sorted"] = sort_new_keepout_zones(OUT)
-    ledger["uuid_canonicalized_blocks"] = canonicalize_uuids(OUT)
+    _canon_refs = ("U1", "J6", "J9", "J11", "J12", "J13", "H1", "H2", "H3", "H4") + tuple(sorted(NEW_FP))
+    ledger["uuid_canonicalized_blocks"] = canonicalize_uuids(OUT, refs=_canon_refs)
     ledger["out_board"] = os.path.relpath(OUT, ROOT) if OUT.startswith(ROOT) else OUT
     ledger["out_sha16"] = sha16(OUT)
     json.dump(ledger, open(LEDGER, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
