@@ -2,30 +2,31 @@
 <rect width="780" height="336" fill="#0d1117"/>
 <text x="30" y="20" fill="#e6edf3" font-family="monospace" font-size="14">P3-04 层分配（8L：F/In1..In6/B；L2-5 + canonical SPEC）</text>
 <g transform="translate(30,30)">
-<rect x="20.0" y="0.0" width="180.0" height="11.0" fill="#161b22" stroke="#58a6ff" stroke-width="0.5"/>
-<text x="26.0" y="8.0" fill="#e6edf3" font-family="monospace" font-size="9" text-anchor="start">F.Cu</text>
-<text x="90.0" y="8.0" fill="#8b949e" font-family="monospace" font-size="9" text-anchor="start">信号</text>
-<rect x="20.0" y="12.0" width="180.0" height="11.0" fill="#161b22" stroke="#58a6ff" stroke-width="0.5"/>
-<text x="26.0" y="20.0" fill="#e6edf3" font-family="monospace" font-size="9" text-anchor="start">In1.Cu</text>
-<text x="90.0" y="20.0" fill="#8b949e" font-family="monospace" font-size="9" text-anchor="start">GND 平面</text>
-<rect x="20.0" y="24.0" width="180.0" height="11.0" fill="#161b22" stroke="#58a6ff" stroke-width="0.5"/>
-<text x="26.0" y="32.0" fill="#e6edf3" font-family="monospace" font-size="9" text-anchor="start">In2.Cu</text>
-<text x="90.0" y="32.0" fill="#8b949e" font-family="monospace" font-size="9" text-anchor="start">信号（穿越）</text>
-<rect x="20.0" y="36.0" width="180.0" height="11.0" fill="#161b22" stroke="#58a6ff" stroke-width="0.5"/>
-<text x="26.0" y="44.0" fill="#e6edf3" font-family="monospace" font-size="9" text-anchor="start">In3.Cu</text>
-<text x="90.0" y="44.0" fill="#8b949e" font-family="monospace" font-size="9" text-anchor="start">GND 平面</text>
-<rect x="20.0" y="48.0" width="180.0" height="11.0" fill="#161b22" stroke="#58a6ff" stroke-width="0.5"/>
-<text x="26.0" y="56.0" fill="#e6edf3" font-family="monospace" font-size="9" text-anchor="start">In4.Cu</text>
-<text x="90.0" y="56.0" fill="#8b949e" font-family="monospace" font-size="9" text-anchor="start">电源分区</text>
-<rect x="20.0" y="60.0" width="180.0" height="11.0" fill="#161b22" stroke="#58a6ff" stroke-width="0.5"/>
-<text x="26.0" y="68.0" fill="#e6edf3" font-family="monospace" font-size="9" text-anchor="start">In5.Cu</text>
-<text x="90.0" y="68.0" fill="#8b949e" font-family="monospace" font-size="9" text-anchor="start">信号</text>
-<rect x="20.0" y="72.0" width="180.0" height="11.0" fill="#161b22" stroke="#58a6ff" stroke-width="0.5"/>
-<text x="26.0" y="80.0" fill="#e6edf3" font-family="monospace" font-size="9" text-anchor="start">In6.Cu</text>
-<text x="90.0" y="80.0" fill="#8b949e" font-family="monospace" font-size="9" text-anchor="start">GND 平面</text>
-<rect x="20.0" y="84.0" width="180.0" height="11.0" fill="#161b22" stroke="#58a6ff" stroke-width="0.5"/>
-<text x="26.0" y="92.0" fill="#e6edf3" font-family="monospace" font-size="9" text-anchor="start">B.Cu</text>
-<text x="90.0" y="92.0" fill="#8b949e" font-family="monospace" font-size="9" text-anchor="start">信号（单面贴，空置可用）</text>
-<text x="20.0" y="114.0" fill="#8b949e" font-family="monospace" font-size="8" text-anchor="start">via: {'max_per_net': 2, 'drill_mm': 0.2, 'outer_mm': 0.35, 'annular_min_mm': 0.075, 'back_drill': True, 'diff_symmetric': True, 'gnd_companion_min': 1, 'dangling': 'error'}</text>
-<text x="20.0" y="128.0" fill="#8b949e" font-family="monospace" font-size="8" text-anchor="start">等长: {'intra_pair_max_mm': 0.15, 'inter_pair_max_mm': 1.0}</text>
+<rect x="20.0" y="0.0" width="310.0" height="11.0" fill="#161b22" stroke="#58a6ff" stroke-width="0.5"/>
+<text x="26.0" y="8.0" fill="#e6edf3" font-family="monospace" font-size="8" text-anchor="start">F.Cu     信号（微带，参考 In1）</text>
+<text x="170.0" y="8.0" fill="#8b949e" font-family="monospace" font-size="8" text-anchor="start">microstrip In1.Cu w=0.205</text>
+<rect x="20.0" y="12.0" width="310.0" height="11.0" fill="#161b22" stroke="#58a6ff" stroke-width="0.5"/>
+<text x="26.0" y="20.0" fill="#e6edf3" font-family="monospace" font-size="8" text-anchor="start">In1.Cu   GND 平面</text>
+<text x="170.0" y="20.0" fill="#8b949e" font-family="monospace" font-size="8" text-anchor="start">  </text>
+<rect x="20.0" y="24.0" width="310.0" height="11.0" fill="#161b22" stroke="#58a6ff" stroke-width="0.5"/>
+<text x="26.0" y="32.0" fill="#e6edf3" font-family="monospace" font-size="8" text-anchor="start">In2.Cu   信号（带状线，穿越）</text>
+<text x="170.0" y="32.0" fill="#8b949e" font-family="monospace" font-size="8" text-anchor="start">symmetric_stripline In1.Cu,In3.Cu w=0.16</text>
+<rect x="20.0" y="36.0" width="310.0" height="11.0" fill="#161b22" stroke="#58a6ff" stroke-width="0.5"/>
+<text x="26.0" y="44.0" fill="#e6edf3" font-family="monospace" font-size="8" text-anchor="start">In3.Cu   GND 平面</text>
+<text x="170.0" y="44.0" fill="#8b949e" font-family="monospace" font-size="8" text-anchor="start">  </text>
+<rect x="20.0" y="48.0" width="310.0" height="11.0" fill="#161b22" stroke="#58a6ff" stroke-width="0.5"/>
+<text x="26.0" y="56.0" fill="#e6edf3" font-family="monospace" font-size="8" text-anchor="start">In4.Cu   电源分区</text>
+<text x="170.0" y="56.0" fill="#8b949e" font-family="monospace" font-size="8" text-anchor="start">  </text>
+<rect x="20.0" y="60.0" width="310.0" height="11.0" fill="#161b22" stroke="#58a6ff" stroke-width="0.5"/>
+<text x="26.0" y="68.0" fill="#e6edf3" font-family="monospace" font-size="8" text-anchor="start">In5.Cu   信号（带状线）</text>
+<text x="170.0" y="68.0" fill="#8b949e" font-family="monospace" font-size="8" text-anchor="start">symmetric_stripline In4.Cu,In6.Cu w=0.16</text>
+<rect x="20.0" y="72.0" width="310.0" height="11.0" fill="#161b22" stroke="#58a6ff" stroke-width="0.5"/>
+<text x="26.0" y="80.0" fill="#e6edf3" font-family="monospace" font-size="8" text-anchor="start">In6.Cu   GND 平面</text>
+<text x="170.0" y="80.0" fill="#8b949e" font-family="monospace" font-size="8" text-anchor="start">  </text>
+<rect x="20.0" y="84.0" width="310.0" height="11.0" fill="#161b22" stroke="#58a6ff" stroke-width="0.5"/>
+<text x="26.0" y="92.0" fill="#e6edf3" font-family="monospace" font-size="8" text-anchor="start">B.Cu     信号（单面贴，空置可用）</text>
+<text x="170.0" y="92.0" fill="#8b949e" font-family="monospace" font-size="8" text-anchor="start">microstrip In6.Cu w=0.205</text>
+<text x="20.0" y="114.0" fill="#8b949e" font-family="monospace" font-size="8" text-anchor="start">Zdiff 目标 85.0Ω ±10% · model=JLC_SI9000_H1_5.0mil_Er1_4.3 · gap_mm=0.175 / alt 0.215/0.2</text>
+<text x="20.0" y="128.0" fill="#8b949e" font-family="monospace" font-size="8" text-anchor="start">via: {'max_per_net': 2, 'drill_mm': 0.2, 'outer_mm': 0.35, 'annular_min_mm': 0.075, 'back_drill': True, 'diff_symmetric': True, 'gnd_companion_min': 1, 'dangling': 'error'}</text>
+<text x="20.0" y="142.0" fill="#8b949e" font-family="monospace" font-size="8" text-anchor="start">等长: {'intra_pair_max_mm': 0.15, 'inter_pair_max_mm': 1.0}</text>
 </g></svg>

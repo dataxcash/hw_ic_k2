@@ -2,8 +2,32 @@
 <rect width="780" height="336" fill="#0d1117"/>
 <text x="30" y="20" fill="#e6edf3" font-family="monospace" font-size="14">P3-05 敷铜策略（L2-5；GND In1/In3/In6 + 电源 In4）</text>
 <g transform="translate(30,30)">
-<text x="10.0" y="20.0" fill="#58a6ff" font-family="monospace" font-size="9" text-anchor="start">In1/In3/In6 = 整板 GND 平面 | In4 = 分区电源（P3V3 东 / MCU_VDD 西 / P3V3_AUX 岛 / 12V_IN 载体）</text>
-<text x="10.0" y="36.0" fill="#8b949e" font-family="monospace" font-size="8" text-anchor="start">去耦: board_real_per_net: P3V3{C74-C75-C76-C77-C78-C79-C80-C81-C82-C83-C84} / MCU_VDD{C85-C86} /</text>
-<text x="10.0" y="50.0" fill="#8b949e" font-family="monospace" font-size="8" text-anchor="start">GND 伴行 via: {"candidates_file": "j2_via_gnd_stitch_v8.json", "rule": "差分换层处硬性 GND 伴行 via (每换层点 ≥1, 2026-08-19 8 层定案)", "vi</text>
-<text x="10.0" y="64.0" fill="#f0883e" font-family="monospace" font-size="9" text-anchor="start">出 Gerber 前置（审计 §10.5）：13 zone 全 filled_polygon>=1 且 net 非空</text>
+<text x="10.0" y="20.0" fill="#f0883e" font-family="monospace" font-size="8" text-anchor="start">zone 台账 0/13 已填充（现状） | 出 Gerber 前置（审计 §10.5）：13 区全 filled_polygon>=1 且 net 非空</text>
+<rect x="651.0" y="55.4" width="27.9" height="137.6" fill="none" stroke="#8b949e" stroke-width="0.7" stroke-dasharray="3 3"/>
+<text x="10.0" y="34.0" fill="#8b949e" font-family="monospace" font-size="7" text-anchor="start">z 0 (no-net)   F.Cu     filled=0</text>
+<rect x="182.7" y="56.4" width="72.6" height="25.2" fill="none" stroke="#8b949e" stroke-width="0.7" stroke-dasharray="3 3"/>
+<text x="10.0" y="43.0" fill="#8b949e" font-family="monospace" font-size="7" text-anchor="start">z 1 (no-net)   F.Cu     filled=0</text>
+<rect x="182.7" y="165.6" width="72.6" height="25.2" fill="none" stroke="#8b949e" stroke-width="0.7" stroke-dasharray="3 3"/>
+<text x="10.0" y="52.0" fill="#8b949e" font-family="monospace" font-size="7" text-anchor="start">z 2 (no-net)   F.Cu     filled=0</text>
+<rect x="354.6" y="96.7" width="139.4" height="55.1" fill="none" stroke="#8b949e" stroke-width="0.7" stroke-dasharray="3 3"/>
+<text x="10.0" y="61.0" fill="#8b949e" font-family="monospace" font-size="7" text-anchor="start">z 3 (no-net)   F.Cu     filled=0</text>
+<rect x="12.1" y="23.0" width="65.8" height="29.5" fill="none" stroke="#f85149" stroke-width="0.7" stroke-dasharray="3 3"/>
+<text x="10.0" y="70.0" fill="#8b949e" font-family="monospace" font-size="7" text-anchor="start">z 4 12V_IN     In4.Cu   filled=0</text>
+<rect x="1.8" y="1.8" width="716.4" height="272.4" fill="none" stroke="#3fb950" stroke-width="0.7" stroke-dasharray="3 3"/>
+<text x="10.0" y="79.0" fill="#8b949e" font-family="monospace" font-size="7" text-anchor="start">z 5 GND        In1.Cu   filled=0</text>
+<rect x="1.8" y="1.8" width="716.4" height="272.4" fill="none" stroke="#3fb950" stroke-width="0.7" stroke-dasharray="3 3"/>
+<text x="10.0" y="88.0" fill="#8b949e" font-family="monospace" font-size="7" text-anchor="start">z 6 GND        In3.Cu   filled=0</text>
+<rect x="1.8" y="1.8" width="716.4" height="272.4" fill="none" stroke="#3fb950" stroke-width="0.7" stroke-dasharray="3 3"/>
+<text x="10.0" y="97.0" fill="#8b949e" font-family="monospace" font-size="7" text-anchor="start">z 7 GND        In6.Cu   filled=0</text>
+<rect x="1.8" y="1.8" width="206.7" height="272.4" fill="none" stroke="#d29922" stroke-width="0.7" stroke-dasharray="3 3"/>
+<text x="10.0" y="106.0" fill="#8b949e" font-family="monospace" font-size="7" text-anchor="start">z 8 MCU_VDD    In4.Cu   filled=0</text>
+<rect x="209.7" y="1.8" width="508.5" height="272.4" fill="none" stroke="#58a6ff" stroke-width="0.7" stroke-dasharray="3 3"/>
+<text x="10.0" y="115.0" fill="#8b949e" font-family="monospace" font-size="7" text-anchor="start">z 9 P3V3       In4.Cu   filled=0</text>
+<rect x="67.6" y="6.1" width="144.9" height="37.4" fill="none" stroke="#58a6ff" stroke-width="0.7" stroke-dasharray="3 3"/>
+<text x="10.0" y="124.0" fill="#8b949e" font-family="monospace" font-size="7" text-anchor="start">z10 P3V3       In4.Cu   filled=0</text>
+<rect x="29.7" y="17.9" width="148.8" height="109.7" fill="none" stroke="#bc8cff" stroke-width="0.7" stroke-dasharray="3 3"/>
+<text x="10.0" y="133.0" fill="#8b949e" font-family="monospace" font-size="7" text-anchor="start">z11 P3V3_AUX   In4.Cu   filled=0</text>
+<rect x="175.2" y="114.1" width="41.7" height="63.0" fill="none" stroke="#bc8cff" stroke-width="0.7" stroke-dasharray="3 3"/>
+<text x="10.0" y="142.0" fill="#8b949e" font-family="monospace" font-size="7" text-anchor="start">z12 P3V3_AUX   In4.Cu   filled=0</text>
+<text x="10.0" y="266.0" fill="#8b949e" font-family="monospace" font-size="9" text-anchor="start">power_partition={'P3V3': 'In4 一区 (东侧)', 'P3V3_AUX_MCU_VDD': 'In4 二区 (西侧)'} | gnd_stitch={"candidates_file": "j2_via_gnd_stitch_v8.json", "rule": "差分换层处硬性 GND 伴行 via (每换</text>
 </g></svg>

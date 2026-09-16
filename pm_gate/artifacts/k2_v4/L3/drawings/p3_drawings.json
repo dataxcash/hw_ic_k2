@@ -2636,6 +2636,13 @@
    "pass": false,
    "note": "L2-4 统一口径 = 『焊盘外接框净距』（西 17.55 / 东 27.81）。**canonical SPEC 的 corridors[].note 仍写已作废口径**（27.40/17.30）且 x_range 用体宽口径 ⇒ **口径回写未完成**（属 SPEC 变更 ⇒ 须监理放行 rev-23）"
   },
+  "C7_pour_zones_filled": {
+   "count": 13,
+   "filled": 0,
+   "expect": "13/13（P4 前置）",
+   "pass": false,
+   "note": "B 判据：出 Gerber 前 13 区必须全填充（本次 = 交付板现状）"
+  },
   "D1_pinheader_interference": {
    "column_x": 27.94,
    "clearance_mm": 0.2,
@@ -2664,6 +2671,449 @@
    ],
    "pass": true,
    "note": "L2-3 位移复检（封装几何 @27.94）。before = 含 C73/C86 **旧位** ⇒ 复现 L2-3「仅 C73/C86 相撞」的依据；after = C73/C86 新解位 ⇒ 应无冲突"
+  }
+ },
+ "pour_zones": {
+  "count": 13,
+  "filled_count": 0,
+  "zones": [
+   {
+    "idx": 0,
+    "net": "",
+    "layer": "F.Cu",
+    "filled": 0,
+    "bbox_mm": [
+     131.5,
+     42.23,
+     136.15,
+     65.17
+    ]
+   },
+   {
+    "idx": 1,
+    "net": "",
+    "layer": "F.Cu",
+    "filled": 0,
+    "bbox_mm": [
+     53.45,
+     42.4,
+     65.55,
+     46.6
+    ]
+   },
+   {
+    "idx": 2,
+    "net": "",
+    "layer": "F.Cu",
+    "filled": 0,
+    "bbox_mm": [
+     53.45,
+     60.6,
+     65.55,
+     64.8
+    ]
+   },
+   {
+    "idx": 3,
+    "net": "",
+    "layer": "F.Cu",
+    "filled": 0,
+    "bbox_mm": [
+     82.1,
+     49.11,
+     105.34,
+     58.29
+    ]
+   },
+   {
+    "idx": 4,
+    "net": "12V_IN",
+    "layer": "In4.Cu",
+    "filled": 0,
+    "bbox_mm": [
+     25.02,
+     36.84,
+     35.98,
+     41.75
+    ]
+   },
+   {
+    "idx": 5,
+    "net": "GND",
+    "layer": "In1.Cu",
+    "filled": 0,
+    "bbox_mm": [
+     23.3,
+     33.3,
+     142.7,
+     78.7
+    ]
+   },
+   {
+    "idx": 6,
+    "net": "GND",
+    "layer": "In3.Cu",
+    "filled": 0,
+    "bbox_mm": [
+     23.3,
+     33.3,
+     142.7,
+     78.7
+    ]
+   },
+   {
+    "idx": 7,
+    "net": "GND",
+    "layer": "In6.Cu",
+    "filled": 0,
+    "bbox_mm": [
+     23.3,
+     33.3,
+     142.7,
+     78.7
+    ]
+   },
+   {
+    "idx": 8,
+    "net": "MCU_VDD",
+    "layer": "In4.Cu",
+    "filled": 0,
+    "bbox_mm": [
+     23.3,
+     33.3,
+     57.75,
+     78.7
+    ]
+   },
+   {
+    "idx": 9,
+    "net": "P3V3",
+    "layer": "In4.Cu",
+    "filled": 0,
+    "bbox_mm": [
+     57.95,
+     33.3,
+     142.7,
+     78.7
+    ]
+   },
+   {
+    "idx": 10,
+    "net": "P3V3",
+    "layer": "In4.Cu",
+    "filled": 0,
+    "bbox_mm": [
+     34.27,
+     34.02,
+     58.42,
+     40.25
+    ]
+   },
+   {
+    "idx": 11,
+    "net": "P3V3_AUX",
+    "layer": "In4.Cu",
+    "filled": 0,
+    "bbox_mm": [
+     27.95,
+     35.98,
+     52.75,
+     54.27
+    ]
+   },
+   {
+    "idx": 12,
+    "net": "P3V3_AUX",
+    "layer": "In4.Cu",
+    "filled": 0,
+    "bbox_mm": [
+     52.2,
+     52.02,
+     59.15,
+     62.52
+    ]
+   }
+  ],
+  "gate": "出 Gerber 前置（审计 §10.5）：13 zone 全 filled_polygon>=1 且 net 非空",
+  "power_partition": {
+   "P3V3": "In4 一区 (东侧)",
+   "P3V3_AUX_MCU_VDD": "In4 二区 (西侧)"
+  },
+  "decoupling": "board_real_per_net: P3V3{C74-C75-C76-C77-C78-C79-C80-C81-C82-C83-C84} / MCU_VDD{C85-C86} / 12V_IN{C88} / P3V3_AUX{C90} → via_to_plane",
+  "gnd_stitch_via": {
+   "candidates_file": "j2_via_gnd_stitch_v8.json",
+   "rule": "差分换层处硬性 GND 伴行 via (每换层点 ≥1, 2026-08-19 8 层定案)",
+   "via_drill": 0.2,
+   "via_outer": 0.35
+  }
+ },
+ "layer_assignment": {
+  "roles": {
+   "gnd_planes": [
+    "In1.Cu",
+    "In3.Cu",
+    "In6.Cu"
+   ],
+   "power_plane": "In4.Cu",
+   "signal_layers": [
+    "F.Cu",
+    "In2.Cu",
+    "In5.Cu",
+    "B.Cu"
+   ]
+  },
+  "target_zdiff": 85.0,
+  "tolerance_pct": 10,
+  "model": "JLC_SI9000_H1_5.0mil_Er1_4.3",
+  "gap_mm": 0.175,
+  "alt_width_mm": 0.215,
+  "alt_gap_mm": 0.2,
+  "width_mm_by_layer": {
+   "F.Cu": 0.205,
+   "In2.Cu": 0.16,
+   "In5.Cu": 0.16,
+   "B.Cu": 0.205
+  },
+  "per_layer": {
+   "F.Cu": {
+    "kind": "microstrip",
+    "refs": [
+     "In1.Cu"
+    ],
+    "w_mm": 0.205,
+    "h_mm": 0.1164,
+    "er": 4.16,
+    "gap_mm_delivered": [
+     0.295,
+     0.395
+    ],
+    "material": "2116*1"
+   },
+   "In2.Cu": {
+    "kind": "symmetric_stripline",
+    "refs": [
+     "In1.Cu",
+     "In3.Cu"
+    ],
+    "w_mm": 0.16,
+    "b_mm": 0.5,
+    "er": 3.99,
+    "gap_mm_delivered": [
+     0.34,
+     0.44
+    ],
+    "material": "core 0.25*2"
+   },
+   "In5.Cu": {
+    "kind": "symmetric_stripline",
+    "refs": [
+     "In4.Cu",
+     "In6.Cu"
+    ],
+    "w_mm": 0.16,
+    "b_mm": 0.5,
+    "er": 3.99,
+    "gap_mm_delivered": [
+     0.34,
+     0.44
+    ],
+    "material": "core 0.25*2"
+   },
+   "B.Cu": {
+    "kind": "microstrip",
+    "refs": [
+     "In6.Cu"
+    ],
+    "w_mm": 0.205,
+    "h_mm": 0.1164,
+    "er": 4.16,
+    "gap_mm_delivered": [
+     0.295,
+     0.395
+    ],
+    "material": "2116*1"
+   }
+  },
+  "via_policy": {
+   "max_per_net": 2,
+   "drill_mm": 0.2,
+   "outer_mm": 0.35,
+   "annular_min_mm": 0.075,
+   "back_drill": true,
+   "diff_symmetric": true,
+   "gnd_companion_min": 1,
+   "dangling": "error"
+  },
+  "length_policy": {
+   "intra_pair_max_mm": 0.15,
+   "inter_pair_max_mm": 1.0
+  },
+  "stackup_material": "JLC 8L 1.6mm 阻抗板 JLC08161H（南亚 NP-155F；prepreg 2116*1 / 3313*1，core 0.36*2） — 叠层分配与逐层介质厚度由 L2 CO-55 反解裁定；终判 = 板厂阻抗券",
+  "total_thickness_mm": 1.6
+ },
+ "corridor_occupancy": {
+  "corridors": [
+   {
+    "id": "EAST_CHIP_TO_J2",
+    "x_range": [
+     105.25,
+     132.65
+    ],
+    "pairs": 18,
+    "note": "v31 regen: single DS320 east corridor (L2 v2.0 东走廊 27.40mm); 16 data pairs (DN in A_PER 8 + UP_OUT out B_PET 8) + REFCLK0/1 2 (In2 S翼, L3)",
+    "bands": [
+     {
+      "band": "dn",
+      "layer": "In2.Cu",
+      "pairs": 8,
+      "nets": [
+       "PCIE_DN0",
+       "PCIE_DN1",
+       "PCIE_DN2",
+       "PCIE_DN3",
+       "PCIE_DN4",
+       "PCIE_DN5",
+       "PCIE_DN6",
+       "PCIE_DN7"
+      ],
+      "tracks_y": [
+       58.3,
+       59.5,
+       60.7,
+       61.9,
+       63.1,
+       64.3,
+       65.5,
+       66.7
+      ],
+      "note": "A_PER -> In2 east crossing (VIA_IN2)"
+     },
+     {
+      "band": "up",
+      "layer": "In2.Cu",
+      "pairs": 8,
+      "nets": [
+       "PCIE_UP_OUT0",
+       "PCIE_UP_OUT1",
+       "PCIE_UP_OUT2",
+       "PCIE_UP_OUT3",
+       "PCIE_UP_OUT4",
+       "PCIE_UP_OUT5",
+       "PCIE_UP_OUT6",
+       "PCIE_UP_OUT7"
+      ],
+      "tracks_y": [
+       40.3,
+       41.5,
+       42.7,
+       43.9,
+       45.1,
+       46.3,
+       47.5,
+       48.7
+      ],
+      "note": "B_PET -> In2 east crossing (VIA_IN2)"
+     },
+     {
+      "band": "refclk",
+      "layer": "F.Cu",
+      "pairs": 2,
+      "nets": [
+       "PCIE_REFCLK0",
+       "PCIE_REFCLK1"
+      ],
+      "tracks_y": [
+       45.7,
+       50.5
+      ],
+      "note": "REFCLK0/1 J2<->J3/J4 直通不经芯片"
+     }
+    ]
+   },
+   {
+    "id": "WEST_MCIO_TO_CHIP",
+    "x_range": [
+     65.05,
+     82.35
+    ],
+    "pairs": 18,
+    "note": "v31 regen: single DS320 west corridor (L2 v2.0 西走廊 17.30mm); 16 data pairs (UP in B_PER 8 + DN_OUT out A_PET 8) + REFCLK0/1 2",
+    "bands": [
+     {
+      "band": "up",
+      "layer": "In2.Cu",
+      "pairs": 8,
+      "nets": [
+       "PCIE_UP0",
+       "PCIE_UP1",
+       "PCIE_UP2",
+       "PCIE_UP3",
+       "PCIE_UP4",
+       "PCIE_UP5",
+       "PCIE_UP6",
+       "PCIE_UP7"
+      ],
+      "tracks_y": [
+       40.7,
+       41.9,
+       43.1,
+       44.3,
+       45.5,
+       46.7,
+       47.9,
+       49.1
+      ],
+      "note": "B_PER direct F.Cu west (J3 0-3/J4 4-7)"
+     },
+     {
+      "band": "dn",
+      "layer": "In2.Cu",
+      "pairs": 8,
+      "nets": [
+       "PCIE_DN_OUT0",
+       "PCIE_DN_OUT1",
+       "PCIE_DN_OUT2",
+       "PCIE_DN_OUT3",
+       "PCIE_DN_OUT4",
+       "PCIE_DN_OUT5",
+       "PCIE_DN_OUT6",
+       "PCIE_DN_OUT7"
+      ],
+      "tracks_y": [
+       58.7,
+       59.9,
+       61.1,
+       62.3,
+       63.5,
+       64.7,
+       65.9,
+       67.1
+      ],
+      "note": "A_PET direct F.Cu west (J3 0-3/J4 4-7)"
+     },
+     {
+      "band": "refclk",
+      "layer": "F.Cu",
+      "pairs": 2,
+      "nets": [
+       "PCIE_REFCLK0",
+       "PCIE_REFCLK1"
+      ],
+      "tracks_y": [
+       45.7,
+       50.5
+      ],
+      "note": "REFCLK0/1 直通"
+     }
+    ]
+   }
+  ],
+  "clearance_basis": {
+   "basis": "焊盘外接框净距",
+   "west_mm": 17.55,
+   "east_mm": 27.81,
+   "west_basis": "J3/J4 右缘 65.05 → U6 左缘 82.60",
+   "east_basis": "U6 右缘 104.84 → J2 左缘 132.65"
   }
  },
  "placement_solution": {

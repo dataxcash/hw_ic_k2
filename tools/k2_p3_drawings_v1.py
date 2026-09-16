@@ -321,6 +321,47 @@ def main():
                                             "pass": not stale,
                                             "note": "L2-4 统一口径 = 『焊盘外接框净距』（西 17.55 / 东 27.81）。**canonical SPEC 的 corridors[].note 仍写已作废口径**（27.40/17.30）且 x_range 用体宽口径 ⇒ **口径回写未完成**（属 SPEC 变更 ⇒ 须监理放行 rev-23）"}
 
+    # ── 敷铜策略：13 zone 台账（交付板实测，只读）+ 出 Gerber 前置 ──────────
+    import pcbnew as _pk
+    _bb = _pk.LoadBoard(os.path.join(K2, "hw/k2_v4_8L.l4.kicad_pcb"))
+    zones = []
+    for i, z in enumerate(_bb.Zones()):
+        filled = 1 if (z.GetFilledPolysList(z.GetLayer()) and z.GetFilledPolysList(z.GetLayer()).OutlineCount() > 0) else 0
+        zb = z.GetBoundingBox()
+        zones.append({"idx": i, "net": z.GetNetname(), "layer": _bb.GetLayerName(z.GetLayer()), "filled": filled,
+                      "bbox_mm": [round(_pk.ToMM(zb.GetLeft()), 2), round(_pk.ToMM(zb.GetTop()), 2),
+                                  round(_pk.ToMM(zb.GetRight()), 2), round(_pk.ToMM(zb.GetBottom()), 2)]})
+    geo["pour_zones"] = {"count": len(zones), "filled_count": sum(z["filled"] for z in zones), "zones": zones,
+                         "gate": "出 Gerber 前置（审计 §10.5）：13 zone 全 filled_polygon>=1 且 net 非空",
+                         "power_partition": (spec.get("pd") or {}).get("power_partition"),
+                         "decoupling": (spec.get("pd") or {}).get("decoupling"),
+                         "gnd_stitch_via": (spec.get("pd") or {}).get("gnd_stitch_via")}
+    geo["criteria"]["C7_pour_zones_filled"] = {"count": len(zones), "filled": sum(z["filled"] for z in zones),
+                                               "expect": "13/13（P4 前置）", "pass": sum(z["filled"] for z in zones) == len(zones),
+                                               "note": "B 判据：出 Gerber 前 13 区必须全填充（本次 = 交付板现状）"}
+    # ── 层分配：逐层角色 + 阻抗/线宽/参考（SPEC impedance.per_layer） ────────
+    imp = spec.get("impedance") or {}
+    per = imp.get("per_layer") or {}
+    wl = imp.get("width_mm_by_layer") or {}
+    geo["layer_assignment"] = {"roles": L2["L2-5_pour"], "target_zdiff": imp.get("target_zdiff"),
+                               "tolerance_pct": imp.get("tolerance_pct"), "model": imp.get("model"),
+                               "gap_mm": imp.get("gap_mm"), "alt_width_mm": imp.get("alt_width_mm"), "alt_gap_mm": imp.get("alt_gap_mm"),
+                               "width_mm_by_layer": wl,
+                               "per_layer": {k: {kk: vv for kk, vv in v.items()} for k, v in per.items()},
+                               "via_policy": L2["L2-6_via"], "length_policy": L2["L2-7_length"],
+                               "stackup_material": spec.get("stackup", {}).get("material"),
+                               "total_thickness_mm": spec.get("stackup", {}).get("total_thickness_mm")}
+    # ── 走廊占用表（逐走廊/逐带/逐轨） ─────────────────────────────────────
+    cot = []
+    for c in cor:
+        bands = []
+        for b in (c.get("bands") or []):
+            bands.append({"band": b.get("band"), "layer": b.get("layer"), "pairs": b.get("pairs"),
+                          "nets": b.get("nets"), "tracks_y": b.get("tracks_y"), "note": b.get("note")})
+        cot.append({"id": c.get("id"), "x_range": c.get("x_range"), "pairs": c.get("pairs"),
+                    "note": c.get("note"), "bands": bands})
+    geo["corridor_occupancy"] = {"corridors": cot, "clearance_basis": L2["L2-4_corridor_clearance"]}
+
     # 附加机检 D1：L2-3 排针列位移后的干涉（封装几何 @column_x=27.94；板 0 焊盘 ⇒ 必须用 lib 几何）
     import pcbnew as _pc
     _b = _pc.LoadBoard(os.path.join(K2, "hw/k2_v4_8L.kicad_pcb"))
@@ -441,15 +482,22 @@ def main():
     with open(os.path.join(OUT, "03_corridor_occupancy.svg"), "w") as f:
         f.write(svg_open("P3-03 走廊占用（SPEC corridors；口径=L2-4 焊盘外接框净距）", W, H, ox, oy)[0])
         frame(f)
-        yy = 40
-        for c in cor[:14]:
-            for b in (c.get("bands") or [])[:6]:
+        yy = 26
+        for c in (geo.get("corridor_occupancy") or {}).get("corridors", []):
+            xr = c.get("x_range") or [bx0, bx1]
+            lanes = 0
+            for b in c.get("bands") or []:
                 ys = b.get("tracks_y") or []
+                layers = b.get("layer"); lanes += len(ys)
+                for yline in ys:
+                    p0 = P(xr[0], yline, ox, oy); p1 = P(xr[1], yline, ox, oy)
+                    line(f, p0[0], p0[1], p1[0], p1[1], "#bc8cff", 0.5)
                 if ys:
-                    y0 = min(ys) - 0.6; y1 = max(ys) + 0.6
-                    p0 = P(bx0 + 66, y0, ox, oy); p1 = P(bx0 + 92, y1, ox, oy)
-                    rect(f, p0[0], p0[1], p1[0], p1[1], "#bc8cff", width=0.6)
-            txt(f, 10, yy, f"corridor {c.get('id', '')} {c.get('layer', '')}", "#bc8cff", 8); yy += 11
+                    p0 = P(xr[0], min(ys) - 0.4, ox, oy); p1 = P(xr[1], max(ys) + 0.4, ox, oy)
+                    rect(f, p0[0], p0[1], p1[0], p1[1], "#bc8cff", width=0.8)
+            txt(f, 10, yy, f"{c.get('id')} x{c.get('x_range')} pairs={c.get('pairs')} lanes={lanes}", "#bc8cff", 8); yy += 11
+            for b in (c.get("bands") or [])[:3]:
+                txt(f, 16, yy, f" ↳ {b.get('band')} @{b.get('layer')} pairs={b.get('pairs')}", "#8b949e", 7); yy += 9
         d = L2["L2-4_corridor_clearance"]
         txt(f, 10, H * SCALE - 10, f"口徑={d['basis']} | 西 {d['west_mm']}mm ({d['west_basis']}) | 東 {d['east_mm']}mm ({d['east_basis']})", "#8b949e")
         svg_close(f)
@@ -457,22 +505,37 @@ def main():
     # 04 层分配
     with open(os.path.join(OUT, "04_layer_assignment.svg"), "w") as f:
         f.write(svg_open("P3-04 层分配（8L：F/In1..In6/B；L2-5 + canonical SPEC）", 120, 46, ox, oy)[0])
-        rows = [("F.Cu", "信号"), ("In1.Cu", "GND 平面"), ("In2.Cu", "信号（穿越）"), ("In3.Cu", "GND 平面"),
-                ("In4.Cu", "电源分区"), ("In5.Cu", "信号"), ("In6.Cu", "GND 平面"), ("B.Cu", "信号（单面贴，空置可用）")]
-        for i, (l, r) in enumerate(rows):
-            y0 = 12 * i; rect(f, 20, y0, 200, y0 + 11, "#58a6ff", "#161b22", 0.5)
-            txt(f, 26, y0 + 8, l, "#e6edf3", 9); txt(f, 90, y0 + 8, r, "#8b949e", 9)
-        txt(f, 20, 12 * len(rows) + 18, f"via: {L2['L2-6_via']}", "#8b949e", 8)
-        txt(f, 20, 12 * len(rows) + 32, f"等长: {L2['L2-7_length']}", "#8b949e", 8)
+        la = geo.get("layer_assignment") or {}
+        wl = la.get("width_mm_by_layer") or {}; per = la.get("per_layer") or {}
+        rowsx = [("F.Cu", "信号（微带，参考 In1）"), ("In1.Cu", "GND 平面"), ("In2.Cu", "信号（带状线，穿越）"),
+                 ("In3.Cu", "GND 平面"), ("In4.Cu", "电源分区"), ("In5.Cu", "信号（带状线）"),
+                 ("In6.Cu", "GND 平面"), ("B.Cu", "信号（单面贴，空置可用）")]
+        for i, (l, r) in enumerate(rowsx):
+            y0 = 12 * i
+            rect(f, 20, y0, 330, y0 + 11, "#58a6ff", "#161b22", 0.5)
+            pl = per.get(l) or {}
+            wtxt = f"w={wl.get(l)}" if l in wl else ""
+            ktxt = pl.get("kind", "") or ""
+            refs = ",".join(pl.get("refs") or [])
+            txt(f, 26, y0 + 8, f"{l:8s} {r}", "#e6edf3", 8)
+            txt(f, 170, y0 + 8, f"{ktxt} {refs} {wtxt}", "#8b949e", 8)
+        txt(f, 20, 12 * len(rowsx) + 18, f"Zdiff 目标 {la.get('target_zdiff')}Ω ±{la.get('tolerance_pct')}% · model={la.get('model')} · gap_mm={la.get('gap_mm')} / alt {la.get('alt_width_mm')}/{la.get('alt_gap_mm')}", "#8b949e", 8)
+        txt(f, 20, 12 * len(rowsx) + 32, f"via: {L2['L2-6_via']}", "#8b949e", 8)
+        txt(f, 20, 12 * len(rowsx) + 46, f"等长: {L2['L2-7_length']}", "#8b949e", 8)
         svg_close(f)
 
     # 05 敷铜策略
     with open(os.path.join(OUT, "05_pour_strategy.svg"), "w") as f:
         f.write(svg_open("P3-05 敷铜策略（L2-5；GND In1/In3/In6 + 电源 In4）", 120, 46, ox, oy)[0])
-        txt(f, 10, 20, "In1/In3/In6 = 整板 GND 平面 | In4 = 分区电源（P3V3 东 / MCU_VDD 西 / P3V3_AUX 岛 / 12V_IN 载体）", "#58a6ff", 9)
-        txt(f, 10, 36, f"去耦: {(geo['pour'].get('decoupling') or '')[:90]}", "#8b949e", 8)
-        txt(f, 10, 50, f"GND 伴行 via: {json.dumps(geo['pour'].get('gnd_stitch_via'), ensure_ascii=False)[:110]}", "#8b949e", 8)
-        txt(f, 10, 64, "出 Gerber 前置（审计 §10.5）：13 zone 全 filled_polygon>=1 且 net 非空", "#f0883e", 9)
+        pzs = geo.get("pour_zones") or {}
+        colors = {"GND": "#3fb950", "P3V3": "#58a6ff", "MCU_VDD": "#d29922", "P3V3_AUX": "#bc8cff", "12V_IN": "#f85149", "": "#8b949e"}
+        txt(f, 10, 20, f"zone 台账 {pzs.get('filled_count')}/{pzs.get('count')} 已填充（现状） | 出 Gerber 前置（审计 §10.5）：13 区全 filled_polygon>=1 且 net 非空", "#f0883e", 8)
+        yy = 34
+        for z in pzs.get("zones", []):
+            bbz = z["bbox_mm"]; p0 = P(bbz[0], bbz[1], ox, oy); p1 = P(bbz[2], bbz[3], ox, oy)
+            rect(f, p0[0], p0[1], p1[0], p1[1], colors.get(z["net"], "#8b949e"), width=0.7, dash="" if z["filled"] else "3 3")
+            txt(f, 10, yy, f"z{z['idx']:>2d} {z['net'] or '(no-net)':10s} {z['layer']:8s} filled={z['filled']}", "#8b949e", 7); yy += 9
+        txt(f, 10, H * SCALE - 10, f"power_partition={pzs.get('power_partition')} | gnd_stitch={json.dumps(pzs.get('gnd_stitch_via'), ensure_ascii=False)[:80]}", "#8b949e")
         svg_close(f)
 
     # 06 回避区
