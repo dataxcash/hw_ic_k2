@@ -1,7 +1,8 @@
-# K2 · **P4 施工状态（增量 1+2+3）** v3 —— 交监理核
+# K2 · **P4 施工状态（增量 1+2+3）+ 距绿取证** v4 —— 交监理核
 
 > **依据**：监理 **#K2-18 §五（U3 = P4 开工令）** + **§九-3（P4 施工）**；输入清单 `K2-P4-INPUT-PREREQUISITES-v1.md` v4（IN-1..IN-11）。
 > **性质**：施工执行报告（ENG「交测量」，判定权归监理）。**P4 未完工**；本件 = 增量 1 + 增量 2。
+> **修订留痕（v4）**：v3（`4071abba5eb1ddea`）→ 本版：新增 §12（**DRC 归因**：新件 97 / 既有 105；连通 364→208）+ §13（P4 剩余作业面清册）。
 > **修订留痕（v3）**：v2（`0e147b34d80b53bc`）→ 本版：新增 §10（增量 3 = 真源补网 IN-12/13/14）+ §11（剩余 FAIL 的结构性质 / U4-D / J-9 口径）。
 > **修订留痕（v2）**：v1（`68f73746f4609ffc`）→ 本版：新增 §7（增量 2 = **IN-5** 落板赋网）+ §8（DRC 现状）+ §9（**T-1 复跑同一性**）。
 > **冻件**：`k2/hw/k2_v4_8L.l4.kicad_pcb`（`d4e81f647be7f980`）**未动**；`criteria/` 两份只读未动。
@@ -115,3 +116,37 @@ AppDir/bin/kicad-cli pcb drc --format json --severity-error --severity-warning k
 | `pipeline_present` | 6 目录无 `pipeline.yaml` | **J-9**：判定器要求**每个含 `.kicad_sch` 的目录**均有该文件 —— `k2/hw/sch` 可出（schema 参照 `key_v2/key_v2/pipeline.yaml` + `_shared/eda_core/pipeline/checks.py`）；**其余 5 个属 k1/pciesw4** ⇒ 请裁 J-9 是否 k2-scoped，或授权跨项目补件 |
 
 **注记**：`PWR_5V_KEY` 真源仅 **1 节点** ⇒ 登记册「每条声明网 ≥2 焊盘」对其不可达（判定器现按 `nets_with_zero == 0` 判 ⇒ 已 PASS）；登记为口径注记，无需改件。
+
+## 12. **DRC 归因（新件 vs 既有）与连通改善**（2026-09-17，`kicad-cli pcb drc`）
+
+| 对象 | 违规 | 未连接 |
+|---|---|---|
+| **l4（冻结交付板，P4 前基线）** | **42**（`lib_footprint_mismatch 29` / `lib_footprint_issues 12` / `silk_edge_clearance 1`） | **364** |
+| **l5（P4 增量 3）** | **202** | **208** |
+
+**归因（按违规项是否涉及本件新增对象 `H1..H4` / `K2_HOLE_KEEPOUT` / 5 接口件 / 13 补件）**：
+- **涉及新件 97**：`hole_clearance 42` · `shorting_items 14` · `solder_mask_bridge 10` · `clearance 8` · `items_not_allowed 7` · `nonmirrored_text_on_back_layer 5` · `pth_inside_courtyard 3` · `silk_edge_clearance 3` · `hole_to_hole 3` · `courtyards_overlap 2`
+- **既有/其他 105**：`lib_footprint_mismatch 29` · `solder_mask_bridge 28` · `shorting_items 19` · `hole_clearance 12` · `clearance 10` · `lib_footprint_issues 6` · `silk_edge_clearance 1`
+
+**根因（实例，均非「判据/口径」问题，而是**施工顺序**问题）**：
+1. `shorting_items`（例：`GND` 走线 0.675mm @(31.85,54.5) 与 `U1` pad 11 `PERSTA#` 相碰）⇒ **l4 的既有走线是在 `U1` 只有 33 pad 的前提下画的**；`IN-4` 补齐 `34..49` 后，新 pad 落在既有走线上。
+2. `hole_clearance`（例：`J9` PTH pad 3 与 `GND` via @(30.275,56.0) 净距 **0.2157 < 0.25**）⇒ **`IN-8` 排针列 `+1.44mm` 移位**把 pad 移进既有 via/走线旁。
+3. 4×NPTH + Ø6.0 keepout：孔周既有铜需让位（`hole_clearance` 大头 + `items_not_allowed 7`）。
+- ⇒ **连通性净改善 364 → 208**（真源补网 + 补件落板生效）；**违规上升 42 → 202 全属「新增对象 vs 既有走线」的施工冲突**，须由**重布 U1 周圈 / 排针列周圈 / 孔周 / 补件走线**收敛。
+
+## 13. **P4 剩余作业面清册（供监理排布/授权）**
+
+| # | 作业面 | 规模（实测） | 前置/性质 |
+|---|---|---|---|
+| W-1 | **U1 周圈重布**（34..49 新 pad 与既有 GND/信号走线冲突） | `shorting 14`（新件）+ `clearance 8` + `mask 10` 部分 | 需布线（引擎链外或需批准） |
+| W-2 | **排针列周圈重布**（`column_x 26.5→27.94` 后 pad↔via/走线冲突） | `hole_clearance` 部分 + `clearance` 部分 | 同上 |
+| W-3 | **固定孔周让位**（4×Ø3.2 + Ø6.0 keepout 与既有铜） | `hole_clearance 42` 大头 + `items_not_allowed 7` | 同上 |
+| W-4 | **补件走线**（13 补件 + `C73/C86` 移位后旧段残线） | **未连接 208 主体** | 同上 |
+| W-5 | **U6 侧带球逃逸**（gap E；L2 已裁「球隙 via→In2→南带」） | 15 球 | 实现 = **引擎链外 mini per-ball 域**（m13 §3c：须按宪法确定性实现或登记引擎扩展）⇒ **需批准** |
+| W-6 | **J-5 非 45° 归一**（`In5 1906` 等） | 2051 段 | 源头 = 冻结 W3 图纸折线 ⇒ **U4-D 待裁**（授权重解 or 口径收窄） |
+| W-7 | **J-1/J-4 九条 ignore** | 9 条（DRC/丝印全开口径） | 修 or 豁免裁定（manifest 属判据，ENG 只读） |
+| W-8 | **J-7 封装=库**（`lib_footprint_mismatch 29` + `issues 6` + `fp-lib-table`） | 35 | 需先裁**权威侧**（板实作 vs 库文件；K2 板件由 m13 真源生成，库可能陈旧）⇒ 口径问题 |
+| W-9 | **J-9 `pipeline.yaml`** | 6 目录（k2 + k1/pciesw4 等） | `k2/hw/sch` 侧可出；其余属他项目 ⇒ **待裁 scope** |
+| W-10 | **P4 出 Gerber**（平面层 `G36 > 0`） | 8 铜层 + 钻孔 + 叠层/阻抗 | **须待 W-1..W-4 收敛后**（现状 DRC 未绿不得出图交付） |
+
+**ENG 就绪声明**：W-1..W-4 的**执行方式**（既有引擎链 vs 授权新写确定性执行器）与 W-5/W-6/W-7/W-8/W-9 的**口径/授权**均需监理裁示；未获裁示前 ENG 不擅自布线或改生成器（红线：未获批不得改生成器/SPEC/原理图）。
