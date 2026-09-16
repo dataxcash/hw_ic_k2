@@ -219,14 +219,15 @@ def main():
         rec["footprint_file"] = os.path.relpath(fpc, ROOT) if fpc else None
         rec["footprint_pads"] = len(pads)
         if rec.get("at"):
-            if ref in anch and anch[ref].get("pad_aabb_board"):
-                a = list(anch[ref]["pad_aabb_board"])
-                if ref in ph.get("positions", {}):  # L2-3：排针列位移 dx
-                    dx = col_x - ph["positions"][ref][0]
-                    a = [a[0] + dx, a[1], a[2] + dx, a[3]]
-                    rec["note"] = f"L2-3 移位 dx={dx:+.2f}mm（column_x 26.5→{col_x}）"
-                rec["pad_aabb"] = [round(v, 3) for v in a]
-                rec["geom_src"] = "board(as-built) + L2-3" if ref in ph.get("positions", {}) else "board(as-built)"
+            if ref in ph.get("positions", {}):
+                # 排针列：交付板上 0 焊盘（F-1）⇒ 必须用**封装几何 + L2-3 位**（勿用板几何，否则静默跳过）
+                a, _ = placed_pad_aabb(fp, col_x, ph["positions"][ref][1], ph.get("rot", 90))
+                rec["pad_aabb"] = [round(v, 3) for v in a] if a else None
+                rec["geom_src"] = f"lib 封装几何 @(column_x={col_x}, y={ph['positions'][ref][1]}, rot={ph.get('rot', 90)})（板 0 焊盘）"
+                rec["note"] = f"L2-3 移位 dx={col_x - ph['positions'][ref][0]:+.2f}mm（column_x 26.5→{col_x}）"
+            elif ref in anch and anch[ref].get("pad_aabb_board"):
+                rec["pad_aabb"] = [round(v, 3) for v in anch[ref]["pad_aabb_board"]]
+                rec["geom_src"] = "board(as-built)"
             else:
                 rec["pad_aabb"], _ = placed_pad_aabb(fp, rec["at"][0], rec["at"][1], rec.get("rot", 0))
                 rec["geom_src"] = "lib(未落件占位)"
@@ -261,16 +262,22 @@ def main():
 
     # 判据 4：接口焊盘不出框（内缩 0.3mm）
     inset = L2["L2-8_thresholds"]["in_frame_inset_mm"]
-    viol = []
+    viol = []; margins = {}; measured = []
     for ref in ["J2", "J3", "J4", "J6", "J9", "J11", "J12", "J13"]:
         d = geo["devices"].get(ref)
         if not d or not d.get("pad_aabb"):
             continue
-        a = d["pad_aabb"]
-        if a[0] < bx0 + inset or a[1] < by0 + inset or a[2] > bx1 - inset or a[3] > by1 - inset:
-            viol.append({"ref": ref, "pad_aabb": [round(v, 3) for v in a]})
-    geo["criteria"]["C4_interface_inframe"] = {"inset_mm": inset, "violations": viol,
-                                               "note": "排针列 x 由 L2-3 改为 27.94 后重测", "pass": not viol}
+        a = d["pad_aabb"]; measured.append(ref)
+        m = min(a[0] - (bx0 + inset), a[1] - (by0 + inset), (bx1 - inset) - a[2], (by1 - inset) - a[3])
+        margins[ref] = round(m, 3)
+        if m < 0:
+            viol.append({"ref": ref, "pad_aabb": [round(v, 3) for v in a], "margin_mm": round(m, 3)})
+    geo["criteria"]["C4_interface_inframe"] = {"inset_mm": inset, "violations": viol, "measured_refs": measured,
+                                               "min_margin_mm": min(margins.values()) if margins else None,
+                                               "min_margin_ref": min(margins, key=margins.get) if margins else None,
+                                               "margins_mm": margins,
+                                               "note": "接口件 8 件；排针列按 lib 封装几何 @column_x=27.94（板 0 焊盘 ⇒ 不得用板几何）",
+                                               "pass": (not viol) and len(measured) == 8}
 
     # 判据 5：回避区（每区 ≥1 开关 ≠ allowed）
     keep = [
@@ -297,11 +304,63 @@ def main():
             for key in ("clearance_basis", "basis", "口径"):
                 if key in b: bases.add(b[key])
     geo["corridors"] = cor
-    geo["criteria"]["C6_corridor_basis"] = {"declared": L2["L2-4_corridor_clearance"],
-                                            "bases_found_in_spec": sorted(bases),
-                                            "pass": True,
-                                            "note": "图纸册按 L2-4 统一口径『焊盘外接框净距』表述（西 17.55 / 东 27.81）"}
+    # 口径回写核查：canonical SPEC 内是否仍留**作废**口径（L2-4 裁定前的 17.30/27.40 与体宽口径 x_range）
+    stale = []
+    for c in cor:
+        note = c.get("note", "") if isinstance(c, dict) else ""
+        for bad in ("17.30", "27.40"):
+            if bad in note:
+                stale.append({"corridor": c.get("id"), "field": "note", "value": bad, "text": note[:90]})
+    l24 = L2["L2-4_corridor_clearance"]
+    xr = {c.get("id"): c.get("x_range") for c in cor if isinstance(c, dict)}
+    xr_check = {"WEST_MCIO_TO_CHIP": {"spec": xr.get("WEST_MCIO_TO_CHIP"), "L2-4_upper_mm": 82.60},
+                "EAST_CHIP_TO_J2": {"spec": xr.get("EAST_CHIP_TO_J2"), "L2-4_lower_mm": 104.84}}
+    geo["criteria"]["C6_corridor_basis"] = {"declared": l24, "bases_found_in_spec": sorted(bases),
+                                            "stale_values_in_canonical_spec": stale,
+                                            "x_range_vs_L2-4": xr_check,
+                                            "pass": not stale,
+                                            "note": "L2-4 统一口径 = 『焊盘外接框净距』（西 17.55 / 东 27.81）。**canonical SPEC 的 corridors[].note 仍写已作废口径**（27.40/17.30）且 x_range 用体宽口径 ⇒ **口径回写未完成**（属 SPEC 变更 ⇒ 须监理放行 rev-23）"}
 
+    # 附加机检 D1：L2-3 排针列位移后的干涉（封装几何 @column_x=27.94；板 0 焊盘 ⇒ 必须用 lib 几何）
+    import pcbnew as _pc
+    _b = _pc.LoadBoard(os.path.join(K2, "hw/k2_v4_8L.kicad_pcb"))
+    obst = []; obst_old = []
+    for ft in _b.GetFootprints():
+        ref0 = ft.GetReference()
+        if ref0 in ("J6", "J9", "J11", "J12", "J13"):
+            continue
+        for pad0 in ft.Pads():
+            bb0 = pad0.GetBoundingBox()
+            row = [ref0 + "." + pad0.GetNumber(), _pc.ToMM(bb0.GetLeft()), _pc.ToMM(bb0.GetTop()),
+                   _pc.ToMM(bb0.GetRight()), _pc.ToMM(bb0.GetBottom())]
+            if ref0 in ("C73", "C86"):
+                obst_old.append(row)      # 旧位（L2-3 位移前）——用于复现「为何必须移」
+            else:
+                obst.append(row)
+    for r0, dd0 in geo["devices"].items():
+        if dd0.get("status") == "placed_solved_L2" and dd0.get("pad_aabb"):
+            obst.append([r0, *dd0["pad_aabb"]])
+
+    def _ov(a0, b0, clr0):
+        return not (a0[2] + clr0 <= b0[0] or b0[2] + clr0 <= a0[0] or a0[3] + clr0 <= b0[1] or b0[3] + clr0 <= a0[1])
+
+    d1 = []; d1_before = []
+    for ref0 in ("J6", "J9", "J11", "J12", "J13"):
+        _a, _pads = placed_pad_aabb(geo["devices"][ref0]["footprint"], col_x, ph["positions"][ref0][1], ph.get("rot", 90))
+        for p0 in _pads:
+            px0, py0 = rot_pt(p0["x"], p0["y"], ph.get("rot", 90))
+            pa0 = [col_x + px0 - p0["w"] / 2, ph["positions"][ref0][1] + py0 - p0["h"] / 2,
+                   col_x + px0 + p0["w"] / 2, ph["positions"][ref0][1] + py0 + p0["h"] / 2]
+            for o0 in obst:
+                if _ov(pa0, o0[1:5], 0.2):
+                    d1.append({"header": ref0, "pad": p0["no"], "conflict": o0[0]})
+            for o0 in obst_old:
+                if _ov(pa0, o0[1:5], 0.2):
+                    d1_before.append({"header": ref0, "pad": p0["no"], "conflict": o0[0]})
+    geo["criteria"]["D1_pinheader_interference"] = {"column_x": col_x, "clearance_mm": 0.2,
+                                                    "conflicts_after_move": d1, "conflicts_before_move": d1_before,
+                                                    "pass": not d1,
+                                                    "note": "L2-3 位移复检（封装几何 @27.94）。before = 含 C73/C86 **旧位** ⇒ 复现 L2-3「仅 C73/C86 相撞」的依据；after = C73/C86 新解位 ⇒ 应无冲突"}
     # 层分配 / 敷铜
     geo["layer_plan"] = {"stackup_layers": list(spec.get("stackup", {}).get("layers", {}).keys())
                          if isinstance(spec.get("stackup", {}).get("layers"), dict) else None,

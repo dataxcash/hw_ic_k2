@@ -35,16 +35,35 @@ HOLE_KO_R = 3.0          # Ø6.0 回避区
 PAD_CLEAR = 0.2          # 与既有 pad 净距
 PART_CLEAR = 0.5         # 新件之间（SPEC row_plan）
 
-def load_obstacles():
+HEADER_FP = {"J6": "ForgeOS:PinHeader_1x02", "J12": "ForgeOS:PinHeader_1x02",
+             "J9": "ForgeOS:PinHeader_1x04", "J11": "ForgeOS:PinHeader_1x04", "J13": "ForgeOS:PinHeader_1x04"}
+
+def load_obstacles(spec_pin_headers, col_x, rot=90.0):
+    """既有 pad 障碍 + **5 排针（板 0 焊盘 ⇒ 用封装几何 @L2-3 位显式注入）**。"""
     import pcbnew
+    from k2_p3_drawings_v1 import placed_pad_aabb, rot_pt
     b = pcbnew.LoadBoard(os.path.join(K2, "hw/k2_v4_8L.kicad_pcb"))
     obs = []
     for ft in b.GetFootprints():
+        ref = ft.GetReference()
+        if ref in HEADER_FP:      # 板 0 焊盘 ⇒ 由下段按封装几何注入
+            continue
         for p in ft.Pads():
             bb = p.GetBoundingBox()
-            obs.append([ft.GetReference(), p.GetNumber(),
+            obs.append([ref, p.GetNumber(),
                         pcbnew.ToMM(bb.GetLeft()), pcbnew.ToMM(bb.GetTop()),
                         pcbnew.ToMM(bb.GetRight()), pcbnew.ToMM(bb.GetBottom())])
+    pos = (spec_pin_headers or {}).get("positions", {})
+    for ref, fp in HEADER_FP.items():
+        if ref not in pos:
+            continue
+        x0, y0 = col_x, pos[ref][1]
+        _, pads = placed_pad_aabb(fp, x0, y0, rot)
+        for p in pads:
+            px, py = rot_pt(p["x"], p["y"], rot)
+            obs.append([ref, p["no"],
+                        x0 + px - p["w"] / 2, y0 + py - p["h"] / 2,
+                        x0 + px + p["w"] / 2, y0 + py + p["h"] / 2])
     return obs
 
 def part_aabb(fp, x, y, rot=0.0):
@@ -83,7 +102,7 @@ def solve_one(fp, target, window, placed, obstacles, extra_ko=(), step=0.1):
             a = part_aabb(fp, x, y)
             if not in_frame(a) or in_hole_ko(a):
                 continue
-            if any(overlap(a, k, 0.0) for k in extra_ko):
+            if any(overlap(a, k, 0.3) for k in extra_ko):   # 对 SPEC 去耦柱 keepout 留 0.3mm pad 级余量
                 continue
             if any(overlap(a, o[2:6], PAD_CLEAR) for o in obstacles):
                 continue
@@ -102,14 +121,16 @@ def main():
     zone, decap = pl["zone_mm"], pl["decap_column_keepout_mm"]
     zone_rect = [zone["x"][0], zone["y"][0], zone["x"][1], zone["y"][1]]
     decap_rect = [decap["x"][0], decap["y"][0], decap["x"][1], decap["y"][1]]
-    obs = load_obstacles()
+    ph_spec = spec["components"].get("pin_headers") or {}
+    COL_X = 27.94
+    obs = load_obstacles(ph_spec, COL_X)
     sol = {"strap_zone": zone, "decap_keepout": decap, "strap_footprint_spec": pl["footprint"],
            "constraints": {"inset_mm": INSET, "pad_clearance_mm": PAD_CLEAR, "part_spacing_mm": PART_CLEAR,
                            "hole_keepout_dia_mm": HOLE_KO_R * 2},
            "placed": {}, "unsolved": []}
 
     # ── G1a：9× strap R（域已裁 → 域内就近球排布） ──────────────────────────
-    rows_y = [59.0, 61.0]            # SPEC row_plan「2 rows」严格两排（域 y[58.5,66] 内、柱 y 区间内但 x 已分段）
+    rows_y = [59.6, 61.6]   # 下移 0.6mm：避开 U6 courtyard/silk 外延（L1 体包络 y<=58.20）            # SPEC row_plan「2 rows」严格两排（域 y[58.5,66] 内、柱 y 区间内但 x 已分段）
     segs = {"west": [zone["x"][0] + 0.6, decap["x"][0] - 0.6],   # 左段 83.6..89.65
             "east": [decap["x"][1] + 0.6, zone["x"][1] - 0.6]}   # 右段 92.35..103.4
     order = []
