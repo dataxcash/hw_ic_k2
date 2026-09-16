@@ -68,6 +68,49 @@ def yaml_path():
                 return cand
     return os.path.join(K2, "hw/data/k2_sch.yaml")
 
+def spec_stale_scan(spec, bad_values=("17.30", "27.40", "105.25", "82.35")):
+    """**全 SPEC** 扫描作废口径（R-3 / #K2-18 §三-2）。
+
+    排除变更留痕块：键段前缀 `_spec_rev_`；`corridors_clearance_basis_v<N>`（N < 当前 spec rev）。
+    返回 [{path, value, text}]（live 字段命中）。
+    """
+    cur = 0
+    m = re.search(r"spec-rev-(\d+)", str(spec.get("spec_version", "")))
+    if m:
+        cur = int(m.group(1))
+    hits = []
+
+    def _walk(o, path, segs):
+        if isinstance(o, dict):
+            for k, v in o.items():
+                _walk(v, path + "/" + str(k), segs + [str(k)])
+        elif isinstance(o, list):
+            for i, v in enumerate(o):
+                _walk(v, path + f"[{i}]", segs)
+        elif isinstance(o, str):
+            for bad in bad_values:
+                if bad in o:
+                    hits.append({"path": path, "value": bad, "text": o[:150]})
+        elif isinstance(o, (int, float)) and not isinstance(o, bool):
+            if round(float(o), 4) in {float(b) for b in bad_values}:
+                hits.append({"path": path, "value": o, "text": f"numeric {o}"})
+
+    def _excluded(segs):
+        for sg in segs:
+            if sg.startswith("_spec_rev_"):
+                return True
+            mm = re.fullmatch(r"corridors_clearance_basis_v(\d+)", sg)
+            if mm and cur and int(mm.group(1)) < cur:
+                return True
+        return False
+
+    for k, v in spec.items():
+        segs = [str(k)]
+        if _excluded(segs):
+            continue
+        _walk(v, "/" + str(k), segs)
+    return hits
+
 def yaml_load():
     import yaml
     yp = yaml_path()
@@ -107,6 +150,74 @@ def footprint_pads(fp: str):
                             "rot": float(m.group(6) or 0), "w": float(m.group(7) or 0), "h": float(m.group(8) or 0)})
             return c, out
     return None, []
+
+def footprint_pad_stats(fp: str):
+    """R-1（#K2-18 §二-1）：**pad 计数口径**声明件（口径不可复现 ⇒ C-12 同型陷阱）。
+
+    计数口径 = **带号 pad**（`pad` 第一参数非空，与 `PAD_RE`/`footprint_pads()` 同基准）；
+    **无名（`pad ""`）paste-only 钢网开窗不计**（无电气性）。
+    返回 (file, {"numbered": 带号数, "unnamed": 无名数, "blocks_total": 全部 pad 块,
+                 "paste_only_unnamed": 无名且 layers 仅含 *Paste, "electrical_unnamed": 无名含铜层,
+                 "pad_re_matches": PAD_RE 命中数})
+    """
+    if ":" in fp:
+        lib, _, nm = fp.partition(":")
+    else:
+        lib, nm = "", fp
+    cands = []
+    if lib:
+        cands += [os.path.join(K2, "hw/lib", f"{lib}.pretty", f"{nm}.kicad_mod"),
+                  os.path.join(ROOT, f"AppDir/share/kicad/footprints/{lib}.pretty/{nm}.kicad_mod")]
+    else:
+        cands += [os.path.join(K2, "hw/lib/ForgeOS.pretty", f"{nm}.kicad_mod")]
+        for base in (os.path.join(K2, "hw/lib"), os.path.join(ROOT, "AppDir/share/kicad/footprints")):
+            if os.path.isdir(base):
+                for d in sorted(os.listdir(base)):
+                    if d.endswith(".pretty"):
+                        cands.append(os.path.join(base, d, f"{nm}.kicad_mod"))
+    for c in cands:
+        if not os.path.isfile(c):
+            continue
+        txt = open(c, encoding="utf-8", errors="replace").read()
+        st = {"numbered": 0, "unnamed": 0, "blocks_total": 0, "paste_only_unnamed": 0,
+              "electrical_unnamed": 0, "pad_re_matches": len(PAD_RE.findall(txt))}
+        i = 0
+        while True:
+            j = txt.find("(pad", i)
+            if j < 0:
+                break
+            k = j
+            d = 0
+            while k < len(txt):
+                ch = txt[k]
+                if ch == '"':
+                    k += 1
+                    while txt[k] != '"':
+                        k += 2 if txt[k] == "\\" else 1
+                elif ch == "(":
+                    d += 1
+                elif ch == ")":
+                    d -= 1
+                    if d == 0:
+                        break
+                k += 1
+            block = txt[j:k + 1]
+            i = k + 1
+            st["blocks_total"] += 1
+            m = re.match(r'\(pad\s+(?:"([^"]*)"|([^\s(]+))', block)
+            num = (m.group(1) if m and m.group(1) is not None else (m.group(2) if m else "")) or ""
+            lay = re.search(r'\(layers((?:\s+"[^"]*")+)\s*\)', block)
+            layers = re.findall(r'"([^"]*)"', lay.group(1)) if lay else []
+            if num.strip():
+                st["numbered"] += 1
+            else:
+                st["unnamed"] += 1
+                if layers and not any(l.endswith(".Cu") for l in layers):
+                    st["paste_only_unnamed"] += 1
+                else:
+                    st["electrical_unnamed"] += 1
+        return c, st
+    return None, {}
 
 def rot_pt(x, y, deg, cx=0.0, cy=0.0):
     r = math.radians(deg)
@@ -156,11 +267,20 @@ def c3_measure(devices, registry_path,  registry_sha16=None):
                                  if os.path.isfile(registry_path) else None)
     c3 = {"literal_mismatch": [], "directed_extra": [], "unresolved_footprint": [],
           "directed_judgement": [], "registry": {"file": os.path.relpath(registry_path, ROOT) if os.path.isfile(registry_path) else None,
-                                                 "sha16": reg_sha}}
+                                                 "sha16": reg_sha},
+          "count_basis": {
+              "rule": "pad 计数 = **带号 pad**（`pad` 第一参数非空，与 PAD_RE/footprint_pads() 同基准）；无名（`pad \"\"`）paste-only 钢网开窗不计（无电气性）",
+              "authority": "#K2-18 §二-1（R-1 强制登记；口径不可复现即判据自废 = C-12 同型）",
+              "per_footprint": {}}}
     for ref, d in sorted(devices.items()):
         if not d.get("footprint_file"):
             c3["unresolved_footprint"].append(ref)
             continue
+        _f, _st = footprint_pad_stats(d["footprint"])
+        if _st:
+            c3["count_basis"]["per_footprint"][ref] = dict(
+                _st, file=os.path.relpath(_f, ROOT), computed_pads=int(d["footprint_pads"]),
+                basis_consistent=(_st["numbered"] == int(d["footprint_pads"])))
         sp, fp_pads = d["symbol_pins"], d["footprint_pads"]
         if fp_pads != sp:
             c3["literal_mismatch"].append({"ref": ref, "symbol_pins": sp, "footprint_pads": fp_pads})
@@ -253,6 +373,7 @@ def main():
             rec["at"] = anch.get(ref, {}).get("at"); rec["rot"] = anch.get(ref, {}).get("rot")
             rec["pad_aabb"] = anch.get(ref, {}).get("pad_aabb_board")
             rec["geom_src"] = "board(as-built，旧位)"
+            rec["board_pads"] = anch.get(ref, {}).get("board_pads")   # R-2（#K2-18 §二-2）：补板侧实测 pad 数
             rec["status"] = "move_pending_L2-3"
             rec["note"] = "L2-3 已裁须移位（仍在左带内）；新坐标待解（L2 自裁域），图纸标为待定"
         elif ref in anch and ref not in ph.get("positions", {}):
@@ -349,13 +470,8 @@ def main():
             for key in ("clearance_basis", "basis", "口径"):
                 if key in b: bases.add(b[key])
     geo["corridors"] = cor
-    # 口径回写核查：canonical SPEC 内是否仍留**作废**口径（L2-4 裁定前的 17.30/27.40 与体宽口径 x_range）
-    stale = []
-    for c in cor:
-        note = c.get("note", "") if isinstance(c, dict) else ""
-        for bad in ("17.30", "27.40"):
-            if bad in note:
-                stale.append({"corridor": c.get("id"), "field": "note", "value": bad, "text": note[:90]})
+    # 口径回写核查（**R-3 / #K2-18 §三-2**：扫描范围由「corridors[].note」扩为「全 SPEC，排除变更留痕块」）
+    stale = spec_stale_scan(spec)
     l24 = L2["L2-4_corridor_clearance"]
     xr = {c.get("id"): c.get("x_range") for c in cor if isinstance(c, dict)}
     xr_check = {"WEST_MCIO_TO_CHIP": {"spec": xr.get("WEST_MCIO_TO_CHIP"), "L2-4_upper_mm": 82.60},
@@ -363,8 +479,12 @@ def main():
     geo["criteria"]["C6_corridor_basis"] = {"declared": l24, "bases_found_in_spec": sorted(bases),
                                             "stale_values_in_canonical_spec": stale,
                                             "x_range_vs_L2-4": xr_check,
+                                            "stale_scan_scope": {"scope": "全 SPEC（叶级）",
+                                                                 "excluded": ["键段前缀 `_spec_rev_`（变更留痕）",
+                                                                              "`corridors_clearance_basis_v<N>` 且 N < 当前 rev（历史 basis 块）"],
+                                                                 "clarified_by": "#K2-18 §三-2（监理职权：判据语义澄清；自 P4 完工复算起生效，不追溯重判已关的 P3）"},
                                             "pass": not stale,
-                                            "note": "L2-4 统一口径 = 『焊盘外接框净距』（西 17.55 / 东 27.81）。**canonical SPEC 的 corridors[].note 仍写已作废口径**（27.40/17.30）且 x_range 用体宽口径 ⇒ **口径回写未完成**（属 SPEC 变更 ⇒ 须监理放行 rev-23）"}
+                                            "note": "L2-4 统一口径 = 『焊盘外接框净距』（西 17.55 / 东 27.81）。**canonical SPEC（rev-25 起）已回写** corridors[].note + x_range（L2-4 口径）= `corridors_clearance_basis_v24` 逐端点 basis；残留项（`bga_escape.per_ball.corridor_edge` 105.25/82.35 + `strap_domain_v32.open_for_coords[1]` 文本）已由 **IN-10 / rev-25** 落地。stale 扫描口径见 `stale_scan_scope`（#K2-18 §三-2）。"}
 
     # ── 敷铜策略：13 zone 台账（交付板实测，只读）+ 出 Gerber 前置 ──────────
     import pcbnew as _pk

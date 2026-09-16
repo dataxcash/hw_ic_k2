@@ -1,7 +1,7 @@
 {
  "spec": {
-  "name": "SPEC_k2_v4.spec-rev-24.json",
-  "sha16": "317140048c80a569"
+  "name": "SPEC_k2_v4.spec-rev-25.json",
+  "sha16": "74f31d08a8be2f17"
  },
  "nets_yaml": {
   "path": "k2/hw/data/k2_sch.errata-1.yaml",
@@ -68,6 +68,7 @@
     48.21
    ],
    "geom_src": "L2 自裁解（k2_p3_place_solver_v1.py）",
+   "board_pads": 2,
    "status": "placed_solved_L2",
    "note": "L2-3 已裁须移位（仍在左带内）；新坐标待解（L2 自裁域），图纸标为待定",
    "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
@@ -471,6 +472,7 @@
     36.31
    ],
    "geom_src": "L2 自裁解（k2_p3_place_solver_v1.py）",
+   "board_pads": 2,
    "status": "placed_solved_L2",
    "note": "L2-3 已裁须移位（仍在左带内）；新坐标待解（L2 自裁域），图纸标为待定",
    "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
@@ -3370,6 +3372,617 @@
    "registry": {
     "file": "k2/docs/K2-P2-E2-directed-pad-registry-v1.md",
     "sha16": "828afc7cf5b1681d"
+   },
+   "count_basis": {
+    "rule": "pad 计数 = **带号 pad**（`pad` 第一参数非空，与 PAD_RE/footprint_pads() 同基准）；无名（`pad \"\"`）paste-only 钢网开窗不计（无电气性）",
+    "authority": "#K2-18 §二-1（R-1 强制登记；口径不可复现即判据自废 = C-12 同型）",
+    "per_footprint": {
+     "C73": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "C74": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "C75": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "C76": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "C77": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "C78": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "C79": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "C80": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "C81": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "C82": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "C83": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "C84": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0805_2012Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "C85": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "C86": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "C87": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "C88": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "C89": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "C90": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "D1": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/LED_SMD.pretty/LED_0603_1608Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "D2": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Diode_SMD.pretty/D_SMA.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "E2": {
+      "numbered": 8,
+      "unnamed": 0,
+      "blocks_total": 8,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 8,
+      "file": "k2/hw/lib/ForgeOS.pretty/SOIC8_FRU.kicad_mod",
+      "computed_pads": 8,
+      "basis_consistent": true
+     },
+     "J11": {
+      "numbered": 4,
+      "unnamed": 0,
+      "blocks_total": 4,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 4,
+      "file": "k2/hw/lib/ForgeOS.pretty/PinHeader_1x04.kicad_mod",
+      "computed_pads": 4,
+      "basis_consistent": true
+     },
+     "J12": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "k2/hw/lib/ForgeOS.pretty/PinHeader_1x02.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "J13": {
+      "numbered": 4,
+      "unnamed": 0,
+      "blocks_total": 4,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 4,
+      "file": "k2/hw/lib/ForgeOS.pretty/PinHeader_1x04.kicad_mod",
+      "computed_pads": 4,
+      "basis_consistent": true
+     },
+     "J2": {
+      "numbered": 74,
+      "unnamed": 0,
+      "blocks_total": 74,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 74,
+      "file": "k2/hw/lib/ForgeOS.pretty/SlimSAS_x8_SFF-8654_74pin_RASide.kicad_mod",
+      "computed_pads": 74,
+      "basis_consistent": true
+     },
+     "J3": {
+      "numbered": 38,
+      "unnamed": 0,
+      "blocks_total": 38,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 38,
+      "file": "k2/hw/lib/ForgeOS.pretty/MCIO_4i_SFF-1016_RASide.kicad_mod",
+      "computed_pads": 38,
+      "basis_consistent": true
+     },
+     "J4": {
+      "numbered": 38,
+      "unnamed": 0,
+      "blocks_total": 38,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 38,
+      "file": "k2/hw/lib/ForgeOS.pretty/MCIO_4i_SFF-1016_RASide.kicad_mod",
+      "computed_pads": 38,
+      "basis_consistent": true
+     },
+     "J6": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "k2/hw/lib/ForgeOS.pretty/PinHeader_1x02.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "J9": {
+      "numbered": 4,
+      "unnamed": 0,
+      "blocks_total": 4,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 4,
+      "file": "k2/hw/lib/ForgeOS.pretty/PinHeader_1x04.kicad_mod",
+      "computed_pads": 4,
+      "basis_consistent": true
+     },
+     "L1": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Inductor_SMD.pretty/L_0805_2012Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "R1": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "R21": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "R28": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "R29": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "R3": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "R31": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "R32": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "R33": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "R34": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "R35": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "R36": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "R37": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "R38": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "R39": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "R40": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "R41": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "R42": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "R43": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "R44": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "R45": {
+      "numbered": 2,
+      "unnamed": 0,
+      "blocks_total": 2,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 2,
+      "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
+      "computed_pads": 2,
+      "basis_consistent": true
+     },
+     "U1": {
+      "numbered": 49,
+      "unnamed": 9,
+      "blocks_total": 58,
+      "paste_only_unnamed": 9,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 49,
+      "file": "k2/hw/lib/ForgeOS.pretty/MCU_STM32G0_LQFP48.kicad_mod",
+      "computed_pads": 49,
+      "basis_consistent": true
+     },
+     "U2": {
+      "numbered": 8,
+      "unnamed": 0,
+      "blocks_total": 8,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 8,
+      "file": "AppDir/share/kicad/footprints/Package_SO.pretty/SOIC-8_5.3x5.3mm_P1.27mm.kicad_mod",
+      "computed_pads": 8,
+      "basis_consistent": true
+     },
+     "U4": {
+      "numbered": 3,
+      "unnamed": 0,
+      "blocks_total": 3,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 3,
+      "file": "k2/hw/lib/ForgeOS.pretty/SOT23_BAT54C.kicad_mod",
+      "computed_pads": 3,
+      "basis_consistent": true
+     },
+     "U5": {
+      "numbered": 4,
+      "unnamed": 0,
+      "blocks_total": 4,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 4,
+      "file": "k2/hw/lib/ForgeOS.pretty/OPTO_LTV356T.kicad_mod",
+      "computed_pads": 4,
+      "basis_consistent": true
+     },
+     "U6": {
+      "numbered": 354,
+      "unnamed": 0,
+      "blocks_total": 354,
+      "paste_only_unnamed": 0,
+      "electrical_unnamed": 0,
+      "pad_re_matches": 354,
+      "file": "k2/hw/lib/ForgeOS.pretty/DS320PR1601.kicad_mod",
+      "computed_pads": 354,
+      "basis_consistent": true
+     }
+    }
    }
   },
   "C1_board_frame": {
@@ -3487,8 +4100,16 @@
      "L2-4_lower_mm": 104.84
     }
    },
+   "stale_scan_scope": {
+    "scope": "全 SPEC（叶级）",
+    "excluded": [
+     "键段前缀 `_spec_rev_`（变更留痕）",
+     "`corridors_clearance_basis_v<N>` 且 N < 当前 rev（历史 basis 块）"
+    ],
+    "clarified_by": "#K2-18 §三-2（监理职权：判据语义澄清；自 P4 完工复算起生效，不追溯重判已关的 P3）"
+   },
    "pass": true,
-   "note": "L2-4 统一口径 = 『焊盘外接框净距』（西 17.55 / 东 27.81）。**canonical SPEC 的 corridors[].note 仍写已作废口径**（27.40/17.30）且 x_range 用体宽口径 ⇒ **口径回写未完成**（属 SPEC 变更 ⇒ 须监理放行 rev-23）"
+   "note": "L2-4 统一口径 = 『焊盘外接框净距』（西 17.55 / 东 27.81）。**canonical SPEC（rev-25 起）已回写** corridors[].note + x_range（L2-4 口径）= `corridors_clearance_basis_v24` 逐端点 basis；残留项（`bga_escape.per_ball.corridor_edge` 105.25/82.35 + `strap_domain_v32.open_for_coords[1]` 文本）已由 **IN-10 / rev-25** 落地。stale 扫描口径见 `stale_scan_scope`（#K2-18 §三-2）。"
   },
   "C7_pour_zones_filled": {
    "count": 9,
