@@ -14,7 +14,7 @@
 | `05_pour_strategy.svg` | `273910d6c820326e` |
 | `06_keepouts.svg` | `6ee00985779e7d76` |
 | `07_interface_pads_inframe.svg` | `0b10a71326cb3e99` |
-| `p3_drawings.json` | `45b4a9ee4fdc4c4b` |
+| `p3_drawings.json` | `a6841cd70e24f75c` |
 | `p3_placement_solution.json` | `faddc9de5519c5ec` |
 
 | 图 | 内容 | 源 |
@@ -41,7 +41,7 @@ K2_P3_OUT=/tmp/opencode/p3 AppDir/usr/bin/python3.11 k2/tools/k2_p3_drawings_v1.
 
 ## 3. 判据状态（#K2-16 复判回件）
 
-- **P3-1 ✅ / P3-2 ✅ / P3-4 ✅ / P3-5 ✅**；**P3-3 复算（§3.1/§3.2 修后）**：53/55 字面相等，U1/U2 按 #K2-11 §1-2 **有向口径**逐条登记（引 `K2-P2-E2-directed-pad-registry-v1.md`）⇒ 待复判；**P3-6 复算 PASS**（R1 = `rev-23` 落件后，stale=[]、x_range = L2-4 口径、03 图 0 处 `< ! >`）。
+- **P3-1 ✅ / P3-2 ✅ / P3-4 ✅ / P3-5（图侧）✅**；**C5b（板侧 ESC 4 区 5 开关全 allowed）⇒ P4 施工项**（#K2-17 §三）；**P3-3 复算（§3.1/§3.2 修后）**：53/55 字面相等，U1/U2 按 #K2-11 §1-2 **有向口径**逐条登记（引 `K2-P2-E2-directed-pad-registry-v1.md`）⇒ 待复判；**P3-6 复算 PASS**（R1 = `rev-23` 落件后，stale=[]、x_range = L2-4 口径、03 图 0 处 `< ! >`）。
 - **C7（P4 前置）**：**9 铜区** 全填充 = 现状 **0/9**（4 个无网 `ESC_*` keepout 排除；口径按 #K2-16 §四 监理自纠修正）。
 - **D1**：排针列位移干涉 = 位移前 4 处 → 位移后 **0**。
 - **errata/前置**：R2 yaml errata `k2/hw/data/k2_sch.errata-1.yaml`（`17d540f058631a5e`）· R3 `L2/L2-ERRATA-8L-v1.md`（`eb9354a6b8ffd535`，含 **In5/In6 角色待裁**）· P4 输入前置 `k2/docs/K2-P4-INPUT-PREREQUISITES-v1.md`（`59091b72304bfdd5`）。

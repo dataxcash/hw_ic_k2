@@ -392,6 +392,30 @@ def main():
         "excluded_non_net_zones": [{"idx": z["idx"], "layer": z["layer"], "note": "ESC_* keepout（无网，按设计不得填充；义务见 P3-5）"} for z in nz],
         "pass": len(cu) > 0 and all(z["filled"] for z in cu),
         "note": "口径 = 9 铜区（#K2-16 §四：原「13 区」含 4 个 ESC keepout ⇒ 自指不可达；监理自纠 2026-09-16）"}
+    # ── C5b（板侧，P4 施工项；#K2-17 §三 补正 2）：4 个无网 ESC_* rule area 的 5 开关实测 ──
+    esc_rows = []
+    for _z in _bb.Zones():
+        if _z.GetNetname():
+            continue
+        sw = {"tracks": "allowed" if not _z.GetDoNotAllowTracks() else "blocked",
+              "vias": "allowed" if not _z.GetDoNotAllowVias() else "blocked",
+              "pads": "allowed" if not _z.GetDoNotAllowPads() else "blocked",
+              "copperpour": "allowed" if not _z.GetDoNotAllowZoneFills() else "blocked",
+              "footprints": "allowed" if not _z.GetDoNotAllowFootprints() else "blocked"}
+        _zb = _z.GetBoundingBox()
+        esc_rows.append({"layer": _bb.GetLayerName(_z.GetLayer()),
+                         "bbox_mm": [round(_pk.ToMM(_zb.GetLeft()), 2), round(_pk.ToMM(_zb.GetTop()), 2),
+                                     round(_pk.ToMM(_zb.GetRight()), 2), round(_pk.ToMM(_zb.GetBottom()), 2)],
+                         "net": _z.GetNetname(), "switches": sw,
+                         "any_non_allowed": any(v != "allowed" for v in sw.values())})
+    geo["keepouts"] = geo.get("keepouts", [])
+    geo["criteria"]["C5b_board_side_esc_switches"] = {
+        "count": len(esc_rows), "zones_all_allowed": sum(1 for r in esc_rows if not r["any_non_allowed"]),
+        "rows": esc_rows,
+        "expect": "板侧每区 ≥1 非 allowed（图侧 KO-5..7 已满足；板侧为 P4 施工项）",
+        "pass": all(r["any_non_allowed"] for r in esc_rows) if esc_rows else None,
+        "note": "P3 门不因此项受阻（P3 = 出图）；登记 P4 施工项（#K2-17 §三 补正 2）"}
+
     # ── 层分配：逐层角色 + 阻抗/线宽/参考（SPEC impedance.per_layer） ────────
     imp = spec.get("impedance") or {}
     per = imp.get("per_layer") or {}

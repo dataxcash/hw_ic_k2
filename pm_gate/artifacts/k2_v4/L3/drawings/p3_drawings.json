@@ -3519,6 +3519,87 @@
    "pass": false,
    "note": "口径 = 9 铜区（#K2-16 §四：原「13 区」含 4 个 ESC keepout ⇒ 自指不可达；监理自纠 2026-09-16）"
   },
+  "C5b_board_side_esc_switches": {
+   "count": 4,
+   "zones_all_allowed": 4,
+   "rows": [
+    {
+     "layer": "F.Cu",
+     "bbox_mm": [
+      131.5,
+      42.23,
+      136.15,
+      65.17
+     ],
+     "net": "",
+     "switches": {
+      "tracks": "allowed",
+      "vias": "allowed",
+      "pads": "allowed",
+      "copperpour": "allowed",
+      "footprints": "allowed"
+     },
+     "any_non_allowed": false
+    },
+    {
+     "layer": "F.Cu",
+     "bbox_mm": [
+      53.45,
+      42.4,
+      65.55,
+      46.6
+     ],
+     "net": "",
+     "switches": {
+      "tracks": "allowed",
+      "vias": "allowed",
+      "pads": "allowed",
+      "copperpour": "allowed",
+      "footprints": "allowed"
+     },
+     "any_non_allowed": false
+    },
+    {
+     "layer": "F.Cu",
+     "bbox_mm": [
+      53.45,
+      60.6,
+      65.55,
+      64.8
+     ],
+     "net": "",
+     "switches": {
+      "tracks": "allowed",
+      "vias": "allowed",
+      "pads": "allowed",
+      "copperpour": "allowed",
+      "footprints": "allowed"
+     },
+     "any_non_allowed": false
+    },
+    {
+     "layer": "F.Cu",
+     "bbox_mm": [
+      82.1,
+      49.11,
+      105.34,
+      58.29
+     ],
+     "net": "",
+     "switches": {
+      "tracks": "allowed",
+      "vias": "allowed",
+      "pads": "allowed",
+      "copperpour": "allowed",
+      "footprints": "allowed"
+     },
+     "any_non_allowed": false
+    }
+   ],
+   "expect": "板侧每区 ≥1 非 allowed（图侧 KO-5..7 已满足；板侧为 P4 施工项）",
+   "pass": false,
+   "note": "P3 门不因此项受阻（P3 = 出图）；登记 P4 施工项（#K2-17 §三 补正 2）"
+  },
   "D1_pinheader_interference": {
    "column_x": 27.94,
    "clearance_mm": 0.2,
