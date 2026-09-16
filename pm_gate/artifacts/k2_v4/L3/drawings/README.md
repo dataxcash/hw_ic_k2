@@ -7,14 +7,14 @@
 
 | 文件 | sha256(16) |
 |---|---|
-| `01_board_frame_and_holes.svg` | `eb40fad57fd0ec50` |
+| `01_board_frame_and_holes.svg` | `12dcf694d596efbd` |
 | `02_device_coordinates.svg` | `48f92c6b9dd16042` |
-| `03_corridor_occupancy.svg` | `0e971fafa16a2c9f` |
+| `03_corridor_occupancy.svg` | `e54c3b34782003db` |
 | `04_layer_assignment.svg` | `124c7c3b6bc72e68` |
 | `05_pour_strategy.svg` | `a74ccb5242b5445d` |
 | `06_keepouts.svg` | `6ee00985779e7d76` |
 | `07_interface_pads_inframe.svg` | `0b10a71326cb3e99` |
-| `p3_drawings.json` | `da87b6dd3dbfa894` |
+| `p3_drawings.json` | `bbda77659a8a5f9f` |
 | `p3_placement_solution.json` | `faddc9de5519c5ec` |
 
 | 图 | 内容 | 源 |
@@ -39,7 +39,15 @@ K2_P3_OUT=/tmp/opencode/p3 AppDir/usr/bin/python3.11 k2/tools/k2_p3_drawings_v1.
 ```
 生成器只读输入；SPEC 经 `pm_gate.config` 解析（**禁硬编码 SPEC 文件名**）。
 
-## 3. 待监理裁/放行（P3 归零前置）
+## 3. 判据状态（#K2-16 复判回件）
+
+- **P3-1 ✅ / P3-2 ✅ / P3-4 ✅ / P3-5 ✅**；**P3-3 复算（§3.1/§3.2 修后）**：53/55 字面相等，U1/U2 按 #K2-11 §1-2 **有向口径**逐条登记（引 `K2-P2-E2-directed-pad-registry-v1.md`）⇒ 待复判；**P3-6 复算 PASS**（R1 = `rev-23` 落件后，stale=[]、x_range = L2-4 口径、03 图 0 处 `< ! >`）。
+- **C7（P4 前置）**：13 zone 全填充 = 现状 **0/13**（登记 P4）。
+- **D1**：排针列位移干涉 = 位移前 4 处 → 位移后 **0**。
+- **errata/前置**：R2 yaml errata `k2/hw/data/k2_sch.errata-1.yaml`（`17d540f058631a5e`）· R3 `L2/L2-ERRATA-8L-v1.md`（`eb9354a6b8ffd535`，含 **In5/In6 角色待裁**）· P4 输入前置 `k2/docs/K2-P4-INPUT-PREREQUISITES-v1.md`（`59091b72304bfdd5`）。
+- **courtyard/丝印级相邻 6 组**（非 P3 判据项）登记给 P4 布线前复核。
+
+## 3b. 历史（本节原为「待监理裁/放行」；R1/R2/R3 已由 #K2-16 裁定并落地）
 
 1. **SPEC `rev-23`**：走廊口径回写（去 `corridors[].note` 的 `17.30/27.40`，`x_range` 改 82.60/104.84）⇒ 解 **P3-6 未达**；
 2. **strap 封装**：SPEC `R_0603` vs 真源 yaml `R_0402`（9 件中 6 件裸名）；

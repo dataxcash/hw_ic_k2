@@ -64,7 +64,10 @@ PAD_RE = re.compile(r'\(pad\s+"?([^"\s]+)"?\s+(\S+)\s+(\S+)\s+\(at\s+([-\d.]+)\s
 
 def footprint_pads(fp: str):
     """返回 [(pad_no, type, x, y, rot, w, h)]（居中于封装原点）。"""
-    lib, _, nm = fp.partition(":")
+    if ":" in fp:
+        lib, _, nm = fp.partition(":")
+    else:
+        lib, nm = "", fp          # §3.1 修：partition 无分隔符时返回 (原串,'','') ⇒ 走错分支
     cands = []
     if lib:
         cands += [os.path.join(K2, "hw/lib", f"{lib}.pretty", f"{nm}.kicad_mod"),
@@ -124,6 +127,36 @@ def anchors():
                     "board_pads": len(pads), "pad_aabb_board": box,
                     "pad_nums": sorted(p.GetNumber() for p in pads)}
     return out
+
+def c3_measure(devices, registry_path,  registry_sha16=None):
+    """P3-3 测量：每器件 pad 数 vs 符号引脚数（**有向口径**：#K2-11 §1-2）。
+
+    返回：literal_mismatch（字面不等）/ directed_extra（余量，须逐条登记）/
+    directed_judgement（按有向口径：电气引脚集 ⊆ 焊盘集；余量引登记件）/ unresolved_footprint。
+    """
+    import hashlib as _h
+    reg_sha = registry_sha16 or (_h.sha256(open(registry_path, "rb").read()).hexdigest()[:16]
+                                 if os.path.isfile(registry_path) else None)
+    c3 = {"literal_mismatch": [], "directed_extra": [], "unresolved_footprint": [],
+          "directed_judgement": [], "registry": {"file": os.path.relpath(registry_path, ROOT) if os.path.isfile(registry_path) else None,
+                                                 "sha16": reg_sha}}
+    for ref, d in sorted(devices.items()):
+        if not d.get("footprint_file"):
+            c3["unresolved_footprint"].append(ref)
+            continue
+        sp, fp_pads = d["symbol_pins"], d["footprint_pads"]
+        if fp_pads != sp:
+            c3["literal_mismatch"].append({"ref": ref, "symbol_pins": sp, "footprint_pads": fp_pads})
+        if fp_pads > sp:
+            nums = [n for n in (d.get("footprint_pad_nums") or []) if n not in set(d.get("symbol_pin_nums") or [])]
+            c3["directed_extra"].append({"ref": ref, "extra": fp_pads - sp,
+                                         "extra_pads": nums if nums else None})
+            c3["directed_judgement"].append({
+                "ref": ref, "rule": "#K2-11 §1-2 有向口径：电气引脚集 ⊆ 焊盘集 + 余量逐条登记（禁静默）",
+                "symbol_pins_subset_of_pads": [n for n in (d.get("symbol_pin_nums") or []) if n not in set(d.get("footprint_pad_nums") or [])] == [],
+                "extra_count": fp_pads - sp, "extra_pads": nums if nums else None,
+                "registry_ref": c3["registry"]})
+    return c3
 
 def sym_pin_nums(sym_def):
     nums = []
@@ -218,6 +251,7 @@ def main():
         fpc, pads = footprint_pads(fp)
         rec["footprint_file"] = os.path.relpath(fpc, ROOT) if fpc else None
         rec["footprint_pads"] = len(pads)
+        rec["footprint_pad_nums"] = sorted(p0["no"] for p0 in pads)
         if rec.get("at"):
             if ref in ph.get("positions", {}):
                 # 排针列：交付板上 0 焊盘（F-1）⇒ 必须用**封装几何 + L2-3 位**（勿用板几何，否则静默跳过）
@@ -233,17 +267,9 @@ def main():
                 rec["geom_src"] = "lib(未落件占位)"
         geo["devices"][ref] = rec
 
-    # 判据 3：每器件 pad 数 == 符号引脚数（含 有向口径：符号 ⊆ 焊盘 + 余量登记）
-    c3 = {"literal_mismatch": [], "directed_extra": [], "unresolved_footprint": []}
-    for ref, d in geo["devices"].items():
-        if not d["footprint_file"]:
-            c3["unresolved_footprint"].append(ref); continue
-        if d["footprint_pads"] != d["symbol_pins"]:
-            c3["literal_mismatch"].append({"ref": ref, "symbol_pins": d["symbol_pins"],
-                                           "footprint_pads": d["footprint_pads"]})
-        if d["footprint_pads"] > d["symbol_pins"]:
-            c3["directed_extra"].append({"ref": ref, "extra": d["footprint_pads"] - d["symbol_pins"]})
-    geo["criteria"]["C3_pad_eq_symbol_pins"] = c3
+    # 判据 3：每器件 pad 数 == 符号引脚数（有向口径；**落位解消费后再重算一次，见 §3.2 修**）
+    E2_REG = os.path.join(K2, "docs/K2-P2-E2-directed-pad-registry-v1.md")
+    geo["criteria"]["C3_pad_eq_symbol_pins"] = c3_measure(geo["devices"], E2_REG)
 
     # 判据 1：板框
     geo["criteria"]["C1_board_frame"] = {"size_mm": [W, H], "expect": L2["L2-1_board_frame"]["size_mm"],
@@ -434,14 +460,14 @@ def main():
                                      "constraints": sol.get("constraints"),
                                      "strap_zone": sol.get("strap_zone"), "decap_keepout": sol.get("decap_keepout"),
                                      "strap_footprint_spec": sol.get("strap_footprint_spec")}
-        # 重算 C3（符号引脚 vs 新解件封装焊盘）与 C4
-        c3 = geo["criteria"]["C3_pad_eq_symbol_pins"]
+        # §3.2 修：用新解件封装**重算设备表 + 重算 C3**（此前只改 d 不重算 c3 ⇒ 测量不自洽）
         for ref, s in (sol.get("placed") or {}).items():
             d = geo["devices"][ref]
             fpc2, pads2 = footprint_pads(d["footprint"])
             d["footprint_file"] = os.path.relpath(fpc2, ROOT) if fpc2 else None
             d["footprint_pads"] = len(pads2)
-        geo["criteria"]["C3_pad_eq_symbol_pins"] = c3
+            d["footprint_pad_nums"] = sorted(p0["no"] for p0 in pads2)
+        geo["criteria"]["C3_pad_eq_symbol_pins"] = c3_measure(geo["devices"], E2_REG)
 
     # ── 回避区几何（机定，全部可溯源） ────────────────────────────────────
     edge_min = spec["constraints"].get("edge_copper_min")
@@ -511,7 +537,10 @@ def main():
                 if ys:
                     p0 = P(xr[0], min(ys) - 0.4, ox, oy); p1 = P(xr[1], max(ys) + 0.4, ox, oy)
                     rect(f, p0[0], p0[1], p1[0], p1[1], "#bc8cff", width=0.8)
-            txt(f, 10, yy, f"{c.get('id')} x{c.get('x_range')} pairs={c.get('pairs')} lanes={lanes}", "#bc8cff", 8); yy += 11
+            _l24 = L2["L2-4_corridor_clearance"]
+            _tgt = {"EAST_CHIP_TO_J2": [104.84, 132.65], "WEST_MCIO_TO_CHIP": [65.05, 82.60]}.get(c.get("id"))
+            _flag = "" if _tgt is None or _tgt == c.get("x_range") else f"  <!> SPEC={c.get('x_range')} 与 L2-4 {_tgt} 不符"
+            txt(f, 10, yy, f"{c.get('id')} x{_tgt or c.get('x_range')}（口径=焊盘外接框净距, L2-4）pairs={c.get('pairs')} lanes={lanes}{_flag}", "#bc8cff", 8); yy += 11
             for b in (c.get("bands") or [])[:3]:
                 txt(f, 16, yy, f" ↳ {b.get('band')} @{b.get('layer')} pairs={b.get('pairs')}", "#8b949e", 7); yy += 9
         d = L2["L2-4_corridor_clearance"]
