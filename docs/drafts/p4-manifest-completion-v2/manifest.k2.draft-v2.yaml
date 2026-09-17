@@ -1,0 +1,59 @@
+# criteria/manifest.k2.draft-v2.yaml —— **ENG 草案（#K2-20 §二 补齐转写 + U4-A/U4-C 修实现 + drill 补正）**
+# ⚠️ 本件位于 /tmp/opencode/p4/draft/，**未经监理正/负控复验 ⇒ 不得安装、不得签认**。
+# 归属（K2-RULING-criteria-ownership-v1 / K2-RULING-plan-verdict-v1 §四-2）：
+#   - 判据「应然值/豁免/阈值」= 监理持有：本草案中取值为 `null` 者 = **待监理填**（ENG 不代填）。
+#   - 判定器实现 = ENG 起草（同目录 `adjudicate.draft-v2.py`）→ 监理正控/负控 → 版本 bump 安装 → 监理签认。
+#   - 内容唯一来源 = 登记册 §C（J-1..J-10）+ 计划 §3.3（V1..V3）；**ENG 未新增任何判据维度**。
+manifest_version: 2
+project: k2
+board: k2_v4_8L.l5.kicad_pcb
+not_countersigned: true
+source_of_truth:
+  register: .omo/supervision/ledger/K2-DEFECT-REGISTER-v1.md
+  register_section: "## C. 出厂判据"
+  plan: k2/docs/K2-RECTIFICATION-PLAN-v1.md
+  plan_section: "### 3.3 V 类（功能级）"
+
+checks:
+  # ── 既有（转写保留；U4-A / U4-C = 修实现，非改语义） ──
+  zone_filled:            {enabled: true, expect: "filled_fillable_zones == fillable_zones", ref: "J-3 / U4-A",
+                           note: "keepout/rule-area 结构上不可能有 filled_polygon（P3-5/C5b 要求其存在且限制）⇒ 分母 = 非 keepout zone"}
+  device_has_pads:        {enabled: true, expect: "every_footprint_pads >= 1", ref: "J-8a"}
+  drill_count:            {enabled: true, expect: "npth >= drill_npth_min and pth >= drill_pth_min", ref: "J-8e / 计划 §P4",
+                           note: "转写补正：npth>=1 → >=4（计划 §P4 钻孔前置；审计 §10.8 L2-8 8e）"}
+  net_declared_realized:  {enabled: true, expect: "every_declared_net_pads >= 2", ref: "V1(部分)"}
+  pin_map_complete:       {enabled: true, expect: "missing_pads == 0", ref: "V2"}
+  non45_segments:         {enabled: true, expect: "non45 == 0", ref: "J-5"}
+  refdes_sets_equal:      {enabled: true, expect: "sch_set == board_set - mechanical_refdes", ref: "J-6 / U4-C",
+                           note: "板有图无 4 = H1..H4 机械固定孔（登记项；未登记的多余 refdes 仍判 FAIL）"}
+  pipeline_present:       {enabled: true, expect: "pipeline.yaml exists when *.kicad_sch exists", ref: "J-9"}
+  verdict_schema:         {enabled: true, expect: "no artifact contains a 'verdict' key", ref: "J-10"}
+
+  # ── #K2-20 §二 补齐（登记册 §C + 计划 §3.3 的转写） ──
+  drc_errors:               {enabled: true, expect: "drc_errors == 0", ref: "J-1 前半",
+                             note: "须 --drc 实跑报告（T-8：仓库路径 + 同名 .kicad_pro）；报告 source 与板不一致 ⇒ FAIL（防伪造绿）"}
+  drc_warning_disposition:  {enabled: true, expect: "warnings_without_disposition == 0", ref: "J-1 后半",
+                             note: "warning 逐条须有处置结论；台账 drc_warning_dispositions 由监理登记（空 ⇒ 有 warning 即 FAIL）"}
+  unconnected_zero:         {enabled: true, expect: "unconnected == 0", ref: "J-2 / V1",
+                             note: "补铜后**全量**、范围 = 权威网表全集（禁裁剪）；含 DRC 实跑"}
+  lib_footprint_electrical: {enabled: true, expect: "lib_footprint_mismatch + lib_footprint_issues == 0", ref: "J-7 前半",
+                             note: "电气级：pad 数/名/尺寸/旋转/位置；W-8「以板为准、电气级必须 0」"}
+  fp_lib_table_present:     {enabled: true, expect: "fp-lib-table exists", ref: "J-7 后半"}
+  board_frame_and_keepout:  {enabled: true, expect: "footprints_outside_outline == 0 and esc_keepout_unrestricted == 0",
+                             ref: "J-8 出框(P3-4) / 回避区(P3-5·C5b·IN-7)",
+                             note: "ESC_* 四区须各 ≥1 个 tracks/vias/pads/footprints 开关非 allowed（copperpour 不计：现板 8 区皆 copperpour=not_allowed）"}
+  density_and_spacing:      {enabled: true, expect: null, ref: "J-8 密度分布 / 关键间距",
+                             note: "阈值待监理填 thresholds.density_max_per_10mm_cell；未填 ⇒ fail-closed"}
+  v3_reference_continuity:  {enabled: true, expect: "unreferenced_hs_segments == 0", ref: "V3",
+                             note: "高速段投影（0.2mm 采样）须被相邻参考层的平面（zone 外形 ∧ 该 zone 已 filled）覆盖全长；参考层由叠层定：F→In1 / In2→In1·In3 / In5→In4·In6 / B→In6"}
+
+# ── 监理持有的取值（ENG 不代填） ──
+mechanical_refdes: [H1, H2, H3, H4]          # U4-C 登记（#K2-20 §三 监理确认）
+drill_npth_min: 4                            # 计划 §P4
+drill_pth_min: null                          # 计划 §P4「PTH ≥ 插件件引脚数」→ 算式待监理给
+fp_lib_table_paths: ["k2/hw/fp-lib-table"]   # W-8
+drc_warning_dispositions: []                 # J-1 warning 处置台账（监理登记）
+thresholds:
+  density_max_per_10mm_cell: null            # J-8 密度分布阈值（待监理填）
+thresholds_pending_supervisor: [density_max_per_10mm_cell, drill_pth_min]
+rule_severity_exemptions: []                 # deny-by-default（原样保留）
