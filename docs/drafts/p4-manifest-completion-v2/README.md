@@ -8,9 +8,14 @@
 
 | 件 | sha256(16) | 说明 |
 |---|---|---|
-| `manifest.k2.draft-v2.yaml` | `46298fa966844f0d` | 转写补齐版判据清单草案（含 `null` = 待监理填的取值） |
-| `adjudicate.draft-v2.py` | `041f37b6eecdfaab` | 判定器草案（实现；自跑 kicad-cli DRC，防伪造绿） |
+| `manifest.k2.draft-v2.yaml` | `890ed50eedf57e6d` | 转写补齐版判据清单草案（含 `null` = 待监理填的取值） |
+| `adjudicate.draft-v2.py` | `db629a013c0563ba` | 判定器草案（实现；自跑 kicad-cli DRC，防伪造绿） |
 | `make_negatives_v2.py` | `8a000f5c294e3a8d` | 负控造件脚本 v2（格式无关括号匹配；m6 改电气级 pad 尺寸突变） |
+
+## 修订（v2.1 · 2026-09-17）
+
+- 依 **#K2-19 §二 W-9**（k2 门 = k2-scoped）实现 `pipeline_present` 的 scope：新增 `manifest.pipeline_scope: [k2]` + 判定器按 scope 过滤 sch 目录 ⇒ 报 `k2/hw/sch` 1 目录（原 6 目录）。
+- 两者 sha 随之为上表 v2.1 值；`make_negatives_v2.py` 未变。
 
 ## 与 `/tmp` 副本的关系
 

@@ -26,7 +26,8 @@ checks:
   non45_segments:         {enabled: true, expect: "non45 == 0", ref: "J-5"}
   refdes_sets_equal:      {enabled: true, expect: "sch_set == board_set - mechanical_refdes", ref: "J-6 / U4-C",
                            note: "板有图无 4 = H1..H4 机械固定孔（登记项；未登记的多余 refdes 仍判 FAIL）"}
-  pipeline_present:       {enabled: true, expect: "pipeline.yaml exists when *.kicad_sch exists", ref: "J-9"}
+  pipeline_present:       {enabled: true, expect: "pipeline.yaml exists when *.kicad_sch exists", ref: "J-9 / W-9",
+                           note: "scope = manifest.pipeline_scope（W-9：#K2-19 §二 裁定 k2 门 = k2-scoped，只判 k2 目录；k1/pciesw4 各自阶段门判）"}
   verdict_schema:         {enabled: true, expect: "no artifact contains a 'verdict' key", ref: "J-10"}
 
   # ── #K2-20 §二 补齐（登记册 §C + 计划 §3.3 的转写） ──
@@ -49,6 +50,7 @@ checks:
 
 # ── 监理持有的取值（ENG 不代填） ──
 mechanical_refdes: [H1, H2, H3, H4]          # U4-C 登记（#K2-20 §三 监理确认）
+pipeline_scope: [k2]                         # W-9（#K2-19 §二 裁定）：k2 门 = k2-scoped
 drill_npth_min: 4                            # 计划 §P4
 drill_pth_min: null                          # 计划 §P4「PTH ≥ 插件件引脚数」→ 算式待监理给
 fp_lib_table_paths: ["k2/hw/fp-lib-table"]   # W-8

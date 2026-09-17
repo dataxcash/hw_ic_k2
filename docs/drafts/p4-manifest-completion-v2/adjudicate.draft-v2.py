@@ -398,6 +398,14 @@ def adjudicate(manifest, meas, args):
 
     if C.get('pipeline_present', {}).get('enabled'):
         schs = find_sch_projects(args.root)
+        # W-9（监理 #K2-19 §二）：k2 门 = k2-scoped —— 只判 manifest.pipeline_scope 列出的项目
+        # 目录；其余项目（k1 / pciesw4 …）在各自阶段门判。空/缺省 ⇒ 全仓（保守）。
+        _scope = [str(x).strip('/') for x in (manifest.get('pipeline_scope') or []) if str(x).strip('/')]
+        if _scope:
+            _pre = tuple(s_ + '/' for s_ in _scope)
+            schs = [f for f in schs
+                    if os.path.relpath(os.path.abspath(f), os.path.abspath(args.root)).replace(os.sep, '/')
+                    .startswith(_pre)]
         uncovered = []
         for f in schs:
             d = os.path.dirname(os.path.abspath(f)); found = False

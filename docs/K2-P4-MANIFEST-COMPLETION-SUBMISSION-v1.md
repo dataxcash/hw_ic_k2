@@ -11,13 +11,13 @@
 
 | 件 | sha256(16) | 说明 |
 |---|---|---|
-| `manifest.k2.draft-v2.yaml` | `46298fa966844f0d` | 转写补齐版清单草案 |
-| `adjudicate.draft-v2.py` | `041f37b6eecdfaab` | 判定器草案（`--kicad-cli` 自跑 DRC，防伪造绿） |
+| `manifest.k2.draft-v2.yaml` | `890ed50eedf57e6d` | 转写补齐版清单草案（**v2.1**：+W-9 `pipeline_scope`） |
+| `adjudicate.draft-v2.py` | `db629a013c0563ba` | 判定器草案（**v2.1**：+W-9 scoped；`--kicad-cli` 自跑 DRC 防伪造绿） |
 | `make_negatives_v2.py` | `8a000f5c294e3a8d` | 负控造件 v2（**本件新修**：增量 16 板封装头已为新格式 ⇒ 旧正则致 m6 静默未注入） |
 
 ---
 
-## 1. 补齐转写（`#K2-20 §二` 五项 + 1 处补正 + U4-A/U4-C）
+## 1. 补齐转写（`#K2-20 §二` 五项 + 1 处补正 + U4-A/U4-C/U4-C/**W-9**）
 
 | # | 检查项 | 表达式（manifest） | 转写来源 | 实现要点 |
 |---|---|---|---|---|
@@ -65,7 +65,7 @@
 | `board_frame_and_keepout` | 出框器件 **0**；ESC_* 全 allowed 区 **4** | 待处置（C5b/IN-7 语义） |
 | `density_and_spacing` | 密度峰值 **5 件/10mm 格**；阈值 `null` ⇒ fail-closed | 待监理填阈值 |
 | `rule_severity_manifest` | 未登记豁免的 ignore **9/62** | 见 W-7 九条方案（`k2/docs/K2-P4-W7-IGNORE-DISPOSITION-v1.md`） |
-| `pipeline_present` | 6 目录（`k1/sch` · `k2/hw/sch` · `pciesw4/*`） | 解析 `pipeline.yaml` 的实现口径（跨项目目录含入） |
+| `pipeline_present` | **1 目录**：`k2/hw/sch`（**W-9 已实现**：k2-scoped；此前报 6 目录含 `k1/sch`·`pciesw4/*`） | **J-9 / M-13**：k2 无 `pipeline.yaml` ⇒ 见 §3.4 |
 
 > **与 `#K2-20 §〇` 监理复算（增量 9 板）的差异**：`non45 2051→0`（G-1 走廊重解已落）· `unconnected 19→2` · `drc error 39→15`；其余 FAIL 项**集合未变**。
 
@@ -119,13 +119,38 @@ lib_footprint_electrical:
 
 ---
 
-## 4. 待监理给口径（**不静默** · 5 项）
+### 3.4 ⚠️ **发现：`pipeline_present`（J-9 / M-13）不是「加一个文件」可闭合 —— 有实测阻断**
+
+**W-9 已实现**（本件 v2.1）：`pipeline_present` 现按 `manifest.pipeline_scope: [k2]` 只判 k2 目录 ⇒ 报 **1 目录 `k2/hw/sch`**（此前 6 目录，含 `k1/sch` / `pciesw4/*`）。
+
+**闭合 J-9 需要 `k2/pipeline.yaml`，但该件受三道硬约束（实测）**：
+
+1. **仓库 meta-gate 要求声明必选 sch checks**（`_shared/eda_core/pipeline/required.py`：`REQUIRED_SCH_CHECKS = ("sch_structural","netlist_connect","bom_consistent")`）。一旦 `k2/pipeline.yaml` 被 `find_all_projects()` 发现，k2 即被纳入 meta-gate。
+2. **`engine.py verify <proj>` 会跑 `verify:` 声明的**全部** check，且 pre-commit 对任何触及 k2 的提交强制执行**（`_shared/eda_core/pipeline/hooks/pre-commit`）⇒ 声明的 check 必须**真能过**，否则 **k2 全部提交被拒**。
+3. **实测三项必选 check 对 k2 的现状**：
+
+| check | 参数 | 实测 | 说明 |
+|---|---|---|---|
+| `sch_structural` | `k2/hw/sch/k2_sch.kicad_sch` | **PASS**（0 warnings） | 结构三基础 OK |
+| `netlist_connect` | 同上 + `nets_yaml: k2/hw/data/k2_sch.errata-1.yaml` | **FAIL · 106 处** | ① 声明网 `PWR_5V_KEY` 在 KiCad netlist **不存在**（1 处，= #K2-19 §二 已登记口径注记）② **反向断言**：KiCad `unconnected-*` 网节点须 ⊆ YAML `nc` 白名单 —— k2 有 **105** 个 `unconnected-*` 网（105 引脚），而 errata 的 **`nc` 白名单 = 0 条** ⇒ 全判「非声明悬空」 |
+| `bom_consistent` | 需 `bom_csv` | **不可跑** | k2 仓内**无任何 BOM csv**（`find k2 -iname '*bom*'` = 空）⇒ 声明即 FAIL |
+
+**⇒ 结论（需监理一句话裁，**非 owner 项**）**：把 k2 接进 `eda_core/pipeline` 门禁（= J-9/M-13 的应然）**不能只加文件**；在 `netlist_connect` 的 `nc` 白名单与 BOM 就位前，接线会 **fail-closed 堵死 k2 的 P4 提交**（自伤）。三条出路：
+
+- **(A) 真源侧补录**：给 k2 的 `nc` 白名单（105 条）+ `PWR_5V_KEY` 处置出**版本 bump 新文件**（`k2_sch.errata-2.yaml`；`errata-1` 原件不动），并生成 k2 的 BOM csv ⇒ 接线后 check 可过。**触及真源 ⇒ 版本 bump 须批**。
+- **(B) 收窄必选集**：监理裁定 k2 的必选 sch checks ≠ 全仓常量（例如 k2 不适用 `netlist_connect` 反向断言 / `bom_consistent`）⇒ 属**判据语义/范围**（#K2-19 §一 二分：监理自有权）。
+- **(C) 分阶段接线**：P4 内只声明 `sch_structural`（已 PASS），`netlist_connect`/`bom_consistent` 挂 P5（bring-up/交付包）再开 ⇒ 须监理明示「J-9 在 P4 按此口径判 PASS」。
+
+**注**：在监理给出口径前，ENG **不**创建 `k2/pipeline.yaml`。**理由**：把必选 check 声明在 `checks:`（引擎 `cmd_run`/`cmd_verify` 均不执行该字段）即可让 meta-gate 表面通过，但那是**只满足字面、不产生强制力**的空声明 = 以口径达成绿，本件拒绝采用。
+
+## 4. 待监理给口径（**不静默** · 6 项）
 
 1. **J-8「关键间距」**：未实现 —— 需监理给「哪类间距 / 阈值 / 口径」（现仅出框 + ESC_* 回避区 + 密度峰值）。
 2. **`density_max_per_10mm_cell`** 阈值 `null` ⇒ 该项恒 FAIL（fail-closed），待监理填。
 3. **`drill_pth_min`**（计划 §P4「PTH ≥ 插件件引脚数」）算式待监理给；草案暂为 `0`（不虚判）。
 4. **V3 语义选择**：草案用「zone **外形** ∧ 该 zone 已 `filled_polygon`」（filled 多边形上万点，纯 Python 逐点判会超时）；若要求严格口径须改栅格化实现。
 5. **J-7 覆盖缺口**（§3.3）：是否采纳覆盖守卫，或具名豁免 24 件无 nickname 封装。
+6. **J-9 / M-13 接线口径**（§3.4）：选 (A) 真源 bump 补 `nc` 白名单+BOM / (B) 收窄必选集 / (C) 分阶段接线 —— 未裁前 ENG 不建 `k2/pipeline.yaml`。
 
 ## 5. 复跑链（确定性）
 
