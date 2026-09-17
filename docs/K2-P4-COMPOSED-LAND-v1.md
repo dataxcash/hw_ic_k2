@@ -3,7 +3,7 @@
 > 性质：ENG 交**落件器（工具）+ 沙箱 `--apply` 全链实证**；**未写仓库**（板 / pro / SPEC / `project.yaml` / `criteria` 逐字节未动，见 §3）。
 > 目的：把「W-7 修复 → PDN 接线 → tncv 对齐 → C86 重落位」的**复合结果板**做成**批准后一笔落**，
 > 并让新 rev 的 `pd` 与落地板**几何自洽**。
-> 工具：`k2/tools/k2_p4_composed_land_v1.py` sha256 前16 **`4a9f1287627f870f`**（dry-run 默认）。
+> 工具：`k2/tools/k2_p4_composed_land_v1.py` sha256 前16 **`41740377fd2dca19`**（dry-run 默认）。
 
 ## 0. 一句话
 
@@ -54,8 +54,27 @@
 ```bash
 AppDir/usr/bin/python3.11 k2/tools/k2_p4_composed_land_v1.py \
   --result-board /tmp/opencode/c86-6/k2_v4_8L.l5.repaired.pdn-stitched.tncv-aligned.c86-relocated.kicad_pcb \
-  --result-sha16 686e9c2b1768c5d3 --apply
+  --result-sha16 686e9c2b1768c5d3 --apply --confirm-repo-write
 ```
 （`/tmp` 易失；复合结果板可由确定性链重建：W-7 → PDN → tncv → C86，各步 sha 见对应交件。）
+
+
+## 6. 事故与硬化（T-41，自曝）
+
+**事故（本轮，已完全还原）**：写本文件的父命令**误用未加引号的 heredoc 分隔符**，shell 把文件内容里的示例命令当命令执行，
+其中 `k2_p4_composed_land_v1.py … --apply`（**未带沙箱路径覆盖，即默认仓库路径**）被实际运行
+⇒ **未经批准把复合板落进仓库**：板 `37019705ef994ccc → 686e9c2b1768c5d3`、新建 `SPEC_k2_v4.spec-rev-47.json`、
+`project.yaml` bump（当时尚无复核、无 SPEC pd 对齐确认）。
+
+**发现与还原**：比对 inode / 时间戳 / sha 定位来源后，`git -C k2 checkout HEAD -- hw/k2_v4_8L.l5.kicad_pcb pm_gate/project.yaml`
++ 删除未跟踪的 rev-47，**逐字节还原**；复核：板 `37019705ef994ccc` · pro `f68a5fb2f82bd02d` · rev-46 `dea36093ba2b4031` ·
+`project.yaml` `eb6179f5da08912e` · 仓库内无 rev-47 · `git -C k2 status` 仅余本会话前既有的未跟踪 `hw/k2_v4_8L.l5.kicad_prl`；
+**12 项冻结源全部一致**（`l4` 未受影响）。
+
+**硬化（T-41）**：`--apply` 现在必须**同时**给 `--confirm-repo-write`，否则 fail-closed 拒绝（实测拒绝生效，且仓库板仍 `37019705…`）。
+带旗标的沙箱 `--apply` 复跑仍**逐字节同**：板 `686e9c2b1768c5d3` / rev-47 `9c5aadc84f3dbd3b` / `project.yaml` `9cee872bd6fbdc67`。
+
+**教训**：① 文档/脚本里的示例命令必须写在**加引号**的 heredoc（`<<'EOF'`）内，否则 `$`、`` ` ``、反斜杠续行会被 shell 展开并可能**执行**；
+② 任何会写仓库的工具都要有**独立的二次确认旗标**——不能只靠「默认 dry-run」，因为示例命令常带 `--apply`。
 
 —— ENG（ARCHER）· 2026-09-18 · 仓库板 / pro / SPEC / 判据**未动** · 未派 WORKER · 临时仅 `/tmp/opencode`

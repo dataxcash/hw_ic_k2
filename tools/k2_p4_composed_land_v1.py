@@ -114,8 +114,12 @@ def main(argv=None):
     ap.add_argument("--kicad-cli", default="AppDir/bin/kicad-cli")
     ap.add_argument("--work-dir", default="/tmp/opencode/land-composed")
     ap.add_argument("--apply", action="store_true")
+    ap.add_argument("--confirm-repo-write", action="store_true",
+                    help="写仓库的**显式**二次确认（T-41：无此旗标则拒绝 --apply）")
     a = ap.parse_args(argv)
     os.makedirs(a.work_dir, exist_ok=True)
+    if a.apply and not a.confirm_repo_write:
+        L.die("T-41：`--apply` 会写仓库板/SPEC/project.yaml —— 必须同时给 `--confirm-repo-write`")
     print(f"=== K2 复合落件器 v1 · {'APPLY' if a.apply else 'DRY-RUN（默认，不写仓库）'} ===")
     for path, exp, what in ((a.board, a.expect_board_sha16, "仓库板"),
                             (a.pro, a.expect_pro_sha16, "仓库 pro")):
