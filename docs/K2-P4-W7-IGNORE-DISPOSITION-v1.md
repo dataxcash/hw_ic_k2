@@ -1,6 +1,6 @@
 # K2 · P4 · W-7「九条 `ignore`」逐条处置方案（ENG 草案 · 交监理逐条批）
 
-- **日期**：2026-09-17 · **基线板**：`k2/hw/k2_v4_8L.l5.kicad_pcb` = `f8eeeda2495fb891`（增量 15 后）；SPEC `rev-43` = `a98e3c482cdc15af`
+- **日期**：2026-09-17 · **基线板**：`k2/hw/k2_v4_8L.l5.kicad_pcb` = `d9813bc554a2d611`（增量 16 后；增量 15 板 `f8eeeda2495fb891` 的复算结果与本件**逐项相同**）；SPEC `rev-44` = `acc64b447ef55e90`
 - **依据**：handoff §5-7「W-7 九条 `ignore` ⇒ 监理裁定**不豁免**，须 ENG **逐条**交『修 or 具名豁免 + 证据』方案，监理逐条批」
 - **取证方法（只读 · T-8 口径）**：把板件与同名 `.kicad_pro` 复制到临时目录（并置 `fp-lib-table`），仅把 9 条的 `rule_severities` 由 `ignore` 改 `warning`，跑 `kicad-cli pcb drc`，再对 **pre（增量 15 前）/ post（增量 15 后）** 做**逐条签名**（`type` + 两端 `description/pos`）比对。**仓库件与 pro 未被改动**。
 - **重要**：下列计数为**该项单独开启时**的命中数；仓库口径（9 条 ignore）门禁违规集仍是 **51**（逐类 8/2/3/2/1/35），本增量对该集合 **新增 0 / 消失 0**。
@@ -15,7 +15,7 @@
 | 4 | `missing_courtyard` | 40 | 40 | +0 | **具名豁免**（或库侧补 courtyard ⇒ 库闸） |
 | 5 | `silk_over_copper` | 44 | 44 | +0 | **具名豁免**（丝印域；可选修，须与 W-8/J-7 合并） |
 | 6 | `silk_overlap` | 20 | 20 | +0 | **具名豁免**（丝印域；同上） |
-| 7 | `track_not_centered_on_via` | 28 | 30 | +2 | **具名豁免**（逐条清单；修 = 改既有铜/涉 HS ⇒ 高压） |
+| 7 | `track_not_centered_on_via` | 28 | 30 | +2（增量 15/16 各同 2 条） | **具名豁免**（逐条清单；修 = 改既有铜/涉 HS ⇒ 高压） |
 | 8 | `tuning_profile_track_geometries` | 0 | 0 | +0 | **改 warning（零命中自证）** |
 | 9 | `via_dangling` | 12 | 12 | +0 | **具名豁免**（电源面缝合孔；逐条清单；修 = 改既有铜） |
 
@@ -225,3 +225,8 @@ mkdir -p /tmp/opencode/p4c/w7 && cp k2/hw/k2_v4_8L.l5.kicad_pcb /tmp/opencode/p4
 AppDir/bin/kicad-cli pcb drc --format json --severity-error --severity-warning \
   --output /tmp/opencode/p4c/w7/d_w7.json /tmp/opencode/p4c/w7/w7.kicad_pcb
 ```
+
+## 附 2：增量 16 复算一致性（2026-09-17）
+
+- 增量 16（M15 阶段重做 / 确定性优先序）后，对九条重新做同一只读复算：**8 项计数与增量 15 逐项相同**，`track_not_centered_on_via` 仍为 **30**（新增的仍是**同一对**：既有同网 In2 走线端点 (44.1266,46.0734) 与新 `PERSTA#` In2→In5 孔 (44.15,46.10) 偏心 0.035mm）⇒ 增量 16 对九条 **新增 0**。
+- 另：器内已加「**禁止同格连续换层**」硬约束（否则同点堆叠孔触发门禁 `holes_co_located`），故本件**不含**该族命中。

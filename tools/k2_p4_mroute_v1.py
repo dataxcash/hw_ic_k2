@@ -409,6 +409,8 @@ def astar(grid, ctx, net, s, g, sl, gl, fine=False):
             if nd < dist[nn] - 1e-9:
                 dist[nn] = nd; came[nn] = n
                 heapq.heappush(q, (nd + h(ni, nj), nd, nn))
+        if viaf[n]:
+            continue          # 禁止同格连续换层（否则同点堆叠孔 ⇒ holes_co_located）
         for (a, b) in TRANS:
             if L == a: oL = b
             elif L == b: oL = a
@@ -541,6 +543,15 @@ def _try_margin(ctx, find, compa, compb, net, la, pa, lb, pb, margin, coarse_ste
     for (x, y, span, l1, l2) in vias:
         if not via_exact(ctx, net, x, y, span):
             return None, "via-clearance(%s)" % _via_why(ctx, net, x, y, span)
+    # 本路由自身孔间（**同网**孔-孔/孔-铜无豁免；KiCad `holes_co_located` 亦为门禁）
+    for i in range(len(vias)):
+        for j in range(i + 1, len(vias)):
+            x1, y1, s1 = vias[i][0], vias[i][1], vias[i][2]
+            x2, y2, s2 = vias[j][0], vias[j][1], vias[j][2]
+            if not (s1 & s2):          # z 向不重叠 ⇒ 不冲突
+                continue
+            if math.hypot(x1 - x2, y1 - y2) < HOLE_R + 0.25 + VIA_R:
+                return None, "self-via-conflict"
     return dict(legs=legs, vias=vias), "ok"
 
 
@@ -551,10 +562,16 @@ def _ok45(x1, y1, x2, y2):
 
 FINE_STEP = 0.10
 MARGINS = (0.0, 0.03, 0.08, 0.15, 0.25)
+# 本板确定性优先序（增量 16 裁定 · L2 走廊/布线自裁）：
+# R35..R44 行的南向 F.Cu 缝**唯一**（x≈80.5..82.3，南墙 = PCIE_REFCLK1_P/N 长度匹配对、不可动）
+# ⇒ strap 组（7 条）必须先分配走廊；其余边按 dist_asc 序。
+PRIORITY_NETS = ("DS320_STRAP_A_ADDR0_15-8", "DS320_STRAP_A_ADDR0_7-0", "DS320_STRAP_A_ADDR1_7-0",
+                 "DS320_STRAP_B_ADDR0_7-0", "DS320_STRAP_B_ADDR1_7-0", "DS320_STRAP_B_ADDR0_15-8",
+                 "DS320_STRAP_MODE")
 EDGE_IN = (0.0, 0.0, 0.0, 0.0)
 
 
-def run(src, drc_path, out_path, ledger_path, margin, only_net, dry, order="dist_asc"):
+def run(src, drc_path, out_path, ledger_path, margin, only_net, dry, order="dist_asc", order_list=None):
     global EDGE_IN
     b = pcbnew.LoadBoard(src)
     ctx = f3.Ctx(b)
@@ -608,7 +625,16 @@ def run(src, drc_path, out_path, ledger_path, margin, only_net, dry, order="dist
         d = math.hypot(pa[0] - pb[0], pa[1] - pb[1])
         edges.append((round(d, 3), na, ua, ub, la, lb, pa, pb))
         # 防未用变量告警
-    if order == "dist_desc":
+    led = {"stage": "M15", "edges": len(edges), "added": [], "blocked": [], "summary": {}}
+    if order == "list" and not order_list:
+        order_list = None
+    if order == "list":
+        prio = ([l.strip() for l in open(order_list, encoding="utf-8") if l.strip()]
+                if order_list else list(PRIORITY_NETS))
+        idx = {n: i for i, n in enumerate(prio)}
+        edges.sort(key=lambda z: (idx.get(z[1], len(prio)), z[0], z[2]))
+        led["priority_order"] = prio
+    elif order == "dist_desc":
         edges.sort(key=lambda z: (-z[0], z[1], z[2]))
     elif order == "hard":
         def _score(z):
@@ -657,12 +683,12 @@ def run(src, drc_path, out_path, ledger_path, margin, only_net, dry, order="dist
         added.append({"net": net, "dist": dist, "segs": nseg, "vias": nvia, "len": round(ln, 4),
                       "via_xy": [[round(v[0], 3), round(v[1], 3)] for v in sol["vias"]],
                       "layers": sorted({LNAME[L] for L, _ in sol["legs"]})})
-    led = {"stage": "M15", "edges": len(edges), "added": added, "blocked": blocked,
+    led.update({"added": added, "blocked": blocked,
            "summary": {"added": len(added), "blocked": len(blocked),
                        "segs": sum(a["segs"] for a in added), "vias": sum(a["vias"] for a in added),
                        "len": round(sum(a["len"] for a in added), 4),
                        "reasons": {k: sum(1 for x in blocked if x["why"] == k)
-                                   for k in sorted({x["why"] for x in blocked})}}}
+                                   for k in sorted({x["why"] for x in blocked})}}})
     json.dump(led, open(ledger_path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     if dry or not blocks:
         return led["summary"]
@@ -699,14 +725,15 @@ def main(argv=None):
     ap.add_argument("--in", dest="src"); ap.add_argument("--drc"); ap.add_argument("--out")
     ap.add_argument("--ledger"); ap.add_argument("--margin", type=float, default=14.0)
     ap.add_argument("--only-net"); ap.add_argument("--dry-run", action="store_true")
-    ap.add_argument("--order", default="dist_asc", choices=["dist_asc", "dist_desc", "hard"])
+    ap.add_argument("--order", default="dist_asc", choices=["dist_asc", "dist_desc", "hard", "list"])
+    ap.add_argument("--order-list", dest="order_list")
     a = ap.parse_args(argv)
     if a.fill:
         return _fill(a.fill[0], a.fill[1])
     if not (a.src and a.drc and a.out and a.ledger):
         ap.error("--in/--drc/--out/--ledger 必填")
     print(json.dumps(run(a.src, a.drc, a.out, a.ledger, a.margin, a.only_net, a.dry_run,
-                         a.order), ensure_ascii=False))
+                         a.order, a.order_list), ensure_ascii=False))
     return 0
 
 
