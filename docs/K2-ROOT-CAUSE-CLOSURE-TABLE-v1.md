@@ -235,3 +235,66 @@ ls k2/pipeline.yaml                                                             
 
 **计数不变**：`根闭 0` · `OUT（具名）4` · `未闭 55`（载体已修 16 / 载体未修 29）。
 **P4 门**：仍不可开（owner #14 ③ fail-closed 不变）；ENG 侧判据前置再增一档：① v3 可安装 ② **v4 可安装** ③ ⑥ 候选板 `b2cfb087839afd73` 待落板 ④ G-ROOT-1/2/3 待放行。
+
+---
+
+## 12. v1.4 增量更新（2026-09-18，inc39–44；**载体现状实测核验 + 三处修正**；§0/§1..§11 为历史快照，不改写）
+
+> 触发：监理 #K2-22 §三把本表「全闭」列为 **P4 关门追加条件**，而 §1..§11 的载体现状是 **9-17 夜**快照。
+> 本节的 ②③ 列**逐条以只读实测复核**；判定仍归监理。仪器：`k2/tools/k2_refdes_annotation_probe_v1.py`
+> `1bd3f4a9d47ff0d4`（refdes 标注）· `AppDir/bin/kicad-cli`（netlist/DRC）· `python3 -c json`（pro 键值）。
+
+### 12.1 载体现状核验（7 处，实测 vs 表内记载）
+
+| 行 | 表内记载（§1..§11） | **本轮只读实测** | 结论 |
+|---|---|---|---|
+| `M-02` | 「**未修**（两文件仍写 dual DS160PR810）」 | `k2/README.md` / `k2/docs/01-architecture.md` 中 **`DS160PR810`/`dual`/`双颗`/`U3`/`U7` 出现 0 次**（`DS320PR1601` 4+1 次）；全仓 `DS160PR810` 仅存于**历史 SPEC rev-7/11/12**（版本化历史，原件按机制不改） | **表内陈旧**：载体**已修** ⇒ 归入「载体已修待判据」 |
+| `N-07` | 「原理图仍有 **7 个未标注 refdes**（`C?/D?/E?/J?/L?/R?/U?`）」 | 排除 `(lib_symbols …)` 子树后，**实例未标注 = 0**（55 实例全已标注）；那 31 个 `?` 全是 **`lib_symbols` 定义占位符**（KiCad 正常内容）；「7」= **7 个不同前缀**；netlist（KiCad 自身口径）**`?` = 0 / 705 ref 条目** | **现象不成立 = 伪缺陷** ⇒ 建议监理判 **OUT（具名：前提实测不成立）** |
+| `F-12` | 「**部分修**：库表侧闭；7 个未标注 refdes 未修（见 N-07）」 | `k2/hw/fp-lib-table` `d731638859be9a08` **存在**且被 DRC 采信（`lib_footprint_issues` 6→0）；refdes 侧 = 伪缺陷（见 `N-07`） | **两半均就绪** ⇒ 载体**已修** |
+| `N-03` | 「`.kicad_pro sheets: []` ⇒ PCB 未挂原理图页」 | pro `schematic.top_level_sheets` = **`[{filename: "k2_v4_8L.l4.kicad_sch", name: "k2_v4_8L.l4", …}]`** 而 **全仓不存在 `k2_v4_8L.l4.kicad_sch`**（`find` 0 命中）；`sheets: []` 亦在 | **缺陷更锐化**：根图指针指向**不存在的 l4 根图**（跨 revision 悬挂）；修复 = 一行 pro 键值（§12.3 决策 8） |
+| `M-10` | 「载体已修：`k2/hw/fp-lib-table` `d731638859be9a08`」 | 文件存在，sha 一致 | 一致 ✓ |
+| `M-08` / `U-05` / `U-06` / `N-06` | 「载体已修：l5 pro ignore 9→0（`d5e0ca06…`）」 | pro `rule_severities` 中 `ignore` **0 条** | 一致 ✓ |
+| `F-6` / `M-08` 模板余项 | 「共享模板 `k2/tools/k2_jlc_template.kicad_pro` 仍含 9 条 ignore」 | 模板 `ignore` **9 条**（`copper_sliver`/`footprint_filters_mismatch`/`footprint_type_mismatch`/`missing_courtyard`/`silk_over_copper`/`silk_overlap`/`track_not_centered_on_via`/`tuning_profile_track_geometries`/`via_dangling`） | 一致 ✓（计划 §1.2#7 / §P6，须获批） |
+| `F-14` / `N-05` | 「部分修：R4 建两个 symlink 兜底」 | `k2/boards/k2_sch.yaml → ../hw/data/k2_sch.yaml`、`k2/k2_v4.kicad_pcb → hw/k2_v4_8L.kicad_pcb` **均在** | 一致 ✓（G-ROOT-3 未闭） |
+
+### 12.2 修正后的计数（**ENG 实测口径；判定归监理**）
+
+| ⑤ | v1.3 记载 | **v1.4（本表实测修正后）** | 变动来源 |
+|---|---|---|---|
+| 根闭 | 0 | **0**（判据仍未安装/未签认 ⇒ 无一行满足 ④） | — |
+| OUT（具名） | 4 | **5** | `N-07`（前提实测不成立，建议 OUT） |
+| 未闭 | 55 | **54** | 同上 |
+| └ 载体已修、只差判据在岗 | 15 | **17** | `+M-02` `+F-12` |
+| └ 判据已实现、待安装 + 签认（J-1..J-10） | 10 | **10**（v1.4 实测：最终板全判据 **19P/0F**，见 `K2-P4-THRESHOLD-MARGIN-AND-19P-REHEARSAL-v1.md`） | — |
+| └ 载体未修（结构性根因） | 30 | **27** | `−M-02` `−F-12` `−N-07` |
+
+### 12.3 关门剩余动作 —— 按**缺失条件的责任方**归类（P4 关门 = 全闭）
+
+| 责任方 | 缺失条件 | 涉及条目 | 条数 | 备注 |
+|---|---|---|---|---|
+| **gate 属主 + 监理** | 判据安装 + manifest 签认（**对全部 54 条都是必要条件**，因 #K2-22 §二「manifest 未签认前不算在岗」） | **全部** | **54** | 安装包就绪度与两处缺陷见 `K2-P4-PIPELINE-INSTALL-READINESS-v1.md`（D-1 消歧 / D-2 派单） |
+| **监理放行（落件）** | 载体侧最后一步：⑥+⑦ 落件（库/几何） | `U-03` `U-04` `M-09`（库侧）+ `F-12` | 4 | 候选 `9682dd026f48c04a` + 库 27 件已就绪（inc40） |
+| **监理放行（改生成器）** | G-ROOT-1/2/3 或其衍生（方案见 §6 G9/G10/G11） | `U-04` `U-07` `U-09` `U-10` · `M-03` `M-05` `M-06` `M-09` `M-11` · `F-1` `F-2` `F-7` `F-10` `F-14` · `N-05` | 15 | 未获批不得改生成器（红线）⇒ 不放行则这 15 条**结构性不可闭** |
+| **监理/owner（真源/原理图/冻结件）** | 真源 nc 声明（errata-2）· 原理图 · L2 冻结表回改 · 6L 历史件 | `M-03` `F-10` · `N-03`（pro 侧，ENG 可执行）· `F-9`（冻结件回改须 owner 批） | 3~4 | `N-03` 修复本身 ENG 可做（§12.1），但需监理排程以免与待批落件冲突 |
+| **监理（口径/阈值）** | J-8 密度口径与阈值 · V3 阈值口径 | `M-12` `U-09`（判据侧） | 2 | 裕量与后果见 `K2-P4-THRESHOLD-MARGIN-AND-19P-REHEARSAL-v1.md` §3 |
+| **P5 交付面** | 出交付 Gerber（P4 未关门不得出） | `N-01` | 1 | 前置已实测（`G36>0`） |
+
+> 读法：**任何一条未闭行都同时缺「判据在岗」**（第一行），因此「安装 + 签认」是一次性最大杠杆；
+> 第二/三行是**仅凭放行即可闭**的 19 条（4+15，含交集 `U-04`/`M-09`）；其余为真源/口径/交付面。
+
+### 12.4 复跑（本节每处实测）
+
+```bash
+cd /home/fila/jqdDev_2025/ic_hw
+K=AppDir/usr/bin/python3.11; CLI=AppDir/bin/kicad-cli
+grep -rn "DS160PR810" k2/README.md k2/docs/01-architecture.md            # 期望 0 命中
+grep -rn "DS160PR810" --include='*.json' k2/pm_gate/artifacts/k2_v4/L3/ | grep -c "spec-rev-47"   # 期望 0
+$K k2/tools/k2_refdes_annotation_probe_v1.py --sch-dir k2/hw/sch --board k2/hw/k2_v4_8L.l5.kicad_pcb \
+   --kicad-cli $CLI --root-sch k2/hw/sch/k2_sch.kicad_sch --netlist-out /tmp/opencode/n07/k2.net --json /tmp/opencode/n07/probe.json
+python3 -c "import json;d=json.load(open('k2/hw/k2_v4_8L.l5.kicad_pro'));print(d['schematic']['top_level_sheets'])"
+find . -name 'k2_v4_8L.l4.kicad_sch' -not -path './AppDir/*'              # 期望 0 命中
+```
+
+**边界**：本节**只读取证**；未改板/pro/库/SPEC/生成器/`criteria/`/真源 yaml/冻结件；未派 WORKER；临时仅 `/tmp/opencode`。
+
+—— ENG（ARCHER）· 2026-09-18 · 探针 `1bd3f4a9d47ff0d4`
