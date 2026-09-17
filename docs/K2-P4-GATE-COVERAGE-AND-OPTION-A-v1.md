@@ -7,6 +7,11 @@
 | 板态 | `k2/hw/k2_v4_8L.l5.kicad_pcb` = `37019705ef994ccc`（**未改**）· pro = `f68a5fb2f82bd02d`（**未改**） |
 | 件 | `k2/tools/k2_p4_gate_coverage_v1.py` `9898781cd1fb9764` · `k2/tools/k2_p4_w8_option_a_install_v1.py` `d18dd19ea3595b55`（**dry-run 默认**） |
 
+> ⚠️ **更正（2026-09-18 · P4 增量 24）**：下表 `J-8b 器件不重叠` 行的「由 DRC `courtyards_overlap` 覆盖」为**过宽陈述**
+> —— 实测本板 59 件中 **40 件无 courtyard**（DRC `missing_courtyard` 副本实跑 = 40，refs 逐一相同），且 6 个 AABB 候选重叠对中
+> **两侧皆有 courtyard 的 = 0** ⇒ DRC 对本板器件重叠**不可判**；铜级（pad AABB）实测异网交叠 = 0。
+> 更正与实测见 `k2/docs/K2-P4-J8-REMAINING-MEASUREMENT-v1.md` §1/§2。
+
 ## 1. 判据覆盖率闸：「判据集 == manifest 应然集」= **缺失 0 / 越界 0**
 
 应然集来源：登记册 §C（J-1..J-10，冻结维度）+ 计划 §3.3（V1..V3 可机判）+ 计划 §P4（三前置）。转写映射（**映射本身归监理确认**）：

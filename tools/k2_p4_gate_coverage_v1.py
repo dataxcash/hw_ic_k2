@@ -28,7 +28,7 @@ MATRIX = [
  ("J-7",  "封装 = 库（mismatch/issues = 0 且 fp-lib-table 存在）", ["lib_footprint_electrical", "fp_lib_table_present"],
   "电气级口径（pad 数/名/形状/尺寸/钻孔/自转/局部位置）；无库链接件按 lib_footprint_link_policy（null ⇒ fail-closed）"),
  ("J-8a", "每器件 pad 数 ≥1", ["device_has_pads"], "审计 §10.8 L2-8 子项字母"),
- ("J-8b", "器件不重叠", [], "由 DRC `courtyards_overlap`（severity=error，现 0 条）经 J-1/drc_errors 覆盖"),
+ ("J-8b", "器件不重叠", [], "**更正**：本板 40/59 件无 courtyard ⇒ DRC `courtyards_overlap` 对其不可判（6 个 AABB 候选对中两侧皆有 courtyard = 0）；铜级 pad AABB 异网交叠实测 = 0。见 k2/docs/K2-P4-J8-REMAINING-MEASUREMENT-v1.md §2"),
  ("J-8c", "出框 = 0（P3-4 口径）", ["board_frame_and_keepout"], ""),
  ("J-8d", "回避区生效 / 密度分布 / 关键间距", ["board_frame_and_keepout", "density_and_spacing"],
   "回避区=C5b/IN-7（每区 ≥1 非 allowed，5 开关含 copperpour）；密度/关键间距阈值待监理填"),
@@ -67,7 +67,7 @@ def main():
 
     print(f"{'权威判据':8s} {'语义':46s} {'v3 ID':24s} {'现板':10s} {'选项(甲′)':10s}")
     for cid, sem, ids, note in MATRIX:
-        print(f"{cid:8s} {sem[:44]:46s} {(','.join(ids) or '(经DRC覆盖)')[:22]:24s} {cell(sa,ids):10s} {cell(sb,ids):10s}")
+        print(f"{cid:8s} {sem[:44]:46s} {(','.join(ids) or '(见备注)')[:22]:24s} {cell(sa,ids):10s} {cell(sb,ids):10s}")
     want = sorted({i for _, _, ids, _ in MATRIX for i in ids})
     got = sorted(sa.keys()) if sa else (sorted(sb.keys()) if sb else [])
     print()
