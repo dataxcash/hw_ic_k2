@@ -11,8 +11,8 @@
 
 | 件 | sha256(16) | 说明 |
 |---|---|---|
-| `manifest.k2.draft-v2.yaml` | `890ed50eedf57e6d` | 转写补齐版清单草案（**v2.1**：+W-9 `pipeline_scope`） |
-| `adjudicate.draft-v2.py` | `db629a013c0563ba` | 判定器草案（**v2.1**：+W-9 scoped；`--kicad-cli` 自跑 DRC 防伪造绿） |
+| `manifest.k2.draft-v2.yaml` | `360b3d1cf377bedb` | 转写补齐版清单草案（**v2.2**：+W-9 `pipeline_scope`；C5b/IN-7 口径对齐） |
+| `adjudicate.draft-v2.py` | `f7b23e99dc277ec6` | 判定器草案（**v2.2**：+W-9 scoped、C5b 口径；`--kicad-cli` 自跑 DRC 防伪造绿） |
 | `make_negatives_v2.py` | `8a000f5c294e3a8d` | 负控造件 v2（**本件新修**：增量 16 板封装头已为新格式 ⇒ 旧正则致 m6 静默未注入） |
 
 ---
@@ -26,7 +26,7 @@
 | 2 | `unconnected_zero` | `unconnected == 0` | J-2 / V1 | 自跑 DRC `unconnected_items`，**全量、禁裁剪** |
 | 3 | `lib_footprint_electrical` | `lib_footprint_mismatch + lib_footprint_issues == 0` | J-7 前半 | 自跑 DRC 计数（**见 §3.3 覆盖缺口**） |
 | 3b | `fp_lib_table_present` | `fp-lib-table exists` | J-7 后半 / W-8 / F-12 | 存在性 |
-| 4 | `board_frame_and_keepout` | `footprints_outside_outline == 0 and esc_keepout_unrestricted == 0` | J-8 出框(P3-4) / 回避区(P3-5·C5b·IN-7) | 器件含 pad bbox vs `Edge.Cuts`；ESC_* 四区 tracks/vias/pads/footprints 须各 ≥1 非 allowed |
+| 4 | `board_frame_and_keepout` | `footprints_outside_outline == 0 and esc_keepout_unrestricted == 0` | J-8 出框(P3-4) / 回避区(P3-5·C5b·IN-7·**#K2-17 §五**) | 器件含 pad bbox vs `Edge.Cuts`；ESC_* 四区须各 **≥1 开关非 allowed，开关集 = tracks/vias/pads/copperpour/footprints（5 项，含 copperpour）** —— 与已裁口径对齐，见 §3.5 |
 | 4b | `density_and_spacing` | `（阈值待监理填）` | J-8 密度/关键间距 | 密度 = 10mm 格峰值；**关键间距未实现**（口径待监理给，见 §4） |
 | 5 | `v3_reference_continuity` | `unreferenced_hs_segments == 0` | V3 | 高速段投影（0.2mm 采样）∩ 相邻参考层平面（zone 外形 ∧ 该 zone 已 filled） |
 | 6 | `drill_count`（**补正**） | `npth >= 4 and pth >= drill_pth_min` | 计划 §P4 / 审计 §10.8 L2-8 8e | `npth >= 1` → **`>= 4`**（现板 NPTH=4 ⇒ 判定不变） |
@@ -37,9 +37,9 @@
 
 ## 2. 正控（当前板 `d9813bc554a2d611` 实跑，判定器自跑 DRC）
 
-**结论**：`passed=false` · **PASS 10 / FAIL 8** · `provisional=true`（manifest 未签认）。
+**结论**：`passed=false` · **PASS 11 / FAIL 7** · `provisional=true`（manifest 未签认）。
 
-### 2.1 PASS 10
+### 2.1 PASS 11
 
 | 检查项 | 实测 |
 |---|---|
@@ -53,8 +53,9 @@
 | `fp_lib_table_present` | **True**（`k2/hw/fp-lib-table`） |
 | `v3_reference_continuity` | 未覆盖高速段 **0 / 3653** |
 | `verdict_schema` | 产物含 `verdict` 键的文件 **[]** |
+| `board_frame_and_keepout` | 出框器件 **0**；C5b/IN-7 不达标区 **0**（其中「仅 copperpour 受限」= 4；更严 4 开关口径 = 4，**本板不可达**，见 §3.5）；全 allowed keepout 区 **0** |
 
-### 2.2 FAIL 8（与门禁口径一致）
+### 2.2 FAIL 7（与门禁口径一致）
 
 | 检查项 | 实测 | 性质 |
 |---|---|---|
@@ -62,7 +63,6 @@
 | `drc_warning_disposition` | 未登记处置 warning **36/36**（hole_to_hole 1 + lib_footprint_mismatch 35） | 待监理登记台账 |
 | `unconnected_zero` | 未连接 **2**（`12V_IN` @H3闸 · `DS320_STRAP_A_ADDR0_15-8` @端点局部不可解） | **owner 闸** |
 | `lib_footprint_electrical` | mismatch **35** + issues **0** = **35** | **owner 闸**（W-8/J-7，T-26） |
-| `board_frame_and_keepout` | 出框器件 **0**；ESC_* 全 allowed 区 **4** | 待处置（C5b/IN-7 语义） |
 | `density_and_spacing` | 密度峰值 **5 件/10mm 格**；阈值 `null` ⇒ fail-closed | 待监理填阈值 |
 | `rule_severity_manifest` | 未登记豁免的 ignore **9/62** | 见 W-7 九条方案（`k2/docs/K2-P4-W7-IGNORE-DISPOSITION-v1.md`） |
 | `pipeline_present` | **1 目录**：`k2/hw/sch`（**W-9 已实现**：k2-scoped；此前报 6 目录含 `k1/sch`·`pciesw4/*`） | **J-9 / M-13**：k2 无 `pipeline.yaml` ⇒ 见 §3.4 |
@@ -143,7 +143,34 @@ lib_footprint_electrical:
 
 **注**：在监理给出口径前，ENG **不**创建 `k2/pipeline.yaml`。**理由**：把必选 check 声明在 `checks:`（引擎 `cmd_run`/`cmd_verify` 均不执行该字段）即可让 meta-gate 表面通过，但那是**只满足字面、不产生强制力**的空声明 = 以口径达成绿，本件拒绝采用。
 
-## 4. 待监理给口径（**不静默** · 6 项）
+### 3.5 ⚠️ **自查纠正：`board_frame_and_keepout` 的回避区腿曾比已裁口径更严，且在该板永不可达**
+
+**事由**：本件 v2.1 的该 check 曾注「copperpour 不计」（只数 tracks/vias/pads/footprints），实测报 `4/4` 不达标 ⇒ 会把**已达成**项判 FAIL，使 P4 **结构上不可闭**（与 C7「13 区」、U4-A「13 区」同类：判据自指/不可达）。**本件 v2.2 已更正**。
+
+**已裁口径（三处一致，均以 5 开关为准，无 copperpour 除外）**：
+- `#K2-17 §三 补正 2`：缺陷定义为「板侧 `ESC_J2/J3/J4/U6` **4 区 × 5 开关（tracks/vias/pads/copperpour/footprints）全部 allowed** = 空操作」；
+- `#K2-17 §五`（P4 施工项）：**「4 个 `ESC_*` keepout 开关落为 ≥1 非 `allowed`」**；
+- `K2-RULING-p3-closure-and-p4-open-v1` §C5b：「板侧每区 ≥1 非 `allowed`」；ENG `K2-P4-CONSTRUCTION-STATUS-v1.md` 已据此记 **IN-7 达成**（`zone_fills = disallow`）。
+
+**板侧现状（l5 实测）**：4 区均为 `copperpour not_allowed` + 其余 4 开关 `allowed` ⇒ 按已裁口径 **不达标区 = 0（达成）**。
+
+**「更严读法」不可达证明（实测，非推理）**：
+
+| 更严选项 | 结果 |
+|---|---|
+| `pads → not_allowed` | DRC **`items_not_allowed` 199 条**，全板违规 **51 → 250** ⇒ **不可行**（U6 球阵 354 pad 与 J2/J3/J4 焊盘即在区内） |
+| `tracks → not_allowed` | 区内 F.Cu 段 **181 / 125 / 213 / 336**（4 区）⇒ 必然海量违规，**不可行** |
+| `vias → not_allowed` | 区内 via **46 / 15 / 17 / 258** ⇒ **不可行** |
+| `footprints → not_allowed` | 区正是 `U6`/`J2`/`J3`/`J4` 的逃逸走廊，封装/庭院在区内 ⇒ 不可行 |
+
+⇒ 本板唯一可行的非 `allowed` 开关 = **`copperpour`**（语义亦正当：**逃逸走廊不得被铺铜填死**）。
+> 方法学更正留痕：本件初测「区内 pad = 0」是**错的** —— 封装内 pad 的 `at` 为**相对坐标**，须先加封装原点；**判据以 DRC 为权威**（0→199 即由此暴露）。
+
+**处置**：v2.2 按已裁口径（5 开关）判定，并**并列上报**两个强度指标（`仅 copperpour 受限 = 4` / `更严 4 开关不达标 = 4`），**不做任何静默收窄**。
+**结果**：正控随之为 **PASS 11 / FAIL 7**，唯一变化项 = 本项；7 件负控逐件复跑**无回归**。
+**交监理（口径强度，不是你我能默定）**：① 认已裁口径（本项即 PASS，J-8 回避区腿闭合）；② 若要更强齿 ⇒ 须把 `ESC_*` 区内铜**移出走廊**（L2 走廊重解，代价大且与「南侧唯一长距离通道」用途冲突）⇒ 另裁。
+
+## 4. 待监理给口径（**不静默** · 7 项）
 
 1. **J-8「关键间距」**：未实现 —— 需监理给「哪类间距 / 阈值 / 口径」（现仅出框 + ESC_* 回避区 + 密度峰值）。
 2. **`density_max_per_10mm_cell`** 阈值 `null` ⇒ 该项恒 FAIL（fail-closed），待监理填。
@@ -151,6 +178,7 @@ lib_footprint_electrical:
 4. **V3 语义选择**：草案用「zone **外形** ∧ 该 zone 已 `filled_polygon`」（filled 多边形上万点，纯 Python 逐点判会超时）；若要求严格口径须改栅格化实现。
 5. **J-7 覆盖缺口**（§3.3）：是否采纳覆盖守卫，或具名豁免 24 件无 nickname 封装。
 6. **J-9 / M-13 接线口径**（§3.4）：选 (A) 真源 bump 补 `nc` 白名单+BOM / (B) 收窄必选集 / (C) 分阶段接线 —— 未裁前 ENG 不建 `k2/pipeline.yaml`。
+7. **C5b/IN-7 口径强度**（§3.5）：认已裁 5 开关口径（现状 PASS）／或要更强齿（须走廊级移铜，另裁）。
 
 ## 5. 复跑链（确定性）
 

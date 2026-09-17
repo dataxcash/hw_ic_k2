@@ -8,9 +8,14 @@
 
 | 件 | sha256(16) | 说明 |
 |---|---|---|
-| `manifest.k2.draft-v2.yaml` | `890ed50eedf57e6d` | 转写补齐版判据清单草案（含 `null` = 待监理填的取值） |
-| `adjudicate.draft-v2.py` | `db629a013c0563ba` | 判定器草案（实现；自跑 kicad-cli DRC，防伪造绿） |
+| `manifest.k2.draft-v2.yaml` | `360b3d1cf377bedb` | 转写补齐版判据清单草案（含 `null` = 待监理填的取值） |
+| `adjudicate.draft-v2.py` | `f7b23e99dc277ec6` | 判定器草案（实现；自跑 kicad-cli DRC，防伪造绿） |
 | `make_negatives_v2.py` | `8a000f5c294e3a8d` | 负控造件脚本 v2（格式无关括号匹配；m6 改电气级 pad 尺寸突变） |
+
+## 修订（v2.2 · 2026-09-17）
+
+- **C5b/IN-7 口径对齐**：`board_frame_and_keepout` 的回避区腿改为按已裁口径（`#K2-17 §五`：**5 开关含 copperpour，每区 ≥1 非 allowed**），并并列上报「仅 copperpour 受限」/「更严 4 开关口径」两个强度指标。v2.1 曾注「copperpour 不计」= 比裁定更严，且实测在本板**不可达**（`pads→not_allowed` ⇒ 199 条 `items_not_allowed`）⇒ 会使 P4 结构上不可闭。见 `k2/docs/K2-P4-C5B-IN7-SCOPE-ALIGNMENT-v1.md`。
+- 正控随之 **PASS 11 / FAIL 7**（唯一变化项 = `board_frame_and_keepout`）。
 
 ## 修订（v2.1 · 2026-09-17）
 

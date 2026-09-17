@@ -42,7 +42,7 @@ checks:
   fp_lib_table_present:     {enabled: true, expect: "fp-lib-table exists", ref: "J-7 后半"}
   board_frame_and_keepout:  {enabled: true, expect: "footprints_outside_outline == 0 and esc_keepout_unrestricted == 0",
                              ref: "J-8 出框(P3-4) / 回避区(P3-5·C5b·IN-7)",
-                             note: "ESC_* 四区须各 ≥1 个 tracks/vias/pads/footprints 开关非 allowed（copperpour 不计：现板 8 区皆 copperpour=not_allowed）"}
+                             note: "C5b/IN-7 口径对齐 #K2-17 §三补正2 + §五施工项：ESC_* 四区须各 ≥1 个开关非 allowed，开关集 = tracks/vias/pads/copperpour/footprints（含 copperpour）；判定器另报「仅 copperpour 受限」区数（口径强度信息）。更强读法（4 开关不含 copperpour）实测在本板不可达：pads not_allowed ⇒ 199 条 items_not_allowed，tracks/vias 按设计占满走廊 —— 见 k2/docs/K2-P4-C5B-IN7-SCOPE-ALIGNMENT-v1.md"}
   density_and_spacing:      {enabled: true, expect: null, ref: "J-8 密度分布 / 关键间距",
                              note: "阈值待监理填 thresholds.density_max_per_10mm_cell；未填 ⇒ fail-closed"}
   v3_reference_continuity:  {enabled: true, expect: "unreferenced_hs_segments == 0", ref: "V3",

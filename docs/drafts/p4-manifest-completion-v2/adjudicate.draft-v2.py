@@ -294,15 +294,25 @@ def measure_extras(board_path, fp_lib_paths):
             outside.append(ref)
         cell[(int(fx // 10), int(fy // 10))] += 1
     # keepout：多边形 + 开关（回避区 / IN-7）
-    keepouts, all_allowed, esc_unrestricted, ko_rows = [], 0, 0, []
+    # C5b / IN-7 口径（#K2-17 §三 补正 2 + §五 施工项 + K2-RULING-p3-closure §C5b）：
+    #   「板侧每区 ≥1 非 `allowed`」，开关集 = tracks / vias / pads / copperpour / footprints（**5 项，含 copperpour**）。
+    #   本件 v2.2 对齐该已裁口径（v2.1 曾注「copperpour 不计」= 比裁定更严，且实测在该板**永不可达**，见
+    #   k2/docs/K2-P4-C5B-IN7-SCOPE-ALIGNMENT-v1.md）。同时上报「仅 copperpour 受限」的区数（口径强度信息）。
+    keepouts, all_allowed, esc_unrestricted, esc_unrestricted_4sw, esc_copper_only, ko_rows = [], 0, 0, 0, 0, []
+    _C5B_SW = ('tracks', 'vias', 'pads', 'copperpour', 'footprints')
     for z in _all(root, 'zone'):
         ko = _one(z, 'keepout')
         if ko is None: continue
         fl = {c[0]: (c[1] if len(c) > 1 else None) for c in ko[1:]}
         if fl and all(v == 'allowed' for v in fl.values()): all_allowed += 1
         name = _txt(z, 'name') or ''
-        if name.startswith('ESC_') and all(fl.get(k) == 'allowed' for k in ('tracks', 'vias', 'pads', 'footprints')):
-            esc_unrestricted += 1
+        if name.startswith('ESC_'):
+            if all(fl.get(k) == 'allowed' for k in _C5B_SW): esc_unrestricted += 1
+            if all(fl.get(k) == 'allowed' for k in ('tracks', 'vias', 'pads', 'footprints')):
+                esc_unrestricted_4sw += 1
+            if all(fl.get(k) == 'allowed' for k in ('tracks', 'vias', 'pads', 'footprints')) \
+               and fl.get('copperpour') == 'not_allowed':
+                esc_copper_only += 1
         ko_rows.append(dict(name=name, flags=fl))
         for poly in _all(z, 'polygon'):
             pts = _one(poly, 'pts')
@@ -331,7 +341,8 @@ def measure_extras(board_path, fp_lib_paths):
                                      end=[float(en[1]), float(en[2])]))
     return dict(outline_bbox=bbox, footprints_outside=sorted(r for r in outside if r),
                 keepout_polygons=len(keepouts), keepout_regions_all_allowed=all_allowed,
-                esc_unrestricted=esc_unrestricted, keepout_rows=ko_rows,
+                esc_unrestricted=esc_unrestricted, esc_unrestricted_4sw=esc_unrestricted_4sw,
+                esc_copper_only=esc_copper_only, keepout_rows=ko_rows,
                 density_max_per_10mm_cell=(max(cell.values()) if cell else 0),
                 density_cells=len(cell), hs_segments=hs_total,
                 unreferenced_hs_segments=len(unreferenced), v3_samples=unreferenced[:5],
@@ -453,8 +464,10 @@ def adjudicate(manifest, meas, args):
             chk('board_frame_and_keepout',
                 not ex['footprints_outside'] and ex['esc_unrestricted'] == 0,
                 f"出框器件 {len(ex['footprints_outside'])} {ex['footprints_outside'][:6]}；"
-                f"ESC_* 回避区空操作（tracks/vias/pads/footprints 全 allowed）= {ex['esc_unrestricted']}"
-                f"（C5b/IN-7 要求每区 ≥1 非 allowed）；全 allowed keepout 区数（含 copperpour）= {ex['keepout_regions_all_allowed']}")
+                f"C5b/IN-7（#K2-17 §五：每区 ≥1 非 allowed，5 开关含 copperpour）不达标区 = {ex['esc_unrestricted']}"
+                f"（其中「仅 copperpour 受限」= {ex['esc_copper_only']}；"
+                f"若按更严口径「4 开关不含 copperpour」则为 {ex['esc_unrestricted_4sw']} —— 该更严口径实测在本板不可达，见文档）；"
+                f"全 allowed keepout 区数 = {ex['keepout_regions_all_allowed']}")
     if C.get('density_and_spacing', {}).get('enabled'):
         if ex is None: chk('density_and_spacing', False, "缺少几何测量（fail-closed）")
         else:
