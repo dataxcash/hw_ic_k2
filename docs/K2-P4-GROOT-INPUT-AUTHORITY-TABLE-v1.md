@@ -28,7 +28,7 @@
 
 | # | 输入 | 生成器现取 | **权威源** | 各载体现值（本会话实测） | 陈旧? | 放行后动作 |
 |---|---|---|---|---|---|---|
-| A1 | 排针 pad **数/号** | 锚板 `pads`（`k2_gen_v5.py:339-346`） | **真源** `k2_sch.yaml::symbols[].pins` | `HEADER_4PIN`={TX1,RX2,GND3,VCC4} · `HEADER_2PIN`={PWR_BTN#1,GND2} · `HEADER_2PIN_12V`={VIN_12V1,GND2} · `HEADER_4PIN_EC`={GND1,EC_SCL2,EC_SDA3,EC_3V34} · `HEADER_2PIN_AUX`={P3V3_AUX1,GND2} | 否 | 消费真源（每 ref 的 symbol 由 `sheets[].placements` 绑定） |
+| A1 | 排针 pad **数/号** | 锚板 `pads`（`k2_gen_v5.py:339-346`） | **真源** `k2_sch.yaml::symbols[].pins` | `HEADER_4PIN`={TX1,RX2,GND3,VCC4} · `HEADER_2PIN`={PWR_BTN#1,GND2} · `HEADER_2PIN_12V`={VIN_12V1,GND2} · `HEADER_4PIN_EC`={GND1,EC_SCL2,EC_SDA3,EC_3V3@4}（引脚号在真源内；`EC_3V3` 属 left 组 pin 4） · `HEADER_2PIN_AUX`={P3V3_AUX1,GND2} | 否 | 消费真源（每 ref 的 symbol 由 `sheets[].placements` 绑定） |
 | A2 | 排针 pad **网名** | 锚板 `pads` | **真源** `nets` | J6/{PWR_CTRL_OUT,GND} · J9/{UART_TX,UART_RX,GND,MCU_VDD} · J11/{GND,I2C2_SCL,I2C2_SDA,P3V3_AUX} · J12/{12V_IN,GND} · J13/{SWDIO,SWCLK_BOOT0,GND,MCU_VDD}（板 16 pad 逐项一致） | 否 | 消费真源 |
 | A3 | 排针 pad **几何** | 锚板 `pads` | **库** `ForgeOS.pretty/PinHeader_1x02|1x04.kicad_mod` | 库＝板一致：`thru_hole circle` 1.5×1.5 / drill 0.8 / local y ±1.27（2pin）、±1.27,±3.81（4pin）/ 局部距 2.54 | 否 | 经 `fp-lib-table`（`d731638859be9a08`）解析库 |
 | A4 | 排针 **column_x** | 锚板 `at` | **L2-3 裁定 = 27.94**（+ #K2-21 §二 守恒闸） | **SPEC rev-47 = 26.5（8 处）**；图纸 = 27.94（25 处，含 `criteria.D1_pinheader_interference.column_x=27.94`）；板 fp at x=27.94（5/5 实测）；#K2-21 守恒闸 = 27.94 | **SPEC 陈旧** | bump `components.pin_headers.column_x` + `positions.*.x` → `27.94`；**同步 `check_pin_headers`(S8) 比对源**（现强制 26.5，会拒正确值） |
