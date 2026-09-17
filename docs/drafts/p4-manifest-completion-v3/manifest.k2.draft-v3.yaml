@@ -1,0 +1,66 @@
+# criteria/manifest.k2.draft-v3.yaml —— **ENG 草案（v2 + 计划 §P4「平面落图前置」转写 + Gerber 扩展名修实现）**
+# ⚠️ 本件位于 /tmp/opencode/p4/draft/，**未经监理正/负控复验 ⇒ 不得安装、不得签认**。
+# 归属（K2-RULING-criteria-ownership-v1 / K2-RULING-plan-verdict-v1 §四-2）：
+#   - 判据「应然值/豁免/阈值」= 监理持有：本草案中取值为 `null` 者 = **待监理填**（ENG 不代填）。
+#   - 判定器实现 = ENG 起草（同目录 `adjudicate.draft-v2.py`）→ 监理正控/负控 → 版本 bump 安装 → 监理签认。
+#   - 内容唯一来源 = 登记册 §C（J-1..J-10）+ 计划 §3.3（V1..V3）；**ENG 未新增任何判据维度**。
+manifest_version: 3
+project: k2
+board: k2_v4_8L.l5.kicad_pcb
+not_countersigned: true
+source_of_truth:
+  register: .omo/supervision/ledger/K2-DEFECT-REGISTER-v1.md
+  register_section: "## C. 出厂判据"
+  plan: k2/docs/K2-RECTIFICATION-PLAN-v1.md
+  plan_section: "### 3.3 V 类（功能级）"
+
+checks:
+  # ── 既有（转写保留；U4-A / U4-C = 修实现，非改语义） ──
+  zone_filled:            {enabled: true, expect: "filled_fillable_zones == fillable_zones", ref: "J-3 / U4-A",
+                           note: "keepout/rule-area 结构上不可能有 filled_polygon（P3-5/C5b 要求其存在且限制）⇒ 分母 = 非 keepout zone"}
+  device_has_pads:        {enabled: true, expect: "every_footprint_pads >= 1", ref: "J-8a"}
+  drill_count:            {enabled: true, expect: "npth >= drill_npth_min and pth >= drill_pth_min", ref: "J-8e / 计划 §P4",
+                           note: "转写补正：npth>=1 → >=4（计划 §P4 钻孔前置；审计 §10.8 L2-8 8e）"}
+  net_declared_realized:  {enabled: true, expect: "every_declared_net_pads >= 2", ref: "V1(部分)"}
+  pin_map_complete:       {enabled: true, expect: "missing_pads == 0", ref: "V2"}
+  non45_segments:         {enabled: true, expect: "non45 == 0", ref: "J-5"}
+  refdes_sets_equal:      {enabled: true, expect: "sch_set == board_set - mechanical_refdes", ref: "J-6 / U4-C",
+                           note: "板有图无 4 = H1..H4 机械固定孔（登记项；未登记的多余 refdes 仍判 FAIL）"}
+  pipeline_present:       {enabled: true, expect: "pipeline.yaml exists when *.kicad_sch exists", ref: "J-9 / W-9",
+                           note: "scope = manifest.pipeline_scope（W-9：#K2-19 §二 裁定 k2 门 = k2-scoped，只判 k2 目录；k1/pciesw4 各自阶段门判）"}
+  verdict_schema:         {enabled: true, expect: "no artifact contains a 'verdict' key", ref: "J-10"}
+
+  # ── #K2-20 §二 补齐（登记册 §C + 计划 §3.3 的转写） ──
+  drc_errors:               {enabled: true, expect: "drc_errors == 0", ref: "J-1 前半",
+                             note: "须 --drc 实跑报告（T-8：仓库路径 + 同名 .kicad_pro）；报告 source 与板不一致 ⇒ FAIL（防伪造绿）"}
+  drc_warning_disposition:  {enabled: true, expect: "warnings_without_disposition == 0", ref: "J-1 后半",
+                             note: "warning 逐条须有处置结论；台账 drc_warning_dispositions 由监理登记（空 ⇒ 有 warning 即 FAIL）"}
+  unconnected_zero:         {enabled: true, expect: "unconnected == 0", ref: "J-2 / V1",
+                             note: "补铜后**全量**、范围 = 权威网表全集（禁裁剪）；含 DRC 实跑"}
+  lib_footprint_electrical: {enabled: true, expect: "electrical_diff == 0 and pad_name_set == 0 and no_library_link == 0", ref: "J-7 前半",
+                             note: "**实现按 W-8 电气级**：逐件比 pad 数/名/形状/尺寸/钻孔/自转/局部位置（不再用 DRC 图形级 lib_footprint_mismatch 计数）。库解析 = fp_lib_table_paths（含 ${KIPRJMOD}）→ 未命中回落 fp_lib_roots。无库链接/库不可载 件按 `lib_footprint_link_policy`（null ⇒ fail-closed）"}
+  fp_lib_table_present:     {enabled: true, expect: "fp-lib-table exists", ref: "J-7 后半"}
+  board_frame_and_keepout:  {enabled: true, expect: "footprints_outside_outline == 0 and esc_keepout_unrestricted == 0",
+                             ref: "J-8 出框(P3-4) / 回避区(P3-5·C5b·IN-7)",
+                             note: "C5b/IN-7 口径对齐 #K2-17 §三补正2 + §五施工项：ESC_* 四区须各 ≥1 个开关非 allowed，开关集 = tracks/vias/pads/copperpour/footprints（含 copperpour）；判定器另报「仅 copperpour 受限」区数（口径强度信息）。更强读法（4 开关不含 copperpour）实测在本板不可达：pads not_allowed ⇒ 199 条 items_not_allowed，tracks/vias 按设计占满走廊 —— 见 k2/docs/K2-P4-C5B-IN7-SCOPE-ALIGNMENT-v1.md"}
+  density_and_spacing:      {enabled: true, expect: null, ref: "J-8 密度分布 / 关键间距",
+                             note: "阈值待监理填 thresholds.density_max_per_10mm_cell；未填 ⇒ fail-closed"}
+  gerber_plane_g36:         {enabled: true, expect: "each gerber_plane_layers file has G36 > 0", ref: "计划 §P4 平面落图前置",
+                            note: "层集合 = gerber_plane_layers（转写自计划 §P4 原文「In1/In3/In6 的 GND、In4 的电源」）；缺 --gerber-dir ⇒ fail-closed"}
+  v3_reference_continuity:  {enabled: true, expect: "unreferenced_hs_segments == 0", ref: "V3",
+                             note: "高速段投影（0.2mm 采样）须被相邻参考层的平面（zone 外形 ∧ 该 zone 已 filled）覆盖全长；参考层由叠层定：F→In1 / In2→In1·In3 / In5→In4·In6 / B→In6"}
+
+# ── 监理持有的取值（ENG 不代填） ──
+mechanical_refdes: [H1, H2, H3, H4]          # U4-C 登记（#K2-20 §三 监理确认）
+pipeline_scope: [k2]                         # W-9（#K2-19 §二 裁定）：k2 门 = k2-scoped
+gerber_plane_layers: [In1.Cu, In3.Cu, In6.Cu, In4.Cu]   # 计划 §P4 平面落图前置（转写原文；口径归监理）
+drill_npth_min: 4                            # 计划 §P4
+drill_pth_min: null                          # 计划 §P4「PTH ≥ 插件件引脚数」→ 算式待监理给
+fp_lib_table_paths: ["k2/hw/fp-lib-table"]   # W-8
+fp_lib_roots: []                             # W-8 标准库根回落（空 ⇒ 用判定器 --std-footprint-roots）
+lib_footprint_link_policy: null               # W-8 无库链接件政策：require | tolerate（null ⇒ fail-closed，待监理填）
+drc_warning_dispositions: []                 # J-1 warning 处置台账（监理登记）
+thresholds:
+  density_max_per_10mm_cell: null            # J-8 密度分布阈值（待监理填）
+thresholds_pending_supervisor: [density_max_per_10mm_cell, drill_pth_min, lib_footprint_link_policy]
+rule_severity_exemptions: []                 # deny-by-default（原样保留）
