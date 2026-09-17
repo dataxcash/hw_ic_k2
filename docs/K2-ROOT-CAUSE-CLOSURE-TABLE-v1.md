@@ -223,3 +223,15 @@ ls k2/pipeline.yaml                                                             
 
 **计数不变**：`根闭 0` · `OUT（具名）4` · `未闭 55`（载体已修 16 / 载体未修 29）。
 **P4 门**：不可开；开门的 ENG 侧前置已就绪（① 判据 v3 可安装；② ⑥ 候选板 `b2cfb087839afd73` 待落板；③ G-ROOT-1/2/3 待放行）。
+
+## 11. v1.3 增量更新（2026-09-17 夜；J-8 密度/间距机制落地）
+
+| 项 | 变化 | 依据（件 + sha） |
+|---|---|---|
+| `J-8`（密度/间距）④ | 由「仍 pending（需 P3 阈值）」→ **「机制已实现 + 正负控七案全命中」**：`adjudicate.draft-v4.py` `1cda68521d0e56be`（v3 严格超集，diff 3 hunk 全新增）+ 安装件 `manifest.k2.v4.yaml` `004f7ac2666da437`（仍 `enabled:false`，`consume`/阈值键已定）+ 测量件 `measure_density_and_clearance.py` `dccaaa476c807def` · `measure_min_clearance_drc.py` `a294a396a8747f71` + 控制件 `manifest.k2.control-v4.yaml` `2531d4c616d855e9` | `K2-P4-J8-DENSITY-CLEARANCE-MECHANISM-EVIDENCE-v1.md` `cd55c5599e25973c` |
+| `J-8` 三项 | **`keepout_active` · `pads_within_outline` · `density_and_clearance` 机制全部齐备**；仅差 ① `criteria/` 安装 + manifest 签认 ② 密度/间距**应然阈值**（`cell_mm`/`cell_origin`/`max_fp_per_cell`/`min_copper_clearance_mm` …）归监理 | 同上 + §10 |
+| S-6a（M-12 口径） | ENG 交**两个可复算口径**：10mm 格峰值（`absolute_zero` **5** = 登记提案；`frame_origin` 7）· 三横带占用比明确定义版 **4.78/7.59/2.19%**；**M-12「19–27%」仍复现不出** ⇒ 待监理择一 + 给阈 | 同上 §2.1/§2.2 |
+| `criteria/` 在岗 | **仍为 0 条**（`criteria/` 未动：`897e8bfde60e2cfe` · `7ce08757eff25557`；v2/v3/v4 均草案，`not_countersigned: true`，`k2/pipeline.yaml` 缺失） | — |
+
+**计数不变**：`根闭 0` · `OUT（具名）4` · `未闭 55`（载体已修 16 / 载体未修 29）。
+**P4 门**：仍不可开（owner #14 ③ fail-closed 不变）；ENG 侧判据前置再增一档：① v3 可安装 ② **v4 可安装** ③ ⑥ 候选板 `b2cfb087839afd73` 待落板 ④ G-ROOT-1/2/3 待放行。

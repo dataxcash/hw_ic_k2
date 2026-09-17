@@ -1,0 +1,34 @@
+# criteria/manifest.k2.yaml —— DRAFT v4（= v3 + J-8 密度/间距机制；ENG 起草；监理给阈值 → 正负控复验 → gate 属主安装 → 监理签认）
+manifest_version: 4（v3 的 J-8 出框/V3 + J-8 密度/间距机制；两项阈值待监理）
+project: k2
+board: k2_v4_8L.l5.kicad_pcb        # 五步复合板（2026-09-17 落件 6ff49da5678c2108）
+not_countersigned: true             # 待监理签认
+source_of_truth:
+  register: .omo/supervision/ledger/K2-DEFECT-REGISTER-v1.md
+  register_section: "## C. 出厂判据"
+  rulings: "监理 #K2-19 · #K2-20 · #K2-21（2026-09-17）"
+checks:
+  zone_filled:              {enabled: true, expect: "filled_netted_nonkeepout_copper_zones == netted_nonkeepout_copper_zones"}
+  device_has_pads:          {enabled: true, expect: "every_footprint_pads >= 1"}
+  drill_count:              {enabled: true, npth_min: 4, expect: "npth >= 4"}
+  net_declared_realized:    {enabled: true, expect: "every_declared_net_pads >= 2"}
+  pin_map_complete:         {enabled: true, expect: "missing_pads == 0"}
+  non45_segments:           {enabled: true, expect: "non45 == 0"}
+  refdes_sets_equal:        {enabled: true, expect: "sch_set == board_set（排除纯机械件 H*，逐条列名留痕）"}
+  pipeline_present:         {enabled: true, scope: "k2", expect: "k2 域内每个含 .kicad_sch 的目录被 pipeline.yaml 覆盖"}
+  verdict_schema:           {enabled: true, expect: "no artifact contains a 'verdict' key"}
+  drc_errors:               {enabled: true, expect: "drc_errors == 0"}
+  drc_warning_dispositions: {enabled: true, expect: "board_warning_types ⊆ drc_warning_dispositions[].type"}
+  unconnected_zero:         {enabled: true, expect: "unconnected_items == 0"}
+  fp_lib_table_present:     {enabled: true, expect: "fp-lib-table exists in board project dir"}
+  lib_electrical_level:     {enabled: true, consume: "w8_audit_json", expect: "n_electrical_diff == 0 且 n_pad_name_set_only == 0（以板为准）；审计板 sha16 须 == 受审板 sha16（否则证据陈旧 ⇒ fail-closed）"}
+  pads_within_outline:      {enabled: true, consume: "pads_outline_json", expect: "全 pad 出框 == 0（AABB 与真外框多边形双口径），接口件（P3-4 8 件）亦 == 0；测量板 sha16 须 == 受审板 sha16（否则证据陈旧 ⇒ fail-closed）"}
+  keepout_active:           {enabled: true, expect: "每个 keepout 区 >=1 flag != allowed"}
+  density_and_clearance:    {enabled: false, consume: [density_json, min_clearance_json], pending: "J-8 密度/关键间距：**机制已实现**（测量件 `measure_density_and_clearance.py` + `measure_min_clearance_drc.py`；阈值键 = cell_mm / cell_origin（absolute_zero|frame_origin）/ max_fp_per_cell / min_copper_clearance_mm / 可选 max_band_occupancy_ratio / min_via_annular_mm / min_pad_to_edge_mm）；阈值未定 ⇒ fail-closed，启用仅需监理给阈值"}
+  ref_plane_continuity:     {enabled: false, pending: "V3：机制已实现（consumes v3_plane_json）；仅差监理定阈值 —— 见 k2/docs/drafts/p4-j8-v3-criteria-v3/README.md（名义 zone 轮廓 / 严格含反焊盘设阈值 / 排除短段）"}
+rule_severity_exemptions: []
+drc_warning_dispositions:
+  - {type: missing_courtyard, disposition: "不豁免；courtyard 补齐登记为 J-7 图形级已知缺口 + L2 placement 项", evidence: "k2/docs/K2-P4-W7-SUPERVISION-DECISION-SHEET-v1.md 裁定项4 + 监理 #K2-21 §〇③ 40 件清单"}
+  - {type: lib_footprint_mismatch, disposition: "以板为准（W-8）：电气级 0，图形/属性级容忍，逐条登记", evidence: "k2/docs/K2-J7-W8-FOOTPRINT-LIB-AUDIT-v1.md（59 件逐条）"}
+thresholds: {}
+thresholds_pending_supervisor: []
