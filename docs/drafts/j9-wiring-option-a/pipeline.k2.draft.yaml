@@ -1,0 +1,14 @@
+# k2/pipeline.yaml —— **草案（J-9 / M-13 接线）**，未安装
+# 依据：计划 IN#6（门禁接线与 fail-closed，落点 P1+P4）+ 登记册 J-9（pipeline.yaml 存在且 ④段判据全机判）
+# 必选 sch checks（_shared/eda_core/pipeline/required.py REQUIRED_SCH_CHECKS）三件必须出现在 checks/verify 中。
+project: k2
+# process_gate: 未启用 —— k2/process/ 尚未 bootstrap；启用手续须监理裁（见 K2-P4-J9-WIRING-OPTION-A-FEASIBILITY-v1.md）
+phases:
+  - id: preflight
+    checks:
+      - {type: project_sch_coverage}
+  - id: verify
+    verify:
+      - {type: sch_structural,  sch: k2/hw/sch/k2_sch.kicad_sch}
+      - {type: netlist_connect, sch: k2/hw/sch/k2_sch.kicad_sch, nets_yaml: k2/hw/data/k2_sch.errata-2.yaml}
+      - {type: bom_consistent,  sch: k2/hw/sch/k2_sch.kicad_sch, bom_csv: k2/fab/k2_v4_bom.csv}
