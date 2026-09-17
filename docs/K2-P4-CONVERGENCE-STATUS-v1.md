@@ -222,3 +222,13 @@ python3 $K --stage C --in b.pcb --drc db.json --out c.pcb --ledger c.json
   ⇒ 首跑实测 +3 `hole_clearance`（I2C1_SCL/SDA 两盲孔相距 0.50mm，需 ≥0.525）。本阶段 G 已按正确口径实现；F3 修订会改变 F3 行为，须整体重测，故留待下轮。
 - **T-12（执行序）**：同轮已落铜必须回灌模型（首跑 75→83：+6 `hole_clearance` + +2 `hole_to_hole` 均因新孔未回灌漏判）⇒ 阶段 G 已回灌（`add_via`/`add_hole`/`add_track`）。
 - **剩余 14 条**：`no-legal-path-on-in2` 12（DS320 strap 阵：In2 在 U6/MCIO 区 43–58% 被占）+ `no-legal-in2-via` 2；**另 5 条电源类已被本阶段按 net class 跳过**（P3V3 ×4 / 12V_IN ×1）= 其路径为 **In4 电源面**（专属 PDN 阶段）。
+
+## 16. **增量 9 附记（更正 + 试验登记）**（2026-09-17）
+
+- **T-11① 更正**：经逐行核对，`k2/tools/k2_p4_ls_xlayer_v1.py`（阶段 F3）的**孔-孔本就无同网豁免**（SPEC rev-37 卡中该项表述有误）——
+  该缺陷实属**阶段 G 首版实现**，已于提交前修正（现实现与注释一致）。F3 实存缺陷仅 **T-11②**（过孔-过孔净距缺 `HOLE_R + v.r + 0.25`）。
+- **F3 修订试验（T-10 span 感知孔表 + T-11②，试验后回滚）**：修订 F3 后在当前板（19 条未连接）复跑 ⇒ **added 0**
+  （`no-legal-path-on-bcu` 10 · `no-legal-via-slot` 8 · `no-port` 1）：**闭合无增益**，且更严的 via-via 判据使 5 条 strap 从「B.Cu 通路失败」
+  变为「无合法孔位」⇒ **本增量不落 F3 修订**（避免无收益的行为变更）；修订版已备，待与走廊重解一并落地。
+- **strap 阵残余诊断（只读）**：`DS320_STRAP_B_ADDR0_15-8` 等边**两端均有**合法 F→B 通孔位（R44 侧 1.8mm · U6 侧 0.1mm）且 F.Cu 逃逸可行，
+  失败点在 **B.Cu 通道**（西→东横穿）与 **In2 通道**（U6/MCIO 区 43–58% 被占）⇒ 残余 12 条 strap = **走廊级**问题（L2 走廊重解域），非搜索力不足。
