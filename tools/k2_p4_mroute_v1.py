@@ -1,0 +1,714 @@
+#!/usr/bin/env python3
+"""K2 · P4 增量 15（L2 自裁）—— **多层迷宫布线器 v1**（span 感知孔类 + 扩窗 + 精确放行闸）。
+
+依据：owner 常设裁定 #14（走廊/布线/过孔策略 = **L2 自裁勿停**）+ 《宪法》第四条（改板须 SPEC 留痕）。
+
+动因（增量 15 取证）：
+- 既有 F1/F2/F3/G 四器对残 14 边**全部 0 解**。根因二：
+  ① F3 的 A* 搜索窗 = **两端 bbox**（±1mm）⇒ 真实走廊（南侧 y 68..78 的 B.Cu 围裙、
+     板 x 23..143 / y 33..79）在窗外，几何上不可能被搜到；
+  ② F3/G 的孔判定为**全层通孔口径**（或单 span 硬编码）⇒ 对既有盲/埋孔类（F→In2 / In2→In5 /
+     In5→B）系统性过保守。
+- 本器：多层 A*（层 = F.Cu / In2.Cu / In5.Cu / B.Cu），过孔转移只用**板内既有孔 span 类**
+  （不新开孔类、不放松下限）；窗 = 两端 bbox 扩 `--margin`（默认 14mm，夹在板内）；
+  粗搜 0.25mm → 走廊内精搜 0.10mm；**放行闸 = 逐段 `seg_exact`（层感知）+ 逐孔 `via_exact`（span 感知）**，
+  任一不符即弃（栅格仅剪枝）。新段一律 0/45/90° 且单腿 ≥0.05；纯增；uuid5 由几何派生（复跑逐字节同）。
+
+CLI: python3 k2_p4_mroute_v1.py --in <board> --drc <drc.json> --out <board> --ledger <json>
+     [--margin 14] [--only-net NET] [--dry-run]
+"""
+from __future__ import annotations
+import argparse, importlib.util, json, math, os, re, shutil, subprocess, sys, uuid
+from array import array
+
+_HERE = os.path.dirname(os.path.abspath(__file__))
+def _load(n, f):
+    sp = importlib.util.spec_from_file_location(n, os.path.join(_HERE, f))
+    m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m); return m
+cv = _load("k2cv", "k2_p4_converge_v1.py")
+f1 = _load("k2f1", "k2_p4_ls_local_v1.py")
+f3 = _load("k2f3", "k2_p4_ls_xlayer_v1.py")
+
+import pcbnew
+F_CU, IN1_CU, IN2_CU, IN3_CU, IN4_CU, IN5_CU, IN6_CU, B_CU = (
+    pcbnew.F_Cu, pcbnew.In1_Cu, pcbnew.In2_Cu, pcbnew.In3_Cu, pcbnew.In4_Cu,
+    pcbnew.In5_Cu, pcbnew.In6_Cu, pcbnew.B_Cu)
+LAYERS = [F_CU, IN2_CU, IN5_CU, B_CU]
+LNAME = {F_CU: "F.Cu", IN2_CU: "In2.Cu", IN5_CU: "In5.Cu", B_CU: "B.Cu",
+         IN1_CU: "In1.Cu", IN3_CU: "In3.Cu", IN4_CU: "In4.Cu", IN6_CU: "In6.Cu"}
+# 板内既有孔 span 类（铜层集合，按叠层序 F,In1,In2,In3,In4,In5,In6,B）
+def _span(a, b):
+    order = [F_CU, IN1_CU, IN2_CU, IN3_CU, IN4_CU, IN5_CU, IN6_CU, B_CU]
+    i, j = order.index(a), order.index(b)
+    if i > j: i, j = j, i
+    return frozenset(order[i:j + 1])
+SPAN_OF = {frozenset((F_CU, IN2_CU)): _span(F_CU, IN2_CU),
+           frozenset((F_CU, IN5_CU)): _span(F_CU, IN5_CU),
+           frozenset((F_CU, B_CU)): _span(F_CU, B_CU),
+           frozenset((IN2_CU, IN5_CU)): _span(IN2_CU, IN5_CU),
+           frozenset((IN5_CU, B_CU)): _span(IN5_CU, B_CU)}
+TRANS = {(F_CU, IN2_CU), (F_CU, IN5_CU), (F_CU, B_CU), (IN2_CU, IN5_CU), (IN5_CU, B_CU)}
+TRACE_W, VIA_W, VIA_D = 0.20, 0.35, 0.20
+HW, VIA_R, HOLE_R = TRACE_W / 2.0, VIA_W / 2.0, VIA_D / 2.0
+GMARGIN = 0.06          # 栅格安全余量（仅剪枝）
+VIA_COST = 2.0          # 过孔代价（mm 当量）
+NS = uuid.UUID("6ba7b810-9dad-11d1-80b4-00c04fd430c8")
+SEG_BLOCK = ('\t(segment\n\t\t(start {x1} {y1})\n\t\t(end {x2} {y2})\n\t\t(width 0.2)\n'
+             '\t\t(layer "{layer}")\n\t\t(net "{net}")\n\t\t(uuid "{u}")\n\t)\n')
+VIA_BLOCK = ('\t(via{blind}\n\t\t(at {x} {y})\n\t\t(size 0.35)\n\t\t(drill 0.2)\n'
+             '\t\t(layers "{l1}" "{l2}")\n\t\t(net "{net}")\n\t\t(uuid "{u}")\n\t)\n')
+
+
+def _fmt(v):
+    s = "%.6f" % v
+    s = s.rstrip("0").rstrip(".")
+    return s if s else "0"
+
+
+def seg_uuid(net, layer, x1, y1, x2, y2):
+    return str(uuid.uuid5(NS, "k2mroute|seg|%s|%s|%s|%s|%s|%s" % (net, LNAME[layer], _fmt(x1), _fmt(y1), _fmt(x2), _fmt(y2))))
+
+
+def via_uuid(net, l1, l2, x, y):
+    return str(uuid.uuid5(NS, "k2mroute|via|%s|%s|%s|%s|%s" % (net, LNAME[l1], LNAME[l2], _fmt(x), _fmt(y))))
+
+
+# ─────────────────────── 精确放行闸（层感知 / span 感知） ───────────────────────
+def seg_exact(ctx, layer, net, x1, y1, x2, y2, hw=HW):
+    for e in ctx.edge:
+        if cv.seg_seg_dist(x1, y1, x2, y2, *e) < 0.3 + hw: return False
+    for poly in ctx.keep_t:
+        if cv.seg_poly_dist(x1, y1, x2, y2, poly) <= 0: return False
+    rb = (min(x1, x2), max(x1, x2), min(y1, y2), max(y1, y2))
+    for t in ctx.tracks:
+        if t["layer"] != layer or t["net"] == net: continue
+        rad = hw + t["hw"] + cv._req(net, t["net"])
+        if not ctx._bb_hit(rb, t["x1"], t["y1"], t["x2"], t["y2"], rad): continue
+        if cv.seg_seg_dist(x1, y1, x2, y2, t["x1"], t["y1"], t["x2"], t["y2"]) < rad: return False
+    for p in ctx.pads.values():
+        if layer not in p["lay"] or p["net"] == net: continue
+        rad = hw + cv._req(net, p["net"])
+        if p["circ"]:
+            if cv.pt_seg_dist(p["x"], p["y"], x1, y1, x2, y2) - min(p["w"], p["h"]) / 2 < rad: return False
+        else:
+            if cv.seg_poly_dist(x1, y1, x2, y2, p["poly"]) < rad: return False
+    for v in ctx.vias.values():
+        if layer not in v["lay"] or v["net"] == net: continue
+        rad = hw + cv._req(net, v["net"])
+        if cv.pt_seg_dist(v["x"], v["y"], x1, y1, x2, y2) - v["r"] < rad: return False
+    for (hx, hy, hr, hnet, hlay) in ctx.holes:
+        if hnet == net or layer not in hlay: continue
+        if cv.pt_seg_dist(hx, hy, x1, y1, x2, y2) < hr + 0.25 + hw: return False
+    return True
+
+
+def via_exact(ctx, net, x, y, span):
+    for e in ctx.edge:
+        if cv.pt_seg_dist(x, y, *e) < 0.3 + VIA_R: return False
+    for poly in ctx.keep_v:
+        if cv.pt_in_poly(x, y, poly): return False
+    for t in ctx.tracks:
+        if t["net"] == net or t["layer"] not in span: continue
+        need = max(VIA_R + cv._req(net, t["net"]), HOLE_R + 0.25 + t["hw"])
+        if cv.pt_seg_dist(x, y, t["x1"], t["y1"], t["x2"], t["y2"]) - t["hw"] < need: return False
+    for p in ctx.pads.values():
+        if p["net"] == net or not (p["lay"] & span): continue
+        need = max(VIA_R + cv._req(net, p["net"]), HOLE_R + 0.25)
+        if p["circ"]:
+            if math.hypot(x - p["x"], y - p["y"]) - min(p["w"], p["h"]) / 2 < need: return False
+        else:
+            if cv.pt_in_poly(x, y, p["poly"]) or cv.pt_poly_dist(x, y, p["poly"]) < need: return False
+    for u, v in ctx.vias.items():
+        if v["net"] == net or not (v["lay"] & span): continue
+        need = max(VIA_R + v["r"] + cv._req(net, v["net"]),   # 铜-铜
+                   HOLE_R + 0.25 + v["r"],                    # 本孔-它铜
+                   VIA_R + 0.25 + v["hole"],                  # 本铜-它孔
+                   HOLE_R + 0.25 + v["hole"])                 # 孔-孔
+        if math.hypot(x - v["x"], y - v["y"]) < need: return False
+    for u, p in ctx.pads.items():                   # PTH 盘：同心孔（本孔-它铜 / 本铜-它孔）
+        if p["net"] == net or p["hole"] <= 0 or not (p["lay"] & span): continue
+        if math.hypot(x - p["x"], y - p["y"]) < max(p["hole"] + 0.25 + VIA_R,
+                                                    VIA_R + 0.25 + p["hole"]): return False
+    for (hx, hy, hr, hnet, hlay) in ctx.holes:      # 孔-孔 0.25（无同网豁免）
+        if math.hypot(x - hx, y - hy) < HOLE_R + 0.25 + hr: return False
+    return True
+
+
+def _via_why(ctx, net, x, y, span):
+    for e in ctx.edge:
+        if cv.pt_seg_dist(x, y, *e) < 0.3 + VIA_R: return "edge"
+    for poly in ctx.keep_v:
+        if cv.pt_in_poly(x, y, poly): return "keepv"
+    for t in ctx.tracks:
+        if t["net"] == net or t["layer"] not in span: continue
+        need = max(VIA_R + cv._req(net, t["net"]), HOLE_R + 0.25 + t["hw"])
+        if cv.pt_seg_dist(x, y, t["x1"], t["y1"], t["x2"], t["y2"]) - t["hw"] < need:
+            return "trk:%s@%.2f,%.2f(d=%.3f/%.3f)" % (t["net"], t["x1"], t["y1"],
+                        cv.pt_seg_dist(x, y, t["x1"], t["y1"], t["x2"], t["y2"]) - t["hw"], need)
+    for p in ctx.pads.values():
+        if p["net"] == net or not (p["lay"] & span): continue
+        need = max(VIA_R + cv._req(net, p["net"]), HOLE_R + 0.25)
+        if p["circ"]:
+            d = math.hypot(x - p["x"], y - p["y"]) - min(p["w"], p["h"]) / 2
+        else:
+            d = 0.0 if cv.pt_in_poly(x, y, p["poly"]) else cv.pt_poly_dist(x, y, p["poly"])
+        if d < need: return "pad:%s@%.2f,%.2f(d=%.3f/%.3f)" % (p["net"], p["x"], p["y"], d, need)
+    for u, v in ctx.vias.items():
+        if v["net"] == net or not (v["lay"] & span): continue
+        need = max(VIA_R + v["r"] + cv._req(net, v["net"]), HOLE_R + 0.25 + v["r"],
+                   VIA_R + 0.25 + v["hole"], HOLE_R + 0.25 + v["hole"])
+        if math.hypot(x - v["x"], y - v["y"]) < need:
+            return "via:%s@%.2f,%.2f(d=%.3f/%.3f)" % (v["net"], v["x"], v["y"], math.hypot(x - v["x"], y - v["y"]), need)
+    for (hx, hy, hr, hnet, hlay) in ctx.holes:
+        if math.hypot(x - hx, y - hy) < HOLE_R + 0.25 + hr:
+            return "hole:%s@%.2f,%.2f(d=%.3f/%.3f)" % (hnet, hx, hy, math.hypot(x - hx, y - hy), HOLE_R + 0.25 + hr)
+    return "?"
+
+
+def node_in_island(ctx, find, comp, net, layer, x, y, tol=0.06):
+    for u, p in ctx.pads.items():
+        if p["net"] != net or layer not in p["lay"]: continue
+        if comp is not None and find("p:" + u) != comp: continue
+        if p["circ"]:
+            if math.hypot(x - p["x"], y - p["y"]) <= min(p["w"], p["h"]) / 2 + tol: return True
+        else:
+            if cv.pt_in_poly(x, y, p["poly"]) or cv.pt_poly_dist(x, y, p["poly"]) <= tol: return True
+    for t in ctx.tracks:
+        if t["net"] != net or t["layer"] != layer: continue
+        if comp is not None and find("t:" + t["uuid"]) != comp: continue
+        if cv.pt_seg_dist(x, y, t["x1"], t["y1"], t["x2"], t["y2"]) <= t["hw"] + tol: return True
+    for u, v in ctx.vias.items():
+        if v["net"] != net or layer not in v["lay"]: continue
+        if comp is not None and find("v:" + u) != comp: continue
+        if math.hypot(x - v["x"], y - v["y"]) <= v["r"] + tol: return True
+    return False
+
+
+# ─────────────────────── 栅格（剪枝） ───────────────────────
+class Grid:
+    def __init__(self, ctx, net, step, x0, y0, x1, y1, margin=0.0):
+        self.step = step; self.x0, self.y0 = x0, y0; self.margin = margin
+        self.nx = int(math.floor((x1 - x0) / step)) + 1
+        self.ny = int(math.floor((y1 - y0) / step)) + 1
+        self.bad = {L: bytearray(self.nx * self.ny) for L in LAYERS}
+        self.vb = {}
+        import time as _t; _t0 = _t.time()
+        self._mark(ctx, net)
+        if os.environ.get("K2MR_DBG"):
+            sys.stderr.write("[grid] step=%.2f %dx%d cells=%d mark=%.1fs\n" %
+                             (step, self.nx, self.ny, self.nx * self.ny, _t.time() - _t0))
+
+    def cell(self, x, y):
+        i = int(round((x - self.x0) / self.step)); j = int(round((y - self.y0) / self.step))
+        return i, j
+
+    def pt(self, i, j):
+        return self.x0 + i * self.step, self.y0 + j * self.step
+
+    def vbad(self, ctx, net, span):
+        """该 span 类过孔**非法**格（剪枝用；放行闸仍为 via_exact）。"""
+        if span in self.vb: return self.vb[span]
+        bad = bytearray(self.nx * self.ny)
+        step, x0, y0, nx, ny = self.step, self.x0, self.y0, self.nx, self.ny
+
+        def cpt(cx, cy, rad):
+            i0 = max(0, int(math.floor((cx - rad - x0) / step)))
+            i1 = min(nx - 1, int(math.ceil((cx + rad - x0) / step)))
+            j0 = max(0, int(math.floor((cy - rad - y0) / step)))
+            j1 = min(ny - 1, int(math.ceil((cy + rad - y0) / step)))
+            for i in range(i0, i1 + 1):
+                px = x0 + i * step
+                for j in range(j0, j1 + 1):
+                    py = y0 + j * step
+                    if (px - cx) ** 2 + (py - cy) ** 2 <= rad * rad: bad[i * ny + j] = 1
+
+        def cseg(ax, ay, bx, by, rad):
+            i0 = max(0, int(math.floor((min(ax, bx) - rad - x0) / step)))
+            i1 = min(nx - 1, int(math.ceil((max(ax, bx) + rad - x0) / step)))
+            j0 = max(0, int(math.floor((min(ay, by) - rad - y0) / step)))
+            j1 = min(ny - 1, int(math.ceil((max(ay, by) + rad - y0) / step)))
+            for i in range(i0, i1 + 1):
+                px = x0 + i * step
+                for j in range(j0, j1 + 1):
+                    py = y0 + j * step
+                    if cv.pt_seg_dist(px, py, ax, ay, bx, by) <= rad: bad[i * ny + j] = 1
+
+        def fill(poly):
+            xa = [q[0] for q in poly]; ya = [q[1] for q in poly]
+            i0 = max(0, int(math.floor((min(xa) - x0) / step)))
+            i1 = min(nx - 1, int(math.ceil((max(xa) - x0) / step)))
+            j0 = max(0, int(math.floor((min(ya) - y0) / step)))
+            j1 = min(ny - 1, int(math.ceil((max(ya) - y0) / step)))
+            for i in range(i0, i1 + 1):
+                for j in range(j0, j1 + 1):
+                    if cv.pt_in_poly(x0 + i * step, y0 + j * step, poly): bad[i * ny + j] = 1
+
+        for e in ctx.edge: cseg(e[0], e[1], e[2], e[3], 0.3 + VIA_R + self.margin)
+        for poly in ctx.keep_v: fill(poly)
+        for t in ctx.tracks:
+            if t["layer"] not in span or t["net"] == net: continue
+            cseg(t["x1"], t["y1"], t["x2"], t["y2"],
+                 max(VIA_R + cv._req(net, t["net"]), HOLE_R + 0.25 + t["hw"]) + t["hw"] + self.margin)
+        for p in ctx.pads.values():
+            if not (p["lay"] & span) or p["net"] == net: continue
+            rad = max(VIA_R + cv._req(net, p["net"]), HOLE_R + 0.25) + self.margin
+            if p["circ"]:
+                cpt(p["x"], p["y"], min(p["w"], p["h"]) / 2 + rad)
+            else:
+                n = len(p["poly"])
+                for k in range(n):
+                    q1, q2 = p["poly"][k], p["poly"][(k + 1) % n]
+                    cseg(q1[0], q1[1], q2[0], q2[1], rad)
+                fill(p["poly"])
+        for u, v in ctx.vias.items():
+            if not (v["lay"] & span) or v["net"] == net: continue
+            cpt(v["x"], v["y"], max(VIA_R + v["r"] + cv._req(net, v["net"]), HOLE_R + 0.25 + v["r"],
+                                    VIA_R + 0.25 + v["hole"], HOLE_R + 0.25 + v["hole"]) + self.margin)
+        for u, p in ctx.pads.items():
+            if p["net"] == net or p["hole"] <= 0 or not (p["lay"] & span): continue
+            cpt(p["x"], p["y"], max(p["hole"] + 0.25 + VIA_R, VIA_R + 0.25 + p["hole"]) + self.margin)
+        for (hx, hy, hr, hnet, hlay) in ctx.holes:
+            if hnet == net: continue
+            cpt(hx, hy, hr + 0.25 + HOLE_R + self.margin)
+        self.vb[span] = bad
+        return bad
+
+    def inside(self, i, j):
+        return 0 <= i < self.nx and 0 <= j < self.ny
+
+    def _mark(self, ctx, net):
+        def cseg(layer, ax, ay, bx, by, rad):
+            bad = self.bad[layer]
+            i0 = max(0, int(math.floor((min(ax, bx) - rad - self.x0) / self.step)))
+            i1 = min(self.nx - 1, int(math.ceil((max(ax, bx) + rad - self.x0) / self.step)))
+            j0 = max(0, int(math.floor((min(ay, by) - rad - self.y0) / self.step)))
+            j1 = min(self.ny - 1, int(math.ceil((max(ay, by) + rad - self.y0) / self.step)))
+            for i in range(i0, i1 + 1):
+                px = self.x0 + i * self.step
+                for j in range(j0, j1 + 1):
+                    py = self.y0 + j * self.step
+                    if cv.pt_seg_dist(px, py, ax, ay, bx, by) <= rad:
+                        bad[i * self.ny + j] = 1
+
+        def cpt(layer, cx, cy, rad):
+            bad = self.bad[layer]
+            i0 = max(0, int(math.floor((cx - rad - self.x0) / self.step)))
+            i1 = min(self.nx - 1, int(math.ceil((cx + rad - self.x0) / self.step)))
+            j0 = max(0, int(math.floor((cy - rad - self.y0) / self.step)))
+            j1 = min(self.ny - 1, int(math.ceil((cy + rad - self.y0) / self.step)))
+            for i in range(i0, i1 + 1):
+                px = self.x0 + i * self.step
+                for j in range(j0, j1 + 1):
+                    py = self.y0 + j * self.step
+                    if (px - cx) ** 2 + (py - cy) ** 2 <= rad * rad:
+                        bad[i * self.ny + j] = 1
+
+        for L in LAYERS:
+            for t in ctx.tracks:
+                if t["layer"] != L or t["net"] == net: continue
+                cseg(L, t["x1"], t["y1"], t["x2"], t["y2"], t["hw"] + HW + cv._req(net, t["net"]) + self.margin)
+            for p in ctx.pads.values():
+                if L not in p["lay"] or p["net"] == net: continue
+                r = HW + cv._req(net, p["net"]) + self.margin
+                if p["circ"]:
+                    cpt(L, p["x"], p["y"], min(p["w"], p["h"]) / 2 + r)
+                else:
+                    n = len(p["poly"])
+                    for k in range(n):
+                        q1, q2 = p["poly"][k], p["poly"][(k + 1) % n]
+                        cseg(L, q1[0], q1[1], q2[0], q2[1], r)
+                    xa = [q[0] for q in p["poly"]]; ya = [q[1] for q in p["poly"]]
+                    i0 = max(0, int(math.floor((min(xa) - self.x0) / self.step)))
+                    i1 = min(self.nx - 1, int(math.ceil((max(xa) - self.x0) / self.step)))
+                    j0 = max(0, int(math.floor((min(ya) - self.y0) / self.step)))
+                    j1 = min(self.ny - 1, int(math.ceil((max(ya) - self.y0) / self.step)))
+                    for i in range(i0, i1 + 1):
+                        for j in range(j0, j1 + 1):
+                            if cv.pt_in_poly(self.x0 + i * self.step, self.y0 + j * self.step, p["poly"]):
+                                self.bad[L][i * self.ny + j] = 1
+            for u, v in ctx.vias.items():
+                if L not in v["lay"] or v["net"] == net: continue
+                cpt(L, v["x"], v["y"], v["r"] + HW + cv._req(net, v["net"]) + self.margin)
+            for (hx, hy, hr, hnet, hlay) in ctx.holes:
+                if hnet == net or L not in hlay: continue
+                cpt(L, hx, hy, hr + 0.25 + HW + self.margin)
+            for e in ctx.edge:
+                cseg(L, e[0], e[1], e[2], e[3], HW + 0.3 + self.margin)
+            for poly in ctx.keep_t:
+                xa = [q[0] for q in poly]; ya = [q[1] for q in poly]
+                i0 = max(0, int(math.floor((min(xa) - self.x0) / self.step)))
+                i1 = min(self.nx - 1, int(math.ceil((max(xa) - self.x0) / self.step)))
+                j0 = max(0, int(math.floor((min(ya) - self.y0) / self.step)))
+                j1 = min(self.ny - 1, int(math.ceil((max(ya) - self.y0) / self.step)))
+                for i in range(i0, i1 + 1):
+                    for j in range(j0, j1 + 1):
+                        if cv.pt_in_poly(self.x0 + i * self.step, self.y0 + j * self.step, poly):
+                            self.bad[L][i * self.ny + j] = 1
+            for poly in ctx.keep_v:
+                xa = [q[0] for q in poly]; ya = [q[1] for q in poly]
+                i0 = max(0, int(math.floor((min(xa) - self.x0) / self.step)))
+                i1 = min(self.nx - 1, int(math.ceil((max(xa) - self.x0) / self.step)))
+                j0 = max(0, int(math.floor((min(ya) - self.y0) / self.step)))
+                j1 = min(self.ny - 1, int(math.ceil((max(ya) - self.y0) / self.step)))
+                for i in range(i0, i1 + 1):
+                    for j in range(j0, j1 + 1):
+                        if cv.pt_in_poly(self.x0 + i * self.step, self.y0 + j * self.step, poly):
+                            self.bad[L][i * self.ny + j] = 1
+
+
+# ─────────────────────── 多层 A* ───────────────────────
+DIRS = ((1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (1, -1), (-1, 1), (-1, -1))
+
+
+CAP = 3_000_000
+
+
+def astar(grid, ctx, net, s, g, sl, gl, fine=False):
+    """s,g = (i,j)。返回 ([(layer,i,j,viaflag), ...], reason)。"""
+    import heapq
+    step = grid.step; ny = grid.ny; nc = grid.nx * ny
+    LI = {L: k for k, L in enumerate(LAYERS)}
+    N = nc * len(LAYERS)
+    inf = float("inf")
+    dist = array("d", [inf]) * N
+    came = array("i", [-1]) * N
+    viaf = bytearray(N)
+    def nid(L, i, j): return LI[L] * nc + i * ny + j
+    W = 1.35
+    sx, sy = s; gx, gy = g
+    def h(i, j): return math.hypot(i - gx, j - gy) * step * W
+    sn = nid(sl, sx, sy)
+    if grid.bad[sl][sx * ny + sy]: return None, "start-blocked"
+    dist[sn] = 0.0
+    q = [(h(sx, sy), 0.0, sn)]
+    seen = 0
+    import time as _t; _t0 = _t.time()
+    while q:
+        f, d, n = heapq.heappop(q)
+        if d > dist[n] + 1e-9: continue
+        seen += 1
+        k = n // nc; r = n % nc; i, j = r // ny, r % ny
+        L = LAYERS[k]
+        if L == gl and i == gx and j == gy:
+            path = []
+            c = n
+            while c != -1:
+                kk = c // nc; rr = c % nc; ii, jj = rr // ny, rr % ny
+                path.append((LAYERS[kk], ii, jj, bool(viaf[c]))); c = came[c]
+            path.reverse()
+            if os.environ.get("K2MR_DBG"): sys.stderr.write("[astar] ok exp=%d %.1fs\n" % (seen, _t.time() - _t0))
+            return path, "ok"
+        px, py = grid.pt(i, j)
+        for di, dj in DIRS:
+            ni, nj = i + di, j + dj
+            if not grid.inside(ni, nj): continue
+            if grid.bad[L][ni * ny + nj]: continue
+            if di and dj and (grid.bad[L][i * ny + nj] or grid.bad[L][ni * ny + j]): continue
+            nd = d + step * (math.sqrt(2) if di and dj else 1.0)
+            nn = nid(L, ni, nj)
+            if nd < dist[nn] - 1e-9:
+                dist[nn] = nd; came[nn] = n
+                heapq.heappush(q, (nd + h(ni, nj), nd, nn))
+        for (a, b) in TRANS:
+            if L == a: oL = b
+            elif L == b: oL = a
+            else: continue
+            if grid.bad[oL][i * ny + j]: continue
+            span = SPAN_OF[frozenset((a, b))]
+            if grid.vbad(ctx, net, span)[i * ny + j]: continue
+            nn = nid(oL, i, j)
+            nd = d + VIA_COST
+            if nd < dist[nn] - 1e-9:
+                dist[nn] = nd; came[nn] = n; viaf[nn] = 1
+                heapq.heappush(q, (nd + h(i, j), nd, nn))
+        if seen > CAP:
+            if os.environ.get("K2MR_DBG"): sys.stderr.write("[astar] cap %d %.1fs\n" % (seen, _t.time() - _t0))
+            return None, "cap-%d" % seen
+    if os.environ.get("K2MR_DBG"): sys.stderr.write("[astar] exhaust %d %.1fs\n" % (seen, _t.time() - _t0))
+    return None, "exhausted-%d" % seen
+
+
+def simplify(pts):
+    out = [pts[0]]
+    for p in pts[1:]:
+        if math.hypot(p[0] - out[-1][0], p[1] - out[-1][1]) < 1e-9: continue
+        out.append(p)
+    if len(out) <= 2: return out
+    res = [out[0]]
+    for k in range(1, len(out) - 1):
+        a, b, c = res[-1], out[k], out[k + 1]
+        d1 = (b[0] - a[0], b[1] - a[1]); d2 = (c[0] - b[0], c[1] - b[1])
+        if abs(d1[0] * d2[1] - d1[1] * d2[0]) < 1e-9 and d1[0] * d2[0] + d1[1] * d2[1] > 0: continue
+        res.append(b)
+    res.append(out[-1])
+    return res
+
+
+def snap_node(grid, ctx, find, comp, net, layer, x, y, maxr=4):
+    ci, cj = grid.cell(x, y)
+    _dbg = os.environ.get("K2MR_DBG2")
+    if _dbg:
+        sys.stderr.write("[snap] %s layer=%s (%.3f,%.3f) cell=(%d,%d) maxr=%d margin=%.2f\n"
+                         % (net, LNAME[layer], x, y, ci, cj, maxr, grid.margin))
+        for r in range(maxr + 1):
+            for di in range(-r, r + 1):
+                for dj in range(-r, r + 1):
+                    if max(abs(di), abs(dj)) != r: continue
+                    i, j = ci + di, cj + dj
+                    if not grid.inside(i, j): continue
+                    px, py = grid.pt(i, j)
+                    own = node_in_island(ctx, find, comp, net, layer, px, py)
+                    blk = grid.bad[layer][i * grid.ny + j]
+                    if own or r <= 1:
+                        sys.stderr.write("   r=%d d=(%d,%d) xy=(%.3f,%.3f) own=%s bad=%d\n"
+                                         % (r, di, dj, px, py, own, blk))
+    for r in range(maxr + 1):
+        cands = []
+        for di in range(-r, r + 1):
+            for dj in range(-r, r + 1):
+                if max(abs(di), abs(dj)) != r: continue
+                cands.append((di, dj))
+        cands.sort()
+        for di, dj in cands:
+            i, j = ci + di, cj + dj
+            if not grid.inside(i, j) or grid.bad[layer][i * grid.ny + j]: continue
+            px, py = grid.pt(i, j)
+            if node_in_island(ctx, find, comp, net, layer, px, py): return i, j
+    return None
+
+
+def solve_edge(ctx, find, compa, compb, net, la, pa, lb, pb, margin, coarse_step):
+    last = "no-attempt"
+    for m in MARGINS:
+        sol, why = _try_margin(ctx, find, compa, compb, net, la, pa, lb, pb, margin, coarse_step, m)
+        if sol is not None: return sol, "ok"
+        last = why
+    return None, last
+
+
+def _try_margin(ctx, find, compa, compb, net, la, pa, lb, pb, margin, coarse_step, gm):
+    x0 = min(pa[0], pb[0]) - margin; x1 = max(pa[0], pb[0]) + margin
+    y0 = min(pa[1], pb[1]) - margin; y1 = max(pa[1], pb[1]) + margin
+    bx0, by0, bx1, by1 = EDGE_IN
+    x0, y0 = max(x0, bx0), max(y0, by0)
+    x1, y1 = min(x1, bx1), min(y1, by1)
+    if x1 - x0 < 1.0 or y1 - y0 < 1.0: return None, "window-empty"
+    g1 = Grid(ctx, net, coarse_step, x0, y0, x1, y1, gm)
+    s = snap_node(g1, ctx, find, compa, net, la, pa[0], pa[1])
+    go = snap_node(g1, ctx, find, compb, net, lb, pb[0], pb[1])
+    if s is None: return None, "no-free-start-node"
+    if go is None: return None, "no-free-goal-node"
+    p1, why1 = astar(g1, ctx, net, s, go, la, lb)
+    if p1 is None:
+        return None, "no-path-coarse(%s)" % why1
+    pts = [(ctx_layer, g1.pt(i, j)) for (ctx_layer, i, j, v) in p1]
+    xs = [p[1][0] for p in pts]; ys = [p[1][1] for p in pts]
+    x0f, x1f = min(xs) - 0.7, max(xs) + 0.7
+    y0f, y1f = min(ys) - 0.7, max(ys) + 0.7
+    x0f, y0f = max(x0f, bx0), max(y0f, by0)
+    x1f, y1f = min(x1f, bx1), min(y1f, by1)
+    g2 = Grid(ctx, net, FINE_STEP, x0f, y0f, x1f, y1f, gm)
+    s2 = snap_node(g2, ctx, find, compa, net, la, pa[0], pa[1], maxr=6)
+    go2 = snap_node(g2, ctx, find, compb, net, lb, pb[0], pb[1], maxr=6)
+    if s2 is None or go2 is None: return None, "no-free-node-fine"
+    p2, why2 = astar(g2, ctx, net, s2, go2, la, lb, fine=True)
+    if p2 is None: return None, "no-path-fine(%s)" % why2
+    # 重组：连续同层 = 折线；层变化 = 过孔
+    legs = []       # (layer, [(x,y)...])
+    vias = []       # (x,y,span,l1,l2)
+    cur = None; curL = None
+    for (L, i, j, v) in p2:
+        x, y = g2.pt(i, j)
+        if curL is None:
+            curL = L; cur = [(x, y)]
+            continue
+        if L == curL:
+            cur.append((x, y))
+        else:
+            legs.append((curL, simplify(cur)))
+            span = SPAN_OF[frozenset((curL, L))]
+            vias.append((cur[-1][0], cur[-1][1], span, curL, L))
+            curL = L; cur = [(x, y)]
+    legs.append((curL, simplify(cur)))
+    # 精确放行闸
+    for (L, pl) in legs:
+        for k in range(len(pl) - 1):
+            (ax, ay), (bx, by) = pl[k], pl[k + 1]
+            if math.hypot(bx - ax, by - ay) < 0.049:
+                return None, "leg-too-short"
+            if not _ok45(ax, ay, bx, by): return None, "leg-not-45"
+            if not seg_exact(ctx, L, net, ax, ay, bx, by): return None, "seg-clearance"
+    for (x, y, span, l1, l2) in vias:
+        if not via_exact(ctx, net, x, y, span):
+            return None, "via-clearance(%s)" % _via_why(ctx, net, x, y, span)
+    return dict(legs=legs, vias=vias), "ok"
+
+
+def _ok45(x1, y1, x2, y2):
+    dx, dy = abs(x2 - x1), abs(y2 - y1)
+    return dx < 1e-6 or dy < 1e-6 or abs(dx - dy) < 1e-6
+
+
+FINE_STEP = 0.10
+MARGINS = (0.0, 0.03, 0.08, 0.15, 0.25)
+EDGE_IN = (0.0, 0.0, 0.0, 0.0)
+
+
+def run(src, drc_path, out_path, ledger_path, margin, only_net, dry, order="dist_asc"):
+    global EDGE_IN
+    b = pcbnew.LoadBoard(src)
+    ctx = f3.Ctx(b)
+    holes = []
+    for u, v in ctx.vias.items():
+        holes.append((v["x"], v["y"], v["hole"], v["net"], frozenset(v["lay"])))
+    for u, p in ctx.pads.items():
+        if p["hole"] > 0:
+            holes.append((p["x"], p["y"], p["hole"], p["net"], frozenset(p["lay"])))
+    ctx.holes = holes
+    bb = b.GetBoardEdgesBoundingBox()
+    inset = 0.3 + HW + 0.4
+    EDGE_IN = (pcbnew.ToMM(bb.GetLeft()) + inset, pcbnew.ToMM(bb.GetTop()) + inset,
+               pcbnew.ToMM(bb.GetRight()) - inset, pcbnew.ToMM(bb.GetBottom()) - inset)
+    m = f1.M(b)
+    find = f1.islands(m)
+    drc = json.load(open(drc_path, encoding="utf-8"))
+
+    def netof(uu):
+        if uu in ctx.pads: return ctx.pads[uu]["net"]
+        if uu in ctx.vias: return ctx.vias[uu]["net"]
+        for t in ctx.tracks:
+            if t["uuid"] == uu: return t["net"]
+        return None
+
+    def layof(uu):
+        if uu in ctx.pads:
+            for L in LAYERS:
+                if L in ctx.pads[uu]["lay"]: return L
+            return F_CU
+        if uu in ctx.vias:
+            for L in LAYERS:
+                if L in ctx.vias[uu]["lay"]: return L
+            return F_CU
+        for t in ctx.tracks:
+            if t["uuid"] == uu:
+                return t["layer"] if t["layer"] in LAYERS else F_CU
+        return None
+
+    edges = []
+    for e in drc.get("unconnected_items", []):
+        its = e.get("items", [])
+        if len(its) != 2: continue
+        ua, ub = its[0].get("uuid"), its[1].get("uuid")
+        na, nb = netof(ua), netof(ub)
+        if not na or na != nb: continue
+        if only_net and na != only_net: continue
+        la, lb = layof(ua), layof(ub)
+        if la is None or lb is None: continue
+        pa = (its[0]["pos"]["x"], its[0]["pos"]["y"]); pb = (its[1]["pos"]["x"], its[1]["pos"]["y"])
+        d = math.hypot(pa[0] - pb[0], pa[1] - pb[1])
+        edges.append((round(d, 3), na, ua, ub, la, lb, pa, pb))
+        # 防未用变量告警
+    if order == "dist_desc":
+        edges.sort(key=lambda z: (-z[0], z[1], z[2]))
+    elif order == "hard":
+        def _score(z):
+            _d, _net, ua, ub, la, lb, pa, pb = z
+            tot = 0
+            for (_u, _L, _p) in ((ua, la, pa), (ub, lb, pb)):
+                x0h, x1h = _p[0] - 1.5, _p[0] + 1.5
+                y0h, y1h = _p[1] - 1.5, _p[1] + 1.5
+                gh = Grid(ctx, _net, 0.10, x0h, y0h, x1h, y1h, 0.0)
+                tot += gh.nx * gh.ny - sum(gh.bad[_L])
+            return tot
+        edges.sort(key=lambda z: (_score(z), -z[0], z[1]))
+    else:
+        edges.sort(key=lambda z: (z[0], z[1], z[2]))
+
+    added, blocked, blocks = [], [], []
+    for dist, net, ua, ub, la, lb, pa, pb in edges:
+        ca, cb = find("p:" + ua) if ua in ctx.pads else (find("v:" + ua) if ua in ctx.vias else find("t:" + ua)), \
+                 find("p:" + ub) if ub in ctx.pads else (find("v:" + ub) if ub in ctx.vias else find("t:" + ub))
+        if ca == cb: continue
+        try:
+            sol, why = solve_edge(ctx, find, ca, cb, net, la, pa, lb, pb, margin, 0.25)
+        except Exception as ex:
+            sol, why = None, "exception:%s" % type(ex).__name__
+        if sol is None:
+            blocked.append({"net": net, "dist": dist, "why": why}); continue
+        nseg = 0; nvia = 0; ln = 0.0
+        for (L, pl) in sol["legs"]:
+            for k in range(len(pl) - 1):
+                x1, y1 = pl[k]; x2, y2 = pl[k + 1]
+                if math.hypot(x2 - x1, y2 - y1) < 0.001: continue
+                blocks.append(SEG_BLOCK.format(x1=_fmt(x1), y1=_fmt(y1), x2=_fmt(x2), y2=_fmt(y2),
+                                               layer=LNAME[L], net=net,
+                                               u=seg_uuid(net, L, x1, y1, x2, y2)))
+                ctx.tracks.append(dict(uuid=seg_uuid(net, L, x1, y1, x2, y2), net=net, layer=L,
+                                       x1=x1, y1=y1, x2=x2, y2=y2, hw=HW))
+                nseg += 1; ln += math.hypot(x2 - x1, y2 - y1)
+        for (x, y, span, l1, l2) in sol["vias"]:
+            u = via_uuid(net, l1, l2, x, y)
+            blind = "" if span == SPAN_OF[frozenset((F_CU, B_CU))] else " blind"
+            blocks.append(VIA_BLOCK.format(blind=blind, x=_fmt(x), y=_fmt(y),
+                                           l1=LNAME[l1], l2=LNAME[l2], net=net, u=u))
+            ctx.vias[u] = dict(net=net, x=x, y=y, r=VIA_R, hole=HOLE_R, lay=set(span))
+            ctx.holes.append((x, y, HOLE_R, net, span))
+            nvia += 1
+        added.append({"net": net, "dist": dist, "segs": nseg, "vias": nvia, "len": round(ln, 4),
+                      "via_xy": [[round(v[0], 3), round(v[1], 3)] for v in sol["vias"]],
+                      "layers": sorted({LNAME[L] for L, _ in sol["legs"]})})
+    led = {"stage": "M15", "edges": len(edges), "added": added, "blocked": blocked,
+           "summary": {"added": len(added), "blocked": len(blocked),
+                       "segs": sum(a["segs"] for a in added), "vias": sum(a["vias"] for a in added),
+                       "len": round(sum(a["len"] for a in added), 4),
+                       "reasons": {k: sum(1 for x in blocked if x["why"] == k)
+                                   for k in sorted({x["why"] for x in blocked})}}}
+    json.dump(led, open(ledger_path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    if dry or not blocks:
+        return led["summary"]
+    txt = open(src, encoding="utf-8").read()
+    anchor = txt.index("\t(segment\n")
+    tmp = out_path + ".m15_tmp.kicad_pcb"
+    open(tmp, "w", encoding="utf-8").write(txt[:anchor] + "".join(blocks) + txt[anchor:])
+    src_pro = re.sub(r"\.kicad_pcb$", ".kicad_pro", src)
+    if os.path.exists(src_pro):
+        shutil.copyfile(src_pro, re.sub(r"\.kicad_pcb$", ".kicad_pro", tmp))
+    r = subprocess.run([sys.executable, os.path.abspath(__file__), "--fill", tmp, out_path],
+                       capture_output=True, text=True)
+    if r.returncode != 0:
+        raise RuntimeError("fill failed rc=%d %s" % (r.returncode, r.stderr[-400:]))
+    if os.path.exists(src_pro):
+        shutil.copyfile(src_pro, re.sub(r"\.kicad_pcb$", ".kicad_pro", out_path))
+    os.remove(tmp)
+    return led["summary"]
+
+
+def _fill(tmp, out_path):
+    b2 = pcbnew.LoadBoard(tmp)
+    if b2 is None:
+        raise SystemExit("_fill: LoadBoard -> None")
+    pcbnew.ZONE_FILLER(b2).Fill(b2.Zones())
+    b2.Save(out_path)
+    print(json.dumps({"fill": "ok"}))
+    return 0
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(description="K2 P4 增量 15：多层迷宫布线器（span 感知孔类 + 扩窗）")
+    ap.add_argument("--fill", nargs=2, metavar=("TMP", "OUT"))
+    ap.add_argument("--in", dest="src"); ap.add_argument("--drc"); ap.add_argument("--out")
+    ap.add_argument("--ledger"); ap.add_argument("--margin", type=float, default=14.0)
+    ap.add_argument("--only-net"); ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--order", default="dist_asc", choices=["dist_asc", "dist_desc", "hard"])
+    a = ap.parse_args(argv)
+    if a.fill:
+        return _fill(a.fill[0], a.fill[1])
+    if not (a.src and a.drc and a.out and a.ledger):
+        ap.error("--in/--drc/--out/--ledger 必填")
+    print(json.dumps(run(a.src, a.drc, a.out, a.ledger, a.margin, a.only_net, a.dry_run,
+                         a.order), ensure_ascii=False))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
