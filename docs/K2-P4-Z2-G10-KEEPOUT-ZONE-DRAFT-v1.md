@@ -2,7 +2,7 @@
 
 > 缘起：handoff inc61 §6-3-(j)「`Z2` 候选口径 `/tmp` 预演：按『以板为准』生成 keepout/zone 段草案（G10 Step 5 段），**仅 `/tmp`、不落件**」。
 > 本会话**无监理放行** ⇒ ENlegal 面；**仓库零载体改动**（仅新增本证据件）。锚：受审板 `6ff49da5678c2108` · l5 pro `d5e0ca067a7b585e`。
-> 草案装置（`/tmp`，易失）：`/tmp/opencode/inc62/g10_zone_keepout_draft.py` **`8a31ad20ec520e32`** · `zones_input.json` **`2edb6eec2d600494`**（18 区数据块）· `board_filled.kicad_pcb` `26dc63a598be3d3e`。
+> 草案装置（`/tmp`，易失）：`/tmp/opencode/inc62/g10_zone_keepout_draft.py` **`8a31ad20ec520e32`** · `zones_input.json` **`2edb6eec2d600494`**（18 区数据块）· `board_filled.kicad_pcb` `26dc63a598be3d3e` · emit 产物 `zones_emit.txt` **`53b47d754916c6c2`**（**两次 emit 同 sha ⇒ 确定性 ✓**，T-38）。
 
 ## 0. 结论（五条）
 
