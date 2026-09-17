@@ -212,3 +212,14 @@ ls k2/pipeline.yaml                                                             
 
 **计数更新**：`根闭 0` · `OUT（具名）4` · `未闭 55` 不变；其中「载体已修」**15 → 16**（+`M-02`）、「载体未修」**30 → 29**。
 **P4 门**：仍不可开（`criteria/` 未签认 + `k2/pipeline.yaml` 缺失 ⇒ 无判据在岗；G-ROOT-1/2/3 未修待放行）。
+
+## 10. v1.2 增量更新（2026-09-17 夜；判据草案 v3 集成）
+
+| 项 | 变化 | 依据（件 + sha） |
+|---|---|---|
+| `J-8`（出框）④ | 由「已实现 + 正负控命中」→ **「已入判定器草案 v3 并可安装（`enabled:true`）」**：`adjudicate.draft-v3.py` `b77eacb11a261925` + `manifest.k2.v3.yaml` `4e3a629c22f85607`；A 案整判 15P/2F（FAIL 集未变） | `K2-P4-CRITERIA-V3-INTEGRATION-EVIDENCE-v1.md` `ef090eb0ca353d44` |
+| V3（`ref_plane_continuity`）④ | 由「测量已实现」→ **「机制已入草案 v3（消费 `v3_plane_json`）+ 控制件六案命中」**；安装仍 `enabled:false`（**阈值口径待监理**） | 同上（`…/manifest.k2.control-v3.yaml` `22bf55ac605b9a5d`） |
+| `criteria/` 在岗 | **仍为 0 条**（`criteria/` 未动；v2/v3 均为草案，`not_countersigned: true`，`k2/pipeline.yaml` 缺失） | — |
+
+**计数不变**：`根闭 0` · `OUT（具名）4` · `未闭 55`（载体已修 16 / 载体未修 29）。
+**P4 门**：不可开；开门的 ENG 侧前置已就绪（① 判据 v3 可安装；② ⑥ 候选板 `b2cfb087839afd73` 待落板；③ G-ROOT-1/2/3 待放行）。
