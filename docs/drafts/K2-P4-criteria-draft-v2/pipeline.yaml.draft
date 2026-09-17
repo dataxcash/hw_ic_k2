@@ -1,0 +1,10 @@
+version: 1
+project: k2
+scope: k2
+fail_closed: true
+criteria:
+  pipeline_present: {scope: k2, expect: "k2 域内 *.kicad_sch 目录均被 pipeline.yaml 覆盖"}
+  drc_errors: {expect: "== 0"}
+  unconnected_zero: {expect: "== 0"}
+  fp_lib_table_present: {expect: "exists"}
+artifacts: {manifest: criteria/manifest.k2.yaml, adjudicator: criteria/adjudicate.py}
