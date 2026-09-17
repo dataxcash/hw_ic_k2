@@ -1,0 +1,23 @@
+# 变体①「合并单件」—— Draft A（判据描述符）+ phases（必选三联）并入单件
+# 注意：criteria/fail_closed/artifacts 三键在 _shared/eda_core/** 与 criteria/** 中实测零消费者
+#       ⇒ 保留即有「声明在岗、实际无人读」风险（详见证据件 §3）。
+# 实测（/tmp/opencode/inc46/d1）：load_config PASS · meta-gate PASS · preflight PASS · verify 3/3 PASS。
+version: 1
+project: k2
+scope: k2
+fail_closed: true
+criteria:
+  pipeline_present: {scope: k2, expect: "k2 域内 *.kicad_sch 目录均被 pipeline.yaml 覆盖"}
+  drc_errors: {expect: "== 0"}
+  unconnected_zero: {expect: "== 0"}
+  fp_lib_table_present: {expect: "exists"}
+artifacts: {manifest: criteria/manifest.k2.yaml, adjudicator: criteria/adjudicate.py}
+phases:
+  - id: preflight
+    checks:
+      - {type: project_sch_coverage}
+  - id: verify
+    verify:
+      - {type: sch_structural,  sch: k2/hw/sch/k2_sch.kicad_sch}
+      - {type: netlist_connect, sch: k2/hw/sch/k2_sch.kicad_sch, nets_yaml: k2/hw/data/k2_sch.errata-2.yaml}
+      - {type: bom_consistent,  sch: k2/hw/sch/k2_sch.kicad_sch, bom_csv: k2/fab/k2_v4_bom.csv}

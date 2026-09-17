@@ -1,0 +1,14 @@
+# 变体②「职责分离」—— phases-only 合规件（= j9 合规件 b74d1f1e883c2ca3 口径）
+# D-1 消歧候选 A：Draft A（criteria-descriptor）不安装；本件装为 k2/pipeline.yaml。
+# 实测（/tmp/opencode/inc46/d1）：load_config PASS · meta-gate PASS · preflight PASS · verify 3/3 PASS。
+# 安装属 gate 属主侧；安装前置见 docs/K2-P4-PIPELINE-INSTALL-PATH-EVIDENCE-v1.md §4。
+project: k2
+phases:
+  - id: preflight
+    checks:
+      - {type: project_sch_coverage}
+  - id: verify
+    verify:
+      - {type: sch_structural,  sch: k2/hw/sch/k2_sch.kicad_sch}
+      - {type: netlist_connect, sch: k2/hw/sch/k2_sch.kicad_sch, nets_yaml: k2/hw/data/k2_sch.errata-2.yaml}
+      - {type: bom_consistent,  sch: k2/hw/sch/k2_sch.kicad_sch, bom_csv: k2/fab/k2_v4_bom.csv}
