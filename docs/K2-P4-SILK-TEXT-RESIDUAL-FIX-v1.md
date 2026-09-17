@@ -12,7 +12,7 @@
 全部为**位号文本**（非封装丝印线段）；此前 W-7 的丝印组（64 条）已把 43+21 降到 3+1，残余 3 件被判「无落点」——成因是 W-7 用**文本外框**作判定，比 DRC 的**字形笔画**判定严格得多。
 
 ## 2. 方法（几何优先；DRC 只作末检）
-工具 `k2/tools/k2_p4_silk_text_fix_v1.py`（sha256/16 = `5a48a69c7e21c5ff`）：
+工具 `k2/tools/k2_p4_silk_text_fix_v1.py`（sha256/16 = `ac213369aa0e104c`）：
 1. **判定 = 与 DRC 同语义的字形级几何**：文本取 `PCB_FIELD.GetEffectiveTextShape()`（真实笔画）；
    障碍 = pad 的 `GetEffectiveShape(F/B_Mask)` + `GetSolderMaskExpansion`、via/track 的 mask 开窗、
    **可见**丝印图元/字段笔画（隐藏字段 DRC 亦不计）；间隙取 DRC 默认 **0**（不是外框 + 40µm 余量）。
@@ -30,7 +30,7 @@
 | 几何自检 | 剩余冲突 **[]**；未落位 **0** |
 | 嵌套碰撞 | **0** |
 | 冻结判定器 | **PASS 6 / FAIL 4**，与复合板**逐条同集合同明细**（`zone_filled` 10/18 · `rule_severity_manifest` 9/62 · `refdes_sets_equal` 板有图无 4 · `pipeline_present`）；`non45` **0/4721** · 钻孔 NPTH4/PTH16 不变 |
-| 确定性 | 两次独立复跑结果板**逐字节同** `6ff49da5678c2108` |
+| 确定性 | **三次**独立复跑（`/tmp/opencode/silk-4` · `silk-5` · `silk-6`，含清理后版本）结果板**逐字节同** `6ff49da5678c2108` |
 
 ## 4. 落件并入 ①（一笔落，不再二次评审）
 `k2/tools/k2_p4_composed_land_v2.py`（sha256/16 = `f702bf8be289358d`，supersedes v1）：
