@@ -16,7 +16,7 @@
 | `…/manifest.k2.control-v4.yaml` | **`2531d4c616d855e9`** | **仅正负控**（示例阈值，非政策提案） |
 | `…/measure_density_and_clearance.py` | **`dccaaa476c807def`** | 测量件（无 `verdict`）：多口径密度 + 三横带 + 间距 + 工艺实达值 |
 | `…/j8_dc_common.py` | **`c5f708932d4e5cd5`** | 共用几何层（pad AABB 口径与 J-8 出框测量同源） |
-| `…/measure_min_clearance_drc.py` | **`a294a396a8747f71`** | 测量件（无 `verdict`）：DRC bracket 全板最小铜间距 |
+| `…/measure_min_clearance_drc.py` | **`4386efde7451bf8e`** | 测量件（无 `verdict`）：DRC bracket 全板最小铜间距 |
 | `…/run_controls_v4.py` · `…/README.md` | `8c9d3bd46d1ceb9b` · 见件内 | 七案正负控驱动 · 跑法与阈值键 |
 
 ## 2. 测量口径与实测（落件板 `k2/hw/k2_v4_8L.l5.kicad_pcb` = **`6ff49da5678c2108`**，未改）
@@ -101,6 +101,8 @@ python3 $D/measure_min_clearance_drc.py --board $B --pro $P --kicad-cli AppDir/b
 diff -u k2/docs/drafts/p4-j8-v3-criteria-v3/adjudicate.draft-v3.py $D/adjudicate.draft-v4.py   # 应为 3 hunk / 全新增
 python3 $D/run_controls_v4.py                                                                  # 七案矩阵
 ```
+
+> **确定性（本轮实测）**：同 work-dir 两次复跑 `measure_min_clearance_drc.py` 的 JSON **逐字节相同**（`53d9d484921e0654`）；`tightest_samples` 已按 `(description, items)` 排序，以消 DRC 报告顺序的不确定性（阈值计数与 `[lower, upper]` 区间不受影响）。
 
 ## 7. 边界
 

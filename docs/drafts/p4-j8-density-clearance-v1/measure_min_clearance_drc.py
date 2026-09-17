@@ -18,7 +18,6 @@ import os
 import shutil
 import subprocess
 import sys
-from collections import Counter
 
 from j8_dc_common import sha16
 
@@ -77,8 +76,10 @@ def main(argv=None):
             return 2
         table.append({"threshold_mm": t, "n_violations": n})
         if n > 0 and samples is None:
-            samples = [{"description": x.get("description"), "items": [i.get("description") for i in x.get("items", [])]}
-                       for x in cl[:3]]
+            # 排序以消 DRC 报告顺序的不确定性（同一违规集的 items 顺序会变）
+            recs = ({"description": x.get("description"),
+                     "items": sorted(str(i.get("description") or "") for i in x.get("items", []))} for x in cl)
+            samples = sorted(recs, key=lambda r: (str(r["description"]), r["items"]))[:3]
     zero = [r["threshold_mm"] for r in table if r["n_violations"] == 0]
     pos = [r for r in table if r["n_violations"] > 0]
     res = {"check": "min_copper_clearance_drc_bracket",
