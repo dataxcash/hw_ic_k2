@@ -33,8 +33,9 @@
 | **S-2** | C5b/IN-7 口径强度（5 开关 vs 4 开关） | **认已裁 5 开关口径**（现状 PASS）；更强齿须走廊级移铜 | `K2-P4-C5B-IN7-SCOPE-ALIGNMENT-v1.md` `21e6b1d26084084d` |
 | **S-3** | 「铜到板边」口径**登记**（内层盲孔） | **只登记**（JLC ≥0.2 已 PASS：实测最小 0.256）；**不加齿、不移铜** | `K2-P4-EDGE-CLEARANCE-INNER-VIA-SCOPE-v1.md` `4dab972bf45b9f89` |
 | **S-4** | **W-7 九条逐条批** | 4 条零命中 ⇒ `ignore→warning`（自证）；余 5 条按方案 | `K2-P4-W7-IGNORE-DISPOSITION-v1.md` |
-| **S-5** | **manifest 正/负控复验 + 签认**（含 §4 七项口径 + `board:` 转写 l4→l5） | 按提交件执行 | `K2-P4-MANIFEST-COMPLETION-SUBMISSION-v1.md` `2ef6278fe63ef204` |
+| **S-5** | **manifest 正/负控复验 + 签认**（含 §4 七项口径 + `board:` 转写 l4→l5） | 按提交件执行 | `K2-P4-MANIFEST-COMPLETION-SUBMISSION-v1.md` `2ef6278fe63ef204`；**36 条 warning 的逐条签名已由 ENG 交**（`K2-P4-WARNING-DISPOSITION-MEASUREMENT-v1.md` `86142e37b30137e6`，disposition 留空待监理填） |
 | **S-6** | 提交件 §4 的七项口径：J-8 关键间距 · density 阈值 · `drill_pth_min` · V3 严格语义 · J-7 覆盖守卫 · J-9 · C5b | 逐项见提交件（ENG 不代填阈值） | 同上 |
+| **S-6a** | **J-8「密度分布」的登记来源需先认口径**：登记册 **M-12** 原文为「左半 30/42、右半 12；**三横带占用 19–27%**」，审计复算**复现不出**（按「器件焊盘外接框 ∩ 带面积 / 带面积」实测 **5.3% / 17.8% / 0.7%**，`M-12 = 口径不明，须补定义`）。草案现用「**10mm 格峰值件数**（实测峰值 5、26 格：分布 {1:9, 2:7, 3:6, 4:2, 5:2}）」仅为**提案**。⇒ 请监理在「①M-12 横带占用比 ②10mm 格峰值 ③其它」中**择一口径**，ENG 按口径实现 + 报告实测 | — | 本件 + 提交件 §4-1 |
 
 ## 3. 答复后的执行序（**一次到位；禁越阶段**）
 
@@ -63,6 +64,7 @@
 | `K2-P4-EDGE-CLEARANCE-INNER-VIA-SCOPE-v1.md`（铜到板边内层盲孔口径） | `4dab972bf45b9f89` |
 | `K2-P4-SPEC-REV40-TOOLPIN-ERRATA-v1.md`（SPEC 工具 pin 勘误） | `6900a29e6fc26076` |
 | `K2-P4-W7-IGNORE-DISPOSITION-v1.md`（W-7 九条逐条方案） | 见件内 |
+| `K2-P4-WARNING-DISPOSITION-MEASUREMENT-v1.md`（36 条 warning 逐条签名 + 依赖映射） | `86142e37b30137e6` |
 | 草案件 `drafts/p4-manifest-completion-v2/`（manifest/adjudicate/make_negatives/README） | `360b3d1cf377bedb` / `f7b23e99dc277ec6` / `8a000f5c294e3a8d` / `d5f5051c6aa2f8da` |
 | 草案 `drafts/j9-wiring-option-a/`（errata-2 / BOM / pipeline 草案） | `bdacbf944ca0c796` / `ce2bb814f31be54b` / `b74d1f1e883c2ca3` |
 | 草案 `drafts/h3-mech-input/h3_scan.py`（H3 最小位移扫描） | `b2c5b78b6dbb4e75` |
