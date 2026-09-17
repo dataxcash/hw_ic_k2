@@ -1,5 +1,7 @@
 # K2 · P4 收敛增量 1+2 状态件 **v2** —— 交监理核
 
+> **修订留痕（v12）**：v11 → 本版新增 §19（**增量 12：电源面（In4）接入**：U6 P3V3 二球 F→In4 盘中孔；未连接 19→17；T-19..T-22）。
+>
 > **修订留痕（v11）**：v10 → 本版新增 §18（**增量 11：U4-D/G-1 规模化**：全板非 45° **2032 → 0**；违规 75→70；未连接 19→19；T-15..T-18）。
 >
 > **修订留痕（v7）**：v6 → 本版新增 §13（**增量 7：F3 搜索加强 +2 条；T-8 测量陷阱登记**）。
@@ -266,3 +268,26 @@ python3 $K --stage C --in b.pcb --drc db.json --out c.pcb --ledger c.json
 - **未完成（P4 未完工，fail-closed）**：判定器余 4 FAIL = `zone_filled 9/17` · `rule_severity 9 ignore` · `refdes 板有图无 4 = H1..H4` · `pipeline 6 目录`；
   DRC 余 **70** = 铜几何域残留（clearance 1 = MCU_VDD/U1 pad 既有；shorting 6 / hole_clearance 10 / mask_bridge 12 / courtyard 5 / lib 35）；
   未连接余 **19**（电源 5 = In4 PDN · strap/低速 12 = 走廊级 · 无合法孔 2）⇒ 见 handoff §8 后续序。
+
+## 19. **增量 12：电源面（In4）接入 —— F→In4 盘中孔（U6 P3V3 二球）**（2026-09-17）
+
+- **【L2 自裁 · owner #14「PDN = 自裁勿停」】**：SPEC 自载 `pd.power_plane_layer = In4.Cu`、`pd.decoupling → via_to_plane`
+  且 `zone_defs.decoupling_via_to_plane.geometry_status = L3_CONSTRUCTION_DERIVED`（**施工派生未建**）⇒ 本增量 = 建该接入。
+- **机读定位（只读）**：板上 In4 电源 zone（12V_IN / P3V3 / P3V3_AUX×2 / MCU_VDD）**均已填充**，电源网已有 F..In6 贯通孔；
+  19 条未连接 = 8 条低速/strap 走廊 + **5 条电源岛**（P3V3×4 + 12V_IN×1）。5 条逐点做过 In4 点在多边形判定。
+- **执行（新器 `k2/tools/k2_p4_pdn_in4_v1.py`）**：落 **2 支 `F.Cu..In4.Cu` 盲孔盘中孔**（0.35/0.2，net P3V3）
+  于 **U6.FF8 (104.17,55.69)** 与 **U6.FJ6 (104.69,55.99)** ⇒ 二球接入 In4 P3V3 主平面（东区）。逐孔经**全层 span 感知净距 oracle** 复核：
+  FF8 margin **+0.0440**（最差 = F.Cu GND 走线）· FJ6 margin **+0.0750**（最差 = DS320_STRAP_A_ADDR0_15-8 pad）。
+- **实测（仓库路径 + 同名 pro，T-8）**：违规 **70 → 70（类型集与逐类计数均不变、逐条签名新增 0）**；未连接 **19 → 17**；
+  判定器 **PASS 6 / FAIL 4 不变**（non45 仍 0/4247）；对内等长 0.0788 不变；总长 4743.8477 不变；复跑**幂等**（placed=0/skipped=2，板 SHA 不变）。
+- **T-19（PDN 选孔律）**：接电源面须 **span 感知** 选孔类。`F..In6` 贯通孔在 U6 南侧与 In5/B.Cu 的 PCIe 走廊冲突（实测 margin −0.1423 / −0.2775）；
+  `F→In4` 盲孔**不触 In5/B.Cu** ⇒ 合法。与 T-10（kicad-cli 孔-铜为 span 感知）互为印证。
+- **T-20（去耦链局部不可行 · 登记）**：`C79/C80/C81/C83` 链 + `C82.1` 的 P3V3→In4 接入在 **±2.0mm 内 0.05mm 网格上三 span（F..In4/F..In5/F..In6）全 0 合法孔位**
+  （最近阻断 = `In2.Cu PCIE_DN5_P` margin −0.3550；±5mm 粗扫 F..In6 亦 0）⇒ 需 **F.Cu 逃逸至远端孔位**（走廊级，L2 待办），非搜索力不足。
+- **T-21（12V_IN 依赖 H3）**：`J12.1 [12V_IN]` 未连接之因 = **H3 NPTH Ø3.2 @(26.1,36.1) 完全覆盖 J12.1 焊盘**（1.5×1.5 @(26.67,35.32)）
+  ⇒ 属 §5-5 H3 四孔重解作业面；且 J12.1 不在 In4 12V_IN zone 内 ⇒ 须先解 H3。
+- **T-22（工具陷阱 · 已修）**：pcbnew 在**缺同名 `.kicad_pro`** 时会回写**默认工程件**（本轮就地改板把 pro 由 18.8KB 换成 9.6KB 默认件），
+  其后 kicad-cli DRC **回退默认规则 ⇒ 假象 1069 条**（annular_width/track_width/via_diameter ×199 等）= T-8 同源陷阱。
+  已改为「备份 src pro 字节 + tmp 配对同名 pro + 落板后**无条件恢复** dst pro」；板已用配对正确的产出重落并复核回 **70 条**。
+- **未完成**：未连接余 **17**（电源 2 = 去耦链/C82 走廊级 · 12V_IN 1 = H3 依赖 · strap 7 · 低速/边带 7）；违规余 **70**；判定器余 4 FAIL（3 项在监理判据侧）。
+
