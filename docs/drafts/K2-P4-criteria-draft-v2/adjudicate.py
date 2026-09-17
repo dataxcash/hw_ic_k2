@@ -14,7 +14,7 @@
 退出码：0 = PASS；1 = FAIL；2 = INFRA ERROR
 """
 from __future__ import annotations
-import argparse, json, math, os, re, shutil, subprocess, sys, glob, tempfile
+import argparse, json, math, os, re, shutil, subprocess, sys, glob, tempfile, hashlib
 from collections import Counter, defaultdict
 
 # ─────────────────────────── 极简 s-expr 解析（与审计取证同源） ───────────────────────────
@@ -321,6 +321,20 @@ def adjudicate(manifest, meas, args):
         _d = os.path.dirname(os.path.abspath(args.board)) if args.board else None
         _ok = bool(_d) and os.path.exists(os.path.join(_d, 'fp-lib-table'))
         chk('fp_lib_table_present', _ok, f"fp-lib-table @ {_d or '(未给板)'}: {'存在' if _ok else '缺失'}")
+    if C.get('lib_electrical_level', {}).get('enabled'):
+        aud = meas.get('w8_audit')
+        if aud is None:
+            chk('lib_electrical_level', False, "缺 W-8 电气级审计 JSON（--w8-audit-json）⇒ fail-closed")
+        else:
+            _sm = aud.get('summary', {})
+            _bsha = None
+            if args.board and os.path.exists(args.board):
+                _bsha = hashlib.sha256(open(args.board, 'rb').read()).hexdigest()[:16]
+            _fresh = (_bsha is not None and _sm.get('board_sha16') == _bsha)
+            _nd = _sm.get('n_electrical_diff', -1); _np = _sm.get('n_pad_name_set_only', -1)
+            chk('lib_electrical_level', bool(_fresh) and _nd == 0 and _np == 0,
+                f"电气级差异 {_nd} + 仅 pad 名差异 {_np}（须 0）；审计板 sha16={_sm.get('board_sha16')} vs 受审板 {_bsha}"
+                f" ⇒ {'一致' if _fresh else '不一致（证据陈旧，fail-closed）'}")
     if C.get('keepout_active', {}).get('enabled'):
         _zk = [z for z in meas['zones'] if z['keepout']]
         _bad = [z for z in _zk if not z['keepout_flags'] or all(v == 'allowed' for v in z['keepout_flags'])]
@@ -358,6 +372,7 @@ def main():
     ap.add_argument('--out', default=None)
     ap.add_argument('--drc-cli', default=None)
     ap.add_argument('--drc-work-dir', default=None)
+    ap.add_argument('--w8-audit-json', default=None)
     args = ap.parse_args()
     here = os.path.dirname(os.path.abspath(__file__))
     mpath = args.manifest or os.path.join(here, f'manifest.{args.project}.yaml')
@@ -377,6 +392,10 @@ def main():
     meas = {k: v for k, v in bm.items() if k != '_fp_rows'}
     meas['rule_severities'] = measure_rule_severities(args.pro)
     meas['drc'] = measure_drc(args.drc_cli, args.board, args.pro, args.drc_work_dir)
+    if args.w8_audit_json and os.path.exists(args.w8_audit_json):
+        meas['w8_audit'] = json.load(open(args.w8_audit_json, encoding='utf-8'))
+    else:
+        meas['w8_audit'] = None
     meas['declared_nets'] = measure_declared_nets_realized(nets_yaml, bm)
     meas['pin_map'] = measure_pin_map(nets_yaml, bm)
     meas['sch_refdes'] = measure_sch_refdes(args.sch_dir)

@@ -21,7 +21,7 @@ checks:
   drc_warning_dispositions: {enabled: true, expect: "board_warning_types ⊆ drc_warning_dispositions[].type"}
   unconnected_zero:         {enabled: true, expect: "unconnected_items == 0"}
   fp_lib_table_present:     {enabled: true, expect: "fp-lib-table exists in board project dir"}
-  lib_electrical_level:     {enabled: false, pending: "J-7b：需 W-8 电气级审计器机器可读口径经监理核定后接线"}
+  lib_electrical_level:     {enabled: true, consume: "w8_audit_json", expect: "n_electrical_diff == 0 且 n_pad_name_set_only == 0（以板为准）；审计板 sha16 须 == 受审板 sha16（否则证据陈旧 ⇒ fail-closed）"}
   pads_within_outline:      {enabled: false, pending: "J-8 出框：需 P3-4 定义 + pcbnew 侧检查器"}
   keepout_active:           {enabled: true, expect: "每个 keepout 区 >=1 flag != allowed"}
   density_and_clearance:    {enabled: false, pending: "J-8 密度/关键间距：需 P3 图纸阈值定义"}

@@ -6,8 +6,8 @@
 ## 1. 交付物
 | 件 | sha256/16 | 内容 |
 |---|---|---|
-| `drafts/.../adjudicate.py` | `c2e190f455adbd80` | 判定器草案：② zone 分母 · ④ pipeline scope · ⑤ refdes 排除 H* · `drill_count` npth_min · 新增 `drc_errors` / `drc_warning_dispositions` / `unconnected_zero` / `fp_lib_table_present` / `keepout_active` |
-| `drafts/.../manifest.k2.yaml` | `746d0382572649f9` | 判据清单 v2 草案（18 检查项，其中 4 项 `enabled:false` + `pending` 理由） |
+| `drafts/.../adjudicate.py` | `7cf8a50eb832c284` | 判定器草案：② zone 分母 · ④ pipeline scope · ⑤ refdes 排除 H* · `drill_count` npth_min · 新增 `drc_errors` / `drc_warning_dispositions` / `unconnected_zero` / `fp_lib_table_present` / `keepout_active` |
+| `drafts/.../manifest.k2.yaml` | `0da2fb9d173fac2d` | 判据清单 v2 草案（18 检查项，其中 4 项 `enabled:false` + `pending` 理由） |
 | `drafts/.../pipeline.yaml.draft` | `3d69d40208bc630e` | k2 域门禁接入草案（**符合 eda_core 管线 schema**：`phases` + 3 项必选 sch 检查 + ④ 段判据机器化表达式）；安装时复制为 `k2/pipeline.yaml` |
 | `drafts/.../run_controls.py` | `2ee1e5bdee408b5a` | 正/负控复跑脚本（7 案） |
 
@@ -20,11 +20,14 @@
 | §三-6 `drill_count` | `npth_min: 4`（expect + 代码读取） | 沿用原 `npth >= 1` 会放过 NPTH=1..3，属口径不足 |
 | §三-1 J-1 | 新增 `drc_errors`（`--drc-cli` 实跑，缺则 fail-closed）+ `drc_warning_dispositions`（板上 warning 类型 ⊆ manifest 登记） | 实跑 staged 同名 pro（T-8）后解析 JSON |
 | §三-2 J-2/V1 | 新增 `unconnected_zero`（同一次 DRC 实跑的 `unconnected_items`） | 与 J-1 共用一次 DRC 调用，避免重复仪器调用 |
-| §三-3 J-7 | `fp_lib_table_present`（实现）；`lib_electrical_level` **声明 pending** | 电气级需 W-8 审计器机器可读口径（监理核定接线后启用） |
+| §三-3 J-7 | `fp_lib_table_present`（实现）· **`lib_electrical_level` 已实现并启用** | 消费 W-8 电气级审计 JSON（`--w8-audit-json`）；**审计板 sha16 须 == 受审板**（证据陈旧即 fail-closed）；**实测当前 = FAIL（电气级差异 31 + 仅 pad 名差异 2 ⇒ J-7「电气级 = 0」未达成，与 ⑥⑦ 登记一致）** |
 | §三-4 J-8 | `keepout_active`（实现）；`pads_within_outline` / `density_and_clearance` **声明 pending** | 出框需 P3-4 定义 + pcbnew 检查器；密度/间距需 P3 阈值 |
 | §三-5 V3 | `ref_plane_continuity` **声明 pending** | 需 pcbnew 侧「段投影 ∩ 相邻层平面多边形 = 全长」检查器（下一增量） |
 
-**4 项 pending 的处理方式**：manifest 中 `enabled:false` + `pending: <口径/实现路径>`；判定器跳过。**不假装实现、不缩口径、不静默改数。**
+**剩余 pending（实现设计已定，下一增量落地）**：`pads_within_outline`（J-8 出框）= 解析 `Edge.Cuts` 外框 AABB（内缩 0.3mm）与 pad AABB（矩形/椭圆按旋转精确、圆形按半径）逐焊盘比对；
+`density_and_clearance`（J-8 密度/关键间距）= 需 P3 图纸阈值；`ref_plane_continuity`（V3）= 需 pcbnew 侧「高速段投影 ∩ 相邻层平面多边形 = 全长」检查器（新工具）。
+
+**其余 3 项 pending 的处理方式**：manifest 中 `enabled:false` + `pending: <口径/实现路径>`；判定器跳过。**不假装实现、不缩口径、不静默改数。**
 
 ## 3. 正/负控实测（7 案，全按设计命中）
 | 案 | 输入 | 结果 |
@@ -36,6 +39,10 @@
 | NEG-refdes-X99 | 落件板改名一件为 `X99` | `refdes_sets_equal` **FAIL**（图有板无 `['C89']` / 板有图无 `['X99']`） |
 | NEG-drc-errors | 落件板 + `missing_courtyard=error` | `drc_errors` **FAIL**（error=40） |
 | NEG-warn-empty | `drc_warning_dispositions: []` | `drc_warning_dispositions` **FAIL**（未登记 `lib_footprint_mismatch`） |
+| J-7b real | 真审计 JSON（33 件 pad 级差异） | `lib_electrical_level` **FAIL**（31+2；J-7 未达成，如实反映） |
+| J-7b green | 合成审计（差异 0，板 sha 一致） | `lib_electrical_level` **PASS**（机制可用） |
+| J-7b stale | 合成审计（`board_sha16` 不匹配） | **FAIL**（证据陈旧 fail-closed） |
+| J-7b none | 未给 `--w8-audit-json` | **FAIL**（缺件 fail-closed） |
 
 复跑：`python3 k2/docs/drafts/K2-P4-criteria-draft-v2/run_controls.py`（cwd = 仓库根）。
 
