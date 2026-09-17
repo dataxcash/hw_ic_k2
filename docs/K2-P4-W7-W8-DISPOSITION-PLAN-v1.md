@@ -121,3 +121,20 @@ AppDir/usr/bin/python3.11 k2/tools/k2_w8_footprint_audit_v1.py --board k2/hw/k2_
 
 - 本件不改任何判据/板/pro；`criteria/` 逐字节未动。
 - 施工（P1/P2）**待监理逐条批**后由 ENG 执行，并与 W-7 口径一致：**不新增检查齿、不缩口径**。
+
+## 4. 附：「(甲′) 以板为准」**可行性探针**（结论：**未定论**，勿据此落件）
+
+为把 (甲′)/(乙) 的取舍变成实证问题，ENG 在 `/tmp/opencode/alpha/` 造了探针（板 + 同名 pro + **板侧自定 `fp-lib-table`**，
+把 5 个 nickname 全部指向**由板逐件导出**的快照 `lib/<Nick>.pretty/`，快照文本 = 板内 footprint 块原文）：
+
+| 探针 | 结果 | 读法 |
+|---|---|---|
+| ① 快照文件可载性（`pcbnew.FootprintLoad`） | 5/5 **LOADED**，pad 数正确（MCIO 38 · SOIC8 8 · 0603 2 …） | 快照本身有效 |
+| ② 把 `Capacitor_SMD` 条目改指**不存在**的目录后再跑 DRC | `lib_footprint_mismatch 35` → **`lib_footprint_issues 18` + `lib_footprint_mismatch 17`** | **项目 `fp-lib-table` 被 kicad-cli DRC 采信**（可作施工面） |
+| ③ 5 个 nickname 全指**板侧逐字快照**后再跑 DRC | 仍为 **`lib_footprint_mismatch 35`（未降）** | **板=库逐字同文本仍被判 mismatch** |
+| ④ 用 KiCad 自身比较器（`FootprintNeedsUpdate`）对 R28：板 vs ① 的逐字快照 | 返回 **True**；对上游库亦 True | DRC 侧 parity 判据**不是纯几何**（很可能含实例/字段级数据）⇒ **`lib_footprint_mismatch` 不能本身当作 J-7 的电气信号** |
+
+⇒ 结论：**「35 条 = 图形级」与「按 F-12 建 fp-lib-table 即可闭合」两说均不成立**（③④）；
+但 ② 证明了 fp-lib-table 是**有效施工面**。故 (甲′) 若要落地，须先隔离 ③④ 的成因（下一增量：
+逐字段二分 `FootprintNeedsUpdate` 的触发项），**ENG 本轮不据此改任何件**；本件的电气级实现（§2）**不依赖** ③④ 的结论。
+
