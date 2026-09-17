@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""K2 · P4 · W-7 施工修复器 v1 —— dry-run 默认，**不写仓库**。
+"""K2 · P4 · W-7 施工修复器 v2 —— dry-run 默认，**不写仓库**。
 
 把 W-7 已登记 9 条 `ignore` 中尚未处置的 5 类（146 条）做成「可落件器」：
 只在 `--work-dir` 内产出修复板 + 复算报告；仓库内（板 / pro / SPEC 原件 / criteria/）
@@ -9,7 +9,8 @@
   via_dangling  12 条  删除孤立过孔（两端无铜 ⇒ 电气零影响）
   tncv          30 条  走线端点对孔心居中 —— 几何求解 + **逐案 DRC 复算 + 回退**
   courtyard     40 条  补 F.CrtYd（须显式 --courtyard-margin；口径属监理，默认只出测量）
-  silk          64 条  参考字段文本移出阻焊开窗/互叠区（v2 实现）
+  silk          64 条  位号文本移出阻焊开窗/互叠区（**真实几何**：丝印线段按胶囊、pad 按开窗外框）
+                      + 6 条封装丝印线段**按开窗裁剪**（v2）
 
 复算口径：KiCad 自身 DRC。本工具在 work-dir 的 pro 副本上把 9 条 severity
 `ignore → warning`（**探针，非安装**），不改 criteria/、不产判据。
@@ -28,6 +29,7 @@ import sys
 import pcbnew
 
 NM = 1_000_000  # nm / mm
+KIID_SEED = 20_260_918   # 固定种子 ⇒ 新建封装丝印线段的 uuid 可复现（两次复跑逐字节同）
 RULES9 = [
     "copper_sliver", "footprint_filters_mismatch", "footprint_type_mismatch",
     "tuning_profile_track_geometries", "missing_courtyard", "silk_over_copper",
@@ -410,80 +412,296 @@ def silk_candidates(fp, old, rings=(0.05, 0.15, 0.3, 0.5, 0.75, 1.0, 1.4, 1.9, 2
     return out
 
 
-def mutate_silk(fuuid):
+def find_fp_graphic(bd, guuid):
+    for f in bd.GetFootprints():
+        for g in f.GraphicalItems():
+            if uid(g) == guuid:
+                return f, g
+    return None, None
+
+
+def seg_rect_dist(sx, sy, ex, ey, r) -> float:
+    """线段 ↔ 轴对齐矩形的距离（相交 = 0）。"""
+    x0, y0, x1, y1 = r
+    # 端点是否在矩形内
+    def inside(px, py):
+        return x0 <= px <= x1 and y0 <= py <= y1
+    if inside(sx, sy) or inside(ex, ey):
+        return 0.0
+    # 线段与矩形边是否相交
+    def seg_seg(p, q, r0, r1):
+        d = (q[0] - p[0]) * (r1[1] - r0[1]) - (q[1] - p[1]) * (r1[0] - r0[0])
+        if d == 0:
+            return False
+        t = ((r0[0] - p[0]) * (r1[1] - r0[1]) - (r0[1] - p[1]) * (r1[0] - r0[0])) / d
+        u = ((r0[0] - p[0]) * (q[1] - p[1]) - (r0[1] - p[1]) * (q[0] - p[0])) / d
+        return 0 <= t <= 1 and 0 <= u <= 1
+    corners = [(x0, y0), (x1, y0), (x1, y1), (x0, y1)]
+    for i in range(4):
+        if seg_seg((sx, sy), (ex, ey), corners[i], corners[(i + 1) % 4]):
+            return 0.0
+    best = float("inf")
+    for cx, cy in corners:
+        best = min(best, pt_seg_dist(cx, cy, sx, sy, ex, ey))
+    for px, py in ((sx, sy), (ex, ey)):
+        best = min(best, pt_rect_dist(px, py, r))
+    return best
+
+
+def pt_seg_dist(px, py, sx, sy, ex, ey) -> float:
+    dx, dy = ex - sx, ey - sy
+    L2 = dx * dx + dy * dy
+    if L2 == 0:
+        return ((px - sx) ** 2 + (py - sy) ** 2) ** 0.5
+    t = max(0.0, min(1.0, ((px - sx) * dx + (py - sy) * dy) / L2))
+    cx, cy = sx + t * dx, sy + t * dy
+    return ((px - cx) ** 2 + (py - cy) ** 2) ** 0.5
+
+
+def pt_rect_dist(px, py, r) -> float:
+    x0, y0, x1, y1 = r
+    dx = max(x0 - px, 0, px - x1)
+    dy = max(y0 - py, 0, py - y1)
+    return (dx * dx + dy * dy) ** 0.5
+
+
+def rect_intersects(r1, r2) -> bool:
+    return not (r1[2] <= r2[0] or r2[2] <= r1[0] or r1[3] <= r2[1] or r2[3] <= r1[1])
+
+
+def obstacles(bd, skip_field_uuid=None, silk_layer=None, mask_layer=None):
+    """真实几何障碍（按面）：mask = pad 开窗外框；silk = 线段胶囊 + 其它丝印外框。"""
+    silk_layer = pcbnew.F_SilkS if silk_layer is None else silk_layer
+    mask_layer = pcbnew.F_Mask if mask_layer is None else mask_layer
+    mask, segs, boxes = [], [], []
+    for f in bd.GetFootprints():
+        for pad in f.Pads():
+            try:
+                if not pad.IsOnLayer(mask_layer):
+                    continue
+            except Exception:
+                pass
+            try:
+                exp = pad.GetSolderMaskExpansion(mask_layer)
+            except Exception:
+                exp = 0
+            bb = pad.GetBoundingBox()
+            m = int(exp) + 30_000
+            mask.append((bb.GetX() - m, bb.GetY() - m,
+                         bb.GetX() + bb.GetWidth() + m, bb.GetY() + bb.GetHeight() + m))
+        for g in f.GraphicalItems():
+            if g.GetLayer() != silk_layer:
+                continue
+            if g.GetShape() == pcbnew.SHAPE_T_SEGMENT:
+                s, e = g.GetStart(), g.GetEnd()
+                segs.append((s.x, s.y, e.x, e.y, g.GetWidth() / 2.0 + 40_000))
+            else:
+                bb = g.GetBoundingBox()
+                boxes.append((bb.GetX() - 40_000, bb.GetY() - 40_000,
+                              bb.GetX() + bb.GetWidth() + 40_000,
+                              bb.GetY() + bb.GetHeight() + 40_000))
+        for fl in f.GetFields():
+            if uid(fl) == skip_field_uuid:
+                continue
+            if fl.GetLayer() != silk_layer:
+                continue
+            bb = fl.GetBoundingBox()
+            boxes.append((bb.GetX() - 40_000, bb.GetY() - 40_000,
+                          bb.GetX() + bb.GetWidth() + 40_000,
+                          bb.GetY() + bb.GetHeight() + 40_000))
+    return mask, segs, boxes
+
+
+def side_layers(silk_layer):
+    if silk_layer == pcbnew.B_SilkS:
+        return pcbnew.B_SilkS, pcbnew.B_Mask, pcbnew.B_Fab
+    return pcbnew.F_SilkS, pcbnew.F_Mask, pcbnew.F_Fab
+
+
+def text_free(tb, mask, segs, boxes) -> bool:
+    x0, y0, x1, y1 = tb
+    for m in mask:
+        if rect_intersects(tb, m):
+            return False
+    for b in boxes:
+        if rect_intersects(tb, b):
+            return False
+    for sx, sy, ex, ey, clr in segs:
+        if seg_rect_dist(sx, sy, ex, ey, tb) < clr:
+            return False
+    return True
+
+
+def clip_rect_interval(sx, sy, ex, ey, r):
+    """线段对矩形的 Liang-Barsky 参数区间；无交返回 None。"""
+    x0, y0, x1, y1 = r
+    dx, dy = ex - sx, ey - sy
+    t0, t1 = 0.0, 1.0
+    for p, q in ((-dx, sx - x0), (dx, x1 - sx), (-dy, sy - y0), (dy, y1 - sy)):
+        if p == 0:
+            if q < 0:
+                return None
+            continue
+        t = q / p
+        if p < 0:
+            t0 = max(t0, t)
+        else:
+            t1 = min(t1, t)
+        if t0 > t1:
+            return None
+    return (t0, t1)
+
+
+def subtract_interval(keep, cut):
+    out = []
+    for a, b in keep:
+        if cut[1] <= a or cut[0] >= b:
+            out.append((a, b))
+            continue
+        if cut[0] > a:
+            out.append((a, cut[0]))
+        if cut[1] < b:
+            out.append((cut[1], b))
+    return out
+
+
+def mutate_silk_seg_tofab(guuid):
+    """整段丝印线段移出丝印层（→ F.Fab）：非破坏性，保留文档但不印在丝印上。"""
+    def fn(bd, idx):
+        fp, g = find_fp_graphic(bd, guuid)
+        if g is None:
+            raise RuntimeError("segment not found")
+        old = pcbnew.LayerName(g.GetLayer())
+        _s, _m, fab = side_layers(g.GetLayer())
+        g.SetLayer(fab)
+        s, e = g.GetStart(), g.GetEnd()
+        return {"seg": guuid[:8], "ref": fp.GetReference(), "mode": "to_fab",
+                "from_layer": old, "to_layer": pcbnew.LayerName(fab),
+                "len_um": round((((e.x - s.x) ** 2 + (e.y - s.y) ** 2) ** 0.5) / 1000, 1)}
+    return fn
+
+
+def silk_seg_variants(guuid):
+    """候选顺序：按开窗裁剪（余量递增；纯非破坏 = 截断 + 追加）→ 整段移 F.Fab。"""
+    out = []
+    for extra in (30_000, 80_000, 150_000, 250_000):
+        out.append((f"clip{extra // 1000}", mutate_silk_seg(guuid, extra_nm=extra)))
+    out.append(("tofab", mutate_silk_seg_tofab(guuid)))
+    return out
+
+
+def mutate_silk_seg(guuid, extra_nm=30_000, min_piece_nm=50_000):
+    """按阻焊开窗裁剪丝印线段：**不删项** —— 原项截为第一段，其余段以新项追加。"""
+    def fn(bd, idx):
+        fp, g = find_fp_graphic(bd, guuid)
+        if g is None:
+            raise RuntimeError("segment not found")
+        s, e = g.GetStart(), g.GetEnd()
+        L = ((e.x - s.x) ** 2 + (e.y - s.y) ** 2) ** 0.5
+        if L == 0:
+            raise RuntimeError("zero-length segment")
+        silk_l, mask_l, _fab = side_layers(g.GetLayer())
+        mask, _, _ = obstacles(bd, silk_layer=silk_l, mask_layer=mask_l)
+        mask = [(r[0] - extra_nm, r[1] - extra_nm, r[2] + extra_nm, r[3] + extra_nm)
+                for r in mask]
+        keep = [(0.0, 1.0)]
+        for r in mask:
+            iv = clip_rect_interval(s.x, s.y, e.x, e.y, r)
+            if iv is not None:
+                keep = subtract_interval(keep, iv)
+        keep = [(a, b) for a, b in keep if (b - a) * L >= min_piece_nm]
+        if not keep:
+            return {"seg": guuid[:8], "ref": fp.GetReference(),
+                    "unsolved": "entire-segment-inside-mask"}
+        if len(keep) == 1 and abs(keep[0][0]) < 1e-9 and abs(keep[0][1] - 1.0) < 1e-9:
+            return {"seg": guuid[:8], "ref": fp.GetReference(),
+                    "unsolved": "no-mask-conflict"}
+
+        def pt(t):
+            return pcbnew.VECTOR2I(int(round(s.x + t * (e.x - s.x))),
+                                   int(round(s.y + t * (e.y - s.y))))
+
+        w = g.GetWidth()
+        a0, b0 = keep[0]
+        g.SetStart(pt(a0))
+        g.SetEnd(pt(b0))
+        for a, b in keep[1:]:
+            sh = pcbnew.PCB_SHAPE(fp)
+            sh.SetShape(pcbnew.SHAPE_T_SEGMENT)
+            sh.SetLayer(silk_l)
+            sh.SetWidth(w)
+            sh.SetStart(pt(a))
+            sh.SetEnd(pt(b))
+            fp.Add(sh)
+        return {"seg": guuid[:8], "ref": fp.GetReference(), "mode": "clip",
+                "pieces": len(keep), "extra_um": extra_nm // 1000,
+                "kept_um": [round((b - a) * L / 1000, 1) for a, b in keep]}
+    return fn
+
+
+def silk_plan(bd, fuuid):
+    """算该位号的候选配置表（按打分升序）与几何上下文。返回 (cands, meta)。"""
+    fp, field = silk_field_by_uuid(bd, fuuid)
+    if field is None:
+        raise RuntimeError("field not found")
+    silk_l, mask_l, _fab = side_layers(field.GetLayer())
+    mask, segs, boxes = obstacles(bd, skip_field_uuid=fuuid,
+                                  silk_layer=silk_l, mask_layer=mask_l)
+    outline = expand(bd.GetBoardEdgesBoundingBox(), -200_000)
+    ol = (outline.GetX(), outline.GetY(),
+          outline.GetX() + outline.GetWidth(), outline.GetY() + outline.GetHeight())
+    op = field.GetPosition()
+    old = (op.x, op.y)
+    base = field.GetBoundingBox()
+    W0, H0 = base.GetWidth(), base.GetHeight()
+    off_x = base.GetX() + W0 / 2.0 - old[0]
+    off_y = base.GetY() + H0 / 2.0 - old[1]
+
+    def box_for(cand, size_mm, ang):
+        w = W0 * size_mm + (0 if size_mm > 0.95 else 60_000)
+        h = H0 * size_mm + (0 if size_mm > 0.95 else 60_000)
+        if ang == 90:
+            w, h = h, w
+        cx, cy = cand.x + off_x, cand.y + off_y
+        return (cx - w / 2.0, cy - h / 2.0, cx + w / 2.0, cy + h / 2.0)
+
+    cands = []
+    for size_mm in (1.0, 0.8):
+        for ang in (0, 90):
+            for cand in silk_candidates(fp, pcbnew.VECTOR2I(*old)):
+                tb = box_for(cand, size_mm, ang)
+                if not (ol[0] <= tb[0] and tb[2] <= ol[2]
+                        and ol[1] <= tb[1] and tb[3] <= ol[3]):
+                    continue
+                if not text_free(tb, mask, segs, boxes):
+                    continue
+                d = int(((cand.x - old[0]) ** 2 + (cand.y - old[1]) ** 2) ** 0.5)
+                score = d + (200_000 if size_mm < 0.95 else 0) \
+                    + (300_000 if ang == 90 else 0)
+                cands.append({"score": score, "shift_nm": d, "text_mm": size_mm,
+                              "angle_deg": ang, "pos": (cand.x, cand.y)})
+    cands.sort(key=lambda c: (c["score"], c["shift_nm"]))
+    meta = {"ref": fp.GetReference(), "old": list(old),
+            "side": "B" if silk_l == pcbnew.B_SilkS else "F"}
+    return cands, meta
+
+
+def mutate_silk_cfg(fuuid, cfg):
     def fn(bd, idx):
         fp, field = silk_field_by_uuid(bd, fuuid)
         if field is None:
             raise RuntimeError("field not found")
-        mask, silk = [], []
-        for f in bd.GetFootprints():
-            for pad in f.Pads():
-                mask.append(expand(pad.GetBoundingBox(), 60_000))
-            for g in f.GraphicalItems():
-                if g.GetLayer() in (pcbnew.F_SilkS, pcbnew.B_SilkS):
-                    silk.append(expand(g.GetBoundingBox(), 40_000))
-            for fl in f.GetFields():
-                if uid(fl) == fuuid:
-                    continue
-                if fl.GetLayer() in (pcbnew.F_SilkS, pcbnew.B_SilkS):
-                    silk.append(expand(fl.GetBoundingBox(), 40_000))
-        outline = expand(bd.GetBoardEdgesBoundingBox(), -200_000)
-        op = field.GetPosition()
-        old = (op.x, op.y)
-        base = field.GetBoundingBox()          # 原位的真实文本外框
-        bx0, by0 = base.GetX(), base.GetY()
-
-        def box_at(cand):
-            return expand(pcbnew.BOX2I(pcbnew.VECTOR2I(bx0 + cand.x - old[0],
-                                                       by0 + cand.y - old[1]),
-                                       pcbnew.VECTOR2I(base.GetWidth(),
-                                                       base.GetHeight())), 40_000)
-
-        # 先按原字号找位；若最近可行位 > 1.2mm，则允许缩到 0.8mm（= pro min_text_height）再找
-        chosen = None
-        for size_mm in (None, 0.8):
-            if size_mm is not None:
-                field.SetTextSize(pcbnew.VECTOR2I(int(size_mm * NM), int(size_mm * NM)))
-                field.SetTextThickness(int(0.12 * NM))
-                base = field.GetBoundingBox()
-                bx0, by0 = base.GetX(), base.GetY()
-
-                def box_at(cand, _b=(bx0, by0), _w=base.GetWidth(), _h=base.GetHeight()):
-                    return expand(pcbnew.BOX2I(
-                        pcbnew.VECTOR2I(_b[0] + cand.x - old[0], _b[1] + cand.y - old[1]),
-                        pcbnew.VECTOR2I(_w, _h)), 40_000)
-            best = None
-            for cand in silk_candidates(fp, pcbnew.VECTOR2I(*old)):
-                tb = box_at(cand)
-                if not boxes_intersect(tb, outline):
-                    continue
-                if any(boxes_intersect(tb, b) for b in mask):
-                    continue
-                if any(boxes_intersect(tb, b) for b in silk):
-                    continue
-                d = int(((cand.x - old[0]) ** 2 + (cand.y - old[1]) ** 2) ** 0.5)
-                if best is None or d < best[0]:
-                    best = (d, cand)
-                    if size_mm is None and d <= 1_200_000:
-                        break
-            if best is not None:
-                if size_mm is None and best[0] <= 1_200_000:
-                    chosen = (best[0], best[1], 1.0)
-                    break
-                if chosen is None or best[0] < chosen[0]:
-                    chosen = (best[0], best[1], size_mm or 1.0)
-        if chosen is not None:
-            d, cand, size_mm = chosen
-            field.SetTextSize(pcbnew.VECTOR2I(int(size_mm * NM), int(size_mm * NM)))
-            field.SetTextThickness(int((0.15 if size_mm > 0.9 else 0.12) * NM))
-            field.SetPosition(cand)
-            return {"field": fuuid[:8], "ref": fp.GetReference(),
-                    "from": list(old), "to": [cand.x, cand.y], "text_mm": size_mm,
-                    "shift_nm": d}
-        field.SetPosition(pcbnew.VECTOR2I(*old))
-        field.SetTextSize(pcbnew.VECTOR2I(int(1.0 * NM), int(1.0 * NM)))
-        field.SetTextThickness(int(0.15 * NM))
-        return {"field": fuuid[:8], "ref": fp.GetReference(), "unsolved": "no-free-slot"}
+        size_mm, ang, (x, y) = cfg["text_mm"], cfg["angle_deg"], cfg["pos"]
+        old = field.GetPosition()
+        field.SetTextSize(pcbnew.VECTOR2I(int(size_mm * NM), int(size_mm * NM)))
+        field.SetTextThickness(int((0.15 if size_mm > 0.95 else 0.12) * NM))
+        field.SetTextAngleDegrees(ang)
+        field.SetPosition(pcbnew.VECTOR2I(x, y))
+        return {"field": fuuid[:8], "ref": fp.GetReference(),
+                "from": [old.x, old.y], "to": [x, y], "text_mm": size_mm,
+                "angle_deg": ang,
+                "side": "B" if field.GetLayer() == pcbnew.B_SilkS else "F",
+                "shift_nm": cfg["shift_nm"]}
     return fn
 
 
@@ -573,6 +791,10 @@ def main(argv=None) -> int:
     a = ap.parse_args(argv)
 
     groups = [g for g in a.groups.split(",") if g]
+    try:
+        pcbnew.KIID.SeedGenerator(KIID_SEED)   # 复跑确定性（见 doc §6.1）
+    except Exception:
+        pass
     board_src, pro_src = os.path.abspath(a.board), os.path.abspath(a.pro)
     work = os.path.abspath(a.work_dir)
     os.makedirs(work, exist_ok=True)
@@ -650,32 +872,73 @@ def main(argv=None) -> int:
         rep_out["log"]["tncv"] = {"applied": applied, "rejected": rejected}
 
     if "silk" in groups:
-        applied, rejected = [], []
+        f_app, s_app, rejected = [], [], []
         for it in range(a.max_iters):
             bd, idx = load_idx(eng.good)
-            keys, kinds = [], {}
+            fkeys, skeys = [], []
             for e in vios(eng.rep, SILK_TYPES):
                 for item in e["items"]:
                     fp, field = silk_field_by_uuid(bd, item["uuid"])
-                    if field is None or field.GetLayer() != pcbnew.F_SilkS:
-                        kinds[item["uuid"]] = "not-ref-field"
+                    if field is not None and field.GetLayer() in (pcbnew.F_SilkS,
+                                                                  pcbnew.B_SilkS):
+                        if item["uuid"] not in fkeys:
+                            fkeys.append(item["uuid"])
                         continue
-                    kinds[item["uuid"]] = "ref"
-                    if item["uuid"] not in keys:
-                        keys.append(item["uuid"])
-            if not keys:
+                    gfp, g = find_fp_graphic(bd, item["uuid"])
+                    if g is not None and g.GetLayer() in (pcbnew.F_SilkS, pcbnew.B_SilkS) \
+                            and g.GetShape() == pcbnew.SHAPE_T_SEGMENT:
+                        if item["uuid"] not in skeys:
+                            skeys.append(item["uuid"])
+            if not fkeys and not skeys:
                 break
             progressed = 0
-            for k in keys:
-                ok, rec = eng.attempt(f"silk:{k[:8]}", mutate_silk(k))
-                if ok:
-                    applied.append(rec)
-                    progressed += 1
-                else:
-                    rejected.append(rec)
+            for k in fkeys + skeys:
+                if k in fkeys:
+                    bd_p, _ = load_idx(eng.good)
+                    try:
+                        cands, meta = silk_plan(bd_p, k)
+                    except Exception as e:
+                        rejected.append({"field": k[:8], "rejected": [f"exception:{e}"]})
+                        continue
+                    if not cands:
+                        rejected.append({"field": k[:8], "ref": meta["ref"],
+                                         "unsolved": "no-free-slot"})
+                        continue
+                    done_f, last_f = False, None
+                    for cfg in cands[:4]:
+                        ok, rec = eng.attempt(f"silk:{k[:8]}", mutate_silk_cfg(k, cfg))
+                        if ok:
+                            f_app.append(rec)
+                            progressed += 1
+                            done_f = True
+                            break
+                        last_f = rec
+                    if not done_f:
+                        rejected.append(last_f)
+                done, last = False, None
+                for tag, fn in silk_seg_variants(k):
+                    ok, rec = eng.attempt(f"silkseg:{k[:8]}:{tag}", fn)
+                    if ok:
+                        rec["variant"] = tag
+                        s_app.append(rec)
+                        progressed += 1
+                        done = True
+                        break
+                    rec.setdefault("tried", []).append(tag)
+                    if last is None:
+                        last = rec
+                    else:
+                        last.setdefault("tried", []).append(tag)
+                        for kk, vv in rec.items():
+                            if kk not in ("tried",):
+                                last[kk] = vv
+                if not done:
+                    rejected.append(last)
             if progressed == 0:
                 break
-        rep_out["log"]["silk"] = {"applied": applied, "rejected": rejected}
+        rep_out["log"]["silk"] = {"applied": f_app + s_app,
+                                 "applied_field": f_app, "applied_seg": s_app,
+                                 "rejected": rejected}
 
     final = os.path.join(work, "k2_v4_8L.l5.repaired.kicad_pcb")
     bd, _ = load_idx(eng.good)
