@@ -37,6 +37,11 @@ def write(name, s):
     d = os.path.join(OUT, name); os.makedirs(d, exist_ok=True)
     open(os.path.join(d, name + '.kicad_pcb'), 'w', encoding='utf-8').write(s)
     shutil.copyfile(PRO, os.path.join(d, name + '.kicad_pro'))
+    # 库解析同目录（T-8）：fp-lib-table + lib/ 一并落件，否则 ${KIPRJMOD} 指向 /tmp 落空
+    tb = '/home/fila/jqdDev_2025/ic_hw/k2/hw/fp-lib-table'
+    if os.path.exists(tb): shutil.copyfile(tb, os.path.join(d, 'fp-lib-table'))
+    lib = '/home/fila/jqdDev_2025/ic_hw/k2/hw/lib'
+    if os.path.isdir(lib): shutil.copytree(lib, os.path.join(d, 'lib'), dirs_exist_ok=True)
 
 
 # M1：删 1 条 F.Cu 走线 ⇒ 未连接 ↑（J-2/V1）
@@ -83,7 +88,8 @@ write('m4_no_ref_in6', mt4)
 # M5：改 1 个 refdes（C85→X99）⇒ 未登记件（J-6）
 write('m5_refdes', txt.replace('(property "Reference" "C85"', '(property "Reference" "X99"', 1))
 
-# M6：U1.11 pad 尺寸 +0.05mm ⇒ 封装≠库（电气级几何）（J-7）
+# M6：U1.11 pad 尺寸 +0.05mm ⇒ 封装≠库（电气级几何）（J-7）；注：U1 为**裸名**（无库链接）
+#     ⇒ 对 J-7「电气级逐件比」**不可判**（并入 no_library_link 计不合格）；保留作覆盖缺口对照。
 j = txt.find('(property "Reference" "U1"')
 s6 = txt
 if j > 0:
@@ -102,4 +108,27 @@ if j > 0:
 if s6 is txt:
     raise SystemExit('M6 注入失败（未找到 U1.11 pad）')
 write('m6_u1_pad', s6)
+
+# M7：U5 pad1 尺寸 +0.05mm —— U5 是板内**电气级与库完全一致**的 2 件之一（U4/U5）
+#     ⇒ 针对 J-7 电气级实现的正/负控「定向注入」；期望：U5 被点名、差异件数 33→34。
+j7 = txt.find('(property "Reference" "U5"')
+if j7 <= 0: raise SystemExit('M7 注入失败（未找到 U5）')
+z = txt.rfind('\n\t(footprint ', 0, j7) + 1
+ze = match_end(txt, z)
+fp = txt[z:ze]
+p7 = fp.find('\n\t\t(pad "1"')
+if p7 < 0: p7 = fp.find('\n\t\t(pad ')
+pe = match_end(fp, fp.index('(', p7))
+blk = fp[p7:pe]
+mm = re.search(r'\(size ([\d.]+) ([\d.]+)\)', blk)
+w, h = float(mm.group(1)), float(mm.group(2))
+nb = blk[:mm.start()] + f'(size {round(w + 0.05, 4)} {h})' + blk[mm.end():]
+print(f'm7: U5 pad size {w}x{h} -> {round(w + 0.05, 4)}x{h}')
+write('m7_u5_pad', txt[:z] + fp[:p7] + nb + fp[pe:] + txt[ze:])
+
+# M8：破坏库链接（C89 链接改指向不存在的库件）⇒ J-7 覆盖失败（fail-closed）
+s8 = txt.replace('(footprint "Capacitor_SMD:C_0603_1608Metric"',
+                 '(footprint "Capacitor_SMD:C_9999_NOPE"', 1)
+if s8 is txt: raise SystemExit('M8 注入失败')
+write('m8_link_broken', s8)
 print('mutants:', sorted(d for d in os.listdir(OUT)))

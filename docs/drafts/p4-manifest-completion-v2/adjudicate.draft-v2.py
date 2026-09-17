@@ -269,7 +269,97 @@ def measure_fp_lib_table(paths):
     return dict(present=bool(found), found=found, checked=list(paths or []))
 
 
-def measure_extras(board_path, fp_lib_paths):
+def parse_fp_lib_table(path):
+    """fp-lib-table → {nickname: uri}（只读）"""
+    root = _parse(open(path, encoding='utf-8').read())
+    out = {}
+    for lib in _all(root, 'lib'):
+        nm, uri = _txt(lib, 'name'), _txt(lib, 'uri')
+        if nm and uri: out[nm] = uri
+    return out
+
+
+def pad_sig(fp_node):
+    """footprint s-expr → {pad 名: 电气级签名}（局部坐标系，与库同口径）"""
+    sig = {}
+    for pad in _all(fp_node, 'pad'):
+        num = pad[1] if len(pad) > 1 else '?'
+        if not isinstance(num, str): num = str(num)
+        shape = pad[3] if len(pad) > 3 and isinstance(pad[3], str) else ''
+        at = _one(pad, 'at') or ['at', '0', '0']
+        sz = _one(pad, 'size') or ['size', '0', '0']
+        dr = _one(pad, 'drill')
+        drill = 0.0
+        if dr and len(dr) > 1 and re.match(r'^-?[\d.]+$', str(dr[1])): drill = abs(float(dr[1]))
+        sig[num] = dict(shape=shape, sx=round(float(sz[1]), 4), sy=round(float(sz[2]), 4),
+                        x=round(float(at[1]), 4), y=round(float(at[2]), 4),
+                        rot=round(float(at[3]), 4) if len(at) > 3 else 0.0, drill=round(drill, 4))
+    return sig
+
+
+def measure_footprint_electrical(board_path, lib_table_paths, lib_roots):
+    """J-7 电气级（W-8）：逐件比 pad 数 / 名 / 形状 / 尺寸 / 钻孔 / 自转 / 局部位置。
+
+    与 `k2/tools/k2_w8_footprint_audit_v1.py`（pcbnew 版）同口径、同结论；本函数为**纯 stdlib**，
+    便于判定器离线自足。库解析：`fp-lib-table`（含 ${KIPRJMOD}）→ 逐 nickname 目录；未命中则回落 lib_roots。
+    """
+    root = _parse(open(board_path, encoding='utf-8').read())
+    board_dir = os.path.dirname(os.path.abspath(board_path))
+    tables = {}
+    for p in (lib_table_paths or []):
+        if os.path.exists(p):
+            try: tables.update(parse_fp_lib_table(p))
+            except Exception: pass
+    recs = []
+    for fp in _all(root, 'footprint'):
+        ident = fp[1] if len(fp) > 1 and isinstance(fp[1], str) else ''
+        ref = None
+        for p in _all(fp, 'property'):
+            if len(p) > 2 and p[1] == 'Reference': ref = p[2]
+        if ':' not in ident:
+            recs.append(dict(ref=ref, ident=ident, verdict='no_library_link'))
+            continue
+        nick, name = ident.split(':', 1)
+        d = None
+        uri = tables.get(nick)
+        if uri:
+            u = uri.replace('${KIPRJMOD}', board_dir)
+            if os.path.isdir(u): d = u
+        if d is None:
+            for r in (lib_roots or []):
+                cand = os.path.join(r, '%s.pretty' % nick)
+                if os.path.isdir(cand): d = cand; break
+        lf = os.path.join(d, '%s.kicad_mod' % name) if d else None
+        if not lf or not os.path.exists(lf):
+            recs.append(dict(ref=ref, ident=ident, verdict='library_unloadable'))
+            continue
+        try:
+            lib = _parse(open(lf, encoding='utf-8').read())
+        except Exception:
+            recs.append(dict(ref=ref, ident=ident, verdict='library_unloadable'))
+            continue
+        bs, ls = pad_sig(fp), pad_sig(lib)
+        diffs = []
+        if set(bs) != set(ls):
+            diffs.append(dict(kind='pad_name_set', board=sorted(bs), lib=sorted(ls)))
+        for n in sorted(set(bs) & set(ls)):
+            fld = [k for k in ('shape', 'sx', 'sy', 'x', 'y', 'rot', 'drill') if bs[n][k] != ls[n][k]]
+            if fld: diffs.append(dict(kind='pad', pad=n, fields=fld, board=bs[n], lib=ls[n]))
+        name_only = bool(diffs) and all(x['kind'] == 'pad_name_set' for x in diffs)
+        verdict = ('electrical_identical' if not diffs else
+                   ('pad_name_set_only' if name_only else 'electrical_diff'))
+        recs.append(dict(ref=ref, ident=ident, verdict=verdict, diffs=diffs,
+                         n_pads_board=len(bs), n_pads_lib=len(ls)))
+    pick = lambda v: [r['ref'] for r in recs if r['verdict'] == v]
+    return dict(records=recs, electrical_diff_refs=pick('electrical_diff'),
+                pad_name_set_refs=pick('pad_name_set_only'),
+                no_link_refs=pick('no_library_link'), unloadable_refs=pick('library_unloadable'),
+                identical_refs=pick('electrical_identical'),
+                n_checked=len(recs) - len(pick('no_library_link')) - len(pick('library_unloadable')),
+                n_footprints=len(recs))
+
+
+def measure_extras(board_path, fp_lib_paths, lib_roots=None):
     """J-8 出框/回避区 + 密度（可量化部分） + V3 参考连续性。"""
     root = _parse(open(board_path, encoding='utf-8').read())
     xs, ys = [], []
@@ -347,6 +437,7 @@ def measure_extras(board_path, fp_lib_paths):
                 density_cells=len(cell), hs_segments=hs_total,
                 unreferenced_hs_segments=len(unreferenced), v3_samples=unreferenced[:5],
                 fp_lib_table=measure_fp_lib_table(fp_lib_paths),
+                footprint_electrical=measure_footprint_electrical(board_path, fp_lib_paths, lib_roots),
                 plane_polygons_by_layer={k: len(v) for k, v in planes.items()})
 
 # ─────────────────────────── 判定（唯一产出 verdict 的地方） ───────────────────────────
@@ -447,11 +538,27 @@ def adjudicate(manifest, meas, args):
         elif not drc['source_matches']: chk('unconnected_zero', False, f"DRC 报告 source 与板不一致（fail-closed）: {drc['source']}")
         else: chk('unconnected_zero', drc['unconnected'] == 0, f"未连接 = {drc['unconnected']}（全量，禁裁剪）")
     if C.get('lib_footprint_electrical', {}).get('enabled'):
-        if drc is None: chk('lib_footprint_electrical', False, "缺少 DRC 实跑报告（fail-closed）")
+        # W-8（监理 #K2-19 §二）实现修正：**按电气级逐件比**（pad 数/名/形状/尺寸/钻孔/自转/局部位置），
+        # 不再用 DRC 的图形级 lib_footprint_mismatch 计数（该计数把 fp_line/property 差异一并算入）。
+        fe = meas.get('extras', {}).get('footprint_electrical')
+        if fe is None: chk('lib_footprint_electrical', False, "缺少几何测量（fail-closed）")
         else:
-            n = drc['lib_footprint_mismatch'] + drc['lib_footprint_issues']
-            chk('lib_footprint_electrical', n == 0,
-                f"封装≠库 = mismatch {drc['lib_footprint_mismatch']} + issues {drc['lib_footprint_issues']} = {n}")
+            pol = manifest.get('lib_footprint_link_policy')
+            bad = fe['electrical_diff_refs'] + fe['pad_name_set_refs']
+            lock = fe['no_link_refs'] + fe['unloadable_refs']
+            extra = ''
+            if pol == 'tolerate':
+                pass
+            else:
+                if pol is None and lock:
+                    extra = '（`lib_footprint_link_policy` 未填 ⇒ fail-closed：无库链接 / 库不可载 件一并计不合格）'
+                elif lock:
+                    extra = f'（策略 = {pol}）'
+            chk('lib_footprint_electrical', (not bad) and (pol == 'tolerate' or not lock),
+                f"电气级（pad 数/名/形状/尺寸/钻孔/自转/局部位置）差异件 = {len(bad)}/{fe['n_checked']}（可库比对）"
+                f"（pad 几何 {len(fe['electrical_diff_refs'])} · pad 名集合 {len(fe['pad_name_set_refs'])} 件）；"
+                f"无库链接（不可判）= {len(fe['no_link_refs'])} · 库不可载 = {len(fe['unloadable_refs'])}；"
+                f"差异样本 {sorted(bad)[:6]}{extra}")
     if C.get('fp_lib_table_present', {}).get('enabled'):
         fx = meas.get('extras', {}).get('fp_lib_table')
         if not fx: chk('fp_lib_table_present', False, "缺少几何测量（fail-closed）")
@@ -507,6 +614,8 @@ def main():
     ap.add_argument('--sch-dir', default=None)
     ap.add_argument('--gerber-dir', default=None)
     ap.add_argument('--drc', default=None, help='外部 kicad-cli DRC 报告（J-1/J-2/J-7 数据源；T-8 口径）')
+    ap.add_argument('--std-footprint-roots', nargs='*', default=['AppDir/share/kicad/footprints'],
+                    help='标准封装库根（.pretty 之上一级）；默认 AppDir/share/kicad/footprints')
     ap.add_argument('--kicad-cli', default=None, help='**判定器自跑 DRC**（首选，防伪造绿）：kicad-cli 可执行路径')
     ap.add_argument('--artifacts', nargs='*', default=[])
     ap.add_argument('--root', default='.')
@@ -549,7 +658,8 @@ def main():
         import yaml as _y; manifest_probe = _y.safe_load(open(mpath, encoding='utf-8')) or {}
     except Exception:
         manifest_probe = {}
-    meas['extras'] = measure_extras(args.board, manifest_probe.get('fp_lib_table_paths'))
+    meas['extras'] = measure_extras(args.board, manifest_probe.get('fp_lib_table_paths'),
+                                    list(manifest_probe.get('fp_lib_roots') or []) + list(args.std_footprint_roots or []))
     meas['verdict_keys_found'] = scan_verdict_keys(args.artifacts)
     meas['_note'] = '测量件：不含 verdict 字段（C4）'
     bm['_fp_rows'] = bm['_fp_rows']

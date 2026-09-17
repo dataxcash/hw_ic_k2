@@ -37,8 +37,8 @@ checks:
                              note: "warning 逐条须有处置结论；台账 drc_warning_dispositions 由监理登记（空 ⇒ 有 warning 即 FAIL）"}
   unconnected_zero:         {enabled: true, expect: "unconnected == 0", ref: "J-2 / V1",
                              note: "补铜后**全量**、范围 = 权威网表全集（禁裁剪）；含 DRC 实跑"}
-  lib_footprint_electrical: {enabled: true, expect: "lib_footprint_mismatch + lib_footprint_issues == 0", ref: "J-7 前半",
-                             note: "电气级：pad 数/名/尺寸/旋转/位置；W-8「以板为准、电气级必须 0」"}
+  lib_footprint_electrical: {enabled: true, expect: "electrical_diff == 0 and pad_name_set == 0 and no_library_link == 0", ref: "J-7 前半",
+                             note: "**实现按 W-8 电气级**：逐件比 pad 数/名/形状/尺寸/钻孔/自转/局部位置（不再用 DRC 图形级 lib_footprint_mismatch 计数）。库解析 = fp_lib_table_paths（含 ${KIPRJMOD}）→ 未命中回落 fp_lib_roots。无库链接/库不可载 件按 `lib_footprint_link_policy`（null ⇒ fail-closed）"}
   fp_lib_table_present:     {enabled: true, expect: "fp-lib-table exists", ref: "J-7 后半"}
   board_frame_and_keepout:  {enabled: true, expect: "footprints_outside_outline == 0 and esc_keepout_unrestricted == 0",
                              ref: "J-8 出框(P3-4) / 回避区(P3-5·C5b·IN-7)",
@@ -54,8 +54,10 @@ pipeline_scope: [k2]                         # W-9（#K2-19 §二 裁定）：k2
 drill_npth_min: 4                            # 计划 §P4
 drill_pth_min: null                          # 计划 §P4「PTH ≥ 插件件引脚数」→ 算式待监理给
 fp_lib_table_paths: ["k2/hw/fp-lib-table"]   # W-8
+fp_lib_roots: []                             # W-8 标准库根回落（空 ⇒ 用判定器 --std-footprint-roots）
+lib_footprint_link_policy: null               # W-8 无库链接件政策：require | tolerate（null ⇒ fail-closed，待监理填）
 drc_warning_dispositions: []                 # J-1 warning 处置台账（监理登记）
 thresholds:
   density_max_per_10mm_cell: null            # J-8 密度分布阈值（待监理填）
-thresholds_pending_supervisor: [density_max_per_10mm_cell, drill_pth_min]
+thresholds_pending_supervisor: [density_max_per_10mm_cell, drill_pth_min, lib_footprint_link_policy]
 rule_severity_exemptions: []                 # deny-by-default（原样保留）
