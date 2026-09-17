@@ -198,3 +198,17 @@ ls k2/pipeline.yaml                                                             
 `criteria/` 两份 `897e8bfde60e2cfe`·`7ce08757eff25557` **未动**。
 
 —— ENG（ARCHER）· 2026-09-17 · 覆盖登记册 **59/59 条**，无抽样
+
+---
+
+## 9. v1.1 增量更新（2026-09-17，监理自动续推后；本件 §0/§1..§8 为 v1 快照，不改写）
+
+| 项 | 变化 | 依据（件 + sha） |
+|---|---|---|
+| `M-02` | ③ 由「未修」→「**载体已修**」：`k2/README.md` `dc28708ba34fddf2` · `k2/docs/01-architecture.md` `e7a478b5420dc161` · `k2/docs/01-architecture.zh-CN.md` `6182d4a040d1cfc2`（三文件 `DS160PR810`/`U3`/`U7` 命中 = 0） | `K2-P4-J8-V3-MEASUREMENT-AND-M02-DOC-FIX-v1.md` `3955d1af993febbe` |
+| `J-8`（出框） | ④ 由「pending 未实现」→「**已实现 + 正负控命中**」：`measure_pads_within_outline.py` `1b177638cde3cd55`（正控 l5 = 0；负控合成板 = 2、rc=1，AABB 与真框双口径同命中）—— **仍待安装 + 签认 ⇒ 未在岗** | 同上 |
+| V3（`ref_plane_continuity`） | 由「设计」→「**测量已实现 + 正负控命中**」：`measure_ref_plane_continuity.py` `7a3cc545c1447b04`（正控 l5 名义 3653/3653；负控冻结 l4 = 0/2327、rc=1）—— **待安装 + 签认，且阈值口径待监理定** | 同上 |
+| `J-8`（密度/间距） | 仍 **pending**（`density_and_clearance` 需 P3 图纸阈值 = 监理/owner 输入） | — |
+
+**计数更新**：`根闭 0` · `OUT（具名）4` · `未闭 55` 不变；其中「载体已修」**15 → 16**（+`M-02`）、「载体未修」**30 → 29**。
+**P4 门**：仍不可开（`criteria/` 未签认 + `k2/pipeline.yaml` 缺失 ⇒ 无判据在岗；G-ROOT-1/2/3 未修待放行）。

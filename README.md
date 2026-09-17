@@ -23,10 +23,11 @@ SlimSAS (SFF-8654) connectors have no vendor 3D models and are represented by si
 ## Overview
 
 K2 sits between the master host and the worker devices. A single SlimSAS x8
-uplink carries eight PCIe Gen4 lanes; the card AC-couples and redrives them,
-then splits them across two MCIO 4i downlinks (4 lanes each). One DS160PR810
-redriver handles each direction, and an on-board STM32G0B1 MCU manages
-sideband, out-of-band UART, I2C and the FRU EEPROM.
+uplink carries eight PCIe Gen4 lanes; the card redrives them (per-lane AC
+coupling is integrated in the device), then splits them across two MCIO 4i
+downlinks (4 lanes each). A single DS320PR1601 redriver (U6) handles the link,
+and an on-board STM32G0B1 MCU manages sideband, out-of-band UART, I2C and the
+FRU EEPROM.
 
 ```
                 8 lanes                       2 × 4 lanes
@@ -34,7 +35,7 @@ sideband, out-of-band UART, I2C and the FRU EEPROM.
   (SlimSAS x8,              │    AC coupling + redrive
    SFF-8654, J2)            └──────────────────────────────► MCIO 4i (J4) → worker
 
-                            U7 upstream / U3 downstream
+                            U6 = DS320PR1601 redriver
                             STM32G0B1 MCU · 12V DC-in
 ```
 
@@ -43,7 +44,7 @@ sideband, out-of-band UART, I2C and the FRU EEPROM.
 - **Form factor**: 8-layer PCB, 120 × 46 mm, 85Ω ±10% differential impedance
 - **Uplink**: 1× SlimSAS x8 (SFF-8654) — 8 PCIe Gen4 lanes + 2 reference clocks
 - **Downlink**: 2× MCIO 4i (SFF-1016) — the x8 link is bifurcated into 2× x4
-- **Redrivers**: dual DS160PR810 (U7 upstream / U3 downstream), AC coupling per lane
+- **Redrivers**: single DS320PR1601 (U6); per-lane AC coupling is integrated in the device
 - **Management**: STM32G0B1 MCU — sideband, OOB UART, I2C, FRU EEPROM
 - **Power**: 12V DC-in → DC-DC 5V → LDO 3V3, plus 3.3V_AUX
 - **Debug**: SWD header (J13), OOB UART header (J9)
