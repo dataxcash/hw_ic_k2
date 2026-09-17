@@ -30,6 +30,7 @@ for i in range(32):
 TRACE_W, VIA_W, VIA_D = 0.20, 0.35, 0.20
 HW, VIA_R, HOLE_R = TRACE_W / 2.0, VIA_W / 2.0, VIA_D / 2.0
 STEP, MAXVIA_R = 0.10, 2.5       # 0.10mm 栅格（仅剪枝；几何合规由精确复核保证）
+ESCAPE_R, MAX_TRY = 6.5, 10       # F.Cu A* 逃逸半径上限 / 每端最大过孔候选尝试数（实测最远 6.2mm）
 TIME_BUDGET = 900.0               # 总时限（秒）：超时后剩余边登记 deferred-time-budget
 NS = uuid.UUID("6ba7b810-9dad-11d1-80b4-00c04fd430c8")
 VIA_BLOCK = ('\t(via\n\t\t(at {x} {y})\n\t\t(size 0.35)\n\t\t(drill 0.2)\n\t\t(layers "{l1}" "{l2}")\n'
@@ -293,8 +294,73 @@ def _ports(ctx, find, comp):
     return sorted(set(bp)), sorted(set(fp))
 
 
+def _in_pad(p, x, y, tol=0.002):
+    """孔位是否落在焊盘铜内（盘中孔口径，与阶段 E 一致）。"""
+    if p["circ"]:
+        return math.hypot(x - p["x"], y - p["y"]) <= min(p["w"], p["h"]) / 2.0 + tol
+    return cv.pt_in_poly(x, y, p["poly"]) or cv.pt_poly_dist(x, y, p["poly"]) <= tol
+
+
+def _vip_near(ctx, net, anchor, target, bound=0.50):
+    """**盘中孔（VIP）兜底**：锚点为**同网、无钻孔（SMD）焊盘中心**时，在盘内按确定性极坐标网格
+    （r 步 0.025 ≤0.50 · 角步 5°）找合法 F→B 孔位；孔位**落在焊盘铜内** ⇒ 靠焊盘自身铜连接，
+    **零长引线**（不做 F.Cu 短引线）。孔位合规由 `via_exact` 精确判定（全铜层净距 + 孔-铜 0.25 +
+    孔-孔 0.25 + 板边 0.3 + 禁 via 区）。
+    动机（handoff §7-1 取证）：U6 侧多数 `no-legal-via-slot` 的真因是 **F.Cu 短引线在 BGA 格内不可达**，
+    而非无落孔位；盘内合法位可直接落孔。**PTH 盘自身有孔 ⇒ 不做盘中孔**（避免孔-孔冲突），由 ring 搜索处理。
+    返回 (via_xy, legs) 或 None。"""
+    for p in ctx.pads.values():
+        if p["net"] != net or p["hole"] > 0: continue
+        if abs(p["x"] - anchor[0]) > 1e-6 or abs(p["y"] - anchor[1]) > 1e-6: continue
+        best = None
+        r = 0.0
+        while r <= bound + 1e-9:
+            n = 1 if r < 1e-9 else 72
+            for k in range(n):
+                a = 0.0 if r < 1e-9 else math.radians(5.0 * k)
+                x, y = p["x"] + r * math.cos(a), p["y"] + r * math.sin(a)
+                if not _in_pad(p, x, y): continue
+                if not ctx.via_exact(net, x, y): continue
+                d = math.hypot(x - target[0], y - target[1])
+                if best is None or d < best[0] - 1e-9: best = (d, (x, y))
+            if best is not None: return best[1], [best[1]]
+            r = round(r + 0.025, 4)
+    return None
+
+
+def _escape(ctx, net, anchor, target, rmax=ESCAPE_R, maxtry=MAX_TRY):
+    """**F.Cu 逃逸（A\* 多腿）**：对锚点焊盘做 F.Cu 通道搜索，逃逸到环状候选中的**合法 F→B 孔位**。
+    动因（handoff §7-1）：多数阻塞边的真因是 **F.Cu 短引线不可达**（BGA 格内 / 电阻阵），
+    而合法孔位在数毫米之外（实测最远 6.2mm，方向朝北）。与 `astar` 同口径：0.10mm 栅格仅剪枝，
+    **放行闸 = 逐段 `seg_exact` 精确复核**（`_poly_ok`），新段一律 0/45/90° 且单腿 ≥0.05。
+    确定性：半径升序 + 角升序（5°）+ 目标距排序 + 尝试数上限。返回 (via_xy, legs) 或 None。"""
+    tried = 0
+    r = round(STEP, 4)
+    while r <= rmax + 1e-9:
+        cands = []
+        for k in range(72):
+            a = math.radians(5.0 * k)
+            x, y = anchor[0] + r * math.cos(a), anchor[1] + r * math.sin(a)
+            if not ctx.via_exact(net, x, y): continue
+            cands.append((math.hypot(x - target[0], y - target[1]), x, y))
+        cands.sort()
+        for d, x, y in cands:
+            if tried >= maxtry: return None
+            tried += 1
+            pts = astar(ctx, net, F_CU, anchor, (x, y))
+            if pts is None: continue
+            pts = simplify(pts)
+            if not _poly_ok(ctx, F_CU, net, pts): continue
+            return (x, y), pts
+        r = round(r + STEP, 4)
+    return None
+
+
 def _via_near(ctx, net, anchor, target):
-    """在 anchor 附近找合法 F→B 通孔位 + F.Cu 短引线（精确复核）。返回 (via_xy, legs) 或 None。"""
+    """在 anchor 附近找合法 F→B 通孔位 + 引线（精确复核）。返回 (via_xy, legs) 或 None。
+    次序：① **盘中孔（零长引线，优选）** → ② 环状候选 + F.Cu ≤2 腿 45° 短引线 → ③ **F.Cu A\* 多腿逃逸**。"""
+    got = _vip_near(ctx, net, anchor, target)
+    if got is not None: return got
     best = None
     r = 0.0
     while r <= MAXVIA_R + 1e-9:
@@ -310,7 +376,7 @@ def _via_near(ctx, net, anchor, target):
                         best = (d, (x, y), pts)
         if best is not None: return best[1], best[2]
         r = round(r + 0.05, 4)
-    return None
+    return _escape(ctx, net, anchor, target)
 
 
 def run(src, drc_path, out_path, ledger_path):
