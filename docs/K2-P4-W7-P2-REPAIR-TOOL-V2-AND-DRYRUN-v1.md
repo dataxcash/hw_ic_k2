@@ -30,7 +30,9 @@ W-7 未处置 5 类共 **146** 条：v2 引擎（真实几何 + 逐案 DRC 复�
 2. **分面处理**：位号字段与封装丝印线段按 **F.SilkS / B.SilkS** 各自面对应的 `F_Mask/B_Mask` 与同面丝印判定（v1 只处理 F 面 ⇒ `J6/J9/J11/J12/J13` 等 **B 面位号从未被尝试**；v2 已处置）。
 3. **封装丝印线段裁剪/降层（非破坏）**：对压在阻焊开窗上的封装丝印线段，候选顺序 = 按开窗裁剪（余量 30/80/150/250 µm，**只截断 + 追加**，不删项）→ 整段**移 F.Fab/B.Fab**；逐候选交 DRC 复算裁决。
 4. **字段落位 = 打分配置 + 多候选试投**：候选 = 位置(16 向 × 11 环) × 字号(1.0/0.8 mm) × 朝向(0°/90°)，打分 = 位移 + 缩字罚 200 µm + 旋转罚 300 µm；按分升序**逐个试 DRC**（最多 4 个），避免「模型最优但复算不过」的空转。
-5. **复跑确定性**：新追加的封装丝印线段由 KiCad 生成 uuid，默认来源不可复现 ⇒ 工具启动时 `pcbnew.KIID.SeedGenerator(20260918)`（固定种子），使两次全量复跑**逐字节相同**（§6.1 实测 2/2）。
+5. **v2.1（本轮）候选扩展**：把「**孔心对涉事走线直线的投影**」并入 tncv 候选集（端点沿自身直线微移即保持 0/45/90）。
+   效果：4 例原报 `no-candidate` 的孔得以生成**具体解**（其后被 DRC 以孔净距否决，见 §4.2），**证据更锐**；总处置案不变（16/30）。
+6. **复跑确定性**：新追加的封装丝印线段由 KiCad 生成 uuid，默认来源不可复现 ⇒ 工具启动时 `pcbnew.KIID.SeedGenerator(20260918)`（固定种子），使两次全量复跑**逐字节相同**（§6.1 实测 2/2）。
 
 ## 3. 处置明细（机器生成）
 
@@ -134,7 +136,7 @@ W-7 未处置 5 类共 **146** 条：v2 引擎（真实几何 + 逐案 DRC 复�
 
 | 类别 | 条数 | 证据 |
 |---|---|---|
-| 终态剩余 | 13 | 详见 `drc_after.json`；成因两类：**(A) 局部几何不可解**（孔心与涉事走线交点均不重合，要消违规须让端点精确落孔心，而该点在每条涉事走线的非 0/45/90 方向；两段式折线所需腿长 < 0.05 mm）；**(B) 移孔触发孔净距**（`hole_to_hole`/`hole_clearance`：孔须移到角节点，实测位移 0.03–0.19 mm 即与邻孔/邻铜冲突） |
+| 终态剩余 | 13（9 个孔） | 成因两类：**(A) 无合法孔位**（4 孔：`62221d53`/`7a5c015c`/`d7edd63f`/`88f105cf`——涉事多线**无共同交点**（如 F 面水平 y=53.75 与 B 面水平 y=53.8 相差 50 µm），或统一到交点需某条线出现 < 0.05 mm 腿的折线）；**(B) 有几何解但**孔动不了**（其余 5 孔：v2.1 投影候选已给出具体解（位移 0.03–0.19 mm），但 DRC 复算否决 `hole_clearance` 0→3/0→8 或 `hole_to_hole` 0→1/0→2——BGA 逃逸区孔/铜密集，无孔位空间） |
 
 ### 4.3 `silk` 4 条（终态）
 
@@ -157,11 +159,11 @@ W-7 未处置 5 类共 **146** 条：v2 引擎（真实几何 + 逐案 DRC 复�
 
 ```bash
 cd /home/fila/jqdDev_2025/ic_hw
-mkdir -p /tmp/opencode/w9m
+mkdir -p /tmp/opencode/wb1
 AppDir/usr/bin/python3.11 k2/tools/k2_p4_w7_repair_v1.py \
   --board k2/hw/k2_v4_8L.l5.kicad_pcb --pro k2/hw/k2_v4_8L.l5.kicad_pro \
-  --kicad-cli AppDir/bin/kicad-cli --work-dir /tmp/opencode/w9m \
-  --groups via_dangling,tncv,silk        # 期望 181 → 98；结果板 363431dcdd366687
+  --kicad-cli AppDir/bin/kicad-cli --work-dir /tmp/opencode/wb1 \
+  --groups via_dangling,tncv,silk        # 期望 181 → 98；结果板 fec20dd1d21241ba
 # 冻结判定器（结果板 + 仓库 pro 同名副本 + fp-lib-table + lib/）
 python3 criteria/adjudicate.py --board <work>/adj/k2_v4_8L.l5.repaired.kicad_pcb \
   --manifest criteria/manifest.k2.yaml --nets k2/hw/data/k2_sch.errata-1.yaml \
@@ -170,7 +172,7 @@ python3 criteria/adjudicate.py --board <work>/adj/k2_v4_8L.l5.repaired.kicad_pcb
 
 **实测复核**：
 - dry-run 复算：181 → 98 warning（error 0），`unconnected` 0 → 0，类型集零新增。
-- 结果板 sha256 前16 **`363431dcdd366687`**。
+- 结果板 sha256 前16 **`fec20dd1d21241ba`**。
 - **两次独立全量复跑结果板逐字节同**（见 §6.1）。
 - 冻结判定器：**PASS 6 / FAIL 4（FAIL 集合与基线逐条相同）**、`non45_segments` **0/4702**、钻孔 NPTH4/PTH16 不变。
 - **源件零改动**：板 `37019705ef994ccc` · pro `f68a5fb2f82bd02d` · `criteria/adjudicate.py` `897e8bfde60e2cfe` · `criteria/manifest.k2.yaml` `7ce08757eff25557` · 源板 `fb07d25ac426ff84` · 真源 `dd794c54f7ce7417`（与 handoff §1 冻结值一致）。
@@ -180,11 +182,20 @@ python3 criteria/adjudicate.py --board <work>/adj/k2_v4_8L.l5.repaired.kicad_pcb
 | 项 | 值 |
 |---|---|
 | 源板 | `k2/hw/k2_v4_8L.l5.kicad_pcb` = `37019705ef994ccc`（未动） |
-| 结果板（dry-run） | `/tmp/opencode/w9m/k2_v4_8L.l5.repaired.kicad_pcb` = `363431dcdd366687` |
-| 复跑一致性 | `/tmp/opencode/w9n/...` = 同值（逐字节） |
+| 结果板（dry-run） | `/tmp/opencode/wb1/k2_v4_8L.l5.repaired.kicad_pcb` = `fec20dd1d21241ba` |
+| 复跑一致性 | `/tmp/opencode/wb2/...` = 同值（逐字节） |
 | zone 重填幂等 | 未改铜时重填前后 sha 相同 |
 
-## 7. 待监理（本件不代判）
+## 7. 落件器（本轮新增，**批则一键落件**）
+`k2/tools/k2_p4_w7_land_v1.py`（**dry-run 默认**；`--apply` 才写仓库）：
+A 前置校验 fail-closed（仓库板/pro/SPEC rev-46/`criteria` 两份 sha 全对才继续；结果板自带 error 或未连接即拒）→
+B `--apply`：备份 src 板/pro 字节 → 写板 → **校验 dst pro 逐字节不变**（不符即回滚，T-22）→ 新增 `SPEC rev-47`（= rev-46 + `_spec_rev_37` 变更记录 + `spec_version`）+ `project.yaml.spec_name` bump →
+C 落件后复核 DRC（仓库 pro 语义，期望 error 0 / warning 35 / unconnected 0）+ 打印后续 git 步骤（不代跑 git）。
+
+**实测 dry-run**（本轮）：6 项前置全 `OK`；结果板 DRC（探针 pro）= error 0 / warning **98** / unconnected 0；
+拟改动 = 板 + SPEC rev-47 + project.yaml；**不动** pro（逐字节校验）、`criteria/`、rev-19..46 原件。
+
+## 8. 待监理（本件不代判）
 
 1. **批准落件**：批则 ENG 走 T-22 落板（备份 src pro + 同名 pro 逐字节校验）+ SPEC bump + 复跑 §6 全链；**未批不落**。
 2. **未处置口径**：① `tncv` 局部不可解 + `via_dangling` 承重支路 ⇒ 是否批**重布线/重定孔位增量**；② 丝印位号（含剩余 4 条）是否接受「远移 / 缩字 / 转 90°」，抑或密集区改置 **F.Fab**；③ 封装丝印线段是否接受「裁剪 / 降层 F.Fab」处置。

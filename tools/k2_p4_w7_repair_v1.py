@@ -203,7 +203,7 @@ def group_tncv(idx, rep):
     return groups
 
 
-def candidates_for_via(g, max_shift_nm=260_000, top=6):
+def candidates_for_via(g, max_shift_nm=260_000, top=8):
     """按（孔不动优先, 变动对象数, 最大位移）排序返回候选 [(P,(x,y),plan), ...]。"""
     via = g["via"]
     vp = via.GetPosition()
@@ -215,7 +215,16 @@ def candidates_for_via(g, max_shift_nm=260_000, top=6):
         return []
     cands = [pcbnew.VECTOR2I(vp.x, vp.y)]
     for t in tracks:
-        cands += [t.GetStart(), t.GetEnd()]
+        s0, e0 = t.GetStart(), t.GetEnd()
+        cands += [s0, e0]
+        # v2.1：孔心到本走线**直线**的投影（端点沿自身直线微移即保持 0/45/90；
+        #       原候选集只含端点/交点，会漏掉「小位移且合法」的解）
+        dx, dy = e0.x - s0.x, e0.y - s0.y
+        L2 = dx * dx + dy * dy
+        if L2:
+            tt = ((vp.x - s0.x) * dx + (vp.y - s0.y) * dy) / L2
+            cands.append(pcbnew.VECTOR2I(int(round(s0.x + tt * dx)),
+                                         int(round(s0.y + tt * dy))))
     for i in range(len(tracks)):
         for j in range(i + 1, len(tracks)):
             pt = line_intersect(tracks[i].GetStart(), tracks[i].GetEnd(),
