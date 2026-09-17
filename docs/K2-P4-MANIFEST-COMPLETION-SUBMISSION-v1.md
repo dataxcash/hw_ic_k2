@@ -32,6 +32,7 @@
 | 6 | `drill_count`（**补正**） | `npth >= 4 and pth >= drill_pth_min` | 计划 §P4 / 审计 §10.8 L2-8 8e | `npth >= 1` → **`>= 4`**（现板 NPTH=4 ⇒ 判定不变） |
 | 7 | `zone_filled` | `filled_fillable_zones == fillable_zones` | J-3 / **U4-A** | 分母 = 非 keepout zone（keepout 结构上不可能 filled） |
 | 8 | `refdes_sets_equal` | `sch_set == board_set - mechanical_refdes` | J-6 / **U4-C** | `mechanical_refdes: [H1..H4]`；**未登记**的多余 refdes 仍判 FAIL |
+| 9 | **`board:` 字段转写** | `board: k2_v4_8L.l5.kicad_pcb` | 清单元数据 | 冻结件为 **`k2_v4_8L.l4.kicad_pcb`**（= 缺陷证据板）；草案已转写为 **l5**（P4 板）。判定器**不消费**该字段（用 `--board`），但**签认件必须指 P4 板**，否则「签认的清单描述的是另一块板」。 |
 
 ---
 
