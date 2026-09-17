@@ -268,7 +268,16 @@ def seg_touches(s, e, p, tol=LINE_TOL_NM) -> bool:
     return abs(p.x - cx) <= tol and abs(p.y - cy) <= tol
 
 
-def mutate_delete_via(vkey):
+def mutate_delete_via(vkey, policy="strict"):
+    """删除孤立过孔 + 其**死端支路**。
+
+    回溯判据（v2.2 修正）：在支路远端
+      · 有焊盘            ⇒ **停并整案放弃**（可能是该盘的唯一接线，不得切）
+      · 有走线**中段穿越**（T 节点）⇒ 删本段即停（穿越段不是本支路的延续）
+      · 恰好 1 条走线**端点**相接 ⇒ 删本段并**续溯**（链的下一环）
+      · ≥2 条或 0 条      ⇒ 删本段即停
+    policy="chain" = 旧口径：遇焊盘也续溯（更激进，可能多切；由 DRC 复算裁决）。
+    """
     def fn(bd, idx2):
         via = None
         for t in bd.GetTracks():
@@ -281,33 +290,55 @@ def mutate_delete_via(vkey):
         tracks = [t for t in bd.GetTracks() if is_track(t)]
         pads = [(f.GetReference() + "." + p.GetPadName(), p.GetPosition())
                 for f in bd.GetFootprints() for p in f.Pads()]
+
+        def pad_at(pt):
+            return [n for n, pp in pads if pp.x == pt.x and pp.y == pt.y]
+
+        def endpoint_tracks(pt, dead):
+            return [t for t in tracks
+                    if uid(t) not in dead and uid(t) != uid(via)
+                    and ((t.GetStart().x == pt.x and t.GetStart().y == pt.y)
+                         or (t.GetEnd().x == pt.x and t.GetEnd().y == pt.y))]
+
+        def passing_tracks(pt, dead, exclude=None):
+            out = []
+            for t in tracks:
+                if uid(t) in dead or uid(t) == uid(via) or uid(t) == exclude:
+                    continue
+                if seg_touches(t.GetStart(), t.GetEnd(), pt):
+                    # 只有「穿越」才算 T（端点相接走 endpoint_tracks 判）
+                    if not ((t.GetStart().x == pt.x and t.GetStart().y == pt.y)
+                            or (t.GetEnd().x == pt.x and t.GetEnd().y == pt.y)):
+                        out.append(t)
+            return out
+
         dead = set()
         frontier = [vp]
         guard = 0
         while frontier and guard < 64:
             guard += 1
             pt = frontier.pop()
-            for t in tracks:
+            for t in list(tracks):
                 if uid(t) in dead:
                     continue
-                for p, side in ((t.GetStart(), "S"), (t.GetEnd(), "E")):
-                    if p.x != pt.x or p.y != pt.y:
-                        continue
-                    other = t.GetEnd() if side == "S" else t.GetStart()
-                    # other 处的其它铜（含**中段穿越**的 T 节点，逐步回溯的关键）
-                    n_other = 0
-                    for t2 in tracks:
-                        if uid(t2) == uid(t) or uid(t2) in dead:
-                            continue
-                        if seg_touches(t2.GetStart(), t2.GetEnd(), other):
-                            n_other += 1
-                    n_pad = sum(1 for _, pp in pads
-                                if pp.x == other.x and pp.y == other.y)
-                    dead.add(uid(t))
-                    # 仅「唯一后继走线且无焊盘」才继续回溯；否则此支路到此为止
-                    if n_pad == 0 and n_other <= 1:
-                        frontier.append(other)
-                    break
+                s0, e0 = t.GetStart(), t.GetEnd()
+                if (s0.x, s0.y) == (pt.x, pt.y):
+                    other = e0
+                elif (e0.x, e0.y) == (pt.x, pt.y):
+                    other = s0
+                else:
+                    continue
+                if pad_at(other) and policy == "strict":
+                    return {"via": vkey[:8], "net": via.GetNetname(),
+                            "unsolved": "far-end-is-pad"}
+                dead.add(uid(t))
+                passes = passing_tracks(other, dead, exclude=uid(t))
+                ends = endpoint_tracks(other, dead)
+                if passes or len(ends) != 1:
+                    continue            # 停：T 穿越 / 多路汇合 / 无后续
+                if policy == "chain" and pad_at(other):
+                    continue            # chain 口径同样止于焊盘（不再往后切）
+                frontier.append(other)  # 端点单链 ⇒ 续溯
         killed = []
         for t in tracks:
             if uid(t) in dead:
@@ -317,6 +348,25 @@ def mutate_delete_via(vkey):
         bd.RemoveNative(via)
         return {"via": vkey[:8], "net": net, "pos": [vp.x, vp.y],
                 "deleted_tracks": killed}
+    return fn
+
+
+def via_dangling_variants(vkey):
+    """候选：① strict（遇焊盘即放弃，最小切除） ② chain（续溯；更激进）—— 逐候选 DRC 裁决。"""
+    return [("strict", mutate_delete_via(vkey, "strict")),
+            ("chain", mutate_delete_via(vkey, "chain"))]
+
+
+def mutate_tncv_drop_track(vkey, off_keys):
+    """候选：删除违规走线本身（若它只是死端支路 ⇒ 违规消且 net 不受损；由复算裁决）。"""
+    def fn(bd, idx2):
+        for t in list(bd.GetTracks()):
+            if is_track(t) and uid(t) in off_keys:
+                s0, e0 = t.GetStart(), t.GetEnd()
+                bd.RemoveNative(t)
+                return {"via": vkey[:8], "dropped_track": uid(t)[:8],
+                        "len_um": round((((e0.x - s0.x) ** 2 + (e0.y - s0.y) ** 2) ** 0.5) / 1000, 1)}
+        raise RuntimeError("offending track not found")
     return fn
 
 
@@ -827,8 +877,17 @@ def main(argv=None) -> int:
                 keys.append(uid(o))
         done, rejected = [], []
         for k in keys:
-            ok, rec = eng.attempt(f"via_dangling:{k[:8]}", mutate_delete_via(k))
-            (done if ok else rejected).append(rec)
+            okd, last = False, None
+            for tag, fn in via_dangling_variants(k):
+                ok, rec = eng.attempt(f"via_dangling:{k[:8]}:{tag}", fn)
+                if ok:
+                    rec["variant"] = tag
+                    done.append(rec)
+                    okd = True
+                    break
+                last = rec
+            if not okd:
+                rejected.append(last)
         rep_out["log"]["via_dangling"] = {"accepted": done, "rejected": rejected}
 
     if "tncv" in groups:
@@ -863,7 +922,19 @@ def main(argv=None) -> int:
                                      "rejected": ["no-candidate-0/45/90+shift-cap"]})
                     continue
                 okb, lastrec = False, None
-                for score, target, plan in cands:
+                for score, target, plan in cands + [((9, 0, 0), None, None)]:
+                    if target is None:      # 末位候选：「删本段」
+                        ok, rec = eng.attempt(f"tncv:{k[:8]}:drop",
+                                              mutate_tncv_drop_track(k, via_off[k]))
+                        if ok:
+                            rec["variant"] = "drop_track"
+                            applied.append(rec)
+                            progressed += 1
+                            okb = True
+                        else:
+                            lastrec = rec
+                        break
+
                     def fn(bd, idx2, _t=target, _p=plan):
                         return apply_plan(bd, idx2, _t, _p)
                     ok, rec = eng.attempt(f"tncv:{k[:8]}", fn)

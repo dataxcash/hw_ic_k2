@@ -8,19 +8,19 @@
 
 ## 0. 一句话
 
-W-7 未处置 5 类共 **146** 条：v2 引擎（真实几何 + 逐案 DRC 复算 + 多候选试投 + 不合格回退）后实测 **181 → 98**（error **0**、未连接 **0**、违规类型集零新增）；**83 条消除**，剩 **23 条**属 5 类范围（另 `lib_footprint_mismatch` 35 与 `missing_courtyard` 40 不在本工具范围）。
+W-7 未处置 5 类共 **146** 条：v2 引擎（真实几何 + 逐案 DRC 复算 + 多候选试投 + 不合格回退）后实测 **181 → 96**（error **0**、未连接 **0**、违规类型集零新增）；**85 条消除**，剩 **21 条**属 5 类范围（另 `lib_footprint_mismatch` 35 与 `missing_courtyard` 40 不在本工具范围）。
 
 ## 1. 结果总账（dry-run；源板 `37019705ef994ccc` 未动）
 
 | 规则类 | 前 | 后 | 已消除 | 处置案 | 未处置 | 未处置原因 |
 |---|---|---|---|---|---|---|
 | `via_dangling` | 12 | 6 | 6 | 6 | 6 | 6 案承重支路（删除即 unconnected>0） |
-| `track_not_centered_on_via` | 30 | 13 | 17 | 16 | 13 | 18 案：8 局部几何不可解（0/45/90+腿长+孔净距三重约束）· 8 移孔触发 hole_to_hole/hole_clearance · 2 其它 |
+| `track_not_centered_on_via` | 30 | 11 | 19 | 18 | 11 | **8 孔**：4 孔无合法孔位（多线无共同交点 / 需 <0.05 mm 腿折线）· 4 孔有几何解但移孔撞孔净距（`hole_clearance` / `hole_to_hole`） |
 | `silk_over_copper` | 43 | 3 | 40 | 43 | 3 | 3 案无落点（C80 · R41 · R45，密集簇内 16 向×11 环×字号×朝向全不可行） |
 | `silk_overlap` | 21 | 1 | 20 | 43 | 1 | 1 案：R45↔C80（同上，须先解决二者落点） |
 | `missing_courtyard` | 40 | 40 | 0 | — | 40 | 40 条全部未动：**外扩口径属 §4-1 耦合裁定**，ENG 不择口径 |
 | `lib_footprint_mismatch` | 35 | 35 | 0 | — | 35 | 35 条不在 W-7 范围（W-8 / `O-2`） |
-| **合计** | **181** | **98** | **83** | | | |
+| **合计** | **181** | **96** | **85** | | | |
 
 **每案复算口径（`delta_ok`）**：① 无新违规类型；② 任一类型条数不增加；③ error 级 = 0；④ `unconnected` = 0；⑤ 违规总量严格下降。任一不满足 ⇒ 该案**回退**（多候选则试下一个）。
 
@@ -32,7 +32,11 @@ W-7 未处置 5 类共 **146** 条：v2 引擎（真实几何 + 逐案 DRC 复�
 4. **字段落位 = 打分配置 + 多候选试投**：候选 = 位置(16 向 × 11 环) × 字号(1.0/0.8 mm) × 朝向(0°/90°)，打分 = 位移 + 缩字罚 200 µm + 旋转罚 300 µm；按分升序**逐个试 DRC**（最多 4 个），避免「模型最优但复算不过」的空转。
 5. **v2.1（本轮）候选扩展**：把「**孔心对涉事走线直线的投影**」并入 tncv 候选集（端点沿自身直线微移即保持 0/45/90）。
    效果：4 例原报 `no-candidate` 的孔得以生成**具体解**（其后被 DRC 以孔净距否决，见 §4.2），**证据更锐**；总处置案不变（16/30）。
-6. **复跑确定性**：新追加的封装丝印线段由 KiCad 生成 uuid，默认来源不可复现 ⇒ 工具启动时 `pcbnew.KIID.SeedGenerator(20260918)`（固定种子），使两次全量复跑**逐字节相同**（§6.1 实测 2/2）。
+6. **v2.2（本轮）**：① `via_dangling` 回溯规则修正——区分「端点单链（可续）」与「**中段穿越 T**（必停）」，
+   并把「遇焊盘即放弃（strict）」与「续溯（chain）」做成**两个候选**交 DRC 裁决（实测 4 strict + 2 chain）；
+   ② tncv 新增「**删本段**」候选（若违规走线只是死端支路 ⇒ 违规消且净连接不受损，由复算裁决；实测命中 2 例：
+   `49ea9d77`（I2C2_SDA）· `2e58431c`（I2C2_SCL））。
+7. **复跑确定性**：新追加的封装丝印线段由 KiCad 生成 uuid，默认来源不可复现 ⇒ 工具启动时 `pcbnew.KIID.SeedGenerator(20260918)`（固定种子），使两次全量复跑**逐字节相同**（§6.1 实测 2/2）。
 
 ## 3. 处置明细（机器生成）
 
@@ -132,11 +136,11 @@ W-7 未处置 5 类共 **146** 条：v2 引擎（真实几何 + 逐案 DRC 复�
 | `dbdf4b0a` (`P3V3_AUX`) | unconnected:1, no-net-decrease |
 | `dd59b566` (`SW_U2`) | via_dangling:6->7, unconnected:2, no-net-decrease |
 
-### 4.2 `track_not_centered_on_via` 13 条（终态）
+### 4.2 `track_not_centered_on_via` 11 条（终态）
 
 | 类别 | 条数 | 证据 |
 |---|---|---|
-| 终态剩余 | 13（9 个孔） | 成因两类：**(A) 无合法孔位**（4 孔：`62221d53`/`7a5c015c`/`d7edd63f`/`88f105cf`——涉事多线**无共同交点**（如 F 面水平 y=53.75 与 B 面水平 y=53.8 相差 50 µm），或统一到交点需某条线出现 < 0.05 mm 腿的折线）；**(B) 有几何解但**孔动不了**（其余 5 孔：v2.1 投影候选已给出具体解（位移 0.03–0.19 mm），但 DRC 复算否决 `hole_clearance` 0→3/0→8 或 `hole_to_hole` 0→1/0→2——BGA 逃逸区孔/铜密集，无孔位空间） |
+| 终态剩余 | 11 条 / 8 孔 | 成因两类：**(A) 无合法孔位**（4 孔：`62221d53`（NRST）· `7a5c015c` · `d7edd63f`（PERSTA#）· `88f105cf`（strap）——涉事多线**无共同交点**（如 F 面水平 y=53.75 与 B 面水平 y=53.8 相差 50 µm），或统一到交点需某条线出现 < 0.05 mm 腿的折线）；**(B) 有几何解但孔动不了**（4 孔：`073ad34f` · `2a02ffd7` · `7b5ea818` · `500c1c18`——投影候选已给出具体解（位移 0.03–0.19 mm），但 DRC 复算否决 `hole_clearance` 0→3/0→8 或 `hole_to_hole` 0→1/0→2：BGA 逃逸区孔/铜密集，无孔位空间；「删本段」候选亦因该段承载网连接而被复算否决） |
 
 ### 4.3 `silk` 4 条（终态）
 
@@ -159,11 +163,11 @@ W-7 未处置 5 类共 **146** 条：v2 引擎（真实几何 + 逐案 DRC 复�
 
 ```bash
 cd /home/fila/jqdDev_2025/ic_hw
-mkdir -p /tmp/opencode/wb1
+mkdir -p /tmp/opencode/wd1
 AppDir/usr/bin/python3.11 k2/tools/k2_p4_w7_repair_v1.py \
   --board k2/hw/k2_v4_8L.l5.kicad_pcb --pro k2/hw/k2_v4_8L.l5.kicad_pro \
-  --kicad-cli AppDir/bin/kicad-cli --work-dir /tmp/opencode/wb1 \
-  --groups via_dangling,tncv,silk        # 期望 181 → 98；结果板 fec20dd1d21241ba
+  --kicad-cli AppDir/bin/kicad-cli --work-dir /tmp/opencode/wd1 \
+  --groups via_dangling,tncv,silk        # 期望 181 → 96；结果板 7a09862980735643
 # 冻结判定器（结果板 + 仓库 pro 同名副本 + fp-lib-table + lib/）
 python3 criteria/adjudicate.py --board <work>/adj/k2_v4_8L.l5.repaired.kicad_pcb \
   --manifest criteria/manifest.k2.yaml --nets k2/hw/data/k2_sch.errata-1.yaml \
@@ -172,9 +176,9 @@ python3 criteria/adjudicate.py --board <work>/adj/k2_v4_8L.l5.repaired.kicad_pcb
 
 **实测复核**：
 - dry-run 复算：181 → 98 warning（error 0），`unconnected` 0 → 0，类型集零新增。
-- 结果板 sha256 前16 **`fec20dd1d21241ba`**。
+- 结果板 sha256 前16 **`7a09862980735643`**。
 - **两次独立全量复跑结果板逐字节同**（见 §6.1）。
-- 冻结判定器：**PASS 6 / FAIL 4（FAIL 集合与基线逐条相同）**、`non45_segments` **0/4702**、钻孔 NPTH4/PTH16 不变。
+- 冻结判定器：**PASS 6 / FAIL 4（FAIL 集合与基线逐条相同）**、`non45_segments` **0/4700**、钻孔 NPTH4/PTH16 不变。
 - **源件零改动**：板 `37019705ef994ccc` · pro `f68a5fb2f82bd02d` · `criteria/adjudicate.py` `897e8bfde60e2cfe` · `criteria/manifest.k2.yaml` `7ce08757eff25557` · 源板 `fb07d25ac426ff84` · 真源 `dd794c54f7ce7417`（与 handoff §1 冻结值一致）。
 
 ### 6.1 sha 账
@@ -182,8 +186,8 @@ python3 criteria/adjudicate.py --board <work>/adj/k2_v4_8L.l5.repaired.kicad_pcb
 | 项 | 值 |
 |---|---|
 | 源板 | `k2/hw/k2_v4_8L.l5.kicad_pcb` = `37019705ef994ccc`（未动） |
-| 结果板（dry-run） | `/tmp/opencode/wb1/k2_v4_8L.l5.repaired.kicad_pcb` = `fec20dd1d21241ba` |
-| 复跑一致性 | `/tmp/opencode/wb2/...` = 同值（逐字节） |
+| 结果板（dry-run） | `/tmp/opencode/wd1/k2_v4_8L.l5.repaired.kicad_pcb` = `7a09862980735643` |
+| 复跑一致性 | `/tmp/opencode/wd2/...` = 同值（逐字节） |
 | zone 重填幂等 | 未改铜时重填前后 sha 相同 |
 
 ## 7. 落件器（本轮新增，**批则一键落件**）
@@ -194,6 +198,17 @@ C 落件后复核 DRC（仓库 pro 语义，期望 error 0 / warning 35 / unconn
 
 **实测 dry-run**（本轮）：6 项前置全 `OK`；结果板 DRC（探针 pro）= error 0 / warning **98** / unconnected 0；
 拟改动 = 板 + SPEC rev-47 + project.yaml；**不动** pro（逐字节校验）、`criteria/`、rev-19..46 原件。
+
+## 7.1 `missing_courtyard` 口径 → 碰撞曲线（本轮新增，工具 `k2_p4_courtyard_margin_sweep_v1.py` `c54d64066317d012`）
+对 margin ∈ {0.00,0.05,0.10,0.15,0.20,0.25,0.30} mm 为 40 件补 `F.CrtYd`（外扩 m）后跑 DRC：
+
+| margin (mm) | 0.00 | 0.05 | 0.10 | 0.15 | 0.20 | **0.25(KLC)** | 0.30 |
+|---|---|---|---|---|---|---|---|
+| `missing_courtyard` | 0 | 0 | 0 | 0 | 0 | **0** | 0 |
+| `courtyards_overlap`（**error**） | **4** | 5 | 6 | 8 | 11 | **15** | 23 |
+
+⇒ **不存在任何外扩口径能使两者同时为 0**（连 m=0「本体轮廓」也已有 4 对贴合重叠：`D2↔U2` 0.05 mm、`L1↔U2` 0.005 mm 等）。
+这是**判据层面的联合不可满足**，不是工具能力问题 ⇒ 属 §4-1 耦合裁定（接受 ≥4 条 error / 先做 placement 重解 / 豁免 `missing_courtyard`）。
 
 ## 8. 待监理（本件不代判）
 
