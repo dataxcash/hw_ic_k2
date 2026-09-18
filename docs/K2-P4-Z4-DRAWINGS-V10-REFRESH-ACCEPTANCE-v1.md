@@ -17,7 +17,7 @@
 
 | 件 | 前（v9 / 动作前） | **后（v10 / 落件）** |
 |---|---|---|
-| `k2/tools/k2_p3_drawings_v1.py` | `59ab211fc37c2a48` | **`15438b5fbc52a4e5`** |
+| `k2/tools/k2_p3_drawings_v1.py` | `59ab211fc37c2a48` | **`eb7ea771a1645c01`** |
 | `L3/drawings/p3_drawings.json` | `21e8891ea3fc4c06` | **`d6613754a7382c99`** |
 | `L3/drawings/01_board_frame_and_holes.svg` | `096a61c81201123d` | **`ae84c110a4d27b0e`** |
 | `L3/drawings/02_device_coordinates.svg` | `48f92c6b9dd16042` | **`caddcf3fbecebff3`** |
@@ -87,7 +87,8 @@ errata-1 `17d540f058631a5e` · SPEC rev-47 `9ba09cbc148d6836` / rev-48 `11ad1da3
 2. **旧 README 索引 sha 勘误**：旧表把 `01` / `p3_drawings.json` 记为 `67614e57…` / `a6841cd7…`，与 v9 实际落件（`096a61c8…` / `21e8891e…`）不符；v10 README 已列「v10 现行 + v9 历史」双列。
 3. **守恒 1 处差异（具名）**：`tracks 4721`（在库判定器 `non45_segments` 亦报 `0/4721`）vs 一次投递包 §6 期望 `4722`；`tracks 4721 + vias 711 = 5432 = GetTracks()` ⇒ 差异为**分类计数口径**（非板变动；板 sha 未变）。
 4. **口径统一带来的连带刷新**：`pour_zones.count` 由「全部 zone（13）」改为「**有网非 keepout 铜区（10）**」，与判定器 `zone_filled` 口径（`#K2-21 §一`）一致；keepout 区另以 `keepout_zone_count=8` 登记，**未丢信息**。
-5. **多层层 keepout 的 KiCad 断言**（工程踩坑）：`GetFilledPolysList()` 对「全 8 层 rule area」抛 C++ 断言（`map::at`）且 `try/except` **不捕获**；v10 生成器改按 `GetIsRuleArea()` 分流 ⇒ 出图硬化（同时避免"静默跳过"）。
+5. **本会话 sha 记录勘误（具名，勿循）**：k2 首笔提交 `fa8ce60` 的**提交信息**把生成器 sha 记为 `15438b5fbc52a4e5`（= 中间草稿值，edit4 后测得）；**落件/入库实际工具 sha = `eb7ea771a1645c01`**（后续 edit5/6/7 改动所致），本件与本目录 README 已按实际值订正。**图集内容与工具一致性无影响**（`p3_drawings.json` 等均由 `eb7ea771a1645c01` 产出，T-38 两次同 sha 已验）。
+6. **多层层 keepout 的 KiCad 断言**（工程踩坑）：`GetFilledPolysList()` 对「全 8 层 rule area」抛 C++ 断言（`map::at`）且 `try/except` **不捕获**；v10 生成器改按 `GetIsRuleArea()` 分流 ⇒ 出图硬化（同时避免"静默跳过"）。
 
 ## 6. 复跑链（确定性）
 
@@ -133,4 +134,4 @@ AppDir/bin/kicad-cli pcb drc --severity-all -o /tmp/opencode/drc.rpt k2/hw/k2_v4
 **未改**：SPEC 族（rev-47/48/49 原件逐字节不动）· 受审板/设计源板/冻结交付板 · 真源 yaml/errata-1 · `criteria/**`（仍只读、rev=1）· `project.yaml` ·
 `_shared/**` · 生成器 `k2_gen_v5.py` · 模板/库/`fp-lib-table` · 闭环表；未建 `k2/pipeline.yaml`、未建 `k2/fab/**`；未出 Gerber；未派 WORKER；临时仅 `/tmp/opencode`；**未新增检查齿**（owner ②）。
 **未闭（具名）**：D7（§3，待监理裁）· C1（⑤ owner）· ⑦ 库快照重建（G-ROOT-1 硬前置）· `pipeline.yaml` 安装（⑤ 硬前置）。
-—— ENG（ARCHER）· 2026-09-18 · 图集 v10 · 生成器 `15438b5fbc52a4e5` · 受审板 `6ff49da5678c2108`
+—— ENG（ARCHER）· 2026-09-18 · 图集 v10 · 生成器 `eb7ea771a1645c01` · 受审板 `6ff49da5678c2108`
