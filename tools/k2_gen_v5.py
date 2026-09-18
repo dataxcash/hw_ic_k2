@@ -47,7 +47,7 @@ os.environ.setdefault("PM_GATE_PROJECT_ROOT", ROOT)   # 自定位：不依赖调
 from pm_gate import artifacts as _ARTIFACTS, config as _PMCFG   # noqa: E402
 SPEC_PATH = _ARTIFACTS.path("L3", _PMCFG.spec_name())
 # G-ROOT-3（#K2-23 §二-3）：真源网表路径**配置驱动**（同 SPEC_PATH 口径），**去 symlink 兜底**。
-#   值 = project.yaml::nets_yaml（#K2-23 §二-6 裁定「乙」= hw/data/k2_sch.errata-1.yaml）。
+#   值 = project.yaml::nets_yaml（现行 = hw/data/k2_sch.errata-2.yaml；owner ⑤ 授权 #K2-24 仅删 C89/PWR_5V_KEY，未夹带 105 NC——#K2-28 §2.4 更正）。
 #   缺配置 / 文件不存在 ⇒ fail-closed（禁回落 boards/k2_sch.yaml 之类隐式兜底）。
 _NETS_REL = _PMCFG.project_config().get("nets_yaml")
 if not _NETS_REL:

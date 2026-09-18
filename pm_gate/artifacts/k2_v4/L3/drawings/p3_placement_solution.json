@@ -51,15 +51,15 @@
   },
   "R42": {
    "at": [
-    86.6,
-    59.55
+    93.3,
+    61.55
    ],
    "rot": 0.0,
    "aabb": [
-    85.375,
-    59.075,
-    87.825,
-    60.025
+    92.075,
+    61.075,
+    94.525,
+    62.025
    ],
    "footprint": "Resistor_SMD:R_0603_1608Metric",
    "ball": "FF5",
@@ -69,7 +69,8 @@
    ],
    "side": "west",
    "basis": "SPEC layer_plan.strap_domain_v32.placement（域/排法/0603 已裁）+ 就近球求解",
-   "net_end": "GND（B 端）"
+   "net_end": "GND（B 端）",
+   "authority_after_bump": "P4 已批准受审板取值（#K2-28 §2.3 C1 补正）；board_sha16=dae8dc8d48ff5b81"
   },
   "R35": {
    "at": [
@@ -322,22 +323,23 @@
   },
   "C86": {
    "at": [
-    32.4,
-    36.0
+    31.55,
+    58.85
    ],
    "rot": 0.0,
    "aabb": [
-    31.64,
-    35.69,
-    33.16,
-    36.31
+    30.79,
+    58.54,
+    32.31,
+    59.16
    ],
    "footprint": "Capacitor_SMD:C_0402_1005Metric",
    "old_at": [
     31.05,
     56.0
    ],
-   "basis": "L2-3 已裁须移位（排针列 column_x 26.5→27.94）；L2 自裁新坐标：左带内就近原位、避既有 pad"
+   "basis": "L2-3 已裁须移位（排针列 column_x 26.5→27.94）；L2 自裁新坐标：左带内就近原位、避既有 pad",
+   "authority_after_bump": "P4 已批准受审板取值（#K2-28 §2.3 C1 补正）；board_sha16=dae8dc8d48ff5b81"
   }
  },
  "unsolved": [],
@@ -387,5 +389,41 @@
   "decap_ko_violations": []
  },
  "solved_count": 15,
- "all_pass": true
+ "all_pass": true,
+ "_revision": {
+  "revision": 2,
+  "at": "engine: ENG · #K2-28 §2.3 C1 补正",
+  "basis": "监理 #K2-28 §2.3-C1：L3 布局解 2 件陈旧须补正至 P4 已批准值，使权威链内部一致。来源 = 受审板 k2/hw/k2_v4_8L.l5.kicad_pcb dae8dc8d48ff5b81（P4 落件态）。",
+  "changes": [
+   {
+    "ref": "C86",
+    "at_before": [
+     32.4,
+     36.0
+    ],
+    "at_after": [
+     31.55,
+     58.85
+    ]
+   },
+   {
+    "ref": "R42",
+    "at_before": [
+     86.6,
+     59.55
+    ],
+    "at_after": [
+     93.3,
+     61.55
+    ]
+   }
+  ],
+  "recheck": {
+   "in_frame": [],
+   "part_spacing_violations": [],
+   "decap_ko_violations": [],
+   "hole_ko_violations": [],
+   "note": "本复算 = ENG 独立 bbox 级重检（inset/part_spacing/decap_ko/hole_ko 四闸），非原求解器自检；原 `selfcheck` 字段保留为求解时快照（针对补正前坐标）"
+  }
+ }
 }
