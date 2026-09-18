@@ -1,12 +1,22 @@
 {
+ "drawings_rev": "v10",
+ "baseline": {
+  "spec": "SPEC_k2_v4.spec-rev-49.json",
+  "spec_sha16": "b8f4a7cb67b575f0",
+  "board": "k2/hw/k2_v4_8L.l5.kicad_pcb",
+  "board_sha16": "6ff49da5678c2108",
+  "historical_board": "k2/hw/k2_v4_8L.kicad_pcb",
+  "authority": "真源 yaml → SPEC（canonical，只版本 bump）→ 受审板（仅实测类字段的量测源；W-8 属性级「以板为准」= #K2-23 §二-1）"
+ },
  "spec": {
-  "name": "SPEC_k2_v4.spec-rev-25.json",
-  "sha16": "74f31d08a8be2f17"
+  "name": "SPEC_k2_v4.spec-rev-49.json",
+  "sha16": "b8f4a7cb67b575f0"
  },
  "nets_yaml": {
   "path": "k2/hw/data/k2_sch.errata-1.yaml",
   "sha16": "17d540f058631a5e"
  },
+ "board_sha16": "6ff49da5678c2108",
  "board_frame": {
   "outline_x": [
    23.0,
@@ -36,15 +46,56 @@
     39.6
    ],
    "H3": [
-    26.1,
-    36.1
+    45.1,
+    75.1
    ],
    "H4": [
     114.6,
     36.1
    ]
   },
-  "note": "右下角不可放孔（In5 PCIe 布线占用 y≥74.5 ∧ x≥86）⇒ 右侧不对称（审计 §10.2 诚实披露）"
+  "spec_edge_material": {
+   "H1": 1.5,
+   "H2": 1.8,
+   "H3": 2.3,
+   "H4": 1.5
+  },
+  "spec_keepout_bbox": {
+   "H1": [
+    23.1,
+    72.6,
+    29.1,
+    78.6
+   ],
+   "H2": [
+    136.6,
+    36.6,
+    142.6,
+    42.6
+   ],
+   "H3": [
+    42.1,
+    72.1,
+    48.1,
+    78.1
+   ],
+   "H4": [
+    111.6,
+    33.1,
+    117.6,
+    39.1
+   ]
+  },
+  "np_thru_hole": {
+   "drill_mm": 3.2,
+   "size_mm": 3.2,
+   "layers": [
+    "*.Cu",
+    "*.Mask"
+   ]
+  },
+  "basis": "受审板实测（board_sha16=6ff49da5678c2108）+ 监理 #K2-23 §二-4「以板为准」裁定 + §二-1 Z4 权威源（真源 → SPEC → 板；板为本文输入层的实测来源）",
+  "board_sha16": "6ff49da5678c2108"
  },
  "devices": {
   "C73": {
@@ -61,23 +112,34 @@
     47.9
    ],
    "rot": 0.0,
-   "pad_aabb": [
-    27.24,
-    47.59,
-    28.76,
-    48.21
-   ],
-   "geom_src": "L2 自裁解（k2_p3_place_solver_v1.py）",
+   "src": "board(受审板 as-built)",
    "board_pads": 2,
-   "status": "placed_solved_L2",
-   "note": "L2-3 已裁须移位（仍在左带内）；新坐标待解（L2 自裁域），图纸标为待定",
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
+   "status": "placed",
+   "note": "L2-3 移位件（受审板 as-built 已落新位）",
    "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
    "footprint_pads": 2,
    "footprint_pad_nums": [
     "1",
     "2"
    ],
-   "basis": "L2-3 已裁须移位（排针列 column_x 26.5→27.94）；L2 自裁新坐标：左带内就近原位、避既有 pad"
+   "pad_aabb": [
+    27.25,
+    47.55,
+    28.75,
+    48.25
+   ],
+   "geom_src": "board(受审板 as-built)",
+   "solution_at": [
+    28.0,
+    47.9
+   ],
+   "solution_basis": "L2-3 已裁须移位（排针列 column_x 26.5→27.94）；L2 自裁新坐标：左带内就近原位、避既有 pad"
   },
   "C74": {
    "sheet": "Power Decoupling (ReDriver VCC)",
@@ -93,8 +155,14 @@
     40.0
    ],
    "rot": 0.0,
-   "src": "anchor(设计源板)",
+   "src": "board(受审板 as-built)",
    "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
    "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
    "footprint_pads": 2,
@@ -108,7 +176,7 @@
     91.55,
     40.25
    ],
-   "geom_src": "board(as-built)"
+   "geom_src": "board(受审板 as-built)"
   },
   "C75": {
    "sheet": "Power Decoupling (ReDriver VCC)",
@@ -124,8 +192,14 @@
     41.0
    ],
    "rot": 0.0,
-   "src": "anchor(设计源板)",
+   "src": "board(受审板 as-built)",
    "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
    "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
    "footprint_pads": 2,
@@ -139,7 +213,7 @@
     91.55,
     41.25
    ],
-   "geom_src": "board(as-built)"
+   "geom_src": "board(受审板 as-built)"
   },
   "C76": {
    "sheet": "Power Decoupling (ReDriver VCC)",
@@ -155,8 +229,14 @@
     42.0
    ],
    "rot": 0.0,
-   "src": "anchor(设计源板)",
+   "src": "board(受审板 as-built)",
    "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
    "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
    "footprint_pads": 2,
@@ -170,7 +250,7 @@
     91.55,
     42.25
    ],
-   "geom_src": "board(as-built)"
+   "geom_src": "board(受审板 as-built)"
   },
   "C77": {
    "sheet": "Power Decoupling (ReDriver VCC)",
@@ -186,8 +266,14 @@
     43.0
    ],
    "rot": 0.0,
-   "src": "anchor(设计源板)",
+   "src": "board(受审板 as-built)",
    "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
    "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
    "footprint_pads": 2,
@@ -201,7 +287,7 @@
     91.55,
     43.25
    ],
-   "geom_src": "board(as-built)"
+   "geom_src": "board(受审板 as-built)"
   },
   "C78": {
    "sheet": "Power Decoupling (ReDriver VCC)",
@@ -217,8 +303,14 @@
     38.5
    ],
    "rot": 0.0,
-   "src": "anchor(设计源板)",
+   "src": "board(受审板 as-built)",
    "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
    "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod",
    "footprint_pads": 2,
@@ -232,7 +324,7 @@
     91.75,
     38.85
    ],
-   "geom_src": "board(as-built)"
+   "geom_src": "board(受审板 as-built)"
   },
   "C79": {
    "sheet": "Power Decoupling (ReDriver VCC)",
@@ -248,8 +340,14 @@
     61.0
    ],
    "rot": 0.0,
-   "src": "anchor(设计源板)",
+   "src": "board(受审板 as-built)",
    "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
    "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
    "footprint_pads": 2,
@@ -263,7 +361,7 @@
     91.55,
     61.25
    ],
-   "geom_src": "board(as-built)"
+   "geom_src": "board(受审板 as-built)"
   },
   "C80": {
    "sheet": "Power Decoupling (ReDriver VCC)",
@@ -279,8 +377,14 @@
     59.0
    ],
    "rot": 0.0,
-   "src": "anchor(设计源板)",
+   "src": "board(受审板 as-built)",
    "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
    "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
    "footprint_pads": 2,
@@ -294,7 +398,7 @@
     91.55,
     59.25
    ],
-   "geom_src": "board(as-built)"
+   "geom_src": "board(受审板 as-built)"
   },
   "C81": {
    "sheet": "Power Decoupling (ReDriver VCC)",
@@ -310,8 +414,14 @@
     60.0
    ],
    "rot": 0.0,
-   "src": "anchor(设计源板)",
+   "src": "board(受审板 as-built)",
    "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
    "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
    "footprint_pads": 2,
@@ -325,7 +435,7 @@
     91.55,
     60.25
    ],
-   "geom_src": "board(as-built)"
+   "geom_src": "board(受审板 as-built)"
   },
   "C82": {
    "sheet": "Power Decoupling (ReDriver VCC)",
@@ -341,8 +451,14 @@
     64.0
    ],
    "rot": 0.0,
-   "src": "anchor(设计源板)",
+   "src": "board(受审板 as-built)",
    "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
    "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
    "footprint_pads": 2,
@@ -356,7 +472,7 @@
     91.55,
     64.25
    ],
-   "geom_src": "board(as-built)"
+   "geom_src": "board(受审板 as-built)"
   },
   "C83": {
    "sheet": "Power Decoupling (ReDriver VCC)",
@@ -372,8 +488,14 @@
     62.0
    ],
    "rot": 0.0,
-   "src": "anchor(设计源板)",
+   "src": "board(受审板 as-built)",
    "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
    "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod",
    "footprint_pads": 2,
@@ -387,7 +509,7 @@
     91.75,
     62.35
    ],
-   "geom_src": "board(as-built)"
+   "geom_src": "board(受审板 as-built)"
   },
   "C84": {
    "sheet": "Power Decoupling (ReDriver VCC)",
@@ -403,8 +525,14 @@
     40.0
    ],
    "rot": 0.0,
-   "src": "anchor(设计源板)",
+   "src": "board(受审板 as-built)",
    "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
    "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0805_2012Metric.kicad_mod",
    "footprint_pads": 2,
@@ -418,7 +546,7 @@
     45.0,
     40.45
    ],
-   "geom_src": "board(as-built)"
+   "geom_src": "board(受审板 as-built)"
   },
   "C85": {
    "sheet": "MCU & Sideband",
@@ -430,12 +558,18 @@
     "2"
    ],
    "at": [
-    31.5,
+    29.7,
     54.5
    ],
-   "rot": 0.0,
-   "src": "anchor(设计源板)",
+   "rot": 180.0,
+   "src": "board(受审板 as-built)",
    "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
    "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
    "footprint_pads": 2,
@@ -444,44 +578,55 @@
     "2"
    ],
    "pad_aabb": [
-    30.95,
+    29.15,
     54.25,
-    32.05,
+    30.25,
     54.75
    ],
-   "geom_src": "board(as-built)"
+   "geom_src": "board(受审板 as-built)"
   },
   "C86": {
    "sheet": "MCU & Sideband",
    "symbol": "C_4R7",
-   "footprint": "Capacitor_SMD:C_0402_1005Metric",
+   "footprint": "Capacitor_SMD:C_0603_1608Metric",
    "symbol_pins": 2,
    "symbol_pin_nums": [
     "1",
     "2"
    ],
    "at": [
-    32.4,
-    36.0
+    31.55,
+    58.85
    ],
    "rot": 0.0,
-   "pad_aabb": [
-    31.64,
-    35.69,
-    33.16,
-    36.31
-   ],
-   "geom_src": "L2 自裁解（k2_p3_place_solver_v1.py）",
+   "src": "board(受审板 as-built)",
    "board_pads": 2,
-   "status": "placed_solved_L2",
-   "note": "L2-3 已裁须移位（仍在左带内）；新坐标待解（L2 自裁域），图纸标为待定",
-   "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
+   "status": "placed",
+   "note": "L2-3 移位件（受审板 as-built 已落新位）",
+   "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod",
    "footprint_pads": 2,
    "footprint_pad_nums": [
     "1",
     "2"
    ],
-   "basis": "L2-3 已裁须移位（排针列 column_x 26.5→27.94）；L2 自裁新坐标：左带内就近原位、避既有 pad"
+   "pad_aabb": [
+    30.8,
+    58.5,
+    32.3,
+    59.2
+   ],
+   "geom_src": "board(受审板 as-built)",
+   "solution_at": [
+    32.4,
+    36.0
+   ],
+   "solution_basis": "L2-3 已裁须移位（排针列 column_x 26.5→27.94）；L2 自裁新坐标：左带内就近原位、避既有 pad"
   },
   "C87": {
    "sheet": "MCU & Sideband",
@@ -497,8 +642,14 @@
     35.0
    ],
    "rot": 0.0,
-   "src": "anchor(设计源板)",
+   "src": "board(受审板 as-built)",
    "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
    "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
    "footprint_pads": 2,
@@ -512,7 +663,7 @@
     44.55,
     35.25
    ],
-   "geom_src": "board(as-built)"
+   "geom_src": "board(受审板 as-built)"
   },
   "C88": {
    "sheet": "Power (12V DC-in DCDC 5V LDO 3V3)",
@@ -528,8 +679,14 @@
     41.5
    ],
    "rot": 0.0,
-   "src": "anchor(设计源板)",
+   "src": "board(受审板 as-built)",
    "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
    "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod",
    "footprint_pads": 2,
@@ -543,7 +700,7 @@
     30.25,
     41.85
    ],
-   "geom_src": "board(as-built)"
+   "geom_src": "board(受审板 as-built)"
   },
   "C89": {
    "sheet": "Power (12V DC-in DCDC 5V LDO 3V3)",
@@ -559,8 +716,14 @@
     37.5
    ],
    "rot": 0.0,
-   "src": "anchor(设计源板)",
+   "src": "board(受审板 as-built)",
    "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
    "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod",
    "footprint_pads": 2,
@@ -574,7 +737,7 @@
     44.75,
     37.85
    ],
-   "geom_src": "board(as-built)"
+   "geom_src": "board(受审板 as-built)"
   },
   "C90": {
    "sheet": "Power Decoupling (ReDriver VCC)",
@@ -590,8 +753,14 @@
     53.0
    ],
    "rot": 0.0,
-   "src": "anchor(设计源板)",
+   "src": "board(受审板 as-built)",
    "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
    "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
    "footprint_pads": 2,
@@ -605,7 +774,7 @@
     30.55,
     53.25
    ],
-   "geom_src": "board(as-built)"
+   "geom_src": "board(受审板 as-built)"
   },
   "D1": {
    "sheet": "MCU & Sideband",
@@ -621,8 +790,14 @@
     66.5
    ],
    "rot": 0.0,
-   "src": "anchor(设计源板)",
+   "src": "board(受审板 as-built)",
    "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
    "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/LED_SMD.pretty/LED_0603_1608Metric.kicad_mod",
    "footprint_pads": 2,
@@ -636,7 +811,7 @@
     49.25,
     66.85
    ],
-   "geom_src": "board(as-built)"
+   "geom_src": "board(受审板 as-built)"
   },
   "D2": {
    "sheet": "Power (12V DC-in DCDC 5V LDO 3V3)",
@@ -651,9 +826,16 @@
     38.7,
     34.6
    ],
-   "src": "无",
-   "status": "placed_solved_L2",
-   "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
+   "rot": 0.0,
+   "src": "board(受审板 as-built)",
+   "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
+   "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Diode_SMD.pretty/D_SMA.kicad_mod",
    "footprint_pads": 2,
    "footprint_pad_nums": [
@@ -666,8 +848,12 @@
     41.95,
     35.5
    ],
-   "geom_src": "L2 自裁解（k2_p3_place_solver_v1.py）",
-   "basis": "buck 续流二极管（SW↔GND）；L2 自裁：就近 SW pad"
+   "geom_src": "board(受审板 as-built)",
+   "solution_at": [
+    38.7,
+    34.6
+   ],
+   "solution_basis": "buck 续流二极管（SW↔GND）；L2 自裁：就近 SW pad"
   },
   "E2": {
    "sheet": "MCU & Sideband",
@@ -689,8 +875,20 @@
     60.0
    ],
    "rot": 0.0,
-   "src": "anchor(设计源板)",
+   "src": "board(受审板 as-built)",
    "board_pads": 8,
+   "board_pads_numbered": 8,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8"
+   ],
    "status": "placed",
    "footprint_file": "k2/hw/lib/ForgeOS.pretty/SOIC8_FRU.kicad_mod",
    "footprint_pads": 8,
@@ -710,7 +908,7 @@
     46.25,
     62.355
    ],
-   "geom_src": "board(as-built)"
+   "geom_src": "board(受审板 as-built)"
   },
   "J11": {
    "sheet": "MCU & Sideband",
@@ -727,9 +925,17 @@
     27.94,
     65.38
    ],
-   "rot": 90,
-   "src": "SPEC pin_headers.positions（column_x 由 L2-3 修正 26.5→27.94）",
-   "board_pads": 0,
+   "rot": 90.0,
+   "src": "board(受审板 as-built)",
+   "board_pads": 4,
+   "board_pads_numbered": 4,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2",
+    "3",
+    "4"
+   ],
    "status": "placed",
    "footprint_file": "k2/hw/lib/ForgeOS.pretty/PinHeader_1x04.kicad_mod",
    "footprint_pads": 4,
@@ -739,14 +945,21 @@
     "3",
     "4"
    ],
+   "pad_aabb_lib_geom_at_column_x": [
+    23.38,
+    64.63,
+    32.5,
+    66.13
+   ],
    "pad_aabb": [
     23.38,
     64.63,
     32.5,
     66.13
    ],
-   "geom_src": "lib 封装几何 @(column_x=27.94, y=65.38, rot=90)（板 0 焊盘）",
-   "note": "L2-3 移位 dx=+1.44mm（column_x 26.5→27.94）"
+   "geom_src": "board(受审板 as-built 排针实焊盘)",
+   "geom_lib_crosscheck_match": true,
+   "note": "L2-3 守值 column_x=27.94（SPEC rev-48 已对齐）；板实 pad AABB == lib 几何 = True"
   },
   "J12": {
    "sheet": "Power (12V DC-in DCDC 5V LDO 3V3)",
@@ -761,9 +974,15 @@
     27.94,
     35.32
    ],
-   "rot": 90,
-   "src": "SPEC pin_headers.positions（column_x 由 L2-3 修正 26.5→27.94）",
-   "board_pads": 0,
+   "rot": 90.0,
+   "src": "board(受审板 as-built)",
+   "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
    "status": "placed",
    "footprint_file": "k2/hw/lib/ForgeOS.pretty/PinHeader_1x02.kicad_mod",
    "footprint_pads": 2,
@@ -771,14 +990,21 @@
     "1",
     "2"
    ],
+   "pad_aabb_lib_geom_at_column_x": [
+    25.92,
+    34.57,
+    29.96,
+    36.07
+   ],
    "pad_aabb": [
     25.92,
     34.57,
     29.96,
     36.07
    ],
-   "geom_src": "lib 封装几何 @(column_x=27.94, y=35.32, rot=90)（板 0 焊盘）",
-   "note": "L2-3 移位 dx=+1.44mm（column_x 26.5→27.94）"
+   "geom_src": "board(受审板 as-built 排针实焊盘)",
+   "geom_lib_crosscheck_match": true,
+   "note": "L2-3 守值 column_x=27.94（SPEC rev-48 已对齐）；板实 pad AABB == lib 几何 = True"
   },
   "J13": {
    "sheet": "MCU & Sideband",
@@ -795,9 +1021,17 @@
     27.94,
     46.54
    ],
-   "rot": 90,
-   "src": "SPEC pin_headers.positions（column_x 由 L2-3 修正 26.5→27.94）",
-   "board_pads": 0,
+   "rot": 90.0,
+   "src": "board(受审板 as-built)",
+   "board_pads": 4,
+   "board_pads_numbered": 4,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2",
+    "3",
+    "4"
+   ],
    "status": "placed",
    "footprint_file": "k2/hw/lib/ForgeOS.pretty/PinHeader_1x04.kicad_mod",
    "footprint_pads": 4,
@@ -807,14 +1041,21 @@
     "3",
     "4"
    ],
+   "pad_aabb_lib_geom_at_column_x": [
+    23.38,
+    45.79,
+    32.5,
+    47.29
+   ],
    "pad_aabb": [
     23.38,
     45.79,
     32.5,
     47.29
    ],
-   "geom_src": "lib 封装几何 @(column_x=27.94, y=46.54, rot=90)（板 0 焊盘）",
-   "note": "L2-3 移位 dx=+1.44mm（column_x 26.5→27.94）"
+   "geom_src": "board(受审板 as-built 排针实焊盘)",
+   "geom_lib_crosscheck_match": true,
+   "note": "L2-3 守值 column_x=27.94（SPEC rev-48 已对齐）；板实 pad AABB == lib 几何 = True"
   },
   "J2": {
    "sheet": "Connectors",
@@ -902,8 +1143,86 @@
     53.7
    ],
    "rot": 0.0,
-   "src": "anchor(设计源板)",
+   "src": "board(受审板 as-built)",
    "board_pads": 74,
+   "board_pads_numbered": 74,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+    "2",
+    "20",
+    "21",
+    "22",
+    "23",
+    "24",
+    "25",
+    "26",
+    "27",
+    "28",
+    "29",
+    "3",
+    "30",
+    "31",
+    "32",
+    "33",
+    "34",
+    "35",
+    "36",
+    "37",
+    "38",
+    "39",
+    "4",
+    "40",
+    "41",
+    "42",
+    "43",
+    "44",
+    "45",
+    "46",
+    "47",
+    "48",
+    "49",
+    "5",
+    "50",
+    "51",
+    "52",
+    "53",
+    "54",
+    "55",
+    "56",
+    "57",
+    "58",
+    "59",
+    "6",
+    "60",
+    "61",
+    "62",
+    "63",
+    "64",
+    "65",
+    "66",
+    "67",
+    "68",
+    "69",
+    "7",
+    "70",
+    "71",
+    "72",
+    "73",
+    "74",
+    "8",
+    "9"
+   ],
    "status": "placed",
    "footprint_file": "k2/hw/lib/ForgeOS.pretty/SlimSAS_x8_SFF-8654_74pin_RASide.kicad_mod",
    "footprint_pads": 74,
@@ -989,7 +1308,7 @@
     135.65,
     64.675
    ],
-   "geom_src": "board(as-built)"
+   "geom_src": "board(受审板 as-built)"
   },
   "J3": {
    "sheet": "Connectors",
@@ -1041,8 +1360,50 @@
     44.5
    ],
    "rot": 180.0,
-   "src": "anchor(设计源板)",
+   "src": "board(受审板 as-built)",
    "board_pads": 38,
+   "board_pads_numbered": 38,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "A1",
+    "A10",
+    "A11",
+    "A12",
+    "A13",
+    "A14",
+    "A15",
+    "A16",
+    "A17",
+    "A18",
+    "A19",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    "A6",
+    "A7",
+    "A8",
+    "A9",
+    "B1",
+    "B10",
+    "B11",
+    "B12",
+    "B13",
+    "B14",
+    "B15",
+    "B16",
+    "B17",
+    "B18",
+    "B19",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6",
+    "B7",
+    "B8",
+    "B9"
+   ],
    "status": "placed",
    "footprint_file": "k2/hw/lib/ForgeOS.pretty/MCIO_4i_SFF-1016_RASide.kicad_mod",
    "footprint_pads": 38,
@@ -1092,7 +1453,7 @@
     65.05,
     46.1
    ],
-   "geom_src": "board(as-built)"
+   "geom_src": "board(受审板 as-built)"
   },
   "J4": {
    "sheet": "Connectors",
@@ -1144,8 +1505,50 @@
     62.7
    ],
    "rot": 0.0,
-   "src": "anchor(设计源板)",
+   "src": "board(受审板 as-built)",
    "board_pads": 38,
+   "board_pads_numbered": 38,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "A1",
+    "A10",
+    "A11",
+    "A12",
+    "A13",
+    "A14",
+    "A15",
+    "A16",
+    "A17",
+    "A18",
+    "A19",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    "A6",
+    "A7",
+    "A8",
+    "A9",
+    "B1",
+    "B10",
+    "B11",
+    "B12",
+    "B13",
+    "B14",
+    "B15",
+    "B16",
+    "B17",
+    "B18",
+    "B19",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6",
+    "B7",
+    "B8",
+    "B9"
+   ],
    "status": "placed",
    "footprint_file": "k2/hw/lib/ForgeOS.pretty/MCIO_4i_SFF-1016_RASide.kicad_mod",
    "footprint_pads": 38,
@@ -1195,7 +1598,7 @@
     65.05,
     64.3
    ],
-   "geom_src": "board(as-built)"
+   "geom_src": "board(受审板 as-built)"
   },
   "J6": {
    "sheet": "MCU & Sideband",
@@ -1210,9 +1613,15 @@
     27.94,
     39.66
    ],
-   "rot": 90,
-   "src": "SPEC pin_headers.positions（column_x 由 L2-3 修正 26.5→27.94）",
-   "board_pads": 0,
+   "rot": 90.0,
+   "src": "board(受审板 as-built)",
+   "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
    "status": "placed",
    "footprint_file": "k2/hw/lib/ForgeOS.pretty/PinHeader_1x02.kicad_mod",
    "footprint_pads": 2,
@@ -1220,14 +1629,21 @@
     "1",
     "2"
    ],
+   "pad_aabb_lib_geom_at_column_x": [
+    25.92,
+    38.91,
+    29.96,
+    40.41
+   ],
    "pad_aabb": [
     25.92,
     38.91,
     29.96,
     40.41
    ],
-   "geom_src": "lib 封装几何 @(column_x=27.94, y=39.66, rot=90)（板 0 焊盘）",
-   "note": "L2-3 移位 dx=+1.44mm（column_x 26.5→27.94）"
+   "geom_src": "board(受审板 as-built 排针实焊盘)",
+   "geom_lib_crosscheck_match": true,
+   "note": "L2-3 守值 column_x=27.94（SPEC rev-48 已对齐）；板实 pad AABB == lib 几何 = True"
   },
   "J9": {
    "sheet": "MCU & Sideband",
@@ -1244,9 +1660,17 @@
     27.94,
     55.96
    ],
-   "rot": 90,
-   "src": "SPEC pin_headers.positions（column_x 由 L2-3 修正 26.5→27.94）",
-   "board_pads": 0,
+   "rot": 90.0,
+   "src": "board(受审板 as-built)",
+   "board_pads": 4,
+   "board_pads_numbered": 4,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2",
+    "3",
+    "4"
+   ],
    "status": "placed",
    "footprint_file": "k2/hw/lib/ForgeOS.pretty/PinHeader_1x04.kicad_mod",
    "footprint_pads": 4,
@@ -1256,14 +1680,21 @@
     "3",
     "4"
    ],
+   "pad_aabb_lib_geom_at_column_x": [
+    23.38,
+    55.21,
+    32.5,
+    56.71
+   ],
    "pad_aabb": [
     23.38,
     55.21,
     32.5,
     56.71
    ],
-   "geom_src": "lib 封装几何 @(column_x=27.94, y=55.96, rot=90)（板 0 焊盘）",
-   "note": "L2-3 移位 dx=+1.44mm（column_x 26.5→27.94）"
+   "geom_src": "board(受审板 as-built 排针实焊盘)",
+   "geom_lib_crosscheck_match": true,
+   "note": "L2-3 守值 column_x=27.94（SPEC rev-48 已对齐）；板实 pad AABB == lib 几何 = True"
   },
   "L1": {
    "sheet": "Power (12V DC-in DCDC 5V LDO 3V3)",
@@ -1278,9 +1709,16 @@
     33.0,
     40.2
    ],
-   "src": "无",
-   "status": "placed_solved_L2",
-   "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
+   "rot": 0.0,
+   "src": "board(受审板 as-built)",
+   "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
+   "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Inductor_SMD.pretty/L_0805_2012Metric.kicad_mod",
    "footprint_pads": 2,
    "footprint_pad_nums": [
@@ -1293,8 +1731,12 @@
     34.5,
     40.8
    ],
-   "geom_src": "L2 自裁解（k2_p3_place_solver_v1.py）",
-   "basis": "buck 电感（SW→P3V3）；L2 自裁：就近 SW/P3V3 pad 中点"
+   "geom_src": "board(受审板 as-built)",
+   "solution_at": [
+    33.0,
+    40.2
+   ],
+   "solution_basis": "buck 电感（SW→P3V3）；L2 自裁：就近 SW/P3V3 pad 中点"
   },
   "R1": {
    "sheet": "MCU & Sideband",
@@ -1310,8 +1752,14 @@
     37.0
    ],
    "rot": 0.0,
-   "src": "anchor(设计源板)",
+   "src": "board(受审板 as-built)",
    "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
    "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
    "footprint_pads": 2,
@@ -1325,7 +1773,7 @@
     51.25,
     37.35
    ],
-   "geom_src": "board(as-built)"
+   "geom_src": "board(受审板 as-built)"
   },
   "R21": {
    "sheet": "MCU & Sideband",
@@ -1341,8 +1789,14 @@
     66.5
    ],
    "rot": 0.0,
-   "src": "anchor(设计源板)",
+   "src": "board(受审板 as-built)",
    "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
    "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
    "footprint_pads": 2,
@@ -1356,7 +1810,7 @@
     46.25,
     66.85
    ],
-   "geom_src": "board(as-built)"
+   "geom_src": "board(受审板 as-built)"
   },
   "R28": {
    "sheet": "MCU & Sideband",
@@ -1372,8 +1826,14 @@
     41.0
    ],
    "rot": 0.0,
-   "src": "anchor(设计源板)",
+   "src": "board(受审板 as-built)",
    "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
    "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
    "footprint_pads": 2,
@@ -1387,7 +1847,7 @@
     51.25,
     41.35
    ],
-   "geom_src": "board(as-built)"
+   "geom_src": "board(受审板 as-built)"
   },
   "R29": {
    "sheet": "MCU & Sideband",
@@ -1403,8 +1863,14 @@
     41.0
    ],
    "rot": 0.0,
-   "src": "anchor(设计源板)",
+   "src": "board(受审板 as-built)",
    "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
    "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
    "footprint_pads": 2,
@@ -1418,7 +1884,7 @@
     54.25,
     41.35
    ],
-   "geom_src": "board(as-built)"
+   "geom_src": "board(受审板 as-built)"
   },
   "R3": {
    "sheet": "MCU & Sideband",
@@ -1434,8 +1900,14 @@
     37.0
    ],
    "rot": 0.0,
-   "src": "anchor(设计源板)",
+   "src": "board(受审板 as-built)",
    "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
    "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
    "footprint_pads": 2,
@@ -1449,7 +1921,7 @@
     54.25,
     37.35
    ],
-   "geom_src": "board(as-built)"
+   "geom_src": "board(受审板 as-built)"
   },
   "R31": {
    "sheet": "MCU & Sideband",
@@ -1465,8 +1937,14 @@
     66.5
    ],
    "rot": 0.0,
-   "src": "anchor(设计源板)",
+   "src": "board(受审板 as-built)",
    "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
    "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
    "footprint_pads": 2,
@@ -1480,7 +1958,7 @@
     56.25,
     66.85
    ],
-   "geom_src": "board(as-built)"
+   "geom_src": "board(受审板 as-built)"
   },
   "R32": {
    "sheet": "MCU & Sideband",
@@ -1496,8 +1974,14 @@
     67.5
    ],
    "rot": 0.0,
-   "src": "anchor(设计源板)",
+   "src": "board(受审板 as-built)",
    "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
    "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
    "footprint_pads": 2,
@@ -1511,7 +1995,7 @@
     56.25,
     67.85
    ],
-   "geom_src": "board(as-built)"
+   "geom_src": "board(受审板 as-built)"
   },
   "R33": {
    "sheet": "MCU & Sideband",
@@ -1527,8 +2011,14 @@
     68.5
    ],
    "rot": 0.0,
-   "src": "anchor(设计源板)",
+   "src": "board(受审板 as-built)",
    "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
    "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
    "footprint_pads": 2,
@@ -1542,7 +2032,7 @@
     56.25,
     68.85
    ],
-   "geom_src": "board(as-built)"
+   "geom_src": "board(受审板 as-built)"
   },
   "R34": {
    "sheet": "MCU & Sideband",
@@ -1558,8 +2048,14 @@
     69.5
    ],
    "rot": 0.0,
-   "src": "anchor(设计源板)",
+   "src": "board(受审板 as-built)",
    "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
    "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
    "footprint_pads": 2,
@@ -1573,7 +2069,7 @@
     56.25,
     69.85
    ],
-   "geom_src": "board(as-built)"
+   "geom_src": "board(受审板 as-built)"
   },
   "R35": {
    "sheet": "ReDriver DS320PR1601 & Sideband Strap",
@@ -1588,9 +2084,16 @@
     83.6,
     61.55
    ],
-   "src": "无",
-   "status": "placed_solved_L2",
-   "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
+   "rot": 0.0,
+   "src": "board(受审板 as-built)",
+   "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
+   "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
    "footprint_pads": 2,
    "footprint_pad_nums": [
@@ -1603,8 +2106,12 @@
     84.825,
     62.025
    ],
-   "geom_src": "L2 自裁解（k2_p3_place_solver_v1.py）",
-   "basis": "SPEC layer_plan.strap_domain_v32.placement（域/排法/0603 已裁）+ 就近球求解",
+   "geom_src": "board(受审板 as-built)",
+   "solution_at": [
+    83.6,
+    61.55
+   ],
+   "solution_basis": "SPEC layer_plan.strap_domain_v32.placement（域/排法/0603 已裁）+ 就近球求解",
    "ball": "FF24",
    "ball_board_pos": [
     83.43,
@@ -1624,9 +2131,16 @@
     100.4,
     59.55
    ],
-   "src": "无",
-   "status": "placed_solved_L2",
-   "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
+   "rot": 0.0,
+   "src": "board(受审板 as-built)",
+   "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
+   "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
    "footprint_pads": 2,
    "footprint_pad_nums": [
@@ -1639,8 +2153,12 @@
     101.625,
     60.025
    ],
-   "geom_src": "L2 自裁解（k2_p3_place_solver_v1.py）",
-   "basis": "SPEC layer_plan.strap_domain_v32.placement（域/排法/0603 已裁）+ 就近球求解",
+   "geom_src": "board(受审板 as-built)",
+   "solution_at": [
+    100.4,
+    59.55
+   ],
+   "solution_basis": "SPEC layer_plan.strap_domain_v32.placement（域/排法/0603 已裁）+ 就近球求解",
    "ball": "B23",
    "ball_board_pos": [
     104.69,
@@ -1660,9 +2178,16 @@
     103.4,
     59.55
    ],
-   "src": "无",
-   "status": "placed_solved_L2",
-   "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
+   "rot": 0.0,
+   "src": "board(受审板 as-built)",
+   "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
+   "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
    "footprint_pads": 2,
    "footprint_pad_nums": [
@@ -1675,8 +2200,12 @@
     104.625,
     60.025
    ],
-   "geom_src": "L2 自裁解（k2_p3_place_solver_v1.py）",
-   "basis": "SPEC layer_plan.strap_domain_v32.placement（域/排法/0603 已裁）+ 就近球求解",
+   "geom_src": "board(受审板 as-built)",
+   "solution_at": [
+    103.4,
+    59.55
+   ],
+   "solution_basis": "SPEC layer_plan.strap_domain_v32.placement（域/排法/0603 已裁）+ 就近球求解",
    "ball": "G1",
    "ball_board_pos": [
     103.65,
@@ -1696,9 +2225,16 @@
     103.4,
     61.55
    ],
-   "src": "无",
-   "status": "placed_solved_L2",
-   "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
+   "rot": 0.0,
+   "src": "board(受审板 as-built)",
+   "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
+   "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
    "footprint_pads": 2,
    "footprint_pad_nums": [
@@ -1711,8 +2247,12 @@
     104.625,
     62.025
    ],
-   "geom_src": "L2 自裁解（k2_p3_place_solver_v1.py）",
-   "basis": "SPEC layer_plan.strap_domain_v32.placement（域/排法/0603 已裁）+ 就近球求解",
+   "geom_src": "board(受审板 as-built)",
+   "solution_at": [
+    103.4,
+    61.55
+   ],
+   "solution_basis": "SPEC layer_plan.strap_domain_v32.placement（域/排法/0603 已裁）+ 就近球求解",
    "ball": "B25",
    "ball_board_pos": [
     104.69,
@@ -1732,9 +2272,16 @@
     100.4,
     61.55
    ],
-   "src": "无",
-   "status": "placed_solved_L2",
-   "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
+   "rot": 0.0,
+   "src": "board(受审板 as-built)",
+   "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
+   "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
    "footprint_pads": 2,
    "footprint_pad_nums": [
@@ -1747,8 +2294,12 @@
     101.625,
     62.025
    ],
-   "geom_src": "L2 自裁解（k2_p3_place_solver_v1.py）",
-   "basis": "SPEC layer_plan.strap_domain_v32.placement（域/排法/0603 已裁）+ 就近球求解",
+   "geom_src": "board(受审板 as-built)",
+   "solution_at": [
+    100.4,
+    61.55
+   ],
+   "solution_basis": "SPEC layer_plan.strap_domain_v32.placement（域/排法/0603 已裁）+ 就近球求解",
    "ball": "F34",
    "ball_board_pos": [
     103.95,
@@ -1768,9 +2319,16 @@
     29.5,
     38.2
    ],
-   "src": "无",
-   "status": "placed_solved_L2",
-   "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
+   "rot": 0.0,
+   "src": "board(受审板 as-built)",
+   "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
+   "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
    "footprint_pads": 2,
    "footprint_pad_nums": [
@@ -1783,8 +2341,12 @@
     30.28,
     38.52
    ],
-   "geom_src": "L2 自裁解（k2_p3_place_solver_v1.py）",
-   "basis": "FB 分压上臂；L2 自裁：就近 FB pad"
+   "geom_src": "board(受审板 as-built)",
+   "solution_at": [
+    29.5,
+    38.2
+   ],
+   "solution_basis": "FB 分压上臂；L2 自裁：就近 FB pad"
   },
   "R41": {
    "sheet": "Power (12V DC-in DCDC 5V LDO 3V3)",
@@ -1799,9 +2361,16 @@
     29.5,
     34.0
    ],
-   "src": "无",
-   "status": "placed_solved_L2",
-   "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
+   "rot": 0.0,
+   "src": "board(受审板 as-built)",
+   "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
+   "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
    "footprint_pads": 2,
    "footprint_pad_nums": [
@@ -1814,8 +2383,12 @@
     30.28,
     34.32
    ],
-   "geom_src": "L2 自裁解（k2_p3_place_solver_v1.py）",
-   "basis": "FB 分压下臂；L2 自裁：就近 FB pad"
+   "geom_src": "board(受审板 as-built)",
+   "solution_at": [
+    29.5,
+    34.0
+   ],
+   "solution_basis": "FB 分压下臂；L2 自裁：就近 FB pad"
   },
   "R42": {
    "sheet": "ReDriver DS320PR1601 & Sideband Strap",
@@ -1827,12 +2400,19 @@
     "2"
    ],
    "at": [
-    86.6,
-    59.55
+    93.3,
+    61.55
    ],
-   "src": "无",
-   "status": "placed_solved_L2",
-   "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
+   "rot": 0.0,
+   "src": "board(受审板 as-built)",
+   "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
+   "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
    "footprint_pads": 2,
    "footprint_pad_nums": [
@@ -1840,13 +2420,17 @@
     "2"
    ],
    "pad_aabb": [
-    85.375,
-    59.075,
-    87.825,
-    60.025
+    92.075,
+    61.075,
+    94.525,
+    62.025
    ],
-   "geom_src": "L2 自裁解（k2_p3_place_solver_v1.py）",
-   "basis": "SPEC layer_plan.strap_domain_v32.placement（域/排法/0603 已裁）+ 就近球求解",
+   "geom_src": "board(受审板 as-built)",
+   "solution_at": [
+    86.6,
+    59.55
+   ],
+   "solution_basis": "SPEC layer_plan.strap_domain_v32.placement（域/排法/0603 已裁）+ 就近球求解",
    "ball": "FF5",
    "ball_board_pos": [
     83.43,
@@ -1866,9 +2450,16 @@
     83.6,
     59.55
    ],
-   "src": "无",
-   "status": "placed_solved_L2",
-   "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
+   "rot": 0.0,
+   "src": "board(受审板 as-built)",
+   "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
+   "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
    "footprint_pads": 2,
    "footprint_pad_nums": [
@@ -1881,8 +2472,12 @@
     84.825,
     60.025
    ],
-   "geom_src": "L2 自裁解（k2_p3_place_solver_v1.py）",
-   "basis": "SPEC layer_plan.strap_domain_v32.placement（域/排法/0603 已裁）+ 就近球求解",
+   "geom_src": "board(受审板 as-built)",
+   "solution_at": [
+    83.6,
+    59.55
+   ],
+   "solution_basis": "SPEC layer_plan.strap_domain_v32.placement（域/排法/0603 已裁）+ 就近球求解",
    "ball": "FJ3",
    "ball_board_pos": [
     82.91,
@@ -1902,9 +2497,16 @@
     86.6,
     61.55
    ],
-   "src": "无",
-   "status": "placed_solved_L2",
-   "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
+   "rot": 0.0,
+   "src": "board(受审板 as-built)",
+   "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
+   "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
    "footprint_pads": 2,
    "footprint_pad_nums": [
@@ -1917,8 +2519,12 @@
     87.825,
     62.025
    ],
-   "geom_src": "L2 自裁解（k2_p3_place_solver_v1.py）",
-   "basis": "SPEC layer_plan.strap_domain_v32.placement（域/排法/0603 已裁）+ 就近球求解",
+   "geom_src": "board(受审板 as-built)",
+   "solution_at": [
+    86.6,
+    61.55
+   ],
+   "solution_basis": "SPEC layer_plan.strap_domain_v32.placement（域/排法/0603 已裁）+ 就近球求解",
    "ball": "FJ28",
    "ball_board_pos": [
     82.91,
@@ -1938,9 +2544,16 @@
     93.3,
     59.55
    ],
-   "src": "无",
-   "status": "placed_solved_L2",
-   "note": "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）",
+   "rot": 0.0,
+   "src": "board(受审板 as-built)",
+   "board_pads": 2,
+   "board_pads_numbered": 2,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2"
+   ],
+   "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
    "footprint_pads": 2,
    "footprint_pad_nums": [
@@ -1953,8 +2566,12 @@
     94.525,
     60.025
    ],
-   "geom_src": "L2 自裁解（k2_p3_place_solver_v1.py）",
-   "basis": "SPEC layer_plan.strap_domain_v32.placement（域/排法/0603 已裁）+ 就近球求解",
+   "geom_src": "board(受审板 as-built)",
+   "solution_at": [
+    93.3,
+    59.55
+   ],
+   "solution_basis": "SPEC layer_plan.strap_domain_v32.placement（域/排法/0603 已裁）+ 就近球求解",
    "ball": "FF30",
    "ball_board_pos": [
     83.43,
@@ -2000,8 +2617,61 @@
     52.0
    ],
    "rot": 0.0,
-   "src": "anchor(设计源板)",
-   "board_pads": 33,
+   "src": "board(受审板 as-built)",
+   "board_pads": 58,
+   "board_pads_numbered": 49,
+   "board_pads_paste_only": 9,
+   "board_pads_numbered_nums": [
+    "1",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+    "2",
+    "20",
+    "21",
+    "22",
+    "23",
+    "24",
+    "25",
+    "26",
+    "27",
+    "28",
+    "29",
+    "3",
+    "30",
+    "31",
+    "32",
+    "33",
+    "34",
+    "35",
+    "36",
+    "37",
+    "38",
+    "39",
+    "4",
+    "40",
+    "41",
+    "42",
+    "43",
+    "44",
+    "45",
+    "46",
+    "47",
+    "48",
+    "49",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9"
+   ],
    "status": "placed",
    "footprint_file": "k2/hw/lib/ForgeOS.pretty/MCU_STM32G0_LQFP48.kicad_mod",
    "footprint_pads": 49,
@@ -2057,12 +2727,12 @@
     "9"
    ],
    "pad_aabb": [
-    33.05,
-    49.05,
-    38.95,
-    54.95
+    31.1,
+    47.1,
+    40.9,
+    56.9
    ],
-   "geom_src": "board(as-built)"
+   "geom_src": "board(受审板 as-built)"
   },
   "U2": {
    "sheet": "Power (12V DC-in DCDC 5V LDO 3V3)",
@@ -2082,8 +2752,20 @@
     37.0
    ],
    "rot": 0.0,
-   "src": "anchor(设计源板)",
+   "src": "board(受审板 as-built)",
    "board_pads": 8,
+   "board_pads_numbered": 8,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8"
+   ],
    "status": "placed",
    "footprint_file": "AppDir/share/kicad/footprints/Package_SO.pretty/SOIC-8_5.3x5.3mm_P1.27mm.kicad_mod",
    "footprint_pads": 8,
@@ -2103,7 +2785,7 @@
     35.25,
     39.355
    ],
-   "geom_src": "board(as-built)"
+   "geom_src": "board(受审板 as-built)"
   },
   "U4": {
    "sheet": "Power (12V DC-in DCDC 5V LDO 3V3)",
@@ -2120,8 +2802,15 @@
     37.0
    ],
    "rot": 0.0,
-   "src": "anchor(设计源板)",
+   "src": "board(受审板 as-built)",
    "board_pads": 3,
+   "board_pads_numbered": 3,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2",
+    "3"
+   ],
    "status": "placed",
    "footprint_file": "k2/hw/lib/ForgeOS.pretty/SOT23_BAT54C.kicad_mod",
    "footprint_pads": 3,
@@ -2136,7 +2825,7 @@
     41.25,
     38.3
    ],
-   "geom_src": "board(as-built)"
+   "geom_src": "board(受审板 as-built)"
   },
   "U5": {
    "sheet": "MCU & Sideband",
@@ -2154,8 +2843,16 @@
     52.0
    ],
    "rot": 0.0,
-   "src": "anchor(设计源板)",
+   "src": "board(受审板 as-built)",
    "board_pads": 4,
+   "board_pads_numbered": 4,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "1",
+    "2",
+    "3",
+    "4"
+   ],
    "status": "placed",
    "footprint_file": "k2/hw/lib/ForgeOS.pretty/OPTO_LTV356T.kicad_mod",
    "footprint_pads": 4,
@@ -2171,7 +2868,7 @@
     46.05,
     53.25
    ],
-   "geom_src": "board(as-built)"
+   "geom_src": "board(受审板 as-built)"
   },
   "U6": {
    "sheet": "ReDriver DS320PR1601 & Sideband Strap",
@@ -2539,8 +3236,366 @@
     53.7
    ],
    "rot": 90.0,
-   "src": "anchor(设计源板)",
+   "src": "board(受审板 as-built)",
    "board_pads": 354,
+   "board_pads_numbered": 354,
+   "board_pads_paste_only": 0,
+   "board_pads_numbered_nums": [
+    "A1",
+    "A35",
+    "AA10",
+    "AA29",
+    "AB1",
+    "AB35",
+    "AC13",
+    "AC17",
+    "AC20",
+    "AC22",
+    "AC32",
+    "AC4",
+    "AD2",
+    "AD34",
+    "AE1",
+    "AE35",
+    "AF26",
+    "AF7",
+    "AG2",
+    "AG34",
+    "AH10",
+    "AH29",
+    "AJ1",
+    "AJ35",
+    "AK13",
+    "AK17",
+    "AK20",
+    "AK22",
+    "AK32",
+    "AK4",
+    "AL2",
+    "AL34",
+    "AM1",
+    "AM35",
+    "AN26",
+    "AN7",
+    "AP2",
+    "AP34",
+    "AR10",
+    "AR29",
+    "AT1",
+    "AT35",
+    "AU13",
+    "AU17",
+    "AU20",
+    "AU22",
+    "AU32",
+    "AU4",
+    "AV2",
+    "AV34",
+    "AW1",
+    "AW35",
+    "AY26",
+    "AY7",
+    "B12",
+    "B16",
+    "B19",
+    "B23",
+    "B25",
+    "B28",
+    "B3",
+    "B31",
+    "B6",
+    "B9",
+    "BA2",
+    "BA34",
+    "BB10",
+    "BB29",
+    "BC1",
+    "BC35",
+    "BD13",
+    "BD17",
+    "BD20",
+    "BD22",
+    "BD32",
+    "BD4",
+    "BE2",
+    "BE34",
+    "BF1",
+    "BF35",
+    "BG26",
+    "BG7",
+    "BH2",
+    "BH34",
+    "BJ10",
+    "BJ29",
+    "BK1",
+    "BK35",
+    "BL13",
+    "BL17",
+    "BL20",
+    "BL22",
+    "BL32",
+    "BL4",
+    "BM2",
+    "BM34",
+    "BN1",
+    "BN35",
+    "BP26",
+    "BP7",
+    "BR2",
+    "BR34",
+    "BT10",
+    "BT29",
+    "BU1",
+    "BU35",
+    "BV13",
+    "BV17",
+    "BV20",
+    "BV22",
+    "BV32",
+    "BV4",
+    "BW2",
+    "BW34",
+    "BY1",
+    "BY35",
+    "C2",
+    "C34",
+    "CA26",
+    "CA7",
+    "CB2",
+    "CB34",
+    "CC10",
+    "CC29",
+    "CD1",
+    "CD35",
+    "CE13",
+    "CE17",
+    "CE20",
+    "CE22",
+    "CE32",
+    "CE4",
+    "CF2",
+    "CF34",
+    "CG1",
+    "CG35",
+    "CH26",
+    "CH7",
+    "CJ2",
+    "CJ34",
+    "CK10",
+    "CK29",
+    "CL1",
+    "CL35",
+    "CM13",
+    "CM17",
+    "CM20",
+    "CM22",
+    "CM32",
+    "CM4",
+    "CN2",
+    "CN34",
+    "CP1",
+    "CP35",
+    "CR26",
+    "CR7",
+    "CT2",
+    "CT34",
+    "CU10",
+    "CU29",
+    "CV1",
+    "CV35",
+    "CW13",
+    "CW17",
+    "CW20",
+    "CW22",
+    "CW32",
+    "CW4",
+    "CY2",
+    "CY34",
+    "D1",
+    "D35",
+    "DA1",
+    "DA35",
+    "DB26",
+    "DB7",
+    "DC2",
+    "DC34",
+    "DD10",
+    "DD29",
+    "DE1",
+    "DE35",
+    "DF13",
+    "DF17",
+    "DF20",
+    "DF22",
+    "DF32",
+    "DF4",
+    "DG2",
+    "DG34",
+    "DH1",
+    "DH35",
+    "DJ26",
+    "DJ7",
+    "DK2",
+    "DK34",
+    "DL10",
+    "DL29",
+    "DM1",
+    "DM35",
+    "DN13",
+    "DN17",
+    "DN20",
+    "DN22",
+    "DN32",
+    "DN4",
+    "DP2",
+    "DP34",
+    "DR1",
+    "DR35",
+    "DT26",
+    "DT7",
+    "DU2",
+    "DU34",
+    "DV10",
+    "DV29",
+    "DW1",
+    "DW35",
+    "DY13",
+    "DY17",
+    "DY20",
+    "DY22",
+    "DY32",
+    "DY4",
+    "E11",
+    "E14",
+    "E18",
+    "E27",
+    "E30",
+    "E33",
+    "E8",
+    "EA2",
+    "EA34",
+    "EB1",
+    "EB35",
+    "EC26",
+    "EC7",
+    "ED2",
+    "ED34",
+    "EE10",
+    "EE29",
+    "EF1",
+    "EF35",
+    "EG13",
+    "EG17",
+    "EG20",
+    "EG22",
+    "EG32",
+    "EG4",
+    "EH2",
+    "EH34",
+    "EJ1",
+    "EJ35",
+    "EK26",
+    "EK7",
+    "EL2",
+    "EL34",
+    "EM10",
+    "EM29",
+    "EN1",
+    "EN35",
+    "EP13",
+    "EP17",
+    "EP20",
+    "EP22",
+    "EP32",
+    "EP4",
+    "ER2",
+    "ER34",
+    "ET1",
+    "ET35",
+    "EU26",
+    "EU7",
+    "EV2",
+    "EV34",
+    "EW10",
+    "EW29",
+    "EY1",
+    "EY35",
+    "F2",
+    "F34",
+    "FA15",
+    "FA32",
+    "FB2",
+    "FB34",
+    "FC19",
+    "FC23",
+    "FC25",
+    "FC28",
+    "FC3",
+    "FC6",
+    "FC9",
+    "FD1",
+    "FD35",
+    "FE2",
+    "FE34",
+    "FF11",
+    "FF14",
+    "FF18",
+    "FF21",
+    "FF24",
+    "FF27",
+    "FF30",
+    "FF33",
+    "FF5",
+    "FF8",
+    "FG1",
+    "FG35",
+    "FH2",
+    "FH34",
+    "FJ12",
+    "FJ16",
+    "FJ19",
+    "FJ23",
+    "FJ25",
+    "FJ28",
+    "FJ3",
+    "FJ31",
+    "FJ6",
+    "FJ9",
+    "G1",
+    "G35",
+    "H12",
+    "H16",
+    "H19",
+    "H31",
+    "J22",
+    "J4",
+    "K2",
+    "K34",
+    "L1",
+    "L35",
+    "M26",
+    "M7",
+    "N2",
+    "N34",
+    "P10",
+    "P29",
+    "R1",
+    "R35",
+    "T13",
+    "T17",
+    "T20",
+    "T22",
+    "T32",
+    "T4",
+    "U2",
+    "U34",
+    "V1",
+    "V35",
+    "W26",
+    "W7",
+    "Y2",
+    "Y34"
+   ],
    "status": "placed",
    "footprint_file": "k2/hw/lib/ForgeOS.pretty/DS320PR1601.kicad_mod",
    "footprint_pads": 354,
@@ -2906,7 +3961,7 @@
     104.84,
     57.79
    ],
-   "geom_src": "board(as-built)"
+   "geom_src": "board(受审板 as-built)"
   }
  },
  "corridors": [
@@ -3082,51 +4137,235 @@
  ],
  "keepouts": [
   {
-   "id": "KO-1..4 mounting holes",
-   "count": 4,
-   "shape": "circle Ø6.0",
+   "id": "ESC_U6",
+   "kind": "keepout_zone",
+   "layers": [
+    "F.Cu"
+   ],
+   "net": null,
    "switches": {
-    "pads": "blocked",
-    "tracks": "blocked",
-    "vias": "blocked",
-    "copper_pour": "blocked",
-    "footprints": "blocked"
-   }
-  },
-  {
-   "id": "KO-5 escape_transition_zone",
-   "count": 1,
-   "shape": "per-pin escape window",
-   "switches": {
-    "pads": "allowed",
-    "tracks": "allowed(escape_clearance_mm=0.075)",
-    "vias": "blocked",
-    "copper_pour": "blocked",
-    "footprints": "blocked"
-   }
-  },
-  {
-   "id": "KO-6 ac_pad_gnd_cutout",
-   "count": 1,
-   "shape": "AC pad GND cut-out",
-   "switches": {
-    "pads": "allowed",
     "tracks": "allowed",
     "vias": "allowed",
-    "copper_pour": "blocked",
+    "pads": "allowed",
+    "copperpour": "not_allowed",
     "footprints": "allowed"
-   }
+   },
+   "vertex_count": 4,
+   "bbox_mm": [
+    82.1,
+    49.11,
+    105.34,
+    58.29
+   ],
+   "src": "SPEC.keepout_geometry.zones（rev-49 输入层；来源＝受审板实测 + #K2-23 §二-4「以板为准」）"
+  },
+  {
+   "id": "ESC_J3",
+   "kind": "keepout_zone",
+   "layers": [
+    "F.Cu"
+   ],
+   "net": null,
+   "switches": {
+    "tracks": "allowed",
+    "vias": "allowed",
+    "pads": "allowed",
+    "copperpour": "not_allowed",
+    "footprints": "allowed"
+   },
+   "vertex_count": 4,
+   "bbox_mm": [
+    53.45,
+    42.4,
+    65.55,
+    46.6
+   ],
+   "src": "SPEC.keepout_geometry.zones（rev-49 输入层；来源＝受审板实测 + #K2-23 §二-4「以板为准」）"
+  },
+  {
+   "id": "ESC_J4",
+   "kind": "keepout_zone",
+   "layers": [
+    "F.Cu"
+   ],
+   "net": null,
+   "switches": {
+    "tracks": "allowed",
+    "vias": "allowed",
+    "pads": "allowed",
+    "copperpour": "not_allowed",
+    "footprints": "allowed"
+   },
+   "vertex_count": 4,
+   "bbox_mm": [
+    53.45,
+    60.6,
+    65.55,
+    64.8
+   ],
+   "src": "SPEC.keepout_geometry.zones（rev-49 输入层；来源＝受审板实测 + #K2-23 §二-4「以板为准」）"
+  },
+  {
+   "id": "ESC_J2",
+   "kind": "keepout_zone",
+   "layers": [
+    "F.Cu"
+   ],
+   "net": null,
+   "switches": {
+    "tracks": "allowed",
+    "vias": "allowed",
+    "pads": "allowed",
+    "copperpour": "not_allowed",
+    "footprints": "allowed"
+   },
+   "vertex_count": 4,
+   "bbox_mm": [
+    131.5,
+    42.23,
+    136.15,
+    65.17
+   ],
+   "src": "SPEC.keepout_geometry.zones（rev-49 输入层；来源＝受审板实测 + #K2-23 §二-4「以板为准」）"
+  },
+  {
+   "id": "K2_HOLE_KEEPOUT_H1",
+   "kind": "keepout_zone",
+   "layers": [
+    "F.Cu",
+    "B.Cu",
+    "In1.Cu",
+    "In2.Cu",
+    "In3.Cu",
+    "In4.Cu",
+    "In5.Cu",
+    "In6.Cu"
+   ],
+   "net": null,
+   "switches": {
+    "tracks": "not_allowed",
+    "vias": "not_allowed",
+    "pads": "allowed",
+    "copperpour": "not_allowed",
+    "footprints": "allowed"
+   },
+   "vertex_count": 36,
+   "bbox_mm": [
+    23.1,
+    72.6,
+    29.1,
+    78.6
+   ],
+   "src": "SPEC.keepout_geometry.zones（rev-49 输入层；来源＝受审板实测 + #K2-23 §二-4「以板为准」）"
+  },
+  {
+   "id": "K2_HOLE_KEEPOUT_H2",
+   "kind": "keepout_zone",
+   "layers": [
+    "F.Cu",
+    "B.Cu",
+    "In1.Cu",
+    "In2.Cu",
+    "In3.Cu",
+    "In4.Cu",
+    "In5.Cu",
+    "In6.Cu"
+   ],
+   "net": null,
+   "switches": {
+    "tracks": "not_allowed",
+    "vias": "not_allowed",
+    "pads": "allowed",
+    "copperpour": "not_allowed",
+    "footprints": "allowed"
+   },
+   "vertex_count": 36,
+   "bbox_mm": [
+    136.6,
+    36.6,
+    142.6,
+    42.6
+   ],
+   "src": "SPEC.keepout_geometry.zones（rev-49 输入层；来源＝受审板实测 + #K2-23 §二-4「以板为准」）"
+  },
+  {
+   "id": "K2_HOLE_KEEPOUT_H3",
+   "kind": "keepout_zone",
+   "layers": [
+    "F.Cu",
+    "B.Cu",
+    "In1.Cu",
+    "In2.Cu",
+    "In3.Cu",
+    "In4.Cu",
+    "In5.Cu",
+    "In6.Cu"
+   ],
+   "net": null,
+   "switches": {
+    "tracks": "not_allowed",
+    "vias": "not_allowed",
+    "pads": "allowed",
+    "copperpour": "not_allowed",
+    "footprints": "allowed"
+   },
+   "vertex_count": 36,
+   "bbox_mm": [
+    42.1,
+    72.1,
+    48.1,
+    78.1
+   ],
+   "src": "SPEC.keepout_geometry.zones（rev-49 输入层；来源＝受审板实测 + #K2-23 §二-4「以板为准」）"
+  },
+  {
+   "id": "K2_HOLE_KEEPOUT_H4",
+   "kind": "keepout_zone",
+   "layers": [
+    "F.Cu",
+    "B.Cu",
+    "In1.Cu",
+    "In2.Cu",
+    "In3.Cu",
+    "In4.Cu",
+    "In5.Cu",
+    "In6.Cu"
+   ],
+   "net": null,
+   "switches": {
+    "tracks": "not_allowed",
+    "vias": "not_allowed",
+    "pads": "allowed",
+    "copperpour": "not_allowed",
+    "footprints": "allowed"
+   },
+   "vertex_count": 36,
+   "bbox_mm": [
+    111.6,
+    33.1,
+    117.6,
+    39.1
+   ],
+   "src": "SPEC.keepout_geometry.zones（rev-49 输入层；来源＝受审板实测 + #K2-23 §二-4「以板为准」）"
   },
   {
    "id": "KO-7 board edge",
+   "kind": "rule_carried",
    "count": 4,
    "shape": "frame inset edge_copper_min=0.3mm",
    "switches": {
     "pads": "allowed",
     "tracks": "blocked(<0.30mm)",
     "vias": "blocked(<0.30mm)",
-    "copper_pour": "blocked(<0.30mm)",
+    "copperpour": "blocked(<0.30mm)",
     "footprints": "allowed"
+   },
+   "src": "SPEC constraints.edge_copper_min（板**无**独立实体 zone ⇒ 由规则承载）",
+   "disposition": {
+    "board_has_standalone_zone": false,
+    "carried_by_rule": "min_copper_edge_clearance=0.3",
+    "action": "不补实体 zone",
+    "reason": "板无 KO-7 独立实体 zone；由规则承载（inc61 §3 建议，#K2-23 §二-4 口径确认）"
    }
   }
  ],
@@ -3386,7 +4625,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "C74": {
       "numbered": 2,
@@ -3397,7 +4640,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "C75": {
       "numbered": 2,
@@ -3408,7 +4655,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "C76": {
       "numbered": 2,
@@ -3419,7 +4670,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "C77": {
       "numbered": 2,
@@ -3430,7 +4685,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "C78": {
       "numbered": 2,
@@ -3441,7 +4700,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "C79": {
       "numbered": 2,
@@ -3452,7 +4715,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "C80": {
       "numbered": 2,
@@ -3463,7 +4730,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "C81": {
       "numbered": 2,
@@ -3474,7 +4745,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "C82": {
       "numbered": 2,
@@ -3485,7 +4760,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "C83": {
       "numbered": 2,
@@ -3496,7 +4775,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "C84": {
       "numbered": 2,
@@ -3507,7 +4790,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0805_2012Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "C85": {
       "numbered": 2,
@@ -3518,7 +4805,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "C86": {
       "numbered": 2,
@@ -3527,9 +4818,13 @@
       "paste_only_unnamed": 0,
       "electrical_unnamed": 0,
       "pad_re_matches": 2,
-      "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
+      "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "C87": {
       "numbered": 2,
@@ -3540,7 +4835,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "C88": {
       "numbered": 2,
@@ -3551,7 +4850,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "C89": {
       "numbered": 2,
@@ -3562,7 +4865,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "C90": {
       "numbered": 2,
@@ -3573,7 +4880,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0402_1005Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "D1": {
       "numbered": 2,
@@ -3584,7 +4895,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/LED_SMD.pretty/LED_0603_1608Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "D2": {
       "numbered": 2,
@@ -3595,7 +4910,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Diode_SMD.pretty/D_SMA.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "E2": {
       "numbered": 8,
@@ -3606,7 +4925,11 @@
       "pad_re_matches": 8,
       "file": "k2/hw/lib/ForgeOS.pretty/SOIC8_FRU.kicad_mod",
       "computed_pads": 8,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 8,
+      "board_pads_numbered": 8,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "J11": {
       "numbered": 4,
@@ -3617,7 +4940,11 @@
       "pad_re_matches": 4,
       "file": "k2/hw/lib/ForgeOS.pretty/PinHeader_1x04.kicad_mod",
       "computed_pads": 4,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 4,
+      "board_pads_numbered": 4,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "J12": {
       "numbered": 2,
@@ -3628,7 +4955,11 @@
       "pad_re_matches": 2,
       "file": "k2/hw/lib/ForgeOS.pretty/PinHeader_1x02.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "J13": {
       "numbered": 4,
@@ -3639,7 +4970,11 @@
       "pad_re_matches": 4,
       "file": "k2/hw/lib/ForgeOS.pretty/PinHeader_1x04.kicad_mod",
       "computed_pads": 4,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 4,
+      "board_pads_numbered": 4,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "J2": {
       "numbered": 74,
@@ -3650,7 +4985,11 @@
       "pad_re_matches": 74,
       "file": "k2/hw/lib/ForgeOS.pretty/SlimSAS_x8_SFF-8654_74pin_RASide.kicad_mod",
       "computed_pads": 74,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 74,
+      "board_pads_numbered": 74,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "J3": {
       "numbered": 38,
@@ -3661,7 +5000,11 @@
       "pad_re_matches": 38,
       "file": "k2/hw/lib/ForgeOS.pretty/MCIO_4i_SFF-1016_RASide.kicad_mod",
       "computed_pads": 38,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 38,
+      "board_pads_numbered": 38,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "J4": {
       "numbered": 38,
@@ -3672,7 +5015,11 @@
       "pad_re_matches": 38,
       "file": "k2/hw/lib/ForgeOS.pretty/MCIO_4i_SFF-1016_RASide.kicad_mod",
       "computed_pads": 38,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 38,
+      "board_pads_numbered": 38,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "J6": {
       "numbered": 2,
@@ -3683,7 +5030,11 @@
       "pad_re_matches": 2,
       "file": "k2/hw/lib/ForgeOS.pretty/PinHeader_1x02.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "J9": {
       "numbered": 4,
@@ -3694,7 +5045,11 @@
       "pad_re_matches": 4,
       "file": "k2/hw/lib/ForgeOS.pretty/PinHeader_1x04.kicad_mod",
       "computed_pads": 4,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 4,
+      "board_pads_numbered": 4,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "L1": {
       "numbered": 2,
@@ -3705,7 +5060,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Inductor_SMD.pretty/L_0805_2012Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "R1": {
       "numbered": 2,
@@ -3716,7 +5075,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "R21": {
       "numbered": 2,
@@ -3727,7 +5090,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "R28": {
       "numbered": 2,
@@ -3738,7 +5105,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "R29": {
       "numbered": 2,
@@ -3749,7 +5120,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "R3": {
       "numbered": 2,
@@ -3760,7 +5135,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "R31": {
       "numbered": 2,
@@ -3771,7 +5150,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "R32": {
       "numbered": 2,
@@ -3782,7 +5165,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "R33": {
       "numbered": 2,
@@ -3793,7 +5180,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "R34": {
       "numbered": 2,
@@ -3804,7 +5195,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "R35": {
       "numbered": 2,
@@ -3815,7 +5210,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "R36": {
       "numbered": 2,
@@ -3826,7 +5225,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "R37": {
       "numbered": 2,
@@ -3837,7 +5240,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "R38": {
       "numbered": 2,
@@ -3848,7 +5255,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "R39": {
       "numbered": 2,
@@ -3859,7 +5270,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "R40": {
       "numbered": 2,
@@ -3870,7 +5285,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "R41": {
       "numbered": 2,
@@ -3881,7 +5300,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "R42": {
       "numbered": 2,
@@ -3892,7 +5315,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "R43": {
       "numbered": 2,
@@ -3903,7 +5330,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "R44": {
       "numbered": 2,
@@ -3914,7 +5345,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "R45": {
       "numbered": 2,
@@ -3925,7 +5360,11 @@
       "pad_re_matches": 2,
       "file": "AppDir/share/kicad/footprints/Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod",
       "computed_pads": 2,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 2,
+      "board_pads_numbered": 2,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "U1": {
       "numbered": 49,
@@ -3936,7 +5375,11 @@
       "pad_re_matches": 49,
       "file": "k2/hw/lib/ForgeOS.pretty/MCU_STM32G0_LQFP48.kicad_mod",
       "computed_pads": 49,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 58,
+      "board_pads_numbered": 49,
+      "board_pads_paste_only": 9,
+      "lib_vs_board_numbered_equal": true
      },
      "U2": {
       "numbered": 8,
@@ -3947,7 +5390,11 @@
       "pad_re_matches": 8,
       "file": "AppDir/share/kicad/footprints/Package_SO.pretty/SOIC-8_5.3x5.3mm_P1.27mm.kicad_mod",
       "computed_pads": 8,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 8,
+      "board_pads_numbered": 8,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "U4": {
       "numbered": 3,
@@ -3958,7 +5405,11 @@
       "pad_re_matches": 3,
       "file": "k2/hw/lib/ForgeOS.pretty/SOT23_BAT54C.kicad_mod",
       "computed_pads": 3,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 3,
+      "board_pads_numbered": 3,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "U5": {
       "numbered": 4,
@@ -3969,7 +5420,11 @@
       "pad_re_matches": 4,
       "file": "k2/hw/lib/ForgeOS.pretty/OPTO_LTV356T.kicad_mod",
       "computed_pads": 4,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 4,
+      "board_pads_numbered": 4,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      },
      "U6": {
       "numbered": 354,
@@ -3980,9 +5435,15 @@
       "pad_re_matches": 354,
       "file": "k2/hw/lib/ForgeOS.pretty/DS320PR1601.kicad_mod",
       "computed_pads": 354,
-      "basis_consistent": true
+      "basis_consistent": true,
+      "board_pads_raw": 354,
+      "board_pads_numbered": 354,
+      "board_pads_paste_only": 0,
+      "lib_vs_board_numbered_equal": true
      }
-    }
+    },
+    "board_lib_basis_mismatch": [],
+    "note_board_basis": "板侧同时登记两口径：`board_pads_raw`（全部 pad 块，含 paste-only 钢网开窗）与 `board_pads_numbered`（R-1 口径 = 带号 pad，电气）。本判据比较**只用 R-1 带号口径**；R-1（#K2-18 §二-1）明示 paste-only 开窗不计 —— 例：U1 库/板皆 58 pad 块 = 49 带号 + 9 F.Paste （EP 钢网阵列，无电气性）⇒ 带号口径 49，库↔板逐值一致。"
    }
   },
   "C1_board_frame": {
@@ -4012,7 +5473,15 @@
       26.1,
       75.6
      ],
-     "edge_material_mm": 1.5
+     "edge_material_mm": 1.5,
+     "spec_edge_material": 1.5,
+     "spec_match": true,
+     "spec_keepout_bbox": [
+      23.1,
+      72.6,
+      29.1,
+      78.6
+     ]
     },
     {
      "hole": "H2",
@@ -4020,15 +5489,31 @@
       139.6,
       39.6
      ],
-     "edge_material_mm": 1.8
+     "edge_material_mm": 1.8,
+     "spec_edge_material": 1.8,
+     "spec_match": true,
+     "spec_keepout_bbox": [
+      136.6,
+      36.6,
+      142.6,
+      42.6
+     ]
     },
     {
      "hole": "H3",
      "at": [
-      26.1,
-      36.1
+      45.1,
+      75.1
      ],
-     "edge_material_mm": 1.5
+     "edge_material_mm": 2.3,
+     "spec_edge_material": 2.3,
+     "spec_match": true,
+     "spec_keepout_bbox": [
+      42.1,
+      72.1,
+      48.1,
+      78.1
+     ]
     },
     {
      "hole": "H4",
@@ -4036,9 +5521,20 @@
       114.6,
       36.1
      ],
-     "edge_material_mm": 1.5
+     "edge_material_mm": 1.5,
+     "spec_edge_material": 1.5,
+     "spec_match": true,
+     "spec_keepout_bbox": [
+      111.6,
+      33.1,
+      117.6,
+      39.1
+     ]
     }
    ],
+   "spec_crosscheck_all_match": true,
+   "src": "受审板实测（board_sha16=6ff49da5678c2108）+ 监理 #K2-23 §二-4「以板为准」裁定 + §二-1 Z4 权威源（真源 → SPEC → 板；板为本文输入层的实测来源）",
+   "note": "逐座标/边料/keepout bbox 由 SPEC rev-49 `mounting_holes` 输入层承载（D3/D4 归零）",
    "pass": true
   },
   "C4_interface_inframe": {
@@ -4066,12 +5562,7 @@
     "J12": 1.27,
     "J13": 0.08
    },
-   "note": "接口件 8 件；排针列按 lib 封装几何 @column_x=27.94（板 0 焊盘 ⇒ 不得用板几何）",
-   "pass": true
-  },
-  "C5_keepout_switches": {
-   "zones": 4,
-   "each_has_non_allowed": true,
+   "note": "接口件 8 件；排针列 pad AABB = 受审板 as-built 实焊盘（与 lib 几何 @column_x=27.94 逐值交叉核对，见 devices[*].geom_lib_crosscheck_match）",
    "pass": true
   },
   "C6_corridor_basis": {
@@ -4112,114 +5603,205 @@
    "note": "L2-4 统一口径 = 『焊盘外接框净距』（西 17.55 / 东 27.81）。**canonical SPEC（rev-25 起）已回写** corridors[].note + x_range（L2-4 口径）= `corridors_clearance_basis_v24` 逐端点 basis；残留项（`bga_escape.per_ball.corridor_edge` 105.25/82.35 + `strap_domain_v32.open_for_coords[1]` 文本）已由 **IN-10 / rev-25** 落地。stale 扫描口径见 `stale_scan_scope`（#K2-18 §三-2）。"
   },
   "C7_pour_zones_filled": {
-   "count": 9,
-   "filled": 0,
-   "expect": "9/9 铜区全 filled_polygon>=1 且 net 非空（P4 前置）",
-   "excluded_non_net_zones": [
+   "count": 10,
+   "filled": 10,
+   "expect": "10/10 有网铜区全 filled_polygon>=1 且 net 非空（P4 前置）",
+   "excluded_keepout_zones": [
     {
      "idx": 0,
-     "layer": "F.Cu",
-     "note": "ESC_* keepout（无网，按设计不得填充；义务见 P3-5）"
+     "name": "ESC_U6",
+     "layers": [
+      "F.Cu"
+     ]
     },
     {
      "idx": 1,
-     "layer": "F.Cu",
-     "note": "ESC_* keepout（无网，按设计不得填充；义务见 P3-5）"
+     "name": "ESC_J3",
+     "layers": [
+      "F.Cu"
+     ]
     },
     {
      "idx": 2,
-     "layer": "F.Cu",
-     "note": "ESC_* keepout（无网，按设计不得填充；义务见 P3-5）"
+     "name": "ESC_J4",
+     "layers": [
+      "F.Cu"
+     ]
     },
     {
      "idx": 3,
-     "layer": "F.Cu",
-     "note": "ESC_* keepout（无网，按设计不得填充；义务见 P3-5）"
+     "name": "ESC_J2",
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "idx": 4,
+     "name": "K2_HOLE_KEEPOUT_H1",
+     "layers": [
+      "F.Cu",
+      "B.Cu",
+      "In1.Cu",
+      "In2.Cu",
+      "In3.Cu",
+      "In4.Cu",
+      "In5.Cu",
+      "In6.Cu"
+     ]
+    },
+    {
+     "idx": 5,
+     "name": "K2_HOLE_KEEPOUT_H2",
+     "layers": [
+      "F.Cu",
+      "B.Cu",
+      "In1.Cu",
+      "In2.Cu",
+      "In3.Cu",
+      "In4.Cu",
+      "In5.Cu",
+      "In6.Cu"
+     ]
+    },
+    {
+     "idx": 6,
+     "name": "K2_HOLE_KEEPOUT_H3",
+     "layers": [
+      "F.Cu",
+      "B.Cu",
+      "In1.Cu",
+      "In2.Cu",
+      "In3.Cu",
+      "In4.Cu",
+      "In5.Cu",
+      "In6.Cu"
+     ]
+    },
+    {
+     "idx": 7,
+     "name": "K2_HOLE_KEEPOUT_H4",
+     "layers": [
+      "F.Cu",
+      "B.Cu",
+      "In1.Cu",
+      "In2.Cu",
+      "In3.Cu",
+      "In4.Cu",
+      "In5.Cu",
+      "In6.Cu"
+     ]
     }
    ],
-   "pass": false,
-   "note": "口径 = 9 铜区（#K2-16 §四：原「13 区」含 4 个 ESC keepout ⇒ 自指不可达；监理自纠 2026-09-16）"
+   "pass": true,
+   "note": "口径 = 有网非 keepout 铜区（#K2-21 §一；keepout 排除）。随 Z4 整族刷新至受审板（D8/D9：13/0 → 10/10）"
+  },
+  "C5_keepout_switches": {
+   "zones": 9,
+   "declared_keepout_zones": 8,
+   "rule_carried": [
+    "KO-7 board edge"
+   ],
+   "each_has_non_allowed": true,
+   "realized_crosscheck_all_match": true,
+   "pass": true
   },
   "C5b_board_side_esc_switches": {
    "count": 4,
-   "zones_all_allowed": 4,
+   "zones_all_allowed": 0,
    "rows": [
     {
-     "layer": "F.Cu",
-     "bbox_mm": [
-      131.5,
-      42.23,
-      136.15,
-      65.17
+     "idx": 0,
+     "name": "ESC_U6",
+     "net": null,
+     "layers": [
+      "F.Cu"
      ],
-     "net": "",
+     "rule_area": true,
      "switches": {
       "tracks": "allowed",
       "vias": "allowed",
       "pads": "allowed",
-      "copperpour": "allowed",
+      "copperpour": "blocked",
       "footprints": "allowed"
      },
-     "any_non_allowed": false
-    },
-    {
-     "layer": "F.Cu",
-     "bbox_mm": [
-      53.45,
-      42.4,
-      65.55,
-      46.6
-     ],
-     "net": "",
-     "switches": {
-      "tracks": "allowed",
-      "vias": "allowed",
-      "pads": "allowed",
-      "copperpour": "allowed",
-      "footprints": "allowed"
-     },
-     "any_non_allowed": false
-    },
-    {
-     "layer": "F.Cu",
-     "bbox_mm": [
-      53.45,
-      60.6,
-      65.55,
-      64.8
-     ],
-     "net": "",
-     "switches": {
-      "tracks": "allowed",
-      "vias": "allowed",
-      "pads": "allowed",
-      "copperpour": "allowed",
-      "footprints": "allowed"
-     },
-     "any_non_allowed": false
-    },
-    {
-     "layer": "F.Cu",
      "bbox_mm": [
       82.1,
       49.11,
       105.34,
       58.29
+     ]
+    },
+    {
+     "idx": 1,
+     "name": "ESC_J3",
+     "net": null,
+     "layers": [
+      "F.Cu"
      ],
-     "net": "",
+     "rule_area": true,
      "switches": {
       "tracks": "allowed",
       "vias": "allowed",
       "pads": "allowed",
-      "copperpour": "allowed",
+      "copperpour": "blocked",
       "footprints": "allowed"
      },
-     "any_non_allowed": false
+     "bbox_mm": [
+      53.45,
+      42.4,
+      65.55,
+      46.6
+     ]
+    },
+    {
+     "idx": 2,
+     "name": "ESC_J4",
+     "net": null,
+     "layers": [
+      "F.Cu"
+     ],
+     "rule_area": true,
+     "switches": {
+      "tracks": "allowed",
+      "vias": "allowed",
+      "pads": "allowed",
+      "copperpour": "blocked",
+      "footprints": "allowed"
+     },
+     "bbox_mm": [
+      53.45,
+      60.6,
+      65.55,
+      64.8
+     ]
+    },
+    {
+     "idx": 3,
+     "name": "ESC_J2",
+     "net": null,
+     "layers": [
+      "F.Cu"
+     ],
+     "rule_area": true,
+     "switches": {
+      "tracks": "allowed",
+      "vias": "allowed",
+      "pads": "allowed",
+      "copperpour": "blocked",
+      "footprints": "allowed"
+     },
+     "bbox_mm": [
+      131.5,
+      42.23,
+      136.15,
+      65.17
+     ]
     }
    ],
-   "expect": "板侧每区 ≥1 非 allowed（图侧 KO-5..7 已满足；板侧为 P4 施工项）",
-   "pass": false,
-   "note": "P3 门不因此项受阻（P3 = 出图）；登记 P4 施工项（#K2-17 §三 补正 2）"
+   "selection": "netless rule area 且 copperpour=not_allowed、其余 4 开关 allowed（受审板实测枚举）",
+   "expect": "板侧每区 ≥1 非 allowed（P4 施工项 IN-11）",
+   "pass": true,
+   "note": "P4 施工项；枚举/开关随受审板刷新（D10：全 allowed → copperpour not_allowed）"
   },
   "D1_pinheader_interference": {
    "column_x": 27.94,
@@ -4247,31 +5829,329 @@
      "conflict": "C73.2"
     }
    ],
+   "obstacle_src": {
+    "board": "k2/hw/k2_v4_8L.l5.kicad_pcb",
+    "board_sha16": "6ff49da5678c2108"
+   },
+   "before_src": {
+    "board": "k2/hw/k2_v4_8L.kicad_pcb",
+    "board_sha16": "fb07d25ac426ff84",
+    "note": "设计源板 = 位移前旧位（只读历史证据，非真值源）"
+   },
+   "header_pad_crosscheck": {
+    "J6": {
+     "board_numbered": 2,
+     "lib_numbered": 2
+    },
+    "J9": {
+     "board_numbered": 4,
+     "lib_numbered": 4
+    },
+    "J11": {
+     "board_numbered": 4,
+     "lib_numbered": 4
+    },
+    "J12": {
+     "board_numbered": 2,
+     "lib_numbered": 2
+    },
+    "J13": {
+     "board_numbered": 4,
+     "lib_numbered": 4
+    }
+   },
+   "header_pad_crosscheck_all_match": true,
    "pass": true,
-   "note": "L2-3 位移复检（封装几何 @27.94）。before = 含 C73/C86 **旧位** ⇒ 复现 L2-3「仅 C73/C86 相撞」的依据；after = C73/C86 新解位 ⇒ 应无冲突"
+   "note": "L2-3 位移复检（封装几何 @27.94）。before = C73/C86 **旧位**（设计源板）⇒ 复现「仅 C73/C86 相撞」；after = 受审板 as-built ⇒ 应无冲突。排针 pad 数：板实 ↔ 库带号逐件一致"
   }
  },
  "pour_zones": {
-  "count": 13,
-  "filled_count": 0,
+  "count": 10,
+  "filled_count": 10,
   "zones": [
    {
-    "idx": 0,
-    "net": "",
-    "layer": "F.Cu",
-    "filled": 0,
+    "idx": 8,
+    "name": null,
+    "net": "GND",
+    "layers": [
+     "In1.Cu"
+    ],
+    "rule_area": false,
+    "switches": {
+     "tracks": "blocked",
+     "vias": "blocked",
+     "pads": "blocked",
+     "copperpour": "allowed",
+     "footprints": "allowed"
+    },
     "bbox_mm": [
-     131.5,
-     42.23,
-     136.15,
-     65.17
+     23.3,
+     33.3,
+     142.7,
+     78.7
+    ],
+    "filled": 1,
+    "layer": "In1.Cu"
+   },
+   {
+    "idx": 9,
+    "name": null,
+    "net": "GND",
+    "layers": [
+     "In3.Cu"
+    ],
+    "rule_area": false,
+    "switches": {
+     "tracks": "blocked",
+     "vias": "blocked",
+     "pads": "blocked",
+     "copperpour": "allowed",
+     "footprints": "allowed"
+    },
+    "bbox_mm": [
+     23.3,
+     33.3,
+     142.7,
+     78.7
+    ],
+    "filled": 1,
+    "layer": "In3.Cu"
+   },
+   {
+    "idx": 10,
+    "name": null,
+    "net": "12V_IN",
+    "layers": [
+     "In4.Cu"
+    ],
+    "rule_area": false,
+    "switches": {
+     "tracks": "blocked",
+     "vias": "blocked",
+     "pads": "blocked",
+     "copperpour": "allowed",
+     "footprints": "allowed"
+    },
+    "bbox_mm": [
+     25.02,
+     36.84,
+     35.98,
+     41.75
+    ],
+    "filled": 1,
+    "layer": "In4.Cu"
+   },
+   {
+    "idx": 11,
+    "name": null,
+    "net": "12V_IN",
+    "layers": [
+     "In4.Cu"
+    ],
+    "rule_area": false,
+    "switches": {
+     "tracks": "blocked",
+     "vias": "blocked",
+     "pads": "blocked",
+     "copperpour": "allowed",
+     "footprints": "allowed"
+    },
+    "bbox_mm": [
+     24.6,
+     34.9,
+     29.4,
+     41.2
+    ],
+    "filled": 1,
+    "layer": "In4.Cu"
+   },
+   {
+    "idx": 12,
+    "name": null,
+    "net": "P3V3_AUX",
+    "layers": [
+     "In4.Cu"
+    ],
+    "rule_area": false,
+    "switches": {
+     "tracks": "blocked",
+     "vias": "blocked",
+     "pads": "blocked",
+     "copperpour": "allowed",
+     "footprints": "allowed"
+    },
+    "bbox_mm": [
+     27.95,
+     35.98,
+     52.75,
+     54.27
+    ],
+    "filled": 1,
+    "layer": "In4.Cu"
+   },
+   {
+    "idx": 13,
+    "name": null,
+    "net": "P3V3_AUX",
+    "layers": [
+     "In4.Cu"
+    ],
+    "rule_area": false,
+    "switches": {
+     "tracks": "blocked",
+     "vias": "blocked",
+     "pads": "blocked",
+     "copperpour": "allowed",
+     "footprints": "allowed"
+    },
+    "bbox_mm": [
+     52.2,
+     52.02,
+     59.15,
+     62.52
+    ],
+    "filled": 1,
+    "layer": "In4.Cu"
+   },
+   {
+    "idx": 14,
+    "name": null,
+    "net": "P3V3",
+    "layers": [
+     "In4.Cu"
+    ],
+    "rule_area": false,
+    "switches": {
+     "tracks": "blocked",
+     "vias": "blocked",
+     "pads": "blocked",
+     "copperpour": "allowed",
+     "footprints": "allowed"
+    },
+    "bbox_mm": [
+     34.27,
+     34.02,
+     58.42,
+     40.25
+    ],
+    "filled": 1,
+    "layer": "In4.Cu"
+   },
+   {
+    "idx": 15,
+    "name": null,
+    "net": "MCU_VDD",
+    "layers": [
+     "In4.Cu"
+    ],
+    "rule_area": false,
+    "switches": {
+     "tracks": "blocked",
+     "vias": "blocked",
+     "pads": "blocked",
+     "copperpour": "allowed",
+     "footprints": "allowed"
+    },
+    "bbox_mm": [
+     23.3,
+     33.3,
+     57.75,
+     78.7
+    ],
+    "filled": 1,
+    "layer": "In4.Cu"
+   },
+   {
+    "idx": 16,
+    "name": null,
+    "net": "P3V3",
+    "layers": [
+     "In4.Cu"
+    ],
+    "rule_area": false,
+    "switches": {
+     "tracks": "blocked",
+     "vias": "blocked",
+     "pads": "blocked",
+     "copperpour": "allowed",
+     "footprints": "allowed"
+    },
+    "bbox_mm": [
+     57.95,
+     33.3,
+     142.7,
+     78.7
+    ],
+    "filled": 1,
+    "layer": "In4.Cu"
+   },
+   {
+    "idx": 17,
+    "name": null,
+    "net": "GND",
+    "layers": [
+     "In6.Cu"
+    ],
+    "rule_area": false,
+    "switches": {
+     "tracks": "blocked",
+     "vias": "blocked",
+     "pads": "blocked",
+     "copperpour": "allowed",
+     "footprints": "allowed"
+    },
+    "bbox_mm": [
+     23.3,
+     33.3,
+     142.7,
+     78.7
+    ],
+    "filled": 1,
+    "layer": "In6.Cu"
+   }
+  ],
+  "total_zones": 18,
+  "copper_zone_count": 10,
+  "keepout_zone_count": 8,
+  "nonesc_keepout_count": 8,
+  "keepout_zones": [
+   {
+    "idx": 0,
+    "name": "ESC_U6",
+    "net": null,
+    "layers": [
+     "F.Cu"
+    ],
+    "rule_area": true,
+    "switches": {
+     "tracks": "allowed",
+     "vias": "allowed",
+     "pads": "allowed",
+     "copperpour": "blocked",
+     "footprints": "allowed"
+    },
+    "bbox_mm": [
+     82.1,
+     49.11,
+     105.34,
+     58.29
     ]
    },
    {
     "idx": 1,
-    "net": "",
-    "layer": "F.Cu",
-    "filled": 0,
+    "name": "ESC_J3",
+    "net": null,
+    "layers": [
+     "F.Cu"
+    ],
+    "rule_area": true,
+    "switches": {
+     "tracks": "allowed",
+     "vias": "allowed",
+     "pads": "allowed",
+     "copperpour": "blocked",
+     "footprints": "allowed"
+    },
     "bbox_mm": [
      53.45,
      42.4,
@@ -4281,9 +6161,19 @@
    },
    {
     "idx": 2,
-    "net": "",
-    "layer": "F.Cu",
-    "filled": 0,
+    "name": "ESC_J4",
+    "net": null,
+    "layers": [
+     "F.Cu"
+    ],
+    "rule_area": true,
+    "switches": {
+     "tracks": "allowed",
+     "vias": "allowed",
+     "pads": "allowed",
+     "copperpour": "blocked",
+     "footprints": "allowed"
+    },
     "bbox_mm": [
      53.45,
      60.6,
@@ -4293,126 +6183,144 @@
    },
    {
     "idx": 3,
-    "net": "",
-    "layer": "F.Cu",
-    "filled": 0,
+    "name": "ESC_J2",
+    "net": null,
+    "layers": [
+     "F.Cu"
+    ],
+    "rule_area": true,
+    "switches": {
+     "tracks": "allowed",
+     "vias": "allowed",
+     "pads": "allowed",
+     "copperpour": "blocked",
+     "footprints": "allowed"
+    },
     "bbox_mm": [
-     82.1,
-     49.11,
-     105.34,
-     58.29
+     131.5,
+     42.23,
+     136.15,
+     65.17
     ]
    },
    {
     "idx": 4,
-    "net": "12V_IN",
-    "layer": "In4.Cu",
-    "filled": 0,
+    "name": "K2_HOLE_KEEPOUT_H1",
+    "net": null,
+    "layers": [
+     "F.Cu",
+     "B.Cu",
+     "In1.Cu",
+     "In2.Cu",
+     "In3.Cu",
+     "In4.Cu",
+     "In5.Cu",
+     "In6.Cu"
+    ],
+    "rule_area": true,
+    "switches": {
+     "tracks": "blocked",
+     "vias": "blocked",
+     "pads": "allowed",
+     "copperpour": "blocked",
+     "footprints": "allowed"
+    },
     "bbox_mm": [
-     25.02,
-     36.84,
-     35.98,
-     41.75
+     23.1,
+     72.6,
+     29.1,
+     78.6
     ]
    },
    {
     "idx": 5,
-    "net": "GND",
-    "layer": "In1.Cu",
-    "filled": 0,
+    "name": "K2_HOLE_KEEPOUT_H2",
+    "net": null,
+    "layers": [
+     "F.Cu",
+     "B.Cu",
+     "In1.Cu",
+     "In2.Cu",
+     "In3.Cu",
+     "In4.Cu",
+     "In5.Cu",
+     "In6.Cu"
+    ],
+    "rule_area": true,
+    "switches": {
+     "tracks": "blocked",
+     "vias": "blocked",
+     "pads": "allowed",
+     "copperpour": "blocked",
+     "footprints": "allowed"
+    },
     "bbox_mm": [
-     23.3,
-     33.3,
-     142.7,
-     78.7
+     136.6,
+     36.6,
+     142.6,
+     42.6
     ]
    },
    {
     "idx": 6,
-    "net": "GND",
-    "layer": "In3.Cu",
-    "filled": 0,
+    "name": "K2_HOLE_KEEPOUT_H3",
+    "net": null,
+    "layers": [
+     "F.Cu",
+     "B.Cu",
+     "In1.Cu",
+     "In2.Cu",
+     "In3.Cu",
+     "In4.Cu",
+     "In5.Cu",
+     "In6.Cu"
+    ],
+    "rule_area": true,
+    "switches": {
+     "tracks": "blocked",
+     "vias": "blocked",
+     "pads": "allowed",
+     "copperpour": "blocked",
+     "footprints": "allowed"
+    },
     "bbox_mm": [
-     23.3,
-     33.3,
-     142.7,
-     78.7
+     42.1,
+     72.1,
+     48.1,
+     78.1
     ]
    },
    {
     "idx": 7,
-    "net": "GND",
-    "layer": "In6.Cu",
-    "filled": 0,
+    "name": "K2_HOLE_KEEPOUT_H4",
+    "net": null,
+    "layers": [
+     "F.Cu",
+     "B.Cu",
+     "In1.Cu",
+     "In2.Cu",
+     "In3.Cu",
+     "In4.Cu",
+     "In5.Cu",
+     "In6.Cu"
+    ],
+    "rule_area": true,
+    "switches": {
+     "tracks": "blocked",
+     "vias": "blocked",
+     "pads": "allowed",
+     "copperpour": "blocked",
+     "footprints": "allowed"
+    },
     "bbox_mm": [
-     23.3,
-     33.3,
-     142.7,
-     78.7
-    ]
-   },
-   {
-    "idx": 8,
-    "net": "MCU_VDD",
-    "layer": "In4.Cu",
-    "filled": 0,
-    "bbox_mm": [
-     23.3,
-     33.3,
-     57.75,
-     78.7
-    ]
-   },
-   {
-    "idx": 9,
-    "net": "P3V3",
-    "layer": "In4.Cu",
-    "filled": 0,
-    "bbox_mm": [
-     57.95,
-     33.3,
-     142.7,
-     78.7
-    ]
-   },
-   {
-    "idx": 10,
-    "net": "P3V3",
-    "layer": "In4.Cu",
-    "filled": 0,
-    "bbox_mm": [
-     34.27,
-     34.02,
-     58.42,
-     40.25
-    ]
-   },
-   {
-    "idx": 11,
-    "net": "P3V3_AUX",
-    "layer": "In4.Cu",
-    "filled": 0,
-    "bbox_mm": [
-     27.95,
-     35.98,
-     52.75,
-     54.27
-    ]
-   },
-   {
-    "idx": 12,
-    "net": "P3V3_AUX",
-    "layer": "In4.Cu",
-    "filled": 0,
-    "bbox_mm": [
-     52.2,
-     52.02,
-     59.15,
-     62.52
+     111.6,
+     33.1,
+     117.6,
+     39.1
     ]
    }
   ],
-  "gate": "出 Gerber 前置（审计 §10.5）：13 zone 全 filled_polygon>=1 且 net 非空",
+  "gate": "出 Gerber 前置：**有网非 keepout** 铜区全 filled_polygon>=1 且 net 非空（#K2-21 §一 口径）",
   "power_partition": {
    "P3V3": "In4 一区 (东侧)",
    "P3V3_AUX_MCU_VDD": "In4 二区 (西侧)"
@@ -4423,9 +6331,166 @@
    "rule": "差分换层处硬性 GND 伴行 via (每换层点 ≥1, 2026-08-19 8 层定案)",
    "via_drill": 0.2,
    "via_outer": 0.35
-  },
-  "copper_zone_count": 9,
-  "nonesc_keepout_count": 4
+  }
+ },
+ "keepout_realized_crosscheck": {
+  "declared_keepout_zones": 8,
+  "realized_rule_areas": 8,
+  "rows": [
+   {
+    "id": "ESC_U6",
+    "realized": true,
+    "switches_match": true,
+    "switch_diff": null,
+    "bbox_match": true,
+    "declared_bbox_mm": [
+     82.1,
+     49.11,
+     105.34,
+     58.29
+    ],
+    "realized_bbox_mm": [
+     82.1,
+     49.11,
+     105.34,
+     58.29
+    ]
+   },
+   {
+    "id": "ESC_J3",
+    "realized": true,
+    "switches_match": true,
+    "switch_diff": null,
+    "bbox_match": true,
+    "declared_bbox_mm": [
+     53.45,
+     42.4,
+     65.55,
+     46.6
+    ],
+    "realized_bbox_mm": [
+     53.45,
+     42.4,
+     65.55,
+     46.6
+    ]
+   },
+   {
+    "id": "ESC_J4",
+    "realized": true,
+    "switches_match": true,
+    "switch_diff": null,
+    "bbox_match": true,
+    "declared_bbox_mm": [
+     53.45,
+     60.6,
+     65.55,
+     64.8
+    ],
+    "realized_bbox_mm": [
+     53.45,
+     60.6,
+     65.55,
+     64.8
+    ]
+   },
+   {
+    "id": "ESC_J2",
+    "realized": true,
+    "switches_match": true,
+    "switch_diff": null,
+    "bbox_match": true,
+    "declared_bbox_mm": [
+     131.5,
+     42.23,
+     136.15,
+     65.17
+    ],
+    "realized_bbox_mm": [
+     131.5,
+     42.23,
+     136.15,
+     65.17
+    ]
+   },
+   {
+    "id": "K2_HOLE_KEEPOUT_H1",
+    "realized": true,
+    "switches_match": true,
+    "switch_diff": null,
+    "bbox_match": true,
+    "declared_bbox_mm": [
+     23.1,
+     72.6,
+     29.1,
+     78.6
+    ],
+    "realized_bbox_mm": [
+     23.1,
+     72.6,
+     29.1,
+     78.6
+    ]
+   },
+   {
+    "id": "K2_HOLE_KEEPOUT_H2",
+    "realized": true,
+    "switches_match": true,
+    "switch_diff": null,
+    "bbox_match": true,
+    "declared_bbox_mm": [
+     136.6,
+     36.6,
+     142.6,
+     42.6
+    ],
+    "realized_bbox_mm": [
+     136.6,
+     36.6,
+     142.6,
+     42.6
+    ]
+   },
+   {
+    "id": "K2_HOLE_KEEPOUT_H3",
+    "realized": true,
+    "switches_match": true,
+    "switch_diff": null,
+    "bbox_match": true,
+    "declared_bbox_mm": [
+     42.1,
+     72.1,
+     48.1,
+     78.1
+    ],
+    "realized_bbox_mm": [
+     42.1,
+     72.1,
+     48.1,
+     78.1
+    ]
+   },
+   {
+    "id": "K2_HOLE_KEEPOUT_H4",
+    "realized": true,
+    "switches_match": true,
+    "switch_diff": null,
+    "bbox_match": true,
+    "declared_bbox_mm": [
+     111.6,
+     33.1,
+     117.6,
+     39.1
+    ],
+    "realized_bbox_mm": [
+     111.6,
+     33.1,
+     117.6,
+     39.1
+    ]
+   }
+  ],
+  "all_match": true
  },
  "layer_assignment": {
   "roles": {
@@ -4698,6 +6763,8 @@
  },
  "placement_solution": {
   "file": "p3_placement_solution.json",
+  "sha16": "faddc9de5519c5ec",
+  "authority": "坐标权威 = 受审板 as-built；本解只留约束/来源（不覆写 at）",
   "solved": 15,
   "all_pass": true,
   "selfcheck": {
@@ -4733,7 +6800,31 @@
     64.5
    ]
   },
-  "strap_footprint_spec": "Resistor_SMD:R_0603_1608Metric"
+  "strap_footprint_spec": "Resistor_SMD:R_0603_1608Metric",
+  "solution_vs_board_drift": [
+   {
+    "ref": "R42",
+    "solution_at": [
+     86.6,
+     59.55
+    ],
+    "board_at": [
+     93.3,
+     61.55
+    ]
+   },
+   {
+    "ref": "C86",
+    "solution_at": [
+     32.4,
+     36.0
+    ],
+    "board_at": [
+     31.55,
+     58.85
+    ]
+   }
+  ]
  },
  "keepout_geometry": {
   "edge_copper_min_mm": 0.3,
@@ -4764,6 +6855,15 @@
    "no_via": true,
    "basis": "SPEC constraints.escape_transition_zone（图面只标规则与数值；逐 pin 窗口见 L1/structural_predict.md）"
   },
-  "ac_pad_gnd_cutout": true
+  "ac_pad_gnd_cutout": true,
+  "declared_keepout_zones": 8,
+  "realized_rule_areas": 8,
+  "realized_crosscheck_all_match": true,
+  "ko7_disposition": {
+   "board_has_standalone_zone": false,
+   "carried_by_rule": "min_copper_edge_clearance=0.3",
+   "action": "不补实体 zone",
+   "reason": "板无 KO-7 独立实体 zone；由规则承载（inc61 §3 建议，#K2-23 §二-4 口径确认）"
+  }
  }
 }

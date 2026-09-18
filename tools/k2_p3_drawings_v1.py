@@ -1,18 +1,25 @@
 #!/usr/bin/env python3
-"""k2_p3_drawings_v1.py — K2 P3（施工图层重建）图纸生成器 v1。
+"""k2_p3_drawings_v1.py — K2 施工图纸生成器（P3 立件；**P4 基线 v10**，#K2-23 §二-1 Z4 整族刷新）。
 
 输入（全部只读）：
-  - canonical SPEC（经 pm_gate.config 解析，禁硬编码文件名）
-  - 真源 yaml `k2/hw/data/k2_sch.yaml`（符号引脚数 / 55 件 placements / nets）
+  - canonical SPEC（经 pm_gate.config 解析，禁硬编码文件名）—— 现行 **rev-49**
+  - 真源 yaml（经 `project.yaml::nets_yaml` 解析，禁硬编码）—— 乙 = `errata-1`
   - L2 裁定值（审计 §十 L2-1..L2-8；引 K2-ENG-AUDIT-2026-09-15.md）
-  - 锚点板 `k2/hw/k2_v4_8L.kicad_pcb`（设计源板，42 件锚点；只读）
+  - **受审板** `k2/hw/k2_v4_8L.l5.kicad_pcb`（`K2_P4_BOARD` 可覆写）—— 仅作
+    「实测/板实」类字段的量测源（W-8 属性级「以板为准」= #K2-23 §二-1 明许）；
+    **坐标/网表/拓扑的真值源仍是真源 yaml → SPEC**（权威链不可倒置）
+  - 设计源板 `k2/hw/k2_v4_8L.kicad_pcb`（只读；**仅** D1「位移前」历史证据）
+
+fail-closed：板 sha16 须 == SPEC 输入层自述 `board_sha16`（`mounting_holes` /
+`keepout_geometry`），否则**拒绝出图**（陈旧板 = 陈旧测量）。
 
 输出：`k2/pm_gate/artifacts/k2_v4/L3/drawings/` 下
-  - `p3_drawings.json`（机读几何 + 判据自测量）
+  - `p3_drawings.json`（机读几何 + 判据自测量；带 `board_sha16` / `drawings_rev`）
   - `0N_*.svg`（7 张施工图）
 
-边界：只读输入 + 只写上述目录；不改 SPEC/原理图/板/生成器/判据；不派 WORKER。
-判据由监理核（ENG 只给测量）。
+写仓库纪律（T-41/T-22）：默认沙箱（`K2_P3_OUT`）；写本目录须
+`--apply --confirm-repo-write`，且落盘前自动备份旧件 + 逐件旧 sha。
+边界：只读输入；不改 SPEC/原理图/板/生成器/判据；不派 WORKER。判据由监理核（ENG 只给测量）。
 """
 from __future__ import annotations
 import json, os, re, sys, math, hashlib
@@ -24,13 +31,25 @@ OUT = os.environ.get("K2_P3_OUT", os.path.join(K2, "pm_gate/artifacts/k2_v4/L3/d
 os.environ.setdefault("PM_GATE_PROJECT_ROOT", K2)  # 经官方解析链定位项目根（禁硬编码 SPEC 路径）
 sys.path.insert(0, os.path.join(K2, "_shared"))
 
+# ── P4 基线（#K2-23 §二-1 Z4 整族刷新）───────────────────────────────────────
+REPO_DRAWINGS = os.path.join(K2, "pm_gate/artifacts/k2_v4/L3/drawings")
+BOARD = os.path.abspath(os.environ.get("K2_P4_BOARD", os.path.join(K2, "hw/k2_v4_8L.l5.kicad_pcb")))
+BOARD_HISTORICAL = os.path.join(K2, "hw/k2_v4_8L.kicad_pcb")   # 设计源板（只读；D1 位移前证据）
+DRAWINGS_REV = "v10"
+
+
+def sha16(path):
+    return hashlib.sha256(open(path, "rb").read()).hexdigest()[:16]
+
 # ── L2 裁定值（审计 §十；本文件只引用，不重裁） ─────────────────────────────
 AUDIT = "k2/docs/K2-ENG-AUDIT-2026-09-15.md"
 L2 = {
     "L2-1_board_frame": {"outline_x": [23.0, 143.0], "outline_y": [33.0, 79.0], "size_mm": [120.0, 46.0]},
+    # L2-2 固定孔：**逐座标/边料不再在此硬编码**，改由 SPEC rev-49 `mounting_holes`
+    # 输入层承载（受审板实测 + #K2-19 §一-3「H3 = L2 热机械 = 自裁域」）；此处只留口径。
     "L2-2_mounting_holes": {
-        "count": 4, "drill_mm": 3.2, "keepout_dia_mm": 6.0, "edge_material_min_mm": 1.5,
-        "positions": {"H1": [26.10, 75.60], "H2": [139.60, 39.60], "H3": [26.10, 36.10], "H4": [114.60, 36.10]},
+        "count_min": 4, "drill_mm": 3.2, "keepout_dia_mm": 6.0, "edge_material_min_mm": 1.5,
+        "positions_src": "SPEC.mounting_holes（rev-49 输入层；H3=(45.10,75.10)）",
         "note": "右下角不可放孔（In5 PCIe 布线占用 y≥74.5 ∧ x≥86）⇒ 右侧不对称（审计 §10.2 诚实披露）",
     },
     "L2-3_pin_header_column_x": 27.94,
@@ -237,22 +256,38 @@ def placed_pad_aabb(fp, px, py, prot):
         box = bx if box is None else [min(box[0], bx[0]), min(box[1], bx[1]), max(box[2], bx[2]), max(box[3], bx[3])]
     return box, pads
 
-def anchors():
+def anchors(path=None):
+    """板侧实测（默认 = 受审板 BOARD；`path` 可覆写）。
+
+    同时登记**两套 pad 计数口径**（R-1 治理；#K2-18 §二-1）：
+      - `board_pads`          = 全部 pad 块（含无名 paste-only 钢网开窗）—— 原口径
+      - `board_pads_numbered` = **带号 pad**（电气；判据 C3 比较口径）
+    """
     import pcbnew
-    b = pcbnew.LoadBoard(os.path.join(K2, "hw/k2_v4_8L.kicad_pcb"))
+    brd = pcbnew.LoadBoard(path or BOARD)
     out = {}
-    for ft in b.GetFootprints():
+    for ft in brd.GetFootprints():
         ref = ft.GetReference()
         pads = [p for p in ft.Pads()]
         box = None
         for p in pads:
             bb = p.GetBoundingBox()
-            b = [pcbnew.ToMM(bb.GetLeft()), pcbnew.ToMM(bb.GetTop()),
+            r = [pcbnew.ToMM(bb.GetLeft()), pcbnew.ToMM(bb.GetTop()),
                  pcbnew.ToMM(bb.GetRight()), pcbnew.ToMM(bb.GetBottom())]
-            box = b if box is None else [min(box[0], b[0]), min(box[1], b[1]), max(box[2], b[2]), max(box[3], b[3])]
-        out[ref] = {"at": [pcbnew.ToMM(ft.GetPosition().x), pcbnew.ToMM(ft.GetPosition().y)],
-                    "rot": ft.GetOrientationDegrees(), "footprint": str(ft.GetFPID().GetLibItemName()),
-                    "board_pads": len(pads), "pad_aabb_board": box,
+            box = r if box is None else [min(box[0], r[0]), min(box[1], r[1]), max(box[2], r[2]), max(box[3], r[3])]
+        numbered = [p.GetNumber().strip() for p in pads if p.GetNumber().strip()]
+        paste_only = 0
+        for p in pads:
+            if p.GetNumber().strip():
+                continue
+            lay = [brd.GetLayerName(l) for l in p.GetLayerSet().Seq()]
+            if lay and not any(l.endswith(".Cu") for l in lay):
+                paste_only += 1
+        out[ref] = {"at": [round(pcbnew.ToMM(ft.GetPosition().x), 3), round(pcbnew.ToMM(ft.GetPosition().y), 3)],
+                    "rot": round(ft.GetOrientationDegrees(), 1), "footprint": str(ft.GetFPID().GetLibItemName()),
+                    "board_pads": len(pads), "board_pads_numbered": len(numbered),
+                    "board_pads_paste_only": paste_only, "pad_nums_numbered": sorted(set(numbered)),
+                    "pad_aabb_board": box,
                     "pad_nums": sorted(p.GetNumber() for p in pads)}
     return out
 
@@ -280,7 +315,10 @@ def c3_measure(devices, registry_path,  registry_sha16=None):
         if _st:
             c3["count_basis"]["per_footprint"][ref] = dict(
                 _st, file=os.path.relpath(_f, ROOT), computed_pads=int(d["footprint_pads"]),
-                basis_consistent=(_st["numbered"] == int(d["footprint_pads"])))
+                basis_consistent=(_st["numbered"] == int(d["footprint_pads"])),
+                board_pads_raw=d.get("board_pads"), board_pads_numbered=d.get("board_pads_numbered"),
+                board_pads_paste_only=d.get("board_pads_paste_only"),
+                lib_vs_board_numbered_equal=(d.get("board_pads_numbered") == int(d["footprint_pads"])))
         sp, fp_pads = d["symbol_pins"], d["footprint_pads"]
         if fp_pads != sp:
             c3["literal_mismatch"].append({"ref": ref, "symbol_pins": sp, "footprint_pads": fp_pads})
@@ -292,7 +330,15 @@ def c3_measure(devices, registry_path,  registry_sha16=None):
                 "ref": ref, "rule": "#K2-11 §1-2 有向口径：电气引脚集 ⊆ 焊盘集 + 余量逐条登记（禁静默）",
                 "symbol_pins_subset_of_pads": [n for n in (d.get("symbol_pin_nums") or []) if n not in set(d.get("footprint_pad_nums") or [])] == [],
                 "extra_count": fp_pads - sp, "extra_pads": nums if nums else None,
-                "registry_ref": c3["registry"]})
+                                         "registry_ref": c3["registry"]})
+    c3["count_basis"]["board_lib_basis_mismatch"] = [
+        r for r, v in sorted(c3["count_basis"]["per_footprint"].items())
+        if v.get("board_pads_numbered") is not None and not v["lib_vs_board_numbered_equal"]]
+    c3["count_basis"]["note_board_basis"] = (
+        "板侧同时登记两口径：`board_pads_raw`（全部 pad 块，含 paste-only 钢网开窗）与 "
+        "`board_pads_numbered`（R-1 口径 = 带号 pad，电气）。本判据比较**只用 R-1 带号口径**；"
+        "R-1（#K2-18 §二-1）明示 paste-only 开窗不计 —— 例：U1 库/板皆 58 pad 块 = 49 带号 + 9 F.Paste "
+        "（EP 钢网阵列，无电气性）⇒ 带号口径 49，库↔板逐值一致。")
     return c3
 
 def sym_pin_nums(sym_def):
@@ -349,18 +395,45 @@ def main():
     for sh in y.get("sheets", []):
         for p in sh.get("placements", []):
             plac[p["ref"]] = {"symbol": p["symbol"], "sheet": sh.get("title", "")}
-    anch = anchors()
+    # ── 板源（受审板）+ fail-closed（陈旧板 = 陈旧测量）────────────────────
+    board_sha = sha16(BOARD)
+    spec_mh_in = spec.get("mounting_holes") or {}
+    kg_in = spec.get("keepout_geometry") or {}
+    declared_sha = spec_mh_in.get("board_sha16") or kg_in.get("board_sha16")
+    if declared_sha and declared_sha != board_sha:
+        raise SystemExit(f"FAIL-CLOSED(陈旧板): {os.path.relpath(BOARD, ROOT)} sha16={board_sha} "
+                         f"!= SPEC 输入层自述 board_sha16={declared_sha}")
+    if not (spec_mh_in.get("holes") and kg_in.get("zones")):
+        raise SystemExit("FAIL-CLOSED: SPEC 缺 mounting_holes / keepout_geometry 输入层（须 rev-49+）")
+    anch = anchors(BOARD)
     bx0, bx1 = L2["L2-1_board_frame"]["outline_x"]
     by0, by1 = L2["L2-1_board_frame"]["outline_y"]
     W, H = bx1 - bx0, by1 - by0
+    # L2-2 固定孔（D3/D4 载体）：逐座标/边料/keepout = SPEC rev-49 输入层
+    mh = {"count": len(spec_mh_in["holes"]),
+          "drill_mm": spec_mh_in["np_thru_hole"]["drill_mm"],
+          "keepout_dia_mm": max(max(h["keepout"]) for h in spec_mh_in["holes"]),
+          "edge_material_min_mm": min(h["edge_material"] for h in spec_mh_in["holes"]),
+          "positions": {h["ref"]: [h["at"][0], h["at"][1]] for h in spec_mh_in["holes"]},
+          "spec_edge_material": {h["ref"]: h["edge_material"] for h in spec_mh_in["holes"]},
+          "spec_keepout_bbox": {h["ref"]: h["keepout_bbox"] for h in spec_mh_in["holes"]},
+          "np_thru_hole": spec_mh_in["np_thru_hole"],
+          "basis": spec_mh_in.get("basis"), "board_sha16": board_sha}
 
     ysrc = y.get("__source_path__")
-    geo = {"spec": {"name": spec_name, "sha16": hashlib.sha256(open(spec_path, 'rb').read()).hexdigest()[:16]},
+    geo = {"drawings_rev": DRAWINGS_REV,
+           "baseline": {"spec": spec_name, "spec_sha16": sha16(spec_path),
+                        "board": os.path.relpath(BOARD, ROOT), "board_sha16": board_sha,
+                        "historical_board": os.path.relpath(BOARD_HISTORICAL, ROOT),
+                        "authority": "真源 yaml → SPEC（canonical，只版本 bump）→ 受审板（仅实测类字段的量测源；"
+                                     "W-8 属性级「以板为准」= #K2-23 §二-1）"},
+           "spec": {"name": spec_name, "sha16": sha16(spec_path)},
            "nets_yaml": {"path": ysrc, "sha16": hashlib.sha256(open(os.path.join(ROOT, ysrc), 'rb').read()).hexdigest()[:16] if ysrc else None},
-           "board_frame": L2["L2-1_board_frame"], "mounting_holes": L2["L2-2_mounting_holes"],
+           "board_sha16": board_sha,
+           "board_frame": L2["L2-1_board_frame"], "mounting_holes": mh,
            "devices": {}, "corridors": [], "keepouts": [], "layer_plan": {}, "pour": {}, "criteria": {}}
 
-    # devices：55 真源件（锚点板 42 + 13 待定 + 排针列 L2-3 修正）
+    # devices：55 真源件（坐标/pad 数 = **受审板 as-built**；排针列另与 lib 几何 @column_x 交叉核对）
     col_x = L2["L2-3_pin_header_column_x"]
     ph = (spec["components"].get("pin_headers") or {})
     for ref in sorted(plac):
@@ -369,42 +442,40 @@ def main():
         pins = sym_pin_nums(sym)
         rec = {"sheet": plac[ref]["sheet"], "symbol": plac[ref]["symbol"], "footprint": fp,
                "symbol_pins": len(pins), "symbol_pin_nums": pins}
-        if ref in ("C73", "C86"):
-            rec["at"] = anch.get(ref, {}).get("at"); rec["rot"] = anch.get(ref, {}).get("rot")
-            rec["pad_aabb"] = anch.get(ref, {}).get("pad_aabb_board")
-            rec["geom_src"] = "board(as-built，旧位)"
-            rec["board_pads"] = anch.get(ref, {}).get("board_pads")   # R-2（#K2-18 §二-2）：补板侧实测 pad 数
-            rec["status"] = "move_pending_L2-3"
-            rec["note"] = "L2-3 已裁须移位（仍在左带内）；新坐标待解（L2 自裁域），图纸标为待定"
-        elif ref in anch and ref not in ph.get("positions", {}):
-            rec["at"] = anch[ref]["at"]; rec["rot"] = anch[ref]["rot"]; rec["src"] = "anchor(设计源板)"
-            rec["board_pads"] = anch[ref]["board_pads"]
+        a = anch.get(ref)
+        if a:
+            rec["at"] = a["at"]; rec["rot"] = a["rot"]; rec["src"] = "board(受审板 as-built)"
+            rec["board_pads"] = a["board_pads"]                       # 原口径 = 全部 pad 块（含 paste-only）
+            rec["board_pads_numbered"] = a["board_pads_numbered"]     # R-1 口径 = 带号 pad（电气）
+            rec["board_pads_paste_only"] = a["board_pads_paste_only"]
+            rec["board_pads_numbered_nums"] = a["pad_nums_numbered"]
             rec["status"] = "placed"
-        elif ref in ph.get("positions", {}):
-            rec["at"] = [col_x, ph["positions"][ref][1]]; rec["rot"] = ph.get("rot", 90)
-            rec["src"] = f"SPEC pin_headers.positions（column_x 由 L2-3 修正 26.5→{col_x}）"
-            rec["board_pads"] = anch.get(ref, {}).get("board_pads")
-            rec["status"] = "placed"
+            if ref in ("C73", "C86"):
+                rec["note"] = "L2-3 移位件（受审板 as-built 已落新位）"
         else:
             rec["at"] = None; rec["src"] = "无"; rec["status"] = "coord_pending"
-            rec["note"] = "P4 补件（真源有、交付板无）⇒ 坐标须新解（L2 自裁域：PDN/strap 就近）"
+            rec["note"] = "真源件在受审板上无实例 ⇒ 板/真源不一致，须具名上报"
         fpc, pads = footprint_pads(fp)
         rec["footprint_file"] = os.path.relpath(fpc, ROOT) if fpc else None
         rec["footprint_pads"] = len(pads)
         rec["footprint_pad_nums"] = sorted(p0["no"] for p0 in pads)
         if rec.get("at"):
+            _ba = [round(v, 3) for v in a["pad_aabb_board"]] if (a and a.get("pad_aabb_board")) else None
             if ref in ph.get("positions", {}):
-                # 排针列：交付板上 0 焊盘（F-1）⇒ 必须用**封装几何 + L2-3 位**（勿用板几何，否则静默跳过）
-                a, _ = placed_pad_aabb(fp, col_x, ph["positions"][ref][1], ph.get("rot", 90))
-                rec["pad_aabb"] = [round(v, 3) for v in a] if a else None
-                rec["geom_src"] = f"lib 封装几何 @(column_x={col_x}, y={ph['positions'][ref][1]}, rot={ph.get('rot', 90)})（板 0 焊盘）"
-                rec["note"] = f"L2-3 移位 dx={col_x - ph['positions'][ref][0]:+.2f}mm（column_x 26.5→{col_x}）"
-            elif ref in anch and anch[ref].get("pad_aabb_board"):
-                rec["pad_aabb"] = [round(v, 3) for v in anch[ref]["pad_aabb_board"]]
-                rec["geom_src"] = "board(as-built)"
+                # 排针列：板实 AABB 为主（P4 已补 16 pad）；lib 几何 @column_x 作交叉核对
+                _lga, _ = placed_pad_aabb(fp, col_x, ph["positions"][ref][1], ph.get("rot", 90))
+                rec["pad_aabb_lib_geom_at_column_x"] = [round(v, 3) for v in _lga] if _lga else None
+                rec["pad_aabb"] = _ba or rec["pad_aabb_lib_geom_at_column_x"]
+                rec["geom_src"] = "board(受审板 as-built 排针实焊盘)"
+                rec["geom_lib_crosscheck_match"] = (rec["pad_aabb"] == rec["pad_aabb_lib_geom_at_column_x"])
+                rec["note"] = (f"L2-3 守值 column_x={col_x}（SPEC rev-48 已对齐）；"
+                               f"板实 pad AABB == lib 几何 = {rec['geom_lib_crosscheck_match']}")
             else:
-                rec["pad_aabb"], _ = placed_pad_aabb(fp, rec["at"][0], rec["at"][1], rec.get("rot", 0))
-                rec["geom_src"] = "lib(未落件占位)"
+                rec["pad_aabb"] = _ba
+                rec["geom_src"] = "board(受审板 as-built)"
+                if _ba is None:
+                    rec["pad_aabb"], _ = placed_pad_aabb(fp, rec["at"][0], rec["at"][1], rec.get("rot", 0))
+                    rec["geom_src"] = "lib(板无 pad ⇒ 占位)"
         geo["devices"][ref] = rec
 
     # 判据 3：每器件 pad 数 == 符号引脚数（有向口径；**落位解消费后再重算一次，见 §3.2 修**）
@@ -415,16 +486,24 @@ def main():
     geo["criteria"]["C1_board_frame"] = {"size_mm": [W, H], "expect": L2["L2-1_board_frame"]["size_mm"],
                                          "y_range": [by0, by1],
                                          "pass": abs(W - 120) < 1e-6 and abs(H - 46) < 1e-6 and by0 == 33 and by1 == 79}
-    # 判据 2：固定孔
-    mh = L2["L2-2_mounting_holes"]; r = mh["drill_mm"] / 2.0
+    # 判据 2：固定孔（逐座标/边料 = SPEC rev-49 `mounting_holes` 输入层；D3/D4）
+    r = mh["drill_mm"] / 2.0
     ds = []
     for k, (hx, hy) in mh["positions"].items():
-        d_edge = min(hx - r - bx0, bx1 - (hx + r), hy - r - by0, by1 - (hy + r))
-        ds.append({"hole": k, "at": [hx, hy], "edge_material_mm": round(d_edge, 3)})
+        d_edge = round(min(hx - r - bx0, bx1 - (hx + r), hy - r - by0, by1 - (hy + r)), 3)
+        ds.append({"hole": k, "at": [hx, hy], "edge_material_mm": d_edge,
+                   "spec_edge_material": mh["spec_edge_material"][k],
+                   "spec_match": abs(d_edge - mh["spec_edge_material"][k]) < 1e-9,
+                   "spec_keepout_bbox": mh["spec_keepout_bbox"][k]})
     geo["criteria"]["C2_mounting_holes"] = {"count": len(mh["positions"]), "drill_mm": mh["drill_mm"],
                                             "min_edge_material_mm": min(x["edge_material_mm"] for x in ds),
                                             "expect_min_mm": mh["edge_material_min_mm"], "per_hole": ds,
-                                            "pass": len(mh["positions"]) >= 4 and min(x["edge_material_mm"] for x in ds) >= 1.5}
+                                            "spec_crosscheck_all_match": all(x["spec_match"] for x in ds),
+                                            "src": mh.get("basis"),
+                                            "note": "逐座标/边料/keepout bbox 由 SPEC rev-49 `mounting_holes` 输入层承载（D3/D4 归零）",
+                                            "pass": len(mh["positions"]) >= 4
+                                                    and min(x["edge_material_mm"] for x in ds) >= mh["edge_material_min_mm"]
+                                                    and all(x["spec_match"] for x in ds)}
 
     # 判据 4：接口焊盘不出框（内缩 0.3mm）
     inset = L2["L2-8_thresholds"]["in_frame_inset_mm"]
@@ -442,25 +521,25 @@ def main():
                                                "min_margin_mm": min(margins.values()) if margins else None,
                                                "min_margin_ref": min(margins, key=margins.get) if margins else None,
                                                "margins_mm": margins,
-                                               "note": "接口件 8 件；排针列按 lib 封装几何 @column_x=27.94（板 0 焊盘 ⇒ 不得用板几何）",
+                                               "note": "接口件 8 件；排针列 pad AABB = 受审板 as-built 实焊盘（与 lib 几何 @column_x=27.94 逐值交叉核对，见 devices[*].geom_lib_crosscheck_match）",
                                                "pass": (not viol) and len(measured) == 8}
 
-    # 判据 5：回避区（每区 ≥1 开关 ≠ allowed）
-    keep = [
-        {"id": "KO-1..4 mounting holes", "count": 4, "shape": f"circle Ø{mh['keepout_dia_mm']}",
-         "switches": {"pads": "blocked", "tracks": "blocked", "vias": "blocked", "copper_pour": "blocked", "footprints": "blocked"}},
-        {"id": "KO-5 escape_transition_zone", "count": 1, "shape": "per-pin escape window",
-         "switches": {"pads": "allowed", "tracks": "allowed(escape_clearance_mm=0.075)", "vias": "blocked",
-                      "copper_pour": "blocked", "footprints": "blocked"}},
-        {"id": "KO-6 ac_pad_gnd_cutout", "count": 1, "shape": "AC pad GND cut-out",
-         "switches": {"pads": "allowed", "tracks": "allowed", "vias": "allowed", "copper_pour": "blocked", "footprints": "allowed"}},
-        {"id": "KO-7 board edge", "count": 4, "shape": f"frame inset edge_copper_min={spec['constraints'].get('edge_copper_min')}mm",
-         "switches": {"pads": "allowed", "tracks": "blocked(<0.30mm)", "vias": "blocked(<0.30mm)",
-                      "copper_pour": "blocked(<0.30mm)", "footprints": "allowed"}},
-    ]
+    # 判据 5：回避区（D11）—— 枚举 = SPEC rev-49 `keepout_geometry.zones`（8 区）
+    #          + KO-7（板无独立实体 zone ⇒ 由 `edge_copper_min` 规则承载，具名登记）
+    keep = []
+    for _kz in kg_in["zones"]:
+        _xs = [float(p[0]) for p in _kz["pts"]]; _ys = [float(p[1]) for p in _kz["pts"]]
+        keep.append({"id": _kz["name"], "kind": "keepout_zone", "layers": _kz["layers"], "net": _kz["net"],
+                     "switches": _kz["keepout"], "vertex_count": len(_kz["pts"]),
+                     "bbox_mm": [round(min(_xs), 2), round(min(_ys), 2), round(max(_xs), 2), round(max(_ys), 2)],
+                     "src": "SPEC.keepout_geometry.zones（rev-49 输入层；来源＝受审板实测 + #K2-23 §二-4「以板为准」）"})
+    keep.append({"id": "KO-7 board edge", "kind": "rule_carried", "count": 4,
+                 "shape": f"frame inset edge_copper_min={spec['constraints'].get('edge_copper_min')}mm",
+                 "switches": {"pads": "allowed", "tracks": "blocked(<0.30mm)", "vias": "blocked(<0.30mm)",
+                              "copperpour": "blocked(<0.30mm)", "footprints": "allowed"},
+                 "src": "SPEC constraints.edge_copper_min（板**无**独立实体 zone ⇒ 由规则承载）",
+                 "disposition": kg_in.get("ko7_disposition")})
     geo["keepouts"] = keep
-    ok5 = all(any(v != "allowed" for v in k["switches"].values()) for k in keep)
-    geo["criteria"]["C5_keepout_switches"] = {"zones": len(keep), "each_has_non_allowed": ok5, "pass": ok5}
 
     # 判据 6：走廊口径统一
     cor = spec.get("corridors") or []
@@ -486,55 +565,92 @@ def main():
                                             "pass": not stale,
                                             "note": "L2-4 统一口径 = 『焊盘外接框净距』（西 17.55 / 东 27.81）。**canonical SPEC（rev-25 起）已回写** corridors[].note + x_range（L2-4 口径）= `corridors_clearance_basis_v24` 逐端点 basis；残留项（`bga_escape.per_ball.corridor_edge` 105.25/82.35 + `strap_domain_v32.open_for_coords[1]` 文本）已由 **IN-10 / rev-25** 落地。stale 扫描口径见 `stale_scan_scope`（#K2-18 §三-2）。"}
 
-    # ── 敷铜策略：13 zone 台账（交付板实测，只读）+ 出 Gerber 前置 ──────────
+    # ── 敷铜/keepout 台账：**受审板实测**（18 zone = 10 有网铜区 + 8 keepout）──────
+    # 口径 = #K2-21 §一（zone_filled 只计**有网非 keepout**）；板源 sha 见 baseline.board_sha16
     import pcbnew as _pk
-    _bb = _pk.LoadBoard(os.path.join(K2, "hw/k2_v4_8L.l4.kicad_pcb"))
-    zones = []
-    for i, z in enumerate(_bb.Zones()):
-        filled = 1 if (z.GetFilledPolysList(z.GetLayer()) and z.GetFilledPolysList(z.GetLayer()).OutlineCount() > 0) else 0
-        zb = z.GetBoundingBox()
-        zones.append({"idx": i, "net": z.GetNetname(), "layer": _bb.GetLayerName(z.GetLayer()), "filled": filled,
-                      "bbox_mm": [round(_pk.ToMM(zb.GetLeft()), 2), round(_pk.ToMM(zb.GetTop()), 2),
-                                  round(_pk.ToMM(zb.GetRight()), 2), round(_pk.ToMM(zb.GetBottom()), 2)]})
-    geo["pour_zones"] = {"count": len(zones), "filled_count": sum(z["filled"] for z in zones), "zones": zones,
-                         "gate": "出 Gerber 前置（审计 §10.5）：13 zone 全 filled_polygon>=1 且 net 非空",
+    _bb = _pk.LoadBoard(BOARD)
+
+    def _sw(z):
+        return {"tracks": "blocked" if z.GetDoNotAllowTracks() else "allowed",
+                "vias": "blocked" if z.GetDoNotAllowVias() else "allowed",
+                "pads": "blocked" if z.GetDoNotAllowPads() else "allowed",
+                "copperpour": "blocked" if z.GetDoNotAllowZoneFills() else "allowed",
+                "footprints": "blocked" if z.GetDoNotAllowFootprints() else "allowed"}
+
+    def _bbmm(z):
+        _b0 = z.GetBoundingBox()
+        return [round(_pk.ToMM(_b0.GetLeft()), 2), round(_pk.ToMM(_b0.GetTop()), 2),
+                round(_pk.ToMM(_b0.GetRight()), 2), round(_pk.ToMM(_b0.GetBottom()), 2)]
+
+    cu = []; ko_real = []
+    for _i, _z in enumerate(_bb.Zones()):
+        _rec = {"idx": _i, "name": (_z.GetZoneName() or None), "net": (_z.GetNetname() or None),
+                "layers": [_bb.GetLayerName(_l) for _l in _z.GetLayerSet().Seq()],
+                "rule_area": bool(_z.GetIsRuleArea()), "switches": _sw(_z), "bbox_mm": _bbmm(_z)}
+        if _rec["rule_area"]:          # 多层层 keepout 无填充多义线 ⇒ 不得询 GetFilledPolysList（KiCad 断言）
+            ko_real.append(_rec); continue
+        _fl = _z.GetFilledPolysList(_z.GetLayer())
+        _rec["filled"] = 1 if (_fl and _fl.OutlineCount() > 0) else 0
+        _rec["layer"] = _bb.GetLayerName(_z.GetLayer())
+        cu.append(_rec)
+    geo["pour_zones"] = {"count": len(cu), "filled_count": sum(z["filled"] for z in cu), "zones": cu,
+                         "total_zones": len(cu) + len(ko_real),
+                         "copper_zone_count": len(cu), "keepout_zone_count": len(ko_real),
+                         "nonesc_keepout_count": len(ko_real), "keepout_zones": ko_real,
+                         "gate": "出 Gerber 前置：**有网非 keepout** 铜区全 filled_polygon>=1 且 net 非空（#K2-21 §一 口径）",
                          "power_partition": (spec.get("pd") or {}).get("power_partition"),
                          "decoupling": (spec.get("pd") or {}).get("decoupling"),
                          "gnd_stitch_via": (spec.get("pd") or {}).get("gnd_stitch_via")}
-    # C7（#K2-16 §四 监理自纠 口径修正）：**9 个铜 zone**（net 非空）全填充；4 个无网 ESC_* keepout 排除（其义务见 P3-5）
-    cu = [z for z in zones if z["net"]]
-    nz = [z for z in zones if not z["net"]]
-    geo["pour_zones"]["copper_zone_count"] = len(cu)
-    geo["pour_zones"]["nonesc_keepout_count"] = len(nz)
+    # C7（口径 = 有网非 keepout 铜区；#K2-21 §一）：受审板 **10/10** 全填充（D8/D9 归零）
     geo["criteria"]["C7_pour_zones_filled"] = {
         "count": len(cu), "filled": sum(z["filled"] for z in cu),
-        "expect": f"{len(cu)}/{len(cu)} 铜区全 filled_polygon>=1 且 net 非空（P4 前置）",
-        "excluded_non_net_zones": [{"idx": z["idx"], "layer": z["layer"], "note": "ESC_* keepout（无网，按设计不得填充；义务见 P3-5）"} for z in nz],
+        "expect": f"{len(cu)}/{len(cu)} 有网铜区全 filled_polygon>=1 且 net 非空（P4 前置）",
+        "excluded_keepout_zones": [{"idx": z["idx"], "name": z["name"], "layers": z["layers"]} for z in ko_real],
         "pass": len(cu) > 0 and all(z["filled"] for z in cu),
-        "note": "口径 = 9 铜区（#K2-16 §四：原「13 区」含 4 个 ESC keepout ⇒ 自指不可达；监理自纠 2026-09-16）"}
-    # ── C5b（板侧，P4 施工项；#K2-17 §三 补正 2）：4 个无网 ESC_* rule area 的 5 开关实测 ──
-    esc_rows = []
-    for _z in _bb.Zones():
-        if _z.GetNetname():
+        "note": "口径 = 有网非 keepout 铜区（#K2-21 §一；keepout 排除）。随 Z4 整族刷新至受审板（D8/D9：13/0 → 10/10）"}
+
+    # ── 板实交叉核对（SPEC rev-49 输入层 ↔ 受审板 realized）+ C5（图侧每区 ≥1 非 allowed）──
+    _real = {r["name"]: r for r in ko_real if r["name"]}
+
+    def _norm(v):          # 声明件用 `allowed/not_allowed`；板侧 API 用 `allowed/blocked`
+        return "blocked" if str(v) in ("not_allowed", "blocked") else "allowed"
+
+    _xrows = []
+    for _k in keep:
+        if _k.get("kind") != "keepout_zone":
             continue
-        sw = {"tracks": "allowed" if not _z.GetDoNotAllowTracks() else "blocked",
-              "vias": "allowed" if not _z.GetDoNotAllowVias() else "blocked",
-              "pads": "allowed" if not _z.GetDoNotAllowPads() else "blocked",
-              "copperpour": "allowed" if not _z.GetDoNotAllowZoneFills() else "blocked",
-              "footprints": "allowed" if not _z.GetDoNotAllowFootprints() else "blocked"}
-        _zb = _z.GetBoundingBox()
-        esc_rows.append({"layer": _bb.GetLayerName(_z.GetLayer()),
-                         "bbox_mm": [round(_pk.ToMM(_zb.GetLeft()), 2), round(_pk.ToMM(_zb.GetTop()), 2),
-                                     round(_pk.ToMM(_zb.GetRight()), 2), round(_pk.ToMM(_zb.GetBottom()), 2)],
-                         "net": _z.GetNetname(), "switches": sw,
-                         "any_non_allowed": any(v != "allowed" for v in sw.values())})
-    geo["keepouts"] = geo.get("keepouts", [])
+        _rr = _real.get(_k["id"])
+        _sw_decl = {a: _norm(b) for a, b in _k["switches"].items()}
+        _sw_real = _rr["switches"] if _rr else {}
+        _diff = {a: {"declared": _sw_decl[a], "realized": _sw_real.get(a)} for a in _sw_decl
+                 if _sw_real.get(a) != _sw_decl[a]}
+        _xrows.append({"id": _k["id"], "realized": bool(_rr),
+                       "switches_match": bool(_rr) and not _diff, "switch_diff": _diff or None,
+                       "bbox_match": bool(_rr) and _rr["bbox_mm"] == _k["bbox_mm"],
+                       "declared_bbox_mm": _k["bbox_mm"], "realized_bbox_mm": _rr["bbox_mm"] if _rr else None})
+    geo["keepout_realized_crosscheck"] = {
+        "declared_keepout_zones": len([k for k in keep if k.get("kind") == "keepout_zone"]),
+        "realized_rule_areas": len(ko_real), "rows": _xrows,
+        "all_match": bool(_xrows) and all(r["realized"] and r["switches_match"] and r["bbox_match"] for r in _xrows)}
+    _ok5 = all(any(v != "allowed" for v in k["switches"].values()) for k in keep)
+    geo["criteria"]["C5_keepout_switches"] = {
+        "zones": len(keep),
+        "declared_keepout_zones": len([k for k in keep if k.get("kind") == "keepout_zone"]),
+        "rule_carried": [k["id"] for k in keep if k.get("kind") == "rule_carried"],
+        "each_has_non_allowed": _ok5,
+        "realized_crosscheck_all_match": geo["keepout_realized_crosscheck"]["all_match"],
+        "pass": _ok5}
+    # ── C5b（板侧，P4 施工项 IN-11）：ESC_* rule area（copperpour=not_allowed、其余 4 开关 allowed）──
+    _esc = [r for r in ko_real if r["switches"]["copperpour"] == "blocked"
+            and all(v == "allowed" for a, v in r["switches"].items() if a != "copperpour")]
     geo["criteria"]["C5b_board_side_esc_switches"] = {
-        "count": len(esc_rows), "zones_all_allowed": sum(1 for r in esc_rows if not r["any_non_allowed"]),
-        "rows": esc_rows,
-        "expect": "板侧每区 ≥1 非 allowed（图侧 KO-5..7 已满足；板侧为 P4 施工项）",
-        "pass": all(r["any_non_allowed"] for r in esc_rows) if esc_rows else None,
-        "note": "P3 门不因此项受阻（P3 = 出图）；登记 P4 施工项（#K2-17 §三 补正 2）"}
+        "count": len(_esc),
+        "zones_all_allowed": sum(1 for r in _esc if all(v == "allowed" for v in r["switches"].values())),
+        "rows": _esc,
+        "selection": "netless rule area 且 copperpour=not_allowed、其余 4 开关 allowed（受审板实测枚举）",
+        "expect": "板侧每区 ≥1 非 allowed（P4 施工项 IN-11）",
+        "pass": all(any(v != "allowed" for v in r["switches"].values()) for r in _esc) if _esc else None,
+        "note": "P4 施工项；枚举/开关随受审板刷新（D10：全 allowed → copperpour not_allowed）"}
 
     # ── 层分配：逐层角色 + 阻抗/线宽/参考（SPEC impedance.per_layer） ────────
     imp = spec.get("impedance") or {}
@@ -559,25 +675,31 @@ def main():
                     "note": c.get("note"), "bands": bands})
     geo["corridor_occupancy"] = {"corridors": cot, "clearance_basis": L2["L2-4_corridor_clearance"]}
 
-    # 附加机检 D1：L2-3 排针列位移后的干涉（封装几何 @column_x=27.94；板 0 焊盘 ⇒ 必须用 lib 几何）
+    # 附加机检 D1：L2-3 排针列位移后的干涉（封装几何 @column_x=27.94；受审板 as-built 交叉核对）
     import pcbnew as _pc
-    _b = _pc.LoadBoard(os.path.join(K2, "hw/k2_v4_8L.kicad_pcb"))
-    obst = []; obst_old = []
-    for ft in _b.GetFootprints():
-        ref0 = ft.GetReference()
-        if ref0 in ("J6", "J9", "J11", "J12", "J13"):
-            continue
-        for pad0 in ft.Pads():
-            bb0 = pad0.GetBoundingBox()
-            row = [ref0 + "." + pad0.GetNumber(), _pc.ToMM(bb0.GetLeft()), _pc.ToMM(bb0.GetTop()),
-                   _pc.ToMM(bb0.GetRight()), _pc.ToMM(bb0.GetBottom())]
-            if ref0 in ("C73", "C86"):
-                obst_old.append(row)      # 旧位（L2-3 位移前）——用于复现「为何必须移」
-            else:
-                obst.append(row)
-    for r0, dd0 in geo["devices"].items():
-        if dd0.get("status") == "placed_solved_L2" and dd0.get("pad_aabb"):
-            obst.append([r0, *dd0["pad_aabb"]])
+    _b = _pc.LoadBoard(BOARD)                  # 障碍集 = 受审板 as-built
+    _bh = _pc.LoadBoard(BOARD_HISTORICAL)      # 「位移前」历史证据（C73/C86 旧位；只读）
+
+    def _obs(board, hist):
+        rows = []
+        for ft in board.GetFootprints():
+            r0 = ft.GetReference()
+            if hist and r0 not in ("C73", "C86"):
+                continue
+            if (not hist) and r0 in ("J6", "J9", "J11", "J12", "J13", "C73", "C86"):
+                continue
+            for pad0 in ft.Pads():
+                b0 = pad0.GetBoundingBox()
+                rows.append([r0 + "." + pad0.GetNumber(), _pc.ToMM(b0.GetLeft()), _pc.ToMM(b0.GetTop()),
+                             _pc.ToMM(b0.GetRight()), _pc.ToMM(b0.GetBottom())])
+        return rows
+
+    obst = _obs(_b, False)          # 受审板 as-built（排针列/C73/C86 排除）
+    obst_old = _obs(_bh, True)      # 设计源板 C73/C86 旧位（历史证据）
+    _bfp = {f.GetReference(): f for f in _b.GetFootprints()}
+    _hdr_x = {r: {"board_numbered": len([p for p in _bfp[r].Pads() if p.GetNumber().strip()]),
+                  "lib_numbered": geo["devices"][r]["footprint_pads"]}
+              for r in ("J6", "J9", "J11", "J12", "J13") if r in _bfp}
 
     def _ov(a0, b0, clr0):
         return not (a0[2] + clr0 <= b0[0] or b0[2] + clr0 <= a0[0] or a0[3] + clr0 <= b0[1] or b0[3] + clr0 <= a0[1])
@@ -595,10 +717,17 @@ def main():
             for o0 in obst_old:
                 if _ov(pa0, o0[1:5], 0.2):
                     d1_before.append({"header": ref0, "pad": p0["no"], "conflict": o0[0]})
-    geo["criteria"]["D1_pinheader_interference"] = {"column_x": col_x, "clearance_mm": 0.2,
-                                                    "conflicts_after_move": d1, "conflicts_before_move": d1_before,
-                                                    "pass": not d1,
-                                                    "note": "L2-3 位移复检（封装几何 @27.94）。before = 含 C73/C86 **旧位** ⇒ 复现 L2-3「仅 C73/C86 相撞」的依据；after = C73/C86 新解位 ⇒ 应无冲突"}
+    geo["criteria"]["D1_pinheader_interference"] = {
+        "column_x": col_x, "clearance_mm": 0.2,
+        "conflicts_after_move": d1, "conflicts_before_move": d1_before,
+        "obstacle_src": {"board": os.path.relpath(BOARD, ROOT), "board_sha16": board_sha},
+        "before_src": {"board": os.path.relpath(BOARD_HISTORICAL, ROOT), "board_sha16": sha16(BOARD_HISTORICAL),
+                       "note": "设计源板 = 位移前旧位（只读历史证据，非真值源）"},
+        "header_pad_crosscheck": _hdr_x,
+        "header_pad_crosscheck_all_match": all(v["board_numbered"] == v["lib_numbered"] for v in _hdr_x.values()),
+        "pass": not d1,
+        "note": "L2-3 位移复检（封装几何 @27.94）。before = C73/C86 **旧位**（设计源板）⇒ 复现「仅 C73/C86 相撞」；"
+                "after = 受审板 as-built ⇒ 应无冲突。排针 pad 数：板实 ↔ 库带号逐件一致"}
     # 层分配 / 敷铜
     geo["layer_plan"] = {"stackup_layers": list(spec.get("stackup", {}).get("layers", {}).keys())
                          if isinstance(spec.get("stackup", {}).get("layers"), dict) else None,
@@ -610,35 +739,27 @@ def main():
                    "gnd_stitch_via": (spec.get("pd") or {}).get("gnd_stitch_via"),
                    "L2_residual": L2["L2-4_corridor_clearance"], "basis_sha16": L2["basis_sha16"]}
 
-    # ── 消费落位解（若存在）：G1 13 件 + G2 C73/C86 ────────────────────────
+    # ── 落位解（只作溯源/约束；**不覆写坐标** —— 坐标权威 = 受审板 as-built）───────
     solp = os.path.join(os.environ.get("K2_P3_SOL_IN", OUT), "p3_placement_solution.json")
     if os.path.isfile(solp):
         sol = json.load(open(solp, encoding="utf-8"))
+        drift = []
         for ref, s in (sol.get("placed") or {}).items():
             d = geo["devices"].get(ref)
-            if not d:
+            if not d or not d.get("at"):
                 continue
-            d["at"] = s["at"]; d["pad_aabb"] = s["aabb"]
-            d["footprint"] = s.get("footprint", d.get("footprint"))
-            d["status"] = "placed_solved_L2"
-            d["geom_src"] = "L2 自裁解（k2_p3_place_solver_v1.py）"
-            d["basis"] = s.get("basis")
+            if [round(v, 3) for v in s["at"]] != [round(v, 3) for v in d["at"]]:
+                drift.append({"ref": ref, "solution_at": s["at"], "board_at": d["at"]})
+            d["solution_at"] = s["at"]; d["solution_basis"] = s.get("basis")
             if s.get("ball"):
                 d["ball"] = s["ball"]; d["ball_board_pos"] = s["ball_board_pos"]
-        geo["placement_solution"] = {"file": "p3_placement_solution.json",
+        geo["placement_solution"] = {"file": "p3_placement_solution.json", "sha16": sha16(solp),
+                                     "authority": "坐标权威 = 受审板 as-built；本解只留约束/来源（不覆写 at）",
                                      "solved": sol.get("solved_count"), "all_pass": sol.get("all_pass"),
-                                     "selfcheck": sol.get("selfcheck"),
-                                     "constraints": sol.get("constraints"),
+                                     "selfcheck": sol.get("selfcheck"), "constraints": sol.get("constraints"),
                                      "strap_zone": sol.get("strap_zone"), "decap_keepout": sol.get("decap_keepout"),
-                                     "strap_footprint_spec": sol.get("strap_footprint_spec")}
-        # §3.2 修：用新解件封装**重算设备表 + 重算 C3**（此前只改 d 不重算 c3 ⇒ 测量不自洽）
-        for ref, s in (sol.get("placed") or {}).items():
-            d = geo["devices"][ref]
-            fpc2, pads2 = footprint_pads(d["footprint"])
-            d["footprint_file"] = os.path.relpath(fpc2, ROOT) if fpc2 else None
-            d["footprint_pads"] = len(pads2)
-            d["footprint_pad_nums"] = sorted(p0["no"] for p0 in pads2)
-        geo["criteria"]["C3_pad_eq_symbol_pins"] = c3_measure(geo["devices"], E2_REG)
+                                     "strap_footprint_spec": sol.get("strap_footprint_spec"),
+                                     "solution_vs_board_drift": drift}
 
     # ── 回避区几何（机定，全部可溯源） ────────────────────────────────────
     edge_min = spec["constraints"].get("edge_copper_min")
@@ -654,7 +775,11 @@ def main():
                         "corridor_y_clearance_from_wall_mm": esc.get("corridor_y_clearance_from_wall_mm"),
                         "pitch_mm": esc.get("pitch_mm"), "no_90deg": esc.get("no_90deg"), "no_via": esc.get("no_via"),
                         "basis": "SPEC constraints.escape_transition_zone（图面只标规则与数值；逐 pin 窗口见 L1/structural_predict.md）"},
-        "ac_pad_gnd_cutout": spec["constraints"].get("ac_pad_gnd_cutout")}
+        "ac_pad_gnd_cutout": spec["constraints"].get("ac_pad_gnd_cutout"),
+        "declared_keepout_zones": len(kg_in["zones"]),
+        "realized_rule_areas": geo["pour_zones"]["keepout_zone_count"],
+        "realized_crosscheck_all_match": geo["keepout_realized_crosscheck"]["all_match"],
+        "ko7_disposition": kg_in.get("ko7_disposition")}
 
     # ── 出图 ───────────────────────────────────────────────────────────────
     ox, oy = bx0, by0
@@ -664,7 +789,7 @@ def main():
 
     # 01 板框 + 固定孔
     with open(os.path.join(OUT, "01_board_frame_and_holes.svg"), "w") as f:
-        f.write(svg_open(f"P3-01 板框 120x46 + 固定孔 (L2-1/L2-2) | SPEC {geo['spec']['name']}", W, H, ox, oy)[0])
+        f.write(svg_open(f"P4-01 板框 120x46 + 固定孔 (L2-1 + SPEC mounting_holes) | SPEC {geo['spec']['name']} | 受审板 {geo['board_sha16']}", W, H, ox, oy)[0])
         frame(f)
         for k, (hx, hy) in mh["positions"].items():
             cx, cy = P(hx, hy, ox, oy)
@@ -676,7 +801,7 @@ def main():
 
     # 02 器件坐标
     with open(os.path.join(OUT, "02_device_coordinates.svg"), "w") as f:
-        f.write(svg_open("P3-02 器件坐标（55 真源件全定位：40 锚点/SPEC+L2-3 + 15 L2 落位解）", W, H, ox, oy)[0])
+        f.write(svg_open("P4-02 器件坐标（55 真源件全定位；坐标 = 受审板 as-built，排针列与 lib 几何 @column_x 交叉核对）", W, H, ox, oy)[0])
         frame(f)
         for ref, d in sorted(geo["devices"].items()):
             if d.get("at"):
@@ -688,7 +813,7 @@ def main():
                 txt(f, cx, cy - 6, ref, "#3fb950", 8)
             else:
                 txt(f, 12, 28 + 12 * sorted(geo["devices"]).index(ref) % 600, f"{ref}(无坐标)", "#d29922", 8)
-        txt(f, 10, H * SCALE - 10, "green=已定位 55/55（40 锚点/SPEC+L2-3 + 15 L2 落位解）", "#8b949e")
+        txt(f, 10, H * SCALE - 10, f"green=已定位 {sum(1 for d in geo['devices'].values() if d.get('at'))}/55（受审板 as-built；排针 lib 交叉核对={sum(1 for d in geo['devices'].values() if d.get('geom_lib_crosscheck_match'))}/5）", "#8b949e")
         svg_close(f)
 
     # 03 走廊占用
@@ -745,7 +870,7 @@ def main():
         f.write(svg_open("P3-05 敷铜策略（L2-5；GND In1/In3/In6 + 电源 In4）", 120, 46, ox, oy)[0])
         pzs = geo.get("pour_zones") or {}
         colors = {"GND": "#3fb950", "P3V3": "#58a6ff", "MCU_VDD": "#d29922", "P3V3_AUX": "#bc8cff", "12V_IN": "#f85149", "": "#8b949e"}
-        txt(f, 10, 20, f"zone 台账 铜 {sum(z['filled'] for z in pzs.get('zones',[]) if z['net'])}/{pzs.get('copper_zone_count')} 已填充 + {pzs.get('nonesc_keepout_count')} ESC keepout（排除）| P4 前置：9 铜区全 filled 且 net 非空", "#f0883e", 8)
+        txt(f, 10, 20, f"zone 台账 有网铜区 {pzs.get('filled_count')}/{pzs.get('copper_zone_count')} 已填充 + {pzs.get('keepout_zone_count')} keepout（排除）| 口径=#K2-21 §一 | 板 {geo['board_sha16']}", "#f0883e", 8)
         yy = 34
         for z in pzs.get("zones", []):
             bbz = z["bbox_mm"]; p0 = P(bbz[0], bbz[1], ox, oy); p1 = P(bbz[2], bbz[3], ox, oy)
@@ -774,10 +899,18 @@ def main():
             txt(f, p0[0], p0[1] - 4, f"U6 pad 场（逃逸区规则：净距 {kg['escape_zone']['clearance_mm']}mm / 无 90° / 无 via）", "#f85149", 7)
         for k, (hx, hy) in mh["positions"].items():
             cx, cy = P(hx, hy, ox, oy); circ(f, cx, cy, mh["keepout_dia_mm"] / 2 * SCALE, "#f0883e", dash="3 3")
+        for k in keep:
+            if k.get("kind") != "keepout_zone" or not k.get("bbox_mm"):
+                continue
+            _b0 = k["bbox_mm"]; _p0 = P(_b0[0], _b0[1], ox, oy); _p1 = P(_b0[2], _b0[3], ox, oy)
+            _col = "#bc8cff" if k["switches"].get("copperpour") == "blocked" and \
+                all(v == "allowed" for a, v in k["switches"].items() if a != "copperpour") else "#f0883e"
+            rect(f, _p0[0], _p0[1], _p1[0], _p1[1], _col, width=0.9, dash="4 2")
+            txt(f, _p0[0], _p0[1] - 4, k["id"], _col, 7)
         yy = 34
         for k in keep:
             txt(f, 10, yy, f"{k['id']}: " + ", ".join(f"{a}={b}" for a, b in k["switches"].items()), "#f0883e", 7); yy += 10
-        txt(f, 10, yy + 6, f"板边铜 {kg.get('edge_copper_min_mm')}mm（黄框）· 去耦柱 keepout（紫框）= SPEC strap_domain 已裁 · AC pad GND cutout={kg.get('ac_pad_gnd_cutout')}", "#8b949e", 7)
+        txt(f, 10, yy + 6, f"declared keepout={kg.get('declared_keepout_zones')} ↔ realized rule area={kg.get('realized_rule_areas')} · 交叉核对全一致={kg.get('realized_crosscheck_all_match')} | 板边铜 {kg.get('edge_copper_min_mm')}mm（黄框；板无独立 zone ⇒ 规则承载）· AC cutout={kg.get('ac_pad_gnd_cutout')}", "#8b949e", 7)
         svg_close(f)
 
     # 07 接口焊盘出框检查
@@ -800,5 +933,32 @@ def main():
     for k, v in geo["criteria"].items():
         print(f"  {k}: pass={v.get('pass')} " + json.dumps({kk: vv for kk, vv in v.items() if kk not in ('pass',)}, ensure_ascii=False)[:220])
 
-if __name__ == "__main__":
+def _cli():
+    import argparse, shutil, time
+    ap = argparse.ArgumentParser(description="K2 施工图纸生成器（P4 基线 v10；默认沙箱 dry-run）")
+    ap.add_argument("--apply", action="store_true", help="落盘（写仓库须同时 --confirm-repo-write）")
+    ap.add_argument("--confirm-repo-write", action="store_true", help="确认写仓库目录（T-41）")
+    ap.add_argument("--board", default=None, help="覆盖受审板路径（默认 k2/hw/k2_v4_8L.l5.kicad_pcb）")
+    a = ap.parse_args()
+    global BOARD
+    if a.board:
+        BOARD = os.path.abspath(a.board)
+    out_abs = os.path.abspath(OUT)
+    if out_abs == os.path.abspath(REPO_DRAWINGS) and not (a.apply and a.confirm_repo_write):
+        print("BLOCKED(T-41)：OUT 指向仓库图集目录；须 --apply --confirm-repo-write，"
+              "或设 K2_P3_OUT 到沙箱目录。")
+        raise SystemExit(2)
+    if a.apply and a.confirm_repo_write and os.path.isdir(out_abs):
+        ts = time.strftime("%Y%m%dT%H%M%S")
+        bk = f"/tmp/opencode/backup-drawings-{ts}"
+        os.makedirs(bk, exist_ok=True)
+        for fn in sorted(os.listdir(out_abs)):
+            fp = os.path.join(out_abs, fn)
+            if os.path.isfile(fp):
+                shutil.copy2(fp, os.path.join(bk, fn))
+                print(f"[T-22] 备份 {fn} sha16={sha16(fp)} -> {bk}/{fn}")
     main()
+
+
+if __name__ == "__main__":
+    _cli()
