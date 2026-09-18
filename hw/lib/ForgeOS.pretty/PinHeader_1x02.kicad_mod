@@ -2,11 +2,10 @@
 	(version 20260206)
 	(generator "pcbnew")
 	(generator_version "10.0")
-	(layer "B.Cu")
+	(layer "F.Cu")
 	(property "Reference" "REF**"
-		(at 0 -2 0)
-		(layer "B.SilkS")
-		(uuid "a1d37bbd-ef7b-44c3-93a0-e2f366a961a4")
+		(at 0 0 0)
+		(layer "F.SilkS")
 		(effects
 			(font
 				(size 1 1)
@@ -15,9 +14,8 @@
 		)
 	)
 	(property "Value" "PinHeader_1x02"
-		(at 0 2 0)
-		(layer "B.Fab")
-		(uuid "b3a953be-e1bc-4c56-b8d2-604d54f896ae")
+		(at 0 0 0)
+		(layer "F.Fab")
 		(effects
 			(font
 				(size 1 1)
@@ -25,45 +23,51 @@
 			)
 		)
 	)
-	(property "Datasheet" ""
-		(at 0 0 0)
-		(layer "F.Fab")
+			(property "Datasheet" ""
+		(at 0 0 180)
+		(layer "B.Fab")
 		(hide yes)
-		(uuid "b2d154a4-62e1-4b69-8394-5599f0afa5be")
+		(uuid "55a44818-9e4f-4560-86ed-a357b07f61f1")
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
+			(justify mirror)
 		)
 	)
 	(property "Description" ""
-		(at 0 0 0)
-		(layer "F.Fab")
+		(at 0 0 180)
+		(layer "B.Fab")
 		(hide yes)
-		(uuid "474ce85f-44e9-41c5-81c0-318471668a59")
+		(uuid "f1f51e6d-1fca-47d7-a323-9b8a0ba80840")
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
+			(justify mirror)
 		)
 	)
 	(attr through_hole)
 	(duplicate_pad_numbers_are_jumpers no)
 	(pad "1" thru_hole circle
-		(at 0 -1.27)
-		(size 1.5 1.5)
-		(drill 0.8)
-		(layers "*.Cu" "*.Mask")
-		(remove_unused_layers no)
-		(uuid "4e9bd5bc-fb77-49d9-a3f8-dbdb3e2d66ca")
-	)
-	(pad "2" thru_hole circle
 		(at 0 1.27)
 		(size 1.5 1.5)
 		(drill 0.8)
-		(layers "*.Cu" "*.Mask")
+		(layers "*.Mask" "F.Cu" "B.Cu" "In1.Cu" "In2.Cu" "In3.Cu" "In4.Cu" "In5.Cu"
+			"In6.Cu"
+		)
 		(remove_unused_layers no)
-		(uuid "6c4e0f6c-f930-433a-8528-7e037f288fbf")
+		(uuid "2e96012b-6a2a-574a-8fc2-0565d79822bd")
+	)
+	(pad "2" thru_hole circle
+		(at 0 -1.27)
+		(size 1.5 1.5)
+		(drill 0.8)
+		(layers "*.Mask" "F.Cu" "B.Cu" "In1.Cu" "In2.Cu" "In3.Cu" "In4.Cu" "In5.Cu"
+			"In6.Cu"
+		)
+		(remove_unused_layers no)
+		(uuid "dea79750-d709-5423-af45-8c018fe78a82")
 	)
 	(embedded_fonts no)
 )

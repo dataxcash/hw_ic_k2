@@ -13,7 +13,10 @@ PCIe Gen4 转换卡卡2-K2 权威生成器。取代旧多脚本拼接
                                         [G-ROOT-3] 配置驱动，禁 symlink 兜底
   pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json — 几何权威 (板框/走廊/电容墙/components)
   pm_gate/artifacts/k2_v4/L2/frozen/L2_STRUCTURE_v1.0.md — 冻结决策 (ECN-004)
-  k2_v4.kicad_pcb                    — 坐标锚点 (只读提取已验证器件坐标与 pad 几何)
+  hw/lib/ForgeOS.refmap.json         — 库快照↔板 ref 名集 + 坐标锚点（⑦ #K2-26 §3-1）
+  hw/lib/ForgeOS.pretty/<mod>.kicad_mod — pad 几何**唯一来源**（具名外部源；G-ROOT-1）
+                                        [G-ROOT-1] ref 清单取自**真源 YAML**；pad 几何取自**库快照**
+                                        ⇒ 生成器**零板依赖**（#K2-26 §3-2③）
 
 输出:
   K2_OUT_PCB 环境变量指定 (默认 /tmp/opencode/boards/k2_v5.kicad_pcb)
@@ -51,7 +54,10 @@ if not _NETS_REL:
 YAML_PATH = os.path.join(ROOT, _NETS_REL)
 if not os.path.isfile(YAML_PATH):
     raise SystemExit("[G-ROOT-3] 真源网表不存在: %s ⇒ fail-closed" % YAML_PATH)
-PCB_REF_PATH = os.path.join(ROOT, "k2_v4.kicad_pcb")
+# G-ROOT-1（#K2-26 §3-2③）：**不读任何板** —— ref 清单取自真源 YAML，pad 几何取自库快照 mod，
+# 坐标取自 refmap 冻结锚点。原 `PCB_REF_PATH`（锚板）已整体移除。
+LIB_DIR = os.path.join(ROOT, "hw/lib/ForgeOS.pretty")
+REFMAP_PATH = os.path.join(ROOT, "hw/lib/ForgeOS.refmap.json")
 # 输出路径可经 K2_OUT_PCB / K2_OUT_JSON 环境变量覆盖（默认 v5 路径，
 # 行为零变化）；M13 v8 板重建经覆盖产出 k2_v6，保留 v5 证据不覆盖。
 OUT_PCB = os.environ.get("K2_OUT_PCB", "/tmp/opencode/boards/k2_v5.kicad_pcb")
@@ -64,19 +70,17 @@ BOARD = {"x": [23.0, 143.0], "y": [33.0, 79.0]}   # G1(§五②): 板框 46mm [3
 # 与旧产物 k2_v4.kicad_pcb 的 80 个已验证器件 + 21 个补齐器件一一对应 (共 101)。
 # U7 为上行 ReDriver (YAML 语义), 产物旧命名 "U3"@(93.825,44.7)。
 # ─────────────────────────────────────────────────────────────────────────
-# G3(§五③): K2 refdes 集由真源板导出（禁字面表；单颗 U6）
+# G-ROOT-1（#K2-26 §3-2①）: ref 清单取自**真源 YAML sheets placements**（禁取锚板）
 def _derive_k2_refs_from_true_source(path: str):
-    import re as _re
-    txt = open(path, encoding="utf-8").read()
-    refs = set(_re.findall(r'\(fp_text reference "([A-Z]+\d+)"', txt))
+    spec = yaml.safe_load(open(path, encoding="utf-8"))
+    refs = {pl["ref"] for sh in spec.get("sheets", [])
+            for pl in sh.get("placements", [])}
     if not refs:
-        refs = set(_re.findall(r'\(property "Reference" "([A-Z]+\d+)"', txt))
-    if not refs:
-        raise ValueError(f"[G3] 真源板 {path} 未解析到任何 refdes")
+        raise ValueError(f"[G-ROOT-1] 真源 {path} 未解析到任何 refdes")
     return refs
 
 
-K2_REFS = sorted(_derive_k2_refs_from_true_source(PCB_REF_PATH))
+K2_REFS = sorted(_derive_k2_refs_from_true_source(YAML_PATH))
 K2_REFS_SET = set(K2_REFS)
 
 # K1 DNP / 不生成 (MUST DO #2)
@@ -85,15 +89,14 @@ K1_DNP = {"U6", "J1", "J7", "J10", "U8", "U9", "U10", "E1", "R16", "R30",
 
 # ─────────────────────────────────────────────────────────────────────────
 # E4 判据（§五⑥ + #K2-13 O2 口径登记）
-#   本阶段：产物 refs == 42（对齐真源板）+ 边框 46mm [33,79] + 两次连跑 sha 相同
-#   final_target: 55 @P4 —— 差 13 = D2, L1, R35–R39, R40, R41, R42–R45（板侧补件）
-#   ⚠ 42 == 42 只是「本阶段对齐真源板」，**不得读成终局合格**
+#   P2 起：产物 refs == **真源 YAML 54**（#K2-26 §3-2②）+ 边框 46mm [33,79]
+#   + 两次连跑 sha 相同。**不得**把「refs 相等」读成终局合格（pad 几何仍须对账）。
 # ─────────────────────────────────────────────────────────────────────────
-E4_STAGE_REFS = 42
-E4_FINAL_TARGET_REFS = 55   # @P4
+E4_STAGE_REFS = 54          # = 真源 YAML placements（#K2-24 ⑤ 执行后 55→54）
+E4_FINAL_TARGET_REFS = 54   # @P4
 
 # ECN-004 补齐器件 (MUST DO #4/#5)
-MISSING_REFS = []   # G3 附带：K2_REFS 现由真源板导出，无「补齐」概念
+MISSING_REFS = []   # G-ROOT-1 附带：K2_REFS 取自真源 YAML，无「补齐」概念
 
 # ─────────────────────────────────────────────────────────────────────────
 # 补齐器件新定位 (ECN-004 规则, 从冻结决策落表; 已在板内空隙验证 0 重叠)
@@ -133,16 +136,70 @@ NEW_PLACE = {
     "R34": (55.5, 69.5, 0.0),
 }
 
-# 产物旧 refdes → YAML 语义 refdes (ECN-004 修正)
-OLD_REF_MAP = {}   # G4(§五③): 双颗命名重映射已移除（单颗下 U6 不得被改名）
+def _scan_block(text: str, i: int) -> int:
+    """i 指向 '('；返回配平括号之后的下标（exclusive）。"""
+    depth, instr, j = 1, False, i + 1
+    while j < len(text) and depth > 0:
+        c = text[j]
+        if instr:
+            if c == "\\":
+                j += 2
+                continue
+            if c == '"':
+                instr = False
+        else:
+            if c == '"':
+                instr = True
+            elif c == "(":
+                depth += 1
+            elif c == ")":
+                depth -= 1
+        j += 1
+    return j
 
-# ─────────────────────────────────────────────────────────────────────────
-# 小封装 pad 几何 (0402/0603/0805 — 产物 MLCC/RES 已验几何; 0805 按同比例)
-# pad1 = A (驱动侧), pad2 = B (接收侧)
-# ─────────────────────────────────────────────────────────────────────────
-G_0402 = {"1": (-0.35, 0.0, 0.4, 0.5), "2": (0.35, 0.0, 0.4, 0.5)}
-G_0603 = {"1": (-0.45, 0.0, 0.6, 0.7), "2": (0.45, 0.0, 0.6, 0.7)}
-G_0805 = {"1": (-0.60, 0.0, 0.8, 0.9), "2": (0.60, 0.0, 0.8, 0.9)}
+
+def load_refmap():
+    """⑦ 库↔板名集 + 坐标锚点（#K2-26 §3-1）。失败即 fail-closed（禁隐式兜底）。"""
+    if not os.path.isfile(REFMAP_PATH):
+        raise SystemExit("[G-ROOT-1] 库↔板名集不存在: %s ⇒ fail-closed" % REFMAP_PATH)
+    d = json.load(open(REFMAP_PATH, encoding="utf-8"))
+    return d["ref_to_mod"], {k: tuple(v) for k, v in d["placement_anchor"].items()}
+
+
+def load_mod_pads(mod_name: str):
+    """pad 几何**唯一来源**：hw/lib/ForgeOS.pretty/<mod>.kicad_mod。
+
+    仅取**带号** pad（无号 F.Paste 阵列 = 非电气性；带号口径见 D 待裁登记）。
+    """
+    path = os.path.join(LIB_DIR, mod_name + ".kicad_mod")
+    if not os.path.isfile(path):
+        raise SystemExit("[G-ROOT-1] 库件缺失: %s ⇒ fail-closed" % path)
+    txt = open(path, encoding="utf-8").read()
+    pads = {}
+    for m in re.finditer(r'\(pad\s+"([^"]*)"', txt):
+        num = m.group(1)
+        if num == "":
+            continue
+        blk = txt[m.start():_scan_block(txt, m.start())]
+        mt = re.search(r'\(pad\s+"[^"]*"\s+(\w+)\s+(\w+)\s+'
+                       r'\(at\s+([-\d.]+)\s+([-\d.]+)(?:\s+([-\d.]+))?\)\s+'
+                       r'\(size\s+([-\d.]+)\s+([-\d.]+)\)', blk)
+        if not mt:
+            raise ValueError("[G-ROOT-1] 库件 %s pad %r 解析失败" % (mod_name, num))
+        md = re.search(r"\(drill\s+([-\d.]+)", blk)
+        ml = re.search(r"\(layers\s+([^)]*)\)", blk)
+        mrr = re.search(r"\(roundrect_rratio\s+([-\d.]+)\)", blk)
+        pads[num] = {
+            "type": mt.group(1), "shape": mt.group(2),
+            "at": (float(mt.group(3)), float(mt.group(4))),
+            "size": (float(mt.group(6)), float(mt.group(7))),
+            "drill": float(md.group(1)) if md else None,
+            "layers": ml.group(1).strip(),
+            "rratio": float(mrr.group(1)) if mrr else None,
+        }
+    if not pads:
+        raise ValueError("[G-ROOT-1] 库件 %s 无带号 pad" % mod_name)
+    return pads
 
 
 # ─────────────────────────────────────────────────────────────────────────
@@ -183,111 +240,25 @@ def _strip_card_suffix(value):
     return re.sub(r"_C[12]_(SMT|DNP)", "", value)
 
 
-def parse_ref_pcb():
-    """从产物 k2_v4.kicad_pcb 提取 {ref: (x, y, rot, fp_name, pads)}.
-
-    pads: {pad_num: {type, shape, at:(x,y), size:(w,h), drill, layers}}
-    仅取几何信息; net 一律由 YAML 网表权威重新推导。
-    """
-    src = open(PCB_REF_PATH).read()
-    # 产物文件由增量拼接产生, 部分 footprint 块嵌套在其它块内
-    # (J3/J4/MCIO 与 U3/U4/DS160PR810 缩进异常)。用平衡括号从每个
-    # `(footprint "NAME"` 处完整提取 s-expr, 与嵌套位置无关。
-    blocks = []
-    for m in re.finditer(r'\(footprint\s+"[^"]+"', src):
-        start = m.start()
-        depth = 0
-        i = start
-        in_str = False
-        while i < len(src):
-            c = src[i]
-            if c == '"':
-                in_str = not in_str
-            elif not in_str:
-                if c == "(":
-                    depth += 1
-                elif c == ")":
-                    depth -= 1
-                    if depth == 0:
-                        break
-            i += 1
-        blocks.append(src[start:i + 1])
-    anchors = {}
-    for blk in blocks:
-        mref = re.search(r'\(property\s+"Reference"\s+"([^"]+)"', blk)
-        if not mref:
-            continue
-        ref = mref.group(1)
-        mat = re.search(r"\(at\s+([-\d.]+)\s+([-\d.]+)(?:\s+([-\d.]+))?\)", blk)
-        if not mat:
-            continue
-        x, y = float(mat.group(1)), float(mat.group(2))
-        rot = float(mat.group(3)) if mat.group(3) else 0.0
-        mfp = re.search(r'\(footprint\s+"([^"]+)"', blk)
-        pads = {}
-        for pm in re.finditer(
-            r'\(pad\s+"([^"]+)"\s+(\w+)\s+(\w+)\s+'
-            r'\(at\s+([-\d.]+)\s+([-\d.]+)\)\s+'
-            r'\(size\s+([-\d.]+)\s+([-\d.]+)\)'
-            r'(?:\s+\(drill\s+([-\d.]+)\))?\s+'
-            r'\(layers\s+([^)]+)\)\s+\(net\s+"([^"]+)"\)',
-            blk, re.S):
-            pads[pm.group(1)] = {
-                "type": pm.group(2), "shape": pm.group(3),
-                "at": (float(pm.group(4)), float(pm.group(5))),
-                "size": (float(pm.group(6)), float(pm.group(7))),
-                "drill": float(pm.group(8)) if pm.group(8) else None,
-                "layers": pm.group(9),
-            }
-        anchors[ref] = {
-            "at": (x, y, rot),
-            "fp": mfp.group(1) if mfp else "?",
-            "pads": pads,
-        }
-    return anchors
-
-
 # ─────────────────────────────────────────────────────────────────────────
 # refdes → symbol / footprint / value / 位置 / pad 几何
 # ─────────────────────────────────────────────────────────────────────────
-def build_device_table(symbols, placements, ref_anchors):
-    """构造每个 K2 器件的完整定义. 所有坐标来自冻结输入, 零运行时决策."""
+def build_device_table(symbols, placements, ref_pos, ref_mod):
+    """构造每个 K2 器件的完整定义.
+
+    坐标 = refmap 冻结锚点（P2 阶段；P3 改真源构造）
+    pad 几何 = 库快照 mod（G-ROOT-1 具名外部源）
+    """
     dev = {}
     for ref in K2_REFS:
         pl = placements[ref]
         sym = symbols[pl["symbol"]]
-        # ── 位置: 产物锚点优先 (已验证坐标), 缺失器件用 ECN-004 新定位 ──
-        old_ref = None
-        for k, v in OLD_REF_MAP.items():
-            if v == ref:
-                old_ref = k
-        # refdes 修正器件 (U3/U4/U7): 锚点板已是新命名 (U3/U4/U7 直接存在) 时
-        # 优先新 refdes; 旧命名 (U6 等) 仅作 fallback — 防 KeyError/错位。
-        anchor = ref_anchors.get(ref)
-        if anchor is None and old_ref is not None:
-            anchor = ref_anchors.get(old_ref)
-        if anchor is not None:
-            pos = anchor["at"]
+        if ref in ref_pos:
+            pos = ref_pos[ref]
         else:
-            pos = NEW_PLACE[ref]
-        # ── footprint 名 ──
-        if pl["symbol"] in ("C_100N", "C_220N"):
-            # L2 v1.2: C67/C68/C72 例外 MLCC_0603; 其余 C_100N/C_220N 0402
-            if ref in ("C67", "C68", "C72"):
-                fp = "Capacitor_SMD:C_0603_1608Metric"
-            else:
-                fp = "Capacitor_SMD:C_0402_1005Metric"
-        elif pl["symbol"] == "C_1U":
-            fp = "Capacitor_SMD:C_0603_1608Metric"
-        elif pl["symbol"] == "C_10U":
-            fp = "Capacitor_SMD:C_0805_2012Metric"
-        elif pl["symbol"] == "C_4R7":
-            fp = "Capacitor_SMD:C_0603_1608Metric"
-        elif pl["symbol"].startswith("R_"):
-            # 产物电阻列阵全部 0603 焊盘 (已验证), 沿用产物几何
-            fp = "Resistor_SMD:R_0603_1608Metric"
-        else:
-            fp = sym["footprint"]
+            pos = NEW_PLACE[ref]      # 兼容位：refmap 缺项时回落 ECN-004 表（当前 54/54 已覆盖）
+        mod = ref_mod[ref]
+        fp = "ForgeOS:" + mod
         # ── value ──
         if ref == "J13":
             value = "J_SWD"          # SWD 调试口 (与 J9 OOB 区分)
@@ -299,11 +270,12 @@ def build_device_table(symbols, placements, ref_anchors):
             "ref": ref,
             "symbol": pl["symbol"],
             "footprint": fp,
+            "mod": mod,
             "value": value,
             "at": pos,
             "nc": pl["nc"],
             "pin_map": sym["pins"],   # pin_name -> pad number
-            "pads": {},               # pad_number -> net (稍后填充)
+            "pads": {},               # pad_number -> 几何（assign_nets 由库件装载）
         }
     return dev
 
@@ -317,7 +289,7 @@ def mcio_pad_name(pin_num):
 
 
 def assign_nets(dev, nets):
-    """从 YAML nets 权威推导每个 pad 的 net. 未连网引脚 → NO_CONNECT."""
+    """从 YAML nets 权威推导每个 pad 的 net；pad 几何一律取自库快照 mod。"""
     dev_nets = {ref: {} for ref in dev}
     for net, pins in nets.items():
         for rp in pins:
@@ -342,42 +314,11 @@ def assign_nets(dev, nets):
                                      f"{pad_net[pad_num]} vs {net}")
                 pad_net[pad_num] = net
         d["pad_net"] = pad_net
-        # pad 几何: 产物优先 (已验证), 新器件用 size-class 几何
-        anchor = None
-        old_ref = None
-        for k, v in OLD_REF_MAP.items():
-            if v == ref:
-                old_ref = k
-        anchor = ref_anchors_cache.get(ref)
-        if anchor is None and old_ref is not None:
-            anchor = ref_anchors_cache.get(old_ref)
-        if anchor is not None:
-            d["pads"] = anchor["pads"]
-        else:
-            sym = d["symbol"]
-            if sym in ("C_100N", "C_220N"):
-                geom = G_0603 if ref in ("C67", "C68", "C72") else G_0402
-            elif sym == "C_1U":
-                geom = G_0603
-            elif sym == "C_10U":
-                geom = G_0805
-            elif sym == "C_4R7":
-                geom = G_0603
-            elif sym.startswith("R_"):
-                geom = G_0603
-            else:
-                raise ValueError(f"[GEOM] 缺少 {ref} 的 pad 几何 (符号 {sym})")
-            d["pads"] = {}
-            for num, (px, py, w, h) in geom.items():
-                d["pads"][num] = {
-                    "type": "smd", "shape": "rect",
-                    "at": (px, py), "size": (w, h),
-                    "drill": None, "layers": '"F.Cu" "F.Mask" "F.Paste"',
-                }
-    return dev
-
-
-ref_anchors_cache = {}
+        # ── pad 几何：库快照（唯一来源；缺件/缺号 ⇒ fail-closed）──
+        d["pads"] = load_mod_pads(d["mod"])
+        absent = sorted(set(pad_net) - set(d["pads"]))
+        if absent:
+            raise ValueError(f"[G-ROOT-1] {ref} 库件 {d['mod']} 缺 pad: {absent}")
 
 
 # ─────────────────────────────────────────────────────────────────────────
@@ -426,8 +367,9 @@ def gen_footprint(d):
                    f'(layers {p["layers"]}) (net "{net}") '
                    f'(uuid "{_u5("pad", d["ref"], pnum, net)}"))')
         else:
+            rr = f' (roundrect_rratio {p["rratio"]:g})' if p.get("rratio") else ""
             pad = (f'\t\t(pad "{pnum}" smd {p["shape"]} (at {px:.3f} {py:.3f}) '
-                   f'(size {w:.3f} {h:.3f}) '
+                   f'(size {w:.3f} {h:.3f}){rr} '
                    f'(layers {p["layers"]}) (net "{net}") '
                    f'(uuid "{_u5("pad", d["ref"], pnum, net)}"))')
         lines.append(pad)
@@ -816,9 +758,7 @@ def main():
     symbols, nets, placements = parse_yaml()
     spec = parse_spec()
     g10_ko, g10_cu, g10_holes = load_g10_inputs(spec)   # G-ROOT-2
-    ref_anchors = parse_ref_pcb()
-    global ref_anchors_cache
-    ref_anchors_cache = ref_anchors
+    ref_mod, ref_pos = load_refmap()
 
     # SPEC 板框交叉校验
     sx = spec["board"]["outline_x"]
@@ -834,7 +774,7 @@ def main():
             f"[YAML] K2 清单含 YAML sheets 不存在 ref: "
             f"{sorted(K2_REFS_SET - yaml_refs)}")
 
-    dev = build_device_table(symbols, placements, ref_anchors)
+    dev = build_device_table(symbols, placements, ref_pos, ref_mod)
     apply_spec_overrides(dev, spec)
     assign_nets(dev, nets)
 

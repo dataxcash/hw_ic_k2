@@ -233,6 +233,8 @@ def main(argv=None):
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--confirm-repo-write", action="store_true")
     ap.add_argument("--report", default=None)
+    ap.add_argument("--lib-only", action="store_true",
+                    help="只落库快照（不动板/pro）；板文本守恒闸在本模式下不适用（不写板），逐项记录")
     a = ap.parse_args(argv)
     if a.apply and not a.confirm_repo_write:
         print("REFUSE: --apply 需 --confirm-repo-write（T-41）", file=sys.stderr)
@@ -352,12 +354,20 @@ def main(argv=None):
         bad.append("non45:%s->%s" % (rep["before"]["non45"], rep["after"]["non45"]))
     if rep["before"]["column_x"] != rep["after"]["column_x"]:
         bad.append("column_x_changed")
+    # 板文本守恒闸：只在**写板**时适用。--lib-only 不写板 ⇒ 该闸不适用；
+    # 实测值一律登记（rep["board_text_gate"]），不得静默丢弃。
     if ndiff is None:
-        bad.append("text_line_count_changed")
+        text_gate = "text_line_count_changed"
     elif any(not y.lstrip().startswith('(footprint "') for x, y in chlines):
-        bad.append("text_change_outside_footprint_header")
+        text_gate = "text_change_outside_footprint_header"
     elif not 0 < ndiff <= len(recs):
-        bad.append("text_diff_lines:%d out of (0,%d]" % (ndiff, len(recs)))
+        text_gate = "text_diff_lines:%d out of (0,%d]" % (ndiff, len(recs))
+    else:
+        text_gate = None
+    if a.lib_only:
+        rep["board_text_gate"] = {"applicable": False, "observed": text_gate or "pass"}
+    elif text_gate:
+        bad.append(text_gate)
     rep["placement_equiv"] = {"n_footprints": len(list(bd2.GetFootprints())),
                               "mismatches": placement_equiv(bd2, work_lib)}
     if rep["placement_equiv"]["mismatches"]:
@@ -375,13 +385,16 @@ def main(argv=None):
                        if f.endswith(".kicad_mod") and f[:-10] not in written) \
             if os.path.isdir(lib_src) else []
         shutil.copytree(work_lib, lib_src, dirs_exist_ok=True)   # 只增/改，不删（删除须监理另裁）
-        shutil.copy2(out, board_src)
-        if open(pro_src, "rb").read() != src_pro_bytes:
-            raise RuntimeError("pro 字节被改动，已中止（备份在 %s）" % bak)
-        rep["applied"] = {"board_sha16": sha16(board_src), "pro_sha16": sha16(pro_src),
-                          "pro_unchanged": True, "lib": lib_src,
+        rep["applied"] = {"lib_only": bool(a.lib_only), "lib": lib_src,
+                          "n_snapshot_mods": len(written),
                           "n_mods": len([f for f in os.listdir(lib_src) if f.endswith(".kicad_mod")]),
                           "stale_mods_not_deleted": stale, "backup": bak}
+        if not a.lib_only:
+            shutil.copy2(out, board_src)
+            if open(pro_src, "rb").read() != src_pro_bytes:
+                raise RuntimeError("pro 字节被改动，已中止（备份在 %s）" % bak)
+            rep["applied"].update({"board_sha16": sha16(board_src), "pro_sha16": sha16(pro_src),
+                                   "pro_unchanged": True})
     elif a.apply:
         rep["applied"] = {"refused": "gates failed"}
     outrep = a.report or os.path.join(work, "lib_snapshot_report.json")
