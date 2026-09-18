@@ -427,3 +427,116 @@ sha256sum criteria/*; ls k2/pipeline.yaml                                       
 **fail-closed**：P4 未全绿（本表全闭）不下单、不出交付 Gerber。
 
 —— ENG（ARCHER）· 2026-09-18 · 表版本 **v1.6** · pipeline.yaml `c89cc57fb988f821` · 布局解 rev=2 `086d453d23c5fbff` · 受审板 `dae8dc8d48ff5b81`（未动）
+
+---
+
+## 15. v1.7 增量（2026-09-18；**E-3「载体根闭重算 + 余项闭环」** —— #K2-29 §六-2/§六-3/§七）
+
+> 触发：监理 **#K2-29**（E-4/E-5 判 PASS · 判据在岗 = 安装 + 签认 + **锚 rev=2** · 下一件 = E-3「载体根闭重算 + 余项闭环」，唯一）。§0–§14 为历史快照，**不改写**。
+> **口径（本版新增，ENG 实测；判定归监理）**：`⑤ = 根闭 ⟺ ① 本受审板载体已修 ∧ ② 本条 ④ 所指判据**在岗**（已入 `criteria/` + 签认 + 正/负控）∧ ③ 该判据对本条**实测为绿**`。
+> 判据在岗事实：`criteria/**` **rev=2 COUNTERSIGNED**（`d251bea7c2cb1873` / `1cda68521d0e56be` / `568d2e93d53f854c`）+ `k2/pipeline.yaml` **`c89cc57fb988f821`**（`engine verify k2` **4/4 PASS**）⇒ **v1.5/v1.6 的「④ 未在岗」这一全局豁免已消失**。
+> 19 维标准调用实测 = **15 OK / 2 FAIL**（受审板 `dae8dc8d48ff5b81`）：FAIL = `drc_warning_dispositions`（`lib_footprint_issues`×2）+ `lib_electrical_level`（差异 28），**同一根因** = 受审板 `lib_id` 未重指（本表 `U-03`/`M-09`/`J-7`）⇒ 详见 `k2/docs/K2-P4-E3-STANDARD-CALL-WIRING-AND-CARRIER-DELTA-v1.md` **`e861fd9d8bfce7c7`**。
+
+### 15.1 全 59 条重算（②③ 载体态沿用 §13.1 及本会话实测；⑤ 为本版重定）
+
+| 段 | 条目 ⑤ 重定 | 依据 / 余项 |
+|---|---|---|
+| U-01 | **OUT**（不变） | 计划 §1.3#5 具名（3D 渲染 origin）；替代判据 J-8 器件重叠 |
+| U-02 | **OUT**（不变） | 同上 |
+| U-03 | **未闭** | 受审板 `J3`/`J4` `lib_id` = `ForgeOS:MCIO_4i_SFF-1016_RASide`（快照仅 `…__1`/`…__2`）⇒ `library_item_missing`×2 + DRC `lib_footprint_issues`×2；**⑦「重指 lib_id」待裁** |
+| U-04 | **根闭** | W-8 实测 `J2` = `electrical_identical`（P1 按板重建落库闭）；④ 在岗 |
+| U-05 | **根闭** | pro `ignore 9→0` + 丝印违规 0 + `rule_severity_manifest` 在岗**绿**；余项 共享模板 9 条（§P6 具名） |
+| U-06 | **根闭** | 非 45° **0/4720** + `non45_segments` 在岗绿（负控 l4 已做） |
+| U-07 | **根闭** | 生成器 pad ← 库快照（排针 16 pad 已产出）；`device_has_pads`+`pin_map_complete` 在岗绿 |
+| U-08 | **根闭** | `BOARD` 46mm + `pads_within_outline` 在岗绿（出框 0）；density 余项归 M-12 |
+| U-09 | **未闭** | 密度口径：测量接线**已通**、读数达标；启用待 `criteria/` rev bump（gate 属主） |
+| U-10 | **根闭** | G-ROOT-2 闭（生成器 emit **4 NPTH + 8 keepout**）；`drill_count`+`keepout_active` 在岗绿 |
+| M-01 | **根闭** | 真源归零 + `refdes_sets_equal` 在岗绿 **54/54** |
+| M-02 | **未闭**（仅余④口径） | 载体已修（`README`/`01-architecture` 中 `DS160PR810` = **0**）；**「无判据类」根闭口径待监理定义** |
+| M-03 | **根闭** | `errata-2` 现行 + D-7a（#K2-23 §二-6 裁乙）+ `net_declared_realized`/`pin_map_complete`/`unconnected_zero` 在岗绿；⑤ 硬前置已由 owner **#K2-24** 闭 |
+| M-04 | **根闭** | 同 U-06 |
+| M-05 | **根闭** | `zone_filled` 在岗绿 **10/10**（G-ROOT-2 铺铜产出闭）；余项 `ref_plane_continuity` 升 owner + Gerber 侧归 P5 |
+| M-06 | **根闭** | `unconnected_zero` 在岗绿 |
+| M-07 | **根闭**（判据侧） | `drc_errors`+`unconnected_zero` 在岗绿；L5 旧包历史件由 P5 新包取代 |
+| M-08 | **根闭** | 同 U-05（模板余项 §P6 具名） |
+| M-09 | **未闭** | 同 U-03：`lib_id` 未重指 ⇒ `lib_electrical_level` 在岗但**红 28** |
+| M-10 | **根闭** | `fp-lib-table` `d7316388…` 在 + `fp_lib_table_present` 在岗绿 |
+| M-11 | **根闭** | NPTH 4 / PTH 16 + `drill_count` 在岗绿（G-ROOT-2 闭） |
+| M-12 | **未闭** | 同 U-09（密度口径/启用） |
+| M-13 | **根闭** | `k2/pipeline.yaml` 已装 + `pipeline_present` 在岗绿 + `engine verify` 4/4 |
+| M-14 | **未闭**（仅余④口径） | 载体已修（`project.yaml` + `k2_v4.kicad_pcb` symlink）；「路径可解析」无判据 ⇒ 口径待监理 |
+| M-15 | **OUT**（不变） | 计划 §1.3#5 具名 |
+| M-16 | **根闭** | `U1` = 49 带号 pad（+9 枚无号 `F.Paste` EP 归 **D** 口径）；`device_has_pads`+`pin_map_complete` 在岗绿 |
+| M-17 | **根闭** | NO_CONNECT 128 pad 不产生假未连 ⇒ `unconnected_zero`+`net_declared_realized` 在岗绿 |
+| M-18 | **根闭** | 19 维判据在岗（rev=2 签认） |
+| F-1 | **根闭** | G-ROOT-1（P2 去锚板）+ G-ROOT-2 闭；`device_has_pads`+`drill_count` 在岗绿 |
+| F-2 | **根闭** | 同 M-05 |
+| F-3 | **未闭**（仅余④口径） | SPEC **rev-50**（8L）载体已修；层判据未入 canonical ⇒ 口径待监理（**不新增齿**） |
+| F-4 | **根闭** | 同 U-06 |
+| F-5 | **根闭** | 同 M-01 |
+| F-6 | **根闭** | 同 U-05 |
+| F-7 | **根闭** | pad 对账 **672/672 · 逐件名集 0 差异** + `device_has_pads`/`pin_map_complete` 在岗绿；U6 无网球经 D-7a/⑤ 闭 |
+| F-8 | **根闭** | `BOARD` 46mm + `pads_within_outline` 在岗绿 |
+| F-9 | **未闭** | 走廊口径两套未对账（L2 冻结表回改须 **owner**） |
+| F-10 | **根闭** | 同 M-03 |
+| F-11 | **OUT**（不变） | 计划 §1.3#5 具名 |
+| F-12 | **根闭** | `fp-lib-table` 在岗绿；refdes 侧 = 伪缺陷（`N-07` OUT 消解） |
+| F-13 | **根闭** | 同 M-13 |
+| F-14 | **根闭** | G-ROOT-3 闭（`YAML_PATH` 配置驱动 + symlink 删 + 显式 fail-closed）；产物确定性 8×同 sha |
+| N-01 | **未闭** | 交付 Gerber 未出（P5 未开）；fail-closed：P4 未全绿不下单 |
+| N-02 | **未闭**（仅余④口径） | 指针 **rev-50**（8L）载体已修；层判据口径待监理（同 F-3） |
+| N-03 | **未闭** | pro `sheets: []` + `top_level_sheets → k2_v4_8L.l4.kicad_sch`（**全仓不存在**）；修复 = **一行 pro 键值**（须放行；改 pro ⇒ sha 重锚） |
+| N-04 | **根闭** | `engine verify` 4/4（必选三联 `sch_structural`/`netlist_connect`/`bom_consistent`）+ `pipeline_present` 在岗绿 |
+| N-05 | **根闭** | G-ROOT-3 闭 + 残余 G-ROOT-1 侧已由 P2 闭 |
+| N-06 | **根闭** | 同 U-05 |
+| N-07 | **OUT**（§13.0 生效） | 前提实测不成立（伪缺陷：实例态未标注 refdes = 0） |
+| J-1 | **未闭** | `drc_errors` 在岗绿（error **0**）；但 warning **未逐项处置**（`lib_footprint_issues` 未登记）⇒ 余项归 U-03 同根 |
+| J-2 | **根闭** | `unconnected_zero` 在岗绿 |
+| J-3 | **根闭** | `zone_filled` 在岗绿 10/10 |
+| J-4 | **根闭** | 丝印违规 **0** + `rule_severities` ignore **0**（全开）+ `drc_errors` 在岗绿；`drc_warning_dispositions` 红属非丝印类（归 J-1/U-03） |
+| J-5 | **根闭** | `non45_segments` 在岗绿 |
+| J-6 | **根闭** | `refdes_sets_equal` 在岗绿 |
+| J-7 | **未闭** | `lib_electrical_level` 在岗但**红 28**（`lib_id` 未重指）；含 `fp_lib_table_present` 侧绿 |
+| J-8 | **未闭** | `keepout_active`/`pads_within_outline` 在岗绿；`density_and_clearance` **未启用** |
+| J-9 | **根闭** | `pipeline_present` 在岗绿 + `engine verify` 4/4 |
+| J-10 | **根闭** | 复跑链固定（构造 8×同 sha `d67c0f048f0d0423` · 19 维标准调用 · `engine verify` 4/4 · 判据锚 rev=2） |
+
+### 15.2 计数（**v1.7，ENG 实测口径；判定归监理**）
+
+| ⑤ | v1.5（§13.2） | **v1.7（本轮）** | 变动来源 |
+|---|---|---|---|
+| **根闭** | 0 | **40** | ④ 全局豁免消失（rev=2 签认 + `pipeline.yaml`）⇒ 「载体已修待判据」族 + J 段多数转绿 |
+| **未闭** | 54 | **14** | 余项 = 判据红 2（U-03/M-09/J-7）· 口径待裁 3（U-09/M-12 ·「无判据类」3）· pro 一行 1（N-03）· 走廊 1（F-9）· 交付面 1（N-01）· 密度启用 1（J-8）· warning 登记 1（J-1） |
+| **OUT（具名）** | 5 | **5** | `U-01` `U-02` `M-15` `F-11` `N-07`（不变） |
+
+> **未闭 14 条具名**：`U-03` `U-09` · `M-02` `M-09` `M-12` `M-14` · `F-3` `F-9` · `N-01` `N-02` `N-03` · `J-1` `J-7` `J-8`
+> **不得宣称归零**（C-12）：本版**没有**任何一条以「接近 0」或「口径切换」充绿；`ref_plane_continuity` 严口径 **83.52%** 仍为**不可达**（升 owner），`lib_electrical_level` 仍 **FAIL 28**。
+
+### 15.3 未闭 14 条的归属 → 修复件 → 阻塞点
+
+| ID | 归属 | 修复件 | 阻塞点 |
+|---|---|---|---|
+| `U-03` `M-09` `J-7` | **监理裁定**（⑦ 库侧） | 受审板 54 件 `lib_id` 重指 `ForgeOS:<refmap mod>`（生成器产物已正确：`49 identical / 5 diff`）——选项 (a) 受审板重落 /(b) 最小外科改串 /(c) 判据改消费 refmap | 未获批；受审板（或 `criteria/`）sha 变更 ⇒ 测量链全重锚 |
+| `J-1` | 同上一行（**同根**） | `lib_footprint_issues`×2 = `J3`/`J4` 无后缀 mod 名，随重指一并消解 | 同上一行 |
+| `U-09` `M-12` `J-8` | gate 属主/监理 | `criteria/manifest.k2.yaml` `density_and_clearance.enabled:true`（阈值已在件内）+ rev bump | `criteria/**` ENG 只读；测量 5 件已通且达标 |
+| `M-02` `M-14` `F-3` `N-02` | 监理 | 「无判据类」根闭口径定义（文档层/路径层/SPEC 层；**不新增检查齿**） | 未裁 |
+| `N-03` | 监理放行 | l5 pro 一行键值（`sheets` / `top_level_sheets` → 现行根图） | 改 pro ⇒ pro sha 变 ⇒ 测量链重锚 |
+| `F-9` | owner/监理 | L2 冻结走廊表回改（改冻结件须 owner） | 未获批 |
+| `N-01` | P5（未开） | 出交付 Gerber 包（8 铜层 + 阻焊/丝印/边框/job + Excellon 含 HDI + 叠层图 + 阻抗表 + MANIFEST） | **fail-closed**：P4 未全绿不下单、不出交付 Gerber |
+
+### 15.4 复跑（本节每处实测；仓库只读）
+
+```bash
+cd /home/fila/jqdDev_2025/ic_hw; export SHARUN=$PWD/AppDir/sharun
+sha256sum criteria/*                       # 期望 d251bea7…/1cda6852…/568d2e93…
+tail -1 .omo/supervision/ledger/adjudication-ledger.jsonl | head -c 200            # 期望 rev:2 / COUNTERSIGNED（#K2-29）
+cd k2 && PYTHONPATH="$PWD/_shared:$PWD" python3 _shared/eda_core/pipeline/engine.py verify k2; cd ..   # 期望 4/4 PASS
+# 19 维标准调用（15 OK / 2 FAIL）与 5 件测量读数：见 K2-P4-E3-…-v1.md §1/§2/§7
+# 受审板 l5 lib_id 分布（24 空 /17 Capacitor_SMD /9 Resistor_SMD /1 Package_SO /1 LED_SMD /6 ForgeOS）
+# 生成器产物 lib_id：ForgeOS 54 + 空 4；产物 sha d67c0f048f0d0423
+```
+
+**边界**：本节**只读取证 + 追加本段**；未改板/pro/库/SPEC/生成器/`criteria/`/真源/`_shared`/冻结件；未派 WORKER；临时仅 `/tmp/opencode`；**未新增检查齿**。
+**fail-closed**：P4 未全绿（本表全闭 + 全 J 类绿）不下单、不出交付 Gerber。
+
+—— ENG（ARCHER）· 2026-09-18 · 表版本 **v1.7** · 判据锚 **rev=2** · `pipeline.yaml c89cc57fb988f821` · 受审板 `dae8dc8d48ff5b81`（未动）· 产物 `d67c0f048f0d0423`（未动）
