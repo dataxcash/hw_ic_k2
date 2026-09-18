@@ -391,3 +391,39 @@ sha256sum criteria/*; ls k2/pipeline.yaml                                       
 **fail-closed**：P4 未全绿（本表全闭）不下单、不出交付 Gerber。
 
 —— ENG（ARCHER）· 2026-09-18 · 表版本 **v1.5** · 图集 v10 `d6613754a7382c99` · BOM `9e4ddf4a44302b76` · 受审板 `6ff49da5678c2108`
+
+## 14. v1.6 增量（2026-09-18；**#K2-28 裁定收口：P3 PASS + 坐标源 (a) + L-1 登记 + E-4 在岗**）
+
+> 触发：监理 **#K2-28**（P3 五项全 PASS · 坐标源裁 **(a)** · 库旧件/`k2_p4_*` 两项裁定 · 下一件 = E-4/E-5）。§0–§13 为历史快照，不改写。
+
+### 14.1 **L-1 来源限制登记（#K2-28 §2.3-C2）**
+
+| 编号 | 限制 | 内容（**逐条机检，非估计**） | 处置 |
+|---|---|---|---|
+| **L-1** | **坐标来源** | canonical 布局解 `k2/pm_gate/artifacts/k2_v4/L2/PLACEMENT_SOLUTION_v1.json`（rev=2 `086d453d23c5fbff`）= **P4 已批准落位的 canonical 捕获，非独立求解**；54 件中 **28 件仅板来源**（冻结输入无任何非板权威）+ **2 件曾陈旧**（`C86`/`R42`，已由 #K2-28 §2.3-C1 推 `p3_placement_solution.json` rev=2 补正 ⇒ 现 **15 一致 / 0 陈旧**） | **不得主张独立推导**；**C4**：L-1 若未被 owner 另行授权 (c)，须在 **P4 关门**时**具名接受**（或转 (c)）后方可进 P5；**不得**在 P5 打样件中隐去 |
+
+**C3 口径标注**：`产物 == 受审板` 等式 = **确定性检查**，**非独立性证明**（#K2-28 §2.3-C3）。
+
+### 14.2 ④「判据在岗」推进（E-4/E-5，本轮）
+
+| 项 | v1.5（§13.2） | **v1.6（本轮）** |
+|---|---|---|
+| `k2/pipeline.yaml` | **不存在**（`pipeline_present` FAIL） | **已安装 `c89cc57fb988f821`**（phases-only + `errata-2` + D-7a）；`engine verify k2` **4/4 PASS** |
+| 在库判定器（rev=1）复跑 | PASS 7 / FAIL 3 | **PASS 8 / FAIL 2**（`pipeline_present` **FAIL→PASS**；余 `zone_filled` 10/18 · `refdes_sets_equal` 54/58 = **已具名口径项**） |
+| 19 维 canonical | 草案未装 | **在岗清单 + 5 组别名钉死已交**（`manifest.k2.canonical-draft-v1.yaml 3f003cffe33a6cfd`，17 true / 2 false）；**签认/安装请求**见 E-4/E-5 提交件 §4 |
+| `criteria/**` | rev=1（未签认） | **仍 rev=1**（`897e8bfde60e2cfe` / `7ce08757eff25557`）⇒ **④ 在岗 = 0 条**（签认属监理）；**锚 rev=2 登记请求**已交（提交件 §5） |
+| 判定器口径分歧（登记备裁） | — | `net_declared_realized` 声明 `>=2` **未 gate**（`nets_with_lt2` 仅报告）；现行真源 `errata-2` 下 `lt2 = 0` ⇒ **潜伏**，文字口径仍须裁 |
+| 二维阈值 | 待裁 | `ref_plane_continuity`：nominal **100%** / strict **83.52%**（**1.0 不可达**，守恒级证明齐）· `density_and_clearance`：机制齐 + 7 案正负控齐（候选阈值见提交件 §6）⇒ **均待裁**（切 nominal 须明示授权，**禁充绿**） |
+
+### 14.3 载体侧（本轮同批）
+
+| 项 | 结果 |
+|---|---|
+| **C1** L3 布局解补正 | `L3/drawings/p3_placement_solution.json` **rev=2 `dfbf65c5b456cdd2`**（`C86`→`31.55,58.85` · `R42`→`93.3,61.55`；bbox 级独立复算四闸 0 违规）⇒ **权威链内部一致**（L2 布局解随之 rev=2 `086d453d23c5fbff`；**产物 sha 不变** `d67c0f048f0d0423`） |
+| **§三** 库旧件退役 | 12 件 stale mod → `k2/archive/k2_v4_stale_lib_20260918/` + `MANIFEST.md`；库 **36 → 24** 文件（digest `078f7dc78d980696` → **`efcd88b35d6d846c`**）；`MountingHole_3.2mm_M3` **保留**（其名被生成器 `NPTH_FP_NAME` 用） |
+| **§四** `k2_p4_*` 退役 | `k2/tools/k2_p4_RETIRED.md`（**44 件清单标记 RETIRED(离链)**；**未删/未移动**，保精确路径可追溯）；构造链 = `k2_gen_v5.py` 单件 |
+| **§2.4** 注释更正 | `k2_gen_v5.py` 内 `nets_yaml` 注释 `errata-1` → **`errata-2`**（纯注释，无行为变更） |
+
+**fail-closed**：P4 未全绿（本表全闭）不下单、不出交付 Gerber。
+
+—— ENG（ARCHER）· 2026-09-18 · 表版本 **v1.6** · pipeline.yaml `c89cc57fb988f821` · 布局解 rev=2 `086d453d23c5fbff` · 受审板 `dae8dc8d48ff5b81`（未动）
