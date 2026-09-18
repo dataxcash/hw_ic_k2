@@ -27,7 +27,7 @@
 | `L3/drawings/06_keepouts.svg` | `6ee00985779e7d76` | **`fb6d9b6aaffe187f`** |
 | `L3/drawings/07_interface_pads_inframe.svg` | `0b10a71326cb3e99` | 同（**未漂**） |
 | `L3/drawings/p3_placement_solution.json` | `faddc9de5519c5ec` | 同（**只读，未改写**） |
-| `L3/drawings/README.md`（索引） | `a523265be3734597` | **`8420f56d78430b85`** |
+| `L3/drawings/README.md`（索引） | `a523265be3734597` | **`0b26d038dbb93115`** |
 
 锚（**未动**）：受审板 `6ff49da5678c2108` · 设计源板 `fb07d25ac426ff84` · 冻结交付板 `d4e81f647be7f980` · 真源 `dd794c54f7ce7417` ·
 errata-1 `17d540f058631a5e` · SPEC rev-47 `9ba09cbc148d6836` / rev-48 `11ad1da3818b379d` / rev-49 `b8f4a7cb67b575f0` ·
