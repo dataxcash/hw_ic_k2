@@ -1,22 +1,22 @@
 {
- "drawings_rev": "v10",
+ "drawings_rev": "v11",
  "baseline": {
-  "spec": "SPEC_k2_v4.spec-rev-49.json",
-  "spec_sha16": "b8f4a7cb67b575f0",
+  "spec": "SPEC_k2_v4.spec-rev-50.json",
+  "spec_sha16": "ed0950687e5aec97",
   "board": "k2/hw/k2_v4_8L.l5.kicad_pcb",
-  "board_sha16": "6ff49da5678c2108",
+  "board_sha16": "dae8dc8d48ff5b81",
   "historical_board": "k2/hw/k2_v4_8L.kicad_pcb",
   "authority": "真源 yaml → SPEC（canonical，只版本 bump）→ 受审板（仅实测类字段的量测源；W-8 属性级「以板为准」= #K2-23 §二-1）"
  },
  "spec": {
-  "name": "SPEC_k2_v4.spec-rev-49.json",
-  "sha16": "b8f4a7cb67b575f0"
+  "name": "SPEC_k2_v4.spec-rev-50.json",
+  "sha16": "ed0950687e5aec97"
  },
  "nets_yaml": {
-  "path": "k2/hw/data/k2_sch.errata-1.yaml",
-  "sha16": "17d540f058631a5e"
+  "path": "k2/hw/data/k2_sch.errata-2.yaml",
+  "sha16": "61c4694e3b4df564"
  },
- "board_sha16": "6ff49da5678c2108",
+ "board_sha16": "dae8dc8d48ff5b81",
  "board_frame": {
   "outline_x": [
    23.0,
@@ -94,8 +94,8 @@
     "*.Mask"
    ]
   },
-  "basis": "受审板实测（board_sha16=6ff49da5678c2108）+ 监理 #K2-23 §二-4「以板为准」裁定 + §二-1 Z4 权威源（真源 → SPEC → 板；板为本文输入层的实测来源）",
-  "board_sha16": "6ff49da5678c2108"
+  "basis": "受审板实测（board_sha16=dae8dc8d48ff5b81）+ 监理 #K2-23 §二-4「以板为准」裁定 + §二-1 Z4 权威源（真源 → SPEC → 板；板为本文输入层的实测来源）",
+  "board_sha16": "dae8dc8d48ff5b81"
  },
  "devices": {
   "C73": {
@@ -699,43 +699,6 @@
     41.15,
     30.25,
     41.85
-   ],
-   "geom_src": "board(受审板 as-built)"
-  },
-  "C89": {
-   "sheet": "Power (12V DC-in DCDC 5V LDO 3V3)",
-   "symbol": "C_4R7",
-   "footprint": "Capacitor_SMD:C_0603_1608Metric",
-   "symbol_pins": 2,
-   "symbol_pin_nums": [
-    "1",
-    "2"
-   ],
-   "at": [
-    44.0,
-    37.5
-   ],
-   "rot": 0.0,
-   "src": "board(受审板 as-built)",
-   "board_pads": 2,
-   "board_pads_numbered": 2,
-   "board_pads_paste_only": 0,
-   "board_pads_numbered_nums": [
-    "1",
-    "2"
-   ],
-   "status": "placed",
-   "footprint_file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod",
-   "footprint_pads": 2,
-   "footprint_pad_nums": [
-    "1",
-    "2"
-   ],
-   "pad_aabb": [
-    43.25,
-    37.15,
-    44.75,
-    37.85
    ],
    "geom_src": "board(受审板 as-built)"
   },
@@ -4856,21 +4819,6 @@
       "board_pads_paste_only": 0,
       "lib_vs_board_numbered_equal": true
      },
-     "C89": {
-      "numbered": 2,
-      "unnamed": 0,
-      "blocks_total": 2,
-      "paste_only_unnamed": 0,
-      "electrical_unnamed": 0,
-      "pad_re_matches": 2,
-      "file": "AppDir/share/kicad/footprints/Capacitor_SMD.pretty/C_0603_1608Metric.kicad_mod",
-      "computed_pads": 2,
-      "basis_consistent": true,
-      "board_pads_raw": 2,
-      "board_pads_numbered": 2,
-      "board_pads_paste_only": 0,
-      "lib_vs_board_numbered_equal": true
-     },
      "C90": {
       "numbered": 2,
       "unnamed": 0,
@@ -5533,7 +5481,7 @@
     }
    ],
    "spec_crosscheck_all_match": true,
-   "src": "受审板实测（board_sha16=6ff49da5678c2108）+ 监理 #K2-23 §二-4「以板为准」裁定 + §二-1 Z4 权威源（真源 → SPEC → 板；板为本文输入层的实测来源）",
+   "src": "受审板实测（board_sha16=dae8dc8d48ff5b81）+ 监理 #K2-23 §二-4「以板为准」裁定 + §二-1 Z4 权威源（真源 → SPEC → 板；板为本文输入层的实测来源）",
    "note": "逐座标/边料/keepout bbox 由 SPEC rev-49 `mounting_holes` 输入层承载（D3/D4 归零）",
    "pass": true
   },
@@ -5831,7 +5779,7 @@
    ],
    "obstacle_src": {
     "board": "k2/hw/k2_v4_8L.l5.kicad_pcb",
-    "board_sha16": "6ff49da5678c2108"
+    "board_sha16": "dae8dc8d48ff5b81"
    },
    "before_src": {
     "board": "k2/hw/k2_v4_8L.kicad_pcb",

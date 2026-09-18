@@ -1,24 +1,26 @@
-# L3 施工图集索引（P3 立件 → **P4 基线 v10**：Z4 整族刷新）
+# L3 施工图集索引（P3 立件 → **P4 基线 v11**：Z4 整族刷新 → owner ⑤ 删 `C89`）
 
 > **本目录 = P3「施工图层重建」产出**（监理 **#K2-15 §二** 已开 P3）；**v10 = P4 基线整族刷新**（监理 **#K2-23 §二-1**：Z4 权威源 = 整族刷新至 P4 真值，驳回「以受审板为准」的拓扑用法）。**判据由监理核，ENG 只给测量**。
 > **规范**：图纸内容由生成器**确定性重出**（下 §2）；**冻结件（交付板 `d4e81f64…` / 设计源板 `fb07d25a…` / 真源 yaml `dd794c54…`）不得由本目录工具改写**（生成器只读输入）。
 > **权威链（不可倒置，#K2-23 §二-1 红线）**：真源 yaml → SPEC（canonical，只版本 bump）→ **受审板**（**仅**作「实测/板实」类字段的**量测源**；封装图形/属性级「以板为准」= W-8）。
-> **v10 基线**：SPEC **rev-49** `b8f4a7cb67b575f0` · 受审板 **l5** `6ff49da5678c2108` · 真源 **errata-1** `17d540f058631a5e` · 生成器 `k2_p3_drawings_v1.py` `eb7ea771a1645c01`。
+> **v11 基线（现行）**：SPEC **rev-50** `ed0950687e5aec97` · 受审板 **l5** `dae8dc8d48ff5b81`（owner ⑤ 删 `C89`；原 `6ff49da5678c2108`）· 真源 **errata-2** `61c4694e3b4df564`（`errata-1` `17d540f058631a5e` 上游不动）· 生成器 `k2_p3_drawings_v1.py`。
+> **v11 变更**：器件 **55 → 54**（owner 裁定「删」`C89` + `PWR_5V_KEY`；#K2-24）；判据值不变（C1…C7/D1 全 pass）；留痕见 `k2/docs/K2-P4-OWNER5-C89-PWR5VKEY-DELETION-EXECUTION-v1.md`。
+> **v10 基线（历史）**：SPEC **rev-49** `b8f4a7cb67b575f0` · 受审板 `6ff49da5678c2108` · 真源 **errata-1** `17d540f058631a5e` · 生成器 `eb7ea771a1645c01`。
 > **v10 变更（D1–D12 归零，C1 留待 ⑤）**：D3/D4 `H3=(45.10,75.10)`/边料 `2.30`（SPEC `mounting_holes` 输入层）· D5/D6 排针 `2,4,4,2,4` / `U1` `board_pads` `33→58`（板实）· **D7 具名上报**（`C3.U1` 按 R-1 带号口径 = `49`；`58` = 原始 pad 块口径，见 §3 `count_basis`）· D8/D9 铜区 `13/0→10/10` · D10 `C5b` `4/0`（原全 `allowed`）· D11 keepout 枚举 = SPEC 输入层 8 区 + `KO-7`（规则承载）且与板实逐项一致 · D12 自指 `rev-25→rev-49`；另**附带**刷新三件 as-built 坐标（`C85`/`C86`/`R42`）。
 > **验收**：四方一致（真源 ↔ SPEC rev-49 ↔ 受审板 ↔ 本图集）**34/34 PASS** + Z4 §3 五项未漂；见 `k2/docs/K2-P4-Z4-DRAWINGS-V10-REFRESH-ACCEPTANCE-v1.md`。
 
 ## 1. 图册
 
-| 文件 | sha256(16) **v10（现行）** | sha256(16) v9（历史） |
+| 文件 | sha256(16) **v11（现行）** | sha256(16) v10（历史） |
 |---|---|---|
-| `01_board_frame_and_holes.svg` | `ae84c110a4d27b0e` | `096a61c81201123d` |
-| `02_device_coordinates.svg` | `caddcf3fbecebff3` | `48f92c6b9dd16042` |
+| `01_board_frame_and_holes.svg` | `a7977a2f8fe9bfe6` | `ae84c110a4d27b0e` |
+| `02_device_coordinates.svg` | `95504f874110eb63` | `caddcf3fbecebff3` |
 | `03_corridor_occupancy.svg` | `e54c3b34782003db` | 同（未漂） |
 | `04_layer_assignment.svg` | `124c7c3b6bc72e68` | 同（未漂） |
-| `05_pour_strategy.svg` | `41453c89f007d59e` | `273910d6c820326e` |
+| `05_pour_strategy.svg` | `fa1d0572a80e149b` | `41453c89f007d59e` |
 | `06_keepouts.svg` | `fb6d9b6aaffe187f` | `6ee00985779e7d76` |
 | `07_interface_pads_inframe.svg` | `0b10a71326cb3e99` | 同（未漂） |
-| `p3_drawings.json` | `d6613754a7382c99` | `21e8891ea3fc4c06` |
+| `p3_drawings.json` | `e284e9afd9054408` | `d6613754a7382c99` |
 | `p3_placement_solution.json` | `faddc9de5519c5ec` | 同（**只读，未改写**） |
 
 > 勘误：本表旧版曾把 `01` / `p3_drawings.json` 记为 `67614e57…` / `a6841cd7…`（更早落件值），与 v9 实际落件 sha 不符；上表「v9 历史」列为**落件实测**值。

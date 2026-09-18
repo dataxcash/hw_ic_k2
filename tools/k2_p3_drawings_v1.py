@@ -35,7 +35,7 @@ sys.path.insert(0, os.path.join(K2, "_shared"))
 REPO_DRAWINGS = os.path.join(K2, "pm_gate/artifacts/k2_v4/L3/drawings")
 BOARD = os.path.abspath(os.environ.get("K2_P4_BOARD", os.path.join(K2, "hw/k2_v4_8L.l5.kicad_pcb")))
 BOARD_HISTORICAL = os.path.join(K2, "hw/k2_v4_8L.kicad_pcb")   # 设计源板（只读；D1 位移前证据）
-DRAWINGS_REV = "v10"
+DRAWINGS_REV = "v11"   # #K2-24 §三-6：55→54 件（owner ⑤ 删 C89）基线 bump
 
 
 def sha16(path):

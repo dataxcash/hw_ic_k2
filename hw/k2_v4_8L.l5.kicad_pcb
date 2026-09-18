@@ -80,71 +80,6 @@
 			(outputdirectory "")
 		)
 	)
-	(footprint "Capacitor_SMD:C_0603_1608Metric"
-		(layer "F.Cu")
-		(uuid "02671991-10b0-516d-bff4-654dcee32f24")
-		(at 44 37.5)
-		(property "Reference" "C89"
-			(at 0 -1.4 0)
-			(layer "F.SilkS")
-			(uuid "650470ba-3fa0-5dd0-8ba8-1bdad7bf0b76")
-			(effects
-				(font
-					(size 0.8 0.8)
-					(thickness 0.12)
-				)
-			)
-		)
-		(property "Value" "4.7uF"
-			(at 0 2 0)
-			(layer "F.Fab")
-			(uuid "3e920502-ff81-5ed8-9e15-bf0a9ba0a284")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "761a37f8-e7ca-4bf9-96e5-c09f6f2630ee")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "33ab3347-046f-4736-ad45-4629774eae42")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(duplicate_pad_numbers_are_jumpers no)
-		(pad "1" smd rect
-			(at -0.45 0)
-			(size 0.6 0.7)
-			(layers "F.Cu" "F.Mask" "F.Paste")
-			(net "PWR_5V_KEY")
-			(uuid "11677622-f82a-5554-949f-1ab4a794b850")
-		)
-		(pad "2" smd rect
-			(at 0.45 0)
-			(size 0.6 0.7)
-			(layers "F.Cu" "F.Mask" "F.Paste")
-			(net "GND")
-			(uuid "27fbdf5b-81cd-59ef-b145-0187e25fdde9")
-		)
-		(embedded_fonts no)
-	)
 	(footprint "R_0603_1608Metric"
 		(layer "F.Cu")
 		(uuid "04180e67-978f-5af0-b4e0-26abe40d16ec")
@@ -10678,14 +10613,6 @@
 		(uuid "ce4b3920-1a5e-5248-8250-34698f410a0d")
 	)
 	(segment
-		(start 44.45 37.5)
-		(end 45.225 37.5)
-		(width 0.2)
-		(layer "F.Cu")
-		(net "GND")
-		(uuid "d11e82a8-7a53-556e-aecf-928d4fd7c065")
-	)
-	(segment
 		(start 28.45 47.9)
 		(end 28.8 47.9)
 		(width 0.2)
@@ -12060,14 +11987,6 @@
 		(layers "F.Cu" "B.Cu")
 		(net "GND")
 		(uuid "70bdb626-beb1-5a6e-94c3-15f35484e77e")
-	)
-	(via
-		(at 45.225 37.5)
-		(size 0.35)
-		(drill 0.2)
-		(layers "F.Cu" "B.Cu")
-		(net "GND")
-		(uuid "71da405d-bef0-551a-a07a-cab6edeb017b")
 	)
 	(via blind
 		(at 61.3 43.25)
