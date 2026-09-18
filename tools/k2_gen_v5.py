@@ -519,6 +519,95 @@ HEADER = """(kicad_pcb
 	)"""
 
 
+# ─────────────────────────────────────────────────────────────────────────
+# G10 emit 段（G-ROOT-2；#K2-23 §二-3/§二-4）—— **消费 SPEC 输入层，不读板**（避 C-1）
+#   源：`keepout_geometry.zones`（8 keepout）· `pd.zone_defs.board_realized_zones`（10 有网铜区）
+#       · `mounting_holes.holes`（4 NPTH）；数据经 SPEC rev-49 落库（逐条 verbatim 自受审板实测）。
+#   生成段逐字取自已 KiCad 级验证的草案：Z2 `emit_zone`（inc62 §2 `8a31ad20ec520e32`）
+#   · NPTH `emit_footprint`（inc63 §2 `56cdbef1e48e8b1e`）；填充仍由出图前 ZONE_FILLER 承担。
+# ─────────────────────────────────────────────────────────────────────────
+_KEEPOUT_SW = ("tracks", "vias", "pads", "copperpour", "footprints")
+NPTH_FP_NAME = "MountingHole_3.2mm_M3"
+NPTH_NS = uuid.UUID("6f5f1c3e-0000-4000-8000-000000000000")
+
+
+def _layers_expr(z):
+    return f'(layer "{z["layers"][0]}")' if len(z["layers"]) == 1 else \
+        "(layers " + " ".join(f'"{l}"' for l in z["layers"]) + ")"
+
+
+def emit_zone(z: dict) -> str:
+    u = str(uuid.uuid5(uuid.NAMESPACE_URL,
+                       f'k2/g10/{z["kind"]}/{z["name"]}/{z["net"]}/{z["pts"][:1]}'))
+    pts = " ".join(f"(xy {a} {b})" for a, b in z["pts"])
+    if z["kind"] == "keepout":
+        sw = "\n".join(f"\t\t\t({s} {z['keepout'][s]})" for s in _KEEPOUT_SW)
+        return (f'(zone\n\t\t{_layers_expr(z)}\n\t\t(uuid "{u}")\n\t\t(name "{z["name"]}")\n\t\t(hatch edge 0.5)\n'
+                f'\t\t(connect_pads\n\t\t\t(clearance 0)\n\t\t)\n\t\t(min_thickness 0.25)\n\t\t(keepout\n{sw}\n\t\t)\n'
+                f'\t\t(placement\n\t\t\t(enabled no)\n\t\t\t(sheetname "")\n\t\t)\n\t\t(fill\n\t\t\t(thermal_gap 0.5)\n'
+                f'\t\t\t(thermal_bridge_width 0.5)\n\t\t\t(island_removal_mode 0)\n\t\t)\n\t\t(polygon\n\t\t\t(pts\n\t\t\t\t{pts}\n\t\t\t)\n\t\t)\n\t)')
+    prio = f'\n\t\t(priority {z["priority"]})' if z["priority"] else ""
+    return (f'(zone\n\t\t(net "{z["net"]}")\n\t\t{_layers_expr(z)}\n\t\t(uuid "{u}")\n\t\t(hatch edge 0.5)\n'
+            f'\t\t(connect_pads yes\n\t\t\t(clearance {z["connect_pads_clearance"]})\n\t\t)\n\t\t(min_thickness {z["min_thickness"]}){prio}\n'
+            f'\t\t(fill yes\n\t\t\t(thermal_gap 0.2)\n\t\t\t(thermal_bridge_width 0.3)\n\t\t\t(island_removal_mode 0)\n\t\t)\n'
+            f'\t\t(polygon\n\t\t\t(pts\n\t\t\t\t{pts}\n\t\t\t)\n\t\t)\n\t)')
+
+
+def _npth_uuid(ref: str) -> str:
+    return str(uuid.uuid5(NPTH_NS, f"k2/g10/npth/{ref}"))
+
+
+def _emit_npth_pad(h: dict) -> str:
+    d = h["drill"]
+    return (f'\t\t(pad "" np_thru_hole circle\n'
+            f'\t\t\t(at 0 0)\n'
+            f'\t\t\t(size {d:g} {d:g})\n'
+            f'\t\t\t(drill {d:g})\n'
+            f'\t\t\t(layers "*.Cu" "*.Mask")\n'
+            f'\t\t)')
+
+
+def emit_npth_footprint(h: dict) -> str:
+    x, y = h["at"]; d = h["drill"]
+    return (f'\t(footprint "{NPTH_FP_NAME}"\n'
+            f'\t\t(layer "F.Cu")\n'
+            f'\t\t(uuid "{_npth_uuid(h["ref"])}")\n'
+            f'\t\t(at {x:g} {y:g})\n'
+            f'\t\t(descr "Mounting Hole 3.2mm, M3, no annular")\n'
+            f'\t\t(property "Reference" "{h["ref"]}"\n'
+            f'\t\t\t(at 0 -4.15 0)\n'
+            f'\t\t\t(layer "F.SilkS")\n'
+            f'\t\t\t(effects (font (size 1 1) (thickness 0.15)))\n'
+            f'\t\t)\n'
+            f'\t\t(property "Value" "{NPTH_FP_NAME}"\n'
+            f'\t\t\t(at 0 4.15 0)\n'
+            f'\t\t\t(layer "F.Fab")\n'
+            f'\t\t\t(effects (font (size 1 1) (thickness 0.15)))\n'
+            f'\t\t)\n'
+            f'\t\t(attr exclude_from_pos_files exclude_from_bom)\n'
+            f'\t\t(fp_circle (center 0 0) (end {d:g} 0)\n'
+            f'\t\t\t(stroke (width 0.15) (type solid)) (fill no) (layer "Cmts.User")\n'
+            f'\t\t)\n'
+            f'\t\t(fp_circle (center 0 0) (end {d + 0.25:g} 0)\n'
+            f'\t\t\t(stroke (width 0.05) (type solid)) (fill no) (layer "F.CrtYd")\n'
+            f'\t\t)\n'
+            f'{_emit_npth_pad(h)}\n'
+            f'\t)')
+
+
+def load_g10_inputs(spec: dict):
+    """G-ROOT-2：从 SPEC **输入层**取 G10 三块数据（不读板）；缺件即 fail-closed。"""
+    ko = (spec.get("keepout_geometry") or {}).get("zones") or []
+    bz = ((spec.get("pd") or {}).get("zone_defs") or {}).get("board_realized_zones") or {}
+    cu = bz.get("zones") or []
+    hl = (spec.get("mounting_holes") or {}).get("holes") or []
+    if (len(ko), len(cu), len(hl)) != (8, 10, 4):
+        raise SystemExit(
+            "[G-ROOT-2] SPEC 输入层缺件/计数异常 keepout=%d copper=%d npth=%d（期望 8/10/4）"
+            " ⇒ fail-closed（禁读板兜底；须先有 SPEC rev-49 输入层）" % (len(ko), len(cu), len(hl)))
+    return ko, cu, hl
+
+
 def gen_edge_cuts():
     x0, x1 = BOARD["x"]
     y0, y1 = BOARD["y"]
@@ -726,6 +815,7 @@ def inject_netclasses(pro_path: str, spec: dict, dev: dict) -> None:
 def main():
     symbols, nets, placements = parse_yaml()
     spec = parse_spec()
+    g10_ko, g10_cu, g10_holes = load_g10_inputs(spec)   # G-ROOT-2
     ref_anchors = parse_ref_pcb()
     global ref_anchors_cache
     ref_anchors_cache = ref_anchors
@@ -762,7 +852,10 @@ def main():
     for ref in K2_REFS:
         blocks.append(gen_footprint(dev[ref]))
     body = "\n".join(blocks)
-    full = HEADER + "\n" + body + "\n" + gen_edge_cuts() + "\n)\n"
+    zone_text = "\n".join(emit_zone(z) for z in (g10_ko + g10_cu))
+    hole_text = "\n".join(emit_npth_footprint(h) for h in g10_holes)
+    full = (HEADER + "\n" + body + "\n" + gen_edge_cuts() + "\n"
+            + hole_text + "\n" + zone_text + "\n)\n")
 
     os.makedirs(os.path.dirname(OUT_PCB), exist_ok=True)
     with open(OUT_PCB, "w") as f:
@@ -792,7 +885,7 @@ def main():
     used_nets = sorted({net for d in dev.values() for net in d["pad_net"].values()}
                        - {"NO_CONNECT"})
     print("=" * 56)
-    print("k2_gen_v5 自检结果 (8/8):")
+    print(f"k2_gen_v5 自检结果 ({len(results)}/{len(results)}):")   # D-6: 声称须与实际一致
     for name, _ in results:
         print(f"  ✅ {name}: PASS")
     print("=" * 56)
@@ -805,6 +898,7 @@ def main():
     print(f"  pads 总数: {n_pads}")
     print(f"  使用网名数: {len(used_nets)}  (YAML nets 共 {len(nets)})")
     print(f"  NO_CONNECT pads: {n_nc}")
+    print(f"  G10 输入层: keepout={len(g10_ko)} copper={len(g10_cu)} npth={len(g10_holes)}  (源=SPEC 输入层，不读板)")
     print(f"  输出: {OUT_PCB}")
     print(f"  布局: {OUT_JSON}")
     return dev
