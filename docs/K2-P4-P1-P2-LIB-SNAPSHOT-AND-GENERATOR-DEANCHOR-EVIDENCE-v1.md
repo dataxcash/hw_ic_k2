@@ -24,7 +24,7 @@
 ### 1.2 出处（逐类具名）
 - **来源 = 受审板 `dae8dc8d48ff5b81` 的 58 颗 footprint 本体**（`pcbnew FootprintSave` 原样落库，`Reference`/`Value` 归一为 `REF**`/件名，uuid 原样）——即 **KiCad 板内嵌 footprint = 具名出处**（`Package_SO:SOIC-8_5.3x5.3mm_P1.27mm`（`U2`）等由板内嵌落库，非外部下载）。
 - 分组口径 = 工具的 **land pattern 指纹**（去 `Reference`/`Value` 块 + 归一 uuid）⇒ 同件名但 land pattern 不同者**各自成件**（`C_0402_1005Metric__1/__2/__3`、`R_0603_1608Metric__1/__2`、`R_0402_1005Metric__1/__2`、`MCIO_4i_SFF-1016_RASide__1/__2`）。
-- `J3/J4`：库件 pad 名集 = **`A1..A19/B1..B19`（38）** = 板（原库件 `1..38` 已消除）。
+- `J3/J4`：**活跃库件**（`MCIO_4i_SFF-1016_RASide__1`→`J3`、`__2`→`J4`）pad 名集 = **`A1..A19/B1..B19`（38）** = 板；**裸名旧件 `MCIO_4i_SFF-1016_RASide`（pad `1..38`）仍在库内保留待裁** ⇒ 不得表述为「已消除」（#K2-27 §1.3 更正）。
 
 ### 1.3 机判（原始输出）
 ```
@@ -107,7 +107,7 @@ k2_gen_v5 自检结果 (6/6): S1 焊盘重叠 / S2 refdes 对齐 / S4 缺失器�
 | 冻结四源 sha | `d4e81f647be7f980` / `fb07d25ac426ff84` / `dd794c54f7ce7417` / `897e8bfde60e2cfe`+`7ce08757eff25557` **逐项不变** ✅ |
 | 受审板 / pro | `dae8dc8d48ff5b81` / `35c8f34bde7ac00c` **未改** ✅ |
 | 判定器（`--nets errata-2`，新基线） | **PASS 7 / FAIL 3**，FAIL 集 = `zone_filled` + `refdes_sets_equal` + `pipeline_present`（与 inc87 基线**逐项同名**）⇒ **集合不退化** ✅ |
-| DRC（受审板，同名 pro，`--severity-all`） | **73 warning / 0 error / 0 unconnected** = `missing_courtyard` **39** + `lib_footprint_mismatch` **34**（与 inc87 逐项同）⇒ **DRC 下限未放松** ✅ |
+| DRC（受审板，同名 pro，`--severity-all`） | **落库后实测 = 69 warning / 0 error / 0 unconnected** = `missing_courtyard` **39** + `lib_footprint_mismatch` **30**；类型集**不变**（仅此 2 类）、违规数**下降** ⇒ **DRC 下限未放松** ✅（**勘误**：本件初稿写 `73 / 34` 系误引**落库前**的 tool `before` 读数；P1 落库后 `lib_footprint_mismatch` **34 → 30**（新库使 4 件转 0），见 P3 证据件 §6） |
 | 非 45° | 受审板 **0/4720** ✅ |
 | C-12 | 不宣称任何未闭项已消；§1.4/§4 差异**全部具名** ✅ |
 
@@ -144,3 +144,10 @@ AppDir/bin/kicad-cli pcb drc --severity-all -o /tmp/opencode/drc.rpt k2/hw/k2_v4
 **fail-closed**：P4 未全绿不下单、不出交付 Gerber；P5 未开。
 
 —— ENG（ARCHER）· 2026-09-18 · #K2-26 工作包（P1+P2）· 库快照 digest `efcd88b35d6d846c` · 生成器 `ef514bd3afac701f` · 产物 `d67c0f048f0d0423` · 受审板 `dae8dc8d48ff5b81`（未动）
+
+---
+
+## 附：勘误（#K2-27 §六-2 同批）
+1. **§1.2** 原「原库件 `1..38` 已消除」**不实并已更正**（裸名 `MCIO_4i_SFF-1016_RASide` 保留待裁；活跃库件名集 = 板）。
+2. **§3 DRC 行** 原 `73 / 34` 系误引**落库前**读数，已更正为落库后实测 **69 = 39 courtyard + 30 mismatch**。
+3. **§2.4 已作废（#K2-27 §三 驳回）**：T-24「不再复现」为**换源自证**，**不成立**；登记簿相应条目 **P3 完成前不得刷新**。本件不据此主张任何缺陷已消。

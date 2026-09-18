@@ -13,7 +13,8 @@ PCIe Gen4 转换卡卡2-K2 权威生成器。取代旧多脚本拼接
                                         [G-ROOT-3] 配置驱动，禁 symlink 兜底
   pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json — 几何权威 (板框/走廊/电容墙/components)
   pm_gate/artifacts/k2_v4/L2/frozen/L2_STRUCTURE_v1.0.md — 冻结决策 (ECN-004)
-  hw/lib/ForgeOS.refmap.json         — 库快照↔板 ref 名集 + 坐标锚点（⑦ #K2-26 §3-1）
+  hw/lib/ForgeOS.refmap.json         — 库快照↔板 ref 名集（⑦ #K2-26 §3-1）
+  pm_gate/artifacts/k2_v4/L2/PLACEMENT_SOLUTION_v1.json — canonical 布局解（坐标**唯一来源**）
   hw/lib/ForgeOS.pretty/<mod>.kicad_mod — pad 几何**唯一来源**（具名外部源；G-ROOT-1）
                                         [G-ROOT-1] ref 清单取自**真源 YAML**；pad 几何取自**库快照**
                                         ⇒ 生成器**零板依赖**（#K2-26 §3-2③）
@@ -58,6 +59,8 @@ if not os.path.isfile(YAML_PATH):
 # 坐标取自 refmap 冻结锚点。原 `PCB_REF_PATH`（锚板）已整体移除。
 LIB_DIR = os.path.join(ROOT, "hw/lib/ForgeOS.pretty")
 REFMAP_PATH = os.path.join(ROOT, "hw/lib/ForgeOS.refmap.json")
+# P3（#K2-27 §五）：坐标来源 = canonical 布局解（非任何板）。
+PLACEMENT_PATH = _ARTIFACTS.path("L2", "PLACEMENT_SOLUTION_v1.json")
 # 输出路径可经 K2_OUT_PCB / K2_OUT_JSON 环境变量覆盖（默认 v5 路径，
 # 行为零变化）；M13 v8 板重建经覆盖产出 k2_v6，保留 v5 证据不覆盖。
 OUT_PCB = os.environ.get("K2_OUT_PCB", "/tmp/opencode/boards/k2_v5.kicad_pcb")
@@ -98,44 +101,6 @@ E4_FINAL_TARGET_REFS = 54   # @P4
 # ECN-004 补齐器件 (MUST DO #4/#5)
 MISSING_REFS = []   # G-ROOT-1 附带：K2_REFS 取自真源 YAML，无「补齐」概念
 
-# ─────────────────────────────────────────────────────────────────────────
-# 补齐器件新定位 (ECN-004 规则, 从冻结决策落表; 已在板内空隙验证 0 重叠)
-# 全部 ∈ 板框 x∈[23,143], y∈[33,71]
-# ─────────────────────────────────────────────────────────────────────────
-NEW_PLACE = {
-    # U7@(93.825,44.7) VCC 去耦 (4×0.1µF + 1×1µF bulk): x≈91.0 同列 (C67-C72),
-    # 上放 y∈[38,43] 避开走廊带 y=44.7±0.5
-    "C78": (91.0, 38.5, 0.0),   # U7 bulk 1µF (0603)
-    "C74": (91.0, 40.0, 0.0),   # U7 VCC pin6/18/38/50 去耦 0.1µF
-    "C75": (91.0, 41.0, 0.0),
-    "C76": (91.0, 42.0, 0.0),
-    "C77": (91.0, 43.0, 0.0),
-    # U3@(93.825,62.7) VCC 去耦: x≈91.0 同列, y∈[57,61] (U3 下方空隙)
-    "C83": (91.0, 57.0, 0.0),   # U3 bulk 1µF (0603)
-    "C79": (91.0, 58.0, 0.0),
-    "C80": (91.0, 59.0, 0.0),
-    "C81": (91.0, 60.0, 0.0),
-    "C82": (91.0, 61.0, 0.0),
-    # P3V3 总线 bulk 10µF (0805): 电源区 x∈[30,45], y∈[37,45]
-    "C84": (44.0, 40.0, 0.0),
-    # MCU 电源去耦: C85 0.1µF / C86 4.7µF bulk — 就近 U1@(36,52) 左上方
-    "C85": (31.5, 54.5, 0.0),
-    "C86": (31.5, 56.0, 0.0),
-    # PERST# 滤波 0.1µF — 电源区空闲带
-    "C87": (44.0, 35.0, 0.0),
-    # 12V_IN 输入去耦 1µF — 就近 U2/J12
-    "C88": (29.5, 41.5, 0.0),
-    # PWR_5V_KEY 输出 4.7µF — 电源区
-    "C89": (44.0, 37.5, 0.0),
-    # P3V3_AUX 去耦 0.1µF — 就近 U1 x≈30, y∈[50,55]
-    "C90": (30.0, 53.0, 0.0),
-    # I2C pull-up 4.7K ×4 — strap 电阻列阵右缘 x=55.5 一列
-    "R31": (55.5, 66.5, 0.0),
-    "R32": (55.5, 67.5, 0.0),
-    "R33": (55.5, 68.5, 0.0),
-    "R34": (55.5, 69.5, 0.0),
-}
-
 def _scan_block(text: str, i: int) -> int:
     """i 指向 '('；返回配平括号之后的下标（exclusive）。"""
     depth, instr, j = 1, False, i + 1
@@ -159,11 +124,24 @@ def _scan_block(text: str, i: int) -> int:
 
 
 def load_refmap():
-    """⑦ 库↔板名集 + 坐标锚点（#K2-26 §3-1）。失败即 fail-closed（禁隐式兜底）。"""
+    """⑦ 库↔板名集（#K2-26 §3-1）。失败即 fail-closed（禁隐式兜底）。"""
     if not os.path.isfile(REFMAP_PATH):
         raise SystemExit("[G-ROOT-1] 库↔板名集不存在: %s ⇒ fail-closed" % REFMAP_PATH)
-    d = json.load(open(REFMAP_PATH, encoding="utf-8"))
-    return d["ref_to_mod"], {k: tuple(v) for k, v in d["placement_anchor"].items()}
+    return json.load(open(REFMAP_PATH, encoding="utf-8"))["ref_to_mod"]
+
+
+def load_placement():
+    """canonical 布局解（L2「真源 layout 方案」）——坐标**唯一来源**，**不读任何板**。
+
+    #K2-27 §五-2：来源具名 + sha（见该件 `_basis` 与 `provenance_gap`）。
+    """
+    if not os.path.isfile(PLACEMENT_PATH):
+        raise SystemExit("[P3] 布局解不存在: %s ⇒ fail-closed" % PLACEMENT_PATH)
+    d = json.load(open(PLACEMENT_PATH, encoding="utf-8"))
+    missing = [r for r in K2_REFS if r not in d["refs"]]
+    if missing:
+        raise SystemExit("[P3] 布局解缺 ref（fail-closed）: %s" % missing)
+    return {r: tuple(v["at"]) for r, v in d["refs"].items()}
 
 
 def load_mod_pads(mod_name: str):
@@ -246,17 +224,13 @@ def _strip_card_suffix(value):
 def build_device_table(symbols, placements, ref_pos, ref_mod):
     """构造每个 K2 器件的完整定义.
 
-    坐标 = refmap 冻结锚点（P2 阶段；P3 改真源构造）
-    pad 几何 = 库快照 mod（G-ROOT-1 具名外部源）
+    坐标 = canonical 布局解（L2，非板）· pad 几何 = 库快照 mod（G-ROOT-1）
     """
     dev = {}
     for ref in K2_REFS:
         pl = placements[ref]
         sym = symbols[pl["symbol"]]
-        if ref in ref_pos:
-            pos = ref_pos[ref]
-        else:
-            pos = NEW_PLACE[ref]      # 兼容位：refmap 缺项时回落 ECN-004 表（当前 54/54 已覆盖）
+        pos = ref_pos[ref]            # canonical 布局解（唯一坐标来源）
         mod = ref_mod[ref]
         fp = "ForgeOS:" + mod
         # ── value ──
@@ -758,7 +732,8 @@ def main():
     symbols, nets, placements = parse_yaml()
     spec = parse_spec()
     g10_ko, g10_cu, g10_holes = load_g10_inputs(spec)   # G-ROOT-2
-    ref_mod, ref_pos = load_refmap()
+    ref_mod = load_refmap()
+    ref_pos = load_placement()
 
     # SPEC 板框交叉校验
     sx = spec["board"]["outline_x"]
