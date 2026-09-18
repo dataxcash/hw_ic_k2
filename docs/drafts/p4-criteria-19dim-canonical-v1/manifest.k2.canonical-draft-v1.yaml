@@ -1,0 +1,61 @@
+# criteria/manifest.k2.yaml —— CANONICAL 合并件草案 v1（ENG 起草；**未安装、未签认**）
+#
+# 目的：把现存 6 份清单（criteria 在库 9 维 / v2 17 维 / v3草案 18 维 / v3.1 18 维 /
+#       v4 安装候选 18 维 / v4 控制件 18 维）合并为**唯一 canonical 清单**，消除
+#       「同一语义两个维名」与「维数不等」导致的跨件不可复现（见
+#       k2/docs/K2-P4-CRITERIA-19DIM-CANONICAL-MERGE-DRAFT-v1.md）。
+#
+# 三项硬约束（本草案自检，非判据）：
+#   ① 零新增检查齿（owner ②）：维度集 == adjudicate.draft-v4.py 实际 gate 的 18 维
+#      ∪ {rule_severity_manifest}（判定器内无条件执行）＝ 19；**不引入任何新维**。
+#   ② 零别名：只使用 v4 族命名；v2/v3 族维名（lib_footprint_electrical /
+#      density_and_spacing / v3_reference_continuity / drc_warning_disposition /
+#      board_frame_and_keepout）**不出现**在本件中。
+#   ③ 零无消费者键：不使用 adjudicator 不读的 YAML 键（如 aliases / unconditional_*）。
+#
+# ⚠️ 归属：本件是**候选**，`enabled` 缺省与「无条件维处置」两处须监理裁定后方可安装
+#    （把 not_countersigned 改 false）。安装属 gate 属主侧；ENG 不落件。
+manifest_version: 5-canonical-draft
+project: k2
+board: k2_v4_8L.l5.kicad_pcb        # 五步复合板（2026-09-17 落件 6ff49da5678c2108）
+not_countersigned: true             # 待监理签认
+source_of_truth:
+  register: .omo/supervision/ledger/K2-DEFECT-REGISTER-v1.md
+  register_section: "## C. 出厂判据"
+  rulings: "监理 #K2-19 · #K2-20 · #K2-21"
+
+# ── 19 维 = 18 gated（adjudicate.draft-v4.py 逐维 C.get(<name>).enabled 守卫）
+#          + 1 无条件（rule_severity_manifest，当前无 enabled 守卫；见 §3 方案 O1/O2/O3）──
+checks:
+  # —— 冻结族（在库 9 维，P1 判据资产）——
+  zone_filled:              {enabled: true, expect: "filled_zones == total_zones"}
+  device_has_pads:          {enabled: true, expect: "every_footprint_pads >= 1"}
+  drill_count:              {enabled: true, npth_min: 4, expect: "npth >= 4"}
+  net_declared_realized:    {enabled: true, expect: "every_declared_net_pads >= 2"}
+  pin_map_complete:         {enabled: true, expect: "missing_pads == 0"}
+  non45_segments:           {enabled: true, expect: "non45 == 0"}
+  refdes_sets_equal:        {enabled: true, expect: "sch_set == board_set（排除纯机械件 H*，逐条列名留痕）"}
+  pipeline_present:         {enabled: true, scope: "k2", expect: "k2 域内每个含 .kicad_sch 的目录被 pipeline.yaml 覆盖"}
+  verdict_schema:           {enabled: true, expect: "no artifact contains a 'verdict' key"}
+  # —— 草案族（v4 族命名；v3.1 起）——
+  drc_errors:               {enabled: true, expect: "drc_errors == 0"}
+  drc_warning_dispositions: {enabled: true, expect: "board_warning_types ⊆ drc_warning_dispositions[].type"}
+  unconnected_zero:         {enabled: true, expect: "unconnected_items == 0"}
+  fp_lib_table_present:     {enabled: true, expect: "fp-lib-table exists in board project dir"}
+  lib_electrical_level:     {enabled: true, consume: "w8_audit_json", expect: "n_electrical_diff == 0 且 n_pad_name_set_only == 0（以板为准）；审计板 sha16 须 == 受审板 sha16（陈旧 ⇒ fail-closed）"}
+  pads_within_outline:      {enabled: true, consume: "pads_outline_json", expect: "全 pad 出框 == 0（AABB 与真外框多边形双口径）；测量板 sha16 须 == 受审板 sha16（陈旧 ⇒ fail-closed）"}
+  keepout_active:           {enabled: true, expect: "每个 keepout 区 >=1 flag != allowed"}
+  # —— 阈值待监理（机制已实现；给阈值即可 enabled）——
+  density_and_clearance:    {enabled: false, consume: [density_json, min_clearance_json], pending: "阈值键 = cell_mm / cell_origin / max_fp_per_cell / min_copper_clearance_mm / 可选 3 键；未定 ⇒ fail-closed"}
+  ref_plane_continuity:     {enabled: false, consume: "v3_plane_json", pending: "阈值 = scope(nominal|strict_filled) / min_coverage"}
+  # —— 无条件维（注册 1/3：方案 O1。判定器 adjudicate.draft-v4.py 现**无条件**执行本维；
+  #      本行 enabled:true 与当前行为一致；若监理择 O2/O3 则本行随之删除或改注释 ——）
+  rule_severity_manifest:   {enabled: true, expect: "未登记豁免的 ignore == 0（deny-by-default）"}
+rule_severity_exemptions: []
+drc_warning_dispositions:
+  - {type: missing_courtyard, disposition: "不豁免；登记为 J-7 图形级已知缺口 + L2 placement 项", evidence: "k2/docs/K2-P4-W7-SUPERVISION-DECISION-SHEET-v1.md 项4 + 监理 #K2-21 §〇③"}
+  - {type: lib_footprint_mismatch, disposition: "以板为准（W-8）：电气级 0，图形/属性级容忍，逐条登记", evidence: "k2/docs/K2-J7-W8-FOOTPRINT-LIB-AUDIT-v1.md（59 件）"}
+thresholds: {}
+thresholds_pending_supervisor:
+  density_and_clearance: [cell_mm, max_fp_per_cell, min_copper_clearance_mm]
+  ref_plane_continuity: [scope, min_coverage]
