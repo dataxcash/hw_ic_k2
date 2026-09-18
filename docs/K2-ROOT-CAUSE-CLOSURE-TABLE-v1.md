@@ -298,3 +298,96 @@ find . -name 'k2_v4_8L.l4.kicad_sch' -not -path './AppDir/*'              # 期�
 **边界**：本节**只读取证**；未改板/pro/库/SPEC/生成器/`criteria/`/真源 yaml/冻结件；未派 WORKER；临时仅 `/tmp/opencode`。
 
 —— ENG（ARCHER）· 2026-09-18 · 探针 `1bd3f4a9d47ff0d4`
+
+---
+
+## 13. v1.5 增量更新（2026-09-18；**#K2-23 §二-11 采纳生效 + inc77/79/80/83 载体态刷新**；§0/§1..§12 为历史快照，不改写）
+
+> 触发：监理 **#K2-23 §二-11**「闭环表 3 处修正 —— **放行采纳**（提案 `86e73a061e57f5d4`；一致性机检 **v1.4 FAIL → v1.5 PASS**；对 19 维读数影响 **0 处**）」+
+> 监理自动续推（按已批准计划推进当前阶段）。本节 ③ 列**逐条以只读实测复核**；**判定仍归监理**。
+
+### 13.0 生效：§12 的 3 处修正（由「建议/核验」→ **采纳生效**）
+
+| 行 | 生效后 ③ | 生效后 ⑤ | 依据 |
+|---|---|---|---|
+| `M-02` | **载体已修**（`k2/README.md` · `k2/docs/01-architecture.md` 中 `DS160PR810` = **0**，本轮复测 0；`DS320PR1601` 为现行名） | **未闭**（载体已修；**无判据消费文档层** ⇒ 「无判据类」根闭口径**须监理定义**，ENG 不预判） | `#K2-23 §二-11` · 本节 §13.4 |
+| `F-12` | **载体已修**（`k2/hw/fp-lib-table` `d731638859be9a08` 存在 + `ForgeOS` 1 条 + `ForgeOS.pretty` **20** 件；refdes 侧 = 伪缺陷 ⇒ 由 `N-07` 消解） | **未闭**（④ `fp_lib_table_present` 已实现、**待安装 + 签认**） | 同上 |
+| `N-07` | **现象不成立（伪缺陷）**：排除 `(lib_symbols …)` 子树后**实例态未标注 refdes = 0**（本轮回测 6 个 sch 全 0；31 个 `?` 全在定义子树） | **OUT（具名：前提实测不成立）** | 同上（`K2-P4-CLOSURE-ADOPTION-CRITERIA-IMPACT-DRAFT-v1.md`） |
+
+### 13.1 载体态刷新（**仅列本轮实测复核到的变化**；未列条目 = §12 记载仍成立，其 ⑤ 前提见 §13.2）
+
+| 行 | §12 记载 | **本轮实测（2026-09-18）** | 新 ③ 归类 | 证据 |
+|---|---|---|---|---|
+| `U-10` | 未修（生成器无孔/keepout 产出 = G-ROOT-2） | **G-ROOT-2 已闭载体**：生成器 emit **18 zone（8 keepout + 10 有网铜区，源＝SPEC rev-49 输入层，不读板）+ 4 NPTH**；KiCad 级实测 `zones 18 / keepout 8 / NPTH 4 Ø3.2 / ZONE_FILLER 后 zone_filled 10/10 / keepout_active=True` | **载体已修**（余 ④ 未在岗） | k2 `6cae23a`（inc80）· Step 5 复跑件 `K2-P4-Z4-STEP5-RERUN-ACCEPTANCE-v1.md` |
+| `M-05` | 未修，仅板面（生成器无铺铜产出 = G-ROOT-2） | **G-ROOT-2 已闭载体（铺铜产出侧）**：10 有网铜区由生成器按 SPEC 输入层产出、填充由出图前 `ZONE_FILLER` 强制（实测 10/10）；**「无填充/平面前置判据」侧**仍待 `ref_plane_continuity` 安装 | **载体已修**（判据侧待安装） | 同上 |
+| `F-2` | 同 `M-05` | 同 `M-05` | **载体已修**（判据侧待安装） | 同上 |
+| `M-11` | 未修（G-ROOT-1 + G-ROOT-2） | **G-ROOT-2 侧已闭**（4 NPTH 产出）；**G-ROOT-1 侧未闭**（排针 pad 几何仍取自锚板 ⇒ 生成器产物 `pads=262` 仍缺 16 排针 pad） | **载体未修**（余 G-ROOT-1） | k2 `6cae23a` + Step 5 复跑件（产物 `器件数 42 / pads 262`） |
+| `F-1` | 未修（G-ROOT-1 + G-ROOT-2；5 排针 0 焊盘 / 全板 0 孔） | **G-ROOT-2 侧已闭**（4 NPTH）；**G-ROOT-1 侧未闭**（排针 pad 循环依赖） | **载体未修**（余 G-ROOT-1） | 同上 |
+| `F-14` | 未修（`YAML_PATH` 硬编码 + symlink 兜底 = G-ROOT-3） | **G-ROOT-3 已闭载体**：`YAML_PATH = ROOT/_PMCFG.project_config()["nets_yaml"]` + **显式 fail-closed「禁 symlink 兜底」**；`k2/boards/k2_sch.yaml` **已删**（`k2/boards/` 空目录）；E4 确定性实测（两次运行同 sha `1252bd2e74957d82`） | **载体已修**（E4 判据实现待安装） | k2 `ba3cd07`（inc79）· Step 5 复跑件 |
+| `N-05` | 部分修（symlink 消错） | **G-ROOT-3 侧已闭**（同上）；余 `PCB_REF_PATH` = **G-ROOT-1** 侧未闭 | **载体已修（G-ROOT-3 侧）**，余 G-ROOT-1 | 同上 |
+| `M-03` | 未修（真源 nc 声明 = 0；errata-2 +nc 105 未安装） | **路径已裁 + 口径载体已落**：`#K2-23 §二-6` 裁 **乙**（不动真源、只修判据读取口径）；`D-7a`（NC 白名单 ①②）已落 `_shared a266851`（实测负控：无 NC 口径 → 106 处误报；有 D-7a → 余 **2 处**，同根 `C89/A`） | **载体已修**（口径侧；余 ⑤） | `_shared a266851` · inc76 件 |
+| `M-17` | 未修（同上） | 同 `M-03` | **载体已修**（口径侧；余 ⑤） | 同上 |
+| `F-10` | 未修（草案 errata-2 未安装） | 同 `M-03`（`#K2-23 §二-6` 裁乙 ⇒ errata-2 属**已驳回**路径，非欠件） | **载体已修**（口径侧；余 ⑤） | 同上 |
+| `M-13` | 未修（`k2/pipeline.yaml` 缺；安装属 gate 属主） | **共享层 5 修已落 + BOM 前置已落**：`_shared a266851`（D-2 缺件 fail-closed / D-3 affected 三路径 / **D-4b 案A `cmd_verify` 跑各 phase `checks`** / `D-7a`）；`k2/fab/k2_v4_bom.csv` **`9e4ddf4a44302b76`**（55 refs，每行一 ref）⇒ 只差 **安装**（⑤ 硬前置） | **载体已修（前置件）**；安装待 ⑤ | `_shared a266851` · 本节 §13.4 |
+| `F-13` | 未修（同上；两个核对器零调用） | 同 `M-13`（安装待 ⑤；核对器接线随装） | **载体已修（前置件）** | 同上 |
+| `N-04` | 未修（接线 = gate 安装项） | 同 `M-13`（必选三联 `sch_structural/netlist_connect/bom_consistent` 的 **BOM 件已存在** ⇒ 安装后 `bom_consistent` 有实件可判） | **载体已修（前置件）** | 同上 |
+| `J-9` | 未闭（草案 `pipeline.yaml.draft` 已备，安装属 gate 属主） | 同 `M-13`：**判据侧 + BOM 件均已就绪**，唯一欠项 = 安装（⑤ 硬前置） | **未闭**（判据类，见 §13.2） | 同上 |
+| `F-3` | 载体已修（rev-20…**rev-47**） | 版本链延伸：**现行 SPEC `rev-49`** `b8f4a7cb67b575f0`（`project.yaml` 指向；D1/D2 与 G10 输入层已载） | **载体已修**（刷新） | `k2/pm_gate/project.yaml` · SPEC rev-48/49 |
+| `N-02` | 载体已修（指针经 rev-20…**rev-47**） | 同 `F-3`：**rev-49** | **载体已修**（刷新） | 同上 |
+
+> **未列出的其余条目**：§12 的 ③ 记载自 inc44 起**无对应载体动作**（本会话载体动作仅 inc77/79/80/82/83 五项，逐项影响面已在上表穷举）⇒ 原样保留，**非抽样**。
+
+### 13.2 计数（**v1.5，ENG 实测口径；判定归监理**）
+
+| ⑤ | v1.4 | **v1.5（本轮）** | 变动来源 |
+|---|---|---|---|
+| 根闭 | 0 | **0**（④ 仍未在岗：`criteria/` 未签认 + `k2/pipeline.yaml` 缺失，本轮实测同前） | — |
+| OUT（具名） | 5 | **5** | `U-01` `U-02` `M-15` `F-11` `N-07` |
+| 未闭 | 54 | **54** | — |
+| └ 载体已修、只差判据在岗 | 17 | **25** | `+U-10` `+M-05` `+F-2` `+F-14` `+N-05` `+M-03` `+M-17` `+F-10` |
+| └ 判据已实现、待安装 + 签认（`J-1..J-10`） | 10 | **10** | — |
+| └ 载体未修（结构性根因） | 27 | **19** | `−` 上表 8 条 |
+
+### 13.3 关门剩余动作（更新 §12.3；P4 关门 = 全闭）
+
+| 责任方 | 缺失条件 | 涉及条目 | 条数 |
+|---|---|---|---|
+| **gate 属主 + 监理** | 判据安装 + manifest 签认（对全部 54 条均为必要条件） | 全部 | **54** |
+| **owner（L1，唯一）** | **⑤ `C89/A`／`PWR_5V_KEY`**（`pipeline.yaml` 安装与 `net_declared_realized` 严口径同源硬前置） | `M-03` `M-17` `F-10` `J-9` 等（经 ⑤ 显形） | — |
+| **监理（落件/放行）** | **⑦ 库快照重建 + 落件 + 库↔板名集** ⇒ G-ROOT-1 | `U-03` `U-04` `U-07` `M-09` `F-1` `F-7` `M-11` `F-14`（`PCB_REF_PATH` 侧）`N-05`（同侧） | 结构性 |
+| **监理（口径/阈值）** | 密度/间距应然阈值 · `ref_plane_continuity` 阈值 · 「无判据类」根闭口径（`M-02`） | `M-12` `U-09` `M-05` `F-2` `M-02` | — |
+| **ENG（获批后）** | `N-03` pro 根图指针（一行键值；与待批落件排程） | `N-03` | 1 |
+| **P5 交付面** | 出交付 Gerber | `N-01` | 1 |
+
+> **读法不变**：任一条未闭行都同时缺「判据在岗」（首行）⇒ **安装 + 签认是一次性最大杠杆**；本轮把「仅凭 **⑦ 放行** 即可闭」的结构性条目从 15 收敛到 **G-ROOT-1 家族**一处。
+
+### 13.4 复跑（本节每处实测；仓库只读）
+
+```bash
+cd /home/fila/jqdDev_2025/ic_hw; export SHARUN=$PWD/AppDir/sharun
+# G-ROOT-3 已闭（YAML_PATH 配置驱动 + symlink 已删）
+grep -n 'YAML_PATH' k2/tools/k2_gen_v5.py; ls -la k2/boards/            # 期望：配置驱动 + 空目录（无 k2_sch.yaml）
+# G-ROOT-2 已闭（emit 18 zone / 4 NPTH；两次同 sha）
+K2_OUT_PCB=/tmp/opencode/inc83/g1.kicad_pcb K2_OUT_JSON=/tmp/opencode/inc83/g1.json python3 k2/tools/k2_gen_v5.py
+AppDir/usr/bin/python3.11 -c "
+import pcbnew;b=pcbnew.LoadBoard('/tmp/opencode/inc83/g1.kicad_pcb')
+print('zones',len(b.Zones()),'keepout',sum(1 for z in b.Zones() if z.GetIsRuleArea()))"
+# BOM 前置已落（55 refs；真 check PASS）
+python3 k2/tools/k2_p4_bom_gen_v1.py --out /tmp/opencode/bomchk.csv     # 期望预测 sha16 = 9e4ddf4a44302b76
+python3 -c "
+import pathlib,sys; sys.path.insert(0,'_shared')
+from eda_core.pipeline import checks
+print(checks.check_bom_consistent({'_root':pathlib.Path('k2').resolve(),'_yaml_path':pathlib.Path('k2/pipeline.yaml')},
+      {'sch':'k2/hw/sch/k2_sch.kicad_sch','bom_csv':'k2/fab/k2_v4_bom.csv'}))"   # 期望 (True, 'BOM 与 sch 同步 (55 器件)')
+# M-02 / F-12 / N-07（3 处采纳）
+grep -c 'DS160PR810' k2/README.md k2/docs/01-architecture.md                     # 期望 0 / 0
+sha256sum k2/hw/fp-lib-table; ls k2/hw/lib/ForgeOS.pretty | wc -l                # d7316388… / 20
+# N-07：实例态未标注 refdes = 0（31 个 ? 全在 lib_symbols 定义子树）——见 §12.4 探针命令
+# ④ 在岗态（全表前提）
+sha256sum criteria/*; ls k2/pipeline.yaml                                        # 未改 / 不存在
+```
+
+**边界**：本节**只读取证 + 追加本段**；未改板/pro/库/SPEC/生成器/`criteria/`/真源 yaml/冻结件/`_shared`；未派 WORKER；临时仅 `/tmp/opencode`；**未新增检查齿**。
+**fail-closed**：P4 未全绿（本表全闭）不下单、不出交付 Gerber。
+
+—— ENG（ARCHER）· 2026-09-18 · 表版本 **v1.5** · 图集 v10 `d6613754a7382c99` · BOM `9e4ddf4a44302b76` · 受审板 `6ff49da5678c2108`
