@@ -9,7 +9,8 @@ PCIe Gen4 转换卡卡2-K2 权威生成器。取代旧多脚本拼接
 本脚本纯执行, 不做任何挪器件/换层/fallback。自检 FAIL 即 raise ValueError 阻断写盘。
 
 输入 (全部只读):
-  boards/k2_sch.yaml                  — 网表权威 (symbols 引脚图 + nets 网表 + sheets refdes 清单, K2 卡子集)
+  project.yaml::nets_yaml             — 网表权威 (symbols 引脚图 + nets 网表 + sheets refdes 清单, K2 卡子集)
+                                        [G-ROOT-3] 配置驱动，禁 symlink 兜底
   pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json — 几何权威 (板框/走廊/电容墙/components)
   pm_gate/artifacts/k2_v4/L2/frozen/L2_STRUCTURE_v1.0.md — 冻结决策 (ECN-004)
   k2_v4.kicad_pcb                    — 坐标锚点 (只读提取已验证器件坐标与 pad 几何)
@@ -36,12 +37,20 @@ import yaml
 # 冻结路径 (只读)
 # ─────────────────────────────────────────────────────────────────────────
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-YAML_PATH = os.path.join(ROOT, "boards/k2_sch.yaml")
 # G2(§五④): SPEC 路径经 pm_gate.config 解析（禁硬编码 SPEC 名；根因 F-14/N-05）
 sys.path.insert(0, os.path.join(ROOT, "_shared"))
 os.environ.setdefault("PM_GATE_PROJECT_ROOT", ROOT)   # 自定位：不依赖调用方 cwd
 from pm_gate import artifacts as _ARTIFACTS, config as _PMCFG   # noqa: E402
 SPEC_PATH = _ARTIFACTS.path("L3", _PMCFG.spec_name())
+# G-ROOT-3（#K2-23 §二-3）：真源网表路径**配置驱动**（同 SPEC_PATH 口径），**去 symlink 兜底**。
+#   值 = project.yaml::nets_yaml（#K2-23 §二-6 裁定「乙」= hw/data/k2_sch.errata-1.yaml）。
+#   缺配置 / 文件不存在 ⇒ fail-closed（禁回落 boards/k2_sch.yaml 之类隐式兜底）。
+_NETS_REL = _PMCFG.project_config().get("nets_yaml")
+if not _NETS_REL:
+    raise SystemExit("[G-ROOT-3] project.yaml 缺 nets_yaml ⇒ fail-closed（禁 symlink 兜底）")
+YAML_PATH = os.path.join(ROOT, _NETS_REL)
+if not os.path.isfile(YAML_PATH):
+    raise SystemExit("[G-ROOT-3] 真源网表不存在: %s ⇒ fail-closed" % YAML_PATH)
 PCB_REF_PATH = os.path.join(ROOT, "k2_v4.kicad_pcb")
 # 输出路径可经 K2_OUT_PCB / K2_OUT_JSON 环境变量覆盖（默认 v5 路径，
 # 行为零变化）；M13 v8 板重建经覆盖产出 k2_v6，保留 v5 证据不覆盖。
