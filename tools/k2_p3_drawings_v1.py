@@ -456,6 +456,20 @@ def main():
             rec["at"] = None; rec["src"] = "无"; rec["status"] = "coord_pending"
             rec["note"] = "真源件在受审板上无实例 ⇒ 板/真源不一致，须具名上报"
         fpc, pads = footprint_pads(fp)
+        if fpc is None:
+            # ⑦（#K2-34 §一-6）：YAML 符号 footprint 串**降为交叉核对**；解析源改用
+            #   **受审板 as-built FPID**（J3/J4：YAML 无 `__N` 后缀，库快照仅存 `__N` 件）
+            #   —— 非静默 None；不一致即具名登记（`footprint_resolve`）。
+            _fb = (a or {}).get("footprint", "")
+            _fc, _pd = footprint_pads(_fb) if _fb else (None, [])
+            if _fc is not None:
+                fpc, pads = _fc, _pd
+                rec["footprint_yaml"] = fp
+                rec["footprint"] = _fb
+                rec["footprint_resolve"] = {
+                    "authority": "受审板 as-built FPID（YAML 串交叉核对；不一致即登记）",
+                    "yaml": fp, "board_as_built": _fb,
+                    "resolved_file": os.path.relpath(_fc, ROOT)}
         rec["footprint_file"] = os.path.relpath(fpc, ROOT) if fpc else None
         rec["footprint_pads"] = len(pads)
         rec["footprint_pad_nums"] = sorted(p0["no"] for p0 in pads)

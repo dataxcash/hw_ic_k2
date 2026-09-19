@@ -305,6 +305,16 @@ def _fmt_rot(rot):
     return f"{r:g}"
 
 
+def _fmt_mm(v) -> str:
+    """mm 坐标发射：1 nm 分辨率（%.6f）后去尾零。
+
+    #K2-34 §一-6 (i-a′)：库侧坐标以 nm 整数存储，`%.3f` 会把非 µm 对齐值
+    量化到 0.5 µm（U-03/M-09/J-7 根因）；µm 对齐值文本不变。
+    """
+    s = f"{float(v):.6f}".rstrip("0").rstrip(".")
+    return "0" if s in ("", "-0") else s
+
+
 def _u5(kind: str, *parts: str) -> str:
     """确定性 uuid5: 固定 namespace + 元素类型前缀 + 键部分 (ref/pad/net 等).
     零运行时自由度: 同输入必得同 uuid, 与随机 uuid4 等效唯一 (全局不冲突)."""
@@ -336,13 +346,13 @@ def gen_footprint(d):
         w, h = p["size"]
         if p["type"] == "thru_hole":
             drill = p.get("drill", 0.8)
-            pad = (f'\t\t(pad "{pnum}" thru_hole circle (at {px:.3f} {py:.3f}) '
+            pad = (f'\t\t(pad "{pnum}" thru_hole circle (at {_fmt_mm(px)} {_fmt_mm(py)}) '
                    f'(size {w:.3f} {h:.3f}) (drill {drill:.3f}) '
                    f'(layers {p["layers"]}) (net "{net}") '
                    f'(uuid "{_u5("pad", d["ref"], pnum, net)}"))')
         else:
             rr = f' (roundrect_rratio {p["rratio"]:g})' if p.get("rratio") else ""
-            pad = (f'\t\t(pad "{pnum}" smd {p["shape"]} (at {px:.3f} {py:.3f}) '
+            pad = (f'\t\t(pad "{pnum}" smd {p["shape"]} (at {_fmt_mm(px)} {_fmt_mm(py)}) '
                    f'(size {w:.3f} {h:.3f}){rr} '
                    f'(layers {p["layers"]}) (net "{net}") '
                    f'(uuid "{_u5("pad", d["ref"], pnum, net)}"))')
