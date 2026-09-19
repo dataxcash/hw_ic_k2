@@ -443,7 +443,13 @@ In4 的 `P3V3_AUX`(prio 0, 28.9mm²) 与 `MCU_VDD`(prio 0) **全重叠**，链�
 
 **确定性**：全链 `--upto all` **4 次并行连跑逐字节同 `30fa849641323f98104f`**（`inc112a/b/c/d`）。
 
-### 21.4 边界
+### 21.4 附带改动（同笔）
+
+`canon_sort_tracks` 的 `KINDS` 由 `("segment","via","zone")` 收紧为 `("segment","via")` —— **zone 不参与全局重排**
+（填充语义 = SPEC 序）；并加 `firsts` 空表守卫（段1 骨架板无 segment/via 时原序不动，避免 `StopIteration`）。
+此改动经本笔 4 跑逐字节同验证，未破坏确定性。
+
+### 21.5 边界
 
 改：`k2_route_segment_v1.py f28a4b5a08ed38c0`。读数件 `k2/docs/drafts/p4-l6-reland-v1/segment2c_canonical_inc112.json`。
 **未改**：冻结四源（l4 `d4e81f64` 永不改）· 判据 rev=2 · SPEC 原件 · 真源 · 生成器 `1ca5ac79` · 受审板 · `criteria/**` · `_shared/**`。
