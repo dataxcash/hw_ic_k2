@@ -106,15 +106,20 @@ def run_drc(board, workdir, kicad_cli):
     d = _j.loads(out.read_text())
     # 确定性：违规条目 + 条目内 items 全序化（工具侧按文件序遍历 ⇒ 候选序随 kicad 输出序漂移，
     # 实测 2c-B 两条不同锚点重布位、差 ~0.176mm）。输入侧固化序 = 不改工具件、保可追溯。
+    def _stable(x):
+        """稳定键：剔除 **uuid**（每次运行重生成 ⇒ 若入键会使序随运行漂移，实测 2c-B 锚点差 0.176mm）。"""
+        if isinstance(x, dict):
+            return _j.dumps({k: v for k, v in x.items() if k != "uuid"}, sort_keys=True, ensure_ascii=False)
+        return _j.dumps(x, sort_keys=True, ensure_ascii=False)
     for v in d.get("violations", []):
         if isinstance(v.get("items"), list):
-            v["items"] = sorted(v["items"], key=lambda x: _j.dumps(x, sort_keys=True, ensure_ascii=False))
+            v["items"] = sorted(v["items"], key=_stable)
     d["violations"] = sorted(d.get("violations", []),
-                             key=lambda v: (str(v.get("type")), _j.dumps(v.get("items"), sort_keys=True, ensure_ascii=False),
-                                            _j.dumps(v.get("description", ""), ensure_ascii=False)))
+                             key=lambda v: (str(v.get("type")), [_stable(i) for i in v.get("items", [])],
+                                            str(v.get("description", ""))))
     for kk in ("unconnected_items",):
         if isinstance(d.get(kk), list):
-            d[kk] = sorted(d[kk], key=lambda x: _j.dumps(x, sort_keys=True, ensure_ascii=False))
+            d[kk] = sorted(d[kk], key=_stable)
     out.write_text(_j.dumps(d, sort_keys=True), encoding="utf-8")
     vs = d.get("violations", [])
     return str(out), {"violations": len(vs), "errors": sum(1 for v in vs if v["severity"] == "error"),
@@ -181,6 +186,14 @@ def main() -> int:
             rec["steps"].append({"step": "2b", "spec": pathlib.Path(a.spec_rev19).name,
                                  "stub_w": st["stub_width_mm"], "vias": st["vias"], "tracks": st["tracks"],
                                  "blocked": len(st["blocked"]), "sha16": sha16(out), **track_hist(out)})
+    def _canon(tag):
+        n_s = canon_sort_tracks(out, la)
+        n_u = canon_all_uuids(out, la)
+        rec["steps"].append({"step": "canon:" + tag, "blocks_sorted": n_s, "uuids_remapped": n_u,
+                             "sha16": sha16(out), **track_hist(out)})
+
+    if not a.dry_run:
+        _canon("pre-2cA")
     # ── 段2c 第一步：converge_v1 阶段 A（A1 NC 语义 ⇒ 消 NO_CONNECT；A2 keepout pad；A3 丝印镜像）──
     if _ord(a.upto) >= _ord("2cA"):
         cv = _load("k2cv", "k2_p4_converge_v1.py")
@@ -195,6 +208,8 @@ def main() -> int:
         rec["steps"].append({"step": "2c-A", "rc": rc, "tool_stdout": _buf.getvalue().strip(),
                              "sha16": sha16(out), **track_hist(out)})
 
+    if not a.dry_run and _ord(a.upto) >= _ord("2cB"):
+        _canon("pre-2cB")
     # ── 段2c 第二步：converge_v1 阶段 B（旧铜避让新 pad；需链内即时 DRC）──
     if _ord(a.upto) >= _ord("2cB"):
         cvb = _load("k2cv", "k2_p4_converge_v1.py")
@@ -212,10 +227,7 @@ def main() -> int:
                              "sha16": sha16(out), **track_hist(out)})
 
     if not a.dry_run:
-        n_s = canon_sort_tracks(out, la)
-        n_u = canon_all_uuids(out, la)
-        rec["steps"].append({"step": "canon-sort", "blocks_sorted": n_s, "sha16": sha16(out)})
-        rec["steps"].append({"step": "canon", "uuids_remapped": n_u, "sha16": sha16(out), **track_hist(out)})
+        _canon("final")
     rec["out"] = str(out); rec["out_sha16"] = sha16(out) if not a.dry_run else None
     print(json.dumps(rec, ensure_ascii=False, indent=1))
     return 0

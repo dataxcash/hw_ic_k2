@@ -1,0 +1,39 @@
+{
+ "artifact": "K2-P4 段2 确定性闭合（#K2-31 §2.1 硬要求 2）",
+ "ts": "2026-09-19",
+ "chain": "段1(d67c0f04) → 2a → canon:pre-2cA → 2b → 2c-A → canon:pre-2cB → 2c-B → canon:final",
+ "determinism": "**3 连跑逐字节同 `c7317b49d2953db5`**（cmp 通过）",
+ "intermediate_shas": {
+  "2a": "0bca9bb96b2ca407",
+  "2b": "18115d839766d04d",
+  "canon:pre-2cA": "d523ebd357b48023",
+  "2c-A": "79142532ce2e215f",
+  "canon:pre-2cB": "4b0551b82c76e486",
+  "2c-B": "e174b594438f849f",
+  "canon:final": "c7317b49d2953db5"
+ },
+ "root_causes_fixed": [
+  "① P3 canonicalize 只归一 segment/via/zone **连续同类 run** ⇒ 全块 uuid5 归一 + 全局排序",
+  "② DRC json 违规/items 序随 uuid 漂移 ⇒ 稳定键排序（**剔除 uuid**）",
+  "③ **步间载入序敏感**（2c-B 的连通簇/锚点遍历依赖板文件载入序）⇒ **链内每步前做确定性归一**（canon:pre-*）"
+ ],
+ "final_readings": {
+  "tracks": 2993,
+  "nets": 101,
+  "fps": 58,
+  "zones": 18,
+  "drc": {
+   "violations": 33,
+   "errors": 8,
+   "unconnected": 200,
+   "types": {
+    "lib_footprint_mismatch": 20,
+    "clearance": 6,
+    "track_dangling": 3,
+    "solder_mask_bridge": 2,
+    "silk_edge_clearance": 2
+   }
+  }
+ },
+ "residual_work": "未连接 200 → 0（2c 余器：gnd_vias/ls_local/ls_route/ls_xlayer/ls_in2/u4d_*/pdn_in4/u1c85/p3v3_col/mroute）；段3 ZONE_FILLER 固化；段4 落件 + pro 补丁；三臂 + §四-5"
+}
