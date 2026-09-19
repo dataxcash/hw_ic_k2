@@ -454,3 +454,40 @@ In4 的 `P3V3_AUX`(prio 0, 28.9mm²) 与 `MCU_VDD`(prio 0) **全重叠**，链�
 改：`k2_route_segment_v1.py f28a4b5a08ed38c0`。读数件 `k2/docs/drafts/p4-l6-reland-v1/segment2c_canonical_inc112.json`。
 **未改**：冻结四源（l4 `d4e81f64` 永不改）· 判据 rev=2 · SPEC 原件 · 真源 · 生成器 `1ca5ac79` · 受审板 · `criteria/**` · `_shared/**`。
 未出 Gerber；未派 WORKER；未新增检查齿。余 23 条**全为 warning**（lib_footprint_mismatch 20 + silk_edge_clearance 2 + track_dangling 1）。
+
+## 22. inc113：§6-D **排针面别定案**（L2）= **F.Cu**（同冻结交付板 l4 / 设计源板 / 段1）
+
+### 22.1 待裁事实
+
+`J6 / J9 / J11 / J12 / J13`（5 件 THT 2.54mm 竖直排针）的器件面别：
+
+| 来源 | 面别 |
+|---|---|
+| 容器冻结**交付板 l4**（`d4e81f64…`，永不改） | **F.Cu** |
+| 设计源板 `k2_v4_8L.kicad_pcb` | **F.Cu** |
+| 段1 生成器产物（= 本链 `l6` 候选；inc112 产物实测） | **F.Cu** |
+| 受审板 l5（P4 期） | B.Cu |
+
+### 22.2 证据（判 B.Cu 为**谱系/放置约定产物**，非制造意图）
+
+1. **全仓无任何工具会翻面**：`grep -rn "SetLayer|\.Flip(" k2/tools/*.py` ⇒ 仅 `k2_p4_lib_snapshot_v1.py:200`（**只读等价证明**用，不落板）与 `k2_w8_trigger_isolation_v1.py:106`（**负控触发器**）。
+   `k2_p4_build_l5_v1.py` 重装排针时只设 `SetPosition`/`SetOrientationDegrees`，**不 Flip** ⇒ l5 的 B.Cu 系其上游谱系（anchor/`board.bak`）继承。
+2. **电气/铜 0 差异**：`K2-P4-P1-P2-LIB-SNAPSHOT-AND-GENERATOR-DEANCHOR-EVIDENCE-v1.md:122` 具名——
+   「5 件排针面别：板 = B.Cu、产物 = F.Cu；其 pad 为 **THT 全层**（`*.Mask` + 全 Cu）⇒ **铜/电 0 差异**，面别属 ⑥ L2 placement」。
+3. **判据侧已定性为「放置帧约定」**：`K2-P4-LIB-SNAPSHOT-AND-REPOINT-EVIDENCE-v1.md` §4 表列 `J9/J11/J13` 与 `J6/J12` 的**面 = B**、`fp_rot = 90°`，误报字段为 `dy`/`rot`，成因为「**背面镜像**后偏移/朝向按板坐标系存储，与库局部坐标系异号」；W-8 v2「放置帧归一」正负控证明其**物理等价**（`59/59 全等`）。
+4. **SPEC 无冲突**：`SPEC_k2_v4.spec-rev-49.json` 对 `components.pin_headers` 仅给 `column_x` / `positions[*]` / `rot` / `pad_diameter`，
+   **无 side/layer** 字段；全 SPEC 文本检索 `单面贴/双面贴/assembly/正面/背面/mounting side/装配` **0 命中** ⇒ **不存在 SPEC 冲突**（故不触发停机条件）。
+
+### 22.3 裁定（L2 · 依 handoff §6-D「按 canonical SPEC/L2 定制造事实」）
+
+**制造事实 = `F.Cu`（正面）**，即与**冻结交付板 l4**、设计源板、段1 生成器、以及本链 `l6` 候选**完全一致**。
+
+**fail-safe 依据**：判 F.Cu = **对已交付板 l4 零变更**；判 B.Cu 需凭空引入一次**面别变更**，而仓内**无任何**机械/装配/SPEC 依据支持该变更（且无工具产生它）。
+⇒ 取"不改变已交付事实"的一侧。l5 的 B.Cu 记为**谱系产物**，不作为制造事实。
+
+**影响**：链（段1→段2→段3）**已经**产出 F.Cu ⇒ **本笔无需改任何板/工具/SPEC**；§6-D 由"待裁"转"已裁"。
+
+### 22.4 边界与残留
+
+**未改**：冻结四源（l4 `d4e81f64` 永不改）· 判据 rev=2 · SPEC 原件 · 真源 · 生成器 `1ca5ac79` · 受审板 l5 · `criteria/**` · `_shared/**`；未出 Gerber；未派 WORKER。
+**残留（供监理）**：若装配/机械口径另有依据要求背面（B.Cu），属**接口面机械事实**的变更，须 owner/监理裁定后由 ENG 落一次面别变更并重跑全链；本笔按"零变更于已交付板"取 F.Cu。
