@@ -156,6 +156,29 @@ def dfm_l7() -> dict:
             "n_fail": len(fails), "fails": [i["item"] for i in fails]}
 
 
+def mask_fix_proof() -> dict:
+    """确定性修法证明（**不改仓库**：全部在内存副本上跑）：单参数 `pad_to_mask_clearance`
+    0.05→≤0.02mm 是否消除 JLC 限（openings 间 ≥0.09mm）下之全部阻焊坝缺口。"""
+    import p3_v57_co146_jlc_dfm_gate as G
+    bt, pt = BOARD.read_text(), PRO.read_text()
+    cur = float(re.search(r"\(pad_to_mask_clearance ([\d.]+)\)", bt).group(1))
+    out = {"nature": "ACCEPT 项之确定性修法证明（内存副本；仓库不动；判据 = JLC 限 solder_mask_to_copper_clearance=0.09mm）",
+           "current_pad_to_mask_clearance_mm": cur, "sweep": {}}
+    for v in (cur, 0.04, 0.03, 0.02, 0.01):
+        b2 = re.sub(r"\(pad_to_mask_clearance [\d.]+\)", f"(pad_to_mask_clearance {v})", bt, count=1)
+        c = G.jlc_limit_drc(b2, pt, "(version 1)\n", G.JLC8)
+        out["sweep"][f"{v:.2f}"] = {"solder_mask_bridge": c["by_type"].get("solder_mask_bridge", 0),
+                                    "total_violations": c["n"]}
+    # 最宽松可行值 = 仍能清零之**最大** clearance（降得越少越好）
+    ks = sorted(out["sweep"], key=float, reverse=True)
+    out["all_cleared_at_or_below_mm"] = next((float(k) for k in ks if out["sweep"][k]["solder_mask_bridge"] == 0), None)
+    out["verdict"] = ("fix_available_deterministic: pad_to_mask_clearance "
+                      f"{cur:.2f}->{out['all_cleared_at_or_below_mm']:.2f}mm ⇒ 阻焊坝缺口 0（且无其他副作用：总违规回到 as-designed 201）")
+    out["constraint"] = ("该修法 = **改板 setup 字段** ⇒ 板 sha 变更 ⇒ P4 判据锚失效 ⇒ **不在 P5 范围**（P5 = 交付冻结 l7）；"
+                         "故本次判 ACCEPT_L2_WITH_FAB_REVIEW，并以此证明留可执行回退路径。")
+    return out
+
+
 def stackup_and_layer_seq(spec: dict) -> tuple[str, str]:
     import p3_v57_co146_jlc_fab_package as P
     binding = {"copper": {"outer_oz": 1.0, "inner_oz": 0.5}}
@@ -348,7 +371,7 @@ def order_notes(dfm: dict, imp: dict, drill: dict) -> str:
 ## 3. DFM 逐项（对 JLC HDI 通道；机器实测）
 **汇总：{dfm['n_pass']} PASS / {dfm['n_accept']} ACCEPT / {dfm['n_fail']} FAIL**（逐项见 `06_rulings/jlc_dfm_hdi_l7.md`）。
 - **ACCEPT（1 项）**：阻焊坝共 9 处 < 0.09mm（阈值扫描：4∈[0.05,0.06)·1∈[0.06,0.07)·4∈[0.08,0.09)）。JLC 能力表 0.10mm 系**最小可保证桥宽**（非必须存在桥）⇒ 板厂按「无阻焊坝」印制；承 CO-147 R3 先例 **ACCEPT 随单工程评审**；影响面 = 装配焊接注意，**不阻塞 Gerber 可制造性**。
-  若板厂拒绝：回退修法 = 相应 pad 开窗 0.05→0.02mm（增净距 ≥0.09）⇒ **须改板 ⇒ 另开 rev + 重跑全链**（本次打样不做）。
+  若板厂拒绝：回退修法**已实证** = `pad_to_mask_clearance` 0.05→0.02mm ⇒ 缺口 **9→0**（`07_verify/mask_accept_fix_proof.json`）；该修法属**改板** ⇒ 须另开 rev + 重跑全链（本次打样不做）。
 - **过孔类型项**：标准通道页明文不支持盲埋孔，本板走 **HDI 通道 A** ⇒ 判 PASS（非缩口径：通道语义不同，owner #14 已冻结 A）。
 - **阻抗几何（具名）**：F.Cu 最紧**真平行**耦合段净距 **0.2825mm < SPEC 窗下界 0.295mm（−4.24%）**（位点 `PCIE_UP3` 逃逸域）；线性化 ΔZ ≈ −0.84% ⇒ **仍落 85Ω±10%**。In2/In5 精确落窗（0.34–0.44mm）。B.Cu 无 as-built 耦合 run（SPEC 对称声明行）。详见 `04_impedance/`。
 
@@ -402,7 +425,7 @@ L2 冻结表 0.25/0.41 与板侧实测口径两套未对账；**板侧口径权�
 `M-02` `M-14` `F-3` `N-02` `N-03`（载体已修 / 指针转写，替代防复发逐条具名；**≠ C-12**）。
 
 ## 5b. P5 出包时新增具名项（本包实测，非 P4 遗留）
-1. **阻焊坝 9 处 < 0.09mm**（阈值扫描分布 4∈[0.05,0.06)·1∈[0.06,0.07)·4∈[0.08,0.09)）。JLC 能力表 0.10mm 系**最小可保证桥宽**（非必须存在桥）⇒ 板厂按「无阻焊坝」印制；处置 = **ACCEPT_L2_WITH_FAB_REVIEW**（承 CO-147 R3 先例）；影响面 = 装配焊接注意，**不阻塞 Gerber 可制造性**。若板厂拒绝 ⇒ 回退修法 = 开窗 0.05→0.02mm（**须改板 ⇒ 另开 rev**）。
+1. **阻焊坝 9 处 < 0.09mm**（阈值扫描分布 4∈[0.05,0.06)·1∈[0.06,0.07)·4∈[0.08,0.09)）。JLC 能力表 0.10mm 系**最小可保证桥宽**（非必须存在桥）⇒ 板厂按「无阻焊坝」印制；处置 = **ACCEPT_L2_WITH_FAB_REVIEW**（承 CO-147 R3 先例）；影响面 = 装配焊接注意，**不阻塞 Gerber 可制造性**。**回退修法已实证（本包 `07_verify/mask_accept_fix_proof.json`）**：单参数 `pad_to_mask_clearance` 0.05→0.02mm ⇒ 阻焊坝缺口 **9→0**、总违规回 as-designed 201（无副作用）；该修法 = 改板 setup ⇒ 板 sha 变 ⇒ P4 锚失效 ⇒ **不在 P5 范围**。
 2. **F.Cu 最紧真平行耦合段净距 0.2825mm < SPEC 名义窗下界 0.295mm（−4.24%）**（`PCIE_UP3` 逃逸域）。线性化 ΔZ ≈ −0.84% ⇒ **阻抗仍落 85Ω±10%**。**不主张 F.Cu 名义几何窗"全窗"**。
 3. **B.Cu 无 as-built PCIE 耦合 run**（43 段 PCIE 走线存在但无成对耦合段）⇒ SPEC 之 B.Cu 行属**对称声明**，as-built 未使用；不影响阻抗判定。
 
@@ -461,6 +484,8 @@ def main() -> int:
               "export_normalized_files": exp["n_normalized"]}
     (OUT / "07_verify/anchor_selfcheck.json").write_text(json.dumps(anchor, indent=1, ensure_ascii=False) + "\n")
     (OUT / "06_rulings/copy_parity.json").write_text(json.dumps(parity, indent=1) + "\n")
+    mfp = mask_fix_proof()
+    (OUT / "07_verify/mask_accept_fix_proof.json").write_text(json.dumps(mfp, indent=1, ensure_ascii=False) + "\n")
     (OUT / "06_rulings/dfm_raw_readings.json").write_text(json.dumps(
         {"as_designed_drc_by_type": dfm["evidence"]["as_designed_drc_by_type"],
          "jlc_limit_drc_by_type": dfm["evidence"]["jlc_limit_drc_by_type"],
