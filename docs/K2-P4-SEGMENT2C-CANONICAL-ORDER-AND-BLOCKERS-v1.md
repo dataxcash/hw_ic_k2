@@ -614,3 +614,10 @@ In4 的 `P3V3_AUX`(prio 0, 28.9mm²) 与 `MCU_VDD`(prio 0) **全重叠**，链�
 - 落件：`k2/tools/k2_wait_pid.sh`（**按 PID 判活**；pattern 形式在解析期排除自身+全部祖先进程，之后只查 `/proc/<pid>`）+ `k2/docs/K2-ENG-BACKGROUND-WAIT-CONVENTION-v1.md`（规约 + 禁用写法）。
 - **对照实验实录（#K2-33 §五）**：OLD 自匹配臂 ⇒ 任务 20s 结束后仍死等，`timeout 32` 杀之 **rc=124**（并复现命中轮询自身）；NEW 按 PID 臂 ⇒ `sleep 15` 任务 **`用时 15s` rc=0**；NEW2 pattern 臂 ⇒ `sleep 12` 任务 **`用时 12s` rc=0** ⇒ 验收达标（≤1 个 poll 周期，实测 ≤3s 粒度）。
 - 边界：只新增 ENG 工具/文档；未改板/SPEC/判据/`_shared`/生成器/冻结件。
+
+---
+
+## 26. inc114：`N-03` 载体复核（已修）+ `F-9` 走廊口径量化（专件）
+
+- `N-03`：`l6.kicad_pro` `top_level_sheets = k2_sch.kicad_sch`（**存在**）、顶层 `sheets` 键**已消**；链 pro 生成根因亦已修（模板，`#K2-32 §二`）⇒ 载体已修 + 根因闭；判定待监理（「无判据类」同批）。
+- `F-9`：专件 `k2/docs/K2-P4-F9-CORRIDOR-CALIBER-QUANTIFICATION-v1.md` —— 0.25/0.41 = 端点**参照物**差（体宽 vs 焊盘外接框），精确复算吻合；**四板 × 四口径**板侧恒为 82.60/104.84 ⇒ 揭出 **`NG-1`**：SPEC 在册 `U6 board_measured 82.76/105.00（δ0.16）`**不可复现**；影响量化 = 阻抗 ΔZ=0 · 制造无影响 · 容量两口径均过 ⇒ **不停机**；余项归 owner（冻结表回改/口径具名）。
