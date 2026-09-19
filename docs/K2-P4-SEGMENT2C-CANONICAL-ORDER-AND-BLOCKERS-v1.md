@@ -653,3 +653,5 @@ In4 的 `P3V3_AUX`(prio 0, 28.9mm²) 与 `MCU_VDD`(prio 0) **全重叠**，链�
 - 动机：判定器对**陈旧测量** fail-closed（测量件 `board_sha16` 须 == 受审板 sha）；`l6` 落件后在册测量集仍锚 `dae8dc8d` ⇒ P4 关门缺一册与受审板同锚的测量输入。
 - 对照：段1 产物（`s1 d67c0f04`）w8 = **49/5/4/0**，与 `l6` 同 ⇒ 与「残余根因在生成器（段1）」结论一致。
 - 边界：只落 ENG 自有取证目录；未改 `criteria/**`、板、SPEC、生成器、库。
+
+**§31 补（fail-closed 自检，实跑）**：重锚册逐件扫描 `board_sha16` ⇒ `density`/`min_clearance`/`pads_within_outline`/`ref_plane_continuity`/`w8_audit_board` **全部 = `30fa849641323f98`**（== `l6`）；`w8_audit_seg1_output` = `d67c0f048f0d0423`（== 段1 产物，按设计）；DRC/verdict 无该字段 ⇒ **BAD = 0**（判定器陈旧检查可通过）。

@@ -24,3 +24,7 @@
 - ⚠ **本目录件是 `--w8-audit-json` / `--pads-outline-json` / `--v3-plane-json` / `--density-json` / `--min-clearance-json` 的「测量输入」，不得作为 `--artifacts` 传入**：`w8_audit_*.json` 的逐条记录含 `"verdict"` 字段（工具侧标签），会被 `verdict_schema` 的原文正则误判为「产物声明 verdict」。
 
 —— ENG（ARCHER）· 2026-09-19 · 只读取证件（测量件无 `verdict` 字段；C4）· k2 `e241ba5`
+
+## fail-closed 自检（本册，ENG 实跑）
+
+逐件扫描 `board_sha16`：`density` / `min_clearance` / `pads_within_outline` / `ref_plane_continuity` / `w8_audit_board` 全部 = **`30fa849641323f98`**（== 受审板 `l6`）；`w8_audit_seg1_output` = **`d67c0f048f0d0423`**（== 段1 产物，按设计）；`drc_violations_clean_workdir` / `verdict_19dim` 无该字段。⇒ **BAD = 0，本册与受审板同锚**（判定器陈旧检查可通过）。
