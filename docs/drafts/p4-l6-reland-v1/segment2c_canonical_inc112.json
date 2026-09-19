@@ -1,0 +1,40 @@
+{
+ "increment": "inc112",
+ "date": "2026-09-20",
+ "topic": "段3 ZONE_FILLER 固化为链步 + In4 同优先级铜区优先级规范化 ⇒ zone_filled 10/10（判据口径）",
+ "tools_changed": {
+  "k2_route_segment_v1.py": "f28a4b5a08ed38c0 (前 52709a27a0658572)"
+ },
+ "root_cause": {
+  "statement": "同 SPEC 优先级、互相重叠的不同网铜区，KiCad 填充结果可被大平面吞并",
+  "evidence": "In4 P3V3_AUX(prio0, 28.9mm2) 与 MCU_VDD(prio0) 全重叠 ⇒ 链内重填后 P3V3_AUX 得 0 填充 ⇒ 判据 zone_filled 9/10；生成器序产物 10/10、L5 参照板 10/10",
+  "isolation": "2c-A 输出 10/10；canon 重排后重填 9/10（首暴露于 2c-B）；穷举 5 种 zone 序仍 9/10 ⇒ 非顺序问题；删除 MCU_VDD 区后 P3V3_AUX 填充 ⇒ 同优先级冲突确证",
+  "why_not_order": "在链内板上穷举 zone 序（current/prio-desc/prio-asc/rev/net-sort）均 9/10"
+ },
+ "fix": "段3 步：逐层内、同 SPEC 优先级按面积 DESC 赋 offset（final=prio*100+offset，局域/小面积者优先；跨优先级相对序不变）+ ZONE_FILLER；不改 SPEC/生成器",
+ "determinism": {
+  "full_chain_4_runs_byte_identical": "30fa849641323f98104f"
+ },
+ "final_readings": {
+  "zone_filled": {
+   "passed": true,
+   "filled": 10,
+   "total": 10,
+   "adjudicator_measured": "10/10"
+  },
+  "unconnected": 0,
+  "violations": 23,
+  "errors": 0,
+  "types": {
+   "track_dangling": 1,
+   "silk_edge_clearance": 2,
+   "lib_footprint_mismatch": 20
+  },
+  "hist": {
+   "total": 5854,
+   "nets": 101,
+   "fps": 58
+  }
+ },
+ "carriers_unchanged": "受审板 dae8dc8d · l4 d4e81f64 · 设计源板 fb07d25a · 真源 dd794c54 · 判据 rev=2 · SPEC 原件 · 生成器 1ca5ac79 · hw/k2_v4_8L.l5.kicad_pro"
+}

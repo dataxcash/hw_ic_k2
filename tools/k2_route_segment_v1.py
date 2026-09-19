@@ -41,7 +41,12 @@ def canon_sort_tracks(path, loader):
     ch = loader._root_children(txt)
     head, tail = txt[:ch[0][0]], txt[ch[-1][1]:]
     blocks = [txt[s:e] for s, e in ch]
-    KINDS = ("segment", "via", "zone")
+    # inc111(L2 · zone 填充语义)：**zone 不参与全局重排**。
+    # 实证：同优先级铜区（In4 的 `P3V3_AUX` prio0 与 `MCU_VDD` prio0 全重叠）的填充结果对 **zone 列表序**敏感：
+    #   生成器序（SPEC 序）填 ⇒ zone_filled **10/10**（L5 参照板亦 10/10）；
+    #   `canon` 重排 zone 后重填 ⇒ **9/10**（`P3V3_AUX` 被 `MCU_VDD` 全让 ⇒ 0 填充，§18/§19 之后新暴露）。
+    # ⇒ 只排 segment/via（确定性不变），zone 保持原序（= SPEC 序，填充语义不被改写）。
+    KINDS = ("segment", "via")
     m_kind = re.compile(r'\s*\(\s*([a-z_]+)')
     u_mid = re.compile(r'\(uuid "[^"]*"\)')
 
@@ -51,7 +56,10 @@ def canon_sort_tracks(path, loader):
     tr = [b for b in blocks if kind(b) in KINDS]
     keep = [b for b in blocks if kind(b) not in KINDS]
     tr.sort(key=lambda b: (KINDS.index(kind(b)), u_mid.sub("(uuid)", b)))
-    first = next(i for i, b in enumerate(blocks) if kind(b) in KINDS)
+    firsts = [i for i, b in enumerate(blocks) if kind(b) in KINDS]
+    if not firsts:
+        return 0            # 无 segment/via（如段1 骨架板）⇒ 原序不动
+    first = firsts[0]
     out = blocks[:first] + tr + [b for b in blocks[first:] if kind(b) not in KINDS]
     body = "".join(b + (seps[i] if i < len(seps) else "\n") for i, b in enumerate(out))
     path.write_text(head + body + tail, encoding="utf-8")
@@ -245,7 +253,7 @@ ROUTERS = [("2c-E", "k2_p4_gnd_vias_v1.py", "generic"),
            ("2c-13", "k2_p4_u1c85_v1.py", "plain"),
            ("2c-14", "k2_p4_p3v3_col_v1.py", "plain"),
            ("2c-15", "k2_p4_mroute_v1.py", "generic")]
-STEP_ORDER = ["2b", "2cA", "2cB"] + [r[0] for r in ROUTERS]
+STEP_ORDER = ["2b", "2cA", "2cB"] + [r[0] for r in ROUTERS] + ["3-zone"]
 
 # 2c-13（u1c85，增量 13）在新链已**前置满足**：段1 生成器已含 C85→(29.7,54.5,180°) 搬迁；
 # 阶段 E(gnd_vias) 已落 C85.2 盘中孔 (29.35,54.5) F→In1（实测 post-2c-E 件含该孔，uuid 3561d03d）。
@@ -282,6 +290,60 @@ def run_router(tool, kind, inp, outp, drc, led):
     return r.returncode, (r.stdout or "").strip()[-500:], (r.stderr or "").strip()[-300:]
 
 
+
+
+def run_zone_step(board):
+    """段3：铜区**优先级规范化**（L2 · PDN/浇注策略自裁）+ `ZONE_FILLER`。
+
+    依据（实证）：同 SPEC 优先级且互相重叠的**不同网**铜区，填充结果可被大平面吞并 —— 实测 In4
+    `P3V3_AUX`(prio 0) 与 `MCU_VDD`(prio 0) 全重叠时 `P3V3_AUX` 得 **0 填充** ⇒ 判据 `zone_filled` 9/10；
+    而生成器序产物与 L5 参照板均 **10/10**（两区都有铜）。
+
+    规范化 = **逐层内、同 SPEC 优先级按面积 DESC 赋 offset**（`final = prio*100 + offset`）：
+    即"**局域（小面积）者优先**"，跨优先级相对序**不变**（不同网、同优先级的重叠才受影响）。
+    这是 PDN 浇筑策略决定（owner #14① L2 自裁），不改 SPEC/生成器；仅作用于链内产物。
+    """
+    import pcbnew as _p
+    b = _p.LoadBoard(str(board))
+    if b is None:
+        raise RuntimeError("LoadBoard -> None: %s" % board)
+
+    def _area(z):
+        o = z.Outline(); a = 0.0
+        for k in range(o.OutlineCount()):
+            ch = o.Outline(k); pts = [ch.CPoint(j) for j in range(ch.PointCount())]
+            s = 0.0
+            for j in range(len(pts)):
+                x1, y1 = _p.ToMM(pts[j].x), _p.ToMM(pts[j].y)
+                x2, y2 = _p.ToMM(pts[(j + 1) % len(pts)].x), _p.ToMM(pts[(j + 1) % len(pts)].y)
+                s += x1 * y2 - x2 * y1
+            a += abs(s) / 2.0
+        return a
+
+    groups = {}
+    for z in b.Zones():
+        if z.GetIsRuleArea() or not z.GetNetname():
+            continue
+        groups.setdefault((z.GetLayer(), z.GetAssignedPriority()), []).append(z)
+    for (ly, prio), gl in sorted(groups.items()):
+        gl.sort(key=_area, reverse=True)
+        for off, z in enumerate(gl):
+            z.SetAssignedPriority(int(prio) * 100 + off)
+    _p.ZONE_FILLER(b).Fill(b.Zones())
+    b.Save(str(board))
+    total = filled = 0
+    for z in b.Zones():
+        if z.GetIsRuleArea() or not z.GetNetname():
+            continue
+        total += 1
+        try:
+            fl = z.GetFilledPolysList(z.GetLayer())
+            n = fl.OutlineCount() if fl else 0
+        except Exception:
+            n = 0
+        if n > 0:
+            filled += 1
+    return {"filled": filled, "total": total}
 
 
 def _ord(x: str) -> int:
@@ -419,6 +481,12 @@ def main() -> int:
                              "sha16": sha16(out), **track_hist(out)})
     if not a.dry_run:
         _canon("final")
+    # ── 段3：铜区优先级规范化 + ZONE_FILLER（L2 · PDN 浇注策略）──
+    if not a.dry_run and _ord(a.upto) >= _ord("3-zone"):
+        zr = run_zone_step(out)
+        rec["steps"].append({"step": "3-zone", "zones_filled": zr["filled"], "zones_total": zr["total"],
+                             "zone_filled_pass": zr["filled"] == zr["total"] and zr["total"] > 0,
+                             "sha16": sha16(out), **track_hist(out)})
     rec["out"] = str(out); rec["out_sha16"] = sha16(out) if not a.dry_run else None
     print(json.dumps(rec, ensure_ascii=False, indent=1))
     return 0

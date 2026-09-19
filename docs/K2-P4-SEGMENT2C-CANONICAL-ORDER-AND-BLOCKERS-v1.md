@@ -401,3 +401,50 @@ for p in c.pads.values():
 改：`k2_p4_u4d_scale_v1.py f67cc410f7a0c93e`。读数件 `k2/docs/drafts/p4-l6-reland-v1/segment2c_canonical_inc110.json 677635722ab8ea58`。
 **未改**：冻结四源（l4 `d4e81f64` 永不改）· 判据 rev=2 · SPEC 原件 · 真源 · 生成器 `1ca5ac79` · 受审板 · `criteria/**` · `_shared/**`。
 未出 Gerber；未派 WORKER；未新增检查齿。
+
+## 21. inc112：段3 `ZONE_FILLER` 固化为链步 + In4 同优先级铜区优先级规范化 ⇒ `zone_filled` **10/10**
+
+### 21.1 根因（实证）
+
+判据 `zone_filled`（= 有网非 keepout 的铜区中 `filled_polygon > 0` 者）在链内产物为 **9/10**：
+In4 的 `P3V3_AUX`(prio 0, 28.9mm²) 与 `MCU_VDD`(prio 0) **全重叠**，链内重填后被 MCU_VDD 全让 ⇒ 0 填充。
+生成器序产物 **10/10**、L5 参照板 **10/10** ⇒ 是**链内**引入。
+
+定位链：
+| 板 | zone_filled |
+|---|---|
+| 段1 生成器产物（直接填充） | **10/10** |
+| `2c-A` 输出 | **10/10** |
+| `canon(2c-A)` + 重填 | **9/10** ← 首暴露 |
+| `2c-B` 输出及以后 | 9/10 |
+
+排除项：① **非顺序问题** —— 在链内板上穷举 5 种 zone 序（current / prio-desc / prio-asc / rev / net-sort）重填**均 9/10**；
+② **同优先级冲突确证** —— 删除 `MCU_VDD` 区后重填，`P3V3_AUX` 即 **+**（10/9→全填）；把该 `P3V3_AUX` 优先级 0→1 亦得 **10/10**。
+
+### 21.2 处置（L2 · PDN/浇注策略自裁，owner #14①）
+
+新增**段3 链步** `run_zone_step()`（`--upto all` 内含）：
+
+- **优先级规范化**：逐层内、同 SPEC 优先级按**面积 DESC** 赋 offset，`final = prio*100 + offset`
+  ⇒ "**局域（小面积）者优先**"，跨优先级相对序**不变**（只影响不同网、同优先级的重叠）。
+- 随后 `ZONE_FILLER` 重填并落板，回读 `zones_filled / zones_total`。
+
+**不改 SPEC / 生成器 / 原理图**；仅作用于链内产物。依据 owner 常设裁定 #14①（叠层分配/PDN/走廊/过孔策略 = L2 自裁勿停）。
+
+### 21.3 读数
+
+| 指标 | inc110 | **inc112（本笔）** |
+|---|---|---|
+| `zone_filled`（判据口径，独立测量） | — | **10/10 PASS** |
+| 未连接 | 0 | **0** |
+| 违规 / error | 23 / 0 | **23 / 0** |
+| 终局 | `c1ecf392aefb4b8656af` | **`30fa849641323f98104f`** |
+| 链末 tracks+vias / 网 / fps | 5712 / 101 / 58 | **5854 / 101 / 58** |
+
+**确定性**：全链 `--upto all` **4 次并行连跑逐字节同 `30fa849641323f98104f`**（`inc112a/b/c/d`）。
+
+### 21.4 边界
+
+改：`k2_route_segment_v1.py f28a4b5a08ed38c0`。读数件 `k2/docs/drafts/p4-l6-reland-v1/segment2c_canonical_inc112.json`。
+**未改**：冻结四源（l4 `d4e81f64` 永不改）· 判据 rev=2 · SPEC 原件 · 真源 · 生成器 `1ca5ac79` · 受审板 · `criteria/**` · `_shared/**`。
+未出 Gerber；未派 WORKER；未新增检查齿。余 23 条**全为 warning**（lib_footprint_mismatch 20 + silk_edge_clearance 2 + track_dangling 1）。
