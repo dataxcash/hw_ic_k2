@@ -628,3 +628,11 @@ In4 的 `P3V3_AUX`(prio 0, 28.9mm²) 与 `MCU_VDD`(prio 0) **全重叠**，链�
 
 - 专件 `k2/docs/K2-P4-J1-WARNING-DISPOSITION-LEDGER-AND-U03-REMAINDER-v1.md`：`l6` DRC **164 全 warning / error 0 / unconnected 0**，逐类 9 种（**7 类未登记共 90 条**）已给归属 + **不豁免**处置建议，小计数类逐条具名；w8 残余 **9 件**（5 `electrical_diff` = `U6`/`U1`/`L1`（≤0.5 µm）+ `J3`/`C85`（**物理等价**）· 4 `no_library_link` = `H1..H4` 纯机械件）。
 - 边界：只出证据；未改 `criteria/**`（安装归 gate 属主+监理）、库、板、SPEC、生成器；未以「接近 0」淡化（如实列 1、1）。
+
+---
+
+## 29. inc114：`lib_electrical_level` 残余根因闭环（生成器 µm 量化）
+
+- 专件 `k2/docs/K2-P4-LIB-ELECTRICAL-LEVEL-ROOTCAUSE-MICRON-QUANTIZATION-v1.md`：残余 5 件亚微米差 = **单一机制** —— `k2_gen_v5.py` 用 `{:.3f}`（µm）发射 footprint 原点（`:319`）与 pad 局部坐标；库快照 **216/1232（17.5%）** 分量非 µm 对齐 ⇒ ±0.2–0.5 µm。
+- **逐分量吻合**：`U1` 10/10 · `L1` 4/4 · `C85` 4/4 · `J3` 12/12；`U6`（rot=90）轴置换同量级。**段1 `s1` 已含漂移**，段2/段3 未引入未修复；`l4`/`l5` 与库一致 ⇒ 根因在**生成器**。
+- 影响：电气/DRC/可制造/阻抗 **= 0**；判据**结构性 FAIL**（应然过严）。四路收口候选（含「生成器改 `:.6f`」一行级）**须授权，ENG 不择一**。
