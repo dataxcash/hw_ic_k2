@@ -623,7 +623,41 @@ def run(src, drc_path, out_path, ledger_path, margin, only_net, dry, order="dist
                 return t["layer"] if t["layer"] in LAYERS else F_CU
         return None
 
+    # ── inc107(L2) 根因修复：DRC `unconnected_items` 的**代表项**不确定 ──────────────
+    # 实证（kicad-cli 10.0.5；同板 `80c74d19` + 同 pro `419ac6ec`；fresh work-dir）：
+    #   ① 两次连跑，`unconnected_items` 的**端点项**不同（同网同岛内任取：
+    #      MCU_VDD 岛取 `via(30.475,54.5)` 或 `track(30.05,54.5)0.425`；
+    #      P3V3_AUX 岛取 `R1.2(50.95,37)` 或同点 `track`）—— 项数/网集/规则全同；
+    #   ② `setarch -R`（关 ASLR）与 `taskset -c 0`（绑单核）均**不能**消除
+    #      ⇒ 非 ASLR、非线程调度；DRC 只在**电气等价**候选点里任取代表。
+    # ⇒ 直接消费其 uuid 会把该不确定性注入布线（inc106 实测 segs 863 vs 860）。
+    # 处置：把每个 DRC 端点**规范化到其铜岛的确定性锚点**（同网同岛节点按 (类型序, uuid)
+    #   取最小），再按 (net, 两端锚) 去重。锚点仅作**起点坐标**；放行闸 seg_exact/via_exact 不变。
+    def _root(uu):
+        if uu in ctx.pads: return find("p:" + uu)
+        if uu in ctx.vias: return find("v:" + uu)
+        return find("t:" + uu)
+
+    _anch = {}   # (net, root) -> [rank, uuid, x, y, layer]
+
+    def _offer(net, root, rank, uu, x, y, layer):
+        if net is None or root is None or layer not in LAYERS: return
+        k = (net, root); cur = _anch.get(k)
+        if cur is None or (rank, uu) < (cur[0], cur[1]):
+            _anch[k] = [rank, uu, x, y, layer]
+
+    for u, p in ctx.pads.items():
+        L = next((l for l in LAYERS if l in p["lay"]), None)
+        if L is not None: _offer(p["net"], find("p:" + u), 0, u, p["x"], p["y"], L)
+    for u, v in ctx.vias.items():
+        L = next((l for l in LAYERS if l in v["lay"]), None)
+        if L is not None: _offer(v["net"], find("v:" + u), 1, u, v["x"], v["y"], L)
+    for t in ctx.tracks:
+        _offer(t["net"], find("t:" + t["uuid"]), 2, t["uuid"],
+               (t["x1"] + t["x2"]) / 2.0, (t["y1"] + t["y2"]) / 2.0, t["layer"])
+
     edges = []
+    _seen = set()
     for e in drc.get("unconnected_items", []):
         its = e.get("items", [])
         if len(its) != 2: continue
@@ -631,12 +665,15 @@ def run(src, drc_path, out_path, ledger_path, margin, only_net, dry, order="dist
         na, nb = netof(ua), netof(ub)
         if not na or na != nb: continue
         if only_net and na != only_net: continue
-        la, lb = layof(ua), layof(ub)
-        if la is None or lb is None: continue
-        pa = (its[0]["pos"]["x"], its[0]["pos"]["y"]); pb = (its[1]["pos"]["x"], its[1]["pos"]["y"])
+        ra, rb = _anch.get((na, _root(ua))), _anch.get((nb, _root(ub)))
+        if ra is None or rb is None or ra[1] == rb[1]: continue
+        k = (na,) + tuple(sorted((ra[1], rb[1])))
+        if k in _seen: continue
+        _seen.add(k)
+        la, pa = ra[4], (ra[2], ra[3])
+        lb, pb = rb[4], (rb[2], rb[3])
         d = math.hypot(pa[0] - pb[0], pa[1] - pb[1])
-        edges.append((round(d, 3), na, ua, ub, la, lb, pa, pb))
-        # 防未用变量告警
+        edges.append((round(d, 3), na, ra[1], rb[1], la, lb, pa, pb))
     led = {"stage": "M15", "edges": len(edges), "added": [], "blocked": [], "summary": {}}
     if order == "list" and not order_list:
         order_list = None

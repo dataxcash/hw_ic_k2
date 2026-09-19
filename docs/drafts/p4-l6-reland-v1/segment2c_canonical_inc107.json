@@ -1,0 +1,43 @@
+{
+ "increment": "inc107 (root-cause fix for inc106 non-reproducibility)",
+ "date": "2026-09-19",
+ "topic": "mroute 不可复现根因 = kicad-cli DRC `unconnected_items` 端点项不确定；mroute 端点规范化到铜岛锚点",
+ "tools_changed": {
+  "k2_p4_mroute_v1.py": "0b2f5faaf92568de (前 74cd163493d488f9)"
+ },
+ "root_cause": {
+  "statement": "kicad-cli 10.0.5 对**同一板文件 + 同一 .kicad_pro + 全新 work-dir** 逐次给出不同的 unconnected_items 端点项（同网同铜岛内电气等价项任取）",
+  "evidence": [
+   "同板 80c74d19 + 同 pro 419ac6ec：#1 报 via(30.475,54.5)/track；#2 报 track(30.05,54.5)0.425；P3V3_AUX 岛取 R1.2(50.95,37) 或同点 track；项数 16/16、网集/违规集相同",
+   "3 次连跑出现 2 种签名；setarch -R（关 ASLR）3 次仍 2 种；taskset -c 0（绑单核）4 次 3 种 ⇒ 非 ASLR、非线程调度",
+   "12 份不同 DRC 输入（含 inc106f/inc106g 两份分歧件 + 关 ASLR + 绑核）经规范化后 → 恰 1 种端点集（16 条）"
+  ]
+ },
+ "fix": "mroute 把每个 DRC 端点规范化到其铜岛确定性锚点（同网同岛节点按 (类型序 pad<via<track, uuid) 最小），按 (net,两端锚) 去重；锚仅作起点坐标，放行闸 seg_exact/via_exact 不变",
+ "determinism": {
+  "mroute_dry_run_8_drc_inputs": {
+   "added": 16,
+   "blocked": 0,
+   "segs": 872,
+   "vias": 48,
+   "len": 601.6361
+  },
+  "full_chain_4_runs_byte_identical": "690823e0e8d0ff59",
+  "final_readings": {
+   "unconnected": 0,
+   "violations": 26,
+   "errors": 3,
+   "types": {
+    "clearance": 3,
+    "track_dangling": 1,
+    "silk_edge_clearance": 2,
+    "lib_footprint_mismatch": 20
+   }
+  }
+ },
+ "rejected_variant": "驱动件层 run_drc 统一规范化（改全部 DRC 消费者输入）：4 次并行全链亦逐字节同（8d7d0ae7ebfd4d10），但 2c-E 目标集变化 ⇒ 未连接 0→4，回退；具名残留风险 = F1/F2/F3/G 亦消费 DRC 端点 uuid/pos（本链内实测稳定）",
+ "driver_sha": "95d0c4cc05d36da0（inc105 态；未改）",
+ "chain_order": "canonical 序（inc105 态，未改）",
+ "out_sha16": "690823e0e8d0ff59",
+ "carriers_unchanged": "受审板 dae8dc8d · l4 d4e81f64 · 设计源板 fb07d25a · 真源 dd794c54 · 判据 rev=2 · SPEC 原件 · 生成器 1ca5ac79 · hw/k2_v4_8L.l5.kicad_pro"
+}
