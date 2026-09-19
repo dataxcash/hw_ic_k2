@@ -599,3 +599,20 @@ cd k2 && PYTHONPATH="$PWD/_shared:$PWD" python3 _shared/eda_core/pipeline/engine
 - **⚠ `NG-1`（新，具名）**：SPEC `corridors_clearance_basis_v24` 在册 `U6 board_measured_mm = 82.76 / 105.00`（`delta_mm` **0.16**）在**四板 × 四种 pad-外接框变体下皆不可复现**（(a) pad bbox 82.60/104.84 · (b) +阻焊扩展 82.55/104.89 · (c) footprint bbox 82.60/104.84 · (d) 中心±size/2 82.60/104.84）⇒ 该 0.16 **无可复现口径**；须 owner/监理具名或更正（**ENG 只读 SPEC，不自行改**）。
 - **影响量化**：**阻抗 `ΔZ = 0`**（走廊端点不参与 `impedance.width_mm_by_layer` / 对内 gap）· **可制造性无影响**（JLC HDI 门槛 0.09/0.10mm，与本差无关）· **走廊容量两口径均过**（8×1.46=11.68 ≤ 西 16.2 / 东 20.8；焊盘口径更大 ⇒ a fortiori）· 利用率 51%–65% 余量内 ⇒ **`#K2-30 §2.6` 停机条件不成立**。
 - `F-9` ⑤：载体侧（L2 冻结表）未改（**改冻结件须 owner 批**）⇒ 建议 **未闭（仅余 owner 面：冻结表回改+口径具名）**。
+
+---
+
+## 18. v1.10 增量（2026-09-19；**`J-1` 台账** + **`U-03`/`M-09`/`J-7` 残余定位**）
+
+> 专件：`k2/docs/K2-P4-J1-WARNING-DISPOSITION-LEDGER-AND-U03-REMAINDER-v1.md`（本笔）。计数**不变**（根闭 40 / OUT 5 / 未闭 14）。
+
+### 18.1 `J-1` —— 台账已成（**安装归 gate 属主 + 监理**）
+
+受审板 `l6`（pro `ignore` 0/62）：**164 全 warning · error 0 · unconnected 0**。逐类：`missing_courtyard` 54（已登记）· `silk_over_copper` **37** · `track_not_centered_on_via` **30** · `lib_footprint_mismatch` 20（已登记）· `silk_overlap` **15** · `via_dangling` **4** · `silk_edge_clearance` **2** · `track_dangling` **1** · `copper_sliver` **1**。⇒ **7 类未登记（合计 90 条）已逐类给「归属 + 处置建议（均不豁免）」**；小计数类**逐条具名**（`via_dangling` = `P3V3`/`PERSTA#`/`UART_TX`/`SWCLK_BOOT0` 各 1；`silk_edge_clearance` = `C87`/`D2` 参考字段；`track_dangling` = `[GND] F.Cu` 0.775mm 悬空段；`copper_sliver` = `In4.Cu` ×1）。ENG **不落 `criteria/**`**。
+
+### 18.2 `U-03` / `M-09` / `J-7` —— 残余 9 件已定位（`lib_electrical_level`）
+
+w8（58 件，审计板 sha = 受审板 `30fa8496`）：`identical 49` / `electrical_diff **5**` / `no_library_link **4**` / `unloadable 0`（`l5` 前值 4/28/24/2）。
+- **5 件 `electrical_diff`**：`U6`（166 pad，最大 **dx 0.4 µm**）· `U1`（48 pad，**0.5 µm** + 库侧多 1 无名 pad）· `L1`（**0.5 µm**）· `J3`（`rel_geom_same=True` + 均匀平移 ⇒ **物理等价**，rot 表示差）· `C85`（同上，**物理等价**）。
+- **4 件 `no_library_link`** = `H1..H4` 纯机械件（`diffs: []`；`refdes_sets_equal` 已排除 `H*`）。
+- 判据现行 expect（精确 0）下**仍 FAIL**；**ENG 不主张「亚微米 ⇒ 等价 ⇒ 过」**；三条收口路径（载体侧对齐 / 判据侧具名容差须版本 bump / 维持 FAIL）**供监理裁，ENG 不择一**。

@@ -621,3 +621,10 @@ In4 的 `P3V3_AUX`(prio 0, 28.9mm²) 与 `MCU_VDD`(prio 0) **全重叠**，链�
 
 - `N-03`：`l6.kicad_pro` `top_level_sheets = k2_sch.kicad_sch`（**存在**）、顶层 `sheets` 键**已消**；链 pro 生成根因亦已修（模板，`#K2-32 §二`）⇒ 载体已修 + 根因闭；判定待监理（「无判据类」同批）。
 - `F-9`：专件 `k2/docs/K2-P4-F9-CORRIDOR-CALIBER-QUANTIFICATION-v1.md` —— 0.25/0.41 = 端点**参照物**差（体宽 vs 焊盘外接框），精确复算吻合；**四板 × 四口径**板侧恒为 82.60/104.84 ⇒ 揭出 **`NG-1`**：SPEC 在册 `U6 board_measured 82.76/105.00（δ0.16）`**不可复现**；影响量化 = 阻抗 ΔZ=0 · 制造无影响 · 容量两口径均过 ⇒ **不停机**；余项归 owner（冻结表回改/口径具名）。
+
+---
+
+## 27. inc114：`J-1` warning 逐类处置台账 + `U-03`/`M-09`/`J-7` 残余 9 件定位（专件）
+
+- 专件 `k2/docs/K2-P4-J1-WARNING-DISPOSITION-LEDGER-AND-U03-REMAINDER-v1.md`：`l6` DRC **164 全 warning / error 0 / unconnected 0**，逐类 9 种（**7 类未登记共 90 条**）已给归属 + **不豁免**处置建议，小计数类逐条具名；w8 残余 **9 件**（5 `electrical_diff` = `U6`/`U1`/`L1`（≤0.5 µm）+ `J3`/`C85`（**物理等价**）· 4 `no_library_link` = `H1..H4` 纯机械件）。
+- 边界：只出证据；未改 `criteria/**`（安装归 gate 属主+监理）、库、板、SPEC、生成器；未以「接近 0」淡化（如实列 1、1）。
