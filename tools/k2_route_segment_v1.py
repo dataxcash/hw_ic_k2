@@ -87,6 +87,48 @@ def canon_all_uuids(path, loader):
     return n
 
 
+def run_drc(board, workdir, kicad_cli):
+    """链内 DRC（#K2-31 §2.1 硬要求）：新建 work-dir + 补齐 fp-lib-table/lib 环境，
+    返回 (json_path, counts)。**禁用复用旧目录**（E-3 §4 具名坑：69 vs 73 假绿）。"""
+    import json as _j, pathlib as _p, shutil as _s, subprocess as _sp
+    wd = _p.Path(workdir); wd.mkdir(parents=True, exist_ok=True)
+    stem = "k2_v4_8L.l6cand"
+    b = wd / (stem + ".kicad_pcb"); _s.copy2(board, b)
+    pro = _p.Path(str(board).replace(".kicad_pcb", ".kicad_pro"))
+    if pro.exists(): _s.copy2(pro, wd / (stem + ".kicad_pro"))
+    for pat in ("fp-lib-table", "lib"):
+        s = K2 / "hw" / pat; d = wd / pat
+        if s.exists() and not d.exists():
+            (_s.copytree if s.is_dir() else _s.copy2)(s, d)
+    out = wd / "drc.json"
+    _sp.run([kicad_cli, "pcb", "drc", "--format", "json", "--severity-all", "--output", str(out), str(b)],
+            capture_output=True, text=True, timeout=1800)
+    d = _j.loads(out.read_text())
+    # 确定性：违规条目 + 条目内 items 全序化（工具侧按文件序遍历 ⇒ 候选序随 kicad 输出序漂移，
+    # 实测 2c-B 两条不同锚点重布位、差 ~0.176mm）。输入侧固化序 = 不改工具件、保可追溯。
+    for v in d.get("violations", []):
+        if isinstance(v.get("items"), list):
+            v["items"] = sorted(v["items"], key=lambda x: _j.dumps(x, sort_keys=True, ensure_ascii=False))
+    d["violations"] = sorted(d.get("violations", []),
+                             key=lambda v: (str(v.get("type")), _j.dumps(v.get("items"), sort_keys=True, ensure_ascii=False),
+                                            _j.dumps(v.get("description", ""), ensure_ascii=False)))
+    for kk in ("unconnected_items",):
+        if isinstance(d.get(kk), list):
+            d[kk] = sorted(d[kk], key=lambda x: _j.dumps(x, sort_keys=True, ensure_ascii=False))
+    out.write_text(_j.dumps(d, sort_keys=True), encoding="utf-8")
+    vs = d.get("violations", [])
+    return str(out), {"violations": len(vs), "errors": sum(1 for v in vs if v["severity"] == "error"),
+                      "unconnected": len(d.get("unconnected_items", [])),
+                      "types": {k: sum(1 for v in vs if v["type"] == k) for k in sorted({v["type"] for v in vs})}}
+
+
+STEP_ORDER = ["2b", "2cA", "2cB"]
+
+
+def _ord(x: str) -> int:
+    return len(STEP_ORDER) if x == "all" else STEP_ORDER.index(x)
+
+
 def track_hist(p) -> dict:
     import pcbnew
     b = pcbnew.LoadBoard(str(p)); h = {}
@@ -102,6 +144,8 @@ def main() -> int:
     ap.add_argument("--out", required=True)
     ap.add_argument("--spec-rev19", default=str(K2 / "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-19.json"))
     ap.add_argument("--skip-2b", action="store_true")
+    ap.add_argument("--drc-cli", default=str(K2.parent / "AppDir/bin/kicad-cli"))
+    ap.add_argument("--upto", default="2b", choices=["2b", "2cA", "2cB", "all"], help="链步截止（默认 2b）")
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
 
@@ -137,6 +181,36 @@ def main() -> int:
             rec["steps"].append({"step": "2b", "spec": pathlib.Path(a.spec_rev19).name,
                                  "stub_w": st["stub_width_mm"], "vias": st["vias"], "tracks": st["tracks"],
                                  "blocked": len(st["blocked"]), "sha16": sha16(out), **track_hist(out)})
+    # ── 段2c 第一步：converge_v1 阶段 A（A1 NC 语义 ⇒ 消 NO_CONNECT；A2 keepout pad；A3 丝印镜像）──
+    if _ord(a.upto) >= _ord("2cA"):
+        cv = _load("k2cv", "k2_p4_converge_v1.py")
+        tmpc = str(out) + ".2cA_tmp.kicad_pcb"
+        import contextlib, io
+        _buf = io.StringIO()
+        with contextlib.redirect_stdout(_buf):
+            rc = cv.main(["--stage", "A", "--in", str(out), "--out", tmpc, "--ledger", str(out) + ".2cA_ledger.json"])
+        if rc != 0:
+            print(json.dumps({"error": f"converge A rc={rc}"})); return 3
+        shutil.copy2(tmpc, out)
+        rec["steps"].append({"step": "2c-A", "rc": rc, "tool_stdout": _buf.getvalue().strip(),
+                             "sha16": sha16(out), **track_hist(out)})
+
+    # ── 段2c 第二步：converge_v1 阶段 B（旧铜避让新 pad；需链内即时 DRC）──
+    if _ord(a.upto) >= _ord("2cB"):
+        cvb = _load("k2cv", "k2_p4_converge_v1.py")
+        dj, cnt = run_drc(out, str(out) + ".drc_b", a.drc_cli)
+        tmpb = str(out) + ".2cB_tmp.kicad_pcb"
+        import contextlib, io
+        _bb = io.StringIO()
+        with contextlib.redirect_stdout(_bb):
+            rcb = cvb.main(["--stage", "B", "--in", str(out), "--drc", dj, "--out", tmpb,
+                            "--ledger", str(out) + ".2cB_ledger.json"])
+        if rcb != 0:
+            rec["steps"].append({"step": "2c-B", "rc": rcb, "drc_before": cnt}); print(json.dumps(rec, ensure_ascii=False, indent=1)); return 3
+        shutil.copy2(tmpb, out)
+        rec["steps"].append({"step": "2c-B", "rc": rcb, "drc_before": cnt, "tool_stdout": _bb.getvalue().strip(),
+                             "sha16": sha16(out), **track_hist(out)})
+
     if not a.dry_run:
         n_s = canon_sort_tracks(out, la)
         n_u = canon_all_uuids(out, la)

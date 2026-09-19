@@ -1,0 +1,88 @@
+{
+ "artifact": "K2-P4 段2c 前两步读数（#K2-31 §二 (A)）",
+ "ts": "2026-09-19",
+ "chain": "段1(d67c0f04) → 段2a 图纸直构 → 段2b PDN connect → 段2c-A converge A → 段2c-B converge B → canon",
+ "steps": {
+  "2a": {
+   "stage": "图纸直构",
+   "tracks": 2579,
+   "nets": 102
+  },
+  "2b": {
+   "stage": "PDN connect",
+   "tracks": 2988,
+   "nets": 102,
+   "vias_added": 224,
+   "blocked": 61
+  },
+  "2c-A": {
+   "stage": "converge A",
+   "nets": 101,
+   "A1_nc_pads_no_net": 128,
+   "A2": 0,
+   "A3": 0,
+   "note": "A1 = §2.2-2 修复点（NO_CONNECT 网消解，102→101）；工具内置 ZONE_FILLER 填充"
+  },
+  "2c-B": {
+   "stage": "converge B 旧铜避让",
+   "repairs": 8,
+   "no_solution": 2,
+   "skipped": 13,
+   "tracks": 2992,
+   "nets": 101
+  }
+ },
+ "drc_chain_internal（fp-lib-table+lib 环境，全新 work-dir）": {
+  "段2 起点（2a+2b）": {
+   "violations": 122,
+   "errors": 61,
+   "unconnected": 499,
+   "types": {
+    "lib_footprint_issues": 54,
+    "hole_clearance": 24,
+    "solder_mask_bridge": 17,
+    "shorting_items": 11,
+    "clearance": 9,
+    "track_dangling": 3,
+    "silk_edge_clearance": 2,
+    "hole_to_hole": 2
+   }
+  },
+  "2c-A 后": {
+   "violations": 84,
+   "errors": 57,
+   "unconnected": 199,
+   "types": {
+    "hole_clearance": 24,
+    "lib_footprint_mismatch": 20,
+    "solder_mask_bridge": 14,
+    "shorting_items": 11,
+    "clearance": 8,
+    "track_dangling": 3,
+    "silk_edge_clearance": 2,
+    "hole_to_hole": 2
+   }
+  },
+  "2c-A+2c-B 后": {
+   "violations": 33,
+   "errors": 8,
+   "unconnected": 200,
+   "types": {
+    "lib_footprint_mismatch": 20,
+    "clearance": 6,
+    "track_dangling": 3,
+    "solder_mask_bridge": 2,
+    "silk_edge_clearance": 2
+   },
+   "note": "旧铜避让族（hole_clearance/shorting/hole_to_hole）全清；余 lib_footprint_mismatch 20 = 库↔板口径（⑦ 重指后的 lib 一致性，属 J-7 家族）"
+  }
+ },
+ "确定性状态": {
+  "closed": [
+   "段2a/2b 漂移（P3 canonicalize 仅覆盖连续 run）：全块 uuid5 归一 + segment/via/zone 全局排序 ⇒ 3 连跑同 d523ebd357b48023",
+   "DRC json 违规/条目序化（输入侧固化，不改工具件）"
+  ],
+  "open": "**2c-B 残余非确定**：候选锚点重布位两次得 y=53.088176 / 52.911823（差 0.176mm）；3 连跑 2/3 一致 ⇒ **#K2-31 §2.1 硬要求 2 未闭合**（下一件：定位 stage_b 候选序并输入侧固化，或经监理放行对 RETIRED 工具做最小外科 + 版本化）"
+ },
+ "carriers_unchanged": "受审板 dae8dc8d · l4 d4e81f64 · 设计源板 fb07d25a · 真源 dd794c54 · criteria rev=2 · 生成器 1ca5ac79（未改）"
+}
