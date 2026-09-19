@@ -161,3 +161,5 @@ P3 时该逃逸孔位裕度 +0.2425；链内 In2 铜不同 ⇒ 孔位被 `DS320_
 - **达成 P4 判据之一**：`unconnected_zero = 0`（端到端，全链 `--upto all`）。
 - 件：`k2_p4_mroute_v1.py`（inc103 `f4e04276` → 见提交）；读数件 `segment2c_canonical_inc105.json`。
 - **未闭**：仍余 **3 条 clearance error**（漂移类）+ 20 lib_footprint_mismatch(warning) + 2 silk_edge + 1 track_dangling。
+
+**确定性（inc105）**：全链 `--upto all` 两次连跑逐字节同 `50e54d6101dcfe3f08b20db4b09856c280c319a29715b9293ef3fe98ebbcd5bc`。
