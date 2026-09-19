@@ -129,3 +129,11 @@ P3 时该逃逸孔位裕度 +0.2425；链内 In2 铜不同 ⇒ 孔位被 `DS320_
 - 结论：mroute 的栅格把**细间距 LQFP 焊盘本体**按「走线清距」标为 blocked，缺少 F1/F3 那样的**焊盘逃逸腿（pad-escape leg）**机制 ⇒ 无法从焊盘起步。这属**路由器模型待增强（L2）**，非坐标/数据问题。
 - `PERSTA#` 77.279mm 边同为 `exhausted-1`（长走廊 + 同一模型限制）。
 - **回滚**：`k2_p4_mroute_v1.py` 恢复 `7e5c0bf7bb03269d`（= RETIRED 清单原值），本笔不含该器改动。
+
+## 11. inc103：mroute 修「重复孔」⇒ 未连接 2→**1**
+
+- **根因**：`_try_margin` 生成的路径若在末端换层，而换层点恰落在**既有同网过孔**上（U1.6↔MCU_VDD 锚 (30.475,54.5)、以及 PERSTA# 路径上的既落孔 (59.75,41.4)），原式仍**新放一孔** ⇒ `via-clearance(hole:… d=0.056/0.450 · 0.050/0.450)`。逐 margin 诊断（`K2MR_MARG`）实证：m=0.00/0.03/0.08 均卡在 `via-clearance`（路径已成），仅在更高清距下才转 no-free-start-node。
+- **修**：`_try_margin` 增加去重——与既有**同网**过孔距离 ≤0.15mm 的「换层」不再新放孔（该层对由既有孔桶承担）。
+- **实测**：`--only-net MCU_VDD` 由 added1/blocked1 → **added2/blocked0**；全链 `--upto all` 未连接 **2→1**、违规 **26→26**（error 3 不变）。
+- 件：`k2_p4_mroute_v1.py` `7e5c0bf7bb03269d`→`f4e042760a7e3763`（RETIRED 清单原值 → 本修）；读数件 `drafts/p4-l6-reland-v1/segment2c_canonical_inc103.json`。
+- **残余 1**：`PERSTA# In5(59.75,41.4) ↔ J2.48(135.0,56.7)` 约 77mm 长走廊；其两端各自可达，但缺长走廊通道（属 T-9/T-35/T-36 走廊容量族）。

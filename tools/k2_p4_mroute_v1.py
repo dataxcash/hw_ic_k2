@@ -532,6 +532,17 @@ def _try_margin(ctx, find, compa, compb, net, la, pa, lb, pb, margin, coarse_ste
             vias.append((cur[-1][0], cur[-1][1], span, curL, L))
             curL = L; cur = [(x, y)]
     legs.append((curL, simplify(cur)))
+    # inc103(L2)：与既有**同网**过孔同点且同跨度的「换层」无需新放孔
+    # （链内 U1.6↔MCU_VDD 锚 边的路径末端换层恰落在既有锚孔 (30.475,54.5) 上；原式会加重复孔 ⇒ hole 碰撞 0.056/0.450）
+    _kept = []
+    for (x, y, span, l1, l2) in vias:
+        dup = False
+        for v in ctx.vias.values():
+            if v["net"] != net: continue
+            if math.hypot(x - v["x"], y - v["y"]) > 0.15: continue
+            if l1 in v["lay"] and l2 in v["lay"]: dup = True; break
+        if not dup: _kept.append((x, y, span, l1, l2))
+    vias = _kept
     # 精确放行闸
     for (L, pl) in legs:
         for k in range(len(pl) - 1):
