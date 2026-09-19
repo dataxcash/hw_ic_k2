@@ -1,0 +1,3181 @@
+{
+ "source": "k2/pm_gate/artifacts/k2_v4/L4/E3-standard-call-l6-20260920/drc_violations_clean_workdir.json",
+ "source_sha16": "ad472105c88b2256",
+ "board_sha16": "30fa849641323f98",
+ "pro_sha16": "12ad219b9f66b7b3",
+ "criteria_manifest_rev2": "d251bea7c2cb1873",
+ "criterion": "drc_warning_dispositions: board_warning_types ⊆ drc_warning_dispositions[].type",
+ "counts": {
+  "total": 164,
+  "registered": 74,
+  "unregistered": 90,
+  "by_type": {
+   "missing_courtyard": 54,
+   "silk_over_copper": 37,
+   "track_not_centered_on_via": 30,
+   "lib_footprint_mismatch": 20,
+   "silk_overlap": 15,
+   "via_dangling": 4,
+   "silk_edge_clearance": 2,
+   "copper_sliver": 1,
+   "track_dangling": 1
+  }
+ },
+ "ledger": [
+  {
+   "seq": 1,
+   "type": "copper_sliver",
+   "severity": "warning",
+   "description": "铜箔毛刺 (In4.Cu)",
+   "registered_in_rev2": false,
+   "items": []
+  },
+  {
+   "seq": 2,
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "description": "封装 'PinHeader_1x02' 与库 'ForgeOS' 中的副本不匹配",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 J12",
+     "pos": {
+      "x": 27.94,
+      "y": 35.32
+     },
+     "uuid": "fdc06f18-96d9-5340-9f62-012d5f28f9f6"
+    }
+   ]
+  },
+  {
+   "seq": 3,
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "description": "封装 'PinHeader_1x02' 与库 'ForgeOS' 中的副本不匹配",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 J6",
+     "pos": {
+      "x": 27.94,
+      "y": 39.66
+     },
+     "uuid": "da8b3001-7dca-5a56-a443-af46a8920fcc"
+    }
+   ]
+  },
+  {
+   "seq": 4,
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "description": "封装 'PinHeader_1x04' 与库 'ForgeOS' 中的副本不匹配",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 J13",
+     "pos": {
+      "x": 27.94,
+      "y": 46.54
+     },
+     "uuid": "c794c7d5-9120-55a8-98f1-3b34ab83194c"
+    }
+   ]
+  },
+  {
+   "seq": 5,
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "description": "封装 'PinHeader_1x04' 与库 'ForgeOS' 中的副本不匹配",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 J9",
+     "pos": {
+      "x": 27.94,
+      "y": 55.96
+     },
+     "uuid": "7ff905b9-fc97-5169-aa73-545e867d06a2"
+    }
+   ]
+  },
+  {
+   "seq": 6,
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "description": "封装 'PinHeader_1x04' 与库 'ForgeOS' 中的副本不匹配",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 J11",
+     "pos": {
+      "x": 27.94,
+      "y": 65.38
+     },
+     "uuid": "515ba1b5-15ce-5c12-a275-02fc7077d6ee"
+    }
+   ]
+  },
+  {
+   "seq": 7,
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "description": "封装 'R_0402_1005Metric__1' 与库 'ForgeOS' 中的副本不匹配",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 R41",
+     "pos": {
+      "x": 29.5,
+      "y": 34.0
+     },
+     "uuid": "06a3c63e-127a-5710-b562-8908d53e9d56"
+    }
+   ]
+  },
+  {
+   "seq": 8,
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "description": "封装 'R_0402_1005Metric__2' 与库 'ForgeOS' 中的副本不匹配",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 R40",
+     "pos": {
+      "x": 29.5,
+      "y": 38.2
+     },
+     "uuid": "8e40ba06-67e7-5953-b7a3-685aeef1d1cf"
+    }
+   ]
+  },
+  {
+   "seq": 9,
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "description": "封装 'L_0805_2012Metric' 与库 'ForgeOS' 中的副本不匹配",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 L1",
+     "pos": {
+      "x": 33.0,
+      "y": 40.2
+     },
+     "uuid": "f99508d1-b6b1-5d6d-b1bc-013b610bd2e9"
+    }
+   ]
+  },
+  {
+   "seq": 10,
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "description": "封装 'MCU_STM32G0_LQFP48' 与库 'ForgeOS' 中的副本不匹配",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 U1",
+     "pos": {
+      "x": 36.0,
+      "y": 52.0
+     },
+     "uuid": "e6f6809a-f144-5389-8463-6897a2442788"
+    }
+   ]
+  },
+  {
+   "seq": 11,
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "description": "封装 'D_SMA' 与库 'ForgeOS' 中的副本不匹配",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 D2",
+     "pos": {
+      "x": 38.7,
+      "y": 34.6
+     },
+     "uuid": "8f1d2dd5-83b4-5467-b285-1e0d92d09746"
+    }
+   ]
+  },
+  {
+   "seq": 12,
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "description": "封装 'R_0603_1608Metric__2' 与库 'ForgeOS' 中的副本不匹配",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 R43",
+     "pos": {
+      "x": 83.6,
+      "y": 59.55
+     },
+     "uuid": "b4e6cace-0d24-5500-acad-5e3bd5034dcf"
+    }
+   ]
+  },
+  {
+   "seq": 13,
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "description": "封装 'R_0603_1608Metric__2' 与库 'ForgeOS' 中的副本不匹配",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 R35",
+     "pos": {
+      "x": 83.6,
+      "y": 61.55
+     },
+     "uuid": "2ad1a505-71f4-55db-97ae-b855bb9ff279"
+    }
+   ]
+  },
+  {
+   "seq": 14,
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "description": "封装 'R_0603_1608Metric__2' 与库 'ForgeOS' 中的副本不匹配",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 R44",
+     "pos": {
+      "x": 86.6,
+      "y": 61.55
+     },
+     "uuid": "751635ff-a3c4-5b9a-9a1b-0635df9cbfd2"
+    }
+   ]
+  },
+  {
+   "seq": 15,
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "description": "封装 'R_0603_1608Metric__2' 与库 'ForgeOS' 中的副本不匹配",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 R45",
+     "pos": {
+      "x": 93.3,
+      "y": 59.55
+     },
+     "uuid": "f82304ab-99b8-5917-bfc6-b0bac0e61665"
+    }
+   ]
+  },
+  {
+   "seq": 16,
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "description": "封装 'R_0603_1608Metric__2' 与库 'ForgeOS' 中的副本不匹配",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 R42",
+     "pos": {
+      "x": 93.3,
+      "y": 61.55
+     },
+     "uuid": "7407d5e7-7a3f-55e6-83eb-a42da915cbed"
+    }
+   ]
+  },
+  {
+   "seq": 17,
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "description": "封装 'DS320PR1601' 与库 'ForgeOS' 中的副本不匹配",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 U6",
+     "pos": {
+      "x": 93.8,
+      "y": 53.7
+     },
+     "uuid": "138e7d7d-3290-5e3c-8622-53b7b2b7d510"
+    }
+   ]
+  },
+  {
+   "seq": 18,
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "description": "封装 'R_0603_1608Metric__2' 与库 'ForgeOS' 中的副本不匹配",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 R36",
+     "pos": {
+      "x": 100.4,
+      "y": 59.55
+     },
+     "uuid": "a7893b86-eaa0-5fd1-98d0-417dc98756a6"
+    }
+   ]
+  },
+  {
+   "seq": 19,
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "description": "封装 'R_0603_1608Metric__2' 与库 'ForgeOS' 中的副本不匹配",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 R39",
+     "pos": {
+      "x": 100.4,
+      "y": 61.55
+     },
+     "uuid": "bb335bb5-ebe7-57b1-a4c3-6436c0aed065"
+    }
+   ]
+  },
+  {
+   "seq": 20,
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "description": "封装 'R_0603_1608Metric__2' 与库 'ForgeOS' 中的副本不匹配",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 R37",
+     "pos": {
+      "x": 103.4,
+      "y": 59.55
+     },
+     "uuid": "f9311206-fab8-52e3-b11d-a0d904d3140e"
+    }
+   ]
+  },
+  {
+   "seq": 21,
+   "type": "lib_footprint_mismatch",
+   "severity": "warning",
+   "description": "封装 'R_0603_1608Metric__2' 与库 'ForgeOS' 中的副本不匹配",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 R38",
+     "pos": {
+      "x": 103.4,
+      "y": 61.55
+     },
+     "uuid": "c2e82e7b-ca97-58db-b7b0-0f65ce9342d3"
+    }
+   ]
+  },
+  {
+   "seq": 22,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 J12",
+     "pos": {
+      "x": 27.94,
+      "y": 35.32
+     },
+     "uuid": "fdc06f18-96d9-5340-9f62-012d5f28f9f6"
+    }
+   ]
+  },
+  {
+   "seq": 23,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 J6",
+     "pos": {
+      "x": 27.94,
+      "y": 39.66
+     },
+     "uuid": "da8b3001-7dca-5a56-a443-af46a8920fcc"
+    }
+   ]
+  },
+  {
+   "seq": 24,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 J13",
+     "pos": {
+      "x": 27.94,
+      "y": 46.54
+     },
+     "uuid": "c794c7d5-9120-55a8-98f1-3b34ab83194c"
+    }
+   ]
+  },
+  {
+   "seq": 25,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 J9",
+     "pos": {
+      "x": 27.94,
+      "y": 55.96
+     },
+     "uuid": "7ff905b9-fc97-5169-aa73-545e867d06a2"
+    }
+   ]
+  },
+  {
+   "seq": 26,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 J11",
+     "pos": {
+      "x": 27.94,
+      "y": 65.38
+     },
+     "uuid": "515ba1b5-15ce-5c12-a275-02fc7077d6ee"
+    }
+   ]
+  },
+  {
+   "seq": 27,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 C73",
+     "pos": {
+      "x": 28.0,
+      "y": 47.9
+     },
+     "uuid": "36d237da-61cc-58ac-b5ed-8da9c7314a4c"
+    }
+   ]
+  },
+  {
+   "seq": 28,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 R41",
+     "pos": {
+      "x": 29.5,
+      "y": 34.0
+     },
+     "uuid": "06a3c63e-127a-5710-b562-8908d53e9d56"
+    }
+   ]
+  },
+  {
+   "seq": 29,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 R40",
+     "pos": {
+      "x": 29.5,
+      "y": 38.2
+     },
+     "uuid": "8e40ba06-67e7-5953-b7a3-685aeef1d1cf"
+    }
+   ]
+  },
+  {
+   "seq": 30,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 C88",
+     "pos": {
+      "x": 29.5,
+      "y": 41.5
+     },
+     "uuid": "07522485-0685-5579-974f-6d6216e5eede"
+    }
+   ]
+  },
+  {
+   "seq": 31,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 C85",
+     "pos": {
+      "x": 29.7,
+      "y": 54.5
+     },
+     "uuid": "fd415ccb-7ad0-51fb-88d6-188f4e8124ab"
+    }
+   ]
+  },
+  {
+   "seq": 32,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 C90",
+     "pos": {
+      "x": 30.0,
+      "y": 53.0
+     },
+     "uuid": "309b78cf-e629-5e0a-a959-4e772f2a3e05"
+    }
+   ]
+  },
+  {
+   "seq": 33,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 C86",
+     "pos": {
+      "x": 31.55,
+      "y": 58.85
+     },
+     "uuid": "e3c4fe4f-c796-598c-917b-f3b1650917ac"
+    }
+   ]
+  },
+  {
+   "seq": 34,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 U2",
+     "pos": {
+      "x": 33.0,
+      "y": 37.0
+     },
+     "uuid": "a0a33254-c195-5d73-bcdf-3dd1409a7275"
+    }
+   ]
+  },
+  {
+   "seq": 35,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 L1",
+     "pos": {
+      "x": 33.0,
+      "y": 40.2
+     },
+     "uuid": "f99508d1-b6b1-5d6d-b1bc-013b610bd2e9"
+    }
+   ]
+  },
+  {
+   "seq": 36,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 U1",
+     "pos": {
+      "x": 36.0,
+      "y": 52.0
+     },
+     "uuid": "e6f6809a-f144-5389-8463-6897a2442788"
+    }
+   ]
+  },
+  {
+   "seq": 37,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 D2",
+     "pos": {
+      "x": 38.7,
+      "y": 34.6
+     },
+     "uuid": "8f1d2dd5-83b4-5467-b285-1e0d92d09746"
+    }
+   ]
+  },
+  {
+   "seq": 38,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 U4",
+     "pos": {
+      "x": 40.0,
+      "y": 37.0
+     },
+     "uuid": "13aa8b76-a3a0-5c8e-beb2-5458d7803607"
+    }
+   ]
+  },
+  {
+   "seq": 39,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 C87",
+     "pos": {
+      "x": 44.0,
+      "y": 35.0
+     },
+     "uuid": "104cc09d-a4d0-5a61-817a-9cfa7b5e63d8"
+    }
+   ]
+  },
+  {
+   "seq": 40,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 C84",
+     "pos": {
+      "x": 44.0,
+      "y": 40.0
+     },
+     "uuid": "d49f3e2e-3683-5298-b7de-6d23a3a102e9"
+    }
+   ]
+  },
+  {
+   "seq": 41,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 E2",
+     "pos": {
+      "x": 44.0,
+      "y": 60.0
+     },
+     "uuid": "4eef494d-7f59-574b-867d-471dc76ab9cd"
+    }
+   ]
+  },
+  {
+   "seq": 42,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 U5",
+     "pos": {
+      "x": 44.5,
+      "y": 52.0
+     },
+     "uuid": "bcb1d86c-5cf1-589d-8981-891ac23923b2"
+    }
+   ]
+  },
+  {
+   "seq": 43,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 R21",
+     "pos": {
+      "x": 45.5,
+      "y": 66.5
+     },
+     "uuid": "f898f207-8d1f-53a8-8ea1-e04e6106d022"
+    }
+   ]
+  },
+  {
+   "seq": 44,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 D1",
+     "pos": {
+      "x": 48.5,
+      "y": 66.5
+     },
+     "uuid": "0243f804-03b4-5a99-ab85-e55152b6082a"
+    }
+   ]
+  },
+  {
+   "seq": 45,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 R1",
+     "pos": {
+      "x": 50.5,
+      "y": 37.0
+     },
+     "uuid": "51bac8ee-f44d-5e7c-baca-3e93be82f8b1"
+    }
+   ]
+  },
+  {
+   "seq": 46,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 R28",
+     "pos": {
+      "x": 50.5,
+      "y": 41.0
+     },
+     "uuid": "c4150d02-71e7-57f5-90a3-6e6490569d78"
+    }
+   ]
+  },
+  {
+   "seq": 47,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 R3",
+     "pos": {
+      "x": 53.5,
+      "y": 37.0
+     },
+     "uuid": "1be74449-0479-5220-9016-92b33d35c8db"
+    }
+   ]
+  },
+  {
+   "seq": 48,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 R29",
+     "pos": {
+      "x": 53.5,
+      "y": 41.0
+     },
+     "uuid": "0be2ffb2-b90b-5cc5-b050-828842286294"
+    }
+   ]
+  },
+  {
+   "seq": 49,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 R31",
+     "pos": {
+      "x": 55.5,
+      "y": 66.5
+     },
+     "uuid": "e0fb0dfd-29a9-58cc-af5d-c8a0666ff7c5"
+    }
+   ]
+  },
+  {
+   "seq": 50,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 R32",
+     "pos": {
+      "x": 55.5,
+      "y": 67.5
+     },
+     "uuid": "c52e0a96-e0f7-5065-8df9-4c51d729ac64"
+    }
+   ]
+  },
+  {
+   "seq": 51,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 R33",
+     "pos": {
+      "x": 55.5,
+      "y": 68.5
+     },
+     "uuid": "888c4d6e-8022-5d68-81b4-92c003cb4165"
+    }
+   ]
+  },
+  {
+   "seq": 52,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 R34",
+     "pos": {
+      "x": 55.5,
+      "y": 69.5
+     },
+     "uuid": "592b731a-54a2-5a45-8860-08f41373802e"
+    }
+   ]
+  },
+  {
+   "seq": 53,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 J3",
+     "pos": {
+      "x": 59.5,
+      "y": 44.5
+     },
+     "uuid": "ce9b2a1e-d5d2-5449-a69f-dbb22da5f876"
+    }
+   ]
+  },
+  {
+   "seq": 54,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 J4",
+     "pos": {
+      "x": 59.5,
+      "y": 62.7
+     },
+     "uuid": "0cae3232-1a7f-5ee2-96ef-b1c20becbd94"
+    }
+   ]
+  },
+  {
+   "seq": 55,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 R43",
+     "pos": {
+      "x": 83.6,
+      "y": 59.55
+     },
+     "uuid": "b4e6cace-0d24-5500-acad-5e3bd5034dcf"
+    }
+   ]
+  },
+  {
+   "seq": 56,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 R35",
+     "pos": {
+      "x": 83.6,
+      "y": 61.55
+     },
+     "uuid": "2ad1a505-71f4-55db-97ae-b855bb9ff279"
+    }
+   ]
+  },
+  {
+   "seq": 57,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 R44",
+     "pos": {
+      "x": 86.6,
+      "y": 61.55
+     },
+     "uuid": "751635ff-a3c4-5b9a-9a1b-0635df9cbfd2"
+    }
+   ]
+  },
+  {
+   "seq": 58,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 C78",
+     "pos": {
+      "x": 91.0,
+      "y": 38.5
+     },
+     "uuid": "0969ec71-6002-53b9-8102-4f5f3198bfdf"
+    }
+   ]
+  },
+  {
+   "seq": 59,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 C74",
+     "pos": {
+      "x": 91.0,
+      "y": 40.0
+     },
+     "uuid": "fbb5f06f-1e2e-5bce-b1fd-9c89369f5e09"
+    }
+   ]
+  },
+  {
+   "seq": 60,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 C75",
+     "pos": {
+      "x": 91.0,
+      "y": 41.0
+     },
+     "uuid": "1d14a8e4-ad5c-55bd-90bc-c17fae5b443d"
+    }
+   ]
+  },
+  {
+   "seq": 61,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 C76",
+     "pos": {
+      "x": 91.0,
+      "y": 42.0
+     },
+     "uuid": "2e2c4650-f83a-543e-96eb-28364fa1e7fe"
+    }
+   ]
+  },
+  {
+   "seq": 62,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 C77",
+     "pos": {
+      "x": 91.0,
+      "y": 43.0
+     },
+     "uuid": "b09b0a83-2c9c-5a97-8fbd-8fc33ae4a039"
+    }
+   ]
+  },
+  {
+   "seq": 63,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 C80",
+     "pos": {
+      "x": 91.0,
+      "y": 59.0
+     },
+     "uuid": "38a97d8f-77b3-5d2c-aef7-01b590c63265"
+    }
+   ]
+  },
+  {
+   "seq": 64,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 C81",
+     "pos": {
+      "x": 91.0,
+      "y": 60.0
+     },
+     "uuid": "077822be-c9be-584e-8692-3a362ba57dd3"
+    }
+   ]
+  },
+  {
+   "seq": 65,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 C79",
+     "pos": {
+      "x": 91.0,
+      "y": 61.0
+     },
+     "uuid": "1fee963c-d6a9-550e-82ef-26560f30c103"
+    }
+   ]
+  },
+  {
+   "seq": 66,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 C83",
+     "pos": {
+      "x": 91.0,
+      "y": 62.0
+     },
+     "uuid": "87bdd1ce-e146-54bc-a61a-0ef95f0be9fd"
+    }
+   ]
+  },
+  {
+   "seq": 67,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 C82",
+     "pos": {
+      "x": 91.0,
+      "y": 64.0
+     },
+     "uuid": "a57c4c99-e07c-5678-806f-d395fc124e4b"
+    }
+   ]
+  },
+  {
+   "seq": 68,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 R45",
+     "pos": {
+      "x": 93.3,
+      "y": 59.55
+     },
+     "uuid": "f82304ab-99b8-5917-bfc6-b0bac0e61665"
+    }
+   ]
+  },
+  {
+   "seq": 69,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 R42",
+     "pos": {
+      "x": 93.3,
+      "y": 61.55
+     },
+     "uuid": "7407d5e7-7a3f-55e6-83eb-a42da915cbed"
+    }
+   ]
+  },
+  {
+   "seq": 70,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 U6",
+     "pos": {
+      "x": 93.8,
+      "y": 53.7
+     },
+     "uuid": "138e7d7d-3290-5e3c-8622-53b7b2b7d510"
+    }
+   ]
+  },
+  {
+   "seq": 71,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 R36",
+     "pos": {
+      "x": 100.4,
+      "y": 59.55
+     },
+     "uuid": "a7893b86-eaa0-5fd1-98d0-417dc98756a6"
+    }
+   ]
+  },
+  {
+   "seq": 72,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 R39",
+     "pos": {
+      "x": 100.4,
+      "y": 61.55
+     },
+     "uuid": "bb335bb5-ebe7-57b1-a4c3-6436c0aed065"
+    }
+   ]
+  },
+  {
+   "seq": 73,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 R37",
+     "pos": {
+      "x": 103.4,
+      "y": 59.55
+     },
+     "uuid": "f9311206-fab8-52e3-b11d-a0d904d3140e"
+    }
+   ]
+  },
+  {
+   "seq": 74,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 R38",
+     "pos": {
+      "x": 103.4,
+      "y": 61.55
+     },
+     "uuid": "c2e82e7b-ca97-58db-b7b0-0f65ce9342d3"
+    }
+   ]
+  },
+  {
+   "seq": 75,
+   "type": "missing_courtyard",
+   "severity": "warning",
+   "description": "Footprint has no courtyard defined",
+   "registered_in_rev2": true,
+   "items": [
+    {
+     "description": "封装 J2",
+     "pos": {
+      "x": 133.825,
+      "y": 53.7
+     },
+     "uuid": "28a594fb-67db-5ab3-8196-926922585475"
+    }
+   ]
+  },
+  {
+   "seq": 76,
+   "type": "silk_edge_clearance",
+   "severity": "warning",
+   "description": "Silkscreen clipped by board edge",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "Edge.Cuts 上的 线段",
+     "pos": {
+      "x": 23.0,
+      "y": 33.0
+     },
+     "uuid": "4fdc97af-ef1d-5cec-8e19-eb844fdeaf05"
+    },
+    {
+     "description": "C87 的参考字段",
+     "pos": {
+      "x": 44.0,
+      "y": 33.0
+     },
+     "uuid": "82f7c1b5-6135-59c9-9c2b-32d624be9762"
+    }
+   ]
+  },
+  {
+   "seq": 77,
+   "type": "silk_edge_clearance",
+   "severity": "warning",
+   "description": "Silkscreen clipped by board edge",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "Edge.Cuts 上的 线段",
+     "pos": {
+      "x": 23.0,
+      "y": 33.0
+     },
+     "uuid": "4fdc97af-ef1d-5cec-8e19-eb844fdeaf05"
+    },
+    {
+     "description": "D2 的参考字段",
+     "pos": {
+      "x": 38.7,
+      "y": 32.6
+     },
+     "uuid": "c4cd7902-be49-50f8-b356-99082114b127"
+    }
+   ]
+  },
+  {
+   "seq": 78,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "J12 的参考字段",
+     "pos": {
+      "x": 25.94,
+      "y": 35.32
+     },
+     "uuid": "0aeb2ec3-8cb4-5a11-b45b-1bd0818e5cb1"
+    }
+   ]
+  },
+  {
+   "seq": 79,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "J6 的参考字段",
+     "pos": {
+      "x": 25.94,
+      "y": 39.66
+     },
+     "uuid": "8d1a7139-46df-508a-b77f-c8169610dd32"
+    }
+   ]
+  },
+  {
+   "seq": 80,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "J13 的参考字段",
+     "pos": {
+      "x": 25.94,
+      "y": 46.54
+     },
+     "uuid": "d082a6ee-96cd-5b27-87a1-f811d98da362"
+    }
+   ]
+  },
+  {
+   "seq": 81,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "J9 的参考字段",
+     "pos": {
+      "x": 25.94,
+      "y": 55.96
+     },
+     "uuid": "f6d0d04f-36d8-5a41-b864-fbd982c1d4da"
+    }
+   ]
+  },
+  {
+   "seq": 82,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "J11 的参考字段",
+     "pos": {
+      "x": 25.94,
+      "y": 65.38
+     },
+     "uuid": "a08b8923-93e7-5a4d-ba78-5bba9ca87a33"
+    }
+   ]
+  },
+  {
+   "seq": 83,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "C73 的参考字段",
+     "pos": {
+      "x": 28.0,
+      "y": 45.9
+     },
+     "uuid": "862ade51-68dc-5320-8886-18490e684f65"
+    }
+   ]
+  },
+  {
+   "seq": 84,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "R40 的参考字段",
+     "pos": {
+      "x": 29.5,
+      "y": 36.2
+     },
+     "uuid": "d2266c2d-3e20-51b4-8fda-40940299ae87"
+    }
+   ]
+  },
+  {
+   "seq": 85,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "C88 的参考字段",
+     "pos": {
+      "x": 29.5,
+      "y": 39.5
+     },
+     "uuid": "5f26346f-a81d-55db-87a1-4d69b3aeea98"
+    }
+   ]
+  },
+  {
+   "seq": 86,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "C85 的参考字段",
+     "pos": {
+      "x": 29.7,
+      "y": 56.5
+     },
+     "uuid": "8537abc2-0ce6-5814-8712-7cff2b377098"
+    }
+   ]
+  },
+  {
+   "seq": 87,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "C90 的参考字段",
+     "pos": {
+      "x": 30.0,
+      "y": 51.0
+     },
+     "uuid": "1f0a1cbf-1301-5c4e-acfc-2004ae366ff3"
+    }
+   ]
+  },
+  {
+   "seq": 88,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "C86 的参考字段",
+     "pos": {
+      "x": 31.55,
+      "y": 56.85
+     },
+     "uuid": "62bfbff2-76bc-5541-9f1a-eed883291957"
+    }
+   ]
+  },
+  {
+   "seq": 89,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "U1 的参考字段",
+     "pos": {
+      "x": 36.0,
+      "y": 50.0
+     },
+     "uuid": "e03b591a-b361-5d7c-80d9-d8efa66240e7"
+    }
+   ]
+  },
+  {
+   "seq": 90,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "U4 的参考字段",
+     "pos": {
+      "x": 40.0,
+      "y": 35.0
+     },
+     "uuid": "7c5c4bc6-69d4-54ae-81de-35bd58068ee1"
+    }
+   ]
+  },
+  {
+   "seq": 91,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "R31 的参考字段",
+     "pos": {
+      "x": 55.5,
+      "y": 64.5
+     },
+     "uuid": "f3719165-f910-562b-ad0c-cc137b200fcd"
+    }
+   ]
+  },
+  {
+   "seq": 92,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "R33 的参考字段",
+     "pos": {
+      "x": 55.5,
+      "y": 66.5
+     },
+     "uuid": "5fd54a46-cdfd-5b9e-ad57-e851ca0bcfb8"
+    }
+   ]
+  },
+  {
+   "seq": 93,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "R34 的参考字段",
+     "pos": {
+      "x": 55.5,
+      "y": 67.5
+     },
+     "uuid": "ffb5c5c6-b447-5de5-82c2-2d32af03d232"
+    }
+   ]
+  },
+  {
+   "seq": 94,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "J3 的参考字段",
+     "pos": {
+      "x": 59.5,
+      "y": 46.5
+     },
+     "uuid": "d40b7f3e-3baf-52de-a592-4c0b0e0c3cf3"
+    }
+   ]
+  },
+  {
+   "seq": 95,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "J4 的参考字段",
+     "pos": {
+      "x": 59.5,
+      "y": 60.7
+     },
+     "uuid": "cacdeec9-8139-558d-8d9d-723aa815202e"
+    }
+   ]
+  },
+  {
+   "seq": 96,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "R43 的参考字段",
+     "pos": {
+      "x": 83.6,
+      "y": 57.55
+     },
+     "uuid": "963ca43e-7281-5b13-90ed-869c8f0cc11f"
+    }
+   ]
+  },
+  {
+   "seq": 97,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "R35 的参考字段",
+     "pos": {
+      "x": 83.6,
+      "y": 59.55
+     },
+     "uuid": "b99fb9cb-6fcb-582d-b8ff-0d0311960691"
+    }
+   ]
+  },
+  {
+   "seq": 98,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "C74 的参考字段",
+     "pos": {
+      "x": 91.0,
+      "y": 38.0
+     },
+     "uuid": "14022780-a6be-55c8-9e37-d0c304806c94"
+    }
+   ]
+  },
+  {
+   "seq": 99,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "C75 的参考字段",
+     "pos": {
+      "x": 91.0,
+      "y": 39.0
+     },
+     "uuid": "db855bbb-0e98-52e2-bf6c-8c80596984ff"
+    }
+   ]
+  },
+  {
+   "seq": 100,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "C76 的参考字段",
+     "pos": {
+      "x": 91.0,
+      "y": 40.0
+     },
+     "uuid": "0f6a0e04-6b5e-56ed-ba7d-d691adff24fe"
+    }
+   ]
+  },
+  {
+   "seq": 101,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "C77 的参考字段",
+     "pos": {
+      "x": 91.0,
+      "y": 41.0
+     },
+     "uuid": "5229599e-77c5-5024-a610-86f4da3ba9b9"
+    }
+   ]
+  },
+  {
+   "seq": 102,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "C80 的参考字段",
+     "pos": {
+      "x": 91.0,
+      "y": 57.0
+     },
+     "uuid": "bb4b90d9-79f0-5aff-8d1b-c78421cb9dbf"
+    }
+   ]
+  },
+  {
+   "seq": 103,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "C81 的参考字段",
+     "pos": {
+      "x": 91.0,
+      "y": 58.0
+     },
+     "uuid": "3b4bae72-d88d-5620-8cd2-717cd9236247"
+    }
+   ]
+  },
+  {
+   "seq": 104,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "C79 的参考字段",
+     "pos": {
+      "x": 91.0,
+      "y": 59.0
+     },
+     "uuid": "501d9a60-1c7f-5273-b9f1-844f8da244aa"
+    }
+   ]
+  },
+  {
+   "seq": 105,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "C83 的参考字段",
+     "pos": {
+      "x": 91.0,
+      "y": 60.0
+     },
+     "uuid": "b8e578d7-cfe9-513f-8eb7-3d91bfe3e709"
+    }
+   ]
+  },
+  {
+   "seq": 106,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "C82 的参考字段",
+     "pos": {
+      "x": 91.0,
+      "y": 62.0
+     },
+     "uuid": "f1bd16ca-e1df-5ad6-bb1f-454ede7c098d"
+    }
+   ]
+  },
+  {
+   "seq": 107,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "U6 的参考字段",
+     "pos": {
+      "x": 91.8,
+      "y": 53.7
+     },
+     "uuid": "9745c8c0-4921-5a9b-9434-43127aa0838d"
+    }
+   ]
+  },
+  {
+   "seq": 108,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "R45 的参考字段",
+     "pos": {
+      "x": 93.3,
+      "y": 57.55
+     },
+     "uuid": "c530f709-8cbf-5322-bd75-21352c60b62d"
+    }
+   ]
+  },
+  {
+   "seq": 109,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "R42 的参考字段",
+     "pos": {
+      "x": 93.3,
+      "y": 59.55
+     },
+     "uuid": "e93d23b0-f254-5730-b027-0e7178d612e1"
+    }
+   ]
+  },
+  {
+   "seq": 110,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "R36 的参考字段",
+     "pos": {
+      "x": 100.4,
+      "y": 57.55
+     },
+     "uuid": "94591032-9d61-5625-9471-eeabee80b895"
+    }
+   ]
+  },
+  {
+   "seq": 111,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "R39 的参考字段",
+     "pos": {
+      "x": 100.4,
+      "y": 59.55
+     },
+     "uuid": "0db4052d-8105-5231-9dc9-a4f9e37f9697"
+    }
+   ]
+  },
+  {
+   "seq": 112,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "R37 的参考字段",
+     "pos": {
+      "x": 103.4,
+      "y": 57.55
+     },
+     "uuid": "ae4b72f1-4792-5c83-8c81-576300bba2f2"
+    }
+   ]
+  },
+  {
+   "seq": 113,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "R38 的参考字段",
+     "pos": {
+      "x": 103.4,
+      "y": 59.55
+     },
+     "uuid": "d8ed1adc-7d34-50c2-8494-071f7d69282d"
+    }
+   ]
+  },
+  {
+   "seq": 114,
+   "type": "silk_over_copper",
+   "severity": "warning",
+   "description": "Silkscreen clipped by solder mask",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "J2 的参考字段",
+     "pos": {
+      "x": 133.825,
+      "y": 51.7
+     },
+     "uuid": "aacfb805-421d-5627-b176-0e14e9bac070"
+    }
+   ]
+  },
+  {
+   "seq": 115,
+   "type": "silk_overlap",
+   "severity": "warning",
+   "description": "Silkscreen clearance",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "C73 的参考字段",
+     "pos": {
+      "x": 28.0,
+      "y": 45.9
+     },
+     "uuid": "862ade51-68dc-5320-8886-18490e684f65"
+    },
+    {
+     "description": "J13 的参考字段",
+     "pos": {
+      "x": 25.94,
+      "y": 46.54
+     },
+     "uuid": "d082a6ee-96cd-5b27-87a1-f811d98da362"
+    }
+   ]
+  },
+  {
+   "seq": 116,
+   "type": "silk_overlap",
+   "severity": "warning",
+   "description": "Silkscreen clearance",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "C86 的参考字段",
+     "pos": {
+      "x": 31.55,
+      "y": 56.85
+     },
+     "uuid": "62bfbff2-76bc-5541-9f1a-eed883291957"
+    },
+    {
+     "description": "C85 的参考字段",
+     "pos": {
+      "x": 29.7,
+      "y": 56.5
+     },
+     "uuid": "8537abc2-0ce6-5814-8712-7cff2b377098"
+    }
+   ]
+  },
+  {
+   "seq": 117,
+   "type": "silk_overlap",
+   "severity": "warning",
+   "description": "Silkscreen clearance",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "R32 的参考字段",
+     "pos": {
+      "x": 55.5,
+      "y": 65.5
+     },
+     "uuid": "097a0e31-34b5-5170-8c55-a85486daaa46"
+    },
+    {
+     "description": "R31 的参考字段",
+     "pos": {
+      "x": 55.5,
+      "y": 64.5
+     },
+     "uuid": "f3719165-f910-562b-ad0c-cc137b200fcd"
+    }
+   ]
+  },
+  {
+   "seq": 118,
+   "type": "silk_overlap",
+   "severity": "warning",
+   "description": "Silkscreen clearance",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "R32 的参考字段",
+     "pos": {
+      "x": 55.5,
+      "y": 65.5
+     },
+     "uuid": "097a0e31-34b5-5170-8c55-a85486daaa46"
+    },
+    {
+     "description": "R33 的参考字段",
+     "pos": {
+      "x": 55.5,
+      "y": 66.5
+     },
+     "uuid": "5fd54a46-cdfd-5b9e-ad57-e851ca0bcfb8"
+    }
+   ]
+  },
+  {
+   "seq": 119,
+   "type": "silk_overlap",
+   "severity": "warning",
+   "description": "Silkscreen clearance",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "R33 的参考字段",
+     "pos": {
+      "x": 55.5,
+      "y": 66.5
+     },
+     "uuid": "5fd54a46-cdfd-5b9e-ad57-e851ca0bcfb8"
+    },
+    {
+     "description": "R34 的参考字段",
+     "pos": {
+      "x": 55.5,
+      "y": 67.5
+     },
+     "uuid": "ffb5c5c6-b447-5de5-82c2-2d32af03d232"
+    }
+   ]
+  },
+  {
+   "seq": 120,
+   "type": "silk_overlap",
+   "severity": "warning",
+   "description": "Silkscreen clearance",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "C74 的参考字段",
+     "pos": {
+      "x": 91.0,
+      "y": 38.0
+     },
+     "uuid": "14022780-a6be-55c8-9e37-d0c304806c94"
+    },
+    {
+     "description": "C75 的参考字段",
+     "pos": {
+      "x": 91.0,
+      "y": 39.0
+     },
+     "uuid": "db855bbb-0e98-52e2-bf6c-8c80596984ff"
+    }
+   ]
+  },
+  {
+   "seq": 121,
+   "type": "silk_overlap",
+   "severity": "warning",
+   "description": "Silkscreen clearance",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "C76 的参考字段",
+     "pos": {
+      "x": 91.0,
+      "y": 40.0
+     },
+     "uuid": "0f6a0e04-6b5e-56ed-ba7d-d691adff24fe"
+    },
+    {
+     "description": "C77 的参考字段",
+     "pos": {
+      "x": 91.0,
+      "y": 41.0
+     },
+     "uuid": "5229599e-77c5-5024-a610-86f4da3ba9b9"
+    }
+   ]
+  },
+  {
+   "seq": 122,
+   "type": "silk_overlap",
+   "severity": "warning",
+   "description": "Silkscreen clearance",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "C76 的参考字段",
+     "pos": {
+      "x": 91.0,
+      "y": 40.0
+     },
+     "uuid": "0f6a0e04-6b5e-56ed-ba7d-d691adff24fe"
+    },
+    {
+     "description": "C75 的参考字段",
+     "pos": {
+      "x": 91.0,
+      "y": 39.0
+     },
+     "uuid": "db855bbb-0e98-52e2-bf6c-8c80596984ff"
+    }
+   ]
+  },
+  {
+   "seq": 123,
+   "type": "silk_overlap",
+   "severity": "warning",
+   "description": "Silkscreen clearance",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "C80 的参考字段",
+     "pos": {
+      "x": 91.0,
+      "y": 57.0
+     },
+     "uuid": "bb4b90d9-79f0-5aff-8d1b-c78421cb9dbf"
+    },
+    {
+     "description": "R45 的参考字段",
+     "pos": {
+      "x": 93.3,
+      "y": 57.55
+     },
+     "uuid": "c530f709-8cbf-5322-bd75-21352c60b62d"
+    }
+   ]
+  },
+  {
+   "seq": 124,
+   "type": "silk_overlap",
+   "severity": "warning",
+   "description": "Silkscreen clearance",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "C81 的参考字段",
+     "pos": {
+      "x": 91.0,
+      "y": 58.0
+     },
+     "uuid": "3b4bae72-d88d-5620-8cd2-717cd9236247"
+    },
+    {
+     "description": "C80 的参考字段",
+     "pos": {
+      "x": 91.0,
+      "y": 57.0
+     },
+     "uuid": "bb4b90d9-79f0-5aff-8d1b-c78421cb9dbf"
+    }
+   ]
+  },
+  {
+   "seq": 125,
+   "type": "silk_overlap",
+   "severity": "warning",
+   "description": "Silkscreen clearance",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "C81 的参考字段",
+     "pos": {
+      "x": 91.0,
+      "y": 58.0
+     },
+     "uuid": "3b4bae72-d88d-5620-8cd2-717cd9236247"
+    },
+    {
+     "description": "C79 的参考字段",
+     "pos": {
+      "x": 91.0,
+      "y": 59.0
+     },
+     "uuid": "501d9a60-1c7f-5273-b9f1-844f8da244aa"
+    }
+   ]
+  },
+  {
+   "seq": 126,
+   "type": "silk_overlap",
+   "severity": "warning",
+   "description": "Silkscreen clearance",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "C81 的参考字段",
+     "pos": {
+      "x": 91.0,
+      "y": 58.0
+     },
+     "uuid": "3b4bae72-d88d-5620-8cd2-717cd9236247"
+    },
+    {
+     "description": "R45 的参考字段",
+     "pos": {
+      "x": 93.3,
+      "y": 57.55
+     },
+     "uuid": "c530f709-8cbf-5322-bd75-21352c60b62d"
+    }
+   ]
+  },
+  {
+   "seq": 127,
+   "type": "silk_overlap",
+   "severity": "warning",
+   "description": "Silkscreen clearance",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "C79 的参考字段",
+     "pos": {
+      "x": 91.0,
+      "y": 59.0
+     },
+     "uuid": "501d9a60-1c7f-5273-b9f1-844f8da244aa"
+    },
+    {
+     "description": "C83 的参考字段",
+     "pos": {
+      "x": 91.0,
+      "y": 60.0
+     },
+     "uuid": "b8e578d7-cfe9-513f-8eb7-3d91bfe3e709"
+    }
+   ]
+  },
+  {
+   "seq": 128,
+   "type": "silk_overlap",
+   "severity": "warning",
+   "description": "Silkscreen clearance",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "C79 的参考字段",
+     "pos": {
+      "x": 91.0,
+      "y": 59.0
+     },
+     "uuid": "501d9a60-1c7f-5273-b9f1-844f8da244aa"
+    },
+    {
+     "description": "R42 的参考字段",
+     "pos": {
+      "x": 93.3,
+      "y": 59.55
+     },
+     "uuid": "e93d23b0-f254-5730-b027-0e7178d612e1"
+    }
+   ]
+  },
+  {
+   "seq": 129,
+   "type": "silk_overlap",
+   "severity": "warning",
+   "description": "Silkscreen clearance",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "C83 的参考字段",
+     "pos": {
+      "x": 91.0,
+      "y": 60.0
+     },
+     "uuid": "b8e578d7-cfe9-513f-8eb7-3d91bfe3e709"
+    },
+    {
+     "description": "R42 的参考字段",
+     "pos": {
+      "x": 93.3,
+      "y": 59.55
+     },
+     "uuid": "e93d23b0-f254-5730-b027-0e7178d612e1"
+    }
+   ]
+  },
+  {
+   "seq": 130,
+   "type": "track_dangling",
+   "severity": "warning",
+   "description": "Track has unconnected end",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "走线 [GND] (F.Cu), 长度: 0.7750 mm",
+     "pos": {
+      "x": 44.45,
+      "y": 37.5
+     },
+     "uuid": "f6aa8c8b-31d9-5a17-b7e9-0b0cba0e06cd"
+    }
+   ]
+  },
+  {
+   "seq": 131,
+   "type": "track_not_centered_on_via",
+   "severity": "warning",
+   "description": "Track endpoint not centered on via",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "走线 [P3V3] (B.Cu), 长度: 5.9500 mm",
+     "pos": {
+      "x": 29.0,
+      "y": 38.2
+     },
+     "uuid": "86d0576e-6c28-5876-a290-8cdaa01592b9"
+    },
+    {
+     "description": "过孔 [P3V3] (F.Cu - B.Cu)",
+     "pos": {
+      "x": 28.99,
+      "y": 38.2
+     },
+     "uuid": "93db9f37-2490-5b27-88bd-d31204c64c3d"
+    }
+   ]
+  },
+  {
+   "seq": 132,
+   "type": "track_not_centered_on_via",
+   "severity": "warning",
+   "description": "Track endpoint not centered on via",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "走线 [GND] (F.Cu), 长度: 0.1247 mm",
+     "pos": {
+      "x": 30.35,
+      "y": 53.0
+     },
+     "uuid": "2db79bc2-8550-504f-bffb-148dcf746796"
+    },
+    {
+     "description": "F.Cu - In1.Cu 上的盲孔 [GND]",
+     "pos": {
+      "x": 30.285,
+      "y": 53.0375
+     },
+     "uuid": "71a461ef-0ba1-5d55-b6d1-4351398c54e5"
+    }
+   ]
+  },
+  {
+   "seq": 133,
+   "type": "track_not_centered_on_via",
+   "severity": "warning",
+   "description": "Track endpoint not centered on via",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "走线 [GND] (F.Cu), 长度: 0.3001 mm",
+     "pos": {
+      "x": 30.438176,
+      "y": 53.088176
+     },
+     "uuid": "ce3e942c-4425-598a-9b31-95593156363d"
+    },
+    {
+     "description": "F.Cu - In1.Cu 上的盲孔 [GND]",
+     "pos": {
+      "x": 30.285,
+      "y": 53.0375
+     },
+     "uuid": "71a461ef-0ba1-5d55-b6d1-4351398c54e5"
+    }
+   ]
+  },
+  {
+   "seq": 134,
+   "type": "track_not_centered_on_via",
+   "severity": "warning",
+   "description": "Track endpoint not centered on via",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "走线 [FB_U2] (In2.Cu), 长度: 3.6000 mm",
+     "pos": {
+      "x": 30.5,
+      "y": 37.6
+     },
+     "uuid": "7c5358b2-0c29-5dd4-ae5a-97b5108c5c33"
+    },
+    {
+     "description": "F.Cu - In2.Cu 上的盲孔 [FB_U2]",
+     "pos": {
+      "x": 30.525,
+      "y": 37.635
+     },
+     "uuid": "ec6b1186-45fa-58ee-a81f-dcb60c1dfe6d"
+    }
+   ]
+  },
+  {
+   "seq": 135,
+   "type": "track_not_centered_on_via",
+   "severity": "warning",
+   "description": "Track endpoint not centered on via",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "走线 [UART_TX] (B.Cu), 长度: 10.3054 mm",
+     "pos": {
+      "x": 32.7,
+      "y": 56.0
+     },
+     "uuid": "d6e33530-f9c4-55b8-86a9-21f076fbf0bd"
+    },
+    {
+     "description": "过孔 [UART_TX] (F.Cu - B.Cu)",
+     "pos": {
+      "x": 32.725,
+      "y": 56.0
+     },
+     "uuid": "f786bab3-9b28-5999-aefe-29b4322041dd"
+    }
+   ]
+  },
+  {
+   "seq": 136,
+   "type": "track_not_centered_on_via",
+   "severity": "warning",
+   "description": "Track endpoint not centered on via",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "走线 [I2C1_SDA] (B.Cu), 长度: 0.3000 mm",
+     "pos": {
+      "x": 33.2,
+      "y": 47.9
+     },
+     "uuid": "e500cbd3-0a80-54c4-8fdb-159998c5e771"
+    },
+    {
+     "description": "过孔 [I2C1_SDA] (F.Cu - B.Cu)",
+     "pos": {
+      "x": 33.225,
+      "y": 47.8813
+     },
+     "uuid": "7a356521-d73c-5c2e-a718-ecfed3aa2947"
+    }
+   ]
+  },
+  {
+   "seq": 137,
+   "type": "track_not_centered_on_via",
+   "severity": "warning",
+   "description": "Track endpoint not centered on via",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "走线 [PWR_BTN_OUT] (In2.Cu), 长度: 0.5000 mm",
+     "pos": {
+      "x": 33.2,
+      "y": 56.3
+     },
+     "uuid": "7c9e5755-3f64-514d-a6b7-937a964098ed"
+    },
+    {
+     "description": "F.Cu - In2.Cu 上的盲孔 [PWR_BTN_OUT]",
+     "pos": {
+      "x": 33.1987,
+      "y": 56.303
+     },
+     "uuid": "bb1ade30-77be-5163-95e6-d697c2f937ed"
+    }
+   ]
+  },
+  {
+   "seq": 138,
+   "type": "track_not_centered_on_via",
+   "severity": "warning",
+   "description": "Track endpoint not centered on via",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "走线 [I2C1_SDA] (F.Cu), 长度: 0.5000 mm",
+     "pos": {
+      "x": 33.25,
+      "y": 47.838
+     },
+     "uuid": "9c10e90d-02ec-54f5-8f91-9517a7dabac7"
+    },
+    {
+     "description": "过孔 [I2C1_SDA] (F.Cu - B.Cu)",
+     "pos": {
+      "x": 33.225,
+      "y": 47.8813
+     },
+     "uuid": "7a356521-d73c-5c2e-a718-ecfed3aa2947"
+    }
+   ]
+  },
+  {
+   "seq": 139,
+   "type": "track_not_centered_on_via",
+   "severity": "warning",
+   "description": "Track endpoint not centered on via",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "走线 [I2C1_SCL] (B.Cu), 长度: 0.7000 mm",
+     "pos": {
+      "x": 33.8,
+      "y": 47.8
+     },
+     "uuid": "3f7879c3-b639-523e-a799-9c254281de5c"
+    },
+    {
+     "description": "过孔 [I2C1_SCL] (F.Cu - B.Cu)",
+     "pos": {
+      "x": 33.75,
+      "y": 47.838
+     },
+     "uuid": "da15f579-6700-570a-a0e8-00575f2bc128"
+    }
+   ]
+  },
+  {
+   "seq": 140,
+   "type": "track_not_centered_on_via",
+   "severity": "warning",
+   "description": "Track endpoint not centered on via",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "走线 [P3V3_AUX] (B.Cu), 长度: 7.3893 mm",
+     "pos": {
+      "x": 34.2,
+      "y": 55.3
+     },
+     "uuid": "84081a75-598e-5b0a-ba45-7e84ebb9e24a"
+    },
+    {
+     "description": "过孔 [P3V3_AUX] (F.Cu - B.Cu)",
+     "pos": {
+      "x": 34.25,
+      "y": 55.262
+     },
+     "uuid": "e8153953-847b-553b-a632-6c5543993c7b"
+    }
+   ]
+  },
+  {
+   "seq": 141,
+   "type": "track_not_centered_on_via",
+   "severity": "warning",
+   "description": "Track endpoint not centered on via",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "走线 [I2C2_SCL] (F.Cu), 长度: 0.6500 mm",
+     "pos": {
+      "x": 37.75,
+      "y": 56.162
+     },
+     "uuid": "09c6401f-fdd4-5f42-8b23-b85b23af2b39"
+    },
+    {
+     "description": "F.Cu - In2.Cu 上的盲孔 [I2C2_SCL]",
+     "pos": {
+      "x": 37.75,
+      "y": 56.337
+     },
+     "uuid": "08d7af8b-5771-534f-9308-dd18321aa59a"
+    }
+   ]
+  },
+  {
+   "seq": 142,
+   "type": "track_not_centered_on_via",
+   "severity": "warning",
+   "description": "Track endpoint not centered on via",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "走线 [I2C2_SCL] (In2.Cu), 长度: 12.8411 mm",
+     "pos": {
+      "x": 37.8,
+      "y": 56.3
+     },
+     "uuid": "47c3bbfc-361a-5e4e-b9f3-a62839af1cea"
+    },
+    {
+     "description": "F.Cu - In2.Cu 上的盲孔 [I2C2_SCL]",
+     "pos": {
+      "x": 37.75,
+      "y": 56.337
+     },
+     "uuid": "08d7af8b-5771-534f-9308-dd18321aa59a"
+    }
+   ]
+  },
+  {
+   "seq": 143,
+   "type": "track_not_centered_on_via",
+   "severity": "warning",
+   "description": "Track endpoint not centered on via",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "走线 [I2C2_SDA] (In2.Cu), 长度: 0.1414 mm",
+     "pos": {
+      "x": 38.1,
+      "y": 56.0
+     },
+     "uuid": "f537c4e2-372a-5663-a8fd-d11f2afced6e"
+    },
+    {
+     "description": "F.Cu - In2.Cu 上的盲孔 [I2C2_SDA]",
+     "pos": {
+      "x": 38.25,
+      "y": 55.962
+     },
+     "uuid": "d0cdbf83-5105-5d50-b803-b01cbc3d1a08"
+    }
+   ]
+  },
+  {
+   "seq": 144,
+   "type": "track_not_centered_on_via",
+   "severity": "warning",
+   "description": "Track endpoint not centered on via",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "走线 [I2C2_SDA] (In2.Cu), 长度: 0.1000 mm",
+     "pos": {
+      "x": 38.2,
+      "y": 56.0
+     },
+     "uuid": "a0434863-bea5-5da1-95e8-e3d393155ddf"
+    },
+    {
+     "description": "F.Cu - In2.Cu 上的盲孔 [I2C2_SDA]",
+     "pos": {
+      "x": 38.25,
+      "y": 55.962
+     },
+     "uuid": "d0cdbf83-5105-5d50-b803-b01cbc3d1a08"
+    }
+   ]
+  },
+  {
+   "seq": 145,
+   "type": "track_not_centered_on_via",
+   "severity": "warning",
+   "description": "Track endpoint not centered on via",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "走线 [PERSTA#] (In2.Cu), 长度: 4.0000 mm",
+     "pos": {
+      "x": 43.8,
+      "y": 37.0
+     },
+     "uuid": "6e478907-b740-5695-b14e-5feba00fdcab"
+    },
+    {
+     "description": "F.Cu - In2.Cu 上的盲孔 [PERSTA#]",
+     "pos": {
+      "x": 43.75,
+      "y": 37.0
+     },
+     "uuid": "a5955b25-f545-5ab0-bebf-c24b97917d9a"
+    }
+   ]
+  },
+  {
+   "seq": 146,
+   "type": "track_not_centered_on_via",
+   "severity": "warning",
+   "description": "Track endpoint not centered on via",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "走线 [I2C2_SCL] (In2.Cu), 长度: 17.2500 mm",
+     "pos": {
+      "x": 55.0,
+      "y": 68.5
+     },
+     "uuid": "1d24ac47-f7b1-5688-841a-cf92d29a456d"
+    },
+    {
+     "description": "F.Cu - In2.Cu 上的盲孔 [I2C2_SCL]",
+     "pos": {
+      "x": 55.05,
+      "y": 68.5
+     },
+     "uuid": "dea5f2bf-79d7-5df2-9525-85bc23072740"
+    }
+   ]
+  },
+  {
+   "seq": 147,
+   "type": "track_not_centered_on_via",
+   "severity": "warning",
+   "description": "Track endpoint not centered on via",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "走线 [I2C2_SDA] (In2.Cu), 长度: 0.3000 mm",
+     "pos": {
+      "x": 55.0,
+      "y": 69.5
+     },
+     "uuid": "f41627bf-3103-54fc-a4f8-e3dc5d259397"
+    },
+    {
+     "description": "F.Cu - In2.Cu 上的盲孔 [I2C2_SDA]",
+     "pos": {
+      "x": 55.05,
+      "y": 69.5
+     },
+     "uuid": "20b4e306-6676-57ae-9789-a40362a4e4be"
+    }
+   ]
+  },
+  {
+   "seq": 148,
+   "type": "track_not_centered_on_via",
+   "severity": "warning",
+   "description": "Track endpoint not centered on via",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "走线 [I2C2_SCL] (F.Cu), 长度: 0.4000 mm",
+     "pos": {
+      "x": 55.05,
+      "y": 68.49
+     },
+     "uuid": "9df4d0e3-d1f0-514b-bd7e-a6e63112b8a9"
+    },
+    {
+     "description": "F.Cu - In2.Cu 上的盲孔 [I2C2_SCL]",
+     "pos": {
+      "x": 55.05,
+      "y": 68.5
+     },
+     "uuid": "dea5f2bf-79d7-5df2-9525-85bc23072740"
+    }
+   ]
+  },
+  {
+   "seq": 149,
+   "type": "track_not_centered_on_via",
+   "severity": "warning",
+   "description": "Track endpoint not centered on via",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "走线 [I2C2_SDA] (In2.Cu), 长度: 1.2000 mm",
+     "pos": {
+      "x": 55.2,
+      "y": 69.9
+     },
+     "uuid": "a4ce9064-8b54-5c64-a8c7-80ee99fb16b8"
+    },
+    {
+     "description": "F.Cu - In2.Cu 上的盲孔 [I2C2_SDA]",
+     "pos": {
+      "x": 55.2039,
+      "y": 69.9229
+     },
+     "uuid": "95937aa8-2d32-5f39-83ee-c796d63822bb"
+    }
+   ]
+  },
+  {
+   "seq": 150,
+   "type": "track_not_centered_on_via",
+   "severity": "warning",
+   "description": "Track endpoint not centered on via",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "走线 [P3V3_AUX] (B.Cu), 长度: 19.6222 mm",
+     "pos": {
+      "x": 59.9,
+      "y": 48.4
+     },
+     "uuid": "d1f2b21b-5b31-582b-9201-eddf709ed5f8"
+    },
+    {
+     "description": "过孔 [P3V3_AUX] (F.Cu - B.Cu)",
+     "pos": {
+      "x": 59.8647,
+      "y": 48.4397
+     },
+     "uuid": "c8d63ace-cf85-5359-98c0-36f7bbc8a9fe"
+    }
+   ]
+  },
+  {
+   "seq": 151,
+   "type": "track_not_centered_on_via",
+   "severity": "warning",
+   "description": "Track endpoint not centered on via",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "走线 [DS320_STRAP_MODE] (In2.Cu), 长度: 0.4243 mm",
+     "pos": {
+      "x": 82.8,
+      "y": 61.5
+     },
+     "uuid": "51198fcc-64a5-55cf-b49c-a47613cb47b9"
+    },
+    {
+     "description": "F.Cu - In2.Cu 上的盲孔 [DS320_STRAP_MODE]",
+     "pos": {
+      "x": 82.775,
+      "y": 61.55
+     },
+     "uuid": "e8d7f90d-94fd-5707-8ba5-878788ac497a"
+    }
+   ]
+  },
+  {
+   "seq": 152,
+   "type": "track_not_centered_on_via",
+   "severity": "warning",
+   "description": "Track endpoint not centered on via",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "走线 [GND] (F.Cu), 长度: 0.6250 mm",
+     "pos": {
+      "x": 83.949,
+      "y": 54.19
+     },
+     "uuid": "7c99d2fa-de80-596b-a941-02f3c1b112b1"
+    },
+    {
+     "description": "F.Cu - In1.Cu 上的盲孔 [GND]",
+     "pos": {
+      "x": 83.9102,
+      "y": 54.0451
+     },
+     "uuid": "b93719dd-0512-5b2e-948b-175216dd5ca8"
+    }
+   ]
+  },
+  {
+   "seq": 153,
+   "type": "track_not_centered_on_via",
+   "severity": "warning",
+   "description": "Track endpoint not centered on via",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "走线 [DS320_STRAP_A_ADDR0_15-8] (In2.Cu), 长度: 4.2100 mm",
+     "pos": {
+      "x": 94.3,
+      "y": 60.5
+     },
+     "uuid": "433bc3a0-642f-5e5c-94c3-6d6bbe09bdc4"
+    },
+    {
+     "description": "F.Cu - In2.Cu 上的盲孔 [DS320_STRAP_A_ADDR0_15-8]",
+     "pos": {
+      "x": 94.2504,
+      "y": 60.525
+     },
+     "uuid": "942bf40c-6aae-5152-8610-e65719f9057d"
+    }
+   ]
+  },
+  {
+   "seq": 154,
+   "type": "track_not_centered_on_via",
+   "severity": "warning",
+   "description": "Track endpoint not centered on via",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "走线 [DS320_STRAP_B_ADDR1_15-8] (In2.Cu), 长度: 1.9000 mm",
+     "pos": {
+      "x": 94.9,
+      "y": 58.9
+     },
+     "uuid": "2e2d5537-bb2c-57d9-944e-a5c1b149696a"
+    },
+    {
+     "description": "F.Cu - In2.Cu 上的盲孔 [DS320_STRAP_B_ADDR1_15-8]",
+     "pos": {
+      "x": 94.8898,
+      "y": 58.903
+     },
+     "uuid": "b20529bd-cd89-51c5-b1b2-746d521c7789"
+    }
+   ]
+  },
+  {
+   "seq": 155,
+   "type": "track_not_centered_on_via",
+   "severity": "warning",
+   "description": "Track endpoint not centered on via",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "走线 [GND] (F.Cu), 长度: 0.6250 mm",
+     "pos": {
+      "x": 103.4,
+      "y": 54.44
+     },
+     "uuid": "a679ba84-a93c-508d-97dc-87b47940f1f3"
+    },
+    {
+     "description": "F.Cu - In1.Cu 上的盲孔 [GND]",
+     "pos": {
+      "x": 103.3517,
+      "y": 54.4271
+     },
+     "uuid": "64d6781a-07ab-55e1-9461-194712d28dea"
+    }
+   ]
+  },
+  {
+   "seq": 156,
+   "type": "track_not_centered_on_via",
+   "severity": "warning",
+   "description": "Track endpoint not centered on via",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "走线 [GND] (F.Cu), 长度: 0.4750 mm",
+     "pos": {
+      "x": 103.651,
+      "y": 53.59
+     },
+     "uuid": "209aab90-b079-5531-be3f-b02bb5f1fc00"
+    },
+    {
+     "description": "F.Cu - In1.Cu 上的盲孔 [GND]",
+     "pos": {
+      "x": 103.7717,
+      "y": 53.5576
+     },
+     "uuid": "3170de8b-bad7-5730-bf4c-4d285433ef7c"
+    }
+   ]
+  },
+  {
+   "seq": 157,
+   "type": "track_not_centered_on_via",
+   "severity": "warning",
+   "description": "Track endpoint not centered on via",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "走线 [PCIE_REFCLK0_N] (In2.Cu), 长度: 1.6850 mm",
+     "pos": {
+      "x": 133.135,
+      "y": 45.4
+     },
+     "uuid": "5ba934aa-fe0f-5538-9771-db80e9df766b"
+    },
+    {
+     "description": "F.Cu - In2.Cu 上的盲孔 [PCIE_REFCLK0_N]",
+     "pos": {
+      "x": 131.449999,
+      "y": 45.4
+     },
+     "uuid": "221a924d-646c-5065-943c-056ad1406905"
+    }
+   ]
+  },
+  {
+   "seq": 158,
+   "type": "track_not_centered_on_via",
+   "severity": "warning",
+   "description": "Track endpoint not centered on via",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "走线 [PCIE_REFCLK0_N] (In2.Cu), 长度: 0.9758 mm",
+     "pos": {
+      "x": 133.825,
+      "y": 46.09
+     },
+     "uuid": "d0c0ee44-01e6-5d21-9657-9bdbec585e21"
+    },
+    {
+     "description": "F.Cu - In2.Cu 上的盲孔 [PCIE_REFCLK0_N]",
+     "pos": {
+      "x": 133.824999,
+      "y": 46.09
+     },
+     "uuid": "0c1d8ac7-d185-5218-8d69-f01a5cd15678"
+    }
+   ]
+  },
+  {
+   "seq": 159,
+   "type": "track_not_centered_on_via",
+   "severity": "warning",
+   "description": "Track endpoint not centered on via",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "走线 [PCIE_REFCLK0_N] (F.Cu), 长度: 0.2687 mm",
+     "pos": {
+      "x": 134.015,
+      "y": 45.9
+     },
+     "uuid": "c22e545b-bdd3-5e4d-a315-42b094d52188"
+    },
+    {
+     "description": "F.Cu - In2.Cu 上的盲孔 [PCIE_REFCLK0_N]",
+     "pos": {
+      "x": 133.824999,
+      "y": 46.09
+     },
+     "uuid": "0c1d8ac7-d185-5218-8d69-f01a5cd15678"
+    }
+   ]
+  },
+  {
+   "seq": 160,
+   "type": "track_not_centered_on_via",
+   "severity": "warning",
+   "description": "Track endpoint not centered on via",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "走线 [PCIE_REFCLK1_N] (F.Cu), 长度: 0.2687 mm",
+     "pos": {
+      "x": 134.015,
+      "y": 51.3
+     },
+     "uuid": "c044b985-e0c3-58f2-8f84-232c0b545377"
+    },
+    {
+     "description": "F.Cu - In2.Cu 上的盲孔 [PCIE_REFCLK1_N]",
+     "pos": {
+      "x": 133.824999,
+      "y": 51.49
+     },
+     "uuid": "a00e3e72-a39b-529e-a110-0e9ea156ae27"
+    }
+   ]
+  },
+  {
+   "seq": 161,
+   "type": "via_dangling",
+   "severity": "warning",
+   "description": "Via is not connected or connected on only one layer",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "过孔 [SWCLK_BOOT0] (F.Cu - B.Cu)",
+     "pos": {
+      "x": 29.836871,
+      "y": 47.099923
+     },
+     "uuid": "357cde71-8a94-5e66-a37d-e7c7b59ccf33"
+    }
+   ]
+  },
+  {
+   "seq": 162,
+   "type": "via_dangling",
+   "severity": "warning",
+   "description": "Via is not connected or connected on only one layer",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "过孔 [UART_TX] (F.Cu - B.Cu)",
+     "pos": {
+      "x": 30.411329,
+      "y": 56.062563
+     },
+     "uuid": "cb48dc09-ca3d-56a2-ac20-f59789074c83"
+    }
+   ]
+  },
+  {
+   "seq": 163,
+   "type": "via_dangling",
+   "severity": "warning",
+   "description": "Via is not connected or connected on only one layer",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "过孔 [PERSTA#] (F.Cu - B.Cu)",
+     "pos": {
+      "x": 32.525,
+      "y": 54.5
+     },
+     "uuid": "ccced570-17a2-50ea-a26d-e2ef2870cb42"
+    }
+   ]
+  },
+  {
+   "seq": 164,
+   "type": "via_dangling",
+   "severity": "warning",
+   "description": "Via is not connected or connected on only one layer",
+   "registered_in_rev2": false,
+   "items": [
+    {
+     "description": "过孔 [P3V3] (F.Cu - B.Cu)",
+     "pos": {
+      "x": 40.263888,
+      "y": 35.980223
+     },
+     "uuid": "dfd06966-560b-5d71-a10d-a46b024f7141"
+    }
+   ]
+  }
+ ]
+}
