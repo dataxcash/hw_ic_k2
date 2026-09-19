@@ -55,7 +55,10 @@ def via_margin(c, cv, lid, net, x, y, span_names):
     for t in c.tracks:
         if t['layer'] not in span or t['net'] == net:
             continue
-        if math.hypot(x - (t['x1'] + t['x2']) / 2, y - (t['y1'] + t['y2']) / 2) > 2.6:
+        # inc106(L2)：T-27 粗筛陷阱修正 —— 原按**段中点**剪枝，长走线（实测 DS320_STRAP_B_ADDR1_15-8
+        #   In2 段 7.62mm，中点距孔 2.84mm > 2.6）被误跳过 ⇒ 漏判 −0.178 冲突。改用**段 bbox** 剪枝。
+        if (min(t['x1'], t['x2']) - 2.6 > x or max(t['x1'], t['x2']) + 2.6 < x
+                or min(t['y1'], t['y2']) - 2.6 > y or max(t['y1'], t['y2']) + 2.6 < y):
             continue
         d = cv.pt_seg_dist(x, y, t['x1'], t['y1'], t['x2'], t['y2']) - t['hw'] - VR - cv._req(net, t['net'])
         rows.append((d, 'trk/%s' % t['net']))

@@ -163,3 +163,10 @@ P3 时该逃逸孔位裕度 +0.2425；链内 In2 铜不同 ⇒ 孔位被 `DS320_
 - **未闭**：仍余 **3 条 clearance error**（漂移类）+ 20 lib_footprint_mismatch(warning) + 2 silk_edge + 1 track_dangling。
 
 **确定性（inc105）**：全链 `--upto all` 两次连跑逐字节同 `50e54d6101dcfe3f08b20db4b09856c280c319a29715b9293ef3fe98ebbcd5bc`。
+
+## 15. inc106：pdn_in4 oracle T-27 修正 + 链序调整 ⇒ DRC error 3→2（未连接仍 0）
+
+- **根因 1（oracle）**：`pdn_in4.via_margin` 的走线粗筛按**段中点** (`hypot(x-mid, y-mid) > 2.6`)，把 7.62mm 的 `DS320_STRAP_B_ADDR1_15-8@In2.Cu`（中点距孔 2.84mm）误跳过 ⇒ 漏判 **−0.178** 冲突并落孔。改 **bbox 剪枝**（T-27）后 ⇒ 该孔 `REFU margin=−0.1780`。
+- **根因 2（链序）**：该冲突本质是「G(ls_in2) 先布 In2 strap（增量 9）→ pdn_in4 后落盘孔（增量 12）」——链起始态与 P3 不同，G 选了会与 U6.FJ6 盘孔相撞的通道。**L2 自裁**：把 `2c-12 pdn_in4` 移到 `2c-G` **之前**（先落盘孔，再由 G 避让）⇒ 冲突消除，且未连接保持 0。
+- **实测**：违规 **26→25**、error **3→2**、未连接 **0**；non45 0 · 网 101 · 58 fps · seg 4964 / via 704。
+- **残余 2 条 clearance（同一根因）**：`u4d_scale`（2c-11）生成 0.25/0.2828mm 的 `PCIE_UP7_N@F.Cu` 腿，距阶段 E 既落 `GND(F→In1)` 盲孔 `(94.15,49.76)` **0.1697 < 0.175**（差 −0.0053）；u4d oracle 未拦（微差）。件：`k2_p4_pdn_in4_v1.py`（`ea5af7e4` → 见提交）· 链序见驱动件 · 读数 `segment2c_canonical_inc106.json`。

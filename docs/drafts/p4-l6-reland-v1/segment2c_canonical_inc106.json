@@ -1,0 +1,447 @@
+{
+ "increment": "inc106 (supersedes inc105)",
+ "date": "2026-09-19",
+ "topic": "pdn_in4 孔位 oracle T-27 修正 + 链序调整（pdn_in4 先于 G）⇒ DRC error 3→2，未连接仍 0",
+ "driver": "4aa2a25d9c6a97e5",
+ "tools_changed": {
+  "k2_p4_pdn_in4_v1.py": "819c3ee9f5cfa463 (前 ea5af7e41eebd934)"
+ },
+ "changes": [
+  "pdn_in4.via_margin 的段粗筛由**中点**改 **bbox**（T-27 陷阱；漏判 −0.178）",
+  "链序：pdn_in4 移到 G(ls_in2) 之前 ⇒ G 的 In2 通道在布线时避让既落 P3V3 盘孔"
+ ],
+ "final": {
+  "file": "/tmp/opencode/inc106f/z.kicad_pcb",
+  "sha16": "412257f8aa9d94db",
+  "drc": {
+   "violations": [
+    {
+     "description": "间距违规 ( 间距 0.1750 mm; 实际 0.1697 mm)",
+     "items": [
+      {
+       "description": "F.Cu - In1.Cu 上的盲孔 [GND]",
+       "pos": {
+        "x": 94.15,
+        "y": 49.76
+       },
+       "uuid": "bece1df6-da24-5759-8743-c95bf8b205c7"
+      },
+      {
+       "description": "走线 [PCIE_UP7_N] (F.Cu), 长度: 0.2500 mm",
+       "pos": {
+        "x": 93.75,
+        "y": 49.56
+       },
+       "uuid": "54a959ab-6cb6-559b-9ad6-f7141d040e52"
+      }
+     ],
+     "severity": "error",
+     "type": "clearance"
+    },
+    {
+     "description": "间距违规 ( 间距 0.1750 mm; 实际 0.1697 mm)",
+     "items": [
+      {
+       "description": "F.Cu - In1.Cu 上的盲孔 [GND]",
+       "pos": {
+        "x": 94.15,
+        "y": 49.76
+       },
+       "uuid": "bece1df6-da24-5759-8743-c95bf8b205c7"
+      },
+      {
+       "description": "走线 [PCIE_UP7_N] (F.Cu), 长度: 0.2828 mm",
+       "pos": {
+        "x": 93.55,
+        "y": 49.76
+       },
+       "uuid": "d294c0fd-fc85-56b9-b4a6-b8dcc84c4fff"
+      }
+     ],
+     "severity": "error",
+     "type": "clearance"
+    },
+    {
+     "description": "封装 'D_SMA' 与库 'ForgeOS' 中的副本不匹配",
+     "items": [
+      {
+       "description": "封装 D2",
+       "pos": {
+        "x": 38.7,
+        "y": 34.6
+       },
+       "uuid": "8f1d2dd5-83b4-5467-b285-1e0d92d09746"
+      }
+     ],
+     "severity": "warning",
+     "type": "lib_footprint_mismatch"
+    },
+    {
+     "description": "封装 'PinHeader_1x04' 与库 'ForgeOS' 中的副本不匹配",
+     "items": [
+      {
+       "description": "封装 J11",
+       "pos": {
+        "x": 27.94,
+        "y": 65.38
+       },
+       "uuid": "515ba1b5-15ce-5c12-a275-02fc7077d6ee"
+      }
+     ],
+     "severity": "warning",
+     "type": "lib_footprint_mismatch"
+    },
+    {
+     "description": "封装 'PinHeader_1x02' 与库 'ForgeOS' 中的副本不匹配",
+     "items": [
+      {
+       "description": "封装 J12",
+       "pos": {
+        "x": 27.94,
+        "y": 35.32
+       },
+       "uuid": "fdc06f18-96d9-5340-9f62-012d5f28f9f6"
+      }
+     ],
+     "severity": "warning",
+     "type": "lib_footprint_mismatch"
+    },
+    {
+     "description": "封装 'PinHeader_1x04' 与库 'ForgeOS' 中的副本不匹配",
+     "items": [
+      {
+       "description": "封装 J13",
+       "pos": {
+        "x": 27.94,
+        "y": 46.54
+       },
+       "uuid": "c794c7d5-9120-55a8-98f1-3b34ab83194c"
+      }
+     ],
+     "severity": "warning",
+     "type": "lib_footprint_mismatch"
+    },
+    {
+     "description": "封装 'PinHeader_1x02' 与库 'ForgeOS' 中的副本不匹配",
+     "items": [
+      {
+       "description": "封装 J6",
+       "pos": {
+        "x": 27.94,
+        "y": 39.66
+       },
+       "uuid": "da8b3001-7dca-5a56-a443-af46a8920fcc"
+      }
+     ],
+     "severity": "warning",
+     "type": "lib_footprint_mismatch"
+    },
+    {
+     "description": "封装 'PinHeader_1x04' 与库 'ForgeOS' 中的副本不匹配",
+     "items": [
+      {
+       "description": "封装 J9",
+       "pos": {
+        "x": 27.94,
+        "y": 55.96
+       },
+       "uuid": "7ff905b9-fc97-5169-aa73-545e867d06a2"
+      }
+     ],
+     "severity": "warning",
+     "type": "lib_footprint_mismatch"
+    },
+    {
+     "description": "封装 'L_0805_2012Metric' 与库 'ForgeOS' 中的副本不匹配",
+     "items": [
+      {
+       "description": "封装 L1",
+       "pos": {
+        "x": 33.0,
+        "y": 40.2
+       },
+       "uuid": "f99508d1-b6b1-5d6d-b1bc-013b610bd2e9"
+      }
+     ],
+     "severity": "warning",
+     "type": "lib_footprint_mismatch"
+    },
+    {
+     "description": "封装 'R_0603_1608Metric__2' 与库 'ForgeOS' 中的副本不匹配",
+     "items": [
+      {
+       "description": "封装 R35",
+       "pos": {
+        "x": 83.6,
+        "y": 61.55
+       },
+       "uuid": "2ad1a505-71f4-55db-97ae-b855bb9ff279"
+      }
+     ],
+     "severity": "warning",
+     "type": "lib_footprint_mismatch"
+    },
+    {
+     "description": "封装 'R_0603_1608Metric__2' 与库 'ForgeOS' 中的副本不匹配",
+     "items": [
+      {
+       "description": "封装 R36",
+       "pos": {
+        "x": 100.4,
+        "y": 59.55
+       },
+       "uuid": "a7893b86-eaa0-5fd1-98d0-417dc98756a6"
+      }
+     ],
+     "severity": "warning",
+     "type": "lib_footprint_mismatch"
+    },
+    {
+     "description": "封装 'R_0603_1608Metric__2' 与库 'ForgeOS' 中的副本不匹配",
+     "items": [
+      {
+       "description": "封装 R37",
+       "pos": {
+        "x": 103.4,
+        "y": 59.55
+       },
+       "uuid": "f9311206-fab8-52e3-b11d-a0d904d3140e"
+      }
+     ],
+     "severity": "warning",
+     "type": "lib_footprint_mismatch"
+    },
+    {
+     "description": "封装 'R_0603_1608Metric__2' 与库 'ForgeOS' 中的副本不匹配",
+     "items": [
+      {
+       "description": "封装 R38",
+       "pos": {
+        "x": 103.4,
+        "y": 61.55
+       },
+       "uuid": "c2e82e7b-ca97-58db-b7b0-0f65ce9342d3"
+      }
+     ],
+     "severity": "warning",
+     "type": "lib_footprint_mismatch"
+    },
+    {
+     "description": "封装 'R_0603_1608Metric__2' 与库 'ForgeOS' 中的副本不匹配",
+     "items": [
+      {
+       "description": "封装 R39",
+       "pos": {
+        "x": 100.4,
+        "y": 61.55
+       },
+       "uuid": "bb335bb5-ebe7-57b1-a4c3-6436c0aed065"
+      }
+     ],
+     "severity": "warning",
+     "type": "lib_footprint_mismatch"
+    },
+    {
+     "description": "封装 'R_0402_1005Metric__2' 与库 'ForgeOS' 中的副本不匹配",
+     "items": [
+      {
+       "description": "封装 R40",
+       "pos": {
+        "x": 29.5,
+        "y": 38.2
+       },
+       "uuid": "8e40ba06-67e7-5953-b7a3-685aeef1d1cf"
+      }
+     ],
+     "severity": "warning",
+     "type": "lib_footprint_mismatch"
+    },
+    {
+     "description": "封装 'R_0402_1005Metric__1' 与库 'ForgeOS' 中的副本不匹配",
+     "items": [
+      {
+       "description": "封装 R41",
+       "pos": {
+        "x": 29.5,
+        "y": 34.0
+       },
+       "uuid": "06a3c63e-127a-5710-b562-8908d53e9d56"
+      }
+     ],
+     "severity": "warning",
+     "type": "lib_footprint_mismatch"
+    },
+    {
+     "description": "封装 'R_0603_1608Metric__2' 与库 'ForgeOS' 中的副本不匹配",
+     "items": [
+      {
+       "description": "封装 R42",
+       "pos": {
+        "x": 93.3,
+        "y": 61.55
+       },
+       "uuid": "7407d5e7-7a3f-55e6-83eb-a42da915cbed"
+      }
+     ],
+     "severity": "warning",
+     "type": "lib_footprint_mismatch"
+    },
+    {
+     "description": "封装 'R_0603_1608Metric__2' 与库 'ForgeOS' 中的副本不匹配",
+     "items": [
+      {
+       "description": "封装 R43",
+       "pos": {
+        "x": 83.6,
+        "y": 59.55
+       },
+       "uuid": "b4e6cace-0d24-5500-acad-5e3bd5034dcf"
+      }
+     ],
+     "severity": "warning",
+     "type": "lib_footprint_mismatch"
+    },
+    {
+     "description": "封装 'R_0603_1608Metric__2' 与库 'ForgeOS' 中的副本不匹配",
+     "items": [
+      {
+       "description": "封装 R44",
+       "pos": {
+        "x": 86.6,
+        "y": 61.55
+       },
+       "uuid": "751635ff-a3c4-5b9a-9a1b-0635df9cbfd2"
+      }
+     ],
+     "severity": "warning",
+     "type": "lib_footprint_mismatch"
+    },
+    {
+     "description": "封装 'R_0603_1608Metric__2' 与库 'ForgeOS' 中的副本不匹配",
+     "items": [
+      {
+       "description": "封装 R45",
+       "pos": {
+        "x": 93.3,
+        "y": 59.55
+       },
+       "uuid": "f82304ab-99b8-5917-bfc6-b0bac0e61665"
+      }
+     ],
+     "severity": "warning",
+     "type": "lib_footprint_mismatch"
+    },
+    {
+     "description": "封装 'MCU_STM32G0_LQFP48' 与库 'ForgeOS' 中的副本不匹配",
+     "items": [
+      {
+       "description": "封装 U1",
+       "pos": {
+        "x": 36.0,
+        "y": 52.0
+       },
+       "uuid": "e6f6809a-f144-5389-8463-6897a2442788"
+      }
+     ],
+     "severity": "warning",
+     "type": "lib_footprint_mismatch"
+    },
+    {
+     "description": "封装 'DS320PR1601' 与库 'ForgeOS' 中的副本不匹配",
+     "items": [
+      {
+       "description": "封装 U6",
+       "pos": {
+        "x": 93.8,
+        "y": 53.7
+       },
+       "uuid": "138e7d7d-3290-5e3c-8622-53b7b2b7d510"
+      }
+     ],
+     "severity": "warning",
+     "type": "lib_footprint_mismatch"
+    },
+    {
+     "description": "Silkscreen clipped by board edge",
+     "items": [
+      {
+       "description": "C87 的参考字段",
+       "pos": {
+        "x": 44.0,
+        "y": 33.0
+       },
+       "uuid": "82f7c1b5-6135-59c9-9c2b-32d624be9762"
+      },
+      {
+       "description": "Edge.Cuts 上的 线段",
+       "pos": {
+        "x": 23.0,
+        "y": 33.0
+       },
+       "uuid": "4fdc97af-ef1d-5cec-8e19-eb844fdeaf05"
+      }
+     ],
+     "severity": "warning",
+     "type": "silk_edge_clearance"
+    },
+    {
+     "description": "Silkscreen clipped by board edge",
+     "items": [
+      {
+       "description": "D2 的参考字段",
+       "pos": {
+        "x": 38.7,
+        "y": 32.6
+       },
+       "uuid": "c4cd7902-be49-50f8-b356-99082114b127"
+      },
+      {
+       "description": "Edge.Cuts 上的 线段",
+       "pos": {
+        "x": 23.0,
+        "y": 33.0
+       },
+       "uuid": "4fdc97af-ef1d-5cec-8e19-eb844fdeaf05"
+      }
+     ],
+     "severity": "warning",
+     "type": "silk_edge_clearance"
+    },
+    {
+     "description": "Track has unconnected end",
+     "items": [
+      {
+       "description": "走线 [GND] (F.Cu), 长度: 0.7750 mm",
+       "pos": {
+        "x": 44.45,
+        "y": 37.5
+       },
+       "uuid": "f6aa8c8b-31d9-5a17-b7e9-0b0cba0e06cd"
+      }
+     ],
+     "severity": "warning",
+     "type": "track_dangling"
+    }
+   ],
+   "errors": 2,
+   "unconnected": 0,
+   "types": {
+    "clearance": 2,
+    "lib_footprint_mismatch": 20,
+    "silk_edge_clearance": 2,
+    "track_dangling": 1
+   }
+  },
+  "seg": 4964,
+  "vias": 704,
+  "non45": 0,
+  "nets": 101,
+  "fps": 58
+ },
+ "compare": {
+  "inc105_errors": 3,
+  "inc106_errors": 2,
+  "inc105_unconnected": 0,
+  "inc106_unconnected": 0
+ }
+}
