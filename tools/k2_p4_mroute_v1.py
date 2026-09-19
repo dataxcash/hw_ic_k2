@@ -268,7 +268,8 @@ class Grid:
             if p["net"] == net or p["hole"] <= 0 or not (p["lay"] & span): continue
             cpt(p["x"], p["y"], max(p["hole"] + 0.25 + VIA_R, VIA_R + 0.25 + p["hole"]) + self.margin)
         for (hx, hy, hr, hnet, hlay) in ctx.holes:
-            if hnet == net: continue
+            # inc105(L2)：**孔-孔无同网豁免**（与板内 DRC 一致）⇒ 同网孔位亦须剪枝，
+            #   否则 astar 会把换层点选在既有同网孔上（holes_co_located / 0.050 vs 0.450）
             cpt(hx, hy, hr + 0.25 + HOLE_R + self.margin)
         self.vb[span] = bad
         return bad

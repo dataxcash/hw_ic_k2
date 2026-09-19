@@ -152,3 +152,12 @@ P3 时该逃逸孔位裕度 +0.2425；链内 In2 铜不同 ⇒ 孔位被 `DS320_
 - **实测**：实现已生效但**无候选**（沿出腿方向的所有偏移位 `via_exact` 均非法）⇒ 判词与加性完全不变（added1/blocked1）。⇒ 需**二维孔位搜索**（面/邻域），非沿腿一维偏移。
 - **回滚核验**：`k2_p4_mroute_v1.py` 恢复 `f4e042760a7e3763`（= inc103 提交态，含去重），`git status` 干净。
 - **残余 1 完整口径**：① 换层点需**二维**孔位重解（一维偏移无解）；② 另需长走廊通道。两项均属 mroute 增强（L2）或族外增量。
+
+## 14. inc105：`Grid.vbad` 同网孔剪枝修正 ⇒ 未连接 **0**
+
+- **根因**：mroute 的过孔剪枝模型 `Grid.vbad` 对孔-孔用 `if hnet == net: continue`（**跳过同网孔**），但板内「孔-孔」**无同网豁免** ⇒ astar 认为可在**既有同网孔**上放换层点，精确闸 `via_exact` 再报 `holes_co_located`（0.050/0.450）；先前 inc104 的「一维沿腿偏移」因此无候选。
+- **修**：`vbad` 中同网孔亦剪枝（`cpt(hx,hy,hr+0.25+HOLE_R+margin)`）⇒ astar 自动把换层点选到**邻近合法位**（无需另写二维搜索）。
+- **实测**：`--only-net PERSTA#` added1/blocked1 → **added2/blocked0**；`--only-net MCU_VDD` added2/blocked0；全链 `--upto all` 未连接 **1→0**、违规 **26→26**（error 3 不变）。
+- **达成 P4 判据之一**：`unconnected_zero = 0`（端到端，全链 `--upto all`）。
+- 件：`k2_p4_mroute_v1.py`（inc103 `f4e04276` → 见提交）；读数件 `segment2c_canonical_inc105.json`。
+- **未闭**：仍余 **3 条 clearance error**（漂移类）+ 20 lib_footprint_mismatch(warning) + 2 silk_edge + 1 track_dangling。
