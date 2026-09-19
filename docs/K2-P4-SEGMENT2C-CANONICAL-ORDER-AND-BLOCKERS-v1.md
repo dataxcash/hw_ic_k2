@@ -337,3 +337,67 @@ F1..G 对这些网全部 `blocked`、不改板。若后续板态变化使某"歧
 读数件 `k2/docs/drafts/p4-l6-reland-v1/segment2c_canonical_inc109.json`。
 **未改**：冻结四源（l4 `d4e81f64` 等）· 判据 rev=2 · SPEC 原件 · 真源 · 生成器 `1ca5ac79` · 受审板 · `criteria/**` · `_shared/**`。
 未出 Gerber；未派 WORKER；未新增检查齿。
+
+## 20. inc110（L2 · oracle 口径修正 T-28）：u4d_scale 孔-铜闸改**层感知** ⇒ **DRC error 2→0** · 未连接 0 · 4 跑逐字节同
+
+### 20.1 根因（实证）
+
+`u4d_scale.leg_eval` 的孔-铜闸用 `c.holes`（**含全部孔、无层信息**）：
+
+```python
+for (hx, hy, hr, hnet) in c.holes:      # ← 无层过滤
+    upd(cv.pt_seg_dist(...) - hw - 0.25 - hr)
+```
+
+实测：`PCIE_UP7_P` 在 `(93.25,49.5)` 的孔是 **In2→In5 埋孔**（`lay=[In2,In3,In4,In5]`，不含 F.Cu），
+不可能阻挡 F.Cu 腿，却被判 **−0.0530** ⇒ u4d 的候选序（`k` 由大到小、每 k 先 `la=False`）被这个假障碍主导，
+**放弃了能避开 `GND(F→In1)` 盲孔 `(94.15,49.76)` 的合法变体**，落成 §19.3 的 2 条 DRC error。
+
+### 20.2 修正（T-28）
+
+孔-铜闸改为**仅计穿过本层（`li`）的孔**：
+
+```python
+for v in c.vias.values():
+    if v['net'] == net or v['hole'] <= 0 or li not in v['lay']: continue
+    upd(cv.pt_seg_dist(...) - hw - 0.25 - v['hole'])
+for p in c.pads.values():
+    if p['net'] == net or p['hole'] <= 0 or li not in p['lay']: continue
+    upd(cv.pt_seg_dist(...) - hw - 0.25 - p['hole'])
+```
+
+（`leg_eval` 原本已对 via/pad **铜**做层过滤；仅孔这一支漏了。）
+
+**同段候选复算**（`PCIE_UP7_N` F.Cu，`(93.55,49.76)→(93.75,49.31)`）：
+
+| 候选 | 修前 minmargin | 修后 minmargin | 修后 viol |
+|---|---|---|---|
+| k=1 la=False（旧选） | −0.0530 | **−0.0028** | 2 |
+| k=1 la=True | −0.1498 | +0.1500 | 0 |
+| k=2..5（两向） | −0.05..−0.12 | **+0.0599 .. +0.1040** | **0** |
+
+⇒ 新选 = **k=5 la=False（margin +0.0780）**；legs 2032 → **3488**（阶梯更细，偏差更小）。
+
+### 20.3 读数（终检 DRC，`/tmp/opencode/drcc110a/`）
+
+| 指标 | inc105/107 | inc109 | **inc110（本笔）** |
+|---|---|---|---|
+| 未连接 | 0 | 0 | **0** |
+| 违规 | 26 | 25 | **23** |
+| **error** | 3 | 2 | **0** |
+| 类型分布 | clearance 3 + lib 20 + silk 2 + dangling 1 | clearance 2 + lib 20 + silk 2 + dangling 1 | **lib_footprint_mismatch 20(warning) + silk_edge_clearance 2(warning) + track_dangling 1(warning)** |
+| 终局 | `690823e0e8d0ff59` | `34142e06af0fdc2cbf9a` | **`c1ecf392aefb4b8656af`** |
+
+**确定性**：全链 `--upto all` **4 次并行连跑逐字节同 `c1ecf392aefb4b8656af`**（`inc110a/b/c/d`）。
+**等长守恒未破**：`对内偏斜 max 0.6134 → 0.6135`（与 inc109 同）；band runs 31 / singles 108 不变。
+
+### 20.4 余项（全为 **warning**，无 error）
+
+`lib_footprint_mismatch 20`（库快照副本不匹配，属既有 G-ROOT 类）· `silk_edge_clearance 2` · `track_dangling 1`。
+三项在 inc105..inc109 各态**一直存在**，本笔未新增、未减少；是否需要处置按判据/监理口径（本笔不擅自改口径）。
+
+### 20.5 件与边界
+
+改：`k2_p4_u4d_scale_v1.py f67cc410f7a0c93e`。读数件 `k2/docs/drafts/p4-l6-reland-v1/segment2c_canonical_inc110.json 677635722ab8ea58`。
+**未改**：冻结四源（l4 `d4e81f64` 永不改）· 判据 rev=2 · SPEC 原件 · 真源 · 生成器 `1ca5ac79` · 受审板 · `criteria/**` · `_shared/**`。
+未出 Gerber；未派 WORKER；未新增检查齿。

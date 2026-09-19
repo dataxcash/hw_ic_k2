@@ -1,0 +1,42 @@
+{
+ "increment": "inc110",
+ "date": "2026-09-20",
+ "topic": "u4d_scale leg_eval 孔-铜闸改层感知（T-28）⇒ DRC error 2→0；未连接 0 · 违规 23 · 4 跑逐字节同",
+ "tools_changed": {
+  "k2_p4_u4d_scale_v1.py": "f67cc410f7a0c93e (前 = inc105 态)"
+ },
+ "root_cause": {
+  "statement": "u4d_scale.leg_eval 的孔-铜闸用 c.holes（无层信息）⇒ 对**非本层**孔误报",
+  "evidence": "In2..In5 埋孔 PCIE_UP7_P(93.25,49.5) 在 F.Cu 腿旁被误判 −0.0530 ⇒ 逼 u4d 放弃能避开 GND(F→In1) 盲孔(94.15,49.76) 的变体 ⇒ 落成 DRC 0.1697<0.175（error 2 之一）",
+  "oracle_check": "改后同段候选：k=1 la=False viol=2 margin=−0.0028（弃）；k≥2 全 viol=0 margin≥+0.0599；选中 k=5 la=False margin=+0.0780"
+ },
+ "fix": "孔-铜闸改为仅计**穿过本层**的孔（c.vias/c.pads 按 lay 过滤 + 0.25 + hole_r）",
+ "determinism": {
+  "full_chain_4_runs_byte_identical": "c1ecf392aefb4b8656af"
+ },
+ "final_readings": {
+  "unconnected": 0,
+  "violations": 23,
+  "errors": 0,
+  "types": {
+   "track_dangling": 1,
+   "silk_edge_clearance": 2,
+   "lib_footprint_mismatch": 20
+  }
+ },
+ "steps": {
+  "2c-11": "legs 2032 → 3488 · band runs 31 · singles 108 · fails 0\n对内偏斜 max: 0.6134 → 0.6135\nwritten /tmp/opencode/inc110a/z.kicad_pcb.2c-11_tmp.kicad_pcb",
+  "2c-15": "{\"added\": 16, \"blocked\": 0, \"segs\": 869, \"vias\": 45, \"len\": 606.4978, \"reasons\": {}}",
+  "final_sha16": "c1ecf392aefb4b86",
+  "final_hist": {
+   "total": 5854,
+   "nets": 101,
+   "fps": 58
+  }
+ },
+ "prior_states": {
+  "inc105_107": "unconn 0 / viol 26 / error 3",
+  "inc109": "unconn 0 / viol 25 / error 2"
+ },
+ "carriers_unchanged": "受审板 dae8dc8d · l4 d4e81f64 · 设计源板 fb07d25a · 真源 dd794c54 · 判据 rev=2 · SPEC 原件 · 生成器 1ca5ac79 · hw/k2_v4_8L.l5.kicad_pro"
+}

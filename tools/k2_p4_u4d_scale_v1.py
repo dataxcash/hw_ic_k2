@@ -387,10 +387,18 @@ def leg_eval(c, cv, net, layer, hw, seg):
         if v['net'] == net or li not in v['lay']:
             continue
         upd(cv.pt_seg_dist(v['x'], v['y'], x1, y1, x2, y2) - v['r'] - hw - cv._req(net, v['net']))
-    for (hx, hy, hr, hnet) in c.holes:
-        if hnet == net:
+    # T-28（inc110 · L2 口径修正）：孔-铜**仅计穿过本层（li）的孔**。
+    # 原式用 `c.holes`（含全部孔，无层信息）⇒ 对**非本层**孔误报：实测 In2..In5 埋孔的
+    # `PCIE_UP7_P`(93.25,49.5) 在 F.Cu 腿旁被误判 −0.0530，逼 u4d 放弃能避开
+    # `GND(F→In1)` 盲孔(94.15,49.76)的变体 ⇒ 落成 DRC −0.0053（error 2 之一）。
+    for v in c.vias.values():
+        if v['net'] == net or v['hole'] <= 0 or li not in v['lay']:
             continue
-        upd(cv.pt_seg_dist(hx, hy, x1, y1, x2, y2) - hw - 0.25 - hr)
+        upd(cv.pt_seg_dist(v['x'], v['y'], x1, y1, x2, y2) - hw - 0.25 - v['hole'])
+    for p in c.pads.values():
+        if p['net'] == net or p['hole'] <= 0 or li not in p['lay']:
+            continue
+        upd(cv.pt_seg_dist(p['x'], p['y'], x1, y1, x2, y2) - hw - 0.25 - p['hole'])
     return best
 
 
