@@ -1,0 +1,89 @@
+{
+ "artifact": "K2-P4 段2 起点读数（#K2-31 §二 (A)）",
+ "ts": "2026-09-19",
+ "chain": {
+  "段1": {
+   "tool": "k2/tools/k2_gen_v5.py",
+   "sha16": "1ca5ac79698f5873",
+   "out": "d67c0f048f0d0423",
+   "tracks": 0,
+   "fps": 58,
+   "nets": 102,
+   "zones": 18
+  },
+  "段2": {
+   "tool": "k2/tools/k2_route_segment_v1.py",
+   "in": "d67c0f048f0d0423",
+   "out": "d523ebd357b48023",
+   "determinism": "3 连跑逐字节同（cmp 通过）",
+   "steps": [
+    {
+     "step": "2a 图纸直构",
+     "segs": 2327,
+     "tracks_after": 2579,
+     "by": {
+      "F.Cu": 174,
+      "via": 252,
+      "In2.Cu": 106,
+      "B.Cu": 39,
+      "In5.Cu": 2008
+     }
+    },
+    {
+     "step": "2b PDN connect",
+     "tracks_added": 185,
+     "vias_added": 224,
+     "blocked": 61,
+     "tracks_after": 2988,
+     "by": {
+      "F.Cu": 359,
+      "via": 476,
+      "B.Cu": 39,
+      "In2.Cu": 106,
+      "In5.Cu": 2008
+     }
+    }
+   ],
+   "canonicalize": "驱动器侧补全（P3 canonicalize 仅覆盖 segment/via/zone 连续 run ⇒ 实测 uuid 1115 行 + 段序 975 行漂移；本件加 全局排序 + 全块 uuid5 归一）"
+  }
+ },
+ "reference": {
+  "l4_d4e81f647be7f980": {
+   "tracks": 3005,
+   "unconnected": 364
+  },
+  "l5_dae8dc8d48ff5b81": {
+   "tracks": 5430,
+   "unconnected": 0
+  }
+ },
+ "段2_起点_DRC": {
+  "tool": "kicad-cli pcb drc --format json --severity-all",
+  "board": "d523ebd357b48023",
+  "violations": 122,
+  "errors": 61,
+  "unconnected": 499,
+  "types": {
+   "lib_footprint_issues": 54,
+   "hole_clearance": 24,
+   "solder_mask_bridge": 17,
+   "shorting_items": 11,
+   "clearance": 9,
+   "track_dangling": 3,
+   "silk_edge_clearance": 2,
+   "hole_to_hole": 2
+  },
+  "note": "lib_footprint_issues 54 = /tmp 无 fp-lib-table（链内 DRC 环境需补 fp-lib-table+lib，段2c 接线时修）"
+ },
+ "起始板态差异（具名）": {
+  "PDN_stitch_via": [
+   "在图纸直构板上 +241",
+   "在段1 产物上 +224 ⇒ −17"
+  ],
+  "归因": "段1 含 4 个全层 keepout 规则区（图纸直构板无）⇒ Placer 判定部分 stitch 孔不合法而跳过",
+  "未连接": [
+   "l4=364",
+   "段2 起点=499 ⇒ +135（段1 的 16 件新增器件/新网 + 面别/避让未做）"
+  ]
+ }
+}
