@@ -279,6 +279,30 @@ def delivery_wrapper() -> dict:
             "tarball_bytes": tgz.stat().st_size, "sha256sums_lines": len(sums)}
 
 
+def zone_refill_invariance() -> dict:
+    """决定性检验：交付 Gerber 与 `--check-zones`（按需重铺）导出**逐字节同** ⇒ 存盘填充即最新、交付件对重铺不变。"""
+    import tempfile
+    tmp = Path(tempfile.mkdtemp(prefix="zoneinv_"))
+    shutil.copy2(BOARD, tmp / BOARD.name)
+    shutil.copy2(PRO, tmp / PRO.name)
+    od = tmp / "gbr"
+    od.mkdir()
+    run([str(CLI), "pcb", "export", "gerbers", "--board-plot-params", "--no-x2", "--check-zones",
+         "--layers", PLOT_LAYERS, "--output", str(od), str(tmp / BOARD.name)])
+    res = {}
+    for f in sorted(od.iterdir()):
+        t = f.read_text()
+        f.write_text(TS_PAT.sub(CANON_DATE, t))
+        d = OUT / "01_gerber_rs274x" / f.name
+        res[f.name] = bool(d.exists() and sha256(d) == sha256(f))
+    return {"method": "kicad-cli pcb export gerbers --board-plot-params --no-x2 --check-zones（/tmp 副本）",
+            "canonicalized": "同一 date 规范化后比较",
+            "n_files": len(res), "n_identical": sum(res.values()),
+            "all_identical": all(res.values()), "per_file": res,
+            "meaning": ("all_identical=True ⇒ 存盘 zone fill 已是最新（重铺不改变交付件）；"
+                        "False ⇒ 须以 --check-zones 输出重出交付包（本次为 True）")}
+
+
 def silk_overhang() -> dict:
     """F.SilkS 图元越出 Edge.Cuts 之具名清单（含越出量）；铜层同测作对照。"""
     import pcbnew
@@ -593,6 +617,7 @@ L2 冻结表 0.25/0.41 与板侧实测口径两套未对账；**板侧口径权�
 1. **阻焊坝 9 处 < 0.09mm**（阈值扫描分布 4∈[0.05,0.06)·1∈[0.06,0.07)·4∈[0.08,0.09)）。JLC 能力表 0.10mm 系**最小可保证桥宽**（非必须存在桥）⇒ 板厂按「无阻焊坝」印制；处置 = **ACCEPT_L2_WITH_FAB_REVIEW**（承 CO-147 R3 先例）；影响面 = 装配焊接注意，**不阻塞 Gerber 可制造性**。**回退修法已实证（本包 `07_verify/mask_accept_fix_proof.json`）**：单参数 `pad_to_mask_clearance` 0.05→0.02mm ⇒ 阻焊坝缺口 **9→0**、总违规回 as-designed 201（无副作用）；该修法 = 改板 setup ⇒ 板 sha 变 ⇒ P4 锚失效 ⇒ **不在 P5 范围**。
 2. **F.Cu 最紧真平行耦合段净距 0.2825mm < SPEC 名义窗下界 0.295mm（−4.24%）**（`PCIE_UP3` 逃逸域）。线性化 ΔZ ≈ −0.84% ⇒ **阻抗仍落 85Ω±10%**。**不主张 F.Cu 名义几何窗"全窗"**。
 3. **B.Cu 无 as-built PCIE 耦合 run**（43 段 PCIE 走线存在但无成对耦合段）⇒ SPEC 之 B.Cu 行属**对称声明**，as-built 未使用；不影响阻抗判定。
+5. **交付件对重铺不变（已验证）**：交付 Gerber 与 `--check-zones` 导出**14/14 逐字节同** ⇒ 存盘 zone fill 即最新（非过期填充），见 `07_verify/zone_refill_invariance.json`。
 4. **正面丝印越出板框 {len(silk['f_silk_overhanging_items'])} 处**（最大 {silk['max_overhang_mm']}mm）：{'; '.join(r['ref'] + '(' + r['kind'] + ', +' + str(r['overhang_mm']) + 'mm)' for r in silk['f_silk_overhanging_items'])}。板厂按边框裁剪 ⇒ 位号图例可能缺损（装饰/可追溯性），**不影响可制造性/功能**；**铜层越界 = {silk['copper_tracks_outside_outline']} 处**（对照：`pads_within_outline` 0/0/0、copper-edge DRC 违规 0）。修法 = 移丝印文本 ⇒ 改板 ⇒ 另开 rev（本次不做）。见 `07_verify/silk_overhang.json`。
 
 ## 6. 锚自检（本包 07_verify/anchor_selfcheck.json）
@@ -659,6 +684,10 @@ def main() -> int:
             {k: v for k, v in ge["layers"].items() if v.get("status") == "OUTSIDE"}, ensure_ascii=False))
     silk = silk_overhang()
     (OUT / "07_verify/silk_overhang.json").write_text(json.dumps(silk, indent=1, ensure_ascii=False) + "\n")
+    zi = zone_refill_invariance()
+    (OUT / "07_verify/zone_refill_invariance.json").write_text(json.dumps(zi, indent=1, ensure_ascii=False) + "\n")
+    if not zi["all_identical"]:
+        raise SystemExit("FAIL-CLOSED: 交付 Gerber 与 --check-zones 结果不一致 ⇒ 存盘填充过期，须重出包")
     dx = drill_board_xcheck()
     (OUT / "07_verify/drill_board_xcheck.json").write_text(json.dumps(dx, indent=1, ensure_ascii=False) + "\n")
     if not dx["all_match"]:
