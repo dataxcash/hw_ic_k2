@@ -112,3 +112,5 @@ P3 时该逃逸孔位裕度 +0.2425；链内 In2 铜不同 ⇒ 孔位被 `DS320_
 3. 20 lib_footprint_mismatch（J-7 家族）· 2 silk_edge · 1 track_dangling（warning）。
 
 ⇒ **P4 未全绿；不下单、不出交付 Gerber**（维持 fail-closed）。残余 1 属「族外增量」、残余 2 属漂移重解，两者之下一步（是否补写 inc17+ / 重解孔位走廊）为 **监理口径**。
+
+**确定性（inc102，#K2-31 §2.1 硬要求 2）**：驱动件 `--upto all` **两次连跑逐字节同** `df3ca999496ca74f23cf094567db35cf0122029bd80b78222217f7046a3f4ba`（板终态）。
