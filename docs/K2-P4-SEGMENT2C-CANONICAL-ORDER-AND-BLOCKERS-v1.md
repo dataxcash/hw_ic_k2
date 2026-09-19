@@ -655,3 +655,40 @@ In4 的 `P3V3_AUX`(prio 0, 28.9mm²) 与 `MCU_VDD`(prio 0) **全重叠**，链�
 - 边界：只落 ENG 自有取证目录；未改 `criteria/**`、板、SPEC、生成器、库。
 
 **§31 补（fail-closed 自检，实跑）**：重锚册逐件扫描 `board_sha16` ⇒ `density`/`min_clearance`/`pads_within_outline`/`ref_plane_continuity`/`w8_audit_board` **全部 = `30fa849641323f98`**（== `l6`）；`w8_audit_seg1_output` = `d67c0f048f0d0423`（== 段1 产物，按设计）；DRC/verdict 无该字段 ⇒ **BAD = 0**（判定器陈旧检查可通过）。
+
+---
+
+## 32. inc114：**ENG 自捕自修** —— rev-51 `board_sha16` 写成 20hex（非 16hex 约定）⇒ P3 图纸器 fail-closed
+
+### 32.1 捕获路径（本轮新增验证）
+
+本轮补验一项此前**从未在 `l6` 上跑过**的消费方：P3 施工图纸器 `k2/tools/k2_p3_drawings_v1.py`（自带 fail-closed：板 sha16 须 == SPEC 输入层自述 `board_sha16`）。
+
+```
+FAIL-CLOSED(陈旧板): k2/hw/k2_v4_8L.l6.kicad_pcb sha16=30fa849641323f98
+                     != SPEC 输入层自述 board_sha16=30fa849641323f98104f
+```
+
+### 32.2 根因（**ENG 本笔错误**，非监理/非他人）
+
+rev-51（inc114 落件笔）把新板 `board_sha16` 记成 **20 hex**（`30fa849641323f98104f`，从 handoff/ledger 文本照抄），而**全库约定与所有消费方**均为 **16 hex**：既有值 `6ff49da5678c2108` / `dae8dc8d48ff5b81` / `0e636a67c1472462` 皆 16；消费方 `k2_p3_drawings_v1.py:402` 以 `sha16(BOARD)`（16）比较 ⇒ 必 fail-closed。
+**影响面**：该 20hex 出现 **8 处**（3 处 live 声明 `mounting_holes`/`keepout_geometry`/`pd.zone_defs.board_realized_zones` + 卡内 `board_sha16` 与 3 处 `updated_board_sha16_declarations` 文本 + 1）；仅 `k2_p3_drawings_v1.py` 一处消费比较，但其为 **P3 图纸的唯一出口** ⇒ 图集无法对新受审板重发。
+
+### 32.3 修正（**同笔已授权 bump 范围内的形式纠正**）
+
+rev-51：8 处 20hex → **16hex**；`e96f2df07fe1d764` → **`522a904f3a1bc43a`**。**未动** rev-47/48/49/50 原件、几何、网表、口径；与 rev-50 的非卡差异仍**恰为 3 处 `board_sha16` 声明**。
+
+### 32.4 修正后复验（三项全过）
+
+| 复验 | 读数 |
+|---|---|
+| **P3 图纸器（`l6`，沙箱 `K2_P3_OUT`）** | **通过 fail-closed 并出图**（7 SVG + `p3_drawings.json`）；附带断言 `C6_corridor_basis` pass · `C7_pour_zones_filled` **10/10** · `C5_keepout_switches` pass · `C5b_board_side_esc_switches` pass · `D1_pinheader_interference` pass |
+| `engine verify k2` | **4/4 PASS** |
+| 19 维标准调用（`l6`，全新 work-dir） | **15 OK / 2 FAIL 不变**（同两类） |
+| 冻结四源 / `l6` / `l6` pro / 生成器 sha | **零漂移**（`d4e81f64` · `fb07d25a` · `dd794c54` · `30fa8496…` · `12ad219b…` · `1ca5ac79`） |
+
+### 32.5 附带新事实（**对 P4 关门有耦合意义**）
+
+`l6` 上重生成图集与**在册图集**（锚 `dae8dc8d`）键级差异 **34 项**，除锚点（`baseline.board/spec`、`board_sha16`、`spec_sha16`）外，**实质差**落在一处：**`J3`/`J4` 的 `footprint_file=None` · `footprint_pads` 38→0 ⇒ `criteria.C3_pad_eq_symbol_pins.unresolved_footprint` 由 0 项变 **2 项****（另有 `U1` `board_pads_raw` 58→49 / `paste_only` 9→0，属 `M-16` 已具名的无号 `F.Paste` 口径）。
+⇒ 这正是 **`U-03`/`M-09`/`J-7`「`lib_id` 未重指」**同一根因在**图集路径**上的显影（闭环表 §15.1 已具名「快照仅 `…__1`/`…__2`」）。**结论**：P3 图集对新受审板**无法干净重发**，其重发与 ⑦「重指 `lib_id`」**同批**；即 `U-03`/`J-7` 的收口路径（i-a 等）**同时**解锁「图集重发」。
+在册图集（`p3_drawings.json e284e9af`，锚 `dae8dc8d`）**保留为历史件**；**不**以 l6 重生成件覆盖在册件（重发时机与 ⑦ 同批，待裁定）。
