@@ -137,3 +137,5 @@ P3 时该逃逸孔位裕度 +0.2425；链内 In2 铜不同 ⇒ 孔位被 `DS320_
 - **实测**：`--only-net MCU_VDD` 由 added1/blocked1 → **added2/blocked0**；全链 `--upto all` 未连接 **2→1**、违规 **26→26**（error 3 不变）。
 - 件：`k2_p4_mroute_v1.py` `7e5c0bf7bb03269d`→`f4e042760a7e3763`（RETIRED 清单原值 → 本修）；读数件 `drafts/p4-l6-reland-v1/segment2c_canonical_inc103.json`。
 - **残余 1**：`PERSTA# In5(59.75,41.4) ↔ J2.48(135.0,56.7)` 约 77mm 长走廊；其两端各自可达，但缺长走廊通道（属 T-9/T-35/T-36 走廊容量族）。
+
+**确定性（inc103）**：全链 `--upto all` 两次连跑逐字节同 `967f95d9c7e7af9b69db4a756aa405917aa3def56f2bea51a6e9deea67b3f50b`。
