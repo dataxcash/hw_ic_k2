@@ -590,3 +590,18 @@ In4 的 `P3V3_AUX`(prio 0, 28.9mm²) 与 `MCU_VDD`(prio 0) **全重叠**，链�
 | **C2 / L-1** | L-1 来源限制登记（闭得由 §14.1 载明） | 登记在库且未变：canonical 布局解 = **P4 已批准落位的 canonical 捕获，非独立求解**；54 件中 **28 件仅板来源** + 2 件曾陈旧（`C86`/`R42`）已由 C1 rev=2 补正 ⇒ **15 一致 / 0 陈旧** | **登记完好；本笔不改变它**（链条坐标仍取 `PLACEMENT_SOLUTION_v1.json`，未新增任何非板权威） |
 
 > **对 P4 关门的含义（具名携带，勿隐）**：`C4` —— L-1 **若未获 owner 另行授权 (c)，须在 P4 关门时具名接受（或转 (c)）后方可进 P5**；**不得**在 P5 打样件中隐去。ENG 此处只登记事实，**不代 owner 接受**。
+
+---
+
+## 24. inc114：`ref_plane_continuity` **新口径机判 + 成因分离 + `max_contiguous_gap_mm` 分布**（#K2-31 §四-5 ①②③ + ④-前）
+
+> 授权：**#K2-31 §四**（口径精化 `non_antipad_gap == 0`；面积率降信息项）。专件：
+> `k2/docs/K2-P4-REFPLANE-NONANTIPAD-GAP-MECHANISM-AND-DISTRIBUTION-v1.md` **`bc91256aabdf0182`**；
+> 新仪器 `k2/docs/drafts/p4-refplane-nonantipad-v1/measure_non_antipad_gap.py`（只读）。
+
+- **主判**：`non_antipad_gap == 0`。受审板 `l6 30fa849641323f98`：`non_antipad_gap` = **0.0 mm²**（R=0.5 默认）⇒ **PASS**；若 `hole_keepout`（**0.006168 mm²**）亦计入 ⇒ ≠0（**未以「接近 0」宣称归零，如实并列**）。
+- **⚠ 核心发现（须监理裁）**：结论对判别半径 **`R`** 敏感 —— `R=0.25` ⇒ `non_antipad_gap = 20.8905 mm²`（FAIL）· `R=0.5`/`1.0` ⇒ `0.0`（PASS）。本板缺口腔尺度集中于 **0.5–1.0mm**。两条出路：(1) 钉死 `R`；(2) 改采**成因派生定义**（antipad = 各 pad/via 按 zone clearance 外扩并集；本件未实现，可授权实现，**非新增检查齿**）。
+- **正/负控**：正控（in-run，严格全长覆盖段 n=**3176**）⇒ `non_antipad_gap=0` 且 `max_contiguous_gap=0` ✅；负控（冻结 `l4`，zone 全未填充）⇒ **798.1724 mm²** / `max_contiguous_gap` **57.13 mm** / 严格覆盖 0% ⇒ FAIL ✅。
+- **`max_contiguous_gap_mm` 分布（③）**：仅有缺口段（n=**619**）p50 **0.0938** · p90 **0.3755** · p95 **0.3755** · max **0.611**；全 3795 段 p90 0.0599 · p95 0.2687 · p99 0.3755。阈值归监理（不预设）。
+- **④**：整改**前**读数 = 本件（受审板 `l6`）；整改**后**待 `#K2-31 §四-4` L2 载体整改（反焊盘阵列/补缝合孔，改受审载体 ⇒ 与落件同批）。
+- 红线：只读；未改板/SPEC/判据/`_shared`/生成器；未放松下限；未派 WORKER。
