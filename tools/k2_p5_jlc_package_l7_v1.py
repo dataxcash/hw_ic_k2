@@ -279,6 +279,34 @@ def delivery_wrapper() -> dict:
             "tarball_bytes": tgz.stat().st_size, "sha256sums_lines": len(sums)}
 
 
+def aperture_census() -> dict:
+    """交付 Gerber 圆孔径普查 + **fail-closed 断言**：各铜层板内走线宽度须全部出现为该层圆孔径。
+
+    捕捉一类绘图失效（走线被以错误/零孔径绘出）。另报各层孔径全集（含 pad 形状孔径）。
+    """
+    import pcbnew
+    b = pcbnew.LoadBoard(str(BOARD))
+    bw = defaultdict(set)
+    for t in b.GetTracks():
+        if isinstance(t, pcbnew.PCB_VIA):
+            continue
+        bw[b.GetLayerName(t.GetLayer())].add(round(pcbnew.ToMM(t.GetWidth()), 6))
+    out, all_ok = {}, True
+    for L in COPPER:
+        f = OUT / "01_gerber_rs274x" / (BOARD.stem + "-" + L.replace(".", "_") + ".gbr")
+        txt = f.read_text()
+        rounds = sorted({float(x) for x in re.findall(r"%ADD\d+C,([\d.]+)\*%", txt)})
+        rects = sorted({x for x in re.findall(r"%ADD\d+(?:R|O|RoundRect|Rect),([^\*]+)\*%", txt)})
+        missing = sorted(w for w in bw[L] if not any(abs(w - a) < 1e-6 for a in rounds))
+        all_ok &= not missing
+        out[L] = {"board_track_widths_mm": sorted(bw[L]), "gerber_round_apertures_mm": rounds,
+                  "n_pad_apertures": len(rects), "missing_track_widths": missing,
+                  "min_aperture_mm": min(rounds) if rounds else None}
+    return {"assertion": "各铜层板内走线宽度 ⊆ 该层 Gerber 圆孔径集",
+            "all_track_widths_present": all_ok, "per_layer": out,
+            "board_min_track_width_mm": min((w for L in bw for w in bw[L]), default=None)}
+
+
 def zone_refill_invariance() -> dict:
     """决定性检验：交付 Gerber 与 `--check-zones`（按需重铺）导出**逐字节同** ⇒ 存盘填充即最新、交付件对重铺不变。"""
     import tempfile
@@ -684,6 +712,11 @@ def main() -> int:
             {k: v for k, v in ge["layers"].items() if v.get("status") == "OUTSIDE"}, ensure_ascii=False))
     silk = silk_overhang()
     (OUT / "07_verify/silk_overhang.json").write_text(json.dumps(silk, indent=1, ensure_ascii=False) + "\n")
+    ac = aperture_census()
+    (OUT / "07_verify/gerber_aperture_census.json").write_text(json.dumps(ac, indent=1, ensure_ascii=False) + "\n")
+    if not ac["all_track_widths_present"]:
+        raise SystemExit("FAIL-CLOSED: 走线宽度未在交付 Gerber 孔径中体现: " + json.dumps(
+            {k: v["missing_track_widths"] for k, v in ac["per_layer"].items() if v["missing_track_widths"]}, ensure_ascii=False))
     zi = zone_refill_invariance()
     (OUT / "07_verify/zone_refill_invariance.json").write_text(json.dumps(zi, indent=1, ensure_ascii=False) + "\n")
     if not zi["all_identical"]:
