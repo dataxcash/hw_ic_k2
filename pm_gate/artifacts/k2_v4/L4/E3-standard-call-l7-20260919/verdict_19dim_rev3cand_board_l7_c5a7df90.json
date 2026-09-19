@@ -1,0 +1,106 @@
+{
+ "passed": true,
+ "n_pass": 19,
+ "n_fail": 0,
+ "fails": [],
+ "oks": [
+  {
+   "check": "zone_filled",
+   "ok": true,
+   "detail": "铜区（有网非 keepout）已填充 10/10；keepout 规则区 8 个另计（不入分母）"
+  },
+  {
+   "check": "device_has_pads",
+   "ok": true,
+   "detail": "0 焊盘器件 0: []"
+  },
+  {
+   "check": "drill_count",
+   "ok": true,
+   "detail": "NPTH=4（应 ≥4）PTH=16"
+  },
+  {
+   "check": "non45_segments",
+   "ok": true,
+   "detail": "非 45° 段 0/5037"
+  },
+  {
+   "check": "rule_severity_manifest",
+   "ok": true,
+   "detail": "未登记豁免的 ignore 0/62: []"
+  },
+  {
+   "check": "net_declared_realized",
+   "ok": true,
+   "detail": "板上 0 焊盘的声明网 = 0；<2 焊盘 = 0"
+  },
+  {
+   "check": "pin_map_complete",
+   "ok": true,
+   "detail": "网表节点无对应焊盘 = 0"
+  },
+  {
+   "check": "refdes_sets_equal",
+   "ok": true,
+   "detail": "排除纯机械件 H*（4 条逐条列名: ['H1', 'H2', 'H3', 'H4']）⇒ 原理图 54 / 板 54；图有板无 []，板有图无 []"
+  },
+  {
+   "check": "pipeline_present",
+   "ok": true,
+   "detail": "scope=k2：含 .kicad_sch 但无 pipeline.yaml 的目录 0 个（fail-closed）: []；范围外（他项目阶段门判）6 个: ['k1/sch', 'key_v2/key_v2/sch', 'pciesw4/aic', 'pciesw4/aic/sch_kicad', 'pciesw4/gpu']"
+  },
+  {
+   "check": "drc_errors",
+   "ok": true,
+   "detail": "DRC error=0（违规总 167）: []"
+  },
+  {
+   "check": "drc_warning_dispositions",
+   "ok": true,
+   "detail": "未登记 warning 类型 0/9: []；已登记 ['copper_sliver', 'lib_footprint_mismatch', 'missing_courtyard', 'silk_edge_clearance', 'silk_over_copper', 'silk_overlap', 'track_dangling', 'track_not_centered_on_via', 'via_dangling']"
+  },
+  {
+   "check": "unconnected_zero",
+   "ok": true,
+   "detail": "unconnected_items = 0"
+  },
+  {
+   "check": "fp_lib_table_present",
+   "ok": true,
+   "detail": "fp-lib-table @ /home/fila/jqdDev_2025/ic_hw/k2/hw: 存在"
+  },
+  {
+   "check": "lib_electrical_level",
+   "ok": true,
+   "detail": "电气级差异 0（原 2，B 口径豁免 2） + 仅 pad 名差异 0（原 1，非电气无号 F.Paste 豁免 1）（须 0）；B 口径=生效；审计板 sha16=c5a7df90aadb66e0 vs 受审板 c5a7df90aadb66e0 ⇒ 一致"
+  },
+  {
+   "check": "keepout_active",
+   "ok": true,
+   "detail": "keepout 区 8 个；其中无生效开关（全 allowed / 无 flag）0 个"
+  },
+  {
+   "check": "pads_within_outline",
+   "ok": true,
+   "detail": "出框：全 pad(AABB)=0 · 接口件(P3-4)=0 · 全 pad(真外框多边形)=0（须全 0）；测量板 sha16=c5a7df90aadb66e0 vs 受审板 c5a7df90aadb66e0 ⇒ 一致"
+  },
+  {
+   "check": "ref_plane_continuity",
+   "ok": true,
+   "detail": "口径 non_antipad_gap==0 @ R=0.5mm：non_antipad_gap = 0.0 mm²（须 == 0）；归因 antipad=20.9552 / split_or_cutout=0.0 / keepout=0.0062；平面层=['In1.Cu', 'In3.Cu', 'In4.Cu', 'In6.Cu']；信息项 V3 名义全长覆盖 3795/3795（#K2-34 §一-1 降为信息）；测量板 sha16=c5a7df90aadb66e0 vs 受审板 c5a7df90aadb66e0 ⇒ 一致"
+  },
+  {
+   "check": "density_and_clearance",
+   "ok": true,
+   "detail": "密度[10mm/frame_origin] 峰值 7（≤8）· 最小铜间距 0.1（≥0.1）mm · 横带占用 0.07586（≤None）· 孔环 0.075（≥None）· pad 到边 0.38（≥None）mm；测量板 sha16=c5a7df90aadb66e0/c5a7df90aadb66e0 vs 受审板 c5a7df90aadb66e0 ⇒ 一致"
+  },
+  {
+   "check": "verdict_schema",
+   "ok": true,
+   "detail": "产物中出现 verdict 字段的文件: []"
+  }
+ ],
+ "provisional": true,
+ "manifest": "manifest.k2.rev3-draft.yaml",
+ "board": "k2_v4_8L.l7.kicad_pcb"
+}
