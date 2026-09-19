@@ -581,3 +581,12 @@ In4 的 `P3V3_AUX`(prio 0, 28.9mm²) 与 `MCU_VDD`(prio 0) **全重叠**，链�
 4. **#K2-30 §2.4 `N-03`**（`sheets`/`top_level_sheets` 一行 pro 键值）—— 本笔已由 §二 链侧修正，受审 pro 侧已按 §二 落值；
 5. **#K2-30 §2.6 `F-9`**（走廊 0.25 vs 0.41 量化）；
 6. **#K2-31 §四-5 `refplane` 4 项**（成因分离 / 机判+正负控 / `max_contiguous_gap_mm` 分布 / 整改前后读数）—— 机制已存在（`p4-j8-v3-measurement-v1` + `p4-refplane-strict-gap-v1`），拆类与分布为本轮续做项。
+
+### 23.8 §一-5 之 `C1` / `C2` / `L-1` 复核（#K2-29 §7 同批项；本笔零改动）
+
+| 项 | 定义（#K2-29 §7） | 落件后实测 | 判 |
+|---|---|---|---|
+| **C1** | `p3_placement_solution.json` rev=2 + L2 解 | `k2/pm_gate/artifacts/k2_v4/L3/drawings/p3_placement_solution.json` **`dfbf65c5b456cdd2`**（rev=2；`solved_count` 15 · `all_pass` True · `selfcheck` 五类违规 0）· `k2/pm_gate/artifacts/k2_v4/L2/PLACEMENT_SOLUTION_v1.json` **`086d453d23c5fbff`** | **PASS（与 #K2-29 登记值逐字节同，未动）** |
+| **C2 / L-1** | L-1 来源限制登记（闭得由 §14.1 载明） | 登记在库且未变：canonical 布局解 = **P4 已批准落位的 canonical 捕获，非独立求解**；54 件中 **28 件仅板来源** + 2 件曾陈旧（`C86`/`R42`）已由 C1 rev=2 补正 ⇒ **15 一致 / 0 陈旧** | **登记完好；本笔不改变它**（链条坐标仍取 `PLACEMENT_SOLUTION_v1.json`，未新增任何非板权威） |
+
+> **对 P4 关门的含义（具名携带，勿隐）**：`C4` —— L-1 **若未获 owner 另行授权 (c)，须在 P4 关门时具名接受（或转 (c)）后方可进 P5**；**不得**在 P5 打样件中隐去。ENG 此处只登记事实，**不代 owner 接受**。
