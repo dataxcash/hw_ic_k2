@@ -42,3 +42,16 @@ k2/tools/k2_wait_pid.sh --pattern 'run_arm3\.sh' --poll 5 --timeout 3600 --label
 
 - 消除每次后台等待 **13–20 分钟**的系统性白耗（#K2-33 §三）；亦减少哨兵长静默噪声。
 - 本件**只**新增 ENG 侧工具 + 本规约文档；**未改**板/SPEC/判据/`_shared`/生成器/冻结件；未派 WORKER；临时仅 `/tmp/opencode`。
+
+---
+
+## 6. 追加（inc115 自捕，2026-09-19）：**`pkill -f` 亦会自匹配**（#K2-33 §一 同根因族，扩面）
+
+**实录**：本会话清理干跑副本进程时执行 `pkill -f measure_derived_v2.py` ⇒ 该 pattern **同时命中本会话自身的 bash 命令行**（其中含同一字符串）⇒ **向自己发 SIGTERM**（rc=143，shell 被杀）；仓库/数据无损伤，载荷随后按 PID 重跑。
+
+**规则（与 §四 同源，扩面为「凡 `-f` 全命令行匹配」）**：
+1. **禁** `pkill -f <本笔工件名/脚本名>`；终止进程一律 **`kill -TERM <PID>`**（必要时 `kill -TERM $(cat pidfile)`）。
+2. **禁** `pgrep -f` / `ps|grep` 作为**轮询**手段（#K2-33 §四）；轮询/等待一律 `k2_wait_pid.sh --pid`。
+3. 需要按名定位时才用 `pgrep -f`，且必须**排除自身与全部祖先进程**（`k2_wait_pid.sh --pattern` 已内置 `ancestors()` 排除），不得用于自杀式清理。
+
+**验收**：同一条命令行中不得同时出现「被匹配的 pattern」与「`pkill/pgrep -f` 调用」。
