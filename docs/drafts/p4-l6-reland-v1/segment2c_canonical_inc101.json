@@ -1,0 +1,339 @@
+{
+ "increment": "inc101",
+ "date": "2026-09-19",
+ "topic": "段2c 收敛族按 P3 增量序 re-host（canonical order）+ 到 2c-12 的读数 + 具名阻塞",
+ "driver": "k2/tools/k2_route_segment_v1.py b9b9a0fba1c476cc (前 b23f3e794e0df85a)",
+ "generator_step1": "d67c0f048f0d0423",
+ "order": "E(3) F1(4) F2(5) F3(6,含7/8加强) G(9) u4d-plan/emit(10) u4d-scale(11) pdn_in4(12) u1c85(13,skip) p3v3_col(14,fail) mroute(15)",
+ "steps": [
+  {
+   "step": "2c-E",
+   "tool": "k2_p4_gnd_vias_v1.py",
+   "kind": "generic",
+   "sha16": "2a8094f179d502a8",
+   "total": 3135,
+   "nets": 101,
+   "fps": 58,
+   "drc_before": {
+    "violations": 33,
+    "errors": 8,
+    "unconnected": 200,
+    "types": {
+     "clearance": 6,
+     "lib_footprint_mismatch": 20,
+     "silk_edge_clearance": 2,
+     "solder_mask_bridge": 2,
+     "track_dangling": 3
+    }
+   },
+   "tool_stdout": "{\"added\": 140, \"in_pad\": 139, \"segments\": 1, \"blocked\": 1}"
+  },
+  {
+   "step": "2c-F1",
+   "tool": "k2_p4_ls_local_v1.py",
+   "kind": "generic",
+   "sha16": "f35cdf9a192e576f",
+   "total": 3164,
+   "nets": 101,
+   "fps": 58,
+   "drc_before": {
+    "violations": 33,
+    "errors": 8,
+    "unconnected": 63,
+    "types": {
+     "clearance": 6,
+     "lib_footprint_mismatch": 20,
+     "silk_edge_clearance": 2,
+     "solder_mask_bridge": 2,
+     "track_dangling": 3
+    }
+   },
+   "tool_stdout": "{\"added\": 16, \"blocked\": 46, \"blocked_reasons\": {\"needs-router\": 46}}"
+  },
+  {
+   "step": "2c-F2",
+   "tool": "k2_p4_ls_route_v1.py",
+   "kind": "generic",
+   "sha16": "b0975ccd0f1e3c10",
+   "total": 3197,
+   "nets": 101,
+   "fps": 58,
+   "drc_before": {
+    "violations": 33,
+    "errors": 8,
+    "unconnected": 47,
+    "types": {
+     "clearance": 6,
+     "lib_footprint_mismatch": 20,
+     "silk_edge_clearance": 2,
+     "solder_mask_bridge": 2,
+     "track_dangling": 3
+    }
+   },
+   "tool_stdout": "{\"added\": 2, \"blocked\": 44, \"reasons\": {\"needs-cross-layer-router\": 17, \"no-legal-path-in-fcu\": 27}}"
+  },
+  {
+   "step": "2c-F3",
+   "tool": "k2_p4_ls_xlayer_v1.py",
+   "kind": "generic",
+   "sha16": "fbc05670eaeca778",
+   "total": 3279,
+   "nets": 101,
+   "fps": 58,
+   "drc_before": {
+    "violations": 33,
+    "errors": 8,
+    "unconnected": 45,
+    "types": {
+     "clearance": 6,
+     "lib_footprint_mismatch": 20,
+     "silk_edge_clearance": 2,
+     "solder_mask_bridge": 2,
+     "track_dangling": 3
+    }
+   },
+   "tool_stdout": "{\"added\": 11, \"blocked\": 33, \"reasons\": {\"no-legal-path-on-bcu\": 25, \"no-legal-via-slot\": 8}, \"vias_placed\": 14}"
+  },
+  {
+   "step": "2c-G",
+   "tool": "k2_p4_ls_in2_v1.py",
+   "kind": "generic",
+   "sha16": "72caa0e24dcdd091",
+   "total": 3423,
+   "nets": 101,
+   "fps": 58,
+   "drc_before": {
+    "violations": 43,
+    "errors": 18,
+    "unconnected": 34,
+    "types": {
+     "clearance": 6,
+     "hole_clearance": 10,
+     "lib_footprint_mismatch": 20,
+     "silk_edge_clearance": 2,
+     "solder_mask_bridge": 2,
+     "track_dangling": 3
+    }
+   },
+   "tool_stdout": "{\"added\": 13, \"blocked\": 12, \"skipped_power\": 9, \"reasons\": {\"no-legal-path-on-in2\": 12}, \"vias_placed\": 22}"
+  },
+  {
+   "step": "2c-10plan",
+   "tool": "k2_p4_u4d_refclk_plan_v1.py",
+   "kind": "u4d_plan",
+   "drc_before": {
+    "violations": 42,
+    "errors": 18,
+    "unconnected": 21,
+    "types": {
+     "clearance": 6,
+     "hole_clearance": 10,
+     "lib_footprint_mismatch": 20,
+     "silk_edge_clearance": 2,
+     "solder_mask_bridge": 2,
+     "track_dangling": 2
+    }
+   },
+   "tool_stdout": " 135.0]\nPCIE_REFCLK0_N     short   diag_first-x-y old=  2.4732 new=2.6608 Δ=+0.1876 angles=[45.0, 0.0]\nPCIE_REFCLK1_P     zig     n=10 split=0 dir=1 old= 23.6599 new=21.6375 Δ=-2.0224 angles=[45.0, 135.0, 45.0, 135.0, 45.0, 135.0, 45.0, 135.0, 45.0, 135.0]\nPCIE_REFCLK1_P     tune    tune m=4 dir=+1 old= 24.4750 new=25.4562 Δ=+0.9812 angles=[0.0, 45.0, 135.0, 45.0, 135.0, 45.0, 135.0, 45.0, 135.0, 0.0]\nPCIE_REFCLK1_N     short   ax_first-x+y   old=  1.1903 new=1.2537 Δ=+0.0634 angles=[0.0, 135.0]"
+  },
+  {
+   "step": "2c-10emit",
+   "tool": "k2_p4_u4d_refclk_emit_v1.py",
+   "kind": "u4d_emit",
+   "sha16": "381e3f3833e22f8c",
+   "total": 3435,
+   "nets": 101,
+   "fps": 58,
+   "drc_before": {
+    "violations": 42,
+    "errors": 18,
+    "unconnected": 21,
+    "types": {
+     "clearance": 6,
+     "hole_clearance": 10,
+     "lib_footprint_mismatch": 20,
+     "silk_edge_clearance": 2,
+     "solder_mask_bridge": 2,
+     "track_dangling": 2
+    }
+   },
+   "tool_stdout": "replaced 22 旧段 → 34 新段\nwritten /tmp/opencode/inc101c/z.kicad_pcb.2c-10emit_tmp.kicad_pcb"
+  },
+  {
+   "step": "2c-11",
+   "tool": "k2_p4_u4d_scale_v1.py",
+   "kind": "u4d_scale",
+   "sha16": "f8c50de2a6ea3c94",
+   "total": 4749,
+   "nets": 101,
+   "fps": 58,
+   "drc_before": {
+    "violations": 42,
+    "errors": 18,
+    "unconnected": 21,
+    "types": {
+     "clearance": 6,
+     "hole_clearance": 10,
+     "lib_footprint_mismatch": 20,
+     "silk_edge_clearance": 2,
+     "solder_mask_bridge": 2,
+     "track_dangling": 2
+    }
+   },
+   "tool_stdout": "legs 2032 → 3346 · band runs 31 · singles 108 · fails 0\n对内偏斜 max: 0.6134 → 0.6135\nwritten /tmp/opencode/inc101c/z.kicad_pcb.2c-11_tmp.kicad_pcb"
+  },
+  {
+   "step": "2c-12",
+   "tool": "k2_p4_pdn_in4_v1.py",
+   "kind": "plain",
+   "sha16": "7dab4c17baf36ddb",
+   "total": 4751,
+   "nets": 101,
+   "fps": 58,
+   "drc_before": {
+    "violations": 39,
+    "errors": 15,
+    "unconnected": 21,
+    "types": {
+     "clearance": 3,
+     "hole_clearance": 10,
+     "lib_footprint_mismatch": 20,
+     "silk_edge_clearance": 2,
+     "solder_mask_bridge": 2,
+     "track_dangling": 2
+    }
+   },
+   "tool_stdout": "via-in-pad F→In4: placed=2 skipped=0 refused=0\n  OK   P3V3     (104.170,55.690) U6.FF8 margin=+0.0440 (worst=trk/GND)\n  OK   P3V3     (104.690,55.990) U6.FJ6 margin=+0.0503 (worst=via/DS320_STRAP_A_ADDR0_15-8)\nwritten /tmp/opencode/inc101c/z.kicad_pcb.2c-12_tmp.kicad_pcb"
+  },
+  {
+   "step": "2c-13",
+   "tool": "k2_p4_u1c85_v1.py",
+   "kind": "skip",
+   "sha16": "73bfd5e4ef699cb0",
+   "total": 4751,
+   "nets": 101,
+   "fps": 58,
+   "drc_before": {
+    "violations": 40,
+    "errors": 16,
+    "unconnected": 19,
+    "types": {
+     "clearance": 4,
+     "hole_clearance": 10,
+     "lib_footprint_mismatch": 20,
+     "silk_edge_clearance": 2,
+     "solder_mask_bridge": 2,
+     "track_dangling": 2
+    }
+   },
+   "skipped": true,
+   "reason": "u1c85 前置已满足（C85 搬迁 + C85.2 盘中孔）且对新链不安全（坐标删除缺网校验会误删 PERSTA#；新孔 uuid 判重与阶段 E 冲突）；残余 C85.1 短线交 2c-15 mroute"
+  },
+  {
+   "step": "2c-14",
+   "tool": "k2_p4_p3v3_col_v1.py",
+   "kind": "plain",
+   "drc_before": {
+    "violations": 40,
+    "errors": 16,
+    "unconnected": 19,
+    "types": {
+     "clearance": 4,
+     "hole_clearance": 10,
+     "lib_footprint_mismatch": 20,
+     "silk_edge_clearance": 2,
+     "solder_mask_bridge": 2,
+     "track_dangling": 2
+    }
+   },
+   "stderr": " <module>\n    sys.exit(main())\n             ^^^^^^\n  File \"/home/fila/jqdDev_2025/ic_hw/k2/tools/k2_p4_p3v3_col_v1.py\", line 202, in main\n    assert m > 0, \"%s: 孔位 span 裕度 %.4f < 0 (%s)\" % (tg[\"name\"], m, blk)\n           ^^^^^\nAssertionError: col: 孔位 span 裕度 -0.0750 < 0 (trk/DS320_STRAP_MODE@In2.Cu)"
+  }
+ ],
+ "determinism": {
+  "runs": 2,
+  "out_sha16": "73bfd5e4ef699cb0",
+  "upto": "2c-12",
+  "byte_identical": true
+ },
+ "post_2c12_board": {
+  "file": "/tmp/opencode/detA/z.kicad_pcb",
+  "sha16": "73bfd5e4ef699cb0",
+  "segments": 4097,
+  "vias": 654,
+  "non45": 0,
+  "nets": 101,
+  "fps": 58,
+  "zones": 18
+ },
+ "mroute_diagnostic": {
+  "note": "非 canonical 位（p3v3_col 未过）；仅取证",
+  "board_sha16": "997262d30c687696",
+  "summary": {
+   "added": 15,
+   "blocked": 3,
+   "segs": 727,
+   "vias": 41,
+   "len": 507.3268,
+   "reasons": {
+    "no-free-goal-node": 1,
+    "no-free-start-node": 1,
+    "no-path-coarse(exhausted-74)": 1
+   }
+  },
+  "drc_after": {
+   "violations": 39,
+   "errors": 15,
+   "unconnected": 3,
+   "types": {
+    "clearance": 3,
+    "hole_clearance": 10,
+    "lib_footprint_mismatch": 20,
+    "silk_edge_clearance": 2,
+    "solder_mask_bridge": 2,
+    "track_dangling": 2
+   }
+  },
+  "residual_unconnected": [
+   {
+    "a": "F.Cu 上 U1 的焊盘 6 [MCU_VDD]",
+    "b": "走线 [MCU_VDD] (F.Cu), 长度: 0.6750 mm",
+    "pos": {
+     "x": 31.838,
+     "y": 51.75
+    }
+   },
+   {
+    "a": "走线 [PERSTA#] (F.Cu), 长度: 1.1314 mm",
+    "b": "F.Cu 上 J2 的焊盘 48 [PERSTA#]",
+    "pos": {
+     "x": 58.95,
+     "y": 42.2
+    }
+   },
+   {
+    "a": "过孔 [P3V3] (F.Cu - B.Cu)",
+    "b": "走线 [P3V3] (F.Cu), 长度: 1.0000 mm",
+    "pos": {
+     "x": 90.825,
+     "y": 54.0
+    }
+   }
+  ]
+ },
+ "l5_reference": {
+  "file": "k2/hw/k2_v4_8L.l5.kicad_pcb",
+  "sha16": "dae8dc8d48ff5b81",
+  "drc": {
+   "violations": 69,
+   "errors": 0,
+   "unconnected": 0,
+   "types": {
+    "lib_footprint_issues": 2,
+    "lib_footprint_mismatch": 28,
+    "missing_courtyard": 39
+   }
+  },
+  "segments": 4720,
+  "non45": 0
+ }
+}

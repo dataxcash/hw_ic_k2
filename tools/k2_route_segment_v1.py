@@ -130,18 +130,55 @@ def run_drc(board, workdir, kicad_cli):
                       "types": {k: sum(1 for v in vs if v["type"] == k) for k in sorted({v["type"] for v in vs})}}
 
 
-ROUTERS = [("2c-E", "k2_p4_gnd_vias_v1.py"), ("2c-F1", "k2_p4_ls_local_v1.py"),
-           ("2c-F2", "k2_p4_ls_route_v1.py"), ("2c-F3", "k2_p4_ls_xlayer_v1.py"),
-           ("2c-G", "k2_p4_ls_in2_v1.py"), ("2c-15", "k2_p4_mroute_v1.py")]
+# 收敛族执行序 = P3 增量序（1..16，见 K2-P4-CONVERGENCE-STATUS-v1.md §7..§25 与
+# K2-P4-ROUTE-SEGMENT-INTO-CHAIN-PLAN-AND-PROOF-v1.md §4）：E(3) F1(4) F2(5) F3(6/7/8，工具内已含加强)
+# G(9) u4d-plan/emit(10) u4d-scale(11) pdn_in4(12) u1c85(13) p3v3_col(14) mroute(15)。
+# **mroute 必须在最后**（CONVERGENCE §24：mroute 是 F1..G 全 0 解后才新写的兜底器）。
+ROUTERS = [("2c-E", "k2_p4_gnd_vias_v1.py", "generic"),
+           ("2c-F1", "k2_p4_ls_local_v1.py", "generic"),
+           ("2c-F2", "k2_p4_ls_route_v1.py", "generic"),
+           ("2c-F3", "k2_p4_ls_xlayer_v1.py", "generic"),
+           ("2c-G", "k2_p4_ls_in2_v1.py", "generic"),
+           ("2c-10plan", "k2_p4_u4d_refclk_plan_v1.py", "u4d_plan"),
+           ("2c-10emit", "k2_p4_u4d_refclk_emit_v1.py", "u4d_emit"),
+           ("2c-11", "k2_p4_u4d_scale_v1.py", "u4d_scale"),
+           ("2c-12", "k2_p4_pdn_in4_v1.py", "plain"),
+           ("2c-13", "k2_p4_u1c85_v1.py", "skip"),
+           ("2c-14", "k2_p4_p3v3_col_v1.py", "plain"),
+           ("2c-15", "k2_p4_mroute_v1.py", "generic")]
 STEP_ORDER = ["2b", "2cA", "2cB"] + [r[0] for r in ROUTERS]
 
+# 2c-13（u1c85，增量 13）在新链已**前置满足**：段1 生成器已含 C85→(29.7,54.5,180°) 搬迁；
+# 阶段 E(gnd_vias) 已落 C85.2 盘中孔 (29.35,54.5) F→In1（实测 post-2c-E 件含该孔，uuid 3561d03d）。
+# 该 RETIRED 器对新链**不安全**：① 已搬检测按 '29.7 54.5 180' 字面匹配，链内实际为 '29.700 54.500 180' ⇒ 误判未搬；
+# ② 旧 GND 引线删除按坐标 (31.85,54.5)-(32.525,54.5) 匹配且**不校验网**，链内该坐标为 PERSTA# 段 ⇒ 会误删 PERSTA#；
+# ③ 新孔按 uuid5 判重，与阶段 E 已落孔 uuid 不同 ⇒ 会加重复孔。残余仅 C85.1(30.05,54.5)→锚(30.475,54.5) 0.425mm 短线，
+# 交下游客路器（2c-15 mroute 兜底）处理。⇒ 记录为具名 skip，不落任何改动（不静默、不缩口径）。
+SKIP_REASONS = {"2c-13": "u1c85 前置已满足（C85 搬迁 + C85.2 盘中孔）且对新链不安全（坐标删除缺网校验会误删 PERSTA#；新孔 uuid 判重与阶段 E 冲突）；残余 C85.1 短线交 2c-15 mroute"}
 
-def run_router(tool, inp, outp, drc, led):
-    """子进程跑离链路由器（只读 `--in`=链内产物；`--drc`=链内即时 DRC；写 `--out`/`--ledger`）。"""
+
+def run_router(tool, kind, inp, outp, drc, led):
+    """子进程跑离链路由器（只读链内产物）。
+    kind=generic : --in/--drc/--out/--ledger（DRC 驱动族 E/F1/F2/F3/G/mroute）
+    kind=plain   : --in/--out/--ledger（定点修复族 pdn_in4/u1c85/p3v3_col，不读 DRC）
+    kind=u4d_plan: <in> <plan.json>（只产计划，不改板）
+    kind=u4d_emit: <in> <plan.json> <out>（按计划落板）
+    kind=u4d_scale: --in/--out/--plan（非 45° 规模化；--plan = 台账输出）"""
     import subprocess as _sp
-    cmd = [sys.executable, str(HERE / tool), "--in", str(inp), "--drc", str(drc),
-           "--out", str(outp), "--ledger", str(led)]
-    r = _sp.run(cmd, capture_output=True, text=True, timeout=3600)
+    if kind == "generic":
+        cmd = [sys.executable, str(HERE / tool), "--in", str(inp), "--drc", str(drc),
+               "--out", str(outp), "--ledger", str(led)]
+    elif kind == "plain":
+        cmd = [sys.executable, str(HERE / tool), "--in", str(inp), "--out", str(outp), "--ledger", str(led)]
+    elif kind == "u4d_plan":
+        cmd = [sys.executable, str(HERE / tool), str(inp), str(led)]
+    elif kind == "u4d_emit":
+        cmd = [sys.executable, str(HERE / tool), str(inp), str(led), str(outp)]
+    elif kind == "u4d_scale":
+        cmd = [sys.executable, str(HERE / tool), "--in", str(inp), "--out", str(outp), "--plan", str(led)]
+    else:
+        raise SystemExit("unknown router kind: %s" % kind)
+    r = _sp.run(cmd, capture_output=True, text=True, timeout=5400)
     return r.returncode, (r.stdout or "").strip()[-500:], (r.stderr or "").strip()[-300:]
 
 
@@ -243,20 +280,42 @@ def main() -> int:
         rec["steps"].append({"step": "2c-B", "rc": rcb, "drc_before": cnt, "tool_stdout": _bb.getvalue().strip(),
                              "sha16": sha16(out), **track_hist(out)})
 
-    for tag, tool in ROUTERS:
+    plan_json = str(out) + ".u4d_plan.json"
+    for tag, tool, kind in ROUTERS:
         if _ord(a.upto) < _ord(tag):
             break
         if a.dry_run:
             break
         _canon("pre-" + tag)
         dj, cnt = run_drc(out, str(out) + ".drc_" + tag, a.drc_cli)
+        if kind == "skip":
+            rec["steps"].append({"step": tag, "tool": tool, "kind": kind, "drc_before": cnt,
+                                 "skipped": True, "reason": SKIP_REASONS.get(tag, "unspecified"),
+                                 "sha16": sha16(out), **track_hist(out)})
+            continue
         tmp = str(out) + "." + tag + "_tmp.kicad_pcb"
-        rc, so, se = run_router(tool, out, tmp, dj, str(out) + "." + tag + "_ledger.json")
+        if kind == "u4d_plan":
+            led = plan_json
+        elif kind == "u4d_emit":
+            led = plan_json
+        elif kind == "u4d_scale":
+            led = str(out) + "." + tag + "_plan.json"
+        else:
+            led = str(out) + "." + tag + "_ledger.json"
+        rc, so, se = run_router(tool, kind, out, tmp, dj, led)
         if rc != 0:
-            rec["steps"].append({"step": tag, "tool": tool, "rc": rc, "drc_before": cnt,
+            rec["steps"].append({"step": tag, "tool": tool, "kind": kind, "rc": rc, "drc_before": cnt,
                                  "stdout": so, "stderr": se}); print(json.dumps(rec, ensure_ascii=False, indent=1)); return 3
+        if kind == "u4d_plan":   # 计划器不改板：只登记计划读数，不复制/不量 tracks
+            rec["steps"].append({"step": tag, "tool": tool, "kind": kind, "rc": rc, "drc_before": cnt,
+                                 "tool_stdout": so, "plan": led})
+            continue
+        if not os.path.exists(tmp):
+            rec["steps"].append({"step": tag, "tool": tool, "kind": kind, "rc": rc, "drc_before": cnt,
+                                 "stdout": so, "stderr": "missing output board " + tmp})
+            print(json.dumps(rec, ensure_ascii=False, indent=1)); return 3
         shutil.copy2(tmp, out)
-        rec["steps"].append({"step": tag, "tool": tool, "rc": rc, "drc_before": cnt, "tool_stdout": so,
+        rec["steps"].append({"step": tag, "tool": tool, "kind": kind, "rc": rc, "drc_before": cnt, "tool_stdout": so,
                              "sha16": sha16(out), **track_hist(out)})
     if not a.dry_run:
         _canon("final")
