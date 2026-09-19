@@ -142,3 +142,37 @@
 - **旁证**：① 容器超项目 pin（`_shared`/`k2`）**未由 ENG 提交** —— 容器根 pre-commit 的 affected 判定把 `_shared` 变更判给 k2 并以容器 cwd 跑 `engine verify`（路径基址 = 容器根 ⇒ `FileNotFoundError`），属**已知调用口径问题**（`K2-P4-CLOSURE-FORMALITY-FACTS-v1`），且 handoff §8-② 记「容器 `k2` 指针滞后（刻意，监理排程）」⇒ 循前例留监理/哨兵；② `hw/k2_v4_8L.l7.kicad_prl`（KiCad 本地态）**未跟踪、未入库**。
 
 —— ENG（ARCHER）· 2026-09-19 · k2 `adf2ab6` · `_shared 935fb25` · 受审板 `l7 c5a7df90aadb66e0` · 判据锚 rev=2 · **停等 §三-3（gate 属主 rev=3）**
+
+---
+
+## 7. 追加（同笔）：**§三-3 的 ENG 面已备好 —— `criteria` rev=3 安装候选 + 影子复算 0 FAIL**
+
+> 监理续推令：「按已批准整改计划推进当前阶段；阶段门未过不得越阶段」。当前阶段 = **P4**；其唯一非 ENG 闸口 = §三-3（gate 属主装 rev=3）。本笔把该步的 **ENG 面（起草 + 复算 + 正负控）做到「可安装」**，不改 `criteria/**`。
+
+### 7.1 交付（新增，唯一落件 = `docs/drafts/**`）
+
+| 件 | sha16 | 内容 |
+|---|---|---|
+| `k2/docs/drafts/p4-k234-criteria-rev3-v1/manifest.k2.rev3-draft.yaml` | `11e2777226ef3dfb` | 19 维全 `enabled`；+7 登记；`board→l7`；`ref_plane_continuity` 写入 `caliber=non_antipad_gap==0` / `radius_R_mm=0.5`；`covered 19 / uncovered []`；**`not_countersigned: true`（安装时签认）** |
+| `.../adjudicate.rev3.py` | `1937a40ae68bc288` | +`--refplane-gap-json` 新口径判定；`lib_electrical_level` 落 **(B)** 三条具名口径（`_reclassify_w8`） |
+| `.../README.md` | `6f9550c0cbea03aa` | 六项对位 + 证明矩阵 + **安装程序** + 一处口径张力具名 |
+
+### 7.2 影子复算（`l7`；`criteria/` 未动；`--manifest` 覆写）
+
+| 臂 | 读数 |
+|---|---|
+| 正控：**rev=2** 判据 × `l7` | **15 OK / 2 FAIL**（`drc_warning_dispositions` · `lib_electrical_level 2+1`） |
+| **rev=3 候选** × `l7` | **19 OK / 0 FAIL** —— `lib_electrical_level` 电气级 **0**（原 2，B 口径豁免 2）＋ pad 名 **0**（原 1，无号 F.Paste 豁免 1）；`ref_plane_continuity` `non_antipad_gap = 0.0` @R=0.5；`density_and_clearance` 峰 7≤8 · 铜间距 0.1≥0.1 |
+| NC-A 候选 × **冻结 `l4`** | `ref_plane_continuity` **FAIL `798.172376 mm²`**（= evidence-pack #2 §1 记录值）⇒ **非缩口径** |
+| NC-B 候选 × `l4` 板 + `l7` 证据 | `lib_electrical_level` **FAIL**「证据陈旧，fail-closed」 |
+| NC-C 缺 `--refplane-gap-json` / NC-D 阈值缺 | 各自 **FAIL** fail-closed |
+
+### 7.3 `l7` 五件测量（§三-4 输入，本轮已全跑；均自证 `board_sha16 = c5a7df90aadb66e0`）
+
+出框 **0/0/0**（676 pad）· V3 参考连续性（信息项：名义全长覆盖 **3795/3795**）· 密度 **峰 7 / 横带 0.07586** · 最小铜间距 bracket **[0.10,0.105] ≥ 0.100** · 孔环 0.075 / pad 到边 0.38 · **non_antipad_gap = 0.0**（归因 antipad 20.9552 / split_or_cutout **0.0** / keepout 0.0062）。
+
+### 7.4 须监理安装时一句话确认（具名，非停机级）
+
+- **§一-1** 定口径 = `non_antipad_gap == 0`（草案据此实现）；**§三-4** 括注仍写「V3 覆盖口径」（旧列表口径）。`l7` 实测**两者皆 PASS**（`0.0` 且 `3795/3795`）⇒ 草案把 V3 覆盖列**信息项**；若要求 V3 **并列为门**（收紧），ENG 按 `AND` 合并即可。
+
+⇒ **§三-3 安装后**，ENG 立即跑 §三-4 全链重锚（期望 0 FAIL）⇒ §三-7 闭环 14 条 + L-1 具名接受（C4）⇒ **P4 关门判定报监理**。**未越阶段**（P5 未开、未出 Gerber）。
