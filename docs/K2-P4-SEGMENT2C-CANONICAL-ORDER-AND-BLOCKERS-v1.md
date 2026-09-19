@@ -114,3 +114,10 @@ P3 时该逃逸孔位裕度 +0.2425；链内 In2 铜不同 ⇒ 孔位被 `DS320_
 ⇒ **P4 未全绿；不下单、不出交付 Gerber**（维持 fail-closed）。残余 1 属「族外增量」、残余 2 属漂移重解，两者之下一步（是否补写 inc17+ / 重解孔位走廊）为 **监理口径**。
 
 **确定性（inc102，#K2-31 §2.1 硬要求 2）**：驱动件 `--upto all` **两次连跑逐字节同** `df3ca999496ca74f23cf094567db35cf0122029bd80b78222217f7046a3f4ba`（板终态）。
+
+## 9. 残余深挖（`--only-net` + `K2MR_DBG2` 实证）
+
+- **来源判定**：`l4` / 设计源板 在 U1.6 邻域 **0** 条 MCU_VDD 铜、在 (59.75,41.4) 邻域 **0** 条 PERSTA# 铜；仅 `l5` 有（4 / 10）⇒ 这两条连接是 **P3 增量（post-l4）** 补的，非段2a/图纸缺段。
+- **MCU_VDD（dist 3.069）**：`--only-net MCU_VDD` = added 1 / blocked 1，reason `no-free-start-node`；但 `K2MR_DBG2` 显示该边两端 **start(31.838,51.75) 与 goal(30.475,54.5) 在全部 5 个 clearance margin 的粗(step)/细 pass 均 snap 成功**（r=0/1，`own=True bad=0`）⇒ `no-free-start-node` 判词与该边实测**不自洽**（疑 mroute 序内「先落边改变 ctx 后，次边 snap 假失败」或窗口裁剪逻辑）。→ **路由器侧待查项（L2）**。
+- **PERSTA#（dist 77.279）**：U1.6 式之外的长走廊（~80mm，In5→J2.48），mroute 报 `no-free-start-node`；属 T-9/T-35/T-36 走廊容量族。
+- 两变体（inc15 默认序 / inc16 `--order list`）实测均止于 **2**。
