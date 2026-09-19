@@ -47,12 +47,14 @@ def canon_sort_tracks(path, loader):
 
     def kind(b):
         m = m_kind.match(b); return m.group(1) if m else ""
+    seps = [txt[ch[i - 1][1]:ch[i][0]] for i in range(1, len(ch))]
     tr = [b for b in blocks if kind(b) in KINDS]
     keep = [b for b in blocks if kind(b) not in KINDS]
     tr.sort(key=lambda b: (KINDS.index(kind(b)), u_mid.sub("(uuid)", b)))
     first = next(i for i, b in enumerate(blocks) if kind(b) in KINDS)
     out = blocks[:first] + tr + [b for b in blocks[first:] if kind(b) not in KINDS]
-    path.write_text(head + "\n".join(out) + tail, encoding="utf-8")
+    body = "".join(b + (seps[i] if i < len(seps) else "\n") for i, b in enumerate(out))
+    path.write_text(head + body + tail, encoding="utf-8")
     return len(tr)
 
 
@@ -69,8 +71,9 @@ def canon_all_uuids(path, loader):
     ch = loader._root_children(txt)
     head, tail = txt[:ch[0][0]], txt[ch[-1][1]:]
     u_mid = re.compile(r'\(uuid "[^"]*"\)')
+    seps = [txt[ch[i - 1][1]:ch[i][0]] for i in range(1, len(ch))]
     seen, out_blocks, n = {}, [], 0
-    for (s, e) in ch:
+    for j, (s, e) in enumerate(ch):
         blk = txt[s:e]
         key = u_mid.sub("(uuid)", blk)
         i = seen.get(key, 0); seen[key] = i + 1
@@ -82,8 +85,8 @@ def canon_all_uuids(path, loader):
             return '(uuid "%s")' % uuid.uuid5(uuid.UUID(UUID_NS), base + "|%d" % c[0])
         nb = u_mid.sub(sub, blk)
         n += c[0]
-        out_blocks.append(nb)
-    path.write_text(head + "\n".join(out_blocks) + tail, encoding="utf-8")
+        out_blocks.append(nb + (seps[j] if j < len(seps) else ""))
+    path.write_text(head + "".join(out_blocks) + tail, encoding="utf-8")
     return n
 
 
@@ -127,7 +130,21 @@ def run_drc(board, workdir, kicad_cli):
                       "types": {k: sum(1 for v in vs if v["type"] == k) for k in sorted({v["type"] for v in vs})}}
 
 
-STEP_ORDER = ["2b", "2cA", "2cB"]
+ROUTERS = [("2c-E", "k2_p4_gnd_vias_v1.py"), ("2c-F1", "k2_p4_ls_local_v1.py"),
+           ("2c-F2", "k2_p4_ls_route_v1.py"), ("2c-F3", "k2_p4_ls_xlayer_v1.py"),
+           ("2c-G", "k2_p4_ls_in2_v1.py"), ("2c-15", "k2_p4_mroute_v1.py")]
+STEP_ORDER = ["2b", "2cA", "2cB"] + [r[0] for r in ROUTERS]
+
+
+def run_router(tool, inp, outp, drc, led):
+    """子进程跑离链路由器（只读 `--in`=链内产物；`--drc`=链内即时 DRC；写 `--out`/`--ledger`）。"""
+    import subprocess as _sp
+    cmd = [sys.executable, str(HERE / tool), "--in", str(inp), "--drc", str(drc),
+           "--out", str(outp), "--ledger", str(led)]
+    r = _sp.run(cmd, capture_output=True, text=True, timeout=3600)
+    return r.returncode, (r.stdout or "").strip()[-500:], (r.stderr or "").strip()[-300:]
+
+
 
 
 def _ord(x: str) -> int:
@@ -150,7 +167,7 @@ def main() -> int:
     ap.add_argument("--spec-rev19", default=str(K2 / "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-19.json"))
     ap.add_argument("--skip-2b", action="store_true")
     ap.add_argument("--drc-cli", default=str(K2.parent / "AppDir/bin/kicad-cli"))
-    ap.add_argument("--upto", default="2b", choices=["2b", "2cA", "2cB", "all"], help="链步截止（默认 2b）")
+    ap.add_argument("--upto", default="2b", choices=["2b", "2cA", "2cB"] + [r[0] for r in ROUTERS] + ["all"], help="链步截止（默认 2b）")
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
 
@@ -226,6 +243,21 @@ def main() -> int:
         rec["steps"].append({"step": "2c-B", "rc": rcb, "drc_before": cnt, "tool_stdout": _bb.getvalue().strip(),
                              "sha16": sha16(out), **track_hist(out)})
 
+    for tag, tool in ROUTERS:
+        if _ord(a.upto) < _ord(tag):
+            break
+        if a.dry_run:
+            break
+        _canon("pre-" + tag)
+        dj, cnt = run_drc(out, str(out) + ".drc_" + tag, a.drc_cli)
+        tmp = str(out) + "." + tag + "_tmp.kicad_pcb"
+        rc, so, se = run_router(tool, out, tmp, dj, str(out) + "." + tag + "_ledger.json")
+        if rc != 0:
+            rec["steps"].append({"step": tag, "tool": tool, "rc": rc, "drc_before": cnt,
+                                 "stdout": so, "stderr": se}); print(json.dumps(rec, ensure_ascii=False, indent=1)); return 3
+        shutil.copy2(tmp, out)
+        rec["steps"].append({"step": tag, "tool": tool, "rc": rc, "drc_before": cnt, "tool_stdout": so,
+                             "sha16": sha16(out), **track_hist(out)})
     if not a.dry_run:
         _canon("final")
     rec["out"] = str(out); rec["out_sha16"] = sha16(out) if not a.dry_run else None
