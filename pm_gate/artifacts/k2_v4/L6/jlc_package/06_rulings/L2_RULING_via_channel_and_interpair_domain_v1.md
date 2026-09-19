@@ -1,0 +1,30 @@
+# L2 裁定 v1.0 — 过孔策略/打样渠道 · J2 对间适用域 · 阻焊桥（CO-147）
+
+> 依据：LAYOUT_CONSTITUTION 第二章（L2 = 叠层分配/PDN/走廊分配/**过孔策略**/等长窗口/热机械 ⇒ ARCHER 自裁；L1 仅 器件分区/接口朝向/信号流向/电源域划分/球重映射）。本件三题均属 L2，需求（目的/原则）未变更。
+> 板 `d4e81f647be7f980`（未改动，逐字节）｜SPEC rev-19 `5f72182a2616392c`（未改动）｜零坐标搜索。
+
+## R1 过孔策略（盲/埋孔）与打样渠道
+- 层级：L2（过孔策略 —— 宪章第二章 L2 职权明列）
+- 事实：`{"non_through_vias": 220, "total": 493, "census": {"F.Cu->B.Cu|THROUGH": 273, "F.Cu->In2.Cu|BLIND_BURIED": 92, "F.Cu->In5.Cu|BLIND_BURIED": 8, "In2.Cu->In5.Cu|BLIND_BURIED": 88, "In5.Cu->B.Cu|BLIND_BURIED": 32}, "jlc_standard": "Blind/Buried Vias Not supported（仅通孔）", "through_only_trial": {"clearance": 55, "copper_edge_clearance": 4, "hole_clearance": 23, "hole_to_hole": 2, "shorting_items": 111, "solder_mask_bridge": 14}, "jlc_quote": "advanced options（blind/buried、HDI）须 DFM review，成本/交期上升"}`
+- **裁定**：**维持现行过孔策略（盲/埋孔）**，打样渠道绑定 **JLC advanced / 盲埋孔通道**（随单提交叠层图 + 阻抗表 + 本裁定，接受其 DFM review 与重报价）。理由：① 盲/埋孔是现行 W3 逃逸派生的**结构必需**（原地通孔化实测 111 项 shorting_items）；② 「通孔板」不存在不改派生的降级路径（UC-01 v2 §4 同结论）；③ 层数/HDI 才是 L1，本件不涉层数变更（仍 8 层），仅渠道/工艺类别 = L2。
+- 不做的理由：**不**在本轮执行「通孔化重派生」：需先补引擎通孔模型（via 占位须在全部 8 层留柱）并先证可行性，否则即暴力迭代（红线）。已登记为独立 L2 候选（前置 = 可行性证明 + G4 全链重基线）。
+
+## R2 J2 连接器 landing 对间 3W 短欠（F.Cu）
+- 层级：L2（实现/派生值可达性；需求目的不变）
+- 事实：`{"requirement": "REQ-R3-2（对间不串扰 ⇒ 3W）", "l2_faithful_form": "对间铜边 ≥ 2w ⇒ F.Cu 0.41mm", "as_built_edge_mm": 0.2577, "as_built_edge_basis": "**全量**平行(≤10°)异对最小铜边（CO-151 独立复算；CO-142 明细行 22：PCIE_DN6_N×PCIE_DN7_P @7.43°）；J2 侧最劣 0.2871；欠 2w 达 0.1523", "as_built_edge_cited_prev": 0.3294, "connector_pitch_mm": 0.6, "cap_center_mm": 0.615, "segments": "J2 pad-field landing（连接器侧，接口固有不可路由）", "mechanism": "短、非长平行 landing；REQ-R3-2 针对长平行对间耦合"}`
+- **裁定**：**ACCEPT_L2（声明偏差 + hash-pin 依据）**：J2 landing 段对间短欠判为**接口固有实现偏差**，维持需求目的（对间不串扰）不变，按「域适用」在 L2 内声明豁免（与既有 ECN-001 逃逸域豁免同族、口径一致），**终判 = SI/JLC 阻抗控制服务**。判据闭合条件：① 偏差显式登记（本件 + 台账 DV-INTPAIR-EDGE）；② 依据 hash-pin；③ 不得静默（ORDER_NOTES + boundary 双记）。
+- 不做的理由：不改需求文本、不改几何：连接器 0.6 节距为接口固有；路由不可消除（CO-140 已判 INHERENT_INTERFACE_PITCH）。
+
+## R3 阻焊桥 / 开窗-邻铜净距 1 处（R3.pad2 ↔ PCIE_UP3_N）
+- 层级：L2（DFM/阻焊实现）
+- 事实：`{"pad": {"ref": "R3.2", "net": "PWR_BTN_ISO", "center_mm": [53.95, 37.0], "size_mm": [0.6, 0.7]}, "mask_expansion_mm": 0.05, "foreign_net": "PCIE_UP3_N", "closest": {"gap_mm": 0.0695, "at": [54.472, 36.6], "seg": [54.4, 34.5, 54.7, 43.25], "trace_w": 0.205}, "jlc_min_mm": 0.09, "shortfall_mm": 0.0205, "jlc_rule": "Keep at least 0.09 mm clearance between soldermask openings and neighboring traces"}`
+- **裁定**：**ACCEPT_L2_WITH_FAB_REVIEW**：实测 0.0695mm vs JLC 0.09mm ⇒ 欠 0.0205mm（边际）。并入 JLC 盲埋孔工程评审一并提交（**不触铜几何、不改板**）。若板厂拒绝 ⇒ 回退最小修法（R3 开窗 0.05→**0.02mm** ⇒ 净距 0.0695+0.03=0.0995 ≥ 0.09；或该段 PCIe 走线微调 ~0.021mm）+ 上游声明件 + G4 全链重基线。
+- 不做的理由：0.0205mm 量级边际差距 vs 一次全链重基线 + 复评：比例失当；且该板必经板厂工程评审。（CO-152 订正：原叙述 0.0065mm 与本件 facts.shortfall_mm 0.0205 矛盾 = CO-151 F-3）
+
+## 影响与后续
+
+- 打样渠道：JLC advanced（盲埋孔）＋随单提交叠层图/阻抗表/ORDER_NOTES；标准通道不可用（能力页明文）。
+- L2 侧本轮**无剩余待办**；通孔化重派生列为独立 L2 候选（前置 = 引擎通孔模型 + 可行性证明）。
+- owner 可见项 0（三题均在 L2 职权内裁定；若 owner 不认 R2 的域声明，可覆盖本裁定）。
+- 复评债：CO-147 本件 + CO-146 全部产物（另一会话，禁自评）。
+
