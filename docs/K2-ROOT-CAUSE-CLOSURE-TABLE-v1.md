@@ -540,3 +540,35 @@ cd k2 && PYTHONPATH="$PWD/_shared:$PWD" python3 _shared/eda_core/pipeline/engine
 **fail-closed**：P4 未全绿（本表全闭 + 全 J 类绿）不下单、不出交付 Gerber。
 
 —— ENG（ARCHER）· 2026-09-18 · 表版本 **v1.7** · 判据锚 **rev=2** · `pipeline.yaml c89cc57fb988f821` · 受审板 `dae8dc8d48ff5b81`（未动）· 产物 `d67c0f048f0d0423`（未动）
+
+
+---
+
+## 16. v1.8 增量（2026-09-19；**#K2-32 §一/§二 落件后全链重锚 + `M-14` fail-closed 实证**）
+
+> 触发：监理 **#K2-32**（§一 放行 (a) 同笔 SPEC bump + §二 `top_level_sheets` 裁定 + §三 段2/段3 PASS）。§0–§15 历史快照**不改写**。
+> 落件：k2 **`2b4792c`** —— 受审板 **`l5 dae8dc8d48ff5b81` → `l6 30fa849641323f98104f`**（l5 保留历史件）；SPEC **rev-51 `e96f2df07fe1d764`**（rev-50 `ed0950687e5aec97` 逐字节不改）；pro **`12ad219b9f66b7b3`**（链 pro + 两补丁）。
+> 全链重锚与逐项读数见 `k2/docs/K2-P4-SEGMENT2C-CANONICAL-ORDER-AND-BLOCKERS-v1.md` **§23**（`daa51ad7916b81a9`）。
+
+### 16.1 受审载体变更对 ⑤ 的影响（**计数不变：根闭 40 / OUT 5 / 未闭 14**）
+
+| 条 | ⑤ | 本版实测依据（受审板 `30fa849641323f98`） |
+|---|---|---|
+| `U-03` `M-09` `J-7` | **未闭（读数显著改善）** | `lib_electrical_level` 由 `差异 28` → **`差异 5`**（w8 58 件：identical **4→49** · electrical_diff **28→5** · no_library_link **24→4** · unloadable **2→0**）；仍 FAIL（须 0）⇒ ⑦「重指 `lib_id`」仍待裁 |
+| `J-1` | **未闭（读数更新）** | `drc_warning_dispositions`：受审 pro `ignore` 归 0 后，未登记 warning 类型 **7/9**（`copper_sliver`/`silk_edge_clearance`/`silk_over_copper`/`silk_overlap`/`track_dangling`/`track_not_centered_on_via`/`via_dangling`；已登记 2） |
+| 全条 | 不回退 | `drc_errors` error **0** · `unconnected_zero` **0** · `zone_filled` **10/10** · `non45_segments` **0/5125** · `rule_severity_manifest` ignore **0/62** · `pads_within_outline` 出框 **0/0/0** · `engine verify k2` **4/4 PASS** |
+| `M-14` | **未闭（④口径）** | 见 §16.2：**实证为 fail-OPEN**，不满足「置坏指针 ⇒ 链失败」 |
+
+### 16.2 `M-14` fail-closed 实证（#K2-30 §2.3；三臂实跑）
+
+- **ARM1**（现行指针，cwd=k2）：`config.board_path()`=`k2_v4.kicad_pcb`，文件在 → `red_team.R13_pcb_guard` = `[]`（审到、无异常）。
+- **ARM2**（**坏指针**，临时 project root）：`k2_v4_NOPE.kicad_pcb`，文件不在 → R13 = **`[]`（静默跳过 = 链不失败）**。
+- **ARM3**（合法名 + 空 registry，对照）：R13 = **有 findings**（`PCB … 无合法写盘登记`）⇒ 探测器**活着**。
+⇒ **`M-14` 的「置坏指针 ⇒ 链失败」在 `red_team` 消费者处不成立**（`if not isfile(pcb): return out` = fail-OPEN）。
+- **消费者盘点**：`check_qa.py:22`（基址=`_shared`，恒 FAIL）· `wp1_semantics_check.py:46`/`tools_measure_l1.py`/`tools_executor_single_pair.py:17`（同族）· `red_team.py:346,395`（cwd 相对，缺文件 fail-OPEN）· `cli.py:367`（cwd 相对）· `falsify_service.py:290`（`pcb_root` 拼接）。
+- **ENG 建议口径（供监理裁，非新增检查齿）**：钉死「`board_path` 基址 = 项目根（`artifacts.discover_project_root()`）」+ 在**既有**消费者上加 fail-closed 断言；否则 `M-14` 余④无法闭。
+
+### 16.3 本版未闭 14 条（不变，读数刷新）
+
+`U-03` `U-09` · `M-02` `M-09` `M-12` `M-14` · `F-3` `F-9` · `N-01` `N-02` `N-03` · `J-1` `J-7` `J-8`
+（余项通道：判据/口径 6 · 交付面 1 · 密度启用 1 · warning 登记 1 · 走廊 1 · `lib_id` 重指 3 · 无判据类 1）

@@ -491,3 +491,93 @@ In4 的 `P3V3_AUX`(prio 0, 28.9mm²) 与 `MCU_VDD`(prio 0) **全重叠**，链�
 
 **未改**：冻结四源（l4 `d4e81f64` 永不改）· 判据 rev=2 · SPEC 原件 · 真源 · 生成器 `1ca5ac79` · 受审板 l5 · `criteria/**` · `_shared/**`；未出 Gerber；未派 WORKER。
 **残留（供监理）**：若装配/机械口径另有依据要求背面（B.Cu），属**接口面机械事实**的变更，须 owner/监理裁定后由 ENG 落一次面别变更并重跑全链；本笔按"零变更于已交付板"取 F.Cu。
+
+
+---
+
+## 23. inc114：#K2-32 §一/§二 **落件**（受审板换 `l6` + pro 两补丁 + 同笔 SPEC bump rev-50→rev-51）+ §一-5 重锚 + §五-3 之 `M-14` 实证
+
+> 授权：**#K2-32 §一-1（放行 = (a) 同笔 SPEC 版本 bump）** · §二（`top_level_sheets`=`k2_sch.kicad_sch` + 消 `sheets: []`）· §三（段2/段3 判定 PASS）。
+> 落件提交：k2 **`2b4792c`**（pre-commit pipeline 全 PASS：`PCB 变更 1 项对应 SPEC 变更 1 项` · meta-gate · k2 verify 3/3）。
+> 本笔**未**改：冻结四源（l4 `d4e81f64` · 设计源板 `fb07d25a` · 真源 `dd794c54` · 判据 rev=2 `d251bea7`/`1cda6852`/`568d2e93`）· 历史件 `l5`（保留）· `criteria/**` · `_shared/**` · 生成器 `1ca5ac79` · 段2 器 `f28a4b5a` · 真源 yaml；未出 Gerber；未派 WORKER。
+
+### 23.1 构造链复现（两次连跑逐字节同）
+
+| 段 | 读数 |
+|---|---|
+| 段1 `k2_gen_v5.py`（`1ca5ac79`） | `s1.kicad_pcb` **`d67c0f048f0d0423`**（G10 输入层 8 keepout / 10 有网铜区 / 4 NPTH；与前次记录一致） |
+| 段2+段3 `k2_route_segment_v1.py --upto all`（`f28a4b5a`） | **`30fa849641323f98104f`**（`zone_filled` 10/10 · tracks+vias 5854 · nets 101 · fps 58） |
+| 确定性 | 本会话 **2 次连跑逐字节同**；加 inc112 已记 4 跑 = **6 跑同 sha** |
+
+### 23.2 落件逐件（前 → 后）
+
+| 件 | 前 | 后 |
+|---|---|---|
+| `k2/hw/k2_v4_8L.l6.kicad_pcb` | `<absent>` | **`30fa849641323f98104f`**（新增） |
+| `k2/hw/k2_v4_8L.l6.kicad_pro` | `<absent>` | **`12ad219b9f66b7b3`**（新增） |
+| `k2/pm_gate/artifacts/.../SPEC_k2_v4.spec-rev-51.json` | `<absent>` | **`e96f2df07fe1d764`**（新增；rev-50 原件 `ed0950687e5aec97` 逐字节不改） |
+| `k2/pm_gate/project.yaml` | `56583331599fab0f` | `c8bc9efd669f3c2d`（`spec_name` 指针 rev-50→rev-51） |
+| `k2/tools/k2_jlc_template.kicad_pro` | `fbd9f99…` | §二 修链 pro 生成（`top_level_sheets` `k2_eco22.kicad_sch`→`k2_sch.kicad_sch`；消 `sheets: []`）；**仅影响链 pro，不影响 pcb 字节**（已由 6 跑同 sha 佐证） |
+
+**`l6` pro = 链 pro + 两补丁**（基 = 链 pro，因其为唯一含 9 条 `ignore` 者）：① `rule_severities` 9 条 `ignore`→`warning`（`copper_sliver` / `footprint_filters_mismatch` / `footprint_type_mismatch` / `missing_courtyard` / `silk_over_copper` / `silk_overlap` / `track_not_centered_on_via` / `tuning_profile_track_geometries` / `via_dangling`）② `top_level_sheets=[{filename: k2_sch.kicad_sch, name: k2_sch}]` + 消 `sheets: []`；另 `meta.filename` 命名派生 `k2_v4_8L.l6.kicad_pro`。
+
+### 23.3 §一-3「允许集外差异」——具名、全量枚举（**供监理裁**）
+
+| 差异 | 内容 | 影响评估 |
+|---|---|---|
+| pro `net_settings.netclass_assignments` | `l5` pro（145 键）→ `l6` pro（100 键）：**54 键为旧命名死键**（`*_U3` / `*_U7`，板上 **0 命中**，实测）+ **补 9 键** `DS320_STRAP_*`→`LOW_SPEED`（与 SPEC `net_classes` 一致） | **类定义逐字段相同**（`Default`/`LOW_SPEED`/`PCIe85`/`POWER`）；两 pro 对 **68 个 `PCIe85` 网归类完全相同**；**无任何网的 clearance 改变**（`Default` 0.1 == `LOW_SPEED` 0.1）⇒ **对 DRC 无影响** |
+| pro `board.design_settings.meta.filename` | `board_design_settings.json`（链模板自带；`l5` pro 无此键） | KiCad 版本痕迹，无判据消费 |
+
+> ENG 判定：上表差异**非 ENG 手工编辑**，而是「落件基 = 链 pro（§一-3 补丁① 的唯一可施行基）」之**必然产物**；#K2-32 §一-3 字面允许集只列「换板 + pro 两补丁」⇒ **本项按「冲突即上报」具名列出**；若监理判其越界，**一次提交即可回退/重做**（l5 pro 原件未动）。
+
+### 23.4 §一-5 全测量链**一次重锚**（受审板 `l5 dae8dc8d` → **`l6 30fa849641323f98`**）
+
+| 测量 | 前（l5） | 后（l6） | 判 |
+|---|---|---|---|
+| 19 维标准调用 | 15 OK / 2 FAIL | **15 OK / 2 FAIL** | 同类 2 FAIL（见下） |
+| └ `drc_errors` | OK（error 0） | **OK（error 0；违规总 164，全 warning）** | 不回退 ✅ |
+| └ `unconnected_zero` | OK | **OK（unconnected 0）** | 不回退 ✅ |
+| └ `zone_filled` | 10/10 | **10/10** | 不回退 ✅ |
+| └ `rule_severity_manifest` | ignore 0 | **ignore 0/62** | 补丁① 生效 ✅ |
+| └ `non45_segments` | 0/4720 | **0/5125** | ✅ |
+| └ `lib_electrical_level` | **FAIL 差异 28** | **FAIL 差异 5** | 显著改善（未闭） |
+| └ `drc_warning_dispositions` | FAIL | **FAIL：未登记 warning 类型 7/9**（`copper_sliver`/`silk_edge_clearance`/`silk_over_copper`/`silk_overlap`/`track_dangling`/`track_not_centered_on_via`/`via_dangling`；已登记 2 = `lib_footprint_mismatch`/`missing_courtyard`） | 未闭（J-1 余项） |
+| 5 件测量 ① `w8_footprint_audit`（58 件） | 4 / 28 / 24 / 2 | **49 / 5 / 4 / 0** | 显著改善（`identical` 4→49） |
+| ② `pads_within_outline` | 出框 0/0/0 | **0/0/0**（685 pad） | ✅ |
+| ③ `ref_plane_continuity` | 名义 3653/3653 | **名义 3795/3795**（段数随链自产布线增加） | 信息项（严口径统计为 owner 面，见 §四-5） |
+| ④ `density_and_clearance` | 10mm frame 峰 7 | **10mm frame 峰 7** · 异网 pad 最小 0.20 · 孔环 0.075 · 最小孔钻 0.8 | ✅ |
+| ⑤ `min_clearance_drc`（bracket） | [0.100, 0.105] | **[0.100, 0.105]**（T=0.100 ⇒ 0 违规） | ✅ |
+| `engine verify k2` | 4/4 | **4/4 PASS**（`project_sch_coverage` + `sch_structural` + `netlist_connect` + `bom_consistent`） | ✅ |
+
+### 23.5 §一-6 撤板三臂 + 确定性
+
+- **静态**：链两器全文检索 `l4` / `l5` / `k2_v4_8L` / `k2_v4.kicad_pcb` ⇒ **0 处读板引用**（命中仅为 docstring 声明与 `p3_v57_l4_apply_drawing` 模块名）；链输入仅 `SPEC_PATH` / `YAML_PATH` / `LIB_DIR` / `REFMAP_PATH` / `PLACEMENT_PATH`。
+- **动态（arm3，实跑）**：**同时移走** `l4`/`l5` 的 pcb+pro（存在性断言：移走后 4 件均 `STILL-PRESENT`=0）⇒ 段1 自检 **6/6 PASS**、器件 54 / pads 672 / NC 128 / G10 8-10-4 **未变** ⇒ 全链产物 **`30fa849641323f98104f`（逐字节同）**；`trap EXIT` 无条件还原成功（4 件 `restored`），l4 `d4e81f64` / l5 `dae8dc8d` / l5 pro `35c8f34b` 复核**未变**。
+- **确定性合计**：本会话全链 **3 跑**（run1 / run2 / arm3）+ inc112 已记 4 跑 = **7 跑同 `30fa849641323f98104f`**。
+- **§一-7**：`l5` 板/pro **保留为历史件**（未删）。
+
+### 23.6 §五-3 之 `M-14` fail-closed 实证（三臂，实跑）
+
+题目：`project.yaml::board_path` 置坏 ⇒ **链必须失败**（不得静默放行）。
+
+| 臂 | 布景 | `config.board_path()` | cwd 相对存在 | `red_team.R13_pcb_guard` 读数 |
+|---|---|---|---|---|
+| ARM1 | 现行 `project.yaml`，cwd=k2 | `k2_v4.kicad_pcb` | **True** | `[]`（板被审到、registry 合法） |
+| ARM2 | 坏指针（临时 root），cwd=k2 | `k2_v4_NOPE.kicad_pcb` | **False** | **`[]`（静默跳过）** |
+| ARM3 | 合法名 + 空 registry（临时 root） | `k2_v4.kicad_pcb` | True | **有 findings**（`R13: PCB … 无合法写盘登记 (write_guard registry 缺失)`） |
+
+**结论（实证，非推断）**：ARM3 证明该探测器**活着**（能报问题），ARM2 证明**置坏指针 ⇒ 零 findings = 链不失败** ⇒ `M-14` 所要求的「置坏指针 ⇒ 链失败」**在 `red_team` 消费者处不成立（fail-OPEN）**。
+
+**另测**：`pm_gate/check_qa.py:22` 的 `PCB_PATH = join(dirname(dirname(check_qa.py)), config.board_path())` 在拆仓后基址 = `k2/_shared` ⇒ 解析到 `k2/_shared/k2_v4.kicad_pcb`（**永不存在**）⇒ 该 gate 恒 FAIL「施工产物缺失」（fail-closed 方向正确，但属**消费者基址缺陷**）。
+
+**消费者盘点（`board_path` 全量）**：`check_qa.py:22`（基址=`_shared`，恒 FAIL）· `wp1_semantics_check.py:46` / `tools_measure_l1.py` / `tools_executor_single_pair.py:17`（同基址族）· `red_team.py:346,395`（**cwd 相对**；缺文件 ⇒ `return out` = fail-OPEN）· `cli.py:367`（cwd 相对）· `falsify_service.py:290`（`pcb_root` 拼接）。
+⇒ `M-14` **不宜判根闭**：无判据（owner ② 禁新增齿）+ 消费者 fail-OPEN + 基址约定不一（三族）。**ENG 建议**（供监理裁）：以一句话口径钉死「`board_path` 解析基址 = 项目根（`artifacts.discover_project_root()`）」，并由 ENG 在**既有**消费者上做 fail-closed 断言（**非新增检查齿**）；否则 `M-14` 余④口径无法闭。
+
+### 23.7 未闭 / 待监理（承 §五 串行）
+
+1. **2 条 FAIL**：`drc_warning_dispositions`（7/9 未登记；J-1）· `lib_electrical_level`（差异 5；U-03/J-7 ⑦「重指 lib_id」待裁）；
+2. **§一-3 允许集外差异**（§23.3）—— 需一句话裁定（接受 / 回退）；
+3. **#K2-30 §2.2 `density_and_clearance` rev=3 启用**（gate 属主 + 签认 + 锚 rev=3）；
+4. **#K2-30 §2.4 `N-03`**（`sheets`/`top_level_sheets` 一行 pro 键值）—— 本笔已由 §二 链侧修正，受审 pro 侧已按 §二 落值；
+5. **#K2-30 §2.6 `F-9`**（走廊 0.25 vs 0.41 量化）；
+6. **#K2-31 §四-5 `refplane` 4 项**（成因分离 / 机判+正负控 / `max_contiguous_gap_mm` 分布 / 整改前后读数）—— 机制已存在（`p4-j8-v3-measurement-v1` + `p4-refplane-strict-gap-v1`），拆类与分布为本轮续做项。
