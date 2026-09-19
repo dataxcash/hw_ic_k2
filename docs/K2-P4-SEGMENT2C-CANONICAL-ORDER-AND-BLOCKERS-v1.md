@@ -121,3 +121,11 @@ P3 时该逃逸孔位裕度 +0.2425；链内 In2 铜不同 ⇒ 孔位被 `DS320_
 - **MCU_VDD（dist 3.069）**：`--only-net MCU_VDD` = added 1 / blocked 1，reason `no-free-start-node`；但 `K2MR_DBG2` 显示该边两端 **start(31.838,51.75) 与 goal(30.475,54.5) 在全部 5 个 clearance margin 的粗(step)/细 pass 均 snap 成功**（r=0/1，`own=True bad=0`）⇒ `no-free-start-node` 判词与该边实测**不自洽**（疑 mroute 序内「先落边改变 ctx 后，次边 snap 假失败」或窗口裁剪逻辑）。→ **路由器侧待查项（L2）**。
 - **PERSTA#（dist 77.279）**：U1.6 式之外的长走廊（~80mm，In5→J2.48），mroute 报 `no-free-start-node`；属 T-9/T-35/T-36 走廊容量族。
 - 两变体（inc15 默认序 / inc16 `--order list`）实测均止于 **2**。
+
+## 10. inc103：`no-free-start-node` 深查结论（路由器模型缺「细间距焊盘逃逸腿」）
+
+- 逐 margin 复算：`U1.6` 起点格在 margin 0.00/0.03/0.08/0.15 为 `own=True bad=0`（可起步），在 **margin 0.25 全部邻格 `bad=1`** ⇒ `solve_edge` 取**最后一个 margin** 的判词 ⇒ 报 `no-free-start-node`。
+- 实验（**已回滚，未入库**）：令 `snap_node` 在无「free 且 own」格时回退到「own」格、并允许 A* 从 bad 起点**正交**离格 ⇒ 判词变为 `no-path-coarse(exhausted-1)`（起点格的 4 邻格在该 margin 全被清距封死）。**加性 14 / 阻塞 2 不变** ⇒ 该修**无收益**。
+- 结论：mroute 的栅格把**细间距 LQFP 焊盘本体**按「走线清距」标为 blocked，缺少 F1/F3 那样的**焊盘逃逸腿（pad-escape leg）**机制 ⇒ 无法从焊盘起步。这属**路由器模型待增强（L2）**，非坐标/数据问题。
+- `PERSTA#` 77.279mm 边同为 `exhausted-1`（长走廊 + 同一模型限制）。
+- **回滚**：`k2_p4_mroute_v1.py` 恢复 `7e5c0bf7bb03269d`（= RETIRED 清单原值），本笔不含该器改动。
