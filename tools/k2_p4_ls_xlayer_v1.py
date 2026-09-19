@@ -138,11 +138,17 @@ class Ctx:
             elif cv.pt_in_poly(x, y, p["poly"]) or cv.pt_poly_dist(x, y, p["poly"]) < need: return False
         for v in self.vias.values():
             if v["net"] == net: continue
-            need = max(VIA_R + v["r"] + cv._req(net, v["net"]), HOLE_R + 0.25, HOLE_R + 0.25 + v["hole"] - HOLE_R)
+            # need = max(盘-盘净距, 孔-孔 0.25, 本孔→彼盘 hole clearance, 彼孔→本盘 hole clearance)
+            # （fix inc101：原式漏「孔-铜」两项 ⇒ 实测接受 0.5 中心距的过孔对，KiCad 报 hole_clearance 0.225<0.25；
+            #  修正后 need=0.1+0.25+0.175=0.525，与 l5 合法间距 0.5536/0.565 一致）
+            need = max(VIA_R + v["r"] + cv._req(net, v["net"]),
+                       HOLE_R + 0.25 + v["hole"],
+                       HOLE_R + 0.25 + v["r"],
+                       v["hole"] + 0.25 + VIA_R)
             if math.hypot(x - v["x"], y - v["y"]) < need: return False
-        for (hx, hy, hr, hnet) in self.holes:          # 孔-孔 0.25（**无同网豁免**）
+        for (hx, hy, hr, hnet) in self.holes:          # 孔-孔 0.25 + 孔-铜 0.25（**无同网豁免**）
             if abs(x - hx) > 1.0 or abs(y - hy) > 1.0: continue
-            if math.hypot(x - hx, y - hy) < HOLE_R + 0.25 + hr: return False
+            if math.hypot(x - hx, y - hy) < max(HOLE_R + 0.25 + hr, VIA_R + 0.25 + hr): return False
         return True
 
 

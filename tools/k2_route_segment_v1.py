@@ -143,7 +143,7 @@ ROUTERS = [("2c-E", "k2_p4_gnd_vias_v1.py", "generic"),
            ("2c-10emit", "k2_p4_u4d_refclk_emit_v1.py", "u4d_emit"),
            ("2c-11", "k2_p4_u4d_scale_v1.py", "u4d_scale"),
            ("2c-12", "k2_p4_pdn_in4_v1.py", "plain"),
-           ("2c-13", "k2_p4_u1c85_v1.py", "skip"),
+           ("2c-13", "k2_p4_u1c85_v1.py", "plain"),
            ("2c-14", "k2_p4_p3v3_col_v1.py", "plain"),
            ("2c-15", "k2_p4_mroute_v1.py", "generic")]
 STEP_ORDER = ["2b", "2cA", "2cB"] + [r[0] for r in ROUTERS]
@@ -154,7 +154,8 @@ STEP_ORDER = ["2b", "2cA", "2cB"] + [r[0] for r in ROUTERS]
 # ② 旧 GND 引线删除按坐标 (31.85,54.5)-(32.525,54.5) 匹配且**不校验网**，链内该坐标为 PERSTA# 段 ⇒ 会误删 PERSTA#；
 # ③ 新孔按 uuid5 判重，与阶段 E 已落孔 uuid 不同 ⇒ 会加重复孔。残余仅 C85.1(30.05,54.5)→锚(30.475,54.5) 0.425mm 短线，
 # 交下游客路器（2c-15 mroute 兜底）处理。⇒ 记录为具名 skip，不落任何改动（不静默、不缩口径）。
-SKIP_REASONS = {"2c-13": "u1c85 前置已满足（C85 搬迁 + C85.2 盘中孔）且对新链不安全（坐标删除缺网校验会误删 PERSTA#；新孔 uuid 判重与阶段 E 冲突）；残余 C85.1 短线交 2c-15 mroute"}
+# （历史）inc101 曾因 u1c85 对新链不安全而具名 skip；inc102 已把 u1c85/p3v3_col re-host 为链安全（见各器注释）⇒ 恢复 plain。
+SKIP_REASONS = {}
 
 
 def run_router(tool, kind, inp, outp, drc, led):

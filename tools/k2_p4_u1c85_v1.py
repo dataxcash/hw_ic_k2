@@ -59,40 +59,64 @@ def new_via_uuid():
 def fix_text(txt):
     """返回 (new_text, ledger_ops)。幂等：已施加则 ops=[]。"""
     ops = []
+    def _find_block(cur, head, conds):
+        """在 cur 中按块首 head（'segment'/'via'/'via blind'）定位**块内**同时满足 conds 的块。"""
+        pat = r'\t\(' + head + r'\n(?:.*?\n)*?\t\)\n'
+        for m in re.finditer(pat, cur):
+            b = m.group(0)
+            if all(c in b for c in conds):
+                return m, b
+        return None, None
     # 1) C85 footprint 搬移+旋转
-    anchor = '(uuid "%s")\n\t\t(at %s %s' % (C85_UUID, C85_FROM[0], C85_FROM[1])
-    if anchor in txt:
-        txt = txt.replace(anchor, '(uuid "%s")\n\t\t(at %s %s %s' % (C85_UUID, C85_TO[0], C85_TO[1], C85_TO[2]), 1)
+    # re-host(inc101)：链内 canon 会 uuid5 重写 C85 的 uuid（实测 06874f47→fd415ccb）⇒ 按**位置**判定，
+    # 不再依赖 P3 uuid。定位 = 含 (property "Reference" "C85") 的 footprint 块内的首个 (at ...)。
+    ref_i = txt.find('"Reference" "C85"')
+    if ref_i < 0:
+        raise SystemExit("C85 锚点未找到（无 Reference C85）")
+    fp_i = txt.rfind('(footprint', 0, ref_i)
+    m_at = re.search(r'\(at ([+-]?[\d.]+) ([+-]?[\d.]+)(?: ([+-]?[\d.]+))?\)', txt[fp_i:ref_i])
+    if fp_i < 0 or not m_at:
+        raise SystemExit("C85 锚点未找到（footprint 块内无 at）")
+    ax, ay = float(m_at.group(1)), float(m_at.group(2))
+    if abs(ax - float(C85_FROM[0])) < 1e-6 and abs(ay - float(C85_FROM[1])) < 1e-6:
+        new_at = '(at %s %s %s)' % (C85_TO[0], C85_TO[1], C85_TO[2])
+        a0, a1 = fp_i + m_at.start(), fp_i + m_at.end()
+        txt = txt[:a0] + new_at + txt[a1:]
         ops.append(dict(op="move-footprint", ref="C85", **{"from": C85_FROM, "to": C85_TO}))
-    elif '(uuid "%s")\n\t\t(at %s %s %s' % (C85_UUID, C85_TO[0], C85_TO[1], C85_TO[2]) in txt:
+    elif abs(ax - float(C85_TO[0])) < 1e-6 and abs(ay - float(C85_TO[1])) < 1e-6:
         pass
     else:
-        raise SystemExit("C85 锚点未找到（非预期件）")
+        raise SystemExit("C85 位置非预期: %s %s" % (ax, ay))
     # 2) MCU_VDD 引线：原位改端点（uuid 保持 ⇒ 逐条守恒）
-    old_seg = ('\t(segment\n\t\t(start 31.15 54.5)\n\t\t(end 30.475 54.5)\n\t\t(width 0.2)\n\t\t(layer "F.Cu")\n'
-               '\t\t(net "MCU_VDD")\n\t\t(uuid "%s")\n\t)\n' % STUB_MCU)
-    new_seg = ('\t(segment\n\t\t(start %s %s)\n\t\t(end %s %s)\n\t\t(width 0.2)\n\t\t(layer "F.Cu")\n'
-               '\t\t(net "MCU_VDD")\n\t\t(uuid "%s")\n\t)\n'
-               % (fmt(PAD_MCU[0]), fmt(PAD_MCU[1]), fmt(A_MCU[0]), fmt(A_MCU[1]), STUB_MCU))
-    if old_seg in txt:
-        txt = txt.replace(old_seg, new_seg, 1)
-        ops.append(dict(op="resize-segment", net="MCU_VDD", uuid=STUB_MCU, **{"from": [[31.15, 54.5], [30.475, 54.5]], "to": [[PAD_MCU[0], PAD_MCU[1]], [A_MCU[0], A_MCU[1]]]}))
+    # re-host(inc101)：按**几何**（net MCU_VDD/F.Cu/端点 {31.15,54.5}↔{30.475,54.5}）匹配旧引线，保留原 uuid
+    mseg = re.search(r'\t\(segment\n\t\t\(start (?:31\.15|30\.475) 54\.5\)\n\t\t\(end (?:30\.475|31\.15) 54\.5\)\n(.*?)\t\)\n',
+                     txt, re.S)
+    if mseg and 'MCU_VDD' in mseg.group(1) and 'F.Cu' in mseg.group(1):
+        new_seg = ('\t(segment\n\t\t(start %s %s)\n\t\t(end %s %s)\n' % (fmt(PAD_MCU[0]), fmt(PAD_MCU[1]), fmt(A_MCU[0]), fmt(A_MCU[1]))
+                   + mseg.group(1) + '\t)\n')
+        txt = txt[:mseg.start()] + new_seg + txt[mseg.end():]
+        ops.append(dict(op="resize-segment", net="MCU_VDD", **{"from": [[31.15, 54.5], [30.475, 54.5]],
+                                                                "to": [[PAD_MCU[0], PAD_MCU[1]], [A_MCU[0], A_MCU[1]]],
+                                                                "note": "几何匹配，保留原 uuid"}))
     # 3) GND 引线：删
-    m = re.search(r'\t\(segment\n\t\t\(start 31\.85 54\.5\)\n\t\t\(end 32\.525 54\.5\)\n(?:.*?\n)*?\t\)\n', txt)
+    # re-host(inc101)：块内匹配（坐标+网），不跨块；链内该坐标被 PERSTA# 占用 ⇒ 校网后 no-op
+    m, body = _find_block(txt, 'segment', ['(start 31.85 54.5)', '(end 32.525 54.5)', '(net "GND")'])
     if m:
         txt = txt[:m.start()] + txt[m.end():]
-        ops.append(dict(op="delete-segment", net="GND", uuid=STUB_GND, geom=[[31.85, 54.5], [32.525, 54.5]]))
+        ops.append(dict(op="delete-segment", net="GND", geom=[[31.85, 54.5], [32.525, 54.5]]))
     # 4) 旧 GND 平面孔：删
-    mv = re.search(r'\t\(via\n\t\t\(at 32\.525 54\.5\)\n(?:.*?\n)*?\t\)\n', txt)
+    # re-host(inc101)：按 位置+网 匹配（链内 canon 会 uuid5 重写；且该坐标在链内被 PERSTA# 占用 ⇒ 必须校网，否则误删）
+    # re-host(inc101)：块内匹配（坐标+网）；链内 (32.525,54.5) 为 PERSTA# ⇒ 校网后 no-op
+    mv, body = _find_block(txt, 'via', ['(at 32.525 54.5)', '(net "GND")'])
     if mv:
-        body = mv.group(0)
-        assert OLD_VIA in body, "旧 GND 孔 uuid 不符"
         txt = txt[:mv.start()] + txt[mv.end():]
-        ops.append(dict(op="delete-via", net="GND", uuid=OLD_VIA, geom=[32.525, 54.5], span=["F.Cu", "B.Cu"]))
+        u_old = re.search(r'\(uuid "([^"]+)"\)', body)
+        ops.append(dict(op="delete-via", net="GND", uuid=(u_old.group(1) if u_old else None),
+                        geom=[32.525, 54.5], span=["F.Cu", "B.Cu"]))
     # 5) 新 GND 平面孔（F->In1 盲孔 盘中孔 @C85.2）
     nb = ('\t(via blind\n\t\t(at %s %s)\n\t\t(size 0.35)\n\t\t(drill 0.2)\n\t\t(layers "F.Cu" "In1.Cu")\n'
           '\t\t(net "GND")\n\t\t(uuid "%s")\n\t)\n' % (fmt(NEWV_X), fmt(NEWV_Y), new_via_uuid()))
-    if new_via_uuid() not in txt:
+    if not re.search(r'\(via blind\n\t\t\(at %s %s\)' % (fmt(NEWV_X), fmt(NEWV_Y)), txt) and new_via_uuid() not in txt:
         mk = re.search(r'\n\t\(via(?: blind)?\n', txt) or re.search(r'\n\t\(segment\n', txt)
         txt = txt[:mk.start() + 1] + nb + txt[mk.start() + 1:]
         ops.append(dict(op="add-via", net="GND", uuid=new_via_uuid(), geom=[NEWV_X, NEWV_Y], span=["F.Cu", "In1.Cu"], size=0.35, drill=0.2, in_pad="C85.2"))
