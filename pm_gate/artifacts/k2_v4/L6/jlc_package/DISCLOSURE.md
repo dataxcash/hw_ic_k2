@@ -40,6 +40,7 @@ L2 冻结表 0.25/0.41 与板侧实测口径两套未对账；**板侧口径权�
 1. **阻焊坝 9 处 < 0.09mm**（阈值扫描分布 4∈[0.05,0.06)·1∈[0.06,0.07)·4∈[0.08,0.09)）。JLC 能力表 0.10mm 系**最小可保证桥宽**（非必须存在桥）⇒ 板厂按「无阻焊坝」印制；处置 = **ACCEPT_L2_WITH_FAB_REVIEW**（承 CO-147 R3 先例）；影响面 = 装配焊接注意，**不阻塞 Gerber 可制造性**。**回退修法已实证（本包 `07_verify/mask_accept_fix_proof.json`）**：单参数 `pad_to_mask_clearance` 0.05→0.02mm ⇒ 阻焊坝缺口 **9→0**、总违规回 as-designed 201（无副作用）；该修法 = 改板 setup ⇒ 板 sha 变 ⇒ P4 锚失效 ⇒ **不在 P5 范围**。
 2. **F.Cu 最紧真平行耦合段净距 0.2825mm < SPEC 名义窗下界 0.295mm（−4.24%）**（`PCIE_UP3` 逃逸域）。线性化 ΔZ ≈ −0.84% ⇒ **阻抗仍落 85Ω±10%**。**不主张 F.Cu 名义几何窗"全窗"**。
 3. **B.Cu 无 as-built PCIE 耦合 run**（43 段 PCIE 走线存在但无成对耦合段）⇒ SPEC 之 B.Cu 行属**对称声明**，as-built 未使用；不影响阻抗判定。
+4. **正面丝印越出板框 4 处**（最大 1.848mm）：H4(fp.text, +1.848mm); R41(fp.text, +1.798mm); D2(fp.text, +1.198mm); C87(fp.text, +0.798mm)。板厂按边框裁剪 ⇒ 位号图例可能缺损（装饰/可追溯性），**不影响可制造性/功能**；**铜层越界 = 0 处**（对照：`pads_within_outline` 0/0/0、copper-edge DRC 违规 0）。修法 = 移丝印文本 ⇒ 改板 ⇒ 另开 rev（本次不做）。见 `07_verify/silk_overhang.json`。
 
 ## 6. 锚自检（本包 07_verify/anchor_selfcheck.json）
 board `c5a7df90aadb66e0` · pro `33b4eb6cae8359a9` · SPEC `42f8485ee4d6b566` ·

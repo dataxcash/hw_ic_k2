@@ -156,6 +156,170 @@ def dfm_l7() -> dict:
             "n_fail": len(fails), "fails": [i["item"] for i in fails]}
 
 
+def gerber_extents() -> dict:
+    """逐件 Gerber 坐标外接框 + **是否落在 Edge.Cuts 边框内**（单位/偏移/跑件 sanity）。
+
+    只取 D01/D02/D03 命令行的坐标（`%FSLAX46Y46*%` 头含 X46Y46 字样，须排除）。
+    """
+    CMD = re.compile(r"^X(-?\d+)Y(-?\d+)D0[123]\*$", re.M)
+    boxes = {}
+    for f in sorted((OUT / "01_gerber_rs274x").glob("*.gbr")):
+        txt = f.read_text()
+        m = re.search(r"%FSLAX(\d)(\d)Y(\d)(\d)\*%", txt)
+        dec = int(m.group(2)) if m else 6
+        pts = [(int(a) / 10 ** dec, int(c) / 10 ** dec) for a, c in CMD.findall(txt)]
+        xs = [q[0] for q in pts]; ys = [q[1] for q in pts]
+        boxes[f.name] = {"n_cmd_tokens": len(pts),
+                         "bbox_mm": [round(min(xs), 3), round(min(ys), 3), round(max(xs), 3), round(max(ys), 3)] if pts else None,
+                         "size_mm": [round(max(xs) - min(xs), 3), round(max(ys) - min(ys), 3)] if pts else None,
+                         "apertures": len(re.findall(r"%ADD\d+", txt)),
+                         "g36": len(re.findall(r"^G36\*", txt, re.M))}
+    edge = boxes.get(f"{BOARD.stem}-Edge_Cuts.gbr", {}).get("bbox_mm")
+    copper = []
+    if edge:
+        for name, v in boxes.items():
+            bb = v["bbox_mm"]
+            if bb is None:
+                v["status"] = "empty"                     # 空层（如 B.Silkscreen 无图元）合法
+                continue
+            v["within_edge_cuts"] = bool(bb[0] >= edge[0] - 1e-3 and bb[1] >= edge[1] - 1e-3
+                                         and bb[2] <= edge[2] + 1e-3 and bb[3] <= edge[3] + 1e-3)
+            v["status"] = "within" if v["within_edge_cuts"] else "OUTSIDE"
+            if any(name.endswith("-" + c.replace(".", "_") + ".gbr") for c in COPPER):
+                copper.append(v["within_edge_cuts"])
+    return {"edge_cuts_bbox_mm": edge, "edge_cuts_size_mm":
+            [round(edge[2] - edge[0], 3), round(edge[3] - edge[1], 3)] if edge else None,
+            "layers": boxes,
+            "all_copper_within_outline": all(copper) if copper else None,
+            "n_copper_layers_checked": len(copper),
+            "note": "仅铜层作越界断言；阻焊/丝印/边框为信息项（丝印可越界，板厂裁剪）"}
+
+
+def drill_board_xcheck() -> dict:
+    """fail-closed：交付 Excellon 分对孔数 ↔ 板内 via(层对)/PAD 钻 普查。"""
+    import pcbnew
+    b = pcbnew.LoadBoard(str(BOARD))
+    via = Counter(); pth = Counter(); npth = Counter()
+    for t in b.GetTracks():
+        if isinstance(t, pcbnew.PCB_VIA):
+            via[(b.GetLayerName(t.TopLayer()), b.GetLayerName(t.BottomLayer()),
+                 round(pcbnew.ToMM(t.GetDrill()), 3))] += 1
+    for fp in b.GetFootprints():
+        for pd in fp.Pads():
+            d = pd.GetDrillSize()
+            if d.x <= 0:
+                continue
+            (npth if pd.GetAttribute() == pcbnew.PAD_ATTRIB_NPTH else pth)[round(pcbnew.ToMM(d.x), 3)] += 1
+    def tag(n):
+        return {"F.Cu": "front", "B.Cu": "back"}.get(n, n.replace(".Cu", "").lower())
+
+    def key_of(a, b):
+        return "THROUGH" if {a, b} == {"F.Cu", "B.Cu"} else "PAIR|" + "|".join(sorted((tag(a), tag(b))))
+
+    exp = {}
+    for (top, bot, d), n in via.items():
+        exp[key_of(top, bot)] = exp.get(key_of(top, bot), 0) + n
+    exp["THROUGH"] = exp.get("THROUGH", 0) + sum(pth.values()) + sum(npth.values())
+    got = {}
+    for f in sorted((OUT / "02_drill_excellon").glob("*.drl")):
+        cur = None; cnt = Counter()
+        for line in f.read_text().splitlines():
+            mm = re.match(r"^T(\d+)$", line.strip())
+            if mm:
+                cur = mm.group(1); continue
+            if line.strip().startswith("X"):
+                cnt[cur] += 1
+        parts = f.stem.split(".")[-1].split("-")[1:]      # e.g. ['front','in1'] / [] 表通孔
+        k = "THROUGH" if not parts else "PAIR|" + "|".join(sorted(parts))
+        got[k] = got.get(k, 0) + sum(cnt.values())
+    per_file = {k: {"board": exp.get(k), "drl": got.get(k), "match": exp.get(k) == got.get(k)}
+                for k in sorted(set(exp) | set(got))}
+    return {"board_total": sum(via.values()) + sum(pth.values()) + sum(npth.values()),
+            "drl_total": sum(got.values()),
+            "board_breakdown": {"vias": sum(via.values()), "pth": sum(pth.values()), "npth": sum(npth.values())},
+            "per_file": per_file, "all_match": all(v["match"] for v in per_file.values())}
+
+
+def delivery_wrapper() -> dict:
+    """交付封装（确定性 tarball + SHA256SUMS + README），供手工交接。"""
+    import gzip, io, tarfile
+    d = K2 / "pm_gate/artifacts/k2_v4/L6/DELIVERY"
+    d.mkdir(parents=True, exist_ok=True)
+    sums = [f"{sha256(q)}  {q.relative_to(OUT.parent)}" for q in sorted(OUT.rglob("*")) if q.is_file()]
+    fixed = 1789830000  # 固定 mtime ⇒ 逐字节可复现
+    buf = io.BytesIO()
+    with tarfile.open(fileobj=buf, mode="w", format=tarfile.GNU_FORMAT) as tf:
+        for q in sorted(OUT.rglob("*")):
+            if not q.is_file():
+                continue
+            ti = tf.gettarinfo(str(q), arcname="k2_v4_8L.l7_gerber_package/" + str(q.relative_to(OUT)))
+            ti.mtime, ti.uid, ti.gid, ti.uname, ti.gname, ti.mode = fixed, 0, 0, "root", "root", 0o644
+            with open(q, "rb") as fh:
+                tf.addfile(ti, fh)
+    tgz = d / "k2_v4_8L.l7_gerber_package.tar.gz"
+    with open(tgz, "wb") as fh:
+        with gzip.GzipFile(fileobj=fh, mode="wb", mtime=0, compresslevel=9) as gz:
+            gz.write(buf.getvalue())
+    sums.append(f"{sha256(tgz)}  DELIVERY/{tgz.name}")
+    (d / "SHA256SUMS.txt").write_text("\n".join(sums) + "\n")
+    man = json.loads((OUT / "MANIFEST.json").read_text())
+    (d / "README.md").write_text(
+        "# K2 P5 交付封装 — `k2_v4_8L.l7`（受审板 `c5a7df90aadb66e0`）\n\n"
+        "| 件 | 说明 |\n|---|---|\n"
+        "| `k2_v4_8L.l7_gerber_package.tar.gz` | 完整交付包（= `../jlc_package/`，49 件） |\n"
+        "| `SHA256SUMS.txt` | 逐件 sha256（相对 `L6/`） |\n"
+        "| `../jlc_package/MANIFEST.json` | 机读 MANIFEST（board/pro sha · 命令 · 件表 · DFM 汇总） |\n"
+        "| `../jlc_package/ORDER_NOTES.md` | 制造备注（JLC HDI 通道） |\n"
+        "| `../jlc_package/DISCLOSURE.md` | 具名披露（167 warning / OUT #5 / F-9 / L-1 / P5 新项） |\n\n"
+        f"- DFM 对 JLC HDI 通道：**{man['dfm_summary']['pass']} PASS / {man['dfm_summary']['accept']} ACCEPT / "
+        f"{man['dfm_summary']['fail']} FAIL**；N-01：平面层 4/4 `G36>0`；钻孔 {man['drill_total']} 孔。\n"
+        "- 判据锚 rev=3 · 冻结四源未动 · 打包确定性（固定 mtime/uid/gid ⇒ tar sha 可复现）。\n"
+        "- 下单/报价/交期 = 商务，不在 ENG 范围（#15）。\n")
+    return {"tarball": str(tgz.relative_to(K2)), "tarball_sha256": sha256(tgz),
+            "tarball_bytes": tgz.stat().st_size, "sha256sums_lines": len(sums)}
+
+
+def silk_overhang() -> dict:
+    """F.SilkS 图元越出 Edge.Cuts 之具名清单（含越出量）；铜层同测作对照。"""
+    import pcbnew
+    b = pcbnew.LoadBoard(str(BOARD))
+    bb = b.GetBoardEdgesBoundingBox()
+    X1, Y1, X2, Y2 = [pcbnew.ToMM(v) for v in (bb.GetX(), bb.GetY(), bb.GetRight(), bb.GetBottom())]
+    out = []
+    def chk(kind, ref, box):
+        x1, y1, x2, y2 = [pcbnew.ToMM(v) for v in (box.GetX(), box.GetY(), box.GetRight(), box.GetBottom())]
+        ov = max(X1 - x1, Y1 - y1, x2 - X2, y2 - Y2)
+        if ov > -1e-6:
+            out.append({"kind": kind, "ref": ref, "overhang_mm": round(ov, 3),
+                        "bbox_mm": [round(x1, 2), round(y1, 2), round(x2, 2), round(y2, 2)]})
+    L = pcbnew.F_SilkS
+    for d in b.GetDrawings():
+        if d.GetLayer() == L:
+            chk("board.graphic", d.GetClass(), d.GetBoundingBox())
+    for fp in b.GetFootprints():
+        for g in fp.GraphicalItems():
+            if g.GetLayer() == L:
+                chk("fp.graphic", fp.GetReference(), g.GetBoundingBox())
+        for t in (fp.Reference(), fp.Value()):
+            if t.GetLayer() == L:
+                chk("fp.text", fp.GetReference(), t.GetBoundingBox())
+    out.sort(key=lambda r: -r["overhang_mm"])
+    cu_bad = 0
+    for t in b.GetTracks():
+        if t.GetLayer() not in (pcbnew.F_Cu, pcbnew.B_Cu):
+            continue
+        box = t.GetBoundingBox()
+        x1, y1, x2, y2 = [pcbnew.ToMM(v) for v in (box.GetX(), box.GetY(), box.GetRight(), box.GetBottom())]
+        if max(X1 - x1, Y1 - y1, x2 - X2, y2 - Y2) > 1e-3:
+            cu_bad += 1
+    return {"board_edge_bbox_mm": [round(X1, 3), round(Y1, 3), round(X2, 3), round(Y2, 3)],
+            "f_silk_overhanging_items": out, "n_overhanging": len(out),
+            "max_overhang_mm": out[0]["overhang_mm"] if out else 0.0,
+            "copper_tracks_outside_outline": cu_bad,
+            "disposition": ("板厂按边框裁剪丝印 ⇒ 位号图例可能缺损（装饰/可追溯性，不影响可制造性/功能）；"
+                            "修法 = 移动丝印文本 ⇒ 改板 ⇒ 另开 rev（本次打样不做）")}
+
+
 def mask_fix_proof() -> dict:
     """确定性修法证明（**不改仓库**：全部在内存副本上跑）：单参数 `pad_to_mask_clearance`
     0.05→≤0.02mm 是否消除 JLC 限（openings 间 ≥0.09mm）下之全部阻焊坝缺口。"""
@@ -382,10 +546,11 @@ U6（DS320PR1601）热：定案 O2 = 30×30mm 铝散热片 + 界面垫 1.0℃/W 
 - DRC（在册 canonical）：违规 **167 全 warning** / error **0** / unconnected **0**；9 类全登记（`drc_warning_dispositions`）。
 - 丝印图形级 warning（silk_over_copper 37 / silk_overlap 15 / silk_edge_clearance 2）：按板厂惯例对焊盘上丝印**自动裁剪**，不影响制造。
 - 排针 J6/J9/J11/J12/J13 为无焊盘占位（netlist 骨架）—— 3D 预览属 OUT #5 族（证据层，不阻塞可制造性）。
+- **正面丝印越出板框 4 处**（H4 +1.848mm · R41 +1.798mm · D2 +1.198mm · C87 +0.798mm）：板厂按边框裁剪 ⇒ 该 4 个位号图例可能缺损（装饰/可追溯性，不影响制造）；**铜层越界 0**。见 `07_verify/silk_overhang.json`。
 """
 
 
-def disclosure(dfm: dict, anchor: dict) -> str:
+def disclosure(dfm: dict, anchor: dict, silk: dict) -> str:
     return f"""# K2 P5 交付包 · 具名披露（#K2-36 §三 / #K2-34 §一-7 · §5 / owner #14③）
 
 > 本包不自称"全绿无瑕"。以下为**如实具名**项，随包交付。
@@ -428,6 +593,7 @@ L2 冻结表 0.25/0.41 与板侧实测口径两套未对账；**板侧口径权�
 1. **阻焊坝 9 处 < 0.09mm**（阈值扫描分布 4∈[0.05,0.06)·1∈[0.06,0.07)·4∈[0.08,0.09)）。JLC 能力表 0.10mm 系**最小可保证桥宽**（非必须存在桥）⇒ 板厂按「无阻焊坝」印制；处置 = **ACCEPT_L2_WITH_FAB_REVIEW**（承 CO-147 R3 先例）；影响面 = 装配焊接注意，**不阻塞 Gerber 可制造性**。**回退修法已实证（本包 `07_verify/mask_accept_fix_proof.json`）**：单参数 `pad_to_mask_clearance` 0.05→0.02mm ⇒ 阻焊坝缺口 **9→0**、总违规回 as-designed 201（无副作用）；该修法 = 改板 setup ⇒ 板 sha 变 ⇒ P4 锚失效 ⇒ **不在 P5 范围**。
 2. **F.Cu 最紧真平行耦合段净距 0.2825mm < SPEC 名义窗下界 0.295mm（−4.24%）**（`PCIE_UP3` 逃逸域）。线性化 ΔZ ≈ −0.84% ⇒ **阻抗仍落 85Ω±10%**。**不主张 F.Cu 名义几何窗"全窗"**。
 3. **B.Cu 无 as-built PCIE 耦合 run**（43 段 PCIE 走线存在但无成对耦合段）⇒ SPEC 之 B.Cu 行属**对称声明**，as-built 未使用；不影响阻抗判定。
+4. **正面丝印越出板框 {len(silk['f_silk_overhanging_items'])} 处**（最大 {silk['max_overhang_mm']}mm）：{'; '.join(r['ref'] + '(' + r['kind'] + ', +' + str(r['overhang_mm']) + 'mm)' for r in silk['f_silk_overhanging_items'])}。板厂按边框裁剪 ⇒ 位号图例可能缺损（装饰/可追溯性），**不影响可制造性/功能**；**铜层越界 = {silk['copper_tracks_outside_outline']} 处**（对照：`pads_within_outline` 0/0/0、copper-edge DRC 违规 0）。修法 = 移丝印文本 ⇒ 改板 ⇒ 另开 rev（本次不做）。见 `07_verify/silk_overhang.json`。
 
 ## 6. 锚自检（本包 07_verify/anchor_selfcheck.json）
 board `{anchor['board']['sha16']}` · pro `{anchor['pro']['sha256'][:16]}` · SPEC `{anchor['spec']['sha256'][:16]}` ·
@@ -486,11 +652,22 @@ def main() -> int:
     (OUT / "06_rulings/copy_parity.json").write_text(json.dumps(parity, indent=1) + "\n")
     mfp = mask_fix_proof()
     (OUT / "07_verify/mask_accept_fix_proof.json").write_text(json.dumps(mfp, indent=1, ensure_ascii=False) + "\n")
+    ge = gerber_extents()
+    (OUT / "07_verify/gerber_extents.json").write_text(json.dumps(ge, indent=1, ensure_ascii=False) + "\n")
+    if ge["all_copper_within_outline"] is not True:
+        raise SystemExit("FAIL-CLOSED: 铜层越出 Edge.Cuts: " + json.dumps(
+            {k: v for k, v in ge["layers"].items() if v.get("status") == "OUTSIDE"}, ensure_ascii=False))
+    silk = silk_overhang()
+    (OUT / "07_verify/silk_overhang.json").write_text(json.dumps(silk, indent=1, ensure_ascii=False) + "\n")
+    dx = drill_board_xcheck()
+    (OUT / "07_verify/drill_board_xcheck.json").write_text(json.dumps(dx, indent=1, ensure_ascii=False) + "\n")
+    if not dx["all_match"]:
+        raise SystemExit("FAIL-CLOSED: drill ↔ board 分对核对不通过: " + json.dumps(dx["per_file"], ensure_ascii=False))
     (OUT / "06_rulings/dfm_raw_readings.json").write_text(json.dumps(
         {"as_designed_drc_by_type": dfm["evidence"]["as_designed_drc_by_type"],
          "jlc_limit_drc_by_type": dfm["evidence"]["jlc_limit_drc_by_type"],
          "as_built": dfm["as_built"]}, indent=1, ensure_ascii=False) + "\n")
-    (OUT / "DISCLOSURE.md").write_text(disclosure(dfm, anchor))
+    (OUT / "DISCLOSURE.md").write_text(disclosure(dfm, anchor, silk))
     (OUT / "ORDER_NOTES.md").write_text(order_notes(dfm, imp, dc))
     files = {}
     for p in sorted(OUT.rglob("*")):
@@ -510,6 +687,8 @@ def main() -> int:
            "n01_g36_regions": {k: v["g36_regions"] for k, v in g36_census().items()},
            "drill_total": dc["_total"], "n_files": len(files), "files": files}
     (OUT / "MANIFEST.json").write_text(json.dumps(man, indent=1, ensure_ascii=False) + "\n")
+    dlv = delivery_wrapper()          # 必须在 MANIFEST 落盘之后（tarball 内含 MANIFEST）
+    print("DELIVERY tarball", dlv["tarball_sha256"][:16], dlv["tarball_bytes"], "bytes")
     print("MANIFEST n_files", len(files), "| normalized", exp["n_normalized"])
     print("N-01 G36:", {k: v["g36_regions"] for k, v in g36_census().items()})
     print("drill total:", dc["_total"], "| DFM:", dfm["n_pass"], "PASS /", dfm["n_accept"], "ACCEPT /", dfm["n_fail"], "FAIL")

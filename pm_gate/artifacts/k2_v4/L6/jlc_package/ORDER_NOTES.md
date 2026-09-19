@@ -41,3 +41,4 @@ U6（DS320PR1601）热：定案 O2 = 30×30mm 铝散热片 + 界面垫 1.0℃/W 
 - DRC（在册 canonical）：违规 **167 全 warning** / error **0** / unconnected **0**；9 类全登记（`drc_warning_dispositions`）。
 - 丝印图形级 warning（silk_over_copper 37 / silk_overlap 15 / silk_edge_clearance 2）：按板厂惯例对焊盘上丝印**自动裁剪**，不影响制造。
 - 排针 J6/J9/J11/J12/J13 为无焊盘占位（netlist 骨架）—— 3D 预览属 OUT #5 族（证据层，不阻塞可制造性）。
+- **正面丝印越出板框 4 处**（H4 +1.848mm · R41 +1.798mm · D2 +1.198mm · C87 +0.798mm）：板厂按边框裁剪 ⇒ 该 4 个位号图例可能缺损（装饰/可追溯性，不影响制造）；**铜层越界 0**。见 `07_verify/silk_overhang.json`。
