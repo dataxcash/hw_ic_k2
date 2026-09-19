@@ -632,3 +632,11 @@ w8（58 件，审计板 sha = 受审板 `30fa8496`）：`identical 49` / `electr
 **影响**：电气/DRC/可制造/阻抗 **= 0**（≤0.5 µm）· **判据侧结构性 FAIL**（精确口径下 17.5% 的库 pad 分量注定被量化 ⇒ **应然过严**，与 `refplane` 面积口径同构）。
 
 **收口候选（须授权；ENG 不择一）**：(i-a) 生成器改 `:.6f`/nm 整数（改生成器 ⇒ 全链 sha 变 ⇒ 重落件+重锚）· (i-b) 库快照按 µm 网格重建 · (ii) 判据侧具名量化容差（须版本 bump + 签认）· (iii) 维持 FAIL。
+
+---
+
+## 20. v1.12 增量（2026-09-19；受审测量集**重锚册**落件）
+
+- 新册 `k2/pm_gate/artifacts/k2_v4/L4/E3-standard-call-l6-20260920/`（受审板 `30fa849641323f98` + pro `12ad219b9f66b7b3`）：5 件测量 + 段1 对照 w8 + **全新 work-dir DRC（164 全 warning / error 0 / unconnected 0）** + `verdict_19dim`（15 OK / 2 FAIL）+ `MANIFEST.md`。
+- **旧册 `E3-standard-call-v1/`（`dae8dc8d` + `l5 pro`）保留**；两册**不可逐数直比**（板与 pro 均不同）——`courtyard` 39→54 · `mismatch` 28→20 等差异属**换板 + pro 口径**双重变化，非单一变量。
+- 计数**不变**（根闭 40 / OUT 5 / 未闭 14）。

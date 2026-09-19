@@ -1,0 +1,60 @@
+{
+ "check": "min_copper_clearance_drc_bracket",
+ "board": "/home/fila/jqdDev_2025/ic_hw/k2/hw/k2_v4_8L.l6.kicad_pcb",
+ "board_sha16": "30fa849641323f98",
+ "method": "kicad-cli pcb drc，仅上调 min_clearance/netclass clearance（/tmp/opencode/inc114/e5/clr_a 副本；仓库 pro 未动）",
+ "table": [
+  {
+   "threshold_mm": 0.1,
+   "n_violations": 0
+  },
+  {
+   "threshold_mm": 0.105,
+   "n_violations": 30
+  },
+  {
+   "threshold_mm": 0.11,
+   "n_violations": 30
+  },
+  {
+   "threshold_mm": 0.12,
+   "n_violations": 35
+  },
+  {
+   "threshold_mm": 0.15,
+   "n_violations": 82
+  },
+  {
+   "threshold_mm": 0.2,
+   "n_violations": 208
+  }
+ ],
+ "max_zero_violation_threshold_mm": 0.1,
+ "first_violating_threshold_mm": 0.105,
+ "min_copper_clearance_mm_lower_bound": 0.1,
+ "min_copper_clearance_mm_upper_bound": 0.105,
+ "tightest_samples": [
+  {
+   "description": "间距违规 ( 间距 0.1050 mm; 实际 0.1000 mm)",
+   "items": [
+    "走线 [DS320_STRAP_A_ADDR1_15-8] (F.Cu), 长度: 1.1000 mm",
+    "走线 [DS320_STRAP_B_ADDR1_15-8] (F.Cu), 长度: 0.9899 mm"
+   ]
+  },
+  {
+   "description": "间距违规 ( 间距 0.1050 mm; 实际 0.1000 mm)",
+   "items": [
+    "走线 [DS320_STRAP_A_ADDR1_15-8] (F.Cu), 长度: 1.1000 mm",
+    "走线 [DS320_STRAP_B_ADDR1_15-8] (F.Cu), 长度: 1.1898 mm"
+   ]
+  },
+  {
+   "description": "间距违规 ( 间距 0.1050 mm; 实际 0.1000 mm)",
+   "items": [
+    "走线 [NRST] (F.Cu), 长度: 0.1414 mm",
+    "走线 [SWCLK_BOOT0] (F.Cu), 长度: 0.3000 mm"
+   ]
+  }
+ ],
+ "note": "测量件：不含 verdict 字段；真值区间由 DRC bracket 给出，应然阈值归监理"
+}

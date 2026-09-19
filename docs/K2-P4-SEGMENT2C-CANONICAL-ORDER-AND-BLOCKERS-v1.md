@@ -643,3 +643,13 @@ In4 的 `P3V3_AUX`(prio 0, 28.9mm²) 与 `MCU_VDD`(prio 0) **全重叠**，链�
 
 - `k2/docs/K2-P4-GENERATOR-MICRON-QUANTIZATION-FIX-SPEC-v1.md`：生成器**全部数值发射点穷举**（5 处）；库侧非 µm 对齐仅 **pos.x 164/616（26.6%）+ pos.y 52/616（8.4%）**，`size`/`drill` **0%** ⇒ **最小充分补丁 = 3 个格式串实例**（`:319` 原点 + `:339`/`:345` pad 行）；**精度充分性**：6 位小数 = 1 nm ⇒ nm→mm→nm 无损往返 ⇒ 预测 Δ ≡ 0；**代价**：sha 不可规避（受影响坐标文本必变）⇒ 须授权 + 重落件 + 全链重锚；**ENG 不施行、不选变体**。
 - `k2/docs/K2-P4-OPEN-RULINGS-DECISION-SHEET-v1.md`：10 行待裁一张纸（现象/载体/证据 sha/一句话选项/代价），供监理逐项裁定或升级人工。
+
+---
+
+## 31. inc114：受审测量集重锚册（受审板 `l6`）落件
+
+- 新册 `k2/pm_gate/artifacts/k2_v4/L4/E3-standard-call-l6-20260920/`（**旧册 `E3-standard-call-v1/` 保留**，不覆盖）—— 受审板 **`30fa849641323f98`** + pro **`12ad219b9f66b7b3`**（ignore 0/62）；判据锚 rev=2。
+- 内容：5 件测量（`w8_audit` · `pads_within_outline` · `ref_plane_continuity` · `density` · `min_clearance_drc`）+ **段1 产物对照 w8**（`d67c0f04`）+ **全新 work-dir 的 DRC**（164 全 warning / error 0 / unconnected 0）+ `verdict_19dim`（`passed=False` · **15 OK / 2 FAIL**：`drc_warning_dispositions` 7/9 未登记 · `lib_electrical_level` 差异 5）+ `MANIFEST.md`（含**逐件 sha16**、两册不可直比声明、DRC 复用旧 work-dir 具名坑、`--artifacts` 误用警告）。
+- 动机：判定器对**陈旧测量** fail-closed（测量件 `board_sha16` 须 == 受审板 sha）；`l6` 落件后在册测量集仍锚 `dae8dc8d` ⇒ P4 关门缺一册与受审板同锚的测量输入。
+- 对照：段1 产物（`s1 d67c0f04`）w8 = **49/5/4/0**，与 `l6` 同 ⇒ 与「残余根因在生成器（段1）」结论一致。
+- 边界：只落 ENG 自有取证目录；未改 `criteria/**`、板、SPEC、生成器、库。
