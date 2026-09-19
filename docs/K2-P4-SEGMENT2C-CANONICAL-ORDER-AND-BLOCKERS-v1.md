@@ -290,3 +290,50 @@ F1..G 对这些网全部 `blocked`、不改板。若后续板态变化使某"歧
 冻结四源 · 判据 rev=2 · SPEC · 真源 · 生成器 · 受审板 · `criteria/**` · `_shared/**`；未出 Gerber；未派 WORKER。
 **仅入库**：inc107（§17）。**试验件 sha 留痕**：链序版驱动 `7bca72ac1159b556` · T-27 版 pdn_in4 `bdb89d2eb1ef99ab` ·
 驱动 closest-approach `d83f48d732cf1107` · 驱动 min-uid 不去重 `843603f11f040e25`。
+
+## 19. inc109：**gnd_vias 岛驱动目标枚举 + 驱动件端点规范化 + 链序 + T-27** ⇒ 未连接 0 · **error 2** · 4 跑逐字节同
+
+### 19.1 三处根因与对应处置（全部 L2 自裁域）
+
+| # | 根因（§17/§18 实证） | 处置 |
+|---|---|---|
+| A | kicad-cli DRC `unconnected_items` 端点项在**电气等价候选**间任取 ⇒ 2c-E(`gnd_vias`) 按**描述文本**取目标不可复现（141 vs 140） | `gnd_vias` 目标枚举改**岛驱动**：缺口两端 `uuid` → `f1.islands` **铜岛** → **岛内全部 GND pad**。目标集 = 板内容纯函数，且是各随机写法的**并集**（不丢被点名 pad） |
+| B | `pdn_in4.via_margin` 走线粗筛按**段中点** ⇒ 漏判 7.62mm `DS320_STRAP_B_ADDR1_15-8@In2`（REFU −0.178） | 粗筛 **中点 → bbox**（T-27） |
+| C | 链序：`G(ls_in2)` 先布 In2 strap、`pdn_in4` 后落盘孔 ⇒ `U6.FJ6` 盘孔恒违规 | `2c-12 pdn_in4` 移到 `2c-G` **之前**（先落盘孔、再由 G 避让） |
+
+另：驱动件 `run_drc` 内把每条缺口的端点规范化到**缺口处**（两端铜岛几何**最近对**，键 = 点距 + 类型序 + uuid）；
+**不去重、不丢条目**。此规范化只服务 F1/F2/F3/G/mroute 的 `dist`/`pos` 确定性（它们以铜岛端口布线，对代表替换不敏感）；
+`gnd_vias` 已改岛驱动、不再受其影响。**所有 DRC 下限 / 判据不动。**
+
+> 为何不用"岛内 (类型序,uuid) 取一"当端点（§18 已试弃）：那会把 200 条缺口的 pad 目标**并集**化（2c-E 140→152），
+> 且会**替换掉被 DRC 点名的 pad**（U1.20/21/44 丢目标）⇒ 未连接 0→4。岛驱动是"按岛取并集、按 pad 保留"，不是"取代表"。
+
+### 19.2 读数（终检 DRC，`/tmp/opencode/drcc109u/`）
+
+| 指标 | inc105/inc107（入库态） | **inc109（本笔）** |
+|---|---|---|
+| 未连接 | 0 | **0** |
+| 违规 | 26 | **25** |
+| error | 3 | **2**（余 2 条 = §6-A 的 −0.0053 ×2） |
+| 类型分布 | clearance 3 + lib_footprint_mismatch 20 + silk_edge_clearance 2 + track_dangling 1 | clearance **2** + lib_footprint_mismatch 20 + silk_edge_clearance 2 + track_dangling 1 |
+| 终局 | `690823e0e8d0ff59` | `34142e06af0fdc2cbf9a` |
+
+**确定性**：全链 `--upto all` **4 次并行连跑逐字节同 `34142e06af0fdc2cbf9a`**（`inc109u/v/w/x`）。
+（对照：inc108 试装未加 gnd_vias 岛驱动时 4 跑 3 同 1 异，首个分歧步 = 2c-E；本笔消除该分歧源。）
+
+**具名副作用（非缺陷）**：2c-E 目标集 141（DRC 任选）→ **168**（岛驱动并集），即多落 27 个 GND 缝合孔。
+这是**语义完整化**（原法会漏掉 DRC 用 `track` 代表的岛内 pad），非放松口径；vias 数由判据/测量链在重锚时统一登记。
+
+### 19.3 余项（下一步 §7-2）
+
+仍余 **2 条 clearance error（同一根因）**：`u4d_scale`(2c-11) 生成 0.25 / 0.2828mm 的 `PCIE_UP7_N@F.Cu` 腿，
+距阶段 E 既落 `GND(F→In1)` 盲孔 `(94.15,49.76)` **0.1697 < 0.175**（差 −0.0053）；u4d `leg_eval` 未拦。
+⇒ 需查 `u4d_scale` 的 `leg_eval` oracle 与该腿变体选取（error 2→0）。
+
+### 19.4 件与边界
+
+改：`k2_p4_gnd_vias_v1.py d762428704bd9282` · `k2_route_segment_v1.py 2a34e694393a25ea` ·
+`k2_p4_pdn_in4_v1.py 164baca32142660b`（+ inc107 的 `k2_p4_mroute_v1.py 0b2f5faaf92568de`）。
+读数件 `k2/docs/drafts/p4-l6-reland-v1/segment2c_canonical_inc109.json`。
+**未改**：冻结四源（l4 `d4e81f64` 等）· 判据 rev=2 · SPEC 原件 · 真源 · 生成器 `1ca5ac79` · 受审板 · `criteria/**` · `_shared/**`。
+未出 Gerber；未派 WORKER；未新增检查齿。

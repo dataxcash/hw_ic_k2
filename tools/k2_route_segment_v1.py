@@ -90,6 +90,99 @@ def canon_all_uuids(path, loader):
     return n
 
 
+def _canon_unconnected_items(d, board):
+    """inc108/109(L2)：把 DRC `unconnected_items` 的**端点项**规范化到**该缺口处**的确定性节点。
+
+    根因（inc107/inc108 实证）：kicad-cli 10.0.5 对**同一板文件 + 同一工程件 + 全新 work-dir** 逐次给出不同
+    端点项（同网同铜岛内电气等价项任取：`pad` vs 同点起 `track`、`via` vs `track`、`R1.2` vs 同点 `track`），
+    项数 / 网集 / 违规集全同；`setarch -R`（关 ASLR）与 `taskset -c 0`（绑单核）均不能消除。
+
+    处置（**逐条目**）：对每条缺口，在两端铜岛内取**几何最近的一对节点**（键 = (点距, 类型序 pad<via<track,
+    uuid)），用该对作端点；`uuid`/`pos`/`description` 同步改写。**不去重、不丢条目**。
+    注：2c-E(`gnd_vias`) 已改为**岛驱动**目标枚举（见该器 inc109），故不受"代表替换"影响；
+    本规范化只服务 F1/F2/F3/G/mroute 的 `dist`/`pos` 确定性。不改任何 DRC 下限 / 判据。
+    """
+    import pcbnew as _p
+    f1 = _load("k2f1", "k2_p4_ls_local_v1.py")
+    b = _p.LoadBoard(str(board))
+    if b is None:
+        raise RuntimeError("LoadBoard -> None: %s" % board)
+    m = f1.M(b)
+    find = f1.islands(m)
+    lname = {_p.F_Cu: "F.Cu", _p.In1_Cu: "In1.Cu", _p.In2_Cu: "In2.Cu", _p.In3_Cu: "In3.Cu",
+             _p.In4_Cu: "In4.Cu", _p.In5_Cu: "In5.Cu", _p.In6_Cu: "In6.Cu", _p.B_Cu: "B.Cu"}
+
+    def key_of(uu):
+        if uu in m.pads: return "p:" + uu
+        if uu in m.vias: return "v:" + uu
+        for t in m.tracks:
+            if t["uuid"] == uu: return "t:" + t["uuid"]
+        return None
+
+    nodes_of = {}
+    pts_of = {}
+    info_of = {}
+
+    def reg(uu, key, rank, pts, desc):
+        nodes_of.setdefault(find(key), []).append(uu)
+        pts_of[uu] = pts
+        info_of[uu] = (rank, pts[0][0], pts[0][1], desc)
+
+    for u, p in m.pads.items():
+        pts = list(p["poly"]) if (p["poly"] and not p["circ"]) else [(p["x"], p["y"])]
+        reg(u, "p:" + u, 0, pts,
+            "%s 上 %s 的焊盘 %s [%s]" % ("F.Cu" if p["onF"] else "B.Cu", p["ref"], p["num"], p["net"]))
+    for u, v in m.vias.items():
+        reg(u, "v:" + u, 1, [(v["x"], v["y"])], "过孔 [%s]" % v["net"])
+    for t in m.tracks:
+        reg(t["uuid"], "t:" + t["uuid"], 2, [(t["x1"], t["y1"]), (t["x2"], t["y2"])],
+            "走线 [%s] (%s)" % (t["net"], lname.get(t["layer"], str(t["layer"]))))
+
+    def gap_pair(ra, rb):
+        best = None
+        for ua in nodes_of.get(ra, []):
+            pa = pts_of[ua]
+            for ub in nodes_of.get(rb, []):
+                dd = min((xa - xb) ** 2 + (ya - yb) ** 2
+                         for xa, ya in pa for xb, yb in pts_of[ub])
+                k = (dd, info_of[ua][0], ua, info_of[ub][0], ub)
+                if best is None or k < best[0]:
+                    best = (k, ua, ub)
+        return None if best is None else (best[1], best[2])
+
+    kept = []
+    for e in d.get("unconnected_items", []):
+        its = e.get("items", [])
+        if not isinstance(its, list) or len(its) != 2:
+            kept.append(e); continue
+        ra = rb = None
+        for it, side in ((its[0], "a"), (its[1], "b")):
+            uu = it.get("uuid") if isinstance(it, dict) else None
+            kk = key_of(uu) if uu else None
+            if kk is None:
+                ra = rb = None; break
+            if side == "a": ra = find(kk)
+            else: rb = find(kk)
+        if ra is None or rb is None:
+            kept.append(e); continue
+        pair = gap_pair(ra, rb)
+        if pair is None:
+            kept.append(e); continue
+        e2 = dict(e); items2 = []
+        for i, uu2 in enumerate(pair):
+            src = its[i]
+            rank, x, y, desc = info_of[uu2]
+            ni = dict(src) if isinstance(src, dict) else {}
+            ni["uuid"] = uu2
+            ni["pos"] = {"x": x, "y": y}
+            ni["description"] = desc
+            items2.append(ni)
+        e2["items"] = items2
+        kept.append(e2)
+    d["unconnected_items"] = kept
+    return d
+
+
 def run_drc(board, workdir, kicad_cli):
     """链内 DRC（#K2-31 §2.1 硬要求）：新建 work-dir + 补齐 fp-lib-table/lib 环境，
     返回 (json_path, counts)。**禁用复用旧目录**（E-3 §4 具名坑：69 vs 73 假绿）。"""
@@ -107,6 +200,8 @@ def run_drc(board, workdir, kicad_cli):
     _sp.run([kicad_cli, "pcb", "drc", "--format", "json", "--severity-all", "--output", str(out), str(b)],
             capture_output=True, text=True, timeout=1800)
     d = _j.loads(out.read_text())
+    # inc108/109(L2)：端点项规范化（同一铜岛 → 缺口处确定性节点；根因见 `_canon_unconnected_items`）
+    _canon_unconnected_items(d, board)
     # 确定性：违规条目 + 条目内 items 全序化（工具侧按文件序遍历 ⇒ 候选序随 kicad 输出序漂移，
     # 实测 2c-B 两条不同锚点重布位、差 ~0.176mm）。输入侧固化序 = 不改工具件、保可追溯。
     def _stable(x):
@@ -134,15 +229,19 @@ def run_drc(board, workdir, kicad_cli):
 # K2-P4-ROUTE-SEGMENT-INTO-CHAIN-PLAN-AND-PROOF-v1.md §4）：E(3) F1(4) F2(5) F3(6/7/8，工具内已含加强)
 # G(9) u4d-plan/emit(10) u4d-scale(11) pdn_in4(12) u1c85(13) p3v3_col(14) mroute(15)。
 # **mroute 必须在最后**（CONVERGENCE §24：mroute 是 F1..G 全 0 解后才新写的兜底器）。
+#
+# inc108（L2 链序裁定）：`2c-12 pdn_in4` 提到 `2c-G` **之前**。
+# 依据：pdn_in4 落 U6 P3V3 二球 F→In4 盘中孔；G(ls_in2) 布 In2 strap。G 先布时选了与 U6.FJ6
+# 盘孔相撞的通道 ⇒ 后落盘孔恒违规（inc106 实测 REFU −0.178）。先落盘孔再由 G 避让 ⇒ 冲突消除（error 3→2）。
 ROUTERS = [("2c-E", "k2_p4_gnd_vias_v1.py", "generic"),
            ("2c-F1", "k2_p4_ls_local_v1.py", "generic"),
            ("2c-F2", "k2_p4_ls_route_v1.py", "generic"),
            ("2c-F3", "k2_p4_ls_xlayer_v1.py", "generic"),
+           ("2c-12", "k2_p4_pdn_in4_v1.py", "plain"),
            ("2c-G", "k2_p4_ls_in2_v1.py", "generic"),
            ("2c-10plan", "k2_p4_u4d_refclk_plan_v1.py", "u4d_plan"),
            ("2c-10emit", "k2_p4_u4d_refclk_emit_v1.py", "u4d_emit"),
            ("2c-11", "k2_p4_u4d_scale_v1.py", "u4d_scale"),
-           ("2c-12", "k2_p4_pdn_in4_v1.py", "plain"),
            ("2c-13", "k2_p4_u1c85_v1.py", "plain"),
            ("2c-14", "k2_p4_p3v3_col_v1.py", "plain"),
            ("2c-15", "k2_p4_mroute_v1.py", "generic")]

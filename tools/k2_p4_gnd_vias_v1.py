@@ -205,12 +205,36 @@ def run(src, drc_path, out_path, ledger_path):
     b = pcbnew.LoadBoard(src)
     M = Model(b)
     drc = json.load(open(drc_path, encoding="utf-8"))
-    targets = set()
+    # inc109(L2 · PDN 缝合策略自裁)：目标枚举改**岛驱动**，不再解析 DRC 描述文本。
+    # 依据（inc108 实测）：kicad-cli DRC 的 `unconnected_items` 端点项在同一铜岛的电气等价项中任取
+    #   （`pad` vs 同点起 `track`），描述文本随之漂移 ⇒ 旧法目标集不可复现（141 vs 140）。
+    #   而「把端点替换成岛的代表」又会**丢掉被 DRC 点名的 pad**（U1.20/21/44 等）⇒ 未连接 0→4。
+    # 处置：对每条缺口的**两端 uuid → 铜岛**，取**该岛内全部 GND pad** 作目标。
+    #   ⇒ 目标集 = 板内容的纯函数（不随 DRC 任选漂移），且是各随机写法目标的**并集**（不丢 pad）。
+    _f1s = importlib.util.spec_from_file_location("k2f1g", os.path.join(_HERE, "k2_p4_ls_local_v1.py"))
+    f1g = importlib.util.module_from_spec(_f1s); _f1s.loader.exec_module(f1g)
+    _mg = f1g.M(b); _findg = f1g.islands(_mg)
+
+    def _rootg(uu):
+        if uu in _mg.pads: return _findg("p:" + uu)
+        if uu in _mg.vias: return _findg("v:" + uu)
+        for _t in _mg.tracks:
+            if _t["uuid"] == uu: return _findg("t:" + _t["uuid"])
+        return None
+
+    _islands = set()
     for u in drc.get("unconnected_items", []):
         for it in u.get("items", []):
-            m = cv._GPAD.search(it.get("description", ""))
-            if m and m.group(3) == "GND":
-                targets.add((m.group(1), m.group(2)))
+            uu = it.get("uuid")
+            if not uu:
+                continue
+            _r = _rootg(uu)
+            if _r is not None:
+                _islands.add(_r)
+    targets = set()
+    for u, _p in _mg.pads.items():
+        if _p["net"] == "GND" and _findg("p:" + u) in _islands:
+            targets.add((_p["ref"], _p["num"]))
     pad_by = {}
     for fp in b.GetFootprints():
         for p in fp.Pads():

@@ -1,0 +1,352 @@
+{
+ "increment": "inc109",
+ "date": "2026-09-19",
+ "topic": "gnd_vias 目标枚举改岛驱动（去 DRC 描述依赖）+ 驱动件 DRC 端点规范化 + 链序（pdn_in4 先于 G）+ T-27 bbox ⇒ 未连接 0 / error 2 / 4 跑逐字节同",
+ "tools_changed": {
+  "k2_p4_gnd_vias_v1.py": "d762428704bd9282 (前 = inc105 态)",
+  "k2_route_segment_v1.py": "2a34e694393a25ea (前 95d0c4cc05d36da0)",
+  "k2_p4_pdn_in4_v1.py": "164baca32142660b (前 ea5af7e41eebd934)"
+ },
+ "root_causes": {
+  "A": "kicad-cli DRC `unconnected_items` 端点项在等价候选间任取 ⇒ 2c-E(gnd_vias) 按描述取目标不可复现（141 vs 140）",
+  "B": "pdn_in4.via_margin 走线粗筛按段中点 ⇒ 漏判 7.62mm In2 strap（−0.178）",
+  "C": "链序：G(ls_in2) 先布 In2 strap、pdn_in4 后落盘孔 ⇒ U6.FJ6 盘孔恒违规"
+ },
+ "fixes": {
+  "gnd_vias": "目标 = DRC 缺口两端 uuid → 铜岛(f1.islands) → 岛内全部 GND pad ⇒ 目标集为板内容纯函数，且不丢被点名 pad",
+  "driver": "run_drc 内把端点规范化到缺口处（两端铜岛几何最近对）；不去重不丢条目 —— 服务 F1/F2/F3/G/mroute 的 dist/pos 确定性",
+  "chain_order": "2c-12 pdn_in4 移到 2c-G 之前（L2 走廊/过孔策略自裁）",
+  "pdn_in4": "via_margin 段粗筛中点→bbox（T-27）"
+ },
+ "determinism": {
+  "full_chain_4_runs_byte_identical": "34142e06af0fdc2cbf9a"
+ },
+ "final_readings": {
+  "unconnected": 0,
+  "violations": 25,
+  "errors": 2,
+  "types": {
+   "clearance": 2,
+   "track_dangling": 1,
+   "silk_edge_clearance": 2,
+   "lib_footprint_mismatch": 20
+  }
+ },
+ "remaining_errors": [
+  "间距违规 ( 间距 0.1750 mm; 实际 0.1697 mm)",
+  "间距违规 ( 间距 0.1750 mm; 实际 0.1697 mm)"
+ ],
+ "steps": [
+  {
+   "step": "2a",
+   "sha16": "4ca3ba6e9a6d378e",
+   "unconnected": null,
+   "hist": {
+    "total": 2579,
+    "nets": 102,
+    "fps": 58
+   }
+  },
+  {
+   "step": "2b",
+   "sha16": "6dcacefb7e4044a8",
+   "unconnected": null,
+   "hist": {
+    "total": 2988,
+    "nets": 102,
+    "fps": 58
+   }
+  },
+  {
+   "step": "canon:pre-2cA",
+   "sha16": "2f44047e56e05d0a",
+   "unconnected": null,
+   "hist": {
+    "total": 2988,
+    "nets": 102,
+    "fps": 58
+   }
+  },
+  {
+   "step": "2c-A",
+   "sha16": "79142532ce2e215f",
+   "unconnected": null,
+   "hist": {
+    "total": 2988,
+    "nets": 101,
+    "fps": 58
+   }
+  },
+  {
+   "step": "canon:pre-2cB",
+   "sha16": "50fdb097318d2add",
+   "unconnected": null,
+   "hist": {
+    "total": 2988,
+    "nets": 101,
+    "fps": 58
+   }
+  },
+  {
+   "step": "2c-B",
+   "sha16": "d4be4a5c8f33d5a2",
+   "unconnected": 198,
+   "hist": {
+    "total": 2993,
+    "nets": 101,
+    "fps": 58
+   }
+  },
+  {
+   "step": "canon:pre-2c-E",
+   "sha16": "46364bfad23d829e",
+   "unconnected": null,
+   "hist": {
+    "total": 2993,
+    "nets": 101,
+    "fps": 58
+   }
+  },
+  {
+   "step": "2c-E",
+   "sha16": "f98618f323af080c",
+   "unconnected": 200,
+   "hist": {
+    "total": 3176,
+    "nets": 101,
+    "fps": 58
+   }
+  },
+  {
+   "step": "canon:pre-2c-F1",
+   "sha16": "38432b098ebe3e7b",
+   "unconnected": null,
+   "hist": {
+    "total": 3176,
+    "nets": 101,
+    "fps": 58
+   }
+  },
+  {
+   "step": "2c-F1",
+   "sha16": "9f98308fa7df7abf",
+   "unconnected": 63,
+   "hist": {
+    "total": 3205,
+    "nets": 101,
+    "fps": 58
+   }
+  },
+  {
+   "step": "canon:pre-2c-F2",
+   "sha16": "15d5b8241f94e3dd",
+   "unconnected": null,
+   "hist": {
+    "total": 3205,
+    "nets": 101,
+    "fps": 58
+   }
+  },
+  {
+   "step": "2c-F2",
+   "sha16": "6b4391ba48610644",
+   "unconnected": 47,
+   "hist": {
+    "total": 3238,
+    "nets": 101,
+    "fps": 58
+   }
+  },
+  {
+   "step": "canon:pre-2c-F3",
+   "sha16": "62f7b0e21f22c48c",
+   "unconnected": null,
+   "hist": {
+    "total": 3238,
+    "nets": 101,
+    "fps": 58
+   }
+  },
+  {
+   "step": "2c-F3",
+   "sha16": "9acef9124edf7872",
+   "unconnected": 45,
+   "hist": {
+    "total": 3320,
+    "nets": 101,
+    "fps": 58
+   }
+  },
+  {
+   "step": "canon:pre-2c-12",
+   "sha16": "f745e79eb3678945",
+   "unconnected": null,
+   "hist": {
+    "total": 3320,
+    "nets": 101,
+    "fps": 58
+   }
+  },
+  {
+   "step": "2c-12",
+   "sha16": "a1a1241fb03a1fbb",
+   "unconnected": 34,
+   "hist": {
+    "total": 3322,
+    "nets": 101,
+    "fps": 58
+   }
+  },
+  {
+   "step": "canon:pre-2c-G",
+   "sha16": "2dc56a1ae8a8fd6d",
+   "unconnected": null,
+   "hist": {
+    "total": 3322,
+    "nets": 101,
+    "fps": 58
+   }
+  },
+  {
+   "step": "2c-G",
+   "sha16": "c15dc7df692557f7",
+   "unconnected": 32,
+   "hist": {
+    "total": 3466,
+    "nets": 101,
+    "fps": 58
+   }
+  },
+  {
+   "step": "canon:pre-2c-10plan",
+   "sha16": "7461bb833bcffe53",
+   "unconnected": null,
+   "hist": {
+    "total": 3466,
+    "nets": 101,
+    "fps": 58
+   }
+  },
+  {
+   "step": "2c-10plan",
+   "sha16": null,
+   "unconnected": 19,
+   "hist": {
+    "total": null,
+    "nets": null,
+    "fps": null
+   }
+  },
+  {
+   "step": "canon:pre-2c-10emit",
+   "sha16": "b097ca03e7058a84",
+   "unconnected": null,
+   "hist": {
+    "total": 3466,
+    "nets": 101,
+    "fps": 58
+   }
+  },
+  {
+   "step": "2c-10emit",
+   "sha16": "e94d5e38723a4bf6",
+   "unconnected": 19,
+   "hist": {
+    "total": 3478,
+    "nets": 101,
+    "fps": 58
+   }
+  },
+  {
+   "step": "canon:pre-2c-11",
+   "sha16": "a89a4298b3f45f65",
+   "unconnected": null,
+   "hist": {
+    "total": 3478,
+    "nets": 101,
+    "fps": 58
+   }
+  },
+  {
+   "step": "2c-11",
+   "sha16": "5873dcaac77f723a",
+   "unconnected": 19,
+   "hist": {
+    "total": 4792,
+    "nets": 101,
+    "fps": 58
+   }
+  },
+  {
+   "step": "canon:pre-2c-13",
+   "sha16": "42dca400ee9f39b7",
+   "unconnected": null,
+   "hist": {
+    "total": 4792,
+    "nets": 101,
+    "fps": 58
+   }
+  },
+  {
+   "step": "2c-13",
+   "sha16": "8790537faf25e503",
+   "unconnected": 19,
+   "hist": {
+    "total": 4792,
+    "nets": 101,
+    "fps": 58
+   }
+  },
+  {
+   "step": "canon:pre-2c-14",
+   "sha16": "4696dc1c99a2fd88",
+   "unconnected": null,
+   "hist": {
+    "total": 4792,
+    "nets": 101,
+    "fps": 58
+   }
+  },
+  {
+   "step": "2c-14",
+   "sha16": "f8eb2a3718b9d33b",
+   "unconnected": 18,
+   "hist": {
+    "total": 4798,
+    "nets": 101,
+    "fps": 58
+   }
+  },
+  {
+   "step": "canon:pre-2c-15",
+   "sha16": "802a89aaad65c839",
+   "unconnected": null,
+   "hist": {
+    "total": 4798,
+    "nets": 101,
+    "fps": 58
+   }
+  },
+  {
+   "step": "2c-15",
+   "sha16": "7621c06ad0b5e0ee",
+   "unconnected": 16,
+   "hist": {
+    "total": 5712,
+    "nets": 101,
+    "fps": 58
+   }
+  },
+  {
+   "step": "canon:final",
+   "sha16": "34142e06af0fdc2c",
+   "unconnected": null,
+   "hist": {
+    "total": 5712,
+    "nets": 101,
+    "fps": 58
+   }
+  }
+ ],
+ "carriers_unchanged": "受审板 dae8dc8d · l4 d4e81f64 · 设计源板 fb07d25a · 真源 dd794c54 · 判据 rev=2 · SPEC 原件 · 生成器 1ca5ac79 · hw/k2_v4_8L.l5.kicad_pro"
+}
