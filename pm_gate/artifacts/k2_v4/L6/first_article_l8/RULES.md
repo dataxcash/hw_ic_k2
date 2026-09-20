@@ -1,7 +1,7 @@
 # K2 P5 · **首件验收 · 逐项操作规程**（v1）· 受审板 `l8 7a5c89913d6e5d0a`
 
 > 依据：`k2/docs/K2-P5-FIRST-ARTICLE-ACCEPTANCE-PLAN-v1.md`（验收项与阈值来源）· 计划 §P5 责任（**实测方执行；不得 ENG 自证；判定归监理**）。
-> 交付锚（勿改）：`../jlc_package/MANIFEST.json` **`4b610baed4f4752c…`** · 随单件 = `ORDER_NOTES.md` + `DISCLOSURE.md` + `03_stackup/` + `04_impedance/`。
+> 交付锚（勿改）：`../jlc_package_l8/MANIFEST.json` **`4b610baed4f4752c…`** · 随单件 = `ORDER_NOTES.md` + `DISCLOSURE.md` + `03_stackup/` + `04_impedance/`。
 > 输出：把实测填入 `results_template.json`（同目录）⇒ 回件监理判定。
 
 ## 0. 通用要求（每项都适用）
