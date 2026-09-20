@@ -1,0 +1,287 @@
+{
+ "artifact": "k2_p6_k1_board_level_defect_worklist",
+ "schema": 2,
+ "purpose": "P6 §⑦ 跨板复用『造活』：把 K1 判定器暴露的**板级项**逐条落成**具名工作清单**（站点 + 读数 + 修法族 + K2 缺陷 ID 映射），供 K1 项目排期。**只读**；未动 k1；**不新增判据维/检查齿**（owner ②）。",
+ "source_of_readings": "ENG 本会话直跑 `criteria/adjudicate.py --project k1`（DRC work-dir 在 /tmp；`drc.json` 逐条读出）；板/库/外框读数由 ENG pcbnew-free 解析交叉复核。",
+ "board_facts": {
+  "outline_mm": [
+   80,
+   38
+  ],
+  "origin": [
+   0,
+   0
+  ],
+  "n_footprints": 42,
+  "n_pads": 306,
+  "PTH": 28,
+  "NPTH": 2,
+  "copper_zones": 0,
+  "keepout_zones": 0,
+  "n_tracks": 0,
+  "drc": {
+   "error": 13,
+   "warning": 17,
+   "by_type": {
+    "clearance": 1,
+    "shorting_items": 2,
+    "pth_inside_courtyard": 4,
+    "copper_edge_clearance": 3,
+    "solder_mask_bridge": 3,
+    "silk_edge_clearance": 3,
+    "nonmirrored_text_on_back_layer": 14
+   }
+  },
+  "unconnected_items": 156,
+  "unconnected_nets": 51,
+  "unconnected_refs": 42,
+  "unconnected_top_nets": {
+   "GND": 100,
+   "P3V3_AUX": 26,
+   "VBUS": 22,
+   "MCU_VDD": 18,
+   "PWR_5V_MAIN": 14,
+   "PERSTA#": 6,
+   "12V_IN": 6,
+   "I2C1_SDA": 6,
+   "I2C1_SCL": 6,
+   "SBU1": 6,
+   "NRST": 4,
+   "PCIE_TX0_N": 4
+  }
+ },
+ "worklist": [
+  {
+   "id": "K1-D1",
+   "severity": "高",
+   "title": "J1（换装后 Type-C）SH/NPTH 焊盘压在板左边框上",
+   "readings": [
+    "`copper_edge_clearance` **3 error**：J1 NPTH(@1.2,23.36) 距边 0.2692mm · J1 SH(@0.67,22.11) 0.2700mm · **J1 SH(@0.31,16.16) 0.0000mm**（要求 ≥0.30mm；板边 x=0）",
+    "`pads_within_outline` **2 pad**：`J1` pad `SH`，AABB x∈[−0.03,1.37]（越内缩框 0.3mm）"
+   ],
+   "map_k2": "**J-8**（器件位置合理性：出框/关键间距）—— K2 同族已归零（接口焊盘 `0/0/0`）",
+   "fix_family": "J1 **向板内移位/旋转**（placement，L2）或按 K2 口径调整接口伸出量/板框口径（板框属既定 80×38 ⇒ 首选移位）",
+   "note": "说明 OPEN-1（换 Amphenol 24-pin）**在板侧已换件，但落位未随之复算** ⇒ 引入本组新违规。"
+  },
+  {
+   "id": "K1-D2",
+   "severity": "高",
+   "title": "J13 pad4(MCU_VDD) 与 U1 pad31/pad32 实质短路",
+   "readings": [
+    "`shorting_items` **2 error**：网络 **MCU_VDD ↔ SBU_SEL**（J13 pad4 @8.81,8.0 ↔ U1 pad31 @9.3,8.75）· 网络 **MCU_VDD ↔ SWCLK_BOOT0**（同为 J13 pad4 ↔ U1 pad32 @9.3,8.25）",
+    "同址另有 `solder_mask_bridge` **2 error**"
+   ],
+   "map_k2": "**J-1**（DRC error = 0）",
+   "fix_family": "J13（1x04 SWD 排针）移位或 U1 移位/旋转使 pad 中心距 ≥ 焊盘半径和 + 0.1mm（placement）",
+   "note": "属**电气级**缺陷：THT 孔与 QFN 焊盘实copper 相连 ⇒ 必然功能失败，优先级最高。"
+  },
+  {
+   "id": "K1-D3",
+   "severity": "高",
+   "title": "J6 pad1 与 U1 pad17 铜间距 0.0000mm",
+   "readings": [
+    "`clearance` **1 error**：J6 PTH pad1 `PWR_CTRL_OUT`(@14.53,13.0) ↔ U1 pad17 `<no net>`(@13.75,12.7)，实际 **0.0000mm**（规则 0.1mm）",
+    "同址另有 `solder_mask_bridge` **1 error**"
+   ],
+   "map_k2": "**J-1**",
+   "fix_family": "J6 移位（placement）；另建议核实 U1 pad17 之 no-net 是否应为 GND/NC（输入面）"
+  },
+  {
+   "id": "K1-D4",
+   "severity": "中",
+   "title": "J9 全部 4 个 PTH 焊盘落在 J1 courtyard 内",
+   "readings": [
+    "`pth_inside_courtyard` **4 error**：J9 pad1..4 (@1.19/3.73/6.27/8.81, y=13.0) 均落在『封装 J1』(@4.8,19.0) courtyard 内"
+   ],
+   "map_k2": "**J-8**（重叠/回避区）",
+   "fix_family": "J9 移位或核正 J1 courtyard 尺寸（placement / keepout 口径）"
+  },
+  {
+   "id": "K1-D5",
+   "severity": "—（**非缺陷**：K1 未布线中间态）",
+   "title": "156 条未连接项（51 网 / 42 器件）",
+   "readings": [
+    "`unconnected_items` **156**；涉及 51 网、42 器件；TOP：GND 100 · P3V3_AUX 26 · VBUS 22 · MCU_VDD 18 · PWR_5V_MAIN 14 · PERSTA#/12V_IN/I2C1_*/SBU1 各 6；TOP 器件：U1 44 · J1 37 · U11 35 · E1 16 · U9 14"
+   ],
+   "map_k2": "**J-2**（连通 = 0，补铜后）",
+   "fix_family": "K1 布线推进（**计划 §1.3 #7 明示：K1 未布线状态本身不是缺陷**）",
+   "note": "本项**不计入机制包**；供 K1 排期参考。"
+  },
+  {
+   "id": "K1-D6",
+   "severity": "信息（已登记）",
+   "title": "**77 条 warning / 5 类**（silk_over_copper 29 · silk_overlap 24 · nonmirrored_text_on_back_layer 14 · **missing_courtyard 7** · silk_edge_clearance 3）",
+   "readings": [
+    "来源 `K1_DRC_EVIDENCE_20260921_v1.json`（板 sha `eda1dc91eec76aa7` · kicad-cli 10.0.5 · 2026-09-20T20:12）：`error 13 / warning 77`，五类 `missing_courtyard 7 · nonmirrored_text_on_back_layer 14 · silk_edge_clearance 3 · silk_over_copper 29 · silk_overlap 24`",
+    "**读数更新（#K2-51 授权）**：前值 **17 条 / 2 类**（silk_edge_clearance 3 · nonmirrored_text_on_back_layer 14）系早期中间态板快照；现板快照为 **77 条 / 5 类**",
+    "K1 manifest `drc_warning_dispositions` 已登记该 **5 类全量**（`criteria/manifest.k1.yaml` 第 77..88 行：missing_courtyard / silk_over_copper / silk_overlap / silk_edge_clearance / nonmirrored_text_on_back_layer）⇒ 判据 `board_warning_types ⊆ dispositions[].type` **PASS 维持**"
+   ],
+   "map_k2": "**J-1**（warning 逐项有处置结论）",
+   "fix_family": "登记制、不豁免、保持可见（现状已合规）",
+   "note": "**仅登记制、不豁免、保持可见**（#K2-51 口径逐字保留）· **禁**以此豁免任何实体 DRC/DFM 项 · 未新增判据维/检查齿（owner ②）。"
+  },
+  {
+   "id": "K1-D7",
+   "severity": "中",
+   "title": "固定孔不足 + 无铺铜区/回避区",
+   "readings": [
+    "**NPTH=2**（Ø0.65×1 · 槽 0.95×0.65×1）< 4 · **copper zones = 0** · **keepout = 0**",
+    "对照 K2：NPTH 4×Ø3.2 · 10 个已填充铜区（In1/In3/In6 GND + In4 电源）· 8 个 keepout"
+   ],
+   "map_k2": "**J-8**（固定孔/回避区）+ 缺陷册 **M-11**（NPTH=0 无固定孔）· **M-05**（铺铜 0 填充 / keepout 空操作）",
+   "fix_family": "K1 板级设计推进（固定孔 ≥4 NPTH Ø3.2 · 平面层铺铜策略 · 回避区生效）",
+   "note": "K2 同族修法可直接参照（K2 判据值：NPTH≥4 · zone_filled 10/10 · keepout 8 区无 all-allowed）。"
+  },
+  {
+   "id": "K1-D8",
+   "severity": "**高（功能级：器件无法工作）**",
+   "title": "Q1(TPS22990) 与 U12(TPS22965) 的 **VBIAS（器件偏置电源）引脚未接**",
+   "readings": [
+    "**板直读**（`k1/k1_v1.kicad_pcb`，pcbnew-free 解析）：Q1 pad **4** `net=None`；U12 pad **4** `net=None`（其余脚均有网：Q1 3/11=PWR_5V_MAIN(VIN)、5=WORK_EN(ON)、6=GND、8/9/10=VBUS(VOUT)；U12 1/2=PWR_5V_MAIN(VIN)、3=TPS_EN(ON)、5=GND、7/8=VBUS(VOUT)、9=GND(EP)）",
+    "**手册（已验 sha256 · 与在册 `doc_sha256` 逐字节同）**：`TPS22990.pdf` `ea198776524544eb…`（SLVSDK1C §6 Pin Functions）**pin 4 = VBIAS** — *\"Bias voltage. Power supply to the device\"*；§7.3 推荐 **2.5–5.5 V**，且 **VIN 0.6 V – VBIAS**（表 7-1）⇒ **VBIAS 为必需电源**",
+    "**手册**：`TPS22965.pdf` `3300eef743d7871f…`（SLVSBJ0F §6 Pin Functions）**pin 4 = VBIAS** — *\"Bias voltage. Power supply to the device. Recommended voltage range for this pin is 2.5 V to 5.7 V\"*",
+    "**脚号对应已交叉验证**（4–5 个独立网一致）：Q1 IN→{3,11}（3=VIN ∧ 11=EP=VIN 手册明示）· ON→5 · GND→6 · VOUT→8/9/10 ⇒ pad 4 必为 VBIAS；U12 IN→{1,2}（手册『must be connected to Pin 1 and Pin 2』）· ON→3 · GND→5 · VOUT→7/8 · 9=EP(GND) ⇒ pad 4 必为 VBIAS"
+   ],
+   "impact": "**两枚负载开关的偏置电源缺失 ⇒ 器件功能不可实现**（Q1=轨B 工作态 10A 通路；U12=轨A 预鉴权轨）。属**功能级**，非布线中间态（**网表中即无该网**；K1-D5 的『未布线中间态』指有网未布，性质不同）。",
+   "map_k2": "无对应 K2 缺陷（K2 侧无此类 VBIAS 器件）",
+   "fix_family": "把 **VBIAS 接至合规轨**（VBIAS 2.5–5.5/5.7 V 且 ≥VIN）：候选 = `PWR_5V_MAIN`（5 V）或 `12V_IN` 经分压/降压 —— **属设计连接决策 ⇒ 须授权**（且**先修真源** `k1_board.yaml#net_coverage`）。",
+   "note": "**真源本身缺网**：`k1_board.yaml#net_coverage` 对 Q1/U12 仅 4 个网，无 VBIAS ⇒ 仅改原理图=治标；**根因在②补充件定义**。**诚实登记：本条系本会话新发现，先前 K1 对账/工作清单均未列**（全仓 `VBIAS` 仅见于 2 份手册 YAML）。"
+  },
+  {
+   "id": "K1-D9",
+   "severity": "低（观察·待确认）",
+   "title": "Q1/U12 的 CT 与 Q1 的 PG 引脚空接（未报错，需确认设计意图）",
+   "readings": [
+    "Q1 pad 1=CT `None` · pad 7=PG `None`；U12 pad 6=CT `None`",
+    "手册：TPS22965 `CT … Can be left floating`（可空）⇒ U12-CT 空接**合规**；TPS22990 `CT = VOUT slew rate control`（是否可空**未在本次摘录确认**）⇒ 待确认",
+    "手册：TPS22990 `PG = Power good… Tie to GND if not used` ⇒ 未用 PG 空置可接受，但**设计要求明示『带 PG』**（`k1_board.yaml#devices.Q1.function`）⇒ 空置与设计意图不符，待确认"
+   ],
+   "impact": "不影响器件基本开关功能（CT 空 ⇒ 固定/默认压摆；PG 空 ⇒ 无 PG 信号汇报）。",
+   "map_k2": "无",
+   "fix_family": "确认设计意图后决定：接 CT 电容（设定压摆）· PG 接 MCU（或用则接 GND）",
+   "note": "与 K1-D8 同源（②补充件定义不全）；**不阻塞**，随 K1-D8 一并处置。"
+  },
+  {
+   "id": "K1-D10",
+   "severity": "中（**已在册 G-5**；本件仅复现）",
+   "title": "U8 声明为 **TPS54628（裸 IC·SO PowerPAD-8）**，实现却是 **6 脚模块式符号 `DCDC_12V_5V`**",
+   "readings": [
+    "`k1_board.yaml#devices.U8`：`value=TPS54628` · `function=『12V→5V 主 buck (TPS54628, 6A 同步, 650kHz, SO PowerPAD-8)』`",
+    "实现：placement 用 symbol `DCDC_12V_5V`（6 脚：VIN/VOUT/GND/EN/SW/FB；**`nc=[SW,FB]`**），footprint = 通用 `SOIC-8_5.3x5.3mm_P1.27mm`（**无 PowerPAD/EP**）",
+    "手册（**sha256 校验与在册同版** `638ae7d8504d9b44…`）：TPS54628 DDA **8 脚 + EP**，pin = 1 EN · 2 VFB · 3 VREG5 · 4 SS · 5 **GND** · 6 SW · 7 VBST · 8 **VIN**，EP→GND",
+    "**若按裸 IC 判定**：板映射与之**严重不符** — pad **5=GND 却被接 `PWR_5V_MAIN`** · pad **8=VIN 未接** · pad 1=EN 未接（未上拉 ⇒ 不使能）· pad 2=VFB 接 GND（反馈短地）· pad 4=SS 接 `12V_IN` · pad 6=SW 接 `12V_IN`；且缺 VBST/SS/VREG5 外围",
+    "**根因**：生成器 `k1_sch_sync_v1.py` 的 `U8_OLD→U8_NEW` 只把**真源 value** 由 `DCDC_12V_5V` 改为 `TPS54628`，**未同步原理图符号/footprint/外围**"
+   ],
+   "impact": "① 若实装 TPS54628（裸 IC）⇒ **buck 不工作/地脚接输出轨（严重）**；② 若实装模块 ⇒ **声明/功能/BOM 与实件不符**（采购与装配歧义）。二者必有其一为真。",
+   "map_k2": "与 **U12/K1-S4** 同族（声明改件、实现未跟）",
+   "fix_family": "二择一（**设计决策·须授权**）：(a) 按 TPS54628 重建符号/封装（8 脚+EP）+ 补 VBST 电容/SS 电容/VREG5 电容/电感/FB 分压；(b) 回退声明为实装模块并把 `function/BOM` 改回模块型号。",
+   "note": "**本会话新发现**（系统普查所得，先前未登）。",
+   "prior_art": "**已在册**：`K1-GAP G-5`（`L1/frozen/L1_BID_v2_k1.md §5`）已记『`DCDC_12V_5V.yaml` 引脚表实为 **TLV61046(boost)**；`U8` footprint 声明 SOIC-8 而真源 **SOT-23-6** ⇒ **②原理图前必须修**』；`K1-SYNC G1` 已记声明变更『`U8 DCDC_12V_5V→TPS54628`』 ⇒ **非新发现**，本件仅为其实测复现。"
+  },
+  {
+   "id": "K1-D11",
+   "severity": "中（**已在册 C-G2-1 FAIL**；本件仅复现并给出版物级依据）",
+   "title": "R35/R36 声明 **10K**（CC Rp → 3A 宣告），实现符号却是 **`R_56K`（56K）**",
+   "readings": [
+    "`k1_board.yaml#devices.R35/R36.value = 10K`；且生成器 `PWR_NEW` 明写 *『CC1/CC2 经 R35/R36 (10K) Rp 上拉 → **3A 宣告**』*（`PWR_OLD` 为 56K）",
+    "实现：placement 用 symbol `R_56K`（value **56K**）——**即上拉 56K**",
+    "Type-C 语义：CC Rp **56K** ⇒ 默认电流档（~500/900 mA）；**10K** ⇒ 3 A ⇒ 与需求冻结的『3A 宣告』不符"
+   ],
+   "impact": "原理图/BOM 与需求冻结的**电流宣告档位**不一致（装配 56K ⇒ 主机按默认电流供电）。",
+   "map_k2": "无直接同族（K2 无 CC Rp 改动）",
+   "fix_family": "把 R35/R36 实现符号改为 **10K**（有 `R_10K` 现成符号）——**须授权**（属实现侧修正，非新判据）。",
+   "note": "**本会话新发现**（系统普查所得，先前未登）。",
+   "prior_art": "**已在册**：**`K1-BUILD C-G2-1`**（`L3/BUILD_REPORT_v2.md`）已判 **FAIL**：『CC 宣告 3A（Rp=10k）… R35=56K R36=56K（目标 10000Ω±5%）』；`K1-SYNC G2` 已记声明『R35/R36 56K→10K』 ⇒ **非新发现**。"
+  },
+  {
+   "id": "K1-D12",
+   "severity": "中（**元缺陷：漂移机制**）",
+   "title": "『声明/实现漂移』机制：`k1_sch_sync_v1.py` 只改 yaml 真源、**不改原理图符号**",
+   "readings": [
+    "普查（`k1_declared_vs_impl_census_v1.py`）：**11/42 件** 声明值或 footprint 与实现符号不一致 = J1 · J10 · Q1 · Q2 · R35 · R36 · R38 · R39 · U12 · U13 · U8",
+    "生成器 docstring 自述：*『除 `k1_board.yaml`/`k1_nets.yaml` 外不写任何文件』*；全仓**无工具写 `k1/sch/*.kicad_sch`**（见 K1-S5）"
+   ],
+   "impact": "任何 ②同步（改 value/footprint）都会**静默留下**原理图侧陈旧 ⇒ 同源对账（J-6）长期不过。",
+   "map_k2": "K2 侧同问题已由 `k2/tools/k2_sch_gen_v1.py` + 共享 `schlib`（由真源再生）解决",
+   "fix_family": "K1 侧引入**同构再生器**（共享 `schlib` 已实测可驱动 K1）+ 把『声明/实现一致』纳入 N-3 验收核（已备）。",
+   "note": "机制级归纳：**K1-S1/S2/S4/S6 + K1-D10 + K1-D11 皆为此机制的表现**。",
+   "prior_art": "机制面与 **`K1-GAP G-5`** 的『②原理图前必须修』**一致**（即原理图侧尚未修）；但『**全仓无工具写 `k1/sch/*.kicad_sch`**』这一**机制性根因**（K1-S5）未见于既有册 ⇒ 视为**机制补充**。"
+  }
+ ],
+ "summary": {
+  "k1_board_level_open": 6,
+  "highest_priority": [
+   "K1-D2",
+   "K1-D1",
+   "K1-D3"
+  ],
+  "mechanism_family_already_proposed": "见 K1_MECHANISM_COVERAGE_BUNDLE_PROPOSAL_v1.json（3 件 · 镜像实测 n_pass 5→8）",
+  "not_a_defect": "K1-D5（未布线中间态）",
+  "n_items": 12,
+  "added_this_session": [
+   "K1-D8",
+   "K1-D9"
+  ],
+  "systematic_census": {
+   "tool": "k2/docs/drafts/n3-k1-sch-regen-v1/k1_declared_vs_impl_census_v1.py",
+   "result": "11/42 件声明/实现漂移",
+   "refs": [
+    "J1",
+    "J10",
+    "Q1",
+    "Q2",
+    "R35",
+    "R36",
+    "R38",
+    "R39",
+    "U12",
+    "U13",
+    "U8"
+   ]
+  }
+ },
+ "boundary": "只读工作清单**提案**：未改 `k1/` 任何文件 · 未改 `criteria/` · **未新增判据维/检查齿**（owner ②）。K1-D6 读数更新属**输入登记**（#K2-51 授权）。",
+ "readonly_repo": true,
+ "not_landed": true,
+ "no_new_criteria_dim": true,
+ "ts": "2026-09-21T00:35:00+0800",
+ "corrections": [
+  {
+   "at": "2026-09-22T08:10:00+0800",
+   "what": "新增 K1-D8（Q1/U12 VBIAS 未接·功能级）与 K1-D9（CT/PG 观察）。**依据 = 通过 sha256 校验确认与在册同版的手册 pin table + 板 pad 直读 + 脚号交叉验证**。"
+  },
+  {
+   "at": "2026-09-22T08:45:00+0800",
+   "what": "系统普查新增 K1-D10(U8 声明/实现不符) · K1-D11(R35/R36 10K vs 56K) · K1-D12(漂移机制)。"
+  },
+  {
+   "at": "2026-09-22T09:50:00+0800",
+   "what": "**跨册核对更正**：D10≈K1-GAP G-5、D11≈K1-BUILD C-G2-1（均已在册）；本会话仅有 D8(VBIAS) 与 S6(J10) 为真新。并建立 `PRIOR_ART_REGISTRY_INDEX` 以防复发。"
+  },
+  {
+   "at": "2026-09-21T00:35:00+0800",
+   "what": "**#K2-51 授权**：K1-D6 台账读数 **17→77 / 5 类**（自裁·输入登记）。口径不变（登记制、不豁免、保持可见）；K1 manifest 已登记 5 类全量 ⇒ 判据维 PASS 维持。**禁**以此豁免任何实体 DRC/DFM 项。",
+   "authority": "监理 #K2-51 §二「K1-D6」",
+   "evidence": "K1_DRC_EVIDENCE_20260921_v1.json（board_sha16 eda1dc91eec76aa7 · warning 77 / 5 类）"
+  },
+  {
+   "at": "2026-09-21T00:35:00+0800",
+   "what": "同 #K2-51 §二 SG-AUDIT-1：补检 DS160PR810 **全量 64/64**（前版仅抽样 14/64）⇒ 无新缺陷。见 `SG_AUDIT_DS160PR810_FULL64_CROSSCHECK_20260921_v1.json`。",
+   "authority": "监理 #K2-51 §二「SG-AUDIT-1」"
+  }
+ ],
+ "prior_art_crosscheck": {
+  "_status": "**已核**（依据 `PRIOR_ART_REGISTRY_INDEX_20260921_v1.json`）",
+  "K1-D8_Q1U12_VBIAS": "**真新**（全册 grep `VBIAS` 仅 2 份手册 YAML ⇒ 未登）",
+  "K1-S6_J10_footprint": "**真新**（既有册仅 OPEN-1 J1 / OPEN-2 U10）",
+  "K1-D9_CT_PG": "未见于既有册（低严重度观察）",
+  "K1-D10_U8": "**已在册 G-5 + K1-SYNC G1**",
+  "K1-D11_R35R36": "**已在册 C-G2-1 FAIL**",
+  "D1..D7": "既有（源自 K2-P4 直读裁定，非本会话新出）"
+ },
+ "supersedes": {
+  "artifact": "K1_BOARD_LEVEL_DEFECT_WORKLIST_20260921_v1.json",
+  "sha256_16": "8cbf714fb4d2f5eb",
+  "reason": "**#K2-51**『K1-D6 台账读数 17→77 / 5 类』**授权更新读数**（自裁·输入登记）；口径不变（登记制、不豁免、保持可见）"
+ }
+}

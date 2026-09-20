@@ -1,0 +1,91 @@
+{
+ "artifact": "k2_sg_ds160pr810_pin_truth_full64_crosscheck",
+ "schema": 1,
+ "ts": "2026-09-21T00:20:00+0800",
+ "id": "SG-AUDIT-1c",
+ "authorization": "**#K2-51 §二 SG-AUDIT-1**『知悉 + 放行补检（排期补检 DS160PR810（64 脚）· TLV61046A）』· 只读",
+ "purpose": "补齐 `SCH_GATE_PIN_TRUTH_AUDIT_ADDENDUM_20260921_v1.json` 的残差：DS160PR810 由**抽样 14/64** 升级为**全量 64/64 对表**（厂商 PDF Pin Functions 表 vs 在库真源 YAML）。",
+ "device": "TI DS160PR810 8-Lane PCIe 4.0 Linear Redriver · WQFN-64 (NJX)",
+ "source_of_truth": {
+  "vendor_pdf": "TI SNLS658 (Rev B, DECEMBER 2020)",
+  "vendor_url": "https://www.ti.com/lit/ds/symlink/ds160pr810.pdf",
+  "pdf_sha256": "50528cacd8b3e367a830ba743ae6669b006e2117239bb7332403011c3a57e79c",
+  "table": "§5 Pin Functions (Table 5-1)",
+  "in_repo_yaml": "_shared/eda_core/sch_gate/datasheets/DS160PR810.yaml (四检出树同 sha `bfb1f3a3583d7d45`)"
+ },
+ "method": {
+  "tool": "k2/tools/k2_sg_ds160pr810_pin_truth_crosscheck_v1.py（新，只读）",
+  "steps": [
+   "pdftotext -layout -f 4 -l 6 <pdf>（**仅表体页**；排除 p3 Figure 5-1 封装俯视图——该图列排布会把 pin 号错读，正是前版抽样解析失稳之源）",
+   "逐行 NAME+PIN 正则（含 `X / Y` 双功能名归一为 `X_Y`），折行续号合并（GND 行在 PDF 拆三行：`EP, 9, 12, 21,` / `GND 24, 32, 41, 44,` / `53, 56, 64`）",
+   "与 YAML `#pins` 逐脚比对；同时校验覆盖（1..64 无缺/无越界/无重复）"
+  ],
+  "command": "python3 k2/tools/k2_sg_ds160pr810_pin_truth_crosscheck_v1.py --pdf /tmp/opencode/sgaudit/ds160pr810.pdf --yaml _shared/eda_core/sch_gate/datasheets/DS160PR810.yaml --out-json /tmp/opencode/sgaudit/ds160pr810_crosscheck.json"
+ },
+ "results": {
+  "verdict": "**PASS 64/64**",
+  "n_parsed_pins": 64,
+  "n_conflicts": 0,
+  "coverage": {
+   "missing_in_pdf": [],
+   "out_of_range": [],
+   "duplicates": []
+  },
+  "spot_check_multi_pin_rows": {
+   "GND": [
+    9,
+    12,
+    21,
+    24,
+    32,
+    41,
+    44,
+    53,
+    56,
+    64
+   ],
+   "VCC": [
+    6,
+    18,
+    38,
+    50
+   ],
+   "VREG1": [
+    3,
+    47
+   ],
+   "VREG2": [
+    15,
+    35
+   ]
+  },
+  "spot_check_key_rows": {
+   "RX0P": 1,
+   "TX0P": 55,
+   "TX7N": 33,
+   "ALL_DONE_N": 31,
+   "MODE": 61,
+   "RSVD0": 58,
+   "RSVD1": 30,
+   "READ_EN_N": 57,
+   "GAIN0_SDA": 63,
+   "RX_DET_SCL": 62
+  },
+  "doc_constraints_corroborated": {
+   "RSVD0/RSVD1 悬空(NC)": "PDF 'Reserved use for TI. The pin must be left floating (NC).' —— YAML 已知约束注释一致",
+   "GAIN0_SDA/RX_DET_SCL/GAIN1/EQ0_0_ADDR0/EQ1_0_ADDR1 = 4-level strap": "PDF 与 YAML `aliases` 复用名一致"
+  }
+ },
+ "negative_control": {
+  "what": "人为把 YAML `pins[1]` 由 RX0P 篡改为 RX0N ⇒ 复跑必须 FLAG",
+  "observed": "FAIL conflicts=1 → {'pad': 1, 'pdf': 'RX0P', 'yaml': 'RX0N'}（exit=1）",
+  "conclusion": "**对表器非恒绿**（防 C-12：不得为变绿缩口径）"
+ },
+ "conclusion": "**无新缺陷**：DS160PR810 在库真源与厂商原件 **64/64 全量一致** ⇒ SG-AUDIT-1『7/8 一致、唯一 FAIL = STM32G0B1KBU6』结论**维持**（该 FAIL 已于 #K2-51 ① 订正落件）；本文补齐 addendum 的 14/64 残差。",
+ "not_landed": [
+  "未改任何 datasheet YAML（只读比对）",
+  "未改 criteria/（ENG 只读）",
+  "未改 PDF（下载件仅在 /tmp）"
+ ],
+ "next": "执行序 6/6 T2-F6 续取余 6 件 · 4/6 W8 SPEC+重建仍待批（W8-GEN-1）"
+}
