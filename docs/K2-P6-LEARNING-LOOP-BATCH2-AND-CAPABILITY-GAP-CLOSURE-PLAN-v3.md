@@ -20,6 +20,7 @@
 | # | 具名动作（文件:行） | 责任 | 可复现验收命令 | **fail-closed 门（期望值）** | 授权项 |
 |---|---|---|---|---|---|
 | **B2-1** | `_shared/eda_core/hs_route_model.py` — `_escape_smd_via` 定义 `:4513`/调用 `:892`：pad 契约显式化（真源 = 板 as-built 优先；库/YAML 交叉核对；不一致**登记**，禁静默 None/默认） | ENG | `python3 -m pytest -q _shared/eda_core/tests/test_hs_route_model.py` ＋ `python3 -m py_compile _shared/eda_core/hs_route_model.py` | ① 涉项用例**实跑**绿；② **`skipped` 不得充绿**（基线 **34P/34S**，skip=「k2_v4 真板缺失」）；③ 负控：pad 真源冲突 ⇒ **显式登记** | 无（共享层改动须监理批） |
+> **基线归因**：34 skip = **22**（`K2V4_REAL_BOARD` 锚错，**一行可修 ⇒ 转实跑**）+ 12（`/tmp` fixture = N-05 同族）。见 SOC §7。
 | **B2-2** | 同文件：`solve_all_v4` 定义 `:4406` · CLI `--all-v4` `:4796` · **项目分派** `:4800-4804`（`config.chain_segments`(K1) ↔ `alloc["alloc"]` PCIE_ 前缀(K2)）· 调用 `:4806` · 第二路径 `:4842-4846`；`routing_topology_gate.py:43` 同步 | ENG | 同 B2-1 ＋ K1 维度分派断言（构造 K1 链基 ⇒ 分派 K1） | ① 分派断言绿；② **K2 同输入同输出逐字节不回退**；③ 负控：非法/缺失项目维度 ⇒ **报错**（非静默取 K2） | 无 |
 | **B2-3a** | `check_l3.py:26`（文案 `:28/:46/:53`）硬编码 `SPEC_k2_v4.json` ⇒ 改 `config.spec_name(artifacts.active_project())`；**且** `check_l2/l3/qa` 全部 `artifacts.read_text(...)` 补 `project=_proj()`（**T13 仅改了 `check_l1`** ⇒ F-2） | ENG | `cd k2 && PYTHONPATH=$PWD/_shared:$PWD python3 _shared/eda_core/pipeline/engine.py verify k2`（`preflight`+3 全 PASS）＋ K1 维度逐 gate 跑通 | ① K2 不回退；② K1 `G2.x/G3.x/G4.x` 读 **K1 自己**产物（现状：`G2.1` 报缺 `measurements.md`，而 `k1/.../L2/measurements.md` **实存**）；③ 负控：`spec_name` 指向不存在件 ⇒ **fail-closed** | **需监理批** |
 | **B2-3b** | `check_qa.py:35` `config.spec_name()` **空参** ⇒ 取 `DEFAULT_PROJECT` 而非 active（`_shared` **唯一空参点** ⇒ F-2b） | ENG | `grep -rn "spec_name()" _shared --include=*.py`（期望 **0 命中**）＋ K1 `G4.1` | ① K1 `G4.1` 不再报「SPEC 缺失」（实存 `L3/SPEC_k1.json`）；② K2 不回退 | **需监理批** |
@@ -42,9 +43,13 @@
 - 机读真源：`pm_gate/artifacts/k2_v4/P6_execution/BASELINE_pm_gate_k1_k2_readonly_v1.json` sha256 **`27d79e4608…`**（**两次连跑逐字节同** ⇒ 可入库判据）。
 - 仪器：`P6_execution/{README.md, CHECKLIST.md, results_template.json, INSTRUMENT_SELFCHECK.json}`（**不属于交付锚**，与 `L6/first_article/` 平级同构）。
 - 机核入口：`k2/tools/k2_p6_instruments_selfcheck_v1.py`（13/13 锚 + 基线可复现；**负控已验**：篡改 1 锚 ⇒ verdict FAIL / 退出码 1）。
+- 普查件：`P6_execution/SPEC_SITE_CENSUS_v1.json` sha256 **`6df3d557…`**（43 站点逐处定性 + 34 skip 归因 + K1 waiver 复算；两次连跑逐字节同）· 普查器 `k2/tools/k2_p6_spec_site_census_v1.py`。
 
 ## 1.7 SPEC 站点普查修正（范围差异，须具名）
-v2 记「13 处」；实测 `_shared` **43 处**（`pm_gate/` **16**、`eda_core/` 27；新增具名 `review.py:121`·`check_qa.py:34`·`config.py:120`·`closure_check.py:112`）⇒ 实施时**逐处定性**（应项目化 / 应具名豁免），**禁**一把梭（C-12）。
+v2 记「13 处」；实测 `_shared` **43 处**（`pm_gate/` **16**、`eda_core/` 27）⇒ **已逐处定性（8 类 · 0 未定性）**，真源 `P6_execution/SPEC_SITE_CENSUS_v1.json` `6df3d557…`：
+**STALE_LEGACY_BASE 4**（`cap_wall_apply.py:56` · `cap_wall_solver.py:608` · `closure_check.py:112` · `wp1_semantics_check.py:45`，基址仍为旧 `revA/pcb` 布局 ⇒ M-14 钉子须扩面）·
+**NAME_ONLY_HARDCODE 6**（`check_l3.py:26,:53` · `freeze_wp1.py:45` · `review.py:105,:121` · `tools_escape_predict.py:39`）·
+**TEST_ANCHOR 13** · DOCSTRING_MESSAGE 9（具名豁免）· CLI_CONTRACT 7 · NEGATIVE_CONTROL 2（禁令门**仅扫 1 模块**，扩面须监理批）· PROJECT_CONFIG 1 · LEGACY_OTHER_PROJECT 1。**禁**一把梭（C-12）。
 
 ## 2. P6 完工判据（机判）与执行序
 | 项 | 判据 | 命令 |
@@ -74,5 +79,6 @@ v2 记「13 处」；实测 `_shared` **43 处**（`pm_gate/` **16**、`eda_core
 | 4 红线 | ✅ §5；未触任何载体 |
 | 5 禁以 HOLD 结案 | ✅ 本件为**推进物**（v2→v3 细化 + 机读仪器 + 只读基线） |
 | **L1/owner 系统类** | **无** ⇒ 无「单列并停」项（L1 拓扑/接口/信号流向/球重映射未被触及） |
+| 基线/普查可复现 | ✅ 两机读件**两次连跑逐字节同**（`27d79e46…` / `6df3d557…`）；普查器与自检器**负控均已验** |
 
 —— ENG（ARCHER）· 2026-09-20 · 判据锚 rev=3（只读）

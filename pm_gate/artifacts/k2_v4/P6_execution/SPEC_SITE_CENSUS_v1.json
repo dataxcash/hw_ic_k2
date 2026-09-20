@@ -1,0 +1,464 @@
+{
+ "artifact": "k2_p6_spec_site_census",
+ "k1_g15_waiver_recompute": {
+  "candidates": [
+   {
+    "file": "candidate_A.md",
+    "has_keyword_serpentine": true
+   },
+   {
+    "file": "candidate_B.md",
+    "has_keyword_serpentine": true
+   },
+   {
+    "file": "candidate_C.md",
+    "has_keyword_serpentine": true
+   }
+  ],
+  "claim": "waiver 原文：规则件在 _shared/docs；工艺常识强条文档在库；3 份 precheck 章节齐；候选含「蛇形」",
+  "note": "本项为**复核既有 WAIVER 的实质陈述**，非新增检查齿；F-1 修好后应转机判 PASS 并撤 waiver（B2-4）",
+  "prechecks": [
+   {
+    "file": "precheck_A.md",
+    "has_G2_padwall": true,
+    "has_verdict": true
+   },
+   {
+    "file": "precheck_B.md",
+    "has_G2_padwall": true,
+    "has_verdict": true
+   },
+   {
+    "file": "precheck_C.md",
+    "has_G2_padwall": true,
+    "has_verdict": true
+   }
+  ],
+  "rules_doc_checkouts": [
+   {
+    "has_strong_clause": true,
+    "path": "_shared/docs/PCB_DESIGN_RULES.md"
+   },
+   {
+    "has_strong_clause": true,
+    "path": "k2/_shared/docs/PCB_DESIGN_RULES.md"
+   },
+   {
+    "has_strong_clause": true,
+    "path": "key_v2/_shared/docs/PCB_DESIGN_RULES.md"
+   },
+   {
+    "has_strong_clause": true,
+    "path": "pciesw4/_shared/docs/PCB_DESIGN_RULES.md"
+   }
+  ],
+  "substantive_conditions_met": true,
+  "truth_path": "_shared/docs/PCB_DESIGN_RULES.md",
+  "truth_path_exists": true
+ },
+ "purpose": "P6/批2 只读普查：B2-3 站点定性 + 34 skip 归因 + K1 G1.5 waiver 复算",
+ "readonly": true,
+ "schema": 1,
+ "skip_decomposition": {
+  "exit_code": 0,
+  "groups": [
+   {
+    "constant": "K2V4_REAL_BOARD",
+    "correct_anchor": "k2/k2_v4.kicad_pcb",
+    "correct_anchor_exists": true,
+    "expr": "REPO / \"k2_v4.kicad_pcb\"",
+    "remedy": "锚改为 REPO/'k2'/'k2_v4.kicad_pcb'（同文件 SPEC/ALLOC 已用绝对锚；一行可修）⇒ 22 项可由 skip 转**实跑**",
+    "resolved_exists": false,
+    "skip_count": 22,
+    "skip_reasons": [
+     "k2_v4 真板缺失",
+     "k2_v4 真板缺失（不落真板，仅副本验收）"
+    ]
+   },
+   {
+    "constant": "BASELINE_PCB",
+    "expr": "Path(\"/tmp/opencode/boards/k2_m9demo.kicad_pcb\")",
+    "remedy": "依赖 /tmp 生成物（不在库）= N-05「生成器不可复跑」同族 ⇒ 需补 fixture 生成步骤或**具名接受**",
+    "skip_count": 12,
+    "skip_reasons": [
+     "基线板不存在"
+    ]
+   }
+  ],
+  "passed": 34,
+  "reasons": {
+   "k2_v4 真板缺失": 21,
+   "k2_v4 真板缺失（不落真板，仅副本验收）": 1,
+   "基线板不存在": 12
+  },
+  "skipped": 34,
+  "test_file": "_shared/eda_core/tests/test_hs_route_model.py",
+  "unattributed_skips": 0
+ },
+ "spec_k2_v4_sites": {
+  "classes": {
+   "CLI_CONTRACT": 7,
+   "DOCSTRING_MESSAGE": 9,
+   "LEGACY_OTHER_PROJECT": 1,
+   "NAME_ONLY_HARDCODE": 6,
+   "NEGATIVE_CONTROL": 2,
+   "PROJECT_CONFIG": 1,
+   "STALE_LEGACY_BASE": 4,
+   "TEST_ANCHOR": 13
+  },
+  "count": 43,
+  "needle": "SPEC_k2_v4",
+  "roots": {
+   "_shared": 43,
+   "k2/_shared": 43
+  },
+  "roots_agree": true,
+  "sites": [
+   {
+    "key": "eda_core/board_low_speed_sync.py:32",
+    "line": 32,
+    "rationale": "usage 文案",
+    "rel": "eda_core/board_low_speed_sync.py",
+    "site_class": "CLI_CONTRACT",
+    "text": "--board <k2_v4.kicad_pcb> --spec <SPEC_k2_v4.json> \\"
+   },
+   {
+    "key": "eda_core/board_spec_consistency.py:35",
+    "line": 35,
+    "rationale": "usage 文案",
+    "rel": "eda_core/board_spec_consistency.py",
+    "site_class": "CLI_CONTRACT",
+    "text": "--spec <SPEC_k2_v4.json> \\"
+   },
+   {
+    "key": "eda_core/escape_connect_gen.py:25",
+    "line": 25,
+    "rationale": "usage 文案",
+    "rel": "eda_core/escape_connect_gen.py",
+    "site_class": "CLI_CONTRACT",
+    "text": "--spec <SPEC_k2_v4.json> \\"
+   },
+   {
+    "key": "eda_core/escape_low_speed_freeze.py:19",
+    "line": 19,
+    "rationale": "usage 文案",
+    "rel": "eda_core/escape_low_speed_freeze.py",
+    "site_class": "CLI_CONTRACT",
+    "text": "--obstacle-spec <SPEC_k2_v4.json>   (冻结段/via 障碍场, build_fixed 输入)"
+   },
+   {
+    "key": "eda_core/escape_low_speed_spec_write.py:16",
+    "line": 16,
+    "rationale": "usage 文案",
+    "rel": "eda_core/escape_low_speed_spec_write.py",
+    "site_class": "CLI_CONTRACT",
+    "text": "--spec <SPEC_k2_v4.json> \\"
+   },
+   {
+    "key": "eda_core/escape_stub_replanner.py:19",
+    "line": 19,
+    "rationale": "usage 文案",
+    "rel": "eda_core/escape_stub_replanner.py",
+    "site_class": "CLI_CONTRACT",
+    "text": "--spec-l3 pm_gate/artifacts/L3/SPEC_k2_v4.json \\"
+   },
+   {
+    "key": "eda_core/escape_stub_replanner.py:204",
+    "line": 204,
+    "rationale": "--spec-l3 必填参数 help 文案",
+    "rel": "eda_core/escape_stub_replanner.py",
+    "site_class": "CLI_CONTRACT",
+    "text": "ap.add_argument(\"--spec-l3\", required=True, help=\"L3 SPEC_k2_v4.json 路径（In2/In6 折线走廊）\")"
+   },
+   {
+    "key": "eda_core/closure_check.py:413",
+    "line": 413,
+    "rationale": "报错文案",
+    "rel": "eda_core/closure_check.py",
+    "site_class": "DOCSTRING_MESSAGE",
+    "text": "\"pm_gate 下为 artifacts/L3/SPEC_k2_v4.json)\")"
+   },
+   {
+    "key": "eda_core/verify_checks.py:17",
+    "line": 17,
+    "rationale": "docstring",
+    "rel": "eda_core/verify_checks.py",
+    "site_class": "DOCSTRING_MESSAGE",
+    "text": "用与被测 SPEC 相同的真源配置 (route_config_v5 ← SPEC_k2_v4.json) 构建。"
+   },
+   {
+    "key": "pm_gate/check_l3.py:3",
+    "line": 3,
+    "rationale": "docstring",
+    "rel": "pm_gate/check_l3.py",
+    "site_class": "DOCSTRING_MESSAGE",
+    "text": "G3.1 SPEC 提取：SPEC_k2_v4.json 存在且关键字段（阻抗/走廊/过孔/叠层）齐全"
+   },
+   {
+    "key": "pm_gate/check_l3.py:28",
+    "line": 28,
+    "rationale": "报错文案",
+    "rel": "pm_gate/check_l3.py",
+    "site_class": "DOCSTRING_MESSAGE",
+    "text": "return GateResult(False, errors=[\"缺失 SPEC_k2_v4.json\"])"
+   },
+   {
+    "key": "pm_gate/check_l3.py:46",
+    "line": 46,
+    "rationale": "evidence 文案",
+    "rel": "pm_gate/check_l3.py",
+    "site_class": "DOCSTRING_MESSAGE",
+    "text": "return GateResult(True, evidence=\"SPEC_k2_v4.json 结构完整（9 顶层字段 + 阻抗/网类/过孔/走廊）\")"
+   },
+   {
+    "key": "pm_gate/check_qa.py:34",
+    "line": 34,
+    "rationale": "注释（该行为 B2-3b 缺陷点）",
+    "rel": "pm_gate/check_qa.py",
+    "site_class": "DOCSTRING_MESSAGE",
+    "text": "# E2: SPEC 名经项目配置（K2=SPEC_k2_v4.json）"
+   },
+   {
+    "key": "pm_gate/config.py:120",
+    "line": 120,
+    "rationale": "docstring",
+    "rel": "pm_gate/config.py",
+    "site_class": "DOCSTRING_MESSAGE",
+    "text": "\"\"\"项目 L3 SPEC 文件名（K2=SPEC_k2_v4.json）。\"\"\""
+   },
+   {
+    "key": "pm_gate/red_team.py:49",
+    "line": 49,
+    "rationale": "docstring",
+    "rel": "pm_gate/red_team.py",
+    "site_class": "DOCSTRING_MESSAGE",
+    "text": "\"\"\"项目 L3 SPEC 路径（artifacts + config.spec_name，K2=SPEC_k2_v4.json）。\"\"\""
+   },
+   {
+    "key": "pm_gate/tools_escape_predict.py:15",
+    "line": 15,
+    "rationale": "docstring",
+    "rel": "pm_gate/tools_escape_predict.py",
+    "site_class": "DOCSTRING_MESSAGE",
+    "text": "- 逃逸需求值从 SPEC_k2_v4.json net_classes.PCIe85 读取 (零硬编码魔数)"
+   },
+   {
+    "key": "eda_core/env_fingerprint.py:69",
+    "line": 69,
+    "rationale": "候选含 strix-halo-ioconvert/revA 路径（与 K2 判据无关）",
+    "rel": "eda_core/env_fingerprint.py",
+    "site_class": "LEGACY_OTHER_PROJECT",
+    "text": "_REPO / \"strix-halo-ioconvert\" / \"revA\" / \"pcb\" / \"pm_gate\" / \"artifacts\" / \"L3\" / \"SPEC_k2_v4.json\","
+   },
+   {
+    "key": "pm_gate/check_l3.py:26",
+    "line": 26,
+    "rationale": "B2-3a：读 SPEC 名写死 ⇒ 非默认项目/新版 spec 恒读错",
+    "rel": "pm_gate/check_l3.py",
+    "site_class": "NAME_ONLY_HARDCODE",
+    "text": "text = artifacts.read_text(\"L3\", \"SPEC_k2_v4.json\")"
+   },
+   {
+    "key": "pm_gate/check_l3.py:53",
+    "line": 53,
+    "rationale": "check_g32 内容期望写死 'SPEC_k2_v4.json'（判据内容，须项目化）",
+    "rel": "pm_gate/check_l3.py",
+    "site_class": "NAME_ONLY_HARDCODE",
+    "text": "for kw in (\"违宪\", \"SPEC_k2_v4.json\", \"禁止\"):"
+   },
+   {
+    "key": "pm_gate/freeze_wp1.py:45",
+    "line": 45,
+    "rationale": "DEFAULT_SPEC=artifacts_dir('L3')+写死名",
+    "rel": "pm_gate/freeze_wp1.py",
+    "site_class": "NAME_ONLY_HARDCODE",
+    "text": "DEFAULT_SPEC = os.path.join(artifacts.artifacts_dir(\"L3\"), \"SPEC_k2_v4.json\")"
+   },
+   {
+    "key": "pm_gate/review.py:105",
+    "line": 105,
+    "rationale": "L3 复核读 artifacts_dir('L3')+写死名",
+    "rel": "pm_gate/review.py",
+    "site_class": "NAME_ONLY_HARDCODE",
+    "text": "spec_p = os.path.join(artifacts.artifacts_dir(\"L3\"), \"SPEC_k2_v4.json\")"
+   },
+   {
+    "key": "pm_gate/review.py:121",
+    "line": 121,
+    "rationale": "G3* 断言源 artifacts_dir('L3')+写死名",
+    "rel": "pm_gate/review.py",
+    "site_class": "NAME_ONLY_HARDCODE",
+    "text": "spec_p = os.path.join(artifacts.artifacts_dir(\"L3\"), \"SPEC_k2_v4.json\")"
+   },
+   {
+    "key": "pm_gate/tools_escape_predict.py:39",
+    "line": 39,
+    "rationale": "artifacts_dir('L3')+写死名",
+    "rel": "pm_gate/tools_escape_predict.py",
+    "site_class": "NAME_ONLY_HARDCODE",
+    "text": "os.path.join(artifacts.artifacts_dir(\"L3\"), \"SPEC_k2_v4.json\"))"
+   },
+   {
+    "key": "eda_core/tests/test_feature_extractor.py:15",
+    "line": 15,
+    "rationale": "禁令测试 docstring",
+    "rel": "eda_core/tests/test_feature_extractor.py",
+    "site_class": "NEGATIVE_CONTROL",
+    "text": "D  零单板特判（模块源码 grep k2_v4/SPEC_k2_v4 → 空）"
+   },
+   {
+    "key": "eda_core/tests/test_feature_extractor.py:262",
+    "line": 262,
+    "rationale": "forbidden 令牌（仅扫 feature_extractor 一个模块）",
+    "rel": "eda_core/tests/test_feature_extractor.py",
+    "site_class": "NEGATIVE_CONTROL",
+    "text": "for forbidden in (\"k2_v4\", \"SPEC_k2_v4\"):"
+   },
+   {
+    "key": "pm_gate/config.py:27",
+    "line": 27,
+    "rationale": "PROJECTS 兜底字典 k2_v4 条目 = 正当默认",
+    "rel": "pm_gate/config.py",
+    "site_class": "PROJECT_CONFIG",
+    "text": "\"spec_name\": \"SPEC_k2_v4.json\","
+   },
+   {
+    "key": "eda_core/cap_wall_apply.py:56",
+    "line": 56,
+    "rationale": "SPEC_PATH=_PCB_ROOT/pm_gate/artifacts/L3/…，_PCB_ROOT 解析到 _shared（非项目根）",
+    "rel": "eda_core/cap_wall_apply.py",
+    "site_class": "STALE_LEGACY_BASE",
+    "text": "SPEC_PATH = _PCB_ROOT / \"pm_gate\" / \"artifacts\" / \"L3\" / \"SPEC_k2_v4.json\""
+   },
+   {
+    "key": "eda_core/cap_wall_solver.py:608",
+    "line": 608,
+    "rationale": "--spec 默认值走 _PCB_ROOT/pm_gate/artifacts/k2_v4/…（恒缺）",
+    "rel": "eda_core/cap_wall_solver.py",
+    "site_class": "STALE_LEGACY_BASE",
+    "text": "\"SPEC_k2_v4.json\"))"
+   },
+   {
+    "key": "pm_gate/closure_check.py:112",
+    "line": 112,
+    "rationale": "F-3：DEFAULT_SPEC=模块目录/artifacts/…（恒缺）",
+    "rel": "pm_gate/closure_check.py",
+    "site_class": "STALE_LEGACY_BASE",
+    "text": "\"artifacts\", \"L3\", \"SPEC_k2_v4.json\")"
+   },
+   {
+    "key": "pm_gate/wp1_semantics_check.py:45",
+    "line": 45,
+    "rationale": "注释自承 _PCB_ROOT='revA/pcb' 旧布局；DEFAULT_SPEC 恒缺",
+    "rel": "pm_gate/wp1_semantics_check.py",
+    "site_class": "STALE_LEGACY_BASE",
+    "text": "\"SPEC_k2_v4.json\")"
+   },
+   {
+    "key": "eda_core/tests/conftest.py:10",
+    "line": 10,
+    "rationale": "fixture docstring",
+    "rel": "eda_core/tests/conftest.py",
+    "site_class": "TEST_ANCHOR",
+    "text": "spec_path      — fixtures/SPEC_k2_v4.json 绝对路径 (session 级, 真源副本)"
+   },
+   {
+    "key": "eda_core/tests/conftest.py:42",
+    "line": 42,
+    "rationale": "fixture docstring",
+    "rel": "eda_core/tests/conftest.py",
+    "site_class": "TEST_ANCHOR",
+    "text": "\"\"\"SPEC_k2_v4.json 副本 (从 pm_gate/artifacts/L3 真源复制) 的绝对路径。"
+   },
+   {
+    "key": "eda_core/tests/conftest.py:46",
+    "line": 46,
+    "rationale": "fixtures/SPEC_k2_v4.json 副本 ⇒ 需 per-project fixture",
+    "rel": "eda_core/tests/conftest.py",
+    "site_class": "TEST_ANCHOR",
+    "text": "return _must_exist(FIXTURES_DIR / \"SPEC_k2_v4.json\")"
+   },
+   {
+    "key": "eda_core/tests/conftest.py:65",
+    "line": 65,
+    "rationale": "fixture docstring",
+    "rel": "eda_core/tests/conftest.py",
+    "site_class": "TEST_ANCHOR",
+    "text": "\"\"\"SPEC_k2_v4.json 当前真源副本 (LS-MODEL-GATE 模型测试专用)。\"\"\""
+   },
+   {
+    "key": "eda_core/tests/test_cap_wall_upgrade.py:107",
+    "line": 107,
+    "rationale": "注释",
+    "rel": "eda_core/tests/test_cap_wall_upgrade.py",
+    "site_class": "TEST_ANCHOR",
+    "text": "K2 真源 (SPEC_k2_v4.json / channel_alloc_v4.json) 属项目侧数据，"
+   },
+   {
+    "key": "eda_core/tests/test_cap_wall_upgrade.py:113",
+    "line": 113,
+    "rationale": "真源路径",
+    "rel": "eda_core/tests/test_cap_wall_upgrade.py",
+    "site_class": "TEST_ANCHOR",
+    "text": "spec = os.path.join(_PCB_ROOT, \"pm_gate\", \"artifacts\", \"L3\", \"SPEC_k2_v4.json\")"
+   },
+   {
+    "key": "eda_core/tests/test_closure_check.py:184",
+    "line": 184,
+    "rationale": "真源路径",
+    "rel": "eda_core/tests/test_closure_check.py",
+    "site_class": "TEST_ANCHOR",
+    "text": "/ \"SPEC_k2_v4.json\")"
+   },
+   {
+    "key": "eda_core/tests/test_escape_landing.py:683",
+    "line": 683,
+    "rationale": "真源路径",
+    "rel": "eda_core/tests/test_escape_landing.py",
+    "site_class": "TEST_ANCHOR",
+    "text": "/ \"SPEC_k2_v4.json\", encoding=\"utf-8\"))"
+   },
+   {
+    "key": "eda_core/tests/test_hs_route_model.py:164",
+    "line": 164,
+    "rationale": "BASELINE_SPEC 绝对锚（已修法示范）",
+    "rel": "eda_core/tests/test_hs_route_model.py",
+    "site_class": "TEST_ANCHOR",
+    "text": "/ \"L3\" / \"SPEC_k2_v4.json\")"
+   },
+   {
+    "key": "eda_core/tests/test_hs_route_model.py:324",
+    "line": 324,
+    "rationale": "K2V4_SPEC 绝对锚（已修法示范）",
+    "rel": "eda_core/tests/test_hs_route_model.py",
+    "site_class": "TEST_ANCHOR",
+    "text": "/ \"L3\" / \"SPEC_k2_v4.json\")"
+   },
+   {
+    "key": "eda_core/tests/test_redteam_evidence.py:37",
+    "line": 37,
+    "rationale": "REAL_SPEC 路径",
+    "rel": "eda_core/tests/test_redteam_evidence.py",
+    "site_class": "TEST_ANCHOR",
+    "text": "REAL_SPEC = PCB_ROOT / \"pm_gate\" / \"artifacts\" / \"L3\" / \"SPEC_k2_v4.json\""
+   },
+   {
+    "key": "eda_core/tests/test_routing_topology_gate.py:31",
+    "line": 31,
+    "rationale": "K2_SPEC 绝对锚",
+    "rel": "eda_core/tests/test_routing_topology_gate.py",
+    "site_class": "TEST_ANCHOR",
+    "text": "K2_SPEC = Path(\"/home/fila/jqdDev_2025/ic_hw/k2/pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json\")"
+   },
+   {
+    "key": "eda_core/tests/test_topology_gate.py:25",
+    "line": 25,
+    "rationale": "legacy ioconvert revA 路径",
+    "rel": "eda_core/tests/test_topology_gate.py",
+    "site_class": "TEST_ANCHOR",
+    "text": "\"/revA/pcb/pm_gate/artifacts/L3/SPEC_k2_v4.json\")"
+   }
+  ],
+  "unclassified": []
+ }
+}

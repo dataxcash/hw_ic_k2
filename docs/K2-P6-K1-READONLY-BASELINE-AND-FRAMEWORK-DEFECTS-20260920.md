@@ -66,6 +66,37 @@
 | 新增具名（v2 未列） | — | `review.py:121` · `check_qa.py:34` · `config.py:120` · `closure_check.py:112` · 27 处 `eda_core`（含 tests） |
 > **实施要求**：逐处**定性**（应项目化 / 应具名豁免），**禁**一把梭替换（C-12）；范围结论须与监理对齐。
 
+## 6. `SPEC_k2_v4` 站点**逐处定性**（43 处 · 8 类 · 0 未定性）
+真源（机读）：`pm_gate/artifacts/k2_v4/P6_execution/SPEC_SITE_CENSUS_v1.json` sha256 **`6df3d557…`**（两次连跑逐字节同）
+普查器：`k2/tools/k2_p6_spec_site_census_v1.py`（只读；`_shared` 与 `k2/_shared` 两份 checkouts **一致**校验通过）
+
+| 类别 | 数 | 含义 / 处置 |
+|---|---|---|
+| **STALE_LEGACY_BASE** | **4** | 基址仍是拆分前 `revA/pcb` 布局 ⇒ 路径**恒不存在**：`eda_core/cap_wall_apply.py:56` · `eda_core/cap_wall_solver.py:608` · `pm_gate/closure_check.py:112`（F-3） · `pm_gate/wp1_semantics_check.py:45`（注释自承 `revA/pcb`）⇒ **M-14 基址钉子须扩到这些处** |
+| **NAME_ONLY_HARDCODE** | 6 | 基址正确、仅文件名写死 ⇒ 改 `config.spec_name(active)`：`check_l3.py:26`（B2-3a）· `check_l3.py:53`（check_g32 内容期望）· `freeze_wp1.py:45` · `review.py:105` · `review.py:121` · `tools_escape_predict.py:39` |
+| **TEST_ANCHOR** | 13 | 测试锚（`conftest.py:46` fixture 副本 / `test_hs_route_model.py:164,324` 绝对锚 / `test_routing_topology_gate.py:31` / `test_topology_gate.py:25` 旧路径 …）⇒ 随批 2 项目参数化 **或具名 K2-only** |
+| **DOCSTRING_MESSAGE** | 9 | 注释/报错证据文案（零行为）⇒ **具名豁免** |
+| **CLI_CONTRACT** | 7 | CLI 用法/参数 help（路径由调用方传）⇒ 可留名，**须具名** |
+| **NEGATIVE_CONTROL** | 2 | `test_feature_extractor.py` 的「零单板特判」禁令测试（**仅扫 1 个模块**）⇒ 不改；**注意**：该禁令门未覆盖其余模块 ⇒ 与 B2-3 同批扩面**须监理批** |
+| **PROJECT_CONFIG** | 1 | `pm_gate/config.py:27`（PROJECTS 兜底字典 k2_v4 条目）= 正当 |
+| **LEGACY_OTHER_PROJECT** | 1 | `eda_core/env_fingerprint.py:69`（候选含 `strix-halo-ioconvert/revA` 路径）= 与 K2 判据无关 |
+
+## 7. 34 个 skip 的**归因**（「回归网弱于表面」的拆解）
+| 组 | 数 | 常量 / 现状 | 补救 |
+|---|---|---|---|
+| **A** | **22** | `K2V4_REAL_BOARD = REPO/"k2_v4.kicad_pcb"`（`REPO`=容器根 ⇒ **恒缺**；真板在 `k2/k2_v4.kicad_pcb`，**在库**） | **一行锚修正**（同文件 `SPEC/ALLOC` 已用绝对锚示范）⇒ 22 项**由 skip 转实跑**（B2-1/B2-2 的「skipped 不得充绿」即可满足） |
+| **B** | 12 | `BASELINE_PCB = /tmp/opencode/boards/k2_m9demo.kicad_pcb`（**/tmp 生成物，不在库**） | 补 fixture 生成步骤 **或具名接受** ⇒ 与 **N-05「生成器不可复跑」同族** |
+> 归因完整：`34 = 22 + 12`（`unattributed = 0`，机读见 census 件）。
+
+## 8. K1 `G1.5` WAIVER **实质条件复算**（只读 · 撤 waiver 前置）
+| 陈述（waiver 原文） | 复算结果 |
+|---|---|
+| 真实规则件在 `_shared/docs/PCB_DESIGN_RULES.md` | ✅ 在库 |
+| 工艺常识强条文档在库 | ✅ 4 份 checkout 全含「强条」 |
+| K1 precheck 章节齐 | ✅ `precheck_{A,B,C}.md` 各含「G2 焊盘墙穿透」+「汇总判定」 |
+| 候选含「蛇形」 | ✅ `candidate_{A,B,C}.md` 各含 |
+⇒ **`substantive_conditions_met = true`**：F-1 修好后 K1 `G1.5` 应可**机判 PASS**，届时**撤 waiver**（B2-4 的验收判据已就绪）。
+
 ## 5. 不改动声明
 本件与两份工具**零载体改动**：未触 `_shared`（除只读 import）· 未触 `criteria/` · 未触冻结四源 · **未重建交付包** · 未触 `.omo/supervision/**`。临时件仅在 `/tmp/opencode`。
 
