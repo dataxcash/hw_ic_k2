@@ -1,0 +1,63 @@
+{
+ "artifact": "k2_w8_pose_normalizer_validation",
+ "schema": 2,
+ "ts": "2026-09-21T02:55:00+0800",
+ "supersedes": "W8_POSE_NORMALIZER_VALIDATION_20260921_v1.json（sha16 9be44f94642738d9）—— v1 的『定向、不 Flip』规则经 **#K2-52 §一** 判为**工具缺陷**（漏 Flip）。",
+ "authorization": "**#K2-52 §一/§三**：`U9-GEOM-1 / K1-D16 = 假阳性（工具漏 Flip）⇒ 闭（自裁）`；修**工具**，**禁改库 · 禁重建板 · 禁动 SPEC**；工具修正须「① 层感知（B.Cu 先 Flip 再 Orient，顺序固定）② 层感知负控 ③ 42/42 不得丢失 ④ 独立法（绝对坐标）复核 42/42」。",
+ "root_cause": "`ForgeOS:TPD6E05U06_RVZ` 库件定义在 **F.Cu**，而 U9 实例在 **B.Cu**（底面，@180°）⇒ 物理上**须镜像**。v1 归一器只做定向（`SetOrientation`）、不做 Flip ⇒ 对『B.Cu **且** 旋转』的唯一件 U9 产生 `dy` 假差。其余 7 件 B.Cu 件为 0°/90°，镜像不改其 pad 相对位（或对称）⇒ 未暴露该缺陷。",
+ "tool": {
+  "v1": "k2/tools/k2_w8_footprint_audit_pose_v1.py（保留，仅作对照）",
+  "v2": "k2/tools/k2_w8_footprint_audit_pose_v2_layeraware.py（版本 bump）",
+  "v2_sha256": "41883bb898eaf5fbcb56dbee3eb3a31aa9199d2b5c67482a469688fff307291e",
+  "v2_rule": "库件 Add → 若板实例在 B.Cu：`SetLayerAndFlip(B_Cu)` → `SetOrientation` → `SetPosition`；比 full pad signature（shape/sx/sy/dx/dy/rot/drill_d/layer）"
+ },
+ "board_under_test": {
+  "path": "/tmp/opencode/k1gen/out/fix.kicad_pcb（沙箱联动板：现板 + 42 库昵称，W8-GEN-1 补丁产物）",
+  "sha16": "b68105d2e8914aa7",
+  "n_footprints": 42,
+  "n_back_layer": 8
+ },
+ "four_validations": {
+  "A_layer_aware_v2": {
+   "identical": 42,
+   "diff": 0,
+   "refs": [],
+   "verdict": "**42/42 identical（含 U9）**"
+  },
+  "B_v1_no_flip_repro": {
+   "identical": 41,
+   "diff": 1,
+   "refs": [
+    "U9"
+   ],
+   "sample": "U9 pad1 `dy`: 板 `+1.5` vs 库 `-1.5`（与 #K2-52 §一 方法 B / ENG 报告逐字一致）"
+  },
+  "C_independent_abscoord": {
+   "method": "pad **绝对坐标** + shape/size/drill（层感知）—— 与 v2 相对签名法**实现独立**",
+   "n": 42,
+   "abs_identical": 42,
+   "abs_diff_refs": [],
+   "tool": "/tmp/opencode/sgaudit/indep_abs.py（本会话独立实现）"
+  },
+  "D_layer_aware_negative_control": {
+   "what": "对 **B.Cu 件 U9** pad1 size +0.1mm ⇒ 须 FLAG",
+   "observed": "identical 42→**41** · diff refs = **['U9']** · 字段 `sx` 0.85 vs 0.75 ⇒ **FLAG**",
+   "conclusion": "层感知归一器**非盲绿**（防 C-12）"
+  }
+ },
+ "d16_disposition": {
+  "K1-D16": "**闭（假阳性）** —— 差异由 v1 工具漏 Flip 产生，非板/库缺陷",
+  "K1-D14_D15": "维持 #K2-51 已闭（pose 伪差）",
+  "red_line_ok": "**未改库**（`ForgeOS:TPD6E05U06_RVZ` 未动）· **未重建板** · **未动 SPEC**"
+ },
+ "residual_note": "v2 归一后 42/42 identical ⇒ K1 `lib_electrical_level` 的**电气级差异 = 0**；但该维仍受 **C-26 未落**约束（#K2-52 §五-4）⇒ **不计绿**。",
+ "readonly_repo": true,
+ "no_new_criteria_dim": true,
+ "not_landed_detail": [
+  "未改 `_shared`/库快照",
+  "未改 k1 板/SPEC/原理图",
+  "未改 criteria/",
+  "沙箱产物仅 /tmp"
+ ],
+ "next": "执行序 2：`_shared` 批（PIN01-K1-1a 先出 J1 对照表定性 + 1b）"
+}
