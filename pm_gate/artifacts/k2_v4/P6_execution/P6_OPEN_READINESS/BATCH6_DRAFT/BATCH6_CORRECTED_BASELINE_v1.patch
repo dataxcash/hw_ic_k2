@@ -1,0 +1,224 @@
+--- a/_shared/eda_core/hs_route_model.py
++++ b/_shared/eda_core/hs_route_model.py
+@@ -28,7 +28,7 @@
+ import sys
+ from typing import Dict, List, Optional, Sequence, Set, Tuple
+ 
+-from eda_core.drc_rules import Board, BoardParser, DRCRuleLibrary
++from eda_core.drc_rules import Board, BoardParser, DRCRuleLibrary, _point_seg_dist
+ from eda_core.unified_field import UnifiedObstacleField
+ from .route_input import (ModelConfig, ProjectRouteConfig,
+                           load_route_input_json)
+@@ -124,6 +124,23 @@
+     return 0.0
+ 
+ 
++# ── ④ 退化守卫（批 5）──────────────────────────────────────────────────
++_SEG_DEGENERATE_EPS = 1e-6
++
++
++def _seg_len(a, b) -> float:
++    return math.hypot(b[0] - a[0], b[1] - a[1])
++
++
++def _polyline_degenerate(pts) -> bool:
++    """折线是否含**零长段**（相邻同点）。零长走线不可制造 ⇒ 引擎产出的任何
++    折线都不得含零长段（fail-closed）。已实测 `_tpl_a_line` 的 `ady<1e-9`
++    捷径在 `pad_x==corr_x ∧ pad_y==track` 时产出 `[(x,y),(x,y)]` 且通过
++    seg_ok/verify（K1 `OCuLink_RX0 left`）。通用性：只判几何，零项目特判。"""
++    q = list(pts)
++    return any(_seg_len(a, b) <= _SEG_DEGENERATE_EPS for a, b in zip(q, q[1:]))
++
++
+ def _seg_seg_dist(a, b, c, d) -> float:
+     """两线段最小距离（相交 = 0，含端点）。"""
+     abx, aby = b[0] - a[0], b[1] - a[1]
+@@ -283,6 +300,44 @@
+     return []  # zone/mask 顶点过大，不参与节点生成（障碍由段级查询覆盖）
+ 
+ 
++class _PairClearField:
++    """把一条已解折线当作**对网障碍**的场包装（对级耦合用；净空默认 0.1mm）。
++
++    只做几何：`obstacles` 透传（可见性图节点仍由原场生成），`seg_ok`/`point_ok`
++    追加『到保留折线距离 >= clr』。零项目特判。
++    """
++
++    def __init__(self, base, poly, clr: float = 0.1):
++        self._b = base
++        self._poly = [tuple(x) for x in poly]
++        self._clr = clr
++
++    @property
++    def obstacles(self):
++        return self._b.obstacles
++
++    def __getattr__(self, k):
++        return getattr(self._b, k)
++
++    def _d_seg(self, a, b) -> float:
++        return min(_seg_seg_dist(tuple(a), tuple(b), self._poly[i], self._poly[i + 1])
++                   for i in range(len(self._poly) - 1))
++
++    def _d_pt(self, p) -> float:
++        return min(_point_seg_dist(tuple(p), self._poly[i], self._poly[i + 1])
++                   for i in range(len(self._poly) - 1))
++
++    def seg_ok(self, net, a, b):
++        if not self._b.seg_ok(net, a, b):
++            return False
++        return self._d_seg(a, b) >= self._clr - 1e-9
++
++    def point_ok(self, net, p):
++        if not self._b.point_ok(net, p):
++            return False
++        return self._d_pt(p) >= self._clr - 1e-9
++
++
+ class HSVisibilityGraph:
+     """高速域可见性图：节点 = fv + cvs + 障碍包络顶点（unified 规则膨胀）。
+ 
+@@ -3895,6 +3950,17 @@
+             └─ 异层：模板 B 异层版（P 模板 A 直连 + N 短段→via→内层）
+         """
+         idx = 0 if side == "left" else 1
++        # (d) 候选：**直接对角线**（端点对齐目标轨道，最小必要）
++        try:
++            if layer_p in fields and layer_n in fields:
++                _cd = {"P": {"pts": [tuple(ep["P"][idx]["pos"]), (corr_x, track_p)],
++                             "layers": [layer_p], "via": None},
++                       "N": {"pts": [tuple(ep["N"][idx]["pos"]), (corr_x, track_n)],
++                             "layers": [layer_n], "via": None}}
++                if self._k1_escape_verify(fields, net_p, net_n, ep, _cd, side):
++                    return {"corr_x": corr_x, "P": _cd["P"], "N": _cd["N"]}
++        except Exception:
++            pass
+         if layer_p == layer_n:
+             if layer_p == "F.Cu":
+                 r = self._k1_escape_a(fields, net_p, net_n, ep, track_p,
+@@ -3935,6 +4001,21 @@
+             except RuntimeError:
+                 return None
+             if sol_p is not None and sol_n is not None:
++                # ⑥ 对级耦合（双向迭代避让）：N 先避 P，再让 P 反向避 N，
++                #    两遍后若 P/N 间距仍不足则由 verify 拒绝（fail-closed）。
++                try:
++                    sol_n2 = HSVisibilityGraph(
++                        _PairClearField(fcu, sol_p[0]), net_n,
++                        tuple(ep["N"][idx]["pos"]), {(corr_x, track_n)}).solve()
++                    if sol_n2 is not None:
++                        sol_n = sol_n2
++                    sol_p2 = HSVisibilityGraph(
++                        _PairClearField(fcu, sol_n[0]), net_p,
++                        tuple(ep["P"][idx]["pos"]), {(corr_x, track_p)}).solve()
++                    if sol_p2 is not None:
++                        sol_p = sol_p2
++                except Exception:
++                    pass
+                 cand = {
+                     "P": {"pts": [tuple(p) for p in sol_p[0]],
+                           "layers": ["F.Cu"] * (len(sol_p[0]) - 1), "via": None},
+@@ -3957,10 +4038,11 @@
+         pp = tuple(pad["pos"])
+         ady = abs(track - pp[1])
+         if ady < 1e-9:
+-            if fcu.seg_ok(net, pp, (corr_x, track)):
++            if (not _polyline_degenerate([pp, (corr_x, track)])
++                    and fcu.seg_ok(net, pp, (corr_x, track))):
+                 return ({"pts": [pp, (corr_x, track)], "layers": ["F.Cu"],
+                          "via": None}, corr_x)
+-            return None
++            return None     # ④ 退化守卫：pad 与落点重合 ⇒ 零长段 ⇒ 不产候选
+         dxs = [ady, max(ady-0.3,0.1), max(ady-0.6,0.1), max(ady-0.9,0.1), 0.3]
+         for dx in dxs:
+             vx = round(pp[0] + d * dx, 3)
+@@ -3968,6 +4050,25 @@
+             if all(fcu.seg_ok(net, a, b) for a, b in zip(path, path[1:])):
+                 return ({"pts": path, "layers": ["F.Cu"],
+                          "via": None}, vx)
++        # ⑤ 端点对齐（K2 学习环实证）：先**沿焊盘行出排** dx，再折向轨道 y，
++        #    最后沿轨道到 corr_x —— 端子焊盘行（节距 0.5、净间隙 0.25 < 0.29 通道）
++        #    不可能斜穿，必须沿目标焊盘轴线先出排。K2 实板（J2 REFCLK y=45.9/51.30
++        #    而非 band 45.7/50.5）即此形态。
++        _bud = min(abs(ady), 3.0)
++        _steps = [round(0.1 * i, 3) for i in range(0, int(_bud / 0.1 + 1e-9) + 1)]
++        for dx in [0.5, 1.0, 1.5, 2.0] + _steps:
++            vx = round(pp[0] + d * dx, 3)
++            path = [pp, (vx, pp[1]), (vx, track), (corr_x, track)]
++            if _polyline_degenerate(path):
++                continue
++            if all(fcu.seg_ok(net, a, b) for a, b in zip(path, path[1:])):
++                try:
++                    open("/tmp/opencode/batch5/tpl5.log", "a").write(
++                        f"{net} pad={pp} track={track} corr_x={corr_x} d={d} dx={dx} vx={vx}\n")
++                except Exception:
++                    pass
++                return ({"pts": path, "layers": ["F.Cu"] * 3,
++                         "via": None}, corr_x)
+         return None
+ 
+     def _tpl_b_line(self, fields, net: str, pad: Dict, track: float,
+@@ -4151,19 +4252,36 @@
+         idx = 0 if side == "left" else 1
+         pad_p = ep["P"][idx]
+         pad_n = ep["N"][idx]
++        # D-5 层合法性：折线**起点**所在铜层必须属于该焊盘（SMD 单层；THT 全层）
++        for key, net in (("P", net_p), ("N", net_n)):
++            _p0 = tuple(cand[key]["pts"][0])
++            _l0 = cand[key]["layers"][0]
++            _ok = any(abs(pp.pos[0] - _p0[0]) < 1e-6 and abs(pp.pos[1] - _p0[1]) < 1e-6
++                      and pp.net == net and _l0 in pp.copper_layers()
++                      for pp in self.board.pads)
++            if not _ok:
++                return False
+         for key, net in (("P", net_p), ("N", net_n)):
+             pts, layers = cand[key]["pts"], cand[key]["layers"]
+             if len(layers) != len(pts) - 1:
+                 return False
++            if _polyline_degenerate(pts):
++                return False        # ④ 退化守卫：零长段候选一律拒（fail-closed）
+             for i in range(len(pts) - 1):
+                 if not fields[layers[i]].seg_ok(net, pts[i], pts[i + 1]):
+                     return False
++        # D-2 修正：门应为**中心距 >= 线宽 + 边缘 gap**（项目 spec 派生）
++        _w = (self.spec.get("impedance") or {}).get("width_mm", 0.09)
++        _g = (((self.spec.get("net_classes") or {}).get("PCIe85") or {})
++              .get("diff_pair") or {}).get("p_gap",
++                                           (self.spec.get("impedance") or {}).get("gap_mm", 0.1))
++        _req = _w + _g
+         for i in range(len(cand["P"]["pts"]) - 1):
+             for j in range(len(cand["N"]["pts"]) - 1):
+                 lp, ln = cand["P"]["layers"][i], cand["N"]["layers"][j]
+                 if lp == ln and _seg_seg_dist(
+                         cand["P"]["pts"][i], cand["P"]["pts"][i + 1],
+-                        cand["N"]["pts"][j], cand["N"]["pts"][j + 1]) < 0.1 - 1e-9:
++                        cand["N"]["pts"][j], cand["N"]["pts"][j + 1]) < _req - 1e-9:
+                     return False
+         vp = cand["P"].get("via")
+         vn = cand["N"].get("via")
+@@ -4313,6 +4431,16 @@
+         for sp, sn, segname in segments:
+             res = self.solve_pair_v4(sp, sn, base, segname,
+                                      shared_segs=shared, shared_vias=vias)
++            # FIX-B: 段级 P/N 间距门（下沉 base 级 _pn_spacing_check 的阈值）
++            if res.get("status") == "SOLVED" and res.get("P") and res.get("N"):
++                _me, _pt = _path_pn_min_edge_pt(res["P"]["path"], res["P"]["layers"],
++                                                res["N"]["path"], res["N"]["layers"],
++                                                res.get("width") or 0.205)
++                _thr = (self.spec.get("impedance") or {}).get("gap_mm", 0.1)
++                if _me is not None and _me < _thr:
++                    res["status"] = "INFEASIBLE"
++                    res["pn_spacing"] = round(_me, 4)
++                    res["reason"] = f"P/N 间距不足 {_me:.4f} < {_thr}（段级门·项目 spec gap_mm）"
+             if res.get("status") == "SOLVED":
+                 for key in ("P", "N"):
+                     net = res[key]["net"]
+@@ -4480,7 +4608,7 @@
+             res = self.solve_chain_v4(stem, shared_segs=shared,
+                                       shared_vias=vias)
+             results[base] = res
+-            if res.get("status") == "SOLVED":
++            if True:  # FIX-A: 逐段累积
+                 for seg in res.get("segments", []):
+                     if seg.get("status") != "SOLVED":
+                         continue

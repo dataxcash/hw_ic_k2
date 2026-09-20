@@ -1,0 +1,55 @@
+{
+ "artifact": "k2_pending_rulings_delta",
+ "schema": 1,
+ "purpose": "对 `PENDING_RULINGS_PACKET_20260921_v1.json` 的**增量**（不改其正文）：本会话（handoff §8.2 只读路）产出两项可影响裁定的实测 —— （A）VG 对级化**次序**择优；（B）U11 右端换层可达性上界。",
+ "owner_gate": "无（全部 L2/机制/批次面）",
+ "delta": [
+  {
+   "id": "R-3",
+   "status": "更新（推荐项变更；其余选项/证据不变）",
+   "new_recommend": "同批落的候选从 POC 的**单向序**（`BATCH6_VG_PAIRAWARE_v1.patch`，RX0/input 边缘净距 0.174）改为 **v2 双向择优序**（`BATCH6_VG_PAIRAWARE_v2.patch`，同一段边缘净距 **0.2636**）",
+   "why": "7 策略同基线实测定序：P 先 / N 先 / 两轮 皆 2/8；`best_of`（两序都算，取通过修正门且 P/N **边缘净距更大**者）确定性取到 0.2636 ⇒ **同增益、更多裕度、且对次序不敏感**（不是碰运气）",
+   "measured": {"np_indep(修正基线)": "1/8 shared=8", "np_pairaware(v1)": "2/8 shared=23 RX0/input edge 0.174",
+                "pn_pairaware": "2/8 shared=23 RX0/input edge 0.2636", "best_of(v2)": "2/8 shared=23 RX0/input edge 0.2636",
+                "layer_legality_violations": 0, "two_run_bytewise_identical": true},
+   "evidence": "BATCH6_VG_ORDER_SCOPE_PROBE_v1.json · BATCH6_DRAFT/BATCH6_VG_PAIRAWARE_v2.patch（sha16 11a0e60ff03c6dba，git apply 可复现）· BATCH6_PATCHGEN_VERIFY_v1.json"
+  },
+  {
+   "id": "R-3b",
+   "status": "范围收窄（对裁定有利）",
+   "statement": "VG 对级化的增益**不依赖** (c) 的 `SPEC.corridors[].bands[].tracks_y` 扩展（7 策略全程未动 SPEC）⇒ (c) 可独立排期，(d) 不必等 SPEC 裁定",
+   "evidence": "同上"
+  },
+  {
+   "id": "R-7",
+   "status": "降级：若按 v2 落件则**不再阻塞**（仅剩原则问题）",
+   "statement": "RX0/input 实测边缘净距 0.2636 ⇒ 同时满足 K1 SPEC（0.1）与共享 `drc_rules.json`（PCIe85 = 0.175，K2 派生）⇒ v1 的『0.174 差 0.001 挂边』风险被 v2 次序消除",
+   "evidence": "BATCH6_VG_ORDER_SCOPE_PROBE_v1.json"
+  },
+  {
+   "id": "R-8",
+   "status": "新（请裁定：(d) 右端是否立项『换层逃逸模板』）",
+   "question": "U11 侧（高 x 端）F.Cu 单层无对级解已证实；本件证『换层』路径**未被几何排除**（内层近乎空闲）⇒ 是否立项把换层自由度加进 `_k1_escape`（In2 优先；是否同时让 In1.Cu 入场）？",
+   "finding": {
+    "F.Cu_only_reachability": "8 段中 5 段（TX0/input · RX0/input · RX1/input · RX1/output · TX0.input 等）两网在 F.Cu **皆不可达**",
+    "inner_layer_reachability": "同 5 段在 In1.Cu 与 In2.Cu 上**两网皆可达**（起点网格 404–451 点，可达率 ≈100%，最短路径 0.3–4.9mm）",
+    "obstacle_census_TX0_input": {"F.Cu": 151, "In1.Cu": 26, "In2.Cu": 26},
+    "engine_layer_set": "{layer_p, layer_n, F.Cu, In2.Cu} —— **不含 In1.Cu**（本件独立复证 handoff §7-⑧）；In2 已在集内 ⇒ 最小路线 = P/N 各 1 via 下 In2 + 内层绕行 + 回落走廊层"
+   },
+   "options": ["立项（推荐）：加换层逃逸模板，In2 优先", "同时授权 In1.Cu 入场（层集扩展）", "仅登记不立项（(d) 停在 2/8）"],
+   "if_not": "(d) 的 K1 真值上限锁死 2/8；TX0.input · TX1.input · RX1.input · TX1/RX1 output 保持 INFEASIBLE",
+   "caveat": "本件是**松弛上界**（异层不计 P/N 冲突；via 仅查离焊盘 ≥0.3；未查 via-via / 走廊层约束）⇒『换层不排除』成立，**但不是可行解证明**；真解须引擎模板 + 实解验证（含负控）。",
+   "evidence": "BATCH6_U11_RIGHT_END_BOUND_v1.json · k1_u11_right_end_bound_probe_v1.py"
+  }
+ ],
+ "new_artifacts": {
+  "BATCH6_VG_ORDER_SCOPE_PROBE_v1.json": "7 策略段级真值（两跑一致）",
+  "BATCH6_U11_RIGHT_END_BOUND_v1.json": "8 段 · 3 层可达性上界",
+  "k1_vg_pairaware_scope_probe_v1.py": "次序/轮数/择优普查脚本",
+  "k1_u11_right_end_bound_probe_v1.py": "端点可达性上界脚本",
+  "k1_corrected_baseline_patchgen_v1.py + BATCH6_PATCHGEN_VERIFY_v1.json": "把两个（三个）影子固化为可复现补丁（git apply 后 sha 逐字节同）"
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-21T10:05:00+0800"
+}

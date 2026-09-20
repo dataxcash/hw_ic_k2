@@ -1,0 +1,40 @@
+{
+ "artifact": "k1_corrected_baseline_patchgen",
+ "purpose": "把两个只读影子固化成可复核补丁（draft，未落件）",
+ "container_shared_hs_route_model_sha16": "dcd1f65f4b549527",
+ "patches": {
+  "BATCH6_CORRECTED_BASELINE_v1.patch": {
+   "bytes": 9885,
+   "sha16_of_patch": "36729967be2d867a",
+   "target_sha16": "1f60b2ee2dc1804d",
+   "verify_from_container": {
+    "git_apply": "OK",
+    "sha16": "1f60b2ee2dc1804d",
+    "matches_expected": true
+   }
+  },
+  "BATCH6_VG_PAIRAWARE_v1.patch": {
+   "bytes": 2140,
+   "sha16_of_patch": "b21b731eea9cf502",
+   "target_sha16": "dea0fbb60d1dbc04",
+   "verify_from_corrected": {
+    "git_apply": "OK",
+    "sha16": "dea0fbb60d1dbc04",
+    "matches_expected": true
+   }
+  },
+  "BATCH6_VG_PAIRAWARE_v2.patch": {
+   "bytes": 4439,
+   "sha16_of_patch": "11a0e60ff03c6dba",
+   "target_sha16": "5bc6a0d918c14902",
+   "verify_from_corrected": {
+    "git_apply": "OK",
+    "sha16": "5bc6a0d918c14902",
+    "matches_expected": true
+   },
+   "strategy": "best_of（两序都算，取通过修正门且 P/N 边缘净距更大者；已去 ⑥）"
+  }
+ },
+ "readonly_repo": true,
+ "not_landed": true
+}

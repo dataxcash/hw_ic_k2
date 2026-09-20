@@ -1,0 +1,53 @@
+--- a/_shared/eda_core/hs_route_model.py
++++ b/_shared/eda_core/hs_route_model.py
+@@ -338,6 +338,34 @@
+         return self._d_pt(p) >= self._clr - 1e-9
+ 
+ 
++class _PairClearField:
++    """把已解折线当作对网障碍的场包装（**簇距 = 中心线距离**，K1 应为 线宽+gap）。"""
++
++    def __init__(self, base, poly, clr):
++        self._b = base
++        self._poly = [tuple(x) for x in poly]
++        self._clr = clr
++
++    @property
++    def obstacles(self):
++        return self._b.obstacles
++
++    def __getattr__(self, k):
++        return getattr(self._b, k)
++
++    def seg_ok(self, net, a, b):
++        if not self._b.seg_ok(net, a, b):
++            return False
++        return min(_seg_seg_dist(tuple(a), tuple(b), self._poly[i], self._poly[i + 1])
++                   for i in range(len(self._poly) - 1)) >= self._clr - 1e-9
++
++    def point_ok(self, net, p):
++        if not self._b.point_ok(net, p):
++            return False
++        return min(_point_seg_dist(tuple(p), self._poly[i], self._poly[i + 1])
++                   for i in range(len(self._poly) - 1)) >= self._clr - 1e-9
++
++
+ class HSVisibilityGraph:
+     """高速域可见性图：节点 = fv + cvs + 障碍包络顶点（unified 规则膨胀）。
+ 
+@@ -3995,7 +4023,14 @@
+                 g_p = HSVisibilityGraph(fcu, net_p, tuple(ep["P"][idx]["pos"]),
+                                         {(corr_x, track_p)})
+                 sol_p = g_p.solve()
+-                g_n = HSVisibilityGraph(fcu, net_n, tuple(ep["N"][idx]["pos"]),
++                _w = (self.spec.get("impedance") or {}).get("width_mm", 0.09)
++                _g = (((self.spec.get("net_classes") or {}).get("PCIe85") or {})
++                      .get("diff_pair") or {}).get("p_gap",
++                                                   (self.spec.get("impedance") or {}).get("gap_mm", 0.1))
++                _clr = _w + _g
++                _nf = (_PairClearField(fcu, sol_p[0], _clr)
++                       if (sol_p is not None and len(sol_p[0]) >= 2) else fcu)
++                g_n = HSVisibilityGraph(_nf, net_n, tuple(ep["N"][idx]["pos"]),
+                                         {(corr_x, track_n)})
+                 sol_n = g_n.solve()
+             except RuntimeError:

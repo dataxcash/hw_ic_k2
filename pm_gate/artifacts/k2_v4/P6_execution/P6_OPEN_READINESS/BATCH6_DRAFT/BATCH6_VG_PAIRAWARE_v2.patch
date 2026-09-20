@@ -1,0 +1,81 @@
+--- a/_shared/eda_core/hs_route_model.py
++++ b/_shared/eda_core/hs_route_model.py
+@@ -3992,38 +3992,54 @@
+         fcu = fields.get("F.Cu")
+         if fcu is not None:
+             try:
++                _w = (self.spec.get("impedance") or {}).get("width_mm", 0.09)
++                _g = (((self.spec.get("net_classes") or {}).get("PCIe85") or {})
++                      .get("diff_pair") or {}).get("p_gap",
++                                                   (self.spec.get("impedance") or {}).get("gap_mm", 0.1))
++                _clr = _w + _g
+                 g_p = HSVisibilityGraph(fcu, net_p, tuple(ep["P"][idx]["pos"]),
+                                         {(corr_x, track_p)})
+                 sol_p = g_p.solve()
++                if sol_p is not None and len(sol_p[0]) >= 2:
++                    g_n = HSVisibilityGraph(_PairClearField(fcu, sol_p[0], _clr), net_n,
++                                            tuple(ep["N"][idx]["pos"]), {(corr_x, track_n)})
++                else:
++                    g_n = HSVisibilityGraph(fcu, net_n, tuple(ep["N"][idx]["pos"]),
++                                            {(corr_x, track_n)})
++                sol_n = g_n.solve()
++                _sp2, _sn2 = sol_p, sol_n
+                 g_n = HSVisibilityGraph(fcu, net_n, tuple(ep["N"][idx]["pos"]),
+                                         {(corr_x, track_n)})
+                 sol_n = g_n.solve()
++                if sol_n is not None and len(sol_n[0]) >= 2:
++                    g_p = HSVisibilityGraph(_PairClearField(fcu, sol_n[0], _clr), net_p,
++                                            tuple(ep["P"][idx]["pos"]), {(corr_x, track_p)})
++                else:
++                    g_p = HSVisibilityGraph(fcu, net_p, tuple(ep["P"][idx]["pos"]),
++                                            {(corr_x, track_p)})
++                sol_p = g_p.solve()
++                _cands = []
++                for _sp, _sn in ((sol_p, sol_n), (_sp2, _sn2)):
++                    if _sp is None or _sn is None:
++                        continue
++                    _c = {
++                        "P": {"pts": [tuple(p) for p in _sp[0]],
++                              "layers": ["F.Cu"] * (len(_sp[0]) - 1), "via": None},
++                        "N": {"pts": [tuple(p) for p in _sn[0]],
++                              "layers": ["F.Cu"] * (len(_sn[0]) - 1), "via": None},
++                    }
++                    if not self._k1_escape_verify(fields, net_p, net_n, ep, _c, side):
++                        continue
++                    _me, _pt = _path_pn_min_edge_pt(
++                        _c["P"]["pts"], _c["P"]["layers"], _c["N"]["pts"],
++                        _c["N"]["layers"], _w)
++                    _cands.append((_me if _me is not None else -9.0, _c))
++                if _cands:
++                    _cands.sort(key=lambda t: -t[0])
++                    _c = _cands[0][1]
++                    return {"corr_x": corr_x, "P": _c["P"], "N": _c["N"]}
+             except RuntimeError:
+                 return None
+-            if sol_p is not None and sol_n is not None:
+-                # ⑥ 对级耦合（双向迭代避让）：N 先避 P，再让 P 反向避 N，
+-                #    两遍后若 P/N 间距仍不足则由 verify 拒绝（fail-closed）。
+-                try:
+-                    sol_n2 = HSVisibilityGraph(
+-                        _PairClearField(fcu, sol_p[0]), net_n,
+-                        tuple(ep["N"][idx]["pos"]), {(corr_x, track_n)}).solve()
+-                    if sol_n2 is not None:
+-                        sol_n = sol_n2
+-                    sol_p2 = HSVisibilityGraph(
+-                        _PairClearField(fcu, sol_n[0]), net_p,
+-                        tuple(ep["P"][idx]["pos"]), {(corr_x, track_p)}).solve()
+-                    if sol_p2 is not None:
+-                        sol_p = sol_p2
+-                except Exception:
+-                    pass
+-                cand = {
+-                    "P": {"pts": [tuple(p) for p in sol_p[0]],
+-                          "layers": ["F.Cu"] * (len(sol_p[0]) - 1), "via": None},
+-                    "N": {"pts": [tuple(p) for p in sol_n[0]],
+-                          "layers": ["F.Cu"] * (len(sol_n[0]) - 1), "via": None},
+-                }
+-                if self._k1_escape_verify(fields, net_p, net_n, ep, cand, side):
+-                    return {"corr_x": corr_x, "P": cand["P"], "N": cand["N"]}
+         return None
+ 
+     def _tpl_a_line(self, fields, net: str, pad: Dict, track: float,

@@ -1,0 +1,787 @@
+{
+ "artifact": "k1_u11_right_end_bound_probe",
+ "schema": 1,
+ "core": "/tmp/opencode/vgscope/best_of",
+ "centerline_req_mm": 0.19,
+ "relaxation": "异层不计 P/N 冲突；via 仅查离焊盘 ≥0.3；未查 via-via / 走廊层",
+ "segments": {
+  "RX0/input": {
+   "corridor": "HIGH_SPEED_MAIN",
+   "corr_x_right": 38.312,
+   "track_P": 21.01,
+   "layer_P": "In2",
+   "track_N": 20.51,
+   "layer_N": "In2",
+   "center_dist_PN": 0.5,
+   "pad_row": {
+    "P": [
+     38.312,
+     17.5
+    ],
+    "N": [
+     38.312,
+     18.0
+    ]
+   },
+   "engine_escape_layers": [
+    "F.Cu",
+    "In2",
+    "In2.Cu"
+   ],
+   "engine_has_In1": false,
+   "reach": {
+    "P": {
+     "F.Cu": {
+      "reachable": false,
+      "n_start_points": 1,
+      "n_reachable_starts": 0,
+      "min_path_len": null
+     },
+     "In1.Cu": {
+      "reachable": true,
+      "n_start_points": 426,
+      "n_reachable_starts": 426,
+      "min_path_len": 2.429
+     },
+     "In2.Cu": {
+      "reachable": true,
+      "n_start_points": 426,
+      "n_reachable_starts": 426,
+      "min_path_len": 2.429
+     }
+    },
+    "N": {
+     "F.Cu": {
+      "reachable": false,
+      "n_start_points": 1,
+      "n_reachable_starts": 0,
+      "min_path_len": null
+     },
+     "In1.Cu": {
+      "reachable": true,
+      "n_start_points": 404,
+      "n_reachable_starts": 404,
+      "min_path_len": 1.441
+     },
+     "In2.Cu": {
+      "reachable": true,
+      "n_start_points": 404,
+      "n_reachable_starts": 404,
+      "min_path_len": 1.441
+     }
+    }
+   },
+   "n_obstacles": {
+    "F.Cu": 151,
+    "In1.Cu": 26,
+    "In2.Cu": 26
+   },
+   "relaxed_verdict": {
+    "layers_reachable_P": [
+     "In1.Cu",
+     "In2.Cu"
+    ],
+    "layers_reachable_N": [
+     "In1.Cu",
+     "In2.Cu"
+    ],
+    "split_layer_assignment_exists": true,
+    "example_assignment": [
+     "In1.Cu",
+     "In2.Cu"
+    ],
+    "conclusion": "换层不排除 ⇒ 须过孔 + 引擎模板（另案）",
+    "via_search_space": {
+     "start_points_per_net_per_inner_layer": 404,
+     "layers": [
+      "F.Cu",
+      "In1.Cu",
+      "In2.Cu"
+     ]
+    }
+   }
+  },
+  "RX0/output": {
+   "corridor": "HIGH_SPEED_MAIN",
+   "corr_x_right": 73.245,
+   "track_P": 18.0,
+   "layer_P": "In2",
+   "track_N": 19.0,
+   "layer_N": "In1",
+   "center_dist_PN": 1.0,
+   "pad_row": {
+    "P": [
+     73.245,
+     23.0
+    ],
+    "N": [
+     73.245,
+     22.5
+    ]
+   },
+   "engine_escape_layers": [
+    "F.Cu",
+    "In1",
+    "In2",
+    "In2.Cu"
+   ],
+   "engine_has_In1": false,
+   "reach": {
+    "P": {
+     "F.Cu": {
+      "reachable": true,
+      "n_start_points": 1,
+      "n_reachable_starts": 1,
+      "min_path_len": 5.837
+     },
+     "In1.Cu": {
+      "reachable": true,
+      "n_start_points": 477,
+      "n_reachable_starts": 477,
+      "min_path_len": 3.9
+     },
+     "In2.Cu": {
+      "reachable": true,
+      "n_start_points": 477,
+      "n_reachable_starts": 477,
+      "min_path_len": 3.9
+     }
+    },
+    "N": {
+     "F.Cu": {
+      "reachable": true,
+      "n_start_points": 1,
+      "n_reachable_starts": 1,
+      "min_path_len": 4.89
+     },
+     "In1.Cu": {
+      "reachable": true,
+      "n_start_points": 456,
+      "n_reachable_starts": 456,
+      "min_path_len": 2.419
+     },
+     "In2.Cu": {
+      "reachable": true,
+      "n_start_points": 456,
+      "n_reachable_starts": 456,
+      "min_path_len": 2.419
+     }
+    }
+   },
+   "n_obstacles": {
+    "F.Cu": 151,
+    "In1.Cu": 26,
+    "In2.Cu": 26
+   },
+   "relaxed_verdict": {
+    "layers_reachable_P": [
+     "F.Cu",
+     "In1.Cu",
+     "In2.Cu"
+    ],
+    "layers_reachable_N": [
+     "F.Cu",
+     "In1.Cu",
+     "In2.Cu"
+    ],
+    "split_layer_assignment_exists": true,
+    "example_assignment": [
+     "F.Cu",
+     "In1.Cu"
+    ],
+    "conclusion": "换层不排除 ⇒ 须过孔 + 引擎模板（另案）",
+    "via_search_space": {
+     "start_points_per_net_per_inner_layer": 456,
+     "layers": [
+      "F.Cu",
+      "In1.Cu",
+      "In2.Cu"
+     ]
+    }
+   }
+  },
+  "RX1/input": {
+   "corridor": "HIGH_SPEED_MAIN",
+   "corr_x_right": 38.312,
+   "track_P": 16.0,
+   "layer_P": "F.Cu",
+   "track_N": 24.02,
+   "layer_N": "In1",
+   "center_dist_PN": 8.02,
+   "pad_row": {
+    "P": [
+     38.312,
+     22.0
+    ],
+    "N": [
+     38.312,
+     22.5
+    ]
+   },
+   "engine_escape_layers": [
+    "F.Cu",
+    "In1",
+    "In2.Cu"
+   ],
+   "engine_has_In1": false,
+   "reach": {
+    "P": {
+     "F.Cu": {
+      "reachable": false,
+      "n_start_points": 1,
+      "n_reachable_starts": 0,
+      "min_path_len": null
+     },
+     "In1.Cu": {
+      "reachable": true,
+      "n_start_points": 431,
+      "n_reachable_starts": 431,
+      "min_path_len": 4.909
+     },
+     "In2.Cu": {
+      "reachable": true,
+      "n_start_points": 431,
+      "n_reachable_starts": 431,
+      "min_path_len": 4.909
+     }
+    },
+    "N": {
+     "F.Cu": {
+      "reachable": true,
+      "n_start_points": 1,
+      "n_reachable_starts": 1,
+      "min_path_len": 2.851
+     },
+     "In1.Cu": {
+      "reachable": true,
+      "n_start_points": 448,
+      "n_reachable_starts": 448,
+      "min_path_len": 0.42
+     },
+     "In2.Cu": {
+      "reachable": true,
+      "n_start_points": 448,
+      "n_reachable_starts": 448,
+      "min_path_len": 0.42
+     }
+    }
+   },
+   "n_obstacles": {
+    "F.Cu": 151,
+    "In1.Cu": 24,
+    "In2.Cu": 24
+   },
+   "relaxed_verdict": {
+    "layers_reachable_P": [
+     "In1.Cu",
+     "In2.Cu"
+    ],
+    "layers_reachable_N": [
+     "F.Cu",
+     "In1.Cu",
+     "In2.Cu"
+    ],
+    "split_layer_assignment_exists": true,
+    "example_assignment": [
+     "In1.Cu",
+     "F.Cu"
+    ],
+    "conclusion": "换层不排除 ⇒ 须过孔 + 引擎模板（另案）",
+    "via_search_space": {
+     "start_points_per_net_per_inner_layer": 448,
+     "layers": [
+      "F.Cu",
+      "In1.Cu",
+      "In2.Cu"
+     ]
+    }
+   }
+  },
+  "RX1/output": {
+   "corridor": "HIGH_SPEED_MAIN",
+   "corr_x_right": 73.245,
+   "track_P": 21.0,
+   "layer_P": "In1",
+   "track_N": 20.5,
+   "layer_N": "In1",
+   "center_dist_PN": 0.5,
+   "pad_row": {
+    "P": [
+     73.245,
+     21.5
+    ],
+    "N": [
+     73.245,
+     21.0
+    ]
+   },
+   "engine_escape_layers": [
+    "F.Cu",
+    "In1",
+    "In2.Cu"
+   ],
+   "engine_has_In1": false,
+   "reach": {
+    "P": {
+     "F.Cu": {
+      "reachable": false,
+      "n_start_points": 1,
+      "n_reachable_starts": 0,
+      "min_path_len": null
+     },
+     "In1.Cu": {
+      "reachable": true,
+      "n_start_points": 435,
+      "n_reachable_starts": 435,
+      "min_path_len": 0.3
+     },
+     "In2.Cu": {
+      "reachable": true,
+      "n_start_points": 435,
+      "n_reachable_starts": 435,
+      "min_path_len": 0.3
+     }
+    },
+    "N": {
+     "F.Cu": {
+      "reachable": false,
+      "n_start_points": 1,
+      "n_reachable_starts": 0,
+      "min_path_len": null
+     },
+     "In1.Cu": {
+      "reachable": true,
+      "n_start_points": 451,
+      "n_reachable_starts": 451,
+      "min_path_len": 0.3
+     },
+     "In2.Cu": {
+      "reachable": true,
+      "n_start_points": 451,
+      "n_reachable_starts": 451,
+      "min_path_len": 0.3
+     }
+    }
+   },
+   "n_obstacles": {
+    "F.Cu": 151,
+    "In1.Cu": 26,
+    "In2.Cu": 26
+   },
+   "relaxed_verdict": {
+    "layers_reachable_P": [
+     "In1.Cu",
+     "In2.Cu"
+    ],
+    "layers_reachable_N": [
+     "In1.Cu",
+     "In2.Cu"
+    ],
+    "split_layer_assignment_exists": true,
+    "example_assignment": [
+     "In1.Cu",
+     "In2.Cu"
+    ],
+    "conclusion": "换层不排除 ⇒ 须过孔 + 引擎模板（另案）",
+    "via_search_space": {
+     "start_points_per_net_per_inner_layer": 451,
+     "layers": [
+      "F.Cu",
+      "In1.Cu",
+      "In2.Cu"
+     ]
+    }
+   }
+  },
+  "TX0/input": {
+   "corridor": "HIGH_SPEED_MAIN",
+   "corr_x_right": 38.312,
+   "track_P": 18.0,
+   "layer_P": "F.Cu",
+   "track_N": 17.5,
+   "layer_N": "F.Cu",
+   "center_dist_PN": 0.5,
+   "pad_row": {
+    "P": [
+     38.312,
+     15.5
+    ],
+    "N": [
+     38.312,
+     16.0
+    ]
+   },
+   "engine_escape_layers": [
+    "F.Cu",
+    "In2.Cu"
+   ],
+   "engine_has_In1": false,
+   "reach": {
+    "P": {
+     "F.Cu": {
+      "reachable": false,
+      "n_start_points": 1,
+      "n_reachable_starts": 0,
+      "min_path_len": null
+     },
+     "In1.Cu": {
+      "reachable": true,
+      "n_start_points": 448,
+      "n_reachable_starts": 448,
+      "min_path_len": 1.4
+     },
+     "In2.Cu": {
+      "reachable": true,
+      "n_start_points": 448,
+      "n_reachable_starts": 448,
+      "min_path_len": 1.4
+     }
+    },
+    "N": {
+     "F.Cu": {
+      "reachable": false,
+      "n_start_points": 1,
+      "n_reachable_starts": 0,
+      "min_path_len": null
+     },
+     "In1.Cu": {
+      "reachable": true,
+      "n_start_points": 431,
+      "n_reachable_starts": 431,
+      "min_path_len": 0.5
+     },
+     "In2.Cu": {
+      "reachable": true,
+      "n_start_points": 431,
+      "n_reachable_starts": 431,
+      "min_path_len": 0.5
+     }
+    }
+   },
+   "n_obstacles": {
+    "F.Cu": 151,
+    "In1.Cu": 26,
+    "In2.Cu": 26
+   },
+   "relaxed_verdict": {
+    "layers_reachable_P": [
+     "In1.Cu",
+     "In2.Cu"
+    ],
+    "layers_reachable_N": [
+     "In1.Cu",
+     "In2.Cu"
+    ],
+    "split_layer_assignment_exists": true,
+    "example_assignment": [
+     "In1.Cu",
+     "In2.Cu"
+    ],
+    "conclusion": "换层不排除 ⇒ 须过孔 + 引擎模板（另案）",
+    "via_search_space": {
+     "start_points_per_net_per_inner_layer": 431,
+     "layers": [
+      "F.Cu",
+      "In1.Cu",
+      "In2.Cu"
+     ]
+    }
+   }
+  },
+  "TX0/output": {
+   "corridor": "HIGH_SPEED_MAIN",
+   "corr_x_right": 74.2,
+   "track_P": 22.5,
+   "layer_P": "F.Cu",
+   "track_N": 18.5,
+   "layer_N": "In2",
+   "center_dist_PN": 4.0,
+   "pad_row": {
+    "P": [
+     75.155,
+     23.0
+    ],
+    "N": [
+     75.155,
+     22.5
+    ]
+   },
+   "engine_escape_layers": [
+    "F.Cu",
+    "In2",
+    "In2.Cu"
+   ],
+   "engine_has_In1": false,
+   "reach": {
+    "P": {
+     "F.Cu": {
+      "reachable": true,
+      "n_start_points": 1,
+      "n_reachable_starts": 1,
+      "min_path_len": 1.078
+     },
+     "In1.Cu": {
+      "reachable": true,
+      "n_start_points": 475,
+      "n_reachable_starts": 475,
+      "min_path_len": 0.045
+     },
+     "In2.Cu": {
+      "reachable": true,
+      "n_start_points": 475,
+      "n_reachable_starts": 475,
+      "min_path_len": 0.045
+     }
+    },
+    "N": {
+     "F.Cu": {
+      "reachable": true,
+      "n_start_points": 1,
+      "n_reachable_starts": 1,
+      "min_path_len": 5.067
+     },
+     "In1.Cu": {
+      "reachable": true,
+      "n_start_points": 453,
+      "n_reachable_starts": 453,
+      "min_path_len": 2.9
+     },
+     "In2.Cu": {
+      "reachable": true,
+      "n_start_points": 453,
+      "n_reachable_starts": 453,
+      "min_path_len": 2.9
+     }
+    }
+   },
+   "n_obstacles": {
+    "F.Cu": 151,
+    "In1.Cu": 26,
+    "In2.Cu": 26
+   },
+   "relaxed_verdict": {
+    "layers_reachable_P": [
+     "F.Cu",
+     "In1.Cu",
+     "In2.Cu"
+    ],
+    "layers_reachable_N": [
+     "F.Cu",
+     "In1.Cu",
+     "In2.Cu"
+    ],
+    "split_layer_assignment_exists": true,
+    "example_assignment": [
+     "F.Cu",
+     "In1.Cu"
+    ],
+    "conclusion": "换层不排除 ⇒ 须过孔 + 引擎模板（另案）",
+    "via_search_space": {
+     "start_points_per_net_per_inner_layer": 453,
+     "layers": [
+      "F.Cu",
+      "In1.Cu",
+      "In2.Cu"
+     ]
+    }
+   }
+  },
+  "TX1/input": {
+   "corridor": "HIGH_SPEED_MAIN",
+   "corr_x_right": 38.312,
+   "track_P": 20.51,
+   "layer_P": "In2",
+   "track_N": 21.3,
+   "layer_N": "In2",
+   "center_dist_PN": 0.79,
+   "pad_row": {
+    "P": [
+     38.312,
+     20.0
+    ],
+    "N": [
+     38.312,
+     20.5
+    ]
+   },
+   "engine_escape_layers": [
+    "F.Cu",
+    "In2",
+    "In2.Cu"
+   ],
+   "engine_has_In1": false,
+   "reach": {
+    "P": {
+     "F.Cu": {
+      "reachable": true,
+      "n_start_points": 1,
+      "n_reachable_starts": 1,
+      "min_path_len": 0.51
+     },
+     "In1.Cu": {
+      "reachable": true,
+      "n_start_points": 404,
+      "n_reachable_starts": 404,
+      "min_path_len": 0.313
+     },
+     "In2.Cu": {
+      "reachable": true,
+      "n_start_points": 404,
+      "n_reachable_starts": 404,
+      "min_path_len": 0.313
+     }
+    },
+    "N": {
+     "F.Cu": {
+      "reachable": true,
+      "n_start_points": 1,
+      "n_reachable_starts": 1,
+      "min_path_len": 2.4
+     },
+     "In1.Cu": {
+      "reachable": true,
+      "n_start_points": 426,
+      "n_reachable_starts": 426,
+      "min_path_len": 0.001
+     },
+     "In2.Cu": {
+      "reachable": true,
+      "n_start_points": 426,
+      "n_reachable_starts": 426,
+      "min_path_len": 0.001
+     }
+    }
+   },
+   "n_obstacles": {
+    "F.Cu": 151,
+    "In1.Cu": 24,
+    "In2.Cu": 24
+   },
+   "relaxed_verdict": {
+    "layers_reachable_P": [
+     "F.Cu",
+     "In1.Cu",
+     "In2.Cu"
+    ],
+    "layers_reachable_N": [
+     "F.Cu",
+     "In1.Cu",
+     "In2.Cu"
+    ],
+    "split_layer_assignment_exists": true,
+    "example_assignment": [
+     "F.Cu",
+     "In1.Cu"
+    ],
+    "conclusion": "换层不排除 ⇒ 须过孔 + 引擎模板（另案）",
+    "via_search_space": {
+     "start_points_per_net_per_inner_layer": 426,
+     "layers": [
+      "F.Cu",
+      "In1.Cu",
+      "In2.Cu"
+     ]
+    }
+   }
+  },
+  "TX1/output": {
+   "corridor": "HIGH_SPEED_MAIN",
+   "corr_x_right": 74.2,
+   "track_P": 20.0,
+   "layer_P": "B.Cu",
+   "track_N": 21.5,
+   "layer_N": "In1",
+   "center_dist_PN": 1.5,
+   "pad_row": {
+    "P": [
+     75.155,
+     21.5
+    ],
+    "N": [
+     75.155,
+     21.0
+    ]
+   },
+   "engine_escape_layers": [
+    "B.Cu",
+    "F.Cu",
+    "In1",
+    "In2.Cu"
+   ],
+   "engine_has_In1": false,
+   "reach": {
+    "P": {
+     "F.Cu": {
+      "reachable": true,
+      "n_start_points": 1,
+      "n_reachable_starts": 1,
+      "min_path_len": 1.778
+     },
+     "In1.Cu": {
+      "reachable": true,
+      "n_start_points": 453,
+      "n_reachable_starts": 453,
+      "min_path_len": 0.403
+     },
+     "In2.Cu": {
+      "reachable": true,
+      "n_start_points": 453,
+      "n_reachable_starts": 453,
+      "min_path_len": 0.403
+     }
+    },
+    "N": {
+     "F.Cu": {
+      "reachable": true,
+      "n_start_points": 1,
+      "n_reachable_starts": 1,
+      "min_path_len": 1.078
+     },
+     "In1.Cu": {
+      "reachable": true,
+      "n_start_points": 475,
+      "n_reachable_starts": 475,
+      "min_path_len": 0.045
+     },
+     "In2.Cu": {
+      "reachable": true,
+      "n_start_points": 475,
+      "n_reachable_starts": 475,
+      "min_path_len": 0.045
+     }
+    }
+   },
+   "n_obstacles": {
+    "F.Cu": 151,
+    "In1.Cu": 26,
+    "In2.Cu": 26
+   },
+   "relaxed_verdict": {
+    "layers_reachable_P": [
+     "F.Cu",
+     "In1.Cu",
+     "In2.Cu"
+    ],
+    "layers_reachable_N": [
+     "F.Cu",
+     "In1.Cu",
+     "In2.Cu"
+    ],
+    "split_layer_assignment_exists": true,
+    "example_assignment": [
+     "F.Cu",
+     "In1.Cu"
+    ],
+    "conclusion": "换层不排除 ⇒ 须过孔 + 引擎模板（另案）",
+    "via_search_space": {
+     "start_points_per_net_per_inner_layer": 475,
+     "layers": [
+      "F.Cu",
+      "In1.Cu",
+      "In2.Cu"
+     ]
+    }
+   }
+  }
+ }
+}
