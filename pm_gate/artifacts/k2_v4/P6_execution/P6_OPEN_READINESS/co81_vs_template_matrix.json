@@ -1,0 +1,236 @@
+{
+ "artifact": "k2_p6_2_co81_conflict_matrix",
+ "co81_predicate": "k2/tools/p3_v57_co81_project_rules_gate.py：对 `git ls-files *.kicad_pro` 每个文件，`rule_severities` 逐规则须 == `tools/k2_jlc_template.kicad_pro`（另 + 7 项 DRC 规则 == _shared/eda_core/drc_rules.json:manufacturing）",
+ "eng_note": "ENG 未改任何 .kicad_pro / 判据 / 记录件（模板仅 /tmp 备料 + dry-run）；本件只报冲突与可执行方案，**选择权归监理**。",
+ "finding_1_latent_red": {
+  "interpretation": "l5/l6/l7 的 pro 在 P4 被清理为 0 ignore，而模板仍 9 ⇒ CO-81 的『== 模板』子句**自 P4 起实际已不成立**；CO-81 记录件（m13_v57_co81_project_rules_gate.json）为 5 文件时代快照（其模板 sha16 206dd0f2 = 现行模板），未随 P4 重跑",
+  "mismatch_files": [
+   "hw/k2_v4_8L.l5.kicad_pro",
+   "hw/k2_v4_8L.l6.kicad_pro",
+   "hw/k2_v4_8L.l7.kicad_pro"
+  ],
+  "reading": "现状 7/10 合规，3 个 mismatch",
+  "severity": "既有回归闸静默失守（新发现，未见他处登记）"
+ },
+ "finding_2_A_prime_blast": {
+  "interpretation": "模板单改会连带 6 个**真实受控文件**失配（含 archive/k2_v4_6L/* 两件历史 6L 记录 + hw/k2_v4_8L.kicad_pro 设计源 pro + hw/k2_v4_8L.l4.kicad_pro 冻结板配套 pro）⇒ 模板不能单独移动",
+  "mismatch_files": [
+   "archive/k2_v4_6L/k2_v4.kicad_pro",
+   "archive/k2_v4_6L/k2_v4.l4.kicad_pro",
+   "hw/k2_v4_8L.kicad_pro",
+   "hw/k2_v4_8L.l4.kicad_pro",
+   "k2_v4_8L.kicad_pro",
+   "k2_v4_8L.l4.kicad_pro",
+   "tools/k2_jlc_template.kicad_pro"
+  ],
+  "reading": "方案 A′（模板 9 条 ignore→warning）后 3/10 合规，7 个 mismatch"
+ },
+ "matrix": [
+  {
+   "file": "archive/k2_v4_6L/k2_v4.kicad_pro",
+   "n_ignores": 9,
+   "severity_mismatch_after_A_prime": [
+    "copper_sliver",
+    "footprint_filters_mismatch",
+    "footprint_type_mismatch",
+    "missing_courtyard",
+    "silk_over_copper",
+    "silk_overlap",
+    "track_not_centered_on_via",
+    "tuning_profile_track_geometries",
+    "via_dangling"
+   ],
+   "severity_mismatch_vs_template_current": [],
+   "sha16": "ef53b4ff8f0f20b9",
+   "symlink_to": null
+  },
+  {
+   "file": "archive/k2_v4_6L/k2_v4.l4.kicad_pro",
+   "n_ignores": 9,
+   "severity_mismatch_after_A_prime": [
+    "copper_sliver",
+    "footprint_filters_mismatch",
+    "footprint_type_mismatch",
+    "missing_courtyard",
+    "silk_over_copper",
+    "silk_overlap",
+    "track_not_centered_on_via",
+    "tuning_profile_track_geometries",
+    "via_dangling"
+   ],
+   "severity_mismatch_vs_template_current": [],
+   "sha16": "f89f4975af22cee7",
+   "symlink_to": null
+  },
+  {
+   "file": "hw/k2_v4_8L.kicad_pro",
+   "n_ignores": 9,
+   "severity_mismatch_after_A_prime": [
+    "copper_sliver",
+    "footprint_filters_mismatch",
+    "footprint_type_mismatch",
+    "missing_courtyard",
+    "silk_over_copper",
+    "silk_overlap",
+    "track_not_centered_on_via",
+    "tuning_profile_track_geometries",
+    "via_dangling"
+   ],
+   "severity_mismatch_vs_template_current": [],
+   "sha16": "f54404024191ea64",
+   "symlink_to": null
+  },
+  {
+   "file": "hw/k2_v4_8L.l4.kicad_pro",
+   "n_ignores": 9,
+   "severity_mismatch_after_A_prime": [
+    "copper_sliver",
+    "footprint_filters_mismatch",
+    "footprint_type_mismatch",
+    "missing_courtyard",
+    "silk_over_copper",
+    "silk_overlap",
+    "track_not_centered_on_via",
+    "tuning_profile_track_geometries",
+    "via_dangling"
+   ],
+   "severity_mismatch_vs_template_current": [],
+   "sha16": "ce2c2bf0da79a1ff",
+   "symlink_to": null
+  },
+  {
+   "file": "hw/k2_v4_8L.l5.kicad_pro",
+   "n_ignores": 0,
+   "severity_mismatch_after_A_prime": [],
+   "severity_mismatch_vs_template_current": [
+    "copper_sliver",
+    "footprint_filters_mismatch",
+    "footprint_type_mismatch",
+    "missing_courtyard",
+    "silk_over_copper",
+    "silk_overlap",
+    "track_not_centered_on_via",
+    "tuning_profile_track_geometries",
+    "via_dangling"
+   ],
+   "sha16": "35c8f34bde7ac00c",
+   "symlink_to": null
+  },
+  {
+   "file": "hw/k2_v4_8L.l6.kicad_pro",
+   "n_ignores": 0,
+   "severity_mismatch_after_A_prime": [],
+   "severity_mismatch_vs_template_current": [
+    "copper_sliver",
+    "footprint_filters_mismatch",
+    "footprint_type_mismatch",
+    "missing_courtyard",
+    "silk_over_copper",
+    "silk_overlap",
+    "track_not_centered_on_via",
+    "tuning_profile_track_geometries",
+    "via_dangling"
+   ],
+   "sha16": "12ad219b9f66b7b3",
+   "symlink_to": null
+  },
+  {
+   "file": "hw/k2_v4_8L.l7.kicad_pro",
+   "n_ignores": 0,
+   "severity_mismatch_after_A_prime": [],
+   "severity_mismatch_vs_template_current": [
+    "copper_sliver",
+    "footprint_filters_mismatch",
+    "footprint_type_mismatch",
+    "missing_courtyard",
+    "silk_over_copper",
+    "silk_overlap",
+    "track_not_centered_on_via",
+    "tuning_profile_track_geometries",
+    "via_dangling"
+   ],
+   "sha16": "33b4eb6cae8359a9",
+   "symlink_to": null
+  },
+  {
+   "file": "k2_v4_8L.kicad_pro",
+   "n_ignores": 9,
+   "severity_mismatch_after_A_prime": [
+    "copper_sliver",
+    "footprint_filters_mismatch",
+    "footprint_type_mismatch",
+    "missing_courtyard",
+    "silk_over_copper",
+    "silk_overlap",
+    "track_not_centered_on_via",
+    "tuning_profile_track_geometries",
+    "via_dangling"
+   ],
+   "severity_mismatch_vs_template_current": [],
+   "sha16": "f54404024191ea64",
+   "symlink_to": "hw/k2_v4_8L.kicad_pro"
+  },
+  {
+   "file": "k2_v4_8L.l4.kicad_pro",
+   "n_ignores": 9,
+   "severity_mismatch_after_A_prime": [
+    "copper_sliver",
+    "footprint_filters_mismatch",
+    "footprint_type_mismatch",
+    "missing_courtyard",
+    "silk_over_copper",
+    "silk_overlap",
+    "track_not_centered_on_via",
+    "tuning_profile_track_geometries",
+    "via_dangling"
+   ],
+   "severity_mismatch_vs_template_current": [],
+   "sha16": "ce2c2bf0da79a1ff",
+   "symlink_to": "hw/k2_v4_8L.l4.kicad_pro"
+  },
+  {
+   "file": "tools/k2_jlc_template.kicad_pro",
+   "n_ignores": 9,
+   "severity_mismatch_after_A_prime": [
+    "copper_sliver",
+    "footprint_filters_mismatch",
+    "footprint_type_mismatch",
+    "missing_courtyard",
+    "silk_over_copper",
+    "silk_overlap",
+    "track_not_centered_on_via",
+    "tuning_profile_track_geometries",
+    "via_dangling"
+   ],
+   "severity_mismatch_vs_template_current": [],
+   "sha16": "ecce278068e6d330",
+   "symlink_to": null
+  }
+ ],
+ "purpose": "P6-2 模板整改（G-c 模板整改批）与既有 L2 回归闸 **CO-81** 的**排序冲突**取证（ENG 只读复算；不代裁）",
+ "readonly_repo": true,
+ "resolution_options_for_supervisor": [
+  {
+   "blast": "6 个真实文件（含 2 件 archive 历史记录 + 2 件 hw 设计源/冻结板配套 pro）；不动任何 .kicad_pcb；l5/l6/l7 已是目标态无需改",
+   "id": "O1",
+   "name": "全集合一（模板 + 6 个 9-ignore 文件一次性 → warning）",
+   "risk": "触及历史/设计源配套记录件，须监理裁 + 留痕",
+   "then": "重跑 CO-81 记录 + 重签；P6-2 判据（模板 ignore 集 == manifest 应然集）随之可核"
+  },
+  {
+   "id": "O2",
+   "name": "闸改口径（CO-81 的 severity 子句：`== 模板` → `== manifest 应然集`）",
+   "rationale": "与 P6-2 判据**同源**（都以 manifest 应然集为唯一真源，deny-by-default）；模板与各板 pro 不再需要逐字同表",
+   "risk": "判据口径变更，须监理裁；ENG 不代裁",
+   "then": "CO-81 工具与其记录件重跑 + 重签（属 L2 回归闸口径变更 ⇒ 监理职权）"
+  },
+  {
+   "consequence": "P6-2 判据无法成立（模板仍 9 条 ignore）⇒ 与 G-c『模板整改批』自相矛盾",
+   "id": "O3",
+   "name": "维持现状（不动模板）",
+   "risk": "不建议"
+  }
+ ],
+ "schema": 1,
+ "tracked_n": 10
+}

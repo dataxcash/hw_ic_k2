@@ -78,6 +78,24 @@ P6-1 的**唯一缺件** = 监理持有的 `criteria/manifest.k1.yaml`（G-c2，
 - 口径说明：pipeline 覆盖 = 判定器 `pipeline_present` 的**祖先链≤3 层**口径（非"同目录在否"）；本普查**只读**，不对 key_v2/pciesw4 作阶段判定（各项目阶段门自判）。
 - 机读：`P6_OPEN_READINESS/crossboard_census.json`。
 
+## 2.3 ⚠ 冲突：P6-2 模板整改 × 既有 L2 回归闸 **CO-81**（须监理排序；ENG 未动任何件）
+
+**CO-81 口径**（`k2/tools/p3_v57_co81_project_rules_gate.py`）：对 `git ls-files *.kicad_pro` 的每个文件，`rule_severities` 逐规则**须等于** `tools/k2_jlc_template.kicad_pro`（另加 7 项 DRC 规则 = `_shared/eda_core/drc_rules.json:manufacturing`）。
+
+| 事实 | 读数 |
+|---|---|
+| 受控 `.kicad_pro`（tracked） | **10 条**（其中 `k2_v4_8L.kicad_pro` / `k2_v4_8L.l4.kicad_pro` 为符号链接 → 真实文件 **8**） |
+| **现状**（模板 9 ignore） | **7/10 合规 · 3 个 mismatch** = `hw/k2_v4_8L.l5/l6/l7.kicad_pro`（0 ignore）⇒ **CO-81 的『== 模板』子句自 P4 起实际已不成立**（其记录件是 5 文件时代快照，模板 sha16 `206dd0f2` 与现行一致，但文件集已扩到 10） |
+| **方案 A′ 后**（模板 9→warning） | **3/10 合规 · 7 个 mismatch** ⇒ 模板**不能单独移动**：会连带 `archive/k2_v4_6L/*`（历史 6L 记录）· `hw/k2_v4_8L.kicad_pro`（设计源 pro）· `hw/k2_v4_8L.l4.kicad_pro`（冻结板配套 pro）等失配 |
+
+**监理三选一**（ENG 不代裁；机读矩阵 `P6_OPEN_READINESS/co81_vs_template_matrix.json`）：
+
+- **O1 全集合一**：模板 + 6 个 9-ignore 真实文件一次性 → `warning`；随之重跑/重签 CO-81 记录 ⇒ 触及历史与设计源**配套**记录件（不动任何 `.kicad_pcb`）。
+- **O2 闸改口径**：CO-81 的 severity 子句由「== 模板」改为「== manifest 应然集（deny-by-default）」——与 **P6-2 判据同源**（单一真源）；属 L2 回归闸口径变更 ⇒ 须监理裁 + 记录重签。
+- **O3 维持现状**：P6-2 判据不成立（模板仍 9 条）⇒ 与 G-c「模板整改批」自相矛盾。
+
+> **顺带发现（新，未见他处登记）**：CO-81 现状 3 个 mismatch = **既有回归闸静默失守**（l5/l6/l7 的 pro 在 P4 被清理为 0 ignore，模板未随动，闸未重跑）。建议随 O1/O2 一并处置并留痕。
+
 ## 3. 未越阶段声明
 
 批 2 已落件（`shared fc59771` · `k2 b58f53a/e019faa`）；**P6-1/P6-2 未启动**（G-c2 未落、模板未批）· **K1 复跑未启动** · **外部首件回件属外部**。冻结件 `d4e81f64…` 等未动 · `criteria/` 未动 · 模板未动 · 生成器/SPEC/原理图未动 · 未派 WORKER。
