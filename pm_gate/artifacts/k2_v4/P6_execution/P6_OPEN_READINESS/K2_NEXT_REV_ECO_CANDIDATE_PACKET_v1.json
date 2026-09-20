@@ -1,0 +1,84 @@
+{
+ "artifact": "k2_next_rev_eco_candidate_packet",
+ "schema": 1,
+ "purpose": "owner ⑥『把没活干变成找活/造活』：把 K2 全部**已具名残项**整理成**下一 rev（若被授权）的可机械执行变更清单** —— 每条含目标件/字段 · 改法 · 实测效果 · 验证命令 · 风险 · 授权层级。**本件为提案，不改任何文件**。",
+ "preconditions_for_a_new_rev": [
+  "P5 首件触发 T1（`Tj(U6) > 117.0℃` 或未按 O2 实施）⇒ 计划 §P5 明文『立即开新 rev』",
+  "监理授权（消除本包 ACCEPT 项 / 修正 job 元数据 / 外部 DFM 答复要求改动）",
+  "任何新 rev 均破『交付锚冻结』⇒ 需重跑 9 项包验证 + canonical 19 + 判据锚重钉（受审板 sha 变更）"
+ ],
+ "eco_items": [
+  {
+   "id": "ECO-1",
+   "title": "消除阻焊坝 ACCEPT 项（唯一可清零的 ACCEPT）",
+   "target": "`k2/hw/k2_v4_8L.l7.kicad_pcb` 第 29 行 `(pad_to_mask_clearance 0.05)`",
+   "change": "→ `0.02`（单字段）",
+   "measured_effect": "**本会话独立复现**（`p3_v57_co146_jlc_dfm_gate.jlc_limit_drc` 直跑，仓库不动）{\"0.05\": {\"solder_mask_bridge\": 9, \"total_violations\": 210}, \"0.04\": {\"solder_mask_bridge\": 5, \"total_violations\": 206}, \"0.03\": {\"solder_mask_bridge\": 4, \"total_violations\": 205}, \"0.02\": {\"solder_mask_bridge\": 0, \"total_violations\": 201}, \"0.01\": {\"solder_mask_bridge\": 0, \"total_violations\": 201}} ⇒ `solder_mask_bridge` **9→0**、总违规 **210→201**（= as-designed，**无副作用**）；`all_cleared_at_or_below_mm = 0.02`",
+   "verify": "① 同函数复跑（预期 0 / 201）② `criteria/adjudicate.py` canonical 19（新板须重锚）③ 重出包后 9 项包验证 + DFM 17 项（预期 ACCEPT→PASS，16/1/0 → **17/0/0**）",
+   "risk": "阻焊开窗整体外扩 0.03mm（开窗到铜净距满足 JLC ≥0.09）；板 sha 变更 ⇒ 交付锚/P4 锚全部重钉",
+   "authority": "技术面 = **L2**（阻焊）；**触交付锚 ⇒ 须监理放行新 rev**"
+  },
+  {
+   "id": "ECO-2",
+   "title": "消除 4 处正面丝印越框（装饰级）",
+   "target": "F.Silkscreen 文本：`H4`(+1.848mm) · `R41`(+1.798) · `D2`(+1.198) · `C87`(+0.798)",
+   "change": "将该 4 个 fp.text 移入边框内（≥0.2mm 边距）",
+   "measured_effect": "在岗件 `07_verify/silk_overhang.json`（板 sha 与现行一致）⇒ `n_overhanging` **4→0**；铜层越界本就 = 0",
+   "verify": "重跑包内 silk 检查（`k2_p5_jlc_package_l7_v1.silk_overhang`）⇒ 预期 0 项",
+   "risk": "纯图形级；位号可读性提升；不影响电气/可制造性",
+   "authority": "技术面 = L2；触交付锚 ⇒ 须监理放行"
+  },
+  {
+   "id": "ECO-3",
+   "title": "修正 job 文件叠层/Finish 元数据（B-1/B-2）",
+   "target": "`01_gerber_rs274x/*-job.gbrjob` 的 `MaterialStackup` 与 `GeneralSpecs.Finish`",
+   "change": "**(a)** 板 setup 补 `(stackup)` 段（铜厚 1oz/0.5oz · 介质 0.1164/0.25/0.1922 · NP-155F）⇒ job 文件随导出正确；**Finish** 由下单页/随单注明（KiCad 写 `None` 属默认）· 或 **(b)** 打包工具对 job 文件后处理（**= 改生成器，须授权**）",
+   "measured_effect": "现状 job：铜厚全 0.035 · 介质全 0.1857 · FR4 · Finish=None；叠层图/ORDER_NOTES：外1oz/内0.5oz · 介质 0.1164/0.25/0.1922 · NP-155F · ENIG",
+   "verify": "重出包后解析 `GeneralSpecs`/`MaterialStackup` 与 `03_stackup` 一致性",
+   "risk": "(a) 仅 board setup 段（不影响几何，但板 sha 变更）；(b) 改打包工具属生成器改动",
+   "authority": "(a) L2 · (b) 生成器改动 ⇒ 须授权"
+  },
+  {
+   "id": "ECO-4",
+   "title": "补足 F.Cu 最紧耦合段净距（可选·低优先）",
+   "target": "`PCIE_UP3` 逃逸域最紧真平行耦合段（净距 0.2825 < SPEC 名义窗下界 0.295，−4.24%）",
+   "change": "微调该段走线/焊盘引出，使净距落回 ≥0.295（或维持并保留具名披露）",
+   "measured_effect": "阻抗 ΔZ ≈ **−0.84%**（F.Cu M1 88.43 → ≈87.7Ω，仍落 76.5–93.5Ω）⇒ **非合格性缺陷**，仅名义窗披露",
+   "verify": "重跑链 + 全部判据 + 阻抗表 as-built 复验",
+   "risk": "改 routed geometry ⇒ 须全链复跑，可能影响邻段与既有解（K1/R-8 类联锁）",
+   "authority": "L2；触交付锚 ⇒ 须放行（建议仅在开 rev 时**顺带**评估）"
+  },
+  {
+   "id": "ECO-5",
+   "title": "文档口径顺带修（装饰级）",
+   "target": "`DISCLOSURE.md §5b` 条目编号乱序（1·2·3·5·4）· `ORDER_NOTES.md` 补『索取阻抗券 + 覆盖 0.6mm 中心/0.2825mm 最紧段』（P5-1）",
+   "change": "文本订正/增补一行",
+   "measured_effect": "—（文档面）",
+   "verify": "重出包后 doc 复核",
+   "risk": "无",
+   "authority": "L2；随任一次重出包顺带"
+  }
+ ],
+ "excluded_not_in_packet": [
+  {
+   "item": "**HDI 深孔（L1→In4 / L1→In5）可制造性**",
+   "why": "工艺 **A 冻结**（JLC HDI 盲埋孔 阶数≥2 · owner #14①）；『免除 HDI/改叠层拓扑』议题**已作废**；深孔具体限值属**板厂 DFM 答复 = 外部输入**（L2 裁定 §5 已登记）"
+  },
+  {
+   "item": "`F-9` 走廊口径（L2 冻结表 vs 板侧口径）",
+   "why": "**owner 面另案**（可选、不阻交付）—— 不属 ENG 自裁包"
+  },
+  {
+   "item": "`L-1` 28 件『仅板来源』",
+   "why": "已**具名接受**（以板侧坐标为权威）⇒ 不动"
+  },
+  {
+   "item": "3D 预览族（U-01..U-03 · M-15 · F-11 · N-07）",
+   "why": "OUT #5 证据层，不阻塞可制造性"
+  }
+ ],
+ "readonly_repo": true,
+ "not_landed": true,
+ "no_new_criteria_dim": true,
+ "ts": "2026-09-22T02:20:00+0800"
+}
