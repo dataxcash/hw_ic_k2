@@ -1,0 +1,369 @@
+{
+ "anchors": {
+  "board_8L": {
+   "sha16": "fb07d25ac426ff84"
+  },
+  "engine": {
+   "path": "k2/_shared/eda_core/hs_route_model.py",
+   "sha16": "b6f88d35bc0669e4"
+  },
+  "legacy_alloc": {
+   "sha16": "c65097148aab6842"
+  },
+  "p3_carrier": {
+   "path": "/tmp/opencode/current_alloc_from_pipeline.json",
+   "sha16": "547c9513ff67b470"
+  },
+  "spec_rev52": {
+   "sha16": "0bd52ed48e720b8c"
+  }
+ },
+ "artifact": "k2_p6_cli_failclosed_sweep",
+ "conclusions": [
+  "现行 schema 载体 + 无守卫：崩溃 2 处（子命令：['chain_UP0', 'link_topology']）⇒ CLI 面崩溃点集中于 `--link-topology`（B1）；其余子命令该载体下 fail-closed 返回状态。",
+  "遗留载体：无/有守卫结果一致 ⇒ B1 修复零语义回退（同 (i) 结论）。",
+  "注：exit code 不可单独用于判定（崩溃与『非 TOPOLOGY_OK/未全解』同为 1）；须并联 status/stderr。",
+  "发现 B2（非 B1 同族，载体无关）：`--chain UP0` 在两载体/两守卫 4 组合下**均抛 `RuntimeError: 可见性图求解超限（fail-closed，非设计结论）`**（hs_route_model.py:347，系**刻意** fail-closed 抛错，非静默错误）⇒ 属 **CLI 层未包装**问题：调用方看到 traceback + rc=1，与『正常未解』不可机辨（与 (i) 的 exit code 观察同源）。建议并入 B1 授权件的 CLI 语义整改。",
+  "发现 B3（判据口径，需监理裁定）：`--capacity-map` 在现行载体下 status=CAPACITY_OK / exit 0，但走廊 `EAST_CHIP_TO_J2_refclk` = INSUFFICIENT ⇒ CLI 判定**只看 region**、忽略 corridor INSUFFICIENT ⇒ 潜在 fail-open（是否应致 FAIL 属判据口径，ENG 不改）。"
+ ],
+ "determinism_2run": "MATCH",
+ "matrix": [
+  {
+   "carrier": "legacy_alloc",
+   "cmd": "chain_UP0",
+   "exception": "RuntimeError: 可见性图求解超限（fail-closed，非设计结论）",
+   "guarded": false,
+   "rc": 1,
+   "runtime_s": 25.6,
+   "status": null,
+   "status_detail": null,
+   "timeout": false
+  },
+  {
+   "carrier": "legacy_alloc",
+   "cmd": "chain_REFCLK0",
+   "exception": "",
+   "guarded": false,
+   "rc": 1,
+   "runtime_s": 7.3,
+   "status": "INFEASIBLE",
+   "status_detail": {},
+   "timeout": false
+  },
+  {
+   "carrier": "legacy_alloc",
+   "cmd": "chain_v2_UP0",
+   "exception": "",
+   "guarded": false,
+   "rc": 1,
+   "runtime_s": 0.1,
+   "status": "INFEASIBLE",
+   "status_detail": {},
+   "timeout": false
+  },
+  {
+   "carrier": "legacy_alloc",
+   "cmd": "capacity_map",
+   "exception": "",
+   "guarded": false,
+   "rc": 1,
+   "runtime_s": 0.2,
+   "status": "INSUFFICIENT",
+   "status_detail": {
+    "corridors": {
+     "EAST_CHIP_TO_J2_dn": "CAPACITY_OK",
+     "EAST_CHIP_TO_J2_refclk": "INSUFFICIENT",
+     "EAST_CHIP_TO_J2_up": "CAPACITY_OK",
+     "WEST_MCIO_TO_CHIP_dn": "CAPACITY_OK",
+     "WEST_MCIO_TO_CHIP_refclk": "CAPACITY_OK",
+     "WEST_MCIO_TO_CHIP_up": "CAPACITY_OK"
+    },
+    "insufficient_regions": [
+     "MCIO_region",
+     "J2_region"
+    ],
+    "ok_regions": []
+   },
+   "timeout": false
+  },
+  {
+   "carrier": "legacy_alloc",
+   "cmd": "all_v4",
+   "exception": "",
+   "guarded": false,
+   "rc": 1,
+   "runtime_s": 0.1,
+   "status": "PARTIAL",
+   "status_detail": {
+    "solved": []
+   },
+   "timeout": false
+  },
+  {
+   "carrier": "legacy_alloc",
+   "cmd": "link_topology",
+   "exception": "",
+   "guarded": false,
+   "rc": 1,
+   "runtime_s": 0.1,
+   "status": "CROSSING_FOUND",
+   "status_detail": {},
+   "timeout": false
+  },
+  {
+   "carrier": "legacy_alloc",
+   "cmd": "chain_UP0",
+   "exception": "RuntimeError: 可见性图求解超限（fail-closed，非设计结论）",
+   "guarded": true,
+   "rc": 1,
+   "runtime_s": 24.9,
+   "status": null,
+   "status_detail": null,
+   "timeout": false
+  },
+  {
+   "carrier": "legacy_alloc",
+   "cmd": "chain_REFCLK0",
+   "exception": "",
+   "guarded": true,
+   "rc": 1,
+   "runtime_s": 7.4,
+   "status": "INFEASIBLE",
+   "status_detail": {},
+   "timeout": false
+  },
+  {
+   "carrier": "legacy_alloc",
+   "cmd": "chain_v2_UP0",
+   "exception": "",
+   "guarded": true,
+   "rc": 1,
+   "runtime_s": 0.1,
+   "status": "INFEASIBLE",
+   "status_detail": {},
+   "timeout": false
+  },
+  {
+   "carrier": "legacy_alloc",
+   "cmd": "capacity_map",
+   "exception": "",
+   "guarded": true,
+   "rc": 1,
+   "runtime_s": 0.1,
+   "status": "INSUFFICIENT",
+   "status_detail": {
+    "corridors": {
+     "EAST_CHIP_TO_J2_dn": "CAPACITY_OK",
+     "EAST_CHIP_TO_J2_refclk": "INSUFFICIENT",
+     "EAST_CHIP_TO_J2_up": "CAPACITY_OK",
+     "WEST_MCIO_TO_CHIP_dn": "CAPACITY_OK",
+     "WEST_MCIO_TO_CHIP_refclk": "CAPACITY_OK",
+     "WEST_MCIO_TO_CHIP_up": "CAPACITY_OK"
+    },
+    "insufficient_regions": [
+     "MCIO_region",
+     "J2_region"
+    ],
+    "ok_regions": []
+   },
+   "timeout": false
+  },
+  {
+   "carrier": "legacy_alloc",
+   "cmd": "all_v4",
+   "exception": "",
+   "guarded": true,
+   "rc": 1,
+   "runtime_s": 0.1,
+   "status": "PARTIAL",
+   "status_detail": {
+    "solved": []
+   },
+   "timeout": false
+  },
+  {
+   "carrier": "legacy_alloc",
+   "cmd": "link_topology",
+   "exception": "",
+   "guarded": true,
+   "rc": 1,
+   "runtime_s": 0.1,
+   "status": "CROSSING_FOUND",
+   "status_detail": {},
+   "timeout": false
+  },
+  {
+   "carrier": "p3_current_schema",
+   "cmd": "chain_UP0",
+   "exception": "RuntimeError: 可见性图求解超限（fail-closed，非设计结论）",
+   "guarded": false,
+   "rc": 1,
+   "runtime_s": 25.5,
+   "status": null,
+   "status_detail": null,
+   "timeout": false
+  },
+  {
+   "carrier": "p3_current_schema",
+   "cmd": "chain_REFCLK0",
+   "exception": "",
+   "guarded": false,
+   "rc": 1,
+   "runtime_s": 7.2,
+   "status": "INFEASIBLE",
+   "status_detail": {},
+   "timeout": false
+  },
+  {
+   "carrier": "p3_current_schema",
+   "cmd": "chain_v2_UP0",
+   "exception": "",
+   "guarded": false,
+   "rc": 0,
+   "runtime_s": 0.1,
+   "status": "SOLVED",
+   "status_detail": {},
+   "timeout": false
+  },
+  {
+   "carrier": "p3_current_schema",
+   "cmd": "capacity_map",
+   "exception": "",
+   "guarded": false,
+   "rc": 0,
+   "runtime_s": 3.1,
+   "status": "CAPACITY_OK",
+   "status_detail": {
+    "corridors": {
+     "EAST_CHIP_TO_J2_dn": "CAPACITY_OK",
+     "EAST_CHIP_TO_J2_refclk": "INSUFFICIENT",
+     "EAST_CHIP_TO_J2_up": "CAPACITY_OK",
+     "WEST_MCIO_TO_CHIP_dn": "CAPACITY_OK",
+     "WEST_MCIO_TO_CHIP_refclk": "CAPACITY_OK",
+     "WEST_MCIO_TO_CHIP_up": "CAPACITY_OK"
+    },
+    "insufficient_regions": [],
+    "ok_regions": [
+     "MCIO_region",
+     "J2_region"
+    ]
+   },
+   "timeout": false
+  },
+  {
+   "carrier": "p3_current_schema",
+   "cmd": "all_v4",
+   "exception": "",
+   "guarded": false,
+   "rc": 1,
+   "runtime_s": 69.0,
+   "status": "PARTIAL",
+   "status_detail": {
+    "solved": [
+     "PCIE_DN6"
+    ]
+   },
+   "timeout": false
+  },
+  {
+   "carrier": "p3_current_schema",
+   "cmd": "link_topology",
+   "exception": "ValueError: min() arg is an empty sequence",
+   "guarded": false,
+   "rc": 1,
+   "runtime_s": 0.1,
+   "status": null,
+   "status_detail": null,
+   "timeout": false
+  },
+  {
+   "carrier": "p3_current_schema",
+   "cmd": "chain_UP0",
+   "exception": "RuntimeError: 可见性图求解超限（fail-closed，非设计结论）",
+   "guarded": true,
+   "rc": 1,
+   "runtime_s": 25.0,
+   "status": null,
+   "status_detail": null,
+   "timeout": false
+  },
+  {
+   "carrier": "p3_current_schema",
+   "cmd": "chain_REFCLK0",
+   "exception": "",
+   "guarded": true,
+   "rc": 1,
+   "runtime_s": 7.2,
+   "status": "INFEASIBLE",
+   "status_detail": {},
+   "timeout": false
+  },
+  {
+   "carrier": "p3_current_schema",
+   "cmd": "chain_v2_UP0",
+   "exception": "",
+   "guarded": true,
+   "rc": 0,
+   "runtime_s": 0.1,
+   "status": "SOLVED",
+   "status_detail": {},
+   "timeout": false
+  },
+  {
+   "carrier": "p3_current_schema",
+   "cmd": "capacity_map",
+   "exception": "",
+   "guarded": true,
+   "rc": 0,
+   "runtime_s": 3.1,
+   "status": "CAPACITY_OK",
+   "status_detail": {
+    "corridors": {
+     "EAST_CHIP_TO_J2_dn": "CAPACITY_OK",
+     "EAST_CHIP_TO_J2_refclk": "INSUFFICIENT",
+     "EAST_CHIP_TO_J2_up": "CAPACITY_OK",
+     "WEST_MCIO_TO_CHIP_dn": "CAPACITY_OK",
+     "WEST_MCIO_TO_CHIP_refclk": "CAPACITY_OK",
+     "WEST_MCIO_TO_CHIP_up": "CAPACITY_OK"
+    },
+    "insufficient_regions": [],
+    "ok_regions": [
+     "MCIO_region",
+     "J2_region"
+    ]
+   },
+   "timeout": false
+  },
+  {
+   "carrier": "p3_current_schema",
+   "cmd": "all_v4",
+   "exception": "",
+   "guarded": true,
+   "rc": 1,
+   "runtime_s": 69.2,
+   "status": "PARTIAL",
+   "status_detail": {
+    "solved": [
+     "PCIE_DN6"
+    ]
+   },
+   "timeout": false
+  },
+  {
+   "carrier": "p3_current_schema",
+   "cmd": "link_topology",
+   "exception": "",
+   "guarded": true,
+   "rc": 1,
+   "runtime_s": 0.2,
+   "status": "CROSSING_FOUND",
+   "status_detail": {},
+   "timeout": false
+  }
+ ],
+ "n_crash": 5,
+ "n_crash_p3_noguard": 2,
+ "purpose": "(j) CLI 子命令 × 载体 × 守卫 的 fail-closed 普查（B1 同族 CLI 面）",
+ "readonly_repo": true,
+ "schema": 1
+}
