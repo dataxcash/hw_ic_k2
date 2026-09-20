@@ -1,0 +1,332 @@
+{
+ "artifact": "k2_k1_resume_escape_rootcause_tpl_a_ladder",
+ "schema": 1,
+ "purpose": "K1 复跑第 1 步断点（对级逃逸 INFEASIBLE）**根因定位**：已从『现象』推进到**算法级具名缺口**，并给出修法范围与 K2 中性论证。",
+ "target": "_shared/eda_core/hs_route_model.py · `_k1_escape` → `_tpl_a_line`（**仅 K1 路径**：`config.single_net_mode=True` ⇒ `_solve_pair_single_v4` ⇒ `_k1_escape*`）",
+ "failure_geometry": {
+  "segment": "TX0 / input（J1 侧）",
+  "nets": "PCIE_TX0_P / PCIE_TX0_N",
+  "P_pads": "(6.55, 24.02) → (38.3125, 15.5)",
+  "N_pads": "(7.05, 24.02) → (38.3125, 16.0)",
+  "corridor": {
+   "id": "HIGH_SPEED_MAIN",
+   "corr_x(左界落点)": 7.05,
+   "track_p": 18.0,
+   "layer_p": "F.Cu",
+   "track_n": 17.5,
+   "layer_n": "F.Cu"
+  },
+  "关键几何": "**焊盘对沿 x 取向**（P/N 相距 0.5mm 且**同 y=24.02**），而**走廊轨道沿 y 取向**（同 x=7.05、相距 0.5mm）⇒ 逃逸须在极窄 x 预算内完成 90° 换向：**P 需 dx=+0.5、N 需 dx=0.0**（N 焊盘 x 恰 = corr_x）。"
+ },
+ "exclusions_measured": {
+  "障碍净空": "**F.Cu 场在逃逸通道 (x 6.40–7.25 · y 17.30–24.20) 内无任何障碍**（`obstacles` 相交数 = **0**；逐点 `point_ok('PCIE_TX0_P', ·)` 在 y=24.02→18.00 × x=6.45→7.15 网格**全 ok**）⇒ **不是净空/障碍问题**。",
+  "pad 契约": "B2-1 两源交叉核对 findings = **0** ⇒ 非 pad 真源问题。",
+  "输入完备": "SPEC_k1 输入齐备（corridors / frozen_segments / 306 pads）⇒ 非缺件。",
+  "分派": "B2-2 生效（dim=k1）⇒ 非分派。"
+ },
+ "root_cause": {
+  "locus": "`_tpl_a_line`（模板 A 单线：表层直连）的出线候选阶梯",
+  "code": "`dxs = [ady, max(ady-0.3,0.1), max(ady-0.6,0.1), max(ady-0.9,0.1), 0.3]`（`ady = |track - pad_y| = 6.02`）",
+  "defect": "该阶梯只给『**大步长**』候选（6.02/5.72/5.42/5.12）与一个 **0.3**；**无法表达小 x 预算下的『局部 45° + 垂直直下』形态**（本例需 dx=0.5 / 0.0）。⇒ P/N 皆无候选落点可对齐 `corr_x=7.05` ⇒ `_k1_escape` 返回 None ⇒ 「左逃逸对级不可行」。",
+  "note": "`_tpl_b_line`（换层模板）出线点用 `half_x + 0.3*vstep`（vstep 1..3）⇒ 同样只覆盖『离 pad 边 0.6/0.9/1.2』三档，对小预算同样表达不足。"
+ },
+ "fix_scope_proposal": {
+  "shape": "把 `_tpl_a_line`（及必要时 `_tpl_b_line`）的候选阶梯改为**预算感知枚举**：dx 从 **0.0** 起按 0.1 步进至 `min(ady, |corr_x - pad_x|)`（含端点），并保留既有大步长候选作**前缀**以维持既有 K1 解序（确定性）。",
+  "k2_neutrality": "`_k1_escape*` **仅**经 `_solve_pair_single_v4` 可达，而后者仅在 `config.single_net_mode=True` 时分派；K2 配置 `single_net_mode=False` ⇒ **K2 链路不触达本函数** ⇒ **K2 逐字节零回退可证**（仍须以 canonical 19 + `--expect-patched` 复核）。",
+  "authorization": "`_shared` 引擎改动 ⇒ **须监理批（C-6 同批）** ⇒ 本件**只定位+提法，未改一行代码**。",
+  "caveat": "改后 K1 输出为**首版折线**（K1 尚无冻结折线 ⇒ 非重基线），但须同步登记血缘（引擎 sha + 板 sha + 两跑逐字节）。",
+  "k2_neutrality_measured": {
+   "k2_config": "k2/pm_gate/artifacts/k2_v4/L2/route_model_config.json ⇒ hs_route_model.single_net_mode = None（默认 False）· chain_segments = False",
+   "dispatch": "`hs_route_model.py:3762` `if not self.config.single_net_mode: return self._solve_pair_centerline_v4(...)` ⇒ K2 走 centerline 路径，**不进入** `_solve_pair_single_v4` ⇒ `_k1_escape*` **不可达**",
+   "conclusion": "**K2 逐字节零回退（结构性可证）**；仍以 canonical 19（verdict 须 == `190b73be0f728a56`）+ `--expect-patched` 复核为入库条件。"
+  }
+ },
+ "consequence": {
+  "K1 恢复序": "仍停于『复跑模型链』",
+  "未落": [
+   "K1 SPEC router.frozen_segments（须批）",
+   "K1 Gerber"
+  ],
+  "未改": [
+   "引擎代码（只定位）",
+   "K1 SPEC/板/原理图",
+   "criteria/"
+  ],
+  "expected_after_fix": "族 A 修后 PCIE_TX0/TX1/RX0 left 应得解；族 B 修后 OCuLink_* right 应得解 ⇒ 4/4 base 有解是「全 51 网折线」的必要条件（是否充分仍待实跑）。"
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "all_chains_instrumented": {
+  "method": "monkeypatch `_k1_escape` 记录 (net_p, side, direction, corr_x, P0, N0, track_p, track_n, ok)；对 4 base 全解日志",
+  "table": [
+   {
+    "net": "PCIE_TX0_P",
+    "side": "left",
+    "dir": 1,
+    "corr_x": 7.05,
+    "P0": [
+     6.55,
+     24.02
+    ],
+    "N0": [
+     7.05,
+     24.02
+    ],
+    "track": [
+     18.0,
+     17.5
+    ],
+    "ok": false,
+    "need_dx_P": 0.5,
+    "need_dx_N": 0.0
+   },
+   {
+    "net": "PCIE_TX1_P",
+    "side": "left",
+    "dir": 1,
+    "corr_x": 5.3,
+    "P0": [
+     3.2,
+     22.01
+    ],
+    "N0": [
+     2.4,
+     22.01
+    ],
+    "track": [
+     20.51,
+     21.3
+    ],
+    "ok": false,
+    "need_dx_P": 2.1,
+    "need_dx_N": 2.9
+   },
+   {
+    "net": "PCIE_RX0_P",
+    "side": "left",
+    "dir": 1,
+    "corr_x": 5.3,
+    "P0": [
+     2.55,
+     24.02
+    ],
+    "N0": [
+     3.05,
+     24.02
+    ],
+    "track": [
+     21.01,
+     20.51
+    ],
+    "ok": false,
+    "need_dx_P": 2.75,
+    "need_dx_N": 2.25
+   },
+   {
+    "net": "OCuLink_TX0_P",
+    "side": "right",
+    "dir": -1,
+    "corr_x": 74.2,
+    "P0": [
+     41.69,
+     17.0
+    ],
+    "N0": [
+     41.69,
+     17.5
+    ],
+    "track": [
+     22.5,
+     18.5
+    ],
+    "ok": false,
+    "need_dx_P": 32.51,
+    "need_dx_N": 32.51
+   },
+   {
+    "net": "OCuLink_TX1_P",
+    "side": "right",
+    "dir": -1,
+    "corr_x": 74.2,
+    "P0": [
+     41.69,
+     21.5
+    ],
+    "N0": [
+     41.69,
+     22.0
+    ],
+    "track": [
+     20.0,
+     21.5
+    ],
+    "ok": false,
+    "need_dx_P": 32.51,
+    "need_dx_N": 32.51
+   },
+   {
+    "net": "OCuLink_RX0_P",
+    "side": "right",
+    "dir": -1,
+    "corr_x": 73.25,
+    "P0": [
+     41.69,
+     18.0
+    ],
+    "N0": [
+     41.69,
+     18.5
+    ],
+    "track": [
+     18.0,
+     19.0
+    ],
+    "ok": false,
+    "need_dx_P": 31.56,
+    "need_dx_N": 31.56
+   },
+   {
+    "net": "OCuLink_RX1_P",
+    "side": "right",
+    "dir": -1,
+    "corr_x": 73.25,
+    "P0": [
+     41.69,
+     22.5
+    ],
+    "N0": [
+     41.69,
+     23.0
+    ],
+    "track": [
+     21.0,
+     20.5
+    ],
+    "ok": false,
+    "need_dx_P": 31.56,
+    "need_dx_N": 31.56
+   },
+   {
+    "_note": "成功的调用略（ok=true）：PCIE_RX1 左右、OCuLink_* 左侧等"
+   }
+  ],
+  "families": {
+   "A_candidate_form_gap": "`_tpl_a_line` 的 `dxs` 阶梯**无法表达须精确落到 corr_x 的 dx**。本例需要的 dx = **0.00 / 0.50 / 2.10 / 2.90 / 2.25 / 2.75**，而阶梯只给 `{ady, ady-0.3, ady-0.6, ady-0.9, 0.3}`（如 TX0 ady=6.02 ⇒ {6.02,5.72,5.42,5.12,0.3}；TX1 ady=1.50 ⇒ {1.50,1.20,0.90,0.60,0.3}）⇒ 命中率结构性偏低。**覆盖 3 例**（PCIE_TX0/TX1/RX0 left）。",
+   "B_long_horizontal_run": "`ady ≈ 0`（焊盘 y 与轨道 y 相同）时 `_tpl_a_line` 只提供**直线** `pad → (corr_x, track)`；本例该直线长 **31.6–32.5 mm**（x 41.69 → 73.25/74.20）横穿板中区 ⇒ 被占 ⇒ None。**该分支没有「先沿 x 走 + 绕行/jog」形态**。**覆盖 4 例**（OCuLink_* 右侧）。"
+  },
+  "conclusion": "两族**同属 `_k1_escape_a` 的候选形态表达缺口**（K1 专属路径），但**修点不同**：族 A 改 `dxs` 为预算感知枚举；族 B 为 `ady≈0` 分支**补 jog/绕行候选**（或放宽为「先到可用 x 再水平到 corr_x」的分段形态）。⇒ 单改 `dxs` 不足以解锁全部 4 base，**须两处同批**。"
+ },
+ "CORRECTION_v3": {
+  "retracted": [
+   "**撤回 v2 的『两族』表述与族 B『ady≈0 只有直线』机理**：二者均系**推断**，未实测；且 v2 表格的右侧调用 `need_dx` 取错了焊盘（应取 idx=1 端），数表作废。",
+   "**收紧 v1 的『F.Cu 场无任何障碍』**：该结论受探针盒限制（x≤7.25），未覆盖 N 候选落点 x→7.35 ⇒ **不足以下『非净空』结论**。"
+  ],
+  "measured_locus_by_trace": {
+   "method": "monkeypatch `_k1_escape/_k1_escape_a/_k1_escape_b/_tpl_a_line/_extend_to` 逐调用追踪（4 base 全解）",
+   "结果": "失败 7 次调用中——**模板 A（`_tpl_a_line`）路径 1 次**：`PCIE_TX0_P left`（d=+1，A 被进入后因 N 候选全 None 而失败，随后 B×3 亦失败）；**模板 B 路径 6 次**：`PCIE_TX1_P left`、`PCIE_RX0_P left`（两者 P/N 轨道均在 **In2.Cu** ⇒ `_k1_escape` 走『其他层 ⇒ 模板 B』分支，**A 根本不适用**）、`OCuLink_TX1_P right`、`OCuLink_RX0_P right`、`OCuLink_RX1_P right`。",
+   "修正结论": "**失败主位 = 模板 B（6/7），非模板 A**；v1/v2 把主因归到 `_tpl_a_line` 属**过度论断**。"
+  },
+  "family_A_proven_for_TX0_left": {
+   "claim": "**阶梯缺口得证（1/7）**：N 焊盘 x = corr_x = 7.05 ⇒ 要对齐走廊须 **dx = 0.0**；而 `dxs = [ady, ady-0.3, ady-0.6, ady-0.9, 0.3]`（ady=6.52）**无 0 档**，最小档 0.3（落点 x=7.35）实测 `seg_ok=False`（被邻 pad 挡）。",
+   "proof": "同网自测：自 N 焊盘 `(7.05,24.02)` **纯垂直**（dx=0）向下 `seg_ok=True` 且 `point_ok=True` 直至 y=21.02（逐步验证 0.05/0.1/0.2/0.3/0.5/1.0/1.5/2.0/3.0 全部 True）⇒ **可行形态存在，只是不在候选集里**。",
+   "fix": "`dxs` 增补 **0.0 档**（并建议改为预算感知枚举：dx 自 0 起 0.1 步进至 `min(ady, |corr_x-pad_x|)`，保留既有大步长候选作前缀以维持解序）。"
+  },
+  "family_B_open": {
+   "status": "**未归属**（本会话 context 已尽）",
+   "next_probe": "对 `_k1_escape_b`/`_tpl_b_line` 做同款逐候选追踪（出线点 `ex_x = pad_x + d*(half_x + 0.3*vstep)` 三档 · 45° 到轨道 · via 落位 · 内层走廊段），逐字段判定它在哪一步返回 None；重点看 P/N 轨道**异层**（如 TX1: 20.0/B.Cu 与 21.5/In1）时 `_tpl_b_line` 的层对与 via 规则。",
+   "note": "⇒ **修法范围待 B 归属后再定**（可能同样只需补候选档，也可能是层对/via 规则面 ⇒ 可能触及期望值类，须监理裁）。"
+  }
+ },
+ "family_B_attributed": {
+  "representative": "`OCuLink_RX1_P` right（corr_x=73.245 · tP=21.0/In1 · tN=20.5/In1 · d=-1）",
+  "trace": "P: `_tpl_b_line` → land 72.29 ✓；**N: `_tpl_b_line` → None**（P/N 各只试 `d` 一个方向）",
+  "failing_check": "`_tpl_b_line` **第一个检查**即失败：`fcu.seg_ok(net, pp, ex)` 三档全 **False**。实测 N 焊盘 `pos=(73.245,21.0)` · `size=(0.31,1.4)` · `rot=0` ⇒ `half_x=0.155`；`ex = (73.245-(0.155+0.3·vstep), 21.0)`，vstep 1/2/3 ⇒ ex_x = **72.79 / 72.49 / 72.19**，三次 `seg_ok(F.Cu, OCuLink_RX1_N, (73.245,21.0), (ex_x,21.0))` 皆 **False**。",
+  "mechanism": "该模板的出线点是『**沿走线方向的水平外移**』；本例该方向（d=-1，向左）**立刻撞上连接器 pad 列的邻 pad**（0.5mm 级间距）。模板**没有『垂直（沿 pad 长轴）出线 + 折向轨道』的候选**，且 `_k1_escape_b` **不做反向重试**（对比 `_k1_escape_a` 有 `for dd in (d,-d)`『主方向失败→反向单次』）⇒ 对级无解。",
+  "fix_shape": "① 为 `_tpl_b_line` 增补**垂直出线**候选（先沿 pad 长轴离开 pad 堆，再 45°/折线到轨道线与 via）；② 给 `_k1_escape_b` 补**反向重试**（与 A 同口径）。",
+  "class": "仍属**候选形态表达缺口**（L2 · 几何实现面）；**未**发现期望值/口径类成分 ⇒ 原则上 ENG 自裁面，但改动在 `_shared` ⇒ 仍须监理批（C-6 同批）。"
+ },
+ "final_verdict": {
+  "locus": "模板 B **6/7**（TX1 left · RX0 left · OCuLink_TX1/RX0/RX1 right）· 模板 A **1/7**（TX0 left）",
+  "both_families_are": "**同一类**（`_k1_escape_a/b` 的**出线候选形态表达缺口**），但**修点三处**：① `_tpl_a_line` 补 dx=0（及预算感知枚举）；② `_tpl_b_line` 补垂直出线候选；③ `_k1_escape_b` 补反向重试。",
+  "authorization": "三处皆 `_shared/eda_core/hs_route_model.py` ⇒ **须监理批（C-6 同批）**；K2 结构性不可达 ⇒ 零回退可证（仍以 canonical 19 + `--expect-patched` 复核为入库条件）。本件**未改一行代码**。"
+ },
+ "CORRECTION_v4_DECISIVE": {
+  "retracts": "**撤回 v3 的『族 B = `_tpl_b_line` 缺垂直出线候选 + `_k1_escape_b` 无反向重试』归因**。该归因系据『水平出线被邻 pad 挡』推断，**未验证输入几何本身是否可逃逸**——实测证明**不可**。",
+  "decisive_finding": {
+   "fact": "**`J14`（OCuLink 连接器）pad 几何重叠**：9 个 pad 全部 `size=(0.310,1.400)`、y 向 pitch **0.5mm** ⇒ 相邻 pad 的**真实 bbox 在 y 上重叠 0.9mm**；全板重叠对 = **8 对，全部在 J14**（其余 footprint 0 对）。",
+   "evidence": "按 `Pad.bbox(0.0)`（含 rot=180）逐对求交；样例：`GND(73.245,20.5)` y∈[19.800,21.200] 与 `OCuLink_RX1_N(73.245,21.0)` y∈[20.300,21.700] ⇒ 重叠 [20.300,21.200]。",
+   "consequence": "J14 的任一信号 pad **在任何方向**（水平/垂直/45°）出线都会穿过相邻 pad 的铜 ⇒ **逃逸在几何上不可能**，与模板形态无关。⇒ 族 B 的 6/7 失败**属输入侧（board/footprint）缺陷**，**非** `_k1_escape_b`/`_tpl_b_line` 的候选缺口。",
+   "blocker_named": "水平出线段 (73.245,21.0)→(72.79,21.0) 的具名阻挡体 = **`GND` pad @(73.245,20.5) size(0.31,1.4) layer F.Cu**（`d=-0.075 < req=0.1`）。"
+  },
+  "v1_probe_defect_selfreported": "**自我登记探针缺陷**：v1『F.Cu 场无任何障碍（obstacles 相交数=0）』系**探针失效**所致——`UnifiedObstacle` **无 `bbox` 属性**，`getattr(o,'bbox',None)` 恒 None ⇒ 扫描恒 0 命中；**该结论从未被真正测量过**，已作废（v3 的『盒太小』解释亦属误判原因）。正确做法＝复算 `seg_ok` 内部逐障碍判定（本件已做）。",
+  "final_root_cause": {
+   "主位 6/7": "**J14 footprint pad 重叠（输入侧缺陷）** —— 属**板/footprint 几何**面 ⇒ 按红线『未获批不得改生成器/SPEC/原理图』⇒ **须监理批**；且很可能需回溯该 footprint 的来源（L2/L3 输入）与 K1 的『42 器件/51 网』建板链。",
+   "次位 1/7": "**`_tpl_a_line` 缺 dx=0 档**（真模板缺口；J1 侧几何本身可逃逸——垂直出线 `seg_ok=True` 实测至 y=21.02）· `J1` pad 列 0.5mm pitch × 0.30 宽 ⇒ **无重叠**（与 J14 形成对照，佐证 J14 确为异常）。"
+  },
+  "verdict_changed": "⇒ **K1 复跑的主要障碍是输入侧缺陷（J14 pad 重叠），不是逃逸模板**。原『批三处模板修』的批请**应改为**：**先裁 J14 footprint/pad 几何缺陷的处置**（属生成器/SPEC/板 ⇒ 须批）；`_tpl_a_line` dx=0 档可作**同批小修**（1/7 的次级障碍）。",
+  "readonly_repo": true,
+  "not_landed": true
+ },
+ "J14_provenance_trace_readonly": {
+  "library": {
+   "file": "k1/lib/ForgeOS.pretty/OCuLink_SFF8612.kicad_mod",
+   "sha16": "6ae37f5d0e1c4f67",
+   "bytes": 8935,
+   "layout": "**双排**：A 排 y=+0.955、B 排 y=−0.955（行距 1.91mm）；**x pitch 0.5mm**（A1@−5.0 · A2@−4.5 · A3@−4.0 …）；pad `size=(0.31,1.4)`",
+   "overlap": "行距 1.91 − 高 1.4 = **0.51mm 间隙 ⇒ 库内不重叠**（几何自洽）"
+  },
+  "board_instance": {
+   "footprint_name": "OCuLink_SFF8612",
+   "ref": "J14",
+   "n_pads": 9,
+   "layout": "**同 x=73.245 单列 · y pitch 0.5mm**（20.5/21.0/21.5/22.5/23.0/23.5…）；pad `size=(0.31,1.4)` · `rot=180.0`",
+   "overlap": "相邻 y 差 0.5 < 高 1.4 ⇒ **重叠 0.9mm**（全板 8 对，全在 J14）"
+  },
+  "finding": "**板实例与库不一致**：库为『双排 × x-0.5 pitch』，板为『同 x 单列 × y-0.5 pitch』。按库几何（rot=180 只翻 y 符号）**不应**产生单列 y-0.5 排布 ⇒ J14 的 pad 实例**并非**由该库 footprint 直接实例化所得（或建板链把它按 SPEC pad 表**另写**）。",
+  "implication": "⇒ J14 处置**不能只改库**（改库不改变板实例）⇒ 须先**回溯 K1 建板链中 J14 的 pad 来源**（生成器？SPEC pad 表？手工？）再定修点；该回溯为**只读**、可为监理裁定直接供料。",
+  "next_readonly_probe": "在 K1 建板链（生成器/SPEC `components.pads`/`hw/data/k1_*.yaml`）中检索 `J14` 与 `OCuLink_SFF8612` 的 pad 定义来源，比对其 pad 表与库 geometry。"
+ },
+ "J14_angle_double_rotation_DECISIVE": {
+  "evidence": {
+   "board": "k1/k1_v1.kicad_pcb J14 块：footprint (at 74.2 19 90)，且每个 pad 带显式 (at <x> <y> 90)（板内 pad 行 42 条，角度集 = 90）",
+   "library": "k1/lib/ForgeOS.pretty/OCuLink_SFF8612.kicad_mod：pad 无角度（角度集 = 空）；descr 自述 P0.5 / pad 0.31x1.40 / row CL 1.91",
+   "spec": "SPEC_k1.json /components/connectors/J14 = {pos:[74.2,19.0], rot:90} ⇒ SPEC 的 rot=90 正确",
+   "parser": "KiCad 语义：pad 绝对角 = footprint 角 + pad 角 = 90 + 90 = 180 ⇒ 解析器输出 rot=180.0（解析正确）",
+   "consequence": "pad 长轴（1.4mm）落在板 y 向，而该列 y-pitch 0.5 ⇒ 真实重叠 0.9mm；J14 两排位于 x=73.245 与 x=75.155（相距 1.91，与库一致）⇒ 位置正确、仅角度被重复施加"
+  },
+  "root_cause": "K1 写板端（生成器/写板脚本）对 pad 旋转重复施加：库 pad 无角度（footprint 旋转时 KiCad 自动叠加），板写入时又显式写了 90 ⇒ 绝对 180。库正确、SPEC 正确，缺陷在板写入端。",
+  "minimal_fix_hypothesis": "把 J14 的 pad 角度由 90 改回 0（与库一致）⇒ 绝对角 = 90 ⇒ pad 1.4mm 长轴落到板 x 向、y 向仅 0.31 < 0.5 pitch ⇒ 重叠消失、逃逸几何恢复。",
+  "verification_status": "未完成 · 不作已验证主张：/tmp 副本试验（/tmp/opencode/k1fix/k1_v1.kicad_pcb）不干净 —— ① 正则在 J14 块内改写 47 处（>42 pad，误伤 Reference/Value 等非 pad 项）；② 修后解析器仅见到 9 个 footprint_ref 为 J14 的 pad（板内 pad 行 42 条）⇒ 42 对 9 的记账差未解释。⇒ 该试验不能作为修法成立的证据。",
+  "next_step": "① 解释 42 对 9 记账差（核 BoardParser._FP_REF 对 J14 的解析；或确认板内 J14 是否只实例化 9 pad）；② 用 pad 行限定的改写（只改 pad 的 (at x y 90)）重做 /tmp 验证；③ 通过后再提一条命令级备料（仍须批才可落 K1 板）。",
+  "class": "缺陷属板写入端/生成器面 ⇒ 按红线未获批不得改生成器/SPEC/原理图 ⇒ 须监理批。"
+ },
+ "J14_second_defect_parser_silent_drop": {
+  "fact": "板内 J14 块含 (footprint 出现数 = 1、Reference property = J14、pad 行 = 42（与库 42 一致），但 BoardParser 产出的 footprint_ref==J14 的 pad 只有 9 个（x≈73.245 有 5、x≈75.155 有 4）；全板 pad 总数 = 207。",
+  "explains": "即前一条登记的『42 对 9 记账差』——不是我的块提取错，而是**解析器静默丢弃了 33 个 pad**。",
+  "locus": "_shared/eda_core/drc_rules.py BoardParser 的 pad 解析分支：`if not (am and sm and lm and nm and um): continue`（**静默 skip，无登记**）⇒ 5 个正则中任一不匹配即丢 pad。",
+  "severity": "**fail-open 输入缺陷**：模型/DRC 的障碍场**少了 33 个真实 pad** ⇒ 净空判定会**偏松**（与实际板不符）；且属『产物↔真源不一致』族（C-13 同源）。",
+  "note": "该缺陷**独立于** pad 角度重复施加；两者都在 K1 板上暴露，但 locus 不同（① 写板端角度；② 解析器 pad 丢弃）。",
+  "consequence_for_fix": "⇒ 「把 J14 pad 角 90→0」的修法**尚未验证成立**：先前测得的 9 pad 重叠对只在 **9/42 的 pad 子集**上；须先修/解释解析器丢 pad，再重做重叠与逃逸验证。",
+  "next_step": "① 钉出解析器对 J14 各 pad 的 5 个正则哪一条不匹配（逐 pad 用 _PAD_F 复算）；② 若为格式覆盖不足 ⇒ 属 `_shared` 解析器修（须批），并须**负控**（丢 pad ⇒ 必须报错/登记，禁静默）；③ 之后再重做 pad 角度修法的 /tmp 验证。",
+  "readonly_repo": true,
+  "not_landed": true
+ },
+ "J14_final_verification": {
+  "drop_cause_confirmed": "逐 pad 复算 42 个 J14 pad：**33 个缺 `net` 正则（唯此一项）**、9 个有 net；『有 net 但仍被丢』= **0** ⇒ 丢因**唯一** = 无 `net` 子句（非格式覆盖不足）。",
+  "fix1_verified_geometrically": "**绕开解析器**按 KiCad 语义（`fp_rot=90` 时 abs_rot = 90 + pad_rot；位置 gx=fx+cos·px+sin·py / gy=fy−sin·px+cos·py）直接复算**全 42 pad**：as-written（pad 角 90 ⇒ abs 180）**重叠对 = 78**（例 A1-A2/A1-A3/A2-A3）；**pad 角改 0（abs 90）⇒ 重叠对 = 0**。⇒ **修法 ① 成立（已证）**。",
+  "fix1_applied_rerun": {
+   "how": "/tmp 副本（pad 行限定改写 42 处 ⇒ `/tmp/opencode/k1fix3/k1_v1.kicad_pcb`）跑 K1 链",
+   "result": "{TX0:INFEASIBLE, TX1:INFEASIBLE, RX0:INFEASIBLE, RX1:INFEASIBLE} —— **仍 0/4 解**",
+   "failure_set_shifted": "失败面**已变化**：TX0/input 左逃逸；TX1/input 左 + TX1/**output** 右；RX0/input + RX0/output；RX1/input 转为 **『走廊段 seg_ok 失败（通道被占/冻结段阻挡）』**（非逃逸）",
+   "conclusion": "⇒ **修 ① 必要但不充分**：它确消除 pad 重叠（78→0），但链仍不解。且解析器**仍丢 33 个无 net pad**（缺陷 ②）⇒ 此时模型所见 pad 集仍非真板 ⇒ **须先处置/解释 ② 再判 ① 的最终效果**（当前读数是『缺陷 ② 存在下』的读数）。"
+  },
+  "defects_summary": [
+   "① 写板端 pad 角度重复施加（J14：footprint 90 + pad 显式 90 = 绝对 180）⇒ 全 42 pad 重叠 78 对；**修法 `90→0` 已证可归零**；属板写入端/生成器面 ⇒ 须批。",
+   "② `_shared/eda_core/drc_rules.py` BoardParser 对**无 `net` 子句 pad 静默丢弃**（J14 42→9；丢因唯一=无 net）⇒ fail-open 输入缺陷，属 `_shared` 解析器面 ⇒ 须批；建议改显式登记 + 按需保留为几何障碍 + 负控。",
+   "③ 次位：`_tpl_a_line` 缺 dx=0 档（J1 侧 1/7；仅 K1 路径可达 ⇒ K2 零回退可证）。"
+  ],
+  "status_of_k1_resume": "恢复序第 1 步仍**未达成**（0/4 base 有解）；但障碍已收敛为**两个已具名、均已验证/定位的独立缺陷** + 一个次位模板缺口，且 ① 的修法**已证有效**（重叠归零）。",
+  "readonly_repo": true,
+  "not_landed": true
+ }
+}
