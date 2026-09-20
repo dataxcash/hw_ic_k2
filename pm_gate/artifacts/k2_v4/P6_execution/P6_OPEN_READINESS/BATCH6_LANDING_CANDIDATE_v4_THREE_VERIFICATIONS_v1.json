@@ -1,0 +1,35 @@
+{
+ "artifact": "k2_batch6_landing_candidate_v4_three_verifications",
+ "schema": 1,
+ "purpose": "**v4（= v3 + R-10 退化候选守卫）的全量三验预演**（隔离影子；真源零改）。",
+ "v4_patch": {
+  "file": "BATCH6_DRAFT/BATCH6_LANDING_CANDIDATE_v4.patch",
+  "sha16": "3ded8584bb74461f",
+  "target_sha16": "c9e1c3b4ca208482",
+  "git_apply_reproduced": true
+ },
+ "verifications": {
+  "1_verify_k2": "**PASS**（= 验收门 B 维实测：`verify k2` preflight+3 PASS）",
+  "2_canonical_19": "**19 OK / 0 FAIL** · verdict `190b73be0f728a56`（本会话实跑 + 求解器导入陷阱证明解耦 ⇒ 对 v4 不改动该面）",
+  "3_expect_patched": {
+   "verdict": "**PASS**",
+   "A": "anchors 4/4",
+   "B": "verify PASS",
+   "C": "K1 pass=14 / K2 pass=14 · **regressions=0**",
+   "D": "shadow K1=14/K2=14 PASS · pytest 2F/61P/12S · **hidden_failures=2（= 既定 C1/C2）**",
+   "identical_to_v3_and_pristine": true
+  }
+ },
+ "k1_truth": {
+  "segment_solved": "2/8（TX0/output 0.142 · RX0/input 0.2636）",
+  "layer_legality_violations": 0,
+  "c_slot_enum": "48 组合 · 22 消除走廊阻塞 · 0 SOLVED · **0 崩溃（守卫后）**"
+ },
+ "conclusion": "**v4 落件候选三验全过 + K1 真值 2/8 + 零回归 + 无崩溃路径** ⇒ 建议以 v4 取代 v3 落件；落件后仅需在真源上复跑同一三验确认（预期同值）。",
+ "artifacts_sha16": {
+  "BATCH6_LANDING_REHEARSAL_ACCEPTANCE_v4.json": "687e5150536b0820"
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-21T13:55:00+0800"
+}
