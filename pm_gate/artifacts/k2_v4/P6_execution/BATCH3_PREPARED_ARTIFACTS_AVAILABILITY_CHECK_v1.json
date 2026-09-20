@@ -1,0 +1,147 @@
+{
+ "artifact": "k2_batch3_prepared_artifacts_availability_check",
+ "schema": 1,
+ "purpose": "落件前的**备料件可用性复核**：全部补丁 dry-run + 三个验收器实跑 —— 证明监理一旦授权，S1–S8 **每一步都可直接执行且读数与文件内声明一致**。",
+ "dryrun_all_ok": true,
+ "dryrun": {
+  "anchor_shared": {
+   "diff": "K2V4_REAL_BOARD_absolute.diff",
+   "cwd": "_shared",
+   "p": 3,
+   "rc": 0,
+   "last": [
+    "checking file eda_core/tests/test_hs_route_model.py"
+   ]
+  },
+  "anchor_k2_shared": {
+   "diff": "K2V4_REAL_BOARD_absolute.diff",
+   "cwd": "k2/_shared",
+   "p": 3,
+   "rc": 0,
+   "last": [
+    "checking file eda_core/tests/test_hs_route_model.py"
+   ]
+  },
+  "companion_k2": {
+   "diff": "K2P6_SHADOW_VERIFY_ANCHOR_TOLERANCE.diff",
+   "cwd": "k2",
+   "p": 1,
+   "rc": 0,
+   "last": [
+    "checking file tools/k2_p6_shadow_verify_v1.py"
+   ]
+  },
+  "density_guard_k2": {
+   "diff": "DENSITY_EMPTY_GUARD.diff",
+   "cwd": "k2",
+   "p": 1,
+   "rc": 0,
+   "last": [
+    "checking file docs/drafts/p4-j8-density-clearance-v1/measure_density_and_clearance.py"
+   ]
+  },
+  "o1": [
+   {
+    "diff": "archive_6L__k2_v4.kicad_pro.diff",
+    "cwd": "k2",
+    "p": 2,
+    "rc": 0,
+    "last": [
+     "checking file archive/k2_v4_6L/k2_v4.kicad_pro"
+    ]
+   },
+   {
+    "diff": "archive_6L__k2_v4.l4.kicad_pro.diff",
+    "cwd": "k2",
+    "p": 2,
+    "rc": 0,
+    "last": [
+     "checking file archive/k2_v4_6L/k2_v4.l4.kicad_pro"
+    ]
+   },
+   {
+    "diff": "k1_jlc_template.kicad_pro.diff",
+    "cwd": "k1",
+    "p": 2,
+    "rc": 0,
+    "last": [
+     "checking file tools/k1_jlc_template.kicad_pro"
+    ]
+   },
+   {
+    "diff": "k2_jlc_template.kicad_pro.diff",
+    "cwd": "k2",
+    "p": 2,
+    "rc": 0,
+    "last": [
+     "checking file tools/k2_jlc_template.kicad_pro"
+    ]
+   },
+   {
+    "diff": "k2_v4_8L.kicad_pro.diff",
+    "cwd": "k2",
+    "p": 2,
+    "rc": 0,
+    "last": [
+     "checking file hw/k2_v4_8L.kicad_pro"
+    ]
+   },
+   {
+    "diff": "k2_v4_8L.l4.kicad_pro.diff",
+    "cwd": "k2",
+    "p": 2,
+    "rc": 0,
+    "last": [
+     "checking file hw/k2_v4_8L.l4.kicad_pro"
+    ]
+   }
+  ]
+ },
+ "acceptance_runs": {
+  "p6_1": {
+   "verdict": "FAIL",
+   "four_items": {
+    "ignore_without_ruling(9)": true,
+    "no_pipeline(1)": true,
+    "no_fp_lib_table(1)": true,
+    "sheets_empty(1)": true
+   },
+   "integrity": {
+    "dim_set_is_19": true,
+    "manifest_countersigned": false
+   },
+   "note": "四项命中全 OK；**唯一 MISS = manifest 未签认** ⇒ 待 S7（G-c2 落件+签认）后同一条命令转 PASS"
+  },
+  "p6_2_now": {
+   "verdict": "FAIL",
+   "k2_diff_vs_expected": 7,
+   "note": "现状（未整改）⇒ 预期 FAIL"
+  },
+  "p6_2_simulate_O1": {
+   "verdict": "PASS",
+   "k2_diff_vs_expected": 0,
+   "templates_ok": {
+    "k2": true,
+    "k1": true
+   },
+   "note": "O1 落件前预测 ⇒ PASS"
+  },
+  "skip_registry": {
+   "verdict": "PASS",
+   "measured": 20,
+   "registered": 20,
+   "unregistered": 0
+  }
+ },
+ "target_shas_still_match": {
+  "shared_test": "93af4803258cb578",
+  "k2_shared_test": "93af4803258cb578",
+  "shadow_verify": "3d20d9791079081f",
+  "density_tool": "dccaaa476c807def",
+  "k1_state": "90476545bc144084",
+  "k1_tool": "56a39cd52eaf3965"
+ },
+ "conclusion": "**备料件全部现势可用**：4 组补丁（锚修×2 检出 / 同伴件 / 工具守卫 / O1×6）dry-run 全绿；验收器读数与各件内声明一致（判据① 四项命中待签认、判据② O1 预测 PASS、SKIP 登记 20/20）⇒ **S0 授权即可按 S1→S8 执行**。",
+ "readonly_repo": true,
+ "not_landed": true
+}
