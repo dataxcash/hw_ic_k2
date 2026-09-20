@@ -1,0 +1,58 @@
+{
+ "artifact": "k2_capability_gap_closure_map_and_c19_hardening",
+ "schema": 1,
+ "purpose": "P6 产出之三『**能力缺口入账**』的 ENG 侧**一次性收口图**（非周期性复评）：把账本中**ENG 可核对**的项逐条对**当前可复现证据**，并补上唯一发现的 ENG 侧缺口（C-19）。",
+ "scope_declaration": "**一次性收口**；不新增判据维、不做周期复评、不产 t45+ 新齿（守 owner 常设②）；条目状态最终归**监理确认**（账本属监理）。",
+ "items": [
+  {
+   "id": "C-6",
+   "claim": "边做边改自己（学习环跑在执行环里）",
+   "eng_check": "批 3 全部改动**汇成一次性序列** `K2-BATCH3-ONE-SHOT-SEQUENCE-v1.md`（`e1f48893f76f7793`）并按 S0 授权后同批落",
+   "status": "**受控**（批次化）"
+  },
+  {
+   "id": "C-11",
+   "claim": "K2 无 `pipeline.yaml` ⇒ checks.py 对 K2 一次未跑",
+   "eng_check": "`k2/pipeline.yaml` **存在**；`engine verify k2` = `preflight`+3 **PASS**（本轮多次实测，含 commit 前门禁）⇒ 前提不成立",
+   "status": "**已不成立**（前提失效）"
+  },
+  {
+   "id": "C-12",
+   "claim": "门禁吞数 / 判据自废（可被被审对象一侧关掉）",
+   "eng_check": "criteria rev=3 装 `rule_severity_manifest`（**deny-by-default**：未登记豁免 ignore == 0）+ `drc_warning_dispositions` 登记制（7 类具名）⇒ 判定动作与报告动作合一",
+   "status": "**已机判**（rev=3 §三 裁定）"
+  },
+  {
+   "id": "C-13",
+   "claim": "产物↔方案一致性无检查",
+   "eng_check": "rev=3 19 维含 `refdes_sets_equal` · `lib_electrical_level`（W-8，含 sha 新鲜度）· `pads_within_outline`（双口径）· `pin_map_complete` · `net_declared_realized` ⇒ 回读比对已成维",
+   "status": "**已机判**"
+  },
+  {
+   "id": "C-14",
+   "claim": "监理以被审对象输出替代独立核实",
+   "eng_check": "ENG 侧已产**独立测量件**：K2 E3 册 **11 件**（`L4/E3-standard-call-l7-20260919/`）+ K1 b 类 4 类输入（drc / w8 / pads / min-clearance，见 `gc2/B_CLASS_INPUT_COST_AND_READINGS_v2.json`）；判定器对每件强制 **sha16 == 受审板**（陈旧 ⇒ fail-closed）",
+   "status": "**ENG 侧已供料**；『独立复算』归监理"
+  },
+  {
+   "id": "C-19",
+   "claim": "影子 pytest cwd/import 错 ⇒ 补丁静默失效（读到假绿）",
+   "eng_check": "**缺口实测**：`_shared/eda_core/tests/conftest.py` 中**无任何 provenance 断言**（grep 命中 0）。本件**备料补齐**：新增 fail-closed 守卫『pytest cwd 必须 == 本测试文件所在树的根』",
+   "status": "**缺口 → 本件备料（未落件）**"
+  }
+ ],
+ "c19_patch": {
+  "target": "_shared/eda_core/tests/conftest.py（容器 `_shared` 与 `k2/_shared` 同内容）",
+  "diff": "capability_gap/C19_CONFTEST_PROVENANCE.diff",
+  "diff_sha16": "5913489a58040dfa",
+  "apply": "（两处 `_shared` 各一次）cd <…>/_shared && patch --posix -p3 < …/C19_CONFTEST_PROVENANCE.diff",
+  "dry_run": "**OK**（容器 `_shared` 内 `-p3`）",
+  "proof_b_legit": "scratch 副本（容器布局）施加后：`cd <树根> && pytest _shared/eda_core/tests/test_matcher.py` ⇒ **16 passed / rc=0**（合法布局不受影响）",
+  "proof_c_violation": "同一文件、cwd 改为树外（/tmp/opencode）⇒ **fail-closed**：`RuntimeError: C-19 provenance 失败：pytest cwd=… 但测试文件所在树的根=…`（**正是被堵的『假绿』路径**）",
+  "nature": "**非判据维**（不改 19 维、不改任何 `criteria/`）；仅防『补丁静默失效 ⇒ 假验证』",
+  "authorization": "改 `_shared` ⇒ **须监理批**（可拒：若认为会误伤既有调用方式，直接不批即可）"
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "criteria_touched": false
+}

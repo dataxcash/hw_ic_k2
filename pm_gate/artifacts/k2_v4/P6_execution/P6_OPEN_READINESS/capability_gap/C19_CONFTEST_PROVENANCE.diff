@@ -1,0 +1,19 @@
+--- a/k2/_shared/eda_core/tests/conftest.py
++++ b/k2/_shared/eda_core/tests/conftest.py
+@@ -21,6 +21,16 @@
+ if str(REPO) not in sys.path:
+     sys.path.insert(0, str(REPO))
+ 
++# ── C-19 provenance（防「影子补丁静默失效」）──────────────────────────────
++# 影子/多检出布局下，若 pytest 的 cwd ≠ **本测试文件所在树的根**，收集/import 可能命中
++# **真源**（未打补丁）⇒ 读到「假绿」。此处 fail-closed：宁可报错，不得静默通过。
++_CWD_ROOT = Path.cwd().resolve()
++if _CWD_ROOT != REPO:
++    raise RuntimeError(
++        "C-19 provenance 失败：pytest cwd=%s，但测试文件所在树的根=%s；"
++        "请以 `cd %s && python -m pytest …` 运行（否则可能命中真源、影子补丁静默失效）"
++        % (_CWD_ROOT, REPO, REPO))
++
+ FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures"
+ 
+ 
