@@ -1,0 +1,67 @@
+{
+ "artifact": "k2_l8_package_integrity_chain",
+ "schema": 1,
+ "ts": "2026-09-21T01:05:12+0800",
+ "id": "交付包**完整性链路**端到端实证（MANIFEST ≡ 目录 ≡ SHA256SUMS ≡ tarball · 含打包卫生）—— 此前仅验 `sha256sum -c` 一条",
+ "authority": "owner #14③（完工定义含「MANIFEST」）· CR-36/CR-38 之延伸（判据⑥ 包收口）",
+ "subject": {
+  "package": "L6/jlc_package_l8（`4b610baed4f4752c`）",
+  "tarball": "L6/DELIVERY_l8/k2_v4_8L.l8_gerber_package.tar.gz（`36a6b276b4f7e465`）",
+  "board_sha16": "7a5c89913d6e5d0a"
+ },
+ "checks": [
+  {
+   "#": 1,
+   "what": "**MANIFEST.json::files ↔ 目录实件**（集合相等）",
+   "result": "MANIFEST `files` 字典 **53** 件 ≡ 目录（除 MANIFEST）**53** 件 ⇒ **双向差 0**（`n_files=53` 自洽）",
+   "verdict": "PASS"
+  },
+  {
+   "#": 2,
+   "what": "**SHA256SUMS.txt ↔ 目录实件**（集合相等 · 无漏无多）",
+   "result": "SHA256SUMS（去 tarball 行）= **54** 行 ≡ 目录（含 MANIFEST）**54** 件 ⇒ **双向差 0**（另 +1 行为 tarball 自身 ⇒ 全 55 行）",
+   "verdict": "PASS"
+  },
+  {
+   "#": 3,
+   "what": "**tarball 内容 ↔ 目录**（条目集 + **逐件字节**）",
+   "result": "tar 条目（去目录项）**54** ≡ 目录 **54**；解包后**逐件 sha256 全同（54/54）** ⇒ **tarball 即目录之逐字节镜像**",
+   "verdict": "PASS"
+  },
+  {
+   "#": 4,
+   "what": "**`sha256sum -c`（自 `L6/`）**",
+   "result": "**55/55 OK · rc=0**（54 包件 + 1 tarball）",
+   "verdict": "PASS"
+  },
+  {
+   "#": 5,
+   "what": "**打包卫生（确定性）**",
+   "result": "顶层**唯一**目录 `k2_v4_8L.l8_gerber_package/`；`uid/gid` **统一 `root/root`**；`mtime` **统一 `2026-09-19 23:00`** ⇒ 归一化打包（声明之「固定 mtime/uid/gid」**实证成立**）",
+   "verdict": "PASS"
+  }
+ ],
+ "observations": [
+  "固定 `mtime = 2026-09-19 23:00` **早于**本包构建日（09-21 00:25）——此为**归一常量**（确定性打包；非缺陷）；若板厂对时间戳敏感，可在下批把常量更新为构建日（**非阻塞**）。",
+  "`root/root` 归属 = 归一化结果；解包方按自身用户落盘（无实际影响）。"
+ ],
+ "verdict": "**完整性链路 5/5 PASS · 双向差 0 · 逐字节镜像** ⇒ owner ③「MANIFEST」要件**不止于存在，且可复算至字节级**。",
+ "method_note": "只读：`find`/`comm`/`sha256sum`/`tar tvzf`/解包至 `/tmp/opencode`；**未改**包/板/判据/SPEC/生成器。",
+ "non_tooth": "**非新增检查齿**（未新增判据维/阈值）——仅对既有交付件做**链路实证**。",
+ "red_lines_ok": [
+  "只读",
+  "交付包锚 4b610bad/36a6b276 未动",
+  "旧锚 6ee7495d/0e88e107 未动",
+  "未改判据/SPEC/板/生成器",
+  "未派 WORKER",
+  "临时仅 /tmp/opencode"
+ ],
+ "repro": [
+  "cd k2/pm_gate/artifacts/k2_v4/L6",
+  "find jlc_package_l8 -type f | sed 's#^jlc_package_l8/##' | sort > /tmp/opencode/pkg.txt",
+  "awk '{print $2}' DELIVERY_l8/SHA256SUMS.txt | grep -v '^DELIVERY_l8/' | sed 's#^jlc_package_l8/##' | sort > /tmp/opencode/sums.txt && comm -3 /tmp/opencode/pkg.txt /tmp/opencode/sums.txt   # 空",
+  "tar tzf DELIVERY_l8/*.tar.gz | grep -v '/$' | sed 's#^[^/]*/##' | sort > /tmp/opencode/tar.txt && comm -3 /tmp/opencode/tar.txt /tmp/opencode/pkg.txt   # 空",
+  "tar tvzf DELIVERY_l8/*.tar.gz | awk '{print $2\" \"$4\" \"$5}' | sort -u   # root/root 2026-09-19 23:00",
+  "LC_ALL=C sha256sum -c DELIVERY_l8/SHA256SUMS.txt | grep -c ': OK$'   # 55"
+ ]
+}
