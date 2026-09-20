@@ -3,7 +3,7 @@
 > 性质：**只读实测记录 + 根因命名**（不改任何载体/判据/交付包）。
 > 用途：① 给 B2-1..B2-4 的「改前」判据；② 把 v2 计划里的**推测性根因**换成**可复现实证**。
 > 机读真源：`pm_gate/artifacts/k2_v4/P6_execution/BASELINE_pm_gate_k1_k2_readonly_v1.json`
-> sha256 **`27d79e460809987c9ab6e94f7d2451ca1830f56f95da7fc05b436ef99eb25d6b`**（两次连跑逐字节同）
+> sha256 **`91ca2cc3601bb56fb6d6e6d1f4780a6c876868c93e512a82429a14f743eaf9c6`**（两次连跑逐字节同）
 > 机核：`pm_gate/artifacts/k2_v4/P6_execution/INSTRUMENT_SELFCHECK.json`（13/13 锚在；负控已验：篡改 1 锚 ⇒ FAIL/退出码 1）
 > 复现：`PYTHONPATH=AppDir/shared/lib/python3.11/dist-packages AppDir/bin/python3.11 k2/tools/k2_p6_readonly_baseline_v1.py --out /tmp/opencode/k2_p6_baseline.json`
 
@@ -96,6 +96,22 @@
 | K1 precheck 章节齐 | ✅ `precheck_{A,B,C}.md` 各含「G2 焊盘墙穿透」+「汇总判定」 |
 | 候选含「蛇形」 | ✅ `candidate_{A,B,C}.md` 各含 |
 ⇒ **`substantive_conditions_met = true`**：F-1 修好后 K1 `G1.5` 应可**机判 PASS**，届时**撤 waiver**（B2-4 的验收判据已就绪）。
+
+## 9. **对账矩阵**：框架维度 ↔ K1 项目 runner（P6 执行序②「逐项对账同源项」）
+K1 的 `k1_l2_gate_runner.py` / `k1_l3_gate_runner.py` 只做「注入 `project=k1`」后调用**同一份冻结检查体**、**零写操作** ⇒ 本轮只读复跑（机读见基线件 `reconciliation_k1`）。
+
+| 门 | 框架维度 | K1 项目 runner | 定性 |
+|---|---|---|---|
+| G1.1–G1.4 | PASS | （无 runner） | 一致 |
+| **G1.5** | **FAIL** | （无 runner；历史 = WAIVER） | **F-1 工具缺陷**（§8 实质条件已复算 met） |
+| **G2.1–G2.6** | **全 FAIL** | **全 PASS** | **工具缺陷（F-2，读错项目维度）** ⇒ 逐条实证：**6/6** |
+| **G3.1 · G3.2** | FAIL | FAIL | **工具缺陷（F-2a 硬编码名）**：runner 侧错误原文即「缺失 `SPEC_k2_v4.json`」/「缺关键声明 `SPEC_k2_v4.json`」，而 K1 实有 `SPEC_k1.json` |
+| **G3.3** | FAIL | FAIL（缺 `buildability.md`） | **K1 真缺口**（项目侧；非工具） |
+| **G3.4** | FAIL | PASS | **工具缺陷（F-2）** |
+| **G3.5** | FAIL | FAIL（`wp1_closure_check` 依赖不存在的框架相对 SPEC） | **工具缺陷（F-3）** |
+| G4.1–G4.2 | FAIL（「SPEC 缺失」） | （无 runner） | **工具缺陷（F-2b 空参）** |
+
+**结论**：K1 `G2.x/G3.x/G4.x` 的框架 FAIL 中 **11 行为工具缺陷**（7 项目维度 + 3 硬编码名 + 1 空参族），**仅 G3.3 为项目真缺口** ⇒ **B2-3 修好后 K1 维度应转 PASS（除 G3.3，属项目侧）**；此表即 B2-3a fail-closed 门的**逐条期望值**。
 
 ## 5. 不改动声明
 本件与两份工具**零载体改动**：未触 `_shared`（除只读 import）· 未触 `criteria/` · 未触冻结四源 · **未重建交付包** · 未触 `.omo/supervision/**`。临时件仅在 `/tmp/opencode`。

@@ -210,6 +210,87 @@ def run_py_compile() -> dict:
             "stderr_tail": proc.stderr.strip().splitlines()[-1] if proc.stderr.strip() else ""}
 
 
+def run_k1_project_runners() -> dict:
+    """只读运行 K1 项目维度 runner（k1_l2_gate_runner / k1_l3_gate_runner）。
+
+    这两个 runner 只做「注入 project=k1」后调用**同一份冻结检查体**，无任何写操作
+    （源码无 open(w)/json.dump/save）⇒ 可安全用于只读对账（P6 执行序②「逐项对账同源项」）。
+    """
+    out = {}
+    for name, script in (("L2", "pm_gate/tools/k1_l2_gate_runner.py"),
+                         ("L3", "pm_gate/tools/k1_l3_gate_runner.py")):
+        cmd = [sys.executable, script]
+        try:
+            proc = subprocess.run(cmd, cwd=os.path.join(REPO, "k1"), capture_output=True,
+                                  text=True, timeout=1800, env=os.environ.copy())
+        except Exception as exc:
+            out[name] = {"cmd": "python3 " + script, "error": f"{type(exc).__name__}: {exc}"}
+            continue
+        gates: dict = {}
+        last = None
+        for line in proc.stdout.splitlines():
+            m = re.match(r"\s*(PASS|FAIL)\s+(\S+)\s*(.*)$", line)
+            if m:
+                last = m.group(2)
+                gates[last] = {"status": m.group(1), "detail": m.group(3).strip(), "errors": []}
+            elif last and line.strip().startswith("-"):
+                gates[last]["errors"].append(line.strip().lstrip("- ").strip())
+        verdict = [l for l in proc.stdout.splitlines() if "verdict" in l]
+        out[name] = {"cmd": "python3 " + script, "exit_code": proc.returncode,
+                     "verdict_line": verdict[-1].strip() if verdict else "", "gates": gates}
+    return out
+
+
+def reconcile(projects: dict, runners: dict) -> dict:
+    """框架维度读数 ↔ K1 项目 runner 读数的对账（P6 执行序②）。"""
+    frame = {}
+    for mod in GATE_MODULES:
+        for gid, r in (projects.get("k1", {}).get(mod, {}) or {}).items():
+            frame[gid.replace("check_", "").upper() if False else gid] = r
+    rows = {}
+    k1 = projects.get("k1", {})
+    for mod in GATE_MODULES:
+        for fn, r in sorted((k1.get(mod) or {}).items()):
+            gid = {"check_g11": "G1.1", "check_g12": "G1.2", "check_g13": "G1.3", "check_g14": "G1.4",
+                   "check_g15": "G1.5"}.get(fn, fn)
+            rows[fn] = {"framework_passed": r["passed"],
+                        "framework_first_error": (r["errors"][0][:110] if r["errors"] else r.get("exception", "")[:110])}
+    # runner 侧：L2 → G2.x；L3 → G3.x/wp1_closure_check
+    runner_map = {}
+    alias = {"wp1_closure_check": "G3.5"}   # check_g35 直接调用 wp1_closure_check
+    for stage, r in (runners or {}).items():
+        for gid, g in (r.get("gates") or {}).items():
+            gid = alias.get(gid, gid)
+            runner_map[gid] = {"status": g["status"], "detail": g["detail"][:110],
+                               "first_error": (g["errors"][0][:110] if g["errors"] else "")}
+    # 定性：runner PASS & framework FAIL ⇒ 工具缺陷（读错项目维度）；双 FAIL ⇒ 项目真缺口/ENV
+    for fn, row in rows.items():
+        gid = {"check_g11": "G1.1", "check_g12": "G1.2", "check_g13": "G1.3", "check_g14": "G1.4",
+               "check_g15": "G1.5"}.get(fn)
+        if gid is None:
+            gid = "G2." + fn[-1] if fn.startswith("check_g2") else ("G3." + fn[-1] if fn.startswith("check_g3") else ("G4." + fn[-1] if fn.startswith("check_g4") else fn))
+        rr = runner_map.get(gid)
+        row["gate_id"] = gid
+        if rr:
+            row["project_runner"] = rr
+            if rr["status"] == "PASS" and row["framework_passed"] is False:
+                row["classification"] = "TOOL_DEFECT_PROJECT_DIMENSION"
+            elif rr["status"] == "FAIL" and row["framework_passed"] is False:
+                blob = f"{rr['first_error']} {rr['detail']}"
+                if "SPEC_k2_v4" in blob:
+                    row["classification"] = "TOOL_DEFECT_HARDCODED_NAME"
+                elif "pcbnew" in blob or "ModuleNotFoundError" in blob:
+                    row["classification"] = "ENV_DEPENDENT"
+                else:
+                    row["classification"] = "PROJECT_GAP"
+            else:
+                row["classification"] = "AGREE"
+        else:
+            row["classification"] = "NO_PROJECT_RUNNER"
+    return {"notes": "runner 为 K1 项目侧只读 harness（注入 project=k1 后跑同一份冻结检查体）",
+            "runner_map": dict(sorted(runner_map.items())), "rows": {k: rows[k] for k in sorted(rows)}}
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default=None, help="输出 JSON 路径（缺省 = stdout）")
@@ -252,6 +333,7 @@ def main() -> int:
     doc["spec_k2_v4_census"]["count"] = len(hits)
     doc["spec_k2_v4_census"]["count_pm_gate_only"] = len([h for h in hits if "pm_gate/" in h])
 
+    doc["k1_project_runner_readings"] = run_k1_project_runners()
     doc["pytest_baseline"] = run_pytest()
     doc["py_compile_baseline"] = run_py_compile()
 
@@ -261,6 +343,7 @@ def main() -> int:
             continue
         projects[project] = probe_project(project, proj_root, framework_root)
     doc["projects"] = projects
+    doc["reconciliation_k1"] = reconcile(projects, doc["k1_project_runner_readings"])
 
     text = json.dumps(doc, indent=1, sort_keys=True, ensure_ascii=False) + "\n"
     if args.out:
