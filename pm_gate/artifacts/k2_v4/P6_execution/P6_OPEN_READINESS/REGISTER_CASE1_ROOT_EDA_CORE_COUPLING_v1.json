@@ -1,0 +1,16 @@
+{
+ "artifact": "k2_register_case1_root_eda_core_coupling",
+ "schema": 1,
+ "ruling": "#K2-42 §二⑬（case_1 另立具名登记；**本批只登记不动**）",
+ "finding": "共享层测试的**根解析**依赖根级 `eda_core` 符号链接：`REPO = parents[3]` 之后 `REPO/'eda_core'` 须可解析（如 `test_drc_locator.py:20/:292`）。容器根 `ic_hw/eda_core -> _shared/eda_core` 与影子根 `/tmp/opencode/shadow/eda_core -> shared/eda_core` 皆有；**裸 `k2/` 检出无** ⇒ 用例 `FileNotFoundError: k2/eda_core/drc_rules.json`（实测 9 项）。",
+ "now_load_bearing": "落件 S3b（C-19 provenance 守卫）后，该耦合**由守卫强化**：守卫要求 `pytest cwd == parents[3]`（容器 `_shared` 树 ⇒ cwd=容器根；`k2/_shared` 树 ⇒ cwd=`k2`），而 `import eda_core` 又需同根可解析 ⇒ **凡以 `parents[3]` 为『树根』的布局，其根必须同时具备 `eda_core` 可达路径**（现状：容器根/影子根满足；裸 `k2` 检出不满足，故其单测须经影子根跑）。",
+ "evidence": {
+  "census": "k2/pm_gate/artifacts/k2_v4/P6_execution/BATCH3_PRE_SPLIT_PATH_DEFECT_CENSUS_v1.json（e7f5f859469f095f）",
+  "container_root_symlink": "ic_hw/eda_core -> _shared/eda_core（根级，不属任何子模块）",
+  "shadow_root_symlinks": "/tmp/opencode/shadow/{eda_core,_shared,shared,k1,k2,criteria,AppDir}",
+  "measured_cwd_mismatch": "`cd k2 && pytest _shared/eda_core/tests` ⇒ `ModuleNotFoundError: No module named 'eda_core'`（与 C-19 守卫并存 ⇒ 该布局须经影子根）"
+ },
+ "scope_now": "**只登记，不动**（本批不做代码/链接变更）；若日后要支持裸 `k2` 检出跑单测，候选修法 = 在 `k2` 根增 `eda_core` 符号链接（与容器根同形）或让 `conftest` 显式把 `<parents[3]>/_shared` 注入 `sys.path`（**均属 `_shared`/布局类 ⇒ 须批**）。",
+ "readonly_repo": true,
+ "not_landed": true
+}
