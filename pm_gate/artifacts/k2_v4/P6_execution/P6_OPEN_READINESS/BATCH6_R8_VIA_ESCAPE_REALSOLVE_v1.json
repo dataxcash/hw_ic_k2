@@ -1,0 +1,2340 @@
+{
+ "artifact": "k1_r8_via_escape_realsolve_probe",
+ "schema": 1,
+ "purpose": "R-8 实解验证：把『换层逃逸』候选按引擎门（`_k1_escape_verify`，含 D-5/D-2/负控规则）逐一判定，回答『右端是否真有解』（此前仅松弛上界）。",
+ "gate": "self._k1_escape_verify(fields, net_p, net_n, ep, cand, side)",
+ "results": {
+  "TX0/input": {
+   "seg": "TX0/input",
+   "corr_x": 38.312,
+   "track_P": 18.0,
+   "layer_P": "F.Cu",
+   "track_N": 17.5,
+   "layer_N": "F.Cu",
+   "pads": {
+    "P": [
+     38.312,
+     15.5
+    ],
+    "N": [
+     38.312,
+     16.0
+    ]
+   },
+   "forms": {
+    "A: P→In2 / N:F.Cu 直连": {
+     "tried": 40,
+     "passed": 0,
+     "samples": [
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ]
+     ]
+    },
+    "B: N→In2 / P:F.Cu 直连": {
+     "tried": 20,
+     "passed": 0,
+     "samples": [
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ]
+     ]
+    }
+   }
+  },
+  "TX1/input": {
+   "seg": "TX1/input",
+   "corr_x": 38.312,
+   "track_P": 20.51,
+   "layer_P": "In2",
+   "track_N": 21.3,
+   "layer_N": "In2",
+   "pads": {
+    "P": [
+     38.312,
+     20.0
+    ],
+    "N": [
+     38.312,
+     20.5
+    ]
+   },
+   "forms": {
+    "A: P→In2 / N:F.Cu 直连": {
+     "tried": 40,
+     "passed": 0,
+     "samples": [
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ]
+     ]
+    },
+    "B: N→In2 / P:F.Cu 直连": {
+     "tried": 20,
+     "passed": 0,
+     "samples": [
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ]
+     ]
+    }
+   }
+  },
+  "RX0/input": {
+   "seg": "RX0/input",
+   "corr_x": 38.312,
+   "track_P": 21.01,
+   "layer_P": "In2",
+   "track_N": 20.51,
+   "layer_N": "In2",
+   "pads": {
+    "P": [
+     38.312,
+     17.5
+    ],
+    "N": [
+     38.312,
+     18.0
+    ]
+   },
+   "forms": {
+    "A: P→In2 / N:F.Cu 直连": {
+     "tried": 40,
+     "passed": 0,
+     "samples": [
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ]
+     ]
+    },
+    "B: N→In2 / P:F.Cu 直连": {
+     "tried": 20,
+     "passed": 0,
+     "samples": [
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ]
+     ]
+    }
+   }
+  },
+  "RX1/input": {
+   "seg": "RX1/input",
+   "corr_x": 38.312,
+   "track_P": 16.0,
+   "layer_P": "F.Cu",
+   "track_N": 24.02,
+   "layer_N": "In1",
+   "pads": {
+    "P": [
+     38.312,
+     22.0
+    ],
+    "N": [
+     38.312,
+     22.5
+    ]
+   },
+   "forms": {
+    "A: P→In2 / N:F.Cu 直连": {
+     "tried": 40,
+     "passed": 0,
+     "samples": [
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ]
+     ]
+    },
+    "B: N→In2 / P:F.Cu 直连": {
+     "tried": 20,
+     "passed": 0,
+     "samples": [
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ]
+     ]
+    }
+   }
+  },
+  "TX1/output": {
+   "seg": "TX1/output",
+   "corr_x": 74.2,
+   "track_P": 20.0,
+   "layer_P": "B.Cu",
+   "track_N": 21.5,
+   "layer_N": "In1",
+   "pads": {
+    "P": [
+     75.155,
+     21.5
+    ],
+    "N": [
+     75.155,
+     21.0
+    ]
+   },
+   "forms": {
+    "A: P→In2 / N:F.Cu 直连": {
+     "tried": 40,
+     "passed": 0,
+     "samples": [
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ]
+     ]
+    },
+    "B: N→In2 / P:F.Cu 直连": {
+     "tried": 20,
+     "passed": 0,
+     "samples": [
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ]
+     ]
+    }
+   }
+  },
+  "RX1/output": {
+   "seg": "RX1/output",
+   "corr_x": 73.245,
+   "track_P": 21.0,
+   "layer_P": "In1",
+   "track_N": 20.5,
+   "layer_N": "In1",
+   "pads": {
+    "P": [
+     73.245,
+     21.5
+    ],
+    "N": [
+     73.245,
+     21.0
+    ]
+   },
+   "forms": {
+    "A: P→In2 / N:F.Cu 直连": {
+     "tried": 40,
+     "passed": 0,
+     "samples": [
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ]
+     ]
+    },
+    "B: N→In2 / P:F.Cu 直连": {
+     "tried": 20,
+     "passed": 0,
+     "samples": [
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ]
+     ]
+    }
+   }
+  },
+  "RX0/output": {
+   "seg": "RX0/output",
+   "corr_x": 73.245,
+   "track_P": 18.0,
+   "layer_P": "In2",
+   "track_N": 19.0,
+   "layer_N": "In1",
+   "pads": {
+    "P": [
+     73.245,
+     23.0
+    ],
+    "N": [
+     73.245,
+     22.5
+    ]
+   },
+   "forms": {
+    "A: P→In2 / N:F.Cu 直连": {
+     "tried": 40,
+     "passed": 0,
+     "samples": [
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ]
+     ]
+    },
+    "B: N→In2 / P:F.Cu 直连": {
+     "tried": 20,
+     "passed": 0,
+     "samples": [
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ],
+      [
+       "EXC",
+       "TypeError",
+       "HSRouteModel._k1_escape_verify() got mul"
+      ]
+     ]
+    }
+   }
+  }
+ },
+ "outcome": {
+  "verdict": "**未产出通过门禁的候选（0/420）—— 但失败可归因于探针构造缺陷，非无解证明**",
+  "diagnosis": "候选 pts 构造含**重复点**（v2 与 v1 同 x ⇒ 第 2→3 点为零长段）⇒ 被 ④/R-10 **退化守卫**正确拒绝（fail-closed 生效，420 例**零崩溃**）",
+  "therefore": "本轮结果**不能**作为『右端无解』证据；R-8 的实解验证**仍未完成**（证据缺口维持：仅松弛上界）",
+  "fix_next": "修正 pts 构造（去掉重复点：via1 → 内层水平段 → via2 必须在 **x 上真正错开**，或采用『先出排(dy)再水平(dx)』两段），再跑同一门禁",
+  "side_value": "**顺带获得负控实证**：420 例畸形候选逐一被拒且无崩溃 ⇒ ④零长段守卫 + R-10 退化守卫的**牙齿在生产路径上得到验证**（此前仅有单点/构造式负控）"
+ },
+ "ts": "2026-09-21T14:55:00+0800"
+}
