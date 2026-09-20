@@ -1,0 +1,34 @@
+{
+ "artifact": "k2_batch6_vg_pairaware_poc",
+ "schema": 1,
+ "purpose": "**(d) 的廉价解**（只读 /tmp 影子实测）：把 `_k1_escape` 既有的 **V-Graph 兜底** 由『P/N 各自独立求』改为 **对级感知**（N 在 P 已布的场上求解）且**净距用正确量纲**（中心距 = 线宽 + 项目 gap）⇒ 修正基线上 **K1 1/8 → 2/8（新增 RX0.input）**，非新功能级。",
+ "change": {
+  "site": "`_shared/eda_core/hs_route_model.py` · `_k1_escape` 的 VG 兜底块（模板 A/B/C 全失败后）",
+  "before": "g_n = HSVisibilityGraph(fcu, net_n, padN, {(corr_x, track_n)}); sol_n = g_n.solve()  # 与 P 无关",
+  "after": "_clr = spec.net_classes.PCIe85.diff_pair.p_gap + spec.impedance.width_mm；（退化折线 <2 点时退回 fcu）\n_nf = _PairClearField(fcu, sol_p[0], _clr) if sol_p 有效 else fcu\ng_n = HSVisibilityGraph(_nf, net_n, padN, {(corr_x, track_n)}); sol_n = g_n.solve()",
+  "new_class": "`_PairClearField`（透传 base 场，`seg_ok/point_ok` 追加『到已布折线的**中心线距** ≥ clr』；`clr` 用**中心距**口径 = 线宽+gap，替代旧草案的 `0.1` 边缘口径）"
+ },
+ "measurements": {
+  "corrected_baseline_tree_d5": "1/8（仅 TX0.output）",
+  "with_change_tree_vg": "**2/8**（TX0.output + **RX0.input（新增）**）· shared_seg_count 8 → **23**",
+  "two_run_determinism": "段级状态签名两跑一致（sig e4dbc45569ccebc3）",
+  "layer_legality_audit": "**0 违规**（`k1_layer_legality_audit_v1.py`）",
+  "cross_net_same_layer_<0.1": "**0**（全量已解段复算）",
+  "solved_detail": {
+   "RX0/input": {
+    "pn_edge": 0.174,
+    "vias": "[[5.3,21.01],[38.3125,21.01],[5.3,20.51],[38.3125,20.51]]",
+    "P": "(2.55,24.02)→(3.02,23.29)→(4.17,23.29)→(5.3,21.01)→(38.31,21.01)→(34.06,21.01)→(37.58,17.5)→(38.31,17.5) （F.Cu 段 + In2 走廊段）",
+    "N": "(3.05,24.02)→(3.40,26.14)→(7.15,24.42)→(7.02,23.29)→(5.3,20.51)→(38.31,20.51)→(35.06,20.51)→(37.58,18.0)→(38.31,18.0)"
+   }
+  }
+ },
+ "caveats": [
+  "**净距口径歧义（须裁定）**：RX0/input 实测 P/N 边缘距 **0.174** —— 按 **K1 SPEC** `net_classes.PCIe85.clearance=0.1` 与 `diff_pair.p_gap=0.1` ⇒ **合规**；但共享 `drc_rules.json` 的 PCIe85 clearance = **0.175**（K2 派生）⇒ 差 0.001 会**挂边**。请裁定 K1 HS 对净距的权威来源（建议：项目 SPEC 优先，共享规则文件为 K2 派生件）。",
+  "TX0.input 仍 INFEASIBLE（段级 P/N −0.09）：其**右端（U11）**为密集焊盘场（P3V3_AUX/GND，窗口 0）⇒ **VG 兜底在右端无 F.Cu 单层对级解**（实测 P 单独 VG=True、N 避 P 后 VG=**False**）⇒ 该端仍需过孔/换层或 alloc 次序重排。",
+  "本变更属 `_shared` 引擎改动 ⇒ **须批**（与 D-1…D-4 同批为宜）；落件须附：① `_PairClearField` 的 <2 点守卫 ② 阈值来源（项目 SPEC）③ 负控（N 避 P 后若仍不足 ⇒ 必拒）。"
+ ],
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-21T09:20:00+0800"
+}
