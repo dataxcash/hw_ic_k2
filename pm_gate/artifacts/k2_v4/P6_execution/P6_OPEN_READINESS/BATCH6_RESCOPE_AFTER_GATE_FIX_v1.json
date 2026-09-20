@@ -1,0 +1,50 @@
+{
+ "artifact": "k2_batch6_rescope_after_gate_fix",
+ "schema": 1,
+ "purpose": "修正测量门（FIX-A 逐段累积 + FIX-B 段级 P/N 门）后**重看批 6**：K1 真值 = 1/8；瓶颈由『走廊槽位』转为『端点逃逸几何』⇒ 批 6 的 (a)/(c) 杠杆失效，(d) 端点对齐升为主杠杆。",
+ "corrected_baseline": {
+  "tree": "/tmp/opencode/k2side/tree6h = 容器 _shared@02459f5 + ⑥ + FIX-A + FIX-B（阈值=项目 `net_classes.PCIe85.diff_pair.p_gap`=0.1）",
+  "segments_solved": "**1/8**（TX0.output）",
+  "per_segment": {
+   "TX0.input": "INFEASIBLE · **P/N 间距 -0.09（交叉）** ← 输入侧逃逸几何",
+   "TX0.output": "SOLVED",
+   "TX1.input": "INFEASIBLE · 走廊段 seg_ok 失败（通道被占/冻结段阻挡）",
+   "TX1.output": "INFEASIBLE · 左逃逸对级不可行",
+   "RX0.input": "INFEASIBLE · **P/N 间距 0.01（过近）** ← 输入侧逃逸几何",
+   "RX0.output": "INFEASIBLE · 左逃逸对级不可行",
+   "RX1.input": "INFEASIBLE · 走廊段 seg_ok 失败",
+   "RX1.output": "INFEASIBLE · 左逃逸对级不可行"
+  }
+ },
+ "levers_under_corrected_gates": {
+  "6_bidirectional_pair_coupling": "⑥ 树 3/8 →（修正门）1/8 = **与 pristine 同** ⇒ **边际增益 0**。",
+  "c_seg_tracks_slot_support": {
+   "RX1 → In1 20.5/21.0": "仍 1/8（**+0**）；失败面由『走廊被占』变为『**P/N 间距 -0.09**』⇒ 槽位解决后**暴露端点逃逸交叉**。",
+   "TX1 → In1 20.5/21.0": "仍 1/8（+0）；TX1.input 变为『P/N -0.09』。",
+   "TX1 → In2 20.51/21.01": "仍 1/8（+0）。",
+   "combo": "仍 1/8（+0）。"
+  },
+  "reading": "(c) 的槽位覆盖**能把『走廊被占』转化为『逃逸交叉』**，但不产生已解段 ⇒ **槽位不是当前瓶颈**。"
+ },
+ "diagnosis": {
+  "bottleneck": "**端点（逃逸）几何**，非走廊槽位：",
+  "input_side": "J1 端子焊盘行（1.3×0.35 级、节距 0.5）⇒ 对级出线空间不足 ⇒ 出现 P/N 交叉/过近（TX0.input -0.09 · RX0.input 0.01）。",
+  "output_side": "J14 右侧 → 3 条 output 全部『逃逸对级不可行』（异层对走 hetero 分支，见 BATCH6_HETERO_PAIR_PROBE_v1.json）。",
+  "consistency": "与 `CROSSBOARD_CORRIDOR_ENDPOINT_LESSON_v1.json` 的 L2 结论一致：『走廊端点须落到目标焊盘轴线，中心线只在中段成立』——K1 `_k1_escape/_tpl_a_line` 落点强制 = (`corr_x`, `track_y`) ⇒ 端点不偏离 ⇒ 结构性缺口。"
+ },
+ "recommended_rescope": {
+  "step_0": "先落 FIX-A/FIX-B（待监理裁定落件范围与容差语义）→ 重测 K1 真值（预期 1/8）。",
+  "step_1": "批 6 主杠杆改 **(d) 端点对齐**（原判『单独不足』是在 fail-open 口径下测得 ⇒ 须重评）；落点约束由『= (corr_x, track_y)』放宽为『**端点对齐目标焊盘轴线 + 中段对齐轨道**』（L2 走廊/逃逸策略）。",
+  "step_2": "(b) hetero 双换层**保留**为 output 侧候选（3 条 output 全灭，为主战场）。",
+  "step_3": "(a) ⑥ 双向往耦合：修正门下**无边际增益** ⇒ **不建议**单独落件（若与 (d) 联合再评）。",
+  "step_4": "(c) `seg_tracks` 槽位覆盖：降为**辅助**（在 (d) 打通端点后，槽位才是可选项）。",
+  "ordering": "(d) → (b) → (c) 辅助"
+ },
+ "caveats": [
+  "全部读数在 ⑥ 树 + /tmp 影子门上测得；FIX 落件后**须重测**（脚本 `k1_shared_accum_failopen_check_v1.py`）。",
+  "FIX-A/FIX-B 对 K2 非零影响（见 BATCH6_FIX_K2_REGRESSION_PROBE_v1.json）⇒ 落件范围待裁定。"
+ ],
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-21T02:35:00+0800"
+}
