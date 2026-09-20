@@ -15,6 +15,16 @@
 | `_corridor_clear_span` | 两走廊 span **== x_range**（无器件缩进） |
 | `probe_region_capacity`（同形 region） | **INSUFFICIENT**（测试内构造则为 `INFRA_ERROR` ⇒ 待 ENG 定性） |
 
+
+## 1.1 追加测量：**18/18 链的端点都不在现行走廊内**（选案前须 ENG 定性）
+| 事实 | 值 |
+|---|---|
+| 18 链端点（`pair_endpoints(...)[P][0]` 取法）chip 侧 pad x 跨度 | **[54.70, 93.55]** |
+| 走廊 | `WEST_MCIO_TO_CHIP [65.05,82.35]` · `EAST_CHIP_TO_J2 [105.25,132.65]` |
+| 无走廊命中 | **18 / 18**（8 条落在走廊间带 82.35–105.25；其余在 WEST 走廊以西 x<65.05） |
+⇒ **遗留 probe/escape API 的前提（net 端点落走廊）在现行 SPEC 下不成立** ⇒ 13 项确属**旧代际语义**（非"SPEC/板不兼容"缺陷）。
+**caveat（诚实边界）**：端点取法依 `pair_endpoints(...)[P][0]`；**定案前须 ENG 复核取法**（已列入待定性项 ③）。
+
 ## 2. 逐项草案（13 项）
 | # | 用例 | (甲) 重基线：新期望 + 来源 | (乙) 具名退役理由 | ENG 建议 |
 |---|---|---|---|---|
@@ -35,7 +45,7 @@
 ## 3. 提请监理裁定
 1. **选案**：(甲) / (乙) / **混合**（本表「ENG 建议」列即混合方案：11 项甲、3 项乙）。
 2. **退役须具名**：写入 `results_template.json` 与回归网说明，**禁静默 skip**（C-12）。
-3. **两处须 ENG 先定性再定案**：§1 的 `INFRA_ERROR` vs `INSUFFICIENT` 差异；`solve_all_v4` **0/18** 是「输入所致」还是「引擎真缺陷」。
+3. **三处须 ENG 先定性再定案**：① §1 的 `INFRA_ERROR` vs `INSUFFICIENT` 差异（初步定位：测试内 region 把 **J2/东侧走廊 id 与 U7 侧 bases 配对** ⇒ 自相矛盾 ⇒ INFRA_ERROR；同形但走廊 id 正确时实测 INSUFFICIENT）；② `solve_all_v4` **0/18** 与 §1.1 **18/18 无走廊命中** 的关系（判定为「旧 API 前提不成立」or 引擎真缺陷）；③ 端点取法 `pair_endpoints(...)[P][0]` 复核。
 
 ## 4. 零改动声明
 真源 `_shared`/`criteria/`/冻结四源/交付锚/生成器/SPEC/原理图**均未触**；实验与测量全在 `/tmp/opencode/shadow_b3`；未派 WORKER。

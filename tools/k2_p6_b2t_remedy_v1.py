@@ -92,7 +92,24 @@ def measure() -> dict:
     bases = sorted(k for k in alloc_recs if k.startswith("PCIE_"))
     solved = [k for k, r in m.solve_all_v4(bases)["results"].items() if r.get("status") == "SOLVED"]
     topo = m.link_topology_map()
+    cov = {}
+    for base in bases:
+        try:
+            ep = pair_endpoints(m.board, f"{base}_P", f"{base}_N")
+            xs = [ep["P"][0]["pos"][0], ep["N"][0]["pos"][0]]
+            cov[base] = {"pad_x": [round(min(xs), 2), round(max(xs), 2)],
+                         "corridor_hit": (m._corridor_for_x(min(xs), max(xs)) or {}).get("id")}
+        except BaseException as e:
+            cov[base] = {"error": f"{type(e).__name__}: {e}"}
+    no_hit = [k for k, v in cov.items() if v.get("corridor_hit") is None]
     return {
+        "corridor_coverage_18": {
+            "n_nets": len(cov), "n_no_corridor_hit": len(no_hit), "no_hit": sorted(no_hit),
+            "pad_x_span": [min(v["pad_x"][0] for v in cov.values() if "pad_x" in v),
+                           max(v["pad_x"][1] for v in cov.values() if "pad_x" in v)],
+            "reading": "遗留 probe/escape API 的前提（net 端点落走廊）在现行 SPEC 下不成立 ⇒ 13 项属旧代际语义",
+            "caveat": "端点取法依 pair_endpoints(...)[P][0]；定案前须 ENG 复核取法（已列为待定性项）",
+        },
         "corridors": [{"id": c.get("id"), "x_range": c.get("x_range")} for c in m.spec["corridors"]],
         "capacity_regions": sorted(r["id"] for r in m._capacity_regions()),
         "dn0": {"pad_x": px, "corridor_for_x": m._corridor_for_x(px, px)},
