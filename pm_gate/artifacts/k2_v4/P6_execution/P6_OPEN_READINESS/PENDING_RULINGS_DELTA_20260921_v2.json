@@ -5,6 +5,22 @@
  "owner_gate": "无（全部 L2/机制/批次面）",
  "delta": [
   {
+   "id": "**R-8 收口（确认）**",
+   "status": "已试毕 5 形态（⑨异内层 · ⑩同内层 · ⑪下潜 · ⑫两网皆内层穿越 162 组合 · ⑬斜线首段+提前换层 108 组合）⇒ **全部 2/8 零增益**",
+   "diagnosed": "`TX0/input` 左端 = **行序倒置型结构冲突**（P fcu/18.0 在 N fcu/17.5 之上，而 N 焊盘 y=24.02 需穿越 P 落点行）；逃逸门对上述形态全拒（外部插桩证实：装配路径与基线逐字节同、无 In* 段）",
+   "ask": "三选一：**(a) 放行引擎结构改动**（装配路径插桩 + 内层穿越与走廊层协同建模）· **(b) 放行 alloc 行序/层重排** · **(c) 本分支不再投入**（收益均属推测）"
+  },
+  {
+   "id": "**R-4 实测（新增）· 批 5 不得与 v4 简单合并**",
+   "status": "已实测（只读影子）",
+   "measured": {
+    "批5单独落": "K1 **1/8** 且 `RX1/output` 以 **−0.09 假绿**被判 SOLVED ⇒ 读数不可信（批 5 不含 D-1…D-5）",
+    "批5+v4": "`hs_route_model`④补丁**已含于 v4**（apply 被拒）；`drc_rules`①②+T 成功；K2 **零回归**（test_hs_route_model 2F/61P/12S 同 pristine · test_drc_rules **29 passed**）；但 **K1=1/8**：`TX0/output` 由 SOLVED(0.142) → INFEASIBLE ⇒ **负增益**"
+   },
+   "recommend": "**先落 v4；批 5 暂缓**。若须同批 ⇒ 先按 FIX-A/B 同法把 `drc_rules`①② **按项目域分派**解冲突（否则摧毁 v4 既得解）。",
+   "evidence": "BATCH6_BATCH5_R4_MEASURED_PACKAGE_v1.json"
+  },
+  {
    "id": "**(c) 降级：走廊越界可纯 alloc 槽位重排消除，无须改 SPEC**",
    "status": "已实测（只读影子 + 临时 alloc 拷贝）",
    "edit": "`PCIE_TX1_N.track_y 21.3 → 21.01`（同 band in2；两值皆 ∈ `tracks_y`；21.01 ∈ In2 自由带 20.5–21.2）· `PCIE_RX1_P.track_y 16.0 → 17.5`（同 band fcu；∈ `tracks_y` ∧ F.Cu 自由带 17.3–18.2）",
@@ -114,6 +130,8 @@
  },
  "readonly_repo": true,
  "not_landed": true,
- "ts": "2026-09-21T10:05:00+0800",
- "extra_verified": "canonical 19 **不吃求解器**：`criteria/manifest.k2.yaml` 19 维全为板件级量、`criteria/adjudicate.py`(rev=3) 对 `hs_route_model|solve_all|solve_chain|pipeline/engine` 零引用、测量件出自固定受审板 `l7` ⇒ D-1…D-5 不可能移动 canonical 19 verdict；真回归面 = 验收门 D 维的 `test_hs_route_model.py`（已实测，见 R-2 预答）；**本轮硬化**：canonical 19 本会话**实跑** = `passed=True/provisional=False/verdict 190b73be0f728a56`（两跑逐字节同）；并在**求解器导入陷阱**（`k2_canonical19_solver_import_trap_v1.py`，含 `--selftest` 正控）下仍得同值且陷阱未触发 ⇒ **动态证明** canonical 19 不导入求解器 ⇒ 落件回归面**只在**验收门 D 维。"
+ "ts": "2026-09-21T22:50:00+0800",
+ "extra_verified": "canonical 19 **不吃求解器**：`criteria/manifest.k2.yaml` 19 维全为板件级量、`criteria/adjudicate.py`(rev=3) 对 `hs_route_model|solve_all|solve_chain|pipeline/engine` 零引用、测量件出自固定受审板 `l7` ⇒ D-1…D-5 不可能移动 canonical 19 verdict；真回归面 = 验收门 D 维的 `test_hs_route_model.py`（已实测，见 R-2 预答）；**本轮硬化**：canonical 19 本会话**实跑** = `passed=True/provisional=False/verdict 190b73be0f728a56`（两跑逐字节同）；并在**求解器导入陷阱**（`k2_canonical19_solver_import_trap_v1.py`，含 `--selftest` 正控）下仍得同值且陷阱未触发 ⇒ **动态证明** canonical 19 不导入求解器 ⇒ 落件回归面**只在**验收门 D 维。",
+ "recommended_minimum_action": "**放行 `BATCH6_LANDING_CANDIDATE_v4.patch`**（K1 **1/8→2/8** · K2 零回归 · 层合法违规 0 · 无崩溃路径 · 三验预演全过）；执行手册 = `BATCH6_PER_SEGMENT_CEILING_AND_LANDING_RUNBOOK_v1.json`（7 步 · 期望读数 · 中止条件 · 回滚点 `02459f5`）",
+ "eng_readonly_surface": "**已穷尽**：R-1/R-2/R-3/R-4/R-10 均已实测；R-8/(c) 已测上界并收口；8 段上限表与落件手册齐备。裁决到位即可机械执行。"
 }
