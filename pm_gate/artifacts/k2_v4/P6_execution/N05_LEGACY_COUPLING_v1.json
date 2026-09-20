@@ -1,0 +1,3886 @@
+{
+ "artifact": "k2_p6_n05_coupling",
+ "counts": {
+  "IMPORT_ORIGIN_EVOLVED": 4,
+  "LIVE": 966,
+  "RECENT_ORPHAN": 248,
+  "STALE_IMPORT_ORPHAN": 713,
+  "STALE_IMPORT_REFERENCED": 64
+ },
+ "method": "出处口径同 k2_p6_repro_chain_health_v1；引用判定用**严格规则**（完整文件名≥10 / 长主干≥12 / 含数字的具体目录≥8）——与普查件（宽松词面启发式，656 为上界）不同，本件是**可裁决的严格集**；消费者 = 现役代码（tools 非 P6 工具 + _shared/{eda_core,pm_gate} 非测试 + 项目配置）中命中 token 的文件:行",
+ "nature_split": {
+  "authored_or_other": 18,
+  "generated_json": 46
+ },
+ "note_nature": "只有 **机器生成物**（nature=generated_json）才是 N-05 卫生项；人写文档（.md 契约/候选/裁决）由仓库拆分复制而来且未修改属**正常**，不列入 P1。",
+ "on_gate_path_count": 11,
+ "on_gate_path_shortlist": [
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L1/structural_predict.md",
+   "bytes": 10419,
+   "consumers": [
+    {
+     "file": "k2/pm_gate/project.yaml",
+     "lines": [
+      8,
+      27,
+      30
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/pm_gate/check_l1.py",
+     "lines": [
+      203,
+      231
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/pm_gate/config.py",
+     "lines": [
+      33,
+      125
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/pm_gate/tools_escape_predict.py",
+     "lines": [
+      48
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/k2_p3_drawings_v1.py",
+     "lines": [
+      791
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [
+    {
+     "file": "_shared/pm_gate/check_l1.py",
+     "lines": [
+      203,
+      231
+     ],
+     "n_lines": 2
+    }
+   ],
+   "n_consumers": 5,
+   "nature": "authored_doc",
+   "on_gate_path": true,
+   "token": "file:structural_predict.md"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L1/evaluation/criteria.md",
+   "bytes": 1825,
+   "consumers": [
+    {
+     "file": "_shared/eda_core/l1_bid/scorer.py",
+     "lines": [
+      458,
+      588,
+      606
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/l1_bid/criteria.py",
+     "lines": [
+      471,
+      473
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/pm_gate/check_l1.py",
+     "lines": [
+      106,
+      110
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/pm_gate/check_l2.py",
+     "lines": [
+      110,
+      112
+     ],
+     "n_lines": 2
+    }
+   ],
+   "gate_consumers": [
+    {
+     "file": "_shared/pm_gate/check_l1.py",
+     "lines": [
+      106,
+      110
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/pm_gate/check_l2.py",
+     "lines": [
+      110,
+      112
+     ],
+     "n_lines": 2
+    }
+   ],
+   "n_consumers": 4,
+   "nature": "authored_doc",
+   "on_gate_path": true,
+   "token": "file:criteria.md"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L2/evaluation/criteria.md",
+   "bytes": 532,
+   "consumers": [
+    {
+     "file": "_shared/eda_core/l1_bid/scorer.py",
+     "lines": [
+      458,
+      588,
+      606
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/l1_bid/criteria.py",
+     "lines": [
+      471,
+      473
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/pm_gate/check_l1.py",
+     "lines": [
+      106,
+      110
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/pm_gate/check_l2.py",
+     "lines": [
+      110,
+      112
+     ],
+     "n_lines": 2
+    }
+   ],
+   "gate_consumers": [
+    {
+     "file": "_shared/pm_gate/check_l1.py",
+     "lines": [
+      106,
+      110
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/pm_gate/check_l2.py",
+     "lines": [
+      110,
+      112
+     ],
+     "n_lines": 2
+    }
+   ],
+   "n_consumers": 4,
+   "nature": "authored_doc",
+   "on_gate_path": true,
+   "token": "file:criteria.md"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L2/math_closure.md",
+   "bytes": 2897,
+   "consumers": [
+    {
+     "file": "_shared/pm_gate/check_l2.py",
+     "lines": [
+      5,
+      83,
+      85
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/pm_gate/red_team.py",
+     "lines": [
+      122
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "_shared/pm_gate/review.py",
+     "lines": [
+      128
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [
+    {
+     "file": "_shared/pm_gate/check_l2.py",
+     "lines": [
+      5,
+      83,
+      85
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/pm_gate/review.py",
+     "lines": [
+      128
+     ],
+     "n_lines": 1
+    }
+   ],
+   "n_consumers": 3,
+   "nature": "authored_doc",
+   "on_gate_path": true,
+   "token": "file:math_closure.md"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L2/escape_closure_analysis.md",
+   "bytes": 11279,
+   "consumers": [
+    {
+     "file": "_shared/eda_core/escape_closure_analysis.py",
+     "lines": [
+      10,
+      106
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/pm_gate/gates.py",
+     "lines": [
+      105
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [
+    {
+     "file": "_shared/pm_gate/gates.py",
+     "lines": [
+      105
+     ],
+     "n_lines": 1
+    }
+   ],
+   "n_consumers": 2,
+   "nature": "authored_doc",
+   "on_gate_path": true,
+   "token": "file:escape_closure_analysis.md"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L2/constraints.md",
+   "bytes": 2911,
+   "consumers": [
+    {
+     "file": "_shared/pm_gate/check_l2.py",
+     "lines": [
+      4,
+      71,
+      73,
+      79
+     ],
+     "n_lines": 4
+    },
+    {
+     "file": "_shared/pm_gate/check_l3.py",
+     "lines": [
+      4,
+      50,
+      52,
+      55
+     ],
+     "n_lines": 4
+    }
+   ],
+   "gate_consumers": [
+    {
+     "file": "_shared/pm_gate/check_l2.py",
+     "lines": [
+      4,
+      71,
+      73,
+      79
+     ],
+     "n_lines": 4
+    },
+    {
+     "file": "_shared/pm_gate/check_l3.py",
+     "lines": [
+      4,
+      50,
+      52,
+      55
+     ],
+     "n_lines": 4
+    }
+   ],
+   "n_consumers": 2,
+   "nature": "authored_doc",
+   "on_gate_path": true,
+   "token": "file:constraints.md"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L2/ruling/assumption_h3_verify.md",
+   "bytes": 13832,
+   "consumers": [
+    {
+     "file": "_shared/pm_gate/gates.py",
+     "lines": [
+      106
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [
+    {
+     "file": "_shared/pm_gate/gates.py",
+     "lines": [
+      106
+     ],
+     "n_lines": 1
+    }
+   ],
+   "n_consumers": 1,
+   "nature": "authored_doc",
+   "on_gate_path": true,
+   "token": "file:assumption_h3_verify.md"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L2/ruling/assumption_h1_calc.md",
+   "bytes": 7202,
+   "consumers": [
+    {
+     "file": "_shared/pm_gate/gates.py",
+     "lines": [
+      107
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [
+    {
+     "file": "_shared/pm_gate/gates.py",
+     "lines": [
+      107
+     ],
+     "n_lines": 1
+    }
+   ],
+   "n_consumers": 1,
+   "nature": "authored_doc",
+   "on_gate_path": true,
+   "token": "file:assumption_h1_calc.md"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L2/measurements.md",
+   "bytes": 2037,
+   "consumers": [
+    {
+     "file": "_shared/pm_gate/check_l2.py",
+     "lines": [
+      3,
+      61,
+      63,
+      67
+     ],
+     "n_lines": 4
+    }
+   ],
+   "gate_consumers": [
+    {
+     "file": "_shared/pm_gate/check_l2.py",
+     "lines": [
+      3,
+      61,
+      63,
+      67
+     ],
+     "n_lines": 4
+    }
+   ],
+   "n_consumers": 1,
+   "nature": "authored_doc",
+   "on_gate_path": true,
+   "token": "file:measurements.md"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/buildability.md",
+   "bytes": 1677,
+   "consumers": [
+    {
+     "file": "_shared/pm_gate/check_l3.py",
+     "lines": [
+      5,
+      60,
+      62,
+      64,
+      66
+     ],
+     "n_lines": 5
+    }
+   ],
+   "gate_consumers": [
+    {
+     "file": "_shared/pm_gate/check_l3.py",
+     "lines": [
+      5,
+      60,
+      62,
+      64,
+      66
+     ],
+     "n_lines": 5
+    }
+   ],
+   "n_consumers": 1,
+   "nature": "authored_doc",
+   "on_gate_path": true,
+   "token": "file:buildability.md"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/executor_constraints.md",
+   "bytes": 1310,
+   "consumers": [
+    {
+     "file": "_shared/pm_gate/check_l3.py",
+     "lines": [
+      4,
+      50,
+      52,
+      55
+     ],
+     "n_lines": 4
+    }
+   ],
+   "gate_consumers": [
+    {
+     "file": "_shared/pm_gate/check_l3.py",
+     "lines": [
+      4,
+      50,
+      52,
+      55
+     ],
+     "n_lines": 4
+    }
+   ],
+   "n_consumers": 1,
+   "nature": "authored_doc",
+   "on_gate_path": true,
+   "token": "file:executor_constraints.md"
+  }
+ ],
+ "p1_shortlist_generated_stale": [
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/drc_locator/report.json",
+   "bytes": 1336494,
+   "consumers": [
+    {
+     "file": "k2/tools/p3_v57_w3_constructive_validator_v2.py",
+     "lines": [
+      7,
+      8,
+      9,
+      568,
+      572,
+      576
+     ],
+     "n_lines": 6
+    },
+    {
+     "file": "_shared/eda_core/sch_gate/gate_schematic.py",
+     "lines": [
+      5,
+      12,
+      71,
+      226,
+      228
+     ],
+     "n_lines": 5
+    },
+    {
+     "file": "k2/tools/p3_v57_co164_order_runner.py",
+     "lines": [
+      123,
+      293,
+      325,
+      1163
+     ],
+     "n_lines": 4
+    },
+    {
+     "file": "_shared/eda_core/drc_locator.py",
+     "lines": [
+      506,
+      507,
+      525
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/capacity_audit.py",
+     "lines": [
+      40,
+      587
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/escape_landing.py",
+     "lines": [
+      62,
+      1267
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "k2/tools/p3_v57_co105_f4_scope_disposition.py",
+     "lines": [
+      102,
+      125
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "k2/tools/p3_v57_f4_independent_verifier.py",
+     "lines": [
+      62,
+      65
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/ls_route_model.py",
+     "lines": [
+      1203
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "_shared/eda_core/netlist_parity.py",
+     "lines": [
+      20
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/k2_p4_c86_relocate_v1.py",
+     "lines": [
+      254
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/k2_p4_composed_land_v2.py",
+     "lines": [
+      17
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 41,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "file:report.json"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild/PCIE_REFCLK1.json",
+   "bytes": 6302,
+   "consumers": [
+    {
+     "file": "k2/tools/k2_p4_u4d_refclk_plan_v1.py",
+     "lines": [
+      94,
+      96,
+      149
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "k2/tools/k2_p4_rev44_declare_v1.py",
+     "lines": [
+      22,
+      35
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "k2/tools/k2_p4_mroute_v1.py",
+     "lines": [
+      578
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co146_boundary_append.py",
+     "lines": [
+      3654
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co228_findings_disposition.py",
+     "lines": [
+      23
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co40_emit_spec_rev3.py",
+     "lines": [
+      38
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive.py",
+     "lines": [
+      1343
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive_validator.py",
+     "lines": [
+      459
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 8,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "stem:PCIE_REFCLK1"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v4/hs_rebuild/PCIE_REFCLK1.json",
+   "bytes": 4610,
+   "consumers": [
+    {
+     "file": "k2/tools/k2_p4_u4d_refclk_plan_v1.py",
+     "lines": [
+      94,
+      96,
+      149
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "k2/tools/k2_p4_rev44_declare_v1.py",
+     "lines": [
+      22,
+      35
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "k2/tools/k2_p4_mroute_v1.py",
+     "lines": [
+      578
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co146_boundary_append.py",
+     "lines": [
+      3654
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co228_findings_disposition.py",
+     "lines": [
+      23
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co40_emit_spec_rev3.py",
+     "lines": [
+      38
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive.py",
+     "lines": [
+      1343
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive_validator.py",
+     "lines": [
+      459
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 8,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "stem:PCIE_REFCLK1"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v8/hs_rebuild/PCIE_REFCLK1.json",
+   "bytes": 3828,
+   "consumers": [
+    {
+     "file": "k2/tools/k2_p4_u4d_refclk_plan_v1.py",
+     "lines": [
+      94,
+      96,
+      149
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "k2/tools/k2_p4_rev44_declare_v1.py",
+     "lines": [
+      22,
+      35
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "k2/tools/k2_p4_mroute_v1.py",
+     "lines": [
+      578
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co146_boundary_append.py",
+     "lines": [
+      3654
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co228_findings_disposition.py",
+     "lines": [
+      23
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co40_emit_spec_rev3.py",
+     "lines": [
+      38
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive.py",
+     "lines": [
+      1343
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive_validator.py",
+     "lines": [
+      459
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 8,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "stem:PCIE_REFCLK1"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v6/hs_rebuild_newtopo/PCIE_REFCLK1.json",
+   "bytes": 3408,
+   "consumers": [
+    {
+     "file": "k2/tools/k2_p4_u4d_refclk_plan_v1.py",
+     "lines": [
+      94,
+      96,
+      149
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "k2/tools/k2_p4_rev44_declare_v1.py",
+     "lines": [
+      22,
+      35
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "k2/tools/k2_p4_mroute_v1.py",
+     "lines": [
+      578
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co146_boundary_append.py",
+     "lines": [
+      3654
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co228_findings_disposition.py",
+     "lines": [
+      23
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co40_emit_spec_rev3.py",
+     "lines": [
+      38
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive.py",
+     "lines": [
+      1343
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive_validator.py",
+     "lines": [
+      459
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 8,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "stem:PCIE_REFCLK1"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v5/hs_rebuild/PCIE_REFCLK1.json",
+   "bytes": 3407,
+   "consumers": [
+    {
+     "file": "k2/tools/k2_p4_u4d_refclk_plan_v1.py",
+     "lines": [
+      94,
+      96,
+      149
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "k2/tools/k2_p4_rev44_declare_v1.py",
+     "lines": [
+      22,
+      35
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "k2/tools/k2_p4_mroute_v1.py",
+     "lines": [
+      578
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co146_boundary_append.py",
+     "lines": [
+      3654
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co228_findings_disposition.py",
+     "lines": [
+      23
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co40_emit_spec_rev3.py",
+     "lines": [
+      38
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive.py",
+     "lines": [
+      1343
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive_validator.py",
+     "lines": [
+      459
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 8,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "stem:PCIE_REFCLK1"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v10/hs_rebuild/PCIE_REFCLK1.json",
+   "bytes": 1161,
+   "consumers": [
+    {
+     "file": "k2/tools/k2_p4_u4d_refclk_plan_v1.py",
+     "lines": [
+      94,
+      96,
+      149
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "k2/tools/k2_p4_rev44_declare_v1.py",
+     "lines": [
+      22,
+      35
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "k2/tools/k2_p4_mroute_v1.py",
+     "lines": [
+      578
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co146_boundary_append.py",
+     "lines": [
+      3654
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co228_findings_disposition.py",
+     "lines": [
+      23
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co40_emit_spec_rev3.py",
+     "lines": [
+      38
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive.py",
+     "lines": [
+      1343
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive_validator.py",
+     "lines": [
+      459
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 8,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "stem:PCIE_REFCLK1"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v9/hs_rebuild/PCIE_REFCLK1.json",
+   "bytes": 1160,
+   "consumers": [
+    {
+     "file": "k2/tools/k2_p4_u4d_refclk_plan_v1.py",
+     "lines": [
+      94,
+      96,
+      149
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "k2/tools/k2_p4_rev44_declare_v1.py",
+     "lines": [
+      22,
+      35
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "k2/tools/k2_p4_mroute_v1.py",
+     "lines": [
+      578
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co146_boundary_append.py",
+     "lines": [
+      3654
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co228_findings_disposition.py",
+     "lines": [
+      23
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co40_emit_spec_rev3.py",
+     "lines": [
+      38
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive.py",
+     "lines": [
+      1343
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive_validator.py",
+     "lines": [
+      459
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 8,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "stem:PCIE_REFCLK1"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/channel_alloc_v4/PCIE_REFCLK1.json",
+   "bytes": 279,
+   "consumers": [
+    {
+     "file": "k2/tools/k2_p4_u4d_refclk_plan_v1.py",
+     "lines": [
+      94,
+      96,
+      149
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "k2/tools/k2_p4_rev44_declare_v1.py",
+     "lines": [
+      22,
+      35
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "k2/tools/k2_p4_mroute_v1.py",
+     "lines": [
+      578
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co146_boundary_append.py",
+     "lines": [
+      3654
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co228_findings_disposition.py",
+     "lines": [
+      23
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co40_emit_spec_rev3.py",
+     "lines": [
+      38
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive.py",
+     "lines": [
+      1343
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive_validator.py",
+     "lines": [
+      459
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 8,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "stem:PCIE_REFCLK1"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/channel_alloc_v2/PCIE_REFCLK1.json",
+   "bytes": 242,
+   "consumers": [
+    {
+     "file": "k2/tools/k2_p4_u4d_refclk_plan_v1.py",
+     "lines": [
+      94,
+      96,
+      149
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "k2/tools/k2_p4_rev44_declare_v1.py",
+     "lines": [
+      22,
+      35
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "k2/tools/k2_p4_mroute_v1.py",
+     "lines": [
+      578
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co146_boundary_append.py",
+     "lines": [
+      3654
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co228_findings_disposition.py",
+     "lines": [
+      23
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co40_emit_spec_rev3.py",
+     "lines": [
+      38
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive.py",
+     "lines": [
+      1343
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive_validator.py",
+     "lines": [
+      459
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 8,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "stem:PCIE_REFCLK1"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/drc_locator/summary.json",
+   "bytes": 143580,
+   "consumers": [
+    {
+     "file": "_shared/eda_core/ls_route_model.py",
+     "lines": [
+      749,
+      760,
+      1186
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/model_gate.py",
+     "lines": [
+      65,
+      195,
+      203
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/drc_locator.py",
+     "lines": [
+      486,
+      501
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      4828,
+      4870
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/board_low_speed_sync.py",
+     "lines": [
+      386
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "_shared/eda_core/channel_alloc.py",
+     "lines": [
+      388
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "_shared/eda_core/hs_apply.py",
+     "lines": [
+      203
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 7,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "file:summary.json"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/channel_alloc_v4/summary.json",
+   "bytes": 10403,
+   "consumers": [
+    {
+     "file": "_shared/eda_core/ls_route_model.py",
+     "lines": [
+      749,
+      760,
+      1186
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/model_gate.py",
+     "lines": [
+      65,
+      195,
+      203
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/drc_locator.py",
+     "lines": [
+      486,
+      501
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      4828,
+      4870
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/board_low_speed_sync.py",
+     "lines": [
+      386
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "_shared/eda_core/channel_alloc.py",
+     "lines": [
+      388
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "_shared/eda_core/hs_apply.py",
+     "lines": [
+      203
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 7,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "file:summary.json"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/channel_alloc_v2/summary.json",
+   "bytes": 6451,
+   "consumers": [
+    {
+     "file": "_shared/eda_core/ls_route_model.py",
+     "lines": [
+      749,
+      760,
+      1186
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/model_gate.py",
+     "lines": [
+      65,
+      195,
+      203
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/drc_locator.py",
+     "lines": [
+      486,
+      501
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      4828,
+      4870
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/board_low_speed_sync.py",
+     "lines": [
+      386
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "_shared/eda_core/channel_alloc.py",
+     "lines": [
+      388
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "_shared/eda_core/hs_apply.py",
+     "lines": [
+      203
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 7,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "file:summary.json"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/channel_alloc/summary.json",
+   "bytes": 5121,
+   "consumers": [
+    {
+     "file": "_shared/eda_core/ls_route_model.py",
+     "lines": [
+      749,
+      760,
+      1186
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/model_gate.py",
+     "lines": [
+      65,
+      195,
+      203
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/drc_locator.py",
+     "lines": [
+      486,
+      501
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      4828,
+      4870
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/board_low_speed_sync.py",
+     "lines": [
+      386
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "_shared/eda_core/channel_alloc.py",
+     "lines": [
+      388
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "_shared/eda_core/hs_apply.py",
+     "lines": [
+      203
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 7,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "file:summary.json"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/summary.json",
+   "bytes": 1564,
+   "consumers": [
+    {
+     "file": "_shared/eda_core/ls_route_model.py",
+     "lines": [
+      749,
+      760,
+      1186
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/model_gate.py",
+     "lines": [
+      65,
+      195,
+      203
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/drc_locator.py",
+     "lines": [
+      486,
+      501
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      4828,
+      4870
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/board_low_speed_sync.py",
+     "lines": [
+      386
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "_shared/eda_core/channel_alloc.py",
+     "lines": [
+      388
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "_shared/eda_core/hs_apply.py",
+     "lines": [
+      203
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 7,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "file:summary.json"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/cap_wall_v8/solve.json",
+   "bytes": 11473,
+   "consumers": [
+    {
+     "file": "k2/tools/p3_v57_co146_boundary_append.py",
+     "lines": [
+      2728,
+      2871,
+      2885
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "k2/tools/p3_v57_co205_joint_layer_reassign_solver.py",
+     "lines": [
+      244
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co205p_conflict_repair_solver.py",
+     "lines": [
+      311
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co209_band_joint_solve.py",
+     "lines": [
+      74
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co213_rev19_co207_co212_review.py",
+     "lines": [
+      27
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 5,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "file:solve.json"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild/PCIE_REFCLK0.json",
+   "bytes": 4464,
+   "consumers": [
+    {
+     "file": "k2/tools/k2_p4_u4d_refclk_plan_v1.py",
+     "lines": [
+      92,
+      93,
+      149
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      4798,
+      4840
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/routing_topology_gate.py",
+     "lines": [
+      4
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_k2_real_board_e2e.py",
+     "lines": [
+      235
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co40_emit_spec_rev3.py",
+     "lines": [
+      38
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 5,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "stem:PCIE_REFCLK0"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v6/hs_rebuild_newtopo/PCIE_REFCLK0.json",
+   "bytes": 2522,
+   "consumers": [
+    {
+     "file": "k2/tools/k2_p4_u4d_refclk_plan_v1.py",
+     "lines": [
+      92,
+      93,
+      149
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      4798,
+      4840
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/routing_topology_gate.py",
+     "lines": [
+      4
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_k2_real_board_e2e.py",
+     "lines": [
+      235
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co40_emit_spec_rev3.py",
+     "lines": [
+      38
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 5,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "stem:PCIE_REFCLK0"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v4/hs_rebuild/PCIE_REFCLK0.json",
+   "bytes": 2520,
+   "consumers": [
+    {
+     "file": "k2/tools/k2_p4_u4d_refclk_plan_v1.py",
+     "lines": [
+      92,
+      93,
+      149
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      4798,
+      4840
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/routing_topology_gate.py",
+     "lines": [
+      4
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_k2_real_board_e2e.py",
+     "lines": [
+      235
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co40_emit_spec_rev3.py",
+     "lines": [
+      38
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 5,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "stem:PCIE_REFCLK0"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v10/hs_rebuild/PCIE_REFCLK0.json",
+   "bytes": 2386,
+   "consumers": [
+    {
+     "file": "k2/tools/k2_p4_u4d_refclk_plan_v1.py",
+     "lines": [
+      92,
+      93,
+      149
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      4798,
+      4840
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/routing_topology_gate.py",
+     "lines": [
+      4
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_k2_real_board_e2e.py",
+     "lines": [
+      235
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co40_emit_spec_rev3.py",
+     "lines": [
+      38
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 5,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "stem:PCIE_REFCLK0"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v8/hs_rebuild/PCIE_REFCLK0.json",
+   "bytes": 2386,
+   "consumers": [
+    {
+     "file": "k2/tools/k2_p4_u4d_refclk_plan_v1.py",
+     "lines": [
+      92,
+      93,
+      149
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      4798,
+      4840
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/routing_topology_gate.py",
+     "lines": [
+      4
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_k2_real_board_e2e.py",
+     "lines": [
+      235
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co40_emit_spec_rev3.py",
+     "lines": [
+      38
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 5,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "stem:PCIE_REFCLK0"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v9/hs_rebuild/PCIE_REFCLK0.json",
+   "bytes": 2385,
+   "consumers": [
+    {
+     "file": "k2/tools/k2_p4_u4d_refclk_plan_v1.py",
+     "lines": [
+      92,
+      93,
+      149
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      4798,
+      4840
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/routing_topology_gate.py",
+     "lines": [
+      4
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_k2_real_board_e2e.py",
+     "lines": [
+      235
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co40_emit_spec_rev3.py",
+     "lines": [
+      38
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 5,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "stem:PCIE_REFCLK0"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v5/hs_rebuild/PCIE_REFCLK0.json",
+   "bytes": 2305,
+   "consumers": [
+    {
+     "file": "k2/tools/k2_p4_u4d_refclk_plan_v1.py",
+     "lines": [
+      92,
+      93,
+      149
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      4798,
+      4840
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/routing_topology_gate.py",
+     "lines": [
+      4
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_k2_real_board_e2e.py",
+     "lines": [
+      235
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co40_emit_spec_rev3.py",
+     "lines": [
+      38
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 5,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "stem:PCIE_REFCLK0"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/channel_alloc_v4/PCIE_REFCLK0.json",
+   "bytes": 279,
+   "consumers": [
+    {
+     "file": "k2/tools/k2_p4_u4d_refclk_plan_v1.py",
+     "lines": [
+      92,
+      93,
+      149
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      4798,
+      4840
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/routing_topology_gate.py",
+     "lines": [
+      4
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_k2_real_board_e2e.py",
+     "lines": [
+      235
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co40_emit_spec_rev3.py",
+     "lines": [
+      38
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 5,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "stem:PCIE_REFCLK0"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/channel_alloc_v2/PCIE_REFCLK0.json",
+   "bytes": 242,
+   "consumers": [
+    {
+     "file": "k2/tools/k2_p4_u4d_refclk_plan_v1.py",
+     "lines": [
+      92,
+      93,
+      149
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      4798,
+      4840
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/routing_topology_gate.py",
+     "lines": [
+      4
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_k2_real_board_e2e.py",
+     "lines": [
+      235
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co40_emit_spec_rev3.py",
+     "lines": [
+      38
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 5,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "stem:PCIE_REFCLK0"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/channel_alloc_v3/channel_alloc.json",
+   "bytes": 17360,
+   "consumers": [
+    {
+     "file": "_shared/eda_core/channel_alloc.py",
+     "lines": [
+      390,
+      396
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      19
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "_shared/eda_core/routing_topology_gate.py",
+     "lines": [
+      50
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 3,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "file:channel_alloc.json"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/channel_alloc_v4/channel_alloc.json",
+   "bytes": 17360,
+   "consumers": [
+    {
+     "file": "_shared/eda_core/channel_alloc.py",
+     "lines": [
+      390,
+      396
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      19
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "_shared/eda_core/routing_topology_gate.py",
+     "lines": [
+      50
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 3,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "file:channel_alloc.json"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/channel_alloc_v2/channel_alloc.json",
+   "bytes": 13317,
+   "consumers": [
+    {
+     "file": "_shared/eda_core/channel_alloc.py",
+     "lines": [
+      390,
+      396
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      19
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "_shared/eda_core/routing_topology_gate.py",
+     "lines": [
+      50
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 3,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "file:channel_alloc.json"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/channel_alloc/channel_alloc.json",
+   "bytes": 10682,
+   "consumers": [
+    {
+     "file": "_shared/eda_core/channel_alloc.py",
+     "lines": [
+      390,
+      396
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      19
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "_shared/eda_core/routing_topology_gate.py",
+     "lines": [
+      50
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 3,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "file:channel_alloc.json"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_summary.json",
+   "bytes": 206243,
+   "consumers": [
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      4828,
+      4870
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/hs_apply.py",
+     "lines": [
+      203
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 2,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "file:hs_rebuild_summary.json"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v8/hs_rebuild_summary.json",
+   "bytes": 138701,
+   "consumers": [
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      4828,
+      4870
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/hs_apply.py",
+     "lines": [
+      203
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 2,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "file:hs_rebuild_summary.json"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v4/hs_rebuild_summary.json",
+   "bytes": 121202,
+   "consumers": [
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      4828,
+      4870
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/hs_apply.py",
+     "lines": [
+      203
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 2,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "file:hs_rebuild_summary.json"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v5/hs_rebuild_summary.json",
+   "bytes": 97838,
+   "consumers": [
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      4828,
+      4870
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/hs_apply.py",
+     "lines": [
+      203
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 2,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "file:hs_rebuild_summary.json"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v9/hs_rebuild_summary.json",
+   "bytes": 50880,
+   "consumers": [
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      4828,
+      4870
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/hs_apply.py",
+     "lines": [
+      203
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 2,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "file:hs_rebuild_summary.json"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v10/hs_rebuild_summary.json",
+   "bytes": 49374,
+   "consumers": [
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      4828,
+      4870
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/hs_apply.py",
+     "lines": [
+      203
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 2,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "file:hs_rebuild_summary.json"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/env_fingerprint.json",
+   "bytes": 504,
+   "consumers": [
+    {
+     "file": "_shared/eda_core/env_fingerprint.py",
+     "lines": [
+      73,
+      135,
+      142
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/pm_gate/env_fingerprint.py",
+     "lines": [
+      9
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 2,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "file:env_fingerprint.json"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v5/capacity_map.json",
+   "bytes": 68173,
+   "consumers": [
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      4702,
+      4753
+     ],
+     "n_lines": 2
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 1,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "file:capacity_map.json"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/capacity_map_v6/capacity_map.json",
+   "bytes": 41216,
+   "consumers": [
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      4702,
+      4753
+     ],
+     "n_lines": 2
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 1,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "file:capacity_map.json"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/capacity_map_v7/capacity_map.json",
+   "bytes": 41164,
+   "consumers": [
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      4702,
+      4753
+     ],
+     "n_lines": 2
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 1,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "file:capacity_map.json"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v4/hs_rebuild/pdn_conflicts.json",
+   "bytes": 13497,
+   "consumers": [
+    {
+     "file": "_shared/eda_core/hs_apply.py",
+     "lines": [
+      238
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 1,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "file:pdn_conflicts.json"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/STRAP_EQ0_U3.json",
+   "bytes": 2951,
+   "consumers": [
+    {
+     "file": "_shared/eda_core/escape_low_speed_freeze.py",
+     "lines": [
+      20
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 1,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "stem:STRAP_EQ0_U3"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/STRAP_EQ0_1_U7.json",
+   "bytes": 885,
+   "consumers": [
+    {
+     "file": "_shared/eda_core/escape_low_speed_freeze.py",
+     "lines": [
+      20
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 1,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "stem:STRAP_EQ0_1_U7"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/write_guard_registry.json",
+   "bytes": 326,
+   "consumers": [
+    {
+     "file": "_shared/pm_gate/write_guard.py",
+     "lines": [
+      8,
+      28
+     ],
+     "n_lines": 2
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 1,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "file:write_guard_registry.json"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v5/hs_rebuild/pdn_conflicts.json",
+   "bytes": 278,
+   "consumers": [
+    {
+     "file": "_shared/eda_core/hs_apply.py",
+     "lines": [
+      238
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 1,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "file:pdn_conflicts.json"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/resolve_report.json",
+   "bytes": 259,
+   "consumers": [
+    {
+     "file": "_shared/eda_core/ls_route_model.py",
+     "lines": [
+      1203
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 1,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "file:resolve_report.json"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/audit_global.json",
+   "bytes": 178,
+   "consumers": [
+    {
+     "file": "_shared/eda_core/ls_route_model.py",
+     "lines": [
+      745,
+      749,
+      1201,
+      1222,
+      1257,
+      1263
+     ],
+     "n_lines": 6
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 1,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "file:audit_global.json"
+  }
+ ],
+ "reading": [
+  "on_gate_path=True ⇒ 该遗留件被**判定路径**（pm_gate checks/gates/closure_check、pipeline engine）消费 ⇒ N-05 P1 重生成/重钉的首选",
+  "on_gate_path=False ⇒ 多为工具/文档级引用 ⇒ 可降级为 P2/P3",
+  "token 为词面启发式（目录名/长主干）⇒ 消费者列表为上界，裁决前可逐条复核"
+ ],
+ "readonly": true,
+ "schema": 1,
+ "stale_referenced_total": 64,
+ "strictness": {
+  "census_loose_referenced_bound": 656,
+  "note": "宽松口径把 frozen/ruling/candidates 等结构目录名计入 ⇒ 非消费关系"
+ },
+ "top_off_gate_path": [
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/drc_locator/report.json",
+   "bytes": 1336494,
+   "consumers": [
+    {
+     "file": "k2/tools/p3_v57_w3_constructive_validator_v2.py",
+     "lines": [
+      7,
+      8,
+      9,
+      568,
+      572,
+      576
+     ],
+     "n_lines": 6
+    },
+    {
+     "file": "_shared/eda_core/sch_gate/gate_schematic.py",
+     "lines": [
+      5,
+      12,
+      71,
+      226,
+      228
+     ],
+     "n_lines": 5
+    },
+    {
+     "file": "k2/tools/p3_v57_co164_order_runner.py",
+     "lines": [
+      123,
+      293,
+      325,
+      1163
+     ],
+     "n_lines": 4
+    },
+    {
+     "file": "_shared/eda_core/drc_locator.py",
+     "lines": [
+      506,
+      507,
+      525
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/capacity_audit.py",
+     "lines": [
+      40,
+      587
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/escape_landing.py",
+     "lines": [
+      62,
+      1267
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "k2/tools/p3_v57_co105_f4_scope_disposition.py",
+     "lines": [
+      102,
+      125
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "k2/tools/p3_v57_f4_independent_verifier.py",
+     "lines": [
+      62,
+      65
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/ls_route_model.py",
+     "lines": [
+      1203
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "_shared/eda_core/netlist_parity.py",
+     "lines": [
+      20
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/k2_p4_c86_relocate_v1.py",
+     "lines": [
+      254
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/k2_p4_composed_land_v2.py",
+     "lines": [
+      17
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 41,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "file:report.json"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild/PCIE_REFCLK1.json",
+   "bytes": 6302,
+   "consumers": [
+    {
+     "file": "k2/tools/k2_p4_u4d_refclk_plan_v1.py",
+     "lines": [
+      94,
+      96,
+      149
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "k2/tools/k2_p4_rev44_declare_v1.py",
+     "lines": [
+      22,
+      35
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "k2/tools/k2_p4_mroute_v1.py",
+     "lines": [
+      578
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co146_boundary_append.py",
+     "lines": [
+      3654
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co228_findings_disposition.py",
+     "lines": [
+      23
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co40_emit_spec_rev3.py",
+     "lines": [
+      38
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive.py",
+     "lines": [
+      1343
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive_validator.py",
+     "lines": [
+      459
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 8,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "stem:PCIE_REFCLK1"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v4/hs_rebuild/PCIE_REFCLK1.json",
+   "bytes": 4610,
+   "consumers": [
+    {
+     "file": "k2/tools/k2_p4_u4d_refclk_plan_v1.py",
+     "lines": [
+      94,
+      96,
+      149
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "k2/tools/k2_p4_rev44_declare_v1.py",
+     "lines": [
+      22,
+      35
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "k2/tools/k2_p4_mroute_v1.py",
+     "lines": [
+      578
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co146_boundary_append.py",
+     "lines": [
+      3654
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co228_findings_disposition.py",
+     "lines": [
+      23
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co40_emit_spec_rev3.py",
+     "lines": [
+      38
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive.py",
+     "lines": [
+      1343
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive_validator.py",
+     "lines": [
+      459
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 8,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "stem:PCIE_REFCLK1"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v8/hs_rebuild/PCIE_REFCLK1.json",
+   "bytes": 3828,
+   "consumers": [
+    {
+     "file": "k2/tools/k2_p4_u4d_refclk_plan_v1.py",
+     "lines": [
+      94,
+      96,
+      149
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "k2/tools/k2_p4_rev44_declare_v1.py",
+     "lines": [
+      22,
+      35
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "k2/tools/k2_p4_mroute_v1.py",
+     "lines": [
+      578
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co146_boundary_append.py",
+     "lines": [
+      3654
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co228_findings_disposition.py",
+     "lines": [
+      23
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co40_emit_spec_rev3.py",
+     "lines": [
+      38
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive.py",
+     "lines": [
+      1343
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive_validator.py",
+     "lines": [
+      459
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 8,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "stem:PCIE_REFCLK1"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v6/hs_rebuild_newtopo/PCIE_REFCLK1.json",
+   "bytes": 3408,
+   "consumers": [
+    {
+     "file": "k2/tools/k2_p4_u4d_refclk_plan_v1.py",
+     "lines": [
+      94,
+      96,
+      149
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "k2/tools/k2_p4_rev44_declare_v1.py",
+     "lines": [
+      22,
+      35
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "k2/tools/k2_p4_mroute_v1.py",
+     "lines": [
+      578
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co146_boundary_append.py",
+     "lines": [
+      3654
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co228_findings_disposition.py",
+     "lines": [
+      23
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co40_emit_spec_rev3.py",
+     "lines": [
+      38
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive.py",
+     "lines": [
+      1343
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive_validator.py",
+     "lines": [
+      459
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 8,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "stem:PCIE_REFCLK1"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v5/hs_rebuild/PCIE_REFCLK1.json",
+   "bytes": 3407,
+   "consumers": [
+    {
+     "file": "k2/tools/k2_p4_u4d_refclk_plan_v1.py",
+     "lines": [
+      94,
+      96,
+      149
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "k2/tools/k2_p4_rev44_declare_v1.py",
+     "lines": [
+      22,
+      35
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "k2/tools/k2_p4_mroute_v1.py",
+     "lines": [
+      578
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co146_boundary_append.py",
+     "lines": [
+      3654
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co228_findings_disposition.py",
+     "lines": [
+      23
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co40_emit_spec_rev3.py",
+     "lines": [
+      38
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive.py",
+     "lines": [
+      1343
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive_validator.py",
+     "lines": [
+      459
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 8,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "stem:PCIE_REFCLK1"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v10/hs_rebuild/PCIE_REFCLK1.json",
+   "bytes": 1161,
+   "consumers": [
+    {
+     "file": "k2/tools/k2_p4_u4d_refclk_plan_v1.py",
+     "lines": [
+      94,
+      96,
+      149
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "k2/tools/k2_p4_rev44_declare_v1.py",
+     "lines": [
+      22,
+      35
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "k2/tools/k2_p4_mroute_v1.py",
+     "lines": [
+      578
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co146_boundary_append.py",
+     "lines": [
+      3654
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co228_findings_disposition.py",
+     "lines": [
+      23
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co40_emit_spec_rev3.py",
+     "lines": [
+      38
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive.py",
+     "lines": [
+      1343
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive_validator.py",
+     "lines": [
+      459
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 8,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "stem:PCIE_REFCLK1"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v9/hs_rebuild/PCIE_REFCLK1.json",
+   "bytes": 1160,
+   "consumers": [
+    {
+     "file": "k2/tools/k2_p4_u4d_refclk_plan_v1.py",
+     "lines": [
+      94,
+      96,
+      149
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "k2/tools/k2_p4_rev44_declare_v1.py",
+     "lines": [
+      22,
+      35
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "k2/tools/k2_p4_mroute_v1.py",
+     "lines": [
+      578
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co146_boundary_append.py",
+     "lines": [
+      3654
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co228_findings_disposition.py",
+     "lines": [
+      23
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co40_emit_spec_rev3.py",
+     "lines": [
+      38
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive.py",
+     "lines": [
+      1343
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive_validator.py",
+     "lines": [
+      459
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 8,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "stem:PCIE_REFCLK1"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/channel_alloc_v4/PCIE_REFCLK1.json",
+   "bytes": 279,
+   "consumers": [
+    {
+     "file": "k2/tools/k2_p4_u4d_refclk_plan_v1.py",
+     "lines": [
+      94,
+      96,
+      149
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "k2/tools/k2_p4_rev44_declare_v1.py",
+     "lines": [
+      22,
+      35
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "k2/tools/k2_p4_mroute_v1.py",
+     "lines": [
+      578
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co146_boundary_append.py",
+     "lines": [
+      3654
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co228_findings_disposition.py",
+     "lines": [
+      23
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co40_emit_spec_rev3.py",
+     "lines": [
+      38
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive.py",
+     "lines": [
+      1343
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive_validator.py",
+     "lines": [
+      459
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 8,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "stem:PCIE_REFCLK1"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/channel_alloc_v2/PCIE_REFCLK1.json",
+   "bytes": 242,
+   "consumers": [
+    {
+     "file": "k2/tools/k2_p4_u4d_refclk_plan_v1.py",
+     "lines": [
+      94,
+      96,
+      149
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "k2/tools/k2_p4_rev44_declare_v1.py",
+     "lines": [
+      22,
+      35
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "k2/tools/k2_p4_mroute_v1.py",
+     "lines": [
+      578
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co146_boundary_append.py",
+     "lines": [
+      3654
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co228_findings_disposition.py",
+     "lines": [
+      23
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co40_emit_spec_rev3.py",
+     "lines": [
+      38
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive.py",
+     "lines": [
+      1343
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_w3_constructive_validator.py",
+     "lines": [
+      459
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 8,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "stem:PCIE_REFCLK1"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/drc_locator/summary.json",
+   "bytes": 143580,
+   "consumers": [
+    {
+     "file": "_shared/eda_core/ls_route_model.py",
+     "lines": [
+      749,
+      760,
+      1186
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/model_gate.py",
+     "lines": [
+      65,
+      195,
+      203
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/drc_locator.py",
+     "lines": [
+      486,
+      501
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      4828,
+      4870
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/board_low_speed_sync.py",
+     "lines": [
+      386
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "_shared/eda_core/channel_alloc.py",
+     "lines": [
+      388
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "_shared/eda_core/hs_apply.py",
+     "lines": [
+      203
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 7,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "file:summary.json"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/channel_alloc_v4/summary.json",
+   "bytes": 10403,
+   "consumers": [
+    {
+     "file": "_shared/eda_core/ls_route_model.py",
+     "lines": [
+      749,
+      760,
+      1186
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/model_gate.py",
+     "lines": [
+      65,
+      195,
+      203
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/drc_locator.py",
+     "lines": [
+      486,
+      501
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      4828,
+      4870
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/board_low_speed_sync.py",
+     "lines": [
+      386
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "_shared/eda_core/channel_alloc.py",
+     "lines": [
+      388
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "_shared/eda_core/hs_apply.py",
+     "lines": [
+      203
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 7,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "file:summary.json"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/channel_alloc_v2/summary.json",
+   "bytes": 6451,
+   "consumers": [
+    {
+     "file": "_shared/eda_core/ls_route_model.py",
+     "lines": [
+      749,
+      760,
+      1186
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/model_gate.py",
+     "lines": [
+      65,
+      195,
+      203
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/drc_locator.py",
+     "lines": [
+      486,
+      501
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      4828,
+      4870
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/board_low_speed_sync.py",
+     "lines": [
+      386
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "_shared/eda_core/channel_alloc.py",
+     "lines": [
+      388
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "_shared/eda_core/hs_apply.py",
+     "lines": [
+      203
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 7,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "file:summary.json"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/channel_alloc/summary.json",
+   "bytes": 5121,
+   "consumers": [
+    {
+     "file": "_shared/eda_core/ls_route_model.py",
+     "lines": [
+      749,
+      760,
+      1186
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/model_gate.py",
+     "lines": [
+      65,
+      195,
+      203
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/drc_locator.py",
+     "lines": [
+      486,
+      501
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      4828,
+      4870
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/board_low_speed_sync.py",
+     "lines": [
+      386
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "_shared/eda_core/channel_alloc.py",
+     "lines": [
+      388
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "_shared/eda_core/hs_apply.py",
+     "lines": [
+      203
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 7,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "file:summary.json"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/summary.json",
+   "bytes": 1564,
+   "consumers": [
+    {
+     "file": "_shared/eda_core/ls_route_model.py",
+     "lines": [
+      749,
+      760,
+      1186
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/model_gate.py",
+     "lines": [
+      65,
+      195,
+      203
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/drc_locator.py",
+     "lines": [
+      486,
+      501
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      4828,
+      4870
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/board_low_speed_sync.py",
+     "lines": [
+      386
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "_shared/eda_core/channel_alloc.py",
+     "lines": [
+      388
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "_shared/eda_core/hs_apply.py",
+     "lines": [
+      203
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 7,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "file:summary.json"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/cap_wall_v8/solve.json",
+   "bytes": 11473,
+   "consumers": [
+    {
+     "file": "k2/tools/p3_v57_co146_boundary_append.py",
+     "lines": [
+      2728,
+      2871,
+      2885
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "k2/tools/p3_v57_co205_joint_layer_reassign_solver.py",
+     "lines": [
+      244
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co205p_conflict_repair_solver.py",
+     "lines": [
+      311
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co209_band_joint_solve.py",
+     "lines": [
+      74
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co213_rev19_co207_co212_review.py",
+     "lines": [
+      27
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 5,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "file:solve.json"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild/PCIE_REFCLK0.json",
+   "bytes": 4464,
+   "consumers": [
+    {
+     "file": "k2/tools/k2_p4_u4d_refclk_plan_v1.py",
+     "lines": [
+      92,
+      93,
+      149
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      4798,
+      4840
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/routing_topology_gate.py",
+     "lines": [
+      4
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_k2_real_board_e2e.py",
+     "lines": [
+      235
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co40_emit_spec_rev3.py",
+     "lines": [
+      38
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 5,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "stem:PCIE_REFCLK0"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v6/hs_rebuild_newtopo/PCIE_REFCLK0.json",
+   "bytes": 2522,
+   "consumers": [
+    {
+     "file": "k2/tools/k2_p4_u4d_refclk_plan_v1.py",
+     "lines": [
+      92,
+      93,
+      149
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      4798,
+      4840
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/routing_topology_gate.py",
+     "lines": [
+      4
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_k2_real_board_e2e.py",
+     "lines": [
+      235
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co40_emit_spec_rev3.py",
+     "lines": [
+      38
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 5,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "stem:PCIE_REFCLK0"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v4/hs_rebuild/PCIE_REFCLK0.json",
+   "bytes": 2520,
+   "consumers": [
+    {
+     "file": "k2/tools/k2_p4_u4d_refclk_plan_v1.py",
+     "lines": [
+      92,
+      93,
+      149
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      4798,
+      4840
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/routing_topology_gate.py",
+     "lines": [
+      4
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_k2_real_board_e2e.py",
+     "lines": [
+      235
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co40_emit_spec_rev3.py",
+     "lines": [
+      38
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 5,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "stem:PCIE_REFCLK0"
+  },
+  {
+   "artifact": "pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_v10/hs_rebuild/PCIE_REFCLK0.json",
+   "bytes": 2386,
+   "consumers": [
+    {
+     "file": "k2/tools/k2_p4_u4d_refclk_plan_v1.py",
+     "lines": [
+      92,
+      93,
+      149
+     ],
+     "n_lines": 3
+    },
+    {
+     "file": "_shared/eda_core/hs_route_model.py",
+     "lines": [
+      4798,
+      4840
+     ],
+     "n_lines": 2
+    },
+    {
+     "file": "_shared/eda_core/routing_topology_gate.py",
+     "lines": [
+      4
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_k2_real_board_e2e.py",
+     "lines": [
+      235
+     ],
+     "n_lines": 1
+    },
+    {
+     "file": "k2/tools/p3_v57_co40_emit_spec_rev3.py",
+     "lines": [
+      38
+     ],
+     "n_lines": 1
+    }
+   ],
+   "gate_consumers": [],
+   "n_consumers": 5,
+   "nature": "generated_json",
+   "on_gate_path": false,
+   "token": "stem:PCIE_REFCLK0"
+  }
+ ]
+}

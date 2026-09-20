@@ -55,24 +55,31 @@ def provenance() -> dict:
     return add_map, touch_count, last_map
 
 
-def live_corpus() -> str:
-    parts = []
-    for base, dirs, files in os.walk(os.path.join(K2, "tools")):
+def live_files() -> dict:
+    """现役代码清单 {相对路径: 文本}（顺序确定：tools → _shared/eda_core → _shared/pm_gate → 项目配置）。"""
+    files: dict = {}
+    for base, dirs, names in os.walk(os.path.join(K2, "tools")):
         dirs[:] = sorted(d for d in dirs if d != "__pycache__")
-        for n in sorted(files):
+        for n in sorted(names):
             if n.endswith(".py") and not n.startswith("k2_p6_"):
-                parts.append(open(os.path.join(base, n), encoding="utf-8", errors="replace").read())
+                pth = os.path.join(base, n)
+                files[os.path.relpath(pth, REPO)] = open(pth, encoding="utf-8", errors="replace").read()
     for root in (os.path.join(REPO, "_shared", "eda_core"), os.path.join(REPO, "_shared", "pm_gate")):
-        for base, dirs, files in os.walk(root):
+        for base, dirs, names in os.walk(root):
             dirs[:] = sorted(d for d in dirs if d not in ("__pycache__", "tests"))
-            for n in sorted(files):
+            for n in sorted(names):
                 if n.endswith(".py") or n == "project.yaml":
-                    parts.append(open(os.path.join(base, n), encoding="utf-8", errors="replace").read())
+                    pth = os.path.join(base, n)
+                    files[os.path.relpath(pth, REPO)] = open(pth, encoding="utf-8", errors="replace").read()
     for rel in ("pm_gate/project.yaml", "pipeline.yaml"):
-        p = os.path.join(K2, rel)
-        if os.path.isfile(p):
-            parts.append(open(p, encoding="utf-8", errors="replace").read())
-    return "\n".join(parts)
+        pth = os.path.join(K2, rel)
+        if os.path.isfile(pth):
+            files[os.path.join("k2", rel)] = open(pth, encoding="utf-8", errors="replace").read()
+    return files
+
+
+def live_corpus() -> str:
+    return "\n".join(live_files().values())
 
 
 def scan() -> dict:
