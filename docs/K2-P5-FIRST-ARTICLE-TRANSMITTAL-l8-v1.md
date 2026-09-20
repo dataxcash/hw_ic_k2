@@ -23,8 +23,8 @@
 ## 3. 逐项规程与回件（**权威件**）
 | 件 | 路径 | sha16 |
 |---|---|---|
-| 逐项操作规程（V4·V5·V6-1..5·V7 + 通用要求 + 回件格式） | `k2/pm_gate/artifacts/k2_v4/L6/first_article_l8/RULES.md` | `42013771b1358954` |
-| 现场检查表 | `k2/pm_gate/artifacts/k2_v4/L6/first_article_l8/CHECKLIST.md` | `b97ac43fc0f99c31` |
+| 逐项操作规程（V4·V5·V6-1..5·V7 + 通用要求 + 回件格式） | `k2/pm_gate/artifacts/k2_v4/L6/first_article_l8/RULES.md` | `058f650df4d626e6` |
+| 现场检查表 | `k2/pm_gate/artifacts/k2_v4/L6/first_article_l8/CHECKLIST.md` | `f58ca379dab41cbe` |
 | 回填模板（8 项 · criterion/measured/evidence/status） | `k2/pm_gate/artifacts/k2_v4/L6/first_article_l8/results_template.json` | `6b510775339bdc11` |
 | 测点自查（pcbnew 直读 · 11/11 通过） | `k2/pm_gate/artifacts/k2_v4/L6/first_article_l8/INSTRUMENT_SELFCHECK.json` | `540c9a55c66b053b` |
 | 验收计划（阈值来源） | `k2/docs/K2-P5-FIRST-ARTICLE-ACCEPTANCE-PLAN-v1.md` | `b002ec9829a53f12` |
