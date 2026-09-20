@@ -1,0 +1,142 @@
+{
+ "artifact": "k2_p6_hidden_failures_triage",
+ "binary_recommendation": {
+  "carrier_defect_eng_after_approval": [
+   "channel_alloc.json 与 SPEC 命名脱钩 = N-05「生成器不可复跑」实证 ⇒ L3 真源产物需按现行 SPEC 重生成（或补映射层），须授权",
+   "hs_route_model 的旧 id 引用（若为语义硬编码而非兼容层）随 B2-1/B2-2 同批处置"
+  ],
+  "expectation_drift_needs_supervisor": [
+   "tests + check_l3.SPEC_EXPECTS 跟随**旧**命名 ⇒ 若新 id 为权威：须监理批「改名承接」后同步（含 G3.1 期望集）",
+   "反之若旧 id 为权威：SPEC 改名须回退/双名兼容（属判据/载体决策，ENG 不自决）"
+  ]
+ },
+ "carrier_distribution": {
+  "engine_hs_route_model": {
+   "bytes": 236097,
+   "exists": true,
+   "new_ids": {
+    "EAST_CHIP_TO_J2": 0,
+    "WEST_MCIO_TO_CHIP": 0
+   },
+   "new_total": 0,
+   "old_ids": {
+    "J2_TO_U": 2,
+    "U_TO_MCIO": 2
+   },
+   "old_total": 4
+  },
+  "gate_check_l3_expects": {
+   "bytes": 3808,
+   "exists": true,
+   "new_ids": {
+    "EAST_CHIP_TO_J2": 0,
+    "WEST_MCIO_TO_CHIP": 0
+   },
+   "new_total": 0,
+   "old_ids": {
+    "J2_TO_U": 1,
+    "U_TO_MCIO": 1
+   },
+   "old_total": 2
+  },
+  "l3_solve_truth_channel_alloc": {
+   "bytes": 13213,
+   "exists": true,
+   "new_ids": {
+    "EAST_CHIP_TO_J2": 0,
+    "WEST_MCIO_TO_CHIP": 0
+   },
+   "new_total": 0,
+   "old_ids": {
+    "J2_TO_U": 72,
+    "U_TO_MCIO": 36
+   },
+   "old_total": 108
+  },
+  "spec_plain": {
+   "bytes": 141791,
+   "exists": true,
+   "new_ids": {
+    "EAST_CHIP_TO_J2": 1,
+    "WEST_MCIO_TO_CHIP": 1
+   },
+   "new_total": 2,
+   "old_ids": {
+    "J2_TO_U": 0,
+    "U_TO_MCIO": 0
+   },
+   "old_total": 0
+  },
+  "spec_rev52": {
+   "bytes": 459386,
+   "exists": true,
+   "new_ids": {
+    "EAST_CHIP_TO_J2": 6,
+    "WEST_MCIO_TO_CHIP": 5
+   },
+   "new_total": 11,
+   "old_ids": {
+    "J2_TO_U": 0,
+    "U_TO_MCIO": 0
+   },
+   "old_total": 0
+  },
+  "tests": {
+   "bytes": 53292,
+   "exists": true,
+   "new_ids": {
+    "EAST_CHIP_TO_J2": 0,
+    "WEST_MCIO_TO_CHIP": 0
+   },
+   "new_total": 0,
+   "old_ids": {
+    "J2_TO_U": 16,
+    "U_TO_MCIO": 21
+   },
+   "old_total": 37
+  }
+ },
+ "corridor_naming": {
+  "new": [
+   "EAST_CHIP_TO_J2",
+   "WEST_MCIO_TO_CHIP"
+  ],
+  "old": [
+   "J2_TO_U",
+   "U_TO_MCIO"
+  ]
+ },
+ "failure_families": {
+  "corridor_id_pinned_old": [
+   "test_probe_escape_capacity_dn0",
+   "test_probe_reports_via_gap_fact",
+   "test_corridor_clear_span",
+   "test_flip_polarity_cross_rejected",
+   "test_drawing_only_refuses_no_node",
+   "test_correct_polarity_solves_clean",
+   "test_escape_deterministic_byte_identical"
+  ],
+  "region_derivation": [
+   "test_capacity_regions_derived",
+   "test_probe_region_capacity_structure",
+   "test_capacity_map_persist"
+  ],
+  "solve_all_unsolved": [
+   "test_board_level_consistency",
+   "test_chain_no_pn_zero_spacing"
+  ],
+  "topology_set": [
+   "test_link_topology_crossing_old_topology"
+  ]
+ },
+ "readonly": true,
+ "reproduce": "grep -c 旧/新 id × 6 载体（见 carrier_distribution）；失败清单见 SHADOW_VERIFY_v1.json",
+ "root_cause_reading": [
+  "SPEC 侧已用新 id（plain new_total=2 / rev-52 new_total=11）",
+  "L3 求解真源 channel_alloc 仍全为旧 id（old_total=108，new_total=0）⇒ 与 SPEC **脱钩**",
+  "引擎 hs_route_model 与判据 check_l3 亦含旧 id（engine old_total=4 / gate old_total=2）",
+  "测试旧 id 引用密集（old_total=37）"
+ ],
+ "schema": 1,
+ "scope": "22 skip 解锁后 13 项失败的只读根因 triage（走廊命名权威分歧）"
+}

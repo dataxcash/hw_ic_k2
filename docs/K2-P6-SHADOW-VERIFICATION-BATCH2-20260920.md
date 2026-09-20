@@ -72,5 +72,28 @@
 4. **新增两项须并入 B2-3**：F-2c（板路径空参）、F-2d（`scheme_closure_check` 项目维度）。
 5. **须监理裁定的判定源/期望值**：G3.1 字段集与走廊期望 · G3.2 内容期望 · G3.5 判定源（rev-52 vs plain）· G4 施工对象（`l7` vs `k2_v4.kicad_pcb`）。
 
+
+## 8. 13 项失败的**根因 triage**（决定性证据：走廊命名权威分歧）
+机读：`P6_execution/HIDDEN_FAILURES_TRIAGE_v1.json` **`6db5ba75…`**（两次连跑逐字节同）· 工具 `k2/tools/k2_p6_triage_hidden_failures_v1.py`
+
+**载体分布（旧 id `J2_TO_U`/`U_TO_MCIO` ↔ 新 id `EAST_CHIP_TO_J2`/`WEST_MCIO_TO_CHIP`）**
+| 载体 | 旧 id | 新 id |
+|---|---|---|
+| `SPEC_k2_v4.json`（plain） | 0 | **2** |
+| `SPEC_k2_v4.spec-rev-52.json` | 0 | **11** |
+| **`channel_alloc.json`（L3 求解真源）** | **108** | **0** |
+| `hs_route_model.py`（引擎） | 4 | 0 |
+| `check_l3.py`（判据期望集） | 2 | 0 |
+| `test_hs_route_model.py`（测试） | **37** | 0 |
+
+**读法**：SPEC 已改名，而**L3 求解真源（alloc）与引擎/判据/测试仍在旧命名** ⇒ 测试里 `next(c for c in m.spec["corridors"] if c["id"]=="J2_TO_U")` 直接 `StopIteration`；模型侧 id↔alloc 不匹配 ⇒ 对应链判 `NO_CORRIDOR` / `未全解`（8L 板 18 链）。**13 项失败同源**。
+
+**二分建议（供监理一次裁定）**
+| 类 | 内容 | 归属 |
+|---|---|---|
+| **期望漂移** | 测试（37 处）与 `check_l3.SPEC_EXPECTS`（2 处）跟随**旧**命名；若新 id 为权威 ⇒ 须批「改名承接」后同步（含 G3.1 期望集） | **监理裁定** |
+| **载体/引擎真缺陷** | **`channel_alloc.json` 与 SPEC 命名脱钩 = N-05「生成器不可复跑」实证** ⇒ L3 真源产物须按现行 SPEC 重生成（或加映射层）；`hs_route_model.py` 旧 id 引用须定性（语义硬编码 or 兼容层） | **ENG（需授权）** |
+> ⚠️ 该分歧**同时解释**真源基线与影子下 K2 `G3.1` 的 FAIL（期望集旧名）——即 B2-3d 与本节同源。
+
 ## 7. 红线与零改动声明
 真源 `_shared`/`criteria/`/冻结四源/交付锚 **未动**（影子仅在 `/tmp/opencode`）；未派 WORKER；未改生成器/SPEC/原理图；`k2/_shared` 工作树洁净。
