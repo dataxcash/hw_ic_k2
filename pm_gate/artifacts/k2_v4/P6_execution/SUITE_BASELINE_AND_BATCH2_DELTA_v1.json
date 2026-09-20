@@ -1,0 +1,81 @@
+{
+ "artifact": "k2_suite_baseline_and_batch2_delta",
+ "counts": {
+  "base": {
+   "failed": 42,
+   "passed": 492,
+   "skipped": 21,
+   "tests": 555
+  },
+  "delta": {
+   "failed": "-11",
+   "passed": "+18",
+   "skipped": "0",
+   "tests": "+7（A13/A14/A15 合成覆盖）"
+  },
+  "landed": {
+   "failed": 31,
+   "passed": 510,
+   "skipped": 21,
+   "tests": 562
+  }
+ },
+ "fixed_11": [
+  "tests.test_hs_route_model.TestV4Probe::test_probe_escape_capacity_dn0",
+  "tests.test_hs_route_model.TestV4Probe::test_probe_reports_via_gap_fact",
+  "tests.test_hs_route_model.TestV5CapacityMap::test_capacity_map_persist",
+  "tests.test_hs_route_model.TestV5CapacityMap::test_capacity_regions_derived",
+  "tests.test_hs_route_model.TestV5CapacityMap::test_corridor_clear_span",
+  "tests.test_hs_route_model.TestV5CapacityMap::test_probe_region_capacity_structure",
+  "tests.test_hs_route_model.TestV6LinkTopology::test_link_topology_crossing_old_topology",
+  "tests.test_hs_route_model.TestV6ViaPolarityPrecheck::test_correct_polarity_solves_clean",
+  "tests.test_hs_route_model.TestV6ViaPolarityPrecheck::test_drawing_only_refuses_no_node",
+  "tests.test_hs_route_model.TestV6ViaPolarityPrecheck::test_escape_deterministic_byte_identical",
+  "tests.test_hs_route_model.TestV6ViaPolarityPrecheck::test_flip_polarity_cross_rejected"
+ ],
+ "method": {
+  "command": "cd <tree> && <AppDir>/bin/python3.11 -m pytest -q --tb=no -p no:cacheprovider --junitxml=<out> shared/eda_core/tests/",
+  "diff": "逐 testcase（classname::name）三态对比；一次跑成（非采信自述）",
+  "interpreter": "AppDir/bin/python3.11（唯一带 pcbnew 的解释器；ambient python3 会在 3 个模块 ImportError: pcbnew）",
+  "trees": {
+   "base": "`git -C k2/_shared archive 935fb25` 解到 /tmp/opencode/base_shadow（+ AppDir/k2/criteria/k1/.omo 符号链接 + eda_core 影子链接 + SHADOW-ONLY 测试板锚）",
+   "landed": "/tmp/opencode/shadow（影子工具自 fc59771 构建）"
+  }
+ },
+ "note": "只读取证：两棵影子树均在 /tmp；真源 k2/_shared 未改；未动判据/冻结件/交付锚；未派 WORKER。",
+ "order_dependence_check": "全量套件与单文件跑法结果一致：`test_hs_route_model` 恒为 C1+C2 两失败、12 skip（无顺序依赖差异）",
+ "purpose": "**套件级**回归基线（K2 项目此前只有单文件 PYTESTERS）：逐用例对比「批 2 落件前(935fb25) vs 落件后(fc59771)」`shared/eda_core/tests/` 全量（41 个测试模块），证明批 2 **净修 11 项、零新增失败、零新增跳过**，并把**既有 31 项失败 / 21 项 skip** 具名入账",
+ "readonly_repo": true,
+ "remaining_31_by_module": {
+  "test_closure_check": 5,
+  "test_env_fingerprint": 4,
+  "test_hs_route_model": 2,
+  "test_redteam_evidence": 6,
+  "test_solve_pipeline": 1,
+  "test_verify_checks": 6,
+  "test_verify_cli_cache": 4,
+  "test_verify_cli_smoke": 3
+ },
+ "remaining_31_note": "= 既有失败（base 同有）；其中 2 项 = 批 2 具名保持 RED 的 C1/C2（test_board_level_consistency · TestV5FlipRedesign::test_chain_no_pn_zero_spacing），余 29 项在他模块（redteam_evidence/verify_checks/closure_check/verify_cli_cache/env_fingerprint/verify_cli_smoke/solve_pipeline）——**不在批 2 放行范围**，建议入账为『套件级既有失败基线』待监理排期",
+ "schema": 1,
+ "skips_21_classification": {
+  "m9demo_modules": {
+   "test_drc_locator": 2,
+   "test_hs_route_model": 12,
+   "test_ls_migration": 3
+  },
+  "m9demo_基线板不在库": 17,
+  "others": [
+   "tests.test_cap_wall_upgrade::test_window_params_k2_data_driven",
+   "tests.test_routing_topology_gate::test_t5_real_k2_gate_runs_and_reports_j2_polarity",
+   "tests.test_topology_gate::test_t5_k2_integration_from_files",
+   "tests.test_verify_cache::test_init_cleanup_auto_git_head"
+  ]
+ },
+ "verdict": {
+  "fixed": 11,
+  "new_failures": 0,
+  "new_skips": 0,
+  "reading": "**批 2 零回退（套件级），且净修 11 项**"
+ }
+}

@@ -58,3 +58,22 @@
 - 结论：**10 项**打**仍在册**的 `solve_pair_segment` / `solve_chain_v2`，且这两个 API **仅有这些被跳过的用例覆盖** ⇒ 属**覆盖真空**（非「已被新套件取代」）；**2 项**打**已删**私有 API。
 - 处置四选（**监理裁**）：**S1** 具名接受（登记退役 + 显式登记覆盖真空）· **S2** 补 fixture 生成步骤（涉生成器/SPEC/冻结件）· **S3** 随代际退役删 API（共享层改动）· **S4** 重锚到现役 8L 基线（期望重基线）。
 - 机读：`P6_execution/BATCH2_SKIP12_DISPOSITION_v1.json`（`fdbb8f3a0…`）。ENG **未改**测试/引擎/记录件。
+
+## 5. 套件级回归基线（新增 · 逐用例对比）——批 2 **零回退，净修 11 项**
+
+K2 此前只有**单文件** PYTESTERS（`test_hs_route_model.py`）。本件首次做**全量套件**逐用例对比：
+
+| 观测 | 批 2 前（`k2/_shared@935fb25` 经 `git archive` 解到 /tmp） | 批 2 后（`fc59771` 影子） | Δ |
+|---|---|---|---|
+| 用例总数 | 555 | 562 | **+7**（A13/A14/A15 合成覆盖） |
+| passed | 492 | 510 | **+18** |
+| failed | **42** | **31** | **−11** |
+| skipped | 21 | 21 | 0（**集合逐条相同**） |
+| **新增失败** | — | **0** | ✅ 零回退 |
+| **新增跳过** | — | **0** | ✅ |
+
+- **修复的 11 项** = B2-T 13 项 − 具名保持 RED 的 C1/C2（`test_probe_escape_capacity_dn0` · `test_probe_reports_via_gap_fact` · `test_capacity_regions_derived` · `test_probe_region_capacity_structure` · `test_capacity_map_persist` · `test_corridor_clear_span` · `test_link_topology_crossing_old_topology` · `test_correct_polarity_solves_clean` · `test_drawing_only_refuses_no_node` · `test_escape_deterministic_byte_identical` · `test_flip_polarity_cross_rejected`）。
+- **残留 31 项失败**（`base` 同有，**不在批 2 放行范围**）分布：`test_closure_check` 5 · `test_verify_checks` 6 · `test_redteam_evidence` 6 · `test_env_fingerprint` 4 · `test_verify_cli_cache` 4 · `test_verify_cli_smoke` 3 · `test_solve_pipeline` 1 · `test_hs_route_model` 2（= C1/C2）⇒ 建议入账为**套件级既有失败基线**交监理排期。
+- **21 项 skip 分类**：**17 项 = `k2_m9demo` 基线板不在库**（`test_hs_route_model` 12 · `test_ls_migration` 3 · `test_drc_locator` 2 ⇒ 比先前只知 `hs_route_model` 12 更广）+ 4 项其他（K2 真实工件缺失 ×2 · K2 真源数据缺失 ×1 · 影子树无 git HEAD ×1）。
+- **口径**：解释器必须 `AppDir/bin/python3.11`（ambient `python3` 会在 3 个模块 `ImportError: pcbnew`）；命令 `-m pytest -q --tb=no -p no:cacheprovider --junitxml=<out> shared/eda_core/tests/`；全量与单文件跑法结论一致（无顺序依赖差异）。
+- 机读：`P6_execution/SUITE_BASELINE_AND_BATCH2_DELTA_v1.json`（`c0992e5aa…`）。
