@@ -1,0 +1,257 @@
+{
+ "artifact": "k2_n3_k1_sch_regen_landing_report",
+ "schema": 1,
+ "ts": "2026-09-20",
+ "purpose": "N-3（K1 原理图侧**同源对账再生** 37→42）落件报告：单一真源机械再生 + 四验读数 + 残留具名登记（含给监理的自裁项）。只读面：K2/共享判据/criteria/交付锚未动。",
+ "authorization": {
+  "primary": "监理 #K2-48 §一 N-3「K1 同源对账 + 原理图侧再生（37→42 + J1/U10 footprint）」= 授权；『经 k1_sch_sync_v1.py 由单一真源 k1_board.yaml 再生；不新增判据维；K1 项目面』",
+  "precondition": "监理 #K2-49 §二/§三：M1/M2 放行 · M3 前置 = K1 BOM csv；M3+BOM 同批（前序会话已落件 c018fc7/4084133/01f4d72）",
+  "no_new_check_tooth": "本批 0 新判据维 / 0 新检查齿（owner 常设②）；未改 criteria/、未改 _shared/、未改 k2/"
+ },
+ "single_sources": {
+  "devices": "k1/boards/k1_board.yaml",
+  "pin_binding": "k1/boards/k1_pinmap.yaml",
+  "netlist": "k1/boards/k1_nets.yaml（k1_sch_sync_v1.py 由 net_coverage 机械派生）",
+  "reused_as_library": "旧 k1/boards/k1_sch.yaml（仅供既有符号体 + 页定义 title/paper/layout/columns）",
+  "zero_invention": "symbol/placement/nets/nc 全部由上述三件推出；实件物理脚**未被写入 NC** 以免掩盖板级缺陷（K1-D8）"
+ },
+ "tools_added": {
+  "k1/tools/k1_sch_regen_v1.py": {
+   "sha16": "197ed7a2d0682517",
+   "role": "真源→k1_sch.yaml 再生（dry-run 默认 · --apply --confirm-repo-write 双闸 · 备份入 /tmp/opencode）",
+   "extra": "--sync-decl：把 k1_board.yaml#devices[*].sch_pins 行内锚定订正为符号实值"
+  },
+  "k1/tools/k1_sch_gen_v1.py": {
+   "sha16": "1aeaa80e6d451b6b",
+   "role": "薄 driver：importlib 复用 k2/tools/k2_sch_gen_v1.py 作**规则提供者**（渲染规则零复制、K2 零写入），只覆盖 K1 输出口径；--install 落件 k1/sch（备份入 /tmp/opencode）"
+  }
+ },
+ "landed": {
+  "modified": [
+   {
+    "path": "k1/boards/k1_sch.yaml",
+    "before_sha16": "67c2771d6ed0b81e",
+    "after_sha16": "e1fdb1a1f0f6df93",
+    "delta": "placements 37→42 · nets 46→51 · symbols 40→28（在用集）· strap_intents/links 清空（K2 残留）"
+   },
+   {
+    "path": "k1/boards/k1_board.yaml",
+    "before_sha16": "313dfcf6477b8a07",
+    "after_sha16": "1420ca9da99ac7ba",
+    "delta": "sch_pins 声明 4 处订正（见 decl_corrections）"
+   },
+   {
+    "path": "k1/fab/k1_v1_bom.csv",
+    "before_sha16": "2b7b2554f835689e",
+    "after_sha16": "2ba7c2ecf5a53a7a",
+    "delta": "refs 37→42（真 sch netlist 机械派生；与真源 placements 交叉核对一致）"
+   },
+   {
+    "path": "k1/sch/k1_sch.kicad_sch",
+    "before_sha16": "65b04e499065f976",
+    "after_sha16": "4baae622ad859783",
+    "delta": "root 指向 4 个再生页（元数据 title/paper/uuid 沿用 K1 root）"
+   }
+  ],
+  "added": [
+   {
+    "path": "k1/sch/connectors.kicad_sch",
+    "sha16": "4627c476b8a587f7"
+   },
+   {
+    "path": "k1/sch/mcu_sideband.kicad_sch",
+    "sha16": "2e4d7b323f78d79e"
+   },
+   {
+    "path": "k1/sch/power_decoupling_redriver_vcc.kicad_sch",
+    "sha16": "8814c503948e8014"
+   },
+   {
+    "path": "k1/sch/power_12v_dc_in_dcdc_5v_ldo_3v3.kicad_sch",
+    "sha16": "e1e11b9bbace6907"
+   },
+   {
+    "path": "k1/sch/K1_SCH.kicad_sym",
+    "sha16": "263723c7baa4b9b2"
+   }
+  ],
+  "deleted_stale": [
+   "k1/sch/v5_connectors.kicad_sch",
+   "k1/sch/v5_mcu_&_sideband.kicad_sch",
+   "k1/sch/v5_power_decoupling_redriver_vcc.kicad_sch",
+   "k1/sch/v5_power_12v_dc-in_dcdc_5v_ldo_3v3.kicad_sch"
+  ],
+  "symbol_fixes": {
+   "K1-S1/J1": "footprint HRO_TYPE-C-31-M-12 → Connector_USB:USB_C_Receptacle_Amphenol_12401548E4-2A（板真源）",
+   "K1-S6/J10": "footprint ForgeOS:PinHeader_1x02 → Connector_JST:JST_VH_B2P-VH_1x02_P3.96mm_Vertical（板真源）",
+   "K1-S4/U12": "符号 TPS22919（错件）→ TPS22965（角号 IN=1/ON=3/VOUT=7/GND=5；手册转录件已 sha256 同版）",
+   "K1-S2/U10": "符号 footprint 与板真源一致（SOT-23）；**OPEN-2 未关闭**（板侧 footprint 本身即 SOT-23 3 pad）",
+   "U1": "补 WORK_EN(pad9)/KEY_DET_EN(pad25) 两脚 —— 承 **owner 批准 L1-1（#K1-03 · ECN-007）**，非新裁决",
+   "新增件": "Q1=TPS22990(IN/ON/VOUT/GND) · Q2=2N7002(G/S/D) · U13=TPD2E001(VCC/IO1/IO2/GND) · R38/R39=R_22R(A/B)"
+  }
+ },
+ "verification": {
+  "acceptance_core_A_E": {
+   "cmd": "PYTHONPATH=_shared python3 k2/docs/drafts/n3-k1-sch-regen-v1/k1_sch_regen_acceptance_v1.py --sch-yaml k1/boards/k1_sch.yaml [--render]",
+   "result": "ok=true · fails=[] · 板 42 == 图 42 · symbol 全定义 · footprint 0 不符 · nets 0 不一致 · 渲染组件 42"
+  },
+  "pipeline_verify_k1": {
+   "cmd": "python3 -c 'from eda_core.pipeline.engine import main; main([\"verify\",\"k1\"])'",
+   "result": "preflight(project_sch_coverage) PASS · sch_structural PASS · netlist_connect PASS（51 网连接完整 + 反向断言 0 非声明悬空）· bom_consistent PASS（42 器件）"
+  },
+  "pre_commit_hook": "k1 提交时仓库级 hook 实跑：全局 sch 完整性 OK(7 文件) · meta-gate 完整 · k1 verify 全 PASS",
+  "k1_verdict_anchor": {
+   "manifest": "probe_manifest.k1.yaml（未签认 → provisional）",
+   "before": {
+    "n_ok": 6,
+    "n_fail": 13,
+    "ok_dims": [
+     "device_has_pads",
+     "non45_segments",
+     "rule_severity_manifest",
+     "pipeline_present",
+     "fp_lib_table_present",
+     "verdict_schema"
+    ],
+    "fail_dims": [
+     "zone_filled",
+     "drill_count",
+     "net_declared_realized",
+     "pin_map_complete",
+     "refdes_sets_equal",
+     "drc_errors",
+     "drc_warning_dispositions",
+     "unconnected_zero",
+     "lib_electrical_level",
+     "keepout_active",
+     "pads_within_outline",
+     "ref_plane_continuity",
+     "density_and_clearance"
+    ],
+    "provisional": true
+   },
+   "after": {
+    "n_ok": 8,
+    "n_fail": 11,
+    "ok_dims": [
+     "device_has_pads",
+     "non45_segments",
+     "rule_severity_manifest",
+     "net_declared_realized",
+     "refdes_sets_equal",
+     "pipeline_present",
+     "fp_lib_table_present",
+     "verdict_schema"
+    ],
+    "fail_dims": [
+     "zone_filled",
+     "drill_count",
+     "pin_map_complete",
+     "drc_errors",
+     "drc_warning_dispositions",
+     "unconnected_zero",
+     "lib_electrical_level",
+     "keepout_active",
+     "pads_within_outline",
+     "ref_plane_continuity",
+     "density_and_clearance"
+    ],
+    "provisional": true
+   },
+   "flips": {
+    "to_PASS": [
+     "net_declared_realized",
+     "refdes_sets_equal"
+    ],
+    "to_FAIL": []
+   },
+   "note": "pin_map_complete 16→16（未回归；16 节点全部 = J1，见 residuals R-1）"
+  },
+  "determinism": "driver 连跑两次（不同 OUT）⇒ 4 页 + root + symbol lib **逐字节同**（sandbox_report.json 含输出路径故除外，与 K2 driver 同性质）",
+  "idempotency": "k1_sch_regen_v1.py --check ⇒ rc=0（盘上件已同步）"
+ },
+ "decl_corrections": [
+  {
+   "ref": "Q1",
+   "sch_pins": "6 → 4",
+   "symbol": "TPS22990",
+   "why": "旧声明 6 系误抄 TPS22919；符号实值 4（IN/ON/VOUT/GND）"
+  },
+  {
+   "ref": "U1",
+   "sch_pins": "31 → 33",
+   "symbol": "MCU_STM32G0",
+   "why": "本批按 L1-1 正式绑定补 WORK_EN/KEY_DET_EN 两脚 ⇒ 符号 33"
+  },
+  {
+   "ref": "U12",
+   "sch_pins": "6 → 4",
+   "symbol": "TPS22965",
+   "why": "旧声明系 TPS22919 残留；符号实值 4"
+  },
+  {
+   "ref": "U13",
+   "sch_pins": "6 → 4",
+   "symbol": "TPD2E001",
+   "why": "pinmap 声明 4 脚（1/3/4/6）；2/5 = 手册具名 N.C."
+  }
+ ],
+ "residuals_registered": [
+  {
+   "id": "R-1（新登 · 拟 K1-S7）",
+   "severity": "中",
+   "finding": "`pin_map_complete` 16 节点无对应焊盘 = **全部为 J1**：符号脚号 1..16 ∉ 板 pad 名（A*/B*/SH）。K1-S1 已记『pin→pad 绑定本身正确（由 pinmap）』⇒ 本项是**脚号字段**与板 pad 命名不同构。",
+   "delta": "N-3 前后同为 16（**无回归**）；修法二选一 ⇒ **监理自裁项**：(a) 按 pinmap 把 J1 符号脚逐 pad 展开（本仓 J14/U11/U9 既有同类风格；J1 16→23 脚）；(b) 保留逻辑脚号 + 监理裁定该维口径（adjudicate.py 对 MCIO 有 remap 先例，但改判据件 = 禁）。ENG 建议 (a)。"
+  },
+  {
+   "id": "R-2",
+   "severity": "低",
+   "finding": "`k1_nets.yaml#nc` 仍留 (U12,NC)/(U12,QOD) 两条 **TPS22919 旧件**残留（该 nc 段为继承式、非派生）。影响：netlist_connect 白名单**超集**，零判据影响；清理需改 k1_sch_sync_v1.py 的 nc 继承口径（不在本批）。"
+  },
+  {
+   "id": "R-3",
+   "severity": "中",
+   "finding": "U1/PB2（pad17）本批派生 **NC**（旧 sch 曾把 PB2 挂 SBU1，②同步后改由 PB8/PB9 承担）⇒ 与 **K1-D3『pad17 <no net> 待核 GND/NC』同址**。NC 标记**不关闭 D3**：板级事实（pad17 无网）仍在缺陷册保持可见。"
+  },
+  {
+   "id": "R-4",
+   "severity": "低",
+   "finding": "`k1_board.yaml#reconciliation` 块 = ②同步期**快照**，已陈旧（net_count 自述 46 vs 现 51 · nc_pairs 自述 36 · k1_nets_yaml_missing_nodes 5 条中 4 条已修后仍列）。建议由 k1_sch_sync_v1.py 刷新快照（不在本批）。**副产物**：`device_count.schematic_sch_k1=42` 由本批变为**真**（K1-S3 关闭）。"
+  },
+  {
+   "id": "R-5",
+   "severity": "高（可见性）",
+   "finding": "Q1 pad1(CT)/2(NC)/4(**VBIAS**)/7(PG)、U12 pad4(**VBIAS**)/6(CT) **不进入符号**（⇒ 也不写 NC）——写 NC 等于宣称『有意不接』，会**掩盖 K1-D8（VBIAS 未接 = 功能级缺陷）**。故符号只承载 pinmap 已绑定的脚；物理脚数由 fp_pads 承载（Q1 11 / U12 9）。**本条明确不采纳**转录件『sch_pins 订正为 10(+EP)/8(+EP)』的建议：`sch_pins` 语义 = **符号脚数**（证据：U8 6 vs fp_pads 8 · J1 16 vs 30 · U11 43 vs 57）。"
+  },
+  {
+   "id": "R-6",
+   "severity": "中",
+   "finding": "**OPEN-2 仍未关闭**：U10 符号 footprint 与板真源一致（SOT-23），但**板侧 footprint 本身**是 3 pad 的 SOT-23，实件为 SOT-23-5 ⇒ N-3 只完成 sch↔板 对齐，板侧换件仍属 K1 排期项。"
+  },
+  {
+   "id": "R-7",
+   "severity": "信息",
+   "finding": "`strap_intents`/`links` 两段清空：旧件内容 = **K2 模板残留**（引用 K1 不存在的 J2/U3）。K1 判定 19 维不消费该两段（零影响）；如需 K1 自有意图/链路声明，属另一件。"
+  }
+ ],
+ "red_lines_respected": [
+  "冻结四源未改",
+  "criteria/ ENG 只读（未改）",
+  "禁派 WORKER（未派）",
+  "临时仅 /tmp/opencode",
+  "未写 .omo/supervision/**",
+  "未沿用『HOLD/停等』结案",
+  "未重建交付包（交付锚 MANIFEST 6ee7495de61f749f 未动）",
+  "C1/C2 未改绿",
+  "0 新判据维/检查齿"
+ ],
+ "next": [
+  "（ENG 侧本批完成）候选续推：R-1 修法 (a) 待监理自裁后落件（J1 脚号与板 pad 对齐 ⇒ pin_map_complete 可翻 PASS）",
+  "C-25 tier2（parts_electrical_truth.yaml 补全，现 PARTIAL 6/33）排期",
+  "板级缺陷册 K1-D1..D12 排期（K1-D8 VBIAS 为首）",
+  "P5 外部首件（V4–V7 NOT_RUN）= 唯一外部面，ENG 不自证"
+ ],
+ "commit": {
+  "k1": "9e283bf（已推；父 01f4d72）"
+ }
+}
