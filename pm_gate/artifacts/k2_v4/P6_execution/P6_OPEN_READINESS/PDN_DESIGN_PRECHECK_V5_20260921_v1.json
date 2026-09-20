@@ -1,0 +1,206 @@
+{
+ "artifact": "k2_pdn_design_precheck_v5",
+ "schema": 1,
+ "ts": "2026-09-21T09:05:00+0800",
+ "id": "**V5（PDN 直流压降）设计侧预判** —— 几何/电阻预算核算（**非 P5 证据 · 不充绿**）",
+ "authorization": "监理自动续推『推进当前阶段（P5）』+ 计划 §P5『V5 PDN 直流压降 ≤ 预算 3%（监理定值）』；本件为**设计侧预测**，P5 判定仍须**外部实测**（ENG 不得自证）。",
+ "inputs": {
+  "board": "k2/hw/k2_v4_8L.l7.kicad_pcb",
+  "board_sha16": "c5a7df90aadb66e0",
+  "spec": "k2/pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-52.json",
+  "spec_sha16": "42f8485ee4d6b566",
+  "copper": "外层 1oz=35µm · 内层 0.5oz=17.5µm（L5 MANIFEST `jlc_capability`）",
+  "model": "ρ_Cu=1.68e-8 Ω·m（20°C）· α=0.00393/K ⇒ 85°C ×1.256；via：镀铜 25µm 环带 · barrel 长按所跨介质（F/In1=0.1164 · 内层间 0.25 · In6/B=0.1164mm）"
+ },
+ "method": "逐 rail 解析 segment /（through+blind）过孔 / zone 多边形；R=ρL/(w·t_layer)；In4 平面岛面积 = shoelace。**平面不建网**（见 caveats）。",
+ "facts": {
+  "12V_IN": {
+   "V_nom": 12.0,
+   "n_seg": 5,
+   "L_total_mm": 3.52,
+   "widths_mm": [
+    0.2
+   ],
+   "layers": {
+    "F.Cu": 5
+   },
+   "n_vias": 3,
+   "via_kinds": {
+    "through": 3
+   },
+   "via_drills": [
+    0.2
+   ],
+   "worst_single_hop": {
+    "L_mm": 0.925,
+    "layer": "F.Cu",
+    "width_mm": 0.2,
+    "R_mohm_85C": 0.0
+   },
+   "budget3_mV": 360.0,
+   "I_allow_worst_hop_A": 129166.56,
+   "in4_islands": [
+    {
+     "layer": "In4.Cu",
+     "area_mm2": 19.5
+    },
+    {
+     "layer": "In4.Cu",
+     "area_mm2": 49.6
+    }
+   ],
+   "in4_total_mm2": 69.1,
+   "plane_grade": "中/小岛"
+  },
+  "P3V3": {
+   "V_nom": 3.3,
+   "n_seg": 53,
+   "L_total_mm": 54.29,
+   "widths_mm": [
+    0.2
+   ],
+   "layers": {
+    "F.Cu": 51,
+    "B.Cu": 2
+   },
+   "n_vias": 43,
+   "via_kinds": {
+    "through": 39,
+    "blind": 4
+   },
+   "via_drills": [
+    0.2
+   ],
+   "worst_single_hop": {
+    "L_mm": 9.05,
+    "layer": "F.Cu",
+    "width_mm": 0.2,
+    "R_mohm_85C": 0.03
+   },
+   "budget3_mV": 99.0,
+   "I_allow_worst_hop_A": 3630.58,
+   "in4_islands": [
+    {
+     "layer": "In4.Cu",
+     "area_mm2": 6815.6
+    },
+    {
+     "layer": "In4.Cu",
+     "area_mm2": 72.7
+    }
+   ],
+   "in4_total_mm2": 6888.3,
+   "plane_grade": "大平面"
+  },
+  "P3V3_AUX": {
+   "V_nom": 3.3,
+   "n_seg": 84,
+   "L_total_mm": 109.44,
+   "widths_mm": [
+    0.2
+   ],
+   "layers": {
+    "F.Cu": 24,
+    "B.Cu": 15,
+    "In2.Cu": 2,
+    "In5.Cu": 43
+   },
+   "n_vias": 10,
+   "via_kinds": {
+    "blind": 5,
+    "through": 5
+   },
+   "via_drills": [
+    0.2
+   ],
+   "worst_single_hop": {
+    "L_mm": 20.789,
+    "layer": "In5.Cu",
+    "width_mm": 0.2,
+    "R_mohm_85C": 0.13
+   },
+   "budget3_mV": 99.0,
+   "I_allow_worst_hop_A": 790.25,
+   "in4_islands": [
+    {
+     "layer": "In4.Cu",
+     "area_mm2": 38.7
+    },
+    {
+     "layer": "In4.Cu",
+     "area_mm2": 42.5
+    }
+   ],
+   "in4_total_mm2": 81.2,
+   "plane_grade": "中/小岛"
+  },
+  "MCU_VDD": {
+   "V_nom": 3.3,
+   "n_seg": 63,
+   "L_total_mm": 33.11,
+   "widths_mm": [
+    0.2
+   ],
+   "layers": {
+    "F.Cu": 38,
+    "In2.Cu": 25
+   },
+   "n_vias": 12,
+   "via_kinds": {
+    "blind": 4,
+    "through": 8
+   },
+   "via_drills": [
+    0.2
+   ],
+   "worst_single_hop": {
+    "L_mm": 4.95,
+    "layer": "F.Cu",
+    "width_mm": 0.2,
+    "R_mohm_85C": 0.01
+   },
+   "budget3_mV": 99.0,
+   "I_allow_worst_hop_A": 6637.73,
+   "in4_islands": [
+    {
+     "layer": "In4.Cu",
+     "area_mm2": 2153.0
+    }
+   ],
+   "in4_total_mm2": 2153.0,
+   "plane_grade": "大平面"
+  }
+ },
+ "findings": [
+  {
+   "id": "PDN-F1",
+   "level": "信息",
+   "text": "**P3V3 / MCU_VDD 由 In4 大平面承载**（6815.6+72.7 mm² / 2153.0 mm²）⇒ 0.5oz 平面薄层电阻 ≈ **1.20 mΩ/sq @85°C**，数平方量级 ⇒ 平面路径压降 ≪ 99mV 预算。"
+  },
+  {
+   "id": "PDN-F2",
+   "level": "信息",
+   "text": "**12V_IN 平面为小岛**（19.5+49.6 mm²），但该网极短（总长 3.52mm · 最坏单跳 0.925mm ⇒ 2.79 mΩ@85°C）⇒ 预算 360mV，无风险。"
+  },
+  {
+   "id": "PDN-F3",
+   "level": "**观察项（V5 须覆盖）**",
+   "text": "**P3V3_AUX 平面仅小岛**（38.7+42.5 mm²）⇒ 该轨实质**以迹线分配**：总长 **109.44mm**（F.Cu 24 / B.Cu 15 / In2 2 / In5 43 段 · 全宽 **0.2mm**）；**最坏单跳 = In5.Cu 20.789mm（0.2mm · 0.5oz）⇒ 125.3 mΩ@85°C**（另 B.Cu 19.62mm = 59.4 mΩ · 14.88mm = 45.1 mΩ）。该单跳**独自**在 **0.79A** 用尽 3% 预算（99mV）。该轨供 **J3/J4（PCIe 槽）3.3V aux** ⇒ **V5 实测必须覆盖 J3/J4 端**；若实测 >3% ⇒ 确定性修法 = 加宽该跳 / 补岛 stitching（**改板 ⇒ ECO + 监理授权，不在 P5 范围**）。"
+  },
+  {
+   "id": "PDN-F4",
+   "level": "信息",
+   "text": "全宽 0.2mm 为净类默认；在有大平面的轨（P3V3/MCU_VDD）由平面旁路，**唯一例外 = P3V3_AUX**（平面小）⇒ 已具名登记，便于后续会话复现（防重复上报）。"
+  }
+ ],
+ "caveats": [
+  "**平面未建模**：In4 zone 仅计面积、未参与网络 ⇒ 含大平面的轨真实压降**低于**本件迹线数；P3V3_AUX 平面小 ⇒ 迹线数更接近真实。",
+  "**无逐轨电流真值**：SPEC/交付件**无 per-rail 电流预算** ⇒ 本件给『**允许电流**』（I=3%·V/R），非『实测电流下的压降』。",
+  "**本件不是 P5 证据**：V5 维持 `NOT_RUN`；判定归监理。",
+  "未改任何文件/板/SPEC/判据；未新增判据维。"
+ ],
+ "eng_recommendation": "V5 实测清单增补**具名定位**：`P3V3_AUX` 于 `J3/J4` 端（最坏跳 = In5 `(35.25,54.9) → (49.95,40.2)` 段所在网络）；若不足 ⇒ 按 F3 确定性修法起 ECO（须监理授权）。",
+ "readonly_repo": true,
+ "not_landed": true,
+ "no_p5_evidence": true
+}

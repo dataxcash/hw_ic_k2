@@ -45,7 +45,7 @@
    "criterion": "施工图层重建（L3 图纸）—— 板框 / NPTH / pad==引脚 / 接口不出框 / keepout 生效",
    "verdict": "**HOLDS**",
    "evidence": {
-    "SPEC": "k2/pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json = 0bd52ed48e720b8c",
+    "SPEC": "k2/pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-52.json = 42f8485ee4d6b566（8L 权威件 · 与交付包 07_verify/anchor_selfcheck.json 一致）",
     "pads_within_outline": "出框：全 pad(AABB)=0 · 接口件(P3-4)=0 · 全 pad(真外框多边形)=0（须全 0）；测量板 sha16=c5a7df90aadb66e0 vs 受审板 c5a7df90aadb66e0 ⇒ 一致",
     "drill_count": "NPTH=4（应 ≥4）PTH=16",
     "keepout_active": "keepout 区 8 个；其中无生效开关（全 allowed / 无 flag）0 个"
@@ -146,5 +146,13 @@
    "V7": "Tj ≤ 120.0℃（四工况）· T1 触发：Tj(U6)>117.0℃ 或未按 O2 实施 ⇒ 开新 rev（θJA_eff ≤ 9.5℃/W）"
   },
   "conclusion": "**ENG 侧 P5 执行包完备、无待补**；唯一在途 = 外部回件（板厂阻抗券 + 首件实测记录）。"
- }
+ },
+ "corrections": [
+  {
+   "id": "SG-C1",
+   "by": "本会话自证订正（发现于 PDN 预判取叠层输入时）",
+   "what": "P3 的 SPEC 引用原误用 `L3/SPEC_k2_v4.json`（sha16 0bd52ed48e720b8c —— **6L 时代旧件**）；权威件 = **`SPEC_k2_v4.spec-rev-52.json`（8L · sha16 42f8485ee4d6b566）**，依据 = 交付包 `07_verify/anchor_selfcheck.json` 的 `spec` 锚。已就地更正并显式登记（**不静默改写**）。",
+   "impact": "**不影响任何门态判定**（P3 几何读数取自 l7 板本体与 canonical 19，非 SPEC 文件）⇒ 仅更正引用出处。"
+  }
+ ]
 }
