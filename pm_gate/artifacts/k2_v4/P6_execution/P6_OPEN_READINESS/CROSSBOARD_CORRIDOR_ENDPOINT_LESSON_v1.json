@@ -1,0 +1,26 @@
+{
+ "artifact": "k2_crossboard_corridor_endpoint_lesson",
+ "schema": 1,
+ "purpose": "P6『跨板复用与学习环』：把 K1 逃逸 INFEASIBLE 与 K2 交付板在同一**走廊端点×端子焊盘行**结构下做对照，得出可复用的 L2 结论。",
+ "common_structure": {
+  "fact": "两条板的走廊端点都落在**端子焊盘行**内（K1: J1/J14 · K2: J2/J3）。",
+  "pad_geometry": "端子焊盘典型 1.3×0.35（K2 J2）或 0.8×1.4（K1 J1 GND）· 节距 0.5–0.6mm ⇒ 相邻焊盘净间隙 **0.25mm**；走线 0.09 + 两侧 0.1 净空 = **0.29mm 通道** ⇒ **不可能从相邻焊盘间隙穿过**。"
+ },
+ "k2_delivered_behavior": {
+  "measured": "K2 l7 修正解析器（`rot=prot`）下，各 REFCLK 网实际走线 y = **目标焊盘自身 y**：`PCIE_REFCLK0_P` y≈**45.9**（J2 pad y=45.9）· `PCIE_REFCLK1_P` y≈**51.30**（J2 pad y=51.30）；而 band 中心线为 **45.7 / 50.5** ⇒ **端点上做了『对齐到目标焊盘』的偏离**。",
+  "band_centerline_probe": "若**照 band 中心线**硬走：`WEST_MCIO_TO_CHIP.refclk y=45.7` × J3 GND pad(64.9,45.75) 距离 **0.0** · `EAST_CHIP_TO_J2.refclk y=45.7` × J2 pad(132.65,45.9) **0.025** · `y=50.5` × J2 GND(132.65,50.7) **0.025**（均 < 0.145 阈值）⇒ 3 处命中，**全在走廊端点**。",
+  "delivered_status": "受审板 `l7` 真 KiCad DRC = **error 0**（167 全 warning）· 最小铜间距 **[0.10,0.105] ≥ 0.100** ⇒ **实板无此冲突**（路由器已偏离）；⇒ 该命中是**中心线意图面的伪冲突**，非板缺陷。"
+ },
+ "k1_structural_gap": {
+  "measured": "`_k1_escape`/`_tpl_a_line` 的落点**强制 = (`corr_x`, `track_y`)**（`_extend_to(corr_x)`），端点**不偏离**；K1 的 J14 右逃逸即须在 J14 同列焊盘（1.4×0.31 · 节距 0.5）中下潜 ⇒ 单网可见性图直接无解（本轮实测 VG=False）。",
+  "verdict": "**K1 的 INFEASIBLE 与 K2 的 DRC 干净是同一结构下的两种策略结果**：K2 = 端点对齐到目标焊盘（偏离中心线）；K1 = 端点钉在中心线交点。"
+ },
+ "l2_lesson_reusable": {
+  "rule": "走廊端点必须**落到目标网络的焊盘轴线**（本焊盘 y/该焊盘中心），band 中心线只在走廊中段成立；端点区间（±(pad 间距×N)）内须允许**对齐偏离**。",
+  "applies": "K1 `_k1_escape` 对模板 A/B 的落点约束（`corr_x` 全等）应放宽为『端点对齐目标焊盘 + 中段对齐轨道』；K2 侧复用时应保留该偏离（勿把 K2 的端点行为改回中心线硬对齐）。",
+  "scope": "属 L2（走廊/逃逸策略）；落件须批（`_shared` 引擎）。"
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-20T20:30:00+0800"
+}
