@@ -155,6 +155,57 @@
   "title": "模板整改后 k1|k2_jlc_template.kicad_pro 的 ignore 集 == manifest 应然集（0 差异）"
  },
  "artifact": "k2_p6_open_readiness",
+ "crossboard_same_source_census": {
+  "metric_source": "criteria/adjudicate.py（measure_rule_severities · pipeline_present 祖先链 · fp_lib_table_present）——ENG 只读调用，未改判据",
+  "purpose": "计划 §7「跨板复用」：同源缺陷覆盖面（用**判定器自身口径**测量：rule_severities ignore 集 / fp-lib-table 于板目录 / pipeline.yaml 祖先链≤3 层覆盖）",
+  "raw": "P6_OPEN_READINESS/crossboard_census.json",
+  "readings": [
+   "9 条 ignore 的分布 = **模板默认值**在 k1（板+模板）、k2（模板；交付板已清零）、pciesw4（板 9，无模板）重复出现 ⇒ 计划 §7.1 根因在全容器层面成立",
+   "pipeline 未覆盖（scope 内、祖先链≤3 层无 pipeline.yaml）当前 = **5 个目录**（k1/sch 1 + pciesw4 4）；k2 = **0**（k2/pipeline.yaml 覆盖）",
+   "fp-lib-table：k2 有；k1/pciesw4 缺；key_v2 有",
+   "key_v2 的 .kicad_pro 无 rule_severities 表（0 条）⇒ deny-by-default 天然满足"
+  ],
+  "scope_note": "本普查只读；不构成对 key_v2/pciesw4 的阶段判定（各项目阶段门自判，宪法/容器 AGENTS §3）",
+  "table": {
+   "k1": {
+    "board_pro_ignores": 9,
+    "fp_lib_table": false,
+    "pipeline_uncovered": [
+     "k1/sch"
+    ],
+    "sheets": "[] (空)",
+    "template_ignores": 9
+   },
+   "k2": {
+    "board": "k2/hw/k2_v4_8L.l7.kicad_pro",
+    "board_pro_ignores": 0,
+    "fp_lib_table": true,
+    "pipeline_uncovered": [],
+    "sheets": "<key 缺>",
+    "template_ignores": 9
+   },
+   "key_v2": {
+    "board_pro_ignores": 0,
+    "fp_lib_table": true,
+    "n_rules": 0,
+    "pipeline_uncovered": [],
+    "sheets": "非空（3 sheets）",
+    "template": "无"
+   },
+   "pciesw4": {
+    "board_pro_ignores": 9,
+    "fp_lib_table": false,
+    "pipeline_uncovered": [
+     "pciesw4/aic",
+     "pciesw4/aic/sch_kicad",
+     "pciesw4/gpu",
+     "pciesw4/gpu/sch_kicad"
+    ],
+    "sheets": "[] (空)",
+    "template": "无"
+   }
+  }
+ },
  "evidence": {
   "dir": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/",
   "dir_files": {

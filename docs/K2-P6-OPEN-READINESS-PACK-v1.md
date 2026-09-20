@@ -65,6 +65,19 @@ P6-1 的**唯一缺件** = 监理持有的 `criteria/manifest.k1.yaml`（G-c2，
 - 补丁件：`P6_OPEN_READINESS/P6_2_template_proposal/{k1,k2}_jlc_template.kicad_pro.diff`；**`patch -p1 --dry-run` 两件均 OK**（真源零改动）。
 - 放行后动作 = 应用该 diff → 复核模板 ignore 集 = ∅ → 待 G-c2 应然集落件后核 P6-2「结构差异 0」。
 
+## 2.2 跨板同源普查（计划 §7「跨板复用」；**判定器自身口径**测量）
+
+| 项目 | 板 pro `ignore` | 模板 `ignore` | `fp-lib-table` | `pipeline.yaml` 未覆盖（scope 内，祖先链≤3 层） | `sheets` |
+|---|---|---|---|---|---|
+| **k1** | **9** | **9** | 缺 | **1** = `k1/sch` | `[]`（空） |
+| **k2** | **0**（交付板 `l7`） | **9** | 有（`k2/hw`） | **0** ⊂ 覆盖 | key 缺 |
+| key_v2 | 0（无 severities 表，n=0） | 无模板 | 有 | 0 | 非空（3 sheets） |
+| pciesw4 | 9（`aic`；`gpu` 同） | 无模板 | 缺 | **4** = `aic`·`aic/sch_kicad`·`gpu`·`gpu/sch_kicad` | `[]`（空） |
+
+- **读数**：9 条 ignore 在 k1（板+模板）· k2（模板）· pciesw4（板）重复出现 ⇒ 计划 §7.1「根因 = 模板默认值」在**全容器层面**成立；pipeline 未覆盖当前合计 **5 个目录**（k1 1 + pciesw4 4；k2 = 0）。
+- 口径说明：pipeline 覆盖 = 判定器 `pipeline_present` 的**祖先链≤3 层**口径（非"同目录在否"）；本普查**只读**，不对 key_v2/pciesw4 作阶段判定（各项目阶段门自判）。
+- 机读：`P6_OPEN_READINESS/crossboard_census.json`。
+
 ## 3. 未越阶段声明
 
 批 2 已落件（`shared fc59771` · `k2 b58f53a/e019faa`）；**P6-1/P6-2 未启动**（G-c2 未落、模板未批）· **K1 复跑未启动** · **外部首件回件属外部**。冻结件 `d4e81f64…` 等未动 · `criteria/` 未动 · 模板未动 · 生成器/SPEC/原理图未动 · 未派 WORKER。
