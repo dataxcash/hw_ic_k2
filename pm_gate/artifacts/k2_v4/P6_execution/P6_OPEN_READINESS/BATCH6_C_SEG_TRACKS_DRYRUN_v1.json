@@ -1,0 +1,30 @@
+{
+ "artifact": "k2_batch6_c_seg_tracks_dryrun",
+ "schema": 1,
+ "purpose": "批 6(c) 落件形态验证：`seg_tracks` 段级轨道覆盖在**影子 alloc 副本**上的 dry-run（真源零改）。",
+ "semantics_confirmed": {
+  "grep": "`_track_y_for`（~:809+）",
+  "值语义": "`seg_tracks[segname]` = **绝对 y**，须 ∈ 该 band 的 `tracks_y`；命中返回 `(ty, band.layer)`；未命中 ⇒ `return None`（fail-closed）。`band` 取自 `rec[\"band\"]` ⇒ 换层**须同时改 `band`**。"
+ },
+ "experiment": {
+  "variant_A": "`PCIE_RX1 P/N → band=in2 / In2 / y=(18.0,18.5)` + `seg_tracks={'input':y}`",
+  "variant_A_result": "段级 **3/8**；`RX1.input` 仍 INFEASIBLE ⇒ In2 方案**不成立**（疑端点换层/内层绕行受阻）",
+  "variant_B": "`PCIE_RX1 P/N → band=in1 / In1 / y=(20.5,21.0)` + `seg_tracks={'input':y}`",
+  "variant_B_result": "段级 **4/8**；**`RX1.input` SOLVED**（`RX1.output` 原已 SOLVED）⇒ **`RX1` 成为首个全解 base**",
+  "P_N_coupling": "P/N 同层相邻 0.5（0.5 紧耦合保持）；两网 span 仅 input 段 ⇒ 全局 band 未动、右半占用未动"
+ },
+ "gain": {
+  "before": "3/8 段 · 0/4 base",
+  "after": "**4/8 段 · 1/4 base（RX1 全解）**"
+ },
+ "landing_shape": {
+  "file": "`k1/pm_gate/artifacts/k1/L3/model_solves/channel_alloc/channel_alloc.json`（**项目产物 ⇒ 须批**）",
+  "diff": "`PCIE_RX1_P`/`PCIE_RX1_N` 各加 `band='in1'`·`layer='In1'`·`track_y=20.5/21.0`·`seg_tracks={'input':20.5/21.0}`（**4 字段**，不动他网）",
+  "rollback": "`git checkout -- channel_alloc.json`（K1 仓文件级）",
+  "verify": "落件后须跑 K1 `--all-v4` 并核 `RX1` 段级 + P/N 紧耦合；K2 侧零影响（不同项目 alloc）"
+ },
+ "still_open": "TX0.out / RX0.out（J14 右侧真几何阻塞）· TX1.in / TX1.out（走廊占用 + 对级）—— 归 (b) 与本件之后的 (c) 续项",
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-21T00:20:00+0800"
+}
