@@ -54,3 +54,18 @@
   `K1_W8_FOOTPRINT_AUDIT_20260921_v1.json（146b8543…）` · `K1_PADS_WITHIN_OUTLINE_20260921_v1.json（b8e4f0e4…）` ·
   `K1_DENSITY_AND_CLEARANCE_20260921_v1.json（2b274031…）` · `K1_MIN_CLEARANCE_DRC_BRACKET_20260921_v1.json（cfabf764…）`。
 - 结论：**K1 判定面已达本环境可达上限**（18/19 维有读数；余 1 维 K1 侧不适用）。其余 FAIL 均已有具名成因与归属（K1-D 系列 / R-1 / W8-VAC-1）。
+
+---
+
+# 附：**测量件确定性规范化**（M-DET-1）· 同日续推
+
+- **发现 M-DET-1（低 · 操作口径）**：三件 J-8/间距测量器与 W-8 审计器**把输入路径回显进产物**
+  （`min_clearance.method` 含 `--work-dir`；`w8.summary.board` = `--board` 原样）⇒ **逐字节复现须固定规范实参**。
+  实证：同参数、仅换临时目录复跑 ⇒ `min_clearance` 件哈希 `cfabf764…` → `cc7b585a…`（**唯一差异 = `method` 串**）；
+  W-8 件因 `--board` 相对/绝对混用 ⇒ `summary.board` 不同。
+- **处置（已做）**：把 K1 四件测量件**规范化为固定实参**（`--board k1/k1_v1.kicad_pcb` 仓库相对 ·
+  `--work-dir /tmp/opencode/k1meas/clr` 固定 · `--thresholds 0.100,0.105,0.110,0.120,0.150,0.200` 显式）⇒
+  **两跑逐字节同**：W-8 `146b8543` · 出框 `b8e4f0e4` · 密度 `2b274031` · min-clearance `ef620f2f`。
+- **影响**：**判据读数不受影响**（判据维只读 sha/数值字段，不回显路径）；规范化后 K1 判定仍 **10 PASS/8 FAIL**
+  （verdict sha16 `5dfb0f5974138354`，与规范化前**逐字节同**）。
+- 复现提示：**勿用不同临时目录复跑**（会改 `method` 串 ⇒ 破坏「两次连跑逐字节同」）。

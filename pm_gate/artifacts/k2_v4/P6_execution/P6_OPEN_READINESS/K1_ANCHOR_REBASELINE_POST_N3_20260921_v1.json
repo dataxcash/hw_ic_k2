@@ -99,13 +99,14 @@
     "w8": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/K1_W8_FOOTPRINT_AUDIT_20260921_v1.json（146b8543fb629b43）",
     "pads_outline": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/K1_PADS_WITHIN_OUTLINE_20260921_v1.json（b8e4f0e49b9c278e）",
     "density": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/K1_DENSITY_AND_CLEARANCE_20260921_v1.json（2b2740319a1a83e3）",
-    "min_clearance": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/K1_MIN_CLEARANCE_DRC_BRACKET_20260921_v1.json（cfabf764f6b33d2f）"
+    "min_clearance": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/K1_MIN_CLEARANCE_DRC_BRACKET_20260921_v1.json（ef620f2f9f5fffb3）"
    },
    "verdict": {
     "n_pass": 10,
     "n_fail": 8,
     "provisional": false,
-    "sha16": "5dfb0f5974138354"
+    "sha16": "5dfb0f5974138354",
+    "note": "使用**规范化**四件测量件；读数与替换前一致（10/8）"
    },
    "newly_resolved_dims": {
     "pads_within_outline": {
@@ -190,6 +191,22 @@
    "root_cause": "K1 建板器写出的 footprint 未带库 nickname（`ForgeOS:` 前缀）；`k1/fp-lib-table` 已注册 ForgeOS 库（M2 落件）但**板内 footprint 未回填 lib_id**。",
    "fix_family": "K1 侧把 42 件 footprint 的 FPID 补为 `ForgeOS:<name>`（**板/库变更 ⇒ 需批**，且须重跑 DRC/判定）；或由监理裁定该维在『无库链接』下的口径（K2 侧同族已有 `_reclassify_w8` 先例）。",
    "evidence": "W8 测量件 + 上述两跑（含/不含 `--w8-audit-json`）"
+  },
+  {
+   "id": "M-DET-1",
+   "severity": "低（操作口径）",
+   "finding": "三件 J-8/间距测量器与 W-8 审计器**把输入路径回显进产物**（`min_clearance.method` 含 `--work-dir`；`w8.summary.board` = `--board` 原样）⇒ **逐字节复现须固定规范实参**（首次落件的 min-clearance 件含 `/tmp/opencode/k1anchor/clr` ⇒ 独立复跑必不同）。",
+   "action_taken": "本次已把 K1 四件测量件**规范化为固定实参**（`--board k1/k1_v1.kicad_pcb` 仓库相对 + `--work-dir /tmp/opencode/k1meas/clr` 固定 + `--thresholds 0.100,0.105,0.110,0.120,0.150,0.200`），**两跑逐字节同**（w8 `146b8543` · pads `b8e4f0e4` · density `2b274031` · minclr `ef620f2f`）。",
+   "impact": "**判据读数不受影响**（维只读 sha/数值字段，不回显路径）；规范件替换后 K1 判定仍 **10 PASS/8 FAIL**（同维同读数）。",
+   "reproduce_hint": "固定实参 + 固定 work-dir；勿用不同临时目录复跑（会改 `method` 串 → 破坏『逐字节同』）。"
   }
- ]
+ ],
+ "measurement_determinism": {
+  "id": "M-DET-1",
+  "severity": "低（操作口径）",
+  "finding": "三件 J-8/间距测量器与 W-8 审计器**把输入路径回显进产物**（`min_clearance.method` 含 `--work-dir`；`w8.summary.board` = `--board` 原样）⇒ **逐字节复现须固定规范实参**（首次落件的 min-clearance 件含 `/tmp/opencode/k1anchor/clr` ⇒ 独立复跑必不同）。",
+  "action_taken": "本次已把 K1 四件测量件**规范化为固定实参**（`--board k1/k1_v1.kicad_pcb` 仓库相对 + `--work-dir /tmp/opencode/k1meas/clr` 固定 + `--thresholds 0.100,0.105,0.110,0.120,0.150,0.200`），**两跑逐字节同**（w8 `146b8543` · pads `b8e4f0e4` · density `2b274031` · minclr `ef620f2f`）。",
+  "impact": "**判据读数不受影响**（维只读 sha/数值字段，不回显路径）；规范件替换后 K1 判定仍 **10 PASS/8 FAIL**（同维同读数）。",
+  "reproduce_hint": "固定实参 + 固定 work-dir；勿用不同临时目录复跑（会改 `method` 串 → 破坏『逐字节同』）。"
+ }
 }
