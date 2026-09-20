@@ -1,0 +1,158 @@
+{
+ "artifact": "k2_batch3_pre_split_path_defect_census",
+ "schema": 1,
+ "authority": "本件 = ENG 的**只读取证 + 事实更正**，非裁定、非落件；处置归监理。",
+ "purpose": "① 更正一条**已被监理纳入待决清单的输入事实**（B 类 SKIP 处置依据）；② 登记两处**跨布局根解析耦合**的实测事实（供批 3 项 ①/⑨ 参考）。本件**不新增任何检查齿**（owner #14②），不改判据、不动冻结件/交付锚。",
+ "readonly_repo": true,
+ "not_landed": true,
+ "measured_env": {
+  "commit": {
+   "k2": "1916bed",
+   "k1": "16d7b7c",
+   "shared_container": "fc59771",
+   "shared_k2": "fc59771"
+  },
+  "cwd_used": "见各测量段的 run 字段"
+ },
+ "A_correction_to_pending_decision_input": {
+  "target_artifact": "k2/pm_gate/artifacts/k2_v4/P6_execution/BATCH3_EXTERNAL_FIXTURE_DISPOSITION_EVIDENCE_v1.json",
+  "target_sha16": "211a53048f2cb990",
+  "supersedes_also": "k2/pm_gate/artifacts/k2_v4/P6_execution/BATCH3_SKIP_RETIREMENT_REGISTRY_v2.json（classes[id=B].reason 的『缺件』计数）",
+  "registry_v2_sha16": "717f3ec00e713018",
+  "stale_claim": "上件对 `tests.test_topology_gate::test_t5_k2_integration_from_files` 的 SPEC 锚记载 `exists: true`（kind=『绝对锚（在库）』）。",
+  "measured_fact": {
+   "anchor": "/home/fila/jqdDev_2025/ic_hw/strix-halo-ioconvert/revA/pcb/pm_gate/artifacts/L3/SPEC_k2_v4.json",
+   "source": "k2/_shared/eda_core/tests/test_topology_gate.py:25（容器 _shared 同源同 sha16）",
+   "test_file_sha16": "91b2cabc1246ff3b",
+   "exists_now": false,
+   "reason": "容器**不含** `strix-halo-ioconvert/` 目录（`ls` = No such file or directory）⇒ 该锚指向**拆分前** ioconvert 子树，现已不在本仓。",
+   "consequence": "t5 的 skipif 三元组 = (板, 该 SPEC, required_links) 中**本项恒假** ⇒ 即使补齐 `/tmp` 的 k2_v5 板与 required_links，该用例**仍恒 skip**（`_HAS_K2` 不可能为真）。",
+   "sibling_precedent": "同族文件 `test_routing_topology_gate.py:31` 的 K2_SPEC 已由 **W6-A** 修为容器绝对锚 `ic_hw/k2/pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json`（现存在）；`test_topology_gate.py` **漏改** ⇒ 属『同类修一半』（与 C 类『路径缺陷』同族，非纯『外部 fixture 不在库』）。"
+  },
+  "corrected_classification": {
+   "registry_v2_classes_B_current": {
+    "count": 2,
+    "reason": "v5/v6 后期代际外部 fixture 不在库"
+   },
+   "corrected": {
+    "count": 2,
+    "missing_pieces_per_test": {
+     "tests.test_topology_gate::test_t5_k2_integration_from_files": [
+      "/tmp/opencode/boards/k2_v5.kicad_pcb（不在库；生成器在库、身份未钉）",
+      "/tmp/opencode/topo_propose_k2/required_links_k2.json（不在库）",
+      "/home/fila/.../strix-halo-ioconvert/revA/pcb/.../SPEC_k2_v4.json（**路径失效**，非 /tmp 生成物，一格即可修）"
+     ],
+     "tests.test_routing_topology_gate::test_t5_real_k2_gate_runs_and_reports_j2_polarity": [
+      "/tmp/opencode/boards/k2_v6.kicad_pcb（不在库；其余 3 锚皆在库且存在）"
+     ]
+    },
+    "note": "⇒ B 类**不是纯外部 fixture 缺件**：其中 1/3 缺件是**可零成本修复的路径缺陷**。故 F1/F2 二分之外新增第三选项 **F0 = 仅修路径锚**（不动 fixture 身份、不新增覆盖期待）：修后 t5 仍 skip（板仍缺），但『路径缺陷』与『外部 fixture 缺件』**分离登记**，避免日后补 fixture 时再度空跑。"
+   }
+  },
+  "eng_recommendation": "请监理在裁 ⑤（SKIP 处置）前**采信本更正**：B 类 reason 应改记为 『外部 fixture 缺件（板/links）+ 1 处路径锚失效』，并允许 F0（路径锚修正）作为与 F1/F2 并列的**最小动作**。F0 属测试锚类 ⇒ 按 C-6 应并入批 3（与项 ① 同族），**但 ENG 不擅自并入项 ① 的范围**（项 ① 授权不受本件影响，可独立放行）。"
+ },
+ "B_cross_layout_root_coupling_measured": {
+  "claim": "共享层测试对『根』的解析在两种检出布局下不同；部分用例只有在**框架根/容器根**（存在根级 `eda_core` 符号链接）下才成立。",
+  "evidence_container_root": {
+   "path": "/home/fila/jqdDev_2025/ic_hw/eda_core",
+   "type": "symlink -> _shared/eda_core（根级，**不属于任何子模块**）"
+  },
+  "evidence_shadow_root": {
+   "path": "/tmp/opencode/shadow/",
+   "symlinks": [
+    "eda_core -> shared/eda_core",
+    "_shared -> shared",
+    "k2 -> .../k2",
+    "k1 -> .../k1",
+    "criteria -> .../criteria",
+    "AppDir -> .../AppDir"
+   ],
+   "note": "影子框架显式重建了容器根的根级符号链接 ⇒ 框架口径布局；`k2/_shared` 检出树**无**该根级链接。"
+  },
+  "case_1_test_drc_locator": {
+   "file_line": "eda_core/tests/test_drc_locator.py:20 + :292（`REPO = parents[3]`；`rules = REPO / \"eda_core\" / \"drc_rules.json\"`）",
+   "works_when": "REPO 为容器根/影子根（`<REPO>/eda_core` 经根级符号链接解析）",
+   "fails_when": "REPO = `k2`（`k2/eda_core` 不存在；真身 `k2/_shared/eda_core`）",
+   "error": "FileNotFoundError: '/home/fila/jqdDev_2025/ic_hw/k2/eda_core/drc_rules.json'",
+   "measured_affected": 9
+  },
+  "case_2_board_alias_without_pro_sibling": {
+   "alias": "k2/k2_v4.kicad_pcb -> hw/k2_v4_8L.kicad_pcb（符号链接，**存在**）",
+   "real_pro": "k2/hw/k2_v4_8L.kicad_pro（**存在**，146855B 板同目录）",
+   "missing": "k2/k2_v4.kicad_pro（**不存在**）",
+   "mechanism": "测试以 `.pcb` 存在性作 class 级 skipif 守卫，随后用 `board.with_suffix('.kicad_pro')` 派生工程文件 ⇒ 守卫通过但派生物缺失 ⇒ setup error。",
+   "error": "FileNotFoundError: '/home/fila/jqdDev_2025/ic_hw/k2/k2_v4.kicad_pro'",
+   "measured_affected": 21,
+   "live_code_relevance": "`_shared/pm_gate/config.py:26` K2 默认 `board_path = \"k2_v4.kicad_pcb\"`（**别名**，M-14 基址=项目根）；`pm_gate/cli.py:534` 默认板 = `项目根/<alias>`。任何对该默认板做 `.with_suffix('.kicad_pro')` 派生的消费者都会拿到不存在的路径。⇒ 本项为待决 **#K2-41 §三-⑦（board_path = 项目配置修正）** 与决策单 **⑨** 的**新增旁证**，而非新议题。"
+  },
+  "measurement_non_framework_layout": {
+   "label": "口径外布局（登记为测量，**不作为缺陷主张**）",
+   "run": "cd k2/_shared && PYTHONPATH=$REPO/AppDir/shared/lib/python3.11/dist-packages $REPO/AppDir/bin/python3.11 -m pytest eda_core/tests -q -p no:cacheprovider --junitxml=/tmp/opencode/k2tree_pristine.xml",
+   "result": {
+    "tests": 562,
+    "passed": 480,
+    "failed": 32,
+    "errors": 30,
+    "skipped": 20,
+    "wall_clock_s": 157,
+    "exit_code": 1
+   },
+   "junit_sha16": "1c401f746cf5e35d",
+   "vs_framework_layout": {
+    "junit": "/tmp/opencode/natfix_real_post.xml（锚修①落件后口径）",
+    "junit_sha16": "1405ffdfbb6fb6de",
+    "result": {
+     "tests": 562,
+     "passed": 512,
+     "failed": 30,
+     "errors": 0,
+     "skipped": 20
+    },
+    "red_set_diff": {
+     "both": 27,
+     "only_framework": 3,
+     "only_non_framework": 35
+    }
+   },
+   "attribution": "按 junit 错误指纹归组（口径外布局 62 红）：21 = case_2（`k2/k2_v4.kicad_pro` FNF，与 `.with_suffix('.kicad_pro')` 派生一致）；9 = case_1（`k2/eda_core/drc_rules.json` FNF）；9 = case_4（`layout_engine` ModuleNotFound）；7 = case_3（pre-split `strix-halo-ioconvert/revA/pcb` FNF）；其余 16 = 既有退出码/断言项（其中 2 = 具名 C1/C2 真实读数）。⇒ **无一项归因于本会话的产品逻辑改动**（本会话只读）。"
+  },
+  "case_3_pre_split_pcb_root": {
+   "file_lines": [
+    "eda_core/verify_cli.py:65（PCB_ROOT）",
+    "eda_core/tests/test_topology_gate.py:25",
+    "eda_core/tests/test_env_fingerprint.py:104（薄入口定位）",
+    "eda_core/tests/*:PCB_ROOT 注入"
+   ],
+   "mechanism": "测试与工具把 `strix-halo-ioconvert/revA/pcb` 当作 `pm_gate`/引擎的宿主根；拆分后该子树不在本仓 ⇒ 路径恒不存在。",
+   "measured_affected_non_framework_layout": 7,
+   "error_samples": [
+    ".../strix-halo-ioconvert/revA/pcb/pm_gate/artifacts/L3/SPEC_k2_v4.json (4)",
+    ".../strix-halo-ioconvert/revA/pcb (2)",
+    ".../strix-halo-ioconvert/revA/pcb/pm_gate/env_fingerprint.py (1)"
+   ]
+  },
+  "case_4_layout_engine_syspath": {
+   "file_lines": [
+    "eda_core/verify_cache.py:42-43（把 REPO/strix-halo-ioconvert/revA/pcb/{routing_engine,layout_engine} 列入 sys.path）"
+   ],
+   "error": "ModuleNotFoundError: No module named 'layout_engine'",
+   "measured_affected_non_framework_layout": 9,
+   "note": "同属 case_3 根解析族；单列因其失败形态为 import 期 ModuleNotFound（非 FileNotFound）。"
+  }
+ },
+ "C_invariants_untouched": {
+  "named_red_kept": [
+   "tests.test_hs_route_model.TestBoardLevelConsistency::test_board_level_consistency",
+   "tests.test_hs_route_model.TestV5FlipRedesign::test_chain_no_pn_zero_spacing"
+  ],
+  "statement": "C1/C2 **保持 RED，禁改绿**；本件不触碰。skipped 不充绿。",
+  "delivery_stage": "P6 交付阶段**仍关闭**（本件不启动任何交付动作、不重建包）。",
+  "no_new_gate_teeth": "本件为事实更正 + 测量登记；不改 `criteria/`、不新增判据维、不改生成器/SPEC/原理图。",
+  "freeze_check": "冻结四源 / `criteria/` / 交付锚：本件**未读改**（只读 sha 核对见 measured_env）。"
+ },
+ "requests_to_supervision": [
+  "① 采信 §A 的事实更正（B 类 disposition evidence 的 `exists:true` 为陈旧记载）；裁 ⑤ 时按『外部 fixture 缺件 + 1 处路径锚失效』登记。",
+  "② 裁定 F0（路径锚修正）是否作为 B 类最小动作并入批 3（ENG 建议：并入，但**不并入项 ① 的授权范围**，项 ① 可独立放行）。",
+  "③ §B 两处根解析耦合是否并入待决项 ①/⑨，或另立具名登记（ENG 建议：case_2 并入 ⑨ 的旁证；case_1 另立登记）。"
+ ]
+}
