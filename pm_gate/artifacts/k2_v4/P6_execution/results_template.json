@@ -220,6 +220,77 @@
    "measured": {},
    "evidence": [],
    "notes": ""
+  },
+  "B2-3e": {
+   "title": "check_qa 板路径空参（F-2c）",
+   "carrier": [
+    "_shared/pm_gate/check_qa.py:24"
+   ],
+   "owner": "ENG",
+   "action": "board_abspath() 空参 ⇒ board_abspath(_proj())（原取 DEFAULT_PROJECT ⇒ K1 G4.1 指 k2 板）",
+   "commands": [
+    "同 B2-3a（K1/K2 逐 gate 判定）"
+   ],
+   "fail_closed_gates": [
+    "K1 G4.1 指向 k1_v1.kicad_pcb（影子已验：报「尚未按 SPEC 布线」= 真实判定）",
+    "K2 不回退"
+   ],
+   "negative_controls": [
+    "项目根/板缺失 ⇒ fail-closed 报错"
+   ],
+   "authorization": "需监理批（碰门禁实现）",
+   "status": "PENDING",
+   "measured": {},
+   "evidence": [],
+   "notes": "真源基线未暴露（G4.1 先在 SPEC 处失败，被掩盖）"
+  },
+  "B2-3f": {
+   "title": "scheme_closure_check 未注入项目维度（F-2d）",
+   "carrier": [
+    "_shared/pm_gate/gates.py:141"
+   ],
+   "owner": "ENG",
+   "action": "artifacts.read_text(stage, *parts) ⇒ 增 project=artifacts.active_project()",
+   "commands": [
+    "同 B2-3a"
+   ],
+   "fail_closed_gates": [
+    "K1 G2.6 PASS（该件实存；影子已验）",
+    "K2 不回退"
+   ],
+   "negative_controls": [
+    "产物缺失 ⇒ 仍 FAIL"
+   ],
+   "authorization": "需监理批（碰门禁实现）",
+   "status": "PENDING",
+   "measured": {},
+   "evidence": [],
+   "notes": "K1 G2.6 误报「缺失 L2/escape_closure_analysis.md」之因"
+  },
+  "B2-T": {
+   "title": "22 skip 解锁后的 13 项既有隐藏失败 triage",
+   "carrier": [
+    "_shared/eda_core/tests/test_hs_route_model.py（输入钉在遗留 alloc v2）",
+    "_shared/pm_gate/check_l3.py:17-22（期望集旧名）"
+   ],
+   "owner": "ENG（期望值类归监理裁定）",
+   "action": "逐项定性：引擎真缺陷（ENG 修）vs 期望漂移（监理裁定后同步）；先决 = 走廊命名权威",
+   "commands": [
+    "PYTHONPATH=AppDir/... AppDir/bin/python3.11 k2/tools/k2_p6_shadow_verify_v1.py",
+    "同 B2-3a（K1/K2 判定）"
+   ],
+   "fail_closed_gates": [
+    "影子 pytest：13 → 0（不得靠 skip 充绿，C-12）",
+    "零回退（verify k2 4/4 + canonical 19/19）"
+   ],
+   "negative_controls": [
+    "篡改任一期望值以变绿 ⇒ 视为缩口径，禁止"
+   ],
+   "authorization": "需监理裁定（期望值/命名权威）",
+   "status": "PENDING",
+   "measured": {},
+   "evidence": [],
+   "notes": "族别与证据见 docs/K2-P6-SHADOW-VERIFICATION-BATCH2-20260920.md §4/§8 与 HIDDEN_FAILURES_TRIAGE_v1.json"
   }
  },
  "p6_completion": {

@@ -28,6 +28,9 @@
 | **B2-3d** | `check_l3.SPEC_EXPECTS`（`:17-22`）走廊期望 `J2_TO_U`/`U_TO_MCIO` **陈旧**；现行 spec `corridors[].id` = `EAST_CHIP_TO_J2`/`WEST_MCIO_TO_CHIP`（plain 与 rev-52 同）⇒ 修好解析后 K2 `G3.1` **仍 FAIL** | ENG（**裁定期望值归监理**） | 修后 K2 `G3.1` 判定 | 门 = **监理先裁定期望集**（改名承接 / 双名兼容）；**禁 ENG 自定**（C-12） | **需监理裁定** |
 | **B2-4** | `check_l1.py:193` `RULES_DOC`：现解 `<项目根>/../doc/PCB_DESIGN_RULES.md` ⇒ **越出容器**（实测 K1/K2 **双 FAIL**，F-1）；真源 = `_shared/docs/PCB_DESIGN_RULES.md`（K1 WAIVER 原文同指）＋ `:196` `check_g15` 撤 K1 waiver（RISK-001） | ENG | K1：`check_g15` **无 waiver 机判 PASS**；K2：`verify k2` 不回退 | ① K1 `G1.5` **真判 PASS**（撤 waiver）；② 负控：规则文档缺失/无「强条」⇒ **FAIL** | **需监理批**（撤 waiver = 判据收紧） |
 
+| **B2-3e** | `check_qa.py:24` 板路径 `board_abspath()` **空参** ⇒ `board_abspath(_proj())`（F-2c；真源基线被 SPEC 失败掩盖） | ENG | 同 B2-3a | ① K1 `G4.1` 指 `k1_v1.kicad_pcb`（影子已验）；② K2 不回退；③ 负控：板缺失 ⇒ fail-closed | **需监理批** |
+| **B2-3f** | `gates.py:141` `scheme_closure_check` 产物读取未注入项目维度（F-2d） | ENG | 同 B2-3a | ① K1 `G2.6` PASS（影子已验）；② K2 不回退 | **需监理批** |
+| **B2-T** | 22 skip 解锁后 **13 项既有隐藏失败** triage（族别/证据见 SHADOW-VERIFICATION §4/§8） | ENG（期望值归监理） | 见 `results_template.json` | 影子 pytest **13→0**（禁 skip 充绿）；零回退 | **需监理裁定** |
 - **K1 复跑序（恢复条件原文）**：B2-1..B2-4 全绿 ⇒ 复跑模型链 ⇒ **全 51 网折线** ⇒ **DRC error=0** ⇒ `G3.3` ⇒ Gerber。
 
 ## 1.5 只读回归基线（**改前**；真源 = 机读件，v2 数据保留）
@@ -54,7 +57,7 @@ v2 记「13 处」；实测 `_shared` **43 处**（`pm_gate/` **16**、`eda_core
 ## 1.8 影子预验证（**授权前已完成**；真源零改动）
 - 工具：`k2/tools/k2_p6_shadow_verify_v1.py`（`/tmp/opencode/shadow` 建框架影子 → 施加补丁集 → 跑验收 + 控制组归因）；机读件 `P6_execution/SHADOW_VERIFY_v1.json` **`844f2266…`**（两次连跑逐字节同）；报告 `k2/docs/K2-P6-SHADOW-VERIFICATION-BATCH2-20260920.md`。
 - **结果**：K1 框架闸 **4→12 PASS（+8）** · K2 **12→13 PASS** · **零回退** · 控制组（零补丁）测试计数**相同** ⇒ **补丁集零测试回归**。
-- **新增两项并入 B2-3**：**B2-3c（新 F-2c）** `check_qa.py:24` 板路径 `board_abspath()` 空参；**B2-3d（新 F-2d）** `gates.py:141` `scheme_closure_check` 产物读取未注入项目维度（⇒ K1 G2.6 PASS 的关键）。
+- **新增两项并入 B2-3**：**B2-3e（F-2c）** `check_qa.py:24` 板路径 `board_abspath()` 空参；**B2-3f（F-2d）** `gates.py:141` `scheme_closure_check` 产物读取未注入项目维度（⇒ K1 G2.6 PASS 的关键）。
 - **22 skip 解锁实验**：非「一行白捡」——锚 `k2/k2_v4_8L.kicad_pcb` 或 `k2/hw/k2_v4_8L.kicad_pcb` ⇒ **9 通过 / 13 失败**（两锚一致 ⇒ 与锚无关）；锚 `k2/k2_v4.kicad_pcb` ⇒ 21 error（缺 `.kicad_pro`）。
 - **13 项既有隐藏失败**（`hs_route_model` 域：契约漂移/区域集/`INFRA_ERROR`/多次 `StopIteration`/`solve_all_v4` 18 链未解/拓扑集）⇒ **纳入 B2-1/B2-2 triage**；**期望值类须监理裁定**。
 - **待监理裁定的判定源/期望值**：G3.1 字段集 + 走廊期望（`J2_TO_U` vs 现行 `EAST_CHIP_TO_J2`）· G3.2 内容期望 · G3.5 判定源（`spec-rev-52` vs plain）· G4 施工对象（受审板 `l7` vs `project.yaml` 的 `k2_v4.kicad_pcb`）。
@@ -81,7 +84,7 @@ v2 记「13 处」；实测 `_shared` **43 处**（`pm_gate/` **16**、`eda_core
 ## 6. 本件对 **#K2-40 §四** 的自检
 | §四 要求 | 本件 |
 |---|---|
-| 1 具名动作 + 责任 + 可复现验收命令 + fail-closed 门 + 授权项单列 | ✅ §1 四列齐（含负控与反空转条款）；B2-3a/b/c 与 B2-4 已**单列授权**，B2-3d = **判据期望值单列待裁** |
+| 1 具名动作 + 责任 + 可复现验收命令 + fail-closed 门 + 授权项单列 | ✅ §1 四列齐（含负控与反空转条款）；B2-3a/b/c/e/f 与 B2-4 已**单列授权**，B2-3d 与 B2-T = **判据期望值单列待裁** |
 | 2 交付锚不变 / 不重建包 | ✅ 本件为 `docs/` 追加；锚实测未动 |
 | 3 不越阶段门（P6 只出计划） | ✅ §0/§5 |
 | 4 红线 | ✅ §5；未触任何载体 |

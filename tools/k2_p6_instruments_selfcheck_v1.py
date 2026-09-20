@@ -20,6 +20,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import subprocess
 import sys
 
@@ -102,6 +103,31 @@ def check_tooling() -> dict:
     return out
 
 
+CHECKLIST = os.path.join(K2, "pm_gate", "artifacts", "k2_v4", "P6_execution", "CHECKLIST.md")
+REQUIRED_ITEM_FIELDS = ("title", "carrier", "owner", "action", "commands",
+                        "fail_closed_gates", "negative_controls", "authorization", "status")
+
+
+def check_checklist_consistency() -> dict:
+    """人读检查表（CHECKLIST.md 表格行）↔ 机读结果表（results_template.json items）**逐项一致**。
+
+    防「人/机两套清单漂移」——本轮即发现一次标签冲突（B2-3c/3d 被重复占用），故设为 fail-closed 门。
+    """
+    # 行形如 `| **B2-3e（F-2c）** | ...`（粗体内可带补充文字）⇒ 取粗体内 B2- 前缀
+    rows = [m.group(1) for m in re.finditer(r"^\|\s*\*\*(B2-[A-Za-z0-9\-]+)[^*]*\*\*\s*\|",
+                                            open(CHECKLIST, encoding="utf-8").read(), re.M)]
+    doc = json.load(open(RESULTS, encoding="utf-8"))
+    items = doc.get("items", {})
+    missing_in_machine = sorted(set(rows) - set(items))
+    missing_in_checklist = sorted(set(items) - set(rows))
+    field_gaps = {k: [f for f in REQUIRED_ITEM_FIELDS if f not in v] for k, v in items.items()
+                  if isinstance(v, dict) and [f for f in REQUIRED_ITEM_FIELDS if f not in v]}
+    return {"checklist_rows": rows, "machine_items": sorted(items), "counts": {"checklist": len(rows), "machine": len(items)},
+            "missing_in_machine": missing_in_machine, "missing_in_checklist": missing_in_checklist,
+            "field_gaps": field_gaps,
+            "ok": not (missing_in_machine or missing_in_checklist or field_gaps) and len(rows) == len(items) > 0}
+
+
 def check_baseline() -> dict:
     out = {"path": os.path.relpath(BASELINE, REPO)}
     if not os.path.isfile(BASELINE):
@@ -161,6 +187,7 @@ def main() -> int:
         },
         "line_anchors": check_line_anchors(),
         "tooling": check_tooling(),
+        "checklist_consistency": check_checklist_consistency(),
         "baseline_reproducibility": check_baseline(),
         "prerequisites_facts": check_prerequisites(),
     }
@@ -169,6 +196,7 @@ def main() -> int:
     tooling_ok = all(v is True for k, v in doc["tooling"].items() if k != "rules_doc_truth_exists")
     rules_ok = doc["tooling"]["rules_doc_truth_exists"]
     base_ok = doc["baseline_reproducibility"]["ok"]
+    cl_ok = doc["checklist_consistency"]["ok"]
     failed = []
     if not anchors_ok:
         failed.append("line_anchors（计划所引行号/符号与载体不符 ⇒ 须修订计划，禁携旧行号施工）")
@@ -178,7 +206,11 @@ def main() -> int:
         failed.append("rules_doc_truth_missing（_shared/docs/PCB_DESIGN_RULES.md 不在 ⇒ B2-4 无判据真源）")
     if not base_ok:
         failed.append("baseline_reproducibility（基线不可复现或 sha 与 results_template 不一致）")
-    doc["summary"] = {"checks": 4, "anchor_count": len(doc["line_anchors"]), "failed": failed}
+    if not cl_ok:
+        c = doc["checklist_consistency"]
+        failed.append("checklist_consistency（人/机清单漂移：缺于机读 %s / 缺于检查表 %s / 字段缺口 %s）"
+                      % (c["missing_in_machine"], c["missing_in_checklist"], list(c["field_gaps"])))
+    doc["summary"] = {"checks": 5, "anchor_count": len(doc["line_anchors"]), "failed": failed}
     doc["verdict"] = "FAIL" if failed else "PASS"
     doc["fail_closed"] = ("PASS ⇒ 仪器与载体锚一致、基线可复现；**不代表授权已给**（施工另需 prerequisites 全绿）")
 
@@ -186,7 +218,7 @@ def main() -> int:
     with open(args.out, "w", encoding="utf-8") as fh:
         fh.write(text)
     print(f"verdict={doc['verdict']} anchors={sum(1 for v in doc['line_anchors'].values() if v['ok'])}/"
-          f"{len(doc['line_anchors'])} baseline_ok={base_ok} → {args.out}")
+          f"{len(doc['line_anchors'])} baseline_ok={base_ok} checklist_ok={cl_ok} → {args.out}")
     if failed:
         for f in failed:
             print("  FAIL:", f)
