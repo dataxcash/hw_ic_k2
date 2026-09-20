@@ -25,7 +25,9 @@ REL = "_shared/eda_core/hs_route_model.py"
 SHADOW_D5 = "/tmp/opencode/k2side/tree_d5"
 SHADOW_VG = "/tmp/opencode/k2side/tree_vg"
 NEW3 = os.path.join(HERE, "BATCH6_DRAFT/BATCH6_VG_PAIRAWARE_v2.patch")
-SHADOW_VG2 = "/tmp/opencode/vgscope/best_of"   # 由 k1_vg_pairaware_scope_probe_v1.py --only best_of 产出
+SHADOW_VG2 = "/tmp/opencode/vgscope/best_of"
+NEW4 = os.path.join(HERE, "BATCH6_DRAFT/BATCH6_LANDING_CANDIDATE_v3.patch")
+SHADOW_V3 = "/tmp/opencode/shadowtest/k1scope"   # = 修正基线 + K1 域限定(FIX-A/B) + best_of（**落件候选本体**）   # 由 k1_vg_pairaware_scope_probe_v1.py --only best_of 产出
 
 
 def sha16(p):
@@ -78,6 +80,15 @@ def main():
         v2 = {"bytes": n3, "sha16_of_patch": sha16(NEW3), "target_sha16": s_vg2,
               "verify_from_corrected": verify_applies(NEW3, SHADOW_D5, s_vg2),
               "strategy": "best_of（两序都算，取通过修正门且 P/N 边缘净距更大者；已去 ⑥）"}
+    v3 = None
+    if os.path.isfile(os.path.join(SHADOW_V3, REL)):
+        s_v3 = sha16(os.path.join(SHADOW_V3, REL))
+        n4 = mkpatch(src_container, os.path.join(SHADOW_V3, REL), NEW4)
+        v3 = {"bytes": n4, "sha16_of_patch": sha16(NEW4), "target_sha16": s_v3,
+              "verify_from_container": verify_applies(NEW4, data_root, s_v3),
+              "strategy": "D-1…D-5 + ④/⑤ + (d)对角线 + ⑥ + VG 对级化 best_of + FIX-A/FIX-B 的 K1 域限定（`v4_project_dim()==\"k1\"`）",
+              "readings": {"k1_segment_solved": 2, "k1_rx0_input_pn_edge": 0.2636,
+                           "k2_acceptance_pytest": "2F/61P/12S（逐项同 pristine = 零回归）"}}
     out = {
         "artifact": "k1_corrected_baseline_patchgen",
         "purpose": "把两个只读影子固化成可复核补丁（draft，未落件）",
@@ -96,6 +107,8 @@ def main():
     }
     if v2:
         out["patches"][os.path.basename(NEW3)] = v2
+    if v3:
+        out["patches"][os.path.basename(NEW4)] = v3
     print(__import__("json").dumps(out, ensure_ascii=False, indent=1))
     return 0
 

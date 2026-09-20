@@ -1,0 +1,33 @@
+{
+ "artifact": "k2_canonical19_solver_independence",
+ "schema": 1,
+ "purpose": "**R-2 硬化**：canonical 19 维是否消费求解器（若消费 ⇒ D-1…D-5 落件可能移动量产判据）。把上轮『grep 零引用』的**推断**升级为**动态证明** + 刷新锚读数为**本会话实测**。",
+ "command": "python3 criteria/adjudicate.py --project k2 --board k2/hw/k2_v4_8L.l7.kicad_pcb --pro k2/hw/k2_v4_8L.l7.kicad_pro --nets k2/hw/data/k2_sch.errata-2.yaml --sch-dir k2/hw/sch --root . --drc-cli AppDir/bin/kicad-cli --drc-work-dir <全新> --out <verdict.json> --w8-audit-json/--pads-outline-json/--v3-plane-json/--refplane-gap-json/--density-json/--min-clearance-json = L4/E3-standard-call-l7-20260919/ 六件",
+ "results": {
+  "run1_fresh_anchor": {
+   "passed": true,
+   "provisional": false,
+   "n_fail": 0,
+   "verdict_sha16": "190b73be0f728a56",
+   "note": "**本会话实跑**（此前 handoff 标注『继承·未重跑』）⇒ 现为实测读数，与在岗签认值逐字节同"
+  },
+  "run2_with_solver_import_trap": {
+   "passed": true,
+   "provisional": false,
+   "verdict_sha16": "190b73be0f728a56",
+   "trap_fired": false,
+   "note": "陷阱在 sys.meta_path 前置，任何 `eda_core.hs_route_model` 导入即 ImportError ⇒ **未触发** ⇒ canonical 19 **可证不导入求解器**"
+  },
+  "two_runs_byte_identical": true
+ },
+ "negative_control": {
+  "selftest": "`--selftest` 主动导入 `eda_core.hs_route_model` ⇒ TRAP_OK（牙齿会响）"
+ },
+ "conclusion": "**canonical 19 与求解器解耦（动态证明）**⇒ D-1…D-5（及 VG 对级化）**不可能**移动 19 维 verdict；落件唯一的回归面 = 验收门 D 维的 `test_hs_route_model.py`（该面已由 `BATCH6_K2_REGRESSION_PRECHECK_v1.json` 实测：K1 域限定版零回归）。",
+ "artifacts_sha16": {
+  "k2_canonical19_solver_import_trap_v1.py": "948faa3177c5abd7"
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-21T11:20:00+0800"
+}

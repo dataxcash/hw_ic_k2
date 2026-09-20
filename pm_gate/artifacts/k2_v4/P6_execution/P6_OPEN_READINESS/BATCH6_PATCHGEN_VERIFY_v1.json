@@ -33,6 +33,22 @@
     "matches_expected": true
    },
    "strategy": "best_of（两序都算，取通过修正门且 P/N 边缘净距更大者；已去 ⑥）"
+  },
+  "BATCH6_LANDING_CANDIDATE_v3.patch": {
+   "bytes": 12518,
+   "sha16_of_patch": "28e1930324e7e9fb",
+   "target_sha16": "4d4b33c300cfa4c5",
+   "verify_from_container": {
+    "git_apply": "OK",
+    "sha16": "4d4b33c300cfa4c5",
+    "matches_expected": true
+   },
+   "strategy": "D-1…D-5 + ④/⑤ + (d)对角线 + ⑥ + VG 对级化 best_of + FIX-A/FIX-B 的 K1 域限定（`v4_project_dim()==\"k1\"`）",
+   "readings": {
+    "k1_segment_solved": 2,
+    "k1_rx0_input_pn_edge": 0.2636,
+    "k2_acceptance_pytest": "2F/61P/12S（逐项同 pristine = 零回归）"
+   }
   }
  },
  "readonly_repo": true,
