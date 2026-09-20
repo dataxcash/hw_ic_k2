@@ -1,0 +1,70 @@
+{
+ "artifact": "k2_batch3_external_fixture_disposition_evidence",
+ "schema": 1,
+ "purpose": "为 ⑤（12 SKIP S1–S4）中 **B 类 2 项**（v5/v6 外部 fixture）提供处置所需事实：缺什么、能不能补、代价多大。",
+ "items": [
+  {
+   "test": "tests.test_topology_gate::test_t5_k2_integration_from_files",
+   "anchors": [
+    {
+     "p": "/tmp/opencode/boards/k2_v5.kicad_pcb",
+     "exists": false,
+     "kind": "board（/tmp 生成物）"
+    },
+    {
+     "p": "/home/fila/jqdDev_2025/ic_hw/strix-halo-ioconvert/.../SPEC_k2_v4.json",
+     "exists": true,
+     "kind": "绝对锚（在库）"
+    },
+    {
+     "p": "/tmp/opencode/topo_propose_k2/required_links_k2.json",
+     "exists": false,
+     "kind": "/tmp 生成物"
+    }
+   ],
+   "missing": "板 + required_links 两件（皆 /tmp）"
+  },
+  {
+   "test": "tests.test_routing_topology_gate::test_t5_real_k2_gate_runs_and_reports_j2_polarity",
+   "anchors": [
+    {
+     "p": "/tmp/opencode/boards/k2_v6.kicad_pcb",
+     "exists": false,
+     "kind": "board（/tmp 生成物）"
+    },
+    {
+     "p": "k2/pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json",
+     "exists": true,
+     "kind": "绝对锚（在库）"
+    },
+    {
+     "p": ".../model_solves/channel_alloc_v4/channel_alloc.json",
+     "exists": true,
+     "kind": "绝对锚（在库，legacy 代际）"
+    },
+    {
+     "p": ".../L2/route_model_config.json",
+     "exists": true,
+     "kind": "绝对锚（在库）"
+    }
+   ],
+   "missing": "**仅板 1 件**（其余 3 锚皆在库且存在）⇒ 距实跑 = 1 fixture"
+  }
+ ],
+ "generator_availability": {
+  "in_repo": [
+   "k2/tools/k2_gen_v5.py",
+   "k2/tools/k2_route_segment_v1.py"
+  ],
+  "evidence": "L6 受审板 l7 的血缘链即 `k2_gen_v5` → `k2_route_segment_v1 --upto all`（见 L4/E3-standard-call-l7-20260919/MANIFEST.md）",
+  "but": "**v5/v6 的具体身份（sha/参数）在库内无钉定、无生成清单** ⇒ 现产出的板**不可保证**等于当年被引用的板 ⇒ 属 N-05『生成物不可复跑』族"
+ },
+ "options": {
+  "F1": "补生成 + 钉 sha + 入库（新增 fixture 与生成清单；须监理裁 = 期望/锚变更类）",
+  "F2": "具名退役（随代际退役；与 A 类同办）",
+  "F3": "维持 skip（无价值，不建议）"
+ },
+ "eng_recommendation": "**F2 与 A 类合并具名退役**（理由：其锚指向 legacy 代际 `channel_alloc_v4`/6L SPEC 语境，非现役 8L 链；要恢复须重钉身份 = 重基线类工作，价值低于同等工作量的现役锚用例）——**但选择权归监理**。",
+ "readonly_repo": true,
+ "not_landed": true
+}
