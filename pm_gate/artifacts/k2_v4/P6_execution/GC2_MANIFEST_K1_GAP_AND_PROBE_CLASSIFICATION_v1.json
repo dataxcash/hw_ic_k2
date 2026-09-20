@@ -1,0 +1,125 @@
+{
+ "artifact": "k2_gc2_manifest_k1_gap_and_probe_classification",
+ "schema": 1,
+ "purpose": "P6 完工判据①（`adjudicate.py --project k1`）在**开闸前**的闭合性核对：判据四项 vs 已安装判据 rev=3 的 19 维，逐项对表；并独立复跑 PROBE + 把 16 项 FAIL 分类，供监理一次裁定（G-c2 应然集 + K1 中间态豁免）。",
+ "severity": "**阻断级（口径澄清）**：判据①按字面**不可能达成**（见 finding_1）⇒ 须监理澄清口径后方可开 P6（属监理职权，owner ⑦ 明列『口径澄清』）。",
+ "finding_1_sheets_empty_has_no_dim": {
+  "fact": "P6-1 判据要求 verdict **命中四项**（`ignore_without_ruling(9)` · `no_pipeline(1)` · `no_fp_lib_table(1)` · `sheets_empty(1)`），但**已安装判据 rev=3（`criteria/adjudicate.py` `1937a40ae68bc288`）只有 19 维**，其中**无任何与 `sheets`/`sheets_empty` 对应的维**。",
+  "evidence": [
+   "代码：`grep -n 'C\\.get(' criteria/adjudicate.py` ⇒ **18 个 enabled 守卫维**（zone_filled · device_has_pads · drill_count · non45_segments · net_declared_realized · pin_map_complete · refdes_sets_equal · pipeline_present · drc_errors · drc_warning_dispositions · unconnected_zero · fp_lib_table_present · lib_electrical_level · keepout_active · pads_within_outline · ref_plane_continuity · density_and_clearance · verdict_schema）+ **1 无条件维** `rule_severity_manifest` = **19**",
+   "代码：`grep -n 'sheets' criteria/adjudicate.py` ⇒ 仅 2 处，皆**读 nets YAML 的 `sheets` 字段**（:150/:179），**无 sheets 维**",
+   "实测：独立复跑 PROBE ⇒ 判定器输出的维名集合 = 上述 19（`fails` 16 + `oks` 3）"
+  ],
+  "consequence": "要让 `sheets_empty` 进 verdict ⇒ 必须**新增第 20 维** = **新增检查齿**，违 owner 常设②（禁新增检查齿 t45+）。",
+  "options": [
+   {
+    "id": "R1（ENG 建议，零新增齿）",
+    "reading": "判据① = verdict 命中**三项**可机判（`rule_severity_manifest` 9/62 具名 · `pipeline_present` scope=k1 命中 `k1/sch` · `fp_lib_table_present` 缺失）+ 第四项 `sheets_empty` 以**输入侧实测登记**（`k1/k1_v1.kicad_pro` 的 `sheets == []`，测量值已入 `P6_OPEN_READINESS_v1.json`），**不新增维**"
+   },
+   {
+    "id": "R2（不建议）",
+    "reading": "新增第 20 维 `sheets_empty` ⇒ 判据件版 bump（rev=4）+ **新增检查齿**（违 owner ②）"
+   }
+  ],
+  "authority": "口径澄清 = 监理自裁项（owner 常设⑦ 明列）⇒ 本件只报事实 + 建议，不代裁"
+ },
+ "finding_2_probe_fails_classified": {
+  "reproduce": "`python3 criteria/adjudicate.py --project k1 --board k1/k1_v1.kicad_pcb --pro k1/k1_v1.kicad_pro --nets k1/boards/k1_sch.yaml --sch-dir k1/sch --root . --manifest <P6_OPEN_READINESS/probe_manifest.k1.yaml> --measure-out … --out …`",
+  "independent_rerun": {
+   "n_pass": 3,
+   "n_fail": 16,
+   "fails_dim_identical_to_stored_probe": true,
+   "oks": [
+    "device_has_pads",
+    "non45_segments",
+    "verdict_schema"
+   ],
+   "junit": "/tmp/opencode/k1_verdict_rerun.json vs 在库 k1_verdict_probe.json 逐维同"
+  },
+  "classes": [
+   {
+    "id": "a",
+    "n": 3,
+    "meaning": "**判据四项中的可机判三项**（判据①主体）",
+    "dims": [
+     {
+      "dim": "rule_severity_manifest",
+      "detail": "未登记豁免的 ignore 9/62，9 条具名（与 `ignore_without_ruling(9)` 对齐）"
+     },
+     {
+      "dim": "pipeline_present",
+      "detail": "scope=k1：含 .kicad_sch 却无 pipeline.yaml 的目录 1 个 = ['k1/sch']（与 `no_pipeline(1)` 对齐）"
+     },
+     {
+      "dim": "fp_lib_table_present",
+      "detail": "fp-lib-table @ k1/ 缺失（与 `no_fp_lib_table(1)` 对齐）"
+     }
+    ]
+   },
+   {
+    "id": "b",
+    "n": 7,
+    "meaning": "**缺测量件 ⇒ fail-closed**（既有机制，非缺陷）",
+    "dims": [
+     "drc_errors",
+     "drc_warning_dispositions",
+     "unconnected_zero",
+     "lib_electrical_level",
+     "pads_within_outline",
+     "ref_plane_continuity",
+     "density_and_clearance"
+    ],
+    "note": "P6-1 命令原文未提供 `--drc-cli/--w8-audit-json/--pads-outline-json/--refplane-gap-json/--density-json/--min-clearance-json` ⇒ 7 维按设计 fail-closed；是否须为 K1 补测量件（或 enabled:false）= 监理裁"
+   },
+   {
+    "id": "c",
+    "n": 6,
+    "meaning": "**K1 实测缺口 / 空集**（须监理定性：真实缺口 / K1 中间态 / vacuous fail）",
+    "dims": [
+     {
+      "dim": "zone_filled",
+      "detail": "铜区（有网非 keepout）已填充 0/0",
+      "flag": "**空集 fail**（0/0）⇒ 是否 vacuous 口径 = 监理裁"
+     },
+     {
+      "dim": "drill_count",
+      "detail": "NPTH=2 < 4（阈值 npth_min:4）",
+      "flag": "阈值来源 = K2 板规格；K1 是否适用 = 监理裁"
+     },
+     {
+      "dim": "net_declared_realized",
+      "detail": "板上 0 焊盘的声明网 3；<2 焊盘 12"
+     },
+     {
+      "dim": "pin_map_complete",
+      "detail": "网表节点无对应焊盘 16"
+     },
+     {
+      "dim": "refdes_sets_equal",
+      "detail": "原理图 37 / 板 42；板有图无 ['Q1','Q2','R38','R39','U13']（H* 0 条）"
+     },
+     {
+      "dim": "keepout_active",
+      "detail": "keepout 区 0 个",
+      "flag": "**空集 fail**（无 keepout）⇒ 是否 vacuous 口径 = 监理裁"
+     }
+    ]
+   }
+  ],
+  "sum": "3 + 7 + 6 = 16 ✓（与实测 n_fail 一致）"
+ },
+ "finding_3_probe_manifest_cosmetic": {
+  "fact": "`P6_OPEN_READINESS/probe_manifest.k1.yaml` 的 `pipeline_present.expect` 文案仍写『**k2 域内**每个含 .kicad_sch 的目录…』而 `scope: \"k1\"` ⇒ 项目化**文案残留**（机器判定读 scope，文案不影响判定）",
+  "impact": "低（仅文档一致性；G3.1『期望字段集项目域派生』的提交面）",
+  "authority": "落件时的文案修正由 gate 属主一并处理"
+ },
+ "anchors": {
+  "criteria_adjudicate_sha16": "1937a40ae68bc288",
+  "criteria_manifest_k2_sha16": "eb244d811ad7859b",
+  "probe_manifest_sha16": "6c9ca1afc2b30c42",
+  "verdict_probe_sha16": "9b3ef86947424e0c"
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "criteria_touched": false
+}
