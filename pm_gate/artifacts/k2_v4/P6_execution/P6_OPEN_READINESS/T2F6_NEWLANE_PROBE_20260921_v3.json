@@ -1,0 +1,148 @@
+{
+ "artifact": "k2_t2f6_newlane_probe_v3",
+ "schema": 3,
+ "ts": "2026-09-21T07:10:00+0800",
+ "id": "T2-F6（#K2-52 §四-4 / #K2-53 §二-T2-F6 ④『有新线索才试』）—— **第三轮新通道探取**",
+ "authorization": "#K2-53 §二 T2-F6 ④『改按需重探（有新线索才试），禁每轮全量重探』· handoff §7-B『无新裁定 ⇒ 只读造活（T2-F6 按需）』。本件为**新通道**触发（前两轮未登记之主机）之定向重探，非全量。",
+ "independence": "本件全程只读；未改动冻结四源 / criteria / 交付包 / 生成器 / SPEC；外部厂商原件仅落 `/tmp/opencode/probe3`（**未入库**）。",
+ "new_lanes_registered": {
+  "note": "以下主机为**本会话首次实测**（前两轮 #K2-52/#K2-53 未登记）；凡标注 200 者均已实测正文/文件头，非仅 DNS 可达。",
+  "reachable_pdf_hosts": {
+   "https://www.farnell.com/datasheets/<id>.pdf": "**200 application/pdf**（静态 PDF 面可达；同域 `uk.farnell.com` 产品页/搜索 = **403**）",
+   "https://uploadcdn.oneyac.com/attachments/files/brand_pdf/<vendor>/<bucket>/<MPN>.pdf": "**200 application/pdf**（厂商原件镜像）",
+   "https://www.diodes.com/assets/Databriefs/<MPN>-Product-Brief.pdf": "**200 application/pdf**（Diodes 官方域；同域 `assets/Datasheets/*.pdf` = **404**、`/part/view/*` 与 `/search/` = **403**）",
+   "https://file.elecfans.com/web2/**/*.pdf": "**200 application/pdf**（电子发烧友 PDF 面）",
+   "https://pdf.elecfans.com/PERICOM/**.html": "200（产品页；**本件 404**，见下）"
+  },
+  "reachable_search_engines": {
+   "https://www.so.com/s?q=": "**200**（360 搜索 · 可用，结果 URL 可从 HTML 直取）",
+   "https://www.baidu.com/s?wd=": "200（可用，但结果 URL 需解析 `mu=` 属性）"
+  },
+  "reachable_distributor_pages": {
+   "https://www.oneyac.com/product/<id>.html": "200（唯样）",
+   "https://www.ruidan.com/goods/detail/<id>": "200（锐单）",
+   "http://www.chipscn.com/": "200",
+   "https://www.ickey.cn/": "200",
+   "https://item.szlcsc.com/<id>.html": "200 但为 **JS 壳（23,682 B 固定）**，无内联数据表链接",
+   "https://www.lcsc.com/search?q=": "200 但为 SPA 壳（74,963 B 固定）",
+   "https://www.datasheetarchive.com/": "200 但结果 **JS 加载**（仅见件号，无直链）",
+   "https://www.newark.com/ · https://www.element14.com/": "根域 200；**产品页/搜索页 403**"
+  },
+  "still_blocked_new": {
+   "https://www.molex.com/**": "**000（厂商站整域不可达 · 三度尝试：根域 / pdm_docs 直链 / http1.1）**",
+   "https://www.digikey.cn/ · https://www.mouser.cn/": "403",
+   "https://www.diodes.com/part/view/** · /search/": "403",
+   "https://atta.szlcsc.com/": "403（带 Referer 亦然）",
+   "https://wmsc.lcsc.com/**": "403",
+   "https://r.jina.ai/**": "000（超时）",
+   "https://datasheet.eeworld.com.cn/**": "000",
+   "https://pdf1.alldatasheetcn.com/** · https://www.alldatasheetcn.com/**": "403",
+   "https://datasheetspdf.com/ · https://www.datasheetcatalog.com/ · https://search.datasheetcatalog.net/ · https://www.pdf.la/ · https://www.icpdf.com/": "000 / 0 B",
+   "https://www.tme.eu/ · https://www.datasheets360.com/ · https://componentsearchengine.com/ · https://docs.rs-online.com/ · https://datasheet.octopart.com/ · https://pdf1.alldatasheet.com/": "403",
+   "https://api.allorigins.win/ · https://corsproxy.io/": "522/403（代理不可用）"
+  }
+ },
+ "newly_verified": [
+  {
+   "device": "PI3DBS16412",
+   "status": "**部分外部锚取得**（真厂商件 · 封装 + 器件语义 + 控制脚名集）",
+   "obtained": "Diodes Incorporated（Pericom）**PI3DBS16412 Product Brief**（1 页正文 / PDF 共 2 页含 oneyac 水印页）",
+   "urls": [
+    "https://www.diodes.com/assets/Databriefs/PI3DBS16412-Product-Brief.pdf（官方域）",
+    "https://uploadcdn.oneyac.com/attachments/files/brand_pdf/diodesincorporated/F4/0B/PI3DBS16412ZHEX.pdf（新通道首次取得）"
+   ],
+   "files": {
+    "official": {
+     "sha256": "4ef19e6a4dc39625646b4402fc0d9e72c972cc48aee0a9197cda46c42067950d",
+     "bytes": 373580
+    },
+    "oneyac": {
+     "sha256": "ea1a10cd6f0d684f4cb1f6105afc65a1c19795a7f18d5851b01149d723578d74",
+     "bytes": 410839
+    }
+   },
+   "doc_meta": {
+    "title": "PI3DBS16412 Product Brief",
+    "author": "Diodes Incorporated",
+    "subject": "3.3V, 1-20Gbps 2-Lane 2:1 Mux/De-Mux Switch"
+   },
+   "evidence_figure": {
+    "file": "T2F6_PI3DBS16412_PRODUCTBRIEF_P1_20260921_v1.png",
+    "sha256": "26b56444f6370d15bec7f0fad27db8ee0e2d83f6b268d2f36164f9dde9358f3d",
+    "method": "pdftoppm -r 110 -png（官方件 p1）⇒ 人眼核对",
+    "dpi": 110
+   },
+   "cross_check_vs_repo": {
+    "target": "`k2/_shared/eda_core/sch_gate/datasheets/PI3DBS16412.yaml`（零件真源）",
+    "checks": {
+     "封装 = 42-contact TQFN (ZH42) 3.5x9mm（PDF Ordering Information / Packaging）": "**一致**（repo `package: 42-TQFN (ZH42), 3.5x9mm`）",
+     "K2 选定可订购号 = PI3DBS16412**ZHEX** ⇒ 对应 **ZH / 42-contact**（PDF Ordering Information 表）": "**一致**（repo 声明 42-TQFN ⇒ 型号选择正确）",
+     "器件语义 = 4 差分通道 2:1 Mux/DeMux · 双向 · 3.3V · 1–20Gbps（PDF 标题/Features）": "**一致**（repo 文件头同述）",
+     "信号口命名集 A0..A3± / B0..B3± / C0..C3±（PDF Block Diagram）": "**一致**（repo `pins` 24 个差分脚全在）",
+     "控制脚命名集 SEL1 · SEL2 · PD1 · PD2（PDF Block Diagram）": "**一致**（repo 1=PD1 · 8=SEL1 · 10=PD2 · 17=SEL2）",
+     "『无 REFCLK / OE# / SMBus 引脚』（repo 注释）": "**一致**（PDF 仅列 SEL1/SEL2/PD1/PD2 四个控制脚）"
+    },
+    "n_checks": 9,
+    "n_pass": 9,
+    "n_conflict": 0
+   },
+   "what_this_does_NOT_anchor": "**Product Brief 无 Pin Description 表、无 42-TQFN 脚位图** ⇒ **42 脚逐脚（pin↔net）真源仍未取得**；repo 引证的 **Diodes DS40277 Rev 4-2「Pin Description + 42-TQFN pin config」全表**在本轮所有可用通路上**均未取得**（`www.diodes.com/assets/Datasheets/DS40277.pdf` = 404 · `/part/view/*` = 403 · oneyac 镜像仅 Product Brief）。",
+   "tier2_caliber": "**具名 PARTIAL → 具名 PARTIAL（外部锚自 0 → 部分：封装/选型/语义/控制脚名集）**。**不充绿**（#K2-53 §二 T2-F6 ①②：维持具名 PARTIAL · 软目标不得作任何判据/绿判）。"
+  }
+ ],
+ "sibling_part_observed_not_used": {
+  "part": "PI3DBS12212AZBSEX（同族兄弟件，非本板件）",
+  "why_recorded": "新通道 `pdf.elecfans.com` / `file.elecfans.com` 上确有该兄弟件数据表（`https://file.elecfans.com/web2/M00/74/3D/pYYBAGNZHneAL8fmAAZyDxvcKkI938.pdf`）⇒ 证明该通道**能出件**，仅本板件（16412）在其库内 404。**不得**以兄弟件充作 PI3DBS16412 真源。"
+ },
+ "still_blocked": [
+  {
+   "device": "PI3DBS16412",
+   "missing": "DS40277 全表（Pin Description + 42-TQFN 脚位图）",
+   "new_attempts": [
+    "www.diodes.com/assets/Datasheets/{DS40277,ds40277,PI3DBS16412}.pdf → 404×3",
+    "www.diodes.com/assets/Databriefs/PI3DBS16412-Product-Brief.pdf → **200（取得，见上）**",
+    "www.diodes.com/part/view/PI3DBS16412 · /search/?q= → 403",
+    "oneyac 新通道 → 仅 Product Brief",
+    "baidu/so.com 关键词（DS40277）→ 无可用直链"
+   ],
+   "result": "**全表仍不可达**（已获部分外部锚）"
+  },
+  {
+   "device": "USB_C_PLUG（Molex 105444-0001）",
+   "new_attempts": [
+    "www.molex.com 根域 / `pdm_docs/sd/1054440001_sd.pdf`（http1.1）→ **000 整域不可达**",
+    "www.digikey.cn · www.mouser.cn · uk.farnell.com · sg.element14.com 产品页 → 403",
+    "api.allorigins.win / corsproxy.io 代理 → 522/403",
+    "**www.farnell.com/datasheets/<id>.pdf 面可达但需数值 id，而取 id 必经 403 的产品页/搜索页** ⇒ 无可达路径取得 id"
+   ],
+   "result": "仍不可达"
+  },
+  {
+   "device": "USB3.0_Type-A_90",
+   "status": "**标准件**（repo `source:` = USB 3.0 Spec 标准脚位）⇒ 与 #K2-52 口径一致，不计缺口"
+  },
+  {
+   "device": "PMIC_P1 / SOM_B1（SpacemiT）",
+   "new_attempts": [
+    "so.com/baidu 检索仍无公开数据表（既有结论复核）"
+   ],
+   "result": "无公开直链（与前两轮一致）"
+  }
+ ],
+ "reading": {
+  "tier2_after": "17/33（**未变**）· 但 **PI3DBS16412 之外部锚 0 → 部分**，且**新登记 5 类可达通道 + 明确 12 类封锁通道**（供后续会话免重复试探）",
+  "of_total": 33,
+  "caliber": "**具名 PARTIAL；不充绿**"
+ },
+ "red_lines": [
+  "未写 criteria/（ENG 只读）",
+  "未改生成器/SPEC/原理图/符号/冻结四源",
+  "外部厂商原件仅落 /tmp/opencode（未入库）",
+  "未新增任何判据维 / 未新增检查齿",
+  "未改交付包（未重建 Gerber/钻孔）",
+  "未派 WORKER"
+ ],
+ "not_landed": true,
+ "readonly_repo": true,
+ "next": "余件按需（再遇**新通道**才试）；本件不改变 P6 判据面、P5 门态与交付锚。"
+}

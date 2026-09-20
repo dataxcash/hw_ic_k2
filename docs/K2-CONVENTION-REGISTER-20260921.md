@@ -53,3 +53,13 @@
 
 ---
 **（本块）裁定对应**：CR-14 ← #K2-56 §三-4。**不影响** P6 判据面与交付锚（`6ee7495de61f749f` 未动）。
+
+### 续编 · T2-F6 第三轮新通道探取（2026-09-21 · ENG 只读造活 · 通道登记）
+
+| # | 条目 | 内容（事实） | 依据 | 处置红线 |
+|---|---|---|---|---|
+| **CR-15** | **T2-F6 可达/封锁通道登记（免重复试探）** | 第三轮**新登记**（前两轮 #K2-52/#K2-53 未登）**可达 PDF 面**：`www.farnell.com/datasheets/<id>.pdf`（200 · **同域 `uk.farnell.com` 产品页/搜索 = 403**）· `uploadcdn.oneyac.com`（厂商原件镜像 · 200）· `www.diodes.com/assets/Databriefs/*.pdf`（200 · **同域 `assets/Datasheets/*.pdf` = 404、`/part/view`·`/search` = 403**）· `file.elecfans.com`（200）。**可用搜索面**：`www.so.com`（200，结果 URL 可直取）· `www.baidu.com`（200，需解析 `mu=` 属性）。**分销/数据表站**：`oneyac.com`·`ruidan.com`·`chipscn.com`·`ickey.cn` 产品页 200；`item.szlcsc.com`·`www.lcsc.com/search`·`datasheetarchive.com` 仅 **SPA/JS 壳**（无内联直链）。**封锁面（本板上件全数实测）**：`www.molex.com` **整域 000** · `www.digikey.cn`/`www.mouser.cn`/`uk.farnell.com`/`sg.element14.com`/`www.diodes.com/part|search`/`atta.szlcsc.com`/`wmsc.lcsc.com`/**`.alldatasheet*.com`** = **403** · `datasheet.eeworld.com.cn`/`r.jina.ai`/`datasheetspdf.com`/`datasheetcatalog.com`/`pdf.la`/`icpdf.com` = **000** · 公共 CORS 代理不可用。**本轮实得**：**PI3DBS16412** 取得 Diodes/Pericom **Product Brief**（官方域 + oneyac 双源 · sha `4ef19e6a…`/`ea1a10cd…` · `26b56444…` 渲染图证）⇒ 与 repo 真源 **9/9 一致**（封装 42-TQFN ZH42 3.5×9mm · 选定号 ZHEX=ZH · 4 差分通道 2:1 Mux/DeMux 双向 3.3V 1–20Gbps · 信号口 A0..A3/B0..B3/C0..C3 全在 · 控制脚 SEL1/SEL2/PD1/PD2 · 无 REFCLK/OE#/SMBus） | **#K2-53 §二 T2-F6 ④**（新线索才试）+ handoff §7-B（只读造活） | **Product Brief 无脚位表 ⇒ 42 脚逐脚真源（DS40277 全表）仍未取得** ⇒ tier2 维持 **具名 PARTIAL · 17/33 · 不充绿**；**禁**入判据/绿判（C-12/C-25）· **禁**以兄弟件（`PI3DBS12212A`）充作本板件真源 · 外部厂商原件仅落 `/tmp/opencode` |
+
+---
+**（本块）裁定对应**：CR-15 ← #K2-53 §二 T2-F6 ④（新通道才试）· 属**方法/通道登记**（非缺陷、非判据）。
+**不影响** P6 判据面（`criteria/` rev=6 只读）与交付锚（`6ee7495de61f749f` 未动）。
