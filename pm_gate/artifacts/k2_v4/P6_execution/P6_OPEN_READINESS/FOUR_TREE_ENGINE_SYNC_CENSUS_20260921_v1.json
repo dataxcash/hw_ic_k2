@@ -1,0 +1,57 @@
+{
+ "artifact": "k2_four_tree_engine_sync_census",
+ "schema": 1,
+ "ts": "2026-09-21T07:05:00+0800",
+ "id": "`_shared` 四检出树 · 路由引擎（hs_route_model.py）同步现状实测",
+ "authorization": "handoff §5-7『_shared 有**四检出树**，改后须四树逐一提交 + 各自父仓库指针同步』；只读实测。",
+ "measured": [
+  {
+   "tree": "_shared",
+   "head": "3c781be",
+   "file_sha16": "c9e1c3b4ca208482",
+   "lines": 5225,
+   "last_engine_commit": "ea2b746（批 6 落件）"
+  },
+  {
+   "tree": "k2/_shared",
+   "head": "3c781be",
+   "file_sha16": "c9e1c3b4ca208482",
+   "lines": 5225,
+   "last_engine_commit": "ea2b746",
+   "verdict": "**与 `_shared` 逐字节同**"
+  },
+  {
+   "tree": "key_v2/_shared",
+   "head": "47abeb1",
+   "file_sha16": "883525b4f37a660f",
+   "lines": 3849,
+   "last_engine_commit": "8f58466（M13 v8 类A修复）",
+   "verdict": "**落后**"
+  },
+  {
+   "tree": "pciesw4/_shared",
+   "head": "9f01f47",
+   "file_sha16": "6ab5eaaa416da3e7",
+   "lines": 4121,
+   "last_engine_commit": "d24eb0b（M13 W6-D 竖排层换位）",
+   "verdict": "**落后**"
+  }
+ ],
+ "diff_size_vs_master": "key_v2/_shared：1823 行 diff；pciesw4/_shared：1558 行 diff（`diff -u` 行数）",
+ "impact": {
+  "k2_面": "**无**（`k2/_shared` 与 `_shared` 同哈希 ⇒ K2 判据面/交付锚不受影响）",
+  "key_v2_pciesw4_面": "其引擎停在 M13 时代 ⇒ **缺批 2–6 的引擎修复**（含『零长段守卫 / R-10 退化候选守卫』⇒ 理论存在退化候选/崩溃路径）；未实测其项目门禁受影响程度（超本会话只读范围）。"
+ },
+ "interpretation": [
+  "(a) **各自钉版**（各项目门禁自持引擎版本，登记口径即可 · 不追同步）",
+  "(b) **同步缺口**（按 §5-7 应四树同步 ⇒ 须另立跨项目同步批次）"
+ ],
+ "eng_recommendation": "倾向 **(b) 另立跨项目同步批次**（不阻塞 K2 P6；由 gate 属主排期），同时把现状**登记**入册（登记制：不豁免 · 保持可见）。**请监理裁**（口径类 = 监理自裁，#K2-53 §二 口径项先例）。",
+ "red_lines": [
+  "未改任何树任何文件",
+  "未越阶段",
+  "未新增判据维"
+ ],
+ "readonly_repo": true,
+ "not_landed": true
+}

@@ -1,0 +1,54 @@
+{
+ "artifact": "k2_pending_rulings_delta",
+ "schema": 21,
+ "ts": "2026-09-21T07:10:00+0800",
+ "supersedes": "PENDING_RULINGS_DELTA_20260921_v20.json（e0ec1f73a5fe8873）",
+ "purpose": "收敛全部待裁项为**一份**决策件。本会话（#K2-53 后无新裁定）按 handoff §7 执行：**全锚复核（14/14 MATCH）** + **只读造活**。除 v20 已备之三件外，又实测出**两项须监理裁的前提订正**：①**待裁-3『批 6 v4 放行落地』代码面无对象**（内容自 `ea2b746` 起已在树内）②**四树引擎同步缺口**（key_v2/pciesw4 停在 M13）。",
+ "latest_ruling_seen": "**#K2-53**（`K2-RULING-k2-53-k2-52-accept-sgaudit1d-land-j1ssp2-convention-t2f6-nogreen.md` · 2026-09-20 21:46 · sha16 `af56e7564acac42f`）—— 本会话**第一动作已读**（含 `sent/`），**无晚于 handoff 的裁定** ⇒ 按 handoff 继续，**未停等**。",
+ "owner_gate": "**0**（全部自裁面；owner 面仍仅 C-26 登记 + P5 外部面 + J1 命名视角知悉项）",
+ "stage_state": "P0–P4 **HOLDS** · P5 **PENDING_EXTERNAL**（V4–V7 NOT_RUN，ENG 不得自证）· P6 **结构面 PASS / 命中面待口径**。交付锚 `6ee7495de61f749f` **未动**（本会话实测）。判据 **rev=6**。canonical 19 `190b73be0f728a56`。**未越阶段、未触任何受保护件。**",
+ "landed_this_session": [
+  {
+   "id": "锚全复核（handoff §7-B 首条）",
+   "artifact": "K2_ANCHOR_RECHECK_20260921_v4.json（b7bfda62b322fcfc）",
+   "reading": "冻结四源 + 受审板 + 交付锚 2 + 判据 rev=6 五件 + canonical 19 + K1 板 = **14/14 MATCH**；各树 HEAD 与 handoff §1 一致"
+  },
+  {
+   "id": "T2-F6 新通道定向重探（新线索触发，非全量）",
+   "artifact": "T2F6_NEWLANE_PROBE_20260921_v2.json（f609d256eb30d822）",
+   "reading": "新通道 = **Digi-Key 媒体镜像 `media.digikey.com`（可达；`www.digikey.com` 403 是不同面）** ⇒ ①**OPTO_LTV356T** 三件套外部真源取得（Lite-On 原厂 PDF · sha256 e340ba0a… · p2 图例 1 Anode/2 Cathode/3 Emitter/4 Collector ⇒ 与 repo 逐脚一致 4/4）②**STM32G0B1KBU6** 逐脚核对（DS13560 p45 Figure 12 · 32/32 归一一致 · EP=VSS）⇒ tier2 读数 **15/33 → 17/33**（**具名 · 不充绿**）",
+   "evidence_figs": "T2F6_LTV356T_PINOUT_FIG_P2_20260921_v1.png（316805a698345060）· T2F6_STM32G0B1KBU6_UFQFPN32_FIG12_DS13560_20260921_v1.png（24cfd51cd9a3006b）",
+   "still_blocked": "PI3DBS16412 · USB_C_PLUG(Molex 105444) · USB3.0_Type-A_90 · PMIC_P1/SOM_B1（逐条记录新尝试）"
+  },
+  {
+   "id": "待裁-1 方案 (a) 载本",
+   "artifact": "P6_1_CLOSURE_DOSSIER_OPTIONA_20260921_v1.json（07ea08c6a75d224f）",
+   "reading": "**整改前命中 4/4 OK**（可复现：探针 verdict ⇒ 4 项全 OK，唯一 MISS=provisional）**+** 整改记录（k1 `c018fc7` · `k1/pipeline.yaml` 8946a22e… · `k1/fp-lib-table` 13ddfa53…）**+** 整改后读数（P6-1 = 3 MISS，完整性/签认前置 OK；P6-2 = **PASS**）⇒ **放行即一击闭 P6-1**（含提议登记文本）",
+   "no_change": "未改工具/判据/模板（只读运行）"
+  },
+  {
+   "id": "待裁-2 覆盖面实测 + 提案",
+   "artifact": "PCIESW4_COVERAGE_MANIFEST_PROPOSAL_20260921_v1.json（85f879087be9a943）",
+   "reading": "**口径订正 COV-C1**：范围外未覆盖目录 = **4 个（全在 pciesw4）/ 39 件 .kicad_sch**；`k2/hw/sch` 与 `key_v2/key_v2/sch` **实为已覆盖**（分别由 k2/pipeline.yaml、key_v2/key_v2/pipeline.yaml），v19/handoff §3 所列含此二者 = 陈旧；k2 域内未覆盖 = **0**（PASS 维持）。提案：**option_B（pciesw4 自持 pipeline.yaml，零 criteria 变更）**，option_A（criteria 显式 out_of_scope 登记）为备选、须 gate 属主裁"
+  }
+ ],
+ "pending_supervision": [
+  "**待裁-1 · P6-1 口径（须裁·监理自裁）**：载本已备（`P6_1_CLOSURE_DOSSIER_OPTIONA_20260921_v1.json`）。ENG 建议 **(a)**；若裁 (b) 须明裁且**不得新增检查齿**，ENG 不自行改工具。",
+  "**待裁-2 · pciesw4 覆盖面**：实测范围外未覆盖 = **pciesw4 4 目录/39 件**（`k2/hw/sch`、`key_v2/key_v2/sch` 实为**已覆盖** ⇒ 口径订正 COV-C1）；请裁 **option_B（pciesw4 自持 pipeline.yaml · 跨项目批次）** 或 option_A（criteria 登记）。**k2 域内未覆盖 0，不影响 P6**。",
+  "**待裁-3 · 批 6 v4 —— 请改裁『追认』（前提订正）**：实测 **v4 内容已在树内**（`ea2b746` 起 · 反向 dry-run RC=0）⇒ 『放行落地』**无代码对象**；请裁 **(i) 追认 v4 已随 v3 生效**（预期待裁-#3 由 v21 起改述为追认），或 **(ii) 若 v4 须与 v3 区分 ⇒ 给出真实前像**（现记录 `c9e1c3b4` 为后像）。附 **COV-C2** 检查缺环登记。",
+  "**待裁-4 · 四树引擎同步口径（新）**：请裁 (a) 各自钉版（登记口径）或 (b) 另立跨项目同步批次（ENG 倾向 (b) · 不阻塞 P6）。",
+  "**T2-F6 状态更新（无须裁）**：15/33 → **17/33**（OPTO_LTV356T · STM32G0B1KBU6；具名·不充绿）；余 4 件仍不可达；软目标不得入判据。",
+  "**（owner 面·非阻塞·报备）** C-26 未落 · P5 外部面 V4–V7 `NOT_RUN`（ENG 不得自证）· J1 TX 极性知悉项"
+ ],
+ "red_lines_ok": [
+  "未写 .omo/supervision/**",
+  "未改 criteria/（只读运行）",
+  "未改生成器/SPEC/原理图/模板/工具/符号",
+  "未重建交付包（交付锚未动）",
+  "外部取件仅落 /tmp/opencode（厂商原件未入库；入库仅派生证据）",
+  "未新增判据维/检查齿",
+  "未派 WORKER",
+  "未越阶段"
+ ],
+ "next": "获裁即做：待裁-1/2/3 按明裁落地（一裁一笔提交 + 证据）；无裁定则继续只读造活（T2-F6 新通道按需、册面维护、锚周期复核），**禁以 HOLD/停等结案**。"
+}
