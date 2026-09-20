@@ -1,0 +1,109 @@
+{
+ "artifact": "k2_c25_tier2_provenance_batch4",
+ "schema": 1,
+ "ts": "2026-09-20T20:40:00+0800",
+ "purpose": "C-25 **tier2** 续证（batch4）：在 batch3 判『自动化通道关闭』之后，**重开半自动通道**并对 9 件 vendor_blocked 续取件。ENG 只读外部件；**未写 criteria/**；外部件仅落 /tmp/opencode。",
+ "authorization_basis": "handoff §7-2『C-25 tier2 收口：余 9 件人工/镜像取件』· 常设红线『外部取件仅落 /tmp/opencode』·『未获批不得改生成器/SPEC/原理图』",
+ "prior_state": {
+  "tier2_verified": "12/33（batch1 9 + batch2 USB-C 3）",
+  "batch3_conclusion": "automation_lane_closed=true（9/9 余件判定自动化不可达）"
+ },
+ "method_v2": "① vendor **download 路由**（diodes.com/datasheet/download/<PART>.pdf · ww1.microchip.com/downloads/...）；② **中文镜像通道**：Sogou(可达) 检索 → atta.szlcsc.com / file.elecfans.com PDF 直链；curl GET → %PDF magic + pdftotext → doc_id 令牌机检 → sha256。",
+ "newly_verified": [
+  {
+   "device": "BAT54C",
+   "doc_id_expected": "(引证为通用『标准脚位』, 无文献号)",
+   "doc_url": "https://www.diodes.com/datasheet/download/BAT54C.pdf",
+   "doc_sha256": "50b04e4e17bcf5db62164f6e5422e91546d0cace0ab2efed61660c3044b4fef0",
+   "bytes": 502635,
+   "doc_id_token_hit": {
+    "BAT54C": 3,
+    "BAT54 /A /C /S": 10,
+    "Schottky": 2
+   },
+   "pdf_head": "BAT54 /A /C /S — SURFACE-MOUNT SCHOTTKY BARRIER DIODE",
+   "lane": "vendor download route",
+   "note": "引证为通用共阴极脚位；本件为 cross-vendor(Diodes Inc) 等价件数据表，作脚位外部锚"
+  },
+  {
+   "device": "FRU_EEPROM",
+   "doc_id_expected": "(引证为『AT24C02 类 I2C EEPROM 标准脚位』, 无文献号)",
+   "doc_url": "https://ww1.microchip.com/downloads/aemDocuments/documents/OTH/ProductDocuments/DataSheets/AT24C01C-AT24C02C-I2C-Compatible-Two-Wire-Serial-EEPROM-1Kbit-2Kbit-20006111A.pdf",
+   "doc_sha256": "b6466f4cce6d4ed5bdaaf3854c7bd2eb10f9258a678d09ccdf233f6b3f2fa424",
+   "bytes": 1203643,
+   "doc_id_token_hit": {
+    "AT24C02C": 80,
+    "AT24C01C": 79,
+    "20006111": 46
+   },
+   "pdf_head": "AT24C01C/AT24C02C — I2C-Compatible (Two-Wire) Serial EEPROM 1-Kbit/2-Kbit",
+   "lane": "vendor (Microchip) direct",
+   "note": "引证为通用类件；本件为 canonical AT24C02 数据表（文献号 20006111A）"
+  },
+  {
+   "device": "STM32G0B1CBT6",
+   "doc_id_expected": "ST DS13560 Rev 6",
+   "doc_url": "https://atta.szlcsc.com/upload/public/pdf/source/20210707/C2829307_30DFBC3FA791244241E64BDE5F705BBC.pdf",
+   "doc_sha256": "9fc2cfec9a1c8d5c8a281df64ee03d1769949de32ae629ff707a709e5d406924",
+   "bytes": 2632172,
+   "doc_id_token_hit": {
+    "DS13560": 159,
+    "STM32G0B1": 207
+   },
+   "pdf_head": "STM32G0B1xB/C/xE ... Datasheet - production data",
+   "lane": "**中文镜像通道**（atta.szlcsc.com PDF 直链）",
+   "note": "doc_id 令牌命中 159 次 ⇒ 与引证一致"
+  }
+ ],
+ "tier2_after": {
+  "verified_three_piece": 15,
+  "of_total": 33,
+  "delta": "12 → 15（+3）"
+ },
+ "findings": [
+  {
+   "id": "T2-F6",
+   "severity": "高",
+   "finding": "**batch3 的 automation_lane_closed=true 不成立**：本条通道虽被厂商站级反自动化封死，但存在两条**可复现的半自动外部取件通道** —— ① vendor `.../download/<PART>.pdf` 路由（diodes.com · microchip.com 实测 200+%PDF）；② 中文 PDF 镜像（Sogou 可达 → atta.szlcsc.com · file.elecfans.com 实测 200+application/pdf）。",
+   "impact": "tier2 余量不必『纯人工』；可由脚本+检索半自动补齐，直至『21/33 可达上限』。",
+   "status": "方法面登记（非缺陷）—— 供监理口径裁定"
+  },
+  {
+   "id": "T2-F7",
+   "severity": "中",
+   "finding": "`STM32G0B1KBU6` 引证文献号为 **ST DS12872**，但实测厂商数据表 **DS13560**（已取回）**逐字列出 `STM32G0B1KB`** 为其覆盖料号，且含专节 **『STM32G0B1KxU UFQFPN32 pinout』(Figure 12, §45)** ⇒ 该件的正确数据表 = DS13560。",
+   "impact": "同 T2-F1 族（`_shared` `source:` 订正，须批+同批升版）。",
+   "evidence": "st.txt: 'STM32G0B1CB, STM32G0B1KB,' / 'STM32G0B1KxU UFQFPN32 pinout' / UFQFPN32 出现 36 次"
+  }
+ ],
+ "still_blocked_after_batch4": [
+  {
+   "device": "PI3DBS16412",
+   "reason": "diodes.com 直链 500/404；alldatasheet 系镜像 403；未获"
+  },
+  {
+   "device": "OPTO_LTV356T",
+   "reason": "liteon 端点 000（不可达）；elecfans 无 LTV-356T 条目（404）"
+  },
+  {
+   "device": "USB3.0_Type-A_90",
+   "reason": "usb.org 无 USB 3.0/3.2 基规公开直链（404）"
+  },
+  {
+   "device": "PMIC_P1 / SOM_B1",
+   "reason": "SpacemiT 无公开直链"
+  },
+  {
+   "device": "USB_C_PLUG(Molex 105444-0001)",
+   "reason": "molex.com 网络面 000；21icsearch 可反查其直链但 molex 端不可达"
+  }
+ ],
+ "expected_tier2_ceiling": "15(已验证) + 上述 6(可达后 21) ⇒ **21/33** 为批 4 后的可达上限（标准件 5 + 约定件 6 + 语义件 1 = 12 结构上无三件套）",
+ "red_lines": [
+  "未写 criteria/（ENG 只读）",
+  "未改生成器/SPEC/原理图",
+  "外部取件仅落 /tmp/opencode",
+  "未改 _shared（T2-F7 仅登记）"
+ ],
+ "next": "①T2-F7 订正（_shared，须批）②余 6 件沿 batch4 半自动通道续取（PI3DBS16412/LTV356T/Molex 优先）③tier2 收口后由 gate 属主另立 criteria rev"
+}

@@ -1,0 +1,96 @@
+{
+ "artifact": "k1_shared_kbu6_pin_rotation_defect",
+ "schema": 1,
+ "ts": "2026-09-20T20:40:00+0800",
+ "id": "KBU6-PINROT-1",
+ "alias": "K1-D13",
+ "severity": "高",
+ "purpose": "**独立复核发现**：`_shared` sch_gate 器件真源 `STM32G0B1KBU6.yaml` 的**物理脚 25..32 映射整体旋转一位**（相对厂商数据表）。ENG **只读登记**；未改 `_shared`/SPEC/原理图/criteria。",
+ "authorization_basis": "handoff §7-4『只读造活（同族自查）』· 红线『未获批不得改生成器/SPEC/原理图』·『禁写 .omo/supervision/**』",
+ "subject_files_unchanged": {
+  "_shared/eda_core/sch_gate/datasheets/STM32G0B1KBU6.yaml": "4c898090e2fabeff",
+  "_shared/eda_core/sch_gate/datasheets/STM32G0B1CBT6.yaml": "70bff999464551a0",
+  "k1/boards/k1_pinmap.yaml": "e1f45d291cc9e5ab",
+  "k1/boards/k1_sch.yaml": "e1fdb1a1f0f6df93",
+  "k1/boards/k1_board.yaml": "1420ca9da99ac7ba"
+ },
+ "vendor_truth": {
+  "doc": "ST DS13560 — STM32G0B1xB/C/xE datasheet",
+  "copy": "DS13560 Rev 1 (Nov 2020) · mirror atta.szlcsc.com · sha256 9fc2cfec9a1c8d5c8a281df64ee03d1769949de32ae629ff707a709e5d406924",
+  "table": "Table 12. Pin assignment and description — column **LQFP32 / UFQFPN32 - GP**",
+  "figure": "Figure 12. STM32G0B1KxU UFQFPN32 pinout (§45)",
+  "package_pinout_25_32": {
+   "25": "PA14-BOOT0",
+   "26": "PA15",
+   "27": "PB3",
+   "28": "PB4",
+   "29": "PB5",
+   "30": "PB6",
+   "31": "PB7",
+   "32": "PB8"
+  }
+ },
+ "yaml_current": {
+  "25": "PA15",
+  "26": "PB3",
+  "27": "PB4",
+  "28": "PB5",
+  "29": "PB6",
+  "30": "PB7",
+  "31": "PB8",
+  "32": "PA14"
+ },
+ "delta": {
+  "25": "PA15→PA14-BOOT0",
+  "26": "PB3→PA15",
+  "27": "PB4→PB3",
+  "28": "PB5→PB4",
+  "29": "PB6→PB5",
+  "30": "PB7→PB6",
+  "31": "PB8→PB7",
+  "32": "PA14→PB8",
+  "shape": "脚 25..32 值整体**循环右移一位**（yaml[25..32] = truth[26..32,25]）"
+ },
+ "verification_chain": [
+  "① 以 `pdftotext -layout` 抽 Table 12；行内 token 结构 = [c1..c11 各封装列] + [pin name] + [type] + [AF...]。c1 = 表头最左列 = **LQFP32/UFQFPN32-GP**；c2 = LQFP32/UFQFPN32-N；c3 = LQFP48/UFQFPN48-GP；…",
+  "② 完备性：c1 取值覆盖 1..32（2/3 = PC14/PC15，行长名带后缀未匹配，由 Figure 12 补认）⇒ c1 确为 32 脚封装列。",
+  "③ **解析器交叉校验**：同一解析器对 **c3 (LQFP48)** 的输出与**受信**文件 `STM32G0B1CBT6.yaml`（LQFP48）**逐脚一致 30/30**（PC13=1·NRST=10·PA0=11·PA4=15·PB0=19·PA8=28·PA10=32·PA13=35·PA14=36·PA15=37·PB3=42·PB6=45·PB8=47·PB9=48 …）⇒ 列识别/行关联可靠。",
+  "④ **单调性判据**（决定性）：嵌套封装的『小封装脚号 ↔ 大封装脚号』沿同一边应为单调。Table 12 给出 c1↔c3 = 25→36·26→37·27→42·28→43·29→44·30→45·31→46·32→47（**单调**）；而 Figure 12 文本流两种可能配对（正序/逆序）均产生**非单调**映射 ⇒ **Table 12 为准**。",
+  "⑤ 同源 Figure 9 (LQFP48) 的文本流同样呈现『名字块与编号块顺序相反』，佐证图形文本抽取**不能**直接按位置配对，须以 Table 12 为准。"
+ ],
+ "impact": {
+  "k1_board": "**受影响**。U1 = STM32G0B1KBU6 (ForgeOS:MCU_STM32G0_QFN32, 33 pad)，为 K1 单一真源链 `k1_board.yaml → k1_pinmap.yaml → k1_sch.yaml` 消费。",
+  "k1_inherited_wrong_pads": {
+   "SWCLK_BOOT0": "32（应 25）",
+   "I2C1_SCL(PB6)": "29（应 30）",
+   "I2C1_SDA(PB7)": "30（应 31）",
+   "PB3": "26（应 27）",
+   "PB4": "27（应 28）",
+   "PB5": "28（应 29）",
+   "PB8": "31（应 32）"
+  },
+  "collateral": "K1 pinmap 同时含 `KEY_DET_EN: 25`；物理 pad 25 = **PA14-BOOT0**（非 PA15）。符号中 `SWCLK_BOOT0` 亦指 pad 25 的物理脚 ⇒ **pad 25 用途与本表的 SWD/BOOT0 语义存在冲突**，属 MCU pin 分配（**球重映射 = L1**）。",
+  "k2_board": "**不受影响**：k2 现役 hw 使用 **STM32G0B1CBT6**（LQFP48，其真源 `STM32G0B1CBT6.yaml` 经 c3 列 30/30 校验**正确**）⇒ K2 交付锚/受审板/判据面不动。",
+  "n3_schematic": "N-3 再生的 k1 `sch/`（k1 9e283bf）沿用上述脚号 ⇒ 若本件成立，**该批再生含 7 个脚号错**（须重出 BOM 与判定）。"
+ },
+ "caveat": "取回镜像为 **DS13560 Rev 1**（引证为 **Rev 6**）。封装脚位为硅片/封装固有属性，跨 revision 不应变化；仍建议以 Rev-6 原件二次确认（属 T2 引证面，与 T2-F1/T2-F7 同族）。",
+ "not_landed": [
+  "未改 `_shared` 真源",
+  "未改 k1 pinmap/sch/board",
+  "未改 criteria/",
+  "未改生成器",
+  "仅登记（禁充绿：不声称已修复）"
+ ],
+ "required_action": [
+  "① **监理自裁**：`_shared/eda_core/sch_gate/datasheets/STM32G0B1KBU6.yaml` pins 25..32 订正为 Table 12 真值（`_shared` 件 ⇒ 须批 + **同批升版**）。",
+  "② **owner (L1)**：K1 MCU pad 配对（`{9,25}` 空脚集合与 KEY_DET_EN/SWD-BOOT0 的物理脚归属）= 球重映射 ⇒ owner 闸。",
+  "③ 订正后重跑：k1 `k1_sch_regen_v1.py` → `k1_sch_gen_v1.py --install` → `k1_p4_bom_gen_v1.py` → `verify k1` → K1 判定，并复核 `pinmap` 校验器对 U1 的判定翻转。",
+  "④ 追查同源风险：`sch_gate/datasheets/` 其余 32 件是否存在同型『图形转写』错位（建议一次性机检）。"
+ ],
+ "red_line_ok": [
+  "未写 .omo/supervision/**",
+  "未派 WORKER",
+  "临时件仅 /tmp/opencode"
+ ],
+ "next": "待批即执行；未批期间不动物理件。"
+}
