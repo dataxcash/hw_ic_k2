@@ -1,0 +1,55 @@
+{
+ "artifact": "k2_k254_gate_selfcheck",
+ "schema": 1,
+ "ts": "2026-09-21T08:00:00+0800",
+ "id": "#K2-54 §一/§二/§三/§四 **验收判据（Gate）自检**（逐条实测）",
+ "authorization": "#K2-54 §一~§四 各自『验收判据』栏；只读核对，未改任何文件。",
+ "checks": [
+  {
+   "gate": "§一-① CR-5 在册且文本 = ENG 提议文本（逐字）",
+   "method": "`proposed_register_entry_optionA.text` ⊆ 登记册全文（字符串包含）",
+   "result": "**PASS**（逐字命中）"
+  },
+  {
+   "gate": "§一-② 复跑证据含 探针 4/4 OK + 三项整改记录 + P6-2 PASS",
+   "method": "读 `P6_ACCEPTANCE_CLOSURE_AFTER_K2_54_20260921_v1.json`（14d5463c02191282）",
+   "result": "**PASS**（探针 4/4 OK · k1 pipeline/fp-lib-table sha + `c018fc7` · P6-2 PASS）"
+  },
+  {
+   "gate": "§一-③ `criteria/` 五件 rev=6 仍 MATCH",
+   "method": "逐件 sha256 前16 实算",
+   "result": "**PASS**（`eb3da49f…`/`1937a40ae…`/`00faba34…`/`c175be51…`/`727d0995…`）"
+  },
+  {
+   "gate": "§一-④ 无任何工具/判据变更（git 证）",
+   "method": "`git -C k2 status --porcelain -- tools criteria` = 空；`git show --name-only HEAD` 仅 docs/artifacts",
+   "result": "**PASS**（提交仅 3 件：登记册 + 2 证据件）"
+  },
+  {
+   "gate": "§二 COV-C1 在册（含精确计数 1/17/1/20=39）+ k2 域内未覆盖维持 0 + criteria 未动",
+   "method": "登记册 CR-7 + `find` 复算 + 判定器逻辑复算",
+   "result": "**PASS**"
+  },
+  {
+   "gate": "§三 COV-C2 在册且含**前向校验命令**；引擎 sha 维持 `c9e1c3b4`；ENG 维持 1.1.4",
+   "method": "登记册 CR-8（落点命令已列）+ sha256 + `ENG_VERSION.yaml`",
+   "result": "**PASS**"
+  },
+  {
+   "gate": "§三 批 6 v4 追认：禁单独升版/重复落地",
+   "method": "`ENG_VERSION.yaml` = **1.1.4**（未升 1.1.5）；未应用任何补丁（`_shared` 工作树干净）",
+   "result": "**PASS**"
+  },
+  {
+   "gate": "§四 COV-C3 在册（三态 sha16 + 缺 ENG_VERSION 事实 + 排期指向）+ 未动他项目文件",
+   "method": "登记册 CR-10；`git -C key_v2 status` / `git -C pciesw4 status` 未涉本会话改动",
+   "result": "**PASS**"
+  }
+ ],
+ "verdict": "**Gate 全 PASS（8/8）** ⇒ #K2-54 §七-1/2/3 **执行完成**；**P6 验收面闭合**，未越阶段（P5 维持 `PENDING_EXTERNAL`）。",
+ "engine_sha_unchanged": "c9e1c3b4ca208482",
+ "eng_version": "1.1.4（未升版）",
+ "delivery_anchor": "6ee7495de61f749f",
+ "readonly_repo": true,
+ "not_landed": true
+}
