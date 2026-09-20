@@ -1,0 +1,35 @@
+{
+ "artifact": "k2_batch6_landing_rehearsal_three_verifications",
+ "schema": 1,
+ "purpose": "**落件前全量三验预演**：在**隔离影子**（真实拷贝 `_shared`(落件候选 v3) + `k1` + `k2` + `AppDir`/`criteria` symlink）上把验收门三验全部跑通 ⇒ 裁定一旦到位即可直接落件。",
+ "shadow": "/tmp/opencode/shadowtest/land（非容器真源：`k2` 为拷贝 ⇒ 验收门产物落影子，不动真 k2）",
+ "verifications": {
+  "1_verify_k2": {
+   "cmd": "cd <影子> && PYTHONPATH=<影子>/_shared:<影子> python3 _shared/eda_core/pipeline/engine.py verify k2",
+   "result": "preflight/check[project_sch_coverage]=PASS · verify/sch_structural=PASS · verify/netlist_connect=PASS · verify/bom_consistent=PASS ⇒ **preflight+3 PASS**",
+   "note": "从影子**根**运行即通过 ⇒ 顺带复证 C-22（verify 与 cwd 解耦）在落件候选下有效"
+  },
+  "2_canonical_19": {
+   "result": "19 OK / 0 FAIL · passed=true · provisional=false · verdict sha16 **190b73be0f728a56**（两跑逐字节同；另附求解器导入陷阱 ⇒ 可证不导入求解器）",
+   "evidence": "BATCH6_CANONICAL19_SOLVER_INDEPENDENCE_v1.json"
+  },
+  "3_expect_patched": {
+   "cmd": "cd <影子> && AppDir/bin/python3.11 k2/tools/k2_p6_acceptance_gate_v1.py --expect-patched",
+   "result": "**mode=expect_patched verdict=PASS** · A anchors 4/4 · B verify=PASS · C K1 pass=14 / K2 pass=14 · **regressions=0** · D shadow K1=14/K2=14 PASS · pytest 2F/61P/12S · **hidden_failures=2（= 既定 C1/C2）**",
+   "identical_to_pristine": true
+  }
+ },
+ "k1_truth": {
+  "segment_solved": "2/8（TX0/output · RX0/input）",
+  "rx0_input_pn_edge": 0.2636,
+  "layer_legality_violations": 0,
+  "two_run_bytewise_identical": true
+ },
+ "conclusion": "落件候选 `BATCH6_LANDING_CANDIDATE_v3.patch`（28e1930324e7e9fb）**三验全过 + K1 真值 2/8 + 零回归**；所有验收判据已在影子上预满足 ⇒ 待监理放行即落。",
+ "artifacts_sha16": {
+  "BATCH6_LANDING_REHEARSAL_ACCEPTANCE_v1.json": "687e5150536b0820"
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-21T12:05:00+0800"
+}
