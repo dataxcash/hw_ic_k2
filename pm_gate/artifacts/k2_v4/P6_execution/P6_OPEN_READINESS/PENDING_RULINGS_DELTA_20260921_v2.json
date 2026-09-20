@@ -5,6 +5,15 @@
  "owner_gate": "无（全部 L2/机制/批次面）",
  "delta": [
   {
+   "id": "**(c) 降级：走廊越界可纯 alloc 槽位重排消除，无须改 SPEC**",
+   "status": "已实测（只读影子 + 临时 alloc 拷贝）",
+   "edit": "`PCIE_TX1_N.track_y 21.3 → 21.01`（同 band in2；两值皆 ∈ `tracks_y`；21.01 ∈ In2 自由带 20.5–21.2）· `PCIE_RX1_P.track_y 16.0 → 17.5`（同 band fcu；∈ `tracks_y` ∧ F.Cu 自由带 17.3–18.2）",
+   "result": "`TX1/input` 失败面由『走廊段 seg_ok 失败（通道被占/冻结段阻挡）』**转为**『P/N 间距不足 −0.0900（段级门）』⇒ **走廊阻塞已被纯槽位重排消除**，剩余阻塞 = 逃逸对级（= R-8 换层模板问题）；总真值仍 2/8（该段未净增解，因逃逸面未解）",
+   "implication": "**(c) 不必以『扩 SPEC `tracks_y`』为前提**：既有槽位内已有可用成员（TX1.input：21.01）；(c) 的真实动作 = **alloc 槽位重排**（模型输入，由 pipeline 自产，非冻结件）。R-3 原『是否授权扩 SPEC』项可收窄。",
+   "caveat": "RX1.input 的 F.Cu 自由带槽位（17.5/18.0）已被 TX0 对占用 ⇒ 其 P 需跨层（In1 19.0 ∈ 自由带 ∧ `tracks_y`）或另案；且槽位重排仍属**未获批不得改**的 alloc 面，须裁定。",
+   "evidence": "BATCH6_C_ALLOC_REORDER_PROBE_v1.json"
+  },
+  {
    "id": "**落件前全量三验预演已完成（隔离影子）**",
    "status": "已实测（read-only）",
    "result": "① `verify k2` = preflight+3 PASS（从影子根跑，顺证 C-22 cwd 解耦）② canonical 19 = 19 OK/0 FAIL/`190b73be0f728a56` ③ `--expect-patched` = **PASS**（A 4/4 · B PASS · C 14/14 回退 0 · D hidden=2=C1/C2，与 pristine 逐项同）；K1 真值 2/8（RX0/input 0.2636）、层合法违规 0",
@@ -100,7 +109,8 @@
   "BATCH6_CANONICAL19_SOLVER_INDEPENDENCE_v1.json": "canonical 19 实跑 + 解耦动态证明",
   "BATCH6_DRAFT/BATCH6_LANDING_CANDIDATE_v3.patch": "**落件本体（一键）**",
   "k2_canonical19_solver_import_trap_v1.py": "陷阱脚本（正控 + 透传）",
-  "BATCH6_LANDING_REHEARSAL_THREE_VERIFICATIONS_v1.json": "三验预演读数（影子）"
+  "BATCH6_LANDING_REHEARSAL_THREE_VERIFICATIONS_v1.json": "三验预演读数（影子）",
+  "BATCH6_C_ALLOC_REORDER_PROBE_v1.json": "(c) 槽位重排实测（失败面转移证明）"
  },
  "readonly_repo": true,
  "not_landed": true,

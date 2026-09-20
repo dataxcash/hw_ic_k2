@@ -1,0 +1,90 @@
+{
+ "artifact": "k1_corridor_alloc_reorder_probe",
+ "schema": 1,
+ "edit": {
+  "PCIE_TX1_N.track_y": "21.3 → 21.01",
+  "PCIE_RX1_P.track_y": "16.0 → 17.5"
+ },
+ "baseline": {
+  "shared_seg_count": 23,
+  "segments": {
+   "TX0/input": {
+    "st": "INFEASIBLE",
+    "why": "P/N 间距不足 -0.0900 < 0.1（段级门·项目 spec gap_mm）"
+   },
+   "TX0/output": {
+    "st": "SOLVED",
+    "why": null,
+    "edge": 0.142
+   },
+   "TX1/input": {
+    "st": "INFEASIBLE",
+    "why": "走廊段 seg_ok 失败（通道被占/冻结段阻挡）"
+   },
+   "TX1/output": {
+    "st": "INFEASIBLE",
+    "why": "左逃逸对级不可行（output）"
+   },
+   "RX0/input": {
+    "st": "SOLVED",
+    "why": null,
+    "edge": 0.2636
+   },
+   "RX0/output": {
+    "st": "INFEASIBLE",
+    "why": "左逃逸对级不可行（output）"
+   },
+   "RX1/input": {
+    "st": "INFEASIBLE",
+    "why": "左逃逸对级不可行（input）"
+   },
+   "RX1/output": {
+    "st": "INFEASIBLE",
+    "why": "左逃逸对级不可行（output）"
+   }
+  }
+ },
+ "reordered": {
+  "shared_seg_count": 23,
+  "segments": {
+   "TX0/input": {
+    "st": "INFEASIBLE",
+    "why": "P/N 间距不足 -0.0900 < 0.1（段级门·项目 spec gap_mm）"
+   },
+   "TX0/output": {
+    "st": "SOLVED",
+    "why": null,
+    "edge": 0.142
+   },
+   "TX1/input": {
+    "st": "INFEASIBLE",
+    "why": "P/N 间距不足 -0.0900 < 0.1（段级门·项目 spec gap_mm）"
+   },
+   "TX1/output": {
+    "st": "INFEASIBLE",
+    "why": "左逃逸对级不可行（output）"
+   },
+   "RX0/input": {
+    "st": "SOLVED",
+    "why": null,
+    "edge": 0.2636
+   },
+   "RX0/output": {
+    "st": "INFEASIBLE",
+    "why": "左逃逸对级不可行（output）"
+   },
+   "RX1/input": {
+    "st": "INFEASIBLE",
+    "why": "左逃逸对级不可行（input）"
+   },
+   "RX1/output": {
+    "st": "INFEASIBLE",
+    "why": "左逃逸对级不可行（output）"
+   }
+  }
+ },
+ "solved_baseline": 2,
+ "solved_reordered": 2,
+ "readonly_repo": true,
+ "not_landed": true
+}
