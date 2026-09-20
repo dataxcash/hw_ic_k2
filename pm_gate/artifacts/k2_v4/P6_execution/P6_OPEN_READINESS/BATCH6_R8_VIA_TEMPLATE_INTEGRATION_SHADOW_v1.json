@@ -1,0 +1,30 @@
+{
+ "artifact": "k2_r8_via_template_integration_shadow",
+ "schema": 1,
+ "purpose": "R-8 影子集成验证：把引擎门实测通过的换层形态（⑨）接入 `_k1_escape`（含 In1 入场），量化『是否产生真值增益』与**接入次序的陷阱**。",
+ "shadow": "/tmp/opencode/shadowtest/via（v4 + ⑨ 候选 + `layers` 加 In1.Cu；真源零改）",
+ "runs": {
+  "A__⑨_before_existing(default alloc)": {
+   "seg_solved": "**1/8（负增益！）**",
+   "detail": "TX0/output SOLVED 0.2773（几何被⑨改写）· **RX0/input 由 SOLVED 落为 INFEASIBLE**（段级 P/N −0.09）",
+   "cause": "`_k1_escape` 返回**首个**通过逃逸门的候选 ⇒ ⑨ 抢先返回『逃逸门通过但整段失败』的候选，**抢占**既有 VG 对级化路径的可行解"
+  },
+  "B__⑨_after_existing(default alloc)": {
+   "seg_solved": "**2/8**",
+   "detail": "TX0/output 0.142 · RX0/input 0.2636 ⇒ 回到 v4 基线的**同一读数** ⇒ **无净增益、亦无损失**"
+  },
+  "C__⑨_after_existing +(c) 槽位重排": {
+   "seg_solved": "**2/8**",
+   "detail": "TX1/input 失败面由『走廊段 seg_ok 失败』变为『P/N 间距不足 −0.09（段级门）』⇒ **走廊已通（(c) 生效）**，但**逃逸/装配后的对级交叉仍在** ⇒ 仍未 SOLVED"
+  }
+ },
+ "hard_constraints_learned": [
+  "**⑨ 必须置于既有候选之后**（或在既有候选全败时才启用）：置前会造成 **2/8→1/8 负增益**（抢占既有解）—— 这是 A1 实现的**硬约束**，naive 实现会引入回归。",
+  "⑨ 的『逃逸门通过』**不等于**整段可解：`TX1/input` 在 (c) 修正后仍因**段级 P/N 交叉**失败 ⇒ R-8 需更完整的绕行（如两端协同/连续两段同向），单点换层不足。",
+  "在本形态下，R-8 的**即时收益 = 0 段**（2/8 → 2/8）⇒ 立项价值须由更强形态或 (c)+⑨+两端协同共同兑现。"
+ ],
+ "k1_truth_unchanged": "**2/8**（TX0/output 0.142 · RX0/input 0.2636）；层合法违规 0",
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-21T17:40:00+0800"
+}
