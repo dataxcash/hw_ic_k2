@@ -1,0 +1,66 @@
+{
+ "artifact": "k2_l8_deliverable_cross_consistency_owner3",
+ "schema": 1,
+ "ts": "2026-09-21T01:04:12+0800",
+ "id": "owner ③ 交付件**互证**：叠层图 ↔ SPEC 叠层 ↔ 钻孔程序 ↔ 阻抗（此前仅验「件在」，未验「件间自洽」）",
+ "authority": "owner 常设裁定 #14③（完工定义 = 8 铜层 + 阻焊/丝印/边框/job + Excellon **含 HDI 盲埋孔** + **叠层图** + **阻抗表** + MANIFEST）—— 本件验其**互证性**（制造方同时读叠层图与钻孔程序 ⇒ 二者必须同构）",
+ "subject": {
+  "package": "L6/jlc_package_l8",
+  "manifest_sha16": "4b610baed4f4752c",
+  "board_sha16": "7a5c89913d6e5d0a"
+ },
+ "checks": [
+  {
+   "#": 1,
+   "what": "**叠层图 ↔ SPEC 逐层介质**（`03_stackup/JLC08161H_stackup.svg` ↔ `L3/SPEC_k2_v4.spec-rev-53.json::stackup.dielectric_8l`）",
+   "result": "**逐层一致** — F.In1 0.1164/er4.16/2116*1 · In1-In2 0.25/3.99/core · In2-In3 0.25/3.99 · In3-In4 0.1922/4.1/自由余隙 · In4-In5 0.25/3.99 · In5-In6 0.25/3.99 · In6-B 0.1164/4.16",
+   "verdict": "PASS"
+  },
+  {
+   "#": 2,
+   "what": "**厚度闭合**（介质 + 铜 = 成品 1.6mm）",
+   "result": "介质 1.4250 mm + 铜(外层 1oz×2=0.070 + 内层 0.5oz×6=0.105 = 0.1750) = **1.6000 mm** = SPEC `total_thickness_mm 1.6` ⇒ **精确闭合**",
+   "verdict": "PASS"
+  },
+  {
+   "#": 3,
+   "what": "**HDI 阶数图 ↔ Excellon 钻孔层对/支数**（`03_stackup/HDI_stage_diagram.svg` ↔ `02_drill_excellon/*.drl`）",
+   "result": "**逐对一致** — `F.Cu→In1.Cu 171` · `F.Cu→In2.Cu 132` · `F.Cu→In4.Cu 4` · `F.Cu→In5.Cu 19` · `In5.Cu→B.Cu 37` · `In2.Cu→In5.Cu 92`（**455 非通孔**）· `F.Cu→B.Cu(THROUGH) 279` ⇒ 通孔+非通孔 = **734 via** = 图载 `non-through 455/734` ✅",
+   "accounting_note": "**口径说明（关键）**：通孔文件 `k2_v4_8L.l8.drl` 含 **299 孔** = **T1 ∅0.2 × 279（过孔）** + **T2 ∅0.8 × 16（PTH 插件）** + **T3 ∅3.2 × 4（NPTH 安装）** ⇒ 全包 **754 孔** = 734 via + 16 PTH + 4 NPTH（与 `drill_board_xcheck.all_match=true` 一致）。图按 **via 计**（734）、钻孔册按 **孔计**（754）⇒ **非矛盾**，本件已具名对齐。",
+   "verdict": "PASS"
+  },
+  {
+   "#": 4,
+   "what": "**SPEC 阻抗 ↔ SPEC 叠层**（`impedance.per_layer` ↔ `stackup.dielectric_8l`）",
+   "result": "F.Cu microstrip `h=0.1164 · er=4.16 · 2116*1` ↔ `d(F.Cu-In1.Cu) 0.1164/4.16/2116*1` ✅ · In2 symmetric_stripline `w=0.16 · er=3.99` ↔ `d(In1-In2)/d(In2-In3) core 0.25/3.99` ✅",
+   "verdict": "PASS"
+  },
+  {
+   "#": 5,
+   "what": "**层序件 ↔ SPEC**（`05_layer_sequence.txt` ↔ `stackup` 层角色）",
+   "result": "F.Cu signal · In1 GND_PLANE · In2 signal · In3 GND_PLANE · In4 POWER_PLANE · In5 signal · In6 GND_PLANE · B.Cu signal ⇒ **与 SPEC 逐层角色一致** ✅",
+   "verdict": "PASS"
+  }
+ ],
+ "registered_inconsistency": {
+  "id": "SPEC-STACKUP-MATERIAL-FREETEXT",
+  "severity": "文档内不一致（**非交付包内**· 不影响制造数据）",
+  "detail": "`SPEC_k2_v4.spec-rev-53.json::stackup.material`（**自由文本**）写「prepreg **2116*1 / 3313*1**，core **0.36*2**」；而同一 SPEC 之**结构化数据** `dielectric_8l` + 叠层图 + 阻抗节 皆为「**2116*1 + core 0.25×2（×4 处）+ 自由余隙 0.1922**」⇒ **无 3313、无 core 0.36**。判读：该自由文本系**早期候选/遗留描述**（同串自称『逐层厚度由 L2 CO-55 反解裁定』，而反解结果即 `dielectric_8l`）。**权威 = 结构化 `dielectric_8l` + 叠层图**（二者一致且厚度精确闭合）。",
+  "disposition": "**登记 · 不阻塞 · 不改 SPEC**（红线：**未获批不得改 SPEC**）⇒ 待监理授权另批（改自由文本 = 改 SPEC ⇒ 须换 SPEC 锚 + 同步交付件）。",
+  "impact": "**无制造/交付影响**：制造以叠层图与钻孔程序为准，二者自洽；`material` 自由文本仅供人读。"
+ },
+ "method_note": "只读：解 SVG 文本、读钻孔册/SPEC JSON、复算厚度；**未跑 pcbnew**、**未改任何文件/板/包/判据/SPEC**。",
+ "non_tooth": "**非新增检查齿**（未新增判据维/阈值）——仅对 owner ③ 既有交付要件做**互证**。",
+ "red_lines_ok": [
+  "只读",
+  "未改交付包（锚 4b610bad/36a6b276 未动）",
+  "未改 SPEC（红线）",
+  "未改判据/板/生成器",
+  "未派 WORKER"
+ ],
+ "repro": [
+  "python3 -c \"import re;s=open('L6/jlc_package_l8/03_stackup/JLC08161H_stackup.svg',encoding='utf-8',errors='replace').read();print(re.sub(r'<[^>]+>',' ',s))\"",
+  "python3 -c \"import json;d=json.load(open('L6/jlc_package_l8/07_verify/drill_census.json'));print(d['files']['k2_v4_8L.l8.drl'])\"  # 299 = 279+16+4",
+  "python3 -c \"import json;s=json.load(open('L3/SPEC_k2_v4.spec-rev-53.json'))['stackup'];print(sum(float(v['mm']) for v in s['dielectric_8l'].values())+0.175)  # => 1.6"
+ ]
+}
