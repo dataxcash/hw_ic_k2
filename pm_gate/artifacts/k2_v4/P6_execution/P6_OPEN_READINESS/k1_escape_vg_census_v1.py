@@ -52,9 +52,21 @@ def _find_data_root():
     return os.getcwd()
 
 
+def _rmtree(path):
+    """444/555 权限树的安全删除（先 chmod 自身与父目录）。"""
+    def _onerr(func, p, exc):
+        try:
+            os.chmod(p, 0o777)
+            os.chmod(os.path.dirname(p), 0o777)
+        except OSError:
+            pass
+        func(p)
+    if os.path.exists(path):
+        shutil.rmtree(path, onerror=_onerr)
+
+
 def build(data_root):
-    if os.path.exists(SHADOW):
-        shutil.rmtree(SHADOW, onerror=lambda f, p, e: (os.chmod(p, 0o777), f(p)))
+    _rmtree(SHADOW)
     os.makedirs(SHADOW, exist_ok=True)
     shutil.copytree(os.path.join(data_root, "_shared"), os.path.join(SHADOW, "_shared"),
                     symlinks=True)

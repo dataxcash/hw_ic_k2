@@ -1,0 +1,46 @@
+{
+ "artifact": "k2_p6_evidence_selfcheck",
+ "schema": 1,
+ "purpose": "**证据自检**：把落地的复核脚本**重新从仓内运行**，与各证据件记录的读数逐项比对（防止『脚本与件不一致』或『件记录有误』）。另附本轮 (d) 下潜方案的阻断量化。",
+ "rerun_2026_09_21": [
+  {
+   "script": "k1_shared_accum_failopen_check_v1.py",
+   "recorded": "as_is 1/8 shared=0 · ⑥树 3/8 shared=0 且 2 段 P/N 超差 · ⑥+FIX-A/B 1/8 shared=8",
+   "rerun": "as_is seg=1 shared=0 viol=0 · ⑥树 seg=3 shared=0 viol=2 · ⑥+FIX-A/B seg=1 shared=8 viol=0",
+   "match": true
+  },
+  {
+   "script": "k1_layer_legality_audit_v1.py（pristine）",
+   "recorded": "solved=1 · violations=0",
+   "rerun": "solved=1 · violations=0",
+   "match": true
+  },
+  {
+   "script": "k1_escape_vg_census_v1.py",
+   "recorded": "9 行端点普查 · 2 处结构性无解（OCuLink_RX0/RX1 右端）· 段级 TX0.output 唯一 SOLVED",
+   "rerun": "rows=9 · structural=2（同为 OCuLink_RX0/RX1 右端）· segs={TX0.input INFEASIBLE, TX0.output SOLVED, 其余 INFEASIBLE}",
+   "match": true
+  },
+  {
+   "script": "k1_corridor_freeband_sweep_v1.py",
+   "recorded": "In1 左半 17.05–21.2(4.2) · In2 20.5–21.2(0.75) · F.Cu 13.95–14.7/17.3–18.2 …",
+   "rerun": "本轮执行 OK（读数与件内一致；见该件 §result_free_runs）",
+   "match": true
+  }
+ ],
+ "script_defect_fixed": {
+  "script": "k1_escape_vg_census_v1.py",
+  "defect": "`shutil.rmtree(shadow, onerror=lambda f,p,e: (os.chmod(p,0o755), f(p)))` 对 `_shared` 的 444/555 文件树**二次运行必失败**（父目录不可写）",
+  "fix": "统一改为 `_rmtree()`：onerror 里**同时 chmod 自身与父目录**再调 func",
+  "status": "已修并复跑通过"
+ },
+ "d_dip_blocker_quantification": {
+  "scheme": "『下潜绕行旋转』：P 先走到焊盘行下方再回轨道（N 直落）；P 的竖直段需 ≥0.19（对 N 竖直）且避开 GND 焊盘",
+  "measured": "P 竖直段 x 需 ≥ 7.05+0.19 = **7.24**（与 N 保持 ≥0.19 中心距）；同时须 ≤ 7.275−0.045−0.1 = **7.13**（避开 (7.6,22.01) 的 GND THT 焊盘，0.65 方，边 7.275）⇒ **区间为空**。实测 x=7.25 的阻断障碍 = `pad GND`，d=−0.02 < req 0.1；x=7.05 无板级阻断但**与 N 竖直重合**（P/N 距离 0，被对级门拒）。",
+  "root_geometry": "J1 THT 行（y=22.01，0.65 方，x∈{6.0,6.4,7.2,7.6…}）相邻缝隙 0.15–0.2 < 所需 0.29（0.09 线宽 + 2×0.1 净空）⇒ **该行不可垂直穿越**。",
+  "conclusion": "TX0.input（旋转窗口 = 0）的旋转**必须绕行到焊盘行下方**并**借助内层过孔**（P 下潜→via→In1→在行下方水平绕行→via 回 F.Cu），单层 F.Cu 无解。⇒ (d) 方案必须含 via 落位，且 via 落位区（y>25.5、x∈[6.6,8.5] 附近的空区）须与 SPEC/alloc 一并裁定。"
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-21T06:40:00+0800"
+}
