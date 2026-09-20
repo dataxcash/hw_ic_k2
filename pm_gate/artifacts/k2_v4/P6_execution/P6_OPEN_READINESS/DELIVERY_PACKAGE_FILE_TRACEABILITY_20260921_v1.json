@@ -1,0 +1,568 @@
+{
+ "artifact": "k2_p6_delivery_package_file_traceability",
+ "schema": 1,
+ "purpose": "P6 §8.2②：交付包 **53 件逐件用途/追溯表**（每件 → 用途 → 判据/验证出处），并对 owner #14③『十项』做机械覆盖核对。**只读**（仅读 MANIFEST 与包内目录；不重出包、不动锚）。",
+ "anchor": {
+  "manifest_sha256_16": "6ee7495de61f749f",
+  "manifest_sha256_full": "6ee7495de61f749fba61a04a5311e17040988c322b3a17f46b6f26efd8b243b2",
+  "n_files": 53,
+  "revision": "P5-L7.1",
+  "board_sha16": "c5a7df90aadb66e0",
+  "pro_sha16": "33b4eb6cae8359a9",
+  "dfm_summary": {
+   "pass": 16,
+   "accept": 1,
+   "fail": 0
+  },
+  "drill_total": 749
+ },
+ "category_summary": {
+  "copper": {
+   "files": 8,
+   "bytes": 1391480
+  },
+  "dfm-report": {
+   "files": 3,
+   "bytes": 10293
+  },
+  "doc": {
+   "files": 2,
+   "bytes": 7999
+  },
+  "drill": {
+   "files": 7,
+   "bytes": 13033
+  },
+  "drill-map": {
+   "files": 7,
+   "bytes": 252303
+  },
+  "drill-report": {
+   "files": 1,
+   "bytes": 2467
+  },
+  "edge": {
+   "files": 1,
+   "bytes": 688
+  },
+  "impedance": {
+   "files": 2,
+   "bytes": 13197
+  },
+  "job": {
+   "files": 1,
+   "bytes": 4856
+  },
+  "layer-seq": {
+   "files": 1,
+   "bytes": 988
+  },
+  "mask": {
+   "files": 2,
+   "bytes": 375043
+  },
+  "parity": {
+   "files": 1,
+   "bytes": 200
+  },
+  "ruling": {
+   "files": 4,
+   "bytes": 13209
+  },
+  "silk": {
+   "files": 2,
+   "bytes": 88436
+  },
+  "stackup": {
+   "files": 2,
+   "bytes": 7647
+  },
+  "verify": {
+   "files": 9,
+   "bytes": 11722
+  }
+ },
+ "owner_14_iii_coverage": {
+  "8 铜层": [
+   8,
+   [
+    "01_gerber_rs274x/k2_v4_8L.l7-B_Cu.gbr",
+    "01_gerber_rs274x/k2_v4_8L.l7-F_Cu.gbr",
+    "01_gerber_rs274x/k2_v4_8L.l7-In1_Cu.gbr",
+    "01_gerber_rs274x/k2_v4_8L.l7-In2_Cu.gbr",
+    "01_gerber_rs274x/k2_v4_8L.l7-In3_Cu.gbr",
+    "01_gerber_rs274x/k2_v4_8L.l7-In4_Cu.gbr",
+    "01_gerber_rs274x/k2_v4_8L.l7-In5_Cu.gbr",
+    "01_gerber_rs274x/k2_v4_8L.l7-In6_Cu.gbr"
+   ]
+  ],
+  "阻焊(F/B)": [
+   2,
+   [
+    "01_gerber_rs274x/k2_v4_8L.l7-B_Mask.gbr",
+    "01_gerber_rs274x/k2_v4_8L.l7-F_Mask.gbr"
+   ]
+  ],
+  "丝印(F/B)": [
+   2,
+   [
+    "01_gerber_rs274x/k2_v4_8L.l7-B_Silkscreen.gbr",
+    "01_gerber_rs274x/k2_v4_8L.l7-F_Silkscreen.gbr"
+   ]
+  ],
+  "边框": [
+   1,
+   [
+    "01_gerber_rs274x/k2_v4_8L.l7-Edge_Cuts.gbr"
+   ]
+  ],
+  "job": [
+   1,
+   [
+    "01_gerber_rs274x/k2_v4_8L.l7-job.gbrjob"
+   ]
+  ],
+  "Excellon 钻孔": [
+   7,
+   [
+    "02_drill_excellon/k2_v4_8L.l7-back-in5.drl",
+    "02_drill_excellon/k2_v4_8L.l7-front-in1.drl",
+    "02_drill_excellon/k2_v4_8L.l7-front-in2.drl",
+    "02_drill_excellon/k2_v4_8L.l7-front-in4.drl",
+    "02_drill_excellon/k2_v4_8L.l7-front-in5.drl",
+    "02_drill_excellon/k2_v4_8L.l7-in2-in5.drl",
+    "02_drill_excellon/k2_v4_8L.l7.drl"
+   ]
+  ],
+  "HDI 盲埋孔(层对)": [
+   6,
+   [
+    "02_drill_excellon/k2_v4_8L.l7-back-in5.drl",
+    "02_drill_excellon/k2_v4_8L.l7-front-in1.drl",
+    "02_drill_excellon/k2_v4_8L.l7-front-in2.drl",
+    "02_drill_excellon/k2_v4_8L.l7-front-in4.drl",
+    "02_drill_excellon/k2_v4_8L.l7-front-in5.drl",
+    "02_drill_excellon/k2_v4_8L.l7-in2-in5.drl"
+   ]
+  ],
+  "叠层图": [
+   2,
+   [
+    "03_stackup/HDI_stage_diagram.svg",
+    "03_stackup/JLC08161H_stackup.svg"
+   ]
+  ],
+  "阻抗表": [
+   2,
+   [
+    "04_impedance/impedance_table.json",
+    "04_impedance/impedance_table.md"
+   ]
+  ],
+  "MANIFEST": [
+   1,
+   [
+    "MANIFEST.json"
+   ]
+  ]
+ },
+ "ten_items_all_covered": true,
+ "files": {
+  "01_gerber_rs274x/k2_v4_8L.l7-B_Cu.gbr": {
+   "category": "copper",
+   "purpose": "铜层图形（8 层之一）",
+   "trace": "图元保真审计(draw/via 逐层相等) + 十项③'8 铜层'",
+   "bytes": 37389,
+   "sha256_16": "fffee0862cd09b7d"
+  },
+  "01_gerber_rs274x/k2_v4_8L.l7-B_Mask.gbr": {
+   "category": "mask",
+   "purpose": "阻焊层图形（F/B）",
+   "trace": "DFM 阻焊 + 图元保真审计 + 十项③'阻焊'",
+   "bytes": 30507,
+   "sha256_16": "7ea4f7315a2ec097"
+  },
+  "01_gerber_rs274x/k2_v4_8L.l7-B_Silkscreen.gbr": {
+   "category": "silk",
+   "purpose": "丝印层图形（F/B）",
+   "trace": "silk_overhang.json + 图元保真审计 + 十项③'丝印'",
+   "bytes": 463,
+   "sha256_16": "8c6961850e20464d"
+  },
+  "01_gerber_rs274x/k2_v4_8L.l7-Edge_Cuts.gbr": {
+   "category": "edge",
+   "purpose": "板框（Edge.Cuts）",
+   "trace": "DFM 外形 + 图元保真审计 + 十项③'边框'",
+   "bytes": 688,
+   "sha256_16": "6c148a4d50ce577e"
+  },
+  "01_gerber_rs274x/k2_v4_8L.l7-F_Cu.gbr": {
+   "category": "copper",
+   "purpose": "铜层图形（8 层之一）",
+   "trace": "图元保真审计(draw/via 逐层相等) + 十项③'8 铜层'",
+   "bytes": 191045,
+   "sha256_16": "6380ee9282c31c77"
+  },
+  "01_gerber_rs274x/k2_v4_8L.l7-F_Mask.gbr": {
+   "category": "mask",
+   "purpose": "阻焊层图形（F/B）",
+   "trace": "DFM 阻焊 + 图元保真审计 + 十项③'阻焊'",
+   "bytes": 344536,
+   "sha256_16": "6e5e44ff38966919"
+  },
+  "01_gerber_rs274x/k2_v4_8L.l7-F_Silkscreen.gbr": {
+   "category": "silk",
+   "purpose": "丝印层图形（F/B）",
+   "trace": "silk_overhang.json + 图元保真审计 + 十项③'丝印'",
+   "bytes": 87973,
+   "sha256_16": "19e5c8b4aea09bef"
+  },
+  "01_gerber_rs274x/k2_v4_8L.l7-In1_Cu.gbr": {
+   "category": "copper",
+   "purpose": "铜层图形（8 层之一）",
+   "trace": "图元保真审计(draw/via 逐层相等) + 十项③'8 铜层'",
+   "bytes": 254179,
+   "sha256_16": "5571ce50cc2dded5"
+  },
+  "01_gerber_rs274x/k2_v4_8L.l7-In2_Cu.gbr": {
+   "category": "copper",
+   "purpose": "铜层图形（8 层之一）",
+   "trace": "图元保真审计(draw/via 逐层相等) + 十项③'8 铜层'",
+   "bytes": 44171,
+   "sha256_16": "6016c45a21e4117a"
+  },
+  "01_gerber_rs274x/k2_v4_8L.l7-In3_Cu.gbr": {
+   "category": "copper",
+   "purpose": "铜层图形（8 层之一）",
+   "trace": "图元保真审计(draw/via 逐层相等) + 十项③'8 铜层'",
+   "bytes": 216607,
+   "sha256_16": "583e622170b5fd97"
+  },
+  "01_gerber_rs274x/k2_v4_8L.l7-In4_Cu.gbr": {
+   "category": "copper",
+   "purpose": "铜层图形（8 层之一）",
+   "trace": "图元保真审计(draw/via 逐层相等) + 十项③'8 铜层'",
+   "bytes": 375144,
+   "sha256_16": "7b93261de86ace9a"
+  },
+  "01_gerber_rs274x/k2_v4_8L.l7-In5_Cu.gbr": {
+   "category": "copper",
+   "purpose": "铜层图形（8 层之一）",
+   "trace": "图元保真审计(draw/via 逐层相等) + 十项③'8 铜层'",
+   "bytes": 121772,
+   "sha256_16": "6ee2c17a86489a88"
+  },
+  "01_gerber_rs274x/k2_v4_8L.l7-In6_Cu.gbr": {
+   "category": "copper",
+   "purpose": "铜层图形（8 层之一）",
+   "trace": "图元保真审计(draw/via 逐层相等) + 十项③'8 铜层'",
+   "bytes": 151173,
+   "sha256_16": "6564e9d752e30eff"
+  },
+  "01_gerber_rs274x/k2_v4_8L.l7-job.gbrjob": {
+   "category": "job",
+   "purpose": "Gerber job 元数据（叠层/Finish/文件清单）",
+   "trace": "DFM job 一致性审计 + 十项③'job'",
+   "bytes": 4856,
+   "sha256_16": "ba3cfa2d5bde15b3"
+  },
+  "02_drill_excellon/drill_report.txt": {
+   "category": "drill-report",
+   "purpose": "Excellon 工具/孔档报表",
+   "trace": "drill_census.json",
+   "bytes": 2467,
+   "sha256_16": "35a2d738133dceef"
+  },
+  "02_drill_excellon/k2_v4_8L.l7-back-in5-drl_map.svg": {
+   "category": "drill-map",
+   "purpose": "钻孔图（含分层对）",
+   "trace": "交付钻孔坐标级保真审计",
+   "bytes": 23431,
+   "sha256_16": "711189c4bd1f1644"
+  },
+  "02_drill_excellon/k2_v4_8L.l7-back-in5.drl": {
+   "category": "drill",
+   "purpose": "Excellon 钻孔（HDI 盲/埋孔对）",
+   "trace": "交付钻孔坐标级保真审计(749/749) + drill_board_xcheck + 十项③'Excellon 含 HDI'",
+   "bytes": 838,
+   "sha256_16": "544c0e7c4fd72098"
+  },
+  "02_drill_excellon/k2_v4_8L.l7-drl_map.svg": {
+   "category": "drill-map",
+   "purpose": "钻孔图（含分层对）",
+   "trace": "交付钻孔坐标级保真审计",
+   "bytes": 85000,
+   "sha256_16": "8d57b0a1410b666b"
+  },
+  "02_drill_excellon/k2_v4_8L.l7-front-in1-drl_map.svg": {
+   "category": "drill-map",
+   "purpose": "钻孔图（含分层对）",
+   "trace": "交付钻孔坐标级保真审计",
+   "bytes": 38502,
+   "sha256_16": "69701feb3bd72fcc"
+  },
+  "02_drill_excellon/k2_v4_8L.l7-front-in1.drl": {
+   "category": "drill",
+   "purpose": "Excellon 钻孔（HDI 盲/埋孔对）",
+   "trace": "交付钻孔坐标级保真审计(749/749) + drill_board_xcheck + 十项③'Excellon 含 HDI'",
+   "bytes": 2725,
+   "sha256_16": "7d8c8c07bc7c9680"
+  },
+  "02_drill_excellon/k2_v4_8L.l7-front-in2-drl_map.svg": {
+   "category": "drill-map",
+   "purpose": "钻孔图（含分层对）",
+   "trace": "交付钻孔坐标级保真审计",
+   "bytes": 33948,
+   "sha256_16": "8ed14ea9cf7c51cd"
+  },
+  "02_drill_excellon/k2_v4_8L.l7-front-in2.drl": {
+   "category": "drill",
+   "purpose": "Excellon 钻孔（HDI 盲/埋孔对）",
+   "trace": "交付钻孔坐标级保真审计(749/749) + drill_board_xcheck + 十项③'Excellon 含 HDI'",
+   "bytes": 2087,
+   "sha256_16": "4c4e82fd34429c0a"
+  },
+  "02_drill_excellon/k2_v4_8L.l7-front-in4-drl_map.svg": {
+   "category": "drill-map",
+   "purpose": "钻孔图（含分层对）",
+   "trace": "交付钻孔坐标级保真审计",
+   "bytes": 19534,
+   "sha256_16": "9fec61316b6ca301"
+  },
+  "02_drill_excellon/k2_v4_8L.l7-front-in4.drl": {
+   "category": "drill",
+   "purpose": "Excellon 钻孔（HDI 盲/埋孔对）",
+   "trace": "交付钻孔坐标级保真审计(749/749) + drill_board_xcheck + 十项③'Excellon 含 HDI'",
+   "bytes": 379,
+   "sha256_16": "caf64c5193325109"
+  },
+  "02_drill_excellon/k2_v4_8L.l7-front-in5-drl_map.svg": {
+   "category": "drill-map",
+   "purpose": "钻孔图（含分层对）",
+   "trace": "交付钻孔坐标级保真审计",
+   "bytes": 22142,
+   "sha256_16": "532b51bd0f1651ac"
+  },
+  "02_drill_excellon/k2_v4_8L.l7-front-in5.drl": {
+   "category": "drill",
+   "purpose": "Excellon 钻孔（HDI 盲/埋孔对）",
+   "trace": "交付钻孔坐标级保真审计(749/749) + drill_board_xcheck + 十项③'Excellon 含 HDI'",
+   "bytes": 570,
+   "sha256_16": "3cff24099576ae6e"
+  },
+  "02_drill_excellon/k2_v4_8L.l7-in2-in5-drl_map.svg": {
+   "category": "drill-map",
+   "purpose": "钻孔图（含分层对）",
+   "trace": "交付钻孔坐标级保真审计",
+   "bytes": 29746,
+   "sha256_16": "44ee27f61d139541"
+  },
+  "02_drill_excellon/k2_v4_8L.l7-in2-in5.drl": {
+   "category": "drill",
+   "purpose": "Excellon 钻孔（HDI 盲/埋孔对）",
+   "trace": "交付钻孔坐标级保真审计(749/749) + drill_board_xcheck + 十项③'Excellon 含 HDI'",
+   "bytes": 1639,
+   "sha256_16": "2b840db2661e83b5"
+  },
+  "02_drill_excellon/k2_v4_8L.l7.drl": {
+   "category": "drill",
+   "purpose": "Excellon 钻孔（通孔）",
+   "trace": "交付钻孔坐标级保真审计(749/749) + drill_board_xcheck + 十项③'Excellon 含 HDI'",
+   "bytes": 4795,
+   "sha256_16": "60834146641b5744"
+  },
+  "03_stackup/HDI_stage_diagram.svg": {
+   "category": "stackup",
+   "purpose": "叠层图（HDI 阶数 + JLC08161H 叠层）",
+   "trace": "十项③'叠层图' + N-1 B-1 叠层口径",
+   "bytes": 4556,
+   "sha256_16": "be277bc2c707ae8e"
+  },
+  "03_stackup/JLC08161H_stackup.svg": {
+   "category": "stackup",
+   "purpose": "叠层图（HDI 阶数 + JLC08161H 叠层）",
+   "trace": "十项③'叠层图' + N-1 B-1 叠层口径",
+   "bytes": 3091,
+   "sha256_16": "44370475b258848f"
+  },
+  "04_impedance/impedance_table.json": {
+   "category": "impedance",
+   "purpose": "阻抗表（json + 人读 md）",
+   "trace": "十项③'阻抗表' + 阻抗判据 85Ω±10%",
+   "bytes": 10466,
+   "sha256_16": "ef45b28cbbc73175"
+  },
+  "04_impedance/impedance_table.md": {
+   "category": "impedance",
+   "purpose": "阻抗表（json + 人读 md）",
+   "trace": "十项③'阻抗表' + 阻抗判据 85Ω±10%",
+   "bytes": 2731,
+   "sha256_16": "f21d020cfb59c19b"
+  },
+  "05_layer_sequence.txt": {
+   "category": "layer-seq",
+   "purpose": "层序列（铜层/介质名序）",
+   "trace": "层计划(SPEC layer_plan) + 十项'叠层'",
+   "bytes": 988,
+   "sha256_16": "e18cb64846baf1ec"
+  },
+  "06_rulings/L2_RULING_process_route_A_frozen_hdi_v1.md": {
+   "category": "ruling",
+   "purpose": "L2 裁定留档（工艺冻结A / 过孔通道域 / U6 热机械）",
+   "trace": "owner #14① 工艺冻结 + L2 裁定向导",
+   "bytes": 3237,
+   "sha256_16": "ef48da8f83393580"
+  },
+  "06_rulings/L2_RULING_u6_thermal_mitigation_v2.md": {
+   "category": "ruling",
+   "purpose": "L2 裁定留档（工艺冻结A / 过孔通道域 / U6 热机械）",
+   "trace": "owner #14① 工艺冻结 + L2 裁定向导",
+   "bytes": 1463,
+   "sha256_16": "cec7bd86d39b71c8"
+  },
+  "06_rulings/L2_RULING_u6_thermal_v1.md": {
+   "category": "ruling",
+   "purpose": "L2 裁定留档（工艺冻结A / 过孔通道域 / U6 热机械）",
+   "trace": "owner #14① 工艺冻结 + L2 裁定向导",
+   "bytes": 3571,
+   "sha256_16": "2c41056fc3a4de05"
+  },
+  "06_rulings/L2_RULING_via_channel_and_interpair_domain_v1.md": {
+   "category": "ruling",
+   "purpose": "L2 裁定留档（工艺冻结A / 过孔通道域 / U6 热机械）",
+   "trace": "owner #14① 工艺冻结 + L2 裁定向导",
+   "bytes": 4938,
+   "sha256_16": "e8e16228bf1ea0eb"
+  },
+  "06_rulings/copy_parity.json": {
+   "category": "parity",
+   "purpose": "包内副本一致性",
+   "trace": "锚完整性核验(53/53 sha256)",
+   "bytes": 200,
+   "sha256_16": "45cc92b0669574af"
+  },
+  "06_rulings/dfm_raw_readings.json": {
+   "category": "dfm-report",
+   "purpose": "JLC HDI DFM 读数与报告",
+   "trace": "DFM 可独立复算审计(16 PASS/1 ACCEPT/0 FAIL)",
+   "bytes": 1777,
+   "sha256_16": "6974b55c218273b6"
+  },
+  "06_rulings/jlc_dfm_hdi_l7.json": {
+   "category": "dfm-report",
+   "purpose": "JLC HDI DFM 读数与报告",
+   "trace": "DFM 可独立复算审计(16 PASS/1 ACCEPT/0 FAIL)",
+   "bytes": 6226,
+   "sha256_16": "25a142e4127c837b"
+  },
+  "06_rulings/jlc_dfm_hdi_l7.md": {
+   "category": "dfm-report",
+   "purpose": "JLC HDI DFM 读数与报告",
+   "trace": "DFM 可独立复算审计(16 PASS/1 ACCEPT/0 FAIL)",
+   "bytes": 2290,
+   "sha256_16": "50b761f44ad2b975"
+  },
+  "07_verify/anchor_selfcheck.json": {
+   "category": "verify",
+   "purpose": "锚自检",
+   "trace": "交付五面核验证据之一",
+   "bytes": 1091,
+   "sha256_16": "235d979276cf39f8"
+  },
+  "07_verify/drill_board_xcheck.json": {
+   "category": "verify",
+   "purpose": "钻孔↔板跨层 via 对账",
+   "trace": "交付五面核验证据之一",
+   "bytes": 659,
+   "sha256_16": "e7c0763bf0fe9175"
+  },
+  "07_verify/drill_census.json": {
+   "category": "verify",
+   "purpose": "孔径逐档计数",
+   "trace": "交付五面核验证据之一",
+   "bytes": 1158,
+   "sha256_16": "8f370a901115c35a"
+  },
+  "07_verify/gerber_aperture_census.json": {
+   "category": "verify",
+   "purpose": "Gerber 孔径聚合计数",
+   "trace": "交付五面核验证据之一",
+   "bytes": 1908,
+   "sha256_16": "e6f55f9ccd515d85"
+  },
+  "07_verify/gerber_extents.json": {
+   "category": "verify",
+   "purpose": "各层图元范围",
+   "trace": "交付五面核验证据之一",
+   "bytes": 3527,
+   "sha256_16": "a95f5018a1d0c743"
+  },
+  "07_verify/mask_accept_fix_proof.json": {
+   "category": "verify",
+   "purpose": "阻焊 ACCEPT 修法留证",
+   "trace": "交付五面核验证据之一",
+   "bytes": 993,
+   "sha256_16": "437ea7a65f79db63"
+  },
+  "07_verify/n01_g36_census.json": {
+   "category": "verify",
+   "purpose": "G36 区域普查",
+   "trace": "交付五面核验证据之一",
+   "bytes": 548,
+   "sha256_16": "48926eb8196e0256"
+  },
+  "07_verify/silk_overhang.json": {
+   "category": "verify",
+   "purpose": "丝印越框读数",
+   "trace": "交付五面核验证据之一",
+   "bytes": 943,
+   "sha256_16": "3c3c7450b98e0553"
+  },
+  "07_verify/zone_refill_invariance.json": {
+   "category": "verify",
+   "purpose": "铺铜重填不变性",
+   "trace": "交付五面核验证据之一",
+   "bytes": 895,
+   "sha256_16": "25e9f852731cd6de"
+  },
+  "DISCLOSURE.md": {
+   "category": "doc",
+   "purpose": "随单披露（含 §5b-1 阻焊坝 / §5b-2 最紧段）",
+   "trace": "十项'随单件' + N-1 P5-2",
+   "bytes": 4169,
+   "sha256_16": "673d4b018f2bda2b"
+  },
+  "ORDER_NOTES.md": {
+   "category": "doc",
+   "purpose": "随单工艺说明（工艺通道/ENIG/阻抗控制）",
+   "trace": "十项'随单件' + N-1 B-2/P5-1",
+   "bytes": 3830,
+   "sha256_16": "0366fe26bc38f0d4"
+  }
+ },
+ "verification_evidence": {
+  "交付五面核验": [
+   "DELIVERY_READINESS_AND_STAGE_GATE_CLOSURE_AUDIT_20260921_v1.json（c5f89de7241af2f0）",
+   "DFM_TRACEABILITY_AND_JOBFILE_CONSISTENCY_AUDIT_20260921_v1.json（0ad8913a548900ed）",
+   "DELIVERY_PLOT_FIDELITY_AUDIT_20260921_v1.json（2c0f7f938498a965）",
+   "DELIVERY_DRILL_FIDELITY_AUDIT_20260921_v1.json（6c40a91938fa5bee）"
+  ],
+  "K1_引脚级": [
+   "K1_REFDES_PINLEVEL_RECONCILIATION_20260921_v1.json（49b028430fd0cc83）"
+  ]
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "no_new_criteria_dim": true,
+ "ts": "2026-09-22T04:50:00+0800",
+ "disk_reverify": {
+  "at": "2026-09-22T04:52:00+0800",
+  "checked": 53,
+  "sha256_ok": 53,
+  "missing": 0,
+  "hash_mismatch": 0,
+  "on_disk_files": 54,
+  "extra_not_in_manifest": [],
+  "verdict": "53/53 逐件 sha256 与盘上一致；盘上无 MANIFEST 之外的多余件"
+ }
+}
