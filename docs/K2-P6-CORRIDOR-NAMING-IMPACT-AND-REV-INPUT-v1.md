@@ -29,3 +29,14 @@
 
 ## 5. 零改动声明
 未触 `_shared`/`criteria/`/冻结四源/交付锚/生成器/SPEC/原理图；未派 WORKER；临时仅 `/tmp/opencode`。
+
+## 6. 补强证据：**交付链不消费遗留 alloc**（⇒ 命名分歧不污染交付）
+| 事实 | 证据 |
+|---|---|
+| 现代链**自产** alloc（不是读 `model_solves/channel_alloc*`） | `_shared/eda_core/solve_pipeline.py:785` 以 `alloc_tmp`（由 `AllocTable` 生成、`finally` 清理）构造 `HSRouteModel`；`bases` 取自 `alloc.alloc` 的 SOLVED 项 |
+| K2 的 P3/P4 工作正是走该链 | `k2/tools/p3_k2_real_board_e2e.py` 等 5 个 P3 工具引用 `solve_pipeline` |
+| 通道由**现行 SPEC 走廊**派生（新 id） | 项目配置 `channel_alloc.corridors_path = "corridors"`；工具置 `channels_from_spec: True` ⇒ `route_input.py:344` 自 SPEC corridors 生成 channels |
+| 现役（非测试）代码**不引用**遗留 alloc | §1 问④ + `NAMING_IMPACT_CHECK_v1.json` 的 `q4_all_refs_incl_tests_and_p6_tools`（仅测试与我方 P6 工具） |
+
+⇒ **交付板（`l7`）的布线链可自现行真源（板 + `SPEC_k2_v4.spec-rev-52` + `route_model_config.json`）重建**（原理上；实跑受 N-05 其它环节影响）。
+⇒ 命名分歧的落点因此**收敛为三处**：**测试输入**（钉遗留 alloc v2）· **判据期望集**（`check_l3.SPEC_EXPECTS` 旧名）· **遗留孤儿件**（卫生）。**交付锚与冻结件零命中**（§1），**无需开 rev** 的结论由此补强。
