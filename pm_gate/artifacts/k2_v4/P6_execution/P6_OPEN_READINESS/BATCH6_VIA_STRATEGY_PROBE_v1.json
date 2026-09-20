@@ -1,0 +1,21 @@
+{
+ "artifact": "k2_batch6_via_strategy_probe",
+ "schema": 1,
+ "purpose": "批 6(b) 预备：真阻塞链的过孔/换层策略可行性探针（两实验，均否证『小改即可』）。",
+ "experiments": [
+  {
+   "id": "⑦ 过孔阶梯放宽",
+   "change": "`_tpl_b_line` 的 `vstep` 由 (1,2,3) 放宽到 (1,2,3,4,5,6,8,10,12)（出线点最远 pad 边外 ~3.9mm）",
+   "result": "K1 段级**仍 3/8**（无变化）⇒ 真阻塞**不是**过孔距离/阶梯不足。"
+  },
+  {
+   "id": "tplB 序列探针",
+   "finding": "`OCuLink_TX0` 链上 `_tpl_b_line` **只对 N 调用**（`tplB_in` N=2 次、P=**0** 次）；N 能得到候选（如 `[(75.155,22.5),(72.6,22.5),(68.6,18.5)]` + via@(68.6,18.5)），**P 侧从未进入换层模板**（其 `_tpl_a_line` F.Cu 直连无解）⇒ 对级整体不可行。",
+   "hypothesis": "F.Cu 对级在「双换层 / 对称换层」一侧缺形态：`_k1_escape_b` 的 `swap_first` 分支对另一侧走 `_tpl_a_line`（F.Cu 直连）而非 `_tpl_b_line`（换层）⇒ **缺『P/N 同时换层』候选**。批 6 须先复核该分支（行号须以现行源 grep 复核）再定改法。"
+  }
+ ],
+ "batch6_scope_update": "(b) 由『过孔落位阶梯』改为『**缺 P/N 同时换层形态**』——须在 `_k1_escape_b` 的 F.Cu 分支补齐『双换层』候选并配负控；⑦ 的放宽**不采**（无收益，徒增候选面）。",
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-20T22:30:00+0800"
+}
