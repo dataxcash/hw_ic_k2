@@ -25,7 +25,7 @@
 |---|---|---|
 | 逐项操作规程（V4·V5·V6-1..5·V7 + 通用要求 + 回件格式） | `k2/pm_gate/artifacts/k2_v4/L6/first_article/RULES.md` | `8bee09616020d5a9` |
 | 现场检查表 | `k2/pm_gate/artifacts/k2_v4/L6/first_article/CHECKLIST.md` | `d7dda9a82c5d06f3` |
-| 回填模板（8 项 · criterion/measured/evidence/status） | `k2/pm_gate/artifacts/k2_v4/L6/first_article/results_template.json` | `c70d7d0915701e5d` |
+| 回填模板（8 项 · criterion/measured/evidence/status） | `k2/pm_gate/artifacts/k2_v4/L6/first_article/results_template.json` | `79b80bdc09de129d` |
 | 测点自查（pcbnew 直读 · 11/11 通过） | `k2/pm_gate/artifacts/k2_v4/L6/first_article/INSTRUMENT_SELFCHECK.json` | `3f89dec1a6481fe5` |
 | 验收计划（阈值来源） | `k2/docs/K2-P5-FIRST-ARTICLE-ACCEPTANCE-PLAN-v1.md` | `43795d2def07152b` |
 
@@ -54,3 +54,13 @@ ENG 不参与自证 · 禁改冻结随单件/重建包 · 禁为变绿改阈值�
 - **V6-3 FRU EEPROM**：`E2`（AT24C02 类 · SOIC8）在 **I2C1**；strapping `A0=GND` · `A1=MCU_VDD` · `A2=GND` ⇒ **7-bit 地址 `0x52`**（8-bit 写 `0xA4` / 读 `0xA5`）；`WP=GND`。板侧（l7 `c5a7df90aadb66e0` 的 E2 pad1/2/3/5/6/7 网名）与**原理图侧**（`k2_sch.yaml`：`E2/A0,A2,WP`⊂GND · `E2/A1,VCC`⊂MCU_VDD · `E2/SDA,SCL`⊂I2C1）**双侧一致**。
 - **V6-2 MCU SWD**：`U1 = STM32G0B1KBU6`；记录 **(a) SW-DP IDCODE**（预期 **`0x0BC11477`** · Cortex-M0+ CoreSight 标准）与 **(b) DBGMCU_IDCODE @ `0x40015800`**（DEV_ID/REV_ID）。**DEV_ID 的规范值须以 ST `RM0454 §DBG` 对照**（本环境 `st.com` = HTTP 567 ⇒ 离线不可得，**登记为手册依赖项**，本包不臆断数值）。
 - 依据件：`k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/P5_EXPECTED_VALUES_DESIGN_SIDE_20260921_v1.json`（825112398ff1ef76）。**边界**：预期值为设计侧推导 ⇒ **不构成 P5 证据**，判定归监理。
+
+## 10. 标称值（V6-1）—— 设计侧推导（**非实测**）
+| 轨 | 标称 | 依据 |
+|---|---|---|
+| `12V_IN` | **12.0 V** | 轨名 + `J12/VIN_12V`（`U2/VIN`·`U2/EN` 同网） |
+| `P3V3` | **3.3 V** | 轨名 + 负载要求（`U6` 3.3V 器件 VCC 域，19 处）；调压设定 = `U2/FB` 分压 `R40/R41`（器件归属问题已登记，不重报） |
+| `P3V3_AUX` | **3.3 V** | 主机 PCIe 槽 aux（`J3`/`J4`） |
+| `MCU_VDD` | **待监理定标称** | `U4` = **`BAT54C_ORING`**：`A2=P3V3 → K=MCU_VDD`（**A1 悬空**）⇒ 独立运行 ≈ `P3V3 − V_f ≈ 3.0–3.1V`；`J13/VCC` 在位时 ≈ 3.3V。**按 3.3V 判会把独立运行读数误判 FAIL** ⇒ 标称属 `[监理裁定]`，已列待裁 |
+- 另核：**轨集合完整**（板 100 网中电源轨恰为上述 4 条 + GND，与 V5/V6-1 模板一致，**无漏轨**）。
+- 依据件：`k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/P5_V6_1_NOMINALS_AND_MCU_VDD_CALIBER_20260921_v1.json`（b3c72f6dec777497）。**边界**：设计侧推导 ⇒ **不构成 P5 证据**，判定归监理。

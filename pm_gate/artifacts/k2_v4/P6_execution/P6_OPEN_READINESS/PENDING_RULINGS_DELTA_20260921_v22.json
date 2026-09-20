@@ -1,0 +1,54 @@
+{
+ "artifact": "k2_pending_rulings_delta",
+ "schema": 22,
+ "ts": "2026-09-21T10:20:00+0800",
+ "supersedes": "PENDING_RULINGS_DELTA_20260921_v21.json（a4f41496bd80f0c0）—— **其 4 项已全部由 #K2-54 裁定并落地**（P6-1 闭 · pciesw4=option_B · 批6v4 追认 · 四树=另立批次）⇒ v22 仅余**新 1 项**。",
+ "purpose": "收敛当前待裁项。本会话（#K2-54 后无新裁定）按 handoff §7-B **只读造活**：P5 执行包缺口逐项排查并补齐（V6-2/V6-3 预期值 · V6-1 标称值 · 轨集合完整性 · V5 PDN 设计侧预判 · V4 几何先例核对），新增 1 项须监理定之口径。",
+ "owner_gate": "**0**（本项属『阈值/口径』= 计划 §P5 明标 `[监理裁定]` ⇒ 监理自裁面）",
+ "stage_state": "P5 = 唯一未闭门（8 项全 `NOT_RUN`，待外部回件）；P0–P4 HOLDS · P6 CLOSED；交付锚 `6ee7495de61f749f` 未动（本会话复验 `sha256sum -c` **55/55 OK**）；判据 **rev=6**。**无越阶段。**",
+ "pending_supervision": [
+  "**V6-1 `MCU_VDD` 标称（须裁·监理：计划 §P5 明标阈值 `[监理裁定]`）**：`U4` = **`BAT54C_ORING`**（`A2=P3V3 → K=MCU_VDD`，**A1 悬空**；`J13/VCC` 与 `MCU_VDD` 同网）⇒ **独立运行** MCU_VDD ≈ **P3V3 − V_f ≈ 3.0–3.1V**；**调试器在位** ≈ 3.3V。若按 3.3V 标称判 ±5%（3.135–3.465）⇒ 独立运行读数**被误判 FAIL**。**ENG 建议二选一**：(a) 标称定为 **3.0V（独立运行工况）** 并要求同记 `J13` 在位工况读数；或 (b) 保留 3.3V 标称但**明定实测工况 = J13 供电**。**ENG 不改阈值**（判据文本一字未动，仅补 `expected_nominal_V` 字段并把 MCU_VDD 置为待定）。依据：`P5_V6_1_NOMINALS_AND_MCU_VDD_CALIBER_20260921_v1.json`（b3c72f6dec777497）。**若监理认定涉 L1（拓扑/接口）⇒ 由监理升级 owner**（ENG 不直接升级）。"
+ ],
+ "closed_by_k254": [
+  "P6-1 口径=(a)（CR-5 逐字落册 · P6 验收面闭合）",
+  "pciesw4 覆盖面=option_B（COV-C1 精确计数 1/17/1/20=39）",
+  "批 6 v4=追认（无落地对象 · 未升版）",
+  "四树引擎同步=另立跨项目批次 + 钉版登记（COV-C3）"
+ ],
+ "landed_this_session": [
+  {
+   "id": "V5 PDN 设计侧预判",
+   "artifact": "PDN_DESIGN_PRECHECK_V5_20260921_v1.json（100bc34f2980d86d）",
+   "reading": "P3V3/MCU_VDD 大平面承载 · 12V_IN 短网 · **P3V3_AUX 仅小岛**（最坏单跳 In5 20.789mm = 125.3mΩ@85℃ ⇒ 0.79A 用尽 3% 预算）⇒ V5 实测须覆盖 J3/J4 端"
+  },
+  {
+   "id": "V6-2/V6-3 预期值补齐",
+   "artifact": "P5_EXPECTED_VALUES_DESIGN_SIDE_20260921_v1.json（825112398ff1ef76）",
+   "reading": "E2（AT24C02 类）在 I2C1 · A0=0/A1=1/A2=0 ⇒ **0x52**（板侧+原理图双侧一致）；SW-DP IDCODE 预期 **0x0BC11477** + `DBGMCU_IDCODE` 须以 **RM0454**（st.com 567 不可达 ⇒ 手册依赖登记）"
+  },
+  {
+   "id": "V6-1 标称 + 轨集合完整性",
+   "artifact": "P5_V6_1_NOMINALS_AND_MCU_VDD_CALIBER_20260921_v1.json（b3c72f6dec777497）",
+   "reading": "12V_IN=12.0 · P3V3=3.3 · P3V3_AUX=3.3 · **MCU_VDD=待裁**；轨集合**完整**（板上电源轨恰 4 条）"
+  },
+  {
+   "id": "先例核对（防重复）",
+   "reading": "①**V4 几何侧**已由冻结阻抗表覆盖（`as_built_l7` · verdict=geometry_matches_spec_rev52_per_layer）⇒ 不重做；②`U2` 器件归属问题**已在册**（`K2-P6-SCH-GATE-TRUTH-REGISTRY-CREDIBILITY` · K1-GAP G-5/K1-D10）⇒ 不重复上报"
+  },
+  {
+   "id": "自证订正",
+   "reading": "**SG-C1**：census 的 P3 SPEC 引用由 6L 旧件更正为 **rev-52（42f8485ee4d6b566）**（已在件内显式登记，不静默改写）"
+  }
+ ],
+ "red_lines_ok": [
+  "未改 criteria/（rev=6 只读）",
+  "未改 SPEC/生成器/原理图/板",
+  "未改任何阈值（仅补 expected_* 字段）",
+  "未动交付包（55/55 复验通过 · 锚未动）",
+  "未新增判据维/检查齿",
+  "未越阶段",
+  "未派 WORKER",
+  "未写 .omo/supervision/**"
+ ],
+ "next": "获裁即落地（一笔一批）；无裁定继续只读造活（P5 其余可判性/几何/热侧核对 · 锚周期复核）；**禁以 HOLD/停等结案**。"
+}

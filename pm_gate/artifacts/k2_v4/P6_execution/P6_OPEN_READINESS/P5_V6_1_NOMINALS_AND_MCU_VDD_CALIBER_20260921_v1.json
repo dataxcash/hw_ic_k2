@@ -1,0 +1,94 @@
+{
+ "artifact": "k2_p5_v6_1_nominals_and_mcu_vdd_caliber",
+ "schema": 1,
+ "ts": "2026-09-21T10:15:00+0800",
+ "id": "**V6-1 标称值补齐 + 新口径缺口（MCU_VDD 标称）** —— 设计侧推导（**非实测 · 非判据变更**）",
+ "authorization": "监理自动续推『推进当前阶段（P5）』；计划 §P5 表：V6-1『各轨电压 ±5% **标称**』= **[监理裁定]** 阈值 ⇒ 标称值须先定，否则实测方无法判。",
+ "gap_found": {
+  "what": "`results_template.json` 的 `V6_1_rail_voltages.measured.rails` 原为 4 个 `null`，**无标称值字段** ⇒ 实测方即使测到读数也无法判『是否 ±5%』（同 V6-2/V6-3 那类可判性缺口）。",
+  "note": "另核：**轨集合完整** —— 板 `net` 全集（100 网）中电源轨恰为 `12V_IN / P3V3 / P3V3_AUX / MCU_VDD`（+ GND）⇒ 与 V5/V6-1 模板一致，**无漏轨**。"
+ },
+ "nominals_design_side": {
+  "12V_IN": {
+   "nominal_V": 12.0,
+   "basis": "轨名 + 输入连接器 `J12/VIN_12V`；`U2/VIN`·`U2/EN` 同网",
+   "confidence": "高"
+  },
+  "P3V3": {
+   "nominal_V": 3.3,
+   "basis": "轨名 + 负载要求（`U6` DS320PR1601 3.3V 器件 VCC 域 · 19 处 VCC 脚）；调压设定 = `U2/FB` 分压 `R40/R41`（**器件归属问题已登记**，见下）",
+   "confidence": "高（标称）/ 中（设定件）"
+  },
+  "P3V3_AUX": {
+   "nominal_V": 3.3,
+   "basis": "主机 PCIe 槽 aux（`J3`/`J4`），轨名",
+   "confidence": "高"
+  },
+  "MCU_VDD": {
+   "nominal_V": null,
+   "status": "**待监理定（口径）**",
+   "basis": "`U4` = **`BAT54C_ORING`**（value `BAT54C`）：**A2 = P3V3 → K = MCU_VDD** · **A1 悬空(无网)** · 另 `J13/VCC` 与 `MCU_VDD` **同网**",
+   "two_scenarios": [
+    "**独立运行**（无调试器）：MCU_VDD ≈ P3V3 − V_f(BAT54C) ≈ **3.0–3.1V**（受负载电流影响）",
+    "**调试器在位**（`J13/VCC` = 3.3V）：MCU_VDD ≈ **3.3V**（经 K 侧直供，二极管反偏）"
+   ],
+   "why_pending": "V6-1 判据 = 『±5% **标称**』；若按 3.3V 判 ⇒ 独立运行读数 ~3.0V 落在 3.135–3.465 之外 ⇒ **误判 FAIL**。标称属 **`[监理裁定]`**（计划 §P5 表明标）⇒ **交监理定**，ENG 不自裁、不改阈值。"
+  }
+ },
+ "cross_checks": {
+  "board": {
+   "k2/hw/k2_v4_8L.l7.kicad_pcb": "c5a7df90aadb66e0"
+  },
+  "schematic": {
+   "k2/hw/data/k2_sch.yaml": "dd794c54f7ce7417"
+  },
+  "U4_pads_board": "pad2(K)=MCU_VDD · pad3(A2)=P3V3 · pad1(A1)=**无网**",
+  "rail_members_sample": {
+   "P3V3": [
+    "U2/VOUT",
+    "U4/A2",
+    "D2/K",
+    "R40/A",
+    "U6 多处 VCC",
+    "C74-C84"
+   ],
+   "MCU_VDD": [
+    "U1/VDD",
+    "E2/VCC",
+    "E2/A1",
+    "U4/K",
+    "J13/VCC",
+    "J9/VCC",
+    "R29/B",
+    "R31-R34/B",
+    "C85/A",
+    "C86/A"
+   ],
+   "12V_IN": [
+    "J12/VIN_12V",
+    "U2/VIN",
+    "U2/EN",
+    "L1/A",
+    "C88/A"
+   ],
+   "P3V3_AUX": [
+    "J3",
+    "J4",
+    "U1/3V3_AUX_SENSE",
+    "R1/B",
+    "C90"
+   ]
+  }
+ },
+ "prior_art_note": {
+  "id": "OB-2 不上报",
+  "text": "`U2`（符号 value `DCDC_12V_5V` 而 `VOUT` 网 = `P3V3`）之**器件归属不可信**问题**已在册**：`k2/docs/K2-P6-SCH-GATE-TRUTH-REGISTRY-CREDIBILITY-20260921.md`（`DCDC_12V_3V3`/`DCDC_12V_5V` 与设计 SOIC-8 冲突，归属设计派生）+ `K1-GAP G-5`/`K1-D10` ⇒ **不重复上报**（先查册纪律）。",
+  "impact_on_this_item": "⇒ P3V3 标称取『**轨名 + 负载要求**』（3.3V），**不**依赖 U2 器件手册；设定件精确值待器件归属澄清后复核（登记备查）。"
+ },
+ "landed": "模板 V6-1 增 `nominal_V`（12.0/3.3/3.3；MCU_VDD = null + pending 说明）+ 投递说明 §10 + 待裁 v22（MCU_VDD 标称口径）。",
+ "boundary": [
+  "**非 P5 证据**（设计侧推导）；V6-1 维持 `NOT_RUN`，判定归监理。",
+  "未改 criteria/SPEC/原理图/板；**未改任何阈值**；未新增判据维。"
+ ],
+ "readonly_repo": true
+}

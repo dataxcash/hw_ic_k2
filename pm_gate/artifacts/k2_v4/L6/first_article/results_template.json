@@ -92,7 +92,14 @@
     }
    },
    "criterion": "各电源轨电压全部 ±5% 标称",
-   "note": ""
+   "note": "MCU_VDD 标称待监理裁定（见 source 件）；其余按标称 ±5% 判。",
+   "expected_nominal_V": {
+    "12V_IN": 12.0,
+    "P3V3": 3.3,
+    "P3V3_AUX": 3.3,
+    "MCU_VDD": "**待监理定标称**（U4=BAT54C_ORING 串联 P3V3→MCU_VDD，A1 悬空；独立运行 ≈3.0–3.1V，J13 供电 ≈3.3V）",
+    "source": "设计侧推导 · k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/P5_V6_1_NOMINALS_AND_MCU_VDD_CALIBER_20260921_v1.json（b3c72f6dec777497）"
+   }
   },
   "V6_2_mcu_swd_id": {
    "required": true,
