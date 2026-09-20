@@ -1,0 +1,54 @@
+{
+ "artifact": "k2_sg_ds320pr1601_truth_table_prepared",
+ "schema": 1,
+ "ts": "2026-09-21T04:50:00+0800",
+ "id": "SG-AUDIT-1d（新·低·库面）",
+ "authorization": "本件为 **#K2-52 §四 执行序全部执行完毕后**的『造活』（owner ⑥）；**只制备不落地**（`_shared` 写须监理放行）。",
+ "purpose": "补齐 k2 侧 sch_gate 真源缺口 `datasheets/DS320PR1601.yaml`（K2 符号库 `PIN-01` 唯一 FAIL），并给出影响面与风险。",
+ "vendor_cross_check": {
+  "doc": "TI **ZDG0354A** · §5 Table 5-1 Pin Functions（354 ball）",
+  "pdf": "k2/pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/ref/ds320pr1601.pdf（本地既有厂商件）",
+  "pdf_sha256_prefix": "f61599c4356edb39",
+  "result": "表区解析得 **354 ball**，与符号库 ball 集合**逐 ball 完全一致**（无缺、无重、无越界）；**名称差异（大小写归一后）= 0** ⇒ `k2/hw/lib/DS320PR1601.kicad_sym` 引脚命名与厂商真源**一致**。"
+ },
+ "payload": {
+  "dir": "k2/docs/drafts/sg-ds320pr1601-truth-table-v1/",
+  "file": "DS320PR1601.yaml",
+  "sha256": "6c02e07d052dd701",
+  "content": "device/package/ZDG0354A/doc_sha256 + `pins: <ball>: <信号名>`（354 行，保厂商大小写）+ `aliases: {N/C: [NC]}`"
+ },
+ "sandbox_validation": {
+  "table": [
+   {
+    "lib": "k2/hw/lib/DS320PR1601.kicad_sym",
+    "before_fails": 1,
+    "after_fails": 0,
+    "verdict": "**PASS**"
+   },
+   {
+    "lib": "k2/hw/lib/IOCONVERT.kicad_sym",
+    "before_fails": 1,
+    "after_fails": 194,
+    "verdict": "**恶化（见阻塞发现）**"
+   }
+  ],
+  "note_nc": "12 个 `N/C` 引脚：pinmap 端口切分按 `/` ⇒ `N/C` 被拆为 `N`/`C` ⇒ 以 `aliases: {N/C: [NC]}` 显式登记（与 USB_C_RECEPT『设计名走 aliases』同法）⇒ 12 项消解。"
+ },
+ "blocking_finding": {
+  "id": "SG-AUDIT-1d-α（中）",
+  "text": "**落地将使 `k2/hw/lib/IOCONVERT.kicad_sym` 的 `DS320PR1601` 变体 FAIL 由 1 → 194**：该变体 **194 个 pin 以 ball 名命名**（如 `AE1: AE1`；另一库同 ball = `GND`）⇒ 触发 pinmap 机制 2『引脚名未绑定任何物理端口』。",
+  "meaning": "两库对同一器件的**表示法不一致**（`DS320PR1601.kicad_sym`=信号名 / `IOCONVERT.kicad_sym`=部分 ball 名）；补表只是**让分歧显形**，非本件引入。",
+  "impact": "**不在 K2 门禁链内**：`k2/pipeline.yaml` preflight/verify **无 pinmap 检查**（仅 project_sch_coverage / sch_structural / netlist_connect / bom_consistent）⇒ 属**库/hygiene 面**，**不影响 P6 判据面与交付锚**（锚 `6ee7495de61f749f` 未动）。",
+  "ask": "裁定：①统一两库表示法（改 `IOCONVERT.kicad_sym` 的 ball 名 pin ⇒ 改符号 = 改设计面，须批）②指定 `IOCONVERT.kicad_sym` 不纳入 pinmap 范围（口径，须登记）③暂不落地本表（保持 fail-closed）。**ENG 不自行选择。**"
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "no_new_criteria_dim": true,
+ "not_landed_detail": [
+  "未写 `_shared`（载荷在 k2/docs/drafts）",
+  "未改任何 `.kicad_sym`",
+  "未改 criteria/",
+  "未改 k2 门禁链"
+ ],
+ "next": "待裁 → 按 ①②③ 之一处置"
+}
