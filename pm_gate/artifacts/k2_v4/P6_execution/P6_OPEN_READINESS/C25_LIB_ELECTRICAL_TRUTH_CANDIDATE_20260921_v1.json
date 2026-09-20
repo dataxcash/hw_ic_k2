@@ -1,0 +1,305 @@
+{
+ "artifact": "k2_c25_lib_electrical_truth_candidate",
+ "schema": 1,
+ "purpose": "C-25 的 `lib_electrical_level` 真源**候选界定 + 覆盖普查**。先厘清该维**实际语义**，再给出**外部真源候选语料**（库封装文件）的 24/24 覆盖，供监理确认『真源内容』后落件。只读。",
+ "A_semantics": {
+  "dim": "lib_electrical_level",
+  "code": "criteria/adjudicate.py `_reclassify_w8`（rev=3 起逐字节同·`1937a40a`）",
+  "what": "消费 `w8_audit_json`（板封装 vs **库封装** 的 pad 名集/几何/旋转对账）；`(B)` 具名口径把『中心对称 rot∈{0,180}』与『无号 F.Paste（无铜层）』判为**非电气**残差并豁免；余项计 `n_electrical_diff_eff` / `n_pad_name_set_only_eff`。",
+  "expect": "n_electrical_diff == 0 且 n_pad_name_set_only == 0（审计板 sha16 须 == 受审板）",
+  "implication": "⇒ 该维的**天然外部真源 = 库封装语料**（对本板而言是独立件，非受审板自述）；**不是**『器件手册电气级』字面义。#K2-47 §三 的措辞为『器件手册电气级』⇒ 需监理确认口径。"
+ },
+ "B_truth_corpus_candidate": {
+  "primary": {
+   "corpus": "k2/hw/lib/ForgeOS.pretty/*.kicad_mod",
+   "n_files": 24,
+   "why": "本板 24 个 lib_id 之封装定义所在（项目库）"
+  },
+  "secondary": {
+   "corpus": "AppDir/share/kicad/footprints/*.pretty/*.kicad_mod（KiCad 标准库）",
+   "why": "部分 lib_id 由标准库背负"
+  },
+  "n_lib_ids": 24,
+  "n_resolved": 24,
+  "n_missing": 0,
+  "by_corpus": {
+   "ForgeOS.pretty": 24
+  },
+  "missing": [],
+  "coverage": "**24/24** 个 lib_id 可定位到具体 `.kicad_mod`（含逐件 sha16）",
+  "rows": [
+   {
+    "lib_id": "(no-nickname) MountingHole_3.2mm_M3",
+    "refs": [
+     "H1",
+     "H2",
+     "H3",
+     "H4"
+    ],
+    "truth_file": "k2/hw/lib/ForgeOS.pretty/MountingHole_3.2mm_M3.kicad_mod",
+    "corpus": "ForgeOS.pretty",
+    "truth_sha16": "84ab0158d02e2ba2"
+   },
+   {
+    "lib_id": "ForgeOS:C_0402_1005Metric__1",
+    "refs": [
+     "C74",
+     "C75",
+     "C76",
+     "C77",
+     "C79",
+     "C80",
+     "C81",
+     "C82",
+     "C87",
+     "C90"
+    ],
+    "truth_file": "k2/hw/lib/ForgeOS.pretty/C_0402_1005Metric__1.kicad_mod",
+    "corpus": "ForgeOS.pretty",
+    "truth_sha16": "d9af13e6c78981b1"
+   },
+   {
+    "lib_id": "ForgeOS:C_0402_1005Metric__2",
+    "refs": [
+     "C85"
+    ],
+    "truth_file": "k2/hw/lib/ForgeOS.pretty/C_0402_1005Metric__2.kicad_mod",
+    "corpus": "ForgeOS.pretty",
+    "truth_sha16": "ec40a528a295ac2d"
+   },
+   {
+    "lib_id": "ForgeOS:C_0402_1005Metric__3",
+    "refs": [
+     "C73"
+    ],
+    "truth_file": "k2/hw/lib/ForgeOS.pretty/C_0402_1005Metric__3.kicad_mod",
+    "corpus": "ForgeOS.pretty",
+    "truth_sha16": "499f816b963b6359"
+   },
+   {
+    "lib_id": "ForgeOS:C_0603_1608Metric",
+    "refs": [
+     "C78",
+     "C83",
+     "C86",
+     "C88"
+    ],
+    "truth_file": "k2/hw/lib/ForgeOS.pretty/C_0603_1608Metric.kicad_mod",
+    "corpus": "ForgeOS.pretty",
+    "truth_sha16": "3d4f3178a7bde8d5"
+   },
+   {
+    "lib_id": "ForgeOS:C_0805_2012Metric",
+    "refs": [
+     "C84"
+    ],
+    "truth_file": "k2/hw/lib/ForgeOS.pretty/C_0805_2012Metric.kicad_mod",
+    "corpus": "ForgeOS.pretty",
+    "truth_sha16": "6f264347c4c4bb19"
+   },
+   {
+    "lib_id": "ForgeOS:DS320PR1601",
+    "refs": [
+     "U6"
+    ],
+    "truth_file": "k2/hw/lib/ForgeOS.pretty/DS320PR1601.kicad_mod",
+    "corpus": "ForgeOS.pretty",
+    "truth_sha16": "28f6c270b57fce02"
+   },
+   {
+    "lib_id": "ForgeOS:D_SMA",
+    "refs": [
+     "D2"
+    ],
+    "truth_file": "k2/hw/lib/ForgeOS.pretty/D_SMA.kicad_mod",
+    "corpus": "ForgeOS.pretty",
+    "truth_sha16": "8e2275fca43e2c6c"
+   },
+   {
+    "lib_id": "ForgeOS:LED_0603_1608Metric",
+    "refs": [
+     "D1"
+    ],
+    "truth_file": "k2/hw/lib/ForgeOS.pretty/LED_0603_1608Metric.kicad_mod",
+    "corpus": "ForgeOS.pretty",
+    "truth_sha16": "a8ad92ed635a09a2"
+   },
+   {
+    "lib_id": "ForgeOS:L_0805_2012Metric",
+    "refs": [
+     "L1"
+    ],
+    "truth_file": "k2/hw/lib/ForgeOS.pretty/L_0805_2012Metric.kicad_mod",
+    "corpus": "ForgeOS.pretty",
+    "truth_sha16": "d5f07b7dd00746f8"
+   },
+   {
+    "lib_id": "ForgeOS:MCIO_4i_SFF-1016_RASide__1",
+    "refs": [
+     "J3"
+    ],
+    "truth_file": "k2/hw/lib/ForgeOS.pretty/MCIO_4i_SFF-1016_RASide__1.kicad_mod",
+    "corpus": "ForgeOS.pretty",
+    "truth_sha16": "72400219f6cace9b"
+   },
+   {
+    "lib_id": "ForgeOS:MCIO_4i_SFF-1016_RASide__2",
+    "refs": [
+     "J4"
+    ],
+    "truth_file": "k2/hw/lib/ForgeOS.pretty/MCIO_4i_SFF-1016_RASide__2.kicad_mod",
+    "corpus": "ForgeOS.pretty",
+    "truth_sha16": "25c842e33149c274"
+   },
+   {
+    "lib_id": "ForgeOS:MCU_STM32G0_LQFP48",
+    "refs": [
+     "U1"
+    ],
+    "truth_file": "k2/hw/lib/ForgeOS.pretty/MCU_STM32G0_LQFP48.kicad_mod",
+    "corpus": "ForgeOS.pretty",
+    "truth_sha16": "23bc3da5e65efc37"
+   },
+   {
+    "lib_id": "ForgeOS:OPTO_LTV356T",
+    "refs": [
+     "U5"
+    ],
+    "truth_file": "k2/hw/lib/ForgeOS.pretty/OPTO_LTV356T.kicad_mod",
+    "corpus": "ForgeOS.pretty",
+    "truth_sha16": "ca07aefa35eb85fc"
+   },
+   {
+    "lib_id": "ForgeOS:PinHeader_1x02",
+    "refs": [
+     "J12",
+     "J6"
+    ],
+    "truth_file": "k2/hw/lib/ForgeOS.pretty/PinHeader_1x02.kicad_mod",
+    "corpus": "ForgeOS.pretty",
+    "truth_sha16": "e1abff3a8844754b"
+   },
+   {
+    "lib_id": "ForgeOS:PinHeader_1x04",
+    "refs": [
+     "J11",
+     "J13",
+     "J9"
+    ],
+    "truth_file": "k2/hw/lib/ForgeOS.pretty/PinHeader_1x04.kicad_mod",
+    "corpus": "ForgeOS.pretty",
+    "truth_sha16": "5c4a4dcc6ddbb497"
+   },
+   {
+    "lib_id": "ForgeOS:R_0402_1005Metric__1",
+    "refs": [
+     "R41"
+    ],
+    "truth_file": "k2/hw/lib/ForgeOS.pretty/R_0402_1005Metric__1.kicad_mod",
+    "corpus": "ForgeOS.pretty",
+    "truth_sha16": "51317190cbda9d33"
+   },
+   {
+    "lib_id": "ForgeOS:R_0402_1005Metric__2",
+    "refs": [
+     "R40"
+    ],
+    "truth_file": "k2/hw/lib/ForgeOS.pretty/R_0402_1005Metric__2.kicad_mod",
+    "corpus": "ForgeOS.pretty",
+    "truth_sha16": "965e4975c05877a4"
+   },
+   {
+    "lib_id": "ForgeOS:R_0603_1608Metric__1",
+    "refs": [
+     "R1",
+     "R21",
+     "R28",
+     "R29",
+     "R3",
+     "R31",
+     "R32",
+     "R33",
+     "R34"
+    ],
+    "truth_file": "k2/hw/lib/ForgeOS.pretty/R_0603_1608Metric__1.kicad_mod",
+    "corpus": "ForgeOS.pretty",
+    "truth_sha16": "7ce1e2833d6137f0"
+   },
+   {
+    "lib_id": "ForgeOS:R_0603_1608Metric__2",
+    "refs": [
+     "R35",
+     "R36",
+     "R37",
+     "R38",
+     "R39",
+     "R42",
+     "R43",
+     "R44",
+     "R45"
+    ],
+    "truth_file": "k2/hw/lib/ForgeOS.pretty/R_0603_1608Metric__2.kicad_mod",
+    "corpus": "ForgeOS.pretty",
+    "truth_sha16": "5d75bdf2de89af3c"
+   },
+   {
+    "lib_id": "ForgeOS:SOIC-8_5.3x5.3mm_P1.27mm",
+    "refs": [
+     "U2"
+    ],
+    "truth_file": "k2/hw/lib/ForgeOS.pretty/SOIC-8_5.3x5.3mm_P1.27mm.kicad_mod",
+    "corpus": "ForgeOS.pretty",
+    "truth_sha16": "ceb091f3e2d2f5da"
+   },
+   {
+    "lib_id": "ForgeOS:SOIC8_FRU",
+    "refs": [
+     "E2"
+    ],
+    "truth_file": "k2/hw/lib/ForgeOS.pretty/SOIC8_FRU.kicad_mod",
+    "corpus": "ForgeOS.pretty",
+    "truth_sha16": "7c606510f7c8fd20"
+   },
+   {
+    "lib_id": "ForgeOS:SOT23_BAT54C",
+    "refs": [
+     "U4"
+    ],
+    "truth_file": "k2/hw/lib/ForgeOS.pretty/SOT23_BAT54C.kicad_mod",
+    "corpus": "ForgeOS.pretty",
+    "truth_sha16": "b68aa661008b6da9"
+   },
+   {
+    "lib_id": "ForgeOS:SlimSAS_x8_SFF-8654_74pin_RASide",
+    "refs": [
+     "J2"
+    ],
+    "truth_file": "k2/hw/lib/ForgeOS.pretty/SlimSAS_x8_SFF-8654_74pin_RASide.kicad_mod",
+    "corpus": "ForgeOS.pretty",
+    "truth_sha16": "e273ab2203c8cdaf"
+   }
+  ]
+ },
+ "C_two_tier_truth_proposal": {
+  "tier1_library": {
+   "role": "判据实际比对对象的**独立真源**",
+   "paths": [
+    "k2/hw/lib/ForgeOS.pretty",
+    "AppDir/share/kicad/footprints"
+   ]
+  },
+  "tier2_datasheet": {
+   "role": "库封装**上溯**依据（land pattern 出处）",
+   "available": "`sch_gate/datasheets/*.yaml` 有 `source:` 引证但**缺三件套**（见 C25_PARTS_TRUTH_SOURCE_CENSUS）"
+  },
+  "recommend": "以 **tier1（库语料）** 作为 `lib_electrical_level` 的 `source_of_truth`（可即时落件、可独立复算）；tier2 作为后续『出处上溯』增强（须先取文献+哈希）。"
+ },
+ "D_ask_supervisor": {
+  "item": "确认 `lib_electrical_level` 真源口径：**库封装语料(tier1)** 还是 **器件手册电气级(tier2)**？",
+  "note": "两者工作量差异大（tier1 可即时落件；tier2 需 33 文献获取+哈希+转录）。**监理自裁面，无 owner 闸口。**"
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "no_new_criteria_dim": true,
+ "ts": "2026-09-22T07:05:00+0800"
+}

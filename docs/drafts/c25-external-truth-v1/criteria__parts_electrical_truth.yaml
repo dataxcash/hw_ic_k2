@@ -1,109 +1,354 @@
-_purpose: C-25 外部真源草案（gate 属主安装目标）：`criteria/parts_electrical_truth.yaml`。为判据维 `lib_electrical_level` 提供**独立外部真源**（器件手册的引脚/电气级），破『以板为准』的自证 (#K2-47 §三)。
+_purpose: C-25 外部真源草案（**v2 · tier1 完整**）：`criteria/parts_electrical_truth.yaml`，为判据维 `lib_electrical_level` 提供独立外部真源。
 _install_target: criteria/parts_electrical_truth.yaml（属主 ic_hw_gate · 0444；ENG 只读 ⇒ 本件为草案）
-_status: '**PARTIAL（须先补全方可安装）** —— 本草案给出**出处登记册 + schema**；`lib_electrical_level` 的 expect =『n_electrical_diff==0 ∧ n_pad_name_set_only==0（以板为准）』，其外部真源应为**逐器件、逐引脚电气级**。'
-acceptance_expect: n_electrical_diff == 0 且 n_pad_name_set_only == 0（审计板 sha16 须 == 受审板 sha16）
-schema:
-  truth:
-    <refdes>:
-      part: <型号>
-      doc_id: …
-      doc_url: …
-      doc_sha256: …
-      pins:
-        <pin_number>:
-          name: …
-          electrical: input|output|bidirectional|passive|power_in|power_out|no_connect
-      where: <手册章节>
-      page: <页>
-      excerpt: <原文>
-provenance_registry:
-- part: Bourns_SRP6060FA-6R8M
-  doc_id: Bourns SRP6060FA Series datasheet (150742)
-  doc_url: https://www.bourns.com/docs/Product-Datasheets/SRP6060FA.pdf
-  doc_sha256: 28ee89c71c693436d0f33e33d36df97c3704511c09249bd0cc4373f23e026740
-  package: SRP6060FA, shielded, 6.6 x 6.4 x 5.3 mm
-  params_transcribed:
-  - dcr_max_mohm
-  - dcr_typ_mohm
-  - inductance_uh
-  - irms_a_20c_rise
-  - isat_a
-  - operating_temp_c
-  source_file: k1/pm_gate/artifacts/k1/L1/inputs/datasheets/Bourns_SRP6060FA-6R8M.yaml
-- part: JST_VH_B2P-VH
-  doc_id: JST VH Series (eVH) datasheet
-  doc_url: https://www.jst-mfg.com/product/pdf/eng/eVH.pdf
-  doc_sha256: d51e669c597988b20c0963daf5bef7356cbd2104c1f867e9107c6fa6cd2b899c
-  package: VH 3.96mm, 2 circuits, top entry (through-hole)
-  params_transcribed:
-  - applicable_wire_awg
-  - current_rating_a
-  - voltage_rating_v
-  source_file: k1/pm_gate/artifacts/k1/L1/inputs/datasheets/JST_VH_B2P-VH.yaml
-- part: TPD2E001
-  doc_id: TI TPD2E001 (SLVS610 — 2-Channel ESD Protection Array)
-  doc_url: https://www.ti.com/lit/ds/symlink/tpd2e001.pdf
-  doc_sha256: b648c5d12f3e5b48c4b8ce3a9c4d5c4f1d40abb084d097e88465ba2f48d98d79
-  package: 可选 DRY (6-pin USON) / DRL (5-pin SOT) / DRS (6-pin WSON) / DZD (4-pin SOT-23)
-  params_transcribed:
-  - channels
-  - esd_iec_airgap_kv
-  - esd_iec_contact_kv
-  - io_abs_max_v
-  - package_options
-  - pinout_6pin
-  - selected_variant
-  - vcc_max_v
-  - vcc_min_v
-  source_file: k1/pm_gate/artifacts/k1/L1/inputs/datasheets/TPD2E001.yaml
-- part: TPS22965
-  doc_id: TI SLVSBJ0F (AUGUST 2012 – REVISED AUGUST 2016)
-  doc_url: https://www.ti.com/lit/ds/symlink/tps22965.pdf
-  doc_sha256: 3300eef743d7871f96c752227ae8f958006a902123ce2df351cf0772ec95a7e1
-  package: DSG (WSON), 8 pins
-  params_transcribed:
-  - iout_max_a
-  - r_on_mohm
-  - r_theta_ja_c_per_w
-  - t_a_max_c
-  - t_j_max_c
-  - topology
-  - vin_max_v
-  source_file: k1/pm_gate/artifacts/k1/L1/inputs/datasheets/TPS22965.yaml
-- part: TPS22990
-  doc_id: TI SLVSDK1C
-  doc_url: https://www.ti.com/lit/ds/symlink/tps22990.pdf
-  doc_sha256: ea198776524544eb3e4a130f1f6a6e5c8e80ca8164eebf387a8fd6b4b7dde2a3
-  package: DML (WSON), 10 pins
-  params_transcribed:
-  - iout_max_a
-  - r_on_mohm
-  - r_theta_ja_c_per_w
-  - t_a_max_c
-  - t_j_max_c
-  - topology
-  - vin_max_v
-  source_file: k1/pm_gate/artifacts/k1/L1/inputs/datasheets/TPS22990.yaml
-- part: TPS54628
-  doc_id: TI SLVSBW5A (APRIL 2013 – REVISED DECEMBER 2016)
-  doc_url: https://www.ti.com/lit/ds/symlink/tps54628.pdf
-  doc_sha256: 638ae7d8504d9b44fe5548cc89e0d0366fbe80d473d7f455660838fcc1d3607b
-  package: DDA (SO PowerPAD), 8 pins
-  params_transcribed:
-  - fsw_khz
-  - iout_max_a
-  - iq_ua_max
-  - r_theta_ja_c_per_w
-  - rds_hs_mohm
-  - rds_ls_mohm
-  - t_a_max_c
-  - t_j_max_c
-  - topology
-  - vin_max_v
-  - vin_min_v
-  source_file: k1/pm_gate/artifacts/k1/L1/inputs/datasheets/TPS54628.yaml
-_coverage_census:
-  datasheets_transcribed_in_repo: 6
-  note: 仓库内已转录手册 = 6 件（K1 L1/inputs/datasheets/），均含出处三件套 doc_id/doc_url/doc_sha256。**其余器件（连接器/MUX/EEPROM/TVS/MCU 等）的引脚电气级尚未转录** ⇒ 安装前须补齐至覆盖面 == 受审板 `lib_electrical_level` 审计所涉器件全集。
-  fail_closed: 未覆盖器件在安装后会使该维仍**不可达**（check-dimensions 保持 17/19），**不得以部分覆盖充绿**（C-12/skipped 不充绿）。
-readonly_derivation: 本草案**只登记**既有转录件（k1/pm_gate/artifacts/k1/L1/inputs/datasheets/*.yaml），未新造任何数值。
+semantics:
+  dim: lib_electrical_level
+  consumes: w8_audit_json（板封装 vs **库封装** pad 名集/几何/旋转；`_reclassify_w8` (B) 具名口径）
+  expect: n_electrical_diff == 0 ∧ n_pad_name_set_only == 0（审计板 sha16 须 == 受审板 c5a7df90aadb66e0）
+  why_external: 比对对象是**库封装**（对本板而言独立件）⇒ 以库语料为真源可破『读受审对象自述』的自证风险。
+  note: '**口径待监理确认**：#K2-47 §三 措辞为『器件手册电气级』；本件按**代码实际语义**落为『库封装语料』(tier1)，并保留 tier2 手册上溯登记。'
+truth_tier1_library:
+  corpora:
+  - k2/hw/lib/ForgeOS.pretty（项目库）
+  - AppDir/share/kicad/footprints（KiCad 标准库）
+  coverage: 24/24 个受审 lib_id 可定位到具体 `.kicad_mod`（逐件 sha16 见 files）
+  files:
+  - lib_id: (no-nickname) MountingHole_3.2mm_M3
+    refs:
+    - H1
+    - H2
+    - H3
+    - H4
+    path: k2/hw/lib/ForgeOS.pretty/MountingHole_3.2mm_M3.kicad_mod
+    corpus: ForgeOS.pretty
+    sha256_16: 84ab0158d02e2ba2
+  - lib_id: ForgeOS:C_0402_1005Metric__1
+    refs:
+    - C74
+    - C75
+    - C76
+    - C77
+    - C79
+    - C80
+    - C81
+    - C82
+    - C87
+    - C90
+    path: k2/hw/lib/ForgeOS.pretty/C_0402_1005Metric__1.kicad_mod
+    corpus: ForgeOS.pretty
+    sha256_16: d9af13e6c78981b1
+  - lib_id: ForgeOS:C_0402_1005Metric__2
+    refs:
+    - C85
+    path: k2/hw/lib/ForgeOS.pretty/C_0402_1005Metric__2.kicad_mod
+    corpus: ForgeOS.pretty
+    sha256_16: ec40a528a295ac2d
+  - lib_id: ForgeOS:C_0402_1005Metric__3
+    refs:
+    - C73
+    path: k2/hw/lib/ForgeOS.pretty/C_0402_1005Metric__3.kicad_mod
+    corpus: ForgeOS.pretty
+    sha256_16: 499f816b963b6359
+  - lib_id: ForgeOS:C_0603_1608Metric
+    refs:
+    - C78
+    - C83
+    - C86
+    - C88
+    path: k2/hw/lib/ForgeOS.pretty/C_0603_1608Metric.kicad_mod
+    corpus: ForgeOS.pretty
+    sha256_16: 3d4f3178a7bde8d5
+  - lib_id: ForgeOS:C_0805_2012Metric
+    refs:
+    - C84
+    path: k2/hw/lib/ForgeOS.pretty/C_0805_2012Metric.kicad_mod
+    corpus: ForgeOS.pretty
+    sha256_16: 6f264347c4c4bb19
+  - lib_id: ForgeOS:DS320PR1601
+    refs:
+    - U6
+    path: k2/hw/lib/ForgeOS.pretty/DS320PR1601.kicad_mod
+    corpus: ForgeOS.pretty
+    sha256_16: 28f6c270b57fce02
+  - lib_id: ForgeOS:D_SMA
+    refs:
+    - D2
+    path: k2/hw/lib/ForgeOS.pretty/D_SMA.kicad_mod
+    corpus: ForgeOS.pretty
+    sha256_16: 8e2275fca43e2c6c
+  - lib_id: ForgeOS:LED_0603_1608Metric
+    refs:
+    - D1
+    path: k2/hw/lib/ForgeOS.pretty/LED_0603_1608Metric.kicad_mod
+    corpus: ForgeOS.pretty
+    sha256_16: a8ad92ed635a09a2
+  - lib_id: ForgeOS:L_0805_2012Metric
+    refs:
+    - L1
+    path: k2/hw/lib/ForgeOS.pretty/L_0805_2012Metric.kicad_mod
+    corpus: ForgeOS.pretty
+    sha256_16: d5f07b7dd00746f8
+  - lib_id: ForgeOS:MCIO_4i_SFF-1016_RASide__1
+    refs:
+    - J3
+    path: k2/hw/lib/ForgeOS.pretty/MCIO_4i_SFF-1016_RASide__1.kicad_mod
+    corpus: ForgeOS.pretty
+    sha256_16: 72400219f6cace9b
+  - lib_id: ForgeOS:MCIO_4i_SFF-1016_RASide__2
+    refs:
+    - J4
+    path: k2/hw/lib/ForgeOS.pretty/MCIO_4i_SFF-1016_RASide__2.kicad_mod
+    corpus: ForgeOS.pretty
+    sha256_16: 25c842e33149c274
+  - lib_id: ForgeOS:MCU_STM32G0_LQFP48
+    refs:
+    - U1
+    path: k2/hw/lib/ForgeOS.pretty/MCU_STM32G0_LQFP48.kicad_mod
+    corpus: ForgeOS.pretty
+    sha256_16: 23bc3da5e65efc37
+  - lib_id: ForgeOS:OPTO_LTV356T
+    refs:
+    - U5
+    path: k2/hw/lib/ForgeOS.pretty/OPTO_LTV356T.kicad_mod
+    corpus: ForgeOS.pretty
+    sha256_16: ca07aefa35eb85fc
+  - lib_id: ForgeOS:PinHeader_1x02
+    refs:
+    - J12
+    - J6
+    path: k2/hw/lib/ForgeOS.pretty/PinHeader_1x02.kicad_mod
+    corpus: ForgeOS.pretty
+    sha256_16: e1abff3a8844754b
+  - lib_id: ForgeOS:PinHeader_1x04
+    refs:
+    - J11
+    - J13
+    - J9
+    path: k2/hw/lib/ForgeOS.pretty/PinHeader_1x04.kicad_mod
+    corpus: ForgeOS.pretty
+    sha256_16: 5c4a4dcc6ddbb497
+  - lib_id: ForgeOS:R_0402_1005Metric__1
+    refs:
+    - R41
+    path: k2/hw/lib/ForgeOS.pretty/R_0402_1005Metric__1.kicad_mod
+    corpus: ForgeOS.pretty
+    sha256_16: 51317190cbda9d33
+  - lib_id: ForgeOS:R_0402_1005Metric__2
+    refs:
+    - R40
+    path: k2/hw/lib/ForgeOS.pretty/R_0402_1005Metric__2.kicad_mod
+    corpus: ForgeOS.pretty
+    sha256_16: 965e4975c05877a4
+  - lib_id: ForgeOS:R_0603_1608Metric__1
+    refs:
+    - R1
+    - R21
+    - R28
+    - R29
+    - R3
+    - R31
+    - R32
+    - R33
+    - R34
+    path: k2/hw/lib/ForgeOS.pretty/R_0603_1608Metric__1.kicad_mod
+    corpus: ForgeOS.pretty
+    sha256_16: 7ce1e2833d6137f0
+  - lib_id: ForgeOS:R_0603_1608Metric__2
+    refs:
+    - R35
+    - R36
+    - R37
+    - R38
+    - R39
+    - R42
+    - R43
+    - R44
+    - R45
+    path: k2/hw/lib/ForgeOS.pretty/R_0603_1608Metric__2.kicad_mod
+    corpus: ForgeOS.pretty
+    sha256_16: 5d75bdf2de89af3c
+  - lib_id: ForgeOS:SOIC-8_5.3x5.3mm_P1.27mm
+    refs:
+    - U2
+    path: k2/hw/lib/ForgeOS.pretty/SOIC-8_5.3x5.3mm_P1.27mm.kicad_mod
+    corpus: ForgeOS.pretty
+    sha256_16: ceb091f3e2d2f5da
+  - lib_id: ForgeOS:SOIC8_FRU
+    refs:
+    - E2
+    path: k2/hw/lib/ForgeOS.pretty/SOIC8_FRU.kicad_mod
+    corpus: ForgeOS.pretty
+    sha256_16: 7c606510f7c8fd20
+  - lib_id: ForgeOS:SOT23_BAT54C
+    refs:
+    - U4
+    path: k2/hw/lib/ForgeOS.pretty/SOT23_BAT54C.kicad_mod
+    corpus: ForgeOS.pretty
+    sha256_16: b68aa661008b6da9
+  - lib_id: ForgeOS:SlimSAS_x8_SFF-8654_74pin_RASide
+    refs:
+    - J2
+    path: k2/hw/lib/ForgeOS.pretty/SlimSAS_x8_SFF-8654_74pin_RASide.kicad_mod
+    corpus: ForgeOS.pretty
+    sha256_16: e273ab2203c8cdaf
+truth_tier2_datasheet_uptrace:
+  role: 库封装 land pattern 的**出处上溯**（增强项；非本维比对的直接对象）
+  status: REGISTRY ONLY（sch_gate 33 件缺 `doc_id`/`doc_url`/`doc_sha256` 三件套；见 C25_PARTS_TRUTH_SOURCE_CENSUS）
+  k1_l1_datasheets_with_three_piece:
+  - part: Bourns_SRP6060FA-6R8M
+    doc_id: Bourns SRP6060FA Series datasheet (150742)
+    doc_url: https://www.bourns.com/docs/Product-Datasheets/SRP6060FA.pdf
+    doc_sha256: 28ee89c71c693436d0f33e33d36df97c3704511c09249bd0cc4373f23e026740
+  - part: JST_VH_B2P-VH
+    doc_id: JST VH Series (eVH) datasheet
+    doc_url: https://www.jst-mfg.com/product/pdf/eng/eVH.pdf
+    doc_sha256: d51e669c597988b20c0963daf5bef7356cbd2104c1f867e9107c6fa6cd2b899c
+  - part: TPD2E001
+    doc_id: TI TPD2E001 (SLVS610 — 2-Channel ESD Protection Array)
+    doc_url: https://www.ti.com/lit/ds/symlink/tpd2e001.pdf
+    doc_sha256: b648c5d12f3e5b48c4b8ce3a9c4d5c4f1d40abb084d097e88465ba2f48d98d79
+  - part: TPS22965
+    doc_id: TI SLVSBJ0F (AUGUST 2012 – REVISED AUGUST 2016)
+    doc_url: https://www.ti.com/lit/ds/symlink/tps22965.pdf
+    doc_sha256: 3300eef743d7871f96c752227ae8f958006a902123ce2df351cf0772ec95a7e1
+  - part: TPS22990
+    doc_id: TI SLVSDK1C
+    doc_url: https://www.ti.com/lit/ds/symlink/tps22990.pdf
+    doc_sha256: ea198776524544eb3e4a130f1f6a6e5c8e80ca8164eebf387a8fd6b4b7dde2a3
+  - part: TPS54628
+    doc_id: TI SLVSBW5A (APRIL 2013 – REVISED DECEMBER 2016)
+    doc_url: https://www.ti.com/lit/ds/symlink/tps54628.pdf
+    doc_sha256: 638ae7d8504d9b44fe5548cc89e0d0366fbe80d473d7f455660838fcc1d3607b
+  sch_gate_datasheet_registry:
+  - device: 24MHz_9pF
+    source_citation: 3225 4 脚晶振封装引脚 (设计约定)
+    n_pins: 4
+    file: 24MHz_9pF.yaml
+  - device: BAT54C
+    source_citation: BAT54C 双二极管标准脚位 (共阴极)
+    n_pins: 3
+    file: BAT54C.yaml
+  - device: DCDC_12V_3V3
+    source_citation: TI SLVSD82 (TLV61046A) Table 5-1 + SLVA912 (TLV61046 同脚位)
+    n_pins: 6
+    file: DCDC_12V_3V3.yaml
+  - device: DCDC_12V_5V
+    source_citation: TI SLVSD82 (TLV61046A) Table 5-1 + SLVA912 (TLV61046 同脚位)
+    n_pins: 6
+    file: DCDC_12V_5V.yaml
+  - device: DS160PR810
+    source_citation: TI SNLS658 Rev B — Table 5-1 Pin Functions + Table 7-2
+    n_pins: 64
+    file: DS160PR810.yaml
+  - device: EMMC_16G
+    source_citation: JEDEC JESD84-B51 eMMC5.1 BGA153 ball map (6 厂商交叉验证)
+    n_pins: 33
+    file: EMMC_16G.yaml
+  - device: FRU_EEPROM
+    source_citation: AT24C02 类 I2C EEPROM 标准脚位
+    n_pins: 8
+    file: FRU_EEPROM.yaml
+  - device: FUSB302
+    source_citation: ON Semi FUSB302/D — Figure 5 (MPX pin assignment) + Table 3 Pin Descriptions
+    n_pins: 14
+    file: FUSB302.yaml
+  - device: J_EC_HEADER
+    source_citation: 设计定义 (EC 遥测排针脚序)
+    n_pins: 4
+    file: J_EC_HEADER.yaml
+  - device: J_OOB_HEADER
+    source_citation: 设计定义 (OOB UART 排针脚序)
+    n_pins: 4
+    file: J_OOB_HEADER.yaml
+  - device: LDO_5V_3V3
+    source_citation: Diodes Inc AP2127 (DS31056) — Pin Descriptions SOT-23-5
+    n_pins: 5
+    file: LDO_5V_3V3.yaml
+  - device: LED_DUAL
+    source_citation: 0603 双色 LED 封装引脚 (设计约定)
+    n_pins: 3
+    file: LED_DUAL.yaml
+  - device: M2_M_SOCKET
+    source_citation: key_v2/carrier_v1.yaml M2_M_SOCKET (726-886) — M.2 M-Key PCIe 规范引脚
+    n_pins: 38
+    file: M2_M_SOCKET.yaml
+  - device: MCIO_4i_SFF1016
+    source_citation: SFF-TA-1016 MCIO — 4i 38-contact, A1-A19/B1-B19, interleaved A1=1,B1=2,...
+    n_pins: 38
+    file: MCIO_4i_SFF1016.yaml
+  - device: OCuLink_SFF8612
+    source_citation: PCI-SIG PCI Express OCuLink ECN / SFF-8612 Rev 1.0 pinout (icy dock MB873 V2 图交叉核对)
+    n_pins: 42
+    file: OCuLink_SFF8612.yaml
+  - device: OPTO_LTV356T
+    source_citation: LTV-356T 光耦标准脚位
+    n_pins: 4
+    file: OPTO_LTV356T.yaml
+  - device: PI3DBS16412
+    source_citation: Diodes DS40277 Rev 4-2 (Dec 2020) — Pin Description + 42-TQFN pin config
+    n_pins: 43
+    file: PI3DBS16412.yaml
+  - device: PMIC_P1
+    source_citation: SpacemiT P1 Datasheet — Table 3-2 Pin Descriptions
+    n_pins: 29
+    file: PMIC_P1.yaml
+  - device: SE050C2
+    source_citation: NXP SE050-DATASHEET — Table 5 Pin description HX2QFN20
+    n_pins: 7
+    file: SE050C2.yaml
+  - device: SOM_B1
+    source_citation: SpacemiT B1 CoM datasheet — b1_pin_map.json (568-ball 全量)
+    n_pins: 568
+    file: SOM_B1.yaml
+  - device: STM32G0B1CBT6
+    source_citation: ST DS13560 Rev 6 — Table 12 (Figure 5), standard _CxT pinout
+    n_pins: 49
+    file: STM32G0B1CBT6.yaml
+  - device: STM32G0B1KBU6
+    source_citation: ST DS12872 — Figure 12 / Table 12, standard _KxU pinout
+    n_pins: 33
+    file: STM32G0B1KBU6.yaml
+  - device: SlimSAS_x8_SFF8654
+    source_citation: SFF-8654 SlimSAS 8X 74-position, A1-A37/B1-B37, row-major
+    n_pins: 74
+    file: SlimSAS_x8_SFF8654.yaml
+  - device: TPD6E05U06
+    source_citation: TI SLLSE95 — TPD6E05U06 6-Channel ESD, USON-14
+    n_pins: 14
+    file: TPD6E05U06.yaml
+  - device: TPS22919
+    source_citation: TI SLVSEN5B (TPS22919 Rev B) — Section 5 Pin Configuration and Functions
+    n_pins: 6
+    file: TPS22919.yaml
+  - device: TS3USB221A
+    source_citation: TI SCDS239A — Table 4-1 Pin Functions
+    n_pins: 10
+    file: TS3USB221A.yaml
+  - device: UART_DEBUG
+    source_citation: 1x03 排针物理引脚顺序
+    n_pins: 3
+    file: UART_DEBUG.yaml
+  - device: USB3.0_Type-A_90
+    source_citation: USB 3.0 Spec — Type-A 9-position 标准脚位
+    n_pins: 9
+    file: USB3.0_Type-A_90.yaml
+  - device: USB_C_PLUG
+    source_citation: Molex 105444-0001 datasheet + USB-IF Type-C R2.0
+    n_pins: 24
+    file: USB_C_PLUG.yaml
+  - device: USB_C_RECEPT
+    source_citation: USB-IF Type-C R2.0 + Molex 105444 (同信号) + USB_C_RECEPT_24.yaml (第二对)
+    n_pins: 16
+    file: USB_C_RECEPT.yaml
+  - device: USB_C_RECEPT_24
+    source_citation: USB-IF USB Type-C R2.0 + USB_C_PLUG.yaml 物理脚号
+    n_pins: 24
+    file: USB_C_RECEPT_24.yaml
+  - device: XO_100M
+    source_citation: carrier_v1.yaml XO_100M (928-952) + 3225 封转振荡器规范
+    n_pins: 4
+    file: XO_100M.yaml
+  - device: null
+    source_citation: null
+    n_pins: 0
+    file: strap_semantics.yaml
+readonly_derivation: tier1 条目由「受审板 lib_id ↔ 库 `.kicad_mod`」**精确路径匹配**得出（含逐件 sha16）；未新造数值。tier2 仅登记既有 `source:` 引证。

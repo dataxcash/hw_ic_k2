@@ -72,3 +72,22 @@ ENG 只读 `criteria/`（本包未写 `criteria/`）；未新增判据维、未�
 - **未精确映射 15/24**：R/C/L/LED/排针/安装孔（无源/机械/通用件）+ **`DS320PR1601`**（其真源文件为 `DS160PR810.yaml`，疑**命名不一致** ⇒ 须人工确认）。
 - ⚠ 方法学登记：曾用模糊/子串回退 ⇒ **电阻件误配 MCU**（假阳）⇒ 已弃用，改用**精确匹配**并显式列出未映射项。
 - **须监理确认**：(i) 采用路径 (b)？(ii) 外部真源的**器件纳入面**是否含无源件？(iii) `DS320PR1601`↔`DS160PR810` 命名对应。
+
+## 7. ⭐ 语义厘清 ⇒ `parts_electrical_truth.yaml` **v2（tier1 完整）**
+读判据代码后确认（`criteria/adjudicate.py` `_reclassify_w8`，rev=3 起逐字节同 `1937a40a`）：
+`lib_electrical_level` 消费 `w8_audit_json`，实际比对的是 **板封装 ↔ 库封装**（pad 名集/几何/旋转；`(B)` 口径把『中心对称 rot∈{0,180}』与『无号 F.Paste』豁免为非电气）。
+> ⇒ 该维的**天然外部真源 = 库封装语料**（对本板是独立件），**不是**「器件手册电气级」字面义。#K2-47 §三 的措辞需监理确认口径。
+
+证据件：`…/P6_OPEN_READINESS/C25_LIB_ELECTRICAL_TRUTH_CANDIDATE_20260921_v1.json`（`be296ee29e43f60f`）
+- **tier1（库语料）覆盖 24/24**：受审 24 个 lib_id **全部**命中 `k2/hw/lib/ForgeOS.pretty/*.kicad_mod`（逐件 sha16 已录）。
+- tier2（手册上溯）：`sch_gate/datasheets/*.yaml` 33 件**缺三件套** ⇒ 仅登记 `source:` 引证（增强项，非阻塞）。
+
+**v2 草案再验证（真 CLI · /tmp 沙箱）**
+| 场景 | 结果 |
+|---|---|
+| 基线 rev=5 | 17/19 · 违规 2 ⇒ FAIL |
+| **v2 草案（jlc + parts tier1 + manifest 补丁）** | **19/19 · 违规 0 ⇒ PASS** |
+| 负控① 真源=受审板自身 | 被拦（fail-closed） |
+| 负控② 真源缺件 | 被拦（fail-closed） |
+
+**⇒ 若监理确认口径为 tier1（库语料），本包可即时落件**（gate 属主 3 步：install×2 + patch），装后 rev=6 + 重跑 canonical 19 复核 == `190b73be0f728a56`。

@@ -5,9 +5,10 @@
  "ruling": "#K2-47（监理 2026-09-20 · criteria rev=5 2da49b56a1b329ad）",
  "deliverables": {
   "jlc_hdi_capability.yaml": "k2/docs/drafts/c25-external-truth-v1/criteria__jlc_hdi_capability.yaml（sha16 00faba340bb7eb5b）",
-  "parts_electrical_truth.yaml": "k2/docs/drafts/c25-external-truth-v1/criteria__parts_electrical_truth.yaml（sha16 bc76ef81ae5d0cdf · **PARTIAL**）",
+  "parts_electrical_truth.yaml": "k2/docs/drafts/c25-external-truth-v1/criteria__parts_electrical_truth.yaml（sha16 c6de696df205c829 · **v2 · tier1 完整 / tier2 REGISTRY**）",
   "manifest_patch": "k2/docs/drafts/c25-external-truth-v1/manifest.k2.dim_source_of_truth.patch（sha16 b1c14714dea5e672）",
-  "README": "k2/docs/drafts/c25-external-truth-v1/README.md"
+  "README": "k2/docs/drafts/c25-external-truth-v1/README.md",
+  "lib_truth_candidate": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/C25_LIB_ELECTRICAL_TRUTH_CANDIDATE_20260921_v1.json（be296ee29e43f60f）"
  },
  "jlc_truth_provenance": {
   "doc_id": "JLCPCB PCB Capabilities (jlcpcb.com/capabilities/pcb-capabilities)",
@@ -28,38 +29,35 @@
   "blind_buried_caveat": "JLC 标准能力页 `blind_buried.supported=false`（HDI/激光孔属 advanced options 须 DFM review）；本工程工艺冻结=A 属**须随单确认的工艺前置**，非本维阈值。"
  },
  "parts_truth_status": {
-  "state": "PARTIAL",
-  "why": "该维 expect = n_electrical_diff==0 ∧ n_pad_name_set_only==0（逐器件逐引脚电气级）；仓库既有已转录手册仅 6 件（K1 L1/inputs/datasheets/，均含出处三件套）。",
-  "registry_parts": [
-   "Bourns_SRP6060FA-6R8M",
-   "JST_VH_B2P-VH",
-   "TPD2E001",
-   "TPS22965",
-   "TPS22990",
-   "TPS54628"
-  ],
-  "gate": "未补全前不得安装（fail-closed）；不得以部分覆盖充绿（C-12/skipped 不充绿）。"
+  "state": "tier1 COMPLETE / tier2 REGISTRY",
+  "semantics": "`lib_electrical_level` 实际比对**板封装 vs 库封装**（`_reclassify_w8` (B) 口径）⇒ 天然外部真源 = **库封装语料**",
+  "tier1": "k2/hw/lib/ForgeOS.pretty：**24/24** 个受审 lib_id 命中具体 `.kicad_mod`（逐件 sha16 已录）",
+  "tier2": "sch_gate 33 件缺三件套 ⇒ 仅登记 `source:` 引证（出处上溯增强项）",
+  "caveat": "#K2-47 §三 措辞为『器件手册电气级』，与代码实际语义（库封装）不同 ⇒ **口径须监理确认**"
  },
  "live_validation": {
-  "where": "/tmp 沙箱（仓库零写）· 真 CLI `python3 -m eda_core.truth_binding check-dimensions`",
+  "where": "/tmp 沙箱 · 真 CLI `check-dimensions`",
   "baseline_rev5": {
    "declared": "17/19",
    "violations": 2,
    "verdict": "FAIL"
   },
-  "after_draft": {
+  "after_draft_v2": {
    "declared": "19/19",
    "violations": 0,
    "verdict": "PASS"
   },
   "negctl_self_source": {
-   "rule": "density/lib 真源改指受审板",
-   "verdict": "被拦（fail-closed）"
+   "ok": false,
+   "violations": 1,
+   "verdict": "被拦"
   },
   "negctl_missing_file": {
-   "verdict": "被拦（fail-closed）"
+   "ok": false,
+   "violations": 1,
+   "verdict": "被拦"
   },
-  "reproduces_ruling": "基线 17/19 与 #K2-47 §三「正控 17/19」逐字相符"
+  "reproduces_ruling": "基线 17/19 与 #K2-47 §三 正控逐字相符"
  },
  "boundary": {
   "eng_wrote_criteria": false,
