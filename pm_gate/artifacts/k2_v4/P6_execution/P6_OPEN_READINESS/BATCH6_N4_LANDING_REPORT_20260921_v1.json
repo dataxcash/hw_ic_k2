@@ -1,0 +1,45 @@
+{
+ "artifact": "k2_batch6_n4_landing_report",
+ "schema": 1,
+ "authorization": "**#K2-48** N-4 放行（批 6 v4 落件）",
+ "landed_commit": {
+  "repo": "_shared (ic_hw_eda)",
+  "branch": "main",
+  "sha": "ea2b746241d85fdd84e65aef8aff23a5792dd916",
+  "sha16": "ea2b746241d85fdd",
+  "parent_rollback": "02459f5（回滚点）",
+  "file": "eda_core/hs_route_model.py",
+  "file_sha16": "c9e1c3b4ca208482（= 落件目标 sha，逐字节命中）",
+  "pushed": true
+ },
+ "patch": {
+  "file": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/BATCH6_DRAFT/BATCH6_LANDING_CANDIDATE_v4.patch",
+  "sha16": "3ded8584bb74461f（== 放行件）",
+  "scope": "仅 eda_core/hs_route_model.py（164+/14-）"
+ },
+ "verifications": {
+  "0_clean": "`git -C _shared status --porcelain` **空**（洁净）⇒ 开跑 ✓",
+  "1_apply": "apply 成功；`sha16(hs_route_model.py)` == **c9e1c3b4ca208482** ✓",
+  "2_verify_k2": "preflight/check[project_sch_coverage] PASS · verify/sch_structural PASS · verify/netlist_connect PASS · verify/bom_consistent PASS ⇒ **preflight+3 PASS** ✓",
+  "3_canonical_19": "**19 OK / 0 FAIL · PASS**；verdict sha16 **190b73be0f728a56**（两跑逐字节同；且与在册签认件 `verdict_19dim_rev3_board_l7_c5a7df90.json` **逐字节同**）✓",
+  "4_expect_patched": "**PASS** · A anchors 4/4 · B verify PASS · C K1 14/K2 14 **回退 0** · D shadow K1=14/K2=14 PASS · pytest {failed:2,passed:61,skipped:12} · hidden_failures=2（= 既定 C1/C2）✓",
+  "5_k1_truth": "段级 **2/8**：`TX0/output` SOLVED · **`RX0/input` SOLVED**（track_P 21.01 / track_N 20.51）—— 对照落件前基线 **1/8**（仅 TX0/output）⇒ **1/8→2/8 增益兑现** ✓；**层合法违规 0**（`k1_layer_legality_audit_v1.py`：solved_segments=2 · violations=[]）✓",
+  "6_commit": "**一笔提交** ea2b746（含 #K2-48 放行号与全部读数）✓"
+ },
+ "two_tree_sync": {
+  "root_shared": "ea2b746241d85fdd84e65aef8aff23a5792dd916",
+  "k2_shared": "ea2b746241d85fdd84e65aef8aff23a5792dd916",
+  "same_commit_id": true,
+  "file_identical": true,
+  "k2_pointer_commit": "11d72b8（chore(batch6): 共享层批 6 落件）",
+  "container_pointer_commit": "7073e27（chore(批6落件 #K2-48)）"
+ },
+ "deviations_and_notes": [
+  "**`git apply` 层级更正**：runbook 写 `-p1` ⇒ 在 `_shared` 内解析为 `_shared/_shared/...` **必失败**（dry-run 实测）；**正确为 `-p2`**（strip `a/_shared/`）。已按 `-p2` 落件。",
+  "**runbook 未载『双树同步』步骤**：`k2/_shared` 是**独立树**（非 symlink）⇒ 落件须同步；本件以『root 提交 → k2 fetch+checkout 同 commit id』实现 **双树同 commit `ea2b746`**（逐文件同）。",
+  "**确定性口径**：K1 求解 summary 两跑**仅 `solve_time_s` 不同**（2.57 vs 2.551，墙钟字段）；其余字段（含 `input_fp` · `shared_seg_count` 23 · `shared_via_count` 5 · 各段结果）**逐字节同** ⇒ 求解输出确定性成立；该 timing 字段为**工具既有**（落件前复跑亦记录 wall_clock），非本批引入。canonical 19 verdict 两跑**全字节同**。",
+  "**未做**（依放行边界）：未改 `criteria/`、未改 SPEC/原理图/生成器、**未重建交付包**（交付锚 `6ee7495d…`/`0e88e107…` 未动）、未新增检查齿、未派 WORKER。"
+ ],
+ "readonly_repo_effect": "仅 `_shared/eda_core/hs_route_model.py` 按放行补丁变更；k2/容器侧仅 submodule 指针推进。",
+ "ts": "2026-09-22T10:45:00+0800"
+}
