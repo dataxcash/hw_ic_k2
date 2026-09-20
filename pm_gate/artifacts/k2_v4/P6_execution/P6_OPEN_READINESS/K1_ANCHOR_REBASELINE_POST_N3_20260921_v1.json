@@ -1,0 +1,160 @@
+{
+ "artifact": "k2_k1_anchor_rebaseline_post_n3",
+ "schema": 1,
+ "ts": "2026-09-20T20:07:34+0800",
+ "purpose": "**K1 锚重基线**（承 N-3 落件；handoff『落件后报 K1 锚重基线』）：以**已签认**判据 `criteria/manifest.k1.yaml` + **DRC 实跑**给出 N-3 前后逐维读数，证明 N-3 只增维不回退。只读复算。",
+ "printout": "K1 判定（签认 manifest + DRC 实跑）**7 PASS/11 FAIL → 9 PASS/9 FAIL**（18/19 维）；**另**：追加 W-8 测量件后 = 10 PASS/8 FAIL，**但 `lib_electrical_level` 属空过（W8-VAC-1，禁用其宣称合规）**",
+ "command_template": "python3 criteria/adjudicate.py --project k1 --board k1/k1_v1.kicad_pcb --pro k1/k1_v1.kicad_pro --nets {nets} --sch-dir {sch} --root . --manifest criteria/manifest.k1.yaml --drc-cli AppDir/bin/kicad-cli --drc-work-dir <全新> --out {out}",
+ "runs": {
+  "before": {
+   "desc": "N-3 前：`k1_sch.yaml`/`sch/*` 由 git `01f4d72` 抽出至 `/tmp/opencode/k1before/`（**仓库零改**）",
+   "cmd": "python3 criteria/adjudicate.py --project k1 --board k1/k1_v1.kicad_pcb --pro k1/k1_v1.kicad_pro --nets /tmp/opencode/k1before/k1_sch.yaml --sch-dir /tmp/opencode/k1before/sch --root . --manifest criteria/manifest.k1.yaml --drc-cli AppDir/bin/kicad-cli --drc-work-dir <全新> --out /tmp/opencode/k1anchor/k1_verdict_signed_BEFORE.json",
+   "n_pass": 7,
+   "n_fail": 11,
+   "provisional": false,
+   "oks": [
+    "device_has_pads",
+    "non45_segments",
+    "rule_severity_manifest",
+    "pipeline_present",
+    "drc_warning_dispositions",
+    "fp_lib_table_present",
+    "verdict_schema"
+   ],
+   "fails": [
+    "zone_filled",
+    "drill_count",
+    "net_declared_realized",
+    "pin_map_complete",
+    "refdes_sets_equal",
+    "drc_errors",
+    "unconnected_zero",
+    "lib_electrical_level",
+    "keepout_active",
+    "pads_within_outline",
+    "density_and_clearance"
+   ],
+   "sha16": "49aedea73e226464"
+  },
+  "after": {
+   "desc": "N-3 后：现盘 `k1/boards/k1_sch.yaml` + `k1/sch/`",
+   "cmd": "python3 criteria/adjudicate.py --project k1 --board k1/k1_v1.kicad_pcb --pro k1/k1_v1.kicad_pro --nets k1/boards/k1_sch.yaml --sch-dir k1/sch --root . --manifest criteria/manifest.k1.yaml --drc-cli AppDir/bin/kicad-cli --drc-work-dir <全新> --out /tmp/opencode/k1anchor/k1_verdict_signed_AFTER.json",
+   "n_pass": 9,
+   "n_fail": 9,
+   "provisional": false,
+   "oks": [
+    "device_has_pads",
+    "non45_segments",
+    "rule_severity_manifest",
+    "net_declared_realized",
+    "refdes_sets_equal",
+    "pipeline_present",
+    "drc_warning_dispositions",
+    "fp_lib_table_present",
+    "verdict_schema"
+   ],
+   "fails": [
+    "zone_filled",
+    "drill_count",
+    "pin_map_complete",
+    "drc_errors",
+    "unconnected_zero",
+    "lib_electrical_level",
+    "keepout_active",
+    "pads_within_outline",
+    "density_and_clearance"
+   ],
+   "sha16": "ad621f82c06ef31e"
+  },
+  "after_plus_w8": {
+   "desc": "N-3 后 + **W-8 电气级审计测量件**（K1 板逐件 vs `k1/lib/ForgeOS.pretty`）",
+   "cmd_measure": "AppDir/usr/bin/python3.11 k2/tools/k2_w8_footprint_audit_v1.py --board k1/k1_v1.kicad_pcb --proj-lib k1/lib --out-json <…> --out-md <…>",
+   "w8_audit_artifact": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/K1_W8_FOOTPRINT_AUDIT_20260921_v1.json（146b8543fb629b43）",
+   "w8_summary": {
+    "n_footprints": 42,
+    "n_electrical_identical": 0,
+    "n_electrical_diff": 0,
+    "n_pad_name_set_only": 0,
+    "n_no_library_link": 42,
+    "n_library_unloadable": 0,
+    "board_sha16": "eda1dc91eec76aa7",
+    "tool_sha16": "75404d706413d546"
+   },
+   "verdict": {
+    "n_pass": 10,
+    "n_fail": 8,
+    "sha16": "753446eb68e86acc"
+   },
+   "dim_reading": "`lib_electrical_level` **PASS**（电气级差异 0 + 仅 pad 名差异 0；审计板 sha16 == 受审板 ⇒ 非陈旧）"
+  }
+ },
+ "flips": {
+  "fail_to_pass": [
+   "net_declared_realized",
+   "refdes_sets_equal"
+  ],
+  "pass_to_fail": []
+ },
+ "cross_check": "BEFORE 7 PASS/11 FAIL 与 #K2-49 落件报告『K1 判定 7 PASS/11 FAIL（provisional=false）』**逐维一致** ⇒ 本基线可复现前序读数口径",
+ "detail_flips": {
+  "refdes_sets_equal": "原理图 37 / 板 42 → **42 / 42**（N-3 主效应）",
+  "net_declared_realized": "板上 0 焊盘的声明网 3 → **0**（<2 焊盘 12 → 8）",
+  "pin_map_complete": "**16 → 16 未回退**：16 节点全部为 `J1`（符号脚号 1..16 ∉ 板 pad A*/B*/SH）⇒ R-1（监理自裁中）"
+ },
+ "residual_fails_with_cause": [
+  {
+   "dim": "zone_filled",
+   "cause": "K1 无铜区/无填充平面（K1-D7；计划允许中间态）"
+  },
+  {
+   "dim": "drill_count",
+   "cause": "NPTH=2 < 4（K1-D7）"
+  },
+  {
+   "dim": "pin_map_complete",
+   "cause": "J1 脚号 vs 板 pad（R-1）"
+  },
+  {
+   "dim": "drc_errors",
+   "cause": "DRC error 13（clearance/copper_edge_clearance/pth_inside_courtyard/shorting_items/solder_mask_bridge）⇒ K1-D1/D2/D3"
+  },
+  {
+   "dim": "unconnected_zero",
+   "cause": "unconnected_items=156 = K1 **未布线中间态**（K1-D5；非缺陷登记）"
+  },
+  {
+   "dim": "lib_electrical_level",
+   "cause": "缺 K1 版 W-8 电气级审计 JSON（测量工具面）"
+  },
+  {
+   "dim": "pads_within_outline",
+   "cause": "缺 K1 版 J-8 出框测量 JSON（读数已由 K1-D1 手工具名：J1 SH 越框）"
+  },
+  {
+   "dim": "density_and_clearance",
+   "cause": "缺 K1 版 J-8 密度/间距测量 JSON"
+  },
+  {
+   "dim": "keepout_active",
+   "cause": "K1 keepout 区 0 个（K1-D7）"
+  }
+ ],
+ "boundary": [
+  "只读复算；未改判据/生成器/SPEC/原理图/交付锚",
+  "DRC work-dir 与产物均在 /tmp/opencode",
+  "未派 WORKER",
+  "未越阶段门"
+ ],
+ "next": "①R-1 获裁后落件 ⇒ `pin_map_complete` 可翻 PASS ②**W8-VAC-1**：K1 footprint 补 `lib_id` 或裁定口径（**须批**）③K1 版 J-8 测量件（出框/密度·间距）落地 ⇒ 2 个『缺件 fail-closed』维转实读数 ④K1-D1..D12 排期（未批不动板）",
+ "findings": [
+  {
+   "id": "W8-VAC-1",
+   "severity": "**中（口径风险 · 防充绿）**",
+   "finding": "K1 板 **42/42 footprint 无库 nickname**（板内 FPID 为裸名，如 `C_0402_1005Metric`）⇒ W-8 比对**零对象**（工具口径：无 nickname ⇒ `no_library_link`，KiCad 不比对）⇒ `lib_electrical_level` 在该测量件下为 **空过（vacuous pass）**：`0/0` 不是『板 = 库』的证据，而是『无可比对象』。",
+   "impact": "**禁用该空过宣称 K1 电气级合规**（C-12）。K1 判定面含 `--w8-audit-json` 时 = 10 PASS/8 FAIL，其中 1 维为空过；**不含时为 9/9 且该维 fail-closed（更诚实）**。",
+   "root_cause": "K1 建板器写出的 footprint 未带库 nickname（`ForgeOS:` 前缀）；`k1/fp-lib-table` 已注册 ForgeOS 库（M2 落件）但**板内 footprint 未回填 lib_id**。",
+   "fix_family": "K1 侧把 42 件 footprint 的 FPID 补为 `ForgeOS:<name>`（**板/库变更 ⇒ 需批**，且须重跑 DRC/判定）；或由监理裁定该维在『无库链接』下的口径（K2 侧同族已有 `_reclassify_w8` 先例）。",
+   "evidence": "W8 测量件 + 上述两跑（含/不含 `--w8-audit-json`）"
+  }
+ ]
+}
