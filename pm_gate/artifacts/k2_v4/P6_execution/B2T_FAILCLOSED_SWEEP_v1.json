@@ -1,0 +1,196 @@
+{
+ "anchor_carrier_verification": {
+  "board_symlink": {
+   "path": "k2/k2_v4.kicad_pcb",
+   "sha16": "fb07d25ac426ff84",
+   "target": "hw/k2_v4_8L.kicad_pcb"
+  },
+  "extracted_carrier_n": 34,
+  "extracted_equals_stored": true,
+  "rehearsal": {
+   "alloc_n": 0,
+   "alloc_solved": 0,
+   "board_sha256_16": "fb07d25ac426ff84",
+   "capacity_bottleneck": "TRACK",
+   "capacity_verdict": "INFEASIBLE",
+   "input_fp": "ce5e470537cdbb4d807618b55b514ecc985f96ea38f590db6afe5f1facead755"
+  },
+  "rehearsal_alloc_equals_stored": false,
+  "rehearsal_rc": 0,
+  "rehearsal_runtime_s": 1.4,
+  "repo_p3_report_unchanged": true,
+  "stored_p3_report": {
+   "alloc_n": 34,
+   "alloc_solved": 34,
+   "board_sha256_16": "f6273de613f43d05",
+   "board_sha_expected_16": "6c387dff",
+   "input_fp": "5113681d4d3256f53d6b0e928d2945e2054c741aa8b484e9b3bd4f61c1fe7d64"
+  },
+  "verdict": "**不可运行期自建**：现行输入（8L 板 fb07d25a，k2/k2_v4.kicad_pcb 自 2026-09-16 起为指向 hw/k2_v4_8L.kicad_pcb 的符号链接）下 alloc 阶段 0 解（capacity INFEASIBLE/TRACK）⇒ 测试若在运行期自建 alloc 将无解；Sept-9 P3 载体（其 board.sha256=f6273de6，而该报告自记 sha_expected=6c387dff —— 当时即已板身份不符）无法由当前 harness 重放"
+ },
+ "anchors": {
+  "board_8L": {
+   "sha16": "fb07d25ac426ff84",
+   "via_symlink": "k2/k2_v4.kicad_pcb"
+  },
+  "engine": {
+   "path": "k2/_shared/eda_core/hs_route_model.py",
+   "sha16": "b6f88d35bc0669e4"
+  },
+  "legacy_alloc": {
+   "sha16": "c65097148aab6842"
+  },
+  "p3_carrier": {
+   "path": "/tmp/opencode/current_alloc_from_pipeline.json",
+   "sha16": "547c9513ff67b470"
+  },
+  "spec_rev52": {
+   "sha16": "0bd52ed48e720b8c"
+  }
+ },
+ "artifact": "k2_p6_b2t_failclosed_sweep",
+ "conclusions": [
+  "① 承载形态：**运行期自建 alloc 不可行**（现行输入下 alloc 0 解 / capacity INFEASIBLE-TRACK）；P3 载体为 Sept-9 冻结产物（board 6c387dff），今日 harness+8L 板（fb07d25a）无法重放 ⇒ 锚迁移须走『具名承载』（登记该冻结载体 + 血缘）或『合成现行 fixture』，不得声称可运行期自建。",
+  "② fail-closed：33 API × 2 载体动态普查，**唯一抛异常 = link_topology_map（缺陷 B1）**；静态 6 处 min/max/next 候选，除 B1 两行外均有守卫/default ⇒ B1 为单点缺陷，非系统性。",
+  "③ 观测（供监理）：`k2/k2_v4.kicad_pcb` 为符号链接 → `hw/k2_v4_8L.kicad_pcb`（2026-09-16 建立）⇒ 仓库内 Sept-9 P3 报告（board 6c387dff）与今日 E2E 输入**不是同一板**，读数不可直接互比。"
+ ],
+ "determinism_2run": "MATCH",
+ "dynamic_sweep": {
+  "exceptions": {
+   "legacy_alloc": {},
+   "p3_alloc_sept9": {
+    "link_topology_map": {
+     "at": [
+      "File \"/home/fila/jqdDev_2025/ic_hw/k2/_shared/eda_core/hs_route_model.py\", line 3136, in probe_link_topology"
+     ],
+     "exc": "ValueError: min() arg is an empty sequence",
+     "ok": false
+    }
+   }
+  },
+  "n_apis": {
+   "legacy_alloc": 33,
+   "p3_alloc_sept9": 33
+  },
+  "n_exc": {
+   "legacy_alloc": 0,
+   "p3_alloc_sept9": 1
+  },
+  "runtime_s": 93.5,
+  "surface": [
+   "_capacity_regions",
+   "_corridor_clear_span(all)",
+   "capacity_map",
+   "link_topology_map",
+   "probe_escape_capacity[PCIE_DN0,-]",
+   "probe_escape_capacity[PCIE_DN0,input]",
+   "probe_escape_capacity[PCIE_DN0,out_J2]",
+   "probe_escape_capacity[PCIE_DN0,out_MCIO]",
+   "probe_escape_capacity[PCIE_REFCLK0,-]",
+   "probe_escape_capacity[PCIE_REFCLK0,input]",
+   "probe_escape_capacity[PCIE_REFCLK0,out_J2]",
+   "probe_escape_capacity[PCIE_REFCLK0,out_MCIO]",
+   "probe_escape_capacity[PCIE_UP0,-]",
+   "probe_escape_capacity[PCIE_UP0,input]",
+   "probe_escape_capacity[PCIE_UP0,out_J2]",
+   "probe_escape_capacity[PCIE_UP0,out_MCIO]",
+   "probe_link_topology[DN0]",
+   "probe_link_topology[DN4]",
+   "probe_link_topology[REFCLK0]",
+   "probe_link_topology[UP0]",
+   "probe_link_topology[UP4]",
+   "probe_region_capacity[EAST_CHIP_TO_J2/dn/out_J2/right]",
+   "probe_region_capacity[EAST_CHIP_TO_J2/up/out_J2/right]",
+   "probe_region_capacity[EAST_CHIP_TO_J2/up/out_U7/left]",
+   "probe_region_capacity[WEST_MCIO_TO_CHIP/dn/out_MCIO/right]",
+   "probe_region_capacity[WEST_MCIO_TO_CHIP/up/out_MCIO/right]",
+   "solve_all_v4(18)",
+   "solve_chain_v4[DN0]",
+   "solve_chain_v4[DN4]",
+   "solve_chain_v4[REFCLK0]",
+   "solve_chain_v4[REFCLK1]",
+   "solve_chain_v4[UP0]",
+   "solve_chain_v4[UP4]"
+  ]
+ },
+ "purpose": "B2-T 续作：①测试锚承载形态验证（现行 pipeline 能否运行期自建 alloc）②B1 同族 fail-closed 普查",
+ "readonly_repo": true,
+ "schema": 1,
+ "static_scan": [
+  {
+   "classification": "已守卫（紧接 `if src_corr is None: return None`）",
+   "line": "397",
+   "text": "src_corr = next((c for c in spec.get(\"corridors\", [])"
+  },
+  {
+   "classification": "已守卫（405 `if src_tys is None or tgt_tys is None: return None`）",
+   "line": "401",
+   "text": "src_tys = next((b.get(\"tracks_y\") or [] for b in src_corr.get(\"bands\", [])"
+  },
+  {
+   "classification": "已守卫（同上）",
+   "line": "403",
+   "text": "tgt_tys = next((b.get(\"tracks_y\") or [] for b in tgt_corr.get(\"bands\", [])"
+  },
+  {
+   "classification": "已守卫（前一步 None 判定后使用）",
+   "line": "416",
+   "text": "tgt_band = next(b for b in tgt_corr.get(\"bands\", [])"
+  },
+  {
+   "classification": "有 default（跨行 `, None)`）+ 显式 None 判定（非 B1 同族）",
+   "line": "744",
+   "text": "seg = next((r for r in solved if r[\"status\"] == \"SOLVED\""
+  },
+  {
+   "classification": "有 default（跨行 None）+ 调用侧判定",
+   "line": "803",
+   "text": "corr = next((c for c in self.spec.get(\"corridors\", [])"
+  },
+  {
+   "classification": "有 default（跨行 None）+ 调用侧判定",
+   "line": "2547",
+   "text": "corridor = next((c for c in self.spec.get(\"corridors\", [])"
+  },
+  {
+   "classification": "有 default（跨行 None）+ 调用侧判定",
+   "line": "2721",
+   "text": "corridor = next((c for c in self.spec.get(\"corridors\", [])"
+  },
+  {
+   "classification": "已守卫（len(ys) < 2 → 2.0）",
+   "line": "2936",
+   "text": "gap = min(b - a for a, b in zip(ys, ys[1:]))"
+  },
+  {
+   "classification": "有 default（0.0）",
+   "line": "2948",
+   "text": "mw = max((d[\"half_w\"] for d in reds.values()), default=0.0)"
+  },
+  {
+   "classification": "有 default（0.0）",
+   "line": "2949",
+   "text": "mh = max((d[\"half_h\"] for d in reds.values()), default=0.0)"
+  },
+  {
+   "classification": "已守卫（if chip_ends:）",
+   "line": "3077",
+   "text": "min_chip_x = min(c[\"x\"] for c in chip_ends)"
+  },
+  {
+   "classification": "**未守卫 ⇒ 缺陷 B1**（本轮已定位；影子守卫已验证）",
+   "line": "3136",
+   "text": "x_l = min(s[\"end_left\"][\"x\"] for s in segs"
+  },
+  {
+   "classification": "**未守卫 ⇒ 缺陷 B1**（同处 x_r）",
+   "line": "3138",
+   "text": "x_r = max(s[\"end_right\"][\"x\"] for s in segs"
+  },
+  {
+   "classification": "有 default（0）",
+   "line": "4607",
+   "text": "idx = next((i for i in range(len(new_path) - 1)"
+  }
+ ]
+}

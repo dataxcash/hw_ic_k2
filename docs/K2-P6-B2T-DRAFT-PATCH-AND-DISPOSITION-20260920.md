@@ -3,6 +3,10 @@
 > 状态：**草稿（/tmp 影子，真源零改动）**；判定归监理 · 施工前需批2 授权（碰 `_shared` / 测试锚）。
 > 机读：`k2/pm_gate/artifacts/k2_v4/P6_execution/B2T_DRAFT_PATCH_v1.json` · diff：`/tmp/opencode/b2t_draft_patch_v1.diff`
 > 生成：`python3 k2/tools/k2_p6_b2t_draft_patch_v1.py --verify-determinism`
+> **补记（同一会话续作）**：测试锚**承载形态**验证见
+> `k2/docs/K2-P6-B2T-ANCHOR-CARRIER-AND-FAILCLOSED-20260920.md` —— 结论：**运行期自建 alloc 不可行**
+> （现行 8L 输入下 alloc 阶段 0 解），锚迁移须走「具名冻结载体（P3 Sept-9 alloc，血缘登记）」或
+> 「合成现行 fixture」；B1 同族 fail-closed 普查 = 单点缺陷（33 API × 2 载体仅 B1 抛异常）。
 
 ## 0. 五棵树读数（同一测试文件、同一板锚；差异只在 alloc 锚 / 补丁 / 引擎守卫）
 
