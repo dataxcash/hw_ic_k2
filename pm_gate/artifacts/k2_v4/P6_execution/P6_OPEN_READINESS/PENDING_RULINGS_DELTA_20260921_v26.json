@@ -1,0 +1,62 @@
+{
+ "artifact": "k2_pending_rulings_delta",
+ "schema": 1,
+ "ts": "2026-09-21T01:49:05.274169+08:00",
+ "supersedes": "PENDING_RULINGS_DELTA_20260921_v25.json（已由 #K2-59 全额消费：另立批放行 + 重出准 + 限定复核 + CR-62 追认）",
+ "purpose": "【主项 · #K2-59 R3】请监理对 l8r2 重出件作「限定复核」（不重跑 canonical 19 —— 板未变）；②【报备 · 非提问】#K2-59 R1/R2 已按裁执行完毕（CR-49/64/65/66/67）；③【登记 · 非阻塞】CR-68（P6 仪器自检 FAIL 既有事实 + R5 可选批未做之理由）。",
+ "why_signal_now": "CR-32 强制结构化；且新包在复核通过前**禁作外发/下单依据**（#K2-59 R3）⇒ 复核未回 = ENG 侧**唯一闸门**。未结构化则监理不可见（2026-09-20『待裁信号真空』同型）。",
+ "owner_gate": "**0** —— 限定复核属监理复核/批面（§11 自裁优先）；本件无 L1 成分（不涉拓扑/接口/信号流向/球重映射）⇒ ENG 不升级 owner。",
+ "stage_state": "P5 = 唯一未闭门（`PENDING_EXTERNAL` · V4–V7 全 `NOT_RUN`）；P0–P4 **HOLDS**（P4 对 l8 19/0 · verdict `562b482fac5ee941` 未动）；P6 CLOSED；无越阶段。判据 **rev=6 MATCH**。**STOP-1 已解除（#K2-58 R1）**；**新增闸 = #K2-59 R3 待限定复核**。owner 闸口 = 0。",
+ "pending_supervision": [
+  {
+   "id": "**【#K2-59 R3】l8r2 重出件「限定复核」** = ENG 侧唯一闸门",
+   "ask": "请按 #K2-59 R3 六项核：①板 sha 未变 ②逐件 diff = 仅声明 delta（几何零变更）③新包完整性链 ④DFM 16/1/0 ⑤旧锚逐字节未动 ⑥外发面引用解析 0 悬空。**通过后**新包方可作外发/下单依据。",
+   "artifacts": {
+    "新交付包": "`L6/jlc_package_l8r2/MANIFEST.json` **`19d637c4e9ed35be`** · `revision P5-L8.2` · tarball `L6/DELIVERY_l8r2/k2_v4_8L.l8r2_gerber_package.tar.gz` **`488e90a47d088d06`**",
+    "证据件": "`P6_execution/P6_OPEN_READINESS/K2_59_STANDALONE_BATCH_EXECUTION_EVIDENCE_20260921_v1.json` **`85468e122bb1e280`**（含 6 变更件对照表 + 48 逐件同清单 + 全部命令/原始输出/sha16）",
+    "册面": "`docs/K2-CONVENTION-REGISTER-20260921.md` **`dfddd84556f77dcf`**（CR-1..CR-68）",
+    "k2 commits": "`ea94637`（CR-49）· `081b383`（另立批）—— 已 push · origin/main 0/0"
+   },
+   "selfcheck_gate": {
+    "①板": "`7a5c89913d6e5d0a` 未变（仍为输入 · 不重生成）",
+    "②diff": "54↔54 无增删 · 48 件逐字节同 · 6 件变更 = 全部声明 delta（MANIFEST/anchor_selfcheck/impedance_table.{json,md}/DISCLOSURE/ORDER_NOTES）",
+    "③完整性": "`LC_ALL=C sha256sum -c` **55/55 OK** · MANIFEST.files 53 ≡ 目录 · tarball 54 ≡ 目录逐件 sha 同 · 无 `.l7` 条目",
+    "④DFM": "16 PASS / 1 ACCEPT / 0 FAIL · drill **754** · `revision P5-L8.2` · `criteria_anchor rev=6`",
+    "⑤旧锚": "l8 `4b610baed4f4752c`/`36a6b276b4f7e465` · l7 `6ee7495de61f749f`/`0e88e107e2da8192` 逐字节未动",
+    "⑥引用": "外发面文件型引用 **38/38** 解析成功 · 悬空 **0** · 锚同代（l8r2）"
+   }
+  },
+  {
+   "id": "【登记 · 非阻塞】",
+   "items": [
+    "`CR-68(i)` **P6 仪器自检现判 FAIL（既有事实 · 先于本批 · 未改锚/基线/存储件）**：行号锚钉在 **4957 行**时代 vs 现行 `k2/_shared/eda_core/hs_route_model.py` **5225 行**（`c9e1c3b4ca208482`）；基线生成器把 **pytest 墙钟秒数**写入件内（两连跑 69.04s/69.89s）⇒ **结构性不可逐字节复现**。改锚=缩口径（C-12）⇒ 提请监理于 P6/仪器面裁定。",
+    "`CR-68(ii)` `#K2-59` R1 末行 **R5 可选批本轮未做**：注释头行/`source` 需逐件已验证文献号（`STM32G0B1CBT6` 之 `Rev 6 Table 12` 属 CR-30「引证待核」）；无权威件擅改 = 伪造引证 ⇒ 维持 #K2-58 R5 登记。",
+    "`CR-17` / `CR-22` / `CR-3` / land pattern 族 · `COV-C3`（#K2-58 R4 已定范围+钉版 · 维持前裁 · 禁 push/rewrite B 宿主）"
+   ]
+  }
+ ],
+ "landed_this_session": [
+  {
+   "id": "CR-49（工具 stale 路径 · 独立一笔）",
+   "artifact": "`tools/k2_p6_instruments_selfcheck_v1.py` `16c6000cd19ad9f6` → `52bff426fc3517df`",
+   "reading": "自检改读 l8 模板；`first_article_statuses` 8 项全 `NOT_RUN` · rc=1（FAIL 为既有 · 见 CR-68(i)）"
+  },
+  {
+   "id": "CR-64/65/66/67（另立批主体 · 一笔提交 `081b383`）",
+   "artifact": "册面 + 证据件",
+   "reading": "见 pending_supervision[0].selfcheck_gate"
+  }
+ ],
+ "red_lines_ok": [
+  "未改 criteria/（rev=6 只读 MATCH）",
+  "未改冻结四源",
+  "未改板 `7a5c8991` / 原理图 / 网表 / `k2_sch.yaml`",
+  "**未覆盖/删除任何旧包**（l8 `4b610bad`/`36a6b276` · l7 `6ee7495d`/`0e88e107` 逐字节保全）",
+  "未触 B 宿主远端（无 push / 无 rewrite）",
+  "未派 WORKER",
+  "未越阶段 · **未下单**（R2-6 前置闸实测通过）",
+  "未为历史 commit 批量补 tag",
+  "临时落点仅 `/tmp/opencode`"
+ ],
+ "next": "① **待监理限定复核**（本件）；通过后 ⇒ 新包方可作外发/下单依据 ⇒ P5 外部回件按 `L6/first_article_l8/results_template.json`（8 项 · V6-1 必填 `condition` + 辅读）回填交监理判定 ⇒ P5 关门；② 复核未回期间**只读造活**（锚周期复核 · 册面维护；**禁**重复核已收口项）· **禁以 HOLD/停等结案**（owner ⑥）。"
+}
