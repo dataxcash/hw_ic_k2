@@ -6,9 +6,9 @@
  "method": "curl GET → %PDF magic + pdftotext 首2页 → doc_id 令牌命中检查 → sha256；本轮另加：UA 头 + `--http1.1`/`-k` 重试、全文（非首2页）令牌搜索。",
  "tier2_before": "REGISTRY ONLY：33 件中 **0** 件具 `doc_url`+`doc_sha256`（#K2-48 §一 N-5/C-25 口径）",
  "tier2_after": {
-  "verified_three_piece": 9,
+  "verified_three_piece": 12,
   "of_total": 33,
-  "note": "**禁充绿**：仅收『PDF 可解析 + doc_id/产品名机检命中』者；其余一律不填 sha"
+  "note": "**禁充绿**：仅收『PDF 可解析 + doc_id/产品名机检命中』者；其余一律不填 sha。批 2 后 = 9 + 3（USB-IF Type-C R2.5 三件套）"
  },
  "verified_three_piece": [
   {
@@ -139,6 +139,51 @@
    ],
    "note": "**引用号不符**：仓内引证 SCDS239A，实测为 SCDS277C ⇒ 同上",
    "pdf_copy": "/tmp/opencode/c25docs/TS3USB221A_0.pdf"
+  },
+  {
+   "device": "USB_C_PLUG",
+   "doc_id": "USB-IF USB Type-C Cable and Connector Specification Release 2.5 (March 2026)",
+   "doc_url": "https://www.usb.org/sites/default/files/USB%20Type-C%202.5%20Release%20202603.zip",
+   "doc_url_inner": "USB Type-C 2.5 Release 202603/USB Type-C Spec R2.5 - March 2026.pdf",
+   "doc_sha256": "6636cd61387a2f78b0fa96c8ea86ccc0f39ec59f98821cdb57b206d31445a328",
+   "container_sha256": "603c2cb0ea356d367fea61f8747a21981f0da9abae4d8ec15556e0063edb81b5",
+   "bytes": 15750907,
+   "doc_id_token_hit": [
+    "Type-C",
+    "Release 2.5",
+    "Cable and Connector"
+   ],
+   "note": "**版本漂移**：仓内引「USB-IF Type-C R2.0」，usb.org 当前公开件为 **R2.5 (2026-03)**（A1..B12 脚位跨版本不变）"
+  },
+  {
+   "device": "USB_C_RECEPT",
+   "doc_id": "USB-IF USB Type-C Cable and Connector Specification Release 2.5 (March 2026)",
+   "doc_url": "https://www.usb.org/sites/default/files/USB%20Type-C%202.5%20Release%20202603.zip",
+   "doc_url_inner": "USB Type-C 2.5 Release 202603/USB Type-C Spec R2.5 - March 2026.pdf",
+   "doc_sha256": "6636cd61387a2f78b0fa96c8ea86ccc0f39ec59f98821cdb57b206d31445a328",
+   "container_sha256": "603c2cb0ea356d367fea61f8747a21981f0da9abae4d8ec15556e0063edb81b5",
+   "bytes": 15750907,
+   "doc_id_token_hit": [
+    "Type-C",
+    "Release 2.5",
+    "Cable and Connector"
+   ],
+   "note": "**版本漂移**：仓内引「USB-IF Type-C R2.0」，usb.org 当前公开件为 **R2.5 (2026-03)**（A1..B12 脚位跨版本不变）"
+  },
+  {
+   "device": "USB_C_RECEPT_24",
+   "doc_id": "USB-IF USB Type-C Cable and Connector Specification Release 2.5 (March 2026)",
+   "doc_url": "https://www.usb.org/sites/default/files/USB%20Type-C%202.5%20Release%20202603.zip",
+   "doc_url_inner": "USB Type-C 2.5 Release 202603/USB Type-C Spec R2.5 - March 2026.pdf",
+   "doc_sha256": "6636cd61387a2f78b0fa96c8ea86ccc0f39ec59f98821cdb57b206d31445a328",
+   "container_sha256": "603c2cb0ea356d367fea61f8747a21981f0da9abae4d8ec15556e0063edb81b5",
+   "bytes": 15750907,
+   "doc_id_token_hit": [
+    "Type-C",
+    "Release 2.5",
+    "Cable and Connector"
+   ],
+   "note": "**版本漂移**：仓内引「USB-IF Type-C R2.0」，usb.org 当前公开件为 **R2.5 (2026-03)**（A1..B12 脚位跨版本不变）"
   }
  ],
  "findings": [
@@ -273,27 +318,6 @@
    ]
   },
   {
-   "device": "USB_C_PLUG",
-   "reason": "Molex PDM 直链 HTTP/2 流中断 + 90s 超时",
-   "tried": [
-    "https://www.molex.com/pdm_docs/sd/1054440001_sd.pdf"
-   ]
-  },
-  {
-   "device": "USB_C_RECEPT",
-   "reason": "同 USB_C_RECEPT_24（usb.org 直链 404）",
-   "tried": [
-    "https://www.usb.org/sites/default/files/documents/usb_type-c_release_2.0_20190829.pdf"
-   ]
-  },
-  {
-   "device": "USB_C_RECEPT_24",
-   "reason": "usb.org `usb_type-c_release_2.0_20190829.pdf` 404",
-   "tried": [
-    "https://www.usb.org/sites/default/files/documents/usb_type-c_release_2.0_20190829.pdf"
-   ]
-  },
-  {
    "device": "PMIC_P1",
    "reason": "SpacemiT P1 手册无公开直链（厂商站 + 需注册）",
    "tried": []
@@ -316,5 +340,65 @@
   "外部取件仅落 /tmp/opencode",
   "禁派 WORKER"
  ],
- "next": "①T2-F1 引用号订正（sch_gate 注册表，须批）②T2-F4 的 12 件人工取件 ⇒ 补齐后三件套覆盖 21/33（标准件 5 + 约定件 6 永不可得）③tier2 完成后 gate 属主另立 criteria rev"
+ "next": "①T2-F1 引用号订正（sch_gate 注册表，须批）②T2-F4 的 12 件人工取件 ⇒ 补齐后三件套覆盖 21/33（标准件 5 + 约定件 6 永不可得）③tier2 完成后 gate 属主另立 criteria rev",
+ "batch2": {
+  "at": "2026-09-20T20:02:02+0800",
+  "what": "对外部不可达件再取件：usb.org 公开索引抓取（合规路径）⇒ USB-IF Type-C R2.5 整包（zip 29.7MB）内主规 PDF 取证",
+  "resolved": [
+   {
+    "device": "USB_C_RECEPT",
+    "doc_id": "USB-IF USB Type-C Cable and Connector Specification Release 2.5 (March 2026)",
+    "doc_url": "https://www.usb.org/sites/default/files/USB%20Type-C%202.5%20Release%20202603.zip",
+    "doc_url_inner": "USB Type-C 2.5 Release 202603/USB Type-C Spec R2.5 - March 2026.pdf",
+    "doc_sha256": "6636cd61387a2f78b0fa96c8ea86ccc0f39ec59f98821cdb57b206d31445a328",
+    "container_sha256": "603c2cb0ea356d367fea61f8747a21981f0da9abae4d8ec15556e0063edb81b5",
+    "bytes": 15750907,
+    "doc_id_token_hit": [
+     "Type-C",
+     "Release 2.5",
+     "Cable and Connector"
+    ],
+    "note": "**版本漂移**：仓内引「USB-IF Type-C R2.0」，usb.org 当前公开件为 **R2.5 (2026-03)**（A1..B12 脚位跨版本不变）"
+   },
+   {
+    "device": "USB_C_RECEPT_24",
+    "doc_id": "USB-IF USB Type-C Cable and Connector Specification Release 2.5 (March 2026)",
+    "doc_url": "https://www.usb.org/sites/default/files/USB%20Type-C%202.5%20Release%20202603.zip",
+    "doc_url_inner": "USB Type-C 2.5 Release 202603/USB Type-C Spec R2.5 - March 2026.pdf",
+    "doc_sha256": "6636cd61387a2f78b0fa96c8ea86ccc0f39ec59f98821cdb57b206d31445a328",
+    "container_sha256": "603c2cb0ea356d367fea61f8747a21981f0da9abae4d8ec15556e0063edb81b5",
+    "bytes": 15750907,
+    "doc_id_token_hit": [
+     "Type-C",
+     "Release 2.5",
+     "Cable and Connector"
+    ],
+    "note": "**版本漂移**：仓内引「USB-IF Type-C R2.0」，usb.org 当前公开件为 **R2.5 (2026-03)**（A1..B12 脚位跨版本不变）"
+   },
+   {
+    "device": "USB_C_PLUG",
+    "doc_id": "USB-IF USB Type-C Cable and Connector Specification Release 2.5 (March 2026)",
+    "doc_url": "https://www.usb.org/sites/default/files/USB%20Type-C%202.5%20Release%20202603.zip",
+    "doc_url_inner": "USB Type-C 2.5 Release 202603/USB Type-C Spec R2.5 - March 2026.pdf",
+    "doc_sha256": "6636cd61387a2f78b0fa96c8ea86ccc0f39ec59f98821cdb57b206d31445a328",
+    "container_sha256": "603c2cb0ea356d367fea61f8747a21981f0da9abae4d8ec15556e0063edb81b5",
+    "bytes": 15750907,
+    "doc_id_token_hit": [
+     "Type-C",
+     "Release 2.5",
+     "Cable and Connector"
+    ],
+    "note": "**版本漂移**：仓内引「USB-IF Type-C R2.0」，usb.org 当前公开件为 **R2.5 (2026-03)**（A1..B12 脚位跨版本不变）"
+   }
+  ],
+  "still_blocked": {
+   "onsemi": "站点整体 403（含 legacy /pub/Collateral 路径）×2 件（BAT54C · FRU_EEPROM 的 onsemi 候选）",
+   "st.com": "端点 567（反自动化；.com.cn 镜像同 567）×2 件（STM32G0B1CBT6 · STM32G0B1KBU6）",
+   "diodes.com": "PI3DBS16412/ds40277 均 404",
+   "liteon": "老路径 404",
+   "molex": "HTTP/2 流中断 + 超时",
+   "usb.org": "**USB 3.2 基规无公开直链**（仅合规/嵌入文件）⇒ USB3.0_Type-A_90 仍缺",
+   "spacemit": "PMIC_P1 · SOM_B1 无公开直链"
+  }
+ }
 }

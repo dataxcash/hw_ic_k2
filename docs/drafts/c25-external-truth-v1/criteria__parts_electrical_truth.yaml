@@ -1,4 +1,4 @@
-_purpose: C-25 外部真源草案（**v3 · tier1 完整 + tier2 首批取证**）：`criteria/parts_electrical_truth.yaml`，为判据维 `lib_electrical_level` 提供独立外部真源。**ENG 只读，安装归 gate 属主**。
+_purpose: C-25 外部真源草案（**v4 · tier1 完整 + tier2 12/33 取证**）：`criteria/parts_electrical_truth.yaml`，为判据维 `lib_electrical_level` 提供独立外部真源。**ENG 只读，安装归 gate 属主**。
 _install_target: criteria/parts_electrical_truth.yaml（属主 ic_hw_gate · 0444；ENG 只读 ⇒ 本件为草案）
 semantics:
   dim: lib_electrical_level
@@ -192,7 +192,7 @@ truth_tier1_library:
     sha256_16: e273ab2203c8cdaf
 truth_tier2_datasheet_uptrace:
   role: 库封装 land pattern 的**出处上溯**（增强项；非本维比对的直接对象）
-  status: BATCH1（2026-09-20）：**9/33 件三件套已取证**（`doc_url` + `doc_sha256`，机检 doc_id/产品名命中）；5 件 **付费/注册标准**（无免费全文）· 6 件 **设计约定/通用封装**（无厂商件）· 12 件 **厂商直链自动化不可达**（已列失败码）；1 件（`strap_semantics.yaml`）为语义件非器件。**禁充绿**：未取证者一律不填 sha。
+  status: BATCH2（2026-09-20）：**12/33 件三件套已取证**（9 批 1 + 3 USB-IF Type-C R2.5）；5 件付费/注册标准（无免费全文）· 6 件设计约定件（无厂商件）· **9 件厂商直链不可达**（onsemi/st.com 站点级反自动化 · Diodes 404 · LiteOn/Molex 路径漂移 · usb.org 无 USB3.2 基规公开直链 · SpacemiT 无公开直链）；1 件语义件。**禁充绿**：未取证者一律不填 sha。
   k1_l1_datasheets_with_three_piece:
   - part: Bourns_SRP6060FA-6R8M
     doc_id: Bourns SRP6060FA Series datasheet (150742)
@@ -351,7 +351,7 @@ truth_tier2_datasheet_uptrace:
     source_citation: null
     n_pins: 0
     file: strap_semantics.yaml
-  evidence_batch1: k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/C25_TIER2_PROVENANCE_BATCH1_20260921_v1.json（sha16 465d2cc930ecfe2b）
+  evidence_batch1: k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/C25_TIER2_PROVENANCE_BATCH1_20260921_v1.json（sha16 45c342b3fe1177c8）
   provenance_verified:
   - device: DCDC_12V_3V3
     doc_id: TI SLVSD82 (TLV61046A)
@@ -400,6 +400,24 @@ truth_tier2_datasheet_uptrace:
     doc_sha256: cccebf8c10df605133d24bd3ab3abeb97a19dbf539d3465b53562fc19f7a242e
     bytes: 1462357
     note: '**引用号不符**：仓内引证 SCDS239A，实测为 SCDS277C ⇒ 同上'
+  - device: USB_C_PLUG
+    doc_id: USB-IF USB Type-C Cable and Connector Specification Release 2.5 (March 2026)
+    doc_url: https://www.usb.org/sites/default/files/USB%20Type-C%202.5%20Release%20202603.zip
+    doc_sha256: 6636cd61387a2f78b0fa96c8ea86ccc0f39ec59f98821cdb57b206d31445a328
+    bytes: 15750907
+    note: '**版本漂移**：仓内引「USB-IF Type-C R2.0」，usb.org 当前公开件为 **R2.5 (2026-03)**（A1..B12 脚位跨版本不变）'
+  - device: USB_C_RECEPT
+    doc_id: USB-IF USB Type-C Cable and Connector Specification Release 2.5 (March 2026)
+    doc_url: https://www.usb.org/sites/default/files/USB%20Type-C%202.5%20Release%20202603.zip
+    doc_sha256: 6636cd61387a2f78b0fa96c8ea86ccc0f39ec59f98821cdb57b206d31445a328
+    bytes: 15750907
+    note: '**版本漂移**：仓内引「USB-IF Type-C R2.0」，usb.org 当前公开件为 **R2.5 (2026-03)**（A1..B12 脚位跨版本不变）'
+  - device: USB_C_RECEPT_24
+    doc_id: USB-IF USB Type-C Cable and Connector Specification Release 2.5 (March 2026)
+    doc_url: https://www.usb.org/sites/default/files/USB%20Type-C%202.5%20Release%20202603.zip
+    doc_sha256: 6636cd61387a2f78b0fa96c8ea86ccc0f39ec59f98821cdb57b206d31445a328
+    bytes: 15750907
+    note: '**版本漂移**：仓内引「USB-IF Type-C R2.0」，usb.org 当前公开件为 **R2.5 (2026-03)**（A1..B12 脚位跨版本不变）'
   provenance_dispositions:
     standard_no_free_fulltext:
     - device: EMMC_16G
@@ -445,12 +463,6 @@ truth_tier2_datasheet_uptrace:
       reason: LiteOn 老路径 404（TLS/路径漂移）
     - device: USB3.0_Type-A_90
       reason: usb.org 直链 404（版本化文件名漂移；需官网文档页人工取件）
-    - device: USB_C_PLUG
-      reason: Molex PDM 直链 HTTP/2 流中断 + 90s 超时
-    - device: USB_C_RECEPT
-      reason: 同 USB_C_RECEPT_24（usb.org 直链 404）
-    - device: USB_C_RECEPT_24
-      reason: usb.org `usb_type-c_release_2.0_20190829.pdf` 404
     - device: PMIC_P1
       reason: SpacemiT P1 手册无公开直链（厂商站 + 需注册）
     - device: SOM_B1
@@ -459,6 +471,9 @@ truth_tier2_datasheet_uptrace:
     - file: strap_semantics.yaml
       reason: 语义件（strap 语义定义），非器件
   findings_batch1:
+  - id: T2-F5
+    severity: 中
+    finding: '**厂商站点级反自动化**：onsemi 全站 403（含 legacy `/pub/Collateral/`）、st.com 端点 567（`.com.cn` 镜像同 567）⇒ 这两家的 12 件中 4 件**无法在自动化环境取证**，须人工浏览器/代理；另 usb.org **无 USB 3.2 基规公开直链**（仅合规/嵌入件）⇒ `USB3.0_Type-A_90` 仍缺。'
   - id: T2-F1
     severity: 中
     finding: '**两处引用号与厂商当前件不符**：sch_gate `TPD6E05U06` 引 ''SLLSE95'' ⇒ 实测 **SLVSBO7O**；`TS3USB221A` 引 ''SCDS239A'' ⇒ 实测 **SCDS277C**。两件产品名在 PDF 全文命中（TPD6E05U06 ×89 · TS3USB221A ×55）⇒ 同一器件的**文献号漂移/笔误**。'

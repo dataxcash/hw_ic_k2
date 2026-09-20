@@ -42,3 +42,27 @@
 - 建议序：①T2-F1 引用号订正（须批）②12 件人工取件 ⇒ 达 21/33 ③tier2 收口后由 gate 属主**另立 criteria rev**。
 
 —— ENG（ARCHER）· 2026-09-20 · `k2` 本次提交 · 判据 **rev=6**（只读未动）· 交付锚 `6ee7495de61f749f` 未动
+
+---
+
+# 附：**批 2**（同日续推）—— tier2 取证 **9/33 → 12/33**
+
+- 新证据 sha16：`C25_TIER2_PROVENANCE_BATCH1_20260921_v1.json` **`465d2cc9` → `45c342b3`**；
+  草案 v4 `criteria__parts_electrical_truth.yaml` **`3d174baa` → `47898ddd`**（**tier1 仍逐字节未改**）。
+- **新取证 3 件**（USB-IF Type-C）：`USB_C_RECEPT` · `USB_C_RECEPT_24` · `USB_C_PLUG`
+  - `doc_id`：**USB-IF USB Type-C Cable and Connector Specification Release 2.5（March 2026）**
+  - `doc_url`：`https://www.usb.org/sites/default/files/USB%20Type-C%202.5%20Release%20202603.zip`（29.7 MB 整包）
+  - `doc_sha256`（**规格 PDF 本体**）：`6636cd61387a2f78b0fa96c8ea86ccc0f39ec59f98821cdb57b206d31445a328`（15,750,907 B）
+  - 承运 zip sha256：`603c2cb0ea356d367fea61f8747a21981f0da9abae4d8ec15556e0063edb81b5`
+  - 命中令牌：`Type-C` / `Release 2.5` / `Cable and Connector`（首页标题实测）
+  - **版本漂移**：仓内引「USB-IF Type-C **R2.0**」，usb.org 当前公开件为 **R2.5 (2026-03)**；A1..B12 脚位跨版本不变（登记可见）。
+- 取证路径：抓 `usb.org/documents` 公开索引 → 命中 USB-IF 整包 → `zipfile` 取内层主规 PDF → `pdftotext` 令牌机检 → sha256。
+- **仍缺 9 件**（逐件失败码已入证据件）：`BAT54C` · `FRU_EEPROM`（**onsemi 站点整体 403**，含 legacy `/pub/Collateral/`）·
+  `STM32G0B1CBT6` · `STM32G0B1KBU6`（**st.com 端点 567**，`.com.cn` 镜像同 567）· `PI3DBS16412`（Diodes 404）·
+  `OPTO_LTV356T`（LiteOn 老路径 404）· `USB3.0_Type-A_90`（**usb.org 无 USB 3.2 基规公开直链**，仅合规/嵌入件）·
+  `PMIC_P1` · `SOM_B1`（SpacemiT 无公开直链）。
+- **新发现 T2-F5（中）**：厂商**站点级反自动化**（onsemi 403 / st.com 567）⇒ 这 4 件**自动化环境不可取证**，须人工浏览器/代理；
+  此项属**方法面**，非口径问题。
+- 上限修正（诚实口径）：三件套可达上限 = **12 已取 + 9 人工可达 = 21/33**；另 12 件（5 标准 + 6 约定 + 1 语义）**永不可得**，
+  其出处认定仍待**监理口径自裁**。
+- 复核：`check-dimensions` 仍 **19/19 · 违规 0 PASS**（criteria 未动）；未改生成器/SPEC/原理图；未越阶段门。
