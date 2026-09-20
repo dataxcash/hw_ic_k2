@@ -57,6 +57,14 @@ P6-1 的**唯一缺件** = 监理持有的 `criteria/manifest.k1.yaml`（G-c2，
   - **B（声明）**：`manifest.rule_severity_exemptions` 逐条登记这 9 条 ⇒ 差异 0，但根因仍在（与 §7.2-2 相悖）。
 - 整改落件 = 一次性、可复现（`rule_severities` 单点改动），**须先获批**（模板件）。
 
+### 2.1 整改方案 A′（**已备料、dry-run 通过；未落件**）
+
+- 内容：两模板 9 条 `rule_severities` 由 `ignore` → `warning`。
+- 依据（**既有先例，非新口径**）：已签认交付板 `k2/hw/k2_v4_8L.l7.kicad_pro`（`33b4eb6cae8359a9`）的 62 条 = **33 error / 29 warning / 0 ignore**，其 9 条同 id 取值**均为 `warning`** ⇒ 逐条可复算。
+- 落件面：2 文件 × 9 行；预告读数 = `ignore 0 / warning 29 / error 33`（与 l7 分布逐 id 同值）。
+- 补丁件：`P6_OPEN_READINESS/P6_2_template_proposal/{k1,k2}_jlc_template.kicad_pro.diff`；**`patch -p1 --dry-run` 两件均 OK**（真源零改动）。
+- 放行后动作 = 应用该 diff → 复核模板 ignore 集 = ∅ → 待 G-c2 应然集落件后核 P6-2「结构差异 0」。
+
 ## 3. 未越阶段声明
 
 批 2 已落件（`shared fc59771` · `k2 b58f53a/e019faa`）；**P6-1/P6-2 未启动**（G-c2 未落、模板未批）· **K1 复跑未启动** · **外部首件回件属外部**。冻结件 `d4e81f64…` 等未动 · `criteria/` 未动 · 模板未动 · 生成器/SPEC/原理图未动 · 未派 WORKER。

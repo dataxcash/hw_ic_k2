@@ -126,6 +126,27 @@
     "same_names": true
    }
   },
+  "proposal_A_prime_ready_to_apply": {
+   "dry_run": "`patch -p1 --dry-run` 两件均 **OK**（未落件；真源零改动，`git status` 洁净）",
+   "expected_after": {
+    "equals": "k2/hw/k2_v4_8L.l7.kicad_pro 的分布（逐 id 同值）",
+    "error": 33,
+    "ignore": 0,
+    "warning": 29
+   },
+   "note": "落件须**监理批**（模板件）；落件后 P6-2 结构判据（模板 ignore 集 == manifest 应然集）方可复核（应然集仍需 G-c2）",
+   "patch_files": {
+    "k1": [
+     "k1_jlc_template.kicad_pro.diff"
+    ],
+    "k2": [
+     "k2_jlc_template.kicad_pro.diff"
+    ]
+   },
+   "scope": "2 文件 × 9 行（`k1/tools/k1_jlc_template.kicad_pro` · `k2/tools/k2_jlc_template.kicad_pro`）",
+   "what": "两模板 9 条 rule_severities 由 `ignore` → `warning`（**对齐 K2 交付板 l7.kicad_pro 既有先例**：其 62 条 = 33 error / 29 warning / 0 ignore，9 条同 id 取值均为 warning）",
+   "why_precedent": "l7 是已签认的交付板 pro（`33b4eb6cae8359a9`），其处置路径可逐条复算 ⇒ 非新口径发明"
+  },
   "remediation_options_for_监理": [
    "A 收紧（计划 §7.2-2 原文）：模板 rule_severities 改为由 manifest 派生/删除 9 条 ⇒ 模板 ignore 集 = ∅ = 应然集（需改 k1/tools/k1_jlc_template.kicad_pro + k2/tools/k2_jlc_template.kicad_pro）",
    "B 声明：manifest 的 rule_severity_exemptions 逐条登记这 9 条 ⇒ 结构差异 0，但『新板自带 ignore』根因未除（与 §7.2-2『从根上消除』相悖）"
@@ -136,12 +157,23 @@
  "artifact": "k2_p6_open_readiness",
  "evidence": {
   "dir": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/",
+  "dir_files": {
+   "k1_measure_probe.json": "3bb21a670f9556f2",
+   "k1_probe_run_nets_k1_nets.log": "3f6d26f8dfa5ad97",
+   "k1_probe_run_nets_k1_sch.log": "d9929d10fd7c1a40",
+   "k1_verdict_probe.json": "9b3ef86947424e0c",
+   "probe_manifest.k1.yaml": "6c9ca1afc2b30c42"
+  },
   "files": {
    "k1_measure_probe.json": "3bb21a670f9556f2",
    "k1_probe_run_nets_k1_nets.log": "3f6d26f8dfa5ad97",
    "k1_probe_run_nets_k1_sch.log": "d9929d10fd7c1a40",
    "k1_verdict_probe.json": "9b3ef86947424e0c",
    "probe_manifest.k1.yaml": "6c9ca1afc2b30c42"
+  },
+  "proposal_files": {
+   "k1_jlc_template.kicad_pro.diff": "8530e2e60d926260",
+   "k2_jlc_template.kicad_pro.diff": "cbf9c3c2926ec59b"
   }
  },
  "purpose": "P6 开闸**就绪件**（计划/测量件；P6 交付阶段仍关闭）。ENG 只提供测量，应然集/裁定归监理（#K2-41 §三-⑥；计划 §3.2）。",
