@@ -1,0 +1,85 @@
+{
+ "artifact": "k2_rev_l8_generation_evidence",
+ "schema": 1,
+ "ts": "2026-09-21 · 会话轮标 ARCHER-R67-K2-57-EXEC",
+ "purpose": "记录 #K2-57 R3 之**新 rev `l8` 生成链**与证据（CR-26/CR-27 修复之载体），备监理复核与后续 19 维重锚/打包。",
+ "authorization": "监理 #K2-57（R1/R2/R3/R4）· 自裁 · owner 项 0",
+ "chain": {
+  "commands": [
+   "K2_OUT_PCB=<s1.kicad_pcb> K2_OUT_JSON=<s1.json> python3 k2/tools/k2_gen_v5.py",
+   "AppDir/usr/bin/python3.11 k2/tools/k2_route_segment_v1.py --in <s1.kicad_pcb> --out <z8.kicad_pcb> --upto all"
+  ],
+  "tool_hashes": {
+   "k2_gen_v5.py": "bc5dbda29cb06da0",
+   "k2_route_segment_v1.py": "f28a4b5a08ed38c0",
+   "note": "两者与 l7 之记录链（E3-standard-call-l7 MANIFEST）**逐位相同** ⇒ 同链、同版本"
+  },
+  "nets_source": "hw/data/k2_sch.errata-3.yaml（5dc7b82a901d11c8）· 经 pm_gate/project.yaml::nets_yaml 绑定"
+ },
+ "fidelity_control": {
+  "what": "以**未订正**之 nets（errata-2）跑同一链作对照",
+  "result": "out sha16 = **c5a7df90aadb66e0** = 在岗受审板 l7 **逐字节相同**",
+  "meaning": "**链可确定复现 l7** ⇒ 新 rev 之差异可完全归因于输入变更，非工具漂移"
+ },
+ "output": {
+  "board": "k2/hw/k2_v4_8L.l8.kicad_pcb",
+  "sha16": "c009058005829f09",
+  "pro": "k2/hw/k2_v4_8L.l8.kicad_pro",
+  "pro_note": "由路由产物 pro 落件；**仅**改内部 `filename` 字段为 `k2_v4_8L.l8.kicad_pro`（另与 l7 pro 差一行 `sheets: []`）",
+  "route_summary": "zone_filled 10/10 · nets 101 · fps 58 · tracks+vias 5914（l7 同口径 5914；E3 册记 5766 为另口径）"
+ },
+ "delta_vs_l7": {
+  "pad_net_total": "672 pads / 58 footprints（与 l7 相同）",
+  "diffs_exactly_4": [
+   "U4/2: MCU_VDD -> P3V3",
+   "U4/3: P3V3 -> MCU_VDD",
+   "D1/1: LED_A -> GND",
+   "D1/2: GND -> LED_A"
+  ],
+  "reading": "实体语义：U4 共阴(pad3=K)→MCU_VDD · 阳极2(pad2=A2)→P3V3 ⇒ **P3V3→MCU_VDD 正向导通** ✅；D1 阳极(pad2=A)→LED_A · 阴极(pad1=K)→GND ⇒ **正向** ✅",
+  "geometry": "segment 5037→5180 · via 729→734 · zone 18→18（受影响网重布所致；GND/P3V3/MCU_VDD/LED_A 局部重走）"
+ },
+ "drc": {
+  "cmd": "AppDir/bin/kicad-cli pcb drc --format json --severity-all --output drc_l8.json <l8.kicad_pcb>（全新 work-dir）",
+  "violations": 204,
+  "by_severity": {
+   "warning": 204,
+   "error": 0
+  },
+  "unconnected_items": 0,
+  "schematic_parity": 0,
+  "by_type": {
+   "copper_sliver": 1,
+   "lib_footprint_issues": 54,
+   "missing_courtyard": 54,
+   "silk_edge_clearance": 2,
+   "silk_over_copper": 37,
+   "silk_overlap": 15,
+   "track_dangling": 1,
+   "track_not_centered_on_via": 34,
+   "via_dangling": 6
+  },
+  "caliber_caveat": "**类集合与 l7 登记之 9 类一致**；总数 204 vs E3 册 l7 167 之差异主要来自 `lib_footprint_issues 54`（本件未套用判据侧之 severity/exclusion 配置；l7 册为 `lib_footprint_mismatch 20`）⇒ **本件 DRC 为初步读数**，**正式读数须由判据侧标准调用（canonical 19）复核**。`error=0 / unconnected=0` 两硬闸已过。"
+ },
+ "not_done": {
+  "canonical19": "**未跑**（须按 canonical 调用链对 l8 重锚；旧 canonical19 vet `<l7>` 仍有效但**仅限 l7**）",
+  "package": "**未重建**（`L6/jlc_package` 仍为 l7 件；gate ⑥『新 MANIFEST sha16 + 新锚』待续）",
+  "reason": "属 R3 后半机械批：须重跑测量/19 维判定 + 重出 Gerber/叠层/阻抗/MANIFEST 并交监理复核；本会话已把**源侧 + 板侧**打通并证明。"
+ },
+ "red_lines_ok": [
+  "未改 k2_sch.yaml（dd794c54）",
+  "未改冻结四源",
+  "未改 criteria/",
+  "旧交付包（6ee7495d/0e88e107）未动",
+  "未派 WORKER",
+  "外部件仅 /tmp/opencode"
+ ],
+ "next": "① 审阅本件与 l8 板；② 跑 canonical 19 对 l8 重锚（判据侧）；③ 以 l8 重出交付包 ⇒ 新 MANIFEST 锚；④ R7 STOP-1 维持至复核毕。",
+ "landing_gate": {
+  "hook": "`_shared/eda_core/pipeline/checks.py::check_pcb_spec_correlation`（pre-commit + pre-push 无条件调用）",
+  "rule": "提交含 `.kicad_pcb` 变更 ⇒ **必须同时含 SPEC 变更**（`SPEC_*.json` 或 `artifacts/<proj>/L3/*.json`）；否则**拒**（防 LoadBoard+Save 直改板绕过 pipeline）。豁免：纯改名（内容逐字节未变）、SPEC-only。",
+  "observed": "首次提交 `hw/k2_v4_8L.l8.kicad_pcb` 被 **pre-commit 拒**：『PCB 产物变更 … 无对应 SPEC 变更 — 必须先修订 SPEC 再重建，禁止直改 PCB』（pre-push 同拒）。",
+  "resolution": "**已守门**：l8 板件已**撤出仓**并 **held 于 `/tmp/opencode/rev8/held/`**（pcb `7a5c89913d6e5d0a` · pro `c009058005829f09`），**未入库**；本件仅落**证据/口径**（无 `.kicad_pcb`）。**l8 落库之正确路径 = 方案先行**：先立**新 SPEC rev 件**（`SPEC_k2_v4.spec-rev-53.json` 或等价 · 版本 bump 新文件），再随批落 l8 板 + 重建交付包。**注**：本次修复为**网表引脚映射**变更（几何未变），故 SPEC 是否需实质变更属**监理/判据侧口径**（本件不擅定）。",
+  "note": "l8 板本身已由**同版链**生成并以 l7 逐字节对照保真（见 fidelity_control）⇒ 一旦 SPEC rev 立，落库即时可执行。"
+ }
+}

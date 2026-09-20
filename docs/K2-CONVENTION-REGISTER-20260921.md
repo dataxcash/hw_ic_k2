@@ -182,3 +182,15 @@
 **（本块）裁定对应**：#K2-57（R1/R2/R3/R4/R6）。**报备监理 1 条（有效杠杆层口径）· owner 项 0**。
 **不影响** 旧交付锚（`6ee7495de61f749f` / `0e88e107e2da8192` 未动）与 `criteria/`（rev=6 只读）。
 **待续（R3 后半 + ⑥）**：`k2_route_segment_v1 --upto all` → 新 rev 板 → 重跑 P4 锚/19 维 → 新交付包。
+### 续编 · 新 rev `l8` 生成（#K2-57 R3 后半 · 载体）
+
+| # | 条目 | 内容（事实/裁定） | 依据 | 处置红线 |
+|---|---|---|---|---|
+| **CR-34** | **新 rev `l8` 生成完成（CR-26/CR-27 修复载体）· 19 维重锚与交付包重出待续** | **链**：`k2_gen_v5.py`（`bc5dbda2`，与 l7 链同版）→ `k2_route_segment_v1.py --upto all`（`f28a4b5a`，同版）；输入 = `hw/data/k2_sch.errata-3.yaml`（`5dc7b82a901d11c8`）。**保真对照**：同链于**未订正** nets（errata-2）跑 → out = **`c5a7df90aadb66e0` = 在岗 l7 逐字节同** ⇒ 链可确定复现 l7，新 rev 差异**可完全归因输入变更**。**产物**：`k2/hw/k2_v4_8L.l8.kicad_pcb` **`7a5c89913d6e5d0a`** · `…l8.kicad_pro` `c009058005829f09`。**差异（唯一 4 条，672 pad/58 fp 全同）**：`U4/2 MCU_VDD→P3V3` · `U4/3 P3V3→MCU_VDD` · `D1/1 LED_A→GND` · `D1/2 GND→LED_A` ⇒ U4 `P3V3→MCU_VDD` **正向导通** ✅、D1 **正向** ✅。**DRC（初步）**：`error 0` · `unconnected 0` · `schematic_parity 0` · 违规 204 **全 warning**、**类集合与 l7 登记 9 类一致**（±局部重布致 `via_dangling 4→6` · `track_not_centered_on_via 33→34`；`lib_footprint_issues 54` 系本件未套判据侧 severity/exclusion 配置，l7 册为 `lib_footprint_mismatch 20`）⇒ **正式读数须由判据侧标准调用复核**。**未做**：canonical 19 对 l8 重锚 · 交付包重出（旧锚 `6ee7495de61f749f`/`0e88e107e2da8192` 仍为 l7 件、未动） | 监理 #K2-57 R3；本件 `REV_L8_GENERATION_EVIDENCE_20260921_v1.json`（现行 `ff23e7774dca74f5`） | **只增新 rev 件**·**未改** l7/旧包/冻结四源/`criteria` · **STOP-1 维持**：l8 经监理复核前**不下首件单** |
+
+---
+**（本块）裁定对应**：#K2-57 R3（后半·载体）。**报备监理 1 条（新 rev 待复核）· owner 项 0**。
+**待续**：canonical 19 重锚 → 交付包重出（判据 ⑥ 新锚）。
+
+> **【CR-34 补充 · 2026-09-21 本会话】**：l8 板件**落库被门禁拒**（`check_pcb_spec_correlation`：含 `.kicad_pcb` 变更须同含 SPEC 变更，防直改板绕过 pipeline）。**处置（守门，未绕）**：l8 板 **held 于 `/tmp/opencode/rev8/held/`**（`7a5c89913d6e5d0a` / pro `c009058005829f09`），**未入库**；本会话只落证据件 `REV_L8_GENERATION_EVIDENCE_20260921_v1.json`（**`ff23e7774dca74f5`** = 含 `landing_gate` 节之现行件；初版 `4087a07a69fdf8c5` 已被本补充更新）。
+> **l8 落库之正确路径 = 方案先行**：先立新 **SPEC rev** 件（`SPEC_k2_v4.spec-rev-53.json` 或等价 · 版本 bump 新文件）→ 再随批落 l8 板 + 重建交付包。**是否需实质改 SPEC**（本次为**网表引脚映射**变更、几何未变）属**监理/判据侧口径**，ENG 不擅定。
