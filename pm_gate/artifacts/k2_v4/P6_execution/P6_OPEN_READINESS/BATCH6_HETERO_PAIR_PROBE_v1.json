@@ -1,0 +1,21 @@
+{
+ "artifact": "k2_batch6_hetero_pair_probe",
+ "schema": 1,
+ "purpose": "批 6(b) 第二轮：按裁定要求先 grep 复核载体，再定改法。**推翻上一轮假设**并给出真实的顺序依赖。",
+ "grep_findings": {
+  "refuted": "`_k1_escape_b` **存在**『P/N 同时换层』分支（`swap_first == \"both\"` ⇒ P、N 皆走 `_tpl_b_line`）⇒ 上一轮『缺双换层形态』**不成立**。",
+  "actual_structure": "上一轮探针见 `_tpl_b_line` 对 `OCuLink_TX0_P` 调用 = 0 的真因是：**J14 右链为异层对**（`layer_p=F.Cu` / `layer_n=In2`）⇒ `_k1_escape` 走 **hetero 分支**，该分支**只会** `_tpl_a_line(P, F.Cu)` + `_tpl_b_line(N, layer_n)` ⇒ P 按设计不换层。"
+ },
+ "experiment_⑧": {
+  "change": "hetero 分支补回退：P 也换层（P/N 同换 `In2.Cu` 或 `layer_n` 后走走廊），两种层组合各试一次",
+  "result": "K1 段级**仍 3/8**（无增益）；`TX1.out` 失败面由『左逃逸』转为『右逃逸』⇒ 左侧被 ⑧ 打通但右侧仍不可行 ⇒ 整体仍 INFEASIBLE。"
+ },
+ "conclusion": {
+  "b_not_solvable_by_template": "(b) 真阻塞链**不能靠逃逸模板（含异层双换层）解决** —— P/N 在 J14 右侧于 F.Cu 与 In2 两层均无可行逃逸。",
+  "ordering_dependency": "⇒ **批 6 必须先做 (c) 走廊/band 重分配**（让该对在端点侧具备可行层/轨道）或引入 via-in-pad 类策略，**(b) 才可能有解**；顺序：(c) → (b)。",
+  "keep_⑥": "⑥（双向对级耦合）收益 2 链，独立于 (c)，可先落。"
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-20T23:00:00+0800"
+}
