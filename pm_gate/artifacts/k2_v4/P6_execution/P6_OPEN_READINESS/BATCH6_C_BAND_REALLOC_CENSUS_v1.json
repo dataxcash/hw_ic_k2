@@ -1,0 +1,61 @@
+{
+ "artifact": "k2_batch6_c_band_realloc_census",
+ "schema": 1,
+ "purpose": "批 6(c)：`PCIE_RX1_P` 走廊 band 重分配的候选空间核算（只读；修正解析器几何）。",
+ "current_allocation": {
+  "P": "HIGH_SPEED_MAIN/fcu idx1 ⇒ 绝对 y=16.0（F.Cu）",
+  "N": "HIGH_SPEED_MAIN/in1 idx4 ⇒ y=24.02（In1）"
+ },
+ "blockers_of_current_P_track": {
+  "n": 2,
+  "list": [
+   {
+    "dist": 0.0,
+    "kind": "pad",
+    "ref": "J1",
+    "net": "GND",
+    "y": 16.16
+   },
+   {
+    "dist": 0.0,
+    "kind": "pad",
+    "ref": "**U11**",
+    "net": "**PCIE_TX0_N**",
+    "y": 16.0
+   }
+  ],
+  "note": "**新增第 2 处零距离冲突**（U11 的 PCIE_TX0_N pad，y=16.0 与航线重合）；此前只具名了 J1 GND。"
+ },
+ "candidate_slots_free_of_board_geometry": {
+  "method": "同层 · 同 band · 相邻 tracks_y 间距 0.5（差分紧耦合）· 沿走廊段 x∈[7.2,38.3125] 对 pad/via/已成段 逐点净空（clr 0.1 + 半宽 0.045）",
+  "zero_hit": [
+   [
+    "in1",
+    "In1",
+    20.5,
+    21.0
+   ],
+   [
+    "in2",
+    "In2",
+    18.0,
+    18.5
+   ],
+   [
+    "in2",
+    "In2",
+    20.51,
+    21.01
+   ]
+  ],
+  "caveat": "K1 板**尚无 HS 走线段**（未布通）⇒ 上述『0 命中』只对**板几何**（焊盘/过孔/既有段）成立；这些槽在 `channel_alloc` 中**已被其他网占用**（in1/in2 band 现有归属见件），故 (c) 的实质是**分配冲突消解**（重排/让位/加轨），非简单搬迁。"
+ },
+ "implications": {
+  "realloc_is_not_a_move": "须做 band 级**容量与优先级**重排（或向 `tracks_y` 加轨并复算与邻轨净空）；`alloc[net].track_y` 是 `tracks_y` 的**索引载体**。",
+  "escape_coupling": "RX1 为 **J1→U11** 段；若迁至 In2/In1，两端逃逸须同步换层 ⇒ 与批 6 (b) 的『端点侧可行层』互为前提（顺序 (c)→(b) 再确认）。",
+  "k2_lesson": "K2 的 band 轨道值源自『曾 SOLVED』的 v4 alloc（`tracks_y_basis`），K1 侧同法可从『曾 SOLVED』的旧 alloc 取候选——但须逐条复算本板几何（K1 板与 K2 板几何不同）。"
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-20T23:30:00+0800"
+}
