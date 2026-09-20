@@ -228,3 +228,12 @@
 
 ---
 **（本块）裁定对应**：CR-37 ← CR-26 缺陷类收口（ENG 只读造活）。**报备监理 1 条（类别收口）· owner 项 0**。
+
+### 续编 · P5 首件外发包 **rev 对齐（l7 → l8）**（当前阶段 · 外发面就绪）
+
+| # | 条目 | 内容（事实/裁定） | 依据 | 处置红线 |
+|---|---|---|---|---|
+| **CR-38** | **P5 首件外发包与投递说明已对齐至现行 rev `l8`**（原全套为 **l7** 引用 ⇒ 外发前必然错配） | **缘起**：`#K2-57` 开新 rev `l8` 后，`L6/first_article/`（RULES/CHECKLIST/results_template/INSTRUMENT_SELFCHECK）与 `K2-P5-FIRST-ARTICLE-TRANSMITTAL-v1.md` **仍全套指 l7**（`board c5a7df90` · 锚 `6ee7495d`/`0e88e107`）⇒ 外部实测方将拿 **l8 实物对 l7 文档**。**处置（新目录/新文件名，l7 件**逐字节保留**）**：新建 `L6/first_article_l8/`（`RULES.md 00fc0f19fbaddf2e` · `CHECKLIST.md b97ac43fc0f99c31` · `results_template.json c7c8be4ecd5cd691` · `INSTRUMENT_SELFCHECK.json 432125b50d6f5590`）+ `docs/K2-P5-FIRST-ARTICLE-TRANSMITTAL-l8-v1.md`（`fa17aa92bf06a706`）；board→`l8 7a5c89913d6e5d0a` · 交付锚→`4b610baed4f4752c`/`36a6b276b4f7e465` · 路径→`jlc_package_l8`/`DELIVERY_l8`。**测点自查按 l8 板重跑（机核）**：16 网全在 ✅ `all_nets_present` · 引用件全在 ✅ `refdes_all_present` · `J13` SWD 网 ✅ · `J2` PCIe 网 ✅。**V5 具名测点正向对照（本件独立机核）**：**`J3 A9 → P3V3_AUX` · `J4 A9 → P3V3_AUX`** ⇒ 外发包之强制具名测点在 l8 上**真实存在**。**阈值/测点零变更**：l8 与 l7 **几何相同**，仅 `U4/2,3`（`A2→P3V3`/`K→MCU_VDD`）与 `D1/1,2` 之 pad→net 不同 ⇒ 8 项验收阈值、V6-1 主判工况（独立运行 · 标称 3.0V）、V6-3 地址 `0x52` **全部照旧适用** | 监理 #K2-57 R3/R7；本件机核 | **只增新件**·**未改** l7 版 `first_article/` 与 `…TRANSMITTAL-v1.md`（逐字节保留）· **未覆盖**任何交付锚 · **STOP-1 维持**（监理复核 l8 前**不下首件单**） |
+
+---
+**（本块）裁定对应**：CR-38 ← 当前阶段外发面 rev 对齐。**报备监理 1 条（外发包 l8 就绪待复核）· owner 项 0**。
