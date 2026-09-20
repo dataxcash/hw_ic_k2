@@ -1,0 +1,47 @@
+{
+ "artifact": "k2_k1_resume_escape_attribution_final",
+ "schema": 1,
+ "purpose": "把 6 条失败链的**唯一拒绝点**钉死（`_k1_escape` 内部分支直录，非推断）。",
+ "method": "影子树（②+① 修，③ 未修）在 `_k1_escape` 内插桩，逐链记录 [模板A 结果, VG(P,N), pair-verify, 返回] 后落 jsonl",
+ "table": [
+  {
+   "chain": "PCIE_TX0_P|left",
+   "ev": "tplA=False → VG=(True,True) → **pair-verify=False** ⇒ 拒绝点 = **对级校验**（唯一未过项：P/N 段间距 <0.1）",
+   "class": "对级耦合缺失"
+  },
+  {
+   "chain": "PCIE_TX1_P|left",
+   "ev": "VG=(True,True) → **pair-verify=False**",
+   "class": "对级耦合缺失"
+  },
+  {
+   "chain": "PCIE_RX0_P|left",
+   "ev": "VG=(True,True) → **pair-verify=False**",
+   "class": "对级耦合缺失"
+  },
+  {
+   "chain": "OCuLink_TX0_P|right",
+   "ev": "VG=(True,**False**) ⇒ N 网在 F.Cu 场**无任何路径**",
+   "class": "真几何阻塞"
+  },
+  {
+   "chain": "OCuLink_TX1_P|left",
+   "ev": "VG=(**False**,True) ⇒ P 网无路径",
+   "class": "真几何阻塞"
+  },
+  {
+   "chain": "OCuLink_RX0_P|right",
+   "ev": "VG=(**False**,False) ⇒ P/N 皆无路径",
+   "class": "真几何阻塞"
+  }
+ ],
+ "root_cause_split": {
+  "A_pair_coupling": "引擎最后手段 `HSVisibilityGraph` 是**单网**可见性图（各自避障，不感知对网）⇒ 得出的 P/N 路径常违反**差分对 0.1 间距**（`_k1_escape_verify` 第 2 段检查）⇒ 3 链（PCIE_TX0/TX1/RX0 left）卡在**对级耦合缺失**（缺 P/N 联合路由/联合图）。",
+  "B_true_blockage": "3 链单网即无路 ⇒ 需**几何/策略**层面解决（过孔落位 → 内层绕行，或迂回多段），与已知阻塞物（U11 同列 no-net pad · J14 同列 pad）一致。既有 `OCuLink_RX1_P|right` 已产出 4 点迂回解（x 73.245→72.79→72.29→73.245），可作可行模板样本。",
+  "C_defect4": "`_tpl_a_line` `ady<1e-9` 捷径产零长段（退化解被放行）⇒ 有效解计数虚高 1（见 decision_tree_split 件）。"
+ },
+ "conclusion": "K1 断点 = **L2（逃逸策略）双因**：(A) 缺对级耦合路由（引擎算法面）；(B) 真几何阻塞（需过孔/层策略）。二者均**在修 ②① 后才可见**——旧件把 (A)(B) 误判为『模板 dx 档位不足』，根源是缺陷 ② 让 99 个 pad（含阻塞物）不可见。",
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-20T17:55:00+0800"
+}

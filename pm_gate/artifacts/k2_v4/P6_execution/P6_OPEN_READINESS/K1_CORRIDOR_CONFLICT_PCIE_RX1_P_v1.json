@@ -1,0 +1,43 @@
+{
+ "artifact": "k2_k1_corridor_conflict_pcie_rx1_p",
+ "schema": 1,
+ "purpose": "把 `TX1.in`/`RX1.in` 的『走廊段 seg_ok 失败（通道被占/冻结段阻挡）』钉到具名障碍物与具名航线，并给出 L2 处置方向。",
+ "method": "影子树（②+① 修）内插桩 `_solve_pair_single_v4` 的走廊失败分支：复算逐障碍 `edge_dist_to_seg` vs `_req_for`（按 handoff §7⑫ 口径，不用不存在的 `bbox` 属性）",
+ "finding": {
+  "segment": "PCIE_RX1_P input（x 7.20 → 38.3125）",
+  "layer_checked": {
+   "F.Cu": "seg_ok=False",
+   "In1": "seg_ok=True"
+  },
+  "blocker": {
+   "kind": "pad",
+   "net": "GND",
+   "layer": "F.Cu",
+   "pos": [
+    9.29,
+    16.16
+   ],
+   "size": [
+    0.8,
+    1.4
+   ],
+   "rot": 180,
+   "footprint": "**J1**（Type-C 连接器，fp_rot=180，THT 焊盘）",
+   "y_span": [
+    15.46,
+    16.86
+   ],
+   "dist": -0.075,
+   "req": 0.1
+  },
+  "why": "`PCIE_RX1_P` 被分配到 F.Cu band **index 1** ⇒ 绝对 y = `corridors[HIGH_SPEED_MAIN].bands[fcu].tracks_y[1]` = **16.0**，该水平航线正穿 J1 GND 焊盘的 y 区间 [15.46,16.86]。同 band 的 **index 0（y=15.5）同样落在该 pad 行内**。",
+  "independence": "阻塞物是**有网（GND）焊盘**，与缺陷 ①② 无关 ⇒ 属**既有 L2 走廊/分配冲突**，非本轮缺陷所致。"
+ },
+ "L2_disposition_direction": {
+  "candidate": "把 `PCIE_RX1_P` 迁出 y∈[15.46,16.86] 行，且**必须与 `PCIE_RX1_N` 保持差分紧耦合**（不可丢到 In1 的 19.0 等远离轨道 ⇒ 会破坏差分配对）。可选项：(a) F.Cu index ≥2（y≥17.5，但该带 index 2/3 已属 PCIE_TX0_N/P、index 7 属 OCuLink_TX0_P）；(b) In1 band 内与 24.02 相邻的可用位（In1 tracks_y = [19.0, 20.5, 21.0, 21.5, 24.02]，与 24.02 相邻者间隔 2.52 ⇒ **In1 现无紧邻位**）。⇒ 需要一次**band 级重分配/加轨**研究（L2：叠层分配/走廊），ENG 自裁范围。",
+  "trap_registered": "**`alloc[net].track_y` 是 `corridors[].bands[].tracks_y` 的索引载体，不是绝对 y**（引擎注释：『alloc.track_y 是分配廊道 band 内的索引载体』）。直接写绝对 y ⇒ `_track_y_for` 越界返回 None ⇒ 表现为 **`通道缺失 P=None`**（本轮前两次尝试即此坑）。任何 L2 分配试验必须改**索引**或同步改 band 的 tracks_y。"
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-20T18:40:00+0800"
+}

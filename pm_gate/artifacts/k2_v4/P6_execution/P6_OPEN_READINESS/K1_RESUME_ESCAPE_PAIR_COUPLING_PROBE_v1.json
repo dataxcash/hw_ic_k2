@@ -1,0 +1,86 @@
+{
+ "artifact": "k2_k1_resume_escape_pair_coupling_probe",
+ "schema": 1,
+ "purpose": "验证『对级耦合缺失』假设的**最小可行形态**：把已解 P 折线作为对 N 的额外障碍（净空 0.1）重解 N 的可见性图，观察 K1 段级读数变化。",
+ "method": "/tmp 影子树（②+① 修，③ 未修）+ monkeypatch `HSVisibilityGraph.__init__`（对 N 注入 `PairField` 包装：`obstacles` 透传、`seg_ok/point_ok` 追加『到 P 折线距离 ≥0.1』）",
+ "seg_table": {
+  "cols": [
+   "run",
+   "说明",
+   "TX0.in",
+   "TX0.out",
+   "TX1.in",
+   "TX1.out",
+   "RX0.in",
+   "RX0.out",
+   "RX1.in",
+   "RX1.out"
+  ],
+  "rows": [
+   [
+    "out_A_real_asis",
+    "A 真源解析器+原板",
+    "INFE",
+    "SOLV(假)",
+    "INFE",
+    "INFE",
+    "INFE",
+    "INFE",
+    "INFE",
+    "INFE"
+   ],
+   [
+    "out_C_sim_asis",
+    "C ② 修",
+    "INFE",
+    "INFE",
+    "INFE",
+    "INFE",
+    "INFE",
+    "INFE",
+    "INFE",
+    "INFE"
+   ],
+   [
+    "out_E_sim_rotprot",
+    "E ②+① 修",
+    "INFE",
+    "INFE",
+    "INFE",
+    "INFE",
+    "INFE",
+    "INFE",
+    "INFE",
+    "SOLV"
+   ],
+   [
+    "out_N_pair",
+    "N ②+①+**对级耦合探针**",
+    "SOLV",
+    "INFE",
+    "INFE",
+    "INFE",
+    "SOLV",
+    "INFE",
+    "INFE",
+    "SOLV"
+   ]
+  ]
+ },
+ "finding": {
+  "solved_by_pair_coupling": "**TX0.input 与 RX0.input 由 INFEASIBLE → SOLVED**（2/3 的『双 VG 有路但对级 verify=False』链被打通）⇒『对级耦合缺失』假设**成立且形态最小已足**。",
+  "still_open": "TX1.output 仍『左逃逸对级不可行』（P/N 在耦合下皆解出但仍不过 verify）⇒ 需**更强耦合**（P/N 联合图或 P/N 相互迭代避让，而非仅 N 避 P 单向）。",
+  "true_blockage": "TX0.output / RX0.output = 右逃逸（J14 侧）⇒ 真几何阻塞（VG 单网即无路），须过孔落位/内层绕行。",
+  "corridor_blocked": "TX1.input / RX1.input = 『走廊段 seg_ok 失败（通道被占/冻结段阻挡）』= **第三种机制**（走廊/冻结段占用），与逃逸模板无关。",
+  "net_effect": "②+①+对级耦合下 K1 段级 = **3/8 有解**（TX0.in · RX0.in · RX1.out），其余 5 段的失败机制已逐条具名。"
+ },
+ "fix_shape_proposal": {
+  "A_对级耦合": "`_k1_escape` 的最后手段改为**成对**：先解 P，再以 P 折线为 N 的额外障碍解 N（本轮 PoC 即此）；如仍不过 verify ⇒ 升级为 P/N 联合图。",
+  "B_真几何阻塞": "对 OCuLink 右侧链评估**过孔落位 + 内层绕行**（复用 `_k1_escape_b` 阶梯与 `OCuLink_RX1 right` 的 4 点迂回样板）。",
+  "C_走廊占用": "`走廊段 seg_ok 失败` 属**走廊/冻结段口径** ⇒ 先做只读普查（哪条冻结段占用了哪条走廊），再定 L2 处置。",
+  "authorization": "A/B 属 `_shared` 引擎（L2 逃逸策略）⇒ 须批；C 可能触及走廊口径 ⇒ 先查后报。"
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-20T18:15:00+0800"
+}

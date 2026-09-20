@@ -1,0 +1,318 @@
+{
+ "artifact": "k2_k1_resume_escape_dx_budget_corrected",
+ "schema": 1,
+ "purpose": "在**修 ②（全 pad 入几何域）+ ①（rot=prot）后的正确几何**下，重做 K1 对级逃逸定因（handoff §4『重做 ③ 定因』）；并检验 ③ 现提法与加宽版是否闭链。",
+ "geometry": "影子树 /tmp/opencode/simroot（②+① 已修，③ 未修）",
+ "instrumented_table": [
+  {
+   "net_p": "PCIE_TX0_P",
+   "net_n": "PCIE_TX0_N",
+   "side": "left",
+   "dir": 1,
+   "corr_x": 7.049999999999999,
+   "P0": [
+    6.55,
+    24.02
+   ],
+   "N0": [
+    7.05,
+    24.02
+   ],
+   "track_p": 18.0,
+   "layer_p": "F.Cu",
+   "track_n": 17.5,
+   "layer_n": "F.Cu",
+   "ok": false,
+   "need_dx_P": 0.5,
+   "need_dx_N": 0.0,
+   "ady_P": 6.02,
+   "ady_N": 6.52
+  },
+  {
+   "net_p": "OCuLink_TX0_P",
+   "net_n": "OCuLink_TX0_N",
+   "side": "left",
+   "dir": 1,
+   "corr_x": 41.6875,
+   "P0": [
+    41.6875,
+    17.0
+   ],
+   "N0": [
+    41.6875,
+    17.5
+   ],
+   "track_p": 22.5,
+   "layer_p": "F.Cu",
+   "track_n": 18.5,
+   "layer_n": "In2",
+   "ok": true,
+   "need_dx_P": 0.0,
+   "need_dx_N": 0.0,
+   "ady_P": 5.5,
+   "ady_N": 1.0
+  },
+  {
+   "net_p": "OCuLink_TX0_P",
+   "net_n": "OCuLink_TX0_N",
+   "side": "right",
+   "dir": -1,
+   "corr_x": 74.2,
+   "P0": [
+    75.155,
+    23.0
+   ],
+   "N0": [
+    75.155,
+    22.5
+   ],
+   "track_p": 22.5,
+   "layer_p": "F.Cu",
+   "track_n": 18.5,
+   "layer_n": "In2",
+   "ok": false,
+   "need_dx_P": 0.955,
+   "need_dx_N": 0.955,
+   "ady_P": 0.5,
+   "ady_N": 4.0
+  },
+  {
+   "net_p": "PCIE_TX1_P",
+   "net_n": "PCIE_TX1_N",
+   "side": "left",
+   "dir": 1,
+   "corr_x": 5.3,
+   "P0": [
+    3.2,
+    22.01
+   ],
+   "N0": [
+    2.4,
+    22.01
+   ],
+   "track_p": 20.51,
+   "layer_p": "In2",
+   "track_n": 21.3,
+   "layer_n": "In2",
+   "ok": false,
+   "need_dx_P": 2.1,
+   "need_dx_N": 2.9,
+   "ady_P": 1.5,
+   "ady_N": 0.71
+  },
+  {
+   "net_p": "OCuLink_TX1_P",
+   "net_n": "OCuLink_TX1_N",
+   "side": "left",
+   "dir": 1,
+   "corr_x": 41.6875,
+   "P0": [
+    41.6875,
+    21.5
+   ],
+   "N0": [
+    41.6875,
+    22.0
+   ],
+   "track_p": 20.0,
+   "layer_p": "B.Cu",
+   "track_n": 21.5,
+   "layer_n": "In1",
+   "ok": false,
+   "need_dx_P": 0.0,
+   "need_dx_N": 0.0,
+   "ady_P": 1.5,
+   "ady_N": 0.5
+  },
+  {
+   "net_p": "PCIE_RX0_P",
+   "net_n": "PCIE_RX0_N",
+   "side": "left",
+   "dir": 1,
+   "corr_x": 5.3,
+   "P0": [
+    2.55,
+    24.02
+   ],
+   "N0": [
+    3.05,
+    24.02
+   ],
+   "track_p": 21.01,
+   "layer_p": "In2",
+   "track_n": 20.51,
+   "layer_n": "In2",
+   "ok": false,
+   "need_dx_P": 2.75,
+   "need_dx_N": 2.25,
+   "ady_P": 3.01,
+   "ady_N": 3.51
+  },
+  {
+   "net_p": "OCuLink_RX0_P",
+   "net_n": "OCuLink_RX0_N",
+   "side": "left",
+   "dir": 1,
+   "corr_x": 41.6875,
+   "P0": [
+    41.6875,
+    18.0
+   ],
+   "N0": [
+    41.6875,
+    18.5
+   ],
+   "track_p": 18.0,
+   "layer_p": "In2",
+   "track_n": 19.0,
+   "layer_n": "In1",
+   "ok": true,
+   "need_dx_P": 0.0,
+   "need_dx_N": 0.0,
+   "ady_P": 0.0,
+   "ady_N": 0.5
+  },
+  {
+   "net_p": "OCuLink_RX0_P",
+   "net_n": "OCuLink_RX0_N",
+   "side": "right",
+   "dir": -1,
+   "corr_x": 73.245,
+   "P0": [
+    73.245,
+    23.0
+   ],
+   "N0": [
+    73.245,
+    22.5
+   ],
+   "track_p": 18.0,
+   "layer_p": "In2",
+   "track_n": 19.0,
+   "layer_n": "In1",
+   "ok": false,
+   "need_dx_P": 0.0,
+   "need_dx_N": 0.0,
+   "ady_P": 5.0,
+   "ady_N": 3.5
+  },
+  {
+   "net_p": "PCIE_RX1_P",
+   "net_n": "PCIE_RX1_N",
+   "side": "left",
+   "dir": 1,
+   "corr_x": 7.199999999999999,
+   "P0": [
+    7.2,
+    22.01
+   ],
+   "N0": [
+    6.4,
+    22.01
+   ],
+   "track_p": 16.0,
+   "layer_p": "F.Cu",
+   "track_n": 24.02,
+   "layer_n": "In1",
+   "ok": true,
+   "need_dx_P": 0.0,
+   "need_dx_N": 0.8,
+   "ady_P": 6.01,
+   "ady_N": 2.01
+  },
+  {
+   "net_p": "PCIE_RX1_P",
+   "net_n": "PCIE_RX1_N",
+   "side": "right",
+   "dir": -1,
+   "corr_x": 38.3125,
+   "P0": [
+    38.3125,
+    22.0
+   ],
+   "N0": [
+    38.3125,
+    22.5
+   ],
+   "track_p": 16.0,
+   "layer_p": "F.Cu",
+   "track_n": 24.02,
+   "layer_n": "In1",
+   "ok": true,
+   "need_dx_P": 0.0,
+   "need_dx_N": 0.0,
+   "ady_P": 6.0,
+   "ady_N": 1.52
+  },
+  {
+   "net_p": "OCuLink_RX1_P",
+   "net_n": "OCuLink_RX1_N",
+   "side": "left",
+   "dir": 1,
+   "corr_x": 41.6875,
+   "P0": [
+    41.6875,
+    22.5
+   ],
+   "N0": [
+    41.6875,
+    23.0
+   ],
+   "track_p": 21.0,
+   "layer_p": "In1",
+   "track_n": 20.5,
+   "layer_n": "In1",
+   "ok": true,
+   "need_dx_P": 0.0,
+   "need_dx_N": 0.0,
+   "ady_P": 1.5,
+   "ady_N": 2.5
+  },
+  {
+   "net_p": "OCuLink_RX1_P",
+   "net_n": "OCuLink_RX1_N",
+   "side": "right",
+   "dir": -1,
+   "corr_x": 73.245,
+   "P0": [
+    73.245,
+    21.5
+   ],
+   "N0": [
+    73.245,
+    21.0
+   ],
+   "track_p": 21.0,
+   "layer_p": "In1",
+   "track_n": 20.5,
+   "layer_n": "In1",
+   "ok": true,
+   "need_dx_P": 0.0,
+   "need_dx_N": 0.0,
+   "ady_P": 0.5,
+   "ady_N": 0.5
+  }
+ ],
+ "table_reading": {
+  "n_chains": 12,
+  "ok": 6,
+  "fail": 6,
+  "fail_detail": [
+   "PCIE_TX0_P left : corr_x=7.05 P0=(6.55,24.02) N0=(7.05,24.02) need_dx=(0.5,0.0) ady=(6.02,6.52) —— 与旧件同（③ 原目标案例，仍成立）",
+   "OCuLink_TX0_P right: corr_x=74.2 P0=(75.155,23.0) need_dx=(0.955,**0.955**) ady=(0.5,4.0) —— **need_dx=0.955 > ady=0.5 ⇒ 现提法上限 min(ady,|corr_x-pad_x|)=0.5 覆盖不到**（新发现）",
+   "PCIE_TX1_P left : corr_x=5.3 need_dx=(2.1,2.9)",
+   "OCuLink_TX1_P left: need_dx=(0.0,0.0) **却仍 INFEASIBLE** ⇒ 非 dx 档问题",
+   "PCIE_RX0_P left : need_dx=(2.75,2.25)",
+   "OCuLink_RX0_P right: need_dx=(0.0,0.0) **却仍 INFEASIBLE** ⇒ 非 dx 档问题"
+  ],
+  "conclusion": "K1 逃逸失败**至少两种机制**并存：(a) dx 候选阶梯不足以表达小/精确预算（TX0·TX1·RX0 左 + OCuLink_TX0 右）；(b) need_dx=0 仍失败 ⇒ 落点/对级取齐或 verify 段另有约束。另 RX1.input 报『走廊段 seg_ok 失败(通道被占/冻结段阻挡)』= 第三种（走廊/冻结段占用）。"
+ },
+ "fix3_tests": {
+  "variant1_min(ady,|dx|)_cap": "补 0.0–0.5 档 ⇒ 仍 0/4（且 RX1.output 由 SOLV 退化为 INFE，说明加档会改变对级取齐结果 ⇒ 原解非稳定）",
+  "variant2_max(ady,|dx|)_cap": "补 0.0–max(ady,need_dx) 档 ⇒ 仍 0/4（RX1.output SOLV，其余 INFE）",
+  "verdict": "**③ 现提法（含加宽版）均不足以闭链** ⇒ 须先修 ①② 落地、再以正确几何重建逃逸定因；③ 的改法**不得照搬旧结论**。"
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-20T17:05:00+0800"
+}

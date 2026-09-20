@@ -1,0 +1,120 @@
+{
+ "artifact": "k2_k1_resume_escape_decision_tree_split",
+ "schema": 1,
+ "purpose": "在**修 ②① 后的正确几何**下，把 6 条失败链按 `_k1_escape` 决策树的**失败层**分类（模板 A/B/V-Graph/对级 verify），供 L2 策略定因；并登记新发现的退化段缺陷。",
+ "method": "/tmp 影子树（②+①，③ 未修）· monkeypatch `_k1_escape` / `HSVisibilityGraph.solve` / `_k1_escape_verify` 记录每链事件序（栈式 chain tag）",
+ "layers_note": "`_k1_escape` 决策树：模板 A → 模板 B(单侧/双侧/异层) → 最后手段 `HSVisibilityGraph`（单网可见性图，即『此网在 F.Cu 场里是否存在任何路径』）→ verify",
+ "table": [
+  {
+   "chain": "PCIE_TX0_P|left",
+   "esc": "None",
+   "layers": [
+    "F.Cu",
+    "F.Cu"
+   ],
+   "VG": [
+    true,
+    true
+   ],
+   "note": "单网双 VG 有路、verify 记 True 但整体仍 None ⇒ **疑 tag/语义待复核**（保守：不计入已解）"
+  },
+  {
+   "chain": "OCuLink_TX0_P|left",
+   "esc": "dict",
+   "layers": [
+    "F.Cu",
+    "In2"
+   ],
+   "note": "求解成功（模板 B）"
+  },
+  {
+   "chain": "OCuLink_TX0_P|right",
+   "esc": "None",
+   "layers": [
+    "F.Cu",
+    "In2"
+   ],
+   "VG": [
+    true,
+    false
+   ],
+   "note": "**N 侧最后手段 VG 失败 ⇒ 真几何阻塞**（x≈74.2–75.2 邻域）"
+  },
+  {
+   "chain": "PCIE_TX1_P|left",
+   "esc": "None",
+   "layers": [
+    "In2",
+    "In2"
+   ],
+   "VG": [
+    true,
+    true
+   ],
+   "note": "同上，疑对级/tag"
+  },
+  {
+   "chain": "OCuLink_TX1_P|left",
+   "esc": "None",
+   "layers": [
+    "B.Cu",
+    "In1"
+   ],
+   "VG": [
+    false,
+    true
+   ],
+   "note": "**P 侧 VG 失败 ⇒ 真几何阻塞**（U11 同列 pad）"
+  },
+  {
+   "chain": "PCIE_RX0_P|left",
+   "esc": "None",
+   "layers": [
+    "In2",
+    "In2"
+   ],
+   "VG": [
+    true,
+    true
+   ],
+   "note": "同上，疑对级/tag"
+  },
+  {
+   "chain": "OCuLink_RX0_P|left",
+   "esc": "dict",
+   "layers": [
+    "In2",
+    "In1"
+   ],
+   "note": "**但解为退化段**（见 defect4）"
+  },
+  {
+   "chain": "OCuLink_RX0_P|right",
+   "esc": "None",
+   "layers": [
+    "In2",
+    "In1"
+   ],
+   "VG": [
+    false,
+    false
+   ],
+   "note": "**P/N 双侧 VG 皆失败 ⇒ 真几何阻塞**（J14 同列 pad）"
+  },
+  {
+   "chain": "OCuLink_RX1_P|left/right · PCIE_RX1_P|left/right",
+   "esc": "dict",
+   "note": "4 条已解（含迂回多段折线，如 right 侧 [x 73.245→72.79→72.29→73.245]）"
+  }
+ ],
+ "defect4_zero_length_segment": {
+  "statement": "`_tpl_a_line` 的 `ady < 1e-9` 捷径分支返回 `(pts=[pp,(corr_x,track)], ...)`；当 **pad_x == corr_x 且 pad_y == track** 时产 **零长段** `[(x,y),(x,y)]`，且 `seg_ok` 与 `_k1_escape_verify` 均放行 ⇒ 退化逃逸（不可制造）。",
+  "measured": "`OCuLink_RX0_P|left` 实测候选 = `{'pts': [(41.6875, 18.0), (41.6875, 18.0)], 'layers': ['F.Cu']}`（pad P0=(41.6875,18.0) · track_p=18.0 · corr_x=41.6875）。",
+  "classification": "引擎（`_shared/eda_core/hs_route_model.py`）**L2 退化守卫缺失** ⇒ 须批；配负控（零长段/零长折线必须被拒）。",
+  "impact": "K1 侧『已解』计数被高估：`OCuLink_RX0 left` 不是有效解 ⇒ 修 ①② 后的**真实有效解 = 5/12 链**（非 6/12）。"
+ },
+ "verdict": "K1 逃逸失败**两类机制**：(a) **真几何阻塞**（3 链 VG 失败：OCuLink_TX0 right · OCuLink_TX1 left · OCuLink_RX0 right）；(b) **对级/模板约束**（3 链：PCIE_TX0/TX1/RX0 left，单网有路但对级不成）。另 **新缺陷 ④**（退化零长段）。⇒ K1 问题属 **L2（逃逸/过孔/走廊策略）**，ENG 可自裁推进，但**修 ②① 是前置**（否则障碍场不真）。",
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-20T17:40:00+0800"
+}

@@ -1,0 +1,15 @@
+{
+ "artifact": "k2_k1_resume_escape_blocker_identity",
+ "schema": 1,
+ "purpose": "定位『修饰 ② 后仍 INFEASIBLE』的**阻塞物身份**：证明旧件『逃逸通道内无任何障碍（obstacles 相交数=0）』是**缺陷 ② 造成的假阴性**。",
+ "method": "修正解析器（②+①）解析 k1 板 → 对失败段做几何命中普查（点到线段距离 vs pad 半宽/半高 + 旋转投影，阈值 clearance 0.1 + 走线半宽 0.045）",
+ "findings": {
+  "OCuLink_TX1_P_left_seg": "((41.6875,21.5)→(41.6875,20.0))：命中 **4** 个障碍 —— U11 在 x=41.688 的 3 个 **no-net** pad（y=20.0/20.5/21.0 · size 0.875×0.25）**+ 自身 pad**。这 3 个 no-net pad 在缺陷 ② 下**完全不可见** ⇒ 通道被误判为空。",
+  "OCuLink_RX0_P_right_seg": "((73.245,23.0)→(73.245,18.0))：命中 **11** 个障碍 —— J14 同列 pad（y=18.0/18.5/19.0/19.5/20.0/22.0 为 **no-net**，20.5 为 GND，22.5 为 OCuLink_RX0_N）。J14 的**立式同列 pad 本身**即构成垂直下潜的结构性阻挡。",
+  "OCuLink_TX0_P_left_（旧件判为已解）": "((41.6875,17.0)→(41.6875,22.5))：命中 **12** 个障碍（U11 同列 pad 全列占用）⇒ 直下同样不可行，该解靠 **dx≈ady 的 45° 斜出**取得。"
+ },
+ "root_cause_statement": "旧件把 K1 断点归因于『`_tpl_a_line` 候选阶梯缺小 x 预算形态』，其前提『逃逸通道 F.Cu 场内无任何障碍』**是缺陷 ②（99 个 pad 静默不入几何域，含 U11 的 30 个 no-net pad 与 J14 的 33 个）造成的假阴性** ⇒ 断点定性**须以修 ②① 后的几何重做**（本轮已重做：见 `K1_RESUME_ESCAPE_DX_BUDGET_CORRECTED_v1.json`）。",
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-20T17:20:00+0800"
+}
