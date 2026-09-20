@@ -53,7 +53,7 @@ v2 记「13 处」；实测 `_shared` **43 处**（`pm_gate/` **16**、`eda_core
 
 ## 1.8 影子预验证（**授权前已完成**；真源零改动）
 - 工具：`k2/tools/k2_p6_shadow_verify_v1.py`（`/tmp/opencode/shadow` 建框架影子 → 施加补丁集 → 跑验收 + 控制组归因）；机读件 `P6_execution/SHADOW_VERIFY_v1.json` **`844f2266…`**（两次连跑逐字节同）；报告 `k2/docs/K2-P6-SHADOW-VERIFICATION-BATCH2-20260920.md`。
-- **结果**：K1 框架闸 **5→12 PASS** · K2 **12→13 PASS** · **零回退** · 控制组（零补丁）测试计数**相同** ⇒ **补丁集零测试回归**。
+- **结果**：K1 框架闸 **4→12 PASS（+8）** · K2 **12→13 PASS** · **零回退** · 控制组（零补丁）测试计数**相同** ⇒ **补丁集零测试回归**。
 - **新增两项并入 B2-3**：**B2-3c（新 F-2c）** `check_qa.py:24` 板路径 `board_abspath()` 空参；**B2-3d（新 F-2d）** `gates.py:141` `scheme_closure_check` 产物读取未注入项目维度（⇒ K1 G2.6 PASS 的关键）。
 - **22 skip 解锁实验**：非「一行白捡」——锚 `k2/k2_v4_8L.kicad_pcb` 或 `k2/hw/k2_v4_8L.kicad_pcb` ⇒ **9 通过 / 13 失败**（两锚一致 ⇒ 与锚无关）；锚 `k2/k2_v4.kicad_pcb` ⇒ 21 error（缺 `.kicad_pro`）。
 - **13 项既有隐藏失败**（`hs_route_model` 域：契约漂移/区域集/`INFRA_ERROR`/多次 `StopIteration`/`solve_all_v4` 18 链未解/拓扑集）⇒ **纳入 B2-1/B2-2 triage**；**期望值类须监理裁定**。

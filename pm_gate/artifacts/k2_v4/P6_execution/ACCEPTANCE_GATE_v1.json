@@ -1,0 +1,110 @@
+{
+ "A_anchors": {
+  "board_frozen_l4": {
+   "actual": "d4e81f647be7f9809aef72affb55fdf442a0cf743baead02d8e44fb130de18fc",
+   "expected": "d4e81f647be7f980",
+   "ok": true,
+   "path": "hw/k2_v4_8L.l4.kicad_pcb"
+  },
+  "board_reviewed_l7": {
+   "actual": "c5a7df90aadb66e067802263531699c6e950b1a5e042d3efc3d415fc447641b3",
+   "expected": "c5a7df90aadb66e0",
+   "ok": true,
+   "path": "hw/k2_v4_8L.l7.kicad_pcb"
+  },
+  "delivery_manifest": {
+   "actual": "6ee7495de61f749fba61a04a5311e17040988c322b3a17f46b6f26efd8b243b2",
+   "expected": "6ee7495de61f749fba61a04a5311e17040988c322b3a17f46b6f26efd8b243b2",
+   "ok": true,
+   "path": "pm_gate/artifacts/k2_v4/L6/jlc_package/MANIFEST.json"
+  },
+  "delivery_tarball": {
+   "actual": "0e88e107e2da81923ccdda0c20d89c7ca486bc2281a139a4a007650542f0bce0",
+   "expected": "0e88e107e2da81923ccdda0c20d89c7ca486bc2281a139a4a007650542f0bce0",
+   "ok": true,
+   "path": "pm_gate/artifacts/k2_v4/L6/DELIVERY/k2_v4_8L.l7_gerber_package.tar.gz"
+  }
+ },
+ "B_pipeline": {
+  "checks": [
+   "preflight/check[project_sch_coverage]: PASS",
+   "verify/sch_structural: PASS",
+   "verify/netlist_connect: PASS",
+   "verify/bom_consistent: PASS"
+  ],
+  "exit_code": 0,
+  "failed": [],
+  "interpreter": "/usr/bin/python3",
+  "ok": true,
+  "stderr_tail": []
+ },
+ "C_framework_readings": {
+  "k1": {
+   "fail": 14,
+   "gates": {
+    "check_g11": true,
+    "check_g12": true,
+    "check_g13": true,
+    "check_g14": true,
+    "check_g15": false,
+    "check_g21": false,
+    "check_g22": false,
+    "check_g23": false,
+    "check_g24": false,
+    "check_g25": false,
+    "check_g26": false,
+    "check_g31": false,
+    "check_g32": false,
+    "check_g33": false,
+    "check_g34": false,
+    "check_g35": false,
+    "check_g41": false,
+    "check_g42": false
+   },
+   "pass": 4
+  },
+  "k2_v4": {
+   "fail": 6,
+   "gates": {
+    "check_g11": true,
+    "check_g12": true,
+    "check_g13": true,
+    "check_g14": true,
+    "check_g15": false,
+    "check_g21": true,
+    "check_g22": true,
+    "check_g23": true,
+    "check_g24": true,
+    "check_g25": true,
+    "check_g26": false,
+    "check_g31": false,
+    "check_g32": true,
+    "check_g33": true,
+    "check_g34": true,
+    "check_g35": false,
+    "check_g41": false,
+    "check_g42": false
+   },
+   "pass": 12
+  }
+ },
+ "C_regressions_vs_baseline": [],
+ "D_shadow": {
+  "control_same": true,
+  "hidden_failures": 13,
+  "k1_pass": 12,
+  "k2_pass": 13,
+  "pytest": {
+   "failed": 13,
+   "passed": 43,
+   "skipped": 12
+  }
+ },
+ "artifact": "k2_p6_acceptance_gate",
+ "failures": [],
+ "mode": "status_report",
+ "note": "默认模式 = 现状体检（FAIL 属预期，供授权前自查）；加 --expect-patched 才是变更后 fail-closed 验收",
+ "readonly": true,
+ "schema": 1,
+ "verdict": "PASS"
+}

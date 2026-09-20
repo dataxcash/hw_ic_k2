@@ -27,7 +27,7 @@
 | **B2-T（triaged）** | **22 skip 解锁后 13 项既有隐藏失败**（`hs_route_model` 域；清单见 `docs/K2-P6-SHADOW-VERIFICATION-BATCH2-20260920.md` §4） | `PYTHONPATH=AppDir/... AppDir/bin/python3.11 k2/tools/k2_p6_shadow_verify_v1.py` | 逐项定性：**引擎真缺陷**（ENG 修）vs **期望漂移**（**监理裁定**，C-12 禁缩口径） | **须监理裁定**（期望值类） | ☐ |
 | **B2-4** | `check_l1.py:193` `RULES_DOC`：现解析为 `<项目根>/../doc/PCB_DESIGN_RULES.md` ⇒ **越出容器**（实测 K1/K2 **双双 FAIL**）；真源 = `_shared/docs/PCB_DESIGN_RULES.md`（K1 `state_k1.json` 的 G1.5 WAIVER 原文即如此指认）＋ 撤 `G1.5` waiver（RISK-001） | K1：`check_g15` **无 waiver 机判 PASS**；K2：`verify k2` 不回退 | ① K1 `G1.5` 真判 PASS（**标注须撤**，不再 PASS-by-waiver）；② 负控：规则文档缺失/无「强条」⇒ **FAIL** | **需监理批**（撤 waiver = 判据收紧） | ☐ |
 
-> **影子预验证（授权前已完成，真源零改动）**：`k2/tools/k2_p6_shadow_verify_v1.py` ⇒ K1 框架闸 **5→12 PASS** · K2 **12→13 PASS** · 零回退 · 控制组归因**零测试回归**；机读件 `SHADOW_VERIFY_v1.json` `844f2266…`。
+> **影子预验证（授权前已完成，真源零改动）**：`k2/tools/k2_p6_shadow_verify_v1.py` ⇒ K1 框架闸 **4→12 PASS（+8）** · K2 **12→13 PASS** · 零回退 · 控制组归因**零测试回归**；机读件 `SHADOW_VERIFY_v1.json` `844f2266…`。
 > **SPEC 站点普查修正**：v2 记「13 处」；本轮实测 `_shared` 内 **43 处**（`pm_gate/` 内 **16**、`eda_core/` 内 27；含 `review.py:121`、`check_qa.py:34`、`config.py:120` 等）⇒ 实施时**逐处定性**（应项目化 / 应具名豁免），**禁**一把梭（C-12）。
 
 ## 2. P6 完工判据（机判 · 执行序全部**只读**起手）
