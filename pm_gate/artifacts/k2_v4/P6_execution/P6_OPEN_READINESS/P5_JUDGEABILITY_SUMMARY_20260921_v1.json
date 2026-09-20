@@ -1,0 +1,99 @@
+{
+ "artifact": "k2_p5_judgeability_summary",
+ "schema": 1,
+ "ts": "2026-09-20T22:51:30+08:00",
+ "session_label": "K2-2026-09-21（逻辑会话日 · 与 ts 分离 · COV-C4）",
+ "id": "**P5 执行包『可判性』总表**（8 项 · 阈值/预期/测点/证据 四要素）—— 本会话三轮补齐后收口",
+ "authorization": "监理自动续推『P5 只读造活』；#K2-55 §三-3。- 本件**只读汇总**；未改判据/阈值。",
+ "result": "**8/8 项可判**（每项均有：明确的阈值 + 预期/额定值或二值语义 + 测点 + 证据要求）",
+ "items": {
+  "V4_impedance_coupon": {
+   "threshold": "85.0Ω ±10%（76.5–93.5）",
+   "expected": "券须覆盖 0.6mm 中心几何 + 最紧段 0.2825mm（PCIE_UP3）",
+   "points": "板厂阻抗券（4 层）",
+   "evidence": "券报告",
+   "judgeable": true,
+   "note": "设计侧 as-built 几何已由冻结阻抗表覆盖（`as_built_l7` · verdict=geometry_matches_spec_rev52_per_layer）⇒ 本会话**未重复**"
+  },
+  "V5_pdn_dc_drop": {
+   "threshold": "各轨源→负载压降 ≤3%",
+   "expected": "4 轨（12V_IN/P3V3/P3V3_AUX/MCU_VDD）· 逻辑 ≤预算",
+   "points": "4 轨",
+   "evidence": "读数 + 载/温声明",
+   "judgeable": true,
+   "note": "ENG 设计侧预判已落（P3V3_AUX 于 J3/J4 最坏单跳 125.3mΩ@85℃ ⇒ **实测须覆盖该端**）"
+  },
+  "V6_1_rail_voltages": {
+   "threshold": "各轨 ±5% 标称",
+   "expected": "**已定（#K2-55）**：12V_IN 12.0 / P3V3 3.3 / P3V3_AUX 3.3 / **MCU_VDD 主判 3.0（窗 2.85–3.15）** + J13 辅助 3.135–3.465",
+   "points": "4 轨",
+   "evidence": "读数 + 工况声明",
+   "judgeable": true,
+   "note": "本会话补齐（原缺标称 ⇒ 不可判）"
+  },
+  "V6_2_mcu_swd_id": {
+   "threshold": "device ID 与手册一致（二值）",
+   "expected": "SW-DP IDCODE 预期 **0x0BC11477**；`DBGMCU_IDCODE`@0x40015800 **须以 RM0454 对照**（st.com 567 离线不可得 ⇒ 手册依赖登记）",
+   "points": "J13 pad1/pad2（NRST 另接 U1.pad10/R29.pad1/C73.pad1）",
+   "evidence": "读数/screenshot",
+   "judgeable": true,
+   "note": "本会话补齐预期值"
+  },
+  "V6_3_fru_i2c": {
+   "threshold": "EEPROM 地址应答正确（二值）",
+   "expected": "E2 于 **I2C1** · 7-bit **0x52**（板侧+原理图双侧一致）",
+   "points": "I2C1",
+   "evidence": "扫描 + 前 16 字节",
+   "judgeable": true,
+   "note": "本会话补齐预期地址"
+  },
+  "V6_4_link_gen4_x4": {
+   "threshold": "双路 x4 Gen4 训练成功（二值）",
+   "expected": "16 GT/s ×4 · LTSSM 终态（预期 L0）",
+   "points": "J2/J3/J4（中继 U6）",
+   "evidence": "lspci -vvv / 厂商工具截图 + 训练日志",
+   "judgeable": true
+  },
+  "V6_5_stability_30min_aer": {
+   "threshold": "AER 计数 = 0（30 分钟）",
+   "expected": "连续 30min AER=0",
+   "points": "链路",
+   "evidence": "日志/曲线",
+   "judgeable": true
+  },
+  "V7_thermal_o2": {
+   "threshold": "Tj ≤ 120.0℃（四工况）",
+   "expected": "装配前置（30×30 Al + 1.0℃/W 垫 + ~2m/s 风冷 · **未按 O2 ⇒ 直接 T1**）· P/Tj_pred = 4.7/91.7 · 6.0/106.0 · 5.8/103.8 · 7.0/117.0 · 测法 θJC_top=6.5 · Ta 基准 40.0℃",
+   "points": "U6 case-top",
+   "evidence": "四工况曲线 + 装配照 + Ta/风速",
+   "judgeable": true,
+   "note": "本会话核对（**无缺口**）· T1/T2 触发条款齐"
+  }
+ },
+ "session_gap_fixes": [
+  {
+   "item": "V6_2/V6_3 预期值缺失",
+   "fix": "`P5_EXPECTED_VALUES_DESIGN_SIDE_20260921_v1.json`（825112398ff1ef76）",
+   "by": "前轮"
+  },
+  {
+   "item": "V6_1 缺标称（4×null）",
+   "fix": "`P5_V6_1_NOMINALS_AND_MCU_VDD_CALIBER_20260921_v1.json`（b3c72f6dec777497）→ **#K2-55 裁定**（MCU_VDD 主判 3.0）",
+   "by": "前轮 + 本落定"
+  },
+  {
+   "item": "V5 无设计侧风险定位",
+   "fix": "`PDN_DESIGN_PRECHECK_V5_20260921_v1.json`（100bc34f2980d86d）⇒ P3V3_AUX/J3/J4 具名",
+   "by": "前轮"
+  }
+ ],
+ "no_gap_confirmations": [
+  "**V4**：as-built 几何核对已由冻结阻抗表覆盖 ⇒ 不重复；**V7**：装配前置/四工况/测法/触发条款/证据清单齐备 ⇒ 无缺口；**轨集合完整**（板 100 网中电源轨恰 4 条 + GND）。"
+ ],
+ "boundary": [
+  "**非 P5 证据**（汇总件）；V4–V7 维持 `NOT_RUN`；判定归实测方 + 监理（**ENG 不得自证**）。",
+  "未改任何阈值/判据/板/SPEC/交付包。"
+ ],
+ "readonly_repo": true,
+ "not_landed": true
+}
