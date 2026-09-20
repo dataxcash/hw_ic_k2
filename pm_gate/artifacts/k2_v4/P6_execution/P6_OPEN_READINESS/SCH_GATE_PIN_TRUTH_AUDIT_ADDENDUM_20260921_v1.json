@@ -1,0 +1,35 @@
+{
+ "artifact": "sch_gate_pin_truth_audit_addendum",
+ "schema": 1,
+ "ts": "2026-09-20T23:00:00+0800",
+ "id": "SG-AUDIT-1b",
+ "authorization": "**#K2-51 §二 SG-AUDIT-1**『知悉 + 放行补检』（排期补检 DS160PR810 / TLV61046A）· 只读",
+ "purpose": "补检 SG-AUDIT-1 未检两件（现行生成代 pin 真源 vs 厂商原件）——**只读**，未改任何件。",
+ "results": [
+  {
+   "part": "DCDC_12V_3V3 / DCDC_12V_5V",
+   "device": "TI TLV61046A",
+   "package": "DBV 6-pin SOT-23",
+   "doc": "TI SLVSD82B",
+   "table": "Table 5-1 Pin Functions",
+   "verdict": "**PASS 6/6**",
+   "detail": "1 SW · 2 GND · 3 FB · 4 EN · 5 VOUT · 6 VIN（两份 YAML 相同，均命中）"
+  },
+  {
+   "part": "DS160PR810",
+   "device": "TI DS160PR810",
+   "package": "NJX 64-pin WQFN",
+   "doc": "TI SNLS658",
+   "table": "Pin Functions（表）+ Figure 5-1（图）",
+   "verdict": "**PASS（抽样 14/64，无冲突）**",
+   "detail": "表行机检命中并一致：RX0P=1 · 27 EQ0_1 · 28 GAIN1 · 29 EQ1_1 · TX0P=55 · ALL_DONE_N=31 · RSVD1=30 · RSVD0=58 · RX_DET/SCL=62 · MODE=61 + 33/34/37；图（Fig 5-1）交叉：VREG1=3 · GND=53 · TX0N=54 等一致。**未发现冲突**。",
+   "residual": "表行解析受**跨页/折行**影响（`pdftotext -layout` 下 64 行仅 9 行可正则化）⇒ 未做 64/64 全量对表；**建议**在姿态/证据重出批（执行序 4/6）内以更稳健解析（或逐页 pdftotext 无 layout）补齐全量。"
+  }
+ ],
+ "conclusion": "**无新缺陷**：本轮补检两件均**未发现真源与厂商原件不一致** ⇒ SG-AUDIT-1『7/8 一致、唯一 FAIL = STM32G0B1KBU6』的结论**维持**（该 FAIL 已在 #K2-51 ① 订正落件）。",
+ "not_landed": [
+  "未改任何 datasheet YAML",
+  "未改 criteria/"
+ ],
+ "next": "执行序 4/6（W8 SPEC+重建，**建议吸收 K1-U1-BOARD-SYNC**）→ 5/6 姿态归一器（含负控）→ 6/6 T2-F6 续取"
+}
