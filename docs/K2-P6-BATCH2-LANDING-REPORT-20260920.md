@@ -91,3 +91,16 @@ K2 此前只有**单文件** PYTESTERS（`test_hs_route_model.py`）。本件首
 - **备料（未落件，C-6：批 2 已落 ⇒ 建议并入下一批）**：1 行锚修（`K2V4_REAL_BOARD` → 绝对锚）+ **配套 2 行**（影子工具板锚补丁改容忍，否则验收门 D 腿会 AssertionError）；`patch -p3 --dry-run` 已过。
   预期（容器根布局）：**passed 492→512 · failed 28→30（新增 = 具名 C1/C2）· skipped 42→20**；k2 检出版零变化。
 - 机读：`P6_execution/SUITE_LAYOUT_ASYMMETRY_AND_ANCHOR_FIX_v1.json` + `P6_OPEN_READINESS/anchors/K2V4_REAL_BOARD_absolute.diff`。
+
+## 6. 跨板复用效果量化（计划 §7.2「判据一次落地，全板受益」）
+
+同一次升版对两板的逐 gate 前后对比（**机读件 → 机读件**：`BASELINE_pm_gate_k1_k2_readonly_v1.json` 批 2 前 vs `ACCEPTANCE_GATE_v1.json` 批 2 后）：
+
+| 项目 | 批 2 前 PASS | 批 2 后 PASS | 翻绿 | 回退 |
+|---|---|---|---|---|
+| **K1** | 4 | **14** | **+10** = `g15` · `g21`–`g26` · `g31` · `g32` · `g34` | **0** |
+| **K2** | 12 | **14** | **+2** = `g15` · `g31` | **0** |
+
+- **机制**：项目维度注入（`check_l2/l3/qa` 产物读取补 `project=_proj()`）· 项目域期望（G3.1 字段集/走廊 id、G3.2 spec 基名）· G3.5 判定源 `config.spec_name(active)` · `check_l1.RULES_DOC` 项目根化（同使 K1 `g15` 不再依赖 waiver）⇒ **同一份共享代码对两板同时生效**。
+- **两侧残留 FAIL 均为真实读数**：K1 = `g33`（缺 `buildability.md`）· `g35`（WP1 指纹缺）· `g41/g42`（G4：未布线 / 未开 ECN）；K2 = `g26` · `g35` · `g41` · `g42`。
+- 机读：`P6_execution/CROSSBOARD_GATE_DELTA_v1.json`（`8404572a8…`）。

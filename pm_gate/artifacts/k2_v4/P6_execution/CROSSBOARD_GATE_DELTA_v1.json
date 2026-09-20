@@ -1,0 +1,194 @@
+{
+ "artifact": "k2_batch2_crossboard_gate_delta",
+ "mechanism": "批 2 的项目维度注入（check_l2/l3/qa read_text + project=_proj()）+ 项目域期望（G3.1 字段集/走廊 id、G3.2 spec 基名）+ G3.5 判定源 config.spec_name(active) + check_l1 RULES_DOC 项目根化 ⇒ **同一份共享代码对两板同时生效**（RULES_DOC 修正还使 K1 g15 不再需要 waiver）",
+ "note": "只读汇总（两份在库机读件 → 逐 gate diff）；未改判据/载件/冻结件；未派 WORKER。",
+ "purpose": "量化批 2 的**跨板复用**效果（计划 §7.2『判据一次落地，全板受益』）：同一次升版对 K1 / K2 的逐 gate 前后对比（机读件对机读件，不采信自述）",
+ "reading": {
+  "both_remaining_failures": "K1: g33（缺 buildability.md）· g35（WP1 指纹缺）· g41/g42（G4：未布线 / 未开 ECN）＝真实读数；K2: g26 · g35 · g41 · g42＝真实读数",
+  "k1": "PASS 4 → **14**（翻绿 10：g15 · g21–g26 · g31 · g32 · g34；**回退 0**）",
+  "k2_v4": "PASS 12 → **14**（翻绿 2：g15 · g31；**回退 0**）"
+ },
+ "readonly_repo": true,
+ "result": {
+  "k1": {
+   "flipped_to_pass": [
+    "check_g15",
+    "check_g21",
+    "check_g22",
+    "check_g23",
+    "check_g24",
+    "check_g25",
+    "check_g26",
+    "check_g31",
+    "check_g32",
+    "check_g34"
+   ],
+   "gates": {
+    "check_g11": {
+     "post": "PASS",
+     "pre": "PASS"
+    },
+    "check_g12": {
+     "post": "PASS",
+     "pre": "PASS"
+    },
+    "check_g13": {
+     "post": "PASS",
+     "pre": "PASS"
+    },
+    "check_g14": {
+     "post": "PASS",
+     "pre": "PASS"
+    },
+    "check_g15": {
+     "post": "PASS",
+     "pre": "FAIL"
+    },
+    "check_g21": {
+     "post": "PASS",
+     "pre": "FAIL"
+    },
+    "check_g22": {
+     "post": "PASS",
+     "pre": "FAIL"
+    },
+    "check_g23": {
+     "post": "PASS",
+     "pre": "FAIL"
+    },
+    "check_g24": {
+     "post": "PASS",
+     "pre": "FAIL"
+    },
+    "check_g25": {
+     "post": "PASS",
+     "pre": "FAIL"
+    },
+    "check_g26": {
+     "post": "PASS",
+     "pre": "FAIL"
+    },
+    "check_g31": {
+     "post": "PASS",
+     "pre": "FAIL"
+    },
+    "check_g32": {
+     "post": "PASS",
+     "pre": "FAIL"
+    },
+    "check_g33": {
+     "post": "FAIL",
+     "pre": "FAIL"
+    },
+    "check_g34": {
+     "post": "PASS",
+     "pre": "FAIL"
+    },
+    "check_g35": {
+     "post": "FAIL",
+     "pre": "FAIL"
+    },
+    "check_g41": {
+     "post": "FAIL",
+     "pre": "FAIL"
+    },
+    "check_g42": {
+     "post": "FAIL",
+     "pre": "FAIL"
+    }
+   },
+   "post_pass": 14,
+   "pre_pass": 4,
+   "regressed": []
+  },
+  "k2_v4": {
+   "flipped_to_pass": [
+    "check_g15",
+    "check_g31"
+   ],
+   "gates": {
+    "check_g11": {
+     "post": "PASS",
+     "pre": "PASS"
+    },
+    "check_g12": {
+     "post": "PASS",
+     "pre": "PASS"
+    },
+    "check_g13": {
+     "post": "PASS",
+     "pre": "PASS"
+    },
+    "check_g14": {
+     "post": "PASS",
+     "pre": "PASS"
+    },
+    "check_g15": {
+     "post": "PASS",
+     "pre": "FAIL"
+    },
+    "check_g21": {
+     "post": "PASS",
+     "pre": "PASS"
+    },
+    "check_g22": {
+     "post": "PASS",
+     "pre": "PASS"
+    },
+    "check_g23": {
+     "post": "PASS",
+     "pre": "PASS"
+    },
+    "check_g24": {
+     "post": "PASS",
+     "pre": "PASS"
+    },
+    "check_g25": {
+     "post": "PASS",
+     "pre": "PASS"
+    },
+    "check_g26": {
+     "post": "FAIL",
+     "pre": "FAIL"
+    },
+    "check_g31": {
+     "post": "PASS",
+     "pre": "FAIL"
+    },
+    "check_g32": {
+     "post": "PASS",
+     "pre": "PASS"
+    },
+    "check_g33": {
+     "post": "PASS",
+     "pre": "PASS"
+    },
+    "check_g34": {
+     "post": "PASS",
+     "pre": "PASS"
+    },
+    "check_g35": {
+     "post": "FAIL",
+     "pre": "FAIL"
+    },
+    "check_g41": {
+     "post": "FAIL",
+     "pre": "FAIL"
+    },
+    "check_g42": {
+     "post": "FAIL",
+     "pre": "FAIL"
+    }
+   },
+   "post_pass": 14,
+   "pre_pass": 12,
+   "regressed": []
+  }
+ },
+ "schema": 1,
+ "sources": {
+  "caveat": "两份均为**只读机读记录**；pre 的 K1 侧含已知项目维度缺陷（check_l2/l3/qa 读 K2 产物）——正是本批修复对象",
+  "post": "P6_execution/ACCEPTANCE_GATE_v1.json（批 2 后，--expect-patched PASS，sha16 687e5150536b0820）",
+  "pre": "P6_execution/BASELINE_pm_gate_k1_k2_readonly_v1.json（批 2 前，2026-09-20 09:21，sha16 91ca2cc3601bb56f）"
+ }
+}
