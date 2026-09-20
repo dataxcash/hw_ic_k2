@@ -1,0 +1,99 @@
+{
+ "artifact": "k2_batch3_skip_retirement_registry",
+ "schema": 2,
+ "supersedes": "BATCH3_SKIP_RETIREMENT_REGISTRY_DRAFT_v1.json（其为草案；本件按**最新实测口径**复核后定稿，供监理签认）",
+ "authority": "处置归监理（S1–S4 / F1–F2）；本件为 ENG 的**登记与建议**，非既成事实",
+ "measured_basis": {
+  "junit": "/tmp/opencode/natfix_real_post.xml（锚修已落件的实测口径：562 tests · 512P/30F/**20S**）",
+  "junit_sha16": "1405ffdfbb6fb6de",
+  "staleness_guard": {
+   "test_source_sha16": "93af4803258cb578（= 测量时；未变）",
+   "external_fixtures": "k2_v5/k2_v6/topo_propose_k2/m9demo 四件**仍不在库** ⇒ 20 项 SKIP 集合仍现势"
+  }
+ },
+ "classes": [
+  {
+   "id": "A",
+   "count": 17,
+   "label": "m9demo 族基线缺件（3 模块；与既有『17 项』**逐项对上**）",
+   "reason": "基线 = /tmp/opencode/boards/k2_m9demo.*（生成物、库内无生成器）+ 6L 旧 SPEC + 已 RETIRED 的遗留 alloc ⇒ **不可复跑**（N-05 族）",
+   "recommended": "**S1 具名接受（登记退役）**：不计覆盖、不充绿；**同时登记覆盖真空**（见下）",
+   "alternatives": {
+    "S2": "补 fixture 生成步骤（涉及生成器/SPEC/冻结件 ⇒ 须批，且旧代际锚身份另需裁定）",
+    "S3": "随代际退役删 API（`solve_pair_segment`/`solve_chain_v2`；须先证消费者面；ENG 探针工具现用到）",
+    "S4": "重锚到现役 8L 基线（= 期望重基线类；v2/v3 旧几何期望在 8L 下多半不成立）"
+   },
+   "cost": "S1 = **文档级（零代码）**",
+   "tests": [
+    "tests.test_drc_locator.TestBaselineIntegration::test_baseline_full_coverage",
+    "tests.test_drc_locator.TestBaselineIntegration::test_baseline_rule_type_distribution",
+    "tests.test_hs_route_model.TestBaselineUP4::test_up4_input_segment_solved",
+    "tests.test_hs_route_model.TestV2CorridorDeterministic::test_up4_chain_solved",
+    "tests.test_hs_route_model.TestV2CorridorDeterministic::test_dn0_chain_solved",
+    "tests.test_hs_route_model.TestV2CorridorDeterministic::test_corridor_deterministic",
+    "tests.test_hs_route_model.TestV2PairSymmetry::test_pair_expand_equal_length",
+    "tests.test_hs_route_model.TestV2PairSymmetry::test_pair_pitch",
+    "tests.test_hs_route_model.TestV2RefclkIn6::test_refclk0_in6_layer",
+    "tests.test_hs_route_model.TestV2RefclkIn6::test_refclk1_in6_layer",
+    "tests.test_hs_route_model.TestV3EscapeIn2::test_up4_escape_uses_in2",
+    "tests.test_hs_route_model.TestV3EscapeIn2::test_escape_deterministic",
+    "tests.test_hs_route_model.TestV3EscapeIn2::test_zero_vgraph_18_pairs",
+    "tests.test_hs_route_model.TestV3EscapeIn2::test_escape_fallback_single_vgraph",
+    "tests.test_ls_migration.TestMigrationRegression::test_point_ok_equiv_500",
+    "tests.test_ls_migration.TestMigrationRegression::test_seg_ok_equiv_400",
+    "tests.test_ls_migration.TestMigrationRegression::test_inflation_math_equivalence"
+   ]
+  },
+  {
+   "id": "B",
+   "count": 2,
+   "label": "v5/v6 后期代际外部 fixture 不在库",
+   "reason": "`k2_v5`/`k2_v6` 板 + `topo_propose_k2/required_links_k2.json` 皆 /tmp 生成物；生成器**在库**（`k2/tools/k2_gen_v5.py` → `k2_route_segment_v1.py`，l7 血缘链同源）但 **v5/v6 身份未钉定、无生成清单**",
+   "recommended": "**F2 与 A 类合并具名退役**（其锚语境 = legacy 代际；恢复须重钉身份 = 重基线类工作）",
+   "alternatives": {
+    "F1": "补生成 + 钉 sha + 入库（新增 fixture 与生成清单；须批）",
+    "F3": "维持 skip（不建议）"
+   },
+   "detail": {
+    "test_routing_topology_gate::test_t5_real_k2_gate_runs_and_reports_j2_polarity": "**仅缺板 1 件**（SPEC/alloc/config 三锚皆在库）⇒ 距实跑 = 1 fixture"
+   },
+   "cost": "F2 = 文档级；F1 = 生成 + 钉定（中等）",
+   "tests": [
+    "tests.test_routing_topology_gate::test_t5_real_k2_gate_runs_and_reports_j2_polarity",
+    "tests.test_topology_gate::test_t5_k2_integration_from_files"
+   ]
+  },
+  {
+   "id": "C",
+   "count": 1,
+   "label": "**路径缺陷『永久掩盖』用例（不可退役）**",
+   "reason": "spec 路径缺 `k2_v4` 段 ⇒ **两种布局皆恒 skip**（连 k2 检出也 skip）",
+   "unmask_probe": "解锁实测 = **FAIL**（`DN 窗口缺边界 57.9825: {33.0,71.0}`）；改挂现役 alloc 则 `KeyError:'channels'`（schema 不合）⇒ 本质 = **旧代际期望**",
+   "recommended": "**归 S3/S4**（随代际退役 或 重锚+重基线）——**不得**登记退役了事",
+   "cost": "须监理先裁其归属",
+   "tests": [
+    "tests.test_cap_wall_upgrade::test_window_params_k2_data_driven"
+   ]
+  }
+ ],
+ "coverage_vacuum_registration": {
+  "apis": [
+   "solve_pair_segment",
+   "solve_chain_v2"
+  ],
+  "fact": "此二 API 在**全测试文件**中的唯一覆盖点即 A 类被跳过用例（其余出现 = 0）⇒ 在真空期间其回归防护 = 0",
+  "registration": "登记为**覆盖真空**（非『已被新套件取代』）；补用例须以 **8L 现役锚**（= 重基线类 ⇒ 监理裁）",
+  "counts_toward_coverage": false,
+  "counts_as_green": false
+ },
+ "excluded": {
+  "class_id": "C",
+  "why": "见 classes[id=C]：路径缺陷掩盖（解锁即 FAIL）⇒ 排除于 S1 退役范围之外；其条目已列于 classes[C].tests（不重复登记）"
+ },
+ "acceptance": {
+  "check": "python3 k2/tools/k2_skip_registry_check_v1.py --registry <本件> --junit <实测 junit>",
+  "criterion": "`unregistered_skips == 0`（**每一条 skip 都有具名条目**）",
+  "note": "本件为**登记完备性**核对；非新增判据维（owner ②）"
+ },
+ "readonly_repo": true
+}
