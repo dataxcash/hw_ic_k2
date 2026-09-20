@@ -1,0 +1,88 @@
+{
+ "artifact": "k2_batch6_nonhs_scope_census",
+ "schema": 1,
+ "purpose": "handoff §8③：确认 v4 落件（改 _shared/eda_core/hs_route_model.py）**不改变非 HS 网/对**的既有读数 —— 补 K2 零回归的旁证面。只读。",
+ "patch_scope": {
+  "file_only": "BATCH6_LANDING_CANDIDATE_v4.patch 仅一处 +++：_shared/eda_core/hs_route_model.py（10 hunk）",
+  "sha16": {
+   "pristine": "dcd1f65f4b549527",
+   "patched": "c9e1c3b4ca208482",
+   "expected_target": "c9e1c3b4ca208482",
+   "patch": "3ded8584bb74461f"
+  },
+  "reproduced": "patch -p1 on /tmp 镜像 ⇒ sha16 逐字节同（本会话复现）",
+  "hunk_to_function": [
+   {
+    "hunk": "-28",
+    "at": "模块级 import（+_point_seg_dist）"
+   },
+   {
+    "hunk": "-124 / -283",
+    "at": "_point_edge_dist / _obstacle_vertices（几何工具）"
+   },
+   {
+    "hunk": "-3895 / -3926",
+    "at": "_k1_escape（K1-only：既经 single_net_mode 门）"
+   },
+   {
+    "hunk": "-3957 / -3968",
+    "at": "_tpl_a_line（换层模板 A）"
+   },
+   {
+    "hunk": "-4151",
+    "at": "_k1_escape_verify（K1-only；含 R-10 退化候选守卫）"
+   },
+   {
+    "hunk": "-4313",
+    "at": "solve_chain_v4（**HS 链段**逐段 FIX-B 门）—— 显式 `self.v4_project_dim()==\"k1\"` 域限定"
+   },
+   {
+    "hunk": "-4480",
+    "at": "逐 base 累积（FIX-A）—— 显式 `self.v4_project_dim()==\"k1\"` 域限定"
+   }
+  ]
+ },
+ "model_scope_config": {
+  "source": "k2/pm_gate/artifacts/k2_v4/L2/route_model_config.json ⇒ hs_route_model",
+  "hs_prefixes": [
+   "PCIE",
+   "REFCLK"
+  ],
+  "pdn_yield_prefixes": [
+   "GND",
+   "P3V3",
+   "MCU_",
+   "VREG",
+   "PWR_5V"
+  ],
+  "chain_segments_scope": "K1 四 base × 2 端 = 8 段（solve_chain_v4 输入）",
+  "reading": "模型入口仅覆盖 **HS 前缀网（PCIE/REFCLK）**；低速/功能网不经 solve_chain_v4。"
+ },
+ "net_census": {
+  "k1一板/网表": "k1/boards/k1_sch.yaml（K1 真值 2/8 口径）",
+  "k2声明网": "k2/hw/data/k2_sch.yaml ⇒ 共 101 网：HS(PCIE/REFCLK)=68 · 非 HS=33",
+  "nonhs_examples": [
+   "GND",
+   "P3V3",
+   "MCU_VDD",
+   "12V_IN",
+   "I2C1_SCL/SDA",
+   "UART_RX/TX",
+   "SWDIO/SWCLK_BOOT0",
+   "NRST",
+   "GPIO_LED",
+   "DS320_STRAP_*",
+   "PERSTA#/PERSTB#"
+  ],
+  "reading": "33 个非 HS 网**均不匹配** hs_prefixes ⇒ 不在任何被 v4 改动的代码路径内。"
+ },
+ "empirical_no_change": {
+  "k2_gate": "canonical 19 本会话实测 = 19 OK/0 FAIL · verdict 190b73be0f728a56（= 在岗签认值 ⇒ K2 交付面读数未动；该面已动态证明与求解器解耦）",
+  "k1_/k2_pytest": "验收门 D 维 test_hs_route_model.py = 2F/61P/12S，K1 域限定版与 pristine 逐项同（在岗件 BATCH6_K2_REGRESSION_PRECHECK_v1.json）",
+  "hunk_guard": "两处『共享路径』改动（FIX-A/FIX-B）均以 v4_project_dim()==\"k1\" 显式限定 ⇒ K2 域为 no-op"
+ },
+ "conclusion": "v4 落件对**非 HS 网/对**：①静态面 = 不在被改函数/入口内（hs_prefixes 不含任何非 HS 网）；②动态面 = K2 门读数与 K2 pytest 逐项同。**旁证成立**：非 HS 网既有读数不会因 v4 落件改变。",
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-21T23:59:00+0800"
+}

@@ -1,0 +1,45 @@
+{
+ "artifact": "k2_c1_dim_checker_controls_rerun",
+ "schema": 1,
+ "purpose": "handoff §8②：以**已落件**的 checker（_shared/eda_core/truth_binding.py · 02459f5）在**真实数据**上复跑正/负控，为 §3⑤（C-1 2 维落件）做落件前预验证。不写 criteria/。",
+ "caller": "python3 -m eda_core.truth_binding check-dimensions --manifest <m> --artifact <board> --artifact <L6/jlc_package> --base-dir <容器根>",
+ "artifact_set": [
+  "k2/hw/k2_v4_8L.l7.kicad_pcb",
+  "k2/pm_gate/artifacts/k2_v4/L6/jlc_package/（目录树 ⇒ 包内件一律判自证）"
+ ],
+ "controls": {
+  "positive_17proposed": {
+   "declared": "17/19",
+   "ok": false,
+   "violations": [
+    "density_and_clearance 未声明",
+    "lib_electrical_level 未声明"
+   ],
+   "reading": "17 条拟声明**全部通过**（0 违规）；仅剩 2 维无外部真源（= C-1 真残面）。checker 的 PASS 需 19/19 ⇒ 现存 2 维未落件时恒 FAIL（正确 fail-closed）。"
+  },
+  "negative_inpackage_selfsource": {
+   "ok": false,
+   "violation": "density_and_clearance 真源与**被验对象**重合（交付包内 06_rulings/jlc_dfm_hdi_l7.json ∈ 交付包目录）⇒ 自证循环被拦（C-1）",
+   "verdict": "BLOCKED ✓"
+  },
+  "negative_current_rev3_manifest": {
+   "declared": "0/19",
+   "n_violations": 19,
+   "verdict": "BLOCKED ✓（= before 读数，非缺陷）"
+  },
+  "negative_source_is_artifact_itself": {
+   "ok": false,
+   "violation": "zone_filled 真源 = 受审板本体 ⇒ 自证循环被拦",
+   "verdict": "BLOCKED ✓"
+  },
+  "negative_source_missing": {
+   "ok": false,
+   "violation": "zone_filled 真源文件不存在 ⇒ fail-closed",
+   "verdict": "BLOCKED ✓"
+  }
+ },
+ "conclusion": "checker 齿在岗且四类负控**全部拦住**；正控在 17 条拟声明上 0 违规 ⇒ C-1 残面**确为『2 维缺外部真源件』而非 checker 缺齿**（与在岗提案件 C1_DIM_SOURCE_OF_TRUTH_PROPOSAL_v1.json 逐项一致，独立复跑复现）。落件动作（gate 属主 4 步）不变。",
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-21T23:59:00+0800"
+}

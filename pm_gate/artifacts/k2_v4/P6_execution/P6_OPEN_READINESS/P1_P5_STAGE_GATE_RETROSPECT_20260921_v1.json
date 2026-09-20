@@ -1,0 +1,117 @@
+{
+ "artifact": "k2_p1_p5_stage_gate_retrospect",
+ "schema": 1,
+ "purpose": "handoff §8①（无新裁定路）：按《K2 整体整改计划》§② 逐阶段核对『阶段门判据是否仍成立』，只读实测，暴露越阶段风险。",
+ "authority": {
+  "latest_ruling": "#K2-43（2026-09-20 16:55）· 无更晚裁定（.ruling-ids k2-44..47 = 空登记，非放行）",
+  "handoff": ".omo/handoffs/k2-batch6-evidence-ready-v4-landing-20260921.md（e3543dc00c743085）"
+ },
+ "live_measurements": {
+  "frozen_sources_unchanged": {
+   "k2/hw/k2_v4_8L.l4.kicad_pcb": {
+    "now": "d4e81f647be7f980",
+    "expected": "d4e81f647be7f980",
+    "ok": true
+   },
+   "k2/hw/k2_v4_8L.kicad_pcb": {
+    "now": "fb07d25ac426ff84",
+    "expected": "fb07d25ac426ff84",
+    "ok": true
+   },
+   "k2/hw/data/k2_sch.yaml": {
+    "now": "dd794c54f7ce7417",
+    "expected": "dd794c54f7ce7417",
+    "ok": true
+   },
+   "k2/hw/k2_v4_8L.l7.kicad_pcb": {
+    "now": "c5a7df90aadb66e0",
+    "expected": "c5a7df90aadb66e0",
+    "ok": true
+   }
+  },
+  "criteria_anchor_rev3": {
+   "criteria/adjudicate.py": "1937a40ae68bc288",
+   "criteria/manifest.k2.yaml": "eb244d811ad7859b",
+   "criteria/CHANGELOG": "e2b49fdd3aec0283",
+   "criteria/manifest.k1.yaml": "c175be51c3338a53",
+   "expected": "1937a40ae68bc288 / eb244d811ad7859b / e2b49fdd3aec0283 / c175be51c3338a53",
+   "ok": true,
+   "ownership": "criteria/ = ic_hw_gate · 目录 0555 / 文件 0444（P1 权限判据在岗）"
+  },
+  "delivery_anchor_unchanged": {
+   "MANIFEST.json": "6ee7495de61f749f",
+   "tarball": "0e88e107e2da8192",
+   "expected": "6ee7495de61f749f / 0e88e107e2da8192",
+   "ok": true
+  },
+  "verify_k2": "preflight[project_sch_coverage] PASS · sch_structural PASS · netlist_connect PASS · bom_consistent PASS ⇒ 3 项全 PASS",
+  "canonical19_fresh_rerun": {
+   "cmd": "python3 criteria/adjudicate.py --project k2 --board k2/hw/k2_v4_8L.l7.kicad_pcb --pro k2/hw/k2_v4_8L.l7.kicad_pro --nets k2/hw/data/k2_sch.errata-2.yaml --sch-dir k2/hw/sch --root . --drc-cli AppDir/bin/kicad-cli --drc-work-dir <全新> + L4/E3-standard-call-l7-20260919 六件",
+   "result": "19 OK / 0 FAIL",
+   "verdict_sha16": "190b73be0f728a56",
+   "matches_countersigned": true,
+   "key_readings": {
+    "zone_filled": "10/10",
+    "drc_errors": 0,
+    "unconnected": 0,
+    "drill_count": "NPTH=4 / PTH=16",
+    "refdes_sets_equal": "sch 54 / board 54（差 0）",
+    "pads_within_outline": "0/0/0",
+    "keepout_active": "8 区 · 无 all-allowed"
+   }
+  }
+ },
+ "gates": [
+  {
+   "stage": "P0",
+   "criterion": "基线 sha 账本 + 冻结件未动",
+   "evidence": "本件 frozen_sources_unchanged",
+   "verdict": "HOLDS",
+   "note": "l4 与设计源/真源网表逐字节同"
+  },
+  {
+   "stage": "P1",
+   "criterion": "四项（负控/正控/权限/fail-closed）+ 判据 rev 在岗",
+   "evidence": "负控=冻结 l4 板 ⇒ adjudicate rc=1 FAIL（命中 zone_filled 0/9 · device_has_pads 5 颗 · drill_count NPTH=0/PTH=0 · net_declared_realized 10 条 0 焊盘 · pin_map_complete 50 节点 · 另 10 项）· 正控=伪造 verdict 件 ⇒ verdict_schema FAIL rc=1 · 权限=criteria 444/555 ic_hw_gate · fail-closed=缺测量件 ⇒ 4 维 fail-closed · verify k2 PASS",
+   "verdict": "HOLDS",
+   "note": "原判据① 第 6 类 ignore_without_ruling(9) 在 k2 侧**已消失**（模板整改已落件 ⇒ 缺陷不再存在）；语义由 rule_severity_manifest 维承接（l4 读数 0/62）。此为『缺陷被修好』而非判据放松；**不得**为之新增检查齿（owner ②）。"
+  },
+  {
+   "stage": "P2",
+   "criterion": "E1/E2/E3/E4 四等式 0 差异 + 每声明网 ≥2 焊盘",
+   "evidence": "#K2-15（P2 正式关门：E1 图侧归零 · E2/E3 板侧项延 P4 · Z1/Z3/Z4 达成）；现行 l7 上 canonical 19 实测 refdes_sets_equal 差 0 · net_declared_realized 0 · pin_map_complete 0",
+   "verdict": "HOLDS",
+   "note": "计划 §P2 原命令 criteria/measure_source_reconcile.py **不存在于 criteria/**（从未落件）；四等式现由 rev=3 三维承接 ⇒ 判据『换址』，非缺失；建议监理在册面注明（属口径澄清·监理自裁项）。"
+  },
+  {
+   "stage": "P3",
+   "criterion": "板框 120×46(y[33,79]) · NPTH≥4 Ø3.2 · pad==引脚 · 接口不出框 · keepout 生效 · 走廊口径统一",
+   "evidence": "L3/SPEC_k2_v4.json outline_x[23,143] / outline_y[33,79] ⇒ 120×46 ✓ · l7 NPTH=4×Ø3.2 ✓ · canonical 19 pads_within_outline 0/0/0 ✓ · keepout_active 8 区无 all-allowed ✓ · 走廊口径 = #K2-28 裁定",
+   "verdict": "HOLDS"
+  },
+  {
+   "stage": "P4",
+   "criterion": "判定器全 J 类 + V1/V2/V3 绿 · 铺铜 10/10 · 钻孔 · 平面 G36>0",
+   "evidence": "canonical 19 本会话实测 19 OK/0 FAIL（verdict 190b73be0f728a56）· 铺铜 10/10 · NPTH=4/PTH=16 · L6 包 07_verify/n01_g36_census：In1/In3/In6 各 1、In4 9（平面已画）· DFM 16 PASS/1 ACCEPT/0 FAIL · 包 53 件",
+   "verdict": "HOLDS"
+  },
+  {
+   "stage": "P5",
+   "criterion": "V4–V7 外部实测（阻抗券/PDN/上电/SWD/FRU/链路/稳定性）",
+   "evidence": "L6/first_article/results_template.json：V4–V7 全 NOT_RUN · measured_by=『<实测方（不得 ENG 自证）>』· judged_by=监理",
+   "verdict": "PENDING_EXTERNAL",
+   "note": "与 #K2-38/#K2-39 EXTERNAL-HOLD 一致；ENG 不自证，非本会话可推进项。"
+  },
+  {
+   "stage": "P6",
+   "criterion": "① adjudicate --project k1 命中四项同源项 ② 模板 ignore 集 == manifest 应然集",
+   "evidence": "**② LIVE PASS**：k2_p6_2_acceptance_v1.py（默认体检）⇒ k2 模板 ignore=0 · 文件差异 0/10 · 差异(应然集=[]) 0/10 ⇒ `结构差异==0 ? True ⇒ PASS(state)`；k1 模板 ignore=0（k1_v1.kicad_pro 9 ignore 属 K1 manifest 面，信息项）。 **① LIVE PASS**：本会话以**现行**判据（criteria/manifest.k1.yaml c175be51 · countersigned）重出 k1 verdict（n_pass=5/n_fail=13 · provisional=**False**）后跑 k2_p6_1_acceptance_v1.py ⇒ 四项命中全 OK（ignore_without_ruling 9/62 · no_pipeline 1 命中 k1/sch · no_fp_lib_table 缺 · sheets_empty []）+ dim_set 19（18 活跃 + 1 已签认显式关闭 ref_plane_continuity）+ **manifest_countersigned OK** ⇒ **P6-1 验收 PASS**（rc=0）",
+   "verdict": "CRITERIA_PASS_OPEN_SCOPE",
+   "note": "**新读数**：此前唯一阻塞（G-c2 manifest 签认）已于 #K2-42 落件，但未有人复跑 ⇒ 本次复跑 P6-1 由 FAIL 转 **PASS**。P6 仍未闭之面 = ①K1 同源缺陷覆盖（批 6 · 待监理放行 v4）②P6 交付外部面（外部首件）。"
+  }
+ ],
+ "stage_order_risk": "未发现越阶段：P1→P4 判据全在岗且 live 复现（canonical 19 值未动）；P5 未被跳过（保持 NOT_RUN/外部）；P6 判据面已 PASS 但 K1 覆盖面待放行 ⇒ 无『未过门先开工』迹象。唯一门口径漂移 = P2 的 measure_source_reconcile.py 未落件（已由 rev=3 三维承接）。",
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-21T23:59:00+0800"
+}
