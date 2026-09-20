@@ -274,23 +274,24 @@
     "_shared/pm_gate/check_l3.py:17-22（期望集旧名）"
    ],
    "owner": "ENG（期望值类归监理裁定）",
-   "action": "逐项定性：引擎真缺陷（ENG 修）vs 期望漂移（监理裁定后同步）；先决 = 走廊命名权威",
+   "action": "逐项定性已由实验收口：**命名同步不足**（翻译遗留 alloc + 5 处角色解析 ⇒ 仍 13→13 fail）⇒ 真因 = **几何/代际漂移**（PCIE_DN0_P pad x=84.85 落在现行两走廊空隙 82.35…105.25 ⇒ NO_CORRIDOR）；处置须监理三选：**重基线 / 具名退役 / 混合**",
    "commands": [
     "PYTHONPATH=AppDir/... AppDir/bin/python3.11 k2/tools/k2_p6_shadow_verify_v1.py",
     "同 B2-3a（K1/K2 判定）"
    ],
    "fail_closed_gates": [
-    "影子 pytest：13 → 0（不得靠 skip 充绿，C-12）",
-    "零回退（verify k2 4/4 + canonical 19/19）"
+    "影子 pytest：13 → 0（**禁以改期望缩口径**，C-12；重基线须给期望值来源与覆盖度论证）",
+    "零回退（verify k2 4/4 + canonical 19/19）",
+    "退役须在 results_template/清单中**具名**记录（不得静默 skip）"
    ],
    "negative_controls": [
     "篡改任一期望值以变绿 ⇒ 视为缩口径，禁止"
    ],
-   "authorization": "需监理裁定（期望值/命名权威）",
+   "authorization": "需监理裁定（重基线 / 具名退役 / 混合）",
    "status": "PENDING",
    "measured": {},
    "evidence": [],
-   "notes": "族别与证据见 docs/K2-P6-SHADOW-VERIFICATION-BATCH2-20260920.md §4/§8 与 HIDDEN_FAILURES_TRIAGE_v1.json"
+   "notes": "证据：docs/K2-P6-B2T-EXPERIMENT-NAMING-SYNC-INSUFFICIENT-20260920.md（§3 几何证据）；实验件 k2/tools/k2_p6_b2t_naming_sync_experiment_v1.py（/tmp 影子，真源零改动）"
   }
  },
  "p6_completion": {
