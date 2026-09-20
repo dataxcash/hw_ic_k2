@@ -1,0 +1,53 @@
+{
+ "artifact": "k2_n2_k1_landing_blocker_bom_required",
+ "schema": 1,
+ "authorization": "#K2-48 N-2 放行（K1 机制包 3 件）",
+ "status": "**停机（冲突即停机·第九条）** —— 3 件已备齐并实测，但**被仓库级 pre-commit meta-gate 拒绝**，未入库；`k1` 已回退至洁净 `dc720fd`。",
+ "blocker": {
+  "gate": "仓库级 pre-commit meta-gate（`_shared/eda_core/pipeline/required.py::check_all_projects_coverage`）",
+  "rule": "`REQUIRED_SCH_CHECKS = (\"sch_structural\", \"netlist_connect\", \"bom_consistent\")` —— **常量**（无项目覆写）；任何含 `.kicad_sch` 的项目**必须声明全部 3 项**，否则**拒绝提交**（‘漏声明必选 sch checks … 禁止放行’）。",
+  "actual": "`k1/pipeline.yaml`（提案样例）只声明 sch_structural + netlist_connect ⇒ meta-gate 报 `k1: 漏声明必选 sch checks ['bom_consistent']` ⇒ **commit 被拒**。",
+  "why_not_simply_declare": "`bom_consistent` 需要 `bom_csv`；`_shared/eda_core/pipeline/checks.py::check_bom_consistent` 对缺件**fail-closed**。而 **K1 仓无任何 BOM csv**（`find k1 -iname '*bom*'` 空；`k1/fab/` 不存在）⇒ 若**只声明不加件**，则 `verify` 必 FAIL ⇒ 等于把 fail-closed 从提交期挪到验证期，**不可取**。",
+  "scope_note": "提案件**已预警**此点：『样例未含 bom_consistent（K1 仓无 BOM csv，**须 K1 侧定**）』⇒ 属**已知未决**，非新缺口。"
+ },
+ "measured_before_block": {
+  "baseline": "K1 判定 19 维（ref_plane_continuity 为 enabled:false ⇒ 实评 18 维）：**4 PASS / 14 FAIL**",
+  "after_bundle": "**7 PASS / 11 FAIL**；翻转维 = `rule_severity_manifest` · `fp_lib_table_present` · `pipeline_present`（**恰为 3 目标维**）；**0 新失败**（其余 FAIL 逐项同：zone_filled/drill_count/net_declared_realized/pin_map_complete/refdes_sets_equal/drc_errors/unconnected_zero/lib_electrical_level/keepout_active/pads_within_outline/density_and_clearance）",
+  "delta_vs_proposal": "提案镜像记 5→8；本件真树实测 **4→7**（**常数 +1 偏移**；增量 +3 与目标维**完全一致**）。已诚实登记，未采信未复现值。",
+  "artifacts_ready": {
+   "patch": "K1_O1_EQUIVALENT_PROPOSAL_v1.patch（f056d18de0c3c53b）· 9 行 ignore→warning · `git -C k1 apply -p2` dry-run OK",
+   "fp_lib_table": "K1_fp-lib-table.sample（13ddfa5331d67e13）",
+   "pipeline": "K1_pipeline.yaml.sample（eaff19fedec99811）"
+  },
+  "reapply_cmds": [
+   "cd /home/fila/jqdDev_2025/ic_hw",
+   "git -C k1 apply -p2 \"$PWD/k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/K1_O1_EQUIVALENT_PROPOSAL_v1.patch\"",
+   "cp k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/K1_fp-lib-table.sample k1/fp-lib-table",
+   "cp k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/K1_pipeline.yaml.sample k1/pipeline.yaml",
+   "# + 依裁定补 bom_consistent 及其 bom_csv 后 git -C k1 add/commit/push"
+  ]
+ },
+ "options": [
+  {
+   "id": "(a)",
+   "title": "**补 K1 BOM csv 并声明 bom_consistent**（ENG 建议）",
+   "detail": "新建 `k1/fab/k1_v1_bom.csv`（**ref 集由 sch netlist 机械派生**，与 K2 的 `k2/fab/k2_v4_bom.csv` 同格式：首行 `Ref` + 逐 refdes），并在 `k1/pipeline.yaml` verify 增 `{type: bom_consistent, sch: sch/k1_sch.kicad_sch, bom_csv: fab/k1_v1_bom.csv}`。**机械可得、零发明**（检查只比 ref 集）。",
+   "caveat": "BOM 的 ref 集须随 **N-3**（37→42）**同批更新**，否则 N-3 落件后该维会 FAIL ⇒ 建议 **N-2 与 N-3 合并为同一批**（同批升版·C-6）或先落 BOM 再随 N-3 更新。"
+  },
+  {
+   "id": "(b)",
+   "title": "豁免/覆写必选清单",
+   "detail": "把 `bom_consistent` 从 `REQUIRED_SCH_CHECKS` 移出或引入项目级覆写 —— **属共享层规则变更**（改 `_shared`）⇒ 须监理批 + 两树同步；**ENG 不擅动**。"
+  },
+  {
+   "id": "(c)",
+   "title": "维持现状（K1 无 sch 门禁）",
+   "detail": "撤回 N-2 ⇒ K1 继续无 pipeline.yaml（meta-gate 对无 pipeline 项目? —— **注意**：`load_config` 对缺 pipeline 的项目行为须核；若缺件即 FAIL，则 K1 现状本就被拦）。**不推荐**（N-2 的本意正是补上）。"
+  }
+ ],
+ "ask": "请监理择 (a)/(b)/(c)。**ENG 建议 (a)**，并把 **N-2 与 N-3 合为同批**（BOM ref 集随 37→42 一次成型）。**监理自裁面；owner 闸口=无。**",
+ "readonly_repo": true,
+ "not_landed": true,
+ "no_new_criteria_dim": true,
+ "ts": "2026-09-22T11:10:00+0800"
+}

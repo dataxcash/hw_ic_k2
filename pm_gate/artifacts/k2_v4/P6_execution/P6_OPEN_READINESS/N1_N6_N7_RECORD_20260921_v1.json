@@ -1,0 +1,45 @@
+{
+ "artifact": "k2_n1_n6_n7_record_per_k2_48",
+ "schema": 1,
+ "authorization": "#K2-48 执行序 4/4（N-1 / N-6 / N-7 = **册面/口径注明，ENG 只读落档**）",
+ "N_1_delivery_caliber": {
+  "ruling": "**(a) 接受 + 随单注明**（**不动交付锚**）",
+  "package_frozen": "MANIFEST `6ee7495de61f749f` · tarball `0e88e107e2da8192` —— **未重建包**（红线遵守）",
+  "items": [
+   {
+    "id": "B-1",
+    "what": "`-job.gbrjob` 的 `MaterialStackup`（铜 0.035 / 介质 0.1857 / FR4）≠ 包内 `03_stackup`（1oz/0.5oz · 0.1164/0.25/0.1922 · NP-155F）",
+    "root_cause": "板文件**无 `(stackup)` 段** ⇒ kicad-cli 写 KiCad 默认推导叠层",
+    "disposition": "**接受**；以包内 `03_stackup/JLC08161H_stackup.svg` + `05_layer_sequence.txt` 为准；下单页注明『叠层以 03_stackup 为准，job 内 MaterialStackup 为工具默认、非设计声明』"
+   },
+   {
+    "id": "B-2",
+    "what": "job `GeneralSpecs.Finish=\"None\"` vs 工艺要求 **ENIG**",
+    "disposition": "**商务下单页**勾选 ENIG（owner #14④：**非 ENG 任务**）；ORDER_NOTES 已明写 ENIG"
+   },
+   {
+    "id": "P5-1",
+    "what": "P5 的 V4（阻抗券）未在随单件中索取（ORDER_NOTES 仅『勾选阻抗控制』）",
+    "disposition": "**商务下单页备注索取阻抗券**（owner #14④：**非 ENG 任务**）；索取要求已载于 `RULES.md §V4`"
+   },
+   {
+    "id": "P5-2",
+    "what": "`DISCLOSURE.md §5b` 条目编号乱序（1·2·3·5·4）",
+    "disposition": "**接受**（信息级）；以 §5b-1 阻焊坝 / §5b-2 最紧段 **标题**为准（编号不承载语义）"
+   }
+  ],
+  "note": "包为**冻结** ⇒ 上述『注明』**不写入包内**（禁重建包）；本件即为其**唯一落档**。若将来开新 rev，可在包内一并订正。"
+ },
+ "N_6_p2_caliber": {
+  "ruling": "**接受**",
+  "note": "`criteria/measure_source_reconcile.py` 从未落件 ⇒ 册面注明『**判据换址、非缺失**』：该面由 **rev=3 三维**（`density_and_clearance` / `lib_electrical_level` / `ref_plane_continuity`）承接。"
+ },
+ "N_7_p6_criteria": {
+  "ruling": "**确认**：P6 判据①② **达成**",
+  "P6_1": "`k1` verdict `provisional=False` 且四项同源命中 ⇒ `k2_p6_1_acceptance_v1.py` **PASS**",
+  "P6_2": "`k2` 模板 ignore=0 · 结构差异 **0/10** ⇒ `k2_p6_2_acceptance_v1.py` **PASS(state)**",
+  "stage_gate": "**P5 外部门仍关**（V4–V7 `NOT_RUN`，ENG 不得自证）—— 未越阶段。"
+ },
+ "readonly_repo": true,
+ "ts": "2026-09-22T11:15:00+0800"
+}
