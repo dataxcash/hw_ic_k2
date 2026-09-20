@@ -427,3 +427,14 @@
 
 ---
 **（本块）裁定对应**：**#K2-60 R1（复核通过）+ R2（P6 仪器订正）+ R5（过程）**。**（附）维持登记**：`CR-17`/`CR-22`/`CR-3`/land pattern 族 · `COV-C3`（维持前裁 · 禁 push/rewrite B 宿主）· **R5 文献批**（待权威件 · 未做正确）。**（附）T2-F6 新通道登记**（免重复试探）：`archive.org` / `web.archive.org` = **000（连接超时）** ⇒ **闭**；`www.st.com` 复核仍 **567**（与 CR-15 一致）⇒ `CR-17` 维持**登记制不可达**·不充绿。**报备监理 1 条 · owner 项 0**。
+
+### 续编 · 工具/脚本面**代际残留**扫描（只读造活）—— 1 处真缺陷 + 3 处「非缺陷」澄清 + CR-70(b) 补强（CR-71）
+
+| # | 条目 | 内容（事实/裁定） | 依据 | 处置红线 |
+|---|---|---|---|---|
+| **CR-71** | **P5 生成器 **docstring 之 `产出（OUT）` 串错代**（`l8` 与 `l8r2` 两件同型）—— **登记 · 待授权**（与 CR-47 同批）** | **事实（本会话全工具面扫描）**：`tools/k2_p5_jlc_package_l8_v1.py:7` 与 `tools/k2_p5_jlc_package_l8r2_v1.py:7` 之 docstring 均写 `产出（OUT）：pm_gate/artifacts/k2_v4/L6/jlc_package/`，而**实际** `OUT` = `…/L6/jlc_package_l8`（`:31`）与 `…/L6/jlc_package_l8r2`（`:31`）⇒ **文档串与代码不一致**（= **CR-47 同类**，且系 CR-36「由 l7 版机械派生」时**只改代码未改 docstring** 之遗留）。**影响**：**无**（docstring 不入产物、不参与 MANIFEST）· 属**文档串**。**为何 #K2-59 未捕获**：该轮判据② 只 grep 三串（`criteria_rev3`/`spec_rev52`/`L6/DELIVERY/`），`L6/jlc_package/` 不在其列。**处置（本轮不做）**：修 docstring **不需重跑构建器**（非产物）⇒ 比 CR-47 更轻；仍属**改生成器** ⇒ **登记 · 待监理授权**（建议与 CR-47 批并：一次改 3 串 + 2 docstring）。 | 本会话全工具面扫描（`tools/*.py` × `pm_gate/*.py`）；CR-36/CR-47 | **未改**生成器/交付包/锚 · 未重跑构建器 · 登记制 · **不充绿 · 不阻塞** |
+| — | **（附 1）澄清：3 处「疑似残留」实为 P6 期按设计钉版之历史锚 ⇒ **非缺陷**（免重复上报）** | ① `tools/k2_p6_acceptance_gate_v1.py::ANCHORS` 之 `delivery_manifest`/`delivery_tarball` → **l7** 目录/件、`board_reviewed_l7` → l7 板；② `tools/k2_p6_readonly_baseline_v1.py::ANCHOR_FILES` 同上（新基线件之 `anchors` 块亦如实载 l7 交付对）；③ `tools/k2_p6_triage_hidden_failures_v1.py:28` 之 `spec_rev52`。**判定 = 非缺陷**：键名**已明示** `_l7` / `rev52` ⇒ 系 **P6 期（l7 世代）之冻结参照集**，其用途 = 可复现性/历史对账，**非**「现行交付指针」；与 CR-46/CR-47/CR-62 之「**误指旧代**」性质不同。⇒ **登记说明**，**禁**以「新发现」重复上报、**禁**为追逐现行锚而反复重钉（会致基线连锁换锚）。 | 本会话实测三件键名与语义；CR-46/CR-47 | 只读说明 · **未改**任何工具/件 |
+| — | **（附 2）CR-70(b) 之**补强证据**：该 2 失败为**具名例外**（非回退 · 非掩盖）** | 本会话实测：`tools/k2_p6_acceptance_gate_v1.py::NAMED_HIDDEN_EXCEPTIONS = ("test_board_level_consistency", "test_chain_no_pn_zero_spacing")`，其注为「**#K2-41 §三-④：唯二具名保持 RED 的能力缺口（D 腿期望值修正，非缩口径；重开条件 = D4 形态补齐）**」；同 P6 验收门多份落件（`BATCH3_B2_1_B2_2_SCOPE_DEFINITION` · `K2-BATCH3-LANDING-REPORT` · `K2-P6-BATCH2-LANDING-REPORT`）皆记 `D hidden=2 = 具名 C1/C2` 为 **PASS**。⇒ 新基线载 `failed=2` **与 P6 验收门之期望一致**；CR-70(b) 之「非新回退」判定由此**获独立佐证**（v27 待裁项之证据补强）。 | 本会话实测工具常量 + P6 落件；CR-70(b) · v27 | 只读引证 · 未改判据/工具 |
+
+---
+**（本块）裁定对应**：只读造活（工具/脚本面代际扫描）。**报备监理 1 条 · owner 项 0**。
