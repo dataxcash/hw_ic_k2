@@ -1,0 +1,175 @@
+{
+ "artifact": "k2_p6_b2t_remedy_options",
+ "context": "B2-T 13 项隐藏失败的处置草案；**命名同步不足已由实验证明**（见 B2T-EXPERIMENT 件）",
+ "measurements_current_truth": {
+  "capacity_regions": [
+   "J2_region",
+   "MCIO_region"
+  ],
+  "corridor_clear_span": {
+   "EAST_CHIP_TO_J2": [
+    105.25,
+    132.65
+   ],
+   "WEST_MCIO_TO_CHIP": [
+    65.05,
+    82.35
+   ]
+  },
+  "corridors": [
+   {
+    "id": "EAST_CHIP_TO_J2",
+    "x_range": [
+     105.25,
+     132.65
+    ]
+   },
+   {
+    "id": "WEST_MCIO_TO_CHIP",
+    "x_range": [
+     65.05,
+     82.35
+    ]
+   }
+  ],
+  "dn0": {
+   "corridor_for_x": null,
+   "pad_x": 84.85
+  },
+  "link_topology": {
+   "crossing": [
+    "UP4",
+    "UP5",
+    "UP6",
+    "UP7"
+   ],
+   "n_links": 18,
+   "verdict": "CROSSING_FOUND"
+  },
+  "solve_all_v4": {
+   "n_bases": 18,
+   "n_solved": 0
+  }
+ },
+ "note": "甲=重基线（新期望 + 期望值来源）；乙=具名退役（禁静默 skip）。**裁量权归监理**；ENG 不擅自改期望（C-12）。",
+ "option_coverage": {
+  "measured_items": 13,
+  "shadow_failures": 13
+ },
+ "options": {
+  "test_board_level_consistency": {
+   "jia": {
+    "new_expect": "以**现行真源可解子集**为对象（当前 8L 板：18 链 0 解）",
+    "source": "实测 solve_all_v4: n_solved=0/18（bases 取自翻译后 alloc 的 PCIE_*）"
+   },
+   "yi": "整板一致性为**重要**性质；建议保留并改为「以现行真源生成输入」而非退役"
+  },
+  "test_capacity_map_persist": {
+   "jia": {
+    "new_expect": "len(regions) == 实测值（当前 2）；corridors 数亦按实测",
+    "source": "同 ③"
+   },
+   "yi": "同 ③（4 区域/6 走廊为旧代际）"
+  },
+  "test_capacity_regions_derived": {
+   "jia": {
+    "new_expect": "regions == {'J2_region','MCIO_region'}（或经 ENG 论证后补 pin_region 推导）",
+    "source": "`m._capacity_regions()` 实测 = ['J2_region','MCIO_region']（当前数据驱动推导）"
+   },
+   "yi": "期望的 U7/U3 pin_region 源自旧代际器件名/分段命名"
+  },
+  "test_chain_no_pn_zero_spacing": {
+   "jia": {
+    "new_expect": "REFCLK0 链 status 允许 INFEASIBLE（并记录原因）",
+    "source": "实测 solve_chain_v4('REFCLK0') = INFEASIBLE"
+   },
+   "yi": "旧代际可解性假设"
+  },
+  "test_correct_polarity_solves_clean": {
+   "jia": {
+    "new_expect": "DN4 段 SOLVED 前提在当前几何不成立",
+    "source": "实测同族链 INFEASIBLE/None"
+   },
+   "yi": "旧代际正极性可解假设"
+  },
+  "test_corridor_clear_span": {
+   "jia": {
+    "new_expect": "span == x_range（无器件缩进）",
+    "source": "实测 span == x_range（105.25,132.65 / 65.05,82.35）"
+   },
+   "yi": "期望的 U7/U3 器件缩进属旧代际布局"
+  },
+  "test_drawing_only_refuses_no_node": {
+   "jia": {
+    "new_expect": "同上（返回 None ⇒ 无节点语义变化）",
+    "source": "同上"
+   },
+   "yi": "同上（drawing_only 红线用例需按现行逃逸域重写）"
+  },
+  "test_escape_deterministic_byte_identical": {
+   "jia": {
+    "new_expect": "确定性断言改在**现行可解输入**上重写",
+    "source": "当前入参不可解 ⇒ 无输出可比较"
+   },
+   "yi": "同上；确定性属**性质**，建议以新输入保留该性质（优先重写而非退役）"
+  },
+  "test_flip_polarity_cross_rejected": {
+   "jia": {
+    "new_expect": "无（`_escape_pair` 在当前几何参数下返回 None）",
+    "source": "实测 TypeError: NoneType not subscriptable（入参依赖旧代际走廊/轨道）"
+   },
+   "yi": "该用例证据锚点 = 旧事故点 (64.317,49.077)，属旧代际场景"
+  },
+  "test_link_topology_crossing_old_topology": {
+   "jia": {
+    "new_expect": "crossing_links == ['UP4','UP5','UP6','UP7']（4 对）",
+    "source": "实测 link_topology_map: verdict=CROSSING_FOUND, crossing=['UP4','UP5','UP6','UP7'], links=18"
+   },
+   "yi": "期望的 8 对（UP4-7+DN0-3）属旧代际拓扑判定"
+  },
+  "test_probe_escape_capacity_dn0": {
+   "jia": {
+    "new_expect": "status ∈ ('SOLVED','BLOCKED','NO_CORRIDOR')",
+    "source": "走廊覆盖几何：DN0 pad x=84.85 ∉ 走廊 [65.05,82.35]∪[105.25,132.65] ⇒ NO_CORRIDOR 是**合法**结论"
+   },
+   "yi": "旧代际探针期望（pad 必落某走廊）；现几何下不适用"
+  },
+  "test_probe_region_capacity_structure": {
+   "jia": {
+    "new_expect": "status ∈ ('CAPACITY_OK','INSUFFICIENT')",
+    "source": "独立测量：同形 region 实测 INSUFFICIENT（测试内构造仍 INFRA_ERROR ⇒ 需 ENG 定性差异）"
+   },
+   "yi": "旧代际 region 契约（含 U7 段）"
+  },
+  "test_probe_reports_via_gap_fact": {
+   "jia": {
+    "new_expect": "仅在 status≠NO_CORRIDOR 时校验 ends/边距事实；否则断言 ends 缺省契约",
+    "source": "同上（该用例与 ① 同源）"
+   },
+   "yi": "同上；其物理事实（pn_via_edge=0.05）属旧几何"
+  }
+ },
+ "readonly": true,
+ "schema": 1,
+ "shadow": "/tmp/opencode/shadow_b3",
+ "shadow_failure_counts": {
+  "failed": 13,
+  "passed": 43,
+  "skipped": 12
+ },
+ "shadow_failures": [
+  "test_board_level_consistency",
+  "test_capacity_map_persist",
+  "test_capacity_regions_derived",
+  "test_chain_no_pn_zero_spacing",
+  "test_correct_polarity_solves_clean",
+  "test_corridor_clear_span",
+  "test_drawing_only_refuses_no_node",
+  "test_escape_deterministic_byte_identical",
+  "test_flip_polarity_cross_rejected",
+  "test_link_topology_crossing_old_topology",
+  "test_probe_escape_capacity_dn0",
+  "test_probe_region_capacity_structure",
+  "test_probe_reports_via_gap_fact"
+ ]
+}
