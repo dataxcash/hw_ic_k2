@@ -239,3 +239,21 @@
 **（本块）裁定对应**：CR-38 ← 当前阶段外发面 rev 对齐。**报备监理 1 条（外发包 l8 就绪待复核）· owner 项 0**。
 
 > **【CR-38 补充 · 2026-09-21】**：**l8 交付包结构与完整性实测复核（判据⑥ 收口）** —— ① `sha256sum -c DELIVERY_l8/SHA256SUMS.txt`（自 `L6/` 运行）= **55/55 OK · rc=0**（l7 对照亦 55/55 OK ⇒ **冻结锚未受扰**）；② **结构奇偶校验**（文件名 `.l7`/`.l8` 归一后）：l7 包 54 件 ↔ l8 包 54 件，**各子目录计数逐项同**（`01_gerber_rs274x 14` · `02_drill_excellon 15` · `03_stackup 2` · `04_impedance 2` · `06_rulings 8` · `07_verify 9` · 顶层 4），**唯一差异 = DFM 卡文件名 `jlc_dfm_hdi_l7.*`→`jlc_dfm_hdi_l8.*`（预期）** ⇒ 派生构建器**无漏件/多件**；③ **阻抗 as-built 对照**：l8 之耦合主 run 采样与 l7 **逐项同**（`F.Cu|0.205` 113 段 · `In2.Cu|0.16` 26 · `In5.Cu|0.16` 325）⇒ 本次修复（`U4`/`D1` 局部网）**未触及高速耦合几何**，V4 就绪度不变。
+
+### 续编 · 只读取证件**标签失真**订正（CR-39）
+
+| # | 条目 | 内容（事实/裁定） | 依据 | 处置红线 |
+|---|---|---|---|---|
+| **CR-39** | **`REV_L8_GENERATION_EVIDENCE` 之 `output.sha16` 标签失真（误填 **pro** 哈希）—— 已拆为 `board_sha16` / `pro_sha16`** | **缘起**（本会话**锚周期复核**）：该件 `output` 块仅一键 `"sha16": "c009058005829f09"`，而 **`c009058005829f09` = `k2_v4_8L.l8.kicad_pro` 之 sha16**；同块 `board` 字段所指 `k2/hw/k2_v4_8L.l8.kicad_pcb` 之 sha16 真值 = **`7a5c89913d6e5d0a`** ⇒ **标签指向错误对象**（数值皆为真值，唯标签错位）。**同类扫描（限定范围）**：全 `artifacts/k2_v4` 提及 `c0090580` 者共 **5** 件（`L6/jlc_package_l8/MANIFEST.json` · `…/DISCLOSURE.md` · `…/07_verify/anchor_selfcheck.json` · `L4/E3-standard-call-l8-20260921/MANIFEST.md` · 本件）—— **唯本件误置**，其余 4 件均正确标注为 **pro** ⇒ **孤立缺陷 · 非系统性**（不充绿）。**处置**：拆为显式 `board_sha16 7a5c89913d6e5d0a` + `pro_sha16 c009058005829f09` + 自述键 `label_fix_CR39`；**未改任何读数/结论**（仅修标签）。**新锚** `122e0021dc7745e3`（原 `8f990c357a08abe3`）。 | 本会话锚周期复核实测 · `k2_v4_8L.l8.kicad_pro` 实测 sha16 | **只改本件标签** · 未改板/判据/交付包/冻结四源 · 登记制（**不充绿 · 不重复上报**） |
+
+---
+**（本块）裁定对应**：CR-39 ← 只读取证件标签失真订正（ENG 只读造活）。**报备监理 1 条 · owner 项 0**。
+
+### 续编 · 交付里程碑 TAG（TAG_POLICY §1 · 进程合规）
+
+| # | 条目 | 内容（事实/裁定） | 依据 | 处置红线 |
+|---|---|---|---|---|
+| **CR-40** | **`l8` 交付里程碑已打 annotated tag `k2-v57-l8-l6-delivery-anchored`** | **事件**：`#K2-57` R3 开新 rev `l8` ⇒ 判据 ⑥ 交付包重出（`L6/jlc_package_l8/MANIFEST.json` **`4b610baed4f4752c`** · tarball **`36a6b276b4f7e465`**）⇒ 属 `TAG_POLICY` §1「发布候选 / 交付」**必打**事件（承接 `CR-14` 断档口径后**首次按事件打标**）。**tag message（§3 必含项）**：`gate` 判定（P0–P4 **HOLDS** · P4 对 `l8` **19/0** · P5 `PENDING_EXTERNAL` · P6 **CLOSED** · **未越阶段** · **`STOP-1` 维持**：监理复核前不下首件单）· 受审板 **`7a5c89913d6e5d0a`** · 配套 pro `c009058005829f09` · SPEC rev-53 **`4e92b3a05cd5a223`** · 交付锚 **`4b610baed4f4752c`** · 判据 **rev=6** · 复现命令。**核验（§4/§5）**：`push origin main` + `push origin --tags` ⇒ `rev-list --left-right --count origin/main...HEAD` = **`0 0`**；`ls-remote --tags` **`^{}` 解引用**指向目标 commit；tag 后 HEAD 距 tag < `TAG_STALE_COMMITS(20)` ⇒ 哨兵 tag 断档告警**复位**。**登记**：`.omo/start-work/ledger.jsonl` 同轮记 tag 名 + 目标 commit + gate（§6）。 | `k2/pm_gate/TAG_POLICY.md` §1/§2/§3/§4/§5/§6 · 监理 **#K2-56**（自裁 · 进程合规 · **不推回 owner**） | **禁**为历史 commit 批量补打（**禁伪造里程碑**）· 禁 amend/rebase **已发布** 段 · 未改冻结四源 / `criteria` / 交付包 |
+
+---
+**（本块）裁定对应**：CR-40 ← TAG_POLICY §1 交付事件打标（process compliance · ENG 执行）。**报备监理 1 条 · owner 项 0**。

@@ -1,0 +1,82 @@
+{
+ "artifact": "k2_pending_rulings_delta",
+ "schema": 24,
+ "ts": "2026-09-21T00:32:55+0800",
+ "supersedes": "PENDING_RULINGS_DELTA_20260921_v23.json（7224 B · 已由 #K2-57 **全额消费**）—— v23 之后**无新待裁件**；本件补上 **l8 复核** 之结构化信号。",
+ "purpose": "向监理上交**当前唯一 ENG 侧阻塞**与一项另立批决策：①【主项 · 关键路径】**复核 rev `l8`**（= #K2-57 R1–R5 修复载体）⇒ 判 **PASS 即解除 `STOP-1`（可下首件单）**；②【另立批】判据 ⑧ `COV-C3` 跨项目 `_shared` 同步批 ⇒ 请监理**定范围 + 钉版**（#K2-54 已定属另立批，ENG 不擅改）。",
+ "why_signal_now": "哨兵判「监理阻塞」为**结构化信号**（`watch.py:203` `pending_rulings_blocked()` = 最新待裁件 mtime > 最新裁定 mtime + 300s）。现行最新裁定 = **#K2-57**（早于 l8 完工）⇒ **若本件不落，l8 复核请求对哨兵不可见**，监理永不被拉起复核（= 2026-09-20『待裁信号真空』事故同型；当时 CR-26 因此长期无裁定，v23 补齐信号后立获 #K2-57）。**本件即补齐该信号。**",
+ "owner_gate": "**0** —— l8 复核属**监理复核/批面**（宪法第十一条 · 自裁优先）；`COV-C3` 范围/钉版亦属监理定。**本件不含 L1 成分**（不涉拓扑/接口/信号流向/球重映射），ENG **不**升级 owner。",
+ "stage_state": "P5 = 唯一未闭门（**PENDING_EXTERNAL** · V4–V7 全 `NOT_RUN`）；P0–P4 **HOLDS**（P4 已对 l8 重锚 **19/0**）；P6 CLOSED；**无越阶段**。判据 **rev=6 MATCH**（ENG 只读）。l8 交付锚 `MANIFEST.json 4b610baed4f4752c` / tarball `36a6b276b4f7e465`；旧锚 l7 `6ee7495de61f749f` / `0e88e107e2da8192` **逐字节未动**。**`STOP-1` 维持**（复核前不下首件单）。",
+ "anchors_recomputed_this_session": [
+  "冻结四源（**本会话重算 · 全同**）：l4 `d4e81f647be7f980`（`k2/hw/k2_v4_8L.l4.kicad_pcb`）· 设计源/PCB `fb07d25ac426ff84`（`k2/hw/k2_v4_8L.kicad_pcb`）· 网表 `dd794c54f7ce7417`（`k2/hw/data/k2_sch.yaml`）· `drc_rules.json 0a459839e15960b8`",
+  "TAG_POLICY §5 另两源：`L3/SPEC_k2_v4.json 0bd52ed48e720b8c` · `L3/mcio_feas_step2/m13_v57_s1_page_manifest.json a8ef3ea8ecff99d7`",
+  "现行 rev `l8`：板 **`7a5c89913d6e5d0a`** · pro **`c009058005829f09`** · `L3/SPEC_k2_v4.spec-rev-53.json` **`4e92b3a05cd5a223`**（= `pm_gate/project.yaml::spec_name` 指针）· 网表 `k2/hw/data/k2_sch.errata-3.yaml` **`5dc7b82a901d11c8`**（`k2_sch.yaml` 逐字节未改）",
+  "canonical19(l8)：`L4/E3-standard-call-l8-20260921/verdict_19dim_rev6_board_l8_7a5c8991.json` **`562b482fac5ee941`** = **PASS · n_pass 19 · n_fail 0 · provisional False**",
+  "交付包：`L6/jlc_package_l8/MANIFEST.json` **`4b610baed4f4752c`**（`revision P5-L8.1` · `criteria_anchor rev=6` · `dfm_summary 16/1/0` · `drill_total 754`）· tarball `L6/DELIVERY_l8/k2_v4_8L.l8_gerber_package.tar.gz` **`36a6b276b4f7e465`**；**本会话实测** `sha256sum -c DELIVERY_l8/SHA256SUMS.txt` = **55/55 OK · rc=0**（自 `L6/`）",
+  "旧锚（l7 · **只读未动**）：`L6/jlc_package/MANIFEST.json 6ee7495de61f749f` · `L6/DELIVERY/k2_v4_8L.l7_gerber_package.tar.gz 0e88e107e2da8192`",
+  "判据 rev=6（COUNTERSIGNED · ENG 只读）：`CHANGELOG eb3da49f2ad97e37` · `adjudicate.py 1937a40ae68bc288` · `jlc_hdi_capability.yaml 00faba340bb7eb5b` · `manifest.k1.yaml c175be51c3338a53` · `manifest.k2.yaml 727d09953cf9bd78`（`sup.py status` = **MATCH**）",
+  "生成链（与 l7 **同版**）：`k2_gen_v5.py bc5dbda29cb06da0` → `k2_route_segment_v1.py f28a4b5a08ed38c0`"
+ ],
+ "pending_supervision": [
+  {
+   "id": "**【主项 · 关键路径】复核 rev `l8` ⇒ 解除 `STOP-1`（可下首件单）**",
+   "ask": "独立复核后裁：**l8 判 PASS ⇒ 解除 `STOP-1`（ENG 方可下首件单）**；或判 FAIL ⇒ **列明不合格项**（ENG 按项再开 rev）。",
+   "why_blocking": "`STOP-1`（#K2-57 R7 · 本会话维持）= l8 经监理复核前**不下首件单**；而 P5 **外部首件回件未到** ⇒ **此为 ENG 侧唯一阻塞**。**l7 已证不可作合格首件**（CR-26：`U4` 电源 ORing 物理反接 ⇒ 按 CR-11 主判工况独立运行 `MCU_VDD` 无电 ⇒ `V6-1`/`V6-2` 必 FAIL、板不上电）。",
+   "what_l8_is": "#K2-57 R1–R5 之修复载体：**R1** `_shared` 真源订正（`BAT54C.yaml` → `1:A1 · 2:A2 · 3:K`，四树同 · `ed70671ac3b03746`）· **R2** 符号层（`IOCONVERT.kicad_sym#BAT54C_ORING` K→3/A2→2）· **R3** 新 rev `l8` 全链（板 + SPEC rev-53 + 网表 errata-3 + P4 重锚 + 交付包）· **R4** `D1` LED 极性并入（A→2/K→1）· **R5** 引证 5 项（**仅** `source` 字段，引脚不动）。",
+   "delta_vs_l7": "**恰好 4 条 pad→net**：`U4/2 MCU_VDD→P3V3` · `U4/3 P3V3→MCU_VDD` · `D1/1 LED_A→GND` · `D1/2 GND→LED_A`（**672 pad / 58 footprint 不变**；`segment 5037→5180` · `via 729→734` 为相关网局部重布所致）。**订正后实体语义**：`U4` 共阴(pad3=K)→`MCU_VDD`、阳极2(pad2=A2)→`P3V3` ⇒ **`P3V3`→`MCU_VDD` 正向导通** ✅；`D1` 阳极(pad2)→`LED_A`、阴极(pad1)→`GND` ⇒ **正向** ✅。",
+   "determinism_proof": "**保真对照**（决定性）：同链于**未订正** nets（errata-2）跑 ⇒ 出件 sha16 = **`c5a7df90aadb66e0`** = **在岗受审板 l7 逐字节同** ⇒ l8 之差异**可完全归因于输入变更**，非工具漂移。依据：`P6_execution/P6_OPEN_READINESS/REV_L8_GENERATION_EVIDENCE_20260921_v1.json`（`fidelity_control`）。",
+   "review_scope_7": [
+    "① 锚：板/SPEC/网表/判据 rev=6 五件（见 `anchors_recomputed_this_session`）",
+    "② canonical 19：`L4/E3-standard-call-l8-20260921/`（8 件 · 12 处 `board_sha16` 自检 **BAD 0**）⇒ **19 OK / 0 FAIL**",
+    "③ 交付包（判据 ⑥）：`L6/jlc_package_l8/`（8 叠层 Gerber/钻孔/叠层图/阻抗表/裁定副本/披露/MANIFEST）· **55/55 OK** · **DFM 16 PASS / 1 ACCEPT / 0 FAIL** · `drill 754`",
+    "④ CR-37：脚位真源缺陷类在 **Gerber 驱动层**收口（官方 **PIN-01** 三路核：网表层 ≡ 符号层 ≡ 真源表；194 全为 `CR-3` 既有登记；**新发现 0**）",
+    "⑤ CR-38：P5 **外发包 rev 对齐** `l8`（`L6/first_article_l8/` 4 件 + `docs/K2-P5-FIRST-ARTICLE-TRANSMITTAL-l8-v1.md`）；V5 具名测点正向对照 `J3 A9 → P3V3_AUX` · `J4 A9 → P3V3_AUX` **真实存在**；**阈值零变更**",
+    "⑥ 披露订正：l8 包 `DISCLOSURE.md`/`ORDER_NOTES.md` 之具名 DRC 数字 **167→170**（`track_not_centered_on_via 33→34` · `via_dangling 4→6`；**error 0 · unconnected 0 · 类集 9 类不变**）",
+    "⑦ CR-39（**本会话**）：只读取证件 `REV_L8_GENERATION_EVIDENCE` 之 `output.sha16` **标签错位**（误填 pro 哈希）⇒ 已拆为 `board_sha16`/`pro_sha16`（**仅修标签 · 未改读数**）"
+   ],
+   "independent_recompute_runbook": [
+    "锚（一次性）：`cd /home/fila/jqdDev_2025/ic_hw && python3 -c \"import hashlib,sys;[print(hashlib.sha256(open(p,'rb').read()).hexdigest()[:16],p) for p in ['k2/hw/k2_v4_8L.l8.kicad_pcb','k2/hw/k2_v4_8L.l8.kicad_pro','k2/hw/data/k2_sch.errata-3.yaml','k2/pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-53.json','k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/REV_L8_GENERATION_EVIDENCE_20260921_v1.json']]\"` ⇒ 期望 `7a5c89913d6e5d0a / c009058005829f09 / 5dc7b82a901d11c8 / 4e92b3a05cd5a223 / 122e0021dc7745e3`",
+    "包完整性：`cd k2/pm_gate/artifacts/k2_v4/L6 && sha256sum -c DELIVERY_l8/SHA256SUMS.txt | grep -c ': OK$'` ⇒ **55**（rc=0）",
+    "DFM：`python3 -c \"import json;d=json.load(open('k2/pm_gate/artifacts/k2_v4/L6/jlc_package_l8/06_rulings/jlc_dfm_hdi_l8.json'));print(d['n_pass'],d['n_accept'],d['n_fail'])\"` ⇒ `16 1 0`",
+    "canonical 19（**监理自跑 · 取全新 `--drc-work-dir`**）：`AppDir/usr/bin/python3 criteria/adjudicate.py --project k2 --manifest criteria/manifest.k2.yaml --board k2/hw/k2_v4_8L.l8.kicad_pcb --pro k2/hw/k2_v4_8L.l8.kicad_pro --nets k2/hw/data/k2_sch.errata-3.yaml --gerber-dir k2/pm_gate/artifacts/k2_v4/L6/jlc_package_l8/01_gerber_rs274x --drc-work-dir <全新空目录> --w8-audit-json <L4-E3-l8>/w8_audit_board_l8_7a5c8991.json --pads-outline-json <…>/pads_within_outline_board_l8_7a5c8991.json --v3-plane-json <…>/ref_plane_continuity_board_l8_7a5c8991.json --density-json <…>/density_board_l8_7a5c8991.json --min-clearance-json <…>/min_clearance_drc_board_l8_7a5c8991.json --refplane-gap-json <…>/refplane_nonantipad_board_l8_7a5c8991.json --out /tmp/opencode/k2_l8_review_verdict.json`（<…> = `L4/E3-standard-call-l8-20260921`）",
+    "确定性：核对 `REV_L8_GENERATION_EVIDENCE…json::fidelity_control.result = c5a7df90aadb66e0`（= l7 逐字节）"
+   ],
+   "requested_verdict": "**PASS ⇒ 解除 `STOP-1`**（ENG 据此下首件单 / 推进 P5）；或 **FAIL + 项清单**。"
+  },
+  {
+   "id": "**【另立批】判据 ⑧ `COV-C3` 跨项目 `_shared` 同步批：请监理定范围 / 钉版**",
+   "facts": "R1/R5 之 `_shared` 订正在 **B 宿主两株本地已含**：`key_v2/_shared`（本地 `d89d7bb`，父仓指针 `174765a`）· `pciesw4/_shared`（本地 `91a2a44`，父仓指针 `17b028b`）；但 **`origin/main` 之 B 宿主 = `6ab6308`，非快进**（`git rev-list --left-right --count` = `65 4` / `52 4`）⇒ **禁 push · 禁 rewrite 已发布段**。",
+   "ask": "请监理**定本批范围（哪些树 / 哪些件）+ 钉版（目标 commit / 版本策略）**；ENG 按裁定**另批**执行。",
+   "eng_boundary": "**未获裁前不动 B 宿主远端**（本地订正已就位、不 push、不改写）。"
+  },
+  {
+   "id": "【登记 · 非阻塞】",
+   "items": [
+    "`CR-17` `DBGMCU_IDCODE` 预期值缺（通道面三路排查仍闭：`st.com 567` · `stmcu 429` · `molex.com 000` 已登）",
+    "`CR-22` `m13_*` 派生件缺 `psi_jt`（**禁改**该两件）",
+    "`CR-3` `IOCONVERT` 194 项 ball 名变体（登记制 · **不充绿 · 不重复上报**）",
+    "land pattern / 被动件 < IPC / `U2` 封装指派 = P4 W-8/J-7 族**既有登记**（owner 闸面）"
+   ]
+  }
+ ],
+ "landed_this_session": [
+  {
+   "id": "CR-39 只读取证件标签失真订正（锚周期复核发现）",
+   "artifact": "`P6_execution/P6_OPEN_READINESS/REV_L8_GENERATION_EVIDENCE_20260921_v1.json` 新锚 **`122e0021dc7745e3`**（原 `8f990c357a08abe3`）",
+   "reading": "`output.sha16 = c009058005829f09` 实为 **pro** 哈希（板真值 `7a5c89913d6e5d0a`）⇒ 拆为 `board_sha16` / `pro_sha16` + 自述键；**同类扫描 = 孤立缺陷**（全 `artifacts/k2_v4` 提及 `c0090580` 之 5 件中唯本件误置）。**未改任何读数/结论**。",
+   "register": "`k2/docs/K2-CONVENTION-REGISTER-20260921.md` 新锚 `1001c2a8962d602c`（原 `02a54c1090a701aa` · 续编 CR-39）"
+  }
+ ],
+ "red_lines_ok": [
+  "未改 `criteria/`（rev=6 只读 MATCH）",
+  "未改冻结四源（l4 `d4e81f64` 等）",
+  "未改生成器 / SPEC / 原理图 / 符号 / 网表 / PCB（本轮**只读取证 + 只改自产证件标签**）",
+  "未动交付包 / 外发包（l8 锚 `4b610bad` / `36a6b276` 未动；旧锚 `6ee7495d` / `0e88e107` 逐字节未动）",
+  "未新增判据维 / 检查齿",
+  "未派 WORKER",
+  "未越阶段（P5 仍 `PENDING_EXTERNAL` · **未下单** · 商务不在 ENG 范围）",
+  "外部厂商原件仅落 `/tmp/opencode`（未入库）",
+  "未为历史 commit 批量补打 tag"
+ ],
+ "next": "**获裁即落地**：① 若 l8 判 PASS ⇒ **解除 `STOP-1`** ⇒ ENG 按商务渠道下首件单 / 推进 P5；② `COV-C3` 获定范围+钉版 ⇒ 另批执行四树同步；③ P5 外部首件回件到位 ⇒ 按 `L6/first_article_l8/results_template.json`（8 项）回填（附原始记录 + sha256）交**监理判定**（`measured_by` 实测方 / `judged_by` 监理 · **ENG 不自证**）⇒ P5 关门。**未获裁期间**：不改设计面 · 不下首件单 · 继续**只读造活**（锚周期复核 · 册面/索引维护 · T2-F6 **仅新通道**才试）—— **禁以 HOLD/停等结案**。"
+}
