@@ -41,6 +41,17 @@ P6-1 的**唯一缺件** = 监理持有的 `criteria/manifest.k1.yaml`（G-c2，
   - FAIL：`zone_filled`(0/0)·`drill_count`(NPTH=2 < 4)·`rule_severity_manifest`·`net_declared_realized`(0 焊盘 3 · <2 焊盘 12)·`pin_map_complete`(16)·`refdes_sets_equal`(图 37 / 板 42；板有图无 `Q1,Q2,R38,R39,U13`)·`pipeline_present`·`fp_lib_table_present`·`keepout_active`(0)·DRC 3 维 + 测量 4 维（未提供输入 ⇒ fail-closed）
 - ⇒ **须监理裁定**：K1 处于中间态（未布线、未挂原理图、无测量件）⇒ 哪些维 `enabled:false`、哪些登记豁免、哪些须补测量件；`--nets` 用 `k1_sch.yaml` 抑或判据侧容错 `k1_nets.yaml`。
 
+## 1.4 B2-4 收口件：撤 K1 `G1.5` WAIVER（**已备料 + 副本演练；落件须监理批**）
+
+- **前置已完成**：F-1/B2-4 已落共享层 `fc59771` —— `check_l1.RULES_DOC → <框架根>/docs/PCB_DESIGN_RULES.md`，K1 侧解析 = `_shared/docs/PCB_DESIGN_RULES.md` ✓。
+- **机判复跑（ENG 实测，两跑逐字节同）**：`cd k1 && PM_GATE_PROJECT_ROOT=$PWD PYTHONPATH=<容器>/_shared python3 -c "...check_l1.check_g15()"` ⇒ **`passed=True`，`evidence=「结构预检 + 工艺常识强条全 PASS（3 份报告）」`** ⇒ K1 `G1.5` 已是**真机判**（不再依赖路径缺陷豁免）。
+- **撤 waiver 依据（既有监理裁定，非本轮发明）**：`K1-RULING-r03-gbid` + 监理指令 `#K1-02` 第 3 条原文 =「**待学习环批 2 修工具后重跑机判并撤 waiver**（RISK-001）」；CHECKLIST B2-4 授权列 = **需监理批**（撤 waiver = 判据收紧）。
+- **备料（幂等，默认 `--check` 不写盘、拒绝对真源 apply）**：`P6_OPEN_READINESS/apply_k1_g15_waiver_retraction_v1.py`
+  - 改 `k1/pm_gate/tools/k1_closeout_l2_v1.py`（**写者**：G15_EVIDENCE + RISK-001 文案 → 真机判口径，避免复跑回填 WAIVER）
+  - 改 `k1/pm_gate/state_k1.json`（`L1.gates.G1.5.evidence` → 真机判；`risks[RISK-001]` → `closed`；**原 WAIVER 原文两处归档保留**便于追溯）
+  - **副本演练**：`--apply` ×2 = `patched → already`（幂等）· 副本 JSON 可解析 · 副本工具 `py_compile` ✓
+- **影响面**：G1.5 本已 `passed` ⇒ **语义不变、判据收紧**；`k2_p6_readonly_baseline_v1.py` 的 `is_waiver` 标记自然消失（零代码改动）。
+
 ## 2. P6-2 就绪（模板整改）
 
 | 件 | ignore 数 | `sheets` |

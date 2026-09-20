@@ -1,0 +1,52 @@
+{
+ "artifact": "k2_b2_4_k1_g15_waiver_retraction_bundle",
+ "authorization_basis": [
+  "K1-RULING-r03-gbid「G1.5 属真缺口，归批 2（C-3），不作阻塞」",
+  "监理指令 #K1-02 第 3 条「L1 段显式标注实质已过 · 待批 2 修工具」",
+  "⇒ 原文「**待学习环批 2 修工具后重跑机判并撤 waiver**（RISK-001）」",
+  "CHECKLIST B2-4 授权列 = 需监理批（本件按此只备料）"
+ ],
+ "bundle": {
+  "apply_script": "P6_OPEN_READINESS/apply_k1_g15_waiver_retraction_v1.py（幂等；默认 --check 不写盘；拒绝对真源 apply）",
+  "changes": [
+   {
+    "file": "k1/pm_gate/tools/k1_closeout_l2_v1.py",
+    "what": "G15_EVIDENCE + RISK-001 文案 → 真机判口径（写者，避免复跑回填 WAIVER）"
+   },
+   {
+    "file": "k1/pm_gate/state_k1.json",
+    "what": "L1.gates.G1.5.evidence → 真机判；risks[RISK-001] → closed；原 WAIVER 原文两处均**归档保留**（evidence_waiver_archived / desc_waiver_archived）"
+   }
+  ],
+  "dry_run_on_copy": "/tmp 副本 `--apply` ×2 = patched → already（幂等）；副本 JSON 可解析 ✓；副本工具 py_compile ✓"
+ },
+ "impact": {
+  "consumers": [
+   "k2/tools/k2_p6_readonly_baseline_v1.py:149 读 is_waiver=ev.startswith('WAIVER') ⇒ 撤后该标记自然消失（零代码改动）",
+   "k2/tools/k2_p6_spec_site_census_v1.py 的 k1_g15_waiver_recompute 复算项随之可标记闭环"
+  ],
+  "gate_semantics": "不变（G1.5 本就 passed）；撤掉的是『WAIVER』这一非机判依据 ⇒ 判据**收紧**（真实机判背书）",
+  "other_projects": "仅 K1 记录；不动判据/k2 载件"
+ },
+ "machine_judgment": {
+  "command": "cd k1 && PM_GATE_PROJECT_ROOT=$PWD PYTHONPATH=<容器>/_shared python3 -c \"from pm_gate import artifacts,check_l1; artifacts.set_active_project('k1'); r=check_l1.check_g15(); print(r.passed, r.evidence)\"",
+  "determinism": "两跑逐字节同",
+  "passed": true,
+  "runs": [
+   "结构预检 + 工艺常识强条全 PASS（3 份报告）",
+   "结构预检 + 工艺常识强条全 PASS（3 份报告）"
+  ]
+ },
+ "note": "ENG 未改 k1 任何文件（check 模式零写盘；apply 仅在 /tmp 副本演练）；落件 = 监理批后一条命令。",
+ "pre_state_hashes": {
+  "k1/pm_gate/state_k1.json": "90476545bc144084",
+  "k1/pm_gate/tools/k1_closeout_l2_v1.py": "56a39cd52eaf3965"
+ },
+ "prerequisite_done": {
+  "fix": "F-1/B2-4：check_l1.RULES_DOC → <框架根>/docs/PCB_DESIGN_RULES.md（共享层 fc59771，本批已落）",
+  "resolved_path": "_shared/docs/PCB_DESIGN_RULES.md"
+ },
+ "purpose": "B2-4 收口件（**未落件**）：撤 K1 G1.5 WAIVER ⇒ 真机判记录。备料 + 副本演练完成，落件须监理批（CHECKLIST B2-4：撤 waiver = 判据收紧）",
+ "readonly_repo": true,
+ "schema": 1
+}
