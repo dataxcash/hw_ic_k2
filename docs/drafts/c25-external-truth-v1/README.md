@@ -47,3 +47,20 @@ verdict 仍 == `190b73be0f728a56`（判据语义不应变）。
 ## 4. 红线
 ENG 只读 `criteria/`（本包未写 `criteria/`）；未新增判据维、未改任何阈值（本包只声明**外部真源**）；
 未动冻结四源 / 交付锚。**无 owner 闸口**（C-25 为 gate 属主落件项，见 #K2-47 §五）。
+
+## 5. ⛔ `parts_electrical_truth.yaml` 的**真源可得性普查**（阻塞点量化）
+承 §3 PARTIAL 门：已盘点仓库内既有『器件引脚真源』是否满足 C-25 的**出处三件套**。
+证据件：`k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/C25_PARTS_TRUTH_SOURCE_CENSUS_20260921_v1.json`（`c2003dd1c11a6ec8`）。
+
+| 来源 | 件数 | `pins` | **出处三件套** | 可否直接用 |
+|---|---|---|---|---|
+| `_shared/eda_core/sch_gate/datasheets/*.yaml`（两树同） | **33** | 32 | **0**（仅自由文本 `source`，如「TI SNLS658 Rev B」） | ❌ 不合 C-25 要求；且 `pins` 为**物理脚名**非**电气级** |
+| `k1/…/L1/inputs/datasheets/*.yaml` | 6 | — | **6**（`doc_id`/`doc_url`/`doc_sha256`） | ✅ 合要求，但仅 6 器件且属 K1 |
+
+⇒ **`parts_electrical_truth.yaml` 的补全不是"填表"，而是"取文献+哈希+转录电气级"**。三条补全路径（须监理择一）：
+
+- **(a) 就地升级 33 件出处**：补三件套 + 电气级。**动 `_shared` ⇒ 须两树同步 + 零单板特判**。工作量高、版本错配风险中。
+- **(b) K2 侧独立转录 → `criteria/parts_electrical_truth.yaml`**：**不动 `_shared`**。工作量高、风险低。← **ENG 建议**
+- **(c) 缩面声明**：仅覆盖 `lib_electrical_level` 审计实际涉及器件（须先由审计件定出器件全集）。工作量中。
+
+**选路前该维维持不可达（`check-dimensions` 保持 17/19，不得部分覆盖充绿）。**

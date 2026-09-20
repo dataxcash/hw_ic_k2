@@ -1,0 +1,454 @@
+{
+ "artifact": "k2_c25_parts_truth_source_census",
+ "schema": 1,
+ "purpose": "承 #K2-47 §三 C-25：量化 `parts_electrical_truth.yaml` 的**真源可得性**——盘点仓库内既有『器件引脚真源』是否满足 C-25 要求的**出处三件套**（`doc_id`/`doc_url`/`doc_sha256`），并给出补全路径。只读；不新造任何真值。",
+ "target": "criteria/parts_electrical_truth.yaml（判据维 lib_electrical_level 的外部真源）",
+ "A_in_repo_pin_truth": {
+  "dir": "_shared/eda_core/sch_gate/datasheets/（两树同：容器根 _shared 与 k2/_shared）",
+  "n_files": 33,
+  "n_with_pins": 32,
+  "n_with_three_piece_provenance": 0,
+  "fields_present": "`device` / `package` / `source`（**自由文本**引证，如『TI SNLS658 Rev B』）/ `pins`（pin号→物理脚名）",
+  "verdict": "**0/33 满足 C-25 出处三件套**；且其 `pins` 为**物理脚名**（非电气级）。⇒ 既有件**不能直接**作为 `lib_electrical_level` 的外部真源。",
+  "files": [
+   {
+    "file": "24MHz_9pF.yaml",
+    "device": "24MHz_9pF",
+    "package": "Crystal_SMD_3225-4Pin",
+    "has_source_text": true,
+    "has_doc_id": false,
+    "has_doc_url": false,
+    "has_doc_sha256": false,
+    "has_pins": true,
+    "n_pins": 4
+   },
+   {
+    "file": "BAT54C.yaml",
+    "device": "BAT54C",
+    "package": "SOT-23",
+    "has_source_text": true,
+    "has_doc_id": false,
+    "has_doc_url": false,
+    "has_doc_sha256": false,
+    "has_pins": true,
+    "n_pins": 3
+   },
+   {
+    "file": "DCDC_12V_3V3.yaml",
+    "device": "DCDC_12V_3V3",
+    "package": "SOT-23-6 (DBV)",
+    "has_source_text": true,
+    "has_doc_id": false,
+    "has_doc_url": false,
+    "has_doc_sha256": false,
+    "has_pins": true,
+    "n_pins": 6
+   },
+   {
+    "file": "DCDC_12V_5V.yaml",
+    "device": "DCDC_12V_5V",
+    "package": "SOT-23-6 (DBV)",
+    "has_source_text": true,
+    "has_doc_id": false,
+    "has_doc_url": false,
+    "has_doc_sha256": false,
+    "has_pins": true,
+    "n_pins": 6
+   },
+   {
+    "file": "DS160PR810.yaml",
+    "device": "DS160PR810",
+    "package": "WQFN-64",
+    "has_source_text": true,
+    "has_doc_id": false,
+    "has_doc_url": false,
+    "has_doc_sha256": false,
+    "has_pins": true,
+    "n_pins": 64
+   },
+   {
+    "file": "EMMC_16G.yaml",
+    "device": "EMMC_16G",
+    "package": "BGA153",
+    "has_source_text": true,
+    "has_doc_id": false,
+    "has_doc_url": false,
+    "has_doc_sha256": false,
+    "has_pins": true,
+    "n_pins": 33
+   },
+   {
+    "file": "FRU_EEPROM.yaml",
+    "device": "FRU_EEPROM",
+    "package": "8-pin SOIC",
+    "has_source_text": true,
+    "has_doc_id": false,
+    "has_doc_url": false,
+    "has_doc_sha256": false,
+    "has_pins": true,
+    "n_pins": 8
+   },
+   {
+    "file": "FUSB302.yaml",
+    "device": "FUSB302",
+    "package": "WQFN-14 (MPX), 2.2x3.1mm",
+    "has_source_text": true,
+    "has_doc_id": false,
+    "has_doc_url": false,
+    "has_doc_sha256": false,
+    "has_pins": true,
+    "n_pins": 14
+   },
+   {
+    "file": "J_EC_HEADER.yaml",
+    "device": "J_EC_HEADER",
+    "package": "4-pin header",
+    "has_source_text": true,
+    "has_doc_id": false,
+    "has_doc_url": false,
+    "has_doc_sha256": false,
+    "has_pins": true,
+    "n_pins": 4
+   },
+   {
+    "file": "J_OOB_HEADER.yaml",
+    "device": "J_OOB_HEADER",
+    "package": "4-pin header",
+    "has_source_text": true,
+    "has_doc_id": false,
+    "has_doc_url": false,
+    "has_doc_sha256": false,
+    "has_pins": true,
+    "n_pins": 4
+   },
+   {
+    "file": "LDO_5V_3V3.yaml",
+    "device": "LDO_5V_3V3",
+    "package": "SOT-23-5",
+    "has_source_text": true,
+    "has_doc_id": false,
+    "has_doc_url": false,
+    "has_doc_sha256": false,
+    "has_pins": true,
+    "n_pins": 5
+   },
+   {
+    "file": "LED_DUAL.yaml",
+    "device": "LED_DUAL",
+    "package": "LED_0603_1608Metric",
+    "has_source_text": true,
+    "has_doc_id": false,
+    "has_doc_url": false,
+    "has_doc_sha256": false,
+    "has_pins": true,
+    "n_pins": 3
+   },
+   {
+    "file": "M2_M_SOCKET.yaml",
+    "device": "M2_M_SOCKET",
+    "package": "M.2 (NGFF) M-Key card edge socket, 75-pin (本设计取用 38)",
+    "has_source_text": true,
+    "has_doc_id": false,
+    "has_doc_url": false,
+    "has_doc_sha256": false,
+    "has_pins": true,
+    "n_pins": 38
+   },
+   {
+    "file": "MCIO_4i_SFF1016.yaml",
+    "device": "MCIO_4i_SFF1016",
+    "package": "SFF-TA-1016 4i (38-contact)",
+    "has_source_text": true,
+    "has_doc_id": false,
+    "has_doc_url": false,
+    "has_doc_sha256": false,
+    "has_pins": true,
+    "n_pins": 38
+   },
+   {
+    "file": "OCuLink_SFF8612.yaml",
+    "device": "OCuLink_SFF8612",
+    "package": "SFF-8612 OCuLink receptacle, 42-pin (2 rows x 21), x4 lane",
+    "has_source_text": true,
+    "has_doc_id": false,
+    "has_doc_url": false,
+    "has_doc_sha256": false,
+    "has_pins": true,
+    "n_pins": 42
+   },
+   {
+    "file": "OPTO_LTV356T.yaml",
+    "device": "OPTO_LTV356T",
+    "package": "SOP-4",
+    "has_source_text": true,
+    "has_doc_id": false,
+    "has_doc_url": false,
+    "has_doc_sha256": false,
+    "has_pins": true,
+    "n_pins": 4
+   },
+   {
+    "file": "PI3DBS16412.yaml",
+    "device": "PI3DBS16412",
+    "package": "42-TQFN (ZH42), 3.5x9mm",
+    "has_source_text": true,
+    "has_doc_id": false,
+    "has_doc_url": false,
+    "has_doc_sha256": false,
+    "has_pins": true,
+    "n_pins": 43
+   },
+   {
+    "file": "PMIC_P1.yaml",
+    "device": "PMIC_P1",
+    "package": "QFN60",
+    "has_source_text": true,
+    "has_doc_id": false,
+    "has_doc_url": false,
+    "has_doc_sha256": false,
+    "has_pins": true,
+    "n_pins": 29
+   },
+   {
+    "file": "SE050C2.yaml",
+    "device": "SE050C2",
+    "package": "HX2QFN20",
+    "has_source_text": true,
+    "has_doc_id": false,
+    "has_doc_url": false,
+    "has_doc_sha256": false,
+    "has_pins": true,
+    "n_pins": 7
+   },
+   {
+    "file": "SOM_B1.yaml",
+    "device": "SOM_B1",
+    "package": "PsP_BGA568",
+    "has_source_text": true,
+    "has_doc_id": false,
+    "has_doc_url": false,
+    "has_doc_sha256": false,
+    "has_pins": true,
+    "n_pins": 568
+   },
+   {
+    "file": "STM32G0B1CBT6.yaml",
+    "device": "STM32G0B1CBT6",
+    "package": "LQFP48",
+    "has_source_text": true,
+    "has_doc_id": false,
+    "has_doc_url": false,
+    "has_doc_sha256": false,
+    "has_pins": true,
+    "n_pins": 49
+   },
+   {
+    "file": "STM32G0B1KBU6.yaml",
+    "device": "STM32G0B1KBU6",
+    "package": "UFQFPN32",
+    "has_source_text": true,
+    "has_doc_id": false,
+    "has_doc_url": false,
+    "has_doc_sha256": false,
+    "has_pins": true,
+    "n_pins": 33
+   },
+   {
+    "file": "SlimSAS_x8_SFF8654.yaml",
+    "device": "SlimSAS_x8_SFF8654",
+    "package": "SFF-8654 8X (74-position)",
+    "has_source_text": true,
+    "has_doc_id": false,
+    "has_doc_url": false,
+    "has_doc_sha256": false,
+    "has_pins": true,
+    "n_pins": 74
+   },
+   {
+    "file": "TPD6E05U06.yaml",
+    "device": "TPD6E05U06",
+    "package": "USON-14 (RVZ)",
+    "has_source_text": true,
+    "has_doc_id": false,
+    "has_doc_url": false,
+    "has_doc_sha256": false,
+    "has_pins": true,
+    "n_pins": 14
+   },
+   {
+    "file": "TPS22919.yaml",
+    "device": "TPS22919",
+    "package": "DCK-6 (SOT-SC70)",
+    "has_source_text": true,
+    "has_doc_id": false,
+    "has_doc_url": false,
+    "has_doc_sha256": false,
+    "has_pins": true,
+    "n_pins": 6
+   },
+   {
+    "file": "TS3USB221A.yaml",
+    "device": "TS3USB221A",
+    "package": "UQFN-10 (RSE)",
+    "has_source_text": true,
+    "has_doc_id": false,
+    "has_doc_url": false,
+    "has_doc_sha256": false,
+    "has_pins": true,
+    "n_pins": 10
+   },
+   {
+    "file": "UART_DEBUG.yaml",
+    "device": "UART_DEBUG",
+    "package": "PinHeader_1x03_P1.25mm",
+    "has_source_text": true,
+    "has_doc_id": false,
+    "has_doc_url": false,
+    "has_doc_sha256": false,
+    "has_pins": true,
+    "n_pins": 3
+   },
+   {
+    "file": "USB3.0_Type-A_90.yaml",
+    "device": "USB3.0_Type-A_90",
+    "package": "USB 3.0 Type-A (9-pin)",
+    "has_source_text": true,
+    "has_doc_id": false,
+    "has_doc_url": false,
+    "has_doc_sha256": false,
+    "has_pins": true,
+    "n_pins": 9
+   },
+   {
+    "file": "USB_C_PLUG.yaml",
+    "device": "USB_C_PLUG",
+    "package": "Molex_105444",
+    "has_source_text": true,
+    "has_doc_id": false,
+    "has_doc_url": false,
+    "has_doc_sha256": false,
+    "has_pins": true,
+    "n_pins": 24
+   },
+   {
+    "file": "USB_C_RECEPT.yaml",
+    "device": "USB_C_RECEPT",
+    "package": "USB Type-C receptacle (12-pin simplified + 2nd SS pair)",
+    "has_source_text": true,
+    "has_doc_id": false,
+    "has_doc_url": false,
+    "has_doc_sha256": false,
+    "has_pins": true,
+    "n_pins": 16
+   },
+   {
+    "file": "USB_C_RECEPT_24.yaml",
+    "device": "USB_C_RECEPT_24",
+    "package": "USB Type-C receptacle 24-pin (A1-B12, 4 SuperSpeed pairs)",
+    "has_source_text": true,
+    "has_doc_id": false,
+    "has_doc_url": false,
+    "has_doc_sha256": false,
+    "has_pins": true,
+    "n_pins": 24
+   },
+   {
+    "file": "XO_100M.yaml",
+    "device": "XO_100M",
+    "package": "3225 (3.2x2.5mm) 4-pin oscillator",
+    "has_source_text": true,
+    "has_doc_id": false,
+    "has_doc_url": false,
+    "has_doc_sha256": false,
+    "has_pins": true,
+    "n_pins": 4
+   },
+   {
+    "file": "strap_semantics.yaml",
+    "device": null,
+    "package": null,
+    "has_source_text": false,
+    "has_doc_id": false,
+    "has_doc_url": false,
+    "has_doc_sha256": false,
+    "has_pins": false,
+    "n_pins": 0
+   }
+  ]
+ },
+ "B_compliant_sources_available": {
+  "where": "k1/pm_gate/artifacts/k1/L1/inputs/datasheets/*.yaml（6 件）",
+  "why": "含 `doc_id`/`doc_url`/`doc_sha256` 三件套（符合 C-25 出处要求）",
+  "items": [
+   {
+    "part": "Bourns_SRP6060FA-6R8M",
+    "doc_id": "Bourns SRP6060FA Series datasheet (150742)",
+    "doc_url": "https://www.bourns.com/docs/Product-Datasheets/SRP6060FA.pdf",
+    "doc_sha256": "28ee89c71c693436d0f33e33d36df97c3704511c09249bd0cc4373f23e026740"
+   },
+   {
+    "part": "JST_VH_B2P-VH",
+    "doc_id": "JST VH Series (eVH) datasheet",
+    "doc_url": "https://www.jst-mfg.com/product/pdf/eng/eVH.pdf",
+    "doc_sha256": "d51e669c597988b20c0963daf5bef7356cbd2104c1f867e9107c6fa6cd2b899c"
+   },
+   {
+    "part": "TPD2E001",
+    "doc_id": "TI TPD2E001 (SLVS610 — 2-Channel ESD Protection Array)",
+    "doc_url": "https://www.ti.com/lit/ds/symlink/tpd2e001.pdf",
+    "doc_sha256": "b648c5d12f3e5b48c4b8ce3a9c4d5c4f1d40abb084d097e88465ba2f48d98d79"
+   },
+   {
+    "part": "TPS22965",
+    "doc_id": "TI SLVSBJ0F (AUGUST 2012 – REVISED AUGUST 2016)",
+    "doc_url": "https://www.ti.com/lit/ds/symlink/tps22965.pdf",
+    "doc_sha256": "3300eef743d7871f96c752227ae8f958006a902123ce2df351cf0772ec95a7e1"
+   },
+   {
+    "part": "TPS22990",
+    "doc_id": "TI SLVSDK1C",
+    "doc_url": "https://www.ti.com/lit/ds/symlink/tps22990.pdf",
+    "doc_sha256": "ea198776524544eb3e4a130f1f6a6e5c8e80ca8164eebf387a8fd6b4b7dde2a3"
+   },
+   {
+    "part": "TPS54628",
+    "doc_id": "TI SLVSBW5A (APRIL 2013 – REVISED DECEMBER 2016)",
+    "doc_url": "https://www.ti.com/lit/ds/symlink/tps54628.pdf",
+    "doc_sha256": "638ae7d8504d9b44fe5548cc89e0d0366fbe80d473d7f455660838fcc1d3607b"
+   }
+  ],
+  "limitation": "仅覆盖 6 个器件；且**属 K1 项目**（K2 侧器件未覆盖）。"
+ },
+ "C_completion_options": [
+  {
+   "id": "(a)",
+   "title": "就地升级 33 件出处",
+   "detail": "为 `_shared/eda_core/sch_gate/datasheets/*.yaml` 逐件补 `doc_id`/`doc_url`/`doc_sha256`（`source` 文本已具名文献，如 TI SNLS658 Rev B）——须**取得文献原件并哈希**（网络/供应商渠道），再补**电气级**字段。**改 `_shared` ⇒ 须两树同步 + 零单板特判**。",
+   "effort": "高（33 文献获取+哈希+电气级转录）",
+   "risk": "中（版本匹配；须防错配修订版）"
+  },
+  {
+   "id": "(b)",
+   "title": "K2 侧独立转录到 criteria 真源",
+   "detail": "新写 `criteria/parts_electrical_truth.yaml`（schema 见草案包），逐器件按**手册**转录引脚电气级 + 三件套。**不动 `_shared`**。",
+   "effort": "高（K2 器件全集逐一转录）",
+   "risk": "低（不动共享层）"
+  },
+  {
+   "id": "(c)",
+   "title": "缩面声明（若监理认可）",
+   "detail": "仅覆盖 `lib_electrical_level` 审计实际涉及的器件子集（须先由审计件定出器件全集）。",
+   "effort": "中",
+   "risk": "低，但覆盖面须监理裁"
+  }
+ ],
+ "D_ask_supervisor": {
+  "item": "C-25 completion path 选择 + 是否需先行确定『审计所涉器件全集』",
+  "note": "ENG 可执行 (a)/(b)/(c) 任一，但**工作量与是否动 `_shared` 差异大** ⇒ 请监理择一放行（**监理自裁面，无 owner 闸口**）。",
+  "blocked_until": "选路前，`parts_electrical_truth.yaml` 维持 **PARTIAL**（不得安装；fail-closed）。"
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "no_new_criteria_dim": true,
+ "ts": "2026-09-22T06:15:00+0800"
+}
