@@ -14,9 +14,9 @@
 |---|---|---|---|---|
 | base | 遗留 alloc 锚（现状） | 43 | 13 | 12 |
 | anchor | 仅重锚现行 pipeline alloc | 41 | 15 | 12 |
-| draft | anchor + 甲案测试补丁 | 50 | 6 | 12 |
-| **draft_b1** | draft + B1 引擎守卫（/tmp 影子） | **54** | **2** | 12 |
-| negctl | draft_b1 + 逐项 mutation | 41 | 15 | 12 |
+| draft | anchor + 甲案测试补丁 | 53 | 6 | 12 |
+| **draft_b1** | draft + B1 引擎守卫（/tmp 影子） | **57** | **2** | 12 |
+| negctl | draft_b1 + 逐项 mutation | 43 | 16 | 12 |
 
 牙齿（负控）总判：**PASS**（改错期望必 FAIL ⇒ 补丁不是"改绿"）
 确定性（两跑逐字节同）：**MATCH**
@@ -59,10 +59,16 @@
 | A11 | `test_link_topology_crossing_old_topology` | 甲-期望重基线(+B1 守卫) | 是 | — | PASSED | FAILED | 现行 alloc(+B1 守卫) 实测 CROSSING_FOUND / crossing=[UP4..UP7] / DN0-3·UP0-3·REFCLK0-1 ALIGNED |
 | A12 | `test_board_level_consistency` | 甲-输入筛选修正（测试仍 RED：能力缺口 C1） | 是 | — | FAILED | FAILED | 现行 alloc 含 16 个 *_OUT* 条目 ⇒ 原 base 筛选得 34（应为 18）；筛选修正后断言暴露真实『未全解』 |
 
+**配套新增覆盖（A13）**：A3 重基线后「器件缩进」分支在真板数据下不再被覆盖，故新增**合成现行 fixture** 用例
+（`TestB2TSyntheticCoverage`，3 例：左端缩进 / 右端缩进 / 无尺寸不缩进 + 含于 x_range + 确定性）：
+draft_b1 = {'test_corridor_clear_span_left_indent': 'PASSED', 'test_corridor_clear_span_right_indent': 'PASSED', 'test_corridor_clear_span_no_size_no_indent': 'PASSED'} · negctl（改错左端期望）= {'test_corridor_clear_span_left_indent': 'FAILED', 'test_corridor_clear_span_right_indent': 'PASSED', 'test_corridor_clear_span_no_size_no_indent': 'PASSED'}
+（来源：合成 spec，redriver `WQFN-64_10x5.5mm` 半宽 5.0 + corridor `[100,120]`）
+
 **牙齿逐项**（draft_b1=PASSED 且 negctl=FAILED 才算✅）：
 | # | draft_b1 | negctl | 牙齿 |
 |---|---|---|---|
 | A1 | PASSED | FAILED | ✅ |
+| A13 | 3/3 PASSED | 1/3 FAILED | ✅ |
 | A2 | PASSED | FAILED | ✅ |
 | A3 | PASSED | FAILED | ✅ |
 | A4 | PASSED | FAILED | ✅ |
@@ -117,4 +123,4 @@
 3. **测试期望重基线批**：A1–A12（11 项期望/输入重锚）。
 4. **不申请**：C1/C2 改绿（能力缺口，禁缩口径）。
 
-—— ENG（ARCHER）· 2026-09-20 · 真源零改动（`_shared` / `criteria/` / 冻结四源 / 交付锚未动）· diff 232 行
+—— ENG（ARCHER）· 2026-09-20 · 真源零改动（`_shared` / `criteria/` / 冻结四源 / 交付锚未动）· diff 293 行

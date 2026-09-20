@@ -165,11 +165,34 @@
   }
  ],
  "caveats": [
-  "A3 缩进分支在现行真板数据下不再被覆盖 ⇒ 建议另立合成 SPEC 单测保覆盖（本补丁未加）。",
+  "A3 缩进分支在现行真板数据下不再被覆盖 ⇒ 已由 A13（合成现行 fixture，TestB2TSyntheticCoverage 3 例）补齐覆盖。",
   "A12 仅修输入筛选（34→18）；能力断言保持 RED（C1），不得改绿。",
   "C1/C2 属能力缺口（D4 形态卡），禁重基线至绿；重开条件 = D4 形态补齐。",
   "B1 守卫属 _shared 改动 ⇒ 需批2 授权；本工具仅在 /tmp 影子验证。",
   "现行 alloc 取自 P3 E2E 报告的 stages.alloc.alloc（pipeline 自产）；落库前需监理裁定承载形态。"
+ ],
+ "coverage_items": [
+  {
+   "class": "甲-配套新增合成覆盖（保 A3 缩进分支）",
+   "draft_b1": {
+    "test_corridor_clear_span_left_indent": "PASSED",
+    "test_corridor_clear_span_no_size_no_indent": "PASSED",
+    "test_corridor_clear_span_right_indent": "PASSED"
+   },
+   "expectation_source": "合成 spec：redriver footprint WQFN-64_10x5.5mm 半宽 5.0 + corridor[100,120] ⇒ 左/右缩进与不缩进三分支；实测 (105.2,120.0)/(100.0,109.8)/(100.0,120.0)",
+   "id": "A13",
+   "mutation": "assert (x0, x1) == (100.0, 120.0)",
+   "negctl": {
+    "test_corridor_clear_span_left_indent": "FAILED",
+    "test_corridor_clear_span_no_size_no_indent": "PASSED",
+    "test_corridor_clear_span_right_indent": "PASSED"
+   },
+   "tests": [
+    "test_corridor_clear_span_left_indent",
+    "test_corridor_clear_span_right_indent",
+    "test_corridor_clear_span_no_size_no_indent"
+   ]
+  }
  ],
  "defects": [
   {
@@ -356,6 +379,11 @@
   "A1": {
    "draft_b1": "PASSED",
    "negctl": "FAILED",
+   "teeth_ok": true
+  },
+  "A13": {
+   "draft_b1": "3/3 PASSED",
+   "negctl": "1/3 FAILED",
    "teeth_ok": true
   },
   "A2": {
@@ -571,7 +599,7 @@
   "draft": {
    "counts": {
     "failed": 6,
-    "passed": 50,
+    "passed": 53,
     "skipped": 12
    },
    "patch_count": 11,
@@ -591,6 +619,9 @@
     "test_chip_side_dip_solved_staggered_drop": "PASSED",
     "test_correct_polarity_solves_clean": "PASSED",
     "test_corridor_clear_span": "PASSED",
+    "test_corridor_clear_span_left_indent": "PASSED",
+    "test_corridor_clear_span_no_size_no_indent": "PASSED",
+    "test_corridor_clear_span_right_indent": "PASSED",
     "test_corridor_deterministic": "SKIPPED",
     "test_deterministic": "PASSED",
     "test_direct_escape_geometric_precheck": "PASSED",
@@ -651,7 +682,7 @@
   "draft_b1": {
    "counts": {
     "failed": 2,
-    "passed": 54,
+    "passed": 57,
     "skipped": 12
    },
    "patch_count": 11,
@@ -671,6 +702,9 @@
     "test_chip_side_dip_solved_staggered_drop": "PASSED",
     "test_correct_polarity_solves_clean": "PASSED",
     "test_corridor_clear_span": "PASSED",
+    "test_corridor_clear_span_left_indent": "PASSED",
+    "test_corridor_clear_span_no_size_no_indent": "PASSED",
+    "test_corridor_clear_span_right_indent": "PASSED",
     "test_corridor_deterministic": "SKIPPED",
     "test_deterministic": "PASSED",
     "test_direct_escape_geometric_precheck": "PASSED",
@@ -730,8 +764,8 @@
   },
   "negctl": {
    "counts": {
-    "failed": 15,
-    "passed": 41,
+    "failed": 16,
+    "passed": 43,
     "skipped": 12
    },
    "patch_count": 11,
@@ -751,6 +785,9 @@
     "test_chip_side_dip_solved_staggered_drop": "PASSED",
     "test_correct_polarity_solves_clean": "PASSED",
     "test_corridor_clear_span": "FAILED",
+    "test_corridor_clear_span_left_indent": "FAILED",
+    "test_corridor_clear_span_no_size_no_indent": "PASSED",
+    "test_corridor_clear_span_right_indent": "PASSED",
     "test_corridor_deterministic": "SKIPPED",
     "test_deterministic": "PASSED",
     "test_direct_escape_geometric_precheck": "PASSED",

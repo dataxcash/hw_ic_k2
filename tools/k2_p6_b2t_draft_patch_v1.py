@@ -59,6 +59,71 @@ B2T_TESTS = ["test_probe_escape_capacity_dn0", "test_probe_reports_via_gap_fact"
              "test_link_topology_crossing_old_topology",
              "test_correct_polarity_solves_clean"]
 
+
+SYNTH_COVERAGE_CLS = '''
+
+class TestB2TSyntheticCoverage:
+    """B2-T 甲案配套（A3 重基线后『器件缩进』分支失去真板覆盖 ⇒ 合成现行 fixture 保覆盖）。
+
+    合成件：spec.components（footprint 正则取器件半宽）+ corridor.x_range，零真板依赖。
+    覆盖：① 左端缩进 ② 右端缩进 ③ 无尺寸器件不缩进 ④ 净空必含于 x_range ⑤ 确定性。
+    """
+
+    def _m(self, tmp_path, components):
+        pcb = tmp_path / "syn.kicad_pcb"
+        pcb.write_text(MINI_PCB, encoding="utf-8")
+        sp = tmp_path / "spec.json"
+        sp.write_text(json.dumps({"corridors": [{"id": "C_SYN",
+                                                 "x_range": [100.0, 120.0]}],
+                                  "components": components}), encoding="utf-8")
+        ap = tmp_path / "alloc.json"
+        ap.write_text(json.dumps({"alloc": {}}), encoding="utf-8")
+        return HSRouteModel(str(pcb), str(sp), str(ap),
+                            str(REPO / "_shared" / "eda_core" / "drc_rules.json"))
+
+    def _span(self, m):
+        c = next(c for c in m.spec["corridors"] if c["id"] == "C_SYN")
+        return m._corridor_clear_span(c), c["x_range"]
+
+    def test_corridor_clear_span_left_indent(self, tmp_path):
+        """① 器件（半宽 5.0，pos x=100）覆盖走廊左端 x0 ⇒ x0 缩进到 105.2。"""
+        m = self._m(tmp_path, {"redriver": {"R1": {"pos": [100.0, 50.0],
+                                                   "footprint": "WQFN-64_10x5.5mm"}},
+                               "connectors": {}})
+        (x0, x1), xr = self._span(m)
+        assert (x0, x1) == (105.2, 120.0)
+        assert xr[0] <= x0 < x1 <= xr[1]
+
+    def test_corridor_clear_span_right_indent(self, tmp_path):
+        """② 器件（pos x=115）覆盖走廊右端 x1 ⇒ x1 缩进到 109.8。"""
+        m = self._m(tmp_path, {"redriver": {"R1": {"pos": [115.0, 50.0],
+                                                   "footprint": "WQFN-64_10x5.5mm"}},
+                               "connectors": {}})
+        (x0, x1), xr = self._span(m)
+        assert (x0, x1) == (100.0, 109.8)
+        assert xr[0] <= x0 < x1 <= xr[1]
+
+    def test_corridor_clear_span_no_size_no_indent(self, tmp_path):
+        """③ 无尺寸器件（连接器 footprint 无 _WxH）⇒ 不缩进；④ 含于 x_range；⑤ 确定性。"""
+        m = self._m(tmp_path, {"redriver": {},
+                               "connectors": {"J1": {"pos": [110.0, 50.0],
+                                                     "footprint": "MCIO_4i_SFF-1016_RASide"}}})
+        (x0, x1), xr = self._span(m)
+        assert (x0, x1) == (100.0, 120.0)
+        assert xr[0] <= x0 < x1 <= xr[1]
+        assert self._span(m) == ((x0, x1), xr)   # ⑤ 确定性
+'''
+
+EXTRA_ITEMS = [
+ dict(id="A13", cls="甲-配套新增合成覆盖（保 A3 缩进分支）",
+      src="合成 spec：redriver footprint WQFN-64_10x5.5mm 半宽 5.0 + corridor[100,120] ⇒ 左/右缩进与不缩进三分支；实测 (105.2,120.0)/(100.0,109.8)/(100.0,120.0)",
+      anchor="class TestLayerSwapEscape:",
+      tests=["test_corridor_clear_span_left_indent",
+             "test_corridor_clear_span_right_indent",
+             "test_corridor_clear_span_no_size_no_indent"],
+      mut=("assert (x0, x1) == (105.2, 120.0)", "assert (x0, x1) == (100.0, 120.0)")),
+]
+
 ANCHOR_OLD = '''K2V4_ALLOC = (Path("/home/fila/jqdDev_2025/ic_hw/k2/pm_gate/artifacts/k2_v4")
               / "L3" / "model_solves" / "channel_alloc_v2"
               / "channel_alloc.json")'''
@@ -413,6 +478,12 @@ def build(kind, tag=""):
                 text = patch_fn(text, it["test"], it["old"], it["new"])
             if it.get("old2"):
                 text = patch_fn(text, it["test"], it["old2"], it["new2"])
+        for it in EXTRA_ITEMS:
+            assert text.count(it["anchor"]) == 1, f'{it["id"]} anchor 未唯一命中'
+            ins = SYNTH_COVERAGE_CLS
+            if kind == "negctl":
+                ins = ins.replace(it["mut"][0], it["mut"][1], 1)
+            text = text.replace(it["anchor"], ins + "\n\n" + it["anchor"], 1)
     if kind == "negctl":
         for it in ITEMS:
             if it.get("mut"):
@@ -458,6 +529,12 @@ def collect(tag=""):
         d = t["draft_b1"]["status"].get(it["test"])
         n = t["negctl"]["status"].get(it["test"])
         teeth[it["id"]] = {"draft_b1": d, "negctl": n, "teeth_ok": (d == "PASSED" and n == "FAILED")}
+    for it in EXTRA_ITEMS:
+        ds = [t["draft_b1"]["status"].get(x) for x in it["tests"]]
+        ns = [t["negctl"]["status"].get(x) for x in it["tests"]]
+        teeth[it["id"]] = {"draft_b1": f"{ds.count('PASSED')}/{len(ds)} PASSED",
+                           "negctl": f"{ns.count('FAILED')}/{len(ns)} FAILED",
+                           "teeth_ok": all(x == "PASSED" for x in ds) and any(x == "FAILED" for x in ns)}
     res["teeth"] = teeth
     res["teeth_all_ok"] = bool(teeth) and all(v["teeth_ok"] for v in teeth.values())
     return res
@@ -536,10 +613,15 @@ def main() -> int:
                    "patch": bool(it["old"]), "mutation": bool(it.get("mut")),
                    "draft_b1": run["trees"]["draft_b1"]["status"].get(it["test"]),
                    "negctl": run["trees"]["negctl"]["status"].get(it["test"])} for it in ITEMS],
+        "coverage_items": [{"id": it["id"], "class": it["cls"], "expectation_source": it["src"],
+                            "tests": it["tests"],
+                            "draft_b1": {x: run["trees"]["draft_b1"]["status"].get(x) for x in it["tests"]},
+                            "negctl": {x: run["trees"]["negctl"]["status"].get(x) for x in it["tests"]},
+                            "mutation": it["mut"][1]} for it in EXTRA_ITEMS],
         "defects": [DEFECT_B1], "capability_gaps": CAPABILITY_GAPS, "harness_defect": HARNESS_DEFECT,
         "eng_qualitative": ENG_QUALITATIVE,
         "caveats": [
-            "A3 缩进分支在现行真板数据下不再被覆盖 ⇒ 建议另立合成 SPEC 单测保覆盖（本补丁未加）。",
+            "A3 缩进分支在现行真板数据下不再被覆盖 ⇒ 已由 A13（合成现行 fixture，TestB2TSyntheticCoverage 3 例）补齐覆盖。",
             "A12 仅修输入筛选（34→18）；能力断言保持 RED（C1），不得改绿。",
             "C1/C2 属能力缺口（D4 形态卡），禁重基线至绿；重开条件 = D4 形态补齐。",
             "B1 守卫属 _shared 改动 ⇒ 需批2 授权；本工具仅在 /tmp 影子验证。",
@@ -562,6 +644,7 @@ def main() -> int:
 
 
 def write_doc(out, diff_lines):
+    cov = {c["id"]: c for c in out.get("coverage_items", [])}
     rows = "\n".join(
         f"| `{b['test']}` | {b['class']} | {b['base']} | {b['anchor']} | {b['draft_b1']} | {b['negctl']} | {b['disposition']} |"
         for b in out["b2t_13"])
@@ -610,6 +693,11 @@ def write_doc(out, diff_lines):
 | # | test | 定性 | 改测试 | 负控 | draft_b1 | negctl | 期望值来源（实测） |
 |---|---|---|---|---|---|---|---|
 {it_rows}
+
+**配套新增覆盖（A13）**：A3 重基线后「器件缩进」分支在真板数据下不再被覆盖，故新增**合成现行 fixture** 用例
+（`TestB2TSyntheticCoverage`，3 例：左端缩进 / 右端缩进 / 无尺寸不缩进 + 含于 x_range + 确定性）：
+draft_b1 = {cov.get('A13', {}).get('draft_b1')} · negctl（改错左端期望）= {cov.get('A13', {}).get('negctl')}
+（来源：合成 spec，redriver `WQFN-64_10x5.5mm` 半宽 5.0 + corridor `[100,120]`）
 
 **牙齿逐项**（draft_b1=PASSED 且 negctl=FAILED 才算✅）：
 | # | draft_b1 | negctl | 牙齿 |
