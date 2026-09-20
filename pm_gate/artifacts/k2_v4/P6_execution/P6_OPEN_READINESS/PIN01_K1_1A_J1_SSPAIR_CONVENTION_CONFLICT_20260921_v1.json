@@ -1,0 +1,52 @@
+{
+ "artifact": "k2_pin01_k1_1a_j1_sspair_convention_conflict",
+ "schema": 1,
+ "ts": "2026-09-21T02:00:00+0800",
+ "id": "PIN01-K1-1a（须批·高）前置发现",
+ "authorization": "PIN01-K1-1a（`_shared` USB-C 系真源升 pad 级）—— 制备载荷时做前置一致性核对（只读）。",
+ "finding_summary": "**欲升 pad 级，必须先定『SS 差分对 ± 命名口径』—— 而仓库内现存 3 套互斥口径**；若照 PIN01-K1-1a 原议『与 `k1_pinmap.yaml#J1` 同口径』直接落表，等于把其中一套**未裁决**的口径**写进外部真源**（触 C-12『不得为变绿缩口径』）。**故本件只报冲突、不落载荷。**",
+ "three_conventions": [
+  {
+   "src": "USB_C_PLUG.yaml（Molex 105444·USB-IF 标准）",
+   "map": "A2=**TX_P** · A3=**TX_N** · A11=RX_P · A10=RX_N · B2=TX_P · B3=TX_N · B11=RX_P · B10=RX_N"
+  },
+  {
+   "src": "USB_C_RECEPT.yaml 头注（既有 12-pin 表）",
+   "map": "5=TX_P(**A2**) · 6=TX_N(**A3**)（同 USB-IF 口径）"
+  },
+  {
+   "src": "k1_pinmap.yaml#J1 ＋ K1 符号 USB_C_RECEPT（23 脚，R-1(a) 落件）",
+   "map": "TX_P=**A3** · TX_N=**A2** · TX2_P=**B3** · TX2_N=**B2**（与上二者**相反**）"
+  },
+  {
+   "src": "USB_C_RECEPT_24.yaml（24-pin·已 pad 级）",
+   "map": "A2=SSTXp1 · A3=SSTXn1（USB-IF），并以 **别名做交叉**：`TX1_P→SSRXp1(A11)` · `RX1_P→SSTXp1(A2)`（Key 卡 UFP/Device 侧口径）"
+  }
+ ],
+ "extra_conflict_24pin": "`USB_C_RECEPT_24.yaml` 的别名采用『Device 侧交叉』（TX1_P=A11），与 K1 符号『TX_P=A3』**既非同一套、也非其镜像**（符号 A3 对应表中 `RX1_N`）⇒ 第 3 套。",
+ "impact_assessment": {
+  "nets_actual": "`k1_nets.yaml`: J1/TX_P→`PCIE_TX0_P`(pad A3) · TX_N→`PCIE_TX0_N`(A2) · RX_P→`PCIE_RX0_P`(A11) · RX_N→`PCIE_RX0_N`(A10) · TX2/RX2 同型。",
+  "contact_orientation": "K1 把**自身 TX 放在 SSTX 触点(A2/A3)**、RX 放 SSRX 触点(A10/A11) ⇒ 取向 = **上游/host 侧**（若 K1 为下游 device 侧则需交叉）。**该取向属 L1（接口/信号流向）** —— 本件不裁。",
+  "polarity": "在既定取向内，符号 `TX_P` 落 A3(=TX1−) 与 `TX_N` 落 A2(=TX1+) ⇒ **± 命名与标准触点极性相反**。",
+  "functional_impact": "该 SS 对在 K1 走 **PCIe**（`PCIE_TX0_*`）；**PCIe 允许逐 lane 极性反转**（接收端 lane polarity inversion 自动检测）⇒ **功能上无害**。故该冲突**只影响门禁口径与命名自洽**，不影响可制造性/Gerber。",
+  "gate_impact": "sch_gate PIN-01 的 23 项 FAIL 全部由此口径差产生（`VBUS 允许 pin ['1']` … 见 `K1_SCH_GATE_PINMAP_CHECK_BEFORE_AFTER_20260921_v1.json`）。"
+ },
+ "options_for_supervisor": [
+  "**O1（口径澄清·最小改动·推荐裁定项）**：确认『K1 J1 符号/`k1_pinmap#J1` 的 ± 命名 = 板侧习惯命名（PCIe 极性不敏感）』⇒ 放行 `_shared` USB-C 系表**按 `k1_pinmap.yaml#J1` 口径**升 pad 级（即 PIN01-K1-1a 原议），并在表内**显式登记该口径与 USB-IF 命名的差异**（禁静默）。",
+  "**O2（订正符号命名）**：认定符号 ± 命名错误 ⇒ 改 K1 符号 `TX_P→A2 / TX_N→A3`（+TX2/RX2 同型）⇒ 触原理图/板重建链（`k1_sch_regen`→`gen --install`→板重建）⇒ 更大批，且需重出 K1 证据。",
+  "**O3（L1 升级）**：若认定『K1 应为 downstream device 侧、须交叉（TX↔SSRX）』⇒ **L1 接口/信号流向**，须 owner 裁。**ENG 不自行认定。**"
+ ],
+ "ask": [
+  "裁定 O1 / O2 / O3（**建议 O1**：功能无害 + 与既定 pinmap 自洽 + 最小改动）。",
+  "裁定后：`_shared` USB-C 系 3 表升 pad 级可与 PIN01-K1-1b/c **同一笔**落地。"
+ ],
+ "readonly_repo": true,
+ "not_landed": true,
+ "no_new_criteria_dim": true,
+ "not_landed_detail": [
+  "未改 `_shared`（**未制备该载荷**——口径未定，制备即等于预裁）",
+  "未改 k1 原理图/板/SPEC",
+  "未改 criteria/"
+ ],
+ "next": "获裁 → 按 O1/O2/O3 之一落地；PIN01-K1-1b/c 载荷已备（1c 已实证）⇒ 可一并一笔放行。"
+}
