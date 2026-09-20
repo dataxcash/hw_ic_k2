@@ -1,0 +1,65 @@
+{
+ "artifact": "k2_p6_2_acceptance_mechanized",
+ "schema": 1,
+ "purpose": "把 P6 完工判据② 做成**一条命令的机读验收**（含**落件前预测**模式），与判据①的验收件并列 ⇒ P6 两条判据现均有机器化验收路径。",
+ "criterion": "《K2 整体整改计划》§② P6 判据②：模板整改后 `k1|k2_jlc_template.kicad_pro` 的 ignore 集 == **manifest 应然集**（结构差异 0）",
+ "tool": {
+  "path": "k2/tools/k2_p6_2_acceptance_v1.py",
+  "sha16": "38c7f0084b504f9d",
+  "readonly": true,
+  "new_criteria_dims": 0,
+  "modes": {
+   "status": "现状体检（默认）",
+   "--expect-zero": "阶段门验收（差异必须 0）",
+   "--simulate <diff目录>": "把受控 pro 复制到 /tmp 镜像并施加补丁后评估 ⇒ **落件前预测**（真源零改）"
+  }
+ },
+ "expected_set": {
+  "source": "criteria/manifest.k2.yaml",
+  "read": "rule_severity_exemptions == [] ⇒ 应然集 = ∅（deny-by-default）",
+  "expect_text": "未登记豁免的 ignore == 0（deny-by-default）"
+ },
+ "scope": {
+  "in_scope": "CO-81 的 k2 全受控集（`git ls-files '*.kicad_pro'` = 10 件）+ **两模板**（判据② 明列）",
+  "k1_other": "k1 侧非模板 pro（`k1_v1.kicad_pro`，9 ignore）归 **K1 manifest**（待落）裁定 ⇒ 本件只报为**信息项**，不计入判据② 成否"
+ },
+ "runs": {
+  "status_now": {
+   "verdict": "FAIL(state)",
+   "k2": {
+    "n_files": 10,
+    "差异_vs_模板": 3,
+    "差异_vs_应然集": 7,
+    "模板_ignore": 9
+   },
+   "k1": {
+    "n_files": 2,
+    "模板_ignore": 9
+   }
+  },
+  "simulate_O1": {
+   "verdict": "PASS",
+   "diffs_applied": 6,
+   "k2": {
+    "差异_vs_模板": 0,
+    "差异_vs_应然集": 0,
+    "模板_ignore": 0
+   },
+   "k1": {
+    "模板_ignore": 0,
+    "信息项": [
+     "k1_v1.kicad_pro (9 ignore)"
+    ]
+   },
+   "reproduce": "python3 k2/tools/k2_p6_2_acceptance_v1.py --simulate <O1_fullset> --expect-zero"
+  }
+ },
+ "reading_note": "现状『3/10 与模板不一致』与『7/10 与应然集 ∅ 不一致』= **同一事实的两种口径**（前者以模板 9 为参照、后者以 ∅ 为参照；3 + 7 = 10）。CO-81 的合同文本用『== 模板』，而判据②/`rule_severity_manifest` 用『== 应然集 ∅』⇒ 若择 O1（全 0 ignore），两种口径**同时**达成（模板本身也变 ∅）。",
+ "known_tool_defect_caught": {
+  "what": "`patch -d <dir>` **先 chdir 再打开 `-i` 补丁文件** ⇒ 相对 `-i` 路径必失败（rc=2）",
+  "handling": "本件已用 `Path(...).resolve()` 绝对化；失败时**逐补丁报 rc**（不静默）"
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "criteria_touched": false
+}
