@@ -1,0 +1,33 @@
+{
+ "artifact": "k2_batch6_d_direct_diagonal_proposal",
+ "schema": 1,
+ "purpose": "批 6 (d) 端点对齐的**最小候选**（只读 /tmp 影子实测）：在 `_k1_escape` 候选序列**最前面**加『**直接对角线**（pad → (corr_x, track_y)）』候选 ⇒ 修正度量基线上 K1 由 **1/8 → 2/8**（新增 TX1.output），且跨网净空违规 **0**。",
+ "carrier": {
+  "file": "`_shared/eda_core/hs_route_model.py` · `HSRouteModel._k1_escape`",
+  "insert_at": "`idx = 0 if side == \"left\" else 1` 之后、模板 A/B 分派之前",
+  "code": "if layer_p in fields and layer_n in fields:\n    _cd = {\"P\": {\"pts\": [tuple(ep[\"P\"][idx][\"pos\"]), (corr_x, track_p)], \"layers\": [layer_p], \"via\": None},\n           \"N\": {\"pts\": [tuple(ep[\"N\"][idx][\"pos\"]), (corr_x, track_n)], \"layers\": [layer_n], \"via\": None}}\n    if self._k1_escape_verify(fields, net_p, net_n, ep, _cd, side):\n        return {\"corr_x\": corr_x, \"P\": _cd[\"P\"], \"N\": _cd[\"N\"]}",
+  "semantics": "与 `CROSSBOARD_CORRIDOR_ENDPOINT_LESSON_v1.json` 的 L2 结论一致：**端点落到目标焊盘轴线/目标轨道**，不做『45°→变陡→垂直』的固定三段式。"
+ },
+ "measurements": {
+  "corrected_baseline": "`tree_all`（⑤⑥草案 + D-1…D-4 全修）= **1/8**（TX0.output）",
+  "with_d_candidate": "`tree_d`（tree_all + 本候选）= **2/8**（TX0.output · **TX1.output（新增）**）",
+  "gain": "**+1 段（真实增益）**",
+  "geometry_check": "该次运行 solved 2 段；`_path_pn_min_edge_pt`：TX0/output = 0.142（≥0.1 ✓）；TX1/output = `None`（P=B.Cu / N=In1 **全段异层** ⇒ 同层 P/N 门不适用，非漏检）。跨网同层段对 <0.1（中心线）计数 = **0**；`shared_seg_count = 14`（跨 base 避让已生效）。",
+  "failopen_metric_contrast": "未修 D-1…D-4 的口径下：⑥ 树 3/8 → 加本候选 4/8（同为 +1），但那 4 段含 TX0.input(-0.09 交叉)/RX0.input(edge 0.01) 两段**不合规** ⇒ 只有修正口径的 +1 可信。"
+ },
+ "caveats": [
+  "TX1.output 成为**异层对**（P=B.Cu / N=In1）——这是 alloc 既有归属（`OCuLink_TX1_P` band=bcu、`_N` band=in1）的后果，DRC 无违规；但**差分耦合质量**属设计判断（L2），须监理确认是否接受。",
+  "候选置于模板**之前**（最短路径优先）会抢占模板 A/B 的候选；若监理认为应让既有模板优先，可改为**兜底位**（模板全失败后再试）——两种顺序的读数须实测对比。",
+  "TX0.input / RX1.input 的旋转窗口 = 0（见 BATCH6_RESCOPE_AFTER_GATE_FIX_v1.json §input_side_rotation_geometry）⇒ 本候选对它们无效（实测仍 INFEASIBLE）。"
+ ],
+ "prerequisite": "**D-1…D-4 必须同批落件**：不加 D-1…D-4，本候选的增益会与不合规几何混在一起（3/8→4/8 中含 2 段不合规），无法判定真伪。",
+ "negative_controls": [
+  "NC-1：构造『直接对角线穿过对侧既有几何/对网』⇒ 必须被 `_k1_escape_verify`（修正后）拒绝。",
+  "NC-2：K1 真值不得回退（修正口径下 ≥ 2/8；逐段可追溯）。",
+  "NC-3：K2 canonical 19 逐字节同（D-1…D-4 的 K2 影响已证非零 ⇒ 必测）。",
+  "NC-4：候选顺序两种（首位 / 兜底位）读数对比，择一落件。"
+ ],
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-21T04:25:00+0800"
+}
