@@ -1,0 +1,54 @@
+{
+ "artifact": "k2_b_class_and_alias_addendum",
+ "schema": 1,
+ "authority": "ENG 只读取证/备料建议（**未落件**）；处置归监理。不新增检查齿（owner #14②）。",
+ "purpose": "为待决 ⑨（board_path 项目配置修正）与 ⑤（B 类 SKIP 处置）补两条**新增旁证**，并登记一条本轮 env 事故教训。",
+ "A_alias_kicad_pro_gap": {
+  "fact": {
+   "alias_pcb": "k2/k2_v4.kicad_pcb",
+   "alias_pcb_tracked": "git ls-files --stage ⇒ 120000（**tracked 符号链接**）",
+   "alias_pro": "k2/k2_v4.kicad_pro（**不存在**）",
+   "real_pro_sibling": "k2/hw/k2_v4_8L.kicad_pro（在库；同目录 l4/l5/l6/l7 皆有 .kicad_pro 兄弟）",
+   "generator_behavior": "`k2_gen_v5.py` **自身会写出 .kicad_pro 兄弟**（本轮实测产出 run1.kicad_pro）⇒ 缺口**纯属别名表漏项**，非生成链缺陷。"
+  },
+  "remedy_minimal": "新增同名别名符号链接 `k2/k2_v4.kicad_pro -> hw/k2_v4_8L.kicad_pro`（与既有 `.kicad_pcb` 别名同形、同为 tracked 链接）。",
+  "scope_note": "属 `board_path` 口径族 ⇒ 与待决 ⑨ / **#K2-41 §三-⑦** 同一裁定面，**ENG 不擅自落件**（本件仅备料）。",
+  "effect_if_landed": "以 `.pcb` 存在性做 class 守卫、再用 `with_suffix('.kicad_pro')` 派生的用例不再 setup error（本轮口径外布局实测 21 项）。"
+ },
+ "B_class_disposition_addendum": {
+  "measured": {
+   "generator_alone": {
+    "cmd": "K2_OUT_PCB=… python3 k2/tools/k2_gen_v5.py（ambient python3，rc=0，**1.2 s**）",
+    "determinism": "两跑逐字节同（.pcb 与 .json 皆同）",
+    "output_sha16": "2ec9434f6d7c4354",
+    "bytes": 153771,
+    "nature": "**链的第 1 段中间产物**（非任何已发布板；设计源板 fb07d25a / 受审板 l7 皆 ≠ 此值）"
+   },
+   "full_chain": {
+    "cmd": "AppDir/usr/bin/python3.11 k2/tools/k2_route_segment_v1.py --in <gen 产物> --out … --upto all（**须 AppDir python**；ambient python3 因缺 pcbnew rc=1）",
+    "result_sha16": "c5a7df90aadb66e0",
+    "bytes": 2080371,
+    "wall_clock": "≈9 min",
+    "equality": "**== 受审板 `k2/hw/k2_v4_8L.l7.kicad_pcb` 的 sha16 (`c5a7df90aadb66e0`)，逐字节同**"
+   }
+  },
+  "conclusion": [
+   "① **受审板可复现性成立（今日口径）**：在**当前 commit**（k2 `662ccf4` / 共享层 `fc59771`）与冻结输入下，`k2_gen_v5 → k2_route_segment_v1 --upto all` **逐字节重建出受审板 l7**。⇒ 这是『跨板复用/学习环』(P6) 的核心可复用性事实（生成链闭合、确定性、可重建）。",
+   "② **但 B 类历史 fixture 仍不可钉定**：`k2_v5`/`k2_v6` 是**旧代际的中间产物**；今日生成器产出的是**今日**的中间产物（`2ec9434f…` / 最终 `c5a7df90…`），**不等于**当年那两个板的身份。⇒ disposition 的『身份未钉定 ⇒ 不可复跑』结论**成立**并已被本轮量化。",
+   "③ **F1（若选）成本已量化**：技术上零障碍（生成 1.2 s、全链 ≈9 min、两段皆确定性），代价全在**期望值重基线**（新 fixture = 新身份 + 血缘登记）⇒ 属**重基线类** ⇒ 须批。**F0（仅修路径锚）仍是最小动作**，与 F1/F2 并列不冲突。"
+  ],
+  "not_re_derived": "整链逐字节确定性**已在** `L4/E3-standard-call-l7-20260919/MANIFEST.md` 记为『3 跑逐字节同』⇒ 本轮**不**作为新主张重复登记（owner #14② 禁复评债）；本轮仅新增『**今日 commit 下可重建出受审板本体**』这一条。第二跑（chain2）**主动中止**以免重复已知事实，故 chain2 无完整读数（如实登记）。"
+ },
+ "C_env_lesson_sharpening": {
+  "incident": "本轮用 `ps` 过滤『k2_route_segment_v1.py』以清停长跑；过滤脚本虽排除 `os.getpid()`，但**父 shell 的 `bash -lc <整段脚本>` cmdline 含该字面量** ⇒ 误杀自身父 shell（exit 143），长跑随之被 SIGTERM。",
+  "rule": "清停时**不得**以工件名做 cmdline 子串匹配；必须 (a) 排除**全部祖先进程**（沿 `/proc/<pid>/stat` 的 ppid 链），或 (b) 只按 `argv[0]` 精确形态匹配，或 (c) 用持久会话/超时自收敛（首选）。",
+  "suggestion": "建议并入 handoff §6『环境教训』（现有第 ⑨ 条只讲 `rm -rf`；本条是**新的自匹配形态**，与既有『禁 pgrep/pkill -f 自匹配』同族但更隐蔽）。"
+ },
+ "invariants": {
+  "landed": "无（全部只读 / 仅 /tmp 产物）",
+  "c1c2": "C1/C2 保持 RED，未触碰",
+  "frozen": "冻结四源 / `criteria/` / 交付锚未动",
+  "workers": "未派 WORKER",
+  "stage": "P6 交付动作仍关闭；不越阶段门"
+ }
+}
