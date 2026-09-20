@@ -1,0 +1,55 @@
+{
+ "artifact": "k1_sch_gate_pinmap_check_before_after",
+ "schema": 1,
+ "ts": "2026-09-21T00:40:00+0800",
+ "id": "PIN01-K1-1",
+ "authorization": "#K2-51 §三 3/6 验收项『pinmap 校验器 U1 全 PASS』的独立复核（只读）",
+ "command": "python3 _shared/eda_core/sch_gate/checks/pinmap.py <符号库>（datasheets_dir = `_shared/eda_core/sch_gate/datasheets`，含本轮订正后真源）",
+ "before": {
+  "rev": "k1 9e283bf（N-3，R-1(a) 之前）符号库",
+  "verdict": "PIN-01 **FAIL(13)**",
+  "breakdown": {
+   "MCU_STM32G0(U1)": "9 项",
+   "缺真源表(fail-closed)": "TPS22990 · TPS22965 · TPD2E001 · R_LED · R_56K … 4 项+"
+  }
+ },
+ "after": {
+  "rev": "k1 08ff8bb（R-1(a)+U1 订正）现盘",
+  "verdict": "PIN-01 **FAIL(29)**",
+  "breakdown": {
+   "USB_C_RECEPT(J1)": "**23 项**（`引脚号错: VBUS 允许 pin ['1']` … 期望 1..16，实际 A4/B4/A9/B9/A1/B1/A12/B12/SH/A6/A7/A3/A2/A11/A10/B3/B2/B11/B10/A5/B5/A8/B8）",
+   "MCU_STM32G0(U1)": "**2 项**（`WORK_EN`/`KEY_DET_EN` 引脚名未绑定物理端口）",
+   "缺真源表(fail-closed)": "4 项+"
+  }
+ },
+ "findings": [
+  {
+   "id": "PIN01-K1-1a",
+   "severity": "高",
+   "finding": "**R-1(a) 与 sch_gate PIN-01 校验冲突**：R-1(a) 把 J1 符号脚由 `1..16` 改为 **pad 级名**（A*/B*/SH），但 `_shared` 真源 `datasheets/USB_C_RECEPT.yaml` 仍为 `1..16` ⇒ PIN-01 新增 **23 项 FAIL**（13→29）。",
+   "root_cause": "两套校验共用同一条真源：`criteria.measure_pin_map`（要求**焊盘级**可实现，R-1(a) 因它翻 PASS）× sch_gate `checks/pinmap.py`（要求与 `datasheets/<DEV>.yaml` 的**引脚号**一致）。真实需要 = **真源也升为 pad 级**。",
+   "fix": "`_shared/eda_core/sch_gate/datasheets/{USB_C_RECEPT,USB_C_RECEPT_24,USB_C_PLUG}.yaml` 的 `pins` 由 `1..16` 升为 pad 级（A*/B*/SH，与 `k1_pinmap.yaml#J1` 同口径）⇒ **`_shared` 变更，须批 + 同批升版 + 四树同步**。",
+   "note": "R-1(a) 的 `criteria` 侧验收（`pin_map_complete` PASS · K1 判定 11/7）**已达成**；本条是 **sch_gate 侧**的新回退，属 #K2-50 §二 R-1『K1 其余维零回退』的边界外缺口。"
+  },
+  {
+   "id": "PIN01-K1-1b",
+   "severity": "中",
+   "finding": "#K2-51 §三 3/6 验收「**pinmap 校验器 U1 全 PASS**」**未达成**：U1 仍有 **2 项** —— `WORK_EN`/`KEY_DET_EN` 引脚名未在任何物理端口别名中。",
+   "note": "脚**号**侧已全对（KBU6 订正生效，U1 由 9 项降为 2 项）；剩 2 项为**引脚名绑定**面（`aliases` 未含这两个设计名）⇒ 需在 KBU6 真源 `aliases` 增补（`WORK_EN: [PA2]` · `KEY_DET_EN: [PA15]`，同 `_shared` 批）或在册接受口径。"
+  },
+  {
+   "id": "PIN01-K1-1c",
+   "severity": "低",
+   "finding": "4 件多引脚器件**无 datasheet 真源表**（`TPS22990` · `TPS22965` · `TPD2E001` · `2N7002` 等）⇒ fail-closed 阻断，属**册面缺口**（非本会话引入）。",
+   "ask": "排期补表（与 SG-AUDIT-1 同族）。"
+  }
+ ],
+ "conclusion": "#K2-51 ③ 的 U1 验收**部分达成**（脚号全对；名绑定未达）；并暴露 **R-1(a) 需 `_shared` USB-C 真源同步升为 pad 级**的伴随变更（须批）。",
+ "not_landed": [
+  "未改 `_shared` USB-C 真源",
+  "未改 criteria/",
+  "未改生成器",
+  "未回退 R-1(a)（criteria 侧验收已达成，待批后同批补 sch_gate 侧）"
+ ],
+ "next": "待批：①`_shared` USB-C 系真源升 pad 级 + KBU6 `aliases` 补 WORK_EN/KEY_DET_EN（同一笔）②4 件补表。"
+}
