@@ -37,6 +37,12 @@ cd ic_hw/k2 && patch --posix -p1 < <P6X>/P6_OPEN_READINESS/gc2/tool_fixes/DENSIT
 ## S3 · B2-1 / B2-2（`_shared` 两处契约显式化）
 1. **第 0 步**：`grep -n` 复核载体行（旧行号多为批 2 前快照；B2-2 该区 **−91 漂移**）。
 2. 落补丁 → 3. 负控实跑（B2-1 真源冲突 ⇒ 显式登记；B2-2 非法维度 ⇒ 报错）→ 4. 见 S8 验收。
+**S3b · C-19 provenance 守卫**（同批；两处 `_shared`，`-p3`）：
+```bash
+cd ic_hw/_shared    && patch --posix -p3 < <P6X>/P6_OPEN_READINESS/capability_gap/C19_CONFTEST_PROVENANCE.diff
+cd ic_hw/k2/_shared && patch --posix -p3 < <P6X>/P6_OPEN_READINESS/capability_gap/C19_CONFTEST_PROVENANCE.diff
+```
+**期望**：合法布局 pytest 照常通过；**cwd ≠ 树根 ⇒ fail-closed 报 C-19**（封『补丁静默失效 ⇒ 假绿』）。**回滚**：2 文件 `git checkout`。
 **期望**：`_shared` 通用（零单板特判）；K2 同输入同输出**逐字节不回退**。**回滚**：`git revert`（单提交）。
 
 ## S4 · P6-2 模板整改 O1（6 补丁 / 54 行）

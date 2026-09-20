@@ -30,6 +30,8 @@
 | 7 | **B2-1 / B2-2 授权口径** | v3 表标"授权=无"，附注"共享层改动须监理批" ⇒ **口径冲突** | 按 **#K2-41 §三-② 同例**：`_shared` 改动**须监理批**；B2-1/B2-2 **范围已界定**（改动面 + **漂移自检**：旧行号多为批 2 前快照 ⇒ 施工第 0 步须 grep 复核）+ **零回归预验证 5 步**（G-d · canonical 19 两跑同 · `--expect-patched` · 双布局 pytest · 负控）⇒ **并入批 3 同批落** | 批 3 补丁集（与 1 同批） | `_shared` 通用（零单板特判）+ G-d 必过 + 负控牙齿实跑（见 `BATCH3_B2_1_B2_2_SCOPE_DEFINITION_v1.json` `b39739e1c29ce148`） | 文件级 |
 | 8 | **外部首件** P5 V4–V7 | 8/8 `NOT_RUN` | **不由 ENG 自证**；回件后由监理/外部填 `L6/first_article/results_template.json` | — | — | — |
 
+| 11 | **（新）C-19 conftest provenance 守卫** | 账本 C-19 的『conftest provenance 断言』**当前树中不存在**（grep 命中 0）⇒ 影子 cwd 错时会读到**假绿** | **补守卫（fail-closed）**：pytest cwd 必须 == 本测试文件所在树的根 | （两处 `_shared`）`cd <…>/_shared && patch --posix -p3 < …/capability_gap/C19_CONFTEST_PROVENANCE.diff` | 合法布局 **16 passed**；违规 cwd ⇒ **RuntimeError（报 C-19）** ⇒ 假绿路径被封 | 2 文件 `git checkout`（可拒：若认为误伤调用方式则不批） |
+
 ## 2. 批 3 落件后**唯一**验收（每步后 / 收尾各一次）
 
 ① `cd k2 && PYTHONPATH=$PWD/_shared:$PWD python3 _shared/eda_core/pipeline/engine.py verify k2` ⇒ `preflight`+3 **PASS**
