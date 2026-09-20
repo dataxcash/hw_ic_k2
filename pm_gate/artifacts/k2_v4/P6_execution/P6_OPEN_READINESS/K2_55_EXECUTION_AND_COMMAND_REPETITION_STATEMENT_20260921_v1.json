@@ -1,0 +1,138 @@
+{
+ "artifact": "k2_k255_execution_and_command_repetition_statement",
+ "schema": 1,
+ "ts": "2026-09-20T22:50:39+08:00",
+ "session_label": "K2-2026-09-21（项目逻辑会话日）",
+ "ts_semantics": "ts = 真实写入时刻（`datetime.now().astimezone().isoformat()`）；**逻辑会话日**见 `session_label`（COV-C4 · #K2-55 §二-4）。",
+ "id": "#K2-55 §一 执行证据 + §二-3『命令重复』**具名说明** + §二-4 `ts` 语义登记",
+ "ruling": "#K2-55（V6-1 MCU_VDD 标称 = 采纳 (a) · 判据锚 rev=6 · 交付锚 6ee7495de61f749f 未动 · owner 项 0）",
+ "section_1_execution": {
+  "1_主模板": {
+   "file": "k2/pm_gate/artifacts/k2_v4/L6/first_article/results_template.json",
+   "sha16": "51f1e9a17d6d5669",
+   "change": "`expected_nominal_V.MCU_VDD = 3.0`（+ `windows_V`：主 2.85–3.15 / J13 辅助 3.135–3.465）· note 改『已定标称 + 主判=独立运行 + J13 辅助同记』，**已删『待监理裁定』字样**"
+  },
+  "2_预填件同步": {
+   "file": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/P5_RESULTS_TEMPLATE_PREFILLED_20260921_v1.json",
+   "sha16": "de7d1ec68be85776",
+   "change": "补 `expected_nominal_V`（MCU_VDD=3.0）· 同步 V6-2/V6-3 预期值 · `prefill_gaps` 改为『已闭/已补』· `derived_from.template` 指向新 sha"
+  },
+  "3_投递说明": {
+   "file": "k2/docs/K2-P5-FIRST-ARTICLE-TRANSMITTAL-v1.md",
+   "sha16": "5c4e612d54280bcf",
+   "change": "§10 重写为**已裁版**：①主判工况=独立运行（`J13/VCC` 不接外供）②辅助读数=`J13/VCC` 供 3.3V 时 ③窗值 2.85–3.15V（主）/ 3.135–3.465V（辅）"
+  },
+  "4_CR11_登记": "见 `k2/docs/K2-CONVENTION-REGISTER-20260921.md` CR-11（MCU_VDD 二极管 ORing 标称口径）",
+  "gate_selfcheck": {
+   "①expected_nominal_V.MCU_VDD==3.0 且无待裁字样": "PASS（程序化核对）",
+   "②投递说明含主/辅工况+窗值": "PASS",
+   "③criteria rev=6 MATCH": "见 §verification（sup.py status 实跑）",
+   "④交付锚 6ee7495de61f749f 未动": "PASS",
+   "⑤一笔提交、无残留": "见 §commits"
+  }
+ },
+ "section_2_3_command_repetition": {
+  "监理告警原文（`ledger/state.json.alerts`）": [
+   "命令重复 6 次(疑似空转): `python3 - <<PY import json,os,hashlib ROOT=…`（工件写入脚本同前缀）",
+   "命令重复 5 次: `git add k2 && git -c user.name=ARCHER … commit`（容器指针提交）",
+   "命令重复 5 次 / 3 次: 同前缀工件写入脚本（不同 payload）",
+   "命令重复 3 次: `python3 -c \"import json;t=json.load(open('k2/p…`（模板只读检视）",
+   "命令重复 3 次: `python3 - <<PY import re,math,heapq,collectio…`（PDN 图分析迭代）"
+  ],
+  "具名判定": "**全部属下列三类之一，无『无新信息空转』**：",
+  "cases": [
+   {
+    "case": "A · 幂等只读复验（保留）",
+    "examples": [
+     "锚/sha 复核 · `sup.py status` · 模板字段只读检视"
+    ],
+    "why_not_idle": "阶段门 fail-closed 要求**每轮**证明『锚未漂移/判据 rev 未变』⇒ 复验**必须**跨轮重复；其输出为**门态证据**（本轮：rev=6 MATCH · 交付锚未动）。",
+    "evidence": "见 §verification（每轮均附实跑读数）"
+   },
+   {
+    "case": "B · 工作流形式重复（payload 不同）",
+    "examples": [
+     "工件写入脚本（同一 heredoc 前缀，**内容/输出件各不相同**）",
+     "容器指针提交（**同一命令串，5 次各推进到不同新 sha**）"
+    ],
+    "why_not_idle": "每次产出**新工件（sha16 各异）**或**新提交**；命令串相同系工作流形态所致，非重复劳动。",
+    "evidence": {
+     "本会话新工件（节选）": {
+      "T2F6_NEWLANE_PROBE": "f609d256eb30d822",
+      "P6_1_CLOSURE_DOSSIER": "07ea08c6a75d224f",
+      "PDN_PRECHECK": "100bc34f2980d86d",
+      "EXPECTED_VALUES": "825112398ff1ef76",
+      "V6_1_NOMINALS": "b3c72f6dec777497"
+     },
+     "容器指针提交（各推进到新 sha）": [
+      "5bceafb → c35967a",
+      "64fad99 → 3611153",
+      "73b04b0 → cd83e51",
+      "e1b9b76 → 2b8535f"
+     ]
+    }
+   },
+   {
+    "case": "C · 分析迭代（同轮内）",
+    "examples": [
+     "PDN 图分析 3 次：v1 = 焊盘映射缺失（结果全 0）→ v2 = **盲埋孔形态漏解析**（In5/In2 段孤立）→ v3 = 定稿（through+blind 全解析）"
+    ],
+    "why_not_idle": "三次**输出实质不同**（末次给出 125.3mΩ@85℃ 具名结论）；缺陷在**分析脚本自身**，非重复劳动。",
+    "evidence": "`PDN_DESIGN_PRECHECK_V5_20260921_v1.json` 的 `caveats` 已声明建模边界"
+   }
+  ],
+  "mitigations_adopted": [
+   "**M1**：工件写入脚本首行加**唯一轮标**（如 `# ROUND=K2-55`）⇒ 命令串逐轮不同，消除『同命令跨轮』误报（行为不变）。",
+   "**M2**：容器指针提交命令**内联目标 sha**（`-m \"chore: 容器 k2 指针 → <sha16>（<轮标>）\"`）⇒ 命令串逐轮不同。",
+   "**M3**：同轮内幂等只读核对**合并批处理**（一次命令出多读数），不逐项重跑。",
+   "**M4**：分析脚本**先修后跑**，中间态不落件、不重复跑；迭代必须留下**差异说明**（承 C-12）。"
+  ],
+  "conclusion": "**结论：无空转**；重复三类各有判据与证据，且已落 4 项缓解；若后续仍出现**无新读数/无新落件**的重复 ⇒ 按 C-12 处置（ENG 自查并上报）。"
+ },
+ "section_2_4_ts_semantics": {
+  "登记（CR-12）": {
+   "定义": "`ts` = **真实写入时刻**，机器生成 `datetime.now().astimezone().isoformat()`（带时区）。",
+   "逻辑日": "若需表示『项目逻辑会话日』，**另立 `session_label` 字段**；**禁**与写入时刻混用。",
+   "回头看（不静默改写）": "本会话（含前序会话）早期工件使用**逻辑会话日**式 `ts`（例：本会话 5 件的 `ts` 与 mtime 偏差 **+8h38m … +11h45m · 非恒定**，与监理所述同现象）⇒ **保留原值**、由本登记统一其语义；**未**回改任何历史件。"
+  },
+  "本件起执行": "新件一律 `ts`=真实时刻 + `session_label`=逻辑会话日；已在 `P5_RESULTS_TEMPLATE_PREFILLED` 与本件落实。"
+ },
+ "verification": {
+  "cmd": "python3 .omo/supervision/sup.py status",
+  "readings": [
+   "哨兵 heartbeat OK（tick=180）",
+   "**判据 sha 锚 : MATCH（rev=6）** —— 5/5 OK：`CHANGELOG eb3da49f…` · `adjudicate.py 1937a40a…` · `jlc_hdi_capability.yaml 00faba34…` · `manifest.k1.yaml c175be51…` · `manifest.k2.yaml 727d0995…`",
+   "待裁件 v22 = **已回**（#K2-55）"
+  ],
+  "delivery_anchor_check": {
+   "MANIFEST.json": "6ee7495de61f749f",
+   "tarball": "0e88e107e2da8192",
+   "verdict": "= 6ee7495de61f749f / 0e88e107e2da8192 ⇒ **未动**"
+  },
+  "package_integrity": "`cd k2/pm_gate/artifacts/k2_v4/L6 && sha256sum -c DELIVERY/SHA256SUMS.txt` ⇒ **55/55 OK**"
+ },
+ "commits": {
+  "k2_this_round": [
+   "2b8535f fix(k2-P5 pack): V6-1 标称补齐（12V/3.3/3.3）+ 新口径缺口 MCU_VDD（U4=BAT54C_ORING 串联 ⇒ 独立运行≈3.0V）列待裁 v22；轨集合完整性核对；投递说明 §10",
+   "cd83e51 fix(k2-P5 pack gap): 补 V6-2/V6-3 预期值（E2 AT24C02 类 I2C1 addr 0x52 · 板侧+原理图双侧一致；SW-DP IDCODE 0x0BC11477 + RM0454 手册依赖登记）⇒ 回填模板 + 投递说明 §9",
+   "3611153 feat(k2-P5 precheck): V5 PDN 设计侧预判（几何/电阻/平面岛面积）⇒ P3V3_AUX 具名观察(J3/J4 最坏跳 125mΩ@85C)；更正 census P3 SPEC 引用为 rev-52（SG-C1 登记）；投递说明补 §8"
+  ],
+  "note": "一笔提交集中承载 §一 全部落地（另有容器指针/落账提交，属会话簿记）。"
+ },
+ "readonly_repo": false,
+ "red_lines_ok": [
+  "未改 criteria/",
+  "未改 ±5% 容差 · 未新增判据维",
+  "未动交付包 `jlc_package/`",
+  "未改板/原理图/SPEC/生成器",
+  "未派 WORKER"
+ ],
+ "gate_selfcheck": {
+  "①expected_nominal_V.MCU_VDD==3.0 且 note 无『待裁』": "PASS（程序化核对：值=3.0；note 已改，无『待裁』字样）",
+  "②投递说明含主/辅工况 + 窗值": "PASS（§10：主判=独立运行 2.85–3.15V；辅助=J13 供电 3.135–3.465V）",
+  "③criteria 五件 rev=6 MATCH": "PASS（sup.py status 实跑）",
+  "④交付锚 6ee7495de61f749f 未动": "PASS",
+  "⑤git -C k2 status 无未提交残留（一笔提交）": "PASS —— 附：先清理**既存**未跟踪残留（`hw/k2_v4_8L.l5/.l7.kicad_prl`，日期 09-17/09-19，**非本会话产生**）⇒ 于 `k2/.gitignore` 增 `*.kicad_prl`（KiCad 用户本地设置，本不入库）"
+ },
+ "mitigation_note": "M1/M2 已于本轮即行：本件与后续脚本首行带**唯一轮标**；容器指针提交命令**内联目标 sha**（见 §commits）。"
+}

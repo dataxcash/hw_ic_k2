@@ -127,7 +127,7 @@
     }
    },
    "criterion": "各电源轨电压全部 ±5% 标称",
-   "note": "",
+   "note": "标称已定（#K2-55）：**主判工况 = 独立运行（J13/VCC 不接外供）** ⇒ MCU_VDD 标称 **3.0V**（窗 2.85–3.15V）；**辅助读数（须同记）** = J13/VCC 供 3.3V 时之 MCU_VDD（窗 3.135–3.465V）；其余轨按各自标称 ±5%。",
    "measurement_guide": "同 V5 测点/条件（稳态、已声明负载），逐轨记电压。",
    "expected": {
     "tolerance_pct": 5.0,
@@ -137,6 +137,37 @@
      "P3V3_AUX",
      "MCU_VDD"
     ]
+   },
+   "expected_nominal_V": {
+    "12V_IN": 12.0,
+    "P3V3": 3.3,
+    "P3V3_AUX": 3.3,
+    "MCU_VDD": 3.0,
+    "source": "#K2-55 §一（口径自裁）· 依据件 k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/P5_V6_1_NOMINALS_AND_MCU_VDD_CALIBER_20260921_v1.json",
+    "windows_V": {
+     "MCU_VDD_main": {
+      "lo": 2.85,
+      "hi": 3.15,
+      "basis": "标称 3.0V ±5% · 主判工况 = 独立运行（J13/VCC 无外供）"
+     },
+     "MCU_VDD_aux_J13": {
+      "lo": 3.135,
+      "hi": 3.465,
+      "basis": "辅助读数：J13/VCC 供 3.3V 时 MCU_VDD 按 3.3V ±5%（同记，不改主判）"
+     },
+     "12V_IN": {
+      "lo": 11.4,
+      "hi": 12.6
+     },
+     "P3V3": {
+      "lo": 3.135,
+      "hi": 3.465
+     },
+     "P3V3_AUX": {
+      "lo": 3.135,
+      "hi": 3.465
+     }
+    }
    }
   },
   "V6_2_mcu_swd_id": {
@@ -160,7 +191,11 @@
      }
     },
     "device_id_read": null,
-    "expected_device_id": null
+    "expected_device_id": {
+     "sw_dp_idcode_expected": "0x0BC11477（Cortex-M0+ · ARM CoreSight 标准）",
+     "st_dbgmcu_dev_id_expected": "须以 RM0454 §DBG 检取（st.com 离线不可达 ⇒ 手册依赖项）",
+     "source": "设计侧推导 · k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/P5_EXPECTED_VALUES_DESIGN_SIDE_20260921_v1.json（825112398ff1ef76）"
+    }
    },
    "criterion": "读到正确 device ID（须与器件手册一致）",
    "note": "",
@@ -180,7 +215,22 @@
      "I2C2"
     ],
     "addresses_found": [],
-    "expected_address": null
+    "expected_address": {
+     "refdes": "E2",
+     "part_class": "AT24C02 类 8-pin SOIC",
+     "bus": "I2C1",
+     "addr_7bit": "0x52",
+     "addr_8bit_write": "0xA4",
+     "addr_8bit_read": "0xA5",
+     "strapping": {
+      "A0": "GND(0)",
+      "A1": "MCU_VDD(1)",
+      "A2": "GND(0)",
+      "WP": "GND"
+     },
+     "source": "设计侧推导（板侧+原理图双侧一致）· k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/P5_EXPECTED_VALUES_DESIGN_SIDE_20260921_v1.json（825112398ff1ef76）"
+    },
+    "fru_eeprom_bus": "I2C1"
    },
    "criterion": "FRU EEPROM 地址应答正确（与原理图/BOM 标称地址一致）",
    "note": "",
@@ -328,13 +378,18 @@
  },
  "instrument_selfcheck": "INSTRUMENT_SELFCHECK.json",
  "derived_from": {
-  "template": "k2/pm_gate/artifacts/k2_v4/L6/first_article/results_template.json（sha16 c688b7daf9953b30）",
+  "template": "k2/pm_gate/artifacts/k2_v4/L6/first_article/results_template.json（sha16 51f1e9a17d6d5669）",
   "rules": "k2/pm_gate/artifacts/k2_v4/L6/first_article/RULES.md（sha16 8bee09616020d5a9）",
   "selfcheck": "k2/pm_gate/artifacts/k2_v4/L6/first_article/INSTRUMENT_SELFCHECK.json（sha16 3f89dec1a6481fe5）"
  },
  "prefill_note": "**只读预填**：仅填 ENG 可知且**有出处**的『期望/指引』；`measured`/`evidence` 保持空（外部方填）。未新增/未改任何阈值。",
  "prefill_gaps": {
-  "V6_2_mcu_swd_id": "expected_device_id 未在仓库内找到出处 ⇒ 由外部方按器件手册（STM32G0B1KBU6）填。",
-  "V6_3_fru_i2c": "expected_address 的具体数值未在仓库内找到出处 ⇒ 以 E2 strapping（板侧实测）为准并由外部方按手册确认。"
- }
+  "V6_1_MCU_VDD": "**已闭**：#K2-55 裁定标称 3.0V（主判=独立运行窗 2.85–3.15V；J13 辅助窗 3.135–3.465V）。",
+  "V6_2_mcu_swd_id": "**已补**：SW-DP IDCODE 预期 0x0BC11477；`DBGMCU_IDCODE` 须以 RM0454 对照（手册依赖）。",
+  "V6_3_fru_i2c": "**已补**：E2 于 I2C1 · 7-bit 0x52（板侧+原理图双侧一致）。",
+  "V6_4_link": "阈值二值（x4 Gen4）；无 pending。"
+ },
+ "ts": "2026-09-20T22:50:14+08:00",
+ "session_label": "K2-2026-09-21（项目逻辑会话日 · 与件内 ts 分离）",
+ "ts_semantics": "ts = 真实写入时刻（datetime.now().astimezone()）；逻辑会话日见 session_label（COV-C4 · #K2-55 §二-4）"
 }
