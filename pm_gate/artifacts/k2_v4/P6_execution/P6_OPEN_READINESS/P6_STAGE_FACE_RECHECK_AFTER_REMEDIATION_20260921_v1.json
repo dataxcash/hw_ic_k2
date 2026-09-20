@@ -1,0 +1,50 @@
+{
+ "artifact": "k2_p6_stage_face_recheck_after_remediation",
+ "schema": 1,
+ "ts": "2026-09-21T06:05:00+0800",
+ "id": "P6 判据面·修复后复核实测（监理自动续推·当前阶段=P6）",
+ "authorization": "监理自动续推『按已批准《K2 整体整改计划》推进当前阶段』（阶段门 fail-closed）。本件**只读实测**；未改工具/判据/模板。",
+ "current_stage": "**P6**（阶段门总态：P0–P4 HOLDS · P5 PENDING_EXTERNAL · P6 判据面 → 见下）",
+ "live_readings": {
+  "P6_2_结构面": {
+   "cmd": "python3 k2/tools/k2_p6_2_acceptance_v1.py",
+   "result": "**PASS(state)** —— k2 模板 ignore=0 · 文件差异 0/10 · 差异(应然集=[]) 0/10；k1 模板 ignore=0 · 文件差异 0/2 · 差异 0/2 ⇒ 结构差异==0",
+   "verdict": "**PASS（维持）**"
+  },
+  "P6_1_命中面": {
+   "cmd": "python3 k2/tools/k2_p6_1_acceptance_v1.py --verdict <K1 verdict 11P/7F> --pro k1/k1_v1.kicad_pro",
+   "result": "**[MISS] ignore_without_ruling(9) · [MISS] no_pipeline(1) · [MISS] no_fp_lib_table(1) · [OK] sheets_empty(1)** ⇒ 工具报 FAIL",
+   "verdict": "**需口径裁定（非回归）**"
+  }
+ },
+ "root_cause_of_3_miss": {
+  "text": "验收器 ①②③ 只读 **FAIL 维**（`_fail_map`）并以『**缺陷存在**』为通过条件；而这三项同源缺陷**已被 #K2-49 放行修复** ⇒ 判定器不再报缺陷 ⇒ 工具判 MISS。**属『缺陷被修好』，非回归、非判据放松。**",
+  "evidence": [
+   "① `k1/k1_v1.kicad_pro` 的 9 条 ignore **已改 severity=warning** —— k1 提交 **`c018fc7`**『feat(k1-mech M1): kicad_pro 规则严重度 ignore→warning（9 项）（#K2-49 放行·N-2/M1）』 ⇒ 现 verdict `rule_severity_manifest: 未登记豁免的 ignore **0/62**`",
+   "② `k1/pipeline.yaml` **已在岗**（19:43 落件） ⇒ 现 verdict `pipeline_present: scope=k1 … 0 个`",
+   "③ `k1/fp-lib-table` **已在岗** ⇒ 现 verdict `fp_lib_table_present: … 存在`（无『缺失』）",
+   "④ `sheets_empty(1)` 仍 OK（`k1_v1.kicad_pro.sheets == []`）"
+  ],
+  "note": "计划 §7.2-2 本就要求『模板整改一次：从根上消除新板自带 9 条 ignore』⇒ **缺陷消除 = 计划成果**；P6 判据①『必须命中』是**对整改前状态的一次性演示**，整改后**自然不可再命中**。"
+ },
+ "asks": [
+  {
+   "id": "P6-1-口径（须裁·监理自裁）",
+   "text": "裁定 P6-1 的闭法：(a) 以**整改前命中证据**（在册：`P1_P5_STAGE_GATE_RETROSPECT` 记『四项命中全 OK』）+ **整改记录**（k1 `c018fc7` / `pipeline.yaml` / `fp-lib-table`）**闭 P6-1**；或 (b) 改验收器语义为『命中 **或** 已登记修复』——**后者须监理明裁且不得新增检查齿（owner ②）**；ENG **不自行改工具**（防 C-12）。",
+   "eng_note": "ENG 建议 (a)：修复是**成果**，以历史命中 + 修复记录闭，工具语义不动。"
+  },
+  {
+   "id": "pciesw4-覆盖面（计划 §7.2-6 · 待裁）",
+   "text": "计划 §7.2-6 明确『跨板覆盖范围应含 `pciesw4`』。实测 `pipeline_present` 的 fail-closed 扫描**范围外**仍列 6 个含 `.kicad_sch` 无 `pipeline.yaml` 的目录（`k2/hw/sch` · `key_v2/key_v2/sch` · `pciesw4/aic` · `pciesw4/aic/sch_kicad` · `pciesw4/gpu` …）。⇒ 请求：**由 gate 属主**为 `pciesw4`（及 `key_v2`）**立 manifest 条目**（criteria 面 = ENG 只读 ⇒ 只能提议）。"
+  }
+ ],
+ "not_landed_detail": [
+  "未改工具/判据/模板",
+  "未改 k1/k2/pciesw4 项目件",
+  "未改 criteria/"
+ ],
+ "readonly_repo": true,
+ "no_new_criteria_dim": true,
+ "stage_gate_discipline": "**未越阶段**：P0–P4 HOLDS（本会话已复核锚全 MATCH）· P5 = PENDING_EXTERNAL（未跳过）· P6 = 结构面 PASS / 命中面待口径 ⇒ **无『未过门先开工』**。",
+ "next": "待裁 P6-1 口径 + pciesw4 覆盖面；T2-F6 按需；批 6 v4（release-gated）待放行。"
+}

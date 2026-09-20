@@ -1,0 +1,167 @@
+{
+ "artifact": "k2_pending_rulings_delta",
+ "schema": 19,
+ "ts": "2026-09-21T06:10:00+0800",
+ "supersedes": "PENDING_RULINGS_DELTA_20260921_v18.json（sha16 42245968bfc8c0fe）；v19 追加『P6 判据面·修复后复核』实测与两项待裁",
+ "purpose": "收敛全部待裁项为**一份**决策件。本会话（#K2-51 后无新裁定）按 handoff §7-B 只读造活：落 4 项实质成果，并把 **W8-GEN-1（4/6 唯一阻塞）由『须批』推成『已实证、可一击落地』**。",
+ "owner_gate": "无（全部自裁面）；owner 面仍仅 C-26 登记 + P5 外部面 + #K2-52 §五-1 的 J1 命名视角『知悉』项",
+ "stage_state": "P0–P4 与 P6 判据面 HOLDS；P5 = 唯一未闭阶段门（外部 V4–V7 `NOT_RUN`）；交付锚 `6ee7495de61f749f` **未动**（本会话实测复核）；判据 **rev=6**；canonical 19 `190b73be0f728a56`。**未越阶段、未动任何受保护件。**",
+ "landed_this_session": [
+  {
+   "id": "SG-AUDIT-1c（新·闭环）",
+   "what": "DS160PR810 **全量 64/64 对表 PASS**（补齐 addendum 的 14/64 残差）",
+   "evidence": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/SG_AUDIT_DS160PR810_FULL64_CROSSCHECK_20260921_v1.json（sha16 ab72bc3d5c0ce45d）",
+   "tool": "k2/tools/k2_sg_ds160pr810_pin_truth_crosscheck_v1.py（新·只读）",
+   "detail": "厂商 PDF TI SNLS658（`pdf_sha256 50528cac…`，本会话 curl 取回）§5 Pin Functions（**仅表体 p4–p6**，排除 p3 封装俯视图以防列错读）逐脚解析；覆盖 1..64 无缺/无越界/无重复；**负控**（人为改 pins[1] RX0P→RX0N）⇒ FLAG，非恒绿。",
+   "conclusion": "无新缺陷 ⇒ **SG-AUDIT-1『7/8 一致、唯一 FAIL = STM32G0B1KBU6』结论维持**；DS160PR810 残差**闭**。"
+  },
+  {
+   "id": "K1-D6 台账（#K2-51 授权·已落）",
+   "what": "读数 **17 → 77 / 5 类**",
+   "evidence": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/K1_BOARD_LEVEL_DEFECT_WORKLIST_20260921_v2.json（sha16 d191c47a937fa5ce；supersedes v1 8cbf714f）",
+   "detail": "来源 `K1_DRC_EVIDENCE_20260921_v1.json`（板 sha eda1dc91eec76aa7）：error 13 / warning 77 = silk_over_copper 29 · silk_overlap 24 · nonmirrored_text_on_back_layer 14 · missing_courtyard 7 · silk_edge_clearance 3。",
+   "gate_check": "`criteria/manifest.k1.yaml` `drc_warning_dispositions` 已登记该 **5 类全量** ⇒ `board_warning_types ⊆ dispositions[].type` **PASS 维持**（实测复核）。口径不变：**登记制、不豁免、保持可见**；禁以此豁免任何实体 DRC/DFM 项。",
+   "note": "**未重跑 DRC**（遵 owner ②『终止每轮必复评』；读数取自既有证据件）。"
+  },
+  {
+   "id": "PIN01-K1-1c 载荷制备（状态升级：待排期 → **已制备待落地**）",
+   "what": "4 件缺失真源表从厂商原件逐脚转录并**沙箱验证**",
+   "evidence": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/PIN01_K1_1C_MISSING_TRUTH_TABLES_PREPARED_20260921_v1.json（sha16 bc2c776926ae6e6c）· 载荷 `k2/docs/drafts/pin01-k1-1c-missing-tables-v1/`",
+   "detail": "TPS22990(TI SLVSDK1C, DML WSON-10) · TPS22965(TI SLVSBJ0F, DSG WSON-8) · TPD2E001(TI SLLS684I, DRY 6-pin) · 2N7002(Nexperia Rev.7, SOT23)。**沙箱**：pinmap.py FAIL **29 → 25**（4 无表项全消、无新增）；**负控**（2N7002 D 3→2）⇒ FLAG。前 3 件 `doc_sha256` 与仓库既有 K1 输入层记录**逐字节一致**。",
+   "ask": "与 PIN01-K1-1a/b **同一笔** `_shared` 放行落地（预期随后 PIN-01 FAIL(29)→**FAIL(0)**）"
+  },
+  {
+   "id": "W8-GEN-1 补丁制备 + 沙箱实证（状态升级：须批 → **已实证待落地**）",
+   "what": "建板器补 FPID 库昵称的补丁已写成并**沙箱跑通**",
+   "evidence": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/W8_GEN_1_BUILDER_FPID_PATCH_PROVEN_20260921_v1.json（sha16 29a648633a52293b）· 载荷 k2/docs/drafts/w8-gen-1-builder-fpid-v1/",
+   "detail": "沙箱（/tmp/opencode/k1gen）实测：**原件 42 裸名 → 补丁 42/42 带 `LIB:NAME`**（`n_no_library_link 42→0 ∧ n_footprints=42` = #K2-51 验收条达成）；两次连跑**逐字节一致**（b68105d2e8914aa7…）；产物 vs 现役板 **98 行差**（84 FPID + 14 U1 net 重排 ⇒ 同批闭合 K1-U1-BOARD-SYNC）；几何/焊盘/网表零功能改动。",
+   "ask": "放行落地批：①应用补丁 ②真源订正 U10 footprint ③重建板 + 同批重出测量证据（k2/docs/drafts/p4-j8-*）④L3 建板记录 ⑤复算 K1（4/6 收口）"
+  },
+  {
+   "id": "**K1-U10-FP-1（新·中）**",
+   "what": "补丁 fail-closed 断言揪出 U10 声明/实现漂移",
+   "evidence": "同上（补丁运行即报错）",
+   "detail": "`k1_board.yaml#devices.U10.footprint` 声明 `Package_TO_SOT_SMD:SOT-23`（3 pad），板件实测 **`SOT-23-5`（5 pad，与 sch_pins=5 自洽）**；该件 geometry.note 自述『reconciliation **OPEN-2**；实际器件应为 SOT-23-5』⇒ 声明未随 ② 换件复算（同族 K1-D10/D11/D12）。",
+   "ask": "落地批必带 1 行真源订正：`k1_board.yaml#devices.U10.footprint` → `Package_TO_SOT_SMD:SOT-23-5`。"
+  },
+  {
+   "id": "**J1-SSP-1（新·高·口径冲突）**",
+   "what": "PIN01-K1-1a 前置核对发现：USB-C J1 的 SS 差分对 ± 命名在仓库内存在 **3 套互斥口径**",
+   "evidence": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/PIN01_K1_1A_J1_SSPAIR_CONVENTION_CONFLICT_20260921_v1.json（sha16 b60b6bc03cd24ff4）",
+   "detail": "①`USB_C_PLUG.yaml`(Molex/ USB-IF)：A2=TX_P·A3=TX_N ②`USB_C_RECEPT.yaml` 头注：5=TX_P(A2)·6=TX_N(A3) ③`k1_pinmap.yaml#J1`＋K1 符号：**TX_P=A3·TX_N=A2**（相反）④`USB_C_RECEPT_24.yaml` 用别名做 Device 侧交叉（TX1_P=A11）⇒ 第三套。K1 TX 落在 SSTX 触点、RX 落 SSRX 触点 ⇒ 取向=上游/host 侧（属 **L1** 取向问题，ENG 不裁）。既定取向内 ± 命名与标准触点极性相反；该对走 **PCIe 且 PCIe 允许 lane 极性反转 ⇒ 功能无害**，只影响门禁口径自洽。",
+   "ask": "裁 O1（推荐：确认板侧±命名习惯 ⇒ 表按 `k1_pinmap#J1` 口径升 pad 级并显式登记差异）/ O2（改符号 ± 命名 ⇒ 触重建链）/ O3（L1：取向须交叉 ⇒ owner）。"
+  },
+  {
+   "id": "PIN01-K1-1b 载荷制备（状态升级：须批 → **已制备待落地**）",
+   "what": "KBU6 真源 `aliases` 补 `WORK_EN:[PA2]` / `KEY_DET_EN:[PA15]`（**pins 逐字未动**）",
+   "evidence": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/PIN01_K1_1B_KBU6_ALIASES_PREPARED_20260921_v1.json（sha16 f42e633b4d3e7192）· 载荷 k2/docs/drafts/pin01-k1-1b-kbu6-aliases-v1/",
+   "detail": "沙箱：真源副本 + 本载荷（叠加 1c 4 表）⇒ pinmap.py **29 → 25(1c) → 23(1c+1b)**（本载荷 −2，恰为 2 项名绑定）；余 23 = USB-C J1（受 J1-SSP-1 阻塞）。",
+   "ask": "与 PIN01-K1-1c **同一笔** `_shared` 放行落地。"
+  }
+ ],
+ "new_items_after_v10": [
+  {
+   "id": "**T2-F6 通道降级（新·中）**",
+   "title": "batch4 的『半自动取件通道』本会话**实测已部分失效**",
+   "facts": [
+    "**已不可达/被拒**：`atta.szlcsc.com` **403**（batch4 时 200）· `www.diodes.com` **403**（batch4 时 200+%PDF）· `www.molex.com` / `www.liteon.com` **000** · `alldatasheet.com`/**digikey** 403。",
+    "**LCSC / Mouser** 站点 200 但搜索页为 **JS 渲染**（curl 拿不到结果/直链）；`wmsc.lcsc.com` API 403/404。",
+    "**本会话新可达**：`www.ti.com`（200，已成功取 DS160PR810/TPS22990/TPS22965/TPD2E001 四份 PDF）· `assets.nexperia.com`（200，已取 2N7002）· `file.elecfans.com`（200）· `21icsearch`（500，疑似半可用）。",
+    "⇒ tier2 读数**维持 15/33**；余 6 件（PI3DBS16412 / OPTO_LTV356T / USB3.0_Type-A_90 / PMIC_P1 / SOM_B1 / USB_C_PLUG(Molex 105444)）本会话**未取回**（**不充绿**、保持具名 PARTIAL）。"
+   ],
+   "ask": [
+    "知悉（口径不变）。**vendor 站级反自动化使半自动通道具时效性** ⇒ 建议把『可达上限 21/33』改为**软目标**，tier2 收口以『结构性无三件套 12 件』为不可约下界。"
+   ]
+  }
+ ],
+ "carried_forward_pending": [
+  {
+   "id": "PIN01-K1-1a（须批·高）",
+   "title": "`_shared` USB-C 系真源升 pad 级（`USB_C_RECEPT`/`USB_C_RECEPT_24`/`USB_C_PLUG`）",
+   "status": "未落"
+  },
+  {
+   "id": "PIN01-K1-1b（须批·中）",
+   "title": "KBU6 真源 `aliases` 补 `WORK_EN:[PA2]` / `KEY_DET_EN:[PA15]`",
+   "status": "未落"
+  },
+  {
+   "id": "W8-GEN-1（须批·高）",
+   "title": "建板器补输出 `(footprint \"<LIB>:<NAME>\")`（4/6 唯一阻塞）",
+   "status": "**已制备待落地**（补丁 + 沙箱实证 + 落地批定义齐备）",
+   "merge": "同批：K1-U10-FP-1 真源订正 + K1-U1-BOARD-SYNC 闭合 + W8-FU-1 证据重出 + L3 建板记录 + 复算 K1 判定",
+   "evidence": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/W8_GEN_1_BUILDER_FPID_PATCH_PROVEN_20260921_v1.json（29a648633a52293b）"
+  },
+  {
+   "id": "U9-GEOM-1 / K1-D16（须批）",
+   "title": "`U9` 姿态归一后仍几何不一致（板 +1.5 vs 库 −1.5）⇒ 处置方向待裁",
+   "status": "未落"
+  },
+  {
+   "id": "K1-U10-FP-1（须批·中）",
+   "title": "U10 footprint 声明漂移（SOT-23 → SOT-23-5）",
+   "status": "随 W8-GEN-1 批落地"
+  },
+  {
+   "id": "J1-SSP-1 / PIN01-K1-1a（须批·口径）",
+   "title": "USB-C J1 SS 对 ± 命名口径冲突（3 套）⇒ PIN01-K1-1a 载荷**因口径未定而未制备**（制备即等于预裁）",
+   "status": "待裁 O1/O2/O3"
+  }
+ ],
+ "readonly_repo": true,
+ "not_landed": true,
+ "no_new_criteria_dim": true,
+ "eng_readonly_surface": "本会话把『DS160PR810 全量对表 + K1-D6 读数 + 缺失真源表制备』做尽；进一步实质推进**依赖上表监理放行**（尤其 PIN01-K1-1a/b/c 一笔、W8-GEN-1）。",
+ "next": "待裁 P6-1 口径 / pciesw4 覆盖面 / 批 6 v4 放行；无裁定时只读造活（册面维护 · 锚周期复核 · T2-F6 按需）。**禁停等**。",
+ "pin01_batch_status": {
+  "1a": "**阻塞**（J1-SSP-1 口径冲突未定）——载荷**未制备**（制备即等于预裁口径）",
+  "1b": "**已制备+沙箱验证**（−2；载荷 `k2/docs/drafts/pin01-k1-1b-kbu6-aliases-v1/`）",
+  "1c": "**已制备+沙箱验证**（−4；载荷 `k2/docs/drafts/pin01-k1-1c-missing-tables-v1/`）",
+  "合并效果": "PIN-01 29 → **23**（1b+1c 一笔即可落）；1a 定口径后可达 **0**"
+ },
+ "k2_52_execution_status": {
+  "1_姿态归一器层感知": "**完成** —— v2 工具（B.Cu 先 Flip 再 Orient）；**42/42 identical（含 U9）**；层感知负控（U9 pad size 变异）⇒ FLAG；独立绝对坐标法 **42/42** ⇒ **K1-D16 闭（假阳性=工具缺陷）**；K1-D14/D15 维持闭。证据 `W8_POSE_NORMALIZER_VALIDATION_20260921_v2.json`（5588179f953f28f1）",
+  "2_shared批": "**完成** —— PIN01-K1-1a：`USB_C_RECEPT.yaml` 升**标准 pad 级**（A1-B12+SH；标准端口名 + 设计名走 aliases；以 **KiCad 官方符号**独立复核；**未采用** 24.yaml 的 B 行）+ PIN01-K1-1b：KBU6 aliases 补 WORK_EN/KEY_DET_EN；**ENG 1.1.1→1.1.2 · 四树同步**（`_shared`/`k2/_shared` 8e0df3e · `key_v2/_shared` 81d276c · `pciesw4/_shared` c4f4dd2）；负控 FLAG ✓；**K1 PIN-01 29 → 4**；key_v2 0→0 零回归。定性：**J1 无 TX/RX 对交叉**（角色与板侧网自洽）⇒ 属口径，已注明 TX 对 P/N 反相。证据 `PIN01_K1_1A_J1_CROSSTABLE_AND_LANDING_20260921_v1.json`（54014ad4182b1a75）",
+  "3_W8-GEN-1": "**完成** —— 建板器 v2（真源昵称 · **禁兜底 · 缺则硬中断**）+ **K1-U10-FP-1** 真源订正 + 生成器重出板（`ela1dc91`→`b68105d2`）；`n_no_library_link 42→0 ∧ n_footprints=42` · 两跑逐字节同 · 98 行差（84 FPID + 14 U1 net）⇒ **K1-U1-BOARD-SYNC 闭**；同批重出 4 件测量证据 + DRC v2 + L3 记录；**复算 11 PASS/7 FAIL**（`lib_electrical_level` 电气级差异 **0**、板 sha 与审计一致；C-26 未落 ⇒ 不计绿）。k1 `6a1ecdd` · k2 `d5b2e91`",
+  "4_T2-F6": "未动（下一步）",
+  "5_PIN01-K1-1c": "**完成** —— 4 表落地（四树 · ENG **1.1.3**）⇒ **K1 PIN-01 FAIL(4) → PASS(0)**（1a+1b+1c 合计 29→0）；key_v2 0→0 零回归。证据 `PIN01_K1_1C_MISSING_TRUTH_TABLES_PREPARED_20260921_v1.json`",
+  "6_每批一笔提交+证据": "遵行",
+  "4_T2_F6": "**已执行·不可达** —— 10 条 URL 尝试全败（diodes 403/404 · liteon 000/HTML · molex 000 · 21icsearch 404）；余 6 件维持**具名 PARTIAL（不充绿）**，tier2 维持 **15/33**。证据 `T2F6_CHANNEL_PROBE_20260921_v1.json`（4e18fb43c3e43ddf）"
+ },
+ "pending_supervision": [
+  "**P6-1-口径（须裁·监理自裁）**：以『整改前命中证据 + 整改记录』闭 P6-1（ENG 建议 a）**或**改验收器语义（须明裁·不得新增检查齿）——ENG **不自行改工具**（防 C-12）",
+  "**pciesw4/key_v2 覆盖面（计划 §7.2-6 · 待裁）**：`pipeline_present` 范围外仍有 6 个含 `.kicad_sch` 无 `pipeline.yaml` 目录 ⇒ 请 **gate 属主**为 `pciesw4`（及 `key_v2`）立 manifest 条目（criteria = ENG 只读，只能提议）",
+  "**批 6 v4（release-gated）**：5 行『D-5 守卫前置』（消 IndexError 崩溃路径）；目标 `_shared/eda_core/hs_route_model.py` sha16 `c9e1c3b4ca208482` **仍匹配**（补丁未失效）；三验预演已过（verify k2 PASS · canonical 19 = 19 OK/0 FAIL · 期望补丁 PASS · **零回归**）⇒ 待放行落地",
+  "T2-F6 余 6 件（按需·不充绿）",
+  "（owner 面·非阻塞）C-26 判据覆盖洞 · P5 外部面 V4–V7 NOT_RUN · J1 TX 极性『是否有意』知悉项"
+ ],
+ "new_after_v16": [
+  {
+   "id": "**SG-AUDIT-1d（新·低·库面）**",
+   "title": "k2 侧 `datasheets/DS320PR1601.yaml` 真源缺口：**表已制备+沙箱验证**，但落地有**表示法阻塞**",
+   "facts": [
+    "厂商 **ZDG0354A** §5 Table 5-1 解析 **354 ball**，与 `k2/hw/lib/DS320PR1601.kicad_sym` **逐 ball 全一致（归一后 0 名差）**",
+    "载荷沙箱验证：`DS320PR1601.kicad_sym` **FAIL 1 → 0**；但 `IOCONVERT.kicad_sym` 变体（**194 个 pin 以 ball 名命名**）**1 → 194**（pinmap 机制 2）",
+    "**不在 K2 门禁链内**（`k2/pipeline.yaml` 无 pinmap 检查）⇒ 库/hygiene 面，**不影响 P6 判据面与交付锚**"
+   ],
+   "ask": [
+    "裁 ①统一两库表示法（改 IOCONVERT 符号 = 改设计面）②指定 IOCONVERT 不纳入 pinmap（口径）③暂不落地（保持 fail-closed）"
+   ]
+  }
+ ],
+ "k2_53_execution_status": {
+  "1_shared批_SG_AUDIT_1d": "**完成** —— `datasheets/DS320PR1601.yaml` 落地（TI ZDG0354A · ZDG nfBGA-354 · **354 ball 全量** · 厂商原件逐 ball 转录）；**ENG 1.1.3→1.1.4** · **四树同步**（`_shared`/`k2/_shared` 3c781be · `key_v2/_shared` 47abeb1 · `pciesw4/_shared` 9f01f47）；**负控**（改一 ball 名 ⇒ FLAG=1）✓；**全库 before/after**：`DS320PR1601.kicad_sym` **1→0（PASS 化）** · k1 0→0 · key_v2 0→0 · `IOCONVERT.kicad_sym` **1→194（登记制·不充绿）**；**未改任何 `.kicad_sym`**。证据 `SG_AUDIT_1D_DS320PR1601_LANDING_20260921_v1.json`（927681f990449775）",
+  "2_口径登记件": "**完成** —— `k2/docs/K2-CONVENTION-REGISTER-20260921.md`（**CR-1** J1 TX 极性反相[口径·非缺陷·不升级] · **CR-2** J1-SSP-2[维持不统一] · **CR-3** IOCONVERT 表示法差[登记制] · **CR-4** tier2 不可约下界 12 件[非绿判]）+ `PRIOR_ART_REGISTRY_INDEX_20260921_v6.json`（76d34ef247705784）",
+  "3_册面维护_锚复核": "**完成** —— 锚全 MATCH：K2 PCB `fb07d25ac426ff84` · l4 `d4e81f647be7f980` · K1 板 `b68105d2e8914aa7` · `k2_sch dd794c54f7ce7417` · **交付锚 `6ee7495de61f749f`（未动）** · 判据 **rev=6 五件**（`CHANGELOG eb3da49f` · `adjudicate 1937a40a` · `jlc_hdi 00faba34` · `manifest.k1 c175be51` · `manifest.k2 727d0995`）",
+  "4_T2_F6": "按需重探（**未每轮全量**，遵 #K2-53 §二/T2-F6 ④）；维持 **15/33** 具名 PARTIAL 不充绿",
+  "5_每批一笔提交+证据": "遵行"
+ },
+ "p6_stage_recheck": {
+  "current_stage": "P6（P0–P4 HOLDS · P5 PENDING_EXTERNAL · P6 结构面 PASS / 命中面待口径）",
+  "P6_2_结构面": "**PASS(state)**（两模板 ignore=0 · 结构差异 0）",
+  "P6_1_命中面": "**[MISS]ignore_without_ruling(9) · [MISS]no_pipeline(1) · [MISS]no_fp_lib_table(1) · [OK]sheets_empty(1)** ⇒ 工具报 FAIL",
+  "root_cause": "验收器 ①②③ **只读 FAIL 维**并以『缺陷存在』为通过条件；三项同源缺陷**已被 #K2-49 放行修复**（k1 `c018fc7` 9 条 ignore→warning · `k1/pipeline.yaml` 在岗 · `k1/fp-lib-table` 在岗）⇒ 不再报缺陷。**属『缺陷被修好』，非回归**",
+  "evidence": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/P6_STAGE_FACE_RECHECK_AFTER_REMEDIATION_20260921_v1.json（0d5f7d2b42ffed2d）",
+  "no_stage_violation": "未越阶段（P0–P4 HOLDS 已复核锚全 MATCH；P5 未跳过）"
+ }
+}
