@@ -1,0 +1,65 @@
+{
+ "artifact": "k2_pending_rulings_delta",
+ "schema": 1,
+ "ts": "2026-09-21T02:42:08.679175+08:00",
+ "supersedes": "PENDING_RULINGS_DELTA_20260921_v27.json（已由 #K2-61 全额消费：CR-70(a)(b) 确认 + CR-71/72 授权）",
+ "purpose": "①【报备 · 非提问】#K2-61 R4/R3 已落地（CR-71 生成器 docstring 串 · CR-72 check_l3 口径去 K2 专用名 · 双项目验证通过）；②【待裁 · 非阻塞 · K1 面】CR-73 —— 容器 `k1` 指针指向 `k1` repo **未发布**之 commit（耐久性缺陷）；③【说明 · R6 要求】『命令重复 3 次』告警之幂等性说明。",
+ "why_signal_now": "CR-32 强制结构化（新待裁项一经发现即入本件）；CR-73 属**跨项目（K1 面）**耐久性缺陷 ⇒ 须结构化方可见。",
+ "owner_gate": "**0** —— CR-73 属**放行范围/项目面处置**（监理自裁面）；无 L1 成分 ⇒ ENG 不升级 owner。",
+ "stage_state": "P5 `PENDING_EXTERNAL`（V4–V7 全 `NOT_RUN`）· P0–P4 HOLDS · P6 CLOSED · 未越阶段 · 判据 rev=6 MATCH · 交付锚 `19d637c4e9ed35be`/`488e90a47d088d06`（未动 · 未重出包）。",
+ "pending_supervision": [
+  {
+   "id": "**【待裁 · 非阻塞 · K1 面】CR-73：容器 `k1` 指针指向未发布 commit（`6a1ecdd`）**",
+   "facts": "容器 gitlink `k1` = `6a1ecdd`；`ic_hw-k1.git` `origin/main` = `9e283bf`；`origin/main...HEAD` = **0/3**（未发布 3 笔 = `e2acb20` · `08ff8bb` · `6a1ecdd`；**快进可推**）。对照组：`_shared 8f324cc`（本批）· `k2 51c2ae9`（本批 bump）· `key_v2 174765a` · `pciesw4 17b028b` **皆已发布** ✓ ⇒ **唯 k1 未发布**。另：handoff/前会话自述「k1 0 0」与实测 **0/3** 不符。",
+   "impact": "新克隆/新机器 `git submodule update --init` 无法 fetch 容器所引之 k1 commit（**耐久性缺陷**）· **非 P5 阻塞** · 不影响任何交付锚/判据。",
+   "ask": "请裁 remedy：(i) **准予快进 push** `k1` 至 A 宿主（非破坏 · 不 rewrite · 发布该 3 笔既有 K1 commit）；或 (ii) 维持现状并登记（K1 面另批处置）；或 (iii) 其他。**本会话未 push 任何 K1 内容**（守「不越项目处置」）。",
+   "evidence": "册面 CR-73 · 证据件 `K2_61_DOCSTRING_AND_CHECKL3_CALIBER_EVIDENCE_20260921_v1.json` `ac13d1065ca0ffa5`"
+  },
+  {
+   "id": "【说明 · #K2-61 R6 要求】『命令重复 3 次(疑似空转)』告警之幂等性说明（附命令 + 目的）",
+   "classification": [
+    "**A 幂等只读复算**（命令式 `sha256sum <冻结四源/criteria/交付锚/旧锚>` 与 `python3 -c 'import hashlib…'`）：目的 = fail-closed 纪律——**每批须证明冻结锚未漂移**（#K2-60/#K2-61 §五判据均要求）；同一输入必同输出，属**必要复算**，非空转。",
+    "**B 工作流形式重复**（`python3 - <<'PY'` 编辑脚本）：命令行前缀同而 **payload 不同**（每批文件/替换对/断言各异）⇒ 每笔**产出不同**（对应 commit 逐笔不同：`e3920e8` · `376a002` · `51c2ae9` 等）。"
+   ],
+   "verdict": "**无任一重复属「无新读数 / 无新落件」** ⇒ 非局部循环。**承诺**：此后重复一律加**轮标 + 目的**注记并尽量批处理；若再现无新读数重复 ⇒ 按 C-12 自查上报。",
+   "evidence": "/tmp/opencode 会话内无落库件（只读件）；落件对照 = 各批 commit 差异"
+  },
+  {
+   "id": "【登记 · 非阻塞】",
+   "items": [
+    "`check_l3.py` **未授权范围**：`:3` 模块文档串 · `:71` K1/K2 命名口径注释 仍含 `SPEC_k2_v4.json`（说明性提及 · #K2-61 R3 仅授权 :43/:62）⇒ 登记待裁。",
+    "T2-F6 新闭通道（`archive.org`/`web.archive.org`=000 · `st.com`=567）· `CR-17`/`CR-22`/`CR-3`/land pattern 族 · `COV-C3`（维持前裁 · 禁 push/rewrite B 宿主）· R5 文献批（待权威件）"
+   ]
+  }
+ ],
+ "landed_this_session": [
+  {
+   "id": "CR-71（R4）",
+   "artifact": "`tools/k2_p5_jlc_package_l8_v1.py` `732ed21bfd23c5bc` · `…l8r2_v1.py` `97466411dec2d351`（各仅 :7 一行）",
+   "reading": "判据④: 两件 l8 世代生成器 `L6/jlc_package/` 0 命中; 未重跑/未重出包/未换锚"
+  },
+  {
+   "id": "CR-72（R3）",
+   "artifact": "canonical `_shared/pm_gate/check_l3.py` `d07f3267df7b27e7`（shared `8f324cc`）· k2 `376a002` · 容器 `8f68a23`",
+   "reading": "双项目: k1→`SPEC_k1.json …` · k2_v4→`SPEC_k2_v4.spec-rev-54.json …` 均 passed=True ⇒ gate 语义不变"
+  },
+  {
+   "id": "CR-73（登记）",
+   "artifact": "册面 + 证据件",
+   "reading": "见 pending_supervision[0]"
+  }
+ ],
+ "red_lines_ok": [
+  "未改 criteria/",
+  "未改冻结四源",
+  "未改板/原理图/网表/SPEC",
+  "未覆盖或删除旧包与旧锚",
+  "未重跑构建器/未重出包/未换交付锚",
+  "未触 B 宿主副本（key_v2/_shared · pciesw4/_shared）",
+  "未 push 任何 K1 内容",
+  "未派 WORKER",
+  "未越阶段 · 未下单",
+  "临时落点仅 /tmp/opencode"
+ ],
+ "next": "① 待监理对 CR-73（K1 面 remedy）之裁定（非阻塞）；② 外发/下单闸已解除 ⇒ 商务渠道；③ 外部回件 ⇒ 8 项回填 ⇒ 监理判定 ⇒ P5 关门；④ 只读造活（**禁 HOLD/停等结案**）。"
+}
