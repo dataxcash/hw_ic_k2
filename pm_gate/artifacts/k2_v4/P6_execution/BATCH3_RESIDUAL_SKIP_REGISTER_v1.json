@@ -1,0 +1,124 @@
+{
+ "artifact": "k2_batch3_residual_skip_register",
+ "schema": 1,
+ "purpose": "批 2 + 板锚修后残留 **20 项 SKIP** 的完整登记与分类（『skipped 不得充绿』收尾面）。口径 = 锚修已落件的**实测** junit，非预期值。",
+ "measured_state": {
+  "junit": "/tmp/opencode/natfix_real_post.xml",
+  "tests": 562,
+  "passed": 512,
+  "failed": 30,
+  "skipped": 20,
+  "source": "NATURAL_LAYOUT_ANCHOR_FIX_MEASURED_v1.json（实体瞬时落板锚修后回退）"
+ },
+ "before_fix_skips": 42,
+ "after_fix_skips": 20,
+ "resolved_by_anchor_fix": 22,
+ "by_reason": {
+  "K2 真实工件缺失": 2,
+  "K2 真源数据缺失 (项目侧数据, _shared 单测上下文无)": 1,
+  "m9demo 板不存在": 3,
+  "基线 drc.json 不存在": 1,
+  "基线 k2_m9demo 文件不存在（外部目录）": 1,
+  "基线板不存在": 12
+ },
+ "classes": [
+  {
+   "id": "A",
+   "count": 17,
+   "label": "m9demo 基线缺件（3 模块）",
+   "reconciliation": "12(test_hs_route_model) + 3(test_ls_migration) + 2(test_drc_locator) = 17 ⇒ 与既有『m9demo 基线缺件 3 模块 17 项』**逐项对上**",
+   "detail": [
+    {
+     "module": "test_hs_route_model.py",
+     "n": 12,
+     "skipif": "BASELINE_PCB.exists()（=/tmp/opencode/boards/k2_m9demo.kicad_pcb，非库内）",
+     "carrier": "BATCH2_SKIP12_DISPOSITION_v1.json（逐条具名 + S1–S4）；其中 2 项打**已删**私有 _pair_expand ⇒ 解锁必 AttributeError"
+    },
+    {
+     "module": "test_ls_migration.py",
+     "n": 3,
+     "skipif": "m9demo 板不存在（同一 /tmp 基线）"
+    },
+    {
+     "module": "test_drc_locator.py",
+     "n": 2,
+     "skipif": "基线 k2_m9demo.{kicad_pcb,drc.json} 不存在（同一 /tmp 基线）"
+    }
+   ],
+   "root_cause_common": "基线板/drc = **/tmp 生成物、库内无生成器**（N-05『生成物不可复跑』族）",
+   "tests": [
+    "tests.test_drc_locator.TestBaselineIntegration::test_baseline_full_coverage",
+    "tests.test_drc_locator.TestBaselineIntegration::test_baseline_rule_type_distribution",
+    "tests.test_hs_route_model.TestBaselineUP4::test_up4_input_segment_solved",
+    "tests.test_hs_route_model.TestV2CorridorDeterministic::test_corridor_deterministic",
+    "tests.test_hs_route_model.TestV2CorridorDeterministic::test_dn0_chain_solved",
+    "tests.test_hs_route_model.TestV2CorridorDeterministic::test_up4_chain_solved",
+    "tests.test_hs_route_model.TestV2PairSymmetry::test_pair_expand_equal_length",
+    "tests.test_hs_route_model.TestV2PairSymmetry::test_pair_pitch",
+    "tests.test_hs_route_model.TestV2RefclkIn6::test_refclk0_in6_layer",
+    "tests.test_hs_route_model.TestV2RefclkIn6::test_refclk1_in6_layer",
+    "tests.test_hs_route_model.TestV3EscapeIn2::test_escape_deterministic",
+    "tests.test_hs_route_model.TestV3EscapeIn2::test_escape_fallback_single_vgraph",
+    "tests.test_hs_route_model.TestV3EscapeIn2::test_up4_escape_uses_in2",
+    "tests.test_hs_route_model.TestV3EscapeIn2::test_zero_vgraph_18_pairs",
+    "tests.test_ls_migration.TestMigrationRegression::test_inflation_math_equivalence",
+    "tests.test_ls_migration.TestMigrationRegression::test_point_ok_equiv_500",
+    "tests.test_ls_migration.TestMigrationRegression::test_seg_ok_equiv_400"
+   ]
+  },
+  {
+   "id": "B",
+   "count": 2,
+   "label": "后期代际板（v5/v6）外部 fixture 不在库",
+   "detail": [
+    {
+     "module": "test_topology_gate.py",
+     "skipif": "K2_BOARD=/tmp/opencode/boards/k2_v5.kicad_pcb ∧ K2_LINKS=/tmp/opencode/topo_propose_k2/required_links_k2.json"
+    },
+    {
+     "module": "test_routing_topology_gate.py",
+     "skipif": "K2_BOARD=/tmp/opencode/boards/k2_v6.kicad_pcb"
+    }
+   ],
+   "note": "与 A 同类（外部生成物未入库）；须裁：补生成+入库，或具名退役",
+   "tests": [
+    "tests.test_routing_topology_gate::test_t5_real_k2_gate_runs_and_reports_j2_polarity",
+    "tests.test_topology_gate::test_t5_k2_integration_from_files"
+   ]
+  },
+  {
+   "id": "C",
+   "count": 1,
+   "label": "**新发现**：永久掩盖的路径缺陷（非布局相关）",
+   "detail": [
+    {
+     "module": "test_cap_wall_upgrade.py",
+     "test": "test_window_params_k2_data_driven",
+     "defect": "spec 路径 `_PCB_ROOT/pm_gate/artifacts/L3/SPEC_k2_v4.json` **缺 `k2_v4` 段**（真路径 `…/artifacts/k2_v4/L3/…`）⇒ 两种布局下皆不存在 ⇒ 恒 skip（影子/容器两布局 junit 同为 skipped）",
+     "unmask_probe": [
+      {
+       "variant": "仅修路径、沿用原代际锚 channel_alloc_v4",
+       "result": "**FAIL**：`AssertionError: DN 窗口缺边界 57.9825: {33.0, 71.0}`（1 failed / 6 passed）⇒ 期望值属旧代际 ⇒ 非 1 行路径修"
+      },
+      {
+       "variant": "改挂现役 alloc pipeline_alloc_current_v1/alloc.json",
+       "result": "**FAIL**：`KeyError: 'channels'`（cap_wall_solver.py:163）⇒ 现役 alloc 与 legacy channel_alloc **schema 不同** ⇒ 该用例本质=旧代际用例"
+      }
+     ],
+     "scratch": "/tmp/opencode/unmask2（副本演练；真源零改）",
+     "disposition_hint": "归 S3/S4 类（随代际退役 或 重锚+重基线）⇒ 须监理裁；**不是**简单路径修复"
+    }
+   ],
+   "tests": [
+    "tests.test_cap_wall_upgrade::test_window_params_k2_data_driven"
+   ]
+  }
+ ],
+ "composition": {
+  "m9demo_族或_tmp_fixture": 19,
+  "path_defect_masked": 1
+ },
+ "eng_claim": "残留 20 项**全部具名、全部可归因**；19 项 = 外部/临时 fixture 未入库（N-05 族，处置归 S1–S4），1 项 = **新发现**的路径缺陷永久掩盖（解锁即 FAIL、属旧代际期望）⇒ 无『未知 skip』。",
+ "readonly_repo": true,
+ "not_landed": true
+}

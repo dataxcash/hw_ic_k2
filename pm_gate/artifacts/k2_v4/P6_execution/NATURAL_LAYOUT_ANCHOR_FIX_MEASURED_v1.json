@@ -1,0 +1,79 @@
+{
+ "artifact": "k2_natural_layout_anchor_fix_measured",
+ "schema": 1,
+ "purpose": "把套件级『预期』转成**实测**：板锚修（K2V4_REAL_BOARD 相对→绝对）在**容器根布局**下的全量套件读数。前件 SUITE_LAYOUT_ASYMMETRY_AND_ANCHOR_FIX_v1.json 的 expected_effect_natural_layout 本件逐项确认。",
+ "subject": "k2/_shared/eda_core/tests/test_hs_route_model.py（容器 _shared 与 k2/_shared 同内容同 sha）",
+ "patch": {
+  "diff": "P6_OPEN_READINESS/anchors/K2V4_REAL_BOARD_absolute.diff",
+  "diff_sha16": "310b5f80892e8f54",
+  "file_sha256_before": "93af4803258cb578985c1f27a9d3dd4f0c5ce4c5027afa8458212a256c60fde8",
+  "file_sha256_after": "94447d3d3ee6b69f2609f82f421158eaf0e59567d103d8cebd8d0c5d40d1ec1f"
+ },
+ "method": {
+  "run": "cwd=容器根 ic_hw；`AppDir/bin/python3.11 -m pytest -q -rf -rs -p no:cacheprovider --tb=no _shared/eda_core/tests/`（与框架基线工具同口径；含 junit）",
+  "temporariness": "实体板锚修**瞬时落** k2/_shared 与 容器 _shared 两处 → 跑 → `git checkout --` 无条件回退（trap）⇒ 工作树复原",
+  "zero_touch_proof": {
+   "file_sha256_after_revert": "93af4803258cb578985c1f27a9d3dd4f0c5ce4c5027afa8458212a256c60fde8",
+   "container_shared_git_status_after": "（空 = 洁净）",
+   "k2_git_status_after": "仅 2 个既存未跟踪 hw/k2_v4_8L.l{5,7}.kicad_prl",
+   "heads": "容器 _shared 与 k2/_shared 均 fc597715c3dae38c278d76d33a9ae0f9ccdf1573（未动）"
+  },
+  "control_independent": "第二法：/tmp/opencode/natfix = 容器布局**副本**（真 cp -a，零碰真源）+ 同 patch ⇒ 两法互证（见 emulation）"
+ },
+ "measured_container_layout": {
+  "before": {
+   "junit": "/tmp/opencode/suite_container.xml",
+   "tests": 562,
+   "passed": 492,
+   "failed": 28,
+   "skipped": 42
+  },
+  "after": {
+   "junit": "/tmp/opencode/natfix_real_post.xml",
+   "tests": 562,
+   "passed": 512,
+   "failed": 30,
+   "skipped": 20,
+   "wall_clock_s": 216.19,
+   "exit_code": 1
+  }
+ },
+ "attribution": {
+  "method": "逐用例比对 junit 状态（classname::name）",
+  "status_changes_total": 22,
+  "skipped_to_passed": 20,
+  "skipped_to_failed": 2,
+  "skipped_to_failed_names": [
+   "TestBoardLevelConsistency::test_board_level_consistency",
+   "TestV5FlipRedesign::test_chain_no_pn_zero_spacing"
+  ],
+  "note": "2 项 = #K2-41 §三-④ 具名保持 RED 的 C1/C2（能力缺口，禁改绿）",
+  "passed_to_failed_regressions": 0,
+  "other_status_changes": 0
+ },
+ "emulation": {
+  "root": "/tmp/opencode/natfix（容器布局副本；AppDir/k2/k1/criteria/.omo 为符号链接）",
+  "before": {
+   "junit": "/tmp/opencode/natfix_pre.xml",
+   "passed": 490,
+   "failed": 29,
+   "skipped": 43
+  },
+  "after": {
+   "junit": "/tmp/opencode/natfix_post.xml",
+   "passed": 510,
+   "failed": 31,
+   "skipped": 21
+  },
+  "fidelity_check": "副本 pre 与真容器 pre 的逐用例差 = **恰 2 项具名**：test_env_fingerprint::test_default_paths_repo_relative_no_tmp（副本根非 git 仓 ⇒ fail）、test_verify_cache::test_init_cleanup_auto_git_head（同上 ⇒ skip）；其余 560 项状态全同 ⇒ 副本为可信模型",
+  "cross_check": "副本 after 计数与**影子（k2 检出）**读数 510/31/21 完全一致 ⇒ 落锚后两布局同态"
+ },
+ "conclusion": {
+  "expected_effect_natural_layout": "CONFIRMED（492→512 P · 28→30 F · 42→20 S）",
+  "k2_checkout_layout": "零变化（本 patch 在 k2 检出下等价改写，行为不变）",
+  "regression": "0（无 PASS→FAIL）"
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "authorization": "共享层改动须监理批（C-6 禁零散补丁）⇒ 本件只测量/备料，未落件"
+}
