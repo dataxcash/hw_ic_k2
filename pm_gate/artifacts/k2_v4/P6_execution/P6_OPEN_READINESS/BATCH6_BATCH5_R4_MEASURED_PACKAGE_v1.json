@@ -1,0 +1,33 @@
+{
+ "artifact": "k2_batch5_R4_measured_package",
+ "schema": 1,
+ "purpose": "**R-4 实测包**（此前仅有 dry-run 绿）：批 5 补丁包单独落、以及与 v4 合并落件的**真值/回归**读数，供监理联合裁定 R-1+R-4。",
+ "config_A_batch5_alone": {
+  "tree": "容器 `_shared`(pristine 02459f5) + BATCH5_PATCHES 三补丁（drc_rules①② · hs_route_model④ · test_drc_rules T）",
+  "apply": "三补丁全部 rc=0",
+  "k1_truth": "**1/8**，且 `RX1/output` 以**边缘净距 −0.09 被判 SOLVED** ⇒ **假绿**",
+  "reading": "**批 5 本身不修 fail-open 家族**（无 D-1…D-5）⇒ 读数不可信 ⇒ **不得单独落**"
+ },
+ "config_B_batch5_plus_v4": {
+  "tree": "`shadowtest/b5v4` = v4(land) + 批 5 三补丁",
+  "apply": {
+   "drc_rules.py.patch": "rc=0",
+   "test_drc_rules.py.patch": "rc=0",
+   "hs_route_model.py.patch": "**rc=1 被拒** ⇒ 该 ④（零长段守卫）**已含于 v4**（修正基线组成之一），无新内容"
+  },
+  "k1_truth": "**1/8** —— `RX0/input` 保留(0.2636)，但 **`TX0/output` 由 SOLVED(0.142) 变为 INFEASIBLE（『右逃逸对级不可行』）** ⇒ **相对 v4 为负增益**",
+  "k2_regression": {
+   "test_hs_route_model.py": "**2 failed / 61 passed / 12 skipped**（与 pristine 逐项同 ⇒ 零回归）",
+   "test_drc_rules.py": "**29 passed**（批 5 自带 T 生效；验证『① 会使 pad 旋转测试必红 ⇒ T 必须同批』成立）"
+  },
+  "verdict": "**批 5 与 v4 不得简单合并**：`drc_rules` ①② 改变净距/规则口径，会**摧毁 v4 的一条既得解**（TX0/output）"
+ },
+ "conclusion_for_ruling": [
+  "**R-4 须与 R-1 联合裁定**（不得各自独立放行）：批 5 单独落 ⇒ 读数虚高（假绿）；与 v4 合并 ⇒ K1 负增益 2/8→1/8",
+  "若必须同批：须先**解 `drc_rules`①② 与 v4 的冲突**（如把 ①② 限定 K2 域 / K1 域分派，与 FIX-A/B 的 K1 域限定同法），否则不落",
+  "备选：**只落 v4，批 5 暂缓**（v4 已三验预演全过、K1 2/8、零回归、无冲突）"
+ ],
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-21T22:20:00+0800"
+}
