@@ -1,0 +1,77 @@
+# ─────────────────────────────────────────────────────────────
+# Datasheet 引脚真源 — USB-C 母座 (24-pin, A1-B12 + SH)
+#
+# 权威来源: **USB-IF USB Type-C R2.0** 母座触点定义；并与**独立第三方权威**
+#   KiCad 官方符号 `Connector/USB_C_Receptacle`（`AppDir/share/kicad/symbols/
+#   Connector.kicad_symdir/USB_C_Receptacle.kicad_sym`）**逐触点交叉复核**：
+#     A2=TX1+ A3=TX1- A10=RX2- A11=RX2+ / B2=TX2+ B3=TX2- B10=RX1- B11=RX1+
+#   ⇒ **两行角色相同：2/3 触点 = TX，10/11 触点 = RX**（本表的 SSTX*/SSRX* 命名按
+#     『A 行=对1、B 行=对2』编号，角色与上述标准一致）。
+#
+# ⚠ 口径声明（#K2-52 §三 PIN01-K1-1a 要求「注明视角 + P/N 反相是否有意」）：
+#   本表 `pins` = **标准物理 pad → 标准端口名**（**非**取自 `k1_pinmap.yaml#J1`，防自证循环）。
+#   设计功能名（TX_P/TX_N/RX_P/...）走 `aliases`。K1 J1 符号的**触点角色**与板侧网自洽：
+#   `PCIE_TX0/1_*` 落 **SSTX 触点**（A2/A3 · B2/B3），`PCIE_RX0/1_*` 落 **SSRX 触点**（A10/A11 · B10/B11）
+#   ⇒ **不存在 TX/RX 对交叉**。唯一差异：符号 `TX_P` 落 A3(=SSTXn1，**负触点**)、`TX_N` 落 A2(=SSTXp1)
+#   ⇒ **TX 两对的 P/N 标注与标准触点极性相反**。该二对在 K1 走 **PCIe**，**PCIe 允许逐 lane 极性反转**
+#   ⇒ **功能无害**（是否有意由 owner/监理知悉；本表按板侧既有命名登记，不改符号）。
+# ---------------------------------------------------------------------------
+
+device: USB_C_RECEPT
+package: USB Type-C receptacle 24-pin (A1-B12 + SH)
+source: "USB-IF USB Type-C R2.0 母座触点 + KiCad 官方 USB_C_Receptacle 交叉复核"
+doc_id: "USB-IF USB Type-C R2.0 (Receptacle pin assignment)"
+doc_url: "https://www.usb.org/usb-type-c"
+retrieved_via: "vendor-standard + 本地 KiCad 官方符号独立复核（无公开直链时段，见 provenance 注）"
+
+pins:
+  A1: GND
+  A2: SSTXp1
+  A3: SSTXn1
+  A4: VBUS
+  A5: CC1
+  A6: Dp1
+  A7: Dn1
+  A8: SBU1
+  A9: VBUS
+  A10: SSRXn1
+  A11: SSRXp1
+  A12: GND
+  B1: GND
+  B2: SSTXp2
+  B3: SSTXn2
+  B4: VBUS
+  B5: CC2
+  B6: Dp2
+  B7: Dn2
+  B8: SBU2
+  B9: VBUS
+  B10: SSRXn2
+  B11: SSRXp2
+  B12: GND
+  SH: "SHIELD/GND"          # 屏蔽壳；板上 SH 与 GND 同网（K1 J1: GND_5→SH）
+
+aliases:
+  D_P:
+  - Dp1
+  - Dp2
+  D_N:
+  - Dn1
+  - Dn2
+  # 板侧功能名 → 标准触点（TX 对 P/N 标注与标准触点极性相反，见头注）
+  TX_P:
+  - SSTXn1
+  TX_N:
+  - SSTXp1
+  RX_P:
+  - SSRXp1
+  RX_N:
+  - SSRXn1
+  TX2_P:
+  - SSTXn2
+  TX2_N:
+  - SSTXp2
+  RX2_P:
+  - SSRXp2
+  RX2_N:
+  - SSRXn2

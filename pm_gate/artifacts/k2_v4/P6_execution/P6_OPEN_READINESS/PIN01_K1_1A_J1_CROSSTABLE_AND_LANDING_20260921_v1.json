@@ -1,0 +1,235 @@
+{
+ "artifact": "k2_pin01_k1_1a_j1_crosstable_and_landing",
+ "schema": 1,
+ "ts": "2026-09-21T03:20:00+0800",
+ "id": "PIN01-K1-1a",
+ "authorization": "**#K2-52 §三 PIN01-K1-1a（放行方向 + 强制前置核对）**",
+ "crosstable_columns": [
+  "符号名",
+  "现符号 pad",
+  "标准端口名（独立权威）",
+  "板侧网",
+  "判定"
+ ],
+ "crosstable": [
+  [
+   "VBUS",
+   "A4",
+   "VBUS",
+   "VBUS",
+   "角色✓ 极性✓"
+  ],
+  [
+   "VBUS_2",
+   "B4",
+   "VBUS",
+   "VBUS",
+   "✓"
+  ],
+  [
+   "VBUS_3",
+   "A9",
+   "VBUS",
+   "VBUS",
+   "✓"
+  ],
+  [
+   "VBUS_4",
+   "B9",
+   "VBUS",
+   "VBUS",
+   "✓"
+  ],
+  [
+   "GND",
+   "A1",
+   "GND",
+   "GND",
+   "✓"
+  ],
+  [
+   "GND_2",
+   "B1",
+   "GND",
+   "GND",
+   "✓"
+  ],
+  [
+   "GND_3",
+   "A12",
+   "GND",
+   "GND",
+   "✓"
+  ],
+  [
+   "GND_4",
+   "B12",
+   "GND",
+   "GND",
+   "✓"
+  ],
+  [
+   "GND_5",
+   "SH",
+   "SHIELD（板上 bonded GND）",
+   "GND",
+   "✓（壳 bonds GND）"
+  ],
+  [
+   "D_P",
+   "A6",
+   "D+(Dp1)",
+   "KEY_D_P",
+   "角色✓"
+  ],
+  [
+   "D_N",
+   "A7",
+   "D-(Dn1)",
+   "KEY_D_N",
+   "✓"
+  ],
+  [
+   "CC1",
+   "A5",
+   "CC1",
+   "CC1",
+   "✓"
+  ],
+  [
+   "CC2",
+   "B5",
+   "CC2",
+   "CC2",
+   "✓"
+  ],
+  [
+   "SBU1",
+   "A8",
+   "SBU1",
+   "SBU1",
+   "✓"
+  ],
+  [
+   "SBU2",
+   "B8",
+   "SBU2",
+   "SBU2",
+   "✓"
+  ],
+  [
+   "TX_P",
+   "A3",
+   "TX1-(SSTXn1)",
+   "PCIE_TX0_P",
+   "**角色✓(TX触点) · 极性✗(P在负触点)**"
+  ],
+  [
+   "TX_N",
+   "A2",
+   "TX1+(SSTXp1)",
+   "PCIE_TX0_N",
+   "角色✓ · 极性✗"
+  ],
+  [
+   "RX_P",
+   "A11",
+   "RX2+(SSRXp1)",
+   "PCIE_RX0_P",
+   "✓✓"
+  ],
+  [
+   "RX_N",
+   "A10",
+   "RX2-(SSRXn1)",
+   "PCIE_RX0_N",
+   "✓✓"
+  ],
+  [
+   "TX2_P",
+   "B3",
+   "TX2-(SSTXn2)",
+   "PCIE_TX1_P",
+   "**角色✓ · 极性✗**"
+  ],
+  [
+   "TX2_N",
+   "B2",
+   "TX2+(SSTXp2)",
+   "PCIE_TX1_N",
+   "角色✓ · 极性✗"
+  ],
+  [
+   "RX2_P",
+   "B11",
+   "RX1+(SSRXp2)",
+   "PCIE_RX1_P",
+   "✓✓"
+  ],
+  [
+   "RX2_N",
+   "B10",
+   "RX1-(SSRXn2)",
+   "PCIE_RX1_N",
+   "✓✓"
+  ]
+ ],
+ "independent_authorities": {
+  "A_kicad_official": "`AppDir/share/kicad/symbols/Connector.kicad_symdir/USB_C_Receptacle.kicad_sym`（＋USB_C_Plug）逐触点：**A2=TX1+ A3=TX1- A10=RX2- A11=RX2+ / B2=TX2+ B3=TX2- B10=RX1- B11=RX1+** ⇒ **两行角色相同：2/3=TX、10/11=RX**",
+  "B_repo_plug_table": "`USB_C_PLUG.yaml`（Molex 105444）：A2/B2=TX_P · A3/B3=TX_N · A10/B10=RX_N · A11/B11=RX_P ⇒ 与 A **角色一致**",
+  "C_usb_if": "USB-IF USB Type-C R2.0 母座触点定义（与 A/B 一致）",
+  "D_prior_art": "`PRIOR_ART_REGISTRY_INDEX…v5`：SSP/TX_P/极性/polarity/USB_C 全册 **0 命中** ⇒ 首次在册登记"
+ },
+ "determination": {
+  "branch": "**① 命名视角/口径 —— 非 ② 物理 TX/RX 对交叉**",
+  "role_evidence": "`PCIE_TX0/1_*` 全部落 **SSTX 触点**（A2/A3·B2/B3）；`PCIE_RX0/1_*` 全部落 **SSRX 触点**（A10/A11·B10/B11）⇒ **无对交叉**（未触发 §三③ 停机条件）。",
+  "polarity_note": "唯一差异 = **TX 两对 P/N 标注与标准触点极性相反**（`TX_P`→A3=SSTXn1 负触点；`TX2_P`→B3=SSTXn2）。二对在 K1 走 **PCIe**，**PCIe 允许逐 lane 极性反转** ⇒ **功能无害**。**是否有意 ENG 不能自证** ⇒ 按裁定『注明视角 + P/N 反相是否有意』如实登记，交监理/owner 知悉；**ENG 未擅改符号脚号**（#K2-52 §三⑤）。",
+  "cross_board_coherence": "**K1 ↔ key_v2 互补自洽**：key_v2 符号 `USB_C_RECEPT_24` 把 **A2/A3 = RX1_P/RX1_N**、**A10/A11 = TX1_P/TX1_N**（device/交叉口径）；K1 把 **TX 放 A2/A3** ⇒ **K1 的 TX 恰落对端 RX 触点** ⇒ 链路收发配对正确。",
+  "template_note": "#K2-52 指定模板 `USB_C_RECEPT_24.yaml` 的 **B 行角色与 KiCad 官方及本仓 plug 表相反**（24.yaml: B2=SSRXp2·B10=SSTXn2）。**判为 device/host 视角口径差异（非缺陷）**：24.yaml 与自身 aliases 及 key_v2 符号自洽，key_v2 PIN-01 = PASS(0) ⇒ **本件不采用其 B 行**，改以 **KiCad 官方**为准；**未改 24.yaml/PLUG**（key_v2 在用 ⇒ 动它须另立回归批）。**新登记 J1-SSP-2**（口径是否统一，待裁）。"
+ },
+ "landing": {
+  "batch": "PIN01-K1-1a + PIN01-K1-1b（一笔 · 四树同步）",
+  "files": [
+   {
+    "path": "eda_core/sch_gate/datasheets/USB_C_RECEPT.yaml",
+    "change": "**简化 1..16 → 标准 pad 级（A1-B12+SH）**；设计名走 aliases",
+    "sha16": "176ee189f53355d4"
+   },
+   {
+    "path": "eda_core/sch_gate/datasheets/STM32G0B1KBU6.yaml",
+    "change": "aliases 补 `WORK_EN:[PA2]` · `KEY_DET_EN:[PA15]`（pins 未动）",
+    "sha16": "06320bd69359b88c"
+   },
+   {
+    "path": "eda_core/ENG_VERSION.yaml",
+    "change": "1.1.1 → **1.1.2**",
+    "sha16": "3df21280e4e43548"
+   }
+  ],
+  "four_tree_sync": {
+   "files_byte_identical": true,
+   "commits": {
+    "_shared": "8e0df3e",
+    "k2/_shared": "8e0df3e",
+    "key_v2/_shared": "81d276c",
+    "pciesw4/_shared": "c4f4dd2"
+   }
+  },
+  "negative_control": {
+   "what": "K1 J1 符号 `TX_P` 脚号 A3→A10 ⇒ 必 FLAG",
+   "observed": "FAIL 0 → **1**（`TX_P 允许 pin ['A3']`）⇒ 新真源**确被强制**（非静默放行）"
+  },
+  "zero_regression": {
+   "K1_PIN_01": "**29 → 4**（1a+1b 贡献 −25；余 4 = PIN01-K1-1c 的 4 件无表，按 #K2-52 排期）",
+   "key_v2_PIN_01": "0 → **0**（PASS 未回归）",
+   "k2_符号库": "1 → 1（既有 `DS320PR1601` 无表，与本批无关）",
+   "pciesw4": "无符号库 ⇒ 无影响"
+  }
+ },
+ "not_landed_detail": [
+  "未改 `USB_C_RECEPT_24.yaml`/`USB_C_PLUG.yaml`（key_v2 在用 ⇒ 另立回归批）",
+  "未改 K1 符号脚号",
+  "未改 criteria/"
+ ],
+ "next": "执行序 3：W8-GEN-1（生成器补 FPID → 重建 → 落板 + W8-FU-1 证据重出 + L3 + 复算）"
+}
