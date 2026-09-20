@@ -1,0 +1,36 @@
+{
+ "artifact": "k2_r8_via_template_two_ends_summary",
+ "schema": 1,
+ "form": "斜出排 + 两网异内层(In2/In1) + 末点落内层 + 1 via/网",
+ "gate": "`_k1_escape_verify`（引擎自身门：D-5 层合法性 · D-2 对级净距 · via≥0.3 距焊盘 · via-via≥0.19 · 退化守卫）",
+ "right_end": {
+  "tested": 312,
+  "passed": 16,
+  "passing": {
+   "TX1/output": 8,
+   "RX0/output": 8
+  }
+ },
+ "left_end": {
+  "tested": 324,
+  "passed": 12,
+  "passing": {
+   "TX1/input": 6,
+   "RX1/input": 6
+  }
+ },
+ "per_segment": {
+  "TX1/input": "**左端 6 PASS**（其现行失败面=走廊+左逃逸）⇒ 模板直击其阻塞端",
+  "RX1/input": "**左端 6 PASS**（现行失败面=左逃逸）⇒ 直击阻塞端",
+  "TX1/output": "右端 8 PASS（其现行失败面=左逃逸 ⇒ 未覆盖阻塞端）",
+  "RX0/output": "右端 8 PASS（同上）",
+  "TX0/input": "两端 0（右端=段级 P/N −0.09 交叉 / 斜出排首段 seg_ok 受阻）",
+  "RX0/input": "两端 0",
+  "RX1/output": "两端 0"
+ },
+ "conclusion": "**换层模板已由引擎门实测可行，且直接覆盖 2 段（TX1/input · RX1/input）的左端阻塞** ⇒ 与 (c) alloc 槽位重排（TX1.input）叠加后，**K1 真值有上升空间**；整段兑现须把该形态接入 `_k1_escape`（新增候选序）后重测。",
+ "caveat": "仍非整段 SOLVED 证明：门通过只证『逃逸段可行』；装配后还须过段级门与走廊。K1 真值至今仍 2/8，未变。",
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-21T17:00:00+0800"
+}
