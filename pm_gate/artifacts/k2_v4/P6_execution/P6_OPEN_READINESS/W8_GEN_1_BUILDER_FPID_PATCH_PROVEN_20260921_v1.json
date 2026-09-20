@@ -48,14 +48,28 @@
   "⑤ 复算 K1 判定（4/6 收口）"
  ],
  "readonly_repo": true,
- "not_landed": true,
+ "not_landed": false,
  "no_new_criteria_dim": true,
  "not_landed_detail": [
-  "未改生成器（补丁存 k2/docs/drafts）",
-  "未改 k1_board.yaml / SPEC / 原理图",
-  "未落板（仓库板仍 eda1dc91）",
+  "（已落地）未改 SPEC_k1.json",
   "未改 criteria/",
-  "沙箱产物仅 /tmp/opencode"
+  "未直改 PCB（生成器重出）"
  ],
- "next": "待批 → 按 landing_batch 一笔落地 → 复算 → 4/6 收口"
+ "next": "待批 → 按 landing_batch 一笔落地 → 复算 → 4/6 收口",
+ "status": "**已落地（LANDED）** —— #K2-52 §三 放行后于执行序 3 落地",
+ "landed_record": {
+  "k1_commit": "6a1ecdd（生成器 v2 + U10 真源订正 + 生成器重出板 + L3 记录）",
+  "board_sha16": "b68105d2e8914aa7（原 eda1dc91eec76aa7）",
+  "acceptance_recheck": {
+   "n_no_library_link": "42 → **0**",
+   "n_footprints": 42,
+   "two_runs_byte_identical": true
+  },
+  "evidence": {
+   "w8": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/K1_W8_FOOTPRINT_AUDIT_20260921_v2.json（0a8d5345e71c6b34）",
+   "l3": "k1/pm_gate/artifacts/k1/L3/REBUILD_W8GEN1_20260921_v1.json（4b5d63d0be7f870a）",
+   "verdict": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/K1_VERDICT_POST_W8GEN1_20260921_v1.json（e520d5d6f9d7f6e7）"
+  },
+  "truth_correction_bundled": "K1-U10-FP-1（k1_board.yaml#devices.U10.footprint SOT-23 → SOT-23-5）—— 由补丁 fail-closed 断言机械抓出，批内一并订正"
+ }
 }

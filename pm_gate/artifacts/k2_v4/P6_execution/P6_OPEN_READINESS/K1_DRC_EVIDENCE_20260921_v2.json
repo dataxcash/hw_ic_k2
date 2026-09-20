@@ -1,0 +1,406 @@
+{
+ "artifact": "k2_k1_drc_evidence",
+ "schema": 1,
+ "ts": "2026-09-21T03:45:00+0800",
+ "purpose": "K1 板 **DRC 逐条证据**（#K2-52 §三 W8-GEN-1 同批·板 sha 变更后重出）；只读复算。",
+ "command": "python3 criteria/adjudicate.py --project k1 … --drc-cli AppDir/bin/kicad-cli --drc-work-dir /tmp/opencode/k1meas/drc …（判定器内跑 DRC；本件为摘要）",
+ "source_report": {
+  "path": "drc-work-dir/k1_v1/drc.json（沙箱）",
+  "kicad_version": "10.0.5",
+  "date": "2026-09-20T20:12:29",
+  "included_severities": [
+   "error",
+   "warning",
+   "exclusion"
+  ],
+  "ignored_checks": [],
+  "schematic_parity_len": 0
+ },
+ "board_sha16": "b68105d2e8914aa7",
+ "counts": {
+  "total_violations": 90,
+  "by_severity": {
+   "error": 13,
+   "warning": 77
+  },
+  "by_type_and_severity": {
+   "clearance/error": 1,
+   "copper_edge_clearance/error": 3,
+   "missing_courtyard/warning": 7,
+   "nonmirrored_text_on_back_layer/warning": 14,
+   "pth_inside_courtyard/error": 4,
+   "shorting_items/error": 2,
+   "silk_edge_clearance/warning": 3,
+   "silk_over_copper/warning": 29,
+   "silk_overlap/warning": 24,
+   "solder_mask_bridge/error": 3
+  },
+  "unconnected_items": 156
+ },
+ "error_items": [
+  {
+   "type": "clearance",
+   "description": "间距违规 ( 间距 0.1000 mm; 实际 0.0000 mm)",
+   "n_items": 2,
+   "sites": [
+    {
+     "what": "J6 的PTH 焊盘 1 [PWR_CTRL_OUT]",
+     "xy_mm": [
+      14.53,
+      13.0
+     ]
+    },
+    {
+     "what": "B.Cu 上 U1 的焊盘 17 [<no net>]",
+     "xy_mm": [
+      13.75,
+      12.7
+     ]
+    }
+   ]
+  },
+  {
+   "type": "copper_edge_clearance",
+   "description": "电路板边缘间距违规 (<电路板配置> 中的 \"板边\" 约束 间距 0.3000 mm; 实际 0.0000 mm)",
+   "n_items": 2,
+   "sites": [
+    {
+     "what": "Edge.Cuts 上的 线段",
+     "xy_mm": [
+      0.0,
+      38.0
+     ]
+    },
+    {
+     "what": "J1 的PTH 焊盘 SH [GND]",
+     "xy_mm": [
+      0.31,
+      16.16
+     ]
+    }
+   ]
+  },
+  {
+   "type": "copper_edge_clearance",
+   "description": "电路板边缘间距违规 (<电路板配置> 中的 \"板边\" 约束 间距 0.3000 mm; 实际 0.2692 mm)",
+   "n_items": 2,
+   "sites": [
+    {
+     "what": "J1 的 NPTH 焊盘",
+     "xy_mm": [
+      1.2,
+      23.36
+     ]
+    },
+    {
+     "what": "J1 的PTH 焊盘 B1 [GND]",
+     "xy_mm": [
+      2.0,
+      22.71
+     ]
+    }
+   ]
+  },
+  {
+   "type": "copper_edge_clearance",
+   "description": "电路板边缘间距违规 (<电路板配置> 中的 \"板边\" 约束 间距 0.3000 mm; 实际 0.2700 mm)",
+   "n_items": 2,
+   "sites": [
+    {
+     "what": "Edge.Cuts 上的 线段",
+     "xy_mm": [
+      0.0,
+      38.0
+     ]
+    },
+    {
+     "what": "J1 的PTH 焊盘 SH [GND]",
+     "xy_mm": [
+      0.67,
+      22.11
+     ]
+    }
+   ]
+  },
+  {
+   "type": "pth_inside_courtyard",
+   "description": "PTH inside courtyard",
+   "n_items": 2,
+   "sites": [
+    {
+     "what": "J9 的PTH 焊盘 1 [UART_TX]",
+     "xy_mm": [
+      1.19,
+      13.0
+     ]
+    },
+    {
+     "what": "封装 J1",
+     "xy_mm": [
+      4.8,
+      19.0
+     ]
+    }
+   ]
+  },
+  {
+   "type": "pth_inside_courtyard",
+   "description": "PTH inside courtyard",
+   "n_items": 2,
+   "sites": [
+    {
+     "what": "J9 的PTH 焊盘 2 [UART_RX]",
+     "xy_mm": [
+      3.73,
+      13.0
+     ]
+    },
+    {
+     "what": "封装 J1",
+     "xy_mm": [
+      4.8,
+      19.0
+     ]
+    }
+   ]
+  },
+  {
+   "type": "pth_inside_courtyard",
+   "description": "PTH inside courtyard",
+   "n_items": 2,
+   "sites": [
+    {
+     "what": "J9 的PTH 焊盘 3 [GND]",
+     "xy_mm": [
+      6.27,
+      13.0
+     ]
+    },
+    {
+     "what": "封装 J1",
+     "xy_mm": [
+      4.8,
+      19.0
+     ]
+    }
+   ]
+  },
+  {
+   "type": "pth_inside_courtyard",
+   "description": "PTH inside courtyard",
+   "n_items": 2,
+   "sites": [
+    {
+     "what": "J9 的PTH 焊盘 4 [MCU_VDD]",
+     "xy_mm": [
+      8.81,
+      13.0
+     ]
+    },
+    {
+     "what": "封装 J1",
+     "xy_mm": [
+      4.8,
+      19.0
+     ]
+    }
+   ]
+  },
+  {
+   "type": "shorting_items",
+   "description": "短路了两个不同网络的项目 (网络 MCU_VDD 和 SBU_SEL)",
+   "n_items": 2,
+   "sites": [
+    {
+     "what": "J13 的PTH 焊盘 4 [MCU_VDD]",
+     "xy_mm": [
+      8.81,
+      8.0
+     ]
+    },
+    {
+     "what": "B.Cu 上 U1 的焊盘 31 [SBU_SEL]",
+     "xy_mm": [
+      9.3,
+      8.75
+     ]
+    }
+   ]
+  },
+  {
+   "type": "shorting_items",
+   "description": "短路了两个不同网络的项目 (网络 MCU_VDD 和 SWCLK_BOOT0)",
+   "n_items": 2,
+   "sites": [
+    {
+     "what": "J13 的PTH 焊盘 4 [MCU_VDD]",
+     "xy_mm": [
+      8.81,
+      8.0
+     ]
+    },
+    {
+     "what": "B.Cu 上 U1 的焊盘 32 [SWCLK_BOOT0]",
+     "xy_mm": [
+      9.3,
+      8.25
+     ]
+    }
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "description": "底层阻焊开窗区域与不同网络的项目相连",
+   "n_items": 2,
+   "sites": [
+    {
+     "what": "B.Cu 上 U1 的焊盘 17 [<no net>]",
+     "xy_mm": [
+      13.75,
+      12.7
+     ]
+    },
+    {
+     "what": "J6 的PTH 焊盘 1 [PWR_CTRL_OUT]",
+     "xy_mm": [
+      14.53,
+      13.0
+     ]
+    }
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "description": "底层阻焊开窗区域与不同网络的项目相连",
+   "n_items": 2,
+   "sites": [
+    {
+     "what": "B.Cu 上 U1 的焊盘 31 [SBU_SEL]",
+     "xy_mm": [
+      9.3,
+      8.75
+     ]
+    },
+    {
+     "what": "J13 的PTH 焊盘 4 [MCU_VDD]",
+     "xy_mm": [
+      8.81,
+      8.0
+     ]
+    }
+   ]
+  },
+  {
+   "type": "solder_mask_bridge",
+   "description": "底层阻焊开窗区域与不同网络的项目相连",
+   "n_items": 2,
+   "sites": [
+    {
+     "what": "B.Cu 上 U1 的焊盘 32 [SWCLK_BOOT0]",
+     "xy_mm": [
+      9.3,
+      8.25
+     ]
+    },
+    {
+     "what": "J13 的PTH 焊盘 4 [MCU_VDD]",
+     "xy_mm": [
+      8.81,
+      8.0
+     ]
+    }
+   ]
+  }
+ ],
+ "unconnected_top_refs": [
+  [
+   "J1",
+   23
+  ],
+  [
+   "J9",
+   6
+  ],
+  [
+   "J13",
+   5
+  ],
+  [
+   "J10",
+   3
+  ],
+  [
+   "J6",
+   2
+  ]
+ ],
+ "unconnected_top_nets": [
+  [
+   "GND",
+   100
+  ],
+  [
+   "P3V3_AUX",
+   26
+  ],
+  [
+   "VBUS",
+   22
+  ],
+  [
+   "MCU_VDD",
+   18
+  ],
+  [
+   "PWR_5V_MAIN",
+   14
+  ],
+  [
+   "PERSTA#",
+   6
+  ],
+  [
+   "12V_IN",
+   6
+  ],
+  [
+   "I2C1_SDA",
+   6
+  ],
+  [
+   "I2C1_SCL",
+   6
+  ],
+  [
+   "SBU1",
+   6
+  ],
+  [
+   "NRST",
+   4
+  ],
+  [
+   "PCIE_TX0_N",
+   4
+  ]
+ ],
+ "cross_check": {
+  "error_side": "与 `K1_BOARD_LEVEL_DEFECT_WORKLIST_20260921_v1.json`（error 13 · by_type 五类）**同值同集合** ✓",
+  "warning_side_delta": {
+   "worklist": "17 条 warning（silk_edge_clearance 3 · nonmirrored_text_on_back_layer 14）",
+   "now": "**77 条 warning / 5 类**（missing_courtyard 7 · nonmirrored_text_on_back_layer 14 · silk_edge_clearance 3 · silk_over_copper 29 · silk_overlap 24）",
+   "cause": "K1 `.kicad_pro` 规则严重度经 **M1 落件（ignore→warning ×9，`k1 c018fc7`）** 后，先前被 `ignore` 的 3 类（silk_over_copper/silk_overlap/missing_courtyard）现以 warning 现形 ⇒ **K1-D6 的『17 条』读数已陈旧**（应更新为 77 条 / 5 类）。",
+   "criteria_impact": "**零影响**：5 类全部已在 `criteria/manifest.k1.yaml#drc_warning_dispositions` 登记（登记制·不豁免）⇒ `drc_warning_dispositions` 维仍 **PASS**；但『保持可见』的台账口径应随之更新（属 K1 项目面，须批）。"
+  },
+  "unconnected_side": "156 项与 worklist/D5 同值 ✓（K1 未布线中间态）"
+ },
+ "boundary": [
+  "只读复算；未改板/判据/生成器",
+  "沙箱 /tmp/opencode"
+ ],
+ "delta_vs_v1": {
+  "before_sha16": "eda1dc91eec76aa7",
+  "note": "**几何/焊盘/DRC 零改动**：error 13 · warning 77（5 类，与 K1-D6 台账读数逐字一致）· unconnected 156 全同；唯一板级差异 = 42 件 FPID 补库昵称 + 7 处 U1 侧 net 重排（K1-U1-BOARD-SYNC 闭合）",
+  "fp_id": "n_no_library_link 42 → 0"
+ }
+}
