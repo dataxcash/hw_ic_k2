@@ -77,7 +77,37 @@
     }
    },
    "criterion": "各轨 源端→负载点 直流压降 ≤ 预算 3%（监理定值/指令 #10）；各轨电流须显式声明来源（datasheet 或保守值）",
-   "note": ""
+   "note": "【测点强制】`P3V3_AUX` 负载点须取 `J3`/`J4` 之 `P3V3_AUX` pad（板侧机核各 1 个）—— 该轨为迹线分配小岛，最坏单跳 `In5.Cu` 20.789mm = **125.3 mΩ@85℃**（PDN-F3）；取近端会**假绿**。",
+   "named_load_points_required": {
+    "P3V3_AUX": {
+     "refdes_any_of": [
+      "J3",
+      "J4"
+     ],
+     "pad_net": "P3V3_AUX",
+     "board_check": "板侧机核（l7 · 只读）：J3/J4 各 1 个 P3V3_AUX pad；同网 C90/J11/R1/U1 各 1",
+     "why": "该轨平面为小岛 ⇒ 实质迹线分配（总长 109.44mm · 宽 0.2mm）；最坏单跳 In5.Cu 20.789mm ⇒ 125.3 mΩ@85℃（内部 PDN-F3『V5 须覆盖』）⇒ 负载点取近端会高估裕度（假绿）",
+     "source": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/PDN_DESIGN_PRECHECK_V5_20260921_v1.json（100bc34f2980d86d）"
+    },
+    "12V_IN": {
+     "refdes_any_of": [
+      "指定并注明"
+     ],
+     "note": "负载点 refdes 必须注明"
+    },
+    "P3V3": {
+     "refdes_any_of": [
+      "指定并注明"
+     ],
+     "note": "负载点 refdes 必须注明"
+    },
+    "MCU_VDD": {
+     "refdes_any_of": [
+      "U1 供电 pad 或等效可及点，且注明"
+     ],
+     "note": "负载点 refdes 必须注明"
+    }
+   }
   },
   "V6_1_rail_voltages": {
    "required": true,

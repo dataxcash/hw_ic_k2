@@ -1,0 +1,440 @@
+{
+ "artifact": "k2_prior_art_registry_index",
+ "schema": 11,
+ "purpose": "**先查册再声明**：把『已知缺陷/缺口/待裁』的**权威登记册**编成一页索引，供任何新会话在声明『新发现』前逐册核对，避免重复上报（本会话已发生 3 次重复：K1-S6 为真漏；K1-D11≈C-G2-1；K2-REG-1≈G-5）。**只读**。",
+ "how_to_use": [
+  "声明『新发现』或『风险』前：先在本表逐册 grep 关键词（器件号/网名/现象）。",
+  "若已登记 ⇒ 只引用其编号与状态（不得重复上报为『新』）。",
+  "若确为新 ⇒ 在产物中**显式写明已核本表**（`prior_art_checked: true`）。"
+ ],
+ "registries": [
+  {
+   "id": "K1-GAP",
+   "path": "k1/pm_gate/artifacts/k1/L1/frozen/L1_BID_v2_k1.md §5",
+   "scope": "K1 ①方案缺口/器件真源缺陷",
+   "items": "G-1..G-10",
+   "key": {
+    "G-5": "**器件真源缺陷**：`sch_gate/datasheets/DCDC_12V_5V.yaml` 引脚表实为 **TLV61046(boost)**；`U8` footprint 声明 SOIC-8 而真源 SOT-23-6 ⇒ ②原理图前必须修",
+    "G-6": "`k1_board.yaml#devices.U1.nets` 含 SBU1 但 `k1_nets.yaml#SBU1` 无 U1 ⇒ 漂移",
+    "G-9": "`candidate_generator` 电源岛器件集硬编码",
+    "G-10": "k1 无 pipeline.yaml（统一入口不可用）"
+   }
+  },
+  {
+   "id": "K1-OPEN",
+   "path": "k1/boards/k1_board.yaml#reconciliation.open_issues",
+   "scope": "K1 板级开放项",
+   "items": "OPEN-1（J1 Type-C 无 SS 焊盘⇒换 Amphenol）· OPEN-2（U10 LDO 5pin vs SOT-23 3pad，『待 ECO』）"
+  },
+  {
+   "id": "K1-BUILD",
+   "path": "k1/pm_gate/artifacts/k1/L3/BUILD_REPORT_v2.md",
+   "scope": "K1 判据逐条判定（②③阶段）",
+   "items": "含 **`C-G2-1` CC 宣告 3A（Rp=10k）⇒ FAIL：R35=56K R36=56K（目标 10000Ω±5%）**；C-G6-2 I2C 上拉预算 FAIL（R37 对地）等"
+  },
+  {
+   "id": "K1-SYNC",
+   "path": "k1/pm_gate/artifacts/k1/L2/SCH_SYNC_v1.md",
+   "scope": "K1 ②同步**声明**（改了什么）",
+   "items": "G1 `U8 DCDC_12V_5V→TPS54628`；`U12 TPS22919→TPS22965`；G2 `R35/R36 56K→10K`（CC 3A 宣告）"
+  },
+  {
+   "id": "K2-E2PAD",
+   "path": "k2/docs/K2-P2-E2-directed-pad-registry-v1.md",
+   "scope": "K2『有向口径』余量焊盘逐条登记",
+   "items": "J2 0 · J3 0 · J4 0 · U1 14+缺8（**板侧缺陷 2-A″：U1 截断 + EP 未接 GND**）· **U2 余量 2：`7`,`8` = 结构性余量（SOIC-8 未用脚），登记即闭**"
+  },
+  {
+   "id": "K2-LAND",
+   "path": "k2/docs/K2-P4-CONVERGENCE-STATUS-v1.md",
+   "scope": "K2 板级 land pattern vs 库 系统性差异 + 供裁项",
+   "items": "28 件被动件 land 偏小；**② `U2` 真源符号 `DCDC_12V_3V3`（无型号/图纸，`body_width:17.78` 与封装名矛盾）⇒ 封装指派本身存疑**；J3/J4 库件 pad 命名陈旧；E2 y 镜像。**边界：源侧⇒owner 闸；判据侧⇒判据通道**"
+  },
+  {
+   "id": "K2-CAP",
+   "path": ".omo/supervision/ledger/CAPABILITY-GAP-STATUS-v1.json",
+   "scope": "能力缺口 C-1..C-25 状态",
+   "items": "24/25 closed · **C-25 pending**（2 维无独立外部真源）"
+  },
+  {
+   "id": "K2-PEND",
+   "path": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/PENDING_RULINGS_DELTA_20260921_v6.json",
+   "scope": "当前待裁清单（N-1..N-7 + N-3rev + C-25 + K1 项）",
+   "items": "见件内"
+  },
+  {
+   "id": "K2-DEFREG",
+   "path": ".omo/supervision/ledger/（K2-DEFECT-REGISTER 等）",
+   "scope": "K2 缺陷登记册/裁定留痕",
+   "items": "J-1..J-n / C-* / ECO-*"
+  },
+  {
+   "id": "K1-WORKLIST",
+   "path": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/K1_BOARD_LEVEL_DEFECT_WORKLIST_20260921_v1.json",
+   "scope": "**本会话新编** K1 板级工作清单 D1..D12（部分与上述册重叠，见 corrections）",
+   "items": "D1..D12"
+  },
+  {
+   "id": "K2-CONV",
+   "path": "k2/docs/K2-CONVENTION-REGISTER-20260921.md",
+   "scope": "K2 口径登记册（已裁定为口径/登记制者 + 待监理裁定项）",
+   "items": "CR-1..CR-10（见册）"
+  }
+ ],
+ "known_overlaps_found_this_session": [
+  {
+   "mine": "K1-D11（R35/R36 56K）",
+   "already": "**K1-BUILD `C-G2-1` FAIL（K1 L3 BUILD_REPORT_v2）**",
+   "verdict": "重复（已在册）"
+  },
+  {
+   "mine": "K2-REG-1（DCDC_12V_* 注册册 TLV61046 误挂）",
+   "already": "**K1-GAP `G-5`**",
+   "verdict": "重复（已在册）"
+  },
+  {
+   "mine": "K1-D10（U8 声明 TPS54628 vs 符号 DCDC_12V_5V）",
+   "already": "K1-GAP `G-5` + K1-SYNC `G1`（声明已记，须②修）",
+   "verdict": "基本重复"
+  },
+  {
+   "mine": "K1-S6（J10 footprint 陈旧）",
+   "already": "未见于上述册（既有 only OPEN-1 J1 / OPEN-2 U10）",
+   "verdict": "**真新**（已核）"
+  },
+  {
+   "mine": "K1-D8（Q1/U12 **VBIAS 未接**）",
+   "already": "全册未见（grep `VBIAS` 仅 2 份手册 YAML）",
+   "verdict": "**真新**（已核）"
+  }
+ ],
+ "readonly_repo": true,
+ "not_landed": true,
+ "no_new_criteria_dim": true,
+ "ts": "2026-09-21T08:15:00+0800",
+ "v2_addendum": {
+  "what": "本会话（ARCHER · 2026-09-20）新增登记项的索引增量 —— 供后续会话『先查册』；v1 内容**逐键保留**。",
+  "new_entries": [
+   {
+    "id": "K1-S7 / R-1",
+    "where": "k2/docs/K2-N3-K1-SCH-REGEN-LANDING-REPORT-20260921.md §四 R-1 · K1_ANCHOR_REBASELINE…（ef7160de/1ba64d54）",
+    "claim": "J1 符号脚号 `1..16` ∉ 板 pad 名 `A*/B*/SH` ⇒ `pin_map_complete` 的 16 节点『无对应焊盘』**全部来自 J1**；N-3 前后同为 16（无回归）",
+    "status": "**待监理自裁**（(a) 按 pinmap 逐 pad 展开 / (b) 裁定该维口径）"
+   },
+   {
+    "id": "W8-VAC-1",
+    "where": "同上 §二 · K1_W8_FOOTPRINT_AUDIT_20260921_v1.json（146b8543）",
+    "claim": "K1 板 **42/42 footprint 无库 nickname** ⇒ W-8 电气级比对**零对象**，`lib_electrical_level` 属**空过**（禁用其宣称 K1 电气级合规）",
+    "status": "**待批**（补 `ForgeOS:` lib_id 属板/库变更）或裁定口径"
+   },
+   {
+    "id": "T2-F1",
+    "where": "k2/docs/K2-C25-TIER2-PROVENANCE-BATCH1-20260921.md §二",
+    "claim": "`sch_gate/datasheets` 引证文献号与厂商当前件不符：`TPD6E05U06` SLLSE95 → 实测 **SLVSBO7O**；`TS3USB221A` SCDS239A → 实测 **SCDS277C**",
+    "status": "**待批**（`_shared` 件 `source:` 订正）"
+   },
+   {
+    "id": "T2-F5",
+    "where": "同上 §一/§四 · C25_TIER2_PROVENANCE_BATCH1…（f1f50deb）",
+    "claim": "厂商站点级反自动化（onsemi 全站 403 · st.com 端点 567 含产品页 · Diodes 搜索 403 · Molex 超时 · LiteOn WAF）⇒ tier2 余 9 件**自动化不可达**；usb.org 无 USB 3.2 基规公开直链",
+    "status": "方法面登记（非缺陷）；tier2 可达上限 21/33"
+   },
+   {
+    "id": "C19-F1",
+    "where": "C19_K2_ANCHOR_REPRODUCTION_20260921_v1.json（d13823189443cc73）",
+    "claim": "canonical 19 复现须给**六件**测量输入；漏 `--v3-plane-json` 时 verdict 仍 PASS/19-0 但 `ref_plane_continuity` detail 尾部信息项降为 `None/None` ⇒ JSON 哈希漂移（`45fd4fa1…` ≠ 锚 `190b73be0f728a56`）",
+    "status": "口径已写入（复现须全六件）"
+   },
+   {
+    "id": "M-DET-1",
+    "where": "k2/docs/K2-K1-ANCHOR-REBASELINE-POST-N3-20260921.md（附节）",
+    "claim": "测量器回显输入路径（`min_clearance.method` 含 work-dir · `w8.summary.board` = `--board` 原样）⇒ 逐字节复现须**固定规范实参**；判据读数不受影响",
+    "status": "已处置（K1 四件测量件规范化，两跑逐字节同）"
+   },
+   {
+    "id": "K1-D6 读数更新",
+    "where": "K1_DRC_EVIDENCE_20260921_v1.json（39989527）",
+    "claim": "M1（ignore→warning ×9）后 K1 warning 由册面『17 条 / 2 类』变为**77 条 / 5 类**（新增 silk_over_copper 29 · silk_overlap 24 · missing_courtyard 7）",
+    "status": "判据零影响（5 类均已登记 ⇒ 该维仍 PASS）；台账口径更新属 K1 项目面（须批）"
+   },
+   {
+    "id": "K1-S3（**关闭**）",
+    "where": "k2/pm_gate/artifacts/…/N3_K1_SCH_REGEN_LANDING_REPORT_20260921_v1.json（a3282757）",
+    "claim": "`k1_board.yaml#reconciliation.device_count.schematic_sch_k1=42` 自述与盘上不符 —— **N-3 落件（`k1 9e283bf`）后已为真** ⇒ 本项关闭",
+    "status": "已关闭"
+   }
+  ],
+  "how_to_use_addendum": "查册时除 v1 的 `registries` 外，一并核对本 `v2_addendum.new_entries`（本会话登记面）。"
+ },
+ "v3_addendum": {
+  "what": "ARCHER 2026-09-20 续接会话（只读造活）新增登记；v2 内容逐键保留。",
+  "new_entries": [
+   {
+    "id": "T2-F6",
+    "where": "k2/docs/K2-C25-TIER2-PROVENANCE-BATCH4-20260921.md §二 · C25_TIER2_PROVENANCE_BATCH4…（1fb516b7）",
+    "claim": "batch3 的 `automation_lane_closed=true` 不成立：存在两条可复现**半自动**取件通道 —— ①vendor `.../download/<PART>.pdf` 路由（diodes/microchip 实测 200+PDF）②中文镜像通道（Sogou→atta.szlcsc.com / file.elecfans.com，实测 200+PDF）",
+    "status": "方法面登记（非缺陷）⇒ tier2 可半自动推进至可达上限 21/33"
+   },
+   {
+    "id": "T2-F7",
+    "where": "同上 §一/§三",
+    "claim": "`STM32G0B1KBU6` 引证 **DS12872**；实测 **DS13560** 逐字列出 `STM32G0B1KB` 且含 `STM32G0B1KxU UFQFPN32 pinout` 专节 ⇒ 正确表 = DS13560",
+    "status": "**待批**（`_shared` `source:` 订正 · 同 T2-F1 族）"
+   },
+   {
+    "id": "KBU6-PINROT-1 / K1-D13",
+    "where": "k2/docs/K2-STM32G0B1KBU6-PIN-ROTATION-DEFECT-20260921.md · STM32G0B1KBU6_PIN_ROTATION_DEFECT…（b23ac49f）",
+    "claim": "`_shared/eda_core/sch_gate/datasheets/STM32G0B1KBU6.yaml` 物理脚 **25..32 相对厂商 DS13560 Table 12 (UFQFPN32-GP) 整体旋转一位**；K1 U1 pinmap/sch 符号继承 7 个脚号错（SWCLK_BOOT0 32→25 · I2C1_SCL 29→30 · I2C1_SDA 30→31 · PB3 26→27 · PB4 27→28 · PB5 28→29 · PB8 31→32）；pad 25 物理为 PA14-BOOT0。**K2 现役板用 CBT6 ⇒ 交付面不受影响**",
+    "status": "**高** ⇒ ①监理自裁 `_shared` 订正（须批+同批升版）②owner（L1）K1 pad 配对 ③订正后重跑 K1 链；**ENG 未落地**"
+   }
+  ]
+ },
+ "v4_addendum": {
+  "what": "同族机检登记；v3 内容逐键保留。",
+  "new_entries": [
+   {
+    "id": "SG-AUDIT-1",
+    "where": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/SCH_GATE_PIN_TRUTH_AUDIT_20260921_v1.json（c29e95c62879050b）",
+    "claim": "sch_gate 现行代件 pin 真源**抽检 7/8 与厂商原件一致**（TPS22919·TS3USB221A·AP2127·SE050C2·TPD6E05U06·FUSB302·STM32G0B1CBT6）；唯一 FAIL = **STM32G0B1KBU6**（脚 25..32 旋转）",
+    "status": "只读登记 ⇒ ①优先订正 KBU6 ②补检 DS160PR810 / TLV61046A ③对 source 指向 Figure 的件加注复核优先级"
+   }
+  ]
+ },
+ "v5_addendum": {
+  "supersedes": "PRIOR_ART_REGISTRY_INDEX_20260921_v4.json（sha16 4b45dd8d51020d0e）",
+  "purpose": "红线『声明新发现前先查在册』—— 本会话 2 项新发现的在册核对结论。",
+  "crosscheck": [
+   {
+    "mine": "**K1-U10-FP-1**（U10 footprint 声明 `Package_TO_SOT_SMD:SOT-23`(3pad) vs 板件实测 `SOT-23-5`(5pad)）",
+    "already": "**已在册**：`K1-OPEN` 注册表 `k1/boards/k1_board.yaml#reconciliation.open_issues` = **OPEN-2**『U10 LDO 5pin vs SOT-23 3pad，待 ECO』",
+    "verdict": "**同族复现（非真新）** —— 但提供**新证据层**：①板件实测 footprint=**SOT-23-5**（与 `sch_pins=5` 自洽）②由**补丁 fail-closed 断言机械抓取**（非人工巡检）③**落地必需**（W8-GEN-1 批若不订正该行，建板器健壮性断言会拒绝签名）"
+   },
+   {
+    "mine": "**J1-SSP-1**（USB-C J1 SS 差分对 ± 命名 3 套互斥口径）",
+    "already": "册内仅有 **R-1**（J1 符号脚号 `1..16` ∉ 板 pad 名 `A*/B*/SH`，待监理自裁）；**± 命名口径/极性冲突未见于任何册**",
+    "verdict": "**真新**（已核；grep 全册 `SSP`/`TX_P`/`极性`/`polarity`/`USB_C` 均 0 命中）—— 且为 R-1 选 (a)『逐 pad 展开』**落地后暴露的下一层问题**（脚号对了，命名口径还没定）"
+   },
+   {
+    "mine": "**SG-AUDIT-1c**（DS160PR810 64/64）",
+    "already": "SG-AUDIT-1 条目在册（补检建议）",
+    "verdict": "**闭环/升级**（把 14/64 抽样残差补齐为全量，无新缺陷）"
+   },
+   {
+    "mine": "**T2-F6 通道降级**（batch4 半自动取件通道本会话部分失效）",
+    "already": "T2-F6 在册（batch4 口径裁定）",
+    "verdict": "**同一条目状态更新**（可达性具时效性 ⇒ 建议把 21/33 改列为软目标）"
+   }
+  ]
+ },
+ "v6_addendum": {
+  "supersedes": "PRIOR_ART_REGISTRY_INDEX_20260921_v5.json（sha16 7a959f4cc5cb21db）",
+  "purpose": "#K2-53 §三-2：把『已裁为口径、非缺陷』的差异集中登记 + 本批新发现查册结论。",
+  "convention_register": "见 `k2/docs/K2-CONVENTION-REGISTER-20260921.md`（CR-1..CR-4）",
+  "crosscheck": [
+   {
+    "mine": "CR-1 J1 TX 对 P/N 反相",
+    "already": "#K2-52 §五-1 已报备 owner（知悉项）；本册**首次登记为口径**",
+    "verdict": "**已裁（#K2-53）· 非真新缺陷**"
+   },
+   {
+    "mine": "CR-2 J1-SSP-2（24.yaml B 行角色）",
+    "already": "v5 已登（真新）；本册登记为**口径**",
+    "verdict": "**已裁（#K2-53）· 维持不统一**"
+   },
+   {
+    "mine": "CR-3 IOCONVERT 表示法差",
+    "already": "SG-AUDIT-1d（v17）已登",
+    "verdict": "**已裁（#K2-53）· 登记制**"
+   },
+   {
+    "mine": "CR-4 tier2 不可约下界",
+    "already": "T2-F6（v5/v16）已登",
+    "verdict": "**已裁（#K2-53）· 口径（非绿判）**"
+   },
+   {
+    "mine": "SG-AUDIT-1d DS320PR1601 真源表",
+    "already": "v17 已登（待裁）",
+    "verdict": "**已裁并落地（#K2-53）**"
+   }
+  ]
+ },
+ "supersedes": "PRIOR_ART_REGISTRY_INDEX_20260921_v10.json（36c39a0a3c63026d）",
+ "new_since_v6": {
+  "note": "本会话新增登记（**先查册再声明**；以下条目在声明『新发现』前必须先命中此处）：",
+  "K2-CONV": [
+   {
+    "id": "CR-5",
+    "what": "tier2 读数 15/33 → **17/33**（OPTO_LTV356T · STM32G0B1KBU6 · 新通道 media.digikey.com）",
+    "status": "读数更新 · 具名不充绿",
+    "evidence": "T2F6_NEWLANE_PROBE_20260921_v2.json（f609d256eb30d822）"
+   },
+   {
+    "id": "CR-6",
+    "what": "pciesw4 覆盖缺口 = **4 目录/39 件**（COV-C1 口径订正：k2/hw/sch 与 key_v2/key_v2/sch 实为已覆盖）",
+    "status": "待监理裁定（option_B/option_A）",
+    "evidence": "PCIESW4_COVERAGE_MANIFEST_PROPOSAL_20260921_v1.json（85f879087be9a943）"
+   },
+   {
+    "id": "CR-7",
+    "what": "补丁证据『目标 sha 自比』⇒ 须记前像/后像（COV-C2 检查缺环）",
+    "status": "登记",
+    "evidence": "BATCH6_V4_RELEASE_PRECHECK_20260921_v1.json（fa4e15eafad1acb7）"
+   },
+   {
+    "id": "CR-8",
+    "what": "**批 6 v4 已在树内**（ea2b746 起 · 反向 dry-run RC=0）⇒ 待裁-3 应改裁『追认』",
+    "status": "待监理裁定",
+    "evidence": "同上（fa4e15eafad1acb7）"
+   },
+   {
+    "id": "CR-9",
+    "what": "四树引擎同步缺口：key_v2/_shared、pciesw4/_shared 停在 M13（落后 1823/1558 行 diff）",
+    "status": "待监理裁定",
+    "evidence": "FOUR_TREE_ENGINE_SYNC_CENSUS_20260921_v1.json（4e2a2cd0fa4032cf）"
+   }
+  ],
+  "artifacts_index": {
+   "K2_ANCHOR_RECHECK_20260921_v4.json": "b7bfda62b322fcfc（14/14 锚 MATCH）",
+   "P6_1_CLOSURE_DOSSIER_OPTIONA_20260921_v1.json": "07ea08c6a75d224f",
+   "PENDING_RULINGS_DELTA_20260921_v21.json": "a4f41496bd80f0c0",
+   "k2/docs/K2-CONVENTION-REGISTER-20260921.md": "dd7a1c8ce94b52d4（CR-1..CR-9）"
+  }
+ },
+ "new_since_v7": {
+  "note": "**最新权威裁定 = #K2-54**（2026-09-20 · owner 项 0）。本册已按裁定重编号并落册（CR-5 = P6-1 口径 · CR-6 tier2 · CR-7 COV-C1 · CR-8 COV-C2 · CR-9 批6v4 追认 · CR-10 COV-C3）。**声明『新发现』前必须先命中此处**。",
+  "ruled_and_landed": [
+   {
+    "id": "CR-5",
+    "what": "P6 判据①口径 = 采纳 (a)（整改前命中 4/4 + 整改记录闭合；整改后 MISS 属预期）",
+    "status": "**已裁定 · 已落册**（#K2-54 §一）",
+    "evidence": "k2/docs/K2-CONVENTION-REGISTER-20260921.md（d4a844ab3f8b85fb）· P6_ACCEPTANCE_CLOSURE_AFTER_K2_54_20260921_v1.json（14d5463c02191282）"
+   },
+   {
+    "id": "CR-6",
+    "what": "tier2 读数 15/33 → 17/33（OPTO_LTV356T · STM32G0B1KBU6 · 新通道 media.digikey.com）",
+    "status": "知悉（具名·不充绿）",
+    "evidence": "T2F6_NEWLANE_PROBE_20260921_v2.json（f609d256eb30d822）"
+   },
+   {
+    "id": "CR-7",
+    "what": "pciesw4 覆盖缺口 COV-C1 = 4 目录/39 件（1/17/1/20）· option_B（pciesw4 自持 pipeline.yaml）",
+    "status": "**已裁定 · 已落册**（#K2-54 §二）",
+    "evidence": "PCIESW4_COVERAGE_MANIFEST_PROPOSAL_20260921_v1.json（85f879087be9a943）"
+   },
+   {
+    "id": "CR-8",
+    "what": "COV-C2 补丁前像新鲜度检查（落点 = 容器根 `git apply --check <补丁>`；RC=0 可落 / RC≠0 已应用或前像陈旧 ⇒ 标 superseded + 记 pre_image_sha16）",
+    "status": "**已裁定 · 已落册**（#K2-54 §三）",
+    "evidence": "BATCH6_V4_RELEASE_PRECHECK_20260921_v1.json（fa4e15eafad1acb7）"
+   },
+   {
+    "id": "CR-9",
+    "what": "批 6 v4 = **已随 `ea2b746` 生效**（无落地对象 · 禁单独升版 · ENG 维持 1.1.4）",
+    "status": "**已裁定 · 已落册**（#K2-54 §三）",
+    "evidence": "同上（fa4e15eafad1acb7）"
+   },
+   {
+    "id": "CR-10",
+    "what": "COV-C3 四树引擎三态漂移（c9e1c3b4 / 883525b4 / 6ab5eaaa）⇒ 另立跨项目批次 + 钉版登记",
+    "status": "**已裁定 · 已落册**（#K2-54 §四）",
+    "evidence": "FOUR_TREE_ENGINE_SYNC_CENSUS_20260921_v1.json（4e2a2cd0fa4032cf）"
+   }
+  ],
+  "stage_state": "**P6 验收面闭合**（P6-1 闭 / P6-2 PASS）· P0–P4 HOLDS · **P5 维持 PENDING_EXTERNAL（V4–V7 NOT_RUN）** · 交付锚 `6ee7495de61f749f` 未动 · 判据 rev=6。**交付包完整性 55/55 OK · DFM 16P/1ACCEPT(已裁)/0F**（DELIVERY_PACKAGE_INTEGRITY_RECHECK_20260921_v1.json · 6d650f637da9f6f4）。",
+  "artifacts_added": {
+   "P6_ACCEPTANCE_CLOSURE_AFTER_K2_54_20260921_v1.json": "14d5463c02191282",
+   "DELIVERY_PACKAGE_INTEGRITY_RECHECK_20260921_v1.json": "6d650f637da9f6f4",
+   "k2/docs/K2-CONVENTION-REGISTER-20260921.md": "d4a844ab3f8b85fb"
+  }
+ },
+ "already_ruled_watchlist": {
+  "purpose": "**已裁定但极易被后续会话误报为『新发现』的事项**（先查此处，再决定是否上报）。",
+  "items": [
+   {
+    "id": "P5-1 阻抗券索取",
+    "ruling": "**#K2-48 N-1 (a)**：『接受 + 随单注明』· **不动交付锚**；阻抗券索取 = **商务下单页**（owner #14④）⇒ **非 ENG 任务**",
+    "do_not": "禁作为新发现上报；禁改交付包/`ORDER_NOTES.md`（触锚）"
+   },
+   {
+    "id": "B-1 叠层标注 / B-2 Finish(ENIG) / P5-2 DISCLOSURE 编号",
+    "ruling": "**#K2-48 N-1 (a)**：随单/`DISCLOSURE.md` 注明 · **禁重建包**",
+    "do_not": "禁以『未修』为缺陷上报；如须改包须**监理授权**（触交付锚）"
+   },
+   {
+    "id": "P2 口径：`measure_source_reconcile.py` 未见",
+    "ruling": "**#K2-48 N-6**：判据**换址**（由 rev=3 三维承接）· 册面注明『非缺失』",
+    "do_not": "禁重复上报为『判据缺失』"
+   },
+   {
+    "id": "C-25 tier1/tier2",
+    "ruling": "**#K2-48 N-5**：tier1 即时落件（`check-dimensions` 19/19 PASS）· tier2 排期（现 **17/33** 具名 · 不充绿）",
+    "do_not": "禁把 tier2 余量/『可达上限』入判据（C-12）"
+   },
+   {
+    "id": "批 6 v4『待放行』",
+    "ruling": "**#K2-54 §三**：**追认已随 `ea2b746` 生效**（无落地对象）· **禁单独升版/重复落地**",
+    "do_not": "禁再报『v4 待放行』；禁升 1.1.5"
+   },
+   {
+    "id": "四树引擎漂移",
+    "ruling": "**#K2-54 §四**：**COV-C3 登记口径**（另立跨项目批次 + 钉版登记）· **不阻塞 P6**",
+    "do_not": "禁作为阻塞 P6 的理由；禁越权改 key_v2/pciesw4"
+   },
+   {
+    "id": "J1 TX 对 P/N 反相 / J1-SSP-2 / IOCONVERT 194 项",
+    "ruling": "**#K2-53 §二**（CR-1/CR-2/CR-3）⇒ **口径 · 非缺陷**",
+    "do_not": "禁重复上报为缺陷；禁改 `.kicad_sym`/`USB_C_*` 真源"
+   },
+   {
+    "id": "P6 判据①『必须命中』整改后 MISS",
+    "ruling": "**#K2-54 §一 = CR-5**：整改前命中 4/4 + 整改记录闭合；整改后 MISS **属预期**（非回归）",
+    "do_not": "禁把 3 MISS 报为回归/新缺陷"
+   }
+  ]
+ },
+ "v10_addendum": {
+  "what": "ARCHER 续接会话（2026-09-21 · 只读造活 · T2-F6 第三轮新通道）新增登记；v1..v9 内容**逐键保留**。",
+  "note": "**最新权威裁定 = #K2-56**（里程碑 tag 断档收口 · 进程合规自裁 · owner 项 0）。**声明『新发现』前必须先命中此处**。",
+  "new_entries": [
+   {
+    "id": "CR-15",
+    "where": "k2/docs/K2-CONVENTION-REGISTER-20260921.md（83a5f45b15d0f027）· T2F6_NEWLANE_PROBE_20260921_v3.json（431b80e9b69abe28）",
+    "claim": "**T2-F6 通道可达/封锁登记（免重复试探）**：新可达 PDF 面 = `www.farnell.com/datasheets/<id>.pdf` · `uploadcdn.oneyac.com` · `www.diodes.com/assets/Databriefs/*.pdf` · `file.elecfans.com`；可用搜索面 = `www.so.com` · `www.baidu.com`；封锁面（12 类逐项实测）= `www.molex.com` **整域 000** · `digikey.cn`/`mouser.cn`/`uk.farnell.com`/`sg.element14.com`/`www.diodes.com/part|search`/`atta.szlcsc.com`/`wmsc.lcsc.com`/`.alldatasheet*.com` = 403 · `datasheet.eeworld.com.cn`/`r.jina.ai`/`datasheetspdf.com`/`datasheetcatalog.com`/`pdf.la`/`icpdf.com` = 000 · 公共 CORS 代理不可用。**本轮实得**：PI3DBS16412 **Product Brief**（Diodes/Pericom 真件 · 官方域 + oneyac 双源 · sha `4ef19e6a…`/`ea1a10cd…` · 渲染图证 `26b56444…`）⇒ 与 repo 真源 **9/9 一致**（封装 42-TQFN ZH42 3.5×9mm / 选定号 ZHEX=ZH / 4 差分通道 2:1 Mux/DeMux 双向 3.3V 1–20Gbps / 信号口 A0..A3·B0..B3·C0..C3 全在 / 控制脚 SEL1·SEL2·PD1·PD2 / 无 REFCLK·OE#·SMBus）",
+    "status": "**方法/通道登记**（非缺陷 · 非判据）· ENG 只读取件 · **不充绿**",
+    "limits": "Product Brief **无脚位表** ⇒ **42 脚逐脚真源（Diodes DS40277 Rev 4-2 全表）仍未取得** ⇒ tier2 **维持具名 PARTIAL · 17/33**",
+    "evidence": "T2F6_NEWLANE_PROBE_20260921_v3.json（431b80e9b69abe28）· T2F6_PI3DBS16412_PRODUCTBRIEF_P1_20260921_v1.png（26b56444f6370d15）"
+   }
+  ],
+  "stage_state": "**P5 维持 PENDING_EXTERNAL（V4–V7 NOT_RUN · 外部回件未到）** · P0–P4 HOLDS · P6 CLOSED · 交付锚 `6ee7495de61f749f` 未动 · 判据 rev=6（MATCH）· k2/父仓 push 均 `0 0` · tag `k2-v57-l6-delivery-anchored`→`9758b76`。",
+  "do_not_report_as_new": [
+   "PI3DBS16412『无数据表』⇒ 已为具名 PARTIAL，本轮补部分外部锚（CR-15）",
+   "tier2『可达上限 21/33』⇒ **禁**入判据（C-12 / #K2-48 N-5）",
+   "`molex.com`/`digikey*`/`mouser*` 不可达 ⇒ 已登 CR-15；**禁**再作『新发现』上报，仅**新通道**才重试"
+  ]
+ },
+ "v11_addendum": {
+  "what": "ARCHER 续接会话（2026-09-21 · 只读造活 · P5 外发包可判性核对）新增登记；v1..v10 **逐键保留**。",
+  "note": "**最新权威裁定 = #K2-56**（owner 项 0）。**声明『新发现』前必须先命中此处**。",
+  "new_entries": [
+   {
+    "id": "CR-16 / P5-V5-1",
+    "where": "k2/docs/K2-CONVENTION-REGISTER-20260921.md（887c4a53df65444e）· P5_V5_NAMED_LOADPOINT_CONSISTENCY_FIX_20260921_v1.json（d80ba42d60d844ed）",
+    "claim": "**V5 具名测点缺口（假绿风险）⇒ 已修**：内部 `PDN-F3` 已标 `P3V3_AUX` 为『观察项（V5 须覆盖）』（迹线分配 · 总长 109.44mm · 最坏单跳 `In5.Cu` 20.789mm = **125.3 mΩ@85℃**），handoff §7-A-3 亦要求覆盖 `J3`/`J4`，**但外发三件原无具名测点** ⇒ 现强制『`P3V3_AUX` 负载点取 `J3`/`J4` 之 `P3V3_AUX` pad』（板侧机核各 1 pad）。落件：`RULES.md` `8bee0961`→`498c365f` · `CHECKLIST.md` `d7dda9a8`→`b91fd606` · `results_template.json` `51f1e9a1`→`fc1b93c4`",
+    "status": "**已修（L2 规程面自裁）· 未新增判据维/检查齿 · 不触交付锚**"
+   },
+   {
+    "id": "CR-17 / P5-V6-2-1",
+    "where": "same（d80ba42d60d844ed）",
+    "claim": "`V6-2` 之 `DBGMCU_IDCODE` **预期值仍缺**（仅『RM0454 §DBG 手册依赖项』；`SW-DP IDCODE` 预期 `0x0BC11477` 已有）。本轮新通道 `www.stmcu.com.cn`（ST 中国官方资源页）⇒ **429 限流**；`www.st.com` 仍不可达",
+    "status": "**开放依赖（非缺陷 · 不阻塞）**——再遇可读 RM0454 之新通道即补；**禁**以记忆填值"
+   }
+  ],
+  "consistency_sweep_result": "**外发四件 × 8 项**逐项核对：V4 阈值/覆盖（4 处一致）· V6-1 标称（与 CR-11 一致）· V6-2 测点（3 处一致）· V6-3 `0x52`（与预期值件一致）· V7 四工况（与 L2 裁定一致）· 项数 8（4 处一致）⇒ **唯一缺口 = V5 具名测点（已修 CR-16）**。",
+  "stage_state": "**P5 维持 PENDING_EXTERNAL**（V4–V7 NOT_RUN · 外部回件未到）· P0–P4 HOLDS · P6 CLOSED · 交付锚 `6ee7495de61f749f` 未动 · 判据 rev=6（MATCH）· k2/父仓 push `0 0` · tag `k2-v57-l6-delivery-anchored`→`9758b76`。",
+  "do_not_report_as_new": [
+   "`P3V3_AUX` 最坏跳/PDN-F3 ⇒ **已裁已修（CR-16）**，禁再报为『规程缺测点』",
+   "`DBGMCU_IDCODE` 无预期值 ⇒ **已登 CR-17（开放依赖）**，禁再报为『缺陷』；只补值",
+   "`molex.com`/`digikey*`/`mouser*`/`st.com` 不可达 ⇒ CR-15/CR-17 已登，仅**新通道**才重试"
+  ]
+ }
+}

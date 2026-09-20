@@ -14,7 +14,7 @@
 | # | 项 | 条件/测点 | 判据 | 实测 | 判 |
 |---|---|---|---|---|---|
 | V4 | 阻抗券 | F/In2/In5/B 各 ≥1 对；覆盖 0.6mm 中心 + 0.2825mm 最紧段 | 85Ω±10%（76.5–93.5Ω） | | ☐PASS ☐FAIL |
-| V5 | PDN 压降 | 4 轨 源端/负载点；电流显式声明 | ≤3% 预算 | | ☐PASS ☐FAIL |
+| V5 | PDN 压降 | 4 轨 源端/负载点；电流显式声明；**`P3V3_AUX` 负载点须取 `J3`/`J4` 焊盘**（PDN-F3 最坏跳 125.3 mΩ@85℃） | ≤3% 预算 | | ☐PASS ☐FAIL |
 | V6-1 | 轨电压 | 稳态 | 全部 ±5% | | ☐PASS ☐FAIL |
 | V6-2 | MCU SWD | J13 pad1/pad2(+GND)；NRST 另于 U1 pad10/R29 pad1/C73 pad1 | device ID 正确 | | ☐PASS ☐FAIL |
 | V6-3 | FRU I2C | I2C1/I2C2 扫描 | EEPROM 地址应答 | | ☐PASS ☐FAIL |
