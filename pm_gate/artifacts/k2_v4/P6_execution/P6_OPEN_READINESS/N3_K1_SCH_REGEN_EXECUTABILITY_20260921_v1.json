@@ -101,23 +101,27 @@
   {
    "id": "N3-G1",
    "part": "Q1",
-   "severity": "BLOCKING(N-3)",
+   "severity": "高（数据已备·待授权）",
    "finding": "Q1=TPS22990：`k1_board.yaml` 声明 `sch_pins=6`，但 `k1_pinmap.yaml` 仅给出 **4** 个有网脚（IN/VOUT/ON/GND）⇒ **缺 2 脚**定义；且仓库内 **无 TPS22990 引脚表**（`L1/inputs/datasheets/TPS22990.yaml` 只有电气/热参数，无 pinout；`sch_gate/datasheets/` 33 件亦无）。",
    "impact": "N-3 无法在不**杜撰**脚位的前提下完成 37→42。",
    "options": [
     "(i) 取 TPS22990 手册（TI SLVSDK1C）转录 pinout + 三件套（推荐）",
     "(ii) 监理/owner 裁定按其 4 有网脚 + 2 NC 具名落件",
     "(iii) 暂缓 Q1，先落其余 4 件（**须监理同意部分再生**）"
-   ]
+   ],
+   "data_gap_status": "**已解除（本会话）**：手册已取得并**经 sha256 确认为在册同版**（tps22990 `ea198776…` / tps22965 `3300eef7…`），引脚表已转录为草案 `TPS22990_TPS22965_pinout_transcription_v1.yaml`（含逐脚 name/type/note + 出处三件套）。",
+   "remaining_blocker": "**授权**（安装转录件 + 订正 `sch_pins` 声明 + 落 N-3）。**另**：`k1_board.yaml#devices.Q1.sch_pins=6` 与实件 **10(+EP)** 不符、`U12.sch_pins=6` 与 **8(+EP)** 不符 ⇒ 声明须随批订正。"
   },
   {
    "id": "N3-G2",
    "part": "U12",
-   "severity": "高（同族）",
+   "severity": "高（数据已备·待授权）",
    "finding": "U12=TPS22965：声明 `sch_pins=6`；仓库无 TPS22965 pinout（同 N3-G1 情形）。现原理图用 `TPS22919`（6 脚）为**错件**（K1-S4）⇒ 改件后其 6 脚须有出处。",
    "options": [
     "同上 (i)/(ii)"
-   ]
+   ],
+   "data_gap_status": "**已解除（本会话）**：手册已取得并**经 sha256 确认为在册同版**（tps22990 `ea198776…` / tps22965 `3300eef7…`），引脚表已转录为草案 `TPS22990_TPS22965_pinout_transcription_v1.yaml`（含逐脚 name/type/note + 出处三件套）。",
+   "remaining_blocker": "**授权**（安装转录件 + 订正 `sch_pins` 声明 + 落 N-3）。**另**：`k1_board.yaml#devices.Q1.sch_pins=6` 与实件 **10(+EP)** 不符、`U12.sch_pins=6` 与 **8(+EP)** 不符 ⇒ 声明须随批订正。"
   },
   {
    "id": "N3-G3",
@@ -165,5 +169,17 @@
  "readonly_repo": true,
  "not_landed": true,
  "no_new_criteria_dim": true,
- "ts": "2026-09-22T08:15:00+0800"
+ "ts": "2026-09-22T08:25:00+0800",
+ "data_acquisition": {
+  "method": "curl 取 TI 手册 → sha256 **与在册 `doc_sha256` 逐字节同**（确认为同版）→ pdftotext -layout → 逐脚摘录 §6 Pin Configuration and Functions",
+  "fidelity_note": "pdftotext 在 **§6 表中** 把 pin 8/9/10 的 VOUT 行折叠为『8 / 9 VOUT』与孤立『10』；**已用同页 Top/Bottom View 图交叉确认 8/9/10 = VOUT**（禁凭单行表格下结论）。",
+  "artifacts": [
+   "k2/docs/drafts/n3-k1-sch-regen-v1/TPS22990_TPS22965_pinout_transcription_v1.yaml"
+  ],
+  "verified_downloads": {
+   "tps22990.pdf": "ea198776524544eb3e4a130f1f6a6e5c8e80ca8164eebf387a8fd6b4b7dde2a3",
+   "tps22965.pdf": "3300eef743d7871f96c752227ae8f958006a902123ce2df351cf0772ec95a7e1"
+  }
+ },
+ "conclusion_update": "N-3 的**唯一实质阻塞=授权**（数据已备）：5 件数据可得性 = Q1 ✅(新转录·**10+EP**) · U12 ✅(新转录·**8+EP**) · U13 ✅(手册既有) · Q2 ✅ · R38/R39 ✅。"
 }

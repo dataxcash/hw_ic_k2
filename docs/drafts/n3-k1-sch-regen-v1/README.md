@@ -45,3 +45,13 @@ PYTHONPATH=_shared python3 k2/docs/drafts/n3-k1-sch-regen-v1/k1_sch_regen_accept
 
 ## 5. 边界
 只读；未动 `k1/`；未新增判据维/检查齿（本验收核为**该次授权变更**的验收工具，非门禁新维）。
+
+## 6. ⭐ 本轮解除 G1/G2 数据阻塞（**手册已取并使 sha256 验证**）
+方法：`curl` 取 TI 手册 → **sha256 与在册 `doc_sha256` 逐字节同**（确认为同版）→ `pdftotext -layout` → 逐脚摘录 §6。
+- `tps22990.pdf` `ea198776524544eb…` ✅ · `tps22965.pdf` `3300eef743d7871f…` ✅
+- 转录件：`TPS22990_TPS22965_pinout_transcription_v1.yaml`（逐脚 name/type/note + 出处三件套）
+- **纠错**：`k1_board.yaml` 声明 `Q1.sch_pins=6` / `U12.sch_pins=6`，**与实件不符** —— TPS22990 = **10(+EP)**、TPS22965 = **8(+EP)**。
+- **方法学登记**：`pdftotext` 把 §6 表的 pin 8/9/10 折叠成『8 / 9 VOUT』+ 孤立『10』⇒ **改用同页 Top/Bottom View 图交叉确认 8/9/10 = VOUT**（禁凭单行表格下结论）。
+- **板侧一致性**：Q1 板 pad1..10+11(EP) **逐一对应**手册 1..10+EP；U12 板 pad1..8+9(EP) 同样逐一对应 ⇒ 编号体系可信（并**再次坐实 K1-D8 的 VBIAS 未接**）。
+
+**⇒ N-3 的唯一实质阻塞已收敛为「授权」**（数据齐备）：Q1 ✅(10+EP) · U12 ✅(8+EP) · U13 ✅ · Q2 ✅ · R38/R39 ✅。

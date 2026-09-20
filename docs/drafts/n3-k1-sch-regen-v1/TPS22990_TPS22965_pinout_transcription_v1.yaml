@@ -1,0 +1,60 @@
+# N-3 前置数据（草案）· TPS22990 / TPS22965 引脚表转录
+# 目的：解除 N3-G1/G2 的「仓库无 pinout」阻塞（K1 原理图再生 37→42 的前置）
+# 性质：**只读转录**（ENG 对 k1/ 只读 ⇒ 本件为草案；安装归 K1 项目/监理）
+# 转录方法：curl 取 pdf → sha256 **与在册 doc_sha256 逐字节同**（确认为同版）→ pdftotext -layout
+#           → 逐脚摘录自 §6 Pin Configuration and Functions（含 Top/Bottom View 图）
+transcribed_by: ARCHER (CODEX)
+transcribed_at: "2026-09-21"
+
+TPS22990:
+  part: TPS22990
+  package: "DML (WSON), 10 pins + thermal pad"
+  doc_id: "TI SLVSDK1C"
+  doc_url: "https://www.ti.com/lit/ds/symlink/tps22990.pdf"
+  doc_sha256: "ea198776524544eb3e4a130f1f6a6e5c8e80ca8164eebf387a8fd6b4b7dde2a3"   # 下载件实测一致
+  doc_sha256_verified: true
+  where: "§6 Pin Configuration and Functions（DML 10-Pin WSON Top/Bottom View + Pin Functions 表）"
+  excerpt: "VBIAS 4 … Bias voltage. Power supply to the device | VOUT 8/9/10 … Switch output | — VIN (Thermal Pad) … Switch input"
+  pins:
+    1: {name: CT,    type: O,   note: "VOUT slew rate control"}
+    2: {name: NC,    type: "-", note: "Not internally connected"}
+    3: {name: VIN,   type: I,   note: "Switch input. Bypass with ceramic cap to GND"}
+    4: {name: VBIAS, type: P,   note: "Bias voltage. Power supply to the device (2.5–5.5V; VIN 0.6V–VBIAS)  **必需**"}
+    5: {name: ON,    type: I,   note: "Active high switch control. Do not leave floating"}
+    6: {name: GND,   type: "GND", note: "Device ground"}
+    7: {name: PG,    type: O,   note: "Power good, active-high open drain. Tie to GND if not used"}
+    8: {name: VOUT,  type: O,   note: "Switch output"}
+    9: {name: VOUT,  type: O,   note: "Switch output"}
+    10: {name: VOUT, type: O,   note: "Switch output"}
+    "EP": {name: "VIN (Thermal Pad)", type: I, note: "Tie to VIN"}
+  n_pins: 10
+  has_thermal_pad: true
+
+TPS22965:
+  part: TPS22965
+  package: "DSG (WSON), 8 pins + thermal pad"
+  doc_id: "TI SLVSBJ0F"
+  doc_url: "https://www.ti.com/lit/ds/symlink/tps22965.pdf"
+  doc_sha256: "3300eef743d7871f96c752227ae8f958006a902123ce2df351cf0772ec95a7e1"   # 下载件实测一致
+  doc_sha256_verified: true
+  where: "§6 Pin Configuration and Functions（DSG 8-Pin WSON + Pin Functions 表）"
+  excerpt: "VIN 1/2 … Must be connected to Pin 1 and Pin 2 | VBIAS 4 … 2.5 V to 5.7 V | CT 6 … Can be left floating | Thermal Pad … Tie to GND"
+  pins:
+    1: {name: VIN,   type: I, note: "Switch input; must be connected to Pin 1 AND Pin 2"}
+    2: {name: VIN,   type: I, note: "同上"}
+    3: {name: ON,    type: I, note: "Active high switch control. Do not leave floating"}
+    4: {name: VBIAS, type: I, note: "Bias voltage. Power supply to the device (2.5–5.7V)  **必需**"}
+    5: {name: GND,   type: "-", note: "Device ground"}
+    6: {name: CT,    type: O, note: "Switch slew rate control. **Can be left floating**"}
+    7: {name: VOUT,  type: O, note: "Switch output"}
+    8: {name: VOUT,  type: O, note: "Switch output"}
+    "EP": {name: "Thermal Pad", type: "-", note: "Tie to GND"}
+  n_pins: 8
+  has_thermal_pad: true
+
+# ── 与板侧一致性核对（本会话实测）──
+consistency_with_board:
+  board: "k1/k1_v1.kicad_pcb"
+  TPS22990_Q1: "板 pad1..10 + pad11(EP) 与手册 1..10 + EP **逐一对应**（VIN→{3,11} · ON→5 · GND→6 · VOUT→{8,9,10} · **VBIAS=4 未接 net=None**）"
+  TPS22965_U12: "板 pad1..8 + pad9(EP) 与手册 1..8 + EP **逐一对应**（VIN→{1,2} · ON→3 · GND→5 · VOUT→{7,8} · EP→9 · **VBIAS=4 未接 net=None**）"
+  declared_pin_count_mismatch: "`k1_board.yaml#devices.Q1.sch_pins = 6` 与实件 **10(+EP) 不符**；`U12.sch_pins = 6` 与实件 **8(+EP) 不符** ⇒ 该声明须随 N-3 一并订正"
