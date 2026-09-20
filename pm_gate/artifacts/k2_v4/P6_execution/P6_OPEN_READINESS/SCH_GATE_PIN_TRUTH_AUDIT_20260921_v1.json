@@ -1,0 +1,96 @@
+{
+ "artifact": "sch_gate_pin_truth_audit",
+ "schema": 1,
+ "ts": "2026-09-20T20:55:00+0800",
+ "id": "SG-AUDIT-1",
+ "purpose": "KBU6-PINROT-1 发现后的**同族机检**：对 `_shared/eda_core/sch_gate/datasheets/` 现行生成代（batch1/2/4 已取回厂商原件）的 pin 真源逐件复核，判断 KBU6 是孤例还是系统性错位。**只读**。",
+ "authorization_basis": "handoff §7-4『只读造活』；红线『未获批不得改 SPEC』",
+ "method": "对每件：厂商 PDF（/tmp/opencode 缓存，见 C25 batch1/batch4）→ `pdftotext -layout` → 定位『Pin Functions / Pin Descriptions / Pin assignment』表 → 逐脚 (pin_no → name) 与 YAML 对表。",
+ "results": [
+  {
+   "part": "TPS22919",
+   "package": "DCK-6 SOT-SC70",
+   "doc": "TI SLVSEN5B",
+   "table": "§5 Pin Functions",
+   "verdict": "**PASS 6/6**",
+   "detail": "1 IN · 2 GND · 3 ON · 4 NC · 5 QOD · 6 VOUT"
+  },
+  {
+   "part": "TS3USB221A",
+   "package": "UQFN-10 RSE",
+   "doc": "TI SCDS239A",
+   "table": "Table 4-1",
+   "verdict": "**PASS 10/10**",
+   "detail": "1 1D+ · 2 1D– · 3 2D+ · 4 2D– · 5 GND · 6 OE · 7 D– · 8 D+ · 9 S · 10 VCC"
+  },
+  {
+   "part": "LDO_5V_3V3",
+   "package": "SOT-23-5",
+   "doc": "Diodes AP2127",
+   "table": "Pin Descriptions",
+   "verdict": "**PASS 5/5**",
+   "detail": "VIN=1 · VOUT=5 · GND=2 · NC/ADJ=4 · Shutdown=3"
+  },
+  {
+   "part": "SE050C2",
+   "package": "HX2QFN20",
+   "doc": "NXP SE050 Rev 3.8",
+   "table": "Table 5",
+   "verdict": "**PASS 7/7**",
+   "detail": "SDA=9 · SCL=10 · ENA=11 · VIN=12 · RST_N=14 · VCC=18 · VSS=19"
+  },
+  {
+   "part": "TPD6E05U06",
+   "package": "USON-14 RVZ",
+   "doc": "TI SLVSBO7O",
+   "table": "Table 4-3",
+   "verdict": "**PASS 14/14**",
+   "detail": "D1+=14·D1–=13·D2+=12·D2–=11·D3+=9·D3–=8·GND=5/10·NC=1,2,3,4,6,7（YAML IO1..IO6 对应 D1+..D3–）"
+  },
+  {
+   "part": "FUSB302",
+   "package": "MLP-14 MPX",
+   "doc": "onsemi FUSB302/D",
+   "table": "Figure 5 (MPX) + Pin Descriptions",
+   "verdict": "**PASS 14/14**",
+   "detail": "1 CC2·2 VBUS·3 VDD·4 VDD·5 INT_N·6 SCL·7 SDA·8 GND·9 GND·10 CC1·11 CC1·12 VCONN·13 VCONN·14 CC2"
+  },
+  {
+   "part": "STM32G0B1CBT6",
+   "package": "LQFP48",
+   "doc": "ST DS13560",
+   "table": "Table 12 col LQFP48/UFQFPN48-GP",
+   "verdict": "**PASS 30/30**（抽样）",
+   "detail": "以 KBU6 缺陷所用同一解析器逐脚对表（PC13=1·NRST=10·PA0=11·PA4=15·PB0=19·PA8=28·PA10=32·PA13=35·PA14=36·PA15=37·PB3=42·PB6=45·PB8=47·PB9=48 …）"
+  },
+  {
+   "part": "STM32G0B1KBU6",
+   "package": "UFQFPN32",
+   "doc": "ST DS13560",
+   "table": "Table 12 col LQFP32/UFQFPN32-GP",
+   "verdict": "**FAIL** —— 脚 25..32 旋转一位",
+   "detail": "见 `STM32G0B1KBU6_PIN_ROTATION_DEFECT_20260921_v1.json`（KBU6-PINROT-1 / K1-D13）"
+  }
+ ],
+ "not_checked": [
+  {
+   "part": "DCDC_12V_3V3 / DCDC_12V_5V",
+   "reason": "TLV61046A，脚少且引证 Table 5-1；本轮未对表"
+  },
+  {
+   "part": "DS160PR810",
+   "reason": "64 脚，工作量较大；建议下一轮"
+  },
+  {
+   "part": "其余（标准件/约定件/未取件）",
+   "reason": "无厂商原件"
+  }
+ ],
+ "conclusion": "**7/8 抽检**现行代件 pin 真源**与厂商原件一致**；**唯一例外 = STM32G0B1KBU6**。⇒ 该缺陷倾向为**孤例（图形转写型）**，非全库系统性错位；但**不能外推**（DS160PR810 等未检）。建议：①优先订正 KBU6 ②补齐 DS160PR810 / TLV61046A 对表 ③对『source 引证指向 *Figure*』的件加注复核优先级。",
+ "not_landed": [
+  "未改任何 datasheet YAML",
+  "未改 criteria/",
+  "外部件仅 /tmp/opencode"
+ ],
+ "next": "待批：KBU6 订正 + 续检 DS160PR810/TLV61046A"
+}
