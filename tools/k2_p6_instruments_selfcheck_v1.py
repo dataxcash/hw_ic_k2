@@ -154,7 +154,7 @@ def check_baseline() -> dict:
 
 
 def check_prerequisites() -> dict:
-    fa = os.path.join(K2, "pm_gate", "artifacts", "k2_v4", "L6", "first_article", "results_template.json")
+    fa = os.path.join(K2, "pm_gate", "artifacts", "k2_v4", "L6", "first_article_l8", "results_template.json")
     out = {}
     if os.path.isfile(fa):
         items = json.load(open(fa, encoding="utf-8")).get("items", {})
