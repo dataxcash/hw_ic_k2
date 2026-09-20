@@ -143,5 +143,9 @@
   "impact": "K1 上 `TX0/output`（edge 0.142 ≥ K1 要求 0.1）会被 0.155 误判为违规 ⇒ 属**零单板特判**残留（K2 常量泄漏到通用层）。",
   "fix": "阈值改读 `spec.impedance.gap_mm`（缺项 fail-closed），或由 config 注入。"
  },
- "batch6_implication": "**批 6 方案不可按现读数立项**：⑥ 与 (c) 的收益均为 fail-open 产物。建议次序：**先落 FIX-A/B（同批）→ 重跑 K1 真值（1/8）→ 再据此重排批 6 的 (a)/(b)/(c)/(d)**。  ⚠️ 且 FIX-A 在 K2 上**非零影响**（实测解对象 DN6→DN7）⇒ 落件须以 canonical 19 实证，不得假定。  FIX-B 容差语义亦须裁定（阈值 0.175/0.174 会使 K2 在 0/18 与 1/18 间跳变）。"
+ "batch6_implication": "**批 6 方案不可按现读数立项**：⑥ 与 (c) 的收益均为 fail-open 产物。建议次序：**先落 FIX-A/B（同批）→ 重跑 K1 真值（1/8）→ 再据此重排批 6 的 (a)/(b)/(c)/(d)**。  ⚠️ 且 FIX-A 在 K2 上**非零影响**（实测解对象 DN6→DN7）⇒ 落件须以 canonical 19 实证，不得假定。  FIX-B 容差语义亦须裁定（阈值 0.175/0.174 会使 K2 在 0/18 与 1/18 间跳变）。",
+ "root_cause_chain": {
+  "new_artifact": "BATCH6_PN_GATE_ROOTCAUSE_v1.json",
+  "summary": "D-1 逃逸门只验逃逸段（走廊段引入的交叉不可见）· D-2 逃逸门量纲错误（中心线距 vs 边缘 gap：K1 应 0.19 却用 0.1）· D-3 base 级违规不回填段级且 base 未 SOLVED 时门被跳过 · D-4 跨 base 累积门挂 base 级。四者叠加 = 段级读数虚高。"
+ }
 }

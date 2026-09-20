@@ -1,0 +1,54 @@
+{
+ "artifact": "k2_batch6_pn_gate_rootcause",
+ "schema": 1,
+ "purpose": "把『段级 SOLVED 虚高』追到**四条可复现的机制缺陷**（只读 + /tmp 影子；真源零改），并给出各自修法与负控。供监理一次裁定，避免修一条漏三条。",
+ "defects": [
+  {
+   "id": "D-1",
+   "name": "逃逸门**作用域**缺口（只验逃逸候选，不验拼接整段）",
+   "site": "`_shared/eda_core/hs_route_model.py` `_k1_escape_verify`（调用点在各 `_k1_escape` 分支返回前）；走廊段在其**之后**拼接（`_solve_pair_single_v4`）",
+   "evidence": "PCIE_TX0/input：逃逸候选 `verify=True`、候选内同层 P/N 中心线最小距 **0.1483**（合法）；**拼接整段** `_path_pn_min_edge_pt` = **-0.09**（铜重叠 @(7.205,18.0)）。差值由走廊段引入，逃逸门看不到。",
+   "fix": "对级间距判定移到**整段拼接完成之后**（或对拼接结果复验）；判定对象 = 全部同层段对。",
+   "negative_control": "构造『逃逸候选合法、走廊段使其交叉』⇒ 该段必须 INFEASIBLE（现行 fail-open）。"
+  },
+  {
+   "id": "D-2",
+   "name": "逃逸门**量纲错误**（中心线距 vs 边缘净距）",
+   "site": "`_k1_escape_verify`：`if lp == ln and _seg_seg_dist(P_i, N_j) < 0.1 - 1e-9: return False`",
+   "evidence": "`_seg_seg_dist` 是**中心线**距离，而 0.1 是 K1 spec 的**边缘** gap（`net_classes.PCIe85.diff_pair.p_gap`）⇒ 正确门应为**中心距 ≥ 线宽+gap = 0.09+0.1 = 0.19**。实测 PCIE_RX0/input：逃逸候选同层中心线 min = **0.1000**（恰在阈值上，通过）⇒ 拼接后整段 edge = **0.01**（中心距 0.1）仍报 SOLVED。",
+   "fix": "阈值改用 `w + gap`（项目 spec 派生；K1 0.19 / K2 0.38），或统一改用 `_path_pn_min_edge_pt`（edge 量纲）与 `gap` 比较。",
+   "negative_control": "中心距 = w+gap−ε ⇒ 必拒；= w+gap+ε ⇒ 接受（K1: 0.19 双侧）。"
+  },
+  {
+   "id": "D-3",
+   "name": "base/段级判定**不一致**（violation 不回填段级；base 未 SOLVED 时整道门跳过）",
+   "site": "`solve_chain_v4` 末：`if out.get('status') == 'SOLVED': … _pn_spacing_check`",
+   "evidence": "⑥ 树 TX0 base = INFEASIBLE / reason『P/N 间距不足 -0.0900 < 0.175』，而其 input/output **两段都报 SOLVED**；RX0/input（edge 0.01）因 base 未 SOLVED ⇒ 该门**整道跳过**、无 pn_spacing 记录。",
+   "fix": "P/N 门下沉为**段级**（每段自证），base 级只做链级聚合；段级 SOLVED 不得与 base 级违规并存。",
+   "negative_control": "造『base 部分解』场景 ⇒ 违规段必须自身 INFEASIBLE，不得依赖 base 级。"
+  },
+  {
+   "id": "D-4",
+   "name": "跨 base 避让**累积门**挂错层级",
+   "site": "`solve_all_v4`：`if res.get('status') == 'SOLVED':` 之后才累积 `shared`",
+   "evidence": "K1 实测 `shared_seg_count = 0`（pristine 与 ⑥ 树皆然）；与该法自述『已解段累积（后解避让先解，高速↔高速互交 0）』矛盾。同层跨网相交：3/8 读数 12 处、5/8 读数 44 处。",
+   "fix": "累积门下沉为**逐段**（FIX-A）。",
+   "negative_control": "造『base A 部分解、B 后解』⇒ B 必须避让 A 的已解段。"
+  }
+ ],
+ "chain_linkage": "D-1/D-2 让**段级**放行不合规几何；D-3 让 base 级发现的违规**不回填**段级；D-4 让已解段**不参与**后续避让 ⇒ 三者叠加 = 『段级 SOLVED 数』越修越高（3/8→5/8）而物理可制造性越差。",
+ "measured_truth": {
+  "k1_corrected": "1/8（仅 TX0.output）——见 BATCH6_SHARED_ACCUM_FAILOPEN_v1.json（FIX-A+FIX-B）",
+  "k1_reported_by_batch6": "3/8（⑥）· 4/8（(c)）· 5/8（combo）—— 全部出现在 base 级已判 INFEASIBLE 的 base 上"
+ },
+ "k2_impact": "D-4 在 K2 上非零影响（解对象 DN6→DN7）；D-1/D-2 因 K2 走 centerline 分支而不经 `_k1_escape_verify`；D-3 的 base 门对 K2 有效 ⇒ 仍须以 canonical 19 实证。",
+ "proposed_batch": "建议 D-1/D-2/D-3/D-4 **同批一笔**修（禁零散补丁 = C-6）+ 4 条负控；落件后重测 K1 真值并跑 K2 canonical 19 逐字节回归。",
+ "readonly_repo": true,
+ "not_landed": true,
+ "script": {
+  "path": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/k1_escape_vs_assembled_pn_probe_v1.py",
+  "sha16": "05d9330e63e0fd56",
+  "usage": "cd <容器根> && python3 <本件>（自跑复现 D-1/D-2；影子落 /tmp/opencode/esc_vs_assembled）"
+ },
+ "ts": "2026-09-21T03:40:00+0800"
+}
