@@ -1,0 +1,151 @@
+{
+ "artifact": "k1_c_slot_enumeration",
+ "schema": 1,
+ "purpose": "(c) 上限：**不改 SPEC**（只用既有 `tracks_y`）时，槽位重排能把 TX1.input 推进到哪一步。",
+ "constraint": {
+  "same_layer_min_center_dist": 0.19,
+  "bands": {
+   "fcu": {
+    "layer": "F.Cu",
+    "tracks_y": [
+     15.5,
+     16,
+     17.5,
+     18,
+     20,
+     20.5,
+     22,
+     22.5,
+     24.02,
+     24.52
+    ]
+   },
+   "in2": {
+    "layer": "In2",
+    "tracks_y": [
+     18.0,
+     18.5,
+     20.51,
+     21.01,
+     21.3,
+     21.51
+    ]
+   },
+   "in1": {
+    "layer": "In1",
+    "tracks_y": [
+     19.0,
+     20.5,
+     21.0,
+     21.5,
+     24.02
+    ]
+   },
+   "bcu": {
+    "layer": "B.Cu",
+    "tracks_y": [
+     20.0
+    ]
+   }
+  }
+ },
+ "current": {
+  "P": {
+   "band": "in2",
+   "layer": "In2",
+   "track_y": 20.51
+  },
+  "N": {
+   "band": "in2",
+   "layer": "In2",
+   "track_y": 21.3
+  }
+ },
+ "current_status": {
+  "status": "INFEASIBLE",
+  "reason": "走廊段 seg_ok 失败（通道被占/冻结段阻挡）"
+ },
+ "enumeration": {
+  "cap": 48,
+  "tested": 48,
+  "corridor_block_removed": 22,
+  "solved": 0,
+  "crashes": 0,
+  "crash_samples": [],
+  "samples": [
+   [
+    "fcu",
+    15.5,
+    "fcu",
+    16,
+    "INFEASIBLE",
+    "走廊段 seg_ok 失败（通道被占/冻结段阻挡）"
+   ],
+   [
+    "fcu",
+    15.5,
+    "fcu",
+    17.5,
+    "INFEASIBLE",
+    "走廊段 seg_ok 失败（通道被占/冻结段阻挡）"
+   ],
+   [
+    "fcu",
+    15.5,
+    "fcu",
+    18,
+    "INFEASIBLE",
+    "走廊段 seg_ok 失败（通道被占/冻结段阻挡）"
+   ],
+   [
+    "fcu",
+    15.5,
+    "fcu",
+    20,
+    "INFEASIBLE",
+    "走廊段 seg_ok 失败（通道被占/冻结段阻挡）"
+   ],
+   [
+    "fcu",
+    15.5,
+    "fcu",
+    20.5,
+    "INFEASIBLE",
+    "右逃逸对级不可行（input）"
+   ],
+   [
+    "fcu",
+    15.5,
+    "fcu",
+    22,
+    "INFEASIBLE",
+    "左逃逸对级不可行（input）"
+   ],
+   [
+    "fcu",
+    15.5,
+    "fcu",
+    22.5,
+    "INFEASIBLE",
+    "走廊段 seg_ok 失败（通道被占/冻结段阻挡）"
+   ],
+   [
+    "fcu",
+    15.5,
+    "fcu",
+    24.02,
+    "INFEASIBLE",
+    "左逃逸对级不可行（input）"
+   ]
+  ],
+  "reasons_seen": [
+   "P/N 间距不足 -0.0900 < 0.1（段级门·项目 spec gap_m",
+   "右逃逸对级不可行（input）",
+   "左逃逸对级不可行（input）",
+   "走廊段 seg_ok 失败（通道被占/冻结段阻挡）"
+  ]
+ },
+ "conclusion": "不改 SPEC、只用既有 tracks_y 槽位：22/48 组合可**消除走廊阻塞**，但**无一**使该段 SOLVED ⇒ (c) 的单独上限 = 消除走廊阻塞；兑现真值须与 R-8（逃逸换层模板）同批。",
+ "readonly_repo": true,
+ "not_landed": true
+}
