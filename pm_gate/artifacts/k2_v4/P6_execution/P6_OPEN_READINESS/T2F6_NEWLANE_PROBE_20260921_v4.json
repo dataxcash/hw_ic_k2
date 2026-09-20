@@ -1,0 +1,60 @@
+{
+ "artifact": "k2_t2f6_newlane_probe",
+ "schema": 4,
+ "ts": "2026-09-21 · 会话轮标 ARCHER-R66",
+ "purpose": "按 handoff §8-B『T2-F6 **仅新通道才试**』登记本会话通道探取结果（含 1 条**新可达厂商通道**），并复核 `CR-17`（`DBGMCU_IDCODE` 预期值 / RM0454）通道面是否仍闭。**禁重复上报已登记项**（CR-15/CR-6 已登之通道见册面）。",
+ "new_reachable": [
+  {
+   "channel": "ww1.microchip.com",
+   "sample": "/downloads/en/DeviceDoc/doc0180.pdf",
+   "result": "**200** · 635,738 B · application/pdf · 20 页 · sha256 `a084aa10aada64d7…`",
+   "nature": "**厂商正本**（Atmel/Microchip）· **首次登记** · 已用于 `CR-31`（E2/AT24C02 8/8 独立核）",
+   "note": "Microchip 走 `ww1.` 子域；`www.microchip.com` 未试。文档号式路径 = `/downloads/en/DeviceDoc/<docid>.pdf`（`doc0180` 式），**aemDocuments 深路径 403**。"
+  }
+ ],
+ "retried_or_probed": [
+  {
+   "url": "pdf.elecfans.com/STMicroelectronics/STM32G0B1CBT6.html",
+   "result": "200（复核 · 已登记）"
+  },
+  {
+   "url": "pdf.elecfans.com/STMicroelectronics/RM0454.html",
+   "result": "**404**（该站器件页式路径无参考手册 RM）"
+  },
+  {
+   "url": "www.elecfans.com/d/2366842.html",
+   "result": "**403**"
+  },
+  {
+   "url": "www.elecfans.com/soft/search.php?keyword=RM0454",
+   "result": "**403**（站内搜索不可用）"
+  },
+  {
+   "url": "so.elecfans.com",
+   "result": "**000**（DNS 不可解析）"
+  },
+  {
+   "url": "www.stmcu.com.cn/Designresource/detail/reference_manual/699676",
+   "result": "**429**（限流 · 与既有登记一致）"
+  },
+  {
+   "url": "www.so.com/s?q=…",
+   "result": "**200**（搜索引擎可用；命中指向 stmcu.com.cn 429 与 CSDN 博客——后者**非权威正本**，不采）"
+  }
+ ],
+ "cr17_status": {
+  "id": "CR-17",
+  "item": "`DBGMCU_IDCODE` 预期值（依赖 ST **RM0454**）",
+  "verdict": "**仍不可达**：`www.st.com` 567 · `stmcu.com.cn` 429 · `pdf.elecfans.com` 无 RM0454 页（404）· 站内搜索 403 ⇒ **维持登记制不可达（非阻塞）**",
+  "attempted_this_session": "新增尝试 = `pdf.elecfans.com` 器件页式路径 + `www.elecfans.com` 站内搜索 + `so.elecfans.com` —— **三条皆闭**；`so.com` 检索面可用但仅指向已闭通道与非权威镜像。"
+ },
+ "non_impact": "**不影响** tier2 读数口径：`CR-15` 已定 **17/33 · 具名 PARTIAL · 不充绿**；本件**不**改任何读数、**不**入判据/绿判。",
+ "red_lines_ok": [
+  "只读（未改 _shared/符号/网表/PCB/交付包）",
+  "未改 criteria/（rev=6）",
+  "外部原件仅落 /tmp/opencode（未入库）",
+  "未派 WORKER",
+  "未新增判据维/阈值"
+ ],
+ "next": "其余建议：① ST/参考手册族**不再重复探**（三路皆闭）直至出现**新通道**；② 若外部回件或监理裁定需要，再按需探取。"
+}
