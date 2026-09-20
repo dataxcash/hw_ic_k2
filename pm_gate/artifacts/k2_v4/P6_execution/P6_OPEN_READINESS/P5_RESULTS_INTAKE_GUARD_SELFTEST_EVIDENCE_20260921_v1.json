@@ -1,0 +1,119 @@
+{
+ "artifact": "k2_p5_results_intake_guard_selftest_evidence",
+ "schema": 1,
+ "ts": "2026-09-21T02:46:39+08:00",
+ "session_label": "K2-2026-09-21 · 轮标 ARCHER-R97 · P5 回件可判性机械化（§12 自动化优先 · 只读造活）",
+ "why": "P5 关门路径现为『外部回件 ⇒ 人工逐条读 8 项 ⇒ 监理判定』= 人工密集环节；按 §12（自动化优先）把它机械化：回件到达即一命令得『可判性 fail-closed + 各条读数』，判定权仍归监理。",
+ "tool": {
+  "path": "k2/tools/k2_p5_results_intake_guard_v1.py",
+  "sha256_16": "c92329a304c90f48",
+  "sha256": "c92329a304c90f48c5fb08c68a5ed353af4de93db2995f3bf441f08820b70a01",
+  "py_compile": "OK",
+  "cli": [
+   "python3 tools/k2_p5_results_intake_guard_v1.py <results.json> [--json-out P]",
+   "python3 tools/k2_p5_results_intake_guard_v1.py --self-test"
+  ],
+  "exit_code": {
+   "0": "可判(admissible)",
+   "1": "不可判(inadmissible)",
+   "2": "用法/内部错"
+  }
+ },
+ "zero_new_criteria": {
+  "声明": "**零新增判据维 / 零新增检查齿**；阈值全部取自已冻结件：results_template.json（criterion/note/expected_nominal_V/windows_V/tj_conversion_caliber）· RULES.md · K2-P5-FIRST-ARTICLE-ACCEPTANCE-PLAN-v1.md",
+  "工具只做两件事": [
+   "① 结构/锚/证据完整性 fail-closed（不置 status）",
+   "② 把已有数值对已有阈值算差值并打印（suggested_reading，非判定）"
+  ],
+  "判定权": "监理（results_template.json::judged_by = 监理）",
+  "未改": [
+   "results_template.json（sha16 119cd7c48b3146d2 复算未动）",
+   "RULES.md",
+   "criteria/",
+   "交付包/交付锚",
+   "冻结四源"
+  ]
+ },
+ "thresholds_implemented": {
+  "V4": "Zdiff 逐层 ∈ [76.5,93.5]Ω（85Ω±10%）+ 覆盖 center 0.6mm / tightest 0.2825mm 强制",
+  "V5": "drop = (V_source−V_load)/V_nom ≤ 3%；P3V3_AUX 负载点须 ∈ {J3,J4}；电流来源须声明",
+  "V6_1": "±5% 标称（MCU_VDD 主判 3.0V ⇒ [2.85,3.15]）；condition 必填；辅助读数窗 [3.135,3.465]（不参与主判）",
+  "V6_2": "SW-DP IDCODE 期望 0x0BC11477",
+  "V6_3": "期望 7-bit 0x52（8-bit 0xA4/0xA5）",
+  "V6_4": "x4 Gen4 ⇒ speed 16 GT/s · width 4",
+  "V6_5": "duration ≥30min · AER = 0",
+  "V7": "Tj ≤120℃ 逐工况 · Tj>T_top+P*3.6（ψJT=3.6 唯一反推口径）· >117℃ ⇒ T1 触发 · 装配须 O2（30×30mm Al + 1.0℃/W + ~2m/s）"
+ },
+ "self_test": {
+  "positive_fixture": {
+   "admissible": true,
+   "n_fails": 0,
+   "n_warnings": 12,
+   "n_readings": 33
+  },
+  "negative_fixture": {
+   "injected": [
+    "delivery_anchor.manifest_sha256 置 0*64",
+    "V6_1.condition 置空",
+    "V7.assembly.airflow_mps 置 null",
+    "V5.P3V3_AUX.V_load=3.0（越 3% 预算）",
+    "V6_4.speed_GTs=8（非 x4 Gen4）",
+    "measured_by=ARCHER (ENG)（ENG 自证）"
+   ],
+   "admissible": false,
+   "n_fails": 4,
+   "n_warnings": 13,
+   "n_readings": 30,
+   "fails_caught": [
+    "delivery_anchor/manifest_sha256",
+    "measured_by",
+    "V6_1_rail_voltages.condition",
+    "V7_thermal_o2.assembly.airflow_mps"
+   ],
+   "stale_readings_caught": [
+    "P3V3_AUX.drop_pct",
+    "speed_GTs"
+   ],
+   "verdict": "**负夹具被正确判为不可判**，且锚不符/自证/缺 condition/O2 缺失四项全被捕（fail-closed 两向自证）"
+  },
+  "rc": 0
+ },
+ "pristine_template_reading": {
+  "input": "pm_gate/artifacts/k2_v4/L6/first_article_l8/results_template.json",
+  "input_sha16": "119cd7c48b3146d2",
+  "admissible": false,
+  "n_fails": 49,
+  "n_warnings": 1,
+  "n_readings": 2,
+  "exit_code": 1,
+  "reading": "空模板 = 不可判（49 项 fail-closed）· 属预期（V4–V7 全 NOT_RUN · 无实测方 · 无证据）—— 证明守卫**不放行未测回件**",
+  "template_unchanged": "输入件 sha16 与运行前一致（119cd7c48b3146d2）⇒ 只读，未改模板"
+ },
+ "bug_found_and_fixed_in_session": {
+  "bug": "IDCODE 归一 hex(int(...)) 去前导零 ⇒ 0x0BC11477 被读成 0xBC11477 而误报 MISMATCH",
+  "root_cause": "本工具自缺陷（非项目缺陷）",
+  "fix": "归一为 int 比较 + fmt_hex() 固定 8 位输出",
+  "evidence": "修后 self-test 读数 sw_dp_idcode=0x0BC11477 MATCH_EXPECTED"
+ },
+ "anchor_recheck_this_session": {
+  "note": "开批 fail-closed 复核（§1 表逐项 + criteria rev=6）",
+  "result": "冻结四源 d4e81f647be7f980/fb07d25ac426ff84/dd794c54f7ce7417/0a459839e15960b8 ✅ · TAG_POLICY 另两源 0bd52ed48e720b8c/a8ef3ea8ecff99d7 ✅ · 现行 l8 板 7a5c89913d6e5d0a/pro c009058005829f09/SPEC f3a48b866983c8db/errata-3 5dc7b82a901d11c8 ✅ · 交付锚 MANIFEST 19d637c4e9ed35be/tarball 488e90a47d088d06 ✅ · 旧锚 l8 4b610baed4f4752c/36a6b276b4f7e465 · l7 6ee7495de61f749f/0e88e107e2da8192 ✅ · canonical19 l8 562b482fac5ee941 ✅ · criteria rev=6 五件 eb3da49f2ad97e37/1937a40ae68bc288/00faba340bb7eb5b/c175be51c3338a53/727d09953cf9bd78 ✅",
+  "drift": 0
+ },
+ "red_lines_ok": [
+  "未改 criteria/",
+  "未改冻结四源",
+  "未改板/原理图/网表/SPEC",
+  "未改受审板 7a5c8991",
+  "未重跑构建器/未重出包/未换交付锚",
+  "未覆盖或删除旧包与旧锚",
+  "未改 results_template.json/RULES.md/外发包（仅只读消费）",
+  "未触 B 宿主副本（key_v2/_shared · pciesw4/_shared）",
+  "未 push K1",
+  "未派 WORKER",
+  "未越阶段",
+  "未下单",
+  "临时仅 /tmp/opencode"
+ ],
+ "ask_scope_note": "本件 = 工具面/过程自动化（非判据面）；若监理判定『新增检查齿』不属授权范围，请裁撤用（删除该工具即可，零影响交付锚/判据/包）。**汇报优先级低于 CR-73。**"
+}

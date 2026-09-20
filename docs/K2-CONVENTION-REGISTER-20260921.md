@@ -449,3 +449,12 @@
 
 ---
 **（本块）裁定对应**：**#K2-61 R4（CR-71 授权修）+ R3（CR-72 授权修）+ R5（登记维持）**。**报备监理 1 条（含 CR-73 集成异常）· owner 项 0**。
+
+### 续编 · **只读造活（工具面 · §12 自动化优先）** —— P5 回件可判性机械化（CR-74）
+
+| # | 条目 | 内容（事实） | 依据 | 处置红线 |
+|---|---|---|---|---|
+| **CR-74** | **P5 回件可判性守卫（intake guard）· 零新增判据维** | **缘起**：P5 关门路径现为「外部回件 ⇒ **人工**逐条读 8 项 ⇒ 监理判定」= 人工密集环节（§12 定性：需人工介入之环节 = 缺陷）。**落地**：新增 `k2/tools/k2_p5_results_intake_guard_v1.py`（**`56aea8eb8a71ca34`**，`py_compile` OK）⇒ 回件到达**一命令**得：① **可判性 fail-closed**（结构/交付锚 sha256 须等于本仓现行 MANIFEST+tarball ⇒ 防「量的是别的包」/ 责权边界『不得 ENG 自证』/ 必填齐（`V6-1.condition` 等）/ 证据 sha256 可核）；② **各条读数**对**已冻结阈值**之差值（`suggested_reading`，**非判定**）。退出码 0=可判 / 1=不可判。**两向自证**：正夹具 `admissible=True, fail=0`；负夹具（篡改交付锚 + `measured_by=ARCHER(ENG)` + 缺 `condition` + 缺 O2 风速 + 越 3% 预算 + speed=8）⇒ **`admissible=False, fail=4`，四项全捕**；空模板 ⇒ **不可判 fail=49**（**不放行未测回件**）。**零新增判据维/检查齿**：阈值**逐条**取自**已冻结**之 `results_template.json`（`criterion`/`expected_nominal_V`/`windows_V`/`tj_conversion_caliber`）+ `RULES.md` + 验收计划；工具**不置 status**、判定权归**监理**。**自抓自缺陷并修**：IDCODE 归一 `hex(int())` 去前导零致 `0x0BC11477` 误报 MISMATCH ⇒ 改 int 比较 + `fmt_hex()` 8 位输出（**工具自缺陷 · 非项目缺陷**，已留痕）。**未改**：`results_template.json`（`119cd7c48b3146d2` 复算未动）· `RULES.md` · `criteria/` · 交付包/锚 · 冻结四源。**证据**：`P6_execution/P6_OPEN_READINESS/P5_RESULTS_INTAKE_GUARD_SELFTEST_EVIDENCE_20260921_v1.json`（**`b8ec277b68d4655e`**）。**另**：本批开批 fail-closed 锚复核 **23 项全中 · criteria rev=6 · drift=0**。 | §12 自动化优先（owner 2026-09-20）；验收计划 §5 责任边界；`results_template.json`/`RULES.md` | 工具面（非判据面）· **零新增判据维** · **不置 status**（判定归监理）· 未改模板/锚/判据/包 · 若监理判「不属授权范围」⇒ 删工具即零影响 |
+
+---
+**（本块）报备监理 1 条（工具面自动化 · 非阻塞）· owner 项 0**。

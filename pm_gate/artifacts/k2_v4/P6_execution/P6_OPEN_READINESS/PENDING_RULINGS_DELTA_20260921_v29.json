@@ -1,0 +1,69 @@
+{
+ "artifact": "k2_pending_rulings_delta",
+ "schema": 1,
+ "ts": "2026-09-21T02:46:56+08:00",
+ "session_label": "K2-2026-09-21 · 轮标 ARCHER-R97 · 只读造活（§12 自动化优先）",
+ "supersedes": "PENDING_RULINGS_DELTA_20260921_v28.json（已由 #K2-61 全额消费；其 CR-73 项**仍未裁** ⇒ 本件承接续存）",
+ "purpose": "①【待裁 · 续存 · K1 面】**CR-73**（容器 k1 指针指向未发布 commit）**延续待裁**（v28 已提 · 截至本会话**未获新裁定**）；②【报备 · 请覆核 · 非阻塞】CR-74 —— 新增 P5 回件**可判性守卫**（工具面 · 零新增判据维，§12 自动化优先）；③【登记 · 续存】check_l3 `:3/:71` 未授权范围 + 维持登记集。",
+ "why_signal_now": "CR-32 强制结构化：CR-73 仍未决 ⇒ 不可因出新一代 delta 而失信号；CR-74 属新增工具面件，须具名可查以防被视作「私下新增检查齿」。",
+ "owner_gate": "**0** —— 全属**放行范围/工具面/项目面处置**（监理自裁面）；无 L1 成分（不涉拓扑/接口/信号流向/球重映射）· 不动 owner 系统/账号/预算 ⇒ ENG 不升级 owner。",
+ "stage_state": "P5 `PENDING_EXTERNAL`（V4–V7 全 `NOT_RUN` · 未下单/未外发）· P0–P4 HOLDS · P6 CLOSED · 未越阶段 · 判据 rev=6 MATCH · 交付锚 `19d637c4e9ed35be`/`488e90a47d088d06`（未动 · 未重出包）。",
+ "pending_supervision": [
+  {
+   "id": "**【待裁 · 续存 · K1 面】CR-73：容器 `k1` 指针指向未发布 commit（`6a1ecdd`）**",
+   "status": "**v28 已提 · 未获裁定 · 本会话实测仍 `origin/main...HEAD = 0/3`（未变）**",
+   "facts": "容器 gitlink `k1` = `6a1ecdd`；`ic_hw-k1.git` `origin/main` = `9e283bf`；未发布 3 笔 = `e2acb20` · `08ff8bb` · `6a1ecdd`（**快进可推**）。**本会话复核**：仍 0/3（本轮未 push 任何 K1 内容）。",
+   "impact": "新克隆/新机器 `git submodule update --init` 无法 fetch 容器所引 k1 commit（耐久性缺陷）· **非 P5 阻塞** · 不影响任何交付锚/判据。",
+   "ask": "请裁 remedy：(i) **准予快进 push** `k1` 至 A 宿主（非破坏 · 不 rewrite）；或 (ii) 维持现状并登记（K1 面另批）；或 (iii) 其他。",
+   "evidence": "册面 CR-73 · 本会话实测 `git -C k1 rev-list --count origin/main..HEAD` = 3"
+  },
+  {
+   "id": "【报备 · 请覆核 · 非阻塞】CR-74：P5 回件可判性守卫（工具面 · 零新增判据维）",
+   "what": "新增 `k2/tools/k2_p5_results_intake_guard_v1.py`（`56aea8eb8a71ca34`）：外部首件回件到达时，一命令给出 (A) **可判性 fail-closed**（交付锚 sha256 须等于本仓现行 MANIFEST+tarball / 责权边界『不得 ENG 自证』/ 必填齐 / 证据 sha256 可核）+ (B) 各条**读数**对**已冻结阈值**之差值；退出码 0=可判 1=不可判；`--self-test` 两向自证。",
+   "scope_declaration": "**零新增判据维 / 零新增检查齿**：阈值逐条取自已冻结之 `results_template.json`（`criterion`/`expected_nominal_V`/`windows_V`/`tj_conversion_caliber`）+ `RULES.md` + 验收计划；**不置 status**；**判定权归监理**（`judged_by = 监理`）。定位 = 把「人工逐条读 8 项」机械化（§12：需人工介入之环节 = 缺陷）。",
+   "why_not_ask_first": "属**工具面/过程自动化**（非判据面 · 非改冻结集 · 非动 owner 系统）⇒ ENG 侧自裁面；且**不阻塞**任何在途事项（未改模板/锚/判据/包）。**若监理判「不属授权范围」⇒ 删该工具即零影响**（交付锚/判据/包 一律未动）。",
+   "evidence": "`P6_execution/P6_OPEN_READINESS/P5_RESULTS_INTAKE_GUARD_SELFTEST_EVIDENCE_20260921_v1.json`（**`b8ec277b68d4655e`**）· 册面 CR-74",
+   "measured": "自证：正夹具 `admissible=True/fail=0` · 负夹具 `admissible=False/fail=4`（锚不符+ENG自证+缺condition+缺O2四项全捕）· 空模板 `fail=49`（不放行未测回件）· `self-test rc=0`；**自抓自缺陷已修**（IDCODE `hex(int())` 去前导零 ⇒ 改 int 比较）"
+  },
+  {
+   "id": "【登记 · 续存 · 非阻塞】",
+   "items": [
+    "`check_l3.py` **未授权范围**：`:3` 模块文档串 · `:71` K1/K2 命名口径注释 仍含 `SPEC_k2_v4.json`（说明性提及 · #K2-61 R3 仅授权 :43/:62）⇒ 登记待裁（**续存 v28 该项**）。",
+    "T2-F6 新闭通道（`archive.org`/`web.archive.org`=000 · `st.com`=567）· `CR-17`/`CR-22`/`CR-3`/land pattern 族 · `COV-C3`（维持前裁 · 禁 push/rewrite B 宿主）· R5 文献批（待权威件）"
+   ]
+  }
+ ],
+ "landed_this_session": [
+  {
+   "id": "CR-74（新工具）",
+   "artifact": "`tools/k2_p5_results_intake_guard_v1.py` `56aea8eb8a71ca34`（py_compile OK）· 证据件 `b8ec277b68d4655e`",
+   "reading": "self-test rc=0；空模板 ⇒ 不可判 fail=49；模板 sha16 `119cd7c48b3146d2` 复算未动"
+  },
+  {
+   "id": "册面维护",
+   "artifact": "`docs/K2-CONVENTION-REGISTER-20260921.md` `2c309d589f74fddf` → `cbf94d94ea8dbcf6`（CR-74）",
+   "reading": "续编只读造活块"
+  },
+  {
+   "id": "开批锚复核（fail-closed）",
+   "artifact": "§1 表 23 项 + criteria rev=6",
+   "reading": "**23/23 全中 · drift=0**（冻结四源 / TAG_POLICY 另两源 / 现行 l8 板-pro-SPEC-errata / 交付锚 / 旧锚 l8+l7 / canonical19 / criteria 五件）"
+  }
+ ],
+ "red_lines_ok": [
+  "未改 criteria/",
+  "未改冻结四源",
+  "未改板/原理图/网表/SPEC",
+  "未改受审板 7a5c8991",
+  "未重跑构建器/未重出包/未换交付锚",
+  "未覆盖或删除旧包与旧锚",
+  "未改 results_template.json / RULES.md / 外发包（仅只读消费）",
+  "未触 B 宿主副本（key_v2/_shared · pciesw4/_shared）",
+  "未 push 任何 K1 内容",
+  "未派 WORKER",
+  "未越阶段",
+  "未下单/未外发",
+  "临时落点仅 /tmp/opencode"
+ ],
+ "next": "① 待监理裁 **CR-73**（K1 面 remedy · 非阻塞）；② 待监理覆核 **CR-74**（工具面 · 非阻塞）；③ 外部回件 ⇒ `tools/k2_p5_results_intake_guard_v1.py <回件>` ⇒ 交监理判定（判定权归监理）⇒ P5 关门；④ 未获回件期间继续只读造活（**禁 HOLD/停等结案**）。"
+}
