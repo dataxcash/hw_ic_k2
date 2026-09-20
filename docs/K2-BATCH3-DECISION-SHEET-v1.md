@@ -40,7 +40,8 @@
 ### 2.1 **P6 完工判据**（阶段门）验收 —— 一条命令
 - **P6-1**：`python3 k2/tools/k2_p6_1_acceptance_v1.py --verdict <k1_verdict.json> --pro k1/k1_v1.kicad_pro` ⇒ 须 **PASS**
   （机判四项命中 `ignore_without_ruling(9)`/`no_pipeline(1)`/`no_fp_lib_table(1)`/**`sheets_empty(1)` 输入侧**；**唯一剩余前置 = manifest 签认**）
-- **P6-2**：`k1|k2_jlc_template.kicad_pro` 的 ignore 集 == **manifest 应然集（∅）** ⇒ 结构差异 **0**（O1 实测已达：`P6_2_O1_MEASURED_v1.json`）
+- **P6-2**：`python3 k2/tools/k2_p6_2_acceptance_v1.py [--simulate <O1_fullset>] --expect-zero` ⇒ 须 **PASS**
+  （机判：k2 全受控集 + 两模板的 ignore 集 == **manifest 应然集（∅）**；**O1 落件前预测已 = PASS**：6 补丁后 k2 差异 **0/10**、两模板 ∅；件 `P6_2_ACCEPTANCE_MECHANIZED_v1.json` `402385be8f89bf90`）
 
 ## 3. ENG 立即可动 vs 需裁定
 
