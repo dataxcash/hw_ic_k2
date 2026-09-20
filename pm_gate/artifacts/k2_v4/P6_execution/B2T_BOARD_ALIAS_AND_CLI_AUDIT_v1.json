@@ -1,0 +1,623 @@
+{
+ "anchors": {
+  "alias_resolved_sha16": "fb07d25ac426ff84",
+  "design_source_board": {
+   "path": "k2/hw/k2_v4_8L.kicad_pcb",
+   "sha16": "fb07d25ac426ff84"
+  },
+  "engine": {
+   "path": "k2/_shared/eda_core/hs_route_model.py",
+   "sha16": "b6f88d35bc0669e4"
+  }
+ },
+ "artifact": "k2_p6_board_alias_and_cli_audit",
+ "board_alias": {
+  "is_symlink": true,
+  "path": "k2/k2_v4.kicad_pcb",
+  "resolved_sha16": "fb07d25ac426ff84",
+  "target": "hw/k2_v4_8L.kicad_pcb"
+ },
+ "cli_behavior": [
+  {
+   "carrier": "legacy_alloc",
+   "crossing_links": [
+    "UP4",
+    "UP5",
+    "UP6",
+    "UP7"
+   ],
+   "guarded": false,
+   "rc": 1,
+   "status": "CROSSING_FOUND",
+   "stderr_tail": "",
+   "stdout_tail": "{\"status\": \"CROSSING_FOUND\", \"links\": {\"DN0\": \"ALIGNED\", \"DN1\": \"ALIGNED\", \"DN2\": \"ALIGNED\", \"DN3\": \"ALIGNED\", \"DN4\": \"LONG_SPAN\", \"DN5\": \"LONG_SPAN\", \"DN6\": \"L"
+  },
+  {
+   "carrier": "legacy_alloc",
+   "crossing_links": [
+    "UP4",
+    "UP5",
+    "UP6",
+    "UP7"
+   ],
+   "guarded": true,
+   "rc": 1,
+   "status": "CROSSING_FOUND",
+   "stderr_tail": "",
+   "stdout_tail": "{\"status\": \"CROSSING_FOUND\", \"links\": {\"DN0\": \"ALIGNED\", \"DN1\": \"ALIGNED\", \"DN2\": \"ALIGNED\", \"DN3\": \"ALIGNED\", \"DN4\": \"LONG_SPAN\", \"DN5\": \"LONG_SPAN\", \"DN6\": \"L"
+  },
+  {
+   "carrier": "p3_current_schema",
+   "crossing_links": null,
+   "guarded": false,
+   "rc": 1,
+   "status": null,
+   "stderr_tail": "ValueError: min() arg is an empty sequence",
+   "stdout_tail": ""
+  },
+  {
+   "carrier": "p3_current_schema",
+   "crossing_links": [
+    "UP4",
+    "UP5",
+    "UP6",
+    "UP7"
+   ],
+   "guarded": true,
+   "rc": 1,
+   "status": "CROSSING_FOUND",
+   "stderr_tail": "",
+   "stdout_tail": "{\"status\": \"CROSSING_FOUND\", \"links\": {\"DN0\": \"ALIGNED\", \"DN1\": \"ALIGNED\", \"DN2\": \"ALIGNED\", \"DN3\": \"ALIGNED\", \"DN4\": \"LONG_SPAN\", \"DN5\": \"LONG_SPAN\", \"DN6\": \"L"
+  }
+ ],
+ "conclusions": [
+  "(g) 板别名 `k2/k2_v4.kicad_pcb` → `hw/k2_v4_8L.kicad_pcb`（sha16 `fb07d25ac426ff84` = 冻结设计源板）⇒ 现役消费者（30 个 .py，含 `_shared/pm_gate/config.py`·`check_qa.py`·`_shared/eda_core/*`）读到的是 8L 板，与 handoff §1 一致（**非缺陷**）；历史脚本（27 个）中 4 个含旧板身份字面量⇒ 按该路径重跑会静默换板（**须逐脚本标注，禁默认重跑**）。",
+  "(i) B1 行为差异（下表）：现行 schema 载体下 `--link-topology` 无守卫 = 崩溃（非 fail-closed）；有守卫 = 正常返回 `CROSSING_FOUND`（exit 1 = 非 TOPOLOGY_OK，语义正确）。遗留载体两态一致 ⇒ B1 修复**只改变崩溃为正常判定**，无既存调用者语义回退。",
+  "⚠ 附带发现（随 B1 一并裁定）：崩溃态与『非 TOPOLOGY_OK』**exit code 同为 1** ⇒ 调用方仅凭 rc 无法分辨（fail-open 隐患）。建议 B1 授权件同时要求：异常 → `status=INFRA_ERROR` + 明确非零码（或 CLI 层 try/except 包装），使『崩溃』与『判定为 CROSSING_FOUND』可机辨。"
+ ],
+ "consumers_by_category": {
+  "HIST(历史分析/复现脚本)": 27,
+  "LIVE(共享层)": 30,
+  "TOOL": 2,
+  "TOOL(本轮/前轮 ENG 工具)": 4
+ },
+ "consumers_hist": [
+  {
+   "category": "HIST(历史分析/复现脚本)",
+   "file": "k2/pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/gen_chip_landing_v33.py",
+   "sample_lines": [
+    13,
+    38
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "HIST(历史分析/复现脚本)",
+   "file": "k2/pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_step2_layout_feasibility.py",
+   "sample_lines": [
+    6,
+    27
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "HIST(历史分析/复现脚本)",
+   "file": "k2/pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/mcio_geom_dump.py",
+   "sample_lines": [
+    20
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "HIST(历史分析/复现脚本)",
+   "file": "k2/pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/mcio_q2_fanout.py",
+   "sample_lines": [
+    26,
+    33
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "HIST(历史分析/复现脚本)",
+   "file": "k2/pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/mcio_q2_solve.py",
+   "sample_lines": [
+    36
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "HIST(历史分析/复现脚本)",
+   "file": "k2/pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/mcio_step2_definitive.py",
+   "sample_lines": [
+    25
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "HIST(历史分析/复现脚本)",
+   "file": "k2/pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/mcio_step2_feas.py",
+   "sample_lines": [
+    26
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "HIST(历史分析/复现脚本)",
+   "file": "k2/pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/packing_scan.py",
+   "sample_lines": [
+    7
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "HIST(历史分析/复现脚本)",
+   "file": "k2/pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/reproduce_eco_c5_verify.py",
+   "sample_lines": [
+    2
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "HIST(历史分析/复现脚本)",
+   "file": "k2/pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/reproduce_eco_full_clearance.py",
+   "sample_lines": [
+    3
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "HIST(历史分析/复现脚本)",
+   "file": "k2/pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/reproduce_eco_geom_angle.py",
+   "sample_lines": [
+    2
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "HIST(历史分析/复现脚本)",
+   "file": "k2/pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/reproduce_eco_phase1_delete_legacy.py",
+   "sample_lines": [
+    2
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "HIST(历史分析/复现脚本)",
+   "file": "k2/pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/reproduce_eco_phase2_insert_ds320_wire.py",
+   "sample_lines": [
+    2
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "HIST(历史分析/复现脚本)",
+   "file": "k2/pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/reproduce_k2_sch_v31_parity.py",
+   "sample_lines": [
+    4,
+    19
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "HIST(历史分析/复现脚本)",
+   "file": "k2/tools/p3_v56_p1_chip_coverage.py",
+   "sample_lines": [
+    40
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "HIST(历史分析/复现脚本)",
+   "file": "k2/tools/p3_v57_big_w0r_corridor_model.py",
+   "sample_lines": [
+    38
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "HIST(历史分析/复现脚本)",
+   "file": "k2/tools/p3_v57_big_w0r_validator.py",
+   "sample_lines": [
+    32
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "HIST(历史分析/复现脚本)",
+   "file": "k2/tools/p3_v57_l1_struct_preflight_v2.py",
+   "sample_lines": [
+    11,
+    25
+   ],
+   "sha_literals": [
+    "f6273de6"
+   ]
+  },
+  {
+   "category": "HIST(历史分析/复现脚本)",
+   "file": "k2/tools/p3_v57_layer_intent_derive.py",
+   "sample_lines": [
+    26
+   ],
+   "sha_literals": [
+    "f6273de6"
+   ]
+  },
+  {
+   "category": "HIST(历史分析/复现脚本)",
+   "file": "k2/tools/p3_v57_s0_audit_derived.py",
+   "sample_lines": [
+    38
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "HIST(历史分析/复现脚本)",
+   "file": "k2/tools/p3_v57_s0_endpoint_model.py",
+   "sample_lines": [
+    28
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "HIST(历史分析/复现脚本)",
+   "file": "k2/tools/p3_v57_s1_a14_gate.py",
+   "sample_lines": [
+    9
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "HIST(历史分析/复现脚本)",
+   "file": "k2/tools/p3_v57_s1_page_manifest.py",
+   "sample_lines": [
+    33
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "HIST(历史分析/复现脚本)",
+   "file": "k2/tools/p3_v57_s1_r1_via_verdict.py",
+   "sample_lines": [
+    20
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "HIST(历史分析/复现脚本)",
+   "file": "k2/tools/p3_v57_s1_r1_via_verdict_r2.py",
+   "sample_lines": [
+    20
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "HIST(历史分析/复现脚本)",
+   "file": "k2/tools/p3_v57_stackup_realign_8L.py",
+   "sample_lines": [
+    19
+   ],
+   "sha_literals": [
+    "f6273de6"
+   ]
+  },
+  {
+   "category": "HIST(历史分析/复现脚本)",
+   "file": "k2/tools/p3_v57_w3_constructive_validator_v2.py",
+   "sample_lines": [
+    27,
+    35
+   ],
+   "sha_literals": [
+    "f6273de6",
+    "fb07d25a"
+   ]
+  }
+ ],
+ "consumers_hist_with_sha_literals": [
+  {
+   "category": "HIST(历史分析/复现脚本)",
+   "file": "k2/tools/p3_v57_l1_struct_preflight_v2.py",
+   "sample_lines": [
+    11,
+    25
+   ],
+   "sha_literals": [
+    "f6273de6"
+   ]
+  },
+  {
+   "category": "HIST(历史分析/复现脚本)",
+   "file": "k2/tools/p3_v57_layer_intent_derive.py",
+   "sample_lines": [
+    26
+   ],
+   "sha_literals": [
+    "f6273de6"
+   ]
+  },
+  {
+   "category": "HIST(历史分析/复现脚本)",
+   "file": "k2/tools/p3_v57_stackup_realign_8L.py",
+   "sample_lines": [
+    19
+   ],
+   "sha_literals": [
+    "f6273de6"
+   ]
+  },
+  {
+   "category": "HIST(历史分析/复现脚本)",
+   "file": "k2/tools/p3_v57_w3_constructive_validator_v2.py",
+   "sample_lines": [
+    27,
+    35
+   ],
+   "sha_literals": [
+    "f6273de6",
+    "fb07d25a"
+   ]
+  }
+ ],
+ "consumers_live": [
+  {
+   "category": "LIVE(共享层)",
+   "file": "_shared/eda_core/board_low_speed_sync.py",
+   "sample_lines": [
+    32
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "LIVE(共享层)",
+   "file": "_shared/eda_core/board_spec_consistency.py",
+   "sample_lines": [
+    34
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "LIVE(共享层)",
+   "file": "_shared/eda_core/cap_wall_apply.py",
+   "sample_lines": [
+    53
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "LIVE(共享层)",
+   "file": "_shared/eda_core/connector_geometry.py",
+   "sample_lines": [
+    18
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "LIVE(共享层)",
+   "file": "_shared/eda_core/jlc_deliver/package.py",
+   "sample_lines": [
+    19
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "LIVE(共享层)",
+   "file": "_shared/eda_core/tests/conftest.py",
+   "sample_lines": [
+    59
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "LIVE(共享层)",
+   "file": "_shared/eda_core/tests/test_escape_landing.py",
+   "sample_lines": [
+    22,
+    564,
+    668
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "LIVE(共享层)",
+   "file": "_shared/eda_core/tests/test_hs_route_model.py",
+   "sample_lines": [
+    321
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "LIVE(共享层)",
+   "file": "_shared/pm_gate/check_qa.py",
+   "sample_lines": [
+    21,
+    87
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "LIVE(共享层)",
+   "file": "_shared/pm_gate/cli.py",
+   "sample_lines": [
+    532
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "LIVE(共享层)",
+   "file": "_shared/pm_gate/config.py",
+   "sample_lines": [
+    26,
+    83
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "LIVE(共享层)",
+   "file": "_shared/pm_gate/tools_escape_predict.py",
+   "sample_lines": [
+    46
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "LIVE(共享层)",
+   "file": "_shared/pm_gate/tools_executor_single_pair.py",
+   "sample_lines": [
+    17
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "LIVE(共享层)",
+   "file": "_shared/pm_gate/tools_measure_l1.py",
+   "sample_lines": [
+    2,
+    16,
+    108
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "LIVE(共享层)",
+   "file": "_shared/pm_gate/wp1_semantics_check.py",
+   "sample_lines": [
+    13,
+    46
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "LIVE(共享层)",
+   "file": "k2/_shared/eda_core/board_low_speed_sync.py",
+   "sample_lines": [
+    32
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "LIVE(共享层)",
+   "file": "k2/_shared/eda_core/board_spec_consistency.py",
+   "sample_lines": [
+    34
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "LIVE(共享层)",
+   "file": "k2/_shared/eda_core/cap_wall_apply.py",
+   "sample_lines": [
+    53
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "LIVE(共享层)",
+   "file": "k2/_shared/eda_core/connector_geometry.py",
+   "sample_lines": [
+    18
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "LIVE(共享层)",
+   "file": "k2/_shared/eda_core/jlc_deliver/package.py",
+   "sample_lines": [
+    19
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "LIVE(共享层)",
+   "file": "k2/_shared/eda_core/tests/conftest.py",
+   "sample_lines": [
+    59
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "LIVE(共享层)",
+   "file": "k2/_shared/eda_core/tests/test_escape_landing.py",
+   "sample_lines": [
+    22,
+    564,
+    668
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "LIVE(共享层)",
+   "file": "k2/_shared/eda_core/tests/test_hs_route_model.py",
+   "sample_lines": [
+    321
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "LIVE(共享层)",
+   "file": "k2/_shared/pm_gate/check_qa.py",
+   "sample_lines": [
+    21,
+    87
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "LIVE(共享层)",
+   "file": "k2/_shared/pm_gate/cli.py",
+   "sample_lines": [
+    532
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "LIVE(共享层)",
+   "file": "k2/_shared/pm_gate/config.py",
+   "sample_lines": [
+    26,
+    83
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "LIVE(共享层)",
+   "file": "k2/_shared/pm_gate/tools_escape_predict.py",
+   "sample_lines": [
+    46
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "LIVE(共享层)",
+   "file": "k2/_shared/pm_gate/tools_executor_single_pair.py",
+   "sample_lines": [
+    17
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "LIVE(共享层)",
+   "file": "k2/_shared/pm_gate/tools_measure_l1.py",
+   "sample_lines": [
+    2,
+    16,
+    108
+   ],
+   "sha_literals": []
+  },
+  {
+   "category": "LIVE(共享层)",
+   "file": "k2/_shared/pm_gate/wp1_semantics_check.py",
+   "sample_lines": [
+    13,
+    46
+   ],
+   "sha_literals": []
+  }
+ ],
+ "consumers_total": 63,
+ "determinism_2run": "MATCH",
+ "purpose": "(g) 板别名消费者普查 (i) B1 修复前后 CLI 行为差异面",
+ "readonly_repo": true,
+ "schema": 1
+}
