@@ -37,7 +37,8 @@
 ### 1.3 板锚修（1 行）+ 工具容忍（配套 2 行）—— **建议并入下一批**（C-6）
 - 事实：`K2V4_REAL_BOARD` 相对锚 ⇒ 容器 `_shared` 检出下 **22 项静默 skip**（框架自身基线工具读到 mask 视图 `41P/34S`）。
 - 命令：应用 `P6_OPEN_READINESS/anchors/K2V4_REAL_BOARD_absolute.diff`（**须在 `_shared` 检出内跑**：`-p3` strip 后为 `eda_core/tests/…`，**两处** `_shared` 各一次；不在 `_shared` 根跑会提示 `File to patch:`）**并**把 `k2_p6_shadow_verify_v1.py` 的板锚补丁改容忍（否则验收门 D 腿 AssertionError）。
-- 期望：容器根布局 `492P/28F/42S → 512P/30F/20S`；k2 检出版零变化。
+- 读数（**2026-09-20 实测，非期望**）：容器根布局 `492P/28F/42S → 512P/30F/20S`；归因 **22 = 20 skip→PASS + 2 skip→FAIL（具名 C1/C2）**、**回退 0**；k2 检出版零变化。件：`P6_execution/NATURAL_LAYOUT_ANCHOR_FIX_MEASURED_v1.json`（`23e88403a42df1b8`）+ `evidence_anchor_fix/*.xml`。
+  配套件（**必随本修同批**）：`P6_OPEN_READINESS/companion/K2P6_SHADOW_VERIFY_ANCHOR_TOLERANCE.diff`（`cd k2 && patch --posix -p1 < …`）—— 实测：**不落此件则落锚后验收门 D 腿必 `AssertionError`**（`COMPANION_PROBE_v1.json`）。
 
 ### 1.4 批 2 收口件（其余两项）
 - **12 SKIP 处置**（四选 `S1–S4`，见 `BATCH2_SKIP12_DISPOSITION_v1.json`）：`S1` 具名接受 ⇒ 在册登记退役 + 显式登记 `solve_pair_segment`/`solve_chain_v2` **覆盖真空**。
