@@ -1,0 +1,110 @@
+{
+ "artifact": "k2_batch6_shared_accum_failopen",
+ "schema": 1,
+ "purpose": "批 6 前置发现（只读）：K1 HS 模型的**段级 SOLVED 为 fail-open** —— 跨 base 避让 / P/N 间距 / skew 三道物理门全挂在 **base 级**；K1 四个 base 全 INFEASIBLE ⇒ 三道门全部不生效，段级读数虚高。批 6 的 ⑥/(c) 增益读数即在此口径下测得 ⇒ **不可比**，须重测。",
+ "defect": {
+  "statement": "`HSRouteModel.solve_all_v4` 仅在 **base 级** `status == 'SOLVED'` 时才把该 base 的已解段/过孔并入 `shared`（供后续 base 避让）。K1 的 base 恒为 INFEASIBLE ⇒ `shared_seg_count == 0` ⇒ **跨 base 避让完全未发生**；同一 base 内 P/N 间距门 `_pn_spacing_check`（阈值 0.155）也只在 base SOLVED 时才执行 ⇒ 段级 SOLVED 可含 P/N 交叉/间距不足的走线。",
+  "contract_violated": "`solve_all_v4` docstring 自称『已解段累积（后解避让先解，高速↔高速互交 0）』——实测 K1 互交 ≠ 0。",
+  "code_site": "`_shared/eda_core/hs_route_model.py` `solve_all_v4`（`results[base] = res` 之后的 `if res.get(\"status\") == \"SOLVED\":` 累积门）；P/N 门在 `solve_chain_v4` 末（`if out.get(\"status\") == \"SOLVED\":` … `_pn_spacing_check`）。",
+  "internal_contradiction": {
+   "evidence": "同一 `solve_all_v4` 运行内：`TX0` base 判定 = **INFEASIBLE / pn_spacing=-0.09 / reason='P/N 间距不足 -0.0900 < 0.175'**，而 `TX0/input` 与 `TX0/output` **两段都报 SOLVED**（见 §evidence.readings_as_is.base_level_vs_segment_level）。",
+   "implication": "批 6 的度量用的是**段级**计数 ⇒ 计数与模型自身 base 级判定矛盾 ⇒ 度量口径不成立。"
+  }
+ },
+ "evidence": {
+  "repro_cmd": "cd <容器根> && python3 k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/k1_shared_accum_failopen_check_v1.py",
+  "readings_as_is": {
+   "seg_solved": "1/8（现行真源 @02459f5）",
+   "shared_seg_count": 0,
+   "shared_via_count": 0,
+   "segment_solved_but_pn_below_engine_threshold": [
+    {
+     "base": "TX0",
+     "seg": "output",
+     "min_edge": 0.142,
+     "engine_threshold": 0.155,
+     "at": [
+      41.688,
+      17.25
+     ]
+    }
+   ],
+   "base_level_vs_segment_level": {
+    "tree": "/tmp/opencode/k2side/tree6（容器 _shared@02459f5 + BATCH6_DRAFT ④⑤⑥）",
+    "TX0": "BASE=INFEASIBLE pn_spacing=-0.09 (P/N 间距不足) | segments: input=SOLVED, output=SOLVED",
+    "RX0": "BASE=INFEASIBLE (无 pn_spacing：base 未 SOLVED ⇒ 门被跳过) | segments: input=SOLVED (实测 P/N edge=0.01 < K1 spec gap 0.1), output=INFEASIBLE",
+    "TX1/RX1": "全 INFEASIBLE",
+    "seg_total": "3/8（= 批 6 报告的『⑥ 收益后』读数）",
+    "shared_seg_count": 0
+   }
+  },
+  "readings_with_candidate_fix": {
+   "shadow": "/tmp/opencode/shared_accum_check/tree_fixed（真源零改；累积门下沉为逐段）",
+   "shared_seg_count": 8,
+   "shared_via_count": 1
+  },
+  "negative_control_geometric": {
+   "method": "对『段级 SOLVED』折线做同层跨网线段相交复算（解析几何，非引擎自述）",
+   "as_is_baseline_1of8_intersections": 12,
+   "as_is_batch6_6_3of8_intersections": 12,
+   "with_candidate_fix_baseline": "24 段 shared；残留同层跨网相交 2 处，且该 2 处为 **同 base 内 P/N 交叉**（TX0/input min_edge = -0.09 @ (7.205,18.0)）⇒ 第二道 fail-open（P/N 门未下沉）。",
+   "as_is_batch6_c_4of8_intersections": 21,
+   "as_is_combo_5of8_intersections": "44~45"
+  },
+  "cross_check_engine_own_function": "`_path_pn_min_edge_pt`（引擎自带）实测 TX0/input min_edge = **-0.09**（负值=铜重叠）而该段仍报 SOLVED。",
+  "k2_neutrality_by_construction": {
+   "source": "k2/pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_summary.json",
+   "reading": "K2 18 个 base **全部 SOLVED** ⇒ 累积门『base 级』与『逐段』在 K2 上**行为等价**（K2 无部分解 base）⇒ 本修法对 K2 **零影响**（落件时仍须跑 canonical 19 逐字节回归作实证）。"
+  },
+  "corrected_gates_measurement": {
+   "shadow": "/tmp/opencode/k2side/tree6h = tree6 + FIX-A（逐段累积）+ FIX-B（段级 P/N 门，阈值取**项目 spec** `impedance.gap_mm`=0.1，而非硬编码 0.155）",
+   "readings": {
+    "baseline_6_tree": "1/8（仅 TX0.output；TX0.input 因 P/N 交叉 -0.09 被段级门判 INFEASIBLE；RX0.input 因 edge 0.01 被判 INFEASIBLE）",
+    "(c) RX1→In1 20.5/21.0": "1/8（**+0 增益**）",
+    "TX1→In1 20.5/21.0": "1/8（+0）",
+    "TX1→In2 20.51/21.01": "1/8（+0）",
+    "combo RX1 In1 + TX1 In2": "1/8（+0）",
+    "pristine _shared 基线（无 ⑥）": "1/8（仅 TX0.output）"
+   },
+   "conclusion": "**修正后 K1 真值 = 1/8，与 pristine 基线同** ⇒ ⑥ 的『+2 段』与 (c) 的『RX1 全解』**均不可复现**（二者都出现在 base 级已判 INFEASIBLE 的 base 上）。"
+  }
+ },
+ "impact_on_batch6": {
+  "6_bidirectional_pair_coupling": "报告 +2 段（1/8→3/8）；**含累积门修正后为 +1 段（→2/8）** ⇒ 增益被高估 1 段。",
+  "c_proposal_RX1_in1_20.5_21.0": "报告『RX1 成首个全解 base（4/8）』；累积门修正后 **+0 段**（仍 2/8）⇒ 该收益不可复现。",
+  "TX1_candidates": "在**未修正**口径下 In1 20.5/21.0 / In2 20.51/21.01 / F.Cu 20-20.5 各 +1 段；修正口径下仅 In1 20.5/21.0 仍 +1（3/8）。",
+  "conclusion": "批 6 的『段级增益』**一律须在累积门修正后重测**方可作为落件依据（C-12：不得为变绿缩口径；反之也不得用虚绿定方案）。"
+ },
+ "proposed_fix": {
+  "candidate": "`solve_all_v4` 累积门由 base 级下沉为逐段（`for seg in res.get('segments', []): if seg['status']!='SOLVED': continue`）；`solve_chain_v4` 的 P/N 门由 base 级下沉到**段级**（段级 SOLVED 须自证 min_edge ≥ 0.155），skew 门语义另行裁定（skew 是链级量，可保留 base 级）。",
+  "scope": "`_shared` 通用层（零单板特判）；属 L2 机制面（非拓扑/接口/信号流向/球重映射）⇒ 无 owner 闸口。",
+  "negative_controls_required": [
+   "构造『base A 部分解、base B 后解』场景：B 的候选与 A 已解段重叠 ⇒ 必须拦（fail-closed）。",
+   "构造 P/N 交叉段 ⇒ 该**段**必须 INFEASIBLE（不得只把 base 置 INFEASIBLE 而段仍报 SOLVED）。",
+   "K2 回归：canonical 19 verdict 须逐字节同（本门在 K2 全解链上行为等价）。"
+  ],
+  "not_landed": true,
+  "candidate_batches": {
+   "FIX-A": "`solve_all_v4`：累积门 base 级 → **逐段**。",
+   "FIX-B": "`solve_chain_v4`：P/N 间距门 base 级 → **段级**，且阈值 = 项目 spec `impedance.gap_mm`（K1=0.1；缺项 fail-closed）。",
+   "FIX-C（可选）": "skew 门保持链级（语义上属链），但链级 INFEASIBLE **不得**掩盖段级 SOLVED 的物理判定（段级只认 FIX-B 的几何门）。"
+  }
+ },
+ "proposed_gap_id": "C-25（`_shared` HS 模型段级 SOLVED fail-open：跨 base 避让/P-N 门未下沉）——待监理登记（ENG 禁写 `.omo/supervision/**`）",
+ "readonly_repo": true,
+ "not_landed": true,
+ "script": {
+  "path": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/k1_shared_accum_failopen_check_v1.py",
+  "sha16": "f63cf59974038c07",
+  "self_contained_verdict": "as_is: seg=1/8 shared=0 | ⑥树 as-is: seg=3/8 shared=0 且 2 段 SOLVED 的 P/N edge（-0.09 / 0.01）< 项目 gap 0.1，TX0 base 自判 'P/N 间距不足 -0.0900 < 0.175' | ⑥树+FIX-A/B: seg=1/8 shared=8 违规 0",
+  "usage": "cd <容器根> && python3 <本件>（真源零改；影子落 /tmp/opencode/shared_accum_check/）"
+ },
+ "ts": "2026-09-21T01:20:00+0800",
+ "title": "批 6 前置：K1 HS 模型**段级 SOLVED 与 base 级物理判定自相矛盾**（fail-open）⇒ 批 6 全部『段级增益』读数作废、须重测",
+ "secondary_defect": {
+  "statement": "`solve_chain_v4` 的 P/N 间距阈值 **0.155 硬编码**（注释自述由 `0.38 中心距 - 0.205 线宽` 推得 = **K2 专有几何**）却作用于 `_shared` 通用层；K1 线宽 0.09 / gap 0.1 ⇒ 阈值应为项目 spec 的 `impedance.gap_mm`。",
+  "impact": "K1 上 `TX0/output`（edge 0.142 ≥ K1 要求 0.1）会被 0.155 误判为违规 ⇒ 属**零单板特判**残留（K2 常量泄漏到通用层）。",
+  "fix": "阈值改读 `spec.impedance.gap_mm`（缺项 fail-closed），或由 config 注入。"
+ },
+ "batch6_implication": "**批 6 方案不可按现读数立项**：⑥ 与 (c) 的收益均为 fail-open 产物。建议次序：**先落 FIX-A/B（同批）→ 重跑 K1 真值（1/8）→ 再据此重排批 6 的 (a)/(b)/(c)/(d)**。"
+}

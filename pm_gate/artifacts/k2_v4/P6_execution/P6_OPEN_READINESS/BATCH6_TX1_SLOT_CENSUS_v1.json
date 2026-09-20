@@ -1,0 +1,98 @@
+{
+ "artifact": "k2_batch6_tx1_slot_census",
+ "schema": 1,
+ "purpose": "批 6(c) 续项（只读）：**TX1 输入段（J1→U11）走廊槽位候选核算** —— 与 RX1 同法（seg_tracks 段级覆盖），量化每个候选的段级增益，并给出 TX1×RX1 的**互斥关系**。",
+ "method": {
+  "alloc_mutation": "`alloc[net]` 加 `band`/`layer`/`track_y` + `seg_tracks={'input': y}`（同 (c) 形态；真源零改，影子 alloc 落 /tmp/opencode）",
+  "engine_tree": "`/tmp/opencode/k2side/tree6` = 容器 `_shared`@02459f5 + `BATCH6_DRAFT/hs_route_model.patch`（④+⑤+⑥）；**未触真源**",
+  "metric": "`solve_all_v4` 段级 SOLVED 计数（8 段 = TX0/TX1/RX0/RX1 × input/output）"
+ },
+ "tx1_input_candidates": [
+  {
+   "slot": "In1 y=20.5/21.0",
+   "seg_solved": "4/8",
+   "gain": "+1（TX1.input SOLVED）"
+  },
+  {
+   "slot": "In2 y=20.51/21.01",
+   "seg_solved": "4/8",
+   "gain": "+1（TX1.input SOLVED）"
+  },
+  {
+   "slot": "F.Cu y=20.0/20.5",
+   "seg_solved": "4/8",
+   "gain": "+1（TX1.input SOLVED）"
+  },
+  {
+   "slot": "In1 y=21.0/21.5",
+   "seg_solved": "3/8",
+   "gain": "0"
+  },
+  {
+   "slot": "In2 y=18.0/18.5",
+   "seg_solved": "3/8",
+   "gain": "0"
+  },
+  {
+   "slot": "In2 y=21.01/21.51",
+   "seg_solved": "3/8",
+   "gain": "0"
+  },
+  {
+   "slot": "F.Cu y=22.0/22.5",
+   "seg_solved": "3/8",
+   "gain": "0"
+  },
+  {
+   "slot": "F.Cu y=24.02/24.52",
+   "seg_solved": "3/8",
+   "gain": "0"
+  }
+ ],
+ "rx1_input_candidates": [
+  {
+   "slot": "In1 y=20.5/21.0",
+   "seg_solved": "4/8",
+   "gain": "+1（RX1.input SOLVED，= 现行 (c) 提案）"
+  },
+  {
+   "slot": "In2 y=20.51/21.01",
+   "seg_solved": "4/8",
+   "gain": "+1"
+  },
+  {
+   "slot": "F.Cu y=20.0/20.5",
+   "seg_solved": "4/8",
+   "gain": "+1"
+  },
+  {
+   "slot": "In1 y=21.0/21.5 / In2 18.0-18.5 / In2 21.01-21.51 / F.Cu 22.0-22.5 / F.Cu 24.02-24.52",
+   "seg_solved": "3/8",
+   "gain": "0"
+  }
+ ],
+ "contention": {
+  "finding": "TX1.input 与 RX1.input **不能同时**用同一 (layer, y) —— 两段在左半走廊 x∈[~5.3,38.31] **重叠**。",
+  "measured_combo": "『RX1 In1 20.5/21.0 + TX1 In1 20.5/21.0』在现行口径下报 **5/8**，但这是**假绿**：该运行 `shared_seg_count = 0` ⇒ 两网在同一 (In1, y=20.5) 上完全重叠而未被拦（见 BATCH6_SHARED_ACCUM_FAILOPEN_v1.json）。",
+  "free_pairs_per_layer": "In1 可用紧耦合对 = {20.5/21.0, 21.0/21.5}（共享 21.0）；In2 = {18.0/18.5, 20.51/21.01, 21.01/21.51}；F.Cu = {20.0/20.5, 22.0/22.5, 24.02/24.52}；B.Cu 单轨无对。",
+  "implication": "要同时解 TX1.in 与 RX1.in，须**两个互不重叠的 (layer,y) 对**；候选空间见上表，但真值须在累积门修正后重测（现行读数不可作准）。"
+ },
+ "cross_net_same_layer_intersection_census": {
+  "method": "对段级 SOLVED 折线做同层跨网线段相交复算（解析几何）",
+  "tree6_baseline_3of8": 12,
+  "tree6_RX1_in1_4of8": 21,
+  "tree6_combo_RX1in1_TX1in1_5of8": 44,
+  "tree6_combo_RX1in1_TX1in2_5of8": 45,
+  "reading": "**段级 SOLVED 数越高，跨网同层相交越多**（3/8→12 处；5/8→44~45 处）⇒ 现行读数与物理可制造性**反相关**，佐证 fail-open。"
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-21T00:58:00+0800",
+ "superseded_notice": "**全部读数（下表）在『fail-open 口径』下测得**（`shared_seg_count=0` + 段级 P/N 门未下沉）；修正口径（FIX-A+FIX-B，见 BATCH6_SHARED_ACCUM_FAILOPEN_v1.json）下：**所有候选增益 = 0（K1 真值恒为 1/8）**。本件保留作候选空间普查，**不得**作为落件依据。",
+ "corrected_under_fix": {
+  "baseline": "1/8",
+  "TX1 In1 20.5/21.0": "1/8",
+  "RX1 In1 20.5/21.0": "1/8",
+  "combo": "1/8"
+ }
+}
