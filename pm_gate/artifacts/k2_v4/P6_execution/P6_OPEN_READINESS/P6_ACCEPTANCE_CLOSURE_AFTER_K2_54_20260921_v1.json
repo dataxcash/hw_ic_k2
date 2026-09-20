@@ -1,0 +1,82 @@
+{
+ "artifact": "k2_p6_acceptance_closure_after_k254",
+ "schema": 1,
+ "ts": "2026-09-21T07:50:00+0800",
+ "id": "**P6 验收面闭合**（#K2-54 §七-2 按裁定口径复跑 P6-1 / P6-2 取证）",
+ "authorization": "#K2-54 §一（P6-1 口径 = 采纳 (a) · 自裁）· §七-2『复跑 P6-1 / P6-2 取证 ⇒ P6 验收面闭合』",
+ "ruling_basis": "#K2-54 §一：判据①四项「必须命中」= 对**整改前状态的一次性演示**；整改后三项同源缺陷**已消除** ⇒ MISS **属预期**、**不作 FAIL 依据**；**不新增判据维/检查齿/不放松下限**。登记为 **CR-5**（逐字 = ENG 提议文本）。",
+ "probe_pre_fix": {
+  "cmd": "python3 k2/tools/k2_p6_1_acceptance_v1.py --verdict k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/k1_verdict_probe.json --pro k1/k1_v1.kicad_pro",
+  "verdict_input_sha16": "9b3ef86947424e0c",
+  "output_verbatim": [
+   "  [OK  ] ignore_without_ruling(9): 未登记 ignore 9/62",
+   "  [OK  ] no_pipeline(1): scope=k1? True · 目录数 1 · 命中 k1/sch? True",
+   "  [OK  ] no_fp_lib_table(1): fp-lib-table @ /home/fila/jqdDev_2025/ic_hw/k1: 缺失",
+   "  [OK  ] sheets_empty(1): sheets == []",
+   "  [OK  ] dim_set_is_19（非判据维）: 19 维 · 已签认显式关闭=[]",
+   "  [MISS] manifest_countersigned（非判据维）: provisional=True · manifest=probe_manifest.k1.yaml",
+   "  => P6-1 验收: FAIL"
+  ],
+  "reading": "**判据①四项 4/4 OK（整改前命中成立且本会话复现）**；唯一 MISS = `manifest_countersigned`（`provisional=True` = 探针件、非签认 ⇒ 不充当放行凭证）"
+ },
+ "post_fix": {
+  "cmd": "python3 k2/tools/k2_p6_1_acceptance_v1.py --verdict /tmp/opencode/k1recalc/k1_verdict_v2.json --pro k1/k1_v1.kicad_pro",
+  "verdict_input": {
+   "n_pass": 11,
+   "n_fail": 7,
+   "provisional": false,
+   "note": "真判定器签认件（K1 判定 11 PASS / 7 FAIL）"
+  },
+  "output_verbatim": [
+   "  [MISS] ignore_without_ruling(9): verdict 无 rule_severity_manifest 维（判据①第 1 项无法命中）",
+   "  [MISS] no_pipeline(1): verdict 无 pipeline_present 维",
+   "  [MISS] no_fp_lib_table(1): verdict 无 fp_lib_table_present 维",
+   "  [OK  ] sheets_empty(1): sheets == []",
+   "  [OK  ] dim_set_is_19（非判据维）: 18 维 · 已签认显式关闭=['ref_plane_continuity']",
+   "  [OK  ] manifest_countersigned（非判据维）: provisional=False · manifest=manifest.k1.yaml",
+   "  => P6-1 验收: FAIL"
+  ],
+  "reading": "三项 MISS = **缺陷已消除**（属预期 · 不作 FAIL 依据 · #K2-54 §一）；完整性前置（18 维 + 显式关闭 1 = 19）与签认前置 **OK**"
+ },
+ "p6_2": {
+  "cmd": "python3 k2/tools/k2_p6_2_acceptance_v1.py --expect-zero",
+  "output_verbatim": [
+   "[k2] 模板 tools/k2_jlc_template.kicad_pro ignore=0 · 文件差异(模板) 0/10 · 差异(应然集=[]) 0/10",
+   "[k1] 模板 tools/k1_jlc_template.kicad_pro ignore=0 · 文件差异(模板) 0/2 · 差异(应然集=[]) 0/2",
+   "  => 结构差异 == 0 ? True ⇒ PASS"
+  ],
+  "reading": "**PASS**（k2 模板 0/10 · k1 模板 0/2 ⇒ 结构差异 == 0）"
+ },
+ "remediation_records_verified": {
+  "k1_pro_sha16": "f9d1d8e63fc5d499",
+  "k1_pipeline_yaml_sha16": "8946a22e677055bc",
+  "k1_fp_lib_table_sha16": "13ddfa5331d67e13",
+  "k1_board_sha16": "b68105d2e8914aa7",
+  "k1_commit": "c018fc7（9 条 ignore→severity=warning · #K2-49 放行）"
+ },
+ "no_change_attestation": {
+  "p6_1_tool_sha16": "f26459948c28e51b",
+  "p6_2_tool_sha16": "38c7f0084b504f9d",
+  "git_status_tools": "空（未改任何工具）",
+  "criteria_rev6": {
+   "CHANGELOG": "eb3da49f2ad97e37",
+   "adjudicate.py": "1937a40ae68bc288",
+   "jlc_hdi_capability.yaml": "00faba340bb7eb5b",
+   "manifest.k1.yaml": "c175be51c3338a53",
+   "manifest.k2.yaml": "727d09953cf9bd78",
+   "verdict": "5/5 与 rev=6 锚一致 ⇒ 未动"
+  },
+  "no_new_criteria_dim": true,
+  "no_new_check_teeth": true
+ },
+ "closure": {
+  "P6_1": "**闭**（按 (a) 口径：整改前命中 4/4 + 整改记录 + 整改后 MISS 属预期）",
+  "P6_2": "**PASS（维持）**",
+  "P6_验收面": "**闭合**",
+  "stage_boundary": "**不越阶段**：P0–P4 HOLDS · **P5 维持 `PENDING_EXTERNAL`（V4–V7 `NOT_RUN` · ENG 不得自证）** · owner 面 C-26 **未落**",
+  "delivery_anchor": "`6ee7495de61f749f` **未动**"
+ },
+ "readonly_repo": true,
+ "not_landed": false,
+ "landed": "① 口径登记 CR-5（+COV-C1/C2/C3 = CR-7/8/10）逐字入册 ② 本复跑取证 ③ COV-C2 落点与命令入册（不改工具）"
+}
