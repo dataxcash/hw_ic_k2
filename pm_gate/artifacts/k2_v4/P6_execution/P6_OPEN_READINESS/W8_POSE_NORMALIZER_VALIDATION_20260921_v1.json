@@ -1,0 +1,78 @@
+{
+ "artifact": "w8_pose_normalizer_validation",
+ "schema": 1,
+ "ts": "2026-09-21T00:05:00+0800",
+ "id": "W8-POSE-1",
+ "authorization": "**#K2-51 §二 姿态口径（自裁）**：姿态解释的 pad `rot` 差 = 表征差 ⇒ 比较前须姿态归一；归一器须过**三项验证**方可用于绿判（防 C-12）。",
+ "deliverable": "**新工具** `k2/tools/k2_w8_footprint_audit_pose_v1.py`（只读板+只读库；**未改**既有 `k2_w8_footprint_audit_v1.py` = 未改生成器/既有测量器）",
+ "normalization_rule": {
+  "rule": "库件按板上**实例姿态**放置：`SetOrientation(fp.GetOrientation())` + `SetPosition(...)`，**不做 Flip**；随后比较电气签名（shape/sx/sy/dx/dy/rot/drill）。",
+  "why_no_flip": "**实测对照**（沙箱联动板 `09a07eb7`）：**NOFLIP → 41 identical / 1 diff**；**FLIP → 34 identical / 8 diff（含 0° 件 U1/U5/U6/E1）** ⇒ 草案 `p4-j7b-w8-pose-normalized-v1/w8_audit.draft-v2.py` 的 `Flip()` = **过度归一**，**确认否决**（与 #K2-51 §二 ③ 一致）。"
+ },
+ "three_validations": {
+  "a_negative_control": {
+   "how": "`--neg-control U1`：对 U1 pad1 尺寸 +0.1mm",
+   "result": "**PASS** —— U1 由 identical 变 **FLAG**（identical 41→40 · diff {U9}→{U1,U9}）"
+  },
+  "b_zero_degree_parts_unchanged": {
+   "how": "集合 {U1,U5,U6,E1} 归一前/后",
+   "result": "**PASS** —— RAW {E1,U1,U5,U6} == POSE {E1,U1,U5,U6}"
+  },
+  "c_prior_identical_preserved": {
+   "how": "RAW identical 集合 ⊆ POSE identical 集合",
+   "result": "**PASS** —— 35 ⊂ 41，**丢失 0**"
+  }
+ },
+ "results": {
+  "raw": {
+   "identical": 35,
+   "diff": [
+    "J1",
+    "J10",
+    "J13",
+    "J14",
+    "J6",
+    "J9",
+    "U9"
+   ]
+  },
+  "pose_normalized": {
+   "identical": 41,
+   "diff": [
+    "U9"
+   ]
+  },
+  "pose_artifacts_resolved": [
+   "J1",
+   "J6",
+   "J9",
+   "J10",
+   "J13",
+   "J14"
+  ],
+  "residual_real_diff": [
+   "U9"
+  ]
+ },
+ "registration": {
+  "K1-D14": "**闭**（J1/J6/J9/J10/J13 = 实例姿态伪差，归一后 identical）",
+  "K1-D15": "**闭**（J14 = 实例 90° 姿态伪差，归一后 identical）",
+  "K1-D16": "**保持开** —— `U9`(=U9 TPD6E05U06_RVZ, B.Cu @180°) 归一后**仍差异**（pad1/10 等 `dy` 符号相反）⇒ 板与 `ForgeOS:TPD6E05U06_RVZ` 库快照**真实几何不一致**；按 #K2-51『不一致 ⇒ 登记为真缺陷，**禁改库迁就板**』⇒ **登记为真缺陷件**（处置须批）。"
+ },
+ "boundary": {
+  "applies_on": "**沙箱联动板** `/tmp/opencode/k1link/k1_v1.kicad_pcb`（= 现板 + 42 件库昵称，`09a07eb7`）—— 因仓库板 **W8-VAC-1 未落**（阻塞于 **W8-GEN-1**），归一器暂**不能**在仓库板上产出可入册读数。",
+  "transitional": "#K2-51 §二 ④：归一器已过验证，但 **W8 通道未落件前 K1 `lib_electrical_level` 仍一律不绿**；K1-D16 未闭 ⇒ 该维亦不可能绿。"
+ },
+ "evidence_files": {
+  "/tmp/opencode/k1link/w8raw.json": "RAW 基线(沙箱板)",
+  "/tmp/opencode/k1link/w8pose.json": "姿态归一(41/1)",
+  "/tmp/opencode/k1link/w8pose_neg.json": "负控(U1 FLAG)"
+ },
+ "not_landed": [
+  "未改既有审计器/生成器",
+  "未改 criteria/",
+  "未动仓库板",
+  "未改库（禁改库迁就板）"
+ ],
+ "next": "待 W8-GEN-1 批 → 落板后以**姿态归一器**出 K1 `lib_electrical_level` 读数；K1-D16 另案（真缺陷）处置须批。"
+}
