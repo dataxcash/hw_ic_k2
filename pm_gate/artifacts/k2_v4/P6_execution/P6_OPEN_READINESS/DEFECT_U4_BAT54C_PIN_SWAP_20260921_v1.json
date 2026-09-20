@@ -1,0 +1,46 @@
+{
+ "artifact": "k2_defect_u4_bat54c_pin_swap",
+ "schema": 1,
+ "ts": "2026-09-21T10:25:00+0800",
+ "id": "**缺陷（HIGH · 板级功能性）**：`U4` BAT54C 电源 ORing **二极管物理反接** —— 起因 = `BAT54C.yaml` 脚位真源错（1=A1/**2=K**/**3=A2**）",
+ "severity": "**HIGH（交付板级功能缺陷）**：`P3V3 → MCU_VDD` 之 ORing 通路**在实体板上不存在** ⇒ 按 CR-11『主判工况 = 独立运行（`J13/VCC` 不接外供）』，`MCU_VDD` 将 **无供电**（≈0 V）⇒ **V6-1 主判 FAIL · V6-2（SWD IDCODE）FAIL** ⇒ **板不上电**（仅在 `J13`/`J9` 外供时才可能表面正常 —— 故内部比对无法发现）。",
+ "discovery": "本会话『TI/Nexperia/Diodes 厂商正本补证』批次的**附带产出**：核 `2N7002`/`BAT54C` 时发现 `BAT54C.yaml` 之 `source` 为无引证之『标准脚位』⇒ 取两厂商正本核对",
+ "vendor_truth": {
+  "Nexperia BAT54C": "§5 Pinning information **Table 2**：`1 = A1 (anode 1)` · `2 = A2 (anode 2)` · **`3 = K1, K2 (common cathode)`**（正本 `assets.nexperia.com/documents/data-sheet/BAT54C.pdf` · sha16 `38d4cf5982dcaaa3`）",
+  "Diodes BAT54/A/C/S": "`DS11005 Rev. 34-2 (Nov 2023)` 首页 Top View 拓扑图：两阳极在下侧两脚、**公共阴极汇聚至上侧单脚** ⇒ 同为 **pin3 = 共阴**（图证 `DEFECT_U4_BAT54C_PIN_SWAP_EVIDENCE_20260921_v1.png` · 图与 Nexperia 表**互相印证**）",
+  "conclusion": "**两家独立厂商一致：pin1=A1 · pin2=A2 · pin3=K（共阴）**"
+ },
+ "repo_truth_wrong": {
+  "file": "k2/_shared/eda_core/sch_gate/datasheets/BAT54C.yaml",
+  "content": "`1: A1` · **`2: K`** · **`3: A2`**",
+  "source_field": "\"BAT54C 双二极管标准脚位 (共阴极)\" —— **无厂商文献引证**（与 T2-F1 族同类：『标准脚位』式无源声明）",
+  "verdict": "**两处对调**（K 与 A2 互换）"
+ },
+ "propagation_chain": {
+  "① 真源": "`BAT54C.yaml` 错 ⇒ 后续全链继承",
+  "② 符号": "`k2/hw/lib/IOCONVERT.kicad_sym` 之 `BAT54C_ORING`：`name \"A1\" → number 1` · **`name \"K\" → number 2`** · **`name \"A2\" → number 3`**（与错源一致）",
+  "③ 网表/铜": "受审板 l7 之 `U4`（fp `ForgeOS:SOT23_BAT54C`）：**pad3 → `P3V3`** · **pad2 → `MCU_VDD`** · pad1 → NC",
+  "④ 几何（决定物理脚）": "footprint 焊盘坐标（库与板实例一致）：`pad1 (−0.95, +0.95)` = **左下** · `pad2 (+0.95, +0.95)` = **右下** · `pad3 (0, −0.95)` = **上中单脚** ⇒ **JEDEC TO-236 标准编号**（1 左下 / 2 右下 / 3 上）",
+  "⑤ 实体后果": "⇒ 板上**共阴（pin3）接 `P3V3`**、**阳极2（pin2）接 `MCU_VDD`** ⇒ 二极管仅能 **`MCU_VDD` → `P3V3`** 导通，**`P3V3` → `MCU_VDD` 被截止**"
+ },
+ "why_internal_checks_missed": "P4/P5 之『板 ↔ 真源』比对**以同一份错源为基准** ⇒ 自比一致（与 CR-8 COV-C2『目标 sha 自比』同类盲区）；且 `J13/J9` 亦可外供 `MCU_VDD` ⇒ 台架可能表面正常",
+ "required_disposition": {
+  "what": "修法本身简单（`BAT54C.yaml` 改 `2: A2 / 3: K` ⇒ 同步修符号 pin 号 ⇒ 重生成网表 ⇒ 交换 `U4` pad2/pad3 网络 ⇒ 重出 Gerber ⇒ **新 rev**）；但：",
+  "why_not_self_authorized": [
+   "`_shared` 真源改字 ⇒ **监理批面**（同 T2-F1 族）",
+   "符号/网表/铜 = **设计面** ⇒ 红线『未获批不得改生成器/SPEC/原理图』",
+   "开新 rev / 是否重投 ⇒ **阶段门 + 交付承诺** 面 ⇒ 非 ENG 自裁",
+   "**且**：在处置前**不应下首件单**（按监理 fail-closed 规则『P4 未全绿不下单』—— 本件证明 l7 板**不满足**其设计意图之 ORing 功能）"
+  ],
+  "owner_needed": "**否**（非拓扑/接口/信号流向之架构变更 · 属真源缺陷修复 = 监理批面）"
+ },
+ "also_note": "`U4` 之 CR-11 口径（`MCU_VDD` 标称 3.0V · 主判独立运行）**其推导逻辑仍成立**，只是**本板物理实现与之矛盾** ⇒ P5 回填前必须先处置本件",
+ "red_lines": [
+  "只读取证（未改 `_shared`/符号/网表/PCB/交付包）",
+  "未派 WORKER",
+  "外部厂商 PDF 仅落 `/tmp/opencode`（未入库）"
+ ],
+ "readonly_repo": true,
+ "not_landed": true,
+ "next": "① **等监理处置裁定**（审批 `_shared` 订正 + 是否开新 rev）；② 同时**只读**续扫同类『无引证标准脚位』件（`LED_DUAL`/`24MHz_9pF`/`FRU_EEPROM`/`USB3.0_Type-A_90` 等）以防同类反接；③ P5 首件单**暂缓**。"
+}
