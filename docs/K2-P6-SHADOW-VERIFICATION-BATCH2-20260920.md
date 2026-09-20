@@ -95,5 +95,11 @@
 | **载体/引擎真缺陷** | **`channel_alloc.json` 与 SPEC 命名脱钩 = N-05「生成器不可复跑」实证** ⇒ L3 真源产物须按现行 SPEC 重生成（或加映射层）；`hs_route_model.py` 旧 id 引用须定性（语义硬编码 or 兼容层） | **ENG（需授权）** |
 > ⚠️ 该分歧**同时解释**真源基线与影子下 K2 `G3.1` 的 FAIL（期望集旧名）——即 B2-3d 与本节同源。
 
+**机制确认（已定位到行）**：引擎是**数据驱动**、非硬编码——
+`hs_route_model.py:789-804` `_track_y_for()` 以 `c.get("id") == corridor_id` 在 **SPEC corridors** 中查走廊；`:394` `src_cid = rec.get("corridor")` 取 **alloc 记录里的走廊串**。
+⇒ 传入/携带**旧 id**（alloc 108 处、测试 37 处、判据 2 处）在**新 id 的 SPEC** 中查不到 ⇒ `无通道分配` / `NO_CORRIDOR` ⇒ 8L 板 18 链**全未解**。
+⇒ **引擎侧旧 id 仅出现在 docstring/注释（`:2701`、`:3430`）⇒ 非引擎缺陷**（文案级，可具名豁免）。
+**结论（三分）**：① 期望漂移 = 测试 + `check_l3.SPEC_EXPECTS`（须监理裁定命名权威后同步）；② **数据陈旧 = `channel_alloc.json` 未随 SPEC 改名重生成（N-05 同族）**；③ 引擎无责。
+
 ## 7. 红线与零改动声明
 真源 `_shared`/`criteria/`/冻结四源/交付锚 **未动**（影子仅在 `/tmp/opencode`）；未派 WORKER；未改生成器/SPEC/原理图；`k2/_shared` 工作树洁净。
