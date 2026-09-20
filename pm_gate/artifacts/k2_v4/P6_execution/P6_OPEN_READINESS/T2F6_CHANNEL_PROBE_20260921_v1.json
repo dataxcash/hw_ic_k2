@@ -1,0 +1,56 @@
+{
+ "artifact": "k2_t2f6_channel_probe",
+ "schema": 1,
+ "ts": "2026-09-21T04:15:00+0800",
+ "id": "T2-F6（#K2-52 §四 执行序 4）",
+ "authorization": "#K2-52 §四-4：续取余 6 件（`PI3DBS16412`/`OPTO_LTV356T`/Molex `105444` 优先）",
+ "attempts": [
+  {
+   "url": "https://www.diodes.com/assets/Datasheets/PI3DBS16412.pdf",
+   "result": "404（HTML）"
+  },
+  {
+   "url": "https://www.diodes.com/assets/Datasheets/PI3DBS16412XUAEX.pdf",
+   "result": "404（HTML）"
+  },
+  {
+   "url": "https://www.diodes.com/assets/Datasheets/ds39061.pdf",
+   "result": "404（HTML）"
+  },
+  {
+   "url": "https://www.diodes.com/assets/Datasheets/products_information/PI3DBS16412.pdf",
+   "result": "404（HTML）"
+  },
+  {
+   "url": "https://www.diodes.com/search/?q=PI3DBS16412",
+   "result": "403（反自动化）"
+  },
+  {
+   "url": "https://optoelectronics.liteon.com/upload/download/DS-70-97-0053/LTV-356T.pdf",
+   "result": "200 但 **HTML（非 PDF）**；且默认 TLS 证书链不可验（需 -k）"
+  },
+  {
+   "url": "https://optoelectronics.liteon.com/upload/download/DS-70-97-0053/LTV-356T%20series.pdf",
+   "result": "200 但 HTML"
+  },
+  {
+   "url": "https://www.molex.com/pdm_docs/sd/1054440001_sd.pdf",
+   "result": "000（HTTP/2 INTERNAL_ERROR，站点不可达）"
+  },
+  {
+   "url": "https://www.lcsc.com/datasheet/PI3DBS16412XUAEX_C2690870.pdf",
+   "result": "200 但 HTML（站内为 JS 渲染，非直链）"
+  },
+  {
+   "url": "https://www.21icsearch.com/search/PI3DBS16412",
+   "result": "404"
+  }
+ ],
+ "result": "**未取回任何件** ⇒ 6 件维持**具名 PARTIAL（不充绿）**；tier2 读数维持 **15/33**",
+ "reachability_state": "本会话可达：`www.ti.com`（200，已用于取 4 份 TI PDF）· `assets.nexperia.com`（200，2N7002）· `file.elecfans.com`（200，未定位到目标件）· `www.lcsc.com`（200 但 JS）· `www.mouser.com`（200 但 JS）。**封锁**：`atta.szlcsc.com` 403 · `www.diodes.com` 403/404 · `www.molex.com` 000 · `www.liteon.com`/`optoelectronics.liteon.com` 000/HTML · `alldatasheet.com` 403 · `digikey` 403 · DDG 超时。",
+ "conclusion": "**通道具强时效性**（batch4 可用的 diodes/atta 本会话已失效）⇒ 重申 #K2-52 建议：『可达上限 21/33』宜作**软目标**；tier2 收口以『结构性无三件套 12 件』为**不可约下界**。",
+ "readonly_repo": true,
+ "not_landed": true,
+ "no_new_criteria_dim": true,
+ "next": "执行序 5：PIN01-K1-1c 4 表落地"
+}
