@@ -1,0 +1,60 @@
+{
+ "artifact": "k2_b2_4_waiver_retraction_drill",
+ "schema": 1,
+ "purpose": "⑥ B2-4 撤 K1 `G1.5` WAIVER 的**副本演练复核**（独立重跑，非引述既有证据包）：幂等性 / 语义 / **真源零副作用** / 放行守卫。",
+ "tool": {
+  "path": "P6_OPEN_READINESS/apply_k1_g15_waiver_retraction_v1.py",
+  "sha16": "fc0cbd71b4d6701b",
+  "note": "与 RUNBOOK §2 索引载明 sha16 一致（fc0cbd71b4d6701b）⇒ 本件核的是同一件"
+ },
+ "drill": {
+  "root": "/tmp/opencode/b24drill/k1（k1 全树副本 2.8M）",
+  "sequence": [
+   "check ⇒ **patched / patched**（= 真源当前仍处 WAIVER 态，撤 waiver 仍待落）",
+   "apply ⇒ patched / patched（落件到副本）",
+   "check ⇒ **already / already**",
+   "apply(第二次) ⇒ **already / already**"
+  ],
+  "idempotent": "第二次 apply 后两文件字节与第一次**完全一致**（sha 逐件相同）⇒ 幂等成立",
+  "target_shas": {
+   "pm_gate/tools/k1_closeout_l2_v1.py": "7a27fdc19665334c（演练产出，可复算）",
+   "pm_gate/state_k1.json": "05ee9799023bd5cd（演练产出，可复算）",
+   "before": {
+    "pm_gate/tools/k1_closeout_l2_v1.py": "56a39cd52eaf3965",
+    "pm_gate/state_k1.json": "90476545bc144084"
+   }
+  },
+  "determinism": "工具内 `checked_at`/`closed_at` 为**硬编码常量** ⇒ 两跑逐字节同，可复算"
+ },
+ "semantics_verified": {
+  "g15.evidence": "含『真机判 PASS（撤 WAIVER…』",
+  "g15.evidence_waiver_archived": "含『【撤销留痕·原 WAIVER 记录】』前缀（原文留痕）",
+  "risks[RISK-001]": "status=**closed** · desc 更新且 `desc_waiver_archived` 留痕",
+  "旧 WAIVER 标记": "live evidence 中已消失",
+  "工具常量 G15_EVIDENCE": "已换真机判口径"
+ },
+ "zero_side_effect": {
+  "check": "运行前后 **真 k1** 的两文件 sha16 全等（56a39cd5/90476545）且 `git -C k1 status --porcelain` 全等",
+  "conclusion": "本器**只写 `--root` 之下**；真源零副作用（已实测）"
+ },
+ "operational_finding": {
+  "fact": "工具自带**放行守卫**：`--apply` 且 `--root` == 真 k1 路径 ⇒ **rc=2 + 拒绝**（实测文案：『⛔ 拒绝直接落真源…须监理批』）；**无 override 开关**。",
+  "consequence": "⇒ **B2-4 的落件无法由本器直接执行**；监理批后须走其中一条：",
+  "landing_options": [
+   {
+    "id": "L1（推荐 · 零新工具改动）",
+    "how": "把**演练产出的两份文件**按 sha 钉定覆盖真 k1（`7a27fdc19665334c` / `05ee9799023bd5cd`）⇒ 与 `--apply` 语义等价（文件级可复核）",
+    "audit": "覆盖后复 sha + 复跑 `apply_..._v1.py --root k1`（应报 **already/already**）"
+   },
+   {
+    "id": "L2",
+    "how": "批一处工具改动（加显式 `--i-have-authorization` 开关）后 `--root k1 --apply`",
+    "cost": "工具改动 ⇒ 另须批（C-6）"
+   }
+  ]
+ },
+ "acceptance_after_landing": "按 RUNBOOK §1.4：复跑 `check_g15` 与 `k2_p6_readonly_baseline_v1.py` ⇒ `is_waiver` 标记消失；K1 G1.5 真机判 PASS。",
+ "authorization": "撤 waiver = **判据收紧** ⇒ 须监理批（CHECKLIST B2-4 原文）；本件只演练 + 备落件路径，未落件。",
+ "readonly_repo": true,
+ "not_landed": true
+}
