@@ -22,8 +22,12 @@
 | **B2-3b** | `check_qa.py:35` `config.spec_name()` **空参** ⇒ 取 `DEFAULT_PROJECT`（`k2_v4`）而非 active project（**全 `_shared` 唯一空参点**：`grep -rn "spec_name()" _shared`） | `grep -rn "spec_name()" _shared --include=*.py`（期望：**0 命中**）＋ K1 `G4.1` | ① K1 `G4.1` 不再报「SPEC 缺失」（实测：K1 有 `L3/SPEC_k1.json`，仍报缺）；② K2 不回退 | 同上 | ☐ |
 | **B2-3c** | `closure_check.py:110-113`：`DEFAULT_SPEC` / `ESCAPE_SPEC_PATH` 为**框架相对**（`_shared/pm_gate/artifacts/...`，该目录**不存在**）⇒ `check_l3.check_g35` 对**任何**项目不可跑（M-14 基址钉子未覆盖这 2 处） | `python3 -c "import ...; print(os.path.isfile(cc.DEFAULT_SPEC))"`（期望 True）＋ K1/K2 `G3.5` 可跑 | ① 两项目 `G3.5` 均**可跑**（现状均 FAIL「SPEC 读取失败 `_shared/pm_gate/artifacts/L3/...`」）；② 负控：项目根缺失 ⇒ 明确报错 | 同上 | ☐ |
 | **B2-3d** | `check_l3.SPEC_EXPECTS["corridors"] = ["J2_TO_U","U_TO_MCIO"]` **陈旧**：现行 spec 走廊 `id` 实为 `EAST_CHIP_TO_J2` / `WEST_MCIO_TO_CHIP`（plain 与 rev-52 同）⇒ 修好解析后 K2 `G3.1` **仍 FAIL**。**期望值属判据侧** | 修后 K2 `G3.1` 判定 | 门：**须监理先裁定**走廊期望集（改名承接 or 保留双名），**不得 ENG 自定**（C-12 禁为变绿缩口径） | **需监理裁定** | ☐ |
+| **B2-3c（新 F-2c）** | `check_qa.py:24` 板路径 `board_abspath()` **空参** ⇒ 改 `board_abspath(_proj())`（原取 `DEFAULT_PROJECT`；真源基线被 SPEC 失败掩盖） | 同 B2-3a | ① K1 `G4.1` 指 `k1_v1.kicad_pcb`（**影子已验**：报「尚未按 SPEC 布线」= 真实判定）；② K2 不回退 | **需监理批** | ☐ |
+| **B2-3d（新 F-2d）** | `gates.py:141` `scheme_closure_check` 的 `artifacts.read_text(stage, *parts)` 未注入项目维度 ⇒ K1 `G2.6` 误报缺产物（**该件实存**） | 同 B2-3a | K1 `G2.6` PASS（**影子已验**） | **需监理批** | ☐ |
+| **B2-T（triaged）** | **22 skip 解锁后 13 项既有隐藏失败**（`hs_route_model` 域；清单见 `docs/K2-P6-SHADOW-VERIFICATION-BATCH2-20260920.md` §4） | `PYTHONPATH=AppDir/... AppDir/bin/python3.11 k2/tools/k2_p6_shadow_verify_v1.py` | 逐项定性：**引擎真缺陷**（ENG 修）vs **期望漂移**（**监理裁定**，C-12 禁缩口径） | **须监理裁定**（期望值类） | ☐ |
 | **B2-4** | `check_l1.py:193` `RULES_DOC`：现解析为 `<项目根>/../doc/PCB_DESIGN_RULES.md` ⇒ **越出容器**（实测 K1/K2 **双双 FAIL**）；真源 = `_shared/docs/PCB_DESIGN_RULES.md`（K1 `state_k1.json` 的 G1.5 WAIVER 原文即如此指认）＋ 撤 `G1.5` waiver（RISK-001） | K1：`check_g15` **无 waiver 机判 PASS**；K2：`verify k2` 不回退 | ① K1 `G1.5` 真判 PASS（**标注须撤**，不再 PASS-by-waiver）；② 负控：规则文档缺失/无「强条」⇒ **FAIL** | **需监理批**（撤 waiver = 判据收紧） | ☐ |
 
+> **影子预验证（授权前已完成，真源零改动）**：`k2/tools/k2_p6_shadow_verify_v1.py` ⇒ K1 框架闸 **5→12 PASS** · K2 **12→13 PASS** · 零回退 · 控制组归因**零测试回归**；机读件 `SHADOW_VERIFY_v1.json` `844f2266…`。
 > **SPEC 站点普查修正**：v2 记「13 处」；本轮实测 `_shared` 内 **43 处**（`pm_gate/` 内 **16**、`eda_core/` 内 27；含 `review.py:121`、`check_qa.py:34`、`config.py:120` 等）⇒ 实施时**逐处定性**（应项目化 / 应具名豁免），**禁**一把梭（C-12）。
 
 ## 2. P6 完工判据（机判 · 执行序全部**只读**起手）

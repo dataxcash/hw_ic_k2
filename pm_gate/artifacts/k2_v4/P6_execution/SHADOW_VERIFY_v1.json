@@ -1,0 +1,293 @@
+{
+ "artifact": "k2_p6_shadow_verify",
+ "attribution": {
+  "reading": "两组计数相同 ⇒ 批 2 补丁集**零测试回归**；失败为**既有隐藏缺陷**（原被 skip 掩盖）",
+  "same_result": true
+ },
+ "board_anchor": "k2/k2_v4_8L.kicad_pcb",
+ "control_root": "/tmp/opencode/shadow_ctl",
+ "gate_battery_shadow": {
+  "k1": {
+   "check_g11": {
+    "detail": "3 个候选文件，字段齐全: ['candidate_A.md', 'candidate_B.md', 'candidate_C.md']",
+    "status": "PASS"
+   },
+   "check_g12": {
+    "detail": "3 个打分表，维度与 criteria 一致 (['SI 信号完整性', 'DFM 可制造性', 'PDN 电源完整性', '可维护性', '架构清晰度', '面积成本', '控制面走线', '供电布局'])",
+    "status": "PASS"
+   },
+   "check_g13": {
+    "detail": "ruling.md 含中选方案/淘汰理由/裁决人",
+    "status": "PASS"
+   },
+   "check_g14": {
+    "detail": "frozen/ 冻结完成: ['L1_BID_v2_k1.md']",
+    "status": "PASS"
+   },
+   "check_g15": {
+    "detail": "结构预检 + 工艺常识强条全 PASS（3 份报告）",
+    "status": "PASS"
+   },
+   "check_g21": {
+    "detail": "measurements.md 含板几何/焊盘盒/走廊/电容墙",
+    "status": "PASS"
+   },
+   "check_g22": {
+    "detail": "constraints.md 工艺/电气/叠层约束齐全且带出处",
+    "status": "PASS"
+   },
+   "check_g23": {
+    "detail": "汇总判定 8 项全闭合",
+    "status": "PASS"
+   },
+   "check_g24": {
+    "detail": "3 结构候选 + 一致打分表 (['物理可行性', '信号完整性', 'PDN 与参考平面', '可制造性与成本', '冻结可复现性'])",
+    "status": "PASS"
+   },
+   "check_g25": {
+    "detail": "L2 冻结完成: ['L2_STRUCTURE_FROZEN_v1.md', 'PLACEMENT_ADDENDUM_v1.md']",
+    "status": "PASS"
+   },
+   "check_g26": {
+    "detail": "L2.5 方案级闭合率通过：逃逸闭合分析 + H1/H3 假设复核 PASS/PARTIAL",
+    "status": "PASS"
+   },
+   "check_g31": {
+    "detail": "SPEC 缺顶层字段: ['capacitor_walls']",
+    "status": "FAIL"
+   },
+   "check_g32": {
+    "detail": "executor_constraints.md 缺关键声明: 'SPEC_k2_v4.json'",
+    "status": "FAIL"
+   },
+   "check_g33": {
+    "detail": "缺失 buildability.md",
+    "status": "FAIL"
+   },
+   "check_g34": {
+    "detail": "逃逸桩方案闭合：59 可落桩 + 0 豁免记录（全为 NO_CONNECT/已裁决）",
+    "status": "PASS"
+   },
+   "check_g35": {
+    "detail": "无冻结签名 (fail-closed): SPEC 缺 layer_plan.wp1_escape_nets_meta.fingerprint",
+    "status": "FAIL"
+   },
+   "check_g41": {
+    "detail": "施工产物无走线（k1_v1.kicad_pcb 尚未按 SPEC 布线）——规格对照无对象",
+    "status": "FAIL"
+   },
+   "check_g42": {
+    "detail": "G4.1 未过——强制开 ECN（宪法第九章：打回必须走变更单）",
+    "status": "FAIL"
+   }
+  },
+  "k2_v4": {
+   "check_g11": {
+    "detail": "3 个候选文件，字段齐全: ['candidate_A.md', 'candidate_B.md', 'candidate_C.md']",
+    "status": "PASS"
+   },
+   "check_g12": {
+    "detail": "3 个打分表，维度与 criteria 一致 (['走廊闭合', '信号完整性潜力', 'DFM 可制造性', '电源/PDN 合理性', '可维护性', '架构清晰度'])",
+    "status": "PASS"
+   },
+   "check_g13": {
+    "detail": "ruling.md 含中选方案/淘汰理由/裁决人",
+    "status": "PASS"
+   },
+   "check_g14": {
+    "detail": "frozen/ 冻结完成: ['L1_TOPOLOGY_v1.0.md', 'L1_TOPOLOGY_v2.0.md']",
+    "status": "PASS"
+   },
+   "check_g15": {
+    "detail": "结构预检 + 工艺常识强条全 PASS（1 份报告）",
+    "status": "PASS"
+   },
+   "check_g21": {
+    "detail": "measurements.md 含板几何/焊盘盒/走廊/电容墙",
+    "status": "PASS"
+   },
+   "check_g22": {
+    "detail": "constraints.md 工艺/电气/叠层约束齐全且带出处",
+    "status": "PASS"
+   },
+   "check_g23": {
+    "detail": "汇总判定 5 项全闭合",
+    "status": "PASS"
+   },
+   "check_g24": {
+    "detail": "2 结构候选 + 一致打分表 (['数学闭合', '阻抗确定性', 'DFM 可制造性', 'PDN 合理性', '可维护性'])",
+    "status": "PASS"
+   },
+   "check_g25": {
+    "detail": "L2 冻结完成: ['L2_STRUCTURE_v1.0.md', 'L2_STRUCTURE_v2.0.md']",
+    "status": "PASS"
+   },
+   "check_g26": {
+    "detail": "芯片侧断点逃逸闭合分析（L2/escape_closure_analysis.md）无 PASS/PARTIAL 明确判定（未在含'判定'的行找到关键词）",
+    "status": "FAIL"
+   },
+   "check_g31": {
+    "detail": "SPEC.corridors 缺字段: ['J2_TO_U', 'U_TO_MCIO']",
+    "status": "FAIL"
+   },
+   "check_g32": {
+    "detail": "执行器约束已声明（旧管线违宪在册，新执行器零运行时自由度）",
+    "status": "PASS"
+   },
+   "check_g33": {
+    "detail": "JLC DFM 逐项核对完成，结论 PASS（阻抗 coupon 已登记前置）",
+    "status": "PASS"
+   },
+   "check_g34": {
+    "detail": "逃逸桩方案闭合：140 可落桩 + 7 豁免记录（全为 NO_CONNECT/已裁决）",
+    "status": "PASS"
+   },
+   "check_g35": {
+    "detail": "无冻结签名 (fail-closed): SPEC 缺 layer_plan.wp1_escape_nets_meta.fingerprint",
+    "status": "FAIL"
+   },
+   "check_g41": {
+    "detail": "施工产物无走线（k2_v4.kicad_pcb 尚未按 SPEC 布线）——规格对照无对象",
+    "status": "FAIL"
+   },
+   "check_g42": {
+    "detail": "G4.1 未过——强制开 ECN（宪法第九章：打回必须走变更单）",
+    "status": "FAIL"
+   }
+  }
+ },
+ "patch_set": [
+  {
+   "file": "pm_gate/check_l1.py",
+   "note": "F-1/B2-4：RULES_DOC → <框架根>/docs/PCB_DESIGN_RULES.md"
+  },
+  {
+   "file": "pm_gate/check_l2.py",
+   "note": "B2-3：项目维度注入（L2 产物读取）（9 处）"
+  },
+  {
+   "file": "pm_gate/check_l3.py",
+   "note": "B2-3：项目维度注入（L3 产物读取）（4 处）"
+  },
+  {
+   "file": "pm_gate/check_qa.py",
+   "note": "B2-3：项目维度注入（QA 产物读取）（2 处）"
+  },
+  {
+   "file": "pm_gate/check_l3.py",
+   "note": "B2-3a：check_l3 去硬编码 SPEC 名（经 project.yaml: spec_name）"
+  },
+  {
+   "file": "pm_gate/check_l3.py",
+   "note": "B2-3a：check_l3 引入 config"
+  },
+  {
+   "file": "pm_gate/check_qa.py",
+   "note": "B2-3b：check_qa spec_name(active)（原空参取 DEFAULT_PROJECT）"
+  },
+  {
+   "file": "pm_gate/check_qa.py",
+   "note": "B2-3c（新 F-2c）：check_qa 板路径 board_abspath(active)"
+  },
+  {
+   "file": "pm_gate/gates.py",
+   "note": "B2-3d（新 F-2d）：scheme_closure_check 注入项目维度"
+  },
+  {
+   "file": "pm_gate/closure_check.py",
+   "note": "F-3/B2-3c：closure_check 默认值 → 项目根（原指向不存在的框架 artifacts/）"
+  },
+  {
+   "file": "eda_core/tests/test_hs_route_model.py",
+   "note": "SHADOW-ONLY 测试板锚 → /home/fila/jqdDev_2025/ic_hw/k2/k2_v4_8L.kicad_pcb"
+  }
+ ],
+ "purpose": "批 2 补丁集的影子预验证（真源零改动）+ 22 skip 解锁实验 + 控制组归因",
+ "pytest_control_no_patchset": {
+  "counts": {
+   "failed": 13,
+   "passed": 43,
+   "skipped": 12
+  },
+  "exit_code": 1,
+  "failed_tests": [
+   "test_board_level_consistency",
+   "test_capacity_map_persist",
+   "test_capacity_regions_derived",
+   "test_chain_no_pn_zero_spacing",
+   "test_correct_polarity_solves_clean",
+   "test_corridor_clear_span",
+   "test_drawing_only_refuses_no_node",
+   "test_escape_deterministic_byte_identical",
+   "test_flip_polarity_cross_rejected",
+   "test_link_topology_crossing_old_topology",
+   "test_probe_escape_capacity_dn0",
+   "test_probe_region_capacity_structure",
+   "test_probe_reports_via_gap_fact"
+  ],
+  "failure_lines": [
+   "'U3_region'",
+   "'U7_region'",
+   "+ INFEASIBLE",
+   "AssertionError: assert 'INFEASIBLE' == 'SOLVED'",
+   "AssertionError: assert 'INFRA_ERROR' in ('CAPACITY_OK', 'INSUFFICIENT')",
+   "AssertionError: assert 'NO_CORRIDOR' in ('SOLVED', 'BLOCKED')",
+   "AssertionError: assert 2 == 4",
+   "AssertionError: assert ['UP4', 'UP5', 'UP6', 'UP7'] == ['DN0', 'DN1'...', 'UP5', ...]",
+   "AssertionError: assert {'J2_region', 'MCIO_region'} == {'J2_region',..., 'U7_region'}",
+   "E         - SOLVED",
+   "E         At index 0 diff: 'UP4' != 'DN0'",
+   "E         Extra items in the right set:",
+   "KeyError: 'left'",
+   "Right contains 4 more items, first extra item: 'UP4'",
+   "StopIteration",
+   "Use -v to get more diff",
+   "assert not ['PCIE_UP0', 'PCIE_UP1', 'PCIE_UP2', 'PCIE_UP3', 'PCIE_UP4', 'PCIE_UP5', ...]"
+  ]
+ },
+ "pytest_shadow": {
+  "counts": {
+   "failed": 13,
+   "passed": 43,
+   "skipped": 12
+  },
+  "exit_code": 1,
+  "failed_tests": [
+   "test_board_level_consistency",
+   "test_capacity_map_persist",
+   "test_capacity_regions_derived",
+   "test_chain_no_pn_zero_spacing",
+   "test_correct_polarity_solves_clean",
+   "test_corridor_clear_span",
+   "test_drawing_only_refuses_no_node",
+   "test_escape_deterministic_byte_identical",
+   "test_flip_polarity_cross_rejected",
+   "test_link_topology_crossing_old_topology",
+   "test_probe_escape_capacity_dn0",
+   "test_probe_region_capacity_structure",
+   "test_probe_reports_via_gap_fact"
+  ],
+  "failure_lines": [
+   "'U3_region'",
+   "'U7_region'",
+   "+ INFEASIBLE",
+   "AssertionError: assert 'INFEASIBLE' == 'SOLVED'",
+   "AssertionError: assert 'INFRA_ERROR' in ('CAPACITY_OK', 'INSUFFICIENT')",
+   "AssertionError: assert 'NO_CORRIDOR' in ('SOLVED', 'BLOCKED')",
+   "AssertionError: assert 2 == 4",
+   "AssertionError: assert ['UP4', 'UP5', 'UP6', 'UP7'] == ['DN0', 'DN1'...', 'UP5', ...]",
+   "AssertionError: assert {'J2_region', 'MCIO_region'} == {'J2_region',..., 'U7_region'}",
+   "E         - SOLVED",
+   "E         At index 0 diff: 'UP4' != 'DN0'",
+   "E         Extra items in the right set:",
+   "KeyError: 'left'",
+   "Right contains 4 more items, first extra item: 'UP4'",
+   "StopIteration",
+   "Use -v to get more diff",
+   "assert not ['PCIE_UP0', 'PCIE_UP1', 'PCIE_UP2', 'PCIE_UP3', 'PCIE_UP4', 'PCIE_UP5', ...]"
+  ]
+ },
+ "readonly_repo": true,
+ "schema": 1,
+ "shadow_root": "/tmp/opencode/shadow"
+}
