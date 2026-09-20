@@ -1,0 +1,127 @@
+{
+ "artifact": "k2_batch6_escape_vg_census",
+ "schema": 1,
+ "purpose": "批 6 重排依据（只读）：分离 K1 逃逸端点的 **结构性无解** 与 **模板/对级受限** —— 用引擎自带 V-Graph 兜底分支加诊断，在影子树跑 K1 全量 v4。",
+ "method": {
+  "carrier": "`_shared/eda_core/hs_route_model.py` `_k1_escape` 的 V-Graph 兜底分支（仅在模板 A/B/C 全失败后到达）",
+  "instrumentation": "记录该端点的单网 VG 可达性 `(vg_p, vg_n)`；真源零改（影子树 /tmp/opencode/escape_vg_census）",
+  "repro": "cd <容器根> && python3 k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/k1_escape_vg_census_v1.py"
+ },
+ "census": [
+  {
+   "side": "input(left)",
+   "corr_x": 7.05,
+   "pair": [
+    "PCIE_TX0_P",
+    "PCIE_TX0_N"
+   ],
+   "vg_p": true,
+   "vg_n": true,
+   "class": "模板/对级受限"
+  },
+  {
+   "side": "output(left)",
+   "corr_x": 41.688,
+   "pair": [
+    "OCuLink_TX0_P",
+    "OCuLink_TX0_N"
+   ],
+   "vg_p": true,
+   "vg_n": true,
+   "class": "模板/对级受限"
+  },
+  {
+   "side": "output(right)",
+   "corr_x": 74.2,
+   "pair": [
+    "OCuLink_TX0_P",
+    "OCuLink_TX0_N"
+   ],
+   "vg_p": true,
+   "vg_n": true,
+   "class": "模板/对级受限（该段已 SOLVED）"
+  },
+  {
+   "side": "input(left)",
+   "corr_x": 5.3,
+   "pair": [
+    "PCIE_TX1_P",
+    "PCIE_TX1_N"
+   ],
+   "vg_p": true,
+   "vg_n": true,
+   "class": "模板/对级受限"
+  },
+  {
+   "side": "output(right)",
+   "corr_x": 74.2,
+   "pair": [
+    "OCuLink_TX1_P",
+    "OCuLink_TX1_N"
+   ],
+   "vg_p": true,
+   "vg_n": true,
+   "class": "模板/对级受限"
+  },
+  {
+   "side": "input(left)",
+   "corr_x": 5.3,
+   "pair": [
+    "PCIE_RX0_P",
+    "PCIE_RX0_N"
+   ],
+   "vg_p": true,
+   "vg_n": true,
+   "class": "模板/对级受限"
+  },
+  {
+   "side": "output(right)",
+   "corr_x": 73.245,
+   "pair": [
+    "OCuLink_RX0_P",
+    "OCuLink_RX0_N"
+   ],
+   "vg_p": true,
+   "vg_n": false,
+   "class": "**结构性无解**（N 单网亦不可达）"
+  },
+  {
+   "side": "input(left)",
+   "corr_x": 7.2,
+   "pair": [
+    "PCIE_RX1_P",
+    "PCIE_RX1_N"
+   ],
+   "vg_p": true,
+   "vg_n": true,
+   "class": "模板/对级受限"
+  },
+  {
+   "side": "output(right)",
+   "corr_x": 73.245,
+   "pair": [
+    "OCuLink_RX1_P",
+    "OCuLink_RX1_N"
+   ],
+   "vg_p": false,
+   "vg_n": false,
+   "class": "**结构性无解**（P/N 单网皆不可达）"
+  }
+ ],
+ "reading": {
+  "input_side": "**四个 input 端全部『模板/对级受限』**（单网各自可达）⇒ 输入侧不是几何墙，**属对级/模板构造问题** ⇒ **(d) 端点对齐是主杠杆**。",
+  "output_side": "OCuLink_TX1 右端单网可达（模板受限，可 (d)/(b) 解）；**OCuLink_RX0 右端 N、OCuLink_RX1 右端 P/N 结构性无解** ⇒ **必须换层/过孔策略 (b)**。",
+  "consistency": "与 `BATCH6_RESCOPE_AFTER_GATE_FIX_v1.json` 的失败分类一致（输入侧 → 逃逸几何；输出 RX0/RX1 → 真几何）。"
+ },
+ "caveats": [
+  "VG 为 **F.Cu 单网** 可见性图（`fields.get('F.Cu')`）；`vg=True` 仅证『单网在 F.Cu 存在通路』，不证对级可同时满足 P/N 间距 ⇒ 须在 (d) 落件时以段级门复验。",
+  "本普查在**未加 FIX-A/B** 的门径下运行（与批 6 现读数同口径的『可达性』信息独立于段级计数）⇒ 结论不受 fail-open 影响；但 (d) 落件后的增益须以修正门重测。"
+ ],
+ "readonly_repo": true,
+ "not_landed": true,
+ "script": {
+  "path": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/k1_escape_vg_census_v1.py",
+  "sha16": "6714951a23c7fd7b"
+ },
+ "ts": "2026-09-21T03:00:00+0800"
+}
