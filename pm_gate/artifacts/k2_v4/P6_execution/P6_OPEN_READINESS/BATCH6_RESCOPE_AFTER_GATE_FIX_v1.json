@@ -46,5 +46,58 @@
  ],
  "readonly_repo": true,
  "not_landed": true,
- "ts": "2026-09-21T02:35:00+0800"
+ "ts": "2026-09-21T04:00:00+0800",
+ "corrected_measurement_baseline": {
+  "shadow": "/tmp/opencode/k2side/tree_all = 容器 `_shared`@02459f5 + ⑤⑥草案 + **D-1…D-4 全修**（逐段累积 · 段级 P/N edge 门取项目 `diff_pair.p_gap` · 逃逸门量纲改中心距 ≥ 线宽+gap）",
+  "k1_truth": "**1/8**（仅 TX0.output；与仅修 D-4/段级门时的 1/8 一致 ⇒ 结论稳健）",
+  "no6_control": "`tree_all_no6`（pristine + D-1…D-4，**无 ⑥**）亦 **1/8** ⇒ **⑥ 在修正基线上边际增益 = 0**（仅 TX1.input 的失败原因表述不同）。",
+  "note": "此影子即后续 (d) 实验的**度量基准**；D-1/D-2 未修前，任何 (d) 读数都不可信。"
+ },
+ "input_side_rotation_geometry": {
+  "method": "只读复算：`pair_endpoints` + alloc track_y + 走廊入口 `corr_x`（= max(走廊左缘, max(pad_x))）",
+  "table": [
+   {
+    "base": "TX0",
+    "pad_dx": 0.5,
+    "track_dy": 0.5,
+    "corr_x": 7.05,
+    "rotation_window_mm": 0.0,
+    "drop_P": 6.02,
+    "drop_N": 6.52
+   },
+   {
+    "base": "TX1",
+    "pad_dx": 0.8,
+    "track_dy": 0.79,
+    "corr_x": 5.3,
+    "rotation_window_mm": 2.1,
+    "drop_P": 1.5,
+    "drop_N": 0.71
+   },
+   {
+    "base": "RX0",
+    "pad_dx": 0.5,
+    "track_dy": 0.5,
+    "corr_x": 5.3,
+    "rotation_window_mm": 2.25,
+    "drop_P": 3.01,
+    "drop_N": 3.51
+   },
+   {
+    "base": "RX1",
+    "pad_dx": 0.8,
+    "track_dy": 8.02,
+    "corr_x": 7.2,
+    "rotation_window_mm": 0.0,
+    "drop_P": 6.01,
+    "drop_N": 2.01
+   }
+  ],
+  "reading": {
+   "zero_window": "**TX0 与 RX1 的旋转窗口 = 0**（`corr_x` 恰等于最右焊盘 x）⇒ 对级必须在**焊盘行处**完成『x 并排 → y 堆叠』的 90° 旋转 ⇒ **F.Cu 模板无论如何调都不可行**（RX1 更叠加 8.02mm 跨层）⇒ 只能走**换层/过孔**或**改 alloc 轨道**。",
+   "non_zero_window": "**TX1（2.1mm）与 RX0（2.25mm）有窗口**且落差小（1.5/3.5mm）⇒ **(d) 模板改造可望解决这两段**（须在新基线上以引擎字段为裁判验证）。",
+   "output_side": "output 侧 RX0/RX1 右端已证结构性无解（见 BATCH6_ESCAPE_VG_CENSUS_v1.json）⇒ 归 (b)。"
+  },
+  "rescope_update": "(d) 的可解目标收窄为 **TX1.input + RX0.input**；TX0.input / RX1.input 需 alloc 轨道或换层策略（(c)/(b) 面）；output RX0/RX1 → (b)。"
+ }
 }
