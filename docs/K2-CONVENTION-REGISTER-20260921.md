@@ -385,3 +385,12 @@
 
 ---
 **（本块）裁定对应**：册面/索引维护（handoff §8-B 允许项）。**报备监理 1 条 · owner 项 0**。
+
+### 续编 · **P5 就绪里程碑 TAG**（TAG_POLICY §1 交付事件 · CR-61）
+
+| # | 条目 | 内容（事实/裁定） | 依据 | 处置红线 |
+|---|---|---|---|---|
+| **CR-61** | **已打 annotated tag `k2-v57-p5-outbound-pack-ready` → `92eb193`**（P5 就绪里程碑：#K2-58 R1 `STOP-1` 解除 + l8 外发包收口） | **事件**：① **#K2-58 R1 = l8 独立复核 PASS ⇒ ENG 侧 `STOP-1` 解除**（gate 类事件）；② l8 **外发包/P5 执行包**经本会话 CR-46..CR-60 收口（rev 指针 · 自查件覆盖 · 模板判据量 · 权威件口径 · 验收链 · 册面落档）⇒ 属 TAG_POLICY §1「**发布候选/交付**」**必打**事件。**tag message（§3 必含）**：`gate` 判定（P0–P4 HOLDS · P4 对 l8 **19/0** · P5 `PENDING_EXTERNAL` · P6 CLOSED · **未越阶段** · **`STOP-1` 已解除**）· 交付包锚 **`4b610baed4f4752c`**/**`36a6b276b4f7e465`**（**未动**）· 外发包 6 锚（`RULES 058f650df4d626e6` · `CHECKLIST f58ca379dab41cbe` · `template 6b510775339bdc11` · `selfcheck 540c9a55c66b053b` · 投递说明 `314239049f4c2ba3` · 验收计划 `b002ec9829a53f12`）· 判据 **rev=6** · 受审板 `7a5c89913d6e5d0a` · 册面 `3dcf790bd91147aa` · `date 2026-09-21` · 复现命令。**核验**：`push origin --tags` ⇒ `ls-remote --tags` **`^{}` 解引用 = `92eb193`**（= 目标 commit）✅；tag 后 HEAD 距 tag **0** ⇒ 哨兵 tag 断档告警**复位**（阈值 20）。 | `k2/pm_gate/TAG_POLICY.md` §1/§2/§3/§4/§5/§6；**#K2-58 R1**；CR-14（断档口径） | **禁**为历史 commit 批量补打 · 禁 amend/rebase 已发布段 · 未改冻结四源/`criteria`/交付包 |
+
+---
+**（本块）裁定对应**：TAG_POLICY §1 里程碑打标（ENG 执行 · 进程合规）。**报备监理 1 条 · owner 项 0**。
