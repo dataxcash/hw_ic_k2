@@ -1,0 +1,23 @@
+{
+ "artifact": "k2_batch6_pair_coupling_bidirectional_experiment",
+ "schema": 1,
+ "purpose": "批 6（L2 逃逸策略批）预备：验证『双向对级耦合』形态与 K1 段级增益，界定批 6 的范围。",
+ "change_tested": "`_k1_escape` 的 VG 回退改为**双向迭代避让**：先解 P → 以 P 折线为 N 的额外障碍（净空 0.1，`_PairClearField` 包装场）解 N → 再以 N 折线为 P 的障碍重解 P → 交 `_k1_escape_verify`（fail-closed）。",
+ "result": {
+  "before": "1/8 段（仅 RX1.out）",
+  "after": "**3/8 段**（TX0.in · RX0.in · RX1.out）",
+  "zero_len_segments": 0,
+  "still_open": "TX1.out 仍『左逃逸对级不可行』（双向耦合 2 遍仍未过 verify）· TX1.in/RX1.in 走廊占用 · TX0.out/RX0.out 真几何阻塞"
+ },
+ "reading": {
+  "a_gain": "对级耦合把 `PCIE_TX0_P|left` 与 `PCIE_RX0_P|left` 由 INFEASIBLE → **SOLVED**（复现并确认单向 PoC 结论；双向第 2 遍未再增益）",
+  "scope_for_batch6": "批 6 须含四件并**同批设计**：(a) 对级耦合（本件形态，收益 2 链）· (b) 真阻塞链过孔/内层策略（3 链）· (c) 走廊 band 重分配（RX1.in/TX1.in 走廊占用 + `PCIE_RX1_P` 迁出 J1 GND 焊盘行）· (d) ⑤ 端点对齐（本件已证单独不足，可作辅助候选）",
+  "not_closed_by_this": "TX1.out 需更强耦合（可能需 P/N **联合图**而非迭代避让），列入批 6 待办"
+ },
+ "patches": {
+  "draft": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/BATCH6_DRAFT/hs_route_model.patch（含 ④+⑤+⑥ 草案；**未获批，未落真源**）"
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-20T22:05:00+0800"
+}
