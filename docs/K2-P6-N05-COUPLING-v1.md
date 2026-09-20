@@ -19,7 +19,7 @@
 ## 3. 已确证的「真 N-05 实例」（本轮实测，非启发式）
 | 实例 | 证据 |
 |---|---|
-| `L3/model_solves/channel_alloc_v2/channel_alloc.json` | 被 `test_hs_route_model.py` 钉住作输入；08-28 字节导入、**从未重生成**；携带旧走廊 id（108 处）⇒ 13 项隐藏失败之输入侧成因 |
+| `L3/model_solves/channel_alloc_v2/channel_alloc.json` | 被 `test_hs_route_model.py` 钉住作输入；08-28 字节导入、**从未重生成**；携带旧走廊 id（108 处）⇒ 命名侧成因（**但 B2-T 实验证明：仅同步命名不足以清 13 项失败，真因为几何/代际漂移**） |
 | `L3/drc_locator/report.json`（1.3 MB） | 字节导入 + 未变更 + 名称被现役代码引用（命名约定） |
 | `L4/E3-standard-call-*/ref_plane_continuity_board_*.json`（1.8 MB 级） | 后续新增但现役不引用（`RECENT_ORPHAN`）⇒ 复现链中「只此一份、不可重建」的测量输出 |
 | `model_solves/hs_rebuild*/**` | 多版本并存、均自导入；与 B2-1/B2-2 同族（模型产物不可复跑） |
