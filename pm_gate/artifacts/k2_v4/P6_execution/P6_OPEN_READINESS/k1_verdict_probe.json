@@ -1,0 +1,107 @@
+{
+ "passed": false,
+ "n_pass": 3,
+ "n_fail": 16,
+ "fails": [
+  {
+   "check": "zone_filled",
+   "ok": false,
+   "detail": "铜区（有网非 keepout）已填充 0/0；keepout 规则区 0 个另计（不入分母）"
+  },
+  {
+   "check": "drill_count",
+   "ok": false,
+   "detail": "NPTH=2（应 ≥4）PTH=28"
+  },
+  {
+   "check": "rule_severity_manifest",
+   "ok": false,
+   "detail": "未登记豁免的 ignore 9/62: ['copper_sliver', 'footprint_filters_mismatch', 'footprint_type_mismatch', 'missing_courtyard', 'silk_over_copper', 'silk_overlap', 'track_not_centered_on_via', 'tuning_profile_track_geometries', 'via_dangling']"
+  },
+  {
+   "check": "net_declared_realized",
+   "ok": false,
+   "detail": "板上 0 焊盘的声明网 = 3；<2 焊盘 = 12"
+  },
+  {
+   "check": "pin_map_complete",
+   "ok": false,
+   "detail": "网表节点无对应焊盘 = 16"
+  },
+  {
+   "check": "refdes_sets_equal",
+   "ok": false,
+   "detail": "排除纯机械件 H*（0 条逐条列名: []）⇒ 原理图 37 / 板 42；图有板无 []，板有图无 ['Q1', 'Q2', 'R38', 'R39', 'U13']"
+  },
+  {
+   "check": "pipeline_present",
+   "ok": false,
+   "detail": "scope=k1：含 .kicad_sch 但无 pipeline.yaml 的目录 1 个（fail-closed）: ['k1/sch']；范围外（他项目阶段门判）6 个: ['k2/hw/sch', 'key_v2/key_v2/sch', 'pciesw4/aic', 'pciesw4/aic/sch_kicad', 'pciesw4/gpu']"
+  },
+  {
+   "check": "drc_errors",
+   "ok": false,
+   "detail": "缺 DRC 实跑（--drc-cli）⇒ fail-closed"
+  },
+  {
+   "check": "drc_warning_dispositions",
+   "ok": false,
+   "detail": "缺 DRC 实跑 ⇒ fail-closed"
+  },
+  {
+   "check": "unconnected_zero",
+   "ok": false,
+   "detail": "缺 DRC 实跑 ⇒ fail-closed"
+  },
+  {
+   "check": "fp_lib_table_present",
+   "ok": false,
+   "detail": "fp-lib-table @ /home/fila/jqdDev_2025/ic_hw/k1: 缺失"
+  },
+  {
+   "check": "lib_electrical_level",
+   "ok": false,
+   "detail": "缺 W-8 电气级审计 JSON（--w8-audit-json）⇒ fail-closed"
+  },
+  {
+   "check": "keepout_active",
+   "ok": false,
+   "detail": "keepout 区 0 个；其中无生效开关（全 allowed / 无 flag）0 个"
+  },
+  {
+   "check": "pads_within_outline",
+   "ok": false,
+   "detail": "缺 J-8 出框测量 JSON（--pads-outline-json）⇒ fail-closed"
+  },
+  {
+   "check": "ref_plane_continuity",
+   "ok": false,
+   "detail": "缺 ref_plane_continuity 新口径测量 JSON（--refplane-gap-json）⇒ fail-closed"
+  },
+  {
+   "check": "density_and_clearance",
+   "ok": false,
+   "detail": "缺 J-8 密度/间距测量 JSON（--density-json / --min-clearance-json）⇒ fail-closed"
+  }
+ ],
+ "oks": [
+  {
+   "check": "device_has_pads",
+   "ok": true,
+   "detail": "0 焊盘器件 0: []"
+  },
+  {
+   "check": "non45_segments",
+   "ok": true,
+   "detail": "非 45° 段 0/0"
+  },
+  {
+   "check": "verdict_schema",
+   "ok": true,
+   "detail": "产物中出现 verdict 字段的文件: []"
+  }
+ ],
+ "provisional": true,
+ "manifest": "probe_manifest.k1.yaml",
+ "board": "k1_v1.kicad_pcb"
+}

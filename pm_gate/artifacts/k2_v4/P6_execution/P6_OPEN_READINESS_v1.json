@@ -1,0 +1,162 @@
+{
+ "P6_1": {
+  "command_as_written_in_results_template": "python3 criteria/adjudicate.py --project k1 --board k1/k1_v1.kicad_pcb --pro k1/k1_v1.kicad_pro --nets k1/boards/k1_nets.yaml --sch-dir k1/sch --measure-out /tmp/opencode/k1_measure.json --out /tmp/opencode/k1_verdict.json",
+  "expected_four_items_measured": {
+   "ignore_without_ruling(9)": {
+    "carrier": "k1/k1_v1.kicad_pro: board.design_settings.rule_severities",
+    "dim": "rule_severity_manifest",
+    "measured": "未登记豁免的 ignore 9/62",
+    "names": [
+     "copper_sliver",
+     "footprint_filters_mismatch",
+     "footprint_type_mismatch",
+     "missing_courtyard",
+     "silk_over_copper",
+     "silk_overlap",
+     "track_not_centered_on_via",
+     "tuning_profile_track_geometries",
+     "via_dangling"
+    ],
+    "root_cause": "共享模板默认值（k1/tools/k1_jlc_template.kicad_pro 与 k2/tools/k2_jlc_template.kicad_pro 的 ignore 集逐条相同）"
+   },
+   "no_fp_lib_table(1)": {
+    "dim": "fp_lib_table_present",
+    "measured": "fp-lib-table @ k1/ 缺失（K2 侧存在：k2/hw/fp-lib-table）"
+   },
+   "no_pipeline(1)": {
+    "dim": "pipeline_present",
+    "measured": "scope=k1 内含 .kicad_sch 但无 pipeline.yaml 的目录 1 个: ['k1/sch']",
+    "range_note": "范围外 6 个（他项目阶段门判）: ['k2/hw/sch','key_v2/key_v2/sch','pciesw4/aic','pciesw4/aic/sch_kicad','pciesw4/gpu',…]"
+   },
+   "sheets_empty(1)": {
+    "measure": "k1/k1_v1.kicad_pro.sheets == []",
+    "measured": "[]（空）",
+    "reference": "K2 交付板 pro（l7）sheets=None 且 ignore=0（已清理）；l4 与两模板仍 sheets=[]/ignore=9"
+   }
+  },
+  "finding_A_failclosed_no_manifest": {
+   "measured": "rc=1，stdout `[FAIL] manifest 缺失: <criteria>/manifest.k1.yaml（fail-closed）`（adjudicate.py:536-538）",
+   "verdict": "fail-closed 生效；唯一缺件 = 监理持有的 G-c2 应然集"
+  },
+  "finding_B_nets_input_crash": {
+   "cause": "`k1/boards/k1_nets.yaml` 顶层 = ['nets','nc','source','k1_device_count']，与判定器输入契约 ['symbols','nets','sheets'] 不符",
+   "evidence": "P6_OPEN_READINESS/k1_probe_run_nets_k1_nets.log",
+   "measured": "rc=1 + traceback `KeyError: 'symbols'` @ adjudicate.py:149（measure_declared_nets_realized）",
+   "note": "修法属判据侧（criteria/ ENG 只读）或输入侧（--nets 路径），**须监理裁定**；本件不改任何件",
+   "resolution_candidate": "同一目录 `k1/boards/k1_sch.yaml` 顶层 = ['symbols','nets','sheets','strap_intents','links']（与 K2 errata-2 同构，symbols 40 / sheets 4）⇒ 可跑（本件已实测）"
+  },
+  "other_k1_measurements_for_manifest_ruling": {
+   "drill_count": "NPTH=2（模板门槛 ≥4）· PTH=28",
+   "keepout_active": "keepout 区 0 个",
+   "measurement_inputs_absent": "DRC（--drc-cli）/ W-8（--w8-audit-json）/ 出框（--pads-outline-json）/ 参考连续性（--refplane-gap-json）/ 密度间距（--density-json,--min-clearance-json） 均未提供 ⇒ 对应 6 维 fail-closed（P6-1 命令原文亦未提供）",
+   "net_declared_realized": "声明网 0 焊盘 = 3；<2 焊盘 = 12",
+   "pin_map_complete": "网表节点无对应焊盘 = 16",
+   "refdes_sets_equal": "原理图 37 / 板 42；板有图无 ['Q1','Q2','R38','R39','U13']（H* 0 条）",
+   "zone_filled": "0/0（K1 板上有网非 keepout 铜区 0 个）"
+  },
+  "prerequisites_for_监理": [
+   "G-c2：criteria/manifest.k1.yaml（应然集；四项同源缺陷的声明方式 + 其余维 enabled/豁免/阈值）",
+   "输入口径裁定：--nets 用 k1/boards/k1_sch.yaml（可跑）抑或判据侧容错 k1_nets.yaml（本件实测崩溃）",
+   "其余 16 维中哪些属 K1 中间态（未布线/未挂原理图）而须 enabled:false 或登记豁免"
+  ],
+  "runnable_probe": {
+   "command": "python3 criteria/adjudicate.py --project k1 --board k1/k1_v1.kicad_pcb --pro k1/k1_v1.kicad_pro --nets k1/boards/k1_sch.yaml --sch-dir k1/sch --root . --manifest <PROBE> --measure-out … --out …",
+   "fail_dims": [
+    "zone_filled",
+    "drill_count",
+    "rule_severity_manifest",
+    "net_declared_realized",
+    "pin_map_complete",
+    "refdes_sets_equal",
+    "pipeline_present",
+    "drc_errors",
+    "drc_warning_dispositions",
+    "unconnected_zero",
+    "fp_lib_table_present",
+    "lib_electrical_level",
+    "keepout_active",
+    "pads_within_outline",
+    "ref_plane_continuity",
+    "density_and_clearance"
+   ],
+   "manifest": "PROBE（非签认，未落 criteria/）—— 复刻 manifest.k2.yaml 语义，project/scope→k1，not_countersigned=true",
+   "ok_dims": [
+    "device_has_pads",
+    "non45_segments",
+    "verdict_schema"
+   ],
+   "verdict": "n_pass=3 / n_fail=16（provisional=true）"
+  },
+  "title": "adjudicate.py --project k1 出 verdict 且命中同源四项"
+ },
+ "P6_2": {
+  "eng_note": "本件**未改**任何 .kicad_pro（属模板件，须监理批）；仅测量 + 备选方案。整改落件可在放行后一次性执行（改动面 = 2 个文件、各 9 行 rule_severities）。",
+  "measured_boards": {
+   "k1/k1_v1.kicad_pro": {
+    "ignores": 9,
+    "sheets": []
+   },
+   "k2/hw/k2_v4_8L.l4.kicad_pro": {
+    "ignores": 9,
+    "sheets": []
+   },
+   "k2/hw/k2_v4_8L.l7.kicad_pro": {
+    "ignores": 0,
+    "note": "交付板 pro 已清零（rule_severities ignore 0/62）",
+    "sheets": null
+   }
+  },
+  "measured_templates": {
+   "k1/tools/k1_jlc_template.kicad_pro": {
+    "ignores": 9,
+    "names": [
+     "copper_sliver",
+     "footprint_filters_mismatch",
+     "footprint_type_mismatch",
+     "missing_courtyard",
+     "silk_over_copper",
+     "silk_overlap",
+     "track_not_centered_on_via",
+     "tuning_profile_track_geometries",
+     "via_dangling"
+    ]
+   },
+   "k2/tools/k2_jlc_template.kicad_pro": {
+    "ignores": 9,
+    "same_names": true
+   }
+  },
+  "remediation_options_for_监理": [
+   "A 收紧（计划 §7.2-2 原文）：模板 rule_severities 改为由 manifest 派生/删除 9 条 ⇒ 模板 ignore 集 = ∅ = 应然集（需改 k1/tools/k1_jlc_template.kicad_pro + k2/tools/k2_jlc_template.kicad_pro）",
+   "B 声明：manifest 的 rule_severity_exemptions 逐条登记这 9 条 ⇒ 结构差异 0，但『新板自带 ignore』根因未除（与 §7.2-2『从根上消除』相悖）"
+  ],
+  "root_cause": "计划 §7.1：9 条 ignore 来自**共享模板默认值**（两模板逐条相同）⇒『判据被成批关闭』是新板默认态",
+  "title": "模板整改后 k1|k2_jlc_template.kicad_pro 的 ignore 集 == manifest 应然集（0 差异）"
+ },
+ "artifact": "k2_p6_open_readiness",
+ "evidence": {
+  "dir": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/",
+  "files": {
+   "k1_measure_probe.json": "3bb21a670f9556f2",
+   "k1_probe_run_nets_k1_nets.log": "3f6d26f8dfa5ad97",
+   "k1_probe_run_nets_k1_sch.log": "d9929d10fd7c1a40",
+   "k1_verdict_probe.json": "9b3ef86947424e0c",
+   "probe_manifest.k1.yaml": "6c9ca1afc2b30c42"
+  }
+ },
+ "purpose": "P6 开闸**就绪件**（计划/测量件；P6 交付阶段仍关闭）。ENG 只提供测量，应然集/裁定归监理（#K2-41 §三-⑥；计划 §3.2）。",
+ "readonly_repo": true,
+ "red_lines": {
+  "criteria_untouched": true,
+  "frozen_sources_untouched": true,
+  "note": "本件为计划/测量件；未改判据、未改模板/生成器/SPEC/原理图；未越阶段（P6 交付仍关闭）",
+  "templates_untouched": true
+ },
+ "reproduce": [
+  "①（fail-closed 取证）原命令不加 --manifest ⇒ rc=1 `manifest 缺失（fail-closed）`",
+  "②（崩溃取证）--nets k1/boards/k1_nets.yaml ⇒ rc=1 + KeyError 'symbols'",
+  "③（可跑取证）--nets k1/boards/k1_sch.yaml + PROBE manifest ⇒ n_pass=3/n_fail=16（provisional）"
+ ],
+ "schema": 1,
+ "stage_gate": "批 2 = 开（已落件 fc59771/b58f53a/e019faa）；**P6 交付阶段（P6-1/P6-2 · K1 复跑 · 外部首件）= 仍关闭**；G-c2（criteria/manifest.k1.yaml）= 监理持有，于 P6 开闸时原子落件。"
+}

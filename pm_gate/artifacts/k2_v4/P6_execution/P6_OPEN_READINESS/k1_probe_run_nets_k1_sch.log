@@ -1,0 +1,22 @@
+=== 判定 k1 @ k1_v1.kicad_pcb ===
+  manifest: probe_manifest.k1.yaml  countersigned=False
+  [OK]   device_has_pads: 0 焊盘器件 0: []
+  [OK]   non45_segments: 非 45° 段 0/0
+  [OK]   verdict_schema: 产物中出现 verdict 字段的文件: []
+  [FAIL] zone_filled: 铜区（有网非 keepout）已填充 0/0；keepout 规则区 0 个另计（不入分母）
+  [FAIL] drill_count: NPTH=2（应 ≥4）PTH=28
+  [FAIL] rule_severity_manifest: 未登记豁免的 ignore 9/62: ['copper_sliver', 'footprint_filters_mismatch', 'footprint_type_mismatch', 'missing_courtyard', 'silk_over_copper', 'silk_overlap', 'track_not_centered_on_via', 'tuning_profile_track_geometries', 'via_dangling']
+  [FAIL] net_declared_realized: 板上 0 焊盘的声明网 = 3；<2 焊盘 = 12
+  [FAIL] pin_map_complete: 网表节点无对应焊盘 = 16
+  [FAIL] refdes_sets_equal: 排除纯机械件 H*（0 条逐条列名: []）⇒ 原理图 37 / 板 42；图有板无 []，板有图无 ['Q1', 'Q2', 'R38', 'R39', 'U13']
+  [FAIL] pipeline_present: scope=k1：含 .kicad_sch 但无 pipeline.yaml 的目录 1 个（fail-closed）: ['k1/sch']；范围外（他项目阶段门判）6 个: ['k2/hw/sch', 'key_v2/key_v2/sch', 'pciesw4/aic', 'pciesw4/aic/sch_kicad', 'pciesw4/gpu']
+  [FAIL] drc_errors: 缺 DRC 实跑（--drc-cli）⇒ fail-closed
+  [FAIL] drc_warning_dispositions: 缺 DRC 实跑 ⇒ fail-closed
+  [FAIL] unconnected_zero: 缺 DRC 实跑 ⇒ fail-closed
+  [FAIL] fp_lib_table_present: fp-lib-table @ /home/fila/jqdDev_2025/ic_hw/k1: 缺失
+  [FAIL] lib_electrical_level: 缺 W-8 电气级审计 JSON（--w8-audit-json）⇒ fail-closed
+  [FAIL] keepout_active: keepout 区 0 个；其中无生效开关（全 allowed / 无 flag）0 个
+  [FAIL] pads_within_outline: 缺 J-8 出框测量 JSON（--pads-outline-json）⇒ fail-closed
+  [FAIL] ref_plane_continuity: 缺 ref_plane_continuity 新口径测量 JSON（--refplane-gap-json）⇒ fail-closed
+  [FAIL] density_and_clearance: 缺 J-8 密度/间距测量 JSON（--density-json / --min-clearance-json）⇒ fail-closed
+  => FAIL（PROVISIONAL：manifest 未经监理签认）

@@ -1,0 +1,438 @@
+{
+ "n_footprints": 42,
+ "footprints_without_pads": [],
+ "zones": [],
+ "zones_keepout": 0,
+ "zones_total": 0,
+ "zones_filled": 0,
+ "keepout_all_allowed": 0,
+ "pad_types": {
+  "smd": 276,
+  "np_thru_hole": 2,
+  "thru_hole": 28
+ },
+ "npth": 2,
+ "pth": 28,
+ "segments": 0,
+ "non45_segments": 0,
+ "vias": 0,
+ "nets_on_board": [
+  "12V_IN",
+  "CC1",
+  "CC2",
+  "GND",
+  "GPIO_LED",
+  "I2C1_SCL",
+  "I2C1_SDA",
+  "KEY_DET_EN",
+  "KEY_DET_RET",
+  "KEY_D_N",
+  "KEY_D_P",
+  "LED_A",
+  "MCU_VDD",
+  "MUX_PD",
+  "MUX_SEL",
+  "NRST",
+  "OCuLink_RX0_N",
+  "OCuLink_RX0_P",
+  "OCuLink_RX1_N",
+  "OCuLink_RX1_P",
+  "OCuLink_TX0_N",
+  "OCuLink_TX0_P",
+  "OCuLink_TX1_N",
+  "OCuLink_TX1_P",
+  "P3V3_AUX",
+  "PCIE_RX0_N",
+  "PCIE_RX0_P",
+  "PCIE_RX1_N",
+  "PCIE_RX1_P",
+  "PCIE_TX0_N",
+  "PCIE_TX0_P",
+  "PCIE_TX1_N",
+  "PCIE_TX1_P",
+  "PERSTA#",
+  "PWR_5V_MAIN",
+  "PWR_BTN_ISO",
+  "PWR_BTN_OUT",
+  "PWR_CTRL_OUT",
+  "SBU1",
+  "SBU1_INT",
+  "SBU2",
+  "SBU2_INT",
+  "SBU_EN",
+  "SBU_SEL",
+  "SWCLK_BOOT0",
+  "SWDIO",
+  "TPS_EN",
+  "UART_RX",
+  "UART_TX",
+  "VBUS",
+  "WORK_EN"
+ ],
+ "pads_total": 306,
+ "pads_without_net": 99,
+ "rule_severities": {
+  "ignored": [
+   "copper_sliver",
+   "footprint_filters_mismatch",
+   "footprint_type_mismatch",
+   "missing_courtyard",
+   "silk_over_copper",
+   "silk_overlap",
+   "track_not_centered_on_via",
+   "tuning_profile_track_geometries",
+   "via_dangling"
+  ],
+  "total": 62
+ },
+ "drc": null,
+ "w8_audit": null,
+ "pads_outline": null,
+ "v3_plane": null,
+ "density_clearance": null,
+ "min_clearance": null,
+ "refplane_gap": null,
+ "declared_nets": {
+  "nets": [
+   {
+    "net": "I2C1_SCL",
+    "declared_nodes": 4,
+    "realized": 4
+   },
+   {
+    "net": "I2C1_SDA",
+    "declared_nodes": 4,
+    "realized": 4
+   },
+   {
+    "net": "PERSTA#",
+    "declared_nodes": 4,
+    "realized": 4
+   },
+   {
+    "net": "PWR_BTN_OUT",
+    "declared_nodes": 2,
+    "realized": 2
+   },
+   {
+    "net": "PWR_BTN_ISO",
+    "declared_nodes": 2,
+    "realized": 2
+   },
+   {
+    "net": "PWR_CTRL_OUT",
+    "declared_nodes": 2,
+    "realized": 2
+   },
+   {
+    "net": "GPIO_LED",
+    "declared_nodes": 2,
+    "realized": 2
+   },
+   {
+    "net": "LED_A",
+    "declared_nodes": 2,
+    "realized": 2
+   },
+   {
+    "net": "UART_TX",
+    "declared_nodes": 2,
+    "realized": 2
+   },
+   {
+    "net": "UART_RX",
+    "declared_nodes": 2,
+    "realized": 2
+   },
+   {
+    "net": "P3V3_AUX",
+    "declared_nodes": 13,
+    "realized": 13
+   },
+   {
+    "net": "MCU_VDD",
+    "declared_nodes": 10,
+    "realized": 10
+   },
+   {
+    "net": "12V_IN",
+    "declared_nodes": 4,
+    "realized": 4
+   },
+   {
+    "net": "GND",
+    "declared_nodes": 41,
+    "realized": 36
+   },
+   {
+    "net": "NRST",
+    "declared_nodes": 3,
+    "realized": 3
+   },
+   {
+    "net": "SWCLK_BOOT0",
+    "declared_nodes": 3,
+    "realized": 3
+   },
+   {
+    "net": "SWDIO",
+    "declared_nodes": 2,
+    "realized": 2
+   },
+   {
+    "net": "KEY_D_P",
+    "declared_nodes": 2,
+    "realized": 1
+   },
+   {
+    "net": "KEY_D_N",
+    "declared_nodes": 2,
+    "realized": 1
+   },
+   {
+    "net": "SBU_SEL",
+    "declared_nodes": 3,
+    "realized": 3
+   },
+   {
+    "net": "SBU_EN",
+    "declared_nodes": 2,
+    "realized": 2
+   },
+   {
+    "net": "PCIE_TX0_P",
+    "declared_nodes": 3,
+    "realized": 2
+   },
+   {
+    "net": "PCIE_TX0_N",
+    "declared_nodes": 3,
+    "realized": 2
+   },
+   {
+    "net": "PCIE_RX0_P",
+    "declared_nodes": 3,
+    "realized": 2
+   },
+   {
+    "net": "PCIE_RX0_N",
+    "declared_nodes": 3,
+    "realized": 2
+   },
+   {
+    "net": "PCIE_TX1_P",
+    "declared_nodes": 2,
+    "realized": 1
+   },
+   {
+    "net": "PCIE_TX1_N",
+    "declared_nodes": 2,
+    "realized": 1
+   },
+   {
+    "net": "PCIE_RX1_P",
+    "declared_nodes": 2,
+    "realized": 1
+   },
+   {
+    "net": "PCIE_RX1_N",
+    "declared_nodes": 2,
+    "realized": 1
+   },
+   {
+    "net": "OCuLink_TX0_P",
+    "declared_nodes": 2,
+    "realized": 2
+   },
+   {
+    "net": "OCuLink_TX0_N",
+    "declared_nodes": 2,
+    "realized": 2
+   },
+   {
+    "net": "OCuLink_RX0_P",
+    "declared_nodes": 2,
+    "realized": 2
+   },
+   {
+    "net": "OCuLink_RX0_N",
+    "declared_nodes": 2,
+    "realized": 2
+   },
+   {
+    "net": "OCuLink_TX1_P",
+    "declared_nodes": 2,
+    "realized": 2
+   },
+   {
+    "net": "OCuLink_TX1_N",
+    "declared_nodes": 2,
+    "realized": 2
+   },
+   {
+    "net": "OCuLink_RX1_P",
+    "declared_nodes": 2,
+    "realized": 2
+   },
+   {
+    "net": "OCuLink_RX1_N",
+    "declared_nodes": 2,
+    "realized": 2
+   },
+   {
+    "net": "MUX_SEL",
+    "declared_nodes": 3,
+    "realized": 3
+   },
+   {
+    "net": "MUX_PD",
+    "declared_nodes": 3,
+    "realized": 3
+   },
+   {
+    "net": "PWR_5V_KEY",
+    "declared_nodes": 5,
+    "realized": 0
+   },
+   {
+    "net": "PWR_5V_PREAUTH",
+    "declared_nodes": 5,
+    "realized": 0
+   },
+   {
+    "net": "TPS_EN",
+    "declared_nodes": 2,
+    "realized": 2
+   },
+   {
+    "net": "CC1",
+    "declared_nodes": 2,
+    "realized": 1
+   },
+   {
+    "net": "CC2",
+    "declared_nodes": 2,
+    "realized": 1
+   },
+   {
+    "net": "SBU1",
+    "declared_nodes": 4,
+    "realized": 1
+   },
+   {
+    "net": "SBU2",
+    "declared_nodes": 2,
+    "realized": 0
+   }
+  ],
+  "nets_with_lt2": 12,
+  "nets_with_zero": 3
+ },
+ "pin_map": {
+  "missing_nodes": 16,
+  "samples": [
+   {
+    "net": "GND",
+    "ref": "J1",
+    "pin": "GND",
+    "ball": "2"
+   },
+   {
+    "net": "KEY_D_P",
+    "ref": "J1",
+    "pin": "D_P",
+    "ball": "3"
+   },
+   {
+    "net": "KEY_D_N",
+    "ref": "J1",
+    "pin": "D_N",
+    "ball": "4"
+   },
+   {
+    "net": "PCIE_TX0_P",
+    "ref": "J1",
+    "pin": "TX_P",
+    "ball": "5"
+   },
+   {
+    "net": "PCIE_TX0_N",
+    "ref": "J1",
+    "pin": "TX_N",
+    "ball": "6"
+   },
+   {
+    "net": "PCIE_RX0_P",
+    "ref": "J1",
+    "pin": "RX_P",
+    "ball": "7"
+   },
+   {
+    "net": "PCIE_RX0_N",
+    "ref": "J1",
+    "pin": "RX_N",
+    "ball": "8"
+   },
+   {
+    "net": "PCIE_TX1_P",
+    "ref": "J1",
+    "pin": "TX2_P",
+    "ball": "13"
+   },
+   {
+    "net": "PCIE_TX1_N",
+    "ref": "J1",
+    "pin": "TX2_N",
+    "ball": "14"
+   },
+   {
+    "net": "PCIE_RX1_P",
+    "ref": "J1",
+    "pin": "RX2_P",
+    "ball": "15"
+   }
+  ]
+ },
+ "sch_refdes": [
+  "C73",
+  "C85",
+  "C86",
+  "C87",
+  "C88",
+  "C89",
+  "C90",
+  "C91",
+  "C92",
+  "D1",
+  "E1",
+  "J1",
+  "J10",
+  "J13",
+  "J14",
+  "J6",
+  "J9",
+  "R1",
+  "R16",
+  "R21",
+  "R28",
+  "R29",
+  "R3",
+  "R30",
+  "R31",
+  "R32",
+  "R35",
+  "R36",
+  "R37",
+  "U1",
+  "U10",
+  "U11",
+  "U12",
+  "U5",
+  "U6",
+  "U8",
+  "U9"
+ ],
+ "gerber_planes": null,
+ "verdict_keys_found": [],
+ "_note": "测量件：不含 verdict 字段（C4）"
+}
