@@ -1,0 +1,185 @@
+{
+ "artifact": "k2_t2f6_ti_lane_tier2_verification",
+ "schema": 1,
+ "ts": "2026-09-21T09:20:00+0800",
+ "id": "TI 新通道（`www.ti.com`）· 厂商正本补证：文献号核对 + 引脚表逐脚核对",
+ "authorization": "handoff §7-B『只读造活（T2-F6 按需 · P5 可判性）』· #K2-53 §二 T2-F6 ④（新通道才试）· owner #14⑥（不停等）",
+ "new_lane": {
+  "host": "https://www.ti.com/",
+  "pattern": "https://www.ti.com/lit/ds/symlink/<part>.pdf → **200 application/pdf**",
+  "registered": "CR-23（上一笔）；本笔为其**批量利用**"
+ },
+ "method": "只读：curl 取正本 → `pdfinfo` 取 Title/Keywords（文献号）→ `pdftotext -layout` 取 §5/§4 之 Pin Functions 表 → 与 `k2/_shared/eda_core/sch_gate/datasheets/*.yaml` 逐脚比对。**外部厂商 PDF 仅落 `/tmp/opencode/ti`（未入库）**。",
+ "doc_number_audit": {
+  "sources": [
+   {
+    "device": "TLV61046A",
+    "ti_doc_actual": "SLVSD82B",
+    "sha16": "a3749e059bbbe29a",
+    "bytes": 1922673,
+    "url": "https://www.ti.com/lit/ds/symlink/tlv61046a.pdf"
+   },
+   {
+    "device": "DS160PR810",
+    "ti_doc_actual": "SNLS658",
+    "sha16": "50528cacd8b3e367",
+    "bytes": 2083907,
+    "url": "https://www.ti.com/lit/ds/symlink/ds160pr810.pdf"
+   },
+   {
+    "device": "DS320PR1601",
+    "ti_doc_actual": "SNLS683",
+    "sha16": "f61599c4356edb39",
+    "bytes": 2225981,
+    "url": "https://www.ti.com/lit/ds/symlink/ds320pr1601.pdf"
+   },
+   {
+    "device": "TPD2E001",
+    "ti_doc_actual": "SLLS684I",
+    "sha16": "b648c5d12f3e5b48",
+    "bytes": 1799962,
+    "url": "https://www.ti.com/lit/ds/symlink/tpd2e001.pdf"
+   },
+   {
+    "device": "TPD6E05U06",
+    "ti_doc_actual": "SLVSBO7O",
+    "sha16": "c167cf1e72a5473a",
+    "bytes": 2801466,
+    "url": "https://www.ti.com/lit/ds/symlink/tpd6e05u06.pdf"
+   },
+   {
+    "device": "TPS22919",
+    "ti_doc_actual": "SLVSEN5B",
+    "sha16": "743c59b01fb0891d",
+    "bytes": 1454791,
+    "url": "https://www.ti.com/lit/ds/symlink/tps22919.pdf"
+   },
+   {
+    "device": "TPS22965",
+    "ti_doc_actual": "SLVSBJ0F",
+    "sha16": "3300eef743d7871f",
+    "bytes": 1799236,
+    "url": "https://www.ti.com/lit/ds/symlink/tps22965.pdf"
+   },
+   {
+    "device": "TPS22990",
+    "ti_doc_actual": "SLVSDK1C",
+    "sha16": "ea198776524544eb",
+    "bytes": 4760542,
+    "url": "https://www.ti.com/lit/ds/symlink/tps22990.pdf"
+   },
+   {
+    "device": "TS3USB221A",
+    "ti_doc_actual": "SCDS277C",
+    "sha16": "cccebf8c10df6051",
+    "bytes": 1462357,
+    "url": "https://www.ti.com/lit/ds/symlink/ts3usb221a.pdf"
+   }
+  ],
+  "exact_match": [
+   "TPD2E001 = SLLS684I",
+   "TPD6E05U06 = **SLVSBO7O**",
+   "TPS22919 = SLVSEN5B",
+   "TPS22965 = SLVSBJ0F",
+   "TPS22990 = SLVSDK1C",
+   "TS3USB221A = **SCDS277C**"
+  ],
+  "findings": [
+   {
+    "id": "TI-CIT-1",
+    "device": "DS320PR1601",
+    "repo_cites": "TI **ZDG0354A** — §5 Table 5-1",
+    "actual": "正本页眉 = **SNLS683 – JUNE 2023**；`ZDG0354A` 实为**封装图号**（正本 mechanical drawing 页标题 'ZDG0354A NFBGA - 1.4 mm max height'）",
+    "level": "**引证错位**（§5 Table 5-1 之内容引用正确，文献号错用封装图号）",
+    "disposition": "**登记待批**（`_shared` 件 ⇒ 同 T2-F1/T2-F7 族，禁 ENG 擅改）"
+   },
+   {
+    "id": "TI-CIT-2",
+    "device": "DS160PR810",
+    "repo_cites": "TI SNLS658 **Rev B**",
+    "actual": "正本页眉 = `SNLS658 – DECEMBER 2020`（全文 32 处 `SNLS658`，**无 `SNLS658B`**）⇒ 本次下载版 = 初版",
+    "level": "rev 标注存疑",
+    "disposition": "**登记待批**（若 repo 参考他版需补证；本次未取到 B 版）"
+   },
+   {
+    "id": "TI-CIT-3",
+    "device": "DCDC_12V_3V3 / DCDC_12V_5V (TLV61046A)",
+    "repo_cites": "TI **SLVSD82**",
+    "actual": "**SLVSD82B**（APRIL 2017 – REVISED FEBRUARY 2021）",
+    "level": "缺 rev 后缀（轻微）",
+    "disposition": "**登记**（引证补 `B`）"
+   }
+  ],
+  "t2f1_confirmed": "**T2-F1 之两处订正已由厂商正本独立确认**：`TPD6E05U06` 应为 **SLVSBO7O** ✓ · `TS3USB221A` 应为 **SCDS277C** ✓ ⇒ 该待批项**获得外部锚**"
+ },
+ "pin_table_crosscheck": {
+  "verified": [
+   {
+    "device": "DCDC_12V_3V3 · DCDC_12V_5V",
+    "doc": "TLV61046A SLVSD82B Table 5-1",
+    "pins": "**6/6**",
+    "map": "1 SW · 2 GND · 3 FB · 4 EN · 5 VOUT · 6 VIN",
+    "verdict": "一致"
+   },
+   {
+    "device": "TPD2E001",
+    "doc": "SLLS684I §5 Pin Functions",
+    "pins": "**6/6**",
+    "map": "DRY(6-USON): 1 VCC · 2 N.C. · 3 IO1 · 4 GND · 5 N.C. · 6 IO2（+ EP=GND, DRS）",
+    "verdict": "一致（且 repo 之 DRL/DZD 变体登记与正本相符：DRL 1 VCC/3 IO/4 GND/5 IO2 · DZD 1 GND/4 VCC）"
+   },
+   {
+    "device": "TPS22919",
+    "doc": "SLVSEN5B §5 Pin Functions",
+    "pins": "**6/6**",
+    "map": "1 IN · 2 GND · 3 ON · 4 NC · 5 QOD · 6 VOUT",
+    "verdict": "一致"
+   },
+   {
+    "device": "TPS22965",
+    "doc": "SLVSBJ0F §5 Pin Functions",
+    "pins": "**8/8 + 热焊盘**",
+    "map": "1,2 VIN · 3 ON · 4 VBIAS · 5 GND · 6 CT · 7,8 VOUT · Thermal Pad = GND",
+    "verdict": "一致（含『VIN 必须同时接 1 与 2』与热焊盘接 GND 之注记）"
+   },
+   {
+    "device": "TS3USB221A",
+    "doc": "SCDS277C Table 4-1",
+    "pins": "**10/10**",
+    "map": "1 1D+ · 2 1D− · 3 2D+ · 4 2D− · 5 GND · 6 OE · 7 D− · 8 D+ · 9 S · 10 VCC",
+    "verdict": "一致"
+   },
+   {
+    "device": "TPD6E05U06",
+    "doc": "SLVSBO7O Table 4-3（RVZ 14-USON）",
+    "pins": "**14/14**",
+    "map": "14 D1+ · 13 D1− · 12 D2+ · 11 D2− · 9 D3+ · 8 D3− · 5,10 GND · 1,2,3,4,6,7 NC",
+    "verdict": "一致"
+   },
+   {
+    "device": "DS160PR810",
+    "doc": "SNLS658 §5 Pin Functions",
+    "pins": "**64/64**",
+    "map": "含 VCC=6/18/38/50 · VREG1=3/47 · VREG2=15/35 · GND=EP,9,12,21,24,32,41,44,53,56,64 · MODE=61 · EQ0_0/ADDR0=59 · EQ1_0/ADDR1=60 · GAIN0/SDA=63 等",
+    "verdict": "一致（50 脚机匹配 + 14 脚（GND 组/PD0/PD1/READ_EN_N/GAIN0_SDA）逐行目证）"
+   }
+  ],
+  "totals": "**7 器件族 · 114 脚逐脚核对 · 0 冲突**",
+  "not_done": "**DS320PR1601（354 ball）未逐脚核对**（大表 ⇒ 列为下一步；本轮已核 §6.4 热参 + §6.5 PACT 与件内一致）"
+ },
+ "impact": {
+  "tier2": "**17/33 读数不变**（本件为**真源勘验**，不改计数口径）；但 7 件零件真源获**厂商正本独立锚**（其中 2 件为 T2-F1 待批订正确认）",
+  "t2f1": "**可结**：订正有外部锚（仍待监理批 `_shared` 改字）",
+  "new_defects": "3 项引证问题（TI-CIT-1/2/3）⇒ 登记待批（禁 ENG 擅改 `_shared`）"
+ },
+ "red_lines": [
+  "未改 `_shared/eda_core/**`（引证问题仅登记 · 同 T2-F1 族待批）",
+  "未改冻结四源/criteria/交付包/受审板",
+  "外部厂商 PDF 仅落 `/tmp/opencode`（未入库）",
+  "未新增判据维/检查齿",
+  "未派 WORKER"
+ ],
+ "readonly_repo": true,
+ "not_landed": true,
+ "next": "① DS320PR1601 354-ball 逐脚（可先做**网表用到的 ball 子集**）；② TI-CIT-1/2/3 待监理批后落 `_shared` 引证订正；③ 余 ST/SpacemiT/连接器族仍按新通道才试。"
+}
