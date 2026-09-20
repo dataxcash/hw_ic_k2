@@ -1,0 +1,126 @@
+{
+ "artifact": "k2_delivery_readiness_and_stage_gate_closure_audit",
+ "schema": 1,
+ "purpose": "监理自动续推（按已批准《K2 整体整改计划》· 阶段门 fail-closed）⇒ 对**当前阶段 P6** 的交付要件做只读核对：① owner #14③ 完工定义十项 ② 交付锚完整性（MANIFEST 逐文件 sha256 + tarball 等价性） ③ 阶段门总态。**不新增判据维、不动真源/判据/生成器**。",
+ "gate_discipline": {
+  "current_stage": "P6（跨板复用与学习环）",
+  "fail_closed_check": "P1 已全过⇒P2 可开（#K2-15 关门）· P2 已归零⇒P3 可开（#K2-18）· P3 图纸已核⇒P4 可开（#K2-28）· P4 已全绿⇒P5 有输入（#K2-36）；未发现越阶段"
+ },
+ "delivery_completeness_owner_clause_3": {
+  "clause": "8 铜层 + 阻焊/丝印/边框/job + Excellon 钻孔含 HDI 盲埋孔 + 叠层图 + 阻抗表 + MANIFEST",
+  "items": [
+   {
+    "n": 1,
+    "req": "8 铜层 Gerber",
+    "evidence": "01_gerber_rs274x/ 共 14 件 = 8 Cu(F,In1..In6,B) + 2 Mask + 2 Silkscreen + Edge_Cuts + gbrjob",
+    "verdict": "OK"
+   },
+   {
+    "n": 2,
+    "req": "阻焊",
+    "evidence": "F_Mask.gbr · B_Mask.gbr",
+    "verdict": "OK"
+   },
+   {
+    "n": 3,
+    "req": "丝印",
+    "evidence": "F_Silkscreen.gbr · B_Silkscreen.gbr",
+    "verdict": "OK"
+   },
+   {
+    "n": 4,
+    "req": "边框",
+    "evidence": "Edge_Cuts.gbr",
+    "verdict": "OK"
+   },
+   {
+    "n": 5,
+    "req": "job",
+    "evidence": "k2_v4_8L.l7-job.gbrjob",
+    "verdict": "OK"
+   },
+   {
+    "n": 6,
+    "req": "Excellon 钻孔**含 HDI 盲埋孔**",
+    "evidence": {
+     "via_census": "板上 729 个 via 块 · 非通孔 448（61.5%）：F→In1 168 · F→In2 128 · F→In4 4 · F→In5 19 · In2→In5 92 · In5→B 37 · F→B(通孔) 281",
+     "drill_files": [
+      "k2_v4_8L.l7-back-in5.drl",
+      "k2_v4_8L.l7-front-in1.drl",
+      "k2_v4_8L.l7-front-in2.drl",
+      "k2_v4_8L.l7-front-in4.drl",
+      "k2_v4_8L.l7-front-in5.drl",
+      "k2_v4_8L.l7-in2-in5.drl",
+      "k2_v4_8L.l7.drl"
+     ],
+     "holes_per_drill_file": {
+      "k2_v4_8L.l7-back-in5.drl": 37,
+      "k2_v4_8L.l7-front-in1.drl": 168,
+      "k2_v4_8L.l7-front-in2.drl": 128,
+      "k2_v4_8L.l7-front-in4.drl": 4,
+      "k2_v4_8L.l7-front-in5.drl": 19,
+      "k2_v4_8L.l7-in2-in5.drl": 92,
+      "k2_v4_8L.l7.drl": 301
+     },
+     "drill_report": "主文件 K2_V4_8L.l7.drl：T1 0.200mm×281（通孔 via）+ T2 0.800mm×16（PTH 焊盘）= 297；另 6 个层对文件 = 盲/埋孔专档",
+     "xcheck": "07_verify/drill_board_xcheck.json（在包内）"
+    },
+    "verdict": "OK"
+   },
+   {
+    "n": 7,
+    "req": "叠层图",
+    "evidence": "03_stackup/HDI_stage_diagram.svg（内嵌 as-built 448/729 + 7 层对 + 板 sha）· 03_stackup/JLC08161H_stackup.svg",
+    "verdict": "OK"
+   },
+   {
+    "n": 8,
+    "req": "阻抗表",
+    "evidence": "04_impedance/impedance_table.md + .json（目标 85Ω±10% ⇒ 76.5–93.5Ω；M1/M2 双模型；l7 as-built 耦合主 run 复验；F.Cu 最紧 0.2825mm 具名披露 ⇒ ΔZ≈−0.84% 仍落窗）",
+    "verdict": "OK"
+   },
+   {
+    "n": 9,
+    "req": "MANIFEST（逐文件 sha256）",
+    "evidence": "MANIFEST.json 列 53 件（含逐件 sha256+bytes）",
+    "verdict": "OK"
+   },
+   {
+    "n": 10,
+    "req": "DFM 逐项对 JLC HDI 通道全 PASS",
+    "evidence": "06_rulings/jlc_dfm_hdi_l7.json：n_items 17 ⇒ **16 PASS / 1 ACCEPT / 0 FAIL**（1 ACCEPT = 阻焊坝 9 处 <0.09mm，已实证回退修法 pad_to_mask_clearance 0.05→0.02 ⇒ 缺口 9→0，属改板级、不阻 Gerber 可制造性）",
+    "verdict": "OK"
+   }
+  ],
+  "reading": "**十项齐备（10/10）** 且与本板 as-built（board_sha16 c5a7df90aadb66e0）对齐。"
+ },
+ "anchor_integrity": {
+  "manifest_sha16": "6ee7495de61f749f",
+  "manifest_expected": "6ee7495de61f749f",
+  "tarball_sha16": "0e88e107e2da8192",
+  "tarball_expected": "0e88e107e2da8192",
+  "per_file_check": "53/53 件 sha256 与 bytes **全部相等**；无缺失件、无 MANIFEST 外多余件",
+  "tarball_equivalence": "tarball 解出 54 件（53 + MANIFEST.json）与 jlc_package/ **逐字节同**（only_in_tarball=∅ · only_in_package=∅ · content_differs=∅）",
+  "board_alignment": "MANIFEST.board_sha16 = 盘上 k2/hw/k2_v4_8L.l7.kicad_pcb sha16 = c5a7df90aadb66e0",
+  "verdict": "**锚完整且自洽**（未重建包；冻结锚未移动）"
+ },
+ "stage_gate_status": {
+  "P0": "HOLDS（冻结四源逐字节同）",
+  "P1": "HOLDS（四项判据 live 复现 + rev=3 在岗）",
+  "P2": "HOLDS（#K2-15 关门；l7 三等式差 0）",
+  "P3": "HOLDS（120×46 · NPTH 4×Ø3.2 · 出框 0）",
+  "P4": "HOLDS（canonical 19 = 19 OK/0 FAIL · verdict 190b73be0f728a56）",
+  "P5": "PENDING_EXTERNAL（V4–V7 NOT_RUN · 外部实测方）",
+  "P6": "**判据面 PASS**（① k2_p6_1_acceptance_v1.py ⇒ PASS rc=0，四项同源命中 + dim_set19 + manifest_countersigned OK；② k2_p6_2_acceptance_v1.py ⇒ 结构差异 0 ⇒ PASS(state)）",
+  "conclusion": "按计划 §②，**P0–P4 与 P6 的阶段门判据均已达成**；唯一未闭阶段门 = **P5（外部实测，ENG 不得自证）**。⇒ ENG 侧整改程序在**判据面已闭合**，交付包按 owner #14③ 十项齐备。"
+ },
+ "open_items_not_stage_gates": [
+  "批 6（K1 同源模型覆盖增强：v4 落件候选 → K1 段解 1/8→2/8）**非阶段门要件**，处 **release-gated**（待监理放行；本会话未落件）。",
+  "R-8 换层模板分支（5 形态零增益 · 根因已定位）三选一待监理定。",
+  "P5 外部首件 V4–V7 回件（外部输入）。"
+ ],
+ "no_new_criteria_dim": true,
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-21T23:59:50+0800"
+}
