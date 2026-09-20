@@ -1,0 +1,16 @@
+--- a/k2/_shared/eda_core/tests/test_topology_gate.py
++++ b/k2/_shared/eda_core/tests/test_topology_gate.py
+@@ -21,8 +21,11 @@
+ 
+ # ── K2 真实工件路径（仅 t5 skipif 保护下读取）──────────────────────────
+ K2_BOARD = Path("/tmp/opencode/boards/k2_v5.kicad_pcb")
+-K2_SPEC = Path("/home/fila/jqdDev_2025/ic_hw/strix-halo-ioconvert"
+-               "/revA/pcb/pm_gate/artifacts/L3/SPEC_k2_v4.json")
++# W6-A 同款：SPEC 绝对锚 —— 原式为**拆分前** ioconvert 子树路径，容器无
++# `strix-halo-ioconvert/` ⇒ 该锚恒不存在 ⇒ t5 的 skipif 三元组恒假
++#（即便补齐 /tmp 的 k2_v5 板与 required_links，该用例仍恒 skip）。
++# 与 test_routing_topology_gate.py K2_SPEC 同口径（容器绝对锚）。
++K2_SPEC = Path("/home/fila/jqdDev_2025/ic_hw/k2/pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json")
+ K2_LINKS = Path("/tmp/opencode/topo_propose_k2/required_links_k2.json")
+ 
+ 

@@ -49,7 +49,12 @@
     "note": "⇒ B 类**不是纯外部 fixture 缺件**：其中 1/3 缺件是**可零成本修复的路径缺陷**。故 F1/F2 二分之外新增第三选项 **F0 = 仅修路径锚**（不动 fixture 身份、不新增覆盖期待）：修后 t5 仍 skip（板仍缺），但『路径缺陷』与『外部 fixture 缺件』**分离登记**，避免日后补 fixture 时再度空跑。"
    }
   },
-  "eng_recommendation": "请监理在裁 ⑤（SKIP 处置）前**采信本更正**：B 类 reason 应改记为 『外部 fixture 缺件（板/links）+ 1 处路径锚失效』，并允许 F0（路径锚修正）作为与 F1/F2 并列的**最小动作**。F0 属测试锚类 ⇒ 按 C-6 应并入批 3（与项 ① 同族），**但 ENG 不擅自并入项 ① 的范围**（项 ① 授权不受本件影响，可独立放行）。"
+  "eng_recommendation": "请监理在裁 ⑤（SKIP 处置）前**采信本更正**：B 类 reason 应改记为 『外部 fixture 缺件（板/links）+ 1 处路径锚失效』，并允许 F0（路径锚修正）作为与 F1/F2 并列的**最小动作**。F0 属测试锚类 ⇒ 按 C-6 应并入批 3（与项 ① 同族），**但 ENG 不擅自并入项 ① 的范围**（项 ① 授权不受本件影响，可独立放行）。",
+  "prepared_followup": {
+   "artifact": "P6_OPEN_READINESS/anchors/F0_K2_SPEC_ABSOLUTE_PREPARED_v1.json（53cb1f2a717da2f1）",
+   "diff": "P6_OPEN_READINESS/anchors/K2_SPEC_ABSOLUTE.diff（5ed11bb1f45fe376）",
+   "state": "已备到一条命令级 + 双树 dry-run rc=0 + scratch 实落 byte-identical + 锚解析为存在；**未落件**"
+  }
  },
  "B_cross_layout_root_coupling_measured": {
   "claim": "共享层测试对『根』的解析在两种检出布局下不同；部分用例只有在**框架根/容器根**（存在根级 `eda_core` 符号链接）下才成立。",

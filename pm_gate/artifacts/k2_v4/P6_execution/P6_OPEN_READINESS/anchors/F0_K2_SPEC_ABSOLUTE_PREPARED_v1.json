@@ -1,0 +1,41 @@
+{
+ "artifact": "k2_f0_k2_spec_absolute_prepared",
+ "schema": 1,
+ "item": "⑫-F0（本会话新提）：仅修 `tests/test_topology_gate.py` 的 SPEC 路径锚 = 拆分前失效路径 → 容器绝对锚",
+ "authority": "备料件（**未落件**）；是否并入批 3 由监理裁（见 BATCH3_PRE_SPLIT_PATH_DEFECT_CENSUS_v1.json §requests_to_supervision）。",
+ "why": "原锚 `/home/fila/.../strix-halo-ioconvert/revA/pcb/pm_gate/artifacts/L3/SPEC_k2_v4.json` 恒不存在 ⇒ t5 的 skipif 三元组 (板, SPEC, required_links) **恒假** ⇒ 该用例**永不可解锁**。修后 skipif 退化为『仅缺外部 fixture（板 + links）』⇒ 与 B 类其余部分口径一致，日后补 fixture 时不会再度空跑。**不新增覆盖期待、不新增检查齿**（owner #14②）。",
+ "patch": {
+  "diff": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/anchors/K2_SPEC_ABSOLUTE.diff",
+  "diff_sha16": "5ed11bb1f45fe376",
+  "target_rel": "eda_core/tests/test_topology_gate.py（**两处检出同内容同 sha**：容器 `_shared` 与 `k2/_shared`）",
+  "target_sha16_before": "91b2cabc1246ff3b",
+  "target_sha16_after": "c74a4d20f936e73c",
+  "one_command": [
+   "cd /home/fila/jqdDev_2025/ic_hw/k2/_shared && patch --posix --batch -p3 -i <abs>/K2_SPEC_ABSOLUTE.diff",
+   "cd /home/fila/jqdDev_2025/ic_hw/_shared    && patch --posix --batch -p3 -i <abs>/K2_SPEC_ABSOLUTE.diff"
+  ],
+  "rollback": "两处 `git -C <tree> checkout -- eda_core/tests/test_topology_gate.py`"
+ },
+ "verification": {
+  "dry_run_both_trees": {
+   "k2/_shared": "rc=0",
+   "_shared": "rc=0",
+   "post_dry_run_sha16": "91b2cabc1246ff3b（未变 ⇒ dry-run 未写盘）"
+  },
+  "scratch_real_apply": {
+   "rc": 0,
+   "byte_identical_to_prepared_after": true,
+   "resolved_spec_exists": true,
+   "board_still_missing": true,
+   "links_still_missing": true
+  },
+  "expected_effect_on_suite": "**零变化**（0 PASS→FAIL，0 skip→pass）：t5 仍因板 + links 缺失而 skip；本件只消除『路径缺陷』这一独立成因。⇒ 落件后 canonical 19 与 `--expect-patched` 读数**应逐字节同**（此即验收断言）。"
+ },
+ "not_claimed": [
+  "本件**不**要求恢复 v5 板或 required_links",
+  "本件**不**改变 t5 的期望值/判据",
+  "本件**不**并入项 ① 的授权范围（项 ① 可独立放行）"
+ ],
+ "readonly_repo": true,
+ "not_landed": true
+}
