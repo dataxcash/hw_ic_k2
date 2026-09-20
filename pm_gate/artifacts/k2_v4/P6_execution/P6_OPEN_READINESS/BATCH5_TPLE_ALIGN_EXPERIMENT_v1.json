@@ -1,0 +1,18 @@
+{
+ "artifact": "k2_batch5_tpl_endpoint_align_experiment",
+ "schema": 1,
+ "purpose": "验证『端点对齐（先沿焊盘行出排，再折向轨道 y）』是否足以打通 K1 逃逸；界定剩余工作形态。",
+ "hypothesis_tested": "K2 实板（J2 REFCLK y=45.9/51.30 而非 band 45.7/50.5）显示端点须沿目标焊盘轴线出排 ⇒ 给 `_tpl_a_line` 增 3 段候选 `[pad,(pad_x+d·dx,pad_y),(vx,track),(corr_x,track)]`（dx 取 0.5/1.0/1.5/2.0 + 0.0–min(|ady|,3.0) 0.1 步进）。",
+ "result": {
+  "reading": "K1 `--all-v4` = **1/8 段**（与仅 ①② 时**同**）⇒ **⑤ 不改变读数**；产出解零长段 0。",
+  "instrumented": "全链仅 **1** 次 ⑤ 候选被接受：`PCIE_RX1_P`(right) pad=(38.3125,22.0) track=16.0 corr_x=38.3125 d=-1 **dx=1.0 vx=37.312**。其余失败链的 ⑤ 候选**全部 `seg_ok` 失败**（连沿焊盘行出排都不成立）⇒ 阻塞面**宽于**焊盘行出排。"
+ },
+ "conclusion": {
+  "not_sufficient": "端点对齐（⑤）**不足以**打通 K1：多数链连『沿焊盘行出排 + 折向轨道』都无净空 ⇒ 与前述『真几何阻塞（单网 VG=False）3 链』一致 —— **单网在整层场内无任何路径**，非模板形态问题。",
+  "remaining_work_split": "K1 收口剩余工作**必须成对设计**，不可拆成独立补丁：\n  (a) **对级耦合逃逸**：P/N 须分配到**不同出排列**并联合求解（本轮已证单向『N 避 P』可打通 2/3 链）；单独放宽模板会致 P/N 落同列下潜（间距 0）。\n  (b) **真阻塞链的几何/层策略**：`OCuLink_TX0_P|right` · `OCuLink_TX1_P|left` · `OCuLink_RX0_P|right` 单网无路 ⇒ 须过孔落位 + 内层绕行（引擎内层策略），非模板改动。\n  (c) **走廊/band 重分配**：`PCIE_RX1_P` 迁出 J1 GND 焊盘行（F.Cu y=16.0，须保持差分紧耦合）⇒ band 级重分配（`alloc.track_y` 是**索引载体**，改的是索引/`tracks_y`）。"
+ },
+ "landing_shape_recommendation": "建议**批 5 = ①②④T**（本件已就绪，形态小、可证回退）先行落件；(a)(b)(c) 归 **批 6（L2 逃逸策略批）**并**同批设计**（对级耦合 + 出排列分配 + 过孔/内层策略 + band 重分配），避免零散补丁（C-6）。",
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-20T21:40:00+0800"
+}
