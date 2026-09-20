@@ -1,0 +1,163 @@
+{
+ "artifact": "k2_l8_deliverable_conformance_to_owner_definition",
+ "schema": 1,
+ "ts": "2026-09-21T00:54:28+0800",
+ "authority": "owner 常设裁定 #14 ③（完工定义 = 交出**可制造 Gerber 套装**；做不到须给不可行证明 · 禁『可能/取决于/待定』）",
+ "subject": {
+  "package": "L6/jlc_package_l8",
+  "manifest_sha16": "4b610baed4f4752c",
+  "tarball_sha16": "36a6b276b4f7e465",
+  "board_sha16": "7a5c89913d6e5d0a",
+  "revision": "P5-L8.1",
+  "criteria_anchor": "rev=6"
+ },
+ "method": "**只读**枚举包内实际件（`ls`）+ 读包内**自证**件（`07_verify/drill_census.json` · `drill_board_xcheck.json` · `jlc_dfm_hdi_l8.json`）；**未改动包内任何件**（包锚 `4b610bad`/`36a6b276` 复算未变）。",
+ "requirements": [
+  {
+   "#": 1,
+   "owner_③": "8 铜层",
+   "found": "8 个铜层 Gerber",
+   "files": [
+    "k2_v4_8L.l8-B_Cu.gbr",
+    "k2_v4_8L.l8-F_Cu.gbr",
+    "k2_v4_8L.l8-In1_Cu.gbr",
+    "k2_v4_8L.l8-In2_Cu.gbr",
+    "k2_v4_8L.l8-In3_Cu.gbr",
+    "k2_v4_8L.l8-In4_Cu.gbr",
+    "k2_v4_8L.l8-In5_Cu.gbr",
+    "k2_v4_8L.l8-In6_Cu.gbr"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "#": 2,
+   "owner_③": "阻焊",
+   "found": "F/B Mask 2 件",
+   "files": [
+    "k2_v4_8L.l8-B_Mask.gbr",
+    "k2_v4_8L.l8-F_Mask.gbr"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "#": 3,
+   "owner_③": "丝印",
+   "found": "F/B Silkscreen 2 件",
+   "files": [
+    "k2_v4_8L.l8-B_Silkscreen.gbr",
+    "k2_v4_8L.l8-F_Silkscreen.gbr"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "#": 4,
+   "owner_③": "边框",
+   "found": "Edge_Cuts 1 件",
+   "files": [
+    "k2_v4_8L.l8-Edge_Cuts.gbr"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "#": 5,
+   "owner_③": "job",
+   "found": "`.gbrjob` 1 件",
+   "files": [
+    "k2_v4_8L.l8-job.gbrjob"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "#": 6,
+   "owner_③": "Excellon 钻孔含 **HDI 盲埋孔**",
+   "found": "7 个 Excellon 钻孔文件（6 组**盲/埋孔对** + 1 通孔）· 总 754 孔 · board↔drl **全对**（`all_match=true`）",
+   "files": [
+    "k2_v4_8L.l8-back-in5.drl",
+    "k2_v4_8L.l8-front-in1.drl",
+    "k2_v4_8L.l8-front-in2.drl",
+    "k2_v4_8L.l8-front-in4.drl",
+    "k2_v4_8L.l8-front-in5.drl",
+    "k2_v4_8L.l8-in2-in5.drl",
+    "k2_v4_8L.l8.drl"
+   ],
+   "verdict": "PASS",
+   "detail": {
+    "blind": [
+     "front-in1 171",
+     "front-in2 132",
+     "front-in4 4",
+     "front-in5 19",
+     "back-in5 37"
+    ],
+    "buried": [
+     "in2-in5 92"
+    ],
+    "through": 299,
+    "sum_check": "171+132+4+19+37+92+299 = 754 = board_total = drl_total",
+    "board_breakdown": {
+     "vias": 734,
+     "pth": 16,
+     "npth": 4
+    },
+    "pairs": [
+     "PAIR|back|in5",
+     "PAIR|front|in1",
+     "PAIR|front|in2",
+     "PAIR|front|in4",
+     "PAIR|front|in5",
+     "PAIR|in2|in5",
+     "THROUGH"
+    ],
+    "hdi_stage_note": "owner ① 工艺冻结 A = JLC HDI 盲埋孔（阶数≥2）：本板含 **外-内1 盲孔**（F.Cu→In1）与 **内2-内5 埋孔** ⇒ 阶数 ≥2 成立"
+   }
+  },
+  {
+   "#": 7,
+   "owner_③": "叠层图",
+   "found": "2 件（HDI 阶图 + JLC08161H 叠层）",
+   "files": [
+    "HDI_stage_diagram.svg",
+    "JLC08161H_stackup.svg"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "#": 8,
+   "owner_③": "阻抗表",
+   "found": "2 件（JSON + MD；3 条耦合 run）",
+   "files": [
+    "impedance_table.json",
+    "impedance_table.md"
+   ],
+   "verdict": "PASS",
+   "detail": {
+    "runs": "F.Cu|0.205（microstrip 85Ω）· In2.Cu|0.16（symmetric stripline 85Ω）· In5.Cu|0.16（symmetric stripline 85Ω）"
+   }
+  },
+  {
+   "#": 9,
+   "owner_③": "MANIFEST",
+   "found": "`MANIFEST.json`（+ `DISCLOSURE.md` · `ORDER_NOTES.md` · `05_layer_sequence.txt`）",
+   "verdict": "PASS"
+  }
+ ],
+ "summary": {
+  "n_required": 9,
+  "n_met": 9,
+  "n_missing": 0,
+  "verdict": "**完工定义（owner ③）逐项满足**"
+ },
+ "dfm": {
+  "source": "06_rulings/jlc_dfm_hdi_l8.json",
+  "n_pass": 16,
+  "n_accept": 1,
+  "n_fail": 0,
+  "accept_note": "唯一 ACCEPT = 阻焊桥/阻焊-铜净距（`solder_mask_bridge=9`），**承自 l7 既有已裁项且有证明**（`07_verify/mask_accept_fix_proof.json`）⇒ 非新引入"
+ },
+ "red_lines_ok": [
+  "只读：未改包内任何件（锚 4b610bad/36a6b276 复算未变）",
+  "未改板/SPEC/网表/判据/冻结四源",
+  "未新增判据维/检查齿"
+ ],
+ "status": "**交付面完备**；ENG 侧仍受 `STOP-1` 约束（l8 经监理复核前不下首件单）—— 复核请求见 `PENDING_RULINGS_DELTA_20260921_v24.json`。"
+}
