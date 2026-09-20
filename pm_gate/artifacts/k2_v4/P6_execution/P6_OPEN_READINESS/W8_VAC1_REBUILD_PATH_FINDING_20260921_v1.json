@@ -1,0 +1,31 @@
+{
+ "artifact": "w8_vac1_rebuild_path_finding",
+ "schema": 1,
+ "ts": "2026-09-20T23:20:00+0800",
+ "id": "W8-GEN-1",
+ "authorization": "**#K2-51 §二 W8-VAC-1 修法**（放行 SPEC+重建路径）· 只读试探（未改任何件）",
+ "finding": "**建板器 `k1/tools/k1_board_builder.py` 丢弃 footprint 的库昵称**：真源 `k1_board.yaml#devices[ref].footprint` **已带前缀**（如 `ForgeOS:MCU_STM32G0_QFN32` · `Connector_USB:USB_C_Receptacle_Amphenol_12401548E4-2A`），但重出 PCB 的 `(footprint \"...\")` 为**裸名** ⇒ 重建**不能**产生 `LIB:NAME` ⇒ **W8-VAC-1『SPEC 修订 + 重建』路径单独走不通，须同时改建板器（生成器）**。",
+ "evidence": {
+  "rebuilt_cmd": "AppDir/sharun python3.11 k1/tools/k1_board_builder.py --out /tmp/opencode/k1rebuild/k1_v1.kicad_pcb（沙箱，未覆写仓库）",
+  "rebuilt_stdout": "OK ... devices=42 nets=51 pad_assignments=207 provisional=[]",
+  "rebuilt_prefixes": "**全部裸名**（`MCU_STM32G0_QFN32` · `R_0402_1005Metric` · `USB_C_Receptacle_...` …）—— 无 `ForgeOS:` / `Connector_USB:` 前缀",
+  "diff_vs_current": "**仅 28 行**（全为 U1 侧 net 名重排：SWCLK_BOOT0/KEY_DET_EN/TPS_EN/GND/I2C1_SCL/I2C1_SDA/SBU_SEL）⇒ 重建**几何等价、低风险**"
+ },
+ "second_finding": {
+  "id": "K1-U1-BOARD-SYNC 可由此重建闭合",
+  "text": "重建产物**已按订正后 pinmap** 分配 U1 焊盘网（`SWCLK_BOOT0` 等落位随真源）⇒ 落该重建即可闭合 3/6 发现的 sch↔板 2 处不齐。",
+  "caution": "但落板会改板 sha ⇒ **必须同批**重出 `pads_within_outline`/`density_and_clearance`/`min_clearance` 与 `w8` 证据（否则 fail-closed『证据陈旧』），且提交须含 `artifacts/L3/*` 记录（PCB↔SPEC 门禁）。"
+ },
+ "blocker": {
+  "class": "**红线：未获批不得改生成器**",
+  "ask": "请求放行 **① `k1_board_builder.py` 输出 `(footprint \"<LIB>:<NAME>\")`**（昵称取真源 `k1_board.yaml#devices[ref].footprint`，缺失则按可解析库定位）**② 同批落板 + 重出测量证据 + L3 建板记录**。",
+  "note": "#K2-51 §二 假设『SPEC_k1.json#components footprint 字段』可承载，实测该件 `components` 仅含 `refdes_authority`（真源 = `k1_board.yaml devices`）⇒ 实际改点在**生成器**，须补批。"
+ },
+ "not_landed": [
+  "未改生成器",
+  "未改 SPEC",
+  "未落板（仓库板未动，`k1_v1.kicad_pcb` 仍 `eda1dc91`）",
+  "未改 criteria/"
+ ],
+ "next": "待批：生成器补 FPID 输出 → 同批 落板 + 证据重出 + L3 记录 → 复算（4/6 收口）；随后 5/6 姿态归一器（含负控）。"
+}
