@@ -1,0 +1,57 @@
+{
+ "artifact": "r1a_j1_pinmap_expansion_landing_report",
+ "schema": 1,
+ "ts": "2026-09-20T21:15:00+0800",
+ "id": "R-1(a)",
+ "authorization": "**#K2-50 §二 R-1 放行 (a)**（否决 (b)）；判据 rev=6 MATCH；owner 项=0",
+ "change": "`J1`(USB_C_RECEPT) 符号脚 **16→23 逐 pad 展开**（`k1_pinmap.yaml#J1` 既有映射，U11 `VDD`/`VDD_2..6` 既有风格）：`VBUS/VBUS_2..4→A4/B4/A9/B9` · `GND/GND_2..5→A1/B1/A12/B12/SH` · 其余 14 单 pad 脚号改为 pad 名。**电气绑定不变**（板侧 pad 网原样：A4/A9/B4/B9=VBUS；A1/B1/A12/B12/SH=GND）。",
+ "files": {
+  "k1/boards/k1_sch.yaml": "6517dbbbd239d267（符号体 23 脚）",
+  "k1/boards/k1_pinmap.yaml": "292ff6f74d5651dc（J1 23 项一名一 pad）",
+  "k1/boards/k1_nets.yaml": "bf66e413dcc14a64（VBUS/GND 补 J1/*_2..n 成员）",
+  "k1/boards/k1_board.yaml": "4c5f922302f4f4b9（sch_pins 16→23）",
+  "k1/sch/K1_SCH.kicad_sym": "（lib_symbol USB_C_RECEPT 23 pad 脚）",
+  "k1/sch/connectors.kicad_sch": "（J1 实例 23 脚）",
+  "k1/fab/k1_v1_bom.csv": "2ba7c2ecf5a53a7a（**未变**，42 refs）"
+ },
+ "commands": [
+  "python3 k1/tools/k1_sch_regen_v1.py --apply --confirm-repo-write --sync-decl",
+  "python3 k1/tools/k1_sch_gen_v1.py --install --confirm-repo-write",
+  "python3 k1/tools/k1_p4_bom_gen_v1.py --apply --confirm-repo-write",
+  "verify k1（`eda_core.pipeline.engine`）= preflight+3 全 PASS",
+  "criteria/adjudicate.py --project k1 …（4 件规范化测量输入）"
+ ],
+ "evidence": {
+  "pin_map_complete": "**FAIL→PASS**：`网表节点无对应焊盘 = 0`（原 16，全为 J1）",
+  "verdict": "**11 PASS / 7 FAIL**（provisional=false）；原 10 PASS/8 FAIL ⇒ **+1 翻转 · 0 回退**",
+  "two_run_identical": true,
+  "regression": "无（无 PASS→FAIL）",
+  "remaining_fails": [
+   "zone_filled",
+   "drill_count",
+   "drc_errors",
+   "unconnected_zero",
+   "keepout_active",
+   "pads_within_outline",
+   "density_and_clearance"
+  ]
+ },
+ "honest_expressions": {
+  "per_K2_50_W8VAC1": "W8/`lib_electrical_level` 对 K1 **空过（42/42 无库昵称）不计绿** ⇒ 对外表述应为 **10 PASS + 1 空过 + 7 FAIL**，禁称 11 PASS（C-12）。",
+  "note": "本件 11 PASS 计数含该空过维，仅作判据读数，不作用交付合规声明。"
+ },
+ "commit": {
+  "k1": "e2acb20",
+  "k2": "（本件）",
+  "shared": "ea2b746（未动）",
+  "criteria": "rev=6（只读）",
+  "anchor": "6ee7495de61f749f（未动）"
+ },
+ "not_touched": [
+  "criteria/",
+  "k2 交付面",
+  "交付锚",
+  "_shared"
+ ],
+ "next": "#K2-50 执行序 2/6：**W8-VAC-1 修**（42 件 FPID 补库昵称 → 重跑 W8 → 报 `n_no_library_link`/diff）"
+}
