@@ -159,3 +159,13 @@
 ---
 **（本块）裁定对应**：CR-30 ← handoff §7-B（只读造活 · 真源核验收口）。**报备监理 1 条（引证待核）· owner 项 0**。
 **不影响** P6 判据面（`criteria/` rev=6 只读）与交付锚（`6ee7495de61f749f` 未动）。
+### 续编 · E2/AT24C02 真源独立厂商复核（2026-09-21 · **关 CR-26 同类残余自比盲区**）
+
+| # | 条目 | 内容（事实/裁定） | 依据 | 处置红线 |
+|---|---|---|---|---|
+| **CR-31** | **`E2`（`FRU_EEPROM` · AT24C02 类）真源 **8/8 厂商正本一致** —— 为 `CR-26` 暴露之『**无引证标准脚位 + 板↔真源自比**』盲区补**独立**核（**非新增检查齿**）** | **缘起**：`CR-26`（`U4` BAT54C）证明『**板 ↔ 同一错源** 比对必然看不见错源』（同 `CR-8` COV-C2）；而 `FRU_EEPROM.yaml` 之 `source` = **无引证**之『AT24C02 类标准脚位』，其此前核法**仅板↔真源自比**（`CR-28` 记 ✅）⇒ **残一自比盲区**。**独立核**：新通道 **`ww1.microchip.com`**（首次登记 · 200）⇒ `downloads/en/DeviceDoc/doc0180.pdf` = **Atmel/Microchip AT24C01A/02/04/08A/16A**（`0180Z1–SEEPR–5/07` · 20 页 · `sha256 a084aa10aada64d7ea1b7717705e9d5c01f19028cad805724a14ee6552a432ca`）· **Table 1 Pin Configuration · 8-lead SOIC** = `1=A0 · 2=A1 · 3=A2 · 4=GND · 5=SDA · 6=SCL · 7=WP · 8=VCC`。**全链逐层核**：① `FRU_EEPROM.yaml` 真源 **8/8 一致**；② 符号 `IOCONVERT.kicad_sym#FRU_EEPROM` pin 号（1/A0·2/A1·3/A2·7/WP·6/SCL·5/SDA·4/VSS·8/VCC）**8/8 一致**；③ `ForgeOS.pretty/SOIC8_FRU.kicad_mod` 焊盘几何（pad1 左上…pad4 左下…pad5 右下…pad8 右上 = **JEDEC SOIC 逆时针**）与厂商图同构；④ 板 l7 `E2` pad→net `1=GND 2=MCU_VDD 3=GND 4=GND 5=I2C1_SDA 6=I2C1_SCL 7=GND 8=MCU_VDD` **逐脚自洽**。**附带增益**：`A0=0/A1=1/A2=0 ⇒ 7-bit 地址 `0x52``，**为 `CR-18`/`V6-3` 预期地址提供独立厂商依据**（地址脚接 GND/VCC 为厂商允许；`WP=GND ⇒ 正常读/写`，符合正本 p1 语义）⇒ **`E2` 无缺陷 · 非第二例 BAT54C** | 本件实测 · `T2F6_AT24C02_FRU_EEPROM_VERIFICATION_20260921_v1.json`（`a7499c6b9e8284ca`）· 外部 PDF 仅落 `/tmp/opencode`（**未入库**） | **只读**（未改 `_shared`/符号/网表/PCB/交付包）· **禁**以本件覆盖既有 `U1` land 登记（`CR-29` 同旨）· **非**新增判据维/阈值/检查齿 |
+| — | **（附）同类残余枚举 ⇒ 自比盲区清零** | 按 `symbol:` 清单枚举 l7 **实际实例化**之厂商脚位类器件：`U1`/`U2`/`U6`（ST/TI 正本已核）· `U4` ✗`CR-26` · `U5`（Lite-On 正本 · `CR-6`）· **`E2` ✅ 本件** · `D1` ✗`CR-27` · `D2`（KiCad 官方 footprint 约定）⇒ **除 `U4`/`D1` 外无第三例，且唯一残余自比件（`E2`）已补齐独立核**。`24MHz_9pF`/`LED_DUAL`/`USB_C_RECEPT`/`USB3.0_Type-A_90`（同为『无引证』件）经核对 = **本板未实例化**（库内定义；`USB_C_RECEPT` 属 KEY 卡/另板）⇒ 不在本板核验面（**登记制 · 不充绿**） | 本件 · `symbol:` 清单（l7 设计源） | 登记制 · 不充绿 · **禁**重复普查同类件 |
+
+---
+**（本块）裁定对应**：CR-31 ← handoff §8-B（只读造活 · 关 `CR-26` 同类残余）。**报备监理 1 条（同类收口）· owner 项 0**。
+**不影响** P6 判据面（`criteria/` rev=6 只读）与交付锚（`6ee7495de61f749f` 未动）。

@@ -1,0 +1,56 @@
+{
+ "artifact": "k2_t2f6_at24c02_fru_eeprom_verification",
+ "schema": 1,
+ "ts": "2026-09-21T(+08) · 会话轮标 ARCHER-R66-CLASS-CLOSURE-E2",
+ "purpose": "关闭 CR-26（BAT54C 脚位真源错）所暴露的**同类残余风险**：`FRU_EEPROM.yaml`(`source` = 无引证之『AT24C02 类标准脚位』) 此前仅经**板↔真源自比**核过（CR-26 §同类排查），而 CR-26 已证**自比必看不见错源**（同 CR-8 COV-C2 盲区）。本件以**厂商正本**独立复核 `E2` 全链（真源→符号→footprint 几何→板网）。",
+ "why_this_item": "枚举 l7 板**实际实例化**的厂商脚位类器件（`symbol:` 清单）后，`U4`(CR-26)/`D1`(CR-27) 已定缺陷；`U5` 已由 Lite-On 正本独立核（CR-6）；`U1/U2/U6` 已由 ST/TI 正本独立核（CR-30/CR-29）；**唯余 `E2` 仅自比** ⇒ 本件补其独立核。",
+ "vendor_truth": {
+  "channel": "ww1.microchip.com/downloads/en/DeviceDoc/doc0180.pdf",
+  "http": 200,
+  "bytes": 635738,
+  "doc_id": "0180Z1–SEEPR–5/07（Atmel/Microchip AT24C01A/02/04/08A/16A 2-Wire Serial EEPROM）",
+  "pages": 20,
+  "sha256": "a084aa10aada64d7ea1b7717705e9d5c01f19028cad805724a14ee6552a432ca",
+  "sha16": "a084aa10aada64d7",
+  "table": "Table 1. Pin Configuration — 8-lead SOIC",
+  "pinout_8soic": {
+   "1": "A0",
+   "2": "A1",
+   "3": "A2",
+   "4": "GND",
+   "5": "SDA",
+   "6": "SCL",
+   "7": "WP",
+   "8": "VCC"
+  },
+  "wp_semantics": "WP=GND ⇒ normal Read/Write（p1『WRITE PROTECT (WP)… allows normal Read/Write operations when connected to ground (GND)』）",
+  "local_copy": "/tmp/opencode/AT24C01A-16_doc0180.pdf（外部原件**未入库**）"
+ },
+ "chain_check": {
+  "1_true_source": "k2/_shared/eda_core/sch_gate/datasheets/FRU_EEPROM.yaml = 1:A0 2:A1 3:A2 4:VSS 5:SDA 6:SCL 7:WP 8:VCC ⇒ **8/8 与厂商一致**",
+  "2_symbol": "k2/hw/lib/IOCONVERT.kicad_sym#FRU_EEPROM pin number: 1/A0 · 2/A1 · 3/A2 · 7/WP · 6/SCL · 5/SDA · 4/VSS · 8/VCC ⇒ **8/8 一致**",
+  "3_footprint_geometry": "k2/hw/lib/ForgeOS.pretty/SOIC8_FRU.kicad_mod pad 坐标：pad1(−1.95,−1.905) 左上 · pad2 · pad3 · pad4(−1.95,+1.905) 左下 · pad5(+1.95,+1.905) 右下 · pad6 · pad7 · pad8(+1.95,−1.905) 右上 ⇒ **JEDEC SOIC 逆时针编号**（与厂商图 A0=1 左上 / GND=4 左下 / SDA=5 右下 / VCC=8 右上 同构）",
+  "4_board_l7_nets": "E2 pad→net：1=GND(A0) · 2=`MCU_VDD`(A1) · 3=GND(A2) · 4=GND(VSS) · 5=`I2C1_SDA` · 6=`I2C1_SCL` · 7=GND(WP) · 8=`MCU_VDD`(VCC) ⇒ **与厂商脚位逐脚自洽**"
+ },
+ "address_consistency": {
+  "tie_offs": "A0=0 · A1=1 · A2=0（地址脚按厂商允许接 GND/VCC）· WP=0（可写）",
+  "7bit_address": "1010 A2 A1 A0 = 1010 010 = 0x52",
+  "cross_ref": "与 CR-18『板侧完全证明 V6-3 预期地址 0x52』/ `P5_EXPECTED_VALUES_DESIGN_SIDE_20260921_v1.json` 一致 ⇒ **主判预期值有独立厂商依据**"
+ },
+ "verdict": "**E2 全链 8/8 PASS · 无缺陷**（`FRU_EEPROM.yaml` 真源**正确**，非第二例 BAT54C）",
+ "class_closure": {
+  "class": "『无引证标准脚位』真源件（BAT54C 缺陷族）",
+  "l7_instantiated_enumeration": "U1(U6/U2 亦) · U4 · U5 · E2 · D2 · D1（+被动件无极性/脚位语义）",
+  "status": "U4 ✗CR-26(HIGH) · D1 ✗CR-27(LOW-MED) · **U5 ✅CR-6** · **E2 ✅本件** · U1 ✅CR-30 · U2/U6 ✅ · D2 ✅(KiCad 官方 footprint 约定) ⇒ **除 U4/D1 外无第三例，且残余自比盲区（E2）已由厂商正本补齐**",
+  "note": "`24MHz_9pF`/`LED_DUAL`/`USB_C_RECEPT`/`USB3.0_Type-A_90` 等『无引证』件经 `symbol:` 清单核对 = **本板未实例化**（库内定义；`USB_C_RECEPT` 属 KEY 卡/另板），故不在本板真源核验面"
+ },
+ "red_lines_ok": [
+  "未改 _shared/符号/网表/PCB/交付包（只读取证）",
+  "未改 criteria/（rev=6 只读）",
+  "外部原件仅落 /tmp/opencode（未入库）",
+  "未派 WORKER",
+  "未改任何阈值/判据维",
+  "登记制 · 不充绿"
+ ],
+ "provenance_note": "pdftotext -layout 提取 Table 1 后**人眼核读排版块**（依环境教训：仅凭文本流可能错位；本件为单页表，双列并排已逐列对齐核对）"
+}

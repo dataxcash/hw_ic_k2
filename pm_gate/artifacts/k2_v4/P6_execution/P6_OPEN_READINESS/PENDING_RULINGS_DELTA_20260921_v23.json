@@ -1,0 +1,38 @@
+{
+ "artifact": "k2_pending_rulings_delta",
+ "schema": 23,
+ "ts": "2026-09-21T11:50:00+0800",
+ "supersedes": "PENDING_RULINGS_DELTA_20260921_v22.json（a4f41496bd80f0c0）—— 其**唯一项**（`V6-1` `MCU_VDD` 标称）已由 **#K2-55** 裁定并落地（CR-11 在册）。v22 之后、本件之前**无新待裁件**；**注**：`CR-26`（23:19 发现）此前**仅记于** `ledger.jsonl` 与 handoff §4，**未落为结构化待裁件** ⇒ 哨兵 `pending_rulings_blocked()` 恒 False ⇒ **监理永不被拉起裁定 CR-26**（= 2026-09-20『ARCHER 停等监理无信号』事故同型）。**本件即为补齐该信号**。",
+ "purpose": "把**已登记但未入待裁通道**的项结构化上交监理：**CR-26（HIGH · `U4` BAT54C 电源 ORing 物理反接）** 为主项，`CR-27`（LOW-MED · `D1` LED 极性）与引证待批 5 项为**同批建议并入项**。ENG 已把修复链**取证到可执行**，获批即落地。",
+ "owner_gate": "**0**（CR-26 非拓扑/接口/信号流向/球重映射 ⇒ **不含 L1 成分** ⇒ 属『真源缺陷修复』= **监理批面**；ENG **不**直接升级 owner）",
+ "stage_state": "P5 = 唯一未闭门（**PENDING_EXTERNAL** · V4–V7 全 `NOT_RUN`）；P0–P4 **HOLDS** · P6 CLOSED；交付锚 `MANIFEST.json 6ee7495de61f749f` / tarball `0e88e107e2da8192` **未动**；判据 **rev=6 MATCH**；受审板 l7 `c5a7df90aadb66e0`。**无越阶段。**",
+ "pending_supervision": [
+  "**【主项 · CR-26 · HIGH】`U4` BAT54C 电源 ORing 二极管 *物理反接*（根因 = 脚位真源错）**：`k2/_shared/eda_core/sch_gate/datasheets/BAT54C.yaml` 记 `1=A1 · 2=K · 3=A2`（`source` = **无引证**之『标准脚位』）；**两厂商正本一致否证** —— **Nexperia BAT54C §5 Table 2** = `1=A1 · 2=A2 · 3=K1,K2（共阴）`（正本 sha16 `38d4cf5982dcaaa3`）· **Diodes `DS11005 Rev 34-2`** 首页拓扑图同 ⇒ **`K` 与 `A2` 对调**。传播链：真源错 ⇒ 符号 `IOCONVERT.kicad_sym#BAT54C_ORING`（`K→pin2`·`A2→pin3`）⇒ 板 l7 `U4`：**pad3→`P3V3`**、**pad2→`MCU_VDD`**、pad1 NC（footprint 焊盘 = `pad1 左下`/`pad2 右下`/`pad3 上中`，JEDEC TO-236 编号）⇒ 实体板**共阴(pin3)接 `P3V3`**、**阳极2(pin2)接 `MCU_VDD`** ⇒ **仅 `MCU_VDD→P3V3` 导通，`P3V3→MCU_VDD` 被截止**。影响：按 **CR-11** 主判工况（独立运行 · `J13/VCC` 不接外供）⇒ `MCU_VDD` **无供电** ⇒ **V6-1 主判 FAIL · V6-2 FAIL · 板不上电**；仅外供 `J13/J9` 时表面正常 ⇒ **内部『板↔真源』比对必然看不见**（同 CR-8 COV-C2 自比盲区）。**请监理裁定二事**：① **批 `_shared` 真源订正**（`2:A2 / 3:K`；建议**并入 `D1` LED 符号 pin 号**同批）；② **是否开新 rev**（修符号 pin 号 → 重生成网表 → 交换 `U4` pad2/pad3 网络 → 重出 Gerber ⇒ 新 rev ⇒ 重跑 P4 锚 ⇒ 再议 P5）。**ENG 边界**：**获批前不改任何设计面**（生成器/SPEC/原理图/符号/网表/PCB）；**获批前不下首件单**（fail-closed『P4 未全绿不下单』——本件证明 l7 板**不满足**其设计意图之 ORing 功能）。依据：`DEFECT_U4_BAT54C_PIN_SWAP_20260921_v1.json`（`affa0c5d2c3b7491`）+ 图证 `…_EVIDENCE_…png`（`63a4c3a22ab1e671`）+ 两厂商正本（外部原件仅落 `/tmp/opencode`，未入库）。",
+  "**【并入项 · CR-27 · LOW-MED】`D1` LED 疑反接**：项目符号 `k2_sch.yaml#LED` = `A→pin1(左)·K→pin2(右)`，而原理图声明之 `LED_0603_1608Metric`（本机 KiCad 官方件）**pad1=K**（丝印阴极在左，渲染图证）⇒ 板上 `D1` **pad1→`LED_A`** = 阴极落 `LED_A` ⇒ 反偏（指示 LED 不亮）。**不影响可制造性**、**Gerber 无需因 LED 改**（建议与 CR-26 并入同批，若开新 rev 则顺带修符号 pin 号）。依据：`DEFECT_D1_LED_POLARITY_AND_POLARITY_CENSUS_20260921_v1.json`（`8d214f3ace25beec`）。",
+  "**【并入项 · 引证待批 5 项 · `_shared` 件 ⇒ 禁 ENG 擅改】**：`TI-CIT-1` `DS320PR1601` 引封装图号 `ZDG0354A`（真文献号 = **`SNLS683``）· `TI-CIT-2` `DS160PR810` 引「`SNLS658` **Rev B**」而正本无 `B` · `TI-CIT-3` `TLV61046A` 引 `SLVSD82` 应为 **`SLVSD82B`** · `AP2127` 引 `DS31056` 应为 **`DS36478 Rev 7-2`**（引脚表 **5/5 一致**）· `STM32G0B1CBT6` 引「Rev 6 Table 12 (Figure 5)」而 Rev 1 对应 **Figure 9**（引脚 **48/48 一致**）。**请监理批**：仅订正 `source`/文献号字段（**引脚真源内容不动**）⇒ ENG 获批后一笔落 `_shared`。",
+  "**【登记 · 非阻塞】** `CR-17` `DBGMCU_IDCODE` 预期值仍缺（`st.com` 567 · `stmcu.com.cn` 429 不可达 ⇒ 手册依赖登记）· `CR-22` `m13_*` 派生件缺 `psi_jt` 字段（**禁改**该两件）。"
+ ],
+ "landed_this_session": [
+  {
+   "id": "E2/AT24C02 真源独立厂商复核（关 CR-26 同类残余自比盲区）",
+   "artifact": "T2F6_AT24C02_FRU_EEPROM_VERIFICATION_20260921_v1.json（a7499c6b9e8284ca）",
+   "reading": "厂商正本 **Microchip/Atmel doc0180（0180Z1–SEEPR–5/07）· Table 1 · 8-lead SOIC** ⇒ `1=A0 2=A1 3=A2 4=GND 5=SDA 6=SCL 7=WP 8=VCC`；与 `FRU_EEPROM.yaml` 真源 **8/8 一致**、与符号 `IOCONVERT.kicad_sym#FRU_EEPROM` pin 号 **8/8 一致**、与 `SOIC8_FRU` footprint 焊盘几何（JEDEC 逆时针）一致、与板 l7 `E2` pad→net（1=GND/2=MCU_VDD/3=GND/4=GND/5=I2C1_SDA/6=I2C1_SCL/7=GND/8=MCU_VDD）逐脚自洽 ⇒ **无缺陷**；且 `A1=VCC ⇒ 7-bit 地址 0x52`，**为 CR-18/V6-3 预期值提供了独立厂商依据**（WP=GND ⇒ 可写，符合厂商 p1 语义）。**新通道**：`ww1.microchip.com`（首次登记 · 200 · 635,738 B · sha256 `a084aa10aada64d7…`）。"
+  },
+  {
+   "id": "同类残余枚举（为何不再有第三例）",
+   "reading": "按 `symbol:` 清单枚举 l7 **实际实例化**之厂商脚位类器件 = `U1/U2/U6`（ST/TI 正本已核）+ `U4`(CR-26) + `U5`（Lite-On 正本 · CR-6）+ `E2`（本件）+ `D1`(CR-27) + `D2`（KiCad 官方 footprint 约定）⇒ **残余自比盲区已清零**。`24MHz_9pF`/`LED_DUAL`/`USB_C_RECEPT`/`USB3.0_Type-A_90` 经核对 **本板未实例化**（库内定义）⇒ 不在本板核验面（**不充绿**，登记制）。"
+  }
+ ],
+ "red_lines_ok": [
+  "未改 criteria/（rev=6 只读 MATCH）",
+  "未改冻结四源（l4 `d4e81f64` 等）",
+  "未改 _shared/生成器/SPEC/原理图/符号/网表/PCB（**只读取证**）",
+  "未动交付包（锚 `6ee7495de61f749f` 未动 · 未重建）",
+  "未新增判据维/检查齿",
+  "未派 WORKER",
+  "未越阶段",
+  "外部厂商原件仅落 /tmp/opencode（未入库）",
+  "未为历史 commit 批量补打 tag（#K2-56 已消费：两仓 `0 0` · tag `k2-v57-l6-delivery-anchored`→`9758b76` `^{}` 已核）"
+ ],
+ "next": "**获裁即落地**（一笔一批：CR-26 修复链 → 新 rev → 重跑 P4 锚 → 再议 P5）。**未获裁期间**：不改设计面、不下首件单（`STOP-1`），继续**只读造活**（锚周期复核 · 册面/索引维护 · T2-F6 **仅新通道**才试）——**禁以 HOLD/停等结案**。外部回件（P5 8 项实测）到位则按 `L6/first_article/results_template.json` 回填交监理判定。"
+}
