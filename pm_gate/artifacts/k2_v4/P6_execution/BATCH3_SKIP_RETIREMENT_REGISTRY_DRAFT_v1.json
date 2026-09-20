@@ -1,0 +1,68 @@
+{
+ "artifact": "k2_batch3_skip_retirement_registry_DRAFT",
+ "schema": 1,
+ "status": "DRAFT / 未落件 —— 仅供监理裁 S1 后**一条命令级**落件（ENG 备料，非既成事实）",
+ "depends_on": {
+  "decision": "BATCH3-DECISION-SHEET-v1.md §1 第 5 项（12 SKIP 处置 S1–S4）",
+  "register": "BATCH3_RESIDUAL_SKIP_REGISTER_v1.json（1b6d5b7d36746399）"
+ },
+ "scope_note": "S1『具名接受』原定范围 = 12 项；ENG 建议**扩到本批全部 19 项外部 fixture 族**（A+B），并**排除** C（1 项路径缺陷掩盖 ⇒ 归 S3/S4，不可登记退役了事）。",
+ "retirement_entries": [
+  {
+   "class": "A",
+   "tests": [
+    "tests.test_drc_locator.TestBaselineIntegration::test_baseline_full_coverage",
+    "tests.test_drc_locator.TestBaselineIntegration::test_baseline_rule_type_distribution",
+    "tests.test_hs_route_model.TestBaselineUP4::test_up4_input_segment_solved",
+    "tests.test_hs_route_model.TestV2CorridorDeterministic::test_corridor_deterministic",
+    "tests.test_hs_route_model.TestV2CorridorDeterministic::test_dn0_chain_solved",
+    "tests.test_hs_route_model.TestV2CorridorDeterministic::test_up4_chain_solved",
+    "tests.test_hs_route_model.TestV2PairSymmetry::test_pair_expand_equal_length",
+    "tests.test_hs_route_model.TestV2PairSymmetry::test_pair_pitch",
+    "tests.test_hs_route_model.TestV2RefclkIn6::test_refclk0_in6_layer",
+    "tests.test_hs_route_model.TestV2RefclkIn6::test_refclk1_in6_layer",
+    "tests.test_hs_route_model.TestV3EscapeIn2::test_escape_deterministic",
+    "tests.test_hs_route_model.TestV3EscapeIn2::test_escape_fallback_single_vgraph",
+    "tests.test_hs_route_model.TestV3EscapeIn2::test_up4_escape_uses_in2",
+    "tests.test_hs_route_model.TestV3EscapeIn2::test_zero_vgraph_18_pairs",
+    "tests.test_ls_migration.TestMigrationRegression::test_inflation_math_equivalence",
+    "tests.test_ls_migration.TestMigrationRegression::test_point_ok_equiv_500",
+    "tests.test_ls_migration.TestMigrationRegression::test_seg_ok_equiv_400"
+   ],
+   "reason_class": "N-05 生成物不可复跑：基线 = /tmp/opencode/boards/k2_m9demo.* (+ 6L 旧 SPEC + 已 RETIRED 的遗留 alloc)",
+   "registered_as": "RETIRED_BASELINE_UNREPRODUCIBLE",
+   "counts_toward_coverage": false,
+   "counts_as_green": false
+  },
+  {
+   "class": "B",
+   "tests": [
+    "tests.test_routing_topology_gate::test_t5_real_k2_gate_runs_and_reports_j2_polarity",
+    "tests.test_topology_gate::test_t5_k2_integration_from_files"
+   ],
+   "reason_class": "外部生成物未入库：/tmp 的 k2_v5 / k2_v6 板 + topo_propose_k2 links",
+   "registered_as": "EXTERNAL_FIXTURE_NOT_ARCHIVED",
+   "counts_toward_coverage": false,
+   "counts_as_green": false,
+   "pending_explicit": "须监理另裁：补生成+入库 或 一并具名退役"
+  }
+ ],
+ "coverage_vacuum_registration": {
+  "apis": [
+   "solve_pair_segment",
+   "solve_chain_v2"
+  ],
+  "fact": "此二 API 在**全测试文件**中的唯一覆盖点即上述被跳过用例（其余出现 = 0）⇒ 登记为**覆盖真空**（非『已被新套件取代』）",
+  "consequence": "在真空期间，这 2 个在册 API 的回归防护 = 0 ⇒ 后续须以 **8L 现役锚**补用例（须监理裁 = 期望重基线类）",
+  "counts_as_green": false
+ },
+ "excluded": {
+  "tests": [
+   "tests.test_cap_wall_upgrade::test_window_params_k2_data_driven"
+  ],
+  "why": "路径缺陷掩盖：解锁即 FAIL（旧代际期望）⇒ 属 S3/S4（退役 API 或 重锚+重基线），**不得**登记退役了事"
+ },
+ "landing_requirement": "落件须由**监理签**（本件为 ENG 出的登记草案；落件后 skip 数不充绿、逐条具名不变）",
+ "readonly_repo": true,
+ "not_landed": true
+}
