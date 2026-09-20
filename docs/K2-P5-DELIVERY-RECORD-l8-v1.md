@@ -4,7 +4,7 @@
 
 ## 0. 一句话
 `k2/pm_gate/artifacts/k2_v4/L6/jlc_package_l8/`（**53 件 + `MANIFEST.json`**）
-· `MANIFEST.json` sha256 **`427a42534af002b412ae26d8ae984d467427aa8fa3819cac2cbe22eeb9f8557f`**
+· `MANIFEST.json` sha256 **`4b610baed4f4752c123a6dbd015e413eac71d260a6e01956454aa1d550c6f73a`**
 · DFM 对 JLC HDI 通道 **16 PASS / 1 ACCEPT / 0 FAIL**
 · N-01 平面层 4/4 `G36>0` · 钻孔 754 孔 · kicad-cli 10.0.5
 · 交付封装 `L6/DELIVERY/k2_v4_8L.l8_gerber_package.tar.gz`（见其 README/SHA256SUMS）
@@ -34,11 +34,11 @@ ACCEPT（1 项）= 阻焊坝 9 处 <0.09mm → `ACCEPT_L2_WITH_FAB_REVIEW`（承
 | 幂等 | 连跑两次 `MANIFEST.json` 逐字节同（构建器：清目录→导出→规范化→验证→MANIFEST→封装） |
 
 ## 5. 具名披露（`DISCLOSURE.md`）
-167 条 warning 全量 9 类（不缩口径）· OUT #5 族 + `U-03` 残项 · `F-9` 走廊口径（owner 另案）· `L-1` C4（28 件仅板来源）· 无判据类根闭 5 条 ·
+170 条 warning 全量 9 类（不缩口径）· OUT #5 族 + `U-03` 残项 · `F-9` 走廊口径（owner 另案）· `L-1` C4（28 件仅板来源）· 无判据类根闭 5 条 ·
 **P5 新项**：阻焊坝 9 处 ACCEPT（附证明）· F.Cu 最紧耦合段 0.2825mm（−4.24%，阻抗仍 ±10%）· B.Cu 无 as-built 耦合 run · **正面丝印 4 处越框** · 重铺不变性已验证。
 
 ## 6. 待监理（ENG 不代判）
-① 阻焊坝 9 处 ACCEPT 是否接受；② F.Cu 名义窗 −4.24% 是否接受；③ 「23 条恒定 warning」切分对账（库内 167/9 类）；④ 正面丝印 4 处越框是否需另开 rev。
+① 阻焊坝 9 处 ACCEPT 是否接受；② F.Cu 名义窗 −4.24% 是否接受；③ 「23 条恒定 warning」切分对账（库内 170/9 类）；④ 正面丝印 4 处越框是否需另开 rev。
 
 ## 7. 复现
 ```

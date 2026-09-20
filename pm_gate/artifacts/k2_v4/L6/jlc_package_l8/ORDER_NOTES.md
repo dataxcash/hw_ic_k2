@@ -38,7 +38,7 @@
 U6（DS320PR1601）热：定案 O2 = 30×30mm 铝散热片 + 界面垫 1.0℃/W + ~2m/s 风冷 ⇒ θJA_eff 11.0℃/W，四工况 Tj ≤117.0℃（限 120.0℃）全 PASS。**系统装配须按 O2 实施**。详见 `06_rulings/L2_RULING_u6_thermal_mitigation_v2.md`。
 
 ## 5. 已知板级事实（如实登记）
-- DRC（在册 canonical）：违规 **167 全 warning** / error **0** / unconnected **0**；9 类全登记（`drc_warning_dispositions`）。
+- DRC（在册 canonical · l8）：违规 **170 全 warning** / error **0** / unconnected **0**；9 类全登记（`drc_warning_dispositions`）。
 - 丝印图形级 warning（silk_over_copper 37 / silk_overlap 15 / silk_edge_clearance 2）：按板厂惯例对焊盘上丝印**自动裁剪**，不影响制造。
 - 排针 J6/J9/J11/J12/J13 为无焊盘占位（netlist 骨架）—— 3D 预览属 OUT #5 族（证据层，不阻塞可制造性）。
 - **正面丝印越出板框 4 处**（H4 +1.848mm · R41 +1.798mm · D2 +1.198mm · C87 +0.798mm）：板厂按边框裁剪 ⇒ 该 4 个位号图例可能缺损（装饰/可追溯性，不影响制造）；**铜层越界 0**。见 `07_verify/silk_overhang.json`。

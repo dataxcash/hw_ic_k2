@@ -216,3 +216,5 @@
 ---
 **（本块）裁定对应**：#K2-57 R3 判据 ⑥（新交付包）。**报备监理 1 条（新 rev 包待复核）· owner 项 0**。
 **至此 #K2-57 §四判据 ①②③④⑤⑥⑦ 全达成**（⑧ 见 COV-C3 跨项目批）。
+
+> **【CR-36 补充 · 2026-09-21】**：**交付包自洽性核验发现并订正一处数字失真** —— 派生构建器自 l7 版继承了**具名披露的 DRC 数字（167 + 类型表）**，而 l8 之在册 canonical DRC = **170**（`track_not_centered_on_via 33→34` · `via_dangling 4→6`）⇒ 已按 l8 实测订正 `DISCLOSURE.md`/`ORDER_NOTES.md`，并**如实加入 l8 vs l7 差异注**（+3 归因 = 4 条 pad→net 变更致相关网局部重布、+5 过孔/+143 段；**error 0 · unconnected 0 · 类型集不变**）。**新锚**：`MANIFEST.json` `4b610baed4f4752c`（原 `427a42534af002b4` 作废）；`DELIVERY_l8` tarball 同步更新。**旧交付锚仍逐字节未动**（`6ee7495de61f749f` / `0e88e107e2da8192` / l7 记录 `73fca3aaa360a179`）。

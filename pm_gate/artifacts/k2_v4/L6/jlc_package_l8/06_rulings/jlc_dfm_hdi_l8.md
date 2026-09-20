@@ -23,4 +23,4 @@
 | 16 | 阻抗控制 | 支持层数 4/6/8/10/12/.../32，公差 ±10% | 8 层 + 85Ω±10%（见 CO-146 阻抗表） | **PASS** |
 | 17 | **过孔类型（盲/埋孔）** | **不支持盲/埋孔（仅通孔）** | **非通孔 455/734 支**：F.Cu->In1.Cu|BLIND_BURIED=171；F.Cu->In2.Cu|BLIND_BURIED=132；F.Cu->In4.Cu|BLIND_BURIED=4；F.Cu->In5.Cu|BLIND_BURIED=19；In2.Cu->In5.Cu|BLIND_BURIED=92；In5.Cu->B.Cu|BLIND_BURIED=37 | **PASS** |
 
-- as-designed DRC 204 项 / JLC 限地板重跑 213 项（by_type 见 json；口径 = gate 工具，勿与在册 canonical 167 混比）
+- as-designed DRC 204 项 / JLC 限地板重跑 213 项（by_type 见 json；口径 = gate 工具，勿与在册 canonical 170 混比）

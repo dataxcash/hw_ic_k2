@@ -286,11 +286,11 @@ ACCEPT（1 项）= 阻焊坝 9 处 <0.09mm → `ACCEPT_L2_WITH_FAB_REVIEW`（承
 | 幂等 | 连跑两次 `MANIFEST.json` 逐字节同（构建器：清目录→导出→规范化→验证→MANIFEST→封装） |
 
 ## 5. 具名披露（`DISCLOSURE.md`）
-167 条 warning 全量 9 类（不缩口径）· OUT #5 族 + `U-03` 残项 · `F-9` 走廊口径（owner 另案）· `L-1` C4（28 件仅板来源）· 无判据类根闭 5 条 ·
+170 条 warning 全量 9 类（不缩口径）· OUT #5 族 + `U-03` 残项 · `F-9` 走廊口径（owner 另案）· `L-1` C4（28 件仅板来源）· 无判据类根闭 5 条 ·
 **P5 新项**：阻焊坝 9 处 ACCEPT（附证明）· F.Cu 最紧耦合段 0.2825mm（−4.24%，阻抗仍 ±10%）· B.Cu 无 as-built 耦合 run · **正面丝印 4 处越框** · 重铺不变性已验证。
 
 ## 6. 待监理（ENG 不代判）
-① 阻焊坝 9 处 ACCEPT 是否接受；② F.Cu 名义窗 −4.24% 是否接受；③ 「23 条恒定 warning」切分对账（库内 167/9 类）；④ 正面丝印 4 处越框是否需另开 rev。
+① 阻焊坝 9 处 ACCEPT 是否接受；② F.Cu 名义窗 −4.24% 是否接受；③ 「23 条恒定 warning」切分对账（库内 170/9 类）；④ 正面丝印 4 处越框是否需另开 rev。
 
 ## 7. 复现
 ```
@@ -333,7 +333,7 @@ def delivery_wrapper() -> dict:
         "| `SHA256SUMS.txt` | 逐件 sha256（相对 `L6/`） |\n"
         "| `../jlc_package_l8/MANIFEST.json` | 机读 MANIFEST（board/pro sha · 命令 · 件表 · DFM 汇总） |\n"
         "| `../jlc_package_l8/ORDER_NOTES.md` | 制造备注（JLC HDI 通道） |\n"
-        "| `../jlc_package_l8/DISCLOSURE.md` | 具名披露（167 warning / OUT #5 / F-9 / L-1 / P5 新项） |\n\n"
+        "| `../jlc_package_l8/DISCLOSURE.md` | 具名披露（170 warning / OUT #5 / F-9 / L-1 / P5 新项） |\n\n"
         f"- DFM 对 JLC HDI 通道：**{man['dfm_summary']['pass']} PASS / {man['dfm_summary']['accept']} ACCEPT / "
         f"{man['dfm_summary']['fail']} FAIL**；N-01：平面层 4/4 `G36>0`；钻孔 {man['drill_total']} 孔。\n"
         "- 判据锚 rev=6 · 冻结四源未动 · 打包确定性（固定 mtime/uid/gid ⇒ tar sha 可复现）。\n"
@@ -658,7 +658,7 @@ def order_notes(dfm: dict, imp: dict, drill: dict) -> str:
 U6（DS320PR1601）热：定案 O2 = 30×30mm 铝散热片 + 界面垫 1.0℃/W + ~2m/s 风冷 ⇒ θJA_eff 11.0℃/W，四工况 Tj ≤117.0℃（限 120.0℃）全 PASS。**系统装配须按 O2 实施**。详见 `06_rulings/L2_RULING_u6_thermal_mitigation_v2.md`。
 
 ## 5. 已知板级事实（如实登记）
-- DRC（在册 canonical）：违规 **167 全 warning** / error **0** / unconnected **0**；9 类全登记（`drc_warning_dispositions`）。
+- DRC（在册 canonical · l8）：违规 **170 全 warning** / error **0** / unconnected **0**；9 类全登记（`drc_warning_dispositions`）。
 - 丝印图形级 warning（silk_over_copper 37 / silk_overlap 15 / silk_edge_clearance 2）：按板厂惯例对焊盘上丝印**自动裁剪**，不影响制造。
 - 排针 J6/J9/J11/J12/J13 为无焊盘占位（netlist 骨架）—— 3D 预览属 OUT #5 族（证据层，不阻塞可制造性）。
 - **正面丝印越出板框 4 处**（H4 +1.848mm · R41 +1.798mm · D2 +1.198mm · C87 +0.798mm）：板厂按边框裁剪 ⇒ 该 4 个位号图例可能缺损（装饰/可追溯性，不影响制造）；**铜层越界 0**。见 `07_verify/silk_overhang.json`。
@@ -672,22 +672,24 @@ def disclosure(dfm: dict, anchor: dict, silk: dict) -> str:
 
 ## 1. DRC warning 全量披露（**不缩口径**）
 在册 canonical DRC（`07_verify` 之外，源 = 册 `drc_violations_clean_workdir.json`）：
-**167 条全 warning · error 0 · unconnected 0**，9 类全登记：
+**170 条全 warning · error 0 · unconnected 0**（l8 实测；l7 = 167）**，9 类全登记：
 
 | 类 | 条数 |
 |---|---|
 | missing_courtyard | 54 |
 | silk_over_copper | 37 |
-| track_not_centered_on_via | 33 |
+| track_not_centered_on_via | 34 |
 | lib_footprint_mismatch | 20 |
 | silk_overlap | 15 |
-| via_dangling | 4 |
+| via_dangling | 6 |
 | silk_edge_clearance | 2 |
 | track_dangling | 1 |
 | copper_sliver | 1 |
 
-> ⚠ **口径对账**：#K2-36 §三 提及「**23 条恒定 warning**」，该 23 之切分**无法由在库册复现**（册给 167/9 类）。
-> 本包**按全量 167 条披露**（粒度更细、不缩口径），并**具名提请监理**确认 23 条的切分依据；若 23 为特定子集，
+> **l8 vs l7 差异（如实披露，不缩口径）**：总数 **167 → 170**（+3）—— `track_not_centered_on_via` **33→34**（+1）· `via_dangling` **4→6**（+2）。归因 = 本 rev 之 **4 条 pad→net 变更（U4/2,3 + D1/1,2）**致相关网（`P3V3`/`MCU_VDD`/`GND`/`LED_A`）局部重布、新增 5 过孔与 143 段；**error 仍 0 · unconnected 仍 0 · 类型集不变（9 类）** ⇒ 不影响可制造性判定。
+
+> ⚠ **口径对账**：#K2-36 §三 提及「**23 条恒定 warning**」，该 23 之切分**无法由在库册复现**（册给 170/9 类）。
+> 本包**按全量 170 条披露**（粒度更细、不缩口径），并**具名提请监理**确认 23 条的切分依据；若 23 为特定子集，
 > 本包披露集为其**超集**，不影响可制造性判定。
 
 ## 2. OUT（具名，非本包缺陷）
@@ -750,7 +752,7 @@ def main() -> int:
     for i, it in enumerate(dfm["items"], 1):
         card.append(f"| {i} | {it['item']} | {it['jlc_limit']} | {it['measured']} | **{it['hdi']}** |")
     card += ["", f"- as-designed DRC {dfm['evidence']['as_designed_drc_n']} 项 / JLC 限地板重跑 "
-                 f"{dfm['evidence']['jlc_limit_drc_n']} 项（by_type 见 json；口径 = gate 工具，勿与在册 canonical 167 混比）"]
+                 f"{dfm['evidence']['jlc_limit_drc_n']} 项（by_type 见 json；口径 = gate 工具，勿与在册 canonical 170 混比）"]
     (OUT / "06_rulings/jlc_dfm_hdi_l8.md").write_text("\n".join(card) + "\n")
     (OUT / "07_verify/n01_g36_census.json").write_text(json.dumps({"board_sha16": sha16(BOARD),
         "gerber_dir": "01_gerber_rs274x", "g36_regions_per_copper_layer": g36_census()}, indent=1, ensure_ascii=False) + "\n")

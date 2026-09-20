@@ -4,22 +4,24 @@
 
 ## 1. DRC warning 全量披露（**不缩口径**）
 在册 canonical DRC（`07_verify` 之外，源 = 册 `drc_violations_clean_workdir.json`）：
-**167 条全 warning · error 0 · unconnected 0**，9 类全登记：
+**170 条全 warning · error 0 · unconnected 0**（l8 实测；l7 = 167）**，9 类全登记：
 
 | 类 | 条数 |
 |---|---|
 | missing_courtyard | 54 |
 | silk_over_copper | 37 |
-| track_not_centered_on_via | 33 |
+| track_not_centered_on_via | 34 |
 | lib_footprint_mismatch | 20 |
 | silk_overlap | 15 |
-| via_dangling | 4 |
+| via_dangling | 6 |
 | silk_edge_clearance | 2 |
 | track_dangling | 1 |
 | copper_sliver | 1 |
 
-> ⚠ **口径对账**：#K2-36 §三 提及「**23 条恒定 warning**」，该 23 之切分**无法由在库册复现**（册给 167/9 类）。
-> 本包**按全量 167 条披露**（粒度更细、不缩口径），并**具名提请监理**确认 23 条的切分依据；若 23 为特定子集，
+> **l8 vs l7 差异（如实披露，不缩口径）**：总数 **167 → 170**（+3）—— `track_not_centered_on_via` **33→34**（+1）· `via_dangling` **4→6**（+2）。归因 = 本 rev 之 **4 条 pad→net 变更（U4/2,3 + D1/1,2）**致相关网（`P3V3`/`MCU_VDD`/`GND`/`LED_A`）局部重布、新增 5 过孔与 143 段；**error 仍 0 · unconnected 仍 0 · 类型集不变（9 类）** ⇒ 不影响可制造性判定。
+
+> ⚠ **口径对账**：#K2-36 §三 提及「**23 条恒定 warning**」，该 23 之切分**无法由在库册复现**（册给 170/9 类）。
+> 本包**按全量 170 条披露**（粒度更细、不缩口径），并**具名提请监理**确认 23 条的切分依据；若 23 为特定子集，
 > 本包披露集为其**超集**，不影响可制造性判定。
 
 ## 2. OUT（具名，非本包缺陷）

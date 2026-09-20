@@ -6,7 +6,7 @@
 | `SHA256SUMS.txt` | 逐件 sha256（相对 `L6/`） |
 | `../jlc_package_l8/MANIFEST.json` | 机读 MANIFEST（board/pro sha · 命令 · 件表 · DFM 汇总） |
 | `../jlc_package_l8/ORDER_NOTES.md` | 制造备注（JLC HDI 通道） |
-| `../jlc_package_l8/DISCLOSURE.md` | 具名披露（167 warning / OUT #5 / F-9 / L-1 / P5 新项） |
+| `../jlc_package_l8/DISCLOSURE.md` | 具名披露（170 warning / OUT #5 / F-9 / L-1 / P5 新项） |
 
 - DFM 对 JLC HDI 通道：**16 PASS / 1 ACCEPT / 0 FAIL**；N-01：平面层 4/4 `G36>0`；钻孔 754 孔。
 - 判据锚 rev=6 · 冻结四源未动 · 打包确定性（固定 mtime/uid/gid ⇒ tar sha 可复现）。
