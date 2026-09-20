@@ -5,10 +5,11 @@
 # 转录: `pdftotext -layout` → 表区正则逐 ball 抽取；**ball 集合与符号库逐 ball 一致（354/354，无缺无重）**
 # 命名: 保存厂商原文大小写（如 `B_PETp1`）；sch_gate 比对经 `_norm` 大写化 ⇒ 与符号库 `B_PETP1` 等价。
 #
-# ⚠ 影响面声明: 本表**不在 K2 门禁链内**（`k2/pipeline.yaml` 无 pinmap 检查）⇒ 属库/hygiene 面。
-#   本表将使 `k2/hw/lib/DS320PR1601.kicad_sym`（pin 名=信号名，0 个 ball 名）**PASS**；
-#   但 `k2/hw/lib/IOCONVERT.kicad_sym` 的 DS320PR1601 变体（**194 个 pin 以 ball 名命名**）
-#   将因『引脚名未绑定物理端口』触发大量 FAIL ⇒ **落地前须裁定该变体的表示法**（不得静默拉绿/拉红）。
+# 影响面（**#K2-53 裁定**）: 本表**不在 K2 门禁链内**（`k2/pipeline.yaml` 无 pinmap 检查）⇒ 库/hygiene 面。
+#   ① 本表使 `k2/hw/lib/DS320PR1601.kicad_sym`（pin 名=信号名）**FAIL 1 → 0（PASS）**；
+#   ② `k2/hw/lib/IOCONVERT.kicad_sym` 的 DS320PR1601 变体（**194 个 pin 以 ball 名命名**）将
+#      由 1 → **194 FAIL**（pinmap 机制 2『引脚名未绑定物理端口』）—— **#K2-53 裁『登记制：不豁免 ·
+#      保持可见 · 不充绿』**，**不入 K2 门禁链判据**；**禁改任何 `.kicad_sym`**（改符号 = 设计面 = 须 owner）。
 device: DS320PR1601
 package: ZDG (nfBGA-354)
 source: "TI ZDG0354A — §5 Table 5-1 Pin Functions (354 ball)"
