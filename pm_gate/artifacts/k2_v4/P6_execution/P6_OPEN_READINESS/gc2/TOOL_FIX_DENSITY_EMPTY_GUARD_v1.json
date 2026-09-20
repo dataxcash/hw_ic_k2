@@ -1,0 +1,54 @@
+{
+ "artifact": "k2_gc2_tool_fix_density_empty_guard",
+ "schema": 1,
+ "purpose": "⑧ 工具修复的**备料件**（未落件）：解锁 `density_and_clearance` 维对放置态板（无走线/无过孔）的可用性；附**K2 零扰动证明**。",
+ "tool_fix": {
+  "target": "k2/docs/drafts/p4-j8-density-clearance-v1/measure_density_and_clearance.py",
+  "target_sha16_before": "dccaaa476c807def",
+  "after_sha16": "ff763e6865bac843",
+  "diff": "tool_fixes/DENSITY_EMPTY_GUARD.diff",
+  "diff_sha16": "20faf179b3bd936f",
+  "apply": "cd k2 && patch --posix -p1 < <…>/tool_fixes/DENSITY_EMPTY_GUARD.diff  （dry-run 已过）",
+  "change": "`process_min` 的 5 个 `min(...)` 收敛到局部 `_mn()`：**空集 ⇒ None（不崩）**；非空行为不变（逐字节同，见证明①）",
+  "authorization": "工具改动 ⇒ **须监理批**（C-6 同批）；本件只备料"
+ },
+ "proof_1_k2_zero_perturbation": {
+  "board": "k2/hw/k2_v4_8L.l7.kicad_pcb（受审板）",
+  "orig_json_sha16": "95034499aad26454",
+  "patched_json_sha16": "95034499aad26454",
+  "cmp": "**逐字节同**（`cmp` 无输出）⇒ 该修对 K2 读数零扰动"
+ },
+ "proof_2_k1_runnable": {
+  "board": "k1/k1_v1.kicad_pcb",
+  "rc": 0,
+  "process_min": "min_track_width_mm=null · n_tracks=0 · min_via_*=null · n_vias=0 · **min_hole_drill_mm=0.4 · n_holes=30**",
+  "before": "原工具崩溃：`ValueError: min() arg is an empty sequence` @:133"
+ },
+ "proof_3_judge_dim_closure": {
+  "what": "把修后工具产出的 K1 密度件（+ 既有 min_clearance 件）喂给真判定器",
+  "dim": "density_and_clearance ⇒ **由 fail-closed 转实测**",
+  "reading": "密度[10mm/frame_origin] **峰值 12（阈值 ≤8）⇒ 超限** · 最小铜间距 lower_bound **None**（即低于 bracket 最低档 0.1 ⇒ **< 0.100 阈值**）· sha16 与受审板一致 ⇒ 判定 **FAIL（实测，非缺件）**",
+  "n_pass_n_fail": "4 / 15（不变；该维本就是 FAIL，但**性质由『缺件』变为『实测』**）"
+ },
+ "correction_retired_tool": {
+  "earlier_claim": "B_CLASS…_v2.json 曾把 `k2/tools/k2_p4_j8_measure_v1.py:177`（oval 钻孔 `float('oval')` 崩）列为『同批候选修复』",
+  "correction": "该工具在 `k2/tools/k2_p4_RETIRED.md` 中为 **RETIRED（离链）**（第 13 行，sha16 `2d77bc8b902f87fb`）⇒ **撤回该建议**：离链工具不修（避免在离链件上做零散补丁）；其缺陷仅作留痕"
+ },
+ "b_class_final_state": {
+  "real_readings": [
+   "drc_errors",
+   "drc_warning_dispositions",
+   "unconnected_zero",
+   "lib_electrical_level( PASS )",
+   "pads_within_outline",
+   "density_and_clearance"
+  ],
+  "vacuous": [
+   "ref_plane_continuity（K1 无平面层 ⇒ 须口径裁定）"
+  ],
+  "blocked": "无（除 refplane 口径）"
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "tools_touched": false
+}

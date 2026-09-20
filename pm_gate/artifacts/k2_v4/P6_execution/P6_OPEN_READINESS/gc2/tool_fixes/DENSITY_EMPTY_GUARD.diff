@@ -1,0 +1,23 @@
+--- a/docs/drafts/p4-j8-density-clearance-v1/measure_density_and_clearance.py
++++ b/docs/drafts/p4-j8-density-clearance-v1/measure_density_and_clearance.py
+@@ -130,12 +130,15 @@
+             if pad.GetAttribute() in (pcbnew.PAD_ATTRIB_PTH, pcbnew.PAD_ATTRIB_NPTH):
+                 dr = pad.GetDrillSize()
+                 hd.append(min(dr.x, dr.y))
+-    return {"min_track_width_mm": round(min(t.GetWidth() for t in tracks) / NM, 4),
++    def _mn(vals):
++        """空集 ⇒ None（**不崩**）：无对象可测（如放置态板无走线/无过孔）时按 null 上报。"""
++        return round(min(vals) / NM, 4) if vals else None
++    return {"min_track_width_mm": _mn([t.GetWidth() for t in tracks]),
+             "n_tracks": len(tracks),
+-            "min_via_diameter_mm": round(min(vd) / NM, 4), "n_vias": len(vd),
+-            "min_via_drill_mm": round(min(vdr) / NM, 4),
+-            "min_via_annular_mm": round((min(vd) - min(vdr)) / 2.0 / NM, 4),
+-            "min_hole_drill_mm": round(min(hd) / NM, 4) if hd else None, "n_holes": len(hd)}
++            "min_via_diameter_mm": _mn(vd), "n_vias": len(vd),
++            "min_via_drill_mm": _mn(vdr),
++            "min_via_annular_mm": (_mn([(min(vd) - min(vdr)) / 2.0]) if (vd and vdr) else None),
++            "min_hole_drill_mm": _mn(hd), "n_holes": len(hd)}
+ 
+ 
+ def main(argv=None):
