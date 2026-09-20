@@ -147,16 +147,26 @@
   "note": "**U2 的 pad 7/8 无网且无 NC 声明**（`k2_nets#nc` 25 条不含 U2；`placements[].nc` 亦不含）——与 C-1 的『6 脚符号落 8 pad SOIC』一致（另 2 脚悬空）。其余多数为 U6 BGA 保留球 / U1 未用 GPIO / 连接器保留脚 / 安装孔，且 U6/U4/J2-J4 **已有 NC 声明**。"
  },
  "E_impact_and_ask": {
-  "if_registry_right": "**交付板 U2/U8（及 K1 U8）land pattern 与器件不符 ⇒ 不可制造** ⇒ 须开新 rev（触交付锚，另批）。",
-  "if_design_right": "**内部『引脚真源』注册册归属不可信** ⇒ 对 **C-1/C-25**（外部真源）是直接反证：该册**非手册派生**，不宜作 `source_of_truth`（**支持 C-25 走 tier1 库封装语料**）。",
+  "corrected_impact": "**非『新发现不可制造风险』**；而是：(i) 交付板 land-pattern/封装指派问题**已在册**（E2 规则 + CONVERGENCE §供裁），处置边界明示涉 **owner 闸/判据通道** ⇒ **本件不重复上报为风险**；(ii) 本件**新增**的只是**注册册归属不可信**这一事实，用以支撑 **C-25 tier1** 建议。",
   "ask": [
-   "澄清 `DCDC_12V_3V3/5V` 的**实装器件与封装**（以需求冻结/BOM 为准）",
-   "据结论修注册册或修板（**均须授权**）",
-   "**监理自裁面；owner 闸口=无**（除非判定为拓扑/选件 ⇒ 按 L1 上报）"
+   "**C-25**：采纳本件作为『注册册（tier2）不可靠、宜走 tier1 库封装语料』的依据（**监理自裁**）。",
+   "**DCDC 器件归属**：若监理要澄清实装器件 ⇒ 属**在册待裁项**（CONVERGENCE §供裁 ②），本件仅补『注册册侧 TLV61046 不可信』之一半证据。"
   ]
  },
  "readonly_repo": true,
  "not_landed": true,
  "no_new_criteria_dim": true,
- "ts": "2026-09-22T09:05:00+0800"
+ "ts": "2026-09-22T09:25:00+0800",
+ "corrections_after_crosscheck": {
+  "_what": "本件初稿曾把『U2 pad7/8 无网且无 NC 声明』与『U2 封装指派存疑』当作新发现 ⇒ **经交叉核对，二者均已在册** ⇒ 现更正。",
+  "U2_pad7_8_no_net": "**已登记**：`k2/docs/K2-P2-E2-directed-pad-registry-v1.md` §1 ⇒ `U2`「余量焊盘 `7`,`8`；**结构性余量（SOIC-8 未用脚），登记即闭**」。⇒ **非新发现**，本件仅作复现（与在册一致）。",
+  "U2_footprint_assignment": "**已登记**：`k2/docs/K2-P4-CONVERGENCE-STATUS-v1.md` §『工程含义（供裁）』② ⇒ *『`U2` 真源符号 = `DCDC_12V_3V3`（**无型号/图纸**，`body_width: 17.78` 与封装名矛盾）⇒ **封装指派本身存疑**』*。⇒ **非新议题**。",
+  "existing_boundary_red_line": "同文件已明示处置边界：**源侧**（按库重落 land pattern / 改生成器源）⇒ **owner 闸**（未获批不得改生成器）；**判据侧**（容忍 pad 级差异）⇒ 判据维度/阈值变更 = **owner 通道**。⇒ 本件**不得**绕过该边界。",
+  "U1_EP_not_grounded": "亦**已登记**（同 E2 件 §2 ⇒『板侧缺陷（`U1` 截断，2-A″）＋板侧缺陷（**EP 未接 GND**）』，待监理 2-A″）⇒ 本件无网 pad 普查中的 `U1` 22 pad 与之同源。"
+ },
+ "narrowed_new_contribution": {
+  "genuinely_new": "注册册 `DCDC_12V_3V3`/`DCDC_12V_5V` 的 `source=TI SLVSD82 (**TLV61046A 28V Boost**)` / `package=SOT-23-6` **未见于任何既有件**（**全仓 `TLV61046` 仅出现在该 2 个注册册文件**），且**拓扑不合**（该轨为 12V→5V/3.3V 降压 6A/3A）⇒ 系**与既有『封装指派存疑』一致的补强证据**：注册册 pins **由设计派生、非手册派生**。",
+  "relevance": "⇒ 对 **C-1/C-25** 为直接反证：该册**不宜作 `source_of_truth`**（**支持 C-25 走 tier1 库封装语料**）。",
+  "severity": "**信息级/机制级**（非交付阻塞）：交付板 canonical 19/19 与 DFM 读数不受影响；且『封装指派存疑』已是**在册待裁项**。"
+ }
 }
