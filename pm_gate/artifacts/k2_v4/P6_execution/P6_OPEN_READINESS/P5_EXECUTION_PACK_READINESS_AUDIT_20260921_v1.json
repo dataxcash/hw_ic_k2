@@ -1,0 +1,115 @@
+{
+ "artifact": "k2_p5_execution_pack_readiness_audit",
+ "schema": 1,
+ "purpose": "监理自动续推轮（P6）：对**唯一未闭阶段门 P5** 的执行包做只读可用性核对 —— 计划↔规程↔检查表↔回填模板四件一致性 · 全部测点指向是否在受审板上真实存在（板直读）· 记录/判定/责任边界是否齐备。只读；不动包。",
+ "inputs": {
+  "plan": "k2/docs/K2-P5-FIRST-ARTICLE-ACCEPTANCE-PLAN-v1.md",
+  "rules": "k2/pm_gate/artifacts/k2_v4/L6/first_article/RULES.md（8bee09616020d5a9）",
+  "checklist": "first_article/CHECKLIST.md（d7dda9a82c5d06f3）",
+  "template": "first_article/results_template.json（c688b7daf9953b30）",
+  "selfcheck": "first_article/INSTRUMENT_SELFCHECK.json（3f89dec1a6481fe5）"
+ },
+ "A_consistency": "计划 §2 的 V4/V5/V6-1..5/V7 共 8 项 ⇒ 回填模板 8 项一一对应（V4_impedance_coupon · V5_pdn_dc_drop · V6_1_rail_voltages · V6_2_mcu_swd_id · V6_3_fru_i2c · V6_4_link_gen4_x4 · V6_5_stability_30min_aer · V7_thermal_o2）；阈值（85Ω±10% / ≤3% / ±5% / 二值 / AER=0 / Tj≤120℃ 且 T1 触发 >117℃）在模板 `criterion` 字段逐项落字；CHECKLIST 与 RULES 同阈值；计划 §3 具名观察 4 条中 2 条入 `observations_p5_named`、1 条（F.Cu 0.2825）纳入 V4 判据、1 条（B.Cu 无 run）标注无需动作 ⇒ 无漏项。",
+ "B_pointer_verification": {
+  "method": "ENG 以 pcbnew-free 解析器直读受审板 l7（58 footprint / pad→net）逐点核对规程与检查表所引 refdes/pad/net",
+  "results": [
+   {
+    "check": "J13 SWD 引脚",
+    "ok": true,
+    "detail": "{'1': 'SWDIO', '2': 'SWCLK_BOOT0', '3': 'GND', '4': 'MCU_VDD'}"
+   },
+   {
+    "check": "NRST 测点 U1.pad10",
+    "ok": true,
+    "detail": "U1.pad10=NRST"
+   },
+   {
+    "check": "NRST 测点 R29.pad1",
+    "ok": true,
+    "detail": "R29={'1': 'NRST', '2': 'MCU_VDD'}"
+   },
+   {
+    "check": "NRST 测点 C73.pad1",
+    "ok": true,
+    "detail": "C73={'1': 'NRST', '2': 'GND'}"
+   },
+   {
+    "check": "V6-4 端口 J2/J3/J4 存在且带 PCIE 网",
+    "ok": true,
+    "detail": {
+     "J2": {
+      "pads": 74,
+      "pcie": 36
+     },
+     "J3": {
+      "pads": 38,
+      "pcie": 18
+     },
+     "J4": {
+      "pads": 38,
+      "pcie": 18
+     }
+    }
+   },
+   {
+    "check": "中继 U6 存在",
+    "ok": true,
+    "detail": "U6 pads=354 · nets=77"
+   },
+   {
+    "check": "V5/V6-1 四轨网存在",
+    "ok": true,
+    "detail": "轨网 12V_IN/P3V3/P3V3_AUX/MCU_VDD 见 INSTRUMENT_SELFCHECK（all_nets_present=True）"
+   },
+   {
+    "check": "回填模板项数 == 计划验收项",
+    "ok": true,
+    "detail": "['V4_impedance_coupon', 'V5_pdn_dc_drop', 'V6_1_rail_voltages', 'V6_2_mcu_swd_id', 'V6_3_fru_i2c', 'V6_4_link_gen4_x4', 'V6_5_stability_30min_aer', 'V7_thermal_o2']"
+   },
+   {
+    "check": "每项含 criterion + evidence + status 槽",
+    "ok": true,
+    "detail": "8/8 项均含 criterion/evidence/status"
+   },
+   {
+    "check": "责任边界（实测方/判定归监理）",
+    "ok": true,
+    "detail": "measured_by=<实测方（不得 ENG 自证）> judged_by=监理"
+   },
+   {
+    "check": "交付锚一致",
+    "ok": true,
+    "detail": "{\"package\": \"pm_gate/artifacts/k2_v4/L6/jlc_package\", \"manifest_sha256\": \"6ee7495de61f749fba61a04a5311e17040988c322b3a17f46b6f26efd8b243b2\", \"tarball_sha256\": \"0e88e107e2da81923ccdda0c20d89c7ca486bc22"
+   }
+  ],
+  "verdict": "全部指向真实存在且网名相符（含 V6-2 特别说明：NRST **不在 J13**，测点 = U1.pad10 / R29.pad1 / C73.pad1 三者均 = NRST ⇒ 规程的『纠正性说明』正确）"
+ },
+ "C_record_and_judgement": "回填模板含 status_enum{NOT_RUN,PASS,FAIL,INCONCLUSIVE} · 逐项 measured/evidence 槽 · conditions_global（Ta/风速/仪器/供电）· 具名观察槽 · judgement 槽（『判定归监理』）。责任边界明确：**实测方执行并签字 · 不得 ENG 自证**。交付锚写在模板内且与现行包一致（MANIFEST 6ee7495d…/tarball 0e88e107…）。",
+ "D_findings": [
+  {
+   "id": "P5-1",
+   "severity": "中（P5 唯一未闭门之输入风险）",
+   "finding": "**P5 的 V4（阻抗券）在随单件中未被索取**：`jlc_package/ORDER_NOTES.md` 仅写『下单勾选阻抗控制』，未要求板厂**出阻抗券报告**；索取动作写在**到货后**的验收规程 `first_article/RULES.md §V4（向板厂索取…）`。若板厂默认不出券，V4 将无输入（只能记 INCONCLUSIVE）。",
+   "evidence": "ORDER_NOTES.md 全文无『券/coupon』字样（grep 实证）；RULES.md §V4 有『索取』条目；CHECKLIST V4 行要求券覆盖 0.6mm 中心 + 0.2825mm 最紧段。",
+   "options": [
+    "(a) **随单件补一行**（`ORDER_NOTES.md §1` 增『请提供各层阻抗券报告（覆盖 0.6mm 中心几何 + 0.2825mm 最紧段）』）⇒ 改包 = **触交付锚** ⇒ 需监理授权重出包；",
+    "(b) **不动包**：由商务在下单页备注/邮件索取（不动交付锚）⇒ 需监理在册面确认此口径。"
+   ],
+   "note": "两案均属**交付口径 = 监理自裁项**；ENG 不擅自改包（红线：不重建包）。"
+  },
+  {
+   "id": "P5-2",
+   "severity": "装饰级",
+   "finding": "`jlc_package/DISCLOSURE.md §5b` 条目编号乱序：1 · 2 · 3 · **5** · **4**（第 4 条『正面丝印越框』印在第 5 条之后）。",
+   "evidence": "DISCLOSURE.md §5b 原文顺序",
+   "options": [
+    "随 (a) 一并重出包时修正；或不动包、仅在册面记录（不影响内容与可制造性）。"
+   ]
+  }
+ ],
+ "E_verdict": "**P5 执行包可用**：8 项验收项与阈值齐备 · 回填模板/检查表/规程/计划四件同口径 · **全部测点指向在 l7 板上实证存在且网名相符** · 记录与责任边界（实测方执行/判定归监理）明确。**唯一输入风险 = D-P5-1（阻抗券未随单索取）**，处置需监理裁定（两案均不动真源几何）。阶段门态不变：P0–P4 与 P6 判据面 PASS，**P5 仍为唯一未闭阶段门**，未越阶段。",
+ "readonly_repo": true,
+ "not_landed": true,
+ "no_new_criteria_dim": true,
+ "ts": "2026-09-22T00:25:00+0800"
+}
