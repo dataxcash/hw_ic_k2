@@ -1,0 +1,87 @@
+_purpose: C-25 外部真源草案（gate 属主安装目标）：`criteria/jlc_hdi_capability.yaml`。为判据维 `density_and_clearance` 提供**独立外部真源**（JLC 工艺能力），破『真源=被验对象自身』(#K2-47 §三)。
+_install_target: criteria/jlc_hdi_capability.yaml（属主 ic_hw_gate · 0444；ENG 只读 ⇒ 本件为草案，安装由 gate 属主执行）
+doc_id: JLCPCB PCB Capabilities (jlcpcb.com/capabilities/pcb-capabilities)
+doc_url: https://jlcpcb.com/capabilities/pcb-capabilities
+doc_sha256: 7d1d5a9193f3c2123367b1b306e9e3c67863fd31da6e577ad7c4f197fab8ac9d
+doc_sha256_full_note: sha256 = 抓取页原始 HTML（去标签前）
+fetched: '2026-09-12'
+captured_copy_file: k2/pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_co146_jlc_capability_source.html
+captured_copy_bytes: 135508
+revision: CO146-CAP.4
+_note: 值均取自抓取件（CO146-CAP.4 · 27 规则/29 捕获组 · anchor 逐条为原文子串）。**未新增判据维/阈值**；本件只声明**外部能力真源**。
+capability:
+  layer_count:
+    min: 1
+    max: 32
+    quote: Layer count 1-32 Layers
+  min_track_width_mm:
+    value: 0.09
+    quote: 'Min. track width and spacing (1 oz) Multilayer: 0.09 / 0.09 mm (3.5 / 3.5 mil). 3 mil is acceptable in BGA fan-outs.'
+  min_track_spacing_mm:
+    value: 0.09
+    quote: 同上（3.5 mil）；BGA fan-out 可 3 mil (0.0762mm)
+  min_via_hole_mm:
+    value: 0.15
+    preferred: 0.2
+    quote: 'Min. Via hole size/diameter 0.15mm / 0.25mm ... ② Preferred Min. Via hole size: 0.2mm'
+  min_via_diameter_mm:
+    value: 0.25
+    quote: Min. Via hole size/diameter 0.15mm / 0.25mm
+  via_hole_to_hole_mm:
+    value: 0.2
+    quote: Via Hole-to-Hole Spacing 0.2mm
+  pad_hole_to_hole_mm:
+    value: 0.45
+    quote: Pad Hole-to-Hole Spacing 0.45mm
+  min_npth_mm:
+    value: 0.5
+    quote: Min. Non-plated holes 0.50mm
+  copper_edge_clearance_mm:
+    value: 0.2
+    quote: 'Copper clearance from routed board edges: ≧0.2 mm'
+  solder_mask_to_copper_mm:
+    value: 0.09
+    quote: Keep at least 0.09 mm clearance between soldermask openings and neighboring traces
+  solder_mask_bridge_mm:
+    value: 0.1
+    quote: 'Soldermask bridge 0.10mm 1oz: Min. pad spacing: 0.10 mm'
+  surface_finish:
+    value: ENIG
+    quote: Surface Finish HASL ... FR-4/HDI boards with 6 or more layers ... do not support HASL
+  impedance_tolerance_pct:
+    value: 10
+    quote: Impedance Tolerance ±10%
+  outer_copper_oz:
+    value: 1.0
+    allowed: 1 oz / 2 oz
+    quote: 'Finished Outer Layer Copper Multi-layer: 1 oz / 2 oz'
+  inner_copper_oz:
+    value: 0.5
+    allowed: 0.5 oz / 1 oz / 2 oz
+    quote: Finished Inner Layer Copper 0.5 oz / 1 oz / 2 oz ... 0.5oz by default
+  blind_buried:
+    supported: false
+    quote: Blind/Buried Vias Not supported Currently we don't support Blind/Buried Vias, only make through holes.
+  blind_buried_faq:
+    note: FAQ：blind/buried、HDI(laser vias) 属 advanced options，须 DFM review，成本/交期上升
+    quote: Advanced options such as blind/buried vias, HDI (laser vias) ... require DFM review and may increase both cost and production time.
+  board_max_mm:
+    w: 656.0
+    h: 586.0
+    quote: 'FR4(6-layer and above): 656 × 586 mm'
+  board_min_mm:
+    w: 3.0
+    h: 3.0
+    quote: 'Minimum Dimensions FR4/Rogers/PTFE: 3 × 3 mm'
+  thickness_mm:
+    value: 1.6
+    range: 0.4 – 4.5
+    tol_pct: 10
+    quote: Thickness 0.4 – 4.5 mm ... 1.6 ... Thickness Tolerance (Thickness≥1.0mm) ± 10%
+_binding_to_threshold:
+  dimension: density_and_clearance
+  manifest_thresholds: criteria/manifest.k2.yaml#thresholds.density_and_clearance = {cell_mm:10, cell_origin:frame_origin, max_fp_per_cell:8, min_copper_clearance_mm:0.1}
+  external_basis: JLC 最小线宽/间距 0.09mm（1oz 多层；BGA fan-out 0.0762mm）⇒ 判据下限 0.100mm **严于** JLC 能力底线 0.09mm（保守侧，非缩口径）
+  fp_density_basis: max_fp_per_cell=8 为**设计侧布局预算**（非 JLC 能力值）⇒ 该半维的『外部真源』= 本件（能力底线）+ 板侧几何测量件（min_clearance_json/density_json）；口径变更须监理裁。
+  blind_buried_caveat: JLC **标准**能力页明示 blind/buried & HDI(laser via) 属 advanced options、须 **DFM review**（`blind_buried.supported=false`）。本工程工艺冻结=A（JLC HDI 盲埋孔，阶数≥2）⇒ 该节为**须随单确认的工艺前置**，非本维阈值。
+_ascii_note: 字段名保持英文以便机器消费；中文说明置于 _ 前缀键。

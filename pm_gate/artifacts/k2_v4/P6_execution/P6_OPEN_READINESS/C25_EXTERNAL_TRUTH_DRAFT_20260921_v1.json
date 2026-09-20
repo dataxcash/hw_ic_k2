@@ -1,0 +1,73 @@
+{
+ "artifact": "k2_p6_c25_external_truth_draft",
+ "schema": 1,
+ "purpose": "承 #K2-47 §三（C-25 残面）：为 `density_and_clearance` / `lib_electrical_level` 两维提供**独立外部真源草案**，破『以板为准/包内自证』。ENG 对 criteria/ 只读 ⇒ 本包为**草案**，安装归 gate 属主。**未新增判据维、未改阈值**。",
+ "ruling": "#K2-47（监理 2026-09-20 · criteria rev=5 2da49b56a1b329ad）",
+ "deliverables": {
+  "jlc_hdi_capability.yaml": "k2/docs/drafts/c25-external-truth-v1/criteria__jlc_hdi_capability.yaml（sha16 00faba340bb7eb5b）",
+  "parts_electrical_truth.yaml": "k2/docs/drafts/c25-external-truth-v1/criteria__parts_electrical_truth.yaml（sha16 bc76ef81ae5d0cdf · **PARTIAL**）",
+  "manifest_patch": "k2/docs/drafts/c25-external-truth-v1/manifest.k2.dim_source_of_truth.patch（sha16 b1c14714dea5e672）",
+  "README": "k2/docs/drafts/c25-external-truth-v1/README.md"
+ },
+ "jlc_truth_provenance": {
+  "doc_id": "JLCPCB PCB Capabilities (jlcpcb.com/capabilities/pcb-capabilities)",
+  "doc_url": "https://jlcpcb.com/capabilities/pcb-capabilities",
+  "doc_sha256": "7d1d5a9193f3c2123367b1b306e9e3c67863fd31da6e577ad7c4f197fab8ac9d",
+  "captured_copy": "k2/pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_co146_jlc_capability_source.html（135508 B）",
+  "derived_from": "m13_v57_co146_jlc8_capability.json（CO146-CAP.4 · 27 规则/29 捕获组 · anchor 逐条原文子串）",
+  "key_values": {
+   "min_track_width_mm": 0.09,
+   "min_track_spacing_mm": 0.09,
+   "min_via_hole_mm": 0.15,
+   "min_via_diameter_mm": 0.25,
+   "copper_edge_clearance_mm": 0.2,
+   "solder_mask_to_copper_mm": 0.09,
+   "blind_buried_supported": false
+  },
+  "threshold_binding": "判据下限 min_copper_clearance_mm=0.100 **严于** JLC 能力底线 0.09mm（保守侧，非缩口径）；fp_peak_per_cell<=8 属**设计侧布局预算**（非 JLC 值），已在该真源 `_binding_to_threshold` 显式登记。",
+  "blind_buried_caveat": "JLC 标准能力页 `blind_buried.supported=false`（HDI/激光孔属 advanced options 须 DFM review）；本工程工艺冻结=A 属**须随单确认的工艺前置**，非本维阈值。"
+ },
+ "parts_truth_status": {
+  "state": "PARTIAL",
+  "why": "该维 expect = n_electrical_diff==0 ∧ n_pad_name_set_only==0（逐器件逐引脚电气级）；仓库既有已转录手册仅 6 件（K1 L1/inputs/datasheets/，均含出处三件套）。",
+  "registry_parts": [
+   "Bourns_SRP6060FA-6R8M",
+   "JST_VH_B2P-VH",
+   "TPD2E001",
+   "TPS22965",
+   "TPS22990",
+   "TPS54628"
+  ],
+  "gate": "未补全前不得安装（fail-closed）；不得以部分覆盖充绿（C-12/skipped 不充绿）。"
+ },
+ "live_validation": {
+  "where": "/tmp 沙箱（仓库零写）· 真 CLI `python3 -m eda_core.truth_binding check-dimensions`",
+  "baseline_rev5": {
+   "declared": "17/19",
+   "violations": 2,
+   "verdict": "FAIL"
+  },
+  "after_draft": {
+   "declared": "19/19",
+   "violations": 0,
+   "verdict": "PASS"
+  },
+  "negctl_self_source": {
+   "rule": "density/lib 真源改指受审板",
+   "verdict": "被拦（fail-closed）"
+  },
+  "negctl_missing_file": {
+   "verdict": "被拦（fail-closed）"
+  },
+  "reproduces_ruling": "基线 17/19 与 #K2-47 §三「正控 17/19」逐字相符"
+ },
+ "boundary": {
+  "eng_wrote_criteria": false,
+  "new_criteria_dim": false,
+  "threshold_changed": false,
+  "frozen_sources_untouched": true,
+  "delivery_anchor_untouched": true,
+  "owner_gate": "无（gate 属主落件项）"
+ },
+ "ts": "2026-09-22T05:20:00+0800"
+}

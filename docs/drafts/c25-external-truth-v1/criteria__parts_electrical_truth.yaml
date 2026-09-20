@@ -1,0 +1,109 @@
+_purpose: C-25 外部真源草案（gate 属主安装目标）：`criteria/parts_electrical_truth.yaml`。为判据维 `lib_electrical_level` 提供**独立外部真源**（器件手册的引脚/电气级），破『以板为准』的自证 (#K2-47 §三)。
+_install_target: criteria/parts_electrical_truth.yaml（属主 ic_hw_gate · 0444；ENG 只读 ⇒ 本件为草案）
+_status: '**PARTIAL（须先补全方可安装）** —— 本草案给出**出处登记册 + schema**；`lib_electrical_level` 的 expect =『n_electrical_diff==0 ∧ n_pad_name_set_only==0（以板为准）』，其外部真源应为**逐器件、逐引脚电气级**。'
+acceptance_expect: n_electrical_diff == 0 且 n_pad_name_set_only == 0（审计板 sha16 须 == 受审板 sha16）
+schema:
+  truth:
+    <refdes>:
+      part: <型号>
+      doc_id: …
+      doc_url: …
+      doc_sha256: …
+      pins:
+        <pin_number>:
+          name: …
+          electrical: input|output|bidirectional|passive|power_in|power_out|no_connect
+      where: <手册章节>
+      page: <页>
+      excerpt: <原文>
+provenance_registry:
+- part: Bourns_SRP6060FA-6R8M
+  doc_id: Bourns SRP6060FA Series datasheet (150742)
+  doc_url: https://www.bourns.com/docs/Product-Datasheets/SRP6060FA.pdf
+  doc_sha256: 28ee89c71c693436d0f33e33d36df97c3704511c09249bd0cc4373f23e026740
+  package: SRP6060FA, shielded, 6.6 x 6.4 x 5.3 mm
+  params_transcribed:
+  - dcr_max_mohm
+  - dcr_typ_mohm
+  - inductance_uh
+  - irms_a_20c_rise
+  - isat_a
+  - operating_temp_c
+  source_file: k1/pm_gate/artifacts/k1/L1/inputs/datasheets/Bourns_SRP6060FA-6R8M.yaml
+- part: JST_VH_B2P-VH
+  doc_id: JST VH Series (eVH) datasheet
+  doc_url: https://www.jst-mfg.com/product/pdf/eng/eVH.pdf
+  doc_sha256: d51e669c597988b20c0963daf5bef7356cbd2104c1f867e9107c6fa6cd2b899c
+  package: VH 3.96mm, 2 circuits, top entry (through-hole)
+  params_transcribed:
+  - applicable_wire_awg
+  - current_rating_a
+  - voltage_rating_v
+  source_file: k1/pm_gate/artifacts/k1/L1/inputs/datasheets/JST_VH_B2P-VH.yaml
+- part: TPD2E001
+  doc_id: TI TPD2E001 (SLVS610 — 2-Channel ESD Protection Array)
+  doc_url: https://www.ti.com/lit/ds/symlink/tpd2e001.pdf
+  doc_sha256: b648c5d12f3e5b48c4b8ce3a9c4d5c4f1d40abb084d097e88465ba2f48d98d79
+  package: 可选 DRY (6-pin USON) / DRL (5-pin SOT) / DRS (6-pin WSON) / DZD (4-pin SOT-23)
+  params_transcribed:
+  - channels
+  - esd_iec_airgap_kv
+  - esd_iec_contact_kv
+  - io_abs_max_v
+  - package_options
+  - pinout_6pin
+  - selected_variant
+  - vcc_max_v
+  - vcc_min_v
+  source_file: k1/pm_gate/artifacts/k1/L1/inputs/datasheets/TPD2E001.yaml
+- part: TPS22965
+  doc_id: TI SLVSBJ0F (AUGUST 2012 – REVISED AUGUST 2016)
+  doc_url: https://www.ti.com/lit/ds/symlink/tps22965.pdf
+  doc_sha256: 3300eef743d7871f96c752227ae8f958006a902123ce2df351cf0772ec95a7e1
+  package: DSG (WSON), 8 pins
+  params_transcribed:
+  - iout_max_a
+  - r_on_mohm
+  - r_theta_ja_c_per_w
+  - t_a_max_c
+  - t_j_max_c
+  - topology
+  - vin_max_v
+  source_file: k1/pm_gate/artifacts/k1/L1/inputs/datasheets/TPS22965.yaml
+- part: TPS22990
+  doc_id: TI SLVSDK1C
+  doc_url: https://www.ti.com/lit/ds/symlink/tps22990.pdf
+  doc_sha256: ea198776524544eb3e4a130f1f6a6e5c8e80ca8164eebf387a8fd6b4b7dde2a3
+  package: DML (WSON), 10 pins
+  params_transcribed:
+  - iout_max_a
+  - r_on_mohm
+  - r_theta_ja_c_per_w
+  - t_a_max_c
+  - t_j_max_c
+  - topology
+  - vin_max_v
+  source_file: k1/pm_gate/artifacts/k1/L1/inputs/datasheets/TPS22990.yaml
+- part: TPS54628
+  doc_id: TI SLVSBW5A (APRIL 2013 – REVISED DECEMBER 2016)
+  doc_url: https://www.ti.com/lit/ds/symlink/tps54628.pdf
+  doc_sha256: 638ae7d8504d9b44fe5548cc89e0d0366fbe80d473d7f455660838fcc1d3607b
+  package: DDA (SO PowerPAD), 8 pins
+  params_transcribed:
+  - fsw_khz
+  - iout_max_a
+  - iq_ua_max
+  - r_theta_ja_c_per_w
+  - rds_hs_mohm
+  - rds_ls_mohm
+  - t_a_max_c
+  - t_j_max_c
+  - topology
+  - vin_max_v
+  - vin_min_v
+  source_file: k1/pm_gate/artifacts/k1/L1/inputs/datasheets/TPS54628.yaml
+_coverage_census:
+  datasheets_transcribed_in_repo: 6
+  note: 仓库内已转录手册 = 6 件（K1 L1/inputs/datasheets/），均含出处三件套 doc_id/doc_url/doc_sha256。**其余器件（连接器/MUX/EEPROM/TVS/MCU 等）的引脚电气级尚未转录** ⇒ 安装前须补齐至覆盖面 == 受审板 `lib_electrical_level` 审计所涉器件全集。
+  fail_closed: 未覆盖器件在安装后会使该维仍**不可达**（check-dimensions 保持 17/19），**不得以部分覆盖充绿**（C-12/skipped 不充绿）。
+readonly_derivation: 本草案**只登记**既有转录件（k1/pm_gate/artifacts/k1/L1/inputs/datasheets/*.yaml），未新造任何数值。
