@@ -1,0 +1,66 @@
+{
+ "artifact": "k2_batch6_k2_regression_precheck",
+ "schema": 1,
+ "purpose": "**R-2 预答**：D-1…D-5（+v2）落件是否动 K2 验收面 —— 用**只读影子 pytest**（`_shared/eda_core/tests/test_hs_route_model.py`，验收门 D 维的 PYTESTERS 锚，`k2_p6_readonly_baseline_v1.py:37`）实测三种树。",
+ "method": "cd <影子树根> && AppDir/bin/python3.11 -m pytest -q -rf <test>；影子须 `eda_core`→`_shared/eda_core` 与 `AppDir` 两个 symlink（`eda_core.__file__` 已断言落在影子内）。",
+ "results": {
+  "pristine_container": {
+   "failed": 2,
+   "passed": 61,
+   "skipped": 12,
+   "failing": [
+    "TestV5FlipRedesign::test_chain_no_pn_zero_spacing",
+    "TestBoardLevelConsistency::test_board_level_consistency"
+   ],
+   "note": "两项 = 既定 C1/C2 具名 RED"
+  },
+  "corrected_baseline_D1_D5_nopairaware": {
+   "failed": 3,
+   "passed": 60,
+   "skipped": 12,
+   "failing": [
+    "TestV5FlipRedesign::test_chain_no_pn_zero_spacing",
+    "TestBoardLevelConsistency::test_board_level_consistency",
+    "**新增** TestV6ViaPolarityPrecheck::test_correct_polarity_solves_clean"
+   ],
+   "verdict": "**K2 回归 1 项**（PASS→FAIL）⇒ 原样落件**过不了**验收门"
+  },
+  "v2_pairaware_best_of_unscoped": {
+   "failed": 3,
+   "passed": 60,
+   "skipped": 12,
+   "failing": [
+    "TestV5FlipRedesign::test_chain_no_pn_zero_spacing",
+    "TestV6ViaPolarityPrecheck::test_correct_polarity_solves_clean",
+    "TestBoardLevelConsistency::test_board_level_consistency"
+   ],
+   "verdict": "回归与 VG 对级化**无关**（由 D-1…D-5 自身引入）"
+  },
+  "k1_domain_scoped_v2": {
+   "failed": 2,
+   "passed": 61,
+   "skipped": 12,
+   "failing": [
+    "TestV5FlipRedesign::test_chain_no_pn_zero_spacing",
+    "TestBoardLevelConsistency::test_board_level_consistency"
+   ],
+   "verdict": "**零回归**（与 pristine 逐项同）",
+   "k1_truth_segment_solved": 2,
+   "k1_truth_rx0_input_pn_edge": 0.2636
+  }
+ },
+ "root_cause": {
+  "site": "FIX-B（D-3/D-1 的段级 P/N 门）：阈值取 `spec.impedance.gap_mm` **边缘口径**",
+  "why": "K2 合法构造的边缘距 = 0.38（中心距）− 0.205（线宽）= **0.175 ± 1e-3**，与 K2 `impedance.gap_mm = 0.175` **同值** ⇒ 浮点越界 ⇒ DN4 input 由 SOLVED 落为 INFEASIBLE ⇒ `test_correct_polarity_solves_clean` 断言失败",
+  "fix_口径": "与引擎既有 `_pn_spacing_check` **同口径/同容差**（K2 用 0.155 = 0.175 − 0.02），或统一改**中心距口径 `≥ 线宽 + p_gap`**；**禁**另立裸阈值（撞 owner 常设② 禁新增检查齿）",
+  "scope_fix": "FIX-A/FIX-B 加 `self.v4_project_dim() == \"k1\"` 域限定（B2-2 已存在的显式分派）；D-1/D-2/D-5/④/⑤/(d)/⑥ 天然 K1-only（`_k1_escape*` 仅在 `single_net_mode` 可达）"
+ },
+ "artifacts_sha16": {
+  "BATCH6_D15_K1_SCOPE_v1.patch": "ceda2c8b3ad82eec",
+  "k1scope_hs_route_model": "4d4b33c300cfa4c5",
+  "unscoped_v2_hs_route_model": "5bc6a0d918c14902"
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-21T10:45:00+0800"
+}

@@ -5,13 +5,32 @@
  "owner_gate": "无（全部 L2/机制/批次面）",
  "delta": [
   {
+   "id": "R-2 预答（已实测；原 v1 选项 2 被证实为唯一零回归路径）",
+   "status": "已测答案（只读影子 pytest；供裁定直接采用）",
+   "question": "D-1…D-5（+v2）落件后 K2 验收面是否移动？",
+   "measured": {
+    "pristine": "2 failed / 61 passed / 12 skipped（两项 = 既定 C1/C2 RED）",
+    "D-1…D-5 原样": "3 failed / 60 passed ⇒ **新增回归 `TestV6ViaPolarityPrecheck::test_correct_polarity_solves_clean`（PASS→FAIL）**",
+    "v2 对级化（同原样）": "3 failed / 60 passed ⇒ 回归由 D-1…D-5 自身引入，**与 VG 对级化无关**",
+    "**K1 域限定 v2**": "**2 failed / 61 passed / 12 skipped（与 pristine 逐项同 = 零回归）**，且 K1 真值仍 **2/8**（RX0/input 边缘净距 0.2636）"
+   },
+   "root_cause": "FIX-B（段级 P/N 门）阈值取 `spec.impedance.gap_mm` 的**边缘口径**：K2 合法边缘距 = 0.38−0.205 = **0.175±1e-3** 与 K2 `gap_mm=0.175` 同值 ⇒ 浮点越界 ⇒ DN4 input 由 SOLVED 落为 INFEASIBLE",
+   "recommend": "**采用选项 2 = K1 域限定**（FIX-A/FIX-B 加 `self.v4_project_dim()==\"k1\"`；D-1/D-2/D-5/④/⑤/(d)/⑥ 天然 K1-only）+ FIX-B 阈值改与引擎既有 `_pn_spacing_check` **同口径同容差**（K2 0.155 = 0.175−0.02）或统一**中心距口径 `≥ 线宽+p_gap`**；**禁另立裸阈值**（撞 owner 常设② 禁新增检查齿）",
+   "evidence": "BATCH6_K2_REGRESSION_PRECHECK_v1.json · BATCH6_D15_K1_SCOPE_v1.patch（1278B，小改动，可复核）"
+  },
+  {
    "id": "R-3",
    "status": "更新（推荐项变更；其余选项/证据不变）",
    "new_recommend": "同批落的候选从 POC 的**单向序**（`BATCH6_VG_PAIRAWARE_v1.patch`，RX0/input 边缘净距 0.174）改为 **v2 双向择优序**（`BATCH6_VG_PAIRAWARE_v2.patch`，同一段边缘净距 **0.2636**）",
    "why": "7 策略同基线实测定序：P 先 / N 先 / 两轮 皆 2/8；`best_of`（两序都算，取通过修正门且 P/N **边缘净距更大**者）确定性取到 0.2636 ⇒ **同增益、更多裕度、且对次序不敏感**（不是碰运气）",
-   "measured": {"np_indep(修正基线)": "1/8 shared=8", "np_pairaware(v1)": "2/8 shared=23 RX0/input edge 0.174",
-                "pn_pairaware": "2/8 shared=23 RX0/input edge 0.2636", "best_of(v2)": "2/8 shared=23 RX0/input edge 0.2636",
-                "layer_legality_violations": 0, "two_run_bytewise_identical": true},
+   "measured": {
+    "np_indep(修正基线)": "1/8 shared=8",
+    "np_pairaware(v1)": "2/8 shared=23 RX0/input edge 0.174",
+    "pn_pairaware": "2/8 shared=23 RX0/input edge 0.2636",
+    "best_of(v2)": "2/8 shared=23 RX0/input edge 0.2636",
+    "layer_legality_violations": 0,
+    "two_run_bytewise_identical": true
+   },
    "evidence": "BATCH6_VG_ORDER_SCOPE_PROBE_v1.json · BATCH6_DRAFT/BATCH6_VG_PAIRAWARE_v2.patch（sha16 11a0e60ff03c6dba，git apply 可复现）· BATCH6_PATCHGEN_VERIFY_v1.json"
   },
   {
@@ -33,10 +52,18 @@
    "finding": {
     "F.Cu_only_reachability": "8 段中 5 段（TX0/input · RX0/input · RX1/input · RX1/output · TX0.input 等）两网在 F.Cu **皆不可达**",
     "inner_layer_reachability": "同 5 段在 In1.Cu 与 In2.Cu 上**两网皆可达**（起点网格 404–451 点，可达率 ≈100%，最短路径 0.3–4.9mm）",
-    "obstacle_census_TX0_input": {"F.Cu": 151, "In1.Cu": 26, "In2.Cu": 26},
+    "obstacle_census_TX0_input": {
+     "F.Cu": 151,
+     "In1.Cu": 26,
+     "In2.Cu": 26
+    },
     "engine_layer_set": "{layer_p, layer_n, F.Cu, In2.Cu} —— **不含 In1.Cu**（本件独立复证 handoff §7-⑧）；In2 已在集内 ⇒ 最小路线 = P/N 各 1 via 下 In2 + 内层绕行 + 回落走廊层"
    },
-   "options": ["立项（推荐）：加换层逃逸模板，In2 优先", "同时授权 In1.Cu 入场（层集扩展）", "仅登记不立项（(d) 停在 2/8）"],
+   "options": [
+    "立项（推荐）：加换层逃逸模板，In2 优先",
+    "同时授权 In1.Cu 入场（层集扩展）",
+    "仅登记不立项（(d) 停在 2/8）"
+   ],
    "if_not": "(d) 的 K1 真值上限锁死 2/8；TX0.input · TX1.input · RX1.input · TX1/RX1 output 保持 INFEASIBLE",
    "caveat": "本件是**松弛上界**（异层不计 P/N 冲突；via 仅查离焊盘 ≥0.3；未查 via-via / 走廊层约束）⇒『换层不排除』成立，**但不是可行解证明**；真解须引擎模板 + 实解验证（含负控）。",
    "evidence": "BATCH6_U11_RIGHT_END_BOUND_v1.json · k1_u11_right_end_bound_probe_v1.py"
@@ -47,9 +74,12 @@
   "BATCH6_U11_RIGHT_END_BOUND_v1.json": "8 段 · 3 层可达性上界",
   "k1_vg_pairaware_scope_probe_v1.py": "次序/轮数/择优普查脚本",
   "k1_u11_right_end_bound_probe_v1.py": "端点可达性上界脚本",
-  "k1_corrected_baseline_patchgen_v1.py + BATCH6_PATCHGEN_VERIFY_v1.json": "把两个（三个）影子固化为可复现补丁（git apply 后 sha 逐字节同）"
+  "k1_corrected_baseline_patchgen_v1.py + BATCH6_PATCHGEN_VERIFY_v1.json": "把两个（三个）影子固化为可复现补丁（git apply 后 sha 逐字节同）",
+  "BATCH6_K2_REGRESSION_PRECHECK_v1.json": "pristine/原样/v2/K1域限定 四树 pytest 实测 + 根因",
+  "BATCH6_D15_K1_SCOPE_v1.patch": "R-2 选项 2 的最小实现（K1 域限定 FIX-A/FIX-B）"
  },
  "readonly_repo": true,
  "not_landed": true,
- "ts": "2026-09-21T10:05:00+0800"
+ "ts": "2026-09-21T10:05:00+0800",
+ "extra_verified": "canonical 19 **不吃求解器**：`criteria/manifest.k2.yaml` 19 维全为板件级量、`criteria/adjudicate.py`(rev=3) 对 `hs_route_model|solve_all|solve_chain|pipeline/engine` 零引用、测量件出自固定受审板 `l7` ⇒ D-1…D-5 不可能移动 canonical 19 verdict；真回归面 = 验收门 D 维的 `test_hs_route_model.py`（已实测，见 R-2 预答）"
 }

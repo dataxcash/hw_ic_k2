@@ -1,0 +1,21 @@
+--- a/_shared/eda_core/hs_route_model.py
++++ b/_shared/eda_core/hs_route_model.py
+@@ -4448,7 +4448,8 @@
+             res = self.solve_pair_v4(sp, sn, base, segname,
+                                      shared_segs=shared, shared_vias=vias)
+             # FIX-B: 段级 P/N 间距门（下沉 base 级 _pn_spacing_check 的阈值）
+-            if res.get("status") == "SOLVED" and res.get("P") and res.get("N"):
++            if (res.get("status") == "SOLVED" and res.get("P") and res.get("N")
++                    and self.v4_project_dim() == "k1"):  # FIX-B：K1 域限定
+                 _me, _pt = _path_pn_min_edge_pt(res["P"]["path"], res["P"]["layers"],
+                                                 res["N"]["path"], res["N"]["layers"],
+                                                 res.get("width") or 0.205)
+@@ -4624,7 +4625,7 @@
+             res = self.solve_chain_v4(stem, shared_segs=shared,
+                                       shared_vias=vias)
+             results[base] = res
+-            if True:  # FIX-A: 逐段累积
++            if self.v4_project_dim() == "k1":  # FIX-A: 逐段累积（K1 域限定）
+                 for seg in res.get("segments", []):
+                     if seg.get("status") != "SOLVED":
+                         continue
