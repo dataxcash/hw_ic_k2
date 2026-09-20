@@ -48,10 +48,22 @@ def find_data_root():
     return os.getcwd()
 
 
+def _rmtree(path):
+    """444/555 权限树的安全删除（先 chmod 自身与父目录）。"""
+    def _onerr(func, p, exc):
+        try:
+            os.chmod(p, 0o777)
+            os.chmod(os.path.dirname(p), 0o777)
+        except OSError:
+            pass
+        func(p)
+    if os.path.exists(path):
+        shutil.rmtree(path, onerror=_onerr)
+
+
 def build_tree(data_root, name, patch6=False, fix_a=False, fix_b=False):
     dst = os.path.join(SHADOW_ROOT, name)
-    if os.path.exists(dst):
-        shutil.rmtree(dst, onerror=lambda f, p, e: (os.chmod(p, 0o755), f(p)))
+    _rmtree(dst)
     os.makedirs(SHADOW_ROOT, exist_ok=True)
     shutil.copytree(os.path.join(data_root, "_shared"), os.path.join(dst, "_shared"),
                     symlinks=True)
@@ -109,9 +121,34 @@ def measure(core_root, data_root):
             "bases": bases}
 
 
+def measure_k2(core_root, data_root):
+    """K2 回归探针（锚 = test_hs_route_model.py 的 K2V4_* 口径）。"""
+    import hashlib
+    sys.path.insert(0, os.path.join(core_root, "_shared"))
+    for m in [m for m in sys.modules if m.startswith("eda_core")]:
+        del sys.modules[m]
+    from eda_core.hs_route_model import HSRouteModel
+    k2 = os.path.join(data_root, "k2")
+    board = os.path.join(k2, "k2_v4_8L.kicad_pcb")
+    spec = os.path.join(k2, "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json")
+    alloc = os.path.join(k2, "pm_gate/artifacts/k2_v4/L3/model_solves/pipeline_alloc_current_v1/alloc.json")
+    m = HSRouteModel(board, spec, alloc, os.path.join(core_root, "_shared/eda_core/drc_rules.json"),
+                     pro_path=board.replace(".kicad_pcb", ".kicad_pro"))
+    r = m.solve_all_v4(m.v4_bases())
+    sig = {}
+    for b, v in r["results"].items():
+        sig[b] = (v.get("status"),
+                  tuple((s.get("name"), s.get("status")) for s in v.get("segments", [])),
+                  v.get("skew"), v.get("pn_spacing"))
+    return {"n_bases": len(sig), "solved_bases": sorted(b for b, v in sig.items() if v[0] == "SOLVED"),
+            "shared_seg_count": r.get("shared_seg_count"),
+            "sig_sha16": hashlib.sha256(json.dumps(sig, sort_keys=True).encode()).hexdigest()[:16]}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--root", default=None)
+    ap.add_argument("--k2", action="store_true", help="并跑 K2 回归探针（约 1min/核）")
     a = ap.parse_args()
     data_root = a.root or find_data_root()
     out = {"data_root": data_root, "cases": {}}
@@ -120,6 +157,9 @@ def main():
         build_tree(data_root, "t6", patch6=True), data_root)
     out["cases"]["batch6_6_patch_fixA_fixB"] = measure(
         build_tree(data_root, "t6ab", patch6=True, fix_a=True, fix_b=True), data_root)
+    if a.k2:
+        out["k2_pristine"] = measure_k2(data_root, data_root)
+        out["k2_fixed"] = measure_k2(build_tree(data_root, "k2fixAB", fix_a=True, fix_b=True), data_root)
     c0, c6, c6ab = (out["cases"]["as_is"], out["cases"]["batch6_6_patch_as_is"],
                     out["cases"]["batch6_6_patch_fixA_fixB"])
     out["verdict"] = {

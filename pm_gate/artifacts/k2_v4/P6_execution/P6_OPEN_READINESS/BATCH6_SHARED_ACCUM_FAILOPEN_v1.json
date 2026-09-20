@@ -52,10 +52,6 @@
    "as_is_combo_5of8_intersections": "44~45"
   },
   "cross_check_engine_own_function": "`_path_pn_min_edge_pt`（引擎自带）实测 TX0/input min_edge = **-0.09**（负值=铜重叠）而该段仍报 SOLVED。",
-  "k2_neutrality_by_construction": {
-   "source": "k2/pm_gate/artifacts/k2_v4/L3/model_solves/hs_rebuild_summary.json",
-   "reading": "K2 18 个 base **全部 SOLVED** ⇒ 累积门『base 级』与『逐段』在 K2 上**行为等价**（K2 无部分解 base）⇒ 本修法对 K2 **零影响**（落件时仍须跑 canonical 19 逐字节回归作实证）。"
-  },
   "corrected_gates_measurement": {
    "shadow": "/tmp/opencode/k2side/tree6h = tree6 + FIX-A（逐段累积）+ FIX-B（段级 P/N 门，阈值取**项目 spec** `impedance.gap_mm`=0.1，而非硬编码 0.155）",
    "readings": {
@@ -67,6 +63,47 @@
     "pristine _shared 基线（无 ⑥）": "1/8（仅 TX0.output）"
    },
    "conclusion": "**修正后 K1 真值 = 1/8，与 pristine 基线同** ⇒ ⑥ 的『+2 段』与 (c) 的『RX1 全解』**均不可复现**（二者都出现在 base 级已判 INFEASIBLE 的 base 上）。"
+  },
+  "k2_regression_measured": {
+   "pristine_container_shared@02459f5": {
+    "bases": 18,
+    "Solved": 1,
+    "solved_base": "PCIE_DN6",
+    "shared_seg_count": 28,
+    "sig_sha16": "c2b1303f3d1ee209"
+   },
+   "shadow_FIX_A_plus_FIX_B": {
+    "bases": 18,
+    "Solved": 1,
+    "solved_base": "PCIE_DN7",
+    "shared_seg_count": 113,
+    "sig_sha16": "21d4a42bbe98b2f7",
+    "diff": "**解出的 base 由 DN6 变为 DN7**（同为 1/18，但对象变了）"
+   },
+   "shadow_FIX_A_only": {
+    "bases": 18,
+    "Solved": 1,
+    "solved_base": "PCIE_DN7",
+    "shared_seg_count": 113,
+    "sig_sha16": "21d4a42bbe98b2f7",
+    "note": "阈值无关（仅累积门下沉）⇒ 与 pristine 的差别纯粹来自 FIX-A"
+   },
+   "shadow_FIX_A_plus_FIX_B_thr_gap_mm_exact": {
+    "Solved": 0,
+    "solved_bases": [],
+    "shared_seg_count": 0,
+    "sig_sha16": "e3d970dd0fbf30c9",
+    "note": "阈值 = `spec.impedance.gap_mm` = **0.175**（无容差）⇒ K2 全灭"
+   }
+  },
+  "k2_impact_correction": {
+   "earlier_claim": "『K2 18/18 base 全 SOLVED ⇒ 累积门在 K2 行为等价 ⇒ 零影响』（依据 `L3/model_solves/hs_rebuild_summary.json`）",
+   "why_wrong": "该 summary 与本会话实测**不同源**：以现行锚（design source board + SPEC_k2_v4.json + pipeline_alloc_current_v1）实跑 K2 得 **1/18 SOLVED（DN6）**，并非 18/18。故『构造性零影响』**不成立**，撤回。",
+   "residual_uncertainty": "`hs_rebuild_summary.json` 的 18/18 出自何板/何 alloc 未核（可能为旧板或另一 alloc 快照）⇒ 建议监理一并厘清（属对象/血缘问题，非本件结论依据）。"
+  },
+  "threshold_sensitivity": {
+   "finding": "FIX-B 的阈值**对 K2 结果敏感**：阈值 0.175 ⇒ K2 0/18；阈值 0.175−1e-3=0.174 ⇒ K2 1/18（DN7）；现行硬编码 0.155（=0.175−0.02 容差）⇒ K2 1/18（DN6）。",
+   "conclusion": "FIX-B 的容差语义**必须显式裁定并文档化**（现行 0.02 容差是既有行为的一部分）；否则『零回归』无法成立。"
   }
  },
  "impact_on_batch6": {
@@ -95,8 +132,8 @@
  "not_landed": true,
  "script": {
   "path": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/k1_shared_accum_failopen_check_v1.py",
-  "sha16": "f63cf59974038c07",
-  "self_contained_verdict": "as_is: seg=1/8 shared=0 | ⑥树 as-is: seg=3/8 shared=0 且 2 段 SOLVED 的 P/N edge（-0.09 / 0.01）< 项目 gap 0.1，TX0 base 自判 'P/N 间距不足 -0.0900 < 0.175' | ⑥树+FIX-A/B: seg=1/8 shared=8 违规 0",
+  "sha16": "f06c24177f41743d",
+  "self_contained_verdict": "as_is: seg=1/8 shared=0 | ⑥树 as-is: seg=3/8 shared=0 且 2 段 SOLVED 的 P/N edge（-0.09 / 0.01）< 项目 gap 0.1，TX0 base 自判 'P/N 间距不足 -0.0900 < 0.175' | ⑥树+FIX-A/B: seg=1/8 shared=8 违规 0 | --k2: K2 pristine DN6 1/18 shared=28；FIX-A+B(thr=gap_mm 0.175) ⇒ 0/18 shared=0",
   "usage": "cd <容器根> && python3 <本件>（真源零改；影子落 /tmp/opencode/shared_accum_check/）"
  },
  "ts": "2026-09-21T01:20:00+0800",
@@ -106,5 +143,5 @@
   "impact": "K1 上 `TX0/output`（edge 0.142 ≥ K1 要求 0.1）会被 0.155 误判为违规 ⇒ 属**零单板特判**残留（K2 常量泄漏到通用层）。",
   "fix": "阈值改读 `spec.impedance.gap_mm`（缺项 fail-closed），或由 config 注入。"
  },
- "batch6_implication": "**批 6 方案不可按现读数立项**：⑥ 与 (c) 的收益均为 fail-open 产物。建议次序：**先落 FIX-A/B（同批）→ 重跑 K1 真值（1/8）→ 再据此重排批 6 的 (a)/(b)/(c)/(d)**。"
+ "batch6_implication": "**批 6 方案不可按现读数立项**：⑥ 与 (c) 的收益均为 fail-open 产物。建议次序：**先落 FIX-A/B（同批）→ 重跑 K1 真值（1/8）→ 再据此重排批 6 的 (a)/(b)/(c)/(d)**。  ⚠️ 且 FIX-A 在 K2 上**非零影响**（实测解对象 DN6→DN7）⇒ 落件须以 canonical 19 实证，不得假定。  FIX-B 容差语义亦须裁定（阈值 0.175/0.174 会使 K2 在 0/18 与 1/18 间跳变）。"
 }

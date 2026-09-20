@@ -1,0 +1,60 @@
+{
+ "artifact": "k2_batch6_fix_k2_regression_probe",
+ "schema": 1,
+ "purpose": "FIX-A/FIX-B 的 **K2 回归探针**（只读 + /tmp 影子）：证明修正门在 K2 上**不是零影响**，须以 canonical 19 实证回归，不得假定。",
+ "anchors_used": {
+  "board": "k2/k2_v4_8L.kicad_pcb（fb07d25ac426ff84）",
+  "spec": "k2/pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json（= `_shared/eda_core/tests/test_hs_route_model.py:326` K2V4_SPEC 锚）",
+  "alloc": "k2/pm_gate/artifacts/k2_v4/L3/model_solves/pipeline_alloc_current_v1/alloc.json（= 同测试 K2V4_ALLOC 锚）",
+  "call": "`HSRouteModel(...).solve_all_v4(m.v4_bases())`，cwd=容器根"
+ },
+ "measurements": {
+  "pristine_container_shared@02459f5": {
+   "bases": 18,
+   "Solved": 1,
+   "solved_base": "PCIE_DN6",
+   "shared_seg_count": 28,
+   "sig_sha16": "c2b1303f3d1ee209"
+  },
+  "shadow_FIX_A_plus_FIX_B": {
+   "bases": 18,
+   "Solved": 1,
+   "solved_base": "PCIE_DN7",
+   "shared_seg_count": 113,
+   "sig_sha16": "21d4a42bbe98b2f7",
+   "diff": "**解出的 base 由 DN6 变为 DN7**（同为 1/18，但对象变了）"
+  },
+  "shadow_FIX_A_only": {
+   "bases": 18,
+   "Solved": 1,
+   "solved_base": "PCIE_DN7",
+   "shared_seg_count": 113,
+   "sig_sha16": "21d4a42bbe98b2f7",
+   "note": "阈值无关（仅累积门下沉）⇒ 与 pristine 的差别纯粹来自 FIX-A"
+  },
+  "shadow_FIX_A_plus_FIX_B_thr_gap_mm_exact": {
+   "Solved": 0,
+   "solved_bases": [],
+   "shared_seg_count": 0,
+   "sig_sha16": "e3d970dd0fbf30c9",
+   "note": "阈值 = `spec.impedance.gap_mm` = **0.175**（无容差）⇒ K2 全灭"
+  }
+ },
+ "correction_of_earlier_claim": {
+  "earlier_claim": "『K2 18/18 base 全 SOLVED ⇒ 累积门在 K2 行为等价 ⇒ 零影响』（依据 `L3/model_solves/hs_rebuild_summary.json`）",
+  "why_wrong": "该 summary 与本会话实测**不同源**：以现行锚（design source board + SPEC_k2_v4.json + pipeline_alloc_current_v1）实跑 K2 得 **1/18 SOLVED（DN6）**，并非 18/18。故『构造性零影响』**不成立**，撤回。",
+  "residual_uncertainty": "`hs_rebuild_summary.json` 的 18/18 出自何板/何 alloc 未核（可能为旧板或另一 alloc 快照）⇒ 建议监理一并厘清（属对象/血缘问题，非本件结论依据）。"
+ },
+ "implication": "FIX-A（逐段累积）会**改变 K2 的解对象**（DN6→DN7）⇒ 若 K2 现役链消费该输出，canonical 19 / `verify k2` 可能移动 ⇒ **落件验收必须实测 canonical 19 逐字节同**；若移动，须由监理裁定该修正的落件范围（是否只对 K1 维度启用，或连带接受 K2 重基线 —— 注意 C-12：不得为变绿缩口径，反之亦不得用未验证的『零影响』假定放行）。",
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-21T02:05:00+0800",
+ "threshold_sensitivity": {
+  "finding": "FIX-B 的阈值**对 K2 结果敏感**：阈值 0.175 ⇒ K2 0/18；阈值 0.175−1e-3=0.174 ⇒ K2 1/18（DN7）；现行硬编码 0.155（=0.175−0.02 容差）⇒ K2 1/18（DN6）。",
+  "conclusion": "FIX-B 的容差语义**必须显式裁定并文档化**（现行 0.02 容差是既有行为的一部分）；否则『零回归』无法成立。"
+ },
+ "reproduce": {
+  "cmd": "cd <容器根> && python3 k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/k1_shared_accum_failopen_check_v1.py --k2",
+  "note": "脚本内 K2 探针用阈值=impedance.gap_mm(0.175) ⇒ 期望 K2 fixed Solved=[]；FIX-A only 行走法见 §measurements"
+ }
+}
