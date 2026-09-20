@@ -114,12 +114,14 @@
    "status": "NOT_RUN",
    "evidence": [],
    "measured": {
+    "condition": null,
     "rails": {
      "12V_IN": null,
      "P3V3": null,
      "P3V3_AUX": null,
      "MCU_VDD": null
-    }
+    },
+    "MCU_VDD_aux_j13_3V3": null
    },
    "criterion": "各电源轨电压全部 ±5% 标称",
    "note": "标称已定（#K2-55）：**主判工况 = 独立运行（J13/VCC 不接外供）** ⇒ MCU_VDD 标称 **3.0V**（窗 2.85–3.15V）；**辅助读数（须同记）** = J13/VCC 供 3.3V 时之 MCU_VDD（窗 3.135–3.465V）；其余轨按各自标称 ±5%。",
@@ -153,7 +155,8 @@
       "hi": 3.465
      }
     }
-   }
+   },
+   "condition_required": "#K2-55：**主判工况 = 独立运行（`J13/VCC` 不接外供）** ⇒ `MCU_VDD` 标称 **3.0V**（窗 2.85–3.15V）；**辅助读数（须同记）** = `J13/VCC` 供 3.3V 时之 `MCU_VDD`（窗 3.135–3.465V）⇒ 填 `MCU_VDD_aux_j13_3V3`，**不参与主判**。`condition` **必填**且须与实测接线一致（缺 `condition` ⇒ 该判不可判）。"
   },
   "V6_2_mcu_swd_id": {
    "required": true,

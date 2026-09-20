@@ -345,3 +345,12 @@
 
 ---
 **（本块）裁定对应**：P5 阶段只读造活（外发自查件覆盖补齐）。**报备监理 1 条 · owner 项 0**。
+
+### 续编 · 回件模板「**判据所需量**」审计 + V6-1 schema 补齐（CR-56）
+
+| # | 条目 | 内容（事实/裁定） | 依据 | 处置红线 |
+|---|---|---|---|---|
+| **CR-56** | **回件模板逐项审计：8 项中 **7 项量齐**；`V6-1` **缺 #K2-55 之主判工况 + 辅助读数** ⇒ 已补（`condition` + `MCU_VDD_aux_j13_3V3` + `condition_required`）** | **缘起**：判据可执行性的最后一环 = **回件模板能否捕获判据所需量**（缺 ⇒ 回件后不可判）。**审计口径**：逐项比对「判据/口径」↔「`measured` 字段」。**结果**：`V4`（覆盖几何双点 ✔）· `V5`（4 轨 `V_source/V_load/I_A/drop_pct` + 电流声明 ✔）· `V6-2`（接口 + `device_id_read` + `expected_device_id` ✔）· `V6-3`（`addresses_found` + `expected_address`（含 `board_verified`）✔）· `V6-4`（`ports/both_directions/final_state` ✔）· `V6-5`（`aer_count/log_files` ✔）· `V7`（`assembly`+`Ta_C`+`Ttop_C`+`Tj_meas`+`Tj_conserve_upper`+`Tj_measure_method` = RULES『必须同记』量**齐备** ✔）⇒ **7 项完整**。**唯 `V6-1` 有缺**：原 `measured` 仅 `rails{4 轨}` ⇒ **无处记**（a）**#K2-55 主判工况 = 独立运行（J13/VCC 不接外供）**（b）**辅助读数**（J13/VCC 供 3.3V 时之 MCU_VDD，RULES 明定『须同记、不改主判』）⇒ **有把 3.3V 外供工况之读数当主判之风险**。**处置**：`V6-1.measured` 增 `condition`（**必填**：`独立运行`｜`J13/VCC 供 3.3V`）+ `MCU_VDD_aux_j13_3V3`（辅助读数）+ `condition_required`（明示缺 `condition` ⇒ **该判不可判**）；其余字段/阈值一字未动。**锚**：`results_template.json` **`6b510775339bdc11`**（原 `d125c5eac50c933f`）· 投递说明 §3 表同步 → **`9602f7be3f560eb6`**。 | 本会话逐项审计；**#K2-55**；`RULES.md §V6-1`；CR-48/CR-53/CR-55 同型 | **只补模板捕获字段**（ENG 手制件）· **未改**阈值/判据/交付包锚 · 未改 SPEC/板/生成器 · **非新增检查齿** · 登记制 |
+
+---
+**（本块）裁定对应**：P5 阶段只读造活（回件模板判据量审计）。**报备监理 1 条 · owner 项 0**。
