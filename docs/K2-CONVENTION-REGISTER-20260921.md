@@ -194,3 +194,5 @@
 
 > **【CR-34 补充 · 2026-09-21 本会话】**：l8 板件**落库被门禁拒**（`check_pcb_spec_correlation`：含 `.kicad_pcb` 变更须同含 SPEC 变更，防直改板绕过 pipeline）。**处置（守门，未绕）**：l8 板 **held 于 `/tmp/opencode/rev8/held/`**（`7a5c89913d6e5d0a` / pro `c009058005829f09`），**未入库**；本会话只落证据件 `REV_L8_GENERATION_EVIDENCE_20260921_v1.json`（**`ff23e7774dca74f5`** = 含 `landing_gate` 节之现行件；初版 `4087a07a69fdf8c5` 已被本补充更新）。
 > **l8 落库之正确路径 = 方案先行**：先立新 **SPEC rev** 件（`SPEC_k2_v4.spec-rev-53.json` 或等价 · 版本 bump 新文件）→ 再随批落 l8 板 + 重建交付包。**是否需实质改 SPEC**（本次为**网表引脚映射**变更、几何未变）属**监理/判据侧口径**，ENG 不擅定。
+
+> **【CR-34 补充 2 · 本会话】**：**l8 已落库** —— `SPEC_k2_v4.spec-rev-53.json`（`4e92b3a05cd5a223`，仅 3 处 `board_sha16` 声明 + 卡；旧 rev 逐字节不改）+ `pm_gate/project.yaml::spec_name` → rev-53 + `hw/k2_v4_8L.l8.kicad_pcb`（`7a5c89913d6e5d0a`）/ pro（`c009058005829f09`）同批 ⇒ **PCB↔SPEC 门禁已满足**（方案先行范式）。仍待：canonical 19 重锚 + 交付包重出。
