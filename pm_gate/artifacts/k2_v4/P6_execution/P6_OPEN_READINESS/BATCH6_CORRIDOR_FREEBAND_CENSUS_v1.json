@@ -1,0 +1,52 @@
+{
+ "artifact": "k2_batch6_corridor_freeband_census",
+ "schema": 1,
+ "purpose": "(c)⊕(d) 联合落位核算（只读）：用引擎自身字段（`build_hs_field` + SPEC 冻结段）对**左半走廊 x∈[5.3,38.3125] / 右半 x∈[41.6875,74.2]** 逐层做**直线可走带**扫描（步长 0.05mm），得到「哪些 (layer, y) 真正净空」的权威表。",
+ "method": {
+  "field": "`build_hs_field(board, rules, layer, clear_hs_pads=True, config)` + 非 yield 的 SPEC 冻结段（`spec_frozen_segments`，剔 `yield_seg_prefixes`）——与 `_solve_pair_single_v4` 同口径",
+  "probe": "`field.seg_ok('PCIE_TX1_P', (x0,y), (x1,y))`；y 从 12.0 扫到 27.0（步长 0.05）",
+  "repro": "cd <容器根> && python3 k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/k1_corridor_freeband_sweep_v1.py"
+ },
+ "result_free_runs": {
+  "F.Cu": {
+   "left": "13.95–14.7(0.8) · 17.3–18.2(0.95) · 20.0(0.05) · 20.5–20.7(0.25) · 23.3–23.45(0.2) · 24.8–26.2(1.45)",
+   "right": "12.0–18.7(6.75) · 19.3–19.6(0.35) · 21.4–27.0(5.65)"
+  },
+  "In1": {
+   "left": "**17.05–21.2(4.2)** · 23.25–26.2(3.0)",
+   "right": "12.0–27.0(全)"
+  },
+  "In2": {
+   "left": "**20.5–21.2(0.75)** · 23.25–26.2(3.0)",
+   "right": "12.0–27.0(全)"
+  },
+  "B.Cu": {
+   "left": "13.95–15.25(1.35) · 18.3–19.2(0.95) · 19.8–20.2 · 20.8–21.2 · 23.25–24.95(1.75)",
+   "right": "12.0–27.0(全)"
+  }
+ },
+ "cross_exam_with_alloc": {
+  "TX1.input": "现行 `in2 y=20.51/21.3`：20.51 ∈ 自由带；**21.3 越界（自由带 20.5–21.2）** ⇒ 这正是『走廊段 seg_ok 失败』的直接原因。",
+  "RX1.input": "现行 `fcu y=16.0`：**越界**（F.Cu 左半自由带无 16.0）⇒ P 侧走廊被挡；N 在 In1 24.02 ∈ 23.25–26.2 ✓。",
+  "actionable_pairs_in_free_bands": "In2: (20.51, 21.01) ✓ 同在 20.5–21.2；In1: (20.5, 21.0) ✓、(17.05–21.2 连续)；(23.25–26.2) 内可放 24.02/24.52 但 **24.52 不在 `tracks_y`** ⇒ 见下。"
+ },
+ "mechanism_constraint_found": {
+  "finding": "`seg_tracks`（与 `band`/`layer`/`track_y`）的值**必须是该 band `tracks_y` 列表中的成员**，否则 `_track_y_for` 返回 None ⇒ 报 `INFRA_ERROR 通道缺失 P=None`（实测：TX1→in2 y=20.5/21.0 与 RX1→in1 y=24.52 均如此）。",
+  "implication": "**自由带里可用的 y ≠ alloc 可用的 y**：要启用 20.5/21.0(In2)、24.52(In1) 等自由带内新轨，须扩 `SPEC.corridors[].bands[].tracks_y` ⇒ **SPEC 变更（需批准）**。"
+ },
+ "corrected_baseline_negative_results": {
+  "tree": "`/tmp/opencode/k2side/tree_d5`（容器 `_shared` + ⑤⑥草案 + **D-1…D-5 全修**）",
+  "TX1→(20.51,21.01) In2": "走廊通过 ✓ ⇒ 失败面转为**逃逸 P/N 间距 -0.09**（escape 成为约束）",
+  "TX1→(20.5,21.0) In2": "INFRA_ERROR（不在 tracks_y）",
+  "RX1→In1 (24.52,24.02)": "INFRA_ERROR（24.52 不在 tracks_y）",
+  "RX1→F.Cu (17.5,18.0)": "走廊通过 ✓ ⇒ 失败面转为**逃逸 P/N 间距 -0.09**",
+  "conclusion": "**(c) 能让走廊不再挡，但失败面随即转到逃逸** ⇒ 输入侧的**约束是逃逸对级构造（旋转），不是走廊槽位**；且 TX0/RX1 的旋转窗口 = 0（`BATCH6_RESCOPE_AFTER_GATE_FIX_v1.json`）⇒ 须**模板 + via 落位的重新设计**，并与 SPEC 轨道扩展一并裁定。"
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "script": {
+  "path": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/k1_corridor_freeband_sweep_v1.py",
+  "sha16": "9243793d490acf0c"
+ },
+ "ts": "2026-09-21T06:00:00+0800"
+}
