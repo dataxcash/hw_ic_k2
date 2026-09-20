@@ -34,13 +34,13 @@
    "title": "(d) 范围与 SPEC 轨道扩展",
    "question": "(d) 端点对齐的落地范围？是否授权扩 `SPEC.corridors[].bands[].tracks_y`（启用自由带新轨）？",
    "options": [
-    "只做 (d) 引擎模板（不含 SPEC 变更）（推荐先做）",
-    "(d) + 授权扩 tracks_y 一并",
-    "暂不做 (d)"
+    "先立 (d) 引擎『搜索式逃逸模板族』（新功能，工作量中等偏上）",
+    "暂缓 (d)，先落 D-1…D-5 修正度量",
+    "(d)+(c) 一起做（含 alloc 次序重排）"
    ],
-   "recommend": "先 (d) 引擎模板（不改 SPEC）；**范围为两端旁路+过孔躲让通用族**；tracks_y 扩展另案",
+   "recommend": "先落 D-1…D-5（不依赖 (d)）；(d) 单独立项排期",
    "if_not": "批 6 无法产出任何真实增益（当前 (d) 有效增益 = 0）",
-   "evidence": "BATCH6_RESCOPE_AFTER_GATE_FIX_v1.json（旋转窗口 TX0/RX1=0、TX1=2.1、RX0=2.25）· BATCH6_CORRIDOR_FREEBAND_CENSUS_v1.json（`seg_tracks` 必须 ∈ `tracks_y`，否则 INFRA_ERROR）· BATCH6_D_VIA_SEARCH_NEGATIVE_v1.json（有界 via 搜索 = 0 增益）· 本轮实测：via 合法区充足（x∈[2,12],y∈[24.6,30] 各网 1230 点），但 **J1 THT 行竖直通道仅 0.15mm（需 0.29）不可穿越** ⇒ 绕行须走 x≥8.07 或 x≤5.53 的宽绕道 ⇒ **须引擎级模板 + via 搜索**，非手工候选可解。 | BATCH6_D_BYPASS_PARTIAL_v1.json（**左端 J1 旁路候选 27/27 通过修正门；右端 U11 结构性硬墙（焊盘同列+窗口0 ⇒ U 形折返必穿对侧走廊段）⇒ (d) 须“两端旁路 + 过孔躲让”通用模板族**）"
+   "evidence": "BATCH6_RESCOPE_AFTER_GATE_FIX_v1.json（旋转窗口 TX0/RX1=0、TX1=2.1、RX0=2.25）· BATCH6_CORRIDOR_FREEBAND_CENSUS_v1.json（`seg_tracks` 必须 ∈ `tracks_y`，否则 INFRA_ERROR）· BATCH6_D_VIA_SEARCH_NEGATIVE_v1.json（有界 via 搜索 = 0 增益）· 本轮实测：via 合法区充足（x∈[2,12],y∈[24.6,30] 各网 1230 点），但 **J1 THT 行竖直通道仅 0.15mm（需 0.29）不可穿越** ⇒ 绕行须走 x≥8.07 或 x≤5.53 的宽绕道 ⇒ **须引擎级模板 + via 搜索**，非手工候选可解。 | BATCH6_D_BYPASS_PARTIAL_v1.json（**左端 J1 旁路候选 27/27 通过修正门；右端 U11 结构性硬墙（焊盘同列+窗口0 ⇒ U 形折返必穿对侧走廊段）⇒ (d) 须“两端旁路 + 过孔躲让”通用模板族**） | 右端(U11)侧移旁路**实测不可行**（P3V3_AUX/GND 密集焊盘场，d=−0.032~−0.045）⇒ (d) 实为**新功能级**（搜索式逃逸模板族），请裁定是否立项及优先级"
   },
   {
    "id": "R-4",
