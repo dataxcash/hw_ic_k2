@@ -5,6 +5,13 @@
  "owner_gate": "无（全部 L2/机制/批次面）",
  "delta": [
   {
+   "id": "**落件前全量三验预演已完成（隔离影子）**",
+   "status": "已实测（read-only）",
+   "result": "① `verify k2` = preflight+3 PASS（从影子根跑，顺证 C-22 cwd 解耦）② canonical 19 = 19 OK/0 FAIL/`190b73be0f728a56` ③ `--expect-patched` = **PASS**（A 4/4 · B PASS · C 14/14 回退 0 · D hidden=2=C1/C2，与 pristine 逐项同）；K1 真值 2/8（RX0/input 0.2636）、层合法违规 0",
+   "implication": "落件候选 v3 的**全部验收判据已在影子上预满足** ⇒ 裁定到位后落件即为『已知结果的执行』，无残余未知量",
+   "evidence": "BATCH6_LANDING_REHEARSAL_THREE_VERIFICATIONS_v1.json · BATCH6_LANDING_REHEARSAL_ACCEPTANCE_v1.json"
+  },
+  {
    "id": "**落件形已备妥：`BATCH6_LANDING_CANDIDATE_v3.patch`**（请裁定以此为落件本体）",
    "status": "draft（未落件）；`git apply` 于容器 `_shared` 可复现（patch sha16 `28e1930324e7e9fb` → 目标 `4d4b33c300cfa4c5`）",
    "content": "D-1…D-5 + ④零长段守卫 + ⑤端点对齐 + (d)对角线 + ⑥耦合 + **VG 对级化 best_of（v2 次序）** + **FIX-A/FIX-B 的 K1 域限定**",
@@ -92,7 +99,8 @@
   "BATCH6_D15_K1_SCOPE_v1.patch": "R-2 选项 2 的最小实现（K1 域限定 FIX-A/FIX-B）",
   "BATCH6_CANONICAL19_SOLVER_INDEPENDENCE_v1.json": "canonical 19 实跑 + 解耦动态证明",
   "BATCH6_DRAFT/BATCH6_LANDING_CANDIDATE_v3.patch": "**落件本体（一键）**",
-  "k2_canonical19_solver_import_trap_v1.py": "陷阱脚本（正控 + 透传）"
+  "k2_canonical19_solver_import_trap_v1.py": "陷阱脚本（正控 + 透传）",
+  "BATCH6_LANDING_REHEARSAL_THREE_VERIFICATIONS_v1.json": "三验预演读数（影子）"
  },
  "readonly_repo": true,
  "not_landed": true,
