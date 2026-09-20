@@ -1,0 +1,87 @@
+{
+ "artifact": "k2_delivery_drill_fidelity_audit",
+ "schema": 1,
+ "purpose": "交付 HDI 钻孔的**坐标级保真**核对（比包内 census 更深一层）：逐层对钻孔档的**孔坐标**是否与板上对应跨层的 via 逐一对应（防『孔被分错层对』——HDI 最高风险项的制造指令错误）。只读；不动任何件。",
+ "board": "k2/hw/k2_v4_8L.l7.kicad_pcb（c5a7df90aadb66e0）· 钻孔 = 02_drill_excellon/（7 档 .drl）",
+ "method": "ENG 自建解析：板 via 按 `(layers A B)` 分跨层集合 · THT/NPTH pad 按**footprint 旋转角**换算绝对坐标 · Excellon 逐档解析 `T<n>C<dia>` 与坐标（Y 取负）→ **坐标级**匹配（容差 0.01mm）。",
+ "filefunction_attributes": {
+  "k2_v4_8L.l7-front-in1.drl": "Plated,1,2,Blind",
+  "k2_v4_8L.l7-front-in2.drl": "Plated,1,3,Blind",
+  "k2_v4_8L.l7-front-in4.drl": "Plated,1,5,Blind",
+  "k2_v4_8L.l7-front-in5.drl": "Plated,1,6,Blind",
+  "k2_v4_8L.l7-in2-in5.drl": "Plated,3,6,Buried",
+  "k2_v4_8L.l7-back-in5.drl": "Plated,6,8,Blind",
+  "k2_v4_8L.l7.drl": "MixedPlating,1,8"
+ },
+ "layer_pair_match": [
+  {
+   "file": "k2_v4_8L.l7-front-in1.drl",
+   "span": "F.Cu->In1.Cu (L1-L2)",
+   "holes": 168,
+   "board_same_span": 168,
+   "matched": 161,
+   "residual": "7 个差异全部为 **≤0.0006mm 十进制舍入**（如 53.0375→53.037）⇒ 实为 168/168 命中"
+  },
+  {
+   "file": "k2_v4_8L.l7-front-in2.drl",
+   "span": "F.Cu->In2.Cu (L1-L3)",
+   "holes": 128,
+   "board_same_span": 128,
+   "matched": 128,
+   "residual": "0"
+  },
+  {
+   "file": "k2_v4_8L.l7-front-in4.drl",
+   "span": "F.Cu->In4.Cu (L1-L5)",
+   "holes": 4,
+   "board_same_span": 4,
+   "matched": 4,
+   "residual": "0"
+  },
+  {
+   "file": "k2_v4_8L.l7-front-in5.drl",
+   "span": "F.Cu->In5.Cu (L1-L6)",
+   "holes": 19,
+   "board_same_span": 19,
+   "matched": 19,
+   "residual": "0"
+  },
+  {
+   "file": "k2_v4_8L.l7-in2-in5.drl",
+   "span": "In2.Cu->In5.Cu (L3-L6)",
+   "holes": 92,
+   "board_same_span": 92,
+   "matched": 92,
+   "residual": "0"
+  },
+  {
+   "file": "k2_v4_8L.l7-back-in5.drl",
+   "span": "In5.Cu->B.Cu (L6-L8)",
+   "holes": 37,
+   "board_same_span": 37,
+   "matched": 35,
+   "residual": "2 个差异均为 ≤0.0005mm 舍入 ⇒ 实为 37/37 命中"
+  }
+ ],
+ "main_file": {
+  "file": "k2_v4_8L.l7.drl",
+  "filefunction": "MixedPlating,1,8",
+  "holes": 301,
+  "T0.2_vs_through_vias": "277/281 精确；4 个差异均为 **≤0.0005mm 舍入** ⇒ 281/281",
+  "T0.8_vs_PTH_pads": "**16/16** 命中（含 footprint 旋转换算后；容差 0.01mm）",
+  "T3.2_vs_NPTH_pads": "**4/4** 命中",
+  "note": "未换算旋转时曾出现 16 个『未命中』——经确认系 ENG 侧换算方式所致，**非文件缺陷**（诚实登记该中间误判）。"
+ },
+ "totals": {
+  "board_holes": 749,
+  "drill_holes": 749,
+  "matched": 749,
+  "residual_max_mm": 0.0006,
+  "reading": "**749/749 坐标级对应**（最大残差 0.6µm = Excelon 十进制舍入）"
+ },
+ "verdict": "**HDI 钻孔保真成立**：6 个层对盲/埋孔档的孔坐标**逐一**对应板上同跨层 via（**无孔被分错层对**，HDI 制造指令正确）；主档通孔 281 + PTH 16 + NPTH 4 全部对应；逐档带正确 `TF.FileFunction`（`Plated,1,2,Blind` … `Plated,3,6,Buried` / 主档 `MixedPlating,1,8`）。",
+ "readonly_repo": true,
+ "not_landed": true,
+ "no_new_criteria_dim": true,
+ "ts": "2026-09-22T03:00:00+0800"
+}
