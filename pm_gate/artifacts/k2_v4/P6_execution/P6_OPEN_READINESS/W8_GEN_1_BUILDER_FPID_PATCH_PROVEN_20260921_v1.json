@@ -1,0 +1,61 @@
+{
+ "artifact": "k2_w8_gen_1_builder_fpid_patch_proven",
+ "schema": 1,
+ "ts": "2026-09-21T01:40:00+0800",
+ "id": "W8-GEN-1",
+ "authorization": "**#K2-51 §二 W8-VAC-1 修法**（放行 SPEC+重建路径）· 本件**只制备+沙箱实证，不落地**（改生成器 = 红线，须补批）。",
+ "purpose": "把 4/6 的唯一阻塞（建板器丢 FPID 库昵称）做成**已实证、可一击落地**的补丁 + 明确落地批定义。",
+ "payload": {
+  "dir": "k2/docs/drafts/w8-gen-1-builder-fpid-v1/",
+  "patch": "k1_board_builder_fpid_W8GEN1.patch",
+  "patch_sha256": "10c17fd95fe004a65739accd63f5a07048d9b7fe9e9ef072f118ca84bf1d6695",
+  "readme_sha256": "44e542a85384ec7896b2faf10ec4a3ce751e1120aee4da9078f5937e85c12c67"
+ },
+ "root_cause": "`pcbnew.FootprintLoad(<目录路径>, name)` ⇒ FPID 无库昵称 ⇒ `(footprint \"NAME\")` 裸名 ⇒ `n_no_library_link=42`。真源 `k1_board.yaml#devices[ref].footprint` 42/42 **已带** `LIB:NAME`。",
+ "sandbox_proof": {
+  "sandbox": "/tmp/opencode/k1gen（tools/ 原件版+补丁版 · boards/ · lib/ 副本）· KICAD_FOOTPRINTS=<AppDir>/usr/share/kicad/footprints · AppDir/usr/bin/python3.11 (pcbnew 10.0.5)",
+  "orig": {
+   "n_footprints": 42,
+   "with_nickname": 0,
+   "bare": 42
+  },
+  "patched": {
+   "n_footprints": 42,
+   "with_nickname": 42,
+   "bare": 0,
+   "board_sha256_16": "b68105d2e8914aa7"
+  },
+  "acceptance_met": "`n_no_library_link 42→0 ∧ n_footprints=42`（#K2-51 §二 W8-VAC-1 验收条）",
+  "determinism": "两次连跑逐字节一致（b68105d2e8914aa7…）",
+  "diff_vs_production": "**98 行** = 84（42 对 FPID）+ 14（U1 侧 net 重排，按订正 pinmap ⇒ 同批闭合 K1-U1-BOARD-SYNC）；几何/焊盘/网表零功能改动"
+ },
+ "new_finding": {
+  "id": "K1-U10-FP-1（新·中）",
+  "title": "补丁的 fail-closed 断言揪出 `U10` 声明/实现漂移：`k1_board.yaml` 声明 `Package_TO_SOT_SMD:SOT-23`（3 pad）而板件实测 `SOT-23-5`（5 pad）",
+  "facts": [
+   "`RuntimeError: U10 footprint 真源不一致: k1_board.yaml='Package_TO_SOT_SMD:SOT-23' vs COORDS='SOT-23-5'`",
+   "板件 `k1_v1.kicad_pcb` U10 footprint = **`SOT-23-5`**（与 `sch_pins=5` 自洽）；",
+   "`k1_board.yaml#devices.U10.geometry.note` **自述**『符号 5 pin vs SOT-23 3 pad 不匹配 (reconciliation OPEN-2)；实际器件应为 SOT-23-5』⇒ **声明未随 ② 换件复算**。",
+   "同族 = `K1-D10/D11/D12`（声明/实现漂移）。"
+  ],
+  "ask": "落地批**必带**真源订正：`k1_board.yaml#devices.U10.footprint` → `Package_TO_SOT_SMD:SOT-23-5`（1 行·声明订正·非设计变更）。"
+ },
+ "landing_batch": [
+  "① 应用补丁（生成器）",
+  "② 真源订正 U10 footprint（K1-U10-FP-1）",
+  "③ 重建板 → 同批重出 pads_within_outline/density_and_clearance/min_clearance/w8 证据（用 k2/docs/drafts/p4-j8-*；禁用 k2_p4_j8_measure_v1.py）",
+  "④ 提交含 pm_gate/artifacts/k1/L3/* 建板记录",
+  "⑤ 复算 K1 判定（4/6 收口）"
+ ],
+ "readonly_repo": true,
+ "not_landed": true,
+ "no_new_criteria_dim": true,
+ "not_landed_detail": [
+  "未改生成器（补丁存 k2/docs/drafts）",
+  "未改 k1_board.yaml / SPEC / 原理图",
+  "未落板（仓库板仍 eda1dc91）",
+  "未改 criteria/",
+  "沙箱产物仅 /tmp/opencode"
+ ],
+ "next": "待批 → 按 landing_batch 一笔落地 → 复算 → 4/6 收口"
+}

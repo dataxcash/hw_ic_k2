@@ -1,0 +1,51 @@
+--- a/k1/tools/k1_board_builder.py
++++ b/k1/tools/k1_board_builder.py
+@@ -127,6 +127,39 @@
+     return "LOW_SPEED"
+ 
+ 
++# ── W8-GEN-1（待批）：footprint 库昵称 (FPID) 输出 ─────────────
++# 根因: pcbnew.FootprintLoad(<目录路径>, name) 产生的 FPID **无库昵称** ⇒
++# 板件 `(footprint "NAME")` 裸名 ⇒ W-8 `n_no_library_link = 42`（该维空过）。
++# 修法: 显式 SetFPID(pcbnew.LIB_ID(nick, name))，昵称取**真源**
++# `boards/k1_board.yaml#devices[ref].footprint`（已带 "LIB:NAME" 前缀）。
++BASE_YAML = os.path.join(K1DIR, "boards", "k1_board.yaml")
++
++
++def _board_yaml_footprints() -> dict:
++    doc = yaml.safe_load(open(BASE_YAML, encoding="utf-8")) or {}
++    out = {}
++    for ref, v in (doc.get("devices") or {}).items():
++        fp = str((v or {}).get("footprint") or "")
++        if ":" in fp:
++            out[ref] = fp
++    return out
++
++
++BOARD_FP = _board_yaml_footprints()      # ref -> "LIB:NAME"（真源）
++
++
++def fpid_for(ref: str, lib: str, name: str):
++    """返回 (nick, name)。真源优先; 不一致 = fail-closed（禁静默）。"""
++    spec = BOARD_FP.get(ref)
++    if spec:
++        nick, nm = spec.split(":", 1)
++        if nm != name:
++            raise RuntimeError(
++                f"{ref} footprint 真源不一致: k1_board.yaml='{spec}' vs COORDS='{name}'")
++        return nick, nm
++    return os.path.basename(lib).removesuffix(".pretty"), name
++
++
+ def load_fp(lib: str, name: str):
+     """FootprintLoad, 失败 = RuntimeError 硬中断."""
+     fp = pcbnew.FootprintLoad(lib, name)
+@@ -211,6 +244,8 @@
+         lib, name, x, y, rot = entry[:5]
+         flip = bool(entry[5]) if len(entry) > 5 else False
+         fp = load_fp(lib, name)
++        nick, nm = fpid_for(ref, lib, name)
++        fp.SetFPID(pcbnew.LIB_ID(nick, nm))   # W8-GEN-1: 库昵称落件
+         fp.m_Uuid.Increment()
+         fp.SetReference(ref)
+         fp.SetPosition(pcbnew.VECTOR2I(int(x * MM), int(y * MM)))
