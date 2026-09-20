@@ -1,0 +1,63 @@
+{
+ "artifact": "k2_delivery_package_integrity_recheck",
+ "schema": 1,
+ "ts": "2026-09-21T07:30:00+0800",
+ "id": "交付包完整性/DFM 现状**只读复算**（owner #14③ 完工定义对照）",
+ "authorization": "handoff §7-B『只读造活（册面维护 · 锚周期复核）』；常设红线『交付锚冻结：不重建包』⇒ 本件**只校验、不重建**。",
+ "anchors": {
+  "MANIFEST.json": "6ee7495de61f749f",
+  "tarball": "0e88e107e2da8192",
+  "expected": {
+   "MANIFEST.json": "6ee7495de61f749f",
+   "tarball": "0e88e107e2da8192"
+  }
+ },
+ "integrity_check": {
+  "cmd": "cd k2/pm_gate/artifacts/k2_v4/L6 && sha256sum -c DELIVERY/SHA256SUMS.txt",
+  "result": "**55 件全 OK · 0 失败**（`grep -c ': OK$'` = 55；失败项 0）",
+  "note": "只读校验；未改任何包内文件"
+ },
+ "manifest_reading": {
+  "n_files": 53,
+  "drill_total": 749,
+  "kicad_version": "10.0.5",
+  "board_sha16": "c5a7df90aadb66e0",
+  "pro_sha16": "33b4eb6cae8359a9",
+  "criteria_anchor": "rev=3",
+  "dfm_summary": {
+   "pass": 16,
+   "accept": 1,
+   "fail": 0
+  },
+  "八铜层+阻焊/丝印/边框": true,
+  "excellon_钻孔": true,
+  "叠层图": true,
+  "阻抗表": true,
+  "MANIFEST": true,
+  "dirs": [
+   "01_gerber_rs274x",
+   "02_drill_excellon",
+   "03_stackup",
+   "04_impedance",
+   "05_layer_sequence.txt",
+   "06_rulings",
+   "07_verify"
+  ]
+ },
+ "dfm_detail": {
+  "pass": 16,
+  "accept": 1,
+  "fail": 0,
+  "accept_item": {
+   "id": "solder_mask_to_copper_clearance（阻焊坝）",
+   "ruling": "**ACCEPT_L2_WITH_FAB_REVIEW**（L2 自裁 · 登记在册）",
+   "evidence": "`06_rulings/mask_accept_fix_proof.json`：确定性修法已证 —— `pad_to_mask_clearance 0.05 → 0.02mm` ⇒ 阻焊桥缺口 **9 → 0**（总违规 210 → 201）",
+   "why_not_fixed_in_p5": "该修法 = 改板 setup 字段 ⇒ **板 sha 变更 ⇒ P4 判据锚失效** ⇒ **不在 P5 范围**（P5 = 交付冻结 l7）⇒ 修法留作**可执行回退路径**",
+   "caliber": "属『**有不可行/代价证明 + L2 裁定 + 可执行回退**』，非未处置 FAIL；**不充绿**（若下游厂审要求，则须起 ECO 改板并**重跑 P4 锚**）"
+  }
+ },
+ "verdict": "**交付包完整性 55/55 OK · DFM pass 16 / accept 1(已裁+有证明) / fail 0 · 锚未动** ⇒ owner #14③ 定义之交付物**齐备且未损坏**；P5 外部面（V4–V7）仍为 `NOT_RUN`（须外部回件，ENG 不得自证）。",
+ "readonly_repo": true,
+ "not_landed": true,
+ "no_delivery_rebuild": "**未重建包**（未跑任何 gerber/drill 生成命令）"
+}
