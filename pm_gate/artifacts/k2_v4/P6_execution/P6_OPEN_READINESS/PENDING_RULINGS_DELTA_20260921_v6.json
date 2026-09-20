@@ -129,6 +129,40 @@
    "evidence": [
     "PRIOR_ART_REGISTRY_INDEX_20260921_v1.json（2c2da4332e48e9fa）"
    ]
+  },
+  {
+   "id": "**N-2-BLK（新·停机项）**",
+   "title": "**N-2 K1 机制包被仓库级 meta-gate 拒**（`bom_consistent` 必选常量）⇒ 冲突即停机",
+   "facts": [
+    "3 件已备齐并实测（真判定器）：基线 **4/14** → 落件 **7/11**；翻转维 = `rule_severity_manifest`·`fp_lib_table_present`·`pipeline_present`（**恰为 3 目标维**）；**0 新失败**。（提案镜像记 5→8 = 常数 +1 偏移，已诚实登记。）",
+    "**pre-commit meta-gate 拒绝**：`k1: 漏声明必选 sch checks ['bom_consistent']`。根因 = `_shared/eda_core/pipeline/required.py` `REQUIRED_SCH_CHECKS` 为**常量**（sch_structural/netlist_connect/**bom_consistent**），凡含 `.kicad_sch` 必全声明。",
+    "而 `bom_consistent` 需 `bom_csv`；**K1 仓无任何 BOM**（`k1/fab/` 不存在）⇒ 只声明不加件 ⇒ `verify` **fail-closed**。**提案件已预警此点**（『须 K1 侧定』）。",
+    "**影响面**：该 meta-gate 拦**所有 k1 提交** ⇒ **N-2 与 N-3 同受阻**。`k1` 已回退洁净 `dc720fd`（未入库）。"
+   ],
+   "impact": "K1 工作流（N-2/N-3）**整体待此裁**；N-4 不受影响（已落件）。",
+   "options": [
+    "**(a) ENG 建议**：补 `k1/fab/k1_v1_bom.csv`（**ref 集由 sch netlist 机械派生**，格式同 `k2/fab/k2_v4_bom.csv`）+ 声明 `bom_consistent`；**并建议 N-2 与 N-3 合为同批**（BOM ref 集随 37→42 一次成型）",
+    "(b) 覆写/移出必选清单 ⇒ 改 `_shared` ⇒ 须监理批 + 两树同步",
+    "(c) 撤回 N-2（不推荐）"
+   ],
+   "eng_recommend": "**(a)**；重放命令见阻塞件 `measured_before_block.reapply_cmds`。**监理自裁面；owner 闸口 = 无。**",
+   "evidence": [
+    "N2_K1_LANDING_BLOCKER_BOM_CONSISTENT_20260921_v1.json（c94114c0edf01d5c）"
+   ]
+  },
+  {
+   "id": "**N-1/N-6/N-7（已落档·知悉即可）**",
+   "title": "执行序 4/4：N-1 接受(a)+随单注明 · N-6 接受 · N-7 确认达成 —— 已 ENG 只读落档",
+   "facts": [
+    "N-1：**未重建包**（锚 `6ee7495d…`/`0e88e107…` 冻结）；B-2/P5-1 = **商务下单页**（#14④ 非 ENG）；B-1（叠层以 `03_stackup` 为准）/P5-2（以 §5b 标题为准）注明；**因包冻结，注明不写入包内，本件为唯一落档**。",
+    "N-6：注明『**判据换址、非缺失**』（由 rev=3 三维承接）。",
+    "N-7：P6 判据①② 达成（P6-1 `provisional=False` 四项同源命中 · P6-2 ignore=0/结构差异 0/10）；**P5 外部门仍关**。"
+   ],
+   "options": [],
+   "eng_recommend": "知悉即可（无需裁定）。",
+   "evidence": [
+    "N1_N6_N7_RECORD_20260921_v1.json（8fa73a0b8eefe18f）"
+   ]
   }
  ],
  "readonly_repo": true,
