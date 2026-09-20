@@ -1,0 +1,26 @@
+# Datasheet 引脚真源 — TI TPD2E001 (U13: SBU1/SBU2 两通道 ESD 保护)
+#
+# 权威来源: TI SLLS684I (JULY 2006 – REVISED MARCH 2016)
+#   §5 Pin Configuration and Functions — "Pin Functions" 表
+# 取回校验: doc_sha256 = 下载字节哈希 (curl https://www.ti.com/lit/ds/symlink/tpd2e001.pdf)
+#
+# ⚠ 本表按 **DRY (6-pin USON)** 编号登记 = K1 板所用变体 (owner 裁决 L1-4: DRY0006A);
+#   DRS (6-pin WSON) **同拓扑同编号**; 差异变体如下 (未登记, 供参照):
+#     DRL (5-pin SOT): 1=VCC 2=NC 3=IO1 4=GND 5=IO2
+#     DZD (4-pin SOP/SOT-23): 1=GND 2=IO1 3=IO2 4=VCC  ← 与 DRY **不同**
+#   若后续换封装变体, 必须另立 device/表 (禁一套编号通吃).
+#   EP (DRS 独有, 厂商表 'EP') = GND.
+device: TPD2E001
+package: DRY (6-pin USON; DRS 6-pin WSON 同拓扑)
+source: "TI SLLS684I (Rev I) — §5 Pin Configuration and Functions, Table 'Pin Functions'"
+doc_id: SLLS684I
+doc_url: "https://www.ti.com/lit/ds/symlink/tpd2e001.pdf"
+doc_sha256: "b648c5d12f3e5b48c4b8ce3a9c4d5c4f1d40abb084d097e88465ba2f48d98d79"
+
+pins:
+  1: VCC
+  2: NC
+  3: IO1
+  4: GND
+  5: NC
+  6: IO2

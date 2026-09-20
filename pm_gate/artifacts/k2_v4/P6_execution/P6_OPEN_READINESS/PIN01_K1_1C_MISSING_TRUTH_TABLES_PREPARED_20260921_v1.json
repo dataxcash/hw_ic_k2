@@ -1,0 +1,90 @@
+{
+ "artifact": "k2_pin01_k1_1c_missing_truth_tables_prepared",
+ "schema": 1,
+ "ts": "2026-09-21T01:05:00+0800",
+ "id": "PIN01-K1-1c（低·排期）",
+ "authorization": "PIN01-K1-1c『4 件多引脚器件无 datasheet 真源表 ⇒ fail-closed 阻断；排期补表（与 SG-AUDIT-1 同族）』—— 本件**只制备不落地**（`_shared` 写须监理放行）。",
+ "purpose": "把 sch_gate 真源缺口 4 件（TPS22990/TPS22965/TPD2E001/2N7002）从**厂商原件逐脚转录**并**沙箱验证**，形成可一击落地的载荷，供与 PIN01-K1-1a/b **同一笔** `_shared` 批放行。",
+ "payload_dir": "k2/docs/drafts/pin01-k1-1c-missing-tables-v1/",
+ "payloads": [
+  {
+   "file": "TPS22990.yaml",
+   "device": "TI TPS22990",
+   "package": "DML WSON-10",
+   "vendor_doc": "TI SLVSDK1C",
+   "doc_url": "https://www.ti.com/lit/ds/symlink/tps22990.pdf",
+   "doc_sha256": "ea198776524544eb3e4a130f1f6a6e5c8e80ca8164eebf387a8fd6b4b7dde2a3",
+   "yaml_sha256": "6c51b7dbe9270d9caf2a9e7a5e634e4767c31c5d62baf313041b72bafb50b4d2"
+  },
+  {
+   "file": "TPS22965.yaml",
+   "device": "TI TPS22965",
+   "package": "DSG WSON-8",
+   "vendor_doc": "TI SLVSBJ0F",
+   "doc_url": "https://www.ti.com/lit/ds/symlink/tps22965.pdf",
+   "doc_sha256": "3300eef743d7871f96c752227ae8f958006a902123ce2df351cf0772ec95a7e1",
+   "yaml_sha256": "b35ec1ecd315bbd7efa0fc74478467c965a23fb66217f265bb455d28947effaf"
+  },
+  {
+   "file": "TPD2E001.yaml",
+   "device": "TI TPD2E001",
+   "package": "DRY 6-pin USON",
+   "vendor_doc": "TI SLLS684I",
+   "doc_url": "https://www.ti.com/lit/ds/symlink/tpd2e001.pdf",
+   "doc_sha256": "b648c5d12f3e5b48c4b8ce3a9c4d5c4f1d40abb084d097e88465ba2f48d98d79",
+   "yaml_sha256": "6edaeae4747a74731cf983c8077beb886bb289c1c9421027af8bb5310fdbe00d"
+  },
+  {
+   "file": "2N7002.yaml",
+   "device": "Nexperia 2N7002",
+   "package": "SOT23 (TO-236AB)",
+   "vendor_doc": "Nexperia Rev. 7 (2011-09-08)",
+   "doc_url": "https://assets.nexperia.com/documents/data-sheet/2N7002.pdf",
+   "doc_sha256": "cc9c275457670c3cbbf2e56f5a75c800d3b5f0b396fabc798cf18cb639646475",
+   "yaml_sha256": "e629fb62952981f9aa0db0c96a60e2a39671ed698febe8610c17f7be5144c5a1"
+  }
+ ],
+ "provenance_cross_check": "TPS22990/TPS22965/TPD2E001 的 `doc_sha256`（本人本会话重新 curl 取回字节哈希）与仓库既有 `k1/pm_gate/artifacts/k1/L1/inputs/datasheets/*.yaml` 记录**逐字节一致** ⇒ 出处自洽、可反查。",
+ "sandbox_validation": {
+  "cmd": "check_symbol_library(k1/sch/K1_SCH.kicad_sym, dsdir=真源目录副本 + 本批 4 件)",
+  "before": {
+   "verdict": "FAIL",
+   "fails": 29,
+   "no_table_entries": [
+    "TPS22990",
+    "2N7002",
+    "TPS22965",
+    "TPD2E001"
+   ]
+  },
+  "after": {
+   "verdict": "FAIL",
+   "fails": 25,
+   "no_table_entries": []
+  },
+  "delta": "-4（恰为 4 件无表项；无新增 fail）",
+  "residual_25": "= USB_C_RECEPT(J1) 23 项（PIN01-K1-1a）+ STM32G0B1KBU6 名绑定 2 项（PIN01-K1-1b）",
+  "negative_control": "把 NMOS_2N7002 符号 D 脚号 3→2 ⇒ FAIL(26) 且报 `引脚号错: D 允许 pin ['3']` ⇒ 新表**确实被强制**，非静默放行",
+  "zero_regression": "全仓 `*.kicad_sym` grep：仅 `k1/sch/K1_SCH.kicad_sym` 使用这 4 个 Value ⇒ k2/key_v2/pciesw4 零影响"
+ },
+ "transcription_rules": [
+  "逐脚取自厂商 PDF 'Pin Functions' 表（页码/表名见各 YAML 头注）",
+  "热焊盘按厂商表 `—`（**非编号脚**）登记于独立 `thermal_pad:` 字段；板侧焊盘号（Q1=11 / U12=9）仅注释，**不进 `pins`**",
+  "`ON` 等 YAML 1.1 布尔词**必须加引号**（否则 `True` ⇒ 误报『未绑定端口』）—— 本批已规避",
+  "TPD2E001 按 **DRY** 编号（= K1 板变体）；YAML 内显式警示 DZD(4-pin) 编号不同、禁一套通吃"
+ ],
+ "landing_ask": {
+  "target": "_shared/eda_core/sch_gate/datasheets/（4 件新增）",
+  "batch": "与 PIN01-K1-1a（USB-C 系真源升 pad 级）+ PIN01-K1-1b（KBU6 aliases 补 WORK_EN/KEY_DET_EN）**同一笔** `_shared` 升版 + 四树同步",
+  "expected_after_landing": "pinmap.py PIN-01 由 FAIL(29) → **FAIL(0)**（4 无表 + 23 J1 + 2 KBU6 全消）；随后重跑 K1 判定与 `verify k1` 报零回归"
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "no_new_criteria_dim": true,
+ "not_landed_detail": [
+  "未写 `_shared/`（载荷在 k2/docs/drafts/，未生效）",
+  "未改 criteria/",
+  "未改生成器/SPEC/原理图/板"
+ ],
+ "next": "待批 → 一笔落地 → 重跑 pinmap.py 报 PIN-01 读数 → 复跑 K1 判定"
+}

@@ -1,0 +1,35 @@
+# Datasheet 引脚真源 — TI TPS22965 (U12: 轨A 预鉴权轨负载开关)
+#
+# 权威来源: TI SLVSBJ0F (AUGUST 2012 – REVISED AUGUST 2016)
+#   §5 Pin Configuration and Functions — "Pin Functions" 表 (DSG 8-Pin WSON)
+# 取回校验: doc_sha256 = 下载字节哈希 (curl https://www.ti.com/lit/ds/symlink/tps22965.pdf)
+#
+# 已知约束:
+#   - VIN = 1 与 2 两脚("Must be connected to Pin 1 and Pin 2").
+#   - 热焊盘 (exposed center pad) = **GND** ("Tie to GND") — 本表按厂商编号只列 1..8;
+#     K1 板 footprint 焊盘号 = 9 (k1_pinmap.yaml#U12: GND→['5','9']).
+#   - 符号侧沿用短名 `IN` (= VIN) ⇒ 见 aliases.
+device: TPS22965
+package: DSG (WSON-8)
+source: "TI SLVSBJ0F (Rev F) — §5 Pin Configuration and Functions, Table 'Pin Functions'"
+doc_id: SLVSBJ0F
+doc_url: "https://www.ti.com/lit/ds/symlink/tps22965.pdf"
+doc_sha256: "3300eef743d7871f96c752227ae8f958006a902123ce2df351cf0772ec95a7e1"
+
+pins:
+  1: VIN
+  2: VIN
+  3: "ON"
+  4: VBIAS
+  5: GND
+  6: CT
+  7: VOUT
+  8: VOUT
+
+aliases:
+  IN:
+  - VIN
+
+thermal_pad:
+  name: GND
+  note: "exposed center pad; 厂商表以 '—' 编号. K1 板 footprint 焊盘号 = 9 (k1_pinmap.yaml#U12)."

@@ -1,0 +1,77 @@
+{
+ "artifact": "k2_pending_rulings_delta",
+ "schema": 11,
+ "ts": "2026-09-21T01:20:00+0800",
+ "supersedes": "PENDING_RULINGS_DELTA_20260921_v10.json（sha16 acde53c60ba5976e；v10 正文保留，本件追加本期成果 + T2-F6 通道降级 + PIN01-K1-1c 制备态）",
+ "purpose": "收敛当前全部待裁项为**一份**决策件。本会话（context 归零续接，#K2-51 后无新裁定）按 handoff §7-B『无裁定则只读造活，禁停等』推进，落 3 项实质成果并**把 PIN01-K1-1c 由『待排期』推成『已制备待落地』**。",
+ "owner_gate": "**无**（全部 监理面：`_shared` 批 / 生成器批 / 库快照处置；owner 面仅 C-26 登记 · P5 外部面）",
+ "stage_state": "P0–P4 与 P6 判据面 HOLDS；P5 = 唯一未闭阶段门（外部 V4–V7 `NOT_RUN`）；交付锚 `6ee7495de61f749f` **未动**（本会话实测复核）；判据 **rev=6**；canonical 19 `190b73be0f728a56`。**未越阶段、未动任何受保护件。**",
+ "landed_this_session": [
+  {
+   "id": "SG-AUDIT-1c（新·闭环）",
+   "what": "DS160PR810 **全量 64/64 对表 PASS**（补齐 addendum 的 14/64 残差）",
+   "evidence": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/SG_AUDIT_DS160PR810_FULL64_CROSSCHECK_20260921_v1.json（sha16 ab72bc3d5c0ce45d）",
+   "tool": "k2/tools/k2_sg_ds160pr810_pin_truth_crosscheck_v1.py（新·只读）",
+   "detail": "厂商 PDF TI SNLS658（`pdf_sha256 50528cac…`，本会话 curl 取回）§5 Pin Functions（**仅表体 p4–p6**，排除 p3 封装俯视图以防列错读）逐脚解析；覆盖 1..64 无缺/无越界/无重复；**负控**（人为改 pins[1] RX0P→RX0N）⇒ FLAG，非恒绿。",
+   "conclusion": "无新缺陷 ⇒ **SG-AUDIT-1『7/8 一致、唯一 FAIL = STM32G0B1KBU6』结论维持**；DS160PR810 残差**闭**。"
+  },
+  {
+   "id": "K1-D6 台账（#K2-51 授权·已落）",
+   "what": "读数 **17 → 77 / 5 类**",
+   "evidence": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/K1_BOARD_LEVEL_DEFECT_WORKLIST_20260921_v2.json（sha16 d191c47a937fa5ce；supersedes v1 8cbf714f）",
+   "detail": "来源 `K1_DRC_EVIDENCE_20260921_v1.json`（板 sha eda1dc91eec76aa7）：error 13 / warning 77 = silk_over_copper 29 · silk_overlap 24 · nonmirrored_text_on_back_layer 14 · missing_courtyard 7 · silk_edge_clearance 3。",
+   "gate_check": "`criteria/manifest.k1.yaml` `drc_warning_dispositions` 已登记该 **5 类全量** ⇒ `board_warning_types ⊆ dispositions[].type` **PASS 维持**（实测复核）。口径不变：**登记制、不豁免、保持可见**；禁以此豁免任何实体 DRC/DFM 项。",
+   "note": "**未重跑 DRC**（遵 owner ②『终止每轮必复评』；读数取自既有证据件）。"
+  },
+  {
+   "id": "PIN01-K1-1c 载荷制备（状态升级：待排期 → **已制备待落地**）",
+   "what": "4 件缺失真源表从厂商原件逐脚转录并**沙箱验证**",
+   "evidence": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/PIN01_K1_1C_MISSING_TRUTH_TABLES_PREPARED_20260921_v1.json（sha16 bc2c776926ae6e6c）· 载荷 `k2/docs/drafts/pin01-k1-1c-missing-tables-v1/`",
+   "detail": "TPS22990(TI SLVSDK1C, DML WSON-10) · TPS22965(TI SLVSBJ0F, DSG WSON-8) · TPD2E001(TI SLLS684I, DRY 6-pin) · 2N7002(Nexperia Rev.7, SOT23)。**沙箱**：pinmap.py FAIL **29 → 25**（4 无表项全消、无新增）；**负控**（2N7002 D 3→2）⇒ FLAG。前 3 件 `doc_sha256` 与仓库既有 K1 输入层记录**逐字节一致**。",
+   "ask": "与 PIN01-K1-1a/b **同一笔** `_shared` 放行落地（预期随后 PIN-01 FAIL(29)→**FAIL(0)**）"
+  }
+ ],
+ "new_items_after_v10": [
+  {
+   "id": "**T2-F6 通道降级（新·中）**",
+   "title": "batch4 的『半自动取件通道』本会话**实测已部分失效**",
+   "facts": [
+    "**已不可达/被拒**：`atta.szlcsc.com` **403**（batch4 时 200）· `www.diodes.com` **403**（batch4 时 200+%PDF）· `www.molex.com` / `www.liteon.com` **000** · `alldatasheet.com`/**digikey** 403。",
+    "**LCSC / Mouser** 站点 200 但搜索页为 **JS 渲染**（curl 拿不到结果/直链）；`wmsc.lcsc.com` API 403/404。",
+    "**本会话新可达**：`www.ti.com`（200，已成功取 DS160PR810/TPS22990/TPS22965/TPD2E001 四份 PDF）· `assets.nexperia.com`（200，已取 2N7002）· `file.elecfans.com`（200）· `21icsearch`（500，疑似半可用）。",
+    "⇒ tier2 读数**维持 15/33**；余 6 件（PI3DBS16412 / OPTO_LTV356T / USB3.0_Type-A_90 / PMIC_P1 / SOM_B1 / USB_C_PLUG(Molex 105444)）本会话**未取回**（**不充绿**、保持具名 PARTIAL）。"
+   ],
+   "ask": [
+    "知悉（口径不变）。**vendor 站级反自动化使半自动通道具时效性** ⇒ 建议把『可达上限 21/33』改为**软目标**，tier2 收口以『结构性无三件套 12 件』为不可约下界。"
+   ]
+  }
+ ],
+ "carried_forward_pending": [
+  {
+   "id": "PIN01-K1-1a（须批·高）",
+   "title": "`_shared` USB-C 系真源升 pad 级（`USB_C_RECEPT`/`USB_C_RECEPT_24`/`USB_C_PLUG`）",
+   "status": "未落"
+  },
+  {
+   "id": "PIN01-K1-1b（须批·中）",
+   "title": "KBU6 真源 `aliases` 补 `WORK_EN:[PA2]` / `KEY_DET_EN:[PA15]`",
+   "status": "未落"
+  },
+  {
+   "id": "W8-GEN-1（须批·高）",
+   "title": "建板器补输出 `(footprint \"<LIB>:<NAME>\")`（4/6 唯一阻塞）",
+   "status": "未落",
+   "merge": "同批：K1-U1-BOARD-SYNC + W8-FU-1 证据重出 + `artifacts/L3/*` 建板记录 + 复算 K1 判定"
+  },
+  {
+   "id": "U9-GEOM-1 / K1-D16（须批）",
+   "title": "`U9` 姿态归一后仍几何不一致（板 +1.5 vs 库 −1.5）⇒ 处置方向待裁",
+   "status": "未落"
+  }
+ ],
+ "readonly_repo": true,
+ "not_landed": true,
+ "no_new_criteria_dim": true,
+ "eng_readonly_surface": "本会话把『DS160PR810 全量对表 + K1-D6 读数 + 缺失真源表制备』做尽；进一步实质推进**依赖上表监理放行**（尤其 PIN01-K1-1a/b/c 一笔、W8-GEN-1）。",
+ "next": "获裁 → ①PIN01-K1-1a/b/c 一笔 `_shared`（升版 + 四树）→ 复跑 pinmap.py 报 PIN-01 ②W8-GEN-1 批 → 落板 + 证据重出 + 复算 K1（4/6 收口）③U9-GEOM-1 处置。无裁定 → 按 handoff §7-B 续做只读造活（册面维护 / 6/6 复探 / 锚复核）。"
+}

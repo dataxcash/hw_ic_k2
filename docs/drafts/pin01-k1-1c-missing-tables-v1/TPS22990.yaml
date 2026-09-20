@@ -1,0 +1,40 @@
+# Datasheet 引脚真源 — TI TPS22990 (Q1: 轨B 工作态负载开关)
+#
+# 权威来源: TI SLVSDK1C (MAY 2016 – REVISED SEPTEMBER 2017)
+#   §6 Pin Configuration and Functions — "Pin Functions" 表 (DML 10-Pin WSON)
+# 取回校验: doc_sha256 = 下载字节哈希 (curl https://www.ti.com/lit/ds/symlink/tps22990.pdf)
+#
+# 语义 (见 checks/pinmap.py): pins = 物理真源 (pin号 → 物理引脚名).
+#   一对多: VOUT 在 8/9/10 三脚同名 ⇒ 符号填任一均合法.
+#
+# 已知约束:
+#   - 热焊盘 (exposed center pad) = **VIN** ("Switch input. VIN and thermal pad ... to
+#     alleviate thermal stress") — 本表按**厂商编号**只列 1..10; 封装侧焊盘号见板件
+#     (K1 Q1 footprint 用 11, 见 k1/boards/k1_pinmap.yaml#Q1).
+#   - 符号侧沿用短名 `IN` (= VIN) ⇒ 见 aliases.
+device: TPS22990
+package: DML (WSON-10)
+source: "TI SLVSDK1C (Rev C) — §6 Pin Configuration and Functions, Table 'Pin Functions'"
+doc_id: SLVSDK1C
+doc_url: "https://www.ti.com/lit/ds/symlink/tps22990.pdf"
+doc_sha256: "ea198776524544eb3e4a130f1f6a6e5c8e80ca8164eebf387a8fd6b4b7dde2a3"
+
+pins:
+  1: CT
+  2: NC
+  3: VIN
+  4: VBIAS
+  5: "ON"
+  6: GND
+  7: PG
+  8: VOUT
+  9: VOUT
+  10: VOUT
+
+aliases:
+  IN:
+  - VIN
+
+thermal_pad:
+  name: VIN
+  note: "exposed center pad; 厂商表以 '—' 编号. K1 板 footprint 焊盘号 = 11 (k1_pinmap.yaml#Q1: IN→['3','11'])."
