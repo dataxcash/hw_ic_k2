@@ -41,3 +41,20 @@
 冻结四源原件未改（`l4 d4e81f64` / 设计源 `fb07d25a` / `k2_sch dd794c54`）· 交付锚未动（`MANIFEST 6ee7495d` / tarball `0e88e107` / 受审板 `l7 c5a7df90` / `l7.kicad_pro 33b4eb6c`）· `criteria/` **只读未动**（rev=3 `eb244d81 / 1937a40a / e2b49fdd`）· 不重建包 · 不放松 DRC 下限 · 未连接 0 / error 0 / zone_filled 10/10 未回退 · `skipped` 未充绿 · C1/C2 未改绿 · **未派 WORKER** · 临时件仅 `/tmp/opencode` · 未写 `.omo/supervision/**`。
 
 —— ENG（ARCHER）· 2026-09-20 · 放行件 **#K2-41** · 批 2 落件完成，**P6 交付阶段仍关闭**
+
+## 4. S3 收口：批 2 残留 **12 个 SKIP** 逐条具名（`skipped 不得充绿`）
+
+施工后 pytest = 61 PASS / 2 FAIL（具名 C1/C2）/ **12 SKIP**。12 项**全部**同一 skipif 族（`BASELINE_PCB.exists()`，基线板 = `/tmp/opencode/boards/k2_m9demo.kicad_pcb`，**不在库**）⇒ 结构上仍可能「skip 充绿」，故逐条定性：
+
+| skipif 站点 | 用例数 | 打的 API | 该 API 是否仍在引擎 | 该 API 的**其他**测试覆盖 |
+|---|---|---|---|---|
+| `:171` `test_up4_input_segment_solved` | 1 | `solve_pair_segment` | ✅ 在册 | **0**（覆盖真空） |
+| `:195` `TestV2CorridorDeterministic` | 3 | `solve_chain_v2` | ✅ 在册 | **0** |
+| `:217` `TestV2PairSymmetry` | 2 | `_pair_expand` | ❌ **引擎已删**（解锁必 AttributeError） | 0 |
+| `:237` `TestV2RefclkIn6` | 2 | `solve_chain_v2` | ✅ 在册 | 0 |
+| `:269` `TestV3EscapeIn2` | 4 | `solve_chain_v2` | ✅ 在册 | 0 |
+
+- 基线三件套**全部非现役**：`/tmp` 板（**不在库**、仓库无生成器 ⇒ N-05「生成物不可复跑」同族）+ 6L 旧 `SPEC_k2_v4.json`（README-canonical 标「陈旧读取」）+ `channel_alloc_v2`（本批已标 **RETIRED**）。
+- 结论：**10 项**打**仍在册**的 `solve_pair_segment` / `solve_chain_v2`，且这两个 API **仅有这些被跳过的用例覆盖** ⇒ 属**覆盖真空**（非「已被新套件取代」）；**2 项**打**已删**私有 API。
+- 处置四选（**监理裁**）：**S1** 具名接受（登记退役 + 显式登记覆盖真空）· **S2** 补 fixture 生成步骤（涉生成器/SPEC/冻结件）· **S3** 随代际退役删 API（共享层改动）· **S4** 重锚到现役 8L 基线（期望重基线）。
+- 机读：`P6_execution/BATCH2_SKIP12_DISPOSITION_v1.json`（`fdbb8f3a0…`）。ENG **未改**测试/引擎/记录件。

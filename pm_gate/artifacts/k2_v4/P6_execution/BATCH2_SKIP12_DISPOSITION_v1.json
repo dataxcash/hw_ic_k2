@@ -1,0 +1,172 @@
+{
+ "anchor_triple": {
+  "BASELINE_ALLOC": "…/model_solves/channel_alloc_v2/channel_alloc.json（**已由本批标 RETIRED**）",
+  "BASELINE_PCB": "/tmp/opencode/boards/k2_m9demo.kicad_pcb（**不在库**；/tmp 生成物，仓库内无生成器 ⇒ N-05「生成物不可复跑」同族）",
+  "BASELINE_SPEC": "k2/pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json（**6L 旧代际**，README-canonical 已标『陈旧读取，禁直接读取』）"
+ },
+ "artifact": "k2_batch2_skip12_disposition",
+ "eng_note": "ENG 未改测试/引擎/记录件；本件仅逐条具名 + 量化覆盖真空 + 给处置选项。批 2 的『skipped 不得充绿』因此由『结构上可能』变为『**已具名、待处置**』。",
+ "engine_sha16": "8f9bd6c7fa033039",
+ "findings": [
+  "12 项全部落在**同一 skipif 族**（`BASELINE_PCB.exists()`）⇒ 只要基线板不在库即静默跳过（『skip 充绿』结构条件仍存在）",
+  "**10 项**打的是**仍在册的引擎 API**：`solve_pair_segment`（1）· `solve_chain_v2`（9）；这两个 API 在全测试文件中**仅由这些被跳过用例覆盖**（其余出现 = 0）⇒ 属**覆盖真空**，非『已被新套件取代』",
+  "**2 项**（`TestV2PairSymmetry`）依赖**已从引擎移除**的私有 `_pair_expand`（engine 内 `def _pair_expand(` 命中 0）⇒ 一旦解锁必 **AttributeError**（该类对**已删 API**，属历史残留）",
+  "基线三件套全部**非现役**（/tmp 板 + 6L 旧 SPEC + 已 RETIRED 的遗留 alloc）⇒ 与批 2 已落的新锚（8L 板 + 现行 pipeline alloc）**不同源**"
+ ],
+ "measured_skip_count": 12,
+ "options_for_supervisor": [
+  {
+   "detail": "12 项在册登记为『基线不可复跑 / 目标代际退役』，不充绿、不再计入覆盖；同时登记 `solve_pair_segment`/`solve_chain_v2` 的**测试覆盖真空**（后续按需补 8L 锚用例）",
+   "id": "S1",
+   "name": "具名接受（登记退役）"
+  },
+  {
+   "detail": "在库内补 `k2_m9demo` 生成脚本 + 冻结件（可复跑）；但基线仍依赖 6L 旧 SPEC 与已 RETIRED 的遗留 alloc ⇒ 须一并裁定其锚身份",
+   "id": "S2",
+   "name": "补 fixture 生成步骤",
+   "risk": "涉及生成器/SPEC/冻结件 ⇒ 须监理裁"
+  },
+  {
+   "detail": "`solve_pair_segment` / `solve_chain_v2` 若无现役消费者则连同 10 项一起退役（先证消费者面）",
+   "id": "S3",
+   "name": "随代际退役删 API",
+   "risk": "引擎 API 删除属共享层改动 ⇒ 须监理批；且 ENG 探针工具（S1 sweep/b2t）现用到它们"
+  },
+  {
+   "detail": "用 `hw/k2_v4_8L.l4.kicad_pcb`（冻结 `d4e81f64`）+ 现行 SPEC + 现行 alloc 重建 12 项期望",
+   "id": "S4",
+   "name": "重锚到现役 8L 基线",
+   "risk": "属**期望重基线**（#K2-41 §三-④ 类）⇒ 须监理裁；v2/v3 旧几何期望在 8L 下多半不成立"
+  }
+ ],
+ "purpose": "批 2 收口项『skipped 不得充绿』：把施工后残留的 **12 个 SKIP** 逐条具名定性（ENG 测量；处置归监理）",
+ "readonly_repo": true,
+ "schema": 1,
+ "skip_reason": "基线板不存在",
+ "skipif_sites": [
+  {
+   "line": 171,
+   "name": "test_up4_input_segment_solved",
+   "scope": "func"
+  },
+  {
+   "line": 195,
+   "name": "TestV2CorridorDeterministic",
+   "scope": "class"
+  },
+  {
+   "line": 217,
+   "name": "TestV2PairSymmetry",
+   "scope": "class"
+  },
+  {
+   "line": 237,
+   "name": "TestV2RefclkIn6",
+   "scope": "class"
+  },
+  {
+   "line": 269,
+   "name": "TestV3EscapeIn2",
+   "scope": "class"
+  }
+ ],
+ "test_file_sha16": "93af4803258cb578",
+ "tests": [
+  {
+   "api": "solve_pair_segment",
+   "api_coverage_elsewhere_in_tests": true,
+   "api_still_in_engine": true,
+   "class": null,
+   "site_line": 171,
+   "test": "test_up4_input_segment_solved"
+  },
+  {
+   "api": "solve_chain_v2",
+   "api_coverage_elsewhere_in_tests": true,
+   "api_still_in_engine": true,
+   "class": "TestV2CorridorDeterministic",
+   "site_line": 195,
+   "test": "test_up4_chain_solved"
+  },
+  {
+   "api": "solve_chain_v2",
+   "api_coverage_elsewhere_in_tests": true,
+   "api_still_in_engine": true,
+   "class": "TestV2CorridorDeterministic",
+   "site_line": 195,
+   "test": "test_dn0_chain_solved"
+  },
+  {
+   "api": "solve_chain_v2",
+   "api_coverage_elsewhere_in_tests": true,
+   "api_still_in_engine": true,
+   "class": "TestV2CorridorDeterministic",
+   "site_line": 195,
+   "test": "test_corridor_deterministic"
+  },
+  {
+   "api": "_pair_expand",
+   "api_coverage_elsewhere_in_tests": false,
+   "api_still_in_engine": false,
+   "class": "TestV2PairSymmetry",
+   "site_line": 217,
+   "test": "test_pair_expand_equal_length"
+  },
+  {
+   "api": "_pair_expand",
+   "api_coverage_elsewhere_in_tests": false,
+   "api_still_in_engine": false,
+   "class": "TestV2PairSymmetry",
+   "site_line": 217,
+   "test": "test_pair_pitch"
+  },
+  {
+   "api": "solve_chain_v2",
+   "api_coverage_elsewhere_in_tests": true,
+   "api_still_in_engine": true,
+   "class": "TestV2RefclkIn6",
+   "site_line": 237,
+   "test": "test_refclk0_in6_layer"
+  },
+  {
+   "api": "solve_chain_v2",
+   "api_coverage_elsewhere_in_tests": true,
+   "api_still_in_engine": true,
+   "class": "TestV2RefclkIn6",
+   "site_line": 237,
+   "test": "test_refclk1_in6_layer"
+  },
+  {
+   "api": "solve_chain_v2",
+   "api_coverage_elsewhere_in_tests": true,
+   "api_still_in_engine": true,
+   "class": "TestV3EscapeIn2",
+   "site_line": 269,
+   "test": "test_up4_escape_uses_in2"
+  },
+  {
+   "api": "solve_chain_v2",
+   "api_coverage_elsewhere_in_tests": true,
+   "api_still_in_engine": true,
+   "class": "TestV3EscapeIn2",
+   "site_line": 269,
+   "test": "test_escape_deterministic"
+  },
+  {
+   "api": "solve_chain_v2",
+   "api_coverage_elsewhere_in_tests": true,
+   "api_still_in_engine": true,
+   "class": "TestV3EscapeIn2",
+   "site_line": 269,
+   "test": "test_zero_vgraph_18_pairs"
+  },
+  {
+   "api": "solve_chain_v2",
+   "api_coverage_elsewhere_in_tests": true,
+   "api_still_in_engine": true,
+   "class": "TestV3EscapeIn2",
+   "site_line": 269,
+   "test": "test_escape_fallback_single_vgraph"
+  }
+ ]
+}
