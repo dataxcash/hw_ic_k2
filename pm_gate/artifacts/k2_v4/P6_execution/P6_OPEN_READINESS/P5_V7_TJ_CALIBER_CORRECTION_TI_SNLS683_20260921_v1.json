@@ -1,0 +1,90 @@
+{
+ "artifact": "k2_p5_v7_tj_caliber_correction_ti_snls683",
+ "schema": 1,
+ "ts": "2026-09-21T08:50:00+0800",
+ "id": "【**更正**】P5 · V7 `Tj` 反推口径 —— 由**新通道 `www.ti.com`** 取得 SNLS683 正本 ⇒ 推翻本会话前件 CR-20 之『ψJT 无源』判断，并据此**修订 CR-19 口径**",
+ "nature": "**自纠（integrity）**：公开更正在先，不掩盖、不静默回改（前件件与 ledger **保留原值**，本件为_amend_）",
+ "new_lane": {
+  "name": "TI 官方数据表直链",
+  "url_pattern": "https://www.ti.com/lit/ds/symlink/<part>.pdf",
+  "reachability": "`https://www.ti.com/` = 200 · `https://www.ti.com/lit/ds/symlink/ds320pr1601.pdf` = **200 · application/pdf · 2,225,981 B**（**本会话首次登记**；此前记录只封了 `www.st.com`(567) 与 `diodes.com` 部分面，**未登 ti.com**）"
+ },
+ "evidence": {
+  "datasheet": "DS320PR1601 — 32 Gbps 16 Lane PCIe 5.0, CXL 2.0 Linear Redriver · TI **SNLS683 – JUNE 2023**",
+  "url": "https://www.ti.com/lit/ds/symlink/ds320pr1601.pdf",
+  "sha256": "f61599c4356edb395e07c9300999ab818898986a4adde71753bae7a080c039da",
+  "bytes": 2225981,
+  "sha_match": "**与本项目裁定链所引件逐字节相同**（`m13_v57_co148_u6_ds320pr1601_inputs.json` 记 `pdf_sha256` = 同值）⇒ 正本无歧义",
+  "section": "**§6.4 Thermal Information（p16）**",
+  "table_verbatim": {
+   "RθJA-High K": "17.4 ℃/W",
+   "RθJC(top)": "6.5 ℃/W",
+   "RθJB": "6.1 ℃/W",
+   "**ψJT**": "**3.6 ℃/W** *Junction-to-top characterization parameter*",
+   "ψJB": "5.9 ℃/W",
+   "RθJC(bot)": "N/A"
+  },
+  "figure": "P5_V7_TI_SNLS683_P16_THERMAL_20260921_v1.png（8df6571f9a7643f7 · pdftoppm -r 110 p16）",
+  "also_confirms": "§6.5 DC Electrical（p16）：`PACT` EQ=0-2 **4.7/6.0 W** · EQ=5-19 **5.8/7.0 W** —— 与件内 `PACT` **一致**"
+ },
+ "correction": {
+  "what_i_claimed_before": "CR-19/CR-20（本会话前件）：『`ψJT = 3.6` **无器件手册出处**』⇒ 故把 `θJC_top(6.5)` 定为唯一判据式、把 `ψJT` 式降为『不得单独作判据』",
+  "why_wrong": "该判断**只以 repo 之机器可读派生件为限**取证：`m13_v57_co148_u6_ds320pr1601_inputs.json`(`d98677fd7f7d51ba`) 与 `m13_v57_co204_thermal_verification.json` **均未收录 `ψJT` 行**，且全库检索只命中计划正文 1 处自述。**根因 = 派生件字段缺失被误读为『无源』**（取证不足 · 非源缺失）。ti.com 新通道取得正本后即被推翻。",
+  "correct_facts": [
+   "`ψJT = 3.6 ℃/W` **有源**（TI SNLS683 §6.4 p16 · 正本 sha `f61599c4…`）",
+   "`ψJT` 为 *Junction-to-top characterization parameter* ⇒ **物理上正是**「top 面温度 ⇒ 结温」所用参数",
+   "`θJC_top = 6.5` 亦为手册值，但其用途 = **冷板/顶面热阻**（配 θJA_eff 预测链），**不是** top 面反推参数"
+  ],
+  "consequence_of_wrong_ruling": "若维持前件口径（以 6.5 反推），会把**设计 PASS** 之板**误判 FAIL**（最重档 +20.3℃：设计点 `Tj=117.0` ⇒ `T_top=91.8` ⇒ 6.5 式给 **137.3℃ > 120 ⇒ FAIL**）并**误触 T1**（`T_top ≥ 71.5℃` 即触，真 Tj 仅 96.7℃）⇒ 可致**不必要之开新 rev**（费用+排期）"
+ },
+ "ruling_L2_self_amended": {
+  "id": "L2-V7-1′（**修订** L2-V7-1）",
+  "decision": [
+   "**唯一判据式 = `Tj = T_top + P·ψJT`，`ψJT = 3.6 ℃/W`**（TI SNLS683 §6.4 p16 · 有源 · 物理正确参数）—— 即回到《整改计划》§L2-9c′ 之口径，并**补上出处**",
+   "**`θJC_top = 6.5 ℃/W` 用途限定**：仅用于设计预测链 `θJA_eff = θJC_top + R_int + θHS = 11.0`（L2 v2.0 §1）；**不得**用于 `T_top ⇒ Tj` 反推",
+   "**必须同记**：原始 `T_top`/`P`/`Ta`/装配方式，**并记**以 6.5 式所得之**保守上界**（供监理交叉）；禁只交一个 `Tj` 数字",
+   "**边界复核**：判据式 `>117.0℃`(T1) 或 `>120.0℃`(FAIL) ⇒ 连同原始量交**监理复核**后再开新 rev",
+   "**两式/两法不一致 ⇒ 监理裁定**（实测方不得单方择式）"
+  ],
+  "thresholds_untouched": "`Tj ≤ 120.0℃` 与 T1 `> 117.0℃` **逐字未改**",
+  "not_owner_item": "L2 热机械口径（宪法第二章）+ owner ⑦（口径澄清 = 自裁面）⇒ **不自升 owner**"
+ },
+ "repo_chain_gap_registered": {
+  "id": "CR-20′（**撤回**原 CR-20，改立『派生件字段缺失』登记）",
+  "what": "repo 之机器可读手册派生件**缺 `ψJT` 行**：`m13_v57_co148_u6_ds320pr1601_inputs.json`(`d98677fd7f7d51ba`) 与 `m13_v57_co204_thermal_verification.json` 均无 `psi_jt` ⇒ 易被后续会话误读为『无源』（**本会话即误读 1 次**）",
+  "action": "**不修改该两件**（其 sha16 已被 L2 v1/v2 裁定引用；改即断链）⇒ **仅登记**：后续引用 U6 热参数时应同时引正本 SNLS683 §6.4（或另建派生件）",
+  "severity": "登记级（不阻塞 · 不改判据）"
+ },
+ "fix_landed": {
+  "pm_gate/artifacts/k2_v4/L6/first_article/RULES.md": {
+   "before": "af8c3dd994eacabb",
+   "after": "5fbb54b97e8125d8",
+   "change": "§V7 口径**更正**：判据式 = `T_top + P·ψJT(3.6)`（有源）· 6.5 限用于预测链 · 必记原始量+保守上界 · 边界须监理复核"
+  },
+  "pm_gate/artifacts/k2_v4/L6/first_article/CHECKLIST.md": {
+   "before": "e2e6a074feac1716",
+   "after": "1f45c783b7b7953b",
+   "change": "V7 行判据式改回 `T_top + P·ψJT(3.6)`，并注记 6.5 保守上界"
+  },
+  "pm_gate/artifacts/k2_v4/L6/first_article/results_template.json": {
+   "before": "00d6ff4cfad0ba66",
+   "after": "2346d30351e81805",
+   "change": "`tj_conversion_caliber` 更正（判据式 ψJT + 出处 + 预测链限定 + 必记 + 边界复核）；新增 `Tj_conservative_upper_bound_C` 字段"
+  },
+  "pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/P5_V7_TI_SNLS683_P16_THERMAL_20260921_v1.png": "8df6571f9a7643f7（图证）"
+ },
+ "red_lines": [
+  "未改冻结四源（`d4e81f64` 未动）",
+  "未改 criteria/（rev=6 只读）",
+  "未改交付包（MANIFEST `6ee7495de61f749f` 未动）",
+  "未改受审板 l7（`c5a7df90` 未动）",
+  "**未改任何阈值/触发**（≤120.0 · T1 >117.0）",
+  "未改 `m13_*` 历史派生件（sha 链保持）",
+  "未新增判据维/检查齿",
+  "未改生成器/SPEC/原理图/符号",
+  "未派 WORKER",
+  "外部厂商原件仅落 `/tmp/opencode`（未入库）"
+ ],
+ "readonly_repo": false,
+ "not_landed": false
+}

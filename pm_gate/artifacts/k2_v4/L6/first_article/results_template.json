@@ -299,27 +299,32 @@
       "Ttop_C": null
      }
     },
-    "Tj_measure_method": ""
+    "Tj_measure_method": "",
+    "Tj_conservative_upper_bound_C": null
    },
    "criterion": "Tj ≤ 120.0℃（四工况，L2 v2.0/CO-204）；T1 触发：Tj(U6) > 117.0℃ 或未按 O2 实施 ⇒ 开新 rev（目标 θJA_eff ≤ 9.5℃/W）；T2：U6 域几何他因修订 ⇒ 同 rev 补 GND via 阵列",
    "note": "",
    "tj_conversion_caliber": {
-    "judging_formula": "Tj = T_top + P * theta_jc_top",
-    "theta_jc_top_C_per_W": 6.5,
-    "parameter_source": "器件手册值（TI SNLS683 派生件 m13_v57_co148_u6_ds320pr1601_inputs.json d98677fd7f7d51ba）",
-    "nature": "**保守上界**（theta_jc_top 为冷板表征值；用于 top 面反推会高估 Tj）",
+    "judging_formula": "Tj = T_top + P * psi_JT",
+    "psi_JT_C_per_W": 3.6,
+    "parameter_name": "Junction-to-top characterization parameter（专为 top 面温度⇒结温 定义）",
+    "parameter_source": "TI DS320PR1601 / SNLS683 §6.4 Thermal Information（p16）",
+    "datasheet_sha256": "f61599c4356edb395e07c9300999ab818898986a4adde71753bae7a080c039da",
+    "prediction_only": {
+     "theta_jc_top_C_per_W": 6.5,
+     "use": "仅在设计预测链 theta_ja_eff = theta_jc_top + R_int + theta_hs = 11.0（L2 v2.0 §1）",
+     "do_not": "不得用于 T_top ⇒ Tj 反推（会高估 2.9*P：4.7W +13.6℃ · 7.0W +20.3℃ ⇒ 误判 FAIL/误触 T1）"
+    },
     "must_record": [
      "T_top_C",
      "P_W",
      "Ta_C",
-     "assembly"
+     "assembly",
+     "conservative_upper_bound_Tj_via_theta_jc_top"
     ],
-    "psi_JT_formula_forbidden_as_sole_basis": {
-     "psi_JT_C_per_W": 3.6,
-     "why": "**无器件手册出处**（仅见 L2 计划正文 L2-9c′；machine-readable inputs 件无此值）⇒ 见 CR-19",
-     "rule": "参考可用；**不得单独据此判 PASS/FAIL 或触发 T1**；两式不一致 ⇒ 由监理裁定"
-    },
-    "over_limit_disposition": "判据式超 T1(117.0)/FAIL(120.0) 时，须连同原始 T_top/P/Ta 交监理复核后再开新 rev"
+    "boundary_review": "判据式 >117.0℃(T1) 或 >120.0℃(FAIL) ⇒ 连同原始量交监理复核后再开新 rev",
+    "disagreement_rule": "两式/两法结论不一致 ⇒ 由监理裁定（实测方不得单方择式）",
+    "correction_ref": "P5_V7_TJ_CALIBER_CORRECTION_TI_SNLS683_20260921_v1.json（CR-19 修订 · CR-20 撤回）"
    }
   }
  },
