@@ -60,7 +60,7 @@ B2T_TESTS = ["test_probe_escape_capacity_dn0", "test_probe_reports_via_gap_fact"
              "test_correct_polarity_solves_clean"]
 
 
-SYNTH_COVERAGE_CLS = '''
+SYNTH_COVERAGE_CLS = r'''
 
 class TestB2TSyntheticCoverage:
     """B2-T 甲案配套（A3 重基线后『器件缩进』分支失去真板覆盖 ⇒ 合成现行 fixture 保覆盖）。
@@ -114,6 +114,79 @@ class TestB2TSyntheticCoverage:
         assert self._span(m) == ((x0, x1), xr)   # ⑤ 确定性
 '''
 
+
+SYNTH_POLARITY_CLS = r'''
+
+class TestB2TSyntheticPolarityCoverage:
+    """B2-T 甲案配套：极性交叉必拒性质**去真板耦合**（合成 fixture；A7 真板版之外的合成保底）。
+
+    合成件：P pad(100,55.2) / N pad(100,55.6)（异排 0.4 脚距）+ 走廊 C_SYN[110,131.5] 轨道 48.7。
+    实测：flip=False ⇒ INFEASIBLE(kind=VIA) 证据 @ (100.243,55.211)；flip=True ⇒ @ (104.538,48.702)；
+    两次调用逐字节同（确定性）。
+    """
+
+    def _m(self, tmp_path):
+        pcb = tmp_path / "synb.kicad_pcb"
+        pcb.write_text(
+            "\n(kicad_pcb (version 20260306) (generator \"test\")\n"
+            "\t(footprint \"U7\" (layer \"F.Cu\") (at 100 55.2 0)\n"
+            "\t\t(pad \"1\" smd rect (at 0 0) (size 0.45 0.25) (layers \"F.Cu\" \"F.Paste\" \"F.Mask\") (net \"PCIE_X1_P\") (uuid \"u1\"))\n"
+            "\t\t(pad \"2\" smd rect (at 0 0.4) (size 0.45 0.25) (layers \"F.Cu\" \"F.Paste\" \"F.Mask\") (net \"PCIE_X1_N\") (uuid \"u2\"))\n"
+            "\t)\n\t(footprint \"J2\" (layer \"F.Cu\") (at 133.825 55.2 0)\n"
+            "\t\t(pad \"1\" smd rect (at 1.175 -0.3) (size 1.3 0.35) (layers \"F.Cu\" \"F.Paste\" \"F.Mask\") (net \"PCIE_X1_P\") (uuid \"j1\"))\n"
+            "\t\t(pad \"2\" smd rect (at -1.175 0.3) (size 1.3 0.35) (layers \"F.Cu\" \"F.Paste\" \"F.Mask\") (net \"PCIE_X1_N\") (uuid \"j2\"))\n"
+            "\t)\n)\n", encoding="utf-8")
+        sp = tmp_path / "spec.json"
+        sp.write_text(json.dumps({
+            "spec_version": "1.0",
+            "components": {"redriver": {},
+                           "connectors": {"J2": {"pos": [133.825, 55.2],
+                                                 "footprint": "MCIO_4i_SFF-1016_RASide"}}},
+            "corridors": [{"id": "C_SYN", "x_range": [110.0, 131.5], "y_range": [46.0, 52.0],
+                           "bands": [{"band": "upper", "layer": "F.Cu",
+                                      "tracks_y": [48.7], "pairs": 8}]}],
+            "impedance": {"width_mm": 0.205}}), encoding="utf-8")
+        ap = tmp_path / "alloc.json"
+        ap.write_text(json.dumps({"alloc": {"PCIE_X1": {
+            "band": "upper", "track_y": 48.7, "corridor": "C_SYN", "layer": "F.Cu",
+            "status": "SOLVED", "seg_tracks": {"input": 48.7}}}}), encoding="utf-8")
+        return HSRouteModel(str(pcb), str(sp), str(ap),
+                            str(REPO / "_shared" / "eda_core" / "drc_rules.json"))
+
+    def _call(self, m, flip):
+        ep = pair_endpoints(m.board, "PCIE_X1_P", "PCIE_X1_N")
+        pad_p, pad_n = ep["P"][0], ep["N"][0]
+        band = build_hs_field(m.board, m.rules, layer="F.Cu", clear_hs_pads=True,
+                              config=m.config, clear_hs_nets=("PCIE_X1_P", "PCIE_X1_N"))
+        esc = build_hs_field(m.board, m.rules, layer="In2.Cu", clear_hs_pads=True,
+                             config=m.config, clear_hs_nets=("PCIE_X1_P", "PCIE_X1_N"))
+        return m._escape_pair(band, band, esc, pad_p, pad_n, 110.0, 48.7, 131.5, 1,
+                              "PCIE_X1_P", "PCIE_X1_N", flip=flip)
+
+    def test_polarity_cross_rejected_synthetic(self, tmp_path):
+        """合成 fixture：flip=False ⇒ 相向交叉被拒（带几何证据）+ 确定性。"""
+        m = self._m(tmp_path)
+        r = self._call(m, False)
+        assert r["status"] == "INFEASIBLE"
+        assert r["kind"] == "VIA"
+        assert "极性" in r["reason"] and "相向交叉" in r["reason"]
+        ce = r["cross_evidence"]
+        assert ce["min_edge"] <= -0.2 and ce["req"] == 0.175
+        assert abs(ce["point"][0] - 100.243) < 0.01
+        assert abs(ce["point"][1] - 55.211) < 0.01
+        assert json.dumps(r, sort_keys=True) == json.dumps(self._call(m, False), sort_keys=True)
+
+    def test_polarity_flip_true_also_rejected_synthetic(self, tmp_path):
+        """合成 fixture：flip=True ⇒ 同样拒绝（证据点随 flip 变化）@ (104.538, 48.702)。"""
+        m = self._m(tmp_path)
+        r = self._call(m, True)
+        assert r["status"] == "INFEASIBLE" and r["kind"] == "VIA"
+        ce = r["cross_evidence"]
+        assert ce["min_edge"] <= -0.2
+        assert abs(ce["point"][0] - 104.538) < 0.01
+        assert abs(ce["point"][1] - 48.702) < 0.01
+'''
+
 EXTRA_ITEMS = [
  dict(id="A13", cls="甲-配套新增合成覆盖（保 A3 缩进分支）",
       src="合成 spec：redriver footprint WQFN-64_10x5.5mm 半宽 5.0 + corridor[100,120] ⇒ 左/右缩进与不缩进三分支；实测 (105.2,120.0)/(100.0,109.8)/(100.0,120.0)",
@@ -122,6 +195,13 @@ EXTRA_ITEMS = [
              "test_corridor_clear_span_right_indent",
              "test_corridor_clear_span_no_size_no_indent"],
       mut=("assert (x0, x1) == (105.2, 120.0)", "assert (x0, x1) == (100.0, 120.0)")),
+ dict(id="A14", cls="甲-配套新增合成覆盖（极性交叉必拒去真板耦合）",
+      src="合成 fixture：P(100,55.2)/N(100,55.6) + 走廊 C_SYN[110,131.5] track_y 48.7 ⇒ flip=False 实测 INFEASIBLE(VIA) @ (100.243,55.211)、flip=True @ (104.538,48.702)，min_edge=-0.205，两次调用逐字节同",
+      anchor="class TestLayerSwapEscape:",
+      tests=["test_polarity_cross_rejected_synthetic",
+             "test_polarity_flip_true_also_rejected_synthetic"],
+      text=SYNTH_POLARITY_CLS,
+      mut=("abs(ce[\"point\"][0] - 100.243) < 0.01", "abs(ce[\"point\"][0] - 999.0) < 0.01")),
 ]
 
 ANCHOR_OLD = '''K2V4_ALLOC = (Path("/home/fila/jqdDev_2025/ic_hw/k2/pm_gate/artifacts/k2_v4")
@@ -480,7 +560,7 @@ def build(kind, tag=""):
                 text = patch_fn(text, it["test"], it["old2"], it["new2"])
         for it in EXTRA_ITEMS:
             assert text.count(it["anchor"]) == 1, f'{it["id"]} anchor 未唯一命中'
-            ins = SYNTH_COVERAGE_CLS
+            ins = it.get("text") or SYNTH_COVERAGE_CLS
             if kind == "negctl":
                 ins = ins.replace(it["mut"][0], it["mut"][1], 1)
             text = text.replace(it["anchor"], ins + "\n\n" + it["anchor"], 1)
@@ -698,6 +778,9 @@ def write_doc(out, diff_lines):
 （`TestB2TSyntheticCoverage`，3 例：左端缩进 / 右端缩进 / 无尺寸不缩进 + 含于 x_range + 确定性）：
 draft_b1 = {cov.get('A13', {}).get('draft_b1')} · negctl（改错左端期望）= {cov.get('A13', {}).get('negctl')}
 （来源：合成 spec，redriver `WQFN-64_10x5.5mm` 半宽 5.0 + corridor `[100,120]`）
+另有 **A14**（`TestB2TSyntheticPolarityCoverage` 2 例）：合成 fixture 复现「极性交叉必拒 + 几何证据 + 确定性」
+（`INFEASIBLE`/`kind=VIA`/`min_edge=-0.205`，证据点 flip=False @ (100.243,55.211)、flip=True @ (104.538,48.702)）
+⇒ 极性性质**去真板耦合**：draft_b1 = {cov.get('A14', {}).get('draft_b1')} · negctl = {cov.get('A14', {}).get('negctl')}
 
 **牙齿逐项**（draft_b1=PASSED 且 negctl=FAILED 才算✅）：
 | # | draft_b1 | negctl | 牙齿 |

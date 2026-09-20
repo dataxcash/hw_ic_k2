@@ -192,6 +192,24 @@
     "test_corridor_clear_span_right_indent",
     "test_corridor_clear_span_no_size_no_indent"
    ]
+  },
+  {
+   "class": "甲-配套新增合成覆盖（极性交叉必拒去真板耦合）",
+   "draft_b1": {
+    "test_polarity_cross_rejected_synthetic": "PASSED",
+    "test_polarity_flip_true_also_rejected_synthetic": "PASSED"
+   },
+   "expectation_source": "合成 fixture：P(100,55.2)/N(100,55.6) + 走廊 C_SYN[110,131.5] track_y 48.7 ⇒ flip=False 实测 INFEASIBLE(VIA) @ (100.243,55.211)、flip=True @ (104.538,48.702)，min_edge=-0.205，两次调用逐字节同",
+   "id": "A14",
+   "mutation": "abs(ce[\"point\"][0] - 999.0) < 0.01",
+   "negctl": {
+    "test_polarity_cross_rejected_synthetic": "FAILED",
+    "test_polarity_flip_true_also_rejected_synthetic": "PASSED"
+   },
+   "tests": [
+    "test_polarity_cross_rejected_synthetic",
+    "test_polarity_flip_true_also_rejected_synthetic"
+   ]
   }
  ],
  "defects": [
@@ -384,6 +402,11 @@
   "A13": {
    "draft_b1": "3/3 PASSED",
    "negctl": "1/3 FAILED",
+   "teeth_ok": true
+  },
+  "A14": {
+   "draft_b1": "2/2 PASSED",
+   "negctl": "1/2 FAILED",
    "teeth_ok": true
   },
   "A2": {
@@ -599,7 +622,7 @@
   "draft": {
    "counts": {
     "failed": 6,
-    "passed": 53,
+    "passed": 55,
     "skipped": 12
    },
    "patch_count": 11,
@@ -654,6 +677,8 @@
     "test_pair_pitch": "SKIPPED",
     "test_pdn_yielded": "PASSED",
     "test_pn_pads": "PASSED",
+    "test_polarity_cross_rejected_synthetic": "PASSED",
+    "test_polarity_flip_true_also_rejected_synthetic": "PASSED",
     "test_probe_deterministic": "PASSED",
     "test_probe_escape_capacity_dn0": "PASSED",
     "test_probe_path_clearance": "PASSED",
@@ -682,7 +707,7 @@
   "draft_b1": {
    "counts": {
     "failed": 2,
-    "passed": 57,
+    "passed": 59,
     "skipped": 12
    },
    "patch_count": 11,
@@ -737,6 +762,8 @@
     "test_pair_pitch": "SKIPPED",
     "test_pdn_yielded": "PASSED",
     "test_pn_pads": "PASSED",
+    "test_polarity_cross_rejected_synthetic": "PASSED",
+    "test_polarity_flip_true_also_rejected_synthetic": "PASSED",
     "test_probe_deterministic": "PASSED",
     "test_probe_escape_capacity_dn0": "PASSED",
     "test_probe_path_clearance": "PASSED",
@@ -764,8 +791,8 @@
   },
   "negctl": {
    "counts": {
-    "failed": 16,
-    "passed": 43,
+    "failed": 17,
+    "passed": 44,
     "skipped": 12
    },
    "patch_count": 11,
@@ -820,6 +847,8 @@
     "test_pair_pitch": "SKIPPED",
     "test_pdn_yielded": "PASSED",
     "test_pn_pads": "PASSED",
+    "test_polarity_cross_rejected_synthetic": "FAILED",
+    "test_polarity_flip_true_also_rejected_synthetic": "PASSED",
     "test_probe_deterministic": "PASSED",
     "test_probe_escape_capacity_dn0": "FAILED",
     "test_probe_path_clearance": "PASSED",

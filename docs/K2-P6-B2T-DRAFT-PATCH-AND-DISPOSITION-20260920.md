@@ -14,9 +14,9 @@
 |---|---|---|---|---|
 | base | 遗留 alloc 锚（现状） | 43 | 13 | 12 |
 | anchor | 仅重锚现行 pipeline alloc | 41 | 15 | 12 |
-| draft | anchor + 甲案测试补丁 | 53 | 6 | 12 |
-| **draft_b1** | draft + B1 引擎守卫（/tmp 影子） | **57** | **2** | 12 |
-| negctl | draft_b1 + 逐项 mutation | 43 | 16 | 12 |
+| draft | anchor + 甲案测试补丁 | 55 | 6 | 12 |
+| **draft_b1** | draft + B1 引擎守卫（/tmp 影子） | **59** | **2** | 12 |
+| negctl | draft_b1 + 逐项 mutation | 44 | 17 | 12 |
 
 牙齿（负控）总判：**PASS**（改错期望必 FAIL ⇒ 补丁不是"改绿"）
 确定性（两跑逐字节同）：**MATCH**
@@ -63,12 +63,16 @@
 （`TestB2TSyntheticCoverage`，3 例：左端缩进 / 右端缩进 / 无尺寸不缩进 + 含于 x_range + 确定性）：
 draft_b1 = {'test_corridor_clear_span_left_indent': 'PASSED', 'test_corridor_clear_span_right_indent': 'PASSED', 'test_corridor_clear_span_no_size_no_indent': 'PASSED'} · negctl（改错左端期望）= {'test_corridor_clear_span_left_indent': 'FAILED', 'test_corridor_clear_span_right_indent': 'PASSED', 'test_corridor_clear_span_no_size_no_indent': 'PASSED'}
 （来源：合成 spec，redriver `WQFN-64_10x5.5mm` 半宽 5.0 + corridor `[100,120]`）
+另有 **A14**（`TestB2TSyntheticPolarityCoverage` 2 例）：合成 fixture 复现「极性交叉必拒 + 几何证据 + 确定性」
+（`INFEASIBLE`/`kind=VIA`/`min_edge=-0.205`，证据点 flip=False @ (100.243,55.211)、flip=True @ (104.538,48.702)）
+⇒ 极性性质**去真板耦合**：draft_b1 = {'test_polarity_cross_rejected_synthetic': 'PASSED', 'test_polarity_flip_true_also_rejected_synthetic': 'PASSED'} · negctl = {'test_polarity_cross_rejected_synthetic': 'FAILED', 'test_polarity_flip_true_also_rejected_synthetic': 'PASSED'}
 
 **牙齿逐项**（draft_b1=PASSED 且 negctl=FAILED 才算✅）：
 | # | draft_b1 | negctl | 牙齿 |
 |---|---|---|---|
 | A1 | PASSED | FAILED | ✅ |
 | A13 | 3/3 PASSED | 1/3 FAILED | ✅ |
+| A14 | 2/2 PASSED | 1/2 FAILED | ✅ |
 | A2 | PASSED | FAILED | ✅ |
 | A3 | PASSED | FAILED | ✅ |
 | A4 | PASSED | FAILED | ✅ |
@@ -123,4 +127,4 @@ draft_b1 = {'test_corridor_clear_span_left_indent': 'PASSED', 'test_corridor_cle
 3. **测试期望重基线批**：A1–A12（11 项期望/输入重锚）。
 4. **不申请**：C1/C2 改绿（能力缺口，禁缩口径）。
 
-—— ENG（ARCHER）· 2026-09-20 · 真源零改动（`_shared` / `criteria/` / 冻结四源 / 交付锚未动）· diff 293 行
+—— ENG（ARCHER）· 2026-09-20 · 真源零改动（`_shared` / `criteria/` / 冻结四源 / 交付锚未动）· diff 365 行
