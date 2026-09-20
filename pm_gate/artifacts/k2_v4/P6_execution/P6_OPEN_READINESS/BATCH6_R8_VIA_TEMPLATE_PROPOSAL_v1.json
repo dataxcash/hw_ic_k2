@@ -1,0 +1,113 @@
+{
+ "artifact": "k2_r8_via_escape_template_proposal",
+ "schema": 1,
+ "purpose": "**R-8 立项备料**：把 (d) 右端（高 x 端，密集焊盘场）的『换层逃逸模板』做成可裁定的参数化提案 + 负控设计。依据 = 本会话 U11 上界普查（BATCH6_U11_RIGHT_END_BOUND_v1.json）与 (c) 槽位枚举（BATCH6_C_SLOT_ENUMERATION_v1.json）。**本件为设计/备料，不含引擎改动、未落件。**",
+ "problem_recap": {
+  "fact": "8 段中 5 段（TX0/input · RX0/input · RX1/input · RX1/output · …）在高 x 端的 **F.Cu 两网皆不可达**；同 5 段在 **In1.Cu / In2.Cu 上两网皆可达**",
+  "quantified": "起点网格 404–451 点/网/内层，可达率 ≈100%，最短内层路径 0.3–4.9 mm；障碍数 F.Cu 151 vs In1/In2 **26** ⇒ 内层近乎空闲",
+  "engine_gap": "`_k1_escape` 场集 = `{layer_p, layer_n, F.Cu, In2.Cu}` —— **In2 已在集内，In1 不在**（独立复证 handoff §7-⑧）",
+  "current_block": "引擎只有『同层 F.Cu 直连（模板 A/B/C）+ F.Cu 单层 VG 兜底』，**无换层逃逸自由度** ⇒ 右端无候选 ⇒ 段级 INFEASIBLE"
+ },
+ "template_family": {
+  "naming": "`_k1_escape_via`（拟名）——与既有模板 A/B/C 并列的新形态，**不改既有模板语义**",
+  "form": "每 net 独立构造：`pad →(F.Cu 短段)→ via1 →(内层水平段)→ [可选 via2 回 F.Cu]→ (corr_x, track_net)`；P/N 允许**同层**（须中心距 ≥ 线宽 + 项目 `p_gap`）或**异层**（无对级冲突）",
+  "parameters": [
+   {
+    "k": "dx1",
+    "desc": "via1 相对自身焊盘行的 x 偏移",
+    "grid": "0.1 步长离散，上限 = min(|ady|, 3.0)（与 ⑤ 端点对齐模板同界）"
+   },
+   {
+    "k": "dy1",
+    "desc": "via1 相对焊盘行的 y 偏移（出排方向）",
+    "grid": "0 / ±0.5 / ±1.0 三值（先出排再换层，避免穿焊盘行）"
+   },
+   {
+    "k": "L_in",
+    "desc": "内层选择",
+    "enum": [
+     "In2.Cu（**已在引擎场集内**，首选）",
+     "In1.Cu（**需授权入场**）"
+    ]
+   },
+   {
+    "k": "dx2",
+    "desc": "via2 x（回落点）",
+    "grid": "固定 corr_x（走廊落点）或 corr_x ∓ 0.3（错位避让）"
+   },
+   {
+    "k": "assign",
+    "desc": "对级层指派",
+    "enum": [
+     [
+      "P:In2, N:F.Cu"
+     ],
+     [
+      "P:F.Cu, N:In2"
+     ],
+     [
+      "P:In2, N:In2（同层，须对级净距）"
+     ],
+     [
+      "P:In1, N:F.Cu"
+     ],
+     [
+      "P:In1, N:In2"
+     ]
+    ]
+   }
+  ],
+  "candidate_count": {
+   "per_net": "≈ |dx1| × |dy1| ≈ 30–60（bounded，与 ⑤ 模板同量级）",
+   "per_segment": "|assign| × per_net² ≈ 5 × (60 × 60) ≈ **18k 上界**；按引擎现行『固定序 + 早退』可压到 **O(10²)**（先试 `P:In2,N:F.Cu` 与反序，命中即返）",
+   "measured_legal_via_points": "404–451/网/内层（`BATCH6_U11_RIGHT_END_BOUND_v1.json`）⇒ 空间充足，非组合爆炸瓶颈"
+  },
+  "determinism": "固定参数序 + 首个通过者即返 ⇒ 与既有模板同级的字节级确定性（须两跑逐字节同）"
+ },
+ "negative_controls": [
+  {
+   "id": "N1",
+   "case": "via1 落点距任一焊盘 < 0.3 mm",
+   "expect": "REJECT（no_via_in_pad）"
+  },
+  {
+   "id": "N2",
+   "case": "via1↔via2 或 P/N 跨 via 间距 < 项目 via 规则",
+   "expect": "REJECT（via-via 净距）"
+  },
+  {
+   "id": "N3",
+   "case": "折线含零长段 或 <2 点 / `layers` 为空",
+   "expect": "REJECT（fail-closed；**R-10 守卫已落于 v4**）"
+  },
+  {
+   "id": "N4",
+   "case": "换层点无 via 记录 / 起点层 ∉ 焊盘 `copper_layers()`",
+   "expect": "REJECT（D-5 + 层合法性审计器）"
+  },
+  {
+   "id": "N5",
+   "case": "P/N 同层且中心距 < 线宽 + 项目 `p_gap`",
+   "expect": "REJECT（D-2 量纲修正后的门）"
+  },
+  {
+   "id": "N6",
+   "case": "内层段穿越 SPEC 冻结段（非 yield）",
+   "expect": "REJECT（`seg_ok` 即 gate，无事后发现）"
+  }
+ ],
+ "authorization_asks": [
+  "**A1**：立项『换层逃逸模板』（`_k1_escape` 新增形态；只增候选序，不改既有模板与门）",
+  "**A2**：是否同时让 **In1.Cu 入场**（场集 `{layer_p,layer_n,F.Cu,In2.Cu}` → `+In1.Cu`）；不授权则仅 In2 路线（上界普查显示 **In2 单层已足够**）",
+  "**A3**：是否与 **(c) alloc 槽位重排**（TX1.input in2 21.3→21.01）**同批**——两者叠加才能兑现真值（(c) 单独 0 段 SOLVED）"
+ ],
+ "acceptance_criteria": [
+  "K1 真值 **↑**（≥3/8）；层合法违规 **0**；跨网同层 <0.1 计数 **0**；两跑逐字节同；`verify k2`+canonical 19+`--expect-patched` 不回退（canonical 19 已证与求解器解耦）",
+  "6 条负控逐条必拒",
+  "`_shared` 保持通用（零单板特判）：模板参数全部由板几何/SPEC 派生"
+ ],
+ "evidence_gap": "**尚未做真解验证**：本件是设计备料；(d) 的『有解』证据目前仅为**松弛上界**（异层不计 P/N 冲突、via 仅查离焊盘 ≥0.3）。⇒ A1 立项后第一步应为『模板 + 有界搜索』的**实解验证 + 6 负控**。",
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-21T14:20:00+0800"
+}
