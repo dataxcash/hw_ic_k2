@@ -1,0 +1,10 @@
+# k1/pipeline.yaml —— 门禁流程声明（fail-closed）｜**提案样例**（镜像实测用）
+project: k1
+phases:
+  - id: preflight
+    checks:
+      - {type: project_sch_coverage}
+  - id: verify
+    verify:
+      - {type: sch_structural,  sch: sch/k1_sch.kicad_sch}
+      - {type: netlist_connect, sch: sch/k1_sch.kicad_sch, nets_yaml: boards/k1_sch.yaml}

@@ -1,0 +1,113 @@
+{
+ "artifact": "k2_p6_k1_mechanism_coverage_bundle_proposal",
+ "schema": 1,
+ "purpose": "《K2 整体整改计划》§1.3 #7『K1 只覆盖其**机制缺陷**（模板/门禁/接线/sheets）』+ §⑦ 跨板复用：把 K2 已落件的机制类修法**成套复用**到 K1，并**镜像实测**（真源零改、k1 仓库未动）。",
+ "scope_rule": "计划 §1.3 #7：**K1 当前『未布线』状态本身不是缺陷** ⇒ 本包**只提案机制类**（模板/门禁/接线），**不含** K1 的板级几何/布线项（见 §D 分类）。",
+ "bundle": [
+  {
+   "id": "K1-M1",
+   "target": "k1/k1_v1.kicad_pro",
+   "form": "9 行 `ignore→warning`",
+   "sample": "K1_O1_EQUIVALENT_PROPOSAL_v1.patch（f056d18de0c3c53b）",
+   "k2_source": "K2 批 3 ④ O1 模板整改（已落件）",
+   "dim_fixed": "rule_severity_manifest"
+  },
+  {
+   "id": "K1-M2",
+   "target": "k1/fp-lib-table（新建）",
+   "form": "3 行 fp_lib_table，注册 `ForgeOS` → `${KIPRJMOD}/lib/ForgeOS.pretty`（**K1 库目录已存在** `k1/lib/ForgeOS.pretty`）",
+   "sample": "K1_fp-lib-table.sample（13ddfa5331d67e13）",
+   "k2_source": "K2 对应件 `k2/hw/fp-lib-table`（在岗）；K2 缺陷册 M-10（全项目无 fp-lib-table ⇒ ForgeOS 未注册）",
+   "dim_fixed": "fp_lib_table_present"
+  },
+  {
+   "id": "K1-M3",
+   "target": "k1/pipeline.yaml（新建）",
+   "form": "门禁流程声明（preflight=project_sch_coverage；verify=sch_structural + netlist_connect→`boards/k1_sch.yaml`）；**样例未含 bom_consistent**（K1 仓无 BOM csv，须 K1 侧定）",
+   "sample": "K1_pipeline.yaml.sample（eaff19fedec99811）",
+   "k2_source": "K2 对应件 `k2/pipeline.yaml`（在岗，含 ②段 verify 三检查）；K2 缺陷册 M-13（k2 无 pipeline.yaml ⇒ 门禁从未运行）",
+   "dim_fixed": "pipeline_present"
+  }
+ ],
+ "measured_in_mirror": {
+  "method": "`k1` 树 → `/tmp` 镜像（`_shared` 保持相对符号链接指向真 _shared）；镜像内建 3 件；以**真判定器**（criteria/adjudicate.py · 现行 criteria/manifest.k1.yaml c175be51 countersigned）跑；**真源零改、k1 仓库未动**。",
+  "baseline_current_k1": {
+   "n_pass": 5,
+   "n_fail": 13
+  },
+  "step1_only_O1": {
+   "n_pass": 6,
+   "n_fail": 12,
+   "flipped": "rule_severity_manifest FAIL→OK"
+  },
+  "step2_only_fplib_pipeline": {
+   "n_pass": 7,
+   "n_fail": 11,
+   "flipped": "fp_lib_table_present FAIL→OK · pipeline_present FAIL→OK"
+  },
+  "step3_bundle_all_three": {
+   "n_pass": 8,
+   "n_fail": 10,
+   "flipped": [
+    "rule_severity_manifest",
+    "fp_lib_table_present",
+    "pipeline_present"
+   ],
+   "new_failures": [],
+   "side_effects": "drc_errors 仍 13 error（类型不变）；`drc_warning_dispositions` 仍 OK（新暴露 3 类已在 K1 manifest 登记）；其余 FAIL 维逐项不变",
+   "raw_readings": {
+    "fp_lib_table_present": "fp-lib-table @ <mirror>: **存在**",
+    "pipeline_present": "scope=k1：含 .kicad_sch 但无 pipeline.yaml 的目录 **0 个**（fail-closed）",
+    "rule_severity_manifest": "未登记豁免的 ignore **0/62**"
+   }
+  },
+  "reproducibility": "同参数重复跑读数稳定（本会话 4 次镜像/真源跑，同维读数逐项可复现）"
+ },
+ "D_k1_remaining_fails_classification": [
+  {
+   "dim": "unconnected_zero (156)",
+   "class": "板级/布线推进（K1 未布线中间态）",
+   "note": "计划 §1.3 #7 明示**不是缺陷**；属 K1 P4 面"
+  },
+  {
+   "dim": "drc_errors (13 error · 5 类)",
+   "class": "板级几何（K1 实测缺陷）",
+   "note": "不受机制包影响；K1 自身整改"
+  },
+  {
+   "dim": "zone_filled (0/0) · keepout_active (0)",
+   "class": "板级（K1 尚无铺铜区/回避区）",
+   "note": "K2 对应 = 10 filled zones + 8 keepout（K1 侧属设计推进）"
+  },
+  {
+   "dim": "drill_count (NPTH=2<4)",
+   "class": "板级（固定孔不足）",
+   "note": "ENG 独立复核：PTH 28（0.4×12 · 0.8×10 · 1.7×2 · 槽 0.5×1.1×4）· NPTH 2（Ø0.65×1 · 槽 0.95×0.65×1）⇒ 与判定器一致"
+  },
+  {
+   "dim": "pads_within_outline (2 · refs J1)",
+   "class": "板级（J1 屏蔽 pad 出框）",
+   "note": "ENG 独立复核 k1_pads.json：`J1` pad `SH`（GND）AABB x∈[-0.03,1.37] 越内缩框"
+  },
+  {
+   "dim": "refdes_sets_equal (原理图 37 / 板 42；板有图无 Q1,Q2,R38,R39,U13)",
+   "class": "输入/来源一致性",
+   "note": "K2 对应族 = E1 四源对账（K2 已归零）；K1 侧须回上游对账"
+  },
+  {
+   "dim": "net_declared_realized (0 焊盘网 3 · <2 焊盘 12) / pin_map_complete (16 节点缺焊盘)",
+   "class": "输入/来源一致性",
+   "note": "同族；K1 自身对账"
+  },
+  {
+   "dim": "density_and_clearance (缺测量件 ⇒ fail-closed)",
+   "class": "工具接入",
+   "note": "K2 已有生产者（J-8 密度/间距测量链）可复用；属 K1 侧测量接入"
+  }
+ ],
+ "boundary": "**提案 + /tmp 实测**；未改 `k1/` 任何文件（`git -C k1 status` 洁净；`k1/k1_v1.kicad_pro` 仍 `d6528227fc9aa763`）。三件落件属**跨项目改动** ⇒ 需监理裁定；落件后 K1 自身锚需重基线。",
+ "readonly_repo": true,
+ "not_landed": true,
+ "no_new_criteria_dim": true,
+ "ts": "2026-09-22T01:05:00+0800"
+}
