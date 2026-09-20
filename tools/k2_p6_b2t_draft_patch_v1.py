@@ -187,6 +187,83 @@ class TestB2TSyntheticPolarityCoverage:
         assert abs(ce["point"][1] - 48.702) < 0.01
 '''
 
+
+SYNTH_COMBINED_CLS = r'''
+
+class TestB2TSyntheticCombinedCoverage:
+    """B2-T 甲案配套：**跨廊道 0.4mm 偏移 × 层换位** 组合性质（合成 fixture，零真板依赖）。
+
+    合成件：U7 侧 PCIE_X1_P(100,55.2)/N(100,55.6)（异排 0.4）+ J2 连接器；SPEC 双走廊
+    `C_MAIN`(tracks 48.7) / `C_ALT`(tracks 49.1 = +0.4)；alloc `seg_tracks={input:48.7, out_J2:49.1}`
+    且**分配廊道 = C_MAIN**（即 seg 轨道落在**另一条**廊道上）。
+    实测（本用例固化）：跨廊道同 band 索引映射成立；错廊道解析 fail-closed 返回 None；
+    层换位逃逸在 48.7/49.1 两轨道均 SOLVED/LSWAP 且两次调用逐字节同。
+    """
+
+    def _m(self, tmp_path):
+        pcb = tmp_path / "syn_combined.kicad_pcb"
+        pcb.write_text(
+            "\n(kicad_pcb (version 20260306) (generator \"test\")\n"
+            "\t(footprint \"U7\" (layer \"F.Cu\") (at 100 55.2 0)\n"
+            "\t\t(pad \"1\" smd rect (at 0 0) (size 0.45 0.25) (layers \"F.Cu\" \"F.Paste\" \"F.Mask\") (net \"PCIE_X1_P\") (uuid \"u1\"))\n"
+            "\t\t(pad \"2\" smd rect (at 0 0.4) (size 0.45 0.25) (layers \"F.Cu\" \"F.Paste\" \"F.Mask\") (net \"PCIE_X1_N\") (uuid \"u2\"))\n"
+            "\t)\n\t(footprint \"J2\" (layer \"F.Cu\") (at 133.825 55.2 0)\n"
+            "\t\t(pad \"1\" smd rect (at 1.175 -0.3) (size 1.3 0.35) (layers \"F.Cu\" \"F.Paste\" \"F.Mask\") (net \"PCIE_X1_P\") (uuid \"j1\"))\n"
+            "\t\t(pad \"2\" smd rect (at -1.175 0.3) (size 1.3 0.35) (layers \"F.Cu\" \"F.Paste\" \"F.Mask\") (net \"PCIE_X1_N\") (uuid \"j2\"))\n"
+            "\t)\n)\n", encoding="utf-8")
+        sp = tmp_path / "spec.json"
+        sp.write_text(json.dumps({
+            "spec_version": "1.0",
+            "components": {"redriver": {},
+                           "connectors": {"J2": {"pos": [133.825, 55.2],
+                                                 "footprint": "MCIO_4i_SFF-1016_RASide"}}},
+            "corridors": [
+                {"id": "C_MAIN", "x_range": [98.83, 131.5], "y_range": [46.0, 52.0],
+                 "bands": [{"band": "upper", "layer": "F.Cu", "tracks_y": [48.7], "pairs": 8}]},
+                {"id": "C_ALT", "x_range": [98.83, 131.5], "y_range": [46.0, 52.0],
+                 "bands": [{"band": "upper", "layer": "F.Cu", "tracks_y": [49.1], "pairs": 8}]}],
+            "impedance": {"width_mm": 0.205}}), encoding="utf-8")
+        ap = tmp_path / "alloc.json"
+        ap.write_text(json.dumps({"alloc": {"PCIE_X1": {
+            "band": "upper", "track_y": 48.7, "corridor": "C_MAIN", "layer": "F.Cu",
+            "status": "SOLVED", "seg_tracks": {"input": 48.7, "out_J2": 49.1}}}}), encoding="utf-8")
+        return HSRouteModel(str(pcb), str(sp), str(ap),
+                            str(REPO / "_shared" / "eda_core" / "drc_rules.json"))
+
+    def _lswap(self, m, track_y):
+        ep = pair_endpoints(m.board, "PCIE_X1_P", "PCIE_X1_N")
+        j2_p, j2_n = ep["P"][1], ep["N"][1]
+        fcu = build_hs_field(m.board, m.rules, layer="F.Cu", clear_hs_pads=True,
+                             config=m.config, clear_hs_nets=("PCIE_X1_P", "PCIE_X1_N"))
+        in2 = build_hs_field(m.board, m.rules, layer="In2.Cu", clear_hs_pads=True,
+                             config=m.config, clear_hs_nets=("PCIE_X1_P", "PCIE_X1_N"))
+
+        def pn_ok(p_pts, p_layers, n_pts, n_layers):
+            me, _pt = _path_pn_min_edge_pt(p_pts, p_layers, n_pts, n_layers, 0.205)
+            return me is None or me >= 0.155
+
+        return m._layer_swap_escape(fcu, fcu, in2, j2_p, j2_n, corr_x=131.5,
+                                    track_y=track_y, bound_x=98.83, direction=-1,
+                                    net_p="PCIE_X1_P", net_n="PCIE_X1_N", flip=False,
+                                    esc_layer="In2.Cu", pn_ok=pn_ok)
+
+    def test_cross_corridor_index_mapping(self, tmp_path):
+        """跨廊道同 band 索引映射：seg 轨道 49.1 在 C_ALT 命中；对分配廊道 C_MAIN fail-closed None。"""
+        m = self._m(tmp_path)
+        assert m._track_y_for("PCIE_X1_P", "C_ALT", "out_J2") == (49.1, "F.Cu")
+        assert m._track_y_for("PCIE_X1_P", "C_MAIN", "out_J2") is None
+        assert m._track_y_for("PCIE_X1_P", "C_MAIN", "input") == (48.7, "F.Cu")
+
+    def test_lswap_with_offsetsolved_and_deterministic(self, tmp_path):
+        """层换位 × 0.4mm 偏移：48.7 与 49.1 两轨道均 SOLVED/LSWAP 且逐字节确定。"""
+        m = self._m(tmp_path)
+        for ty in (48.7, 49.1):
+            r = self._lswap(m, ty)
+            assert r is not None and r["status"] == "SOLVED", f"track_y={ty} 未 SOLVED"
+            assert r["kind"] == "LSWAP"
+            assert json.dumps(r, sort_keys=True) == json.dumps(self._lswap(m, ty), sort_keys=True)
+'''
+
 EXTRA_ITEMS = [
  dict(id="A13", cls="甲-配套新增合成覆盖（保 A3 缩进分支）",
       src="合成 spec：redriver footprint WQFN-64_10x5.5mm 半宽 5.0 + corridor[100,120] ⇒ 左/右缩进与不缩进三分支；实测 (105.2,120.0)/(100.0,109.8)/(100.0,120.0)",
@@ -202,6 +279,16 @@ EXTRA_ITEMS = [
              "test_polarity_flip_true_also_rejected_synthetic"],
       text=SYNTH_POLARITY_CLS,
       mut=("abs(ce[\"point\"][0] - 100.243) < 0.01", "abs(ce[\"point\"][0] - 999.0) < 0.01")),
+
+ dict(id="A15", cls="甲-配套新增合成覆盖（跨廊道 0.4mm 偏移 × 层换位组合）",
+      src="合成双走廊 C_MAIN(48.7)/C_ALT(49.1=+0.4)+alloc seg_tracks{input:48.7,out_J2:49.1}(分配廊道 C_MAIN) ⇒ "
+          "_track_y_for(C_ALT,out_J2)=(49.1,F.Cu) 跨廊道索引映射、对 C_MAIN=None fail-closed；"
+          "_layer_swap_escape 在 48.7/49.1 均 SOLVED/LSWAP 且逐字节确定",
+      anchor="class TestLayerSwapEscape:",
+      tests=["test_cross_corridor_index_mapping",
+             "test_lswap_with_offsetsolved_and_deterministic"],
+      text=SYNTH_COMBINED_CLS,
+      mut=('assert m._track_y_for("PCIE_X1_P", "C_ALT", "out_J2") == (49.1, "F.Cu")', 'assert m._track_y_for("PCIE_X1_P", "C_ALT", "out_J2") == (48.7, "F.Cu")')),
 ]
 
 ANCHOR_OLD = '''K2V4_ALLOC = (Path("/home/fila/jqdDev_2025/ic_hw/k2/pm_gate/artifacts/k2_v4")
@@ -781,6 +868,9 @@ draft_b1 = {cov.get('A13', {}).get('draft_b1')} · negctl（改错左端期望�
 另有 **A14**（`TestB2TSyntheticPolarityCoverage` 2 例）：合成 fixture 复现「极性交叉必拒 + 几何证据 + 确定性」
 （`INFEASIBLE`/`kind=VIA`/`min_edge=-0.205`，证据点 flip=False @ (100.243,55.211)、flip=True @ (104.538,48.702)）
 ⇒ 极性性质**去真板耦合**：draft_b1 = {cov.get('A14', {}).get('draft_b1')} · negctl = {cov.get('A14', {}).get('negctl')}
+另有 **A15**（`TestB2TSyntheticCombinedCoverage` 2 例）：**跨廊道 0.4mm 偏移 × 层换位**组合（`_track_y_for(C_ALT,out_J2)=(49.1,F.Cu)`、
+对 `C_MAIN` 返回 None 的 fail-closed 负例；`_layer_swap_escape` 在 48.7/49.1 均 `SOLVED`/`LSWAP` 且逐字节确定）：
+draft_b1 = {cov.get('A15', {}).get('draft_b1')} · negctl = {cov.get('A15', {}).get('negctl')}
 
 **牙齿逐项**（draft_b1=PASSED 且 negctl=FAILED 才算✅）：
 | # | draft_b1 | negctl | 牙齿 |

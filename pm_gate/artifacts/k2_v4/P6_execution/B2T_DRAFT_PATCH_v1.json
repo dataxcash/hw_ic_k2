@@ -210,6 +210,24 @@
     "test_polarity_cross_rejected_synthetic",
     "test_polarity_flip_true_also_rejected_synthetic"
    ]
+  },
+  {
+   "class": "甲-配套新增合成覆盖（跨廊道 0.4mm 偏移 × 层换位组合）",
+   "draft_b1": {
+    "test_cross_corridor_index_mapping": "PASSED",
+    "test_lswap_with_offsetsolved_and_deterministic": "PASSED"
+   },
+   "expectation_source": "合成双走廊 C_MAIN(48.7)/C_ALT(49.1=+0.4)+alloc seg_tracks{input:48.7,out_J2:49.1}(分配廊道 C_MAIN) ⇒ _track_y_for(C_ALT,out_J2)=(49.1,F.Cu) 跨廊道索引映射、对 C_MAIN=None fail-closed；_layer_swap_escape 在 48.7/49.1 均 SOLVED/LSWAP 且逐字节确定",
+   "id": "A15",
+   "mutation": "assert m._track_y_for(\"PCIE_X1_P\", \"C_ALT\", \"out_J2\") == (48.7, \"F.Cu\")",
+   "negctl": {
+    "test_cross_corridor_index_mapping": "FAILED",
+    "test_lswap_with_offsetsolved_and_deterministic": "PASSED"
+   },
+   "tests": [
+    "test_cross_corridor_index_mapping",
+    "test_lswap_with_offsetsolved_and_deterministic"
+   ]
   }
  ],
  "defects": [
@@ -405,6 +423,11 @@
    "teeth_ok": true
   },
   "A14": {
+   "draft_b1": "2/2 PASSED",
+   "negctl": "1/2 FAILED",
+   "teeth_ok": true
+  },
+  "A15": {
    "draft_b1": "2/2 PASSED",
    "negctl": "1/2 FAILED",
    "teeth_ok": true
@@ -622,7 +645,7 @@
   "draft": {
    "counts": {
     "failed": 6,
-    "passed": 55,
+    "passed": 57,
     "skipped": 12
    },
    "patch_count": 11,
@@ -646,6 +669,7 @@
     "test_corridor_clear_span_no_size_no_indent": "PASSED",
     "test_corridor_clear_span_right_indent": "PASSED",
     "test_corridor_deterministic": "SKIPPED",
+    "test_cross_corridor_index_mapping": "PASSED",
     "test_deterministic": "PASSED",
     "test_direct_escape_geometric_precheck": "PASSED",
     "test_dn0_chain_solved": "SKIPPED",
@@ -666,6 +690,7 @@
     "test_link_topology_deterministic": "FAILED",
     "test_link_topology_persist": "FAILED",
     "test_link_topology_segment_structure": "FAILED",
+    "test_lswap_with_offsetsolved_and_deterministic": "PASSED",
     "test_missing_alloc_corridor_fail_closed": "PASSED",
     "test_missing_pad_field_unattributable": "PASSED",
     "test_no_solved_segment_carries_crossing": "PASSED",
@@ -707,7 +732,7 @@
   "draft_b1": {
    "counts": {
     "failed": 2,
-    "passed": 59,
+    "passed": 61,
     "skipped": 12
    },
    "patch_count": 11,
@@ -731,6 +756,7 @@
     "test_corridor_clear_span_no_size_no_indent": "PASSED",
     "test_corridor_clear_span_right_indent": "PASSED",
     "test_corridor_deterministic": "SKIPPED",
+    "test_cross_corridor_index_mapping": "PASSED",
     "test_deterministic": "PASSED",
     "test_direct_escape_geometric_precheck": "PASSED",
     "test_dn0_chain_solved": "SKIPPED",
@@ -751,6 +777,7 @@
     "test_link_topology_deterministic": "PASSED",
     "test_link_topology_persist": "PASSED",
     "test_link_topology_segment_structure": "PASSED",
+    "test_lswap_with_offsetsolved_and_deterministic": "PASSED",
     "test_missing_alloc_corridor_fail_closed": "PASSED",
     "test_missing_pad_field_unattributable": "PASSED",
     "test_no_solved_segment_carries_crossing": "PASSED",
@@ -791,8 +818,8 @@
   },
   "negctl": {
    "counts": {
-    "failed": 17,
-    "passed": 44,
+    "failed": 18,
+    "passed": 45,
     "skipped": 12
    },
    "patch_count": 11,
@@ -816,6 +843,7 @@
     "test_corridor_clear_span_no_size_no_indent": "PASSED",
     "test_corridor_clear_span_right_indent": "PASSED",
     "test_corridor_deterministic": "SKIPPED",
+    "test_cross_corridor_index_mapping": "FAILED",
     "test_deterministic": "PASSED",
     "test_direct_escape_geometric_precheck": "PASSED",
     "test_dn0_chain_solved": "SKIPPED",
@@ -836,6 +864,7 @@
     "test_link_topology_deterministic": "FAILED",
     "test_link_topology_persist": "FAILED",
     "test_link_topology_segment_structure": "FAILED",
+    "test_lswap_with_offsetsolved_and_deterministic": "PASSED",
     "test_missing_alloc_corridor_fail_closed": "PASSED",
     "test_missing_pad_field_unattributable": "PASSED",
     "test_no_solved_segment_carries_crossing": "PASSED",
