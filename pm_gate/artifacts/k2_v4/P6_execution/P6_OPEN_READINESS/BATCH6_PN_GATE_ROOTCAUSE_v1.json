@@ -34,15 +34,24 @@
    "evidence": "K1 实测 `shared_seg_count = 0`（pristine 与 ⑥ 树皆然）；与该法自述『已解段累积（后解避让先解，高速↔高速互交 0）』矛盾。同层跨网相交：3/8 读数 12 处、5/8 读数 44 处。",
    "fix": "累积门下沉为**逐段**（FIX-A）。",
    "negative_control": "造『base A 部分解、B 后解』⇒ B 必须避让 A 的已解段。"
+  },
+  {
+   "id": "D-5",
+   "name": "逃逸门缺**层合法性**守卫（折线起点层可不在焊盘铜层集合内）",
+   "site": "`_k1_escape_verify`（逐段 `seg_ok` 只问『该层是否净空』，不问『该层是否有该焊盘的铜』）",
+   "evidence": "`tree_d`（加无 via 的直接对角线候选）把 `OCuLink_TX1` output 报成 SOLVED：其 P/N 焊盘为 **F.Cu-only SMD**，而折线整段在 **B.Cu / In1**、`vias=None` ⇒ 焊盘无连接、不可制造。加 D-5 守卫（`Pad.copper_layers()` 判定起点层）后该段回落 INFEASIBLE，K1 真值回到 **1/8**。",
+   "impact": "任何**不带 via 的候选**都可产出非法层跳 ⇒ 会让读数虚高（本例正是如此，导致我前一笔 '+1 真增益' 结论作废）。",
+   "fix": "在 `_k1_escape_verify` 开头加：折线**起点**层必须 ∈ 对应焊盘 `copper_layers()`（THT 全层；SMD 单层），否则 return False。",
+   "negative_control": "构造『SMD 焊盘 + 起点在非 F.Cu 且无 via』的候选 ⇒ 必须被拒。"
   }
  ],
- "chain_linkage": "D-1/D-2 让**段级**放行不合规几何；D-3 让 base 级发现的违规**不回填**段级；D-4 让已解段**不参与**后续避让 ⇒ 三者叠加 = 『段级 SOLVED 数』越修越高（3/8→5/8）而物理可制造性越差。",
+ "chain_linkage": "D-1/D-2 让**段级**放行不合规几何；D-3 让 base 级发现的违规**不回填**段级；D-4 让已解段**不参与**后续避让 ⇒ 三者叠加 = 『段级 SOLVED 数』越修越高（3/8→5/8）而物理可制造性越差。  **D-5 补**：层合法性守卫缺失 ⇒ 无 via 候选可产出『焊盘悬空』的假 SOLVED（本会话实测并已自纠）。",
  "measured_truth": {
   "k1_corrected": "1/8（仅 TX0.output）——见 BATCH6_SHARED_ACCUM_FAILOPEN_v1.json（FIX-A+FIX-B）",
   "k1_reported_by_batch6": "3/8（⑥）· 4/8（(c)）· 5/8（combo）—— 全部出现在 base 级已判 INFEASIBLE 的 base 上"
  },
  "k2_impact": "D-4 在 K2 上非零影响（解对象 DN6→DN7）；D-1/D-2 因 K2 走 centerline 分支而不经 `_k1_escape_verify`；D-3 的 base 门对 K2 有效 ⇒ 仍须以 canonical 19 实证。",
- "proposed_batch": "建议 D-1/D-2/D-3/D-4 **同批一笔**修（禁零散补丁 = C-6）+ 4 条负控；落件后重测 K1 真值并跑 K2 canonical 19 逐字节回归。",
+ "proposed_batch": "建议 D-1…D-5 **同批一笔**修（禁零散补丁 = C-6）+ 5 条负控；落件后重测 K1 真值并跑 K2 canonical 19 逐字节回归。",
  "readonly_repo": true,
  "not_landed": true,
  "script": {
@@ -50,5 +59,5 @@
   "sha16": "05d9330e63e0fd56",
   "usage": "cd <容器根> && python3 <本件>（自跑复现 D-1/D-2；影子落 /tmp/opencode/esc_vs_assembled）"
  },
- "ts": "2026-09-21T03:40:00+0800"
+ "ts": "2026-09-21T05:00:00+0800"
 }

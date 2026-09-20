@@ -1,7 +1,7 @@
 {
  "artifact": "k2_batch6_d_direct_diagonal_proposal",
  "schema": 1,
- "purpose": "批 6 (d) 端点对齐的**最小候选**（只读 /tmp 影子实测）：在 `_k1_escape` 候选序列**最前面**加『**直接对角线**（pad → (corr_x, track_y)）』候选 ⇒ 修正度量基线上 K1 由 **1/8 → 2/8**（新增 TX1.output），且跨网净空违规 **0**。",
+ "purpose": "（改写）批 6 (d) 的**负结果 + D-5 缺陷**记录：直接对角线候选在**合规守卫**下**无有效增益**；前版 +1 已撤回。",
  "carrier": {
   "file": "`_shared/eda_core/hs_route_model.py` · `HSRouteModel._k1_escape`",
   "insert_at": "`idx = 0 if side == \"left\" else 1` 之后、模板 A/B 分派之前",
@@ -29,5 +29,24 @@
  ],
  "readonly_repo": true,
  "not_landed": true,
- "ts": "2026-09-21T04:25:00+0800"
+ "ts": "2026-09-21T05:00:00+0800",
+ "retracted": true,
+ "retraction": {
+  "what": "本件前版宣称『(d) 直接对角线候选 ⇒ K1 1/8 → 2/8（+1 真增益）』—— **撤回**。该增益是**假绿**。",
+  "why": "新解 TX1.output 的 P/N 均为 **F.Cu-only 的 SMD 焊盘**（`copper_layers()=['F.Cu']`），而该候选给出的折线**整段跑在 B.Cu / In1**、`vias = None`（无过孔）。**焊盘与外层铜无任何连接** ⇒ 不可制造。",
+  "rootcause": "**D-5：`_k1_escape_verify` 缺『层合法性』守卫** —— 未要求折线**起点层 ∈ 该焊盘铜层集合**（SMD ⇒ 必须从 F.Cu 起，或带过孔）。模板 A/B 的候选自带 via 且被 via 规则检查，故未暴露；**我新增的无 via 候选绕过了该守卫**。",
+  "how_caught": "以 `Pad.copper_layers()` + `seg['vias']` 复核（见 §verification）",
+  "residual_risk": "任何**无 via 的新候选**都可能利用此守卫缺口产出非法层跳 ⇒ 该守卫是 (d) 工作的**前置条件**。"
+ },
+ "verification": {
+  "tool": "只读复核：`Pad.copper_layers()` + 段级 `vias` 字段 + 折线 `layers`",
+  "TX1_output_invalid": "pads `OCuLink_TX1_P/N` @ (41.688,21.5)/(41.688,22.0) 与 (75.155,21.5)/(75.155,21.0) 全部 `is_tht=False, copper_layers=['F.Cu']`；而 P 折线 layers=['B.Cu']*3、N 折线 layers=['In1']*3、`vias=None` ⇒ **无连接**。",
+  "valid_control": "TX0/output N 折线 layers=['F.Cu','In2','In2'] 且段级 `vias=[[41.6875,18.5]]` 恰在层变点 ⇒ 有 via 记录，**合法**（说明非法性不是普遍现象，而是**守卫缺口**）。",
+  "with_D5_guard": "影子 `tree_d5` = tree_d + D-5 守卫 ⇒ TX1.output 回落 INFEASIBLE，K1 真值 **1/8**（= 无 (d) 增益）"
+ },
+ "corrected_result": {
+  "d_direct_diagonal_valid_gain": "**0**（前版 +1 作废）",
+  "k1_truth": "仍为 **1/8**（仅 TX0.output）",
+  "implication": "(d) 仍为主杠杆，但候选**必须**自带合法层变（via）或起点层合法 ⇒ (d) 与 **过孔落位** 必须同批设计；D-5 守卫须与之同批落件。"
+ }
 }
