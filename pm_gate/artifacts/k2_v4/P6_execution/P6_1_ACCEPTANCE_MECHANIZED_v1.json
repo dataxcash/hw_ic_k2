@@ -1,0 +1,35 @@
+{
+ "artifact": "k2_p6_1_acceptance_mechanized",
+ "schema": 1,
+ "purpose": "把 P6 完工判据① 做成**一条命令的机读验收**（四项命中 + 完整性/放行前置），供 P6 开闸时直接出 PASS/FAIL。",
+ "tool": {
+  "path": "k2/tools/k2_p6_1_acceptance_v1.py",
+  "sha16": "5305ae9f142ddb6b",
+  "readonly": true,
+  "new_criteria_dims": 0,
+  "note": "**不新增任何判据维**（19 维集合不动）；仅把 #K2-41 §三-⑥ 已裁的四项期望 + 2 条完整性/放行前置做成机判"
+ },
+ "command": "python3 k2/tools/k2_p6_1_acceptance_v1.py --verdict <k1_verdict.json> --pro k1/k1_v1.kicad_pro --out /tmp/opencode/k1_p6_1_accept.json",
+ "probe_run": {
+  "verdict_input": "/tmp/opencode/k1_verdict_b3.json（真判定器 + 真输入：drc/w8/pads/min-clr）",
+  "four_items": {
+   "ignore_without_ruling(9)": "OK · 未登记 ignore 9/62（9 条名逐条命中）",
+   "no_pipeline(1)": "OK · scope=k1 · 目录数 1 · 命中 k1/sch",
+   "no_fp_lib_table(1)": "OK · fp-lib-table @ …/k1 缺失",
+   "sheets_empty(1)": "OK · **输入侧实测** 顶层 `sheets == []`（rev=3 无该维 ⇒ 不加维）"
+  },
+  "integrity": {
+   "dim_set_is_19": "OK · 19 维（防维集漂移）",
+   "manifest_countersigned": "**MISS** · provisional=True（PROPOSED 件未签认）"
+  },
+  "verdict": "FAIL（**唯一 MISS = manifest 未签认**）",
+  "meaning": "⇒ 判据①的四项命中已**全部机器可判并已达成**；P6-1 验收的**唯一剩余前置 = G-c2 落件 + 监理签认**（落件后同一条命令即转 PASS）。"
+ },
+ "notes": [
+  "`sheets_empty` 落点：KiCad `.kicad_pro` 的 `sheets` 为**顶层**键（列表）；本件兼容旧布局 `board.design_settings.sheets`。",
+  "`provisional` 语义：判定器对未签认 manifest 输出 `provisional=true` ⇒ 本件把它设为**放行前置**（不得以未签认 manifest 宣称 P6-1 通过）。"
+ ],
+ "readonly_repo": true,
+ "not_landed": true,
+ "criteria_touched": false
+}

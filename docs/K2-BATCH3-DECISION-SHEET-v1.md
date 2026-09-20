@@ -37,6 +37,11 @@
 ③ `AppDir/bin/python3.11 k2/tools/k2_p6_acceptance_gate_v1.py --expect-patched` ⇒ **PASS**（A 4/4 · C K1=14/K2=14 · 回退 0 · D hidden=2 = 具名 C1/C2）
 > **C1/C2 保持 RED**（禁改绿）；`skipped` 不充绿；**两跑不逐字节同者不得入库**。
 
+### 2.1 **P6 完工判据**（阶段门）验收 —— 一条命令
+- **P6-1**：`python3 k2/tools/k2_p6_1_acceptance_v1.py --verdict <k1_verdict.json> --pro k1/k1_v1.kicad_pro` ⇒ 须 **PASS**
+  （机判四项命中 `ignore_without_ruling(9)`/`no_pipeline(1)`/`no_fp_lib_table(1)`/**`sheets_empty(1)` 输入侧**；**唯一剩余前置 = manifest 签认**）
+- **P6-2**：`k1|k2_jlc_template.kicad_pro` 的 ignore 集 == **manifest 应然集（∅）** ⇒ 结构差异 **0**（O1 实测已达：`P6_2_O1_MEASURED_v1.json`）
+
 ## 3. ENG 立即可动 vs 需裁定
 
 - **需裁定后才动**：上表 1–7（全为**监理自裁项**；ENG 已把它们的"件/命令/期望值/回滚"备到**一条命令级**）。
