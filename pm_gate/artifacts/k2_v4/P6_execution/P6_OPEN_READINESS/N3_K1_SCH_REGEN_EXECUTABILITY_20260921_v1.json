@@ -132,6 +132,17 @@
    "severity": "无阻塞",
    "finding": "Q2(2N7002 SOT-23 G/S/D 3 脚)·R38/R39(22R 2 脚) 可由 `k1_pinmap.yaml` + `k1_board.yaml` 完全派生 ✅（无需额外手册）。",
    "options": []
+  },
+  {
+   "id": "N3-G5",
+   "part": "Q1/U12（真源侧）",
+   "severity": "**高（N-3 语义性警告）**",
+   "finding": "**真源 `k1_board.yaml#net_coverage` 本身缺 VBIAS 网**（Q1/U12 各仅 4 网）；经 sha256 校验确认与在册同版的手册 pin table 显示 **VBIAS 为器件必需电源**（TPS22990 pin4 2.5–5.5V·TPS22965 pin4 2.5–5.7V），而板上 pad 4 `net=None`（见 K1-D8）。",
+   "impact": "N-3 若『以板/真源为准』机械再生 ⇒ **把该缺陷一并固化**。⇒ **N-3 与 K1-D8 必须同批处置**：先修 `k1_board.yaml`（真源）再加 VBIAS 网，然后再生。",
+   "options": [
+    "(a) 先修 K1-D8（真源 + 网表），再执行 N-3 再生（**推荐**）",
+    "(b) 先再生、K1-D8 另批（会把缺陷写进原理图，不建议）"
+   ]
   }
  ],
  "D_acceptance_harness": {
@@ -154,5 +165,5 @@
  "readonly_repo": true,
  "not_landed": true,
  "no_new_criteria_dim": true,
- "ts": "2026-09-22T07:45:00+0800"
+ "ts": "2026-09-22T08:15:00+0800"
 }

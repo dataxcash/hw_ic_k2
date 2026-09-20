@@ -128,6 +128,35 @@
    "map_k2": "**J-8**（固定孔/回避区）+ 缺陷册 **M-11**（NPTH=0 无固定孔）· **M-05**（铺铜 0 填充 / keepout 空操作）",
    "fix_family": "K1 板级设计推进（固定孔 ≥4 NPTH Ø3.2 · 平面层铺铜策略 · 回避区生效）",
    "note": "K2 同族修法可直接参照（K2 判据值：NPTH≥4 · zone_filled 10/10 · keepout 8 区无 all-allowed）。"
+  },
+  {
+   "id": "K1-D8",
+   "severity": "**高（功能级：器件无法工作）**",
+   "title": "Q1(TPS22990) 与 U12(TPS22965) 的 **VBIAS（器件偏置电源）引脚未接**",
+   "readings": [
+    "**板直读**（`k1/k1_v1.kicad_pcb`，pcbnew-free 解析）：Q1 pad **4** `net=None`；U12 pad **4** `net=None`（其余脚均有网：Q1 3/11=PWR_5V_MAIN(VIN)、5=WORK_EN(ON)、6=GND、8/9/10=VBUS(VOUT)；U12 1/2=PWR_5V_MAIN(VIN)、3=TPS_EN(ON)、5=GND、7/8=VBUS(VOUT)、9=GND(EP)）",
+    "**手册（已验 sha256 · 与在册 `doc_sha256` 逐字节同）**：`TPS22990.pdf` `ea198776524544eb…`（SLVSDK1C §6 Pin Functions）**pin 4 = VBIAS** — *\"Bias voltage. Power supply to the device\"*；§7.3 推荐 **2.5–5.5 V**，且 **VIN 0.6 V – VBIAS**（表 7-1）⇒ **VBIAS 为必需电源**",
+    "**手册**：`TPS22965.pdf` `3300eef743d7871f…`（SLVSBJ0F §6 Pin Functions）**pin 4 = VBIAS** — *\"Bias voltage. Power supply to the device. Recommended voltage range for this pin is 2.5 V to 5.7 V\"*",
+    "**脚号对应已交叉验证**（4–5 个独立网一致）：Q1 IN→{3,11}（3=VIN ∧ 11=EP=VIN 手册明示）· ON→5 · GND→6 · VOUT→8/9/10 ⇒ pad 4 必为 VBIAS；U12 IN→{1,2}（手册『must be connected to Pin 1 and Pin 2』）· ON→3 · GND→5 · VOUT→7/8 · 9=EP(GND) ⇒ pad 4 必为 VBIAS"
+   ],
+   "impact": "**两枚负载开关的偏置电源缺失 ⇒ 器件功能不可实现**（Q1=轨B 工作态 10A 通路；U12=轨A 预鉴权轨）。属**功能级**，非布线中间态（**网表中即无该网**；K1-D5 的『未布线中间态』指有网未布，性质不同）。",
+   "map_k2": "无对应 K2 缺陷（K2 侧无此类 VBIAS 器件）",
+   "fix_family": "把 **VBIAS 接至合规轨**（VBIAS 2.5–5.5/5.7 V 且 ≥VIN）：候选 = `PWR_5V_MAIN`（5 V）或 `12V_IN` 经分压/降压 —— **属设计连接决策 ⇒ 须授权**（且**先修真源** `k1_board.yaml#net_coverage`）。",
+   "note": "**真源本身缺网**：`k1_board.yaml#net_coverage` 对 Q1/U12 仅 4 个网，无 VBIAS ⇒ 仅改原理图=治标；**根因在②补充件定义**。**诚实登记：本条系本会话新发现，先前 K1 对账/工作清单均未列**（全仓 `VBIAS` 仅见于 2 份手册 YAML）。"
+  },
+  {
+   "id": "K1-D9",
+   "severity": "低（观察·待确认）",
+   "title": "Q1/U12 的 CT 与 Q1 的 PG 引脚空接（未报错，需确认设计意图）",
+   "readings": [
+    "Q1 pad 1=CT `None` · pad 7=PG `None`；U12 pad 6=CT `None`",
+    "手册：TPS22965 `CT … Can be left floating`（可空）⇒ U12-CT 空接**合规**；TPS22990 `CT = VOUT slew rate control`（是否可空**未在本次摘录确认**）⇒ 待确认",
+    "手册：TPS22990 `PG = Power good… Tie to GND if not used` ⇒ 未用 PG 空置可接受，但**设计要求明示『带 PG』**（`k1_board.yaml#devices.Q1.function`）⇒ 空置与设计意图不符，待确认"
+   ],
+   "impact": "不影响器件基本开关功能（CT 空 ⇒ 固定/默认压摆；PG 空 ⇒ 无 PG 信号汇报）。",
+   "map_k2": "无",
+   "fix_family": "确认设计意图后决定：接 CT 电容（设定压摆）· PG 接 MCU（或用则接 GND）",
+   "note": "与 K1-D8 同源（②补充件定义不全）；**不阻塞**，随 K1-D8 一并处置。"
   }
  ],
  "summary": {
@@ -138,11 +167,22 @@
    "K1-D3"
   ],
   "mechanism_family_already_proposed": "见 K1_MECHANISM_COVERAGE_BUNDLE_PROPOSAL_v1.json（3 件 · 镜像实测 n_pass 5→8）",
-  "not_a_defect": "K1-D5（未布线中间态）"
+  "not_a_defect": "K1-D5（未布线中间态）",
+  "n_items": 9,
+  "added_this_session": [
+   "K1-D8",
+   "K1-D9"
+  ]
  },
  "boundary": "只读工作清单**提案**：未改 `k1/` 任何文件；修法均属 K1 项目改动（placement/板级设计）⇒ 需 K1 授权；**未新增判据维/检查齿**（owner ②）。",
  "readonly_repo": true,
  "not_landed": true,
  "no_new_criteria_dim": true,
- "ts": "2026-09-22T02:00:00+0800"
+ "ts": "2026-09-22T02:00:00+0800",
+ "corrections": [
+  {
+   "at": "2026-09-22T08:10:00+0800",
+   "what": "新增 K1-D8（Q1/U12 VBIAS 未接·功能级）与 K1-D9（CT/PG 观察）。**依据 = 通过 sha256 校验确认与在册同版的手册 pin table + 板 pad 直读 + 脚号交叉验证**。"
+  }
+ ]
 }

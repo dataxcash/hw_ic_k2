@@ -1,0 +1,79 @@
+{
+ "artifact": "k2_pending_rulings_delta",
+ "schema": 6,
+ "supersedes": "PENDING_RULINGS_DELTA_20260921_v5.json（**其 N-1..N-7 / N-3 rev / C-25 / P5 预填 正文不变**；本件**只追加 K1-D8 新缺陷**）",
+ "purpose": "把当前全部待裁项收敛为**一份**决策件（避免逐轮零散重投）：N-1..N-7（v3 正文不变）+ N-3 rev（v4）+ **C-25（新增）**。",
+ "owner_gate": "无（全部 L2/机制/批次/交付口径/跨项目面；唯一外部面 = P5 外部首件回件，ENG 不得自证）",
+ "stage_state": "P0–P4 与 P6 判据面 HOLDS；**P5 = 唯一未闭阶段门**（外部 V4–V7 `NOT_RUN`）；交付锚 `6ee7495d…` 未动；判据 **rev=5 `2da49b56`**（#K2-47）。未越阶段。",
+ "carried_forward": [
+  "N-1（交付口径批）· N-2（K1 机制包）· N-4（批 6 v4 放行·**最高价值可兑现项**）· N-5（R-5/C-1 残面）· N-6（P2 口径）· N-7（P6 判据闭闸）——正文与 ENG 建议**维持 v3**",
+  "N-3 rev（K1 原理图再生范围更正：拆两步·生成器缺位）——维持 v4",
+  "附：K1 板级 6 项排期 · ECO-1..5 开 rev · F-1 泪滴口径"
+ ],
+ "new_items": [
+  {
+   "id": "C-25",
+   "title": "**两维外部真源落件**（`density_and_clearance` / `lib_electrical_level`）——草案齐备，待口径确认",
+   "facts": [
+    "#K2-47 §三 登记 C-25（2 维无独立外部真源 ⇒ 自证风险）。",
+    "ENG 已交**可安装草案包** `k2/docs/drafts/c25-external-truth-v1/`：`jlc_hdi_capability.yaml`（出处三件套 JLC 能力页 `7d1d5a91…`）+ `parts_electrical_truth.yaml` v2 + `manifest.dim_source_of_truth` 增量补丁（`patch -p1` dry-run rc=0）。",
+    "**真 CLI 沙箱实测**：基线 **17/19 FAIL** → 施加 **19/19 PASS 违规 0**；负控 自证/缺件 **均被拦**（逐字复现 #K2-47 §三）。",
+    "**语义厘清（读判据代码）**：`lib_electrical_level` 实际比对**板封装 ↔ 库封装**（`_reclassify_w8` (B) 口径）⇒ 天然外部真源 = **库封装语料**；tier1 覆盖 **24/24**（全部命中 `k2/hw/lib/ForgeOS.pretty/*.kicad_mod`，逐件 sha16 已录）。",
+    "⚠ 但 #K2-47 §三 措辞为『**器件手册电气级**』（tier2），与代码实际语义（tier1 库语料）**不同** ⇒ 口径须监理确认。tier2 需先取 33 件文献+哈希+转录（重）。"
+   ],
+   "options": [
+    "(tier1) 以**库封装语料**为真源 ⇒ **可即时落件**（gate 属主 3 步：install×2 + patch），tier2 作后续上溯增强",
+    "(tier2) 以**器件手册电气级**为真源 ⇒ 须先取文献/哈希/转录（工作量大）",
+    "(tier1+tier2) 并存：tier1 先落件解阻塞，tier2 另行排期"
+   ],
+   "eng_recommend": "**(tier1+tier2)**：tier1 即时解阻塞（可独立复算、破自证），tier2 排期做出处上溯。",
+   "evidence": [
+    "C25_EXTERNAL_TRUTH_DRAFT_20260921_v1.json（2d41898bd48fa3c1）",
+    "C25_LIB_ELECTRICAL_TRUTH_CANDIDATE_20260921_v1.json（be296ee29e43f60f）",
+    "C25_PARTS_TRUTH_SOURCE_CENSUS_20260921_v1.json（c2003dd1c11a6ec8）",
+    "C25_PARTS_TRUTH_SCOPE_OPTIONB_20260921_v1.json（66a317fca84e7c7d）"
+   ]
+  },
+  {
+   "id": "（附）P5 回件包已预填",
+   "title": "P5 回件模板预填 + 预验（handoff §8.2③）—— 供外部方直接填",
+   "facts": [
+    "只读副本 8/8 `measurement_guide` + 8/8 `expected`，`measured` 槽未改；阈值 token 19/19 双侧命中；板侧测点独立复核全 OK。",
+    "**订正**：K2 FRU EEPROM = **`E2`**（RULES 未具名）；strapping A0=GND/A1=MCU_VDD/A2=GND。",
+    "缺口（仓库无出处，外部方填）：`expected_device_id` / `expected_address` 值 / 轨标称值。"
+   ],
+   "eng_recommend": "知悉即可（无需裁定；供外部回件使用）。",
+   "evidence": [
+    "P5_RESULTS_TEMPLATE_PREFILL_AND_PREVALIDATION_20260921_v1.json（b8e93a8be58521df）",
+    "P5_RESULTS_TEMPLATE_PREFILLED_20260921_v1.json（eb6bcac1261707ff）"
+   ]
+  },
+  {
+   "id": "**K1-D8（新·功能级）**",
+   "title": "**K1 板上 Q1(TPS22990) 与 U12(TPS22965) 的 VBIAS（器件偏置电源）未接**",
+   "facts": [
+    "板直读：Q1 pad4 `net=None` · U12 pad4 `net=None`（其余脚均有网）。",
+    "手册（**下载件 sha256 与在册 `doc_sha256` 逐字节同** ⇒ 同版）：TPS22990 pin4 = VBIAS『Bias voltage. Power supply to the device』（2.5–5.5V，VIN ≤ VBIAS）；TPS22965 pin4 = VBIAS（2.5–5.7V）。",
+    "脚号对应经 4–5 个独立网交叉验证（Q1 3/11=VIN & 11=EP=VIN；ON5 · GND6 · VOUT8/9/10；U12 1/2=VIN『must connect Pin1&2』· ON3 · GND5 · VOUT7/8 · 9=EP/GND）。",
+    "**真源本身缺网**：`k1_board.yaml#net_coverage` Q1/U12 各仅 4 网、无 VBIAS ⇒ 根因在**②补充件定义**，非布线中间态。",
+    "全仓 `VBIAS` 仅见于 2 份手册 YAML ⇒ **先前 K1 对账/工作清单均未登记**（本会话新发现）。"
+   ],
+   "impact": "**两枚负载开关功能不可实现**（Q1=轨B 工作态通路 · U12=轨A 预鉴权轨）。",
+   "options": [
+    "VBIAS 接 `PWR_5V_MAIN`(5V) ← ENG 倾向（轨内自取，无需新器件）",
+    "VBIAS 接 `12V_IN` 经降压/分压（须新增器件）",
+    "其他（监理裁）"
+   ],
+   "eng_recommend": "**接 `PWR_5V_MAIN`**（两件均在 5V 域；VBIAS 2.5–5.7V 合规且 ≥VIN）；**先修 `k1_board.yaml` 真源再加网**，然后与 N-3 同批处置（见 N3-G5）。**属设计连接决策 ⇒ 须授权**。",
+   "evidence": [
+    "K1_BOARD_LEVEL_DEFECT_WORKLIST_20260921_v1.json（eafe45f704489d47 · K1-D8/K1-D9）",
+    "N3_K1_SCH_REGEN_EXECUTABILITY_20260921_v1.json（含 N3-G5）",
+    "手册 pinned：tps22990.pdf sha256 ea198776… · tps22965.pdf sha256 3300eef7…（与在册 doc_sha256 同）"
+   ]
+  }
+ ],
+ "readonly_repo": true,
+ "not_landed": true,
+ "no_new_criteria_dim": true,
+ "ts": "2026-09-22T07:15:00+0800"
+}
