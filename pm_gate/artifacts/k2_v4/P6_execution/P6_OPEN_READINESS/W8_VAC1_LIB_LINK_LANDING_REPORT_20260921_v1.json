@@ -1,7 +1,7 @@
 {
  "artifact": "w8_vac1_lib_link_landing_report",
  "schema": 1,
- "ts": "2026-09-20T21:45:00+0800",
+ "ts": "2026-09-20T21:55:00+0800",
  "id": "W8-VAC-1",
  "authorization": "**#K2-50 §二 W8-VAC-1**（① 空过不计绿 · ② 修法放行补库昵称 · ③ C-26 登记）",
  "change": "42 件板级 footprint 的 **FPID 库昵称补全**（板文件 `k1/k1_v1.kicad_pcb`，纯 `(footprint \"LIB:NAME\")` 表征）：ForgeOS×9 件（项目快照 `k1/lib/ForgeOS.pretty`）· 标准 KiCad 库 33 件（`Capacitor_SMD`/`Resistor_SMD`/`Package_SON`/`Package_SO`/`Package_TO_SOT_SMD`/`Package_DFN_QFN`/`LED_SMD`/`Connector_USB`/`Connector_JST`）；**几何/焊盘/网表/DRC 零改动**（纯 ID 表征）。",
@@ -94,5 +94,14 @@
   "交付锚"
  ],
  "honest_statement": "W8 通道由**空过**变为**真实测量**：K1 该维**不绿**（6 差异）。**禁**称 K1 电气级合规（C-12）。",
- "next": "#K2-50 §四 执行序 3/6 = **T2-F1（+T2-F7 并批）`_shared` `source:` 订正**"
+ "next": "#K2-50 §四 执行序 3/6 = **T2-F1（+T2-F7 并批）`_shared` `source:` 订正**",
+ "CORRECTION_20260920_2155": {
+  "status": "**未落件（已回退）** —— 初稿误记为『已落件』，现更正。",
+  "reason": "k1 提交被**仓库级 PCB↔SPEC 门禁**拒绝：`[pipeline:pre-commit] PCB 产物变更 ['k1_v1.kicad_pcb'] 无对应 SPEC 变更 — 必须先修订 SPEC (SPEC_*.json / artifacts/L3/*.json) 再重建, 禁止直改 PCB`。⇒ **直改 PCB 违法**；正确路径 = **修订 `k1/pm_gate/artifacts/k1/L3/SPEC_k1.json#components` 的 footprint 库昵称 → 用板重建器重出 PCB**。",
+  "worktree_action": "`git checkout -- k1/k1_v1.kicad_pcb` 已回退 ⇒ 工作树恢复一致（`k1_v1.kicad_pcb` 回到 HEAD 态）。",
+  "still_valid": "**方法与读数全部有效**（在本会话工作树上实测过）：`n_no_library_link 42→0` · `n_electrical_identical 35` · 残余 7 件 **仅 pad `rot`**（U9 另 `dy`）· 板 sha `eda1dc91→09a07eb7` · K1 判定 `10 PASS + 1 空过` → `10 PASS/8 FAIL`（`lib_electrical_level` 空过→真实 FAIL 6）。",
+  "blocker_class": "**机制/门禁面**（非 owner 面）：需先走 SPEC 修订 + 重建链（`k1/lib/k1_board_builder.py` / `k1_spec_board_sync.py`）——重建属板级变更，**须同批**处理测量证据重出（W8-FU-1）与 K1 零回归复算。",
+  "next": "① 监理确认『W8 库昵称修法走 SPEC+重建路径』② 修订 SPEC_k1.json#components 的 footprint 字段 ③ 重建 PCB ④ 同批重出 K1 测量证据（W8-FU-1）⑤ 复算 K1 判定。",
+  "honest": "**禁充绿**：W8 通道**仍未落件**，K1 该维现况仍为**空过·不计绿**（#K2-50 §二 W8-VAC-1①）。"
+ }
 }
