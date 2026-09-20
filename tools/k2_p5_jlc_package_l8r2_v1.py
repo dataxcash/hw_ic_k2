@@ -4,7 +4,7 @@
 性质：只出交付物。不改板/SPEC/原理图/判据/冻结四源。
 输入（只读）：BOARD=hw/k2_v4_8L.l8.kicad_pcb (7a5c89913d6e5d0a) · PRO=l8 pro · SPEC rev-54
              册 = L4/E3-standard-call-l8-20260921/ · 冻结件 = L5/jlc_package/（叠层图/阻抗表/裁定副本源）
-产出（OUT）：pm_gate/artifacts/k2_v4/L6/jlc_package/
+产出（OUT）：pm_gate/artifacts/k2_v4/L6/jlc_package_l8r2/
   01_gerber_rs274x/  8 铜层 + 阻焊F/B + 丝印F/B + 边框 + .gbrjob
   02_drill_excellon/ Excellon（通孔 + HDI 盲埋孔分对）+ drill map svg + drill_report.txt
   03_stackup/        JLC08161H_stackup.svg（由 SPEC rev-54 叠层确定性绘制）+ HDI_stage_diagram.svg（l8 as-built）
