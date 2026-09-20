@@ -169,3 +169,16 @@
 ---
 **（本块）裁定对应**：CR-31 ← handoff §8-B（只读造活 · 关 `CR-26` 同类残余）。**报备监理 1 条（同类收口）· owner 项 0**。
 **不影响** P6 判据面（`criteria/` rev=6 只读）与交付锚（`6ee7495de61f749f` 未动）。
+### 续编 · #K2-57 裁定落地（CR-26 修复执行 + CR-27 并入 + 引证 5 项 + 过程口径 CR-32）
+
+| # | 条目 | 内容（事实/裁定） | 依据 | 处置红线 |
+|---|---|---|---|---|
+| **CR-26**（**状态更新：已裁 → 已落**） | **`U4` BAT54C 电源 ORing 反接 · 根因链已订正并复算** | **裁定**：监理 **#K2-57**（自裁 · §11）批准 ① 真源订正 ② 开新 rev。**已落**：① `_shared` 四树 `BAT54C.yaml` = `1:A1 · 2:A2 · 3:K`（旧 `2:K/3:A2` 系无引证『标准脚位』）· `source` 改引 Nexperia §5 Table 2 + Diodes DS11005 Rev 34-2；② 生成器实际消费之 pin 映射经 **`hw/data/k2_sch.errata-3.yaml`**（版本 bump；`k2_sch.yaml` **逐字节未改** = `dd794c54f7ce7417`）订正 `K→3 · A2→2`；③ 符号层 `IOCONVERT.kicad_sym#BAT54C_ORING`（及内嵌该符号之 sch）同订正。**复算（gates ③）**：`k2_gen_v5` 于 errata-2 = `U4 pad2→MCU_VDD / pad3→P3V3`（**复现缺陷**）；于 errata-3 = **`pad2→P3V3` · `pad3→MCU_VDD`** ⇒ 实体 `A2→P3V3` / `K→MCU_VDD` ⇒ **`P3V3→MCU_VDD` 正向导通** ✅ | 监理 #K2-57 R1/R2/R3；件 `DEFECT_U4_BAT54C_PIN_SWAP_20260921_v1.json`（affa0c5d2c3b7491） + 两厂商正本 | **未改** `k2_sch.yaml`/冻结四源/`criteria/` · 未改交付包旧锚 · 修复件走 **新 rev** |
+| **CR-27**（**并入同批 · 已落**） | **`D1` LED 极性（LOW-MED）· 符号 pin 号对齐 footprint** | **ENG 独立复核**（R4 前置）：本机官方 `LED_SMD:LED_0603_1608Metric` pad1 在 **x=−0.7875（左）**，丝印阴极竖条在 **x=−1.485（左）** ⇒ **pad1=K**（阴极）⇒ 板用 footprint（`ForgeOS` 副本，同左/右序，**无丝印**）pad1=K。**意图**（nets）= `LED_A: [R21/B, D1/A]` · `GND ∋ D1/K` ⇒ 需 `A→pad2 · K→pad1`。**已落**：符号 pin 号 `A→2 · K→1`（`IOCONVERT.kicad_sym#LED` + `mcu_sideband.kicad_sch` 内嵌件 + errata-3）。**复算**：`D1 pad1→GND · pad2→LED_A`（正向）✅ | 监理 #K2-57 R4；本机官方 footprint 丝印实证 | 意图未变 · 不新增判据维 |
+| **CR-32**（**本裁立 · 过程口径**） | **「待裁信号真空」——新待裁项一经发现即须结构化，禁只写 handoff/ledger** | **事实**：CR-26 于 23:19 发现，但**只**记于 `ledger.jsonl` + handoff §4，**未**落 `PENDING_RULINGS_DELTA_*.json` ⇒ 哨兵 `pending_rulings_blocked()` 恒 **False** ⇒ **900s 自动拉起监理之梯子永不触发**（= 2026-09-20『无信号⇒不拉起监理』事故同型）。**口径（#K2-57 R6）**：待裁项**一经发现即结构化**入 `k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/PENDING_RULINGS_DELTA_*.json`。**已按此纠正**：本会话落 **v23**（`833d419e4b9464ae`）⇒ 23:32:06 > 22:51:35+300s ⇒ 阻塞信号生效 ⇒ 监理 925s 拉起并出 #K2-57 | 监理 #K2-57 R6；`watch.py:191/203` · `sup.py status` | **非判据维 · 非检查齿**（属 §12 自动化优先之过程口径） |
+| **CR-33**（**口径澄清 · 非齿**） | **脚位真源之「有效杠杆层」——生成器消费 **netlist pin map**，非 `.kicad_sym`** | **事实（本会话实证）**：`k2/tools/k2_gen_v5.py::parse_yaml→build_device_table` 之 `pin_map` 取自 **nets_yaml（`spec["symbols"][*].pins`）**（`assign_nets` 以 `REF/PINNAME` 经该表解析 pad 号）⇒ **PCB/Gerber 侧的有效杠杆 = 网表 pin 映射**；`hw/lib/IOCONVERT.kicad_sym` 为 `k2_sch_gen_v1.py` **再生件**（且现行件含后置补丁，与从头再生**不逐字节同**）。**故**：订正 `.kicad_sym`（R2 字面目标）**单靠自身不改板**；须同订正网表 pin 映射（本会话经 errata-3）。**登记目的**：供后续会话**先查册**，避免「改了符号却没改板」之假绿 | 本会话实证（`k2_gen_v5.py` 代码 + errata-2/errata-3 双跑对照） | **非判据维 · 非检查齿**；**禁**以符号层订正宣称板已修（须以网表 pin 映射 + 板 pad→net 机核为证） |
+
+---
+**（本块）裁定对应**：#K2-57（R1/R2/R3/R4/R6）。**报备监理 1 条（有效杠杆层口径）· owner 项 0**。
+**不影响** 旧交付锚（`6ee7495de61f749f` / `0e88e107e2da8192` 未动）与 `criteria/`（rev=6 只读）。
+**待续（R3 后半 + ⑥）**：`k2_route_segment_v1 --upto all` → 新 rev 板 → 重跑 P4 锚/19 维 → 新交付包。

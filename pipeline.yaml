@@ -1,7 +1,7 @@
 # k2/pipeline.yaml —— 门禁流程声明（fail-closed）
 # 安装授权：监理 #K2-28 §五-1（安装属 ENG，签认属监理）；变体 = 「职责分离（phases-only）」
 #   （#K2-23 §二-6「乙」路径 + D-1 消歧推荐件；Draft A 描述符件不安装）。
-# 真源绑定（G11）：netlist_connect.nets_yaml 指向**现行真源** hw/data/k2_sch.errata-2.yaml
+# 真源绑定（G11）：netlist_connect.nets_yaml 指向**现行真源** hw/data/k2_sch.errata-3.yaml
 #   （owner ⑤ #K2-24 授权 bump；仅删 C89/PWR_5V_KEY，未夹带 105 NC）。
 # D-7a：NC 白名单口径（①top-level nc + ②sheets[].placements[].nc）已落 _shared（checks.py）。
 # 路径口径：**k2 项目根相对**（engine 经 config.abs_path(cfg, ...) 以 pipeline.yaml 所在目录为基准）；
@@ -15,5 +15,5 @@ phases:
   - id: verify
     verify:
       - {type: sch_structural,  sch: hw/sch/k2_sch.kicad_sch}
-      - {type: netlist_connect, sch: hw/sch/k2_sch.kicad_sch, nets_yaml: hw/data/k2_sch.errata-2.yaml}
+      - {type: netlist_connect, sch: hw/sch/k2_sch.kicad_sch, nets_yaml: hw/data/k2_sch.errata-3.yaml}
       - {type: bom_consistent,  sch: hw/sch/k2_sch.kicad_sch, bom_csv: fab/k2_v4_bom.csv}
