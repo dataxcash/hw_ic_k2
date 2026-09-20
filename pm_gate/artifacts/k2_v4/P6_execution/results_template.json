@@ -1,0 +1,268 @@
+{
+ "artifact": "k2_p6_batch2_results",
+ "schema": 1,
+ "scope": "P6/学习环批2 施工结果表（计划态；施工前不得填 PASS）",
+ "plan": "k2/docs/K2-P6-LEARNING-LOOP-BATCH2-AND-CAPABILITY-GAP-CLOSURE-PLAN-v3.md",
+ "checklist": "pm_gate/artifacts/k2_v4/P6_execution/CHECKLIST.md",
+ "baseline": {
+  "path": "pm_gate/artifacts/k2_v4/P6_execution/BASELINE_pm_gate_k1_k2_readonly_v1.json",
+  "sha256": "27d79e460809987c9ab6e94f7d2451ca1830f56f95da7fc05b436ef99eb25d6b",
+  "regenerate_cmd": "PYTHONPATH=AppDir/shared/lib/python3.11/dist-packages AppDir/bin/python3.11 k2/tools/k2_p6_readonly_baseline_v1.py --out /tmp/opencode/k2_p6_baseline.json",
+  "invariant": "两次连跑逐字节同；升版后须复算对比（不得回退）"
+ },
+ "measured_by": "ENG (ARCHER)",
+ "judged_by": "监理",
+ "status_enum": [
+  "PENDING",
+  "PASS",
+  "FAIL",
+  "BLOCKED_UNAUTHORIZED"
+ ],
+ "prerequisites": {
+  "G-a_p5_external": {
+   "status": "UNMET",
+   "owner": "外部/监理",
+   "evidence": "L6/first_article/results_template.json 逐项 NOT_RUN"
+  },
+  "G-b_k1_priority": {
+   "status": "PENDING_OWNER",
+   "owner": "owner",
+   "evidence": "notice-20260916-k1-pause.md"
+  },
+  "G-c_batch2_and_template_auth": {
+   "status": "PENDING_SUPERVISOR",
+   "owner": "监理"
+  },
+  "G-c2_k1_manifest_for_adjudicate": {
+   "status": "MISSING_ARTIFACT",
+   "owner": "监理",
+   "evidence": "criteria/ 仅 manifest.k2.yaml；adjudicate.py:536 按 criteria/manifest.<project>.yaml 解析 ⇒ --project k1 FAIL-closed"
+  },
+  "G-d_regression_not_breaking_k2": {
+   "status": "AVAILABLE",
+   "owner": "ENG",
+   "evidence": "engine verify k2 = preflight+3 PASS（本轮实测）"
+  }
+ },
+ "items": {
+  "B2-1": {
+   "title": "_escape_smd_via pad 契约显式化",
+   "carrier": [
+    "_shared/eda_core/hs_route_model.py:4513 (def)",
+    "_shared/eda_core/hs_route_model.py:892 (call)"
+   ],
+   "owner": "ENG",
+   "action": "pad 几何真源 = 板 as-built 优先；库/YAML 交叉核对；不一致显式登记，禁静默 None/默认值",
+   "commands": [
+    "python3 -m pytest -q _shared/eda_core/tests/test_hs_route_model.py",
+    "python3 -m py_compile _shared/eda_core/hs_route_model.py"
+   ],
+   "fail_closed_gates": [
+    "涉项用例实跑绿（skipped 不得充绿；基线 34 passed / 34 skipped）"
+   ],
+   "negative_controls": [
+    "pad 真源冲突 ⇒ 显式登记（负控用例，非静默）"
+   ],
+   "authorization": "无（共享层改动须监理批，见 prerequisites.G-c）",
+   "status": "PENDING",
+   "measured": {},
+   "evidence": [],
+   "notes": ""
+  },
+  "B2-2": {
+   "title": "--all-v4 项目维度分派显式化",
+   "carrier": [
+    "_shared/eda_core/hs_route_model.py:4406 (def solve_all_v4)",
+    "_shared/eda_core/hs_route_model.py:4796 (--all-v4)",
+    "_shared/eda_core/hs_route_model.py:4800-4804 (分派：chain_segments ↔ alloc PCIE_)",
+    "_shared/eda_core/hs_route_model.py:4806 (call)",
+    "_shared/eda_core/hs_route_model.py:4842-4846 (第二路径)",
+    "_shared/eda_core/routing_topology_gate.py:43 (docstring 同步点)"
+   ],
+   "owner": "ENG",
+   "action": "分派显式化（项目维度），禁隐式默认落 K2",
+   "commands": [
+    "python3 -m pytest -q _shared/eda_core/tests/test_hs_route_model.py",
+    "python3 -m py_compile _shared/eda_core/hs_route_model.py",
+    "K1 维度分派断言（构造 K1 链基 ⇒ 分派 K1）"
+   ],
+   "fail_closed_gates": [
+    "分派断言绿",
+    "K2 同输入同输出（逐字节不回退）"
+   ],
+   "negative_controls": [
+    "非法/缺失项目维度 ⇒ 报错（非静默取 K2）"
+   ],
+   "authorization": "无",
+   "status": "PENDING",
+   "measured": {},
+   "evidence": [],
+   "notes": ""
+  },
+  "B2-3a": {
+   "title": "SPEC 名与产物维度项目化（check_l2/l3/qa + 硬编码站点）",
+   "carrier": [
+    "_shared/pm_gate/check_l3.py:26 (硬编码 SPEC_k2_v4.json)",
+    "_shared/pm_gate/check_l3.py:28,:46,:53 (文案)",
+    "_shared/pm_gate/check_l2.py / check_l3.py / check_qa.py: artifacts.read_text(...) 未传 project=",
+    "_shared/pm_gate/check_l1.py (T13 已改造=对照正确面)"
+   ],
+   "owner": "ENG",
+   "action": "SPEC 名经 pm_gate/project.yaml: spec_name 解析；read_text 调用补 project=_proj()（T13 模式）",
+   "commands": [
+    "cd k2 && PYTHONPATH=$PWD/_shared:$PWD python3 _shared/eda_core/pipeline/engine.py verify k2",
+    "K1 维度逐 gate 跑通（读 K1 自己的产物）"
+   ],
+   "fail_closed_gates": [
+    "K2 verify k2 = preflight+3 PASS（不回退）",
+    "K1 G2.x/G3.x/G4.x 读 K1 产物（现状 G2.1 报缺 measurements.md，而 k1/.../L2/measurements.md 实际存在）"
+   ],
+   "negative_controls": [
+    "spec_name 指向不存在件 ⇒ fail-closed 报错"
+   ],
+   "authorization": "需监理批（碰门禁实现）",
+   "status": "PENDING",
+   "measured": {},
+   "evidence": [],
+   "notes": ""
+  },
+  "B2-3b": {
+   "title": "config.spec_name() 空参调用（取 DEFAULT_PROJECT 而非 active）",
+   "carrier": [
+    "_shared/pm_gate/check_qa.py:35 (全 _shared 唯一空参点)"
+   ],
+   "owner": "ENG",
+   "action": "改为 config.spec_name(artifacts.active_project())",
+   "commands": [
+    "grep -rn \"spec_name()\" _shared --include=*.py  # 期望 0 命中",
+    "K1 G4.1 判定"
+   ],
+   "fail_closed_gates": [
+    "K1 G4.1 不再报「SPEC 缺失」（实测：K1 有 L3/SPEC_k1.json 仍报缺）",
+    "K2 不回退"
+   ],
+   "negative_controls": [
+    "active project 未设 ⇒ 明确报错"
+   ],
+   "authorization": "需监理批（同上）",
+   "status": "PENDING",
+   "measured": {},
+   "evidence": [],
+   "notes": ""
+  },
+  "B2-3c": {
+   "title": "closure_check 框架相对默认路径（G3.5 不可跑）",
+   "carrier": [
+    "_shared/pm_gate/closure_check.py:110-113 (DEFAULT_SPEC / ESCAPE_SPEC_PATH)"
+   ],
+   "owner": "ENG",
+   "action": "两处默认值钉到项目根（M-14 口径）",
+   "commands": [
+    "python3 -c 'import pm_gate.closure_check as cc, os; print(cc.DEFAULT_SPEC, os.path.isfile(cc.DEFAULT_SPEC))'",
+    "K1/K2 G3.5 判定"
+   ],
+   "fail_closed_gates": [
+    "两项目 G3.5 均可跑（现状均 FAIL：SPEC 读取失败 _shared/pm_gate/artifacts/L3/...）"
+   ],
+   "negative_controls": [
+    "项目根缺失 ⇒ 明确报错"
+   ],
+   "authorization": "需监理批（同上）",
+   "status": "PENDING",
+   "measured": {},
+   "evidence": [],
+   "notes": ""
+  },
+  "B2-3d": {
+   "title": "SPEC_EXPECTS 走廊期望集陈旧（判据期望值）",
+   "carrier": [
+    "_shared/pm_gate/check_l3.py:17-22 SPEC_EXPECTS"
+   ],
+   "owner": "ENG",
+   "action": "现行 spec corridors[].id = EAST_CHIP_TO_J2 / WEST_MCIO_TO_CHIP；期望集 = J2_TO_U / U_TO_MCIO",
+   "commands": [
+    "K2 G3.1 判定（修好解析后仍 FAIL）"
+   ],
+   "fail_closed_gates": [
+    "须监理先裁定期望集（改名承接 or 双名兼容）；ENG 不得自定（C-12）"
+   ],
+   "negative_controls": [
+    "—"
+   ],
+   "authorization": "需监理裁定（判据侧期望值）",
+   "status": "PENDING",
+   "measured": {},
+   "evidence": [],
+   "notes": ""
+  },
+  "B2-4": {
+   "title": "RULES_DOC 路径修复 + 撤 K1 G1.5 waiver",
+   "carrier": [
+    "_shared/pm_gate/check_l1.py:193 (RULES_DOC)",
+    "_shared/pm_gate/check_l1.py:196 (check_g15)"
+   ],
+   "owner": "ENG",
+   "action": "真源 = _shared/docs/PCB_DESIGN_RULES.md（K1 state G1.5 WAIVER 原文指认）；撤 waiver 后 K1 须机判 PASS",
+   "commands": [
+    "K1: check_g15 无 waiver 机判（期望 PASS）",
+    "cd k2 && PYTHONPATH=$PWD/_shared:$PWD python3 _shared/eda_core/pipeline/engine.py verify k2"
+   ],
+   "fail_closed_gates": [
+    "K1 G1.5 真判 PASS（不再 PASS-by-waiver；RISK-001 关闭）",
+    "K2 verify k2 不回退"
+   ],
+   "negative_controls": [
+    "规则文档缺失/无「强条」⇒ FAIL"
+   ],
+   "authorization": "需监理批（撤 waiver = 判据收紧）",
+   "status": "PENDING",
+   "measured": {},
+   "evidence": [],
+   "notes": ""
+  }
+ },
+ "p6_completion": {
+  "P6-1": {
+   "title": "adjudicate.py --project k1 出 verdict 且命中同源四项",
+   "owner": "ENG",
+   "commands": [
+    "python3 criteria/adjudicate.py --project k1 --board k1/k1_v1.kicad_pcb --pro k1/k1_v1.kicad_pro --nets k1/boards/k1_nets.yaml --sch-dir k1/sch --measure-out /tmp/opencode/k1_measure.json --out /tmp/opencode/k1_verdict.json"
+   ],
+   "inputs_pending_supervisor_confirmation": true,
+   "fail_closed_gates": [
+    "ignore_without_ruling(9)",
+    "no_pipeline(1)",
+    "no_fp_lib_table(1)",
+    "sheets_empty(1)"
+   ],
+   "authorization": "需监理提供 criteria/manifest.k1.yaml（应然集）",
+   "status": "PENDING",
+   "measured": {},
+   "evidence": []
+  },
+  "P6-2": {
+   "title": "ignore 集 == manifest 应然集（0 差异）",
+   "owner": "ENG",
+   "commands": [
+    "同 P6-1 + 模板解析（k1|k2_jlc_template.kicad_pro）"
+   ],
+   "fail_closed_gates": [
+    "结构差异 = 0"
+   ],
+   "authorization": "模板整改须获批",
+   "status": "PENDING",
+   "measured": {},
+   "evidence": []
+  }
+ },
+ "red_lines": [
+  "不在执行环内改 _shared",
+  "不重建交付包（MANIFEST 6ee7495d… / tarball 0e88e107…）",
+  "不改冻结四源",
+  "criteria/ 只读",
+  "不新增检查齿",
+  "不得为变绿缩口径",
+  "未连接 0 / error 0 / zone_filled 10/10 不得回退",
+  "冲突即停机"
+ ]
+}

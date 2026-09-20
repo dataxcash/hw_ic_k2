@@ -1,0 +1,175 @@
+{
+ "artifact": "k2_p6_instruments_selfcheck",
+ "baseline_reproducibility": {
+  "byte_identical_to_stored": true,
+  "ok": true,
+  "path": "k2/pm_gate/artifacts/k2_v4/P6_execution/BASELINE_pm_gate_k1_k2_readonly_v1.json",
+  "regen_exit_code": 0,
+  "sha256_recorded_in_results": "27d79e460809987c9ab6e94f7d2451ca1830f56f95da7fc05b436ef99eb25d6b",
+  "sha256_regenerated": "27d79e460809987c9ab6e94f7d2451ca1830f56f95da7fc05b436ef99eb25d6b",
+  "sha256_stored": "27d79e460809987c9ab6e94f7d2451ca1830f56f95da7fc05b436ef99eb25d6b",
+  "sha_matches_results": true
+ },
+ "covers": {
+  "baseline": "pm_gate/artifacts/k2_v4/P6_execution/BASELINE_pm_gate_k1_k2_readonly_v1.json",
+  "checklist": "pm_gate/artifacts/k2_v4/P6_execution/CHECKLIST.md",
+  "results_template": "pm_gate/artifacts/k2_v4/P6_execution/results_template.json"
+ },
+ "fail_closed": "PASS ⇒ 仪器与载体锚一致、基线可复现；**不代表授权已给**（施工另需 prerequisites 全绿）",
+ "line_anchors": {
+  "eda_core/hs_route_model.py:4406": {
+   "claimed_line": 4406,
+   "line_count": 4957,
+   "line_text": "def solve_all_v4(self, bases: Sequence[str]) -> Dict:",
+   "needle": "def solve_all_v4",
+   "ok": true,
+   "rel": "k2/_shared/eda_core/hs_route_model.py",
+   "why": "B2-2 定义"
+  },
+  "eda_core/hs_route_model.py:4513": {
+   "claimed_line": 4513,
+   "line_count": 4957,
+   "line_text": "def _escape_smd_via(self, fcu_field, band_field, net: str, pad,",
+   "needle": "def _escape_smd_via",
+   "ok": true,
+   "rel": "k2/_shared/eda_core/hs_route_model.py",
+   "why": "B2-1 定义"
+  },
+  "eda_core/hs_route_model.py:4796": {
+   "claimed_line": 4796,
+   "line_count": 4957,
+   "line_text": "if args.all_v4:",
+   "needle": "if args.all_v4",
+   "ok": true,
+   "rel": "k2/_shared/eda_core/hs_route_model.py",
+   "why": "B2-2 CLI 开关"
+  },
+  "eda_core/hs_route_model.py:4800": {
+   "claimed_line": 4800,
+   "line_count": 4957,
+   "line_text": "if m.config.chain_segments:",
+   "needle": "m.config.chain_segments",
+   "ok": true,
+   "rel": "k2/_shared/eda_core/hs_route_model.py",
+   "why": "B2-2 分派（K1 链基）"
+  },
+  "eda_core/hs_route_model.py:4806": {
+   "claimed_line": 4806,
+   "line_count": 4957,
+   "line_text": "res = m.solve_all_v4(bases)",
+   "needle": "solve_all_v4(bases)",
+   "ok": true,
+   "rel": "k2/_shared/eda_core/hs_route_model.py",
+   "why": "B2-2 调用"
+  },
+  "eda_core/hs_route_model.py:4842": {
+   "claimed_line": 4842,
+   "line_count": 4957,
+   "line_text": "if m.config.chain_segments:",
+   "needle": "m.config.chain_segments",
+   "ok": true,
+   "rel": "k2/_shared/eda_core/hs_route_model.py",
+   "why": "B2-2 第二路径"
+  },
+  "eda_core/hs_route_model.py:892": {
+   "claimed_line": 892,
+   "line_count": 4957,
+   "line_text": "return self._escape_smd_via(fcu_field, esc_field, net, pad,",
+   "needle": "_escape_smd_via",
+   "ok": true,
+   "rel": "k2/_shared/eda_core/hs_route_model.py",
+   "why": "B2-1 调用点"
+  },
+  "eda_core/routing_topology_gate.py:43": {
+   "claimed_line": 43,
+   "line_count": 951,
+   "line_text": "证明不得宣称可行；不跑 --all-v4。",
+   "needle": "--all-v4",
+   "ok": true,
+   "rel": "k2/_shared/eda_core/routing_topology_gate.py",
+   "why": "B2-2 同步点（docstring）"
+  },
+  "pm_gate/check_l1.py:193": {
+   "claimed_line": 193,
+   "line_count": 267,
+   "line_text": "RULES_DOC = os.path.join(os.path.dirname(os.path.dirname(",
+   "needle": "RULES_DOC",
+   "ok": true,
+   "rel": "k2/_shared/pm_gate/check_l1.py",
+   "why": "B2-4 规则文档路径"
+  },
+  "pm_gate/check_l3.py:26": {
+   "claimed_line": 26,
+   "line_count": 103,
+   "line_text": "text = artifacts.read_text(\"L3\", \"SPEC_k2_v4.json\")",
+   "needle": "SPEC_k2_v4.json",
+   "ok": true,
+   "rel": "k2/_shared/pm_gate/check_l3.py",
+   "why": "B2-3a 硬编码 SPEC 名"
+  },
+  "pm_gate/check_l3.py:46": {
+   "claimed_line": 46,
+   "line_count": 103,
+   "line_text": "return GateResult(True, evidence=\"SPEC_k2_v4.json 结构完整（9 顶层字段 + 阻抗/网类/过孔/走廊）\")",
+   "needle": "SPEC_k2_v4.json",
+   "ok": true,
+   "rel": "k2/_shared/pm_gate/check_l3.py",
+   "why": "B2-3a 证据文案"
+  },
+  "pm_gate/check_qa.py:35": {
+   "claimed_line": 35,
+   "line_count": 181,
+   "line_text": "text = artifacts.read_text(\"L3\", config.spec_name())",
+   "needle": "config.spec_name()",
+   "ok": true,
+   "rel": "k2/_shared/pm_gate/check_qa.py",
+   "why": "B2-3b 空参调用"
+  },
+  "pm_gate/closure_check.py:110-113": {
+   "claimed_line": "110-113",
+   "needle": [
+    "DEFAULT_SPEC",
+    "ESCAPE_SPEC_PATH"
+   ],
+   "ok": true,
+   "rel": "_shared/pm_gate/closure_check.py",
+   "text": " ⏎ DEFAULT_SPEC = os.path.join(os.path.dirname(os.path.abspath(__file__)), ⏎                             \"artifacts\", \"L3\", \"SPEC_k2_v4.json\") ⏎ ESCAPE_SPEC_PATH = os.path.join(os.path.dirname(os.path",
+   "why": "B2-3c 框架相对默认值"
+  }
+ },
+ "prerequisites_facts": {
+  "criteria_manifest_k1_exists": false,
+  "criteria_manifest_k2_exists": true,
+  "first_article_statuses": {
+   "V4_impedance_coupon": "NOT_RUN",
+   "V5_pdn_dc_drop": "NOT_RUN",
+   "V6_1_rail_voltages": "NOT_RUN",
+   "V6_2_mcu_swd_id": "NOT_RUN",
+   "V6_3_fru_i2c": "NOT_RUN",
+   "V6_4_link_gen4_x4": "NOT_RUN",
+   "V6_5_stability_30min_aer": "NOT_RUN",
+   "V7_thermal_o2": "NOT_RUN"
+  },
+  "ok": true,
+  "p5_external_all_not_run": true,
+  "p6_1_blocked_on_supervisor_artifact": true
+ },
+ "readonly": true,
+ "schema": 1,
+ "scope": "P6/学习环批2 仪器机核（只读）",
+ "summary": {
+  "anchor_count": 13,
+  "checks": 4,
+  "failed": []
+ },
+ "tooling": {
+  "eda_core.hs_route_model": true,
+  "pm_gate.check_l1": true,
+  "pm_gate.check_l2": true,
+  "pm_gate.check_l3": true,
+  "pm_gate.check_qa": true,
+  "pm_gate.closure_check": true,
+  "rules_doc_truth_exists": true
+ },
+ "verdict": "PASS"
+}
