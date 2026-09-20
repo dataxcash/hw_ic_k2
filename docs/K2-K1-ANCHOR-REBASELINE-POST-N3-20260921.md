@@ -69,3 +69,15 @@
 - **影响**：**判据读数不受影响**（判据维只读 sha/数值字段，不回显路径）；规范化后 K1 判定仍 **10 PASS/8 FAIL**
   （verdict sha16 `5dfb0f5974138354`，与规范化前**逐字节同**）。
 - 复现提示：**勿用不同临时目录复跑**（会改 `method` 串 ⇒ 破坏「两次连跑逐字节同」）。
+
+---
+
+# 附：**K1 DRC 逐条证据**（同日续推）
+
+- 新件：`K1_DRC_EVIDENCE_20260921_v1.json（481158fbc290508f）`（kicad-cli 原始 DRC 报告的结构化摘要，供 K1-D1..D12 排期取用）。
+- 读数：`error 13`（clearance 1 · copper_edge_clearance 3 · pth_inside_courtyard 4 · shorting_items 2 · solder_mask_bridge 3）
+  · `warning **77**`（missing_courtyard 7 · nonmirrored_text_on_back_layer 14 · silk_edge_clearance 3 · silk_over_copper 29 · silk_overlap 24）
+  · `unconnected 156`（K1-D5 未布线中间态）。
+- **册面陈旧项（新登）**：`K1-D6` 原记「17 条 warning / 2 类」⇒ **M1 落件（ignore→warning ×9）后实为 77 条 / 5 类**（新增 3 类共 60 条）。
+  **判据零影响**（5 类均已在 `manifest.k1.yaml#drc_warning_dispositions` 登记 ⇒ 该维仍 PASS），但「保持可见」的台账口径应更新（K1 项目面，须批）。
+- 同步：`PRIOR_ART_REGISTRY_INDEX_20260921_v2.json（45f4c9483c7981bf）` —— v1 逐键保留 + `v2_addendum`（本会话 8 项：R-1/K1-S7 · W8-VAC-1 · T2-F1 · T2-F5 · C19-F1 · M-DET-1 · K1-D6 读数更新 · K1-S3 关闭）供后续会话「先查册」。
