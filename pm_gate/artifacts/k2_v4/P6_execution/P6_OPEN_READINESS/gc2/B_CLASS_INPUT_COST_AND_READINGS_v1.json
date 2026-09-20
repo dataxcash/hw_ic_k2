@@ -1,0 +1,90 @@
+{
+ "artifact": "k2_gc2_b_class_input_cost_and_readings",
+ "schema": 1,
+ "purpose": "P6 判据① 的 **b 类 7 维**（缺测量件 ⇒ fail-closed）逐维**代价评估 + 已实跑读数**：哪些即跑即得、哪些须工具修复（= 须监理批）、哪些属 K1 语境 vacuous。",
+ "judge": {
+  "criteria": "criteria/adjudicate.py 1937a40ae68bc288（rev=3，只读）",
+  "manifest": "PROPOSED_manifest.k1.yaml 94da046bfad8f2c8"
+ },
+ "measured_delta": {
+  "before": {
+   "n_pass": 3,
+   "n_fail": 16,
+   "note": "无测量输入（P6-1 命令行原文）"
+  },
+  "after": {
+   "n_pass": 4,
+   "n_fail": 15,
+   "transition": "**lib_electrical_level 由 fail-closed 转 PASS**（0 电气差异 / 0 pad 名差异；审计板 sha16 == 受审板 eda1dc91eec76aa7 ✓）"
+  },
+  "reproduce": "python3 criteria/adjudicate.py --project k1 --board k1/k1_v1.kicad_pcb --pro k1/k1_v1.kicad_pro --nets k1/boards/k1_sch.yaml --sch-dir k1/sch --root . --manifest <PROPOSED_manifest.k1.yaml> --drc-cli AppDir/usr/bin/kicad-cli --drc-work-dir <全新> --w8-audit-json <k2_w8 输出> --measure-out … --out …"
+ },
+ "per_dim": [
+  {
+   "dims": [
+    "drc_errors",
+    "drc_warning_dispositions",
+    "unconnected_zero"
+   ],
+   "n": 3,
+   "input": "`--drc-cli`（AppDir/usr/bin/kicad-cli）+ **全新** `--drc-work-dir`",
+   "producer": "judge 内建 `measure_drc`（:107；`pcb drc --format json --severity-all`）",
+   "k1_applicable": true,
+   "cost": "**即跑即得，~5 s**",
+   "verdict_readings": {
+    "drc_errors": "**13 errors**（违规总 30）· 类型 = ['clearance','copper_edge_clearance','pth_inside_courtyard','shorting_items','solder_mask_bridge']",
+    "drc_warning_dispositions": "**1 未登记 warning 类** = ['nonmirrored_text_on_back_layer']（已登记 ['silk_edge_clearance']）",
+    "unconnected_zero": "**unconnected_items = 156**"
+   },
+   "needs_supervisor": "**是（仅登记口径）**：K1 manifest 是否登记 `nonmirrored_text_on_back_layer`（或裁为 K1 中间态豁免）；`shorting_items` 等 13 error 是 **K1 实测**（非测量缺失）"
+  },
+  {
+   "dims": [
+    "lib_electrical_level"
+   ],
+   "n": 1,
+   "input": "`--w8-audit-json`",
+   "producer": "`k2/tools/k2_w8_footprint_audit_v1.py --board <board> --out-json --out-md`（**板参数化**）",
+   "k1_applicable": true,
+   "cost": "**即跑即得，~0.1 s**",
+   "verdict_readings": {
+    "summary": "n_electrical_diff=0 · n_pad_name_set_only=0 · board_sha16=eda1dc91eec76aa7（== 受审板）⇒ **PASS**"
+   },
+   "needs_supervisor": "否（读数即证据）"
+  },
+  {
+   "dims": [
+    "pads_within_outline",
+    "density_and_clearance"
+   ],
+   "n": 3,
+   "input": "`--pads-outline-json` · `--density-json` · `--min-clearance-json`",
+   "producer": "`k2/tools/k2_p4_j8_measure_v1.py --board --pro --json`",
+   "k1_applicable": false,
+   "blocker": "**工具在 K1 上崩溃**：`ValueError: could not convert string to float: 'oval'` @ `k2_p4_j8_measure_v1.py:177`（假定钻孔 `drill` 恒为数值 ⇒ 遇 **oval 钻孔**即死）",
+   "cost": "**须工具修复（1 处：`drill` 非数值的通用处理）**⇒ 工具改动 = **须监理批**（C-6 同批）",
+   "needs_supervisor": "**是**"
+  },
+  {
+   "dims": [
+    "ref_plane_continuity"
+   ],
+   "n": 1,
+   "input": "`--refplane-gap-json`",
+   "producer": "`k2/docs/drafts/p4-refplane-nonantipad-v1/measure_non_antipad_gap.py`（**草稿件、非 tools/ 正式件**；须 `--spec` 且默认 `--net-prefix PCIE_` = K2 域假定）",
+   "k1_applicable": false,
+   "blocker": "K1 板 **无铜区/无填充平面**（judge 自测 `zone_filled` = 0/0；`keepout 区 0`）⇒ 该维对 K1 **vacuous**（无平面可测）",
+   "cost": "N/A（无对象可测）",
+   "needs_supervisor": "**是（口径）**：vacuous 通过 / 登记豁免 / enabled:false 三选一；**不得**为它新增检查齿"
+  }
+ ],
+ "summary_for_supervisor": {
+  "runnable_now": "**4/7 维即跑即得**（drc×3 需登记 `nonmirrored_text_on_back_layer`；w8×1 直接 PASS）",
+  "needs_batch_fix": "**3/7 维须 1 处工具通用化修复**（oval 钻孔）⇒ 建议并入下一批",
+  "vacuous": "**1/7 维**（refplane）对 K1 无对象 ⇒ 建议按不适用登记",
+  "substantive": "K1 板实测 **13 DRC error（含 shorting_items）+ 156 unconnected** ⇒ K1 是**未完成板**（与 `zone_filled 0/0`/`non45 0/0` 一致）；P6 判据①只要求『同源四项命中』（3 项可机判）。"
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "criteria_touched": false
+}
