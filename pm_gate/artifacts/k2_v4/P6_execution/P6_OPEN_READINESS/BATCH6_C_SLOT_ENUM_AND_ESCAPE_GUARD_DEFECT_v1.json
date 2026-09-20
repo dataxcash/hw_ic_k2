@@ -31,13 +31,14 @@
   "target_sha16": "c9e1c3b4ca208482",
   "k1_truth": "2/8（TX0/output 0.142 · RX0/input 0.2636）",
   "git_apply_reproduction": {
-   "rc": 128,
-   "reproduced": false,
-   "note": "本件一键复核脚本内 apply 未通过 ⇒ **待下轮用 patchgen 的 verify_applies() 复核**（疑为本机一行式路径/标签问题，非内容问题；容器侧未落件、无风险）"
+   "rc": 0,
+   "reproduced": true,
+   "apply_target_sha16": "c9e1c3b4ca208482",
+   "note": "**复核通过**：先前失败系本机一行式用了**相对补丁路径**（cwd=临时树 ⇒ can't open patch），非内容问题；以**绝对路径** `git apply -p1` 复现目标 sha16 逐字节同。"
   }
  },
  "verdict": "**R-10（新）：落件前必修** `_k1_escape_verify` 退化候选守卫；建议以 `BATCH6_DRAFT/BATCH6_LANDING_CANDIDATE_v4.patch` 取代 v3。",
  "readonly_repo": true,
  "not_landed": true,
- "ts": "2026-09-21T13:05:00+0800"
+ "ts": "2026-09-21T13:15:00+0800"
 }
