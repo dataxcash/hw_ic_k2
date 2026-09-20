@@ -26,15 +26,17 @@
 
 ### 1.2 P6-2 —— 模板整改（**三选一**，见 `P6_OPEN_READINESS/co81_vs_template_matrix.json`）
 - **冲突事实**：CO-81（L2 回归闸）要求**每个 tracked `*.kicad_pro` 的 `rule_severities` == `tools/k2_jlc_template.kicad_pro`**。现状 **7/10 合规、3 mismatch**（`hw/k2_v4_8L.l5/l6/l7.kicad_pro` = 0 ignore vs 模板 9，**自 P4 起静默失守**）；模板单独改（A′）会**连带 7 个 mismatch**（含 `archive/k2_v4_6L/*` 两件历史记录 + 设计源/冻结板配套 pro）。
-- **O1 全集合一**（模板 + 其余 9-ignore 真实文件一次性 →`warning`）：
-  `P6_OPEN_READINESS/P6_2_template_proposal/O1_fullset/*.diff`（6 件，**`patch -p3 --dry-run` 全 OK**）⇒ 应用后 **重跑并重签 CO-81**。
+- **O1 全集合一**（模板 + 其余 9-ignore 真实文件一次性 →`warning`，**含 archive/6L 两件**）：
+  `P6_OPEN_READINESS/P6_2_template_proposal/O1_fullset/*.diff`（6 件）⇒ 应用后 **重跑并重签 CO-81**。
+  - ⚠ **更正 #1（2026-09-20 实测）**：补丁头为 `a/k2/…`、`a/k1/…` ⇒ **须用 `-p2`**：k2 五件在 **k2 仓库根**（`cd k2 && patch --posix -p2 < …`），k1 模板在 **k1 仓库根**。原文 `-p3` **会 strip 到文件名** ⇒ 交互提示 `File to patch:`，非交互下即挂住（并可能留半打补丁树）。
+  - ✅ **实测（scratch 镜像，真源零改）**：k2 10 件受控 pro 结构差异 **3 → 0**；两模板 ignore 集 **∅ == manifest 应然集 ∅**（`rule_severity_manifest.expect` + `rule_severity_exemptions: []`）⇒ **满足计划 P6 判据②**；补丁外科性 = **54 字段全 `ignore→warning`、非 `rule_severities` 字段 0**；受审板 `l7` pro **不在补丁集**。件：`P6_execution/P6_2_O1_MEASURED_v1.json`（`bf7b8d91cb4f384c`）。
 - **O2 闸改口径**：CO-81 的 severity 子句 `== 模板` → `== manifest 应然集`（与 P6-2 判据同源）⇒ 改工具 + 重跑重签。
 - **O3 维持现状**：P6-2 判据不成立（模板仍 9）⇒ 不建议。
 - 落件后复核：`P6-2 结构差异 = 0`（模板 ignore 集 == manifest 应然集）。
 
 ### 1.3 板锚修（1 行）+ 工具容忍（配套 2 行）—— **建议并入下一批**（C-6）
 - 事实：`K2V4_REAL_BOARD` 相对锚 ⇒ 容器 `_shared` 检出下 **22 项静默 skip**（框架自身基线工具读到 mask 视图 `41P/34S`）。
-- 命令：应用 `P6_OPEN_READINESS/anchors/K2V4_REAL_BOARD_absolute.diff`（`patch -p3 --dry-run` 已过）**并**把 `k2_p6_shadow_verify_v1.py` 的板锚补丁改容忍（否则验收门 D 腿 AssertionError）。
+- 命令：应用 `P6_OPEN_READINESS/anchors/K2V4_REAL_BOARD_absolute.diff`（**须在 `_shared` 检出内跑**：`-p3` strip 后为 `eda_core/tests/…`，**两处** `_shared` 各一次；不在 `_shared` 根跑会提示 `File to patch:`）**并**把 `k2_p6_shadow_verify_v1.py` 的板锚补丁改容忍（否则验收门 D 腿 AssertionError）。
 - 期望：容器根布局 `492P/28F/42S → 512P/30F/20S`；k2 检出版零变化。
 
 ### 1.4 批 2 收口件（其余两项）

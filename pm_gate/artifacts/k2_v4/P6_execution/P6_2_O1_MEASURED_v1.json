@@ -1,0 +1,103 @@
+{
+ "artifact": "k2_p6_2_o1_measured",
+ "schema": 1,
+ "purpose": "把 P6-2 的 O1『结构差异 = 0』由 dry-run 升级为 **scratch 实测**，并与**已批准《K2 整体整改计划》P6 完工判据②** + **已安装判据 rev=3** 做闭合性判定（不代监理裁定，只给可复核读数）。",
+ "authorities": {
+  "plan": "k2/docs/K2-RECTIFICATION-PLAN-v1.md §② P6 完工判据②：『模板整改后：k1|k2_jlc_template.kicad_pro 的 ignore 集 == manifest 应然集 [结构=0 差异]』（0d24a5606f77b1aa）",
+  "criteria": "criteria/manifest.k2.yaml（rev=3, eb244d811ad7859b）`rule_severity_manifest: {enabled: true, expect: \"未登记豁免的 ignore == 0（deny-by-default）\"}` + `rule_severity_exemptions: []` ⇒ **manifest 应然集 = ∅**",
+  "criteria_inline_note": "同文件该行上方注：『无条件维（注册 1/3：方案 O1）… **若监理择 O2/O3 则本行随之删除或改注释**』⇒ 择 O2/O3 需**改判据本身**（ENG 只读、且属动判据）"
+ },
+ "method": {
+  "scratch": "/tmp/opencode/o1tree（容器式镜像：k2/<rel> 10 件、k1 2 件；根别名按原样建**符号链接** ⇒ 与真库同构）",
+  "apply": "`patch --posix -p2`（k2 仓库根 / k1 仓库根）——**更正 RUNBOOK §1.2 的 `-p3`**：O1 补丁头为 `a/k2/…`，`-p3` 会 strip 到文件名 ⇒ 交互提示 `File to patch:`（实测），非交互下即挂住并可能留半打补丁树",
+  "probe": "真源零改；全部读写在 /tmp/opencode"
+ },
+ "measured": {
+  "pre": {
+   "k2_tracked_kicad_pro": 10,
+   "mismatch_vs_template": 3,
+   "mismatch_files": [
+    "hw/k2_v4_8L.l5.kicad_pro",
+    "hw/k2_v4_8L.l6.kicad_pro",
+    "hw/k2_v4_8L.l7.kicad_pro"
+   ],
+   "template_ignore_set_size": 9
+  },
+  "post_O1": {
+   "k2_tracked_kicad_pro": 10,
+   "mismatch_vs_template": 0,
+   "template_ignore_set_size": 0,
+   "k1_template_ignore_set_size": 0,
+   "structural_diff_plan_criterion_2": "0 ⇒ **達成**（模板 ignore 集 ∅ == manifest 应然集 ∅）"
+  },
+  "surgical_check": {
+   "total_changed_fields": 54,
+   "expected": "6 文件 × 9 条 = 54",
+   "non_rule_severities_fields": 0,
+   "change_shape": "全部 ignore→warning"
+  },
+  "untouched_check": {
+   "受审板 l7 pro": "**不在补丁集**（L6 交付锚证据链不受影响）",
+   "sha16_l7_pro": "33b4eb6cae8359a9（真库，未动）"
+  }
+ },
+ "option_closure": [
+  {
+   "id": "O1",
+   "what": "模板 + 其余 9-ignore 真实文件一次性 ignore→warning（含 archive 两件）",
+   "plan_P6_criterion_2": "**達成（结构差异 0）**",
+   "criteria_change": "**无需改判据**（判据 rev=3 原样）"
+  },
+  {
+   "id": "O2",
+   "what": "闸改口径：`== 模板` → `== manifest 应然集`",
+   "plan_P6_criterion_2": "**不達成**（模板仍 9 ≠ ∅）",
+   "criteria_change": "**须改判据行**（该行注文本即要求择 O2/O3 时删/改注释）⇒ 动 `criteria/`（ENG 只读）+ 属口径变更"
+  },
+  {
+   "id": "O3",
+   "what": "维持现状",
+   "plan_P6_criterion_2": "**不達成**",
+   "criteria_change": "无（但结构性缺陷留存：CO-81 自 P4 起 3 mismatch 静默）"
+  }
+ ],
+ "open_subquestion": {
+  "archive": "O1_fullset **已含** `archive/k2_v4_6L/{k2_v4,k2_v4.l4}.kicad_pro` 两件历史记录 ⇒ 若监理要豁免 archive，**须另出 O1 变体**（本件未备，dry-run 亦未备）"
+ },
+ "files_in_O1": {
+  "k2_jlc_template.kicad_pro.diff": {
+   "diff_sha16": "cbf9c3c2926ec59b",
+   "n_ignore_before": 9,
+   "n_after": 0
+  },
+  "k2_v4_8L.kicad_pro.diff": {
+   "diff_sha16": "4e2463b34436687e",
+   "n_ignore_before": 9,
+   "n_after": 0
+  },
+  "k2_v4_8L.l4.kicad_pro.diff": {
+   "diff_sha16": "8766ad3cf46714c1",
+   "n_ignore_before": 9,
+   "n_after": 0
+  },
+  "archive_6L__k2_v4.kicad_pro.diff": {
+   "diff_sha16": "558c253f02c55fd6",
+   "n_ignore_before": 9,
+   "n_after": 0
+  },
+  "archive_6L__k2_v4.l4.kicad_pro.diff": {
+   "diff_sha16": "5ac4c3f63da5143a",
+   "n_ignore_before": 9,
+   "n_after": 0
+  },
+  "k1_jlc_template.kicad_pro.diff": {
+   "diff_sha16": "8530e2e60d926260",
+   "n_ignore_before": 9,
+   "n_after": 0
+  }
+ },
+ "rollback": "6 文件 × 9 行 = 54 行（文件级 git checkout）",
+ "readonly_repo": true,
+ "not_landed": true,
+ "authorization": "模板整改执行 = ENG（若获批）/ 判定 = 监理（plan §P6 责任栏）⇒ 本件只测量"
+}
