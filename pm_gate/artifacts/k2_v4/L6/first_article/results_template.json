@@ -1,0 +1,212 @@
+{
+ "artifact": "k2_p5_first_article_results",
+ "schema": 1,
+ "board": "k2_v4_8L.l7.kicad_pcb",
+ "board_sha16": "c5a7df90aadb66e0",
+ "delivery_anchor": {
+  "package": "pm_gate/artifacts/k2_v4/L6/jlc_package",
+  "manifest_sha256": "6ee7495de61f749fba61a04a5311e17040988c322b3a17f46b6f26efd8b243b2",
+  "tarball_sha256": "0e88e107e2da81923ccdda0c20d89c7ca486bc2281a139a4a007650542f0bce0"
+ },
+ "plan": "k2/docs/K2-P5-FIRST-ARTICLE-ACCEPTANCE-PLAN-v1.md",
+ "rules": "pm_gate/artifacts/k2_v4/L6/first_article/RULES.md",
+ "measured_by": "<实测方（不得 ENG 自证）>",
+ "judged_by": "监理",
+ "status_enum": [
+  "NOT_RUN",
+  "PASS",
+  "FAIL",
+  "INCONCLUSIVE"
+ ],
+ "conditions_global": {
+  "ambient_C": null,
+  "airflow_mps": null,
+  "instruments": [],
+  "supply_notes": ""
+ },
+ "items": {
+  "V4_impedance_coupon": {
+   "required": true,
+   "status": "NOT_RUN",
+   "evidence": [],
+   "measured": {
+    "per_layer_zdiff_ohm": {
+     "F.Cu": null,
+     "In2.Cu": null,
+     "In5.Cu": null,
+     "B.Cu": null
+    },
+    "covers_geometry": {
+     "center_mm_0.6": null,
+     "tightest_edge_gap_mm_0.2825": null
+    }
+   },
+   "criterion": "85.0Ω ±10% ⇒ 76.5–93.5Ω（SPEC impedance.tolerance_pct）；券须覆盖最宽对内间距 0.6mm 中心几何与最紧段 0.2825mm（PCIE_UP3）",
+   "note": ""
+  },
+  "V5_pdn_dc_drop": {
+   "required": true,
+   "status": "NOT_RUN",
+   "evidence": [],
+   "measured": {
+    "rails": {
+     "12V_IN": {
+      "V_source": null,
+      "V_load": null,
+      "I_A": null,
+      "drop_pct": null
+     },
+     "P3V3": {
+      "V_source": null,
+      "V_load": null,
+      "I_A": null,
+      "drop_pct": null
+     },
+     "P3V3_AUX": {
+      "V_source": null,
+      "V_load": null,
+      "I_A": null,
+      "drop_pct": null
+     },
+     "MCU_VDD": {
+      "V_source": null,
+      "V_load": null,
+      "I_A": null,
+      "drop_pct": null
+     }
+    }
+   },
+   "criterion": "各轨 源端→负载点 直流压降 ≤ 预算 3%（监理定值/指令 #10）；各轨电流须显式声明来源（datasheet 或保守值）",
+   "note": ""
+  },
+  "V6_1_rail_voltages": {
+   "required": true,
+   "status": "NOT_RUN",
+   "evidence": [],
+   "measured": {
+    "rails": {
+     "12V_IN": null,
+     "P3V3": null,
+     "P3V3_AUX": null,
+     "MCU_VDD": null
+    }
+   },
+   "criterion": "各电源轨电压全部 ±5% 标称",
+   "note": ""
+  },
+  "V6_2_mcu_swd_id": {
+   "required": true,
+   "status": "NOT_RUN",
+   "evidence": [],
+   "measured": {
+    "connector": "J13 (SWDIO/SWCLK/MCU_NRST/GND)",
+    "device_id_read": null,
+    "expected_device_id": null
+   },
+   "criterion": "读到正确 device ID（须与器件手册一致）",
+   "note": ""
+  },
+  "V6_3_fru_i2c": {
+   "required": true,
+   "status": "NOT_RUN",
+   "evidence": [],
+   "measured": {
+    "buses": [
+     "I2C1",
+     "I2C2"
+    ],
+    "addresses_found": [],
+    "expected_address": null
+   },
+   "criterion": "FRU EEPROM 地址应答正确（与原理图/BOM 标称地址一致）",
+   "note": ""
+  },
+  "V6_4_link_gen4_x4": {
+   "required": true,
+   "status": "NOT_RUN",
+   "evidence": [],
+   "measured": {
+    "ports": {
+     "J2": null,
+     "J3": null,
+     "J4": null
+    },
+    "both_directions": null,
+    "final_state": {
+     "speed_GTs": null,
+     "width": null
+    }
+   },
+   "criterion": "双路 x4 Gen4 训练成功（二值；须记录链路速度/宽度与 LTSSM 终态）",
+   "note": ""
+  },
+  "V6_5_stability_30min_aer": {
+   "required": true,
+   "status": "NOT_RUN",
+   "evidence": [],
+   "measured": {
+    "duration_min": 30,
+    "aer_count": null,
+    "log_files": []
+   },
+   "criterion": "连续 30 分钟 AER 计数 = 0",
+   "note": ""
+  },
+  "V7_thermal_o2": {
+   "required": true,
+   "status": "NOT_RUN",
+   "evidence": [],
+   "measured": {
+    "assembly": {
+     "heatsink": "30×30mm Al",
+     "interface_pad_C_per_W": 1.0,
+     "airflow_mps": null
+    },
+    "Ta_C": null,
+    "thetaJA_eff_C_per_W": null,
+    "cases": {
+     "U6_EQ0-2_typ": {
+      "P_W": 4.7,
+      "Tj_pred_C": 91.7,
+      "Tj_meas_C": null
+     },
+     "U6_EQ0-2_max": {
+      "P_W": 6.0,
+      "Tj_pred_C": 106.0,
+      "Tj_meas_C": null
+     },
+     "U6_EQ5-19_typ": {
+      "P_W": 5.8,
+      "Tj_pred_C": 103.8,
+      "Tj_meas_C": null
+     },
+     "U6_EQ5-19_max": {
+      "P_W": 7.0,
+      "Tj_pred_C": 117.0,
+      "Tj_meas_C": null
+     }
+    },
+    "Tj_measure_method": ""
+   },
+   "criterion": "Tj ≤ 120.0℃（四工况，L2 v2.0/CO-204）；T1 触发：Tj(U6) > 117.0℃ 或未按 O2 实施 ⇒ 开新 rev（目标 θJA_eff ≤ 9.5℃/W）；T2：U6 域几何他因修订 ⇒ 同 rev 补 GND via 阵列",
+   "note": ""
+  }
+ },
+ "observations_p5_named": {
+  "mask_dam_9_sites": {
+   "desc": "阻焊坝 9 处 <0.09mm（ACCEPT，见 DISCLOSURE §5b-1）",
+   "checked": null,
+   "finding": null
+  },
+  "silk_overhang_4": {
+   "desc": "正面丝印 4 处越框 H4/R41/D2/C87（板厂裁剪）",
+   "checked": null,
+   "finding": null
+  }
+ },
+ "judgement": {
+  "verdict": null,
+  "judged_at": null,
+  "note": "判定归监理（二值项直接判；V5 需声明输入）"
+ }
+}
