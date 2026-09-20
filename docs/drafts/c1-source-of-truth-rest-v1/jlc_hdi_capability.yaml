@@ -1,0 +1,33 @@
+# C-1 残面 · 草案（**ENG 提案，待 gate 属主落为 `criteria/jlc_hdi_capability.yaml`**）
+# 目的：为判据维 `density_and_clearance` 提供**外部**真源（现行真源仅存在于交付包内
+#   `06_rulings/jlc_dfm_hdi_l7.json` ⇒ 包内自证风险，负控已实测被拦）。
+schema: criteria_truth_v1
+project: k2
+dim: density_and_clearance
+truth_kind: process_capability          # 外部工艺能力（JLC HDI 通道），非被验对象产物
+source_of_truth:
+  primary: k2/pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_co146_jlc8_capability.json
+  origin: JLC HDI 工艺能力（8 层 / 盲埋孔通道）· 冻结工艺 = A（JLC HDI，阶数 >= 2）
+  note: 该件为**能力表**（订单侧工艺限），与受审板/交付包**无血缘** ⇒ 可作外部真源
+limits:                                  # 判据下限（外部真值）
+  min_line_width_mm: 0.09                # ≥3.5mil
+  min_line_spacing_mm: 0.09              # 域外
+  min_via_hole_mm: 0.15                  # 孔壁下限（本板按 JLC 建议 0.20 判）
+  min_via_pad_mm: 0.25
+  min_annular_ring_mm: 0.075             # 盘径 ≥ 孔径 + 0.15（单边 0.075）
+  min_via_hole_to_hole_mm: 0.20
+  min_npth_mm: 0.50
+  copper_to_edge_mm: 0.20
+  solder_mask_bridge_mm: 0.10
+  mask_opening_to_copper_mm: 0.09
+  surface_finish: ENIG                   # >=6 层不支持 HASL
+  via_types: [THROUGH, BLIND_BURIED]     # 本通道支持盲/埋孔
+  copper_thickness_outer_oz: [1, 2]
+  copper_thickness_inner_oz: [0.5, 1, 2]
+  board_thickness_mm: 1.6
+  n_copper_layers_max: 32
+  impedance_tolerance_pct: 10
+consumers:
+  - criteria/manifest.k2.yaml:checks.density_and_clearance
+  - criteria/manifest.k2.yaml:checks.rule_severity_manifest
+accepted_exceptions_ref: 06_rulings/jlc_dfm_hdi_l7.json#items[14]   # 阻焊桥项 = ACCEPT_L2_WITH_FAB_REVIEW（**由 criteria 侧引用，不反向依赖包内件作为真源**）

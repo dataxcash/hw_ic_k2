@@ -1,0 +1,24 @@
+# C-1 残面 · 草案（**ENG 提案，待 gate 属主落为 `criteria/parts_electrical_truth.yaml`**）
+# 目的：为判据维 `lib_electrical_level` 提供**外部**真源。现行锚 = W-8 审计（**板派生**，
+#   由板读库）⇒ 与 C-1『真源不得为被验对象自身产物』相悖。
+schema: criteria_truth_v1
+project: k2
+dim: lib_electrical_level
+truth_kind: library_electrical              # 器件库/手册电气级（外部），非板产物
+source_of_truth:
+  project_lib: k2/hw/lib                    # 项目库（footprint）；符号库同源
+  std_libs: AppDir/share/kicad/footprints   # KiCad 官方库（外部真值）
+  datasheet_refs_required: true             # 每器件须附手册出处（part + 页码/表号）
+  extraction_tool: k2/tools/k2_p4_lib_snapshot_v1.py   # 由**库侧**导出（不读板）
+  landing_recipe:                           # gate 属主落件时执行一次
+    - python3 k2/tools/k2_p4_lib_snapshot_v1.py --out criteria/parts_electrical_truth.yaml
+    - 人工补 datasheet_refs（逐器件）后签认
+evidence_basis:
+  w8_audit: k2/pm_gate/artifacts/k2_v4/L4/E3-standard-call-l7-20260919/w8_audit_board_l7_c5a7df90.json
+  baseline_reading: 58 footprints · electrical_identical 51 · **electrical_diff 2**（矩形 pad rot 0≡180 等价）· pad_name_set_only 1（无号 F.Paste）· no_library_link 4
+  note: 上述读数**只作为『需覆盖哪些器件』的清单**，**不得**作为真值本身（避免板派生自证）
+consumers:
+  - criteria/manifest.k2.yaml:checks.lib_electrical_level
+open_items_for_gate_owner:
+  - 4 个 no_library_link 器件的真源归属（项目库补齐 or 手册直引）
+  - 2 个 electrical_diff 的等价性陈述须由**手册/库**侧给出（现由板侧 rot 0≡180 推断）
