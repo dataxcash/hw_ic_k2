@@ -34,13 +34,13 @@
    "title": "(d) 范围与 SPEC 轨道扩展",
    "question": "(d) 端点对齐的落地范围？是否授权扩 `SPEC.corridors[].bands[].tracks_y`（启用自由带新轨）？",
    "options": [
-    "先立 (d) 引擎『搜索式逃逸模板族』（新功能，工作量中等偏上）",
-    "暂缓 (d)，先落 D-1…D-5 修正度量",
-    "(d)+(c) 一起做（含 alloc 次序重排）"
+    "**(推荐) 与 D-1…D-4 同批落 VG 对级化**（含阈值/守卫）",
+    "单独立项 ✚ 右端搜索式逃逸",
+    "暂缓"
    ],
-   "recommend": "先落 D-1…D-5（不依赖 (d)）；(d) 单独立项排期",
+   "recommend": "与 D-1…D-4 同批落 VG 对级化（小改动、已实测 +1 真增益）；右端 U11 另案",
    "if_not": "批 6 无法产出任何真实增益（当前 (d) 有效增益 = 0）",
-   "evidence": "BATCH6_RESCOPE_AFTER_GATE_FIX_v1.json（旋转窗口 TX0/RX1=0、TX1=2.1、RX0=2.25）· BATCH6_CORRIDOR_FREEBAND_CENSUS_v1.json（`seg_tracks` 必须 ∈ `tracks_y`，否则 INFRA_ERROR）· BATCH6_D_VIA_SEARCH_NEGATIVE_v1.json（有界 via 搜索 = 0 增益）· 本轮实测：via 合法区充足（x∈[2,12],y∈[24.6,30] 各网 1230 点），但 **J1 THT 行竖直通道仅 0.15mm（需 0.29）不可穿越** ⇒ 绕行须走 x≥8.07 或 x≤5.53 的宽绕道 ⇒ **须引擎级模板 + via 搜索**，非手工候选可解。 | BATCH6_D_BYPASS_PARTIAL_v1.json（**左端 J1 旁路候选 27/27 通过修正门；右端 U11 结构性硬墙（焊盘同列+窗口0 ⇒ U 形折返必穿对侧走廊段）⇒ (d) 须“两端旁路 + 过孔躲让”通用模板族**） | 右端(U11)侧移旁路**实测不可行**（P3V3_AUX/GND 密集焊盘场，d=−0.032~−0.045）⇒ (d) 实为**新功能级**（搜索式逃逸模板族），请裁定是否立项及优先级"
+   "evidence": "BATCH6_RESCOPE_AFTER_GATE_FIX_v1.json（旋转窗口 TX0/RX1=0、TX1=2.1、RX0=2.25）· BATCH6_CORRIDOR_FREEBAND_CENSUS_v1.json（`seg_tracks` 必须 ∈ `tracks_y`，否则 INFRA_ERROR）· BATCH6_D_VIA_SEARCH_NEGATIVE_v1.json（有界 via 搜索 = 0 增益）· 本轮实测：via 合法区充足（x∈[2,12],y∈[24.6,30] 各网 1230 点），但 **J1 THT 行竖直通道仅 0.15mm（需 0.29）不可穿越** ⇒ 绕行须走 x≥8.07 或 x≤5.53 的宽绕道 ⇒ **须引擎级模板 + via 搜索**，非手工候选可解。 | BATCH6_D_BYPASS_PARTIAL_v1.json（**左端 J1 旁路候选 27/27 通过修正门；右端 U11 结构性硬墙（焊盘同列+窗口0 ⇒ U 形折返必穿对侧走廊段）⇒ (d) 须“两端旁路 + 过孔躲让”通用模板族**） | 右端(U11)侧移旁路**实测不可行**（P3V3_AUX/GND 密集焊盘场，d=−0.032~−0.045）⇒ (d) 实为**新功能级**（搜索式逃逸模板族），请裁定是否立项及优先级 | **BATCH6_VG_PAIRAWARE_POC_v1.json：廉价解已找到** —— VG 兜底对级化 + 中心距口径阈值 ⇒ 修正基线 **1/8→2/8（新增 RX0.input）**，两跑一致/层合法 0/跨网 0；**非新功能级** ⇒ 建议与 D-1…D-4 同批。右端 U11 另案（或无解，须改 alloc 次序）。"
   },
   {
    "id": "R-4",
@@ -77,6 +77,19 @@
    "recommend": "自纠 + 登记 C-25",
    "if_not": "后续会话可能误把空登记当放行（历史事故同型：漏读/误读裁定）",
    "evidence": "本会话 ledger 多笔；#K2-43 §四-⑤ 已就 k2-44/45/46 提示同型问题"
+  },
+  {
+   "id": "R-7",
+   "title": "K1 HS 对净距的**权威来源**",
+   "question": "K1 差分对同层净距判据用哪一份？**项目 SPEC**（`net_classes.PCIe85.clearance=0.1` / `diff_pair.p_gap=0.1`）还是**共享 `drc_rules.json`**（PCIe85=**0.175**，源标注为 SPEC_k2_v4 ⇒ K2 派生）？",
+   "options": [
+    "**项目 SPEC 优先**（推荐；共享 drc_rules 为 K2 派生件，K1 域不应继承）",
+    "共享 rules 优先（则 RX0/input 实测量 0.174 会差 0.001 挂边 ⇒ 须重解）",
+    "两处都改（含共享件版本化）"
+   ],
+   "recommend": "项目 SPEC 优先 + 共享 drc_rules 标注『K2 派生』",
+   "if_not": "批 6 新解（RX0/input）合规性悬空；且 D-2 的阈值来源无定论",
+   "evidence": "BATCH6_VG_PAIRAWARE_POC_v1.json（测得 0.174）· `_shared/eda_core/drc_rules.json` clearance.net_classes[PCIe85]=0.175（source: SPEC_k2_v4）· `SPEC_k1.json` net_classes.PCIe85.clearance=0.1"
   }
  ],
  "notes": [
