@@ -1,0 +1,106 @@
+{
+ "artifact": "k2_p6_1_closure_dossier_optiona",
+ "schema": 1,
+ "ts": "2026-09-21T06:40:00+0800",
+ "id": "待裁-1『P6-1 口径』的**方案 (a) 载本**（ENG 建议 (a)：以『整改前命中证据 + 整改记录』闭 P6-1）",
+ "authorization": "handoff §7-A1『P6-1 口径若批 (a) ⇒ 以「整改前命中证据 + 整改记录」闭 P6-1（落册 + 复跑 P6-1/P6-2 取证）』；本件为**该分支的预备载本**（只读造活，未改任何工具/判据）。",
+ "problem": {
+  "criterion1": "《K2 整体整改计划》§② P6 完工判据①：`adjudicate.py --project k1` verdict **必须命中** `ignore_without_ruling(9)` · `no_pipeline(1)` · `no_fp_lib_table(1)` · `sheets_empty(1)`",
+  "observed": "整改落地后，前三项**同源缺陷已被修复**（#K2-49 放行）⇒ 判定器不再报该三FAIL维 ⇒ 验收器判 MISS ⇒ 工具报 FAIL",
+  "nature": "**『缺陷被修好』（= 计划 §7.2-2 目标本身），非回归、非判据放松**；判据①的『必须命中』是对**整改前状态的一次性演示**，整改后自然不可再命中。"
+ },
+ "pre_fix_hit_evidence": {
+  "reproduction": {
+   "cmd": "python3 k2/tools/k2_p6_1_acceptance_v1.py --verdict k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/k1_verdict_probe.json --pro k1/k1_v1.kicad_pro",
+   "input_verdict": {
+    "path": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/k1_verdict_probe.json",
+    "sha16": "9b3ef86947424e0c",
+    "n_pass": 3,
+    "n_fail": 16,
+    "provisional": true,
+    "fails_include": [
+     "rule_severity_manifest",
+     "pipeline_present",
+     "fp_lib_table_present"
+    ]
+   },
+   "output_verbatim": [
+    "[OK  ] ignore_without_ruling(9): 未登记 ignore 9/62",
+    "[OK  ] no_pipeline(1): scope=k1? True · 目录数 1 · 命中 k1/sch? True",
+    "[OK  ] no_fp_lib_table(1): fp-lib-table @ …/k1: 缺失",
+    "[OK  ] sheets_empty(1): sheets == []",
+    "[OK  ] dim_set_is_19（非判据维）: 19 维",
+    "[MISS] manifest_countersigned（非判据维）: provisional=True · manifest=probe_manifest.k1.yaml",
+    "=> P6-1 验收: FAIL"
+   ],
+   "reading": "**判据①四项 4/4 命中（OK）**；唯一 MISS = `provisional=True`（该件为**探针件**、非签认 manifest）⇒ 探针命中**成立但不可单独充当放行凭证**"
+  },
+  "earlier_recorded_probe": {
+   "path": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_1_ACCEPTANCE_MECHANIZED_v1.json",
+   "sha16": "30ba5c18a4d6a631",
+   "records": "对**真判定器真输入**verdict（/tmp/opencode/k1_verdict_b3.json）之四项命中：ignore_without_ruling(9) OK · no_pipeline(1) OK(scope=k1·命中 k1/sch) · no_fp_lib_table(1) OK · sheets_empty(1) OK；当时唯一 MISS = manifest 未签认 ⇒ **四项命中已机器可判并达成**"
+  }
+ },
+ "remediation_records": [
+  {
+   "item": "① 9 条 ignore → severity=warning",
+   "commit": "k1 `c018fc7`『feat(k1-mech M1): kicad_pro 规则严重度 ignore→warning（9 项）（#K2-49 放行·N-2/M1）』",
+   "diff": "k1_v1.kicad_pro | 18 +++++----（9 insertions, 9 deletions）",
+   "now": "`criteria/adjudicate.py --project k1` 现读数 `rule_severity_manifest: 未登记豁免的 ignore 0/62` ⇒ **维不再 FAIL**"
+  },
+  {
+   "item": "② `k1/pipeline.yaml` 在岗",
+   "sha16": "8946a22e677055bc",
+   "now": "现读数 `pipeline_present: scope=k1 … 0 个` ⇒ **维不再 FAIL**"
+  },
+  {
+   "item": "③ `k1/fp-lib-table` 在岗",
+   "sha16": "13ddfa5331d67e13",
+   "now": "现读数 `fp_lib_table_present: … 存在` ⇒ **维不再 FAIL**"
+  }
+ ],
+ "post_fix_readings": {
+  "P6_1": {
+   "cmd": "python3 k2/tools/k2_p6_1_acceptance_v1.py --verdict /tmp/opencode/k1recalc/k1_verdict_v2.json --pro k1/k1_v1.kicad_pro",
+   "input_verdict": {
+    "n_pass": 11,
+    "n_fail": 7,
+    "provisional": false,
+    "board_sha16": "b68105d2e8914aa7",
+    "note": "= handoff §1『K1 判定 11 PASS / 7 FAIL』"
+   },
+   "output_verbatim": [
+    "[MISS] ignore_without_ruling(9): verdict 无 rule_severity_manifest 维（判据①第 1 项无法命中）",
+    "[MISS] no_pipeline(1): verdict 无 pipeline_present 维",
+    "[MISS] no_fp_lib_table(1): verdict 无 fp_lib_table_present 维",
+    "[OK  ] sheets_empty(1): sheets == []",
+    "[OK  ] dim_set_is_19（非判据维）: 18 维 · 已签认显式关闭=['ref_plane_continuity']",
+    "[OK  ] manifest_countersigned（非判据维）: provisional=False · manifest=manifest.k1.yaml",
+    "=> P6-1 验收: FAIL"
+   ],
+   "reading": "3 MISS = 三项缺陷已消除；**完整性前置（维集 18 + 显式关闭 1 = 19）与签认前置均 OK**"
+  },
+  "P6_2": {
+   "cmd": "python3 k2/tools/k2_p6_2_acceptance_v1.py --expect-zero",
+   "output_verbatim": [
+    "[k2] 模板 tools/k2_jlc_template.kicad_pro ignore=0 · 文件差异(模板) 0/10 · 差异(应然集=[]) 0/10",
+    "[k1] 模板 tools/k1_jlc_template.kicad_pro ignore=0 · 文件差异(模板) 0/2 · 差异(应然集=[]) 0/2",
+    "=> 结构差异 == 0 ? True ⇒ PASS"
+   ],
+   "reading": "**PASS（维持）**"
+  }
+ },
+ "attestations": {
+  "tools_unchanged": "`k2_p6_1_acceptance_v1.py` / `k2_p6_2_acceptance_v1.py` 本会话**未改**（只读运行）",
+  "criteria_unchanged": "criteria/ 五件 rev=6 逐件 sha16 与锚一致（见 K2_ANCHOR_RECHECK_20260921_v4.json）",
+  "no_new_criteria_dim": "未新增任何判据维；仍 19 维集合",
+  "no_greenwashing": "不缩口径、不排除范围、不为变绿改工具（C-12）"
+ },
+ "proposed_register_entry_optionA": {
+  "text": "P6 判据①（A 项）判定口径：判据①之四项『必须命中』以**整改前命中证据**（P6_1_ACCEPTANCE_MECHANIZED_v1 探针实测 4/4 OK + 本件复现）**加** 整改记录（k1 c018fc7 · k1/pipeline.yaml · k1/fp-lib-table）**闭合**；整改后验收器对同三项报 MISS 属预期（缺陷已消除），**不作为 FAIL 依据**；`sheets_empty(1)` 维持输入侧实测 OK。**本口径不新增判据维、不放松任何维的下限。**",
+  "apply_by": "gate 属主/监理（criteria 面 = ENG 只读）—— ENG 仅提议并备载本"
+ },
+ "eng_recommendation": "**采纳 (a)**：(b)（改验收器语义）须明裁且**风险更高**（易被视为为变绿改工具）；且**禁止新增检查齿**（owner ②）。",
+ "not_landed": true,
+ "readonly_repo": true
+}

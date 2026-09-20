@@ -1,0 +1,129 @@
+{
+ "artifact": "k2_anchor_recheck",
+ "schema": 4,
+ "ts": "2026-09-21T06:45:00+0800",
+ "id": "交接件 §1 全锚复核（本会话实测 · 只读）",
+ "authorization": "handoff §7-B『先复核 §1 全部锚』；常设红线『锚不得移动』",
+ "method": "逐件 sha256 前 16 位实算 + 各树 `git rev-parse --short HEAD`；**未重跑判定器**（静默锚移动检测用哈希即可，且遵 owner ②『终止每轮必复评』）",
+ "anchors": [
+  {
+   "name": "冻结源 l4",
+   "path": "k2/hw/k2_v4_8L.l4.kicad_pcb",
+   "expected": "d4e81f647be7f980",
+   "actual": "d4e81f647be7f980",
+   "verdict": "MATCH"
+  },
+  {
+   "name": "冻结源 K2 设计源/PCB",
+   "path": "k2/hw/k2_v4_8L.kicad_pcb",
+   "expected": "fb07d25ac426ff84",
+   "actual": "fb07d25ac426ff84",
+   "verdict": "MATCH"
+  },
+  {
+   "name": "冻结源 真源网表",
+   "path": "k2/hw/data/k2_sch.yaml",
+   "expected": "dd794c54f7ce7417",
+   "actual": "dd794c54f7ce7417",
+   "verdict": "MATCH"
+  },
+  {
+   "name": "冻结源 drc_rules",
+   "path": "k2/_shared/eda_core/drc_rules.json",
+   "expected": "0a459839e15960b8",
+   "actual": "0a459839e15960b8",
+   "verdict": "MATCH"
+  },
+  {
+   "name": "受审板 l7",
+   "path": "k2/hw/k2_v4_8L.l7.kicad_pcb",
+   "expected": "c5a7df90aadb66e0",
+   "actual": "c5a7df90aadb66e0",
+   "verdict": "MATCH"
+  },
+  {
+   "name": "交付锚 MANIFEST",
+   "path": "k2/pm_gate/artifacts/k2_v4/L6/jlc_package/MANIFEST.json",
+   "expected": "6ee7495de61f749f",
+   "actual": "6ee7495de61f749f",
+   "verdict": "MATCH"
+  },
+  {
+   "name": "交付锚 tarball",
+   "path": "k2/pm_gate/artifacts/k2_v4/L6/DELIVERY/k2_v4_8L.l7_gerber_package.tar.gz",
+   "expected": "0e88e107e2da8192",
+   "actual": "0e88e107e2da8192",
+   "verdict": "MATCH"
+  },
+  {
+   "name": "判据 rev=6 CHANGELOG",
+   "path": "criteria/CHANGELOG",
+   "expected": "eb3da49f2ad97e37",
+   "actual": "eb3da49f2ad97e37",
+   "verdict": "MATCH"
+  },
+  {
+   "name": "判据 rev=6 adjudicate.py",
+   "path": "criteria/adjudicate.py",
+   "expected": "1937a40ae68bc288",
+   "actual": "1937a40ae68bc288",
+   "verdict": "MATCH"
+  },
+  {
+   "name": "判据 rev=6 jlc_hdi_capability",
+   "path": "criteria/jlc_hdi_capability.yaml",
+   "expected": "00faba340bb7eb5b",
+   "actual": "00faba340bb7eb5b",
+   "verdict": "MATCH"
+  },
+  {
+   "name": "判据 rev=6 manifest.k1",
+   "path": "criteria/manifest.k1.yaml",
+   "expected": "c175be51c3338a53",
+   "actual": "c175be51c3338a53",
+   "verdict": "MATCH"
+  },
+  {
+   "name": "判据 rev=6 manifest.k2",
+   "path": "criteria/manifest.k2.yaml",
+   "expected": "727d09953cf9bd78",
+   "actual": "727d09953cf9bd78",
+   "verdict": "MATCH"
+  },
+  {
+   "name": "canonical 19",
+   "path": "k2/pm_gate/artifacts/k2_v4/L4/E3-standard-call-l7-20260919/verdict_19dim_rev3_board_l7_c5a7df90.json",
+   "expected": "190b73be0f728a56",
+   "actual": "190b73be0f728a56",
+   "verdict": "MATCH"
+  },
+  {
+   "name": "K1 板",
+   "path": "k1/k1_v1.kicad_pcb",
+   "expected": "b68105d2e8914aa7",
+   "actual": "b68105d2e8914aa7",
+   "verdict": "MATCH"
+  }
+ ],
+ "all_match": true,
+ "tree_heads": {
+  ".": "afe88bd",
+  "_shared": "3c781be",
+  "k1": "6a1ecdd",
+  "k2": "ffb64a1",
+  "key_v2": "74152b2",
+  "pciesw4": "25c69b7",
+  "k2/_shared": "3c781be",
+  "key_v2/_shared": "47abeb1",
+  "pciesw4/_shared": "9f01f47"
+ },
+ "eng_version": "1.1.4（`_shared` 与 `k2/_shared` 有 ENG_VERSION.yaml；`key_v2/_shared`/`pciesw4/_shared` 历史无该件 = 既有结构差）",
+ "gate_state": {
+  "P0_P4": "HOLDS（锚全 MATCH）",
+  "P5": "PENDING_EXTERNAL（V4–V7 NOT_RUN · ENG 不得自证）",
+  "P6": "结构面 PASS / 命中面待口径（见 P6_1_CLOSURE_DOSSIER_OPTIONA）"
+ },
+ "conclusion": "**全部锚 MATCH ⇒ 本会话落件未移动任何受保护件/判据面/交付锚**",
+ "readonly_repo": true,
+ "not_landed": true
+}

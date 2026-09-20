@@ -1,0 +1,80 @@
+{
+ "artifact": "k2_pciesw4_coverage_manifest_proposal",
+ "schema": 1,
+ "ts": "2026-09-21T06:45:00+0800",
+ "id": "待裁-2『pciesw4/key_v2 覆盖面』的**实测 + 可执行提案**（ENG 只提议；criteria/ = ENG 只读）",
+ "authorization": "handoff §3 待裁-2 / §7-A2；本件为**只读实测 + 提案**，未改 criteria/、未改任何项目件。",
+ "method": "**直接 import 判定器本体**：`criteria/adjudicate.py::find_sch_projects` + 与判定器**同一条覆盖判定逻辑**（自身 + 最多 3 层祖先找 `pipeline.yaml`），仅把 scope 由 manifest 的 `k2` 换成显式统计 ⇒ 与判定器零口径差。",
+ "measured": {
+  "total_kicad_sch": 53,
+  "by_project": {
+   "k1": 5,
+   "k2": 6,
+   "key_v2": 3,
+   "pciesw4": 39
+  },
+  "dirs_by_project": {
+   "k1": [
+    "k1/sch"
+   ],
+   "k2": [
+    "k2/hw/sch"
+   ],
+   "key_v2": [
+    "key_v2/key_v2/sch"
+   ],
+   "pciesw4": [
+    "pciesw4/aic",
+    "pciesw4/aic/sch_kicad",
+    "pciesw4/gpu",
+    "pciesw4/gpu/sch_kicad"
+   ]
+  },
+  "coverage_map": {
+   "k1/sch": "k1/pipeline.yaml（在岗）",
+   "k2/hw/sch": "k2/pipeline.yaml（在岗）",
+   "key_v2/key_v2/sch": "**key_v2/key_v2/pipeline.yaml（在岗 · 1887B · 2026-08-20）**",
+   "pciesw4/aic 等 4 目录": "**无**（范围内无 pipeline.yaml，且 4 层祖先内无）"
+  },
+  "scope_k2_verdict_read": "`pipeline_present: scope=k2：含 .kicad_sch 但无 pipeline.yaml 的目录 **0 个**（fail-closed）` ⇒ **k2 域内 PASS**",
+  "outside_k2": {
+   "n_dirs": 4,
+   "n_files": 39,
+   "dirs": [
+    "pciesw4/aic",
+    "pciesw4/aic/sch_kicad",
+    "pciesw4/gpu",
+    "pciesw4/gpu/sch_kicad"
+   ]
+  }
+ },
+ "correction_of_record": {
+  "id": "COV-C1",
+  "severity": "低（口径订正）",
+  "finding": "handoff §3 待裁-2 / `P6_STAGE_FACE_RECHECK_AFTER_REMEDIATION_20260921_v1.json` 所列范围外目录含 `k2/hw/sch` 与 `key_v2/key_v2/sch` —— **实测此二者已被覆盖**（分别由 `k2/pipeline.yaml`、`key_v2/key_v2/pipeline.yaml` 覆盖）；判定器 dim 文本里『范围外（他项目阶段门判）**47**』是**范围外文件计数**，**不等于**『未覆盖目录』。",
+  "true_gap": "范围外**未覆盖**目录 = **4 个（全在 pciesw4）/ 39 个 .kicad_sch**。",
+  "note": "按 #K2-53 §二 口径与 owner #7（口径澄清=监理自裁项）⇒ 本订正**登记备查、不阻塞**。"
+ },
+ "proposal": {
+  "option_B_primary": {
+   "name": "由 pciesw4 自建 `pciesw4/pipeline.yaml`（及必要 scope）—— **不触碰 k2 判据面**",
+   "rationale": "k1/k2/key_v2 均为『本项目自持 pipeline.yaml』；pciesw4 缺失是**该项目自身阶段门缺口**，不是 K2 的 P6 前置。以项目侧补齐，**零 criteria 变更、零新增齿**。",
+   "deliverable": "另立**跨项目批次**（pciesw4 侧）：`pciesw4/pipeline.yaml` +（若要进门禁链）其项目 manifest；由 gate 属主排期。",
+   "impact_on_k2": "**无**（k2 域内 0 未覆盖；P6 判据面与交付锚不动）"
+  },
+  "option_A_fallback": {
+   "name": "在 `criteria/manifest.k2.yaml` 的 `pipeline_present` 增 **显式 out-of-scope 登记**（登记制：不豁免 · 保持可见 · 不充绿）",
+   "requires": "**须 gate 属主改 criteria + 判定器读取该登记**（= 判据面变更 ⇒ **不得由 ENG 自行落**；且须评审是否触 owner ②『禁新增检查齿』）",
+   "draft_yaml": "# criteria/manifest.k2.yaml（**提案文本 · 未落**）\npipeline_present:\n  enabled: true\n  scope: \"k2\"\n  expect: \"k2 域内每个含 .kicad_sch 的目录被 pipeline.yaml 覆盖\"\n  # 【提案】范围外登记（**非豁免**：仍报告、仍可见；仅声明由他项目阶段门判）\n  out_of_scope_registry:\n    - path: \"pciesw4/aic\"\n      n_sch: 2\n      ruling: \"他项目（pciesw4）阶段门自持；登记备查·不豁免·不充绿\"\n    - path: \"pciesw4/aic/sch_kicad\"\n      n_sch: 17\n      ruling: \"同上\"\n    - path: \"pciesw4/gpu\"\n      n_sch: 1\n      ruling: \"同上\"\n    - path: \"pciesw4/gpu/sch_kicad\"\n      n_sch: 19\n      ruling: \"同上\"\n"
+  }
+ },
+ "eng_recommendation": "**取 option_B**（pciesw4 项目侧自持 pipeline.yaml）—— 与 k1/k2/key_v2 既有结构一致，且不触判据面；option_A 仅作登记备选（须 gate 属主裁）。",
+ "red_lines": [
+  "未改 criteria/",
+  "未改 pciesw4/key_v2 任何文件",
+  "未改判定器",
+  "未新增判据维"
+ ],
+ "not_landed": true,
+ "readonly_repo": true
+}

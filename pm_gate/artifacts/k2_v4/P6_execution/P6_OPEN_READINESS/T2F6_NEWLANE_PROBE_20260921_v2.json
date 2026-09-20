@@ -1,0 +1,113 @@
+{
+ "artifact": "k2_t2f6_newlane_probe_v2",
+ "schema": 2,
+ "ts": "2026-09-21T06:40:00+0800",
+ "id": "T2-F6（#K2-52 §四-4 / #K2-53 §二-T2-F6 ④『有新线索才试』）—— 新通道探取",
+ "authorization": "#K2-53 §二 T2-F6 ④『改按需重探（有新线索才试），禁每轮全量重探』。本件为**新线索**触发的定向重探（非全量）。",
+ "new_lane": {
+  "name": "Digi-Key 媒体镜像 `media.digikey.com`",
+  "why_new": "此前记录的封锁结论是 `www.digikey.com` 403；本会话实测**镜像域 `media.digikey.com` 可达（200 · application/pdf）**，与前者是不同主机/不同 WAF 面 —— 属新通道，非重复探测。",
+  "reachability_probe": {
+   "media.digikey.com/pdf/.../*.pdf": "200 application/pdf（命中原件时）· 404 text/html（未命中时，3340B 固定错误页）"
+  }
+ },
+ "newly_verified": [
+  {
+   "device": "OPTO_LTV356T",
+   "status": "三件套外部真源**已取得**（新通道）",
+   "doc_url": "https://media.digikey.com/pdf/Data%20Sheets/Lite-On%20PDFs/LTV-356T.pdf",
+   "vendor": "Lite-On Technology Corp.",
+   "doc_id": "LTV-356T（件号）/ BNS-OD-C131/A4（文件控制号）",
+   "doc_sha256": "e340ba0aae5a53301ccc0a3f694cafb3c2399fde2d5e8c955641a6cd9f8d78b4",
+   "bytes": 143016,
+   "pages": 9,
+   "pdf_head": "LITE-ON TECHNOLOGY CORPORATION — LTV-356T（Mini-flat 光耦，SOP-4）",
+   "pin_truth": {
+    "source": "PDF p2『OUTLINE DIMENSIONS / Pin No. and internal connection diagram』图例",
+    "table": "1. Anode · 2. Cathode · 3. Emitter · 4. Collector",
+    "method": "pdftoppm 渲染 p2（150→110dpi）⇒ 人眼核对图例；图例文字为 CAD 矢量路径（pdftotext 不可提取 ⇒ 以渲染图为证）",
+    "evidence_figure": "T2F6_LTV356T_PINOUT_FIG_P2_20260921_v1.png（316805a698345060）"
+   },
+   "cross_check_vs_repo": "`_shared/eda_core/sch_gate/datasheets/OPTO_LTV356T.yaml` pins 1=ANODE 2=CATHODE 3=EMITTER 4=COLLECTOR ⇒ **逐脚一致（4/4）**；repo 侧 `source:` 为『LTV-356T 光耦标准脚位』（自由文本引证）⇒ 本件为其**外部锚**",
+   "external_file_discipline": "厂商原件仅落 `/tmp/opencode/probe2/ltv356t.pdf`（**未入库**）；入库仅派生证据（渲染小图 + sha256 + 图例文本）"
+  },
+  {
+   "device": "STM32G0B1KBU6",
+   "status": "外部真源**已在手**（DS13560 缓存件）+ 本次补齐**逐脚交叉核对**",
+   "doc_url": "（本会话无外网取件；用上一会话已取回件）atta.szlcsc.com 镜像 ST DS13560 Rev 1",
+   "doc_sha256": "9fc2cfec9a1c8d5c8a281df64ee03d1769949de32ae629ff707a709e5d406924",
+   "bytes": 2632172,
+   "pages": 159,
+   "doc_id": "ST DS13560 Rev 1（与 repo `source:` 引证一致）",
+   "pin_truth": {
+    "source": "PDF p45『Figure 12. STM32G0B1KxU UFQFPN32 pinout』（GP version · _KxU）",
+    "method": "pdftoppm 渲染 p45 ⇒ 人眼核对；并与 pdftotext -layout 抽取的名列交叉",
+    "evidence_figure": "T2F6_STM32G0B1KBU6_UFQFPN32_FIG12_DS13560_20260921_v1.png（24cfd51cd9a3006b）",
+    "figure_pins": "1 PB9·2 PC14-OSC32_IN·3 PC15-OSC32_OUT·4 VDD/VDDA·5 VSS/VSSA·6 PF2-NRST·7 PA0·8 PA1·9 PA2·10 PA3·11 PA4·12 PA5·13 PA6·14 PA7·15 PB0·16 PB1·17 PB2·18 PA8·19 PA9·20 PC6·21 PA10·22 PA11·23 PA12·24 PA13·25 PA14-BOOT0·26 PA15·27 PB3·28 PB4·29 PB5·30 PB6·31 PB7·32 PB8（Exposed pad = VSS）"
+   },
+   "cross_check_vs_repo": "`_shared/…/STM32G0B1KBU6.yaml` 32 脚 + `33: EP`：**归一后 32/32 一致**（唯一差异 = 命名口径 `PF2-NRST`(图) ≡ `NRST`(repo)，同网异名）；EP=VSS 与图内 Exposed pad 一致",
+   "note": "与 T2-F7 同源（该件引证订正），本件补的是**逐脚可复算的核对**，非新缺陷"
+  }
+ ],
+ "still_blocked": [
+  {
+   "device": "PI3DBS16412",
+   "new_attempts": [
+    "https://www.diodes.com/datasheet/download/PI3DBS16412.pdf → **500 HTML**",
+    "https://www.diodes.com/datasheet/download/PI3DBS16412XUAEX.pdf → 404（19B『Datasheet not found』）",
+    "https://www.diodes.com/datasheet/download/ds40277.pdf → 404",
+    "https://www.digikey.com/htmldatasheets/P/PI3/PI3DBS16412.pdf → **403**",
+    "media.digikey.com 四个目录名 × 四个件名（Pericom/Diodes/Inc/Semiconductor × PI3DBS16412/XUAEX/ds40277/DS40277）→ 全 404",
+    "https://wmsc.lcsc.com/ftps/wm/search/global?keyword=PI3DBS16412 → 403（crawler 面）"
+   ],
+   "result": "仍不可达"
+  },
+  {
+   "device": "USB_C_PLUG（Molex 105444-0001）",
+   "new_attempts": [
+    "molex.com/content/dam/…/salesdrawingpdf/105/105444/1054440001_sd.pdf → 18s 超时 0B",
+    "molex.com/pdm_docs/sd/1054440001_sd.pdf（--http1.1）→ 18s 超时 0B",
+    "media.digikey.com Molex 目录 5 种命名 → 全 404"
+   ],
+   "result": "仍不可达（厂商站网络面 000）"
+  },
+  {
+   "device": "USB3.0_Type-A_90",
+   "new_attempts": [
+    "usb.org 猜测直链 404（与前会话一致）"
+   ],
+   "result": "未取（repo `source:` = USB 3.0 Spec 标准脚位 ⇒ 归『标准件』类）"
+  },
+  {
+   "device": "PMIC_P1 / SOM_B1（SpacemiT）",
+   "new_attempts": [
+    "本会话新注册通道：GitHub API（api.github.com 200）——检索到 spacemit-com/{uboot-2022.10,opensbi,linux-6.18,spacemit-firmware} 等 8 仓，**均无 P1/B1 数据表**"
+   ],
+   "result": "无公开直链（与前会话一致）"
+  }
+ ],
+ "reading": {
+  "tier2_before": "15/33",
+  "tier2_after": "**17/33**（+2：OPTO_LTV356T · STM32G0B1KBU6）",
+  "of_total": 33,
+  "caliber": "**具名 PARTIAL → 具名已取件**，**不充绿**（#K2-53 §二 T2-F6 ①：维持具名 PARTIAL；②『软目标/可达上限』**不得**作任何判据/绿判）",
+  "remaining_blocked_named": [
+   "PI3DBS16412",
+   "USB_C_PLUG(Molex 105444)",
+   "USB3.0_Type-A_90",
+   "PMIC_P1",
+   "SOM_B1",
+   "（另：CR-4 已登记之结构性无三件套 12 件为不可约下界）"
+  ]
+ },
+ "red_lines": [
+  "未写 criteria/（ENG 只读）",
+  "未改生成器/SPEC/原理图/符号",
+  "外部取件仅落 /tmp/opencode（厂商原件未入库）",
+  "未新增任何判据维",
+  "未派 WORKER"
+ ],
+ "not_landed": true,
+ "readonly_repo": true,
+ "next": "余 4 件按需（有新通道才试）；本件不改变 P6 判据面与交付锚"
+}
