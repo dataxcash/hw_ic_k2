@@ -1,0 +1,46 @@
+{
+ "artifact": "k2_t2f6_ds13560_u1_lqfp48_verification",
+ "schema": 1,
+ "ts": "2026-09-21T11:30:00+0800",
+ "id": "`U1`（`STM32G0B1CBT6` · LQFP48）真源 **48/48 逐脚核验**（ST DS13560 · 新通道取得）",
+ "new_lane": {
+  "product_page": "https://pdf.elecfans.com/STMicroelectronics/STM32G0B1CBT6.html（200）",
+  "pdf_direct": "https://file1.huaqiu.com/web2/M00/00/43/wKgZomatSW-AHL42ACgp7LGnHP8064.pdf（**200 application/pdf** · 2,632,172 B）",
+  "host": "`file1.huaqiu.com`（电子发烧友 CDN）—— **本会话首次登记**（此前只知 `file.elecfans.com`）"
+ },
+ "evidence": {
+  "doc": "ST **DS13560 Rev 1 — November 2020** · 159 页 · “STM32G0B1xB/C/xE” 数据表（生产数据）",
+  "sha256": "9fc2cfec9a1c8d5c8a281df64ee03d1769949de32ae629ff707a709e5d406924",
+  "sha_match": "**与本项目 KBU6 核验所引件逐字节同值**（同一正本）",
+  "figure": "**Figure 9 `STM32G0B1CxT LQFP48 pinout`（p42 · GP version `_RxT`）**",
+  "figure_png": "pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/T2F6_DS13560_FIG9_LQFP48_P42_20260921_v1.png（3261f1fe8730ae71 · pdftoppm -r 300）"
+ },
+ "verification": {
+  "target": "`k2/_shared/eda_core/sch_gate/datasheets/STM32G0B1CBT6.yaml`（U1 真源）",
+  "result": "**48/48 一致 · 0 冲突**",
+  "detail": "左列 1=PC13·2=PC14·3=PC15·4=VBAT·5=VREF·6=VDD·7=VSS·8=PF0·9=PF1·10=NRST(PF2-NRST)·11=PA0·12=PA1 ｜下排 13=PA2·14=PA3·15=PA4·16=PA5·17=PA6·18=PA7·19=PB0·20=PB1·21=PB2·22=PB10·23=PB11·24=PB12 ｜右列 25=PB13·26=PB14·27=PB15·28=PA8·29=PA9·30=PC6·31=PC7·32=PA10·33=PA11·34=PA12·35=PA13·36=PA14 ｜**上排 37=PA15·38=PD0·39=PD1·40=PD2·41=PD3·42=PB3·43=PB4·44=PB5·45=PB6·46=PB7·47=PB8·48=PB9**",
+  "repo_extra": "yaml 另含 `49: EP`（LQFP48 无 EP ⇒ 属符号约定；**U1 land/脚数冲突为既有 P4 登记，本件不触及**）",
+  "trap_recorded": "**正本图面直读为要**：`pdftotext` 抽出的『上排标注串』顺序与脚号**相反**（48→37 自左而右），若仅凭文本串比对会误判为『整排镜像』——本件首试即误判，经 `pdftoppm -r 300` 渲染人眼核对后纠正（**环境教训 +1**）"
+ },
+ "citation_note": {
+  "yaml_cites": "ST DS13560 **Rev 6** — Table 12 (Figure 5), standard `_CxT`",
+  "observed": "本件正本 = **Rev 1**；其 LQFP48 pinout = **Figure 9（p42）**，Table 12 非 pinout 表",
+  "verdict": "**引证待核**（若 Rev 6 重编号/重排表号 ⇒ yaml 无误；否则须订正）⇒ 同 TI-CIT 族 · `_shared` 件 ⇒ **登记待批 · 禁 ENG 擅改**",
+  "impact": "**不影响本件结论**（pin 映射本身 48/48 一致）"
+ },
+ "board_truth_closure": {
+  "scope": "l7 板内器件真源核验面（本会话收口）",
+  "results": "`U1` ✅48/48 · `U6` ✅354/354 · `U2` 真源 ✅6/6（land = P4 既有登记/owner 闸）· `U5` ✅4/4 · `E2` ✅8/8 · `D2` ✅ · **`U4` ✗ CR-26 HIGH** · **`D1` ✗ CR-27 LOW-MED** · `J2/J3/J4` 规格类（P2-E2 登记）· `J6/J9/J11/J12/J13` 设计定义件",
+  "verdict": "**除已登记/已报缺陷外，板内器件真源核验面已尽**"
+ },
+ "red_lines": [
+  "未改 `_shared`/符号/网表/PCB/交付包/生成器",
+  "引证项仅登记待批",
+  "外部 PDF 仅落 `/tmp/opencode/ven`（未入库）",
+  "未新增判据维/检查齿",
+  "未派 WORKER"
+ ],
+ "readonly_repo": true,
+ "not_landed": true,
+ "next": "① 等 CR-26 处置；② 引证待批项累计：TI-CIT-1/2/3 · `AP2127`（`DS31056`→`DS36478`）· **STM32G0B1CBT6（Rev 6/Figure 5 vs Rev 1/Figure 9）**；③ 余 ST/SpacemiT/连接器族**新通道才试**。"
+}

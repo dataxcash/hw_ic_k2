@@ -149,3 +149,13 @@
 ---
 **（本块）裁定对应**：CR-29 ← 本会话『先查册』命中既有登记后之**澄清登记**。**报备监理 1 条（维度澄清）· owner 项 0**。
 **不影响** P6 判据面（`criteria/` rev=6 只读）与交付锚（`6ee7495de61f749f` 未动）。
+### 续编 · U1 真源核验（MCU · 2026-09-21 · 只读造活）
+
+| # | 条目 | 内容（事实/裁定） | 依据 | 处置红线 |
+|---|---|---|---|---|
+| **CR-30** | **`U1`（`STM32G0B1CBT6`，LQFP48）真源 **48/48 逐脚一致**（厂商正本 · 新通道取得）＋ 引证待核** | **新通道**：`https://pdf.elecfans.com/STMicroelectronics/STM32G0B1CBT6.html`（200）⇒ 直链 `https://file1.huaqiu.com/web2/M00/00/43/wKgZomatSW-AHL42ACgp7LGnHP8064.pdf` ⇒ 取得 **ST DS13560 Rev 1（Nov 2020）· 159 页**，`sha256 = 9fc2cfec9a1c8d5c8a281df64ee03d1769949de32ae629ff707a709e5d406924` = **与本项目 KBU6 核验所引件逐字节同值**。**核验**：`DS13560 Rev 1` **Figure 9 `STM32G0B1CxT LQFP48 pinout`（p42 · GP version `_RxT`）** 逐脚比对 `_shared/eda_core/sch_gate/datasheets/STM32G0B1CBT6.yaml` ⇒ **48/48 一致 · 0 冲突**（左列 1–12 · 下排 13–24 · 右列 25–36 · 上排 **48=PB9 … 37=PA15**）。**引证待核**：yaml 记「**DS13560 Rev 6 — Table 12 (Figure 5)**」，而 Rev 1 对应为「**Figure 9**（p42）· Table 12 非 pinout 表」⇒ 若 Rev 6 重编号则 yaml 无误，否则须订正（**同 TI-CIT 族 · `_shared` 件 ⇒ 登记待批 · 禁 ENG 擅改**）。**注**：`U1` 之 **land/脚数冲突**（板 33 pad vs 符号 LQFP48 编号）属**既有 P4 登记**（`K2-P2-E2-directed-pad-registry` v1.1「板侧缺陷 2-A″」）⇒ 本件**只核真源表**，**不触及**该登记（CR-29 同旨） | 本件实测 · 正本 sha 与项目件**逐字节同** · 外部 PDF 仅落 `/tmp/opencode/ven`（未入库） | **只读**（未改 `_shared`/符号/网表/PCB/交付包）· 引证项**登记待批** · **禁**以本件覆盖既有 land 登记 |
+| — | **（附）板内器件真源核验收口** | 本会话至此：`U1` ✅48/48 · `U6` ✅354/354 · `U2` 真源 ✅6/6（land 属 P4 既有登记）· `U5` ✅4/4 · `E2` ✅8/8 · `D2` ✅ · `U4` ✗（CR-26 HIGH）· `D1` ✗（CR-27 LOW-MED）· `J2/J3/J4` 规格类（P2-E2 登记）· `J6/J9/J11/J12/J13` 设计定义件 ⇒ **板内器件真源核验面已尽**（除已登记且涉 owner 闸之 land 议题） | 本会话各件 | 登记制 · 不充绿 |
+
+---
+**（本块）裁定对应**：CR-30 ← handoff §7-B（只读造活 · 真源核验收口）。**报备监理 1 条（引证待核）· owner 项 0**。
+**不影响** P6 判据面（`criteria/` rev=6 只读）与交付锚（`6ee7495de61f749f` 未动）。
