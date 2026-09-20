@@ -1,0 +1,150 @@
+{
+ "artifact": "k2_stage_gate_failclosed_census",
+ "schema": 1,
+ "ts": "2026-09-21T08:35:00+0800",
+ "id": "**阶段门 fail-closed 全链核对**（监理自动续推 · 当前阶段推进前置检查）",
+ "authorization": "监理自动续推『按已批准《K2 整体整改计划》推进当前阶段，阶段门未过不得越阶段（fail-closed）』；本件**只读**。",
+ "plan": "k2/docs/K2-RECTIFICATION-PLAN-v1.md（P0→P1→(P2→P3→P4→P5 ∥ P6)，依赖图 L205-217）",
+ "gates": [
+  {
+   "stage": "P0",
+   "criterion": "冻结与基线（不动任何产物）",
+   "verdict": "**HOLDS**",
+   "evidence": {
+    "l4": "k2/hw/k2_v4_8L.l4.kicad_pcb = d4e81f647be7f980（锚 d4e81f647be7f980）",
+    "K2 设计源/PCB": "fb07d25ac426ff84（锚 fb07d25ac426ff84）",
+    "真源网表": "dd794c54f7ce7417（锚 dd794c54f7ce7417）",
+    "drc_rules": "0a459839e15960b8（锚 0a459839e15960b8）"
+   },
+   "note": "本会话已实测复核（K2_ANCHOR_RECHECK_20260921_v4.json · 14/14 MATCH）"
+  },
+  {
+   "stage": "P1",
+   "criterion": "判据体系落地 + 权限隔离（四项：负控/正控/权限/fail-closed + 判据 rev 在岗）",
+   "verdict": "**HOLDS**",
+   "evidence": {
+    "retrospective": "P1_P5_STAGE_GATE_RETROSPECT_20260921_v1.json（P1 条目：负控=冻结 l4 板 ⇒ adjudicate rc=1 FAIL 命中多维 · 正控=伪造 verdict ⇒ verdict_schema FAIL rc=1 · 权限=criteria 444/555 · fail-closed=缺测量件 ⇒ 4 维 fail-closed）",
+    "criteria_rev6": "5/5 sha16 MATCH（eb3da49f2ad97e37 / 1937a40ae68bc288 / 00faba340bb7eb5b / c175be51c3338a53 / 727d09953cf9bd78）"
+   },
+   "note": "**未重跑负控/正控**（遵 owner ②『终止每轮必复评』）—— 判据未动 + 锚 MATCH 足以维持"
+  },
+  {
+   "stage": "P2",
+   "criterion": "真源归零（E1/E2/E3/E4 四等式 0 差异 + 每声明网 ≥2 焊盘）",
+   "verdict": "**HOLDS**",
+   "evidence": {
+    "refdes_sets_equal": "排除纯机械件 H*（4 条逐条列名: ['H1', 'H2', 'H3', 'H4']）⇒ 原理图 54 / 板 54；图有板无 []，板有图无 []",
+    "net_declared_realized": "板上 0 焊盘的声明网 = 0；<2 焊盘 = 0",
+    "pin_map_complete": "网表节点无对应焊盘 = 0",
+    "zone_filled": "铜区（有网非 keepout）已填充 10/10；keepout 规则区 8 个另计（不入分母）"
+   },
+   "note": "读数取自 canonical 19 在册 verdict（190b73be0f728a56 · 板 l7 c5a7df90aadb66e0）"
+  },
+  {
+   "stage": "P3",
+   "criterion": "施工图层重建（L3 图纸）—— 板框 / NPTH / pad==引脚 / 接口不出框 / keepout 生效",
+   "verdict": "**HOLDS**",
+   "evidence": {
+    "SPEC": "k2/pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json = 0bd52ed48e720b8c",
+    "pads_within_outline": "出框：全 pad(AABB)=0 · 接口件(P3-4)=0 · 全 pad(真外框多边形)=0（须全 0）；测量板 sha16=c5a7df90aadb66e0 vs 受审板 c5a7df90aadb66e0 ⇒ 一致",
+    "drill_count": "NPTH=4（应 ≥4）PTH=16",
+    "keepout_active": "keepout 区 8 个；其中无生效开关（全 allowed / 无 flag）0 个"
+   }
+  },
+  {
+   "stage": "P4",
+   "criterion": "按图重建板 + 出 Gerber（新 revision，不动冻结件）；**全绿**方可下单",
+   "verdict": "**HOLDS（全绿）**",
+   "evidence": {
+    "canonical19": "**19 OK / 0 FAIL**（passed=True · provisional=False · verdict sha16 190b73be0f728a56）",
+    "drc": "DRC error=0（违规总 167）: []",
+    "unconnected": "unconnected_items = 0",
+    "交付包": "L6/jlc_package：n_files=53 · `sha256sum -c` **55/55 OK** · DFM **pass 16 / accept 1(已裁+有证明) / fail 0**（DELIVERY_PACKAGE_INTEGRITY_RECHECK_20260921_v1.json · 6d650f637da9f6f4）",
+    "交付锚": "6ee7495de61f749f / 0e88e107e2da8192（未动）"
+   },
+   "note": "⇒ Gerber 出包与下单前置成立；**下单/报价/交期 = 商务（owner #14④），非 ENG 任务**"
+  },
+  {
+   "stage": "P5",
+   "criterion": "打样 + 首件 bring-up（**唯一能证明『可用』的阶段**）",
+   "verdict": "**PENDING_EXTERNAL（唯一未闭门）**",
+   "evidence": {
+    "模板": "`L6/first_article/results_template.json` 8 项 **全 NOT_RUN**：V4_impedance_coupon · V5_pdn_dc_drop · V6_1..V6_5 · V7_thermal_o2",
+    "新鲜度": "模板 board_sha16 = c5a7df90aadb66e0（= 受审板 l7）· delivery_anchor = 6ee7495de61f749f / 0e88e107e2da8192（= 现行包）⇒ 模板未陈旧",
+    "责任边界": "measured_by = `<实测方（不得 ENG 自证）>` · judged_by = 监理"
+   },
+   "note": "**ENG 不得自证**；8 项阈值/证据位已齐（#K2-48/K2-54 口径）；回件到位即回填"
+  },
+  {
+   "stage": "P6",
+   "criterion": "跨板复用与学习环（K1 同判定器 + 模板整改 + 能力缺口入账）",
+   "verdict": "**CLOSED**",
+   "evidence": {
+    "ruling": "#K2-54 §一 = 采纳 (a)（CR-5 逐字落册）",
+    "复跑": "P6_ACCEPTANCE_CLOSURE_AFTER_K2_54_20260921_v1.json（14d5463c02191282）：P6-1 探针 **4/4 OK** · 整改后 3 MISS **属预期** · P6-2 **PASS**",
+    "自检": "K2_54_GATE_SELFCHECK_20260921_v1.json（c263d7b4963c7c7c）**8/8 PASS**",
+    "能力缺口": "CAPABILITY-GAP-LEDGER（C-12/C-13 在账）· 既有结构差登记（#K2-53 注①）"
+   }
+  }
+ ],
+ "fail_closed_checks": [
+  {
+   "rule": "P1 未全过 → 不启 P2 施工",
+   "status": "**满足**（P1 HOLDS 在册后 P2 才开）"
+  },
+  {
+   "rule": "P2 未归零 → 不开 P3",
+   "status": "**满足**（四等式 0 差异在册）"
+  },
+  {
+   "rule": "P3 图纸未核 → 不开 P4",
+   "status": "**满足**（L3 SPEC + 版图读数在册）"
+  },
+  {
+   "rule": "P4 未全绿 → 不下单（P5 无输入）",
+   "status": "**满足**（canonical 19 = 19 OK/0 FAIL ⇒ 允许下单；下单属商务面）"
+  },
+  {
+   "rule": "**无越阶段**",
+   "status": "**成立**：P5 未闭期间 ENG 未宣称『可用』；P5 8 项全 `NOT_RUN`，无 ENG 自证值；交付包仅**随单件**（非『已验收可用』）"
+  },
+  {
+   "rule": "计划 §7.2-6『范围 6 目录』口径",
+   "status": "**已澄清**：dim 文本『范围外 **6 个**』= 范围外**含 .kicad_sch 的目录**（k1/sch · key_v2/key_v2/sch · pciesw4/aic · pciesw4/aic/sch_kicad · pciesw4/gpu · pciesw4/gpu/sch_kicad）；其中 **k1/sch、key_v2/key_v2/sch 已被各自 pipeline.yaml 覆盖** ⇒ **真缺口 = pciesw4 4 目录/39 件**（COV-C1 · #K2-54 §二 = option_B，gate 属主排期）"
+  }
+ ],
+ "current_stage": "**P5（PENDING_EXTERNAL）** —— ENG 侧构造/判据/交付工作**已无未闭项**；唯一在途输入 = 外部首件实测回件（ENG 不得自证）",
+ "eng_next_actions": [
+  "外部回件到位 ⇒ 按 `L6/first_article/results_template.json` **回填**（含原始记录/证据路径）⇒ 交监理判定（`judged_by=监理`）",
+  "无回件期间（不 park）：T2-F6 **按需**（新通道才试）· 册面维护 · 锚周期复核",
+  "商务面（下单页索取阻抗券、交期）= owner #14④，非 ENG 任务"
+ ],
+ "readonly_repo": true,
+ "not_landed": true,
+ "no_stage_violation": true,
+ "p5_pack_completeness": {
+  "method": "程序化核对 8 项是否同时存在于 ④件（计划 / 规程 RULES.md / 检查表 CHECKLIST.md / 回填模板 results_template.json）",
+  "items": [
+   "V4_impedance_coupon",
+   "V5_pdn_dc_drop",
+   "V6_1_rail_voltages",
+   "V6_2_mcu_swd_id",
+   "V6_3_fru_i2c",
+   "V6_4_link_gen4_x4",
+   "V6_5_stability_30min_aer",
+   "V7_thermal_o2"
+  ],
+  "result": "**8/8 在四件中齐备**（模板 criterion 逐项落阈值 · RULES 逐项操作规程 · CHECKLIST 逐项勾选位）",
+  "thresholds": {
+   "V4": "85.0Ω ±10%（76.5–93.5）+ 覆盖 0.6mm 中心几何与最紧 0.2825mm（PCIE_UP3）",
+   "V5": "压降 ≤ 3%（监理定值/指令 #10）",
+   "V6_1": "各轨 ±5%",
+   "V6_2": "SWD device ID 正确（二值）",
+   "V6_3": "FRU EEPROM 地址应答正确（二值）",
+   "V6_4": "双路 x4 Gen4 训练成功（二值 + LTSSM 终态）",
+   "V6_5": "30min AER = 0",
+   "V7": "Tj ≤ 120.0℃（四工况）· T1 触发：Tj(U6)>117.0℃ 或未按 O2 实施 ⇒ 开新 rev（θJA_eff ≤ 9.5℃/W）"
+  },
+  "conclusion": "**ENG 侧 P5 执行包完备、无待补**；唯一在途 = 外部回件（板厂阻抗券 + 首件实测记录）。"
+ }
+}
