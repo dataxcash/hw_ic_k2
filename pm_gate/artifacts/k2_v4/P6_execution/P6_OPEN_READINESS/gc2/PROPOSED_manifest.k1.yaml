@@ -1,0 +1,112 @@
+# ⚠ PROPOSED（未落件、未签认）—— 供 **gate 属主**在 P6 开闸时**原子落件**为 `criteria/manifest.k1.yaml`
+#   本件由 ENG(ARCHER) 依 **#K2-41 §三-⑥（应然集）+ §三-⑦（G3.1/G3.2/G3.5 项目域派生）** 起草；
+#   **落件权/签认权 = 监理 + gate 属主**（ENG 对 criteria/ 只读，不代笔）。
+#   ├─ 判据①三项**可机判命中**：rule_severity_manifest(9/62 具名) · pipeline_present(scope=k1 ⇒ ['k1/sch']) · fp_lib_table_present(缺失)
+#   ├─ 第四项 `sheets_empty`：**rev=3 的 19 维中无对应维**（见 GC2_MANIFEST_K1_GAP_AND_PROBE_CLASSIFICATION_v1.json）
+#   │  ⇒ 依 owner 常设②（禁新增检查齿）**不进 manifest**（本件无该键、亦无替代键 ⇒ 不违「零无消费者键」约束③）；
+#   │    其读数以**输入侧实测**登记：`k1/k1_v1.kicad_pro` 的 `sheets == []`（值已入 P6_OPEN_READINESS_v1.json）
+#   ├─ 落件时：把 `not_countersigned` 置 false 并填 `countersigned_by`（监理签认动作）
+#   └─ 本件与 `probe_manifest.k1.yaml` 的**唯一差异** = pipeline_present 的 expect 文案项目化（k2→k1）；判定行为逐维同（已实测）
+# PROBE ONLY —— ENG 只读测量用临时 manifest（**非 criteria/**，未签认；应然集归监理）
+# criteria/manifest.k2.yaml —— CANONICAL 合并件 **rev=3（安装件）**；监理 #K2-34 签认 2026-09-19
+#
+# 目的：把现存 6 份清单（criteria 在库 9 维 / v2 17 维 / v3草案 18 维 / v3.1 18 维 /
+#       v4 安装候选 18 维 / v4 控制件 18 维）合并为**唯一 canonical 清单**，消除
+#       「同一语义两个维名」与「维数不等」导致的跨件不可复现（见
+#       k2/docs/K2-P4-CRITERIA-19DIM-CANONICAL-MERGE-DRAFT-v1.md）。
+#
+# 三项硬约束（本草案自检，非判据）：
+#   ① 零新增检查齿（owner ②）：维度集 == adjudicate.draft-v4.py 实际 gate 的 18 维
+#      ∪ {rule_severity_manifest}（判定器内无条件执行）＝ 19；**不引入任何新维**。
+#   ② 零别名：只使用 v4 族命名；v2/v3 族维名（lib_footprint_electrical /
+#      density_and_spacing / v3_reference_continuity / drc_warning_disposition /
+#      board_frame_and_keepout）**不出现**在本件中。
+#   ③ 零无消费者键：不使用 adjudicator 不读的 YAML 键（如 aliases / unconditional_*）。
+#
+# 归属：本件为**已安装 rev=3**（gate 属主 ic_hw_gate 落件 + 监理 #K2-34 签认）。
+#    锚：ledger/adjudication-ledger.jsonl rev=3。ENG 只读。
+manifest_version: 6-k234-rev3
+project: k1
+countersigned_by: "监理(OpenCode) · 裁定 #K2-34 · 2026-09-19"
+countersigned_scope:
+  covered:
+    - zone_filled
+    - device_has_pads
+    - drill_count
+    - net_declared_realized
+    - pin_map_complete
+    - non45_segments
+    - refdes_sets_equal
+    - pipeline_present
+    - verdict_schema
+    - drc_errors
+    - drc_warning_dispositions
+    - unconnected_zero
+    - fp_lib_table_present
+    - lib_electrical_level
+    - pads_within_outline
+    - keepout_active
+    - rule_severity_manifest
+    - density_and_clearance
+    - ref_plane_continuity
+  uncovered: []
+board: k1_v1.kicad_pcb        # PROBE（非签认件；ENG 只读测量用）
+not_countersigned: true             # 已签认（监理 #K2-34；见 countersigned_scope）
+source_of_truth:
+  register: .omo/supervision/ledger/K2-DEFECT-REGISTER-v1.md
+  register_section: "## C. 出厂判据"
+  rulings: "监理 #K2-19 · #K2-20 · #K2-21 · #K2-23 · #K2-29 · #K2-32 · #K2-34"
+
+# ── 19 维 = 18 gated（adjudicate.draft-v4.py 逐维 C.get(<name>).enabled 守卫）
+#          + 1 无条件（rule_severity_manifest，当前无 enabled 守卫；见 §3 方案 O1/O2/O3）──
+checks:
+  # —— 冻结族（在库 9 维，P1 判据资产）——
+  zone_filled:              {enabled: true, expect: "filled_zones == total_zones"}
+  device_has_pads:          {enabled: true, expect: "every_footprint_pads >= 1"}
+  drill_count:              {enabled: true, npth_min: 4, expect: "npth >= 4"}
+  net_declared_realized:    {enabled: true, expect: "every_declared_net_pads >= 2"}
+  pin_map_complete:         {enabled: true, expect: "missing_pads == 0"}
+  non45_segments:           {enabled: true, expect: "non45 == 0"}
+  refdes_sets_equal:        {enabled: true, expect: "sch_set == board_set（排除纯机械件 H*，逐条列名留痕）"}
+  pipeline_present:         {enabled: true, scope: "k1", expect: "k1 域内每个含 .kicad_sch 的目录被 pipeline.yaml 覆盖"}
+  verdict_schema:           {enabled: true, expect: "no artifact contains a 'verdict' key"}
+  # —— 草案族（v4 族命名；v3.1 起）——
+  drc_errors:               {enabled: true, expect: "drc_errors == 0"}
+  drc_warning_dispositions: {enabled: true, expect: "board_warning_types ⊆ drc_warning_dispositions[].type"}
+  unconnected_zero:         {enabled: true, expect: "unconnected_items == 0"}
+  fp_lib_table_present:     {enabled: true, expect: "fp-lib-table exists in board project dir"}
+  lib_electrical_level:     {enabled: true, consume: "w8_audit_json", expect: "n_electrical_diff == 0 且 n_pad_name_set_only == 0（以板为准）；审计板 sha16 须 == 受审板 sha16（陈旧 ⇒ fail-closed）"}
+  pads_within_outline:      {enabled: true, consume: "pads_outline_json", expect: "全 pad 出框 == 0（AABB 与真外框多边形双口径）；测量板 sha16 须 == 受审板 sha16（陈旧 ⇒ fail-closed）"}
+  keepout_active:           {enabled: true, expect: "每个 keepout 区 >=1 flag != allowed"}
+  # —— 阈值待监理（机制已实现；给阈值即可 enabled）——
+  # #K2-34 §一-9：授权 rev=3 启用（阈值承 #K2-23 §二-9）
+  density_and_clearance:    {enabled: true, consume: [density_json, min_clearance_json], expect: "grid(cell_mm=10, frame_origin).fp_peak_per_cell <= 8 ∧ min_copper_clearance_mm >= 0.100"}
+  # #K2-34 §一-1：口径 = non_antipad_gap == 0，判别半径 R=0.5mm 具名（面积覆盖率降信息项）
+  ref_plane_continuity:     {enabled: true, consume: "refplane_gap_json", caliber: "non_antipad_gap == 0", radius_R_mm: 0.5, expect: "R=0.5mm 下 non_antipad_gap == 0"}
+  # —— 无条件维（注册 1/3：方案 O1。判定器 adjudicate.draft-v4.py 现**无条件**执行本维；
+  #      本行 enabled:true 与当前行为一致；若监理择 O2/O3 则本行随之删除或改注释 ——）
+  rule_severity_manifest:   {enabled: true, expect: "未登记豁免的 ignore == 0（deny-by-default）"}
+rule_severity_exemptions: []
+drc_warning_dispositions:
+  - {type: missing_courtyard, disposition: "不豁免；登记为 J-7 图形级已知缺口 + L2 placement 项", evidence: "k2/docs/K2-P4-W7-SUPERVISION-DECISION-SHEET-v1.md 项4 + 监理 #K2-21 §〇③"}
+  - {type: lib_footprint_mismatch, disposition: "以板为准（W-8）：电气级 0，图形/属性级容忍，逐条登记", evidence: "k2/docs/K2-J7-W8-FOOTPRINT-LIB-AUDIT-v1.md（59 件）"}
+  # #K2-34 §一-7：7 类登记（登记制，**均不豁免**；90 条保持可见）
+  - {type: silk_over_copper, disposition: "不豁免；丝印图形级，须 P5 出图前处置；逐条台账留痕", evidence: "K2-P4-PRERULING-EVIDENCE-PACK-5-v1.md §1.2 · K2-P4-J1-WARNING-DISPOSITION-LEDGER-AND-U03-REMAINDER-v1.md"}
+  - {type: silk_overlap, disposition: "不豁免；丝印图形级，须 P5 出图前处置；逐条台账留痕", evidence: "同上"}
+  - {type: silk_edge_clearance, disposition: "不豁免；丝印图形级，须 P5 出图前处置；逐条台账留痕", evidence: "同上"}
+  - {type: track_not_centered_on_via, disposition: "不豁免；布线级，归链内路由器/PDN 步；逐条台账留痕", evidence: "同上"}
+  - {type: via_dangling, disposition: "不豁免；布线级，归链内路由器/PDN 步；逐条台账留痕", evidence: "同上"}
+  - {type: track_dangling, disposition: "不豁免；布线级，归链内路由器/PDN 步；逐条台账留痕", evidence: "同上"}
+  - {type: copper_sliver, disposition: "不豁免；布线级，归链内路由器/PDN 步；逐条台账留痕", evidence: "同上"}
+thresholds:
+  # 监理裁定（#K2-23 §二-9；本维 enabled:false ⇒ 待测量件接入后启用）
+  density_and_clearance:
+    cell_mm: 10
+    cell_origin: frame_origin
+    max_fp_per_cell: 8
+    min_copper_clearance_mm: 0.100
+  # #K2-34 §一-1（口径 + 判别半径；承载 measure_non_antipad_gap.py 输出）
+  ref_plane_continuity:
+    caliber: "non_antipad_gap==0"
+    radius_R_mm: 0.5
+thresholds_pending_supervisor: {}
