@@ -1,0 +1,125 @@
+{
+ "artifact": "k2_61_r4_docstring_and_r3_checkl3_caliber_evidence",
+ "schema": 1,
+ "ts": "2026-09-21T02:41:29.218788+08:00",
+ "session_label": "K2-2026-09-21 · ARCHER-R95 · #K2-61 R4+R3 落地",
+ "ruling": "#K2-61（CR-70(a)(b) 确认 · CR-71 授权修 · CR-72 授权修 · 登记维持 · owner 0）",
+ "R4_CR71": {
+  "scope": "两件 l8 世代生成器 :7 docstring 产出（OUT）串",
+  "files": {
+   "tools/k2_p5_jlc_package_l8_v1.py": {
+    "before": "796043be97ceb3f8",
+    "after": "732ed21bfd23c5bc",
+    "line7": "产出（OUT）：pm_gate/artifacts/k2_v4/L6/jlc_package_l8/"
+   },
+   "tools/k2_p5_jlc_package_l8r2_v1.py": {
+    "before": "bc2394923a919058",
+    "after": "97466411dec2d351",
+    "line7": "产出（OUT）：pm_gate/artifacts/k2_v4/L6/jlc_package_l8r2/"
+   }
+  },
+  "asserts": [
+   "每件仅 :7 一行变更（逐行断言）",
+   ":31 OUT / :32 fail-closed assert 与全部逻辑未动",
+   "py_compile OK"
+  ],
+  "grep_gate4": {
+   "cmd": "grep -n \"L6/jlc_package/\" tools/*.py",
+   "result": "命中 = k2_p5_jlc_package_l7_v1.py:7/:258（其 OUT 确为 L6/jlc_package ⇒ docstring 正确 · 不在本批）+ k2_p6_acceptance_gate_v1.py:38 · k2_p6_readonly_baseline_v1.py:50（P6 期按设计钉版 · CR-71 附1 已判非缺陷）⇒ **两件 l8 世代生成器 0 命中**"
+  },
+  "redlines": {
+   "rerun_builder": false,
+   "rerelease": false,
+   "anchor_change": false,
+   "anchors_recheck": {
+    "l8r2_MANIFEST": "19d637c4e9ed35be",
+    "l8r2_tarball": "488e90a47d088d06",
+    "l8_MANIFEST": "4b610baed4f4752c"
+   }
+  }
+ },
+ "R3_CR72": {
+  "canonical": "external repo ic_hw_eda (A 宿主 144.34.182.44) · path _shared/pm_gate/check_l3.py",
+  "content": {
+   "before": "4aef5de8598f0110",
+   "after": "d07f3267df7b27e7"
+  },
+  "diff": [
+   "- errors=[\"缺失 SPEC_k2_v4.json\"]  ->  + errors=[f\"缺失 {config.spec_name(_proj())}\"]",
+   "- evidence=\"SPEC_k2_v4.json 结构完整（…）\"  ->  + f\"{config.spec_name(_proj())} 结构完整（…）\""
+  ],
+  "dual_verify": {
+   "k1": {
+    "spec_name": "SPEC_k1.json",
+    "passed": true,
+    "evidence": "SPEC_k1.json 结构完整（9 顶层字段 + 阻抗/网类/过孔/走廊）"
+   },
+   "k2_v4": {
+    "spec_name": "SPEC_k2_v4.spec-rev-54.json",
+    "passed": true,
+    "evidence": "SPEC_k2_v4.spec-rev-54.json 结构完整（9 顶层字段 + 阻抗/网类/过孔/走廊）"
+   },
+   "cmd": "PM_GATE_PROJECT_ROOT=<proj_root> AppDir/bin/python3.11 -c 'sys.path.insert(0,\"<repo>/_shared\"); from pm_gate import artifacts, config, check_l3; artifacts.set_active_project(p); r=check_l3.check_g31()'"
+  },
+  "sync": {
+   "canonical_commit": "8f324cc (push → A 宿主 0/0)",
+   "k2_pointer": "376a002",
+   "container_pointer": "8f68a23",
+   "copies_sha_equal": "d07f3267df7b27e7 ×3 (_shared · k2/_shared · k1/_shared[符号链接])",
+   "b_host_copies_untouched": {
+    "key_v2/_shared": "b9f415bc50360748",
+    "pciesw4/_shared": "b9f415bc50360748"
+   }
+  },
+  "out_of_scope_registered": ":3 模块文档串 · :71 K1/K2 命名口径注释 仍含 SPEC_k2_v4.json（说明性提及 · #K2-61 R3 仅授权 :43/:62）"
+ },
+ "integration_census": {
+  "method": "容器 gitlink ↔ 子模块 origin/main（merge-base --is-ancestor）",
+  "rows": [
+   {
+    "module": "_shared",
+    "container_pointer": "8f324cc",
+    "published": true,
+    "origin_sync": "0/0"
+   },
+   {
+    "module": "k1",
+    "container_pointer": "6a1ecdd",
+    "published": false,
+    "origin_sync": "0/3",
+    "note": "origin/main=9e283bf · 快进可推 · 未发布 3 笔 e2acb20/08ff8bb/6a1ecdd"
+   },
+   {
+    "module": "k2",
+    "container_pointer": "64bc084",
+    "published": true,
+    "note": "本批 bump 至 376a002"
+   },
+   {
+    "module": "key_v2",
+    "container_pointer": "174765a",
+    "published": true,
+    "origin_sync": "0/0"
+   },
+   {
+    "module": "pciesw4",
+    "container_pointer": "17b028b",
+    "published": true,
+    "origin_sync": "0/0"
+   }
+  ],
+  "anomaly": "唯 k1 指针指向未发布 commit（耐久性缺陷 · 非 P5 阻塞）⇒ 登记 CR-73 · 提请监理于 K1 面裁（本会话未 push）"
+ },
+ "redlines_ok": [
+  "未改 criteria/",
+  "未改冻结四源",
+  "未改板/原理图/网表/SPEC",
+  "未覆盖或删除旧包与旧锚",
+  "未重跑构建器/未重出包/未换交付锚",
+  "未触 B 宿主副本（key_v2/_shared · pciesw4/_shared）",
+  "未 push 任何 K1 内容",
+  "未派 WORKER",
+  "未越阶段 · 未下单",
+  "临时落点仅 /tmp/opencode"
+ ]
+}
