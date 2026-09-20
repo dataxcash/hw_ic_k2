@@ -291,3 +291,12 @@
 ---
 **（本块）裁定对应**：P5 阶段只读造活（设计侧预判件 rev 基准核验）。**报备监理 2 条（1 新增基准件 + 1 登记）· owner 项 0**。
 > **【CR-48 补充 · 2026-09-21】**：投递说明 §8 增一设计侧关注点（`MCU_VDD` l8 迹线电阻 +81% ⇒ V5 实测一并覆盖）⇒ `docs/K2-P5-FIRST-ARTICLE-TRANSMITTAL-l8-v1.md` 新锚 **`5a74cb491fd025ca`**（原 `19fb16130df598a9`）。**交付包锚 `4b610bad`/`36a6b276` 未动**。
+
+### 续编 · **l7 基准件清扫完成**（CR-48 未覆盖之 4 件 · CR-50）
+
+| # | 条目 | 内容（事实/裁定） | 依据 | 处置红线 |
+|---|---|---|---|---|
+| **CR-50** | **l8 时代件以 l7 为基准者**全量清扫 = **8 件**（CR-48 已处置 4 件 + 本轮 4 件）；其中**外发对账件已换 l8 基准复算 ⇒ 9/9 不变**；余者登记不阻塞 | **清扫范围**：全 `artifacts/k2_v4` 提及 `k2_v4_8L.l7.kicad_pcb` / `c5a7df90` 者逐条判定 ⇒ 属 **l8 时代**（非 l7 世代历史件）者共 **8** 件。**CR-48 已处置 4 件**（`PDN_DESIGN_PRECHECK_V5` · `P5_EXPECTED_VALUES_DESIGN_SIDE` · `P5_V5_NAMED_LOADPOINT_CONSISTENCY_FIX` · `P5_V6_1_NOMINALS…`）。**本轮 4 件**：<br>① **`P5_OUTBOUND_NAMED_ENTITY_RECONCILIATION`（具决策相关性 · 外发方动作依据）** ⇒ **换 l8 基准独立复算**：自写括号配对解析器**先以 l7 复现原 9 项**（口径校验）**再以 l8 重跑 ⇒ **9/9 逐项同**（`U1.10/R29.1/C73.1=NRST` · J13 四脚 · `E2` 八脚⇒**0x52** · `U6/J2/J3/J4` pad 74/38/38 · In1/In3/In6 各 1 `GND` zone · In4 7 zone 网集 · `PCIE_UP3` P+N 层段 F.Cu 30/In2 4/In5 31 · 观察项 refdes 全在）⇒ **原结论对 l8 仍成立**；**非材料性差异 2 项**：`NRST` 层段 88→118（CR-26 重布连带 · 具名判据不变）· In4 zone **文件序**不同（网集相同）。**件**：`P6_execution/P6_OPEN_READINESS/P5_OUTBOUND_NAMED_ENTITY_RECONCILIATION_L8_RECHECK_20260921_v1.json`（`bcd564fac932c7e3`）。<br>② **`P5_RESULTS_TEMPLATE_PREFILLED` · `…PREFILL_AND_PREVALIDATION`**：l7 基准之**预填/预验副本**（原意供外部填写）⇒ 已被**权威模板** `L6/first_article_l8/results_template.json`（`d125c5eac50c933f`）**取代** ⇒ **登记 · 不阻塞**（不改造 · 不主张其为外发件）。<br>③ **`P5_V7_TJ_CALIBER_CORRECTION_TI_SNLS683` · `P5_V7_TJ_CONVERSION_CALIBER_CONFLICT`**：V7 热口径件（**热学与走线几何无关**；l7 引用属**溯源细节**）⇒ **登记 · 不阻塞**。 | 本会话全量清扫 + l8 独立复算（解析器先以 l7 自证）；CR-46/CR-48 同型 | **未改**任何 l7 基准件（历史/在册记录）· **未改**权威模板/交付包/判据/生成器 · **非新增检查齿**（换基准重跑 · 未新增判据维/阈值）· 登记制 |
+
+---
+**（本块）裁定对应**：P5 阶段只读造活（l7 基准件清扫收口）。**报备监理 1 条 · owner 项 0**。

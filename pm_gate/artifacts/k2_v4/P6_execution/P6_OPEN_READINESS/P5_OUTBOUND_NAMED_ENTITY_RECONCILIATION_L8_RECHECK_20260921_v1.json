@@ -1,0 +1,36 @@
+{
+ "artifact": "k2_p5_outbound_named_entity_reconciliation_l8_recheck",
+ "schema": 1,
+ "ts": "2026-09-21T01:02:55+0800",
+ "id": "P5 外发包『具名实体 ↔ 板』对账之 **l8 基准独立复核** —— 补 CR-48 未覆盖之 4 件中最具决策相关者",
+ "why": "CR-46/CR-48 之间型扫描（本会话）发现 **8 件 l8 时代件仍以 l7 为几何/板基准**；其中本件直接关系**外发方动作依据**（`RULES.md §0`：测点以自查件为准；若具名有误 ⇒ 测错点 ⇒ 误判）⇒ 于 l8 逐项独立复算。",
+ "method": "自写**括号配对**解析器（KiCad 10 · `(net \"NAME\")` 行内式）读 **l7 与 l8 两板**；**先以 l7 复现原对账件全部 9 项**（口径校验）→ 再以 **l8** 重跑同一 9 项。**只读**：未跑 pcbnew · 未改任何文件/板/包/判据。",
+ "parser_validation": "**l7 复现 9/9 与原对账件逐项一致**（U1.10/R29.1/C73.1 = `NRST` · J13 四脚 = SDIO/SWCLK_BOOT0/GND/MCU_VDD · E2 八脚 ⇒ A2A1A0=010 ⇒ **0x52** · U6 `ForgeOS:DS320PR1601` · J2/J3/J4 pad 数 **74/38/38** · In1/In3/In6 各 1 `GND` zone · In4 **7** zone 网集 · `PCIE_UP3` P+N 层段 F.Cu **30** / In2.Cu **4** / In5.Cu **31** · 观察项 refdes H4/R41/D2/C87 全在）⇒ **解析口径可靠**。",
+ "l8_recheck": {
+  "verdict": "**9/9 逐项同** ⇒ 原对账件之结论对 **l8 仍然成立**（外发包具名实体与受审板一致；实测方可按件执行）",
+  "verified_on_l8": {
+   "U1_10/R29_1/C73_1": "NRST / NRST / NRST",
+   "J13_pads": "1=SWDIO · 2=SWCLK_BOOT0 · 3=GND · 4=MCU_VDD",
+   "E2_pads_1_8": "GND · MCU_VDD · GND · GND · I2C1_SDA · I2C1_SCL · GND · MCU_VDD ⇒ **0x52**",
+   "U6_fp": "ForgeOS:DS320PR1601",
+   "J2_J3_J4_pads": "74 / 38 / 38",
+   "zones_gnd": "In1.Cu 1 · In3.Cu 1 · In6.Cu 1（皆 GND）",
+   "zones_in4": "7（网集 P3V3×2 · P3V3_AUX×2 · 12V_IN×2 · MCU_VDD×1）",
+   "PCIE_UP3_PN_layers": "F.Cu 30 段 · In2.Cu 4 · In5.Cu 31（与原对账一致）",
+   "refdes_present": "H4/R41/D2/C87 全在",
+   "rails_present": "12V_IN / P3V3 / P3V3_AUX / MCU_VDD 均在板"
+  },
+  "non_material_diffs": [
+   "`NRST` 层段 l7 = 88（F.Cu 87 + B.Cu 1）→ l8 = **118（F.Cu）**（CR-26 修复之重布连带；**具名判据** `U1.10/R29.1/C73.1 = NRST` **不变**）",
+   "`In4` zone 之**文件序**不同（网集逐项相同）⇒ 与网集判定**无影响**"
+  ]
+ },
+ "scope_note": "原对账件**未检** `U4`/`D1`（非外发具名实体）⇒ 本复核**亦不主张**其 l7 值；`U4`/`D1` 之 l8 pad→net 权威件 = `REV_L8_GENERATION_EVIDENCE…`（`122e0021dc7745e3`）与 P4 册（`562b482fac5ee941`）。",
+ "non_tooth": "**非新增检查齿**：未新增判据维/阈值；仅将既有对账**换基准重跑**。",
+ "red_lines_ok": [
+  "只读（未跑 pcbnew · 未改文件）",
+  "未改板/SPEC/网表/判据/交付包/生成器",
+  "未派 WORKER"
+ ],
+ "next": "其余 3 件（`P5_RESULTS_TEMPLATE_PREFILLED` · `…PREFILL_AND_PREVALIDATION` · `P5_V7_TJ_*`×2）之 l7 基准 ⇒ 见册面 **CR-50** 处置（登记 · 不阻塞）。"
+}
