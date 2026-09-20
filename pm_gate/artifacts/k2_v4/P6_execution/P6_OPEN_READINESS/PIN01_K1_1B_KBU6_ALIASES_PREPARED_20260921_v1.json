@@ -1,0 +1,37 @@
+{
+ "artifact": "k2_pin01_k1_1b_kbu6_aliases_prepared",
+ "schema": 1,
+ "ts": "2026-09-21T02:20:00+0800",
+ "id": "PIN01-K1-1b（须批·中）",
+ "authorization": "#K2-51 §三 3/6 验收未达项；#K2-51 §二② 已裁定信号层决定（WORK_EN=PA2 · KEY_DET_EN=PA15 逐字保留）⇒ 本件**只补名绑定、不改 pins**。",
+ "purpose": "把 PIN01-K1-1b 做成可一击落地的载荷（与 PIN01-K1-1c 同批）。",
+ "payload": {
+  "dir": "k2/docs/drafts/pin01-k1-1b-kbu6-aliases-v1/",
+  "file": "STM32G0B1KBU6.yaml",
+  "sha256": "06320bd69359b88c26a411c6be3045fc4aab5e2a4c154f202c73287c6c71ed25",
+  "readme_sha256": "349e9dc30a6b375b891f83bd6908e145bad31e42c85805b8641a557429d3e622",
+  "diff": "仅在 `aliases:` 末尾追加 2 键：`WORK_EN: [PA2]` · `KEY_DET_EN: [PA15]`（pins 逐字未动）"
+ },
+ "sandbox_validation": {
+  "before": {
+   "fail": 29
+  },
+  "plus_1c": {
+   "fail": 25
+  },
+  "plus_1c_plus_1b": {
+   "fail": 23
+  },
+  "delta": "本载荷 −2（恰为 2 项名绑定）",
+  "residual_23": "USB-C J1 ⇒ PIN01-K1-1a（受 J1-SSP-1 口径冲突阻塞）"
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "no_new_criteria_dim": true,
+ "not_landed_detail": [
+  "未写 `_shared`（载荷在 k2/docs/drafts）",
+  "未改 criteria/",
+  "未改 k1/"
+ ],
+ "next": "与 PIN01-K1-1c 同一笔 `_shared` 放行 → PIN-01 29→23"
+}
