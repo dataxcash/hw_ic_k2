@@ -1,0 +1,52 @@
+{
+ "artifact": "k2_p6_k1_source_reconciliation_and_schematic_side_residual",
+ "schema": 1,
+ "purpose": "P6 §⑦ 跨板复用：对 K1 做**同源对账**（K2 已归零的 E1 四源对账族），并具名登记**原理图侧残项**。只读；不动 k1；不新增判据维/不加检查齿（owner ②）。",
+ "A_source_reconciliation": {
+  "counts": {
+   "board_pcb": 42,
+   "k1_board.yaml#devices": 42,
+   "k1_pinmap.yaml#pins": 42,
+   "k1_nets.yaml#端点 refs": 42,
+   "k1_sch.yaml#sheets[].placements": 37,
+   "k1/sch/*.kicad_sch refs": 37
+  },
+  "identical_pairs": "板 42 == board.yaml 42 == pinmap 42 == nets.yaml-refs 42（**四源逐件一致**）· k1_sch.yaml placements 37 == kicad_sch 37（**输入与产物互相一致**）",
+  "only_mismatch": "**原理图侧（输入+产物）37 件 vs 其余四源 42 件**：缺 `Q1 · Q2 · R38 · R39 · U13`",
+  "ghosts": "∅（原理图侧无板外幽灵件）",
+  "missing_five_identity": "板侧实证（ENG 直读 l7… 实为 k1_v1.kicad_pcb）：Q1=`WSON-10-1EP_2.5x2.5mm_P0.5mm`(15 pad) · Q2=`SOT-23`(3) · R38/R39=`R_0402_1005Metric`(2) · U13=`DFN-6_1.6x1.3mm_P0.4mm`(6) ⇒ 均为真实件；`k1_board.yaml.reconciliation.sch_sync_v1` 明列其来源 = **②补充件（Q1 轨B 开关 / WORK_EN / SBU 串 R+ESD / SBU 网拆分）**",
+  "authority": "与 K2 同模式：**板侧为权威**（四源中三源+板一致 42/42/42/42）"
+ },
+ "B_schematic_side_residual_defects": [
+  {
+   "id": "K1-S1",
+   "severity": "高（承 OPEN-1 · BLOCKING 项在**原理图面**未闭合）",
+   "finding": "`k1/sch/v5_connectors.kicad_sch` 的 **J1 Footprint 属性仍为 `Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12`**（16-pin USB2-only，**无 SS 差分焊盘**），而**板上已换** `USB_C_Receptacle_Amphenol_12401548E4-2A`（30 pad：A/B 各 12 信号含 **A2/A3/A10/A11/B2/B3/B10/B11** + 4 SH + 2 NPTH）。",
+   "evidence": "板直读（pad 名单含 SS 8/8）vs `k1_board.yaml.reconciliation.open_issues[OPEN-1]`（ruling: PM 2026-08-22 换 Amphenol；action『本 yaml 已同步 footprint/几何』）⇒ **同步只落在板 + yaml，原理图侧未同步**。",
+   "impact": "原理图面仍声明 16-pin 变体 ⇒ 由该原理图再生的任何产物都会丢 PCIe x2 x2 数据面落点（OPEN-1 原始影响）。"
+  },
+  {
+   "id": "K1-S2",
+   "severity": "中（承 OPEN-2 · WARN）",
+   "finding": "`k1/sch/v5_power_12v_dc-in_dcdc_5v_ldo_3v3.kicad_sch` 的 **U10 Footprint 属性仍为 `Package_TO_SOT_SMD:SOT-23`**（3 pad），而**板上为 `SOT-23-5`**（5 pad，与符号 5 pin 匹配）。",
+   "evidence": "板直读 U10 fp=SOT-23-5 · n_pads=5 vs 原理图 property=SOT-23 · `open_issues[OPEN-2].action` =『原理图 footprint 修正**待 ECO**』⇒ 该 ECO 未落。"
+  },
+  {
+   "id": "K1-S3",
+   "severity": "低（自述与盘上不符）",
+   "finding": "`k1_board.yaml.reconciliation.device_count` 自述 `schematic_sch_k1: 42 · diff: []`，与盘上实测（k1_sch.yaml placements 37 · kicad_sch refs 37）**不符**。",
+   "note": "K2 曾因『追溯块/声明与盘上不符』被监理点名（计划 §版本追溯 更正 #1）⇒ 建议随 K1 侧再生后一并订正。"
+  }
+ ],
+ "C_reusable_fix_family": [
+  "与 K2 **E1 四源归零**同族：**由单一真源再生** —— K1 侧真源 = `k1_board.yaml`（含②补充件）· 已具名生成器 = `k1/pm_gate/tools/k1_sch_sync_v1.py`（`k1_board.yaml.reconciliation.sch_sync_v1.generator`）",
+  "再生后预期：原理图侧 37→**42**（回填 Q1/Q2/R38/R39/U13）+ J1/U10 footprint 同步 ⇒ `refdes_sets_equal` 的 5 件差**归零**",
+  "附属：订正 `device_count` 自述；`k1_nets_yaml_missing_nodes`(7 条) 与 `nc_pairs` 差 4 亦可在同一次再生中一并核算（属 K1 输入面）"
+ ],
+ "D_boundary": "**只读审计 + 提案**：未改 `k1/` 任何文件（`git -C k1 status` 洁净）；修法须 K1 项目授权（改 `k1/sch/*`、`k1/boards/*.yaml`）。**不新增判据维、不主张新增检查齿**（owner ②）——本件仅登记事实与既有 J-6（板↔原理图一致）冻结语义下的 K1 侧残项。",
+ "E_k2_contrast": "K2 侧同源面**已归零**：canonical 19 实测 `refdes_sets_equal` 原理图 54 / 板 54（差 0）· `lib_electrical_level` 电气级 0；K1 侧仍 **37 / 42** 且原理图侧两处封装属性陈旧。",
+ "readonly_repo": true,
+ "not_landed": true,
+ "no_new_criteria_dim": true,
+ "ts": "2026-09-22T01:25:00+0800"
+}
