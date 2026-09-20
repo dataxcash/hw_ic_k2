@@ -32,3 +32,25 @@
 ## 四、边界
 
 只读复算（DRC work-dir / 产物 / 旧件沙箱全在 `/tmp/opencode`，仓库零改）；未改判据/生成器/SPEC/原理图；未派 WORKER；未越阶段门。
+
+---
+
+# 附：**全五件测量输入**（同日续推）—— K1 判定面达本环境可达上限
+
+- 读数（签认 `criteria/manifest.k1.yaml` + DRC + W-8 + J-8 出框 + J-8 密度/间距 + min-clearance bracket）：
+  **10 PASS / 8 FAIL**（`provisional=false`，18/19 维参与；`ref_plane_continuity` K1 侧 `enabled:false`）。
+- 两维由 **fail-closed → 实读数**（均 FAIL，且**与手工缺陷册逐条一致**）：
+
+| 维 | 机读 | 与在册缺陷册交叉核对 |
+|---|---|---|
+| `pads_within_outline` | 全 pad(AABB)=**2** · 接口件=**2** · 真框多边形=**2**（`J1.SH` ×2） | **K1-D1**（pads_within_outline 2 pad = J1 SH）✓ 一致 |
+| `density_and_clearance` | 10mm/frame_origin 封装峰值 **12（>8）** · 最小铜间距 **<0.100**（T=0.100 起即违规 ⇒ 实达区间 `[None, 0.1]`）· pad 到边 **-0.39mm** | **K1-D7**（密度/铺铜）与 **K1-D3**（最紧样本 = `U1` pad17[no net] ↔ `J6` PTH pad1[`PWR_CTRL_OUT`]）✓ 同址 |
+| `lib_electrical_level` | **空过 PASS**（42/42 `no_library_link`） | **W8-VAC-1** ⇒ **禁用其宣称合规** |
+
+- 测量器全部**板参数化**（`--board`）；唯一 K1 侧自由参数 = `--interface-refs`，由 K2 缺省
+  `[J2,J3,J4,J6,J9,J11,J12,J13]` 换为 **K1 接口集 `[J1,J6,J9,J10,J13,J14]`**（已在件中具名）。
+  四件测量件均带 `board_sha16=eda1dc91eec76aa7` = 受审板 ⇒ 非陈旧（fail-closed 通过）。
+- 证据件：`K1_ANCHOR_REBASELINE_POST_N3_20260921_v1.json（ef7160de72900d2d）` +
+  `K1_W8_FOOTPRINT_AUDIT_20260921_v1.json（146b8543…）` · `K1_PADS_WITHIN_OUTLINE_20260921_v1.json（b8e4f0e4…）` ·
+  `K1_DENSITY_AND_CLEARANCE_20260921_v1.json（2b274031…）` · `K1_MIN_CLEARANCE_DRC_BRACKET_20260921_v1.json（cfabf764…）`。
+- 结论：**K1 判定面已达本环境可达上限**（18/19 维有读数；余 1 维 K1 侧不适用）。其余 FAIL 均已有具名成因与归属（K1-D 系列 / R-1 / W8-VAC-1）。

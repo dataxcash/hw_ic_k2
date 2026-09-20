@@ -3,7 +3,7 @@
  "schema": 1,
  "ts": "2026-09-20T20:07:34+0800",
  "purpose": "**K1 锚重基线**（承 N-3 落件；handoff『落件后报 K1 锚重基线』）：以**已签认**判据 `criteria/manifest.k1.yaml` + **DRC 实跑**给出 N-3 前后逐维读数，证明 N-3 只增维不回退。只读复算。",
- "printout": "K1 判定（签认 manifest + DRC 实跑）**7 PASS/11 FAIL → 9 PASS/9 FAIL**（18/19 维）；**另**：追加 W-8 测量件后 = 10 PASS/8 FAIL，**但 `lib_electrical_level` 属空过（W8-VAC-1，禁用其宣称合规）**",
+ "printout": "K1 判定（签认 manifest）：**7 PASS/11 FAIL →（+DRC）9 PASS/9 FAIL →（+全五件测量输入）10 PASS/8 FAIL**；其中 `lib_electrical_level` 属**空过（W8-VAC-1，禁用其宣称合规）**；`pads_within_outline`/`density_and_clearance` 已由 fail-closed → **实读数 FAIL**（与 K1-D1/D3/D7 手工册逐条一致）。",
  "command_template": "python3 criteria/adjudicate.py --project k1 --board k1/k1_v1.kicad_pcb --pro k1/k1_v1.kicad_pro --nets {nets} --sch-dir {sch} --root . --manifest criteria/manifest.k1.yaml --drc-cli AppDir/bin/kicad-cli --drc-work-dir <全新> --out {out}",
  "runs": {
   "before": {
@@ -86,6 +86,41 @@
     "sha16": "753446eb68e86acc"
    },
    "dim_reading": "`lib_electrical_level` **PASS**（电气级差异 0 + 仅 pad 名差异 0；审计板 sha16 == 受审板 ⇒ 非陈旧）"
+  },
+  "after_full_inputs": {
+   "desc": "N-3 后 + **五件测量输入全给**（DRC + W-8 + J-8 出框 + J-8 密度/间距 + min-clearance DRC bracket）⇒ K1 可达的最完整读数",
+   "measure_cmds": [
+    "AppDir/usr/bin/python3.11 k2/tools/k2_w8_footprint_audit_v1.py --board k1/k1_v1.kicad_pcb --proj-lib k1/lib --out-json … --out-md …",
+    "AppDir/usr/bin/python3.11 k2/docs/drafts/p4-j8-v3-measurement-v1/measure_pads_within_outline.py --board k1/k1_v1.kicad_pcb --interface-refs J1,J6,J9,J10,J13,J14 --json …",
+    "AppDir/usr/bin/python3.11 k2/docs/drafts/p4-j8-density-clearance-v1/measure_density_and_clearance.py --board k1/k1_v1.kicad_pcb --json …",
+    "AppDir/usr/bin/python3.11 k2/docs/drafts/p4-j8-density-clearance-v1/measure_min_clearance_drc.py --board k1/k1_v1.kicad_pcb --pro k1/k1_v1.kicad_pro --kicad-cli AppDir/bin/kicad-cli --json …"
+   ],
+   "measurement_artifacts": {
+    "w8": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/K1_W8_FOOTPRINT_AUDIT_20260921_v1.json（146b8543fb629b43）",
+    "pads_outline": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/K1_PADS_WITHIN_OUTLINE_20260921_v1.json（b8e4f0e49b9c278e）",
+    "density": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/K1_DENSITY_AND_CLEARANCE_20260921_v1.json（2b2740319a1a83e3）",
+    "min_clearance": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/K1_MIN_CLEARANCE_DRC_BRACKET_20260921_v1.json（cfabf764f6b33d2f）"
+   },
+   "verdict": {
+    "n_pass": 10,
+    "n_fail": 8,
+    "provisional": false,
+    "sha16": "5dfb0f5974138354"
+   },
+   "newly_resolved_dims": {
+    "pads_within_outline": {
+     "reading": "FAIL — 全 pad(AABB)=2 · 接口件=2 · 真框多边形=2（J1.SH ×2）",
+     "cross_check": "与 K1-D1（`pads_within_outline` 2 pad = J1 SH）**逐条一致** ✓"
+    },
+    "density_and_clearance": {
+     "reading": "FAIL — 10mm/frame_origin 封装峰值 **12（>8）** · 最小铜间距 **<0.100**（DRC bracket：T=0.100 起即违规 ⇒ 实达区间 [None,0.1]）· pad 到边 **-0.39mm**",
+     "cross_check": "与 K1-D7（密度/铺铜）与 K1-D3（U1 pad17 ↔ J6 pad1 ≈0.0mm）**同址一致** ✓（最紧样本 = U1 pad17[no net] ↔ J6 PTH pad1[PWR_CTRL_OUT]）"
+    },
+    "lib_electrical_level": {
+     "reading": "**空过 PASS**（42/42 `no_library_link`）⇒ 见 **W8-VAC-1**，禁用其宣称合规"
+    }
+   },
+   "measurement_tools_note": "三件测量器均为**板参数化**（`--board`）；`--interface-refs` 由 K2 缺省 [J2,J3,J4,J6,J9,J11,J12,J13] 换为 **K1 接口集 [J1,J6,J9,J10,J13,J14]**（K1 侧唯一自由参数，已在件中具名）；测量器读数均带 `board_sha16=eda1dc91eec76aa7` = 受审板 ⇒ 非陈旧。"
   }
  },
  "flips": {
@@ -145,7 +180,7 @@
   "未派 WORKER",
   "未越阶段门"
  ],
- "next": "①R-1 获裁后落件 ⇒ `pin_map_complete` 可翻 PASS ②**W8-VAC-1**：K1 footprint 补 `lib_id` 或裁定口径（**须批**）③K1 版 J-8 测量件（出框/密度·间距）落地 ⇒ 2 个『缺件 fail-closed』维转实读数 ④K1-D1..D12 排期（未批不动板）",
+ "next": "①R-1 获裁后落件 ⇒ `pin_map_complete` 可翻 PASS ②**W8-VAC-1**：K1 42 件补 `lib_id` 或裁定口径（**须批**）③K1-D1..D12 排期（未批不动板；本基线已为其提供机读读数）④**K1 判定面已达本环境可达上限**（19 维中 18 维有读数，1 维 `ref_plane_continuity` K1 侧 `enabled:false`）",
  "findings": [
   {
    "id": "W8-VAC-1",
