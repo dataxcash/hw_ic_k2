@@ -1,0 +1,100 @@
+{
+ "artifact": "k2_p5_expected_values_design_side",
+ "schema": 1,
+ "ts": "2026-09-21T09:40:00+0800",
+ "id": "**P5 执行包缺口补齐**：V6-2 / V6-3 的『预期值』（设计侧推导 · **非实测 · 非判据变更**）",
+ "authorization": "监理自动续推『推进当前阶段（P5）』；本件补齐实测方判『正确』所需之**预期值**（模板原 `expected_device_id`/`expected_address` = null ⇒ 实测方无对照）。只读推导；未改 criteria/SPEC/板/交付包。",
+ "gap_found": {
+  "what": "`L6/first_article/results_template.json` 的 V6-2/V6-3 判据为『与器件手册/原理图标称一致』，但 `expected_*` 字段为空 ⇒ 实测方无法自判。",
+  "fix": "本件给出设计侧可推导的预期值 + 手册依赖项登记，并回填模板（数值来源可复算）。"
+ },
+ "V6_3_fru_i2c": {
+  "device": "E2（FRU_EEPROM · AT24C02 类 8-pin SOIC · symbol ref_prefix=E）",
+  "bus": "**I2C1**（板：pad5 SDA=I2C1_SDA · pad6 SCL=I2C1_SCL；原理图：`E2/SDA`→I2C1_SDA · `E2/SCL`→I2C1_SCL）",
+  "strapping_7bit": {
+   "A0": "GND(0)",
+   "A1": "**MCU_VDD(1)**",
+   "A2": "GND(0)",
+   "WP": "GND（写使能）"
+  },
+  "expected_address": {
+   "addr_7bit": "**0x52**",
+   "addr_8bit_write": "0xA4",
+   "addr_8bit_read": "0xA5",
+   "derivation": "AT24C02 类固定前缀 1010 + (A2 A1 A0) = 0b1010_010 = 0x52"
+  },
+  "cross_check": {
+   "board_as_built": {
+    "k2/hw/k2_v4_8L.l7.kicad_pcb": {
+     "sha16": "c5a7df90aadb66e0",
+     "pads": {
+      "1(A0)": "GND",
+      "2(A1)": "MCU_VDD",
+      "3(A2)": "GND",
+      "4(VSS)": "GND",
+      "5(SDA)": "I2C1_SDA",
+      "6(SCL)": "I2C1_SCL",
+      "7(WP)": "GND",
+      "8(VCC)": "MCU_VDD"
+     }
+    }
+   },
+   "schematic_intent": {
+    "k2/hw/data/k2_sch.yaml": {
+     "sha16": "dd794c54f7ce7417",
+     "GND": [
+      "E2/VSS",
+      "E2/A0",
+      "E2/A2",
+      "E2/WP"
+     ],
+     "MCU_VDD": [
+      "E2/VCC",
+      "E2/A1"
+     ],
+     "I2C1_SDA": [
+      "E2/SDA"
+     ],
+     "I2C1_SCL": [
+      "E2/SCL"
+     ]
+    }
+   },
+   "pin_truth": {
+    "_shared/eda_core/sch_gate/datasheets/FRU_EEPROM.yaml": {
+     "sha16": "155413b715a8d1f9",
+     "note": "`pins` 1=A0 2=A1 3=A2 4=VSS 5=SDA 6=SCL 7=WP 8=VCC ⇒ 与 E2 板上网名逐脚一致"
+    }
+   }
+  },
+  "reading_for_tester": "I2C1 扫描应见 **0x52**（若扫描器用 8-bit 表示则为 **0xA4/0xA5**）；内容可读 ⇒ V6-3 二值成立（判定归监理）。"
+ },
+ "V6_2_mcu_swd_id": {
+  "device": "U1 = STM32G0B1KBU6（LQFP? 板件 = UFQFPN32 · 32 脚 + EP）",
+  "record_two_readings": [
+   "① **SW-DP IDCODE**（调试器直读；`pyocd`/`openocd` 均打印）",
+   "② **DBGMCU_IDCODE** @ `0x40015800`（DEV_ID/REV_ID；须随实测一同记录）"
+  ],
+  "expected": {
+   "sw_dp_idcode": "**0x0BC11477**（Cortex-M0+ · ARM CoreSight ADIv5 标准值 · 厂商无关）",
+   "st_dbgmcu_dev_id": "**须以 RM0454（STM32G0 参考手册 §DBG）检取** —— 本环境 `www.st.com` = **HTTP 567（反自动化）** ⇒ 离线不可得 ⇒ **登记为手册依赖项**，**不猜测数值**（防 C-12 式臆断）"
+  },
+  "note": "判据 = 『与器件手册一致』；本件只提供**可复算的 SW-DP 预期值**与**手册依赖登记**，DEV_ID 数值由实测方按 RM0454 对照后交监理判定。"
+ },
+ "V6_4_link": {
+  "expected": "**x4 Gen4（16 GT/s）** 训练成功；记录 速度/宽度/LTSSM 终态（预期终态 L0）",
+  "ports": [
+   "J2",
+   "J3",
+   "J4"
+  ]
+ },
+ "boundary": [
+  "**非 P5 证据**：全部为设计侧推导，P5 判定仍须外部实测与监理判定。",
+  "未改 criteria/SPEC/原理图/板/交付包；未新增判据维。",
+  "模板回填仅补 `expected_*`（数值来源见本件），**判据文本与阈值一字未改**。"
+ ],
+ "readonly_repo": true,
+ "not_landed": false,
+ "landed": "① 本件；② 模板 `expected_*` 回填；③ 投递说明 §9 与 sha 刷新"
+}

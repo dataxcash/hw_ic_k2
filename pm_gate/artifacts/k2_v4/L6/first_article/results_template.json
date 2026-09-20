@@ -115,10 +115,14 @@
      }
     },
     "device_id_read": null,
-    "expected_device_id": null
+    "expected_device_id": {
+     "sw_dp_idcode_expected": "0x0BC11477（Cortex-M0+ · ARM CoreSight 标准）",
+     "st_dbgmcu_dev_id_expected": "须以 RM0454 §DBG 检取（st.com 离线不可达 ⇒ 手册依赖项）",
+     "source": "设计侧推导 · k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/P5_EXPECTED_VALUES_DESIGN_SIDE_20260921_v1.json（825112398ff1ef76）"
+    }
    },
    "criterion": "读到正确 device ID（须与器件手册一致）",
-   "note": ""
+   "note": "记录两项：SW-DP IDCODE + DBGMCU_IDCODE(0x40015800)。"
   },
   "V6_3_fru_i2c": {
    "required": true,
@@ -130,10 +134,25 @@
      "I2C2"
     ],
     "addresses_found": [],
-    "expected_address": null
+    "expected_address": {
+     "refdes": "E2",
+     "part_class": "AT24C02 类 8-pin SOIC",
+     "bus": "I2C1",
+     "addr_7bit": "0x52",
+     "addr_8bit_write": "0xA4",
+     "addr_8bit_read": "0xA5",
+     "strapping": {
+      "A0": "GND(0)",
+      "A1": "MCU_VDD(1)",
+      "A2": "GND(0)",
+      "WP": "GND"
+     },
+     "source": "设计侧推导（板侧+原理图双侧一致）· k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/P5_EXPECTED_VALUES_DESIGN_SIDE_20260921_v1.json（825112398ff1ef76）"
+    },
+    "fru_eeprom_bus": "I2C1"
    },
    "criterion": "FRU EEPROM 地址应答正确（与原理图/BOM 标称地址一致）",
-   "note": ""
+   "note": "I2C1 上应见 0x52（8-bit 记为 0xA4/0xA5）。"
   },
   "V6_4_link_gen4_x4": {
    "required": true,
