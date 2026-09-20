@@ -1,0 +1,162 @@
+{
+ "artifact": "k2_sch_gate_truth_registry_credibility_audit",
+ "schema": 1,
+ "purpose": "审计**内部『引脚真源』注册册**（`_shared/eda_core/sch_gate/datasheets/`，33 件）的**可信性**：其 `device`/`package` 声明是否与设计实现（`k2/hw/data/k2_sch.yaml` 符号）相符；并把 K2 交付板的『无网 pad』全量登记作佐证。只读；不新增判据维/检查齿。",
+ "A_registry_scope": {
+  "n_files": 33,
+  "used_by_k2_symbols": 9,
+  "note": "注册册在 `_shared` ⇒ **K1/K2 共用**；多数条目对应 K1/他项目器件。"
+ },
+ "B_overlap_audit": [
+  {
+   "device": "DCDC_12V_3V3",
+   "registry_package": "SOT-23-6 (DBV)",
+   "registry_source": "TI SLVSD82 (TLV61046A) Table 5-1 + SLVA912 (TLV61046 同脚位)",
+   "n_pins_registry": 6,
+   "design_footprint": "Package_SO:SOIC-8_5.3x5.3mm_P1.27mm",
+   "design_value": "DCDC_12V_3V3",
+   "n_pins_symbol": 6
+  },
+  {
+   "device": "DCDC_12V_5V",
+   "registry_package": "SOT-23-6 (DBV)",
+   "registry_source": "TI SLVSD82 (TLV61046A) Table 5-1 + SLVA912 (TLV61046 同脚位)",
+   "n_pins_registry": 6,
+   "design_footprint": "Package_SO:SOIC-8_5.3x5.3mm_P1.27mm",
+   "design_value": "DCDC_12V_5V",
+   "n_pins_symbol": 6
+  },
+  {
+   "device": "FRU_EEPROM",
+   "registry_package": "8-pin SOIC",
+   "registry_source": "AT24C02 类 I2C EEPROM 标准脚位",
+   "n_pins_registry": 8,
+   "design_footprint": "ForgeOS:SOIC8_FRU",
+   "design_value": "FRU_EEPROM",
+   "n_pins_symbol": 8
+  },
+  {
+   "device": "LDO_5V_3V3",
+   "registry_package": "SOT-23-5",
+   "registry_source": "Diodes Inc AP2127 (DS31056) — Pin Descriptions SOT-23-5",
+   "n_pins_registry": 5,
+   "design_footprint": "Package_TO_SOT_SMD:SOT-23",
+   "design_value": "LDO_5V_3V3",
+   "n_pins_symbol": 5
+  },
+  {
+   "device": "OCuLink_SFF8612",
+   "registry_package": "SFF-8612 OCuLink receptacle, 42-pin (2 rows x 21), x4 lane",
+   "registry_source": "PCI-SIG PCI Express OCuLink ECN / SFF-8612 Rev 1.0 pinout (icy dock MB873 V2 图交叉核对)",
+   "n_pins_registry": 42,
+   "design_footprint": "ForgeOS:OCuLink_SFF8612",
+   "design_value": "OCuLink_SFF8612",
+   "n_pins_symbol": 42
+  },
+  {
+   "device": "OPTO_LTV356T",
+   "registry_package": "SOP-4",
+   "registry_source": "LTV-356T 光耦标准脚位",
+   "n_pins_registry": 4,
+   "design_footprint": "ForgeOS:OPTO_LTV356T",
+   "design_value": "OPTO_LTV356T",
+   "n_pins_symbol": 4
+  },
+  {
+   "device": "PI3DBS16412",
+   "registry_package": "42-TQFN (ZH42), 3.5x9mm",
+   "registry_source": "Diodes DS40277 Rev 4-2 (Dec 2020) — Pin Description + 42-TQFN pin config",
+   "n_pins_registry": 43,
+   "design_footprint": "ForgeOS:PI3DBS16412",
+   "design_value": "PI3DBS16412",
+   "n_pins_symbol": 43
+  },
+  {
+   "device": "TPS22919",
+   "registry_package": "DCK-6 (SOT-SC70)",
+   "registry_source": "TI SLVSEN5B (TPS22919 Rev B) — Section 5 Pin Configuration and Functions",
+   "n_pins_registry": 6,
+   "design_footprint": "ForgeOS:TPS22919",
+   "design_value": "TPS22919",
+   "n_pins_symbol": 6
+  },
+  {
+   "device": "USB_C_RECEPT",
+   "registry_package": "USB Type-C receptacle (12-pin simplified + 2nd SS pair)",
+   "registry_source": "USB-IF Type-C R2.0 + Molex 105444 (同信号) + USB_C_RECEPT_24.yaml (第二对)",
+   "n_pins_registry": 16,
+   "design_footprint": "Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12",
+   "design_value": "USB_C_RECEPT",
+   "n_pins_symbol": 16
+  }
+ ],
+ "C_conflicts": [
+  {
+   "device": "DCDC_12V_3V3",
+   "registry_package": "SOT-23-6 (DBV)",
+   "registry_source": "TI SLVSD82 (TLV61046A 28V Boost)",
+   "design_footprint": "Package_SO:SOIC-8_5.3x5.3mm_P1.27mm",
+   "used_by": "K2 `U2`",
+   "severity": "高（**交付板 land pattern 冲突 · 需澄清**）",
+   "analysis": "① 拓扑不合：`TLV61046` 为 **28V boost**，而该轨为 **12V→3.3V**（降压）⇒ 器件归属不可信；② 引脚映射（1SW/2GND/3FB/4EN/5VOUT/6VIN）与设计**一致** ⇒ 注册册 pins 系**由设计派生**、非手册派生；③ 若注册册为真 ⇒ 交付板 **SOIC-8 land pattern 与 SOT-23-6 器件不符（不可制造）**；若设计为真 ⇒ **注册册归属错误**。"
+  },
+  {
+   "device": "DCDC_12V_5V",
+   "registry_package": "SOT-23-6 (DBV)",
+   "registry_source": "TI SLVSD82 (TLV61046A 28V Boost)",
+   "design_footprint": "Package_SO:SOIC-8_5.3x5.3mm_P1.27mm",
+   "used_by": "K2（12V→5V 主轨）· K1 `U8`（另见 K1-D10）",
+   "severity": "高（同上）",
+   "analysis": "同 C-1：拓扑不合（boost vs 12V→5V 6A 降压）+ 引脚映射与设计一致。"
+  },
+  {
+   "device": "LDO_5V_3V3",
+   "registry_package": "SOT-23-5",
+   "design_footprint": "Package_TO_SOT_SMD:SOT-23",
+   "used_by": "K1 `U10`（K1-S2）/ K2 同族",
+   "severity": "中（**已知** K1-S2 家族；此处注册册为**正确**一侧）",
+   "analysis": "注册册 SOT-23-5 与 K1-S2『实际器件为 SOT-23-5、原理图 footprint 陈旧』**互相印证** ⇒ 此条**设计侧错、注册册对**。"
+  },
+  {
+   "device": "USB_C_RECEPT",
+   "registry_package": "USB Type-C receptacle (12-pin simplified + 2nd SS pair)",
+   "design_footprint": "Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12",
+   "used_by": "K1 `J1`（K1-S1）",
+   "severity": "中",
+   "analysis": "注册册描述『12-pin 简化 + 第二对』；板侧为 **HRO 16-pin USB2-only**（K1-S1 已知未同步）⇒ 描述与实现不一致，须随 K1-S1 一并订正。"
+  }
+ ],
+ "D_k2_board_no_net_pads": {
+  "method": "pcbnew-free 解析受审板 l7",
+  "total_pads": 676,
+  "pads_without_net": 132,
+  "footprints_with_such": 11,
+  "by_refdes": {
+   "U6": 93,
+   "U1": 22,
+   "J4": 4,
+   "J3": 4,
+   "J2": 2,
+   "U2": 2,
+   "U4": 1,
+   "H1": 1,
+   "H2": 1,
+   "H3": 1,
+   "H4": 1
+  },
+  "note": "**U2 的 pad 7/8 无网且无 NC 声明**（`k2_nets#nc` 25 条不含 U2；`placements[].nc` 亦不含）——与 C-1 的『6 脚符号落 8 pad SOIC』一致（另 2 脚悬空）。其余多数为 U6 BGA 保留球 / U1 未用 GPIO / 连接器保留脚 / 安装孔，且 U6/U4/J2-J4 **已有 NC 声明**。"
+ },
+ "E_impact_and_ask": {
+  "if_registry_right": "**交付板 U2/U8（及 K1 U8）land pattern 与器件不符 ⇒ 不可制造** ⇒ 须开新 rev（触交付锚，另批）。",
+  "if_design_right": "**内部『引脚真源』注册册归属不可信** ⇒ 对 **C-1/C-25**（外部真源）是直接反证：该册**非手册派生**，不宜作 `source_of_truth`（**支持 C-25 走 tier1 库封装语料**）。",
+  "ask": [
+   "澄清 `DCDC_12V_3V3/5V` 的**实装器件与封装**（以需求冻结/BOM 为准）",
+   "据结论修注册册或修板（**均须授权**）",
+   "**监理自裁面；owner 闸口=无**（除非判定为拓扑/选件 ⇒ 按 L1 上报）"
+  ]
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "no_new_criteria_dim": true,
+ "ts": "2026-09-22T09:05:00+0800"
+}
