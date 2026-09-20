@@ -1,0 +1,87 @@
+{
+ "artifact": "k2_batch3_b2_1_b2_2_scope_definition",
+ "schema": 1,
+ "purpose": "⑦ 授权口径的**范围界定件**：把『v3 表标授权=无』与『共享层改动须监理批』的口径冲突，落到**具体改动面 + 零回归预验证方案 + 回滚**，供监理一次裁定（内容不代裁）。",
+ "drift_check": {
+  "landed_engine": "_shared/eda_core/hs_route_model.py sha16 = 8f9bd6c7fa033039（= 批 2 落件引擎）",
+  "fact": "`results_template.json` 所载行号为**批 2 前快照**；本件按 landed 引擎复核 ⇒ **部分载体已漂移**",
+  "recheck": [
+   {
+    "item": "B2-1",
+    "claim": "def :4513 / call :892",
+    "actual": "def **:4519**（+6）/ call :892（未漂移）"
+   },
+   {
+    "item": "B2-2",
+    "claim": "def :4406 / --all-v4 :4796 / 分派 :4800-4804 / call :4806 / 第二路径 :4842-4846",
+    "actual": "def **:4412**（+6）/ `--all-v4` 定义 **:4705-4706** / 分派/使用 **:4811** / 调用 **:4821**（该区 −91 漂移）"
+   },
+   {
+    "item": "B2-2 文档同步点",
+    "claim": "routing_topology_gate.py:43",
+    "actual": ":43（**未漂移**，含『不跑 --all-v4』）"
+   }
+  ],
+  "rule": "⇒ **施工第 0 步 = 行号复核（grep）**；本件行号仅作定位起点，不得直接按旧行号施工"
+ },
+ "items": [
+  {
+   "id": "B2-1",
+   "title": "`_escape_smd_via` pad 契约显式化",
+   "carriers": [
+    "`_shared/eda_core/hs_route_model.py:4519`（def `_escape_smd_via`）",
+    "`:892`（调用点）"
+   ],
+   "required": "pad 几何真源 = **板 as-built 优先**；库/YAML 交叉核对；不一致**显式登记**，**禁静默 None/默认值**",
+   "fail_closed_gates": [
+    "涉项用例实跑绿（**skipped 不得充绿**；基线 34 passed / 34 skipped 口径适用）",
+    "`python3 -m py_compile _shared/eda_core/hs_route_model.py`"
+   ],
+   "negative_controls": [
+    "构造 pad 真源冲突 ⇒ **显式登记/报错**（非静默默认）"
+   ]
+  },
+  {
+   "id": "B2-2",
+   "title": "`--all-v4` 项目维度分派显式化",
+   "carriers": [
+    "`hs_route_model.py:4412`（def `solve_all_v4`）",
+    "`:4705-4706`（`--all-v4` 定义）",
+    "`:4811`（分派使用）",
+    "`:4821`（调用）",
+    "`_shared/eda_core/routing_topology_gate.py:43`（文档同步点）"
+   ],
+   "required": "分派按**项目维度显式**（`chain_segments` ↔ alloc `PCIE_` 语义），**禁隐式默认落 K2**",
+   "fail_closed_gates": [
+    "分派断言绿（构造 K1 链基 ⇒ 分派 K1）",
+    "K2 同输入同输出（**逐字节不回退**）"
+   ],
+   "negative_controls": [
+    "非法/缺失项目维度 ⇒ **报错**（非静默取 K2）"
+   ]
+  }
+ ],
+ "preverify_plan_zero_regression": {
+  "why": "两项皆改 `_shared` ⇒ 按既有口径须过**全回归门**方得入库",
+  "steps": [
+   "① `cd k2 && PYTHONPATH=$PWD/_shared:$PWD python3 _shared/eda_core/pipeline/engine.py verify k2` ⇒ preflight+3 **PASS**",
+   "② canonical 19 维（**全新 `--drc-work-dir`**）⇒ **19 OK / 0 FAIL**，且 **两跑逐字节同**（verdict sha16 须 == 在岗签认值 `190b73be0f728a56`）",
+   "③ `AppDir/bin/python3.11 k2/tools/k2_p6_acceptance_gate_v1.py --expect-patched` ⇒ **PASS**（A 4/4 · C K1=14/K2=14 · **回退 0** · D hidden=2 = 具名 C1/C2）",
+   "④ 双布局 pytest（容器根 / k2 检出）：**零新增失败/零新增 skip**（对表 `SUITE_BASELINE_AND_BATCH2_DELTA_v1.json`）",
+   "⑤ 各自**负控牙齿**实跑（见 items[].negative_controls）；**skipped 不充绿**"
+  ]
+ },
+ "authorization": {
+  "verdict": "**共享层（`_shared`）改动 ⇒ 须监理批**（依 #K2-41 §三-② 同类先例：B1/B2/B4 即由监理批并入批 2）",
+  "owner_gate": "**无**（非 L1：不涉拓扑/接口/信号流向/球重映射；不动 owner 系统/账号/预算）",
+  "no_new_tooth": "两项均为**既有维的契约显式化/分派显式化**，**不新增检查齿**（守 owner 常设②）",
+  "scope_question_for_supervisor": "是否与批 3 其它项**同批升版**（C-6 禁零散补丁）"
+ },
+ "cost_and_rollback": {
+  "files": "`_shared/eda_core/hs_route_model.py`（+ `routing_topology_gate.py` 文档 1 行）",
+  "rollback": "文件级 `git revert`（单提交）；无冻结件/交付锚/criteria 触碰"
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "tools_touched": false
+}
