@@ -1,0 +1,17 @@
+{
+ "artifact": "k2_batch3_anchor_literal_census",
+ "schema": 1,
+ "purpose": "板锚修暴露『永久掩盖』类缺陷（cap_wall：join 段错 ⇒ 两布局恒 skip）后，对 `_shared/eda_core/tests/*.py` 做**一次性字面量级锚普查**，确认无第二处同族悬空锚。",
+ "method": "抽所有含 `/` 的路径字面量（排除 /tmp）→ 在四个候选根（容器根 / k2 / _shared / k2/_shared）解析存在性 → 报『四根皆不存在』者",
+ "result": {
+  "rel_missing": 11,
+  "abs_missing": 7,
+  "verdict": "**无第二处同族悬空锚**：18 项命中逐条归因 = 测试夹具模板（`{truth}/FIX.yaml`、`{art}/plan.json`、`model_solves/x.json`）· 负控专用不存在路径（`/nonexistent/SPEC_does_not_exist.json`）· 跨行拼接碎片（`F.Cu->In/B.Cu`、`/channel_alloc_v4/channel_alloc.json`）· 占位路径（`/home/u/proj/...`、`/p/.omo/supervision/...`）"
+ },
+ "limit": {
+  "honest": "本法**扫不出** cap_wall 那样『join 段错但每段都像真的』的形态；该形态只能靠**跨布局行为差异**发现（本会话已固定该手法：双布局 junit 逐用例比对）",
+  "no_new_check_tooth": "依 owner 常设②（禁新增检查齿 t45+）⇒ **不新增任何自动检查齿**；本件为**一次性普查结论**，手法已在 RUNBOOK/本件留痕，供后续复用"
+ },
+ "readonly_repo": true,
+ "not_landed": true
+}
