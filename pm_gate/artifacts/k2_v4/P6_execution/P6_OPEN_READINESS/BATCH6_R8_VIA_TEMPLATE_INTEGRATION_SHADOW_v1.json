@@ -16,6 +16,14 @@
   "C__⑨_after_existing +(c) 槽位重排": {
    "seg_solved": "**2/8**",
    "detail": "TX1/input 失败面由『走廊段 seg_ok 失败』变为『P/N 间距不足 −0.09（段级门）』⇒ **走廊已通（(c) 生效）**，但**逃逸/装配后的对级交叉仍在** ⇒ 仍未 SOLVED"
+  },
+  "D__⑩_same_inner_layer(default)": {
+   "seg_solved": "2/8",
+   "detail": "TX0/output 0.142 · RX0/input 0.2636 ⇒ 与基线同 ⇒ 同层内层绕行**无增益**"
+  },
+  "E__⑩+(c) 槽位": {
+   "seg_solved": "2/8",
+   "detail": "TX1/input 仍『段级 P/N −0.09』（走廊已通、逃逸/装配交叉仍在）"
   }
  },
  "hard_constraints_learned": [
@@ -26,5 +34,13 @@
  "k1_truth_unchanged": "**2/8**（TX0/output 0.142 · RX0/input 0.2636）；层合法违规 0",
  "readonly_repo": true,
  "not_landed": true,
- "ts": "2026-09-21T17:40:00+0800"
+ "ts": "2026-09-21T18:40:00+0800",
+ "ceiling_conclusion": {
+  "statement": "把 ⑨（异内层）与 ⑩（同内层，落点直对齐走廊层）两种形态接入后，K1 真值**上界仍 = 2/8**（与 v4 基线同）",
+  "why_remaining_6_blocked": [
+   "TX0/input · TX1/input（(c)后）：**段级 P/N −0.09 交叉**（装配后）——非逃逸门可解",
+   "TX1/output · RX0/output · RX1/input · RX1/output：**逃逸门直接无候选**（左/右端在 ⑨/⑩ 全部参数下被拒）"
+  ],
+  "implication": "在本授权边界内（不改 SPEC/alloc 需批、不改生成器），只读影子实验对本分支的**边际产出已趋零**：进一步的模板调参需**结构性改动**（alloc 次序/拓扑面）或监理放行后立项。"
+ }
 }
