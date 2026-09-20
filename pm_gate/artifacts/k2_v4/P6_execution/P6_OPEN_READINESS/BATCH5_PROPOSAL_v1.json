@@ -1,0 +1,46 @@
+{
+ "artifact": "k2_batch5_proposal_readonly_patch_bundle",
+ "schema": 1,
+ "purpose": "**批 5 提案（待批）**：K1 断点定因收敛出的三项 `_shared` 引擎修复，已做成**干净补丁包 + dry-run 证据**，获批即落（禁零散补丁 = 同批一笔）。",
+ "items": [
+  {
+   "id": "①",
+   "file": "_shared/eda_core/drc_rules.py",
+   "change": "`rot=fp_rot + prot` → **`rot=prot`**（KiCad 文件角=绝对角）",
+   "evidence": "pcbnew 真值：J14 pad orient=90 · bbox 1.4×0.31 · 42 pad 两两 Collide 重叠对 **0**；round-trip：fp 转 90 后落盘 pad 角 = 90。修复后模型域与 pcbnew **逐项同**、重叠对 0。",
+   "note": "**替代**原「K1 板 pad 角 90→0」提案 —— 后者经 pcbnew 真值判定会**把铜盘物理转错 90°（制造真缺陷）**，请勿采用。"
+  },
+  {
+   "id": "②",
+   "file": "_shared/eda_core/drc_rules.py",
+   "change": "`nm`（net 子句）不再必需 + pad 号允许空（`\"([^\"]+)\"`→`\"([^\"]*)\"`）⇒ 无 net / 空号 pad **入几何域**（net='' ⇒ 永不与任何网同网豁免 = fail-closed）",
+   "evidence": "K1 解析 pad 207 → **306**（=真板全量）；K2 l7 676/132；pytest 10 个 BoardParser 面测试 真源 vs 修补 **逐名同**；canonical 19 构造性零影响（adjudicate 不 import eda_core）；K2 预测器 +31（纯增 0 删，已声明）。"
+  },
+  {
+   "id": "④",
+   "file": "_shared/eda_core/hs_route_model.py",
+   "change": "新增 `_polyline_degenerate()` + 在 `_k1_escape_verify` 与 `_tpl_a_line` 的 `ady<1e-9` 捷径处**拒零长段**（fail-closed）",
+   "evidence": "负控：`_polyline_degenerate([(1,1),(1,1)])`=True · `[(1,1),(1+1e-9,1)]`=True；正控：正常折线/单点=False。实测原缺陷：`_tpl_a_line` 在 `pad_x==corr_x ∧ pad_y==track` 时产出 `[(41.6875,18.0),(41.6875,18.0)]` 且曾通过 verify。K1 dry-run 产出解中零长段 = **0**；**K1 段级读数不变**（该退化候选本被下游拒），故 ④ 为**牙齿**非读数变化。"
+  },
+  {
+   "id": "T",
+   "file": "_shared/eda_core/tests/test_drc_rules.py",
+   "change": "`test_pad_rotation_transform` 断言随 ① 更新（`p.rot` 90→**0**，文件无第三个数=绝对角 0）+ 新增负控 `test_pad_rotation_transform_absolute_with_explicit_angle`（显式角 90 ⇒ 绝对 90；旧实现会得 180）",
+   "evidence": "更新前该测试**编码旧语义而必红**（3F/200P/18S）；更新后回到基线 **2F/202P/18S**（= 基线 2F/201P/18S + 1 新负控）。"
+  }
+ ],
+ "dry_run_evidence": {
+  "tree": "/tmp/opencode/batch5/tree2（容器 `_shared`@02459f5 副本 + ①②④T，**未触真源**）",
+  "k1_chain": "`--all-v4` ⇒ `{TX0:in INFE/TX1:in INFE/RX0:in INFE/RX1:in INFE·out SOLVED}` = **1/8 段**（与仅 ①② 时同 ⇒ ④ 不改读数）；产出解零长段 = 0",
+  "pytest_face": "BoardParser/逃逸相关 10 文件 = **2F/202P/18S**（基线 2F/201P/18S + 1）",
+  "not_run_at_dryrun": "入库三验（`verify k2` · canonical 19 两跑 · `--expect-patched`）须在**落件时**跑（`--expect-patched` 的期望读数随补丁集变化，dry-run 阶段无意义）"
+ },
+ "patches": {
+  "drc_rules.py.patch": "4824f4951365d209",
+  "hs_route_model.py.patch": "2d3ed72e4ce28475",
+  "test_drc_rules.py.patch": "b958fe30896e534a"
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-20T21:05:00+0800"
+}

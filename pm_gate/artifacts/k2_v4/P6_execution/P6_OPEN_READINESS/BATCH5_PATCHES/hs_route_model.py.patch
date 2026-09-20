@@ -1,0 +1,49 @@
+--- a/_shared/eda_core/hs_route_model.py
++++ b/_shared/eda_core/hs_route_model.py
+@@ -124,6 +124,23 @@
+     return 0.0
+ 
+ 
++# ── ④ 退化守卫（批 5）──────────────────────────────────────────────────
++_SEG_DEGENERATE_EPS = 1e-6
++
++
++def _seg_len(a, b) -> float:
++    return math.hypot(b[0] - a[0], b[1] - a[1])
++
++
++def _polyline_degenerate(pts) -> bool:
++    """折线是否含**零长段**（相邻同点）。零长走线不可制造 ⇒ 引擎产出的任何
++    折线都不得含零长段（fail-closed）。已实测 `_tpl_a_line` 的 `ady<1e-9`
++    捷径在 `pad_x==corr_x ∧ pad_y==track` 时产出 `[(x,y),(x,y)]` 且通过
++    seg_ok/verify（K1 `OCuLink_RX0 left`）。通用性：只判几何，零项目特判。"""
++    q = list(pts)
++    return any(_seg_len(a, b) <= _SEG_DEGENERATE_EPS for a, b in zip(q, q[1:]))
++
++
+ def _seg_seg_dist(a, b, c, d) -> float:
+     """两线段最小距离（相交 = 0，含端点）。"""
+     abx, aby = b[0] - a[0], b[1] - a[1]
+@@ -3957,10 +3974,11 @@
+         pp = tuple(pad["pos"])
+         ady = abs(track - pp[1])
+         if ady < 1e-9:
+-            if fcu.seg_ok(net, pp, (corr_x, track)):
++            if (not _polyline_degenerate([pp, (corr_x, track)])
++                    and fcu.seg_ok(net, pp, (corr_x, track))):
+                 return ({"pts": [pp, (corr_x, track)], "layers": ["F.Cu"],
+                          "via": None}, corr_x)
+-            return None
++            return None     # ④ 退化守卫：pad 与落点重合 ⇒ 零长段 ⇒ 不产候选
+         dxs = [ady, max(ady-0.3,0.1), max(ady-0.6,0.1), max(ady-0.9,0.1), 0.3]
+         for dx in dxs:
+             vx = round(pp[0] + d * dx, 3)
+@@ -4155,6 +4173,8 @@
+             pts, layers = cand[key]["pts"], cand[key]["layers"]
+             if len(layers) != len(pts) - 1:
+                 return False
++            if _polyline_degenerate(pts):
++                return False        # ④ 退化守卫：零长段候选一律拒（fail-closed）
+             for i in range(len(pts) - 1):
+                 if not fields[layers[i]].seg_ok(net, pts[i], pts[i + 1]):
+                     return False

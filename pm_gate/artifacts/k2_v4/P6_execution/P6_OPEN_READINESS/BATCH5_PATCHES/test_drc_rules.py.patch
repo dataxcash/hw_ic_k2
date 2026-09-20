@@ -1,0 +1,47 @@
+--- a/_shared/eda_core/tests/test_drc_rules.py
++++ b/_shared/eda_core/tests/test_drc_rules.py
+@@ -285,4 +285,43 @@
+         # J9 pad3 实测错位 2.54mm 根因（M11 修复）。
+         assert p.pos[0] == pytest.approx(10.0)
+         assert p.pos[1] == pytest.approx(20.45)
+-        assert p.rot == pytest.approx(90.0)
++        # ① 修复（批 5）：KiCad 文件内的 pad 角 = **绝对角**（pcbnew round-trip 实证：
++        # 对 fp_rot=0/pad 角 0 的 fp 做 SetOrientationDegrees(90) 落盘后 pad 角 = 90；
++        # 且 J14 pad 实测 bbox 1.4×0.31、42 pad 两两 Collide 重叠对 = 0 ⇒ pcbnew 按绝对角解算）。
++        # 本 fixture 的 pad **无第三个数** ⇒ 文件角 0 ⇒ 绝对角 0（旧实现错加 fp_rot 得 90）。
++        assert p.rot == pytest.approx(0.0)
++
++    def test_pad_rotation_transform_absolute_with_explicit_angle(self, tmp_path):
++        """① 负控：pad 显式角 = 绝对角；旧实现（fp_rot + prot）会得 180。"""
++        pcb = tmp_path / "t2.kicad_pcb"
++        pcb.write_text('''(kicad_pcb
++\t(version 20260206)
++\t(general (thickness 1.6))
++\t(paper "A4")
++\t(layers
++\t\t(0 "F.Cu" signal)
++\t)
++\t(footprint "T:FP"
++\t\t(layer "F.Cu")
++\t\t(uuid "44444444-4444-4444-4444-444444444444")
++\t\t(at 10 20 90)
++\t\t(property "Reference" "U2"
++\t\t\t(at 0 0 0)
++\t\t\t(layer "F.SilkS")
++\t\t\t(uuid "55555555-5555-5555-5555-555555555555")
++\t\t)
++\t\t(pad "1" smd rect
++\t\t\t(at -0.45 0 90)
++\t\t\t(size 0.31 1.4)
++\t\t\t(layers "F.Cu" "F.Mask" "F.Paste")
++\t\t\t(net "GND")
++\t\t\t(uuid "66666666-6666-6666-6666-666666666666")
++\t\t)
++\t)
++)\n''')
++        board = BoardParser(str(pcb)).parse()
++        assert len(board.pads) == 1
++        p = board.pads[0]
++        assert p.pos[0] == pytest.approx(10.0)      # 位置仍由 fp_rot 旋转（M11 口径不变）
++        assert p.pos[1] == pytest.approx(20.45)
++        assert p.rot == pytest.approx(90.0)         # 绝对角 = 文件值（旧实现得 180）

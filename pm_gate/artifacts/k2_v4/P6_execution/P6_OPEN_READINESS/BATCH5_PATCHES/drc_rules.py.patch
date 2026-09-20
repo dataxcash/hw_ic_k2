@@ -1,0 +1,31 @@
+--- a/_shared/eda_core/drc_rules.py
++++ b/_shared/eda_core/drc_rules.py
+@@ -264,7 +264,7 @@
+         "uuid": re.compile(r'\(uuid\s+"([^"]+)"\)'),
+     }
+     _PAD_F = {
+-        "head": re.compile(r'\(pad\s+"([^"]+)"\s+(smd|thru_hole|np_thru_hole)\s+(\w+)'),
++        "head": re.compile(r'\(pad\s+"([^"]*)"\s+(smd|thru_hole|np_thru_hole)\s+(\w+)'),
+         "at": re.compile(r'\(at\s+([-+]?[\d.]+)\s+([-+]?[\d.]+)(?:\s+([-+]?[\d.]+))?\)'),
+         "size": re.compile(r'\(size\s+([\d.]+)(?:\s+([\d.]+))?\)'),
+         "drill": re.compile(r'\(drill\s+([\d.]+)\)'),
+@@ -387,8 +387,8 @@
+                     lm = pf["layers"].search(pblock)
+                     nm = pf["net"].search(pblock)
+                     um = pf["uuid"].search(pblock)
+-                    if not (am and sm and lm and nm and um):
+-                        continue
++                    if not (am and sm and lm and um):
++                        continue  # ② 修复：无 net 子句 pad 仍入几何域（net="" ⇒ fail-closed）
+                     px, py = float(am.group(1)), float(am.group(2))
+                     prot = float(am.group(3)) if am.group(3) else 0.0
+                     pw = float(sm.group(1))
+@@ -409,7 +409,7 @@
+                         uuid=um.group(1), net=self._net(pblock, pf["net"]), layers=layers,
+                         shape="circle" if pshape == "circle" else "rect",
+                         size=(pw, ph), pos=(gx, gy),
+-                        rot=fp_rot + prot, drill=drill, is_tht=is_tht,
++                        rot=prot, drill=drill, is_tht=is_tht,  # ① 修复：文件角=绝对角（pcbnew 实证）
+                         footprint_ref=fref, footprint_name=fname)
+                     board.pads.append(pad)
+                     board.by_uuid[pad.uuid] = pad
