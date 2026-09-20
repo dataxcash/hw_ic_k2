@@ -1,0 +1,98 @@
+{
+ "artifact": "w8_vac1_lib_link_landing_report",
+ "schema": 1,
+ "ts": "2026-09-20T21:45:00+0800",
+ "id": "W8-VAC-1",
+ "authorization": "**#K2-50 §二 W8-VAC-1**（① 空过不计绿 · ② 修法放行补库昵称 · ③ C-26 登记）",
+ "change": "42 件板级 footprint 的 **FPID 库昵称补全**（板文件 `k1/k1_v1.kicad_pcb`，纯 `(footprint \"LIB:NAME\")` 表征）：ForgeOS×9 件（项目快照 `k1/lib/ForgeOS.pretty`）· 标准 KiCad 库 33 件（`Capacitor_SMD`/`Resistor_SMD`/`Package_SON`/`Package_SO`/`Package_TO_SOT_SMD`/`Package_DFN_QFN`/`LED_SMD`/`Connector_USB`/`Connector_JST`）；**几何/焊盘/网表/DRC 零改动**（纯 ID 表征）。",
+ "primary_criterion": {
+  "n_footprints": 42,
+  "n_no_library_link": 0,
+  "before": {
+   "n_no_library_link": 42
+  },
+  "verdict": "**达成**"
+ },
+ "raw_audit": {
+  "tool": "k2/tools/k2_w8_footprint_audit_v1.py（sha16 75404d706413d546）",
+  "n_electrical_identical": 35,
+  "n_electrical_diff": 7,
+  "n_pad_name_set_only": 0,
+  "n_library_unloadable": 0,
+  "electrical_diff_refs": [
+   "J1",
+   "J6",
+   "J9",
+   "J10",
+   "J13",
+   "J14",
+   "U9"
+  ],
+  "diff_field_signature": "**全部仅 pad `rot`**（U9 另有 `dy`）；shape/size/drill/焊盘名集合 **逐件相同**"
+ },
+ "pose_analysis": {
+  "finding": "7 件 diff 与**实例姿态**一致：J1/U9 实例 `(at ... 180)` → rot +180（U9 另 dy 取反）；J6/J9/J10/J13/J14 实例 `(at ... 90)` → rot +90。J1(0.3×0.7 roundrect)·J6/J9/J10/J13(正方形 1.5×1.5 / 2.7×2.7) 的 rot 差**电气等价**；J14(0.31×1.4)·U9 的差值恰由实例角解释。⇒ **高概率为 pose(实例姿态) 表示差异，非几何缺陷**。",
+  "caveat": "`k2_w8_footprint_audit_v1.py` **不做姿态归一**；姿态归一草案 `w8_audit.draft-v2.py`（sha16 34b83cff5fe8ade7）产出**不同集合**（8 件，含 0° 件 U1/U5/U6/E1）⇒ **两器互斥，姿态口径本身未定** ⇒ 属**口径裁定**面（监理职权）。",
+  "action": "**不判绿、不吞**：按 #K2-50『diff>0 ⇒ 登记』登记为待裁项（见 `w8_residual_registration`）。**禁改库迁就板**（未动 `ForgeOS.pretty`）。"
+ },
+ "verdict_impact": {
+  "before": "10 PASS + **1 空过（lib_electrical_level）** + 7 FAIL（不实声明 11 PASS）",
+  "after": "**10 PASS + 8 FAIL**；`lib_electrical_level` 由**空过**变为**真实 FAIL**（`电气级差异 6（原 7，B 口径豁免 1）`）",
+  "regression_check": "**无 PASS→FAIL 功能回退**：该维此前为空过、**从未计绿**（#K2-50 §二 W8-VAC-1①）；其余 10 维读数不变。",
+  "board_sha": {
+   "before": "eda1dc91eec76aa7",
+   "after": "09a07eb74733aef5"
+  }
+ },
+ "required_followup": {
+  "id": "W8-FU-1",
+  "severity": "中",
+  "text": "板 sha 变更 ⇒ **按板参数化的测量证据须重出**：`pads_within_outline` · `density_and_clearance`（另 min-clearance）现报『测量板 eda1dc91 ≠ 受审板 09a07eb7 ⇒ 证据陈旧，fail-closed』。二者**本就 FAIL**（出框=2 · 密度峰值 12>8），判读不变，但**证据链须随板重出**（M-DET-1 固定实参、两跑逐字节同）。",
+  "tools": "`k2/docs/drafts/p4-j8-v3-measurement-v1/measure_pads_within_outline.py` · `k2/docs/drafts/p4-j8-density-clearance-v1/*`（`k2/tools/k2_p4_j8_measure_v1.py` 对 K1 **崩于 oval drill**，不可直接用）"
+ },
+ "w8_residual_registration": [
+  {
+   "id": "K1-D14",
+   "refs": [
+    "J1",
+    "J6",
+    "J9",
+    "J10",
+    "J13"
+   ],
+   "class": "pose/rot 表征（电气等价：正方/180°对称）",
+   "status": "待姿态口径裁定 → 若裁为 pose 伪差 ⇒ 闭"
+  },
+  {
+   "id": "K1-D15",
+   "refs": [
+    "J14"
+   ],
+   "class": "pad rot 90 vs 0（实例 90° 解释）",
+   "status": "待姿态口径裁定"
+  },
+  {
+   "id": "K1-D16",
+   "refs": [
+    "U9"
+   ],
+   "class": "pad dy+rot（实例 180° 解释）",
+   "status": "待姿态口径裁定"
+  }
+ ],
+ "commit": {
+  "k1": "（本批）",
+  "k2": "（本批）",
+  "shared": "ea2b746（未动）",
+  "criteria": "rev=6（只读）",
+  "anchor": "6ee7495de61f749f（未动）"
+ },
+ "not_touched": [
+  "criteria/",
+  "ForgeOS.pretty（禁改库迁就板）",
+  "k2 交付面",
+  "交付锚"
+ ],
+ "honest_statement": "W8 通道由**空过**变为**真实测量**：K1 该维**不绿**（6 差异）。**禁**称 K1 电气级合规（C-12）。",
+ "next": "#K2-50 §四 执行序 3/6 = **T2-F1（+T2-F7 并批）`_shared` `source:` 订正**"
+}
