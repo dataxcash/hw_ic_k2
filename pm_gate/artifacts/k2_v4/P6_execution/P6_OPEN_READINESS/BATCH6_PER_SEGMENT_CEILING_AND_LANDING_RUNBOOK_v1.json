@@ -1,0 +1,125 @@
+{
+ "artifact": "k2_batch6_per_segment_ceiling_and_v4_landing_runbook",
+ "schema": 1,
+ "part_A_per_segment_ceiling": {
+  "scope": "K1 四 base × 2 段 = 8 段；口径 = v4 落件候选（D-1…D-5 + FIX-A/B 的 K1 域限定 + VG 对级化 best_of + R-10 守卫）",
+  "segments": [
+   {
+    "seg": "TX0/output",
+    "v4_status": "SOLVED（边缘净距 0.142）",
+    "blocker": "—",
+    "what_changes_it": "—",
+    "evidence": "BATCH6_LANDING_REHEARSAL_THREE_VERIFICATIONS_v1.json"
+   },
+   {
+    "seg": "RX0/input",
+    "v4_status": "SOLVED（边缘净距 **0.2636**）",
+    "blocker": "—",
+    "what_changes_it": "—（**v4 新增解**，1/8→2/8；0.2636 同时满足 K1 SPEC 0.1 与共享 drc_rules 0.175）",
+    "evidence": "同上"
+   },
+   {
+    "seg": "TX0/input",
+    "v4_status": "INFEASIBLE · 段级 P/N −0.09",
+    "blocker": "**行序倒置型结构冲突**（P fcu/18.0 在 N fcu/17.5 之上，而 N 焊盘 y=24.02 需穿越 P 行）",
+    "what_changes_it": "(a) 引擎结构改动（内层穿越+走廊层协同建模）或 (b) alloc 行序/层重排；**候选调参已证无效**（⑨–⑬ 五形态数百组合零增益）",
+    "evidence": "BATCH6_TX0_INPUT_CROSS_LOCALIZATION_v1.json"
+   },
+   {
+    "seg": "TX1/input",
+    "v4_status": "INFEASIBLE · 走廊段 seg_ok 失败",
+    "blocker": "走廊槽位越界（in2 y=21.3 ∉ 自由带 20.5–21.2）",
+    "what_changes_it": "**(c) alloc 槽位重排**（21.3→21.01）⇒ 实测**可清除走廊阻塞**（失败面转段级 −0.09），**收益 0 段**",
+    "evidence": "BATCH6_C_ALLOC_REORDER_PROBE_v1.json · BATCH6_C_SLOT_ENUMERATION_v1.json"
+   },
+   {
+    "seg": "TX1/output",
+    "v4_status": "INFEASIBLE · 左逃逸对级不可行",
+    "blocker": "左端逃逸门无候选（既有模板 + ⑨–⑬ 全拒）",
+    "what_changes_it": "引擎结构改动（该端出排几何待建模）",
+    "evidence": "BATCH6_R8_VIA_ESCAPE_REALSOLVE_v3_left.json"
+   },
+   {
+    "seg": "RX0/output",
+    "v4_status": "INFEASIBLE · 左逃逸对级不可行",
+    "blocker": "同上",
+    "what_changes_it": "同上",
+    "evidence": "同上"
+   },
+   {
+    "seg": "RX1/input",
+    "v4_status": "INFEASIBLE · 左逃逸对级不可行",
+    "blocker": "左端虽有 6 个 ⑨ 逃逸门通过候选，但**装配后仍不可解**",
+    "what_changes_it": "引擎结构改动（装配级建模）",
+    "evidence": "BATCH6_R8_VIA_TEMPLATE_INTEGRATION_SHADOW_v1.json"
+   },
+   {
+    "seg": "RX1/output",
+    "v4_status": "INFEASIBLE · 左逃逸对级不可行",
+    "blocker": "左端逃逸门无候选",
+    "what_changes_it": "同上",
+    "evidence": ""
+   }
+  ],
+  "ceiling_summary": "**不动 SPEC / 不做引擎结构改动 / 不做 alloc 行序改动** ⇒ K1 真值上限 = **2/8**（v4 已达成）；(c) 槽位可清除 1 段走廊阻塞但**不增解**；换层模板 5 形态**零增益**"
+ },
+ "part_B_v4_landing_runbook": {
+  "preconditions": [
+   "监理放行 `BATCH6_DRAFT/BATCH6_LANDING_CANDIDATE_v4.patch`（sha16 `3ded8584bb74461f` → 目标 `c9e1c3b4ca208482`，git apply 复现通过）",
+   "`_shared` 工作树洁净（当前 `02459f5`）"
+  ],
+  "steps": [
+   {
+    "n": 0,
+    "cmd": "cd /home/fila/jqdDev_2025/ic_hw && git -C _shared status --porcelain",
+    "expect": "输出为空（洁净）",
+    "abort": "非空 ⇒ 停机（冲突即停机·第九条）"
+   },
+   {
+    "n": 1,
+    "cmd": "git -C _shared apply -p1 k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/BATCH6_DRAFT/BATCH6_LANDING_CANDIDATE_v4.patch",
+    "expect": "无输出；随后 sha16(`_shared/eda_core/hs_route_model.py`) == `c9e1c3b4ca208482`",
+    "abort": "报错或 sha 不符 ⇒ 停机"
+   },
+   {
+    "n": 2,
+    "cmd": "cd k2 && PYTHONPATH=$PWD/_shared:$PWD python3 _shared/eda_core/pipeline/engine.py verify k2",
+    "expect": "preflight+3 PASS"
+   },
+   {
+    "n": 3,
+    "cmd": "canonical 19（l7 册六件 · 全新 --drc-work-dir ×2；命令见 k2/pm_gate/artifacts/k2_v4/L4/E3-standard-call-l7-20260919/MANIFEST.md）",
+    "expect": "19 OK / 0 FAIL · passed=true · provisional=false · verdict sha16 == `190b73be0f728a56` · 两跑逐字节同"
+   },
+   {
+    "n": 4,
+    "cmd": "AppDir/bin/python3.11 k2/tools/k2_p6_acceptance_gate_v1.py --expect-patched",
+    "expect": "PASS · A 4/4 · B verify PASS · C K1 14/K2 14 回退 0 · D 14/14 · pytest 2F/61P/12S · hidden=2(=C1/C2)"
+   },
+   {
+    "n": 5,
+    "cmd": "K1 真值重测（既有 K1 量测链，口径同本批）",
+    "expect": "**2/8**（TX0/output 0.142 · RX0/input 0.2636）· 层合法违规 0"
+   },
+   {
+    "n": 6,
+    "cmd": "git -C _shared commit（一笔提交）",
+    "expect": "入库；回滚点 = 落件前 `02459f5`"
+   }
+  ],
+  "rollback": "`git -C _shared checkout -- _shared/eda_core/hs_route_model.py`（或 revert 该笔）⇒ 回到 `02459f5`",
+  "must_not": [
+   "不改 `criteria/`（ENG 只读）",
+   "不改 SPEC/原理图/生成器",
+   "不重建交付包（交付锚 `6ee7495d…`/`0e88e107…` 冻结）",
+   "不放松 DRC 下限、不为变绿缩口径（C-12）",
+   "C1/C2 禁改绿；skipped 不充绿",
+   "禁派 WORKER；临时仅 `/tmp/opencode`",
+   "冲突即停机（第九条）"
+  ],
+  "post_landing_note": "预期 K2 canonical 19 与验收门 D 维**不动**（canonical 19 已动态证明与求解器解耦；D 维 pytest 已实测零回归）；若实际移动 ⇒ 立即回滚并报告"
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-21T21:40:00+0800"
+}
