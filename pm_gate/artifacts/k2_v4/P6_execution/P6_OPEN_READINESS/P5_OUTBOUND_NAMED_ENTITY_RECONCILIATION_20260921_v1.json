@@ -1,0 +1,78 @@
+{
+ "artifact": "k2_p5_outbound_named_entity_reconciliation",
+ "schema": 1,
+ "ts": "2026-09-21T08:05:00+0800",
+ "id": "P5 外发包『具名实体 ↔ 板/自查件』逐项对账（第三批只读造活）",
+ "authorization": "handoff §7-B『无新裁定 ⇒ 只读造活（P5 其余可判性核对）』· owner #14⑥（不停等）· **非复评上轮 CO**（本项为首次对账）· **非新增检查齿**（不新增判据维/阈值）",
+ "why": "RULES.md §0 明文：『本规程所引连接器/网络/器件已机核存在（`INSTRUMENT_SELFCHECK.json`）…测点以该件为准』⇒ 外发包中**每一条具名实体**（refdes/pad/网名/层位）都是实测方的动作依据；**若具名有误 ⇒ 测错点 ⇒ 误判**。故逐项对账。",
+ "method": "只读解析受审板 `k2/hw/k2_v4_8L.l7.kicad_pcb`（KiCad 10 · `(net \"NAME\")` 行内式 · 括号配对提取 66 footprint / 5037 segment / 18 zone）+ 读 `INSTRUMENT_SELFCHECK.json`；**未跑 pcbnew**、未改任何文件（本轮除本件与模板一行外）",
+ "board_sha16": "c5a7df90aadb66e0（未动）",
+ "checks": [
+  {
+   "item": "V6-2 NRST 测点",
+   "claim": "NRST 不在 J13；其测点 = U1 pad10 / R29 pad1 / C73 pad1",
+   "result": "**PASS** — U1.10 = `NRST` · R29.1 = `NRST` · C73.1 = `NRST`"
+  },
+  {
+   "item": "V6-2 SWD 接口",
+   "claim": "J13 pad1=SWDIO · pad2=SWCLK_BOOT0 · pad3=GND（pad4=MCU_VDD）",
+   "result": "**PASS** — 与 `INSTRUMENT_SELFCHECK.json` `refdes.J13.pads` **逐脚一致**"
+  },
+  {
+   "item": "V6-3 E2 地址（**判据所依**）",
+   "claim": "A0=GND(0) · A1=MCU_VDD(1) · A2=GND(0) · WP=GND ⇒ 7-bit **0x52**",
+   "result": "**PASS（板侧机核）** — E2 逐脚：1=GND · 2=MCU_VDD · 3=GND · 4=GND · 5=`I2C1_SDA` · 6=`I2C1_SCL` · 7=GND · 8=MCU_VDD ⇒ A2A1A0=010 ⇒ **0x52**（写 0xA4/读 0xA5）· `fp=ForgeOS:SOIC8_FRU` · `value=FRU_EEPROM`",
+   "note": "**唯一一处『预期值可被板侧完全证明』之项** ⇒ 已回写 `results_template.json`（`board_verified`）"
+  },
+  {
+   "item": "V6-4 器件/端口",
+   "claim": "U6 = DS320PR1601；J2/J3/J4 为高速端口",
+   "result": "**PASS** — U6 `ForgeOS:DS320PR1601`（value `DS320PR1601` · 354 pad）· J2 `SlimSAS_x8_SFF-8654_74pin`（74 pad）· J3/J4 `MCIO_4i_SFF-1016`（各 38 pad）"
+  },
+  {
+   "item": "V5/V6-1 平面层位",
+   "claim": "电源面 = In4.Cu；GND 面 = In1/In3/In6",
+   "result": "**PASS** — zone 逐层：In1(1)、In3(1)、In6(1) 皆 `GND`；In4 共 **7** zone = `P3V3`×2 · `P3V3_AUX`×2 · `12V_IN`×2 · `MCU_VDD`×1（F.Cu 4 个 zone 皆 ESC_* keepout，非平面）",
+   "note": "In4 仅 7 个 zone 且 `P3V3_AUX` 为 2 个小 zone ⇒ 与 `PDN-F3`『小岛/迹线分配』**互相印证**"
+  },
+  {
+   "item": "V5 四轨网名",
+   "claim": "12V_IN / P3V3 / P3V3_AUX / MCU_VDD 存在",
+   "result": "**PASS** — 四轨网名均在板（且与 `INSTRUMENT_SELFCHECK.nets_present` 一致）"
+  },
+  {
+   "item": "V4 层位与最紧段",
+   "claim": "测点 F.Cu/In2.Cu/In5.Cu/B.Cu；最紧段 = **F.Cu** `PCIE_UP3` 逃逸域 0.2825mm",
+   "result": "**PASS（层位部分）** — `PCIE_UP3_P/N` 实走 F.Cu 30 段 · In5.Cu 31 段 · In2.Cu 4 段 ⇒ F.Cu 属其逃逸域，声明成立；**B.Cu 上 _P/_N 网段数 = 0** ⇒ 与观察项 4『B.Cu 无 as-built 耦合 run』**一致**"
+  },
+  {
+   "item": "观察项实体存在性",
+   "claim": "U1 pad23/24 · U6 FG1 · J13 pad1/2（阻焊坝）；H4/R41/D2/C87（丝印越框）",
+   "result": "**PASS** — 全部 refdes 在板；`U6` 含 `FG1` pad；`U1` 之 23/24 pad 存在（23=`I2C2_SDA`，24 无网=NC 类）"
+  },
+  {
+   "item": "V5 具名负载点（**CR-16**）",
+   "claim": "`P3V3_AUX` 负载点须取 J3/J4",
+   "result": "**PASS** — 见 `P5_V5_NAMED_LOADPOINT_CONSISTENCY_FIX_20260921_v1.json`（J3/J4 各 1 pad，同网 C90/J11/R1/U1 各 1）"
+  }
+ ],
+ "verdict": "**9/9 对账通过 · 0 缺口 · 0 冲突** ⇒ 外发包具名实体**与受审板一致**，实测方可按件执行；`V6-3` 预期地址 `0x52` 由板侧**完全证明**。",
+ "landed": {
+  "pm_gate/artifacts/k2_v4/L6/first_article/results_template.json": {
+   "before": "fc1b93c4e84dedf5",
+   "after": "6714b1391cf61d0c",
+   "change": "`V6_3…expected_address` 增 `board_verified`（逐脚映射 + 推导 + 证据指针）"
+  }
+ },
+ "readonly_repo": false,
+ "not_landed": false,
+ "red_lines": [
+  "未改冻结四源",
+  "未改 criteria/（rev=6 只读）",
+  "未改交付包（MANIFEST `6ee7495de61f749f` 未动）",
+  "未改受审板 l7（`c5a7df90` 未动）",
+  "未新增判据维/阈值/检查齿",
+  "未改生成器/SPEC/原理图/符号",
+  "未派 WORKER"
+ ]
+}

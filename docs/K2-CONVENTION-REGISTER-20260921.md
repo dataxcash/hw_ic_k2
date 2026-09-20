@@ -73,3 +73,12 @@
 ---
 **（本块）裁定对应**：CR-16 ← handoff §7-A-3 + §7-B（L2 规程自裁）· CR-17 ← 实测登记。
 **不影响** P6 判据面（`criteria/` rev=6 只读）与交付锚（`6ee7495de61f749f` 未动）。
+### 续编 · P5 外发包具名实体对账（2026-09-21 · 第三批只读造活）
+
+| # | 条目 | 内容（事实/裁定） | 依据 | 处置红线 |
+|---|---|---|---|---|
+| **CR-18** | **V6-3 预期地址 `0x52` 已由板侧完全证明 + 外发包具名实体对账通过** | **对账结果 9/9 PASS · 0 缺口**（详见 `P5_OUTBOUND_NAMED_ENTITY_RECONCILIATION_20260921_v1.json`）：① `V6-2` NRST 测点 `U1.10`/`R29.1`/`C73.1` 皆为 `NRST`；② `J13` pad1=SWDIO/pad2=SWCLK_BOOT0/pad3=GND 与自查件逐脚一致；③ **`E2` 逐脚机核 = 1 GND · 2 `MCU_VDD` · 3 GND · 4 GND · 5 `I2C1_SDA` · 6 `I2C1_SCL` · 7 GND · 8 `MCU_VDD` ⇒ A2A1A0=010 ⇒ 7-bit **`0x52`**（写 0xA4/读 0xA5）—— 与件内 `expected_address` 一致 ⇒ 已回写 `results_template.json` `board_verified`**；④ `U6`=`DS320PR1601`(354pad) · `J2`=`SlimSAS x8 74pin` · `J3`/`J4`=`MCIO 4i`(各38pad)；⑤ 平面：`In1`/`In3`/`In6` 皆 `GND` · `In4` 7 zone = `P3V3`×2/`P3V3_AUX`×2/`12V_IN`×2/`MCU_VDD`×1（F.Cu 4 zone 皆 ESC keepout）⇒ 与 `PDN-F3`『小岛』互证；⑥ `PCIE_UP3_P/N` 实走 F.Cu 30 / In5 31 / In2 4 段 ⇒ V4 层位声明成立，**B.Cu `_P/_N` 段 = 0** ⇒ 观察项 4 成立；⑦ 观察项实体（`U1.23/24` · `U6.FG1` · `H4/R41/D2/C87`）皆在板 | **handoff §7-B** + `RULES.md` §0（『所引件已机核』）· **首次对账**（非复评） | **非新增检查齿**（不新增判据维/阈值）· **未触**交付锚 `6ee7495de61f749f` · **未改**受审板 `c5a7df90`/SPEC/`criteria/`；`0x52` 之证明**仅作预期值锚**，**实测仍由实测方执行、判定仍归监理**（ENG 不得自证） |
+
+---
+**（本块）裁定对应**：CR-18 ← handoff §7-B（L2 可判性核对 · 证据登记）。
+**不影响** P6 判据面（`criteria/` rev=6 只读）与交付锚（`6ee7495de61f749f` 未动）。

@@ -208,7 +208,22 @@
       "A2": "GND(0)",
       "WP": "GND"
      },
-     "source": "设计侧推导（板侧+原理图双侧一致）· k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/P5_EXPECTED_VALUES_DESIGN_SIDE_20260921_v1.json（825112398ff1ef76）"
+     "source": "设计侧推导（板侧+原理图双侧一致）· k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/P5_EXPECTED_VALUES_DESIGN_SIDE_20260921_v1.json（825112398ff1ef76）",
+     "board_verified": {
+      "verdict": "**板侧机核通过（只读）**",
+      "per_pad": {
+       "1_A0": "GND(0)",
+       "2_A1": "MCU_VDD(1)",
+       "3_A2": "GND(0)",
+       "4_VSS": "GND",
+       "5_SDA": "I2C1_SDA",
+       "6_SCL": "I2C1_SCL",
+       "7_WP": "GND(写使能)",
+       "8_VCC": "MCU_VDD"
+      },
+      "derivation": "A2A1A0 = 0,1,0 = 2 ⇒ 7-bit = 1010_010 = **0x52**（写 0xA4 / 读 0xA5）—— 与件内 `addr_7bit` **一致**",
+      "source": "P5_OUTBOUND_NAMED_ENTITY_RECONCILIATION_20260921_v1.json"
+     }
     },
     "fru_eeprom_bus": "I2C1"
    },
