@@ -196,3 +196,13 @@
 > **l8 落库之正确路径 = 方案先行**：先立新 **SPEC rev** 件（`SPEC_k2_v4.spec-rev-53.json` 或等价 · 版本 bump 新文件）→ 再随批落 l8 板 + 重建交付包。**是否需实质改 SPEC**（本次为**网表引脚映射**变更、几何未变）属**监理/判据侧口径**，ENG 不擅定。
 
 > **【CR-34 补充 2 · 本会话】**：**l8 已落库** —— `SPEC_k2_v4.spec-rev-53.json`（`4e92b3a05cd5a223`，仅 3 处 `board_sha16` 声明 + 卡；旧 rev 逐字节不改）+ `pm_gate/project.yaml::spec_name` → rev-53 + `hw/k2_v4_8L.l8.kicad_pcb`（`7a5c89913d6e5d0a`）/ pro（`c009058005829f09`）同批 ⇒ **PCB↔SPEC 门禁已满足**（方案先行范式）。仍待：canonical 19 重锚 + 交付包重出。
+
+### 续编 · 新 rev `l8` 之 **P4 重锚**（canonical 19 · #K2-57 R3）
+
+| # | 条目 | 内容（事实/裁定） | 依据 | 处置红线 |
+|---|---|---|---|---|
+| **CR-35** | **`l8` 通过 canonical 19 标准调用：`19 OK / 0 FAIL`（判据 rev=6 在岗）—— P4 锚在 CR-26/CR-27 修复后**不回退**** | **标准调用**（`criteria/adjudicate.py` · `--drc-work-dir` 全新 · 6 件测量输入为本会话实测）：**PASS · n_pass 19 · n_fail 0 · provisional=False**。关键读数：`zone_filled 10/10` · `non45 0/5180` · `drc error 0`（违规 170 全 warning）· `unconnected 0` · `未登记 warning 类型 0/9` · `电气级差异 0`（B 口径豁免 2）· `出框 0`（676 pad）· `non_antipad_gap 0.0 mm²` · 密度峰值 7（≤8）· 最小铜间距 0.10（≥0.10）· 横带 0.07586 · pad 到边 0.38。**与 l7 册逐项同**（l7 = 19/0）⇒ **无回退**。**测量册**：新建 `L4/E3-standard-call-l8-20260921/`（`MANIFEST.md a6faf8374918fef0` + 8 件；fail-closed 自检：12 处 `board_sha16` 全 = 受审板 `7a5c89913d6e5d0a`，**BAD 0**）。**仪器口径**：W-8/pads/v3-plane/min-clearance 四器 sha16 与 l7 册所用**逐位相同**；**`measure_density_and_clearance.py` 已漂移**（l7 册 `dccaaa476c807def` → 今 `ff763e6865bac843`）⇒ 已登记，读数同号（0.07586 / 0.38）**无回退** | 监理 #K2-57 R3；本会话标准调用实测；册 `L4/E3-standard-call-l8-20260921/` | **只增册**·**未改** l7 册/旧交付包/冻结四源/`criteria`（rev=6 只读）· 仪器漂移**登记不掩盖** |
+| — | **（附）P4 门态（l8）** | **P4 全绿（19/0）** ⇒ 按 `#K2-57` R3「重跑 P4 锚」**已完成**；**P5 仍 `PENDING_EXTERNAL`**（外部首件回件未到）；P6 CLOSED ⇒ **未越阶段**。**待续**：交付包对新 rev 重出（判据 ⑥ 新锚）。 | 本册 | 登记制 · 不充绿 · **STOP-1 维持**（l8 经监理复核前不下首件单） |
+
+---
+**（本块）裁定对应**：#K2-57 R3（P4 重锚）。**报备监理 1 条**（仪器漂移登记）· **owner 项 0**。
