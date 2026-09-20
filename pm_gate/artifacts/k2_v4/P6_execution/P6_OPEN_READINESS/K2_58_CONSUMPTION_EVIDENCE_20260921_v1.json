@@ -1,0 +1,145 @@
+{
+ "artifact": "k2_58_consumption_evidence",
+ "schema": 1,
+ "ts": "2026-09-21T00:56:37+0800",
+ "ruling": "监理 #K2-58（l8 独立复核 PASS ⇒ 解除 STOP-1 · COV-C3 范围/钉版 · 口径澄清 ×2 · 残余登记）· owner 项 0",
+ "purpose": "逐项落 #K2-58 §四 执行序 1–4 + 自验 §五 判据 ①–⑦；**不改冻结件/判据/包锚**。",
+ "R1_stop1_lifted": {
+  "verdict": "l8 = PASS（监理独立）⇒ **ENG 侧 STOP-1 解除**",
+  "eng_action": "按**商务渠道**推进 P5 首件单；**ENG 不自采购/不承诺交期**（owner #14④）",
+  "reserved": "l7 板若已在外 ⇒ 仍按**缺陷复现样**处理，**不得作合格首件**；l8 方为合格首件候选",
+  "artifact": "docs/K2-P5-FIRST-ARTICLE-TRANSMITTAL-l8-v1.md §11（下单就绪注）",
+  "p5_state": "仍 `PENDING_EXTERNAL`（V4–V7 NOT_RUN · 外部回件 + 监理判定方关门 · ENG 不自证）"
+ },
+ "R2_caliber_A": {
+  "landing": "版本 bump 新件 `errata-3` + 符号层",
+  "k2_sch_yaml_sha16": "dd794c54f7ce7417（逐字节未动 = gate④ PASS）",
+  "note": "R4 原文「订正 `k2_sch.yaml#LED`」措辞不精确；本注防误读",
+  "register": "CR-41（承 CR-33）"
+ },
+ "R3_caliber_B": {
+  "authoritative": "canonical 全量 = 170 条 · 9 类 · error 0 · unconnected 0",
+  "legacy": "「23 条恒定 warning」= P4 期（rev=3 · l6/l7）子集口径 ⇒ **不具交付判据效力**（包披露 170 为其超集）",
+  "must_not": "禁以 23 缩口径（C-12）",
+  "where": "册面 CR-42（包内 `DISCLOSURE.md` 属已复核锚 4b610baed4f4752c ⇒ **冻结不动**；且为构建器再生件 ⇒ 手改会被覆盖）"
+ },
+ "R4_cov_c3": {
+  "scope": {
+   "trees": [
+    "_shared",
+    "k2/_shared",
+    "key_v2/_shared",
+    "pciesw4/_shared"
+   ],
+   "classes": [
+    "eda_core/*（漂移本体）",
+    "sch_gate 真源/引证件"
+   ],
+   "owner": "跨项目批次 · gate 属主排期（#K2-54 §四）· ENG 不得越权改 key_v2/pciesw4 项目文件"
+  },
+  "pin": {
+   "engine_hs_route_model.py": {
+    "_shared": "c9e1c3b4ca208482",
+    "k2/_shared": "c9e1c3b4ca208482",
+    "key_v2/_shared": "883525b4f37a660f",
+    "pciesw4/_shared": "6ab5eaaa416da3e7"
+   },
+   "ENG_VERSION.yaml": {
+    "_shared": "present",
+    "k2/_shared": "present",
+    "key_v2/_shared": "MISSING",
+    "pciesw4/_shared": "MISSING"
+   },
+   "sch_gate_content_pin_four_trees_equal": {
+    "BAT54C.yaml": "ed70671ac3b03746",
+    "DS320PR1601.yaml": "2757a9f487531fe5",
+    "DCDC_12V_3V3.yaml": "027772ce7f122ff9",
+    "DCDC_12V_5V.yaml": "af59deb0812d1916",
+    "LDO_5V_3V3.yaml": "65219b10f9e670ff",
+    "DS160PR810.yaml": "ed1b6e9a1eb0c56c",
+    "STM32G0B1CBT6.yaml": "afd2d1a89b1765d0",
+    "strap_semantics.yaml": "fd1bb14317c7a235"
+   }
+  },
+  "b_host": {
+   "key_v2/_shared": {
+    "local": "d89d7bb",
+    "behind": 65,
+    "ahead": 5
+   },
+   "pciesw4/_shared": {
+    "local": "91a2a44",
+    "behind": 52,
+    "ahead": 5
+   },
+   "origin_main": "6ab63087d011f803522a1d465e4672c2031bb9f3",
+   "merge_base": "ad41353e",
+   "verdict": "非快进 ⇒ 禁 push / 禁 rewrite"
+  },
+  "register": "CR-43",
+  "repro": [
+   "for t in _shared k2/_shared key_v2/_shared pciesw4/_shared; do python3 -c \"import hashlib,sys;print(hashlib.sha256(open(sys.argv[1],'rb').read()).hexdigest()[:16])\" $t/eda_core/hs_route_model.py; done",
+   "git -C key_v2/_shared ls-remote --heads origin main  # 期望 6ab6308…（未变）",
+   "git -C pciesw4/_shared ls-remote --heads origin main  # 期望 6ab6308…（未变）"
+  ]
+ },
+ "R5_residual": {
+  "items": [
+   "DCDC_12V_3V3.yaml / DCDC_12V_5V.yaml 注释头行仍 `SLVSD82`",
+   "LDO_5V_3V3.yaml 注释头行仍 `DS31056`",
+   "STM32G0B1CBT6.yaml 注释头行仍 `Rev 6 Table 12 (Figure 5)`",
+   "strap_semantics.yaml::source 仍 `TI SNLS658 Rev B`"
+  ],
+  "verdict": "**不在 R5 具名五件范围** ⇒ 不构成 R5 未完成；登记 · 不充绿 · 不阻塞；ENG **可另批**订正（不动 pins）——本会话不做",
+  "register": "CR-44"
+ },
+ "gate_selfcheck": {
+  "①": {
+   "board_sha16": "7a5c89913d6e5d0a",
+   "canonical19": "PASS 19/0 provisional=False",
+   "verdict_sha16": "562b482fac5ee941"
+  },
+  "②": {
+   "frozen_four": [
+    "l4 d4e81f647be7f980",
+    "设计源 fb07d25ac426ff84",
+    "k2_sch dd794c54f7ce7417",
+    "drc_rules 0a459839e15960b8"
+   ],
+   "criteria": "rev=6 MATCH（sup.py status）"
+  },
+  "③": {
+   "package": "55/55 OK（sha256sum -c）",
+   "dfm": "16 PASS / 1 ACCEPT / 0 FAIL",
+   "tarball_entries": 54,
+   "tarball_l7_named": 0
+  },
+  "④": {
+   "register": "CR-41/42/43/44/45 在册（含复现命令）"
+  },
+  "⑤": {
+   "b_host_origin_main": "6ab63087d011f803522a1d465e4672c2031bb9f3（两树均未变 · 无 push 无 rewrite）"
+  },
+  "⑥": {
+   "key_v2_worktree": "clean",
+   "pciesw4_worktree": "clean"
+  },
+  "⑦": {
+   "old_anchor_manifest": "6ee7495de61f749f",
+   "old_anchor_tarball": "0e88e107e2da8192"
+  }
+ },
+ "red_lines_ok": [
+  "未改冻结四源",
+  "未改 criteria/（rev=6）",
+  "未改 k2_sch.yaml",
+  "未改/未重建 l8 包（锚 4b610bad/36a6b276 逐字节未动）",
+  "未动旧交付锚",
+  "未 push/未 rewrite B 宿主",
+  "未改他项目文件",
+  "未派 WORKER",
+  "未下单/未采购（商务）",
+  "临时仅 /tmp/opencode"
+ ],
+ "next": "① 商务渠道下单（ENG 只交制造数据/规格）；② P5 外部首件回件 ⇒ 按 `L6/first_article_l8/results_template.json` 8 项回填交监理判定；③ 另立批（COV-C3 四树同步 · R5 文献号）待 gate 属主排期；④ 无新裁定 ⇒ 只读造活，**禁停等**。"
+}
