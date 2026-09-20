@@ -1,0 +1,65 @@
+{
+ "artifact": "k2_k1_mechanism_bundle_landing_report",
+ "schema": 1,
+ "authorization": "**#K2-49**（N-2 拆分裁决：M1/M2 放行；M3 暂停至 BOM 落件后同批）+ 前件 #K2-48",
+ "k1_sequence": {
+  "base": "dc720fd → 01f4d72",
+  "steps": [
+   {
+    "id": "M1",
+    "commit": "c018fc7",
+    "what": "`k1_v1.kicad_pro` 规则严重度 **ignore→warning ×9**（copper_sliver · footprint_filters_mismatch · footprint_type_mismatch · missing_courtyard · silk_over_copper · silk_overlap · track_not_centered_on_via · tuning_profile_track_geometries · via_dangling）",
+    "target_dim": "rule_severity_manifest",
+    "meta_gate": "0 项目（k1 无 pipeline.yaml ⇒ skipped）⇒ 过"
+   },
+   {
+    "id": "M2",
+    "commit": "4084133",
+    "what": "新建 `k1/fp-lib-table`（ForgeOS → `${KIPRJMOD}/lib/ForgeOS.pretty`）",
+    "target_dim": "fp_lib_table_present",
+    "meta_gate": "同上 ⇒ 过"
+   },
+   {
+    "id": "M3+",
+    "commit": "01f4d72",
+    "what": "**新建 `k1/pipeline.yaml`**（preflight=project_sch_coverage；verify=sch_structural + netlist_connect + **bom_consistent**）+ **前置 BOM** `k1/fab/k1_v1_bom.csv`（sha16 `2b7b2554f835689e` · Ref 头 + 每行一 ref · 37 refs）+ 生成器 `k1/tools/k1_p4_bom_gen_v1.py` + `k1/fab/README.md` + `project.yaml` 增 `nets_yaml` 指针",
+    "target_dim": "pipeline_present",
+    "meta_gate": "**转绿**（k1 verify 全 PASS）"
+   }
+  ]
+ },
+ "readings": {
+  "k1_adjudication": {
+   "baseline": "4 PASS / 14 FAIL（19 维中 ref_plane_continuity enabled=false ⇒ 实评 18）",
+   "after_all_three": "**7 PASS / 11 FAIL** · provisional=false；**翻转维 = `rule_severity_manifest` · `fp_lib_table_present` · `pipeline_present`（恰为 3 目标维）**；**0 新失败**",
+   "pass": [
+    "device_has_pads",
+    "drc_warning_dispositions",
+    "fp_lib_table_present",
+    "non45_segments",
+    "pipeline_present",
+    "rule_severity_manifest",
+    "verdict_schema"
+   ],
+   "fail_remaining": "K1 自身面（未布线中间态/板级几何/缺测量件/原理图 37 vs 42）—— **非本批引入**",
+   "note": "提案镜像记 5→8 = **常数 +1 偏移**；本件真树实测 **4→7**，增量 +3 与目标维完全一致（已诚实登记，未采信未复现值）"
+  },
+  "k1_engine_verify": "`cd k1 && PYTHONPATH=$PWD/_shared:$PWD python3 _shared/eda_core/pipeline/engine.py verify k1` ⇒ **preflight + 3 全 PASS（含 bom_consistent）** ⇒ **K1 统一入口打通（闭 G-10）**",
+  "meta_gate": "k1 提交期 meta-gate **转绿**（`全部 … sch 必选检查声明完整`）✓"
+ },
+ "bom_governance": {
+  "schema": "`Ref` 头 + 每行一 ref（`checks.py::check_bom_consistent` 逐行 `csv.reader(row)[0].split(\",\")`）",
+  "source": "真 sch netlist（`kicad-cli sch export netlist`）；**不读板/SPEC**（避 C-1）",
+  "cross_check": "与真源 `pm_gate/project.yaml::nets_yaml`（= `boards/k1_sch.yaml`）placements 交叉核对 **37 == 37** ✓",
+  "fail_closed": "sch 缺/SHARUN 不可执行/导出失败/0 器件/ref 含逗号换行/与真源不同集 ⇒ 非零退出不落盘",
+  "repo_write_T41": "默认 dry-run；`--apply --confirm-repo-write` 才落盘（落盘前自动备份 + 打印旧 sha）",
+  "not_delivery_bom": "仅为**判据消费口径 ref 集**；交付级 BOM 属 P5 交付面（另件另裁）",
+  "must_sync_with_N3": "**N-3（37→42）落件后须以生成器重出并同批提交**，否则 `bom_consistent` FAIL"
+ },
+ "pointers": {
+  "container_commit_a": "a17e84e（k1 gitlink → 01f4d72）",
+  "container_commit_b": "92dc676（k2 gitlink → 212dd57）"
+ },
+ "boundary": "未改 `criteria/`／SPEC／冻结件；未重建交付包；未新增检查齿；未派 WORKER。",
+ "ts": "2026-09-22T12:00:00+0800"
+}
