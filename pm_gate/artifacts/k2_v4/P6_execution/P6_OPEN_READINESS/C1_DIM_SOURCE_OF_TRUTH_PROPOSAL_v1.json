@@ -1,0 +1,83 @@
+{
+ "artifact": "k2_c1_dim_source_of_truth_proposal",
+ "schema": 1,
+ "purpose": "C-1 收口前置（#K2-43）：为 19 判据维产出**可安装的 `source_of_truth` 拟声明**，并用已落件的 checker 在**真实数据**上做正控/负控。ENG 只出草案，逐维声明归判据属主（监理）。",
+ "context": {
+  "checker": "`_shared/eda_core/truth_binding.py` `check_dimension_sources()` + CLI `check-dimensions`（批 4 落件 `02459f5`）",
+  "现行 manifest（rev=3）逐维声明": "**0/19**（checker 实测 ⇒ FAIL 19 条；这是 C-1 残面的『before』读数，非缺陷）",
+  "路径口径": "`source_of_truth` 用**容器仓库根相对**路径（与 canonical `--root .` 同口径）；checker 调用带 `--base-dir <容器根>`",
+  "被验对象（artifact）": "受审板 `k2/hw/k2_v4_8L.l7.kicad_pcb` + **交付包目录** `k2/pm_gate/artifacts/k2_v4/L6/jlc_package/`（**目录树** ⇒ 包内件一律判自证）"
+ },
+ "proposed_declarations": {
+  "zone_filled": [
+   "k2/pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json",
+   "_shared/eda_core/drc_rules.json"
+  ],
+  "device_has_pads": [
+   "k2/pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json"
+  ],
+  "drill_count": [
+   "k2/pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json"
+  ],
+  "net_declared_realized": [
+   "k2/hw/data/k2_sch.yaml"
+  ],
+  "pin_map_complete": [
+   "k2/hw/data/k2_sch.yaml",
+   "k2/hw/sch/k2_sch.kicad_sch"
+  ],
+  "non45_segments": [
+   "_shared/eda_core/drc_rules.json"
+  ],
+  "refdes_sets_equal": [
+   "k2/hw/sch/k2_sch.kicad_sch"
+  ],
+  "pipeline_present": [
+   "k2/pipeline.yaml"
+  ],
+  "verdict_schema": [
+   "criteria/manifest.k2.yaml"
+  ],
+  "drc_errors": [
+   "_shared/eda_core/drc_rules.json"
+  ],
+  "drc_warning_dispositions": [
+   "criteria/manifest.k2.yaml"
+  ],
+  "unconnected_zero": [
+   "k2/hw/data/k2_sch.yaml"
+  ],
+  "fp_lib_table_present": [
+   "k2/pipeline.yaml"
+  ],
+  "pads_within_outline": [
+   "k2/pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json"
+  ],
+  "keepout_active": [
+   "k2/pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json"
+  ],
+  "rule_severity_manifest": [
+   "criteria/manifest.k2.yaml"
+  ],
+  "ref_plane_continuity": [
+   "k2/pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json"
+  ]
+ },
+ "gap_dims_needing_new_external_source": {
+  "density_and_clearance": "JLC HDI 工艺能力（线宽/间距/孔环下限）：现仅存在于**交付包内** 06_rulings/jlc_dfm_hdi_l7.json ⇒ 包内自证风险；建议 gate 属主落 criteria/jlc_hdi_capability.yaml",
+  "lib_electrical_level": "器件手册/库电气级：现锚于 W-8 审计（**板派生**）⇒ 建议落 criteria/parts_electrical_truth.yaml（器件手册摘录 + 出处三件套）"
+ },
+ "controls": {
+  "positive": "17 维清洁外部真源 ⇒ `17/17 已声明 · 违规 0 ⇒ PASS`（exit 0）",
+  "negative_real_data": "把 `density_and_clearance` 真源指向**交付包内** `06_rulings/jlc_dfm_hdi_l7.json` ⇒ **被拦**（exit 1）：『真源与被验对象重合 … 自证循环被拦（C-1）』",
+  "negative_missing": "对现行 rev=3 manifest（无逐维声明）⇒ `0/19 已声明 · 违规 19 ⇒ FAIL`（exit 1）"
+ },
+ "reading": {
+  "clean": "19 维中 **17 维**可锚到库内**独立外部件**（真源网表 / 原理图 / 设计 SPEC / DRC 规则库 / pipeline 声明 / 判据契约）",
+  "gap": "**2 维无独立外部真源**：`density_and_clearance`（JLC HDI 工艺能力现仅存在于**交付包内**判定件 ⇒ 包内自证）· `lib_electrical_level`（现锚于 **板派生** 的 W-8 审计）⇒ 建议 gate 属主落 `criteria/jlc_hdi_capability.yaml` 与 `criteria/parts_electrical_truth.yaml`（含出处三件套 doc_id/doc_url/doc_sha256）",
+  "note": "此 2 维即 **C-1 的真正残面**：不是 checker 缺齿，而是**外部真源件不存在**。"
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-20T20:05:00+0800"
+}
