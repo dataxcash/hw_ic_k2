@@ -72,8 +72,8 @@
    ]
   },
   {
-   "id": "**K1-D10/D11/D12（新·系统普查所得）**",
-   "title": "**K1『声明/实现漂移』族**：U8(TPS54628 vs 6脚模块) · R35/R36(10K vs 56K) · 及机制性根因",
+   "id": "**K1-D10/D11/D12（更正：D10/D11 已在册）**",
+   "title": "（**部分重复·已更正**）K1-D10≈`G-5`／D11≈`C-G2-1` **均已在册**；仅 D12 机制面为补充",
    "facts": [
     "普查工具（可复现）：`k1_declared_vs_impl_census_v1.py` ⇒ **11/42 件**漂移：J1·J10·Q1·Q2·R35·R36·R38·R39·U12·U13·U8。",
     "**U8（K1-D10）**：声明 `TPS54628`（手册 8 脚+EP：1 EN·2 VFB·3 VREG5·4 SS·**5 GND**·6 SW·7 VBST·**8 VIN**），实现为 6 脚模块符号 `DCDC_12V_5V`（SW/FB 显式 NC）。**若按裸 IC 判定，板映射严重不符**（pad5=GND 接在 `PWR_5V_MAIN`、pad8=VIN 未接、EN 未上拉、VFB 短地…）。",
@@ -86,16 +86,17 @@
     "R35/R36：把实现符号改为 10K（现成 R_10K）",
     "机制：K1 引入共享 schlib 同构再生器（N-3）并纳入已备验收核"
    ],
-   "eng_recommend": "**U8 走 (b) 或 (a) 需监理/owner 定件**（属**选件决策**，ENG 不自定）；R35/R36 改 10K（与需求冻结一致）；机制随 N-3 一并解决。",
+   "eng_recommend": "**D10/D11 撤回为『新事项』**（已在册）；**仅 D8(VBIAS)/S6(J10) 请监理裁**。",
    "evidence": [
     "K1_BOARD_LEVEL_DEFECT_WORKLIST_20260921_v1.json（含 D10/D11/D12）",
     "k1_declared_vs_impl_census_v1.py（可复现普查）",
     "手册 sha256 校验：tps54628 `638ae7d8504d9b44…`"
-   ]
+   ],
+   "prior_art": "`G-5`（K1 L1_BID §5）· `C-G2-1`（K1 L3 BUILD_REPORT_v2）"
   },
   {
-   "id": "**K2-REG-1（新）**",
-   "title": "内部『引脚真源』注册册**归属不可信**（C-25 反证）—— **非交付阻塞**（U2 封装指派存疑/余量 pad 均**已在册**）",
+   "id": "**K2-REG-1（更正：实为在册 `G-5`）**",
+   "title": "（**重复上报·已更正**）内部注册册 `DCDC_12V_*` 归属问题 —— **实为 K1 `G-5` 已在册**",
    "facts": [
     "注册册 `_shared/eda_core/sch_gate/datasheets/` 33 件（K1/K2 共用）；与 K2 符号重叠 9 件。",
     "**`DCDC_12V_3V3` / `DCDC_12V_5V`**：注册册 `package=SOT-23-6 (DBV)`、`source=TI SLVSD82 (TLV61046A **28V Boost**)`；而设计（K2 `U2`、K1 `U8`）footprint = `SOIC-8_5.3x5.3mm_P1.27mm`。**该轨为 12V→5V/3.3V 降压（6A/3A）** ⇒ 28V boost 拓扑不合 ⇒ **归属不可信**；且注册册 `pins` 与设计一致 ⇒ 系**设计派生**。",
@@ -107,10 +108,26 @@
     "**C-25**：采纳本件作 tier1 依据（监理自裁）",
     "DCDC 实装器件澄清 ⇒ 归**在册待裁项**（CONVERGENCE §供裁），处置边界明示涉 **owner 闸/判据通道**"
    ],
-   "eng_recommend": "**仅作 C-25 依据**；**不**将其作为新的交付风险上报（已澄清为在册项）。",
+   "eng_recommend": "**撤回为『新事项』**：本项**已在册**（`K1-GAP G-5`）⇒ 仅作 **C-25 的 tier1 依据**引用，**不另列待裁**。",
    "evidence": [
     "SCH_GATE_TRUTH_REGISTRY_CREDIBILITY_AUDIT_20260921_v1.json（8986ac46258a1d7e）",
     "K2-P6-SCH-GATE-TRUTH-REGISTRY-CREDIBILITY-20260921.md"
+   ],
+   "prior_art": "`k1/pm_gate/artifacts/k1/L1/frozen/L1_BID_v2_k1.md §5 G-5`（已在册，2026-09-15）"
+  },
+  {
+   "id": "**（新增）PRIOR-ART 索引**",
+   "title": "**`PRIOR_ART_REGISTRY_INDEX_20260921_v1.json`** —— 『先查册再声明』的登记册索引",
+   "facts": [
+    "本会话**3 次**遇到『新发现』与既有册重叠（K1-S6 为真漏；K1-D11≈`C-G2-1`；K2-REG-1≈`G-5`）⇒ 建索引以防复发。",
+    "索引覆盖：K1-GAP(G-1..G-10) · K1-OPEN(OPEN-1/2) · K1-BUILD(判据判定) · K1-SYNC(②声明) · K2-E2PAD · K2-LAND · K2-CAP · K2-PEND · K2-DEFREG · K1-WORKLIST。",
+    "并**逐条标注**本会话哪些为真新（**D8 VBIAS** · **S6 J10**）、哪些已登（D10/D11/K2-REG-1）。"
+   ],
+   "impact": "流程改进：后续任何『新发现』须先核本索引并在产物中写 `prior_art_checked: true`。",
+   "options": [],
+   "eng_recommend": "知悉并采纳为前置步骤。",
+   "evidence": [
+    "PRIOR_ART_REGISTRY_INDEX_20260921_v1.json（2c2da4332e48e9fa）"
    ]
   }
  ],

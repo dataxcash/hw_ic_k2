@@ -1,0 +1,109 @@
+{
+ "artifact": "k2_prior_art_registry_index",
+ "schema": 1,
+ "purpose": "**先查册再声明**：把『已知缺陷/缺口/待裁』的**权威登记册**编成一页索引，供任何新会话在声明『新发现』前逐册核对，避免重复上报（本会话已发生 3 次重复：K1-S6 为真漏；K1-D11≈C-G2-1；K2-REG-1≈G-5）。**只读**。",
+ "how_to_use": [
+  "声明『新发现』或『风险』前：先在本表逐册 grep 关键词（器件号/网名/现象）。",
+  "若已登记 ⇒ 只引用其编号与状态（不得重复上报为『新』）。",
+  "若确为新 ⇒ 在产物中**显式写明已核本表**（`prior_art_checked: true`）。"
+ ],
+ "registries": [
+  {
+   "id": "K1-GAP",
+   "path": "k1/pm_gate/artifacts/k1/L1/frozen/L1_BID_v2_k1.md §5",
+   "scope": "K1 ①方案缺口/器件真源缺陷",
+   "items": "G-1..G-10",
+   "key": {
+    "G-5": "**器件真源缺陷**：`sch_gate/datasheets/DCDC_12V_5V.yaml` 引脚表实为 **TLV61046(boost)**；`U8` footprint 声明 SOIC-8 而真源 SOT-23-6 ⇒ ②原理图前必须修",
+    "G-6": "`k1_board.yaml#devices.U1.nets` 含 SBU1 但 `k1_nets.yaml#SBU1` 无 U1 ⇒ 漂移",
+    "G-9": "`candidate_generator` 电源岛器件集硬编码",
+    "G-10": "k1 无 pipeline.yaml（统一入口不可用）"
+   }
+  },
+  {
+   "id": "K1-OPEN",
+   "path": "k1/boards/k1_board.yaml#reconciliation.open_issues",
+   "scope": "K1 板级开放项",
+   "items": "OPEN-1（J1 Type-C 无 SS 焊盘⇒换 Amphenol）· OPEN-2（U10 LDO 5pin vs SOT-23 3pad，『待 ECO』）"
+  },
+  {
+   "id": "K1-BUILD",
+   "path": "k1/pm_gate/artifacts/k1/L3/BUILD_REPORT_v2.md",
+   "scope": "K1 判据逐条判定（②③阶段）",
+   "items": "含 **`C-G2-1` CC 宣告 3A（Rp=10k）⇒ FAIL：R35=56K R36=56K（目标 10000Ω±5%）**；C-G6-2 I2C 上拉预算 FAIL（R37 对地）等"
+  },
+  {
+   "id": "K1-SYNC",
+   "path": "k1/pm_gate/artifacts/k1/L2/SCH_SYNC_v1.md",
+   "scope": "K1 ②同步**声明**（改了什么）",
+   "items": "G1 `U8 DCDC_12V_5V→TPS54628`；`U12 TPS22919→TPS22965`；G2 `R35/R36 56K→10K`（CC 3A 宣告）"
+  },
+  {
+   "id": "K2-E2PAD",
+   "path": "k2/docs/K2-P2-E2-directed-pad-registry-v1.md",
+   "scope": "K2『有向口径』余量焊盘逐条登记",
+   "items": "J2 0 · J3 0 · J4 0 · U1 14+缺8（**板侧缺陷 2-A″：U1 截断 + EP 未接 GND**）· **U2 余量 2：`7`,`8` = 结构性余量（SOIC-8 未用脚），登记即闭**"
+  },
+  {
+   "id": "K2-LAND",
+   "path": "k2/docs/K2-P4-CONVERGENCE-STATUS-v1.md",
+   "scope": "K2 板级 land pattern vs 库 系统性差异 + 供裁项",
+   "items": "28 件被动件 land 偏小；**② `U2` 真源符号 `DCDC_12V_3V3`（无型号/图纸，`body_width:17.78` 与封装名矛盾）⇒ 封装指派本身存疑**；J3/J4 库件 pad 命名陈旧；E2 y 镜像。**边界：源侧⇒owner 闸；判据侧⇒判据通道**"
+  },
+  {
+   "id": "K2-CAP",
+   "path": ".omo/supervision/ledger/CAPABILITY-GAP-STATUS-v1.json",
+   "scope": "能力缺口 C-1..C-25 状态",
+   "items": "24/25 closed · **C-25 pending**（2 维无独立外部真源）"
+  },
+  {
+   "id": "K2-PEND",
+   "path": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/PENDING_RULINGS_DELTA_20260921_v6.json",
+   "scope": "当前待裁清单（N-1..N-7 + N-3rev + C-25 + K1 项）",
+   "items": "见件内"
+  },
+  {
+   "id": "K2-DEFREG",
+   "path": ".omo/supervision/ledger/（K2-DEFECT-REGISTER 等）",
+   "scope": "K2 缺陷登记册/裁定留痕",
+   "items": "J-1..J-n / C-* / ECO-*"
+  },
+  {
+   "id": "K1-WORKLIST",
+   "path": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/K1_BOARD_LEVEL_DEFECT_WORKLIST_20260921_v1.json",
+   "scope": "**本会话新编** K1 板级工作清单 D1..D12（部分与上述册重叠，见 corrections）",
+   "items": "D1..D12"
+  }
+ ],
+ "known_overlaps_found_this_session": [
+  {
+   "mine": "K1-D11（R35/R36 56K）",
+   "already": "**K1-BUILD `C-G2-1` FAIL（K1 L3 BUILD_REPORT_v2）**",
+   "verdict": "重复（已在册）"
+  },
+  {
+   "mine": "K2-REG-1（DCDC_12V_* 注册册 TLV61046 误挂）",
+   "already": "**K1-GAP `G-5`**",
+   "verdict": "重复（已在册）"
+  },
+  {
+   "mine": "K1-D10（U8 声明 TPS54628 vs 符号 DCDC_12V_5V）",
+   "already": "K1-GAP `G-5` + K1-SYNC `G1`（声明已记，须②修）",
+   "verdict": "基本重复"
+  },
+  {
+   "mine": "K1-S6（J10 footprint 陈旧）",
+   "already": "未见于上述册（既有 only OPEN-1 J1 / OPEN-2 U10）",
+   "verdict": "**真新**（已核）"
+  },
+  {
+   "mine": "K1-D8（Q1/U12 **VBIAS 未接**）",
+   "already": "全册未见（grep `VBIAS` 仅 2 份手册 YAML）",
+   "verdict": "**真新**（已核）"
+  }
+ ],
+ "readonly_repo": true,
+ "not_landed": true,
+ "no_new_criteria_dim": true,
+ "ts": "2026-09-22T09:50:00+0800"
+}
