@@ -1,0 +1,113 @@
+{
+ "artifact": "k2_gc2_b_class_input_cost_and_readings",
+ "schema": 2,
+ "supersedes": "B_CLASS_INPUT_COST_AND_READINGS_v1.json（其生产者归属有误；本件为更正+全量实跑版）",
+ "purpose": "P6 判据① 的 **b 类 7 维**（缺测量件 ⇒ fail-closed）逐维：**真实生产者 / K1 可跑性 / 实跑读数 / 须批处**。",
+ "judge": {
+  "criteria": "criteria/adjudicate.py 1937a40ae68bc288（rev=3，ENG 只读）",
+  "manifest": "PROPOSED_manifest.k1.yaml 94da046bfad8f2c8"
+ },
+ "measured_delta": {
+  "baseline": {
+   "n_pass": 3,
+   "n_fail": 16
+  },
+  "with_drc_w8_pads_minclr": {
+   "n_pass": 4,
+   "n_fail": 15,
+   "note": "`lib_electrical_level` 转 **PASS**；`pads_within_outline` 由 fail-closed 转**实测读数**"
+  },
+  "reproduce": "python3 criteria/adjudicate.py --project k1 --board k1/k1_v1.kicad_pcb --pro k1/k1_v1.kicad_pro --nets k1/boards/k1_sch.yaml --sch-dir k1/sch --root . --manifest <PROPOSED_manifest.k1.yaml> --drc-cli AppDir/usr/bin/kicad-cli --drc-work-dir <全新> --w8-audit-json <k1_w8.json> --pads-outline-json <k1_pads.json> --min-clearance-json <k1_mc.json>"
+ },
+ "per_dim": [
+  {
+   "dims": [
+    "drc_errors",
+    "drc_warning_dispositions",
+    "unconnected_zero"
+   ],
+   "n": 3,
+   "input": "`--drc-cli` + **全新** `--drc-work-dir`",
+   "producer": "判定器内建 `measure_drc`（:107；`kicad-cli pcb drc --format json --severity-all`）",
+   "k1_runnable": true,
+   "cost_s": 5,
+   "readings": {
+    "drc_errors": "**13 error**（违规总 30）· 类型 ['clearance','copper_edge_clearance','pth_inside_courtyard','shorting_items','solder_mask_bridge']",
+    "drc_warning_dispositions": "**1 未登记 warning 类** ['nonmirrored_text_on_back_layer']（已登记 ['silk_edge_clearance']）",
+    "unconnected_zero": "**156** unconnected_items"
+   },
+   "supervisor_item": "是否在 K1 manifest 登记 `nonmirrored_text_on_back_layer`（或裁 K1 中间态豁免）；13 error 为 **K1 实测缺陷**（非测量缺失）"
+  },
+  {
+   "dims": [
+    "lib_electrical_level"
+   ],
+   "n": 1,
+   "input": "`--w8-audit-json`",
+   "producer": "`k2/tools/k2_w8_footprint_audit_v1.py --board …`（板参数化）",
+   "k1_runnable": true,
+   "cost_s": 0.1,
+   "readings": {
+    "summary": "n_electrical_diff=0 · n_pad_name_set_only=0 · board_sha16=eda1dc91eec76aa7（== 受审板）⇒ **PASS**"
+   },
+   "supervisor_item": "无"
+  },
+  {
+   "dims": [
+    "pads_within_outline"
+   ],
+   "n": 1,
+   "input": "`--pads-outline-json`",
+   "producer": "`k2/docs/drafts/p4-j8-v3-measurement-v1/measure_pads_within_outline.py --board --json`（板参数化）",
+   "k1_runnable": true,
+   "cost_s": 0.1,
+   "readings": {
+    "result": "**出框 2 pad**（AABB 与真外框多边形双口径同值；均 J1.SH，rule=oval）· n_pads=306 · board_sha16 一致 ⇒ 判定**FAIL（实测）**"
+   },
+   "supervisor_item": "读数即证据；K1 板确有 2 个 oval pad 越框（`--inset-mm` 默认 0.3）"
+  },
+  {
+   "dims": [
+    "density_and_clearance"
+   ],
+   "n": 1,
+   "input": "`--density-json` **+** `--min-clearance-json`",
+   "producer": {
+    "min_clearance": "`k2/docs/drafts/p4-j8-density-clearance-v1/measure_min_clearance_drc.py --board --pro --kicad-cli --json`（**可跑**；实达上界 0.1mm，首违规阈值 0.1）",
+    "density": "`k2/docs/drafts/p4-j8-density-clearance-v1/measure_density_and_clearance.py --board --json`（**K1 崩**）"
+   },
+   "k1_runnable": "半（min_clearance ✓ / density ✗）",
+   "blocker": "`measure_density_and_clearance.py:133` `process_min`：`min(t.GetWidth() for t in tracks)` ⇒ K1 板**无走线** ⇒ `ValueError: min() arg is an empty sequence`",
+   "cost": "须 **1 处通用空集守卫**（无走线/无过孔/无孔时跳过工艺极限项，而非崩溃）⇒ 工具改动 = **须监理批**（C-6 同批）",
+   "supervisor_item": "批该处修复（通用：对空集给 `null` 而非崩溃）；或不启本维/裁 K1 中间态豁免"
+  },
+  {
+   "dims": [
+    "ref_plane_continuity"
+   ],
+   "n": 1,
+   "input": "`--refplane-gap-json`",
+   "producer": "`k2/docs/drafts/p4-refplane-nonantipad-v1/measure_non_antipad_gap.py`（**草稿件**；须 `--spec`，默认 `--net-prefix PCIE_` = K2 域假定）",
+   "k1_runnable": false,
+   "blocker": "K1 板**无铜区/无填充平面**（judge 自测 `zone_filled` 0/0、keepout 0）⇒ **无对象可测（vacuous）**",
+   "cost": "N/A",
+   "supervisor_item": "口径三选一：vacuous 通过 / 登记不适用 / enabled:false；**不得**为其新增检查齿"
+  }
+ ],
+ "secondary_observation": {
+  "tool": "k2/tools/k2_p4_j8_measure_v1.py",
+  "defect": "`float(one(h,'drill')[1])` 假定钻孔为数值 ⇒ 遇 **oval 钻孔**即 `ValueError: could not convert string to float: 'oval'` @:177",
+  "scope": "**非本 7 维的输入路径**（该工具不是判定器输入的生产者），但同属工具通用性缺陷；如需其输出（工艺极限）则须同类修复 ⇒ 建议与上条**同批**处置"
+ },
+ "summary_for_supervisor": {
+  "runnable_now": "**5/7 维即跑即得**（drc×3 + w8 + pads_outline）",
+  "半可": "**1/7**（density_and_clearance：min_clearance 可跑、density 须空集守卫）",
+  "vacuous": "**1/7**（refplane：K1 无平面层）",
+  "batch_fix_needed": "**2 处工具通用性修复**（空走线空集守卫 · oval 钻孔解析）⇒ 建议并入下一批（须批）",
+  "substantive_K1": "K1 板实测：**13 DRC error（含 shorting_items）· 156 unconnected · 2 pad 出框 · 最小铜间距上界 0.100mm** ⇒ K1 属**未完成板**（与 `zone_filled 0/0`、`non45 0/0` 一致）；P6 判据①只要求『同源四项命中』（其中 3 项可机判，已确认命中）。"
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "criteria_touched": false,
+ "tools_touched": false
+}
