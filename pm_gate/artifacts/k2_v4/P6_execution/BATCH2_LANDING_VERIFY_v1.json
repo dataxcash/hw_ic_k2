@@ -1,0 +1,94 @@
+{
+ "G_d_delivery_chain": {
+  "command": "cd k2 && PYTHONPATH=$PWD/_shared:$PWD python3 _shared/eda_core/pipeline/engine.py verify k2",
+  "reading": "preflight/check[project_sch_coverage] PASS · verify/sch_structural PASS · verify/netlist_connect PASS · verify/bom_consistent PASS",
+  "verdict": "PASS（4/4，不回退）"
+ },
+ "acceptance_gate": {
+  "command": "PYTHONPATH=AppDir/... AppDir/bin/python3.11 k2/tools/k2_p6_acceptance_gate_v1.py --expect-patched",
+  "reading": {
+   "A_anchors": "4/4",
+   "B_verify": "PASS",
+   "C_k1_pass": 14,
+   "C_k2_pass": 14,
+   "C_regressions": 0,
+   "D_hidden_failures": 2,
+   "D_k1_pass": 14,
+   "D_k2_pass": 14,
+   "D_named_exceptions": [
+    "test_board_level_consistency",
+    "test_chain_no_pn_zero_spacing"
+   ],
+   "D_pytest": {
+    "failed": 2,
+    "passed": 61,
+    "skipped": 12
+   }
+  },
+  "record": "P6_execution/ACCEPTANCE_GATE_v1.json",
+  "verdict": "PASS（failures=[]）"
+ },
+ "anchor_not_rebuilt": {
+  "MANIFEST.json": "6ee7495de61f749f",
+  "board_l4": "d4e81f647be7f980",
+  "board_l7": "c5a7df90aadb66e0",
+  "design_source": "fb07d25ac426ff84",
+  "netlist": "dd794c54f7ce7417",
+  "tarball": "0e88e107e2da8192"
+ },
+ "artifact": "k2_batch2_landing_verify",
+ "b2t_repro": {
+  "determinism": "MATCH",
+  "record": "P6_execution/B2T_DRAFT_PATCH_v1.json",
+  "teeth": "12/12",
+  "tool": "k2/tools/k2_p6_b2t_draft_patch_v1.py",
+  "trees": {
+   "anchor": "41P/15F",
+   "base": "43P/13F",
+   "draft": "57P/6F",
+   "draft_b1": "61P/2F",
+   "negctl": "45P/18F"
+  }
+ },
+ "canonical_19": {
+  "command": "python3 criteria/adjudicate.py --project k2 --board k2/hw/k2_v4_8L.l7.kicad_pcb --pro k2/hw/k2_v4_8L.l7.kicad_pro --nets k2/hw/data/k2_sch.errata-2.yaml --sch-dir k2/hw/sch --root . --drc-cli AppDir/bin/kicad-cli --drc-work-dir <全新> + L4/E3-standard-call-l7-20260919 六件测量输入",
+  "equals_countersigned_record": true,
+  "reading": {
+   "drc_error": 0,
+   "n_fail": 0,
+   "n_pass": 19,
+   "passed": true,
+   "provisional": false,
+   "unconnected": 0,
+   "zone_filled": "10/10（keepout 规则区 8 另计）"
+  },
+  "two_run": "run1 与 run2 verdict 逐字节同（cmp OK）",
+  "verdict_sha16": "190b73be0f728a56"
+ },
+ "checkouts_byte_identical": true,
+ "criteria_readonly": {
+  "CHANGELOG": "e2b49fdd3aec0283",
+  "adjudicate.py": "1937a40ae68bc288",
+  "manifest.k2.yaml": "eb244d811ad7859b",
+  "rev": 3
+ },
+ "engine": {
+  "expect": "8f9bd6c7fa033039（影子施工后期望态，逐字节同）",
+  "path": "k2/_shared/eda_core/hs_route_model.py",
+  "sha16": "8f9bd6c7fa033039"
+ },
+ "landing_commits": {
+  "container_shared": "fc59771",
+  "k1": "16d7b7c",
+  "k2": "b58f53a",
+  "k2_shared": "fc59771"
+ },
+ "purpose": "批 2（#K2-41 放行）落件后**三元验收**的机读留痕（供监理/看护复算，不新增检查齿）",
+ "readonly": true,
+ "reproduce": "三元验收可一键复跑：① engine verify k2；② 上述 canonical 命令（须给全新 --drc-work-dir）；③ acceptance gate --expect-patched。口径与件锚见本件；命令参数原文见 k2/docs/K2-P6-BATCH2-LANDING-REPORT-20260920.md",
+ "schema": 1,
+ "test_file": {
+  "path": "k2/_shared/eda_core/tests/test_hs_route_model.py",
+  "sha16": "93af4803258cb578"
+ }
+}
