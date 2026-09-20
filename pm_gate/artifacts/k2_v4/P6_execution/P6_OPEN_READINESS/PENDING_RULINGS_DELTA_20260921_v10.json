@@ -1,0 +1,172 @@
+{
+ "artifact": "k2_pending_rulings_delta",
+ "schema": 10,
+ "ts": "2026-09-21T00:45:00+0800",
+ "supersedes": "PENDING_RULINGS_DELTA_20260921_v9.json（v9 正文保留；本件追加 PIN-01 复核新发现 + 须批 2 项）",
+ "purpose": "收敛当前全部待裁项为**一份**决策件。本会话（2026-09-20 20:14 起 · context 归零续接）在『无晚于 handoff 的裁定』下按 handoff §7-4 只读造活，落 2 项实质成果并新增 4 项待裁（含 **1 项高严重度**）。",
+ "owner_gate": "无（W8-GEN-1 为**监理面**生成器批准；owner 面仅 C-26 登记 · P5 外部面）",
+ "stage_state": "P0–P4 与 P6 判据面 HOLDS；P5 = 唯一未闭阶段门（外部 V4–V7 `NOT_RUN`）；交付锚 `6ee7495de61f749f` **未动**；判据 **rev=6**（此会话复核四件逐字节同：`727d0995`/`00faba34`/`c175be51`/`1937a40a`）；canonical 19 `190b73be0f728a56`。**未越阶段、未动任何受保护件。**",
+ "carried_forward": [
+  "R-1（`pin_map_complete` J1 脚号 = 16 节点；择 (a) 逐 pad 展开 / (b) 口径）",
+  "W8-VAC-1（K1 42/42 footprint 无库 nickname ⇒ W-8 空过；补 lib_id 须批 / 裁口径）",
+  "T2-F1（`_shared` `source:` 引证订正：TPD6E05U06 SLLSE95→SLVSBO7O · TS3USB221A SCDS239A→SCDS277C；须批+同批升版）",
+  "C-25 tier2 口径（标准件 5 + 约定件 6 + 语义件 1 结构上无三件套 ⇒ 出处认定方式）",
+  "K1-D6 台账更新（warning 17→77 / 5 类；K1 项目面须批）",
+  "K1-D8（Q1/U12 VBIAS 未接）· N-3 rev · N-1/N-6/N-7 已落档",
+  "批 6 落件独立复算（监理侧；本会话已在 auto_supervisor.log 见监理独立复算 canonical 19 r1=r2=`190b73be0f728a56` IDENTICAL ⇒ 似已执行，请正式出件）"
+ ],
+ "new_items": [
+  {
+   "id": "**KBU6-PINROT-1 / K1-D13（新·高）**",
+   "title": "**`_shared` 器件真源 `STM32G0B1KBU6.yaml` 物理脚 25..32 相对厂商数据表整体旋转一位** ⇒ K1 U1 符号/pinmap 继承 7 个脚号错",
+   "facts": [
+    "厂商真值（ST **DS13560** Table 12 · 列 `LQFP32/UFQFPN32 - GP`）：**25=PA14-BOOT0 · 26=PA15 · 27=PB3 · 28=PB4 · 29=PB5 · 30=PB6 · 31=PB7 · 32=PB8**。",
+    "现 YAML（sha16 `4c898090e2fabeff`）：25=PA15 · 26=PB3 · 27=PB4 · 28=PB5 · 29=PB6 · 30=PB7 · 31=PB8 · 32=PA14 ——**循环右移一位**；脚 1..24 两侧一致。",
+    "**证据链**：①表结构解析（c1 = 表头最左列 = LQFP32/UFQFPN32-GP；c3 = LQFP48）②完备性（c1 覆盖 1..32）③**解析器交叉校验**：同解析器对 c3(LQFP48) 与**受信** `STM32G0B1CBT6.yaml` **逐脚 30/30 一致** ④**单调性判据**：Table 12 的 c1↔c3 = 25→36·26→37·27→42·…·32→47 **单调**；Figure 12 文本流两种配对**均非单调** ⇒ **以 Table 12 为准**。",
+    "**影响**：K1 U1(STM32G0B1KBU6·QFN32) 继承错位 —— `SWCLK_BOOT0 32→25` · `I2C1_SCL 29→30` · `I2C1_SDA 30→31` · `PB3 26→27` · `PB4 27→28` · `PB5 28→29` · `PB8 31→32`；`k1_pinmap.yaml`（`e1f45d29`）· `k1_sch.yaml`（`e1fdb1a1`）均已含。N-3 再生 `k1 9e283bf` 的 `sch/` 沿用 ⇒ **该批含 7 脚错**。",
+    "**K2 交付面不受影响**：k2 现役 hw 用 **STM32G0B1CBT6**（其真源经 c3 列 30/30 校验**正确**）。",
+    "**pad 25 冲突**：pinmap 中 `KEY_DET_EN: 25`，而物理 pad 25 = **PA14-BOOT0**；符号 `SWCLK_BOOT0` 亦指 pad 25 物理脚 ⇒ pad 归属 = **球重映射 = L1**。",
+    "**证据件**：`STM32G0B1KBU6_PIN_ROTATION_DEFECT_20260921_v1.json`（`b23ac49fa5f805fd`）· `k2/docs/K2-STM32G0B1KBU6-PIN-ROTATION-DEFECT-20260921.md`（`728e73c9`）"
+   ],
+   "ask": [
+    "①**监理自裁**：订正 `_shared/eda_core/sch_gate/datasheets/STM32G0B1KBU6.yaml` pins 25..32（`_shared` 件 ⇒ 须批 + **同批升版**）。",
+    "②**owner（L1）**：K1 MCU pad 配对（`{9,25}` 空脚集合 · KEY_DET_EN 与 SWD/BOOT0 物理脚归属）。",
+    "③订正后重跑：`k1_sch_regen_v1.py` → `k1_sch_gen_v1.py --install` → `k1_p4_bom_gen_v1.py` → `verify k1` → K1 判定，复核 pinmap 校验器判定翻转。"
+   ],
+   "eng_recommendation": "先订正真源再重跑；**未批不动**（当前为登记件，禁充绿）。"
+  },
+  {
+   "id": "**T2-F6（新·中）**",
+   "title": "**batch3 `automation_lane_closed=true` 证伪** —— 存在两条可复现**半自动**取件通道",
+   "facts": [
+    "①vendor `.../download/<PART>.pdf` 路由（`diodes.com/datasheet/download/BAT54C.pdf` · `ww1.microchip.com/...` 实测 200 + application/pdf）；②**中文镜像通道**：Sogou（可达）→ `atta.szlcsc.com` / `file.elecfans.com` PDF 直链（实测 200 + application/pdf）；`item.szlcsc.com` / `21icsearch` 可反查 vendor 直链。",
+    "本会话据此已于 batch4 新取 3 件（见下）。"
+   ],
+   "ask": [
+    "裁定『镜像/分销商宿主 PDF』是否计入三件套出处（若计入，tier2 可脚本化推进至 21/33）。"
+   ]
+  },
+  {
+   "id": "**T2-F7（新·中）**",
+   "title": "`STM32G0B1KBU6` 引证文献号 **DS12872** 实为 **DS13560**",
+   "facts": [
+    "厂商表 DS13560 逐字列出 `STM32G0B1CB, STM32G0B1KB, …` 且含专节 `STM32G0B1KxU UFQFPN32 pinout`（Figure 12, §45）⇒ 该件正确数据表 = DS13560。",
+    "同 T2-F1 族（`_shared` `source:` 订正 · 须批 + 同批升版）。"
+   ],
+   "ask": [
+    "与 T2-F1 **并批**订正 `_shared` `source:` 文字。"
+   ]
+  },
+  {
+   "id": "**C-25 tier2 batch4（读数更新·非新裁项）**",
+   "title": "tier2 三件套 **12 → 15/33**（+BAT54C / +FRU_EEPROM(AT24C02) / +STM32G0B1CBT6）",
+   "facts": [
+    "三件均 `%PDF` + `pdftotext` 可解析 + 文献号/产品名机检命中：BAT54C `50b04e4e17bcf5db`（diodes 路由）· AT24C02 `b6466f4cce6d4ed5`（Microchip）· STM32G0B1CBT6 `9fc2cfec9a1c8d5c`（DS13560 令牌命中×159，中文镜像）。",
+    "batch4 后仍缺 6 件：PI3DBS16412 · OPTO_LTV356T · USB3.0_Type-A_90 · PMIC_P1 · SOM_B1 · USB_C_PLUG(Molex 105444)（阻塞特征见机读件）。可达上限仍 **21/33**。"
+   ],
+   "ask": [
+    "知悉；tier2 收口后由 gate 属主另立 criteria rev（同 C-25 原议）。"
+   ]
+  },
+  {
+   "id": "**SG-AUDIT-1（新·中）**",
+   "title": "sch_gate 器件 pin 真源**同族机检**：抽检 **7/8 与厂商原件一致**，唯一 FAIL = STM32G0B1KBU6",
+   "facts": [
+    "PASS：TPS22919 6/6 · TS3USB221A 10/10 · LDO_5V_3V3(AP2127) 5/5 · SE050C2 7/7 · TPD6E05U06 14/14 · FUSB302 14/14 · STM32G0B1CBT6 30/30（LQFP48 列）。",
+    "FAIL：STM32G0B1KBU6（脚 25..32 旋转）。未检：DS160PR810(64 脚) · DCDC_12V_*(TLV61046A)。",
+    "⇒ KBU6 **倾向孤例（图形转写型）**，但不能外推；建议对 `source` 引证指向 **Figure** 的件加注复核优先级。"
+   ],
+   "ask": [
+    "知悉；建议排期补检 DS160PR810 / TLV61046A。"
+   ]
+  }
+ ],
+ "readonly_repo": true,
+ "not_landed": true,
+ "no_new_criteria_dim": true,
+ "eng_readonly_surface": "本会话把『锚复核 + tier2 半自动续取 + 真源同族机检』做尽；下一步实质推进**依赖上表裁定**（尤其 KBU6 订正）。未批期间 ENG 续做：余 6 件半自动取件 + DS160PR810 补检。",
+ "k2_51_execution_status": {
+  "1/6 完成": "`_shared` 器件真源批（KBU6 pins 25..32 订正 + 三件 source: + ENG 1.1.0→1.1.1）；四树逐字节同；`_shared 9623eb3`·`k2/_shared 9623eb3`·`key_v2/_shared 16c762a`·`pciesw4/_shared 7d668cc`；父指针 k2 4d9dafa·key_v2 0cee195·pciesw4 61b873f·容器 67c65b6",
+  "2/6 完成": "同族补检 TLV61046A 6/6 PASS · DS160PR810 抽样 14/64 无冲突 ⇒ **无新缺陷**（`SCH_GATE_PIN_TRUTH_AUDIT_ADDENDUM_20260921_v1.json` 2f9b2593）",
+  "3/6 完成": "K1 U1 脚号随真源订正（KEY_DET_EN 25→26 · SWCLK_BOOT0 32→25 · I2C1_SCL/SDA 29/30→30/31 · PB3/4/5 →27/28/29 · PB8 31→32；撤 provisional）；`verify k1` 全 PASS；K1 **11 PASS/7 FAIL**；`k1 08ff8bb`；**新登 K1-U1-BOARD-SYNC**（`net_declared_realized` `<2 焊盘` 0→2 ⇒ 板须随真源重建）",
+  "4/6 阻塞": "**W8-GEN-1**：建板器 `k1_board_builder.py` **丢弃 footprint 库昵称**（真源 `k1_board.yaml` 已带前缀，重出 PCB 为裸名）⇒ 『SPEC+重建』**单独走不通**，须同时**改建板器（生成器）** ⇒ 触红线『未获批不得改生成器』。副产：重建与现板**仅 28 行差**（U1 侧 net 重排）且**已按订正 pinmap 落位** ⇒ 落该重建可**闭合 K1-U1-BOARD-SYNC**（须同批重出证据 + L3 记录）。证据 `W8_VAC1_REBUILD_PATH_FINDING_20260921_v1.json（2a4566f9）`",
+  "5/6 未动": "姿态归一器（须带负控）",
+  "6/6 未动": "T2-F6 通道续取余 6 件",
+  "5/6 完成": "**W8-POSE-1**：新工具 `k2/tools/k2_w8_footprint_audit_pose_v1.py`（定向归一、**不 Flip**）+ **三项验证全 PASS**（负控 U1 被 FLAG · 0° 件 {U1,U5,U6,E1} 集合不变 · 原 35 identical 零丢失）⇒ 归位 6 件（J1/J6/J9/J10/J13/J14 = 实例姿态伪差）· **残留真实差异 = U9**；**K1-D14/D15 闭** · **K1-D16 保持开**。草案 FLIP 版实测 34/8（含 0° 件）⇒ 确认否决。"
+ },
+ "new_items_after_v7": [
+  {
+   "id": "**W8-GEN-1（须批·高）**",
+   "title": "请求放行 **建板器输出 `(footprint \"<LIB>:<NAME>\")`**",
+   "facts": [
+    "真源 `k1_board.yaml#devices[ref].footprint` **已带库前缀**（`ForgeOS:` / `Connector_USB:` …）；建板器经 `pcbnew.FootprintLoad(lib,name)` 加载后，重出 PCB 的 FPID 退化为**裸名**。",
+    "⇒ W8-VAC-1 的 `n_no_library_link 42→0` **只能由生成器修复**（或每次重建后手工回填 = 直改 PCB，被 PCB↔SPEC 门禁禁止）。",
+    "沙箱重建实测：`devices=42 nets=51 pad_assignments=207 provisional=[]`；与现板 **28 行差**（U1 net 重排）⇒ 低风险。"
+   ],
+   "ask": [
+    "① 放行建板器补 FPID 输出；② 同批：落板 + 重出 `pads_within_outline`/`density_and_clearance`/`min_clearance`/`w8` 证据 + `artifacts/L3/*` 建板记录（PCB↔SPEC 门禁）；③ 复算 K1 判定。"
+   ],
+   "note": "#K2-51 §二 假设改点在 `SPEC_k1.json#components`，实测该件仅含 `refdes_authority`（真源 = `k1_board.yaml devices`）⇒ 改点在**生成器**。"
+  },
+  {
+   "id": "**K1-U1-BOARD-SYNC（中）**",
+   "title": "3/6 实测发现：sch 已改脚号、板未重建 ⇒ `<2 焊盘` 0→2",
+   "ask": [
+    "并入 W8-GEN-1 同批重建（同一块板），避免板 sha 反复。"
+   ]
+  },
+  {
+   "id": "**W8-FU-1（中）**",
+   "title": "板 sha 变更后，K1 板参数化测量证据须重出（`k2_p4_j8_measure_v1.py` 对 K1 oval drill 崩，须用 `k2/docs/drafts/p4-j8-*`）",
+   "ask": [
+    "同批执行（并入 W8-GEN-1）。"
+   ]
+  }
+ ],
+ "new_items_after_v8": [
+  {
+   "id": "**U9-GEOM-1 / K1-D16（真缺陷·须批处置）**",
+   "title": "`U9`(TPD6E05U06_RVZ, B.Cu @180°) 板与 `ForgeOS:TPD6E05U06_RVZ` 库快照**姿态归一后仍几何不一致**",
+   "facts": [
+    "归一（定向、不 Flip）后 U9 仍 diff：pad1/10 等 `dy` **符号相反**（板 +1.5 vs 库 -1.5），shape/size/drill 相同。",
+    "其余 41 件（含全部 0° 件与 6 件 pose 件）归一后 identical ⇒ 该差异**不可由姿态解释**。",
+    "按 #K2-51 §二『不一致 ⇒ 登记为真缺陷，**禁**改库迁就板』⇒ **登记**，处置须批。"
+   ],
+   "ask": [
+    "裁定处置方向：①以**板为权威**刷新 `ForgeOS:TPD6E05U06_RVZ` 快照（=改库，须批）②或查明板/库谁是正确件（若板错 ⇒ 走 SPEC+重建，须批）。"
+   ]
+  }
+ ],
+ "new_items_after_v9": [
+  {
+   "id": "**PIN01-K1-1a（须批·高）**",
+   "title": "**R-1(a) 与 sch_gate PIN-01 校验冲突** —— J1 符号脚已改 pad 级，但 `_shared` `USB_C_RECEPT.yaml` 仍 `1..16` ⇒ **PIN-01 新增 23 项 FAIL（13→29）**",
+   "facts": [
+    "`python3 _shared/eda_core/sch_gate/checks/pinmap.py k1/sch/K1_SCH.kicad_sym`：**k1 9e283bf（R-1(a) 前）= FAIL(13)** → **现盘 08ff8bb = FAIL(29)**；增量 = **USB_C_RECEPT 23 项**（`引脚号错: VBUS 允许 pin ['1']` …）。",
+    "两套校验共用同源：`criteria.measure_pin_map` 要**焊盘级可实现**（R-1(a) 因此翻 PASS）× sch_gate `pinmap.py` 要与 `datasheets/<DEV>.yaml` **脚号一致**。真实需要 = **真源也升 pad 级**。",
+    "同轮 KBU6 订正使 **U1 侧由 9 项降为 2 项**（脚号全对）⇒ 净账 13→29 中，U1 改善 7、J1 新增 23。"
+   ],
+   "ask": [
+    "放行 `_shared/eda_core/sch_gate/datasheets/{USB_C_RECEPT,USB_C_RECEPT_24,USB_C_PLUG}.yaml` 的 `pins` **升为 pad 级**（A*/B*/SH，与 `k1_pinmap.yaml#J1` 同口径）；`_shared` ⇒ 同批升版 + 四树同步。"
+   ],
+   "note": "R-1(a) 的 **criteria 侧验收已达成**（`pin_map_complete` PASS · K1 11 PASS/7 FAIL）；本条为 **sch_gate 侧**回退，属 #K2-50 §二 R-1『K1 其余维零回退』的边界外缺口。"
+  },
+  {
+   "id": "**PIN01-K1-1b（须批·中）**",
+   "title": "#K2-51 §三 3/6 验收「pinmap 校验器 **U1 全 PASS**」**未达成** —— 剩 2 项：`WORK_EN`/`KEY_DET_EN` 引脚名未绑定物理端口",
+   "facts": [
+    "脚**号**侧已全对（9→2）；剩 2 项为**名绑定**面：KBU6 真源 `aliases` 未含 `WORK_EN`(PA2)/`KEY_DET_EN`(PA15)。"
+   ],
+   "ask": [
+    "在 KBU6 真源 `aliases` 增补 `WORK_EN: [PA2]` · `KEY_DET_EN: [PA15]`（与 PIN01-K1-1a **同一笔** `_shared` 批）；或裁定在册接受口径。"
+   ]
+  },
+  {
+   "id": "PIN01-K1-1c（低·排期）",
+   "title": "4 件多引脚器件无 datasheet 真源表（`TPS22990`·`TPS22965`·`TPD2E001`·`2N7002`）⇒ fail-closed 阻断（册面缺口，非本会话引入）",
+   "ask": [
+    "排期补表（与 SG-AUDIT-1 同族）。"
+   ]
+  }
+ ]
+}
