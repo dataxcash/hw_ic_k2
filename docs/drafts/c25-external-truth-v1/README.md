@@ -64,3 +64,11 @@ ENG 只读 `criteria/`（本包未写 `criteria/`）；未新增判据维、未�
 - **(c) 缩面声明**：仅覆盖 `lib_electrical_level` 审计实际涉及器件（须先由审计件定出器件全集）。工作量中。
 
 **选路前该维维持不可达（`check-dimensions` 保持 17/19，不得部分覆盖充绿）。**
+
+## 6. 路径 (b) 的**可执行范围**（器件全集已定）
+证据件：`k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/C25_PARTS_TRUTH_SCOPE_OPTIONB_20260921_v1.json`（`66a317fca84e7c7d`）
+- 基准 = `lib_electrical_level` 实际消费的 W-8 审计件（`…/E3-standard-call-l7-20260919/w8_audit_board_l7_c5a7df90.json` · tool `75404d706413d546`）：**58 footprint / 24 唯一 lib_id**；RAW `n_electrical_diff=2 · n_pad_name_set_only=1`（dim 经 `_reclassify_w8` 具名口径后判 PASS）。
+- **精确映射 9/24** 到仓库既有引脚真源（→ 其待取文献 `source:` 引证）：`MCIO_4i_SFF1016` · `STM32G0B1CBT6` · `OPTO_LTV356T` · `J_OOB_HEADER` · `DCDC_12V_5V` · `FRU_EEPROM` · `BAT54C` · `SlimSAS_x8_SFF8654`（+ `MCIO` 两个 variant）。
+- **未精确映射 15/24**：R/C/L/LED/排针/安装孔（无源/机械/通用件）+ **`DS320PR1601`**（其真源文件为 `DS160PR810.yaml`，疑**命名不一致** ⇒ 须人工确认）。
+- ⚠ 方法学登记：曾用模糊/子串回退 ⇒ **电阻件误配 MCU**（假阳）⇒ 已弃用，改用**精确匹配**并显式列出未映射项。
+- **须监理确认**：(i) 采用路径 (b)？(ii) 外部真源的**器件纳入面**是否含无源件？(iii) `DS320PR1601`↔`DS160PR810` 命名对应。

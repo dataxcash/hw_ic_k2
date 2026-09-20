@@ -1,0 +1,429 @@
+{
+ "artifact": "k2_c25_parts_truth_scope_optionb",
+ "schema": 1,
+ "purpose": "C-25 补全路径 (b) 的**可执行范围**：由 `lib_electrical_level` 实际消费的 W-8 审计件定出**器件全集**（24 lib_id / 58 footprint），并**仅以精确匹配**映射到仓库既有引脚真源及其待取文献 `source:` 引证。只读；不含推断性映射。",
+ "basis": {
+  "w8_audit": "k2/pm_gate/artifacts/k2_v4/L4/E3-standard-call-l7-20260919/w8_audit_board_l7_c5a7df90.json（sha16 0551daa3ee912566 · tool_sha16 75404d706413d546）",
+  "board_sha16": "c5a7df90aadb66e0",
+  "summary": {
+   "n_footprints": 58,
+   "n_electrical_identical": 51,
+   "n_electrical_diff": 2,
+   "n_pad_name_set_only": 1,
+   "n_no_library_link": 4,
+   "n_library_unloadable": 0
+  },
+  "note": "expect = n_electrical_diff==0 ∧ n_pad_name_set_only==0；RAW 审计 = 2/1（dim 经 `_reclassify_w8` 具名口径后判 PASS）⇒ 外部真源须能**独立复算**该口径。"
+ },
+ "mapping_method": "lib_id →（`k2/hw/data/k2_sch.yaml` footprint→symbol）→ 符号 `name`/`value` **精确等于** `_shared/eda_core/sch_gate/datasheets/*.yaml` 的 `device`（**无模糊/子串回退**；模糊匹配已试并因假阳（电阻件误配 MCU）弃用，诚实登记）",
+ "scope": {
+  "n_unique_lib_ids": 24,
+  "n_footprints": 58,
+  "n_exact_mapped": 9,
+  "n_not_exact_mapped": 15,
+  "exact_mapped_devices": [
+   "BAT54C",
+   "DCDC_12V_5V",
+   "FRU_EEPROM",
+   "J_OOB_HEADER",
+   "MCIO_4i_SFF1016",
+   "OPTO_LTV356T",
+   "STM32G0B1CBT6",
+   "SlimSAS_x8_SFF8654"
+  ],
+  "rows": [
+   {
+    "lib_id": "(no-nickname) MountingHole_3.2mm_M3",
+    "refs": [
+     "H1",
+     "H2",
+     "H3",
+     "H4"
+    ],
+    "verdicts": [
+     "no_library_link"
+    ],
+    "matched_device": null,
+    "matched_by": null,
+    "sch_gate_datasheet": null
+   },
+   {
+    "lib_id": "ForgeOS:C_0402_1005Metric__1",
+    "refs": [
+     "C74",
+     "C75",
+     "C76",
+     "C77",
+     "C79",
+     "C80",
+     "C81",
+     "C82",
+     "C87",
+     "C90"
+    ],
+    "verdicts": [
+     "electrical_identical"
+    ],
+    "matched_device": null,
+    "matched_by": null,
+    "sch_gate_datasheet": null
+   },
+   {
+    "lib_id": "ForgeOS:C_0402_1005Metric__2",
+    "refs": [
+     "C85"
+    ],
+    "verdicts": [
+     "electrical_diff"
+    ],
+    "matched_device": null,
+    "matched_by": null,
+    "sch_gate_datasheet": null
+   },
+   {
+    "lib_id": "ForgeOS:C_0402_1005Metric__3",
+    "refs": [
+     "C73"
+    ],
+    "verdicts": [
+     "electrical_identical"
+    ],
+    "matched_device": null,
+    "matched_by": null,
+    "sch_gate_datasheet": null
+   },
+   {
+    "lib_id": "ForgeOS:C_0603_1608Metric",
+    "refs": [
+     "C78",
+     "C83",
+     "C86",
+     "C88"
+    ],
+    "verdicts": [
+     "electrical_identical"
+    ],
+    "matched_device": null,
+    "matched_by": null,
+    "sch_gate_datasheet": null
+   },
+   {
+    "lib_id": "ForgeOS:C_0805_2012Metric",
+    "refs": [
+     "C84"
+    ],
+    "verdicts": [
+     "electrical_identical"
+    ],
+    "matched_device": null,
+    "matched_by": null,
+    "sch_gate_datasheet": null
+   },
+   {
+    "lib_id": "ForgeOS:DS320PR1601",
+    "refs": [
+     "U6"
+    ],
+    "verdicts": [
+     "electrical_identical"
+    ],
+    "matched_device": null,
+    "matched_by": null,
+    "sch_gate_datasheet": null
+   },
+   {
+    "lib_id": "ForgeOS:D_SMA",
+    "refs": [
+     "D2"
+    ],
+    "verdicts": [
+     "electrical_identical"
+    ],
+    "matched_device": null,
+    "matched_by": null,
+    "sch_gate_datasheet": null
+   },
+   {
+    "lib_id": "ForgeOS:LED_0603_1608Metric",
+    "refs": [
+     "D1"
+    ],
+    "verdicts": [
+     "electrical_identical"
+    ],
+    "matched_device": null,
+    "matched_by": null,
+    "sch_gate_datasheet": null
+   },
+   {
+    "lib_id": "ForgeOS:L_0805_2012Metric",
+    "refs": [
+     "L1"
+    ],
+    "verdicts": [
+     "electrical_identical"
+    ],
+    "matched_device": null,
+    "matched_by": null,
+    "sch_gate_datasheet": null
+   },
+   {
+    "lib_id": "ForgeOS:MCIO_4i_SFF-1016_RASide__1",
+    "refs": [
+     "J3"
+    ],
+    "verdicts": [
+     "electrical_diff"
+    ],
+    "matched_device": "MCIO_4i_SFF1016",
+    "matched_by": "symbol.value",
+    "sch_gate_datasheet": {
+     "file": "MCIO_4i_SFF1016.yaml",
+     "source": "SFF-TA-1016 MCIO — 4i 38-contact, A1-A19/B1-B19, interleaved A1=1,B1=2,...",
+     "package": "SFF-TA-1016 4i (38-contact)",
+     "n_pins": 38
+    }
+   },
+   {
+    "lib_id": "ForgeOS:MCIO_4i_SFF-1016_RASide__2",
+    "refs": [
+     "J4"
+    ],
+    "verdicts": [
+     "electrical_identical"
+    ],
+    "matched_device": "MCIO_4i_SFF1016",
+    "matched_by": "symbol.value",
+    "sch_gate_datasheet": {
+     "file": "MCIO_4i_SFF1016.yaml",
+     "source": "SFF-TA-1016 MCIO — 4i 38-contact, A1-A19/B1-B19, interleaved A1=1,B1=2,...",
+     "package": "SFF-TA-1016 4i (38-contact)",
+     "n_pins": 38
+    }
+   },
+   {
+    "lib_id": "ForgeOS:MCU_STM32G0_LQFP48",
+    "refs": [
+     "U1"
+    ],
+    "verdicts": [
+     "pad_name_set_only"
+    ],
+    "matched_device": "STM32G0B1CBT6",
+    "matched_by": "symbol.value",
+    "sch_gate_datasheet": {
+     "file": "STM32G0B1CBT6.yaml",
+     "source": "ST DS13560 Rev 6 — Table 12 (Figure 5), standard _CxT pinout",
+     "package": "LQFP48",
+     "n_pins": 49
+    }
+   },
+   {
+    "lib_id": "ForgeOS:OPTO_LTV356T",
+    "refs": [
+     "U5"
+    ],
+    "verdicts": [
+     "electrical_identical"
+    ],
+    "matched_device": "OPTO_LTV356T",
+    "matched_by": "symbol.name",
+    "sch_gate_datasheet": {
+     "file": "OPTO_LTV356T.yaml",
+     "source": "LTV-356T 光耦标准脚位",
+     "package": "SOP-4",
+     "n_pins": 4
+    }
+   },
+   {
+    "lib_id": "ForgeOS:PinHeader_1x02",
+    "refs": [
+     "J12",
+     "J6"
+    ],
+    "verdicts": [
+     "electrical_identical"
+    ],
+    "matched_device": null,
+    "matched_by": null,
+    "sch_gate_datasheet": null
+   },
+   {
+    "lib_id": "ForgeOS:PinHeader_1x04",
+    "refs": [
+     "J11",
+     "J13",
+     "J9"
+    ],
+    "verdicts": [
+     "electrical_identical"
+    ],
+    "matched_device": "J_OOB_HEADER",
+    "matched_by": "symbol.value",
+    "sch_gate_datasheet": {
+     "file": "J_OOB_HEADER.yaml",
+     "source": "设计定义 (OOB UART 排针脚序)",
+     "package": "4-pin header",
+     "n_pins": 4
+    }
+   },
+   {
+    "lib_id": "ForgeOS:R_0402_1005Metric__1",
+    "refs": [
+     "R41"
+    ],
+    "verdicts": [
+     "electrical_identical"
+    ],
+    "matched_device": null,
+    "matched_by": null,
+    "sch_gate_datasheet": null
+   },
+   {
+    "lib_id": "ForgeOS:R_0402_1005Metric__2",
+    "refs": [
+     "R40"
+    ],
+    "verdicts": [
+     "electrical_identical"
+    ],
+    "matched_device": null,
+    "matched_by": null,
+    "sch_gate_datasheet": null
+   },
+   {
+    "lib_id": "ForgeOS:R_0603_1608Metric__1",
+    "refs": [
+     "R1",
+     "R21",
+     "R28",
+     "R29",
+     "R3",
+     "R31",
+     "R32",
+     "R33",
+     "R34"
+    ],
+    "verdicts": [
+     "electrical_identical"
+    ],
+    "matched_device": null,
+    "matched_by": null,
+    "sch_gate_datasheet": null
+   },
+   {
+    "lib_id": "ForgeOS:R_0603_1608Metric__2",
+    "refs": [
+     "R35",
+     "R36",
+     "R37",
+     "R38",
+     "R39",
+     "R42",
+     "R43",
+     "R44",
+     "R45"
+    ],
+    "verdicts": [
+     "electrical_identical"
+    ],
+    "matched_device": null,
+    "matched_by": null,
+    "sch_gate_datasheet": null
+   },
+   {
+    "lib_id": "ForgeOS:SOIC-8_5.3x5.3mm_P1.27mm",
+    "refs": [
+     "U2"
+    ],
+    "verdicts": [
+     "electrical_identical"
+    ],
+    "matched_device": "DCDC_12V_5V",
+    "matched_by": "symbol.name",
+    "sch_gate_datasheet": {
+     "file": "DCDC_12V_5V.yaml",
+     "source": "TI SLVSD82 (TLV61046A) Table 5-1 + SLVA912 (TLV61046 同脚位)",
+     "package": "SOT-23-6 (DBV)",
+     "n_pins": 6
+    }
+   },
+   {
+    "lib_id": "ForgeOS:SOIC8_FRU",
+    "refs": [
+     "E2"
+    ],
+    "verdicts": [
+     "electrical_identical"
+    ],
+    "matched_device": "FRU_EEPROM",
+    "matched_by": "symbol.name",
+    "sch_gate_datasheet": {
+     "file": "FRU_EEPROM.yaml",
+     "source": "AT24C02 类 I2C EEPROM 标准脚位",
+     "package": "8-pin SOIC",
+     "n_pins": 8
+    }
+   },
+   {
+    "lib_id": "ForgeOS:SOT23_BAT54C",
+    "refs": [
+     "U4"
+    ],
+    "verdicts": [
+     "electrical_identical"
+    ],
+    "matched_device": "BAT54C",
+    "matched_by": "symbol.value",
+    "sch_gate_datasheet": {
+     "file": "BAT54C.yaml",
+     "source": "BAT54C 双二极管标准脚位 (共阴极)",
+     "package": "SOT-23",
+     "n_pins": 3
+    }
+   },
+   {
+    "lib_id": "ForgeOS:SlimSAS_x8_SFF-8654_74pin_RASide",
+    "refs": [
+     "J2"
+    ],
+    "verdicts": [
+     "electrical_identical"
+    ],
+    "matched_device": "SlimSAS_x8_SFF8654",
+    "matched_by": "symbol.value",
+    "sch_gate_datasheet": {
+     "file": "SlimSAS_x8_SFF8654.yaml",
+     "source": "SFF-8654 SlimSAS 8X 74-position, A1-A37/B1-B37, row-major",
+     "package": "SFF-8654 8X (74-position)",
+     "n_pins": 74
+    }
+   }
+  ]
+ },
+ "not_exact_mapped": {
+  "lib_ids": [
+   "(no-nickname) MountingHole_3.2mm_M3",
+   "ForgeOS:C_0402_1005Metric__1",
+   "ForgeOS:C_0402_1005Metric__2",
+   "ForgeOS:C_0402_1005Metric__3",
+   "ForgeOS:C_0603_1608Metric",
+   "ForgeOS:C_0805_2012Metric",
+   "ForgeOS:DS320PR1601",
+   "ForgeOS:D_SMA",
+   "ForgeOS:LED_0603_1608Metric",
+   "ForgeOS:L_0805_2012Metric",
+   "ForgeOS:PinHeader_1x02",
+   "ForgeOS:R_0402_1005Metric__1",
+   "ForgeOS:R_0402_1005Metric__2",
+   "ForgeOS:R_0603_1608Metric__1",
+   "ForgeOS:R_0603_1608Metric__2"
+  ],
+  "note": "含 R/C/L/LED/排针/安装孔 等（多为无源/机械/通用件）+ DS320PR1601（其真源在 `sch_gate/datasheets/DS160PR810.yaml`，疑为**命名不一致** DS320PR1601 vs DS160PR810 ⇒ 须人工确认，故不计入精确映射）。"
+ },
+ "ask_supervisor": "请监理确认：(i) 是否采用路径 (b)；(ii) `lib_electrical_level` 外部真源的**器件纳入面**（是否含无源件）；(iii) DS320PR1601↔DS160PR810 命名对应。**监理自裁面，无 owner 闸口。**",
+ "readonly_repo": true,
+ "not_landed": true,
+ "no_new_criteria_dim": true,
+ "ts": "2026-09-22T06:45:00+0800"
+}
