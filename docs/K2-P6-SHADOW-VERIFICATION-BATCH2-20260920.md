@@ -74,14 +74,14 @@
 
 
 ## 8. 13 项失败的**根因 triage**（决定性证据：走廊命名权威分歧）
-机读：`P6_execution/HIDDEN_FAILURES_TRIAGE_v1.json` **`6db5ba75…`**（两次连跑逐字节同）· 工具 `k2/tools/k2_p6_triage_hidden_failures_v1.py`
+机读：`P6_execution/HIDDEN_FAILURES_TRIAGE_v1.json` **`ac01c7d4…`**（前版 `6db5ba75…` 已因载体误名更正，见影响面件 §4）（两次连跑逐字节同）· 工具 `k2/tools/k2_p6_triage_hidden_failures_v1.py`
 
 **载体分布（旧 id `J2_TO_U`/`U_TO_MCIO` ↔ 新 id `EAST_CHIP_TO_J2`/`WEST_MCIO_TO_CHIP`）**
 | 载体 | 旧 id | 新 id |
 |---|---|---|
 | `SPEC_k2_v4.json`（plain） | 0 | **2** |
 | `SPEC_k2_v4.spec-rev-52.json` | 0 | **11** |
-| **`channel_alloc.json`（L3 求解真源）** | **108** | **0** |
+| `channel_alloc_v2/channel_alloc.json`（**测试钉住的遗留输入**，08-28 字节导入、从未重生成、现役链不读） | **108** | **0** |
 | `hs_route_model.py`（引擎） | 4 | 0 |
 | `check_l3.py`（判据期望集） | 2 | 0 |
 | `test_hs_route_model.py`（测试） | **37** | 0 |
@@ -99,7 +99,7 @@
 `hs_route_model.py:789-804` `_track_y_for()` 以 `c.get("id") == corridor_id` 在 **SPEC corridors** 中查走廊；`:394` `src_cid = rec.get("corridor")` 取 **alloc 记录里的走廊串**。
 ⇒ 传入/携带**旧 id**（alloc 108 处、测试 37 处、判据 2 处）在**新 id 的 SPEC** 中查不到 ⇒ `无通道分配` / `NO_CORRIDOR` ⇒ 8L 板 18 链**全未解**。
 ⇒ **引擎侧旧 id 仅出现在 docstring/注释（`:2701`、`:3430`）⇒ 非引擎缺陷**（文案级，可具名豁免）。
-**结论（三分）**：① 期望漂移 = 测试 + `check_l3.SPEC_EXPECTS`（须监理裁定命名权威后同步）；② **数据陈旧 = `channel_alloc.json` 未随 SPEC 改名重生成（N-05 同族）**；③ 引擎无责。
+**结论（三分）**：① 期望漂移 = 测试 + `check_l3.SPEC_EXPECTS`（须监理裁定命名权威后同步）；② **测试输入漂移 = 钉在遗留 alloc v2**（08-28 字节导入、从未重生成；现役链不读）**（N-05 同族）**；③ 引擎无责。
 
 ## 7. 红线与零改动声明
 真源 `_shared`/`criteria/`/冻结四源/交付锚 **未动**（影子仅在 `/tmp/opencode`）；未派 WORKER；未改生成器/SPEC/原理图；`k2/_shared` 工作树洁净。

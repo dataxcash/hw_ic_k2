@@ -26,7 +26,7 @@ CARRIERS = {
     "tests": "k2/_shared/eda_core/tests/test_hs_route_model.py",
     "spec_plain": "k2/pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json",
     "spec_rev52": "k2/pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-52.json",
-    "l3_solve_truth_channel_alloc": "k2/pm_gate/artifacts/k2_v4/L3/model_solves/channel_alloc_v2/channel_alloc.json",
+    "legacy_alloc_v2_pinned_by_tests": "k2/pm_gate/artifacts/k2_v4/L3/model_solves/channel_alloc_v2/channel_alloc.json",
 }
 # 13 项失败 → 家族（依 SHADOW_VERIFY 的 failed_tests；家族依失败形态判读）
 FAMILIES = {
@@ -67,7 +67,7 @@ def main() -> int:
         "carrier_distribution": table,
         "root_cause_reading": [
             f"SPEC 侧已用新 id（plain new_total={table['spec_plain'].get('new_total')} / rev-52 new_total={table['spec_rev52'].get('new_total')}）",
-            f"L3 求解真源 channel_alloc 仍全为旧 id（old_total={table['l3_solve_truth_channel_alloc'].get('old_total')}，new_total={table['l3_solve_truth_channel_alloc'].get('new_total')}）⇒ 与 SPEC **脱钩**",
+            f"遗留 alloc v2（**测试钉住的输入**；08-28 自 strix-halo-ioconvert 字节导入、从未重生成；现役工具链**不读**）仍全为旧 id（old_total={table['legacy_alloc_v2_pinned_by_tests'].get('old_total')}，new_total={table['legacy_alloc_v2_pinned_by_tests'].get('new_total')}）⇒ 与 SPEC 脱钩",
             f"引擎 hs_route_model 与判据 check_l3 亦含旧 id（engine old_total={table['engine_hs_route_model'].get('old_total')} / gate old_total={table['gate_check_l3_expects'].get('old_total')}）",
             f"测试旧 id 引用密集（old_total={table['tests'].get('old_total')}）",
         ],
@@ -78,7 +78,7 @@ def main() -> int:
                 "反之若旧 id 为权威：SPEC 改名须回退/双名兼容（属判据/载体决策，ENG 不自决）",
             ],
             "carrier_defect_eng_after_approval": [
-                "channel_alloc.json 与 SPEC 命名脱钩 = N-05「生成器不可复跑」实证 ⇒ L3 真源产物需按现行 SPEC 重生成（或补映射层），须授权",
+                "测试输入钉在**遗留 alloc v2**（与 SPEC 命名脱钩；现役工具链不读该件）⇒ 处置 = 测试重钉现行真源（SPEC 派生通道 / 现行配置）＋ 遗留件标 RETIRED（N-05 卫生）；均须授权",
                 "hs_route_model 的旧 id 引用（若为语义硬编码而非兼容层）随 B2-1/B2-2 同批处置",
             ],
         },

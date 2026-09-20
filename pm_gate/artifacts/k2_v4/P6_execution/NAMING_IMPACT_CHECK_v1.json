@@ -1,0 +1,86 @@
+{
+ "answers": {
+  "1_delivery_L6_clean_of_corridor_ids": true,
+  "2_frozen_sources_clean_of_corridor_ids": true,
+  "3_live_config_uses_new_ids_only": true,
+  "4_live_toolchain_independent_of_legacy_alloc": true
+ },
+ "artifact": "k2_p6_corridor_naming_impact_check",
+ "q1_delivery_tree_L6": {
+  "files_scanned": 61,
+  "hit_files": [],
+  "new_total": 0,
+  "old_total": 0
+ },
+ "q2_frozen_sources": {
+  "hw/data/k2_sch.yaml": {
+   "new": 0,
+   "old": 0
+  },
+  "hw/k2_v4_8L.kicad_pcb": {
+   "new": 0,
+   "old": 0
+  },
+  "hw/k2_v4_8L.l4.kicad_pcb": {
+   "new": 0,
+   "old": 0
+  }
+ },
+ "q3_live_config": {
+  "exists": true,
+  "new": 4,
+  "old": 0,
+  "path": "pm_gate/artifacts/k2_v4/L2/route_model_config.json"
+ },
+ "q4_all_refs_incl_tests_and_p6_tools": [
+  "_shared/eda_core/tests/test_hs_route_model.py",
+  "k2/_shared/eda_core/tests/test_hs_route_model.py",
+  "k2/tools/k2_p6_naming_impact_check_v1.py",
+  "k2/tools/k2_p6_triage_hidden_failures_v1.py"
+ ],
+ "q4_legacy_alloc_inventory": {
+  "pm_gate/artifacts/k2_v4/L3/model_solves/channel_alloc/channel_alloc.json": {
+   "commits": 1,
+   "exists": true,
+   "first_commit": "1a883b8",
+   "new_total": 0,
+   "old_total": 128
+  },
+  "pm_gate/artifacts/k2_v4/L3/model_solves/channel_alloc_v2/channel_alloc.json": {
+   "commits": 1,
+   "exists": true,
+   "first_commit": "1a883b8",
+   "new_total": 0,
+   "old_total": 108
+  },
+  "pm_gate/artifacts/k2_v4/L3/model_solves/channel_alloc_v3/channel_alloc.json": {
+   "commits": 1,
+   "exists": true,
+   "first_commit": "1a883b8",
+   "new_total": 0,
+   "old_total": 108
+  },
+  "pm_gate/artifacts/k2_v4/L3/model_solves/channel_alloc_v4/channel_alloc.json": {
+   "commits": 1,
+   "exists": true,
+   "first_commit": "1a883b8",
+   "new_total": 0,
+   "old_total": 108
+  }
+ },
+ "q4_live_toolchain_refs_to_legacy_alloc": [],
+ "question": "走廊命名分歧（SPEC 新 id ↔ 遗留 alloc 旧 id）是否影响 P3/P4 冻结件与 P5 交付锚 ⇒ 是否需开 rev",
+ "readonly": true,
+ "schema": 1,
+ "tests_pinned_to": "k2/_shared/eda_core/tests/test_hs_route_model.py → K2V4_ALLOC = .../model_solves/channel_alloc_v2/channel_alloc.json",
+ "verdict_input_for_supervisor": {
+  "eng_self_decision": "无（命名权威与测试重钉属判据侧 ⇒ 监理裁定后 ENG 同步）",
+  "rev_needed_on_naming_grounds": false,
+  "why": [
+   "交付锚 L6 全树 0 命中走廊 id；冻结四源 0 命中 ⇒ 物理交付件与命名无关",
+   "现役项目配置已用新 id；现役工具链不读遗留 alloc ⇒ 交付链与遗留 alloc 无耦合",
+   "13 项隐藏失败 = 测试**钉在遗留 alloc v2**（08-28 字节导入、从未重生成）所致 ⇒ 输入漂移，非引擎/交付缺陷",
+   "处置建议：① 测试重钉到现行真源（SPEC 派生通道 / 现行配置）② 遗留 alloc 族标注 RETIRED（N-05 卫生）"
+  ]
+ }
+}
