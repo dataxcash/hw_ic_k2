@@ -1,0 +1,75 @@
+{
+ "artifact": "k2_p6_1_nets_input_caliber_evaluation",
+ "schema": 1,
+ "purpose": "③ P6-1 `--nets` 输入口径的**代价评估**（两方案，含第一手复现）；供监理一句口径确认即可落定。",
+ "finding_1_crash_reproduced_firsthand": {
+  "cmd": "python3 criteria/adjudicate.py --project k1 --board k1/k1_v1.kicad_pcb --pro k1/k1_v1.kicad_pro --nets k1/boards/k1_nets.yaml --sch-dir k1/sch --root . --manifest <probe>",
+  "result": "`KeyError: 'symbols'` @ `criteria/adjudicate.py:149`（`measure_declared_nets_realized`）",
+  "code_sites": [
+   "`:149` `S = {s['name']: s for s in nets_yaml['symbols']}`",
+   "`:150` `plc = {p['ref']: p for sh in nets_yaml['sheets'] for p in sh.get('placements', [])}`",
+   "`:178`/`:179` 同型（第二处 measure：pin_map 侧）"
+  ],
+  "contract": "判定器对 `--nets` 的**输入契约 = {symbols, sheets, nets}**（3 键）"
+ },
+ "finding_2_two_inputs_compared": {
+  "k1/boards/k1_nets.yaml": {
+   "keys": [
+    "k1_device_count",
+    "nc",
+    "nets",
+    "source"
+   ],
+   "nets": 51,
+   "symbols": null,
+   "sheets": null,
+   "mtime": "2026-09-15 12:32",
+   "tracked": true,
+   "shape": "**仅网表派生件**（无结构侧）"
+  },
+  "k1/boards/k1_sch.yaml": {
+   "keys": [
+    "links",
+    "nets",
+    "sheets",
+    "strap_intents",
+    "symbols"
+   ],
+   "nets": 46,
+   "symbols": 40,
+   "sheets": 4,
+   "mtime": "2026-08-28 13:57",
+   "tracked": true,
+   "shape": "**原理图导出件**（与 K2 `errata-2` 同构）⇒ **符合契约**"
+  }
+ },
+ "options": [
+  {
+   "id": "A",
+   "name": "输入侧：`--nets k1/boards/k1_sch.yaml`（**ENG 建议**）",
+   "cost": "**零判据改动、零工具改动**（输入路径而已；文件在库且受控）",
+   "effect": "两维 `net_declared_realized` / `pin_map_complete` **全量可判**；已多次实跑（含本轮 b 类全输入 ⇒ 4P/15F）",
+   "needs": "监理**一句口径确认**"
+  },
+  {
+   "id": "B",
+   "name": "判据侧容错：让判定器接受 `k1_nets.yaml`",
+   "cost": "**动判据**（`criteria/adjudicate.py` = ENG 只读 ⇒ 须监理/gate 属主；并须 rev bump）",
+   "feasibility_analysis": "`k1_nets.yaml` **无 symbols / sheets**（仅 nets 51）⇒ 两处 measure 所需的『符号名↔网→焊盘』与『placement』**无法由该输入推出**；所谓『容错』只能退化为该两维**无数据** ⇒ 实际是 ① 现状 fail-closed，或 ② 把两维对 K1 置 `enabled:false`（= K1 判据面收窄）",
+   "verdict": "**不是容错，而是缩面**（且对 K1 而言并非必要——A 方案零代价即可全量可判）⇒ **不建议**"
+  }
+ ],
+ "recommendation": {
+  "choice": "A",
+  "reason": "零改动 + 两维全量可判 + 输入件在库受控 + 与 K2 errata-2 同构（跨板复用语义一致）；B 既动判据又必然降维",
+  "note": "本轮 b 类实跑、判据① 三项命中、P6-1 验收件**全部基于 A**（`k1_sch.yaml`）⇒ 选 A 则既有证据**无需重跑**"
+ },
+ "evidence_pins": {
+  "k1/boards/k1_sch.yaml": "67c2771d6ed0b81e",
+  "k1/boards/k1_nets.yaml": "b5626662e12cb608",
+  "criteria/adjudicate.py": "1937a40ae68bc288"
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "criteria_touched": false
+}
