@@ -1,0 +1,58 @@
+{
+ "artifact": "k2_pending_rulings_delta",
+ "schema": 1,
+ "ts": "2026-09-21T02:16:20.232266+08:00",
+ "supersedes": "PENDING_RULINGS_DELTA_20260921_v26.json（已由 #K2-60 全额消费：R3 PASS + CR-68 处置）",
+ "purpose": "①【报备 · 非提问】#K2-60 R1/R2 已执行完毕（CR-69 复核通过落地 / CR-70 P6 仪器订正 ⇒ 自检 rc=0 · 判据⑦ 达成 · tag `k2-v57-p5-l8r2-review-passed` 已打）；②【待裁 · 非阻塞】CR-70 两项确认：(a) 行号锚重钉表（13 锚，其中 2 处原缺陷点已由 CR-33 修毕、1 处语义偏移）是否认可以「现行符号」为准；(b) 基线重钉与 `invariant`『不得回退』之读法（新基线含已登记 C1/C2 之 2 失败 · 失败仍可见）；③【登记 · 非阻塞】T2-F6 新闭通道。",
+ "why_signal_now": "CR-32 强制结构化；CR-70 之 (a)(b) 属**已在册面自述「提请监理」**之项（本会话未擅动判据文本）⇒ 须结构化方可见。",
+ "owner_gate": "**0** —— 全属监理自裁面（工具维护/判据语义澄清/放行范围）；无 L1 成分 ⇒ ENG 不升级 owner。",
+ "stage_state": "**新交付锚生效** = `P5-L8.2`（`MANIFEST 19d637c4e9ed35be` / tarball `488e90a47d088d06`）· 旧锚 l8/l7 保全对照 · **外发/下单闸已解除**。P5 仍 `PENDING_EXTERNAL`（V4–V7 全 `NOT_RUN`）· P0–P4 HOLDS · P6 CLOSED · 未越阶段 · 判据 rev=6 MATCH · owner 闸口 0。",
+ "pending_supervision": [
+  {
+   "id": "**【待裁 · 非阻塞】CR-70(a) 行号锚重钉表（13 锚）之确认**",
+   "ask": "请确认以「**现行符号所在行**」为准之重钉（**未删锚 · 未降要求**）；特别确认 3 处非常规项：(i) `check_l3.py` 26→**43** —— 原『硬编码 SPEC 名』缺陷点**已由 CR-33 修毕**，43 为该串**残留处**（错误文案仍硬编码 K2 名 ⇒ **K1 项目下报错名会错**，属**口径残留**，另请裁是否并入 shared 层待授权批）；(ii) `check_qa.py` 35→**40** 且 needle 随签名更新（`config.spec_name()` → `config.spec_name(`）；(iii) `hs_route_model.py` 4842→**5101** —— 原『第二路径』（all_v4 内联分派）已由 B2-2 显式分派取代 ⇒ 现两处命中皆在 `all_v2` 分支（**语义偏移已登记**）。",
+   "evidence": "工具 `tools/k2_p6_instruments_selfcheck_v1.py` `3ab3af605746fa86` · 自检 13/13 OK · 证据件 CR-70 表"
+  },
+  {
+   "id": "**【待裁 · 非阻塞】CR-70(b) 基线重钉 vs `invariant`『不得回退』之读法**",
+   "ask": "新基线（`655d47e2b1eed5c1`）含 `exit=1 · failed=2`（`test_chain_no_pn_zero_spacing` / `test_board_level_consistency`）—— **即已登记之能力缺口 C1/C2**；旧基线（`91ca2cc3601bb56f`）系**批 2 之前**（34 passed/34 skipped/**0 failed** · 未收集该 2 测试）。理由 = 判据⑦ 要求 rc=0，而工具判据为「重跑 == 在库基线 + == 记录锚」⇒ 必须重钉至现行态。**请裁**：(i) 认可重钉（本会话做法 · 失败在件内**可见**、未掩盖）；或 (ii) 视为「回退」⇒ 该 2 失败之**判据面处置**另立 **P6 面**批（ENG 本轮未擅动任何判据文本）。",
+   "evidence": "证据件 `K2_60_R3_REVIEW_PASS_AND_P6_INSTRUMENT_FIX_EVIDENCE_20260921_v1.json` `a7f23c96ae900bff` · `BASELINE…json 655d47e2b1eed5c1` · `results_template.json 0726491502765dc1`（仅 `baseline.sha256` 测量字段变更 · `invariant` 原文未动）"
+  },
+  {
+   "id": "【登记 · 非阻塞】",
+   "items": [
+    "T2-F6 **新通道登记**（免重复试探）：`archive.org` / `web.archive.org` = **000（连接超时）** ⇒ 闭；`www.st.com` 复核仍 **567**（与 CR-15 一致）⇒ `CR-17` 维持**登记制不可达** · 不充绿。",
+    "`CR-17` / `CR-22` / `CR-3` / land pattern 族 · `COV-C3`（#K2-58 R4 维持前裁 · 禁 push/rewrite B 宿主）· **R5 文献批**（#K2-60 R3：未做正确 · 待权威件）"
+   ]
+  }
+ ],
+ "landed_this_session": [
+  {
+   "id": "CR-69（#K2-60 R1 · 复核通过落地）",
+   "artifact": "投递说明 **`cded013974777c73`**（原 `fcf25bf201a6ba3e`）· 验收计划 **`20eb85cb06292fec`**（原 `bdc769eb6275efd1`）",
+   "reading": "『⚠ 待复核闸』→『✅ 已通过 ⇒ 可作外发/下单依据』；R2-6 前置闸实测未下单/未外发"
+  },
+  {
+   "id": "CR-70（#K2-60 R2 · P6 仪器订正）",
+   "artifact": "自检工具 `3ab3af605746fa86` · 基线生成器 `34693f01ffe7bce7` · 基线 `655d47e2b1eed5c1` · 模板 `0726491502765dc1` · 自检件 `fed92cb7aec48150`",
+   "reading": "**rc=0 · verdict=PASS · anchors 13/13 · 基线两连跑逐字节同**（判据⑦ 达成）"
+  },
+  {
+   "id": "tag",
+   "artifact": "`k2-v57-p5-l8r2-review-passed` → **`14af183`**（`^{}` 已核 · HEAD 距 tag = 0）",
+   "reading": "TAG_POLICY §1「gate 切换/交付」+ §3 message（gate/锚/判据/板/册面/date/复现命令）"
+  }
+ ],
+ "red_lines_ok": [
+  "未改 criteria/（rev=6 MATCH）",
+  "未改冻结四源（0bd52ed4 / a8ef3ea8 / fb07d25a / 0a459839 复算同）",
+  "未改板 `7a5c8991` / 原理图 / 网表 / SPEC rev-53 `4e92b3a0` / 冻结 SPEC `0bd52ed4`",
+  "未覆盖/删除旧包与旧锚（l8 `4b610bad`/`36a6b276` · l7 `6ee7495d`/`0e88e107`）",
+  "未触 B 宿主远端",
+  "未派 WORKER",
+  "未越阶段 · 未下单",
+  "未删锚/未降要求",
+  "临时落点仅 /tmp/opencode"
+ ],
+ "next": "① 待监理对 CR-70(a)(b) 之确认（非阻塞）；② **P5 外部面**：外发/下单依 `L6/DELIVERY_l8r2/`（tarball `488e90a4`）+ 投递说明 `cded013974777c73`（**闸已解除**）；实际下单 = 商务渠道；③ 外部回件 ⇒ 按 `results_template.json`（8 项 · V6-1 必填 `condition`+辅读）回填交监理判定 ⇒ P5 关门；④ 未回件期间只读造活（**禁 HOLD/停等结案** · owner ⑥）。"
+}
