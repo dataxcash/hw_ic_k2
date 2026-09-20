@@ -1,0 +1,288 @@
+{
+ "artifact": "k2_p5_results_template_prefill_and_prevalidation",
+ "schema": 1,
+ "purpose": "P6 §8.2③：P5 回件模板的**预填** + **预验**。把 RULES 的工况/阈值/测点/证据要求与板侧实测（机核）**预填进只读副本**，供外部方直接填；本件只做**预验读数**，不改判据/阈值。",
+ "inputs": {
+  "board": "k2_v4_8L.l7.kicad_pcb",
+  "board_sha16": "c5a7df90aadb66e0",
+  "manifest_sha256": "6ee7495de61f749f",
+  "tarball_sha256": "0e88e107e2da8192",
+  "rules_sha16": "8bee09616020d5a9",
+  "template_sha16": "c688b7daf9953b30",
+  "selfcheck_sha16": "3f89dec1a6481fe5",
+  "checklist_sha16": "d7dda9a82c5d06f3"
+ },
+ "A_structure": {
+  "n_items": 8,
+  "items_all_required": true,
+  "status_enum": [
+   "NOT_RUN",
+   "PASS",
+   "FAIL",
+   "INCONCLUSIVE"
+  ],
+  "all_have_criterion": true,
+  "all_have_status_slot": true,
+  "all_have_evidence_slot": true
+ },
+ "B_threshold_crosscheck": {
+  "rows": [
+   {
+    "tag": "V4",
+    "token": "76.5",
+    "in_rules": true,
+    "in_template_criterion": true,
+    "in_template_full": true
+   },
+   {
+    "tag": "V4",
+    "token": "93.5",
+    "in_rules": true,
+    "in_template_criterion": true,
+    "in_template_full": true
+   },
+   {
+    "tag": "V4",
+    "token": "0.2825",
+    "in_rules": true,
+    "in_template_criterion": true,
+    "in_template_full": true
+   },
+   {
+    "tag": "V4",
+    "token": "0.6",
+    "in_rules": true,
+    "in_template_criterion": true,
+    "in_template_full": true
+   },
+   {
+    "tag": "V5",
+    "token": "3%",
+    "in_rules": true,
+    "in_template_criterion": true,
+    "in_template_full": true
+   },
+   {
+    "tag": "V5-rail",
+    "token": "12V_IN",
+    "in_rules": true,
+    "in_template_criterion": false,
+    "in_template_full": true
+   },
+   {
+    "tag": "V6-1",
+    "token": "±5%",
+    "in_rules": true,
+    "in_template_criterion": true,
+    "in_template_full": true
+   },
+   {
+    "tag": "V6-2-J13",
+    "token": "SWDIO",
+    "in_rules": true,
+    "in_template_criterion": false,
+    "in_template_full": true
+   },
+   {
+    "tag": "V6-2-NRST",
+    "token": "U1",
+    "in_rules": true,
+    "in_template_criterion": false,
+    "in_template_full": true
+   },
+   {
+    "tag": "V7",
+    "token": "120.0",
+    "in_rules": true,
+    "in_template_criterion": true,
+    "in_template_full": true
+   },
+   {
+    "tag": "V7",
+    "token": "117.0",
+    "in_rules": true,
+    "in_template_criterion": true,
+    "in_template_full": true
+   },
+   {
+    "tag": "V7",
+    "token": "9.5",
+    "in_rules": true,
+    "in_template_criterion": true,
+    "in_template_full": true
+   },
+   {
+    "tag": "V7",
+    "token": "4.7",
+    "in_rules": true,
+    "in_template_criterion": false,
+    "in_template_full": true
+   },
+   {
+    "tag": "V7",
+    "token": "6.0",
+    "in_rules": true,
+    "in_template_criterion": false,
+    "in_template_full": true
+   },
+   {
+    "tag": "V7",
+    "token": "5.8",
+    "in_rules": true,
+    "in_template_criterion": false,
+    "in_template_full": true
+   },
+   {
+    "tag": "V7",
+    "token": "7.0",
+    "in_rules": true,
+    "in_template_criterion": true,
+    "in_template_full": true
+   },
+   {
+    "tag": "V7",
+    "token": "91.7",
+    "in_rules": true,
+    "in_template_criterion": false,
+    "in_template_full": true
+   },
+   {
+    "tag": "V7",
+    "token": "106.0",
+    "in_rules": true,
+    "in_template_criterion": false,
+    "in_template_full": true
+   },
+   {
+    "tag": "V7",
+    "token": "103.8",
+    "in_rules": true,
+    "in_template_criterion": false,
+    "in_template_full": true
+   }
+  ],
+  "missing_in_rules": [],
+  "missing_in_template": [
+   "12V_IN",
+   "SWDIO",
+   "U1",
+   "4.7",
+   "6.0",
+   "5.8",
+   "91.7",
+   "106.0",
+   "103.8"
+  ],
+  "missing_in_template_full": [],
+  "verdict": "RULES ↔ 模板 criterion 关键阈值一致（除 §B 列出的未命中项，见下）"
+ },
+ "C_anchor_check": {
+  "ok": true,
+  "expect": {
+   "board_sha16": "c5a7df90aadb66e0",
+   "manifest": "6ee7495de61f749f",
+   "tarball": "0e88e107e2da8192"
+  }
+ },
+ "D_board_pointer_reverify": {
+  "method": "ENG 独立解析受审板 l7（pcbnew-free）逐点核对",
+  "results": [
+   {
+    "refdes": "J13",
+    "present": true,
+    "expect": {
+     "1": "SWDIO",
+     "2": "SWCLK_BOOT0",
+     "3": "GND",
+     "4": "MCU_VDD"
+    },
+    "actual": {
+     "1": "SWDIO",
+     "2": "SWCLK_BOOT0",
+     "3": "GND",
+     "4": "MCU_VDD"
+    },
+    "ok": true
+   },
+   {
+    "refdes": "E2",
+    "present": true,
+    "expect": {
+     "1": "GND",
+     "2": "MCU_VDD",
+     "3": "GND",
+     "4": "GND",
+     "5": "I2C1_SDA",
+     "6": "I2C1_SCL",
+     "7": "GND",
+     "8": "MCU_VDD"
+    },
+    "actual": {
+     "1": "GND",
+     "2": "MCU_VDD",
+     "3": "GND",
+     "4": "GND",
+     "5": "I2C1_SDA",
+     "6": "I2C1_SCL",
+     "7": "GND",
+     "8": "MCU_VDD"
+    },
+    "ok": true
+   },
+   {
+    "refdes": "U1",
+    "present": true,
+    "check": "pad10 net",
+    "actual": "NRST",
+    "ok": true
+   },
+   {
+    "refdes": "J2",
+    "present": true,
+    "npads": 74,
+    "pcie_net_pads": 36,
+    "ok": true
+   },
+   {
+    "refdes": "J3",
+    "present": true,
+    "npads": 38,
+    "pcie_net_pads": 18,
+    "ok": true
+   },
+   {
+    "refdes": "J4",
+    "present": true,
+    "npads": 38,
+    "pcie_net_pads": 18,
+    "ok": true
+   },
+   {
+    "refdes": "U6",
+    "present": true,
+    "npads": 354,
+    "pcie_net_pads": 64,
+    "ok": true
+   }
+  ],
+  "all_ok": true
+ },
+ "E_prefilled_deliverable": {
+  "file": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/P5_RESULTS_TEMPLATE_PREFILLED_20260921_v1.json",
+  "sha16": "eb6bcac1261707ff",
+  "note": "新增 `measurement_guide`（逐项测点/方法/证据，源自 RULES）+ `expected`（逐项期望，源自 RULES/监理定值）+ `prefill_gaps`；**全部 `measured` 槽保持原样（未改）**——已机核。"
+ },
+ "F_prefill_gaps": {
+  "V6_2_mcu_swd_id": "expected_device_id：仓库无出处 ⇒ 外部方按 STM32G0B1KBU6 手册填。",
+  "V6_3_fru_i2c": "expected_address 具体值：仓库无出处；本件给 **板侧实测 strapping**（E2: A0=GND, A1=MCU_VDD, A2=GND ⇒ 对 1010xx 族期望 0x52），**须按器件手册/FRU 规格确认**。",
+  "rail_nominals": "V5/V6-1 的『标称』值仓库无出处 ⇒ 未预填（禁自定阈值 C-12）；外部方按轨名/手册填。"
+ },
+ "G_boundary": {
+  "eng_wrote_criteria": false,
+  "threshold_changed": false,
+  "new_criteria_dim": false,
+  "pack_frozen_untouched": true,
+  "note": "只读预填+预验；未改 L6 交付锚 / criteria / 生成器。"
+ },
+ "ts": "2026-09-22T05:55:00+0800"
+}

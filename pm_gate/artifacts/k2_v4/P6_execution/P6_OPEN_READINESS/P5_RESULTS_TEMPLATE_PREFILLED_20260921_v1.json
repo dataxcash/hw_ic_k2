@@ -1,0 +1,340 @@
+{
+ "artifact": "k2_p5_first_article_results_prefilled",
+ "schema": 1,
+ "board": "k2_v4_8L.l7.kicad_pcb",
+ "board_sha16": "c5a7df90aadb66e0",
+ "delivery_anchor": {
+  "package": "pm_gate/artifacts/k2_v4/L6/jlc_package",
+  "manifest_sha256": "6ee7495de61f749fba61a04a5311e17040988c322b3a17f46b6f26efd8b243b2",
+  "tarball_sha256": "0e88e107e2da81923ccdda0c20d89c7ca486bc2281a139a4a007650542f0bce0"
+ },
+ "plan": "k2/docs/K2-P5-FIRST-ARTICLE-ACCEPTANCE-PLAN-v1.md",
+ "rules": "pm_gate/artifacts/k2_v4/L6/first_article/RULES.md",
+ "measured_by": "<实测方（不得 ENG 自证）>",
+ "judged_by": "监理",
+ "status_enum": [
+  "NOT_RUN",
+  "PASS",
+  "FAIL",
+  "INCONCLUSIVE"
+ ],
+ "conditions_global": {
+  "ambient_C": null,
+  "airflow_mps": null,
+  "instruments": [],
+  "supply_notes": ""
+ },
+ "items": {
+  "V4_impedance_coupon": {
+   "required": true,
+   "status": "NOT_RUN",
+   "evidence": [],
+   "measured": {
+    "per_layer_zdiff_ohm": {
+     "F.Cu": null,
+     "In2.Cu": null,
+     "In5.Cu": null,
+     "B.Cu": null
+    },
+    "covers_geometry": {
+     "center_mm_0.6": null,
+     "tightest_edge_gap_mm_0.2825": null
+    }
+   },
+   "criterion": "85.0Ω ±10% ⇒ 76.5–93.5Ω（SPEC impedance.tolerance_pct）；券须覆盖最宽对内间距 0.6mm 中心几何与最紧段 0.2825mm（PCIE_UP3）",
+   "note": "",
+   "measurement_guide": "向板厂索取阻抗券报告（逐层 TDR/时域曲线+数值）。覆盖：①最宽对内间距 0.6mm 中心几何；②最紧段=F.Cu 边到边净距 0.2825mm（PCIE_UP3 逃逸域）。测点：F/In2/In5/B 各≥1 处差分对，记 Zdiff。证据：券 PDF/扫描件 + 逐层数值表 + 抽样位置图。",
+   "expected": {
+    "zdiff_ohm_range": [
+     76.5,
+     93.5
+    ],
+    "nominal_ohm": 85.0,
+    "tolerance_pct": 10,
+    "layers_required": [
+     "F.Cu",
+     "In2.Cu",
+     "In5.Cu",
+     "B.Cu"
+    ],
+    "geometries_required": [
+     "center_mm_0.6",
+     "tightest_edge_gap_mm_0.2825"
+    ]
+   }
+  },
+  "V5_pdn_dc_drop": {
+   "required": true,
+   "status": "NOT_RUN",
+   "evidence": [],
+   "measured": {
+    "rails": {
+     "12V_IN": {
+      "V_source": null,
+      "V_load": null,
+      "I_A": null,
+      "drop_pct": null
+     },
+     "P3V3": {
+      "V_source": null,
+      "V_load": null,
+      "I_A": null,
+      "drop_pct": null
+     },
+     "P3V3_AUX": {
+      "V_source": null,
+      "V_load": null,
+      "I_A": null,
+      "drop_pct": null
+     },
+     "MCU_VDD": {
+      "V_source": null,
+      "V_load": null,
+      "I_A": null,
+      "drop_pct": null
+     }
+    }
+   },
+   "criterion": "各轨 源端→负载点 直流压降 ≤ 预算 3%（监理定值/指令 #10）；各轨电流须显式声明来源（datasheet 或保守值）",
+   "note": "",
+   "measurement_guide": "轨=12V_IN/P3V3/P3V3_AUX/MCU_VDD；电源面=In4.Cu，GND 面=In1/In3/In6。每轨取源端与负载点各 1 点并注明 refdes。四线法优先（或校准数字表+表内阻）；稳态读数；该轨电流须显式声明来源。证据：测点照/接线图 + 读数记录 + 电流来源说明。",
+   "expected": {
+    "drop_pct_max": 3.0,
+    "plane_layer": "In4.Cu",
+    "gnd_planes": [
+     "In1.Cu",
+     "In3.Cu",
+     "In6.Cu"
+    ],
+    "rails": [
+     "12V_IN",
+     "P3V3",
+     "P3V3_AUX",
+     "MCU_VDD"
+    ]
+   }
+  },
+  "V6_1_rail_voltages": {
+   "required": true,
+   "status": "NOT_RUN",
+   "evidence": [],
+   "measured": {
+    "rails": {
+     "12V_IN": null,
+     "P3V3": null,
+     "P3V3_AUX": null,
+     "MCU_VDD": null
+    }
+   },
+   "criterion": "各电源轨电压全部 ±5% 标称",
+   "note": "",
+   "measurement_guide": "同 V5 测点/条件（稳态、已声明负载），逐轨记电压。",
+   "expected": {
+    "tolerance_pct": 5.0,
+    "rails": [
+     "12V_IN",
+     "P3V3",
+     "P3V3_AUX",
+     "MCU_VDD"
+    ]
+   }
+  },
+  "V6_2_mcu_swd_id": {
+   "required": true,
+   "status": "NOT_RUN",
+   "evidence": [],
+   "measured": {
+    "interface": {
+     "J13": {
+      "pad1": "SWDIO",
+      "pad2": "SWCLK_BOOT0",
+      "gnd": "GND"
+     },
+     "NRST": {
+      "note": "不在 J13",
+      "points": [
+       "U1.pad10",
+       "R29.pad1",
+       "C73.pad1"
+      ]
+     }
+    },
+    "device_id_read": null,
+    "expected_device_id": null
+   },
+   "criterion": "读到正确 device ID（须与器件手册一致）",
+   "note": "",
+   "measurement_guide": "接调试器 ⇒ 读 device ID（读不到则记复位/debug 口状态）。J13 pad1=SWDIO · pad2=SWCLK_BOOT0 · pad3=GND（机核）；NRST 不在 J13，测点=U1.pad10 / R29.pad1 / C73.pad1。",
+   "expected": {
+    "interface_verified": true,
+    "device_id": null
+   }
+  },
+  "V6_3_fru_i2c": {
+   "required": true,
+   "status": "NOT_RUN",
+   "evidence": [],
+   "measured": {
+    "buses": [
+     "I2C1",
+     "I2C2"
+    ],
+    "addresses_found": [],
+    "expected_address": null
+   },
+   "criterion": "FRU EEPROM 地址应答正确（与原理图/BOM 标称地址一致）",
+   "note": "",
+   "measurement_guide": "FRU EEPROM = **E2**（SOIC8_FRU，MCU & Sideband 页）。总线 I2C1/I2C2。总线扫描 + 读前 16 字节。",
+   "expected": {
+    "refdes": "E2",
+    "addr_strap_board_measured": {
+     "A0": "GND",
+     "A1": "MCU_VDD",
+     "A2": "GND"
+    },
+    "addr_derivation_note": "A0=0,A1=1,A2=0；对 1010xx 族（如 AT24C02 类，7-bit 基址 0x50）⇒ 期望 7-bit 地址 0x52。**须按实际器件手册/FRU 规格确认**（本件仅给板侧实测 strapping，不代定判据）。"
+   }
+  },
+  "V6_4_link_gen4_x4": {
+   "required": true,
+   "status": "NOT_RUN",
+   "evidence": [],
+   "measured": {
+    "ports": {
+     "J2": null,
+     "J3": null,
+     "J4": null
+    },
+    "both_directions": null,
+    "final_state": {
+     "speed_GTs": null,
+     "width": null
+    }
+   },
+   "criterion": "双路 x4 Gen4 训练成功（二值；须记录链路速度/宽度与 LTSSM 终态）",
+   "note": "",
+   "measurement_guide": "端口 J2/J3/J4（中继 = U6 DS320PR1601）。按 ORDER_NOTES 工艺通道 A 匹配的调试环境插入主机 ⇒ 读速度/宽度/LTSSM 终态；两条方向/端口均须记录。证据：lspci -vvv 摘录（含 Speed/Width/AER）+ 训练日志。",
+   "expected": {
+    "target_speed_GTs": 16,
+    "target_width_x": 4,
+    "gen": 4,
+    "ports": [
+     "J2",
+     "J3",
+     "J4"
+    ]
+   }
+  },
+  "V6_5_stability_30min_aer": {
+   "required": true,
+   "status": "NOT_RUN",
+   "evidence": [],
+   "measured": {
+    "duration_min": 30,
+    "aer_count": null,
+    "log_files": []
+   },
+   "criterion": "连续 30 分钟 AER 计数 = 0",
+   "note": "",
+   "measurement_guide": "V6-4 训练成功后连续运行 30 分钟；记 AER 计数与是否降速/掉链。证据：kernel/lspci AER 段前后对照 + 时长证明。",
+   "expected": {
+    "duration_min": 30,
+    "aer_count_max": 0
+   }
+  },
+  "V7_thermal_o2": {
+   "required": true,
+   "status": "NOT_RUN",
+   "evidence": [],
+   "measured": {
+    "assembly": {
+     "heatsink": "30×30mm Al",
+     "interface_pad_C_per_W": 1.0,
+     "airflow_mps": null
+    },
+    "Ta_C": null,
+    "thetaJA_eff_C_per_W": null,
+    "cases": {
+     "U6_EQ0-2_typ": {
+      "P_W": 4.7,
+      "Tj_pred_C": 91.7,
+      "Tj_meas_C": null
+     },
+     "U6_EQ0-2_max": {
+      "P_W": 6.0,
+      "Tj_pred_C": 106.0,
+      "Tj_meas_C": null
+     },
+     "U6_EQ5-19_typ": {
+      "P_W": 5.8,
+      "Tj_pred_C": 103.8,
+      "Tj_meas_C": null
+     },
+     "U6_EQ5-19_max": {
+      "P_W": 7.0,
+      "Tj_pred_C": 117.0,
+      "Tj_meas_C": null
+     }
+    },
+    "Tj_measure_method": ""
+   },
+   "criterion": "Tj ≤ 120.0℃（四工况，L2 v2.0/CO-204）；T1 触发：Tj(U6) > 117.0℃ 或未按 O2 实施 ⇒ 开新 rev（目标 θJA_eff ≤ 9.5℃/W）；T2：U6 域几何他因修订 ⇒ 同 rev 补 GND via 阵列",
+   "note": "",
+   "measurement_guide": "装配前置（强制）：U6 = 30×30mm 铝散热片 + 界面垫 1.0 ℃/W + ~2m/s 风冷；未按此 ⇒ 直接记 T1 触发。测点：case-top 热电偶（记固定方式/导热膏）或红外（声明发射率）；Tj=Tcase+P·θJC_top(6.5) 或仪器直读；Ta 须实测（设计基准 40.0℃）。证据：四工况原始曲线 + 装配照 + Ta/风速记录。",
+   "expected": {
+    "Tj_max_C": 120.0,
+    "T1_trigger_C": 117.0,
+    "thetaJA_eff_max_C_per_W": 9.5,
+    "thetaJC_top": 6.5,
+    "Ta_design_C": 40.0,
+    "assembly": "30x30mm 铝散热片 + 1.0C/W 界面垫 + ~2m/s 风冷",
+    "cases": {
+     "U6_EQ0-2_typ": {
+      "P_W": 4.7,
+      "Tj_pred_C": 91.7
+     },
+     "U6_EQ0-2_max": {
+      "P_W": 6.0,
+      "Tj_pred_C": 106.0
+     },
+     "U6_EQ5-19_typ": {
+      "P_W": 5.8,
+      "Tj_pred_C": 103.8
+     },
+     "U6_EQ5-19_max": {
+      "P_W": 7.0,
+      "Tj_pred_C": 117.0
+     }
+    }
+   }
+  }
+ },
+ "observations_p5_named": {
+  "mask_dam_9_sites": {
+   "desc": "阻焊坝 9 处 <0.09mm（ACCEPT，见 DISCLOSURE §5b-1）",
+   "checked": null,
+   "finding": null
+  },
+  "silk_overhang_4": {
+   "desc": "正面丝印 4 处越框 H4/R41/D2/C87（板厂裁剪）",
+   "checked": null,
+   "finding": null
+  }
+ },
+ "judgement": {
+  "verdict": null,
+  "judged_at": null,
+  "note": "判定归监理（二值项直接判；V5 需声明输入）"
+ },
+ "instrument_selfcheck": "INSTRUMENT_SELFCHECK.json",
+ "derived_from": {
+  "template": "k2/pm_gate/artifacts/k2_v4/L6/first_article/results_template.json（sha16 c688b7daf9953b30）",
+  "rules": "k2/pm_gate/artifacts/k2_v4/L6/first_article/RULES.md（sha16 8bee09616020d5a9）",
+  "selfcheck": "k2/pm_gate/artifacts/k2_v4/L6/first_article/INSTRUMENT_SELFCHECK.json（sha16 3f89dec1a6481fe5）"
+ },
+ "prefill_note": "**只读预填**：仅填 ENG 可知且**有出处**的『期望/指引』；`measured`/`evidence` 保持空（外部方填）。未新增/未改任何阈值。",
+ "prefill_gaps": {
+  "V6_2_mcu_swd_id": "expected_device_id 未在仓库内找到出处 ⇒ 由外部方按器件手册（STM32G0B1KBU6）填。",
+  "V6_3_fru_i2c": "expected_address 的具体数值未在仓库内找到出处 ⇒ 以 E2 strapping（板侧实测）为准并由外部方按手册确认。"
+ }
+}
