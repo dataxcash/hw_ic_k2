@@ -5,6 +5,19 @@
  "owner_gate": "无（全部 L2/机制/批次面）",
  "delta": [
   {
+   "id": "**落件形已备妥：`BATCH6_LANDING_CANDIDATE_v3.patch`**（请裁定以此为落件本体）",
+   "status": "draft（未落件）；`git apply` 于容器 `_shared` 可复现（patch sha16 `28e1930324e7e9fb` → 目标 `4d4b33c300cfa4c5`）",
+   "content": "D-1…D-5 + ④零长段守卫 + ⑤端点对齐 + (d)对角线 + ⑥耦合 + **VG 对级化 best_of（v2 次序）** + **FIX-A/FIX-B 的 K1 域限定**",
+   "readings": {
+    "k1_segment_solved": "**2/8**（TX0/output · RX0/input）",
+    "k1_rx0_input_pn_edge": "**0.2636**",
+    "k2_acceptance_pytest": "**2F/61P/12S（逐项同 pristine = 零回归）**",
+    "layer_legality_violations": 0,
+    "two_run_bytewise_identical": true
+   },
+   "how": "`cd <容器根> && git -C _shared apply -p1 <patch>`（或等价落件流程）；落件后必跑三验（verify k2 · canonical 19 两跑 · `--expect-patched`）"
+  },
+  {
    "id": "R-2 预答（已实测；原 v1 选项 2 被证实为唯一零回归路径）",
    "status": "已测答案（只读影子 pytest；供裁定直接采用）",
    "question": "D-1…D-5（+v2）落件后 K2 验收面是否移动？",
@@ -76,10 +89,13 @@
   "k1_u11_right_end_bound_probe_v1.py": "端点可达性上界脚本",
   "k1_corrected_baseline_patchgen_v1.py + BATCH6_PATCHGEN_VERIFY_v1.json": "把两个（三个）影子固化为可复现补丁（git apply 后 sha 逐字节同）",
   "BATCH6_K2_REGRESSION_PRECHECK_v1.json": "pristine/原样/v2/K1域限定 四树 pytest 实测 + 根因",
-  "BATCH6_D15_K1_SCOPE_v1.patch": "R-2 选项 2 的最小实现（K1 域限定 FIX-A/FIX-B）"
+  "BATCH6_D15_K1_SCOPE_v1.patch": "R-2 选项 2 的最小实现（K1 域限定 FIX-A/FIX-B）",
+  "BATCH6_CANONICAL19_SOLVER_INDEPENDENCE_v1.json": "canonical 19 实跑 + 解耦动态证明",
+  "BATCH6_DRAFT/BATCH6_LANDING_CANDIDATE_v3.patch": "**落件本体（一键）**",
+  "k2_canonical19_solver_import_trap_v1.py": "陷阱脚本（正控 + 透传）"
  },
  "readonly_repo": true,
  "not_landed": true,
  "ts": "2026-09-21T10:05:00+0800",
- "extra_verified": "canonical 19 **不吃求解器**：`criteria/manifest.k2.yaml` 19 维全为板件级量、`criteria/adjudicate.py`(rev=3) 对 `hs_route_model|solve_all|solve_chain|pipeline/engine` 零引用、测量件出自固定受审板 `l7` ⇒ D-1…D-5 不可能移动 canonical 19 verdict；真回归面 = 验收门 D 维的 `test_hs_route_model.py`（已实测，见 R-2 预答）"
+ "extra_verified": "canonical 19 **不吃求解器**：`criteria/manifest.k2.yaml` 19 维全为板件级量、`criteria/adjudicate.py`(rev=3) 对 `hs_route_model|solve_all|solve_chain|pipeline/engine` 零引用、测量件出自固定受审板 `l7` ⇒ D-1…D-5 不可能移动 canonical 19 verdict；真回归面 = 验收门 D 维的 `test_hs_route_model.py`（已实测，见 R-2 预答）；**本轮硬化**：canonical 19 本会话**实跑** = `passed=True/provisional=False/verdict 190b73be0f728a56`（两跑逐字节同）；并在**求解器导入陷阱**（`k2_canonical19_solver_import_trap_v1.py`，含 `--selftest` 正控）下仍得同值且陷阱未触发 ⇒ **动态证明** canonical 19 不导入求解器 ⇒ 落件回归面**只在**验收门 D 维。"
 }
