@@ -53,7 +53,24 @@
   "断点": "**对级逃逸（pair escape）**，非分派、非 pad 契约。",
   "pad_contract_findings": "**0** ⇒ B2-1 新增的两源交叉核对（板 as-built ↔ SPEC `components.pads` 冻结资产）**未发现冲突** ⇒ 本断点**不是** pad 真源不一致所致（该可能性已被 B2-1 正面排除）。",
   "旁证": "TX0 的 **output 段已 SOLVED**（走廊/轨道分配可用）⇒ 非全面崩溃，是**逃逸侧净空/资源**问题。",
-  "定性": "属 **L2**（逃逸/走廊/过孔策略）口径 ⇒ 原则上 ENG 可自裁推进；但**下一步须先做逃逸不可行定因**（本会话 context 已尽，未展开）。"
+  "定性": "属 **L2**（逃逸/走廊/过孔策略）口径 ⇒ 原则上 ENG 可自裁推进；但**下一步须先做逃逸不可行定因**（本会话 context 已尽，未展开）。",
+  "input_completeness_probe": {
+   "SPEC_k1 顶层键": "board/components/constraints/corridors/impedance/layer_plan/net_classes/net_coverage/pd/router/source/spec_version/stackup/vias",
+   "router 子键": [
+    "emission_order",
+    "escape_spec",
+    "frozen_segments",
+    "region"
+   ],
+   "frozen_segments": {
+    "_frozen_at": true,
+    "fcu_high_speed": true,
+    "fcu_low_speed": true,
+    "in2_cross": true
+   },
+   "components.pads entries": 306,
+   "结论": "**输入齐备**（corridors/frozen_segments/pads 皆在，TX0/RX0 相关网名在 SPEC 中可解析）⇒ 本断点**不是**『SPEC 缺件/fail-closed』类，而是**在现有输入下的几何/资源不可行** ⇒ 归 **L2**（逃逸/走廊/过孔策略）。"
+  }
  },
  "consequence": {
   "resume_status": "恢复条件中「**全 51 网折线**」**未达成** ⇒ K1 复跑**停于第 1 步**（不是 HOLD：前置已证满足、复跑已执行、断点已定性到段级）。",
