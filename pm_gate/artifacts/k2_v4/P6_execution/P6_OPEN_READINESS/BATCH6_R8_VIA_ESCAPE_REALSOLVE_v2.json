@@ -1,0 +1,68 @@
+{
+ "artifact": "k1_r8_via_escape_realsolve_v2",
+ "schema": 1,
+ "gate": "m._k1_escape_verify(...)",
+ "forms": {
+  "TX0/input": {
+   "corr_x": 38.312,
+   "track_P": 18.0,
+   "track_N": 17.5,
+   "tested": 180,
+   "passed": 0,
+   "passing": [],
+   "first_diag": {
+    "A": "seg_ok@P seg3",
+    "C": "seg_ok@P seg3",
+    "D": "seg_ok@P seg3"
+   }
+  },
+  "RX1/input": {
+   "corr_x": 38.312,
+   "track_P": 16.0,
+   "track_N": 24.02,
+   "tested": 180,
+   "passed": 0,
+   "passing": [],
+   "first_diag": {
+    "A": "seg_ok@P seg3",
+    "C": "seg_ok@P seg3",
+    "D": "seg_ok@P seg3"
+   }
+  }
+ },
+ "total_tested": 360,
+ "total_passed": 0,
+ "readonly_repo": true,
+ "not_landed": true,
+ "outcome": {
+  "verdict": "修正探针后 **0/360** 通过门禁；**失败点已定位到物理成因（非探针缺陷）**",
+  "diagnostic_chain": [
+   "v1（pts 含重复点）⇒ 0/420，被 ④/R-10 退化守卫拒绝（探针缺陷）",
+   "v2a（p0 舍入 ⇒ 端点焊盘匹配失败）⇒ 0/360，N4 起点层（探针缺陷，已修）",
+   "v2b ⇒ 0/360，**`seg_ok@P seg3`**：P 路径最后一段（沿 `y=track_P` 的 **F.Cu 水平段**）在 F.Cu 上被挡"
+  ],
+  "physical_finding": "**走廊落点行（`y=track_*`）在 U11 侧被占**：该行为**全对共享落点行**，各对落点短段占据 x≈pad 行 ⇒ **任何『沿落点行的 F.Cu 水平段』都会 seg_ok 失败**（与 U11 侧 F.Cu 密集场一致）",
+  "design_implication": "⇒ 换层模板必须**最终落在内层**（`pts` 末点 = (corr_x, track_net)、末段层 = In2.Cu），把 F.Cu 暴露压到**只有焊盘出排的短竖直段**；装配阶段自会在走廊接缝处生成 via（`_solve_pair_single_v4` 由层变点自动记 via）。**⇒ 下一版模板形态 = `pad →(dy 出排, F.Cu)→ via1 →(In2 水平)→ (In2 竖直)→ (corr_x,track) 结束（In2）**，不再沿落点行做 F.Cu 走线。",
+  "evidence_gap": "R-8 实解验证**仍未完成**（本版探针形态选择不当）；但已排除两类探针缺陷并获得**模板形态的强制约束**。"
+ },
+ "next_iteration_spec": {
+  "pts": [
+   "pad",
+   "(pad.x, pad.y+s*dy1)",
+   "(pad.x+dx1, pad.y+s*dy1)",
+   "(pad.x+dx1, track)",
+   "(corr_x, track)"
+  ],
+  "layers": [
+   "F.Cu",
+   "In2.Cu",
+   "In2.Cu",
+   "In2.Cu"
+  ],
+  "via": [
+   "pts[1]"
+  ],
+  "rationale": "F.Cu 只保留焊盘出排短段；走廊接缝的层变由装配阶段自动补 via"
+ },
+ "ts": "2026-09-21T15:25:00+0800"
+}
