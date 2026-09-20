@@ -1,0 +1,320 @@
+{
+ "artifact": "k2_c25_tier2_provenance_batch1",
+ "schema": 1,
+ "ts": "2026-09-20T20:00:10+0800",
+ "purpose": "C-25 **tier2**（`parts_electrical_truth.yaml` 的器件手册出处三件套）**首批取证**：对 sch_gate 33 件的 `source_citation` 逐一尝试取回厂商原件，**机检 doc_id 令牌**后给出 `doc_url`+`doc_sha256`，并对其余件按类别具名登记（标准件 / 设计约定 / 厂商直链不可达）。ENG 只读外部件；**未写 criteria/**。",
+ "method": "curl GET → %PDF magic + pdftotext 首2页 → doc_id 令牌命中检查 → sha256；本轮另加：UA 头 + `--http1.1`/`-k` 重试、全文（非首2页）令牌搜索。",
+ "tier2_before": "REGISTRY ONLY：33 件中 **0** 件具 `doc_url`+`doc_sha256`（#K2-48 §一 N-5/C-25 口径）",
+ "tier2_after": {
+  "verified_three_piece": 9,
+  "of_total": 33,
+  "note": "**禁充绿**：仅收『PDF 可解析 + doc_id/产品名机检命中』者；其余一律不填 sha"
+ },
+ "verified_three_piece": [
+  {
+   "device": "DCDC_12V_3V3",
+   "doc_id": "TI SLVSD82 (TLV61046A)",
+   "doc_url": "https://www.ti.com/lit/ds/symlink/tlv61046a.pdf",
+   "doc_sha256": "a3749e059bbbe29aa685d5e45275b867ea7bd0bb24a3bc9aaa812640cdf363f5",
+   "bytes": 1922673,
+   "doc_id_token_hit": [
+    "SLVSD82"
+   ],
+   "pdf_head": [
+    "TLV61046A",
+    "TLV61046A",
+    "SLVSD82B – APRIL 2017 – REVISED FEBRUARY"
+   ]
+  },
+  {
+   "device": "DCDC_12V_5V",
+   "doc_id": "TI SLVSD82 (TLV61046A)",
+   "doc_url": "https://www.ti.com/lit/ds/symlink/tlv61046a.pdf",
+   "doc_sha256": "a3749e059bbbe29aa685d5e45275b867ea7bd0bb24a3bc9aaa812640cdf363f5",
+   "bytes": 1922673,
+   "doc_id_token_hit": [
+    "SLVSD82"
+   ],
+   "pdf_head": [
+    "TLV61046A",
+    "TLV61046A",
+    "SLVSD82B – APRIL 2017 – REVISED FEBRUARY"
+   ]
+  },
+  {
+   "device": "DS160PR810",
+   "doc_id": "TI SNLS658 Rev B",
+   "doc_url": "https://www.ti.com/lit/ds/symlink/ds160pr810.pdf",
+   "doc_sha256": "50528cacd8b3e367a830ba743ae6669b006e2117239bb7332403011c3a57e79c",
+   "bytes": 2083907,
+   "doc_id_token_hit": [
+    "SNLS658"
+   ],
+   "pdf_head": [
+    "DS160PR810",
+    "DS160PR810",
+    "SNLS658 – DECEMBER"
+   ]
+  },
+  {
+   "device": "FUSB302",
+   "doc_id": "ON Semi FUSB302/D",
+   "doc_url": "https://www.onsemi.com/download/data-sheet/pdf/fusb302-d.pdf",
+   "doc_sha256": "bdc544e82c13a2af8f6f20170d6ff271fb2706b730066a700f51a33f1bd18723",
+   "bytes": 1768979,
+   "doc_id_token_hit": [
+    "FUSB302"
+   ],
+   "pdf_head": [
+    "ON Semiconductor",
+    "Is Now",
+    "To learn more about onsemi™, please visit our website at"
+   ]
+  },
+  {
+   "device": "LDO_5V_3V3",
+   "doc_id": "Diodes Inc AP2127 (DS31056)",
+   "doc_url": "https://www.diodes.com/assets/Datasheets/AP2127.pdf",
+   "doc_sha256": "d48c96ac985d348a379084ad921f699b8ec6f298c3d72fddc0ecae6bbe328993",
+   "bytes": 931768,
+   "doc_id_token_hit": [
+    "AP2127"
+   ],
+   "pdf_head": [
+    "AP2127",
+    "300mA HIGH SPEED, EXTREMELY LOW NOISE CMOS LDO REGULATOR",
+    "Description"
+   ]
+  },
+  {
+   "device": "SE050C2",
+   "doc_id": "NXP SE050-DATASHEET",
+   "doc_url": "https://www.nxp.com/docs/en/data-sheet/SE050-DATASHEET.pdf",
+   "doc_sha256": "b47c8a5d40191f31b78e48f6c60c6ba17c3eac56bf97976212ade786ee3ee83c",
+   "bytes": 377642,
+   "doc_id_token_hit": [
+    "SE050"
+   ],
+   "pdf_head": [
+    "SE050",
+    "Plug & Trust Secure Element",
+    "Rev. 3.8 — 18 October 2023"
+   ]
+  },
+  {
+   "device": "TPD6E05U06",
+   "doc_id": "TI SLVSBO7O (DECEMBER 2012 – REVISED AUGUST 2024)",
+   "doc_url": "https://www.ti.com/lit/ds/symlink/tpd6e05u06.pdf",
+   "doc_sha256": "c167cf1e72a5473a4d2c59b6a3c0251498701da05b7785919b9ceaae3b3e02c6",
+   "bytes": 2801466,
+   "doc_id_token_hit": [
+    "SLVSBO7O"
+   ],
+   "note": "**引用号不符**：仓内 sch_gate 引证为 SLLSE95，实测厂商当前件为 SLVSBO7O ⇒ 以实测为三件套，并把引用号差异登记为订正项",
+   "pdf_copy": "/tmp/opencode/c25docs/TPD6E05U06_0.pdf"
+  },
+  {
+   "device": "TPS22919",
+   "doc_id": "TI SLVSEN5B",
+   "doc_url": "https://www.ti.com/lit/ds/symlink/tps22919.pdf",
+   "doc_sha256": "743c59b01fb0891d2d0f1faba779161cd2d2b6c18edf68e6d5b3279016240c84",
+   "bytes": 1454791,
+   "doc_id_token_hit": [
+    "SLVSEN5"
+   ],
+   "pdf_head": [
+    "Product",
+    "Folder",
+    "Order"
+   ]
+  },
+  {
+   "device": "TS3USB221A",
+   "doc_id": "TI SCDS277C (NOVEMBER 2008 – REVISED OCTOBER 2024)",
+   "doc_url": "https://www.ti.com/lit/ds/symlink/ts3usb221a.pdf",
+   "doc_sha256": "cccebf8c10df605133d24bd3ab3abeb97a19dbf539d3465b53562fc19f7a242e",
+   "bytes": 1462357,
+   "doc_id_token_hit": [
+    "SCDS277C"
+   ],
+   "note": "**引用号不符**：仓内引证 SCDS239A，实测为 SCDS277C ⇒ 同上",
+   "pdf_copy": "/tmp/opencode/c25docs/TS3USB221A_0.pdf"
+  }
+ ],
+ "findings": [
+  {
+   "id": "T2-F1",
+   "severity": "中",
+   "finding": "**两处引用号与厂商当前件不符**：sch_gate `TPD6E05U06` 引 'SLLSE95' ⇒ 实测 **SLVSBO7O**；`TS3USB221A` 引 'SCDS239A' ⇒ 实测 **SCDS277C**。两件产品名在 PDF 全文命中（TPD6E05U06 ×89 · TS3USB221A ×55）⇒ 同一器件的**文献号漂移/笔误**。",
+   "impact": "引用号（doc_id）是 C-25 三件套的一件；错引号会使外部复算者按错号取件。修法 = sch_gate 注册表 `source:` 订正（属 `_shared` 件，须监理批 + 同批升版）。"
+  },
+  {
+   "id": "T2-F2",
+   "severity": "低",
+   "finding": "5 件为**付费/注册标准**（JEDEC JESD84-B51 · PCI-SIG M.2/OCuLink · SNIA SFF-TA-1016/SFF-8654）⇒ **无合法免费全文**，不可能有 `doc_sha256`；出路 = 以『标准号 + 官方条目页』为出处，或提供内部获授权副本的 sha（须 owner/法务面）。"
+  },
+  {
+   "id": "T2-F3",
+   "severity": "低",
+   "finding": "6 件为**设计约定/通用封装**（无具体厂商件）：24MHz_9pF · J_EC_HEADER · J_OOB_HEADER · LED_DUAL · UART_DEBUG · XO_100M ⇒ 三件套不适用（出处 = 设计定义 + 封装标准）。"
+  },
+  {
+   "id": "T2-F4",
+   "severity": "中",
+   "finding": "12 件厂商直链**自动化不可达**（ST 567 反自动化 · onsemi/Diodes 403/404 · Molex HTTP/2 中断 · usb.org 版本化文件名漂移 · SpacemiT 无公开直链）。已列每件失败码与候选路径；出路 = 人工浏览器取件或分销商镜像（Mouser/LCSC）——**须人工/半自动**。"
+  }
+ ],
+ "standards_no_free_fulltext": [
+  {
+   "device": "EMMC_16G",
+   "doc_id": "JEDEC JESD84-B51 eMMC5.1",
+   "doc_url_landing": "https://www.jedec.org/standards-documents/docs/jesd84-b51",
+   "reason": "标准件（付费/注册后方可下载全文）⇒ 无 doc_sha256；以标准号 + 官方条目页为出处"
+  },
+  {
+   "device": "M2_M_SOCKET",
+   "doc_id": "PCI-SIG M.2 M-Key (PCIe)",
+   "doc_url_landing": "https://www.pcisig.com/specifications/m2/",
+   "reason": "标准件（付费/注册后方可下载全文）⇒ 无 doc_sha256；以标准号 + 官方条目页为出处"
+  },
+  {
+   "device": "MCIO_4i_SFF1016",
+   "doc_id": "SNIA SFF-TA-1016 (MCIO 4i)",
+   "doc_url_landing": "https://www.snia.org/technology-communities/sff/specifications",
+   "reason": "标准件（付费/注册后方可下载全文）⇒ 无 doc_sha256；以标准号 + 官方条目页为出处"
+  },
+  {
+   "device": "OCuLink_SFF8612",
+   "doc_id": "PCI-SIG OCuLink / SFF-8612 Rev 1.0",
+   "doc_url_landing": "https://www.pcisig.com/specifications/oculink/",
+   "reason": "标准件（付费/注册后方可下载全文）⇒ 无 doc_sha256；以标准号 + 官方条目页为出处"
+  },
+  {
+   "device": "SlimSAS_x8_SFF8654",
+   "doc_id": "SNIA SFF-8654 SlimSAS 8X",
+   "doc_url_landing": "https://www.snia.org/technology-communities/sff/specifications",
+   "reason": "标准件（付费/注册后方可下载全文）⇒ 无 doc_sha256；以标准号 + 官方条目页为出处"
+  }
+ ],
+ "design_convention_no_vendor_doc": [
+  {
+   "device": "24MHz_9pF",
+   "reason": "3225 4 脚晶振**封装**引脚（设计约定；无具体厂商件）"
+  },
+  {
+   "device": "J_EC_HEADER",
+   "reason": "**设计定义**（EC 遥测排针脚序；无厂商件）"
+  },
+  {
+   "device": "J_OOB_HEADER",
+   "reason": "**设计定义**（OOB UART 排针脚序；无厂商件）"
+  },
+  {
+   "device": "LED_DUAL",
+   "reason": "0603 双色 LED **封装**引脚（设计约定）"
+  },
+  {
+   "device": "UART_DEBUG",
+   "reason": "1x03 排针**物理**脚序（设计约定）"
+  },
+  {
+   "device": "XO_100M",
+   "reason": "3225 封装振荡器 + carrier_v1 声明（无具体厂商件）"
+  }
+ ],
+ "vendor_blocked": [
+  {
+   "device": "BAT54C",
+   "reason": "onsemi/Diodes 直链 403/404（含 UA 重试）；Vishay 85602 亦未命中",
+   "tried": [
+    "https://www.diodes.com/assets/Datasheets/ds11038.pdf"
+   ]
+  },
+  {
+   "device": "FRU_EEPROM",
+   "reason": "Microchip 直链失效、onsemi `cat24c02-d` 403",
+   "tried": [
+    "https://www.onsemi.com/pdf/datasheet/cat24c02-d.pdf"
+   ]
+  },
+  {
+   "device": "PI3DBS16412",
+   "reason": "Diodes `PI3DBS16412.pdf`/`ds40277.pdf` 均 404",
+   "tried": [
+    "https://www.diodes.com/assets/Datasheets/PI3DBS16412.pdf"
+   ]
+  },
+  {
+   "device": "STM32G0B1CBT6",
+   "reason": "st.com PDF 端点返回 567（反自动化）",
+   "tried": [
+    "https://www.st.com/resource/en/datasheet/stm32g0b1cb.pdf"
+   ]
+  },
+  {
+   "device": "STM32G0B1KBU6",
+   "reason": "同 STM32G0B1CBT6",
+   "tried": [
+    "https://www.st.com/resource/en/datasheet/stm32g0b1kb.pdf"
+   ]
+  },
+  {
+   "device": "OPTO_LTV356T",
+   "reason": "LiteOn 老路径 404（TLS/路径漂移）",
+   "tried": [
+    "https://optoelectronics.liteon.com/upload/download/DS-70-96-0016/LTV-3X6T%20series%20201612%20.pdf"
+   ]
+  },
+  {
+   "device": "USB3.0_Type-A_90",
+   "reason": "usb.org 直链 404（版本化文件名漂移；需官网文档页人工取件）",
+   "tried": [
+    "https://www.usb.org/sites/default/files/documents/usb_3_0_20111112.zip"
+   ]
+  },
+  {
+   "device": "USB_C_PLUG",
+   "reason": "Molex PDM 直链 HTTP/2 流中断 + 90s 超时",
+   "tried": [
+    "https://www.molex.com/pdm_docs/sd/1054440001_sd.pdf"
+   ]
+  },
+  {
+   "device": "USB_C_RECEPT",
+   "reason": "同 USB_C_RECEPT_24（usb.org 直链 404）",
+   "tried": [
+    "https://www.usb.org/sites/default/files/documents/usb_type-c_release_2.0_20190829.pdf"
+   ]
+  },
+  {
+   "device": "USB_C_RECEPT_24",
+   "reason": "usb.org `usb_type-c_release_2.0_20190829.pdf` 404",
+   "tried": [
+    "https://www.usb.org/sites/default/files/documents/usb_type-c_release_2.0_20190829.pdf"
+   ]
+  },
+  {
+   "device": "PMIC_P1",
+   "reason": "SpacemiT P1 手册无公开直链（厂商站 + 需注册）",
+   "tried": []
+  },
+  {
+   "device": "SOM_B1",
+   "reason": "SpacemiT B1 CoM 手册无公开直链",
+   "tried": []
+  }
+ ],
+ "not_a_device": [
+  {
+   "file": "strap_semantics.yaml",
+   "reason": "语义件（strap 语义定义），非器件"
+  }
+ ],
+ "red_lines": [
+  "未写 criteria/（ENG 只读）",
+  "未改生成器/SPEC/原理图",
+  "外部取件仅落 /tmp/opencode",
+  "禁派 WORKER"
+ ],
+ "next": "①T2-F1 引用号订正（sch_gate 注册表，须批）②T2-F4 的 12 件人工取件 ⇒ 补齐后三件套覆盖 21/33（标准件 5 + 约定件 6 永不可得）③tier2 完成后 gate 属主另立 criteria rev"
+}
