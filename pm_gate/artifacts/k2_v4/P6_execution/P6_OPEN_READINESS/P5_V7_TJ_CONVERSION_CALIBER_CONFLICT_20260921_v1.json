@@ -1,0 +1,69 @@
+{
+ "artifact": "k2_p5_v7_tj_conversion_caliber_conflict",
+ "schema": 1,
+ "ts": "2026-09-21T08:30:00+0800",
+ "id": "P5 外发包 · V7 之 Tj 反推口径冲突（口径歧义 ⇒ 已 L2 自裁唯一化）",
+ "authorization": "handoff §7-B『P5 其余可判性核对（几何/热侧）』· owner ⑦（口径澄清 = 监理/自裁面，**不得推回 owner**）· 宪法第二章（**热机械 = L2 ⇒ ARCHER 自裁**）· owner #14⑥（不停等）",
+ "finding": {
+  "id": "P5-V7-1",
+  "level": "**口径冲突/歧义（判据不可机械复现 · 可致相反判定）**",
+  "what": "同一『case-top 温度 ⇒ Tj』反推在两份项目正文里**给出两个不同式**：\n  ① **外发 `RULES.md` §V7**：`Tj = Tcase + P·θJC_top`，`θJC_top = 6.5 ℃/W`\n  ② **《K2 整体整改计划》§L2-9c′（裁定）**：`Tj = T_top + P·ψJT`，`ψJT = 3.6 ℃/W`\n  P5 计划（`K2-P5-FIRST-ARTICLE-ACCEPTANCE-PLAN-v1.md` §V7）**未载明式** ⇒ 操作面唯一依据 = `RULES.md`，与 L2-9c′ 冲突。",
+  "magnitude": "两式差 = `(6.5 − 3.6)·P = 2.9·P` ⇒ EQ0-2 typ(4.7W) **+13.6℃** · EQ0-2 max(6.0W) **+17.4℃** · EQ5-19 typ(5.8W) **+16.8℃** · **EQ5-19 max(7.0W) +20.3℃**",
+  "consequence": "① **同板相反判定**：设计预测点（最重档 `Tj_pred = 117.0℃`）对应真值 `T_top = 117.0 − 7.0×3.6 = 91.8℃` ⇒ 以 θJC 式反推得 `91.8 + 7.0×6.5 = **137.3℃** ⇒ 判 **FAIL**`；以 ψJT 式判 **PASS** ⇒ **同一实测数据可得出相反结论**。② **误触 T1**：θJC 式下 `T_top ≥ 117.0 − 45.5 = 71.5℃` 即触 T1（对应真 Tj 仅 96.7℃）⇒ 可能**不必要地开新 rev**（费用+排期）。③ 若反向用 ψJT 式而该参数有误 ⇒ 反向**假绿**。",
+  "why_now": "判据面歧义属『不可机械复现』，与其在回件后再吵，不如**先定口径**；这正是 P5 可判性核对的范围。"
+ },
+ "source_audit": {
+  "machine_readable_handbook_inputs": "`k2/pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_co148_u6_ds320pr1601_inputs.json`（sha16 `d98677fd7f7d51ba` · 源 = TI DS320PR1601 / SNLS683 · 节录件 `623b562cfc8262d2`）",
+  "contains": {
+   "TJ_max_C": 120,
+   "theta_ja_highK_C_per_W": 17.4,
+   "psi_jb_C_per_W": 5.9,
+   "theta_jb_C_per_W": 6.1,
+   "theta_jc_top_C_per_W": 6.5,
+   "PACT": "0-2:{4.7,6.0} · 5-19:{5.8,7.0}"
+  },
+  "missing": "**`psi_jt` 不在件内**（全库检索 `ψJT/psi_jt` 仅命 1 处 = `k2/docs/K2-RECTIFICATION-PLAN-v1.md:429` 之正文自述，**无手册出处、无机器可读件**）",
+  "verdict": "⇒ `θJC_top = 6.5` **有源可复算**；`ψJT = 3.6` **无源**（L2-9c′ 自身即建在未入册之数上）"
+ },
+ "ruling_L2_self": {
+  "id": "L2-V7-1（口径唯一化 · 热机械 = L2 自裁）",
+  "decision": [
+   "**唯一判据式 = `Tj = T_top + P·θJC_top`，`θJC_top = 6.5 ℃/W`**（有手册出处、可复算；因该参数为冷板表征值，用于 top 面反推属**保守上界**）。",
+   "**`ψJT` 式不得单独作为 PASS/FAIL/T1 依据**（无源）——可作参考，但**须先补源**（取回 SNLS683 之 `ψJT` 或改用仪器直读 `Tj`）。",
+   "**必须同记原始量**：`T_top` · `P` · `Ta` · 装配方式（禁只交一个 `Tj` 数字）。",
+   "**两式结论不一致 ⇒ 由监理裁定**（实测方不得择式）。",
+   "**超限防误触**：判据式得 `Tj > 117.0℃`(T1) 或 `> 120.0℃`(FAIL) ⇒ **须连同原始 `T_top`/`P` 交监理复核后再开新 rev**；无复核前不得以 ψJT 式改判 PASS。"
+  ],
+  "direction": "**保守/防假绿**（保留有源参数为判据、把无源参数降为参考）⇒ 与 owner ②（禁新增检查齿）及 C-12（禁缩口径凑绿）**同向**；未改任何阈值（`≤120.0` 与 T1 `>117.0` 逐字不动）。",
+  "not_owner_item": "属 **L2 热机械口径**（owner ⑦ 明列：口径澄清 = 监理自裁面）⇒ **不自升 owner**；本件随 ledger 报备监理。"
+ },
+ "fix_landed": {
+  "pm_gate/artifacts/k2_v4/L6/first_article/RULES.md": {
+   "before": "498c365f01ac911e",
+   "after": "af8c3dd994eacabb",
+   "change": "§V7 新增『`Tj` 反推口径（唯一）』：判据式 = `T_top + P·6.5`（有源·保守上界）· 必记原始量 · ψJT 式禁用为单独依据 · 超限须监理复核"
+  },
+  "pm_gate/artifacts/k2_v4/L6/first_article/CHECKLIST.md": {
+   "before": "b91fd6069928c5f7",
+   "after": "e2e6a074feac1716",
+   "change": "V7 行补『须同记 T_top/P/Ta · 判据式 = T_top + P·6.5 · 超限须监理复核』"
+  },
+  "pm_gate/artifacts/k2_v4/L6/first_article/results_template.json": {
+   "before": "6714b1391cf61d0c",
+   "after": "00d6ff4cfad0ba66",
+   "change": "新增 `tj_conversion_caliber`（判据式/参数出处/性质/必记项/ψJT 禁用条款/超限处置）+ 四工况各增 `Ttop_C` 原始量字段"
+  }
+ },
+ "readonly_repo": false,
+ "not_landed": false,
+ "red_lines": [
+  "未改冻结四源（`d4e81f64` 未动）",
+  "未改 criteria/（rev=6 只读）",
+  "未改交付包（MANIFEST `6ee7495de61f749f` 未动）",
+  "未改受审板 l7（`c5a7df90` 未动）",
+  "**未改任何阈值/触发**（≤120.0 · T1 >117.0 逐字不动）",
+  "未新增判据维/检查齿",
+  "未改生成器/SPEC/原理图/符号",
+  "未派 WORKER"
+ ]
+}

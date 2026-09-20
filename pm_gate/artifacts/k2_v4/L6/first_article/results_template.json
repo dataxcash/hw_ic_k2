@@ -277,28 +277,50 @@
      "U6_EQ0-2_typ": {
       "P_W": 4.7,
       "Tj_pred_C": 91.7,
-      "Tj_meas_C": null
+      "Tj_meas_C": null,
+      "Ttop_C": null
      },
      "U6_EQ0-2_max": {
       "P_W": 6.0,
       "Tj_pred_C": 106.0,
-      "Tj_meas_C": null
+      "Tj_meas_C": null,
+      "Ttop_C": null
      },
      "U6_EQ5-19_typ": {
       "P_W": 5.8,
       "Tj_pred_C": 103.8,
-      "Tj_meas_C": null
+      "Tj_meas_C": null,
+      "Ttop_C": null
      },
      "U6_EQ5-19_max": {
       "P_W": 7.0,
       "Tj_pred_C": 117.0,
-      "Tj_meas_C": null
+      "Tj_meas_C": null,
+      "Ttop_C": null
      }
     },
     "Tj_measure_method": ""
    },
    "criterion": "Tj ≤ 120.0℃（四工况，L2 v2.0/CO-204）；T1 触发：Tj(U6) > 117.0℃ 或未按 O2 实施 ⇒ 开新 rev（目标 θJA_eff ≤ 9.5℃/W）；T2：U6 域几何他因修订 ⇒ 同 rev 补 GND via 阵列",
-   "note": ""
+   "note": "",
+   "tj_conversion_caliber": {
+    "judging_formula": "Tj = T_top + P * theta_jc_top",
+    "theta_jc_top_C_per_W": 6.5,
+    "parameter_source": "器件手册值（TI SNLS683 派生件 m13_v57_co148_u6_ds320pr1601_inputs.json d98677fd7f7d51ba）",
+    "nature": "**保守上界**（theta_jc_top 为冷板表征值；用于 top 面反推会高估 Tj）",
+    "must_record": [
+     "T_top_C",
+     "P_W",
+     "Ta_C",
+     "assembly"
+    ],
+    "psi_JT_formula_forbidden_as_sole_basis": {
+     "psi_JT_C_per_W": 3.6,
+     "why": "**无器件手册出处**（仅见 L2 计划正文 L2-9c′；machine-readable inputs 件无此值）⇒ 见 CR-19",
+     "rule": "参考可用；**不得单独据此判 PASS/FAIL 或触发 T1**；两式不一致 ⇒ 由监理裁定"
+    },
+    "over_limit_disposition": "判据式超 T1(117.0)/FAIL(120.0) 时，须连同原始 T_top/P/Ta 交监理复核后再开新 rev"
+   }
   }
  },
  "observations_p5_named": {

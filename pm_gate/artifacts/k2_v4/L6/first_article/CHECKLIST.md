@@ -20,7 +20,7 @@
 | V6-3 | FRU I2C | I2C1/I2C2 扫描 | EEPROM 地址应答 | | ☐PASS ☐FAIL |
 | V6-4 | 链路 | J2/J3/J4 | **双路 x4 Gen4 训练成功** | | ☐PASS ☐FAIL |
 | V6-5 | 稳定性 | 30 min | **AER = 0** | | ☐PASS ☐FAIL |
-| V7 | 热（O2） | U6：30×30 Al + 1.0℃/W + ~2m/s | 四工况 Tj ≤ 120.0℃ | | ☐PASS ☐FAIL |
+| V7 | 热（O2） | U6：30×30 Al + 1.0℃/W + ~2m/s；**须同记 T_top/P/Ta** | 四工况 Tj ≤ 120.0℃（**判据式 = `T_top + P·6.5`**；超限须监理复核） | | ☐PASS ☐FAIL |
 
 ## 触发条款勾选（任一命中⇒按 RULES.md 处置）
 - ☐ **T1**：`Tj(U6) > 117.0℃` 或 未按 O2 实施 ⇒ **开新 rev**（回 P3/P4，目标 θJA_eff ≤ 9.5℃/W）
