@@ -1,0 +1,259 @@
+{
+ "artifact": "k2_59_standalone_batch_execution_evidence",
+ "schema": 1,
+ "ts": "2026-09-21T01:48:28.078524+08:00",
+ "session_label": "K2-2026-09-21 · ARCHER-R92 · #K2-59 另立批执行",
+ "ruling": "#K2-59（另立批放行 · l8 包重出准(新版本/新路径/旧锚保全) · 重出后须限定复核 · CR-62 追认 · owner 0）",
+ "r2_6_pregate": {
+  "finding": "未按旧锚下单 / 未外发任何件 ⇒ 前置闸通过",
+  "evidence": [
+   "P5 八项全 NOT_RUN（L6/first_article_l8/results_template.json）",
+   "L6/ 下无 order/ship 件",
+   "手头第 0 条红线『未下单』维持"
+  ]
+ },
+ "CR49": {
+  "tool": "tools/k2_p6_instruments_selfcheck_v1.py",
+  "anchor": {
+   "before": "16c6000cd19ad9f6",
+   "after": "52bff426fc3517df"
+  },
+  "command": "PYTHONPATH=AppDir/... AppDir/bin/python3.11 k2/tools/k2_p6_instruments_selfcheck_v1.py --out /tmp/opencode/iss_after.json",
+  "rc": 1,
+  "reading": {
+   "first_article_statuses": "8 项全 NOT_RUN",
+   "p5_external_all_not_run": true,
+   "note": "改前(未改版)实跑 rc 亦=1 ⇒ FAIL 非本改所致（先跑证据 /tmp/opencode/iss_before.json）"
+  },
+  "fail_cause_registered": [
+   "line_anchors 2/13（行号锚钉于 4957 行时代 vs 现行 k2/_shared hs_route_model.py 5225 行 c9e1c3b4）",
+   "baseline_reproducibility（基线生成器把 pytest 墙钟秒数写入件内 ⇒ 结构性不可逐字节复现；两连跑 69.04s/69.89s）"
+  ]
+ },
+ "CR64": {
+  "file": "tools/k2_p5_jlc_package_l8_v1.py",
+  "anchor": {
+   "before": "08667d2ceb2a56ae",
+   "after": "796043be97ceb3f8"
+  },
+  "fixes": [
+   "`:262` 文档串 L6/DELIVERY/ -> L6/DELIVERY_l8/",
+   "`:764` key criteria_rev3 -> criteria_rev6 且补列全 5 件",
+   "`:568` verdict …spec_rev52… -> …spec_rev53…"
+  ],
+  "gate2_cmd": "grep -n \"criteria_rev3\\|spec_rev52\\|L6/DELIVERY/\" tools/k2_p5_jlc_package_l8_v1.py",
+  "gate2_result": "0 命中"
+ },
+ "CR65": {
+  "file": "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-54.json",
+  "anchor16": "f3a48b866983c8db",
+  "diff_vs_rev53": "恰 1 行（stackup.material）；逐字段 walk 断言 diffpaths=['.stackup.material']",
+  "untouched": {
+   "rev-53": "4e92b3a05cd5a223",
+   "frozen SPEC_k2_v4.json": "0bd52ed48e720b8c"
+  },
+  "pointer": {
+   "pm_gate/project.yaml": {
+    "before": "5fdd6221f9d290b6",
+    "after": "bf057b5f177583a8",
+    "note": "spec_name -> rev-54 · 属声明 delta"
+   }
+  }
+ },
+ "CR66": {
+  "generator": "tools/k2_p5_jlc_package_l8r2_v1.py",
+  "generator_sha16": "bc2394923a919058",
+  "build_cmd": "PYTHONPATH=AppDir/shared/lib/python3.11/dist-packages AppDir/bin/python3.11 k2/tools/k2_p5_jlc_package_l8r2_v1.py",
+  "build_rc": 0,
+  "manifest_sha16": "19d637c4e9ed35be",
+  "tarball": {
+   "path": "L6/DELIVERY_l8r2/k2_v4_8L.l8r2_gerber_package.tar.gz",
+   "sha16": "488e90a47d088d06",
+   "bytes": 423156
+  },
+  "delivery_record_doc": {
+   "path": "k2/docs/K2-P5-DELIVERY-RECORD-l8r2-v1.md",
+   "sha16": "502200e0d3a20329"
+  },
+  "integrity": {
+   "sha256sum_c": "55/55 OK (LC_ALL=C)",
+   "manifest_files": "53 ≡ 目录 53（全同）",
+   "tarball": "54 条目 ≡ 目录 逐件 sha 全同 · 顶层目录唯一 k2_v4_8L.l8r2_gerber_package/ · 无 .l7 条目",
+   "dfm": "16 PASS / 1 ACCEPT / 0 FAIL",
+   "drill_total": 754,
+   "revision": "P5-L8.2",
+   "criteria_anchor": "rev=6"
+  },
+  "geometry_zero_change": {
+   "file_counts": {
+    "old": 54,
+    "new": 54
+   },
+   "only_in_old": [],
+   "only_in_new": [],
+   "byte_identical_count": 48,
+   "changed_count": 6,
+   "changed_files": {
+    "04_impedance/impedance_table.json": {
+     "old": "6e4a58aea6392204",
+     "new": "455a976e17afc13d"
+    },
+    "04_impedance/impedance_table.md": {
+     "old": "f04c7aa401cdba50",
+     "new": "81b516aef2ff05b7"
+    },
+    "07_verify/anchor_selfcheck.json": {
+     "old": "ab37e5fc2c39c0f0",
+     "new": "f95d814b94972e4c"
+    },
+    "DISCLOSURE.md": {
+     "old": "c074d1b9c175409a",
+     "new": "9cc6a2259c3e2249"
+    },
+    "MANIFEST.json": {
+     "old": "4b610baed4f4752c",
+     "new": "19d637c4e9ed35be"
+    },
+    "ORDER_NOTES.md": {
+     "old": "af65bb2b733496d7",
+     "new": "a3b2d1cbc7d53465"
+    }
+   },
+   "byte_identical_files": [
+    "01_gerber_rs274x/k2_v4_8L.l8-B_Cu.gbr",
+    "01_gerber_rs274x/k2_v4_8L.l8-B_Mask.gbr",
+    "01_gerber_rs274x/k2_v4_8L.l8-B_Silkscreen.gbr",
+    "01_gerber_rs274x/k2_v4_8L.l8-Edge_Cuts.gbr",
+    "01_gerber_rs274x/k2_v4_8L.l8-F_Cu.gbr",
+    "01_gerber_rs274x/k2_v4_8L.l8-F_Mask.gbr",
+    "01_gerber_rs274x/k2_v4_8L.l8-F_Silkscreen.gbr",
+    "01_gerber_rs274x/k2_v4_8L.l8-In1_Cu.gbr",
+    "01_gerber_rs274x/k2_v4_8L.l8-In2_Cu.gbr",
+    "01_gerber_rs274x/k2_v4_8L.l8-In3_Cu.gbr",
+    "01_gerber_rs274x/k2_v4_8L.l8-In4_Cu.gbr",
+    "01_gerber_rs274x/k2_v4_8L.l8-In5_Cu.gbr",
+    "01_gerber_rs274x/k2_v4_8L.l8-In6_Cu.gbr",
+    "01_gerber_rs274x/k2_v4_8L.l8-job.gbrjob",
+    "02_drill_excellon/drill_report.txt",
+    "02_drill_excellon/k2_v4_8L.l8-back-in5-drl_map.svg",
+    "02_drill_excellon/k2_v4_8L.l8-back-in5.drl",
+    "02_drill_excellon/k2_v4_8L.l8-drl_map.svg",
+    "02_drill_excellon/k2_v4_8L.l8-front-in1-drl_map.svg",
+    "02_drill_excellon/k2_v4_8L.l8-front-in1.drl",
+    "02_drill_excellon/k2_v4_8L.l8-front-in2-drl_map.svg",
+    "02_drill_excellon/k2_v4_8L.l8-front-in2.drl",
+    "02_drill_excellon/k2_v4_8L.l8-front-in4-drl_map.svg",
+    "02_drill_excellon/k2_v4_8L.l8-front-in4.drl",
+    "02_drill_excellon/k2_v4_8L.l8-front-in5-drl_map.svg",
+    "02_drill_excellon/k2_v4_8L.l8-front-in5.drl",
+    "02_drill_excellon/k2_v4_8L.l8-in2-in5-drl_map.svg",
+    "02_drill_excellon/k2_v4_8L.l8-in2-in5.drl",
+    "02_drill_excellon/k2_v4_8L.l8.drl",
+    "03_stackup/HDI_stage_diagram.svg",
+    "03_stackup/JLC08161H_stackup.svg",
+    "05_layer_sequence.txt",
+    "06_rulings/L2_RULING_process_route_A_frozen_hdi_v1.md",
+    "06_rulings/L2_RULING_u6_thermal_mitigation_v2.md",
+    "06_rulings/L2_RULING_u6_thermal_v1.md",
+    "06_rulings/L2_RULING_via_channel_and_interpair_domain_v1.md",
+    "06_rulings/copy_parity.json",
+    "06_rulings/dfm_raw_readings.json",
+    "06_rulings/jlc_dfm_hdi_l8.json",
+    "06_rulings/jlc_dfm_hdi_l8.md",
+    "07_verify/drill_board_xcheck.json",
+    "07_verify/drill_census.json",
+    "07_verify/gerber_aperture_census.json",
+    "07_verify/gerber_extents.json",
+    "07_verify/mask_accept_fix_proof.json",
+    "07_verify/n01_g36_census.json",
+    "07_verify/silk_overhang.json",
+    "07_verify/zone_refill_invariance.json"
+   ]
+  },
+  "old_anchors_preserved": {
+   "l8_manifest": "4b610baed4f4752c",
+   "l8_tarball": "36a6b276b4f7e465",
+   "l7_manifest": "6ee7495de61f749f",
+   "l7_tarball": "0e88e107e2da8192"
+  }
+ },
+ "CR67": {
+  "synced": {
+   "L6/first_article_l8/RULES.md": {
+    "before": "058f650df4d626e6",
+    "after": "1f8f640cac54b6f1"
+   },
+   "L6/first_article_l8/CHECKLIST.md": {
+    "before": "f58ca379dab41cbe",
+    "after": "11f2621ced066390"
+   },
+   "L6/first_article_l8/results_template.json": {
+    "before": "6b510775339bdc11",
+    "after": "119cd7c48b3146d2"
+   },
+   "L6/first_article_l8/INSTRUMENT_SELFCHECK.json": {
+    "before": "540c9a55c66b053b",
+    "after": "540c9a55c66b053b",
+    "note": "未变"
+   },
+   "docs/K2-P5-FIRST-ARTICLE-TRANSMITTAL-l8-v1.md": {
+    "before": "314239049f4c2ba3",
+    "after": "fcf25bf201a6ba3e"
+   },
+   "docs/K2-P5-FIRST-ARTICLE-ACCEPTANCE-PLAN-v1.md": {
+    "before": "b002ec9829a53f12",
+    "after": "bdc769eb6275efd1"
+   }
+  },
+  "incidental_fix": "投递说明 §2 DFM 行悬空引用 06_rulings/mask_accept_fix_proof.json -> L6/jlc_package_l8r2/07_verify/mask_accept_fix_proof.json（既有缺陷）",
+  "gate7_reference_resolution": "文件型引用 38/38 解析成功 · 悬空 0",
+  "gate_R3_added": "投递说明 + 验收计划 均载『P5-L8.2 须经监理限定复核通过后方可作外发/下单依据』"
+ },
+ "CR68": {
+  "p6_instrument_selfcheck": {
+   "verdict_now": "FAIL",
+   "pre_existing": true,
+   "evidence": [
+    "/tmp/opencode/iss_before.json（未改版实跑）",
+    "/tmp/opencode/iss_after.json"
+   ],
+   "root_causes": [
+    "line anchors 4957 -> 5225 行漂移",
+    "baseline 生成器写入 pytest 墙钟秒数 ⇒ 结构性不可复现"
+   ],
+   "action": "登记 · 不阻塞 · 未改锚/基线/存储件 · 提请监理于 P6/仪器面处置"
+  },
+  "R5_optional_deferred": {
+   "done": false,
+   "reason": "注释头行/source 订正需逐件已验证文献号（STM32G0B1CBT6『Rev 6 Table 12』属 CR-30 引证待核）；无权威件擅改=伪造引证 ⇒ 维持 #K2-58 R5 登记"
+  }
+ },
+ "registry": {
+  "path": "docs/K2-CONVENTION-REGISTER-20260921.md",
+  "sha16": "dfddd84556f77dcf",
+  "cr_range": "CR-1..CR-68"
+ },
+ "judge_criteria_selfcheck": {
+  "①CR-49": "改毕 + 实跑（rc 见上 · 事实登记）",
+  "②生成器三串": "0 命中",
+  "③rev-54 在 · rev-53/冻结原件未变": "✅",
+  "④新包完整性/DFM/drill": "✅",
+  "⑤逐件 diff=仅声明 delta": "✅ 48 同 / 6 声明变更",
+  "⑥旧锚未动": "✅",
+  "⑦引用 0 悬空 · 锚同代": "✅",
+  "⑧criteria rev=6 · 冻结四源": "待复算（见下）",
+  "⑨B 宿主未动": "✅ 未 push",
+  "⑩未派 WORKER · 未越阶段": "✅"
+ },
+ "redlines_ok": [
+  "未改 criteria/（rev=6 只读）",
+  "未改冻结四源",
+  "未改板/原理图/网表/判据",
+  "未覆盖或删除旧包（l8 与 l7 锚逐字节保全）",
+  "未触 B 宿主远端",
+  "未派 WORKER",
+  "未越阶段 · 未下单",
+  "未为历史 commit 批量补 tag",
+  "临时落点仅 /tmp/opencode"
+ ]
+}

@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""P5 交付包构建器（受审板 l8 / 判据锚 rev=6 / #K2-36 P5 放行）。
+"""P5 交付包构建器（受审板 l8 · **重出 l8r2（#K2-59 R2）** / 判据锚 rev=6 / #K2-36 P5 放行）。
 
 性质：只出交付物。不改板/SPEC/原理图/判据/冻结四源。
-输入（只读）：BOARD=hw/k2_v4_8L.l8.kicad_pcb (7a5c89913d6e5d0a) · PRO=l8 pro · SPEC rev-53
+输入（只读）：BOARD=hw/k2_v4_8L.l8.kicad_pcb (7a5c89913d6e5d0a) · PRO=l8 pro · SPEC rev-54
              册 = L4/E3-standard-call-l8-20260921/ · 冻结件 = L5/jlc_package/（叠层图/阻抗表/裁定副本源）
 产出（OUT）：pm_gate/artifacts/k2_v4/L6/jlc_package/
   01_gerber_rs274x/  8 铜层 + 阻焊F/B + 丝印F/B + 边框 + .gbrjob
   02_drill_excellon/ Excellon（通孔 + HDI 盲埋孔分对）+ drill map svg + drill_report.txt
-  03_stackup/        JLC08161H_stackup.svg（由 SPEC rev-53 叠层确定性绘制）+ HDI_stage_diagram.svg（l8 as-built）
+  03_stackup/        JLC08161H_stackup.svg（由 SPEC rev-54 叠层确定性绘制）+ HDI_stage_diagram.svg（l8 as-built）
   04_impedance/      impedance_table.{md,json}（冻结 CO-146 表 + l8 as-built 几何复验）
   05_layer_sequence.txt
   06_rulings/        L2 裁定副本（逐字节 parity）+ jlc_dfm_hdi_l8.{json,md}
@@ -25,10 +25,11 @@ K2 = ROOT / "k2"
 CLI = ROOT / "AppDir/bin/kicad-cli"
 BOARD = K2 / "hw/k2_v4_8L.l8.kicad_pcb"
 PRO = K2 / "hw/k2_v4_8L.l8.kicad_pro"
-SPEC = K2 / "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-53.json"
+SPEC = K2 / "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-54.json"
 BOOK = K2 / "pm_gate/artifacts/k2_v4/L4/E3-standard-call-l8-20260921"
 FROZEN_PKG = K2 / "pm_gate/artifacts/k2_v4/L5/jlc_package"
-OUT = K2 / "pm_gate/artifacts/k2_v4/L6/jlc_package_l8"
+OUT = K2 / "pm_gate/artifacts/k2_v4/L6/jlc_package_l8r2"
+assert OUT.name == "jlc_package_l8r2", "FAIL-CLOSED: l8r2 生成器不得指向冻结包 l8 (#K2-59 R2-1)"
 CANON_DATE = "2026-09-19T00:00:00+08:00"
 TS_PAT = re.compile(r"\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}:\d{2}(?:[+-]\d{2}:\d{2})?")
 COPPER = ["F.Cu", "In1.Cu", "In2.Cu", "In3.Cu", "In4.Cu", "In5.Cu", "In6.Cu", "B.Cu"]
@@ -249,17 +250,17 @@ def delivery_record_doc() -> dict:
     ge = json.loads((OUT / "07_verify/gerber_extents.json").read_text())
     silk = json.loads((OUT / "07_verify/silk_overhang.json").read_text())
     anc = json.loads((OUT / "07_verify/anchor_selfcheck.json").read_text())
-    doc = K2 / "docs/K2-P5-DELIVERY-RECORD-l8-v1.md"
+    doc = K2 / "docs/K2-P5-DELIVERY-RECORD-l8r2-v1.md"
     doc.write_text(f"""# K2 · **P5 交付记录**（受审板 `{man['board_sha16']}`）· **由构建器生成**（勿手改）· 2026-09-20
 
 > 依据：#K2-36（P4 关门=通过 · P5 放行=批准）+ owner #14③。机读锚见包内 `MANIFEST.json`；本件为索引/记录，随构建刷新。
 
 ## 0. 一句话
-`k2/pm_gate/artifacts/k2_v4/L6/jlc_package_l8/`（**{man['n_files']} 件 + `MANIFEST.json`**）
+`k2/pm_gate/artifacts/k2_v4/L6/jlc_package_l8r2/`（**{man['n_files']} 件 + `MANIFEST.json`**）
 · `MANIFEST.json` sha256 **`{sha256(OUT / 'MANIFEST.json')}`**
 · DFM 对 JLC HDI 通道 **{man['dfm_summary']['pass']} PASS / {man['dfm_summary']['accept']} ACCEPT / {man['dfm_summary']['fail']} FAIL**
 · N-01 平面层 4/4 `G36>0` · 钻孔 {man['drill_total']} 孔 · kicad-cli {man['kicad_version']}
-· 交付封装 `L6/DELIVERY_l8/k2_v4_8L.l8_gerber_package.tar.gz`（见其 README/SHA256SUMS）
+· 交付封装 `L6/DELIVERY_l8r2/k2_v4_8L.l8r2_gerber_package.tar.gz`（见其 README/SHA256SUMS）
 
 ## 1. 交付物
 `01_gerber_rs274x/`（8 铜层 + 阻焊 F/B + 丝印 F/B + 边框 + `.gbrjob`）· `02_drill_excellon/`（Excellon **含 HDI 盲埋孔分对** + drill map + report）·
@@ -267,7 +268,7 @@ def delivery_record_doc() -> dict:
 `06_rulings/`（L2 裁定副本 parity=真 · `jlc_dfm_hdi_l8.{{json,md}}`）· `07_verify/`（**9 件验证**）· `DISCLOSURE.md` · `ORDER_NOTES.md` · `MANIFEST.json`
 
 ## 2. 锚
-受审板 `{man['board']}` **`{man['board_sha16']}`** · pro `{man['pro_sha16']}` · SPEC rev-53 `{anc['spec']['sha256'][:16]}` ·
+受审板 `{man['board']}` **`{man['board_sha16']}`** · pro `{man['pro_sha16']}` · SPEC rev-54 `{anc['spec']['sha256'][:16]}` ·
 判据 **rev=6（COUNTERSIGNED）**：`727d0995…`/`1937a40a…`/`eb3da49f…`（ENG 只读）· 冻结四源未动（见 `07_verify/anchor_selfcheck.json`）。
 
 ## 3. DFM（对 JLC HDI 通道）
@@ -294,7 +295,7 @@ ACCEPT（1 项）= 阻焊坝 9 处 <0.09mm → `ACCEPT_L2_WITH_FAB_REVIEW`（承
 
 ## 7. 复现
 ```
-PYTHONPATH=AppDir/shared/lib/python3.11/dist-packages AppDir/bin/python3.11 k2/tools/k2_p5_jlc_package_l8_v1.py
+PYTHONPATH=AppDir/shared/lib/python3.11/dist-packages AppDir/bin/python3.11 k2/tools/k2_p5_jlc_package_l8r2_v1.py
 ```
 
 ## 8. 边界
@@ -306,7 +307,7 @@ PYTHONPATH=AppDir/shared/lib/python3.11/dist-packages AppDir/bin/python3.11 k2/t
 def delivery_wrapper() -> dict:
     """交付封装（确定性 tarball + SHA256SUMS + README），供手工交接。"""
     import gzip, io, tarfile
-    d = K2 / "pm_gate/artifacts/k2_v4/L6/DELIVERY_l8"
+    d = K2 / "pm_gate/artifacts/k2_v4/L6/DELIVERY_l8r2"
     d.mkdir(parents=True, exist_ok=True)
     sums = [f"{sha256(q)}  {q.relative_to(OUT.parent)}" for q in sorted(OUT.rglob("*")) if q.is_file()]
     fixed = 1789830000  # 固定 mtime ⇒ 逐字节可复现
@@ -315,25 +316,25 @@ def delivery_wrapper() -> dict:
         for q in sorted(OUT.rglob("*")):
             if not q.is_file():
                 continue
-            ti = tf.gettarinfo(str(q), arcname="k2_v4_8L.l8_gerber_package/" + str(q.relative_to(OUT)))
+            ti = tf.gettarinfo(str(q), arcname="k2_v4_8L.l8r2_gerber_package/" + str(q.relative_to(OUT)))
             ti.mtime, ti.uid, ti.gid, ti.uname, ti.gname, ti.mode = fixed, 0, 0, "root", "root", 0o644
             with open(q, "rb") as fh:
                 tf.addfile(ti, fh)
-    tgz = d / "k2_v4_8L.l8_gerber_package.tar.gz"
+    tgz = d / "k2_v4_8L.l8r2_gerber_package.tar.gz"
     with open(tgz, "wb") as fh:
         with gzip.GzipFile(fileobj=fh, mode="wb", mtime=0, compresslevel=9) as gz:
             gz.write(buf.getvalue())
-    sums.append(f"{sha256(tgz)}  DELIVERY_l8/{tgz.name}")
+    sums.append(f"{sha256(tgz)}  DELIVERY_l8r2/{tgz.name}")
     (d / "SHA256SUMS.txt").write_text("\n".join(sums) + "\n")
     man = json.loads((OUT / "MANIFEST.json").read_text())
     (d / "README.md").write_text(
-        "# K2 P5 交付封装 — `k2_v4_8L.l8`（受审板 `7a5c89913d6e5d0a`）\n\n"
+        "# K2 P5 交付封装 — `k2_v4_8L.l8r2`（受审板 `7a5c89913d6e5d0a`）\n\n"
         "| 件 | 说明 |\n|---|---|\n"
-        f"| `k2_v4_8L.l8_gerber_package.tar.gz` | 完整交付包（= `../jlc_package_l8/`，{man['n_files']} 件 + MANIFEST.json） |\n"
+        f"| `k2_v4_8L.l8r2_gerber_package.tar.gz` | 完整交付包（= `../jlc_package_l8r2/`，{man['n_files']} 件 + MANIFEST.json） |\n"
         "| `SHA256SUMS.txt` | 逐件 sha256（相对 `L6/`） |\n"
-        "| `../jlc_package_l8/MANIFEST.json` | 机读 MANIFEST（board/pro sha · 命令 · 件表 · DFM 汇总） |\n"
-        "| `../jlc_package_l8/ORDER_NOTES.md` | 制造备注（JLC HDI 通道） |\n"
-        "| `../jlc_package_l8/DISCLOSURE.md` | 具名披露（170 warning / OUT #5 / F-9 / L-1 / P5 新项） |\n\n"
+        "| `../jlc_package_l8r2/MANIFEST.json` | 机读 MANIFEST（board/pro sha · 命令 · 件表 · DFM 汇总） |\n"
+        "| `../jlc_package_l8r2/ORDER_NOTES.md` | 制造备注（JLC HDI 通道） |\n"
+        "| `../jlc_package_l8r2/DISCLOSURE.md` | 具名披露（170 warning / OUT #5 / F-9 / L-1 / P5 新项） |\n\n"
         f"- DFM 对 JLC HDI 通道：**{man['dfm_summary']['pass']} PASS / {man['dfm_summary']['accept']} ACCEPT / "
         f"{man['dfm_summary']['fail']} FAIL**；N-01：平面层 4/4 `G36>0`；钻孔 {man['drill_total']} 孔。\n"
         "- 判据锚 rev=6 · 冻结四源未动 · 打包确定性（固定 mtime/uid/gid ⇒ tar sha 可复现）。\n"
@@ -552,20 +553,20 @@ def impedance_asbuilt() -> dict:
 
 
 def impedance_rebase(spec: dict) -> dict:
-    """冻结 CO-146 表 + l8 as-built 几何复验（几何源 = SPEC rev-53 per_layer）。"""
+    """冻结 CO-146 表 + l8 as-built 几何复验（几何源 = SPEC rev-54 per_layer）。"""
     src = json.loads((FROZEN_PKG / "04_impedance/impedance_table.json").read_text())
     ab = impedance_asbuilt()
     out = dict(src)
-    out["artifact"] = "k2_p5_impedance_table_l8"
-    out["revision"] = "P5-L8.1"
+    out["artifact"] = "k2_p5_impedance_table_l8r2"
+    out["revision"] = "P5-L8.2"
     out["nature"] = ("85Ω 差分阻抗表（**冻结 CO-146 表**（两模型 M1 IPC-2141 族 / M2 HJ+Cohn）+ "
-                     "**l8 as-built 几何复验**）；几何源 = SPEC rev-53 impedance.per_layer（与 rev-19 逐值同，已复核）")
+                     "**l8 as-built 几何复验**）；几何源 = SPEC rev-54 impedance.per_layer（与 rev-19 逐值同，已复核）")
     out["source"] = dict(src.get("source", {}))
     out["source"].update({"spec": SPEC.name, "spec_sha16": sha16(SPEC), "board": BOARD.name,
                           "board_sha16": sha16(BOARD),
                           "frozen_table_src": "L5/jlc_package/04_impedance/impedance_table.json"})
     out["as_built_l8"] = ab
-    out["as_built_verdict"] = "geometry_matches_spec_rev53_per_layer"
+    out["as_built_verdict"] = "geometry_matches_spec_rev54_per_layer"
     out["as_built_note"] = ("耦合主 run（夹角≤10° ∧ 重叠≥0.10mm ∧ 中心距≤1.5mm）："
                             "In2/In5 净距 min/中位 0.3400mm、max 0.4400mm（= SPEC 窗精确）；"
                             "F.Cu 中位 0.395mm ∈ 窗内，**最紧 0.2825mm 低于窗下界 4.24%（具名，PCIE_UP3 逃逸域真平行段）** ⇒ "
@@ -575,12 +576,12 @@ def impedance_rebase(spec: dict) -> dict:
 
 def imp_md(imp: dict) -> str:
     rows = imp["rows"]
-    lines = ["# K2 P5 · 85Ω 差分阻抗表（受审板 l8 / SPEC rev-53 / JLC08161H）", "",
+    lines = ["# K2 P5 · 85Ω 差分阻抗表（受审板 l8 / SPEC rev-54 / JLC08161H）", "",
              f"- 目标 **{imp['target_zdiff']}Ω ±{imp['tolerance_pct']}%** ⇒ 窗口 "
              f"{imp['window_ohm'][0]:.1f}–{imp['window_ohm'][1]:.1f}Ω",
              f"- board `{imp['source']['board_sha16']}` · SPEC `{imp['source']['spec_sha16']}` · 判据锚 rev=6",
              "- 模型：M1 = IPC-2141 族（复现 SPEC 一阶）；M2 = Hammerstad–Jensen + Cohn（独立交叉）",
-             "- 几何源 = SPEC rev-53 `impedance.per_layer`；**l8 as-built 复验见下表末**", "",
+             "- 几何源 = SPEC rev-54 `impedance.per_layer`；**l8 as-built 复验见下表末**", "",
              "| 层 | 类型 | w (mm) | 对内净距 (mm) | h/b (mm) | er | Zdiff M1 (Ω) | Zdiff M2 (Ω) | ±10% |",
              "|---|---|---|---|---|---|---|---|---|"]
     for r in rows:
@@ -624,9 +625,9 @@ def imp_md(imp: dict) -> str:
 
 def order_notes(dfm: dict, imp: dict, drill: dict) -> str:
     g = dfm["as_built"]
-    return f"""# JLC（嘉立创）8 层打样**制造备注** — k2_v4_8L.l8
+    return f"""# JLC（嘉立创）8 层打样**制造备注** — k2_v4_8L.l8r2
 
-> 生成：tools/k2_p5_jlc_package_l8_v1.py｜受审板 `{dfm['board']['sha16']}`｜SPEC rev-53｜判据锚 rev=6
+> 生成：tools/k2_p5_jlc_package_l8r2_v1.py｜受审板 `{dfm['board']['sha16']}`｜SPEC rev-54｜判据锚 rev=6
 > 定值来源：监理指令 #10 定值表 + **owner #14 工艺冻结 A**（JLC HDI 盲埋孔 ≥2 阶）
 
 ## 1. 制造参数
@@ -801,14 +802,14 @@ def main() -> int:
     for p in sorted(OUT.rglob("*")):
         if p.is_file() and p.name != "MANIFEST.json":
             files[str(p.relative_to(OUT))] = {"sha256": sha256(p), "bytes": p.stat().st_size}
-    man = {"artifact": "k2_p5_jlc_fab_package_l8", "schema": 1, "revision": "P5-L8.1",
+    man = {"artifact": "k2_p5_jlc_fab_package_l8r2", "schema": 1, "revision": "P5-L8.2",
            "nature": "P5 交付包（#K2-36 P5 放行 · owner #14③ 完工定义）",
            "board": BOARD.name, "board_sha16": sha16(BOARD), "pro_sha16": sha16(PRO),
            "kicad_version": run([str(CLI), "--version"]).strip(),
            "criteria_anchor": "rev=6",
            "commands": {"gerber": "kicad-cli pcb export gerbers --board-plot-params --no-x2 --layers " + PLOT_LAYERS,
                         "drill": "kicad-cli pcb export drill --format excellon --excellon-units mm --generate-map --map-format svg --generate-report --report-path 02_drill_excellon/drill_report.txt",
-                        "build": "PYTHONPATH=AppDir/shared/lib/python3.11/dist-packages AppDir/bin/python3.11 k2/tools/k2_p5_jlc_package_l8_v1.py"},
+                        "build": "PYTHONPATH=AppDir/shared/lib/python3.11/dist-packages AppDir/bin/python3.11 k2/tools/k2_p5_jlc_package_l8r2_v1.py"},
            "canonicalization": {"date_pattern": TS_PAT.pattern, "replacement": CANON_DATE,
                                 "files_normalized": exp["n_normalized"]},
            "dfm_summary": {"pass": dfm["n_pass"], "accept": dfm["n_accept"], "fail": dfm["n_fail"]},

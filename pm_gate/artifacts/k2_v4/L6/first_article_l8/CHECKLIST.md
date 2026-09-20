@@ -1,6 +1,6 @@
 # K2 P5 · **首件验收 检查表**（人读 · 与 `results_template.json` 一一对应）
 
-板 `k2_v4_8L.l8.kicad_pcb` `7a5c89913d6e5d0a` · 交付锚 `MANIFEST.json` `4b610baed4f4752c…` · 实测方：__________ 日期：__________
+板 `k2_v4_8L.l8.kicad_pcb` `7a5c89913d6e5d0a` · 交付锚 `MANIFEST.json` `19d637c4e9ed35be…`（`P5-L8.2`） · 实测方：__________ 日期：__________
 
 ## 环境/仪器（先填）
 | 项 | 值 |
