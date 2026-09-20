@@ -157,6 +157,49 @@
    "map_k2": "无",
    "fix_family": "确认设计意图后决定：接 CT 电容（设定压摆）· PG 接 MCU（或用则接 GND）",
    "note": "与 K1-D8 同源（②补充件定义不全）；**不阻塞**，随 K1-D8 一并处置。"
+  },
+  {
+   "id": "K1-D10",
+   "severity": "高（**声明/实现不符·同 K1-S4 家族**）",
+   "title": "U8 声明为 **TPS54628（裸 IC·SO PowerPAD-8）**，实现却是 **6 脚模块式符号 `DCDC_12V_5V`**",
+   "readings": [
+    "`k1_board.yaml#devices.U8`：`value=TPS54628` · `function=『12V→5V 主 buck (TPS54628, 6A 同步, 650kHz, SO PowerPAD-8)』`",
+    "实现：placement 用 symbol `DCDC_12V_5V`（6 脚：VIN/VOUT/GND/EN/SW/FB；**`nc=[SW,FB]`**），footprint = 通用 `SOIC-8_5.3x5.3mm_P1.27mm`（**无 PowerPAD/EP**）",
+    "手册（**sha256 校验与在册同版** `638ae7d8504d9b44…`）：TPS54628 DDA **8 脚 + EP**，pin = 1 EN · 2 VFB · 3 VREG5 · 4 SS · 5 **GND** · 6 SW · 7 VBST · 8 **VIN**，EP→GND",
+    "**若按裸 IC 判定**：板映射与之**严重不符** — pad **5=GND 却被接 `PWR_5V_MAIN`** · pad **8=VIN 未接** · pad 1=EN 未接（未上拉 ⇒ 不使能）· pad 2=VFB 接 GND（反馈短地）· pad 4=SS 接 `12V_IN` · pad 6=SW 接 `12V_IN`；且缺 VBST/SS/VREG5 外围",
+    "**根因**：生成器 `k1_sch_sync_v1.py` 的 `U8_OLD→U8_NEW` 只把**真源 value** 由 `DCDC_12V_5V` 改为 `TPS54628`，**未同步原理图符号/footprint/外围**"
+   ],
+   "impact": "① 若实装 TPS54628（裸 IC）⇒ **buck 不工作/地脚接输出轨（严重）**；② 若实装模块 ⇒ **声明/功能/BOM 与实件不符**（采购与装配歧义）。二者必有其一为真。",
+   "map_k2": "与 **U12/K1-S4** 同族（声明改件、实现未跟）",
+   "fix_family": "二择一（**设计决策·须授权**）：(a) 按 TPS54628 重建符号/封装（8 脚+EP）+ 补 VBST 电容/SS 电容/VREG5 电容/电感/FB 分压；(b) 回退声明为实装模块并把 `function/BOM` 改回模块型号。",
+   "note": "**本会话新发现**（系统普查所得，先前未登）。"
+  },
+  {
+   "id": "K1-D11",
+   "severity": "高（**接口级：CC 电流宣告**）",
+   "title": "R35/R36 声明 **10K**（CC Rp → 3A 宣告），实现符号却是 **`R_56K`（56K）**",
+   "readings": [
+    "`k1_board.yaml#devices.R35/R36.value = 10K`；且生成器 `PWR_NEW` 明写 *『CC1/CC2 经 R35/R36 (10K) Rp 上拉 → **3A 宣告**』*（`PWR_OLD` 为 56K）",
+    "实现：placement 用 symbol `R_56K`（value **56K**）——**即上拉 56K**",
+    "Type-C 语义：CC Rp **56K** ⇒ 默认电流档（~500/900 mA）；**10K** ⇒ 3 A ⇒ 与需求冻结的『3A 宣告』不符"
+   ],
+   "impact": "原理图/BOM 与需求冻结的**电流宣告档位**不一致（装配 56K ⇒ 主机按默认电流供电）。",
+   "map_k2": "无直接同族（K2 无 CC Rp 改动）",
+   "fix_family": "把 R35/R36 实现符号改为 **10K**（有 `R_10K` 现成符号）——**须授权**（属实现侧修正，非新判据）。",
+   "note": "**本会话新发现**（系统普查所得，先前未登）。"
+  },
+  {
+   "id": "K1-D12",
+   "severity": "中（**元缺陷：漂移机制**）",
+   "title": "『声明/实现漂移』机制：`k1_sch_sync_v1.py` 只改 yaml 真源、**不改原理图符号**",
+   "readings": [
+    "普查（`k1_declared_vs_impl_census_v1.py`）：**11/42 件** 声明值或 footprint 与实现符号不一致 = J1 · J10 · Q1 · Q2 · R35 · R36 · R38 · R39 · U12 · U13 · U8",
+    "生成器 docstring 自述：*『除 `k1_board.yaml`/`k1_nets.yaml` 外不写任何文件』*；全仓**无工具写 `k1/sch/*.kicad_sch`**（见 K1-S5）"
+   ],
+   "impact": "任何 ②同步（改 value/footprint）都会**静默留下**原理图侧陈旧 ⇒ 同源对账（J-6）长期不过。",
+   "map_k2": "K2 侧同问题已由 `k2/tools/k2_sch_gen_v1.py` + 共享 `schlib`（由真源再生）解决",
+   "fix_family": "K1 侧引入**同构再生器**（共享 `schlib` 已实测可驱动 K1）+ 把『声明/实现一致』纳入 N-3 验收核（已备）。",
+   "note": "机制级归纳：**K1-S1/S2/S4/S6 + K1-D10 + K1-D11 皆为此机制的表现**。"
   }
  ],
  "summary": {
@@ -168,11 +211,28 @@
   ],
   "mechanism_family_already_proposed": "见 K1_MECHANISM_COVERAGE_BUNDLE_PROPOSAL_v1.json（3 件 · 镜像实测 n_pass 5→8）",
   "not_a_defect": "K1-D5（未布线中间态）",
-  "n_items": 9,
+  "n_items": 12,
   "added_this_session": [
    "K1-D8",
    "K1-D9"
-  ]
+  ],
+  "systematic_census": {
+   "tool": "k2/docs/drafts/n3-k1-sch-regen-v1/k1_declared_vs_impl_census_v1.py",
+   "result": "11/42 件声明/实现漂移",
+   "refs": [
+    "J1",
+    "J10",
+    "Q1",
+    "Q2",
+    "R35",
+    "R36",
+    "R38",
+    "R39",
+    "U12",
+    "U13",
+    "U8"
+   ]
+  }
  },
  "boundary": "只读工作清单**提案**：未改 `k1/` 任何文件；修法均属 K1 项目改动（placement/板级设计）⇒ 需 K1 授权；**未新增判据维/检查齿**（owner ②）。",
  "readonly_repo": true,
@@ -183,6 +243,10 @@
   {
    "at": "2026-09-22T08:10:00+0800",
    "what": "新增 K1-D8（Q1/U12 VBIAS 未接·功能级）与 K1-D9（CT/PG 观察）。**依据 = 通过 sha256 校验确认与在册同版的手册 pin table + 板 pad 直读 + 脚号交叉验证**。"
+  },
+  {
+   "at": "2026-09-22T08:45:00+0800",
+   "what": "系统普查新增 K1-D10(U8 声明/实现不符) · K1-D11(R35/R36 10K vs 56K) · K1-D12(漂移机制)。"
   }
  ]
 }

@@ -70,6 +70,28 @@
     "N3_K1_SCH_REGEN_EXECUTABILITY_20260921_v1.json（含 N3-G5）",
     "手册 pinned：tps22990.pdf sha256 ea198776… · tps22965.pdf sha256 3300eef7…（与在册 doc_sha256 同）"
    ]
+  },
+  {
+   "id": "**K1-D10/D11/D12（新·系统普查所得）**",
+   "title": "**K1『声明/实现漂移』族**：U8(TPS54628 vs 6脚模块) · R35/R36(10K vs 56K) · 及机制性根因",
+   "facts": [
+    "普查工具（可复现）：`k1_declared_vs_impl_census_v1.py` ⇒ **11/42 件**漂移：J1·J10·Q1·Q2·R35·R36·R38·R39·U12·U13·U8。",
+    "**U8（K1-D10）**：声明 `TPS54628`（手册 8 脚+EP：1 EN·2 VFB·3 VREG5·4 SS·**5 GND**·6 SW·7 VBST·**8 VIN**），实现为 6 脚模块符号 `DCDC_12V_5V`（SW/FB 显式 NC）。**若按裸 IC 判定，板映射严重不符**（pad5=GND 接在 `PWR_5V_MAIN`、pad8=VIN 未接、EN 未上拉、VFB 短地…）。",
+    "**R35/R36（K1-D11）**：声明/生成器均写 **10K**（*『CC Rp → 3A 宣告』*），实现符号却为 **`R_56K`（56K）** ⇒ 电流宣告档位不符。",
+    "**机制（K1-D12）**：`k1_sch_sync_v1.py` **只改 yaml 真源、不改原理图符号**（且全仓无工具写 `k1/sch/*.kicad_sch`）⇒ 每次 ②同步都会静默留下原理图侧陈旧。**K1-S1/S2/S4/S6 与 D10/D11 皆此机制的表现。**"
+   ],
+   "impact": "U8 存在『buck 不可工作』与『声明与实件不符』二择一为真；R35/R36 影响 Type-C 电流宣告；机制层面 ⇒ K1 同源对账长期不过。",
+   "options": [
+    "U8：(a) 按 TPS54628 重建符号/封装+补外围 或 (b) 回退声明为实装模块",
+    "R35/R36：把实现符号改为 10K（现成 R_10K）",
+    "机制：K1 引入共享 schlib 同构再生器（N-3）并纳入已备验收核"
+   ],
+   "eng_recommend": "**U8 走 (b) 或 (a) 需监理/owner 定件**（属**选件决策**，ENG 不自定）；R35/R36 改 10K（与需求冻结一致）；机制随 N-3 一并解决。",
+   "evidence": [
+    "K1_BOARD_LEVEL_DEFECT_WORKLIST_20260921_v1.json（含 D10/D11/D12）",
+    "k1_declared_vs_impl_census_v1.py（可复现普查）",
+    "手册 sha256 校验：tps54628 `638ae7d8504d9b44…`"
+   ]
   }
  ],
  "readonly_repo": true,
