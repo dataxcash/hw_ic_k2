@@ -27,7 +27,7 @@
 | 现场检查表 | `k2/pm_gate/artifacts/k2_v4/L6/first_article_l8/CHECKLIST.md` | `f58ca379dab41cbe` |
 | 回填模板（8 项 · criterion/measured/evidence/status） | `k2/pm_gate/artifacts/k2_v4/L6/first_article_l8/results_template.json` | `6b510775339bdc11` |
 | 测点自查（板直读 · **l8 复核**：12 refdes · 577 pad 对板 **0 不一致**（CR-54/55）） | `k2/pm_gate/artifacts/k2_v4/L6/first_article_l8/INSTRUMENT_SELFCHECK.json` | `540c9a55c66b053b` |
-| 验收计划（阈值来源） | `k2/docs/K2-P5-FIRST-ARTICLE-ACCEPTANCE-PLAN-v1.md` | `b002ec9829a53f12` |
+| 验收计划（阈值来源） | `k2/docs/K2-P5-FIRST-ARTICLE-ACCEPTANCE-PLAN-v1.md` | `5e7ee0598265a233` |
 
 **8 项与阈值**：V4 阻抗券 **85.0Ω ±10%**（须覆盖 0.6mm 中心几何 + 最紧 0.2825mm `PCIE_UP3`）· V5 PDN 压降 **≤3%** · V6-1 各轨 **±5%** · V6-2 SWD device ID（二值）· V6-3 FRU I2C 地址应答（二值）· V6-4 **双路 x4 Gen4 训练成功**（二值 + LTSSM 终态）· V6-5 **30min AER = 0** · V7 热 **Tj ≤ 120.0℃**（四工况；`Tj(U6) > 117.0℃` 或未按 O2 实施 ⇒ **T1 触发**开新 rev，目标 `θJA_eff ≤ 9.5℃/W`）。
 
