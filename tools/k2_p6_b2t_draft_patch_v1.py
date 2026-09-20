@@ -304,6 +304,62 @@ B1_NEW_1 = '''        _ls = [s["end_left"]["x"] for s in segs if "end_left" in s
         _rs = [s["end_right"]["x"] for s in segs if "end_right" in s]
         x_l = min(_ls) if _ls else None
         x_r = max(_rs) if _rs else None'''
+S1_EXTRA = [
+ # B4：_corridor_clear_span 形状校验
+ ('''
+        comps = self.spec.get("components") or {}
+        x0, x1 = corridor["x_range"]''',
+  '''
+        comps = self.spec.get("components") or {}
+        xr = corridor.get("x_range") or []
+        if not isinstance(xr, (list, tuple)) or len(xr) != 2:
+            raise ValueError(
+                "corridor.x_range 形状非法（预期 2 元素，fail-closed）: "
+                f"{corridor.get('id')!r}")
+        x0, x1 = float(xr[0]), float(xr[1])'''),
+ # B3：--capacity-map 总判 = worst-of(region, corridor)
+ ('''
+        bad_regions = [rid for rid, r in cap["regions"].items()
+                       if r.get("status") != "CAPACITY_OK"]''',
+  '''
+        bad_regions = [rid for rid, r in cap["regions"].items()
+                       if r.get("status") != "CAPACITY_OK"]
+        # B3（#K2-41 §三-③）：总判 = worst-of(region, corridor)；region 保留为子字段
+        bad_corridors = [cid for cid, c in cap["corridors"].items()
+                         if c.get("status") != "CAPACITY_OK"]'''),
+ ('''
+        print(json.dumps({"status": "CAPACITY_OK" if not bad_regions
+                          else "INSUFFICIENT",''',
+  '''
+        print(json.dumps({"status": "CAPACITY_OK" if not bad_regions
+                          and not bad_corridors else "INSUFFICIENT",
+                          "insufficient_corridors": bad_corridors,'''),
+ ('''        return 0 if not bad_regions else 1''',
+  '''        return 0 if (not bad_regions and not bad_corridors) else 1'''),
+ # B2：CLI 层包装（可机辨 rc=3）
+ ('''        res = m.solve_chain(args.chain)''',
+  '''        try:
+            res = m.solve_chain(args.chain)
+        except Exception as exc:   # B2：刻意 fail-closed 抛错 → CLI 机辨化
+            print(json.dumps({"status": "INFRA_ERROR", "error_kind": "SOLVER_RAISED",
+                              "error": f"{type(exc).__name__}: {exc}"}, ensure_ascii=False))
+            return 3'''),
+ ('''        res = m.solve_chain_v2(args.chain_v2)''',
+  '''        try:
+            res = m.solve_chain_v2(args.chain_v2)
+        except Exception as exc:   # B2
+            print(json.dumps({"status": "INFRA_ERROR", "error_kind": "SOLVER_RAISED",
+                              "error": f"{type(exc).__name__}: {exc}"}, ensure_ascii=False))
+            return 3'''),
+ ('''    res = m.solve_pair_segment(nets[0], nets[1])''',
+  '''    try:
+        res = m.solve_pair_segment(nets[0], nets[1])
+    except Exception as exc:       # B2
+        print(json.dumps({"status": "INFRA_ERROR", "error_kind": "SOLVER_RAISED",
+                          "error": f"{type(exc).__name__}: {exc}"}, ensure_ascii=False))
+        return 3'''),
+]
+
 B1_OLD_2 = '''            if xr and xr[0] <= x_r and xr[1] >= x_l:'''
 B1_NEW_2 = '''            if (xr and x_l is not None and x_r is not None
                     and xr[0] <= x_r and xr[1] >= x_l):'''
@@ -630,7 +686,8 @@ assert _root in _loaded.parents or _loaded.parent == _root, (
 def build(kind, tag=""):
     """kind ∈ {base,anchor,draft,draft_b1,negctl}（决定补丁行为）；
     tag 仅改树根名（用于确定性两跑），**不得**参与行为判定。"""
-    assert kind in ("base", "anchor", "draft", "draft_b1", "negctl", "diffbase")
+    assert kind in ("base", "anchor", "draft", "draft_b1", "negctl", "diffbase",
+                    "batch2", "batch2_mut")
     root = f"/tmp/opencode/b2t_{kind}{('_' + tag) if tag else ''}"
     shutil.rmtree(root, ignore_errors=True)
     patches = _shadow_tool().build_shadow(root, BOARD, apply_batch2=True)
@@ -639,7 +696,7 @@ def build(kind, tag=""):
     if kind != "base" and kind != "diffbase":
         assert text.count(ANCHOR_OLD) == 1, "alloc 锚块未命中"
         text = text.replace(ANCHOR_OLD, ANCHOR_NEW, 1)
-    if kind in ("draft", "draft_b1", "negctl"):
+    if kind in ("draft", "draft_b1", "negctl", "batch2", "batch2_mut"):
         for it in ITEMS:
             if it["old"]:
                 text = patch_fn(text, it["test"], it["old"], it["new"])
@@ -648,21 +705,24 @@ def build(kind, tag=""):
         for it in EXTRA_ITEMS:
             assert text.count(it["anchor"]) == 1, f'{it["id"]} anchor 未唯一命中'
             ins = it.get("text") or SYNTH_COVERAGE_CLS
-            if kind == "negctl":
+            if kind in ("negctl", "batch2_mut"):
                 ins = ins.replace(it["mut"][0], it["mut"][1], 1)
             text = text.replace(it["anchor"], ins + "\n\n" + it["anchor"], 1)
-    if kind == "negctl":
+    if kind in ("negctl", "batch2_mut"):
         for it in ITEMS:
             if it.get("mut"):
                 text = patch_fn(text, it["test"], it["mut"][0], it["mut"][1])
     open(tp, "w", encoding="utf-8").write(text)
     open(os.path.join(root, "shared/eda_core/tests/conftest.py"), "w", encoding="utf-8").write(CONFTEST)
-    if kind == "draft_b1":
+    if kind in ("draft_b1", "batch2", "batch2_mut"):
         hp = os.path.join(root, HW_REL)
         hs = open(hp, encoding="utf-8").read()
         assert hs.count(B1_OLD_1) == 1 and hs.count(B1_OLD_2) == 1, "B1 守卫补丁未命中"
-        open(hp, "w", encoding="utf-8").write(
-            hs.replace(B1_OLD_1, B1_NEW_1, 1).replace(B1_OLD_2, B1_NEW_2, 1))
+        hs = hs.replace(B1_OLD_1, B1_NEW_1, 1).replace(B1_OLD_2, B1_NEW_2, 1)
+        for _o, _n in S1_EXTRA:            # B2/B3/B4（#K2-41 §三-②③）
+            assert hs.count(_o) == 1, f"S1 补丁锚未命中: {_o[:40]!r}"
+            hs = hs.replace(_o, _n, 1)
+        open(hp, "w", encoding="utf-8").write(hs)
     return root, patches, text
 
 
