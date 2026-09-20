@@ -42,11 +42,15 @@ CALL_RE = re.compile(r'(artifacts\.(?:read_text|list_dir|path|file_exists)\((?:[
 
 
 def _patch(rel, old, new, patches, root):
+    """幂等落补丁：源已含 new（批 2 已落真源）⇒ 记为 already_applied，不再改写。"""
     p = os.path.join(root, "shared", rel)
     s = open(p, encoding="utf-8").read()
-    assert old in s, f"PATCH MISS {rel}"
+    if old not in s:
+        assert new in s, f"PATCH MISS {rel}（既无 old 也无 new）"
+        patches.append({"file": rel, "note": "already_applied（批 2 已落真源）"})
+        return
     open(p, "w", encoding="utf-8").write(s.replace(old, new, 1))
-    patches.append({"file": rel, "note": new if False else rel})
+    patches.append({"file": rel, "note": rel})
 
 
 def build_shadow(root: str, board_abs: str, apply_batch2: bool) -> list:
@@ -56,6 +60,9 @@ def build_shadow(root: str, board_abs: str, apply_batch2: bool) -> list:
     for n in ("AppDir", "k2", "criteria", "k1", ".omo"):
         os.symlink(os.path.join(REPO, n), os.path.join(root, n))
     os.symlink(os.path.join(root, "shared"), os.path.join(root, "_shared"))
+    # C-19：pytest 现以 cwd=影子树根 运行，而 AppDir python 会**重写 PYTHONPATH**
+    # ⇒ 影子树根须自带 `eda_core`（指向**影子自己的** shared/eda_core，provenance 正确）。
+    os.symlink(os.path.join(root, "shared", "eda_core"), os.path.join(root, "eda_core"))
     patches: list = []
 
     if apply_batch2:
@@ -76,8 +83,11 @@ def build_shadow(root: str, board_abs: str, apply_batch2: bool) -> list:
                 j = s.index("\n", i) + 1
                 s = s[:j] + PROJ_HELPER + s[j:]
             open(p, "w", encoding="utf-8").write(s)
-            assert len(hits) >= expect
-            patches.append({"file": rel, "note": f"{note}（{len(hits)} 处）"})
+            # 口径：按**调用点总数**核（CALL_RE 对 `config.spec_name(_proj())` 这类双层括号不匹配，
+            # 该点已由显式 _patch 处理 ⇒ 此处只防「静默零命中」）
+            total = len(re.findall(r"artifacts\.(?:read_text|list_dir|path|file_exists)\(", s))
+            assert total >= expect, f"{rel}: 调用点 {total} < 期望 {expect}"
+            patches.append({"file": rel, "note": f"{note}（调用点 {total} 处）"})
         _patch("pm_gate/check_l3.py", 'artifacts.read_text("L3", "SPEC_k2_v4.json", project=_proj())',
                'artifacts.read_text("L3", config.spec_name(_proj()), project=_proj())', patches, root)
         patches[-1]["note"] = "B2-3a：check_l3 去硬编码 SPEC 名（经 project.yaml: spec_name）"
@@ -134,12 +144,30 @@ def gate_battery(root: str) -> dict:
     return out
 
 
+PROVENANCE_ASSERT = '''
+
+# ── C-19 fail-closed（批 2 落件）：断言被测 eda_core 来自影子树（防 cwd 导入真源）──
+import pathlib as _pl
+import eda_core as _eda  # noqa: E402
+_p_root = _pl.Path(__file__).resolve().parents[2]   # <shadow>/shared
+_p_loaded = _pl.Path(_eda.__file__).resolve()
+assert _p_root in _p_loaded.parents or _p_loaded.parent == _p_root, (
+    f"eda_core 非影子副本: {_p_loaded} (期望在 {_p_root} 内)")
+'''
+
+
 def run_pytest(root: str) -> dict:
     env = {k: v for k, v in os.environ.items() if k not in ("PM_GATE_PROJECT_ROOT",)}
     env["PYTHONPATH"] = os.path.join(root, "shared")
+    cf = os.path.join(root, "shared", "eda_core", "tests", "conftest.py")
+    if os.path.isfile(cf) and "非影子副本" not in open(cf, encoding="utf-8").read():
+        with open(cf, "a", encoding="utf-8") as fh:
+            fh.write(PROVENANCE_ASSERT)
     cmd = [sys.executable, "-m", "pytest", "-q", "-rf", "-p", "no:cacheprovider",
            os.path.join(root, "shared", TEST_REL)]
-    proc = subprocess.run(cmd, cwd=REPO, capture_output=True, text=True, env=env, timeout=1800)
+    # C-19：cwd 必须 = 影子树根（容器根存在 eda_core -> _shared/eda_core 符号链接，
+    # 否则 import 命中真源、影子补丁静默失效）
+    proc = subprocess.run(cmd, cwd=root, capture_output=True, text=True, env=env, timeout=1800)
     text = re.sub(r"\s+in\s+[\d.]+s\s*$", "", proc.stdout, flags=re.M)
     m = re.search(r"(?:(\d+) failed, )?(\d+) passed(?:, (\d+) skipped)?", text)
     failed = re.findall(r"^FAILED \S+::(\S+)", text, re.M)

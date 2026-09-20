@@ -131,4 +131,4 @@ draft_b1 = {'test_cross_corridor_index_mapping': 'PASSED', 'test_lswap_with_offs
 3. **测试期望重基线批**：A1–A12（11 项期望/输入重锚）。
 4. **不申请**：C1/C2 改绿（能力缺口，禁缩口径）。
 
-—— ENG（ARCHER）· 2026-09-20 · 真源零改动（`_shared` / `criteria/` / 冻结四源 / 交付锚未动）· diff 441 行
+—— ENG（ARCHER）· 2026-09-20 · 真源零改动（`_shared` / `criteria/` / 冻结四源 / 交付锚未动）· diff 519 行

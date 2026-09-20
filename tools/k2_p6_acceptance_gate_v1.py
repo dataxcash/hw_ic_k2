@@ -12,7 +12,9 @@
 
 模式：
   · 默认 = **现状报告**（授权前的自我体检；FAIL 属预期，不视为错误）
-  · `--expect-patched` = **变更后期望**：K1 ≥12 PASS、K2 ≥13 PASS、影子 pytest failed==0、零回退（fail-closed）
+  · `--expect-patched` = **变更后期望**：K1 ≥12 PASS、K2 ≥13 PASS、
+   影子 pytest 隐藏失败 == 具名例外 {C1 `test_board_level_consistency`, C2 `test_chain_no_pn_zero_spacing`}、
+   零回退（fail-closed）
 
 用法（容器根 ic_hw）：
   PYTHONPATH=AppDir/shared/lib/python3.11/dist-packages AppDir/bin/python3.11 k2/tools/k2_p6_acceptance_gate_v1.py [--expect-patched] [--no-shadow]
@@ -41,6 +43,9 @@ ANCHORS = {
     "board_frozen_l4": ("hw/k2_v4_8L.l4.kicad_pcb", "d4e81f647be7f980"),
 }
 
+
+# #K2-41 §三-④：唯二具名保持 RED 的能力缺口（D 腿期望值修正，非缩口径；重开条件 = D4 形态补齐）
+NAMED_HIDDEN_EXCEPTIONS = ("test_board_level_consistency", "test_chain_no_pn_zero_spacing")
 
 APP_PY = os.path.join(REPO, "AppDir", "bin", "python3.11")
 APP_DIST = os.path.join(REPO, "AppDir", "shared", "lib", "python3.11", "dist-packages")
@@ -147,6 +152,7 @@ def shadow_acceptance() -> dict:
     return {"k1_pass": sum(1 for v in k1.values() if v["status"] == "PASS"),
             "k2_pass": sum(1 for v in k2v4.values() if v["status"] == "PASS"),
             "pytest": py, "hidden_failures": len(d["pytest_shadow"]["failed_tests"]),
+            "failed_tests": sorted(d["pytest_shadow"]["failed_tests"]),
             "control_same": d["attribution"]["same_result"]}
 
 
@@ -180,8 +186,12 @@ def main() -> int:
         sh = doc.get("D_shadow") or {}
         if sh.get("error"):
             fails.append(f"D 影子验收未跑成：{sh['error']}")
-        elif sh.get("hidden_failures"):
-            fails.append(f"D 变更后期望：13 项隐藏失败清零（实测仍 {sh['hidden_failures']} 项）")
+        else:
+            # #K2-41 §三-④ 裁定：唯二具名例外 C1/C2（能力缺口，禁改绿）⇒ 期望值修正（非缩口径）。
+            named = sorted(sh.get("failed_tests") or [])
+            if named != sorted(NAMED_HIDDEN_EXCEPTIONS):
+                fails.append("D 变更后期望：隐藏失败须恰为具名例外 C1/C2 = "
+                             f"{sorted(NAMED_HIDDEN_EXCEPTIONS)}（实测 {named}）")
     doc["verdict"] = "FAIL" if fails else "PASS"
     doc["failures"] = fails
     doc["note"] = ("默认模式 = 现状体检（FAIL 属预期，供授权前自查）；加 --expect-patched 才是变更后 fail-closed 验收"

@@ -40,44 +40,44 @@
  },
  "C_framework_readings": {
   "k1": {
-   "fail": 14,
+   "fail": 4,
    "gates": {
     "check_g11": true,
     "check_g12": true,
     "check_g13": true,
     "check_g14": true,
-    "check_g15": false,
-    "check_g21": false,
-    "check_g22": false,
-    "check_g23": false,
-    "check_g24": false,
-    "check_g25": false,
-    "check_g26": false,
-    "check_g31": false,
-    "check_g32": false,
+    "check_g15": true,
+    "check_g21": true,
+    "check_g22": true,
+    "check_g23": true,
+    "check_g24": true,
+    "check_g25": true,
+    "check_g26": true,
+    "check_g31": true,
+    "check_g32": true,
     "check_g33": false,
-    "check_g34": false,
+    "check_g34": true,
     "check_g35": false,
     "check_g41": false,
     "check_g42": false
    },
-   "pass": 4
+   "pass": 14
   },
   "k2_v4": {
-   "fail": 6,
+   "fail": 4,
    "gates": {
     "check_g11": true,
     "check_g12": true,
     "check_g13": true,
     "check_g14": true,
-    "check_g15": false,
+    "check_g15": true,
     "check_g21": true,
     "check_g22": true,
     "check_g23": true,
     "check_g24": true,
     "check_g25": true,
     "check_g26": false,
-    "check_g31": false,
+    "check_g31": true,
     "check_g32": true,
     "check_g33": true,
     "check_g34": true,
@@ -85,25 +85,29 @@
     "check_g41": false,
     "check_g42": false
    },
-   "pass": 12
+   "pass": 14
   }
  },
  "C_regressions_vs_baseline": [],
  "D_shadow": {
   "control_same": true,
-  "hidden_failures": 13,
-  "k1_pass": 12,
-  "k2_pass": 13,
+  "failed_tests": [
+   "test_board_level_consistency",
+   "test_chain_no_pn_zero_spacing"
+  ],
+  "hidden_failures": 2,
+  "k1_pass": 14,
+  "k2_pass": 14,
   "pytest": {
-   "failed": 13,
-   "passed": 43,
+   "failed": 2,
+   "passed": 61,
    "skipped": 12
   }
  },
  "artifact": "k2_p6_acceptance_gate",
  "failures": [],
- "mode": "status_report",
- "note": "默认模式 = 现状体检（FAIL 属预期，供授权前自查）；加 --expect-patched 才是变更后 fail-closed 验收",
+ "mode": "expect_patched",
+ "note": "变更后验收：任一项不过即不得宣称完成（#K2-40 §四-5）",
  "readonly": true,
  "schema": 1,
  "verdict": "PASS"

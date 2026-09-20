@@ -1,0 +1,26 @@
+{
+ "alloc_entries": 34,
+ "anchor_consumers": [
+  "k2/_shared/eda_core/tests/test_hs_route_model.py::K2V4_ALLOC（B2-T 契约/结构类锚）"
+ ],
+ "artifact": "k2_b2t_pipeline_alloc_anchor",
+ "board_design_source_sha16": "fb07d25ac426ff84",
+ "content_sha16": "547c9513ff67b470",
+ "content_sha256": "547c9513ff67b47093c39b05d6c279bf4479e33ef4d28e4e06e2d1b05bfd254c",
+ "determinism": "两跑逐字节同：`extract_current_alloc()` 于 12:19 与 12:58 两次独立执行，输出 sha16 恒 547c9513ff67b470（= 本冻结件 content_sha16，落件 cp 后复核一致）。",
+ "engine_sha16_at_freeze": "8f9bd6c7fa033039",
+ "generation_md": "1) 载体内容 = `python3 k2/tools/k2_p6_b2t_draft_patch_v1.py` 的 `extract_current_alloc()`\n   （读 `k2/pm_gate/artifacts/k2_v4/L3/p3_real_board_e2e/p3_real_board_e2e_report.json`\n   的 `stages.alloc.alloc`，**不重跑**管线 ⇒ 不重建交付锚）。\n2) 本次落件命令：`python3 /tmp/opencode/apply_batch2_real_v1.py`\n3) 确定性：同一抽取器两跑逐字节同（sha16 恒 = 上述 content_sha16）。",
+ "limitations": "本体源自 Sept-9 P3 E2E 记录（其 board.sha256=f6273de6 ≠ 自记 sha_expected=6c387dff）；现行 8L 板（fb07d25a）运行期自建不可行（alloc 0 解 / capacity INFEASIBLE-TRACK）⇒ 以本冻结件为该语义的具名载体，**板身份差异已在册**（B2T_ANCHOR_CARRIER 已验证）",
+ "provenance": "k2/pm_gate/artifacts/k2_v4/L3/p3_real_board_e2e/p3_real_board_e2e_report.json#stages.alloc.alloc",
+ "retired_predecessor": "k2/pm_gate/artifacts/k2_v4/L3/model_solves/channel_alloc_v2/channel_alloc.json → 已标 RETIRED（见同目录 RETIRED.md）",
+ "role": "契约/结构类测试的具名冻结载体（#K2-41 §三-①(i)）",
+ "schema": 1,
+ "source_meta": {
+  "board": "/home/fila/jqdDev_2025/ic_hw/k2/k2_v4.kicad_pcb",
+  "board_sha256": "f6273de613f43d05555d12d6c3492b1e70f383761d8db5121f12b2ca0695af9a",
+  "input_fp": "5113681d4d3256f53d6b0e928d2945e2054c741aa8b484e9b3bd4f61c1fe7d64",
+  "note": "现行 pipeline（SolvePipeline.run_alloc）自产 alloc；非人工构造",
+  "source": "k2/pm_gate/artifacts/k2_v4/L3/p3_real_board_e2e/p3_real_board_e2e_report.json#stages.alloc.alloc"
+ },
+ "spec_rev52_sha16": "0bd52ed48e720b8c"
+}

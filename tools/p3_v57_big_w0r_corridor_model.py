@@ -1,4 +1,11 @@
 #!/usr/bin/env python3
+# ────────────────────────────────────────────────────────────────────────────
+# [批2·S4 血缘标注 · ARCHER 2026-09-20 · 零行为改动]
+# 类别    : HIST(历史分析/复现脚本)
+# 作者期板: k2/k2_v4.kicad_pcb（2026-09-16 起为 → hw/k2_v4_8L.kicad_pcb 的符号链接；sha16 fb07d25ac426ff84）
+# 别名风险: 无旧板身份字面量；重跑前须自核板身份（解析后 sha 随板文件而变）
+# 判定    : 仅标注，零行为改动（#K2-41 §三-⑤）
+# ────────────────────────────────────────────────────────────────────────────
 """W0-R — K2 corridor resource model, derived only from frozen upstream inputs.
 
 Revision W0R-FIX.1 closes the architect gaps W0R-G1/G2/G3 recorded in
