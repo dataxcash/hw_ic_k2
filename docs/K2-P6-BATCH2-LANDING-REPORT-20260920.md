@@ -76,4 +76,4 @@ K2 此前只有**单文件** PYTESTERS（`test_hs_route_model.py`）。本件首
 - **残留 31 项失败**（`base` 同有，**不在批 2 放行范围**）分布：`test_closure_check` 5 · `test_verify_checks` 6 · `test_redteam_evidence` 6 · `test_env_fingerprint` 4 · `test_verify_cli_cache` 4 · `test_verify_cli_smoke` 3 · `test_solve_pipeline` 1 · `test_hs_route_model` 2（= C1/C2）⇒ 建议入账为**套件级既有失败基线**交监理排期。
 - **21 项 skip 分类**：**17 项 = `k2_m9demo` 基线板不在库**（`test_hs_route_model` 12 · `test_ls_migration` 3 · `test_drc_locator` 2 ⇒ 比先前只知 `hs_route_model` 12 更广）+ 4 项其他（K2 真实工件缺失 ×2 · K2 真源数据缺失 ×1 · 影子树无 git HEAD ×1）。
 - **口径**：解释器必须 `AppDir/bin/python3.11`（ambient `python3` 会在 3 个模块 `ImportError: pcbnew`）；命令 `-m pytest -q --tb=no -p no:cacheprovider --junitxml=<out> shared/eda_core/tests/`；全量与单文件跑法结论一致（无顺序依赖差异）。
-- 机读：`P6_execution/SUITE_BASELINE_AND_BATCH2_DELTA_v1.json`（`c0992e5aa…`）。
+- 机读：`P6_execution/SUITE_BASELINE_AND_BATCH2_DELTA_v1.json`（`9e5ec990e…`）。
