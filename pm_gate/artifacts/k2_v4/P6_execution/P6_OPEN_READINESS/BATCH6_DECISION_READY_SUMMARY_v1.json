@@ -1,0 +1,55 @@
+{
+ "artifact": "k2_batch6_decision_ready_summary",
+ "schema": 1,
+ "purpose": "**一次裁定即可执行**：把批 6 全部实测证据收敛为『建议合并采用的一件』与『收益/风险/回滚/验收』，供监理直接放行；不再逐轮往返。owner 闸口 = 无（全为 L2/机制/批次面）。",
+ "recommended_package": {
+  "land_now": {
+   "file": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/BATCH6_DRAFT/BATCH6_LANDING_CANDIDATE_v4.patch",
+   "patch_sha16": "3ded8584bb74461f",
+   "target_sha16": "c9e1c3b4ca208482",
+   "git_apply_reproduced": true,
+   "content": "D-1…D-5 + ④零长段守卫 + ⑤端点对齐 + (d)对角线 + ⑥耦合 + VG 对级化 best_of(v2) + FIX-A/FIX-B 的 K1 域限定 + **R-10 退化候选守卫**",
+   "payoff": "K1 真值 **1/8 → 2/8**（新增 RX0/input，边缘净距 **0.2636**）· K2 零回归 · 层合法违规 0 · 无崩溃路径",
+   "verification_rehearsal": {
+    "verify_k2": "preflight+3 PASS",
+    "canonical_19": "19 OK/0 FAIL · verdict 190b73be0f728a56（+求解器导入陷阱证明解耦）",
+    "expect_patched": "PASS（A 4/4 · B PASS · C 14/14 回退 0 · D 14/14 · pytest 2F/61P/12S · hidden=2=C1/C2，与 pristine 逐项同）"
+   },
+   "risk": "低；唯一回归面（验收门 D 维 pytest）已实测零回归；canonical 19 已证与求解器解耦",
+   "rollback": "文件级 `git checkout`（一笔提交）"
+  }
+ },
+ "optional_asks_with_measured_payoff": [
+  {
+   "id": "(c) alloc 槽位重排",
+   "ask": "授权改 alloc（模型输入，pipeline 自产；非冻结件）：`PCIE_TX1_N.track_y 21.3→21.01`",
+   "measured": "**可清除 TX1.input 走廊阻塞**（失败面转移为段级 P/N −0.09）",
+   "immediate_payoff": "**0 段**（该段逃逸面未解）",
+   "note": "须与 R-8 更强形态同批才有兑现"
+  },
+  {
+   "id": "R-8 换层逃逸模板（A1）",
+   "ask": "立项：`_k1_escape` 新增换层候选形态",
+   "measured": "**可行**（引擎门 16/312 右端 + 12/324 左端）；**接入后即时收益 0 段**（2/8→2/8）",
+   "hard_constraint": "**必须置于既有候选之后**（置前实测 **2/8→1/8 负增益**：抢占既有 VG 解）",
+   "recommend": "**暂缓立项**，除非监理接受『先立项、收益待更强形态（两端协同/连续同向）兑现』"
+  },
+  {
+   "id": "R-8 A2：In1.Cu 入场",
+   "ask": "扩展 `_k1_escape` 场集含 In1",
+   "measured": "通过者**全含 In1 路线**，但**集成实验中未显现独立增益**（收益 0 直接来自形态而非 In1）",
+   "recommend": "与 A1 捆绑裁定（若 A1 缓，则 A2 同步缓）"
+  }
+ ],
+ "evidence_index": {
+  "落件候选": "BATCH6_LANDING_CANDIDATE_v4_THREE_VERIFICATIONS_v1.json · BATCH6_LANDING_REHEARSAL_ACCEPTANCE_v4.json · BATCH6_K2_REGRESSION_PRECHECK_v1.json",
+  "canonical19": "BATCH6_CANONICAL19_SOLVER_INDEPENDENCE_v1.json + k2_canonical19_solver_import_trap_v1.py",
+  "(c)": "BATCH6_C_ALLOC_REORDER_PROBE_v1.json · BATCH6_C_SLOT_ENUMERATION_v1.json",
+  "R-8": "BATCH6_R8_VIA_TEMPLATE_PROPOSAL_v1.json · …_REALSOLVE_v3_left/right.json · …_TWO_ENDS_SUMMARY_v1.json · …_INTEGRATION_SHADOW_v1.json",
+  "缺陷": "BATCH6_C_SLOT_ENUM_AND_ESCAPE_GUARD_DEFECT_v1.json（R-10）"
+ },
+ "invariants": "冻结四源未动（l4 `d4e81f64…` 等）· `criteria/` 只读 · 未落任何真源改动（`_shared` 仍 `02459f5`）· 阶段门未越 · 禁派 WORKER 遵守 · 临时仅 `/tmp/opencode`",
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-21T18:10:00+0800"
+}
