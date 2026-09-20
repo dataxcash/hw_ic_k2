@@ -1,0 +1,89 @@
+{
+ "artifact": "k2_pending_rulings_packet",
+ "schema": 1,
+ "purpose": "**决策包**：把当前全部待监理事项压成一页（问题 / 选项 / ENG 建议 / 不裁决的后果 / 证据指针），便于监理一次性裁定，避免逐轮往返。全部为 L2/机制/批次面，**owner 闸口 = 无**。",
+ "items": [
+  {
+   "id": "R-1",
+   "title": "修法批次：D-1…D-5 是否同批落件",
+   "question": "是否批准把 5 条机制缺陷同批修入 `_shared`（一笔提交，禁零散补丁）？",
+   "options": [
+    "全部同批（推荐）",
+    "仅 D-4（累积门）先落",
+    "暂不落"
+   ],
+   "recommend": "全部同批 + 5 条负控",
+   "if_not": "K1 段级读数继续虚高（3/8 假绿 vs 真值 1/8），任何批 6 优化都无可信度量",
+   "evidence": "BATCH6_PN_GATE_ROOTCAUSE_v1.json（D-1 逃逸门作用域 · D-2 量纲 · D-3 base/段级不一致 · D-4 累积门 · D-5 层合法性）"
+  },
+  {
+   "id": "R-2",
+   "title": "K2 回归口径",
+   "question": "D-1…D-5 落件后 K2 canonical 19 若不再逐字节同（已实测 FIX-A 使 K2 解对象 DN6→DN7），如何处理？",
+   "options": [
+    "先实测，再按结果裁定（推荐）",
+    "预先限定：只对 K1 维度启用（`v4_project_dim()` 已显式分派）",
+    "接受 K2 重基线（须另开 rev 与证据）"
+   ],
+   "recommend": "先实测 canonical 19；若移动，再按选项 2 限定 K1 维",
+   "if_not": "落件无法通过验收门槛（G-d 要求 canonical 19 不回退）",
+   "evidence": "BATCH6_FIX_K2_REGRESSION_PROBE_v1.json（pristine 1/18 DN6 shared=28 → FIX 后 DN7；阈值 0.175/0.174 使 0/18↔1/18 跳变）"
+  },
+  {
+   "id": "R-3",
+   "title": "(d) 范围与 SPEC 轨道扩展",
+   "question": "(d) 端点对齐的落地范围？是否授权扩 `SPEC.corridors[].bands[].tracks_y`（启用自由带新轨）？",
+   "options": [
+    "只做 (d) 引擎模板（不含 SPEC 变更）（推荐先做）",
+    "(d) + 授权扩 tracks_y 一并",
+    "暂不做 (d)"
+   ],
+   "recommend": "先 (d) 引擎模板（在**不改 SPEC**的前提下）；tracks_y 扩展另案",
+   "if_not": "批 6 无法产出任何真实增益（当前 (d) 有效增益 = 0）",
+   "evidence": "BATCH6_RESCOPE_AFTER_GATE_FIX_v1.json（旋转窗口 TX0/RX1=0、TX1=2.1、RX0=2.25）· BATCH6_CORRIDOR_FREEBAND_CENSUS_v1.json（`seg_tracks` 必须 ∈ `tracks_y`，否则 INFRA_ERROR）· BATCH6_D_VIA_SEARCH_NEGATIVE_v1.json（有界 via 搜索 = 0 增益）· 本轮实测：via 合法区充足（x∈[2,12],y∈[24.6,30] 各网 1230 点），但 **J1 THT 行竖直通道仅 0.15mm（需 0.29）不可穿越** ⇒ 绕行须走 x≥8.07 或 x≤5.53 的宽绕道 ⇒ **须引擎级模板 + via 搜索**，非手工候选可解。"
+  },
+  {
+   "id": "R-4",
+   "title": "批 5 放行",
+   "question": "`BATCH5_PATCHES/`（`drc_rules.py` ①② + `hs_route_model.py` ④ + `test_drc_rules.py` T）是否放行落件？",
+   "options": [
+    "同批放行（推荐）",
+    "暂缓"
+   ],
+   "recommend": "同批放行（① 会使 `test_pad_rotation_transform` 必红 ⇒ T 必须同批）",
+   "if_not": "K1 解析器（pad 角语义 + 无 net/空号 pad 入域 + 零长段拒）三个真缺陷保持未修",
+   "evidence": "BATCH5_PROPOSAL_v1.json + BATCH5_PATCHES/*.patch（含 dry-run 证据）"
+  },
+  {
+   "id": "R-5",
+   "title": "C-1 落件（判据维 source_of_truth）",
+   "question": "19 维 `source_of_truth` 声明是否按草案落件？2 维（无独立外部真源）需新落 `criteria/jlc_hdi_capability.yaml` + `criteria/parts_electrical_truth.yaml`。",
+   "options": [
+    "17 维先落 + 2 维另案（推荐）",
+    "19 维一次落（含新增两件 criteria）"
+   ],
+   "recommend": "17 维先落（实测 PASS），2 维另案（gate 属主动作）",
+   "if_not": "C-1 残面保持 open，P6-1/P6-2 完工判据缺输入",
+   "evidence": "C1_DIM_SOURCE_OF_TRUTH_PROPOSAL_v1.json；#K2-43 §二 C-1"
+  },
+  {
+   "id": "R-6",
+   "title": "监理侧自纠：`.ruling-ids` 空登记 + C-25 登记",
+   "question": "`.ruling-ids/k2-44/45/46/47` 均**无对应裁定文件**（k2-47 于 17:45:22 由 pid 1576928 登记后进程退出）⇒ 请监理自纠；并登记 **C-25**（段级 SOLVED fail-open 家族 D-1…D-5）。",
+   "options": [
+    "自纠 + 登记 C-25（推荐）",
+    "仅自纠"
+   ],
+   "recommend": "自纠 + 登记 C-25",
+   "if_not": "后续会话可能误把空登记当放行（历史事故同型：漏读/误读裁定）",
+   "evidence": "本会话 ledger 多笔；#K2-43 §四-⑤ 已就 k2-44/45/46 提示同型问题"
+  }
+ ],
+ "notes": [
+  "所有项均**未动**冻结四源、`criteria/`（ENG 只读）、SPEC、原理图、生成器；本会话仅追加证据件与 /tmp 影子。",
+  "ENG 侧无 owner 闸口事项；若监理判定某项属 L1（拓扑/接口/信号流向/球重映射）再升级 owner。"
+ ],
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-21T07:10:00+0800"
+}
