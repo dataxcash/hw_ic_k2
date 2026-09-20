@@ -1,0 +1,72 @@
+{
+ "artifact": "k2_defect_d1_led_polarity_and_polarity_census",
+ "schema": 1,
+ "ts": "2026-09-21T10:55:00+0800",
+ "id": "**缺陷（LOW-MED · 指示 LED 极性 + 丝印缺失）**：`D1` LED 符号脚号与所引 KiCad footprint 约定**不一致** ⇒ 疑反接；另附**全板极性/真相源普查**",
+ "severity": "**LOW-MED**（仅红色指示 LED 不亮；无功能/供电影响）· **附装配风险**：所用 footprint 副本**丢失全部丝印**（无极性标记）⇒ 贴装极性不可辨",
+ "finding": {
+  "id": "DEFECT-D1-1",
+  "chain": {
+   "① 项目符号": "`k2/hw/data/k2_sch.yaml` 之 `LED`：**`A → pin 1`（左）· `K → pin 2`（右）**",
+   "② 所引 footprint 之约定": "原理图声明 `footprint: LED_SMD:LED_0603_1608Metric`；**本机 KiCad 官方库**（`AppDir/share/kicad/footprints/LED_SMD.pretty/LED_0603_1608Metric.kicad_mod`）焊盘 = `1 (x=−0.7875)` / `2 (x=+0.7875)`，且其**丝印含阴极标记（竖条 + 三角尖）位于左侧**（渲染图证 `DEFECT_D1_LED_POLARITY_EVIDENCE_20260921_v1.png` · 见下）⇒ **pad1（左）= K（阴极）**（KiCad LED footprint 生成器 `SML_2terminal_chip_molded` 约定）",
+   "③ 板上": "`D1`（fp `ForgeOS:LED_0603_1608Metric` = 官方件之副本，焊盘同为 pad1 左 / pad2 右）：**pad1 → 网 `LED_A`** · pad2 → `GND`",
+   "④ 对照（同库内的反例）": "项目 `D_SCHOTTKY` 符号 = **`K → pin 1`**，与 `Diode_SMD:D_SMA`（pad1 = K）**约定相符** ⇒ **D2/SS34 正确**（K = `P3V3` 为升压输出 · A = `SW_U2`）✅"
+  },
+  "consequence": "按 KiCad 约定，`D1` 之**阴极**落在网 `LED_A`、**阳极**落 `GND` ⇒ **反偏 ⇒ 指示 LED 不亮**（且若按件体标记正装，则与 footprint 无丝印标记叠加 ⇒ 贴装结果不确定）",
+  "confidence": "**高**（footprint 侧有官方件丝印实证）· 但本机**未装 KiCad 符号库**（`Device.kicad_sym` 不存在）、GitLab 公开符号库直链 404 ⇒ 符号侧约定系**由 footprint 阴极标记 + 生成器约定推得**，非直读 ⇒ 建议随 CR-26 一并由监理确认（或补 KiCad 符号库通道）"
+ },
+ "polarity_census_l7": {
+  "method": "只读解析受审板 l7 全部 footprint 之 `Value`/pad→net，对**极性/方向敏感件**逐一核（(a) 符号 pin 号 ↔ (b) footprint 物理焊盘 ↔ (c) 项目 `k2_sch.yaml` 符号定义 ↔ (d) 官方 KiCad 库约定）",
+  "results": [
+   {
+    "ref": "U4",
+    "value": "BAT54C",
+    "verdict": "**✗ 缺陷 HIGH（CR-26）** — 共阴(pin3)接 `P3V3`、阳极2(pin2)接 `MCU_VDD` ⇒ `P3V3→MCU_VDD` 截止"
+   },
+   {
+    "ref": "D1",
+    "value": "LED",
+    "verdict": "**✗ 缺陷 LOW-MED（本件）** — 阴极落 `LED_A` / 阳极落 `GND` ⇒ 反偏"
+   },
+   {
+    "ref": "D2",
+    "value": "SS34",
+    "verdict": "✅ 正确（`K(1)=P3V3` 为升压输出 · `A=SW_U2`）"
+   },
+   {
+    "ref": "U5",
+    "value": "OPTO_LTV356T",
+    "verdict": "✅ 正确（`1=ANODE=PWR_BTN_ISO` · `2=CATHODE=GND` · `3=EMITTER=GND` · `4=COLLECTOR=PWR_CTRL_OUT`；前轮已由 Lite-On 正本 4/4 核对）"
+   },
+   {
+    "ref": "E2",
+    "value": "FRU_EEPROM",
+    "verdict": "✅ 正确（AT24C02 标准图逐脚一致；`4=VSS=GND` · `8=VCC=MCU_VDD`）"
+   },
+   {
+    "ref": "U2",
+    "value": "DCDC_12V_3V3",
+    "verdict": "✅（TI 正本 6/6 已核）"
+   },
+   {
+    "ref": "U1",
+    "value": "STM32G0B1CBT6",
+    "verdict": "✅（ST DS13560 通道；`KBU6` 变体前轮 32/32）"
+   },
+   {
+    "ref": "U6",
+    "value": "DS320PR1601",
+    "verdict": "✅（TI 正本 354/354 全量已核 · CR-25）"
+   }
+  ],
+  "note": "普查覆盖**全部极性/方向敏感件**（二极管 ×3 + 光耦 + LDO/DC-DC + 主芯片）；除 U4/D1 外**未见第三例**"
+ },
+ "needs": "并入 **CR-26 之监理处置批次**（可否连同 `LED` 符号 pin 号一并订正；`_shared`/符号 = 设计面 ⇒ 需批）。**不影响可制造性**（Gerber 不需因 LED 而改；若开新 rev 可顺带修）",
+ "red_lines": [
+  "只读取证（未改 `_shared`/符号/网表/PCB/交付包）",
+  "未派 WORKER",
+  "外部文件仅落 `/tmp/opencode`"
+ ],
+ "readonly_repo": true,
+ "not_landed": true
+}

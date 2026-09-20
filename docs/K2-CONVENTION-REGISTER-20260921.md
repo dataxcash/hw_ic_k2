@@ -130,3 +130,13 @@
 ---
 **（本块）裁定对应**：CR-26 ← 厂商正本核对（T2-F6 通道附带产出）。**报备监理 1 条（缺陷 HIGH · 请求处置裁定）· owner 项 0**。
 **不影响** P6 判据面（`criteria/` rev=6 只读）与交付锚（`6ee7495de61f749f` 未动）——但**本件影响 l7 板之功能性**，P5 首件单**建议暂缓**至处置裁定。
+### 续编 · D1 LED 极性与全板极性普查（2026-09-21 · 只读造活）
+
+| # | 条目 | 内容（事实/裁定） | 依据 | 处置红线 |
+|---|---|---|---|---|
+| **CR-27** | **【缺陷 · LOW-MED】`D1` LED 符号脚号与所引 footprint 约定不一致（疑反接）+ footprint 副本丢丝印** | **链**：① 项目符号 `k2_sch.yaml#LED` = **`A→pin1`（左）· `K→pin2`（右）**；② 原理图声明 `footprint: LED_SMD:LED_0603_1608Metric`，而**本机 KiCad 官方件**（`AppDir/share/kicad/footprints/LED_SMD.pretty/LED_0603_1608Metric.kicad_mod`）焊盘 `1=左(x−0.7875)`/`2=右(+0.7875)`、**丝印阴极标记（竖条+三角尖）在左**（渲染图证 `93aa22594349b8c7`）⇒ **pad1 = K**；③ 板上 `D1`（fp `ForgeOS:LED_0603_1608Metric`，同布局副本）**pad1 → `LED_A`** · pad2 → `GND` ⇒ **阴极落 `LED_A`、阳极落 `GND` ⇒ 反偏 ⇒ 指示 LED 不亮**；④ **同库反例**：项目 `D_SCHOTTKY` = `K→pin1` 与 `Diode_SMD:D_SMA`（pad1=K）**相符** ⇒ `D2/SS34` **正确**。**附**：`ForgeOS` 副本**丢失全部丝印** ⇒ 无极性标记（贴装不可辨）。**置信**：高（footprint 侧实证）但**本机未装 KiCad 符号库**、GitLab 符号库直链 404 ⇒ 符号侧系推得 ⇒ **并入 CR-26 批次由监理确认** | 本件 `DEFECT_D1_LED_POLARITY_AND_POLARITY_CENSUS_20260921_v1.json`（8d214f3ace25beec）· 图证 `93aa22594349b8c7` | **只读取证**（未改符号/footprint/PCB/交付包）· **不改**（Gerber 不因 LED 需改）· **禁**未批擅改 |
+| **CR-28** | **全板极性/方向敏感件普查（l7）** | 逐件核 (a) 符号 pin 号 ↔ (b) footprint 物理焊盘 ↔ (c) 项目符号定义 ↔ (d) 官方 KiCad 约定：**`U4` BAT54C ✗（CR-26 HIGH）** · **`D1` LED ✗（CR-27 LOW-MED）** · `D2` SS34 ✅ · `U5` OPTO_LTV356T ✅（Lite-On 正本 4/4）· `E2` FRU_EEPROM ✅（AT24C02 逐脚）· `U2` DCDC ✅（TI 6/6）· `U1` STM32G0B1CBT6 ✅ · `U6` DS320PR1601 ✅（TI 354/354）⇒ **除 U4/D1 外无第三例**；**普查覆盖全部极性敏感件**（二极管 ×3 · 光耦 · 电源器件 · 主芯片） | 同上件 §polarity_census_l7 | 登记制 · **不充绿** · 禁重复普查同类件 |
+
+---
+**（本块）裁定对应**：CR-27/CR-28 ← handoff §7-B（只读造活）+ 厂商正本补证附带产出。**报备监理 1 条（并入 CR-26 处置批次）· owner 项 0**。
+**不影响** P6 判据面（`criteria/` rev=6 只读）与交付锚（`6ee7495de61f749f` 未动）。
