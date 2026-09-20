@@ -1,0 +1,148 @@
+{
+ "artifact": "k2_p6_k1_board_level_defect_worklist",
+ "schema": 1,
+ "purpose": "P6 §⑦ 跨板复用『造活』：把 K1 判定器暴露的**板级项**逐条落成**具名工作清单**（站点 + 读数 + 修法族 + K2 缺陷 ID 映射），供 K1 项目排期。**只读**；未动 k1；**不新增判据维/检查齿**（owner ②）。",
+ "source_of_readings": "ENG 本会话直跑 `criteria/adjudicate.py --project k1`（DRC work-dir 在 /tmp；`drc.json` 逐条读出）；板/库/外框读数由 ENG pcbnew-free 解析交叉复核。",
+ "board_facts": {
+  "outline_mm": [
+   80,
+   38
+  ],
+  "origin": [
+   0,
+   0
+  ],
+  "n_footprints": 42,
+  "n_pads": 306,
+  "PTH": 28,
+  "NPTH": 2,
+  "copper_zones": 0,
+  "keepout_zones": 0,
+  "n_tracks": 0,
+  "drc": {
+   "error": 13,
+   "warning": 17,
+   "by_type": {
+    "clearance": 1,
+    "shorting_items": 2,
+    "pth_inside_courtyard": 4,
+    "copper_edge_clearance": 3,
+    "solder_mask_bridge": 3,
+    "silk_edge_clearance": 3,
+    "nonmirrored_text_on_back_layer": 14
+   }
+  },
+  "unconnected_items": 156,
+  "unconnected_nets": 51,
+  "unconnected_refs": 42,
+  "unconnected_top_nets": {
+   "GND": 100,
+   "P3V3_AUX": 26,
+   "VBUS": 22,
+   "MCU_VDD": 18,
+   "PWR_5V_MAIN": 14,
+   "PERSTA#": 6,
+   "12V_IN": 6,
+   "I2C1_SDA": 6,
+   "I2C1_SCL": 6,
+   "SBU1": 6,
+   "NRST": 4,
+   "PCIE_TX0_N": 4
+  }
+ },
+ "worklist": [
+  {
+   "id": "K1-D1",
+   "severity": "高",
+   "title": "J1（换装后 Type-C）SH/NPTH 焊盘压在板左边框上",
+   "readings": [
+    "`copper_edge_clearance` **3 error**：J1 NPTH(@1.2,23.36) 距边 0.2692mm · J1 SH(@0.67,22.11) 0.2700mm · **J1 SH(@0.31,16.16) 0.0000mm**（要求 ≥0.30mm；板边 x=0）",
+    "`pads_within_outline` **2 pad**：`J1` pad `SH`，AABB x∈[−0.03,1.37]（越内缩框 0.3mm）"
+   ],
+   "map_k2": "**J-8**（器件位置合理性：出框/关键间距）—— K2 同族已归零（接口焊盘 `0/0/0`）",
+   "fix_family": "J1 **向板内移位/旋转**（placement，L2）或按 K2 口径调整接口伸出量/板框口径（板框属既定 80×38 ⇒ 首选移位）",
+   "note": "说明 OPEN-1（换 Amphenol 24-pin）**在板侧已换件，但落位未随之复算** ⇒ 引入本组新违规。"
+  },
+  {
+   "id": "K1-D2",
+   "severity": "高",
+   "title": "J13 pad4(MCU_VDD) 与 U1 pad31/pad32 实质短路",
+   "readings": [
+    "`shorting_items` **2 error**：网络 **MCU_VDD ↔ SBU_SEL**（J13 pad4 @8.81,8.0 ↔ U1 pad31 @9.3,8.75）· 网络 **MCU_VDD ↔ SWCLK_BOOT0**（同为 J13 pad4 ↔ U1 pad32 @9.3,8.25）",
+    "同址另有 `solder_mask_bridge` **2 error**"
+   ],
+   "map_k2": "**J-1**（DRC error = 0）",
+   "fix_family": "J13（1x04 SWD 排针）移位或 U1 移位/旋转使 pad 中心距 ≥ 焊盘半径和 + 0.1mm（placement）",
+   "note": "属**电气级**缺陷：THT 孔与 QFN 焊盘实copper 相连 ⇒ 必然功能失败，优先级最高。"
+  },
+  {
+   "id": "K1-D3",
+   "severity": "高",
+   "title": "J6 pad1 与 U1 pad17 铜间距 0.0000mm",
+   "readings": [
+    "`clearance` **1 error**：J6 PTH pad1 `PWR_CTRL_OUT`(@14.53,13.0) ↔ U1 pad17 `<no net>`(@13.75,12.7)，实际 **0.0000mm**（规则 0.1mm）",
+    "同址另有 `solder_mask_bridge` **1 error**"
+   ],
+   "map_k2": "**J-1**",
+   "fix_family": "J6 移位（placement）；另建议核实 U1 pad17 之 no-net 是否应为 GND/NC（输入面）"
+  },
+  {
+   "id": "K1-D4",
+   "severity": "中",
+   "title": "J9 全部 4 个 PTH 焊盘落在 J1 courtyard 内",
+   "readings": [
+    "`pth_inside_courtyard` **4 error**：J9 pad1..4 (@1.19/3.73/6.27/8.81, y=13.0) 均落在『封装 J1』(@4.8,19.0) courtyard 内"
+   ],
+   "map_k2": "**J-8**（重叠/回避区）",
+   "fix_family": "J9 移位或核正 J1 courtyard 尺寸（placement / keepout 口径）"
+  },
+  {
+   "id": "K1-D5",
+   "severity": "—（**非缺陷**：K1 未布线中间态）",
+   "title": "156 条未连接项（51 网 / 42 器件）",
+   "readings": [
+    "`unconnected_items` **156**；涉及 51 网、42 器件；TOP：GND 100 · P3V3_AUX 26 · VBUS 22 · MCU_VDD 18 · PWR_5V_MAIN 14 · PERSTA#/12V_IN/I2C1_*/SBU1 各 6；TOP 器件：U1 44 · J1 37 · U11 35 · E1 16 · U9 14"
+   ],
+   "map_k2": "**J-2**（连通 = 0，补铜后）",
+   "fix_family": "K1 布线推进（**计划 §1.3 #7 明示：K1 未布线状态本身不是缺陷**）",
+   "note": "本项**不计入机制包**；供 K1 排期参考。"
+  },
+  {
+   "id": "K1-D6",
+   "severity": "信息（已登记）",
+   "title": "17 条 warning（silk_edge_clearance 3 · nonmirrored_text_on_back_layer 14）",
+   "readings": [
+    "K1 manifest 已登记该 2 类 ⇒ `drc_warning_dispositions` 判据维 **PASS**"
+   ],
+   "map_k2": "**J-1**（warning 逐项有处置结论）",
+   "fix_family": "登记制、不豁免、保持可见（现状已合规）"
+  },
+  {
+   "id": "K1-D7",
+   "severity": "中",
+   "title": "固定孔不足 + 无铺铜区/回避区",
+   "readings": [
+    "**NPTH=2**（Ø0.65×1 · 槽 0.95×0.65×1）< 4 · **copper zones = 0** · **keepout = 0**",
+    "对照 K2：NPTH 4×Ø3.2 · 10 个已填充铜区（In1/In3/In6 GND + In4 电源）· 8 个 keepout"
+   ],
+   "map_k2": "**J-8**（固定孔/回避区）+ 缺陷册 **M-11**（NPTH=0 无固定孔）· **M-05**（铺铜 0 填充 / keepout 空操作）",
+   "fix_family": "K1 板级设计推进（固定孔 ≥4 NPTH Ø3.2 · 平面层铺铜策略 · 回避区生效）",
+   "note": "K2 同族修法可直接参照（K2 判据值：NPTH≥4 · zone_filled 10/10 · keepout 8 区无 all-allowed）。"
+  }
+ ],
+ "summary": {
+  "k1_board_level_open": 6,
+  "highest_priority": [
+   "K1-D2",
+   "K1-D1",
+   "K1-D3"
+  ],
+  "mechanism_family_already_proposed": "见 K1_MECHANISM_COVERAGE_BUNDLE_PROPOSAL_v1.json（3 件 · 镜像实测 n_pass 5→8）",
+  "not_a_defect": "K1-D5（未布线中间态）"
+ },
+ "boundary": "只读工作清单**提案**：未改 `k1/` 任何文件；修法均属 K1 项目改动（placement/板级设计）⇒ 需 K1 授权；**未新增判据维/检查齿**（owner ②）。",
+ "readonly_repo": true,
+ "not_landed": true,
+ "no_new_criteria_dim": true,
+ "ts": "2026-09-22T02:00:00+0800"
+}
