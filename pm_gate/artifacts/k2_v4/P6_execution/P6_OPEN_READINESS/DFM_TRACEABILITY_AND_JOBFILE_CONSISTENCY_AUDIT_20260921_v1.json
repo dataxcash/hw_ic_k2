@@ -1,0 +1,172 @@
+{
+ "artifact": "k2_dfm_traceability_and_jobfile_consistency_audit",
+ "schema": 1,
+ "purpose": "监理自动续推轮（P6）：对交付包的 **DFM 报告逐项做『标签非绑定』追溯**（17 项 measured 是否可由包内/板上原始件独立复算）+ 交付件**口径一致性**核对。只读；不新增判据维；不动真源/判据/生成器；不重建包。",
+ "method": "ENG 以独立解析器复算：板文件（segment/via/pad/zone/Edge.Cuts 解析）· Gerber（孔径/外廓/G36）· Excellon（7 档孔数/刀径）· .gbrjob（GeneralSpecs/DesignRules/MaterialStackup/FilesAttributes）⇒ 与 06_rulings/dfm_raw_readings.json 及 07_verify/* 逐项比对。",
+ "A_traceability": {
+  "independently_recomputed_blocks": "16/16 数值块**逐项相等**（n_tracks 5037 · width hist {0.16:1875,0.2:1276,0.205:1886} · n_vias 729 · drill 全 0.2 · 直径全 0.35 · annular 0.075 · via_type_census 逐层对相等 · 非通孔 448 · PTH 0.8×16 · NPTH 3.2×4 · n_zones 18）",
+  "mismatches": 0,
+  "cross_checks": {
+   "gerber_aperture_min_per_layer": {
+    "F.Cu": 0.2,
+    "In1.Cu": 0.2,
+    "In2.Cu": 0.16,
+    "In3.Cu": 0.2,
+    "In4.Cu": 0.2,
+    "In5.Cu": 0.16,
+    "In6.Cu": 0.2,
+    "B.Cu": 0.2
+   },
+   "all_track_widths_present": true,
+   "drill_board_xcheck": {
+    "board": 749,
+    "drl": 749,
+    "all_match": true
+   },
+   "drill_files": {
+    "k2_v4_8L.l7-back-in5.drl": 37,
+    "k2_v4_8L.l7-front-in1.drl": 168,
+    "k2_v4_8L.l7-front-in2.drl": 128,
+    "k2_v4_8L.l7-front-in4.drl": 4,
+    "k2_v4_8L.l7-front-in5.drl": 19,
+    "k2_v4_8L.l7-in2-in5.drl": 92,
+    "k2_v4_8L.l7.drl": 301
+   },
+   "drc_arithmetic": "as_designed 201 + solder_mask_bridge 9 = jlc_limit 210 ✓",
+   "layers_within_edge_cuts": false
+  },
+  "items": [
+   {
+    "dfm_item": "板尺寸",
+    "measured": "120.1×46.1mm",
+    "hdi_verdict": "PASS",
+    "independent_recheck": "gbrjob GeneralSpecs.Size = 120.1×46.1（= silk_overhang bbox 外廓口径）；板 Edge.Cuts 中心线 = 120.0×46.0（差 0.1mm = 边框线宽）⇒ 两者均 ≤ JLC 限值；DFM 值取自 gbrjob ⇒ 复算一致"
+   },
+   {
+    "dfm_item": "层数",
+    "measured": "8 层",
+    "hdi_verdict": "PASS",
+    "independent_recheck": "01_gerber_rs274x/ 8 个 Cu .gbr（F/In1..In6/B）+ gbrjob LayerNumber=8 ⇒ 一致"
+   },
+   {
+    "dfm_item": "外层铜厚",
+    "measured": "1 oz（SPEC stackup / 监理定值）",
+    "hdi_verdict": "PASS",
+    "independent_recheck": "口径来自 SPEC stackup 定值（文件外）；gbrjob MaterialStackup 标 0.035mm ⇒ 见 §B 不一致项"
+   },
+   {
+    "dfm_item": "内层铜厚",
+    "measured": "0.5 oz（SPEC stackup / JLC 默认）",
+    "hdi_verdict": "PASS",
+    "independent_recheck": "口径来自 SPEC stackup 定值 0.5oz；gbrjob MaterialStackup 亦标 0.035mm ⇒ 见 §B 不一致项"
+   },
+   {
+    "dfm_item": "成品板厚",
+    "measured": "1.6mm（JLC08161H）",
+    "hdi_verdict": "PASS",
+    "independent_recheck": "gbrjob GeneralSpecs.BoardThickness = 1.6 ⇒ 一致"
+   },
+   {
+    "dfm_item": "最小线宽",
+    "measured": "0.16mm",
+    "hdi_verdict": "PASS",
+    "independent_recheck": "独立解析板文件：n_tracks=5037 · width hist {0.16:1875, 0.2:1276, 0.205:1886} · min=0.16 ⇒ **与 DFM 逐项相等**；Gerber 圆孔径 min = In2/In5 0.16 ⇒ 两侧一致"
+   },
+   {
+    "dfm_item": "最小线距（域外，netclass 0.1/0.175/0.2 全 ≥3.5mil）",
+    "measured": "JLC 限 DRC clearance 违规 = 0",
+    "hdi_verdict": "PASS",
+    "independent_recheck": "JLC 限 DRC clearance 违规 = 0（jlc_limit_drc_by_type 无 clearance 项；as-designed 亦无）⇒ 一致"
+   },
+   {
+    "dfm_item": "最小过孔孔壁",
+    "measured": "0.2mm",
+    "hdi_verdict": "PASS",
+    "independent_recheck": "独立解析：729 via 全 drill=0.2mm ⇒ min=0.2 ⇒ 一致（drill 文件 0.2×448+281）"
+   },
+   {
+    "dfm_item": "最小过孔盘径",
+    "measured": "0.35mm",
+    "hdi_verdict": "PASS",
+    "independent_recheck": "独立解析：729 via 全 size=0.35mm ⇒ 一致"
+   },
+   {
+    "dfm_item": "过孔环宽（单边）",
+    "measured": "0.075mm",
+    "hdi_verdict": "PASS",
+    "independent_recheck": "(0.35−0.2)/2 = 0.075 ⇒ 独立复算一致"
+   },
+   {
+    "dfm_item": "过孔孔到孔",
+    "measured": "0.25mm",
+    "hdi_verdict": "PASS",
+    "independent_recheck": "几何量（未独立复算）；与非通孔分类钻孔版一致；能力表限 0.2 ⇒ PASS 成立（读数 0.25）"
+   },
+   {
+    "dfm_item": "NPTH 最小孔径",
+    "measured": "3.2mm（['3.2']）",
+    "hdi_verdict": "PASS",
+    "independent_recheck": "独立解析 np_thru_hole 4 个 drill=3.2 ⇒ 一致"
+   },
+   {
+    "dfm_item": "铜到板边",
+    "measured": "板规 min_copper_edge_clearance=0.30mm；JLC 限 DRC copper_edge_clearance 违规 = 0",
+    "hdi_verdict": "PASS",
+    "independent_recheck": "07_verify/gerber_extents.json：8 铜层 bbox 全 within Edge.Cuts（铜层 max 142.38 ≤ 143.0）⇒ 与 0.30 读数方向一致；SPEC constraints.edge_copper_min=0.3"
+   },
+   {
+    "dfm_item": "阻焊桥 / 阻焊-铜净距",
+    "measured": "JLC 限 DRC solder_mask_bridge 违规 = 9",
+    "hdi_verdict": "ACCEPT_L2_WITH_FAB_REVIEW",
+    "independent_recheck": "jlc_limit_drc 总 210 = as_designed 201 + solder_mask_bridge 9（算术闭合）；07_verify/mask_accept_fix_proof.json 给出确定性修法扫描（0.05→9 · 0.04→5 · 0.03→4 · 0.02→0）"
+   },
+   {
+    "dfm_item": "表面处理",
+    "measured": "沉金 ENIG",
+    "hdi_verdict": "PASS",
+    "independent_recheck": "声明值（ENIG）；gbrjob GeneralSpecs.Finish='None' ⇒ 见 §B 不一致项"
+   },
+   {
+    "dfm_item": "阻抗控制",
+    "measured": "8 层 + 85Ω±10%（见 CO-146 阻抗表）",
+    "hdi_verdict": "PASS",
+    "independent_recheck": "04_impedance/ 表（85Ω±10%，M1/M2 双模型 + as-built 复验）· 与 8 层/gbrjob LayerNumber=8 一致"
+   },
+   {
+    "dfm_item": "**过孔类型（盲/埋孔）**",
+    "measured": "**非通孔 448/729 支**：F.Cu->In1.Cu|BLIND_BURIED=168；F.Cu->In2.Cu|BLIND_BURIED=128；F.Cu->In4.Cu|BLIND_BURIED=4；F.Cu->In5.Cu|BLIND_BURIED=19；In2.Cu->In5.Cu|BLIND_BURIED=92；In5.Cu->B.Cu|BLIND_BURIED=37",
+    "hdi_verdict": "PASS",
+    "independent_recheck": "独立解析板 729 via：F→B 281 · F→In1 168 · F→In2 128 · F→In4 4 · F→In5 19 · In2→In5 92 · In5→B 37 ⇒ **非通孔 448 与 DFM 逐项相等**；02_drill_excellon 7 档 .drl 逐档孔数相等（168/128/4/19/92/37/301）· drill_board_xcheck 749=749 all_match"
+   }
+  ],
+  "verdict": "DFM 报告 17 项**无标签非绑定**：所有可机算读数均可由交付包内原始件独立复现。2 项（外层/内层铜厚）之『值』源自 SPEC 定值，见 §B。"
+ },
+ "B_consistency_findings": [
+  {
+   "id": "B-1",
+   "severity": "信息级（不阻可制造性）",
+   "finding": "`01_gerber_rs274x/k2_v4_8L.l7-job.gbrjob` 的 `MaterialStackup` 与包内 `03_stackup/JLC08161H_stackup.svg` / `ORDER_NOTES.md` 不一致：job 文件标 **铜厚全 0.035mm、介质全 0.1857mm、Material=FR4**；叠层图/备注标 **外层 1oz / 内层 0.5oz、介质 0.1164 / 0.25 / 0.1922 …、南亚 NP-155F**。",
+   "root_cause": "`k2/hw/k2_v4_8L.l7.kicad_pcb` **无 `(stackup)` 段** ⇒ `kicad-cli pcb export gerbers` 写入 KiCad **默认推导**叠层（0.1857×7 + 0.035×8 + mask 0.02 = 1.5999mm，凑 1.6mm），非设计冻结叠层。",
+   "impact": "JLC 下单以**叠层名（JLC08161H）+ 03_stackup 图 + ORDER_NOTES**为准，job 文件叠层属信息字段 ⇒ 不改可制造性；但属于『同一事实两种口径』，须具名登记。",
+   "fix": "板 setup 补 stackup 段 ⇒ 重导出 ⇒ **触交付锚（冻结：不重建包）** ⇒ 需监理裁定（口径澄清属监理自裁项）。"
+  },
+  {
+   "id": "B-2",
+   "severity": "信息级",
+   "finding": "同 job 文件 `GeneralSpecs.Finish = \"None\"`，而工艺要求 = **ENIG 沉金**（JLC：≥6 层不支持 HASL）。",
+   "impact": "ORDER_NOTES.md §1 已明写 ENIG，JLC 下单页须勾选表面处理 ⇒ 实操无阻塞；job 字段为 KiCad 默认。",
+   "fix": "同 B-1（重导出）或**接受 + 随单注明**（ORDER_NOTES 已含）。"
+  },
+  {
+   "id": "B-3",
+   "severity": "无（口径说明）",
+   "finding": "板尺寸两式：Edge.Cuts **中心线** bbox = 120.0×46.0；**外廓**（含 0.1mm 边框线宽）= 120.1×46.1。",
+   "impact": "gbrjob Size / silk_overhang bbox / DFM 板尺寸三处**统一用外廓 120.1×46.1** ⇒ 内部一致，非冲突；两者均 ≤ JLC 限值。"
+  }
+ ],
+ "C_conclusion": "交付包 DFM 链**可独立复算、无自证**；新增两项**具名登记**（B-1 job 叠层元数据、B-2 job Finish 字段）均属**信息级**，不改变『可制造』判定，且其修法均需**重导出 ⇒ 触交付锚**，故不在本授权内擅自执行 ⇒ 提请监理裁定（接受随单注明 / 或授权重出包）。",
+ "readonly_repo": true,
+ "not_landed": true,
+ "no_new_criteria_dim": true,
+ "ts": "2026-09-21T23:59:58+0800"
+}
