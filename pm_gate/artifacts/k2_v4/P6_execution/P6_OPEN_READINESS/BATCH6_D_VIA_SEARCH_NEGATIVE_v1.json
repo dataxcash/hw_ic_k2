@@ -1,0 +1,24 @@
+{
+ "artifact": "k2_batch6_d_via_search_negative",
+ "schema": 1,
+ "purpose": "(d) 端点对齐的**带合法 via 候选**有界搜索结果（只读 /tmp 影子）：在修正基线（D-1…D-5 全修）上**无增益**（K1 仍 1/8）。给出搜索空间与负结论，供后续设计更聪明的 via 落位。",
+ "setup": {
+  "core": "`tree_dv` = 容器 `_shared`@02459f5 + ⑤⑥草案 + D-1…D-5 全修 + (d)+via 候选",
+  "candidate": "pad(F.Cu) → 短段 → **via@(f·(corr_x−pad_x), pad_y)** → 目标层 → (corr_x, track_y)；P/N 的 f 各取 {0.30, 0.55, 0.85}（9 组合），逐组合过修正后的 `_k1_escape_verify`",
+  "gate": "D-1…D-5 修正门（含层合法性守卫、段级 P/N edge 门、逐段累积）"
+ },
+ "result": {
+  "k1_truth": "**1/8**（仅 TX0.output；与不加候选同）",
+  "new_solved": 0,
+  "audit": "层合法性审计 0 违规（`k1_layer_legality_audit_v1.py`）",
+  "side_effect": "TX0.output 的折线随候选顺序变化（`shared_seg_count` 8→9），仍合法且 P/N 门通过"
+ },
+ "reading": {
+  "why_no_gain": "目标端**窗口极小**：`TX1.output` 右端 pad x=75.155 对走廊右缘 74.2 ⇒ 约 **0.955mm**；`TX1.output` 左端 pad 与 `corr_x` 几乎同位（41.688 vs 41.6875）⇒ 窗口 ≈ 0。加之 via 规则（离焊盘 ≥0.3、via 间距 ≥0.19），本有界网格未覆盖可行落位。",
+  "conclusion": "(d) 的**下一步不是扩网格**，而是**先解决落位空间**：要么放宽 alloc（把该对的内层轨道移到窗口内可达的位置），要么按 `BATCH6_RESCOPE_AFTER_GATE_FIX_v1.json` 的『旋转窗口』结论处理（TX0/RX1 = 0 窗口 ⇒ 须改 alloc/换层策略）。",
+  "no_regression": "本候选对既有 1/8 无回退，且不产生非法几何。"
+ },
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-21T05:30:00+0800"
+}
