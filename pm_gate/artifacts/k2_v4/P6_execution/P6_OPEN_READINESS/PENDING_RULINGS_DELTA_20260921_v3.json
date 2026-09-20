@@ -1,0 +1,116 @@
+{
+ "artifact": "k2_pending_rulings_delta",
+ "schema": 3,
+ "supersedes": "PENDING_RULINGS_DELTA_20260921_v2.json（**其 R-1…R-8 正文不变**；本件只**追加** 2026-09-21 监理自动续推 7 轮产出的新事项，并给出**一次裁定清单**）",
+ "purpose": "把当前**全部待裁项**收敛为**一份**决策件（避免逐轮零散重投），每项含：现状读数 / 选项 / ENG 建议 / 证据件。",
+ "owner_gate": "无（全部 L2/机制/批次/交付口径/跨项目面；P5 外部首件属外部输入，非 owner 裁决）",
+ "stage_state": "**阶段门**：P0–P4 与 **P6 判据面**均已达成（P6-1 `k2_p6_1_acceptance_v1.py` PASS rc=0 · P6-2 结构差异 0 PASS(state)）；**唯一未闭阶段门 = P5（外部实测 V4–V7 NOT_RUN）**；未越阶段。交付包按 owner #14③ **十项齐备 + 锚完整**（53/53 sha256 相符 · tarball 与目录逐字节同）。",
+ "new_items": [
+  {
+   "id": "N-1",
+   "title": "**交付口径批次（4 小项）**：是否『接受 + 随单注明』（不动交付锚），或授权**重出包**",
+   "facts": [
+    "B-1：`-job.gbrjob` 的 `MaterialStackup`（铜厚全 0.035 · 介质全 0.1857 · FR4）≠ 包内 `03_stackup/JLC08161H`（外1oz/内0.5oz · 介质 0.1164/0.25/0.1922 · NP-155F）；根因 = 板文件**无 `(stackup)` 段** ⇒ kicad-cli 写 KiCad 默认推导叠层。",
+    "B-2：同 job `GeneralSpecs.Finish=\"None\"` vs 工艺要求 **ENIG**（ORDER_NOTES 已明写、下单页须勾选）。",
+    "P5-1：P5 的 V4（阻抗券）**未在随单件中索取**（ORDER_NOTES 仅『勾选阻抗控制』；索取写在到货后的 RULES.md §V4）⇒ 若板厂默认不出券，V4 只能 INCONCLUSIVE。",
+    "P5-2：`DISCLOSURE.md §5b` 条目编号乱序（1·2·3·5·4）。"
+   ],
+   "options": [
+    "(a) **接受 + 随单注明/商务下单页备注索取券**（**不动交付锚**，红线『不重建包』保持）；",
+    "(b) 授权**重出包**（触交付锚 ⇒ 需重跑 9 项验证 + 更新 MANIFEST/tarball 锚）"
+   ],
+   "eng_recommend": "**(a)** —— 四项均为**信息级/渠道级**，JLC 以叠层名 + 03_stackup + ORDER_NOTES 为准，且 B-1/B-2/P5-2 的修法都要重导出；不动锚的收益/风险比最优。",
+   "evidence": [
+    "DFM_TRACEABILITY_AND_JOBFILE_CONSISTENCY_AUDIT_20260921_v1.json（0ad8913a548900ed）",
+    "P5_EXECUTION_PACK_READINESS_AUDIT_20260921_v1.json（a8da226a5d96f3b9）"
+   ]
+  },
+  {
+   "id": "N-2",
+   "title": "**K1 机制类覆盖包（3 件）**：是否授权落件到 k1 项目",
+   "facts": [
+    "K1-M1 `k1/k1_v1.kicad_pro` 9 行 ignore→warning（= K2 批 3 ④ O1 同源）",
+    "K1-M2 新建 `k1/fp-lib-table`（ForgeOS→`${KIPRJMOD}/lib/ForgeOS.pretty`；K1 库目录已存在）",
+    "K1-M3 新建 `k1/pipeline.yaml`（门禁接线；样例未含 bom_consistent 因 K1 无 BOM csv）"
+   ],
+   "measured": "/tmp 镜像（真判定器 · 现行 manifest.k1 c175be51）：**n_pass 5→8 / n_fail 13→10**，翻转 `rule_severity_manifest`+`fp_lib_table_present`+`pipeline_present`，**0 副作用**（error 13 不变 · warning 登记面仍 OK）",
+   "eng_recommend": "**授权落件**（一笔提交）；落件后 **K1 锚需重基线**（属 K1 项目面）。**未新增任何规则/检查齿**（owner ② 不触）。",
+   "evidence": [
+    "K1_MECHANISM_COVERAGE_BUNDLE_PROPOSAL_v1.json（70930aff60101c26）",
+    "K1_O1_EQUIVALENT_PROPOSAL_v1.patch（f056d18de0c3c53b）"
+   ]
+  },
+  {
+   "id": "N-3",
+   "title": "**K1 同源对账 + 原理图侧再生**：是否授权（K1 项目改动）",
+   "facts": [
+    "四源逐件一致 = 板/`k1_board.yaml`/`k1_pinmap.yaml`/`k1_nets.yaml` **42/42/42/42**；**原理图侧（`k1_sch.yaml` placements 与 `k1/sch/*.kicad_sch`）仅 37** ⇒ 缺 `Q1·Q2·R38·R39·U13`（= board.yaml 明列的**②补充件**）；幽灵件 0。",
+    "**K1-S1（高）**：`v5_connectors.kicad_sch` 的 J1 Footprint **仍旧 `HRO_TYPE-C-31-M-12`**（16-pin USB2-only、无 SS 焊盘），**板上已换 Amphenol 12401548E4-2A**（24 信号含 SS 8/8）⇒ BLOCKING 的 **OPEN-1 在原理图面未闭合**。",
+    "**K1-S2（中）**：U10 Footprint 图仍 `SOT-23`（3 pad）· 板上 `SOT-23-5`（5 pad）⇒ OPEN-2 的『待 ECO』未落。",
+    "**K1-S3（低）**：`k1_board.yaml` 自述 `schematic_sch_k1: 42` 与盘上 37 不符。"
+   ],
+   "eng_recommend": "授权由**单一真源 `k1_board.yaml` 经既有生成器 `k1_sch_sync_v1.py` 再生**原理图侧（37→42 + J1/U10 footprint 同步 + 订正自述）；属 K1 项目改动、需其授权。**不新增判据维**（本项属既有 J-6『板↔原理图一致』冻结语义下的事实）。",
+   "evidence": [
+    "K1_SOURCE_RECONCILIATION_AND_SCH_SIDE_RESIDUAL_20260921_v1.json（bbee43f7b92ea52a）"
+   ]
+  },
+  {
+   "id": "N-4",
+   "title": "**批 6 v4 落件放行**（唯一可兑现增益项）",
+   "facts": [
+    "候选 `BATCH6_DRAFT/BATCH6_LANDING_CANDIDATE_v4.patch`（3ded8584bb74461f）→ 目标 `c9e1c3b4ca208482`；镜像 apply 逐字节复现 ✓",
+    "三验预演全过：verify k2 PASS · canonical 19 = 190b73be0f728a56 · `--expect-patched` PASS（C 回退 0）",
+    "读数：K1 段解 **1/8→2/8**（TX0/output 0.142 · RX0/input 0.2636）· 层合法违规 0 · K2 零回归"
+   ],
+   "eng_recommend": "**放行**；按手册 7 步落件（回滚点 `_shared 02459f5`）。**注**：P6 判据面已 PASS，本项为**增益**非阶段门要件。",
+   "evidence": [
+    "BATCH6_PER_SEGMENT_CEILING_AND_LANDING_RUNBOOK_v1.json（204ccee62b803c79）",
+    "BATCH6_LANDING_CANDIDATE_v4_THREE_VERIFICATIONS_v1.json"
+   ]
+  },
+  {
+   "id": "N-5",
+   "title": "**R-5 / C-1 残面（2 维）**：采纳 gate 属主 4 步落件",
+   "facts": [
+    "checker 齿在岗（`_shared/eda_core/truth_binding.py` · 02459f5）；本会话复跑：17 条拟声明**零违规**，4 类负控**全拦** ⇒ 残面确为『2 维缺外部真源件』（`density_and_clearance` / `lib_electrical_level`）",
+    "落件 4 步：置 `criteria/jlc_hdi_capability.yaml` + `criteria/parts_electrical_truth.yaml` → manifest 两维填 `source_of_truth` → 跑 `check-dimensions` 正控（19/19）与负控（真源指向被验对象 ⇒ 拦）"
+   ],
+   "eng_recommend": "**采纳**（gate 属主动作）⇒ C-1 收口 19/19。**注**：现行 rev=3 manifest 逐维声明 0/19（= before 读数），落地前该维不得启用。",
+   "evidence": [
+    "C1_DIM_CHECKER_CONTROLS_RERUN_20260921_v1.json（cd04b7da7d00ffe9）",
+    "k2/docs/drafts/c1-source-of-truth-rest-v1/"
+   ]
+  },
+  {
+   "id": "N-6",
+   "title": "**P2 口径**：册面注明『换址承接』",
+   "facts": [
+    "计划 §P2 原命令 `criteria/measure_source_reconcile.py` **从未落件**；四等式现由 rev=3 三维（`refdes_sets_equal` / `net_declared_realized` / `pin_map_complete`）承接"
+   ],
+   "eng_recommend": "在册面注明「判据换址、非缺失」（属**口径澄清 = 监理自裁**）。",
+   "evidence": [
+    "P1_P5_STAGE_GATE_RETROSPECT_20260921_v1.json（62659de5313635d2）"
+   ]
+  },
+  {
+   "id": "N-7",
+   "title": "**P6 判据面新读数**（供闭闸用）",
+   "facts": [
+    "**P6-1 PASS（rc=0）**：以现行 `criteria/manifest.k1.yaml`（c175be51 countersigned）重出 k1 verdict（provisional=False）⇒ 四项同源命中全 OK + dim_set 19 + manifest_countersigned OK（此前唯一阻塞 = G-c2，已于 #K2-42 落件但无人复跑）",
+    "**P6-2 PASS(state)**：k2 模板 ignore=0 · 结构差异 0/10"
+   ],
+   "eng_recommend": "据此可判 **P6 判据①② 达成**（P6 覆盖面即 K1 侧残项见 N-2/N-3）。",
+   "evidence": [
+    "P1_P5_STAGE_GATE_RETROSPECT_20260921_v1.json（62659de5313635d2）"
+   ]
+  }
+ ],
+ "carried_over_from_v2": [
+  "R-3 次序择优（裕度相关）· R-3b · R-4 实测（建议先落 v4、批 5 暂缓）· R-7 降级（best_of 消除挂边风险）· R-8 收口三选一 · (c) 已降级为 alloc 槽位重排"
+ ],
+ "eng_readonly_surface": "**已穷尽**（本会话 7 轮：阶段门回溯 · C-1 控 · 非 HS 旁证 · 交付就绪/锚完整性 · DFM 追溯与 job 口径 · P5 执行包可用性 · K1 O1/机制包/同源对账）",
+ "ask": "**一次裁定**：N-1（交付口径，建议 (a)）· N-2/N-3（K1 跨项目授权，建议授权）· N-4（v4 放行）· N-5（C-1 采纳）· N-6（P2 口径注明）· N-7（P6 判据闭闸）；v2 的 R-4/R-8/(c) 维持原建议。",
+ "readonly_repo": true,
+ "not_landed": true,
+ "ts": "2026-09-22T01:40:00+0800"
+}
