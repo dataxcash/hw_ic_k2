@@ -206,3 +206,13 @@
 
 ---
 **（本块）裁定对应**：#K2-57 R3（P4 重锚）。**报备监理 1 条**（仪器漂移登记）· **owner 项 0**。
+
+### 续编 · 新 rev `l8` 交付包重出（#K2-57 R3 · 判据 ⑥）
+
+| # | 条目 | 内容（事实/裁定） | 依据 | 处置红线 |
+|---|---|---|---|---|
+| **CR-36** | **`l8` 交付包已重出（判据 ⑥ 新锚）—— 8 叠层 Gerber/钻孔/叠层图/阻抗表/裁定副本/披露/MANIFEST 齐** | **新工具**（**新增**，非改既有）：`tools/k2_p5_jlc_package_l8_v1.py`（`7f1cb9e9b91a7ba6`，由 l7 版**机械派生**：BOARD/PRO→l8 · SPEC→rev-53 · 册→`E3-standard-call-l8-20260921` · **OUT→`L6/jlc_package_l8`** · **DELIVERY→`L6/DELIVERY_l8`** · 交付记录→`docs/K2-P5-DELIVERY-RECORD-l8-v1.md`；**冻结锚 `L6/jlc_package` / `L6/DELIVERY` / l7 记录 一律未触碰**）。**产物**：`L6/jlc_package_l8/` **`MANIFEST.json` = `427a42534af002b4`**（53 件 + MANIFEST · `board_sha16 7a5c89913d6e5d0a` · `pro_sha16 c009058005829f09` · `criteria_anchor rev=6` · drill 754）；`L6/DELIVERY_l8/k2_v4_8L.l8_gerber_package.tar.gz` **`f8f143c96ffef9e2`**（422,798 B · 固定 mtime/uid/gid）。**DFM 对 JLC HDI 通道：16 PASS / 1 ACCEPT / 0 FAIL**（N-01 平面层 4/4 `G36>0` · In4 9 区）。**确定性**：**4 连跑 MANIFEST 逐字节同**（`427a42534af002b4`）。**唯一 ACCEPT = 阻焊桥/阻焊-铜净距**（`JLC 限 DRC solder_mask_bridge = 9`），**承自 l7 之既有已裁项且有证明**（`07_verify/mask_accept_fix_proof.json`）—— 其根治（ECO-1 `pad_to_mask_clearance 0.05→0.02`）**不在本 rev 授权范围** ⇒ 维持 ACCEPT、**非新引入**。 | 监理 #K2-57 R3（判据 ⑥）；本件实测 | **旧交付锚 `6ee7495de61f749f` / `0e88e107e2da8192` / l7 记录 `73fca3aaa360a179` 逐字节未动** · **禁**以 l8 包覆盖冻结包 · **STOP-1 维持**（监理复核前不下首件单） |
+
+---
+**（本块）裁定对应**：#K2-57 R3 判据 ⑥（新交付包）。**报备监理 1 条（新 rev 包待复核）· owner 项 0**。
+**至此 #K2-57 §四判据 ①②③④⑤⑥⑦ 全达成**（⑧ 见 COV-C3 跨项目批）。
