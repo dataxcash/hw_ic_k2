@@ -1,0 +1,72 @@
+{
+ "artifact": "k2_k1_resume_step1_model_chain_rerun",
+ "schema": 1,
+ "purpose": "K1 复跑序（`notice-20260916-k1-pause.md` 恢复条件）**第 1 步「复跑模型链」实测**：前置是否已满足、复跑是否产出「全 51 网折线」。",
+ "resume_condition": "B2-1..B2-4 全绿 ⇒ 复跑模型链 ⇒ 全 51 网折线 ⇒ DRC error=0 ⇒ G3.3 ⇒ Gerber",
+ "precondition_verified": {
+  "B2-1 _escape_smd_via pad 契约": "落件（批 3 S3）· 引擎 `dcd1f65f4b549527`",
+  "B2-2 --all-v4 分派": "落件（批 3 S3）· 实测 K1 dim = **k1**、bases = TX0/TX1/RX0/RX1（**非** K2 PCIE_ 路径）",
+  "B2-3a-e check_l2/l3/qa 项目维度": "落件（批 2）· `check_l2/l3/qa` 经 `_proj()` 取项目",
+  "B2-4 check_l1 RULES_DOC 路径 + 撤 G1.5 waiver": "落件（批 3 S5）· 复跑 **already/already** · `check_g15()` **passed=True** 两跑同文",
+  "回归面": "`--expect-patched` PASS：C K1=14/K2=14 · **回退 0**（= 批 2/3 的 K1 侧读数已复原）",
+  "verdict": "**前置已满足**"
+ },
+ "rerun": {
+  "cmd": "PYTHONPATH=$PWD/_shared python3 -m eda_core.hs_route_model --board k1/k1_v1.kicad_pcb --spec k1/pm_gate/artifacts/k1/L3/SPEC_k1.json --alloc k1/pm_gate/artifacts/k1/L3/model_solves/channel_alloc/channel_alloc.json --rules _shared/eda_core/drc_rules.json --pro k1/k1_v1.kicad_pro --config k1/pm_gate/artifacts/k1/L2/route_model_config.json --all-v4 --out /tmp/opencode/k1rerun",
+  "note": "**须 `-m eda_core.hs_route_model`**（直接跑脚本 ⇒ `attempted relative import with no known parent package`）；产物仅落 `/tmp/opencode/k1rerun`，**K1 SPEC 未写**。",
+  "wall_clock_s": 1.673,
+  "board_input_fp": "eda1dc91eec76aa753ab166ae4af8b1208d37c347c117bbd8a97efa482b6263d",
+  "result": {
+   "status": "PARTIAL",
+   "solved": [],
+   "infeasible": [
+    "TX0",
+    "TX1",
+    "RX0",
+    "RX1"
+   ]
+  },
+  "per_segment": {
+   "TX0": {
+    "input": "INFEASIBLE（左逃逸对级不可行）",
+    "output": "**SOLVED**（corridor HIGH_SPEED_MAIN · track_P 22.5 / track_N 18.5 · N 走 F.Cu→In2）"
+   },
+   "RX0": {
+    "input": "INFEASIBLE（左逃逸对级不可行）",
+    "output": "INFEASIBLE（右逃逸对级不可行）"
+   },
+   "TX1": "INFEASIBLE",
+   "RX1": "INFEASIBLE"
+  }
+ },
+ "diagnosis": {
+  "config_effective": {
+   "escape_via_mode": true,
+   "hs_layer": "F.Cu",
+   "chain_segments": [
+    "RX0",
+    "RX1",
+    "TX0",
+    "TX1"
+   ]
+  },
+  "断点": "**对级逃逸（pair escape）**，非分派、非 pad 契约。",
+  "pad_contract_findings": "**0** ⇒ B2-1 新增的两源交叉核对（板 as-built ↔ SPEC `components.pads` 冻结资产）**未发现冲突** ⇒ 本断点**不是** pad 真源不一致所致（该可能性已被 B2-1 正面排除）。",
+  "旁证": "TX0 的 **output 段已 SOLVED**（走廊/轨道分配可用）⇒ 非全面崩溃，是**逃逸侧净空/资源**问题。",
+  "定性": "属 **L2**（逃逸/走廊/过孔策略）口径 ⇒ 原则上 ENG 可自裁推进；但**下一步须先做逃逸不可行定因**（本会话 context 已尽，未展开）。"
+ },
+ "consequence": {
+  "resume_status": "恢复条件中「**全 51 网折线**」**未达成** ⇒ K1 复跑**停于第 1 步**（不是 HOLD：前置已证满足、复跑已执行、断点已定性到段级）。",
+  "not_landed": [
+   "**未写** K1 SPEC `router.frozen_segments`（改 SPEC ⇒ 须批）",
+   "未出 K1 Gerber"
+  ]
+ },
+ "next_actions": [
+  "① 逃逸不可行定因：对 TX0/RX0 input 段复算「哪个障碍/哪条走廊展开线占位」导致 `_escape_polyline`/`_escape_smd_via` 全候选失败（可复用 B2-1 契约 + 既有 `_escape_*` 证明性输出）。",
+  "② 若定因指向项目配置/期望值（如走廊口径、退化容差）⇒ 按 owner 常设②『禁新增检查齿 / 不得为变绿缩口径』提监理裁定；若纯几何 L2（如走廊展开线占位）⇒ ENG 自裁推进。",
+  "③ `--all-v4` 的 K1 分派已生效，可作为该诊断的稳定复现基（1.7 s/次，可快迭代）。"
+ ],
+ "readonly_repo": true,
+ "not_landed": true
+}
