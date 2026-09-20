@@ -1,0 +1,112 @@
+{
+ "artifact": "k2_p5_pdn_precheck_revbasis_l8",
+ "schema": 1,
+ "ts": "2026-09-21T01:01:05+0800",
+ "id": "**P5 设计侧预判件之 rev 基准核验**（`PDN_DESIGN_PRECHECK_V5` 系基于 **l7**；本件独立复算 **l7 vs l8** 逐 rail 几何/电阻，判定引用有效性）",
+ "nature": "**设计侧预测 · 非 P5 证据 · 不充绿**（承原件口径）；**未改**阈值/判据/板/包",
+ "why": "监理自动续推『推进当前阶段（P5）』；本会话外发面 rev 审计（CR-46）后**同型延伸**：P5 设计侧预判件是否仍以 **l7** 为基准（l8 已为现行 rev）。",
+ "inputs": {
+  "l7_board": "k2/hw/k2_v4_8L.l7.kicad_pcb（c5a7df90aadb66e0）",
+  "l8_board": "k2/hw/k2_v4_8L.l8.kicad_pcb（7a5c89913d6e5d0a）",
+  "model_ref": "ρ_Cu(20°C)=1.68e-8 Ω·m · α=0.00393/K ⇒ 85°C ×1.256；外层 35µm(1oz) · 内层 17.5µm(0.5oz)；R=ρL/(w·t)"
+ },
+ "model_validation": "**以项目自身读数反证**：`P3V3_AUX` 最坏单跳 `In5.Cu 20.789mm / 0.2mm / 0.5oz` ⇒ 本件模型算得 **125.3 mΩ@85℃** = 原件/投递说明 §8 所载 **125.3 mΩ** ⇒ **模型逐项吻合**。",
+ "per_rail": {
+  "12V_IN": {
+   "l7": {
+    "n_seg": 5,
+    "L_mm": 3.52,
+    "n_via": 3
+   },
+   "l8": {
+    "n_seg": 5,
+    "L_mm": 3.52,
+    "n_via": 3
+   },
+   "R_l7_mohm": 10.6,
+   "R_l8_mohm": 10.6,
+   "dR_mohm": 0.0,
+   "verdict": "不变"
+  },
+  "P3V3": {
+   "l7": {
+    "n_seg": 53,
+    "L_mm": 54.29,
+    "n_via": 43
+   },
+   "l8": {
+    "n_seg": 55,
+    "L_mm": 55.1,
+    "n_via": 44
+   },
+   "R_l7_mohm": 163.67,
+   "R_l8_mohm": 166.1,
+   "dR_mohm": 2.43,
+   "verdict": "微变（+1.5% · 可忽略）"
+  },
+  "P3V3_AUX": {
+   "l7": {
+    "n_seg": 84,
+    "L_mm": 109.44,
+    "n_via": 10
+   },
+   "l8": {
+    "n_seg": 84,
+    "L_mm": 109.44,
+    "n_via": 10
+   },
+   "R_l7_mohm": 451.26,
+   "R_l8_mohm": 451.26,
+   "dR_mohm": 0.0,
+   "worst_hop": {
+    "l7": "In5.Cu 20.789mm ⇒ 125.3 mΩ",
+    "l8": "同 ⇒ 125.3 mΩ"
+   },
+   "verdict": "**完全不变** ⇒ 投递说明 §8 所引读数**仍然有效** ✅"
+  },
+  "MCU_VDD": {
+   "l7": {
+    "n_seg": 63,
+    "L_mm": 33.11,
+    "n_via": 12
+   },
+   "l8": {
+    "n_seg": 168,
+    "L_mm": 54.1,
+    "n_via": 15
+   },
+   "R_l7_mohm": 130.65,
+   "R_l8_mohm": 236.57,
+   "dR_mohm": 105.92,
+   "worst_hop": {
+    "l7": "F.Cu 4.95mm",
+    "l8": "F.Cu 5.657mm"
+   },
+   "verdict": "**显著变化（+105.92 mΩ · +81%）** ⇒ 该 rail 之 **l7 基准事实已过时**",
+   "cause": "CR-26 修复（`U4` pad2/pad3 交换）= `MCU_VDD`/`P3V3` 网重布所致（本 rev 唯一 4 条 pad→net 之连带几何变更）"
+  }
+ },
+ "other_nets_changed": [
+  "GND 148→147 seg / 336→338 via",
+  "NRST 88→118 seg",
+  "LED_A 1→5 seg",
+  "SWCLK_BOOT0 109→111 seg",
+  "I2C1_SDA 159→160 seg"
+ ],
+ "budget_caliber_note": "原件 `MCU_VDD::budget3_mV = 99.0` 系 **3% × 3.3V**；而 **#K2-55** 已定 `MCU_VDD` **主判标称 = 3.0V** ⇒ **3% 预算应作 90.0 mV**（登记 · 不改原件 · 不新增齿）。",
+ "assessment": {
+  "citation_validity": "投递说明 §8 仅引 `P3V3_AUX` 最坏单跳 125.3 mΩ —— **l8 逐项相同 ⇒ 引用有效**；§9/§10 之预期值/标称非几何依赖 ⇒ 有效。",
+  "stale_part": "`PDN_DESIGN_PRECHECK_V5` 内 **`MCU_VDD`** 之 `n_seg/L_total/n_vias/plane_grade` 系 **l7** 基准 ⇒ 已过时（本件给出 l8 值）。",
+  "impact": "**不改变 V5 判据**（≤3% · 外部实测 · ENG 不自证）；**不改变测点要求**（`P3V3_AUX` 须取 `J3`/`J4` 端 —— 该读数不变）；仅使**设计侧期望**回到 l8 基准。**建议**：V5 实测**同时覆盖 `MCU_VDD`**（其迹线电阻 l8 已近倍增；`In4` 大平面可分担 ⇒ 真实压降仍应远低于迹线数）。",
+  "why_not_a_new_tooth": "复用原件**同一模型/同一阈值** ⇒ **非新增判据维/检查齿**；未改任何文件之判据口径。"
+ },
+ "red_lines_ok": [
+  "只读复算（解析两板文本）",
+  "未改板/SPEC/网表/判据/交付包/生成器",
+  "未改原预判件（仅新增本件 + 册面注）",
+  "未新增判据维/检查齿",
+  "未派 WORKER"
+ ],
+ "repro": "见本件 `inputs`；解析 = 括号配对提取 `(segment …)/(via …)`（KiCad 10 · `(net \"NAME\")` 行内式）；R=ρ85·L/(w·t_layer)。",
+ "next": "V5 外部实测须覆盖 `MCU_VDD` 与 `P3V3_AUX`(J3/J4 端)；判定归监理；ENG 不自证。"
+}
