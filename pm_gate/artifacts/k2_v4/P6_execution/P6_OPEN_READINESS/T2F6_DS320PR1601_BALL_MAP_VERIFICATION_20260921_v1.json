@@ -1,0 +1,58 @@
+{
+ "artifact": "k2_t2f6_ds320pr1601_ball_map_verification",
+ "schema": 1,
+ "ts": "2026-09-21T09:55:00+0800",
+ "id": "`DS320PR1601`（U6）**354-ball 全量逐球核对** —— TI 正本独立复算",
+ "authorization": "handoff §7-B（T2-F6 按需 · P5 可判性）· #K2-53 §二 T2-F6 ④（新通道）· owner #14⑥（不停等）",
+ "scope": "本件为**上一笔列为『未做』之收口**（`T2F6_TI_LANE_TIER2_VERIFICATION_20260921_v1.json` next①）。",
+ "evidence": {
+  "datasheet": "TI **SNLS683 – JUNE 2023** · DS320PR1601（ZDG nfBGA-354）",
+  "url": "https://www.ti.com/lit/ds/symlink/ds320pr1601.pdf",
+  "sha256": "f61599c4356edb395e07c9300999ab818898986a4adde71753bae7a080c039da",
+  "sha_match": "**与本项目 `DS320PR1601.yaml` 所记 `doc_sha256` 及 `m13_v57_co148…inputs.json` 之 `pdf_sha256` 三方同值** ⇒ 正本无歧义",
+  "table": "**§5 Table 5-1. Pin Functions**（p6–p14 共 9 页含 continued 页）"
+ },
+ "method": {
+  "parser": "**独立重解析**（非沿用 yaml 之转录）：逐页 `pdftotext -layout` → 行锚定正则 `^\\s*([A-Z]{1,2}\\d{1,2})\\s{2,}(NAME)`（`re.M`）⇒ 建 `ball→name` 表；再与 yaml 逐球比对（归一化 `[^A-Z0-9]` 去除非字母数字并大写）",
+  "independence": "① 逐页解析（不复用单次全篇抽取）· ② 行锚定（要求 ball 位于行首，避免图表文字混入）· ③ 双向核对（yaml↔PDF 双向差集）",
+  "pitfall_recorded": "`pdftotext` 之 `-layout` 会因续页缩进不同而令『要求 ball 后 ≥2 空格』之旧式失效 ⇒ 须 `re.M` + `^\\s*`（本件首次尝试曾因漏 `re.M` 得 0 行 —— 记入环境教训）"
+ },
+ "result": {
+  "pdf_rows_parsed": 354,
+  "pdf_unique_balls": 354,
+  "pdf_duplicate_conflicts": 0,
+  "yaml_balls": 354,
+  "matched": 354,
+  "conflict": 0,
+  "not_parsed": 0,
+  "pdf_only": 0,
+  "yaml_only": 0,
+  "per_page_rows": {
+   "p6": 39,
+   "p7": 44,
+   "p8": 44,
+   "p9": 44,
+   "p10": 44,
+   "p11": 44,
+   "p12": 44,
+   "p13": 32,
+   "p14": 19
+  },
+  "verdict": "**354/354 逐球一致 · 0 冲突 · 0 缺 · 0 多** ⇒ ① `_shared/eda_core/sch_gate/datasheets/DS320PR1601.yaml` 之 ball→signal 映射**与厂商正本一致**；② 其自述『ball 集合与符号库逐 ball 一致（354/354，无缺无重）』之**PDF 侧前提**成立"
+ },
+ "impact": {
+  "u6": "U6 = 板内最复杂器件（354 ball）；本件使其**球名真源**获厂商正本独立锚（此前后续仅信自转录）",
+  "doc_url_gap": "yaml 记 `doc_url: \"(本地厂商 PDF；公开直链未获)\"` ⇒ **现已知公开直链** `https://www.ti.com/lit/ds/symlink/ds320pr1601.pdf`（**仅登记**；`_shared` 件改动 = 待批，同 T2-F1 族，**禁 ENG 擅改**）",
+  "caliber": "**真源勘验 · 不充绿**（tier2 读数仍 17/33；未入任何判据）"
+ },
+ "red_lines": [
+  "未改 `_shared/eda_core/**`（`doc_url` 等仅登记待批）",
+  "未改冻结四源/criteria/交付包/受审板",
+  "外部厂商 PDF 仅落 `/tmp/opencode/ti`（未入库）",
+  "未新增判据维/检查齿",
+  "未派 WORKER"
+ ],
+ "readonly_repo": true,
+ "not_landed": true,
+ "next": "TI 族补证已清（9 文献号 + 7 小件 114 脚 + U6 354 球）；余待：① TI-CIT-1/2/3 + 本件 `doc_url` ⇒ **待监理批**后落 `_shared`；② ST/SpacemiT/连接器族仍**新通道才试**（`st.com` 567 查 `www.stmcu.com.cn` 429）；③ P5 回件→回填→监理判定。"
+}
