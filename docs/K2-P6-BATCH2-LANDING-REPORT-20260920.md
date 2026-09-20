@@ -77,3 +77,17 @@ K2 此前只有**单文件** PYTESTERS（`test_hs_route_model.py`）。本件首
 - **21 项 skip 分类**：**17 项 = `k2_m9demo` 基线板不在库**（`test_hs_route_model` 12 · `test_ls_migration` 3 · `test_drc_locator` 2 ⇒ 比先前只知 `hs_route_model` 12 更广）+ 4 项其他（K2 真实工件缺失 ×2 · K2 真源数据缺失 ×1 · 影子树无 git HEAD ×1）。
 - **口径**：解释器必须 `AppDir/bin/python3.11`（ambient `python3` 会在 3 个模块 `ImportError: pcbnew`）；命令 `-m pytest -q --tb=no -p no:cacheprovider --junitxml=<out> shared/eda_core/tests/`；全量与单文件跑法结论一致（无顺序依赖差异）。
 - 机读：`P6_execution/SUITE_BASELINE_AND_BATCH2_DELTA_v1.json`（`9e5ec990e…`）。
+
+### 5.1 ⚠ 套件级发现：**同一测试文件在两种检出布局下行为不同**（22 项静默 skip）
+
+| 布局 | cwd | passed | failed | skipped |
+|---|---|---|---|---|
+| **k2 检出布局**（影子树） | 影子树根 | 510 | 31 | 21 |
+| **容器根布局**（框架基线工具 `k2_p6_readonly_baseline_v1.py` 的口径） | `REPO` | 492 | **28** | **42** |
+
+- **归因**：`K2V4_REAL_BOARD = REPO / "k2_v4.kicad_pcb"`（`REPO=parents[3]`）——在 **k2 检出**下 = `k2/` ⇒ 命中 8L 板；在**容器 `_shared` 检出**下 = `ic_hw/` ⇒ 该路径**恒不存在** ⇒ **22 项（含 B2-T 全族）静默 skip**。同文件注释本就要求「两处 checkout 必须同一解析」，`K2V4_SPEC`/`K2V4_ALLOC` 已用绝对锚，**仅板锚漏改**。
+- ⇒ **框架自身的基线工具读到 mask 视图**（`tests.test_hs_route_model`: 41 passed / **34 skipped**），验收门 C 腿的 pytest 基线因此低估。
+- 差集完全可归因：natural-only skip **22 项全在** `test_hs_route_model`；shadow-only failure 3 项 = C1/C2（natural 下被 skip 掩盖）+ `test_env_fingerprint::test_default_paths_repo_relative_no_tmp`（影子根非 git 仓库的环境差，**非产品缺陷**）；shadow-only skip 1 项 = `test_verify_cache::test_init_cleanup_auto_git_head`。
+- **备料（未落件，C-6：批 2 已落 ⇒ 建议并入下一批）**：1 行锚修（`K2V4_REAL_BOARD` → 绝对锚）+ **配套 2 行**（影子工具板锚补丁改容忍，否则验收门 D 腿会 AssertionError）；`patch -p3 --dry-run` 已过。
+  预期（容器根布局）：**passed 492→512 · failed 28→30（新增 = 具名 C1/C2）· skipped 42→20**；k2 检出版零变化。
+- 机读：`P6_execution/SUITE_LAYOUT_ASYMMETRY_AND_ANCHOR_FIX_v1.json` + `P6_OPEN_READINESS/anchors/K2V4_REAL_BOARD_absolute.diff`。

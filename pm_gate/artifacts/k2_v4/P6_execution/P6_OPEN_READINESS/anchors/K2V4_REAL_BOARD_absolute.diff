@@ -1,0 +1,15 @@
+--- a/k2/_shared/eda_core/tests/test_hs_route_model.py
++++ b/k2/_shared/eda_core/tests/test_hs_route_model.py
+@@ -318,7 +318,11 @@
+ # 落板到副本板 → kicad-cli pcb drc（--severity-error --refill-zones）→
+ # 断言高速网（PCIE_*）违规 == 0 且未连接 == 0。每个引擎改动后必跑（防回归）。
+ 
+-K2V4_REAL_BOARD = REPO / "k2_v4.kicad_pcb"
++# B2-T 甲（B2-4 同族）：**绝对锚**（与同文件 K2V4_SPEC / K2V4_ALLOC 同口径）。
++# 原相对式 `REPO / "k2_v4.kicad_pcb"`：REPO=parents[3]，在 **k2 检出**下 = k2/ ⇒ 命中；
++# 在**容器 _shared 检出**下 = ic_hw/ ⇒ `ic_hw/k2_v4.kicad_pcb` 恒不存在 ⇒ **22 项静默 skip**
++#（框架自身基线工具 `k2_p6_readonly_baseline_v1.py` 以 cwd=REPO=容器根 运行 ⇒ 读到 mask 视图）。
++K2V4_REAL_BOARD = Path("/home/fila/jqdDev_2025/ic_hw/k2/k2_v4_8L.kicad_pcb")
+ # 同上：K2 项目 pm_gate 工件绝对锚（容器根 k2），两处 checkout 同一解析。
+ K2V4_SPEC = (Path("/home/fila/jqdDev_2025/ic_hw/k2/pm_gate/artifacts/k2_v4")
+              / "L3" / "SPEC_k2_v4.json")

@@ -1,0 +1,57 @@
+{
+ "artifact": "k2_suite_layout_asymmetry_and_anchor_fix_bundle",
+ "authorization_note": "属**测试锚**类（与 #K2-41 §三-④ A1–A15 同族），但批 2 已落件 ⇒ 按 C-6（禁零散补丁）本件**只备料**，建议并入下一批（或由监理裁定作为批 2 修正件同批补落）。",
+ "finding": {
+  "evidence_note": "两布局差异**可归因**：natural-only skip 全部落在 `test_hs_route_model`（22 项）；shadow-only failure 3 项 = 2 项为 C1/C2（在 natural 下被 skip 掩盖）+ 1 项 `test_env_fingerprint::test_default_paths_repo_relative_no_tmp`（影子根非 git 仓库的环境差，非产品缺陷）；shadow-only skip 1 项 = `test_verify_cache::test_init_cleanup_auto_git_head`（影子树无 git HEAD）。",
+  "impact": [
+   "**框架自身的基线工具**（cwd=REPO=容器根）因此读到 **mask 视图**（`tests.test_hs_route_model`: 41 passed / **34 skipped**）⇒ 验收门 C 腿的 pytest 基线低估",
+   "pytest 侧『skip 充绿』洞**仍在**（与已具名的 m9demo 12 项不同：这 22 项只需 1 行锚修即可实跑）"
+  ],
+  "root_cause": "`K2V4_REAL_BOARD = REPO / \"k2_v4.kicad_pcb\"`（REPO=parents[3]）：在 **k2 检出**下 = `k2/` ⇒ 命中 8L 板；在**容器 `_shared` 检出**下 = `ic_hw/` ⇒ `ic_hw/k2_v4.kicad_pcb` **恒不存在** ⇒ 22 项（含 B2-T 全族）**静默 skip**。同文件注释本就要求『两处 checkout 必须同一解析』（K2V4_SPEC/K2V4_ALLOC 已用绝对锚，仅板锚漏改）。",
+  "same_tests_different_layout": {
+   "natural_only_skips": 22,
+   "natural_容器根布局（框架基线工具口径）": {
+    "cwd": "REPO（容器根；`k2_p6_readonly_baseline_v1.py` 的 pytest 口径）",
+    "failed": 28,
+    "passed": 492,
+    "skipped": 42
+   },
+   "shadow_k2检出布局": {
+    "cwd": "<影子树根>（=k2 检出布局）",
+    "failed": 31,
+    "passed": 510,
+    "skipped": 21
+   },
+   "shadow_only_failures": [
+    "tests.test_env_fingerprint::test_default_paths_repo_relative_no_tmp",
+    "tests.test_hs_route_model.TestBoardLevelConsistency::test_board_level_consistency",
+    "tests.test_hs_route_model.TestV5FlipRedesign::test_chain_no_pn_zero_spacing"
+   ],
+   "shadow_only_skips": [
+    "tests.test_verify_cache::test_init_cleanup_auto_git_head"
+   ]
+  }
+ },
+ "fix_bundle": {
+  "companion_required": {
+   "change": "`build_shadow` 内板锚补丁由硬 `assert old in s` 改为**容忍已绝对锚**（否则落锚后验收门 D 腿会 AssertionError）",
+   "file": "k2/tools/k2_p6_shadow_verify_v1.py",
+   "note": "2 行；须与本修同批（否则 D 腿失效）"
+  },
+  "primary": {
+   "change": "`K2V4_REAL_BOARD` 相对锚 → **绝对锚** `/home/fila/jqdDev_2025/ic_hw/k2/k2_v4_8L.kicad_pcb`（与 K2V4_SPEC/K2V4_ALLOC 同口径）",
+   "diff": "P6_OPEN_READINESS/anchors/K2V4_REAL_BOARD_absolute.diff（15 行；`patch -p3 --dry-run` 已过）",
+   "expected_effect_k2_layout": "**零变化**（61P/2F/12S 不变）",
+   "expected_effect_natural_layout": {
+    "failed": "28 → 30（新增 C1/C2 = 具名保持 RED）",
+    "passed": "492 → 512",
+    "skipped": "42 → 20"
+   },
+   "file": "k2/_shared/eda_core/tests/test_hs_route_model.py（容器 _shared 同内容、同需改）"
+  }
+ },
+ "note": "只读取证；真源未改；未动判据/冻结件/交付锚；未派 WORKER。",
+ "purpose": "取证「同一测试文件在两种检出布局下行为不同」的**套件级口径缺陷**（22 项静默 skip），并备 1 行锚修 + 配套 2 行工具容忍（**未落件**）",
+ "readonly_repo": true,
+ "schema": 1
+}
