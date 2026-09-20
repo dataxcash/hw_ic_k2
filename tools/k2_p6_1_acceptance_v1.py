@@ -41,6 +41,31 @@ IGNORE_9 = ["copper_sliver", "footprint_filters_mismatch", "footprint_type_misma
             "tuning_profile_track_geometries", "via_dangling"]
 
 
+REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+
+def _authorized_disabled(manifest_name: str) -> dict:
+    """已签认 manifest 中**显式** `enabled: false` 的判据维（口径对齐）。
+
+    防维集漂移的**强化**写法（C-12 护栏）：verdict 少维**必须**在**已签认**
+    manifest 里显式关闭，否则仍 FAIL ⇒ 不得静默少维、不得为变绿缩口径。
+    依据：`criteria/manifest.k1.yaml` 的 `checks.<dim>.enabled: false`
+    （K1 `ref_plane_continuity` 为 vacuous，由监理落件时显式关闭）。"""
+    if not manifest_name:
+        return {}
+    path = os.path.join(REPO, "criteria", str(manifest_name))
+    if not os.path.isfile(path):
+        return {}
+    try:
+        import yaml
+        m = yaml.safe_load(open(path, encoding="utf-8").read()) or {}
+    except Exception:
+        return {}
+    checks = m.get("checks") or {}
+    return {k: v for k, v in checks.items()
+            if isinstance(v, dict) and v.get("enabled") is False}
+
+
 def _fail_map(v: dict) -> dict:
     return {f.get("check"): (f.get("detail") or "") for f in (v.get("fails") or [])}
 
@@ -112,9 +137,13 @@ def main() -> int:
         "no_fp_lib_table(1)": check_no_fp_lib_table(fm),
         "sheets_empty(1)": check_sheets_empty(a.pro),
     }
+    disabled = _authorized_disabled(v.get("manifest"))
+    dim_set_ok = (set(dims) <= set(DIMS_19)) and (set(DIMS_19) - set(dims)) == set(disabled)
     integrity = {
-        "dim_set_is_19": {"ok": dims == sorted(DIMS_19), "read": f"{len(dims)} 维",
-                          "why": "防维集漂移（非判据维）"},
+        "dim_set_is_19": {"ok": dim_set_ok,
+                          "read": (f"{len(dims)} 维 · 已签认显式关闭={sorted(disabled)}"),
+                          "why": "防维集漂移（非判据维）：维集须 ⊆ 19 维基准，"
+                                 "且缺维只能是在**已签认** manifest 中显式 enabled:false 者"},
         "manifest_countersigned": {"ok": v.get("provisional") is False,
                                    "read": f"provisional={v.get('provisional')} · manifest={v.get('manifest')}",
                                    "why": "manifest 未经监理签认 ⇒ 不得宣称 P6-1 通过（G-c2 落件）"},

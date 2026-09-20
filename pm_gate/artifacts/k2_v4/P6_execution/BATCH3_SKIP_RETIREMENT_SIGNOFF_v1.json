@@ -1,0 +1,32 @@
+{
+ "artifact": "k2_batch3_skip_retirement_signoff",
+ "schema": 1,
+ "ruling": "#K2-42 §二⑤（批 3 全量放行）",
+ "registry": {
+  "path": "k2/pm_gate/artifacts/k2_v4/P6_execution/BATCH3_SKIP_RETIREMENT_REGISTRY_v2.json",
+  "sha16": "717f3ec00e713018"
+ },
+ "disposition": {
+  "A(m9demo 族 17)": "S1 具名接受 + 覆盖真空登记（不计覆盖、不充绿）",
+  "B(v5/v6 外部 fixture 2)": "F2 与 A 类合并具名退役",
+  "C(路径缺陷永久掩盖 1)": "S3/S4（**不得退役了事**；归属已具名登记，待 S3/S4 专项）"
+ },
+ "coverage_vacuum": {
+  "apis": [
+   "solve_pair_segment",
+   "solve_chain_v2"
+  ],
+  "counts_toward_coverage": false,
+  "counts_as_green": false
+ },
+ "acceptance": {
+  "cmd": "python3 k2/tools/k2_skip_registry_check_v1.py --registry <registry> --junit <实测 junit>",
+  "junit": "/tmp/opencode/b3_final_container.xml",
+  "junit_sha16": "77f1b414508adb7c",
+  "reading": "实测 skip 20 · 登记 20 ⇒ 未登记 0 · 登记未出现 0",
+  "verdict": "PASS"
+ },
+ "note": "本件 = S6 签认登记面；**不改 registry 本体**（保持其在岗 sha，供监理按已引 sha 复核）。",
+ "readonly_repo": true,
+ "not_landed": false
+}

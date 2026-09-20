@@ -111,9 +111,16 @@ def build_shadow(root: str, board_abs: str, apply_batch2: bool) -> list:
     p = os.path.join(root, "shared", TEST_REL)
     s = open(p, encoding="utf-8").read()
     old = 'K2V4_REAL_BOARD = REPO / "k2_v4.kicad_pcb"'
-    assert old in s
-    open(p, "w", encoding="utf-8").write(s.replace(old, NEW_TEST_ANCHOR_FMT.format(board=board_abs), 1))
-    patches.append({"file": TEST_REL, "note": f"SHADOW-ONLY 测试板锚 → {board_abs}"})
+    if old in s:  # 未落锚修：相对式
+        s = s.replace(old, NEW_TEST_ANCHOR_FMT.format(board=board_abs), 1)
+        note = f"SHADOW-ONLY 测试板锚（相对式）→ {board_abs}"
+    else:  # 已落锚修：真源是绝对式 ⇒ 容忍并复写为影子专用锚（形态无法识别仍 fail-closed）
+        m = re.search(r'^K2V4_REAL_BOARD\s*=\s*Path\("[^"]*"\).*$', s, re.M)
+        assert m, f"PATCH MISS {TEST_REL}：板锚既非相对式亦非绝对式（fail-closed）"
+        s = s[:m.start()] + NEW_TEST_ANCHOR_FMT.format(board=board_abs) + s[m.end():]
+        note = f"SHADOW-ONLY 测试板锚（真源已落绝对锚）→ {board_abs}"
+    open(p, "w", encoding="utf-8").write(s)
+    patches.append({"file": TEST_REL, "note": note})
     return patches
 
 
