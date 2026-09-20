@@ -1,0 +1,72 @@
+# K2 · **P6/学习环批 2 · K1 侧只读基线 + 框架缺陷实证**（v1 · 2026-09-20）
+
+> 性质：**只读实测记录 + 根因命名**（不改任何载体/判据/交付包）。
+> 用途：① 给 B2-1..B2-4 的「改前」判据；② 把 v2 计划里的**推测性根因**换成**可复现实证**。
+> 机读真源：`pm_gate/artifacts/k2_v4/P6_execution/BASELINE_pm_gate_k1_k2_readonly_v1.json`
+> sha256 **`27d79e460809987c9ab6e94f7d2451ca1830f56f95da7fc05b436ef99eb25d6b`**（两次连跑逐字节同）
+> 机核：`pm_gate/artifacts/k2_v4/P6_execution/INSTRUMENT_SELFCHECK.json`（13/13 锚在；负控已验：篡改 1 锚 ⇒ FAIL/退出码 1）
+> 复现：`PYTHONPATH=AppDir/shared/lib/python3.11/dist-packages AppDir/bin/python3.11 k2/tools/k2_p6_readonly_baseline_v1.py --out /tmp/opencode/k2_p6_baseline.json`
+
+## 0. 交付锚复核（未动）
+`MANIFEST.json` `6ee7495d…` · tarball `0e88e107…`（422,709 B）· 受审板 `l7 c5a7df90…` · 冻结四源 `d4e81f64…`/`fb07d25a…`/`dd794c54…` · 判据 rev=3（ENG 只读）。
+
+---
+
+## 1. 三个**框架缺陷**（实证 · 均属 C-3「工具对仓库/项目布局的假设陈旧」族）
+
+### F-1 · `RULES_DOC` 越出容器 ⇒ **G1.5 对任何项目不可 PASS**
+- 载体：`_shared/pm_gate/check_l1.py:193`（`__file__` 三级上溯 + `"..", "doc", "PCB_DESIGN_RULES.md"`）。
+- 实测解析：K1 → `/home/fila/jqdDev_2025/ic_hw/../doc/PCB_DESIGN_RULES.md`；K2 → `/home/fila/jqdDev_2025/ic_hw/k2/../doc/PCB_DESIGN_RULES.md` ⇒ **两者的 `exists=False`**（该路径在容器外）。
+- 真源：`_shared/docs/PCB_DESIGN_RULES.md`（在库）；K1 `state_k1.json` 的 **G1.5 WAIVER 原文即如此指认**（「多退一层，越出容器」）。
+- 结论：**K1/K2 双双 FAIL**（本轮实测）。K1 侧历史判定 = `WAIVER`（`is_waiver=True`，RISK-001）；**K2 的历史 G1.5 PASS 早于本次布局**，今日不可复现。
+- 对应：**B2-4**。
+
+### F-2 · L2/L3/QA 门禁**未项目化** ⇒ 非默认项目恒读错产物
+- 载体：`check_l2.py` / `check_l3.py` / `check_qa.py` 的 `artifacts.read_text(...)` **未传 `project=`**（T13 只改造了 `check_l1.py`）⇒ 恒用函数默认 `DEFAULT_PROJECT="k2_v4"`。
+- 独立书证：`k1/pm_gate/tools/k1_l2_gate_runner.py` docstring 明写「**L2/L3/QA 门禁对非默认项目恒不可机判**——与账本 C-3 同族」。
+- 本轮实测（K1）：`G2.1` 报「缺失 `measurements.md`」，而 `k1/pm_gate/artifacts/k1/L2/measurements.md` **实际存在** ⇒ 读的是**别的项目维度**。
+- 子项：
+  - **F-2a**：`check_l3.py:26` 硬编码 `SPEC_k2_v4.json`（文案 `:28/:46/:53`）⇒ K1 `G3.1` 报「缺失 SPEC_k2_v4.json」，而 K1 **实有** `L3/SPEC_k1.json`。
+  - **F-2b**：`check_qa.py:35` `config.spec_name()` **空参** ⇒ 取 `DEFAULT_PROJECT`（`k2_v4`）而非 active project（`_shared` 内**唯一空参点**）⇒ K1 `G4.1` 报「SPEC 缺失，无法对照」。
+- 对应：**B2-3a / B2-3b**。
+
+### F-3 · `wp1_closure_check` 默认值为**框架相对**且**目录不存在** ⇒ G3.5 对任何项目不可跑
+- 载体：`_shared/pm_gate/closure_check.py:110-113`：`DEFAULT_SPEC` / `ESCAPE_SPEC_PATH` = `<pm_gate 模块目录>/artifacts/L3|L2/...`，即 `_shared/pm_gate/artifacts/...`。
+- 实测：`_shared/pm_gate/artifacts` **不存在**；K1/K2 `check_g35` 均 FAIL（「SPEC 读取失败 `_shared/pm_gate/artifacts/L3/SPEC…`」）。
+- 定性：M-14「基址钉死 = 项目根」**未覆盖这 2 处**（与 `check_l3` 的硬编码名叠加）。
+- 对应：**B2-3c**。
+
+---
+
+## 2. K1 / K2 框架维度现状读数（实测；「改前」值）
+
+| gate | K1（框架维度） | K1（项目自述 `state_k1.json`） | K2（框架维度） | K2（`state_k2_v4.json`） |
+|---|---|---|---|---|
+| G1.1–G1.4 | PASS | PASS | PASS | PASS |
+| G1.5 | **FAIL**（F-1） | **WAIVER**（RISK-001） | **FAIL**（F-1） | PASS（2026-08-21，早于布局） |
+| G2.1–G2.5 | **FAIL**（F-2，读错维度） | PASS（经 `k1_l2_gate_runner` 注入项目维度） | PASS | PASS |
+| G2.6 | FAIL（同上） | PASS | FAIL（`escape_closure_analysis.md` 无明确判定） | PASS |
+| G3.1 | **FAIL**（F-2a） | pending | **FAIL**（spec 解析名 + 期望集陈旧，见 §3） | PASS（2026-08-21） |
+| G3.2/G3.4 | FAIL（K1 无该件 / F-2） | G3.4 PASS·G3.2 pending | PASS / PASS | PASS |
+| G3.3 | FAIL（F-2） | pending | PASS | PASS |
+| G3.5 | **FAIL**（F-3） | pending | **FAIL**（F-3） | PASS（2026-08-23） |
+| G4.1/G4.2 | **FAIL**（F-2b） | pending | FAIL（`k2_v4.kicad_pcb` 无走线 = 对象缺失） | pending |
+
+> **读法**：K1 的 `G2.x/G3.x` 框架 FAIL **不等于 K1 缺件**——K1 自有 runner 已 PASS；差异即 F-2。**升版验收必须**区分「项目真缺件」与「工具读错维度」。
+
+## 3. 判据侧待裁项（**ENG 不得自定** · C-12）
+1. **`SPEC_EXPECTS["corridors"]` 陈旧**：`check_l3.py:17-22` 期望 `J2_TO_U` / `U_TO_MCIO`；现行 spec（plain 与 rev-52 同）走廊 `id` 实为 **`EAST_CHIP_TO_J2` / `WEST_MCIO_TO_CHIP`** ⇒ 即使修好解析，K2 `G3.1` **仍 FAIL**。期望集属判据面 ⇒ **须监理裁定**（改名承接 / 双名兼容）。对应 **B2-3d**。
+2. **撤 K1 `G1.5` waiver**（RISK-001）：修 F-1 后须**无 waiver 机判 PASS**；属判据收紧 ⇒ **须监理批**。
+3. **P6-1 前置缺件**：`criteria/` 仅有 `manifest.k2.yaml`；`adjudicate.py:536` 按 `criteria/manifest.<project>.yaml` 解析 ⇒ `--project k1` **FAIL-closed**。**应然集属监理持有**（G-c2）。
+
+## 4. SPEC 名站点普查修正（范围差异，须具名）
+| 口径 | v2 计划 | 本轮实测 |
+|---|---|---|
+| `_shared` 内 `SPEC_k2_v4` 命中 | 「13 处」 | **43 处**（`pm_gate/` 内 **16**、`eda_core/` 内 27） |
+| 新增具名（v2 未列） | — | `review.py:121` · `check_qa.py:34` · `config.py:120` · `closure_check.py:112` · 27 处 `eda_core`（含 tests） |
+> **实施要求**：逐处**定性**（应项目化 / 应具名豁免），**禁**一把梭替换（C-12）；范围结论须与监理对齐。
+
+## 5. 不改动声明
+本件与两份工具**零载体改动**：未触 `_shared`（除只读 import）· 未触 `criteria/` · 未触冻结四源 · **未重建交付包** · 未触 `.omo/supervision/**`。临时件仅在 `/tmp/opencode`。
+
+—— ENG（ARCHER）· 2026-09-20 · k2 HEAD 见提交 · 最新裁定 **#K2-40**

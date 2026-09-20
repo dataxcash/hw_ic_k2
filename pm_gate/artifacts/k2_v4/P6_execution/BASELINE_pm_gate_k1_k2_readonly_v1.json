@@ -1,0 +1,670 @@
+{
+ "anchors": {
+  "board_design_source": {
+   "exists": true,
+   "path": "k2/hw/k2_v4_8L.kicad_pcb",
+   "sha256": "fb07d25ac426ff84905200a9af88e04dd9e6b9216986c4f4459fd7d556a88c34"
+  },
+  "board_l4_frozen": {
+   "exists": true,
+   "path": "k2/hw/k2_v4_8L.l4.kicad_pcb",
+   "sha256": "d4e81f647be7f9809aef72affb55fdf442a0cf743baead02d8e44fb130de18fc"
+  },
+  "board_reviewed_l7": {
+   "exists": true,
+   "path": "k2/hw/k2_v4_8L.l7.kicad_pcb",
+   "sha256": "c5a7df90aadb66e067802263531699c6e950b1a5e042d3efc3d415fc447641b3"
+  },
+  "delivery_manifest": {
+   "exists": true,
+   "path": "k2/pm_gate/artifacts/k2_v4/L6/jlc_package/MANIFEST.json",
+   "sha256": "6ee7495de61f749fba61a04a5311e17040988c322b3a17f46b6f26efd8b243b2"
+  },
+  "delivery_tarball": {
+   "exists": true,
+   "path": "k2/pm_gate/artifacts/k2_v4/L6/DELIVERY/k2_v4_8L.l7_gerber_package.tar.gz",
+   "sha256": "0e88e107e2da81923ccdda0c20d89c7ca486bc2281a139a4a007650542f0bce0"
+  },
+  "nets_source": {
+   "exists": true,
+   "path": "k2/hw/data/k2_sch.yaml",
+   "sha256": "dd794c54f7ce7417c771d8cc02fa94bd6cce681f81c64f7fbf36a24ecda13dec"
+  }
+ },
+ "artifact": "k2_p6_readonly_pm_gate_baseline",
+ "framework_root": "_shared",
+ "interpreter": {
+  "pcbnew_available": true,
+  "sys_executable": "/home/fila/jqdDev_2025/ic_hw/AppDir/bin/python3.11",
+  "version": "3.11.2"
+ },
+ "projects": {
+  "k1": {
+   "active_project": "k1",
+   "check_l1": {
+    "check_g11": {
+     "errors": [],
+     "evidence": "3 个候选文件，字段齐全: ['candidate_A.md', 'candidate_B.md', 'candidate_C.md']",
+     "passed": true
+    },
+    "check_g12": {
+     "errors": [],
+     "evidence": "3 个打分表，维度与 criteria 一致 (['SI 信号完整性', 'DFM 可制造性', 'PDN 电源完整性', '可维护性', '架构清晰度', '面积成本', '控制面走线', '供电布局'])",
+     "passed": true
+    },
+    "check_g13": {
+     "errors": [],
+     "evidence": "ruling.md 含中选方案/淘汰理由/裁决人",
+     "passed": true
+    },
+    "check_g14": {
+     "errors": [],
+     "evidence": "frozen/ 冻结完成: ['L1_BID_v2_k1.md']",
+     "passed": true
+    },
+    "check_g15": {
+     "errors": [
+      "缺失工艺常识强条 /home/fila/jqdDev_2025/ic_hw/../doc/PCB_DESIGN_RULES.md（PCB_DESIGN_RULES.md）"
+     ],
+     "evidence": "",
+     "passed": false
+    }
+   },
+   "check_l2": {
+    "check_g21": {
+     "errors": [
+      "缺失 measurements.md（测量基线）"
+     ],
+     "evidence": "",
+     "passed": false
+    },
+    "check_g22": {
+     "errors": [
+      "缺失 constraints.md（约束清单）"
+     ],
+     "evidence": "",
+     "passed": false
+    },
+    "check_g23": {
+     "errors": [
+      "缺失 math_closure.md（数学闭合）"
+     ],
+     "evidence": "",
+     "passed": false
+    },
+    "check_g24": {
+     "errors": [
+      "candidates/ 下结构候选 0 个（需要 ≥2）"
+     ],
+     "evidence": "",
+     "passed": false
+    },
+    "check_g25": {
+     "errors": [
+      "frozen/ 下无冻结结构文档"
+     ],
+     "evidence": "",
+     "passed": false
+    },
+    "check_g26": {
+     "errors": [
+      "缺失方案级闭合产物 L2/escape_closure_analysis.md（芯片侧断点逃逸闭合分析）",
+      "缺失方案级闭合产物 L2/ruling/assumption_h3_verify.md（L2 ruling 假设 H3 复核）",
+      "缺失方案级闭合产物 L2/ruling/assumption_h1_calc.md（L2 ruling 假设 H1 核算）"
+     ],
+     "evidence": "",
+     "passed": false
+    }
+   },
+   "check_l3": {
+    "check_g31": {
+     "errors": [
+      "缺失 SPEC_k2_v4.json"
+     ],
+     "evidence": "",
+     "passed": false
+    },
+    "check_g32": {
+     "errors": [
+      "缺失 executor_constraints.md"
+     ],
+     "evidence": "",
+     "passed": false
+    },
+    "check_g33": {
+     "errors": [
+      "缺失 buildability.md"
+     ],
+     "evidence": "",
+     "passed": false
+    },
+    "check_g34": {
+     "errors": [
+      "缺失 escape_spec.json（L2）"
+     ],
+     "evidence": "",
+     "passed": false
+    },
+    "check_g35": {
+     "errors": [
+      "SPEC 读取失败 /home/fila/jqdDev_2025/ic_hw/_shared/pm_gate/artifacts/L3/SPEC_k2_v4.json: [Errno 2] No such file or directory: '/home/fila/jqdDev_2025/ic_hw/_shared/pm_gate/artifacts/L3/SPEC_k2_v4.json'"
+     ],
+     "evidence": "",
+     "passed": false
+    }
+   },
+   "check_qa": {
+    "check_g41": {
+     "errors": [
+      "SPEC 缺失，无法对照"
+     ],
+     "evidence": "",
+     "passed": false
+    },
+    "check_g42": {
+     "errors": [
+      "G4.1 未过——强制开 ECN（宪法第九章：打回必须走变更单）"
+     ],
+     "evidence": "",
+     "passed": false
+    }
+   },
+   "closure_check_defaults_probe": {
+    "DEFAULT_SPEC": "/home/fila/jqdDev_2025/ic_hw/_shared/pm_gate/artifacts/L3/SPEC_k2_v4.json",
+    "DEFAULT_SPEC_exists": false,
+    "ESCAPE_SPEC_PATH": "/home/fila/jqdDev_2025/ic_hw/_shared/pm_gate/artifacts/L2/escape_spec.json",
+    "ESCAPE_SPEC_PATH_exists": false
+   },
+   "discovered_project_root": "/home/fila/jqdDev_2025/ic_hw/k1",
+   "project": "k1",
+   "project_root": "k1",
+   "recorded_state": {
+    "exists": true,
+    "gates": {
+     "G1.1": {
+      "checked_at": "2026-09-15T02:56:22+00:00",
+      "evidence_head": "3 个候选文件，字段齐全: ['candidate_A.md', 'candidate_B.md', 'candidate_C.md']",
+      "is_waiver": false,
+      "stage": "L1",
+      "status": "passed"
+     },
+     "G1.2": {
+      "checked_at": "2026-09-15T02:56:22+00:00",
+      "evidence_head": "3 个打分表，维度与 criteria 一致 (['SI 信号完整性', 'DFM 可制造性', 'PDN 电源完整性', '可维护性', '架构清晰度', '面积成本', '控制面走线', '供电布局'])",
+      "is_waiver": false,
+      "stage": "L1",
+      "status": "passed"
+     },
+     "G1.3": {
+      "checked_at": "2026-09-15T02:56:22+00:00",
+      "evidence_head": "ruling.md 含中选方案/淘汰理由/裁决人",
+      "is_waiver": false,
+      "stage": "L1",
+      "status": "passed"
+     },
+     "G1.4": {
+      "checked_at": "2026-09-15T02:56:22+00:00",
+      "evidence_head": "frozen/ 冻结完成: ['L1_BID_v2_k1.md']",
+      "is_waiver": false,
+      "stage": "L1",
+      "status": "passed"
+     },
+     "G1.5": {
+      "checked_at": "2026-09-15T04:03:54+00:00",
+      "evidence_head": "WAIVER（账本 C-3）：机判 FAIL 系**框架路径缺陷**——check_l1.py 的 RULES_DOC 上溯三级解析到 `<k1 父目录>/doc/PCB_DESIGN_RULES.md`（多退一层，越出容器），真实规则件在 `_shared/docs/PCB_DESIGN_RULES.md`；**实质",
+      "is_waiver": true,
+      "stage": "L1",
+      "status": "passed"
+     },
+     "G2.1": {
+      "checked_at": "2026-09-15T04:03:54+00:00",
+      "evidence_head": "measurements.md 含板几何/焊盘盒/走廊/电容墙 | 复现: cd k1 && python3 pm_gate/tools/k1_l2_gate_runner.py --gate G2.1 | 原始输出: pm_gate/artifacts/k1/L2/gate_raw_output_v1.txt | 注",
+      "is_waiver": false,
+      "stage": "L2",
+      "status": "passed"
+     },
+     "G2.2": {
+      "checked_at": "2026-09-15T04:03:54+00:00",
+      "evidence_head": "constraints.md 工艺/电气/叠层约束齐全且带出处 | 复现: cd k1 && python3 pm_gate/tools/k1_l2_gate_runner.py --gate G2.2 | 原始输出: pm_gate/artifacts/k1/L2/gate_raw_output_v1.txt | 注",
+      "is_waiver": false,
+      "stage": "L2",
+      "status": "passed"
+     },
+     "G2.3": {
+      "checked_at": "2026-09-15T04:03:54+00:00",
+      "evidence_head": "汇总判定 8 项全闭合 | 复现: cd k1 && python3 pm_gate/tools/k1_l2_gate_runner.py --gate G2.3 | 原始输出: pm_gate/artifacts/k1/L2/gate_raw_output_v1.txt | 注: 官方 CLI `run G2.3` ",
+      "is_waiver": false,
+      "stage": "L2",
+      "status": "passed"
+     },
+     "G2.4": {
+      "checked_at": "2026-09-15T04:03:54+00:00",
+      "evidence_head": "3 结构候选 + 一致打分表 (['物理可行性', '信号完整性', 'PDN 与参考平面', '可制造性与成本', '冻结可复现性']) | 复现: cd k1 && python3 pm_gate/tools/k1_l2_gate_runner.py --gate G2.4 | 原始输出: pm_gate/arti",
+      "is_waiver": false,
+      "stage": "L2",
+      "status": "passed"
+     },
+     "G2.5": {
+      "checked_at": "2026-09-15T04:03:54+00:00",
+      "evidence_head": "L2 冻结完成: ['L2_STRUCTURE_FROZEN_v1.md'] | 复现: cd k1 && python3 pm_gate/tools/k1_l2_gate_runner.py --gate G2.5 | 原始输出: pm_gate/artifacts/k1/L2/gate_raw_output_v1.",
+      "is_waiver": false,
+      "stage": "L2",
+      "status": "passed"
+     },
+     "G2.6": {
+      "checked_at": "2026-09-15T04:03:54+00:00",
+      "evidence_head": "L2.5 方案级闭合率通过：逃逸闭合分析 + H1/H3 假设复核 PASS/PARTIAL | 复现: cd k1 && python3 pm_gate/tools/k1_l2_gate_runner.py --gate G2.6 | 原始输出: pm_gate/artifacts/k1/L2/gate_raw_ou",
+      "is_waiver": false,
+      "stage": "L2",
+      "status": "passed"
+     },
+     "G3.1": {
+      "checked_at": null,
+      "evidence_head": "",
+      "is_waiver": false,
+      "stage": "L3",
+      "status": "pending"
+     },
+     "G3.2": {
+      "checked_at": null,
+      "evidence_head": "",
+      "is_waiver": false,
+      "stage": "L3",
+      "status": "pending"
+     },
+     "G3.3": {
+      "checked_at": null,
+      "evidence_head": "",
+      "is_waiver": false,
+      "stage": "L3",
+      "status": "pending"
+     },
+     "G3.4": {
+      "checked_at": "2026-09-15T04:05:10+00:00",
+      "evidence_head": "逃逸桩方案闭合：59 可落桩 + 0 豁免记录（全为 NO_CONNECT/已裁决） | 复现: cd k1 && python3 pm_gate/tools/k1_l3_gate_runner.py --gate G3.4 | 原始输出: pm_gate/artifacts/k1/L3/gate_raw_output",
+      "is_waiver": false,
+      "stage": "L3",
+      "status": "passed"
+     },
+     "G4.1": {
+      "checked_at": null,
+      "evidence_head": "",
+      "is_waiver": false,
+      "stage": "QA",
+      "status": "pending"
+     },
+     "G4.2": {
+      "checked_at": null,
+      "evidence_head": "",
+      "is_waiver": false,
+      "stage": "QA",
+      "status": "pending"
+     },
+     "wp1_closure_check": {
+      "checked_at": null,
+      "evidence_head": "",
+      "is_waiver": false,
+      "stage": "L3",
+      "status": "pending"
+     }
+    },
+    "path": "k1/pm_gate/state_k1.json",
+    "waived_gates": [
+     "G1.5"
+    ]
+   },
+   "rules_doc_probe": {
+    "exists": false,
+    "resolved": "/home/fila/jqdDev_2025/ic_hw/../doc/PCB_DESIGN_RULES.md"
+   },
+   "spec_name_probe": {
+    "active_call": "SPEC_k1.json",
+    "active_spec_artifact": "pm_gate/artifacts/k1/L3/SPEC_k1.json",
+    "active_spec_artifact_exists": true,
+    "default_call": "SPEC_k2_v4.json",
+    "k2_spec_artifact": "pm_gate/artifacts/k1/L3/SPEC_k2_v4.json",
+    "k2_spec_artifact_exists": false
+   }
+  },
+  "k2_v4": {
+   "active_project": "k2_v4",
+   "check_l1": {
+    "check_g11": {
+     "errors": [],
+     "evidence": "3 个候选文件，字段齐全: ['candidate_A.md', 'candidate_B.md', 'candidate_C.md']",
+     "passed": true
+    },
+    "check_g12": {
+     "errors": [],
+     "evidence": "3 个打分表，维度与 criteria 一致 (['走廊闭合', '信号完整性潜力', 'DFM 可制造性', '电源/PDN 合理性', '可维护性', '架构清晰度'])",
+     "passed": true
+    },
+    "check_g13": {
+     "errors": [],
+     "evidence": "ruling.md 含中选方案/淘汰理由/裁决人",
+     "passed": true
+    },
+    "check_g14": {
+     "errors": [],
+     "evidence": "frozen/ 冻结完成: ['L1_TOPOLOGY_v1.0.md', 'L1_TOPOLOGY_v2.0.md']",
+     "passed": true
+    },
+    "check_g15": {
+     "errors": [
+      "缺失工艺常识强条 /home/fila/jqdDev_2025/ic_hw/../doc/PCB_DESIGN_RULES.md（PCB_DESIGN_RULES.md）"
+     ],
+     "evidence": "",
+     "passed": false
+    }
+   },
+   "check_l2": {
+    "check_g21": {
+     "errors": [],
+     "evidence": "measurements.md 含板几何/焊盘盒/走廊/电容墙",
+     "passed": true
+    },
+    "check_g22": {
+     "errors": [],
+     "evidence": "constraints.md 工艺/电气/叠层约束齐全且带出处",
+     "passed": true
+    },
+    "check_g23": {
+     "errors": [],
+     "evidence": "汇总判定 5 项全闭合",
+     "passed": true
+    },
+    "check_g24": {
+     "errors": [],
+     "evidence": "2 结构候选 + 一致打分表 (['数学闭合', '阻抗确定性', 'DFM 可制造性', 'PDN 合理性', '可维护性'])",
+     "passed": true
+    },
+    "check_g25": {
+     "errors": [],
+     "evidence": "L2 冻结完成: ['L2_STRUCTURE_v1.0.md', 'L2_STRUCTURE_v2.0.md']",
+     "passed": true
+    },
+    "check_g26": {
+     "errors": [
+      "芯片侧断点逃逸闭合分析（L2/escape_closure_analysis.md）无 PASS/PARTIAL 明确判定（未在含'判定'的行找到关键词）"
+     ],
+     "evidence": "",
+     "passed": false
+    }
+   },
+   "check_l3": {
+    "check_g31": {
+     "errors": [
+      "SPEC.corridors 缺字段: ['J2_TO_U', 'U_TO_MCIO']"
+     ],
+     "evidence": "",
+     "passed": false
+    },
+    "check_g32": {
+     "errors": [],
+     "evidence": "执行器约束已声明（旧管线违宪在册，新执行器零运行时自由度）",
+     "passed": true
+    },
+    "check_g33": {
+     "errors": [],
+     "evidence": "JLC DFM 逐项核对完成，结论 PASS（阻抗 coupon 已登记前置）",
+     "passed": true
+    },
+    "check_g34": {
+     "errors": [],
+     "evidence": "逃逸桩方案闭合：140 可落桩 + 7 豁免记录（全为 NO_CONNECT/已裁决）",
+     "passed": true
+    },
+    "check_g35": {
+     "errors": [
+      "SPEC 读取失败 /home/fila/jqdDev_2025/ic_hw/_shared/pm_gate/artifacts/L3/SPEC_k2_v4.json: [Errno 2] No such file or directory: '/home/fila/jqdDev_2025/ic_hw/_shared/pm_gate/artifacts/L3/SPEC_k2_v4.json'"
+     ],
+     "evidence": "",
+     "passed": false
+    }
+   },
+   "check_qa": {
+    "check_g41": {
+     "errors": [
+      "施工产物无走线（k2_v4.kicad_pcb 尚未按 SPEC 布线）——规格对照无对象"
+     ],
+     "evidence": "",
+     "passed": false
+    },
+    "check_g42": {
+     "errors": [
+      "G4.1 未过——强制开 ECN（宪法第九章：打回必须走变更单）"
+     ],
+     "evidence": "",
+     "passed": false
+    }
+   },
+   "closure_check_defaults_probe": {
+    "DEFAULT_SPEC": "/home/fila/jqdDev_2025/ic_hw/_shared/pm_gate/artifacts/L3/SPEC_k2_v4.json",
+    "DEFAULT_SPEC_exists": false,
+    "ESCAPE_SPEC_PATH": "/home/fila/jqdDev_2025/ic_hw/_shared/pm_gate/artifacts/L2/escape_spec.json",
+    "ESCAPE_SPEC_PATH_exists": false
+   },
+   "discovered_project_root": "/home/fila/jqdDev_2025/ic_hw/k2",
+   "project": "k2_v4",
+   "project_root": "k2",
+   "recorded_state": {
+    "exists": true,
+    "gates": {
+     "G1.1": {
+      "checked_at": "2026-08-26T06:33:53+00:00",
+      "evidence_head": "3 个候选文件，字段齐全: ['candidate_A.md', 'candidate_B.md', 'candidate_C.md']",
+      "is_waiver": false,
+      "stage": "L1",
+      "status": "passed"
+     },
+     "G1.2": {
+      "checked_at": "2026-08-21T16:43:53+00:00",
+      "evidence_head": "3 个打分表，维度与 criteria 一致 (['走廊闭合', '信号完整性潜力', 'DFM 可制造性', '电源/PDN 合理性', '可维护性', '架构清晰度'])",
+      "is_waiver": false,
+      "stage": "L1",
+      "status": "passed"
+     },
+     "G1.3": {
+      "checked_at": "2026-08-21T16:43:53+00:00",
+      "evidence_head": "ruling.md 含中选方案/淘汰理由/裁决人",
+      "is_waiver": false,
+      "stage": "L1",
+      "status": "passed"
+     },
+     "G1.4": {
+      "checked_at": "2026-08-21T16:43:53+00:00",
+      "evidence_head": "frozen/ 冻结完成: ['L1_TOPOLOGY_v1.0.md']",
+      "is_waiver": false,
+      "stage": "L1",
+      "status": "passed"
+     },
+     "G1.5": {
+      "checked_at": "2026-08-21T16:43:53+00:00",
+      "evidence_head": "结构预检 + 工艺常识强条全 PASS（蛇形窗口/出线形式/对间间距）",
+      "is_waiver": false,
+      "stage": "L1",
+      "status": "passed"
+     },
+     "G2.1": {
+      "checked_at": "2026-08-21T16:43:53+00:00",
+      "evidence_head": "measurements.md 含板几何/焊盘盒/走廊/电容墙",
+      "is_waiver": false,
+      "stage": "L2",
+      "status": "passed"
+     },
+     "G2.2": {
+      "checked_at": "2026-08-21T16:43:54+00:00",
+      "evidence_head": "constraints.md 工艺/电气/叠层约束齐全且带出处",
+      "is_waiver": false,
+      "stage": "L2",
+      "status": "passed"
+     },
+     "G2.3": {
+      "checked_at": "2026-08-21T16:43:54+00:00",
+      "evidence_head": "汇总判定 5 项全闭合",
+      "is_waiver": false,
+      "stage": "L2",
+      "status": "passed"
+     },
+     "G2.4": {
+      "checked_at": "2026-08-21T16:43:54+00:00",
+      "evidence_head": "2 结构候选 + 一致打分表 (['数学闭合', '阻抗确定性', 'DFM 可制造性', 'PDN 合理性', '可维护性'])",
+      "is_waiver": false,
+      "stage": "L2",
+      "status": "passed"
+     },
+     "G2.5": {
+      "checked_at": "2026-08-21T16:43:54+00:00",
+      "evidence_head": "L2 冻结完成: ['L2_STRUCTURE_v1.0.md']",
+      "is_waiver": false,
+      "stage": "L2",
+      "status": "passed"
+     },
+     "G2.6": {
+      "checked_at": "2026-08-21T16:43:54+00:00",
+      "evidence_head": "L2.5 方案级闭合率通过：逃逸闭合分析 + H1/H3 假设复核 PASS/PARTIAL",
+      "is_waiver": false,
+      "stage": "L2",
+      "status": "passed"
+     },
+     "G3.1": {
+      "checked_at": "2026-08-21T16:43:54+00:00",
+      "evidence_head": "SPEC_k2_v4.json 结构完整（9 顶层字段 + 阻抗/网类/过孔/走廊）",
+      "is_waiver": false,
+      "stage": "L3",
+      "status": "passed"
+     },
+     "G3.2": {
+      "checked_at": "2026-08-21T16:43:54+00:00",
+      "evidence_head": "执行器约束已声明（旧管线违宪在册，新执行器零运行时自由度）",
+      "is_waiver": false,
+      "stage": "L3",
+      "status": "passed"
+     },
+     "G3.3": {
+      "checked_at": "2026-08-21T16:43:54+00:00",
+      "evidence_head": "JLC DFM 逐项核对完成，结论 PASS（阻抗 coupon 已登记前置）",
+      "is_waiver": false,
+      "stage": "L3",
+      "status": "passed"
+     },
+     "G3.4": {
+      "checked_at": "2026-08-21T16:44:08+00:00",
+      "evidence_head": "逃逸桩方案闭合：105 可落桩 + 7 豁免记录（全为 NO_CONNECT/已裁决）",
+      "is_waiver": false,
+      "stage": "L3",
+      "status": "passed"
+     },
+     "G4.1": {
+      "checked_at": null,
+      "evidence_head": "",
+      "is_waiver": false,
+      "stage": "QA",
+      "status": "pending"
+     },
+     "G4.2": {
+      "checked_at": null,
+      "evidence_head": "",
+      "is_waiver": false,
+      "stage": "QA",
+      "status": "pending"
+     },
+     "wp1_closure_check": {
+      "checked_at": "2026-08-23T09:54:22+00:00",
+      "evidence_head": "WP1 冻结折线闭合: 场指纹匹配 3083d928f3d0b879… + 完整环境复验 26/26 网全净空",
+      "is_waiver": false,
+      "stage": "L3",
+      "status": "passed"
+     }
+    },
+    "path": "k2/pm_gate/state_k2_v4.json",
+    "waived_gates": []
+   },
+   "rules_doc_probe": {
+    "exists": false,
+    "resolved": "/home/fila/jqdDev_2025/ic_hw/../doc/PCB_DESIGN_RULES.md"
+   },
+   "spec_name_probe": {
+    "active_call": "SPEC_k2_v4.spec-rev-52.json",
+    "active_spec_artifact": "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-52.json",
+    "active_spec_artifact_exists": true,
+    "default_call": "SPEC_k2_v4.spec-rev-52.json",
+    "k2_spec_artifact": "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json",
+    "k2_spec_artifact_exists": true
+   }
+  }
+ },
+ "purpose": "P6/学习环批2 的改前基线（#K2-40 §四-1 可复现验收命令；inc119 §7-1 before/after）",
+ "py_compile_baseline": {
+  "cmd": "python3 -m py_compile _shared/eda_core/hs_route_model.py _shared/pm_gate/check_l1.py _shared/pm_gate/check_l2.py _shared/pm_gate/check_l3.py _shared/pm_gate/check_qa.py",
+  "exit_code": 0,
+  "ok": "5/5",
+  "stderr_tail": ""
+ },
+ "pytest_baseline": {
+  "cmd": "/home/fila/jqdDev_2025/ic_hw/AppDir/bin/python3.11 -m pytest -q _shared/eda_core/tests/test_hs_route_model.py",
+  "counts": {
+   "error": 0,
+   "failed": 0,
+   "passed": 34,
+   "skipped": 34
+  },
+  "exit_code": 0,
+  "interpreter": "/home/fila/jqdDev_2025/ic_hw/AppDir/bin/python3.11",
+  "last_line": "34 passed, 34 skipped"
+ },
+ "readonly": true,
+ "schema": 1,
+ "spec_k2_v4_census": {
+  "count": 43,
+  "count_pm_gate_only": 16,
+  "hits": [
+   "_shared/eda_core/board_low_speed_sync.py:32",
+   "_shared/eda_core/board_spec_consistency.py:35",
+   "_shared/eda_core/cap_wall_apply.py:56",
+   "_shared/eda_core/cap_wall_solver.py:608",
+   "_shared/eda_core/closure_check.py:413",
+   "_shared/eda_core/env_fingerprint.py:69",
+   "_shared/eda_core/escape_connect_gen.py:25",
+   "_shared/eda_core/escape_low_speed_freeze.py:19",
+   "_shared/eda_core/escape_low_speed_spec_write.py:16",
+   "_shared/eda_core/escape_stub_replanner.py:19",
+   "_shared/eda_core/escape_stub_replanner.py:204",
+   "_shared/eda_core/tests/conftest.py:10",
+   "_shared/eda_core/tests/conftest.py:42",
+   "_shared/eda_core/tests/conftest.py:46",
+   "_shared/eda_core/tests/conftest.py:65",
+   "_shared/eda_core/tests/test_cap_wall_upgrade.py:107",
+   "_shared/eda_core/tests/test_cap_wall_upgrade.py:113",
+   "_shared/eda_core/tests/test_closure_check.py:184",
+   "_shared/eda_core/tests/test_escape_landing.py:683",
+   "_shared/eda_core/tests/test_feature_extractor.py:15",
+   "_shared/eda_core/tests/test_feature_extractor.py:262",
+   "_shared/eda_core/tests/test_hs_route_model.py:164",
+   "_shared/eda_core/tests/test_hs_route_model.py:324",
+   "_shared/eda_core/tests/test_redteam_evidence.py:37",
+   "_shared/eda_core/tests/test_routing_topology_gate.py:31",
+   "_shared/eda_core/tests/test_topology_gate.py:25",
+   "_shared/eda_core/verify_checks.py:17",
+   "_shared/pm_gate/check_l3.py:26",
+   "_shared/pm_gate/check_l3.py:28",
+   "_shared/pm_gate/check_l3.py:3",
+   "_shared/pm_gate/check_l3.py:46",
+   "_shared/pm_gate/check_l3.py:53",
+   "_shared/pm_gate/check_qa.py:34",
+   "_shared/pm_gate/closure_check.py:112",
+   "_shared/pm_gate/config.py:120",
+   "_shared/pm_gate/config.py:27",
+   "_shared/pm_gate/freeze_wp1.py:45",
+   "_shared/pm_gate/red_team.py:49",
+   "_shared/pm_gate/review.py:105",
+   "_shared/pm_gate/review.py:121",
+   "_shared/pm_gate/tools_escape_predict.py:15",
+   "_shared/pm_gate/tools_escape_predict.py:39",
+   "_shared/pm_gate/wp1_semantics_check.py:45"
+  ],
+  "needle": "SPEC_k2_v4",
+  "scope": "_shared (py, no __pycache__)"
+ },
+ "writes": "仅 --out 输出件；不 set_gate / 不 save state / 不触 criteria / 不重建包"
+}
