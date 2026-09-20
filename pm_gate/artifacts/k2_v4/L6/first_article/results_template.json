@@ -99,7 +99,21 @@
    "status": "NOT_RUN",
    "evidence": [],
    "measured": {
-    "connector": "J13 (SWDIO/SWCLK/MCU_NRST/GND)",
+    "interface": {
+     "J13": {
+      "pad1": "SWDIO",
+      "pad2": "SWCLK_BOOT0",
+      "gnd": "GND"
+     },
+     "NRST": {
+      "note": "不在 J13",
+      "points": [
+       "U1.pad10",
+       "R29.pad1",
+       "C73.pad1"
+      ]
+     }
+    },
     "device_id_read": null,
     "expected_device_id": null
    },
@@ -208,5 +222,6 @@
   "verdict": null,
   "judged_at": null,
   "note": "判定归监理（二值项直接判；V5 需声明输入）"
- }
+ },
+ "instrument_selfcheck": "INSTRUMENT_SELFCHECK.json"
 }
