@@ -1,0 +1,177 @@
+{
+ "artifact": "k2_60_review_pass_and_p6_instrument_fix_evidence",
+ "schema": 1,
+ "ts": "2026-09-21T02:15:36.768848+08:00",
+ "session_label": "K2-2026-09-21 · ARCHER-R93 · #K2-60 落地",
+ "ruling": "#K2-60（R3 限定复核 PASS ⇒ 新锚生效 · CR-68(i) 订正准予 · R5 未做正确 · owner 0）",
+ "CR69": {
+  "new_anchor": {
+   "manifest": "19d637c4e9ed35be",
+   "tarball": "488e90a47d088d06",
+   "revision": "P5-L8.2"
+  },
+  "old_anchors_preserved": {
+   "l8": [
+    "4b610baed4f4752c",
+    "36a6b276b4f7e465"
+   ],
+   "l7": [
+    "6ee7495de61f749f",
+    "0e88e107e2da8192"
+   ]
+  },
+  "docs": {
+   "TRANSMITTAL-l8": {
+    "before": "fcf25bf201a6ba3e",
+    "after": "cded013974777c73"
+   },
+   "ACCEPTANCE-PLAN": {
+    "before": "bdc769eb6275efd1",
+    "after": "20eb85cb06292fec"
+   }
+  },
+  "gate_change": "『⚠ 待复核闸(#K2-59 R3)』→『✅ 限定复核已通过(#K2-60 R1) ⇒ 可作外发/下单依据』",
+  "R2_6_pregate": "P5 八项全 NOT_RUN · 未下单/未外发"
+ },
+ "CR70": {
+  "a_anchor_repin": {
+   "tool_before": "52bff426fc3517df",
+   "tool_after": "3ab3af605746fa86",
+   "table": [
+    [
+     "hs_route_model.py",
+     "892 -> 949",
+     "_escape_smd_via",
+     "B2-1 调用点"
+    ],
+    [
+     "hs_route_model.py",
+     "4406 -> 4592",
+     "def solve_all_v4",
+     "B2-2 定义"
+    ],
+    [
+     "hs_route_model.py",
+     "4513 -> 4762",
+     "def _escape_smd_via",
+     "B2-1 定义"
+    ],
+    [
+     "hs_route_model.py",
+     "4796 -> 5056",
+     "if args.all_v4",
+     "B2-2 CLI 开关"
+    ],
+    [
+     "hs_route_model.py",
+     "4800 -> 5100",
+     "m.config.chain_segments",
+     "B2-2 分派（K1 链基）"
+    ],
+    [
+     "hs_route_model.py",
+     "4806 -> 5064",
+     "solve_all_v4(bases)",
+     "B2-2 调用"
+    ],
+    [
+     "hs_route_model.py",
+     "4842 -> 5101",
+     "m.config.chain_segments",
+     "B2-2 第二路径（现两处命中皆在 all_v2 分支 · 语义偏移已登记）"
+    ],
+    [
+     "routing_topology_gate.py",
+     "43 (未变)",
+     "--all-v4",
+     "B2-2 同步点"
+    ],
+    [
+     "check_l1.py",
+     "193 (未变)",
+     "RULES_DOC",
+     "B2-4 规则文档路径"
+    ],
+    [
+     "check_l3.py",
+     "26 -> 43",
+     "SPEC_k2_v4.json",
+     "B2-3a（原硬编码点已由 CR-33 修毕；此为该串残留处）"
+    ],
+    [
+     "check_l3.py",
+     "46 -> 62",
+     "SPEC_k2_v4.json",
+     "B2-3a 证据文案"
+    ],
+    [
+     "check_qa.py",
+     "35 -> 40",
+     "config.spec_name() -> config.spec_name(",
+     "B2-3b（CR-33 后签名 spec_name(project)）"
+    ]
+   ],
+   "closure_range": "closure_check.py 110-113 -> 120-125",
+   "static_verify": "13/13 needle 命中该行（脚本逐锚实测）"
+  },
+  "b_determinism": {
+   "gen_before": "2e536d5a6501152b",
+   "gen_after": "34693f01ffe7bce7",
+   "fix": "墙钟规范化补 (M:SS) 形态：\\s+in\\s+[\\d.]+s(\\s*\\([\\d:]+\\))?\\s*$",
+   "proof": "两连跑逐字节同 · sha16 655d47e2b1eed5c1 ×2 · rc=0（改前 69.04s vs 69.89s ⇒ 必异）"
+  },
+  "baseline_refresh": {
+   "file": "P6_execution/BASELINE_pm_gate_k1_k2_readonly_v1.json",
+   "before": "91ca2cc3601bb56f",
+   "after": "655d47e2b1eed5c1",
+   "template": {
+    "file": "P6_execution/results_template.json",
+    "before": "2d119d99ced109b4",
+    "after": "0726491502765dc1",
+    "changed_field_only": "baseline.sha256",
+    "invariant_untouched": true
+   }
+  },
+  "selfcheck_restore": {
+   "file": "P6_execution/INSTRUMENT_SELFCHECK.json",
+   "before": "7a341b75b9310dd5",
+   "after": "fed92cb7aec48150",
+   "verdict": "PASS",
+   "anchors": "13/13",
+   "baseline_ok": true,
+   "byte_identical": true,
+   "rc": 0
+  },
+  "failure_visibility": {
+   "baseline_exit": 1,
+   "failed": 2,
+   "passed": 61,
+   "skipped": 12,
+   "crash_tail": "test_chain_no_pn_zero_spacing (C2) | test_board_level_consistency (C1)",
+   "classification": "已登记能力缺口（K2-P6-B2T-DRAFT-PATCH-AND-DISPOSITION 丙/FAILED 测试仍 RED · SUITE_BASELINE_AND_BATCH2_DELTA_v1）",
+   "old_baseline_state": "34 passed / 34 skipped / 0 failed（批 2 之前 · 未收集该 2 测试）",
+   "note": "本次 = 重钉至现行已登记态（非掩盖 · 失败在件内可见）；若按 invariant『不得回退』严格读法 ⇒ 请监理裁 P6 面处置"
+  }
+ },
+ "gate_selfcheck": {
+  "①": "55/55 OK",
+  "②": "DFM 16/1/0 · drill 754 · P5-L8.2 · rev=6",
+  "③": "旧锚 l8+l7 逐字节未动",
+  "④": "外发面引用 0 悬空（本轮续改后已复核）",
+  "⑤": "criteria rev=6 MATCH · 冻结四源未动",
+  "⑥": "B 宿主 origin/main 仍 6ab6308",
+  "⑦": "自检 rc=0 · 行号锚 13/13 · 基线两连跑逐字节同 ✅",
+  "⑧": "未派 WORKER · P5 仍 PENDING_EXTERNAL"
+ },
+ "redlines_ok": [
+  "未改 criteria/",
+  "未改冻结四源",
+  "未改板/原理图/网表/SPEC rev-53/50 原件",
+  "未覆盖或删除旧包与旧锚",
+  "未触 B 宿主远端",
+  "未派 WORKER",
+  "未越阶段",
+  "未以 /tmp 作正式产物落点（临时仅 /tmp/opencode）",
+  "未删锚/未降要求"
+ ]
+}

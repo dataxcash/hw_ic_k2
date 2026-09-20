@@ -36,20 +36,20 @@ GEN = os.path.join(K2, "tools", "k2_p6_readonly_baseline_v1.py")
 
 # (相对 _shared 的路径, 行号, 该行必须包含的符号子串, 说明)
 LINE_ANCHORS = [
-    ("eda_core/hs_route_model.py", 892, "_escape_smd_via", "B2-1 调用点"),
-    ("eda_core/hs_route_model.py", 4406, "def solve_all_v4", "B2-2 定义"),
-    ("eda_core/hs_route_model.py", 4513, "def _escape_smd_via", "B2-1 定义"),
-    ("eda_core/hs_route_model.py", 4796, "if args.all_v4", "B2-2 CLI 开关"),
-    ("eda_core/hs_route_model.py", 4800, "m.config.chain_segments", "B2-2 分派（K1 链基）"),
-    ("eda_core/hs_route_model.py", 4806, "solve_all_v4(bases)", "B2-2 调用"),
-    ("eda_core/hs_route_model.py", 4842, "m.config.chain_segments", "B2-2 第二路径"),
+    ("eda_core/hs_route_model.py", 949, "_escape_smd_via", "B2-1 调用点"),
+    ("eda_core/hs_route_model.py", 4592, "def solve_all_v4", "B2-2 定义"),
+    ("eda_core/hs_route_model.py", 4762, "def _escape_smd_via", "B2-1 定义"),
+    ("eda_core/hs_route_model.py", 5056, "if args.all_v4", "B2-2 CLI 开关"),
+    ("eda_core/hs_route_model.py", 5100, "m.config.chain_segments", "B2-2 分派（K1 链基）"),
+    ("eda_core/hs_route_model.py", 5064, "solve_all_v4(bases)", "B2-2 调用"),
+    ("eda_core/hs_route_model.py", 5101, "m.config.chain_segments", "B2-2 第二路径（现两处命中皆在 all_v2 分支）"),
     ("eda_core/routing_topology_gate.py", 43, "--all-v4", "B2-2 同步点（docstring）"),
     ("pm_gate/check_l1.py", 193, "RULES_DOC", "B2-4 规则文档路径"),
-    ("pm_gate/check_l3.py", 26, 'SPEC_k2_v4.json', "B2-3a 硬编码 SPEC 名"),
-    ("pm_gate/check_l3.py", 46, 'SPEC_k2_v4.json', "B2-3a 证据文案"),
-    ("pm_gate/check_qa.py", 35, "config.spec_name()", "B2-3b 空参调用"),
+    ("pm_gate/check_l3.py", 43, 'SPEC_k2_v4.json', "B2-3a 硬编码 SPEC 名（原硬编码点已由 CR-33 修毕；此为该串残留处）"),
+    ("pm_gate/check_l3.py", 62, 'SPEC_k2_v4.json', "B2-3a 证据文案"),
+    ("pm_gate/check_qa.py", 40, "config.spec_name(", "B2-3b 调用点（CR-33 后签名 = spec_name(project)）"),
 ]
-CLOSURE_RANGE = ("pm_gate/closure_check.py", 110, 113, ("DEFAULT_SPEC", "ESCAPE_SPEC_PATH"), "B2-3c 框架相对默认值")
+CLOSURE_RANGE = ("pm_gate/closure_check.py", 120, 125, ("DEFAULT_SPEC", "ESCAPE_SPEC_PATH"), "B2-3c 框架相对默认值")
 
 
 def sha256_of(path: str) -> str:

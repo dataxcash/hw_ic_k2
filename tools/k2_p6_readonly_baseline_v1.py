@@ -186,7 +186,8 @@ def run_pytest() -> dict:
         proc = subprocess.run(cmd, cwd=REPO, capture_output=True, text=True, timeout=1800, env=env)
         tail = (proc.stdout + proc.stderr).strip().splitlines()
         # 去易变项（墙钟耗时）⇒ 输出可逐字节复现
-        tail = [re.sub(r"\s+in\s+[\d.]+s\s*$", "", line) for line in tail]
+        # 去易变项（墙钟耗时，含 pytest 追加的 `(M:SS)` 形态）⇒ 输出可逐字节复现
+        tail = [re.sub(r"\s+in\s+[\d.]+s(\s*\([\d:]+\))?\s*$", "", line) for line in tail]
         counts = {"passed": 0, "skipped": 0, "failed": 0, "error": 0}
         for line in tail:
             for key in counts:

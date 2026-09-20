@@ -10,7 +10,7 @@
 | 板 sha16 | **`7a5c89913d6e5d0a`** |
 | 层数/工艺 | 8 铜层 · JLC HDI（盲埋孔 · 阶数≥2） |
 
-> **⚠ 待复核闸（#K2-59 R3）**：现行交付包 = **`P5-L8.2`（l8r2 重出件）**，**须经监理「限定复核」通过后方可作外发/下单依据**；复核前**不得**据此下单/外发。R2-6 前置闸已实测：**未按旧锚下单、未外发任何件**（P5 全 `NOT_RUN`）。
+> **✅ 限定复核已通过（#K2-60 R1）**：现行交付包 = **`P5-L8.2`**（`MANIFEST 19d637c4e9ed35be` / tarball `488e90a47d088d06`）⇒ **可作外发/下单依据**（旧锚 l8/l7 保全为对照）。R2-6 前置闸实测：**未按旧锚下单、未外发任何件**（P5 全 `NOT_RUN`）。
 
 ## 2. 随单件（**冻结 · 只读 · 本件不重建**）
 | 项 | 路径 | 锚 |
@@ -29,7 +29,7 @@
 | 现场检查表 | `k2/pm_gate/artifacts/k2_v4/L6/first_article_l8/CHECKLIST.md` | `11f2621ced066390` |
 | 回填模板（8 项 · criterion/measured/evidence/status） | `k2/pm_gate/artifacts/k2_v4/L6/first_article_l8/results_template.json` | `119cd7c48b3146d2` |
 | 测点自查（板直读 · **l8 复核**：12 refdes · 577 pad 对板 **0 不一致**（CR-54/55）） | `k2/pm_gate/artifacts/k2_v4/L6/first_article_l8/INSTRUMENT_SELFCHECK.json` | `540c9a55c66b053b` |
-| 验收计划（阈值来源） | `k2/docs/K2-P5-FIRST-ARTICLE-ACCEPTANCE-PLAN-v1.md` | `bdc769eb6275efd1` |
+| 验收计划（阈值来源） | `k2/docs/K2-P5-FIRST-ARTICLE-ACCEPTANCE-PLAN-v1.md` | `20eb85cb06292fec` |
 
 **8 项与阈值**：V4 阻抗券 **85.0Ω ±10%**（须覆盖 0.6mm 中心几何 + 最紧 0.2825mm `PCIE_UP3`）· V5 PDN 压降 **≤3%** · V6-1 各轨 **±5%** · V6-2 SWD device ID（二值）· V6-3 FRU I2C 地址应答（二值）· V6-4 **双路 x4 Gen4 训练成功**（二值 + LTSSM 终态）· V6-5 **30min AER = 0** · V7 热 **Tj ≤ 120.0℃**（四工况；`Tj(U6) > 117.0℃` 或未按 O2 实施 ⇒ **T1 触发**开新 rev，目标 `θJA_eff ≤ 9.5℃/W`）。
 

@@ -81,18 +81,14 @@
    "exit_code": 1,
    "gates": {
     "G3.1": {
-     "detail": "",
-     "errors": [
-      "缺失 SPEC_k2_v4.json"
-     ],
-     "status": "FAIL"
+     "detail": "SPEC_k2_v4.json 结构完整（9 顶层字段 + 阻抗/网类/过孔/走廊）",
+     "errors": [],
+     "status": "PASS"
     },
     "G3.2": {
-     "detail": "",
-     "errors": [
-      "executor_constraints.md 缺关键声明: 'SPEC_k2_v4.json'"
-     ],
-     "status": "FAIL"
+     "detail": "执行器约束已声明（旧管线违宪在册，新执行器零运行时自由度）",
+     "errors": [],
+     "status": "PASS"
     },
     "G3.3": {
      "detail": "",
@@ -109,7 +105,8 @@
     "wp1_closure_check": {
      "detail": "",
      "errors": [
-      "SPEC 读取失败 /home/fila/jqdDev_2025/ic_hw/k1/_shared/pm_gate/artifacts/L3/SPEC_k2_v4.json: [Errno 2] No such file or directory: '/home/fila/jqdDev_2025/ic_hw/k1/_shared/pm_gate/artifacts/L3/SPEC_k2_v4.json'"
+      "无冻结签名 (fail-closed): SPEC 缺 layer_plan.wp1_escape_nets_meta.fingerprint",
+      "完整环境复验中断 (fail-closed): No module named 'layout_engine'"
      ],
      "status": "FAIL"
     }
@@ -142,73 +139,53 @@
      "passed": true
     },
     "check_g15": {
-     "errors": [
-      "缺失工艺常识强条 /home/fila/jqdDev_2025/ic_hw/../doc/PCB_DESIGN_RULES.md（PCB_DESIGN_RULES.md）"
-     ],
-     "evidence": "",
-     "passed": false
+     "errors": [],
+     "evidence": "结构预检 + 工艺常识强条全 PASS（3 份报告）",
+     "passed": true
     }
    },
    "check_l2": {
     "check_g21": {
-     "errors": [
-      "缺失 measurements.md（测量基线）"
-     ],
-     "evidence": "",
-     "passed": false
+     "errors": [],
+     "evidence": "measurements.md 含板几何/焊盘盒/走廊/电容墙",
+     "passed": true
     },
     "check_g22": {
-     "errors": [
-      "缺失 constraints.md（约束清单）"
-     ],
-     "evidence": "",
-     "passed": false
+     "errors": [],
+     "evidence": "constraints.md 工艺/电气/叠层约束齐全且带出处",
+     "passed": true
     },
     "check_g23": {
-     "errors": [
-      "缺失 math_closure.md（数学闭合）"
-     ],
-     "evidence": "",
-     "passed": false
+     "errors": [],
+     "evidence": "汇总判定 8 项全闭合",
+     "passed": true
     },
     "check_g24": {
-     "errors": [
-      "candidates/ 下结构候选 0 个（需要 ≥2）"
-     ],
-     "evidence": "",
-     "passed": false
+     "errors": [],
+     "evidence": "3 结构候选 + 一致打分表 (['物理可行性', '信号完整性', 'PDN 与参考平面', '可制造性与成本', '冻结可复现性'])",
+     "passed": true
     },
     "check_g25": {
-     "errors": [
-      "frozen/ 下无冻结结构文档"
-     ],
-     "evidence": "",
-     "passed": false
+     "errors": [],
+     "evidence": "L2 冻结完成: ['L2_STRUCTURE_FROZEN_v1.md', 'PLACEMENT_ADDENDUM_v1.md']",
+     "passed": true
     },
     "check_g26": {
-     "errors": [
-      "缺失方案级闭合产物 L2/escape_closure_analysis.md（芯片侧断点逃逸闭合分析）",
-      "缺失方案级闭合产物 L2/ruling/assumption_h3_verify.md（L2 ruling 假设 H3 复核）",
-      "缺失方案级闭合产物 L2/ruling/assumption_h1_calc.md（L2 ruling 假设 H1 核算）"
-     ],
-     "evidence": "",
-     "passed": false
+     "errors": [],
+     "evidence": "L2.5 方案级闭合率通过：逃逸闭合分析 + H1/H3 假设复核 PASS/PARTIAL",
+     "passed": true
     }
    },
    "check_l3": {
     "check_g31": {
-     "errors": [
-      "缺失 SPEC_k2_v4.json"
-     ],
-     "evidence": "",
-     "passed": false
+     "errors": [],
+     "evidence": "SPEC_k2_v4.json 结构完整（9 顶层字段 + 阻抗/网类/过孔/走廊）",
+     "passed": true
     },
     "check_g32": {
-     "errors": [
-      "缺失 executor_constraints.md"
-     ],
-     "evidence": "",
-     "passed": false
+     "errors": [],
+     "evidence": "执行器约束已声明（旧管线违宪在册，新执行器零运行时自由度）",
+     "passed": true
     },
     "check_g33": {
      "errors": [
@@ -218,15 +195,14 @@
      "passed": false
     },
     "check_g34": {
-     "errors": [
-      "缺失 escape_spec.json（L2）"
-     ],
-     "evidence": "",
-     "passed": false
+     "errors": [],
+     "evidence": "逃逸桩方案闭合：59 可落桩 + 0 豁免记录（全为 NO_CONNECT/已裁决）",
+     "passed": true
     },
     "check_g35": {
      "errors": [
-      "SPEC 读取失败 /home/fila/jqdDev_2025/ic_hw/_shared/pm_gate/artifacts/L3/SPEC_k2_v4.json: [Errno 2] No such file or directory: '/home/fila/jqdDev_2025/ic_hw/_shared/pm_gate/artifacts/L3/SPEC_k2_v4.json'"
+      "无冻结签名 (fail-closed): SPEC 缺 layer_plan.wp1_escape_nets_meta.fingerprint",
+      "完整环境复验中断 (fail-closed): No module named 'layout_engine'"
      ],
      "evidence": "",
      "passed": false
@@ -235,7 +211,7 @@
    "check_qa": {
     "check_g41": {
      "errors": [
-      "SPEC 缺失，无法对照"
+      "施工产物无走线（k1_v1.kicad_pcb 尚未按 SPEC 布线）——规格对照无对象"
      ],
      "evidence": "",
      "passed": false
@@ -249,10 +225,10 @@
     }
    },
    "closure_check_defaults_probe": {
-    "DEFAULT_SPEC": "/home/fila/jqdDev_2025/ic_hw/_shared/pm_gate/artifacts/L3/SPEC_k2_v4.json",
-    "DEFAULT_SPEC_exists": false,
-    "ESCAPE_SPEC_PATH": "/home/fila/jqdDev_2025/ic_hw/_shared/pm_gate/artifacts/L2/escape_spec.json",
-    "ESCAPE_SPEC_PATH_exists": false
+    "DEFAULT_SPEC": "/home/fila/jqdDev_2025/ic_hw/k1/pm_gate/artifacts/k1/L3/SPEC_k1.json",
+    "DEFAULT_SPEC_exists": true,
+    "ESCAPE_SPEC_PATH": "/home/fila/jqdDev_2025/ic_hw/k1/pm_gate/artifacts/k1/L2/escape_spec.json",
+    "ESCAPE_SPEC_PATH_exists": true
    },
    "discovered_project_root": "/home/fila/jqdDev_2025/ic_hw/k1",
    "project": "k1",
@@ -289,9 +265,9 @@
       "status": "passed"
      },
      "G1.5": {
-      "checked_at": "2026-09-15T04:03:54+00:00",
-      "evidence_head": "WAIVER（账本 C-3）：机判 FAIL 系**框架路径缺陷**——check_l1.py 的 RULES_DOC 上溯三级解析到 `<k1 父目录>/doc/PCB_DESIGN_RULES.md`（多退一层，越出容器），真实规则件在 `_shared/docs/PCB_DESIGN_RULES.md`；**实质",
-      "is_waiver": true,
+      "checked_at": "2026-09-20T14:00:00+00:00",
+      "evidence_head": "真机判 PASS（撤 WAIVER · B2-4 / 账本 C-3 闭环）：check_l1.RULES_DOC 已修为 `<框架根>/docs/PCB_DESIGN_RULES.md`（共享层 fc59771，F-1/B2-4），K1 侧解析 = `_shared/docs/PCB_DESIGN_RULES.md`；",
+      "is_waiver": false,
       "stage": "L1",
       "status": "passed"
      },
@@ -388,13 +364,11 @@
      }
     },
     "path": "k1/pm_gate/state_k1.json",
-    "waived_gates": [
-     "G1.5"
-    ]
+    "waived_gates": []
    },
    "rules_doc_probe": {
-    "exists": false,
-    "resolved": "/home/fila/jqdDev_2025/ic_hw/../doc/PCB_DESIGN_RULES.md"
+    "exists": true,
+    "resolved": "/home/fila/jqdDev_2025/ic_hw/_shared/docs/PCB_DESIGN_RULES.md"
    },
    "spec_name_probe": {
     "active_call": "SPEC_k1.json",
@@ -429,11 +403,9 @@
      "passed": true
     },
     "check_g15": {
-     "errors": [
-      "缺失工艺常识强条 /home/fila/jqdDev_2025/ic_hw/../doc/PCB_DESIGN_RULES.md（PCB_DESIGN_RULES.md）"
-     ],
-     "evidence": "",
-     "passed": false
+     "errors": [],
+     "evidence": "结构预检 + 工艺常识强条全 PASS（1 份报告）",
+     "passed": true
     }
    },
    "check_l2": {
@@ -472,11 +444,9 @@
    },
    "check_l3": {
     "check_g31": {
-     "errors": [
-      "SPEC.corridors 缺字段: ['J2_TO_U', 'U_TO_MCIO']"
-     ],
-     "evidence": "",
-     "passed": false
+     "errors": [],
+     "evidence": "SPEC_k2_v4.json 结构完整（9 顶层字段 + 阻抗/网类/过孔/走廊）",
+     "passed": true
     },
     "check_g32": {
      "errors": [],
@@ -495,7 +465,8 @@
     },
     "check_g35": {
      "errors": [
-      "SPEC 读取失败 /home/fila/jqdDev_2025/ic_hw/_shared/pm_gate/artifacts/L3/SPEC_k2_v4.json: [Errno 2] No such file or directory: '/home/fila/jqdDev_2025/ic_hw/_shared/pm_gate/artifacts/L3/SPEC_k2_v4.json'"
+      "无冻结签名 (fail-closed): SPEC 缺 layer_plan.wp1_escape_nets_meta.fingerprint",
+      "完整环境复验中断 (fail-closed): No module named 'layout_engine'"
      ],
      "evidence": "",
      "passed": false
@@ -504,7 +475,7 @@
    "check_qa": {
     "check_g41": {
      "errors": [
-      "施工产物无走线（k2_v4.kicad_pcb 尚未按 SPEC 布线）——规格对照无对象"
+      "施工产物无走线（k2_v4_8L.l7.kicad_pcb 尚未按 SPEC 布线）——规格对照无对象"
      ],
      "evidence": "",
      "passed": false
@@ -518,10 +489,10 @@
     }
    },
    "closure_check_defaults_probe": {
-    "DEFAULT_SPEC": "/home/fila/jqdDev_2025/ic_hw/_shared/pm_gate/artifacts/L3/SPEC_k2_v4.json",
-    "DEFAULT_SPEC_exists": false,
-    "ESCAPE_SPEC_PATH": "/home/fila/jqdDev_2025/ic_hw/_shared/pm_gate/artifacts/L2/escape_spec.json",
-    "ESCAPE_SPEC_PATH_exists": false
+    "DEFAULT_SPEC": "/home/fila/jqdDev_2025/ic_hw/k2/pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-54.json",
+    "DEFAULT_SPEC_exists": true,
+    "ESCAPE_SPEC_PATH": "/home/fila/jqdDev_2025/ic_hw/k2/pm_gate/artifacts/k2_v4/L2/escape_spec.json",
+    "ESCAPE_SPEC_PATH_exists": true
    },
    "discovered_project_root": "/home/fila/jqdDev_2025/ic_hw/k2",
    "project": "k2_v4",
@@ -660,14 +631,14 @@
     "waived_gates": []
    },
    "rules_doc_probe": {
-    "exists": false,
-    "resolved": "/home/fila/jqdDev_2025/ic_hw/../doc/PCB_DESIGN_RULES.md"
+    "exists": true,
+    "resolved": "/home/fila/jqdDev_2025/ic_hw/_shared/docs/PCB_DESIGN_RULES.md"
    },
    "spec_name_probe": {
-    "active_call": "SPEC_k2_v4.spec-rev-52.json",
-    "active_spec_artifact": "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-52.json",
+    "active_call": "SPEC_k2_v4.spec-rev-54.json",
+    "active_spec_artifact": "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-54.json",
     "active_spec_artifact_exists": true,
-    "default_call": "SPEC_k2_v4.spec-rev-52.json",
+    "default_call": "SPEC_k2_v4.spec-rev-54.json",
     "k2_spec_artifact": "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json",
     "k2_spec_artifact_exists": true
    }
@@ -683,14 +654,15 @@
  "pytest_baseline": {
   "cmd": "/home/fila/jqdDev_2025/ic_hw/AppDir/bin/python3.11 -m pytest -q _shared/eda_core/tests/test_hs_route_model.py",
   "counts": {
+   "crash_tail": "FAILED _shared/eda_core/tests/test_hs_route_model.py::TestV5FlipRedesign::test_chain_no_pn_zero_spacing | FAILED _shared/eda_core/tests/test_hs_route_model.py::TestBoardLevelConsistency::test_board_level_consistency | 2 failed, 61 passed, 12 skipped",
    "error": 0,
-   "failed": 0,
-   "passed": 34,
-   "skipped": 34
+   "failed": 2,
+   "passed": 61,
+   "skipped": 12
   },
-  "exit_code": 0,
+  "exit_code": 1,
   "interpreter": "/home/fila/jqdDev_2025/ic_hw/AppDir/bin/python3.11",
-  "last_line": "34 passed, 34 skipped"
+  "last_line": "2 failed, 61 passed, 12 skipped"
  },
  "readonly": true,
  "reconciliation_k1": {
@@ -722,14 +694,14 @@
    },
    "check_g15": {
     "classification": "NO_PROJECT_RUNNER",
-    "framework_first_error": "缺失工艺常识强条 /home/fila/jqdDev_2025/ic_hw/../doc/PCB_DESIGN_RULES.md（PCB_DESIGN_RULES.md）",
-    "framework_passed": false,
+    "framework_first_error": "",
+    "framework_passed": true,
     "gate_id": "G1.5"
    },
    "check_g21": {
-    "classification": "TOOL_DEFECT_PROJECT_DIMENSION",
-    "framework_first_error": "缺失 measurements.md（测量基线）",
-    "framework_passed": false,
+    "classification": "AGREE",
+    "framework_first_error": "",
+    "framework_passed": true,
     "gate_id": "G2.1",
     "project_runner": {
      "detail": "measurements.md 含板几何/焊盘盒/走廊/电容墙",
@@ -738,9 +710,9 @@
     }
    },
    "check_g22": {
-    "classification": "TOOL_DEFECT_PROJECT_DIMENSION",
-    "framework_first_error": "缺失 constraints.md（约束清单）",
-    "framework_passed": false,
+    "classification": "AGREE",
+    "framework_first_error": "",
+    "framework_passed": true,
     "gate_id": "G2.2",
     "project_runner": {
      "detail": "constraints.md 工艺/电气/叠层约束齐全且带出处",
@@ -749,9 +721,9 @@
     }
    },
    "check_g23": {
-    "classification": "TOOL_DEFECT_PROJECT_DIMENSION",
-    "framework_first_error": "缺失 math_closure.md（数学闭合）",
-    "framework_passed": false,
+    "classification": "AGREE",
+    "framework_first_error": "",
+    "framework_passed": true,
     "gate_id": "G2.3",
     "project_runner": {
      "detail": "汇总判定 8 项全闭合",
@@ -760,9 +732,9 @@
     }
    },
    "check_g24": {
-    "classification": "TOOL_DEFECT_PROJECT_DIMENSION",
-    "framework_first_error": "candidates/ 下结构候选 0 个（需要 ≥2）",
-    "framework_passed": false,
+    "classification": "AGREE",
+    "framework_first_error": "",
+    "framework_passed": true,
     "gate_id": "G2.4",
     "project_runner": {
      "detail": "3 结构候选 + 一致打分表 (['物理可行性', '信号完整性', 'PDN 与参考平面', '可制造性与成本', '冻结可复现性'])",
@@ -771,9 +743,9 @@
     }
    },
    "check_g25": {
-    "classification": "TOOL_DEFECT_PROJECT_DIMENSION",
-    "framework_first_error": "frozen/ 下无冻结结构文档",
-    "framework_passed": false,
+    "classification": "AGREE",
+    "framework_first_error": "",
+    "framework_passed": true,
     "gate_id": "G2.5",
     "project_runner": {
      "detail": "L2 冻结完成: ['L2_STRUCTURE_FROZEN_v1.md', 'PLACEMENT_ADDENDUM_v1.md']",
@@ -782,9 +754,9 @@
     }
    },
    "check_g26": {
-    "classification": "TOOL_DEFECT_PROJECT_DIMENSION",
-    "framework_first_error": "缺失方案级闭合产物 L2/escape_closure_analysis.md（芯片侧断点逃逸闭合分析）",
-    "framework_passed": false,
+    "classification": "AGREE",
+    "framework_first_error": "",
+    "framework_passed": true,
     "gate_id": "G2.6",
     "project_runner": {
      "detail": "L2.5 方案级闭合率通过：逃逸闭合分析 + H1/H3 假设复核 PASS/PARTIAL",
@@ -793,25 +765,25 @@
     }
    },
    "check_g31": {
-    "classification": "TOOL_DEFECT_HARDCODED_NAME",
-    "framework_first_error": "缺失 SPEC_k2_v4.json",
-    "framework_passed": false,
+    "classification": "AGREE",
+    "framework_first_error": "",
+    "framework_passed": true,
     "gate_id": "G3.1",
     "project_runner": {
-     "detail": "",
-     "first_error": "缺失 SPEC_k2_v4.json",
-     "status": "FAIL"
+     "detail": "SPEC_k2_v4.json 结构完整（9 顶层字段 + 阻抗/网类/过孔/走廊）",
+     "first_error": "",
+     "status": "PASS"
     }
    },
    "check_g32": {
-    "classification": "TOOL_DEFECT_HARDCODED_NAME",
-    "framework_first_error": "缺失 executor_constraints.md",
-    "framework_passed": false,
+    "classification": "AGREE",
+    "framework_first_error": "",
+    "framework_passed": true,
     "gate_id": "G3.2",
     "project_runner": {
-     "detail": "",
-     "first_error": "executor_constraints.md 缺关键声明: 'SPEC_k2_v4.json'",
-     "status": "FAIL"
+     "detail": "执行器约束已声明（旧管线违宪在册，新执行器零运行时自由度）",
+     "first_error": "",
+     "status": "PASS"
     }
    },
    "check_g33": {
@@ -826,9 +798,9 @@
     }
    },
    "check_g34": {
-    "classification": "TOOL_DEFECT_PROJECT_DIMENSION",
-    "framework_first_error": "缺失 escape_spec.json（L2）",
-    "framework_passed": false,
+    "classification": "AGREE",
+    "framework_first_error": "",
+    "framework_passed": true,
     "gate_id": "G3.4",
     "project_runner": {
      "detail": "逃逸桩方案闭合：59 可落桩 + 0 豁免记录（全为 NO_CONNECT/已裁决）",
@@ -837,19 +809,19 @@
     }
    },
    "check_g35": {
-    "classification": "TOOL_DEFECT_HARDCODED_NAME",
-    "framework_first_error": "SPEC 读取失败 /home/fila/jqdDev_2025/ic_hw/_shared/pm_gate/artifacts/L3/SPEC_k2_v4.json: [Errno 2] No such file or",
+    "classification": "PROJECT_GAP",
+    "framework_first_error": "无冻结签名 (fail-closed): SPEC 缺 layer_plan.wp1_escape_nets_meta.fingerprint",
     "framework_passed": false,
     "gate_id": "G3.5",
     "project_runner": {
      "detail": "",
-     "first_error": "SPEC 读取失败 /home/fila/jqdDev_2025/ic_hw/k1/_shared/pm_gate/artifacts/L3/SPEC_k2_v4.json: [Errno 2] No such file",
+     "first_error": "无冻结签名 (fail-closed): SPEC 缺 layer_plan.wp1_escape_nets_meta.fingerprint",
      "status": "FAIL"
     }
    },
    "check_g41": {
     "classification": "NO_PROJECT_RUNNER",
-    "framework_first_error": "SPEC 缺失，无法对照",
+    "framework_first_error": "施工产物无走线（k1_v1.kicad_pcb 尚未按 SPEC 布线）——规格对照无对象",
     "framework_passed": false,
     "gate_id": "G4.1"
    },
@@ -892,14 +864,14 @@
     "status": "PASS"
    },
    "G3.1": {
-    "detail": "",
-    "first_error": "缺失 SPEC_k2_v4.json",
-    "status": "FAIL"
+    "detail": "SPEC_k2_v4.json 结构完整（9 顶层字段 + 阻抗/网类/过孔/走廊）",
+    "first_error": "",
+    "status": "PASS"
    },
    "G3.2": {
-    "detail": "",
-    "first_error": "executor_constraints.md 缺关键声明: 'SPEC_k2_v4.json'",
-    "status": "FAIL"
+    "detail": "执行器约束已声明（旧管线违宪在册，新执行器零运行时自由度）",
+    "first_error": "",
+    "status": "PASS"
    },
    "G3.3": {
     "detail": "",
@@ -913,15 +885,15 @@
    },
    "G3.5": {
     "detail": "",
-    "first_error": "SPEC 读取失败 /home/fila/jqdDev_2025/ic_hw/k1/_shared/pm_gate/artifacts/L3/SPEC_k2_v4.json: [Errno 2] No such file",
+    "first_error": "无冻结签名 (fail-closed): SPEC 缺 layer_plan.wp1_escape_nets_meta.fingerprint",
     "status": "FAIL"
    }
   }
  },
  "schema": 1,
  "spec_k2_v4_census": {
-  "count": 43,
-  "count_pm_gate_only": 16,
+  "count": 37,
+  "count_pm_gate_only": 10,
   "hits": [
    "_shared/eda_core/board_low_speed_sync.py:32",
    "_shared/eda_core/board_spec_consistency.py:35",
@@ -935,9 +907,9 @@
    "_shared/eda_core/escape_stub_replanner.py:19",
    "_shared/eda_core/escape_stub_replanner.py:204",
    "_shared/eda_core/tests/conftest.py:10",
-   "_shared/eda_core/tests/conftest.py:42",
-   "_shared/eda_core/tests/conftest.py:46",
-   "_shared/eda_core/tests/conftest.py:65",
+   "_shared/eda_core/tests/conftest.py:52",
+   "_shared/eda_core/tests/conftest.py:56",
+   "_shared/eda_core/tests/conftest.py:75",
    "_shared/eda_core/tests/test_cap_wall_upgrade.py:107",
    "_shared/eda_core/tests/test_cap_wall_upgrade.py:113",
    "_shared/eda_core/tests/test_closure_check.py:184",
@@ -945,26 +917,20 @@
    "_shared/eda_core/tests/test_feature_extractor.py:15",
    "_shared/eda_core/tests/test_feature_extractor.py:262",
    "_shared/eda_core/tests/test_hs_route_model.py:164",
-   "_shared/eda_core/tests/test_hs_route_model.py:324",
+   "_shared/eda_core/tests/test_hs_route_model.py:328",
    "_shared/eda_core/tests/test_redteam_evidence.py:37",
    "_shared/eda_core/tests/test_routing_topology_gate.py:31",
-   "_shared/eda_core/tests/test_topology_gate.py:25",
+   "_shared/eda_core/tests/test_topology_gate.py:28",
    "_shared/eda_core/verify_checks.py:17",
-   "_shared/pm_gate/check_l3.py:26",
-   "_shared/pm_gate/check_l3.py:28",
    "_shared/pm_gate/check_l3.py:3",
-   "_shared/pm_gate/check_l3.py:46",
-   "_shared/pm_gate/check_l3.py:53",
-   "_shared/pm_gate/check_qa.py:34",
-   "_shared/pm_gate/closure_check.py:112",
-   "_shared/pm_gate/config.py:120",
+   "_shared/pm_gate/check_l3.py:43",
+   "_shared/pm_gate/check_l3.py:62",
+   "_shared/pm_gate/check_l3.py:71",
+   "_shared/pm_gate/check_qa.py:39",
+   "_shared/pm_gate/config.py:143",
    "_shared/pm_gate/config.py:27",
-   "_shared/pm_gate/freeze_wp1.py:45",
    "_shared/pm_gate/red_team.py:49",
-   "_shared/pm_gate/review.py:105",
-   "_shared/pm_gate/review.py:121",
    "_shared/pm_gate/tools_escape_predict.py:15",
-   "_shared/pm_gate/tools_escape_predict.py:39",
    "_shared/pm_gate/wp1_semantics_check.py:45"
   ],
   "needle": "SPEC_k2_v4",
