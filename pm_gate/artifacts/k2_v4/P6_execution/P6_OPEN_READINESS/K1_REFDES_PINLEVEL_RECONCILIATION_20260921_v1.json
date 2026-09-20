@@ -487,6 +487,19 @@
    "actual_path": "原理图侧真源 = `k1/boards/k1_sch.yaml`（schema 与 `k2/hw/data/k2_sch.yaml` **逐键相同**：symbols/nets/sheets/strap_intents/links）；渲染器 = 共享层 `_shared/schlib`（k1/_shared 为其符号链接）+ 薄 driver `k2/tools/k2_sch_gen_v1.py`（env `K2_SCH_YAML`/`K2_OUT_SCH`）。",
    "gap": "`k1_sch.yaml` 本身陈旧：placements 37（缺 5 件）· 3 个 symbol def 陈旧（见 E）⇒ **再生前须先把 k1_sch.yaml 从 k1_board.yaml+pinmap 重建为 42**（此为新增工作量，N-3 原估低估）。",
    "owner_gate": "无（L2/机制面）"
+  },
+  {
+   "id": "K1-S6",
+   "severity": "中（**本会话自我更正·先前遗漏**）",
+   "refs": [
+    "J10"
+   ],
+   "finding": "原理图 symbol `HEADER_2PIN_12V`（J10 所用）Footprint = `ForgeOS:PinHeader_1x02`，而板侧冻结真值 = `Connector_JST:JST_VH_B2P-VH_1x02_P3.96mm_Vertical`（JST VH 3.96mm 2P，10A/250V）。",
+   "pinlevel": "符号 2 脚 (VIN_12V/GND) 与板 pad 1/2 一一对应；**仅 Footprint 属性陈旧**（同 K1-S1/S2/S4 家族）。",
+   "basis": "`k1_board.yaml#devices.J10`（value=JST_VH_B2P-VH，function=『独立 DC 12V 主电源输入连接器…需求冻结 v1 §2.6』）+ 生成器 `k1_sch_sync_v1.py` 的 `\"J10 器件块\"` 替换项已把板侧改 JST VH ⇒ 原理图侧未同步。",
+   "how_found": "**由本会话新建的 N-3 验收核 `k1_sch_regen_acceptance_v1.py`（检查 C：逐件 footprint basename 对 `k1_board.yaml`）机判暴露**；先前 K1 对账仅列 S1/S2/S4，漏此件。",
+   "correction_note": "承 RED 诚实登记惯例：此为 ENG 先前审计的**遗漏**，已具名更正；不影响既有 K1-S1..S5 结论，亦不改变 canonical/交付锚。",
+   "owner_gate": "无（L2/机制面）"
   }
  ],
  "E_sch_yaml_stale_symbol_defs": [
@@ -565,5 +578,11 @@
   "proposal": "N-3 拆两步：(1) 重建 `k1_sch.yaml` 42（补 5 件 symbol def/placement + 修 K1-S1/S2/S4 三处符号）——**新增工作量**；(2) 用共享渲染器再生 4 页 .kicad_sch + 显式 K1 root（一笔提交 + K1 锚重基线）。",
   "note": "不新增判据维/检查齿；不动 K2 交付锚。"
  },
- "ts": "2026-09-22T04:20:00+0800"
+ "ts": "2026-09-22T04:20:00+0800",
+ "corrections": [
+  {
+   "at": "2026-09-22T07:40:00+0800",
+   "what": "补登 K1-S6（J10 footprint 陈旧）；由 N-3 验收核发现，属先前遗漏的诚实更正。"
+  }
+ ]
 }

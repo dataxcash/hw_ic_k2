@@ -1,0 +1,158 @@
+{
+ "artifact": "k2_n3_k1_sch_regen_executability",
+ "schema": 1,
+ "purpose": "N-3（K1 原理图侧再生 37→42）的**可执行性判定**：逐件判定『再生所需数据是否在仓库内可得』，具名登记缺口；并附**验收核脚本**（机判）。只读；不动 k1/。",
+ "A_mechanical_parts": {
+  "nets": "**完全机械**：`k1_sch.yaml#nets` 可由 `k1_nets.yaml#nets`（51 网，②机械派生的权威网表）重建 ⇒ 无需判断。",
+  "placements": "**机械**：5 件 placement（ref/symbol/card/nc）可由 `k1_board.yaml#devices` + `k1_pinmap.yaml` 派生。",
+  "three_symbol_fixes": "**有出处**：J1（K1-S1）· U10（K1-S2）· U12（K1-S4）· J10（**K1-S6·新登**）⇒ footprint 取 `k1_board.yaml#devices[*].footprint`。"
+ },
+ "B_per_part_data_availability": {
+  "Q1": {
+   "board_fp": "Package_SON:WSON-10-1EP_2.5x2.5mm_P0.5mm_EP1.2x2mm",
+   "declared_sch_pins": 6,
+   "pinmap_nets": {
+    "IN": 2,
+    "VOUT": 3,
+    "ON": 1,
+    "GND": 1
+   },
+   "n_pins_from_pinmap": 4,
+   "deficit": 2,
+   "datasheet_in_repo": true,
+   "datasheet_params": [
+    "iout_max_a",
+    "r_on_mohm",
+    "r_theta_ja_c_per_w",
+    "t_a_max_c",
+    "t_j_max_c",
+    "topology",
+    "vin_max_v"
+   ],
+   "deficit_note": "2 脚**无出处**（pinmap 仅有网 4 脚；仓库无 TPS22990 pinout）⇒ N3-G1 BLOCKING"
+  },
+  "Q2": {
+   "board_fp": "Package_TO_SOT_SMD:SOT-23",
+   "declared_sch_pins": 3,
+   "pinmap_nets": {
+    "G": 1,
+    "S": 1,
+    "D": 1
+   },
+   "n_pins_from_pinmap": 3,
+   "deficit": 0,
+   "datasheet_in_repo": null,
+   "datasheet_params": null,
+   "deficit_note": "0 缺口（G/S/D 3 脚由 pinmap+board 完全派生）"
+  },
+  "R38": {
+   "board_fp": "Resistor_SMD:R_0402_1005Metric",
+   "declared_sch_pins": 2,
+   "pinmap_nets": {
+    "A": 1,
+    "B": 1
+   },
+   "n_pins_from_pinmap": 2,
+   "deficit": 0,
+   "datasheet_in_repo": null,
+   "datasheet_params": null,
+   "deficit_note": "0 缺口（A/B 2 脚）"
+  },
+  "R39": {
+   "board_fp": "Resistor_SMD:R_0402_1005Metric",
+   "declared_sch_pins": 2,
+   "pinmap_nets": {
+    "A": 1,
+    "B": 1
+   },
+   "n_pins_from_pinmap": 2,
+   "deficit": 0,
+   "datasheet_in_repo": null,
+   "datasheet_params": null,
+   "deficit_note": "0 缺口（A/B 2 脚）"
+  },
+  "U13": {
+   "board_fp": "Package_DFN_QFN:DFN-6_1.6x1.3mm_P0.4mm",
+   "declared_sch_pins": 6,
+   "pinmap_nets": {
+    "VCC": 1,
+    "IO1": 1,
+    "GND": 1,
+    "IO2": 1
+   },
+   "n_pins_from_pinmap": 4,
+   "deficit": 2,
+   "datasheet_in_repo": true,
+   "datasheet_params": [
+    "channels",
+    "esd_iec_airgap_kv",
+    "esd_iec_contact_kv",
+    "io_abs_max_v",
+    "package_options",
+    "pinout_6pin",
+    "selected_variant",
+    "vcc_max_v",
+    "vcc_min_v"
+   ],
+   "deficit_note": "2 脚 = **N.C.**，**已由手册 pinout_6pin 具名**（1=VCC,2=N.C.,3=IO1,4=GND,5=N.C.,6=IO2）⇒ **非阻塞**（N3-G3）"
+  }
+ },
+ "C_blocking_gaps": [
+  {
+   "id": "N3-G1",
+   "part": "Q1",
+   "severity": "BLOCKING(N-3)",
+   "finding": "Q1=TPS22990：`k1_board.yaml` 声明 `sch_pins=6`，但 `k1_pinmap.yaml` 仅给出 **4** 个有网脚（IN/VOUT/ON/GND）⇒ **缺 2 脚**定义；且仓库内 **无 TPS22990 引脚表**（`L1/inputs/datasheets/TPS22990.yaml` 只有电气/热参数，无 pinout；`sch_gate/datasheets/` 33 件亦无）。",
+   "impact": "N-3 无法在不**杜撰**脚位的前提下完成 37→42。",
+   "options": [
+    "(i) 取 TPS22990 手册（TI SLVSDK1C）转录 pinout + 三件套（推荐）",
+    "(ii) 监理/owner 裁定按其 4 有网脚 + 2 NC 具名落件",
+    "(iii) 暂缓 Q1，先落其余 4 件（**须监理同意部分再生**）"
+   ]
+  },
+  {
+   "id": "N3-G2",
+   "part": "U12",
+   "severity": "高（同族）",
+   "finding": "U12=TPS22965：声明 `sch_pins=6`；仓库无 TPS22965 pinout（同 N3-G1 情形）。现原理图用 `TPS22919`（6 脚）为**错件**（K1-S4）⇒ 改件后其 6 脚须有出处。",
+   "options": [
+    "同上 (i)/(ii)"
+   ]
+  },
+  {
+   "id": "N3-G3",
+   "part": "U13",
+   "severity": "无阻塞",
+   "finding": "U13=TPD2E001：手册 `pinout_6pin` **已在仓库**（1=VCC,2=N.C.,3=IO1,4=GND,5=N.C.,6=IO2）⇒ 6 脚有出处 ✅",
+   "options": []
+  },
+  {
+   "id": "N3-G4",
+   "part": "Q2/R38/R39",
+   "severity": "无阻塞",
+   "finding": "Q2(2N7002 SOT-23 G/S/D 3 脚)·R38/R39(22R 2 脚) 可由 `k1_pinmap.yaml` + `k1_board.yaml` 完全派生 ✅（无需额外手册）。",
+   "options": []
+  }
+ ],
+ "D_acceptance_harness": {
+  "file": "k2/docs/drafts/n3-k1-sch-regen-v1/k1_sch_regen_acceptance_v1.py",
+  "checks": [
+   "A refdes 集合 == 板 42",
+   "B symbol 已定义",
+   "C footprint basename == board.yaml",
+   "D nets 成员集 == k1_nets.yaml",
+   "E 渲染组件数 == 42"
+  ],
+  "live_negctl": "对**现行** `k1/boards/k1_sch.yaml` 实跑 ⇒ **FAIL**（A 37≠42 · C 4 处不符**含新登 J10** · D 13 网不一致 · E 渲染 37）——证明核有效，且**暴露先前遗漏的 J10**。"
+ },
+ "E_render_feasibility": "共享 `schlib` + `k2/tools/k2_sch_gen_v1.py`（env `K2_SCH_YAML`）**已实测可驱动 K1**（4 页 rc=0 · 逐字节确定性 · 仅 /tmp）。",
+ "F_ask_supervisor": [
+  "N-3 授权（拆两步：重建 `k1_sch.yaml` 42 → 共享 schlib 再生 + K1 root）",
+  "N3-G1/G2 数据缺口处置：取手册 (i) / 裁定 NC 脚 (ii) / 部分再生 (iii)",
+  "**均监理自裁面，无 owner 闸口**"
+ ],
+ "readonly_repo": true,
+ "not_landed": true,
+ "no_new_criteria_dim": true,
+ "ts": "2026-09-22T07:45:00+0800"
+}

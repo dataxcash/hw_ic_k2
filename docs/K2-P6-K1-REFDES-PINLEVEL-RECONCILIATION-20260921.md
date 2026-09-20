@@ -48,6 +48,7 @@ K1 **板级真源引脚级自洽**（板 42 == `k1_board.yaml` 42 == `k1_pinmap.
 | **K1-S3** | — | 低 | `k1_board.yaml#reconciliation.device_count` 自述 `schematic_sch_k1=42/diff=[]` | 盘上实测 37 ⇒ 自述与盘上不符 |
 | **K1-S4** | U12 | **高（新登记）** | 原理图 U12 = `IOCONVERT:TPS22919`（6 pin #1-6：IN/GND/ON/NC/QOD/VOUT）vs **板侧冻结值 U12 = TPS22965（DSG WSON-8）** | 按 pad 号 join 会错接：pin2(GND)↔pad2(IN)**✗** · pin6(VOUT)↔pad6(NC)**✗** · pad7/8(VOUT)、pad9(GND/EP) 无符号脚 ⇒ **网表断裂** |
 | **K1-S5** | — | **高（N-3 可执行性更正）** | `k1_sch_sync_v1.py` **只写** `k1_board.yaml`/`k1_nets.yaml`（且二者已同步）；**全仓无工具写 `k1/sch/*.kicad_sch`** | 见 §5 |
+| **K1-S6** | J10 | 中（**自我更正·先前遗漏**） | 原理图 `HEADER_2PIN_12V` Footprint=`ForgeOS:PinHeader_1x02` vs 板侧真值=`Connector_JST:JST_VH_B2P-VH_1x02_P3.96mm_Vertical` | 2 脚(VIN_12V/GND) 与板 pad 1/2 对应；**仅 Footprint 属性陈旧**（同 S1/S2/S4 家族） |
 
 **K1-S4 依据**：`k1_board.yaml#devices.U12.value=TPS22965` + 真源 `TPS22965.yaml`（抬头即『U12: 轨A 预鉴权轨负载开关』）；生成器 `k1_sch_sync_v1.py` 的 `U12_NEW` 块已把 value 改为 TPS22965（旧文本 `PWR_OLD` 仍留 `TPS22919` 字样）。⇒ 承「①方案冻结态、板为权威」，**原理图符号陈旧**。
 
@@ -82,3 +83,8 @@ K2_SCH_YAML=<abs>/k1/boards/k1_sch.yaml K2_OUT_SCH=/tmp/k1rec/sch_out \
 
 - 不新增判据维/检查齿；不动 K2 交付锚；**无 owner 闸口**。
 - 回滚点：`k1 dc720fd`（未动）；本件 `k2` 提交为纯新增件。
+
+## 7. 【更正】K1-S6 —— 先前遗漏的 J10
+本会话新建的 N-3 验收核（`k2/docs/drafts/n3-k1-sch-regen-v1/k1_sch_regen_acceptance_v1.py`）在**逐件 footprint basename 对 `k1_board.yaml`** 的检查（C 项）中**当场暴露**：`J10` 的 symbol `HEADER_2PIN_12V` footprint 仍为 `ForgeOS:PinHeader_1x02`，而板侧冻结真值 = `Connector_JST:JST_VH_B2P-VH_1x02_P3.96mm_Vertical`（JST VH 3.96mm 2P · 10A/250V · 需求冻结 v1 §2.6）。
+⇒ 具名登记为 **K1-S6**（与 K1-S1/S2/S4 同族：原理图侧 footprint 未随板侧更新）。
+**诚实登记**：此为 ENG 先前审计的**遗漏**（原 D_residuals 仅 S1..S5），不影响既有结论、canonical 读数与交付锚。
