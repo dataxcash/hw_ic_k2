@@ -1,0 +1,88 @@
+{
+ "artifact": "k2_pending_rulings_delta",
+ "schema": 7,
+ "ts": "2026-09-20T21:00:00+0800",
+ "supersedes": "PENDING_RULINGS_DELTA_20260921_v6.json（**其 N-1..N-7 / N-3 rev / C-25 / P5 预填 / K1-D8 正文不变**；本件**只追加本会话 4 项**，并更新 C-25 tier2 读数）",
+ "purpose": "收敛当前全部待裁项为**一份**决策件。本会话（2026-09-20 20:14 起 · context 归零续接）在『无晚于 handoff 的裁定』下按 handoff §7-4 只读造活，落 2 项实质成果并新增 4 项待裁（含 **1 项高严重度**）。",
+ "owner_gate": "**L1 项 1 件**（`KBU6-PINROT-1` 的 K1 MCU pad 配对 = 球重映射）；其余全为**监理自裁面**。",
+ "stage_state": "P0–P4 与 P6 判据面 HOLDS；P5 = 唯一未闭阶段门（外部 V4–V7 `NOT_RUN`）；交付锚 `6ee7495de61f749f` **未动**；判据 **rev=6**（此会话复核四件逐字节同：`727d0995`/`00faba34`/`c175be51`/`1937a40a`）；canonical 19 `190b73be0f728a56`。**未越阶段、未动任何受保护件。**",
+ "carried_forward": [
+  "R-1（`pin_map_complete` J1 脚号 = 16 节点；择 (a) 逐 pad 展开 / (b) 口径）",
+  "W8-VAC-1（K1 42/42 footprint 无库 nickname ⇒ W-8 空过；补 lib_id 须批 / 裁口径）",
+  "T2-F1（`_shared` `source:` 引证订正：TPD6E05U06 SLLSE95→SLVSBO7O · TS3USB221A SCDS239A→SCDS277C；须批+同批升版）",
+  "C-25 tier2 口径（标准件 5 + 约定件 6 + 语义件 1 结构上无三件套 ⇒ 出处认定方式）",
+  "K1-D6 台账更新（warning 17→77 / 5 类；K1 项目面须批）",
+  "K1-D8（Q1/U12 VBIAS 未接）· N-3 rev · N-1/N-6/N-7 已落档",
+  "批 6 落件独立复算（监理侧；本会话已在 auto_supervisor.log 见监理独立复算 canonical 19 r1=r2=`190b73be0f728a56` IDENTICAL ⇒ 似已执行，请正式出件）"
+ ],
+ "new_items": [
+  {
+   "id": "**KBU6-PINROT-1 / K1-D13（新·高）**",
+   "title": "**`_shared` 器件真源 `STM32G0B1KBU6.yaml` 物理脚 25..32 相对厂商数据表整体旋转一位** ⇒ K1 U1 符号/pinmap 继承 7 个脚号错",
+   "facts": [
+    "厂商真值（ST **DS13560** Table 12 · 列 `LQFP32/UFQFPN32 - GP`）：**25=PA14-BOOT0 · 26=PA15 · 27=PB3 · 28=PB4 · 29=PB5 · 30=PB6 · 31=PB7 · 32=PB8**。",
+    "现 YAML（sha16 `4c898090e2fabeff`）：25=PA15 · 26=PB3 · 27=PB4 · 28=PB5 · 29=PB6 · 30=PB7 · 31=PB8 · 32=PA14 ——**循环右移一位**；脚 1..24 两侧一致。",
+    "**证据链**：①表结构解析（c1 = 表头最左列 = LQFP32/UFQFPN32-GP；c3 = LQFP48）②完备性（c1 覆盖 1..32）③**解析器交叉校验**：同解析器对 c3(LQFP48) 与**受信** `STM32G0B1CBT6.yaml` **逐脚 30/30 一致** ④**单调性判据**：Table 12 的 c1↔c3 = 25→36·26→37·27→42·…·32→47 **单调**；Figure 12 文本流两种配对**均非单调** ⇒ **以 Table 12 为准**。",
+    "**影响**：K1 U1(STM32G0B1KBU6·QFN32) 继承错位 —— `SWCLK_BOOT0 32→25` · `I2C1_SCL 29→30` · `I2C1_SDA 30→31` · `PB3 26→27` · `PB4 27→28` · `PB5 28→29` · `PB8 31→32`；`k1_pinmap.yaml`（`e1f45d29`）· `k1_sch.yaml`（`e1fdb1a1`）均已含。N-3 再生 `k1 9e283bf` 的 `sch/` 沿用 ⇒ **该批含 7 脚错**。",
+    "**K2 交付面不受影响**：k2 现役 hw 用 **STM32G0B1CBT6**（其真源经 c3 列 30/30 校验**正确**）。",
+    "**pad 25 冲突**：pinmap 中 `KEY_DET_EN: 25`，而物理 pad 25 = **PA14-BOOT0**；符号 `SWCLK_BOOT0` 亦指 pad 25 物理脚 ⇒ pad 归属 = **球重映射 = L1**。",
+    "**证据件**：`STM32G0B1KBU6_PIN_ROTATION_DEFECT_20260921_v1.json`（`b23ac49fa5f805fd`）· `k2/docs/K2-STM32G0B1KBU6-PIN-ROTATION-DEFECT-20260921.md`（`728e73c9`）"
+   ],
+   "ask": [
+    "①**监理自裁**：订正 `_shared/eda_core/sch_gate/datasheets/STM32G0B1KBU6.yaml` pins 25..32（`_shared` 件 ⇒ 须批 + **同批升版**）。",
+    "②**owner（L1）**：K1 MCU pad 配对（`{9,25}` 空脚集合 · KEY_DET_EN 与 SWD/BOOT0 物理脚归属）。",
+    "③订正后重跑：`k1_sch_regen_v1.py` → `k1_sch_gen_v1.py --install` → `k1_p4_bom_gen_v1.py` → `verify k1` → K1 判定，复核 pinmap 校验器判定翻转。"
+   ],
+   "eng_recommendation": "先订正真源再重跑；**未批不动**（当前为登记件，禁充绿）。"
+  },
+  {
+   "id": "**T2-F6（新·中）**",
+   "title": "**batch3 `automation_lane_closed=true` 证伪** —— 存在两条可复现**半自动**取件通道",
+   "facts": [
+    "①vendor `.../download/<PART>.pdf` 路由（`diodes.com/datasheet/download/BAT54C.pdf` · `ww1.microchip.com/...` 实测 200 + application/pdf）；②**中文镜像通道**：Sogou（可达）→ `atta.szlcsc.com` / `file.elecfans.com` PDF 直链（实测 200 + application/pdf）；`item.szlcsc.com` / `21icsearch` 可反查 vendor 直链。",
+    "本会话据此已于 batch4 新取 3 件（见下）。"
+   ],
+   "ask": [
+    "裁定『镜像/分销商宿主 PDF』是否计入三件套出处（若计入，tier2 可脚本化推进至 21/33）。"
+   ]
+  },
+  {
+   "id": "**T2-F7（新·中）**",
+   "title": "`STM32G0B1KBU6` 引证文献号 **DS12872** 实为 **DS13560**",
+   "facts": [
+    "厂商表 DS13560 逐字列出 `STM32G0B1CB, STM32G0B1KB, …` 且含专节 `STM32G0B1KxU UFQFPN32 pinout`（Figure 12, §45）⇒ 该件正确数据表 = DS13560。",
+    "同 T2-F1 族（`_shared` `source:` 订正 · 须批 + 同批升版）。"
+   ],
+   "ask": [
+    "与 T2-F1 **并批**订正 `_shared` `source:` 文字。"
+   ]
+  },
+  {
+   "id": "**C-25 tier2 batch4（读数更新·非新裁项）**",
+   "title": "tier2 三件套 **12 → 15/33**（+BAT54C / +FRU_EEPROM(AT24C02) / +STM32G0B1CBT6）",
+   "facts": [
+    "三件均 `%PDF` + `pdftotext` 可解析 + 文献号/产品名机检命中：BAT54C `50b04e4e17bcf5db`（diodes 路由）· AT24C02 `b6466f4cce6d4ed5`（Microchip）· STM32G0B1CBT6 `9fc2cfec9a1c8d5c`（DS13560 令牌命中×159，中文镜像）。",
+    "batch4 后仍缺 6 件：PI3DBS16412 · OPTO_LTV356T · USB3.0_Type-A_90 · PMIC_P1 · SOM_B1 · USB_C_PLUG(Molex 105444)（阻塞特征见机读件）。可达上限仍 **21/33**。"
+   ],
+   "ask": [
+    "知悉；tier2 收口后由 gate 属主另立 criteria rev（同 C-25 原议）。"
+   ]
+  },
+  {
+   "id": "**SG-AUDIT-1（新·中）**",
+   "title": "sch_gate 器件 pin 真源**同族机检**：抽检 **7/8 与厂商原件一致**，唯一 FAIL = STM32G0B1KBU6",
+   "facts": [
+    "PASS：TPS22919 6/6 · TS3USB221A 10/10 · LDO_5V_3V3(AP2127) 5/5 · SE050C2 7/7 · TPD6E05U06 14/14 · FUSB302 14/14 · STM32G0B1CBT6 30/30（LQFP48 列）。",
+    "FAIL：STM32G0B1KBU6（脚 25..32 旋转）。未检：DS160PR810(64 脚) · DCDC_12V_*(TLV61046A)。",
+    "⇒ KBU6 **倾向孤例（图形转写型）**，但不能外推；建议对 `source` 引证指向 **Figure** 的件加注复核优先级。"
+   ],
+   "ask": [
+    "知悉；建议排期补检 DS160PR810 / TLV61046A。"
+   ]
+  }
+ ],
+ "readonly_repo": true,
+ "not_landed": true,
+ "no_new_criteria_dim": true,
+ "eng_readonly_surface": "本会话把『锚复核 + tier2 半自动续取 + 真源同族机检』做尽；下一步实质推进**依赖上表裁定**（尤其 KBU6 订正）。未批期间 ENG 续做：余 6 件半自动取件 + DS160PR810 补检。"
+}
