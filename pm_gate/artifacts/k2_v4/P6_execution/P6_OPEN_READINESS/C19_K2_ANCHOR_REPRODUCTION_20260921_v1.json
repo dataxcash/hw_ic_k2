@@ -1,0 +1,68 @@
+{
+ "artifact": "k2_c19_anchor_reproduction",
+ "schema": 1,
+ "ts": "2026-09-20T20:05:58+0800",
+ "purpose": "**canonical 19 独立复算**（零回归证书）：本会话落件只触 K1 侧 + k2 文档/证据件，须以**在册锚逐字节命中**证明 K2 判据面未被移动。只读；未写任何项目件。",
+ "authorization_basis": "#K2-48 §一 N-4 收尾条件（canonical 19 == 190b73be0f728a56）· 常设红线『两次连跑不逐字节同者不得入库』",
+ "command": "python3 criteria/adjudicate.py --project k2 --board k2/hw/k2_v4_8L.l7.kicad_pcb --pro k2/hw/k2_v4_8L.l7.kicad_pro --nets k2/hw/data/k2_sch.errata-2.yaml --sch-dir k2/hw/sch --root . --drc-cli AppDir/bin/kicad-cli --drc-work-dir <全新> --v3-plane-json <…> --w8-audit-json <…> --pads-outline-json <…> --refplane-gap-json <…> --density-json <…> --min-clearance-json <…> --out <verdict.json>",
+ "inputs_six": {
+  "w8-audit-json": {
+   "path": "k2/pm_gate/artifacts/k2_v4/L4/E3-standard-call-l7-20260919/w8_audit_board_l7_c5a7df90.json",
+   "sha16": "0551daa3ee912566"
+  },
+  "pads-outline-json": {
+   "path": "k2/pm_gate/artifacts/k2_v4/L4/E3-standard-call-l7-20260919/pads_within_outline_board_l7_c5a7df90.json",
+   "sha16": "af77f48fa5d0e46e"
+  },
+  "v3-plane-json": {
+   "path": "k2/pm_gate/artifacts/k2_v4/L4/E3-standard-call-l7-20260919/ref_plane_continuity_board_l7_c5a7df90.json",
+   "sha16": "bbb4534ea0bf8df7"
+  },
+  "refplane-gap-json": {
+   "path": "k2/pm_gate/artifacts/k2_v4/L4/E3-standard-call-l7-20260919/refplane_nonantipad_board_l7_c5a7df90.json",
+   "sha16": "cc50ba870089a13b"
+  },
+  "density-json": {
+   "path": "k2/pm_gate/artifacts/k2_v4/L4/E3-standard-call-l7-20260919/density_board_l7_c5a7df90.json",
+   "sha16": "95034499aad26454"
+  },
+  "min-clearance-json": {
+   "path": "k2/pm_gate/artifacts/k2_v4/L4/E3-standard-call-l7-20260919/min_clearance_drc_board_l7_c5a7df90.json",
+   "sha16": "ee0ca672ad46a87e"
+  }
+ },
+ "results": {
+  "run3": {
+   "passed": true,
+   "provisional": false,
+   "n_pass": 19,
+   "n_fail": 0,
+   "verdict_sha16": "190b73be0f728a56"
+  },
+  "run4": {
+   "passed": true,
+   "provisional": false,
+   "n_pass": 19,
+   "n_fail": 0,
+   "verdict_sha16": "190b73be0f728a56"
+  },
+  "two_runs_byte_identical": true,
+  "in_repo_anchor_file": {
+   "path": "k2/pm_gate/artifacts/k2_v4/L4/E3-standard-call-l7-20260919/verdict_19dim_rev3_board_l7_c5a7df90.json",
+   "sha16": "190b73be0f728a56"
+  },
+  "verdict": "**在册锚 `190b73be0f728a56` 逐字节命中**（连跑两次同）⇒ K2 判据面 **零回归**"
+ },
+ "finding_reproduction_caliber": {
+  "id": "C19-F1",
+  "severity": "低（操作口径）",
+  "finding": "复现 canonical 19 必须给**六件**测量输入；**漏 `--v3-plane-json`** 时 verdict 仍 `PASS`/19-0，但 `ref_plane_continuity` 的 detail 尾部差异（信息项 V3 名义全长覆盖从实测值降为 `None/None`）⇒ JSON 哈希漂移为 `45fd4fa17b1b14ae`（非锚值）。**判据语义不受影响，但『逐字节同锚』的复现口径须含 v3-plane**。",
+  "evidence": "run1/run2（五件输入，缺 v3）sha16 = 45fd4fa17b1b14ae · run3/run4（六件）sha16 = 190b73be0f728a56"
+ },
+ "boundary": [
+  "只读复算；未改判据/生成器/SPEC/原理图/交付锚",
+  "drc-work-dir 与 out 均在 /tmp/opencode",
+  "未派 WORKER"
+ ],
+ "conclusion": "本会话（N-3 落件 + C-25 tier2 批 1/2/3）**未移动 K2 判据面**：canonical 19 实测 PASS 且与在册签认值逐字节同。"
+}

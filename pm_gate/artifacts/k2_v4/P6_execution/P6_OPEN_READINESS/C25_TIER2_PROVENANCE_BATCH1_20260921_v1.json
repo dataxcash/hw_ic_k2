@@ -400,5 +400,20 @@
    "usb.org": "**USB 3.2 基规无公开直链**（仅合规/嵌入文件）⇒ USB3.0_Type-A_90 仍缺",
    "spacemit": "PMIC_P1 · SOM_B1 无公开直链"
   }
+ },
+ "batch3": {
+  "at": "2026-09-20T20:04:52+0800",
+  "what": "对余 9 件再尝试**站点搜索/产品页/文档库页**路径（非猜测直链），逐站点记录封锁特征",
+  "signatures": {
+   "st.com": "产品页 `stm32g0b1cb.html` 亦返 **567**（站点级，非仅 PDF 端点）⇒ STM32G0B1CBT6/KBU6 不可自动化取证",
+   "diodes.com": "搜索页 `/search/?q=PI3DBS16412` 返 **403** ⇒ PI3DBS16412 不可自动化取证",
+   "usb.org": "文档库页 `document-library/usb-32-specification-release-11` **404**；公开索引仅合规/嵌入件 ⇒ **USB 3.2 基规无公开直链**",
+   "molex.com": "两条 dam/PDM 路径均 **65s 超时 0 字节** ⇒ USB_C_PLUG（105444）不可自动化取证",
+   "liteon": "旧路径返 **WAF 拒绝页**（269B `Request Rejected`, support-id 留存）⇒ OPTO_LTV356T 不可自动化取证",
+   "onsemi": "全站 403（含 `/pub/Collateral/` legacy）⇒ BAT54C / FRU_EEPROM(AT24C02/CAT24C02) 不可自动化取证",
+   "spacemit.com": "站首页=JS 壳（1.2KB，无文档链接）⇒ PMIC_P1 / SOM_B1 无公开直链"
+  },
+  "conclusion": "**9/9 余件在本自动化环境（TW 出口 · 无浏览器/无交互代理）均不可达**：属厂商 WAF/反自动化 · 网络面（Molex 超时）· 无公开直链（USB 3.2 基规 / SpacemiT）三类。⇒ tier2 余量**必须人工/半自动**（浏览器取件或分销商镜像 Mouser/LCSC/Digi-Key，或由 owner/监理提供内部副本），**不可能靠本环境脚本继续**。",
+  "automation_lane_closed": true
  }
 }
