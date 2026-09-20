@@ -1,0 +1,38 @@
+{
+ "artifact": "k2_p5_outbound_pack_selfcheck_and_reference_audit",
+ "schema": 1,
+ "ts": "2026-09-21T01:07:36+0800",
+ "id": "P5 外发包**两项独立核验**：① `INSTRUMENT_SELFCHECK.json` 逐脚对板（该件为实测方『测点依据』）② 外发包**引用解析**（悬空引用）",
+ "checks": [
+  {
+   "#": 1,
+   "what": "**`INSTRUMENT_SELFCHECK.json` ↔ l8 板**逐脚独立复算（自写括号配对解析器）",
+   "result": "**508 pad 全对 · 不一致 0** —— `refdes`（J13/J2/J3/J4/U6）之 pad→net **逐脚与板侧相同**；footprint 名一致；pad 数 **U6 354 · J2 74 · J3 38 · J4 38** 与板**逐一致**；`nets_present` **16/16 在板**；`swd_nets_on_J13 = true`（板侧 J13 含 `SWDIO`/`SWCLK_BOOT0`）✅；`pcie_nets_on_J2 = true`（板侧 J2 含 **36** 条 PCIE 网）✅",
+   "loadpoints": "**V5 具名负载点独立确认**：`J3` 之 `P3V3_AUX` pad = **A9** · `J4` 之 `P3V3_AUX` pad = **A9**（与 CR-38/`P5_V5_NAMED_LOADPOINT_CONSISTENCY_FIX` 一致）",
+   "verdict": "PASS ⇒ 实测方『**测点以该件为准**』之依据**经板侧独立证实**"
+  },
+  {
+   "#": 2,
+   "what": "**外发 4 件之引用解析**（`RULES.md`/`CHECKLIST.md`/`results_template.json`/`INSTRUMENT_SELFCHECK.json`）",
+   "result": "检出 filename-like 引用 **9** 条 ⇒ **全部解析成功**（`../jlc_package_l8/MANIFEST.json` · `DISCLOSURE.md` · `ORDER_NOTES.md` · `MANIFEST.json` · `INSTRUMENT_SELFCHECK.json` · `results_template.json` · `k2_v4_8L.l8.kicad_pcb` · `P5_V7_TJ_CALIBER_CORRECTION_TI_SNLS683_…json` · `k2/docs/K2-P5-FIRST-ARTICLE-ACCEPTANCE-PLAN-v1.md`）⇒ **悬空引用 = 0**",
+   "note": "自动扫描对 `k2/docs/…` 报 1 处 MISS 系**解析器前缀假阳性**（cwd=k2 ⇒ 真路径 `docs/…` 已存在，且本会话 CR-53 刚订正之）⇒ 已人工复核",
+   "verdict": "PASS"
+  }
+ ],
+ "verdict": "两项核验 **PASS**：外发包**自证件对板无误**、**引用无悬空** ⇒ 实测方可按件执行、无『指错文件』风险。",
+ "method_note": "只读：解析 PCB 文本 + 读 JSON/MD；**未跑 pcbnew**、**未改**任何文件/板/包/判据。",
+ "non_tooth": "**非新增检查齿**（未新增判据维/阈值）——仅对既有外发件做**对板复核 + 引用解析**。",
+ "red_lines_ok": [
+  "只读",
+  "交付包锚 4b610bad/36a6b276 未动",
+  "外发包未改（本轮）",
+  "未改判据/SPEC/板/生成器",
+  "未派 WORKER"
+ ],
+ "repro": [
+  "python3 - <<'PY'  # 解析器：括号配对提取 (footprint …(pad \"N\" …(net \"NAME\")))",
+  "  # 逐脚比对 INSTRUMENT_SELFCHECK.refdes[*].pads[*] 与板",
+  "PY",
+  "python3 -c \"import json;d=json.load(open('k2/pm_gate/artifacts/k2_v4/L6/first_article_l8/INSTRUMENT_SELFCHECK.json'));print(len(d['refdes']),d['all_nets_present'],d['refdes_all_present'],d['swd_nets_on_J13'],d['pcie_nets_on_J2'])\"  # 5 True True True True"
+ ]
+}
