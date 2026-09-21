@@ -1,0 +1,109 @@
+{
+ "artifact": "k2_64_l8r3_reissue_evidence",
+ "schema": 1,
+ "ts": "2026-09-21T08:49:37+08:00",
+ "session_label": "K2-2026-09-21 · 轮标 ARCHER-R103 · #K2-64 §三 另批（重出新版包 l8r3）",
+ "authorization": "#K2-64 §三：修 `imp_md()`（补渲染 watch 段 + 首行限定句）**并**修 DFM 卡 MD（表头/限值栏通道归属 + 渲染 `note`）⇒ **重出为新版本** · 旧锚**逐字节保全** · **不阻塞 P5**；§二/#17 口径订正并入同一另批。",
+ "new_version": {
+  "name": "P5-L8.3",
+  "package_dir": "pm_gate/artifacts/k2_v4/L6/jlc_package_l8r3/",
+  "delivery_dir": "pm_gate/artifacts/k2_v4/L6/DELIVERY_l8r3/"
+ },
+ "builder": {
+  "file": "k2/tools/k2_p5_jlc_package_l8r3_v1.py",
+  "sha256_16": "45d0c2d148057209",
+  "strategy": "**新建生成器文件**（由 l8r2 件复制 + 定点订正）⇒ **l8r2 锚仍由其原生成器逐字节可复现**（不牺牲前代可复现性）；py_compile OK",
+  "invocation": "PYTHONPATH=AppDir/shared/lib/python3.11/dist-packages AppDir/bin/python3.11 k2/tools/k2_p5_jlc_package_l8r3_v1.py"
+ },
+ "fixes": [
+  {
+   "id": "订正①（CR-76 · #K2-64 §三）",
+   "file": "04_impedance/impedance_table.md",
+   "before_sha16": "81b516aef2ff05b7",
+   "after_sha16": "2f3958be22fe3bde",
+   "content": "补渲染 **`## watch（设计名义最宽间距；越界即列下单备注）`** 段（F.Cu/B.Cu 名义最宽净距 0.395mm ⇒ M1=90.61Ω · **M2=94.94Ω > 窗上界 93.5Ω** ⇒ 处理=『下单备注要求 JLC 阻抗表覆盖该几何』）+ **首行限定句**『verdict = PASS（判据 = as-built 对内净距；见下 watch）』+ `verdict_basis` + **#K2-64 §四 判读口径**注（券落 M2 分歧区 ⇒ 非 V4 FAIL；落 as-built 且越窗 ⇒ FAIL）",
+   "restores": "**恢复冻结 CO-146 卡（`L5/jlc_package`·53 行含 watch）原貌**"
+  },
+  {
+   "id": "订正②（DFM #17 口径 · #K2-64 §二）",
+   "file": "06_rulings/jlc_dfm_hdi_l8.md",
+   "before_sha16": "4001bdfefd50a18a",
+   "after_sha16": "37413ca58fd25703",
+   "content": "表头限值栏改标 **「JLC 限（标准通道值 · 参考）」**、判列改标 **「判（HDI 通道）」**；新增**口径注**（标准页值 = 参考 · **HDI 通道限值 = 外部输入（板厂 HDI DFM 答复）** · 标准页『Not supported』不适用本板）；新增 **`## 逐项口径说明（note）`** 段渲染 JSON 之 `note`（#17 通道说明等 8 项）"
+  }
+ ],
+ "geometry_zero_change_proof": {
+  "method": "逐件 sha256 比对 `L6/jlc_package_l8r2` ↔ `L6/jlc_package_l8r3`（相对路径全集）",
+  "n_l8r2": 54,
+  "n_l8r3": 54,
+  "byte_identical": 49,
+  "changed": 5,
+  "added": 0,
+  "removed": 0,
+  "changed_list": [
+   {
+    "file": "04_impedance/impedance_table.md",
+    "before": "81b516aef2ff05b7",
+    "after": "2f3958be22fe3bde",
+    "class": "**呈现订正①**（CR-76）"
+   },
+   {
+    "file": "06_rulings/jlc_dfm_hdi_l8.md",
+    "before": "4001bdfefd50a18a",
+    "after": "37413ca58fd25703",
+    "class": "**呈现订正②**（#17 口径）"
+   },
+   {
+    "file": "04_impedance/impedance_table.json",
+    "before": "455a976e17afc13d",
+    "after": "c5b75d2f61a399f2",
+    "class": "**声明 delta**：键级差异**恰 2 键**（`artifact` · `revision`）；**`rows`/`watch` 逐值同** ✓"
+   },
+   {
+    "file": "MANIFEST.json",
+    "before": "19d637c4e9ed35be",
+    "after": "0eb2cb97fa4f1466",
+    "class": "**声明 delta**（revision/paths/件表 sha）"
+   },
+   {
+    "file": "ORDER_NOTES.md",
+    "before": "a3b2d1cbc7d53465",
+    "after": "356213dad85f7af2",
+    "class": "**声明 delta**（标题代次 l8r2→l8r3）"
+   }
+  ],
+  "geometry_face_all_identical": "`01_gerber_rs274x/` · `02_drill_excellon/` · `03_stackup/` · `07_verify/` 全件**逐字节同 l8r2** ⇒ **Gerber/钻孔/叠层/验证零变更** ✓"
+ },
+ "fidelity_chain": {
+  "SHA256SUMS": "**55/55 OK**（以 `L6/` 为基准 `sha256sum -c`）",
+  "idempotency": "**两跑逐字节同**：MANIFEST `0eb2cb97fa4f1466` ×2 · tarball `9de4cfcf9337cea9` ×2 · 记录 `298cc573815ad2cc` ×2",
+  "DFM": "**16 PASS / 1 ACCEPT / 0 FAIL**（n_fail=0 不变 · 逐项可复现）",
+  "drill_total": 754,
+  "g36_in_plane": 1,
+  "n_files": 53
+ },
+ "new_anchors": {
+  "MANIFEST": "**0eb2cb97fa4f1466**",
+  "tarball": "**9de4cfcf9337cea9**（423,771 B）",
+  "delivery_record": "`k2/docs/K2-P5-DELIVERY-RECORD-l8r3-v1.md` **298cc573815ad2cc**"
+ },
+ "old_anchors_untouched": {
+  "l7": "6ee7495de61f749f / 0e88e107e2da8192 ✓",
+  "l8": "4b610baed4f4752c / 36a6b276b4f7e465 ✓",
+  "l8r2": "**19d637c4e9ed35be / 488e90a47d088d06 ✓**"
+ },
+ "freeze_and_board": {
+  "冻结四源": "d4e81f647be7f980 / fb07d25ac426ff84 / dd794c54f7ce7417 / 0a459839e15960b8 **未动** ✓",
+  "受审板": "7a5c89913d6e5d0a **未动** ✓",
+  "criteria": "rev=6（五件 sha 未动）"
+ },
+ "status": "**待监理限定复核**：本件出包**不自动成为交付锚**；现行交付锚 **仍为 l8r2**（`19d637c4e9ed35be`/`488e90a47d088d06`）直至监理复核通过。",
+ "red_lines_ok": [
+  "未改/未覆盖旧包（l7/l8/l8r2 逐字节保全）",
+  "未改冻结四源/板/SPEC/网表/判据",
+  "未改 `results_template.json`/外发包",
+  "未派 WORKER",
+  "未越阶段",
+  "临时仅 /tmp/opencode"
+ ]
+}
