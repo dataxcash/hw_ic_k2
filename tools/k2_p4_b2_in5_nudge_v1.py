@@ -38,11 +38,19 @@ def closest_pair(p, q):
                     best = (d, (px, py), (qx, qy), i)
     return best
 
-def local_min(routes, victim):
-    """廉价预筛：victim 车道至**所有其他车道**之最小段距（21 点采样 ≈0.05mm 精度）。"""
-    p = routes[victim]['pts']; best = 1e9
+def _bbox(pts):
+    xs = [q[0] for q in pts]; ys = [q[1] for q in pts]
+    return (min(xs), min(ys), max(xs), max(ys))
+
+
+def local_min(routes, victim, near=6.0):
+    """廉价预筛（**邻域版**）：仅算与 victim 包围盒 ±near 相交之车道的最小段距 ⇒ 提速 ~10x。"""
+    p = routes[victim]['pts']; bx = _bbox(p); best = 1e9
     for nm, r in routes.items():
         if nm == victim:
+            continue
+        b = _bbox(r['pts'])
+        if b[0] - near > bx[2] or bx[0] - near > b[2] or b[1] - near > bx[3] or bx[1] - near > b[3]:
             continue
         d = closest_pair(p, r['pts'])[0]
         if d < best:
