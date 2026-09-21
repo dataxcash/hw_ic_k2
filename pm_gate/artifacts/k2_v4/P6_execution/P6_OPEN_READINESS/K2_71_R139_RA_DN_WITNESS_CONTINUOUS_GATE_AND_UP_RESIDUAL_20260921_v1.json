@@ -1,0 +1,87 @@
+{
+ "all32": {
+  "note": "DN 半已 0 违规 ⇒ 下一步 = **以 DN 见证解为硬约束 pin，仅重布 UP 16 条**（工具需加 --pin <wo.json>）",
+  "status": "32/32 布通 · 闸余 **20 对**（延续中 · `rip_all32-hung.log`）⇒ 当前瓶颈 = UP 侧 1–6 对"
+ },
+ "artifact": "k2_71_r139_ra_dn_witness_under_continuous_gate_and_up_residual",
+ "authority": "#K2-72（Q1 唯一见证口径=连续精确闸 exact_gate · Q2 A 锚笼 pitch≥1.70 · Q3 过渡孔指派次序=L2）· 判据 ③⑨⑩⑪⑫",
+ "dn_witness": {
+  "files": {
+   "a_sites": "/tmp/opencode/archer/a_dn_hung.json",
+   "b_sites": "/tmp/opencode/archer/b_alloc_s2.00.json",
+   "log": "/tmp/opencode/archer/rip_DN-hung.log",
+   "workorder": "/tmp/opencode/archer/wo_DN-hung.json"
+  },
+  "gate": {
+   "clearance_min_mm": 0.1726,
+   "endpoint_max_dev_mm": 0.0,
+   "lane_pitch_min_gap_mm": 0.495,
+   "lane_pitch_min_pair": [
+    "PCIE_DN_OUT0_N_MCIO",
+    "PCIE_DN_OUT2_P_MCIO"
+   ],
+   "n_clearance_viol": 0,
+   "n_lane_pitch_viol": 0
+  },
+  "method": "A 位 = **最小权指派（Hungarian · 非交叉性由经典反证保证）** on a_alloc_s2.00（min-sep 2.00）· B 位 = b_alloc_s2.00（逐网最近拟合 · 位移可溯）· 求解器 = 连续距离场 ripup · cell 0.10 · rmin 0.5057（严格蕴含闸）· K 8→…",
+  "routed": "16/16",
+  "sha16": {
+   "a_sites": "072f0c8f6085f285",
+   "b_sites": "871a382182c2f482",
+   "tool_k2_p4_b2_in5_ripup_v1": "e2d59980fc533343",
+   "workorder": "a91b2ecc03e23da0"
+  }
+ },
+ "headline": "**DN 组 16/16 见证达成（按 #K2-72 Q1 新口径）**：`exact_gate` 0 违规 · 最小中心距 **0.4950 ≥0.435** · 障碍余量 **0.1726 ≥0.100** · 端点偏移 **0**。UP 组 16/16 布通、余 **1 对**（同对 P/N 邻接 0.0707）。ALL32 布通 32/32、余 20 对（UP 侧驱动）⇒ **R-A 二值：DN 半证达成 · 全 32 未达**。R-B 无证书。",
+ "new_observation_same_batch": {
+  "eng_recommend": "见证/证书以 **#K2-72 Q1 之 §二 R-gate 字面**执行（全对 ≥0.435）—— 本件 DN 见证即按此口径；**并请监理在 R4 一并明确**：差分对最终是否须按 `diff_pair`（对内容差 0.175 / 对间 ≥0.875）复核（若须 ⇒ 32 车道之『全对 0.435』口径需按『对』重新定义，属判据语义 · 监理自裁面）。",
+  "fact": "`_shared/eda_core/drc_rules.json` `diff_pair.p_gap = 0.175`（对内 P/N 中心线间距目标 0.175mm · enabled=true）与 #K2-72 Q1 之『**所有**车道两两线段距 ≥0.435』**张力**：P/N 若按判据 ③ 保持 ≥0.435，则不满足差分对『凑对』语义；若按 diff_pair 凑对（0.175），则 `exact_gate` 报违例。",
+  "id": "O-72-1（口径张力 · 随二值同批附带 · 不单占轮）",
+  "note": "本轮**未**以此为停等理由；继续按 §二 口径推进（DN 已 0 违规）。"
+ },
+ "next": [
+  "① 工具加 `--pin <wo.json>`（DN 见证解为硬约束）⇒ 仅重布 UP ⇒ 目标 32/32 且闸 0 违规",
+  "② UP 收口 1 对：对 `OUT7_N/P` 之 A/B 位做局部重指派（或 P/N 拆散入不同 bundle 槽）",
+  "③ R-B：ILP/SAT 锚孔入障碍 + 逐网配对 + 细格 求严格上界 ‖ 几何守恒论证"
+ ],
+ "red_lines_ok": [
+  "只读板件",
+  "冻结四源未动",
+  "criteria/ 未碰（rev=6）",
+  "未派 WORKER",
+  "未写 .omo/supervision/**",
+  "未越阶段"
+ ],
+ "schema": 1,
+ "ts": "2026-09-21T18:3x+08:00",
+ "up_residual": {
+  "best": "16/16 布通 · 闸余 **1 对**（`PCIE_UP_OUT7_N_J2` ↔ `PCIE_UP_OUT7_P_J2` = 0.0707 < 0.435 · **同差分对 P/N 邻接**）",
+  "files": {
+   "a_sites": "/tmp/opencode/archer/a_up_perm_swap.json",
+   "log": "/tmp/opencode/archer/rip_UP-swap.log"
+  },
+  "history": [
+   {
+    "variant": "a_alloc_s2.00（未置换）",
+    "viol": 2
+   },
+   {
+    "variant": "a_alloc_s200_perm（A 按 B.y 序）",
+    "viol": 1
+   },
+   {
+    "variant": "a_up_hung（Hungarian）",
+    "viol": 6
+   },
+   {
+    "variant": "a_up_perm_swap（本轮最佳）",
+    "viol": 1
+   },
+   {
+    "variant": "cell 0.05（24 iters · 严格）",
+    "viol": 5
+   }
+  ],
+  "variant": "a_alloc_s200_perm + 交换 OUT2_P/OUT4_P 之 A 位（a_up_perm_swap.json · rmin 0.5057 · cell 0.10）"
+ }
+}
