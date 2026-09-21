@@ -458,3 +458,12 @@
 
 ---
 **（本块）报备监理 1 条（工具面自动化 · 非阻塞）· owner 项 0**。
+
+### 续编 · **T2-F6 新通道批次（R97-2 · 只读造活）** —— CR-17 通道打通（可引证值取得）
+
+| # | 条目 | 内容（事实） | 依据 | 处置红线 |
+|---|---|---|---|---|
+| **CR-17（更新 · 通道打通）** | **P5 V6-2 `DBGMCU_IDCODE` 预期值 ⇒ 取得** | **原状态**（本册 :71）：手册依赖项 · 无具体值（`www.st.com` 567 · `stmcu.com.cn` 429 · `archive.org` 000）。**本批新通道**：改走**上游开源工具件** ⇒ **成**。**值**：`DBGMCU_IDCODE`(0x40015800) 之 **DEV_ID（低 12 位）= `0x467`**（STM32G0B1 = G0Bx/G0Cx = ST 分类 **CAT3**；REV_ID 高位随批次）。**三引证**：**A** stlink 上游 `inc/stm32.h`（`:79` 注释『only lower 12 bits』· **`:143` `STM32_CHIPID_G0_CAT3 = 0x467 /* G0Bx/G0Cx */`** · sha `d7c7912e8d7f4d21…`）；**B** stlink `config/chips/G0Bx_G0Cx.chip`（`chip_id 0x467` · `ref_manual_id 0444 // also RM454` · sha `25263df8dcfc02f2…`）；**C** OpenOCD `tcl/target/stm32g0x.cfg`（DBGMCU CR/FZ = `0x40015804`/`0x40015808` ⇒ 基址 **0x40015800** 与模板所载读点一致 · sha `a9c2c492779408f1…`）。**通道登记**：**新可达** `raw.githubusercontent.com`(200) · `api.github.com`(200) · `www.so.com`(200)；**仍闭** `www.st.com`(567) · `www.st.com.cn`(567) · `stmcu.com.cn`(429) · `archive.org`(000)。**残留缺口（如实）**：RM0454 **原厂页**仍不可达 ⇒ 引证等级 = 『上游工具件共同值』，**非原厂手册**；**不充绿**。**处置**：**未改**任何冻结件（`results_template.json` `119cd7c48b3146d2` 复算未动）；**待监理裁**是否采纳为 V6-2 期望值及落地方式；**不阻塞**（既有判据『与器件手册一致』可后验）。 | handoff §8-B（T2-F6 **仅新通道才试**）；CR-15 通道登记格式；CR-17 原条 | **只读探取**（外部原件仅 `/tmp/opencode/cr17/`）· **未改**外发包/模板/锚/判据/冻结四源 · 引证等级如实标注 · 不充绿 |
+
+---
+**（本块）报备监理 1 条（CR-17 通道进展 + 采纳请求 · 非阻塞）· owner 项 0**。

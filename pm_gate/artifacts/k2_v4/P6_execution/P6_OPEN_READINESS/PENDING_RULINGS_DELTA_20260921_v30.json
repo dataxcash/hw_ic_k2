@@ -1,0 +1,77 @@
+{
+ "artifact": "k2_pending_rulings_delta",
+ "schema": 1,
+ "ts": "2026-09-21T08:15:06+08:00",
+ "session_label": "K2-2026-09-21 · 轮标 ARCHER-R97-2 · T2-F6 新通道（只读造活）",
+ "supersedes": "PENDING_RULINGS_DELTA_20260921_v29.json（CR-73 续存未裁 · CR-74 覆核未决 ⇒ 两项**承接**；本件新增 CR-17 采纳请求）",
+ "purpose": "①【待裁 · 续存】CR-73（容器 k1 指针未发布 · K1 面 remedy）；②【待覆核 · 续存】CR-74（P5 回件可判性守卫 · 工具面 · 零新增判据维）；③【待裁 · 新】**CR-17 采纳请求** —— 新通道取得 `DBGMCU_IDCODE` DEV_ID = **`0x467`**，问是否采纳为 V6-2 期望值及落地方式。",
+ "why_signal_now": "CR-32 强制结构化：CR-73/CR-74 未决不可失信号；CR-17 取得可引证值属**新事实**，且其落地方式涉『改外发包 ⇒ 换锚+重出包』⇒ 必须由监理裁。",
+ "owner_gate": "**0** —— 三项全属**放行范围/差异定性/工具面/项目面处置**（监理自裁面）；无 L1 成分；不动 owner 系统/账号/预算。",
+ "stage_state": "P5 `PENDING_EXTERNAL`（V4–V7 全 `NOT_RUN` · 未下单/未外发）· P0–P4 HOLDS · P6 CLOSED · 未越阶段 · 判据 rev=6 MATCH · 交付锚 `19d637c4e9ed35be`/`488e90a47d088d06`（未动 · 未重出包）。",
+ "pending_supervision": [
+  {
+   "id": "**【待裁 · 新】CR-17 采纳请求：V6-2 `DBGMCU_IDCODE` DEV_ID = `0x467`（STM32G0B1 · G0x CAT3）**",
+   "facts": "新通道（上游开源工具件）取得：① stlink 上游 `inc/stm32.h:143` **`STM32_CHIPID_G0_CAT3 = 0x467, /* G0Bx/G0Cx */`**，`:79` 明载『**only lower 12 bits**』且 `:77` 指明该表 = `DBGMCU_IDCODE` 寄存器值（sha `d7c7912e8d7f4d21…`）；② stlink `config/chips/G0Bx_G0Cx.chip` `chip_id 0x467` · `ref_manual_id 0444 // also RM454`（sha `25263df8dcfc02f2…`）；③ OpenOCD `tcl/target/stm32g0x.cfg` DBGMCU 寄存器在 `0x4001580x` ⇒ 基址 **0x40015800**，与模板所载 `DBGMCU_IDCODE(0x40015800)` 一致（sha `a9c2c492779408f1…`）。**残留缺口（如实）**：RM0454 **原厂页**仍不可达（`www.st.com`=567 · `st.com.cn`=567 · `stmcu.com.cn`=429）⇒ 引证等级 = 『上游工具件共同值』，**非原厂手册**，**不充绿**。",
+   "ask": "请裁：(i) **采纳 `0x467`** 作 V6-2 之 `st_dbgmcu_dev_id_expected` 期望值（供实测方对照）⇒ 并定**落地方式**：(i-a) 仅**规程/回件判读层**采纳（不改外发包 ⇒ 不动锚）；(i-b) 改 `results_template.json` 并**重出包**（⇒ 换交付锚 + 需重跑构建器 + 复核）；或 (ii) **不采纳**（维持『与器件手册一致』后验判定）。**ENG 倾向 (i-a)**：零锚变更、零重出包，且该值仅作对照参考，真判据（与手册/实测一致）不变。",
+   "impact_if_none": "**不阻塞**（V6-2 既有判据可后验：实测值先记，拿到手册后核）。",
+   "evidence": "`P6_execution/P6_OPEN_READINESS/CR17_DBGMCU_DEV_ID_NEW_CHANNEL_20260921_v1.json`（**`faf770f6f734d5b3`**）· 册面 CR-17 更新"
+  },
+  {
+   "id": "**【待裁 · 续存 · K1 面】CR-73：容器 `k1` 指针指向未发布 commit（`6a1ecdd`）**",
+   "status": "v28 提 · v29 续存 · **本会话实测仍 `origin/main...HEAD = 0/3`（未变）**",
+   "ask": "请裁 remedy：(i) 准予**快进 push** k1 至 A 宿主（非破坏）；或 (ii) 维持并登记（K1 面另批）；或 (iii) 其他。**本会话未 push 任何 K1 内容。**",
+   "evidence": "册面 CR-73"
+  },
+  {
+   "id": "【待覆核 · 续存 · 非阻塞】CR-74：P5 回件可判性守卫（工具面 · 零新增判据维）",
+   "status": "v29 提 · 未获覆核",
+   "ask": "请覆核『**零新增判据维 / 不置 status / 判定权归监理**』之定位是否成立；若判不属授权范围 ⇒ **删该工具即零影响**（未改模板/锚/判据/包）。",
+   "evidence": "`P5_RESULTS_INTAKE_GUARD_SELFTEST_EVIDENCE_20260921_v1.json`（`b8ec277b68d4655e`）· 册面 CR-74"
+  },
+  {
+   "id": "【登记 · 续存 · 非阻塞】",
+   "items": [
+    "`check_l3.py` 未授权范围：`:3` 模块文档串 · `:71` 口径注释（续存）",
+    "T2-F6 通道登记（本批更新）：**新可达** `raw.githubusercontent.com`/`api.github.com`/`www.so.com`(200)；**仍闭** `www.st.com`(567) · `www.st.com.cn`(567) · `stmcu.com.cn`(429) · `archive.org`(000) ⇒ 免重复试探",
+    "`CR-22`/`CR-3`/land pattern 族 · `COV-C3`（维持前裁 · 禁 push/rewrite B 宿主）· R5 文献批（余项待权威件）"
+   ]
+  }
+ ],
+ "landed_this_session": [
+  {
+   "id": "CR-74（工具面）",
+   "artifact": "`tools/k2_p5_results_intake_guard_v1.py` `56aea8eb8a71ca34` · k2 **fe9772f**（已 push）",
+   "reading": "self-test rc=0 · 负夹具 fail=4 全捕 · 空模板 fail=49"
+  },
+  {
+   "id": "CR-17（通道打通）",
+   "artifact": "证据件 `P6_OPEN_READINESS/CR17_DBGMCU_DEV_ID_NEW_CHANNEL_20260921_v1.json` **faf770f6f734d5b3**",
+   "reading": "DEV_ID = **0x467**（三引证 · 等级已如实标注）"
+  },
+  {
+   "id": "册面维护",
+   "artifact": "`docs/K2-CONVENTION-REGISTER-20260921.md` `cbf94d94ea8dbcf6` → `e544b19c97d5af56`",
+   "reading": "CR-74 续编 + CR-17 更新块"
+  },
+  {
+   "id": "开批锚复核",
+   "artifact": "§1 表 23 项 + criteria rev=6",
+   "reading": "**23/23 全中 · drift=0**"
+  }
+ ],
+ "red_lines_ok": [
+  "未改 criteria/",
+  "未改冻结四源",
+  "未改板/原理图/网表/SPEC/受审板",
+  "未重跑构建器/未重出包/未换交付锚",
+  "未覆盖或删除旧包与旧锚",
+  "未改 results_template.json / RULES.md / 外发包（一字未动）",
+  "未触 B 宿主副本",
+  "未 push 任何 K1 内容",
+  "未派 WORKER",
+  "未越阶段",
+  "未下单",
+  "外部原件仅落 /tmp/opencode/cr17/"
+ ],
+ "next": "① 待监理裁 CR-17 采纳/(i-a|i-b)/不采纳 + CR-73 remedy + 覆核 CR-74；② **外部回件到位** ⇒ `python3 k2/tools/k2_p5_results_intake_guard_v1.py <回件>` ⇒ 交监理判定 ⇒ **P5 关门**；③ 未获回件期间继续只读造活（**禁 HOLD/停等结案** · owner ⑥）。"
+}

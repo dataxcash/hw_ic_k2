@@ -1,0 +1,70 @@
+{
+ "artifact": "k2_t2f6_newlane_cr17_dbgmcu_dev_id",
+ "schema": 1,
+ "ts": "2026-09-21T08:14:51+08:00",
+ "session_label": "K2-2026-09-21 · 轮标 ARCHER-R97-2 · T2-F6 新通道（只读造活 · handoff §8-B『仅新通道才试』）",
+ "item": "CR-17 · P5 V6-2 `DBGMCU_IDCODE` 预期值 = 手册依赖项（未闭）",
+ "outcome": "**取得可引证预期值（第三方上游件 · 非 ST 原厂手册）**：STM32G0B1（G0Bx/G0Cx = ST 分类 CAT3）之 `DBGMCU_IDCODE`(0x40015800) **DEV_ID（低 12 位）= `0x467`**；REV_ID（高位）随批次变。",
+ "citations": [
+  {
+   "id": "A（主引证 · 值）",
+   "src": "stlink 上游 develop `inc/stm32.h`",
+   "url": "https://raw.githubusercontent.com/stlink-org/stlink/develop/inc/stm32.h",
+   "locus": "`:77-79` 注释『See DBGMCU_IDCODE register … stm32 chipids, only lower 12 bits…』；**`:143` `STM32_CHIPID_G0_CAT3 = 0x467, /* G0Bx/G0Cx */`**",
+   "sha256": "d7c7912e8d7f4d2110972fbbe5c05a9d1d9c639e0658ec56559ae1fc9b743b6f",
+   "reading": "DEV_ID = 0x467（低 12 位口径由 `:79` 注释明载）"
+  },
+  {
+   "id": "B（主引证 · 值与手册指引）",
+   "src": "stlink 上游 develop `config/chips/G0Bx_G0Cx.chip`",
+   "url": "https://raw.githubusercontent.com/stlink-org/stlink/develop/config/chips/G0Bx_G0Cx.chip",
+   "locus": "`chip_id 0x467 // STM32_CHIPID_G0_CAT3` · `ref_manual_id 0444 // also RM454`",
+   "sha256": "25263df8dcfc02f2826d4d99fedbf99cb7e49a7c62cb742317c060cfeefd3d6d",
+   "reading": "同一值 0x467，且其指引手册 = RM0444（G0x1）/ **RM0454（G0x0）** —— 与本板件依赖件一致"
+  },
+  {
+   "id": "C（旁证 · 寄存器基址）",
+   "src": "OpenOCD 上游 master `tcl/target/stm32g0x.cfg`",
+   "url": "https://raw.githubusercontent.com/openocd-org/openocd/master/tcl/target/stm32g0x.cfg",
+   "locus": "`:70` `mmw 0x40015804 …`（DBGMCU_CR）· `:74` `mmw 0x40015808 …`（DBGMCU_APB1_FZ）",
+   "sha256": "a9c2c492779408f11249a218b79e7eec7d0d817c57a950f93d2f0b0769fd38e3",
+   "reading": "DBGMCU 基址 = **0x40015800** ⇒ 与 `results_template.json` 所载 `DBGMCU_IDCODE(0x40015800)` **一致**（独立佐证读点正确）"
+  }
+ ],
+ "channel_registry_delta": {
+  "newly_reachable": [
+   "`raw.githubusercontent.com` = 200（可用 · 直取上游源件）",
+   "`api.github.com` = 200（可用 · 目录列举）",
+   "`www.so.com` 搜索面 = 200（可用）"
+  ],
+  "still_blocked": [
+   "`www.st.com` = **567**（同 CR-15/CR-17）",
+   "`www.st.com.cn` = **567**",
+   "`www.stmcu.com.cn/Designresource/detail/reference_manual/699676` = **429**（限流，非 000）",
+   "`archive.org`/`web.archive.org` = 000（既有登记）"
+  ],
+  "note": "免重复试探：RM0454 原件（ST 原厂 PDF）仍不可达；本批改走『上游开源工具件』通道并成。"
+ },
+ "residual_gap": {
+  "what_still_missing": "**RM0454 §DBG 原厂页原件**（不可达）⇒ 本值之引证强度 = 『业界上游工具件共同值』，**非原厂手册**。",
+  "honesty": "**不充绿、不缩口径**：不主张本件等于原厂手册；如实标注引证等级。"
+ },
+ "request_to_supervision": {
+  "ask": "是否**采纳 `0x467`（DEV_ID 低 12 位）为 V6-2 之 `st_dbgmcu_dev_id_expected` 期望值**（供实测方对照）？",
+  "note_no_artifact_change": "本会话**未改**任何冻结件：`results_template.json`（外发包内 · 已复核 · `119cd7c48b3146d2` 复算未动）**一字未动**；若准采纳，须由监理决定落地方式（改外发包 ⇒ 换锚+重出包，或仅在**规程/回件判读**层采纳）。",
+  "impact_if_unadopted": "V6-2 仍可按既有判据『与器件手册一致』**后验判定**（实测值可先记，后核）⇒ **不阻塞** P5。"
+ },
+ "cross_check_board_source": {
+  "board_part": "`U1` = STM32G0B1KBU6（G0B1 · CAT3 ⇒ DEV_ID 0x467）",
+  "prior_verified": "DS13560 Fig.12 LQFP48 32/32 归一一致（既有落件）· 本板封装 = 32-pin（K**B**）UFQFPN（**U**）",
+  "consistency": "分类 CAT3 与板件族一致 ⇒ 值适用"
+ },
+ "red_lines_ok": [
+  "只读网络探取 · 外部原件仅落 `/tmp/opencode/cr17/`",
+  "未改 criteria/ · 未改冻结四源 · 未改板/网表/SPEC/受审板",
+  "未改 results_template.json / RULES.md / 外发包（未重出包/未换交付锚）",
+  "未 push K1",
+  "未派 WORKER",
+  "未越阶段/未下单"
+ ]
+}
