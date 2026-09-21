@@ -1,0 +1,30 @@
+{
+ "artifact": "k2_64_l8r3_pre_review_consistency_precheck",
+ "schema": 1,
+ "ts": "2026-09-21T08:52:50+08:00",
+ "session_label": "K2-2026-09-21 · 轮标 ARCHER-R105 · 只读造活（P5 阶段内 · l8r3 待复核批次预核）",
+ "why": "l8r3 为**待监理限定复核**之批次（#K2-64 §三/§六-2）。故**先做一次锚/数值自洽预核**（只读），供复核直接引用，降低打回往返。",
+ "scope": "只读：逐件 sha256/bytes · 覆盖性 · 板/pro 锚 · DFM 汇总 · 钻孔总数与逐对 · N-01 G36 · 交付记录锚 · DELIVERY 目录与其清单 · 旧锚 6 项 · 冻结四源 4 项。",
+ "readings": {
+  "files_verified": "**53/53 件逐件 sha256 + bytes 相符 ✓**（与 `MANIFEST.json::files` 全等）",
+  "file_coverage": "磁盘 **53** 件 vs MANIFEST `n_files` **53** vs `files` 表 **53** ⇒ 三方一致 ✓（无孤件/无漏登）",
+  "board_pro_anchor": "board `7a5c89913d6e5d0a` ✓ · pro `c009058005829f09` ✓（与 MANIFEST 所载相同）",
+  "dfm_summary": "MANIFEST `{pass:16, accept:1, fail:0}` == `06_rulings/jlc_dfm_hdi_l8.json` `16/1/0` ✓",
+  "drill_total": "MANIFEST `754` == `drill_census.json` **逐文件孔数合计 754** ✓ == `drill_board_xcheck.json` `board_total 754 / drl_total 754` 且 **逐对 `match=True`** ✓（vias 734 + PTH 16 + NPTH 4）",
+  "n01_g36": "MANIFEST `n01_g36_regions` == `07_verify/n01_g36_census.json` 逐层值 ✓（In1/In3/In6 = 1 · In4 = 9）",
+  "record_anchor": "`docs/K2-P5-DELIVERY-RECORD-l8r3-v1.md` 载 MANIFEST **`0eb2cb97fa4f1466`** ✓ · `16 PASS / 1 ACCEPT / 0 FAIL` ✓ · `754` ✓ · `53 件` ✓（记录与包锚**一致 · 无漂移**）",
+  "delivery_dir": "`DELIVERY_l8r3/README.md` 载 l8r3 ✓ · `SHA256SUMS.txt` **55 行**（**55/55 OK** 见 R103 证据）· tarball `9de4cfcf9337cea9` 与清单所载一致 ✓",
+  "old_anchors": "**6 项（l7/l8/l8r2 之 MANIFEST+tarball）逐字节 OK ✓**",
+  "freeze_sources": "**4/4 未动**（l4 `d4e81f64` · 设计源 `fb07d25a` · 真源 `dd794c54` · rules `0a459839`）✓",
+  "geometric_identity": "**49/54 件与 l8r2 逐字节同** · 5 变更全为呈现订正/声明 delta（见 R103 证据）⇒ 几何面全同 ✓"
+ },
+ "script_self_correction": "本预核脚本首版取 `drill_census.json::_total`（**实际键为 `files`**）⇒ 误报『不符』；**已自查更正**并以**逐文件合计 + `drill_board_xcheck` 双路**复算 = **754 ✓**（**脚本自缺陷 · 非包缺陷** · 如实留痕）。",
+ "conclusion": "**l8r3 包内自洽 · 锚无漂移 · 与旧锚/冻结源无耦合污染 ⇒ 供监理限定复核直接引用**。**本件不改任何工件**（只读）。",
+ "red_lines_ok": [
+  "只读（未改包/记录/清单/旧锚/冻结源）",
+  "未重出包/未换锚",
+  "未派 WORKER",
+  "未越阶段",
+  "临时落点仅 /tmp/opencode"
+ ]
+}
