@@ -1,0 +1,76 @@
+{
+ "artifact": "k2_65_l8r3_anchor_activation_and_outbound_sync",
+ "schema": 1,
+ "ts": "2026-09-21T08:55:46+08:00",
+ "session_label": "K2-2026-09-21 · 轮标 ARCHER-R107 · #K2-65 §三-1/§三-2 执行",
+ "authorization": "#K2-65（l8r3 限定复核 = **PASS** ⇒ 新交付锚生效）+ §三-2「外发面同步 l8r3 锚（一笔提交）· 阈值/测点/判据口径一字不动」",
+ "new_anchor_active": {
+  "revision": "P5-L8.3",
+  "MANIFEST": "**0eb2cb97fa4f1466**（full `0eb2cb97fa4f1466cf72bb0b101dceeee9edb3e774af9032f2d26feeee2b4d39`）",
+  "tarball": "**9de4cfcf9337cea9**（full `9de4cfcf9337cea9735a13db4d17d162a678129e3466dbd644ad993487518954`）",
+  "record": "`docs/K2-P5-DELIVERY-RECORD-l8r3-v1.md` 298cc573815ad2cc",
+  "status": "**生效 · 可作外发/下单依据**（承 #K2-60 之『限定复核通过方可外发』）"
+ },
+ "outbound_sync": [
+  {
+   "file": "pm_gate/artifacts/k2_v4/L6/first_article_l8/results_template.json",
+   "before_sha16": "119cd7c48b3146d2",
+   "after_sha16": "83d6b6e313107578",
+   "delta": "`delivery_anchor` **恰 3 字段**（package → `…/L6/jlc_package_l8r3` · manifest_sha256 → 新锚 · tarball_sha256 → 新锚）；JSON 校验合法 ✓"
+  },
+  {
+   "file": "pm_gate/artifacts/k2_v4/L6/first_article_l8/CHECKLIST.md",
+   "before_sha16": "11f2621ced066390",
+   "after_sha16": "8c888c281c558629",
+   "delta": "`:3` 交付锚 sha16 `19d637c4…`→`0eb2cb97…` · 版次 `P5-L8.2`→`P5-L8.3`"
+  },
+  {
+   "file": "pm_gate/artifacts/k2_v4/L6/first_article_l8/RULES.md",
+   "before_sha16": "1f8f640cac54b6f1",
+   "after_sha16": "7c5891e61d736c11",
+   "delta": "`:4` 交付锚行：现行锚 → `../jlc_package_l8r3/MANIFEST.json` `0eb2cb97…` · 复核号 `#K2-59 R2`→**`#K2-65`** · 旧锚保全表述改为**三代表**（l8r2/l8/l7）"
+  },
+  {
+   "file": "pm_gate/artifacts/k2_v4/L6/first_article_l8/INSTRUMENT_SELFCHECK.json",
+   "before_sha16": "540c9a55c66b053b",
+   "after_sha16": "540c9a55c66b053b",
+   "delta": "**无锚字段 ⇒ 未改**（如实：件内 0 处锚引用）"
+  },
+  {
+   "file": "docs/K2-P5-FIRST-ARTICLE-TRANSMITTAL-l8-v1.md",
+   "before_sha16": "cded013974777c73",
+   "after_sha16": "e1b8624b83ae6aab",
+   "delta": "14 处锚级订正：标题版次 · 旧锚保全（三代表）· 限定复核 `#K2-60 R1`→**`#K2-65`** · §2 部件表（包 MANIFEST/打包件/完整性路径 + **4 件外发包 sha16 表**）· 上传清单 · 边界段"
+  },
+  {
+   "file": "docs/K2-P5-FIRST-ARTICLE-ACCEPTANCE-PLAN-v1.md",
+   "before_sha16": "20eb85cb06292fec",
+   "after_sha16": "b6d22cfd27643587",
+   "delta": "§0 唯一输入 → `L6/jlc_package_l8r3/`（`P5-L8.3` · #K2-64 §三 重出 · **#K2-65 限定复核 PASS**）· §6 沿革追加 `l8r2 → l8r3`"
+  }
+ ],
+ "threshold_invariance_proof": {
+  "line_level": "逐件 `git diff -U0`：**改动行中含锚/版次/复核号标记者 = 100%**（不含标记者 **0 行**）",
+  "key_strings_preserved": "`85.0Ω` · `±10%` · `76.5–93.5` · `≤3%` · `±5%` · `120.0℃` · `117.0℃` · `0.2825mm` · `0.6mm` · `ψJT=3.6` · `30min` · `x4 Gen4` · `J13` · `J3`/`J4` · `NOT_RUN` · `PENDING_EXTERNAL` 等**全部保留**（未删未改）",
+  "masked_residual": "掩码后仍余之差 = **仅『旧锚保全』表述扩充**（RULES/投递说明：`l8` → `l8r2+l8+l7` 三代表）与**沿革追加**（验收计划 `l8r2 → l8r3`）⇒ **全属锚类**，**非阈值/测点/口径变更**"
+ },
+ "gate_readings": {
+  "①": "l8r3 `sha256sum -c DELIVERY_l8r3/SHA256SUMS.txt` = **55/55 OK** · 54 件（无增删）✓",
+  "②": "旧锚 l7 `6ee7495de61f749f`/`0e88e107e2da8192` · l8 `4b610baed4f4752c`/`36a6b276b4f7e465` · l8r2 `19d637c4e9ed35be`/`488e90a47d088d06` **逐字节未动** ✓",
+  "③": "外发面锚 = `0eb2cb97`/`9de4cfcf`（results_template 三字段 + CHECKLIST + RULES + 投递说明 §2/上传清单）✓ · 外发包 4 件 sha16 自洽（表 vs 实测）✓",
+  "④": "板 `7a5c89913d6e5d0a` 未动 ✓ · 判据 **rev=6 MATCH** ✓",
+  "⑤": "阈值/测点/判据口径**零变更**（行级证明 + 关键串保全）✓"
+ },
+ "named_observation_from_K2_65": {
+  "item": "包内 `06_rulings/jlc_dfm_hdi_l8.json::jlc_limit` 仍为**标准页原值**（未改）；通道口径仅落 `.md` 人读面（= #K2-65 §二 所要求）⇒ **JSON 机器面未同步注记**",
+  "disposition": "**登记备查**（#K2-65 §二 具名观察）· **非阻塞**；若日后需 JSON 面同步注记 ⇒ 属**改包换锚**须另裁"
+ },
+ "red_lines_ok": [
+  "未重建/未覆盖旧包（l7/l8/l8r2 逐字节保全）",
+  "未改冻结四源/板/SPEC/网表/判据",
+  "未改阈值/测点/口径",
+  "未派 WORKER",
+  "未越阶段",
+  "临时仅 /tmp/opencode"
+ ]
+}

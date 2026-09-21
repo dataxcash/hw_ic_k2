@@ -1,7 +1,7 @@
-# K2 · P5 首件实测 **投递说明（单一入口）** · **l8 版**（交付包 **`P5-L8.2`** · 2026-09-21）
+# K2 · P5 首件实测 **投递说明（单一入口）** · **l8 版**（交付包 **`P5-L8.3`** · 2026-09-21）
 
 > **用途**：外部实测方执行 P5（打样首件 bring-up）时，本件为**唯一入口索引**：受审对象、随单件锚、逐项规程、回件格式、边界与责任人。
-> **性质**：ENG 侧文档（**未改任何交付包**）· **旧锚保全**：`4b610baed4f4752c` / `36a6b276b4f7e465`（l8）逐字节未动 · **现行交付锚（#K2-59 R2 · `P5-L8.2`）** = `19d637c4e9ed35be` / `488e90a47d088d06`。
+> **性质**：ENG 侧文档（**未改任何交付包**）· **旧锚保全**：l8r2 `19d637c4e9ed35be` / `488e90a47d088d06` · l8 `4b610baed4f4752c` / `36a6b276b4f7e465` · l7 `6ee7495de61f749f` / `0e88e107e2da8192` **皆逐字节未动** · **现行交付锚（#K2-64 §三 重出 · `P5-L8.3` · #K2-65 限定复核 PASS）** = `0eb2cb97fa4f1466` / `9de4cfcf9337cea9`。
 
 ## 1. 受审对象（实测对象 = 唯一）
 | 项 | 值 |
@@ -10,24 +10,24 @@
 | 板 sha16 | **`7a5c89913d6e5d0a`** |
 | 层数/工艺 | 8 铜层 · JLC HDI（盲埋孔 · 阶数≥2） |
 
-> **✅ 限定复核已通过（#K2-60 R1）**：现行交付包 = **`P5-L8.2`**（`MANIFEST 19d637c4e9ed35be` / tarball `488e90a47d088d06`）⇒ **可作外发/下单依据**（旧锚 l8/l7 保全为对照）。R2-6 前置闸实测：**未按旧锚下单、未外发任何件**（P5 全 `NOT_RUN`）。
+> **✅ 限定复核已通过（#K2-65）**：现行交付包 = **`P5-L8.3`**（`MANIFEST 0eb2cb97fa4f1466` / tarball `9de4cfcf9337cea9`）⇒ **可作外发/下单依据**（旧锚 l8r2/l8/l7 保全为对照）。R2-6 前置闸实测：**未按旧锚下单、未外发任何件**（P5 全 `NOT_RUN`）。
 
 ## 2. 随单件（**冻结 · 只读 · 本件不重建**）
 | 项 | 路径 | 锚 |
 |---|---|---|
-| 交付包 MANIFEST | `k2/pm_gate/artifacts/k2_v4/L6/jlc_package_l8r2/MANIFEST.json` | `19d637c4e9ed35be` |
-| 打包件 | `k2/pm_gate/artifacts/k2_v4/L6/DELIVERY_l8r2/k2_v4_8L.l8r2_gerber_package.tar.gz` | `488e90a47d088d06` |
-| 完整性 | `sha256sum -c DELIVERY_l8r2/SHA256SUMS.txt`（自 `L6/` 运行） | **55/55 OK** |
-| DFM | `pass 16 / accept 1（阻焊坝 · 已 L2 裁 ACCEPT_WITH_FAB_REVIEW + 有确定性修法证明）/ fail 0` | 见 `L6/jlc_package_l8r2/07_verify/mask_accept_fix_proof.json` |
+| 交付包 MANIFEST | `k2/pm_gate/artifacts/k2_v4/L6/jlc_package_l8r3/MANIFEST.json` | `0eb2cb97fa4f1466` |
+| 打包件 | `k2/pm_gate/artifacts/k2_v4/L6/DELIVERY_l8r3/k2_v4_8L.l8r3_gerber_package.tar.gz` | `9de4cfcf9337cea9` |
+| 完整性 | `sha256sum -c DELIVERY_l8r3/SHA256SUMS.txt`（自 `L6/` 运行） | **55/55 OK** |
+| DFM | `pass 16 / accept 1（阻焊坝 · 已 L2 裁 ACCEPT_WITH_FAB_REVIEW + 有确定性修法证明）/ fail 0` | 见 `L6/jlc_package_l8r3/07_verify/mask_accept_fix_proof.json` |
 
 > **随单件 ≠ 可用性证明**：可用性只能由 P5 实测（V4–V7）证明。
 
 ## 3. 逐项规程与回件（**权威件**）
 | 件 | 路径 | sha16 |
 |---|---|---|
-| 逐项操作规程（V4·V5·V6-1..5·V7 + 通用要求 + 回件格式） | `k2/pm_gate/artifacts/k2_v4/L6/first_article_l8/RULES.md` | `1f8f640cac54b6f1` |
-| 现场检查表 | `k2/pm_gate/artifacts/k2_v4/L6/first_article_l8/CHECKLIST.md` | `11f2621ced066390` |
-| 回填模板（8 项 · criterion/measured/evidence/status） | `k2/pm_gate/artifacts/k2_v4/L6/first_article_l8/results_template.json` | `119cd7c48b3146d2` |
+| 逐项操作规程（V4·V5·V6-1..5·V7 + 通用要求 + 回件格式） | `k2/pm_gate/artifacts/k2_v4/L6/first_article_l8/RULES.md` | `7c5891e61d736c11` |
+| 现场检查表 | `k2/pm_gate/artifacts/k2_v4/L6/first_article_l8/CHECKLIST.md` | `8c888c281c558629` |
+| 回填模板（8 项 · criterion/measured/evidence/status） | `k2/pm_gate/artifacts/k2_v4/L6/first_article_l8/results_template.json` | `83d6b6e313107578` |
 | 测点自查（板直读 · **l8 复核**：12 refdes · 577 pad 对板 **0 不一致**（CR-54/55）） | `k2/pm_gate/artifacts/k2_v4/L6/first_article_l8/INSTRUMENT_SELFCHECK.json` | `540c9a55c66b053b` |
 | 验收计划（阈值来源） | `k2/docs/K2-P5-FIRST-ARTICLE-ACCEPTANCE-PLAN-v1.md` | `20eb85cb06292fec` |
 
@@ -80,13 +80,13 @@ ENG 不参与自证 · 禁改冻结随单件/重建包 · 禁为变绿改阈值�
 | 下单要素 | 值 |
 |---|---|
 | 受审板 | `k2_v4_8L.l8.kicad_pcb` · sha16 **`7a5c89913d6e5d0a`** |
-| 交付包（**唯一上传件**） | `L6/DELIVERY_l8r2/k2_v4_8L.l8r2_gerber_package.tar.gz` · sha16 **`488e90a47d088d06`** |
-| MANIFEST | `L6/jlc_package_l8r2/MANIFEST.json` · sha16 **`19d637c4e9ed35be`** · `revision P5-L8.2` |
-| 完整性 | `sha256sum -c DELIVERY_l8r2/SHA256SUMS.txt`（自 `L6/`）= **55/55 OK** |
+| 交付包（**唯一上传件**） | `L6/DELIVERY_l8r3/k2_v4_8L.l8r3_gerber_package.tar.gz` · sha16 **`9de4cfcf9337cea9`** |
+| MANIFEST | `L6/jlc_package_l8r3/MANIFEST.json` · sha16 **`0eb2cb97fa4f1466`** · `revision P5-L8.3` |
+| 完整性 | `sha256sum -c DELIVERY_l8r3/SHA256SUMS.txt`（自 `L6/`）= **55/55 OK** |
 | 叠层 / 工艺 | **8 铜层** · JLC HDI 盲埋孔（**阶数 ≥2**：含 `F.Cu→In1` 盲孔 · `In2→In5` 埋孔）· 成品厚 1.6mm（JLC08161H）· 外层 1oz / 内层 0.5oz |
 | 阻抗 | **85Ω ±10%**（3 条耦合 run：`F.Cu|0.205` · `In2.Cu|0.16` · `In5.Cu|0.16`）⇒ **下单须注记阻抗控制 + 索取 V4 阻抗券**（见 §5） |
 | 钻孔 | Excellon **7 文件**（6 组盲/埋孔对 + 通孔）· 总 **754 孔** · board↔drl 全对 |
 | DFM | JLC HDI 通道 **16 PASS / 1 ACCEPT / 0 FAIL**（唯一 ACCEPT = 阻焊坝，承 l7 既有已裁项 + 有确定性修法证明） |
 | 旧板保留面 | `l7`（缺 CR-26 修复）若已在外 ⇒ **按缺陷复现样处理 · 不得作合格首件**；`l8` 方为合格首件候选 |
 
-**边界**：本注**不改**任何交付包（**旧锚 `4b610bad`/`36a6b276` 逐字节未动** · 现行锚 `19d637c4e9ed35be`/`488e90a47d088d06`）· 不改验收阈值/测点 · **P5 仍 `PENDING_EXTERNAL`**（可用性由外部实测 + 监理判定，**ENG 不自证**）。
+**边界**：本注**不改**任何交付包（**旧锚 l8r2 `19d637c4`/`488e90a4` · l8 `4b610bad`/`36a6b276` · l7 皆逐字节未动** · 现行锚 `0eb2cb97fa4f1466`/`9de4cfcf9337cea9`）· 不改验收阈值/测点 · **P5 仍 `PENDING_EXTERNAL`**（可用性由外部实测 + 监理判定，**ENG 不自证**）。
