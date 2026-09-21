@@ -1,0 +1,68 @@
+{
+ "artifact": "k2_r106_stackup_arithmetic_and_jlc_external_anchor",
+ "schema": 1,
+ "ts": "2026-09-21T08:54:03+08:00",
+ "session_label": "K2-2026-09-21 · 轮标 ARCHER-R106 · 只读造活（P5 阶段内 · 叠层算术 + 外部锚）",
+ "A_stackup_thickness_closure": {
+  "why": "叠层图是**随单件**（板厂据此叠层）且是阻抗模型 `h/b` 的**物理前提**；须证明**交付叠层图之介质值 = SPEC 逐值**且**总厚算术闭合**（1.6mm）。",
+  "method": "读 SPEC rev-54 `stackup.dielectric_8l`（7 项介质）× 铜厚（外 1oz=0.035 / 内 0.5oz=0.0175）× 8 层 ⇒ 独立合计；并解析交付包 `03_stackup/JLC08161H_stackup.svg` 之介质标注逐值比对。",
+  "readings": {
+   "SPEC_declared_closure": "`stackup.dielectric_8l_basis.thickness_closure` = 『**copper 0.175 + dielectric 1.425 = 1.6（delta 0.0）**』",
+   "independent_arithmetic": "介质合计 = **1.4250 mm**（0.1164×2 + 0.25×4 + 0.1922）· 铜厚合计 = 2×0.035 + 6×0.0175 = **0.1750 mm** · **总厚 = 1.6000 mm** · 与 SPEC `total_thickness_mm = 1.6` 之差 = **+0.0000 mm** ⇒ **闭合 ✓**",
+   "svg_vs_spec": "交付 SVG 之 7 项介质标注（`d(F.Cu-In1.Cu)=0.1164 er=4.16` · `core 0.25 ×4 er=3.99` · `d(In3.Cu-In4.Cu)=0.1922 er=4.1` · `d(In6.Cu-B.Cu)=0.1164 er=4.16`）与 SPEC `dielectric_8l` **逐值一致** ✓",
+   "verdict": "**叠层厚度算术闭合 · 交付叠层图与 SPEC 逐值一致 ✓**（⇒ 阻抗模型之外层 `h=0.1164` / 内层 `b=0.5` 之物理前提有据）"
+  }
+ },
+ "B_jlc_external_anchor_verification": {
+  "why": "#K2-64 §二 / CAL-2 之 DFM 判级基础 = 『**HDI/advanced 通道支持盲埋孔**』之外部锚；须**现网可核**（非记忆/转述）。同时核 DFM 卡『标准通道值（参考）』栏若干项。",
+  "channel": {
+   "url": "https://jlcpcb.com/capabilities/pcb-capabilities",
+   "http": 200,
+   "bytes": 135557,
+   "note": "**新通道登记（免重复试探）**：`jlcpcb.com` 可达（本页 200）；`jlcpcb.com/help/article/Blind-and-Buried-Vias` = **301**（0 B 体）"
+  },
+  "verbatim_quotes": [
+   {
+    "kw": "标准通道 · #17",
+    "text": "**Blind/Buried Vias — Not supported**：Currently we don't support Blind/Buried Vias, only make through holes.",
+    "use": "= 交付 DFM 卡 #17 **限值栏原文来源**（⇒ CAL-2『限值栏 = 标准通道页值（参考）』**成立**）"
+   },
+   {
+    "kw": "HDI/advanced（判级基础）",
+    "text": "**Advanced options such as blind/buried vias, HDI (laser vias), heavy copper (up to 3oz), and tight impedance control** provide higher design density and performance but **typically require DFM review** …",
+    "use": "= #K2-64 §二 所引 FAQ 锚 **逐字命中**（⇒ HDI 通道**支持**盲埋孔之判级基础成立）"
+   }
+  ],
+  "limit_column_corroboration": [
+   {
+    "item": "#5 成品板厚 1.6mm ±10%",
+    "page": "『finished board thickness ranges from **1.44mm(T−10%) to 1.76mm(T+10%)**』",
+    "verdict": "相符 ✓"
+   },
+   {
+    "item": "#8 最小过孔孔壁 ≥0.15mm · #9 最小过孔盘径 ≥0.25mm",
+    "page": "『Min. Via hole **size/diameter 0.15mm / 0.25mm**』",
+    "verdict": "相符 ✓"
+   },
+   {
+    "item": "#15 表面处理（≥6 层须 ENIG）",
+    "page": "『FR-4/**HDI boards with 6 or more layers** … **do not support HASL**』",
+    "verdict": "相符 ✓"
+   },
+   {
+    "item": "#17 过孔类型",
+    "page": "见上（标准页 Not supported）",
+    "verdict": "相符 ✓"
+   }
+  ],
+  "verdict": "**外部锚现网可核 · 逐字命中**；抽样 4 项限值栏与标准页相符 ⇒ 交付 DFM 卡『标准通道值（参考）』栏**有据**。**抽样非全量**（17 项未逐项抓；如需全量须另批）。"
+ },
+ "conclusion": "**两项前置核验通过（只读 · 非缺陷）**：① 叠层厚度**算术闭合**（1.425+0.175=1.600 · 残差 0）且交付叠层图与 SPEC 逐值一致；② DFM 判级之外部锚（HDI/advanced 通道）**现网逐字命中**，抽样限值栏相符。**未改变任何阈值/口径/工件**。",
+ "red_lines_ok": [
+  "只读（未改 `criteria/`/SPEC/板/包/生成器）",
+  "未重出包/未换锚",
+  "外部原件仅落 /tmp/opencode",
+  "未派 WORKER",
+  "未越阶段"
+ ]
+}
