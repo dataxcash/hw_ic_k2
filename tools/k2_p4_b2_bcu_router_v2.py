@@ -124,7 +124,7 @@ def lane_anchors(model):
     return out
 
 
-def build_base(rast, model, movable_tracks):
+def build_base(rast, model, movable_tracks, movable_vias=()):
     """静态障碍（不含车道锚孔）：其他网铜 + 可腾挪网之孔/盘 + 禁布线区。"""
     bad = np.zeros((rast.NX, rast.NY), dtype=bool)
     for s in model["segs"]["B.Cu"]:
@@ -136,12 +136,12 @@ def build_base(rast, model, movable_tracks):
         if "B.Cu" not in v["layers"]:
             continue
         net = v["net"]
-        if is_lane(net):
+        if is_lane(net) or net in movable_vias:
             continue
         rad = max(v["r"] + eff(net), v["drill"] + HOLE_CLR)
         rast.cir(bad, v["x"], v["y"], LANE_HW + rad)
     for p in model["pads"]:
-        if is_lane(p["net"]):
+        if is_lane(p["net"]) or p["net"] in movable_vias:
             continue
         if "B.Cu" not in p["layers"] and not p["pth"]:
             continue
@@ -343,7 +343,8 @@ def main():
     ap.add_argument("--seed", type=int, default=7)
     ap.add_argument("--pf0", type=float, default=0.4)
     ap.add_argument("--hf", type=float, default=0.15)
-    ap.add_argument("--movable-nets", default="")
+    ap.add_argument("--movable-nets", default="", help="可腾挪网：其**走线**不计入障碍")
+    ap.add_argument("--movable-stitch", default="", help="可腾挪网：其**孔/盘**亦不计入障碍（缝合孔腾挪场景）")
     ap.add_argument("--no-gate", action="store_true")
     ap.add_argument("--repair", type=int, default=0, help="协商后 rip-up-and-reroute 修复轮数（违例车道重布）")
     ap.add_argument("--algo", default="negotiate", choices=["negotiate", "hard"],
@@ -352,7 +353,8 @@ def main():
     model = json.load(open(a.model))
     movable = set(x for x in a.movable_nets.split(",") if x)
     rast = Raster(model, step=a.cell)
-    base = build_base(rast, model, movable)
+    movable_vias = set(x for x in a.movable_stitch.split(",") if x)
+    base = build_base(rast, model, movable, movable_vias)
     anchors = lane_anchors(model)
     c_all, own = build_via_counts(rast, anchors)
     R = max(1, int(round(PITCH / a.cell)) - 1)
