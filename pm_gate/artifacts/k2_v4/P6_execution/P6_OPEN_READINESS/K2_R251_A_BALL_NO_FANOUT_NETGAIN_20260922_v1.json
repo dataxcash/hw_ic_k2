@@ -1,0 +1,52 @@
+{
+ "artifact": "K2_R251_A_BALL_NO_FANOUT_NETGAIN_20260922_v1",
+ "one_liner": "**A 过渡孔留球位（位移 0）⇒ 子步骤 F 需求归零 ⇒ 错误 354→109（−69%）· 未连接 1→0 · F.Cu 类 125→0**",
+ "principle": "A 孔即 U6 球位（via-in-ball）⇒ F.Cu 扇出长度 0 ⇒ 125 项 F.Cu 误差（直线 stub 穿球行铜）**结构性地不存在**；apply 实测 `add_stub_fcu=0`。",
+ "boards": {
+  "l9_up_r231b（旧最优）": {
+   "items": 611,
+   "error": 354,
+   "warning": 257,
+   "unconn": 1,
+   "F.Cu_err": 125,
+   "In5_err": 176,
+   "other_err": 53,
+   "sha16": "65707763c2877651"
+  },
+  "l9_cwfix_r250（R250 A 笼搬运版）": {
+   "items": 584,
+   "error": 334,
+   "warning": 250,
+   "unconn": 1,
+   "F.Cu_err": 128,
+   "In5_err": 167,
+   "other_err": 39,
+   "sha16": "932390f49633563d"
+  },
+  "l9_physball_r251（A 留球位 · 11/16 转换）": {
+   "items": 325,
+   "error": 109,
+   "warning": 216,
+   "unconn": 0,
+   "F.Cu_err": 0,
+   "In5_err": 109,
+   "other_err": 0,
+   "sha16": "00b3b5fb1e3e8be7"
+  }
+ },
+ "remaining_109_err_breakdown": {
+  "UP×未转换的 5 条 _P 网（新车道未把旧车道当障碍）": "≈44（0N×4P 19 · 0N×3P 10 · 0P×6N 11 · 0P×7N 2 · 0P×0N 2）",
+  "UP×GND/P3V3（『可动网』虚构未真搬）": "≈22",
+  "UP×低速族（DS320_STRAP/PERSTA#/PERSTB#/I2C1_SDA 未搬）": "≈18",
+  "UP×UP（车道互斥）": "≈10",
+  "单网项（0_N 自身：孔/悬空）": "≈15"
+ },
+ "next_quantified_roadmap": [
+  "①【立刻可做】重布 11 条时把**未转换的 5 条 _P 网当作真障碍**（is_lane 收窄为该 11 条）⇒ 预期 109→≈65。",
+  "② GND/P3V3 + 低速族：真搬（C-w，报 ref_plane_continuity）或真避让 ⇒ 预期 ≈65→≈10。",
+  "③ In5 车道互斥清尾 ⇒ 目标 0/0 ⇒ R4。",
+  "④ 5 条 _P 网若确实不可转换（见 v44 守恒证书）⇒ 具名豁免（留 l8）并确保 ①之避让成立 —— 属监理自裁面。"
+ ],
+ "landing": "A 孔留球位 = via-in-ball（本板现状即如此：现 A 孔本就是球位过孔）· 不需 F.Cu stub · HDI 盲孔 F–In5。",
+ "fallback": "5 条 _P 网保持 l8 拓扑（零改动），其余 11 条走 In5（≤2 via）。"
+}
