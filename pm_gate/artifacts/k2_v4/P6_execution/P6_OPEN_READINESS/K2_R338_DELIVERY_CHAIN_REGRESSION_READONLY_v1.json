@@ -1,0 +1,37 @@
+{
+ "schema": 1,
+ "artifact": "k2_r338_delivery_chain_regression_readonly_v1",
+ "to": "监理",
+ "from": "ENG · ARCHER",
+ "nature": "交付链回归（只读）—— 对已 commit 之交付包逐文件核 sha256；不重建/不覆盖旧包",
+ "package": "k2/pm_gate/artifacts/k2_v4/L6/jlc_package_l8r3",
+ "n_files_in_manifest": 53,
+ "verify": {
+  "ok": 53,
+  "bad": 0,
+  "missing": 0,
+  "bad_list": []
+ },
+ "dfm_summary": {
+  "pass": 16,
+  "accept": 1,
+  "fail": 0
+ },
+ "revision": "P5-L8.3",
+ "verdict": "交付包完整且自洽：逐文件 sha256 与 MANIFEST 全数吻合（53/53 · bad 0 · missing 0）。",
+ "watch": "MANIFEST dfm_summary = 16 PASS / 1 ACCEPT / 0 FAIL；owner #14③ 字面为『全 PASS』⇒ 该 ACCEPT 项须监理确认等效或给处置",
+ "buildability_field": "只读核对：未烙板 · 未改生成器/SPEC/原理图 · 未重建/未覆盖交付包 ⇒ 不动证明成立。",
+ "anchors": {
+  "board_sha16": "7a5c89913d6e5d0a",
+  "frozen4": [
+   "d4e81f647be7f980",
+   "fb07d25ac426ff84",
+   "dd794c54f7ce7417",
+   "0a459839e15960b8"
+  ]
+ },
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "90f58073bcea1d26"
+ }
+}
