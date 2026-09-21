@@ -1,0 +1,135 @@
+{
+ "artifact": "k2_68_r3j_bcu_eco_a1_first_attempt",
+ "attempt": {
+  "moved_sample": [
+   {
+    "frm": [
+     94.275,
+     54.5
+    ],
+    "net": "GND",
+    "to": null
+   },
+   {
+    "d": 1.46,
+    "frm": [
+     83.575,
+     56.516
+    ],
+    "net": "GND",
+    "stub_to": [
+     83.575,
+     56.516
+    ],
+    "to": [
+     84.475,
+     57.666
+    ]
+   },
+   {
+    "frm": [
+     95.35,
+     49.135
+    ],
+    "net": "GND",
+    "to": null
+   },
+   {
+    "frm": [
+     96.55,
+     49.135
+    ],
+    "net": "GND",
+    "to": null
+   }
+  ],
+  "n_moved": 13,
+  "n_targets": 62,
+  "skipped": 49,
+  "tool": "tools/k2_p4_b2_bcu_eco_move_v1.py c0bbd1d95c4d1dee",
+  "zone_refill": "OK"
+ },
+ "authority": "#K2-68 §2.4(a)-2（缝合孔腾挪）· #K2-69 §五-2 · §六④（DRC 判据）",
+ "caveats": [
+  "本件为**否定性结果**（如实记录）：证明『逐孔贪心移位』不足以消解 ECO ⇒ 需协同/迭代解。",
+  "apply 首执态（`d`）仍为参考；`e` 作废。",
+  "未改冻结四源/生成器/SPEC/判据。"
+ ],
+ "drc_delta": {
+  "after": {
+   "by_type": {
+    "clearance": 95,
+    "copper_sliver": 12,
+    "courtyards_overlap": 2,
+    "hole_clearance": 28,
+    "hole_to_hole": 5,
+    "holes_co_located": 1,
+    "items_not_allowed": 2,
+    "lib_footprint_issues": 54,
+    "pth_inside_courtyard": 1,
+    "shorting_items": 138,
+    "silk_edge_clearance": 11,
+    "silk_overlap": 148,
+    "solder_mask_bridge": 5,
+    "track_dangling": 2,
+    "track_not_centered_on_via": 45,
+    "tracks_crossing": 65,
+    "via_dangling": 6
+   },
+   "eco_net_related": {
+    "GND": 91,
+    "I2C1_SDA": 27,
+    "P3V3": 32,
+    "P3V3_AUX": 1
+   },
+   "total": 620,
+   "unconnected": 7
+  },
+  "before": {
+   "by_type": {
+    "clearance": 87,
+    "copper_sliver": 12,
+    "courtyards_overlap": 2,
+    "items_not_allowed": 2,
+    "lib_footprint_issues": 54,
+    "pth_inside_courtyard": 1,
+    "shorting_items": 146,
+    "silk_edge_clearance": 11,
+    "silk_overlap": 148,
+    "track_not_centered_on_via": 45,
+    "tracks_crossing": 66,
+    "via_dangling": 6
+   },
+   "eco_net_related": {
+    "GND": 100,
+    "I2C1_SDA": 27,
+    "P3V3": 32,
+    "P3V3_AUX": 1
+   },
+   "total": 580,
+   "unconnected": 0
+  }
+ },
+ "headline": "**A1（缝合孔腾挪）首试 —— 判为不可用（自证缺陷 · 已弃）**：新工具将逃逸带 `GND`/`P3V3` F–B 缝合孔移位，实测 **62 目标 → 仅 13 可移（49 孔 1.2mm 内无合法位 ⇒ 逃逸带已饱和）**；**副作用**：`unconnected` **0 → 7**（stub 重接未保连接）· 违规 580 → **620**（新位产生新间距/交叉）⇒ **该板件作废，不回用**。",
+ "next_steps": [
+  "A1-v2（重写）：**冲突驱动**选址（只移与违规相关之孔）+ **多点择优**（最小位移 + 不引入新违规）+ **连接保真**（按 span/层逐一还原 stub · 移动后立判 `unconnected` 不增）+ 与 32 条新车道 keepout **联合迭代**；",
+  "或改走 **孔—车道协同重解**：把缝合孔位置作为 router v4 的**输入变量**（禁行区随之变化）⇒ 一次求解（避免两阶段互斥）；",
+  "A2 他网改道（`I2C1_SDA` y 50.4–52.4 长横走 / `P3V3`）仍待做；A2 后**必须重跑 router v4**（共走廊）。"
+ ],
+ "red_lines_ok": [
+  "未改冻结四源",
+  "未改 generator/SPEC/原理图",
+  "criteria/ 只读未碰",
+  "l4..l8 未动",
+  "未派 WORKER",
+  "临时仅 /tmp/opencode"
+ ],
+ "root_cause_of_tool_defect": [
+  "① stub 重接仅建 **1 条**（未按孔之 span 两侧/原 stub 层逐一还原）⇒ 连接丢失（`unconnected` +7）；",
+  "② 候选位仅取**首个合法**（未做冲突感知/多点择优）⇒ 新位引入新违规；",
+  "③ 未把**与本批 32 条新车道**之 keepout 纳入候选评估之迭代（逐孔贪心 ⇒ 相互挤占）。"
+ ],
+ "schema": 1,
+ "ts": "2026-09-21T18:0x+08:00",
+ "verdict": "**不可用 · 已弃**：本批板件（`/tmp/opencode/w4/e.kicad_pcb`）**不得**用于后续；参考态回退至 **apply 首执**（`d.kicad_pcb` · `unconnected=0`）。"
+}
