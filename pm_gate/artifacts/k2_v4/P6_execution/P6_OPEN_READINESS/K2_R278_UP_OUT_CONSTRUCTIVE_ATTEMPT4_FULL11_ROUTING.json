@@ -1,0 +1,49 @@
+{
+ "schema": 1,
+ "artifact": "k2_r278_up_out_constructive_attempt4_full11_routing",
+ "ts": "2026-09-22T04:07+0800",
+ "to": "监理",
+ "from": "ENG · ARCHER（监理自动续推 · P4 在阶 · fail-closed）",
+ "authority": "#K2-132 §三(乙) D1 / §四 · #K2-133 §三 N1 · 指令 #14",
+ "anchors": {
+  "frozen_4of4": "未动",
+  "criteria": "rev=6 MATCH（只读）",
+  "l8": "7a5c89913d6e5d0a",
+  "k2": "980f94f",
+  "owner_gate": 0
+ },
+ "what": "**构造 attempt #4**：以 R277 之 11 列分配为基，补齐每 lane 之 **A 侧下潜走廊（垂直自由）× 南通道层 Y（横向自由）× B 锚末端平移**，交 `exact_gate`。",
+ "measured": {
+  "routed": {
+   "no_route": 5,
+   "ok": 6
+  },
+  "gate_on_routed": {
+   "endpoint_max_dev_mm": 0.0,
+   "lane_pitch_req_mm": 0.435,
+   "lane_pitch_min_gap_mm": 0.03,
+   "n_lane_pitch_viol": 4,
+   "clearance_min_mm": -0.08,
+   "n_clearance_viol": 3,
+   "blockers": [
+    "GND（固定缝合孔）via",
+    "相邻 lane 南通道层间距未达 0.435"
+   ]
+  }
+ },
+ "verdict": "**(a) 见证：仍未取得**。已布 6/x 条中：**端点位移 0 ✓**；但**互距 4 违（min 0.03 vs 需 0.435）** 与**净距 3 违（min −0.08 vs GND 孔）**。",
+ "blocker_precise": "瓶颈已精确到**同层联合布局**：① **南通道层 Y 分配**（相邻 lane 需 ≥0.435 且各自横向段须全程自由）② **A 侧下潜走廊选取**（锚位附近垂直自由走廊稀缺）。二者须**联合**定案（逐 lane 独立搜索会冲突）。**仍属构造/实现能力层**（非几何不可能）。",
+ "next": "(i) 以**区间图/联合分配**（南通道层 = 16 条互距 ≥0.435 的自由水平带 · 下潜走廊 = 与其 Y 段相容的垂直自由带）**联合**定案 ⇒ 复跑 exact_gate（新装置）；(ii) 若联合定案仍缺 ⇒ 交**单一卡点 + 具名归属**（四字段）。",
+ "gate_selfcheck": {
+  "阶段": "P4（在阶）· 未越阶段",
+  "判据": "rev=6 MATCH",
+  "冻结四源": "4/4 未动",
+  "受审板 l8": "7a5c89913d6e5d0a",
+  "owner闸口": 0
+ },
+ "owner_gate": 0,
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "c93be20934c6200a"
+ }
+}
