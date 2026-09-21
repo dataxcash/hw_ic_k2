@@ -1,0 +1,91 @@
+{
+ "artifact": "k2_v5_v6_1_named_measurement_point_candidates",
+ "schema": 1,
+ "ts": "2026-09-21T08:46:38+08:00",
+ "session_label": "K2-2026-09-21 · 轮标 ARCHER-R102 · 只读造活（P5 阶段内 · 测点可达性具名）",
+ "why": "① 验收计划 §V5 **强制** `P3V3_AUX` 负载点须取 `J3`/`J4` 之 `P3V3_AUX` pad，**但既往件只给 refdes、未给 pad 号**（全仓 grep `A9`/`U1.6`/`J12.1` = **0 命中**）⇒ 实测方须在 38-pin MCIO 上自行定位；② 另三轨负载点亦仅要求『注明 refdes』。故**只读**普查四轨全部 pad，给出**具名候选（refdes + pad 号）** ⇒ 消歧义、缩短外部往返（**CR-75 同族之补强 · 零锚**）。",
+ "method": "字符串感知括号解析受审板 `k2/hw/k2_v4_8L.l8.kicad_pcb`（`7a5c89913d6e5d0a`；该板 pad 之网为 `(net \"NAME\")` 名称式）⇒ 逐 footprint 收 (refdes, pad, net, kind, at)。",
+ "cross_validation": "**本解析已与既有独立件逐项相符**：`P5_OUTBOUND_NAMED_ENTITY_RECONCILIATION_L8_RECHECK`（`J13` pads = 1 SWDIO / 2 SWCLK_BOOT0 / 3 GND / **4 MCU_VDD**；`E2` pads 1..8 ⇒ 2,8 = MCU_VDD）⇒ 本件 `J13.4 = MCU_VDD` · `E2.2/E2.8 = MCU_VDD` **一致** ✓",
+ "rails": {
+  "12V_IN": {
+   "n_pads": 5,
+   "connectors": [
+    "**J12.1**（thru_hole/circle）"
+   ],
+   "ics": [
+    "U2.4 (smd/rect)",
+    "U2.6 (smd/rect)"
+   ],
+   "passives": [
+    "C88.1",
+    "L1.1"
+   ],
+   "source_candidate": "**J12.1** —— `k2_sch.yaml` 具名 `J12 = HEADER_2PIN_12V`（12V DC-in 输入头）",
+   "load_candidate": "**U2.4 / U2.6** —— `k2_sch.yaml` 具名 `U2 = DCDC_12V_3V3`（12V→3V3 变换级）"
+  },
+  "P3V3": {
+   "n_pads": 47,
+   "connectors": [],
+   "ics": [
+    "U2.5 (smd/rect)",
+    "U4.2 (smd/rect)",
+    "U6 ×31（AC17/AC20/AK17/AK20/AU17/AU20/BD17/BD20/BL17/BL20/BV17/BV20/CE17/CE20/CM17/CM20/CW17/CW20/DF17/DF20/DN17/DN20/DY17/DY20/EG17/EG20/EP17/EP20/FF8/FJ6/T17/T20）",
+    "U6.T17/T20"
+   ],
+   "passives_n": 13,
+   "source_candidate": "**U2.5** —— U2 = `DCDC_12V_3V3`，其 12V_IN 为 pad4/6 ⇒ pad5 = **P3V3 输出脚**（本件推断 · 以原理图为准）",
+   "load_candidate": "**U4.2**（BAT54C 之 A2 = P3V3 ⇒ MCU_VDD ORing 输入）· 或 `U6` 电源球（多脚，分散）"
+  },
+  "P3V3_AUX": {
+   "n_pads": 6,
+   "connectors": [
+    "**J3.A9** (smd/rect)",
+    "**J4.A9** (smd/rect)",
+    "J11.4 (thru_hole/circle)"
+   ],
+   "ics": [
+    "U1.15 (smd/roundrect)"
+   ],
+   "passives": [
+    "C90.1",
+    "R1.2"
+   ],
+   "mandated_load_point": "**J3.A9 或 J4.A9**（验收计划 §V5 强制『取 J3/J4 之 P3V3_AUX pad』· **pad 号 = `A9`** · 既往件未给 ⇒ 本件补具名）",
+   "source_candidate": "**J11.4** 或 `J3.A9`/`J4.A9`（三者同网；真源未明示源端）⇒ **由实测方按接线确认**"
+  },
+  "MCU_VDD": {
+   "n_pads": 13,
+   "connectors": [
+    "J9.4 (thru_hole/circle)",
+    "J13.4 (thru_hole/circle)"
+   ],
+   "ics": [
+    "**U1.6** (smd/roundrect)",
+    "E2.2",
+    "E2.8",
+    "U4.3"
+   ],
+   "passives": [
+    "R29.2",
+    "R31.2",
+    "R32.2",
+    "R33.2",
+    "R34.2",
+    "C85.1",
+    "C86.1"
+   ],
+   "source_candidate": "**U4.3**（`BAT54C_ORING` 之 **K 端 = MCU_VDD**；A2=P3V3 经二极管 · A1 悬空 ⇒ 承 #K2-55/CR-11 口径）",
+   "load_candidate": "**U1.6**（MCU 供电 pad · 具名）· 或 `E2.2/E2.8`（FRU EEPROM VCC）· 或 `J13.4`（SWD 头供电脚）"
+  }
+ },
+ "power_tree_evidence": "`hw/data/k2_sch.yaml`（真源）sheet『**Power (12V DC-in DCDC 5V LDO 3V3)**』placements：`U2 = DCDC_12V_3V3` · `J12 = HEADER_2PIN_12V` · `U4 = BAT54C_ORING(A1 NC)` · `L1 = L_10U` · `C88 = C_1U` ⇒ 与上表**一致**。",
+ "scope": "**ENG 侧候选读数（非强制 · 非判据）**：RULES §V5 之权威要求 = **实测方自报测点 refdes**；本表**只消歧义**（给出候选 + pad 号），**不改变**任何阈值/测点强制项。",
+ "ask_note": "**无新增待裁**：本件属 **CR-75（#K2-63 已裁 i-a 零锚）** 之**补强** —— 若监理认为需向实测方**转达 pad 号**（`J3.A9`/`J4.A9`、`U1.6`、`J12.1`），走**零锚判读层转达**即可（**不改**外发包/`results_template`/`RULES.md`）。",
+ "red_lines_ok": [
+  "只读解析（未改板/包/SPEC/判据/生成器/外发包）",
+  "未重出包/未换锚",
+  "未派 WORKER",
+  "未越阶段",
+  "临时落点仅 /tmp/opencode"
+ ]
+}
