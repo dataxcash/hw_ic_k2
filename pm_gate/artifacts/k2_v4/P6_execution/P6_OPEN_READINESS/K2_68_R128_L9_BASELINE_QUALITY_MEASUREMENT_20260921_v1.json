@@ -1,0 +1,112 @@
+{
+ "artifact": "k2_68_r128_l9_baseline_quality_measurement",
+ "authority": "#K2-66 §三 阈值表（只测量不判定）· 供 B2 处置（PENDING_RULINGS v39）与 l9 交付路径取证",
+ "b2_measured": {
+  "all_over2_hist": {
+   "10": 1,
+   "15": 1,
+   "3": 10,
+   "4": 62,
+   "44": 1,
+   "6": 1,
+   "8": 1,
+   "9": 1
+  },
+  "high_speed_nets": 34,
+  "hs_hist": {
+   "2": 2,
+   "4": 32
+  },
+  "max_via": 4,
+  "max_via_any": 338,
+  "n_nets_over2_excl_gnd": 78
+ },
+ "board": "/tmp/opencode/w3/c.kicad_pcb（R1E = l9 基线 + 单孔移位 · sha16 fdbcede260424ea7 · title rev=l9）",
+ "key_readings": {
+  "A1_fiducials": null,
+  "A2_testpoints": null,
+  "A3_polarity": null,
+  "A4_courtyard_silk": null,
+  "A6_silk_over_pad": null,
+  "A7_courtyard": {
+   "missing_n": 0,
+   "total": 66,
+   "with_courtyard": 66
+  },
+  "B1_right_angles": {
+   "corners": 5195,
+   "pct": 0.0,
+   "right_angle_90": 0
+  },
+  "C1_copper_balance": {
+   "board_mm": [
+    120.1,
+    46.1
+   ],
+   "detail": {
+    "B.Cu": {
+     "board_mm2": 5536.6,
+     "pad_mm2": 77.0,
+     "track_mm2": 139.0,
+     "zone_mm2": 2916.1,
+     "zones_filled": 1
+    },
+    "F.Cu": {
+     "board_mm2": 5536.6,
+     "pad_mm2": 281.2,
+     "track_mm2": 245.8,
+     "zone_mm2": 2413.4,
+     "zones_filled": 1
+    }
+   },
+   "per_layer_pct": {
+    "B.Cu": 56.57,
+    "F.Cu": 53.11
+   }
+  },
+  "C2_mounting_holes": {
+   "at": [
+    [
+     "H1",
+     [
+      26.1,
+      75.6
+     ]
+    ],
+    [
+     "H2",
+     [
+      139.6,
+      39.6
+     ]
+    ],
+    [
+     "H3",
+     [
+      45.1,
+      75.1
+     ]
+    ],
+    [
+     "H4",
+     [
+      114.6,
+      36.1
+     ]
+    ]
+   ],
+   "n": 4
+  },
+  "C6_mask_dam_min": null
+ },
+ "note": "本件为**只测量**取证件；B2 之处置（(a)/(b)/(c)）待监理对 PENDING_RULINGS_DELTA_20260921_v39_b2_disposition.json 之回复。",
+ "reading": "① **B2 现拓扑实测 = 32 条车道各 4 via**（hist {'2':2,'4':32}）⇒ 与『≤2/线』目标差 2 via/线 × 32 = 64 孔；② `C6 阻焊坝 min 0.05mm < 0.10mm`（既有条件 · 非本轮引入）⇒ **属 l9 交付前须处置/具名之既有缺口**（#K2-66 §三 C6 · 本件仅登记 · 不新增检查齿）；③ 其余项（B1 直角 0 · A6 silk 压焊盘 0 · C1 铜平衡 53.1/56.6% · 安装孔 4）读数与 l8 期一致。",
+ "red_lines_ok": [
+  "只读 · 未改板/件",
+  "冻结四源未动",
+  "criteria/ 未碰",
+  "未越阶段"
+ ],
+ "schema": 1,
+ "ts": "2026-09-21T23:4x+08:00"
+}
