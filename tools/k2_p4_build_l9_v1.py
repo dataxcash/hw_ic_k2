@@ -79,6 +79,59 @@ def mask_aperture_boxes(b, layer=None):
     return out
 
 
+def _seg_pt(p1, p2, q):
+    ax, ay = p1; bx, by = p2; px, py = q
+    dx, dy = bx-ax, by-ay
+    L2 = dx*dx + dy*dy
+    if L2 < 1e-12:
+        return math.hypot(px-ax, py-ay)
+    t = max(0.0, min(1.0, ((px-ax)*dx + (py-ay)*dy)/L2))
+    return math.hypot(px-(ax+t*dx), py-(ay+t*dy))
+
+
+def _seg_seg(p1, p2, p3, p4):
+    """两线段最短距离（含端点情形）。"""
+    def cross(o, a, b):
+        return (a[0]-o[0])*(b[1]-o[1]) - (a[1]-o[1])*(b[0]-o[0])
+    d1, d2 = cross(p3, p4, p1), cross(p3, p4, p2)
+    d3, d4 = cross(p1, p2, p3), cross(p1, p2, p4)
+    if ((d1 > 0) != (d2 > 0)) and ((d3 > 0) != (d4 > 0)):
+        return 0.0
+    return min(_seg_pt(p1, p2, p3), _seg_pt(p1, p2, p4),
+               _seg_pt(p3, p4, p1), _seg_pt(p3, p4, p2))
+
+
+def clear_stub(b, sxy, exy, halfw, net, need=0.175):
+    """精确校验一条候选 stub（seg vs 异网 track 段/过孔 点）边-边净距 ≥ need。"""
+    MMl = pcbnew.ToMM
+    S, E = sxy, exy
+    for t in b.GetTracks():
+        if t.GetNetname() == net:
+            continue
+        if isinstance(t, pcbnew.PCB_VIA):
+            pos = t.GetPosition(); q = (MMl(pos.x), MMl(pos.y))
+            r = MMl(t.GetWidth())/2
+            if (_seg_pt(S, E, q) - halfw - r) < need:
+                return False
+        else:
+            a = (MMl(t.GetStart().x), MMl(t.GetStart().y)); c = (MMl(t.GetEnd().x), MMl(t.GetEnd().y))
+            if (_seg_seg(S, E, a, c) - halfw - MMl(t.GetWidth())/2) < need:
+                return False
+    for fp in b.GetFootprints():
+        for pd in fp.Pads():
+            if pd.GetNetname() == net:
+                continue
+            if not pd.IsOnLayer(pcbnew.F_Cu):
+                continue
+            bx = bb(pd.GetBoundingBox())
+            # pad→seg 近似：pad bbox 视为矩形，用 4 边段
+            corners = [(bx[0], bx[1]), (bx[2], bx[1]), (bx[2], bx[3]), (bx[0], bx[3])]
+            for i in range(4):
+                if _seg_seg(S, E, corners[i], corners[(i+1) % 4]) < halfw:
+                    return False
+    return True
+
+
 def cu_boxes(b):
     """焊盘 mask 开窗 bbox（丝印会被裁处）"""
     out = []
@@ -505,9 +558,10 @@ def s_testpoints(b, rails=("12V_IN", "P3V3", "P3V3_AUX", "MCU_VDD"),
                             continue
                         # 直线 x,y -> cx,cy 沿途采样
                         okline = True
-                        for tt in [i/12 for i in range(13)]:
+                        for ii in range(0, 61):
+                            tt = ii/60.0
                             sx = x + (cx-x)*tt; sy = y + (cy-y)*tt
-                            sb = (sx-0.15, sy-0.15, sx+0.15, sy+0.15)
+                            sb = (sx-0.14, sy-0.14, sx+0.14, sy+0.14)
                             if any(n != net and overlap(sb, bx) for n, bx in boxes):
                                 okline = False; break
                         if okline:
@@ -517,6 +571,8 @@ def s_testpoints(b, rails=("12V_IN", "P3V3", "P3V3_AUX", "MCU_VDD"),
             if stub is None:
                 log("tp_skip", {"net": net, "why": "no spot+clear stub"}); continue
             x, y, cx, cy = stub
+            if not clear_stub(b, (x, y), (cx, cy), 0.125, net):
+                log("tp_skip", {"net": net, "why": "stub exact-clearance"}); continue
         else:
             x, y = spot
         if any(overlap((x-0.85, y-0.85, x+0.85, y+0.85), bx) for nm, bx in boxes if nm == "__tp__"):
