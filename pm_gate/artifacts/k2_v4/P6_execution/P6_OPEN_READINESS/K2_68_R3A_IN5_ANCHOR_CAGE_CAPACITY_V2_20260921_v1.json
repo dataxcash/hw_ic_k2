@@ -61,6 +61,103 @@
   "capacity_tool": "tools/k2_p4_b2_in5_capacity_probe_v1.py 9d0d90d143658432",
   "model_json": "/tmp/opencode/r1e_dump_v1.json（现场重导：In5 2497 seg / 734 via / 684 pad，与旧 dump 一致）"
  },
+ "r2_continuation": {
+  "purpose": "#K2-69 §五-1 之 R2 续：给流量引导加 F.Cu 扇出可达约束（收紧 A/B 候选框）后重算",
+  "results": [
+   {
+    "A_move_med_max": [
+     10.9,
+     20.1
+    ],
+    "B_j2": 16,
+    "B_mcio": 16,
+    "B_move_med_max": [
+     13.9,
+     23.9
+    ],
+    "cell_conn": "0.40/8",
+    "domain": "无约束",
+    "maxflow": 31
+   },
+   {
+    "A_move_med_max": [
+     10.9,
+     20.6
+    ],
+    "B_j2": 16,
+    "B_mcio": 16,
+    "B_move_med_max": [
+     12.9,
+     24.8
+    ],
+    "cell_conn": "0.30/8",
+    "domain": "无约束",
+    "maxflow": 32
+   },
+   {
+    "A_move_med_max": [
+     8.1,
+     17.0
+    ],
+    "B_j2": 16,
+    "B_mcio": 15,
+    "B_move_med_max": [
+     10.7,
+     20.8
+    ],
+    "cell_conn": "0.40/8",
+    "domain": "F.Cu收紧(A x78-89/87-100)",
+    "maxflow": 31
+   },
+   {
+    "A_move_med_max": [
+     7.9,
+     17.6
+    ],
+    "B_j2": 15,
+    "B_mcio": 14,
+    "B_move_med_max": [
+     11.0,
+     19.3
+    ],
+    "cell_conn": "0.30/8",
+    "domain": "F.Cu收紧",
+    "maxflow": 30
+   },
+   {
+    "A_move_med_max": [
+     6.4,
+     15.3
+    ],
+    "B_j2": 15,
+    "B_mcio": 13,
+    "B_move_med_max": [
+     10.8,
+     17.3
+    ],
+    "cell_conn": "0.40/8",
+    "domain": "F.Cu更紧(A x80-90/86-98)",
+    "maxflow": 29
+   },
+   {
+    "A_move_med_max": [
+     6.3,
+     16.3
+    ],
+    "B_j2": 16,
+    "B_mcio": 15,
+    "B_move_med_max": [
+     10.4,
+     17.3
+    ],
+    "cell_conn": "0.30/8",
+    "domain": "F.Cu更紧",
+    "maxflow": 30
+   }
+  ],
+  "side_note": "0.30/8 无约束曾得 32/32（B 组双侧 16/16）⇒ In5 属**贴限**；其可达性取决于 F.Cu 能否容纳 A 锚西移（中位 6–11mm），已超本 In5 单层模型 ⇒ In5 未判死，仅『容量段闸』在 0.40 口径不达标。",
+  "verdict": "**R2 段闸 NOT PASSED**：R2L 口径（0.40/8）自 29–31/32 始终 <32；无约束上界亦仅 31/32 ⇒ 按 #K2-69 §二-3 **停并转 Q2 (a) B.Cu 收紧版**（免再问）"
+ },
  "red_lines_ok": [
   "只读（未改板/件）",
   "冻结四源未动",
