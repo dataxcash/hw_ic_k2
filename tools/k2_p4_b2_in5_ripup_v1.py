@@ -150,7 +150,7 @@ def main():
             pinned[nm] = cells
             pinned_pts[nm] = [[float(x), float(y)] for (x, y) in pts]
             for q in range(len(pts) - 1):
-                rast.seg(pin_block, pts[q][0], pts[q][1], pts[q + 1][0], pts[q + 1][1], R, mode="or")
+                rast.seg(pin_block, pts[q][0], pts[q][1], pts[q + 1][0], pts[q + 1][1], a.rmin, mode="or")
             tasks[nm]["status"] = "PINNED"
         print("  [pin] %d 条车道置为硬约束（%s）" % (len(pinned), a.pin), flush=True)
     for t in tasks.values():
