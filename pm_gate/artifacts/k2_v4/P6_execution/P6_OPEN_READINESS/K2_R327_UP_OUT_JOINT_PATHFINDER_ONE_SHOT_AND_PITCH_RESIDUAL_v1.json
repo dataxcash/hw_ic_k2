@@ -1,0 +1,74 @@
+{
+ "schema": 1,
+ "artifact": "k2_r327_up_out_joint_pathfinder_one_shot_and_pitch_residual_v1",
+ "to": "监理",
+ "from": "ENG · ARCHER",
+ "nature": "②-UP 二值之**联合（PathFinder）一次实现**（只读探索 · 端点不动）——**未得见证**；附卡点再定位",
+ "board": "k2/hw/k2_v4_8L.l8.kicad_pcb",
+ "board_sha16": "7a5c89913d6e5d0a",
+ "frozen_sources": {
+  "k2_v4_8L.l4.kicad_pcb": "d4e81f647be7f980",
+  "k2_v4_8L.kicad_pcb": "fb07d25ac426ff84",
+  "k2_sch.yaml": "dd794c54f7ce7417",
+  "drc_rules.json": "0a459839e15960b8"
+ },
+ "criteria_anchor": {
+  "criteria/adjudicate.py": "1937a40ae68bc288",
+  "criteria/manifest.k2.yaml": "727d09953cf9bd78",
+  "criteria/CHANGELOG": "eb3da49f2ad97e37"
+ },
+ "method": {
+  "algo": "PathFinder 联合协商（16 条 lane **同时** · 软→硬罚 · 换序遍历）",
+  "sequential": false,
+  "cell_mm": 0.05,
+  "hw_mm": 0.08,
+  "pitch_mm": 0.435,
+  "endpoint_fixed": true,
+  "obstacles": "他网铜 + 固定孔/盘 + 禁布线区 + 他 lane 锚孔（中心线排除 r=pitch）；自网旧铜按 no-move 全转可拆",
+  "window": "x∈[82,144] × y∈[36,66]（覆盖全部 A/B 锚）",
+  "witness_authority": "只由 `exact_gate`（连续几何精确闸）判 ⇒ 本体为探索读数，非证"
+ },
+ "runs": {
+  "runA_draft_ad_hoc_schedule": {
+   "desc": "草稿：系数 0.6·(k+1) · 6 sweep（非上报实现 · 停于首版 bug 修毕前）",
+   "placed": "16/16",
+   "exact_gate": {
+    "lane_pitch_viol": 17,
+    "lane_pitch_min_gap_mm": 0.0,
+    "clearance_viol": 0,
+    "clearance_min_mm": 0.0001,
+    "endpoint_max_dev_mm": 0.0
+   }
+  },
+  "runB_canonical_hist_PathFinder": {
+   "desc": "上报实现：canonical hist-based（cost=len·(1+0.5·occ+1.0·hist)）· 25 sweep",
+   "placed": "16/16（每 sweep 皆 16 · 皆**放松互距**约束）",
+   "exact_gate_best": {
+    "lane_pitch_viol": 72,
+    "clearance_viol": 0,
+    "endpoint_max_dev_mm": 0.0
+   },
+   "trace_note": "pitch_viol 在 72–120 间震荡（sweep21=72 为最佳）· min_gap=0.0000 ⇒ 未收敛"
+  }
+ },
+ "binary_verdict": {
+  "(a) 可行见证": "**未得** —— 16/16 皆成路，但**车道互距**未达 0 违例（最佳 17 处）⇒ 依宪法第十三条**拒收**",
+  "(b) 守恒级不可行证书": "**不成立**（R314 反证 + R326 刚性割上界 min=67≥16）"
+ },
+ "key_findings": [
+  "**16/16 皆成路（新 · **放松互距约束**之探索读数）**：联合法下 16 条全部落入自由空间 · **净距违例 0** · **端点位移 0.0000** —— 此前序贯类上限 = 13/16（R320）⇒ **净距/容量/端点非瓶颈**；惟**互距未清零**（见 finding 2）。",
+  "**残余 = 车道互距（硬两两分离）之收敛（新）**：两种独立罚机制（ad-hoc 与 canonical hist）均无法把互距违例驱至 0（同时 0 净距违例）⇒ 需**以互距为硬约束**之联合指派（**MILP/CP-SAT** · 即 #K2-132 §三『精确指派』形态），软协商不足。",
+  "**卡点再定位**：①层 = 算法/实现能力层（**硬约束联合指派**）；②资源 = In5 走廊（x∈[82,144]）；③**未被占死**（16/16 连通 · 净距 0 违例）；④『任何分配都不可能』**前提不成立**。"
+ ],
+ "authorized_next": {
+  "形态": "以『互距 ≥0.435』为**硬约束**、以连通/净距为**硬约束**之联合指派（MILP/CP-SAT · 或 SAT 位级）· **一次实现**",
+  "输入端": "承 #K2-131 §六 之授权（『指派式构造线束布线器』）· 障碍/口径与本件逐项一致",
+  "验收": "`exact_gate` 互距违例 0 ∧ 净距违例 0 ∧ 端点 0 + `buildability.mode=\"no_move\"`"
+ },
+ "buildability_field": "本件为**只读探索**：未烙板 · 未改生成器/SPEC/原理图 · 未改任何网几何 ⇒ **不动证明成立**；**不产出施工图**（互距未清零，缺图，不得据以开工）。",
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "bbbe57556be37b27"
+ },
+ "scope_warning": "16/16『成路』系**放松互距约束**下之探索读数（存在**交叉/重叠**，min_gap=0.0000）⇒ **非单层合法线束**、**非见证**、**非连通性证明**。本件**不主张**任何不可行，亦**不主张**可行。"
+}
