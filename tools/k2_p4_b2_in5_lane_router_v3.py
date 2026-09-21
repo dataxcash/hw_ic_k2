@@ -389,8 +389,14 @@ def main():
         if src:
             ov = json.load(open(src))
             for an in anchors:
-                if an["net"] in ov:
-                    an[key] = tuple(float(x) for x in ov[an["net"]][:2])
+                v = ov.get(an["net"])
+                if v is None:
+                    continue
+                if v and isinstance(v[0], (list, tuple)):      # 候选列表 [[x,y],...]
+                    an[key + "_cands"] = [tuple(float(t) for t in p[:2]) for p in v]
+                    an[key] = an[key + "_cands"][0]
+                else:
+                    an[key] = tuple(float(x) for x in v[:2])
     if a.groups:
         pre = tuple(x for x in a.groups.split(",") if x)
         anchors = [an for an in anchors if an["net"].startswith(pre)]
@@ -483,6 +489,8 @@ def main():
         si = idx[s[0], s[1]]; gi = idx[g[0], g[1]]
         if si < 0 or gi < 0:
             return None, None
+        if hard and occ1d[si] != 0:
+            return None, None
         dist, pred = dijkstra(G2, directed=True, indices=int(si), return_predecessors=True)
         if not np.isfinite(dist[gi]):
             return None, None
@@ -515,7 +523,17 @@ def main():
                 t = tasks[k]
                 if t["status"] != "PENDING":
                     continue
-                cells, _ = route_one_fast(t, occ1d, 0.0, hist1d, hard=True)
+                cands = t["an"].get("A_cands") or [t["an"]["A"]]
+                cells = None
+                for cand in cands:
+                    ci, cj = rast.cell(*cand)
+                    if not (0 <= ci < rast.NX and 0 <= cj < rast.NY) or idx[ci, cj] < 0 or t["blk1d"][idx[ci, cj]]:
+                        continue
+                    t2 = dict(t); t2["s"] = (ci, cj)
+                    cells, _ = route_one_fast(t2, occ1d, 0.0, hist1d, hard=True)
+                    if cells:
+                        t["an"]["A"] = cand
+                        break
                 if not cells:
                     continue
                 cur[t["an"]["net"]] = cells

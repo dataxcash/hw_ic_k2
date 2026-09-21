@@ -1,0 +1,131 @@
+{
+ "artifact": "k2_71_r136_in5_escape_b_anchor_pitch_rootcause",
+ "authority": "#K2-71 §六-1（R-A 终局轮）· §2.2/N-3（锚位可动）· #K2-70 §六（验收判据）",
+ "diagnosis": {
+  "DN_OUT1_P": {
+   "A_原(88.80,50.95)": "距 U6.AU32 GND 焊盘 0.05mm ⇒ 非法位",
+   "换合法位(91.95,51.35)后": "仍不通；单车道独立检验（仅静态障碍）⇒ **其 B 锚格 blk=True**",
+   "根因": "**B 锚对间距 0.600mm < 2×(via_r 0.175 + (0.175+0.100) + hw 0.08) = 1.06mm** ⇒ margin 0.100 口径下 32 条车道之**差分对 B 锚对皆相互封锁**"
+  },
+  "UP_OUT3_N_J2": {
+   "B(136.0,47.45)": "距 J2.16 GND 焊盘 0.391mm < 0.43 ⇒ 非法位（须外移 ≥0.21mm）"
+  },
+  "UP_OUT6_P/OUT7_N": "B 锚无近障碍 ⇒ 次序/拥塞（可由 B 锚重设 + 候选位解决）"
+ },
+ "headline": "**A 侧 4 条缺口之根因已定量定位**：DN 15/16 之唯一残留 `PCIE_DN_OUT1_P` = **B 锚 (61.0,51.5) 落在同对伙伴 `OUT1_N` B 锚 (60.4,51.5) 之 keepout 内**（对间距 **0.600mm < 2×(0.175+0.275+0.08)=1.06mm** @margin 0.100）⇒ 该车道**结构性不可达**（实测换合法 A 位/40 restarts 仍不通）；UP `OUT3_N` B(136.0,47.45) 距 `J2.16` GND 焊盘 **0.391mm < 0.43**（非法位）。**⇒ 剩余缺口全部落在 B 侧锚位（间距/合法性），非容量、非 A 侧。**",
+ "next": [
+  "① **B 锚位重设（决定性 · 授权已具）**：32 条车道之 B 过渡孔按**对间距 ≥1.06mm（建议 ≥1.40mm）+ 距他网焊盘 ≥0.70mm** 重排（消除 OUT1_P 封锁 + OUT3_N 非法位），F.Cu 扇出吸收位移（球位/接口位仍冻结）",
+  "② A 侧沿用已过位集（15 位 + OUT1_P 换 (91.95,51.35)，最小距 1.400mm）",
+  "③ 合并 32/32 单跑 + 闸 0 违规 ⇒ (a) 见证成立 ⇒ R3 施工（双侧锚位重设 + F 扇出 + 等长同批 + 铺铜重灌 + B 锚位重设报件）",
+  "④ R-B 并行 ILP 求严格上界 <32；⑤ 32 HS 对 + 4 REFCLK 入 movable 之匹配/等长报件"
+ ],
+ "r136_changes": {
+  "tool_sha16": "tools/k2_p4_b2_in5_lane_router_v3.py = ca354062be40b606",
+  "v3_A_candidate_search": "`--a-sites` 支持候选列表 [[x,y],…]（逐位试布）",
+  "v3_hard_src_fix": "hard 模式新增**起点格占用检查**（修「多车道共用起点格」缺陷 ⇒ 消除 0.05mm 级重合）"
+ },
+ "red_lines_ok": [
+  "只读板件",
+  "冻结四源未动（d4e81f64/fb07d25a/dd794c54/0a459839）",
+  "criteria/ 未碰（rev=6）",
+  "l4..l8 逐字节未动",
+  "未派 WORKER",
+  "未写 .omo/supervision/**",
+  "未越阶段"
+ ],
+ "runs": [
+  {
+   "algo": "hard",
+   "cell": 0.1,
+   "failed": [
+    "PCIE_DN_OUT1_P_MCIO"
+   ],
+   "gate": {
+    "clearance_min_mm": 0.172,
+    "endpoint_max_dev_mm": 0.0,
+    "lane_pitch_min_mm": 0.4472,
+    "n_clearance_viol": 0,
+    "n_lane_pitch_viol": 0
+   },
+   "restarts": 120,
+   "routed": "15/16",
+   "tag": "DN-split-120r（R135 基线）"
+  },
+  {
+   "algo": "hard",
+   "cell": 0.1,
+   "failed": [
+    "PCIE_UP_OUT3_N_J2",
+    "PCIE_UP_OUT6_P_J2",
+    "PCIE_UP_OUT7_N_J2"
+   ],
+   "gate": {
+    "clearance_min_mm": 0.6963,
+    "endpoint_max_dev_mm": 0.0,
+    "lane_pitch_min_mm": 0.4472,
+    "n_clearance_viol": 0,
+    "n_lane_pitch_viol": 0
+   },
+   "restarts": 6,
+   "routed": "13/16",
+   "tag": "UP-east-6r+候选位"
+  },
+  {
+   "algo": "hard",
+   "cell": 0.1,
+   "failed": [
+    "PCIE_DN_OUT3_N_MCIO",
+    "PCIE_DN_OUT4_P_MCIO"
+   ],
+   "gate": {
+    "clearance_min_mm": 0.176,
+    "endpoint_max_dev_mm": 0.0,
+    "lane_pitch_min_mm": 0.4472,
+    "n_clearance_viol": 0,
+    "n_lane_pitch_viol": 0
+   },
+   "restarts": 40,
+   "routed": "14/16",
+   "tag": "DN-legal-slots（合法位集重排）"
+  },
+  {
+   "algo": "hard",
+   "cell": 0.1,
+   "failed": [
+    "PCIE_DN_OUT1_P_MCIO"
+   ],
+   "gate": {
+    "clearance_min_mm": 0.172,
+    "endpoint_max_dev_mm": 0.0,
+    "lane_pitch_min_mm": 0.4472,
+    "n_clearance_viol": 0,
+    "n_lane_pitch_viol": 0
+   },
+   "restarts": 40,
+   "routed": "15/16",
+   "tag": "DN-fix1（15 位不动 + OUT1_P 换合法位）"
+  },
+  {
+   "algo": "hard",
+   "cell": 0.1,
+   "failed": [
+    "PCIE_UP_OUT3_N_J2",
+    "PCIE_UP_OUT6_P_J2"
+   ],
+   "gate": {
+    "clearance_min_mm": 0.6963,
+    "endpoint_max_dev_mm": 0.0,
+    "lane_pitch_min_mm": 0.05,
+    "n_clearance_viol": 0,
+    "n_lane_pitch_viol": 2
+   },
+   "note": "该 2 处 0.05mm 重合由「多车道共用起点格」缺陷所致 ⇒ 已在 r136 修（起点占用检查）后不再复现",
+   "restarts": 10,
+   "routed": "14/16",
+   "tag": "UP-east+moved-sites 2nd"
+  }
+ ],
+ "schema": 1,
+ "ts": "2026-09-21T16:1x+08:00",
+ "verdict": "**二值仍未达成**（DN 15/16 · UP 13–14/16 · 合 32 未过）。但**剩余缺口已全部归因到 B 锚位（对间距 0.600mm < 1.06mm · 及个别距焊盘 <0.43）**，该杠杆**已由 #K2-71 Q2/N-3 授权** ⇒ 下一轮 = 「按授权重设 B 锚位 + 重跑」，非新一轮工具升级。闸自洽（#K2-71 §五-2 / 判据 ⑨）保持满足：负余量 0 · 余量 +0.1720～+0.6963 ≥0.100 具名 · 端点偏移 0。"
+}
