@@ -82,10 +82,11 @@ def main():
         for an in anchors:
             if an["net"] in ov:
                 an[key] = tuple(float(x) for x in ov[an["net"]][:2])
+    anchors_all = list(anchors)          # **全锚**（keepout 口径：只过滤「被布车道」，不过滤障碍集）
     if a.groups:
         pre = tuple(x for x in a.groups.split(",") if x)
         anchors = [an for an in anchors if an["net"].startswith(pre)]
-    c_all, own = v3.anchor_keepout(rast, anchors, hw)
+    c_all, own = v3.anchor_keepout(rast, anchors_all, hw)
     fixed_ok = ~base
     G, idx = v3.build_topology(fixed_ok, a.cell)
     ii, jj = np.nonzero(fixed_ok)
