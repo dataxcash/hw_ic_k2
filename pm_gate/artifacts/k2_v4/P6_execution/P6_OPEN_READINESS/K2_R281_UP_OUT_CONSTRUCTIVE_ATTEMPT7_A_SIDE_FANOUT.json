@@ -1,0 +1,53 @@
+{
+ "schema": 1,
+ "artifact": "k2_r281_up_out_constructive_attempt7_a_side_fanout",
+ "ts": "2026-09-22T04:38+0800",
+ "to": "监理",
+ "from": "ENG · ARCHER（监理自动续推 · P4 在阶 · fail-closed）",
+ "authority": "#K2-132 §三(乙) D1 / §四 · #K2-133 §三 N1 · 指令 #14",
+ "anchors": {
+  "frozen_4of4": "未动",
+  "criteria": "rev=6 MATCH（只读）",
+  "l8": "7a5c89913d6e5d0a",
+  "k2": "2538cf7",
+  "owner_gate": 0
+ },
+ "what": "**构造 attempt #7 —— A 侧接入段扇出**：以 R280 之 11 条 (c,Y) 为基，为每 lane 选 A 侧下潜走廊 dx（锚位附近垂直自由）⇒ 交 `exact_gate`。",
+ "measured": {
+  "dx 选取": {
+   "PCIE_UP_OUT0_N_J2": 84.65,
+   "PCIE_UP_OUT0_P_J2": 84.65,
+   "PCIE_UP_OUT1_N_J2": 84.65,
+   "PCIE_UP_OUT1_P_J2": 84.65,
+   "PCIE_UP_OUT2_N_J2": 85.1,
+   "PCIE_UP_OUT2_P_J2": 85.65,
+   "PCIE_UP_OUT3_N_J2": 86.3,
+   "PCIE_UP_OUT3_P_J2": 86.85,
+   "PCIE_UP_OUT4_N_J2": 87.5,
+   "PCIE_UP_OUT4_P_J2": 88.05,
+   "PCIE_UP_OUT5_N_J2": 88.7
+  },
+  "gate": {
+   "endpoint_max_dev_mm": 0.0,
+   "lane_pitch_min_gap_mm": 0.0,
+   "n_lane_pitch_viol": 21,
+   "clearance_min_mm": -0.18,
+   "n_clearance_viol": 5
+  }
+ },
+ "defect_diagnosis": "**贪心「最近自由走廊」选 dx 使多条 lane 收敛到同一走廊**（`0_N/0_P → 84.65`）⇒ 自碰（互距 21 违 · min 0.0）；另有 **5 条 GND 净距违（−0.08/−0.18）**，系**栅格抽样净距不足**（cell 0.01 采样仍漏薄障碍）。",
+ "verdict": "**(a) 见证：仍未取得**。缺陷**已完全定位为两点**：① **A 侧下潜走廊须作「非交叉互异分配」**（当前贪心使多 lane 同走廊）；② **抽样净距须加严**（以 disk 膨胀而非点采样）以消尽 GND 接触。",
+ "next_precise": "**一次**完成：① 把 11 条 A 侧走廊建为**非交叉互异匹配**（顺序保持 · 走廊互距 ≥0.435 · 避 GND 缝合孔）② 全部 `segfree` 判定改为 **disk(0.05) 膨胀**（保守 ≥ 门闸净距）⇒ 复跑 `exact_gate`（新装置）⇒ 见证。",
+ "gate_selfcheck": {
+  "阶段": "P4（在阶）· 未越阶段",
+  "判据": "rev=6 MATCH",
+  "冻结四源": "4/4 未动",
+  "受审板 l8": "7a5c89913d6e5d0a",
+  "owner闸口": 0
+ },
+ "owner_gate": 0,
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "c9f8725745e4553f"
+ }
+}
