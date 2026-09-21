@@ -64,9 +64,11 @@ class Field:
     `In2.Cu` 用于对照。车道线半宽按 `LANE_HW` 取（B.Cu = 0.205/2，其余 0.16/2）。
     """
 
-    def __init__(self, model, hw=None, step=0.10, layer="In5.Cu", movable_nets=()):
+    def __init__(self, model, hw=None, step=0.10, layer="In5.Cu", movable_nets=(), caliber="legacy"):
         self.layer = layer
         self.movable = set(movable_nets)
+        # caliber: legacy = 原口径（req() 直取）；nets_max = 板 netclass **max 规则**（lane↔任意网 ≥0.175）
+        self.caliber = caliber
         self.hw = LANE_HW.get(layer, HW_DEF) if hw is None else hw
         self.step = step
         self.segs = model["segs"][layer]
@@ -114,6 +116,12 @@ class Field:
         dx = np.maximum(np.maximum(x0 - X, 0), X - x1); dy = np.maximum(np.maximum(y0 - Y, 0), Y - y1)
         bad[i0:i1 + 1, j0:j1 + 1] |= (np.hypot(dx, dy) < rad)
 
+    def _req(self, net):
+        r = req(net)
+        if self.caliber == "nets_max":
+            r = max(REQ_PCIE, r)
+        return r
+
     def _build_other(self):
         """其他网铜障碍图。`movable_nets`（= ✓ 可腾挪之缝合孔/走线，如 P3V3/GND 缝合孔）**不计入**，
         用于 #K2-68 §2.4(a)-2『腾挪缝合孔 ⇒ 净出口 ≥ 所需』之只读量化（真腾挪须 apply 后复核参考面）。"""
@@ -122,19 +130,21 @@ class Field:
         for s in self.segs:
             if is_lane(s[5]) or s[5] in self.movable:
                 continue
-            self._seg(bad, s[0], s[1], s[2], s[3], hw + s[4] + req(s[5]))
+            self._seg(bad, s[0], s[1], s[2], s[3], hw + s[4] + self._req(s[5]))
         for v in self.vias:
             if is_lane(v["net"]) or v["net"] in self.movable:
                 continue
-            self._cir(bad, v["x"], v["y"], hw + v["r"] + req(v["net"]))
+            self._cir(bad, v["x"], v["y"], hw + max(v["r"] + self._req(v["net"]), v["drill"] + 0.25))
         for p in self.pads:
             if is_lane(p["net"]):
                 continue
             b = p["box"]
-            self._rect(bad, b[0], b[1], b[2], b[3], hw + req(p["net"]))
+            self._rect(bad, b[0], b[1], b[2], b[3], hw + self._req(p["net"]))
         return bad
 
-    def bad_with(self, anchors, keepout=ANCHOR_KEEPOUT):
+    def bad_with(self, anchors, keepout=None):
+        if keepout is None:
+            keepout = (VIA_R + self.hw + max(REQ_PCIE, REQ_PCIE))
         bad = self.other.copy()
         for (x, y) in anchors:
             self._cir(bad, x, y, keepout)
@@ -423,13 +433,15 @@ def main():
                     help="车道中段所在层（(a) 走 B.Cu · In5 路径走 In5.Cu）")
     ap.add_argument("--movable-nets", default="",
                     help="逗号分隔：视为**可腾挪**之缝合孔/走线网（§2.4(a)-2 只读量化；默认空）")
+    ap.add_argument("--caliber", default="legacy", choices=["legacy", "nets_max"],
+                    help="障碍间隙口径：legacy=req() 直取（历史复现）；nets_max=板 netclass max（lane↔任意网 ≥0.175 + 孔到铜 0.25）")
     ap.add_argument("--json-out", default=None)
     a = ap.parse_args()
     model = json.load(open(a.model))
-    t = Field(model, layer=a.layer, movable_nets=[x for x in a.movable_nets.split(',') if x])
+    t = Field(model, layer=a.layer, movable_nets=[x for x in a.movable_nets.split(',') if x], caliber=a.caliber)
     lanes = lanes_of(model)
     A_cur = [l["A"] for l in lanes]; B_cur = [l["B"] for l in lanes]
-    rep = {"artifact": "k2_p4_b2_in5_capacity_probe_v1", "model": a.model,
+    rep = {"artifact": "k2_p4_b2_in5_capacity_probe_v1", "model": a.model, "caliber": a.caliber,
            "layer": a.layer, "lane_hw_mm": t.hw, "anchor_keepout_mm": t.hw + VIA_R + REQ_PCIE,
            "movable_nets": sorted(t.movable),
            "span_classes_board_actual": span_classes(model),

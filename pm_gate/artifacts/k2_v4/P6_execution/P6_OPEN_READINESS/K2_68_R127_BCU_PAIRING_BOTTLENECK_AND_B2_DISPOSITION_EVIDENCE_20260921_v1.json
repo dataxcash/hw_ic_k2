@@ -1,0 +1,90 @@
+{
+ "artifact": "k2_68_r127_bcu_pairing_bottleneck_and_b2_disposition_evidence",
+ "authority": "#K2-69 §二-3（分段闸）· §五-1 · #K2-68 §2.4(a) · K2-66 计划书 §10.4(a)/(b)/(c)",
+ "b2_disposition_options": {
+  "a_move_anchors": {
+   "cost": "高（U6 与连接器两侧 F 扇出重做 + 等长重调 + 重新布线 + 全 DRC）",
+   "desc": "按探针候选位重排锚孔 + F 侧扇出/等长重布",
+   "risk": "F.Cu 扇出可达性未证 · 位移 3.5–26mm"
+  },
+  "b_span_class": {
+   "cost": "中高",
+   "desc": "改孔 span 类以减少锚孔数（§10.4(b)）",
+   "risk": "受 HDI 阶数/工艺（JLC HDI 盲埋孔 · 阶数≥2 已冻结）约束"
+  },
+  "c_named_exemption": {
+   "cost": "低",
+   "desc": "登记具名豁免：『保留现拓扑（4 via/线）+ 现 span 类下 B2 ≤2/线 不可达』（同 #K2-67 courtyard 先例）· 判据 rev=7 登记",
+   "risk": "放弃 B2 的 via 减半目标（SI/可制造性不受影响：现拓扑 DRC 无 error 级新增）"
+  }
+ },
+ "evidence_files": {
+  "b_board": "/tmp/opencode/w5/b.kicad_pcb f7e3308c12c195bd",
+  "hard_no_stitch": "/tmp/opencode/w5/wo_hard_s7.json 03dbd4974364c553 / wo_hard_s21.json 877dc2cdde7b31b2（16/32）",
+  "hard_with_stitch_move": "/tmp/opencode/w5/wo_hard_stitch.json（18/32）",
+  "probe_fixed_netsmax": "/tmp/opencode/w5/fixed_netsmax.json（32/32）",
+  "probe_reloc_netsmax": "/tmp/opencode/w5/reloc_netsmax.json（32/32 · 位移 3.5–26mm）"
+ },
+ "findings": {
+  "F5_stitch_move_insufficient": {
+   "control": "同参数下**不动缝合孔** = **16/32**（两 seed 同值）",
+   "reading": "缝合孔腾挪仅 **+2 车道** ⇒ 不是充分条件；锚孔笼（0.6mm 列距 < 穿越需 0.905mm）本身即主瓶颈。",
+   "result": "严格分离上限 **18/32**（seed 7 · 40 轮 · 失败优先 rip-up）",
+   "run": "router v2 --algo hard --movable-stitch GND,P3V3（GND/P3V3 之孔·盘不计障碍 = A1 腾挪后之乐观模型）"
+  },
+  "F6_probe_caliber_upgrade": {
+   "change": "k2_p4_b2_in5_capacity_probe_v1.py 增 `--caliber {legacy,nets_max}`（默认 legacy 保历史复现；nets_max = 障碍间隙 max(PCIe85 0.175, netclass(net)) + 孔到铜 0.25）",
+   "fixed_nets_max": "A↔B maxflow = **32/32**（B.Cu · cell 0.40 · conn 4 · anchors 视为可拆）",
+   "reading": "单商品 + 锚孔可拆 ⇒ 32/32 恒成立（**上界口径**）；**不能**作为『可施工』之充分证据。真瓶颈在**配对**与**锚孔是否可动**。",
+   "reloc_nets_max": "重组后 maxflow = **32/32**（A moved 32 · B moved 32）"
+  },
+  "F7_reloc_cost": {
+   "A_move_mm": {
+    "B_j2": {
+     "max": 19.804,
+     "median": 9.895,
+     "min": 3.482,
+     "n": 16
+    },
+    "B_mcio": {
+     "max": 19.291,
+     "median": 12.075,
+     "min": 3.385,
+     "n": 16
+    }
+   },
+   "B_move_mm": {
+    "B_j2": {
+     "max": 26.188,
+     "median": 15.845,
+     "min": 5.351,
+     "n": 16
+    },
+    "B_mcio": {
+     "max": 20.216,
+     "median": 16.086,
+     "min": 1.887,
+     "n": 16
+    }
+   },
+   "probe_caveat": "本器只建模 In5 单层：A/B 锚位之 F.Cu 扇出可达性未建模（位移量中位数 10–13mm ⇒ 须与 F 侧扇出重布同批核，可能收紧可选项）",
+   "reading": "若按探针候选位施工 ⇒ 32 条车道两侧 F 扇出 + 等长/蛇形**全部重做**（远超『锚孔笼』范围）· F.Cu 可行性未证。"
+  }
+ },
+ "headline": "**(a) B.Cu 配对布通之瓶颈 = 『配对守恒 + 锚孔固定』**（非布线器能力）：① 缝合孔腾挪**单独不足**（严格分离硬带 16/32 → 18/32）；② 探针已升级 `--caliber nets_max`（板 netclass **max** 规则 + 孔到铜 0.25）后，`fixed` 与 `reloc` 之**单商品最大流仍 32/32**（= 上界；前提是**锚孔可自由拆装**）⇒ 与配对实测 16–18/32 之差**全部来自『锚孔固定 + 逐网配对』**；③ 官方 `reloc` 段闸虽 **≥32 通过**，但其候选位需把锚孔移动 **3.5–26mm（中位 10–13mm）**（探针自带 caveat：F.Cu 扇出可达性**未建模**）⇒ 已非『锚孔笼微调』而是 **U6/连接器两侧 F 扇出 + 等长全面重排**。⇒ 与计划书 §10.4（line 210）『B2 ≤2 via/线 之真正瓶颈 = U6 扇出锚孔笼 · 出路 = (a) 移锚点 / (b) 改 span 类 / (c) 具名豁免』一致。",
+ "next_steps": [
+  "待监理裁 (a)/(b)/(c)；裁定前不停等：可推进项 = 工具入库/复现脚本固化 + A2 可行性在新几何下复核（若采 (c) 则无需 A2）· 若采 (a) 则按 §二-3 段闸已过之候选位进入 F 扇出重布设计。"
+ ],
+ "recommendation": "**采 (c) 具名豁免**（成本低 · 有 #K2-67 先例 · 不阻塞可制造 Gerber 交付）；(a) 暂不启动（成本/风险与本项目目的不匹配）。**裁定权属监理**（放行范围/判据语义 · 宪法第十一条 · #14⑦）⇒ 已同批提交 PENDING_RULINGS。",
+ "red_lines_ok": [
+  "未改冻结四源",
+  "未改 generator/SPEC/原理图",
+  "criteria/ 只读未碰",
+  "l4..l8 未动",
+  "未派 WORKER",
+  "临时仅 /tmp/opencode",
+  "未越阶段"
+ ],
+ "schema": 1,
+ "ts": "2026-09-21T22:5x+08:00"
+}

@@ -1,0 +1,28 @@
+{
+ "artifact": "PENDING_RULINGS_K2_20260921_v39_b2_disposition",
+ "context": "R3-(a)『B.Cu 信号网 only』路线经复核**不成立**：R3K 工作令 30/32 误配（单商品流当工作令）· 正确间隙口径下配对布通实测上限 16–18/32 · 瓶颈 = **U6 锚孔笼 + 配对守恒**（非布线器能力）。证据：`K2_68_R126_BCU_R3K_MISPAIR_AND_PAIRED_REQUIREMENT_20260921_v1.json`（b05f7a9d9517c587）· `K2_68_R127_BCU_PAIRING_BOTTLENECK_AND_B2_DISPOSITION_EVIDENCE_20260921_v1.json`。",
+ "from": "ENG（ARCHER · R126/R127）",
+ "no_owner_gate": true,
+ "note": "本件属监理自裁面（放行范围/判据语义澄清 · 宪法第十一条 · #14⑦）；**不升级 owner**。\n投递：本文件放入 `P6_OPEN_READINESS/` 即由 sentinel/监理拾取。",
+ "questions": [
+  {
+   "cost_note": "(a) 需移动锚孔 3.5–26mm（探针候选位）+ U6/连接器两侧 F 扇出重做 + 等长重调；F.Cu 可达性未证。",
+   "eng_recommendation": "(c) 具名豁免（成本低 · #K2-67 先例 · 不阻塞可制造交付）· 并请同步 gate 属主纳入 criteria rev=7。",
+   "id": "Q1",
+   "q": "B2（≤2 via/线）之处置：采 (a) 锚孔笼/锚点重排（含 F 扇出 + 等长全面重布）· (b) 改 span 类 · 还是 (c) 具名豁免（登记『现拓扑 + 现 span 类下 ≤2/线 不可达』）？"
+  },
+  {
+   "eng_recommendation": "照准作废。理由：R3K 误配为**可证缺陷**（30/32）；其 32/32 依赖探针口径低估（GND 0.10 vs 实须 0.175）与『车道锚孔视为可拆』。",
+   "id": "Q2",
+   "q": "(a)『信号网 only · 缝合孔不动』路线与 R3K 工作令之**作废**是否照准？（ENG 已按 L2 自裁停止其推进）"
+  },
+  {
+   "eng_recommendation": "建议：l9 = R1E 基线（现拓扑）+ 具名豁免表 + rev=7 判据；A2/布线器 v2/工作令等仅作**可追溯工具与证据**保留，不作 l9 之施工项。",
+   "id": "Q3",
+   "q": "若采 (c)：l9 之验收判据（#K2-69 §六 ③ B2 行 · ① 最大流 ≥32 · ② 探针 32/32）是否改以**现拓扑（R1E 基线）**为锚（即 l9 = l8r3 + courtyard/B2 具名豁免 + criteria rev=7）？"
+  }
+ ],
+ "to": "监理（OpenCode）",
+ "ts": "2026-09-21T22:5x+08:00",
+ "type": "放行范围 / 判据语义 请示（**非 owner 项** · 无 L1/系统/账号/预算）"
+}

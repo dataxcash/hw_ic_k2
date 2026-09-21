@@ -649,3 +649,14 @@ V1=车道 A 锚（U6 侧）· V4=车道 B 锚（连接器侧）· 4 via/线
 - **结论与改法（L2 自裁 · 免再问）**：**撤销** (a)『信号网 only』路线 · **作废** R3K 工作令；
   **恢复** #K2-68 §2.4(a)-2 缝合孔腾挪 + #K2-69 Q1 授权之**完整锚孔笼重构**（32 条车道 A/B 过渡孔重排 ≥0.86–0.90mm + 逃逸带 `GND`/`P3V3` 缝合孔腾挪，同报 `ref_plane_continuity`/EMC），
   再以 router v2 **配对**重解 ≥32 ⇒ 几何精确闸 ⇒ apply ⇒ DRC。**A_x↔B_x 配对 = 既有网拓扑之保真约束（非 L1 变更 · owner 闸口 0）**。
+
+### §15.15 **R127 瓶颈定位与 B2 处置请示**（2026-09-21 · 只读 + 工具升级）
+- **证据件**：`K2_68_R127_BCU_PAIRING_BOTTLENECK_AND_B2_DISPOSITION_EVIDENCE_20260921_v1.json`（`b415a53e2112cc47`）· 请示件 `PENDING_RULINGS_K2_20260921_v39_b2_disposition.json`。
+- **F5（缝合孔腾挪不足）**：`router v2 --algo hard --movable-stitch GND,P3V3`（= A1 腾挪后之乐观模型）严格分离上限 **18/32**；不动缝合孔 = **16/32** ⇒ 腾挪仅 +2 ⇒ **锚孔笼本身即主瓶颈**（与 §10.4 line 210 一致）。
+- **F6（探针口径升级）**：`in5_capacity_probe_v1` 增 `--caliber {legacy,nets_max}`（默认 legacy 保历史复现；nets_max = `max(PCIe85 0.175, netclass(net))` + 孔到铜 0.25）。
+  `--mode fixed/reloc --caliber nets_max --layer B.Cu` 之单商品最大流**皆 32/32**——**上界口径**（锚孔视为可拆）⇒ 与配对实测 16–18/32 之差**全部来自『锚孔固定 + 逐网配对』**。
+- **F7（reloc 段闸之真实成本）**：官方 `reloc` 段闸**过（≥32）**，但候选位把锚孔移动 **A 3.4–19.8mm / B 1.9–26.2mm（中位 10–13mm）**，
+  且探针自带 caveat『**F.Cu 扇出可达性未建模**』⇒ 已非『锚孔笼微调』，而是 **U6/连接器两侧 F 扇出 + 等长全面重做**。
+- **基线态（关键）**：R1E 基线 `c.kicad_pcb` kicad-cli DRC = **267**（**error 级仅 3 条** = #K2-67 具名 2×`courtyards_overlap` + 1×`pth_inside_courtyard`；其余全 warning）· `unconnected 0`；R3K 套用后 error 级 **354** ⇒ 进一步佐证 R3K 不可用。
+- **处置三选项**：(a) 重排锚点+F 扇出/等长重做（高成本 · F 侧未证）· (b) 改孔 span 类（中高 · 受 HDI 阶数冻结约束）· (c) **具名豁免 B2**（低 · #K2-67 先例 · **ENG 建议**）。
+  该裁属**放行范围/判据语义** = 监理自裁面（宪法第十一条 · #14⑦）⇒ 已提交 `PENDING_RULINGS`（**非 owner 项**）。
