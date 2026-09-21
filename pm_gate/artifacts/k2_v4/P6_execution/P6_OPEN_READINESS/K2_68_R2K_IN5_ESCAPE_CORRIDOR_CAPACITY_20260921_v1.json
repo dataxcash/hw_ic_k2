@@ -1,0 +1,74 @@
+{
+ "artifact": "k2_68_r2k_in5_escape_corridor_capacity",
+ "authority": "#K2-68 §2.4(a)-2/4 · §三-2",
+ "board": "/tmp/opencode/w3/c.kicad_pcb (R1E)",
+ "boxes": {
+  "U6": [
+   80,
+   97,
+   48,
+   58
+  ],
+  "conn_south": [
+   50,
+   70,
+   45,
+   62
+  ],
+  "east": [
+   124,
+   143,
+   38,
+   62
+  ],
+  "longrun": [
+   23,
+   143,
+   36.0,
+   45.0
+  ]
+ },
+ "conclusion": "干路走廊充裕：U6 扇出场→长走区 **47** · →东侧连接器区 **53** · 长走区→连接器南侧 **40**（皆 ≥32）⇒ **瓶颈不在干路**；结合 R2H/R2L（现锚位下 A↔B 上界 ≤19）⇒ 瓶颈 = **锚孔局部逃逸** ⇒ 完整锚孔笼重构为 In5 路径之必经前置。",
+ "detail": {
+  "U6field->east_conn": {
+   "slots": 27405,
+   "snk_cells": 2709,
+   "src_cells": 663
+  },
+  "U6field->east_conn_withAnchors": {
+   "slots": 27216,
+   "snk_cells": 2652,
+   "src_cells": 555
+  },
+  "U6field->longrun_run": {
+   "slots": 27405,
+   "snk_cells": 6216,
+   "src_cells": 663
+  },
+  "U6field->longrun_withAnchors": {
+   "slots": 27216,
+   "snk_cells": 6204,
+   "src_cells": 555
+  },
+  "longrun->conn_south": {
+   "slots": 27405,
+   "snk_cells": 1380,
+   "src_cells": 6216
+  }
+ },
+ "method": "In5 自由空间 · 0.4mm 槽位（车道间距门）· 节点容量 1 · 8 邻接 · 区域→区域最大流（上界）· 锚孔 keepout『忽略』= 可重排假设",
+ "red_lines_ok": [
+  "只读",
+  "未改板/件",
+  "未改冻结四源/criteria/l4..l8/网表/SPEC",
+  "未派 WORKER",
+  "未越阶段"
+ ],
+ "results": {
+  "U6field->east_conn": 53,
+  "U6field->east_conn_withAnchors": 53,
+  "U6field->longrun_run": 47,
+  "U6field->longrun_withAnchors": 47,
+  "longrun->conn_south": 40
+ }
+}
