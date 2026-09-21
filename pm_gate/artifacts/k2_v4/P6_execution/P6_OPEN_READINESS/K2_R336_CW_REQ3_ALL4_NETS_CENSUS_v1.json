@@ -1,0 +1,91 @@
+{
+ "schema": 1,
+ "artifact": "k2_r336_cw_req3_all4_nets_census_v1",
+ "to": "监理",
+ "from": "ENG · ARCHER",
+ "nature": "**C-w 要件③（端点/球位不动）之 4 网逐网核（只读）** —— 必要条件 + 存在性；**非申报**",
+ "neck_window": [
+  93.0,
+  44.0,
+  112.0,
+  58.0
+ ],
+ "cell_mm": 0.02,
+ "hw_mm": 0.08,
+ "per_net": {
+  "DS320_STRAP_B_ADDR1_7-0": {
+   "n_seg_in_neck": 11,
+   "n_via": 2,
+   "n_via_in_neck": 2,
+   "ports": [],
+   "neck_is_midrun": false,
+   "reroute_exists": null,
+   "reroute_len_mm": null
+  },
+  "DS320_STRAP_B_ADDR0_15-8": {
+   "n_seg_in_neck": 0,
+   "n_via": 2,
+   "n_via_in_neck": 1,
+   "ports": [],
+   "neck_is_midrun": false,
+   "reroute_exists": null,
+   "reroute_len_mm": null
+  },
+  "PERSTA#": {
+   "n_seg_in_neck": 13,
+   "n_via": 6,
+   "n_via_in_neck": 0,
+   "ports": [
+    [
+     83.8,
+     50.5
+    ],
+    [
+     117.9,
+     55.6
+    ]
+   ],
+   "neck_is_midrun": true,
+   "reroute_exists": true,
+   "reroute_len_mm": 36.58
+  },
+  "I2C1_SDA": {
+   "n_seg_in_neck": 3,
+   "n_via": 9,
+   "n_via_in_neck": 1,
+   "ports": [
+    [
+     92.5,
+     51.84
+    ]
+   ],
+   "neck_is_midrun": false,
+   "reroute_exists": null,
+   "reroute_len_mm": null
+  }
+ },
+ "finding": {
+  "neck_is_midrun_nets": [
+   "PERSTA#"
+  ],
+  "reroute_exists_nets": [
+   "PERSTA#"
+  ],
+  "判": "`PERSTA#` 唯一满足『窗内 0 孔 ∧ 端口 2 ∧ 替代绕行存在』⇒ **首选 C-w 对象**；其余 3 网窗内有孔 ⇒ 腾挪须连同孔（**孔位≠球位**，但须逐网给『改线后仍连原端点』证明）。"
+ },
+ "honesty": "依宪法第十三条：要件④ `buildability` 及与 16 lane 之**联合设计**未给 ⇒ **不作数 · 不构成申报**。",
+ "buildability_field": "只读计算：未烙板 · 未改任何实体 ⇒ 不动证明成立；不产出施工图。",
+ "anchors": {
+  "board_sha16": "7a5c89913d6e5d0a",
+  "frozen4": [
+   "d4e81f647be7f980",
+   "fb07d25ac426ff84",
+   "dd794c54f7ce7417",
+   "0a459839e15960b8"
+  ]
+ },
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "95a3acd0b7425650"
+ }
+}
