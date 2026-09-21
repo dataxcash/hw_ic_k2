@@ -1,0 +1,197 @@
+{
+ "artifact": "k2_68_r126_bcu_r3k_mispair_and_paired_requirement",
+ "authority": "#K2-69 §五-1/2（R2 段闸 → Q2 (a) B.Cu 收紧版 · 施工）· §三（Q2 条件准）· #K2-68 §2.4(a)-2/-3/-4",
+ "conclusion": {
+  "l1_boundary": "本件不动**拓扑/接口/信号流向/球重映射**：A_x↔B_x 配对 = 设计既有网拓扑，属**保真约束**（非 L1 变更）；owner 闸口 = 0。",
+  "required": "恢复『锚孔笼 + 逃逸带缝合孔』重构（#K2-68 §2.4(a)-2 · #K2-69 Q1/Q2 已授权 · 免再问）：① 32 条车道 A/B 过渡孔重排（相邻中心距 ≥0.86–0.90mm，避开 U6 逃逸带缝合孔行）；② 逃逸带 GND/P3V3 缝合孔腾挪（同报 ref_plane_continuity / EMC）；③ 以 router v2 配对重解 ≥32；④ 重跑几何精确闸 + kicad-cli DRC（error 仅 #K2-67 具名 · unconn 0 · mask_bridge 0）。",
+  "verdict": "**(a) B.Cu『信号网 only』路线撤销**（其 32/32 为口径伪影）；R3K 工作令**作废**（误配 30/32）。"
+ },
+ "findings": {
+  "F1_workorder_mispair": {
+   "cycles": [
+    [
+     "PCIE_DN_OUT0_N_MCIO",
+     "PCIE_DN_OUT0_P_MCIO"
+    ],
+    [
+     "PCIE_DN_OUT1_N_MCIO",
+     "PCIE_DN_OUT6_N_MCIO",
+     "PCIE_UP_OUT4_P_J2",
+     "PCIE_UP_OUT3_N_J2",
+     "PCIE_UP_OUT5_N_J2",
+     "PCIE_UP_OUT2_P_J2",
+     "PCIE_UP_OUT6_P_J2",
+     "PCIE_UP_OUT6_N_J2"
+    ],
+    [
+     "PCIE_DN_OUT1_P_MCIO",
+     "PCIE_DN_OUT7_N_MCIO",
+     "PCIE_UP_OUT2_N_J2",
+     "PCIE_DN_OUT4_P_MCIO"
+    ],
+    [
+     "PCIE_DN_OUT2_N_MCIO",
+     "PCIE_DN_OUT2_P_MCIO",
+     "PCIE_DN_OUT7_P_MCIO",
+     "PCIE_UP_OUT0_P_J2",
+     "PCIE_DN_OUT4_N_MCIO"
+    ],
+    [
+     "PCIE_DN_OUT3_N_MCIO",
+     "PCIE_DN_OUT3_P_MCIO"
+    ],
+    [
+     "PCIE_DN_OUT5_N_MCIO",
+     "PCIE_UP_OUT0_N_J2",
+     "PCIE_DN_OUT6_P_MCIO"
+    ],
+    [
+     "PCIE_DN_OUT5_P_MCIO"
+    ],
+    [
+     "PCIE_UP_OUT1_N_J2"
+    ],
+    [
+     "PCIE_UP_OUT1_P_J2"
+    ],
+    [
+     "PCIE_UP_OUT3_P_J2",
+     "PCIE_UP_OUT7_N_J2",
+     "PCIE_UP_OUT5_P_J2"
+    ],
+    [
+     "PCIE_UP_OUT4_N_J2"
+    ],
+    [
+     "PCIE_UP_OUT7_P_J2"
+    ]
+   ],
+   "identity_lanes": [
+    "PCIE_UP_OUT4_N_J2",
+    "PCIE_UP_OUT6_N_J2"
+   ],
+   "n_identity": 2,
+   "n_lanes": 32,
+   "n_mispair": 30,
+   "root_cause": "k2_p4_b2_bcu_router_v1.py:maxflow_routes() 单商品最大流 ⇒ 只保证『A 集合↔B 集合』32 条节点不相交路径，抽取时自 A_x 沿残量出边前进、终点落在任意 B_j；『A/B 锚集合间允许配对』是**容量口径**，不得直接当工作令。",
+   "what": "R3K 工作令 `routes[net]` 之末点最近 B 锚 ≠ 本网 B 锚"
+  },
+  "F2_apply_and_drc": {
+   "apply_ledger": "add_runs 814 · add_stubs 64（其中端点 stub 最长 88.19mm）· del_vias 64 · del_lane_tracks 1217 · ZONE_FILLER OK",
+   "board_in": "/tmp/opencode/w3/c.kicad_pcb（R1E 基线 · sha16 fdbcede260424ea7）",
+   "board_out": "/tmp/opencode/w5/b.kicad_pcb（sha16 f7e3308c12c195bd）",
+   "drc_after_R3K": {
+    "by_type": {
+     "clearance": 115,
+     "copper_sliver": 11,
+     "courtyards_overlap": 2,
+     "items_not_allowed": 2,
+     "lib_footprint_issues": 54,
+     "pth_inside_courtyard": 1,
+     "shorting_items": 162,
+     "silk_edge_clearance": 11,
+     "silk_overlap": 148,
+     "track_not_centered_on_via": 39,
+     "tracks_crossing": 72,
+     "via_dangling": 6
+    },
+    "lane_related": 351,
+    "lane_vs_lane": 161,
+    "lane_vs_other": {
+     "DS320_STRAP_B_ADDR0_15-8": 15,
+     "GND": 63,
+     "I2C1_SDA": 71,
+     "I2C2_SCL": 2,
+     "P3V3": 26,
+     "P3V3_AUX": 4,
+     "PCIE_UP4_N": 1,
+     "PCIE_UP4_P": 1,
+     "PCIE_UP5_N": 1,
+     "PCIE_UP5_P": 1,
+     "PCIE_UP6_N": 1,
+     "PCIE_UP6_P": 1,
+     "PCIE_UP7_N": 1,
+     "PCIE_UP7_P": 1,
+     "PERSTA#": 1
+    },
+    "total": 623,
+    "unconnected": 0
+   },
+   "drc_baseline_R1E": {
+    "by_type": {
+     "copper_sliver": 6,
+     "courtyards_overlap": 2,
+     "lib_footprint_issues": 54,
+     "pth_inside_courtyard": 1,
+     "silk_edge_clearance": 11,
+     "silk_overlap": 148,
+     "track_not_centered_on_via": 39,
+     "via_dangling": 6
+    },
+    "lane_related": 0,
+    "lane_vs_lane": 0,
+    "lane_vs_other": {},
+    "total": 267,
+    "unconnected": 0
+   },
+   "reading": "车道相关 351 = 车道互 161（短 53 · 交叉 54 · 间距 54）· GND 63 · I2C1_SDA 71 · P3V3 26 · DS320_STRAP_B_ADDR0_15-8 15 · P3V3_AUX 4 · I2C2_SCL 2 · PERSTA# 1 · PCIE_UP4/5/6/7 各 1-2。`tracks_crossing` 与部分 `shorting_items` 之主因 = **长 stub**（折线末端 → 本网 V4 锚 · 最长 88.19mm）横穿全板；`shorting_items(PCIE_*)` = 车道互短（误配之直接后果）。"
+  },
+  "F3_probe_caliber_errors": {
+   "clearance_measured": "b_drc 报『间距违规 ( 间距 0.1750 mm; 实际 0.1295 mm)』⇒ lane(PCIe85 0.175) ↔ GND(Default 0.1) 之有效间隙 = **0.175**（板 netclass max 规则）",
+   "consequence": "上述两项使 R3K 之『(a) 信号网 only · 缝合孔不动 ⇒ 32/32』成为**口径伪影**（#K2-68 §2.4(a)-2 的缝合孔腾挪并非可有可无）。",
+   "probe_error_1": "k2_p4_b2_in5_capacity_probe_v1.req() 对 GND/I2C*/PERSTA#/PWR_BTN_ISO/DS320_STRAP_* 等返回 0.10（LOW_SPEED/Default）⇒ 障碍膨胀半径偏小 0.075mm ⇒『32/32』容量高估。",
+   "probe_error_2": "Field._build_other() 对 `is_lane(net)` 一律跳过（含**孔**）⇒ 32 条车道之固定 V1(F–B)/V4(F–In2→F–B) 锚孔**从未计入障碍**；但 apply 只删 In5–B / In2–In5 过渡孔，V1/V4 **原位保留**（V4 仅换 span）⇒ 必须参与避让。"
+  },
+  "F4_paired_router_v2": {
+   "gate": "车道两两最小间隙 -0.2050mm（违规 53）· 障碍最小余量 -0.4412mm（违规 79）· 端点最大偏移 0.0000mm（配对守恒 ✓）",
+   "hard": {
+    "iters": 40,
+    "routed_best": "16/32（两 seed 同值）",
+    "seeds": [
+     7,
+     21
+    ],
+    "separation": "≥0.4mm 严格"
+   },
+   "model": "障碍 = B.Cu 其他网铜 + 可腾挪网之孔/盘（仅走线可挪）+ 32 条车道固定锚孔（own 例外）+ 禁布线区；间隙 = max(0.175, req(net)) + 孔到铜 0.25；车道宽 0.205；两两中心距门 0.38；cell 0.2 / stamp R=1（最小中心距 0.4）。",
+   "negotiate": {
+    "iters": 16,
+    "pf": "0.4 → 13107.2（全量 rip-up/轮）",
+    "residual": "361 违规格 · 53 对越距 · 11 对共格（罚系数再增不减 ⇒ 瓶颈为**硬容量**而非参数）",
+    "routed": "32/32"
+   },
+   "tool": "k2/tools/k2_p4_b2_bcu_router_v2.py（新入库 · 配对守恒 · 协商拥塞 + rip-up）"
+  }
+ },
+ "headline": "**R3K 工作令 = 容量见证，不是工作令**：`router v1 --algo maxflow` 系**单商品流**，路径按『首个残量出边』逐条抽取 ⇒ **30/32 网误配**（A_x 接到 B_σ(x)）。套用后 `unconnected=0`（apply 以**长 stub** 把折线末端强行接回本网 V4）但 **kicad-cli DRC 623**（基线 267）· 车道相关 **351**（车道互 **161**）。且其『32/32』所依赖之探针口径**低估间隙**（lane↔GND 实须 0.175，探针取 0.10）并**忽略 32 条车道自身固定锚孔**。在**正确口径 + 配对守恒**下重解（新工具 router v2）：协商软罚 pf 0.4→1.3e4 仍残留 **361 违规格 / 53 对越距**；严格分离（0.4mm 门）实测上限 **16/32**（两 seed 独立同值）⇒ **『锚孔不动 + 缝合孔不动』之前提下 (a) 配对布通不可达 32/32**。⇒ **恢复 #K2-68 §2.4(a)-2 缝合孔腾挪 + #K2-69 Q1 授权之完整锚孔笼重构**（已授权 · 免再问），以正确口径配对重解。",
+ "next_steps": [
+  "① 锚孔笼重构（A/B 过渡孔重排 + 逃逸带缝合孔腾挪）设计与只读段闸（最大流 ≥32 · R2L 口径）；",
+  "② router v2 配对重解 → 几何精确闸（车距 ≥0.38 · 障碍余量 ≥ eff 且下限具名 ≥0.10）→ apply → kicad-cli DRC；",
+  "③ A2（5 信号网改道 · 缝合孔不动）在**新几何**下重做；",
+  "④ stub 细节清理 / §7-3 等长 / R4 复测闸（#K2-69 §六 ①–⑧）/ R5 l9+spec-rev-55（硬前置 criteria rev=7）。"
+ ],
+ "red_lines_ok": [
+  "未改冻结四源",
+  "未改 generator/SPEC/原理图",
+  "criteria/ 只读未碰",
+  "l4..l8 未动",
+  "未派 WORKER",
+  "临时仅 /tmp/opencode",
+  "未越阶段（P5 PENDING_EXTERNAL）"
+ ],
+ "schema": 1,
+ "tools": {
+  "R3K": "K2_68_R3K_BCU_SIGNAL_ONLY_ECO_ROUTE_PLAN_32OF32_20260921_v1.json 2b69a9ca5f0865c7（作废）",
+  "probe": "k2/tools/k2_p4_b2_in5_capacity_probe_v1.py 1e17667caea47e69（req 口径偏低 · 锚孔未计）",
+  "router_v1": "k2/tools/k2_p4_b2_bcu_router_v1.py bc13e5fbec2f613e（误配抽取）",
+  "router_v2": "k2/tools/k2_p4_b2_bcu_router_v2.py 923d63bd3498983a（新）"
+ },
+ "ts": "2026-09-21T21:3x+08:00",
+ "wip": {
+  "R1E": "/tmp/opencode/w3/c.kicad_pcb fdbcede260424ea7",
+  "R3K_apply": "/tmp/opencode/w5/b.kicad_pcb f7e3308c12c195bd（中间态 · 未落库）",
+  "router_v2_hard_s21": "/tmp/opencode/w5/wo_hard_s21.json 877dc2cdde7b31b2",
+  "router_v2_hard_s7": "/tmp/opencode/w5/wo_hard_s7.json 03dbd4974364c553",
+  "router_v2_negotiate_out": "/tmp/opencode/w5/wo_v2.json 29d099ead0d83488"
+ }
+}
