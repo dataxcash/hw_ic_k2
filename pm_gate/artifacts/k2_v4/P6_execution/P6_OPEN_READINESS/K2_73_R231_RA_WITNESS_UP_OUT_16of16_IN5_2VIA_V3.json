@@ -1,0 +1,86 @@
+{
+ "anchors": {
+  "A": "sites_a_up_v2.json",
+  "A_cage_sha16": "608a1b04c048fa1c",
+  "B": "R149_b_alloc_s2.00.json（UP 侧不改）"
+ },
+ "artifact": "k2_p4_b2_RA_WITNESS_UP_OUT_16of16_IN5_2VIA_v3",
+ "convention": "自报 sha16 按 #K2-72 §五 约定 B（可复算 · 不内嵌自身 sha16）",
+ "endpoints_seed23": {
+  "A": 0.0,
+  "B": 0.0
+ },
+ "endpoints_seed7": {
+  "A": 0.0,
+  "B": 0.0
+ },
+ "gate_seed23": {
+  "clearance_min_mm": 0.22,
+  "endpoint_max_dev_mm": 0.0,
+  "lane_pitch_min_gap_mm": 0.4472,
+  "lane_pitch_min_pair": [
+   "PCIE_UP_OUT0_N_J2",
+   "PCIE_UP_OUT0_P_J2"
+  ],
+  "n_lane_pitch_viol": 0,
+  "n_true_crossing_pairs": 0
+ },
+ "gate_seed7": {
+  "clearance_min_mm": 0.22,
+  "endpoint_max_dev_mm": 0.0,
+  "lane_pitch_min_gap_mm": 0.4472,
+  "lane_pitch_min_pair": [
+   "PCIE_UP_OUT0_N_J2",
+   "PCIE_UP_OUT0_P_J2"
+  ],
+  "n_lane_pitch_viol": 0,
+  "n_true_crossing_pairs": 0
+ },
+ "gate_selfcheck": {
+  "owner闸口": 0,
+  "冻结四源": "未动",
+  "判据": "criteria/ rev=6 MATCH（只读未碰）",
+  "外部前置": "1（criteria rev=7 · gate 属主）",
+  "待裁": 0,
+  "阶段": "P5 PENDING_EXTERNAL（未越阶段）"
+ },
+ "method": "**清尾法（三步）**：① v6（DN 铜入障碍）全网自由解（rout=rmin=0.44，40 迭代，两 seed 同解）⇒ 残 2 对违规（2_N×4_N 0.4mm 近距 · 3_N×7_P 真交叉）② **pin 14**（`pin_r44_free_3N7P.json`：钉住 14 条非冲突条 + 2_N/4_N）**只重布 3_N/7_P** ⇒ 真交叉消除 ③ **亚格窗口位移**（4_N 顶点 13,14 上移 0.05mm）⇒ 2_N×4_N 0.4→0.4472 ⇒ **真闸 0**",
+ "model": {
+  "board_layer": "In5.Cu",
+  "cell_mm": 0.1,
+  "lane_w_mm": 0.16,
+  "margin_mm": 0.1,
+  "note": "互斥半径 0.44 ≥ 闸口径 0.435（不放松判据）",
+  "obstacle_model": "**DN_OUT 车道铜入障碍**：LANE_PREFIX 收窄为 ('PCIE_UP_OUT',) ⇒ PCIE_DN_OUT*_MCIO 之 l8 铜（In5 398 段 · 16 网）连同一切非 UP、非 movable 铜均为硬障碍（#K2-73 规定 DN 保 l8 铜）",
+  "pitch_eff_mm": 0.435,
+  "rmin_mm": 0.44,
+  "rout_mm": 0.44
+ },
+ "next": "转 #K2-73 §七-2 施工：apply_up（A 笼 sites_a_up_v2 + 本解 + 子步骤 F 掩码重布）⇒ C-w ⇒ ZONE_FILLER ⇒ DRC 0/0 ⇒ R4",
+ "referenced_sha16": {
+  "/tmp/opencode/archer/ortho2_run_v6.py": "71ce355cb6378c8e",
+  "/tmp/opencode/archer/pin_r44_free_3N7P.json": "a0fd0f9d3041ae69",
+  "/tmp/opencode/archer/sites_a_up_v2.json": "608a1b04c048fa1c",
+  "/tmp/opencode/archer/wo_r44_3N7P_s23.json": "7d6bea4307cbecc7",
+  "/tmp/opencode/archer/wo_r44_3N7P_s7.json": "12886a8da582ae9c",
+  "tools/k2_p4_b2_in5_lane_router_v3.py": "98ad53eb958d67a5",
+  "tools/k2_p4_b2_true_gate_v1.py": "8ea777b251e93c9d"
+ },
+ "superseded_by": "K2_73_R231_RA_WITNESS_UP_OUT_16of16_IN5_2VIA_V4.json（B 锚口径更正为板载实位 ⇒ 5 网 unconnected 消除）",
+ "tick": "R231（承 #K2-73 §七-1/2 · 补 R230 缺口：DN 车道铜入障碍）",
+ "true_gate_seed23": {
+  "min_exact_pair_mm": 0.4472,
+  "n_pairs_below_pitch": 0,
+  "n_pairs_true_crossing": 0,
+  "pitch_req_mm": 0.435,
+  "tool": "k2_p4_b2_true_gate_v1.py（唯一见证口径 · 含真交点）"
+ },
+ "true_gate_seed7": {
+  "min_exact_pair_mm": 0.4472,
+  "n_pairs_below_pitch": 0,
+  "n_pairs_true_crossing": 0,
+  "pitch_req_mm": 0.435,
+  "tool": "k2_p4_b2_true_gate_v1.py（唯一见证口径 · 含真交点）"
+ },
+ "verdict": "**作废（superseded by V4）**：原判『成立』仅对 R149_b 拟合锚成立；该锚与板载 B 孔偏离致 5 网物理脱离 ⇒ DRC unconnected 6。真闸几何本身 0 违规（min 0.4472）· 但**不可制造**，故本件作废。"
+}

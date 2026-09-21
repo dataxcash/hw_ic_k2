@@ -1,0 +1,111 @@
+{
+ "anchors": {
+  "A": "sites_a_up_v2.json",
+  "A_cage_sha16": "608a1b04c048fa1c",
+  "B": "sites_b_board_v1.json（**板载 B 孔实位** · 16 锚 · 由 model dump lane_anchors 提取）",
+  "B_caliber_selfruling": "L2 自裁（过孔策略/口径）：R149_b_alloc_s2.00.json 之『逐网最近拟合』对 12 网偏 0.196mm、对 5 网偏 0.396–1.802mm（1_P 1.397 · 3_N 0.594 · 3_P 1.802 · 4_P 0.396 · 7_P 0.798）；按该拟合值布 In5 车道 ⇒ 5 网末端与 B 孔物理脱离 ⇒ DRC unconnected 6 项。**B 孔为该批不变之连接器侧端子（#K2-73 §七-2『UP 批 In5-only』）**，故路由模型必须以板载实位为 B 锚。"
+ },
+ "applied_evidence": {
+  "board": "l9_up_r231b.kicad_pcb（apply_up_v1 · in= l8 · A 笼 sites_a_up_v2 · 22 张 In5 段 … ledger add_runs=2531）",
+  "drc_vs_baseline": {
+   "l8 基线": "viol 170 全 warning · error 0 · unconnected 0",
+   "剩余 error 分类": {
+    "clearance": 101,
+    "copper_edge_clearance": 16,
+    "hole_clearance": 11,
+    "items_not_allowed": 12,
+    "shorting_items": 134,
+    "solder_mask_bridge": 67,
+    "tracks_crossing": 13
+   },
+   "旧 l9_up（R230 解）": "error 457 · unconnected 4",
+   "本次 l9_up_r231b": "error 354 · unconnected **1** · warning 257"
+  }
+ },
+ "artifact": "k2_p4_b2_RA_WITNESS_UP_OUT_16of16_IN5_2VIA_v4",
+ "convention": "自报 sha16 按 #K2-72 §五 约定 B（可复算 · 不内嵌自身 sha16）",
+ "endpoints_seed23": {
+  "A": 0.0,
+  "B": 0.0
+ },
+ "endpoints_seed7": {
+  "A": 0.0,
+  "B": 0.0
+ },
+ "gate_seed23": {
+  "clearance_min_mm": 0.4438,
+  "endpoint_max_dev_mm": 0.0,
+  "lane_pitch_min_gap_mm": 0.4472,
+  "lane_pitch_min_pair": [
+   "PCIE_UP_OUT1_N_J2",
+   "PCIE_UP_OUT2_P_J2"
+  ],
+  "n_lane_pitch_viol": 0,
+  "n_routed": 16,
+  "n_true_crossing_pairs": 0
+ },
+ "gate_seed7": {
+  "clearance_min_mm": 0.4438,
+  "endpoint_max_dev_mm": 0.0,
+  "lane_pitch_min_gap_mm": 0.4472,
+  "lane_pitch_min_pair": [
+   "PCIE_UP_OUT1_N_J2",
+   "PCIE_UP_OUT2_P_J2"
+  ],
+  "n_lane_pitch_viol": 0,
+  "n_routed": 16,
+  "n_true_crossing_pairs": 0
+ },
+ "gate_selfcheck": {
+  "owner闸口": 0,
+  "冻结四源": "未动",
+  "判据": "criteria/ rev=6 MATCH（只读未碰）",
+  "外部前置": "1（criteria rev=7 · gate 属主）",
+  "待裁": 0,
+  "阶段": "P5 PENDING_EXTERNAL（未越阶段）"
+ },
+ "method": "三步清尾：① v6（DN 铜入障碍 · B=板载实位）全网自由解（rout=rmin=0.44 · 40 迭代 · 两 seed 同解）⇒ 残 1 对（1_N×2_P 0.4mm）② 亚格窗口位移（1_N 顶点 143–146 西移 0.05mm）⇒ 0.4→0.4472 ③ 真闸（含真交点）复核 ⇒ 0 违规",
+ "model": {
+  "board_layer": "In5.Cu",
+  "cell_mm": 0.1,
+  "lane_w_mm": 0.16,
+  "margin_mm": 0.1,
+  "note": "互斥半径 0.44 ≥ 闸口径 0.435（不放松判据）",
+  "obstacle_model": "DN_OUT 车道铜入障碍：LANE_PREFIX=('PCIE_UP_OUT',) ⇒ PCIE_DN_OUT*_MCIO l8 In5 铜（398 段 · 16 网）与一切非 UP、非 movable 铜均为硬障碍（#K2-73 规定 DN 保 l8 铜）",
+  "pitch_eff_mm": 0.435,
+  "rmin_mm": 0.44,
+  "rout_mm": 0.44
+ },
+ "next": "① 子步骤 F：F.Cu 扇出以可达域掩码重布（现为直线 stub ⇒ 126 项 error + GND 区被割断 ⇒ 1 项 unconnected）② 车道闸口径补 Edge.Cuts/rule-area/孔盘净距（copper_edge_clearance 16 + items_not_allowed 12 + hole_clearance 11）③ C-w 执行（低速族 + GND/P3V3 缝合孔 · 同报 ref_plane_continuity）④ DRC 0/0 ⇒ R4",
+ "referenced_sha16": {
+  "/tmp/opencode/archer/l9_up_r231b.kicad_pcb": "65707763c2877651",
+  "/tmp/opencode/archer/l9_up_r231b_drc.json": "ad3ae6e596a0a3d5",
+  "/tmp/opencode/archer/ortho2_run_v6.py": "71ce355cb6378c8e",
+  "/tmp/opencode/archer/sites_a_up_v2.json": "608a1b04c048fa1c",
+  "/tmp/opencode/archer/sites_b_board_v1.json": "d3accce113dd7564",
+  "/tmp/opencode/archer/wo_up_b2_fixed_s23.json": "eb3ee16aa64888ff",
+  "/tmp/opencode/archer/wo_up_b2_fixed_s7.json": "5b56f88bd36dcb9d",
+  "tools/k2_p4_b2_in5_apply_up_v1.py": "9926e6f6163190ee",
+  "tools/k2_p4_b2_in5_lane_router_v3.py": "98ad53eb958d67a5",
+  "tools/k2_p4_b2_true_gate_v1.py": "8ea777b251e93c9d"
+ },
+ "supersedes": {
+  "K2_73_R231_RA_WITNESS_UP_OUT_16of16_IN5_2VIA_V3.json": "**作废**（该件 B 锚取 R149_b_alloc_s2.00.json 之逐网拟合值 ⇒ 5 网与板载 B 孔偏离 0.396–1.802mm ⇒ DRC unconnected 6 项 · 不可制造）"
+ },
+ "tick": "R231（承 #K2-73 §七-1/2 · 补 R230 两处缺口：①DN 车道铜入障碍 ②B 锚口径 = 板载实位）",
+ "true_gate_seed23": {
+  "min_exact_pair_mm": 0.4472,
+  "n_pairs_below_pitch": 0,
+  "n_pairs_true_crossing": 0,
+  "pitch_req_mm": 0.435,
+  "tool": "k2_p4_b2_true_gate_v1.py"
+ },
+ "true_gate_seed7": {
+  "min_exact_pair_mm": 0.4472,
+  "n_pairs_below_pitch": 0,
+  "n_pairs_true_crossing": 0,
+  "pitch_req_mm": 0.435,
+  "tool": "k2_p4_b2_true_gate_v1.py（唯一见证口径 · 含真交点）"
+ },
+ "verdict": "**UP_OUT 亚组 R-A 见证成立（v4 · DN 铜入障碍 + B 锚板载实位）**：16/16 · 真闸（含真交点）**0 违规** · min 段距 **0.4472 ≥ 0.435** · 障碍余量 **0.4438 ≥ 0.100** · 端点位移 **0** · 两 seed（7/23）各自复现 · 自报 sha16（wo_up_b2_fixed_s7=5b56f88bd36dcb9d · s23=eb3ee16aa64888ff）"
+}
