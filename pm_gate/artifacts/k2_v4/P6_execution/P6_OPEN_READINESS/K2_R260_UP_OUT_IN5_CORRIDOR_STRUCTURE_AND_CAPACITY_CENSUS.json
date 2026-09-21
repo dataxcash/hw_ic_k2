@@ -1,0 +1,392 @@
+{
+ "F1_separating_line_free_runs": {
+  "consequence": "①/② 模型把『P 跨点 = P 孔位 x』与『N 跨点限于 A 排邻近 13 段』当作**刚性约束** —— 实测二者皆**非绑定**：车道可自 A 排**先南下**（Y>54.88）→ 南通道 → 东通道 → 再于 **x 135.4–142.62 跨越 y=54.88**（F4 槽数 17）⇒ 『A 侧 x 序 ↔ B 侧 x 序次序反转』之顾虑**作废**；16 车道之跨线**不必**集中在 A 排附近。",
+  "free_x_runs": [
+   [
+    22.95,
+    23.2
+   ],
+   [
+    25.1,
+    25.75
+   ],
+   [
+    27.6,
+    28.3
+   ],
+   [
+    32.9,
+    33.85
+   ],
+   [
+    37.15,
+    54.0
+   ],
+   [
+    55.45,
+    55.8
+   ],
+   [
+    57.25,
+    61.2
+   ],
+   [
+    62.65,
+    63.0
+   ],
+   [
+    64.45,
+    82.05
+   ],
+   [
+    83.6,
+    83.75
+   ],
+   [
+    84.4,
+    92.9
+   ],
+   [
+    93.6,
+    93.95
+   ],
+   [
+    94.65,
+    95.15
+   ],
+   [
+    95.85,
+    96.35
+   ],
+   [
+    97.05,
+    97.55
+   ],
+   [
+    98.25,
+    98.75
+   ],
+   [
+    99.45,
+    99.95
+   ],
+   [
+    100.65,
+    101.15
+   ],
+   [
+    101.85,
+    102.35
+   ],
+   [
+    104.2,
+    104.8
+   ],
+   [
+    106.85,
+    107.3
+   ],
+   [
+    108.55,
+    133.25
+   ],
+   [
+    134.35,
+    143.1
+   ]
+  ],
+  "line_y": 54.88,
+  "note": "A 侧可达之跨线点 = 与 A 排(y>=55.2 · x<=103.35) 相邻之 run ⇒ 84.40-92.90 及 93.6..102.35 之窄缝（=①《缝枚举》13 段 + P 点）。**但** y=54.88 在东侧亦自由（108.55-133.25 · 134.35-143.10）——后者属 B 侧（墙北）区，须先经东通道跨越方可达 ⇒ 故它**不是**『A 侧跨线点』，而是『跨线后可用的北区』。"
+ },
+ "F2_binding_geometry": {
+  "forced_detour": "A 排 → **南通道**(y 56–68) → **东通道**(x≈135.4–142.62) → 北区/东厅(y 41–55) → B 锚",
+  "south_to_north_throat": {
+   "found": true,
+   "note": "南通道 ↔ 北区/东厅 之唯一连通口位于 x≈135.4–142.62（逐 y run 见下）；PERSTA# 带 + 缝合孔场把 x 105.6–135.4 之南北向通路封死",
+   "runs_at_y": {
+    "55.5": [
+     [
+      130.0,
+      133.35
+     ],
+     [
+      134.45,
+      143.0
+     ]
+    ],
+    "56.5": [
+     [
+      134.2,
+      134.65
+     ],
+     [
+      135.4,
+      143.0
+     ]
+    ],
+    "57.5": [
+     [
+      130.0,
+      132.15
+     ],
+     [
+      133.2,
+      133.3
+     ],
+     [
+      136.0,
+      143.0
+     ]
+    ]
+   }
+  },
+  "wall_components": {
+   "connector_via_column": {
+    "by_net": {
+     "GND": 17
+    },
+    "n_vias": 17,
+    "note": "连接器焊盘之通孔列（x≈133.8/135.5/136.1）⇒ 北区内东西向隔断",
+    "x_band": [
+     133.2,
+     136.3
+    ],
+    "y_band": [
+     42.0,
+     56.0
+    ]
+   },
+   "persta_band": {
+    "bbox": [
+     108.6,
+     55.6,
+     133.7,
+     56.3
+    ],
+    "n_ins_seg": 7,
+    "net": "PERSTA#",
+    "note": "他网 In5 折线 · 沿 y 55.15–56.10 横扫 x 105.6–133.7 ⇒ 与缝合孔场合为一墙",
+    "segs": [
+     [
+      117.9,
+      55.6,
+      108.6,
+      55.6
+     ],
+     [
+      118.1,
+      55.8,
+      117.9,
+      55.6
+     ],
+     [
+      127.2,
+      55.8,
+      118.1,
+      55.8
+     ],
+     [
+      127.3,
+      55.9,
+      127.2,
+      55.8
+     ],
+     [
+      127.4,
+      55.9,
+      127.3,
+      55.9
+     ],
+     [
+      127.8,
+      56.3,
+      127.4,
+      55.9
+     ],
+     [
+      133.7,
+      56.3,
+      127.8,
+      56.3
+     ]
+    ]
+   },
+   "stitching_via_field": {
+    "bbox": [
+     82.0,
+     48.0,
+     118.0,
+     55.5
+    ],
+    "note": "GND/P3V3 缝合孔场（固定件 · #K2-133 §三 禁当自网拆）"
+   }
+  }
+ },
+ "F3_cut_capacity_census": {
+  "method": "cell-不相交 A-锚集 → B-锚集 最大流（scipy maximum_flow · 节点容量 1 · 8-邻接）；取 cell*sqrt2 < pitch_eff ⇒ 车道互距 >=pitch ⇒ 两道不可能共 cell ⇒ 该最大流 **>= 车道数**（严格上界）。",
+  "results": {
+   "0.15": {
+    "cell_sqrt2": 0.2121,
+    "free_cells": 173434,
+    "max_node_disjoint_paths": 32,
+    "terminals": 32,
+    "valid_upper_bound": true
+   },
+   "0.20": {
+    "cell_sqrt2": 0.2828,
+    "free_cells": 99114,
+    "max_node_disjoint_paths": 32,
+    "terminals": 32,
+    "valid_upper_bound": true
+   },
+   "0.25": {
+    "cell_sqrt2": 0.3536,
+    "free_cells": 64052,
+    "max_node_disjoint_paths": 32,
+    "terminals": 32,
+    "valid_upper_bound": true
+   },
+   "0.30": {
+    "cell_sqrt2": 0.4243,
+    "free_cells": 45052,
+    "max_node_disjoint_paths": 32,
+    "terminals": 32,
+    "valid_upper_bound": true
+   }
+  },
+  "verdict": "各 cell 尺度下最大流均 = **32 = 终端饱和**（16 A + 16 B）⇒ **不存在 <16 之 cell 级割** ⇒ **(b)「容量型/割线型」确证不可得**（把 R259m 之『仅竖直割线』推广到**任意 cell 级割**）。(b) 仅剩『精确计数（MILP/CP-SAT）型』⇒ 须监理具名方法（#K2-131 §三(乙)② / #K2-132 §二(乙)①）。"
+ },
+ "F4_east_passage_capacity": {
+  "edge_clearance_used_mm": 0.3,
+  "free_runs": [
+   [
+    134.2,
+    134.65
+   ],
+   [
+    135.4,
+    142.75
+   ]
+  ],
+  "lane_slots": 17,
+  "note": "东通道自由宽（扣板边 0.3 + 半线宽 0.08）⇒ 车道槽数 >=16 ⇒ **C-w 不必**（与 R259h 一致）",
+  "pitch_eff_mm": 0.435,
+  "usable_width_mm": 7.35,
+  "y": 56.5
+ },
+ "F5_prev_solution_attribution": {
+  "attribution": "4 条未布网之 B 锚全位于**北区远端/西段**（0_N 127.01,43.25 · 0_P 141.22,42.65 · 1_P 127.59,43.85 · 2_P 137.16,46.25）。其失败系**布线序**：先布者占用东通道**外槽**，后布者无位可入 ⇒ 缺者为 **nesting-aware（洋葱层）束布线**，非空间不足。",
+  "failed": [
+   "PCIE_UP_OUT0_N_J2",
+   "PCIE_UP_OUT0_P_J2",
+   "PCIE_UP_OUT1_P_J2",
+   "PCIE_UP_OUT2_P_J2"
+  ],
+  "failed_B_anchors": {
+   "PCIE_UP_OUT0_N_J2": [
+    127.01,
+    43.25
+   ],
+   "PCIE_UP_OUT0_P_J2": [
+    141.22,
+    42.65
+   ],
+   "PCIE_UP_OUT1_P_J2": [
+    127.59,
+    43.85
+   ],
+   "PCIE_UP_OUT2_P_J2": [
+    137.16,
+    46.25
+   ]
+  },
+  "n_routed": 12,
+  "per_lane_len": {
+   "PCIE_UP_OUT1_N_J2": 80.838,
+   "PCIE_UP_OUT2_N_J2": 87.239,
+   "PCIE_UP_OUT3_N_J2": 75.174,
+   "PCIE_UP_OUT3_P_J2": 85.131,
+   "PCIE_UP_OUT4_N_J2": 75.289,
+   "PCIE_UP_OUT4_P_J2": 70.277,
+   "PCIE_UP_OUT5_N_J2": 60.645,
+   "PCIE_UP_OUT5_P_J2": 76.669,
+   "PCIE_UP_OUT6_N_J2": 61.603,
+   "PCIE_UP_OUT6_P_J2": 58.195,
+   "PCIE_UP_OUT7_N_J2": 49.233,
+   "PCIE_UP_OUT7_P_J2": 59.592
+  },
+  "prev_wo": "/tmp/opencode/archer/wo_c_By_dn.json"
+ },
+ "anchors_verified": {
+  "authorized_source": "k2/hw/data/k2_sch.errata-3.yaml = 5dc7b82a901d11c8",
+  "criteria": "rev=6 MATCH (ENG 只读未碰)",
+  "frozen_sources": {
+   "_shared/eda_core/drc_rules.json": "0a459839e15960b8",
+   "k2/hw/data/k2_sch.yaml": "dd794c54f7ce7417",
+   "k2/hw/k2_v4_8L.kicad_pcb": "fb07d25ac426ff84",
+   "k2/hw/k2_v4_8L.l4.kicad_pcb": "d4e81f647be7f980"
+  },
+  "k2_anchor": "537142d",
+  "note": "冻结四源 4/4 未动（sha256sum 复核 · 判据 rev=6 MATCH）",
+  "reviewed_board": "k2/hw/k2_v4_8L.l8.kicad_pcb = 7a5c89913d6e5d0a"
+ },
+ "artifact": "k2_r260_up_out_in5_corridor_structure_and_capacity_census",
+ "authority": "《整改计划》P4 · handoff §7.6（无可动项 ⇒ 造活/在阶测量）· #K2-133 O-4（不新增待裁锚）· #K2-132 §三.5（③④ 未获 C-B2UP-1 限期 ⇒ 不重跑布线器）· 宪法第三条",
+ "bbox": [
+  22.95,
+  32.95,
+  143.05,
+  79.05
+ ],
+ "board": "k2/hw/k2_v4_8L.l8.kicad_pcb",
+ "caliber": {
+  "hw": 0.08,
+  "keepout": 0.53,
+  "margin": 0.1,
+  "own_copper": "excluded (no-move 全转)",
+  "pitch_eff": 0.435
+ },
+ "cell_mm": 0.05,
+ "conclusions": [
+  "C1 ①/②『缝/指派』非绑定：y=54.88 跨线在东侧亦自由 ⇒ 跨线点位置自由度大 ⇒ 次序反转顾虑作废。",
+  "C2 绑定几何 = 缝合孔场(x82–118,y48–55.5) + PERSTA# In5 带(8 段 · y55.15–56.10 · x105.6–133.7) + 连接器通孔列(x≈133.2–136.3) ⇒ 强制绕行（南通道→东通道→北区/东厅）。",
+  "C3 东通道可用宽 ≈ 见 F4 ⇒ 车道槽 >=16 ⇒ **C-w 不必**（不申报 · 与 R259h 一致）。",
+  "C4 (b) 容量型/割线型确证不可得（F3 任意 cell 级割 >=32）⇒ (b) 仅剩精确计数型（须监理具名方法）。",
+  "C5 卡点 = **同时性/束布线之实现能力（C-B2UP-1）**；建议方法 = **nesting-aware（洋葱层）构造**（见 next_stage_plan）。"
+ ],
+ "design": {
+  "copper_edge_clearance": 0.3,
+  "hole_clearance": 0.25,
+  "hole_to_hole": 0.25
+ },
+ "from": "ENG · ARCHER（应监理自动续推 · P4 在阶 · 造活/在阶测量）",
+ "kb_note": "本件为**在阶测量/归因**（非待裁请求 · **不含新待裁锚** · 承 #K2-133 O-4）；既有待裁 3 条（C-B2UP-1 限期 / (b) 具名方法 / rev=7 落点）不变。",
+ "method": "只读几何测量（cell 0.05 · 物理口径 keepout 0.5300 = hw0.08+0.35+margin0.100 · 自网全转口径）· 零重跑布线器 · 零烙板 · 零改件 · 输入=冻结受审板 l8",
+ "next_stage_plan": [
+  {
+   "budget": "并入 #K2-132 §三 之『一次实现、一次交付』（不新增实现次数）",
+   "id": "P-1",
+   "item": "③④ 一次实现（**待监理给 C-B2UP-1 限期/口径** · 承 #K2-132 §三 · handoff §7.2）",
+   "method": "nesting-aware 洋葱层构造（构造式 · 非扫描 · 非有界搜索）：(a) 定序：以 A 排 x 序 ⇄ 南通道 y 层序（组合梳状规则：最西 A 锚 → 最外/最深通道层）；(b) 东通道 x 槽按 nesting 递增分配（内→外）；(c) 北区/东厅按 nesting 依次西进至 B 锚；(d) 模型须含：自网 In2–In5 盲孔切除（全转）· Edge.Cuts 0.300 约束；(e) 交付 (a) 16/16 见证 + buildability.mode='no_move' 或 (b) 严格证书。"
+  },
+  {
+   "gate": "落库后判定器 19/19 @bump 件",
+   "id": "P-2",
+   "item": "D2 同批落库（rev=7 + spec-rev-55 + l9 + 网表 bump 新件 + 具名豁免表）"
+  },
+  {
+   "gate": "P4 全绿方可下 P5",
+   "id": "P-3",
+   "item": "l9 收口后 R4 复测闸（19 维 + ②-UP/②-DN + ref_plane_continuity + 等长/3W/85Ω）"
+  }
+ ],
+ "owner_gate": 0,
+ "reproduce": "PYTHONPATH=$PWD/AppDir/shared/lib/python3.11/dist-packages AppDir/usr/bin/python3.11 k2/tools/k2_p4_b2_board_in5_model_dump_v1.py <board> /tmp/opencode/archher_model.json ; python3 k2/tools/k2_p4_b2_in5_corridor_structure_census_v1.py --board <board> --out <out.json> --dump-py $PWD/AppDir/usr/bin/python3.11",
+ "schema": 1,
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "35e3b4e76eadc2be"
+ },
+ "to": "监理",
+ "ts": "2026-09-22T01:58+0800"
+}
