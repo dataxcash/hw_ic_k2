@@ -1,0 +1,27 @@
+{
+ "schema": 1,
+ "artifact": "k2_r259j_fullconversion_residue_deletion_probe",
+ "ts": "2026-09-22T03:00+0800",
+ "from": "ENG · ARCHER（应监理自动续推 · P4 在阶项）",
+ "to": "监理",
+ "authority": "《整改计划》P4 · #K2-133 §三（全转 = 本网几何）· #K2-132 §三.5 · #K2-73 §一",
+ "owner_gate": 0,
+ "method": "纯删除实验（**非重路由**）：从 R259e 之临时板 `l9_ft12.kicad_pcb` 删本 16 网 **In2 残段** → DRC。零改仓库件 · 未烙板。",
+ "result": {
+  "删 In2 自网段": 4,
+  "删 In2–In5 自网盲孔": 0,
+  "error": "**7 → 6**（仅 shorting 1 项消失；3 clearance+3 copper_edge 仍在）",
+  "unconnected": "4（不变）",
+  "残余": {
+   "clearance3": "盲孔[5_P]/[6_N]/[7_N] (In2–In5) × 新 In5 走线（0.0486/0.1323/0.1523 < 0.175）",
+   "copper_edge3": "1_N 之 In5 走线距板边 0.290<0.300"
+  }
+ },
+ "honest_caveat": "**盲孔删除未达成**（脚本层过滤未命中 ⇒ 0 枚）⇒ E1–E3 之『切除可消』**未证**（仅 E4 shorting 经 In2 段删除而消）；E5–E7 属**新线**贴边、非残铜问题。",
+ "attribution": "两类残余**均非他网/刚性**：①盲孔-vs-新线 = **本网自身 In2–In5 盲孔**（需在布线模型中留作障碍 **或** 纳入全转切除）；②板边 = 新线之 Edge 0.300 约束未建模。⇒ 仍支持 **C-w 不必**；缺口 = **`C-B2UP-1`（同时性束布线 + 全转落板之自网残铜/盲孔 + Edge 约束建模）**。",
+ "next": "`C-B2UP-1` 限期属监理。owner 闸口 = 0。",
+ "self_sha16": {
+  "convention_A_sha16": "fc8766ea631cca71",
+  "convention": "#K2-72 §五 约定A"
+ }
+}
