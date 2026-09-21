@@ -1,0 +1,42 @@
+{
+ "schema": 1,
+ "artifact": "k2_r282_up_out_constructive_attempt8_a_fanout_disk_fix",
+ "ts": "2026-09-22T04:46+0800",
+ "to": "监理",
+ "from": "ENG · ARCHER（监理自动续推 · P4 在阶 · fail-closed）",
+ "authority": "#K2-132 §三(乙) D1 / §四 · #K2-133 §三 N1 · 指令 #14",
+ "anchors": {
+  "frozen_4of4": "未动",
+  "criteria": "rev=6 MATCH（只读）",
+  "l8": "7a5c89913d6e5d0a",
+  "k2": "46f2159",
+  "owner_gate": 0
+ },
+ "what": "**构造 attempt #8 —— R281 两点修正之落地**：① `segfree` 全部改为 **disk(0.05) 膨胀**判定（消薄障碍漏检）② A 侧走廊改**非交叉递增分配**（dx_k ≥ dx_{k-1}+0.435）⇒ 交 `exact_gate`。",
+ "result": {
+  "修正①（净距加严）": "**净距违例 = 0**（min **+0.005** ✓）—— **GND 接触问题已消除并验证**",
+  "修正②（非交叉走廊）": "贪心递增仅得 **4/11** 条走廊（`0_N,0_P,1_N,1_P`；`3_N,3_P,4_N,4_P,5_N,5_P` 未分到 ≥prev+0.435 之走廊）",
+  "gate": {
+   "endpoint_max_dev_mm": 0.0,
+   "clearance_min_mm": 0.005,
+   "n_clearance_viol": 0,
+   "lane_pitch_min_gap_mm": 0.175,
+   "n_lane_pitch_viol": 2,
+   "n_routes": 4
+  }
+ },
+ "verdict": "**(a) 见证：仍未取得**。但 **R281 之缺陷①（净距抽样）已彻底修复并验证（净距违例 0）**；**唯一剩余项 = A 侧走廊的「非交叉互异」分配**（贪心递增足够性不足，须**精确匹配**）。",
+ "next_precise": "**A 侧走廊精确分配**：把 11 条走廊建为**保序匹配**（dx_1<…<dx_11 · 相邻 ≥0.435 · 各自垂直自由（disk 膨胀）· 锚排 stub 自由），**一次精确求解**（区间/DP）⇒ 复跑 `exact_gate`（新装置）⇒ 见证。",
+ "gate_selfcheck": {
+  "阶段": "P4（在阶）· 未越阶段",
+  "判据": "rev=6 MATCH",
+  "冻结四源": "4/4 未动",
+  "受审板 l8": "7a5c89913d6e5d0a",
+  "owner闸口": 0
+ },
+ "owner_gate": 0,
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "c18d6d910fae8d36"
+ }
+}
