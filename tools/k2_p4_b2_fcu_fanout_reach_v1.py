@@ -184,6 +184,10 @@ def main():
                 return best[1]
         return 0
 
+    if a.npz:
+        np.savez_compressed(a.npz, lab=lab.astype(np.int32), X0=np.float64(rast.X0),
+                            Y0=np.float64(rast.Y0), cell=np.float64(a.cell),
+                            NX=np.int64(rast.NX), NY=np.int64(rast.NY))
     rep = {"artifact": "k2_p4_b2_fcu_fanout_reach_v1", "model": a.model, "cell_mm": a.cell,
            "hw_fcu_mm": HW_FCU, "movable_nets": sorted(movable), "movable_stitch": sorted(mstitch),
            "movable_copper": sorted(mcopper),
