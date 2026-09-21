@@ -45,10 +45,11 @@
   "tools/k2_p4_b2_in5_lane_router_v3.py": "f8e3be7a719ea504（**闸双计修正** + --margin/--movable-copper + PAD_EXTRA 折角安全）"
  },
  "next": [
-  "① DN 收口：OUT1_P 一例 —— 换 restarts 种子/顺序（该车道在 split 集下 60 轮未过）或微调其 A 锚 1 格",
-  "② UP 组同法（Q2）：UP 16 锚重设（可向西/东错开 + 两带分摊）后重跑；当前 32 网格布局下 UP 14/16 失败 ⇒ 组间空间未分离",
-  "③ R-B（并行 · 本轮未完成）：ILP/分支定界求严格上界；几何守恒论证仍缺严格化",
-  "④ 新条目报件已附（32 条 HS 对 + 4 REFCLK 入 movable · 若真移须报匹配/等长复核）"
+  "① DN 收口 1 条（PCIE_DN_OUT1_P）· UP 收口 3 条（OUT3_N/OUT6_P/OUT7_N）：其 A 锚微调 1 格 / 加大锚距 / 换序即可（本轮 120 轮证明非容量问题）",
+  "② UP 组锚位重设（当前 y54.30/55.80 网格）⇒ 参照 DN 之 split 设计放宽行距",
+  "③ 合并 32 条：两组同时收口后跑单次 32/32 并出闸 ⇒ 过则 (a) 见证成立",
+  "④ R-B（并行 · 本轮未完成）：ILP/分支定界求严格上界 <32",
+  "⑤ 新条目报件（32 条 HS 对 + 4 REFCLK 入 movable）· 若真移须报匹配/等长复核"
  ],
  "red_lines_ok": [
   "只读板件",
@@ -75,7 +76,8 @@
     "n_lane_pitch_viol": 0
    },
    "groups": "PCIE_DN_OUT",
-   "restarts": 60,
+   "note": "120 restarts 仍 15/16（唯一失败恒 = PCIE_DN_OUT1_P_MCIO）",
+   "restarts": 120,
    "routed": "**15/16**",
    "tag": "DN-split(Q2)-margin0.100-hard"
   },
@@ -94,9 +96,30 @@
    "restarts": 30,
    "routed": "**18/32**",
    "tag": "ALL32-grid-margin0.100-hard"
+  },
+  {
+   "a_sites": "a_sites_32_grid_v1.json（UP y 54.30/55.80 · x 84.7–95.2 步1.50）",
+   "algo": "hard",
+   "cell": 0.1,
+   "failed": [
+    "PCIE_UP_OUT3_N_J2",
+    "PCIE_UP_OUT6_P_J2",
+    "PCIE_UP_OUT7_N_J2"
+   ],
+   "gate": {
+    "clearance_min_mm": 1.195,
+    "endpoint_max_dev_mm": 0.0,
+    "lane_pitch_min_mm": 0.4472,
+    "n_clearance_viol": 0,
+    "n_lane_pitch_viol": 0
+   },
+   "groups": "PCIE_UP_OUT",
+   "restarts": 60,
+   "routed": "**13/16**",
+   "tag": "UP-only-grid-margin0.100-hard"
   }
  ],
  "schema": 1,
  "ts": "2026-09-21T15:4x+08:00",
- "verdict": "**二值仍未达成**：见证缺 **1 条 DN（OUT1_P）+ 14 条 UP**；证书未出（R-B 本轮未完成）。**但闸已自洽（⑨ 满足）且差口已缩小到 1 条 DN** —— 此为「工具/口径修复」而非「工具再升一版」：v3 版本不变，仅修正其闸内**双计缺陷**并加参数。"
+ "verdict": "**二值仍未达成**：分组上限 = **DN 15/16（120 轮）· UP 13/16（60 轮）**，合 32 需再收 **1(DN) + 3(UP)**；证书未出（R-B 本轮未完成）。**但闸已自洽（⑨ 满足：负余量 0 · 余量 +0.1720/+1.1950 ≥0.100 具名）且差口已缩小到 4 条** —— 属「工具/口径修复」，非「工具再升一版」（v3 版本语义不变，仅修其闸内双计缺陷 + 加参数）。"
 }
