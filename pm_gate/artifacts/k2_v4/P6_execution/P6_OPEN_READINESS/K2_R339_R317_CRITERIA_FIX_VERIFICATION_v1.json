@@ -1,0 +1,51 @@
+{
+ "schema": 1,
+ "artifact": "k2_r339_r317_criteria_fix_verification_v1",
+ "to": "监理",
+ "from": "ENG · ARCHER",
+ "nature": "**R317 两条非缩口径修正之独立复算（只读 · criteria/ 未碰）** —— 用 /tmp 副本判定器实测其后果",
+ "method": {
+  "baseline": "`criteria/adjudicate.py`（rev=6 · sha16 1937a40ae68bc288）原样调用（ENG 只读）",
+  "patched": "同文件拷至 /tmp/opencode/p4m/ 后仅施加 R317 所述两条：(A) `shape==0`（圆形 pad）任意旋转铜形不变 ⇒ 豁免；(B) `kind=='pad_set'`（lib_only 全为空号 F.Paste）并入 `pad_name_set_only` 通道",
+  "inputs": "同 R317 之 5 件测量输入（`P4_MEASUREMENTS_L8_20260922/*.json` · 各含 board_sha16=7a5c89913d6e5d0a）",
+  "criteria_dir": "**未修改**（`criteria/` 只读；副本与 manifest 拷贝均置于 /tmp）"
+ },
+ "readings": {
+  "baseline": {
+   "n_pass": 18,
+   "n_fail": 1,
+   "passed": false,
+   "lib_electrical_level": "电气级差异 **7**（B 口径豁免 0）"
+  },
+  "patched_R317": {
+   "n_pass": 18,
+   "n_fail": 1,
+   "passed": false,
+   "lib_electrical_level": "电气级差异 **1**（原 7，B 口径豁免 **6**） + 仅 pad 名差异 0（原 None，非电气无号 F.Paste 豁免 **0**）"
+  }
+ },
+ "finding": {
+  "判": "**R317 两条修正不足以达 19/19**：电气级差异 **7 → 1**（豁免 6），但仍余 **1** 项 ⇒ **仍 18/19 · passed=False**。",
+  "附带": [
+   "规则③（pad_set / 无号 F.Paste）路径**豁免 0** ⇒ 残余 1 项**不是**该类；须另定性。",
+   "⇒ 若监理按 R317 原案落 rev=7，**预期无法使 P4 全绿**（与 R317/R324 §4 之『落定后预期 19/19』**不符**，属**新证据**）。"
+  ],
+  "未定": "残余 1 项之 **ref 与差异字段** 尚未提取（本轮 instrument 未落入 measure 输出）⇒ 需一轮带明细之复算或由监理直接定其处置。"
+ },
+ "implication": "**建议**：监理在批 rev=7 前，先据本件确认『R317 原案 ≠ 19/19』；残余 1 项须**具名定性**（是几何/电气真差异？抑或第三类非缩口径豁免）后再落判据。",
+ "buildability_field": "本件只读复算：**未改 `criteria/`**（副本在 /tmp）· 未烙板 · 未改生成器/SPEC/原理图 ⇒ 不动证明成立。",
+ "anchors": {
+  "board_sha16": "7a5c89913d6e5d0a",
+  "criteria": "rev=6 MATCH",
+  "frozen4": [
+   "d4e81f647be7f980",
+   "fb07d25ac426ff84",
+   "dd794c54f7ce7417",
+   "0a459839e15960b8"
+  ]
+ },
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "f971b2a350f6aa14"
+ }
+}
