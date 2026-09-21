@@ -131,6 +131,7 @@ def main():
         tasks[nm] = t
     pinned = {}
     pinned_pts = {}
+    pin_block = np.zeros((rast.NX, rast.NY), dtype=bool)
     if a.pin:
         pw = json.load(open(a.pin))
         for nm, rt in pw["routes"].items():
@@ -146,6 +147,8 @@ def main():
                     cells.append(rast.cell(x, y))
             pinned[nm] = cells
             pinned_pts[nm] = [[float(x), float(y)] for (x, y) in pts]
+            for q in range(len(pts) - 1):
+                rast.seg(pin_block, pts[q][0], pts[q][1], pts[q + 1][0], pts[q + 1][1], R, mode="or")
             tasks[nm]["status"] = "PINNED"
         print("  [pin] %d 条车道置为硬约束（%s）" % (len(pinned), a.pin), flush=True)
     bad = [nm for nm, t in tasks.items() if t["status"] != "PENDING"]
@@ -185,7 +188,7 @@ def main():
         D = field_of(others)
         D1 = D[ii, jj]
         pen = K * np.maximum(0.0, rmin - D1) ** 2
-        allow1d = ~t["blk1d"]
+        allow1d = (~t["blk1d"]) & (~pin_block[ii, jj])
         ok = allow1d[e_src] & allow1d[e_tgt]
         w = np.where(ok, e_dl + pen[e_tgt], np.inf)
         s, g = t["s"], t["g"]
@@ -203,7 +206,7 @@ def main():
 
     def route(nm, allowed2d):
         t = tasks[nm]
-        allow1d = allowed2d[ii, jj] & (~t["blk1d"])
+        allow1d = allowed2d[ii, jj] & (~t["blk1d"]) & (~pin_block[ii, jj])
         ok = allow1d[e_src] & allow1d[e_tgt]
         w = np.where(ok, e_dl, np.inf)
         s, g = t["s"], t["g"]
