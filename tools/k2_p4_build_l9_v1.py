@@ -112,6 +112,11 @@ def courtyard_proxy_boxes(b, margin=0.15):
     """既有封装之 pads bbox + margin（= 本构造器所用 courtyard 口径）——供新件避让。"""
     out = []
     for fp in b.GetFootprints():
+        if re.match(r"H\d", fp.GetReference()):
+            c = fp.GetPosition(); cx, cy = MM(c.x), MM(c.y)
+            out.append((("m3keepout", fp.GetReference(), ""),
+                        (cx - 3.0, cy - 3.0, cx + 3.0, cy + 3.0)))
+            continue
         pads = list(fp.Pads())
         if pads:
             bs = [bb(p.GetBoundingBox()) for p in pads]
@@ -159,6 +164,7 @@ def s_fiducial(b, target=3):
         sh.SetCenter(v(x, y)); sh.SetEnd(v(x + 1.3, y)); sh.SetLayer(pcbnew.F_CrtYd)
         sh.SetWidth(IU(0.05)); fp.Add(sh)
         b.Add(fp); boxes.append((("pad", ref, ""), (x-0.5, y-0.5, x+0.5, y+0.5)))
+        boxes.append((("fid_crtyd", ref, ""), (x-1.0, y-1.0, x+1.0, y+1.0)))
         placed.append({"ref": ref, "x": round(x, 2), "y": round(y, 2)})
         if len(placed) >= target:
             break
@@ -479,7 +485,7 @@ def s_testpoints(b, rails=("12V_IN", "P3V3", "P3V3_AUX", "MCU_VDD"),
         for (cx, cy) in pts:
             if cx < X1+1.5 or cx > X2-1.5 or cy < Y1+1.5 or cy > Y2-1.5:
                 continue
-            ball = (cx-r, cy-r, cx+r, cy+r)
+            ball = (cx-0.85, cy-0.85, cx+0.85, cy+0.85)
             if any(n != net and overlap(ball, bx) for n, bx in boxes):
                 continue
             if any(n != net and overlap(ball, bx, tol=0.15) for n, bx in boxes):
@@ -494,7 +500,7 @@ def s_testpoints(b, rails=("12V_IN", "P3V3", "P3V3_AUX", "MCU_VDD"),
                         x = cx + rr*math.cos(math.radians(ang)); y = cy + rr*math.sin(math.radians(ang))
                         if x < X1+1.5 or x > X2-1.5 or y < Y1+1.5 or y > Y2-1.5:
                             continue
-                        ball = (x-r, y-r, x+r, y+r)
+                        ball = (x-0.85, y-0.85, x+0.85, y+0.85)
                         if any(n != net and overlap(ball, bx, tol=0.15) for n, bx in boxes):
                             continue
                         # 直线 x,y -> cx,cy 沿途采样
@@ -513,6 +519,8 @@ def s_testpoints(b, rails=("12V_IN", "P3V3", "P3V3_AUX", "MCU_VDD"),
             x, y, cx, cy = stub
         else:
             x, y = spot
+        if any(overlap((x-0.85, y-0.85, x+0.85, y+0.85), bx) for nm, bx in boxes if nm == "__tp__"):
+            log("tp_skip", {"net": net, "why": "tp-collision"}); continue
         ref = f"TP{len(placed)+1}"
         fp = pcbnew.FOOTPRINT(b); fp.SetReference(ref)
         fp.SetFPID(pcbnew.LIB_ID("", "TestPoint_1.5mm"))
@@ -524,7 +532,7 @@ def s_testpoints(b, rails=("12V_IN", "P3V3", "P3V3_AUX", "MCU_VDD"),
         ls = pcbnew.LSET(); ls.AddLayer(pcbnew.F_Cu); ls.AddLayer(pcbnew.F_Mask)
         pad.SetLayerSet(ls); fp.Add(pad)
         sh = pcbnew.PCB_SHAPE(fp); sh.SetShape(pcbnew.SHAPE_T_CIRCLE)
-        sh.SetCenter(v(x, y)); sh.SetEnd(v(x + 0.75, y)); sh.SetLayer(pcbnew.F_CrtYd)
+        sh.SetCenter(v(x, y)); sh.SetEnd(v(x + 0.85, y)); sh.SetLayer(pcbnew.F_CrtYd)
         sh.SetWidth(IU(0.05)); fp.Add(sh)
         tk = None
         if stub is not None:
@@ -539,6 +547,7 @@ def s_testpoints(b, rails=("12V_IN", "P3V3", "P3V3_AUX", "MCU_VDD"),
                 b.Remove(tk)
             log("tp_skip", {"net": net, "why": f"unconnected {before}->{after}"})
             continue
+        boxes.append(("__tp__", (x-0.85, y-0.85, x+0.85, y+0.85)))
         placed.append({"ref": ref, "net": net, "at": [round(x, 2), round(y, 2)]})
     log("testpoint", {"placed": placed, "n": len(placed)})
 

@@ -1,0 +1,70 @@
+{
+ "artifact": "k2_66_l9_increment3_status",
+ "schema": 1,
+ "ts": "2026-09-21T09:44:29.964975+08:00",
+ "session_label": "K2-2026-09-21 · R108(续5) · #K2-66 l9 增量3（新件避让 → courtyard 6→2）+ C2 依据 + B2 计划",
+ "builder": {
+  "path": "k2/tools/k2_p4_build_l9_v1.py",
+  "sha16": "a8326cdc24f784e1"
+ },
+ "l9_drc": {
+  "kicad-cli": "totals 272 · unconnected 0 · silk_over_copper 0 · courtyards_overlap 2 · clearance 1 · silk_overlap 149 · lib_footprint_issues 54 · solder_mask_bridge 3 · pth_inside_courtyard 1",
+  "note": "courtyards_overlap 6→2（仅 U1↔J9 / U1↔J13 = 既有真实 DFA 间距不足）；新件重叠 4→0"
+ },
+ "gate_status": {
+  "①": "✅ 3",
+  "②": "✅",
+  "③": "silk_over_copper 0 ✅ · courtyard 覆盖 100% ✅ · 无重叠 ✗（2 · 既有）",
+  "④": "90° 0 ✅ · HS vias ✗（B2）",
+  "⑤": "✅ 53.19/56.58",
+  "⑥": "边圆角 ✅ · C2 依据 ✅（derived）",
+  "⑦": "✅"
+ },
+ "delivered_this_increment": [
+  {
+   "doc": "docs/K2-66-MOUNTING-HOLE-MECHANICAL-BASIS-v1.md",
+   "id": "C2",
+   "note": "ENG derived 依据（力偶就近止挡）+ 如实披露（非外部规范；有 enclosure 图则取代）；不判缺陷"
+  },
+  {
+   "doc": "docs/K2-66-B2-LANE-VIA-REDUCTION-PLAN-v1.md",
+   "id": "B2",
+   "note": "实测(32 车道×4 via · F→In2→In5→B) + 可达性(≤2 换层) + 执行(用 k2_p4_mroute_v1.py + via 计数约束) + 验收/禁作弊"
+  },
+  {
+   "fix": "新件(FID/TP)避让：既有 courtyard 代理 + H* 按 SPEC m3_keepout 3.0 + 新件互斥 ⇒ courtyard 重叠 4→0"
+  }
+ ],
+ "remaining": [
+  {
+   "id": "③-2",
+   "root": "U1↔J9 / U1↔J13 courtyard 重叠（既有布局 · 真实 DFA 间距不足 · 非本件引入）",
+   "fix": "移件（布局改动 · L2）或交监理裁（同 #K2-21 先例）"
+  },
+  {
+   "id": "④-B2",
+   "root": "32 车道 4 via/线",
+   "fix": "见 B2 计划（车道重布线 · 未执行）"
+  },
+  {
+   "id": "clearance-1",
+   "root": "GND via ↔ PCIE_UP_OUT0_P_J2 走线 净距不足 1 处（新引入）",
+   "fix": "调整该 via 或该段走线；下轮修"
+  },
+  {
+   "id": "其他",
+   "root": "silk_overlap 149 · lib_footprint_issues 54 · solder_mask_bridge 3（非 §六 gate 项）",
+   "fix": "续修"
+  }
+ ],
+ "red_lines_ok": [
+  "未改冻结四源",
+  "未改 criteria/",
+  "未改 l4..l8",
+  "未改网表/SPEC",
+  "未派 WORKER",
+  "l9 未落 hw/（WIP）",
+  "未越阶段"
+ ],
+ "next": "续修：clearance 1 · 2 处既有 DFA（交裁/移件）· B2 重布线；达 §六后落 hw/ + 送监理。禁 HOLD/停等。"
+}
