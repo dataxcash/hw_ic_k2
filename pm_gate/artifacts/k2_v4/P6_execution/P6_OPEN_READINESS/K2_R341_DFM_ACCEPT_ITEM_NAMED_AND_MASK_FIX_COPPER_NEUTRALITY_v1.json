@@ -1,0 +1,64 @@
+{
+ "schema": 1,
+ "artifact": "k2_r341_dfm_accept_item_named_and_mask_fix_copper_neutrality_v1",
+ "ts": "2026-09-22T07:54+0800",
+ "to": "监理",
+ "from": "ENG · ARCHER",
+ "nature": "交付包 DFM 之『**1 ACCEPT**』项具名 + 其**确定性修法之铜层中性证明**（只读板件 · 实验副本在 /tmp · 仓库不动）",
+ "anchors": {
+  "delivery_package": "k2/pm_gate/artifacts/k2_v4/L6/jlc_package_l8r3（MANIFEST: n_files 见件）",
+  "board": "k2/hw/k2_v4_8L.l8.kicad_pcb",
+  "board_sha16": "7a5c89913d6e5d0a",
+  "frozen4": [
+   "d4e81f647be7f980",
+   "fb07d25ac426ff84",
+   "dd794c54f7ce7417",
+   "0a459839e15960b8"
+  ],
+  "dfm_source": "06_rulings/jlc_dfm_hdi_l8.json（n_items 17 · 16 PASS · 1 ACCEPT · 0 FAIL）"
+ },
+ "named_accept_item": {
+  "item": "阻焊桥 / 阻焊-铜净距 (solder_mask_bridge)",
+  "measured": "JLC 限 DRC solder_mask_bridge 违规 = **9**（阈值扫描：4∈[0.05,0.06) · 1∈[0.06,0.07) · 4∈[0.08,0.09)）",
+  "jlc_limit": "桥 ≥0.10mm；开窗到邻近铜 ≥0.09mm",
+  "machine_std": "FAIL",
+  "hdi": "ACCEPT_L2_WITH_FAB_REVIEW",
+  "package_note": "JLC 能力 0.10mm = **最小可保证桥宽**（非「必须存在桥」）⇒ 板厂按『无阻焊坝』印制；承 CO-147 R3 先例 ACCEPT 随单工程评审；影响面 = 装配焊接注意，**不阻塞 Gerber 可制造性**",
+  "already_disclosed": "`ORDER_NOTES.md` §汇总 + `DISCLOSURE.md`（如实具名，不自称全绿）"
+ },
+ "fix_and_neutrality_proof": {
+  "fix": "`(pad_to_mask_clearance 0.05)` → `0.02`（板 setup 单字段；现有实证 `07_verify/mask_accept_fix_proof.json`：阻焊桥违规 **9 → 0**，总违规回 as-designed）",
+  "experiment": {
+   "where": "/tmp/opencode/maskopt/（板副本；**仓库内板件未动**）",
+   "cmd": "`AppDir/bin/kicad-cli pcb export gerbers --board-plot-params --no-x2 --layers <13 层>` → 对 l8 原板 与 0.02 变体 各出一套",
+   "normalization": "剥 `%TF.*` 与 `G04 Created by`（日期型）后 sha256",
+   "result": {
+    "铜层 F.Cu/In1..In6/B.Cu": "**逐字节相同**",
+    "丝印 F/B.Silkscreen": "**逐字节相同**",
+    "边框 Edge.Cuts": "**逐字节相同**",
+    "阻焊 F.Mask/B.Mask": "**不同**（唯一变化层）",
+    "F_Mask 行数": "15813 → 15213；B_Mask 行数 1301 → 789（阻焊坝消失、开窗连成片）"
+   }
+  },
+  "conclusion": "该修法为 **铜/丝印/边框中性**（零铜层变更）⇒ 若采行，**P4 之铜几何判定不受扰**；仅阻焊层 Gerber 变更（正是要修的对象）。",
+  "caveat": "采行 = **改板 setup 字段 ⇒ 板文件 sha16 变更**（铜不变但字节变）⇒ P4 判据锚需**重跑**（预期仍 19/19，须含 R340 之 (B')）；且交付包须**重建**（新 rev）。故**不在 P5『冻结 l8』范围**—— 属 rev 级决策。"
+ },
+ "delivery_chain_byproduct": {
+  "finding": "本件独立重跑之 Gerber **13/13 层与已交付包逐字节一致**（同法归一化日期后）⇒ 交付包**可复现**（旁证 R338 之 53/53 sha 回归）",
+  "note": "仅作旁证；不重建、不覆盖旧包"
+ },
+ "equivalence_question_for_supervisor": {
+  "问": "owner #14③ 字面『DFM 逐项对 JLC HDI 通道全 PASS』与包内『16 PASS / **1 ACCEPT**』之差，是否等效？",
+  "两处置（皆监理自裁面 · 非 owner）": [
+   "(i) **认 ACCEPT 等效**：理由 = JLC 0.10mm 系最小可保证桥宽（非必须存在桥）· 不影响 Gerber 可制造性 · 已如实披露 ⇒ 交付包按现状 P5 冻结交付；",
+   "(ii) **重出 rev（pad_to_mask_clearance=0.02）**：DFM 转 17/17 全 PASS，但板 sha16 变更 ⇒ 连带重跑 P4 并重建交付包（本件已证该改动**铜层中性**）。"
+  ],
+  "ENG 立场": "两条皆为**可制造**；(ii) 字面满足 #14③ 但成本 = 一次 rev 重跑；(i) 成本 0 但需监理认等效。**ENG 不自行改板**（未获批 · 且属 rev 决策）。"
+ },
+ "buildability_field": "本件只读：**未动仓库内任何板件/包件**（实验板副本在 /tmp）· 未改 `criteria/`/生成器/SPEC/原理图 ⇒ **不动证明成立**；不产出施工图（本件为交付包口径之测量证据）。",
+ "owner_gate": 0,
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "388df269275e8eb4"
+ }
+}

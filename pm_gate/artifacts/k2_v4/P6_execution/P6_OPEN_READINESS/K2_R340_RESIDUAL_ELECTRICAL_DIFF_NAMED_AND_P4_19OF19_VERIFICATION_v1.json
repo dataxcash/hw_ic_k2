@@ -1,0 +1,134 @@
+{
+ "schema": 1,
+ "artifact": "k2_r340_residual_electrical_diff_named_and_p4_19of19_verification_v1",
+ "ts": "2026-09-22T07:53+0800",
+ "to": "监理",
+ "from": "ENG · ARCHER",
+ "nature": "R339『残余 1 项 lib_electrical_level 电气差异』之**具名定性** + 独立复算（只读 · `criteria/` 未碰 · 判据副本在 /tmp）",
+ "anchors": {
+  "board": "k2/hw/k2_v4_8L.l8.kicad_pcb",
+  "board_sha16": "7a5c89913d6e5d0a",
+  "frozen4": [
+   "d4e81f647be7f980",
+   "fb07d25ac426ff84",
+   "dd794c54f7ce7417",
+   "0a459839e15960b8"
+  ],
+  "criteria_rev6": {
+   "adjudicate.py": "1937a40ae68bc288",
+   "manifest.k2.yaml": "727d09953cf9bd78",
+   "CHANGELOG": "eb3da49f2ad97e37"
+  },
+  "nets_errata3": "k2_sch.errata-3.yaml 5dc7b82a901d11c8",
+  "measure_inputs": "P4_MEASUREMENTS_L8_20260922/（w8_l8.json 等 5 件 · 各含 board_sha16=7a5c89913d6e5d0a）"
+ },
+ "method": {
+  "runner": "/tmp/opencode/p4m/run_r340.py（调 `adjudicate(manifest, meas, args)`；meas=既有 measure.json + 本板重算 measure_board）",
+  "baseline": "`criteria/adjudicate.py`（rev=6 · sha16 1937a40ae68bc288）**原样**",
+  "r317": "/tmp/opencode/p4m/adjudicate_r317patched.py = rev=6 + R317 两条（(A) shape==0 圆 pad 任意旋转等效；(B) `pad_set` 并入 pad_name_set_only 桶）",
+  "r340": "/tmp/opencode/p4m/adjudicate_r340fix.py = r317 副本 + 本件 (B')（见 proposed_fix）",
+  "criteria_dir": "**未修改**（0555/0444 · ENG 只读）；副本与产物全在 /tmp"
+ },
+ "readings": {
+  "baseline_rev6": {
+   "n_pass": 18,
+   "n_fail": 1,
+   "passed": false,
+   "lib_electrical_level": {
+    "n_electrical_diff_eff": 7,
+    "excused_electrical": 0
+   }
+  },
+  "r317_two_fixes_only": {
+   "n_pass": 18,
+   "n_fail": 1,
+   "passed": false,
+   "lib_electrical_level": {
+    "n_electrical_diff_eff": 1,
+    "excused_electrical": 6
+   },
+   "note": "复现 R339：R317 两条不足以致 19/19"
+  },
+  "rev7_candidate_r317_plus_r340Bprime": {
+   "n_pass": 19,
+   "n_fail": 0,
+   "passed": true,
+   "lib_electrical_level": {
+    "n_electrical_diff_eff": 0,
+    "excused_electrical": 7
+   },
+   "note": "唯一新增 = 本件 (B')；几何零变更"
+  }
+ },
+ "residual_named": {
+  "ref": "U1",
+  "lib_id": "ForgeOS:MCU_STM32G0_LQFP48",
+  "record_verdict": "electrical_diff",
+  "record_diffs": [
+   {
+    "kind": "pad_set",
+    "board_only": [],
+    "lib_only": [
+     ""
+    ]
+   }
+  ],
+  "nature": "**非电气** —— 库封装含 **9 枚无号(``) `smd` 且层集仅 `F.Paste`（无铜层）** 的钢网孔径；板上 U1 实例无此 9 枚。审计器以 **pad 名为键** 比对 ⇒ 9 枚折叠为单个空名 `` 之 `pad_set` 集合差。",
+  "independent_evidence": {
+   "lib_file": "k2/hw/lib/ForgeOS.pretty/MCU_STM32G0_LQFP48.kicad_mod",
+   "lib_unnamed_pads": 9,
+   "lib_unnamed_pad_type": "smd",
+   "lib_unnamed_pad_layers": [
+    "F.Paste"
+   ],
+   "lib_copper_layer_present": false,
+   "board_u1_pads": 49,
+   "board_u1_unnamed_pads": 0,
+   "board_u1_named_set_equals_lib_named_set": true
+  },
+  "why_not_electrical": "`F.Paste` = 钢网(锡膏)开孔图形，**不产生铜箔/网络/电气连接**；对铜几何、DRC、电气行为**零影响**。与 #K2-34 §一-6(B)『无号 F.Paste ⇒ 非电气』**同类**。"
+ },
+ "negative_controls": [
+  {
+   "id": "B",
+   "change": "U1 diffs lib_only=['1']（有号 pad 仅库有）",
+   "result": "未豁免 ⇒ 18/19",
+   "why": "豁免要求 lib_only 全为空号"
+  },
+  {
+   "id": "C",
+   "change": "U1 diffs board_only=['50']",
+   "result": "未豁免 ⇒ 18/19",
+   "why": "豁免要求 board_only 为空"
+  },
+  {
+   "id": "D",
+   "change": "U1 diffs lib_only=['','5']",
+   "result": "未豁免 ⇒ 18/19",
+   "why": "豁免要求 lib_only 全为空号"
+  }
+ ],
+ "proposed_fix_for_gate_owner": {
+  "target": "`criteria/adjudicate.py` → `_reclassify_w8`（rev=7 候选 · **gate 属主写域**，ENG 只读）",
+  "rule": "把**已核定**之 #K2-34 §一-6 (B)『无号 F.Paste ⇒ 非电气』规则，由 `pad_name_set_only` 桶**扩展到 `electrical_diff` 桶**：\n  条件 = `kind ∈ {pad_set, pad_name_set}` ∧ `board_only == []` ∧ `lib_only` 非空 ∧ `lib_only` 全为 `\"\"`",
+  "minimal_edit": "electrical_diff 分支内，`if d.get('kind') != 'pad':` 处先试 (B') 条件；命中则 continue（计入 exempted，不计 electrical），否则 ok=False",
+  "is_not_a_caliber_shrink": [
+   "未改容差 `W8_TOL_MM=0.0005`",
+   "未改圆/中心对称规则（R317-A/B 原样）",
+   "**几何零变更**（豁免对象无铜层）",
+   "**非新增检查齿**：系既有已核定口径之**归类通道修正**（审计器把该差异放进 electrical_diff 桶而非 pad_name_set_only 桶）",
+   "负控 B/C/D 证明未被过度豁免"
+  ],
+  "root_cause_注": "审计器 `k2/tools/k2_w8_footprint_audit_pose_v2_layeraware.py:cmp_fp` 只发 `kind='pad_set'`（无 `pad_name_set_only` verdict）⇒ 判据 rev=6 的 `pad_name_set_only` 分支**从不触发** ⇒ R317-(B) 落在死通道。ENG **未改**该审计器（待批）。"
+ },
+ "verification_chain": {
+  "独立复算脚本": "/tmp/opencode/p4m/run_r340.py · make_r340fix2.py · nc_r340.py（皆只读 · 可复跑）",
+  "gate": "`exact_gate` 不适用（本件为判据侧）；判据闸 = `adjudicate.py` 19 维"
+ },
+ "buildability_field": "本件只读复算：**未烙板 · 未动任何板上对象 · 未改 `criteria/`（副本在 /tmp）· 未改生成器/SPEC/原理图** ⇒ **不动证明成立**；本件为判据侧测量/验证，不产出施工图（亦不需要）。",
+ "owner_gate": 0,
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "4a4673678e3dfa46"
+ }
+}
