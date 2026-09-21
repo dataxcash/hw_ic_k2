@@ -1,0 +1,50 @@
+{
+ "anchors": {
+  "authorized_netlist": "k2/hw/data/k2_sch.errata-3.yaml = 5dc7b82a901d11c8",
+  "caliber": "keepout 0.5300 · lane_w 0.16 · 互距 ≥0.435",
+  "criteria": "rev=6 MATCH（只读）",
+  "frozen_sources": {
+   "_shared/eda_core/drc_rules.json": "0a459839e15960b8",
+   "k2/hw/data/k2_sch.yaml": "dd794c54f7ce7417",
+   "k2/hw/k2_v4_8L.kicad_pcb": "fb07d25ac426ff84",
+   "k2/hw/k2_v4_8L.l4.kicad_pcb": "d4e81f647be7f980"
+  },
+  "reviewed_board": "k2/hw/k2_v4_8L.l8.kicad_pcb = 7a5c89913d6e5d0a"
+ },
+ "artifact": "k2_r263_coordinate_implementation_v2_and_stage_status",
+ "authority": "监理自动续推 · #K2-132 §三 · #K2-133 §三 · 《整改计划》P4 在阶 · 指令 #14 ⑥",
+ "bans_kept": "未改冻结四源 · criteria 只读 · 未烙板 · 未派 WORKER · 未改生成器/SPEC/原理图 · 临时仅 /tmp/opencode · 未以布通率充见证 · 未以有界搜索冒充证书 · C-w 未申报未执行",
+ "binary_status": {
+  "(a)": "**未取得**（v2 已 16/16 落线但互距 16 对违规 ⇒ 非见证）",
+  "(b)": "**不成立**（A 侧 G-1 反证 + B 侧本轮全板普查反证）⇒ 不签不可行证书、不具名豁免（承 #K2-132(甲) · #K2-70 §六③）"
+ },
+ "blocker_four_fields": {
+  "①层": "**生成器实现层**（零余量 + **避障** 之坐标化线束生成）",
+  "②资源": "A 侧 `_P` 逃生（7 缝 0.090/0.140mm + 东端 · 余量 0）· 东通道 x135.40–142.60 · B 侧北区(富余)",
+  "③被谁占死": "**不被占死**（余量 0 或富余；无 <16 之割）",
+  "④为何任何分配都不可能": "**不成立**"
+ },
+ "from": "ENG · ARCHER（应监理**自动续推**：按已批准《整改计划》推进 P4 · 未越阶段）",
+ "gate_chain_selfcheck": {
+  "owner闸口": 0,
+  "冻结四源": "4/4 未动",
+  "判据": "rev=6 MATCH（只读未碰）",
+  "外部前置": "1（criteria rev=7）",
+  "阶段": "P4 在阶 · 未越阶段（P5-PENDING_EXTERNAL · P6-CLOSED 不变）"
+ },
+ "new_findings": {
+  "G1_north_region_open": "**全板测量**：B 侧北区 y≈33–42、x 115–143 **大面积自由**（y=33.5 自由 [116.1,143.0] · y=36 [117.6,143.0] · y=41 [115.0,136.95]）⇒ 西区(x127–132,y43–55)、南通道、东通道、北远 **同属一个连通域** ⇒ **B 侧（含西组 8 条绕连接器柱顶）无容量障碍**。⇒ 『守恒级不可行』在 **B 侧亦不成立**。",
+  "G2_south_channel_has_obstacles": "南通道 y 59–66 并非空白：实测坐标化 v2 之水平层撞 **他网铜/GND_FIXED 孔/焊盘**（22 项障碍违规 · min −0.425）⇒ 车道生成必须**避障**（非仅避车道）。",
+  "G3_coordinate_v2_result": "坐标化实现 v2（A 侧 no-move 入口 `_P` 斜下穿 `_N` 缝 + 南通道梳子 + 东通道列 + B 侧东组终止/西组经北区西拐再南落按 x_B 分层）：**16/16 全部落线**；末闸 `v3.exact_gate`：**互距违规 16 对（min 0.035）** · **障碍违规 22 项（min −0.425）** · 端点位移 0.1 ⇒ **非见证**。相对 R262（71 对 / 16 项）为**改进**，仍未达标。"
+ },
+ "next": "P4 唯一在阶硬卡点仍为 ②-UP；可行域为**零余量 + 避障**边界 ⇒ 需『避障型坐标化线束生成』（= `C-B2UP-1` 具体化之二：坐标化 + 避障）。ENG 可在**不改冻结件**前提下继续按此规格推进（L2 自裁面）；**不越阶段**。",
+ "owner_gate": 0,
+ "round_scope": "(i) **全板**（`r260/model_full_l8.json` · bbox 22.95–143.05/32.95–79.05）B 侧拓扑普查；(ii) **一次**坐标化实现 v2（人画坐标·零搜索·零迭代）",
+ "schema": 1,
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "71848c845142ca82"
+ },
+ "to": "监理",
+ "ts": "2026-09-22T02:59+0800"
+}
