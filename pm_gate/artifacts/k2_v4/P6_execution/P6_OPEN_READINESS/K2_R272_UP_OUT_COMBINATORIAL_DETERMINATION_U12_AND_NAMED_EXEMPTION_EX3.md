@@ -1,6 +1,6 @@
 # K2 · R272 · ②-UP **组合判定**：U = **12** + 具名豁免 **EX-3**（4 网）
 
-**件**：`K2_R272_UP_OUT_COMBINATORIAL_DETERMINATION_U12_AND_NAMED_EXEMPTION_EX3.json`（sha16 **`f9a955984746cf30`** · 约定A）
+**件**：`K2_R272_UP_OUT_COMBINATORIAL_DETERMINATION_U12_AND_NAMED_EXEMPTION_EX3.json`（sha16 **`c8d189e1d5d90625`** · 约定A）
 **据**：handoff R271 §7.2（**一次组合判定**）· #K2-132 §三.3(b)/§四/§七 · #K2-70 §六③ · 指令 #14
 **锚**：冻结四源 **4/4 未动** · `criteria` rev=6 MATCH · l8 `7a5c8991` · k2 `7af46b6` · 零重跑布线器 · 未派 WORKER
 **工具（可复跑）**：`k2/tools/k2_p4_b2_up_out_comb_determination_v1.py`（sha16 **`79441b0f10fff12e`**）
@@ -76,4 +76,4 @@ R271 之「U ≤ 12」**成立且取等**（其「最小越界量=4 ⇒ U≤12�
 
 冻结四源不改 · `criteria/` 只读 · 不重建/不覆盖旧包（l4..l8 逐字节保全）· 未改生成器/SPEC/原理图 · **未烙板** · **未派 WORKER** · 临时仅 `/tmp/opencode` · **未以布通率/有界搜索/启发式冒充证书** · **零重跑布线器** · 未写 `.omo/supervision/**` · 不放松 DRC 下限 · 豁免附**去向证明** · **禁 HOLD/停等结案**。
 
-—— ENG（ARCHER）· 2026-09-22（真实时钟 03:4x+0800）· k2 **`7af46b6`** · 受审板 l8 **`7a5c89913d6e5d0a`** · 判据 **rev=6 MATCH** · **owner 闸口 0**
+—— ENG（ARCHER）· 2026-09-22（真实时钟 03:34+0800）· k2 **`7af46b6`** · 受审板 l8 **`7a5c89913d6e5d0a`** · 判据 **rev=6 MATCH** · **owner 闸口 0**

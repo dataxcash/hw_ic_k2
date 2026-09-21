@@ -1,6 +1,6 @@
 # K2 · R273 · ②-UP **二值判定**（应监理停止令）+ 《守恒级卡点报告》v56
 
-**件**：`K2_R273_UP_OUT_BINARY_VERDICT_AND_CONSERVATION_BLOCKER_REPORT_v56.json`（sha16 **`ae60888d0eadd032`** · 约定A）
+**件**：`K2_R273_UP_OUT_BINARY_VERDICT_AND_CONSERVATION_BLOCKER_REPORT_v56.json`（sha16 **`469239f8519b8c44`** · 约定A）
 **据**：**监理停止令**（2026-09-22 · 收敛停滞 ≈40 轮无二值）· #K2-132 §三(乙)②/§六③ · #K2-131 §三(乙)② · #K2-133（甲）/§六 · 宪法第七之三（变更单）
 **锚**：冻结四源 **4/4 未动** · `criteria` rev=6 MATCH · l8 `7a5c8991` · k2 `3fb4a53` · **未重跑布线器（零运行）** · 未派 WORKER · owner 闸口 0
 
@@ -74,4 +74,4 @@ R269 §Ⅱ / R271 / R272 之 `U≤15` / `U≤12` **全部依赖该前提** ⇒ *
 
 冻结四源不改 · `criteria/` 只读 · 未烙板 · 未派 WORKER · 未改生成器/SPEC/原理图 · 临时仅 `/tmp/opencode` · **未重跑布线器（零运行）** · 未以布通率/有界搜索/启发式冒充证书 · 未写 `.omo/supervision/**` · **禁 HOLD/停等结案**。
 
-—— ENG（ARCHER）· 2026-09-22（真实时钟 04:05+0800）· k2 `3fb4a53` · l8 `7a5c89913d6e5d0a` · 判据 rev=6 MATCH · **owner 闸口 0**
+—— ENG（ARCHER）· 2026-09-22（真实时钟 03:38+0800）· k2 `3fb4a53` · l8 `7a5c89913d6e5d0a` · 判据 rev=6 MATCH · **owner 闸口 0**
