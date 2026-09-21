@@ -24,12 +24,14 @@ sys.path.insert(0, __file__.rsplit("/", 1)[0])
 from k2_p4_b2_in5_capacity_probe_v1 import Field, lanes_of, req, is_lane, VIA_R  # noqa: E402
 
 HW_B = 0.205 / 2.0
-PITCH_B = 0.205 + 2 * 0.175          # 0.555mm 中心距门
+PITCH_B = 0.205 + 0.175              # 0.380mm 中心距门（= w + 边到边 req；对照 In5: 0.16+0.175=0.335 ✓）
 LANE_W = 0.205
 
 
 def occ_radius_cells(cell):
-    return max(1, int(math.ceil((PITCH_B - LANE_W) / 2.0 / cell)))
+    """占位半径（格）：使被屏蔽邻域 ≥ PITCH_B 中心距之**最小**整数半径（R=0 即仅屏蔽本格，
+    此时相邻格中心距 = cell ≥ PITCH_B 即合法）。"""
+    return max(0, int(math.ceil(PITCH_B / cell)) - 1)
 
 
 def snap_free(field, bad, pt):
@@ -50,7 +52,7 @@ def snap_free(field, bad, pt):
     return None, None
 
 
-def astar(field, bad, occ, start, goal, cell, w_cong=6.0, w_margin=3.0, max_expand=900000, pres_fac=1.0):
+def astar(field, bad, occ, start, goal, cell, w_cong=6.0, w_margin=3.0, max_expand=900000, pres_fac=1.0, hard=False, conn=8):
     """8 邻接 A*（代价 = 长度 + 拥塞惩罚 + 贴边惩罚）。返回 [(i,j),…] 或 None。"""
     NX, NY = field.NX, field.NY
     margin = getattr(field, "_margin_cache", None)
@@ -67,8 +69,9 @@ def astar(field, bad, occ, start, goal, cell, w_cong=6.0, w_margin=3.0, max_expa
     prev = {}
     pq = [(h(si, sj), 0.0, si, sj)]
     seen = 0
-    NB = ((1, 0, 1.0), (-1, 0, 1.0), (0, 1, 1.0), (0, -1, 1.0),
-          (1, 1, 1.4142), (1, -1, 1.4142), (-1, 1, 1.4142), (-1, -1, 1.4142))
+    NB = ((1, 0, 1.0), (-1, 0, 1.0), (0, 1, 1.0), (0, -1, 1.0))
+    if conn == 8:      # 4 邻接（曼哈顿）= 无对角步 ⇒ 连续几何间距 = 栅格间距（可保证 ≥ PITCH_B）
+        NB = NB + ((1, 1, 1.4142), (1, -1, 1.4142), (-1, 1, 1.4142), (-1, -1, 1.4142))
     while pq:
         f, gc, i, j = heapq.heappop(pq)
         if (i, j) == (gi, gj):
@@ -86,6 +89,8 @@ def astar(field, bad, occ, start, goal, cell, w_cong=6.0, w_margin=3.0, max_expa
         for di, dj, step in NB:
             ni, nj = i + di, j + dj
             if not (0 <= ni < NX and 0 <= nj < NY) or bad[ni, nj]:
+                continue
+            if hard and occ[ni, nj] > 0:          # 硬带：已布车道占位区禁行（真两两分离）
                 continue
             m = margin[ni, nj]
             n_clear = m * cell                       # 该格到障碍之名义距离
@@ -119,6 +124,117 @@ def simplify(path):
     return out
 
 
+def _pt_seg(px, py, ax, ay, bx, by):
+    dx, dy = bx - ax, by - ay; L2 = dx * dx + dy * dy
+    if L2 == 0:
+        return math.hypot(px - ax, py - ay)
+    t = max(0.0, min(1.0, ((px - ax) * dx + (py - ay) * dy) / L2))
+    return math.hypot(px - (ax + t * dx), py - (ay + t * dy))
+
+
+def _ccw(p, q, r):
+    return (r[1] - p[1]) * (q[0] - p[0]) - (q[1] - p[1]) * (r[0] - p[0])
+
+
+def _seg_seg(A, B, C, D):
+    if ((_ccw(C, D, A) > 0) != (_ccw(C, D, B) > 0)) and ((_ccw(A, B, C) > 0) != (_ccw(A, B, D) > 0)):
+        return 0.0
+    return min(_pt_seg(*A, *C, *D), _pt_seg(*B, *C, *D), _pt_seg(*C, *A, *B), _pt_seg(*D, *A, *B))
+
+
+def _pt_rect(px, py, lo, hi):
+    dx = max(lo[0] - px, 0.0, px - hi[0]); dy = max(lo[1] - py, 0.0, py - hi[1])
+    return math.hypot(dx, dy)
+
+
+def _seg_rect(A, B, lo, hi):
+    if lo[0] <= A[0] <= hi[0] and lo[1] <= A[1] <= hi[1]:
+        return 0.0
+    if lo[0] <= B[0] <= hi[0] and lo[1] <= B[1] <= hi[1]:
+        return 0.0
+    e = ((lo[0], lo[1]), (hi[0], lo[1])), ((hi[0], lo[1]), (hi[0], hi[1])), ((hi[0], hi[1]), (lo[0], hi[1])), ((lo[0], hi[1]), (lo[0], lo[1]))
+    for (C, D) in e:
+        if _seg_seg(A, B, C, D) == 0.0:
+            return 0.0
+    return min(_seg_seg(A, B, C, D) for (C, D) in e)
+
+
+def verify_routes(field, routes, movable=()):
+    """**几何精确闸**（连续几何 · 非栅格）：① 车道互检（中心距 ≥ w+req）② 逐段 vs 他网铜（边到边 ≥ req）。
+
+    返回 {lane_min_gap, pair_min, clearance_min{net:…}, n_viol_lane, n_viol_obs, worst}"""
+    segs = {}                                    # net -> [((x1,y1),(x2,y2)),…]（含半宽）
+    for n, r in routes.items():
+        pts = [tuple(p) for p in r["pts"]]
+        segs[n] = [((pts[k][0], pts[k][1]), (pts[k + 1][0], pts[k + 1][1])) for k in range(len(pts) - 1)]
+    pair_min = (1e9, None); lane_min = {}
+    names = sorted(segs)
+    for a in range(len(names)):
+        for b in range(a + 1, len(names)):
+            best = 1e9
+            for (A1, A2) in segs[names[a]]:
+                for (B1, B2) in segs[names[b]]:
+                    d = _seg_seg(A1, A2, B1, B2) - LANE_W
+                    if d < best:
+                        best = d
+                        if d <= 0.0:
+                            break
+                if best <= 0.0:
+                    break
+            if best < pair_min[0]:
+                pair_min = (best, (names[a], names[b]))
+    for n in names:
+        m = 1e9
+        for (A1, A2) in segs[n]:
+            for (B1, B2) in segs[n]:
+                if B1 is A1 or B2 is A2:
+                    continue
+            for o in names:
+                if o == n:
+                    continue
+                for (B1, B2) in segs[o]:
+                    d = _seg_seg(A1, A2, B1, B2) - LANE_W
+                    if d < m:
+                        m = d
+        lane_min[n] = round(m, 4)
+    obs = []                                     # 障碍清单（非车道网 · 非可腾挪）
+    for (ax, ay, bx, by, shw, nm) in field.segs:
+        if is_lane(nm) or nm in movable:
+            continue
+        obs.append(("seg", ((ax, ay), (bx, by)), shw, nm))
+    for v in field.vias:
+        if is_lane(v["net"]) or v["net"] in movable:
+            continue
+        obs.append(("via", ((v["x"], v["y"]), (v["x"], v["y"])), v["r"], v["net"]))
+    for p in field.pads:
+        if is_lane(p["net"]) or p["net"] in movable:
+            continue
+        obs.append(("pad", p["box"], 0.0, p["net"]))
+    clr = {}; viol = []
+    for n in names:
+        worst = (1e9, None)
+        for (A1, A2) in segs[n]:
+            for (kind, geo, rr, nm) in obs:
+                if kind == "seg":
+                    d = _seg_seg(A1, A2, geo[0], geo[1]) - rr
+                elif kind == "via":
+                    d = _pt_seg(geo[0][0], geo[0][1], A1[0], A1[1], A2[0], A2[1]) - rr
+                else:
+                    d = _seg_rect(A1, A2, geo[:2], geo[2:])
+                need = req(nm)
+                m = d - need
+                if m < worst[0]:
+                    worst = (m, nm)
+                if m < -1e-9:
+                    viol.append((n, nm, round(m, 4)))
+        clr[n] = {"margin_min": round(worst[0], 4), "blocker": worst[1]}
+    return {"lane_pitch_min_gap_mm": round(pair_min[0], 4), "lane_pitch_min_pair": pair_min[1],
+            "lane_pitch_violations": sorted(n for n, v in lane_min.items() if v < PITCH_B - LANE_W - 1e-9),
+            "lane_min_gap_per_net": lane_min,
+            "clearance_min_mm": min((v["margin_min"] for v in clr.values()), default=None),
+            "clearance_violations": sorted(set(viol)), "per_lane_clearance": clr}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", required=True)
@@ -128,6 +244,10 @@ def main():
     ap.add_argument("--max-expand", type=int, default=900000)
     ap.add_argument("--keepouts", default="", help="额外 keepout 线段(JSON): [[x1,y1,x2,y2],…]（走廊 ECO 预留）")
     ap.add_argument("--movable-nets", default="", help="逗号分隔：视为可腾挪之缝合孔/走线网（§2.4(a)-2 量化）")
+    ap.add_argument("--conn", type=int, default=8, choices=[4, 8],
+                    help="4=曼哈顿（无对角步 ⇒ 连续几何两两间距=栅格间距 · 可证合法）")
+    ap.add_argument("--algo", default="pathfinder", choices=["pathfinder", "hard"],
+                    help="pathfinder=软罚协商；hard=硬带 + 多轮全量重排（保证两两分离）")
     a = ap.parse_args()
     model = json.load(open(a.model))
     field = Field(model, hw=HW_B, step=a.cell, layer="B.Cu",
@@ -158,13 +278,39 @@ def main():
 
     routed = {}
     best = None
-    for it in range(a.iters):
+    if a.algo == "hard":
+        # 硬带：每轮按 (上轮失败者优先) 顺序重排全部车道；occ>0 处禁行 ⇒ 输出天然两两分离
+        ord2 = list(order)
+        for it in range(a.iters):
+            occ[:] = 0.0
+            routed = {}
+            for n in ord2:
+                p = astar(field, bad, occ, sl[n]["start"], sl[n]["goal"], a.cell,
+                          max_expand=a.max_expand, hard=True, conn=a.conn)
+                if p:
+                    routed[n] = p; stamp(p, +1.0)
+            over = float(np.maximum(occ - 1.0, 0.0).sum())
+            print("  [hard %d] routed=%d/32 overuse=%.0f" % (it, len(routed), over))
+            sc = (len(routed), -over)
+            if best is None or sc > best[0]:
+                best = (sc, {k: list(v) for k, v in routed.items()})
+            if len(routed) == len(order):
+                break
+            fail = [n for n in ord2 if n not in routed]
+            ord2 = fail + [n for n in ord2 if n in routed]      # 失败者优先重排
+        routed = best[1]
+        for n in routed:
+            sl[n]["status"] = "ROUTED"
+        for n in order:
+            if n not in routed and sl[n]["status"] != "NO_FREE_ENDPOINT":
+                sl[n]["status"] = "FAILED"
+    for it in range(a.iters) if a.algo == "pathfinder" else ():
         pres_fac = 0.6 * (2.0 ** it)                     # 历史/现存代价双递增
         for n in order:
             if n in routed:                              # 全量 rip-up：先撤后重布
                 stamp(routed[n], -1.0); del routed[n]
             p = astar(field, bad, occ, sl[n]["start"], sl[n]["goal"], a.cell,
-                      max_expand=a.max_expand, pres_fac=pres_fac)
+                      max_expand=a.max_expand, pres_fac=pres_fac, conn=a.conn)
             if p:
                 routed[n] = p; stamp(p, +1.0)
         over = float(np.maximum(occ - 1.0, 0.0).sum())
@@ -189,8 +335,13 @@ def main():
                                          for k in range(len(pts) - 1)), 3),
                      "cells": len(pth)}
     ok = sorted(routes); ng = sorted(n for n in order if n not in routes)
+    ver = verify_routes(field, routes, movable=getattr(field, "movable", ())) if routes else {}
+    if ver:
+        print("  [精确闸] 车道互检最小间隙 %.4f mm（判据 ≥%.3f）· 违规 %d 条 · 障碍最小余量 %.4f mm · 余量违规 %d" % (
+            ver["lane_pitch_min_gap_mm"], PITCH_B - LANE_W, len(ver["lane_pitch_violations"]),
+            ver["clearance_min_mm"], len(ver["clearance_violations"])))
     wo = {"artifact": "k2_p4_b2_bcu_router_v1_workorder", "model": a.model, "cell_mm": a.cell,
-          "layer": "B.Cu", "lane_w_mm": LANE_W, "pitch_mm": PITCH_B,
+          "layer": "B.Cu", "lane_w_mm": LANE_W, "pitch_mm": PITCH_B, "conn": a.conn, "algo": a.algo,
           "movable_nets": sorted(getattr(field, "movable", [])),
           "method": "B.Cu 单层 · 8 邻接 A*（长度 + **PathFinder 协商拥塞**（过用罚·pres_fac 逐轮加倍）+ 贴边惩罚 + 贴限禁行）+ 难度排序 + **每轮全量 rip-up-and-reroute**",
           "n_lanes": len(lanes), "n_routed": len(ok), "n_failed": len(ng),

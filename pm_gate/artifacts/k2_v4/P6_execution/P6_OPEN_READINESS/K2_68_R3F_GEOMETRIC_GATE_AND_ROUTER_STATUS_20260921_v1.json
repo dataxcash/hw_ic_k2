@@ -1,0 +1,82 @@
+{
+ "artifact": "k2_68_r3f_geometric_gate_and_router_status",
+ "authority": "#K2-68 §2.4(a)-4（精确闸）· #K2-69 §六①（A↔B 最大流 ≥32 · R2L 口径）· §六④（DRC）",
+ "board": "/tmp/opencode/w3/c.kicad_pcb (R1E) · B.Cu 中段 · 具名 ECO 集（P3V3,GND,I2C1_SDA,P3V3_AUX）",
+ "capacity_gate": {
+  "eco_set": [
+   "P3V3",
+   "GND",
+   "I2C1_SDA",
+   "P3V3_AUX"
+  ],
+  "maxflow": {
+   "cell0.30_conn4": 32,
+   "cell0.30_conn8": 32,
+   "cell0.40_conn4": 32,
+   "cell0.40_conn8": 32
+  },
+  "note": "conn4（曼哈顿）亦 32/32 ⇒ **对角步非必需** ⇒ 存在**连续几何合法**之 32 条两两分离路径（相邻格 0.40mm ≥ 0.38 门）"
+ },
+ "caveats": [
+  "容量为**上界**模型；『存在合法解』≠『已布通』。",
+  "布线器输出**未经 apply/DRC** ⇒ 不得视为可制造。",
+  "`--movable-nets` = 只读假设（真 ECO 须实做 + 复核）。"
+ ],
+ "geometric_gate": {
+  "implemented": "verify_routes()：连续几何逐段核 车道互检（≥w+req=0.38mm 中心距）+ 逐段 vs 他网铜（边到边 ≥req）",
+  "pitch_correction": {
+   "crosscheck": "In5: 0.16+0.175 = 0.335mm ✓ 与既有『车道间距门 0.335』一致",
+   "new": "PITCH_B = w+req = 0.380mm",
+   "old": "PITCH_B = w+2·req = 0.555mm（**误**：重复计入）"
+  },
+  "results": [
+   {
+    "lane_min_gap_mm": -0.205,
+    "lane_violations": 32,
+    "obs_margin_min_mm": 0.3083,
+    "obs_violations": 0,
+    "routed": "32/32",
+    "router": "pathfinder soft conn8 cell0.10"
+   },
+   {
+    "lane_min_gap_mm": 0.095,
+    "lane_violations": 2,
+    "obs_margin_min_mm": 0.4675,
+    "obs_violations": 0,
+    "routed": "16/32",
+    "router": "hard conn8 cell0.15"
+   },
+   {
+    "lane_min_gap_mm": -0.205,
+    "lane_violations": 9,
+    "obs_margin_min_mm": 0.21,
+    "obs_violations": 0,
+    "routed": "22/32",
+    "router": "hard conn4(manhattan) cell0.40"
+   }
+  ]
+ },
+ "headline": "**① 容量闸过**：B.Cu + 具名最小 ECO 集 ⇒ A↔B 最大流 **32/32**（R2L 口径 0.40/8 **且** 0.30/8 **且 4 邻接曼哈顿 0.40/4 · 0.30/4 皆 32/32**）⇒ **几何合法的 32/32 解存在**。**② 可制造布通未过**：自建布线器三口径实测 32/32（但两两未分离）/ 16/32 / 22/32 —— **几何精确闸**（新入库）显示：障碍余量 ✅（+0.21…+0.47mm · 0 违规），**车道互检 ❌**（违规 2…32 条）⇒ 属**布线器能力缺口**，非板级容量缺口。",
+ "next_steps": [
+  "router v4：以**最大流解（4 邻接 · 节点容量 1）为初始指派** → 逐车道**局部合法化/让位**（保持两两 ≥0.38mm）；或 A* 硬约束（conn4+硬带）+ 失败即 rip-up 阻塞者，迭代至 32/32。",
+  "达 32/32 且精确闸全绿 ⇒ `apply`（V4 同位换 span → F–B · 删 V2/V3 + B.Cu/In2 腿 · 执行具名 ECO · **铺铜重灌**）⇒ §7-3 等长 ⇒ R4（#K2-69 §六 ①–⑧）。",
+  "缝合孔腾挪须同报 `ref_plane_continuity`（non_antipad_gap==0）/EMC。"
+ ],
+ "red_lines_ok": [
+  "只读（未改板/件）",
+  "冻结四源未动",
+  "criteria/ 只读未碰",
+  "l4..l8 未动",
+  "网表/SPEC 未改",
+  "未派 WORKER",
+  "临时仅 /tmp/opencode",
+  "未越阶段"
+ ],
+ "schema": 1,
+ "ts": "2026-09-21T16:0x+08:00",
+ "verdict": {
+  "gate_六①": "**PASS**（容量 · 条件式：须执行具名 ECO 集）",
+  "gate_六④/可制造": "**NOT PASSED**（布线器输出两两未分离 ⇒ 不可 apply）",
+  "root_cause": "布线器能力缺口：软罚协商收敛不到两两分离；硬带贪心容量损失过大。**非**板级容量问题（容量侧 32/32 已证）"
+ }
+}
