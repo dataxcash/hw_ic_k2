@@ -1,0 +1,64 @@
+{
+ "schema": 1,
+ "artifact": "k2_r330_cw_benefit_whatif_v1",
+ "to": "监理",
+ "from": "ENG · ARCHER",
+ "nature": "**C-w 收益量测（what-if · 只读）** —— 决策支持测量；**非见证 · 非可行性主张 · 非 C-w 申报**",
+ "cw_candidate_nets": [
+  "DS320_STRAP_B_ADDR0_15-8",
+  "DS320_STRAP_B_ADDR1_7-0",
+  "I2C1_SDA",
+  "PERSTA#"
+ ],
+ "model": "R325/R326 之『单水平长走』(ax,ay)→(ax,y)→(bx,y)→(bx,by)；cell 0.02 · hw 0.08 · pitch 0.435 · 他锚孔排除 r=pitch",
+ "note": "what-if = 假设该 4 网之 **In5 铜 + 孔** 整体腾挪（其端点/球位**不动**之可行性**未证**）",
+ "zero_candidate_lanes": {
+  "baseline": 8,
+  "post_Cw_if_relocated": 0
+ },
+ "candidates_per_lane": {
+  "baseline": {
+   "T0_N": 0,
+   "T0_P": 144,
+   "T1_N": 144,
+   "T1_P": 0,
+   "T2_N": 0,
+   "T2_P": 144,
+   "T3_N": 144,
+   "T3_P": 0,
+   "T4_N": 0,
+   "T4_P": 144,
+   "T5_N": 144,
+   "T5_P": 0,
+   "T6_N": 0,
+   "T6_P": 144,
+   "T7_N": 144,
+   "T7_P": 0
+  },
+  "post_Cw_if_relocated": {
+   "T0_N": 63,
+   "T0_P": 167,
+   "T1_N": 167,
+   "T1_P": 387,
+   "T2_N": 387,
+   "T2_P": 167,
+   "T3_N": 167,
+   "T3_P": 387,
+   "T4_N": 387,
+   "T4_P": 167,
+   "T5_N": 167,
+   "T5_P": 387,
+   "T6_N": 387,
+   "T6_P": 167,
+   "T7_N": 184,
+   "T7_P": 410
+  }
+ },
+ "verdict": "**C-w 收益显著**：单水平长走模型下零候选 lane 由 8/16 降至 0/16 ⇒ 具名 4 网之腾挪**足以**打开出带通道（在该模型内）。",
+ "scope": "本件**不主张**可行性、**不申报** C-w（缺 `ref_plane_continuity` / 去向证明 / `buildability` / 端点不动证明 · 依宪法第十三条不作数）",
+ "buildability_field": "不动任何对象（what-if 系**内存假设** · 未烙板 · 未改任何实体）⇒ 不动证明成立；不产出施工图。",
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "45eb195d58a61611"
+ }
+}
