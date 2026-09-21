@@ -1641,7 +1641,36 @@
    "P3V3_AUX（B.Cu 45° 斜线 (59.9,48.4)–(73.775,62.275)）",
    "DS320_STRAP_* / PWR_BTN_ISO"
   ],
-  "implication": "达 ≤2/线 必须至少放宽一条前提：(a) 移 3 条线之 A/B 锚点（⇒ 须改其 F 扇出/蛇形 = 等长重调）；(b) 重布 B.Cu 之 I2C1_SDA/PERSTA#/P3V3_AUX 走廊（他网 ECO）；(c) 新开 F–In5 span（改孔策略/工艺）。且 32 车道 B.Cu 重迁须**拥塞感知布线器**（本会话 v1 朴素 A* 仅通 8/32，失败系顺序级联，非结构性）。",
-  "plan_doc_8_3_claim": "『唯一拓扑 = 长走改置 In2（F→In2→F）』**不成立** —— 原 A 锚点（U6 扇出端）在 In2 上被 **BGA/缝合孔墙**封死：22/32 车道的 A 锚仅落在 ≤743 cell（多数 3–93 cell）之孤立自由域。"
+  "implication": "达 ≤2/线 必须至少放宽一条前提：(a) 移 3 条线之 A/B 锚点（⇒ 须改其 F 扇出/蛇形 = 等长重调） + **腾挪他网走廊**（I2C1_SDA/PERSTA#/P3V3_AUX 等，否则 B.Cu 窄口容量不足）+ 拥塞感知布线器；(b) 新开 F–In5 span（改孔策略/工艺）；(c) 具名豁免。",
+  "plan_doc_8_3_claim": "『唯一拓扑 = 长走改置 In2（F→In2→F）』**不成立** —— 原 A 锚点（U6 扇出端）在 In2 上被 **BGA/缝合孔墙**封死：22/32 车道的 A 锚仅落在 ≤743 cell（多数 3–93 cell）之孤立自由域。",
+  "v1_router_result_corrected": {
+   "all_lanes": {
+    "best_ok": "8/32（B.Cu · 朴素 A*）",
+    "group_window_ok": "8/32",
+    "up_first": "见 ledger"
+   },
+   "implication": "处置 (a) 除拥塞感知布线器外**必须**含腾挪他网走廊（否则窄口容量不足）；已通者余量贴限 ⇒ 亦不足直接交付。",
+   "judgement": "失败主因 = **瓶颈容量**（32 车道争用同一批『单车道宽』窄口，单车道路由余量仅 0.00–0.02 mm），非单纯布线顺序；顺序为次因。",
+   "single_lane": {
+    "PCIE_DN_OUT4_N_MCIO": {
+     "blocker": "MCU_VDD",
+     "min_clear_margin": 0.02,
+     "status": "OK"
+    },
+    "PCIE_UP_OUT0_P_J2": {
+     "blocker": "GND",
+     "min_clear_margin": 0.02,
+     "note": "经 x≈83.5 之 U6 孔墙窄口",
+     "status": "OK"
+    },
+    "PCIE_UP_OUT3_N_J2": {
+     "blocker": "GND",
+     "min_clear_margin": 0.0,
+     "note": "同经 x≈83.5",
+     "status": "OK"
+    }
+   },
+   "supersedes": "本条更正先前『v1 失败系顺序级联·非结构性』之过度声称。"
+  }
  }
 }
