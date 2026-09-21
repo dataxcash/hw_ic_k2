@@ -1,0 +1,77 @@
+{
+ "artifact": "k2_k2_63_consumption_evidence",
+ "schema": 1,
+ "ts": "2026-09-21T08:18:40+08:00",
+ "session_label": "K2-2026-09-21 · 轮标 ARCHER-R98 · #K2-63 消费（4 项自裁）",
+ "ruling": "#K2-63（CR-17 采纳 i-a · CR-75 处置 i-a · CR-73 准予快进 push · CR-74 覆核通过保留）· 判据锚 rev=6（MATCH）· owner 项 0",
+ "R1_CR73_push_executed": {
+  "authorization": "#K2-63 §一 CR-73：(i) **准予快进 push**（非破坏 · 禁 force-push · 禁改 K1 载体）",
+  "commands": [
+   "git -C k1 status --porcelain  ⇒ 空（工作树洁净）",
+   "git -C k1 merge-base --is-ancestor origin/main HEAD ⇒ OK（**快进可推**）",
+   "git -C k1 push origin main ⇒ `9e283bf..6a1ecdd  main -> main`"
+  ],
+  "result": {
+   "k1_origin_main": "6a1ecddfe829…",
+   "k1_local_HEAD": "6a1ecddfe829…",
+   "ahead_behind_vs_origin": "0/0"
+  },
+  "container_pointer": {
+   "gitlink": "6a1ecddfe8296b7eb5d57296e77df9c16c98d21f",
+   "check": "git -C k1 merge-base --is-ancestor <gitlink> origin/main ⇒ **true**"
+  },
+  "end_to_end_proof": {
+   "method": "**全新克隆**（正是原缺陷的失效场景）：`git clone --filter=blob:none --no-checkout <k1-url> /tmp/opencode/k1probe_*` ⇒ rc=0；`git -C <clone> cat-file -e 6a1ecdd^{commit}` ⇒ **OK**",
+   "reading": "**新克隆可取到容器所引 k1 commit** ⇒ 耐久性缺陷 **闭合**",
+   "note": "外部落点仅 `/tmp/opencode`；未改 K1 任何内容（仅发布既有 3 笔 commit）"
+  },
+  "closed": true
+ },
+ "R2_CR17_adopted_i_a": {
+  "裁": "采纳 `0x467` 为 V6-2 之 `DBGMCU_IDCODE` DEV_ID 期望值，**仅规程/回件判读层**；**不动交付锚 · 不重建包（禁 i-b）**；回件判读须**并列标注引证等级**；**不充绿**。",
+  "landing_1_addendum": {
+   "artifact": "本判读附则（ENG 侧 · **不在冻结外发包内**）",
+   "rule": "读 `DBGMCU_IDCODE`(0x40015800) ⇒ 取 **DEV_ID（低 12 位）** 期望 **0x467**；**REV_ID（高位）随批次不计**。判读须**并列标注**：`引证等级 = 上游工具件共同值 · 非原厂手册（RM0454 页 567/429 不可达）`。",
+   "mismatch_handling": "DEV_ID ≠ 0x467 ⇒ **不直接判 FAIL**（引证等级非原厂）⇒ 记『**异常读数 · 须复测/查原厂手册确认**』（INCONCLUSIVE 倾向）。"
+  },
+  "landing_2_guard": {
+   "tool": "`tools/k2_p5_results_intake_guard_v1.py` **c2bc38c5746b88b4**（由 `56aea8eb8a71ca34` 扩增 · py_compile OK · self-test rc=0）",
+   "delta": "`v6_2` 增 `dbgmcu_idcode` 读判：解析 → `DEV_ID = v & 0xFFF` → 与 0x467 比对 → **读数标签内联引证等级披露**；不符 ⇒ **warn（勿据此判 FAIL）**；**缺该项 ⇒ 仅 warn（可追问补件）**（模板无该槽 ⇒ 属 CR-75 同族，**不因缺项判不可判**）。",
+   "evidence": "self-test：正夹具 `dbgmcu_dev_id=0x00000467 MATCH_EXPECTED`；负夹具 `0x00000999 ⇒ MISMATCH_EXPECTED + warn`（**仍 admissible 判定逻辑不变**）· rc=0"
+  },
+  "zero_artifact_impact": "`results_template.json`(`119cd7c48b3146d2`)/`RULES.md`(`1f8f640cac54b6f1`)/外发包 **一字未动** · 交付锚 `19d637c4`/`488e90a4` **未动** · **未重建包**"
+ },
+ "R3_CR75_zero_anchor_disposition": {
+  "裁": "**零锚处置（i-a）**：不动交付锚；CR-74 守卫容错检索；回件到货**先跑守卫**，缺 refdes ⇒ **追问补件**（不静默放过）。",
+  "procedure_now_durable": [
+   "① 回件到货 ⇒ **先** `python3 k2/tools/k2_p5_results_intake_guard_v1.py <回件> --json-out /tmp/opencode/<id>.json`",
+   "② 若 `P3V3_AUX` refdes 缺 ⇒ 守卫 **fail-closed 拦截**（`V5_pdn_dc_drop.P3V3_AUX.load_point_refdes`）⇒ **向实测方追问补件**（补充件 + sha256；**补件 ≠ 重出包**，零锚）",
+   "③ refdes **容错检索**范围：`item.load_point_refdes` / `measured.load_point_refdes` / `measured.load_points` / **整个 item JSON（含 `note`/`evidence`）** ⇒ 实测方任意写法均不误判",
+   "④ 同理：`V6-1.condition` 缺失 ⇒ fail-closed；`DBGMCU_IDCODE` 缺失 ⇒ **仅 warn + 追问补件**（不判不可判）"
+  ]
+ },
+ "R4_CR74_upheld": {
+  "裁": "覆核通过 · **保留**（零新增判据维 · 不置 status · 判定权归监理）",
+  "tool_sha16_now": "c2bc38c5746b88b4",
+  "note": "扩增后仍守同一三条定位；扩增部分为**已裁期望值之读判**，非新增判据维。"
+ },
+ "anchor_recheck": {
+  "criteria": "rev=6（MATCH）· eb3da49f/1937a40a/00faba34/c175be51/727d0995",
+  "冻结四源": "d4e81f647be7f980/fb07d25ac426ff84/dd794c54f7ce7417/0a459839e15960b8（未动）",
+  "交付锚": "19d637c4e9ed35be/488e90a47d088d06（未动 · 未重建包）",
+  "k1": "6a1ecdd（**已发布** ⇒ CR-73 闭）"
+ },
+ "red_lines_ok": [
+  "未改 criteria/",
+  "未改冻结四源",
+  "未改板/网表/SPEC/受审板",
+  "未重建包/未换锚",
+  "未改外发包（results_template.json/RULES.md 一字未动）",
+  "未 force-push · 未改 K1 载体（仅发布既有 3 笔）",
+  "未触 B 宿主副本",
+  "未派 WORKER",
+  "未越阶段",
+  "未下单",
+  "临时/外部落点仅 /tmp/opencode"
+ ]
+}

@@ -481,3 +481,15 @@
 
 ---
 **（本块）只读对包复核 1 条（闭合 · 无缺口）· 待裁 0 · owner 项 0**。
+
+### 续编 · **#K2-63 落地**（CR-17 采纳 i-a · CR-75 处置 i-a · CR-73 闭 · CR-74 保留）
+
+| # | 条目 | 内容（事实/裁定） | 依据 | 处置红线 |
+|---|---|---|---|---|
+| **CR-17（裁定 · 采纳 i-a 落地）** | **V6-2 `DBGMCU_IDCODE` DEV_ID = `0x467` 采纳（仅规程/回件判读层）** | **裁定**：#K2-63 §一 → **(i-a)**：采纳 `0x467` 为期望值，**仅规程/回件判读层**；**不动交付锚 · 不重建包（禁 i-b）**；回件判读须**并列标注**引证等级；**不充绿**。**两处落地**：① **判读附则**（ENG 侧 · **不在冻结外发包内**）：读 `0x40015800` 取 **DEV_ID（低 12 位）** 期望 **0x467**，**REV_ID（高位）随批次不计**；不符 ⇒ **不直接判 FAIL**（引证等级非原厂）⇒ 记『异常读数 · 须复测/查原厂手册确认』。② **守卫扩增**：`tools/k2_p5_results_intake_guard_v1.py` `56aea8eb8a71ca34` → **`c2bc38c5746b88b4`**：`v6_2` 增 `dbgmcu_idcode` 读判（`DEV_ID = v & 0xFFF` 比对 0x467 · **读数标签内联引证等级披露** · 不符 ⇒ **warn 勿据此判 FAIL** · **缺该项仅 warn 可追问补件**，因模板无该槽 ⇒ 属 CR-75 同族，**不因缺项判不可判**）。**自证**：正夹具 `dbgmcu_dev_id=0x00000467 MATCH_EXPECTED` · 负夹具 `0x00000999 ⇒ MISMATCH_EXPECTED + warn`（判定逻辑不变）· `self-test rc=0`。**外发包**（`results_template.json 119cd7c4` / `RULES.md 1f8f640c`）**一字未动**。 | **#K2-63 §一 CR-17**；三引证（stlink `inc/stm32.h` G0_CAT3 · `G0Bx_G0Cx.chip` · OpenOCD DBGMCU 基址） | 仅规程/判读层 · **禁 i-b**（不重建包/不换锚）· 引证等级如实并列 · **不充绿** |
+| **CR-75（裁定 · 零锚处置）** | **外发包 V5 规程↔模板不闭合 ⇒ (i-a) 零锚处置（程序已固化为守卫运行序）** | **裁定**：#K2-63 §一 → **(i-a)**：不动交付锚；守卫容错检索；回件到货**先跑守卫**，缺 refdes ⇒ **追问补件**（**不静默放过**）。**固化的运行序**：① 回件到货先 `python3 k2/tools/k2_p5_results_intake_guard_v1.py <回件>`；② `P3V3_AUX` refdes 缺 ⇒ **fail-closed 拦截** ⇒ 向实测方**追问补件**（补充件 + sha256，**补件 ≠ 重出包**）；③ refdes 容错检索 = `load_point_refdes`/`load_points`/**整个 item JSON 含 `note`/`evidence`**；④ 同类：`V6-1.condition` 缺 ⇒ fail-closed；`DBGMCU_IDCODE` 缺 ⇒ **仅 warn + 追问补件**。 | **#K2-63 §一 CR-75** | **零锚** · 未改 RULES/模板/外发包 · 未重建包/未换锚 · 登记制 · 不充绿 |
+| **CR-73（**闭合**）** | **容器 `k1` 指针未发布 ⇒ 准予快进 push，已执行并端到端证明** | **裁定**：#K2-63 **准予 (i) 快进 push**（非破坏 · 禁 force-push · 禁改 K1 载体）。**执行**：`git -C k1 status` 洁净 → `merge-base --is-ancestor origin/main HEAD` **OK**（快进可推）→ `git push origin main` = **`9e283bf..6a1ecdd  main -> main`**；`k1 origin/main = local HEAD = 6a1ecdd`（`0/0`）。**容器指针自洽**：gitlink `6a1ecddfe829…`，`merge-base --is-ancestor <gitlink> origin/main` = **true**。**端到端证明（原缺陷失效场景）**：**全新克隆** `git clone --filter=blob:none --no-checkout <k1-url> /tmp/opencode/k1probe_*` ⇒ rc=0 · `git cat-file -e 6a1ecdd^{commit}` ⇒ **OK** ⇒ **新克隆可取到容器所引 commit** ⇒ **耐久性缺陷闭合**。**未改 K1 任何内容**（仅发布既有 3 笔 commit：`e2acb20`·`08ff8bb`·`6a1ecdd`）。 | **#K2-63 §一 CR-73**；TAG_POLICY §4；本会话实测 | **快进非破坏** · 未 force-push · 未改 K1 载体 · 外部落点仅 `/tmp/opencode` |
+| **CR-74（覆核通过 · 保留）** | **P5 回件可判性守卫 = 工具面 · 保留** | **裁定**：#K2-63 §一 覆核**通过**：定位正确（**零新增判据维**（合 owner ②）· **不置 status** · **判定权归监理**（合宪法第十一条））⇒ **保留**。**本批扩增**（CR-17 i-a 读判）**仍守同一三条定位**：扩增部分为**已裁期望值之读判**，非新增判据维。现 sha16 **`c2bc38c5746b88b4`**。 | **#K2-63 §一 CR-74** | 定位不变 · 判定权归监理 · 不置 status |
+
+---
+**（本块）裁定对应**：**#K2-63**（CR-17 i-a 采纳 · CR-75 i-a 处置 · CR-73 准予 push 并闭合 · CR-74 覆核保留）。**报备：无新待裁项 · owner 项 0**。

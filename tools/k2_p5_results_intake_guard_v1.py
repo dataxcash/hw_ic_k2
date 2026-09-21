@@ -48,6 +48,12 @@ TJ_T1_TRIGGER_C = 117.0       # V7 T1 触发
 PSI_JT = 3.6                  # ℃/W（TI SNLS683 §6.4；反推唯一口径）
 AUX_WIN = (3.135, 3.465)
 SW_DP_IDCODE_INT = 0x0BC11477   # Cortex-M0+ CoreSight SW-DP IDCODE
+DBGMCU_DEV_ID_INT = 0x467        # STM32G0B1=G0Bx/G0Cx (ST CAT3) · DBGMCU_IDCODE(0x40015800) 低 12 位
+DBGMCU_DEVID_DISCLOSURE = (
+    "引证等级 = **上游工具件共同值 · 非原厂手册**（stlink inc/stm32.h `STM32_CHIPID_G0_CAT3=0x467` · "
+    "config/chips/G0Bx_G0Cx.chip `chip_id 0x467` · OpenOCD tcl/target/stm32g0x.cfg DBGMCU@0x4001580x）；"
+    "RM0454 原厂页不可达（567/429）⇒ **#K2-63 采纳 (i-a)：仅规程/回件判读层 · 不充绿 · 不动交付锚**"
+)
 FRU_ADDRS = {"0x52", "0xa4", "0xa5"}
 
 FAIL, WARN, INFO = "ADMISSIBILITY_FAIL", "WARN", "NOTE"
@@ -323,6 +329,35 @@ def v6_2(g: Guard, r: dict) -> None:
                "MATCH_EXPECTED" if hx == SW_DP_IDCODE_INT else "MISMATCH_EXPECTED",
                f"设计侧期望 {fmt_hex(SW_DP_IDCODE_INT)}（Cortex-M0+ CoreSight SW-DP）")
 
+    # DBGMCU_IDCODE(0x40015800) 之 DEV_ID（低 12 位）· #K2-63 采纳 (i-a) 判读层期望 0x467
+    raw = None
+    for holder in (m, did if isinstance(did, dict) else {}):
+        for k in ("dbgmcu_idcode", "dbgmcu_dev_id", "dbgmcu"):
+            if holder.get(k) is not None:
+                raw = holder[k]
+                break
+        if raw is not None:
+            break
+    if raw is None:
+        g.warn(f"{key}.dbgmcu_idcode",
+               "未载 `DBGMCU_IDCODE` 读数（RULES §V6-2 要求记录两项；模板无该槽 ⇒ 属 CR-75 同族）"
+               " ⇒ **可追问补件（零锚）**；本工具不因缺此项判不可判")
+    else:
+        own = raw if is_num(raw) else (norm_hex(raw) if isinstance(raw, str) else None)
+        if own is None:
+            g.warn(f"{key}.dbgmcu_idcode", f"未能解析为数值/十六进制：{str(raw)[:80]}")
+        else:
+            dev = own & 0xFFF
+            rev = own >> 16
+            g.read(key, "dbgmcu_dev_id", fmt_hex(dev),
+                   "MATCH_EXPECTED" if dev == DBGMCU_DEV_ID_INT else "MISMATCH_EXPECTED",
+                   f"判读层期望 DEV_ID {fmt_hex(DBGMCU_DEV_ID_INT)}（读回 0x{own:08X}：REV_ID=0x{rev:04X} 随批次不计）"
+                   f" · {DBGMCU_DEVID_DISCLOSURE}")
+            if dev != DBGMCU_DEV_ID_INT:
+                g.warn(f"{key}.dbgmcu_dev_id",
+                       "DEV_ID 与判读层期望不符 ⇒ **须复测/查原厂手册确认后再判**"
+                       "（引证等级非原厂 ⇒ **勿据此直接判 FAIL**）")
+
 
 def v6_3(g: Guard, r: dict) -> None:
     key = "V6_3_fru_i2c"
@@ -520,7 +555,7 @@ def _base() -> dict:
                 "status": "PASS", "evidence": ["/tmp/opencode/v6_1.log"], "measured": {"condition": "独立运行（J13/VCC 不接外供）",
                     "rails": {"12V_IN": 12.0, "P3V3": 3.3, "P3V3_AUX": 3.3, "MCU_VDD": 3.0},
                     "MCU_VDD_aux_j13_3V3": 3.3}},
-            "V6_2_mcu_swd_id": {"status": "PASS", "evidence": ["/tmp/opencode/swd.log"], "measured": {"device_id_read": "0x0BC11477"}},
+            "V6_2_mcu_swd_id": {"status": "PASS", "evidence": ["/tmp/opencode/swd.log"], "measured": {"device_id_read": "0x0BC11477", "dbgmcu_idcode": "0x10006467"}},
             "V6_3_fru_i2c": {"status": "PASS", "evidence": ["/tmp/opencode/i2c.log"], "measured": {"buses": ["I2C1", "I2C2"], "addresses_found": ["0x52"], "fru_eeprom_bus": "I2C1"}},
             "V6_4_link_gen4_x4": {"status": "PASS", "evidence": ["/tmp/opencode/lspci.txt"], "measured": {"ports": {"J2": "ok", "J3": "ok", "J4": "ok"}, "both_directions": True, "final_state": {"speed_GTs": 16, "width": 4}}},
             "V6_5_stability_30min_aer": {"status": "PASS", "evidence": ["/tmp/opencode/aer.log"], "measured": {"duration_min": 30, "aer_count": 0, "log_files": ["aer.log"]}},
@@ -555,6 +590,7 @@ def self_test() -> int:
     bad["items"]["V5_pdn_dc_drop"]["measured"]["rails"]["P3V3_AUX"]["V_load"] = 3.0
     bad["items"]["V6_4_link_gen4_x4"]["measured"]["final_state"]["speed_GTs"] = 8
     bad["measured_by"] = "ARCHER (ENG)"
+    bad["items"]["V6_2_mcu_swd_id"]["measured"]["dbgmcu_idcode"] = "0x00000999"
     g2 = run(bad)
     rep2 = report(g2, "<fixture:negative>")
     print_human(rep2)
