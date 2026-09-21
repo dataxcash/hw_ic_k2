@@ -1,6 +1,6 @@
 # K2 · R333 · 应监理停止令 ⇒ 《**守恒级卡点报告 v64**》（四字段）
 
-**件**：`K2_R333_CONSERVATION_BLOCKER_REPORT_v64.json`（约定A ``）· 只读
+**件**：`K2_R333_CONSERVATION_BLOCKER_REPORT_v64.json`（约定A `e740ecf9cdd9d096`）· 只读
 **缘起**：监理停止令（收敛停滞≈80轮无二值）：「必须出二值；若出不来 ⇒ 立即出《守恒级卡点报告》」。
 **锚**：受审板 l8 `7a5c89913d6e5d0a` · 冻结四源 **4/4 未动** · `criteria` **rev=6 MATCH** · **owner 闸口 0 · 待裁 0（ENG）**
 
