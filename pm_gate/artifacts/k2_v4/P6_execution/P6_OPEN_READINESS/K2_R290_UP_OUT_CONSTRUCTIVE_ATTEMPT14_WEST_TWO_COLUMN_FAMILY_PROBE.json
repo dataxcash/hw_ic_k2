@@ -1,0 +1,35 @@
+{
+ "schema": 1,
+ "artifact": "k2_r290_up_out_constructive_attempt14_west_two_column_family_probe",
+ "ts": "2026-09-22T06:24+0800",
+ "to": "监理",
+ "from": "ENG · ARCHER（监理自动续推 · P4 在阶 · fail-closed）",
+ "authority": "#K2-132 §三(乙) D1 / §四 · #K2-133 §三 N1 · 指令 #14 · R288（根因）",
+ "anchors": {
+  "frozen_4of4": "未动",
+  "criteria": "rev=6 MATCH（只读）",
+  "l8": "7a5c89913d6e5d0a",
+  "k2": "511b457",
+  "owner_gate": 0
+ },
+ "what": "**构造 attempt #14 —— R288 修正之验证（西组两列路形 · 逐 lane 探针）**：路径 = `A → stub → 下潜至南层 Y → 东行至 gap 列 c → 北上至 y_exit（隔断以北）→ 西行至 x_B 列 → 北上至 B 锚`；变量 (c,dx,Y,y_exit)，全部段在 **disk(0.04) 膨胀**下判定。",
+ "result": {
+  "0_N": "**可行组合 105**（例 (c=137.625, dx=84.75, Y=58.0, y_exit=51.2)）",
+  "7_P": "**可行组合 630**（例 (c=136.32, dx=92.5, Y=58.0, y_exit=54.2)）",
+  "结论": "**西组两列路形在逐 lane 层面可行** ⇒ **R288 之修正成立**（R286/R287 之「零候选」确系**单列路形族**之限，非无解）。"
+ },
+ "verdict": "**(a) 见证：仍未取得**（本轮为**逐 lane 探针**，未作联合分配/未过 exact_gate）。但**已证明**：① 根因（西组需两列）② 修正有效（西组两列路形逐 lane 可行）。",
+ "next_precise": "**一次联合实现**：东组 8 条用单列候选（R287 已得）· 西组 8 条用两列候选（本轮已得）⇒ **联合 DP**（序约束：`c`↑ · `dx`↑ · `Y`↓ · 西组 `y_exit`↓）⇒ 生成 16 条折线 ⇒ `exact_gate`（新装置）⇒ 见证；若仍缺 ⇒ 依停止令交**单一卡点 + 具名归属**（四字段）。",
+ "gate_selfcheck": {
+  "阶段": "P4（在阶）· 未越阶段",
+  "判据": "rev=6 MATCH",
+  "冻结四源": "4/4 未动",
+  "受审板 l8": "7a5c89913d6e5d0a",
+  "owner闸口": 0
+ },
+ "owner_gate": 0,
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "e69a3fe7c52a7558"
+ }
+}
