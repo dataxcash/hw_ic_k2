@@ -1,0 +1,119 @@
+{
+ "anchors": {
+  "authorized_netlist": "k2/hw/data/k2_sch.errata-3.yaml = 5dc7b82a901d11c8",
+  "caliber": "物理 keepout 0.5300（=hw0.08+0.35+margin0.100）· lane_w 0.16 · 车道互距要求 ≥0.435",
+  "criteria": "rev=6 MATCH（ENG 只读未碰）",
+  "frozen_sources": {
+   "_shared/eda_core/drc_rules.json": "0a459839e15960b8",
+   "k2/hw/data/k2_sch.yaml": "dd794c54f7ce7417",
+   "k2/hw/k2_v4_8L.kicad_pcb": "fb07d25ac426ff84",
+   "k2/hw/k2_v4_8L.l4.kicad_pcb": "d4e81f647be7f980"
+  },
+  "reviewed_board": "k2/hw/k2_v4_8L.l8.kicad_pcb = 7a5c89913d6e5d0a"
+ },
+ "artifact": "k2_r261_up_out_a_row_exit_capacity_and_nesting_order_reading",
+ "authority": "#K2-132 §三(D1) · #K2-133 §三(N1) · 《整改计划》P4 在阶 · 指令 #14 ⑥（禁 HOLD · 有可动项即推进）",
+ "bans_kept": "未改冻结四源 · criteria 只读 · 未烙板 · 未派 WORKER · 未改生成器/SPEC/原理图 · 临时仅 /tmp/opencode · 未以 16/16 布通充见证 · 未以有界搜索冒充证书 · 未自行 C-w（C-w 仍未申报）· 未新增待裁锚（#K2-133 O-4）",
+ "binary_result": {
+  "(a)_16_16_witness": "**未取得**（本轮 3 条方法：顺序硬分离 4 朝向·上限 12/16；标准 PathFinder 16/16 布通但 38 对互距违规；在册构造器 12/16）。",
+  "(b)_conservation_certificate": "**未取得严格证书**（容量型已关闭；精确计数型需监理具名方法）。**但本轮新增具名几何机制 F-3/F-4**，把卡点由『束序不变量（抽象）』**收窄**为『**A 排 `_P` 出口零余量**』（可量测、可复算）。"
+ },
+ "buildability": {
+  "mode": "n/a",
+  "why": "本件为**卡点测量/归因**（非见证）· 不作里程碑 · 不据以开工（宪法十三）"
+ },
+ "findings": {
+  "F-1_nesting_order_completeness": {
+   "reading": "4 个规范洋葱朝向**上限 = 12/16**（By_desc）⇒ 12/16 **不是**某一具体布线次序之偶然 ⇒ 与在册『20 序枚举·最好 12/16』一致。",
+   "table": [
+    {
+     "clearance_viol": 0,
+     "endpoint_dev": 0.0,
+     "lane_pitch_viol": 0,
+     "order": "By_desc（B 锚 y 降序 · 南锚先布）",
+     "routed": "12/16"
+    },
+    {
+     "clearance_viol": 0,
+     "endpoint_dev": 0.0,
+     "lane_pitch_viol": 0,
+     "order": "Ax_desc（A.x 降序 · 最东锚先布）",
+     "routed": "11/16"
+    },
+    {
+     "clearance_viol": 0,
+     "endpoint_dev": 0.0,
+     "lane_pitch_viol": 0,
+     "order": "Ax_asc（A.x 升序 · 最西锚先布）",
+     "routed": "2/16"
+    },
+    {
+     "clearance_viol": 0,
+     "endpoint_dev": 0.0,
+     "lane_pitch_viol": 0,
+     "order": "By_asc（B 锚 y 升序 · 北锚先布）",
+     "routed": "1/16"
+    }
+   ],
+   "what": "以本会话独立实现之硬分离顺序布线器（构造式·确定性·非扫描），对**洋葱序的 4 个规范朝向**各跑一次（cell 0.05 · sep 0.45 · 末闸 v3.exact_gate @0.435）。"
+  },
+  "F-2_pathfinder_negotiated": {
+   "reading": "**（a）未取得**：连接层可达（16/16 布通），但**连续精确车道互距（≥0.435）不可同时满足** ⇒ 非见证（红线：不得以 16/16 布通充当见证）。",
+   "result": "**16/16 全部同时布通**（每轮皆 16）· 最优轮 overuse=7690（cell 计数）· 末闸 `v3.exact_gate`：**车道互距 min 0.0000 mm · 38 对违规** · 对障碍 min 0.1025（0 违规）· 端点位移 0。",
+   "what": "标准 PathFinder（保留半径 = pitch/2 = 0.2175 · present+history 罰 · 每轮全量 rip-up · cell 0.10 · 60 轮）。"
+  },
+  "F-3_a_row_exit_capacity（本轮决定性新事实）": {
+   "cut_measure": "在判据口径 keepout=0.5300 下，对 `_N` 行做割线量测（cell 0.02 · 逐 y 扫）：",
+   "cut_table": [
+    {
+     "free_segments": "…7 段 ≈1.02mm + (92.8,103.12) 10.34mm …",
+     "note": "`_N` keepout 仅轻触（半宽 0.086mm/枚）",
+     "y": 55.3
+    },
+    {
+     "free_segments": "7 段 0.10/0.14mm（=`_N` 相邻缝）+ (93.24,103.36) 10.14mm + …",
+     "note": "**割线正落锚心行**",
+     "y": 55.823
+    },
+    {
+     "free_segments": "(84.1,110.02) 25.94mm",
+     "note": "已越 `_N` keepout 行",
+     "y": 56.4
+    }
+   ],
+   "geometry": "A 侧 16 锚分两行：**`_P` 行 y=54.880（8 枚 · x 84.85–93.70）**、**`_N` 行 y=55.823（8 枚 · x 84.35–92.70）**。自由南区（南通道）在 y>56.35。⇒ **每条 `_P` 车道必须跨过 `_N` 行**才能进入南区；`_N` 车道本身起点已在南区侧。",
+   "key_numbers": {
+    "N_row_gap": "相邻 `_N` 锚间距 1.15/1.20mm；减 2×0.5300 ⇒ **缝宽仅 0.090/0.140mm**（7 条）",
+    "band_blocked": "`_P` keepout 在 y 方向达 54.88+0.530=**55.410**；`_N` keepout 自 55.823-0.530=**55.290** ⇒ 二者在 y∈[55.290,55.410] **重叠** ⇒ `_P` 车道**无法在行间带内东行**（该带被 `_P` 自身相邻 keepout 切成 ≈0.168mm 缝）",
+    "east_corridor": "东端 x≈92.8–103.1 于 y≈55.3 自由（宽 10.3mm），惟其入口在 `_P` 行间带之东端，可容车道约 1 条（进口受 `_P`/`_N` keepout 夹持）",
+    "one_lane_per_slit": "0.140 < 0.435 ⇒ **每缝至多 1 条车道**（两条车道在缝内间距必 <0.435）"
+   },
+   "reading": "`_P` 出口割之**可穿越车道数 ≈ 7（锚间缝·各 1）+ ≈1（东端带）= 8 = 需求量**，**余量为 0**；且实现上 `_P` 逃生为一串 0.10–0.14mm 级缝（连续精确闸下几近退化）⇒ 与『**实测失败集恒含 3 条 `_P`**（12/16 之被排除集 {0_N,0_P,1_P,2_P} 中 3 条 `_P`）』『失败网优先时**仅 `_P` 得布**』**一致**。"
+  },
+  "F-4_mechanism_naming": {
+   "name": "**A 排 `_P` 出口零余量（`_P`-exit zero-margin）**",
+   "role": "在册 F-6（A/B 嵌套序 4 组相邻互换）与『12 集 ⊻ 4 集』指纹之**几何成因候选**：`_P` 行被夹在墙与 `_N` keepout 行之间，其南向出口只剩锚间缝 ⇒ 束之序在 `_P` 段被『缝位序』钉住。",
+   "status": "**测量/归因（非证书）**——本件**不宣称** U<16 之严格上界；严格证书仍需『束序不变量（含小孔绕组代价下界）』或**精确 MILP/CP-SAT**。"
+  },
+  "V-1_verification_archived_12of16": {
+   "result": "it0 routed=12（合法集/被排除集与在册 `wo_pf_hardsep045_c05_n30_legal12of16.json` **逐条相同**）· it1 routed=4（=被排除集）· it2 routed=12 ⇒ 在册读数**复现**（第三条·独立复核）。",
+   "what": "独立重跑既有 `k2/tools/k2_p4_b2_in5_pf_lane_router_v1.py`（30 迭代 · cell 0.05 · sep 0.45）一次，用于**复核在册 12/16**。"
+  }
+ },
+ "from": "ENG · ARCHER（续接 R260 · 应 #K2-132 D1『一次·精确·无扫描』+ #K2-133 §三 N1『no-move 全转』）",
+ "next_stage_plan": {
+  "D2/R4 不变": "rev=7 + spec-rev-55 + l9 落 hw/ + 网表 bump 新件 + 具名豁免表 ⇒ 判定器 19/19 @bump；随后 R4 复测闸 ⇒ P4 全绿方下 P5。",
+  "N1（严格 (b) · 已收窄·推荐）": "以 F-3 之割为**刚性量**：证『`_P` 出口割之可穿越车道数 ≤7』之**严格上界**（含东端带之注入容量 + `_P` 行间带不可东行之证明）⇒ 与 8 条 `_P` 车道相抵 ⇒ **U<16** ⇒ 依 #K2-70 §六③ / #K2-132 §四 **具名豁免 = 监理自裁（免再问 owner）**；或以此割为约束建**精确 MILP（序变量+不可交叉+车道宽）**。",
+  "N2（(a) · 构造）": "以『`_P` 逐缝（7 缝）+ 东端带 1 条』之**显式指派 + 每缝单向屏障**作一次构造实现 ⇒ 16/16 + `buildability.mode=\"no_move\"`（末闸 exact_gate 0 违规）。",
+  "预算": "二者并入 #K2-132 §三『一次实现、一次交付』（不新增次数）。"
+ },
+ "owner_gate": 0,
+ "round_scope": "**一次实现**（全转口径：is_lane=仅 16 条 PCIE_UP_OUT*，DN_OUT 等一律硬障碍）· 零烙板 · 零改件 · 临时仅 /tmp/opencode · 未派 WORKER",
+ "schema": 1,
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A（self_sha16 置空 · json.dumps(indent=1,ensure_ascii=False,sort_keys=True)）",
+  "convention_A_sha16": "6edb217d35819856"
+ },
+ "to": "监理",
+ "ts": "2026-09-22T02:51+0800"
+}
