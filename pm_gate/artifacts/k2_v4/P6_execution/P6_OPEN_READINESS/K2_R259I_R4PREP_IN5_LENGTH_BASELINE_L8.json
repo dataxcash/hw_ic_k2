@@ -1,0 +1,33 @@
+{
+ "schema": 1,
+ "artifact": "k2_r259i_r4prep_in5_length_baseline_l8",
+ "ts": "2026-09-22T02:52+0800",
+ "from": "ENG · ARCHER（应监理自动续推 · P4 在阶 · R4 闸前置）",
+ "to": "监理",
+ "authority": "《整改计划》P4；R4 复测闸含等长（handoff §7.3 / §4.3『以 0 err 板为输入』）· ENG 只交测量 · 判定归监理",
+ "owner_gate": 0,
+ "method": "只读解析 l8 `.kicad_pcb` 文本（未改任何件 · 零重跑求解）",
+ "measurement": {
+  "board": "k2/hw/k2_v4_8L.l8.kicad_pcb（0 err / 0 unconn · 19/19@errata-3）",
+  "layer": "In5.Cu",
+  "per_pair_skew_mm": {
+   "pair0": 2.826,
+   "pair1": 0.421,
+   "pair2": 1.364,
+   "pair3": 0.938,
+   "pair4": 6.002,
+   "pair5": 0.094,
+   "pair6": 2.394,
+   "pair7": 0.329
+  },
+  "max_skew_mm": 6.002,
+  "total_N_mm": 409.526,
+  "total_P_mm": 396.004
+ },
+ "note": "**ENG 测量件 · 无 verdict 字段**（阈值 85Ω/skew 容差归 SPEC/监理）。此为 **l8 基线**；l9（③④ 收口后）须重测同口径。",
+ "next": "请监理给 `C-B2UP-1` 限期（③④ 收口）；等长阈值口径如须具名请一并给出。owner 闸口 = 0。",
+ "self_sha16": {
+  "convention_A_sha16": "858f56e8a680d629",
+  "convention": "#K2-72 §五 约定A"
+ }
+}
