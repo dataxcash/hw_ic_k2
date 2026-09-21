@@ -52,6 +52,7 @@ def main():
     ap.add_argument("--kgrow", type=float, default=2.0)
     ap.add_argument("--rmin", type=float, default=0.435)
     ap.add_argument("--rout", type=float, default=None, help="互斥半径（默认 pitch+margin+2·折角安全）")
+    ap.add_argument("--excl", default=None, help="走廊分区硬掩码: \"PREFIX:x0,y0,x1,y1;...\"（该前缀车道禁入该矩形）")
     ap.add_argument("--pin", default=None, help="以既有工作令之 routes 为**硬约束**（只重布未 pin 之车道）")
     ap.add_argument("--a-sites", default=None)
     ap.add_argument("--b-sites", default=None)
@@ -152,6 +153,23 @@ def main():
                 rast.seg(pin_block, pts[q][0], pts[q][1], pts[q + 1][0], pts[q + 1][1], R, mode="or")
             tasks[nm]["status"] = "PINNED"
         print("  [pin] %d 条车道置为硬约束（%s）" % (len(pinned), a.pin), flush=True)
+    for t in tasks.values():
+        t["excl1d"] = np.zeros(NN, dtype=bool)
+    if a.excl:
+        for item in a.excl.split(";"):
+            if not item.strip():
+                continue
+            pref, rect = item.split(":")
+            x0, y0, x1, y1 = [float(v) for v in rect.split(",")]
+            i0, j0 = rast.cell(x0, y0); i1, j1 = rast.cell(x1, y1)
+            i0, i1 = max(0, min(i0, i1)), min(rast.NX - 1, max(i0, i1))
+            j0, j1 = max(0, min(j0, j1)), min(rast.NY - 1, max(j0, j1))
+            m = np.zeros((rast.NX, rast.NY), dtype=bool); m[i0:i1 + 1, j0:j1 + 1] = True
+            m1 = m[ii, jj]
+            for nm, t in tasks.items():
+                if nm.startswith(pref):
+                    t["excl1d"] |= m1
+        print("  [excl] 走廊分区硬掩码已应用：%s" % a.excl, flush=True)
     bad = [nm for nm, t in tasks.items() if t["status"] != "PENDING"]
     if bad:
         print("  ⚠ 端点不可行：", bad, flush=True)
@@ -189,7 +207,7 @@ def main():
         D = field_of(others)
         D1 = D[ii, jj]
         pen = K * np.maximum(0.0, rmin - D1) ** 2
-        allow1d = (~t["blk1d"]) & (~pin_block[ii, jj])
+        allow1d = (~t["blk1d"]) & (~pin_block[ii, jj]) & (~t["excl1d"])
         ok = allow1d[e_src] & allow1d[e_tgt]
         w = np.where(ok, e_dl + pen[e_tgt], np.inf)
         s, g = t["s"], t["g"]
@@ -207,7 +225,7 @@ def main():
 
     def route(nm, allowed2d):
         t = tasks[nm]
-        allow1d = allowed2d[ii, jj] & (~t["blk1d"]) & (~pin_block[ii, jj])
+        allow1d = allowed2d[ii, jj] & (~t["blk1d"]) & (~pin_block[ii, jj]) & (~t["excl1d"])
         ok = allow1d[e_src] & allow1d[e_tgt]
         w = np.where(ok, e_dl, np.inf)
         s, g = t["s"], t["g"]
