@@ -1,0 +1,75 @@
+{
+ "schema": 1,
+ "artifact": "k2_r259_p4_adjudicator_complete_and_up_out_six2_deviation",
+ "ts": "2026-09-22T01:17+0800",
+ "from": "ENG · ARCHER（新会话续接 · 仅加载 handoff + ledger 尾 + 指定工件）",
+ "to": "监理",
+ "authority": "《K2 整体整改计划》v1.9 §P4（完工判据，ENG 只交测量/判定归监理）· #K2-131 §六·§九 · #K2-73 §一（有界搜索观察值 ≠ 证书）· owner #14②⑥",
+ "owner_gate": 0,
+ "first_action": "已读 `.omo/supervision/ledger/`（含 sent/ · outbox/）：**最新 K2-RULING 仍为 #K2-131（2026-09-22 01:00）**，无晚于本 handoff（01:09）之裁定 ⇒ 依 handoff §7 执行其『可做·不依赖 (乙)』支。",
+ "part_A_判定器完整执行": {
+  "说明": "handoff §7.2 列『完整跑判定器』为待办；本件**独立复跑**（rev=6 · countersigned · 全新 --drc-work-dir · 真实时钟）。",
+  "命令": "python3 criteria/adjudicate.py --project k2 --board k2/hw/k2_v4_8L.l8.kicad_pcb --pro k2/hw/k2_v4_8L.l8.kicad_pro --nets <NETLIST> --sch-dir k2/hw/sch --gerber-dir <fresh> --root . --drc-cli AppDir/bin/kicad-cli --drc-work-dir <fresh> --w8-audit-json/--pads-outline-json/--v3-plane-json/--density-json/--min-clearance-json/--refplane-gap-json（6 件在册测量，board_sha16 全 = 受审板）",
+  "受审板": "k2/hw/k2_v4_8L.l8.kicad_pcb · sha16 7a5c89913d6e5d0a",
+  "结果_分列": [
+   {
+    "netlist": "hw/data/k2_sch.errata-3.yaml (#K2-24+#K2-57 授权真源链)",
+    "sha16": "5dc7b82a901d11c8",
+    "verdict": "PASS 19/19",
+    "note": "与在册 L4/E3-standard-call-l8-20260921 之 rev=6 verdict OK 集逐项同"
+   },
+   {
+    "netlist": "hw/data/k2_sch.yaml (冻结原件 · 逐字节未动)",
+    "sha16": "dd794c54f7ce7417",
+    "verdict": "FAIL 17/19",
+    "fails": [
+     "net_declared_realized: LED_A 声明2/实际1 · PWR_5V_KEY 声明1/实际0",
+     "pin_map_complete: 2 节点无焊盘 = (GND,C89/B@2) · (PWR_5V_KEY,C89/A@1)"
+    ]
+   }
+  ],
+  "定性": "2 FAIL **恰为**已授权 errata（C89/PWR_5V_KEY 删减 = owner ⑤+#K2-24；LED/BAT54C pin 号 = #K2-57）⇒ **非缺陷**，系冻结原件尚未随 errata 提升。**判定器本身在 l8 达 19/19（用授权真源）**。",
+  "landed": "pm_gate/artifacts/k2_v4/L4/E3-standard-call-l8-20260922-rerun/"
+ },
+ "part_B_P4口径自答": {
+  "来源": "**全部取自冻结判据实现/manifest 与在册先例，非新裁定**（故 ENG 不再以『请裁』挂起）",
+  "B1_铺铜": "rev=6 `adjudicate.py` 已内定分母：`_zc=[z for z in zones if (not keepout) and net]` ⇒ **有网非 keepout 铜区**（先例 #K2-29 §口径裁定，逐字同）。l8：**10/10 已填充 PASS**；8 个无网 keepout 区**不入分母**（verdict detail 原文『keepout 规则区 8 个另计（不入分母）』）。⇒ R257 之『口径待裁』**已由判据自答**。",
+  "B2_插件件引脚数": "判据 `drill_count` 仅门 **NPTH>=4**（manifest `npth_min: 4`）；PTH 仅为 detail 信息串，**不设阈**。实测：**NPTH=4（H1–H4 安装孔）>= 4 PASS**；**PTH=16 = 5 个插件件引脚合计 16（J11/J9/J13 各 4 + J6/J12 各 2）** ⇒ 计划之『PTH >= 插件件引脚数』= 16 >= 16 **达标**。网表可落性由 `pin_map_complete` / `net_declared_realized` 承载（授权真源下 = 0 缺）。",
+  "B3_平面落图前置": "自 l8 新导出 Gerber（kicad-cli 10.0.5）：`In1.Cu G36=1 · In3.Cu G36=1 · In6.Cu G36=1 · In4.Cu G36=9` ⇒ **平面确被画出 PASS**；`F.Cu/B.Cu G36=0` 合设计（外层无铜箔 zone；4 个 `ESC_*` 为 rule area 非铜）。",
+  "B4_其他机判读数": "DRC error=0/违规总 170（9 类 warning 全登记）· unconnected=0 · non45=0/5180 · vias=734 · pads=676 · footprints=58。"
+ },
+ "part_C_UP_OUT_§六②_未执行_决定性核实": {
+  "结论": "**#K2-131 §六 步骤②『解指派（<=16x<=11 · 精确）』在 R254 之『一次实现』中未被真正执行** —— 该实现用**位置索引启发式**充当指派，未做精确/可达性求解。",
+  "证据": "`/tmp/opencode/archer/assign_router.py`（R254 件 · mtime 2026-09-22 01:03）第 54–57 行：`for i,nm in enumerate(Nn): assign[nm]=SLOT_LIST[i][0] …`（N 线按 A_x 序与缝按 x 序**下标对位**）；全文无 matching/MILP/可达性求解（grep 无 bipart/matching/ILP）。",
+  "推论": [
+   "§六-3『若两皆无 ⇒ 停手』之前提为**步骤①~④已按裁决执行完**；②未执行 ⇒ 该前提**尚未成立**（R254 交的是『③④失败之读数』，非②之精确结论）。",
+   "§六-3 明文分支『**若指派严格不可行 ⇒ (b)**（按 §三 刚性量）』**尚未被触达**：迄今无任何『精确指派不可行』之结论（亦无 (a)）。",
+   "故『两皆无』之停手处置**早于裁决自身之程序**；本件据实登记，请监理定夺（见 part_D）。"
+  ],
+  "不改既往": "R254 之 2/16 读数与 R258 之跨线容量 20>=16 复算均**不撤**（前者=有界搜索观察值，后者=割线容量型）；本件仅指出**②这一子步缺失**。"
+ },
+ "part_D_放行请求_监理自裁面": {
+  "owner_gate": 0,
+  "D1": "**准否按 §六② 精确执行一次『解指派』**（只读 · 无参数/次序/斥力/笼位/格距扫描 · 非新工具提案）？其结论二值化：指派**可行** ⇒ 交监理一条**可施工之指派表**（随后才谈 ③ 坐标化）；指派**严格不可行** ⇒ 依 §六-3 出 **(b) 严格上界证书**。口径/方法若须定，请监理**具名**（先例：**#K2-73** 之『孤立自由域内互合法锚位数 = 精确 MILP 解 14<16』即 §三(乙)② 精确计数之已用形式）。",
+  "D2": "**真源网表提升**：P4 判据须以**授权真源**（errata-3 `5dc7b82a901d11c8`）判；冻结原件 `dd794c54f7ce7417` 判则 2 FAIL（见 part_A）。请明示该链之落库方式（与 `spec-rev-55` / `criteria` rev=7 之同批关系）。",
+  "D3": "**criteria rev=7**（gate 属主落件 · l9 落库硬前置）—— ENG 只读、不代改。",
+  "并行性": "D2/D3 与 D1 互不阻塞，可并行。"
+ },
+ "not_asked": [
+  "不请求 owner 裁决（未触 L1 · 全在监理自裁面）",
+  "未改冻结四源/判据/生成器/SPEC/原理图",
+  "未重跑布线器（守 #K2-131 §六-3）· 未派 WORKER · 未重建/覆盖任何旧包",
+  "不提案新工具（part_C 仅指出裁决自身子步缺失）"
+ ],
+ "gate_selfcheck": {
+  "阶段": "《整改计划》P4（在阶）· 未越阶段（未触 P5）",
+  "判据": "rev=6 MATCH（只读执行）· 口径未改",
+  "冻结四源": "4/4 未动（d4e81f647be7f980 / fb07d25ac426ff84 / dd794c54f7ce7417 / 0a459839e15960b8）",
+  "owner闸口": 0,
+  "外部前置": 1
+ },
+ "self_sha16": {
+  "convention_A_sha16": "4e9c7876e2fd5a9e",
+  "convention": "#K2-72 §五 约定A：sha256(文件字节，self_sha16 之值以空串 '' 替换) 前16"
+ }
+}
