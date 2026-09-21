@@ -1,0 +1,55 @@
+{
+ "anchors": {
+  "A": "sites_a_up_v2.json",
+  "A_cage_sha16": "608a1b04c048fa1c",
+  "B": "R149_b_alloc_s2.00.json（UP 侧不改）"
+ },
+ "artifact": "k2_p4_b2_RA_WITNESS_UP_OUT_16of16_IN5_2VIA_v2",
+ "convention": "自报 sha16 按 #K2-72 §五 约定 B（可复算 · 不内嵌自身 sha16）",
+ "endpoints_seed23": {
+  "A": 0.0,
+  "B": 0.0
+ },
+ "endpoints_seed7": {
+  "A": 0.0,
+  "B": 0.0
+ },
+ "gate_seed23": {
+  "min_exact_pair_mm": 0.5,
+  "n_pairs_below_pitch": 0,
+  "n_pairs_true_crossing": 0,
+  "n_routed": 16,
+  "obstacle_clearance_min_mm": 0.1736,
+  "v3_gate_min_gap_mm": 0.5,
+  "v3_gate_n_lane_pitch_viol": 0
+ },
+ "gate_seed7": {
+  "min_exact_pair_mm": 0.5,
+  "n_pairs_below_pitch": 0,
+  "n_pairs_true_crossing": 0,
+  "n_routed": 16,
+  "obstacle_clearance_min_mm": 0.1736,
+  "v3_gate_min_gap_mm": 0.5,
+  "v3_gate_n_lane_pitch_viol": 0
+ },
+ "gate_selfcheck": {
+  "owner闸口": 0,
+  "冻结四源": "未动",
+  "判据": "criteria/ rev=6 MATCH（只读未碰）",
+  "外部前置": "1（criteria rev=7 · gate 属主）",
+  "待裁": 0,
+  "阶段": "P5 PENDING_EXTERNAL（未越阶段）"
+ },
+ "method": "清尾法 = **钉住 14 条（pin）× 重布涉交叉之 2 条**（UP_OUT0_N / UP_OUT3_P）⇒ 两 seed 各自复现 0 违规（每次 18s）。",
+ "next": "转 #K2-73 §七-2 施工（UP 走 In5 批 ‖ DN 复原 l8 拓扑 + C-z/C-w）⇒ apply ⇒ ZONE_FILLER ⇒ DRC 0/0 ⇒ R4",
+ "referenced_sha16": {
+  "/tmp/opencode/archer/ortho2_run_v4.py": "ec9e48449e503e9d",
+  "/tmp/opencode/archer/pin_up14.json": "d8d3b7f0b2955668",
+  "/tmp/opencode/archer/sites_a_up_v2.json": "608a1b04c048fa1c",
+  "/tmp/opencode/archer/wo_up_pin_s23.json": "15f048c602353029",
+  "/tmp/opencode/archer/wo_up_pin_s7.json": "63f491899eb2dc22",
+  "tools/k2_p4_b2_true_gate_v1.py": "8ea777b251e93c9d"
+ },
+ "tick": "R230（承 #K2-73 §七-1 · R229 自纠后清尾）",
+ "verdict": "**UP_OUT 亚组 R-A 见证成立**（v2）：16/16 · **真闸（含真交点）0 违规** · min 段距 **0.5000 ≥0.435** · 障碍余量 **0.1736 ≥0.100** · **端点位移 A/B = 0.000000** · **两 seed（7/23）复现** · 锚位全在 F.Cu 可达大域（comp#1）且 `Legal(让路集)` 合法 · A 笼两两距 **≥1.523 ≥1.495**。"
+}
