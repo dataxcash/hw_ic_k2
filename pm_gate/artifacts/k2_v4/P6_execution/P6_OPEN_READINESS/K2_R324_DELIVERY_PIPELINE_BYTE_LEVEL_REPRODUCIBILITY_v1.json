@@ -1,0 +1,77 @@
+{
+ "schema": 1,
+ "artifact": "k2_r324_delivery_pipeline_byte_level_reproducibility_v1",
+ "ts": "2026-09-22T06:49+0800",
+ "to": "监理",
+ "from": "ENG · ARCHER",
+ "authority": "《K2 整体整改计划》§P4（产出 = 板 + Gerber + 钻孔 + 打包）· ENG 契约 §3.3 阶段⑤完工判据「包齐 ∧ 逐文件 sha ∧ 字节级可复现」· owner #14③（完工定义 = 可制造 Gerber）",
+ "anchors": {
+  "frozen_4of4": "未动（fb07d25ac426ff84 · d4e81f647be7f980 · dd794c54f7ce7417 · 0a459839e15960b8）",
+  "criteria": "rev=6 MATCH（只读未碰）",
+  "l8": "7a5c89913d6e5d0a",
+  "k2": "250b6af",
+  "owner_gate": 0
+ },
+ "subject": "L6/jlc_package_l8r3（受审板 l8 之 JLC 交付包 · 已 commit）",
+ "method": {
+  "步骤": "① 将 l8 板/工程**只读复制**到 /tmp 副本（副本 sha16 校验 == 受审板）；② 以打包器所载**同一命令**重出：`kicad-cli pcb export gerbers --board-plot-params --no-x2 --layers <8铜+2丝印+2阻焊+边框>` 与 `kicad-cli pcb export drill --format excellon --excellon-units mm --generate-map --map-format svg --generate-report`；③ 施加**同一时间戳规范化**（`\\d{4}-\\d{2}-\\d{2}[ T]\\d{2}:\\d{2}:\\d{2}([+-]\\d{2}:\\d{2})?` → `2026-09-19T00:00:00+08:00`）；④ **逐文件 sha256** 与已 commit 包比对",
+  "未触碰": "仓库工作树未改（导出在 /tmp 副本上进行）",
+  "canonicalized": "gerber 14 件 · drill 15 件被规范化（时间戳）"
+ },
+ "result": {
+  "byte_identical_files": 29,
+  "mismatch": [],
+  "missing": [],
+  "extra": [],
+  "判": "**字节级可复现 PASS（29/29 逐文件 sha256 相同）**",
+  "inventory": {
+   "gerber_files": 14,
+   "drill_files": 15,
+   "copper_layers": [
+    "k2_v4_8L.l8-B_Cu.gbr",
+    "k2_v4_8L.l8-F_Cu.gbr",
+    "k2_v4_8L.l8-In1_Cu.gbr",
+    "k2_v4_8L.l8-In2_Cu.gbr",
+    "k2_v4_8L.l8-In3_Cu.gbr",
+    "k2_v4_8L.l8-In4_Cu.gbr",
+    "k2_v4_8L.l8-In5_Cu.gbr",
+    "k2_v4_8L.l8-In6_Cu.gbr"
+   ],
+   "job_file": [
+    "k2_v4_8L.l8-job.gbrjob"
+   ],
+   "drill_excellon": [
+    "k2_v4_8L.l8-back-in5.drl",
+    "k2_v4_8L.l8-front-in1.drl",
+    "k2_v4_8L.l8-front-in2.drl",
+    "k2_v4_8L.l8-front-in4.drl",
+    "k2_v4_8L.l8-front-in5.drl",
+    "k2_v4_8L.l8-in2-in5.drl",
+    "k2_v4_8L.l8.drl"
+   ],
+   "drill_total": 754,
+   "n_files_manifest": 53,
+   "dfm_summary_manifest": {
+    "pass": 16,
+    "accept": 1,
+    "fail": 0
+   },
+   "criteria_anchor": "rev=6",
+   "kicad_version": "10.0.5"
+  },
+  "l8_pack_file_sha16_sample": {
+   "k2_v4_8L.l8-B_Cu.gbr": "57398d2c48243152",
+   "k2_v4_8L.l8-B_Mask.gbr": "3d4cbd84707540e9",
+   "k2_v4_8L.l8-B_Silkscreen.gbr": "46c209e61d950f0a",
+   "k2_v4_8L.l8-Edge_Cuts.gbr": "03d532877797d77c"
+  }
+ },
+ "scope_note": "本件仅复核**交付链之可复现性**（阶段⑤之机械判据）；**不改变 ②-UP 之未决状态**，亦**不主张 P4 全绿**。受审板仍为 l8；最终交付件待 ②-UP 口径与判据侧两条裁定落定后同批重出（fail-closed）。",
+ "p4_gate_state": "P4 **未全绿**（R317 verdict 18/19；唯一 FAIL `lib_electrical_level` 为判据侧）⇒ fail-closed 维持：不进 P5、不下单。",
+ "bans_kept": "未改冻结四源 · criteria 只读 · 未烙板 · 未派 WORKER · 未改生成器/SPEC/原理图 · 临时仅 /tmp/opencode · 未写 .omo/supervision/** · 仓库工作树未改",
+ "owner_gate": 0,
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "002939003036b8a8"
+ }
+}
