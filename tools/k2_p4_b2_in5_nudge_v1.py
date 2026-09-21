@@ -29,7 +29,7 @@ def closest_pair(p, q):
         ax, ay = p[i]; bx, by = p[i + 1]; dx, dy = bx - ax, by - ay; L2 = dx * dx + dy * dy
         for j in range(len(q) - 1):
             cx, cy = q[j]; ex, ey = q[j + 1]; fx, fy = ex - cx, ey - cy; M2 = fx * fx + fy * fy
-            for t in [k / 50.0 for k in range(51)]:
+            for t in [k / 20.0 for k in range(21)]:
                 px, py = ax + t * dx, ay + t * dy
                 u = 0.0 if M2 == 0 else max(0.0, min(1.0, ((px - cx) * fx + (py - cy) * fy) / M2))
                 qx, qy = cx + u * fx, cy + u * fy
@@ -37,6 +37,18 @@ def closest_pair(p, q):
                 if d < best[0]:
                     best = (d, (px, py), (qx, qy), i)
     return best
+
+def local_min(routes, victim):
+    """廉价预筛：victim 车道至**所有其他车道**之最小段距（21 点采样 ≈0.05mm 精度）。"""
+    p = routes[victim]['pts']; best = 1e9
+    for nm, r in routes.items():
+        if nm == victim:
+            continue
+        d = closest_pair(p, r['pts'])[0]
+        if d < best:
+            best = d
+    return best
+
 
 routes = {k: {'pts': [tuple(x) for x in v['pts']], 'len_mm': v['len_mm']} for k, v in wo['routes'].items()}
 g = gate(routes)
@@ -57,10 +69,13 @@ for rnd in range(6):
             n = math.hypot(vx, vy) or 1.0
             ux, uy = vx / n, vy / n
             vi = min(segi + 1, len(p['pts']) - 2)          # 触发线段末端顶点（不动首末端点）
+            lm_cur = local_min(routes, victim)
             for delta in (0.05, 0.10, 0.15, 0.20, 0.25):
                 cand = copy.deepcopy(routes)
                 px, py = cand[victim]['pts'][vi]
                 cand[victim]['pts'][vi] = (round(px + ux * delta, 4), round(py + uy * delta, 4))
+                if local_min(cand, victim) <= lm_cur + 1e-9:
+                    continue                      # 廉价预筛：局部无改善 ⇒ 跳过闸复算
                 try:
                     gg = gate(cand)
                 except Exception:
