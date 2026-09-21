@@ -1,0 +1,58 @@
+{
+ "artifact": "k2_pending_rulings_delta",
+ "schema": 1,
+ "ts": "2026-09-21T08:21:39+08:00",
+ "session_label": "K2-2026-09-21 · 轮标 ARCHER-R99 · 只读造活（P5 阶段内 · 交付件人读面复核）",
+ "supersedes": "PENDING_RULINGS_DELTA_20260921_v31.json（其四项已由 **#K2-63** 全额裁定 ⇒ 本件为**新发现**，非续存）",
+ "purpose": "【待裁 · 新】**CR-76**：交付件人读面回退（阻抗表 `watch` 段丢渲染）+ **V4 判读口径**请求（券落在已预见之 M2 分歧区时如何判）。",
+ "why_signal_now": "CR-32 强制结构化；本项为**新的**、可复现的交付件缺陷（与 CR-47/CR-71 同族）且直接关系**下单备注/券覆盖**与 **V4 判读**。",
+ "owner_gate": "**0** —— 属**差异定性 / 放行范围 / 判据语义（判读口径）**（监理自裁面）；无 L1 成分；不动 owner 系统/账号/预算（**下单属商务**，不在此）。",
+ "stage_state": "P5 `PENDING_EXTERNAL`（未下单/未外发）· P0–P4 HOLDS · P6 CLOSED · 未越阶段 · 判据 rev=6 MATCH · 交付锚 `19d637c4e9ed35be`/`488e90a47d088d06`（未动 · 未重出包）。",
+ "pending_supervision": [
+  {
+   "id": "**【待裁 · 新】CR-76：包生成器 `imp_md()` 丢渲染冻结 CO-146 卡之 `## watch` 段（人读面回退 · 自 L6 起同型）**",
+   "facts": "`L5/jlc_package` .md = 53 行含 `## watch`；`L6/jlc_package` / `_l8` / **`_l8r2`（现行锚）** .md = 32 行 **无** `## watch`；四包 **JSON `watch` 均在**。丢失 = 『名义最宽净距 0.395mm ⇒ **M2=94.94Ω 越 93.5Ω 上界** ⇒ **下单备注要求 JLC 阻抗表覆盖该几何**』+『verdict=PASS（判据=as-built · 见下 watch）』限定句。机制 = `imp_md()` 未渲染 `watch`/`verdict_basis` ⇒ 结构性。",
+   "ask": "请裁 (i-a) **零锚登记**（不动包/锚）或 (i-b) **修 `imp_md()` + 重出包**（⇒ 换锚 + 重复核 · 承 CR-47 先例 · **ENG 倾向**）。**均不阻塞 P5。**",
+   "evidence": "`CR76_IMPEDANCE_MD_WATCH_CARVEOUT_20260921_v1.json` **172341897b2e669f**"
+  },
+  {
+   "id": "**【待裁 · 判读口径】V4：券覆盖 0.6mm 中心几何后若实测落 93.5–95Ω（= 冻结卡 watch 已预见之 M2 分歧区）**",
+   "facts": "验收计划 §V4 **要求**券覆盖『最宽对内间距 0.6mm 中心几何』（承 CO-146 备注；该几何 M2 观察值偏 +11.7% ⇒ **94.94Ω**）；而冻结判据 = 85Ω±10%（窗口 76.5–**93.5**Ω）。该几何在 as-built 上**非离群**（F.Cu 耦合 run 中位净距即 **0.395mm**）。",
+   "ask": "按既有判据**判越界（⇒ 回 P3/P4）**，抑或另有口径？**ENG 不自裁 · 不主张放松阈值（C-12）**；仅请求在券到达前定口径，避免判读争议。",
+   "impact_if_none": "**不阻塞**（券未到）；但若到达后才议口径，易生争议。"
+  },
+  {
+   "id": "【登记 · 续存 · 非阻塞】",
+   "items": [
+    "`check_l3.py` `:3`/`:71` 未授权范围（续存）",
+    "T2-F6 通道登记（续存）：新可达 `raw.githubusercontent.com`/`api.github.com`/`www.so.com`；仍闭 `www.st.com`(567) · `st.com.cn`(567) · `stmcu.com.cn`(429) · `archive.org`(000)",
+    "`CR-22`/`CR-3`/land pattern 族 · `COV-C3` · R5 文献批（余项待权威件）"
+   ]
+  }
+ ],
+ "landed_this_session": [
+  {
+   "id": "CR-76",
+   "artifact": "证据件 **172341897b2e669f**",
+   "reading": "四包逐件实测：L5=53 行含 watch；L6/l7·l8·l8r2=32 行无 watch；JSON watch 四包均在"
+  },
+  {
+   "id": "册面",
+   "artifact": "`docs/K2-CONVENTION-REGISTER-20260921.md` **3ab56fea3889d564**",
+   "reading": "R99 续编（CR-76）"
+  }
+ ],
+ "red_lines_ok": [
+  "未改 criteria/",
+  "未改冻结四源",
+  "未改板/网表/SPEC/受审板",
+  "**未改生成器**（仅登记）",
+  "未重出包/未换锚",
+  "未改包内件/ORDER_NOTES/DISCLOSURE/投递说明/验收计划",
+  "未触 B 宿主副本",
+  "未派 WORKER",
+  "未越阶段",
+  "未下单"
+ ],
+ "next": "① 待监理裁 **CR-76** (i-a)/(i-b) + **V4 判读口径**；② **外部回件到位** ⇒ `tools/k2_p5_results_intake_guard_v1.py` ⇒（缺 refdes/condition 追问补件）⇒ 交监理判定 ⇒ **P5 关门**（runbook `K2-P5-CLOSURE-RUNBOOK-v1.md`）；③ 继续只读造活（**禁 HOLD/停等**）。"
+}
