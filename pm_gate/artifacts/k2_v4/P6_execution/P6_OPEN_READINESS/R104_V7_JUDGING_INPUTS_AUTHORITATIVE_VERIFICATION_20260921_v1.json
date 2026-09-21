@@ -1,0 +1,45 @@
+{
+ "artifact": "k2_v7_judging_inputs_authoritative_verification",
+ "schema": 1,
+ "ts": "2026-09-21T08:51:49+08:00",
+ "session_label": "K2-2026-09-21 · 轮标 ARCHER-R104 · 只读造活（P5 阶段内 · V7 判据输入核验）",
+ "why": "V7 之 `Tj` **反推口径**（`Tj = T_top + P·ψJT` · ψJT=3.6）与**四工况功率**（4.7/6.0/5.8/7.0 W）是**全部 V7 判读的输入**；若参数错 ⇒ 四个工况的 `Tj` 全错。此前件仅**引用**（`parameter_source` + `datasheet_sha256`），**未核**。本件用**已达通道（`www.ti.com` · CR-23）**重取原厂件**逐值核验**。",
+ "method": "`curl https://www.ti.com/lit/ds/symlink/ds320pr1601.pdf` → `sha256sum` 比对交付件所载 `datasheet_sha256` → `pdfinfo` 取文献号 → `pdftotext -layout` 取 §6.4 / 功耗表 → 逐值比对。**外部原件仅落 `/tmp/opencode/ti_v7/`（未入库）**。",
+ "results": {
+  "doc": {
+   "url": "https://www.ti.com/lit/ds/symlink/ds320pr1601.pdf",
+   "http": 200,
+   "bytes": 2225981,
+   "sha256": "f61599c4356edb395e07c9300999ab818898986a4adde71753bae7a080c039da",
+   "sha256_vs_交付件所载": "**逐位相同** ✓（交付件 `V7.tj_conversion_caliber.datasheet_sha256` = `f61599c4…039da`）",
+   "pdfinfo_doc_number": "**SNLS683** ✓（= 交付件所载 `parameter_source` 之文献号）",
+   "title": "DS320PR1601 32 Gbps 16 Lane PCIe 5.0, CXL 2.0 Linear Redriver datasheet",
+   "package_marking": "**ZDG (nfBGA, 354)** ✓"
+  },
+  "thermal_6_4_page16": {
+   "RθJA-High K": "17.4 ℃/W",
+   "RθJC(top)": "**6.5 ℃/W** ✓（= 交付件 `theta_jc_top_C_per_W: 6.5`，标注 `prediction_only`）",
+   "RθJB": "6.1 ℃/W",
+   "ψJT": "**3.6 ℃/W** ✓（= 交付件 `psi_JT_C_per_W: 3.6`）",
+   "ψJB": "5.9 ℃/W",
+   "RθJC(bot)": "N/A",
+   "source_line": "`snls683.txt:778` `6.4 Thermal Information`（TOC 载 p16 ✓ = 交付件所载 §6.4/（p16））",
+   "caliber_check": "`ψJT` 项名原文 = `Junction-to-top characterization parameter` ⇒ 与交付件 `tj_conversion_caliber.parameter_name` **一致**；交付件用法（`Tj = T_top + P·ψJT`）即该参数之**标准用途** ✓"
+  },
+  "power_consumption": {
+   "PACT：`32-channels (16-lanes), EQ = 0-2`": "**4.7 / 6.0 W**（typ/max）✓ = 交付件 `U6_EQ0-2_typ.P_W=4.7` · `U6_EQ0-2_max.P_W=6.0`",
+   "PACT：`32-channels (16-lanes), EQ = 5-19`": "**5.8 / 7.0 W**（typ/max）✓ = 交付件 `U6_EQ5-19_typ.P_W=5.8` · `U6_EQ5-19_max.P_W=7.0`",
+   "source_line": "`snls683.txt:796-797`（`PACT Device active power`）"
+  },
+  "cross_validation": "① 文献号/参数/功耗**四项全中**；② 封装 **354 nfBGA** 与**板侧** `U6` footprint（`ForgeOS:DS320PR1601`）之 **354 pads** 相互印证（R101/R102 之解析）✓；③ 交付件之 `datasheet_sha256` 与**本次独立下载**逐位相同 ⇒ **引用可核 · 非记忆填充**。"
+ },
+ "conclusion": "**V7 判据输入 = 权威件可核 · 逐值命中**（文献 SNLS683 §6.4 p16：ψJT 3.6 · θJC(top) 6.5；功耗表：4.7/6.0/5.8/7.0 W）。**本件不改变任何阈值/口径**（仅核验）；V7 之 `Tj ≤ 120℃` 与 `T1 触发 >117℃` 维持（#K2-64 §一 判词一致）。",
+ "not_a_defect": true,
+ "red_lines_ok": [
+  "只读核验（未改板/包/SPEC/判据/模板）",
+  "未重出包/未换锚",
+  "外部原件仅落 /tmp/opencode",
+  "未派 WORKER",
+  "未越阶段"
+ ]
+}

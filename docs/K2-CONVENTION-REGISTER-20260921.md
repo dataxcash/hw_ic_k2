@@ -550,3 +550,5 @@
 
 ---
 **（本块）裁定对应**：**#K2-64 §一（判词）+ §二（DFM 通道口径）+ §四（V4 判读口径）** ⇒ 满足 Gate ⑥「口径登记在册」。**owner 项 0**。
+
+| — | **（附 · R104）V7 判据输入**之**权威件核验**（逐值命中 · **非缺陷**） | **动机**：V7 之 `Tj` 反推口径（`Tj = T_top + P·ψJT` · **ψJT=3.6**）与**四工况功率**是全部 V7 判读之输入，此前仅**引用**未核。**核验（新通道 `www.ti.com` · CR-23）**：① `ds320pr1601.pdf` **http 200 · 2,225,981 B · sha256 `f61599c4356edb39…39da`** 与交付件所载 `datasheet_sha256` **逐位相同** ✓；② `pdfinfo` 文献号 = **SNLS683** ✓ · 封装 **ZDG (nfBGA, 354)** ✓；③ §6.4（p16）逐值：**`ψJT = 3.6 ℃/W`** ✓ · **`RθJC(top) = 6.5 ℃/W`** ✓（交付件标注 `prediction_only`）· `RθJA-High K = 17.4` · `RθJB = 6.1` · `ψJB = 5.9`；且 `ψJT` 项名原文 = `Junction-to-top characterization parameter` ⇒ 与交付件 `parameter_name` 一致、用法即标准用途 ✓；④ 功耗表 `PACT`：**EQ 0-2 = 4.7/6.0 W** · **EQ 5-19 = 5.8/7.0 W** ✓ = 交付件四工况 `P_W`。**交叉印证**：封装 **354 nfBGA** 与板侧 `U6` footprint（`ForgeOS:DS320PR1601`）**354 pads** 互证。⇒ **V7 判据输入 = 权威件可核 · 逐值命中**（**不改变**任何阈值/口径）。证据 = `R104_V7_JUDGING_INPUTS_AUTHORITATIVE_VERIFICATION_20260921_v1.json`（**`f9314fac298e6e2c`**）。 | 本会话只读核验；CR-23 通道；V7/CR-19/CR-20 口径 | 只读 · 未改板/包/SPEC/判据/模板 · 外部原件仅 /tmp/opencode · **非缺陷** |
