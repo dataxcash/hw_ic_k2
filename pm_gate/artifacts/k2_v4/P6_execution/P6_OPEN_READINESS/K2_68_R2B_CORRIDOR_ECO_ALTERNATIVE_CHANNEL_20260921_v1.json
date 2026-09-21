@@ -1,0 +1,3668 @@
+{
+ "artifact": "k2_68_r2b_corridor_eco_alternative_channel",
+ "authority": "#K2-68 §2.4(a)-3（他网走廊 ECO）· §7-2 前置",
+ "bands": [
+  [
+   50.0,
+   100.0,
+   33.0,
+   46.0
+  ],
+  [
+   50.0,
+   100.0,
+   46.0,
+   62.0
+  ]
+ ],
+ "board": "/tmp/opencode/w3/c.kicad_pcb (R1E)",
+ "note": "同位替代通道余量 = 同几何（同端点/线宽）置于 B.Cu / In2 时，至最近他网铜缘净距 − (hw+req)；只读测量，未改任何板/件。",
+ "segments": [
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 1.9632,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT4_N_MCIO"
+   },
+   "In2_samepos_slack_mm": -0.38,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT4_N_MCIO"
+   },
+   "In5_slack_mm": 0.015,
+   "a": [
+    55.25,
+    43.0
+   ],
+   "b": [
+    54.65,
+    43.0
+   ],
+   "len": 0.6,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PERSTA#"
+   },
+   "B_Cu_samepos_slack_mm": 2.3224,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT5_N_MCIO"
+   },
+   "In2_samepos_slack_mm": -0.38,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT5_N_MCIO"
+   },
+   "In5_slack_mm": 0.045,
+   "a": [
+    59.15,
+    44.1
+   ],
+   "b": [
+    56.55,
+    44.1
+   ],
+   "len": 2.6,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 0.1476,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_MODE"
+   },
+   "In2_samepos_slack_mm": -0.29,
+   "In5_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR0_7-0"
+   },
+   "In5_slack_mm": 0.05,
+   "a": [
+    83.11,
+    56.79
+   ],
+   "b": [
+    84.21,
+    57.89
+   ],
+   "len": 1.556,
+   "net": "DS320_STRAP_A_ADDR0_7-0",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "I2C2_SCL"
+   },
+   "B_Cu_samepos_slack_mm": -0.0567,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_MODE"
+   },
+   "In2_samepos_slack_mm": -0.3,
+   "In5_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR0_7-0"
+   },
+   "In5_slack_mm": 0.05,
+   "a": [
+    83.11,
+    53.19
+   ],
+   "b": [
+    83.11,
+    56.79
+   ],
+   "len": 3.6,
+   "net": "DS320_STRAP_A_ADDR0_7-0",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "I2C2_SCL"
+   },
+   "B_Cu_samepos_slack_mm": -0.2646,
+   "In2_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "In2_samepos_slack_mm": 0.5281,
+   "In5_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_A_ADDR0_7-0"
+   },
+   "In5_slack_mm": 0.05,
+   "a": [
+    82.36,
+    54.49
+   ],
+   "b": [
+    82.76,
+    54.89
+   ],
+   "len": 0.566,
+   "net": "DS320_STRAP_B_ADDR0_7-0",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "I2C2_SCL"
+   },
+   "B_Cu_samepos_slack_mm": 0.301,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_MODE"
+   },
+   "In2_samepos_slack_mm": 0.04,
+   "In5_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_A_ADDR0_7-0"
+   },
+   "In5_slack_mm": 0.05,
+   "a": [
+    82.76,
+    54.89
+   ],
+   "b": [
+    82.76,
+    56.99
+   ],
+   "len": 2.1,
+   "net": "DS320_STRAP_B_ADDR0_7-0",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 2.3754,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT5_P_MCIO"
+   },
+   "In2_samepos_slack_mm": -0.03,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT5_P_MCIO"
+   },
+   "In5_slack_mm": 0.0717,
+   "a": [
+    55.85,
+    43.5
+   ],
+   "b": [
+    55.75,
+    43.5
+   ],
+   "len": 0.1,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 2.9051,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT5_P_MCIO"
+   },
+   "In2_samepos_slack_mm": -0.23,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT5_N_MCIO"
+   },
+   "In5_slack_mm": 0.0717,
+   "a": [
+    56.45,
+    44.0
+   ],
+   "b": [
+    56.35,
+    44.0
+   ],
+   "len": 0.1,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 2.3754,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT5_P_MCIO"
+   },
+   "In2_samepos_slack_mm": -0.38,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT5_P_MCIO"
+   },
+   "In5_slack_mm": 0.0717,
+   "a": [
+    56.35,
+    44.0
+   ],
+   "b": [
+    55.85,
+    43.5
+   ],
+   "len": 0.707,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 2.9198,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT5_P_MCIO"
+   },
+   "In2_samepos_slack_mm": -0.13,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT5_N_MCIO"
+   },
+   "In5_slack_mm": 0.0717,
+   "a": [
+    56.55,
+    44.1
+   ],
+   "b": [
+    56.45,
+    44.0
+   ],
+   "len": 0.141,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR0_15-8"
+   },
+   "B_Cu_samepos_slack_mm": -0.3,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_A_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.3,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "DS320_STRAP_A_ADDR0_7-0"
+   },
+   "In5_slack_mm": 0.075,
+   "a": [
+    83.76,
+    57.99
+   ],
+   "b": [
+    83.76,
+    64.19
+   ],
+   "len": 6.2,
+   "net": "DS320_STRAP_B_ADDR0_7-0",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 1.9632,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT4_N_MCIO"
+   },
+   "In2_samepos_slack_mm": -0.13,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT4_N_MCIO"
+   },
+   "In5_slack_mm": 0.0751,
+   "a": [
+    55.75,
+    43.5
+   ],
+   "b": [
+    55.25,
+    43.0
+   ],
+   "len": 0.707,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_ISO"
+   },
+   "B_Cu_samepos_slack_mm": 1.191,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT4_P_MCIO"
+   },
+   "In2_samepos_slack_mm": -0.13,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT4_P_MCIO"
+   },
+   "In5_slack_mm": 0.0751,
+   "a": [
+    54.15,
+    42.5
+   ],
+   "b": [
+    54.05,
+    42.5
+   ],
+   "len": 0.1,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_ISO"
+   },
+   "B_Cu_samepos_slack_mm": 1.2617,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT4_P_MCIO"
+   },
+   "In2_samepos_slack_mm": -0.38,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT4_P_MCIO"
+   },
+   "In5_slack_mm": 0.0751,
+   "a": [
+    54.65,
+    43.0
+   ],
+   "b": [
+    54.15,
+    42.5
+   ],
+   "len": 0.707,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 0.5365,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_MODE"
+   },
+   "In2_samepos_slack_mm": -0.3,
+   "In5_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_A_ADDR0_7-0"
+   },
+   "In5_slack_mm": 0.0889,
+   "a": [
+    82.76,
+    56.99
+   ],
+   "b": [
+    83.76,
+    57.99
+   ],
+   "len": 1.414,
+   "net": "DS320_STRAP_B_ADDR0_7-0",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT7_N_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": 0.0895,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.2579,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT7_N_MCIO"
+   },
+   "In5_slack_mm": 0.0895,
+   "a": [
+    93.4,
+    52.138
+   ],
+   "b": [
+    102.5,
+    52.138
+   ],
+   "len": 9.1,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 0.09,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.2502,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "In5_slack_mm": 0.09,
+   "a": [
+    83.7,
+    50.4
+   ],
+   "b": [
+    79.9,
+    50.4
+   ],
+   "len": 3.8,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_ISO"
+   },
+   "B_Cu_samepos_slack_mm": -0.1939,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT3_P_MCIO"
+   },
+   "In2_samepos_slack_mm": -0.28,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT3_P_MCIO"
+   },
+   "In5_slack_mm": 0.095,
+   "a": [
+    55.45,
+    38.7
+   ],
+   "b": [
+    53.45,
+    38.7
+   ],
+   "len": 2.0,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_ISO"
+   },
+   "B_Cu_samepos_slack_mm": -0.4,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT3_P_MCIO"
+   },
+   "In2_samepos_slack_mm": -0.38,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "In5_slack_mm": 0.1084,
+   "a": [
+    54.05,
+    42.5
+   ],
+   "b": [
+    52.05,
+    40.5
+   ],
+   "len": 2.828,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 0.1447,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.2502,
+   "In5_blocker": {
+    "kind": "seg",
+    "net": "PCIE_UP7_N"
+   },
+   "In5_slack_mm": 0.12,
+   "a": [
+    83.8,
+    50.5
+   ],
+   "b": [
+    83.7,
+    50.4
+   ],
+   "len": 0.141,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "I2C1_SDA"
+   },
+   "B_Cu_samepos_slack_mm": 0.1375,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "I2C2_SDA"
+   },
+   "In2_samepos_slack_mm": 0.8332,
+   "In5_blocker": {
+    "kind": "seg",
+    "net": "PCIE_UP7_N"
+   },
+   "In5_slack_mm": 0.12,
+   "a": [
+    79.9,
+    50.4
+   ],
+   "b": [
+    79.6,
+    50.7
+   ],
+   "len": 0.424,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 0.1213,
+   "In2_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "In2_samepos_slack_mm": 0.1213,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "In5_slack_mm": 0.1213,
+   "a": [
+    52.05,
+    40.5
+   ],
+   "b": [
+    52.05,
+    40.3
+   ],
+   "len": 0.2,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "I2C2_SCL"
+   },
+   "B_Cu_samepos_slack_mm": -0.1333,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "I2C2_SDA"
+   },
+   "In2_samepos_slack_mm": -0.2475,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "I2C2_SCL"
+   },
+   "In5_slack_mm": 0.1246,
+   "a": [
+    82.6,
+    51.638
+   ],
+   "b": [
+    82.7,
+    51.737
+   ],
+   "len": 0.141,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "I2C2_SCL"
+   },
+   "B_Cu_samepos_slack_mm": -0.0333,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "I2C2_SDA"
+   },
+   "In2_samepos_slack_mm": -0.1475,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "I2C2_SCL"
+   },
+   "In5_slack_mm": 0.1246,
+   "a": [
+    82.5,
+    51.638
+   ],
+   "b": [
+    82.6,
+    51.638
+   ],
+   "len": 0.1,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT4_P_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": -0.3025,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.3,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_UP7_N"
+   },
+   "In5_slack_mm": 0.125,
+   "a": [
+    94.0,
+    50.5
+   ],
+   "b": [
+    83.8,
+    50.5
+   ],
+   "len": 10.2,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "B_Cu_samepos_slack_mm": 0.125,
+   "In2_samepos_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "In2_samepos_slack_mm": 0.125,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "In5_slack_mm": 0.125,
+   "a": [
+    51.75,
+    37.5
+   ],
+   "b": [
+    51.45,
+    37.5
+   ],
+   "len": 0.3,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 0.9535,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT2_P_MCIO"
+   },
+   "In2_samepos_slack_mm": -0.28,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT2_P_MCIO"
+   },
+   "In5_slack_mm": 0.125,
+   "a": [
+    58.15,
+    39.8
+   ],
+   "b": [
+    57.75,
+    39.8
+   ],
+   "len": 0.4,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "B_Cu_samepos_slack_mm": 0.1256,
+   "In2_samepos_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "In2_samepos_slack_mm": 0.1256,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "In5_slack_mm": 0.1256,
+   "a": [
+    51.85,
+    37.6
+   ],
+   "b": [
+    51.75,
+    37.5
+   ],
+   "len": 0.141,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 0.13,
+   "In2_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "In2_samepos_slack_mm": 0.13,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "In5_slack_mm": 0.13,
+   "a": [
+    103.6,
+    50.0
+   ],
+   "b": [
+    94.5,
+    50.0
+   ],
+   "len": 9.1,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT2_P_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": -0.0025,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.2421,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT2_N_MCIO"
+   },
+   "In5_slack_mm": 0.1395,
+   "a": [
+    87.0,
+    51.938
+   ],
+   "b": [
+    87.6,
+    51.938
+   ],
+   "len": 0.6,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT5_P_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": -0.0025,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.2421,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT5_N_MCIO"
+   },
+   "In5_slack_mm": 0.1395,
+   "a": [
+    90.6,
+    51.938
+   ],
+   "b": [
+    91.2,
+    51.938
+   ],
+   "len": 0.6,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT2_P_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": -0.0025,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.2421,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT1_N_MCIO"
+   },
+   "In5_slack_mm": 0.1395,
+   "a": [
+    85.8,
+    51.938
+   ],
+   "b": [
+    86.4,
+    51.938
+   ],
+   "len": 0.6,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT6_P_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": -0.0025,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.2421,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT6_N_MCIO"
+   },
+   "In5_slack_mm": 0.1395,
+   "a": [
+    91.8,
+    51.938
+   ],
+   "b": [
+    92.4,
+    51.938
+   ],
+   "len": 0.6,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT4_P_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": -0.0025,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.2421,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT3_N_MCIO"
+   },
+   "In5_slack_mm": 0.1395,
+   "a": [
+    88.2,
+    51.938
+   ],
+   "b": [
+    88.8,
+    51.938
+   ],
+   "len": 0.6,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT5_P_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": -0.0025,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.2421,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT4_N_MCIO"
+   },
+   "In5_slack_mm": 0.1395,
+   "a": [
+    89.4,
+    51.938
+   ],
+   "b": [
+    90.0,
+    51.938
+   ],
+   "len": 0.6,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT0_P_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": -0.0025,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.2421,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT0_N_MCIO"
+   },
+   "In5_slack_mm": 0.1395,
+   "a": [
+    84.6,
+    51.938
+   ],
+   "b": [
+    85.2,
+    51.938
+   ],
+   "len": 0.6,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PERSTA#"
+   },
+   "B_Cu_samepos_slack_mm": 2.3224,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_UP2_P"
+   },
+   "In2_samepos_slack_mm": -0.38,
+   "In5_blocker": {
+    "kind": "seg",
+    "net": "PCIE_UP2_P"
+   },
+   "In5_slack_mm": 0.14,
+   "a": [
+    59.75,
+    44.7
+   ],
+   "b": [
+    59.15,
+    44.1
+   ],
+   "len": 0.849,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "I2C1_SDA"
+   },
+   "B_Cu_samepos_slack_mm": 0.1375,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "I2C2_SDA"
+   },
+   "In2_samepos_slack_mm": 0.8332,
+   "In5_blocker": {
+    "kind": "seg",
+    "net": "PCIE_UP7_N"
+   },
+   "In5_slack_mm": 0.1447,
+   "a": [
+    79.6,
+    50.7
+   ],
+   "b": [
+    78.4,
+    50.7
+   ],
+   "len": 1.2,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 0.7227,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT2_N_MCIO"
+   },
+   "In2_samepos_slack_mm": -0.13,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT2_N_MCIO"
+   },
+   "In5_slack_mm": 0.147,
+   "a": [
+    57.25,
+    39.3
+   ],
+   "b": [
+    57.05,
+    39.3
+   ],
+   "len": 0.2,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 1.3353,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_UP2_P"
+   },
+   "In2_samepos_slack_mm": -0.28,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT2_P_MCIO"
+   },
+   "In5_slack_mm": 0.147,
+   "a": [
+    59.75,
+    41.4
+   ],
+   "b": [
+    58.15,
+    39.8
+   ],
+   "len": 2.263,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 0.8271,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT2_N_MCIO"
+   },
+   "In2_samepos_slack_mm": -0.28,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT2_N_MCIO"
+   },
+   "In5_slack_mm": 0.147,
+   "a": [
+    57.75,
+    39.8
+   ],
+   "b": [
+    57.25,
+    39.3
+   ],
+   "len": 0.707,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "I2C2_SCL"
+   },
+   "B_Cu_samepos_slack_mm": -0.3,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "I2C2_SDA"
+   },
+   "In2_samepos_slack_mm": -0.2475,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "I2C2_SCL"
+   },
+   "In5_slack_mm": 0.1475,
+   "a": [
+    82.7,
+    51.737
+   ],
+   "b": [
+    82.9,
+    51.737
+   ],
+   "len": 0.2,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "I2C2_SCL"
+   },
+   "B_Cu_samepos_slack_mm": 0.0333,
+   "In2_samepos_blocker": {
+    "kind": "via",
+    "net": "I2C2_SDA"
+   },
+   "In2_samepos_slack_mm": 0.0063,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "In5_slack_mm": 0.1475,
+   "a": [
+    83.2,
+    52.038
+   ],
+   "b": [
+    83.8,
+    52.038
+   ],
+   "len": 0.6,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT5_P_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": -0.1025,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.3,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT5_P_MCIO"
+   },
+   "In5_slack_mm": 0.1481,
+   "a": [
+    90.5,
+    51.837
+   ],
+   "b": [
+    90.6,
+    51.938
+   ],
+   "len": 0.141,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT4_P_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": -0.1025,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.3,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT4_P_MCIO"
+   },
+   "In5_slack_mm": 0.1481,
+   "a": [
+    89.3,
+    51.837
+   ],
+   "b": [
+    89.4,
+    51.938
+   ],
+   "len": 0.141,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT2_P_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": -0.1025,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.3,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT2_P_MCIO"
+   },
+   "In5_slack_mm": 0.1481,
+   "a": [
+    86.4,
+    51.938
+   ],
+   "b": [
+    86.5,
+    51.837
+   ],
+   "len": 0.141,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT0_P_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": -0.1025,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.2944,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT0_P_MCIO"
+   },
+   "In5_slack_mm": 0.1481,
+   "a": [
+    84.5,
+    51.837
+   ],
+   "b": [
+    84.6,
+    51.938
+   ],
+   "len": 0.141,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT7_P_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": -0.1025,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.3,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT7_P_MCIO"
+   },
+   "In5_slack_mm": 0.1481,
+   "a": [
+    92.4,
+    51.938
+   ],
+   "b": [
+    92.5,
+    51.837
+   ],
+   "len": 0.141,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT1_P_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": -0.1025,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.3,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT1_P_MCIO"
+   },
+   "In5_slack_mm": 0.1481,
+   "a": [
+    85.2,
+    51.938
+   ],
+   "b": [
+    85.3,
+    51.837
+   ],
+   "len": 0.141,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT6_P_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": -0.1025,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.3,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT6_P_MCIO"
+   },
+   "In5_slack_mm": 0.1481,
+   "a": [
+    91.7,
+    51.837
+   ],
+   "b": [
+    91.8,
+    51.938
+   ],
+   "len": 0.141,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT6_P_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": -0.1025,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.3,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT6_P_MCIO"
+   },
+   "In5_slack_mm": 0.1481,
+   "a": [
+    91.2,
+    51.938
+   ],
+   "b": [
+    91.3,
+    51.837
+   ],
+   "len": 0.141,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT1_P_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": -0.1025,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.3,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT1_P_MCIO"
+   },
+   "In5_slack_mm": 0.1481,
+   "a": [
+    85.7,
+    51.837
+   ],
+   "b": [
+    85.8,
+    51.938
+   ],
+   "len": 0.141,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT5_P_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": -0.1025,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.3,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT5_P_MCIO"
+   },
+   "In5_slack_mm": 0.1481,
+   "a": [
+    90.0,
+    51.938
+   ],
+   "b": [
+    90.1,
+    51.837
+   ],
+   "len": 0.141,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT3_P_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": -0.1025,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.3,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT3_P_MCIO"
+   },
+   "In5_slack_mm": 0.1481,
+   "a": [
+    88.1,
+    51.837
+   ],
+   "b": [
+    88.2,
+    51.938
+   ],
+   "len": 0.141,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT4_P_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": -0.1025,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.3,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT4_P_MCIO"
+   },
+   "In5_slack_mm": 0.1481,
+   "a": [
+    88.8,
+    51.938
+   ],
+   "b": [
+    88.9,
+    51.837
+   ],
+   "len": 0.141,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT3_P_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": -0.1025,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.3,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT3_P_MCIO"
+   },
+   "In5_slack_mm": 0.1481,
+   "a": [
+    87.6,
+    51.938
+   ],
+   "b": [
+    87.7,
+    51.837
+   ],
+   "len": 0.141,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT0_P_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": -0.1025,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.0043,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT0_P_MCIO"
+   },
+   "In5_slack_mm": 0.1481,
+   "a": [
+    84.0,
+    51.938
+   ],
+   "b": [
+    84.1,
+    51.837
+   ],
+   "len": 0.141,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT2_P_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": -0.1025,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.3,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT2_P_MCIO"
+   },
+   "In5_slack_mm": 0.1481,
+   "a": [
+    86.9,
+    51.837
+   ],
+   "b": [
+    87.0,
+    51.938
+   ],
+   "len": 0.141,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT0_P_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": -0.0025,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": 0.1348,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT0_P_MCIO"
+   },
+   "In5_slack_mm": 0.1481,
+   "a": [
+    83.9,
+    51.938
+   ],
+   "b": [
+    84.0,
+    51.938
+   ],
+   "len": 0.1,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "I2C2_SCL"
+   },
+   "B_Cu_samepos_slack_mm": -0.2667,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "I2C2_SDA"
+   },
+   "In2_samepos_slack_mm": -0.2699,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "I2C2_SCL"
+   },
+   "In5_slack_mm": 0.1486,
+   "a": [
+    82.9,
+    51.737
+   ],
+   "b": [
+    83.2,
+    52.038
+   ],
+   "len": 0.424,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR0_15-8"
+   },
+   "B_Cu_samepos_slack_mm": -0.3,
+   "In2_samepos_blocker": {
+    "kind": "via",
+    "net": "DS320_STRAP_A_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.165,
+   "In5_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR0_7-0"
+   },
+   "In5_slack_mm": 0.15,
+   "a": [
+    84.21,
+    57.89
+   ],
+   "b": [
+    84.21,
+    63.89
+   ],
+   "len": 6.0,
+   "net": "DS320_STRAP_A_ADDR0_7-0",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT0_P_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": -0.3025,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.2944,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT0_P_MCIO"
+   },
+   "In5_slack_mm": 0.1535,
+   "a": [
+    84.1,
+    51.837
+   ],
+   "b": [
+    84.5,
+    51.837
+   ],
+   "len": 0.4,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT6_P_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": -0.3025,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.2579,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT6_P_MCIO"
+   },
+   "In5_slack_mm": 0.1535,
+   "a": [
+    91.3,
+    51.837
+   ],
+   "b": [
+    91.7,
+    51.837
+   ],
+   "len": 0.4,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT1_P_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": -0.3025,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.2579,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT1_P_MCIO"
+   },
+   "In5_slack_mm": 0.1535,
+   "a": [
+    85.3,
+    51.837
+   ],
+   "b": [
+    85.7,
+    51.837
+   ],
+   "len": 0.4,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT3_P_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": -0.3025,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.2579,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT3_P_MCIO"
+   },
+   "In5_slack_mm": 0.1535,
+   "a": [
+    87.7,
+    51.837
+   ],
+   "b": [
+    88.1,
+    51.837
+   ],
+   "len": 0.4,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT2_P_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": -0.3025,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.2579,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT2_P_MCIO"
+   },
+   "In5_slack_mm": 0.1535,
+   "a": [
+    86.5,
+    51.837
+   ],
+   "b": [
+    86.9,
+    51.837
+   ],
+   "len": 0.4,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT7_P_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": -0.3025,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.2579,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT7_P_MCIO"
+   },
+   "In5_slack_mm": 0.1535,
+   "a": [
+    92.5,
+    51.837
+   ],
+   "b": [
+    93.1,
+    51.837
+   ],
+   "len": 0.6,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT4_P_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": -0.3025,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.2579,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT4_P_MCIO"
+   },
+   "In5_slack_mm": 0.1535,
+   "a": [
+    88.9,
+    51.837
+   ],
+   "b": [
+    89.3,
+    51.837
+   ],
+   "len": 0.4,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT5_P_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": -0.3025,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.2579,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT5_P_MCIO"
+   },
+   "In5_slack_mm": 0.1535,
+   "a": [
+    90.1,
+    51.837
+   ],
+   "b": [
+    90.5,
+    51.837
+   ],
+   "len": 0.4,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT7_N_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": -0.0025,
+   "In2_samepos_blocker": {
+    "kind": "via",
+    "net": "PCIE_UP7_N"
+   },
+   "In2_samepos_slack_mm": 0.1553,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_UP7_N"
+   },
+   "In5_slack_mm": 0.1553,
+   "a": [
+    94.5,
+    50.0
+   ],
+   "b": [
+    94.0,
+    50.5
+   ],
+   "len": 0.707,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "PWR_BTN_ISO"
+   },
+   "B_Cu_samepos_slack_mm": 1.1624,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT3_N_MCIO"
+   },
+   "In2_samepos_slack_mm": -0.03,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT3_N_MCIO"
+   },
+   "In5_slack_mm": 0.1574,
+   "a": [
+    52.95,
+    38.2
+   ],
+   "b": [
+    52.85,
+    38.2
+   ],
+   "len": 0.1,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "PWR_BTN_ISO"
+   },
+   "B_Cu_samepos_slack_mm": 1.1624,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT3_N_MCIO"
+   },
+   "In2_samepos_slack_mm": -0.28,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT3_N_MCIO"
+   },
+   "In5_slack_mm": 0.1574,
+   "a": [
+    53.45,
+    38.7
+   ],
+   "b": [
+    52.95,
+    38.2
+   ],
+   "len": 0.707,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT7_P_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": 0.0975,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "DS320_STRAP_B_ADDR1_7-0"
+   },
+   "In2_samepos_slack_mm": -0.2579,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT7_N_MCIO"
+   },
+   "In5_slack_mm": 0.1656,
+   "a": [
+    93.1,
+    51.837
+   ],
+   "b": [
+    93.4,
+    52.138
+   ],
+   "len": 0.424,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "I2C1_SDA"
+   },
+   "B_Cu_samepos_slack_mm": 0.1375,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "I2C2_SDA"
+   },
+   "In2_samepos_slack_mm": 1.5385,
+   "In5_blocker": {
+    "kind": "seg",
+    "net": "PCIE_UP7_N"
+   },
+   "In5_slack_mm": 0.1701,
+   "a": [
+    78.4,
+    50.7
+   ],
+   "b": [
+    78.3,
+    50.6
+   ],
+   "len": 0.141,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "I2C1_SDA"
+   },
+   "B_Cu_samepos_slack_mm": 0.2215,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "I2C2_SDA"
+   },
+   "In2_samepos_slack_mm": 1.6799,
+   "In5_blocker": {
+    "kind": "seg",
+    "net": "PCIE_UP7_N"
+   },
+   "In5_slack_mm": 0.1701,
+   "a": [
+    78.3,
+    50.6
+   ],
+   "b": [
+    69.5,
+    50.6
+   ],
+   "len": 8.8,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "B_Cu_samepos_slack_mm": 0.1733,
+   "In2_samepos_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "In2_samepos_slack_mm": 0.1733,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "In5_slack_mm": 0.1733,
+   "a": [
+    51.45,
+    37.5
+   ],
+   "b": [
+    51.35,
+    37.4
+   ],
+   "len": 0.141,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "B_Cu_samepos_slack_mm": 0.1733,
+   "In2_samepos_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "In2_samepos_slack_mm": 0.1733,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "In5_slack_mm": 0.1733,
+   "a": [
+    51.35,
+    37.4
+   ],
+   "b": [
+    51.15,
+    37.4
+   ],
+   "len": 0.2,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "I2C2_SCL"
+   },
+   "B_Cu_samepos_slack_mm": 0.0667,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "I2C2_SDA"
+   },
+   "In2_samepos_slack_mm": -0.1475,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "I2C2_SCL"
+   },
+   "In5_slack_mm": 0.183,
+   "a": [
+    82.3,
+    51.438
+   ],
+   "b": [
+    82.5,
+    51.638
+   ],
+   "len": 0.283,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 2.35,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_OUT"
+   },
+   "In2_samepos_slack_mm": 0.0596,
+   "In5_blocker": {
+    "kind": "seg",
+    "net": "PERSTA#"
+   },
+   "In5_slack_mm": 0.1831,
+   "a": [
+    51.35,
+    38.2
+   ],
+   "b": [
+    51.15,
+    38.0
+   ],
+   "len": 0.283,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 2.4696,
+   "In2_samepos_blocker": {
+    "kind": "via",
+    "net": "PERSTA#"
+   },
+   "In2_samepos_slack_mm": 0.4684,
+   "In5_blocker": {
+    "kind": "seg",
+    "net": "PERSTA#"
+   },
+   "In5_slack_mm": 0.1831,
+   "a": [
+    50.55,
+    38.3
+   ],
+   "b": [
+    50.55,
+    37.8
+   ],
+   "len": 0.5,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "I2C2_SCL"
+   },
+   "B_Cu_samepos_slack_mm": -0.2567,
+   "In2_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "In2_samepos_slack_mm": 0.1871,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "In5_slack_mm": 0.1871,
+   "a": [
+    82.91,
+    52.99
+   ],
+   "b": [
+    83.11,
+    53.19
+   ],
+   "len": 0.283,
+   "net": "DS320_STRAP_A_ADDR0_7-0",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_ISO"
+   },
+   "B_Cu_samepos_slack_mm": -0.3,
+   "In2_samepos_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT3_P_MCIO"
+   },
+   "In2_samepos_slack_mm": 1.3406,
+   "In5_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT3_P_MCIO"
+   },
+   "In5_slack_mm": 0.19,
+   "a": [
+    55.55,
+    38.8
+   ],
+   "b": [
+    55.45,
+    38.7
+   ],
+   "len": 0.141,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "B_Cu_samepos_slack_mm": 0.5634,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_OUT"
+   },
+   "In2_samepos_slack_mm": -0.3,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT3_N_MCIO"
+   },
+   "In5_slack_mm": 0.2048,
+   "a": [
+    52.85,
+    38.2
+   ],
+   "b": [
+    52.35,
+    37.7
+   ],
+   "len": 0.707,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "B_Cu_samepos_slack_mm": 0.3637,
+   "In2_samepos_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "In2_samepos_slack_mm": 0.2081,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "In5_slack_mm": 0.2081,
+   "a": [
+    51.05,
+    37.3
+   ],
+   "b": [
+    50.85,
+    37.3
+   ],
+   "len": 0.2,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "B_Cu_samepos_slack_mm": 0.55,
+   "In2_samepos_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "In2_samepos_slack_mm": 0.2081,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "In5_slack_mm": 0.2081,
+   "a": [
+    50.85,
+    37.3
+   ],
+   "b": [
+    50.75,
+    37.2
+   ],
+   "len": 0.141,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT0_P_MCIO"
+   },
+   "B_Cu_samepos_slack_mm": 0.0975,
+   "In2_samepos_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT0_P_MCIO"
+   },
+   "In2_samepos_slack_mm": 0.2108,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT0_P_MCIO"
+   },
+   "In5_slack_mm": 0.2108,
+   "a": [
+    83.8,
+    52.038
+   ],
+   "b": [
+    83.9,
+    51.938
+   ],
+   "len": 0.141,
+   "net": "I2C1_SDA",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "B_Cu_samepos_slack_mm": 0.3254,
+   "In2_samepos_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "In2_samepos_slack_mm": 0.225,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "In5_slack_mm": 0.225,
+   "a": [
+    51.15,
+    37.4
+   ],
+   "b": [
+    51.05,
+    37.3
+   ],
+   "len": 0.141,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "B_Cu_samepos_slack_mm": 0.8169,
+   "In2_samepos_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "In2_samepos_slack_mm": 0.225,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "In5_slack_mm": 0.225,
+   "a": [
+    50.55,
+    37.2
+   ],
+   "b": [
+    50.45,
+    37.1
+   ],
+   "len": 0.141,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "B_Cu_samepos_slack_mm": 0.6203,
+   "In2_samepos_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "In2_samepos_slack_mm": 0.225,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "In5_slack_mm": 0.225,
+   "a": [
+    50.75,
+    37.2
+   ],
+   "b": [
+    50.55,
+    37.2
+   ],
+   "len": 0.2,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 0.7227,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT2_N_MCIO"
+   },
+   "In2_samepos_slack_mm": 0.07,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT2_N_MCIO"
+   },
+   "In5_slack_mm": 0.226,
+   "a": [
+    57.05,
+    39.3
+   ],
+   "b": [
+    56.95,
+    39.2
+   ],
+   "len": 0.141,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 0.7044,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT2_N_MCIO"
+   },
+   "In2_samepos_slack_mm": 0.17,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT2_N_MCIO"
+   },
+   "In5_slack_mm": 0.2271,
+   "a": [
+    56.95,
+    39.2
+   ],
+   "b": [
+    56.75,
+    39.2
+   ],
+   "len": 0.2,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "B_Cu_samepos_slack_mm": 0.2379,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_OUT"
+   },
+   "In2_samepos_slack_mm": 0.0889,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "In5_slack_mm": 0.2379,
+   "a": [
+    52.05,
+    37.6
+   ],
+   "b": [
+    51.85,
+    37.6
+   ],
+   "len": 0.2,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_ISO"
+   },
+   "B_Cu_samepos_slack_mm": -0.2646,
+   "In2_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "In2_samepos_slack_mm": 1.2575,
+   "In5_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT3_P_MCIO"
+   },
+   "In5_slack_mm": 0.29,
+   "a": [
+    55.75,
+    38.8
+   ],
+   "b": [
+    55.55,
+    38.8
+   ],
+   "len": 0.2,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_ISO"
+   },
+   "B_Cu_samepos_slack_mm": -0.1232,
+   "In2_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "In2_samepos_slack_mm": 1.1233,
+   "In5_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT3_P_MCIO"
+   },
+   "In5_slack_mm": 0.29,
+   "a": [
+    55.85,
+    38.9
+   ],
+   "b": [
+    55.75,
+    38.8
+   ],
+   "len": 0.141,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 0.2968,
+   "In2_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "In2_samepos_slack_mm": 0.2968,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "In5_slack_mm": 0.2968,
+   "a": [
+    52.05,
+    40.3
+   ],
+   "b": [
+    51.95,
+    40.2
+   ],
+   "len": 0.141,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 2.2509,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_OUT"
+   },
+   "In2_samepos_slack_mm": -0.0111,
+   "In5_blocker": {
+    "kind": "seg",
+    "net": "PERSTA#"
+   },
+   "In5_slack_mm": 0.3071,
+   "a": [
+    51.35,
+    38.3
+   ],
+   "b": [
+    51.35,
+    38.2
+   ],
+   "len": 0.1,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "B_Cu_samepos_slack_mm": 0.3074,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_OUT"
+   },
+   "In2_samepos_slack_mm": -0.0525,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "In5_slack_mm": 0.3074,
+   "a": [
+    52.15,
+    37.7
+   ],
+   "b": [
+    52.05,
+    37.6
+   ],
+   "len": 0.141,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "B_Cu_samepos_slack_mm": 0.9039,
+   "In2_samepos_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "In2_samepos_slack_mm": 0.3321,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "In5_slack_mm": 0.3321,
+   "a": [
+    50.45,
+    37.1
+   ],
+   "b": [
+    50.25,
+    37.1
+   ],
+   "len": 0.2,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 0.356,
+   "In2_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "In2_samepos_slack_mm": 0.356,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "In5_slack_mm": 0.356,
+   "a": [
+    51.95,
+    40.2
+   ],
+   "b": [
+    51.95,
+    40.0
+   ],
+   "len": 0.2,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "B_Cu_samepos_slack_mm": 1.1034,
+   "In2_samepos_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "In2_samepos_slack_mm": 0.3866,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "In5_slack_mm": 0.3866,
+   "a": [
+    50.25,
+    37.1
+   ],
+   "b": [
+    50.15,
+    37.0
+   ],
+   "len": 0.141,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 0.7044,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT2_N_MCIO"
+   },
+   "In2_samepos_slack_mm": 0.37,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT2_N_MCIO"
+   },
+   "In5_slack_mm": 0.3882,
+   "a": [
+    56.75,
+    39.2
+   ],
+   "b": [
+    56.65,
+    39.1
+   ],
+   "len": 0.141,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_ISO"
+   },
+   "B_Cu_samepos_slack_mm": 0.0182,
+   "In2_samepos_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT2_N_MCIO"
+   },
+   "In2_samepos_slack_mm": 0.9787,
+   "In5_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT3_P_MCIO"
+   },
+   "In5_slack_mm": 0.39,
+   "a": [
+    56.05,
+    38.9
+   ],
+   "b": [
+    55.85,
+    38.9
+   ],
+   "len": 0.2,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_ISO"
+   },
+   "B_Cu_samepos_slack_mm": 0.1596,
+   "In2_samepos_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT2_N_MCIO"
+   },
+   "In2_samepos_slack_mm": 0.8909,
+   "In5_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT3_P_MCIO"
+   },
+   "In5_slack_mm": 0.39,
+   "a": [
+    56.15,
+    39.0
+   ],
+   "b": [
+    56.05,
+    38.9
+   ],
+   "len": 0.141,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 2.1395,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_OUT"
+   },
+   "In2_samepos_slack_mm": -0.1525,
+   "In5_blocker": {
+    "kind": "seg",
+    "net": "PERSTA#"
+   },
+   "In5_slack_mm": 0.4062,
+   "a": [
+    51.45,
+    38.4
+   ],
+   "b": [
+    51.35,
+    38.3
+   ],
+   "len": 0.141,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_ISO"
+   },
+   "B_Cu_samepos_slack_mm": 0.5839,
+   "In2_samepos_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT2_N_MCIO"
+   },
+   "In2_samepos_slack_mm": 0.4328,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT2_N_MCIO"
+   },
+   "In5_slack_mm": 0.4328,
+   "a": [
+    56.65,
+    39.1
+   ],
+   "b": [
+    56.45,
+    39.1
+   ],
+   "len": 0.2,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "B_Cu_samepos_slack_mm": 0.4439,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_OUT"
+   },
+   "In2_samepos_slack_mm": -0.1939,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "In5_slack_mm": 0.4439,
+   "a": [
+    52.35,
+    37.7
+   ],
+   "b": [
+    52.15,
+    37.7
+   ],
+   "len": 0.2,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_ISO"
+   },
+   "B_Cu_samepos_slack_mm": 0.301,
+   "In2_samepos_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT2_N_MCIO"
+   },
+   "In2_samepos_slack_mm": 0.6939,
+   "In5_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT3_P_MCIO"
+   },
+   "In5_slack_mm": 0.49,
+   "a": [
+    56.35,
+    39.0
+   ],
+   "b": [
+    56.15,
+    39.0
+   ],
+   "len": 0.2,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_ISO"
+   },
+   "B_Cu_samepos_slack_mm": 0.4425,
+   "In2_samepos_blocker": {
+    "kind": "via",
+    "net": "PCIE_DN_OUT2_N_MCIO"
+   },
+   "In2_samepos_slack_mm": 0.6212,
+   "In5_blocker": {
+    "kind": "seg",
+    "net": "PCIE_DN_OUT3_P_MCIO"
+   },
+   "In5_slack_mm": 0.49,
+   "a": [
+    56.45,
+    39.1
+   ],
+   "b": [
+    56.35,
+    39.0
+   ],
+   "len": 0.141,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 1.8414,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_OUT"
+   },
+   "In2_samepos_slack_mm": -0.3646,
+   "In5_blocker": {
+    "kind": "seg",
+    "net": "PERSTA#"
+   },
+   "In5_slack_mm": 0.4944,
+   "a": [
+    51.45,
+    38.7
+   ],
+   "b": [
+    51.45,
+    38.4
+   ],
+   "len": 0.3,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "B_Cu_samepos_slack_mm": 1.2,
+   "In2_samepos_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "In2_samepos_slack_mm": 0.5194,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "P3V3_AUX"
+   },
+   "In5_slack_mm": 0.5194,
+   "a": [
+    50.15,
+    37.0
+   ],
+   "b": [
+    50.05,
+    37.0
+   ],
+   "len": 0.1,
+   "net": "PERSTA#",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 0.55,
+   "In2_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "In2_samepos_slack_mm": 0.55,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "In5_slack_mm": 0.55,
+   "a": [
+    51.95,
+    40.0
+   ],
+   "b": [
+    51.85,
+    39.9
+   ],
+   "len": 0.141,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 0.6321,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_OUT"
+   },
+   "In2_samepos_slack_mm": 0.5546,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "In5_slack_mm": 0.6321,
+   "a": [
+    51.85,
+    39.9
+   ],
+   "b": [
+    51.85,
+    39.7
+   ],
+   "len": 0.2,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 2.4208,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_OUT"
+   },
+   "In2_samepos_slack_mm": 0.5546,
+   "In5_blocker": {
+    "kind": "seg",
+    "net": "PERSTA#"
+   },
+   "In5_slack_mm": 0.644,
+   "a": [
+    50.45,
+    38.4
+   ],
+   "b": [
+    50.55,
+    38.3
+   ],
+   "len": 0.141,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 1.7319,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_OUT"
+   },
+   "In2_samepos_slack_mm": -0.4,
+   "In5_blocker": {
+    "kind": "seg",
+    "net": "PERSTA#"
+   },
+   "In5_slack_mm": 0.7705,
+   "a": [
+    51.55,
+    38.8
+   ],
+   "b": [
+    51.45,
+    38.7
+   ],
+   "len": 0.141,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 2.1548,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_OUT"
+   },
+   "In2_samepos_slack_mm": 0.3425,
+   "In5_blocker": {
+    "kind": "seg",
+    "net": "PERSTA#"
+   },
+   "In5_slack_mm": 0.7705,
+   "a": [
+    50.45,
+    38.7
+   ],
+   "b": [
+    50.45,
+    38.4
+   ],
+   "len": 0.3,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 0.831,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_OUT"
+   },
+   "In2_samepos_slack_mm": 0.4132,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "In5_slack_mm": 0.831,
+   "a": [
+    51.85,
+    39.7
+   ],
+   "b": [
+    51.75,
+    39.6
+   ],
+   "len": 0.141,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 1.5326,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_OUT"
+   },
+   "In2_samepos_slack_mm": -0.2939,
+   "In5_blocker": {
+    "kind": "seg",
+    "net": "PERSTA#"
+   },
+   "In5_slack_mm": 0.8369,
+   "a": [
+    51.55,
+    39.0
+   ],
+   "b": [
+    51.55,
+    38.8
+   ],
+   "len": 0.2,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 0.9252,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_OUT"
+   },
+   "In2_samepos_slack_mm": 0.2718,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "In5_slack_mm": 0.9252,
+   "a": [
+    51.75,
+    39.6
+   ],
+   "b": [
+    51.75,
+    39.4
+   ],
+   "len": 0.2,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 1.4265,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_OUT"
+   },
+   "In2_samepos_slack_mm": -0.1525,
+   "In5_blocker": {
+    "kind": "seg",
+    "net": "PERSTA#"
+   },
+   "In5_slack_mm": 1.0318,
+   "a": [
+    51.65,
+    39.1
+   ],
+   "b": [
+    51.55,
+    39.0
+   ],
+   "len": 0.141,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 2.1193,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_OUT"
+   },
+   "In2_samepos_slack_mm": 0.3425,
+   "In5_blocker": {
+    "kind": "seg",
+    "net": "PERSTA#"
+   },
+   "In5_slack_mm": 1.056,
+   "a": [
+    50.35,
+    38.8
+   ],
+   "b": [
+    50.45,
+    38.7
+   ],
+   "len": 0.141,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 1.2267,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_OUT"
+   },
+   "In2_samepos_slack_mm": -0.0111,
+   "In5_blocker": {
+    "kind": "seg",
+    "net": "PERSTA#"
+   },
+   "In5_slack_mm": 1.0849,
+   "a": [
+    51.65,
+    39.3
+   ],
+   "b": [
+    51.65,
+    39.1
+   ],
+   "len": 0.2,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 1.1252,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_OUT"
+   },
+   "In2_samepos_slack_mm": 0.1303,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "In5_slack_mm": 1.1252,
+   "a": [
+    51.75,
+    39.4
+   ],
+   "b": [
+    51.65,
+    39.3
+   ],
+   "len": 0.141,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 1.9521,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_OUT"
+   },
+   "In2_samepos_slack_mm": 0.201,
+   "In5_blocker": {
+    "kind": "seg",
+    "net": "PERSTA#"
+   },
+   "In5_slack_mm": 1.1811,
+   "a": [
+    50.35,
+    39.0
+   ],
+   "b": [
+    50.35,
+    38.8
+   ],
+   "len": 0.2,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 1.9303,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_OUT"
+   },
+   "In2_samepos_slack_mm": 0.201,
+   "In5_blocker": {
+    "kind": "seg",
+    "net": "PERSTA#"
+   },
+   "In5_slack_mm": 1.372,
+   "a": [
+    50.25,
+    39.1
+   ],
+   "b": [
+    50.35,
+    39.0
+   ],
+   "len": 0.141,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 1.7757,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_OUT"
+   },
+   "In2_samepos_slack_mm": 0.0596,
+   "In5_blocker": {
+    "kind": "seg",
+    "net": "PERSTA#"
+   },
+   "In5_slack_mm": 1.4974,
+   "a": [
+    50.25,
+    39.3
+   ],
+   "b": [
+    50.25,
+    39.1
+   ],
+   "len": 0.2,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 1.5289,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_OUT"
+   },
+   "In2_samepos_slack_mm": -0.2232,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "In5_slack_mm": 1.5289,
+   "a": [
+    50.05,
+    39.9
+   ],
+   "b": [
+    50.05,
+    39.7
+   ],
+   "len": 0.2,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 1.5289,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_OUT"
+   },
+   "In2_samepos_slack_mm": -0.2232,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "In5_slack_mm": 1.5289,
+   "a": [
+    49.95,
+    40.0
+   ],
+   "b": [
+    50.05,
+    39.9
+   ],
+   "len": 0.141,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 1.6323,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_OUT"
+   },
+   "In2_samepos_slack_mm": -0.0818,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "In5_slack_mm": 1.6323,
+   "a": [
+    50.05,
+    39.7
+   ],
+   "b": [
+    50.15,
+    39.6
+   ],
+   "len": 0.141,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 1.6323,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_OUT"
+   },
+   "In2_samepos_slack_mm": -0.0818,
+   "In5_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "In5_slack_mm": 1.6323,
+   "a": [
+    50.15,
+    39.6
+   ],
+   "b": [
+    50.15,
+    39.4
+   ],
+   "len": 0.2,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  },
+  {
+   "B_Cu_samepos_blocker": {
+    "kind": "via",
+    "net": "GND"
+   },
+   "B_Cu_samepos_slack_mm": 1.7701,
+   "In2_samepos_blocker": {
+    "kind": "seg",
+    "net": "PWR_BTN_OUT"
+   },
+   "In2_samepos_slack_mm": 0.0596,
+   "In5_blocker": {
+    "kind": "seg",
+    "net": "PERSTA#"
+   },
+   "In5_slack_mm": 1.6881,
+   "a": [
+    50.15,
+    39.4
+   ],
+   "b": [
+    50.25,
+    39.3
+   ],
+   "len": 0.141,
+   "net": "P3V3_AUX",
+   "w": 0.2
+  }
+ ],
+ "summary": {
+  "Bcu_samepos_viable": 83,
+  "In2_samepos_viable": 53,
+  "In5_min_slack": 0.015,
+  "n": 130
+ }
+}
