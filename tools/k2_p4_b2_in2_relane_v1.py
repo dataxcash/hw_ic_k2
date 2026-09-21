@@ -120,13 +120,16 @@ def seg_poly_dist(a, b, poly):
 
 
 # ─────────────────────────── 障碍 / 精确闸 ───────────────────────────
-def collect_obstacles(b):
+def collect_obstacles(b, exclude=None):
+    """exclude = 将被拆线之车道网集合（其铜不计入障碍；其余**全部**计入，含未参与本批之 OUT 车道）。"""
+    exclude = set(exclude) if exclude else {n for n in
+              (nn.GetNetname() for nn in b.GetNetInfo().NetsByNetcode().values()) if is_lane(n)}
     name = {n.GetNetCode(): n.GetNetname() for n in b.GetNetInfo().NetsByNetcode().values()}
     in2 = b.GetLayerID(LAYER)
     obs, keep = [], []
     for t in b.GetTracks():
         nm = name.get(t.GetNetCode(), "")
-        if is_lane(nm):
+        if nm in exclude:
             continue
         if t.GetClass() == "PCB_VIA":
             v = t.Cast()
@@ -142,7 +145,7 @@ def collect_obstacles(b):
     for fp in b.GetFootprints():
         for p in fp.Pads():
             nm = p.GetNetname()
-            if is_lane(nm):
+            if nm in exclude:
                 continue
             pth = p.GetAttribute() == pcbnew.PAD_ATTRIB_PTH
             if in2 not in set(p.GetLayerSet().Seq()) and not pth:
@@ -478,7 +481,7 @@ def run(src, out_path, ledger_path, only=None, step=GRID_DEF, limit=None, dry=Fa
         for v in d["v"]:
             b.Remove(v); n_rm_v += 1
 
-    base_obs, keep_obs = collect_obstacles(b)
+    base_obs, keep_obs = collect_obstacles(b, set(lanes))
     bb = b.GetBoardEdgesBoundingBox()
     x0 = max(MM(bb.GetLeft()) + 0.5, 22.0); y0 = max(MM(bb.GetTop()) + 0.5, 32.0)
     x1 = min(MM(bb.GetRight()) - 0.5, 144.0); y1 = min(MM(bb.GetBottom()) - 0.5, 80.0)

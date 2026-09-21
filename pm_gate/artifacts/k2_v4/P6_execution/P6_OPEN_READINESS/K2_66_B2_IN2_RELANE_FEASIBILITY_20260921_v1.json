@@ -1642,6 +1642,17 @@
    "DS320_STRAP_* / PWR_BTN_ISO"
   ],
   "implication": "达 ≤2/线 必须至少放宽一条前提：(a) 移 3 条线之 A/B 锚点（⇒ 须改其 F 扇出/蛇形 = 等长重调） + **腾挪他网走廊**（I2C1_SDA/PERSTA#/P3V3_AUX 等，否则 B.Cu 窄口容量不足）+ 拥塞感知布线器；(b) 新开 F–In5 span（改孔策略/工艺）；(c) 具名豁免。",
+  "only_mode_obstacle_semantics_correction": {
+   "defect": "`--only` 模式曾按『32 车道全拆』建模障碍 ⇒ 把**其他 OUT 车道之 B.Cu 原走线**当自由空间（其 19 条新增 DRC 误差与『单车道可行』结论均不可采）",
+   "fix": "障碍 = 除本网外**全部**铜（含未参与本批之 OUT 车道）⇒ 已修入工具 collect_obstacles(exclude=本批车道集)",
+   "implication": "B.Cu 之可用缝隙（如 x≈83.5）被其他 OUT 车道之 B.Cu 腿占死 ⇒ **B.Cu 重迁只能在『32 条全拆』之全域场景下进行**（全域最好 8/32）；**不可逐条增量**。",
+   "result_after_fix": "`--only PCIE_UP_OUT3_N_J2` ⇒ **NO_PATH**",
+   "still_valid": [
+    "铺铜重灌必要（未重灌多报 10 条 clearance error）",
+    "基线 l9 DRC = 267 / errors 3",
+    "『F→B→F + 2 孔』拓扑本身可构造（全域场景 8 条已通者证实）"
+   ]
+  },
   "order_sweep_all32_bcu": {
    "conclusion": "顺序扫描不能把成功数提升到 32（最好 8/32）⇒ **确认瓶颈容量主导**（单车道窄口 + 他网走廊占用），非顺序可解。",
    "dn_first": {
