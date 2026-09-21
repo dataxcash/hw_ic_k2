@@ -1,0 +1,89 @@
+{
+ "anchors": {
+  "A": "/tmp/opencode/archer/sites_a_up_v2.json（16 锚 · 全在 F.Cu 可达大域 comp#1 · Legal ✓ · 两两距 ≥1.523）",
+  "A_cage_sha16": "608a1b04c048fa1c",
+  "B": "R149_b_alloc_s2.00.json（UP 侧不改）"
+ },
+ "artifact": "k2_p4_b2_RA_WITNESS_UP_OUT_16of16_in5_2via_v1",
+ "convention": "自报 sha16 按 #K2-72 §五 约定 B（可复算 · 本件不内嵌自身 sha16 · 由外部实测）",
+ "delta_self_correction": {
+  "impact": "见证判定必须用 `tools/k2_p4_b2_true_gate_v1.py`（R161 起已规定同报）⇒ 本次已按规定复核并**主动降级**。",
+  "tool_gap": "`k2_p4_b2_in5_nudge_v1.py` 应升级为**交叉感知闸**（或驱动侧在 nudge 后强制 true_gate 复核）—— 记 ENG 能力缺口（非 owner）。",
+  "what": "R228 之 run 日志报『违规 1』（v3 盲闸口径）；`k2_p4_b2_in5_nudge_v1.py` 报『违规 0 · min 0.5000』（亦为 v3 口径）⇒ ENG 先前据此推定可达见证；**真闸 crossing-aware 复核推翻**：真交叉 1 对（min_exact 0.0）。",
+  "why": "v3 `exact_gate` 对『两折线相交』判为距离 0 但不计入 lane_pitch_viol 口径；`nudge` 之上限判据同源 ⇒ **§ 判据③ 之真交点维在 nudge 环内缺失**（D-1/D-2 族同型：盲闸 ≠ 真闸）。"
+ },
+ "gate_seed23": {
+  "min_exact_pair_mm": 0.0,
+  "min_pair": [
+   "PCIE_UP_OUT0_N_J2",
+   "PCIE_UP_OUT3_P_J2"
+  ],
+  "n_lanes": 16,
+  "n_pairs_below_pitch": 1,
+  "n_pairs_true_crossing": 1,
+  "n_routed": 16,
+  "obstacle_clearance_min_mm": 0.1715,
+  "pitch_req_mm": 0.435,
+  "v3_gate_min_gap_mm": 0.5,
+  "v3_gate_n_lane_pitch_viol": 0,
+  "violations": [
+   [
+    "PCIE_UP_OUT0_N_J2",
+    "PCIE_UP_OUT3_P_J2",
+    0.0,
+    1
+   ]
+  ],
+  "wo": "/tmp/opencode/archer/wo_up2_nudged_s23.json"
+ },
+ "gate_seed7": {
+  "min_exact_pair_mm": 0.0,
+  "min_pair": [
+   "PCIE_UP_OUT0_N_J2",
+   "PCIE_UP_OUT3_P_J2"
+  ],
+  "n_lanes": 16,
+  "n_pairs_below_pitch": 1,
+  "n_pairs_true_crossing": 1,
+  "n_routed": 16,
+  "obstacle_clearance_min_mm": 0.1715,
+  "pitch_req_mm": 0.435,
+  "v3_gate_min_gap_mm": 0.5,
+  "v3_gate_n_lane_pitch_viol": 0,
+  "violations": [
+   [
+    "PCIE_UP_OUT0_N_J2",
+    "PCIE_UP_OUT3_P_J2",
+    0.0,
+    1
+   ]
+  ],
+  "wo": "/tmp/opencode/archer/wo_up2_nudged_s7.json"
+ },
+ "gate_selfcheck": {
+  "owner闸口": 0,
+  "冻结四源": "未动",
+  "判据": "criteria/ rev=6 MATCH（只读未碰）",
+  "外部前置": "1（criteria rev=7 · gate 属主）",
+  "待裁": 0,
+  "阶段": "P5 PENDING_EXTERNAL（未越阶段）"
+ },
+ "next": "清尾 1 对真交叉（定点重布/改序/重跑）⇒ 真闸 0 ⇒ 再出见证件；其后转 #K2-73 §七-2 施工。",
+ "referenced_sha16": {
+  "/tmp/opencode/archer/ortho2_run_v3.py": "b8f0e6d7d0c8e1d4",
+  "/tmp/opencode/archer/sites_a_up_v2.json": "608a1b04c048fa1c",
+  "/tmp/opencode/archer/wo_up2_nudged_s23.json": "93edd6092b7cee2f",
+  "/tmp/opencode/archer/wo_up2_nudged_s7.json": "35ea1f4a08271fbd",
+  "/tmp/opencode/archer/wo_up2_s23.json": "8b3afd90fc7c8190",
+  "/tmp/opencode/archer/wo_up2_s7.json": "cd819abccbf2353a",
+  "tools/k2_p4_b2_in5_nudge_v1.py": "37f41a42510e4efb",
+  "tools/k2_p4_b2_true_gate_v1.py": "8ea777b251e93c9d"
+ },
+ "repro": [
+  "ASITES=/tmp/opencode/archer/sites_a_up_v2.json MOVN=<低速族> MOVS=GND,P3V3 MOVC=<低速族>,GND,P3V3 ITERS=60 GRPS=PCIE_UP_OUT EXCL=\"PCIE_UP_OUT:84.0,48.0,101.0,53.0\" python3 -u /tmp/opencode/archer/ortho2_run_v3.py <out> 7 0.535 0.10 4   # 及 seed 23",
+  "python3 tools/k2_p4_b2_in5_nudge_v1.py <out> <out_nudged>",
+  "python3 tools/k2_p4_b2_true_gate_v1.py <out_nudged>"
+ ],
+ "tick": "R229（承 #K2-73 §七-1：R-A 见证仅对 UP_OUT 重立 · R177/R179 已作废）",
+ "verdict": "**见证不成立（自纠 · R229）**：UP_OUT 16/16 布通 · 端点 0 · 障碍余量 0.1715 ≥0.100 · **但真闸（含真交点）实测 n_pairs_true_crossing = 1 · min_exact_pair_mm = 0.0（两 seed 同）** ⇒ 依 #K2-72 Q1「唯一见证口径 = 连续精确闸（含真交点）」**不构成见证** · 须清尾后再报。"
+}
