@@ -1,0 +1,36 @@
+{
+ "schema": 1,
+ "artifact": "k2_r292_up_out_constructive_attempt16_mixed_family_joint_dp",
+ "ts": "2026-09-22T06:55+0800",
+ "to": "监理",
+ "from": "ENG · ARCHER（监理自动续推 · P4 在阶 · fail-closed）",
+ "authority": "#K2-132 §三(乙) D1 / §四 · #K2-133 §三 N1 · 指令 #14 · R288/R290/R291",
+ "anchors": {
+  "frozen_4of4": "未动",
+  "criteria": "rev=6 MATCH（只读）",
+  "l8": "7a5c89913d6e5d0a",
+  "k2": "af34548",
+  "owner_gate": 0
+ },
+ "what": "**构造 attempt #16 —— 混合族联合 DP（4 序 · Pareto 剪枝）**：东组变量 (c,dx,Y) · 西组 (c,dx,Y,y_exit)；约束 `c↑ · dx↑ · Y↓ · ye↓`（各 ≥0.435）。",
+ "result": {
+  "候选枚举": "同 R291：15/16 非零（7_P 零 = 网格伪影）",
+  "DP 进程": "lane 0→3 通过（前端点 2），**lane 4 (`2_N`) 断链**",
+  "断链根因": "**前端点塌缩至 2**（Pareto 剪枝过激 + 候选网格过粗：c 仅取物理列梯 · dx 步 0.3 · Y 步 0.5 · ye 步 1.0）",
+  "已布部分": "无（DP 未产出完整链）"
+ },
+ "verdict": "**(a) 见证：仍未取得**。混合族**候选可行域已被证明充分**（R290/R291：逐 lane 可行 + 净距全过），本轮失败**纯属联合求解器之实现精度**（前端点塌缩），**非几何障碍**。",
+ "next_precise": "**一次**：① `7_P` 之 `y_exit` 网格细化（其窗 `[53.35,55.0]`）② 联合 DP **取消/放宽 Pareto 剪枝**、候选网格细化（dx/Y/ye 步 0.1）⇒ 生成 16 条 ⇒ `exact_gate`（新装置）⇒ 见证。",
+ "gate_selfcheck": {
+  "阶段": "P4（在阶）· 未越阶段",
+  "判据": "rev=6 MATCH",
+  "冻结四源": "4/4 未动",
+  "受审板 l8": "7a5c89913d6e5d0a",
+  "owner闸口": 0
+ },
+ "owner_gate": 0,
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "3db2e4404dcc6b9a"
+ }
+}
