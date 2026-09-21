@@ -83,11 +83,9 @@ for rnd in range(6):
                 cand = copy.deepcopy(routes)
                 px, py = cand[victim]['pts'][vi]
                 cand[victim]['pts'][vi] = (round(px + ux * delta, 4), round(py + uy * delta, 4))
-                if local_min(cand, victim) <= lm_cur + 1e-9:
-                    continue                      # 廉价预筛：局部无改善 ⇒ 跳过闸复算
                 lm_new = local_min(cand, victim)
-                if lm_new < PITCH_EFF - 1e-9:
-                    continue                      # **局部闸**：victim 邻域内最小段距须 ≥0.435（免全闸复算）
+                if lm_new <= lm_cur + 1e-6:
+                    continue                      # 廉价预筛：邻域最小段距无改善 ⇒ 跳过（免全闸复算）
                 routes = cand; improved = True
                 print('  [nudge r%d] %s 顶点 %d 移 %.2fmm ⇒ 邻域最近距 %.4f' % (rnd, victim, vi, delta, lm_new), flush=True)
                 break
