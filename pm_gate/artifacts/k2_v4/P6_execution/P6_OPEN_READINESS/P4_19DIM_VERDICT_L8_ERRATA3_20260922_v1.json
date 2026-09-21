@@ -1,0 +1,201 @@
+{
+ "schema": 1,
+ "artifact": "p4_19dim_verdict_l8_errata3_20260922_v1",
+ "ts": "2026-09-22T06:29+0800",
+ "to": "监理",
+ "from": "ENG · ARCHER",
+ "authority": "《K2 整体整改计划》§P4『完工判据 —— 由判定器出 verdict，ENG 只交测量』· 监理自动续推（按已批准计划推进当前阶段 P4 · fail-closed）",
+ "anchors": {
+  "frozen_4of4": "未动（fb07d25ac426ff84 · d4e81f647be7f980 · dd794c54f7ce7417 · 0a459839e15960b8）",
+  "criteria": "rev=6 MATCH（adjudicate.py 1937a40ae68bc288 · manifest.k2 727d09953cf9bd78 · CHANGELOG eb3da49f2ad97e37 · ENG 只读未碰）",
+  "l8": "7a5c89913d6e5d0a",
+  "nets_used": "k2_sch.errata-3.yaml 5dc7b82a901d11c8（D2 已批 adjudication 输入）",
+  "owner_gate": 0
+ },
+ "p4_structural_prerequisites": {
+  "铺铜": "**OK** —— `zone_filled` 判定器读数：铜区（有网非 keepout）已填充 **10/10**；keepout 规则区 8 个另计（不入分母）",
+  "钻孔": "**OK** —— `drill_count` 判定器读数：**NPTH=4（应 ≥4）· PTH=16**",
+  "平面落图": "**OK** —— Gerber `G36>0`：`In1_Cu`=1 · `In3_Cu`=1 · `In4_Cu`=9 · `In6_Cu`=1（源 = jlc_package_l8r3/01_gerber_rs274x）",
+  "note": "计划 §P4 原文所记『现状 0/13 · 0/0 · 8 层铜全 0』系 2026-09-15 冻结板时点；本件为受审板 l8 之**实测复跑**。"
+ },
+ "verdict": {
+  "judge": "criteria/adjudicate.py（监理判定器 · ENG 只读调用）",
+  "passed": false,
+  "n_pass": 18,
+  "n_fail": 1,
+  "n_dims": 19,
+  "board_sha16": "7a5c89913d6e5d0a",
+  "oks": [
+   {
+    "check": "zone_filled",
+    "ok": true,
+    "detail": "铜区（有网非 keepout）已填充 10/10；keepout 规则区 8 个另计（不入分母）"
+   },
+   {
+    "check": "device_has_pads",
+    "ok": true,
+    "detail": "0 焊盘器件 0: []"
+   },
+   {
+    "check": "drill_count",
+    "ok": true,
+    "detail": "NPTH=4（应 ≥4）PTH=16"
+   },
+   {
+    "check": "non45_segments",
+    "ok": true,
+    "detail": "非 45° 段 0/5180"
+   },
+   {
+    "check": "rule_severity_manifest",
+    "ok": true,
+    "detail": "未登记豁免的 ignore 0/62: []"
+   },
+   {
+    "check": "net_declared_realized",
+    "ok": true,
+    "detail": "板上 0 焊盘的声明网 = 0；<2 焊盘 = 0"
+   },
+   {
+    "check": "pin_map_complete",
+    "ok": true,
+    "detail": "网表节点无对应焊盘 = 0"
+   },
+   {
+    "check": "refdes_sets_equal",
+    "ok": true,
+    "detail": "排除纯机械件 H*（4 条逐条列名: ['H1', 'H2', 'H3', 'H4']）⇒ 原理图 54 / 板 54；图有板无 []，板有图无 []"
+   },
+   {
+    "check": "pipeline_present",
+    "ok": true,
+    "detail": "scope=k2：含 .kicad_sch 但无 pipeline.yaml 的目录 0 个（fail-closed）: []；范围外（他项目阶段门判）6 个: ['k1/sch', 'key_v2/key_v2/sch', 'pciesw4/aic', 'pciesw4/aic/sch_kicad', 'pciesw4/gpu']"
+   },
+   {
+    "check": "drc_errors",
+    "ok": true,
+    "detail": "DRC error=0（违规总 170）: []"
+   },
+   {
+    "check": "drc_warning_dispositions",
+    "ok": true,
+    "detail": "未登记 warning 类型 0/9: []；已登记 ['copper_sliver', 'lib_footprint_mismatch', 'missing_courtyard', 'silk_edge_clearance', 'silk_over_copper', 'silk_overlap', 'track_dangling', 'track_not_centered_on_via', 'via_dangling']"
+   },
+   {
+    "check": "unconnected_zero",
+    "ok": true,
+    "detail": "unconnected_items = 0"
+   },
+   {
+    "check": "fp_lib_table_present",
+    "ok": true,
+    "detail": "fp-lib-table @ /home/fila/jqdDev_2025/ic_hw/k2/hw: 存在"
+   },
+   {
+    "check": "keepout_active",
+    "ok": true,
+    "detail": "keepout 区 8 个；其中无生效开关（全 allowed / 无 flag）0 个"
+   },
+   {
+    "check": "pads_within_outline",
+    "ok": true,
+    "detail": "出框：全 pad(AABB)=0 · 接口件(P3-4)=0 · 全 pad(真外框多边形)=0（须全 0）；测量板 sha16=7a5c89913d6e5d0a vs 受审板 7a5c89913d6e5d0a ⇒ 一致"
+   },
+   {
+    "check": "ref_plane_continuity",
+    "ok": true,
+    "detail": "口径 non_antipad_gap==0 @ R=0.5mm：non_antipad_gap = 0.0 mm²（须 == 0）；归因 antipad=20.9552 / split_or_cutout=0.0 / keepout=0.0062；平面层=['In1.Cu', 'In3.Cu', 'In4.Cu', 'In6.Cu']；信息项 V3 名义全长覆盖 None/None（#K2-34 §一-1 降为信息）；测量板 sha16=7a5c89913d6e5d0a vs 受审板 7a5c89913d6e5d0a ⇒ 一致"
+   },
+   {
+    "check": "density_and_clearance",
+    "ok": true,
+    "detail": "密度[10mm/frame_origin] 峰值 7（≤8）· 最小铜间距 0.1（≥0.1）mm · 横带占用 0.07586（≤None）· 孔环 0.075（≥None）· pad 到边 0.38（≥None）mm；测量板 sha16=7a5c89913d6e5d0a/7a5c89913d6e5d0a vs 受审板 7a5c89913d6e5d0a ⇒ 一致"
+   },
+   {
+    "check": "verdict_schema",
+    "ok": true,
+    "detail": "产物中出现 verdict 字段的文件: []"
+   }
+  ],
+  "fails": [
+   {
+    "check": "lib_electrical_level",
+    "ok": false,
+    "detail": "电气级差异 7（原 7，B 口径豁免 0） + 仅 pad 名差异 0（原 None，非电气无号 F.Paste 豁免 0）（须 0）；B 口径=生效；审计板 sha16=7a5c89913d6e5d0a vs 受审板 7a5c89913d6e5d0a ⇒ 一致"
+   }
+  ]
+ },
+ "sole_fail_attribution": {
+  "dim": "lib_electrical_level",
+  "判": "**判据侧过度严格之伪差异（非板缺陷）** —— 待监理裁定；ENG 只读判据，**不得自行改**",
+  "A_圆形 pad 之 rot 伪差异": {
+   "refs": [
+    "U6",
+    "J11",
+    "J9",
+    "J13",
+    "J6",
+    "J12"
+   ],
+   "n_pads": 370,
+   "证据": "W-8 审计 records 逐条：`kind='pad'`，`fields=['rot']`，`shape` 板/库同为 **0（圆形）**，且 `sx/sy/dx/dy/drill_d/layer` **逐字段全同**；唯 `rot` 板 **0.0°** vs 库 **90.0°**。",
+   "判据事实": "**圆形 pad 绕自身中心旋转任意角度，铜形完全不变** ⇒ 板/库之铜几何**全同**，属**表示差异**，非电气差异。",
+   "与判据现有规则之关系": "判定器 `_reclassify_w8` 规则② 已承认『中心对称 pad rot 0≡180』；但**圆形（shape=0）之等价类应为任意旋转**，现规则②未覆盖 0 vs 90。"
+  },
+  "B_U1_无号 F.Paste": {
+   "refs": [
+    "U1"
+   ],
+   "n_diffs": 1,
+   "kind": "pad_set",
+   "lib_only": [
+    ""
+   ],
+   "证据": "库件 `k2/hw/lib/ForgeOS.pretty/MCU_STM32G0_LQFP48.kicad_mod` 含 **9 个无号 pad**，逐条为 `(pad \"\" smd roundrect … (layers \"F.Paste\"))` ⇒ **仅 F.Paste、无铜层** ⇒ **非电气**。",
+   "与判据现有规则之关系": "判定器规则③ 明文本意即豁免『无号 F.Paste（lib_only 全空串）⇒ 非电气』，但其 `kind` 守卫限定 `kind=='pad_name_set'`；本处审计产出 `kind='pad_set'` ⇒ **未被覆盖**（实现面未跟上规则本意）。"
+  },
+  "二者性质": "均为**数学恒等 / 非电气**之判据侧口径问题，**不是缩口径**（铜形几何逐字节等同），亦非板缺陷。"
+ },
+ "measurement_inputs": [
+  {
+   "file": "w8_l8.json",
+   "sha256_16": "52393d604e55b70d"
+  },
+  {
+   "file": "pads_outline_l8.json",
+   "sha256_16": "f5c48128dffb0fa6"
+  },
+  {
+   "file": "refplane_l8.json",
+   "sha256_16": "4b6d7d80ac368e61"
+  },
+  {
+   "file": "density_l8.json",
+   "sha256_16": "6d973cb9a888d999"
+  },
+  {
+   "file": "minclr_l8.json",
+   "sha256_16": "fe2a4312ab4d6e85"
+  }
+ ],
+ "reproduce": {
+  "1_model_measurements": "（见表 measurement_inputs · 全部以 l8 实测 · 各含 board_sha16=7a5c89913d6e5d0a）",
+  "2_verdict": "python3 criteria/adjudicate.py --project k2 --board k2/hw/k2_v4_8L.l8.kicad_pcb --pro k2/tools/k2_jlc_template.kicad_pro --nets k2/hw/data/k2_sch.errata-3.yaml --sch-dir k2/hw/sch --gerber-dir k2/pm_gate/artifacts/k2_v4/L6/jlc_package_l8r3/01_gerber_rs274x --drc-cli <AppDir>/usr/bin/kicad-cli --drc-work-dir /tmp/opencode/drc --w8-audit-json <m>/w8_l8.json --pads-outline-json <m>/pads_outline_l8.json --refplane-gap-json <m>/refplane_l8.json --density-json <m>/density_l8.json --min-clearance-json <m>/minclr_l8.json --measure-out /tmp/opencode/p4m/measure.json --out /tmp/opencode/p4m/adj.json",
+  "期望": "n_pass=18 · n_fail=1（唯 lib_electrical_level）· passed=False（**fail-closed：P4 未全绿 ⇒ 不下单**）"
+ },
+ "p4_status": "**P4 未全绿（18/19）⇒ 阶段门 fail-closed 维持**：不得进 P5、不得下单。唯一 FAIL 为**判据侧**（见 sole_fail_attribution）⇒ 属监理自裁面，ENG 不自改判据。",
+ "stage_gate_selfcheck": {
+  "阶段": "P4（在阶）· 未越阶段",
+  "fail_closed": "P4 未全绿 ⇒ 不出交付 Gerber / 不下单",
+  "冻结四源": "4/4 未动",
+  "criteria": "rev=6 MATCH（只读）",
+  "owner闸口": 0,
+  "待裁": 0
+ },
+ "bans_kept": "未改冻结四源 · criteria 只读 · 未烙板 · 未派 WORKER · 未改生成器/SPEC/原理图 · 临时仅 /tmp/opencode · 未写 .omo/supervision/**",
+ "owner_gate": 0,
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "e37c8f1cc2d1f057"
+ }
+}

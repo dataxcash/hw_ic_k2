@@ -1,0 +1,168 @@
+{
+ "instrument": "measure_non_antipad_gap.py (#K2-31 §四-5 ①②③)",
+ "board": "k2/hw/k2_v4_8L.l8.kicad_pcb",
+ "board_sha16": "7a5c89913d6e5d0a",
+ "spec": "k2/pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-54.json",
+ "spec_sha16": "f3a48b866983c8db",
+ "caliber": {
+  "main": "non_antipad_gap == 0",
+  "allowed_class": "antipad",
+  "info": "area_coverage_pct",
+  "axis_band_mm": 0.01
+ },
+ "planes_filled": [
+  "In1.Cu",
+  "In3.Cu",
+  "In4.Cu",
+  "In6.Cu"
+ ],
+ "scope": {
+  "net_prefix": "PCIE_",
+  "n_segments": 3795
+ },
+ "area_mm2": {
+  "A_total": 799.97,
+  "A_covered": 779.0148,
+  "A_gap": 20.9552,
+  "conservation_delta": 0.0
+ },
+ "attribution_mm2": {
+  "antipad": 20.9552,
+  "split_or_cutout": 0.0,
+  "hole_keepout": 0.0062,
+  "board_outside": 0.0
+ },
+ "r_mm": 0.5,
+ "r_sensitivity_non_antipad_mm2": {
+  "0.25": 20.890481574643907,
+  "0.5": 0.0,
+  "1.0": 0.0
+ },
+ "non_antipad_gap_mm2": 0.0,
+ "non_antipad_gap_mm2_incl_keepout_outside": 0.006168,
+ "strict_full_cover": {
+  "n": 3176,
+  "pct": 83.689
+ },
+ "max_contiguous_gap_mm": {
+  "n_segments_with_gap": 619,
+  "p50": 0.0,
+  "p90": 0.0599,
+  "p95": 0.2687,
+  "p99": 0.3755,
+  "max": 0.611,
+  "of_gapped": {
+   "p50": 0.0938,
+   "p90": 0.3755,
+   "p95": 0.3755,
+   "max": 0.611
+  }
+ },
+ "controls": {
+  "POS_strict_full_cover_segments": {
+   "n": 3176,
+   "non_antipad_gap_mm2": 0.0,
+   "max_contiguous_gap_mm_max": 0.0,
+   "expected": "non_antipad_gap==0 且 max_contiguous_gap==0"
+  },
+  "NEG_frozen_l4_see_separate_run": "由调用方对 l4 冻结板另跑一次本器（期望 non_antipad == 段形总面积）"
+ },
+ "gap_by_net_top": [
+  [
+   "PCIE_DN_OUT4_P_MCIO",
+   {
+    "n_gap": 10,
+    "non_antipad_mm2": 0.0,
+    "max_contiguous_gap_mm": 0.3755
+   }
+  ],
+  [
+   "PCIE_DN_OUT4_N_MCIO",
+   {
+    "n_gap": 12,
+    "non_antipad_mm2": 0.0,
+    "max_contiguous_gap_mm": 0.3755
+   }
+  ],
+  [
+   "PCIE_DN_OUT5_P_MCIO",
+   {
+    "n_gap": 10,
+    "non_antipad_mm2": 0.0,
+    "max_contiguous_gap_mm": 0.3755
+   }
+  ],
+  [
+   "PCIE_DN_OUT5_N_MCIO",
+   {
+    "n_gap": 12,
+    "non_antipad_mm2": 0.0,
+    "max_contiguous_gap_mm": 0.3755
+   }
+  ],
+  [
+   "PCIE_REFCLK1_N",
+   {
+    "n_gap": 3,
+    "non_antipad_mm2": 0.0,
+    "max_contiguous_gap_mm": 0.3755
+   }
+  ],
+  [
+   "PCIE_DN_OUT6_P_MCIO",
+   {
+    "n_gap": 10,
+    "non_antipad_mm2": 0.0,
+    "max_contiguous_gap_mm": 0.3755
+   }
+  ],
+  [
+   "PCIE_DN_OUT6_N_MCIO",
+   {
+    "n_gap": 12,
+    "non_antipad_mm2": 0.0,
+    "max_contiguous_gap_mm": 0.3755
+   }
+  ],
+  [
+   "PCIE_DN_OUT7_P_MCIO",
+   {
+    "n_gap": 10,
+    "non_antipad_mm2": 0.0,
+    "max_contiguous_gap_mm": 0.3755
+   }
+  ],
+  [
+   "PCIE_DN_OUT7_N_MCIO",
+   {
+    "n_gap": 11,
+    "non_antipad_mm2": 0.0,
+    "max_contiguous_gap_mm": 0.3755
+   }
+  ],
+  [
+   "PCIE_UP4_P",
+   {
+    "n_gap": 16,
+    "non_antipad_mm2": 0.0,
+    "max_contiguous_gap_mm": 0.3755
+   }
+  ],
+  [
+   "PCIE_UP4_N",
+   {
+    "n_gap": 10,
+    "non_antipad_mm2": 0.0,
+    "max_contiguous_gap_mm": 0.3755
+   }
+  ],
+  [
+   "PCIE_UP5_P",
+   {
+    "n_gap": 16,
+    "non_antipad_mm2": 0.0,
+    "max_contiguous_gap_mm": 0.3755
+   }
+  ]
+ ]
+}
