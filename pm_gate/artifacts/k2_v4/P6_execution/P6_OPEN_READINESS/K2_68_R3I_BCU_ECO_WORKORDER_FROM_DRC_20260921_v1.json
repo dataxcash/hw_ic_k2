@@ -1,0 +1,92 @@
+{
+ "actions": [
+  "A1 缝合孔腾挪（§2.4(a)-2）：U6 逃逸带（x 81–99 · y 48–58）内 **38×`GND`(F–B) + 24×`P3V3`(F–B)** 逐孔外移；保 net/span · 最小位移 · 逐孔合法性（避免短路/短路桥/参考面断裂）。",
+  "A2 他网走线改道（§2.4(a)-3）：**`I2C1_SDA`（B.Cu · 涉事点 y 50.4–52.4 · x 62.8–123.6 之长横走）** 与 **`P3V3`（U6 区 x 85.4–102.2）** 在冲突区改道/同位微调；`P3V3_AUX` 1 处交叉一并处置。",
+  "A3 重跑：几何精确闸 + kicad-cli DRC ⇒ 目标 error 仅 #K2-67 具名 · `unconn 0` · `mask_bridge 0` · 告警零回归。",
+  "A4 缝合孔移位后**同报** `ref_plane_continuity`（`non_antipad_gap==0`）/ EMC（#K2-68 §2.4(a)-2 明文）。",
+  "A5 清理本批 stub 细节：`track_not_centered_on_via` 45 · `via_dangling` 6。"
+ ],
+ "artifact": "k2_68_r3i_bcu_eco_workorder_from_drc",
+ "authority": "#K2-68 §2.4(a)-2（缝合孔腾挪）/-3（他网走廊 ECO）· #K2-69 §五-2",
+ "board": "/tmp/opencode/w4/d.kicad_pcb (apply 首执)",
+ "by_type_net": {
+  "clearance|GND": 33,
+  "clearance|I2C1_SDA": 13,
+  "clearance|P3V3": 10,
+  "shorting_items|GND": 61,
+  "shorting_items|I2C1_SDA": 11,
+  "shorting_items|P3V3": 21,
+  "track_not_centered_on_via|GND": 6,
+  "tracks_crossing|I2C1_SDA": 3,
+  "tracks_crossing|P3V3+P3V3_AUX": 1
+ },
+ "caveats": [
+  "本件为**作业单**（只读反推）· 未执行任何 ECO · 板件仍为中间态（DRC 未过）。",
+  "`I2C1_SDA` 之长横走（x 62.8–123.6）与 32 条车道长走**共走廊** ⇒ 其改道可能改变车道可布性 ⇒ A2 后须重跑 router v4。"
+ ],
+ "drc_total": 580,
+ "eco_related": 159,
+ "headline": "**ECO 作业单（由 DRC 反推 · 具名可执行）**：apply 首执 580 违规中 **159 条与具名 ECO 网相关**（GND 100 · P3V3 31 · I2C1_SDA 27 · P3V3_AUX 1）· 受影响车道 **24/32** ⇒ ECO 面**已收敛为具名清单**。",
+ "named_targets": {
+  "esc_band_vias": {
+   "GND_F-B": 38,
+   "P3V3_F-B": 24,
+   "band": [
+    81.0,
+    99.0,
+    48.0,
+    58.0
+   ]
+  },
+  "lane_affected": 24,
+  "other_net_obstacle_points": {
+   "I2C1_SDA": {
+    "bbox_x": [
+     62.8,
+     123.6
+    ],
+    "bbox_y": [
+     50.44,
+     52.44
+    ],
+    "n": 27
+   },
+   "P3V3": {
+    "bbox_x": [
+     59.9,
+     102.2
+    ],
+    "bbox_y": [
+     42.27,
+     54.0
+    ],
+    "n": 32
+   },
+   "P3V3_AUX": {
+    "bbox_x": [
+     59.9,
+     59.9
+    ],
+    "bbox_y": [
+     48.4,
+     48.4
+    ],
+    "n": 1
+   }
+  }
+ },
+ "red_lines_ok": [
+  "未改冻结四源",
+  "未改 generator/SPEC/原理图",
+  "criteria/ 只读未碰",
+  "l4..l8 未动",
+  "未派 WORKER",
+  "临时仅 /tmp/opencode"
+ ],
+ "schema": 1,
+ "tools_needed": [
+  "A1 可复用/扩展现有 `tools/k2_p4_b2_relocate_stitch_v1.py`（当前仅处理 net=GND · span=F–B · 需扩展支持 `P3V3`）",
+  "A2 需新增他网改道器（或在 B.Cu 上对 `I2C1_SDA` 局部 rip-up + 重布）"
+ ],
+ "ts": "2026-09-21T17:3x+08:00"
+}
