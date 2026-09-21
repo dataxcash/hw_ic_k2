@@ -1,0 +1,166 @@
+{
+ "D4_gate_defect": {
+  "claim": "#K2-72 §二『唯一有效见证口径 = exact_gate』之实现（v3 `_seg_seg_batch`）**只取 4 端点-对侧段距离**，**不含两段内部真交点判定** ⇒ 两条车道**真实交叉（物理短路）时可报出 >0 距离**，甚至 ≥0.435 而『PASS』。",
+  "real_proof": {
+   "n_pairs_true_crossing": 3,
+   "note": "3 对为 0.1mm 栅格内 45° 对角线『交换』真交叉（同一格之两条对角）⇒ 物理短路，**任何亚格 nudge 均不可解**",
+   "true_crossings": [
+    [
+     "PCIE_DN_OUT1_P_MCIO",
+     "PCIE_DN_OUT2_P_MCIO",
+     2
+    ],
+    [
+     "PCIE_DN_OUT2_N_MCIO",
+     "PCIE_DN_OUT3_N_MCIO",
+     1
+    ],
+    [
+     "PCIE_DN_OUT4_P_MCIO",
+     "PCIE_DN_OUT5_N_MCIO",
+     1
+    ]
+   ],
+   "true_min_exact_mm": 0.0,
+   "v3_gate_n_viol": 6,
+   "v3_gate_reported_min_gap_mm": 0.0707,
+   "wo": "wo_R159.json"
+  },
+  "severity": "高 · 影响『见证』授予（可假绿）",
+  "status_for_ENG": "ENG 一侧只加严、不放松（C-12 安全）：R161 起一律以 true_gate（含真交点 ⇒ 0）复算并同报；口径补丁之裁定属监理自裁面（随二值同批附陈 · 不单独占轮）",
+  "synthetic_proof": {
+   "A": [
+    [
+     0,
+     0
+    ],
+    [
+     1,
+     1
+    ]
+   ],
+   "B": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     0
+    ]
+   ],
+   "pitch_req_mm": 0.435,
+   "true_seg_seg_mm": 0.0,
+   "v3__seg_seg_batch_mm": 0.7071067811865476,
+   "verdict_v3": "PASS（假绿）"
+  }
+ },
+ "artifact": "k2_p4_b2_R161_pin_shrink_and_merge_order_cage_refuted__true_crossing_gate_defect",
+ "binary": {
+  "R-A_witness": "NOT ACHIEVED（无 32/32 且 true_gate 0 违规之解；已知最佳 R159 含 3 处真短路）",
+  "R-B_certificate": "NONE（仍无严格上界证书；R158 之 27/32 为有界搜索观察值，非证书）",
+  "best_solution_status": "R159 = 32/32 布通但 **含 3 处物理短路** ⇒ 不可施工"
+ },
+ "gate_selfcheck": {
+  "owner 闸口": 0,
+  "冻结四源": "未动",
+  "判据": "criteria/ rev=6 MATCH（只读未碰）",
+  "外部前置": "1（criteria rev=7 · gate 属主）",
+  "待裁": 0,
+  "阶段": "P5 PENDING_EXTERNAL · 未越阶段"
+ },
+ "hypotheses_tested": [
+  {
+   "data": {
+    "pin10_s23": {
+     "routed": 31,
+     "v3_viol": 12
+    },
+    "pin10_s7": {
+     "routed": 31,
+     "v3_viol": 12
+    },
+    "pin12_s11": {
+     "routed": 32,
+     "v3_viol": 12
+    },
+    "pin12_s23": {
+     "routed": 32,
+     "v3_viol": 12
+    },
+    "pin8_s23": {
+     "routed": 32,
+     "v3_viol": 12
+    },
+    "pin8_s7": {
+     "routed": 32,
+     "v3_viol": 12
+    }
+   },
+   "desc": "缩小 pin 集（放行 20–22 条 · pin 10–12）可消残对（handoff §6-2 首选）",
+   "id": "H-A",
+   "note": "全部劣于 R159 之 6（12 违规 · 8–10 对真交叉）；pin10 更有一车道端点不可行（31/32）⇒『放行更多』反而更差（软罚重布把新放行车道叠进车队）",
+   "result": "REFUTED"
+  },
+  {
+   "data": {
+    "cageA_s23": {
+     "routed": 32,
+     "v3_viol": 17
+    },
+    "cageA_s7": {
+     "routed": 32,
+     "v3_viol": 17
+    },
+    "cageM_s23": {
+     "routed": 32,
+     "v3_viol": 38
+    },
+    "cageM_s7": {
+     "routed": 32,
+     "v3_viol": 38
+    }
+   },
+   "desc": "A 锚↔网 指派改为『源侧(B位)横向序 → 锚位 x 单调』(嵌套扇形 · 非交叉) 可消残对",
+   "id": "H-B",
+   "note": "asc(UP 同序)=17 违规 · desc(UP 反序)=38 违规；锚位集合未变（只置换对应）⇒ 车队合并序并非由 B 位横向序唯一决定",
+   "result": "REFUTED"
+  }
+ ],
+ "instruments": {
+  "a_cage_merge_order": "tools/k2_p4_b2_a_cage_merge_order_v1.py（合并序单调指派 · 只置换网↔锚位）",
+  "true_gate": "tools/k2_p4_b2_true_gate_v1.py（crossing-aware 加严复核器 · 含真交点⇒0）"
+ },
+ "next_steps": [
+  "① 用 true_gate 作为路由约束（真折线距离 · 含真交点）：改造 rip-up 之掩码 D≥R 为『真折线距离 ≥0.435』（对 diagonal 步进需检查步中段），消除『格心距保守』与『盲交叉』两缺陷；预期可解除 27/32 硬上限（保守量 0.1414mm 之释放）。",
+  "② 合并区序约束：以『已布车道的真折线』为硬障碍 + 逐条按锚位 x 序（或按 lane-order）插入，禁止跨序交换（只允许同序重布）。",
+  "③ 若上述仍不达：按 #K2-72 §六 之 (c) 通道求严格上界/几何守恒（锚孔入障碍 + 逐网配对 + 细格 ILP/SAT），或按已授权之 L2（#K2-69 Q1 / #K2-72 Q2-Q3）加大锚笼合并区裕度（多行锚位 + 拉长合并 x 窗）后复跑。"
+ ],
+ "referenced_sha16": {
+  "/tmp/opencode/archer/a_cage_v2.py": "9a1a1045b60ed5a9",
+  "/tmp/opencode/archer/a_cage_v2_asc.json": "9e5d058ca1f4967e",
+  "/tmp/opencode/archer/a_cage_v2_mix.json": "684014c849369d6f",
+  "/tmp/opencode/archer/pin_R158.json": "fca7c1b48ec01c0e",
+  "/tmp/opencode/archer/pin_R159.json": "de52cd1a125cbe95",
+  "/tmp/opencode/archer/true_gate.py": "8ea777b251e93c9d",
+  "/tmp/opencode/archer/wo_R158.json": "82c4b29fdea1e55e",
+  "/tmp/opencode/archer/wo_R159.json": "f6d79d52e94d5caa",
+  "pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/R149_a_grpsep.json": "0cb5503d5258568e",
+  "pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/R149_b_alloc_s2.00.json": "871a382182c2f482",
+  "tools/k2_p4_b2_a_cage_groupsep_v1.py": "010f7813c40cb920",
+  "tools/k2_p4_b2_a_cage_merge_order_v1.py": "9a1a1045b60ed5a9",
+  "tools/k2_p4_b2_in5_lane_router_v3.py": "98ad53eb958d67a5",
+  "tools/k2_p4_b2_in5_nudge_v1.py": "37f41a42510e4efb",
+  "tools/k2_p4_b2_in5_ripup_v1.py": "3108ead167f976ef",
+  "tools/k2_p4_b2_true_gate_v1.py": "8ea777b251e93c9d"
+ },
+ "scope": "P5 / B2 In5 32 车道互斥（R-A 见证面）；只读板件 · 未改冻结四源 · 未越阶段",
+ "structural_diagnosis": {
+  "best_known": "R159（pin 20 / 重布 12）· 32/32 · v3 残 6（其中真交叉 3）· 余量 0.1715 · 端点 0",
+  "conclusion": "瓶颈不在『搜索随机性』亦不在『pin 集大小』，而在 (i) 路由约束用保守格心距、(ii) 合并区局部序未受约束",
+  "mechanism": "残对=锚笼合并区（x≈80–100）车队**过密**：x=80 处 DN 车道 y 实测 44.35…52.65，局部间距 0.2/0.3/0.4mm **< 0.435**；总跨度 8.3mm 足够（16×0.435=6.53），故为**局部挤压**、非容量不足",
+  "second_mechanism": "硬掩码（R_out=0.5764 保守量）贪心极限 27/32（R158）⇒ 现工具之『保守掩码』本身即瓶颈之一；精判据 0.435 对应之最小格心距应为 0.435+2×0.0707=0.5764（严格蕴含），故硬掩码不能再降而不失严格 ⇒ **须改用真折线距离（含交点）做路由约束**，而非格心距离"
+ },
+ "tick": "R161 (承 R160 handoff §6-2 / §6-3)",
+ "ts": "2026-09-21T18:35:42"
+}
