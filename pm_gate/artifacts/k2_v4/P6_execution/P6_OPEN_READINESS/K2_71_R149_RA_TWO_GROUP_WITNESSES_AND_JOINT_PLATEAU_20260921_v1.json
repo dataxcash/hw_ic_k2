@@ -1,0 +1,62 @@
+{
+ "artifact": "k2_71_r149_ra_two_group_witnesses_and_joint_plateau",
+ "authority": "#K2-72（唯一口径=连续精确闸 exact_gate）· 判据③⑨⑩⑪⑫",
+ "headline": "**两组各自 16/16 见证达成（#K2-72 Q1 口径 · 0 违规）**；**联合 32/32 未结案**：全域最佳 32/32 布通 · 残 7 对（残对全为 0.0707 相邻格 ⇒ 缺亚格位移自由度）；窗口化 31/32 · 残 4 对。",
+ "inputs": {
+  "a_sites_grpsep": "R149_a_grpsep.json（DN 南/UP 北 亚带 · 组间 5.02mm · 组内 pitch≥1.70 · Hungarian 非交叉）",
+  "b_sites": "R149_b_alloc_s2.00.json（逐网最近拟合 · 3mm 池）",
+  "sites_sha16": {
+   "a_grpsep": "0cb5503d5258568e",
+   "b_alloc": "871a382182c2f482"
+  }
+ },
+ "joint_best": {
+  "clearance_min_mm": 0.17,
+  "endpoint_max_dev_mm": 0.0,
+  "file": "R149_wo_all32_grpsep.json",
+  "min_gap_mm": 0.0707,
+  "n_pitch_viol": 12,
+  "note": "组分离位集 + 走廊分区 + 全锚 keepout · 32/32 布通 · 残对 12（该 run）· 后续 R145 走廊分区版达残 7 对（其 wo 未及落盘即被会话语境切换终止）",
+  "routed": "32/32",
+  "sha16": "3a82862df679714a"
+ },
+ "next": [
+  "① 连续 legalization（nudge）亚格精修（对残对触发线段 ±0.05–0.20mm 试平移 · exact_gate 复算）⇒ 目标 32/32 且闸 0 违规 ⇒ 二值结案 ⇒ R3 施工",
+  "② 全域细格 cell 0.05 实测不可行（40min/it）⇒ 改用窗口化细格",
+  "③ 备选 ILP/SAT 直解 ‖ 转 R-B 几何守恒上界证书"
+ ],
+ "red_lines_ok": [
+  "只读板件",
+  "冻结四源未动",
+  "criteria/ rev=6 未碰",
+  "未派 WORKER",
+  "未写 .omo/supervision/**",
+  "未越阶段"
+ ],
+ "schema": 1,
+ "tools": [
+  "tools/k2_p4_b2_in5_ripup_v1.py（连续距离场 ripup · --pin/--excl · 全锚 keepout · pinned 真折线硬禁带 · sha16 None）",
+  "tools/k2_p4_b2_a_cage_groupsep_v1.py（A 锚笼分组分离 + 非交叉指派）"
+ ],
+ "ts": "2026-09-21T23:0x+08:00",
+ "witnesses": {
+  "DN": {
+   "clearance_min_mm": 0.1726,
+   "endpoint_max_dev_mm": 0.0,
+   "file": "R149_wo_DN_w2.json",
+   "min_gap_mm": 0.495,
+   "n_pitch_viol": 0,
+   "routed": "16/16",
+   "sha16": "6b8cfa25c71d6e71"
+  },
+  "UP": {
+   "clearance_min_mm": 0.8427,
+   "endpoint_max_dev_mm": 0.0,
+   "file": "R149_wo_UP_gs.json",
+   "min_gap_mm": 0.495,
+   "n_pitch_viol": 0,
+   "routed": "16/16",
+   "sha16": "c859daa06fdb2f30"
+  }
+ }
+}
