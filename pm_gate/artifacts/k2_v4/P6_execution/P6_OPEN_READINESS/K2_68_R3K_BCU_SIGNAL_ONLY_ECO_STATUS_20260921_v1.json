@@ -1,0 +1,80 @@
+{
+ "a1_reversal": {
+  "reason": "三次实验（v1 13 移/`unconn`+7 · v2 46 移/`unconn`+5·违规 580→900）皆失败；且探针证明**不动缝合孔亦可 32/32**（本件）",
+  "status": "**撤销 A1**（其 §2.4(a)-2 要求以『B.Cu 净出口 ≥ 所需』为限，本件已由信号网 ECO 满足）"
+ },
+ "artifact": "k2_68_r3k_bcu_signal_only_eco_plan",
+ "authority": "#K2-68 §2.4(a)-3（他网走廊 ECO）· #2.4(a)-2（缝合孔腾挪 · 本轮**证明非必需**）· #K2-69 §五-2/§六①",
+ "caveats": [
+  "工作令为**只读生成** · 未改板；`--movable-nets` = 只读假设（A2 须实做后复核）。",
+  "余量门按格膨胀（1 格 = 0.40mm）⇒ 障碍余量下限保守；apply 后须以连续几何复核具名。"
+ ],
+ "eco_set": {
+  "ref_plane_impact": "无（缝合孔未动）",
+  "signal_only": [
+   "I2C1_SDA",
+   "P3V3_AUX",
+   "DS320_STRAP_B_ADDR0_15-8",
+   "PERSTA#",
+   "PWR_BTN_ISO"
+  ],
+  "stitching_vias_moved": 0
+ },
+ "headline": "**R3-(a) 方案改进（决定性 · 零参考面风险）**：**缝合孔（`GND`/`P3V3`）全部不动**，仅 **5 个信号网** ECO⇒ B.Cu **A↔B 最大流 32/32** 且 router v4 **32/32 布通 · 几何精确闸全绿**（车道 +0.1950 · 障碍余量 **+0.3553mm** · **0 违规**）。⇒ **A1（缝合孔腾挪）整项撤销**（既被证结构不可行、且**非必需**）· `ref_plane_continuity` 不再受影响。",
+ "probe_matrix_B.Cu_cell0.40_conn4": {
+  "I2C1_SDA": {
+   "maxflow": 23,
+   "necessary": 32
+  },
+  "I2C1_SDA+P3V3_AUX": {
+   "maxflow": 23,
+   "necessary": 32
+  },
+  "I2C1_SDA+P3V3_AUX+DS320_STRAP_B_ADDR0_15-8+PERSTA#+PWR_BTN_ISO": {
+   "maxflow": 32,
+   "necessary": 32
+  },
+  "P3V3+GND+I2C1_SDA（R3G 原方案）": {
+   "maxflow": 32,
+   "necessary": 32
+  },
+  "P3V3+GND（缝合孔·上一版方案）": {
+   "maxflow": 30,
+   "necessary": 30
+  },
+  "无 ECO": {
+   "maxflow": 23,
+   "necessary": 30
+  }
+ },
+ "red_lines_ok": [
+  "只读生成 · 未改板/件",
+  "冻结四源未动",
+  "criteria/ 只读未碰",
+  "l4..l8 未动",
+  "未派 WORKER",
+  "未越阶段"
+ ],
+ "route_plan": {
+  "cell_mm": 0.4,
+  "clear_min_mm": 0.3553,
+  "clear_viol": 0,
+  "conn": 4,
+  "extra_margin_mm": 0.06,
+  "lane_pitch_min_mm": 0.195,
+  "lane_viol": 0,
+  "n_failed": 0,
+  "n_routed": 32
+ },
+ "schema": 1,
+ "still_open": [
+  "① **A2 实做**：5 个信号网在冲突区改道/微调（`I2C1_SDA` 涉事点 y 50.4–52.4 · x 62.8–123.6 之长横走为主）⇒ 改后须**重跑 router v4**；",
+  "② 重跑 apply（换 span/删腿/铺 32 条 B.Cu 走线/stub）⇒ 几何精确闸 + kicad-cli DRC（目标 error 仅 #K2-67 具名 · `unconn 0` · `mask_bridge 0` · 告警零回归）；",
+  "③ 清理 stub 细节（`track_not_centered_on_via` 45 · `via_dangling` 6）· ④ §7-3 等长/蛇形 + SI · ⑤ R4 复测闸（#K2-69 §六 ①–⑧）· ⑥ l9 落 `hw/` + spec-rev-55 同笔（硬前置 criteria rev=7）。"
+ ],
+ "tools": {
+  "probe": "tools/k2_p4_b2_in5_capacity_probe_v1.py 1e17667caea47e69",
+  "router": "tools/k2_p4_b2_bcu_router_v1.py bc13e5fbec2f613e"
+ },
+ "ts": "2026-09-21T18:4x+08:00"
+}
