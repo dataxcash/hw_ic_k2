@@ -1,0 +1,175 @@
+{
+ "artifact": "k2_71_r134_in5_escape_feasibility_v3",
+ "attribution": "未达成之主因已定位 = A 锚笼密度（keepout 净缝 0.240mm），非四周容量；次因 = 阻塞网 movable 集合口径缺口（x≈83–85 之 DS320_STRAP_*_7-0）。不得据此宣称不可达（第八条：可滑对象非障碍；且严格上界未出）。",
+ "authority": "#K2-70 §五-1/§五-3（R-A 配对守恒 + F.Cu 扇出可达性 · 不过则 R-B 守恒闸）+ 交接件 §7（(i) 布线器升级求见证 / (ii) ILP 求证书）",
+ "engine": "ARCHER 续接会话 R134（context 归零 · 仅加载 handoff + ledger 尾 + 指定工件）",
+ "findings": [
+  {
+   "claim": "k2_p4_b2_bcu_router_v2.py::exact_gate 障碍段/焊盘硬编码 model['segs']['B.Cu'] 与 'B.Cu' not in p['layers'] ⇒ R-A-② 所载『障碍最小余量』并非 In5 口径",
+   "id": "O-1v2",
+   "impact": "R-A-② 之 clearance 结论对 In5 无效（车道两两间距部分层无关，仍有效）",
+   "kind": "工具缺陷（可证）"
+  },
+  {
+   "claim": "R-A-② 之两次 In5 布线只开 --movable-nets 5 网，未开 --movable-stitch；实测 A 逃逸带正上方 y≈53.0 为 GND 缝合孔行（x 82–100 内 13 枚）+ y≈54.0 P3V3（24 枚）+ y≈54.5 GND（15 枚）；#K2-68 §2.4(a)-2 / #K2-69 Q1 已授权『逃逸带 GND/P3V3 缝合孔腾挪』",
+   "id": "O-2R-A",
+   "impact": "R-A-② 之『无见证』系在被缝合孔行人工封死之走廊上取得 ⇒ 需重判",
+   "kind": "前置口径缺失（可证 · 决定性）",
+   "measured": "启用后 In5 自由高度：DN 带上方由 2.4mm → 11.6mm（x=84: [50.4,57.2]→[50.4,61.95]；x=90: [50.4,52.85]→[50.4,61.95]）"
+  },
+  {
+   "claim": "x≈83–85 存在非车道阻塞网：DS320_STRAP_A_ADDR0_7-0（In5 竖段 x=83.11, y 53.2–56.8）· DS320_STRAP_B_ADDR0_7-0（x=83.76, y 58.0–64.2）· I2C1_SDA（x=83.8, y 51.9–52.0）等",
+   "id": "F-3",
+   "kind": "真瓶颈 A：西向双缝（决策相关）",
+   "measured": "x=83 之自由缝 = [50.4,50.85] 0.45mm + [51.7,52.6] 0.90mm ⇒ 西向穿越容量 ≤ 2+3 = 5 车道（@0.335）；移除此组后 x=83 自由高 = 11.55mm（容量 ~35）",
+   "scope_gap": "授权/既有 movable 集合名为 DS320_STRAP_B_ADDR0_15-8，而实际阻塞者为 _7-0 变体（另有 DS320_STRAP_A_ADDR0_7-0）⇒ 属走廊/放行范围之命名口径缺口（#K2-70：放行范围=监理自裁面）"
+  },
+  {
+   "claim": "R-A-② 具名锚位集（ra_sites110）最小锚距 1.100mm、keepout 半径 0.43mm ⇒ 相邻锚净缝 0.240mm（DN 10/28 对 <0.335 · UP 2/28）⇒ 缝内最多 1 条走线且无法在缝间腾挪；16 条车道之扇出须在 10.2×1.4mm 带内完成",
+   "id": "F-4",
+   "kind": "真瓶颈 B：A 锚笼密度（决策相关 · 最硬）",
+   "measured": "即使 GND/P3V3 与 9 条阻塞网（DS320×3 / I2C×3 / PERSTA# / PWR_BTN_ISO / P3V3_AUX）全部可腾挪，DN 组硬分离上限仍 = 5–6/16（60 restarts × cell 0.1）",
+   "reading": "⇒ 瓶颈不在『四周容量』而在锚笼自身；#K2-70 判『锚孔/缝合孔/锚点/F 扇出/等长皆可滑 ⇒ 非障碍』成立，但可滑 ≠ 有空间：F.Cu 可达带仅 1.4mm 高（R-A-①），16 锚 + 0.43 keepout 已占带内 65% 面积"
+  },
+  {
+   "claim": "8 条 DN 车道之 B 锚孔（x 55.0–64.0, y=60.2，现 F.Cu–In2.Cu 孔位）正落于他网 In5 铜上（PCIE_UP4_N 竖段 x=55.0 y 46.99–65.0 · PCIE_UP5_P x=56.2 …）",
+   "id": "F-5",
+   "impact": "R3『V1/V4 同位换 span』不可照字面施工（至少 8 条 DN 车道之 B 孔须重设 + F.Cu 扇出覆盖其位移）⇒ R3 工作令须含 B 锚位重设",
+   "kind": "B 侧端点不可用（可证）",
+   "measured": "就近平移 0.30–0.40mm 方可离开他网铜（v3 snap 实测 8 条）"
+  },
+  {
+   "claim": "垂直切割线容量剖面之最小值 = 68（x=64；x=84 处 78）⇒ 简单切割无约束力；0.2mm 粗格『任一细格自由』之宽松松弛（锚孔不计障碍）单商品流 = 16/16 每组（= 车道上限）⇒ 由松弛/切割得不 <32 之严格上界",
+   "id": "F-6",
+   "kind": "无证书（可证）"
+  }
+ ],
+ "frozen_guard": {
+  "criteria": "rev=6 MATCH（未碰）",
+  "design_src_k2_v4_8L.kicad_pcb": "fb07d25ac426ff84",
+  "drc_rules.json": "0a459839e15960b8",
+  "l4": "d4e81f647be7f980",
+  "l4..l8": "逐字节未动",
+  "note": "本轮只读板件 + /tmp/opencode 工具台 + 入库 tools/ 与 pm_gate/artifacts/",
+  "sch_k2_sch.yaml": "dd794c54f7ce7417"
+ },
+ "headline": "R-A 二值仍未达成（无见证）· 亦无证书；但本轮证伪两处前置口径（① v2 精确闸层硬编码 B.Cu；② 前轮 R-A 未启用 GND/P3V3 缝合孔腾挪 ⇒ 逃逸走廊被人工封死），并定位两处真瓶颈：③ x≈83–85 之非车道阻塞网（DS320_STRAP_{A,B}_ADDR0_7-0 等，不在授权 movable 集合内）造成西向 0.45+0.90mm 双缝（≤5 车道）；④ A 锚笼自身密度（16 锚 @1.100mm 最小距 · keepout 0.43 ⇒ 相邻净缝仅 0.240mm，DN 10/28 对 <0.335）——即使四周全开（extended movable）DN 组硬分离上限仍仅 5–6/16。",
+ "new_tool": {
+  "path": "tools/k2_p4_b2_in5_lane_router_v3.py",
+  "why": "v2 之力场为 3x3/方形 stamp（Chebyshev）且 cell 0.1+R=3 ⇒ 实强制 0.4mm 方形中心距（对角 0.566mm），远严于 In5 实需 0.335mm 各向同性；本器改各向同性圆盘 + 细栅格 + 协商/硬双模 + rip-up，并修正 v2 精确闸之 B.Cu 硬编码缺陷"
+ },
+ "next": [
+  "①（L2 自裁 · 立办）阻塞网 movable 集合口径补齐：将 x≈83–85 之 DS320_STRAP_A_ADDR0_7-0/DS320_STRAP_B_ADDR0_7-0（及同族）纳入『逃逸带可腾挪』清单并重跑 R-A；命名口径属监理自裁面（#K2-70 §九 · ⑦）",
+  "②（L2 · 立办）A 逃逸带加宽：R-A-① 之 F.Cu 可达带仅 1.4mm 高 ⇒ 须评估 F.Cu 侧可腾挪对象以把可达带由 1.4mm 扩至 ≥2.3mm（16×0.335=5.4mm 需两带分摊）",
+  "③（(i) 续做）布线器升级：结构化扇出（行 A 锚穿行 B 锚缝之 brick-wall 次序）+ 更细格 0.05mm；目标 32/32 且闸 0 违规",
+  "④（(ii) 备选）ILP/分支定界（锚孔入障碍 · 逐网配对 · 0.1mm 细格）求严格上界",
+  "⑤ R3 工作令须含 B 锚位重设（8 条 DN · 位移 0.30–0.40mm）+ 双侧 F.Cu 扇出"
+ ],
+ "red_lines_ok": [
+  "只读板件（未改 /tmp 以外之板）",
+  "冻结四源未动",
+  "criteria/ 未碰（rev=6）",
+  "l4..l8 逐字节未动",
+  "未派 WORKER",
+  "未写 .omo/supervision/**",
+  "未越阶段（P5 PENDING_EXTERNAL）"
+ ],
+ "residual_tool_issue": "v3 精确闸之 via 口径余量恒 -0.1807mm（4–17 处），与栅格 rast 同式 ⇒ 疑端点 snap 段或栅格半格差，须 triage（不改变『无见证』结论）",
+ "runs": [
+  {
+   "algo": "negotiate",
+   "cell": 0.1,
+   "grid_vio": 17004,
+   "layer": "In5.Cu",
+   "movable": "5 nets + stitch GND,P3V3",
+   "note": "闸次序缺陷致闸崩（已修）⇒ 结果作废",
+   "routed": "32/32",
+   "tag": "v3-neg-stitch"
+  },
+  {
+   "algo": "hard",
+   "cell": 0.1,
+   "movable": "5 nets + stitch GND,P3V3",
+   "restarts": 60,
+   "routed_best": "11/32",
+   "tag": "v3-hard-stitch-all32"
+  },
+  {
+   "algo": "hard",
+   "cell": 0.1,
+   "groups": "PCIE_DN_OUT",
+   "movable": "5 nets + stitch GND,P3V3",
+   "restarts": 150,
+   "routed_best": "4/16",
+   "tag": "v3-hard-DNonly-stitch"
+  },
+  {
+   "algo": "negotiate",
+   "cell": 0.1,
+   "gate": {
+    "clearance_min_mm": -0.1807,
+    "endpoint_max_dev_mm": 0.0,
+    "lane_pitch_min_mm": 0.0,
+    "n_clearance_viol": 17,
+    "n_lane_pitch_viol": 147,
+    "n_obs": {
+     "pad": 15,
+     "seg": 1199,
+     "via": 135
+    }
+   },
+   "movable": "5+9 nets（tracks）+ stitch GND,P3V3",
+   "routed": "32/32",
+   "tag": "v3-neg-ext"
+  },
+  {
+   "algo": "hard",
+   "cell": 0.1,
+   "gate": {
+    "clearance_min_mm": -0.1807,
+    "endpoint_max_dev_mm": 0.0,
+    "lane_pitch_min_mm": 0.3536,
+    "n_clearance_viol": 5,
+    "n_lane_pitch_viol": 0
+   },
+   "groups": "PCIE_DN_OUT",
+   "movable": "5+9 nets（tracks）+ stitch GND,P3V3",
+   "restarts": 40,
+   "routed_best": "6/16",
+   "tag": "v3-hard-DNonly-ext"
+  },
+  {
+   "algo": "negotiate",
+   "cell": 0.1,
+   "gate": {
+    "clearance_min_mm": -0.1807,
+    "endpoint_max_dev_mm": 0.0,
+    "lane_pitch_min_mm": 0.0,
+    "n_clearance_viol": 12,
+    "n_lane_pitch_viol": 117
+   },
+   "movable": "5+9 nets（tracks+vias）+ stitch GND,P3V3",
+   "routed": "32/32",
+   "tag": "v3-neg-m2"
+  },
+  {
+   "algo": "hard",
+   "cell": 0.1,
+   "gate": {
+    "clearance_min_mm": -0.1807,
+    "endpoint_max_dev_mm": 0.0,
+    "lane_pitch_min_mm": 0.3536,
+    "n_clearance_viol": 4,
+    "n_lane_pitch_viol": 0
+   },
+   "groups": "PCIE_DN_OUT",
+   "movable": "5+9 nets（tracks+vias）+ stitch GND,P3V3",
+   "restarts": 60,
+   "routed_best": "5/16",
+   "tag": "v3-hard-DNonly-m2"
+  }
+ ],
+ "schema": 1,
+ "ts": "2026-09-21T14:5x+08:00",
+ "verdict": "R-A 二值 = 仍未达成（协商软解 32/32 但几何违规 117–147 对 / 最小中心距 0.0000mm ⇒ 非见证；硬分离上限 DN 5–6/16、全 32 11/32 ⇒ 亦非见证）。R-B 亦无证书（切割最小容量 68 · 宽松松弛 16/16）。⇒ 依 #K2-70：既不得自行采 (c)、亦不得无见证施工。"
+}
