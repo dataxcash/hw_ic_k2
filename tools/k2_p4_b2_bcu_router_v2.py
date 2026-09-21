@@ -124,16 +124,16 @@ def lane_anchors(model):
     return out
 
 
-def build_base(rast, model, movable_tracks, movable_vias=()):
+def build_base(rast, model, movable_tracks, movable_vias=(), layer="B.Cu"):
     """静态障碍（不含车道锚孔）：其他网铜 + 可腾挪网之孔/盘 + 禁布线区。"""
     bad = np.zeros((rast.NX, rast.NY), dtype=bool)
-    for s in model["segs"]["B.Cu"]:
+    for s in model["segs"][layer]:
         net = s[5]
         if is_lane(net) or net in movable_tracks:
             continue
         rast.seg(bad, s[0], s[1], s[2], s[3], LANE_HW + s[4] + eff(net))
     for v in model["vias"]:
-        if "B.Cu" not in v["layers"]:
+        if layer not in v["layers"]:
             continue
         net = v["net"]
         if is_lane(net) or net in movable_vias:
@@ -143,14 +143,14 @@ def build_base(rast, model, movable_tracks, movable_vias=()):
     for p in model["pads"]:
         if is_lane(p["net"]) or p["net"] in movable_vias:
             continue
-        if "B.Cu" not in p["layers"] and not p["pth"]:
+        if layer not in p["layers"] and not p["pth"]:
             continue
         b = p["box"]
         rast.rect(bad, b[0], b[1], b[2], b[3], LANE_HW + eff(p["net"]))
         if p["pth"] and p.get("drill"):
             rast.cir(bad, p["cx"], p["cy"], LANE_HW + p["drill"] + HOLE_CLR)
     for ra in model["ruleareas"]:
-        if not (ra["no_tracks"] and "B.Cu" in ra["layers"]):
+        if not (ra["no_tracks"] and layer in ra["layers"]):
             continue
         for poly in ra["polys"]:
             rast.poly(bad, poly)
@@ -265,7 +265,7 @@ def exact_gate(model, routes, movable_tracks, anchors):
             continue
         obs.append(("seg", ((s[0], s[1]), (s[2], s[3])), s[4], net))
     for v in model["vias"]:
-        if "B.Cu" not in v["layers"]:
+        if layer not in v["layers"]:
             continue
         obs.append(("via", ((v["x"], v["y"]), (v["x"], v["y"])), v["r"], v["net"]))
     for p in model["pads"]:
@@ -346,6 +346,10 @@ def main():
     ap.add_argument("--movable-nets", default="", help="可腾挪网：其**走线**不计入障碍")
     ap.add_argument("--movable-stitch", default="", help="可腾挪网：其**孔/盘**亦不计入障碍（缝合孔腾挪场景）")
     ap.add_argument("--no-gate", action="store_true")
+    ap.add_argument("--layer", default="B.Cu", help="长走层（B.Cu | In5.Cu | In2.Cu …）")
+    ap.add_argument("--lane-w", type=float, default=None, help="车道线宽（默认按层：B.Cu 0.205 / 其他 0.16）")
+    ap.add_argument("--a-sites", default=None, help="JSON: {net:[x,y],…} 覆盖 A 锚位（锚孔笼重构之指定锚位集）")
+    ap.add_argument("--b-sites", default=None, help="JSON: {net:[x,y],…} 覆盖 B 锚位")
     ap.add_argument("--repair", type=int, default=0, help="协商后 rip-up-and-reroute 修复轮数（违例车道重布）")
     ap.add_argument("--algo", default="negotiate", choices=["negotiate", "hard"],
                     help="negotiate=协商软化（过用罚递增）；hard=严格硬带（cnt>=1 禁行）+ 失败优先 rip-up")
@@ -353,9 +357,19 @@ def main():
     model = json.load(open(a.model))
     movable = set(x for x in a.movable_nets.split(",") if x)
     rast = Raster(model, step=a.cell)
+    layer = a.layer
+    lhw = (a.lane_w / 2.0) if a.lane_w else (0.205 / 2.0 if layer == "B.Cu" else 0.16 / 2.0)
+    global LANE_HW, LANE_W
+    LANE_HW = lhw; LANE_W = 2.0 * lhw
     movable_vias = set(x for x in a.movable_stitch.split(",") if x)
-    base = build_base(rast, model, movable, movable_vias)
+    base = build_base(rast, model, movable, movable_vias, layer)
     anchors = lane_anchors(model)
+    for src, key in ((a.a_sites, "A"), (a.b_sites, "B")):
+        if src:
+            ov = json.load(open(src))
+            for an in anchors:
+                if an["net"] in ov:
+                    an[key] = tuple(float(x) for x in ov[an["net"]][:2])
     c_all, own = build_via_counts(rast, anchors)
     R = max(1, int(round(PITCH / a.cell)) - 1)
     rng = np.random.RandomState(a.seed)
@@ -509,7 +523,7 @@ def main():
               (gate["lane_pitch_min_gap_mm"], gate["n_lane_pitch_viol"], gate["clearance_min_mm"],
                gate["n_clearance_viol"], gate["endpoint_max_dev_mm"]))
     wo = {"artifact": "k2_p4_b2_bcu_router_v2_workorder", "algo": "paired_pathfinder",
-          "cell_mm": a.cell, "lane_w_mm": LANE_W, "pitch_mm": PITCH, "stamp_R": R,
+          "cell_mm": a.cell, "lane_w_mm": LANE_W, "pitch_mm": PITCH, "stamp_R": R, "layer": layer,
           "model": a.model, "movable_nets": sorted(movable), "n_lanes": len(anchors),
           "n_routed": len(routes), "failed": sorted(t["an"]["net"] for t in tasks if t["an"]["net"] not in routes),
           "routes": routes, "cell_paths": {k: [[int(i), int(j)] for (i, j) in v] for k, v in routed.items()},
