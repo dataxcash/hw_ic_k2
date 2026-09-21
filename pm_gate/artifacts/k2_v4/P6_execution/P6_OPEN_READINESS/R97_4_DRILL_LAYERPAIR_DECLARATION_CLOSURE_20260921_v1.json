@@ -1,0 +1,81 @@
+{
+ "artifact": "k2_p5_drill_layerpair_declaration_closure",
+ "schema": 1,
+ "ts": "2026-09-21T08:16:44+08:00",
+ "session_label": "K2-2026-09-21 · 轮标 ARCHER-R97-4 · 只读造活（对板/对包复核 · HDI 钻孔对声明闭合性）",
+ "why": "owner #14① 冻结工艺通道 A = **JLC HDI 盲埋孔（≥2 阶）**；**板厂若把 HDI 对读错（如当通孔）⇒ 直接报废**。故核对『**逐钻孔文件之层对声明 ↔ ORDER_NOTES/层序 ↔ 钻孔普查 ↔ MANIFEST**』是否**闭合**——本项为**一次性只读核对**（非新增判据维/检查齿）。",
+ "method": "① 独立复算每个 `.drl` 之孔数（`^X..Y..` 行计数）；② 解析 `drill_report.txt` 之『Drill file … contains / holes connecting layer pair: …』声明；③ 与 `ORDER_NOTES.md §2`、`05_layer_sequence.txt`、`MANIFEST.json::drill_total` 对账。",
+ "recount_independent": {
+  "k2_v4_8L.l8-back-in5.drl": 37,
+  "k2_v4_8L.l8-front-in1.drl": 171,
+  "k2_v4_8L.l8-front-in2.drl": 132,
+  "k2_v4_8L.l8-front-in4.drl": 4,
+  "k2_v4_8L.l8-front-in5.drl": 19,
+  "k2_v4_8L.l8-in2-in5.drl": 92,
+  "k2_v4_8L.l8.drl": 299
+ },
+ "declared_in_drill_report": {
+  "k2_v4_8L.l8.drl": {
+   "pair": null,
+   "class": "PTH(+NPTH merged)"
+  },
+  "k2_v4_8L.l8-front-in1.drl": {
+   "pair": "F.Cu and In1.Cu",
+   "class": "blind vias"
+  },
+  "k2_v4_8L.l8-front-in2.drl": {
+   "pair": "F.Cu and In2.Cu",
+   "class": "blind vias"
+  },
+  "k2_v4_8L.l8-front-in4.drl": {
+   "pair": "F.Cu and In4.Cu",
+   "class": "blind vias"
+  },
+  "k2_v4_8L.l8-front-in5.drl": {
+   "pair": "F.Cu and In5.Cu",
+   "class": "blind vias"
+  },
+  "k2_v4_8L.l8-back-in5.drl": {
+   "pair": "B.Cu and In5.Cu",
+   "class": "buried vias"
+  },
+  "k2_v4_8L.l8-in2-in5.drl": {
+   "pair": "In2.Cu and In5.Cu",
+   "class": "buried vias"
+  }
+ },
+ "closure": [
+  {
+   "claim": "6 个 HDI 钻孔文件**逐个自带层对声明**",
+   "reading": "front-in1=`F.Cu↔In1.Cu`(blind) · front-in2=`F.Cu↔In2.Cu`(blind) · front-in4=`F.Cu↔In4.Cu`(blind) · front-in5=`F.Cu↔In5.Cu`(blind) · in2-in5=`In2.Cu↔In5.Cu`(buried) · back-in5=`B.Cu↔In5.Cu`(buried) ⇒ **与 ORDER_NOTES §2 七类过孔逐一对应** ✓"
+  },
+  {
+   "claim": "逐文件孔数 = 独立复算",
+   "reading": "171/132/4/19/92/37 全中；通孔文件 299（复算）vs 报告『plated 295』+『unplated 4』= 299 ✓"
+  },
+  {
+   "claim": "总量闭合",
+   "reading": "通孔 299（含 PTH 16 + NPTH 4 + F↔B 通孔过孔 279）+ HDI 455 = **754 = `MANIFEST.json::drill_total`** ✓；且 **455 = ORDER_NOTES §2『非通孔 455 支』** ✓"
+  },
+  {
+   "claim": "多阶层压事实载明",
+   "reading": "`In2.Cu↔In5.Cu` 92 孔 = **埋孔跨 3 次层压** ⇒ ORDER_NOTES 已明载『需多次层压 … 依 HDI/advanced 通道下单并走 HDI DFM review』✓"
+  }
+ ],
+ "observations_named": [
+  {
+   "id": "OBS-R97-4-1",
+   "item": "KiCad 钻孔报告对 `B.Cu↔In5.Cu` 之类别标签写作 **(buried vias)**，而 `ORDER_NOTES §2`/DFM 普查写 **BLIND_BURIED**",
+   "assessment": "**非缺陷 · 非矛盾**：① 二者**层对完全一致**（决定制造的是层对，不是类别名）；② `B.Cu` 为外层 ⇒ 制造语义上属 **blind**，KiCad 标签为工具用词差异；③ 该差异不影响任何制造参数/判据。**登记录以备查，不充绿、不升级**。"
+  }
+ ],
+ "verdict": "**闭合**：HDI 层对声明链（钻孔文件 ↔ 报告 ↔ ORDER_NOTES/层序 ↔ 普查 ↔ MANIFEST）**无缺口、无矛盾**，孔数 754 三路一致 ⇒ **板厂误读层对的风险已被交付件自身封堵**（文件自声明层对）。",
+ "red_lines_ok": [
+  "只读复核（未改包内任何件 · 未重出包 · 未换锚）",
+  "未改 criteria/ · 冻结四源",
+  "外部落点仅 /tmp/opencode"
+ ],
+ "package_anchor_unchanged": {
+  "manifest_sha16": "19d637c4e9ed35be"
+ }
+}
