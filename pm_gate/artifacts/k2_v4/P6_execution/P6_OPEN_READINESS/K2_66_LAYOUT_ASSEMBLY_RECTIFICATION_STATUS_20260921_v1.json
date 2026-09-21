@@ -1,0 +1,154 @@
+{
+ "artifact": "k2_66_layout_assembly_rectification_status",
+ "schema": 1,
+ "ts": "2026-09-21T09:33:43.326107+08:00",
+ "session_label": "K2-2026-09-21 · 轮标 ARCHER-R108(续3) · #K2-66 消费（l9 整改件 + 测量工具 + 齿化规格）",
+ "ruling": "#K2-66（l8/l8r3 布局/可装配/可测试 = 不合格 · 19 项缺口 · 授权 ENG 出新 rev l9 + 测量工具 + 齿化）",
+ "deliverables": {
+  "measurement_tool": {
+   "path": "k2/tools/k2_layout_quality_check_v1.py",
+   "sha16": "8146dc74985bae79",
+   "note": "§五-2 · 只测量不判定"
+  },
+  "builder": {
+   "path": "k2/tools/k2_p4_build_l9_v1.py",
+   "sha16": "a144d45e6fcee834",
+   "note": "§五-1 · 确定性构造器（阶段化）"
+  },
+  "dimension_spec": {
+   "path": "k2/docs/K2-66-LAYOUT-ASSEMBLY-DIMENSION-SPEC-v1.md",
+   "note": "§五-3 · 待 gate 属主安装（ENG criteria 只读）"
+  }
+ },
+ "l8_baseline_vs_l9_wip": {
+  "A1_fiducial": {
+   "l8": 0,
+   "l9": 3,
+   "thresh": ">=2 · Ø1.0 · mask 2x · >=3.35mm",
+   "verdict": "PASS（Ø1.0 ✓ · mask ✓ · 距边 4.9–5.2mm ✓）"
+  },
+  "A2_testpoint": {
+   "l8": 0,
+   "l9": 6,
+   "thresh": ">=1/电源轨+高速通道",
+   "verdict": "4/4 电源轨（12V_IN/P3V3/P3V3_AUX/MCU_VDD）+ 2 高速（PCIE_UP_OUT0_P/N_J2）"
+  },
+  "A3_polar_silk": {
+   "l8": "0/15",
+   "l9": "15/15",
+   "verdict": "PASS"
+  },
+  "A4_outline_silk": {
+   "l8": "0/58",
+   "l9": "67/67",
+   "verdict": "PASS（自解析）"
+  },
+  "A5_board_info": {
+   "l8": "无",
+   "l9": "title_block(名/版/日期/公司)+gr_text",
+   "verdict": "PASS"
+  },
+  "A6_silk_over_copper": {
+   "l8": 37,
+   "l9": 115,
+   "authority": "kicad-cli pcb drc",
+   "verdict": "**未过（回归）**"
+  },
+  "A7_courtyard": {
+   "l8": "4/58",
+   "l9": "67/67 覆盖 · 但 DRC courtyards_overlap = 27",
+   "verdict": "覆盖 PASS · 无重叠 **未过**"
+  },
+  "A8_edge": {
+   "l8": "arcs 0",
+   "l9": "arcs 4 · R1.5mm",
+   "verdict": "PASS"
+  },
+  "B1_right_angles": {
+   "l8": 627,
+   "l9": 0,
+   "verdict": "PASS（630 处 45° 倒角）"
+  },
+  "B2_hs_vias": {
+   "l8": "32 车道 × 4 via",
+   "l9": "同（未动）",
+   "verdict": "**未过 · 须重布线**"
+  },
+  "C1_copper_balance": {
+   "l8": {
+    "F.Cu": 9.25,
+    "B.Cu": 3.9
+   },
+   "l9": {
+    "F.Cu": 53.2,
+    "B.Cu": 56.6
+   },
+   "verdict": "PASS（hatch 0.40/0.80 · 层间差 3.4%<=15–20%）"
+  },
+  "C2_mounting_basis": {
+   "l8": "4 孔不对称",
+   "l9": "同上（未动）",
+   "verdict": "**SPEC 无依据**（仅 m3_keepout_mm=3.0 · `pd.zone_defs.m3_keepout_note` 明记『板文件实测无 M3 孔实例』）⇒ #K2-66 §四 按缺陷修"
+  }
+ },
+ "drc": {
+  "cmd": "AppDir/bin/kicad-cli pcb drc --format json --severity-all",
+  "l8": {
+   "total": 170,
+   "unconnected": 0,
+   "silk_over_copper": 37,
+   "silk_overlap": 15,
+   "courtyards_overlap": 0,
+   "clearance": 0
+  },
+  "l9_wip": {
+   "total": 451,
+   "unconnected": 0,
+   "schematic_parity": 0,
+   "silk_over_copper": 115,
+   "silk_overlap": 177,
+   "courtyards_overlap": 27,
+   "clearance": 1,
+   "solder_mask_bridge": 4,
+   "lib_footprint_issues": 63,
+   "track_not_centered_on_via": 39
+  }
+ },
+ "remaining_root_causes_and_plan": [
+  {
+   "id": "A6",
+   "root": "新加轮廓丝印之**角点/边**落在邻件 pad 之 **solder-mask 开窗**（开窗 > 铜 pad bbox；含 mask margin）⇒ kicad-cli `silk_over_copper`=115",
+   "fix": "① 裁剪改用 **mask 开窗几何**（pad size + 2*mask_margin）而非铜 bbox；② 兜底：对无法避开者**不画该段**（A4 覆盖以 DRC 口径重裁：以『有丝印图元』计，不要求闭合矩形）；③ 复核 `silk_overlap`（丝印-丝印）"
+  },
+  {
+   "id": "A7-overlap",
+   "root": "courtyard = pads bbox + 0.25 ⇒ 密集区相邻 courtyard 相交 27 处",
+   "fix": "courtyard 收缩到 **IPC 实体轮廓**（非 pads bbox）；仍相交者 = 真实 DFA 间距不足 ⇒ 列具名清单交监理裁（同 #K2-21 联合不可满足先例）"
+  },
+  {
+   "id": "B2",
+   "root": "32 条 PCIE 车道层序 F→In2→In5→B = 4 via/线（≥3 次换层）",
+   "fix": "**车道重布线**（L2 自裁 · 布线）：目标 ≤2 via/线 ⇒ 至多 2 次换层；可用层对 F/B + In2/In5；工具 = 项目多层迷宫布线器 `k2/tools/k2_p4_mroute_v1.py`（span 感知）或等价；须保持 85Ω 差分（宽/间距按 SPEC `impedance.width_mm_by_layer`）+ DRC 全绿 + 19 维不回归"
+  },
+  {
+   "id": "C2",
+   "root": "SPEC 无安装孔机械依据（仅 keepout 规则）",
+   "fix": "依 #K2-66 §四『无依据 ⇒ 按缺陷修』⇒ l9 采用**对称阵列**（x∈{X1+8,X2-8} · y∈{Y1+8,Y2-8}）或补外部机械依据；本件不预设（L2 自裁面）"
+  },
+  {
+   "id": "lib_footprint_issues",
+   "root": "新建 footprint（fiducial/TP）之 FPID `k2_v4:*` 无对应库",
+   "fix": "FPID 改用 Gerber-only 中性名（或建 `k2/hw/lib` 桩）以消 DRC `lib_footprint_issues`"
+  }
+ ],
+ "red_lines_ok": [
+  "未改冻结四源",
+  "未改 criteria/（只读 · 出安装件）",
+  "未改 l4..l8（逐字节保全）",
+  "未改网表/SPEC",
+  "未派 WORKER",
+  "临时仅 /tmp/opencode",
+  "未越阶段（P5 PENDING_EXTERNAL 维持）"
+ ],
+ "next": "① 依 remaining 五条续修 l9（A6/A7/B2/C2/lib）；② l9 达 §六 7 项 gate 后落 `hw/k2_v4_8L.l9.kicad_pcb` + 送监理；③ 齿化由 gate 属主装 `layout_and_assembly_quality` 维；④ 无新裁定 ⇒ 继续推进（**禁 HOLD/停等**）。"
+}
