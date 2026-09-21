@@ -581,7 +581,7 @@ def run(src, out_path, ledger_path, only=None, step=GRID_DEF, limit=None, dry=Fa
                 p1, p2 = r["pts"][k], r["pts"][k + 1]
                 nt = pcbnew.PCB_TRACK(b)
                 nt.SetStart(V(*p1)); nt.SetEnd(V(*p2))
-                nt.SetWidth(pcbnew.FromMM(LANE_W)); nt.SetLayer(pcbnew.GetLayerID(LAYER))
+                nt.SetWidth(pcbnew.FromMM(LANE_W)); nt.SetLayer(b.GetLayerID(LAYER))
                 nt.SetNetCode(b.GetNetcodeFromNetname(nm))
                 b.Add(nt)
             for c in (r["A"], r["B"]):
@@ -591,6 +591,12 @@ def run(src, out_path, ledger_path, only=None, step=GRID_DEF, limit=None, dry=Fa
                 vi.SetLayerPair(F_CU, VIA_BOT)
                 vi.SetNetCode(b.GetNetcodeFromNetname(nm))
                 b.Add(vi)
+        try:                                   # 铺铜重灌（新增走线/孔后必要；否则 DRC 报 zone 净距）
+            zf = pcbnew.ZONE_FILLER(b)
+            zf.Fill(list(b.Zones()))
+            LED["zone_refilled"] = True
+        except Exception as e:                 # noqa: BLE001
+            LED["zone_refilled"] = "ERR:%s" % e
         b.Save(out_path)
     with open(ledger_path, "w", encoding="utf-8") as f:
         json.dump(LED, f, ensure_ascii=False, indent=1, sort_keys=True)

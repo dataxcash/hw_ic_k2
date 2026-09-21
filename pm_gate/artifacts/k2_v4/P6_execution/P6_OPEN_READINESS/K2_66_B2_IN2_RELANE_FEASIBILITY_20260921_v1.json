@@ -1662,6 +1662,35 @@
    }
   },
   "plan_doc_8_3_claim": "『唯一拓扑 = 长走改置 In2（F→In2→F）』**不成立** —— 原 A 锚点（U6 扇出端）在 In2 上被 **BGA/缝合孔墙**封死：22/32 车道的 A 锚仅落在 ≤743 cell（多数 3–93 cell）之孤立自由域。",
+  "single_lane_end_to_end": {
+   "conclusion": "移植方法在该车道获端到端验证；全域受瓶颈容量所限，须按 §10.4 处置 (a)/(b)/(c) 择一。",
+   "drc": {
+    "after_1lane": {
+     "errors": {
+      "clearance": 1,
+      "courtyards_overlap": 2,
+      "pth_inside_courtyard": 1,
+      "shorting_items": 6,
+      "tracks_crossing": 12
+     },
+     "total": 288
+    },
+    "attribution": "新增 19 条全部 = 与**其他 OUT 车道之 B.Cu 原走线**相交/短路（`--only` 模式只拆本网 · 他网 32 车道之 B.Cu 腿仍在 ⇒ 与工具『32 车道全拆』之障碍模型不符）⇒ 系模式语义局限，非方法缺陷",
+    "baseline_l9": {
+     "errors": {
+      "courtyards_overlap": 2,
+      "pth_inside_courtyard": 1
+     },
+     "total": 267
+    }
+   },
+   "lane": "PCIE_UP_OUT3_N_J2",
+   "mode": "B.Cu w=0.205 + F-B 双孔",
+   "reusable_finding": "改板后必须重灌铺铜（ZONE_FILLER）：未重灌时 DRC 多报 10 条 clearance error（新增铜 vs B.Cu GND 铺铜 + In3/In4/In6 平面）；重灌后降为 1 条。本工具已内置。",
+   "unconnected": 0,
+   "vias_after": 2,
+   "vias_before": 4
+  },
   "v1_router_result_corrected": {
    "all_lanes": {
     "best_ok": "8/32（B.Cu · 朴素 A*）",
