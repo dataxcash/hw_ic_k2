@@ -1,0 +1,55 @@
+{
+ "schema": 1,
+ "artifact": "k2_r275_up_out_constructive_attempt1_gate_readout",
+ "ts": "2026-09-22T03:44+0800",
+ "to": "监理",
+ "from": "ENG · ARCHER（监理自动续推 · P4 在阶 · fail-closed）",
+ "authority": "#K2-132 §三(乙) D1 / #K2-133 §三 N1（no-move 全转 · 一次实现）· 指令 #14",
+ "anchors": {
+  "frozen_4of4": "未动",
+  "criteria": "rev=6 MATCH（只读）",
+  "l8": "7a5c89913d6e5d0a",
+  "k2": "4fb3adc",
+  "owner_gate": 0
+ },
+ "what": "**构造 attempt #1**（按 R274 拓扑导出的**单调序 + 南通道深度倒置**方案）：一次性生成 16 条 In5 折线（A 锚 → 南下至南通道层 Y_k → 东行至通道列 c_k=135.55+0.435k → 北上至 y_B → 西/东行至 B 锚），交 `exact_gate`（In5 · hw 0.08 · pitch 0.435 · 自网全转口径）。",
+ "gate_readout": {
+  "n_routes": 16,
+  "endpoint_max_dev_mm": 0.0,
+  "lane_pitch_req_mm": 0.435,
+  "lane_pitch_min_gap_mm": 0.0,
+  "n_lane_pitch_viol": 13,
+  "n_clearance_viol": 15,
+  "clearance_obstacle_types": {
+   "via": "GND/P3V3 固定缝合孔（为主）",
+   "seg": "他网 In5 铜"
+  },
+  "clearance_margins": "违例裕度 −0.09…−0.36mm（全为**小量**）",
+  "n_obs": {
+   "seg": 1378,
+   "via": 395,
+   "pad": 20
+  }
+ },
+ "verdict": "**(a) 见证：未取得（attempt #1）** —— **端点位移 0 ✓**（锚不动）· 但 **互距 13 违 + 净距 15 违**，违例**全为小量（<0.36mm）**，blocker 以 **固定 GND/P3V3 缝合孔（135 枚 · 不可动）** 为主 + 少量自碰。",
+ "interpretation": "⇒ 剩余工作是**自由带内的布局定案**（列/层位落点选择），**非**根本卡点；与 R273 之『构造/实现能力层』定性一致。",
+ "discipline_note": "**未做参数扫描/迭代**：attempt #1 为**一次性**；#K2-132 §三.5『同参重跑 ≥2 = FAIL』—— 后续须以**设计**（自由带布局定案）而非调参改进。",
+ "next_design": {
+  "S2a": "逐事件自由带内**落点定案**（用 R273 之免费横截面实测表选列 · 使每列在全高可用且离固定孔 ≥0.435）",
+  "S2b": "南通道层 Y_k 取各 lane 全高可用之公共自由带内（避固定孔）",
+  "S2c": "末端 B 锚接近段按 y_B 逐条**嵌套降落**（北停靠者先西行）",
+  "S3": "复跑 exact_gate（**不同装置 · 非同参**）⇒ 见证"
+ },
+ "gate_selfcheck": {
+  "阶段": "P4（在阶）· 未越阶段",
+  "判据": "rev=6 MATCH",
+  "冻结四源": "4/4 未动",
+  "受审板 l8": "7a5c89913d6e5d0a",
+  "owner闸口": 0
+ },
+ "owner_gate": 0,
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "d468541f8f10a304"
+ }
+}
