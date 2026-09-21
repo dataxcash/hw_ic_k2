@@ -54,14 +54,23 @@ def req(nm):
     return REQ_DFLT
 
 
-class Field:
-    """0.1mm 细栅格上的 In5 线心合法图（bad=True ⇒ 线心不可放）。"""
+LANE_HW = {"In2.Cu": 0.16 / 2, "In5.Cu": 0.16 / 2, "B.Cu": 0.205 / 2}   # 车道线宽 = 探针口径
 
-    def __init__(self, model, hw=HW_DEF, step=0.10):
-        self.hw, self.step = hw, step
-        self.segs = model["segs"]["In5.Cu"]
-        self.vias = [v for v in model["vias"] if "In5.Cu" in v["layers"]]
-        self.pads = [p for p in model["pads"] if ("In5.Cu" in p["layers"] or p["pth"])]
+
+class Field:
+    """0.1mm 细栅格上的**指定层**线心合法图（bad=True ⇒ 线心不可放）。
+
+    `layer` 默认 `In5.Cu`（§7-2-b-0 In5 路径）；`B.Cu` 用于 (a) B.Cu 收紧版段闸；
+    `In2.Cu` 用于对照。车道线半宽按 `LANE_HW` 取（B.Cu = 0.205/2，其余 0.16/2）。
+    """
+
+    def __init__(self, model, hw=None, step=0.10, layer="In5.Cu"):
+        self.layer = layer
+        self.hw = LANE_HW.get(layer, HW_DEF) if hw is None else hw
+        self.step = step
+        self.segs = model["segs"][layer]
+        self.vias = [v for v in model["vias"] if layer in v["layers"]]
+        self.pads = [p for p in model["pads"] if (layer in p["layers"] or p["pth"])]
         x0, y0, x1, y1 = model["bbox"]
         # 栅格原点 = 板 bbox 角点（与官方探针 `k2_p4_b2_feasibility_probe_v1.py` 逐格对齐）
         self.X0, self.Y0 = x0, y0
@@ -356,31 +365,88 @@ def span_classes(model):
             "derivation": "自 dump 之 via top/bot 逐孔统计（脚本化 · 非手列）"}
 
 
+def anchor_clearance(field, lanes, min_clear=None):
+    """逐锚**该层**净距（锚孔铜缘 → 最近他网铜缘）：< `VIA_R + req` ⇒ 换算为该层 span 后**必移**。
+
+    用于 (a) B.Cu 收紧版 / In5 路径之 R3 前置：给出**具名必移孔清单**（禁手列）。
+    """
+    import math as _m
+    out = {}
+    for l in lanes:
+        for tag in ("A", "B"):
+            pt = l[tag]
+            if not pt:
+                continue
+            best = (1e9, None)
+            for (ax, ay, bx, by, shw, nm) in field.segs:
+                if is_lane(nm):
+                    continue
+                dx, dy = bx - ax, by - ay; L2 = dx * dx + dy * dy
+                t = 0.0 if L2 == 0 else max(0.0, min(1.0, ((pt[0] - ax) * dx + (pt[1] - ay) * dy) / L2))
+                d = _m.hypot(pt[0] - (ax + t * dx), pt[1] - (ay + t * dy)) - shw
+                if d < best[0]:
+                    best = (d, {"kind": "seg", "net": nm})
+            for v in field.vias:
+                if is_lane(v["net"]):
+                    continue
+                d = _m.hypot(pt[0] - v["x"], pt[1] - v["y"]) - v["r"]
+                if d < best[0]:
+                    best = (d, {"kind": "via", "net": v["net"], "at": [v["x"], v["y"]]})
+            for p in field.pads:
+                if is_lane(p["net"]):
+                    continue
+                x0, y0, x1, y1 = p["box"]
+                dx = max(x0 - pt[0], 0.0, pt[0] - x1); dy = max(y0 - pt[1], 0.0, pt[1] - y1)
+                d = _m.hypot(dx, dy)
+                if d < best[0]:
+                    best = (d, {"kind": "pad", "net": p["net"], "ref": p["ref"] + "." + p["num"]})
+            need = VIA_R + req(best[1]["net"]) if best[1] else VIA_R
+            out["%s.%s" % (l["net"], tag)] = {"clear_mm": round(best[0], 4), "need_mm": round(need, 3),
+                                             "short_by_mm": round(need - best[0], 4), "blocker": best[1],
+                                             "ok": bool(best[0] >= need - 1e-9)}
+    bad = sorted(k for k, v in out.items() if not v["ok"])
+    return {"per_anchor": out, "n_anchor": len(out), "n_must_move": len(bad), "must_move": bad}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", required=True)
-    ap.add_argument("--mode", default="fixed", choices=["fixed", "reloc", "both"])
+    ap.add_argument("--mode", default="fixed", choices=["fixed", "reloc", "both", "clearance"])
     ap.add_argument("--cell", type=float, default=0.40, help="最大流栅格 (mm)")
     ap.add_argument("--conn", type=int, default=8, choices=[4, 8])
     ap.add_argument("--rloc", type=float, default=1.0, help="锚孔局部扇出半径 (mm)")
     ap.add_argument("--min-sep", type=float, default=0.86, help="锚孔最小中心距 (mm)")
+    ap.add_argument("--layer", default="In5.Cu", choices=["In2.Cu", "In5.Cu", "B.Cu"],
+                    help="车道中段所在层（(a) 走 B.Cu · In5 路径走 In5.Cu）")
     ap.add_argument("--json-out", default=None)
     a = ap.parse_args()
     model = json.load(open(a.model))
-    t = Field(model)
+    t = Field(model, layer=a.layer)
     lanes = lanes_of(model)
     A_cur = [l["A"] for l in lanes]; B_cur = [l["B"] for l in lanes]
     rep = {"artifact": "k2_p4_b2_in5_capacity_probe_v1", "model": a.model,
+           "layer": a.layer, "lane_hw_mm": t.hw, "anchor_keepout_mm": t.hw + VIA_R + REQ_PCIE,
            "span_classes_board_actual": span_classes(model),
            "board": model.get("board"), "cell_mm": a.cell, "conn": a.conn, "rloc_mm": a.rloc,
            "min_sep_mm": a.min_sep, "n_lanes": len(lanes), "regions": REGIONS,
            "method": "In5 细栅格 0.1mm 线心合法图（其他网铜 + 本批锚孔 keepout）→ 抽样栅格最大流"
                      "；每锚经局部扇出 rloc 接源/汇（容量 1）；栅格节点容量 1；A/B 集合间允许配对（上界）"}
+    if a.mode == "clearance":
+        cl = anchor_clearance(t, lanes)
+        rep["clearance"] = cl
+        print("[%s][clearance] 锚孔 %d 个 · **必移 %d 个**" % (a.layer, cl["n_anchor"], cl["n_must_move"]))
+        for k in cl["must_move"][:40]:
+            v = cl["per_anchor"][k]
+            print("   %-30s clear=%.3f need=%.3f (short %.3f) ← %s" % (k, v["clear_mm"], v["need_mm"], v["short_by_mm"], v["blocker"]))
+        if a.json_out:
+            json.dump(rep, open(a.json_out, "w"), ensure_ascii=False, indent=1, sort_keys=True)
+            print("wrote", a.json_out)
+        return
     f_fixed, i_fixed = maxflow(t, A_cur, B_cur, a.cell, a.conn, a.rloc)
     rep["fixed"] = {"maxflow": f_fixed, **i_fixed}
     ok, ncomp, det = same_component_stats(t, lanes, cell_mm=0.10, conn=a.conn, rloc=a.rloc)
     rep["necessary_same_component"] = {"pass": ok, "n": len(lanes), "components": ncomp, "per_lane": det}
-    print("[fixed] A->B maxflow = %d/%d (grid %s)" % (f_fixed, len(lanes), i_fixed))
+    print("[%s][fixed] A->B maxflow = %d/%d (grid %s)" % (a.layer, f_fixed, len(lanes), i_fixed))
     print("[necessary] same-component = %d/%d (components=%d)" % (ok, len(lanes), ncomp))
 
     if a.mode in ("reloc", "both"):
