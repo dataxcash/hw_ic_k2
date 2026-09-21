@@ -1,0 +1,74 @@
+{
+ "artifact": "k2_67_l9_landing_and_gate7_verification",
+ "schema": 1,
+ "ts": "2026-09-21T10:16:56.098989+08:00",
+ "session_label": "K2-2026-09-21 · R108(续9) · #K2-67 消费（courtyard 具名豁免 · D-a 修毕 · l9 落 hw/）",
+ "ruling": "#K2-67（courtyard 零重叠 ×2 = 联合不可满足 ⇒ 具名豁免(b)；移件(a)/改口径(c) 驳回；新立 D-a mask_bridge×3）",
+ "landed_board": {
+  "path": "k2/hw/k2_v4_8L.l9.kicad_pcb",
+  "sha16": "39b58aa12c86e5f4",
+  "sha256": "39b58aa12c86e5f4da3af317ad44117eddd1a371c8366de94731495540794258"
+ },
+ "d_a_fix": {
+  "defect": "solder_mask_bridge ×3（FID1/2/3 阻焊开窗 ↔ F.Cu GND 填充相连）",
+  "fix": "fiducial 3 处加 **F.Cu rule-area keepout**（`SetDoNotAllowZoneFills` · 半径 1.15mm = 开窗 1.0 + 余量）；其余 disallow 置 False（免误报自身 pad）",
+  "result": "solder_mask_bridge **3→0** ✓ · items_not_allowed 0 ✓"
+ },
+ "gate7_verification": {
+  "① 重叠集恰 = {U1↔J9, U1↔J13}": "✓（DRC 实测恰此 2）",
+  "② courtyard 覆盖 100% · silk_over_copper 0 · clearance 0": "✓ 66/66 · 0 · 0",
+  "③ solder_mask_bridge 0 · 余 error 仅具名豁免 2 对 + 同源 1": "✓ errors=3（courtyards_overlap 2 + pth_inside_courtyard 1 · 同对同源）",
+  "④ 豁免证据在册 · criteria 零改 · rev=6 MATCH": "✓（本件 + 册面 LAYOUT-5；criteria 未写）",
+  "⑤ 旧锚 l4..l8 逐字节未动 · 冻结四源未动": "✓（l4 d4e81f64 · 设计源 fb07d25a · l8 7a5c8991）"
+ },
+ "exemption_evidence": {
+  "pairs": [
+   "U1↔J9",
+   "U1↔J13"
+  ],
+  "courtyard_overlap_mm": {
+   "U1↔J9": "1.450×1.550",
+   "U1↔J13": "1.450×0.240"
+  },
+  "U1_pads_in_overlap_region": "0 / 0（两对均零 ⇒ 非焊盘冲突）",
+  "min_pad_edge_gap_mm": {
+   "U1↔J9": 0.31,
+   "U1↔J13": 0.6,
+   "量法": "J9 PTH pad1 ↔ U1 最近 pad（#K2-67 §一 监理读数 · 取更保守者）"
+  },
+  "indivisibility_proof": "#K2-67 §二（x 向可用 0.430mm < 需 1.450mm；y 向 = 冻结接口位）",
+  "same_source_merged": [
+   "pth_inside_courtyard ×1（J9 PTH pad1 [UART_TX] @(31.750,55.960) 落 U1 院落内）"
+  ],
+  "invalid_conditions": "J9/J13/U1 任一位置或封装变更 ⇒ 豁免自动失效须重裁"
+ },
+ "drc_summary": {
+  "total": 267,
+  "unconnected": 0,
+  "silk_over_copper": 0,
+  "clearance": 0,
+  "courtyards_overlap": 2,
+  "solder_mask_bridge": 0,
+  "pth_inside_courtyard": 1,
+  "errors": 3
+ },
+ "remaining": [
+  {
+   "id": "④ B2",
+   "note": "32 数据车道 ×4 via → ≤2（#K2-67 §六-3 已授权 · 并行继续 · 计划 K2-66-B2-LANE-VIA-REDUCTION-PLAN-v1.md）"
+  }
+ ],
+ "observations": {
+  "O-1": "docs/K2-67-CONNECTOR-POSITION-NAMED-NOTE-v1.md（SPEC x=26.500 陈旧 · 板值 27.940）",
+  "O-2": "ENG 报数口径已在 #K2-67 记（监理取更保守 0.310/0.600）"
+ },
+ "red_lines_ok": [
+  "未改冻结四源",
+  "未改 criteria/",
+  "未改 l4..l8",
+  "未改网表/SPEC",
+  "未派 WORKER",
+  "未越阶段"
+ ],
+ "next": "④ B2 车道重布线（并行）⇒ 达 #K2-66 §六 后送监理限定复核。"
+}

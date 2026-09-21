@@ -1,0 +1,34 @@
+{
+ "artifact": "k2_pending_rulings_delta",
+ "schema": 1,
+ "ts": "2026-09-21T10:17:56.564499+08:00",
+ "session_label": "K2-2026-09-21 · R108(续10) · #K2-67 执行中 · 请求授权（l9 落 hw/ 之 SPEC 同笔要求）",
+ "supersedes": "v35（其 courtyard 项已由 #K2-67 裁定 (b) 具名豁免）",
+ "purpose": "【待裁/授权 · 关系 #K2-67 §六-4】l9 落 hw/ 被 repo pre-commit 门禁拒绝：`checks.check_pcb_spec_correlation` 规定『提交含 .kicad_pcb 变更 ⇒ 必须同笔含 SPEC 变更』；而红线为『未获批不得改 SPEC』⇒ ENG 不擅自改 SPEC，请监理裁授权方式。",
+ "owner_gate": "0（属放行范围/授权 · #14⑦ 监理自裁面）",
+ "facts": {
+  "gate": "_shared/eda_core/pipeline/checks.py::check_pcb_spec_correlation（pre-commit 无条件调用）· 拒因原文:PCB 产物变更 [hw/k2_v4_8L.l9.kicad_pcb] 无对应 SPEC 变更",
+  "l9_state": "39b58aa12c86e5f4（WIP · /tmp）· #K2-67 §七 门已达:重叠集恰={U1↔J9,U1↔J13} · 覆盖100% · silk_over_copper 0 · clearance 0 · solder_mask_bridge 0 · errors=3(豁免2+同源1) · unconn 0",
+  "spec_now": "live SPEC_k2_v4.json 仅 _spec_rev_1 marker;l8 之方案锚 = SPEC_k2_v4.spec-rev-54.json(每新 rev 伴新 spec-rev 文件 = 既有模式)",
+  "red_line": "未获批不得改生成器/SPEC/原理图 ⇒ ENG 不自建 spec-rev-55"
+ },
+ "ask": "(a) 授权 ENG 落 SPEC_k2_v4.spec-rev-55.json(= l9 方案锚:布局/可制造整改声明, 不改设计内容, 仅新增 l9 版锚+链接) ⇒ 与 l9 板同笔提交;(b) 由监理/gate 属主代建;(c) 其他。ENG 不自预设。",
+ "impact": "未决 ⇒ l9 无法落库(板 WIP 于 /tmp);④ B2 不受影响(并行继续)。",
+ "evidence": "本件 + K2_67_L9_LANDING_AND_GATE7_VERIFICATION_20260921_v1.json(c1a4a16129b704e5)",
+ "landed_this_session": [
+  {
+   "id": "#K2-67 §六-1/§六-2",
+   "note": "③ courtyard 具名豁免 + D-a(mask_bridge 3→0) 修毕 + l9 板产出(WIP)"
+  }
+ ],
+ "red_lines_ok": [
+  "未改 criteria/",
+  "未改冻结四源",
+  "未改 l4..l8",
+  "未改网表",
+  "未改 SPEC",
+  "未派 WORKER",
+  "未越阶段"
+ ],
+ "next": "① 待监理裁 SPEC 同笔授权 ⇒ 落 l9;② 并行继续 ④ B2 车道重布线;③ 达 #K2-66 §六 后送限定复核。"
+}

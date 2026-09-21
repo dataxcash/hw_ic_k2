@@ -216,7 +216,19 @@ def s_fiducial(b, target=3):
         sh = pcbnew.PCB_SHAPE(fp); sh.SetShape(pcbnew.SHAPE_T_CIRCLE)
         sh.SetCenter(v(x, y)); sh.SetEnd(v(x + 1.3, y)); sh.SetLayer(pcbnew.F_CrtYd)
         sh.SetWidth(IU(0.05)); fp.Add(sh)
-        b.Add(fp); boxes.append((("pad", ref, ""), (x-0.5, y-0.5, x+0.5, y+0.5)))
+        b.Add(fp)
+        # D-a 修（#K2-67 §五）：fiducial 开窗内禁铺铜（rule area · 半径 = 开窗 1.0 + 余量）
+        zk = pcbnew.ZONE(b); zk.SetLayer(pcbnew.F_Cu)
+        zk.SetIsRuleArea(True)
+        zk.SetDoNotAllowZoneFills(True)
+        zk.SetDoNotAllowTracks(False); zk.SetDoNotAllowVias(False)
+        zk.SetDoNotAllowPads(False); zk.SetDoNotAllowFootprints(False)
+        ok = zk.Outline(); ok.NewOutline()
+        for _i in range(32):
+            _a = 2.0*math.pi*_i/32.0
+            ok.Append(IU(x + 1.15*math.cos(_a)), IU(y + 1.15*math.sin(_a)))
+        b.Add(zk)
+        boxes.append((("pad", ref, ""), (x-0.5, y-0.5, x+0.5, y+0.5)))
         boxes.append((("fid_crtyd", ref, ""), (x-1.0, y-1.0, x+1.0, y+1.0)))
         placed.append({"ref": ref, "x": round(x, 2), "y": round(y, 2)})
         if len(placed) >= target:
