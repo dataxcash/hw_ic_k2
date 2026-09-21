@@ -1,0 +1,43 @@
+{
+ "artifact": "k2_p5_outbound_v5_loadpoint_field_gap",
+ "schema": 1,
+ "ts": "2026-09-21T08:15:48+08:00",
+ "session_label": "K2-2026-09-21 · 轮标 ARCHER-R97-3 · 外发件自洽复核（只读造活 · handoff §8-B『引用解析 + 对板复核』）",
+ "finding": "**外发包 V5 规程要求填 `refdes`，但回件模板无对应可填字段** —— 规程要求 ↔ 模板可填面 **不闭合**。",
+ "facts": {
+  "规则侧": "`L6/first_article_l8/RULES.md`（`1f8f640cac54b6f1`）§V5 `:23`「注明所用测点 refdes」· `:26`「其余三轨（`12V_IN`/`P3V3`/`MCU_VDD`）负载点亦须**注明 refdes**」",
+  "模板侧": "`L6/first_article_l8/results_template.json`（`119cd7c48b3146d2`）中 `items.V5_pdn_dc_drop.measured.rails.<rail>` 键集 = **恰 4 键** `{V_source,V_load,I_A,drop_pct}` ⇒ **无 refdes / load_point 字段**；全文 8 处 `refdes` **全部位于说明块**（`named_load_points_required.refdes_any_of` · `board_check`），**非可填槽**",
+  "其余": "`CHECKLIST.md` 0 处 refdes；`INSTRUMENT_SELFCHECK.json` 2 处（均为板侧机核说明）",
+  "影响": "实测方按模板填写 ⇒ 四轨测点 refdes **无落点**（唯一可能去处 = 自由文本 `note`/`evidence`，但**无任何指引**）⇒ 回件可能**不含** refdes ⇒ 按 RULES §V5 该判**不可判** ⇒ **空耗一轮外部周期**（首件回件成本高）",
+  "严重度": "**低危 · 但真实**（不涉制造/交付锚/判据；属**外发件自洽**类，同 CR-46/CR-48 家族）· **非缺陷断言已测**：本件为**只读复核**结论"
+ },
+ "eng_mitigation_already_landed": {
+  "tool": "`tools/k2_p5_results_intake_guard_v1.py`（CR-74）",
+  "behavior": "对 P3V3_AUX 强制『须落 J3/J4』；refdes **容错检索**范围 = `item.load_point_refdes` / `measured.load_point_refdes` / `measured.load_points` / **整个 item JSON（含 `note`/`evidence`）** ⇒ 实测方**任意一种**写法均不会被误判",
+  "value": "零锚缓解：即便规程缺槽，回件**仍可判**（只要写了 refdes）；**未写**则 fail-closed 拦下 ⇒ **不会静默放行**"
+ },
+ "remedy_options": [
+  {
+   "id": "(i-a)",
+   "title": "**零锚处置**（ENG 倾向）",
+   "detail": "维持外发包与锚**不动**；本缺口的实际风险由 ① **册面登记** + ② **CR-74 守卫的容错检索** + ③ **回件到货时 ENG 先跑守卫，缺 refdes 则向实测方追问补件**（补件 ≠ 重出包）三者共同封堵。**零锚变更 · 零重出包 · 零复核失效。**"
+  },
+  {
+   "id": "(i-b)",
+   "title": "重出外发包（改模板/RULES）",
+   "detail": "在模板 `measured` 增 `load_point_refdes` 槽 + RULES 写明落点 ⇒ **改 `1f8f640c`/`119cd7c4` 两件 ⇒ #K2-60 R1 复核失效 ⇒ 须重出包 + 重复核 + 换锚**（外发面锚连动）。"
+  },
+  {
+   "id": "(ii)",
+   "title": "不处置",
+   "detail": "仅登记，靠 (i-a) 之运行期拦截。"
+  }
+ ],
+ "ask": "请裁 (i-a)/(i-b)/(ii)。**ENG 倾向 (i-a)**（零锚 · 不阻塞 · 与 CR-74 守卫互补）。",
+ "red_lines_ok": [
+  "只读复核（未改 RULES.md/结果模板/外发包）",
+  "未改 criteria/ · 冻结四源 · 交付锚",
+  "未重出包 · 未换锚",
+  "未越阶段"
+ ]
+}

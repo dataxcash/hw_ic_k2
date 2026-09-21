@@ -467,3 +467,8 @@
 
 ---
 **（本块）报备监理 1 条（CR-17 通道进展 + 采纳请求 · 非阻塞）· owner 项 0**。
+
+| **CR-75** | **外发包 V5 规程要求填 `refdes`，模板无对应槽（规程↔模板不闭合）** | **事实**：`RULES.md`（`1f8f640cac54b6f1`）`:23`/`:26` 要求四轨**注明测点 refdes**；而 `results_template.json`（`119cd7c48b3146d2`）之 `V5.measured.rails.<rail>` 键集 = **恰 `{V_source,V_load,I_A,drop_pct}`** ⇒ **无 refdes 槽**（全文 8 处 `refdes` 全在说明块 `named_load_points_required` 内，非可填字段；`CHECKLIST.md` 0 处）。**影响**：实测方无落点 ⇒ 回件可能缺 refdes ⇒ 按 RULES 该判**不可判** ⇒ **空耗一轮外部周期**（**低危但真实** · 不涉制造/判据/锚 · 同 CR-46/CR-48 家族）。**零锚缓解（已落地）**：CR-74 守卫对 refdes **容错检索**（`load_point_refdes`/`load_points`/item JSON 任意层含 `note`/`evidence`）+ 缺则 fail-closed 拦截 + 回件到货先跑守卫再追问补件。**待裁**：(i-a) 零锚处置（ENG 倾向）/ (i-b) 重出外发包（⇒ 换锚+重复核）/ (ii) 不处置。 | 本会话只读外发件自洽复核；CR-46/CR-48 家族；CR-74 | **未改** RULES.md/模板/外发包 · 未重出包/未换锚 · 登记制 · **不充绿** |
+
+---
+**（本块）裁定对应**：只读外发件自洽复核（R97-3）。**报备监理 1 条（CR-75 + 采纳请求）· owner 项 0**。
