@@ -552,6 +552,51 @@ def s_testpoints(b, rails=("12V_IN", "P3V3", "P3V3_AUX", "MCU_VDD"),
     log("testpoint", {"placed": placed, "n": len(placed)})
 
 
+def _pt_seg_dist(p, a, cc):
+    ax, ay = a; bx, by = cc; px, py = p
+    dx, dy = bx-ax, by-ay
+    L2 = dx*dx + dy*dy
+    if L2 < 1e-12:
+        return math.hypot(px-ax, py-ay), (ax, ay)
+    t = max(0.0, min(1.0, ((px-ax)*dx + (py-ay)*dy)/L2))
+    qx, qy = ax+t*dx, ay+t*dy
+    return math.hypot(px-qx, py-qy), (qx, qy)
+
+
+def s_clearfix(b, need=0.175, step=0.05, cap=20):
+    """保守清 `clearance`：仅对**同层共存**之异网(过孔,走线)对做**一次**小位移；总数封顶 cap。"""
+    MMl = pcbnew.ToMM
+    vias = [t for t in b.GetTracks() if isinstance(t, pcbnew.PCB_VIA)]
+    trks = [t for t in b.GetTracks() if not isinstance(t, (pcbnew.PCB_VIA, pcbnew.PCB_ARC))]
+    nudges = 0
+    for vv in vias:
+        if nudges >= cap:
+            break
+        vpos = vv.GetPosition(); p = (MMl(vpos.x), MMl(vpos.y))
+        vr = MMl(vv.GetWidth())/2
+        vlayers = [l for l in range(pcbnew.PCB_LAYER_ID_COUNT) if vv.IsOnLayer(l)]
+        for t in trks:
+            if nudges >= cap:
+                break
+            if t.GetNetname() == vv.GetNetname():
+                continue
+            if t.GetLayer() not in vlayers:
+                continue
+            a = (MMl(t.GetStart().x), MMl(t.GetStart().y)); c = (MMl(t.GetEnd().x), MMl(t.GetEnd().y))
+            d, q = _pt_seg_dist(p, a, c)
+            thw = MMl(t.GetWidth())/2
+            if (d - vr - thw) >= need:
+                continue
+            ux, uy = p[0]-q[0], p[1]-q[1]
+            n = math.hypot(ux, uy) or 1.0
+            push = (need - (d - vr - thw)) + step
+            vv.SetPosition(v(p[0]+ux/n*push, p[1]+uy/n*push))
+            p = (p[0]+ux/n*push, p[1]+uy/n*push)
+            nudges += 1
+            break
+    log("clearfix", {"nudges": nudges})
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--in", dest="inp", default="k2/hw/k2_v4_8L.l8.kicad_pcb")
@@ -568,6 +613,8 @@ def main(argv=None):
             fn[st](b)
     if "pour" in stages:
         s_pour(b)
+    if "clearfix" in stages:
+        s_clearfix(b)
     import os; os.makedirs(os.path.dirname(a.out), exist_ok=True)
     b.Save(a.out)
     with open(a.ledger, "w", encoding="utf-8") as fh:

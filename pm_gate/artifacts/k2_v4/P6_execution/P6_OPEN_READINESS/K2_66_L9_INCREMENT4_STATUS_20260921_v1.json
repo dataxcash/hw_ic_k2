@@ -1,0 +1,59 @@
+{
+ "artifact": "k2_66_l9_increment4_status",
+ "schema": 1,
+ "ts": "2026-09-21T09:50:11.963555+08:00",
+ "session_label": "K2-2026-09-21 · R108(续6) · #K2-66 l9 增量4（clearfix 试验→禁用；l9 稳定态定格）",
+ "builder": "8f47b7eaa6204637",
+ "l9_stable_drc": {
+  "total": 272,
+  "unconnected": 0,
+  "silk_over_copper": 0,
+  "courtyards_overlap": 2,
+  "clearance": 1,
+  "silk_overlap": 149,
+  "lib_footprint_issues": 54,
+  "track_not_centered_on_via": 39,
+  "silk_edge_clearance": 11,
+  "via_dangling": 6,
+  "copper_sliver": 6,
+  "solder_mask_bridge": 3,
+  "pth_inside_courtyard": 1
+ },
+ "clearfix_experiment": {
+  "result": "**禁用（默认 stages 移除）**",
+  "finding": "通用过孔净距 nudge 判据 ≠ kicad-cli 口径（未考虑 span/热焊盘/形状）⇒ 2 次 nudge 反致 clearance 1→4",
+  "decision": "不作弊式盲移；`clearance 1` 改为**具名定点修**（GND via @(140.34,43.5) ↔ PCIE_UP_OUT0_P_J2 @y≈45.0 · 实测 0.1365 < 0.175）"
+ },
+ "gate_status": {
+  "①": "✅3",
+  "②": "✅",
+  "③": "silk_over_copper 0 ✅ · courtyard 覆盖100% ✅ · 无重叠 ✗(2 既有 U1↔J9/J13)",
+  "④": "90° 0 ✅ · HS vias ✗(B2)",
+  "⑤": "✅",
+  "⑥": "边 ✅ · C2 derived 依据 ✅",
+  "⑦": "✅"
+ },
+ "remaining": [
+  {
+   "id": "clearance-1",
+   "fix": "定点修：该 GND via 沿 +y(背离 PCIE 走线) 移 ~0.05mm 或该段走线改径；禁盲移"
+  },
+  {
+   "id": "③-2",
+   "fix": "U1↔J9/J13 既有真实 DFA ⇒ 移件(L2) 或监理裁"
+  },
+  {
+   "id": "④-B2",
+   "fix": "车道重布线（计划见 K2-66-B2-LANE-VIA-REDUCTION-PLAN-v1.md）"
+  }
+ ],
+ "red_lines_ok": [
+  "未改冻结四源",
+  "未改 criteria/",
+  "未改 l4..l8",
+  "未改网表/SPEC",
+  "未派 WORKER",
+  "l9 未落 hw/",
+  "未越阶段"
+ ]
+}
