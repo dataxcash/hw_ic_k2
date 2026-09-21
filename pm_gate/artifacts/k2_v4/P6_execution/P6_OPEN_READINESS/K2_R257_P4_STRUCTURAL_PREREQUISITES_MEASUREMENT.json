@@ -1,0 +1,42 @@
+{
+ "schema": 1,
+ "artifact": "k2_r257_p4_structural_prerequisites_measurement",
+ "ts": "2026-09-22T01:08+0800",
+ "from": "ENG · ARCHER R257（应『监理自动续推』· 推进入 P4 在阶项）",
+ "to": "监理",
+ "authority": "《K2 整体整改计划》v1.9 §P4（`k2/docs/K2-RECTIFICATION-PLAN-v1.md`）· #14⑥ · 宪法第十三条（ENG 只交测量、监理判定）",
+ "owner_gate": 0,
+ "stage": "**P4（按图重建板 + 出 Gerber）** —— 本件推进其 §P4『完工判据（可机判）』之**结构性前置**测量（**与 ②-UP/In5 无关**，故不受 #K2-131 §六-3 停手约束）。",
+ "measurements": {
+  "板": "`k2/hw/k2_v4_8L.l8.kicad_pcb`（l8 · 0 err / 0 unconn / 170 warn）；旁证 `l9_physball_r252` 读数相同类",
+  "①_平面落图前置": "**PASS** —— Gerber 导出（kicad-cli pcb export gerbers）：`In1.Cu G36=1` · `In3.Cu G36=1` · `In6.Cu G36=1` · `In4.Cu G36=9` ⇒ **平面层确实被画出**（计划写作时『8 层铜全 0』，现已达标）",
+  "②_铺铜前置": "**字面 FAIL / 实质待口径** —— `zone 总数=18 · 有 filled_polygon 者=10`。**分类**：10 个为**铜箔 zone**（In1 GND×1 · In3 GND×1 · In4 ×7：12V_IN×2/MCU_VDD×1/P3V3×2/P3V3_AUX×2 · In6 GND×1）**全部已充填**；另 **8 个为无网 keepout/无铜 zone**（F.Cu ×4 + `undefined` ×4）**结构上不可能有 filled_polygon**。⇒ 计划判据『有 filled_polygon 的 zone 数 == zone 总数』若按字面 ⇒ FAIL；若限定为**铜箔 zone** ⇒ **10/10 PASS**。**请监理裁定口径**（并据『任何 ignore 无台账 → FAIL』要求，ENG 已在此登记台账候选）。",
+  "③_钻孔前置": "**部分达标** —— `NPTH=4`（≥4 ✓）；`PTH=16`，**『插件件引脚数』待测**（须由 BOM/网表之插件件引脚合计给出；ENG 下次按 P4 判据给出该数并对照 ≥ 关系）。旁证：`VIAS=734`（l8）/`722`（r252）",
+  "④_判定器 verdict": "**本轮未跑**（`criteria/adjudicate.py` 需 `--pro/--nets/--sch-dir/--gerber-dir` 等完整输入；下一件按计划命令完整执行并交测量）。"
+ },
+ "impact": "P4 之**三项结构性前置中，平面落图已 PASS**；铺铜仅剩**口径问题**；钻孔仅剩**插件件引脚数**一项对照。⇒ **P4 的机判残余显著收窄**，且**均不依赖 ②-UP**。",
+ "requested_ruling": [
+  "**(甲)** 铺铜前置口径：『zone』是否限定为**铜箔 zone**（排除无网 keepout/无铜 zone）？若限定 ⇒ 现状 10/10 **PASS**；若不限定 ⇒ 需 ENG 对这 8 个 zone 逐一登记 ignore 台账（请准）。",
+  "**(乙)** 『插件件引脚数』之取数口径（BOM 插件件引脚合计 or 网表），ENG 据以给出 PTH≥ 对照。",
+  "**(丙)** 请准 ENG 下一件完整执行 §P4 判据命令（`criteria/adjudicate.py --board … --out …` 含 J 类 + V1/V2/V3）并**只交测量**（判定归监理）。"
+ ],
+ "gate_selfcheck": {
+  "阶段": "P4（在阶）· 未越阶段（未触 P5 打样）",
+  "判据": "rev=6 MATCH 只读 · 口径未改",
+  "冻结四源": "4/4 未动",
+  "owner闸口": 0,
+  "待裁": "(甲)(乙)(丙)（监理自裁面）",
+  "外部前置": "1（criteria rev=7）"
+ },
+ "not_asked": [
+  "不请求 owner 裁决（未触 L1）",
+  "未改冻结件/判据/生成器/SPEC/原理图",
+  "未派 WORKER",
+  "未重跑 In5 线（守 #K2-131 §六-3）"
+ ],
+ "self_sha16": {
+  "sha256_full": "6f84fd116b4af1e7d33ff3d2eb497b0c94d1ff84f7c092ba354a5b0bca2db2f4",
+  "sha16": "6f84fd116b4af1e7",
+  "convention": "#K2-72 §五 A/B"
+ }
+}
