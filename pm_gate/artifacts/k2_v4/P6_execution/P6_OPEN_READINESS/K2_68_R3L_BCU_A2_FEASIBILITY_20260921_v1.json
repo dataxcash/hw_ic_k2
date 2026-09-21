@@ -1,0 +1,69 @@
+{
+ "artifact": "k2_68_r3l_bcu_a2_feasibility",
+ "authority": "#K2-68 §2.4(a)-3（他网走廊 ECO）· #K2-69 §五-2",
+ "caveats": [
+  "本件为**可行性判定**（只读）· 未改板；『单域』只证明**存在**替代路径，未证明**可同时布通且余量达标**（须 A2 实做 + 精确闸）。",
+  "32 条车道折线按理想几何计入；apply 后之实际铜（含 stub/铺铜）须重新核。"
+ ],
+ "feasibility": {
+  "nets": {
+   "DS320_STRAP_B_ADDR0_15-8": {
+    "components": {
+     "1": 2
+    },
+    "terminals": 2,
+    "verdict": "✅ 单域"
+   },
+   "I2C1_SDA": {
+    "components": {
+     "1": 8
+    },
+    "terminals": 8,
+    "verdict": "✅ 单域"
+   },
+   "P3V3_AUX": {
+    "components": {
+     "1": 6
+    },
+    "terminals": 6,
+    "verdict": "✅ 单域"
+   },
+   "PERSTA#": {
+    "components": {
+     "1": 3
+    },
+    "terminals": 3,
+    "verdict": "✅ 单域"
+   },
+   "PWR_BTN_ISO": {
+    "components": {
+     "1": 2
+    },
+    "terminals": 2,
+    "verdict": "✅ 单域"
+   }
+  },
+  "post_geometry_free_components": 27
+ },
+ "headline": "**A2 可行性判定（只读 · 决定性）**：在「**32 条新车道已布**」之后几何中（车道折线按 `w/2+req` 计入障碍），5 个待改道信号网的**全部终端仍处于单一自由连通域**（`I2C1_SDA` 8 终端 · `P3V3_AUX` 6 · `DS320_STRAP_B_ADDR0_15-8` 2 · `PERSTA#` 3 · `PWR_BTN_ISO` 2）⇒ **A2 可行**（每网均可改道至替代走廊）。缝合孔**全程不动**（零参考面风险）。",
+ "method": "Field(B.Cu · hw=0.205/2) 取 other 障碍 → 叠加 R3K 工作令之 32 条车道折线（按 w/2+req 膨胀）→ 8 邻接连通域；各网终端 = 其 B.Cu 孔 + 焊盘中心，取最近自由格之连通域编号。",
+ "next_steps": [
+  "① **A2 实做**：按本判定，对 5 网逐网在**后几何自由空间**内重布其 B.Cu 冲突段（终端→终端 · 走替代走廊），删旧冲突段；",
+  "② 重跑 router v4（信号网 only）确认车道 32/32 仍成立（车道与改道后之他网须互不冲突）；",
+  "③ 重跑 apply（换 span/删腿/铺 32 条 B.Cu + stub/铺铜重灌）⇒ kicad-cli DRC（目标 error 仅 #K2-67 具名 · `unconn 0` · `mask_bridge 0` · 告警零回归）；",
+  "④ 清理 stub 细节（centered 45 · dangling 6）· ⑤ §7-3 等长/蛇形 + SI · ⑥ R4 复测闸（#K2-69 §六 ①–⑧）· ⑦ l9 落 `hw/` + spec-rev-55 同笔（硬前置 criteria rev=7）。"
+ ],
+ "red_lines_ok": [
+  "只读 · 未改板/件",
+  "冻结四源未动",
+  "criteria/ 只读未碰",
+  "l4..l8 未动",
+  "未派 WORKER",
+  "未越阶段"
+ ],
+ "schema": 1,
+ "tools": {
+  "probe": "tools/k2_p4_b2_in5_capacity_probe_v1.py 1e17667caea47e69"
+ },
+ "ts": "2026-09-21T19:0x+08:00"
+}
