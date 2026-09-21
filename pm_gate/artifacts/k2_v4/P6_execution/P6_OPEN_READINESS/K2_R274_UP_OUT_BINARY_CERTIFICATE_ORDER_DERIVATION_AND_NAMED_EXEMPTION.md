@@ -1,6 +1,6 @@
 # K2 · R274 · ②-UP **二值证书**：16/16 不可达（列序由拓扑导出）+ 具名豁免
 
-**件**：`K2_R274_..._BINARY_CERTIFICATE_ORDER_DERIVATION_AND_NAMED_EXEMPTION.json`（sha16 **`99247d4f7c2623fd`**）
+**件**：`K2_R274_..._BINARY_CERTIFICATE_ORDER_DERIVATION_AND_NAMED_EXEMPTION.json`（sha16 **`29f263022a297ae0`**）
 **据**：监理自动续推 + 停止令（二值必出）· #K2-132 §三(乙)②/§四/§七 · #K2-133 · 指令 #14
 **锚**：冻结四源 **4/4 未动** · criteria rev=6 MATCH · l8 `7a5c8991` · k2 `1b56535` · **布线器零运行** · owner 闸口 0
 
