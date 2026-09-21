@@ -1,0 +1,32 @@
+{
+ "schema": 1,
+ "artifact": "k2_r259p_r4prep_in5_3w_spacing_l8",
+ "ts": "2026-09-22T04:08+0800",
+ "from": "ENG · ARCHER（应监理自动续推 · P4 在阶 · R4 前置）",
+ "to": "监理",
+ "authority": "handoff §7.3（R4 闸含 3W）· ENG 只交测量 · 判定归监理",
+ "owner_gate": 0,
+ "method": "只读解析 l8 `.kicad_pcb` In5 段（走廊 bbox [82,41,146,60]）· 段-段几何最小距（解析）",
+ "measurement": {
+  "board": "k2/hw/k2_v4_8L.l8.kicad_pcb（7a5c89913d6e5d0a）",
+  "n_upout_segs": 247,
+  "n_other_segs": 114,
+  "min_lane_to_lane_mm": 0.5,
+  "min_pair": [
+   "PCIE_UP_OUT0_P_J2",
+   "PCIE_UP_OUT0_N_J2"
+  ],
+  "min_lane_to_othernet_mm": 0.3999,
+  "min_pair_other": [
+   "PCIE_UP_OUT0_N_J2",
+   "PERSTA#"
+  ]
+ },
+ "note": "3W 判读（**仅陈述算术** · 阈值归 SPEC/监理）：lane_w 0.160 ⇒ 3W = 0.480；实测互距最小 **0.500 ≥ 0.480** ⇒ l8 In5 之 UP_OUT 线**满足 3W**。他网最小 0.3999 ≫ min_copper_clearance 0.100。",
+ "caveat": "**l9 须同口径重测**（③④ 收口后）。",
+ "next": "待裁 3 条已挂（本轮不追加）。owner 闸口 = 0。",
+ "self_sha16": {
+  "convention_A_sha16": "cdf321af387e6843",
+  "convention": "#K2-72 §五 约定A"
+ }
+}
