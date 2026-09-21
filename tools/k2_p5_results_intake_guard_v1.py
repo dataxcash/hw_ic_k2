@@ -34,8 +34,8 @@ K2 = Path(__file__).resolve().parents[1]          # .../k2
 ART = K2 / "pm_gate" / "artifacts" / "k2_v4"
 
 BOARD_SHA16 = "7a5c89913d6e5d0a"
-MANIFEST = ART / "L6/jlc_package_l8r2/MANIFEST.json"
-TARBALL = ART / "L6/DELIVERY_l8r2/k2_v4_8L.l8r2_gerber_package.tar.gz"
+MANIFEST = ART / "L6/jlc_package_l8r3/MANIFEST.json"
+TARBALL = ART / "L6/DELIVERY_l8r3/k2_v4_8L.l8r3_gerber_package.tar.gz"
 RULES = ART / "L6/first_article_l8/RULES.md"
 
 STATUS_ENUM = ("NOT_RUN", "PASS", "FAIL", "INCONCLUSIVE")
@@ -528,7 +528,7 @@ def _base() -> dict:
         "board": "k2_v4_8L.l8.kicad_pcb",
         "board_sha16": BOARD_SHA16,
         "delivery_anchor": {
-            "package": "pm_gate/artifacts/k2_v4/L6/jlc_package_l8r2",
+            "package": "pm_gate/artifacts/k2_v4/L6/jlc_package_l8r3",
             "manifest_sha256": sha256_file(MANIFEST),
             "tarball_sha256": sha256_file(TARBALL),
         },

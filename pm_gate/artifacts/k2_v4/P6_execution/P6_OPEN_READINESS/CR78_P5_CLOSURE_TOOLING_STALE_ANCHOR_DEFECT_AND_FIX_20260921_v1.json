@@ -1,0 +1,102 @@
+{
+ "artifact": "k2_cr78_p5_closure_tooling_stale_anchor_defect_and_fix",
+ "schema": 1,
+ "ts": "2026-09-21T08:59:57.714490+08:00",
+ "session_label": "K2-2026-09-21 · 轮标 ARCHER-R108 · 锚周期复核（只读造活 · §8-C）",
+ "title": "P5 关门机械（回件可判性守卫 + 关门 runbook）锚滞后缺陷：仍钉 l8r2 旧锚 ⇒ 合法新锚（l8r3）回件被误判『不可判』",
+ "severity": "P5 关门路径阻断（唯一闸倒置）· 不影响已交付包本体（包/锚未动）· 属 ENG 工具/文档面",
+ "root_cause": "守卫建/改于 08:18（CR-74/#K2-63 期，当时现行锚 = l8r2）；#K2-65（08:53）切换交付锚至 l8r3 后，§三-2 仅列 6 件外发面，未含关门机械 ⇒ 守卫常量与 runbook 文本未随锚更新（滞后）。守卫注释自述意图为『回件所载 sha 须 == 本仓现行 MANIFEST/tarball』，实现却硬编码旧锚路径。",
+ "defect": {
+  "guard_constants": {
+   "before": {
+    "MANIFEST": "ART / \"L6/jlc_package_l8r2/MANIFEST.json\"  (:37)",
+    "TARBALL": "ART / \"L6/DELIVERY_l8r2/k2_v4_8L.l8r2_gerber_package.tar.gz\"  (:38)",
+    "_base().delivery_anchor.package": "pm_gate/artifacts/k2_v4/L6/jlc_package_l8r2  (:531)"
+   },
+   "after": {
+    "MANIFEST": "ART / \"L6/jlc_package_l8r3/MANIFEST.json\"",
+    "TARBALL": "ART / \"L6/DELIVERY_l8r3/k2_v4_8L.l8r3_gerber_package.tar.gz\"",
+    "_base().delivery_anchor.package": "pm_gate/artifacts/k2_v4/L6/jlc_package_l8r3"
+   }
+  },
+  "runbook_ref": {
+   "file": "docs/K2-P5-CLOSURE-RUNBOOK-v1.md:41",
+   "before": "现行交付锚（**锚不变**：`19d637c4e9ed35be`/`488e90a47d088d06`；**未重建包**）",
+   "after": "现行交付锚（**`P5-L8.3` = `0eb2cb97fa4f1466`/`9de4cfcf9337cea9`**；判 PASS 亦不重建包；旧锚 l8r2 `19d637c4e9ed35be`/`488e90a47d088d06` · l8/l7 逐字节保全）"
+  }
+ },
+ "two_direction_proof": {
+  "method": "合成回件（取守卫内置正夹具 _base()，仅覆写 delivery_anchor 为对应包实测 sha256）逐版喂守卫；外部原件仅落 /tmp/opencode/p5_guard（未入库）",
+  "before_fix": {
+   "synth_l8r3_anchor": {
+    "rc": 1,
+    "verdict": "不可判(inadmissible)",
+    "fail": 2,
+    "detail": "锚不符：回件 0eb2cb97fa4f1466… ≠ 本仓实测 19d637c4e9ed35be…（manifest_sha256）+ 同型 tarball 项",
+    "note": "= 合法新锚回件被 fail-closed 误判（缺陷）"
+   },
+   "synth_l8r2_anchor": {
+    "rc": 0,
+    "verdict": "可判(admissible)",
+    "fail": 0,
+    "note": "= 已废弃旧锚回件反而放行（倒置）"
+   }
+  },
+  "after_fix": {
+   "synth_l8r3_anchor": {
+    "rc": 0,
+    "verdict": "可判(admissible)",
+    "fail": 0,
+    "detail": "S0_anchor manifest/tarball MATCH（= 0eb2cb97… / 9de4cfcf…）"
+   },
+   "synth_l8r2_anchor": {
+    "rc": 1,
+    "verdict": "不可判(inadmissible)",
+    "fail": 2,
+    "detail": "锚不符：回件 19d637c4… ≠ 本仓实测 0eb2cb97…（正确：旧锚非现行包）"
+   },
+   "self_test": {
+    "rc": 0,
+    "line": "self-test: positive admissible=True · negative inadmissible&anchor-caught=True · 2 越界读数 · PASS"
+   }
+  }
+ },
+ "fix": {
+  "files_changed": 2,
+  "lines_changed": 4,
+  "sha16": {
+   "guard": {
+    "path": "tools/k2_p5_results_intake_guard_v1.py",
+    "before": "c2bc38c5746b88b4",
+    "after": "04f443444d13042a",
+    "after_full": "04f443444d13042a4fa1a785b89a51fb548673b8a2484491ab9860b770eb4bf6"
+   },
+   "runbook": {
+    "path": "docs/K2-P5-CLOSURE-RUNBOOK-v1.md",
+    "before": "1a2d71a49f6674cf",
+    "after": "6427019a9ac43674",
+    "after_full": "6427019a9ac436747861c86daffba0809be246dfa9124fa7e876434a519e854e"
+   }
+  },
+  "git_diff_stat": "docs/K2-P5-CLOSURE-RUNBOOK-v1.md | 2 +-  ·  tools/k2_p5_results_intake_guard_v1.py | 6 +++---  (4 insertions, 4 deletions)"
+ },
+ "zero_new_criteria": {
+  "声明": "零新增判据维 / 零新增检查齿；仅把已存在的锚比对指向**现行**锚（修前实现与其自述意图相反）",
+  "未改": [
+   "交付包/交付锚（l8r3 及旧锚 6 项逐字节未动）",
+   "criteria/",
+   "冻结四源",
+   "板/网表/SPEC/受审板",
+   "results_template.json/RULES.md/CHECKLIST.md",
+   "验收阈值/测点/口径"
+  ],
+  "判定权": "监理（工具不置 status）"
+ },
+ "boundary": {
+  "L1": false,
+  "L1_note": "不涉拓扑/接口/信号流向/球重映射 ⇒ 非 owner 闸口；属 ENG 工具/文档面（同 CR-74 定位）",
+  "owner_gate": 0,
+  "revertible": "若监理判『不属授权范围』⇒ 回退本 4 行即零影响（同 CR-74 先例）"
+ },
+ "handoff_next": "外部首件回件（载 l8r3 锚）⇒ `python3 tools/k2_p5_results_intake_guard_v1.py <回件.json> --json-out …` ⇒ rc=0 交监理判定 ⇒ PASS 按 runbook §3 机械关门；rc=1 按报告追问补件。"
+}

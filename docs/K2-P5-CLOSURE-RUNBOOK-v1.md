@@ -38,7 +38,7 @@ python3 tools/k2_p5_results_intake_guard_v1.py <回件.json> --json-out /tmp/ope
    ```
    **核验**：`^{}` 解引用须指向目标 commit（§4·§5）。
 2. **关门记录**：落 `P6_execution/P6_OPEN_READINESS/K2_P5_CLOSURE_<date>_v1.json`（含：裁定号 · 守卫报告 sha256 · 回件与全部原始证据 sha256 · 8 项读数与监理判定 · 具名披露（CR-17 引证等级 · CR-75 补件 · ACCEPT 项））。
-3. **册面**：`K2-CONVENTION-REGISTER-20260921.md` 记『P5 关门』条目 + 现行交付锚（**锚不变**：`19d637c4e9ed35be`/`488e90a47d088d06`；**未重建包**）。
+3. **册面**：`K2-CONVENTION-REGISTER-20260921.md` 记『P5 关门』条目 + 现行交付锚（**`P5-L8.3` = `0eb2cb97fa4f1466`/`9de4cfcf9337cea9`**；判 PASS 亦**不重建包**；旧锚 l8r2 `19d637c4e9ed35be`/`488e90a47d088d06` · l8/l7 **逐字节保全**）。
 4. **推送核验**（TAG_POLICY §5）：`k2` 先 `0/0` ⇒ 父仓 pointer bump ⇒ 父仓 `0/0`；冻结四源 SHA 不变。
 5. **ledger**：`.omo/start-work/ledger.jsonl` 记 `tag 名 + 目标 commit + gate`（§6）。
 
