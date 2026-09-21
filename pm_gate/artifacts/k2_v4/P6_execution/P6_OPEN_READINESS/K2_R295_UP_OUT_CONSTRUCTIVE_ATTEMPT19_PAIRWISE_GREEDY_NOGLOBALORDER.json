@@ -1,0 +1,42 @@
+{
+ "schema": 1,
+ "artifact": "k2_r295_up_out_constructive_attempt19_pairwise_greedy_noglobalorder",
+ "ts": "2026-09-22T07:48+0800",
+ "to": "监理",
+ "from": "ENG · ARCHER（监理自动续推 · P4 在阶 · fail-closed）",
+ "authority": "#K2-132 §三(乙) D1 / §四 · #K2-133 §三 N1 · 指令 #14 · R294（规则判别）",
+ "anchors": {
+  "frozen_4of4": "未动",
+  "criteria": "rev=6 MATCH（只读）",
+  "l8": "7a5c89913d6e5d0a",
+  "k2": "d97a2c9",
+  "owner_gate": 0
+ },
+ "what": "**构造 attempt #19 —— 成对几何条件（废除全局字典序）+ 贪心最大最小距放置**：逐 lane 选「与已放置 lane 之最小距最大」者，`exact_gate` 为终审。",
+ "result": {
+  "放置": "**15/16**（仅 `6_N` 未放置 —— 本轮粗网格下其候选为 0，疑网格伪影，同 `7_P` 前例）",
+  "exact_gate": {
+   "endpoint_max_dev_mm": 0.0,
+   "clearance_min_mm": 0.07,
+   "n_clearance_viol": 0,
+   "lane_pitch_min_gap_mm": 0.0,
+   "n_lane_pitch_viol": 32,
+   "note": "**净距违例 0（min +0.070）· 端点位移 0 ✓**；互距 32 违 —— 贪心按「最大最小距」选位**未强制 ≥0.435**"
+  }
+ },
+ "significance": "**R294 之判读得到验证**：废除全局字典序后，**15/16 lane 可同时放置**（R293/R294 之 DP 在第 5 条即断链）⇒ **该「全变量同序」规则确为过严**（非几何不可能）。且**净距全过**（disk 膨胀保证）。",
+ "verdict": "**(a) 见证：仍未取得**（互距未达标）。剩余**唯一**要素：**放置须强制 lane 间 ≥0.435**（贪心改为**间距感知 DP**）。",
+ "next_precise": "**一次**：① 修 `6_N` 候选网格（同 `7_P` 前例）② 放置改**间距感知 DP**（在 (c,dx,Y[,ye]) 候选上以**成对 ≥0.435** 为约束、以无冲突为目标）⇒ 16 条 ⇒ `exact_gate`（新装置）⇒ 见证。",
+ "gate_selfcheck": {
+  "阶段": "P4（在阶）· 未越阶段",
+  "判据": "rev=6 MATCH",
+  "冻结四源": "4/4 未动",
+  "受审板 l8": "7a5c89913d6e5d0a",
+  "owner闸口": 0
+ },
+ "owner_gate": 0,
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "63ddd8d3232a42a3"
+ }
+}
