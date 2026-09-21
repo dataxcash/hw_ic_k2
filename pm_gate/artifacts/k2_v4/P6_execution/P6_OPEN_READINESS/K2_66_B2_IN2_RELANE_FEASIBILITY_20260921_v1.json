@@ -1641,6 +1641,16 @@
    "P3V3_AUX（B.Cu 45° 斜线 (59.9,48.4)–(73.775,62.275)）",
    "DS320_STRAP_* / PWR_BTN_ISO"
   ],
+  "bottleneck_localization": {
+   "board_level_corridor_capacity": "B.Cu 竖切线（x=88..136）y 40–73 自由宽 25–31mm（≈45–57 车道当量）· y 33–45 为 6–12mm（≈10–22）⇒ 板级走廊**非**瓶颈",
+   "conclusion": "B2 之真正瓶颈 = U6 扇出锚孔笼（净出口 ≈4–6 条/32）；出路 = 移锚点(改 F 扇出/等长重调) 或 改孔 span 类 或 具名豁免 ⇒ §10.4 (a)/(b)/(c)，**非仅『换层/布线器』可解**",
+   "local_bottleneck": "U6 扇出『锚孔笼』：32 车道 A 锚孔（DN y=51.423/52.366 · UP y=54.88/55.823 · 行距 0.943mm < 2×0.4525mm）+ P3V3 F–B 缝合孔排（y≈54.0 · 0.5mm 栅距=实心）+ GND F–B 排（y=53.0）⇒ 单车道须沿自身行穿 0.295mm 邻孔缝隙出笼，**每缝隙仅容 1 条**",
+   "measured_exits": {
+    "all32_best": "8/32",
+    "dn_group_only": "4/16",
+    "up_group_only_margin40": "2/16"
+   }
+  },
   "implication": "达 ≤2/线 必须至少放宽一条前提：(a) 移 3 条线之 A/B 锚点（⇒ 须改其 F 扇出/蛇形 = 等长重调） + **腾挪他网走廊**（I2C1_SDA/PERSTA#/P3V3_AUX 等，否则 B.Cu 窄口容量不足）+ 拥塞感知布线器；(b) 新开 F–In5 span（改孔策略/工艺）；(c) 具名豁免。",
   "only_mode_obstacle_semantics_correction": {
    "defect": "`--only` 模式曾按『32 车道全拆』建模障碍 ⇒ 把**其他 OUT 车道之 B.Cu 原走线**当自由空间（其 19 条新增 DRC 误差与『单车道可行』结论均不可采）",

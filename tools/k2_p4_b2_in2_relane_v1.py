@@ -442,7 +442,7 @@ def lane_uuid(nm, kind, *args):
 
 
 def run(src, out_path, ledger_path, only=None, step=GRID_DEF, limit=None, dry=False,
-        margin=12.0, order_mode="dn_first", group_window=False):
+        margin=12.0, order_mode="dn_first", group_window=False, group="all"):
     b = pcbnew.LoadBoard(src)
     name = {n.GetNetCode(): n.GetNetname() for n in b.GetNetInfo().NetsByNetcode().values()}
     lanes = {}
@@ -494,6 +494,10 @@ def run(src, out_path, ledger_path, only=None, step=GRID_DEF, limit=None, dry=Fa
         for suf in ("_N_J2", "_P_J2"):
             order.append("PCIE_UP_OUT%d%s" % (i, suf))
     order = [nm for nm in order if nm in anchors]
+    if group == "dn":
+        order = [n for n in order if "DN_OUT" in n]
+    elif group == "up":
+        order = [n for n in order if "UP_OUT" in n]
     if order_mode == "up_first":
         up = [n for n in order if "UP_OUT" in n]
         dn = [n for n in order if "DN_OUT" in n]
@@ -620,6 +624,7 @@ def main(argv=None):
     ap.add_argument("--safe", type=float, default=None)
     ap.add_argument("--margin", type=float, default=12.0)
     ap.add_argument("--order", default="dn_first")
+    ap.add_argument("--group", default="all", choices=["all","dn","up"])
     ap.add_argument("--group-window", action="store_true",
                     help="按 DN(西向)/UP(东向) 分域窗口限流，避免跨域超长迂回")
     ap.add_argument("--dry-run", action="store_true")
@@ -628,7 +633,7 @@ def main(argv=None):
         _set_safe(a.safe)
     set_cfg(a.layer, a.width, a.via_bot)
     led = run(a.src, a.out or a.src, a.ledger, a.only, a.step, a.limit, a.dry_run,
-              a.margin, a.order, a.group_window)
+              a.margin, a.order, a.group_window, a.group)
     print(json.dumps(led["summary"], ensure_ascii=False))
     for r in led["lanes"]:
         if r["status"] != "OK":
