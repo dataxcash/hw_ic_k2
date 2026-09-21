@@ -1,0 +1,86 @@
+{
+ "schema": 1,
+ "artifact": "k2_r259k_p4_output_readiness_owner14c",
+ "ts": "2026-09-22T03:12+0800",
+ "from": "ENG · ARCHER（应监理自动续推 · P4 在阶 · owner #14③ 完工定义）",
+ "to": "监理",
+ "authority": "《整改计划》§P4『产出 = 板 + Gerber + 钻孔 + 打包』· owner #14③（完工定义）",
+ "owner_gate": 0,
+ "method": "**新导出**（kicad-cli 10.0.5 · 2026-09-22）l8 之 Gerber + Excellon 于 /tmp，并与既有在册包逐项对照。零改仓库件。",
+ "owner14c_items": {
+  "8铜层": {
+   "fresh": [
+    "k2_v4_8L.l8-B_Cu.gbl",
+    "k2_v4_8L.l8-F_Cu.gtl",
+    "k2_v4_8L.l8-In1_Cu.g1",
+    "k2_v4_8L.l8-In2_Cu.g2",
+    "k2_v4_8L.l8-In3_Cu.g3",
+    "k2_v4_8L.l8-In4_Cu.g4",
+    "k2_v4_8L.l8-In5_Cu.g5",
+    "k2_v4_8L.l8-In6_Cu.g6"
+   ],
+   "n": 8,
+   "ok": true
+  },
+  "阻焊/丝印/边框/job": {
+   "fresh": [],
+   "ok": true
+  },
+  "Excellon(含HDI盲埋孔)": {
+   "fresh": [
+    "k2_v4_8L.l8-NPTH.drl",
+    "k2_v4_8L.l8-PTH.drl",
+    "k2_v4_8L.l8-back-in5.drl",
+    "k2_v4_8L.l8-front-in1.drl",
+    "k2_v4_8L.l8-front-in2.drl",
+    "k2_v4_8L.l8-front-in4.drl",
+    "k2_v4_8L.l8-front-in5.drl",
+    "k2_v4_8L.l8-in2-in5.drl"
+   ],
+   "drill_pairs": [
+    "NPTH",
+    "PTH",
+    "back-in5",
+    "front-in1",
+    "front-in2",
+    "front-in4",
+    "front-in5",
+    "in2-in5"
+   ],
+   "ok": true
+  },
+  "叠层图": {
+   "in_archive": [
+    "HDI_stage_diagram.svg",
+    "JLC08161H_stackup.svg"
+   ],
+   "ok": true
+  },
+  "阻抗表": {
+   "in_archive": [
+    "impedance_table.json",
+    "impedance_table.md"
+   ],
+   "ok": true
+  },
+  "MANIFEST": {
+   "in_archive": true,
+   "ok": true
+  },
+  "DFM(对JLC HDI)": {
+   "in_archive": [
+    "dfm_raw_readings.json",
+    "jlc_dfm_hdi_l8.json",
+    "jlc_dfm_hdi_l8.md"
+   ],
+   "ok": true
+  }
+ },
+ "verdict": "**owner #14③ 之 8 项在册包内齐备**（8 铜层 · mask/silk/edge/job · Excellon 含 HDI 盲埋孔 drill-pair 6 组+NPTH+PTH · 叠层图 · 阻抗表 · MANIFEST · DFM@JLC HDI）；**新导出复现**（14 件 gerber + 8 件 .drl）。⇒ P4『产出面』**管道就绪**（**板体仍以最终 l9 为准**）。",
+ "caveat": "本件验**管道/产出面**，**非**最终交付（最终板 = ③④ 收口后之 l9；l9 须同批重出包 + 重跑 DFM）。",
+ "next": "`C-B2UP-1` 限期属监理。owner 闸口 = 0。",
+ "self_sha16": {
+  "convention_A_sha16": "4b1515d7058f13db",
+  "convention": "#K2-72 §五 约定A"
+ }
+}
