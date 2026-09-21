@@ -1,0 +1,171 @@
+{
+ "artifact": "k2_68_r1e_minimal_cage_relocation_in5_32of32",
+ "authority": "#K2-68 §三-1/§三-2（R1 ⇒ In5 达标 ⇒ 走 In5 路径）· §四①（32/32 必要性）· §7-1（修 3 项缺陷后复测）",
+ "board_diff": {
+  "changed": [
+   "via (84.574,54.190) → (83.824,53.190)（size 0.35 · drill 0.2 · span F.Cu–B.Cu 不变）",
+   "stub segment (83.949,54.190)-(84.574,54.190) → (83.949,54.190)-(83.824,53.190)（F.Cu · w=0.2 · 长 1.0078mm）"
+  ],
+  "segments": "5815 → 5815（无增删）",
+  "vias": "745 → 745（无增删）",
+  "zone_refilled": true
+ },
+ "conclusion": "**#K2-68 §7-1 达成**：修正笼重构器 3 项具名缺陷（v2）后，以**最小改动（单孔重布放）**使 In5 必要性探针 **25/32 → 32/32**；DRC 与 l9 基线**逐项同**（267 条 · error 仅 #K2-67 具名 3 条 · `unconnected` 0 · `solder_mask_bridge` 0 · 告警计数零回归）。⇒『38 孔全搬出逃逸带』为敏感度**上界**，非必要条件；本板真瓶颈 = **单个窄闸门**。",
+ "drc": {
+  "after_relocation": {
+   "errors": {
+    "courtyards_overlap": 2,
+    "pth_inside_courtyard": 1
+   },
+   "total_violations": 267,
+   "unconnected": 0,
+   "warnings": {
+    "copper_sliver": 6,
+    "lib_footprint_issues": 54,
+    "silk_edge_clearance": 11,
+    "silk_overlap": 148,
+    "track_not_centered_on_via": 39,
+    "via_dangling": 6
+   }
+  },
+  "baseline_l9": {
+   "errors": {
+    "courtyards_overlap": 2,
+    "pth_inside_courtyard": 1
+   },
+   "total_violations": 267,
+   "unconnected": 0,
+   "warnings": {
+    "copper_sliver": 6,
+    "lib_footprint_issues": 54,
+    "silk_edge_clearance": 11,
+    "silk_overlap": 148,
+    "track_not_centered_on_via": 39,
+    "via_dangling": 6
+   }
+  },
+  "gate_#K2-68_§四②": {
+   "error": "仅 #K2-67 具名 2 对 courtyard + 同源 1 条",
+   "solder_mask_bridge": 0,
+   "unconnected": 0
+  },
+  "tool": "AppDir/bin/kicad-cli pcb drc --severity-all --format json",
+  "verdict": "**PASS**（与基线逐项同 · 零回归）"
+ },
+ "input_board": {
+  "path": "/tmp/opencode/l9/k2_v4_8L.l9.kicad_pcb",
+  "sha16": "39b58aa12c86e5f4"
+ },
+ "output_board": {
+  "determinism": "重跑工具（--in l9）⇒ 输出板 sha256 与本次**逐字节同**（fdbcede260424ea7…）",
+  "note": "WIP（未落 hw/）· 与 /tmp/opencode/w1/a.kicad_pcb 同构（同一 move）",
+  "path": "/tmp/opencode/w3/c.kicad_pcb",
+  "sha16": "fdbcede260424ea7",
+  "sha16_full": "fdbcede260424ea7bd1b5070771e2aa26c7d0544fb8034b9664b38d3d2dbeea7"
+ },
+ "probe_result_real_tool": {
+  "B.Cu": {
+   "fail": 2,
+   "pass": 30
+  },
+  "In2": {
+   "fail": 14,
+   "pass": 18
+  },
+  "In5": {
+   "fail": 0,
+   "pass": 32
+  },
+  "baseline_l9": {
+   "B.Cu": "29/32",
+   "In2": "10/32",
+   "In5": "25/32"
+  },
+  "board": "/tmp/opencode/w3/c.kicad_pcb",
+  "tool": "k2/tools/k2_p4_b2_feasibility_probe_v1.py (56c00419575cb5cb)",
+  "verdict": "**In5 = 32/32（必要条件全通过）** ⇒ 依 #K2-68 §三-2 走 **In5 路径**（长走零改层）"
+ },
+ "red_lines_ok": [
+  "未改冻结四源",
+  "未改 criteria/（ENG 只读）",
+  "未改 l4..l8（仅 /tmp 副本）",
+  "未改网表 yaml",
+  "未改 SPEC（spec-rev-55 未建，待 criteria rev=7 前置）",
+  "未派 WORKER",
+  "未越阶段（P5 PENDING_EXTERNAL）"
+ ],
+ "relocation": {
+  "blocked_after": [],
+  "blocked_before": [
+   "PCIE_DN_OUT1_P_MCIO",
+   "PCIE_DN_OUT2_P_MCIO",
+   "PCIE_DN_OUT3_P_MCIO",
+   "PCIE_DN_OUT4_P_MCIO",
+   "PCIE_DN_OUT5_P_MCIO",
+   "PCIE_DN_OUT6_P_MCIO",
+   "PCIE_UP_OUT0_P_J2"
+  ],
+  "critical_via_screen": {
+   "critical": [
+    "84.574,54.190"
+   ],
+   "n_targets_in_band": 38,
+   "note": "逐孔『删除语义』筛选：仅 (84.574,54.190) 单孔移出即全开闸；其余 37 孔单移均不足。"
+  },
+  "gate_model": {
+   "note": "In5 局部闸门 = 探针 `probe_layer` 之窗口复刻（同净距语义 · 同 anchor 0.43mm 语义 · 车道自身铜/via 不作障碍）",
+   "step": 0.1,
+   "window": [
+    76.95,
+    43.95,
+    104.95,
+    62.95
+   ]
+  },
+  "in5_slack_mm": 0.5,
+  "legal_candidates": 48,
+  "moves": [
+   {
+    "d_mm": 1.25,
+    "from": [
+     84.574,
+     54.19
+    ],
+    "in5_slack_mm": 0.5,
+    "net": "GND",
+    "span": [
+     "F.Cu",
+     "B.Cu"
+    ],
+    "stub_anchor": [
+     83.949,
+     54.19
+    ],
+    "stub_len_mm": 1.0078,
+    "to": [
+     83.824,
+     53.19
+    ]
+   }
+  ]
+ },
+ "repro_cmd": "PYTHONPATH=AppDir/shared/lib/python3.11/dist-packages AppDir/bin/python3.11 k2/tools/k2_p4_b2_relocate_stitch_v1.py --in /tmp/opencode/l9/k2_v4_8L.l9.kicad_pcb --out <out>.kicad_pcb --ledger <led>.json",
+ "schema": 1,
+ "still_required_next": [
+  "§7-2 32 条**整批** In5 端部改接（F–In5 双孔 · 删 B/In2 腿 · 长走保留）",
+  "§7-3 等长/蛇形重调（中段短 ≈16mm/车道 · P/N 同步 · skew ≤0.15mm）",
+  "§7-4 达 #K2-68 §四全 6 条 ⇒ l9 落 hw/ + spec-rev-55 同笔（硬前置 = criteria rev=7 · gate 属主）",
+  "真余量下限（禁 0.00–0.02mm 贴限）须在 §7-2 实布线上具名"
+ ],
+ "tool": {
+  "defect3_evidence": "『沿 stub 轴向共线外移』在板实际几何下 **0 个合法位**（GND 球焊盘所在行/列被同列球焊盘/缝合孔堵死）⇒ 工具以候选位穷举 + 精确核择优（记录于本件与工具 docstring），非预设方向。",
+  "defects_fixed": [
+   "① stub 段-矩形精确距离 (seg_rect_d)",
+   "② solder_mask_bridge ≥0.1mm 入模型",
+   "③ stub 重接改为候选位穷举+精确核（共线外移实测 0 合法位）"
+  ],
+  "path": "k2/tools/k2_p4_b2_relocate_stitch_v1.py",
+  "sha16": "055716a81a83c154"
+ },
+ "ts": "2026-09-21T11:4x+08:00"
+}
