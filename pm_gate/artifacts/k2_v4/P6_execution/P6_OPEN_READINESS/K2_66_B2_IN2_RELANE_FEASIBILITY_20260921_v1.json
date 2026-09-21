@@ -1642,6 +1642,25 @@
    "DS320_STRAP_* / PWR_BTN_ISO"
   ],
   "implication": "达 ≤2/线 必须至少放宽一条前提：(a) 移 3 条线之 A/B 锚点（⇒ 须改其 F 扇出/蛇形 = 等长重调） + **腾挪他网走廊**（I2C1_SDA/PERSTA#/P3V3_AUX 等，否则 B.Cu 窄口容量不足）+ 拥塞感知布线器；(b) 新开 F–In5 span（改孔策略/工艺）；(c) 具名豁免。",
+  "order_sweep_all32_bcu": {
+   "conclusion": "顺序扫描不能把成功数提升到 32（最好 8/32）⇒ **确认瓶颈容量主导**（单车道窄口 + 他网走廊占用），非顺序可解。",
+   "dn_first": {
+    "fail": 24,
+    "ok": 8
+   },
+   "group_window_dn_first": {
+    "fail": 24,
+    "ok": 8
+   },
+   "interleave": {
+    "fail": 28,
+    "ok": 4
+   },
+   "up_first": {
+    "fail": 28,
+    "ok": 4
+   }
+  },
   "plan_doc_8_3_claim": "『唯一拓扑 = 长走改置 In2（F→In2→F）』**不成立** —— 原 A 锚点（U6 扇出端）在 In2 上被 **BGA/缝合孔墙**封死：22/32 车道的 A 锚仅落在 ≤743 cell（多数 3–93 cell）之孤立自由域。",
   "v1_router_result_corrected": {
    "all_lanes": {
