@@ -1,0 +1,77 @@
+{
+ "artifact": "k2_p4_b2_R3_landing_cw_hypothesis_partial_confirmed_v1",
+ "artifacts": {
+  "DRC": "/tmp/opencode/archer/l9_cw_drc.json",
+  "ledger": "/tmp/opencode/archer/l9_cw_ledger.json",
+  "工具": "k2/tools/k2_p4_b2_in5_apply_cw_v1.py",
+  "落板": "/tmp/opencode/archer/l9_cw.kicad_pcb"
+ },
+ "drc_compare": {
+  "baseline_l8": {
+   "error": 0,
+   "unconnected": 0
+  },
+  "by_type": {
+   "clearance": [
+    0,
+    370,
+    177
+   ],
+   "copper_edge_clearance": [
+    0,
+    30,
+    30
+   ],
+   "items_not_allowed": [
+    0,
+    86,
+    86
+   ],
+   "shorting_items": [
+    0,
+    199,
+    148
+   ],
+   "tracks_crossing": [
+    0,
+    108,
+    41
+   ]
+  },
+  "in5_no_relocation": {
+   "error": 793,
+   "unconnected": 0
+  },
+  "in5_with_Cw_delete": {
+   "error": 482,
+   "unconnected": 166
+  }
+ },
+ "experiment": "新增 C-w 变体（`tools/k2_p4_b2_in5_apply_cw_v1.py`：把 movable 51 网之铜一并纳入删除集合）⇒ 落板 ⇒ DRC",
+ "gate_selfcheck": {
+  "owner闸口": 0,
+  "冻结四源": "未动",
+  "判据": "criteria/ rev=6 MATCH（只读未碰）",
+  "阶段": "P5 PENDING_EXTERNAL（未越）"
+ },
+ "interpretation": "删除动网铜使 error **793→482**（shorts 199→148 · clearance 370→177 · crossings 108→41）⇒ **C-w 方向成立**（动网铜确为主要冲突源）；但**删而不重布**导致 **166 未连接**，且仍余 482 error（items_not_allowed 86 / copper_edge 30 未受影响 ⇒ 另有来源，含**锚位未移（C-z）**与动网过孔/盘未搬）。⇒ **R3 落板完整工序**：① 移锚（C-z）② **动网重布（C-w 完整版：搬迁而非删除，保持其连通）** ③ apply 车道 ④ ZONE_FILLER ⑤ **DRC error 0 且 未连接 0** ⇒ R4。",
+ "ledger_counts": {
+  "add_runs": 4318,
+  "add_stubs": 64,
+  "del_lane_tracks": 3486,
+  "del_vias": 101,
+  "swap_via": 77,
+  "zone_refill": "OK"
+ },
+ "r_a_status": "**R-A 见证不受影响**（In5 几何：32/32 · true_gate 0 违规 · min 0.4472 · 余量 0.1700 · 端点 0 · 双 seed 复现）",
+ "referenced_sha16": {
+  "/tmp/opencode/archer/l8_drc.json": "032f919a1ad5c316",
+  "/tmp/opencode/archer/l9_cw.kicad_pcb": "86d54cc48ad6488a",
+  "/tmp/opencode/archer/l9_cw_drc.json": "01feea6861de5768",
+  "/tmp/opencode/archer/l9_in5_drc.json": "24c96cfed578ea29",
+  "k2/tools/k2_p4_b2_in5_apply_cw_v1.py": "9d62fbde479acb91"
+ },
+ "tick": "R204–R205（R3 落板诊断）",
+ "ts": "2026-09-21T20:00:56",
+ "verdict": "落板短路主因 = **动网铜未搬迁**（C-w）**部分确认**；完整修复须『重布动网』+『移锚(C-z)』"
+}
