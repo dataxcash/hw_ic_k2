@@ -1,0 +1,77 @@
+{
+ "artifact": "k2_pending_rulings_delta",
+ "schema": 1,
+ "ts": "2026-09-21T09:10:06.232117+08:00",
+ "session_label": "K2-2026-09-21 · 轮标 ARCHER-R108(续) · §8-C 只读造活（索引刷新 + 监理侧观测）",
+ "supersedes": "PENDING_RULINGS_DELTA_20260921_v33.json（其列之 3 项**已于 #K2-64/#K2-65 全部裁定** ⇒ 本件刷新为 待裁=0）",
+ "purpose": "① 刷新陈旧索引：v33 仍列 CR-76/CR-77/V4 判读口径为『待裁』，实已全裁 ⇒ 归零；② **ENG→监理 观测（非请求）**：哨兵 ALERT『里程碑未打 tag』= **陈旧假阳性**（含根因与证据）；③ 报备 CR-78 落地。",
+ "owner_gate": "**0** —— 全属工具/文档面 + 索引维护；无 L1 成分（不涉拓扑/接口/信号流向/球重映射）；不动 owner 系统/账号/预算。",
+ "stage_state": "P5 `PENDING_EXTERNAL`（未下单/未外发）· P0–P4 HOLDS · P6 CLOSED · 未越阶段 · 判据 rev=6 MATCH · **交付锚 `P5-L8.3` = `0eb2cb97fa4f1466`/`9de4cfcf9337cea9`（现行）** · 旧锚 l8r2/l8/l7 6 项逐字节保全。",
+ "pending_supervision": [],
+ "pending_supervision_note": "**待裁 = 0**。v33 所列 3 项之裁定映射见 resolved_from_v33。",
+ "resolved_from_v33": [
+  {
+   "id": "CR-76（包生成器 imp_md() 丢 watch 渲染）",
+   "ruled_by": "#K2-64 §三（授权修 imp_md()+DFM 卡 MD ⇒ 重出 l8r3）· #K2-65 §二（复核：CR-76 修复 ✓ `.md` 复原 `## watch` 段 + 首行限定句）",
+   "status": "已收口"
+  },
+  {
+   "id": "CR-77（P5 装配输入归属）",
+   "ruled_by": "#K2-64 §五 → (b)：交付级 BOM/CPL 非 ENG 交付面 · 另批产『装配参考件』（非交付级 · 不并入锚）",
+   "status": "已收口（落地 `ASSEMBLY_REF_L8_20260921/`）"
+  },
+  {
+   "id": "V4 判读口径（券覆盖 0.6mm 后落 93.5–95Ω）",
+   "ruled_by": "#K2-64 §四 → CAL-3：判定基（唯一）= as-built 对内净距",
+   "status": "已收口（册面 CAL-3）"
+  }
+ ],
+ "eng_to_supervision_observation": [
+  {
+   "id": "哨兵 ALERT 假阳性 · 里程碑 tag",
+   "alert_text": "『里程碑未打 tag: HEAD 距最后 tag(k2-v57-p5-l8r2-review-passed) 23 commit』（watch.log 自 08:59 起**每 tick 重发**至 09:08+）",
+   "verdict": "**假阳性（陈旧）** —— 里程碑 tag **存在且正确**。",
+   "evidence": {
+    "tag_local": "`git -C k2 tag -l k2-v57-p5-l8r3-anchor-active` = 存在；`^{}` 解引用 = `77e1da940a32`",
+    "tag_remote": "`git ls-remote --tags origin` 含 `refs/tags/k2-v57-p5-l8r3-anchor-active` = `c379f48a…` · `^{}` = `77e1da9…`",
+    "describe_now": "`git describe --tags --abbrev=0` = **`k2-v57-p5-l8r3-anchor-active`**；`rev-list --count <tag>..HEAD` = **2**（< TAG_STALE_COMMITS=20 ⇒ 条件不成立）",
+    "frozen_sources": "冻结四源 4/4 未动（无『冻结源被改』告警）"
+   },
+   "root_cause": "哨兵 `check_repo()` 之 `repo_alert()` **只置位不清零**：`self.pending_repo` 仅于 `repo_alert()` 内赋 msg（watch.py:677），初始化于 :288，**无 OK-路径清除**；告警首次触发于 `k2-v57-p5-l8r3-anchor-active` tag **建立（08:55:46）之前**（当时 HEAD 距 l8r2 tag ≈23 commit），此后 `git describe` 已返回 l8r3（dist 2）⇒ 不再调用 repo_alert ⇒ `pending_repo` **永不复位** ⇒ `tick()` 每轮重发（watch.py:726-731）。",
+   "impact": "误导性告警：后续会话可能被诱去『补打里程碑 tag』（**无此必要**；TAG_POLICY §1 之 l8r3 交付事件 tag 已在位），或误判仓库落后。",
+   "recommendation_to_supervisor": "① 在 `check_repo()` 的 OK 分支加 `self.pending_repo = None`（或按 repo 告警键分组复位）；② 当前陈旧值可经哨兵重启即刻清除。**ENG 未改 `.omo/supervision/**`（红线）**，仅报备。"
+  }
+ ],
+ "landed_this_session": [
+  {
+   "id": "CR-78",
+   "artifact": "P5 关门机械锚滞后缺陷修正",
+   "sha16": "守卫 `04f443444d13042a` · runbook `6427019a9ac43674` · 证据 `CR78_P5_CLOSURE_TOOLING_STALE_ANCHOR_DEFECT_AND_FIX_20260921_v1.json` **`84392244cc503915`**",
+   "note": "见册面 CR-78 块；零新增判据维/检查齿 · 未改包/锚/criteria/冻结四源"
+  },
+  {
+   "id": "索引刷新",
+   "artifact": "本件（v34）",
+   "note": "v33 之 3 待裁项 ⇒ 0（已全裁）"
+  }
+ ],
+ "registered_nonblocking": [
+  "CR-47（交付记录 l8 tarball 路径笔误）· CR-49（P6 仪器自查工具仍读 l7 模板路径）· CR-63（l8 包内 2 处代际标签残留）· CR-71（P5 生成器 docstring 错代） ⇒ **登记 · 待授权**（改即需重出包/换锚 或 改生成器）",
+  "CR-68（P6 仪器自检件现判 FAIL · 既有事实 · 先于本批）⇒ 维持登记",
+  "CR-44（注释头行 + strap_semantics.yaml 旧文献号）· CR-20(已由 CR-22 撤回) · R5 文献批余项 ⇒ 待权威件",
+  "T2-F6 通道登记：新可达 `raw.githubusercontent.com`/`api.github.com`/`www.so.com`/`ti.com`；仍闭 `www.st.com`(567)·`stmcu.com.cn`(429)·`archive.org`(000)"
+ ],
+ "red_lines_ok": [
+  "未改 criteria/",
+  "未改冻结四源",
+  "未改板/网表/SPEC/受审板",
+  "未改交付包/交付锚（l8r3 与旧锚 6 项逐字节保全）",
+  "未改生成器",
+  "未重出包/未换锚",
+  "未派 WORKER",
+  "未越阶段",
+  "未下单",
+  "未改 .omo/supervision/**"
+ ],
+ "next": "① 外部首件回件（载 l8r3 锚）⇒ `python3 tools/k2_p5_results_intake_guard_v1.py <回件.json> --json-out /tmp/opencode/p5_guard/<id>.json` ⇒ rc=0 交监理判定 ⇒ PASS 按 runbook §3 机械关门 / FAIL 走 §4；② 无新裁定 ⇒ 继续 §8-C 只读造活（**禁 HOLD/停等**）。"
+}
