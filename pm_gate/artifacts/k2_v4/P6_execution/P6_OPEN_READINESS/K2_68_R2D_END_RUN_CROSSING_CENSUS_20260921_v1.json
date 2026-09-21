@@ -1,0 +1,1777 @@
+{
+ "artifact": "k2_68_r2d_end_run_crossing_census",
+ "authority": "#K2-68 §2.4(a) 收紧版（32 条整批 · 拥挤感知布线器 v2）· §7-2-b 输入",
+ "board": "/tmp/opencode/w3/c.kicad_pcb (R1E)",
+ "conclusion": "端部直连段**大量被他网 In5 铜实质交叠**（必绕）与贴限 ⇒ §7-2-b **必须**用『拥挤感知布线器 v2』（单层 · 32 网 · 具名余量闸 · 允许绕行 · 允许重布长走），直连/局部微调不足；他网走廊 ECO（PERSTA# 优先）可减少绕行量但不消除需求。",
+ "method": "只读：对 32 条车道×2 段『端部直连（A→V2 / V3→B）』统计与 In5 他网铜的**实质交叠（必绕）**与**净距不足（贴限）**",
+ "red_lines_ok": [
+  "未改冻结四源",
+  "未改 criteria/",
+  "未改 l4..l8",
+  "未改网表/SPEC",
+  "未派 WORKER",
+  "只读",
+  "未越阶段"
+ ],
+ "segments": [
+  {
+   "cross_nets": {
+    "PCIE_DN_OUT4_N_MCIO": 1,
+    "PCIE_DN_OUT4_P_MCIO": 1,
+    "PCIE_DN_OUT5_N_MCIO": 1,
+    "PCIE_DN_OUT5_P_MCIO": 1,
+    "PCIE_DN_OUT6_N_MCIO": 2,
+    "PCIE_DN_OUT6_P_MCIO": 1,
+    "PCIE_UP2_N": 1,
+    "PCIE_UP2_P": 1,
+    "PCIE_UP4_N": 1,
+    "PCIE_UP4_P": 1,
+    "PCIE_UP5_N": 1,
+    "PCIE_UP5_P": 1,
+    "PCIE_UP6_N": 5,
+    "PCIE_UP6_P": 1,
+    "PCIE_UP7_N": 1,
+    "PCIE_UP7_P": 1,
+    "PERSTA#": 1
+   },
+   "cross_total": 22,
+   "from": [
+    84.85,
+    51.423
+   ],
+   "lane": "PCIE_DN_OUT0_N_MCIO",
+   "len_mm": 10.483,
+   "near_nets": {
+    "PCIE_DN_OUT6_N_MCIO": 3
+   },
+   "near_total": 3,
+   "side": "U6",
+   "to": [
+    84.85,
+    40.94
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_DN_OUT4_N_MCIO": 1,
+    "PCIE_DN_OUT4_P_MCIO": 1,
+    "PCIE_DN_OUT5_N_MCIO": 1,
+    "PCIE_DN_OUT5_P_MCIO": 1,
+    "PCIE_DN_OUT6_N_MCIO": 1,
+    "PCIE_DN_OUT6_P_MCIO": 1,
+    "PCIE_UP2_N": 1,
+    "PCIE_UP2_P": 1,
+    "PCIE_UP4_N": 1,
+    "PCIE_UP4_P": 1,
+    "PCIE_UP5_N": 1,
+    "PCIE_UP5_P": 1,
+    "PCIE_UP6_N": 1,
+    "PCIE_UP6_P": 1,
+    "PCIE_UP7_N": 1,
+    "PCIE_UP7_P": 1
+   },
+   "cross_total": 16,
+   "from": [
+    64.6,
+    40.94
+   ],
+   "lane": "PCIE_DN_OUT0_N_MCIO",
+   "len_mm": 10.56,
+   "near_nets": {
+    "PCIE_DN_OUT4_N_MCIO": 4
+   },
+   "near_total": 4,
+   "side": "CONN",
+   "to": [
+    64.6,
+    51.5
+   ]
+  },
+  {
+   "cross_nets": {
+    "I2C1_SDA": 1,
+    "PCIE_DN_OUT4_N_MCIO": 1,
+    "PCIE_DN_OUT4_P_MCIO": 1,
+    "PCIE_DN_OUT5_N_MCIO": 1,
+    "PCIE_DN_OUT5_P_MCIO": 1,
+    "PCIE_DN_OUT6_N_MCIO": 1,
+    "PCIE_DN_OUT6_P_MCIO": 1,
+    "PCIE_UP2_N": 1,
+    "PCIE_UP2_P": 1,
+    "PCIE_UP4_N": 1,
+    "PCIE_UP4_P": 1,
+    "PCIE_UP5_N": 1,
+    "PCIE_UP5_P": 1,
+    "PCIE_UP6_N": 1,
+    "PCIE_UP6_P": 1,
+    "PCIE_UP7_N": 1,
+    "PCIE_UP7_P": 1,
+    "PERSTA#": 1
+   },
+   "cross_total": 18,
+   "from": [
+    84.3,
+    52.366
+   ],
+   "lane": "PCIE_DN_OUT0_P_MCIO",
+   "len_mm": 10.926,
+   "near_nets": {
+    "I2C1_SDA": 4,
+    "PCIE_DN_OUT6_N_MCIO": 1
+   },
+   "near_total": 5,
+   "side": "U6",
+   "to": [
+    84.3,
+    41.44
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_DN_OUT4_N_MCIO": 1,
+    "PCIE_DN_OUT4_P_MCIO": 1,
+    "PCIE_DN_OUT5_N_MCIO": 5,
+    "PCIE_DN_OUT5_P_MCIO": 1,
+    "PCIE_DN_OUT6_N_MCIO": 1,
+    "PCIE_DN_OUT6_P_MCIO": 1,
+    "PCIE_UP2_N": 1,
+    "PCIE_UP2_P": 1,
+    "PCIE_UP4_N": 1,
+    "PCIE_UP4_P": 1,
+    "PCIE_UP5_N": 1,
+    "PCIE_UP5_P": 1,
+    "PCIE_UP6_N": 2,
+    "PCIE_UP6_P": 1,
+    "PCIE_UP7_N": 1,
+    "PCIE_UP7_P": 1
+   },
+   "cross_total": 21,
+   "from": [
+    65.2,
+    41.44
+   ],
+   "lane": "PCIE_DN_OUT0_P_MCIO",
+   "len_mm": 10.06,
+   "near_nets": {
+    "PCIE_DN_OUT4_N_MCIO": 3
+   },
+   "near_total": 3,
+   "side": "CONN",
+   "to": [
+    65.2,
+    51.5
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_DN_OUT4_N_MCIO": 1,
+    "PCIE_DN_OUT4_P_MCIO": 1,
+    "PCIE_DN_OUT5_N_MCIO": 1,
+    "PCIE_DN_OUT5_P_MCIO": 1,
+    "PCIE_DN_OUT6_N_MCIO": 1,
+    "PCIE_DN_OUT6_P_MCIO": 1,
+    "PCIE_UP2_N": 1,
+    "PCIE_UP2_P": 1,
+    "PCIE_UP4_N": 1,
+    "PCIE_UP4_P": 1,
+    "PCIE_UP5_N": 1,
+    "PCIE_UP5_P": 1,
+    "PCIE_UP6_N": 5,
+    "PCIE_UP6_P": 1,
+    "PCIE_UP7_N": 1,
+    "PCIE_UP7_P": 1,
+    "PERSTA#": 1
+   },
+   "cross_total": 21,
+   "from": [
+    86.05,
+    51.423
+   ],
+   "lane": "PCIE_DN_OUT1_N_MCIO",
+   "len_mm": 11.553,
+   "near_nets": {
+    "PCIE_DN_OUT6_N_MCIO": 4
+   },
+   "near_total": 4,
+   "side": "U6",
+   "to": [
+    86.05,
+    39.87
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_DN_OUT4_N_MCIO": 1,
+    "PCIE_DN_OUT4_P_MCIO": 1,
+    "PCIE_DN_OUT5_N_MCIO": 1,
+    "PCIE_DN_OUT5_P_MCIO": 1,
+    "PCIE_UP2_N": 1,
+    "PCIE_UP2_P": 1,
+    "PCIE_UP4_N": 1,
+    "PCIE_UP4_P": 1,
+    "PCIE_UP5_N": 1,
+    "PCIE_UP5_P": 1
+   },
+   "cross_total": 10,
+   "from": [
+    60.4,
+    39.87
+   ],
+   "lane": "PCIE_DN_OUT1_N_MCIO",
+   "len_mm": 11.63,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "CONN",
+   "to": [
+    60.4,
+    51.5
+   ]
+  },
+  {
+   "cross_nets": {
+    "I2C1_SDA": 1,
+    "PCIE_DN_OUT4_N_MCIO": 1,
+    "PCIE_DN_OUT4_P_MCIO": 1,
+    "PCIE_DN_OUT5_N_MCIO": 1,
+    "PCIE_DN_OUT5_P_MCIO": 1,
+    "PCIE_DN_OUT6_N_MCIO": 1,
+    "PCIE_DN_OUT6_P_MCIO": 1,
+    "PCIE_UP2_N": 1,
+    "PCIE_UP2_P": 1,
+    "PCIE_UP4_N": 1,
+    "PCIE_UP4_P": 1,
+    "PCIE_UP5_N": 1,
+    "PCIE_UP5_P": 1,
+    "PCIE_UP6_N": 1,
+    "PCIE_UP6_P": 1,
+    "PCIE_UP7_N": 1,
+    "PCIE_UP7_P": 1,
+    "PERSTA#": 1
+   },
+   "cross_total": 18,
+   "from": [
+    85.5,
+    52.366
+   ],
+   "lane": "PCIE_DN_OUT1_P_MCIO",
+   "len_mm": 11.996,
+   "near_nets": {
+    "I2C1_SDA": 4,
+    "PCIE_DN_OUT6_N_MCIO": 3
+   },
+   "near_total": 7,
+   "side": "U6",
+   "to": [
+    85.5,
+    40.37
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_DN_OUT4_N_MCIO": 1,
+    "PCIE_DN_OUT4_P_MCIO": 1,
+    "PCIE_DN_OUT5_N_MCIO": 1,
+    "PCIE_DN_OUT5_P_MCIO": 1,
+    "PCIE_UP2_N": 1,
+    "PCIE_UP2_P": 1,
+    "PCIE_UP4_N": 1,
+    "PCIE_UP4_P": 1,
+    "PCIE_UP5_N": 1,
+    "PCIE_UP5_P": 1
+   },
+   "cross_total": 10,
+   "from": [
+    61.0,
+    40.37
+   ],
+   "lane": "PCIE_DN_OUT1_P_MCIO",
+   "len_mm": 11.13,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "CONN",
+   "to": [
+    61.0,
+    51.5
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_DN_OUT4_N_MCIO": 1,
+    "PCIE_DN_OUT4_P_MCIO": 1,
+    "PCIE_DN_OUT5_N_MCIO": 1,
+    "PCIE_DN_OUT5_P_MCIO": 1,
+    "PCIE_DN_OUT6_N_MCIO": 1,
+    "PCIE_DN_OUT6_P_MCIO": 1,
+    "PCIE_UP2_N": 1,
+    "PCIE_UP2_P": 1,
+    "PCIE_UP4_N": 1,
+    "PCIE_UP4_P": 1,
+    "PCIE_UP5_N": 1,
+    "PCIE_UP5_P": 1,
+    "PCIE_UP6_N": 5,
+    "PCIE_UP6_P": 1,
+    "PCIE_UP7_N": 1,
+    "PCIE_UP7_P": 1,
+    "PERSTA#": 1
+   },
+   "cross_total": 21,
+   "from": [
+    87.25,
+    51.423
+   ],
+   "lane": "PCIE_DN_OUT2_N_MCIO",
+   "len_mm": 12.623,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "U6",
+   "to": [
+    87.25,
+    38.8
+   ]
+  },
+  {
+   "cross_nets": {
+    "P3V3_AUX": 1,
+    "PCIE_DN_OUT4_N_MCIO": 1,
+    "PCIE_DN_OUT4_P_MCIO": 1,
+    "PCIE_DN_OUT5_N_MCIO": 1,
+    "PCIE_DN_OUT5_P_MCIO": 1,
+    "PCIE_UP4_N": 1,
+    "PCIE_UP4_P": 1,
+    "PCIE_UP5_N": 1,
+    "PCIE_UP5_P": 1,
+    "PERSTA#": 2
+   },
+   "cross_total": 11,
+   "from": [
+    57.4,
+    38.8
+   ],
+   "lane": "PCIE_DN_OUT2_N_MCIO",
+   "len_mm": 12.7,
+   "near_nets": {
+    "PERSTA#": 2
+   },
+   "near_total": 2,
+   "side": "CONN",
+   "to": [
+    57.4,
+    51.5
+   ]
+  },
+  {
+   "cross_nets": {
+    "I2C1_SDA": 1,
+    "PCIE_DN_OUT4_N_MCIO": 1,
+    "PCIE_DN_OUT4_P_MCIO": 1,
+    "PCIE_DN_OUT5_N_MCIO": 1,
+    "PCIE_DN_OUT5_P_MCIO": 1,
+    "PCIE_DN_OUT6_N_MCIO": 1,
+    "PCIE_DN_OUT6_P_MCIO": 1,
+    "PCIE_UP2_N": 1,
+    "PCIE_UP2_P": 1,
+    "PCIE_UP4_N": 1,
+    "PCIE_UP4_P": 1,
+    "PCIE_UP5_N": 1,
+    "PCIE_UP5_P": 1,
+    "PCIE_UP6_N": 1,
+    "PCIE_UP6_P": 1,
+    "PCIE_UP7_N": 1,
+    "PCIE_UP7_P": 1,
+    "PERSTA#": 1
+   },
+   "cross_total": 18,
+   "from": [
+    86.7,
+    52.366
+   ],
+   "lane": "PCIE_DN_OUT2_P_MCIO",
+   "len_mm": 13.066,
+   "near_nets": {
+    "I2C1_SDA": 4,
+    "PCIE_DN_OUT6_N_MCIO": 1
+   },
+   "near_total": 5,
+   "side": "U6",
+   "to": [
+    86.7,
+    39.3
+   ]
+  },
+  {
+   "cross_nets": {
+    "P3V3_AUX": 1,
+    "PCIE_DN_OUT4_N_MCIO": 1,
+    "PCIE_DN_OUT4_P_MCIO": 1,
+    "PCIE_DN_OUT5_N_MCIO": 1,
+    "PCIE_DN_OUT5_P_MCIO": 1,
+    "PCIE_UP4_N": 1,
+    "PCIE_UP4_P": 1,
+    "PCIE_UP5_N": 1,
+    "PCIE_UP5_P": 1,
+    "PERSTA#": 2
+   },
+   "cross_total": 11,
+   "from": [
+    58.0,
+    39.3
+   ],
+   "lane": "PCIE_DN_OUT2_P_MCIO",
+   "len_mm": 12.2,
+   "near_nets": {
+    "PERSTA#": 1
+   },
+   "near_total": 1,
+   "side": "CONN",
+   "to": [
+    58.0,
+    51.5
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_DN_OUT4_N_MCIO": 1,
+    "PCIE_DN_OUT4_P_MCIO": 1,
+    "PCIE_DN_OUT5_N_MCIO": 1,
+    "PCIE_DN_OUT5_P_MCIO": 1,
+    "PCIE_DN_OUT6_N_MCIO": 1,
+    "PCIE_DN_OUT6_P_MCIO": 1,
+    "PCIE_UP4_N": 1,
+    "PCIE_UP4_P": 1,
+    "PCIE_UP5_N": 1,
+    "PCIE_UP5_P": 1,
+    "PCIE_UP6_N": 5,
+    "PCIE_UP6_P": 1,
+    "PCIE_UP7_N": 1,
+    "PCIE_UP7_P": 1,
+    "PERSTA#": 1
+   },
+   "cross_total": 19,
+   "from": [
+    88.45,
+    51.423
+   ],
+   "lane": "PCIE_DN_OUT3_N_MCIO",
+   "len_mm": 13.693,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "U6",
+   "to": [
+    88.45,
+    37.73
+   ]
+  },
+  {
+   "cross_nets": {
+    "P3V3_AUX": 1,
+    "PERSTA#": 1
+   },
+   "cross_total": 2,
+   "from": [
+    53.2,
+    37.73
+   ],
+   "lane": "PCIE_DN_OUT3_N_MCIO",
+   "len_mm": 13.77,
+   "near_nets": {
+    "PERSTA#": 3
+   },
+   "near_total": 3,
+   "side": "CONN",
+   "to": [
+    53.2,
+    51.5
+   ]
+  },
+  {
+   "cross_nets": {
+    "I2C1_SDA": 1,
+    "PCIE_DN_OUT4_N_MCIO": 1,
+    "PCIE_DN_OUT4_P_MCIO": 1,
+    "PCIE_DN_OUT5_N_MCIO": 1,
+    "PCIE_DN_OUT5_P_MCIO": 1,
+    "PCIE_DN_OUT6_N_MCIO": 1,
+    "PCIE_DN_OUT6_P_MCIO": 1,
+    "PCIE_UP4_N": 1,
+    "PCIE_UP4_P": 1,
+    "PCIE_UP5_N": 1,
+    "PCIE_UP5_P": 1,
+    "PCIE_UP6_N": 1,
+    "PCIE_UP6_P": 1,
+    "PCIE_UP7_N": 1,
+    "PCIE_UP7_P": 1,
+    "PERSTA#": 1
+   },
+   "cross_total": 16,
+   "from": [
+    87.9,
+    52.366
+   ],
+   "lane": "PCIE_DN_OUT3_P_MCIO",
+   "len_mm": 14.136,
+   "near_nets": {
+    "I2C1_SDA": 4,
+    "PCIE_UP2_N": 1
+   },
+   "near_total": 5,
+   "side": "U6",
+   "to": [
+    87.9,
+    38.23
+   ]
+  },
+  {
+   "cross_nets": {
+    "P3V3_AUX": 1,
+    "PERSTA#": 1
+   },
+   "cross_total": 2,
+   "from": [
+    53.8,
+    38.23
+   ],
+   "lane": "PCIE_DN_OUT3_P_MCIO",
+   "len_mm": 13.27,
+   "near_nets": {
+    "P3V3_AUX": 2,
+    "PERSTA#": 1
+   },
+   "near_total": 3,
+   "side": "CONN",
+   "to": [
+    53.8,
+    51.5
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_DN_OUT5_N_MCIO": 1,
+    "PCIE_DN_OUT5_P_MCIO": 1,
+    "PCIE_DN_OUT6_N_MCIO": 1,
+    "PCIE_DN_OUT6_P_MCIO": 1,
+    "PCIE_UP4_N": 1,
+    "PCIE_UP4_P": 1,
+    "PCIE_UP5_N": 1,
+    "PCIE_UP5_P": 1,
+    "PCIE_UP6_N": 2,
+    "PCIE_UP6_P": 1,
+    "PCIE_UP7_N": 1,
+    "PCIE_UP7_P": 1,
+    "PERSTA#": 1
+   },
+   "cross_total": 14,
+   "from": [
+    89.65,
+    51.423
+   ],
+   "lane": "PCIE_DN_OUT4_N_MCIO",
+   "len_mm": 8.913,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "U6",
+   "to": [
+    89.65,
+    42.51
+   ]
+  },
+  {
+   "cross_nets": {
+    "P3V3_AUX": 1,
+    "PCIE_UP4_N": 2,
+    "PCIE_UP4_P": 1
+   },
+   "cross_total": 4,
+   "from": [
+    55.0,
+    42.51
+   ],
+   "lane": "PCIE_DN_OUT4_N_MCIO",
+   "len_mm": 17.69,
+   "near_nets": {
+    "P3V3_AUX": 2,
+    "PCIE_UP4_N": 1
+   },
+   "near_total": 3,
+   "side": "CONN",
+   "to": [
+    55.0,
+    60.2
+   ]
+  },
+  {
+   "cross_nets": {
+    "I2C1_SDA": 1,
+    "PCIE_DN_OUT4_N_MCIO": 1,
+    "PCIE_DN_OUT5_N_MCIO": 1,
+    "PCIE_DN_OUT5_P_MCIO": 1,
+    "PCIE_DN_OUT6_N_MCIO": 1,
+    "PCIE_DN_OUT6_P_MCIO": 1,
+    "PCIE_UP4_N": 1,
+    "PCIE_UP4_P": 1,
+    "PCIE_UP5_N": 1,
+    "PCIE_UP5_P": 1,
+    "PCIE_UP6_N": 1,
+    "PCIE_UP6_P": 1,
+    "PCIE_UP7_N": 1,
+    "PCIE_UP7_P": 1,
+    "PERSTA#": 1
+   },
+   "cross_total": 15,
+   "from": [
+    89.1,
+    52.366
+   ],
+   "lane": "PCIE_DN_OUT4_P_MCIO",
+   "len_mm": 10.356,
+   "near_nets": {
+    "I2C1_SDA": 4
+   },
+   "near_total": 4,
+   "side": "U6",
+   "to": [
+    89.1,
+    42.01
+   ]
+  },
+  {
+   "cross_nets": {
+    "P3V3_AUX": 1,
+    "PCIE_UP4_P": 2
+   },
+   "cross_total": 3,
+   "from": [
+    54.4,
+    42.01
+   ],
+   "lane": "PCIE_DN_OUT4_P_MCIO",
+   "len_mm": 18.19,
+   "near_nets": {
+    "P3V3_AUX": 3,
+    "PCIE_UP4_P": 1
+   },
+   "near_total": 4,
+   "side": "CONN",
+   "to": [
+    54.4,
+    60.2
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_DN_OUT6_N_MCIO": 1,
+    "PCIE_DN_OUT6_P_MCIO": 1,
+    "PCIE_UP5_N": 1,
+    "PCIE_UP5_P": 1,
+    "PCIE_UP6_N": 1,
+    "PCIE_UP6_P": 1,
+    "PCIE_UP7_N": 1,
+    "PCIE_UP7_P": 1,
+    "PERSTA#": 1
+   },
+   "cross_total": 9,
+   "from": [
+    90.85,
+    51.423
+   ],
+   "lane": "PCIE_DN_OUT5_N_MCIO",
+   "len_mm": 7.843,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "U6",
+   "to": [
+    90.85,
+    43.58
+   ]
+  },
+  {
+   "cross_nets": {
+    "P3V3_AUX": 1,
+    "PCIE_UP4_N": 1,
+    "PCIE_UP4_P": 1,
+    "PCIE_UP5_N": 2,
+    "PCIE_UP5_P": 1
+   },
+   "cross_total": 6,
+   "from": [
+    56.8,
+    43.58
+   ],
+   "lane": "PCIE_DN_OUT5_N_MCIO",
+   "len_mm": 16.62,
+   "near_nets": {
+    "P3V3_AUX": 2,
+    "PCIE_UP5_N": 1
+   },
+   "near_total": 3,
+   "side": "CONN",
+   "to": [
+    56.8,
+    60.2
+   ]
+  },
+  {
+   "cross_nets": {
+    "I2C1_SDA": 1,
+    "PCIE_DN_OUT5_N_MCIO": 1,
+    "PCIE_DN_OUT6_N_MCIO": 1,
+    "PCIE_DN_OUT6_P_MCIO": 1,
+    "PCIE_UP5_N": 1,
+    "PCIE_UP5_P": 1,
+    "PCIE_UP6_N": 1,
+    "PCIE_UP6_P": 1,
+    "PCIE_UP7_N": 1,
+    "PCIE_UP7_P": 1,
+    "PERSTA#": 1
+   },
+   "cross_total": 11,
+   "from": [
+    90.3,
+    52.366
+   ],
+   "lane": "PCIE_DN_OUT5_P_MCIO",
+   "len_mm": 9.286,
+   "near_nets": {
+    "I2C1_SDA": 4,
+    "PCIE_UP4_P": 1
+   },
+   "near_total": 5,
+   "side": "U6",
+   "to": [
+    90.3,
+    43.08
+   ]
+  },
+  {
+   "cross_nets": {
+    "P3V3_AUX": 2,
+    "PCIE_UP4_N": 1,
+    "PCIE_UP4_P": 1,
+    "PCIE_UP5_P": 2
+   },
+   "cross_total": 6,
+   "from": [
+    56.2,
+    43.08
+   ],
+   "lane": "PCIE_DN_OUT5_P_MCIO",
+   "len_mm": 17.12,
+   "near_nets": {
+    "P3V3_AUX": 3,
+    "PCIE_UP5_P": 1
+   },
+   "near_total": 4,
+   "side": "CONN",
+   "to": [
+    56.2,
+    60.2
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_UP6_N": 1,
+    "PCIE_UP6_P": 1,
+    "PCIE_UP7_N": 1,
+    "PCIE_UP7_P": 1,
+    "PERSTA#": 1
+   },
+   "cross_total": 5,
+   "from": [
+    92.05,
+    51.423
+   ],
+   "lane": "PCIE_DN_OUT6_N_MCIO",
+   "len_mm": 6.773,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "U6",
+   "to": [
+    92.05,
+    44.65
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_UP2_N": 1,
+    "PCIE_UP2_P": 1,
+    "PCIE_UP4_N": 1,
+    "PCIE_UP4_P": 1,
+    "PCIE_UP5_N": 1,
+    "PCIE_UP5_P": 1,
+    "PCIE_UP6_N": 2,
+    "PCIE_UP6_P": 1
+   },
+   "cross_total": 9,
+   "from": [
+    62.2,
+    44.65
+   ],
+   "lane": "PCIE_DN_OUT6_N_MCIO",
+   "len_mm": 15.55,
+   "near_nets": {
+    "PCIE_UP6_N": 1
+   },
+   "near_total": 1,
+   "side": "CONN",
+   "to": [
+    62.2,
+    60.2
+   ]
+  },
+  {
+   "cross_nets": {
+    "I2C1_SDA": 1,
+    "PCIE_DN_OUT6_N_MCIO": 1,
+    "PCIE_UP6_N": 1,
+    "PCIE_UP6_P": 1,
+    "PCIE_UP7_N": 1,
+    "PCIE_UP7_P": 1,
+    "PERSTA#": 1
+   },
+   "cross_total": 7,
+   "from": [
+    91.5,
+    52.366
+   ],
+   "lane": "PCIE_DN_OUT6_P_MCIO",
+   "len_mm": 8.216,
+   "near_nets": {
+    "I2C1_SDA": 4,
+    "PCIE_UP5_P": 1
+   },
+   "near_total": 5,
+   "side": "U6",
+   "to": [
+    91.5,
+    44.15
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_UP2_N": 1,
+    "PCIE_UP2_P": 1,
+    "PCIE_UP4_N": 1,
+    "PCIE_UP4_P": 1,
+    "PCIE_UP5_N": 1,
+    "PCIE_UP5_P": 1,
+    "PCIE_UP6_P": 2
+   },
+   "cross_total": 8,
+   "from": [
+    61.6,
+    44.15
+   ],
+   "lane": "PCIE_DN_OUT6_P_MCIO",
+   "len_mm": 16.05,
+   "near_nets": {
+    "PCIE_UP6_P": 1
+   },
+   "near_total": 1,
+   "side": "CONN",
+   "to": [
+    61.6,
+    60.2
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_UP7_N": 1,
+    "PERSTA#": 1
+   },
+   "cross_total": 2,
+   "from": [
+    93.7,
+    51.673
+   ],
+   "lane": "PCIE_DN_OUT7_N_MCIO",
+   "len_mm": 16.653,
+   "near_nets": {
+    "PERSTA#": 1
+   },
+   "near_total": 1,
+   "side": "U6",
+   "to": [
+    93.7,
+    35.02
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_DN_OUT1_N_MCIO": 1,
+    "PCIE_DN_OUT1_P_MCIO": 1,
+    "PCIE_DN_OUT2_N_MCIO": 1,
+    "PCIE_DN_OUT2_P_MCIO": 1,
+    "PCIE_DN_OUT3_N_MCIO": 1,
+    "PCIE_DN_OUT3_P_MCIO": 2,
+    "PCIE_DN_OUT4_N_MCIO": 1,
+    "PCIE_DN_OUT4_P_MCIO": 1,
+    "PCIE_DN_OUT5_N_MCIO": 2,
+    "PCIE_DN_OUT5_P_MCIO": 1,
+    "PCIE_DN_OUT6_N_MCIO": 1,
+    "PCIE_DN_OUT6_P_MCIO": 1,
+    "PCIE_UP1_N": 1,
+    "PCIE_UP1_P": 1,
+    "PCIE_UP2_N": 1,
+    "PCIE_UP2_P": 1,
+    "PCIE_UP4_N": 1,
+    "PCIE_UP4_P": 1,
+    "PCIE_UP5_N": 1,
+    "PCIE_UP5_P": 1,
+    "PCIE_UP6_N": 1,
+    "PCIE_UP6_P": 1,
+    "PCIE_UP7_N": 2,
+    "PCIE_UP7_P": 1
+   },
+   "cross_total": 27,
+   "from": [
+    64.0,
+    35.02
+   ],
+   "lane": "PCIE_DN_OUT7_N_MCIO",
+   "len_mm": 25.18,
+   "near_nets": {
+    "PCIE_DN_OUT4_N_MCIO": 3,
+    "PCIE_UP7_N": 1
+   },
+   "near_total": 4,
+   "side": "CONN",
+   "to": [
+    64.0,
+    60.2
+   ]
+  },
+  {
+   "cross_nets": {
+    "I2C1_SDA": 1,
+    "PCIE_DN_OUT7_N_MCIO": 1,
+    "PCIE_UP7_N": 1,
+    "PCIE_UP7_P": 1,
+    "PERSTA#": 1
+   },
+   "cross_total": 5,
+   "from": [
+    92.7,
+    52.366
+   ],
+   "lane": "PCIE_DN_OUT7_P_MCIO",
+   "len_mm": 17.846,
+   "near_nets": {
+    "I2C1_SDA": 2,
+    "PCIE_UP6_N": 1
+   },
+   "near_total": 3,
+   "side": "U6",
+   "to": [
+    92.7,
+    34.52
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_DN_OUT1_N_MCIO": 1,
+    "PCIE_DN_OUT1_P_MCIO": 1,
+    "PCIE_DN_OUT2_N_MCIO": 1,
+    "PCIE_DN_OUT2_P_MCIO": 1,
+    "PCIE_DN_OUT3_N_MCIO": 1,
+    "PCIE_DN_OUT3_P_MCIO": 1,
+    "PCIE_DN_OUT4_N_MCIO": 1,
+    "PCIE_DN_OUT4_P_MCIO": 1,
+    "PCIE_DN_OUT5_N_MCIO": 1,
+    "PCIE_DN_OUT5_P_MCIO": 1,
+    "PCIE_DN_OUT6_N_MCIO": 1,
+    "PCIE_DN_OUT6_P_MCIO": 1,
+    "PCIE_UP1_N": 1,
+    "PCIE_UP1_P": 1,
+    "PCIE_UP2_N": 1,
+    "PCIE_UP2_P": 1,
+    "PCIE_UP4_N": 1,
+    "PCIE_UP4_P": 1,
+    "PCIE_UP5_N": 1,
+    "PCIE_UP5_P": 1,
+    "PCIE_UP6_N": 1,
+    "PCIE_UP6_P": 1,
+    "PCIE_UP7_P": 2
+   },
+   "cross_total": 24,
+   "from": [
+    63.4,
+    34.52
+   ],
+   "lane": "PCIE_DN_OUT7_P_MCIO",
+   "len_mm": 25.68,
+   "near_nets": {
+    "PCIE_DN_OUT4_N_MCIO": 3,
+    "PCIE_UP7_P": 1
+   },
+   "near_total": 4,
+   "side": "CONN",
+   "to": [
+    63.4,
+    60.2
+   ]
+  },
+  {
+   "cross_nets": {},
+   "cross_total": 0,
+   "from": [
+    84.35,
+    55.723
+   ],
+   "lane": "PCIE_UP_OUT0_N_J2",
+   "len_mm": 0.611,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "U6",
+   "to": [
+    84.35,
+    56.334
+   ]
+  },
+  {
+   "cross_nets": {
+    "PERSTA#": 1
+   },
+   "cross_total": 1,
+   "from": [
+    127.01,
+    56.334
+   ],
+   "lane": "PCIE_UP_OUT0_N_J2",
+   "len_mm": 13.084,
+   "near_nets": {
+    "PERSTA#": 2
+   },
+   "near_total": 2,
+   "side": "CONN",
+   "to": [
+    127.01,
+    43.25
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_UP_OUT0_N_J2": 1
+   },
+   "cross_total": 1,
+   "from": [
+    84.85,
+    54.88
+   ],
+   "lane": "PCIE_UP_OUT0_P_J2",
+   "len_mm": 1.954,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "U6",
+   "to": [
+    84.85,
+    56.834
+   ]
+  },
+  {
+   "cross_nets": {},
+   "cross_total": 0,
+   "from": [
+    141.22,
+    56.834
+   ],
+   "lane": "PCIE_UP_OUT0_P_J2",
+   "len_mm": 14.184,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "CONN",
+   "to": [
+    141.22,
+    42.65
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_UP_OUT0_N_J2": 1,
+    "PCIE_UP_OUT0_P_J2": 1
+   },
+   "cross_total": 2,
+   "from": [
+    85.5,
+    55.823
+   ],
+   "lane": "PCIE_UP_OUT1_N_J2",
+   "len_mm": 2.46,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "U6",
+   "to": [
+    85.5,
+    58.283
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_UP_OUT0_P_J2": 1
+   },
+   "cross_total": 1,
+   "from": [
+    139.48,
+    58.283
+   ],
+   "lane": "PCIE_UP_OUT1_N_J2",
+   "len_mm": 14.433,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "CONN",
+   "to": [
+    139.48,
+    43.85
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_UP_OUT0_N_J2": 1,
+    "PCIE_UP_OUT0_P_J2": 1
+   },
+   "cross_total": 2,
+   "from": [
+    86.05,
+    54.88
+   ],
+   "lane": "PCIE_UP_OUT1_P_J2",
+   "len_mm": 2.903,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "U6",
+   "to": [
+    86.05,
+    57.783
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_UP_OUT0_P_J2": 1,
+    "PERSTA#": 1
+   },
+   "cross_total": 2,
+   "from": [
+    127.59,
+    57.783
+   ],
+   "lane": "PCIE_UP_OUT1_P_J2",
+   "len_mm": 13.933,
+   "near_nets": {
+    "PERSTA#": 3
+   },
+   "near_total": 3,
+   "side": "CONN",
+   "to": [
+    127.59,
+    43.85
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_UP_OUT0_N_J2": 1,
+    "PCIE_UP_OUT0_P_J2": 1,
+    "PCIE_UP_OUT1_N_J2": 1,
+    "PCIE_UP_OUT1_P_J2": 1
+   },
+   "cross_total": 4,
+   "from": [
+    86.7,
+    55.823
+   ],
+   "lane": "PCIE_UP_OUT2_N_J2",
+   "len_mm": 3.409,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "U6",
+   "to": [
+    86.7,
+    59.232
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_UP_OUT0_P_J2": 1,
+    "PCIE_UP_OUT1_N_J2": 1,
+    "PERSTA#": 1
+   },
+   "cross_total": 3,
+   "from": [
+    129.33,
+    59.232
+   ],
+   "lane": "PCIE_UP_OUT2_N_J2",
+   "len_mm": 12.382,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "CONN",
+   "to": [
+    129.33,
+    46.85
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_UP_OUT0_N_J2": 1,
+    "PCIE_UP_OUT0_P_J2": 1,
+    "PCIE_UP_OUT1_N_J2": 1,
+    "PCIE_UP_OUT1_P_J2": 1,
+    "PCIE_UP_OUT2_N_J2": 1
+   },
+   "cross_total": 5,
+   "from": [
+    87.25,
+    54.88
+   ],
+   "lane": "PCIE_UP_OUT2_P_J2",
+   "len_mm": 4.852,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "U6",
+   "to": [
+    87.25,
+    59.732
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_UP_OUT0_P_J2": 1,
+    "PCIE_UP_OUT1_N_J2": 1
+   },
+   "cross_total": 2,
+   "from": [
+    137.16,
+    59.732
+   ],
+   "lane": "PCIE_UP_OUT2_P_J2",
+   "len_mm": 13.482,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "CONN",
+   "to": [
+    137.16,
+    46.25
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_UP_OUT0_N_J2": 1,
+    "PCIE_UP_OUT0_P_J2": 1,
+    "PCIE_UP_OUT1_N_J2": 1,
+    "PCIE_UP_OUT1_P_J2": 1,
+    "PCIE_UP_OUT2_N_J2": 1,
+    "PCIE_UP_OUT2_P_J2": 1
+   },
+   "cross_total": 6,
+   "from": [
+    87.9,
+    55.823
+   ],
+   "lane": "PCIE_UP_OUT3_N_J2",
+   "len_mm": 5.358,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "U6",
+   "to": [
+    87.9,
+    61.181
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_UP_OUT0_P_J2": 1,
+    "PCIE_UP_OUT1_N_J2": 1,
+    "PCIE_UP_OUT2_P_J2": 1
+   },
+   "cross_total": 3,
+   "from": [
+    136.0,
+    61.181
+   ],
+   "lane": "PCIE_UP_OUT3_N_J2",
+   "len_mm": 13.731,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "CONN",
+   "to": [
+    136.0,
+    47.45
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_UP_OUT0_N_J2": 1,
+    "PCIE_UP_OUT0_P_J2": 1,
+    "PCIE_UP_OUT1_N_J2": 1,
+    "PCIE_UP_OUT1_P_J2": 1,
+    "PCIE_UP_OUT2_N_J2": 1,
+    "PCIE_UP_OUT2_P_J2": 1
+   },
+   "cross_total": 6,
+   "from": [
+    88.45,
+    54.88
+   ],
+   "lane": "PCIE_UP_OUT3_P_J2",
+   "len_mm": 5.801,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "U6",
+   "to": [
+    88.45,
+    60.681
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_UP_OUT0_P_J2": 1,
+    "PCIE_UP_OUT1_N_J2": 1,
+    "PCIE_UP_OUT2_P_J2": 1,
+    "PERSTA#": 1
+   },
+   "cross_total": 4,
+   "from": [
+    130.49,
+    60.681
+   ],
+   "lane": "PCIE_UP_OUT3_P_J2",
+   "len_mm": 13.231,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "CONN",
+   "to": [
+    130.49,
+    47.45
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_UP_OUT0_N_J2": 1,
+    "PCIE_UP_OUT0_P_J2": 1,
+    "PCIE_UP_OUT1_N_J2": 1,
+    "PCIE_UP_OUT1_P_J2": 1,
+    "PCIE_UP_OUT2_N_J2": 1,
+    "PCIE_UP_OUT2_P_J2": 1,
+    "PCIE_UP_OUT3_N_J2": 1,
+    "PCIE_UP_OUT3_P_J2": 1
+   },
+   "cross_total": 8,
+   "from": [
+    89.1,
+    55.823
+   ],
+   "lane": "PCIE_UP_OUT4_N_J2",
+   "len_mm": 6.307,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "U6",
+   "to": [
+    89.1,
+    62.13
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_UP_OUT0_P_J2": 1,
+    "PCIE_UP_OUT1_N_J2": 1,
+    "PCIE_UP_OUT2_P_J2": 1,
+    "PCIE_UP_OUT3_N_J2": 1,
+    "PERSTA#": 1
+   },
+   "cross_total": 5,
+   "from": [
+    131.65,
+    62.13
+   ],
+   "lane": "PCIE_UP_OUT4_N_J2",
+   "len_mm": 13.48,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "CONN",
+   "to": [
+    131.65,
+    48.65
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_UP_OUT0_N_J2": 1,
+    "PCIE_UP_OUT0_P_J2": 1,
+    "PCIE_UP_OUT1_N_J2": 1,
+    "PCIE_UP_OUT1_P_J2": 1,
+    "PCIE_UP_OUT2_N_J2": 1,
+    "PCIE_UP_OUT2_P_J2": 1,
+    "PCIE_UP_OUT3_N_J2": 1,
+    "PCIE_UP_OUT3_P_J2": 1,
+    "PCIE_UP_OUT4_N_J2": 1
+   },
+   "cross_total": 9,
+   "from": [
+    89.65,
+    54.88
+   ],
+   "lane": "PCIE_UP_OUT4_P_J2",
+   "len_mm": 7.75,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "U6",
+   "to": [
+    89.65,
+    62.63
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_UP_OUT0_P_J2": 1
+   },
+   "cross_total": 1,
+   "from": [
+    140.06,
+    62.63
+   ],
+   "lane": "PCIE_UP_OUT4_P_J2",
+   "len_mm": 14.58,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "CONN",
+   "to": [
+    140.06,
+    48.05
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_UP_OUT0_N_J2": 1,
+    "PCIE_UP_OUT0_P_J2": 1,
+    "PCIE_UP_OUT1_N_J2": 1,
+    "PCIE_UP_OUT1_P_J2": 1,
+    "PCIE_UP_OUT2_N_J2": 1,
+    "PCIE_UP_OUT2_P_J2": 1,
+    "PCIE_UP_OUT3_N_J2": 1,
+    "PCIE_UP_OUT3_P_J2": 1,
+    "PCIE_UP_OUT4_N_J2": 1,
+    "PCIE_UP_OUT4_P_J2": 1
+   },
+   "cross_total": 10,
+   "from": [
+    90.3,
+    55.823
+   ],
+   "lane": "PCIE_UP_OUT5_N_J2",
+   "len_mm": 8.256,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "U6",
+   "to": [
+    90.3,
+    64.079
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_UP_OUT0_P_J2": 1,
+    "PCIE_UP_OUT1_N_J2": 1,
+    "PCIE_UP_OUT4_P_J2": 1
+   },
+   "cross_total": 3,
+   "from": [
+    138.9,
+    64.079
+   ],
+   "lane": "PCIE_UP_OUT5_N_J2",
+   "len_mm": 14.829,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "CONN",
+   "to": [
+    138.9,
+    49.25
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_UP_OUT0_N_J2": 1,
+    "PCIE_UP_OUT0_P_J2": 1,
+    "PCIE_UP_OUT1_N_J2": 1,
+    "PCIE_UP_OUT1_P_J2": 1,
+    "PCIE_UP_OUT2_N_J2": 1,
+    "PCIE_UP_OUT2_P_J2": 1,
+    "PCIE_UP_OUT3_N_J2": 1,
+    "PCIE_UP_OUT3_P_J2": 1,
+    "PCIE_UP_OUT4_N_J2": 1,
+    "PCIE_UP_OUT4_P_J2": 1
+   },
+   "cross_total": 10,
+   "from": [
+    90.85,
+    54.88
+   ],
+   "lane": "PCIE_UP_OUT5_P_J2",
+   "len_mm": 8.699,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "U6",
+   "to": [
+    90.85,
+    63.579
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_UP_OUT0_P_J2": 1,
+    "PCIE_UP_OUT1_N_J2": 1,
+    "PCIE_UP_OUT2_N_J2": 1,
+    "PCIE_UP_OUT2_P_J2": 1,
+    "PCIE_UP_OUT3_N_J2": 1,
+    "PCIE_UP_OUT3_P_J2": 1,
+    "PCIE_UP_OUT4_N_J2": 1,
+    "PCIE_UP_OUT4_P_J2": 1,
+    "PERSTA#": 1
+   },
+   "cross_total": 9,
+   "from": [
+    128.75,
+    63.579
+   ],
+   "lane": "PCIE_UP_OUT5_P_J2",
+   "len_mm": 14.329,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "CONN",
+   "to": [
+    128.75,
+    49.25
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_UP_OUT0_N_J2": 1,
+    "PCIE_UP_OUT0_P_J2": 1,
+    "PCIE_UP_OUT1_N_J2": 1,
+    "PCIE_UP_OUT1_P_J2": 1,
+    "PCIE_UP_OUT2_N_J2": 1,
+    "PCIE_UP_OUT2_P_J2": 1,
+    "PCIE_UP_OUT3_N_J2": 1,
+    "PCIE_UP_OUT3_P_J2": 1,
+    "PCIE_UP_OUT4_N_J2": 1,
+    "PCIE_UP_OUT4_P_J2": 1,
+    "PCIE_UP_OUT5_N_J2": 1,
+    "PCIE_UP_OUT5_P_J2": 1
+   },
+   "cross_total": 12,
+   "from": [
+    91.5,
+    55.823
+   ],
+   "lane": "PCIE_UP_OUT6_N_J2",
+   "len_mm": 9.205,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "U6",
+   "to": [
+    91.5,
+    65.028
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_UP_OUT0_P_J2": 1,
+    "PCIE_UP_OUT1_N_J2": 1,
+    "PCIE_UP_OUT2_P_J2": 1,
+    "PCIE_UP_OUT3_N_J2": 1,
+    "PCIE_UP_OUT3_P_J2": 1,
+    "PCIE_UP_OUT4_N_J2": 1,
+    "PCIE_UP_OUT4_P_J2": 1,
+    "PCIE_UP_OUT5_N_J2": 1,
+    "PERSTA#": 1
+   },
+   "cross_total": 9,
+   "from": [
+    129.91,
+    65.028
+   ],
+   "lane": "PCIE_UP_OUT6_N_J2",
+   "len_mm": 12.778,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "CONN",
+   "to": [
+    129.91,
+    52.25
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_UP_OUT0_N_J2": 1,
+    "PCIE_UP_OUT0_P_J2": 1,
+    "PCIE_UP_OUT1_N_J2": 1,
+    "PCIE_UP_OUT1_P_J2": 1,
+    "PCIE_UP_OUT2_N_J2": 1,
+    "PCIE_UP_OUT2_P_J2": 1,
+    "PCIE_UP_OUT3_N_J2": 1,
+    "PCIE_UP_OUT3_P_J2": 1,
+    "PCIE_UP_OUT4_N_J2": 1,
+    "PCIE_UP_OUT4_P_J2": 1,
+    "PCIE_UP_OUT5_N_J2": 1,
+    "PCIE_UP_OUT5_P_J2": 1,
+    "PCIE_UP_OUT6_N_J2": 1
+   },
+   "cross_total": 13,
+   "from": [
+    92.05,
+    54.88
+   ],
+   "lane": "PCIE_UP_OUT6_P_J2",
+   "len_mm": 10.648,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "U6",
+   "to": [
+    92.05,
+    65.528
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_UP_OUT0_P_J2": 1,
+    "PCIE_UP_OUT1_N_J2": 1,
+    "PCIE_UP_OUT4_P_J2": 1,
+    "PCIE_UP_OUT5_N_J2": 1
+   },
+   "cross_total": 4,
+   "from": [
+    137.74,
+    65.528
+   ],
+   "lane": "PCIE_UP_OUT6_P_J2",
+   "len_mm": 13.878,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "CONN",
+   "to": [
+    137.74,
+    51.65
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_UP_OUT0_N_J2": 1,
+    "PCIE_UP_OUT0_P_J2": 1,
+    "PCIE_UP_OUT1_N_J2": 1,
+    "PCIE_UP_OUT1_P_J2": 1,
+    "PCIE_UP_OUT2_N_J2": 1,
+    "PCIE_UP_OUT2_P_J2": 1,
+    "PCIE_UP_OUT3_N_J2": 1,
+    "PCIE_UP_OUT3_P_J2": 1,
+    "PCIE_UP_OUT4_N_J2": 1,
+    "PCIE_UP_OUT4_P_J2": 1,
+    "PCIE_UP_OUT5_N_J2": 1,
+    "PCIE_UP_OUT5_P_J2": 1,
+    "PCIE_UP_OUT6_N_J2": 1,
+    "PCIE_UP_OUT6_P_J2": 1
+   },
+   "cross_total": 14,
+   "from": [
+    92.7,
+    55.823
+   ],
+   "lane": "PCIE_UP_OUT7_N_J2",
+   "len_mm": 11.154,
+   "near_nets": {
+    "PCIE_UP_OUT0_N_J2": 1
+   },
+   "near_total": 1,
+   "side": "U6",
+   "to": [
+    92.7,
+    66.977
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_UP_OUT0_P_J2": 1,
+    "PCIE_UP_OUT1_N_J2": 1,
+    "PCIE_UP_OUT2_P_J2": 1,
+    "PCIE_UP_OUT4_P_J2": 1,
+    "PCIE_UP_OUT5_N_J2": 1,
+    "PCIE_UP_OUT6_P_J2": 1
+   },
+   "cross_total": 6,
+   "from": [
+    136.58,
+    66.977
+   ],
+   "lane": "PCIE_UP_OUT7_N_J2",
+   "len_mm": 14.127,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "CONN",
+   "to": [
+    136.58,
+    52.85
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_UP_OUT0_N_J2": 1,
+    "PCIE_UP_OUT0_P_J2": 1,
+    "PCIE_UP_OUT1_N_J2": 1,
+    "PCIE_UP_OUT1_P_J2": 1,
+    "PCIE_UP_OUT2_N_J2": 1,
+    "PCIE_UP_OUT2_P_J2": 1,
+    "PCIE_UP_OUT3_N_J2": 1,
+    "PCIE_UP_OUT3_P_J2": 1,
+    "PCIE_UP_OUT4_N_J2": 1,
+    "PCIE_UP_OUT4_P_J2": 1,
+    "PCIE_UP_OUT5_N_J2": 1,
+    "PCIE_UP_OUT5_P_J2": 1,
+    "PCIE_UP_OUT6_N_J2": 1,
+    "PCIE_UP_OUT6_P_J2": 1
+   },
+   "cross_total": 14,
+   "from": [
+    93.7,
+    55.13
+   ],
+   "lane": "PCIE_UP_OUT7_P_J2",
+   "len_mm": 11.347,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "U6",
+   "to": [
+    93.7,
+    66.477
+   ]
+  },
+  {
+   "cross_nets": {
+    "PCIE_UP_OUT0_P_J2": 1,
+    "PCIE_UP_OUT1_N_J2": 1,
+    "PCIE_UP_OUT2_P_J2": 1,
+    "PCIE_UP_OUT3_N_J2": 1,
+    "PCIE_UP_OUT4_N_J2": 1,
+    "PCIE_UP_OUT4_P_J2": 1,
+    "PCIE_UP_OUT5_N_J2": 1,
+    "PCIE_UP_OUT6_P_J2": 1,
+    "PERSTA#": 1
+   },
+   "cross_total": 9,
+   "from": [
+    131.07,
+    66.477
+   ],
+   "lane": "PCIE_UP_OUT7_P_J2",
+   "len_mm": 13.627,
+   "near_nets": {},
+   "near_total": 0,
+   "side": "CONN",
+   "to": [
+    131.07,
+    52.85
+   ]
+  }
+ ],
+ "summary": {
+  "n_segments": 64,
+  "segments_clean_and_ok": 2,
+  "segments_with_crossing": 62,
+  "total_crossings": 569
+ }
+}
