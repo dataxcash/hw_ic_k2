@@ -1,0 +1,37 @@
+{
+ "artifact": "pending_rulings_delta_20260921_v42_dn_2via_in5_infeasibility_and_scope",
+ "authority": "#K2-70 §六②③（≤2 via · In5 32/32）之**差异定性 / 放行范围** = 监理自裁面（承 #K2-67 具名豁免）· #14⑦（先交监理 · 不升 owner）· #K2-72 §六(c) 通道②（几何守恒论证）",
+ "evidence": {
+  "artifact": "k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/K2_72_R208_CW_SCOPE_AND_REALCOPPER_ANCHOR_LEGALITY_V1.json（f220ebb4812690f4）",
+  "data": [
+   "/tmp/opencode/archer/wo_dnonly_2_s7.json（DN 单独 16/16 · 61 违规 · 逐对定位已做）",
+   "/tmp/opencode/archer/fcu_reach_b.json · fcu_reach_full.json",
+   "/tmp/opencode/archer/sites_a_pocket_v2.json · ab_sites_pocketA_eastB.json"
+  ],
+  "ledger": ".omo/start-work/ledger.jsonl R209–R224",
+  "tool": "tools/k2_p4_b2_fcu_fanout_reach_v1.py（本轮实装 --npz）· 驱动 /tmp/opencode/archer/ortho2_run_v{2,3}.py"
+ },
+ "from": "ENG · ARCHER R225",
+ "items": [
+  {
+   "class": "差异定性 / 放行范围（DN_OUT 亚组 · 非拓扑）",
+   "eng_ready": "两分支均可即刻执行：分支A（豁免）= 沿用 l8 拓扑仅按 R3 其余要求施工；分支B（移锚笼）= 需 L1 授权。",
+   "eng_recommend": "**准（具名豁免）**：对 **PCIE_DN_OUT 亚组**豁免『≤2 via / 全 In5』，允许恢复 l8 既有『F→In2（或 B.Cu）分散 → 内层长走 → F』拓扑（UP_OUT 组维持 In5 · 2 via 不变）。若监理要求仍按 2-via/全 In5 ⇒ 必须**移动 U6 侧锚笼出穴**，即触及**球位/接口位 = L1**（届时请转 owner）。",
+   "fact": "① 16 条 DN_OUT 车道之 A 侧过渡孔**必须落在 U6 侧 F.Cu 可达穴**：`fcu_fanout_reach` 实测 = **460 格 = 18.4mm²** · bbox **x∈[83.95,94.15] y∈[50.15,52.55]**（**与 movable 集无关** · 承旧件 `fcu_reach_c3.json` 同穴 522 格/同 bbox）；穴内既有 16 孔集中在 **9.4×0.95mm** 条带（y 51.42/51.67/52.37 · min 两两距 1.092）。② In5 车道对他车道**锚孔**之 keepout 半径（v3 `anchor_keepout`）= hw + max(EFF_MIN+via_r, drill+HOLE_CLR) + PAD_EXTRA = 0.08 + 0.35 + 0.1707 = **0.6007mm** ⇒ 相邻锚 keepout **直径 1.2mm > 条带高 0.95mm** ⇒ **任一新车道在离开本锚时必然进入邻锚 keepout** ⇒ 无合法 In5 扇出。③ 实测一致：硬掩码贪心 init 仅 **4/16**（DN 单独）；软场搜索虽 16/16/32/32 全通，但**恒有 61–121 对真交叉**（逐对定位：共享段 0 · 最近点分布走廊中段 x 65–95 / y 50–56）。④ 既有 l8 可行之因 = **锚处即分散至 F/In2/B 多层**（锚处无需同层互斥）⇒ 『全 In5 + ≤2 via』与 U6 穴口几何**不相容**。"
+  },
+  {
+   "class": "观察（非阻塞 · 不充绿）",
+   "eng_recommend": "记入差异定性档（#K2-67 族）。",
+   "fact": "本会话 R209–R224 之 19/32 A 锚非法、DN 笼带 100% movable、最小 C-w 集、B 侧东移、A 穴容量、掩码更正、逐对定位等，均指向同一结论：**约束在 U6 侧穴口的物理密度**，而非路由算法。"
+  }
+ ],
+ "not_asked": [
+  "不请求放松 DRC 下限（通道/孔距/3W/85Ω 一项不动）",
+  "不请求改球位（若监理认定必须移锚笼出穴 ⇒ 请明确为 L1 并转 owner）",
+  "不以本件替代二值：ENG 已同时保留 A 笼 v2 之 32 条 run 读数（32/32 · 违规 69）供监理独立复核"
+ ],
+ "owner_gate": 0,
+ "schema": "pending_rulings_delta/v1",
+ "to": "监理",
+ "ts": "2026-09-21T22:40+08:00"
+}
