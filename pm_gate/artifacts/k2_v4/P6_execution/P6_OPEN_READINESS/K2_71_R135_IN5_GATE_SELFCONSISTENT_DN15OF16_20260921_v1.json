@@ -1,0 +1,102 @@
+{
+ "F-gate": {
+  "fix": "① 去重（margin = d - VR - hw）② 新增 `PAD_EXTRA = --margin + 0.5*cell*sqrt(2)`（设计余量 + 折角安全）并入障碍膨胀与锚孔 keepout ③ `--pitch` 仍报 DRC 0.335，自动取 `pitch_eff = 0.335 + --margin`",
+  "kind": "工具缺陷（可证 · 决定性）· #K2-71 §五-2 之前置",
+  "root_cause": "v3 `exact_gate` 之 via/pad 分支 `margin = d - VR - hw - EFF_MIN`：**VR/PR 已含 eff(net)** ⇒ EFF_MIN 被**重复计入** ⇒ 恒 −0.175mm；余 −0.0057mm = 格心折线**折角**贴限",
+  "validation_fresh_runs": "新跑（--margin 0.100 · cell 0.1）**负余量 = 0** 且 `clearance_min_mm = +0.1720`（DN-split）/ **+0.1783**（全 32）· `lane_pitch_min_gap_mm = 0.4472` ≥ 0.435",
+  "validation_same_routes": "同批旧 routes 复算：−0.1807 → **−0.0057**（= 折角残差 0.0057 ✓ 与 0.1807−0.175 相符）",
+  "判据_⑨": "**已满足**（闸自洽 · 负余量 0 · 每车道余量 ≥0.100 具名）"
+ },
+ "F-orc": {
+  "artifact": "/tmp/opencode/archer/movable_derive_v1.json（sha16 **873926083096d586**）",
+  "cmd": "python3 tools/k2_p4_b2_in5_lane_router_v3.py --model <dump> --out <wo> --cell 0.10 --margin 0.100 --movable-nets \"<51>\" --movable-copper \"<51>,GND,P3V3\"",
+  "counts": {
+   "pads_frozen_in_region": 101,
+   "refplane_stitch": 162,
+   "tracks": 460,
+   "vias": 57
+  },
+  "kind": "规则派生集（#K2-71 §2.2 · 判据 ⑩）",
+  "movable_nets_n": 51,
+  "movable_stitch": [
+   "GND",
+   "P3V3"
+  ],
+  "new_entries_report": "**需求 2 报件**：R-orc 规则使 **32 条 PCIE_UPn/DNn + 4 条 REFCLK 亦落入 movable**（原案未列 · 均为差分对/等长组）。⇒ 若实际移位之，须依 **需求 4 同报匹配/等长复核**。**物理后果**：DN 侧 F.Cu 可达域由 10.2×1.4mm 窄带 → **全板连通域**（461436 候选格 @0.1mm）⇒ Q2『加宽』之代价 = **重布这 32 对高速对之 F.Cu 扇出**（SI/等长全重做），非仅 DC strap 级改动。",
+  "region": [
+   78.0,
+   45.0,
+   100.0,
+   66.0
+  ],
+  "tool": "tools/k2_p4_b2_corridor_movable_derive_v1.py ceffb12555a71d1d"
+ },
+ "F-q2": {
+  "design": "依 Q2 重设 A 锚位：DN 16 锚**两带分摊**（DN 带 y 50.95/52.35 · UP 带 y 54.25/55.85 · 行内 x 步 1.40mm）⇒ 相邻 keepout 净缝 = 1.40 − 2×0.53 = **0.34mm**（margin 0.100 口径下可分辨 · 旧 1.100mm 锚距则仅 0.04mm ⇒ 结构封死，**故 Q2 重设是必要条件**）",
+  "kind": "Q2 落效（A 逃逸带加宽 + 两带分摊）",
+  "measured": "规则派生集下 R-A-①（F.Cu 可达）复算：DN A 组分 bbox = **[83.95,50.75]–[94.15,52.55]（1.8mm 高，376 格）→ 全板组分（461436 格）**；旧 1.4mm 窄带系**他 32 对 PCIE 之 F.Cu 走线**圈成（已被规则派生集判为可移 ⇒ 放开）。"
+ },
+ "artifact": "k2_71_r135_in5_escape_gate_selfconsistent_dn15of16",
+ "authority": "#K2-71 §五-2（闸自洽为提交见证之前置）· §六（R-A 终局轮 + R-B 并行 · 二值限期）· §2.2（R-orc 规则派生）· §三（Q2 锚位两带分摊）",
+ "headline": "**闸自洽前置已清除**（负余量 0 · 每车道余量 +0.1720mm ≥0.100）· **R-orc 规则派生 movable 集已脚本化**（51 网 + GND/P3V3 缝合孔）· 依 Q2 重设 A 锚位（DN 16 锚两带分摊 · 1.40mm 间距）⇒ **DN 组 15/16**（0 闸违规）· 全 32 网格布局 18/32 ⇒ **二值仍未达成（差 1 条 DN / 14 条 UP）**；R-B 本轮未出证书。",
+ "landed_tools": {
+  "tools/k2_p4_b2_corridor_movable_derive_v1.py": "ceffb12555a71d1d（**新** · R-orc 规则派生）",
+  "tools/k2_p4_b2_fcu_fanout_reach_v1.py": "2ecc29d954de576a（+ --movable-copper）",
+  "tools/k2_p4_b2_in5_lane_router_v3.py": "f8e3be7a719ea504（**闸双计修正** + --margin/--movable-copper + PAD_EXTRA 折角安全）"
+ },
+ "next": [
+  "① DN 收口：OUT1_P 一例 —— 换 restarts 种子/顺序（该车道在 split 集下 60 轮未过）或微调其 A 锚 1 格",
+  "② UP 组同法（Q2）：UP 16 锚重设（可向西/东错开 + 两带分摊）后重跑；当前 32 网格布局下 UP 14/16 失败 ⇒ 组间空间未分离",
+  "③ R-B（并行 · 本轮未完成）：ILP/分支定界求严格上界；几何守恒论证仍缺严格化",
+  "④ 新条目报件已附（32 条 HS 对 + 4 REFCLK 入 movable · 若真移须报匹配/等长复核）"
+ ],
+ "red_lines_ok": [
+  "只读板件",
+  "冻结四源未动",
+  "criteria/ 未碰（rev=6）",
+  "l4..l8 逐字节未动",
+  "未派 WORKER",
+  "未写 .omo/supervision/**",
+  "未越阶段"
+ ],
+ "runs": [
+  {
+   "a_sites": "a_sites_dn_split_v1.json（16 · 两带分摊）",
+   "algo": "hard",
+   "cell": 0.1,
+   "failed": [
+    "PCIE_DN_OUT1_P_MCIO"
+   ],
+   "gate": {
+    "clearance_min_mm": 0.172,
+    "endpoint_max_dev_mm": 0.0,
+    "lane_pitch_min_mm": 0.4472,
+    "n_clearance_viol": 0,
+    "n_lane_pitch_viol": 0
+   },
+   "groups": "PCIE_DN_OUT",
+   "restarts": 60,
+   "routed": "**15/16**",
+   "tag": "DN-split(Q2)-margin0.100-hard"
+  },
+  {
+   "a_sites": "a_sites_32_grid_v1.json（DN y50.20/51.70 · UP y54.30/55.80 · x 84.7–95.2 步1.50）",
+   "algo": "hard",
+   "cell": 0.1,
+   "failed_n": 14,
+   "gate": {
+    "clearance_min_mm": 0.1783,
+    "endpoint_max_dev_mm": 0.0,
+    "lane_pitch_min_mm": 0.4472,
+    "n_clearance_viol": 0,
+    "n_lane_pitch_viol": 0
+   },
+   "restarts": 30,
+   "routed": "**18/32**",
+   "tag": "ALL32-grid-margin0.100-hard"
+  }
+ ],
+ "schema": 1,
+ "ts": "2026-09-21T15:4x+08:00",
+ "verdict": "**二值仍未达成**：见证缺 **1 条 DN（OUT1_P）+ 14 条 UP**；证书未出（R-B 本轮未完成）。**但闸已自洽（⑨ 满足）且差口已缩小到 1 条 DN** —— 此为「工具/口径修复」而非「工具再升一版」：v3 版本不变，仅修正其闸内**双计缺陷**并加参数。"
+}

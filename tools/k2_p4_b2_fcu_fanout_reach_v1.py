@@ -95,7 +95,7 @@ class R:
         return int(round((x - self.X0) / self.step)), int(round((y - self.Y0) / self.step))
 
 
-def build_fcu(rast, model, movable_tracks, movable_stitch):
+def build_fcu(rast, model, movable_tracks, movable_stitch, movable_copper=frozenset()):
     """F.Cu 障碍：其他网铜（孔/盘按同口径）。本批车道之**走线**与 movable 网之走线可拆。"""
     bad = np.zeros((rast.NX, rast.NY), dtype=bool)
     for s in model["segs"]["F.Cu"]:
@@ -107,7 +107,7 @@ def build_fcu(rast, model, movable_tracks, movable_stitch):
         if "F.Cu" not in v["layers"]:
             continue
         net = v["net"]
-        if is_lane(net) or net in movable_stitch:
+        if is_lane(net) or net in movable_stitch or net in movable_copper:
             continue
         rad = max(v["r"] + eff(net), v["drill"] + HOLE_CLR)
         rast.cir(bad, v["x"], v["y"], HW_FCU + rad)
@@ -138,13 +138,15 @@ def main():
     ap.add_argument("--cell", type=float, default=0.20)
     ap.add_argument("--movable-nets", default="")
     ap.add_argument("--movable-stitch", default="")
+    ap.add_argument("--movable-copper", default="", help="可腾挪网：**孔**可移 · **盘**仍冻结")
     ap.add_argument("--npz", default=None)
     a = ap.parse_args()
     model = json.load(open(a.model))
     movable = set(x for x in a.movable_nets.split(",") if x)
     mstitch = set(x for x in a.movable_stitch.split(",") if x)
+    mcopper = set(x for x in a.movable_copper.split(",") if x)
     rast = R(model, a.cell)
-    bad = build_fcu(rast, model, movable, mstitch)
+    bad = build_fcu(rast, model, movable, mstitch, mcopper)
     free = ~bad
     lab, n = ndimage.label(free, structure=np.ones((3, 3), bool))
     sizes = np.bincount(lab.ravel())
@@ -184,6 +186,7 @@ def main():
 
     rep = {"artifact": "k2_p4_b2_fcu_fanout_reach_v1", "model": a.model, "cell_mm": a.cell,
            "hw_fcu_mm": HW_FCU, "movable_nets": sorted(movable), "movable_stitch": sorted(mstitch),
+           "movable_copper": sorted(mcopper),
            "board": model.get("board"), "n_free_cells": int(free.sum()), "n_components": int(n), "lanes": {}}
     for nm in sorted(lanes):
         d = lanes[nm]

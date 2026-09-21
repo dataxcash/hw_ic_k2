@@ -30,6 +30,7 @@ from k2_p4_b2_in5_capacity_probe_v1 import req, is_lane  # noqa: E402
 
 EFF_MIN = 0.175
 HOLE_CLR = 0.25
+PAD_EXTRA = 0.0   # 障碍膨胀外扩（设计余量 + 折角安全量）· 由 main 依 --margin/--cell 设定
 NBR = ((1, 0, 1.0), (-1, 0, 1.0), (0, 1, 1.0), (0, -1, 1.0),
        (1, 1, math.sqrt(2)), (1, -1, math.sqrt(2)), (-1, 1, math.sqrt(2)), (-1, -1, math.sqrt(2)))
 
@@ -124,31 +125,31 @@ def lane_anchors(model):
     return out
 
 
-def build_base(rast, model, layer, movable_tracks, movable_vias, hw):
+def build_base(rast, model, layer, movable_tracks, movable_vias, hw, movable_copper=frozenset()):
     """静态障碍（不含车道锚孔）：其他网铜 + 可腾挪网之孔/盘 + 禁布线区；净距 = hw + max(0.175, req)。"""
     bad = np.zeros((rast.NX, rast.NY), dtype=bool)
     for s in model["segs"][layer]:
         net = s[5]
         if is_lane(net) or net in movable_tracks:
             continue
-        rast.seg(bad, s[0], s[1], s[2], s[3], hw + s[4] + eff(net))
+        rast.seg(bad, s[0], s[1], s[2], s[3], hw + s[4] + eff(net) + PAD_EXTRA)
     for v in model["vias"]:
         if layer not in v["layers"]:
             continue
         net = v["net"]
-        if is_lane(net) or net in movable_vias:
+        if is_lane(net) or net in movable_vias or net in movable_copper:
             continue
         rad = max(v["r"] + eff(net), v["drill"] + HOLE_CLR)
-        rast.cir(bad, v["x"], v["y"], hw + rad)
+        rast.cir(bad, v["x"], v["y"], hw + rad + PAD_EXTRA)
     for p in model["pads"]:
         if is_lane(p["net"]) or p["net"] in movable_vias:
             continue
         if layer not in p["layers"] and not p["pth"]:
             continue
         b = p["box"]
-        rast.rect(bad, b[0], b[1], b[2], b[3], hw + eff(p["net"]))
+        rast.rect(bad, b[0], b[1], b[2], b[3], hw + eff(p["net"]) + PAD_EXTRA)
         if p["pth"] and p.get("drill"):
-            rast.cir(bad, p["cx"], p["cy"], hw + p["drill"] + HOLE_CLR)
+            rast.cir(bad, p["cx"], p["cy"], hw + p["drill"] + HOLE_CLR + PAD_EXTRA)
     for ra in model["ruleareas"]:
         if not (ra["no_tracks"] and layer in ra["layers"]):
             continue
@@ -163,7 +164,7 @@ def anchor_keepout(rast, anchors, hw):
     own = {}
     for an in anchors:
         local = np.zeros((rast.NX, rast.NY), dtype=bool)
-        rad = hw + max(EFF_MIN + an["via_r"], an["drill"] + HOLE_CLR)
+        rad = hw + max(EFF_MIN + an["via_r"], an["drill"] + HOLE_CLR) + PAD_EXTRA
         rast.cir(local, an["A"][0], an["A"][1], rad)
         rast.cir(local, an["B"][0], an["B"][1], rad)
         c_all += local.astype(np.int16)
@@ -261,7 +262,7 @@ def _seg_rect_dists(segs, boxes):
     return out
 
 
-def exact_gate(model, routes, anchors, layer, hw, movable_tracks, movable_vias, pitch):
+def exact_gate(model, routes, anchors, layer, hw, movable_tracks, movable_vias, pitch, movable_copper=frozenset()):
     segs = {}
     for nm, r in routes.items():
         p = [tuple(q) for q in r["pts"]]
@@ -286,7 +287,7 @@ def exact_gate(model, routes, anchors, layer, hw, movable_tracks, movable_vias, 
         if layer not in v["layers"]:
             continue
         net = v["net"]
-        if is_lane(net) or net in movable_vias:
+        if is_lane(net) or net in movable_vias or net in movable_copper:
             continue
         obs_via.append(((v["x"], v["y"]), max(v["r"] + eff(net), v["drill"] + HOLE_CLR), net))
     for p in model["pads"]:
@@ -317,7 +318,7 @@ def exact_gate(model, routes, anchors, layer, hw, movable_tracks, movable_vias, 
         if len(V):
             A = sg[:, 0, :]; Bp = sg[:, 1, :]
             d = _pt_seg_pts(V, A, Bp).T
-            margin = d - VR[None, :] - hw - EFF_MIN
+            margin = d - VR[None, :] - hw
             k = int(np.argmin(margin) % margin.shape[1])
             if margin.min() < worst[0]:
                 worst = (float(margin.min()), obs_via[k][2])
@@ -325,7 +326,7 @@ def exact_gate(model, routes, anchors, layer, hw, movable_tracks, movable_vias, 
                 viol_obs.append((nm, obs_via[k][2], "via", round(float(margin.min()), 4)))
         if len(PB):
             d = _seg_rect_dists(sg, PB)
-            margin = d - PR[None, :] - hw - EFF_MIN
+            margin = d - PR[None, :] - hw
             k = int(np.argmin(margin) % margin.shape[1])
             if margin.min() < worst[0]:
                 worst = (float(margin.min()), obs_pad[k][2])
@@ -355,14 +356,16 @@ def main():
     ap.add_argument("--layer", default="In5.Cu")
     ap.add_argument("--cell", type=float, default=0.10)
     ap.add_argument("--lane-w", type=float, default=0.16)
-    ap.add_argument("--pitch", type=float, default=0.335)
+    ap.add_argument("--pitch", type=float, default=0.335, help="In5 车道两两中心距**下限**（DRC 口径 0.335）")
+    ap.add_argument("--margin", type=float, default=0.100, help="设计余量（超越 DRC 下限 · 判据要求 ≥0.100mm）")
     ap.add_argument("--iters", type=int, default=12)
     ap.add_argument("--seed", type=int, default=7)
     ap.add_argument("--pf0", type=float, default=1.0)
     ap.add_argument("--hf", type=float, default=0.05)
     ap.add_argument("--repair", type=int, default=60)
     ap.add_argument("--movable-nets", default="")
-    ap.add_argument("--movable-stitch", default="")
+    ap.add_argument("--movable-stitch", default="", help="可腾挪网：**孔/盘**亦不计入障碍")
+    ap.add_argument("--movable-copper", default="", help="可腾挪网：**孔**不计入障碍（盘仍冻结）")
     ap.add_argument("--a-sites", default=None)
     ap.add_argument("--b-sites", default=None)
     ap.add_argument("--no-gate", action="store_true")
@@ -373,9 +376,14 @@ def main():
     model = json.load(open(a.model))
     movable = set(x for x in a.movable_nets.split(",") if x)
     movable_vias = set(x for x in a.movable_stitch.split(",") if x)
+    movable_copper = set(x for x in a.movable_copper.split(",") if x)
     hw = a.lane_w / 2.0
+    global PAD_EXTRA
+    corner = 0.5 * a.cell * math.sqrt(2.0)     # 折角安全量：格心折线最坏贴限制
+    PAD_EXTRA = a.margin + corner
+    pitch_eff = a.pitch + a.margin
     rast = Raster(model["bbox"], a.cell)
-    base = build_base(rast, model, a.layer, movable, movable_vias, hw)
+    base = build_base(rast, model, a.layer, movable, movable_vias, hw, movable_copper)
     anchors = lane_anchors(model)
     for src, key in ((a.a_sites, "A"), (a.b_sites, "B")):
         if src:
@@ -390,8 +398,8 @@ def main():
     fixed_ok = ~base
     G, idx = build_topology(fixed_ok, a.cell)
     NN = idx.max() + 1
-    print("车道 %d · 栅格 %dx%d cell=%.2f · 固定单元 %d · pitch=%.3f lane_w=%.3f" %
-          (len(anchors), rast.NX, rast.NY, a.cell, NN, a.pitch, a.lane_w))
+    print("车道 %d · 栅格 %dx%d cell=%.2f · 固定单元 %d · pitch_eff=%.3f(DRC %.3f + 余量 %.3f) · lane_w=%.3f · 折角安全 %.4f" %
+          (len(anchors), rast.NX, rast.NY, a.cell, NN, pitch_eff, a.pitch, a.margin, a.lane_w, corner))
 
     tasks = []
     blk2d = {}
@@ -449,7 +457,7 @@ def main():
     for k in sorted(nz)[:40]:
         print("     %-28s A=%.3f B=%.3f" % (k, nz[k]["A"], nz[k]["B"]))
 
-    offs = disk_offsets(a.cell, a.pitch)
+    offs = disk_offsets(a.cell, pitch_eff)
 
     def stamp(occ1d, path_ij):
         pi = np.array([p[0] for p in path_ij], np.int64)
@@ -562,7 +570,7 @@ def main():
     gate = None
     if not a.no_gate and routes:
         try:
-            gate = exact_gate(model, routes, anchors, a.layer, hw, movable, movable_vias, a.pitch)
+            gate = exact_gate(model, routes, anchors, a.layer, hw, movable, movable_vias, pitch_eff, movable_copper)
         except Exception as e:  # noqa: BLE001
             print("  ⚠ 闸异常：%s: %s" % (type(e).__name__, e))
             gate = {"error": "%s: %s" % (type(e).__name__, e)}
@@ -570,7 +578,8 @@ def main():
               (gate["lane_pitch_min_gap_mm"], a.pitch, gate["n_lane_pitch_viol"],
                gate["clearance_min_mm"], gate["n_clearance_viol"], gate["endpoint_max_dev_mm"]))
     wo = {"artifact": "k2_p4_b2_in5_lane_router_v3_workorder", "layer": a.layer, "cell_mm": a.cell,
-          "lane_w_mm": a.lane_w, "pitch_mm": a.pitch, "model": a.model, "movable_nets": sorted(movable),
+          "lane_w_mm": a.lane_w, "pitch_mm": a.pitch, "pitch_eff_mm": pitch_eff,
+          "margin_mm": a.margin, "pad_extra_mm": PAD_EXTRA, "model": a.model, "movable_nets": sorted(movable),
           "n_lanes": len(anchors), "n_routed": len(routes),
           "failed": sorted(t["an"]["net"] for t in tasks if t["an"]["net"] not in routes),
           "routes": routes, "geometric_gate": gate,
