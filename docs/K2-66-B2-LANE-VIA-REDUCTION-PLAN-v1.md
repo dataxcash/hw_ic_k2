@@ -580,3 +580,11 @@ V1=车道 A 锚（U6 侧）· V4=车道 B 锚（连接器侧）· 4 via/线
 - **前提（具名）**：B.Cu 中段 + **具名 ECO 集** `{P3V3, GND, I2C1_SDA, P3V3_AUX}`（其余网保持不动）。
 - **未闭合**：① `apply`（换 span · 删 V2/V3+B.Cu/In2 腿 · 执行 ECO · **铺铜重灌**）；② 端点 stub（via→栅格）生成与复核；
   ③ 长度 84.4 vs 61.3mm ⇒ §7-3/SI；④ 缝合孔腾挪同报 `ref_plane_continuity`；⑤ R4 复测闸；⑥ l9 落库（硬前置 criteria rev=7）。
+
+### §15.9 R3-(a) **apply 首次执行**（工程件 · 未落库）：`unconnected=0` / DRC 未过（= 具名 ECO 未做）
+- 工具（入库 · pcbnew）：`tools/k2_p4_b2_bcu_apply_v1.py`（V4 同位换 span ×32 · 删 V2/V3 ×64 · 删中段腿 **保留 F.Cu 扇出** · 新布 B.Cu 长走 526 段 + stub 64 · **铺铜重灌 ZONE_FILLER**）。
+- 结果：**`unconnected = 0`**（32 条车道拓扑连通 ✓）· DRC 违规 **580**（基线 267 ⇒ +313）·
+  **与具名 ECO 网相关者 = `GND` 110 · `P3V3` 40 · `I2C1_SDA` 30 · `P3V3_AUX` 3**（短路 146 / 间距 87 / 交叉 66）
+  ⇒ **完全符合工作令前提**（该解是在「ECO 集已腾挪」假设下求得）。
+- WIP 板 `/tmp/opencode/w4/d.kicad_pcb`（可确定性重跑：dump → router v4 → apply）· **未落 `hw/` · 未打 tag**（gate 未过）。
+- ⇒ 下一步 = **实做具名 ECO**（缝合孔腾挪 + `I2C1_SDA`/`P3V3_AUX` 改道）⇒ 重跑精确闸 + DRC ⇒ §7-3 等长 ⇒ R4。

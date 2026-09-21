@@ -1,0 +1,73 @@
+{
+ "apply_ledger": {
+  "add_runs": 526,
+  "add_stubs": 64,
+  "del_lane_tracks": 1217,
+  "del_vias": 64,
+  "n_lanes": 32,
+  "swap_via_FIn2_to_FB": 32,
+  "zone_refill": "ZONE_FILLER OK"
+ },
+ "artifact": "k2_68_r3h_bcu_apply_first_execution",
+ "authority": "#K2-69 §五-2（R3 施工：32 条整批改接 + 铺铜重灌）· #K2-68 §2.4(a)-3/-5",
+ "board": "/tmp/opencode/w4/d.kicad_pcb（= R1E 套用后 · 未落库 · 可确定性重跑再生）",
+ "caveats": [
+  "本件为**施工中间态**：`unconnected=0` 但 DRC 未过（580 违规）⇒ **不得**视为可交付/可制造。",
+  "板件在 `/tmp`（WIP）· **未落 `hw/`** · 未打 tag（gate 未过）。",
+  "`track_not_centered_on_via` 45 / `via_dangling` 6 属本批 stub 接续细节 ⇒ 须在 ECO 后一并清理。"
+ ],
+ "drc": {
+  "by_type": {
+   "clearance": 87,
+   "copper_sliver": 12,
+   "courtyards_overlap": 2,
+   "items_not_allowed": 2,
+   "lib_footprint_issues": 54,
+   "pth_inside_courtyard": 1,
+   "shorting_items": 146,
+   "silk_edge_clearance": 11,
+   "silk_overlap": 148,
+   "track_not_centered_on_via": 45,
+   "tracks_crossing": 66,
+   "via_dangling": 6
+  },
+  "eco_net_related": {
+   "GND": 110,
+   "I2C1_SDA": 30,
+   "P3V3": 40,
+   "P3V3_AUX": 3
+  },
+  "reading": "**未执行具名 ECO** ⇒ 新布 B.Cu 长走与 `I2C1_SDA`/`P3V3`/`GND`/`P3V3_AUX` 相撞（短路 146 · 间距 87 · 交叉 66）—— 与工作令前提完全一致：本工作令是**在具名 ECO 集已腾挪**之假设下求得的；**下一步 = 实做 ECO** 再重跑 DRC。",
+  "total": 580,
+  "unconnected": 0
+ },
+ "headline": "**R3-(a) apply 首次执行完成（工程件 · 未落库）**：V4 **同位换 span F–In2→F–B ×32** · 删 V2/V3 共 **64 孔** · 删中段腿 **1217 段**（**保留 F.Cu 扇出**）· 新布 B.Cu 长走 **526 段**（32 条）· 端点 stub **64 条** · **铺铜重灌 ZONE_FILLER OK**。**kicad-cli DRC：`unconnected = 0`**（32 条车道拓扑连通 ✓）· 违规 **580**（基线 267 ⇒ 本批 +313）。",
+ "next_steps": [
+  "① **实做具名 ECO**：`P3V3`/`GND` 缝合孔腾挪（U6 逃逸带 · §2.4(a)-2）+ `I2C1_SDA`（或 `P3V3_AUX`）走线改道（§2.4(a)-3）⇒ 消解 146 短路/87 间距/66 交叉。",
+  "② 重跑 **几何精确闸 + kicad-cli DRC** ⇒ 目标 error 仅 #K2-67 具名 · `unconn 0` · `mask_bridge 0` · 告警零回归。",
+  "③ 缝合孔腾挪同报 `ref_plane_continuity`（non_antipad_gap==0）/EMC。",
+  "④ §7-3 等长/蛇形（长度中位 84.4 vs 61.3mm · P/N 同步 · skew ≤0.15mm）+ SI。",
+  "⑤ R4 复测闸（#K2-69 §六 ①–⑧：最大流 ≥32 · 探针 32/32 · **B2 行 32/32 ≤2 via** · DRC · ref_plane_continuity · 19 维不回归）。",
+  "⑥ l9 落 `hw/` + `spec-rev-55` 同笔（硬前置 `criteria/` rev=7）。"
+ ],
+ "red_lines_ok": [
+  "未改冻结四源",
+  "未改 generator/SPEC/原理图",
+  "criteria/ 只读未碰",
+  "l4..l8 未动",
+  "未派 WORKER",
+  "临时仅 /tmp/opencode",
+  "未越阶段"
+ ],
+ "schema": 1,
+ "tools": {
+  "apply": "tools/k2_p4_b2_bcu_apply_v1.py 6114151d49498dfa",
+  "router": "tools/k2_p4_b2_bcu_router_v1.py bc13e5fbec2f613e"
+ },
+ "ts": "2026-09-21T17:0x+08:00",
+ "wip_board": {
+  "note": "WIP（未落库 · 可确定性重跑：dump → router v4 → apply）",
+  "path": "/tmp/opencode/w4/d.kicad_pcb",
+  "sha256": "6ae9e57a90838e98"
+ }
+}
