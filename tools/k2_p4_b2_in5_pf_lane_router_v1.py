@@ -90,12 +90,15 @@ def flat_to_cells(flat):
 nest_order = sorted(LANES, key=lambda n: (-B[n][1], -B[n][0]))
 nets = list(nest_order)
 hist = np.zeros(NN, np.float64)
+last_failed = []
 best = None
 t0 = time.time()
 for it in range(NIT):
     present = np.zeros(NN, np.float64)
     present_hard = np.zeros((NX, NY), bool)
     paths = {}
+    if it > 0 and last_failed:
+        nets = [n for n in nest_order if n in last_failed] + [n for n in nest_order if n not in last_failed]
     pfac = 1.0 + 0.3 * it          # 标准 PathFinder：present 罚随时间增大
     for nm in nets:
         c = 1.0 + pfac * present + 1.0 * hist
@@ -104,7 +107,7 @@ for it in range(NIT):
         nodes_bad = idx[bad & free]
         if len(nodes_bad):
             c[nodes_bad] = 1e9      # 他道锚孔 keepout（硬）
-        c2 = c.copy(); c2[idx[present_hard & free]] = 1e9   # 本轮内已布道之 pitch/2 硬禁
+        c2 = c.copy(); c2[idx[present_hard & free]] = np.inf   # 本轮内已布道之**真硬禁**（不可跨越）
         pp = route_one(nm, c2)
         if pp is None:
             continue
@@ -125,6 +128,7 @@ for it in range(NIT):
         for (i, j) in flat_to_cells(paths[nm]):
             m[i, j] = True
         cover[edt_dil(m, PITCH / 2.0)] += 1
+    last_failed = [n for n in nets if n not in paths]
     over = np.maximum(0, cover - 1)
     n_over = int(over.sum())
     print("it %2d  routed=%2d  overuse_cells=%6d  t=%.0fs" % (it, len(paths), n_over, time.time() - t0), flush=True)

@@ -1,0 +1,92 @@
+{
+ "anchors": {
+  "caliber": "物理 keepout 0.5300（余量 0.100 未改）",
+  "criteria": "rev=6 MATCH（ENG 只读）",
+  "frozen_sources": {
+   "_shared/eda_core/drc_rules.json": "0a459839e15960b8",
+   "k2/hw/data/k2_sch.yaml": "dd794c54f7ce7417",
+   "k2/hw/k2_v4_8L.kicad_pcb": "fb07d25ac426ff84",
+   "k2/hw/k2_v4_8L.l4.kicad_pcb": "d4e81f647be7f980"
+  },
+  "reviewed_board": "k2/hw/k2_v4_8L.l8.kicad_pcb = 7a5c89913d6e5d0a"
+ },
+ "artifact": "k2_r260_conservation_blocker_report_v53",
+ "authority": "监理停止令（收敛停滞 ≈29 轮）· 《整改计划》P4 · #K2-132 §三（一次实现）· #K2-133 §三 N1",
+ "bans_kept": "未改冻结四源 · criteria 只读 · 未烙板 · 未派 WORKER · 临时仅 /tmp/opencode · 未以 12/16 作见证 · 未以有界搜索冒充证书（本件互斥指纹**明示为启发式实证·非证书**）· 未自行 C-w",
+ "binary_result": {
+  "(a)_16_16_witness": "**未取得**。真硬分离下最优 = **合法 12/16**（0 viol · min gap 0.4528 ≥0.435 ✅ · 对障碍 0 viol · 端点位移 0.0）。非见证（禁以 12/16 作见证）。",
+  "(b)_conservation_certificate": "**未取得严格证书**；但取得**强候选机制 + 可复现互斥指纹**（见下）。"
+ },
+ "evidence": {
+  "F6_nesting_swap": "A 排嵌套序(a_rank=A.x 升) 与 B 侧嵌套序(p_rank=B.y 升) **差 4 组相邻互换**：`0_N↔0_P`·`2_N↔2_P`·`4_N↔4_P`·`6_N↔6_P`（逆序对 4/120）⇒ 单层束「序一致」被破坏 ⇒ 与上列**被排除集 {0_N,0_P,1_P,2_P} 高度重合（含 0_N/0_P）**。",
+  "fingerprint_mutual_exclusion": {
+   "cross_method_consistency": "既有**顺序硬避让**布线器（次序枚举 · 20 序）之最优亦为 **12/16**，其**成功集与失败集与本件逐条相同** ⇒ **两独立方法落在同一堵墙、墙位逐条相同**。",
+   "observed": "自适应优先（失败网先布）时：**只布通 4/16（= 被排除 4 集）**，其余 12 全失败；否则布通 12/16。两者**皆 0 违规** ⇒ **12 集 ⊻ 4 集**（从不同时）。",
+   "件": "L4/E3-standard-call-l8-20260922-pf/wo_pf_hardsep045_adaptivepri_c05_n40_legal12of16.json"
+  },
+  "legal12_of_16": {
+   "excluded_set": [
+    "0_N",
+    "0_P",
+    "1_P",
+    "2_P"
+   ],
+   "gate": {
+    "clearance_min_mm": 0.1003,
+    "endpoint_max_dev_mm": 0.0,
+    "lane_pitch_min_gap_mm": 0.4528,
+    "n_clearance_viol": 0,
+    "n_lane_pitch_viol": 0
+   },
+   "legal_set": [
+    "1_N",
+    "2_N",
+    "3_N",
+    "3_P",
+    "4_N",
+    "4_P",
+    "5_N",
+    "5_P",
+    "6_N",
+    "6_P",
+    "7_N",
+    "7_P"
+   ],
+   "routed": "12/16",
+   "tag": "真硬分离 sep0.45 · cell 0.05 · 30 轮",
+   "件": "L4/E3-standard-call-l8-20260922-pf/wo_pf_hardsep045_c05_n30_legal12of16.json"
+  }
+ },
+ "fields_4": {
+  "1_layer": "**算法/实现能力层**（*严格证书*面）+ **几何-拓扑层（候选）**：单层束之「**嵌套序一致性**」不变量。非判据层、非 owner。",
+  "2_resource": "**In5 走廊**（东通道 7.35mm/17 槽 · A 排出口自由带 · 缝合孔场 + `PERSTA#` In5 带(8 段) + 连接器通孔列之强制绕行）。",
+  "3_occupied_by": "**不被任何对象占死**（反证：任意 cell 级割最大流 =32 终端饱和 ⇒ 无 <16 割；东通道 17 槽 ≥16）；**但**被**「束之序」**占死（候选）：A 排与 B 侧之嵌套序**不同构**（F-6），且两独立方法一致地把 `{0_N,0_P,1_P,2_P}` 逐出。",
+  "4_why_no_assignment": "**候选成立（未证）**：单层既有「A 侧 x 序」又有「B 侧绕行序」，二者须沿**同一条绕墙束**保持一致；F-6 之 4 组相邻互换使该一致性不可能**由简单嵌套**达成；真硬分离实测之**互斥指纹**（12 ⊻ 4 · 皆 0 违规 · 两独立方法墙位逐条相同）即其**实证**。**严格证书**尚缺：需证明「束序不变量」（绕墙环带不可换序）**或**精确 MILP 判定。"
+ },
+ "from": "ENG · ARCHER（应监理**第二次**停止令：本件必须出二值）",
+ "next_stage_plan": [
+  {
+   "budget": "并入 #K2-132 §三 同一次实现（不增次数）",
+   "id": "N1",
+   "item": "**严格 (b) 证书（最后一里）**：以「序不变量」论证（把东通道+南通道+北带视为一条束，证 16 车道之 A 序与 B 序必须一致）**或** 精确 MILP（序变量 + 不可交叉）⇒ 若得 U<16 ⇒ 依 #K2-70 §六③ + #K2-132 §四 **具名豁免 = 监理自裁**（免再问 owner）。"
+  },
+  {
+   "id": "N2",
+   "item": "若监理改按 (a)：以**换序构造**（F-6 之 4 组互换以局部绕行/让线实现）一次实现 ⇒ 16/16 + buildability.mode=\"no_move\"。"
+  },
+  {
+   "id": "N3",
+   "item": "l9 落库同批（D2）⇒ 判定器 19/19 @bump 件；随后 R4 复测闸 ⇒ P4 全绿方下 P5。"
+  }
+ ],
+ "owner_gate": 0,
+ "round_action": "把「轮内分离」由**费用罚**(1e9) 改为**真硬**(∞) ⇒ 得到**自证合法**之解（0 违规），并据以取得**互斥指纹**。",
+ "schema": 1,
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A（self_sha16 置空 · json.dumps(indent=1,ensure_ascii=False,sort_keys=True)）",
+  "convention_A_sha16": "ae5db457c97ef961"
+ },
+ "supersedes": "K2_R260_CONSERVATION_BLOCKER_REPORT_v52（本件为版本 bump 新件 · v52 逐字节保全）",
+ "to": "监理",
+ "ts": "2026-09-22T02:45+0800"
+}
