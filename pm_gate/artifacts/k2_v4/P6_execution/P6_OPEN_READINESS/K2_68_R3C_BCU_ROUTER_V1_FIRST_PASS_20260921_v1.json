@@ -1,0 +1,68 @@
+{
+ "artifact": "k2_68_r3c_bcu_router_v1_first_pass",
+ "authority": "#K2-68 §2.4(a)-4（拥塞感知 + rip-up 布线器 v2 · 精确闸）· #K2-69 §五-2（R3 施工）· #K2-69 §六①",
+ "board": "/tmp/opencode/w3/c.kicad_pcb (R1E)",
+ "caveats": [
+  "本器输出为**工作令**（只读生成）· **未改板**；`apply` 与 DRC/几何复核未做 ⇒ 不得视为布通。",
+  "布线器 v1 为**首版**（未含协商式拥塞）；24/32 之意义 = 『原板未做 -2/-3 即不可布通』之独立佐证，与 #K2-68 §2.4(a) 之次序一致。",
+  "真余量下限须于 apply 后**具名**（≥0.100mm · 禁贴限）。"
+ ],
+ "first_pass": {
+  "cell_mm": 0.2,
+  "failed": [
+   "PCIE_DN_OUT0_N_MCIO",
+   "PCIE_DN_OUT0_P_MCIO",
+   "PCIE_UP_OUT0_N_J2",
+   "PCIE_UP_OUT1_P_J2",
+   "PCIE_UP_OUT2_N_J2",
+   "PCIE_UP_OUT3_P_J2",
+   "PCIE_UP_OUT6_N_J2",
+   "PCIE_UP_OUT7_P_J2"
+  ],
+  "iters": 3,
+  "n_failed": 8,
+  "n_lanes": 32,
+  "n_routed": 24,
+  "note": "未布 8 条中 **2 条为结构性不可达**（B.Cu 必要性探针不过 ⇒ 须锚孔笼/走廊 ECO），其余 6 条为**拥塞/rip-up 强度不足**（现实现为单步回退，未达 PathFinder 式 Negotiated Congestion）。",
+  "structural_blocked_necessary_fail": [
+   "PCIE_DN_OUT0_N_MCIO",
+   "PCIE_DN_OUT0_P_MCIO"
+  ]
+ },
+ "headline": "**(a) B.Cu R3 首测**：自建**拥塞感知 A* + rip-up** 布线器（难度排序 · 长度+拥塞+贴边惩罚 · 贴限禁行）在 **B.Cu 单层**上布 32 条车道长走 ⇒ **24/32 布通**（优于既有朴素全域基线 **8/32**），**未达 32/32** ⇒ 按 #K2-68 §2.4(a) 之**既定次序**，须**先做锚孔笼重构（-2）与他网走廊 ECO（-3）**，再重跑本器。",
+ "inputs": {
+  "capacity_tool": "tools/k2_p4_b2_in5_capacity_probe_v1.py 794c7700f0f98a7d",
+  "router_tool": "tools/k2_p4_b2_bcu_router_v1.py 70211e02079bc207"
+ },
+ "length_impact": {
+  "implication": "新 B.Cu 长走中位 **+23.7mm**、最大 **+40.6mm** 相对原中段 ⇒ §7-3 等长/蛇形**必须重调**且须核 SI（损耗/阻抗 85Ω 与 B.Cu 微带 ref In6）；P/N 同步 · skew ≤0.15mm。",
+  "new_run_len_mm": {
+   "max": 113.4,
+   "median": 85.0,
+   "min": 48.0
+  },
+  "orig_middle_len_mm": {
+   "max": 72.8,
+   "median": 61.3,
+   "min": 40.1
+  }
+ },
+ "next_steps": [
+  "1. **锚孔笼重构**（#K2-68 §2.4(a)-2）：腾挪 `P3V3`(y≈54.0)/`GND`(y=53.0) 缝合孔出逃逸带 ⇒ 解 `PCIE_DN_OUT0_N/P` 之结构性不可达；同报 `ref_plane_continuity`。",
+  "2. **他网走廊 ECO**（#K2-68 §2.4(a)-3）：`I2C1_SDA` · `PERSTA#` · `P3V3_AUX` · `DS320_STRAP_*` · `PWR_BTN_ISO`。",
+  "3. **布线器 v2 强化**：改 **PathFinder 式 Negotiated Congestion**（历史代价累积 + 全量 rip-up-and-reroute · 迭代至无过用）⇒ 目标 32/32；仍禁顺序贪心。",
+  "4. 达 32/32 后：apply（V4 同位换 span → F–B · 删 V2/V3 + B.Cu/In2 腿 · 铺铜重灌 ZONE_FILLER）⇒ R4 复测闸（#K2-69 §六 ①–⑧）。"
+ ],
+ "red_lines_ok": [
+  "只读（未改板/件）",
+  "冻结四源未动",
+  "criteria/ 只读未碰",
+  "l4..l8 未动",
+  "网表/SPEC 未改",
+  "未派 WORKER",
+  "临时仅 /tmp/opencode",
+  "未越阶段"
+ ],
+ "schema": 1,
+ "ts": "2026-09-21T14:3x+08:00"
+}
