@@ -47,6 +47,8 @@
   "/tmp/opencode/archer/cage3row.py": "664282a1fb8e6d4c",
   "/tmp/opencode/archer/ortho2_run.py": "9c460e08e142fd4e",
   "/tmp/opencode/archer/wo_c3_nudged.json": "c21802fda10a3bfc",
+  "/tmp/opencode/archer/wo_c3_s23.json": "3001aa3ec5e21441",
+  "/tmp/opencode/archer/wo_c3_s23_nudged.json": "5cc187df8e1abb12",
   "/tmp/opencode/archer/wo_c3_s7.json": "978897687e16c46a",
   "k2/tools/k2_p4_b2_in5_nudge_v1.py": "37f41a42510e4efb",
   "k2/tools/k2_p4_b2_in5_ripup_v1.py": "3108ead167f976ef",
@@ -57,6 +59,34 @@
   "ASITES=/tmp/opencode/archer/a_cage3row.json python3 -u /tmp/opencode/archer/ortho2_run.py /tmp/opencode/archer/wo_c3_s7.json 7 0.5764 0.10 8",
   "python3 tools/k2_p4_b2_in5_nudge_v1.py /tmp/opencode/archer/wo_c3_s7.json /tmp/opencode/archer/wo_c3_nudged.json",
   "python3 tools/k2_p4_b2_true_gate_v1.py /tmp/opencode/archer/wo_c3_nudged.json"
+ ],
+ "reproduced_note": "两 seed（7/23）**确定性一致**：32/32 · 真闸 0 违规 · min_exact 0.4472 ≥0.435 · 真交叉 0 · 障碍余量 0.1700 ≥0.100 · 端点 0 ⇒ **R-A 见证为可复现结论**。",
+ "reproduced_seeds": [
+  {
+   "gate": {
+    "below_pitch": 0,
+    "clearance_mm": 0.17,
+    "min_exact_mm": 0.4472,
+    "routed": 32,
+    "true_crossings": 0,
+    "v3_viol": 0
+   },
+   "seed": 7,
+   "wo": "/tmp/opencode/archer/wo_c3_nudged.json"
+  },
+  {
+   "gate": {
+    "below_pitch": 0,
+    "clearance_mm": 0.17,
+    "min_exact_mm": 0.4472,
+    "routed": 32,
+    "true_crossings": 0,
+    "v3_viol": 0
+   },
+   "nudge": "同一顶点(序号38)同一位移 0.05mm",
+   "seed": 23,
+   "wo": "/tmp/opencode/archer/wo_c3_s23_nudged.json"
+  }
  ],
  "tick": "R177+R179（承 R161–R176）",
  "ts": "2026-09-21T19:25:57",
