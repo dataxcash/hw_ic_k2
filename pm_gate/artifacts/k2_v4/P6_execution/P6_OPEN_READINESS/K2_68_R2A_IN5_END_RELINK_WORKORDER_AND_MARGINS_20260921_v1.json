@@ -1,0 +1,1285 @@
+{
+ "artifact": "k2_68_r2a_in5_end_relink_workorder_and_margins",
+ "authority": "#K2-68 §2.4(a) 收紧版（32 条整批 · 他网走廊 ECO · 真余量下限）· #K2-68 §三-2 In5 路径 · handoff §7-2",
+ "blockers_named": [
+  "DS320_STRAP_A_ADDR0_7-0",
+  "GND",
+  "I2C1_SDA",
+  "P3V3",
+  "P3V3_AUX",
+  "PERSTA#",
+  "PERSTB#"
+ ],
+ "conclusion": "§7-2（32 条整批 In5 端部改接）**工作令 + 余量实测**：结构 = 每车道把 2 处『2 via 端部过渡』（F–B–In5 与 In5–In2–F）换成 **1 via（F–In5 盲孔）**，中段 In5 长走**保留**；实际改 = ① V1(F–B)→F–In5 · V4(F–In2)→F–In5（同位换 span）② 删 V2(In5–B)/V3(In2–In5)+其 B.Cu/In2 腿 ③ **新增 2 条 In5 端部走线**（各 ≈6.8–25.7mm）④ 等长重调。**实测**：以『全部车道铜视为可拆』语义，32 条×2 段**直连竖直段**中仅 8/64 段余量 ≥0（**其余 56 段被具名他网挡**：`PERSTA#`(In5 走线) · `P3V3_AUX` · `I2C1_SDA`/`GND`/`P3V3` 缝合孔 · `DS320_STRAP_A0` · `PERSTB#`）⇒ **§7-2 的必经前置 = 他网走廊 ECO**（与 #K2-68 §2.4(a)-3 具名集合一致）。",
+ "io": {
+  "input_board": "/tmp/opencode/w3/c.kicad_pcb (R1E · sha256 fdbcede260424ea7…)",
+  "lane_set": "PCIE_(UP|DN)_OUT ×32（B2 车道定义）· 余量口径 = 连续几何（非栅格）：segment 至最近**非车道** In5 铜缘 净距 − (hw 0.08 + req 0.175)",
+  "model": "/tmp/opencode/full_r1e.json"
+ },
+ "next_session_first_action": "① 复核本件余量表 ⇒ ② 做他网走廊 ECO（先只读：$PERSTA#/P3V3_AUX/I2C1_SDA 在 In5 的走线与可用替代通道）+ ③ 起 In5 端部布线器（单层 · 32 网 · 具名余量闸）。",
+ "per_lane": [
+  {
+   "A": [
+    84.85,
+    51.423
+   ],
+   "B": [
+    64.599999,
+    51.5
+   ],
+   "U6_side": {
+    "blocker": {
+     "kind": "seg",
+     "net": "PERSTA#"
+    },
+    "seg_len_mm": 10.483,
+    "straight_slack_mm": -0.355
+   },
+   "V2_In5B": [
+    84.85,
+    40.94
+   ],
+   "V3_In2In5": [
+    64.599999,
+    40.94
+   ],
+   "conn_side": {
+    "blocker": {
+     "kind": "via",
+     "net": "I2C1_SDA",
+     "pos": [
+      62.8,
+      50.4375
+     ]
+    },
+    "seg_len_mm": 10.56,
+    "straight_slack_mm": 1.37
+   },
+   "net": "PCIE_DN_OUT0_N_MCIO"
+  },
+  {
+   "A": [
+    84.3,
+    52.366
+   ],
+   "B": [
+    65.2,
+    51.5
+   ],
+   "U6_side": {
+    "blocker": {
+     "kind": "seg",
+     "net": "PERSTA#"
+    },
+    "seg_len_mm": 10.926,
+    "straight_slack_mm": -0.355
+   },
+   "V2_In5B": [
+    84.3,
+    41.44
+   ],
+   "V3_In2In5": [
+    65.2,
+    41.44
+   ],
+   "conn_side": {
+    "blocker": {
+     "kind": "via",
+     "net": "I2C1_SDA",
+     "pos": [
+      62.8,
+      50.4375
+     ]
+    },
+    "seg_len_mm": 10.06,
+    "straight_slack_mm": 1.97
+   },
+   "net": "PCIE_DN_OUT0_P_MCIO"
+  },
+  {
+   "A": [
+    86.05,
+    51.423
+   ],
+   "B": [
+    60.4,
+    51.5
+   ],
+   "U6_side": {
+    "blocker": {
+     "kind": "seg",
+     "net": "PERSTA#"
+    },
+    "seg_len_mm": 11.553,
+    "straight_slack_mm": -0.355
+   },
+   "V2_In5B": [
+    86.05,
+    39.87
+   ],
+   "V3_In2In5": [
+    60.4,
+    39.87
+   ],
+   "conn_side": {
+    "blocker": {
+     "kind": "via",
+     "net": "P3V3_AUX",
+     "pos": [
+      59.8647,
+      48.4397
+     ]
+    },
+    "seg_len_mm": 11.63,
+    "straight_slack_mm": 0.1053
+   },
+   "net": "PCIE_DN_OUT1_N_MCIO"
+  },
+  {
+   "A": [
+    85.5,
+    52.366
+   ],
+   "B": [
+    61.0,
+    51.5
+   ],
+   "U6_side": {
+    "blocker": {
+     "kind": "seg",
+     "net": "PERSTA#"
+    },
+    "seg_len_mm": 11.996,
+    "straight_slack_mm": -0.355
+   },
+   "V2_In5B": [
+    85.5,
+    40.37
+   ],
+   "V3_In2In5": [
+    61.0,
+    40.37
+   ],
+   "conn_side": {
+    "blocker": {
+     "kind": "via",
+     "net": "P3V3_AUX",
+     "pos": [
+      59.8647,
+      48.4397
+     ]
+    },
+    "seg_len_mm": 11.13,
+    "straight_slack_mm": 0.7053
+   },
+   "net": "PCIE_DN_OUT1_P_MCIO"
+  },
+  {
+   "A": [
+    87.25,
+    51.423
+   ],
+   "B": [
+    57.4,
+    51.5
+   ],
+   "U6_side": {
+    "blocker": {
+     "kind": "seg",
+     "net": "PERSTA#"
+    },
+    "seg_len_mm": 12.623,
+    "straight_slack_mm": -0.355
+   },
+   "V2_In5B": [
+    87.25,
+    38.8
+   ],
+   "V3_In2In5": [
+    57.4,
+    38.8
+   ],
+   "conn_side": {
+    "blocker": {
+     "kind": "seg",
+     "net": "PERSTA#"
+    },
+    "seg_len_mm": 12.7,
+    "straight_slack_mm": -0.355
+   },
+   "net": "PCIE_DN_OUT2_N_MCIO"
+  },
+  {
+   "A": [
+    86.7,
+    52.366
+   ],
+   "B": [
+    58.0,
+    51.5
+   ],
+   "U6_side": {
+    "blocker": {
+     "kind": "seg",
+     "net": "PERSTA#"
+    },
+    "seg_len_mm": 13.066,
+    "straight_slack_mm": -0.355
+   },
+   "V2_In5B": [
+    86.7,
+    39.3
+   ],
+   "V3_In2In5": [
+    58.0,
+    39.3
+   ],
+   "conn_side": {
+    "blocker": {
+     "kind": "seg",
+     "net": "PERSTA#"
+    },
+    "seg_len_mm": 12.2,
+    "straight_slack_mm": -0.355
+   },
+   "net": "PCIE_DN_OUT2_P_MCIO"
+  },
+  {
+   "A": [
+    88.45,
+    51.423
+   ],
+   "B": [
+    53.2,
+    51.5
+   ],
+   "U6_side": {
+    "blocker": {
+     "kind": "seg",
+     "net": "PERSTA#"
+    },
+    "seg_len_mm": 13.693,
+    "straight_slack_mm": -0.355
+   },
+   "V2_In5B": [
+    88.45,
+    37.73
+   ],
+   "V3_In2In5": [
+    53.2,
+    37.73
+   ],
+   "conn_side": {
+    "blocker": {
+     "kind": "seg",
+     "net": "PERSTA#"
+    },
+    "seg_len_mm": 13.77,
+    "straight_slack_mm": -0.355
+   },
+   "net": "PCIE_DN_OUT3_N_MCIO"
+  },
+  {
+   "A": [
+    87.9,
+    52.366
+   ],
+   "B": [
+    53.8,
+    51.5
+   ],
+   "U6_side": {
+    "blocker": {
+     "kind": "seg",
+     "net": "PERSTA#"
+    },
+    "seg_len_mm": 14.136,
+    "straight_slack_mm": -0.355
+   },
+   "V2_In5B": [
+    87.9,
+    38.23
+   ],
+   "V3_In2In5": [
+    53.8,
+    38.23
+   ],
+   "conn_side": {
+    "blocker": {
+     "kind": "seg",
+     "net": "PERSTA#"
+    },
+    "seg_len_mm": 13.27,
+    "straight_slack_mm": -0.355
+   },
+   "net": "PCIE_DN_OUT3_P_MCIO"
+  },
+  {
+   "A": [
+    89.65,
+    51.423
+   ],
+   "B": [
+    55.0,
+    60.2
+   ],
+   "U6_side": {
+    "blocker": {
+     "kind": "seg",
+     "net": "PERSTA#"
+    },
+    "seg_len_mm": 8.913,
+    "straight_slack_mm": -0.355
+   },
+   "V2_In5B": [
+    89.65,
+    42.51
+   ],
+   "V3_In2In5": [
+    55.0,
+    42.51
+   ],
+   "conn_side": {
+    "blocker": {
+     "kind": "seg",
+     "net": "P3V3_AUX"
+    },
+    "seg_len_mm": 17.69,
+    "straight_slack_mm": -0.355
+   },
+   "net": "PCIE_DN_OUT4_N_MCIO"
+  },
+  {
+   "A": [
+    89.1,
+    52.366
+   ],
+   "B": [
+    54.4,
+    60.2
+   ],
+   "U6_side": {
+    "blocker": {
+     "kind": "seg",
+     "net": "PERSTA#"
+    },
+    "seg_len_mm": 10.356,
+    "straight_slack_mm": -0.355
+   },
+   "V2_In5B": [
+    89.1,
+    42.01
+   ],
+   "V3_In2In5": [
+    54.4,
+    42.01
+   ],
+   "conn_side": {
+    "blocker": {
+     "kind": "seg",
+     "net": "P3V3_AUX"
+    },
+    "seg_len_mm": 18.19,
+    "straight_slack_mm": -0.355
+   },
+   "net": "PCIE_DN_OUT4_P_MCIO"
+  },
+  {
+   "A": [
+    90.85,
+    51.423
+   ],
+   "B": [
+    56.8,
+    60.2
+   ],
+   "U6_side": {
+    "blocker": {
+     "kind": "seg",
+     "net": "PERSTA#"
+    },
+    "seg_len_mm": 7.843,
+    "straight_slack_mm": -0.355
+   },
+   "V2_In5B": [
+    90.85,
+    43.58
+   ],
+   "V3_In2In5": [
+    56.8,
+    43.58
+   ],
+   "conn_side": {
+    "blocker": {
+     "kind": "seg",
+     "net": "P3V3_AUX"
+    },
+    "seg_len_mm": 16.62,
+    "straight_slack_mm": -0.355
+   },
+   "net": "PCIE_DN_OUT5_N_MCIO"
+  },
+  {
+   "A": [
+    90.3,
+    52.366
+   ],
+   "B": [
+    56.2,
+    60.2
+   ],
+   "U6_side": {
+    "blocker": {
+     "kind": "seg",
+     "net": "PERSTA#"
+    },
+    "seg_len_mm": 9.286,
+    "straight_slack_mm": -0.355
+   },
+   "V2_In5B": [
+    90.3,
+    43.08
+   ],
+   "V3_In2In5": [
+    56.2,
+    43.08
+   ],
+   "conn_side": {
+    "blocker": {
+     "kind": "seg",
+     "net": "P3V3_AUX"
+    },
+    "seg_len_mm": 17.12,
+    "straight_slack_mm": -0.355
+   },
+   "net": "PCIE_DN_OUT5_P_MCIO"
+  },
+  {
+   "A": [
+    92.05,
+    51.423
+   ],
+   "B": [
+    62.2,
+    60.2
+   ],
+   "U6_side": {
+    "blocker": {
+     "kind": "seg",
+     "net": "PERSTA#"
+    },
+    "seg_len_mm": 6.773,
+    "straight_slack_mm": -0.355
+   },
+   "V2_In5B": [
+    92.05,
+    44.65
+   ],
+   "V3_In2In5": [
+    62.2,
+    44.65
+   ],
+   "conn_side": {
+    "blocker": {
+     "kind": "via",
+     "net": "I2C1_SDA",
+     "pos": [
+      62.8,
+      50.4375
+     ]
+    },
+    "seg_len_mm": 15.55,
+    "straight_slack_mm": 0.17
+   },
+   "net": "PCIE_DN_OUT6_N_MCIO"
+  },
+  {
+   "A": [
+    91.5,
+    52.366
+   ],
+   "B": [
+    61.6,
+    60.2
+   ],
+   "U6_side": {
+    "blocker": {
+     "kind": "seg",
+     "net": "PERSTA#"
+    },
+    "seg_len_mm": 8.216,
+    "straight_slack_mm": -0.355
+   },
+   "V2_In5B": [
+    91.5,
+    44.15
+   ],
+   "V3_In2In5": [
+    61.6,
+    44.15
+   ],
+   "conn_side": {
+    "blocker": {
+     "kind": "via",
+     "net": "I2C1_SDA",
+     "pos": [
+      62.8,
+      50.4375
+     ]
+    },
+    "seg_len_mm": 16.05,
+    "straight_slack_mm": 0.77
+   },
+   "net": "PCIE_DN_OUT6_P_MCIO"
+  },
+  {
+   "A": [
+    93.7,
+    51.673
+   ],
+   "B": [
+    64.0,
+    60.2
+   ],
+   "U6_side": {
+    "blocker": {
+     "kind": "seg",
+     "net": "PERSTA#"
+    },
+    "seg_len_mm": 16.653,
+    "straight_slack_mm": -0.355
+   },
+   "V2_In5B": [
+    93.7,
+    35.02
+   ],
+   "V3_In2In5": [
+    64.0,
+    35.02
+   ],
+   "conn_side": {
+    "blocker": {
+     "kind": "via",
+     "net": "GND",
+     "pos": [
+      64.9,
+      56.9
+     ]
+    },
+    "seg_len_mm": 25.18,
+    "straight_slack_mm": 0.47
+   },
+   "net": "PCIE_DN_OUT7_N_MCIO"
+  },
+  {
+   "A": [
+    92.7,
+    52.366
+   ],
+   "B": [
+    63.4,
+    60.2
+   ],
+   "U6_side": {
+    "blocker": {
+     "kind": "seg",
+     "net": "PERSTA#"
+    },
+    "seg_len_mm": 17.846,
+    "straight_slack_mm": -0.355
+   },
+   "V2_In5B": [
+    92.7,
+    34.52
+   ],
+   "V3_In2In5": [
+    63.4,
+    34.52
+   ],
+   "conn_side": {
+    "blocker": {
+     "kind": "via",
+     "net": "I2C1_SDA",
+     "pos": [
+      62.8,
+      50.4375
+     ]
+    },
+    "seg_len_mm": 25.68,
+    "straight_slack_mm": 0.17
+   },
+   "net": "PCIE_DN_OUT7_P_MCIO"
+  },
+  {
+   "A": [
+    84.35,
+    55.723
+   ],
+   "B": [
+    127.01,
+    43.25
+   ],
+   "U6_side": {
+    "blocker": {
+     "kind": "via",
+     "net": "GND",
+     "pos": [
+      83.575,
+      56.516
+     ]
+    },
+    "seg_len_mm": 0.611,
+    "straight_slack_mm": 0.3661
+   },
+   "V2_In5B": [
+    84.35,
+    56.334
+   ],
+   "V3_In2In5": [
+    127.01,
+    56.334
+   ],
+   "conn_side": {
+    "blocker": {
+     "kind": "seg",
+     "net": "PERSTA#"
+    },
+    "seg_len_mm": 13.084,
+    "straight_slack_mm": -0.355
+   },
+   "net": "PCIE_UP_OUT0_N_J2"
+  },
+  {
+   "A": [
+    84.85,
+    54.88
+   ],
+   "B": [
+    141.22,
+    42.65
+   ],
+   "U6_side": {
+    "blocker": {
+     "kind": "via",
+     "net": "GND",
+     "pos": [
+      84.055,
+      54.49
+     ]
+    },
+    "seg_len_mm": 1.954,
+    "straight_slack_mm": 0.4555
+   },
+   "V2_In5B": [
+    84.85,
+    56.834
+   ],
+   "V3_In2In5": [
+    141.22,
+    56.834
+   ],
+   "conn_side": {
+    "blocker": {
+     "kind": "via",
+     "net": "GND",
+     "pos": [
+      142.08,
+      47.1
+     ]
+    },
+    "seg_len_mm": 14.184,
+    "straight_slack_mm": 0.43
+   },
+   "net": "PCIE_UP_OUT0_P_J2"
+  },
+  {
+   "A": [
+    85.5,
+    55.823
+   ],
+   "B": [
+    139.48,
+    43.85
+   ],
+   "U6_side": {
+    "blocker": {
+     "kind": "seg",
+     "net": "DS320_STRAP_A_ADDR0_7-0"
+    },
+    "seg_len_mm": 2.46,
+    "straight_slack_mm": 0.935
+   },
+   "V2_In5B": [
+    85.5,
+    58.283
+   ],
+   "V3_In2In5": [
+    139.48,
+    58.283
+   ],
+   "conn_side": {
+    "blocker": {
+     "kind": "via",
+     "net": "GND",
+     "pos": [
+      140.34,
+      43.5
+     ]
+    },
+    "seg_len_mm": 14.433,
+    "straight_slack_mm": 0.4985
+   },
+   "net": "PCIE_UP_OUT1_N_J2"
+  },
+  {
+   "A": [
+    86.05,
+    54.88
+   ],
+   "B": [
+    127.59,
+    43.85
+   ],
+   "U6_side": {
+    "blocker": {
+     "kind": "via",
+     "net": "P3V3",
+     "pos": [
+      85.875,
+      54.0
+     ]
+    },
+    "seg_len_mm": 2.903,
+    "straight_slack_mm": 0.4672
+   },
+   "V2_In5B": [
+    86.05,
+    57.783
+   ],
+   "V3_In2In5": [
+    127.59,
+    57.783
+   ],
+   "conn_side": {
+    "blocker": {
+     "kind": "seg",
+     "net": "PERSTA#"
+    },
+    "seg_len_mm": 13.933,
+    "straight_slack_mm": -0.355
+   },
+   "net": "PCIE_UP_OUT1_P_J2"
+  },
+  {
+   "A": [
+    86.7,
+    55.823
+   ],
+   "B": [
+    129.33,
+    46.85
+   ],
+   "U6_side": {
+    "blocker": {
+     "kind": "via",
+     "net": "P3V3",
+     "pos": [
+      86.6,
+      53.975
+     ]
+    },
+    "seg_len_mm": 3.409,
+    "straight_slack_mm": 1.4207
+   },
+   "V2_In5B": [
+    86.7,
+    59.232
+   ],
+   "V3_In2In5": [
+    129.33,
+    59.232
+   ],
+   "conn_side": {
+    "blocker": {
+     "kind": "seg",
+     "net": "PERSTA#"
+    },
+    "seg_len_mm": 12.382,
+    "straight_slack_mm": -0.355
+   },
+   "net": "PCIE_UP_OUT2_N_J2"
+  },
+  {
+   "A": [
+    87.25,
+    54.88
+   ],
+   "B": [
+    137.16,
+    46.25
+   ],
+   "U6_side": {
+    "blocker": {
+     "kind": "via",
+     "net": "P3V3",
+     "pos": [
+      87.225,
+      54.0
+     ]
+    },
+    "seg_len_mm": 4.852,
+    "straight_slack_mm": 0.4504
+   },
+   "V2_In5B": [
+    87.25,
+    59.732
+   ],
+   "V3_In2In5": [
+    137.16,
+    59.732
+   ],
+   "conn_side": {
+    "blocker": {
+     "kind": "via",
+     "net": "GND",
+     "pos": [
+      138.06,
+      50.1
+     ]
+    },
+    "seg_len_mm": 13.482,
+    "straight_slack_mm": 0.47
+   },
+   "net": "PCIE_UP_OUT2_P_J2"
+  },
+  {
+   "A": [
+    87.9,
+    55.823
+   ],
+   "B": [
+    136.0,
+    47.45
+   ],
+   "U6_side": {
+    "blocker": {
+     "kind": "via",
+     "net": "P3V3",
+     "pos": [
+      87.8,
+      53.975
+     ]
+    },
+    "seg_len_mm": 5.358,
+    "straight_slack_mm": 1.4207
+   },
+   "V2_In5B": [
+    87.9,
+    61.181
+   ],
+   "V3_In2In5": [
+    136.0,
+    61.181
+   ],
+   "conn_side": {
+    "blocker": {
+     "kind": "via",
+     "net": "GND",
+     "pos": [
+      135.475,
+      50.7
+     ]
+    },
+    "seg_len_mm": 13.731,
+    "straight_slack_mm": 0.095
+   },
+   "net": "PCIE_UP_OUT3_N_J2"
+  },
+  {
+   "A": [
+    88.45,
+    54.88
+   ],
+   "B": [
+    130.49,
+    47.45
+   ],
+   "U6_side": {
+    "blocker": {
+     "kind": "via",
+     "net": "P3V3",
+     "pos": [
+      88.275,
+      54.0
+     ]
+    },
+    "seg_len_mm": 5.801,
+    "straight_slack_mm": 0.4672
+   },
+   "V2_In5B": [
+    88.45,
+    60.681
+   ],
+   "V3_In2In5": [
+    130.49,
+    60.681
+   ],
+   "conn_side": {
+    "blocker": {
+     "kind": "seg",
+     "net": "PERSTA#"
+    },
+    "seg_len_mm": 13.231,
+    "straight_slack_mm": -0.355
+   },
+   "net": "PCIE_UP_OUT3_P_J2"
+  },
+  {
+   "A": [
+    89.1,
+    55.823
+   ],
+   "B": [
+    131.65,
+    48.65
+   ],
+   "U6_side": {
+    "blocker": {
+     "kind": "via",
+     "net": "P3V3",
+     "pos": [
+      89.0,
+      53.975
+     ]
+    },
+    "seg_len_mm": 6.307,
+    "straight_slack_mm": 1.4207
+   },
+   "V2_In5B": [
+    89.1,
+    62.13
+   ],
+   "V3_In2In5": [
+    131.65,
+    62.13
+   ],
+   "conn_side": {
+    "blocker": {
+     "kind": "seg",
+     "net": "PERSTA#"
+    },
+    "seg_len_mm": 13.48,
+    "straight_slack_mm": -0.355
+   },
+   "net": "PCIE_UP_OUT4_N_J2"
+  },
+  {
+   "A": [
+    89.65,
+    54.88
+   ],
+   "B": [
+    140.06,
+    48.05
+   ],
+   "U6_side": {
+    "blocker": {
+     "kind": "via",
+     "net": "P3V3",
+     "pos": [
+      89.625,
+      54.0
+     ]
+    },
+    "seg_len_mm": 7.75,
+    "straight_slack_mm": 0.4504
+   },
+   "V2_In5B": [
+    89.65,
+    62.63
+   ],
+   "V3_In2In5": [
+    140.06,
+    62.63
+   ],
+   "conn_side": {
+    "blocker": {
+     "kind": "via",
+     "net": "GND",
+     "pos": [
+      138.06,
+      50.1
+     ]
+    },
+    "seg_len_mm": 14.58,
+    "straight_slack_mm": 1.57
+   },
+   "net": "PCIE_UP_OUT4_P_J2"
+  },
+  {
+   "A": [
+    90.3,
+    55.823
+   ],
+   "B": [
+    138.9,
+    49.25
+   ],
+   "U6_side": {
+    "blocker": {
+     "kind": "via",
+     "net": "P3V3",
+     "pos": [
+      90.2,
+      53.975
+     ]
+    },
+    "seg_len_mm": 8.256,
+    "straight_slack_mm": 1.4207
+   },
+   "V2_In5B": [
+    90.3,
+    64.078999
+   ],
+   "V3_In2In5": [
+    138.9,
+    64.078999
+   ],
+   "conn_side": {
+    "blocker": {
+     "kind": "via",
+     "net": "GND",
+     "pos": [
+      138.06,
+      50.1
+     ]
+    },
+    "seg_len_mm": 14.829,
+    "straight_slack_mm": 0.41
+   },
+   "net": "PCIE_UP_OUT5_N_J2"
+  },
+  {
+   "A": [
+    90.85,
+    54.88
+   ],
+   "B": [
+    128.75,
+    49.25
+   ],
+   "U6_side": {
+    "blocker": {
+     "kind": "via",
+     "net": "P3V3",
+     "pos": [
+      90.825,
+      54.0
+     ]
+    },
+    "seg_len_mm": 8.699,
+    "straight_slack_mm": 0.4504
+   },
+   "V2_In5B": [
+    90.85,
+    63.579
+   ],
+   "V3_In2In5": [
+    128.75,
+    63.579
+   ],
+   "conn_side": {
+    "blocker": {
+     "kind": "seg",
+     "net": "PERSTA#"
+    },
+    "seg_len_mm": 14.329,
+    "straight_slack_mm": -0.355
+   },
+   "net": "PCIE_UP_OUT5_P_J2"
+  },
+  {
+   "A": [
+    91.5,
+    55.823
+   ],
+   "B": [
+    129.91,
+    52.25
+   ],
+   "U6_side": {
+    "blocker": {
+     "kind": "via",
+     "net": "P3V3",
+     "pos": [
+      91.4,
+      53.975
+     ]
+    },
+    "seg_len_mm": 9.205,
+    "straight_slack_mm": 1.4207
+   },
+   "V2_In5B": [
+    91.5,
+    65.028
+   ],
+   "V3_In2In5": [
+    129.91,
+    65.028
+   ],
+   "conn_side": {
+    "blocker": {
+     "kind": "seg",
+     "net": "PERSTA#"
+    },
+    "seg_len_mm": 12.778,
+    "straight_slack_mm": -0.355
+   },
+   "net": "PCIE_UP_OUT6_N_J2"
+  },
+  {
+   "A": [
+    92.05,
+    54.88
+   ],
+   "B": [
+    137.74,
+    51.65
+   ],
+   "U6_side": {
+    "blocker": {
+     "kind": "via",
+     "net": "P3V3",
+     "pos": [
+      91.875,
+      54.0
+     ]
+    },
+    "seg_len_mm": 10.648,
+    "straight_slack_mm": 0.4672
+   },
+   "V2_In5B": [
+    92.05,
+    65.528
+   ],
+   "V3_In2In5": [
+    137.74,
+    65.528
+   ],
+   "conn_side": {
+    "blocker": {
+     "kind": "via",
+     "net": "GND",
+     "pos": [
+      138.06,
+      50.1
+     ]
+    },
+    "seg_len_mm": 13.878,
+    "straight_slack_mm": 1.1527
+   },
+   "net": "PCIE_UP_OUT6_P_J2"
+  },
+  {
+   "A": [
+    92.7,
+    55.823
+   ],
+   "B": [
+    136.58,
+    52.85
+   ],
+   "U6_side": {
+    "blocker": {
+     "kind": "via",
+     "net": "PERSTB#",
+     "pos": [
+      91.3,
+      67.2
+     ]
+    },
+    "seg_len_mm": 11.154,
+    "straight_slack_mm": 0.9876
+   },
+   "V2_In5B": [
+    92.7,
+    66.977
+   ],
+   "V3_In2In5": [
+    136.58,
+    66.977
+   ],
+   "conn_side": {
+    "blocker": {
+     "kind": "via",
+     "net": "GND",
+     "pos": [
+      135.475,
+      57.3
+     ]
+    },
+    "seg_len_mm": 14.127,
+    "straight_slack_mm": 0.675
+   },
+   "net": "PCIE_UP_OUT7_N_J2"
+  },
+  {
+   "A": [
+    93.7,
+    55.13
+   ],
+   "B": [
+    131.07,
+    52.85
+   ],
+   "U6_side": {
+    "blocker": {
+     "kind": "via",
+     "net": "GND",
+     "pos": [
+      93.225,
+      54.5
+     ]
+    },
+    "seg_len_mm": 11.347,
+    "straight_slack_mm": 0.359
+   },
+   "V2_In5B": [
+    93.7,
+    66.477
+   ],
+   "V3_In2In5": [
+    131.07,
+    66.477
+   ],
+   "conn_side": {
+    "blocker": {
+     "kind": "seg",
+     "net": "PERSTA#"
+    },
+    "seg_len_mm": 13.627,
+    "straight_slack_mm": -0.355
+   },
+   "net": "PCIE_UP_OUT7_P_J2"
+  }
+ ],
+ "schema": 1,
+ "summary": {
+  "n_lanes": 32,
+  "n_segments": 64,
+  "slack_max_mm": 1.97,
+  "slack_min_mm": -0.355,
+  "straight_blocked": 32,
+  "straight_ok": 32
+ },
+ "ts": "2026-09-21T12:0x+08:00",
+ "work_order": [
+  "0. 前置：他网走廊 ECO（PERSTA#/P3V3_AUX/I2C1_SDA 孔/DS320_STRAP_*/PWR_BTN_ISO 在 In5 段移位或改层）——须与 §7-2 同批 · DRC 后复核 19 维 + 参考面",
+  "1. 32 条整批：V1(F–B)→F–In5 · V4(F–In2)→F–In5（同位 · size/drill 不变）",
+  "2. 删 V2(In5–B) · V3(In2–In5) 及其 B.Cu/In2 腿（4 via → 2 via）",
+  "3. 新布 2 条 In5 端部走线/车道（含绕 `PERSTA#`/`P3V3_AUX` 与他网孔）· **真余量下限须具名且 ≥ 判据下限（禁 0.00–0.02mm 贴限）**",
+  "4. 等长重调（中段长度变化 = 2 条新 In5 段 − 原 B.Cu/In2 腿 · P/N 同步 · skew ≤0.15mm）· F 蛇形重调",
+  "5. 铺铜重灌 + kicad-cli DRC（error 仅 #K2-67 具名 3 · unconnected 0 · mask_bridge 0）+ 探针 In5 复测 32/32",
+  "6. B2 判据行复测（32/32 车道 ≤2 via）+ 19 维不回归 + 参考面完整性（In5 ref = In4 分割面/In6 GND）"
+ ]
+}
