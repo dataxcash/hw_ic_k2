@@ -1,0 +1,56 @@
+{
+ "artifact": "k2_68_r1d_relocation_engine_iterations_and_open_defects",
+ "authority": "#K2-68 §2.4 (a)-2（U6 锚孔笼重构 · 腾挪 GND 缝合孔）· §四②（DRC error 仅准 #K2-67 具名 3 条）· §四③（真余量下限）",
+ "conclusion": "① 方向已证：**In5（长走零改层）+ 逃逸带 GND 缝合孔移出 ⇒ 探针 32/32**（唯一达 §四①）。② 笼重构器 4 轮迭代已把 hole_clearance 与 unconnected **修到 0**，但**出口数不足 + stub/mask 细节未闭合** ⇒ 未达 §四②。③ **本件不主张 PASS**；下一件按上述 3 项缺陷修完后复测（探针 32/32 + DRC error 仅具名 3 条 + 真余量下限）。",
+ "iterations": [
+  {
+   "moved": 38,
+   "note": "证明方向",
+   "probe_In5": 32,
+   "v": "v0（删除式敏感性，非布放）"
+  },
+  {
+   "DRC": "hole_clearance 12 · unconnected 13",
+   "defects": [
+    "缺 hole_clearance(0.25) 条款",
+    "未随孔处理 stub"
+   ],
+   "moved": "28/38",
+   "v": "v1（最近合法位 · 删 stub）"
+  },
+  {
+   "DRC": "hole_clearance 0 ✓ · unconnected 22（拆散 U6 GND 梯）",
+   "moved": "27/38",
+   "v": "v2（+hole_clearance 条款 · 删 stub）"
+  },
+  {
+   "DRC": "unconnected 0 ✓ · shorting 6 · clearance 5 · **solder_mask_bridge 18**",
+   "moved": "12/38",
+   "note": "stub 搬迁约束把 26 条孔判为不可行 ⇒ 出口不足",
+   "v": "v3（+随孔搬 stub 端点）"
+  },
+  {
+   "DRC": "同 v3（未改善）",
+   "moved": "12/38",
+   "v": "v4（+stub 核 pad）"
+  }
+ ],
+ "open_defects_named": [
+  "**① stub 段-矩形距离未核**（现只核 stub 两端点 vs pad bbox）⇒ `shorting_items` 6 · `clearance` 5 仍指向 **U6 无网焊盘**（例 `U6.CV35(95.95,49.76)` vs 移动后 GND stub）⇒ 修：以**段-矩形**精确距离核。",
+  "**② 阻焊桥未入模型** ⇒ `solder_mask_bridge` 18（新孔位之 mask 开窗与邻 pad/孔 mask 相邻）；修正 = 加 `mask_bridge ≥ 0.1mm`（JLC 口径）判据。",
+  "**③ stub 约束过严 ⇒ 出口不足**：v3/v4 仅 12/38 可搬（要求 stub 保持合法直线）⇒ 建议改为**沿 stub 轴向共线外移**（延长 stub · 不产生新穿越）以恢复出口数，而非任意方向最近位。"
+ ],
+ "red_lines_ok": [
+  "未改 criteria/",
+  "未改冻结四源",
+  "未改 l4..l8（仅 /tmp）",
+  "未改网表",
+  "未改 SPEC",
+  "未派 WORKER",
+  "未越阶段"
+ ],
+ "schema": 1,
+ "session_label": "K2-2026-09-21 · R110 · #K2-68 §三-2 笼重构器 4 轮迭代 + 剩余缺陷清单",
+ "tool": "tools/k2_p4_b2_relocate_stitch_v1.py（c0b2ea31b14a6641）",
+ "ts": "2026-09-21T11:4x+08:00"
+}

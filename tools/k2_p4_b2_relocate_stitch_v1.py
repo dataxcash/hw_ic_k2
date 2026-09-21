@@ -93,18 +93,21 @@ def via_ok(lay_seg, lay_cir, lay_rect, holes, x, y, netname, span_layers, skip_s
         for (ax, ay, bx, by, hw, nm) in lay_seg.get(L, ()):  # noqa: E741
             if nm == netname:
                 continue
-            if pt_seg(x, y, ax, ay, bx, by) - hw < VIA_R + cls_req(netname, nm):
+            d = pt_seg(x, y, ax, ay, bx, by) - hw
+            if d < VIA_R + cls_req(netname, nm) or d < HOLE_R + 0.25:
                 return False, "seg:%s" % nm
         for (cx, cy, r, nm) in lay_cir.get(L, ()):
             if nm == netname:
                 continue
-            if math.hypot(x - cx, y - cy) - r < VIA_R + cls_req(netname, nm):
+            d = math.hypot(x - cx, y - cy) - r
+            if d < VIA_R + cls_req(netname, nm) or d < HOLE_R + 0.25:
                 return False, "via:%s" % nm
         for (x0, y0, x1, y1, nm) in lay_rect.get(L, ()):
             if nm == netname:
                 continue
             dx = max(x0 - x, 0.0, x - x1); dy = max(y0 - y, 0.0, y - y1)
-            if math.hypot(dx, dy) < VIA_R + cls_req(netname, nm):
+            d = math.hypot(dx, dy)
+            if d < VIA_R + cls_req(netname, nm) or d < HOLE_R + 0.25:
                 return False, "pad:%s" % nm
     for (hx, hy, hr, nm, sp, kind) in holes:
         if skip_self is not None and (hx, hy) == skip_self:
@@ -138,6 +141,23 @@ def find_spot(lay_seg, lay_cir, lay_rect, holes, x0, y0, span_layers, step=0.1, 
     return None
 
 
+def stub_tracks(b, name, x, y, tol=0.03, netname="GND", maxlen=2.0):
+    """收集端点≈(x,y) 之短 GND 段（随孔搬迁时须清理，否则残孤岛）。"""
+    out = []
+    for t in b.GetTracks():
+        if t.GetClass() == "PCB_VIA":
+            continue
+        if name.get(t.GetNetCode(), "") != netname:
+            continue
+        if MM(t.GetLength()) > maxlen:
+            continue
+        for which, e in (("S", t.GetStart()), ("E", t.GetEnd())):
+            if math.hypot(MM(e.x) - x, MM(e.y) - y) <= tol:
+                out.append((t, which))
+                break
+    return out
+
+
 def run(src, out_path, ledger_path, band, step, dry):
     b = pcbnew.LoadBoard(src)
     name = {n.GetNetCode(): n.GetNetname() for n in b.GetNetInfo().NetsByNetcode().values()}
@@ -159,6 +179,10 @@ def run(src, out_path, ledger_path, band, step, dry):
     led = {"tool": "k2_p4_b2_relocate_stitch_v1", "src": src, "band": list(band),
            "n_candidates": len(targets), "moved": [], "failed": []}
     # 逐个搬：先把原孔移出棋盘语义 = 收集 + 重布放（按离带心远近排序，减小互扰）
+    # 预收集：每个目标孔之贴附短 GND stub（须在任何 Remove 之前取，SWIG 代理移除后失效）
+    stub_of = {}
+    for _i, (_t, _x, _y) in enumerate(targets):
+        stub_of[_i] = stub_tracks(b, name, _x, _y)
     cx = (band[0] + band[1]) / 2.0; cy = (band[2] + band[3]) / 2.0
     targets.sort(key=lambda z: math.hypot(z[1] - cx, z[2] - cy))
     lay_seg, lay_cir, lay_rect, holes = gather(b)
@@ -167,7 +191,8 @@ def run(src, out_path, ledger_path, band, step, dry):
     for L, lst in lay_cir.items():
         lay_cir[L] = [o for o in lst if not (o[3] == "GND" and (round(o[0], 3), round(o[1], 3)) in tgt_xy)]
     holes = [h for h in holes if not (h[3] == "GND" and (round(h[0], 3), round(h[1], 3)) in tgt_xy)]
-    for t, x, y in targets:
+    stubs_killed = 0
+    for _idx, (t, x, y) in enumerate(targets):
         spot = find_spot(lay_seg, lay_cir, lay_rect, holes, x, y, INSPAN, step=step, band=band)
         if spot is None:
             led["failed"].append({"from": [x, y]})
@@ -175,8 +200,53 @@ def run(src, out_path, ledger_path, band, step, dry):
         nx, ny = spot
         led["moved"].append({"from": [round(x, 3), round(y, 3)], "to": [round(nx, 3), round(ny, 3)],
                              "d_mm": round(math.hypot(nx - x, ny - y), 3)})
+        ok_stub = True
         if not dry:
+            for (sgm, which) in stub_of.get(_idx, []):
+                oth = sgm.GetEnd() if which == "S" else sgm.GetStart()
+                a = (MM(oth.x), MM(oth.y))
+                bb2 = (nx, ny)
+                hw = MM(sgm.GetWidth()) / 2.0
+                L = sgm.GetLayer()
+                bad = None
+                # 用段-段净距核
+                def _segs(a1, b1, a2, b2):
+                    def ccw(A, Bq, C): return (C[1] - A[1]) * (Bq[0] - A[0]) - (Bq[1] - A[1]) * (C[0] - A[0])
+                    d1, d2 = ccw(a2, b2, a1), ccw(a2, b2, b1)
+                    d3, d4 = ccw(a1, b1, a2), ccw(a1, b1, b2)
+                    if ((d1 > 0) != (d2 > 0)) and ((d3 > 0) != (d4 > 0)):
+                        return 0.0
+                    return min(pt_seg(*a1, *a2, *b2), pt_seg(*b1, *a2, *b2),
+                               pt_seg(*a2, *a1, *b1), pt_seg(*b2, *a1, *b1))
+                for (ax, ay, bx, by, ohw, nm) in lay_seg.get(L, ()):
+                    if nm == "GND":
+                        continue
+                    if _segs(a, bb2, (ax, ay), (bx, by)) < hw + ohw + cls_req("GND", nm):
+                        bad = nm
+                        break
+                if bad is None:
+                    for (x0, y0, x1, y1, nm) in lay_rect.get(L, ()):
+                        if nm == "GND":
+                            continue
+                        d1 = max(x0 - a[0], 0.0, a[0] - x1), max(y0 - a[1], 0.0, a[1] - y1)
+                        d2 = max(x0 - bb2[0], 0.0, bb2[0] - x1), max(y0 - bb2[1], 0.0, bb2[1] - y1)
+                        if min(math.hypot(*d1), math.hypot(*d2)) < hw + cls_req("GND", nm):
+                            bad = "pad:%s" % nm
+                            break
+                if bad:
+                    ok_stub = False
+                    break
+        if not dry and ok_stub:
+            for (sgm, which) in stub_of.get(_idx, []):
+                if which == "S":
+                    sgm.SetStart(V(nx, ny))
+                else:
+                    sgm.SetEnd(V(nx, ny))
             t.SetPosition(V(nx, ny))
+        elif not dry and not ok_stub:
+            led["failed"].append({"from": [x, y], "why": "stub_illegal"})
+            led["moved"].pop()
+            continue
         # 把新孔加入障碍表（后续孔须与之相容）
         lay_cir.setdefault(F, []).append((nx, ny, VIA_R, "GND"))
         lay_cir.setdefault(pcbnew.In1_Cu, []).append((nx, ny, VIA_R, "GND"))
@@ -187,7 +257,9 @@ def run(src, out_path, ledger_path, band, step, dry):
         lay_cir.setdefault(pcbnew.In6_Cu, []).append((nx, ny, VIA_R, "GND"))
         lay_cir.setdefault(B, []).append((nx, ny, VIA_R, "GND"))
         holes.append((nx, ny, HOLE_R, "GND", set(INSPAN), "via"))
+    led["stubs_removed"] = stubs_killed
     led["summary"] = {"candidates": len(targets), "moved": len(led["moved"]), "failed": len(led["failed"]),
+                      "stubs_removed": stubs_killed,
                       "max_d_mm": max([m["d_mm"] for m in led["moved"]] or [0])}
     if not dry:
         try:
