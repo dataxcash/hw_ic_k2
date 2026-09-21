@@ -59,7 +59,7 @@ def main():
         else:
             legs.append(t)
     for nm, d in seen.items():
-        if "F.Cu-In2.Cu" in d:
+        if "F.Cu-In2.Cu" in d and is_lane(nm):     # **换 span 仅车道**（动网过孔不得换 span）
             swap_vias.append((nm, d["F.Cu-In2.Cu"]))
         for k in ("In5.Cu-B.Cu", "In2.Cu-In5.Cu"):
             if k in d:
