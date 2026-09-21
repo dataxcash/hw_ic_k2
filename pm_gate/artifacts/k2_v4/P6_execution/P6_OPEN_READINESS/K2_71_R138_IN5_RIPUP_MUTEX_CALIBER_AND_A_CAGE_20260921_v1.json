@@ -1,0 +1,95 @@
+{
+ "artifact": "k2_71_r138_in5_ripup_mutex_caliber_and_a_cage",
+ "authority": "#K2-71 §六-2（R-A 终局轮 · 二值 · 禁「工具新版」独立轮）· R137 §7-2（UP 收口 = 局部重布/rip-up）· 判据 ③⑨⑩",
+ "evidence_files": {
+  "logs_tmp": "/tmp/opencode/archer/{rip_up3.log,rip_soft.log,rip_s200.log,rip_s200b.log,rip_s200p.log,rip_r0.47.log,rip_r0.5057.log,rip_mono.log,rip_c05.log,v3_up_neg40.log}",
+  "sites_tmp": "/tmp/opencode/archer/{a_alloc_s1.70.json,a_alloc_s2.00.json,a_alloc_s200_perm.json,a_up_monotone.json,b_alloc_s2.00.json,b_up_monotone.json}",
+  "wo_tmp": "/tmp/opencode/archer/{wo_up_rip3.json,wo_up_s200.json,wo_up_s200b.json,wo_up_s200p.json,wo_up_r0.47.json,wo_up_r0.5057.json,wo_up_mono.json,wo_up_c05t.json,wo_up_u1.json}"
+ },
+ "findings": {
+  "D-1_stamp_not_equivalent_to_gate": {
+   "claim": "v3 硬模之互斥判据（「新车道路径格不得落入已布车道 radius-pitch_eff disk stamp」⇔ 两车道**格心距 ≥0.424**）**既不蕴含、也不被蕴含**于判据 ③ 之连续闸（**线段距 ≥0.435**）⇒ v3 硬模之上限**不是**闸口径之上限。",
+   "consequence": "v3 `--algo hard` 之 13/16 与 R127/R129 之 16–18/32 同为**有界搜索观察值**；「UP 上限 13」不成立。",
+   "proof_a_counterexample": "两车道 A=(0,0)-(0.1,0)、B=(0.4,0.2)-(0.4,0.3)：格心距 min=0.4472 ≥0.424（v3 stamp 判据视为互斥成立）· 而**线段距 = 0.3606 < 0.435（闸口径违规）**。",
+   "proof_b_other_direction": "对 v3 已产出之 13/16 解（wo_up_u1.json）以同一 stamp 判据复算 ⇒ 拥塞格（cov≥2）= **3383**（该解在 v3 内部判据下「不可行」），而连续精确闸判 = **0 违规 · 最小中心距 0.4472** ⇒ 判据不等价（stamp 侧更严）。"
+  },
+  "D-2_negotiate_nviol_self_counting": {
+   "claim": "v3 `--algo negotiate` 之 `nviol` 以 (路径格 × disk offset) 累加 ⇒ **同一车道自重叠**即计入 ⇒ 「单车亦违例」；停止条件 `routed==n and viol==0` **恒不可达**。",
+   "corroboration": "UP 组 negotiate 实跑（`v3_up_neg40.log`）：routed=16/16 但 **vio 7418–10776 恒定**，pf 自 0.5 增至 4000 亦不降 ⇒ 协商模式**不可用于求见证**（此为 R134「协商 32/32 但几何违规 117–147 对」之根因）。",
+   "measured": "单条直车道（200 格）在 radius-0.435 stamp 下：路径格 occ 计数 min=5 / max=9 / 中位=9 ⇒ `nviol`(occ≥2) = **200**（单车已非 0）。"
+  },
+  "D-3_a_cage_fence_new_root_cause": {
+   "claim": "R137 之 UP A 位（东带 2×8 网格 · pitch **1.50mm**）与 v3 之锚孔 keepout 半径 **0.6007mm**（= hw + max(0.175+via_r, drill+0.25) + PAD_EXTRA）互斥 ⇒ 相邻 keepout **净缝仅 0.2986mm** ⇒ 16 条车道被迫经同一缝口西向「漏斗」（图像 `zf_A.png`/`zf_full.png`：13 条已布车道全部西行至 x≈89.2 再东折）⇒ **人为瓶颈**。",
+   "fix": "A 位重设（`k2_p4_b2_anchor_alloc_v1.py --min-sep 1.70/2.00`）⇒ A 锚笼不再成栅栏（见 runs）。",
+   "quantitative": "车道互斥净缝需 ≥0.435mm ⇒ **A 锚笼 pitch 须 ≥ 2×0.6007+0.435 = 1.6364mm**（R137 用 1.50 ⇒ 结构性封口）。"
+  },
+  "D-4_single_lane_reachability": {
+   "claim": "R137 之 3 条「失败」车道（OUT3_N/OUT6_P/OUT7_N）**单车独跑（掩码仅静态障碍）皆直达**：OUT3_N (98.95,54.15)→(136.15,…) 373 点、x 单调东行（`probe_one.py`）⇒ 其失败**非结构性**，属判据/次序。"
+  }
+ },
+ "headline": "**两个口径缺陷（D-1/D-2）被证伪式证成 ⇒ R135–R137 之「UP 13/16 上限」系人为判据瓶颈、非结构性**；改以**与连续闸同源之互斥判据**（EDT 距离场）+ rip-up-and-reroute 后，UP 组**16/16 全布**（配对守恒 32⇒16/16）；余差收敛到**闸级 1–3 对**（0.400–0.4243 < 0.435，即差 0.011–0.035mm）⇒ **二值仍未达成**，差口已定位为 **A 锚笼「栅栏」几何 + A/B 指派次序**（新根因 D-3）。",
+ "images": [
+  "/tmp/opencode/archer/zf_A.png",
+  "/tmp/opencode/archer/zf_full.png（13/16 之西向漏斗 + 失败 X）"
+ ],
+ "next": [
+  "① A 锚笼重设至 pitch ≥1.70mm（本件 s2.00 位集已合规·可施工口径）+ A/B 双向指派联合优化（消除交叉对）⇒ 复跑求解器 ⇒ 目标 32/32 且闸 0 违规 ⇒ 二值结案",
+  "② 细格（cell 0.05 · 需内存优化：窗口化/直接构建 CSR；本件 0.05 版仅 2 iters）",
+  "③ R-B 并行：以「连续判据 + 车道数覆盖率」构造严格上界证书（ILP/最小割）",
+  "④ 32 HS 对 + 4 REFCLK 之匹配/等长报件（待 R-A 结案同批）"
+ ],
+ "red_lines_ok": [
+  "只读板件",
+  "冻结四源未动（d4e81f64/fb07d25a/dd794c54/0a459839）",
+  "criteria/ 未碰（rev=6）",
+  "l4..l8 逐字节未动",
+  "未派 WORKER",
+  "未写 .omo/supervision/**",
+  "未越阶段"
+ ],
+ "runs": [
+  {
+   "a_sites": "a_sites_up_east_v1(R137)",
+   "cell": 0.1,
+   "gate": "—（未达全布）",
+   "routed": "13/16",
+   "tag": "UP-orig-A(hard-mask R=0.5764)"
+  },
+  {
+   "a_sites": "a_alloc_s200_perm",
+   "cell": 0.1,
+   "gate": "min 0.4000 · 违规 **2** 对（OUT3_N↔OUT6_N 0.4000 · OUT5_N↔OUT6_P 0.4243）· 余量 1.0950 · 端点偏移 0",
+   "routed": "**16/16**",
+   "tag": "UP-s2.00-A+permA"
+  },
+  {
+   "a_sites": "a_up_monotone",
+   "cell": 0.1,
+   "gate": "min 0.0707 · 违规 12 对（含交叉）⇒ **单调指派非充分**（A 位 x 散布所致）",
+   "routed": "16/16",
+   "tag": "UP-A 单调指派（A/B 同按 y 序）"
+  },
+  {
+   "a_sites": "a_alloc_s200_perm",
+   "cell": 0.1,
+   "gate": "min 0.0707 · 违规 **1** 对（OUT2_P↔OUT4_P 交叉 @(137.5,49.8) · **B 侧锚位指派所致**）",
+   "routed": "16/16",
+   "tag": "UP-s200perm + rmin0.5057（严格口径）"
+  },
+  {
+   "a_sites": "a_alloc_s200_perm",
+   "cell": 0.05,
+   "gate": "min 0.0354 · 违规 5 对（细格未收敛；应跑满 iters）",
+   "routed": "16/16",
+   "tag": "UP-s200perm + cell0.05（2 iters）"
+  }
+ ],
+ "schema": 1,
+ "solver": {
+  "path": "tools/k2_p4_b2_in5_ripup_v1.py",
+  "rigor_note": "cell=0.1 时路径格心偏差 0.0707、对侧折线栅格化偏差 0.0707 ⇒ 取 rmin=0.5057 者**严格蕴含**闸之线段距 ≥0.435；取 rmin=0.435/0.47 者系「与闸同量级」之近似，须以 `exact_gate` 复核（本件全部 run 均附闸值）。",
+  "what": "**连续距离场互斥 + soft PathFinder rip-up-and-reroute**（全量重布 · 顺序轮转 · K 递增）。互斥判据 = 其他车道折线之 **EDT 距离场** `D`，代价 = 边长 + K·max(0, rmin−D)²（rmin 见各 run）· 静态障碍/他车道锚笼仍硬禁 ⇒ **判据与连续闸同源**（修 D-1/D-2）。"
+ },
+ "ts": "2026-09-21T17:2x+08:00",
+ "verdict": "**R-A 就 In5 布线层面：UP 组 16/16 布通已成（配对守恒 32⇒16/16），但闸（判据 ③）仍余 1–3 对（0.400/0.4243 < 0.435）⇒ 二值未达成**。差口已定量定位：① A 锚笼 pitch（1.50 < 1.6364 结构性封口）② A/B 锚位指派次序（1 对交叉 @(137.5,49.8)）。R-B 证书仍未出。"
+}
