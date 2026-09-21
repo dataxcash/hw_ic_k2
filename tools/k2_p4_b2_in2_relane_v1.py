@@ -42,6 +42,9 @@ B_CU = pcbnew.B_Cu
 # ── 可配置：默认 In2；`--layer B.Cu --via-bot B.Cu` 则走 F→B→F（2 via）──
 LAYER = "In2.Cu"
 VIA_BOT = IN2_CU
+# 分域窗口（group-window）：DN 车道西向/北向 · UP 车道东向/南向
+GW_DN = (46.0, 34.0, 96.0, 64.5)
+GW_UP = (80.0, 38.0, 144.0, 72.0)
 
 
 def _set_safe(v):
@@ -436,7 +439,7 @@ def lane_uuid(nm, kind, *args):
 
 
 def run(src, out_path, ledger_path, only=None, step=GRID_DEF, limit=None, dry=False,
-        margin=12.0, order_mode="dn_first"):
+        margin=12.0, order_mode="dn_first", group_window=False):
     b = pcbnew.LoadBoard(src)
     name = {n.GetNetCode(): n.GetNetname() for n in b.GetNetInfo().NetsByNetcode().values()}
     lanes = {}
@@ -527,8 +530,14 @@ def run(src, out_path, ledger_path, only=None, step=GRID_DEF, limit=None, dry=Fa
     for nm in order:
         A, B = anchors[nm]
         g = build(nm)
-        g.set_window(min(A[0], B[0]) - margin, min(A[1], B[1]) - margin,
-                     max(A[0], B[0]) + margin, max(A[1], B[1]) + margin)
+        if group_window:
+            if "DN_OUT" in nm:
+                g.set_window(GW_DN[0], GW_DN[1], GW_DN[2], GW_DN[3])
+            else:
+                g.set_window(GW_UP[0], GW_UP[1], GW_UP[2], GW_UP[3])
+        else:
+            g.set_window(min(A[0], B[0]) - margin, min(A[1], B[1]) - margin,
+                         max(A[0], B[0]) + margin, max(A[1], B[1]) + margin)
         for c in (A, B):
             for cell in g.disc_cells(c, LANE_HW + 0.175 + 0.02):
                 g.bad[cell] = 0
@@ -602,13 +611,15 @@ def main(argv=None):
     ap.add_argument("--safe", type=float, default=None)
     ap.add_argument("--margin", type=float, default=12.0)
     ap.add_argument("--order", default="dn_first")
+    ap.add_argument("--group-window", action="store_true",
+                    help="按 DN(西向)/UP(东向) 分域窗口限流，避免跨域超长迂回")
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args(argv)
     if a.safe is not None:
         _set_safe(a.safe)
     set_cfg(a.layer, a.width, a.via_bot)
     led = run(a.src, a.out or a.src, a.ledger, a.only, a.step, a.limit, a.dry_run,
-              a.margin, a.order)
+              a.margin, a.order, a.group_window)
     print(json.dumps(led["summary"], ensure_ascii=False))
     for r in led["lanes"]:
         if r["status"] != "OK":
