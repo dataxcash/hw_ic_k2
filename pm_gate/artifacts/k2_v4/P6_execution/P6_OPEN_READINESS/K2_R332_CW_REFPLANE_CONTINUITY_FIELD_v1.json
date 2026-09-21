@@ -1,0 +1,65 @@
+{
+ "schema": 1,
+ "artifact": "k2_r332_cw_refplane_continuity_field_v1",
+ "to": "监理",
+ "from": "ENG · ARCHER",
+ "nature": "**C-w 要件② `ref_plane_continuity` 之逐项核（只读）** —— 补要件②；**非申报**",
+ "cw_nets": [
+  "DS320_STRAP_B_ADDR1_7-0",
+  "DS320_STRAP_B_ADDR0_15-8",
+  "PERSTA#",
+  "I2C1_SDA"
+ ],
+ "plane_prefixes": [
+  "GND",
+  "GND_FIXED",
+  "P3V3",
+  "P3V3_FIXED",
+  "P1V8",
+  "P1V1",
+  "VDD",
+  "VCC"
+ ],
+ "per_net": {
+  "DS320_STRAP_B_ADDR1_7-0": {
+   "is_plane_net": false,
+   "in5_seg_total": 11,
+   "vias_total": 4
+  },
+  "DS320_STRAP_B_ADDR0_15-8": {
+   "is_plane_net": false,
+   "in5_seg_total": 0,
+   "vias_total": 2
+  },
+  "PERSTA#": {
+   "is_plane_net": false,
+   "in5_seg_total": 59,
+   "vias_total": 8
+  },
+  "I2C1_SDA": {
+   "is_plane_net": false,
+   "in5_seg_total": 47,
+   "vias_total": 9
+  }
+ },
+ "finding": {
+  "plane_connected_objects_among_listed": 0,
+  "判": "所列 4 网**全部为信号网**（`is_plane_net=False`）⇒ **腾挪不涉及任何参考平面 / 平面缝合孔**（135 枚固定缝合孔**不在本次对象内**）⇒ `ref_plane_continuity` **不因平面/缝孔被移动而破**。",
+  "but": "被腾挪**信号自身**之参考层连续性（其上下参考平面归属、回流通路）**尚未逐网核** ⇒ 要件②**未完全关闭**（须配 `PERSTA#` 等之改线后参考平面说明）。"
+ },
+ "honesty": "依宪法第十三条：本件仅补要件②之一**必要条件**；要件③（端点/球位不动证明）④（`buildability`）**仍未给** ⇒ **不作数 · 不构成申报**。",
+ "buildability_field": "只读核对：未烙板 · 未改任何实体 · 未改生成器/SPEC/原理图 ⇒ 不动证明成立；不产出施工图。",
+ "anchors": {
+  "board_sha16": "7a5c89913d6e5d0a",
+  "frozen4": [
+   "d4e81f647be7f980",
+   "fb07d25ac426ff84",
+   "dd794c54f7ce7417",
+   "0a459839e15960b8"
+  ]
+ },
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "17bfa7d9828b1c25"
+ }
+}
