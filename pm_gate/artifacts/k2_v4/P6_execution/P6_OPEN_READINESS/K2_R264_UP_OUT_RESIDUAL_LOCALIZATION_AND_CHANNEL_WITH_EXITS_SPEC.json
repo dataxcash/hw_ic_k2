@@ -1,0 +1,61 @@
+{
+ "anchors": {
+  "caliber": "keepout 0.5300 · lane_w 0.16 · 互距 ≥0.435",
+  "criteria": "rev=6 MATCH（只读）",
+  "frozen_sources": {
+   "_shared/eda_core/drc_rules.json": "0a459839e15960b8",
+   "k2/hw/data/k2_sch.yaml": "dd794c54f7ce7417",
+   "k2/hw/k2_v4_8L.kicad_pcb": "fb07d25ac426ff84",
+   "k2/hw/k2_v4_8L.l4.kicad_pcb": "d4e81f647be7f980"
+  },
+  "reviewed_board": "k2/hw/k2_v4_8L.l8.kicad_pcb = 7a5c89913d6e5d0a"
+ },
+ "artifact": "k2_r264_up_out_residual_localization_and_channel_with_exits_spec",
+ "authority": "监理自动续推 · 《整改计划》P4 在阶 · #K2-132 §三 · #K2-133 §三",
+ "bans_kept": "未改冻结四源 · criteria 只读 · 未烙板 · 未派 WORKER · 未改生成器/SPEC/原理图 · 临时仅 /tmp/opencode · 未以布通率充见证 · 未以有界搜索冒充证书 · 未自行 C-w",
+ "binary_status": {
+  "(a)": "未取得（v2 16/16 落线 · 互距 16 对违规 · 障碍 22 项）",
+  "(b)": "不成立（A 侧 R261-F3 + B 侧 R263-G1 双向反证）"
+ },
+ "from": "ENG · ARCHER（应监理**自动续推** · P4 在阶 · 未越阶段）",
+ "gate_chain_selfcheck": {
+  "owner闸口": 0,
+  "冻结四源": "4/4 未动",
+  "判据": "rev=6 MATCH（只读未碰）",
+  "外部前置": "1（criteria rev=7）",
+  "阶段": "P4 在阶 · 未越阶段"
+ },
+ "owner_gate": 0,
+ "residual_localization_of_coordinate_v2": {
+  "obstacle_viol_22": {
+   "blocker": "他网 `DS320_STRAP_A_ADDR0_7-0` / `DS320_STRAP_B_ADDR0_7-0` In5 段",
+   "cause": "梳子最深线（k=1）之**落线竖段**贴 DS320 段 ⇒ 需西移或改层序。",
+   "gap": "0.140/0.190 < 需 0.355",
+   "where": "西端 x≈83.1–84.2 · y≈56.8/57.9/64.2/64.6"
+  },
+  "pitch_viol_16": {
+   "cause": "通道列按 0.435 等距布置（零余量）而东组须在锚高**横向归位**到 x_B ⇒ 归位段与相邻列发生 0.035–0.40 之近距。",
+   "where": "**全部在『东通道列区 + 转弯区』**：① y≈42.65/43.85/47.45（= 东组 B 锚终止高度处之**横向归位**段）② y≈59.9–63.8（= 南通道梳子并入通道列之**转弯区**）",
+   "x_span": "136.4–141.7",
+   "y_span": "42.65–63.8"
+  }
+ },
+ "residual_spec（唯一剩余 · 供一次实现）": {
+  "name": "**channel-with-exits 坐标化**（含避障）",
+  "spec": [
+   "①**通道列按下标单调**预分配（k=1 最深 → 最东列），保证转弯零交叉；",
+   "②东组 8 条**在通道内终止**：**先按列北上，再于其 y_B 处横向归位**；归位须在**相邻列已终止**之后的空档内进行（即『逐条释放』），不得在满列时归位；",
+   "③西组 8 条经北区（y≈37–41 富余）西拐，按 x_B 升序分层（层距 0.5 ≥0.435）——已在 v2 验证可行；",
+   "④**落线竖段避障**：k=1 之落线 x 由 84.35 东移至 ≥84.75（或改为先东后南），避 `DS320_STRAP_*`；",
+   "⑤A 侧 `_P` 穿缝段保持缝心 ±0.05（缝宽 0.090/0.140 · 零余量）。"
+  ],
+  "why_not_done_this_round": "②『逐条释放后归位』是**时刻相关**约束（通道内动态空档），非静态折线；须以显式时序（每条北上的 y 区间）写死，属**一次实现**工作量（本轮已把残差定位到该 2 处 + 1 障碍）。"
+ },
+ "schema": 1,
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "ca74cc69cb1dd776"
+ },
+ "to": "监理",
+ "ts": "2026-09-22T03:00+0800"
+}
