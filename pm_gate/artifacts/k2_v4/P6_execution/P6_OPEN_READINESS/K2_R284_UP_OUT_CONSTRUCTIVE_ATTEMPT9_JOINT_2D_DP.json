@@ -1,0 +1,98 @@
+{
+ "schema": 1,
+ "artifact": "k2_r284_up_out_constructive_attempt9_joint_2d_dp",
+ "ts": "2026-09-22T04:58+0800",
+ "to": "监理",
+ "from": "ENG · ARCHER（监理自动续推 · P4 在阶 · fail-closed）",
+ "authority": "#K2-132 §三(乙) D1 / §四 · #K2-133 §三 N1 · 指令 #14",
+ "anchors": {
+  "frozen_4of4": "未动",
+  "criteria": "rev=6 MATCH（只读）",
+  "l8": "7a5c89913d6e5d0a",
+  "k2": "52991c2",
+  "owner_gate": 0
+ },
+ "what": "**构造 attempt #9 —— (dx,Y) 二维联合精确 DP**：每 lane 的候选 (dx,Y) 均在 **disk(0.05) 膨胀**栅格上判定（stub/下潜/横段三段自由）；DP 同时施加**两个序**：`dx_k≥dx_{k-1}+0.435`（A 侧走廊）与 `Y_k≤Y_{k-1}-0.435`（南通道层）。",
+ "result": {
+  "联合 DP": "**成功**（11 条 lane 全入解；末端前端点 91）⇒ **A 侧走廊 + 南通道层的二维联合分配 = 精确可行**",
+  "解": [
+   [
+    "PCIE_UP_OUT0_N_J2",
+    85.85,
+    66.7
+   ],
+   [
+    "PCIE_UP_OUT0_P_J2",
+    86.35,
+    66.2
+   ],
+   [
+    "PCIE_UP_OUT1_N_J2",
+    87.0,
+    65.7
+   ],
+   [
+    "PCIE_UP_OUT1_P_J2",
+    87.55,
+    65.2
+   ],
+   [
+    "PCIE_UP_OUT2_N_J2",
+    88.05,
+    64.7
+   ],
+   [
+    "PCIE_UP_OUT2_P_J2",
+    88.6,
+    64.2
+   ],
+   [
+    "PCIE_UP_OUT3_N_J2",
+    89.1,
+    62.8
+   ],
+   [
+    "PCIE_UP_OUT3_P_J2",
+    89.65,
+    61.6
+   ],
+   [
+    "PCIE_UP_OUT4_N_J2",
+    90.6,
+    61.1
+   ],
+   [
+    "PCIE_UP_OUT4_P_J2",
+    91.15,
+    59.8
+   ],
+   [
+    "PCIE_UP_OUT5_N_J2",
+    91.8,
+    58.0
+   ]
+  ],
+  "exact_gate": {
+   "endpoint_max_dev_mm": 0.0,
+   "lane_pitch_min_gap_mm": 0.0,
+   "n_lane_pitch_viol": 17,
+   "clearance_min_mm": -0.18,
+   "n_clearance_viol": 5
+  }
+ },
+ "verdict": "**(a) 见证：仍未取得**。二维联合分配可行，但折线 `exact_gate` 仍 **互距 17 违（min 0.0）+ 净距 5 违（−0.18 vs GND）**。",
+ "root_cause_identified": "**DP 的可行性判定只覆盖了 stub / 下潜 / 南横段三段**，**未覆盖后两段**（`(c,Y)→(c,y_B)` 北上段 与 `(c,y_B)→(B) 末端平移`）。违例即出现于**未纳入判定的段落** ⇒ 须把 **5 段全纳入** DP 状态可行性。",
+ "next_precise": "**一次**：把 **全部 5 段**（stub · 下潜 · 南横段 · 北上段 · 末端平移）纳入 `(dx,Y)` 候选可行性判定，再作二维序 DP ⇒ 复跑 `exact_gate`（新装置）⇒ 见证；若届时仍缺 ⇒ **单一卡点 + 具名归属**（四字段齐备，停止令口径）。",
+ "gate_selfcheck": {
+  "阶段": "P4（在阶）· 未越阶段",
+  "判据": "rev=6 MATCH",
+  "冻结四源": "4/4 未动",
+  "受审板 l8": "7a5c89913d6e5d0a",
+  "owner闸口": 0
+ },
+ "owner_gate": 0,
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "6b521650d2bfa5dc"
+ }
+}
