@@ -1,0 +1,1647 @@
+{
+ "artifact": "k2_66_b2_in2_relane_feasibility",
+ "authority": "#K2-66 §六④（高速线过孔 ≤2/线 · 强条 R1-5/R5-1）· #K2-67 §六-3（并行 B2 已授权）",
+ "board_under_test": {
+  "path": "/tmp/opencode/l9/k2_v4_8L.l9.kicad_pcb",
+  "sha16": "39b58aa12c86e5f4"
+ },
+ "method": "必要条件探针（只测量不判定）：在层 L 上按**逐障碍精确净距**栅格化（车道 w/hw · req=max(cls)），把 **32 条车道全部 A/B 锚孔**计入障碍，问『A 与 B 是否同自由连通域』；否 ⇒ 该 (车道,L) 组合在该前提下**不可行**（充分性另测）。",
+ "per_net": {
+  "B.Cu": {
+   "fail_necessary": 3,
+   "pass_necessary": 29,
+   "pass_nets": [
+    "PCIE_DN_OUT1_N_MCIO",
+    "PCIE_DN_OUT1_P_MCIO",
+    "PCIE_DN_OUT2_N_MCIO",
+    "PCIE_DN_OUT2_P_MCIO",
+    "PCIE_DN_OUT3_N_MCIO",
+    "PCIE_DN_OUT3_P_MCIO",
+    "PCIE_DN_OUT4_N_MCIO",
+    "PCIE_DN_OUT4_P_MCIO",
+    "PCIE_DN_OUT5_N_MCIO",
+    "PCIE_DN_OUT5_P_MCIO",
+    "PCIE_DN_OUT6_N_MCIO",
+    "PCIE_DN_OUT6_P_MCIO",
+    "PCIE_DN_OUT7_N_MCIO",
+    "PCIE_DN_OUT7_P_MCIO",
+    "PCIE_UP_OUT0_N_J2",
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT1_P_J2",
+    "PCIE_UP_OUT2_N_J2",
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT3_N_J2",
+    "PCIE_UP_OUT3_P_J2",
+    "PCIE_UP_OUT4_N_J2",
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT5_N_J2",
+    "PCIE_UP_OUT5_P_J2",
+    "PCIE_UP_OUT6_N_J2",
+    "PCIE_UP_OUT6_P_J2",
+    "PCIE_UP_OUT7_N_J2",
+    "PCIE_UP_OUT7_P_J2"
+   ],
+   "per_net": {
+    "PCIE_DN_OUT0_N_MCIO": {
+     "A": [
+      84.85,
+      51.423
+     ],
+     "A_off_mm": 0.447,
+     "B": [
+      64.599999,
+      51.5
+     ],
+     "B_off_mm": 0.424,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 480979,
+     "compB_bbox": [
+      62.95,
+      82.55,
+      50.75,
+      62.05
+     ],
+     "compB_cells": 11456,
+     "same_component": false,
+     "status": "FAIL_NECESSARY"
+    },
+    "PCIE_DN_OUT0_P_MCIO": {
+     "A": [
+      84.3,
+      52.366
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      65.2,
+      51.5
+     ],
+     "B_off_mm": 0.4,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 480979,
+     "compB_bbox": [
+      62.95,
+      82.55,
+      50.75,
+      62.05
+     ],
+     "compB_cells": 11456,
+     "same_component": false,
+     "status": "FAIL_NECESSARY"
+    },
+    "PCIE_DN_OUT1_N_MCIO": {
+     "A": [
+      86.05,
+      51.423
+     ],
+     "A_off_mm": 0.447,
+     "B": [
+      60.4,
+      51.5
+     ],
+     "B_off_mm": 0.424,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 480979,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_DN_OUT1_P_MCIO": {
+     "A": [
+      85.5,
+      52.366
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      61.0,
+      51.5
+     ],
+     "B_off_mm": 0.4,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 480979,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_DN_OUT2_N_MCIO": {
+     "A": [
+      87.25,
+      51.423
+     ],
+     "A_off_mm": 0.447,
+     "B": [
+      57.4,
+      51.5
+     ],
+     "B_off_mm": 0.424,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 480979,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_DN_OUT2_P_MCIO": {
+     "A": [
+      86.7,
+      52.366
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      58.0,
+      51.5
+     ],
+     "B_off_mm": 0.4,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 480979,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_DN_OUT3_N_MCIO": {
+     "A": [
+      88.45,
+      51.423
+     ],
+     "A_off_mm": 0.447,
+     "B": [
+      53.2,
+      51.5
+     ],
+     "B_off_mm": 0.424,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 480979,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_DN_OUT3_P_MCIO": {
+     "A": [
+      87.9,
+      52.366
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      53.8,
+      51.5
+     ],
+     "B_off_mm": 0.4,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 480979,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_DN_OUT4_N_MCIO": {
+     "A": [
+      89.65,
+      51.423
+     ],
+     "A_off_mm": 0.447,
+     "B": [
+      55.0,
+      60.2
+     ],
+     "B_off_mm": 0.4,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 480979,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_DN_OUT4_P_MCIO": {
+     "A": [
+      89.1,
+      52.366
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      54.4,
+      60.2
+     ],
+     "B_off_mm": 0.424,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 480979,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_DN_OUT5_N_MCIO": {
+     "A": [
+      90.85,
+      51.423
+     ],
+     "A_off_mm": 0.447,
+     "B": [
+      56.8,
+      60.2
+     ],
+     "B_off_mm": 0.4,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 480979,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_DN_OUT5_P_MCIO": {
+     "A": [
+      90.3,
+      52.366
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      56.2,
+      60.2
+     ],
+     "B_off_mm": 0.424,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 480979,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_DN_OUT6_N_MCIO": {
+     "A": [
+      92.05,
+      51.423
+     ],
+     "A_off_mm": 0.447,
+     "B": [
+      62.2,
+      60.2
+     ],
+     "B_off_mm": 0.4,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 480979,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_DN_OUT6_P_MCIO": {
+     "A": [
+      91.5,
+      52.366
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      61.6,
+      60.2
+     ],
+     "B_off_mm": 0.4,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 480979,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_DN_OUT7_N_MCIO": {
+     "A": [
+      93.7,
+      51.673
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      64.0,
+      60.2
+     ],
+     "B_off_mm": 0.4,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 480979,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_DN_OUT7_P_MCIO": {
+     "A": [
+      92.7,
+      52.366
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      63.4,
+      60.2
+     ],
+     "B_off_mm": 0.424,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 480979,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_UP_OUT0_N_J2": {
+     "A": [
+      84.35,
+      55.723
+     ],
+     "A_off_mm": 0.447,
+     "B": [
+      127.01,
+      43.25
+     ],
+     "B_off_mm": 0.424,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 480979,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_UP_OUT0_P_J2": {
+     "A": [
+      84.85,
+      54.88
+     ],
+     "A_off_mm": 0.447,
+     "B": [
+      141.22,
+      42.65
+     ],
+     "B_off_mm": 0.447,
+     "compA_bbox": [
+      84.45,
+      84.45,
+      54.55,
+      54.65
+     ],
+     "compA_cells": 2,
+     "compB_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compB_cells": 480979,
+     "same_component": false,
+     "status": "FAIL_NECESSARY"
+    },
+    "PCIE_UP_OUT1_N_J2": {
+     "A": [
+      85.5,
+      55.823
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      139.48,
+      43.85
+     ],
+     "B_off_mm": 0.447,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 480979,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_UP_OUT1_P_J2": {
+     "A": [
+      86.05,
+      54.88
+     ],
+     "A_off_mm": 0.447,
+     "B": [
+      127.59,
+      43.85
+     ],
+     "B_off_mm": 0.424,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 480979,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_UP_OUT2_N_J2": {
+     "A": [
+      86.7,
+      55.823
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      129.33,
+      46.85
+     ],
+     "B_off_mm": 0.447,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 480979,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_UP_OUT2_P_J2": {
+     "A": [
+      87.25,
+      54.88
+     ],
+     "A_off_mm": 0.447,
+     "B": [
+      137.16,
+      46.25
+     ],
+     "B_off_mm": 0.447,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 480979,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_UP_OUT3_N_J2": {
+     "A": [
+      87.9,
+      55.823
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      136.0,
+      47.45
+     ],
+     "B_off_mm": 0.424,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 480979,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_UP_OUT3_P_J2": {
+     "A": [
+      88.45,
+      54.88
+     ],
+     "A_off_mm": 0.447,
+     "B": [
+      130.49,
+      47.45
+     ],
+     "B_off_mm": 0.424,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 480979,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_UP_OUT4_N_J2": {
+     "A": [
+      89.1,
+      55.823
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      131.65,
+      48.65
+     ],
+     "B_off_mm": 0.5,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 480979,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_UP_OUT4_P_J2": {
+     "A": [
+      89.65,
+      54.88
+     ],
+     "A_off_mm": 0.447,
+     "B": [
+      140.06,
+      48.05
+     ],
+     "B_off_mm": 0.447,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 480979,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_UP_OUT5_N_J2": {
+     "A": [
+      90.3,
+      55.823
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      138.9,
+      49.25
+     ],
+     "B_off_mm": 0.424,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 480979,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_UP_OUT5_P_J2": {
+     "A": [
+      90.85,
+      54.88
+     ],
+     "A_off_mm": 0.447,
+     "B": [
+      128.75,
+      49.25
+     ],
+     "B_off_mm": 0.5,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 480979,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_UP_OUT6_N_J2": {
+     "A": [
+      91.5,
+      55.823
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      129.91,
+      52.25
+     ],
+     "B_off_mm": 0.424,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 480979,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_UP_OUT6_P_J2": {
+     "A": [
+      92.05,
+      54.88
+     ],
+     "A_off_mm": 0.447,
+     "B": [
+      137.74,
+      51.65
+     ],
+     "B_off_mm": 0.447,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 480979,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_UP_OUT7_N_J2": {
+     "A": [
+      92.7,
+      55.823
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      136.58,
+      52.85
+     ],
+     "B_off_mm": 0.447,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 480979,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_UP_OUT7_P_J2": {
+     "A": [
+      93.7,
+      55.13
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      131.07,
+      52.85
+     ],
+     "B_off_mm": 0.447,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 480979,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    }
+   },
+   "width_mm": 0.205
+  },
+  "In2.Cu": {
+   "fail_necessary": 22,
+   "pass_necessary": 10,
+   "pass_nets": [
+    "PCIE_DN_OUT0_P_MCIO",
+    "PCIE_DN_OUT7_N_MCIO",
+    "PCIE_UP_OUT0_N_J2",
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT2_N_J2",
+    "PCIE_UP_OUT3_N_J2",
+    "PCIE_UP_OUT4_N_J2",
+    "PCIE_UP_OUT5_N_J2",
+    "PCIE_UP_OUT6_N_J2",
+    "PCIE_UP_OUT7_N_J2"
+   ],
+   "per_net": {
+    "PCIE_DN_OUT0_N_MCIO": {
+     "A": [
+      84.85,
+      51.423
+     ],
+     "A_off_mm": 0.447,
+     "B": [
+      64.599999,
+      51.5
+     ],
+     "B_off_mm": 0.361,
+     "compA_bbox": [
+      85.05,
+      85.75,
+      49.65,
+      51.55
+     ],
+     "compA_cells": 93,
+     "compB_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compB_cells": 458200,
+     "same_component": false,
+     "status": "FAIL_NECESSARY"
+    },
+    "PCIE_DN_OUT0_P_MCIO": {
+     "A": [
+      84.3,
+      52.366
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      65.2,
+      51.5
+     ],
+     "B_off_mm": 0.361,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 458200,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_DN_OUT1_N_MCIO": {
+     "A": [
+      86.05,
+      51.423
+     ],
+     "A_off_mm": 0.447,
+     "B": [
+      60.4,
+      51.5
+     ],
+     "B_off_mm": 0.361,
+     "compA_bbox": [
+      85.05,
+      85.75,
+      49.65,
+      51.55
+     ],
+     "compA_cells": 93,
+     "compB_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compB_cells": 458200,
+     "same_component": false,
+     "status": "FAIL_NECESSARY"
+    },
+    "PCIE_DN_OUT1_P_MCIO": {
+     "A": [
+      85.5,
+      52.366
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      61.0,
+      51.5
+     ],
+     "B_off_mm": 0.361,
+     "compA_bbox": [
+      84.75,
+      92.15,
+      52.25,
+      53.95
+     ],
+     "compA_cells": 513,
+     "compB_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compB_cells": 458200,
+     "same_component": false,
+     "status": "FAIL_NECESSARY"
+    },
+    "PCIE_DN_OUT2_N_MCIO": {
+     "A": [
+      87.25,
+      51.423
+     ],
+     "A_off_mm": 0.447,
+     "B": [
+      57.4,
+      51.5
+     ],
+     "B_off_mm": 0.361,
+     "compA_bbox": [
+      86.25,
+      86.95,
+      49.65,
+      51.55
+     ],
+     "compA_cells": 93,
+     "compB_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compB_cells": 458200,
+     "same_component": false,
+     "status": "FAIL_NECESSARY"
+    },
+    "PCIE_DN_OUT2_P_MCIO": {
+     "A": [
+      86.7,
+      52.366
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      58.0,
+      51.5
+     ],
+     "B_off_mm": 0.361,
+     "compA_bbox": [
+      84.75,
+      92.15,
+      52.25,
+      53.95
+     ],
+     "compA_cells": 513,
+     "compB_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compB_cells": 458200,
+     "same_component": false,
+     "status": "FAIL_NECESSARY"
+    },
+    "PCIE_DN_OUT3_N_MCIO": {
+     "A": [
+      88.45,
+      51.423
+     ],
+     "A_off_mm": 0.447,
+     "B": [
+      53.2,
+      51.5
+     ],
+     "B_off_mm": 0.361,
+     "compA_bbox": [
+      87.45,
+      88.15,
+      49.65,
+      51.55
+     ],
+     "compA_cells": 93,
+     "compB_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compB_cells": 458200,
+     "same_component": false,
+     "status": "FAIL_NECESSARY"
+    },
+    "PCIE_DN_OUT3_P_MCIO": {
+     "A": [
+      87.9,
+      52.366
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      53.8,
+      51.5
+     ],
+     "B_off_mm": 0.361,
+     "compA_bbox": [
+      84.75,
+      92.15,
+      52.25,
+      53.95
+     ],
+     "compA_cells": 513,
+     "compB_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compB_cells": 458200,
+     "same_component": false,
+     "status": "FAIL_NECESSARY"
+    },
+    "PCIE_DN_OUT4_N_MCIO": {
+     "A": [
+      89.65,
+      51.423
+     ],
+     "A_off_mm": 0.447,
+     "B": [
+      55.0,
+      60.2
+     ],
+     "B_off_mm": 0.361,
+     "compA_bbox": [
+      88.65,
+      89.35,
+      49.65,
+      51.55
+     ],
+     "compA_cells": 93,
+     "compB_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compB_cells": 458200,
+     "same_component": false,
+     "status": "FAIL_NECESSARY"
+    },
+    "PCIE_DN_OUT4_P_MCIO": {
+     "A": [
+      89.1,
+      52.366
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      54.4,
+      60.2
+     ],
+     "B_off_mm": 0.361,
+     "compA_bbox": [
+      84.75,
+      92.15,
+      52.25,
+      53.95
+     ],
+     "compA_cells": 513,
+     "compB_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compB_cells": 458200,
+     "same_component": false,
+     "status": "FAIL_NECESSARY"
+    },
+    "PCIE_DN_OUT5_N_MCIO": {
+     "A": [
+      90.85,
+      51.423
+     ],
+     "A_off_mm": 0.447,
+     "B": [
+      56.8,
+      60.2
+     ],
+     "B_off_mm": 0.361,
+     "compA_bbox": [
+      89.85,
+      90.55,
+      49.65,
+      51.55
+     ],
+     "compA_cells": 93,
+     "compB_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compB_cells": 458200,
+     "same_component": false,
+     "status": "FAIL_NECESSARY"
+    },
+    "PCIE_DN_OUT5_P_MCIO": {
+     "A": [
+      90.3,
+      52.366
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      56.2,
+      60.2
+     ],
+     "B_off_mm": 0.361,
+     "compA_bbox": [
+      84.75,
+      92.15,
+      52.25,
+      53.95
+     ],
+     "compA_cells": 513,
+     "compB_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compB_cells": 458200,
+     "same_component": false,
+     "status": "FAIL_NECESSARY"
+    },
+    "PCIE_DN_OUT6_N_MCIO": {
+     "A": [
+      92.05,
+      51.423
+     ],
+     "A_off_mm": 0.447,
+     "B": [
+      62.2,
+      60.2
+     ],
+     "B_off_mm": 0.361,
+     "compA_bbox": [
+      91.05,
+      91.75,
+      49.75,
+      51.55
+     ],
+     "compA_cells": 81,
+     "compB_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compB_cells": 458200,
+     "same_component": false,
+     "status": "FAIL_NECESSARY"
+    },
+    "PCIE_DN_OUT6_P_MCIO": {
+     "A": [
+      91.5,
+      52.366
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      61.6,
+      60.2
+     ],
+     "B_off_mm": 0.361,
+     "compA_bbox": [
+      84.75,
+      92.15,
+      52.25,
+      53.95
+     ],
+     "compA_cells": 513,
+     "compB_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compB_cells": 458200,
+     "same_component": false,
+     "status": "FAIL_NECESSARY"
+    },
+    "PCIE_DN_OUT7_N_MCIO": {
+     "A": [
+      93.7,
+      51.673
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      64.0,
+      60.2
+     ],
+     "B_off_mm": 0.361,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 458200,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_DN_OUT7_P_MCIO": {
+     "A": [
+      92.7,
+      52.366
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      63.4,
+      60.2
+     ],
+     "B_off_mm": 0.361,
+     "compA_bbox": [
+      93.05,
+      103.45,
+      52.45,
+      54.25
+     ],
+     "compA_cells": 743,
+     "compB_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compB_cells": 458200,
+     "same_component": false,
+     "status": "FAIL_NECESSARY"
+    },
+    "PCIE_UP_OUT0_N_J2": {
+     "A": [
+      84.35,
+      55.723
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      127.01,
+      43.25
+     ],
+     "B_off_mm": 0.424,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 458200,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_UP_OUT0_P_J2": {
+     "A": [
+      84.85,
+      54.88
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      141.22,
+      42.65
+     ],
+     "B_off_mm": 0.424,
+     "compA_bbox": [
+      84.45,
+      84.55,
+      54.55,
+      54.65
+     ],
+     "compA_cells": 3,
+     "compB_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compB_cells": 458200,
+     "same_component": false,
+     "status": "FAIL_NECESSARY"
+    },
+    "PCIE_UP_OUT1_N_J2": {
+     "A": [
+      85.5,
+      55.823
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      139.48,
+      43.85
+     ],
+     "B_off_mm": 0.424,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 458200,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_UP_OUT1_P_J2": {
+     "A": [
+      86.05,
+      54.88
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      127.59,
+      43.85
+     ],
+     "B_off_mm": 0.424,
+     "compA_bbox": [
+      84.95,
+      85.75,
+      54.05,
+      54.95
+     ],
+     "compA_cells": 35,
+     "compB_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compB_cells": 458200,
+     "same_component": false,
+     "status": "FAIL_NECESSARY"
+    },
+    "PCIE_UP_OUT2_N_J2": {
+     "A": [
+      86.7,
+      55.823
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      129.33,
+      46.85
+     ],
+     "B_off_mm": 0.424,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 458200,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_UP_OUT2_P_J2": {
+     "A": [
+      87.25,
+      54.88
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      137.16,
+      46.25
+     ],
+     "B_off_mm": 0.424,
+     "compA_bbox": [
+      86.15,
+      87.15,
+      54.35,
+      54.95
+     ],
+     "compA_cells": 33,
+     "compB_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compB_cells": 458200,
+     "same_component": false,
+     "status": "FAIL_NECESSARY"
+    },
+    "PCIE_UP_OUT3_N_J2": {
+     "A": [
+      87.9,
+      55.823
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      136.0,
+      47.45
+     ],
+     "B_off_mm": 0.424,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 458200,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_UP_OUT3_P_J2": {
+     "A": [
+      88.45,
+      54.88
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      130.49,
+      47.45
+     ],
+     "B_off_mm": 0.424,
+     "compA_bbox": [
+      87.35,
+      88.15,
+      54.45,
+      54.95
+     ],
+     "compA_cells": 30,
+     "compB_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compB_cells": 458200,
+     "same_component": false,
+     "status": "FAIL_NECESSARY"
+    },
+    "PCIE_UP_OUT4_N_J2": {
+     "A": [
+      89.1,
+      55.823
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      131.65,
+      48.65
+     ],
+     "B_off_mm": 0.447,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 458200,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_UP_OUT4_P_J2": {
+     "A": [
+      89.65,
+      54.88
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      140.06,
+      48.05
+     ],
+     "B_off_mm": 0.424,
+     "compA_bbox": [
+      88.55,
+      89.55,
+      54.35,
+      54.95
+     ],
+     "compA_cells": 33,
+     "compB_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compB_cells": 458200,
+     "same_component": false,
+     "status": "FAIL_NECESSARY"
+    },
+    "PCIE_UP_OUT5_N_J2": {
+     "A": [
+      90.3,
+      55.823
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      138.9,
+      49.25
+     ],
+     "B_off_mm": 0.424,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 458200,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_UP_OUT5_P_J2": {
+     "A": [
+      90.85,
+      54.88
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      128.75,
+      49.25
+     ],
+     "B_off_mm": 0.447,
+     "compA_bbox": [
+      89.75,
+      90.75,
+      54.45,
+      54.95
+     ],
+     "compA_cells": 32,
+     "compB_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compB_cells": 458200,
+     "same_component": false,
+     "status": "FAIL_NECESSARY"
+    },
+    "PCIE_UP_OUT6_N_J2": {
+     "A": [
+      91.5,
+      55.823
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      129.91,
+      52.25
+     ],
+     "B_off_mm": 0.424,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 458200,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_UP_OUT6_P_J2": {
+     "A": [
+      92.05,
+      54.88
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      137.74,
+      51.65
+     ],
+     "B_off_mm": 0.424,
+     "compA_bbox": [
+      90.95,
+      91.75,
+      54.45,
+      54.95
+     ],
+     "compA_cells": 30,
+     "compB_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compB_cells": 458200,
+     "same_component": false,
+     "status": "FAIL_NECESSARY"
+    },
+    "PCIE_UP_OUT7_N_J2": {
+     "A": [
+      92.7,
+      55.823
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      136.58,
+      52.85
+     ],
+     "B_off_mm": 0.424,
+     "compA_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compA_cells": 458200,
+     "same_component": true,
+     "status": "PASS_NECESSARY"
+    },
+    "PCIE_UP_OUT7_P_J2": {
+     "A": [
+      93.7,
+      55.13
+     ],
+     "A_off_mm": 0.424,
+     "B": [
+      131.07,
+      52.85
+     ],
+     "B_off_mm": 0.424,
+     "compA_bbox": [
+      94.05,
+      101.65,
+      54.45,
+      55.25
+     ],
+     "compA_cells": 502,
+     "compB_bbox": [
+      22.95,
+      143.05,
+      32.95,
+      78.95
+     ],
+     "compB_cells": 458200,
+     "same_component": false,
+     "status": "FAIL_NECESSARY"
+    }
+   },
+   "width_mm": 0.16
+  }
+ },
+ "question": "32 条 PCIE_(UP|DN)_OUT 数据车道能否在**保留原 A/B 锚点（=保留现 F 扇出/蛇形长度调谐）且不改他网**前提下达 ≤2 via/线？",
+ "red_lines_ok": [
+  "未改冻结四源",
+  "未改 criteria/",
+  "未改 l4..l8",
+  "未改网表",
+  "未改 SPEC",
+  "未派 WORKER",
+  "临时仅 /tmp/opencode",
+  "未越阶段"
+ ],
+ "results": {
+  "B.Cu": {
+   "fail_necessary": 3,
+   "pass_necessary": 29
+  },
+  "In2.Cu": {
+   "fail_necessary": 22,
+   "pass_necessary": 10
+  }
+ },
+ "schema": 1,
+ "session_label": "K2-2026-09-21 · R109 · #K2-66 §六④ B2 可行性探针（必要条件口径）",
+ "structure_facts": {
+  "derivation": "≤2 via ⇒ 中间段必须整体置于单一层 L 且两端各 1 个 F→L 孔；F–In5 无 span ⇒ L∈{In2,B.Cu}",
+  "lane_width_mm": {
+   "B.Cu": 0.205,
+   "In2.Cu": 0.16
+  },
+  "probe_step_mm": 0.1,
+  "span_classes": [
+   "F–In2",
+   "In2–In5",
+   "In5–B",
+   "F–B(通孔)"
+  ],
+  "track_vs_via_required_center_mm": "VIA_R(0.175)+hw(0.08/0.1025)+req(0.175 PCIe85) = 0.43(In2) / 0.4525(B.Cu)",
+  "via_geometry_mm": {
+   "drill": 0.2,
+   "od": 0.35
+  }
+ },
+ "tools": {
+  "feasibility_probe": "tools/k2_p4_b2_feasibility_probe_v1.py（a0da59cfb325411f）",
+  "relane_router": "tools/k2_p4_b2_in2_relane_v1.py（6cb435f9f685edd3）"
+ },
+ "ts": "2026-09-21T11:0x+08:00",
+ "verdict": {
+  "bcu_option": "B.Cu 为**唯一有可能全域达 ≤2** 之层：29/32 通过必要条件；但 3 条（DN_OUT0_N / DN_OUT0_P / UP_OUT0_P）锚点亦被封（DN_OUT0 对之 B 锚落 11456-cell 孤岛；UP_OUT0_P 之 A 锚仅 2 cell）。",
+  "blocking_named_nets": [
+   "P3V3（F–B 缝合孔墙 y≈54.0 · 0.5mm 栅距 · 21 孔）",
+   "GND（F–B 缝合孔墙 y=53.0 等）",
+   "I2C1_SDA（B.Cu y=50.438 x 62.8–68.6 + y=51.138 x 69.3–82.0）",
+   "PERSTA#（B.Cu 45° 斜线 (59.8,40.9)–(69.5,50.6)）",
+   "P3V3_AUX（B.Cu 45° 斜线 (59.9,48.4)–(73.775,62.275)）",
+   "DS320_STRAP_* / PWR_BTN_ISO"
+  ],
+  "implication": "达 ≤2/线 必须至少放宽一条前提：(a) 移 3 条线之 A/B 锚点（⇒ 须改其 F 扇出/蛇形 = 等长重调）；(b) 重布 B.Cu 之 I2C1_SDA/PERSTA#/P3V3_AUX 走廊（他网 ECO）；(c) 新开 F–In5 span（改孔策略/工艺）。且 32 车道 B.Cu 重迁须**拥塞感知布线器**（本会话 v1 朴素 A* 仅通 8/32，失败系顺序级联，非结构性）。",
+  "plan_doc_8_3_claim": "『唯一拓扑 = 长走改置 In2（F→In2→F）』**不成立** —— 原 A 锚点（U6 扇出端）在 In2 上被 **BGA/缝合孔墙**封死：22/32 车道的 A 锚仅落在 ≤743 cell（多数 3–93 cell）之孤立自由域。"
+ }
+}

@@ -1,0 +1,52 @@
+{
+ "artifact": "k2_pending_rulings_delta",
+ "ask": "裁 B2 处置路径：(a) 授权 B.Cu 全域重迁【32 车道长走→B.Cu(F→B→F) + 移 3 条锚点(触其 F 扇出/等长重调) + 重布 I2C1_SDA/PERSTA#/P3V3_AUX 走廊 + 拥塞感知布线器】；(b) 授权新开 F–In5 via span（保留现拓扑 · 各端 1 孔 · 须 JLC 深盲孔 DFM 前置）；(c) 判『保留原拓扑 + 现 span 类下 ≤2/线 不可达』具名豁免/具名已知缺口（同 #K2-67 courtyard 先例）。ENG 不自预设。",
+ "facts": {
+  "bcu_blockers": [
+   "I2C1_SDA（B.Cu y=50.438 x62.8–68.6 · y=51.138 x69.3–82.0）",
+   "PERSTA#（B.Cu 45° (59.8,40.9)–(69.5,50.6)）",
+   "P3V3_AUX（B.Cu 45° (59.9,48.4)–(73.775,62.275)）",
+   "DS320_STRAP_*",
+   "PWR_BTN_ISO"
+  ],
+  "evidence": [
+   "pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/K2_66_B2_IN2_RELANE_FEASIBILITY_20260921_v1.json（ec4d0888f1e7edfa）",
+   "docs/K2-66-B2-LANE-VIA-REDUCTION-PLAN-v1.md §十"
+  ],
+  "lane_set": "32 条 PCIE_(UP|DN)_OUT 数据车道（探针量法同 tools/k2_layout_quality_check_v1.py B2 行正则）",
+  "present": "每车道 4 via（F→B→In5[长走]→In2→F）",
+  "probe": "k2/tools/k2_p4_b2_feasibility_probe_v1.py（必要条件探针 · 只测量）：层 L 上精确净距栅格化 + 32 车道全 A/B 锚孔计入障碍 ⇒ 问 A/B 是否同自由连通域",
+  "requirement": "#K2-66 §六④『90° 直角 = 0 · 高速线过孔 ≤2/线』（强条 R1-5/R5-1）；#K2-66 §三 齿化表 B2 行",
+  "result": {
+   "B.Cu": "必要通过 29/32（3 失败：DN_OUT0_N/P 之 B 锚 11456-cell 孤岛 · UP_OUT0_P 之 A 锚 2 cell）",
+   "In2.Cu": "必要通过 10/32（22 失败 · 失败者 A 锚落 ≤743 cell 孤立域，多数 3–93 cell）"
+  },
+  "root_cause_named": "U6 扇出区 BGA/缝合孔墙：P3V3 F–B 缝合孔排（y≈54.0 · 0.5mm 栅距 · 21 孔）为实心墙；GND F–B 排（y=53.0 等 · 1.2mm 栅距）+ 车道自身 A 孔排（行距 0.943mm）叠加 ⇒ In2 通行所需中心距 VIA_R+hw+req=0.43mm 使相邻行无缝可穿。",
+  "span_classes": "{F–In2, In2–In5, In5–B} + F–B 通孔 ⇒ ≤2 via 之唯一结构 = 中间段整体单层 L + 两端各 1 个 F→L 孔；F–In5 无 span ⇒ L∈{In2, B.Cu}",
+  "v1_router_result": "B.Cu 朴素 A* 仅 8/32（2 条取绕南缘 y≈70 超长迂回 ⇒ 走廊级联失败）；最小余量 0.01–0.02mm（贴限）⇒ 非结构性，瓶颈=顺序/拥塞代价"
+ },
+ "impact": "未裁 ⇒ l9 之 #K2-66 §六④『高速线过孔 ≤2/线』一项无法关闭 ⇒ l9 不能过 #K2-66 §六 全闸 ⇒ 落库/限定复核顺延。其余 12 项（①–③⑤–⑦ + A/C 面）已达。",
+ "landed_this_session": [
+  {
+   "id": "#K2-66 §六④ 前置",
+   "note": "B2 必要性实测（In2 不可行证明 + B.Cu 可行性面 + 具名阻塞网 + WIP 布线器 v1）"
+  }
+ ],
+ "next": "① 待监理裁 (a)/(b)/(c)；② 若 (a) ⇒ 先建拥塞感知布线器（v2）后重跑 32 车道 + 精确闸；③ v36（l9 落库之 SPEC 同笔授权）仍待裁，独立并行。",
+ "owner_gate": "0（放行范围/过孔策略/走廊 = #14⑦ 监理自裁面；不涉拓扑/接口/信号流/球重映射）",
+ "purpose": "【待裁 · 放行范围/过孔策略/走廊】#K2-66 §六④ B2『高速线过孔 ≤2/线』：实测证明计划书 §8.3 之『长走改置 In2』不可行，且 B.Cu 路径需放宽至少一条前提。请裁处置路径 (a)/(b)/(c)。",
+ "red_lines_ok": [
+  "未改 criteria/",
+  "未改冻结四源",
+  "未改 l4..l8",
+  "未改网表",
+  "未改 SPEC",
+  "未派 WORKER",
+  "未越阶段",
+  "临时仅 /tmp/opencode"
+ ],
+ "schema": 1,
+ "session_label": "K2-2026-09-21 · R109 · B2（≤2 via/线）必要性实测 ⇒ 请裁处置路径",
+ "supersedes": "v36（l9 落库之 SPEC 同笔授权 · 仍待裁 · 本件不改其诉求）",
+ "ts": "2026-09-21T11:1x+08:00"
+}
