@@ -1,0 +1,139 @@
+{
+ "alloc_result": {
+  "A_side": "合法格 2654 ⇒ 32 位（min 1.400mm）· DN 取低 y 16 位 / UP 取高 y 16 位",
+  "B_side": "DN 16/16 位 · UP 16/16 位（各 min ≥1.401mm）· 各车道 B 位在其焊盘 3mm 内合法格中取（保 F.Cu 扇出可接）"
+ },
+ "artifact": "k2_71_r137_anchor_joint_alloc_dn16of16",
+ "authority": "#K2-71 §六-1（R-A 终局轮 · 二值）· §2.2/R136 根因（B 锚对间距 0.600<1.06）· N-3（B 锚位重设）",
+ "diagnosis_UP": {
+  "3 failing lanes": "`OUT3_N`/`OUT6_P`/`OUT7_N` 之 A/B 位 **blk_A=False · blk_B=False · 可始=True**（单车道结构检验）⇒ **非结构性**，属**硬序贪心之次序/拥塞**（同 3 条在多组配置下恒败 ⇒ 其路径必经同一拥挤段）",
+  "next_lever": "UP 收口 = 次序/rip-up（或把这 3 条排在首轮 + 其余重排）· 非锚位、非工具新版"
+ },
+ "headline": "**协同锚位指派奏效 ⇒ DN 组 16/16 见证达成**（配对守恒 32→16/16 · 闸 **0 违规** · 车道最小中心距 **0.4472 ≥0.435** · 障碍余量 **+0.1700 ≥0.100 具名** · 端点偏移 **0**）；全 32 合跑 **22/32**；UP 组 **13/16**（3 条失败车道之 A/B 位**均合法且无阻塞** ⇒ 属次序/拥塞，非结构性）。**二值仍未达成（需 32/32）**。",
+ "new_tool": {
+  "path": "tools/k2_p4_b2_anchor_alloc_v1.py",
+  "sha16": "见提交",
+  "why": "R136 根因（B 锚对间距 0.600<1.06 @margin0.100）+ r136b 反例（逐车道贪心不可用）⇒ 改为**先联合指派、后布线**：合法晶格（via 口径 ∩ 规则派生 movable）→ 全局贪心 ≥--min-sep（默认 1.40mm）→ 输出**单一锚位集**（无候选）⇒ 交给 v3（掩码依最终锚位一次算定）"
+ },
+ "next": [
+  "① UP 收口 3 条：**次序无关之确定性瓶颈** ⇒ 须对该 3 条做**局部重布**（把其 A/B 位沿走廊外移 0.5–1.0mm 以绕开拥挤段）或升级为 **rip-up-and-reroute（多条同时重布）**；非工具新版",
+  "② 合并 32/32 单跑 + 闸 0 违规 ⇒ (a) 见证 ⇒ 二值结案 ⇒ R3 施工（双侧锚位重设 + F 扇出 + 等长同批 + 铺铜重灌）",
+  "③ R-B 并行 ILP 求严格上界 <32；④ 32 HS 对 + 4 REFCLK 之匹配/等长报件"
+ ],
+ "red_lines_ok": [
+  "只读板件",
+  "冻结四源未动",
+  "criteria/ 未碰（rev=6）",
+  "l4..l8 逐字节未动",
+  "未派 WORKER",
+  "未写 .omo/supervision/**",
+  "未越阶段"
+ ],
+ "runs": [
+  {
+   "algo": "hard",
+   "cell": 0.1,
+   "gate": {
+    "clearance_min_mm": 0.17,
+    "endpoint_max_dev_mm": 0.0,
+    "lane_pitch_min_mm": 0.4472,
+    "n_clearance_viol": 0,
+    "n_lane_pitch_viol": 0
+   },
+   "restarts": 30,
+   "routed": "**22/32**",
+   "tag": "ALL32-joint-alloc"
+  },
+  {
+   "algo": "hard",
+   "cell": 0.1,
+   "failed": [],
+   "gate": {
+    "clearance_min_mm": 0.17,
+    "endpoint_max_dev_mm": 0.0,
+    "lane_pitch_min_mm": 0.4472,
+    "n_clearance_viol": 0,
+    "n_lane_pitch_viol": 0
+   },
+   "groups": "PCIE_DN_OUT",
+   "note": "**DN 组见证成立**（#K2-70 §六 ①配对守恒 ②≤2via 口径之 In5 段 ③余量具名 · 就 In5 布线层面）",
+   "restarts": 30,
+   "routed": "**16/16**",
+   "tag": "DN-joint-alloc"
+  },
+  {
+   "algo": "hard",
+   "cell": 0.1,
+   "failed": [
+    "PCIE_UP_OUT3_N_J2",
+    "PCIE_UP_OUT6_P_J2",
+    "PCIE_UP_OUT7_N_J2"
+   ],
+   "gate": {
+    "clearance_min_mm": 0.6963,
+    "endpoint_max_dev_mm": 0.0,
+    "lane_pitch_min_mm": 0.4472,
+    "n_clearance_viol": 0,
+    "n_lane_pitch_viol": 0
+   },
+   "groups": "PCIE_UP_OUT",
+   "restarts": 30,
+   "routed": "13/16",
+   "tag": "UP-east+allocB (U1)"
+  },
+  {
+   "algo": "hard",
+   "cell": 0.1,
+   "gate": {
+    "clearance_min_mm": 3.2805,
+    "endpoint_max_dev_mm": 0.0,
+    "lane_pitch_min_mm": 0.4472,
+    "n_clearance_viol": 0,
+    "n_lane_pitch_viol": 0
+   },
+   "groups": "PCIE_UP_OUT",
+   "restarts": 30,
+   "routed": "10/16",
+   "tag": "UP-allocA+origB (U2)"
+  },
+  {
+   "algo": "hard",
+   "cell": 0.1,
+   "gate": {
+    "clearance_min_mm": 3.422,
+    "endpoint_max_dev_mm": 0.0,
+    "lane_pitch_min_mm": 0.4472,
+    "n_clearance_viol": 0,
+    "n_lane_pitch_viol": 0
+   },
+   "groups": "PCIE_UP_OUT",
+   "restarts": 30,
+   "routed": "10/16",
+   "tag": "UP-allocA+allocB"
+  },
+  {
+   "algo": "hard",
+   "cell": 0.1,
+   "failed": [
+    "PCIE_UP_OUT3_N_J2",
+    "PCIE_UP_OUT6_P_J2",
+    "PCIE_UP_OUT7_N_J2"
+   ],
+   "gate": {
+    "clearance_min_mm": 0.6963,
+    "endpoint_max_dev_mm": 0.0,
+    "lane_pitch_min_mm": 0.4472,
+    "n_clearance_viol": 0,
+    "n_lane_pitch_viol": 0
+   },
+   "groups": "PCIE_UP_OUT",
+   "note": "120 轮恒 13/16 且**恒同 3 条** ⇒ 非随机拥塞，属该 3 条之**路径必经拥挤段**（次序无关）",
+   "restarts": 120,
+   "routed": "13/16",
+   "tag": "UP-U1-120r"
+  }
+ ],
+ "schema": 1,
+ "ts": "2026-09-21T16:5x+08:00",
+ "verdict": "**R-A 就 In5 布线层面：DN 组 16/16 已成（闸全绿 · 余量 +0.1700 具名）· UP 组 13/16（120 轮恒同 3 条）** ⇒ 全 32 **22/32** ⇒ **二值未达成**（差 UP 3 条）。R-B 证书仍未出。"
+}
