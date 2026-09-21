@@ -1,0 +1,105 @@
+{
+ "artifact": "k2_68_r1c_cage_relocation_real_attempt",
+ "authority": "#K2-68 §2.4 (a) 收紧版第 2 项（U6 扇出锚孔笼重构 · 腾挪 GND 缝合孔排出逃逸带）",
+ "conclusion": "① 路径方向**已证**：**In5（长走零改层）+ 逃逸带 GND 缝合孔移出 = 32/32**（唯一达 §四① 之组合；B.Cu 上限 30/32）。② 真实重布放器 v1 已跑通 28/38（10 条未寻得合法位），但引入 **12 hole_clearance + 13 unconnected** ⇒ **须修**（净距加 hole_clearance 条款 · 随孔搬 stub / 保同 GND 岛）后再复测。③ 本件**不主张**已达门，只报进度与缺陷。",
+ "drc_after_relocation": {
+  "baseline_l9": {
+   "errors": {
+    "courtyards_overlap": 2,
+    "pth_inside_courtyard": 1
+   },
+   "total": 267,
+   "unconnected": 0
+  },
+  "cage_relocated": {
+   "errors": {
+    "courtyards_overlap": 2,
+    "hole_clearance": 12,
+    "pth_inside_courtyard": 1
+   },
+   "total": 299,
+   "unconnected": 13
+  },
+  "root_causes_found": [
+   "**① 净距模型缺 hole_clearance 条款**：`min_hole_clearance = 0.25` 严于铜-铜净距 ⇒ 新孔**孔缘**须距他网铜缘 ≥0.25（本器当时按 `VIA_R+cls_req` 核，欠严）⇒ 12 条 hole_clearance（对 U6 无网焊盘 / I2C2_SCL·SDA / PERSTA# / DS320_STRAP）。修正 = 加 `dist_edge ≥ 0.25 + HOLE_R` 判据。",
+   "**② 未随孔搬迁其 GND 连接短stub**：原缝合孔有 GND 短走线/热焊盘连至 U6 GND 球（如 `U6.B19(82.91,53.59)`）⇒ 孔移走后残留孤岛 ⇒ 13 条 unconnected。修正 = 同批搬迁/删除该孔的连接 stub，或改以『就近合法位且保持同一 GND 岛』为约束。"
+  ],
+  "status": "**两缺陷已具名定位 · 未修**（下一件修）"
+ },
+ "input_board": "l9（39b58aa12c86e5f4）",
+ "out_board": "/tmp/opencode/b2r/cage/c1_out.kicad_pcb（WIP）",
+ "probe_after_relocation": {
+  "B.Cu": 30,
+  "In2": 18,
+  "In5": 32,
+  "verdict": "**In5 = 32/32（必要条件全通过）** ⇒ 路径 (In5 · 长走零改层) 之**关键前提达成**（真实重布放，非删除）"
+ },
+ "red_lines_ok": [
+  "未改 criteria/",
+  "未改冻结四源",
+  "未改 l4..l8（仅 /tmp 副本）",
+  "未改网表",
+  "未改 SPEC",
+  "未派 WORKER",
+  "未越阶段"
+ ],
+ "relocation": {
+  "moved_sample": [
+   {
+    "d_mm": 3.0,
+    "from": [
+     94.425,
+     50.98
+    ],
+    "to": [
+     94.425,
+     47.98
+    ]
+   },
+   {
+    "d_mm": 3.7,
+    "from": [
+     84.675,
+     53.0
+    ],
+    "to": [
+     80.975,
+     53.0
+    ]
+   },
+   {
+    "d_mm": 3.6,
+    "from": [
+     84.574,
+     53.59
+    ],
+    "to": [
+     80.974,
+     53.59
+    ]
+   },
+   {
+    "d_mm": 2.8,
+    "from": [
+     95.05,
+     50.755
+    ],
+    "to": [
+     95.05,
+     47.955
+    ]
+   }
+  ],
+  "result": {
+   "candidates": 38,
+   "failed": 10,
+   "max_d_mm": 4.808,
+   "moved": 28
+  },
+  "rule": "只动 GND 网 F–B 通孔 · 新位须离开逃逸带 x[81,99]×y[48,58] 且最近合法 · 他网不动",
+  "tool": "tools/k2_p4_b2_relocate_stitch_v1.py（71e1dc5d93cca1c9）"
+ },
+ "schema": 1,
+ "session_label": "K2-2026-09-21 · R110 · #K2-68 §三-2 · (a)-2 项**真实**执行尝试（逃逸带 GND 缝合孔重布放）",
+ "ts": "2026-09-21T11:3x+08:00"
+}
