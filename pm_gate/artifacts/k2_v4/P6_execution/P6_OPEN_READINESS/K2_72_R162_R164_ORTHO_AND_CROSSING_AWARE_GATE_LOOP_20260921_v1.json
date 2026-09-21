@@ -1,0 +1,76 @@
+{
+ "artifact": "k2_p4_b2_R162_R164_orthogonal_paths_and_crossing_aware_gate_in_loop",
+ "binary": {
+  "R-A_witness": "NOT ACHIEVED（最佳仍含真交叉；交叉感知闸下最优 6 真违规）",
+  "R-B_certificate": "NONE"
+ },
+ "gate_selfcheck": {
+  "owner闸口": 0,
+  "冻结四源": "未动",
+  "判据": "rev=6 MATCH（只读未碰）",
+  "外部前置": "1（criteria rev=7）",
+  "待裁": 0,
+  "阶段": "P5 PENDING_EXTERNAL · 未越阶段"
+ },
+ "instruments": [
+  "tools/k2_p4_b2_true_gate_v1.py（crossing-aware 加严复核器·已入库）",
+  "tools/k2_p4_b2_in5_ripup_ortho_xgate_v1.py（正交+交叉感知闸驱动·已入库）",
+  "/tmp/opencode/archer/hardrip_run.py（硬序 rip-up·临时）"
+ ],
+ "new_findings": [
+  {
+   "claim": "rip-up 循环之**接受/择优判据** = v3 exact_gate（D-4 盲交叉）⇒ 求解器优化了错误目标：R162 实测 32/32、闸报 1 违规，真交叉 5 对 ⇒ R159『残 6』之 3 处短路从未被求解器看见，非『搜索不到』。",
+   "fix_applied": "ENG 已把交叉感知闸注入循环 ⇒ 真违规 20→6；仍不达 0（须硬掩码/连续几何）",
+   "id": "D-5",
+   "sev": "高·决定性"
+  },
+  {
+   "claim": "4 连通（正交格路）虽使格内对角交换不可能，但代价高：硬掩码 init(R_out=0.455) 仅 18/32（8 连通@0.5764 为 25–27/32）⇒ 正交化非正解；正解在更细格（h=0.05）或连续几何。",
+   "evidence": "rip_ortho_r455_s7.log / rip_xtrue_s7.log / rip_hardH_s7.log 之 [init] 行",
+   "id": "D-6",
+   "sev": "中·工具面"
+  }
+ ],
+ "next_steps": [
+  "① 细格 cell=0.05 + 窗口化(x∈[76,104]) + 8 连通 + 交叉感知闸（折角惩罚 2·0.5·0.05·√2=0.0707 ⇒ R_out=0.435+0.0707=0.5057）",
+  "② 或连续几何（非格）路由：真折线硬障碍(Minkowski 0.435) + 锚笼合并区序约束（禁跨序交换）",
+  "③ 不达 ⇒ #K2-72 §六 (c) 严格上界/几何守恒 ‖ L2 加大合并区裕度"
+ ],
+ "referenced_sha16": {
+  "/tmp/opencode/archer/wo_R159.json": "f6d79d52e94d5caa",
+  "/tmp/opencode/archer/wo_ortho_r455_s7.json": "a69dfcb9876a87ed",
+  "/tmp/opencode/archer/wo_xtrue_s7.json": "37281d3768b31455",
+  "k2/tools/k2_p4_b2_in5_ripup_ortho_xgate_v1.py": "f26045a27cf0431d",
+  "k2/tools/k2_p4_b2_in5_ripup_v1.py": "3108ead167f976ef",
+  "k2/tools/k2_p4_b2_true_gate_v1.py": "8ea777b251e93c9d"
+ },
+ "runs": {
+  "R159(baseline,8连通,soft,R_out0.5764,v3闸)": {
+   "routed": 32,
+   "true_below_pitch": 6,
+   "true_crossing_pairs": 3,
+   "v3_viol": 6
+  },
+  "R162(4连通,soft,R_out0.455,盲闸)": {
+   "note": "D-5 铁证：v3 闸报『仅 1 违规』，真闸复查 5 对真交叉 ⇒ 循环接受判据(盲闸)选出之『最佳』解含 5 处不可见短路",
+   "routed": 32,
+   "true_below_pitch": 6,
+   "true_crossing_pairs": 5,
+   "v3_viol": 1
+  },
+  "R163(4连通,soft,R_out0.455,交叉感知闸入环)": {
+   "note": "入环后真违规 20→6（收敛仍不达 0）⇒ 软罚机制无法保证硬约束",
+   "routed": 32,
+   "true_below_pitch": 6,
+   "true_crossing_pairs": 5
+  },
+  "R164(4连通,硬掩码顺序 rip-up,rmin=rout=0.455)": {
+   "note": "硬掩码 init 仅 18/32 ⇒ 硬序重布亦不达（软罚 6 更优）",
+   "routed": 32,
+   "true_below_pitch": 11
+  }
+ },
+ "scope": "P5/B2 In5 32 车道互斥（R-A 见证面）· 只读板件 · 未改冻结四源 · 未越阶段",
+ "tick": "R162-R164（承 R161 · handoff §6-2 瓶颈①）",
+ "ts": "2026-09-21T18:56:51"
+}
