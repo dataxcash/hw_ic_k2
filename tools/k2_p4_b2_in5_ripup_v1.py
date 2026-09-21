@@ -52,6 +52,7 @@ def main():
     ap.add_argument("--kgrow", type=float, default=2.0)
     ap.add_argument("--rmin", type=float, default=0.435)
     ap.add_argument("--rout", type=float, default=None, help="互斥半径（默认 pitch+margin+2·折角安全）")
+    ap.add_argument("--pin", default=None, help="以既有工作令之 routes 为**硬约束**（只重布未 pin 之车道）")
     ap.add_argument("--a-sites", default=None)
     ap.add_argument("--b-sites", default=None)
     ap.add_argument("--groups", default=None)
@@ -128,6 +129,25 @@ def main():
                 an["B"] = (rast.X0 + gi * a.cell, rast.Y0 + gj * a.cell)
             t["status"] = "PENDING"
         tasks[nm] = t
+    pinned = {}
+    pinned_pts = {}
+    if a.pin:
+        pw = json.load(open(a.pin))
+        for nm, rt in pw["routes"].items():
+            if nm not in tasks:
+                continue
+            cells = []
+            pts = rt["pts"]
+            for q in range(len(pts) - 1):
+                x0, y0 = pts[q]; x1, y1 = pts[q + 1]
+                n = max(1, int(math.hypot(x1 - x0, y1 - y0) / (0.5 * a.cell)))
+                for k in range(n + 1):
+                    x = x0 + (x1 - x0) * k / n; y = y0 + (y1 - y0) * k / n
+                    cells.append(rast.cell(x, y))
+            pinned[nm] = cells
+            pinned_pts[nm] = [[float(x), float(y)] for (x, y) in pts]
+            tasks[nm]["status"] = "PINNED"
+        print("  [pin] %d 条车道置为硬约束（%s）" % (len(pinned), a.pin), flush=True)
     bad = [nm for nm, t in tasks.items() if t["status"] != "PENDING"]
     if bad:
         print("  ⚠ 端点不可行：", bad, flush=True)
@@ -204,7 +224,7 @@ def main():
     def greedy(order, fixed=None):
         kept = dict(fixed or {})
         for nm in order:
-            if nm in kept:
+            if nm in kept or tasks[nm]["status"] != "PENDING":
                 continue
             allowed = route_mask(kept, R)
             p = route(nm, allowed)
@@ -221,17 +241,20 @@ def main():
         rr = {}
         for nm, cells in ps.items():
             t = tasks[nm]
-            pts = [t["an"]["A"]] + [(rast.X0 + i * a.cell, rast.Y0 + j * a.cell) for (i, j) in cells] + [t["an"]["B"]]
-            pts = v3.simplify(pts)
+            if nm in pinned_pts:      # pinned：保留原折线（勿栅格化 · 否则台阶化致闸假违规）
+                pts = [tuple(q) for q in pinned_pts[nm]]
+            else:
+                pts = [t["an"]["A"]] + [(rast.X0 + i * a.cell, rast.Y0 + j * a.cell) for (i, j) in cells] + [t["an"]["B"]]
+                pts = v3.simplify(pts)
             rr[nm] = {"pts": [[round(x, 4), round(y, 4)] for (x, y) in pts],
                       "len_mm": round(sum(math.dist(pts[q], pts[q + 1]) for q in range(len(pts) - 1)), 3)}
         g = v3.exact_gate(model, rr, anchors, a.layer, hw, movable, movable_vias, pitch_eff, movable_copper)
         return g, rr
 
-    paths = {}
+    paths = {k: list(v) for k, v in pinned.items()}
     # 初始化：硬掩码贪心（R_out）多序取优
     def greedy(order):
-        kept = {}
+        kept = {k: list(v) for k, v in pinned.items()}
         for nm in order:
             allowed = route_mask(kept, R)
             p = route(nm, allowed)
@@ -252,13 +275,15 @@ def main():
     for it in range(a.iters):
         ord_it = order0[it % len(order0):] + order0[:it % len(order0)]
         for nm in ord_it:
+            if tasks[nm]["status"] != "PENDING":
+                continue
             others = {k: v for k, v in paths.items() if k != nm}
             p = route_soft(nm, others, K, a.rmin)
             if p:
                 paths[nm] = p
         g, rr = gate_of(paths)
         viol = g["n_lane_pitch_viol"]
-        key = (len(paths), -viol)
+        key = (sum(1 for n2 in paths if tasks[n2]["status"] == "PENDING"), -viol)
         if best is None or key > best[0]:
             best = (key, {k: list(v) for k, v in paths.items()}, g)
         print("  [it %3d] routed=%2d/%d K=%9.2f 闸: 最小中心距=%.4f 违规=%d 余量=%.4f"
@@ -266,7 +291,7 @@ def main():
         if viol and it % 2 == 0:
             print("        最小对=%s · 违规对=%s" % (g.get("lane_pitch_min_pair"),
                   g.get("lane_pitch_violations")), flush=True)
-        if viol == 0 and len(paths) == n_l and g["n_clearance_viol"] == 0 and g["endpoint_max_dev_mm"] == 0.0:
+        if viol == 0 and all(tasks[n2]["status"] == "PENDING" for n2 in tasks if n2 not in paths) and g["n_clearance_viol"] == 0 and g["endpoint_max_dev_mm"] == 0.0:
             break
         K = min(K * a.kgrow, 1.0e7)
     (_, _), paths, gate_best = best
@@ -275,8 +300,11 @@ def main():
     routes = {}
     for nm, cells in paths.items():
         t = tasks[nm]
-        pts = [t["an"]["A"]] + [(rast.X0 + i * a.cell, rast.Y0 + j * a.cell) for (i, j) in cells] + [t["an"]["B"]]
-        pts = v3.simplify(pts)
+        if nm in pinned_pts:      # pinned 车道：**保留原折线**（勿再栅格化 · 否则台阶化致闸假违规）
+            pts = [tuple(q) for q in pinned_pts[nm]]
+        else:
+            pts = [t["an"]["A"]] + [(rast.X0 + i * a.cell, rast.Y0 + j * a.cell) for (i, j) in cells] + [t["an"]["B"]]
+            pts = v3.simplify(pts)
         routes[nm] = {"pts": [[round(x, 4), round(y, 4)] for (x, y) in pts],
                       "len_mm": round(sum(math.dist(pts[q], pts[q + 1]) for q in range(len(pts) - 1)), 3)}
     gate = None
