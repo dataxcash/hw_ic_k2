@@ -1,0 +1,64 @@
+{
+ "artifact": "k2_p4_b2_RA_WITNESS_32of32_crossing_aware_gate_v1",
+ "artifacts": {
+  "前置解": "/tmp/opencode/archer/wo_c3_s7.json",
+  "日志": [
+   "/tmp/opencode/archer/rip_c3_s7.log",
+   "rip_c3_s23.log"
+  ],
+  "模型": "/tmp/opencode/r1e_dump_v1.json",
+  "解": "/tmp/opencode/archer/wo_c3_nudged.json",
+  "锚笼": "/tmp/opencode/archer/a_cage3row.json",
+  "锚笼工具": "/tmp/opencode/archer/cage3row.py"
+ },
+ "caveats": [
+  "本见证之 A 锚笼含**新错行几何**（DN 10+6 行）⇒ 须由监理确认其为**施工锚笼**（L2 面）；UP 亚带未改。",
+  "nudge 位移 0.05mm（亚格）· 已过全闸校验 + 真闸复核 · 端点偏移 0.",
+  "本件 = **B2 In5 车道见证**（R-A）；#K2-72 §六 (c)（R-B 上界证书）**仍未出**，但 R-A 已形成 32/32 可行解 ⇒ (c) 之『不可达』方向失去标的，应转『**可达性已证**』归档。",
+  "R3 施工前仍须：B 锚位重设 8 条（#K2-71 N-3）· 双侧 F.Cu 扇出重布 · 等长/skew≤0.15 · ref_plane_continuity · 铺铜重灌 · 32HS+4REFCLK 匹配报件；l9 硬前置 criteria rev=7（gate 属主）。"
+ ],
+ "construction_chain": [
+  "① A 锚笼 v2（**DN 错行**）：rows y=48.0/49.7 · 10+6 分布 · 交错偏移 0.85 · 最小两两距 1.800≥1.70（依据 D-8：降低车队→锚洞行的收敛斜率需求）—— L2 已授权（#K2-69 Q1 全笼重构 / #K2-72 Q2 pitch≥1.70 / Q3 指派序）；由 /tmp/opencode/archer/cage3row.py 自板派生（判据⑩）。UP 亚带沿用 R149_a（v1）。",
+  "② 布线：tools/k2_p4_b2_in5_ripup_v1.py 同参（8 连通 · cell 0.10 · R_out 0.5764 · --pin 无 · excl 走廊分区）+ **交叉感知真闸入环**（驱动 ortho2_run.py：v3.exact_gate → true_gate）⇒ 32/32 · 真违规 1（min 0.4243）",
+  "③ 末段合法化：tools/k2_p4_b2_in5_nudge_v1.py（亚格 · 该对段距判据 · 全局闸校验+回退）⇒ 顶点 38 移 0.05mm ⇒ 32/32 · 真违规 0 · min 0.4472"
+ ],
+ "gate": {
+  "endpoint_max_dev_mm": 0.0,
+  "min_exact_seg_seg_mm": 0.4472,
+  "n_routed": "32/32",
+  "obstacle_clearance_min_mm": 0.17,
+  "pairs_below_pitch": 0,
+  "pairs_true_crossing": 0,
+  "req_clearance_mm": 0.1,
+  "req_mm": 0.435,
+  "v3_exact_gate_viol": 0,
+  "verifier": "tools/k2_p4_b2_true_gate_v1.py（crossing-aware · 真交点⇒0）"
+ },
+ "gate_selfcheck": {
+  "owner闸口": 0,
+  "冻结四源": "未动",
+  "判据": "criteria/ rev=6 MATCH（只读未碰）",
+  "外部前置": "1（criteria rev=7 · gate 属主）",
+  "待裁": 0,
+  "阶段": "P5 PENDING_EXTERNAL（未越阶段）"
+ },
+ "referenced_sha16": {
+  "/tmp/opencode/archer/a_cage3row.json": "96a0023a9cbc2b35",
+  "/tmp/opencode/archer/cage3row.py": "664282a1fb8e6d4c",
+  "/tmp/opencode/archer/ortho2_run.py": "9c460e08e142fd4e",
+  "/tmp/opencode/archer/wo_c3_nudged.json": "c21802fda10a3bfc",
+  "/tmp/opencode/archer/wo_c3_s7.json": "978897687e16c46a",
+  "k2/tools/k2_p4_b2_in5_nudge_v1.py": "37f41a42510e4efb",
+  "k2/tools/k2_p4_b2_in5_ripup_v1.py": "3108ead167f976ef",
+  "k2/tools/k2_p4_b2_true_gate_v1.py": "8ea777b251e93c9d"
+ },
+ "repro": [
+  "python3 /tmp/opencode/archer/cage3row.py",
+  "ASITES=/tmp/opencode/archer/a_cage3row.json python3 -u /tmp/opencode/archer/ortho2_run.py /tmp/opencode/archer/wo_c3_s7.json 7 0.5764 0.10 8",
+  "python3 tools/k2_p4_b2_in5_nudge_v1.py /tmp/opencode/archer/wo_c3_s7.json /tmp/opencode/archer/wo_c3_nudged.json",
+  "python3 tools/k2_p4_b2_true_gate_v1.py /tmp/opencode/archer/wo_c3_nudged.json"
+ ],
+ "tick": "R177+R179（承 R161–R176）",
+ "ts": "2026-09-21T19:25:57",
+ "verdict": "**R-A 见证达成**（依 #K2-72 §二 R-gate 之 ①–④ · 并以 D-4 加严之真交点判定复核）"
+}
