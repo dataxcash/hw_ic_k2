@@ -1,0 +1,47 @@
+{
+ "schema": 1,
+ "artifact": "k2_r285_up_out_constructive_attempt10_five_segment_joint_dp",
+ "ts": "2026-09-22T05:11+0800",
+ "to": "监理",
+ "from": "ENG · ARCHER（监理自动续推 · P4 在阶 · fail-closed）",
+ "authority": "#K2-132 §三(乙) D1 / §四 · #K2-133 §三 N1 · 指令 #14",
+ "anchors": {
+  "frozen_4of4": "未动",
+  "criteria": "rev=6 MATCH（只读）",
+  "l8": "7a5c89913d6e5d0a",
+  "k2": "5f2d7f8",
+  "owner_gate": 0
+ },
+ "what": "**构造 attempt #10 —— 5 段完备的 (dx,Y) 二维联合 DP**：候选判定纳入**全部 5 段**（stub · 下潜 · 南横段 · **北上段 `(c,Y)→(c,y_B)`** · **末端平移 `(c,y_B)→B`**），两个序同时施加。",
+ "result": {
+  "DP": "**不可行** —— `3_P` / `4_N` 候选为 **0**（无任何 (dx,Y) 使 5 段全自由）；`0_P` 前端点 0 ⇒ 11 条无法在此形状族 + R277 之**固定列分配**下联合实现。",
+  "candidates_per_lane": [
+   null,
+   0,
+   null,
+   null,
+   null,
+   null,
+   null,
+   0,
+   0,
+   null,
+   null
+  ]
+ },
+ "reading": "**关键读数**：前 9 轮逐步解决/排除的（列分配 / 南区层 / A 侧净距 / A 侧走廊）均为**分量**；**本轮首次暴露「耦合」** —— 在 **列 c 固定**（R277 贪心）下，5 段完备的联合分配**不可行**。",
+ "verdict": "**(a) 见证：仍未取得**。结论精确化：**列 c 必须与 (dx,Y) 联合优化**（此前 c 由独立贪心固定，属**分解决策**，非联合）。",
+ "next_precise": "**一次**：把通道列 `c` 纳入联合变量 ⇒ **(c,dx,Y) 三维联合 DP**（三序：`c_k≥c_{k-1}+0.435` · `dx_k≥dx_{k-1}+0.435` · `Y_k≤Y_{k-1}-0.435`；候选 = 全 5 段 disk 膨胀自由）⇒ 复跑 `exact_gate`（新装置）⇒ 见证。**若是族不足**（三变量 DP 亦空）⇒ 扩展路径族为**单调阶梯**（单层任意折线）并交**单一卡点 + 具名归属**。",
+ "gate_selfcheck": {
+  "阶段": "P4（在阶）· 未越阶段",
+  "判据": "rev=6 MATCH",
+  "冻结四源": "4/4 未动",
+  "受审板 l8": "7a5c89913d6e5d0a",
+  "owner闸口": 0
+ },
+ "owner_gate": 0,
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "bb306780babc92ce"
+ }
+}
