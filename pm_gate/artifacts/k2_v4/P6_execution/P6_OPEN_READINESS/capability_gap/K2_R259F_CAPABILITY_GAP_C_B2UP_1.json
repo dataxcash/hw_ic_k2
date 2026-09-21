@@ -1,0 +1,34 @@
+{
+ "schema": 1,
+ "artifact": "k2_r259f_capability_gap_registration_C_six2_bundle_router",
+ "ts": "2026-09-22T02:22+0800",
+ "from": "ENG · ARCHER（应 #K2-133 O-1 登记）",
+ "to": "监理",
+ "authority": "#K2-133 O-1（卡点层 = 算法/实现能力层 ⇒ 登记 `C-*` · 限 = 本件二值件 · 非 owner）· #K2-132 §三.5 · #K2-73 O-3 / #K2-130 O-3 口径",
+ "owner_gate": 0,
+ "gap": {
+  "id": "C-B2UP-1",
+  "title": "可达性约束下的**精确指派匹配** + **单层(In5)坐标化线束生成**（A 侧 x 序 ↔ B 侧 x 序含次序反转 · 硬避让 · 车道互距 ≥0.435）",
+  "layer": "算法/实现能力层（**非**判据层 · **非**几何刚性层）",
+  "evidence": {
+   "①": "跨线 y=54.88：N 容量 **18 ≥ 8** ⇒ 无刚性上界<16（R259c）",
+   "②": "松弛精确指派 = **FEASIBLE 8/8**（R259c · 独立复核 ALL PASS）⇒ 指派层非瓶颈",
+   "③": "坐标化生成（唯一既有生成器 R254 `assign_router.py`，指派与本件②同型）= **2/16**；构造法 `construct_router.py` 历史最好 **12/16**（均 全转口径）",
+   "④": "**全转落板实测（R259e）**：先删尽自网 In5 旧铜 564 段再施工 ⇒ **error 237→7（−97%）· unconnected 0→4 · 涉他网 0** ⇒ F-2 之 237 系落板缺陷、非几何刚性"
+  },
+  "limit": "本件二值件（(#K2-132 §三.5) ② 可行而 ③④ 出不来 ⇒ 停手 + 单一卡点 + 归属）",
+  "status": "OPEN（本 ENG 侧未收敛；构造解未得）",
+  "non_owner": "承 #K2-73 O-3 / #K2-130 O-3：能力缺口 ≠ owner 项"
+ },
+ "N2_申报口径_预置": {
+  "trigger": "已触发（全转落板后仍 12/16 < 16/16 · #K2-133 §四）",
+  "candidate_other_net_objects_in_corridor": "In5 段 88（I2C1_SDA 32 · PERSTA# 18 · PCIE_UP6_N 17 · DS320_STRAP_B_ADDR1_7-0 12 · PCIE_DN_OUT6_N_MCIO 9）· 含 In5 过孔他网 14（I2C1_SDA 2 · PCIE_DN_OUT4/5/6 各 2 · DS320_STRAP_B_ADDR1_7-0 2）",
+  "frozen_do_not_touch": "135 枚电源/地缝合孔（GND 70 · GND_FIXED 32 · P3V3_FIXED 25 · P3V3 8）—— #K2-133 §三 明禁",
+  "note": "**清单未出**：须先证『no-move 已榨干』（4 条未转换之阻塞物须逐条归因）；未归因前**不申报**、**不执行**（#K2-133 §四 禁自行执行）。"
+ },
+ "next": "请监理：① 给 `C-B2UP-1` 定限期；② 核定 ③④ 收口方式（构造解 16/16 之预算/期限）。owner 闸口 = 0。",
+ "self_sha16": {
+  "convention_A_sha16": "8f71f585fd680830",
+  "convention": "#K2-72 §五 约定A"
+ }
+}
