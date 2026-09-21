@@ -1,0 +1,107 @@
+{
+ "D1_closure": {
+  "admissible_L": [
+   "In2.Cu",
+   "In5.Cu",
+   "B.Cu"
+  ],
+  "board_actual_span_set": {
+   "pairs": {
+    "F.Cu-B.Cu": 279,
+    "F.Cu-In1.Cu": 171,
+    "F.Cu-In2.Cu": 132,
+    "F.Cu-In4.Cu": 4,
+    "F.Cu-In5.Cu": 19,
+    "In2.Cu-In5.Cu": 92,
+    "In5.Cu-B.Cu": 37
+   },
+   "total_vias": 734
+  },
+  "confirms_D1": "板实际含 **F.Cu-In5.Cu ×19**（与 #K2-68 监理读数一致）⇒『F↔In5 无直接 span』前提**被证伪**",
+  "defect": "探针 span_classes 系**手列**（照抄计划书 §8.2）⇒ 漏列 F–In5，致 L=In5 从未评估（#K2-68 §2.2 D-1）",
+  "fix": "探针改为**自板解析** span 集（board_span_set()）；admissible_L 亦由 span 集派得",
+  "note": "In1/In4 为平面层（非信号层）⇒ L 集 = {In2, In5, B.Cu}，三者皆有 F–L 直接 span"
+ },
+ "R1_result": {
+  "B_Cu": {
+   "fail": 3,
+   "pass": 29,
+   "width_mm": 0.205
+  },
+  "In2_Cu": {
+   "fail": 22,
+   "pass": 10,
+   "width_mm": 0.16
+  },
+  "In5_Cu": {
+   "fail": 7,
+   "pass": 25,
+   "width_mm": 0.16
+  },
+  "In5_fail_root": "6×`DN_OUT*_P` 之 A 锚（y=52.366）落 **513-cell** 孤立域 · `UP_OUT0_P` 之 A 锚仅 **3 cell** ⇒ 同属 U6 扇出「锚孔笼」（#K2-68 §2.1 监理已独立复算成立）",
+  "In5_fail_set": [
+   "PCIE_DN_OUT1_P_MCIO",
+   "PCIE_DN_OUT2_P_MCIO",
+   "PCIE_DN_OUT3_P_MCIO",
+   "PCIE_DN_OUT4_P_MCIO",
+   "PCIE_DN_OUT5_P_MCIO",
+   "PCIE_DN_OUT6_P_MCIO",
+   "PCIE_UP_OUT0_P_J2"
+  ],
+  "method": "必要条件探针（只测量）· 层上精确净距栅格化（step 0.10mm）· 把 32 车道全部 A/B 锚孔计入障碍 · 判 A/B 是否同自由连通域",
+  "ordering_note": "必要条件通过数：B.Cu 29 > **In5 25** > In2 10 ⇒ 与 (a) 选择一致",
+  "verdict": "**In5 未达 32/32 ⇒ 按 #K2-68 §三-2 判『不达标』⇒ 路径 = (a) B.Cu 全域重迁（收紧版）**"
+ },
+ "R1_si_and_other_checks": {
+  "drc": "未跑（R1 为只读几何核）⇒ 属 R2 实板项",
+  "impedance_85ohm": {
+   "delta_under_In5_path": "**零**（长走仍为现 In5 走线，几何/w 不变）⇒ 85Ω 不回归",
+   "kind": "symmetric_stripline",
+   "layer": "In5.Cu",
+   "refs": [
+    "In4.Cu",
+    "In6.Cu"
+   ],
+   "source": "SPEC_k2_v4.spec-rev-54.json·impedance.per_layer.In5.Cu",
+   "w_mm": 0.16
+  },
+  "length_matching": {
+   "fact": "任一改层路径都会改变**中段长度**（DN 例：旧中段 = B 10.48 + In5 20.25 + In2 10.56 = 41.3mm；In5 路径新中段 ≈ 20.25 + 端部 jog ⇒ **短约 16mm**）",
+   "implication": "⇒ **F 蛇形须重调**（等长 R2-1..R2-5/R3-3）—— 两路径皆然；**且须成对处理（P/N 同步）以保 skew ≤0.15mm**",
+   "note": "本条为 R1 之**关键副产物**：『In5 路径 = 最小改动』**不完全成立**（长走零改层，但长度调谐须重做）"
+  },
+  "ref_plane_integrity_5": {
+   "action": "两路径之该维实测须在**实板**上跑（R2 后）；本件只作**定性**与**基线**说明（禁把定性当 PASS）",
+   "caliber": "ref_plane_continuity = non_antipad_gap==0（R=0.5mm）",
+   "delta_under_Bcu_path": "B.Cu 参考 = In6（GND 整面）⇒ 反而**消除** In4 分割参考风险（改善项）",
+   "delta_under_In5_path": "长走**不变** ⇒ 越分割状况与现状**逐字节同**（非回归）；但**非零**（既有项）",
+   "fact": "In5 参考面 = In4（**分割电源面**）+ In6（GND）"
+  }
+ },
+ "artifact": "k2_68_r1_in5_layer_necessity_report",
+ "authority": "#K2-68 §三-1（先做 R1（只读 · 零成本）：补跑必要性探针，L 加 In5.Cu，用板实际 span 集）",
+ "board_under_test": {
+  "path": "/tmp/opencode/l9/k2_v4_8L.l9.kicad_pcb",
+  "sha16": "39b58aa12c86e5f4"
+ },
+ "next_per_k268": [
+  "R2 = (a) B.Cu 全域重迁（收紧版）5 项必做：整批 32 条 / U6 锚孔笼重构+参考面复核 / 他网走廊 ECO / 拥塞感知布线器 v2 + 真余量下限 / 等长重调 + 铺铜重灌",
+  "v36 并行：spec-rev-55（须满足 #K2-68 §五 criteria rev=7 硬前置 —— 归 gate 属主）"
+ ],
+ "red_lines_ok": [
+  "未改 criteria/",
+  "未改冻结四源",
+  "未改 l4..l8",
+  "未改网表",
+  "未改 SPEC",
+  "未派 WORKER",
+  "临时仅 /tmp/opencode",
+  "未越阶段"
+ ],
+ "schema": 1,
+ "session_label": "K2-2026-09-21 · R110 · #K2-68 §三-1 R1（只读）· D-1 关闭 · L=In5 必要性实测",
+ "tools": {
+  "probe": "tools/k2_p4_b2_feasibility_probe_v1.py（56c00419575cb5cb · 已修 span 自解析 + L=In5）"
+ },
+ "ts": "2026-09-21T11:2x+08:00"
+}

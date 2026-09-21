@@ -221,6 +221,25 @@ def probe_layer(b, layer_name, lane_w, anchors, lane_nets):
     return out
 
 
+def board_span_set(b):
+    """自板解析 via span 集（D-1 修正：禁手列）。"""
+    import collections as _c
+    sp = _c.Counter()
+    for t in b.GetTracks():
+        if t.GetClass() != "PCB_VIA":
+            continue
+        v = t.Cast()
+        sp[(b.GetLayerName(int(v.TopLayer())), b.GetLayerName(int(v.BottomLayer())))] += 1
+    return {"pairs": {"%s-%s" % k: v for k, v in sorted(sp.items(), key=lambda z: -z[1])},
+            "total_vias": sum(sp.values())}
+
+
+def admissible_L(spans, lane_w):
+    """由**板实际 span 集**推可达单层 L 集：须存在 F–L 直接 span 且 L 为信号层。"""
+    have = set(spans["pairs"])
+    return [L for L in ("In2.Cu", "In5.Cu", "B.Cu") if ("F.Cu-%s" % L) in have or ("%s-F.Cu" % L) in have]
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--board", required=True)
@@ -243,9 +262,11 @@ def main(argv=None):
         if top == F_CU and bot == IN2_CU:
             d["B"] = p
     lanes = sorted(anchors)
-    width = {"In2.Cu": 0.16, "B.Cu": 0.205}
-    layers = ["In2.Cu", "B.Cu"] if a.layer == "both" else [a.layer]
+    width = {"In2.Cu": 0.16, "In5.Cu": 0.16, "B.Cu": 0.205}
+    layers = ["In2.Cu", "In5.Cu", "B.Cu"] if a.layer == "both" else [a.layer]
+    spans = board_span_set(b)
     rep = {"tool": "k2_p4_b2_feasibility_probe_v1", "board": a.board, "step_mm": STEP,
+           "span_classes_board_actual": spans, "admissible_L": admissible_L(spans, None),
            "n_lanes": len(lanes), "lanes": {nm: {"A": anchors[nm]["A"], "B": anchors[nm]["B"]} for nm in lanes},
            "layers": {}}
     for L in layers:
