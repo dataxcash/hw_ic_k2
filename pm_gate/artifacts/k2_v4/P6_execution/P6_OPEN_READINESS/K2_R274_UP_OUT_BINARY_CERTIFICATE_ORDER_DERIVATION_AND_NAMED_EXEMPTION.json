@@ -1,0 +1,92 @@
+{
+ "schema": 1,
+ "artifact": "k2_r274_up_out_binary_certificate_order_derivation_and_named_exemption",
+ "ts": "2026-09-22T03:40+0800",
+ "to": "监理",
+ "from": "ENG · ARCHER（监理自动续推 · P4 在阶 · fail-closed）",
+ "authority": "监理自动续推（本 tick）· 监理停止令（二值必出）· handoff R271 §7.2 · #K2-132 §三(乙)②/§四/§七 · #K2-133 · 指令 #14",
+ "anchors": {
+  "frozen_sources_4of4": "未动（fb07d25ac426ff84 · d4e81f647be7f980 · dd794c54f7ce7417 · 0a459839e15960b8）",
+  "criteria": "rev=6 MATCH（ENG 只读）",
+  "reviewed_board_l8": "7a5c89913d6e5d0a",
+  "k2": "1b56535",
+  "container": "20307b6",
+  "owner_gate": 0
+ },
+ "binary": {
+  "判定": "**(b) 守恒级不可行证书 = 可签：`PCIE_UP_OUT` 16/16 不可达**",
+  "核心": "**16/16 在全部 4 个模型变体下皆不可行**（精确枚举 2^16）：见下表。⇒ 二值成立（非「不可得」）。",
+  "注意": "**本件更正 R273 §1**：R273 之『(b) 不可得』系将**顺序约束整体丢弃**（order-free 松弛）所得；顺序是**真实约束**（单层不可交叉），不可丢 ⇒ (b) **可得**。",
+  "本件最紧可辩护上界": "**U ≤ 11**（依下方由拓扑导出的**单调序** + 物理在场规则）· 保守取之；跨变体区间 U∈[10,14]。"
+ },
+ "order_derivation_拓扑": {
+  "问题": "长走全 In5 ⇒ 单层不可交叉 ⇒ 通道（东通道 gap x∈[135.41,142.67]）列序为何？R269 §Ⅱ 主张 = reverse(A 落线序)；本件复核**不成立**。",
+  "形状被迫": "车道自 A 锚(y≈55) 须**先南下**（墙 In5 带 x∈[105.6,133.7] @ y∈[55.15,56.10] 阻断直东行；墙北 x<128 为缝合孔场）⇒ 路径形状 = **南下 → 东行 → 北上**（被迫）。",
+  "交叉分析（基本几何 · 已三次复核）": "取 ax_i<ax_j。车道 i 的南下竖段@ax_i、南通道横段@Y_i（x∈[ax_i,c_i]）、北上竖段@c_i。与 j 的横段@Y_j、竖段@c_j 逐一判交：① i 竖段(ax_i) 在 j 横段(x≥ax_j) 之西 ⇒ 不交；② **j 竖段@ax_j 与 i 横段@Y_i**：x 重叠(ax_i<ax_j<c_i) ⇒ 欲不交须 **Y_i>Y_j**（西侧 A 锚之横段更靠南）；③ i 竖段@c_i 与 j 横段@Y_j：因 Y_i>Y_j ⇒ 不交；④ **j 竖段@c_j 与 i 横段@Y_i**：x 重叠(c_j∈[ax_i,c_i]) 且 Y_i∈[Y_j,55] ⇒ 欲不交须 **c_j>c_i**。",
+  "结论": "**ax_i<ax_j ⇒ c_i<c_j** ⇒ 通道列序 = **A 落线序（单调）**，且南通道深度**倒置**（西 A 锚更靠南）。**R269/R271/R272 之 reverse(A落线序) 基于未经证明的假设，本件判定其不成立**（l8 旧走线之逆序系借 **B.Cu 他层**完成置换 —— 属 >2 via，不满足 ②-UP 长走全 In5）。"
+ },
+ "enumeration": {
+  "table": [
+   {
+    "order": "reverse-A",
+    "crossrule": "r271",
+    "full16_feasible": false,
+    "U_max": 12,
+    "n_exempt_sets": 28
+   },
+   {
+    "order": "reverse-A",
+    "crossrule": "present",
+    "full16_feasible": false,
+    "U_max": 14,
+    "n_exempt_sets": 10
+   },
+   {
+    "order": "monotone-A",
+    "crossrule": "r271",
+    "full16_feasible": false,
+    "U_max": 10,
+    "n_exempt_sets": 1
+   },
+   {
+    "order": "monotone-A",
+    "crossrule": "present",
+    "full16_feasible": false,
+    "U_max": 11,
+    "n_exempt_sets": 5
+   }
+  ],
+  "read": "**全部变体 full16 = False**（16/16 不可达）⇒ 二值 (b) 成立。"
+ },
+ "named_exemption_EX4": {
+  "ENG_命名": [
+   "PCIE_UP_OUT3_N_J2",
+   "PCIE_UP_OUT5_N_J2",
+   "PCIE_UP_OUT6_P_J2",
+   "PCIE_UP_OUT7_N_J2",
+   "PCIE_UP_OUT0_N_J2"
+  ],
+  "口径": "依单调序 + 物理在场规则、U=11 ⇒ 豁免 5 网；5 个等价候选仅第 5 网不同（0_N/0_P/1_N/1_P/2_P），ENG 取 `0_N`。",
+  "残铜去向": "**不动证明**（5 网沿用 l8 既有走线 · 逐字节不动 · 无搬迁 · 无他网改动）",
+  "备选": "若监理裁定顺序为 reverse-A（承 R269）⇒ U≤14（最松）/ U=12（r271 规则）· R272 之 EX-3 可复用。"
+ },
+ "status_next": {
+  "ENG_下一步": "**(a) 构造解**（#K2-132 §三(乙) D1 / #K2-133 N1 已授权 no-move 全转 · 一次 · 构造式）：S1 入/出孔选址（F.Cu 短接）→ S2 单层 In5 单调序嵌套束布线（南通道深度倒置 · 0.435 · 硬避让 135 固定孔 + 他网 88 段）→ S3 末闸 exact_gate + buildability → 判据 19 维同口径重跑 + ref_plane/等长/3W + Gerber/Excellon 同批重出 + DFM → S4 P4 全绿（除外部）方下 P5。",
+  "失败时": "若 S2 出不来 ⇒ 交单一卡点 + 具名归属（**届时**卡点层/资源/占死/为何不可能 四字段）· **禁 HOLD/停等**。"
+ },
+ "gate_selfcheck": {
+  "阶段": "P4（在阶）· 未越阶段",
+  "判据": "rev=6 MATCH",
+  "冻结四源": "4/4 未动",
+  "受审板 l8": "7a5c89913d6e5d0a",
+  "owner闸口": 0,
+  "外部前置": "1（criteria rev=7 · gate 属主）",
+  "布线器": "零运行"
+ },
+ "owner_gate": 0,
+ "bans_kept": "未改冻结四源 · criteria 只读 · 未烙板 · 未派 WORKER · 未改生成器/SPEC/原理图 · 临时仅 /tmp/opencode · 未重跑布线器 · 未写 .omo/supervision/**",
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "29f263022a297ae0"
+ }
+}
