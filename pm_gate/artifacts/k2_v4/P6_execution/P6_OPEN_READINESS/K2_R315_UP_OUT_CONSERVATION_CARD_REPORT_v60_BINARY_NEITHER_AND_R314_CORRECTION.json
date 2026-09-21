@@ -1,0 +1,61 @@
+{
+ "schema": 1,
+ "artifact": "k2_r315_up_out_conservation_card_report_v60_binary_neither_and_r314_correction",
+ "ts": "2026-09-22T06:24+0800",
+ "to": "监理（应停止令：收敛停滞 ≈82 轮无二值）",
+ "from": "ENG · ARCHER",
+ "authority": "监理停止令（须出二值 ‖ 卡点报告）· #K2-132 §四/§七 · #K2-133 §三/§四 · 宪法第十三条 · 第三条（自纠）· handoff §7",
+ "anchors": {
+  "frozen_4of4": "未动（fb07d25ac426ff84 · d4e81f647be7f980 · dd794c54f7ce7417 · 0a459839e15960b8）",
+  "criteria": "rev=6 MATCH（ENG 只读未碰）",
+  "l8": "7a5c89913d6e5d0a",
+  "k2": "b368b7d",
+  "owner_gate": 0
+ },
+ "binary": {
+  "判定": "**二者皆不成立**：(a) 可行见证 **本会话单发构造未得**；(b) 守恒级不可行证书 **已被本会话 R314 反证**。",
+  "(a)_可行见证": "**未得**。本会话单发（1 次 · 未改工具/未改参数迭代）运行 `k2_p4_b2_in5_lane_router_v3.py`（协商式有界搜索）⇒ routed **9/32** · 车道互距违例 **16**（闸读 lane_pitch_min_gap=0.0000）· 障碍净距违例 0。**该读数为工具有界搜索之负结果，不作证书、不作卡点依据。**",
+  "(b)_守恒级不可行证书": "**不成立**。R314 已证：R309 v59 / R313 复算器之 `W_max=6 ⇒ U≤14` 系复算器额外施加「沿 A.x 逆序严格 ye 阶梯」这一**非几何**序律之产物；把该阶梯**反向**即得 `W_max=8`；在**真实几何**约束下（`ye∈自由带 ∧ ye≥B.y+δ ∧ 两两互距≥0.435 ∧ 非交叉 ∧ 锚孔净距≥0.435`），δ∈{0,0.05,0.15} × DIL∈{0,0.04} **六种组合全得 `W_max=8 ⇒ U≤16`** ⇒ **16/16 未被排除**。与监理 #K2-131 F-4 / #K2-132 (甲)「容量≥16 ⇒ 不得签不可行证书」一致。",
+  "据此": "R309 v59 / R298 v58 之 `W_max`、`U≤14/~13`、`EX-5 强制下限 |EX|≥2` **三项同步作废**；handoff §7-2（采 b+EX-5）与 §7-3（owner 级动固定件）**前提消失**。"
+ },
+ "card_report_four_fields": {
+  "①哪层": "**In5.Cu（E1）· 全 16 条 `PCIE_UP_OUT` lane 之单层 In5 几何**：A 锚（x≈84.35–93.70 · y≈54.88–55.82 之 F.Cu–B.Cu 通孔）→ In5 长走东行 → 连接器侧接入 → B 锚（F.Cu–In2 盲孔）。",
+  "②哪资源": "① **西出缺口行带**（连接器 GND 通孔列 x≈133.2–136.3 与墙带 x∈[105.6,133.7]@y∈[55.15,56.10] 所夹之自由行；实测 9 带 · 上限 54.47）；② **In5 单层长走走廊**（A 侧 x≈84–94 → 连接器 x≈134–141；R270 实测自由宽 6.88 ≥ 15×0.435=6.09）；③ **连接器侧接入位**（东组 B 锚 x=136.00/136.58/137.16/137.74/138.90/139.48/140.06/141.22）。",
+  "③被谁占死": "**未被占死**。反证三点：**(i)** 缺口行带对西组 **8/8 全可容**（R314 精确解 + exact_gate：互距违例 0 · 最小 0.5050；净距违例 0）；**(ii)** 跨线容量 **≥16**（监理 #K2-131 F-4 独立自算 = 20）；**(iii)** 走廊 In5 段 337 中他网占 **88**、含 In5 过孔 198 中电源/地缝合孔 **135**（#K2-133 实测），且 **237/237 自网阻塞全属 `PCIE_UP_OUT×PCIE_UP_OUT`（他网 0）**（#K2-133 F-2）⇒ 自网可拆。",
+  "④为何任何分配都不可能": "**不成立 —— 本件不主张任何分配都不可能。** 经 R314 与监理 F-4 双重独立复核，**不存在守恒级/几何刚性不可能性**。真实卡点 = **算法/实现能力层**：缺一个把「A 侧 stub × 下潜竖段」与「西组 (c,Y,dx) 列位 × B 锚 jog」及「东组连接器侧接入」联立求解的**构造器**（承 #K2-133 (甲) 之层定性 C-*）。"
+ },
+ "west_group_closed_witness": {
+  "status": "**西出缺口段（8 条）图纸成立**",
+  "ye_assignment": {
+   "PCIE_UP_OUT0_N_J2": 45.73,
+   "PCIE_UP_OUT1_P_J2": 44.0,
+   "PCIE_UP_OUT2_N_J2": 51.13,
+   "PCIE_UP_OUT3_P_J2": 47.6,
+   "PCIE_UP_OUT4_N_J2": 49.33,
+   "PCIE_UP_OUT5_P_J2": 51.635,
+   "PCIE_UP_OUT6_N_J2": 54.13,
+   "PCIE_UP_OUT7_P_J2": 53.0
+  },
+  "gate": "`lane_router_v3.exact_gate`（In5.Cu · hw=0.08 · pitch=0.435）⇒ 车道互距违例 **0**（最小 **0.5050**）· 净距违例 **0**",
+  "artifact": "K2_R314_SUPPLEMENT_WEST_GROUP_EXACT_GATE_WITNESS_v1.json（约定A 8a7d8be42710d821）"
+ },
+ "residual_construction_gap": "全板 16 条之 **A 侧接入段（A 锚 x≈84–94 → In5 长走走廊）** 与 **连接器侧接入段（x≥134 → B 锚）** 之坐标化线束**尚未取得** ⇒ **全板图纸层仍缺图**，不得据以开工。",
+ "buildability_field_宪法13": "「施工队照着这张图能不能直接连？」→ **西组缺口段：能**（8 个 ye 显式坐标 + 过 exact_gate）；**全板：不能**（缺 A 侧与连接器侧接入坐标）⇒ 全板**图纸层缺图**，不作里程碑、不得开工。**不动证明**：本件**不搬任何对象**（未烙板 · 未改任何网几何）。",
+ "reproduce": {
+  "证书复现": "python3 K2_R313_CERTIFICATE_CHECKER_v59.py /tmp/opencode/model_l8.json ⇒ W_max=6/5（复现）",
+  "反证": "python3 K2_R314_WMAX_EXACT_AND_CERTIFICATE_REFUTATION_v1.py /tmp/opencode/model_l8.json /tmp/opencode/r314.json ⇒ 阶梯反向 W_max=8 · 精确 W_max=8 · U≤16",
+  "西组过闸": "见 K2_R314_SUPPLEMENT 之方法（8 条折线 B锚→(B.x,ye)→(134.6,ye) 送 exact_gate）",
+  "单发构造": "python3 k2/tools/k2_p4_b2_in5_lane_router_v3.py --model /tmp/opencode/model_l8.json --out /tmp/opencode/wo_full16.json ⇒ routed 9/32 · 互距违例 16（负结果）"
+ },
+ "status": {
+  "阶段": "P4（在阶）· 未越阶段 · fail-closed",
+  "待裁": "0（属监理自裁面）· owner 闸口 0",
+  "外部前置": "1（criteria rev=7 · gate 属主 · 不阻 P4）"
+ },
+ "bans_kept": "未改冻结四源 · criteria 只读 · 未烙板 · 未派 WORKER · 未改生成器/SPEC/原理图 · 临时仅 /tmp/opencode · 未写 .omo/supervision/** · 未以有界搜索冒充证书",
+ "owner_gate": 0,
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "567ea506a3c143a0"
+ }
+}
