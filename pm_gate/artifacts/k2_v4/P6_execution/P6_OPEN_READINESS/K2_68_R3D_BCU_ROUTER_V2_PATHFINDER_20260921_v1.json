@@ -1,0 +1,59 @@
+{
+ "artifact": "k2_68_r3d_bcu_router_v2_pathfinder",
+ "authority": "#K2-68 §2.4(a)-4（拥塞感知 + rip-up 布线器 v2）· #K2-68 §2.4(a)-2/-3 · #K2-69 §五-2/§六①",
+ "board": "/tmp/opencode/w3/c.kicad_pcb (R1E) · B.Cu 单层",
+ "caveats": [
+  "工作令为**只读生成** · **未改板** · 过用未归零 ⇒ **不得**视为布通或有 DRC 意义。",
+  "真余量下限须于 apply + 几何精确闸后**具名**（≥0.100mm · 禁贴限）。"
+ ],
+ "headline": "**布线器 v2（PathFinder 协商拥塞）= 30/32**，**恰达 B.Cu 必要性上界**（必要探针亦 30/32）；剩余 2 条 `PCIE_DN_OUT0_N/P` = **结构性不可达**（非布线器问题）⇒ 不达 #K2-69 §六①（≥32）⇒ 须按 #K2-68 §2.4(a)-2/-3 做**锚孔笼重构 + 他网走廊 ECO** 后方可再进。",
+ "open_items": [
+  "① 2 条结构性不可达（`PCIE_DN_OUT0_N/P`）⇒ 走廊 ECO / 端点重摆（#K2-68 §2.4(a)-2/-3）",
+  "② 过用未归零（overuse≈6.4e4 格）⇒ 布线器输出**尚未两两无冲突**；须加**几何精确闸**（逐段 vs 全部障碍 + 车道互检）+ 过用归零迭代",
+  "③ 长度：新 B.Cu 长走中位 85.0mm vs 原中段 61.3mm（+23.7mm · 最大 +40.6mm）⇒ §7-3 等长/SI 硬项",
+  "④ apply 阶段（V4 同位换 span → F–B · 删 V2/V3 + B.Cu/In2 腿 · 铺铜重灌 ZONE_FILLER）尚未执行"
+ ],
+ "red_lines_ok": [
+  "只读（未改板/件）",
+  "冻结四源未动",
+  "criteria/ 只读未碰",
+  "l4..l8 未动",
+  "网表/SPEC 未改",
+  "未派 WORKER",
+  "临时仅 /tmp/opencode",
+  "未越阶段"
+ ],
+ "router_v1_v2": {
+  "movable_nets_probe": {
+   "anchor_must_move": "0/64（B.Cu 无锚孔净距冲突）",
+   "components": "18 → 8",
+   "conclusion": "腾挪缝合孔**改善连通域/自由面积**但不解那 2 条结构封锁 ⇒ 须叠加**他网走廊 ECO**（I2C1_SDA/PERSTA#/P3V3_AUX/DS320_STRAP_*/PWR_BTN_ISO）",
+   "desc": "#K2-68 §2.4(a)-2『腾挪 P3V3/GND 缝合孔』只读量化",
+   "fixed_maxflow": "29/32 → 30/32",
+   "free_cells": "27413 → 32330（+18%）"
+  },
+  "v1_order_ripup": {
+   "failed_not_structural": 6,
+   "n_routed": 24
+  },
+  "v2_pathfinder": {
+   "cell_mm": 0.2,
+   "failed": [
+    "PCIE_DN_OUT0_N_MCIO",
+    "PCIE_DN_OUT0_P_MCIO"
+   ],
+   "iters": 6,
+   "n_routed": 30,
+   "note": "每轮**全量 rip-up-and-reroute** + 过用罚逐轮加倍；30/32 = 必要性上界，布线器已到模型极限",
+   "overuse_cells_last": 63939,
+   "pres_fac": "0.6×2^i"
+  }
+ },
+ "schema": 1,
+ "tools": {
+  "note": "探针新增 `--movable-nets`（§2.4(a)-2 只读量化）；In5 回归复跑仍 **19/32**（未漂）",
+  "probe": "tools/k2_p4_b2_in5_capacity_probe_v1.py 1e17667caea47e69",
+  "router": "tools/k2_p4_b2_bcu_router_v1.py 4c2e6160d4a4895d"
+ },
+ "ts": "2026-09-21T15:0x+08:00"
+}

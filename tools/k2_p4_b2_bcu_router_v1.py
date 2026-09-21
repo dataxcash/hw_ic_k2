@@ -50,7 +50,7 @@ def snap_free(field, bad, pt):
     return None, None
 
 
-def astar(field, bad, occ, start, goal, cell, w_cong=6.0, w_margin=3.0, max_expand=900000):
+def astar(field, bad, occ, start, goal, cell, w_cong=6.0, w_margin=3.0, max_expand=900000, pres_fac=1.0):
     """8 邻接 A*（代价 = 长度 + 拥塞惩罚 + 贴边惩罚）。返回 [(i,j),…] 或 None。"""
     NX, NY = field.NX, field.NY
     margin = getattr(field, "_margin_cache", None)
@@ -89,7 +89,7 @@ def astar(field, bad, occ, start, goal, cell, w_cong=6.0, w_margin=3.0, max_expa
                 continue
             m = margin[ni, nj]
             n_clear = m * cell                       # 该格到障碍之名义距离
-            pen = w_cong * occ[ni, nj]
+            pen = pres_fac * w_cong * max(0.0, float(occ[ni, nj]) - 1.0)   # 过用（>1 网共享）才罚 ⇒ PathFinder 协商
             if n_clear < HW_B + req("PCIE"):         # 贴限（< 要求）⇒ 禁行
                 continue
             pen += w_margin * max(0.0, 2.0 - n_clear)  # 贴边惩罚
@@ -127,9 +127,11 @@ def main():
     ap.add_argument("--iters", type=int, default=6)
     ap.add_argument("--max-expand", type=int, default=900000)
     ap.add_argument("--keepouts", default="", help="额外 keepout 线段(JSON): [[x1,y1,x2,y2],…]（走廊 ECO 预留）")
+    ap.add_argument("--movable-nets", default="", help="逗号分隔：视为可腾挪之缝合孔/走线网（§2.4(a)-2 量化）")
     a = ap.parse_args()
     model = json.load(open(a.model))
-    field = Field(model, hw=HW_B, step=a.cell, layer="B.Cu")
+    field = Field(model, hw=HW_B, step=a.cell, layer="B.Cu",
+                  movable_nets=[x for x in a.movable_nets.split(',') if x])
     bad = field.other.copy()
     for seg in (json.loads(a.keepouts) if a.keepouts else []):
         field._seg(bad, seg[0], seg[1], seg[2], seg[3], LANE_W / 2 + 0.175)
@@ -139,76 +141,45 @@ def main():
     goal = {}
     sl = {}
     for l in lanes:
-        s = snap_free(field, bad, l["A"]); g = snap_free(field, bad, l["B"])
-        if s[0] is None or g[0] is None:
+        s_ = snap_free(field, bad, l["A"]); g_ = snap_free(field, bad, l["B"])
+        if s_[0] is None or g_[0] is None:
             sl[l["net"]] = {"status": "NO_FREE_ENDPOINT"}; continue
-        goal[l["net"]] = g
-        sl[l["net"]] = {"status": "PENDING", "start": s, "goal": g}
+        sl[l["net"]] = {"status": "PENDING", "start": s_, "goal": g_}
     pend = [n for n, v in sl.items() if v["status"] == "PENDING"]
     order = sorted(pend, key=lambda n: -math.hypot(sl[n]["goal"][0] - sl[n]["start"][0],
                                                    sl[n]["goal"][1] - sl[n]["start"][1]))
-    print("车道 %d · 待布 %d · 栅格 %dx%d cell=%.2f" % (len(lanes), len(pend), field.NX, field.NY, a.cell))
+    print("车道 %d · 待布 %d · 栅格 %dx%d cell=%.2f · R=%d" % (len(lanes), len(pend), field.NX, field.NY, a.cell, R))
+
+    def stamp(pth, sign):
+        for (i, j) in pth:
+            i0, i1 = max(0, i - R), min(field.NX - 1, i + R)
+            j0, j1 = max(0, j - R), min(field.NY - 1, j + R)
+            occ[i0:i1 + 1, j0:j1 + 1] += sign
+
     routed = {}
+    best = None
     for it in range(a.iters):
-        changed = 0
+        pres_fac = 0.6 * (2.0 ** it)                     # 历史/现存代价双递增
         for n in order:
-            if sl[n]["status"] == "ROUTED":
-                continue
-            occ[:] = 0.0
-            for m, pth in routed.items():
-                for (i, j) in pth:
-                    for di in range(-R, R + 1):
-                        for dj in range(-R, R + 1):
-                            ii, jj = i + di, j + dj
-                            if 0 <= ii < occ.shape[0] and 0 <= jj < occ.shape[1]:
-                                occ[ii, jj] += 1.0
-            p = astar(field, bad, occ, sl[n]["start"], sl[n]["goal"], a.cell, max_expand=a.max_expand)
+            if n in routed:                              # 全量 rip-up：先撤后重布
+                stamp(routed[n], -1.0); del routed[n]
+            p = astar(field, bad, occ, sl[n]["start"], sl[n]["goal"], a.cell,
+                      max_expand=a.max_expand, pres_fac=pres_fac)
             if p:
-                routed[n] = p
-                sl[n]["status"] = "ROUTED"
-                sl[n]["iter"] = it
-                changed += 1
-                print("  [it%d] ROUTED %-26s cells=%d" % (it, n, len(p)))
-        if not changed:
+                routed[n] = p; stamp(p, +1.0)
+        over = float(np.maximum(occ - 1.0, 0.0).sum())
+        sc = (len(routed), -over)
+        print("  [pf %d] pres=%.1f routed=%d/32 overuse=%.0f" % (it, pres_fac, len(routed), over))
+        if best is None or sc > best[0]:
+            best = (sc, {k: list(v) for k, v in routed.items()})
+        if len(routed) == len(order) and over == 0:
             break
-    # rip-up：对失败网，撤掉“冲突最多”的已布网（占位重叠最高者）后重试
-    for it in range(a.iters):
-        fail = [n for n in order if sl[n]["status"] != "ROUTED"]
-        if not fail:
-            break
-        for n in fail:
-            best = None
-            occ[:] = 0.0
-            for m, pth in routed.items():
-                c = 0
-                for (i, j) in pth:
-                    for di in range(-R, R + 1):
-                        for dj in range(-R, R + 1):
-                            ii, jj = i + di, j + dj
-                            if 0 <= ii < occ.shape[0] and 0 <= jj < occ.shape[1]:
-                                occ[ii, jj] += 1.0
-            for m, pth in routed.items():
-                c = sum(occ[i, j] for (i, j) in pth)
-                if best is None or c > best[0]:
-                    best = (c, m)
-            if not best:
-                break
-            del routed[best[1]]
-            sl[best[1]]["status"] = "PENDING"
-            occ[:] = 0.0
-            for m, pth in routed.items():
-                for (i, j) in pth:
-                    for di in range(-R, R + 1):
-                        for dj in range(-R, R + 1):
-                            ii, jj = i + di, j + dj
-                            if 0 <= ii < occ.shape[0] and 0 <= jj < occ.shape[1]:
-                                occ[ii, jj] += 1.0
-            p = astar(field, bad, occ, sl[n]["start"], sl[n]["goal"], a.cell, max_expand=a.max_expand)
-            if p:
-                routed[n] = p
-                sl[n]["status"] = "ROUTED"
-                sl[n]["iter"] = 100 + it
-                print("  [ripup%d] %-26s routed (rewound %s)" % (it, n, best[1]))
+    routed = best[1]
+    for n in routed:
+        sl[n]["status"] = "ROUTED"
+    for n in order:
+        if n not in routed and sl[n]["status"] != "NO_FREE_ENDPOINT":
+            sl[n]["status"] = "FAILED"
     # 输出
     routes = {}
     for n, pth in routed.items():
@@ -220,7 +191,8 @@ def main():
     ok = sorted(routes); ng = sorted(n for n in order if n not in routes)
     wo = {"artifact": "k2_p4_b2_bcu_router_v1_workorder", "model": a.model, "cell_mm": a.cell,
           "layer": "B.Cu", "lane_w_mm": LANE_W, "pitch_mm": PITCH_B,
-          "method": "B.Cu 单层 · 8 邻接 A*（长度 + 拥塞惩罚 + 贴边惩罚 · 贴限禁行）+ 难度排序 + rip-up 重布",
+          "movable_nets": sorted(getattr(field, "movable", [])),
+          "method": "B.Cu 单层 · 8 邻接 A*（长度 + **PathFinder 协商拥塞**（过用罚·pres_fac 逐轮加倍）+ 贴边惩罚 + 贴限禁行）+ 难度排序 + **每轮全量 rip-up-and-reroute**",
           "n_lanes": len(lanes), "n_routed": len(ok), "n_failed": len(ng),
           "routed": ok, "failed": ng, "routes": routes,
           "vias": {"V1": "F.Cu-B.Cu 原地保留", "V4": "F.Cu-In2.Cu → 同位换 span 为 F.Cu-B.Cu",
