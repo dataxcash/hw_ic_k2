@@ -1,0 +1,39 @@
+{
+ "artifact": "k2_pending_rulings_delta",
+ "schema": 1,
+ "ts": "2026-09-21T09:53:50.724496+08:00",
+ "session_label": "K2-2026-09-21 · R108(续8) · #K2-66 执行中 · 请求裁定（courtyard 无重叠 联合可行性）",
+ "supersedes": "v34（其待裁=0；本件为 #K2-66 执行中新发现的**联合不可满足**问题）",
+ "purpose": "【待裁 · 关系 #K2-66 §六③】**courtyard「100% · 无重叠(IPC-7351B)」在本板 2 处联合不可满足**：`U1↔J9` / `U1↔J13`。ENG 不自裁（差异定性/放行范围 = 监理自裁面 · #14⑦），请裁。",
+ "owner_gate": "0（不涉拓扑/接口/信号流/球重映射；不动 owner 系统/账号/预算）",
+ "stage_state": "P5 PENDING_EXTERNAL · l9 WIP（DRC 270 · unconn 0 · silk_over_copper 0 · clearance 0 · **courtyards_overlap 2**）· 冻结四源未动 · 判据 rev=6 MATCH",
+ "pending_supervision": [
+  {
+   "id": "courtyard 无重叠 × 2（U1↔J9 / U1↔J13）",
+   "facts": "U1（QFP48）pads bbox x[31.10,40.90] y[47.10,56.90]；J9 pads bbox x[23.38,32.50] y[55.21,56.71]；J13 pads bbox x[23.38,32.50] y[45.79,47.29]。重叠区 = **U1 bbox 之角区**（x[31.10,32.50]×y[55.21,56.71] 与 y[47.10,47.29]），**该角区 U1 无焊盘**。**实测最小 pad-边-边净距 = J9 0.469mm / J13 1.533mm（均 >0 · 无铜冲突）**。J9/J13 自 x=23.38 起 = **贴板左缘之排针（接口件）**，内移将改接口位置。",
+   "why_not_eng": "属**差异定性/放行范围**（『courtyard 无重叠』是否按 bbox 口径硬判、抑或按**实体轮廓**口径/判联合不可满足）· #14⑦ 监理自裁面。",
+   "ask": "(a) 维持硬判 ⇒ 授权 ENG **移件**（J9/J13 内移 ~1.5mm；改接口位置 ⇒ 需确认）；(b) 判**联合不可满足**（同 #K2-21 先例）⇒ 记具名豁免（限此 2 对）；(c) 改 courtyard **口径** = 器件**实体轮廓**（QFP 角区不含 ⇒ 无重叠）并写进齿化维定义。**ENG 不自预设。**",
+   "evidence": "本件 · l9 DRC `courtyards_overlap` 明细 · `k2_layout_quality_check_v1.py` 实测"
+  }
+ ],
+ "landed_this_session": [
+  {
+   "id": "#K2-66 增量1–5",
+   "note": "A1/A2/A3/A4/A5/A6(silk_over_copper 37→0)/A8/B1(627→0)/C1(9.3→53.2)/C2(derived 依据) 达；clearance 1→0；courtyard 27→2"
+  },
+  {
+   "id": "courtyard 2 之量化依据",
+   "note": "见上 facts"
+  }
+ ],
+ "red_lines_ok": [
+  "未改 criteria/",
+  "未改冻结四源",
+  "未改 l4..l8",
+  "未改网表/SPEC",
+  "未派 WORKER",
+  "l9 未落 hw/",
+  "未越阶段"
+ ],
+ "next": "① 待监理裁 courtyard 口径/移件；② ENG 并行推进 ④ B2 车道重布线（≤2 via/线 · 计划已就位）；③ 达 §六 后落 hw/ + 送监理。"
+}
