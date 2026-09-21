@@ -1,0 +1,548 @@
+{
+ "schema": 1,
+ "artifact": "k2_r343_unnamed_pad_copper_census_and_Bpp_tightening_v1",
+ "ts": "2026-09-22T07:58+0800",
+ "to": "监理",
+ "from": "ENG · ARCHER",
+ "nature": "**全板『无号 pad』铜层普查** ⇒ 证明 (B') 在本板**成立**，但其 **name-only 形式不安全** ⇒ 给出 **(B'') census 收紧**并验证",
+ "anchors": {
+  "board_sha16": "7a5c89913d6e5d0a",
+  "frozen4": [
+   "d4e81f647be7f980",
+   "fb07d25ac426ff84",
+   "dd794c54f7ce7417",
+   "0a459839e15960b8"
+  ],
+  "lib_source_of_truth": "k2/hw/lib/ForgeOS.pretty（`criteria/manifest.k2.yaml` §dim_source_of_truth）"
+ },
+ "census": {
+  "board_side": {
+   "n_unnamed_pads": 4,
+   "where": [
+    {
+     "ref": "H1",
+     "lib_id": "MountingHole_3.2mm_M3",
+     "type": "np_thru_hole",
+     "layers": "*.Cu *.Mask"
+    },
+    {
+     "ref": "H2",
+     "lib_id": "MountingHole_3.2mm_M3",
+     "type": "np_thru_hole",
+     "layers": "*.Cu *.Mask"
+    },
+    {
+     "ref": "H3",
+     "lib_id": "MountingHole_3.2mm_M3",
+     "type": "np_thru_hole",
+     "layers": "*.Cu *.Mask"
+    },
+    {
+     "ref": "H4",
+     "lib_id": "MountingHole_3.2mm_M3",
+     "type": "np_thru_hole",
+     "layers": "*.Cu *.Mask"
+    }
+   ],
+   "relevance": "H1–H4 = **no_library_link**（w8 summary）⇒ **不参与** `lib_electrical_level` 比对"
+  },
+  "lib_side": {
+   "dir": "k2/hw/lib/ForgeOS.pretty",
+   "n_footprints": 24,
+   "n_unnamed_pads": 10,
+   "distribution": [
+    {
+     "file": "MCU_STM32G0_LQFP48.kicad_mod",
+     "n": 9,
+     "type": "smd",
+     "layers": "F.Paste",
+     "copper_free": true
+    },
+    {
+     "file": "MountingHole_3.2mm_M3.kicad_mod",
+     "n": 1,
+     "type": "np_thru_hole",
+     "layers": "*.Cu *.Mask",
+     "copper_free": false
+    }
+   ]
+  },
+  "per_ref": {
+   "U1": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/MCU_STM32G0_LQFP48.kicad_mod",
+    "lib_unnamed_pads": 9,
+    "lib_unnamed_types": [
+     "smd"
+    ],
+    "lib_unnamed_layers": [
+     "F.Paste"
+    ],
+    "copper_free": true
+   },
+   "R41": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/R_0402_1005Metric__1.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "C88": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/C_0603_1608Metric.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "C81": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/C_0402_1005Metric__1.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "C78": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/C_0603_1608Metric.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "R29": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/R_0603_1608Metric__1.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "J4": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/MCIO_4i_SFF-1016_RASide__2.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "C87": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/C_0402_1005Metric__1.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "R3": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/R_0603_1608Metric__1.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "C75": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/C_0402_1005Metric__1.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "C79": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/C_0402_1005Metric__1.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "H1": {
+    "resolved": false,
+    "copper_free": null,
+    "why": "no_library_link"
+   },
+   "H2": {
+    "resolved": false,
+    "copper_free": null,
+    "why": "no_library_link"
+   },
+   "J2": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/SlimSAS_x8_SFF-8654_74pin_RASide.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "R35": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/R_0603_1608Metric__2.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "C76": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/C_0402_1005Metric__1.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "C90": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/C_0402_1005Metric__1.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "C73": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/C_0402_1005Metric__3.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "C80": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/C_0402_1005Metric__1.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "E2": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/SOIC8_FRU.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "J11": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/PinHeader_1x04.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "R1": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/R_0603_1608Metric__1.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "R34": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/R_0603_1608Metric__1.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "U6": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/DS320PR1601.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "R42": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/R_0603_1608Metric__2.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "R44": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/R_0603_1608Metric__2.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "J9": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/PinHeader_1x04.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "C83": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/C_0603_1608Metric.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "R33": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/R_0603_1608Metric__1.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "R40": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/R_0402_1005Metric__2.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "D2": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/D_SMA.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "U2": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/SOIC-8_5.3x5.3mm_P1.27mm.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "C82": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/C_0402_1005Metric__1.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "R36": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/R_0603_1608Metric__2.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "L1": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/L_0805_2012Metric.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "C77": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/C_0402_1005Metric__1.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "R43": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/R_0603_1608Metric__2.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "D1": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/LED_0603_1608Metric.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "U4": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/SOT23_BAT54C.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "R39": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/R_0603_1608Metric__2.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "U5": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/OPTO_LTV356T.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "H3": {
+    "resolved": false,
+    "copper_free": null,
+    "why": "no_library_link"
+   },
+   "R38": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/R_0603_1608Metric__2.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "R28": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/R_0603_1608Metric__1.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "R32": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/R_0603_1608Metric__1.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "J13": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/PinHeader_1x04.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "J3": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/MCIO_4i_SFF-1016_RASide__1.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "C84": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/C_0805_2012Metric.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "H4": {
+    "resolved": false,
+    "copper_free": null,
+    "why": "no_library_link"
+   },
+   "J6": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/PinHeader_1x02.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "R31": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/R_0603_1608Metric__1.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "C86": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/C_0603_1608Metric.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "R45": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/R_0603_1608Metric__2.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "R21": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/R_0603_1608Metric__1.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "R37": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/R_0603_1608Metric__2.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "C74": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/C_0402_1005Metric__1.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "C85": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/C_0402_1005Metric__2.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   },
+   "J12": {
+    "resolved": true,
+    "lib_file": "k2/hw/lib/ForgeOS.pretty/PinHeader_1x02.kicad_mod",
+    "lib_unnamed_pads": 0,
+    "lib_unnamed_types": [],
+    "lib_unnamed_layers": [],
+    "copper_free": true
+   }
+  }
+ },
+ "safety_finding": {
+  "本板结论": "唯一 `pad_set` 差异 = `U1`（`lib_only=['']`），其库侧无号 pad **9/9 皆 F.Paste-only（无铜）** ⇒ (B') 在本板**成立**（R340 已验证 19/19）。",
+  "通用风险": "**无号 pad 可以是铜** —— 板上 H1–H4 与库侧 `MountingHole_3.2mm_M3` 之无号 pad 即 `np_thru_hole` on `*.Cu`。⇒ **name-only 之 (B') 会把『无号铜 pad 之集合差』误判为非电气**（潜在假绿）。",
+  "收紧 (B'')": "豁免条件加一层 **layer-gated census**：仅当该 `ref` 之库封装无号 pad **皆不触铜层** 时方可豁免；census 缺失 ⇒ 不豁免（**fail-closed**）。",
+  "验证": {
+   "(B'') 本板": "**19/19 PASS**",
+   "负控（伪设 U1 无号 pad 触铜）": "**不豁免 ⇒ 18/19**（闸有效）"
+  }
+ },
+ "recommendation_to_gate_owner": {
+  "首选": "rev=7 采 **(B'')**（census 收紧）而非 name-only (B')；census 可静态由 `lib_source_of_truth`（ForgeOS.pretty）导出。",
+  "次选": "或由审计器 `cmp_fp` 对 `kind='pad_set'` 差异**附每 pad 之层集**（消除判据侧对名字的依赖）；此改动属工具改动 ⇒ **待批**。"
+ },
+ "buildability_field": "本件只读普查（板 + 库文本解析）：**未烙板 · 未改 `criteria/`/生成器/SPEC/原理图 · 未动任何板上对象** ⇒ 不动证明成立。",
+ "owner_gate": 0,
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "ce52d5b591e62478"
+ }
+}

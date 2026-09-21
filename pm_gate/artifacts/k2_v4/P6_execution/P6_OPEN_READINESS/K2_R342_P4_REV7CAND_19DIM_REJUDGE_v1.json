@@ -1,0 +1,159 @@
+{
+ "schema": 1,
+ "artifact": "k2_r342_p4_rev7cand_19dim_rejudge_v1",
+ "ts": "2026-09-22T07:58+0800",
+ "to": "监理",
+ "from": "ENG · ARCHER",
+ "nature": "**P4 19 维『rev=7 候选』重判（端到端真跑 · 只读）** —— 交付给 gate 属主落 rev=7 时可配对使用；**本件非门禁 verdict**（门禁 verdict 须 gate 属主落件后由 `criteria/` 产出）",
+ "anchors": {
+  "board": "k2/hw/k2_v4_8L.l8.kicad_pcb",
+  "board_sha16": "7a5c89913d6e5d0a",
+  "frozen4": [
+   "d4e81f647be7f980",
+   "fb07d25ac426ff84",
+   "dd794c54f7ce7417",
+   "0a459839e15960b8"
+  ],
+  "criteria_rev6": {
+   "adjudicate.py": "1937a40ae68bc288",
+   "manifest.k2.yaml": "727d09953cf9bd78",
+   "CHANGELOG": "eb3da49f2ad97e37"
+  },
+  "nets_errata3": "k2_sch.errata-3.yaml 5dc7b82a901d11c8",
+  "rev7_candidate": "/tmp/opencode/p4m/adjudicate_r343tight.py = rev=6 + R317-(A)(B) + R340-(B') + R343-(B'')（census 收紧）"
+ },
+ "method": {
+  "how": "**全链真跑**：`adjudicate.main()`（判据机制照旧）· 真 DRC（`AppDir/bin/kicad-cli pcb drc --severity-all`）· 真板解析 · canonical 测量输入（`P4_MEASUREMENTS_L8_20260922/*.json`）",
+  "measure_landed": "`K2_R342_P4_REV7CAND_MEASURE_v1.json`（sha256 `7e9bef00086b1a2e`）—— 可直接以任一副本判定器复judge",
+  "measure_sha256_full": "7e9bef00086b1a2e7fbd91c8e6007be38929d4c4076eab3e311ea26aa1598c0b",
+  "criteria_dir": "**未修改**（0444 只读）；判定器副本在 /tmp",
+  "repro": "`python3 <rev7cand副本> --project k2 --board k2/hw/k2_v4_8L.l8.kicad_pcb --pro k2/tools/k2_jlc_template.kicad_pro --nets k2/hw/data/k2_sch.errata-3.yaml --sch-dir k2/hw/sch --gerber-dir k2/pm_gate/artifacts/k2_v4/L6/jlc_package_l8r3/01_gerber_rs274x --drc-cli AppDir/bin/kicad-cli --drc-work-dir /tmp/opencode/drc340 --w8-audit-json P4_MEASUREMENTS_L8_20260922/w8_l8.json --pads-outline-json .../pads_outline_l8.json --density-json .../density_l8.json --min-clearance-json .../minclr_l8.json --refplane-gap-json .../refplane_l8.json`"
+ },
+ "readings": {
+  "baseline_rev6": {
+   "n_pass": 18,
+   "n_fail": 1,
+   "passed": false,
+   "fails": [
+    {
+     "check": "lib_electrical_level",
+     "ok": false,
+     "detail": "电气级差异 7（原 7，B 口径豁免 0） + 仅 pad 名差异 0（原 None，非电气无号 F.Paste 豁免 0）（须 0）；B 口径=生效；审计板 sha16=7a5c89913d6e5d0a vs 受审板 7a5c89913d6e5d0a ⇒ 一致"
+    }
+   ]
+  },
+  "rev7_candidate": {
+   "n_pass": 19,
+   "n_fail": 0,
+   "passed": true,
+   "fails": []
+  },
+  "same_measure": "两次判读使用**同一份**测量（本板 382KB measurement）⇒ 差异**仅**来自判定器之 (B')/(B'')"
+ },
+ "dims_19": [
+  {
+   "check": "zone_filled",
+   "ok": true,
+   "detail": "铜区（有网非 keepout）已填充 10/10；keepout 规则区 8 个另计（不入分母）"
+  },
+  {
+   "check": "device_has_pads",
+   "ok": true,
+   "detail": "0 焊盘器件 0: []"
+  },
+  {
+   "check": "drill_count",
+   "ok": true,
+   "detail": "NPTH=4（应 ≥4）PTH=16"
+  },
+  {
+   "check": "non45_segments",
+   "ok": true,
+   "detail": "非 45° 段 0/5180"
+  },
+  {
+   "check": "rule_severity_manifest",
+   "ok": true,
+   "detail": "未登记豁免的 ignore 0/62: []"
+  },
+  {
+   "check": "net_declared_realized",
+   "ok": true,
+   "detail": "板上 0 焊盘的声明网 = 0；<2 焊盘 = 0"
+  },
+  {
+   "check": "pin_map_complete",
+   "ok": true,
+   "detail": "网表节点无对应焊盘 = 0"
+  },
+  {
+   "check": "refdes_sets_equal",
+   "ok": true,
+   "detail": "排除纯机械件 H*（4 条逐条列名: ['H1', 'H2', 'H3', 'H4']）⇒ 原理图 54 / 板 54；图有板无 []，板有图无 []"
+  },
+  {
+   "check": "pipeline_present",
+   "ok": true,
+   "detail": "scope=k2：含 .kicad_sch 但无 pipeline.yaml 的目录 0 个（fail-closed）: []；范围外（他项目阶段门判）6 个: ['k1/sch', 'key_v2/key_v2/sch', 'pciesw4/aic', 'pciesw4/aic/sch_kicad', 'pciesw4/gpu']"
+  },
+  {
+   "check": "drc_errors",
+   "ok": true,
+   "detail": "DRC error=0（违规总 170）: []"
+  },
+  {
+   "check": "drc_warning_dispositions",
+   "ok": true,
+   "detail": "未登记 warning 类型 0/9: []；已登记 ['copper_sliver', 'lib_footprint_mismatch', 'missing_courtyard', 'silk_edge_clearance', 'silk_over_copper', 'silk_overlap', 'track_dangling', 'track_not_centered_on_via', 'via_dangling']"
+  },
+  {
+   "check": "unconnected_zero",
+   "ok": true,
+   "detail": "unconnected_items = 0"
+  },
+  {
+   "check": "fp_lib_table_present",
+   "ok": true,
+   "detail": "fp-lib-table @ /home/fila/jqdDev_2025/ic_hw/k2/hw: 存在"
+  },
+  {
+   "check": "lib_electrical_level",
+   "ok": true,
+   "detail": "电气级差异 0（原 7，B 口径豁免 7） + 仅 pad 名差异 0（原 None，非电气无号 F.Paste 豁免 0）（须 0）；B 口径=生效；审计板 sha16=7a5c89913d6e5d0a vs 受审板 7a5c89913d6e5d0a ⇒ 一致"
+  },
+  {
+   "check": "keepout_active",
+   "ok": true,
+   "detail": "keepout 区 8 个；其中无生效开关（全 allowed / 无 flag）0 个"
+  },
+  {
+   "check": "pads_within_outline",
+   "ok": true,
+   "detail": "出框：全 pad(AABB)=0 · 接口件(P3-4)=0 · 全 pad(真外框多边形)=0（须全 0）；测量板 sha16=7a5c89913d6e5d0a vs 受审板 7a5c89913d6e5d0a ⇒ 一致"
+  },
+  {
+   "check": "ref_plane_continuity",
+   "ok": true,
+   "detail": "口径 non_antipad_gap==0 @ R=0.5mm：non_antipad_gap = 0.0 mm²（须 == 0）；归因 antipad=20.9552 / split_or_cutout=0.0 / keepout=0.0062；平面层=['In1.Cu', 'In3.Cu', 'In4.Cu', 'In6.Cu']；信息项 V3 名义全长覆盖 None/None（#K2-34 §一-1 降为信息）；测量板 sha16=7a5c89913d6e5d0a vs 受审板 7a5c89913d6e5d0a ⇒ 一致"
+  },
+  {
+   "check": "density_and_clearance",
+   "ok": true,
+   "detail": "密度[10mm/frame_origin] 峰值 7（≤8）· 最小铜间距 0.1（≥0.1）mm · 横带占用 0.07586（≤None）· 孔环 0.075（≥None）· pad 到边 0.38（≥None）mm；测量板 sha16=7a5c89913d6e5d0a/7a5c89913d6e5d0a vs 受审板 7a5c89913d6e5d0a ⇒ 一致"
+  },
+  {
+   "check": "verdict_schema",
+   "ok": true,
+   "detail": "产物中出现 verdict 字段的文件: []"
+  }
+ ],
+ "handoff_to_gate_owner": {
+  "要点": "rev=7 需含三处（R317-A/B + R340-(B\")/R343-(B'')）方达 19/19；R317 单独**不足**（R339）；**name-only 之 (B') 不安全**，须用 R343 之 census-gated **(B'')**。"
+ },
+ "buildability_field": "本件只读（判据机制 + 真 DRC + 板解析）：**未烙板 · 未改 `criteria/`（副本在 /tmp）· 未改生成器/SPEC/原理图 · 未动任何板上对象** ⇒ 不动证明成立；本件为判据侧测量/重判，不产出施工图（亦不需要）。",
+ "owner_gate": 0,
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "974104228f3fae78"
+ }
+}
