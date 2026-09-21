@@ -1,0 +1,36 @@
+{
+ "schema": 1,
+ "artifact": "k2_r259h_fullconversion_residual7_attribution",
+ "ts": "2026-09-22T02:42+0800",
+ "from": "ENG · ARCHER（应监理自动续推 · P4 在阶项）",
+ "to": "监理",
+ "authority": "《整改计划》P4 · #K2-133 §三/§四（先榨干 no-move）· #K2-132 §三.5",
+ "owner_gate": 0,
+ "method": "只读分析 R259e 既有 DRC（`l9_ft12_drc.json`）· 零重跑 · 零改件",
+ "residual": {
+  "error": 7,
+  "unconnected": 4,
+  "E1_E4_自网盲孔": [
+   "E1 clearance: 盲孔[2_P]In2–In5 @(137.16,59.73) × 走线[4_N]In5(0.25mm) 实际0.0486<0.175",
+   "E2 clearance: 盲孔[1_P]In2–In5 @(127.59,57.78) × 走线[6_P]In5(0.04mm) 实际0.1323<0.175",
+   "E3 clearance: 盲孔[0_N]In2–In5 @(127.01,56.33) × 走线[7_P]In5(8.97mm) 实际0.1523<0.175",
+   "E4 shorting: 盲孔[0_P]In2–In5 @(141.22,56.83) × 走线[1_N]In5(2.88mm) 跨网短路"
+  ],
+  "E5_E7_板边": [
+   "1_N 之 In5 走线 @x≈142.6,y≈47 距板边 0.290 < 0.300（差 0.010mm）×3 项"
+  ],
+  "4x_unconnected": [
+   "0_P (J2/pad2 ↔ U6/P10)",
+   "0_N (In2 走线12.4mm ↔ F.Cu stub)",
+   "1_P (In2 走线13.9mm ↔ U6/AA10)",
+   "2_P (J2/pad14 ↔ U6/AH10)"
+  ]
+ },
+ "attribution": "**7 项全属自网 · 全属 no-move 可修**：①E1–E4 = 新 In5 车道撞**本 16 网自身残留之 In2–In5 盲孔**（落板只删了 In5 **走线**、未处理**盲孔/In2 残铜**；且布线器 `is_lane` 把自网**盲孔**一并排除 ⇒ 视图过宽）②E5–E7 = 1_N 车道贴板边差 0.010mm（局部推让即可）⇒ **无刚性障碍** ⇒ 进一步支持 **C-w 不必**；缺口 = **`C-B2UP-1`（同时性束布线 + 全转落板之自网残铜建模）**。",
+ "fix_hint_nonbinding": "非约束建议（不构成新工具提案）：全转落板之『本网几何』须含**自网 In2–In5 盲孔 + In2 残段**（或布线器把自网**盲孔**留作障碍）；板边项按 Edge 0.300 让线。",
+ "next": "请监理给 `C-B2UP-1` 限期并核定 ③④ 收口方式。owner 闸口 = 0。",
+ "self_sha16": {
+  "convention_A_sha16": "e2f63e281e4287a8",
+  "convention": "#K2-72 §五 约定A"
+ }
+}
