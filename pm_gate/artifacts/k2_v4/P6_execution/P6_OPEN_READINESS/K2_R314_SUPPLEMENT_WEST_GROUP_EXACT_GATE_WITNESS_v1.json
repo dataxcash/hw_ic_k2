@@ -1,0 +1,40 @@
+{
+ "schema": 1,
+ "artifact": "k2_r314_supplement_west_group_exact_gate_witness_v1",
+ "board": "k2/hw/k2_v4_8L.l8.kicad_pcb",
+ "board_sha16": "7a5c89913d6e5d0a",
+ "method": "西组 8 条之折线 = B锚 -> (B.x, ye) 竖段 -> (134.6, ye) 水平段；过 lane_router_v3.exact_gate（连续几何精确闸）",
+ "ye_assignment": {
+  "T0_N": 45.73,
+  "T1_P": 44.0,
+  "T2_N": 51.13,
+  "T3_P": 47.6,
+  "T4_N": 49.33,
+  "T5_P": 51.635,
+  "T6_N": 54.13,
+  "T7_P": 53.0
+ },
+ "gate": {
+  "lane_pitch_req_mm": 0.435,
+  "lane_pitch_min_gap_mm": 0.505,
+  "lane_pitch_min_pair": [
+   "PCIE_UP_OUT2_N_J2",
+   "PCIE_UP_OUT5_P_J2"
+  ],
+  "n_lane_pitch_viol": 0,
+  "n_clearance_viol": 0,
+  "clearance_min_mm": -0.0,
+  "endpoint_max_dev_mm": 44.446,
+  "n_obs": {
+   "seg": 1378,
+   "via": 395,
+   "pad": 20
+  }
+ },
+ "note": "endpoint_max_dev 44.446 = A 侧（SoC 侧）段未纳入本见证，非缺陷；本见证只覆盖西出缺口段。",
+ "verdict": "西出缺口段（8 条）过 exact_gate：车道互距违例 0 · 净距违例 0 ⇒ 该段图纸成立；全板仍未闭合（A 侧/东组缺坐标）。",
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "8a7d8be42710d821"
+ }
+}
