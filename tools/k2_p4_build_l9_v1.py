@@ -46,6 +46,39 @@ def board_rect(b):
                 xs.append(MM(p.x)); ys.append(MM(p.y))
     return (min(xs), min(ys), max(xs), max(ys))
 
+def mask_aperture_boxes(b, layer=None):
+    """焊盘/过孔之 **solder-mask 开窗** bbox（= kicad-cli `silk_over_copper` 之判据面）。"""
+    out = []
+    for fp in b.GetFootprints():
+        for pd in fp.Pads():
+            if pd.GetLayerSet().Contains(pcbnew.F_Mask):
+                L = pcbnew.F_Mask
+            elif pd.GetLayerSet().Contains(pcbnew.B_Mask):
+                L = pcbnew.B_Mask
+            else:
+                continue
+            if layer is not None and L != layer:
+                continue
+            try:
+                e = MM(pd.GetSolderMaskExpansion(L))
+            except Exception:  # noqa: BLE001
+                e = 0.0
+            x1, y1, x2, y2 = bb(pd.GetBoundingBox())
+            out.append((x1 - e, y1 - e, x2 + e, y2 + e))
+    for t in b.GetTracks():
+        if not isinstance(t, pcbnew.PCB_VIA):
+            continue
+        try:
+            e = MM(t.GetSolderMaskExpansion())
+        except Exception:  # noqa: BLE001
+            e = 0.0
+        if e <= 0:
+            continue
+        x1, y1, x2, y2 = bb(t.GetBoundingBox())
+        out.append((x1 - e, y1 - e, x2 + e, y2 + e))
+    return out
+
+
 def cu_boxes(b):
     """焊盘 mask 开窗 bbox（丝印会被裁处）"""
     out = []
@@ -75,8 +108,24 @@ def free_spot(b, x, y, r, pad_boxes=None):
     return True
 
 # ---------------------------------------------------------------- stages
+def courtyard_proxy_boxes(b, margin=0.15):
+    """既有封装之 pads bbox + margin（= 本构造器所用 courtyard 口径）——供新件避让。"""
+    out = []
+    for fp in b.GetFootprints():
+        pads = list(fp.Pads())
+        if pads:
+            bs = [bb(p.GetBoundingBox()) for p in pads]
+            box = (min(x[0] for x in bs)-margin, min(x[1] for x in bs)-margin,
+                   max(x[2] for x in bs)+margin, max(x[3] for x in bs)+margin)
+        else:
+            bx = bb(fp.GetBoundingBox())
+            box = (bx[0]-margin, bx[1]-margin, bx[2]+margin, bx[3]+margin)
+        out.append((("fpc", fp.GetReference(), ""), box))
+    return out
+
+
 def s_fiducial(b, target=3):
-    boxes = all_cu_boxes(b)
+    boxes = all_cu_boxes(b) + courtyard_proxy_boxes(b)
     X1, Y1, X2, Y2 = board_rect(b)
     corners = [(X1, Y1), (X1, Y2), (X2, Y1), (X2, Y2)]
     placed = []
@@ -98,7 +147,7 @@ def s_fiducial(b, target=3):
         x, y = found
         ref = f"FID{len(placed)+1}"
         fp = pcbnew.FOOTPRINT(b); fp.SetReference(ref)
-        fp.SetFPID(pcbnew.LIB_ID("k2_v4", "Fiducial_1mm_Mask2mm"))
+        fp.SetFPID(pcbnew.LIB_ID("", "Fiducial_1mm_Mask2mm"))
         fp.SetValue("Fiducial_1mm_Mask2mm"); fp.SetLayer(pcbnew.F_Cu)
         fp.SetPosition(v(x, y)); fp.SetAttributes(pcbnew.FP_SMD)
         pad = pcbnew.PAD(fp); pad.SetNumber(""); pad.SetShape(pcbnew.PAD_SHAPE_CIRCLE)
@@ -177,7 +226,7 @@ def _crtyd_of(b):
         m[fp.GetReference()] = any(g.GetLayer() == pcbnew.F_CrtYd for g in fp.GraphicalItems())
     return m
 
-def s_crtyd(b, margin=0.25, w=0.05):
+def s_crtyd(b, margin=0.0, w=0.05):
     n = 0
     for fp in b.GetFootprints():
         if any(g.GetLayer() == pcbnew.F_CrtYd for g in fp.GraphicalItems()):
@@ -233,10 +282,9 @@ def _sub(track, pad_boxes, hw):
 
 def s_silk(b, w=0.12, margin=0.40, polar=True):
     """器件轮廓丝印（**按焊盘剪断** ⇒ 不压焊盘）+ 极性/1 脚标记（置 courtyard 外）。"""
-    pad_boxes = [bb(p.GetBoundingBox()) for fp in b.GetFootprints() for p in fp.Pads()]
-    pad_boxes += [bb(t.GetBoundingBox()) for t in b.GetTracks() if isinstance(t, pcbnew.PCB_VIA)]
+    pad_boxes = mask_aperture_boxes(b, pcbnew.F_Mask)
     X1, Y1, X2, Y2 = board_rect(b)
-    hw = w / 2.0
+    hw = w / 2.0 + 0.13
     n_seg = n_pol = n_fp = 0
     for fp in b.GetFootprints():
         pads = list(fp.Pads())
@@ -247,12 +295,21 @@ def s_silk(b, w=0.12, margin=0.40, polar=True):
         x2 = max(x[2] for x in boxes) + margin; y2 = max(x[3] for x in boxes) + margin
         pos = fp.GetPosition(); px, py = MM(pos.x), MM(pos.y)
         made = 0
-        for seg in ((x1, y1, x2, y1), (x2, y1, x2, y2), (x2, y2, x1, y2), (x1, y2, x1, y1)):
-            for (ax, ay, bx, by) in _sub(seg, pad_boxes, hw):
-                sh = pcbnew.PCB_SHAPE(fp); sh.SetShape(pcbnew.SHAPE_T_SEGMENT)
-                sh.SetStart(v(ax, ay)); sh.SetEnd(v(bx, by))
-                sh.SetLayer(pcbnew.F_SilkS); sh.SetWidth(IU(w))
-                fp.Add(sh); made += 1
+        cur_margin = margin
+        for _try in range(4):
+            cx1 = min(x[0] for x in boxes) - cur_margin; cy1 = min(x[1] for x in boxes) - cur_margin
+            cx2 = max(x[2] for x in boxes) + cur_margin; cy2 = max(x[3] for x in boxes) + cur_margin
+            segs = []
+            for seg in ((cx1, cy1, cx2, cy1), (cx2, cy1, cx2, cy2), (cx2, cy2, cx1, cy2), (cx1, cy2, cx1, cy1)):
+                segs += _sub(seg, pad_boxes, hw)
+            if segs:
+                for (ax, ay, bx, by) in segs:
+                    sh = pcbnew.PCB_SHAPE(fp); sh.SetShape(pcbnew.SHAPE_T_SEGMENT)
+                    sh.SetStart(v(ax, ay)); sh.SetEnd(v(bx, by))
+                    sh.SetLayer(pcbnew.F_SilkS); sh.SetWidth(IU(w))
+                    fp.Add(sh); made += 1
+                break
+            cur_margin += 0.35
         if made:
             n_fp += 1; n_seg += made
         if polar and (fp.GetReference()[:1] in ("D", "U", "J", "Q", "K") or fp.GetReference().startswith(("LED", "BT"))):
@@ -281,9 +338,7 @@ def s_silk(b, w=0.12, margin=0.40, polar=True):
 
 def s_silkfix(b, tol=-0.02):
     """与焊盘 mask 开窗相交的 Reference 文本 → 8 方向最小位移移出（保可读）。"""
-    pads = [bb(p.GetBoundingBox()) for fp in b.GetFootprints() for p in fp.Pads()
-            if p.GetLayerSet().Contains(pcbnew.F_Mask)]
-    pads += [bb(t.GetBoundingBox()) for t in b.GetTracks() if isinstance(t, pcbnew.PCB_VIA)]
+    pads = mask_aperture_boxes(b, pcbnew.F_Mask)
     X1, Y1, X2, Y2 = board_rect(b)
     dirs = [(0, -1), (0, 1), (-1, 0), (1, 0), (-1, -1), (1, -1), (-1, 1), (1, 1)]
     moved = 0
@@ -407,7 +462,7 @@ def s_testpoints(b, rails=("12V_IN", "P3V3", "P3V3_AUX", "MCU_VDD"),
         nc = b.GetNetcodeFromNetname(net)
         if nc <= 0:
             log("tp_skip", {"net": net, "why": "no netcode"}); continue
-        boxes = _cu_net_boxes(b)
+        boxes = _cu_net_boxes(b) + courtyard_proxy_boxes(b)
         pts = []
         for t in b.GetTracks():
             if t.GetNetname() != net or t.GetLayer() != pcbnew.F_Cu:
@@ -460,7 +515,7 @@ def s_testpoints(b, rails=("12V_IN", "P3V3", "P3V3_AUX", "MCU_VDD"),
             x, y = spot
         ref = f"TP{len(placed)+1}"
         fp = pcbnew.FOOTPRINT(b); fp.SetReference(ref)
-        fp.SetFPID(pcbnew.LIB_ID("k2_v4", "TestPoint_1.5mm"))
+        fp.SetFPID(pcbnew.LIB_ID("", "TestPoint_1.5mm"))
         fp.SetValue("TestPoint_1.5mm_" + net); fp.SetLayer(pcbnew.F_Cu)
         fp.SetPosition(v(x, y)); fp.SetAttributes(pcbnew.FP_SMD)
         pad = pcbnew.PAD(fp); pad.SetNumber(""); pad.SetShape(pcbnew.PAD_SHAPE_CIRCLE)
@@ -469,7 +524,7 @@ def s_testpoints(b, rails=("12V_IN", "P3V3", "P3V3_AUX", "MCU_VDD"),
         ls = pcbnew.LSET(); ls.AddLayer(pcbnew.F_Cu); ls.AddLayer(pcbnew.F_Mask)
         pad.SetLayerSet(ls); fp.Add(pad)
         sh = pcbnew.PCB_SHAPE(fp); sh.SetShape(pcbnew.SHAPE_T_CIRCLE)
-        sh.SetCenter(v(x, y)); sh.SetEnd(v(x + 0.9, y)); sh.SetLayer(pcbnew.F_CrtYd)
+        sh.SetCenter(v(x, y)); sh.SetEnd(v(x + 0.75, y)); sh.SetLayer(pcbnew.F_CrtYd)
         sh.SetWidth(IU(0.05)); fp.Add(sh)
         tk = None
         if stub is not None:

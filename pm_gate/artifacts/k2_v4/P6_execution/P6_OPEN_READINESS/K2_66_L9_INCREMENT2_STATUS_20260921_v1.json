@@ -1,0 +1,103 @@
+{
+ "artifact": "k2_66_l9_increment2_status",
+ "schema": 1,
+ "ts": "2026-09-21T09:42:35.498722+08:00",
+ "session_label": "K2-2026-09-21 · R108(续4) · #K2-66 l9 增量2（A6 归零 · courtyard 27→6）",
+ "builder": {
+  "path": "k2/tools/k2_p4_build_l9_v1.py",
+  "sha16": "877ce11bd3859cd6"
+ },
+ "l9_gate_status_after_increment2": {
+  "① fiducial": "3 ✓（Ø1.0 · mask 2× · 距边>3.35）",
+  "② silk 100%": "极性15/15 ✓ · 轮廓67/67 ✓ · 板卡信息 ✓",
+  "③ silk_over_copper=0": "**0 ✓**（kicad-cli DRC）· courtyard 覆盖 67/67 ✓ · **无重叠 ✗ = 6**",
+  "④ 90°=0": "**0 ✓**（631 倒角）· 高速线过孔≤2/线 ✗（32 车道×4）",
+  "⑤ 铜平衡": "F.Cu 53.19 / B.Cu 56.58 ✓（40–60 · 层间差 3.4%）",
+  "⑥ 边圆角": "arcs 4 · R1.5 ✓ · 安装孔依据 ✗（C2）",
+  "⑦ 锚保全/判据": "l4..l8 未动 · rev=6 ✓"
+ },
+ "drc": {
+  "cmd": "kicad-cli pcb drc --severity-all",
+  "l8": {
+   "total": 170,
+   "unconn": 0,
+   "silk_over_copper": 37,
+   "courtyards_overlap": 0
+  },
+  "l9": {
+   "total": 276,
+   "unconn": 0,
+   "silk_over_copper": 0,
+   "courtyards_overlap": 6,
+   "clearance": 0,
+   "silk_overlap": 150,
+   "lib_footprint_issues": 54,
+   "solder_mask_bridge": 3
+  }
+ },
+ "courtyard_overlap_6": [
+  [
+   "U1",
+   "J9（既有 · 真实 DFA 间距）"
+  ],
+  [
+   "U1",
+   "J13（既有 · 真实 DFA 间距）"
+  ],
+  [
+   "TP1",
+   "FID1（新件互近）"
+  ],
+  [
+   "H1",
+   "FID2（新件避让不全）"
+  ],
+  [
+   "H2",
+   "FID3"
+  ],
+  [
+   "H2",
+   "TP5"
+  ]
+ ],
+ "fixes_this_increment": [
+  "A6 **归零**：丝印裁剪改用 **mask 开窗几何**（pad bbox + GetSolderMaskExpansion）+ 安全余量 0.13 ⇒ DRC silk_over_copper 115→**0**（l8 基线 37）",
+  "A4 保 67/67：轮廓裁剪全清时自动放大 margin 重试（≥1 段）",
+  "courtyard margin 0.25→0.0（courtyard = pads bbox）⇒ overlap 27→**6**",
+  "新件（fiducial/TP）避让既有封装 pads bbox+0.15（courtyard 代理）⇒ 清除 4 处新件重叠中的多数",
+  "FPID 改中性名（消 `k2_v4:*` 无库）"
+ ],
+ "remaining": [
+  {
+   "id": "③-courtyard-overlap-6",
+   "root": "2 处 = 既有 U1↔J9/J13（MCU 与连接器真实间距不足 · 非本件引入）；4 处 = 新件 FID/TP 与 H*/彼此互近（避让搜索空间受限）",
+   "fix": "① 新件位置改用**全局最优搜索**（避 all 既有 courtyard 且互斥）；② 2 处既有 = **真实 DFA 缺陷** ⇒ 须移件 ⇒ 属布局改动(L2) 或交监理裁（同 #K2-21 联合不可满足先例）"
+  },
+  {
+   "id": "④-B2",
+   "root": "32 PCIE 车道 F→In2→In5→B = 4 via/线",
+   "fix": "车道重布线（项目多层迷宫布线器 `k2_p4_mroute_v1.py` · 守 85Ω + 19 维不回归）"
+  },
+  {
+   "id": "⑥-C2",
+   "root": "SPEC 无安装孔机械依据",
+   "fix": "依 §四『无依据 ⇒ 按缺陷修』⇒ 对称阵列或补依据"
+  },
+  {
+   "id": "其他",
+   "root": "silk_overlap 150（丝印-丝印 · 非 §六 gate 项）· lib_footprint_issues 54 · solder_mask_bridge 3",
+   "fix": "续修（非阻塞 gate）"
+  }
+ ],
+ "red_lines_ok": [
+  "未改冻结四源",
+  "未改 criteria/",
+  "未改 l4..l8",
+  "未改网表/SPEC",
+  "未派 WORKER",
+  "l9 未落 hw/（WIP）",
+  "未越阶段"
+ ],
+ "next": "续修：新件全局避让 + B2 车道重布线 + C2；达 §六 7 项后落 hw/ 并送监理。禁 HOLD/停等。"
+}
