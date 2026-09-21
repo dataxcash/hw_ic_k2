@@ -1,0 +1,63 @@
+{
+ "artifact": "k2_68_r3g_bcu_route_plan_32of32_legal_status",
+ "authority": "#K2-68 §2.4(a)-2/-3/-4 · #K2-69 §五-2（R3 施工）· §六① · §二-7（真余量下限具名且 ≥0.100mm · 禁贴限）",
+ "board": "/tmp/opencode/w3/c.kicad_pcb (R1E) · B.Cu 中段 · 具名 ECO 集 {P3V3,GND,I2C1_SDA,P3V3_AUX}",
+ "caveats": [
+  "本件为**工作令**（只读生成）· **未改板** ⇒ 『已求出合法 32/32 路由方案』≠『已制造』。",
+  "`--movable-nets` = 只读假设：真 ECO 须实做（移缝合孔 / 移 I2C1_SDA 走线）并复核参考面与 DRC。",
+  "起点/终点 stub 与铺铜重灌未做 ⇒ apply 后须重跑精确闸 + kicad-cli DRC。"
+ ],
+ "headline": "**R3-(a) 布通方案成立（router v4 = 最大流指派 · 4 邻接曼哈顿 · 节点容量 1）**：32 条车道**全部布通 32/32**，**几何精确闸全绿** —— 车道互检最小间隙 **+0.1950mm**（判据 ≥0.175 · **0 违规**）· 障碍最小余量 **+0.4365mm**（**0 违规** · 远高于 ≥0.100mm 下限）。原理（可证）：4 邻接 + 每格节点容量 1 ⇒ 路径**节点不相交** ⇒ 曼哈顿栅格下两两中心距 ≥ 栅格距 0.40mm ≥ 间距门 0.38mm。",
+ "inputs": {
+  "capacity_tool": "tools/k2_p4_b2_in5_capacity_probe_v1.py 1e17667caea47e69",
+  "router_tool": "tools/k2_p4_b2_bcu_router_v1.py bc13e5fbec2f613e"
+ },
+ "method_note": "布线器三口径演进：PathFinder 软罚（拓扑 32/32 但两两未分离 · 32 违规）→ 硬带（16–22/32）→ **maxflow 指派（本件 · 32/32 且合法）**。",
+ "red_lines_ok": [
+  "只读（未改板/件）",
+  "冻结四源未动",
+  "criteria/ 只读未碰",
+  "l4..l8 未动",
+  "网表/SPEC 未改",
+  "未派 WORKER",
+  "临时仅 /tmp/opencode",
+  "未越阶段"
+ ],
+ "route_plan": {
+  "algo": "maxflow",
+  "cell_mm": 0.4,
+  "conn": 4,
+  "extra_margin_mm": 0.06,
+  "geometric_gate": {
+   "clearance_min_mm": 0.4365,
+   "clearance_violations": 0,
+   "lane_pitch_min_gap_mm": 0.195,
+   "lane_pitch_min_pair": [
+    "PCIE_DN_OUT0_N_MCIO",
+    "PCIE_DN_OUT2_P_MCIO"
+   ],
+   "lane_pitch_violations": 0
+  },
+  "lane_w_mm": 0.205,
+  "len_mm": {
+   "max": 62.0,
+   "median": 43.6,
+   "min": 32.8
+  },
+  "n_failed": 0,
+  "n_lanes": 32,
+  "n_routed": 32,
+  "pitch_mm": 0.38,
+  "workorder": "pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/K2_68_R3G_BCU_ROUTE_PLAN_32OF32_LEGAL_20260921_v1.json"
+ },
+ "schema": 1,
+ "still_open": [
+  "① `apply` 未执行：V4 同位换 span（F–In2→F–B）· 删 V2/V3 + B.Cu/In2 腿 · **执行具名 ECO**（`P3V3`/`GND` 缝合孔腾挪 + `I2C1_SDA` 或 `P3V3_AUX`）· **铺铜重灌 ZONE_FILLER**。",
+  "② 端点接续（via→最近栅格格）之短 stub 未建；须于 apply 生成并复核（同判据）。",
+  "③ 长度中位 43.6mm vs 原中段 61.3mm ⇒ §7-3 等长/蛇形（P/N 同步 · skew ≤0.15mm）+ SI（85Ω · B.Cu 微带 ref In6）。",
+  "④ 缝合孔腾挪同报 `ref_plane_continuity`（non_antipad_gap==0）/EMC。",
+  "⑤ R4 复测闸（#K2-69 §六 ①–⑧：探针 32/32 · **B2 行 32/32 ≤2 via** · DRC error 仅 #K2-67 具名 · unconn 0 · mask_bridge 0 · ref_plane_continuity PASS · 19 维不回归）。",
+  "⑥ l9 落 `hw/` + `spec-rev-55` 同笔（硬前置 `criteria/` rev=7 · gate 属主 · 不阻塞 ①–⑤）。"
+ ],
+ "ts": "2026-09-21T16:4x+08:00"
+}

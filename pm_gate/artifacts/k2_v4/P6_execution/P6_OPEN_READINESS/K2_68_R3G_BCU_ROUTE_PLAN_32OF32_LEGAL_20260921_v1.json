@@ -5,6 +5,180 @@
  "conn": 4,
  "extra_margin_mm": 0.06,
  "failed": [],
+ "geometric_gate": {
+  "clearance_min_mm": 0.4365,
+  "clearance_violations": [],
+  "lane_min_gap_per_net": {
+   "PCIE_DN_OUT0_N_MCIO": 0.195,
+   "PCIE_DN_OUT0_P_MCIO": 0.195,
+   "PCIE_DN_OUT1_N_MCIO": 0.195,
+   "PCIE_DN_OUT1_P_MCIO": 0.195,
+   "PCIE_DN_OUT2_N_MCIO": 0.195,
+   "PCIE_DN_OUT2_P_MCIO": 0.195,
+   "PCIE_DN_OUT3_N_MCIO": 0.195,
+   "PCIE_DN_OUT3_P_MCIO": 0.195,
+   "PCIE_DN_OUT4_N_MCIO": 0.195,
+   "PCIE_DN_OUT4_P_MCIO": 0.195,
+   "PCIE_DN_OUT5_N_MCIO": 0.195,
+   "PCIE_DN_OUT5_P_MCIO": 0.195,
+   "PCIE_DN_OUT6_N_MCIO": 0.195,
+   "PCIE_DN_OUT6_P_MCIO": 0.195,
+   "PCIE_DN_OUT7_N_MCIO": 0.195,
+   "PCIE_DN_OUT7_P_MCIO": 0.195,
+   "PCIE_UP_OUT0_N_J2": 0.195,
+   "PCIE_UP_OUT0_P_J2": 0.195,
+   "PCIE_UP_OUT1_N_J2": 0.195,
+   "PCIE_UP_OUT1_P_J2": 0.195,
+   "PCIE_UP_OUT2_N_J2": 0.195,
+   "PCIE_UP_OUT2_P_J2": 0.195,
+   "PCIE_UP_OUT3_N_J2": 0.195,
+   "PCIE_UP_OUT3_P_J2": 0.195,
+   "PCIE_UP_OUT4_N_J2": 0.195,
+   "PCIE_UP_OUT4_P_J2": 0.195,
+   "PCIE_UP_OUT5_N_J2": 0.195,
+   "PCIE_UP_OUT5_P_J2": 0.195,
+   "PCIE_UP_OUT6_N_J2": 0.195,
+   "PCIE_UP_OUT6_P_J2": 0.195,
+   "PCIE_UP_OUT7_N_J2": 0.195,
+   "PCIE_UP_OUT7_P_J2": 0.195
+  },
+  "lane_pitch_min_gap_mm": 0.195,
+  "lane_pitch_min_pair": [
+   "PCIE_DN_OUT0_N_MCIO",
+   "PCIE_DN_OUT2_P_MCIO"
+  ],
+  "lane_pitch_violations": [],
+  "per_lane_clearance": {
+   "PCIE_DN_OUT0_N_MCIO": {
+    "blocker": "I2C2_SCL",
+    "margin_min": 1.9119
+   },
+   "PCIE_DN_OUT0_P_MCIO": {
+    "blocker": "I2C2_SCL",
+    "margin_min": 0.5471
+   },
+   "PCIE_DN_OUT1_N_MCIO": {
+    "blocker": "PERSTA#",
+    "margin_min": 2.475
+   },
+   "PCIE_DN_OUT1_P_MCIO": {
+    "blocker": "I2C2_SCL",
+    "margin_min": 1.0083
+   },
+   "PCIE_DN_OUT2_N_MCIO": {
+    "blocker": "PERSTA#",
+    "margin_min": 1.275
+   },
+   "PCIE_DN_OUT2_P_MCIO": {
+    "blocker": "I2C2_SCL",
+    "margin_min": 2.2083
+   },
+   "PCIE_DN_OUT3_N_MCIO": {
+    "blocker": "PERSTA#",
+    "margin_min": 0.5526
+   },
+   "PCIE_DN_OUT3_P_MCIO": {
+    "blocker": "PERSTA#",
+    "margin_min": 0.875
+   },
+   "PCIE_DN_OUT4_N_MCIO": {
+    "blocker": "",
+    "margin_min": 5.95
+   },
+   "PCIE_DN_OUT4_P_MCIO": {
+    "blocker": "",
+    "margin_min": 1.25
+   },
+   "PCIE_DN_OUT5_N_MCIO": {
+    "blocker": "DS320_STRAP_B_ADDR0_15-8",
+    "margin_min": 4.865
+   },
+   "PCIE_DN_OUT5_P_MCIO": {
+    "blocker": "",
+    "margin_min": 2.45
+   },
+   "PCIE_DN_OUT6_N_MCIO": {
+    "blocker": "DS320_STRAP_B_ADDR0_15-8",
+    "margin_min": 2.465
+   },
+   "PCIE_DN_OUT6_P_MCIO": {
+    "blocker": "DS320_STRAP_B_ADDR0_15-8",
+    "margin_min": 4.465
+   },
+   "PCIE_DN_OUT7_N_MCIO": {
+    "blocker": "DS320_STRAP_B_ADDR0_15-8",
+    "margin_min": 2.065
+   },
+   "PCIE_DN_OUT7_P_MCIO": {
+    "blocker": "DS320_STRAP_B_ADDR0_15-8",
+    "margin_min": 3.265
+   },
+   "PCIE_UP_OUT0_N_J2": {
+    "blocker": "I2C2_SCL",
+    "margin_min": 0.5071
+   },
+   "PCIE_UP_OUT0_P_J2": {
+    "blocker": "I2C2_SCL",
+    "margin_min": 1.4083
+   },
+   "PCIE_UP_OUT1_N_J2": {
+    "blocker": "I2C2_SCL",
+    "margin_min": 0.95
+   },
+   "PCIE_UP_OUT1_P_J2": {
+    "blocker": "I2C2_SCL",
+    "margin_min": 2.6083
+   },
+   "PCIE_UP_OUT2_N_J2": {
+    "blocker": "I2C2_SCL",
+    "margin_min": 1.35
+   },
+   "PCIE_UP_OUT2_P_J2": {
+    "blocker": "PERSTA#",
+    "margin_min": 2.075
+   },
+   "PCIE_UP_OUT3_N_J2": {
+    "blocker": "PERSTA#",
+    "margin_min": 1.675
+   },
+   "PCIE_UP_OUT3_P_J2": {
+    "blocker": "PERSTA#",
+    "margin_min": 0.4632
+   },
+   "PCIE_UP_OUT4_N_J2": {
+    "blocker": "",
+    "margin_min": 5.55
+   },
+   "PCIE_UP_OUT4_P_J2": {
+    "blocker": "",
+    "margin_min": 5.058
+   },
+   "PCIE_UP_OUT5_N_J2": {
+    "blocker": "DS320_STRAP_B_ADDR0_15-8",
+    "margin_min": 4.065
+   },
+   "PCIE_UP_OUT5_P_J2": {
+    "blocker": "DS320_STRAP_B_ADDR0_15-8",
+    "margin_min": 3.665
+   },
+   "PCIE_UP_OUT6_N_J2": {
+    "blocker": "DS320_STRAP_B_ADDR0_15-8",
+    "margin_min": 0.4365
+   },
+   "PCIE_UP_OUT6_P_J2": {
+    "blocker": "DS320_STRAP_B_ADDR0_15-8",
+    "margin_min": 0.865
+   },
+   "PCIE_UP_OUT7_N_J2": {
+    "blocker": "DS320_STRAP_B_ADDR0_15-8",
+    "margin_min": 1.265
+   },
+   "PCIE_UP_OUT7_P_J2": {
+    "blocker": "DS320_STRAP_B_ADDR0_15-8",
+    "margin_min": 1.665
+   }
+  }
+ },
  "lane_w_mm": 0.205,
  "layer": "B.Cu",
  "method": "B.Cu 单层 · 8 邻接 A*（长度 + **PathFinder 协商拥塞**（过用罚·pres_fac 逐轮加倍）+ 贴边惩罚 + 贴限禁行）+ 难度排序 + **每轮全量 rip-up-and-reroute**",

@@ -438,7 +438,7 @@ def main():
           "movable_nets": sorted(getattr(field, "movable", [])),
           "method": "B.Cu 单层 · 8 邻接 A*（长度 + **PathFinder 协商拥塞**（过用罚·pres_fac 逐轮加倍）+ 贴边惩罚 + 贴限禁行）+ 难度排序 + **每轮全量 rip-up-and-reroute**",
           "n_lanes": len(lanes), "n_routed": len(ok), "n_failed": len(ng),
-          "routed": ok, "failed": ng, "routes": routes,
+          "routed": ok, "failed": ng, "routes": routes, "geometric_gate": ver,
           "extra_margin_mm": a.extra_margin,
           "vias": {"V1": "F.Cu-B.Cu 原地保留", "V4": "F.Cu-In2.Cu → 同位换 span 为 F.Cu-B.Cu",
                    "delete": ["V2(In5-B)", "V3(In2-In5)"]},
