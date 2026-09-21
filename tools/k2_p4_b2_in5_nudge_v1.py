@@ -78,16 +78,16 @@ for rnd in range(6):
             n = math.hypot(vx, vy) or 1.0
             ux, uy = vx / n, vy / n
             vi = min(segi + 1, len(p['pts']) - 2)          # 触发线段末端顶点（不动首末端点）
-            lm_cur = local_min(routes, victim)
+            lm_cur = dd          # 局部判据 = **该对**之最近段距（非整车道最小值 · 免被其他对锁死）
             for delta in (0.05, 0.10, 0.15, 0.20, 0.25):
                 cand = copy.deepcopy(routes)
                 px, py = cand[victim]['pts'][vi]
                 cand[victim]['pts'][vi] = (round(px + ux * delta, 4), round(py + uy * delta, 4))
-                lm_new = local_min(cand, victim)
-                if lm_new <= lm_cur + 1e-6:
-                    continue                      # 廉价预筛：邻域最小段距无改善 ⇒ 跳过（免全闸复算）
+                dd_new = closest_pair(cand[victim]['pts'], cand[other]['pts'])[0]
+                if dd_new <= dd + 1e-6:
+                    continue                      # 局部判据：**该对**段距须严格增大（免全闸复算）
                 routes = cand; improved = True
-                print('  [nudge r%d] %s 顶点 %d 移 %.2fmm ⇒ 邻域最近距 %.4f' % (rnd, victim, vi, delta, lm_new), flush=True)
+                print('  [nudge r%d] %s 顶点 %d 移 %.2fmm ⇒ 该对距 %.4f (原 %.4f)' % (rnd, victim, vi, delta, dd_new, dd), flush=True)
                 break
             if improved:
                 break
