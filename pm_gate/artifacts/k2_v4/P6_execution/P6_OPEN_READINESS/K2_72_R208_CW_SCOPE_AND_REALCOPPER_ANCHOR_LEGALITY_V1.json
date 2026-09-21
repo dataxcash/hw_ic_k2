@@ -1,0 +1,172 @@
+{
+ "artifact": "k2_p4_b2_R208_cw_scope_and_realcopper_anchor_legality_v1",
+ "experiments": {
+  "fixed_adapt_eastcorner": {
+   "best": {
+    "min": 0.0,
+    "routed": 27,
+    "viol": 106
+   },
+   "cage": "a_cage_adapt.json",
+   "final": {
+    "failed": [
+     "PCIE_DN_OUT0_N_MCIO",
+     "PCIE_DN_OUT2_N_MCIO",
+     "PCIE_DN_OUT4_N_MCIO",
+     "PCIE_DN_OUT6_N_MCIO",
+     "PCIE_UP_OUT0_N_J2"
+    ],
+    "routed": 27,
+    "secs": 883
+   },
+   "init": 6,
+   "last_iter": {
+    "it": 25,
+    "min": 0.0,
+    "routed": 27,
+    "viol": 106
+   },
+   "log": "/tmp/opencode/archer/rip_fixed_adapt_s7.log",
+   "movable": "∅"
+  },
+  "fixed_north_band": {
+   "best": {
+    "min": 0.0,
+    "routed": 27,
+    "viol": 104
+   },
+   "cage": "a_cage_north.json",
+   "final": {
+    "failed": [
+     "PCIE_DN_OUT0_N_MCIO",
+     "PCIE_DN_OUT2_N_MCIO",
+     "PCIE_DN_OUT4_N_MCIO",
+     "PCIE_DN_OUT6_N_MCIO",
+     "PCIE_UP_OUT0_N_J2"
+    ],
+    "routed": 27,
+    "secs": 832
+   },
+   "init": 6,
+   "last_iter": {
+    "it": 25,
+    "min": 0.0,
+    "routed": 27,
+    "viol": 104
+   },
+   "log": "/tmp/opencode/archer/rip_north_s7.log",
+   "movable": "∅"
+  },
+  "min_cw_south_band": {
+   "best": {
+    "min": 0.0,
+    "routed": 28,
+    "viol": 45
+   },
+   "cage": "a_cage_south16.json",
+   "final": {
+    "failed": [
+     "PCIE_DN_OUT0_N_MCIO",
+     "PCIE_DN_OUT2_N_MCIO",
+     "PCIE_DN_OUT4_N_MCIO",
+     "PCIE_DN_OUT6_N_MCIO"
+    ],
+    "routed": 28,
+    "secs": 509
+   },
+   "init": 11,
+   "last_iter": {
+    "it": 25,
+    "min": 0.0,
+    "routed": 28,
+    "viol": 45
+   },
+   "log": "/tmp/opencode/archer/rip_south16_s7.log",
+   "movable": "低速族+缝合孔"
+  },
+  "reference_witness_run": {
+   "final": "32/32 · 违规 1 → nudge 0 · 419s",
+   "init": 17,
+   "log": "/tmp/opencode/archer/rip_c3_s7.log",
+   "params": "movable=51 网+缝合孔"
+  }
+ },
+ "finding_1_anchor_legality": {
+  "A_illegal": "19/32（PCIE_DN_OUT* 11 条 + PCIE_UP_OUT* 8 条）",
+  "A_illegal_list": [
+   "PCIE_DN_OUT0_P_MCIO A(84.75,49.70)",
+   "PCIE_DN_OUT1_P_MCIO A(85.70,48.00)",
+   "PCIE_DN_OUT2_N_MCIO A(89.30,48.00)",
+   "PCIE_DN_OUT2_P_MCIO A(91.10,48.00)",
+   "PCIE_DN_OUT3_N_MCIO A(87.50,48.00)",
+   "PCIE_DN_OUT3_P_MCIO A(83.90,48.00)",
+   "PCIE_DN_OUT4_N_MCIO A(90.15,49.70)",
+   "PCIE_DN_OUT4_P_MCIO A(88.35,49.70)",
+   "PCIE_DN_OUT5_P_MCIO A(86.55,49.70)",
+   "PCIE_DN_OUT6_P_MCIO A(91.95,49.70)",
+   "PCIE_DN_OUT7_N_MCIO A(93.75,49.70)",
+   "PCIE_UP_OUT0_N_J2 A(85.30,53.20)",
+   "PCIE_UP_OUT0_P_J2 A(86.30,54.60)",
+   "PCIE_UP_OUT1_N_J2 A(90.30,54.60)",
+   "PCIE_UP_OUT2_N_J2 A(92.10,54.60)",
+   "PCIE_UP_OUT3_P_J2 A(88.50,54.60)",
+   "PCIE_UP_OUT4_N_J2 A(94.90,54.80)",
+   "PCIE_UP_OUT4_P_J2 A(99.70,54.80)",
+   "PCIE_UP_OUT5_P_J2 A(97.30,54.80)"
+  ],
+  "B_illegal": "0/32",
+  "criterion": "k2_p4_b2_anchor_alloc_v1.Legal(model, movable=frozenset(), pad_extra=0.1707)（与锚笼派生同口径）",
+  "note": "router 端因端点 snap(≤1.4mm) 仅报 3 条『端点不可行』（DN_OUT1_P/DN_OUT3_N/DN_OUT3_P）⇒ 与『零位移』要求不可兼容。"
+ },
+ "finding_2_dn_band_composition": {
+  "band": "x∈[84.0,101.0] y∈[46.0,53.0]",
+  "frozen_In5_len_mm": 0.0,
+  "movable_In5_len_mm": 215.9,
+  "movable_nets_in_band": [
+   "PCIE_UP4_P",
+   "PCIE_UP5_P",
+   "PCIE_UP6_P",
+   "PCIE_UP7_P",
+   "PCIE_UP7_N",
+   "PCIE_UP4_N",
+   "PCIE_UP5_N",
+   "PCIE_UP6_N",
+   "PERSTA#",
+   "I2C1_SDA"
+  ],
+  "x83_wall": "GND 缝合孔列 (83.43,50.87)/(83.43,51.52)/(83.43,52.72)/(83.82,53.19)（可移缝合孔 · 非冻结）"
+ },
+ "finding_3_min_cw": {
+  "lanes_freed": "DN 笼带 y∈[50.8,53.2] 每行 81 位 · x∈[78,94] 全通（Legal 扫描）",
+  "movable_set": "#K2-71 §二 具名低速族（straps/I2C/PERST/PWR_BTN）+ GND,P3V3 缝合孔",
+  "pcie_pairs_need_move": false,
+  "ref_plane_continuity_required": true
+ },
+ "finding_4_cw_free_candidate": {
+  "cage_north": "a_cage_north.json · DN 两行 y=42.0/43.8 · 8+8 · x∈[78,92.8] · min 1.800",
+  "north_band": "y∈[40.8,44.4] x∈[76,102] 对『全部铜固定』合法（122–137 位/行）",
+  "status": "待布线验证（rip_north_s7）"
+ },
+ "gate_selfcheck": {
+  "owner闸口": 0,
+  "冻结四源": "未动",
+  "判据": "criteria/ rev=6 MATCH（只读未碰）",
+  "外部前置": "1（criteria rev=7 · gate 属主）",
+  "待裁": 0,
+  "阶段": "P5 PENDING_EXTERNAL（未越阶段）"
+ },
+ "next": "① 依 finding_3 实现最小 C-w（低速族搬迁器 · 含 ref_plane_continuity 同报）② DN A 笼改南带两行（a_cage_south16）+ B 锚保持（已全合法）③ 布 32 车道 ⇒ 真闸 0 ④ apply(In5) ⇒ ZONE_FILLER ⇒ DRC error 0/未连接 0 ⇒ R4",
+ "referenced_sha16": {
+  "a_cage3row.json": "96a0023a9cbc2b35",
+  "a_cage_adapt.json": "77128cf1bb9d0c62",
+  "a_cage_north.json": "eddbfbe0cc5e281a",
+  "a_cage_south16.json": "00170110cc296cb6",
+  "cage_low.py": "326a7259f2102fed",
+  "cage_scan.py": "582c2045f14a2557",
+  "ortho2_run_fixed.py": "a8c127d44514da9b",
+  "scope_cw.py": "f508cf5f0ff8b384",
+  "wo_c3_nudged.json": "c21802fda10a3bfc"
+ },
+ "tick": "R208（承 R161–R207 · 新会话 context 归零）",
+ "verdict": "**见证锚笼对『真实铜』非法 19/32（全在 A 侧）· B 侧 0/32** ⇒ 见证之 A 笼系『动网让路』模型产物；R3 落板必须先做 C-w 或改笼位。**C-w 最小集 = 低速族 + 参考面缝合孔**（PCIe 差分对无需搬迁）⇒ DN 笼带可于 y∈[50.8,52.6] 排成规整两行（min 1.800）。"
+}
