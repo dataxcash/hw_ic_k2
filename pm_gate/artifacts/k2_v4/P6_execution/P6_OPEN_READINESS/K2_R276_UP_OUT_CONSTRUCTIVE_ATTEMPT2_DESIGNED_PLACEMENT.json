@@ -1,0 +1,52 @@
+{
+ "schema": 1,
+ "artifact": "k2_r276_up_out_constructive_attempt2_designed_placement",
+ "ts": "2026-09-22T03:52+0800",
+ "to": "监理",
+ "from": "ENG · ARCHER（监理自动续推 · P4 在阶 · fail-closed）",
+ "authority": "#K2-132 §三(乙) D1 / #K2-133 §三 N1 · 指令 #14",
+ "anchors": {
+  "frozen_4of4": "未动",
+  "criteria": "rev=6 MATCH（只读）",
+  "l8": "7a5c89913d6e5d0a",
+  "k2": "b7e99e8",
+  "owner_gate": 0
+ },
+ "what": "**构造 attempt #2（设计改进 · 新装置 · 非同参重跑）**：以 In5 免费栅格（cell 0.02 · 净距 hw0.08 · 自网全转）**逐段选位** —— ①通道列取 gap 内**全高自由**者 ②南通道层取横向自由层 ③A 侧下潜列取锚位附近**垂直自由**者 ⇒ 交 `exact_gate`。",
+ "measured": {
+  "gap_全高自由列": "**仅 7 条**（y∈[43.0,55.6] 全高自由 · x=137.625/138.495/138.93/139.365/139.8/141.105/141.54）",
+  "南通道候选层": 27,
+  "逐 lane 结果": {
+   "final_seg_blocked": 3,
+   "ok": 4,
+   "no_gap_col": 9
+  },
+  "exact_gate(已布 4 条)": {
+   "clearence_min_mm": 0.005,
+   "n_clearance_viol": 0,
+   "endpoint_max_dev_mm": 0.0,
+   "lane_pitch_min_gap_mm": 0.0,
+   "n_lane_pitch_viol": 6,
+   "note": "互距 0 系**自碰**（同 lane 折返/相邻段叠合）· 净距/端点已达标"
+  }
+ },
+ "verdict": "**(a) 见证：仍未取得（attempt #2）**。价值在于**量出真正的绑定资源**：**gap 全高自由列仅 7 条** ⇒ 车道**不能**各占一条全高列，必须**逐事件（按 y_B 区间）**分配列位 ⇒ 与 R274 之**逐事件横截跨越容量**判定同源、互为印证。",
+ "consistency": "与 R274 (b) 证书一致：**16 条不能共存**；缺口量由**逐事件列容量**决定（R274 枚举 U≤11 于单调序）。",
+ "next": {
+  "S2": "改用**逐事件列分配**（按 y_B 由南而北逐段释放列位）+ B 锚**嵌套降落**；A 侧下潜走廊按实测自由带选位",
+  "S3": "复跑 exact_gate（**新装置 · 非同参**）⇒ 见证或单一卡点",
+  "纪律": "**一次实现** · 禁参数/次序扫描（#K2-132 §三.5）"
+ },
+ "gate_selfcheck": {
+  "阶段": "P4（在阶）· 未越阶段",
+  "判据": "rev=6 MATCH",
+  "冻结四源": "4/4 未动",
+  "受审板 l8": "7a5c89913d6e5d0a",
+  "owner闸口": 0
+ },
+ "owner_gate": 0,
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "1008d6a0e464f381"
+ }
+}
