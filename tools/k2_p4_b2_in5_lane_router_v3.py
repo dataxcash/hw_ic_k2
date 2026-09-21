@@ -524,15 +524,22 @@ def main():
                 if t["status"] != "PENDING":
                     continue
                 cands = t["an"].get("A_cands") or [t["an"]["A"]]
+                bcands = t["an"].get("B_cands") or [t["an"]["B"]]
                 cells = None
                 for cand in cands:
                     ci, cj = rast.cell(*cand)
                     if not (0 <= ci < rast.NX and 0 <= cj < rast.NY) or idx[ci, cj] < 0 or t["blk1d"][idx[ci, cj]]:
                         continue
-                    t2 = dict(t); t2["s"] = (ci, cj)
-                    cells, _ = route_one_fast(t2, occ1d, 0.0, hist1d, hard=True)
+                    for bcand in bcands:
+                        bi, bj = rast.cell(*bcand)
+                        if not (0 <= bi < rast.NX and 0 <= bj < rast.NY) or idx[bi, bj] < 0 or t["blk1d"][idx[bi, bj]]:
+                            continue
+                        t2 = dict(t); t2["s"] = (ci, cj); t2["g"] = (bi, bj)
+                        cells, _ = route_one_fast(t2, occ1d, 0.0, hist1d, hard=True)
+                        if cells:
+                            t["an"]["A"] = cand; t["an"]["B"] = bcand
+                            break
                     if cells:
-                        t["an"]["A"] = cand
                         break
                 if not cells:
                     continue
