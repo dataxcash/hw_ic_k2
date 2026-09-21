@@ -1,0 +1,226 @@
+{
+ "artifact": "k2_68_r2e3_in5_per_lane_real_margin",
+ "authority": "#K2-68 §2.4(a)-4 / §四③（真余量下限）",
+ "board": "/tmp/opencode/w3/c.kicad_pcb (R1E)",
+ "method": "自由空间 = 探针语义（In5 · 除 32 条 OUT 车道铜 + 32×2 锚孔 keepout）；**余量场 = 真实铜-铜余量**（不含人工锚孔）⇒ 每车道最宽路径瓶颈（二分+连通域 · 全板 0.1mm 栅格）",
+ "note": "单网口径（未计 32 网互斥占位）。多网并行另需布线器 v2（逐网占用 + rip-up）。",
+ "per_lane": {
+  "PCIE_DN_OUT0_N_MCIO": {
+   "A_off_mm": 0.447,
+   "B_off_mm": 0.361,
+   "bottleneck_real_mm": 0.1,
+   "straight_mm": 20.3
+  },
+  "PCIE_DN_OUT0_P_MCIO": {
+   "A_off_mm": 0.424,
+   "B_off_mm": 0.361,
+   "bottleneck_real_mm": 0.1,
+   "straight_mm": 19.1
+  },
+  "PCIE_DN_OUT1_N_MCIO": {
+   "A_off_mm": 0.447,
+   "B_off_mm": 0.361,
+   "bottleneck_real_mm": 0.1,
+   "straight_mm": 25.7
+  },
+  "PCIE_DN_OUT1_P_MCIO": {
+   "A_off_mm": 0.424,
+   "B_off_mm": 0.361,
+   "bottleneck_real_mm": 0.1,
+   "straight_mm": 24.5
+  },
+  "PCIE_DN_OUT2_N_MCIO": {
+   "A_off_mm": 0.447,
+   "B_off_mm": 0.361,
+   "bottleneck_real_mm": 0.1,
+   "straight_mm": 29.9
+  },
+  "PCIE_DN_OUT2_P_MCIO": {
+   "A_off_mm": 0.424,
+   "B_off_mm": 0.361,
+   "bottleneck_real_mm": 0.1,
+   "straight_mm": 28.7
+  },
+  "PCIE_DN_OUT3_N_MCIO": {
+   "A_off_mm": 0.447,
+   "B_off_mm": 0.361,
+   "bottleneck_real_mm": 0.1,
+   "straight_mm": 35.3
+  },
+  "PCIE_DN_OUT3_P_MCIO": {
+   "A_off_mm": 0.424,
+   "B_off_mm": 0.361,
+   "bottleneck_real_mm": 0.1,
+   "straight_mm": 34.1
+  },
+  "PCIE_DN_OUT4_N_MCIO": {
+   "A_off_mm": 0.447,
+   "B_off_mm": 0.447,
+   "bottleneck_real_mm": 0.1,
+   "straight_mm": 35.7
+  },
+  "PCIE_DN_OUT4_P_MCIO": {
+   "A_off_mm": 0.424,
+   "B_off_mm": 0.361,
+   "bottleneck_real_mm": 0.1,
+   "straight_mm": 35.6
+  },
+  "PCIE_DN_OUT5_N_MCIO": {
+   "A_off_mm": 0.447,
+   "B_off_mm": 0.447,
+   "bottleneck_real_mm": 0.1,
+   "straight_mm": 35.2
+  },
+  "PCIE_DN_OUT5_P_MCIO": {
+   "A_off_mm": 0.424,
+   "B_off_mm": 0.361,
+   "bottleneck_real_mm": 0.1,
+   "straight_mm": 35.0
+  },
+  "PCIE_DN_OUT6_N_MCIO": {
+   "A_off_mm": 0.447,
+   "B_off_mm": 0.447,
+   "bottleneck_real_mm": 0.1,
+   "straight_mm": 31.1
+  },
+  "PCIE_DN_OUT6_P_MCIO": {
+   "A_off_mm": 0.424,
+   "B_off_mm": 0.447,
+   "bottleneck_real_mm": 0.1,
+   "straight_mm": 30.9
+  },
+  "PCIE_DN_OUT7_N_MCIO": {
+   "A_off_mm": 0.424,
+   "B_off_mm": 0.447,
+   "bottleneck_real_mm": 0.1,
+   "straight_mm": 30.9
+  },
+  "PCIE_DN_OUT7_P_MCIO": {
+   "A_off_mm": 0.424,
+   "B_off_mm": 0.361,
+   "bottleneck_real_mm": 0.1,
+   "straight_mm": 30.3
+  },
+  "PCIE_UP_OUT0_N_J2": {
+   "A_off_mm": 0.424,
+   "B_off_mm": 0.424,
+   "bottleneck_real_mm": 0.283,
+   "straight_mm": 44.4
+  },
+  "PCIE_UP_OUT0_P_J2": {
+   "A_off_mm": 0.424,
+   "B_off_mm": 0.424,
+   "bottleneck_real_mm": 0.141,
+   "straight_mm": 57.7
+  },
+  "PCIE_UP_OUT1_N_J2": {
+   "A_off_mm": 0.424,
+   "B_off_mm": 0.424,
+   "bottleneck_real_mm": 0.6,
+   "straight_mm": 55.3
+  },
+  "PCIE_UP_OUT1_P_J2": {
+   "A_off_mm": 0.424,
+   "B_off_mm": 0.424,
+   "bottleneck_real_mm": 0.141,
+   "straight_mm": 43.0
+  },
+  "PCIE_UP_OUT2_N_J2": {
+   "A_off_mm": 0.424,
+   "B_off_mm": 0.424,
+   "bottleneck_real_mm": 0.6,
+   "straight_mm": 43.6
+  },
+  "PCIE_UP_OUT2_P_J2": {
+   "A_off_mm": 0.424,
+   "B_off_mm": 0.424,
+   "bottleneck_real_mm": 0.2,
+   "straight_mm": 50.7
+  },
+  "PCIE_UP_OUT3_N_J2": {
+   "A_off_mm": 0.424,
+   "B_off_mm": 0.424,
+   "bottleneck_real_mm": 0.6,
+   "straight_mm": 48.8
+  },
+  "PCIE_UP_OUT3_P_J2": {
+   "A_off_mm": 0.424,
+   "B_off_mm": 0.424,
+   "bottleneck_real_mm": 0.141,
+   "straight_mm": 42.7
+  },
+  "PCIE_UP_OUT4_N_J2": {
+   "A_off_mm": 0.424,
+   "B_off_mm": 0.447,
+   "bottleneck_real_mm": 0.6,
+   "straight_mm": 43.2
+  },
+  "PCIE_UP_OUT4_P_J2": {
+   "A_off_mm": 0.424,
+   "B_off_mm": 0.424,
+   "bottleneck_real_mm": 0.2,
+   "straight_mm": 50.9
+  },
+  "PCIE_UP_OUT5_N_J2": {
+   "A_off_mm": 0.424,
+   "B_off_mm": 0.424,
+   "bottleneck_real_mm": 0.6,
+   "straight_mm": 49.0
+  },
+  "PCIE_UP_OUT5_P_J2": {
+   "A_off_mm": 0.424,
+   "B_off_mm": 0.447,
+   "bottleneck_real_mm": 0.2,
+   "straight_mm": 38.3
+  },
+  "PCIE_UP_OUT6_N_J2": {
+   "A_off_mm": 0.424,
+   "B_off_mm": 0.424,
+   "bottleneck_real_mm": 0.6,
+   "straight_mm": 38.6
+  },
+  "PCIE_UP_OUT6_P_J2": {
+   "A_off_mm": 0.424,
+   "B_off_mm": 0.424,
+   "bottleneck_real_mm": 0.141,
+   "straight_mm": 45.8
+  },
+  "PCIE_UP_OUT7_N_J2": {
+   "A_off_mm": 0.424,
+   "B_off_mm": 0.424,
+   "bottleneck_real_mm": 0.6,
+   "straight_mm": 44.0
+  },
+  "PCIE_UP_OUT7_P_J2": {
+   "A_off_mm": 0.424,
+   "B_off_mm": 0.424,
+   "bottleneck_real_mm": 0.1,
+   "straight_mm": 37.4
+  }
+ },
+ "red_lines_ok": [
+  "未改冻结四源",
+  "未改 criteria/",
+  "未改 l4..l8",
+  "未改网表/SPEC",
+  "未派 WORKER",
+  "只读",
+  "未越阶段"
+ ],
+ "resolution_caveat": "余量以 0.1mm 栅格 + 二分测得（分辨率 ≪0.01mm）；**min 0.100mm 为当前栅格下之实测下限**，真值可能略低/略高 ⇒ 实布线时须以**几何净距**复核并具名。",
+ "sequential_greedy_warning": {
+  "conclusion": "32 条车道**共享同一漏斗**（U6 扇出 → 长走区）⇒ **禁止用顺序贪心**；§7-2-b 须实现『拥塞感知 + 资源分配/rip-up』之布线器 v2（#K2-68 §2.4(a)-4 原判再获独立佐证）。",
+  "result": "仅 2/32 布通即受阻",
+  "tool_run": "r2e.py（粗糙顺序贪心：难者先行 + 已布网 0.335mm 占位 · 无 rip-up）"
+ },
+ "summary": {
+  "max_mm": 0.6,
+  "median_mm": 0.1,
+  "min_mm": 0.1,
+  "n": 32,
+  "n_ge_0.05": 32,
+  "n_ge_0.10": 32,
+  "n_with_path": 32
+ },
+ "verdict": "**单网口径：32/32 车道皆存在 ≥0.100mm 真实余量之 In5 路径** ⇒ In5 路径**无原理性障碍**（必要条件充分面）；但**32 网并行**必须实布线器（顺序贪心 2/32 即证）。"
+}
