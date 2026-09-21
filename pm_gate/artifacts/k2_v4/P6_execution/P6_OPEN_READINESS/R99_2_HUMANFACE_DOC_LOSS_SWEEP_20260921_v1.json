@@ -1,0 +1,61 @@
+{
+ "artifact": "k2_r99_2_humanface_doc_loss_sweep",
+ "schema": 1,
+ "ts": "2026-09-21T08:22:23+08:00",
+ "session_label": "K2-2026-09-21 · 轮标 ARCHER-R99-2 · 只读造活（P5 阶段内 · CR-76 同类差集普查）",
+ "why": "CR-76 证明『**新包由生成器重绘人读面 ⇒ 可能丢前代内容**』。故对**同族风险面**做一次差集普查（免重复试探）：逐项比对现行包 `L6/jlc_package_l8r2/` 与**冻结前代** `L5/jlc_package/`、`L6/jlc_package/(l7)`。",
+ "verdict": "**除 CR-76（已登记）外，无新增丢失**：所有被检项**要么逐字节同、要么仅按 rev 增产、要么仅代次名替换**。",
+ "checks": [
+  {
+   "item": "03_stackup/JLC08161H_stackup.svg（叠层图）",
+   "l5": "44370475b258848f",
+   "l7": "44370475b258848f",
+   "l8r2": "44370475b258848f",
+   "judgement": "**三包逐字节相同** ⇒ 未丢未改 ✓"
+  },
+  {
+   "item": "03_stackup/HDI_stage_diagram.svg",
+   "l5": "236e8f90811df3fa",
+   "l7": "be277bc2c707ae8e",
+   "l8r2": "a0e03bda44494bd5",
+   "judgement": "按 rev 重绘（l8 as-built 阶数图）· **设计如此**（非丢失）✓"
+  },
+  {
+   "item": "05_layer_sequence.txt",
+   "method": "`diff <(sed 's/l7/l8/g' l7件) l8r2件`",
+   "judgement": "**差 = 仅板名代次** ⇒ 无丢行 ✓"
+  },
+  {
+   "item": "DISCLOSURE.md（非空行）",
+   "l7": 38,
+   "l8r2": 39,
+   "judgement": "**8 个 `##` 段全同** · 非空行 +1（新增具名项）⇒ **无丢段** ✓"
+  },
+  {
+   "item": "ORDER_NOTES.md（非空行）",
+   "l7": 38,
+   "l8r2": 38,
+   "judgement": "**6 个 `##` 段全同** ⇒ 无丢段 ✓"
+  },
+  {
+   "item": "06_rulings/（L2 裁定副本 4 件）",
+   "method": "包内 `copy_parity.json`",
+   "judgement": "**4/4 = true**（逐字节 parity）✓"
+  },
+  {
+   "item": "04_impedance/impedance_table.json（键集）",
+   "method": "L5 vs l8r2 键集对称差",
+   "judgement": "**L5-only keys = []** ⇒ `watch` **仍在 json**；l8r2 仅增 `as_built_*` ⇒ **确认 CR-76 属『渲染面』丢失 · 非数据丢失** ✓"
+  },
+  {
+   "item": "04_impedance/impedance_table.md（**人读面**）",
+   "judgement": "**← 唯一异常 = CR-76**（丢 `## watch` 段 + 限定句）"
+  }
+ ],
+ "conclusion": "同族风险面**已bound**：现行包人读面**唯一**内容丢失 = CR-76（04_impedance `.md`）。其余人读件（叠层图/层序/披露/备注/裁定副本）**无丢失**。",
+ "red_lines_ok": [
+  "只读比对（未改任何包内件/生成器/锚）",
+  "未重出包/未换锚",
+  "未越阶段"
+ ]
+}

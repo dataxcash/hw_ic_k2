@@ -511,3 +511,5 @@
 
 ---
 **（本块）报备监理 1 条（CR-76 + V4 判读口径请求 · 非阻塞）· owner 项 0**。
+
+| — | **（附 · R99-2）CR-76 **同类差集普查**：现行包人读面**无其他丢失**（bound 完成）** | 逐项比对 `L6/jlc_package_l8r2` ↔ 冻结前代 `L5/jlc_package` / `L6/jlc_package(l7)`：① **叠层图 `JLC08161H_stackup.svg` 三包逐字节同 `44370475b258848f`** ✓；② `HDI_stage_diagram.svg` 按 rev 重绘（设计如此）；③ `05_layer_sequence.txt` diff = **仅板名代次**（无丢行）✓；④ `DISCLOSURE.md` 8 段全同（非空行 38→39 增具名项）✓；⑤ `ORDER_NOTES.md` 6 段全同（38=38）✓；⑥ `06_rulings/` 4 件 **copy_parity = true**（逐字节）✓；⑦ `impedance_table.json` **L5-only keys = []**（`watch` 仍在 json ⇒ **CR-76 属渲染面 · 非数据丢失**）。⇒ **CR-76 为现行包人读面唯一内容丢失项**；本普查**免重复试探**。证据 = `R99_2_HUMANFACE_DOC_LOSS_SWEEP_20260921_v1.json`（**`b4e224362d02e004`**）。 | 本会话只读差集普查；CR-76 | 只读 · 未改任何包内件/生成器/锚 |
