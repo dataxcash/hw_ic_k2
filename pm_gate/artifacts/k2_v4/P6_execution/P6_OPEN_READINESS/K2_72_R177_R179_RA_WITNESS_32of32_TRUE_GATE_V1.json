@@ -42,6 +42,44 @@
   "待裁": 0,
   "阶段": "P5 PENDING_EXTERNAL（未越阶段）"
  },
+ "length_report_IN5_ONLY": {
+  "caveat": "**R-A 见证（互斥/可达/端点）成立，但等长远未达标**：In5 段 N/P skew 最大 **112.59mm**（要求 ≤0.15mm）。⇒ R3 施工**必须含等长调谐**（蛇形/绕行），且需评估绕行对互斥闸的再影响（调谐后须重跑 true_gate）。本解之绕行偏长（20–189mm）多因绕障，R3 应同时做路径优化。",
+  "len_mean_mm": 63.93,
+  "len_range_mm": [
+   20.24,
+   188.96
+  ],
+  "max_pair_skew_mm": 112.59,
+  "median_pair_skew_mm": 15.786,
+  "n_pairs": 16,
+  "note": "**仅 In5 车道段**长度（不含 F.Cu 扇出/球端）· R3 等长调谐前之基线 · #K2-72 §四-2.4 要求同报",
+  "worst": [
+   [
+    "PCIE_DN_OUT7",
+    33.429,
+    146.019,
+    112.59
+   ],
+   [
+    "PCIE_UP_OUT0",
+    183.593,
+    71.461,
+    112.132
+   ],
+   [
+    "PCIE_DN_OUT6",
+    136.224,
+    36.208,
+    100.016
+   ],
+   [
+    "PCIE_UP_OUT1",
+    97.682,
+    188.955,
+    91.273
+   ]
+  ]
+ },
  "referenced_sha16": {
   "/tmp/opencode/archer/a_cage3row.json": "96a0023a9cbc2b35",
   "/tmp/opencode/archer/cage3row.py": "664282a1fb8e6d4c",
