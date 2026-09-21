@@ -1,0 +1,50 @@
+{
+ "schema": 1,
+ "artifact": "k2_r335_cw_req3_persta_reroute_existence_v1",
+ "to": "监理",
+ "from": "ENG · ARCHER",
+ "nature": "**C-w 要件③（端点不动）之充分条件：`PERSTA#` 替代 In5 绕行**存在性检查（只读）** —— **非申报**",
+ "net": "PERSTA#",
+ "neck_window": [
+  93.0,
+  44.0,
+  112.0,
+  58.0
+ ],
+ "cell_mm": 0.02,
+ "hw_mm": 0.08,
+ "ports": {
+  "definition": "窗内铜链与窗外铜相接之点（degree-1 端口）",
+  "value": [
+   [
+    83.8,
+    50.5
+   ],
+   [
+    117.9,
+    55.6
+   ]
+  ]
+ },
+ "free_space": "他网 In5 铜 + 固定孔/盘 + 禁布线区（`PERSTA#` 自身铜与 16 lane 网按可拆处理）",
+ "result": {
+  "existence": true,
+  "shortest_len_mm": 36.58
+ },
+ "verdict": "**充分条件成立（存在性层）**：`PERSTA#` 之两端口在自由空间内**仍连通**，最短替代路径 **36.58mm** ⇒ 腾挪其窗内铜**不必动孔位/球位**（端点不动）在**存在性层**可行。",
+ "scope": "只证**存在一条替代 In5 绕行**；**未证**其与 16 lane 线束**同时**可行（须联合设计），亦未给 `buildability` ⇒ 依宪法第十三条 **不作数 · 不构成申报**。",
+ "buildability_field": "只读计算：未烙板 · 未改任何实体 · 未改生成器/SPEC/原理图 ⇒ 不动证明成立；不产出施工图。",
+ "anchors": {
+  "board_sha16": "7a5c89913d6e5d0a",
+  "frozen4": [
+   "d4e81f647be7f980",
+   "fb07d25ac426ff84",
+   "dd794c54f7ce7417",
+   "0a459839e15960b8"
+  ]
+ },
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "be8bcaa2ad4fe0ac"
+ }
+}
