@@ -1,0 +1,26 @@
+{
+ "artifact": "k2_p5_assembly_input_scope_gap",
+ "schema": 1,
+ "ts": "2026-09-21T08:23:29+08:00",
+ "session_label": "K2-2026-09-21 · 轮标 ARCHER-R100 · 只读造活（P5 阶段内 · 装配面闭合性核对）",
+ "finding": "**P5 完工判据 V5/V6/V7 需「装成的板」，但交付面与仓内均无装配输入（交付级 BOM ± CPL），且归属未见任何裁定** —— `k2/fab/README.md` 自身将其标为『**P5 交付面（另件另裁）**』。",
+ "facts": {
+  "P5_判据需装配": "计划 §P5 完工判据 = V4 阻抗券 + **V5 PDN 直流压降** + **V6-1..5（上电各轨电压 / SWD device ID / FRU I²C / 双路 x4 Gen4 训练 / 30min AER=0）** + **V7 热（U6 + 散热片）** ⇒ **V5/V6/V7 均须已装配的板**（验收计划 §V5/§V6/§V7 之测点为已装器件：`U1`/`U6`/`E2`/`J13` 等）。",
+  "交付面定义（owner #14③）": "8 铜层 Gerber + 阻焊/丝印/边框/job + Excellon（含 HDI 盲埋孔）+ 叠层图 + 阻抗表 + MANIFEST ⇒ **裸板制造成套** ⇒ **不含装配输入**。",
+  "现行包清单": "`L6/jlc_package_l8r2/` = `01_gerber_rs274x/` · `02_drill_excellon/` · `03_stackup/` · `04_impedance/` · `05_layer_sequence.txt` · `06_rulings/` · `07_verify/` · `DISCLOSURE.md` · `ORDER_NOTES.md` · `MANIFEST.json` ⇒ **无 BOM · 无 CPL**。",
+  "仓内 BOM 性质": "`k2/fab/k2_v4_bom.csv` = **ref 集**（首行 `Ref` + 55 行 refdes；**无 `Value`/`Footprint`/`Qty`/`LCSC`**）；其 `fab/README.md:11` 明载：『**本件只是「判据消费口径」的 ref 集**；含 `Value`/`Footprint`/`Qty`/`LCSC` 的**交付级 BOM 属 P5 交付面（另件另裁）**——**勿把本件当交付 BOM**』。",
+  "仓内无 CPL": "全仓 `find *cpl* / *pos*.csv / *pick*place*` ⇒ **0 命中**（命中项皆 L3 期布局规划件，非贴片坐标）。",
+  "料号来源未建": "真源网表 `k2/hw/data/k2_sch.yaml`（68,492 B）中 `MPN`/`LCSC`/`part_number`/`mfr` **均 0 命中** ⇒ 若需 JLC **PCBA 级** BOM（带 LCSC 料号），**料号来源亦未在仓内建立**。",
+  "无既有裁定": "监理裁定全量 grep（`交付级 BOM` / `CPL` / `PCBA`）⇒ **仅 #K2-37 之『装配焊接注意』**（指阻焊坝 ACCEPT 项，**非本项**）⇒ 本项**从未被裁**。"
+ },
+ "why_it_matters": "① 若首件为**裸板打样**（现交付面如此），则 **V5/V6/V7 不可测** ⇒ P5 无法关门；② 若首件须为 **PCBA**，则装配输入**尚未产出**，且料号来源未建 ⇒ 需另立批（且可能牵动 `05`/交付面 ⇒ 是否重出包换锚须裁）；③ 两侧**均未见裁定** ⇒ 属**放行范围/交付面**问题（**监理自裁面**）。",
+ "ask": "请裁：(a) 装配输入**属 P5 交付面** ⇒ 授权 ENG **另立批**落件（交付级 BOM（含 Value/Footprint/Qty/±LCSC）+ CPL/贴片坐标 + 旋转口径），并明确**是否需重出包换锚**；(b) **不属 ENG 范围**（由 owner/商务/实测量方自备，例如以本仓 sch+pcb 自行生成）⇒ **登记备案即可**，本项不阻塞；(c) 其他。**ENG 不预设结论**（owner #14③ 之完工定义仅列裸板制造成套；owner #14④ 又定『下单/采购属商务，不在 ENG 范围』⇒ 两项口径对本项的交叉含义请监理定）。",
+ "boundary": "**本件为范围澄清请求 · 未新增判据维/检查齿 · 未改任何工件**（只读核对 + 登记）。",
+ "red_lines_ok": [
+  "只读核对（未改包/生成器/SPEC/板/网表）",
+  "未重出包/未换锚",
+  "未派 WORKER",
+  "未越阶段（P5 PENDING_EXTERNAL）",
+  "未下单"
+ ]
+}

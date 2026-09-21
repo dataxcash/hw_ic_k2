@@ -1,0 +1,70 @@
+{
+ "artifact": "k2_pending_rulings_delta",
+ "schema": 1,
+ "ts": "2026-09-21T08:23:39+08:00",
+ "session_label": "K2-2026-09-21 · 轮标 ARCHER-R100 · 只读造活（P5 阶段内）",
+ "supersedes": "PENDING_RULINGS_DELTA_20260921_v32.json（**未裁 ⇒ 本件承接其两项**：CR-76 + V4 判读口径；**新增 CR-77**）",
+ "purpose": "①【待裁 · 续存】**CR-76**（交付件人读面 `watch` 段丢渲染）+ **V4 判读口径**；②【待裁 · 新】**CR-77**（P5 装配输入归属/落地 · **V5/V6/V7 可达性前提**）。",
+ "why_signal_now": "CR-32 强制结构化；v32 未裁不可失信号；**CR-77 直接关系『P5 能否关门』**（装配输入无 ⇒ V5/V6/V7 不可测）⇒ 宜在首件回件前定。",
+ "owner_gate": "**0** —— 全属**放行范围 / 交付面 / 差异定性 / 判读口径**（监理自裁面）；无 L1 成分（不涉拓扑/接口/信号流向/球重映射）；不动 owner 系统/账号/预算（**下单/采购属商务**，本件不涉）。",
+ "stage_state": "P5 `PENDING_EXTERNAL`（未下单/未外发）· P0–P4 HOLDS · P6 CLOSED · 未越阶段 · 判据 rev=6 MATCH · 交付锚 `19d637c4e9ed35be`/`488e90a47d088d06`（未动 · 未重出包）。",
+ "pending_supervision": [
+  {
+   "id": "**【待裁 · 新 · 关系 P5 关门】CR-77：P5 装配输入（交付级 BOM ± CPL）未落地 · 归属未裁**",
+   "facts": "V5/V6/V7 须已装配的板；交付面（owner #14③）= 裸板成套（现行包无 BOM/CPL）；`k2/fab/k2_v4_bom.csv` = ref 集（无 Value/Footprint/Qty/LCSC）且其 README 自标『交付级 BOM 属 P5 交付面（另件另裁）』；全仓无 CPL；真源 `k2_sch.yaml` 无 MPN/LCSC；监理裁定全量 grep ⇒ **从未被裁**。",
+   "ask": "(a) 属 P5 交付面 ⇒ 授权 ENG **另立批**落件（BOM±LCSC + CPL/旋转 + 明确是否重出包换锚）；(b) 不属 ENG 范围（owner/商务/实测量方自备）⇒ **登记备案即可 · 不阻塞**；(c) 其他。**ENG 不预设结论。**",
+   "impact_if_none": "**若首件为裸板且无人装配 ⇒ V5/V6/V7 不可测 ⇒ P5 无法关门**（本项为 P5 收尾之前提，宜早定）。",
+   "evidence": "`CR77_P5_ASSEMBLY_INPUT_SCOPE_GAP_20260921_v1.json` **0c5bf49526a752c3**"
+  },
+  {
+   "id": "**【待裁 · 续存】CR-76：包生成器 `imp_md()` 丢渲染冻结 CO-146 卡之 `## watch` 段（人读面回退）**",
+   "ask": "(i-a) 零锚登记 / **(i-b) 修 `imp_md()` + 重出包**（⇒ 换锚+重复核 · 承 CR-47 先例 · **ENG 倾向**）· **均不阻塞 P5**。",
+   "evidence": "`CR76_IMPEDANCE_MD_WATCH_CARVEOUT_20260921_v1.json` **172341897b2e669f**"
+  },
+  {
+   "id": "【待裁 · 续存 · 判读口径】V4：券覆盖 0.6mm 中心几何后若落 93.5–95Ω（冻结卡已预见之 M2 分歧区）",
+   "ask": "按冻结判据判越界（⇒ 回 P3/P4）抑或另有口径？**ENG 不自裁 · 不主张放松阈值（C-12）**。"
+  },
+  {
+   "id": "【登记 · 续存 · 非阻塞】",
+   "items": [
+    "`check_l3.py` `:3`/`:71` 未授权范围",
+    "T2-F6 通道登记（新可达 `raw.githubusercontent.com`/`api.github.com`/`www.so.com`；仍闭 `www.st.com`(567) · `st.com.cn`(567) · `stmcu.com.cn`(429) · `archive.org`(000)）",
+    "`CR-22`/`CR-3`/land pattern 族 · `COV-C3` · R5 文献批（余项待权威件）"
+   ]
+  }
+ ],
+ "landed_this_session": [
+  {
+   "id": "CR-77",
+   "artifact": "证据件 **0c5bf49526a752c3**",
+   "reading": "P5 判据需装配板 · 交付面无 BOM/CPL · fab BOM 为 ref 集 · 无 CPL · 料号未建 · 无既有裁定"
+  },
+  {
+   "id": "R99-2",
+   "artifact": "人读面差集普查 **b4e224362d02e004**",
+   "reading": "除 CR-76 外无丢失（bound 完成）"
+  },
+  {
+   "id": "CR-76",
+   "artifact": "**172341897b2e669f**",
+   "reading": "四包实测：L5 含 watch；l7/l8/l8r2 人读面无 watch；JSON 均在"
+  },
+  {
+   "id": "册面",
+   "artifact": "`docs/K2-CONVENTION-REGISTER-20260921.md` **3e2c516e88bf3e93**"
+  }
+ ],
+ "red_lines_ok": [
+  "未改 criteria/",
+  "未改冻结四源",
+  "未改板/网表/SPEC/受审板",
+  "未改生成器",
+  "未重出包/未换锚",
+  "未触 B 宿主副本",
+  "未派 WORKER",
+  "未越阶段",
+  "未下单"
+ ],
+ "next": "① 待监理裁 **CR-77**（装配输入归属 · **关系 P5 关门**）+ **CR-76** + **V4 判读口径**；② 外部回件 ⇒ `tools/k2_p5_results_intake_guard_v1.py` ⇒ 交监理判定 ⇒ **P5 关门**（runbook）；③ 继续阶段内只读造活（**禁 HOLD/停等**）。"
+}
