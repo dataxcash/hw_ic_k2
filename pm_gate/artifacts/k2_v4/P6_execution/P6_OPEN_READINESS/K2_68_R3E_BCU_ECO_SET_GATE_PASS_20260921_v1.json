@@ -1,0 +1,104 @@
+{
+ "artifact": "k2_68_r3e_bcu_eco_set_gate_pass",
+ "authority": "#K2-68 §2.4(a)-2/-3/-4 · #K2-69 §五-2（R3 施工）· #K2-69 §六①（A↔B 最大流 ≥32 · R2L 口径）",
+ "board": "/tmp/opencode/w3/c.kicad_pcb (R1E) · B.Cu 中段",
+ "caveats": [
+  "`--movable-nets` = **只读假设**（把具名网视为可腾挪）⇒ 真 ECO 须实际布线 + 参考面/DRC 复核后方可计入。",
+  "布线器 32/32 为**拓扑布通**；两两间距未归零 ⇒ **不得**宣称 DRC 通过。"
+ ],
+ "headline": "**R3-(a) 容量闸（#K2-69 §六①）已达成（条件式）**：在**现锚位**（**无需锚孔重摆**）下，只需执行**具名最小 ECO 集**〔`P3V3`+`GND` 缝合孔腾挪（§2.4(a)-2）+ `I2C1_SDA`（或 `P3V3_AUX`）（§2.4(a)-3）〕⇒ **A↔B 最大流 = 32/32 @R2L 口径（0.40mm/8 邻接）** · 必要性 **32/32** · 布线器 v2 **32/32 布通**。",
+ "minimal_eco_set": {
+  "conclusion": "**二者缺一不可**：缝合孔腾挪（自由格 27413→32330 · 连通域 18→8）+ 一条具名他网（I2C1_SDA 或 P3V3_AUX）⇒ 32/32",
+  "measured_R2L_cell0.40_conn8": [
+   {
+    "fixed_maxflow": 32,
+    "movable": [
+     "P3V3",
+     "GND",
+     "I2C1_SDA"
+    ],
+    "necessary": 32,
+    "verdict": "**PASS**"
+   },
+   {
+    "fixed_maxflow": 32,
+    "movable": [
+     "P3V3",
+     "GND",
+     "P3V3_AUX"
+    ],
+    "necessary": 32,
+    "verdict": "**PASS**（等价最小集）"
+   },
+   {
+    "fixed_maxflow": 29,
+    "movable": [
+     "I2C1_SDA"
+    ],
+    "necessary": 32,
+    "verdict": "连通可解但容量不足"
+   },
+   {
+    "fixed_maxflow": 30,
+    "movable": [
+     "P3V3",
+     "GND",
+     "PERSTA#"
+    ],
+    "necessary": 30,
+    "verdict": "不足"
+   },
+   {
+    "fixed_maxflow": 30,
+    "movable": [
+     "P3V3",
+     "GND",
+     "PWR_BTN_ISO"
+    ],
+    "necessary": 30,
+    "verdict": "不足"
+   },
+   {
+    "fixed_maxflow": 30,
+    "movable": [
+     "P3V3",
+     "GND"
+    ],
+    "necessary": 30,
+    "verdict": "不足（§2.4(a)-2 单项不够）"
+   }
+  ]
+ },
+ "red_lines_ok": [
+  "只读（未改板/件）",
+  "冻结四源未动",
+  "criteria/ 只读未碰",
+  "l4..l8 未动",
+  "网表/SPEC 未改",
+  "未派 WORKER",
+  "临时仅 /tmp/opencode",
+  "未越阶段"
+ ],
+ "router_v2_on_eco_set": {
+  "cell_mm": 0.2,
+  "iters": 6,
+  "method": "B.Cu 单层 · 8 邻接 A*（长度 + **PathFinder 协商拥塞**（过用罚·pres_fac 逐轮加倍）+ 贴边惩罚 + 贴限禁行）+ 难度排序 + **每轮全量 rip-up-and-reroute**",
+  "n_failed": 0,
+  "n_routed": 32,
+  "note": "it0 即 32/32；PathFinder 全量 rip-up-and-reroute"
+ },
+ "schema": 1,
+ "still_open": [
+  "① **过用/两两间距未归零**（overuse ≈4.7e4 格）⇒ 布线器输出**尚未两两无冲突**：须加**几何精确闸**（逐段 vs 障碍 + 车道互检 ≥0.555mm 中心距）并迭代至 0。",
+  "② `apply` 未执行：V4 同位换 span（F–In2→F–B）· 删 V2/V3 + B.Cu/In2 腿 · **铺铜重灌 ZONE_FILLER** · 真余量下限具名（≥0.100mm）。",
+  "③ 长度：B.Cu 长走中位 85.0mm vs 原中段 61.3mm ⇒ §7-3 等长/蛇形 + SI（85Ω · 微带 ref In6）硬项。",
+  "④ 缝合孔腾挪须**同报 `ref_plane_continuity`**（non_antipad_gap==0）与 EMC（#K2-68 §2.4(a)-2 明文）。",
+  "⑤ R4 复测闸（#K2-69 §六 ①–⑧）与 R5（l9 落 hw/ + spec-rev-55 同笔 · 硬前置 criteria rev=7）未执行。"
+ ],
+ "tools": {
+  "note": "探针 `--movable-nets` = §2.4(a)-2/-3 之只读量化口径（非真 ECO）；In5 回归仍 19/32 未漂",
+  "probe": "tools/k2_p4_b2_in5_capacity_probe_v1.py 1e17667caea47e69",
+  "router": "tools/k2_p4_b2_bcu_router_v1.py 4c2e6160d4a4895d"
+ },
+ "ts": "2026-09-21T15:2x+08:00"
+}
