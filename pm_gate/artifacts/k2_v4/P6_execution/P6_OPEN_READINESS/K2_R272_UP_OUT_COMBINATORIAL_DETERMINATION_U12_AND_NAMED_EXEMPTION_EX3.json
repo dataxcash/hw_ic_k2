@@ -1,0 +1,524 @@
+{
+ "schema": 1,
+ "artifact": "k2_r272_up_out_combinatorial_determination_u12_and_named_exemption_ex3",
+ "ts": "2026-09-22T03:45+0800",
+ "to": "监理",
+ "from": "ENG · ARCHER（应监理**自动续推** · P4 在阶 · 未越阶段）",
+ "authority": "handoff R271 §7.2（**一次组合判定**）· #K2-132 §三.3(b)（证书须松弛可靠·禁以不紧上界充终局）/ §四（16−U 具名网 · ENG 命名 · 附残铜去向）/ §七（以**物理口径**为准）· #K2-70 §六③ · #K2-133 · 指令 #14",
+ "anchors": {
+  "frozen_sources": {
+   "k2_v4_8L.kicad_pcb": "fb07d25ac426ff84",
+   "k2_v4_8L.l4.kicad_pcb": "d4e81f647be7f980",
+   "k2_sch.yaml": "dd794c54f7ce7417",
+   "drc_rules.json": "0a459839e15960b8"
+  },
+  "frozen_sources_state": "4/4 未动",
+  "criteria": "rev=6 MATCH（adjudicate.py 1937a40ae68bc288 · manifest.k2 727d09953cf9bd78 · CHANGELOG eb3da49f2ad97e37 · ENG 只读未碰）",
+  "reviewed_board_l8": "7a5c89913d6e5d0a",
+  "k2": "7af46b6",
+  "container": "20307b6",
+  "owner_gate": 0
+ },
+ "task": "在 **8 个东组事件的横截跨越容量约束 + 列序约束**下，求**最大可共存子集 U** 与**具名豁免集（16−U 网）**（ILP/精确枚举 · 非扫描 · 非启发式）。",
+ "model": {
+  "①列序被迫": "单层不可交叉 + A 落线序固定 + 南通道嵌套 U 返 ⇒ 通道列序（西→东）= **reverse(A 落线序)**（与 R269 §Ⅱ 一致；复核列号 7_N=第2列 ✓）",
+  "②走廊": "每个东组事件 e@(x_B,y_B)：停靠铜占走廊 [x_B−KE, x_B+KE] · KE=**0.5300**（物理口径 = hw0.08+0.35+margin0.100 在册）",
+  "③跨越者": "{8 西组} ∪ {东组 y_B < y_e}（承 R271 §方法）",
+  "④容量": "按列序被走廊切成西/东两组，各组条数 ≤ 该侧**共同自由容量** —— 共同自由 = **In5 在 y∈[y_B,56.0] 上的交集**（固定列位模型：列须全高可用），按 **0.435** 节距计列数",
+  "⑤子集 S": "豁免网不入通道（旧路在 In2/B.Cu · 不阻 In5）⇒ 既不计入跨越者、亦无走廊（豁免 = 拆除该网 In5 占用 + 释放其走廊）",
+  "方法": "对全部 **2^16 = 65536** 个子集**精确枚举**（组合判定 · 非扫描 · 非启发式 · 非布通率）"
+ },
+ "per_event_capacity_physical": {
+  "OUT0_P": [
+   7,
+   1
+  ],
+  "OUT1_N": [
+   5,
+   5
+  ],
+  "OUT2_P": [
+   3,
+   9
+  ],
+  "OUT3_N": [
+   1,
+   12
+  ],
+  "OUT4_P": [
+   8,
+   5
+  ],
+  "OUT5_N": [
+   5,
+   8
+  ],
+  "OUT6_P": [
+   4,
+   11
+  ],
+  "OUT7_N": [
+   2,
+   13
+  ]
+ },
+ "full16_event_table": [
+  {
+   "col": 2,
+   "east_cap": 13,
+   "east_need": 14,
+   "event": "PCIE_UP_OUT7_N_J2",
+   "violation": [
+    -1,
+    1
+   ],
+   "west_cap": 2,
+   "west_need": 1,
+   "xB": 136.58,
+   "yB": 52.85
+  },
+  {
+   "col": 3,
+   "east_cap": 11,
+   "east_need": 13,
+   "event": "PCIE_UP_OUT6_P_J2",
+   "violation": [
+    -3,
+    2
+   ],
+   "west_cap": 4,
+   "west_need": 1,
+   "xB": 137.74,
+   "yB": 51.65
+  },
+  {
+   "col": 6,
+   "east_cap": 8,
+   "east_need": 10,
+   "event": "PCIE_UP_OUT5_N_J2",
+   "violation": [
+    -2,
+    2
+   ],
+   "west_cap": 5,
+   "west_need": 3,
+   "xB": 138.9,
+   "yB": 49.25
+  },
+  {
+   "col": 7,
+   "east_cap": 5,
+   "east_need": 9,
+   "event": "PCIE_UP_OUT4_P_J2",
+   "violation": [
+    -5,
+    4
+   ],
+   "west_cap": 8,
+   "west_need": 3,
+   "xB": 140.06,
+   "yB": 48.05
+  },
+  {
+   "col": 10,
+   "east_cap": 12,
+   "east_need": 6,
+   "event": "PCIE_UP_OUT3_N_J2",
+   "violation": [
+    4,
+    -6
+   ],
+   "west_cap": 1,
+   "west_need": 5,
+   "xB": 136.0,
+   "yB": 47.45
+  },
+  {
+   "col": 11,
+   "east_cap": 9,
+   "east_need": 5,
+   "event": "PCIE_UP_OUT2_P_J2",
+   "violation": [
+    2,
+    -4
+   ],
+   "west_cap": 3,
+   "west_need": 5,
+   "xB": 137.16,
+   "yB": 46.25
+  },
+  {
+   "col": 14,
+   "east_cap": 5,
+   "east_need": 2,
+   "event": "PCIE_UP_OUT1_N_J2",
+   "violation": [
+    2,
+    -3
+   ],
+   "west_cap": 5,
+   "west_need": 7,
+   "xB": 139.48,
+   "yB": 43.85
+  },
+  {
+   "col": 15,
+   "east_cap": 1,
+   "east_need": 1,
+   "event": "PCIE_UP_OUT0_P_J2",
+   "violation": [
+    0,
+    0
+   ],
+   "west_cap": 7,
+   "west_need": 7,
+   "xB": 141.22,
+   "yB": 42.65
+  }
+ ],
+ "full16_feasible": false,
+ "result": {
+  "U_max": 12,
+  "unconverted_subset_size": 4,
+  "n_max_exemption_sets": 28,
+  "max_exemption_sets": [
+   [
+    "OUT0_N",
+    "OUT1_N",
+    "OUT2_P",
+    "OUT3_N"
+   ],
+   [
+    "OUT0_N",
+    "OUT3_N",
+    "OUT3_P",
+    "OUT4_N"
+   ],
+   [
+    "OUT0_P",
+    "OUT1_N",
+    "OUT2_P",
+    "OUT3_N"
+   ],
+   [
+    "OUT0_P",
+    "OUT3_N",
+    "OUT3_P",
+    "OUT4_N"
+   ],
+   [
+    "OUT1_N",
+    "OUT1_P",
+    "OUT2_P",
+    "OUT3_N"
+   ],
+   [
+    "OUT1_N",
+    "OUT2_N",
+    "OUT2_P",
+    "OUT3_N"
+   ],
+   [
+    "OUT1_N",
+    "OUT2_P",
+    "OUT3_N",
+    "OUT3_P"
+   ],
+   [
+    "OUT1_N",
+    "OUT2_P",
+    "OUT3_N",
+    "OUT4_N"
+   ],
+   [
+    "OUT1_N",
+    "OUT2_P",
+    "OUT3_N",
+    "OUT4_P"
+   ],
+   [
+    "OUT1_N",
+    "OUT3_N",
+    "OUT3_P",
+    "OUT4_N"
+   ],
+   [
+    "OUT1_P",
+    "OUT2_N",
+    "OUT2_P",
+    "OUT3_N"
+   ],
+   [
+    "OUT1_P",
+    "OUT2_P",
+    "OUT3_N",
+    "OUT3_P"
+   ],
+   [
+    "OUT1_P",
+    "OUT2_P",
+    "OUT3_N",
+    "OUT4_N"
+   ],
+   [
+    "OUT1_P",
+    "OUT3_N",
+    "OUT3_P",
+    "OUT4_N"
+   ],
+   [
+    "OUT2_N",
+    "OUT2_P",
+    "OUT3_N",
+    "OUT3_P"
+   ],
+   [
+    "OUT2_N",
+    "OUT2_P",
+    "OUT3_N",
+    "OUT4_N"
+   ],
+   [
+    "OUT2_N",
+    "OUT3_N",
+    "OUT3_P",
+    "OUT4_N"
+   ],
+   [
+    "OUT2_P",
+    "OUT3_N",
+    "OUT3_P",
+    "OUT4_N"
+   ],
+   [
+    "OUT3_N",
+    "OUT3_P",
+    "OUT4_N",
+    "OUT4_P"
+   ],
+   [
+    "OUT3_N",
+    "OUT3_P",
+    "OUT4_P",
+    "OUT5_P"
+   ],
+   [
+    "OUT3_N",
+    "OUT3_P",
+    "OUT4_P",
+    "OUT6_N"
+   ],
+   [
+    "OUT3_N",
+    "OUT3_P",
+    "OUT4_P",
+    "OUT7_P"
+   ],
+   [
+    "OUT3_N",
+    "OUT4_N",
+    "OUT4_P",
+    "OUT5_P"
+   ],
+   [
+    "OUT3_N",
+    "OUT4_N",
+    "OUT4_P",
+    "OUT6_N"
+   ],
+   [
+    "OUT3_N",
+    "OUT4_N",
+    "OUT4_P",
+    "OUT7_P"
+   ],
+   [
+    "OUT3_N",
+    "OUT4_P",
+    "OUT5_P",
+    "OUT6_N"
+   ],
+   [
+    "OUT3_N",
+    "OUT4_P",
+    "OUT5_P",
+    "OUT7_P"
+   ],
+   [
+    "OUT3_N",
+    "OUT4_P",
+    "OUT6_N",
+    "OUT7_P"
+   ]
+  ],
+  "common_core": [
+   "OUT3_N"
+  ],
+  "note": "U=12 ⇒ 未转换子集 **恰好 4 网**（R271 §结论「≥4」在**精确组合判定**下**取等**：R271 之『最小越界量=4 ⇒ U≤12』系单事件读数，本件证明 12 可达且 13 不可达）。"
+ },
+ "named_exemption_EX3": {
+  "ENG_命名": [
+   "OUT1_P",
+   "OUT2_N",
+   "OUT2_P",
+   "OUT3_N"
+  ],
+  "full": [
+   "PCIE_UP_OUT1_P_J2",
+   "PCIE_UP_OUT2_N_J2",
+   "PCIE_UP_OUT2_P_J2",
+   "PCIE_UP_OUT3_N_J2"
+  ],
+  "为何选本集": "① 出现在最大豁免集族（U=12 可达）；② 在**两种独立栅格口径**（v3.build_base 与 recheck 式栅格）与 R271 全局带口径下**皆可行**（robust）；③ 含共同核 `3_N`（全 28 集皆含）与最大单事件越界者 `2_P`(W−3)；④ 族内总裕度最大之一。",
+  "残铜去向": "**不动证明** —— 4 网沿用 l8 既有走线（In2/B.Cu 长走 · 逐字节不动）；无搬迁、无他网改动。其 B 锚为 F.Cu–In2.Cu 盲孔（不含 In5）、A 锚为 F.Cu–B.Cu 通孔（x≈84–94 · 不在通道）⇒ 对 In5 车道**零阻挡**。",
+  "其余 12 网": "**no-move 全转**（#K2-133 §三 N1）：先删尽本 12 网自身 In5 旧铜 → 再按坐标化构造（本件未构造 · 属下一步 l9）；他网零碰 · 端点/球位位移 0。",
+  "residual_event_table": [
+   {
+    "event": "PCIE_UP_OUT7_N_J2",
+    "yB": 52.85,
+    "west_need": 1,
+    "west_cap": 2,
+    "east_need": 10,
+    "east_cap": 13,
+    "slack": [
+     1,
+     3
+    ]
+   },
+   {
+    "event": "PCIE_UP_OUT6_P_J2",
+    "yB": 51.65,
+    "west_need": 1,
+    "west_cap": 4,
+    "east_need": 9,
+    "east_cap": 11,
+    "slack": [
+     3,
+     2
+    ]
+   },
+   {
+    "event": "PCIE_UP_OUT5_N_J2",
+    "yB": 49.25,
+    "west_need": 3,
+    "west_cap": 5,
+    "east_need": 6,
+    "east_cap": 8,
+    "slack": [
+     2,
+     2
+    ]
+   },
+   {
+    "event": "PCIE_UP_OUT4_P_J2",
+    "yB": 48.05,
+    "west_need": 3,
+    "west_cap": 8,
+    "east_need": 5,
+    "east_cap": 5,
+    "slack": [
+     5,
+     0
+    ]
+   },
+   {
+    "event": "PCIE_UP_OUT1_N_J2",
+    "yB": 43.85,
+    "west_need": 5,
+    "west_cap": 5,
+    "east_need": 2,
+    "east_cap": 5,
+    "slack": [
+     0,
+     3
+    ]
+   },
+   {
+    "event": "PCIE_UP_OUT0_P_J2",
+    "yB": 42.65,
+    "west_need": 5,
+    "west_cap": 7,
+    "east_need": 1,
+    "east_cap": 1,
+    "slack": [
+     2,
+     0
+    ]
+   }
+  ],
+  "residual_min_slack": 0
+ },
+ "caliber_cross_check": {
+  "本件（逐事件交集 · 收紧）": {
+   "U": 12,
+   "note": "对 R271 之『全局带 [135.92,142.67]』做了逐事件交集收紧（中高处出现障碍：如 3_N@y47.45 之 x∈[137.65,138.49]、x∈[141.85,142.33]）"
+  },
+  "R271 全局带口径": {
+   "U": 13,
+   "exempt": [
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT3_N_J2",
+    "PCIE_UP_OUT4_P_J2"
+   ],
+   "note": "R271 §方法所用 [135.92,142.67] 为**底带**共同自由全局带；用于中高处**不紧**（既漏西侧 0.30mm 细带、又忽略中高障碍）⇒ 非严格上界，**以本件逐事件口径为准**"
+  },
+  "两独立栅格复核": "v3.build_base 与 recheck 式栅格两实现均得 **U=12**（豁免集 28 个 · 含同核 3_N）"
+ },
+ "findings": [
+  "**精确组合判定：U = 12（严格）** ⇒ 未转换子集 = **4 网**；13 网不可达（枚举穷尽 2^16）。",
+  "**R271 之『U≤12』成立但理由不紧**：其『最小越界量=4』为**单事件**读数；本件以精确枚举确认 12 可达、13 不可达 ⇒ 上界**取等**。",
+  "**R271 之全局带口径得 13**（非严格）；**逐事件交集口径得 12**（严格）⇒ 分列，**以严格者（12）为准**（#K2-132 §三.3(b)）。",
+  "最大豁免集**非唯一**（28 个），共同核 = `PCIE_UP_OUT3_N_J2`；ENG 依 §四命名一盏（EX-3）供监理自裁。",
+  "与在册历史最好 **合法 12/16** 数值吻合（一致性观察 · 非证明）。"
+ ],
+ "status": {
+  "U": "**12**（精确枚举 · 严格）",
+  "未转换子集": "**4 网**（具名 EX-3 · 待监理 §四 自裁生效）",
+  "卡点层": "几何刚性层（横截跨越容量 · 列序被迫）—— R271 收紧方向**被精确判定确认**",
+  "next": "①监理：#K2-132 §四 使 **EX-3 自裁生效（裁完报备 · owner 可另案推翻）**；②ENG：**一次** l9 内容物 = **12 条**单层 In5 坐标化新几何（非搜索）+ 4 豁免网不动 + 他网零改 ⇒ 末闸 `exact_gate`（互距/障碍/端点位移）+ `buildability` ⇒ 判据 19 维同口径重跑 + `ref_plane_continuity`/等长/3W 重测 + Gerber/Excellon 同批重出 + DFM 重跑 ⇒ R4 复闸 ⇒ P4 全绿（除外部）方下 P5。"
+ },
+ "buildability": {
+  "mode": "exemption_listed",
+  "豁免网": "不动证明（4 网旧路逐字节不动 · 无搬迁清单 · 无他网改动）",
+  "已转换网": "no-move 全转（只动本 12 网几何 · 端点位移 0）",
+  "施工可判": "**未完成** —— 本件只出『U + 具名豁免集』，**12 条坐标化几何尚未出图** ⇒ 依第十三条判 **图纸层缺图**（缺 l9 构造解），**不作里程碑**、不得据以烙板。"
+ },
+ "plain_verdict_art13": "「施工队照着这张图能不能直接连？」→ **不能（当前）**：本件给出 U=12 与具名豁免 EX-3，但 **12 条车道几何尚未坐标化** ⇒ 图纸层缺图（缺 l9 构造解）。**16/16 不能**（精确判定 · 严格 U=12）· **12/16 + 具名豁免 4 网为几何刚性下的可行口径**，其可施工性待 l9 出图后另行判。",
+ "requests": [
+  "① 认可本件**精确组合判定 U=12**（并认可 R271『U≤12』**取等**、其全局带口径 13 为不紧、不采用）；",
+  "② 依 #K2-132 §四 使**具名豁免 EX-3 自裁生效**（裁完报备）；ENG 据以把 ②-UP 验收口径改为 **12/16 + EX-3**；",
+  "③ 认可下一步 l9 内容物之口径（12 条坐标化 + 4 网不动 + 他网零改 · 一次实现 · 不新增次数）。"
+ ],
+ "named_observations": [
+  {
+   "id": "O-1",
+   "type": "过程缺陷 · ts 失真回归",
+   "text": "handoff 与 ledger 尾条自记 ts=**08:45/09:05+0800**，而**文件 mtime 与 OS 真实时钟**同为 **03:2x/03:3x+0800**（本件实测 `date`=2026-09-22T03:3x+0800）。承 #K2-131 O-3 / #K2-132 O-4『ts 用真实时钟』已关闭项 —— **本会话再现**，登记回归。本件 ts 一律用**真实时钟**。"
+  },
+  {
+   "id": "O-2",
+   "type": "模型有效性 · 待监理确认（非阻塞）",
+   "text": "本件判定基于**固定列位（静态）**模型；R260 §F-1 曾主张车道可**时变让位/南通道换序**。本件复核认为：单层不可交叉 + 全通道列 x≥135.4 > 全部 A 落线 x≤93.70 ⇒ **嵌套 U 返**下通道列序仍被迫 = reverse(A 落线序)（与 l8 旧 In2 走线实测一致），故静态列序**成立**；但『列位是否可随高度微移（时变列）』**未在本件模型内**——若监理认定可时变，则容量口径须重定（可能高于 12）。**登记待监理口径确认**，**不阻塞** EX-3 与 l9。"
+  }
+ ],
+ "gate_selfcheck": {
+  "阶段": "P4（在阶）· 未越阶段",
+  "判据": "rev=6 MATCH",
+  "冻结四源": "4/4 未动",
+  "受审板 l8": "7a5c89913d6e5d0a",
+  "owner闸口": 0,
+  "待裁": "监理自裁面（EX-3 命名 · 口径）",
+  "外部前置": "1（criteria rev=7 · gate 属主）"
+ },
+ "owner_gate": 0,
+ "bans_kept": "未改冻结四源 · criteria 只读 · 未烙板 · 未派 WORKER · 未改生成器/SPEC/原理图 · 临时仅 /tmp/opencode · 未以布通率/有界搜索/启发式冒充证书 · 零重跑布线器 · 未写 .omo/supervision/**",
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "f9a955984746cf30"
+ },
+ "tools_repro": {
+  "dump": "AppDir/usr/bin/python3.11 k2/tools/k2_p4_b2_board_in5_model_dump_v1.py k2/hw/k2_v4_8L.l8.kicad_pcb <out.json>",
+  "determination": "python3 k2/tools/k2_p4_b2_up_out_comb_determination_v1.py <out.json>   # 退出码 0 = U_max==12",
+  "tool_sha16": "79441b0f10fff12e"
+ }
+}
