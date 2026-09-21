@@ -1,0 +1,98 @@
+{
+ "schema": 1,
+ "artifact": "k2_r280_up_out_constructive_attempt6_exact_dp_south_layer",
+ "ts": "2026-09-22T04:30+0800",
+ "to": "监理",
+ "from": "ENG · ARCHER（监理自动续推 · P4 在阶 · fail-closed）",
+ "authority": "#K2-132 §三(乙) D1 / §四 · #K2-133 §三 N1 · 指令 #14",
+ "anchors": {
+  "frozen_4of4": "未动",
+  "criteria": "rev=6 MATCH（只读）",
+  "l8": "7a5c89913d6e5d0a",
+  "k2": "8270c1e",
+  "owner_gate": 0
+ },
+ "what": "**构造 attempt #6 —— 精确 DP 联合分配**（非搜索启发式）：把「南区南通道层 Y 的全序嵌套分配」建模为 **Y_1>Y_2>…>Y_11（相邻 ≥0.435）且 Y_k∈可用集** 的**精确动态规划**（逐 lane 前向 DP · 精确），再据解生成 11 条折线交 `exact_gate`。",
+ "result": {
+  "DP": "**全序嵌套分配 = 可行**（11 条 lane 全部入解；末端可行状态数 **943**）⇒ **南区南通道层子问题对 11 条 lane 不是卡点**",
+  "Y 解": [
+   [
+    "PCIE_UP_OUT0_N_J2",
+    85.55,
+    66.38
+   ],
+   [
+    "PCIE_UP_OUT0_P_J2",
+    86.05,
+    65.94
+   ],
+   [
+    "PCIE_UP_OUT1_N_J2",
+    86.7,
+    65.5
+   ],
+   [
+    "PCIE_UP_OUT1_P_J2",
+    84.85,
+    65.06
+   ],
+   [
+    "PCIE_UP_OUT2_N_J2",
+    85.5,
+    64.62
+   ],
+   [
+    "PCIE_UP_OUT2_P_J2",
+    86.05,
+    64.18
+   ],
+   [
+    "PCIE_UP_OUT3_N_J2",
+    86.7,
+    63.74
+   ],
+   [
+    "PCIE_UP_OUT3_P_J2",
+    87.25,
+    62.54
+   ],
+   [
+    "PCIE_UP_OUT4_N_J2",
+    87.9,
+    61.62
+   ],
+   [
+    "PCIE_UP_OUT4_P_J2",
+    88.45,
+    61.18
+   ],
+   [
+    "PCIE_UP_OUT5_N_J2",
+    90.3,
+    60.74
+   ]
+  ],
+  "exact_gate_on_solution": {
+   "endpoint_max_dev_mm": 0.0,
+   "lane_pitch_min_gap_mm": 0.0,
+   "n_lane_pitch_viol": 17,
+   "clearance_min_mm": -0.18,
+   "n_clearance_viol": 5
+  }
+ },
+ "verdict": "**(a) 见证：仍未取得**。DP 解出 11 条 Y 层后，折线仍 `exact_gate` **互距 17 违（min 0.0）+ 净距 5 违（min −0.18 vs GND）** —— 缺陷**集中于 A 侧接入段**（锚排引出 stub / 下潜拐角 相邻 lane 相碰）与少数 GND 孔接触（≤0.18mm）。",
+ "new_positive": "**重要正面结论**：**南区南通道层联合分配（此前疑为卡点）对 11 条 lane 精确可行**（943 末端状态）⇒ 卡点**不在**南区层分配，而在 **A 侧接入段扇出**。",
+ "next_precise": "**A 侧接入段扇出**：11 条 lane 自锚排（x 84.35–93.7 · y≈55）引出并分散至各自 (dx, Y) —— 建为**小规模精确扇出**（锚排→下潜走廊的**非交叉匹配**，≥0.435 · 避 GND 缝合孔）⇒ 复跑 exact_gate（新装置）⇒ 见证。",
+ "gate_selfcheck": {
+  "阶段": "P4（在阶）· 未越阶段",
+  "判据": "rev=6 MATCH",
+  "冻结四源": "4/4 未动",
+  "受审板 l8": "7a5c89913d6e5d0a",
+  "owner闸口": 0
+ },
+ "owner_gate": 0,
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "bc8fc53716acd8b5"
+ }
+}
