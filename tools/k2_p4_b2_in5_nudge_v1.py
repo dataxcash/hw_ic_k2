@@ -66,6 +66,7 @@ for rnd in range(6):
     vio = g.get('lane_pitch_violations') or []
     if not vio:
         break
+    round_start = copy.deepcopy(routes); g_round0 = dict(g)
     improved = False
     for (n1, n2, d) in vio:
         for victim, other in ((n2, n1), (n1, n2)):
@@ -84,16 +85,12 @@ for rnd in range(6):
                 cand[victim]['pts'][vi] = (round(px + ux * delta, 4), round(py + uy * delta, 4))
                 if local_min(cand, victim) <= lm_cur + 1e-9:
                     continue                      # 廉价预筛：局部无改善 ⇒ 跳过闸复算
-                try:
-                    gg = gate(cand)
-                except Exception:
-                    continue
-                if (gg['n_lane_pitch_viol'], gg['n_clearance_viol']) < (g['n_lane_pitch_viol'], g['n_clearance_viol']) \
-                   and gg['endpoint_max_dev_mm'] <= 1e-6 and gg['clearance_min_mm'] >= MARGIN - 1e-9:
-                    routes = cand; g = gg; improved = True
-                    print('  [nudge r%d] %s 顶点 %d 移 %.2fmm ⇒ 违规 %d · min %.4f · 余量 %.4f' %
-                          (rnd, victim, vi, delta, g['n_lane_pitch_viol'], g['lane_pitch_min_gap_mm'], g['clearance_min_mm']), flush=True)
-                    break
+                lm_new = local_min(cand, victim)
+                if lm_new < PITCH_EFF - 1e-9:
+                    continue                      # **局部闸**：victim 邻域内最小段距须 ≥0.435（免全闸复算）
+                routes = cand; improved = True
+                print('  [nudge r%d] %s 顶点 %d 移 %.2fmm ⇒ 邻域最近距 %.4f' % (rnd, victim, vi, delta, lm_new), flush=True)
+                break
             if improved:
                 break
         if improved:
@@ -101,6 +98,15 @@ for rnd in range(6):
     if not improved:
         print('  [nudge r%d] 无改进 ⇒ 停' % rnd, flush=True)
         break
+    snap = {k: {'pts': [tuple(x) for x in v['pts']], 'len_mm': v['len_mm']} for k, v in routes.items()}
+    gg = gate(snap)
+    if gg['endpoint_max_dev_mm'] > 1e-6 or gg['clearance_min_mm'] < MARGIN - 1e-9:
+        routes = round_start; g = g_round0
+        print('  [nudge r%d] 整轮**回退**（全闸未通过：余量 %.4f / 端点 %s）' % (rnd, gg['clearance_min_mm'], gg['endpoint_max_dev_mm']), flush=True)
+        continue
+    g = gg
+    print('  [nudge r%d] 全闸校验过：违规 %d · min %.4f · 余量 %.4f · 端点 %s' %
+          (rnd, gg['n_lane_pitch_viol'], gg['lane_pitch_min_gap_mm'], gg['clearance_min_mm'], gg['endpoint_max_dev_mm']), flush=True)
 out = dict(wo); out['routes'] = {k: {'pts': [[x, y] for (x, y) in v['pts']], 'len_mm': v['len_mm']} for k, v in routes.items()}
 out['geometric_gate'] = g; out['nudge'] = {'rounds': rnd + 1, 'viol': g['n_lane_pitch_viol']}
 json.dump(out, open(OUT, 'w'), ensure_ascii=False, indent=1, sort_keys=True)
