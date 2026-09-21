@@ -1,0 +1,58 @@
+{
+ "artifact": "k2_p4_b2_R3_landing_attempts_in5_and_bcu_both_fail_v1",
+ "artifacts": {
+  "drc": [
+   "/tmp/opencode/archer/l8_drc.json",
+   "/tmp/opencode/archer/l9_c3_drc.json",
+   "/tmp/opencode/archer/l9_in5_drc.json"
+  ],
+  "l9_B.Cu": "/tmp/opencode/archer/l9_c3.kicad_pcb",
+  "l9_In5": "/tmp/opencode/archer/l9_in5.kicad_pcb",
+  "新工具": "k2/tools/k2_p4_b2_in5_apply_v1.py（C-y 派生 · 保留入库）"
+ },
+ "conclusion": "R3 落板之正确工序应为：**① 先把新锚笼（错行 10+6）落到板**（改孔位/过孔并重接扇出）→ **② 再 apply 走线** → ③ ZONE_FILLER → ④ DRC。缺 ① 则两版皆失败（600 / 793 error）。⇒ **能力缺口 C-z = 锚笼落板器**（把派生锚位/过孔批量落到板并重接扇出）；ENG 工具建设，非 owner 闸口。",
+ "drc": {
+  "baseline_l8": {
+   "error": 0,
+   "total": 170,
+   "unconnected": 0
+  },
+  "in5_delta_top": {
+   "clearance": 370,
+   "items_not_allowed": 86,
+   "lib_footprint_issues(warn)": 54,
+   "shorting_items": 199,
+   "track_not_centered_on_via(warn)": 68,
+   "tracks_crossing": 108
+  },
+  "landed_B.Cu_variant": {
+   "error": 600,
+   "total": 867,
+   "unconnected": 0
+  },
+  "landed_In5_variant(C-y 派生)": {
+   "error": 793,
+   "total": 1064,
+   "unconnected": 0
+  }
+ },
+ "gate_selfcheck": {
+  "owner闸口": 0,
+  "冻结四源": "未动",
+  "判据": "criteria/ rev=6 MATCH（只读未碰）",
+  "阶段": "P5 PENDING_EXTERNAL（未越）"
+ },
+ "r_a_status": "**R-A 见证不受影响**（In5 几何：32/32 · true_gate 0 违规 · min 0.4472 · 余量 0.1700 · 端点 0 · 双 seed 复现）",
+ "referenced_sha16": {
+  "/tmp/opencode/archer/l8_drc.json": "032f919a1ad5c316",
+  "/tmp/opencode/archer/l9_c3.kicad_pcb": "c581e24de07c34ba",
+  "/tmp/opencode/archer/l9_c3_drc.json": "ccfcbdc228c33d86",
+  "/tmp/opencode/archer/l9_in5.kicad_pcb": "c853c0a0d3be74e0",
+  "/tmp/opencode/archer/l9_in5_drc.json": "24c96cfed578ea29",
+  "k2/tools/k2_p4_b2_in5_apply_v1.py": "98a0c9cb81741c93"
+ },
+ "root_cause": "两版皆大量 `shorting_items`/`tracks_crossing`/`clearance` ⇒ 新布长走（4318 段）与板上既有铜冲突。共同根因 = **本会话工作令之端点取自『新错行锚笼』（a_cage3row.json）**，而 l8 板上仍是**旧笼**孔位/过孔 ⇒ apply 器把折线按新锚位铺到旧结构上 ⇒ 与既有 via/leg/平面冲突。（R198 归因『变体不匹配』经 R199–R200 修正为**端点/锚笼未先落板**为主因；层选择为次因。）",
+ "tick": "R198–R200（R3 落板试跑两版）",
+ "ts": "2026-09-21T19:58:24",
+ "verdict": "R3 落板两版皆未通过；**根因为『锚笼未先落板』**（非 apply 层选择）"
+}
