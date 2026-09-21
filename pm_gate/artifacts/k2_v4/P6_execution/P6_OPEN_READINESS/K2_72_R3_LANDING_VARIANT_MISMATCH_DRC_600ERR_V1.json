@@ -1,0 +1,70 @@
+{
+ "artifact": "k2_p4_b2_R3_landing_variant_mismatch_drc_failure_v1",
+ "artifacts": {
+  "DRC": "/tmp/opencode/archer/l9_c3_drc.json",
+  "基线 DRC": "/tmp/opencode/archer/l8_drc.json",
+  "工作令": "/tmp/opencode/archer/wo_c3_nudged.json",
+  "落板 ledger": "/tmp/opencode/archer/l9_c3_ledger.json",
+  "落板板": "/tmp/opencode/archer/l9_c3.kicad_pcb"
+ },
+ "caveats": [
+  "l8 基线自身 170 违规（0 error · 皆 warning 类）⇒ R4 判据看 **error 级**与**增量**。",
+  "本落板为 /tmp 副本 · **未触** 冻结四源与 k2/hw 下任何包。"
+ ],
+ "conclusion_binary": {
+  "R-A_witness": "**仍成立**（In5 几何层面：32/32 · true_gate 0 违规 · min 0.4472 · 余量 0.1700 · 端点 0 · 双 seed）",
+  "R-B": "仍无证书",
+  "R3_landing": "**未通过**（现成 apply 路径与 In5 见证不兼容 ⇒ 600 error）"
+ },
+ "drc_delta": {
+  "baseline_l8": {
+   "error": 0,
+   "total": 170,
+   "unconnected": 0
+  },
+  "by_type_delta": {
+   "clearance": 214,
+   "copper_edge_clearance": 30,
+   "items_not_allowed": 86,
+   "lib_footprint_issues(warn)": 54,
+   "shorting_items": 188,
+   "solder_mask_bridge": 14,
+   "track_not_centered_on_via(warn)": 65,
+   "tracks_crossing": 68
+  },
+  "landed_l9_c3": {
+   "error": 600,
+   "total": 867,
+   "unconnected": 0
+  }
+ },
+ "gate_selfcheck": {
+  "owner闸口": 0,
+  "冻结四源": "未动（R191 已 4/4 逐字节核验）",
+  "判据": "criteria/ rev=6 MATCH（只读未碰）",
+  "待裁": 0,
+  "阶段": "P5 PENDING_EXTERNAL（未越）"
+ },
+ "next_steps": [
+  "**(i) 变体对齐（首选）**：确认施工变体 —— 若采 B.Cu 长走 ⇒ 必须以**同一锚笼/端点**为 B.Cu 重跑 R-A 见证（判据不变：true_gate 0 违规 + 余量≥0.100 + 端点 0），再 apply；",
+  "**(ii) 或实现 In5 版 apply 路径**（保留 In5 长走）；",
+  "二者皆 **ENG/L2 自裁面**（不动拓扑/接口/球映射）；随后各自走 repro/DRC ⇒ R4 复测闸（DRC error 0）。"
+ ],
+ "referenced_sha16": {
+  "/tmp/opencode/archer/l8_drc.json": "032f919a1ad5c316",
+  "/tmp/opencode/archer/l9_c3.kicad_pcb": "c581e24de07c34ba",
+  "/tmp/opencode/archer/l9_c3_drc.json": "ccfcbdc228c33d86",
+  "/tmp/opencode/archer/l9_c3_ledger.json": "68f72048feea9368",
+  "/tmp/opencode/archer/wo_c3_nudged.json": "c21802fda10a3bfc",
+  "k2/tools/k2_p4_b2_bcu_apply_v1.py": "6114151d49498dfa"
+ },
+ "root_cause": "apply 器实现的是**『长走改到 B.Cu』变体**（自述：V4 同位换 span 为 F–B · 新布 **B.Cu** 长走），而本会话 R-A 见证解为 **In5 长走变体**（工作令 `layer=\"In5.Cu\"`）⇒ 落板时**把为 In5 规划的折线放到 B.Cu 上**，B.Cu 之障碍集（平面/他网铜）与 In5 完全不同 ⇒ 214 clearance + 188 shorting_items + 68 tracks_crossing + 86 items_not_allowed。（dry-run 之 `add_runs=0` 系 dry-run 不计数所致——真跑为 4318，非工具缺陷。）",
+ "tick": "R197–R198（R3 落板试跑）",
+ "ts": "2026-09-21T19:51:49",
+ "verdict": "**R3 落板（现成 apply 器 + In5 见证解）不可用** —— 变体不匹配导致 600 处 error 级 DRC",
+ "what_was_done": [
+  "① apply 器真跑（非 dry-run·写 /tmp 副本）：`k2/tools/k2_p4_b2_bcu_apply_v1.py --in k2/hw/k2_v4_8L.l8.kicad_pcb --workorder wo_c3_nudged.json --out /tmp/opencode/archer/l9_c3.kicad_pcb`",
+  "   结果：swap_via_FIn2_to_FB=32 · del_vias=64 · del_lane_tracks=945 · **add_runs=4318** · add_stubs=64 · ZONE_FILLER OK · 输出 2,634,492 B",
+  "② DRC（kicad-cli pcb drc --severity-all --format json）对 l9_c3 与基线 l8 各跑一次并比对"
+ ]
+}
