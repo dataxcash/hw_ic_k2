@@ -1,0 +1,213 @@
+{
+ "F6_nesting_swap_finding": {
+  "caveat": "**非证书**：自由域为「绕墙之环带（annulus 同型）」⇒ 理论上可借**绕行/环回**改变两线之相对序；故本项为**候选不可行机制（具名 · 待精确判定）**，**不得**据以签 (b)。",
+  "table": [
+   {
+    "A_x": 84.35,
+    "B_y": 43.25,
+    "a_rank": 0,
+    "net": "PCIE_UP_OUT0_N_J2",
+    "p_rank": 1,
+    "state": "相邻互换"
+   },
+   {
+    "A_x": 84.85,
+    "B_y": 42.65,
+    "a_rank": 1,
+    "net": "PCIE_UP_OUT0_P_J2",
+    "p_rank": 0,
+    "state": "相邻互换"
+   },
+   {
+    "A_x": 85.5,
+    "B_y": 43.85,
+    "a_rank": 2,
+    "net": "PCIE_UP_OUT1_N_J2",
+    "p_rank": 2,
+    "state": "同秩"
+   },
+   {
+    "A_x": 86.05,
+    "B_y": 43.85,
+    "a_rank": 3,
+    "net": "PCIE_UP_OUT1_P_J2",
+    "p_rank": 3,
+    "state": "同秩"
+   },
+   {
+    "A_x": 86.7,
+    "B_y": 46.85,
+    "a_rank": 4,
+    "net": "PCIE_UP_OUT2_N_J2",
+    "p_rank": 5,
+    "state": "相邻互换"
+   },
+   {
+    "A_x": 87.25,
+    "B_y": 46.25,
+    "a_rank": 5,
+    "net": "PCIE_UP_OUT2_P_J2",
+    "p_rank": 4,
+    "state": "相邻互换"
+   },
+   {
+    "A_x": 87.9,
+    "B_y": 47.45,
+    "a_rank": 6,
+    "net": "PCIE_UP_OUT3_N_J2",
+    "p_rank": 6,
+    "state": "同秩"
+   },
+   {
+    "A_x": 88.45,
+    "B_y": 47.45,
+    "a_rank": 7,
+    "net": "PCIE_UP_OUT3_P_J2",
+    "p_rank": 7,
+    "state": "同秩"
+   },
+   {
+    "A_x": 89.1,
+    "B_y": 48.65,
+    "a_rank": 8,
+    "net": "PCIE_UP_OUT4_N_J2",
+    "p_rank": 9,
+    "state": "相邻互换"
+   },
+   {
+    "A_x": 89.65,
+    "B_y": 48.05,
+    "a_rank": 9,
+    "net": "PCIE_UP_OUT4_P_J2",
+    "p_rank": 8,
+    "state": "相邻互换"
+   },
+   {
+    "A_x": 90.3,
+    "B_y": 49.25,
+    "a_rank": 10,
+    "net": "PCIE_UP_OUT5_N_J2",
+    "p_rank": 10,
+    "state": "同秩"
+   },
+   {
+    "A_x": 90.85,
+    "B_y": 49.25,
+    "a_rank": 11,
+    "net": "PCIE_UP_OUT5_P_J2",
+    "p_rank": 11,
+    "state": "同秩"
+   },
+   {
+    "A_x": 91.5,
+    "B_y": 52.25,
+    "a_rank": 12,
+    "net": "PCIE_UP_OUT6_N_J2",
+    "p_rank": 13,
+    "state": "相邻互换"
+   },
+   {
+    "A_x": 92.05,
+    "B_y": 51.65,
+    "a_rank": 13,
+    "net": "PCIE_UP_OUT6_P_J2",
+    "p_rank": 12,
+    "state": "相邻互换"
+   },
+   {
+    "A_x": 92.7,
+    "B_y": 52.85,
+    "a_rank": 14,
+    "net": "PCIE_UP_OUT7_N_J2",
+    "p_rank": 14,
+    "state": "同秩"
+   },
+   {
+    "A_x": 93.7,
+    "B_y": 52.85,
+    "a_rank": 15,
+    "net": "PCIE_UP_OUT7_P_J2",
+    "p_rank": 15,
+    "state": "同秩"
+   }
+  ],
+  "what": "**具名结构事实**：A 排嵌套序（a_rank：0 = A.x 最西 · 决定南通道层深与东通道槽位之「外」）与 B 侧嵌套序（p_rank：0 = B.y 最北 · 决定北区绕行次序之「内」）**不一致**，差集 = **4 组相邻互换**：`0_N↔0_P` · `2_N↔2_P` · `4_N↔4_P` · `6_N↔6_P`（其余 8 条同秩）；逆序对 = **4 / 120**。",
+  "why_matters": "单层（In5）束布线要求「束之序」沿整条束**一致**；这 4 处相邻互换正是「**同时性**」卡点之**结构性具名成因**（既有 12/16 之失败集 {`0_N`,`0_P`,`1_P`,`2_P`} 与本互换集 {0_N,0_P}∪{2_N,2_P} **高度重合** ⇒ 归因互相印证）。"
+ },
+ "anchors": {
+  "caliber": "物理 keepout 0.5300（余量 0.100 未改）",
+  "criteria": "rev=6 MATCH（ENG 只读）",
+  "frozen_sources": {
+   "_shared/eda_core/drc_rules.json": "0a459839e15960b8",
+   "k2/hw/data/k2_sch.yaml": "dd794c54f7ce7417",
+   "k2/hw/k2_v4_8L.kicad_pcb": "fb07d25ac426ff84",
+   "k2/hw/k2_v4_8L.l4.kicad_pcb": "d4e81f647be7f980"
+  },
+  "k2_anchor": "537142d（本件落件前）",
+  "reviewed_board": "k2/hw/k2_v4_8L.l8.kicad_pcb = 7a5c89913d6e5d0a"
+ },
+ "artifact": "k2_r260_conservation_blocker_report_v52",
+ "authority": "监理停止令（收敛停滞≈28轮无二值：本件必须出二值 ‖ 若出不来 ⇒ 立即出《守恒级卡点报告》）· 《整改计划》P4 · #K2-132 §三（一次实现）· #K2-133 §三 N1（no-move 全转）",
+ "bans_kept": "未改冻结四源 · criteria 只读 · 未烙板 · 未派 WORKER · 临时仅 /tmp/opencode · 未以 12/16 或 2/16 作见证 · 未以有界搜索冒充证书 · 未自行 C-w",
+ "binary_attempt": {
+  "decisive": "**16/16 全部同时布通**（端点位移 0 · 对障碍 0 违规）⇒ 连接/拓扑层可达；硬禁 0.44（**cell 级**分离达标）仍出 0.0000 连续隙 ⇒ 缺口 = **cell 级分离 ≠ 段级（连续）分离** 之收敛实现。",
+  "evidence": "k2/pm_gate/artifacts/k2_v4/L4/E3-standard-call-l8-20260922-pf/{wo_pf_sep022_c05_n40.json, wo_pf_sep044_c05_n40.json, README.md}",
+  "method": "独立新方法：**协商拥塞（PathFinder 型）束布线器**（k2/tools/k2_p4_b2_in5_pf_lane_router_v1.py）——每轮 16 网**全部**各求最短路（拥塞=费用 present+history）·**本轮内硬禁**（车道中心距下限）·**固定几何序**（B 锚 y 降序）· 非次序枚举、非参数扫描。",
+  "runs": [
+   {
+    "clearance_min_mm": 0.1003,
+    "clearance_viol": 0,
+    "endpoint_dev_mm": 0.0,
+    "failed": [],
+    "lane_pitch_min_gap_mm": 0.0354,
+    "lane_pitch_viol": 18,
+    "routed": "16/16",
+    "tag": "sep0.2175/cell0.05/40轮"
+   },
+   {
+    "clearance_min_mm": 0.1,
+    "clearance_viol": 0,
+    "endpoint_dev_mm": 0.0,
+    "failed": [],
+    "lane_pitch_min_gap_mm": 0.0,
+    "lane_pitch_viol": 31,
+    "routed": "16/16",
+    "tag": "sep0.44/cell0.05/40轮"
+   }
+  ],
+  "verdict": "**非见证**（两件均不满足 ②-UP 之『车道互距 ≥0.435』）⇒ 不得作 (a) 见证/里程碑。"
+ },
+ "conclusion": "二值**未取得**：(a) 16/16 见证未得（差连续车道互距）；(b) 守恒级不可行证书**未成立**（无 <16 刚性割；16/16 连接层可达）——但**具名候选机制**已定位（F6 之 4 组嵌套序互换 + 离散-连续分离）。⇒ 按监理停止令出本卡点报告；卡点 = **`C-B2UP-1`（连续精确车道互斥 + 嵌套序换序之同时性束布线实现）**。",
+ "fields_4": {
+  "1_layer": "**算法/实现能力层** —— 「**连续精确车道互斥（段级）约束下的同时性束布线**」之计实现能力（非判据层 · 非几何刚性层 · 非 owner）。",
+  "2_resource": "**In5 走廊**（②-UP 专用资源）：东通道 x∈[135.40,142.62]（可用宽 7.35mm ⇒ **17 车道槽**）· A 排出口自由带 y∈[56.20,58.20]、x∈[84,132]（容量充裕）· 缝合孔场 + `PERSTA#` In5 带(8 段) + 连接器通孔列（构成**强制绕行**）。",
+  "3_occupied_by": "**不被任何对象占死**。本件 + `K2_R260_..._CENSUS` 之三条实测反证：(i) **任意 cell 级割最大流 = 32 = 终端饱和**（cell·√2<0.435 ⇒ 严格上界）⇒ **不存在 <16 之割**；(ii) 东通道 **17 车道槽 ≥16**；(iii) 12/16 残余 4 条归因 = **布线序**（先布者占外槽），非刚性障碍。",
+  "4_why_no_assignment": "**未证成立**：(i) 无 <16 刚性割（任意 cell 级割 =32 终端饱和）；(ii) 独立新方法实测 **16/16 全部同时布通**（但含 18~31 处互距违规）。**但**发现**候选结构性成因**（见 F6）：A 排嵌套序与 B 侧嵌套序差 **4 组相邻互换**（0_N/0_P · 2_N/2_P · 4_N/4_P · 6_N/6_P）⇒ 单层束「序一致」要求被破坏 ⇒ 需**局部绕行换序**（环带几何下理论可行·未证）⇒ 缺口 = **连续精确分离 + 换序实现**。"
+ },
+ "from": "ENG · ARCHER（应监理停止令：本件必须出二值）",
+ "next_stage_plan": [
+  {
+   "budget": "并入 #K2-132 §三 之『一次实现、一次交付』（不新增实现次数）",
+   "id": "P0",
+   "item": "监理给 `C-B2UP-1` 限期（口径：**连续精确（段级）车道互距**）⇒ ENG 一次实现到位",
+   "method": "三条具名候选（择一即可，均构造式/连续式，非扫描）：(α) cell ≤0.03 之同型协商拥塞（硬禁半径 0.45）——避开离散-连续转换误差（代价：运行时长）；(β) cell 0.05 求解 + **连续推挤/亚格 nudge** 收口（把 18~31 处互距违规以最小位移推到达标）；(γ) 洋葱层**解析构造**（A 排出口对角线扇 + 通道层 + 东通道槽 + 北区绕行，逐层解析）"
+  },
+  {
+   "id": "P1",
+   "item": "D2 同批落库（rev=7 + spec-rev-55 + l9 + 网表 bump 新件 + 具名豁免表）⇒ 判定器 19/19 @bump 件"
+  },
+  {
+   "id": "P2",
+   "item": "l9 收口后 R4 复测闸（19 维 + ②-UP/②-DN + ref_plane_continuity + 等长/3W/85Ω）⇒ P4 全绿方下 P5"
+  }
+ ],
+ "owner_gate": 0,
+ "schema": 1,
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A（self_sha16 置空 · json.dumps(indent=1,ensure_ascii=False,sort_keys=True)）",
+  "convention_A_sha16": "8a841f8ad3932736"
+ },
+ "stop_order_received": "是（本轮出二值：见证 ‖ 守恒级不可行证书；二值未取得 ⇒ 按令出本卡点报告）",
+ "to": "监理",
+ "ts": "2026-09-22T02:28+0800"
+}
