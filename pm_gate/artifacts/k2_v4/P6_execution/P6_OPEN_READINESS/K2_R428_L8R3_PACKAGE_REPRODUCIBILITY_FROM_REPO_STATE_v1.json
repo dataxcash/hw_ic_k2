@@ -1,0 +1,250 @@
+{
+ "schema": 1,
+ "artifact": "k2_r428_l8r3_package_reproducibility_from_repo_state_v1",
+ "ts": "2026-09-23T00:17:15",
+ "from": "ENG · ARCHER（续接会话 · 承 handoff R423 · 应监理巡检）",
+ "to": "监理",
+ "owner_gate": 0,
+ "authority": "owner ③（可制造 Gerber）· #K2-38（交付锚冻结 · 交付闭环先例）· R427（包已锚 l8）· owner #14⑥ · #K2-142 §四（只读残余）",
+ "first_action": "已读全部 `K2-RULING-*` ⇒ 最新仍 **#K2-144** · 无更晚裁定 · 无 owner 回件。",
+ "nature": "**只读可复现核证**：在本会话以在册仪器对**现行仓内 l8** 重跑交付包之**同名导出**，与在册包逐件比对。**未重建包**（未写入包目录）· 未改任何件 · 未出包 · 未烙板。",
+ "headline": "**在册交付包 `l8r3` 与「对现行 l8 的新鲜导出」逐件一致** —— Gerber **14/14** 、钻孔侧 **15/15**（8 `.drl` + 6 map + report）**逐字节相同**（按包自带口径规范化 date 后）。⇒ 该包**未过期**、**忠实于仓内 l8**；且**仅由仓内件（board+pro）即可重生成**（无 `/tmp` 依赖）。",
+ "method": {
+  "command_gerber": "`kicad-cli pcb export gerbers --board-plot-params --no-x2 --layers F.Cu,In1.Cu,In2.Cu,In3.Cu,In4.Cu,In5.Cu,In6.Cu,B.Cu,F.Silkscreen,B.Silkscreen,F.Mask,B.Mask,Edge.Cuts`（= 包内 `MANIFEST.commands.gerber` 原文）",
+  "command_drill": "`kicad-cli pcb export drill --format excellon --excellon-units mm --generate-map --map-format svg --generate-report`（= 包内 `MANIFEST.commands.drill` 原文）",
+  "inputs": "**仅仓内**：`k2/hw/k2_v4_8L.l8.kicad_pcb`（`7a5c8991`）+ `k2_v4_8L.l8.kicad_pro`（`c0090580`），复制入受控 `/tmp` work-dir",
+  "canonicalization": "按包内 `MANIFEST.canonicalization`（`date_pattern` → `2026-09-19T00:00:00+08:00`）后再比 sha256",
+  "instrument": "`AppDir/bin/kicad-cli` 10.0.5（= 包内 `kicad_version`）"
+ },
+ "result": {
+  "gerber": {
+   "same": 14,
+   "total": 14
+  },
+  "drill": {
+   "same": 15,
+   "total": 15
+  },
+  "all_same": true,
+  "rows": [
+   {
+    "group": "gerber",
+    "file": "k2_v4_8L.l8-B_Cu.gbr",
+    "fresh_sha16": "57398d2c48243152",
+    "pkg_sha16": "57398d2c48243152",
+    "same": true
+   },
+   {
+    "group": "gerber",
+    "file": "k2_v4_8L.l8-B_Mask.gbr",
+    "fresh_sha16": "3d4cbd84707540e9",
+    "pkg_sha16": "3d4cbd84707540e9",
+    "same": true
+   },
+   {
+    "group": "gerber",
+    "file": "k2_v4_8L.l8-B_Silkscreen.gbr",
+    "fresh_sha16": "46c209e61d950f0a",
+    "pkg_sha16": "46c209e61d950f0a",
+    "same": true
+   },
+   {
+    "group": "gerber",
+    "file": "k2_v4_8L.l8-Edge_Cuts.gbr",
+    "fresh_sha16": "03d532877797d77c",
+    "pkg_sha16": "03d532877797d77c",
+    "same": true
+   },
+   {
+    "group": "gerber",
+    "file": "k2_v4_8L.l8-F_Cu.gbr",
+    "fresh_sha16": "0101d568a228c236",
+    "pkg_sha16": "0101d568a228c236",
+    "same": true
+   },
+   {
+    "group": "gerber",
+    "file": "k2_v4_8L.l8-F_Mask.gbr",
+    "fresh_sha16": "107ac4d27abf96b8",
+    "pkg_sha16": "107ac4d27abf96b8",
+    "same": true
+   },
+   {
+    "group": "gerber",
+    "file": "k2_v4_8L.l8-F_Silkscreen.gbr",
+    "fresh_sha16": "ca6bc581c9edf059",
+    "pkg_sha16": "ca6bc581c9edf059",
+    "same": true
+   },
+   {
+    "group": "gerber",
+    "file": "k2_v4_8L.l8-In1_Cu.gbr",
+    "fresh_sha16": "e6a794994dfa561b",
+    "pkg_sha16": "e6a794994dfa561b",
+    "same": true
+   },
+   {
+    "group": "gerber",
+    "file": "k2_v4_8L.l8-In2_Cu.gbr",
+    "fresh_sha16": "a62e4ae232e94426",
+    "pkg_sha16": "a62e4ae232e94426",
+    "same": true
+   },
+   {
+    "group": "gerber",
+    "file": "k2_v4_8L.l8-In3_Cu.gbr",
+    "fresh_sha16": "af416e154d0ab1ef",
+    "pkg_sha16": "af416e154d0ab1ef",
+    "same": true
+   },
+   {
+    "group": "gerber",
+    "file": "k2_v4_8L.l8-In4_Cu.gbr",
+    "fresh_sha16": "a8f027dae28d9952",
+    "pkg_sha16": "a8f027dae28d9952",
+    "same": true
+   },
+   {
+    "group": "gerber",
+    "file": "k2_v4_8L.l8-In5_Cu.gbr",
+    "fresh_sha16": "c6984b210fc49e14",
+    "pkg_sha16": "c6984b210fc49e14",
+    "same": true
+   },
+   {
+    "group": "gerber",
+    "file": "k2_v4_8L.l8-In6_Cu.gbr",
+    "fresh_sha16": "e6a6d5557743384f",
+    "pkg_sha16": "e6a6d5557743384f",
+    "same": true
+   },
+   {
+    "group": "gerber",
+    "file": "k2_v4_8L.l8-job.gbrjob",
+    "fresh_sha16": "2ad984ac8b97e325",
+    "pkg_sha16": "2ad984ac8b97e325",
+    "same": true
+   },
+   {
+    "group": "drill",
+    "file": "drill_report.txt",
+    "fresh_sha16": "a733302c54deea55",
+    "pkg_sha16": "a733302c54deea55",
+    "same": true
+   },
+   {
+    "group": "drill",
+    "file": "k2_v4_8L.l8-back-in5-drl_map.svg",
+    "fresh_sha16": "5a415fafbfcb9cc8",
+    "pkg_sha16": "5a415fafbfcb9cc8",
+    "same": true
+   },
+   {
+    "group": "drill",
+    "file": "k2_v4_8L.l8-back-in5.drl",
+    "fresh_sha16": "32212c17b2853ac5",
+    "pkg_sha16": "32212c17b2853ac5",
+    "same": true
+   },
+   {
+    "group": "drill",
+    "file": "k2_v4_8L.l8-drl_map.svg",
+    "fresh_sha16": "2d16c6b7b3d14951",
+    "pkg_sha16": "2d16c6b7b3d14951",
+    "same": true
+   },
+   {
+    "group": "drill",
+    "file": "k2_v4_8L.l8-front-in1-drl_map.svg",
+    "fresh_sha16": "9ea8eb8c32cc5669",
+    "pkg_sha16": "9ea8eb8c32cc5669",
+    "same": true
+   },
+   {
+    "group": "drill",
+    "file": "k2_v4_8L.l8-front-in1.drl",
+    "fresh_sha16": "b18aa72efa667862",
+    "pkg_sha16": "b18aa72efa667862",
+    "same": true
+   },
+   {
+    "group": "drill",
+    "file": "k2_v4_8L.l8-front-in2-drl_map.svg",
+    "fresh_sha16": "b6a07fd36217fdb7",
+    "pkg_sha16": "b6a07fd36217fdb7",
+    "same": true
+   },
+   {
+    "group": "drill",
+    "file": "k2_v4_8L.l8-front-in2.drl",
+    "fresh_sha16": "65d109925e5a3e9c",
+    "pkg_sha16": "65d109925e5a3e9c",
+    "same": true
+   },
+   {
+    "group": "drill",
+    "file": "k2_v4_8L.l8-front-in4-drl_map.svg",
+    "fresh_sha16": "60f1de1df5082748",
+    "pkg_sha16": "60f1de1df5082748",
+    "same": true
+   },
+   {
+    "group": "drill",
+    "file": "k2_v4_8L.l8-front-in4.drl",
+    "fresh_sha16": "caf64c5193325109",
+    "pkg_sha16": "caf64c5193325109",
+    "same": true
+   },
+   {
+    "group": "drill",
+    "file": "k2_v4_8L.l8-front-in5-drl_map.svg",
+    "fresh_sha16": "cddacc12d67a66fa",
+    "pkg_sha16": "cddacc12d67a66fa",
+    "same": true
+   },
+   {
+    "group": "drill",
+    "file": "k2_v4_8L.l8-front-in5.drl",
+    "fresh_sha16": "ae547cef34eadd7c",
+    "pkg_sha16": "ae547cef34eadd7c",
+    "same": true
+   },
+   {
+    "group": "drill",
+    "file": "k2_v4_8L.l8-in2-in5-drl_map.svg",
+    "fresh_sha16": "b960133c9e5377fb",
+    "pkg_sha16": "b960133c9e5377fb",
+    "same": true
+   },
+   {
+    "group": "drill",
+    "file": "k2_v4_8L.l8-in2-in5.drl",
+    "fresh_sha16": "2b840db2661e83b5",
+    "pkg_sha16": "2b840db2661e83b5",
+    "same": true
+   },
+   {
+    "group": "drill",
+    "file": "k2_v4_8L.l8.drl",
+    "fresh_sha16": "8b96da1847314355",
+    "pkg_sha16": "8b96da1847314355",
+    "same": true
+   }
+  ]
+ },
+ "why_it_matters": [
+  "**Q5 之关键物证**：在册包**不是**对 f 的旧快照 —— 它**等于**当前 l8 之导出 ⇒ 若 owner 裁「甲」（受审板回 l8），**无需重出包即可声称『包 = 当前受审板之产物』**（正式复检仍须监理放行）。",
+  "**证据质量对照（重要）**：l8 交付包之全部输入**皆在仓内**、本会话**逐件复现成功**；而 l9 之搬迁铜有 **25/303 段唯一来源为 `/tmp`（R424 F8）** ⇒ 两条路线的『可复现/可追溯』等级**不同**。",
+  "**E-1（单链可重生成）** 对本包在**现行仓态**下依然成立（输入仅 board+pro，命令与仪器皆在册）。"
+ ],
+ "self_check": [
+  "未把『重跑导出』写成『重建交付包』—— 导出写入 `/tmp/opencode/r428/re_export/`，**包目录零写入**（承 #K2-38 §二『交付锚冻结 · 勿重建』）。",
+  "未采信在册包自述：本件**自行重跑**并以 sha256 逐件比对。",
+  "未改 `criteria/`（rev=6 MATCH）/SPEC/生成器/原理图。",
+  "**未把本件当交付见证**：正式 DFM/交付判定仍属监理（gate 链态 **P4 HOLDS**）。"
+ ],
+ "files": [
+  "K2_R428_L8R3_PACKAGE_REPRODUCIBILITY_FROM_REPO_STATE_v1.json/.md/.sha16.txt",
+  "R428_package_repro_measure/repro_table.json"
+ ]
+}
