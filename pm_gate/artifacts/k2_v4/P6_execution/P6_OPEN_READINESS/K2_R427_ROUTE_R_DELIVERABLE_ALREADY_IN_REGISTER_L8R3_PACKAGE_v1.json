@@ -1,0 +1,88 @@
+{
+ "schema": 1,
+ "artifact": "k2_r427_route_r_deliverable_already_in_register_l8r3_package_v1",
+ "ts": "2026-09-22T23:59:29",
+ "from": "ENG · ARCHER（续接会话 · 承 handoff R423）",
+ "to": "监理",
+ "owner_gate": 0,
+ "authority": "owner ③（完工 = 可制造 Gerber + DFM 逐项全 PASS）· owner #14⑥（找活/造活）· #K2-142 §四（只读残余）· handoff R423 §8.4 · 先例 **#K2-38**（ENG 交付闭环判定）",
+ "nature": "**只读核证**（未重建包 · 未改任何件 · 未出包 · 未烙板）。",
+ "first_action": "已读全部 `K2-RULING-*` ⇒ 最新 **#K2-144** · 无更晚裁定 · 无 owner 回件（v65 待裁）。",
+ "headline": "**路线 R（受审板回 l8）之交付件已在仓内 —— 且其锚正是 l8。** 仓内存在 **`L6/jlc_package_l8r3`**（+ `DELIVERY_l8r3`）：`MANIFEST.board_sha16 = 7a5c89913d6e5d0a`（= 现行 l8）· `pro = c009058005829f09` · **SPEC rev-54** · criteria rev=6 · **DFM 16 PASS / 1 ACCEPT / 0 FAIL** · 55/55 sha256 本会话只读复算 **OK**。**仓内不存在任何 l9 交付包。**",
+ "package": {
+  "dir_generator": "k2/tools/k2_p5_jlc_package_l8r3_v1.py（包内 MANIFEST.commands.build）",
+  "path": "k2/pm_gate/artifacts/k2_v4/L6/jlc_package_l8r3/（+ DELIVERY_l8r3/k2_v4_8L.l8r3_gerber_package.tar.gz）",
+  "anchors": {
+   "board": "k2_v4_8L.l8.kicad_pcb `7a5c89913d6e5d0a`（包内 `07_verify/anchor_selfcheck.json` 逐字节复算）",
+   "pro": "k2_v4_8L.l8.kicad_pro `c009058005829f09`",
+   "spec": "SPEC_k2_v4.spec-rev-54.json `f3a48b866983c8db…`",
+   "criteria": "rev=6",
+   "kicad": "10.0.5"
+  },
+  "dfm_summary": {
+   "pass": 16,
+   "accept": 1,
+   "fail": 0
+  },
+  "n_files": 53,
+  "drill_total": 754,
+  "integrity_readonly": "`sha256sum -c DELIVERY_l8r3/SHA256SUMS.txt`（自 `L6/` 运行）⇒ **55 OK / 0 FAILED**（含 tar 自身）；tar 内 54 项"
+ },
+ "owner3_item_by_item": [
+  {
+   "req": "8 铜层 Gerber",
+   "in_package": "`01_gerber_rs274x/`：F_Cu · In1_Cu · In2_Cu · In3_Cu · In4_Cu · In5_Cu · In6_Cu · B_Cu = **8/8**",
+   "verdict": "✓"
+  },
+  {
+   "req": "阻焊 / 丝印 / 边框 / job",
+   "in_package": "F_Mask · B_Mask · F_Silkscreen · B_Silkscreen · Edge_Cuts · `k2_v4_8L.l8-job.gbrjob`",
+   "verdict": "✓"
+  },
+  {
+   "req": "Excellon 钻孔（含 HDI 盲埋孔）",
+   "in_package": "`02_drill_excellon/` **8 个 .drl**（front-in1 171 · front-in2 132 · front-in4 4 · front-in5 19 · **in2-in5 92** · back-in5 37 · 通孔/背 等）+ 逐孔对 census + drill_report + 6 张 map svg",
+   "verdict": "✓（非通孔 455/734 = 62% · HDI 多层层压）"
+  },
+  {
+   "req": "叠层图",
+   "in_package": "`03_stackup/HDI_stage_diagram.svg` + `JLC08161H_stackup.svg`",
+   "verdict": "✓"
+  },
+  {
+   "req": "阻抗表",
+   "in_package": "`04_impedance/impedance_table.json` + `.md`（85Ω 差分 ±10% · 含 as-built 具名偏差）",
+   "verdict": "✓"
+  },
+  {
+   "req": "MANIFEST",
+   "in_package": "`MANIFEST.json` + `DELIVERY_l8r3/SHA256SUMS.txt` + tar.gz",
+   "verdict": "✓"
+  },
+  {
+   "req": "DFM 逐项对 JLC HDI 通道全 PASS",
+   "in_package": "**16 PASS / 1 ACCEPT / 0 FAIL**（ACCEPT = 阻焊坝 9 处 <0.09mm ⇒ 随单工程评审 · 承 CO-147 R3 先例；回退修法已实证但属**改板**）",
+   "verdict": "✓（无 FAIL）"
+  },
+  {
+   "req": "（随包具名披露）",
+   "in_package": "`DISCLOSURE.md`（170 warning 全量披露 · OUT #5 · F-9 · L-1 · P5 新项）+ `ORDER_NOTES.md`（制造备注）",
+   "verdict": "✓"
+  }
+ ],
+ "route_R_anchor_alignment": "**关键对齐**：路线 R 之落地要求（R426）= `spec_name` 指回 **rev-54**；而**本包正是以 rev-54 构建**（`anchor_selfcheck.json` 记 `SPEC_k2_v4.spec-rev-54.json f3a48b86…`）⇒ **回退后之 SPEC 状态 = 交付包构建时之 SPEC 状态**（无『须重出才对齐』之物证）。",
+ "precedent": "**#K2-38**（2026-09-20 · l7 时代）：监理判 **ENG 交付闭环 = 通过**（同结构交付包 · 同 `DFM 16 PASS / 1 ACCEPT / 0 FAIL` 汇总 · 判据锚 MATCH）⇒ 『本类包即 owner ③ 之交付物本体』有在册先例。",
+ "what_this_does_not_claim": "**不主张交付已生效/已合格**（阶段门与交付判定属监理职权 · 且现行 gate 链态为 **P4 HOLDS**）。本件只报**在册事实 + 在册锚 + 完整性复算**，供监理裁 Q1 时定夺：『该包是否仍为有效交付物 / 是否须随回退重出』。",
+ "ask": [
+  "**Q5（新 · 监理自裁面）**：`l8r3` 包（锚 l8 · DFM 0 FAIL · 55/55 OK）在 owner 裁「甲」后**是否仍为有效交付物**（⇒ 完工已满足 · 仅须判据/DRC/DFM 复核）？抑或**须随回退重出**（⇒ item13 仍为待办）？",
+  "**Q6（新）**：若须重出，重出应以**回退后之受审板（l8）+ 落定之 SPEC rev** 为锚 —— 请监理指定重出时点与属主（本包生成器 `k2/tools/k2_p5_jlc_package_l8r3_v1.py` 在册可复用 · **ENG 未获批不自跑**）。"
+ ],
+ "honest_boundary": [
+  "**未重建包**（#K2-38 §二 明令：交付锚冻结、勿重建）—— 本件仅**只读复算**在册包之 sha256 与锚。",
+  "**未改** `criteria/`（rev=6 MATCH）· 未改 SPEC/生成器/原理图 · 未出包 · 未烙板 · 未派 WORKER · 未写 `.omo/supervision/**`。",
+  "**未裁**「②-UP 冻结条款之违背是否使该包失效」—— 那正是 owner #K2-142 之取舍所系；本件不自决。"
+ ],
+ "files": [
+  "K2_R427_ROUTE_R_DELIVERABLE_ALREADY_IN_REGISTER_L8R3_PACKAGE_v1.json/.md/.sha16.txt"
+ ]
+}
