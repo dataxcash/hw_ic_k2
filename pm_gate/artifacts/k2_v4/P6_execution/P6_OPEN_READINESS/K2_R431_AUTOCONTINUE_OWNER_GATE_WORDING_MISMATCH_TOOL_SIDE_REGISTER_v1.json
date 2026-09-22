@@ -1,0 +1,34 @@
+{
+ "schema": 1,
+ "artifact": "k2_r431_autocontinue_owner_gate_wording_mismatch_tool_side_register_v1",
+ "ts": "2026-09-23T00:26:36",
+ "from": "ENG · ARCHER（续接会话 · 承 handoff R423）",
+ "to": "监理",
+ "owner_gate": 0,
+ "authority": "**#K2-38 §三**（『巡检/自动续推停摆』= 工具侧 · 宪法第十一条「自身工具与巡检策略」= 监理自裁面）· **#K2-39**（sentinel-spin-fix 先例）· **#K2-145 指令1**（停手令）· R422 先例（项目侧提交 · 不写 `.omo/supervision/**`）",
+ "first_action": "已读 **#K2-145**（最新裁定 · 无更晚者 · 无 owner 回件）；本轮应自动续推而未新增生产动作。",
+ "nature": "**只读工具侧登记**（非交付件 · 非阶段判定 · 非新齿 · 未改任何仓内件与 `.omo/supervision/**`）。",
+ "headline": "**自动续推停不下来的根因 = 提示词尾句的措辞不在检测表内**：提示词请 ARCHER 用「**确需 owner 裁决** ⇒ 一句话说明并停」，而 `owner_blocked()` 只认「**待 owner 裁决**」等 4 个标记 ⇒ **照提示词作答永不命中** ⇒ 合法停手期（#K2-145 指令1）内续推反复触发。",
+ "finding": {
+  "现象": "本 log 内『自动续推-已投递』**1022 次**；中位间隔 **113s**、最小 **5s**；本会话实测 00:23:33 / 00:23:58 / 00:25:09（另 00:16 巡检兜底 1 条）。",
+  "触发": "`→ 自动续推(L1/L2裁定): 已投递（每进展一次）`（watch.py:1086） ⇒ 条件 = `progress_fingerprint()` 变更（**= 每进展一次**）+ `AUTO_WAKE_SECONDS = 5`。",
+  "根因（措辞不匹配）": "AUTO_WAKE_L2_PROMPT 尾句：『**确需 owner 裁决** ⇒ 一句话说明并停（监理升级人工）』（watch.py:93–99） **VS** `owner_blocked()` = 命中 `OWNER_GATE_MARKERS = (\"待 owner 裁决\", \"停 owner 闸口\", \"awaiting owner ruling\", \"owner 闸口（待\")`（watch.py:124–125 · 1379–1381）",
+  "放大因子": "`MAX_IDLE_WAKES = 3`（watch.py:101）**仅计无工具调用之空转** ⇒ ENG 若持续做**只读工具调用**（本轮 R424–R430 即如此）则**永不**累积到升级兜底 ⇒ 与「坚持推进」形成**正反馈**：越干活越被推。",
+  "与停手令之冲突": "#K2-145 指令1 明令 owner 回件前**禁一切生产动作**（含回退之执行）⇒ 该期间「推进当前阶段」只能落为只读件；续推反复触发 ⇒ **只读空转烧 token**（正是 watch.py:1070 注释所称『防 ARCHER 只读空转烧 token』所欲防者）。"
+ },
+ "suggested_fix": [
+  "① **提示词自洽**：末句改为可识别措辞（如『若确为 owner 闸口，请**照写**「待 owner 裁决」』），或把「owner 裁决」补入 `OWNER_GATE_MARKERS`。",
+  "② **停手令感知**：当存在『明令停手』之编号裁定（如 #K2-145 指令1）且其语义为『待 owner 回件』时，`auto_wake` 直接暂挂。",
+  "③ **指纹口径**：把『ENG 完成只读件（无 board/SPEC/landing 变更）』不计入 `progress_fingerprint`，免自我武装。",
+  "（三选一或任一即可止旋；**ENG 不修** —— 工具属监理写域。）"
+ ],
+ "non_blocking": "本件**不阻塞任何阶段**、不请求权限、不改判据；与 #K2-142（owner 二选一）之**在途闸口互不相干**。P4 之真闸 = **owner 对 #K2-142 之选择**（#K2-145 裁定①/指令1）。",
+ "self_check": [
+  "只读：未改 `watch.py` / 未写 `.omo/supervision/**` / 本轮唯一落件即本件。",
+  "未把本件当交付件或阶段判定；未新增检查齿（`criteria/` rev=6 未动）。",
+  "引用皆出自在册文件原文（行号可复核）；未采信推测。"
+ ],
+ "files": [
+  "K2_R431_AUTOCONTINUE_OWNER_GATE_WORDING_MISMATCH_TOOL_SIDE_REGISTER_v1.json/.md/.sha16.txt"
+ ]
+}
