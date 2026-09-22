@@ -1,0 +1,276 @@
+{
+ "A_barrier_and_port_ring": {
+  "barrier_lemma": {
+   "A_cluster": {
+    "discs_connected": false,
+    "max_nn_mm": 1.2167,
+    "min_nn_mm": 0.9801,
+    "no_threading_all": false,
+    "note": "相邻锚孔中心距 < 2*PITCH=0.870 ⇒ 0.435 盘重叠 ⇒ 车道不可在锚间穿行（=屏障）"
+   },
+   "B_cluster": {
+    "discs_connected": false,
+    "max_nn_mm": 2.4691,
+    "min_nn_mm": 0.8345,
+    "no_threading_all": false,
+    "note": "相邻锚孔中心距 < 2*PITCH=0.870 ⇒ 0.435 盘重叠 ⇒ 车道不可在锚间穿行（=屏障）"
+   }
+  },
+  "port_ring": {
+   "disc_union_components": 16,
+   "max_nn_mm": 1.2167,
+   "min_gap_between_discs_mm": 0.1101,
+   "min_nn_mm": 0.9801,
+   "n_ports": 16,
+   "port_ring_exists": false,
+   "reading": "**屏障/端口环前提 = 不成立**：16 盘之最小中心距 0.98mm > 2*0.435=0.870mm ⇒ **盘两两相离**（并集 16 个连通分量，非单环）· 相邻盘最小缝宽 **0.110mm > 0** ⇒ 模型口径下**车道可在锚间穿行**（中心线只需离他锚 >=0.435）⇒ R390 §S1/S2 所依赖之『北出序被强制』**不能成立**。"
+  }
+ },
+ "C1_A_exit_order_check": {
+  "is_ascending_a_rank": false,
+  "ranks_by_x": [
+   2,
+   2,
+   3,
+   4,
+   5,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   14,
+   13,
+   12,
+   11,
+   10,
+   9,
+   8,
+   7,
+   5,
+   4,
+   3
+  ],
+  "y=56.5": {
+   "count": 22,
+   "order_by_x": [
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT1_P_J2",
+    "PCIE_UP_OUT2_N_J2",
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT3_P_J2",
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT5_N_J2",
+    "PCIE_UP_OUT5_P_J2",
+    "PCIE_UP_OUT6_P_J2",
+    "PCIE_UP_OUT7_N_J2",
+    "PCIE_UP_OUT7_P_J2",
+    "PCIE_UP_OUT7_N_J2",
+    "PCIE_UP_OUT6_P_J2",
+    "PCIE_UP_OUT6_N_J2",
+    "PCIE_UP_OUT5_P_J2",
+    "PCIE_UP_OUT5_N_J2",
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT4_N_J2",
+    "PCIE_UP_OUT3_P_J2",
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT2_N_J2",
+    "PCIE_UP_OUT1_P_J2"
+   ]
+  },
+  "y=57.0": {
+   "count": 24,
+   "order_by_x": [
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT1_P_J2",
+    "PCIE_UP_OUT2_N_J2",
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT3_P_J2",
+    "PCIE_UP_OUT4_N_J2",
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT5_N_J2",
+    "PCIE_UP_OUT5_P_J2",
+    "PCIE_UP_OUT6_N_J2",
+    "PCIE_UP_OUT6_P_J2",
+    "PCIE_UP_OUT7_N_J2",
+    "PCIE_UP_OUT7_N_J2",
+    "PCIE_UP_OUT6_P_J2",
+    "PCIE_UP_OUT6_N_J2",
+    "PCIE_UP_OUT5_P_J2",
+    "PCIE_UP_OUT5_N_J2",
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT4_N_J2",
+    "PCIE_UP_OUT3_P_J2",
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT2_N_J2",
+    "PCIE_UP_OUT1_P_J2"
+   ]
+  },
+  "y=57.5": {
+   "count": 24,
+   "order_by_x": [
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT1_P_J2",
+    "PCIE_UP_OUT2_N_J2",
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT3_P_J2",
+    "PCIE_UP_OUT4_N_J2",
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT5_N_J2",
+    "PCIE_UP_OUT5_P_J2",
+    "PCIE_UP_OUT6_N_J2",
+    "PCIE_UP_OUT6_P_J2",
+    "PCIE_UP_OUT7_N_J2",
+    "PCIE_UP_OUT7_N_J2",
+    "PCIE_UP_OUT6_P_J2",
+    "PCIE_UP_OUT6_N_J2",
+    "PCIE_UP_OUT5_P_J2",
+    "PCIE_UP_OUT5_N_J2",
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT4_N_J2",
+    "PCIE_UP_OUT3_P_J2",
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT2_N_J2",
+    "PCIE_UP_OUT1_P_J2"
+   ]
+  }
+ },
+ "C2_corridor_seam_check": {
+  "C2_holds_on_witness": false,
+  "eastmost_anchor_rank": 15,
+  "reading": "**机器核 [C2]：不成立** —— 已存 gate-clean 见证之走廊南端 seam 车道 = rank 2（非最东锚 rank15）⇒ R390 §S2 之论断『南 seam 车道须为最东锚』**与本项目自有见证相悖**；S2 之『东侧各 lane 须北出 ⇒ 必与 seam 东行段相交』在几何上不成立（东侧 lane 顺序叠在北侧即免交）⇒ **R390 条件式 U≤15 论证之 [C2] 前提不成立 ⇒ 该论证无效**。",
+  "seam_rank_observed_x120": 2,
+  "x=100": {
+   "order_y_asc": [
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT7_P_J2",
+    "PCIE_UP_OUT7_N_J2",
+    "PCIE_UP_OUT6_P_J2",
+    "PCIE_UP_OUT6_N_J2",
+    "PCIE_UP_OUT5_P_J2",
+    "PCIE_UP_OUT5_N_J2",
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT4_N_J2",
+    "PCIE_UP_OUT3_P_J2",
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT2_N_J2",
+    "PCIE_UP_OUT1_P_J2",
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT1_N_J2"
+   ],
+   "seam_south": "PCIE_UP_OUT1_N_J2"
+  },
+  "x=110": {
+   "order_y_asc": [
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT7_P_J2",
+    "PCIE_UP_OUT7_N_J2",
+    "PCIE_UP_OUT6_P_J2",
+    "PCIE_UP_OUT6_N_J2",
+    "PCIE_UP_OUT5_P_J2",
+    "PCIE_UP_OUT5_N_J2",
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT4_N_J2",
+    "PCIE_UP_OUT3_P_J2",
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT2_N_J2",
+    "PCIE_UP_OUT1_P_J2",
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT1_N_J2"
+   ],
+   "seam_south": "PCIE_UP_OUT1_N_J2"
+  },
+  "x=120": {
+   "order_y_asc": [
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT7_P_J2",
+    "PCIE_UP_OUT7_N_J2",
+    "PCIE_UP_OUT6_P_J2",
+    "PCIE_UP_OUT6_N_J2",
+    "PCIE_UP_OUT5_P_J2",
+    "PCIE_UP_OUT5_N_J2",
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT4_N_J2",
+    "PCIE_UP_OUT3_P_J2",
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT2_N_J2",
+    "PCIE_UP_OUT1_P_J2",
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT1_N_J2"
+   ],
+   "seam_south": "PCIE_UP_OUT1_N_J2"
+  },
+  "x=127": {
+   "order_y_asc": [
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT7_P_J2",
+    "PCIE_UP_OUT7_N_J2",
+    "PCIE_UP_OUT6_P_J2",
+    "PCIE_UP_OUT6_N_J2",
+    "PCIE_UP_OUT5_P_J2",
+    "PCIE_UP_OUT5_N_J2",
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT4_N_J2",
+    "PCIE_UP_OUT3_P_J2",
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT2_N_J2",
+    "PCIE_UP_OUT1_P_J2",
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT1_N_J2"
+   ],
+   "seam_south": "PCIE_UP_OUT1_N_J2"
+  }
+ },
+ "E_cut_route_closure": {
+  "general_curve_mincut": "**未闭合（如实登记）**：格点 min-cut 在锚孔处退化为**袋 artefact**（0.03 栅格把每个锚孔围成 ~5 格自由袋，min-cut 直接切其 4 邻格 ⇒ 得 64 格≈1.92mm，与『13 条见证可越任何分离曲线』矛盾 ⇒ **该读数不可作证书**）。⇒ 一般曲线之 0.435-间距 min-cut 需**锚孔 snap 语义**（承 R383 `snap`）方能定义，本 v1 未完成。",
+  "reading": "切面路线（直线族）已由 R393 否证（28≥16）；一般曲线路线本 v1 **未闭合**（artefact）。",
+  "straight_line_min_capacity_r393": 28
+ },
+ "artifact": "k2_r395_c_portorder_invariant_verifier_v1",
+ "authority": "#K2-138 §三（准只读不变量验证器 C-PORTORDER · 限 ① 不变量 / ② [C2] 有限情形穷尽）",
+ "board": "k2/hw/k2_v4_8L.l9.kicad_pcb",
+ "board_sha16": "77aaa63fe016b450",
+ "boundary": "只读 · 未烙板 · 未改冻结四源/criteria/生成器/SPEC 设计内容 · 未派 WORKER · 未跑求解器",
+ "caliber": {
+  "cell_mm": 0.03,
+  "free_domain": "由闸所消费之同一冻结模型重建（#K2-138 §五 准 · 更严口径）",
+  "hw_mm": 0.08,
+  "lane_w_mm": 0.16,
+  "layer": "In5.Cu",
+  "pitch_mm": 0.435
+ },
+ "from": "ENG · ARCHER R395",
+ "model": "C-B2UP-1_REALGEOM_BUS_v1",
+ "model_sha16": "84f19701dfc1db31",
+ "o3_window_run_declaration": {
+  "same_frozen_model_iteration": [
+   "R383（一次实现 · 单次运行）"
+  ],
+  "survey_only": [
+   "R386",
+   "R389",
+   "R393",
+   "R394"
+  ],
+  "this_artifact": "**只读不变量计算 + 已存见证复核 · 未跑任何求解器**",
+  "variant_rerun_consequence": "自陈触强止损 FAIL 级 · 登记 · 禁再犯",
+  "variant_reruns_declared": [
+   "R384",
+   "R387",
+   "R388"
+  ]
+ },
+ "schema": 1,
+ "to": "监理",
+ "verdict": {
+  "(a)": "未取得（R383 13/16 gate-clean）",
+  "(b)": "**未建立**：本 v1 机器核出 **[C2] 不成立**（R390 论证失效）；端口环不构成上限；一般曲线 min-cut 未闭合；**映射类群/辫型严格不变量本 v1 未实现**。",
+  "item4": "R394 已核：13 条 互距/净距/端点 全过闸（部分闭合；3 条无坐标）",
+  "outcome": "依 #K2-138 §三.4：**(b) 不成立 ⇒ 立即回报卡点** ⇒ 由**监理**判『冻结需求 ②-UP=16/16 是否须变』⇒ **升 owner**（预声明路由 · ENG 不自启 · 不空转）"
+ }
+}

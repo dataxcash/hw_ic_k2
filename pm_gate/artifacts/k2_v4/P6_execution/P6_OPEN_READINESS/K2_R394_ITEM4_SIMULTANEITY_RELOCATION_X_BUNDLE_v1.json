@@ -1,0 +1,195 @@
+{
+ "artifact": "k2_r394_item4_simultaneity_relocation_x_bundle_v1",
+ "board": "k2/hw/k2_v4_8L.l9.kicad_pcb",
+ "board_from": "k2_v4_8L.l8.kicad_pcb 7a5c89913d6e5d0a",
+ "board_sha16": "77aaa63fe016b450",
+ "boundary": "只读 · 未烙板 · 未改冻结四源/criteria/生成器/SPEC 设计内容 · 未派 WORKER · 未跑求解器 · 不放松 DRC 下限",
+ "bundle_side": {
+  "n_placed": 13,
+  "n_unplaced": 3,
+  "placed": [
+   "PCIE_UP_OUT1_N_J2",
+   "PCIE_UP_OUT1_P_J2",
+   "PCIE_UP_OUT2_N_J2",
+   "PCIE_UP_OUT2_P_J2",
+   "PCIE_UP_OUT3_P_J2",
+   "PCIE_UP_OUT4_N_J2",
+   "PCIE_UP_OUT4_P_J2",
+   "PCIE_UP_OUT5_N_J2",
+   "PCIE_UP_OUT5_P_J2",
+   "PCIE_UP_OUT6_N_J2",
+   "PCIE_UP_OUT6_P_J2",
+   "PCIE_UP_OUT7_N_J2",
+   "PCIE_UP_OUT7_P_J2"
+  ],
+  "unplaced": [
+   "PCIE_UP_OUT0_N_J2",
+   "PCIE_UP_OUT0_P_J2",
+   "PCIE_UP_OUT3_N_J2"
+  ]
+ },
+ "caliber": {
+  "cell_mm": 0.03,
+  "hw_mm": 0.08,
+  "lane_w_mm": 0.16,
+  "layer": "In5.Cu",
+  "pitch_mm": 0.435
+ },
+ "from": "ENG · ARCHER R394",
+ "gate_readings_on_l9": {
+  "clearance_min_mm": -0.0,
+  "clearance_violations": [],
+  "endpoint_max_dev_mm": 0.0,
+  "lane_pitch_min_gap_mm": 0.4562,
+  "lane_pitch_min_pair": [
+   "PCIE_UP_OUT6_N_J2",
+   "PCIE_UP_OUT6_P_J2"
+  ],
+  "lane_pitch_req_mm": 0.435,
+  "lane_pitch_violations": [],
+  "n_clearance_viol": 0,
+  "n_lane_pitch_viol": 0,
+  "n_obs": {
+   "pad": 20,
+   "seg": 1072,
+   "via": 347
+  },
+  "per_lane": {
+   "PCIE_UP_OUT1_N_J2": {
+    "blocker": "PCIE_UP3_N",
+    "margin_min_mm": 0.0001
+   },
+   "PCIE_UP_OUT1_P_J2": {
+    "blocker": "GND",
+    "margin_min_mm": 0.0013
+   },
+   "PCIE_UP_OUT2_N_J2": {
+    "blocker": "GND",
+    "margin_min_mm": 0.0013
+   },
+   "PCIE_UP_OUT2_P_J2": {
+    "blocker": "GND",
+    "margin_min_mm": 0.2663
+   },
+   "PCIE_UP_OUT3_P_J2": {
+    "blocker": "GND",
+    "margin_min_mm": -0.0
+   },
+   "PCIE_UP_OUT4_N_J2": {
+    "blocker": "GND",
+    "margin_min_mm": -0.0
+   },
+   "PCIE_UP_OUT4_P_J2": {
+    "blocker": "GND",
+    "margin_min_mm": -0.0
+   },
+   "PCIE_UP_OUT5_N_J2": {
+    "blocker": "GND",
+    "margin_min_mm": 0.46
+   },
+   "PCIE_UP_OUT5_P_J2": {
+    "blocker": "GND",
+    "margin_min_mm": -0.0
+   },
+   "PCIE_UP_OUT6_N_J2": {
+    "blocker": "GND",
+    "margin_min_mm": -0.0
+   },
+   "PCIE_UP_OUT6_P_J2": {
+    "blocker": "GND",
+    "margin_min_mm": 0.0007
+   },
+   "PCIE_UP_OUT7_N_J2": {
+    "blocker": "I2C1_SDA",
+    "margin_min_mm": 0.0001
+   },
+   "PCIE_UP_OUT7_P_J2": {
+    "blocker": "PERSTA#",
+    "margin_min_mm": 0.0
+   }
+  }
+ },
+ "model": "C-B2UP-1_REALGEOM_BUS_v1",
+ "model_sha16": "84f19701dfc1db31",
+ "o3_window_run_declaration": {
+  "same_frozen_model_iteration": [
+   "R383（束式有序 MCF · 一次实现 · 单次运行）"
+  ],
+  "survey_only_not_solver_runs": [
+   "R386",
+   "R389",
+   "R393"
+  ],
+  "this_artifact": "**只做验收/复核**（已存见证 × 权威闸 + 文本差分）· 未跑任何求解器",
+  "variant_rerun_consequence": "自陈触 #K2-136 §三 强止损（FAIL 级）· 登记 · 禁再犯（本件不据此追废已出件）",
+  "variant_reruns_declared": [
+   "R384（winding 分裂）",
+   "R387（布序旋转）",
+   "R388（构造型 seam 贴墙）"
+  ]
+ },
+ "relocation_side": {
+  "cw_nets": [
+   "DS320_STRAP_B_ADDR1_7-0",
+   "DS320_STRAP_B_ADDR0_15-8",
+   "PERSTA#",
+   "I2C1_SDA"
+  ],
+  "gate_used": "k2_p4_b2_in5_lane_router_v3.exact_gate（唯一权威闸）",
+  "l8_to_l9_delta": {
+   "DS320_STRAP_B_ADDR0_15-8": {
+    "endpoint_nets_unchanged": true,
+    "in5_seg_in_neck_l8": 0,
+    "in5_seg_in_neck_l9": 0,
+    "in5_via_in_neck_l8": 0,
+    "in5_via_in_neck_l9": 0,
+    "removed_seg": 0,
+    "removed_via": 0
+   },
+   "DS320_STRAP_B_ADDR1_7-0": {
+    "endpoint_nets_unchanged": true,
+    "in5_seg_in_neck_l8": 11,
+    "in5_seg_in_neck_l9": 0,
+    "in5_via_in_neck_l8": 2,
+    "in5_via_in_neck_l9": 0,
+    "removed_seg": 11,
+    "removed_via": 2
+   },
+   "I2C1_SDA": {
+    "endpoint_nets_unchanged": true,
+    "in5_seg_in_neck_l8": 2,
+    "in5_seg_in_neck_l9": 0,
+    "in5_via_in_neck_l8": 1,
+    "in5_via_in_neck_l9": 0,
+    "removed_seg": 2,
+    "removed_via": 1
+   },
+   "PERSTA#": {
+    "endpoint_nets_unchanged": true,
+    "in5_seg_in_neck_l8": 11,
+    "in5_seg_in_neck_l9": 29,
+    "in5_via_in_neck_l8": 0,
+    "in5_via_in_neck_l9": 0,
+    "removed_seg": -18,
+    "removed_via": 0
+   }
+  },
+  "neck_window": [
+   93.0,
+   44.0,
+   112.0,
+   58.0
+  ]
+ },
+ "schema": 1,
+ "spec_rev": "SPEC_k2_v4.spec-rev-55.json（声明性回填 · #K2-137 §二(甲)）",
+ "task": "收口窗口 项4『核同时性』= 搬迁(l9/SPEC rev-55) × 线束(13 条) 之 互距/净距/端点位移",
+ "to": "监理",
+ "verdict": {
+  "bundle_vs_relocation_净距": "exact_gate on l9: clearance_viol=0 · 最小净距=-0.0mm ⇒ 搬迁×线束 净距 0 违例",
+  "bundle_互距": "lane_pitch_viol=0 · 最小对距=0.4562mm (>= 0.435) ⇒ 0 违例",
+  "endpoints": "endpoint_max_dev_mm=0.0",
+  "item4_status": "**部分闭合**：已布 13 条之 互距/净距/端点 全过闸（= 搬迁×线束 同时性对该 13 条成立）；余 3 条无坐标 ⇒ **无法核其同时性** ⇒ 项4 对全 16 条 **不作见证**",
+  "relocation": "C-w 具名网之 neck 内 In5 对象已在 l9 移除（见 l8_to_l9_delta）；端点(过孔)未动"
+ }
+}
