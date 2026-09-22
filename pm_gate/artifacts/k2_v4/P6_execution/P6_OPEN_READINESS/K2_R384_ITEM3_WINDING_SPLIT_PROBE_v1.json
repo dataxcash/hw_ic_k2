@@ -1,0 +1,56 @@
+{
+ "artifact": "k2_r384_item3_winding_split_probe_v1",
+ "board": "k2/hw/k2_v4_8L.l9.kicad_pcb",
+ "board_sha16": "77aaa63fe016b450",
+ "boundary": "只读 · 未烙板 · 未改冻结四源/criteria/生成器/SPEC · 单次实现类内探针（非交付件）· 不充绿。",
+ "finding": "即便**强制**最西 lane（rank0 = PCIE_UP_OUT0_N_J2）走 y<=55.90 之南域，它**仍不可布通** ⇒ x≈83.5–85 之南向窄口在『其余 15 锚 ±0.435 禁入』下**实际不可用**（该窄口紧贴他锚禁入盘）。⇒『南/北 winding 分裂』在本几何上不可得；对本问题类而言自由域近似单连通，非交叉约束≈保序 ⇒ 失败集 {T0_N, T0_P, T3_N} 为**结构性**（跨 6 序 + 各成本/分裂变体恒定）。",
+ "from": "ENG · ARCHER",
+ "implication": "(b) 之候选形态收敛为**非交叉端口序型**证书（容量型 R383 O-2 已排除）；本轮**未建立**该证书（不冒充）。下一步见 R383 §五 之 P2。",
+ "method": "南组 = a_rank 前 m 条 · **域限制 y<=55.90**（强制南绕）· 升序布；北组 = 其余 · a_rank 降序布；两者共用 P+0.015 硬印；闸 = exact_gate。",
+ "model_sha16": "84f19701dfc1db31",
+ "purpose": "承 R383 §三 O-3：验证『绕墙 winding 分裂（南组 x≈83.5–85 窄口 / 北组）』是否能突破 13/16。",
+ "readings": [
+  {
+   "failed": [
+    "PCIE_UP_OUT0_N_J2",
+    "PCIE_UP_OUT3_N_J2",
+    "PCIE_UP_OUT0_P_J2"
+   ],
+   "m": 1,
+   "routed": 13
+  },
+  {
+   "failed": [
+    "PCIE_UP_OUT0_N_J2",
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT3_N_J2"
+   ],
+   "m": 2,
+   "routed": 13
+  },
+  {
+   "failed": [
+    "PCIE_UP_OUT0_N_J2",
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT3_N_J2"
+   ],
+   "m": 3,
+   "routed": 12
+  },
+  {
+   "failed": [
+    "PCIE_UP_OUT0_N_J2",
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT1_P_J2",
+    "PCIE_UP_OUT3_N_J2"
+   ],
+   "m": 4,
+   "routed": 11
+  }
+ ],
+ "schema": 1,
+ "to": "监理",
+ "ts": "2026-09-22T11:55:17.411858+08:00"
+}
