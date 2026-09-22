@@ -1,0 +1,39 @@
+{
+ "schema": 1,
+ "artifact": "k2_r414_l9_defect_impact_envelope_on_p4_main_path_v1",
+ "ts": "2026-09-22T23:00:13+08:00",
+ "from": "ENG · ARCHER（续接会话 · 应 #K2-142 §四 只读）",
+ "to": "监理",
+ "owner_gate": 0,
+ "authority": "#K2-142 §四 · R410/R411 之延伸 · handoff R409 §6（O-1：派生模型指纹 `d34362c4847ad9ba` = 『l9 板 + 补丁 P』）",
+ "purpose": "界定 R410/R411 之 l9 缺陷**对 P4 主路（16-lane · In5）之影响面**，供监理/owner 判『重落后哪些结论须重算』。只读，未动任何件。",
+ "envelope": {
+  "genuine_38_layer_distribution": {
+   "In2.Cu 相关": "26/35 表列条目以 `In2.Cu` 为冲突端（含 14 条 `F.Cu–B.Cu` 通孔 vs In2 走线之孔/净距）",
+   "B.Cu": "14",
+   "F.Cu": "14",
+   "**含 In5 走线铜者**": "**0**（4 条涉及**穿 In5 之通孔**（`F.Cu B.Cu`）之孔/净距，非 In5 走线-走线）",
+   "含平面填充区者": "**0**（真冲突全为 走线/过孔/pad 间）"
+  },
+  "stale_fill_21_from_24_listed": {
+   "含平面填充区": "16/24",
+   "note": "全为『过孔 vs GND/P3V3 填充区』之陈旧铺铜（**回填即消**）"
+  },
+  "verdict": "**P4 主路（In5 走线）之障碍场未被本缺陷直接污染**；38 真冲突之铜层包络 = {F.Cu, In2.Cu, B.Cu} + 穿层通孔。"
+ },
+ "affected_conclusions": {
+  "must_recompute_or_annotate_on_relocation": "凡以 **l9 为底图** 之 P4 派生模型/结论（O-1 指纹 `d34362c4847ad9ba` = l9 + 补丁 P）⇒ 其 In5 场取自 l9；而 l9 之 In5 走线确有改动（普查：`PERSTA#@In5 59→324` · `ADDR1_7-0@In5 11→0` · `I2C1_SDA@In5 47→45`）⇒ **重落 l9′ 后须重锚该指纹并对受影响结论重算或明示『底图已变』**。",
+  "not_affected": "R393（直线切面容量 28）· R395（A 锚盘两两相离 / 一般曲线 min-cut 16）· R397（主路不变量=零）· R398（独立复现）—— 此四项为**拓扑/容量类**且**不依赖 In5 走线铜之合法性**（其结论不因 l9 含 In2/B.Cu 冲突而变）；本条**不重判**其结论，仅在 l9′ 重落后**复算**其底图指纹。"
+ },
+ "recommendation_to_supervisor": "并入 `PENDING_RULINGS_DELTA_20260922_v62` 之裁定：若采『修复+重落 l9′』，重落清单除 R413 §R1（回填 + DRC 0 + non45 0 + 同批 pro）外，**须加**：`重锚 P4 派生模型指纹 + 以新底图复算受影响结论`。",
+ "owner_gate_selfcheck": "不触 L1 ⇒ 不请 owner。",
+ "anchors": {
+  "board_l9": "77aaa63fe016b450",
+  "derived_model_fp": "d34362c4847ad9ba（O-1 · handoff）",
+  "criteria": "rev=6 MATCH",
+  "frozen4": "4/4 未动"
+ },
+ "not_asked": [
+  "未改任何件 · 未派 WORKER · 未烙板 · 未启新法"
+ ]
+}
