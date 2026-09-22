@@ -1,0 +1,152 @@
+{
+ "schema": 1,
+ "artifact": "k2_r425_l8_dfm_precheck_item_by_item_v1",
+ "ts": "2026-09-22T23:55:26",
+ "from": "ENG · ARCHER（续接会话 · 承 handoff R423）",
+ "to": "监理",
+ "owner_gate": 0,
+ "authority": "**owner ③**（完工 = 「DFM 逐项对 JLC HDI 通道全 PASS」）· R270 项13 前置 · `criteria/jlc_hdi_capability.yaml`（gate 属主 · ENG 只读）· owner #14⑥（不 park：找活/造活）· handoff R423 §8.4（裁前只读残余）",
+ "first_action": "已读 `.omo/supervision/ledger/`（含 `sent/`/`outbox/`）全部 `K2-RULING-*` ⇒ 最新 **#K2-144** · **无更晚裁定 · 无 owner 回件**（v65 已投 · 待监理）。",
+ "nature": "**只读 DFM 预核**（读数级 · 非正式 DFM）· 未出包/未烙板/未派工/未改判据/未立齿 · 未写 `.omo/supervision/**`。",
+ "subject": "**l8** `7a5c89913d6e5d0a`（= R424 路线 R『回退』所交付之受审板）· 对照 **l9** `77aaa63fe016b450`；口径与 R420 同（同表 · 同源）",
+ "purpose": "R420 只核了 l9。若 owner 裁「甲」或监理裁「R424 路线 R（回退）」，交付板即 **l8** ⇒ 须先答：**l8 是否逐项过 DFM**（owner ③ 之硬项）。本件只读补此空格。",
+ "table": [
+  {
+   "item": "层数",
+   "l8": "8",
+   "l9": "8",
+   "limit": "1–32",
+   "verdict": "OK"
+  },
+  {
+   "item": "板尺寸",
+   "l8": "120.1 × 46.1 mm",
+   "l9": "同",
+   "limit": "3×3 – 656×586",
+   "verdict": "OK"
+  },
+  {
+   "item": "板厚",
+   "l8": "1.6（SPEC stackup）",
+   "l9": "同",
+   "limit": "0.4–4.5 ±10%",
+   "verdict": "OK"
+  },
+  {
+   "item": "最小线宽",
+   "l8": "**0.16**",
+   "l9": "**0.10**",
+   "limit": "0.09（判据下限 0.10）",
+   "verdict": "**l8 OK（余量 60%）· l9 OK（贴限）**"
+  },
+  {
+   "item": "最小铜间距",
+   "l8": "**DRC error=0 ⇒ ≥规则**（R410 记 `[0.100,0.105]` OK）",
+   "l9": "**FAIL**（T=0.100 ⇒ 16 违例）",
+   "limit": "0.09 / 判据 0.10",
+   "verdict": "**l8 OK · l9 FAIL**"
+  },
+  {
+   "item": "最小过孔钻 / 盘",
+   "l8": "0.20 / 0.35",
+   "l9": "同",
+   "limit": "0.15（pref 0.20）/ 0.25",
+   "verdict": "OK"
+  },
+  {
+   "item": "最小 NPTH",
+   "l8": "3.2",
+   "l9": "同",
+   "limit": "0.50",
+   "verdict": "OK"
+  },
+  {
+   "item": "铜到板边",
+   "l8": "DRC `copper_edge_clearance` 0 违例",
+   "l9": "0",
+   "limit": "0.2 / 冻结 0.3",
+   "verdict": "OK"
+  },
+  {
+   "item": "阻焊-铜 / 阻焊桥",
+   "l8": "0 违例",
+   "l9": "0",
+   "limit": "0.09 / 0.10",
+   "verdict": "OK"
+  },
+  {
+   "item": "过孔 孔-孔",
+   "l8": "**不判**",
+   "l9": "**不判**",
+   "limit": "0.20",
+   "verdict": "口径未具名（R419 §4）⇒ 交监理"
+  },
+  {
+   "item": "焊盘 孔-孔",
+   "l8": "**不判**",
+   "l9": "**不判**",
+   "limit": "0.45",
+   "verdict": "读数无效（pad 相对坐标 · R420 §3）"
+  },
+  {
+   "item": "表面处理",
+   "l8": "册内未声明",
+   "l9": "册内未声明",
+   "limit": "ENIG（≥6 层 HDI 不支持 HASL）",
+   "verdict": "须随单确认"
+  },
+  {
+   "item": "阻抗",
+   "l8": "P5 外部（阻抗券）",
+   "l9": "同",
+   "limit": "±10%",
+   "verdict": "外部"
+  },
+  {
+   "item": "blind/buried（工艺冻结 A）",
+   "l8": "through 279 / blind 363 / buried 92（共 734）",
+   "l9": "through 279 / blind 363 / buried 90（共 732 · R419）",
+   "limit": "JLC 明示須 DFM review（`blind_buried.supported=false`）",
+   "verdict": "**须随单 DFM review**（工艺冻结 A = 已接受此前提）"
+  }
+ ],
+ "via_span_census": {
+  "l8": {
+   "F.Cu-B.Cu": 279,
+   "F.Cu-In1.Cu": 171,
+   "F.Cu-In2.Cu": 132,
+   "F.Cu-In5.Cu": 19,
+   "In5.Cu-B.Cu": 37,
+   "In2.Cu-In5.Cu": 92,
+   "F.Cu-In4.Cu": 4
+  },
+  "l9": {
+   "F.Cu-B.Cu": 280,
+   "F.Cu-In1.Cu": 171,
+   "F.Cu-In2.Cu": 132,
+   "F.Cu-In5.Cu": 19,
+   "In5.Cu-B.Cu": 36,
+   "In2.Cu-In5.Cu": 90,
+   "F.Cu-In4.Cu": 4
+  }
+ },
+ "delta_vs_l9": [
+  "**最小线宽** 0.16（l8）vs 0.10（l9：303 段宽变 · R420 §2）—— l8 **无宽变**。",
+  "**最小铜间距** l8 **PASS**（DRC error=0）vs l9 **FAIL**（16 违例）—— 差异**全部**由 R424 所证之单一差集造成。",
+  "其余各项（层数/尺寸/厚/孔/边/阻焊/表面/阻抗）l8 与 l9 **逐项相同**。"
+ ],
+ "conclusion": "**l8 逐项预核 = 全 PASS**（唯二『不判』= 口径未具名项『过孔/焊盘 孔-孔』；另 2 项属**外部/随单**：表面处理 ENIG 随单确认、阻抗券 P5）。⇒ **若受审板回 l8（R424 路线 R），owner ③ 之「DFM 逐项全 PASS」在读数级即刻可达**（正式 DFM 仍须修复/落定后随包重跑）。",
+ "honest_boundary": [
+  "**读数级预核**，非正式 DFM 见证（正式须随包重跑 · R413 流程缺口 G 系未闭）。",
+  "**不自立判据**：网类宽度无在册应然项（R420 已同判）⇒ l8 之 0.16/0.20 仅报读数，不判『网类共形』。",
+  "『过孔/焊盘 孔-孔』口径未具名 ⇒ **不判**（不立齿）。",
+  "**未出包**：本件不触 Gerber/Excellon 导出（属交付动作 · 须放行后随包执行）。"
+ ],
+ "not_done": [
+  "未出包/未烙板/未派 WORKER/未改任何件"
+ ],
+ "files": [
+  "K2_R425_L8_DFM_PRECHECK_ITEM_BY_ITEM_v1.json/.md/.sha16.txt"
+ ],
+ "via_span_census_note": "l8 spans: F–B 279（through）· F–In1 171 · F–In2 132 · In5–B 37 · In2–In5 92（buried）· F–In5 19 · F–In4 4 ⇒ through 279 / blind 363 / buried 92 = 734；l9 为 279/363/90=732（差 = R424 差集之 4 删 2 增孔）。"
+}
