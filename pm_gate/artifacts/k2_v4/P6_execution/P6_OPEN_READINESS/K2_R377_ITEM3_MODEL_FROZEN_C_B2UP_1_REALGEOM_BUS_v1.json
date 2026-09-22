@@ -1,0 +1,50 @@
+{
+ "model_id": "C-B2UP-1_REALGEOM_BUS_v1",
+ "frozen_at": "2026-09-22T11:06+0800",
+ "frozen_before_solve": true,
+ "class": "**真实几何**之单层并行**非交叉束**布线（**无模板** · 显式含绕墙 winding 自由度）",
+ "inputs": {
+  "board": "k2/hw/k2_v4_8L.l9.kicad_pcb",
+  "board_sha16": "77aaa63fe016b450",
+  "in5_object_set_sha16": "0bcc060322cc1299",
+  "in5_object_counts": {
+   "segments": 2194,
+   "vias": 425
+  },
+  "caliber": {
+   "cell_mm": 0.03,
+   "hw_mm": 0.08,
+   "keepout_mm": 0.53,
+   "lane_w_mm": 0.16,
+   "pitch_eff_mm": 0.435,
+   "min_copper_clearance_mm": 0.1
+  },
+  "anchors": "a_sites_phys1/sites_phys（端点位移 0）· 16 条 `PCIE_UP_OUT*_J2` 之 A/B 焊盘",
+  "planes": "由 k2_p4_b2_plane_layer_extract_v1.py 提供（In4/In6 等）"
+ },
+ "variables": "每条 lane：一串自由格点路径 π_i（cell 0.03 栅格 8-邻域）· 仅限 In5.Cu · 端点 = A_i / B_i（固定）",
+ "constraints": [
+  "(1) 每 lane 一条 A→B 自由路径（栅格连通 · 避他网 In5 铜/孔/焊盘/禁布区）",
+  "(2) **两两互距 ≥ 0.435**（lane-vs-lane 全线）",
+  "(3) **净距**：对非 lane 对象 ≥ `hw + max(0.175, req(net))`",
+  "(4) 端点位移 = 0",
+  "(5) **非交叉**以**束序**编码：16 条按 A 排 a_rank 定序 ⇒ 沿任一切面之穿越**序一致**（显式含绕墙 winding：允许非单调折返，但序不变）",
+  "(6) 连接器侧非交叉（R316 形式）"
+ ],
+ "objective": "最大化布通 lane 数；目标 16/16；**唯一终局 = 二值**",
+ "method": "**一次实现**：束序感知之联合指派（有序多商品流 · 冻结后由求解器内部迭代）——**禁**逐条贪心、**禁** rip-up 变体、**禁**参数/格距/工具扫描",
+ "stop_loss": [
+  "同参重跑 ≥2 = FAIL",
+  "禁变体重跑",
+  "禁半途烙板",
+  "禁派 WORKER",
+  "禁以布通率/有界搜索冒充见证或证书"
+ ],
+ "deliverable": {
+  "(a)": "16/16 合法见证 + exact_gate(互距0∧净距0∧端点0) + buildability（含 ②(ii) 几何核）",
+  "(b)": "**真实几何**上之严格 U<16 证书（**不得**以模型类上界冒充）",
+  "else": "若仍无 (a)/(b) ⇒ 报卡点，由监理判是否触 #K2-132 §十 升级 owner"
+ },
+ "note": "本件仅**冻结模型**（裁定要求：模型须于求解前冻结并记 model_sha）；**尚未求解**。",
+ "model_sha16": "84f19701dfc1db31"
+}
