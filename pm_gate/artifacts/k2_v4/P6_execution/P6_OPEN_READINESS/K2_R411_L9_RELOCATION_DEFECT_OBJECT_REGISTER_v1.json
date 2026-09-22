@@ -1,0 +1,1866 @@
+{
+ "schema": 1,
+ "artifact": "k2_r411_l9_relocation_defect_object_register_and_repairity_v1",
+ "ts": "2026-09-22T22:57:36+08:00",
+ "from": "ENG · ARCHER（续接会话 · context 归零 · 应 #K2-142 §四 只读残余）",
+ "to": "监理",
+ "owner_gate": 0,
+ "authority": "#K2-142 §四（准 P4 残余门项只读测量 · 禁新法/变体/扫描/派工/烙板）· owner #14⑥（不 park：把『没活干』变『找活』）· owner ⑧（工程成果须附可施工性）",
+ "purpose": "把 R410 之『l9 落搬迁 59 error』逐**对象**登记到 uuid/坐标级，并分离**真冲突（38）**与**陈旧铺铜假违例（21）**，为后续（监理放行后之）确定性修复提供可施工清单。**纯只读**（未修复、未烙板、未改任何设计件）。",
+ "method": {
+  "pairing": "原始 DRC（`drc_raw_board_l9_77aaa63f.json` · 59 error）与**铺铜回填后** DRC（/tmp 副本 · 38 error）按 (type, 对象 uuid 集) 配准；genuine=两者皆有（35 精确配对 + 3 同物理冲突因配对对象改挂）；stale_fill=仅原始有（24）",
+  "truth": "**38 = 真几何冲突**；**59−38 = 21 = 陈旧铺铜假违例**（R410 §三口径一致）",
+  "new_in_l9": "对象几何（net+layer+坐标）不在 l8 板者 ⇒ `new_in_l9=true`（= 落搬迁之产物）"
+ },
+ "key_finding": "**59 处 error 全部（59/59）至少一端为 `new_in_l9` 对象**（genuine 35/35 · stale 24/24）⇒ 归因 100% 指向 #K2-137 项2 落搬迁之新生/改动铜，与 l8 既有铜（PCIE_UP/DN 走线、U6 pad、P3V3/GND 过孔）一侧无涉。",
+ "genuine_conflicts": [
+  {
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1000 mm; 实际 0.0390 mm)",
+   "A": "走线 [DS320_STRAP_B_ADDR1_7-0] (In2.Cu), 长度: 15.5721 mm",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR1_7-0",
+    "layer": "In2.Cu",
+    "start": [
+     93.4,
+     51.06
+    ],
+    "end": [
+     108.94,
+     50.06
+    ],
+    "len": 15.5721
+   },
+   "A_new_in_l9": true,
+   "B": "过孔 [GND] (F.Cu - B.Cu)",
+   "B_obj": {
+    "net": "GND",
+    "layers": "F.Cu B.Cu",
+    "at": [
+     102.25,
+     50.755
+    ]
+   },
+   "B_new_in_l9": false
+  },
+  {
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1750 mm; 实际 0.0879 mm)",
+   "A": "F.Cu - In2.Cu 上的盲孔 [PCIE_UP6_P]",
+   "A_obj": {
+    "net": "PCIE_UP6_P",
+    "layers": "F.Cu In2.Cu",
+    "at": [
+     91.95,
+     50.63
+    ]
+   },
+   "A_new_in_l9": false,
+   "B": "走线 [DS320_STRAP_B_ADDR1_7-0] (In2.Cu), 长度: 9.7712 mm",
+   "B_obj": {
+    "net": "DS320_STRAP_B_ADDR1_7-0",
+    "layer": "In2.Cu",
+    "start": [
+     83.66,
+     50.28
+    ],
+    "end": [
+     93.4,
+     51.06
+    ],
+    "len": 9.7712
+   },
+   "B_new_in_l9": true
+  },
+  {
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1750 mm; 实际 0.1409 mm)",
+   "A": "走线 [PCIE_UP5_N] (In2.Cu), 长度: 2.7200 mm",
+   "A_obj": {
+    "net": "PCIE_UP5_N",
+    "layer": "In2.Cu",
+    "start": [
+     90.8,
+     50.58
+    ],
+    "end": [
+     90.8,
+     47.86
+    ],
+    "len": 2.72
+   },
+   "A_new_in_l9": false,
+   "B": "走线 [DS320_STRAP_B_ADDR1_7-0] (In2.Cu), 长度: 9.7712 mm",
+   "B_obj": {
+    "net": "DS320_STRAP_B_ADDR1_7-0",
+    "layer": "In2.Cu",
+    "start": [
+     83.66,
+     50.28
+    ],
+    "end": [
+     93.4,
+     51.06
+    ],
+    "len": 9.7712
+   },
+   "B_new_in_l9": true
+  },
+  {
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1750 mm; 实际 0.0459 mm)",
+   "A": "走线 [DS320_STRAP_B_ADDR1_7-0] (In2.Cu), 长度: 9.7712 mm",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR1_7-0",
+    "layer": "In2.Cu",
+    "start": [
+     83.66,
+     50.28
+    ],
+    "end": [
+     93.4,
+     51.06
+    ],
+    "len": 9.7712
+   },
+   "A_new_in_l9": true,
+   "B": "F.Cu - In2.Cu 上的盲孔 [PCIE_UP5_N]",
+   "B_obj": {
+    "net": "PCIE_UP5_N",
+    "layers": "F.Cu In2.Cu",
+    "at": [
+     90.8,
+     50.58
+    ]
+   },
+   "B_new_in_l9": false
+  },
+  {
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1750 mm; 实际 0.0451 mm)",
+   "A": "走线 [DS320_STRAP_B_ADDR1_7-0] (In2.Cu), 长度: 9.7712 mm",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR1_7-0",
+    "layer": "In2.Cu",
+    "start": [
+     83.66,
+     50.28
+    ],
+    "end": [
+     93.4,
+     51.06
+    ],
+    "len": 9.7712
+   },
+   "A_new_in_l9": true,
+   "B": "走线 [PCIE_UP4_N] (In2.Cu), 长度: 3.7900 mm",
+   "B_obj": {
+    "net": "PCIE_UP4_N",
+    "layer": "In2.Cu",
+    "start": [
+     89.6,
+     50.58
+    ],
+    "end": [
+     89.6,
+     46.79
+    ],
+    "len": 3.79
+   },
+   "B_new_in_l9": false
+  },
+  {
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1750 mm; 实际 0.1275 mm)",
+   "A": "走线 [DS320_STRAP_B_ADDR0_15-8] (B.Cu), 长度: 0.2417 mm",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR0_15-8",
+    "layer": "B.Cu",
+    "start": [
+     94.08,
+     51.26
+    ],
+    "end": [
+     93.98,
+     51.04
+    ],
+    "len": 0.2417
+   },
+   "A_new_in_l9": true,
+   "B": "走线 [PCIE_DN_OUT7_N_MCIO] (B.Cu), 长度: 7.7188 mm",
+   "B_obj": {
+    "net": "PCIE_DN_OUT7_N_MCIO",
+    "layer": "B.Cu",
+    "start": [
+     93.7,
+     51.673
+    ],
+    "end": [
+     93.7,
+     43.954209
+    ],
+    "len": 7.7188
+   },
+   "B_new_in_l9": false
+  },
+  {
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1750 mm; 实际 0.0405 mm)",
+   "A": "走线 [I2C1_SDA] (B.Cu), 长度: 0.3677 mm",
+   "A_obj": {
+    "net": "I2C1_SDA",
+    "layer": "B.Cu",
+    "start": [
+     92.8,
+     52.12
+    ],
+    "end": [
+     92.54,
+     51.86
+    ],
+    "len": 0.3677
+   },
+   "A_new_in_l9": true,
+   "B": "过孔 [PCIE_DN_OUT7_P_MCIO] (F.Cu - B.Cu)",
+   "B_obj": {
+    "net": "PCIE_DN_OUT7_P_MCIO",
+    "layers": "F.Cu B.Cu",
+    "at": [
+     92.7,
+     52.366
+    ]
+   },
+   "B_new_in_l9": false
+  },
+  {
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1750 mm; 实际 0.1105 mm)",
+   "A": "过孔 [I2C1_SDA] (F.Cu - B.Cu)",
+   "A_obj": {
+    "net": "I2C1_SDA",
+    "layers": "In5.Cu B.Cu",
+    "at": [
+     92.54,
+     51.86
+    ]
+   },
+   "A_new_in_l9": true,
+   "B": "走线 [PCIE_DN_OUT6_N_MCIO] (F.Cu), 长度: 0.1061 mm",
+   "B_obj": {
+    "net": "PCIE_DN_OUT6_N_MCIO",
+    "layer": "F.Cu",
+    "start": [
+     92.2,
+     51.673
+    ],
+    "end": [
+     92.125,
+     51.598
+    ],
+    "len": 0.1061
+   },
+   "B_new_in_l9": false
+  },
+  {
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.2000 mm; 实际 0.1932 mm)",
+   "A": "走线 [DS320_STRAP_B_ADDR0_15-8] (B.Cu), 长度: 1.1045 mm",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR0_15-8",
+    "layer": "B.Cu",
+    "start": [
+     103.14,
+     54.26
+    ],
+    "end": [
+     102.32,
+     53.52
+    ],
+    "len": 1.1045
+   },
+   "A_new_in_l9": true,
+   "B": "过孔 [P3V3] (F.Cu - B.Cu)",
+   "B_obj": {
+    "net": "P3V3",
+    "layers": "F.Cu B.Cu",
+    "at": [
+     102.2,
+     53.975
+    ]
+   },
+   "B_new_in_l9": false
+  },
+  {
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.2000 mm; 实际 0.1852 mm)",
+   "A": "F.Cu - In4.Cu 上的盲孔 [P3V3]",
+   "A_obj": {
+    "net": "P3V3",
+    "layers": "F.Cu In4.Cu",
+    "at": [
+     104.69,
+     55.99
+    ]
+   },
+   "A_new_in_l9": false,
+   "B": "走线 [DS320_STRAP_B_ADDR1_7-0] (In2.Cu), 长度: 13.8474 mm",
+   "B_obj": {
+    "net": "DS320_STRAP_B_ADDR1_7-0",
+    "layer": "In2.Cu",
+    "start": [
+     110.26,
+     51.66
+    ],
+    "end": [
+     99.84,
+     60.78
+    ],
+    "len": 13.8474
+   },
+   "B_new_in_l9": true
+  },
+  {
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1000 mm; 实际 0.0596 mm)",
+   "A": "走线 [DS320_STRAP_B_ADDR1_7-0] (In2.Cu), 长度: 15.5721 mm",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR1_7-0",
+    "layer": "In2.Cu",
+    "start": [
+     93.4,
+     51.06
+    ],
+    "end": [
+     108.94,
+     50.06
+    ],
+    "len": 15.5721
+   },
+   "A_new_in_l9": true,
+   "B": "过孔 [GND] (F.Cu - B.Cu)",
+   "B_obj": {
+    "net": "GND",
+    "layers": "F.Cu B.Cu",
+    "at": [
+     99.075,
+     50.98
+    ]
+   },
+   "B_new_in_l9": false
+  },
+  {
+   "type": "hole_clearance",
+   "desc": "孔间距违规 (<电路板配置> 中的 \"孔\" 约束 间距 0.2500 mm; 实际 0.2105 mm)",
+   "A": "走线 [DS320_STRAP_B_ADDR1_7-0] (In2.Cu), 长度: 0.4243 mm",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR1_7-0",
+    "layer": "In2.Cu",
+    "start": [
+     92.95,
+     51.8796
+    ],
+    "end": [
+     93.25,
+     52.1796
+    ],
+    "len": 0.4243
+   },
+   "A_new_in_l9": false,
+   "B": "过孔 [I2C1_SDA] (F.Cu - B.Cu)",
+   "B_obj": {
+    "net": "I2C1_SDA",
+    "layers": "In5.Cu B.Cu",
+    "at": [
+     92.54,
+     51.86
+    ]
+   },
+   "B_new_in_l9": true
+  },
+  {
+   "type": "hole_clearance",
+   "desc": "孔间距违规 (<电路板配置> 中的 \"孔\" 约束 间距 0.2500 mm; 实际 0.2445 mm)",
+   "A": "走线 [DS320_STRAP_B_ADDR0_15-8] (F.Cu), 长度: 1.7127 mm",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR0_15-8",
+    "layer": "F.Cu",
+    "start": [
+     105.12,
+     49.86
+    ],
+    "end": [
+     103.86,
+     48.7
+    ],
+    "len": 1.7127
+   },
+   "A_new_in_l9": true,
+   "B": "过孔 [GND] (F.Cu - B.Cu)",
+   "B_obj": {
+    "net": "GND",
+    "layers": "F.Cu B.Cu",
+    "at": [
+     103.75,
+     49.135
+    ]
+   },
+   "B_new_in_l9": false
+  },
+  {
+   "type": "hole_clearance",
+   "desc": "孔间距违规 (<电路板配置> 中的 \"孔\" 约束 间距 0.2500 mm; 实际 0.2454 mm)",
+   "A": "走线 [DS320_STRAP_B_ADDR0_15-8] (B.Cu), 长度: 0.8621 mm",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR0_15-8",
+    "layer": "B.Cu",
+    "start": [
+     97.06,
+     52.62
+    ],
+    "end": [
+     96.2,
+     52.56
+    ],
+    "len": 0.8621
+   },
+   "A_new_in_l9": true,
+   "B": "过孔 [GND] (F.Cu - B.Cu)",
+   "B_obj": {
+    "net": "GND",
+    "layers": "F.Cu B.Cu",
+    "at": [
+     96.825,
+     53.0
+    ]
+   },
+   "B_new_in_l9": false
+  },
+  {
+   "type": "hole_clearance",
+   "desc": "孔间距违规 (<电路板配置> 中的 \"孔\" 约束 间距 0.2500 mm; 实际 0.2117 mm)",
+   "A": "走线 [DS320_STRAP_B_ADDR1_7-0] (In2.Cu), 长度: 15.5721 mm",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR1_7-0",
+    "layer": "In2.Cu",
+    "start": [
+     93.4,
+     51.06
+    ],
+    "end": [
+     108.94,
+     50.06
+    ],
+    "len": 15.5721
+   },
+   "A_new_in_l9": true,
+   "B": "过孔 [GND] (F.Cu - B.Cu)",
+   "B_obj": {
+    "net": "GND",
+    "layers": "F.Cu B.Cu",
+    "at": [
+     100.275,
+     50.98
+    ]
+   },
+   "B_new_in_l9": false
+  },
+  {
+   "type": "hole_clearance",
+   "desc": "孔间距违规 (<电路板配置> 中的 \"孔\" 约束 间距 0.2500 mm; 实际 0.1381 mm)",
+   "A": "F.Cu 上 U6 的焊盘 BT29 [PCIE_DN_OUT6_N_MCIO]",
+   "A_obj": null,
+   "A_new_in_l9": null,
+   "B": "过孔 [I2C1_SDA] (F.Cu - B.Cu)",
+   "B_obj": {
+    "net": "I2C1_SDA",
+    "layers": "In5.Cu B.Cu",
+    "at": [
+     92.54,
+     51.86
+    ]
+   },
+   "B_new_in_l9": true
+  },
+  {
+   "type": "shorting_items",
+   "desc": "短路了两个不同网络的项目 (网络 DS320_STRAP_B_ADDR1_7-0 和 PCIE_UP3_P)",
+   "A": "走线 [DS320_STRAP_B_ADDR1_7-0] (In2.Cu), 长度: 9.7712 mm",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR1_7-0",
+    "layer": "In2.Cu",
+    "start": [
+     83.66,
+     50.28
+    ],
+    "end": [
+     93.4,
+     51.06
+    ],
+    "len": 9.7712
+   },
+   "A_new_in_l9": true,
+   "B": "走线 [PCIE_UP3_P] (In2.Cu), 长度: 16.6300 mm",
+   "B_obj": {
+    "net": "PCIE_UP3_P",
+    "layer": "In2.Cu",
+    "start": [
+     88.4,
+     50.58
+    ],
+    "end": [
+     88.4,
+     33.95
+    ],
+    "len": 16.63
+   },
+   "B_new_in_l9": false
+  },
+  {
+   "type": "shorting_items",
+   "desc": "短路了两个不同网络的项目 (网络 DS320_STRAP_B_ADDR1_7-0 和 PCIE_UP3_P)",
+   "A": "走线 [DS320_STRAP_B_ADDR1_7-0] (In2.Cu), 长度: 9.7712 mm",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR1_7-0",
+    "layer": "In2.Cu",
+    "start": [
+     83.66,
+     50.28
+    ],
+    "end": [
+     93.4,
+     51.06
+    ],
+    "len": 9.7712
+   },
+   "A_new_in_l9": true,
+   "B": "F.Cu - In2.Cu 上的盲孔 [PCIE_UP3_P]",
+   "B_obj": {
+    "net": "PCIE_UP3_P",
+    "layers": "F.Cu In2.Cu",
+    "at": [
+     88.4,
+     50.58
+    ]
+   },
+   "B_new_in_l9": false
+  },
+  {
+   "type": "shorting_items",
+   "desc": "短路了两个不同网络的项目 (网络 PCIE_UP2_P 和 DS320_STRAP_B_ADDR1_7-0)",
+   "A": "F.Cu - In2.Cu 上的盲孔 [PCIE_UP2_P]",
+   "A_obj": {
+    "net": "PCIE_UP2_P",
+    "layers": "F.Cu In2.Cu",
+    "at": [
+     87.2,
+     50.58
+    ]
+   },
+   "A_new_in_l9": false,
+   "B": "走线 [DS320_STRAP_B_ADDR1_7-0] (In2.Cu), 长度: 9.7712 mm",
+   "B_obj": {
+    "net": "DS320_STRAP_B_ADDR1_7-0",
+    "layer": "In2.Cu",
+    "start": [
+     83.66,
+     50.28
+    ],
+    "end": [
+     93.4,
+     51.06
+    ],
+    "len": 9.7712
+   },
+   "B_new_in_l9": true
+  },
+  {
+   "type": "shorting_items",
+   "desc": "短路了两个不同网络的项目 (网络 PCIE_UP4_N 和 DS320_STRAP_B_ADDR1_7-0)",
+   "A": "F.Cu - In2.Cu 上的盲孔 [PCIE_UP4_N]",
+   "A_obj": {
+    "net": "PCIE_UP4_N",
+    "layers": "F.Cu In2.Cu",
+    "at": [
+     89.6,
+     50.58
+    ]
+   },
+   "A_new_in_l9": false,
+   "B": "走线 [DS320_STRAP_B_ADDR1_7-0] (In2.Cu), 长度: 9.7712 mm",
+   "B_obj": {
+    "net": "DS320_STRAP_B_ADDR1_7-0",
+    "layer": "In2.Cu",
+    "start": [
+     83.66,
+     50.28
+    ],
+    "end": [
+     93.4,
+     51.06
+    ],
+    "len": 9.7712
+   },
+   "B_new_in_l9": true
+  },
+  {
+   "type": "shorting_items",
+   "desc": "短路了两个不同网络的项目 (网络 PCIE_DN_OUT7_P_MCIO 和 I2C1_SDA)",
+   "A": "走线 [PCIE_DN_OUT7_P_MCIO] (B.Cu), 长度: 17.8460 mm",
+   "A_obj": {
+    "net": "PCIE_DN_OUT7_P_MCIO",
+    "layer": "B.Cu",
+    "start": [
+     92.7,
+     52.366
+    ],
+    "end": [
+     92.7,
+     34.52
+    ],
+    "len": 17.846
+   },
+   "A_new_in_l9": false,
+   "B": "过孔 [I2C1_SDA] (F.Cu - B.Cu)",
+   "B_obj": {
+    "net": "I2C1_SDA",
+    "layers": "In5.Cu B.Cu",
+    "at": [
+     92.54,
+     51.86
+    ]
+   },
+   "B_new_in_l9": true
+  },
+  {
+   "type": "shorting_items",
+   "desc": "短路了两个不同网络的项目 (网络 DS320_STRAP_B_ADDR1_7-0 和 GND)",
+   "A": "走线 [DS320_STRAP_B_ADDR1_7-0] (In2.Cu), 长度: 15.5721 mm",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR1_7-0",
+    "layer": "In2.Cu",
+    "start": [
+     93.4,
+     51.06
+    ],
+    "end": [
+     108.94,
+     50.06
+    ],
+    "len": 15.5721
+   },
+   "A_new_in_l9": true,
+   "B": "过孔 [GND] (F.Cu - B.Cu)",
+   "B_obj": {
+    "net": "GND",
+    "layers": "F.Cu B.Cu",
+    "at": [
+     94.425,
+     50.98
+    ]
+   },
+   "B_new_in_l9": false
+  },
+  {
+   "type": "shorting_items",
+   "desc": "短路了两个不同网络的项目 (网络 DS320_STRAP_B_ADDR1_7-0 和 GND)",
+   "A": "走线 [DS320_STRAP_B_ADDR1_7-0] (In2.Cu), 长度: 15.5721 mm",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR1_7-0",
+    "layer": "In2.Cu",
+    "start": [
+     93.4,
+     51.06
+    ],
+    "end": [
+     108.94,
+     50.06
+    ],
+    "len": 15.5721
+   },
+   "A_new_in_l9": true,
+   "B": "过孔 [GND] (F.Cu - B.Cu)",
+   "B_obj": {
+    "net": "GND",
+    "layers": "F.Cu B.Cu",
+    "at": [
+     95.475,
+     50.98
+    ]
+   },
+   "B_new_in_l9": false
+  },
+  {
+   "type": "shorting_items",
+   "desc": "短路了两个不同网络的项目 (网络 DS320_STRAP_B_ADDR1_7-0 和 GND)",
+   "A": "走线 [DS320_STRAP_B_ADDR1_7-0] (In2.Cu), 长度: 15.5721 mm",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR1_7-0",
+    "layer": "In2.Cu",
+    "start": [
+     93.4,
+     51.06
+    ],
+    "end": [
+     108.94,
+     50.06
+    ],
+    "len": 15.5721
+   },
+   "A_new_in_l9": true,
+   "B": "过孔 [GND] (F.Cu - B.Cu)",
+   "B_obj": {
+    "net": "GND",
+    "layers": "F.Cu B.Cu",
+    "at": [
+     97.45,
+     50.755
+    ]
+   },
+   "B_new_in_l9": false
+  },
+  {
+   "type": "shorting_items",
+   "desc": "短路了两个不同网络的项目 (网络 DS320_STRAP_B_ADDR1_7-0 和 GND)",
+   "A": "走线 [DS320_STRAP_B_ADDR1_7-0] (In2.Cu), 长度: 15.5721 mm",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR1_7-0",
+    "layer": "In2.Cu",
+    "start": [
+     93.4,
+     51.06
+    ],
+    "end": [
+     108.94,
+     50.06
+    ],
+    "len": 15.5721
+   },
+   "A_new_in_l9": true,
+   "B": "过孔 [GND] (F.Cu - B.Cu)",
+   "B_obj": {
+    "net": "GND",
+    "layers": "F.Cu B.Cu",
+    "at": [
+     97.875,
+     50.98
+    ]
+   },
+   "B_new_in_l9": false
+  },
+  {
+   "type": "shorting_items",
+   "desc": "短路了两个不同网络的项目 (网络 DS320_STRAP_B_ADDR1_7-0 和 GND)",
+   "A": "走线 [DS320_STRAP_B_ADDR1_7-0] (In2.Cu), 长度: 15.5721 mm",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR1_7-0",
+    "layer": "In2.Cu",
+    "start": [
+     93.4,
+     51.06
+    ],
+    "end": [
+     108.94,
+     50.06
+    ],
+    "len": 15.5721
+   },
+   "A_new_in_l9": true,
+   "B": "过孔 [GND] (F.Cu - B.Cu)",
+   "B_obj": {
+    "net": "GND",
+    "layers": "F.Cu B.Cu",
+    "at": [
+     96.675,
+     50.98
+    ]
+   },
+   "B_new_in_l9": false
+  },
+  {
+   "type": "shorting_items",
+   "desc": "短路了两个不同网络的项目 (网络 DS320_STRAP_B_ADDR1_7-0 和 GND)",
+   "A": "走线 [DS320_STRAP_B_ADDR1_7-0] (In2.Cu), 长度: 15.5721 mm",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR1_7-0",
+    "layer": "In2.Cu",
+    "start": [
+     93.4,
+     51.06
+    ],
+    "end": [
+     108.94,
+     50.06
+    ],
+    "len": 15.5721
+   },
+   "A_new_in_l9": true,
+   "B": "过孔 [GND] (F.Cu - B.Cu)",
+   "B_obj": {
+    "net": "GND",
+    "layers": "F.Cu B.Cu",
+    "at": [
+     98.65,
+     50.755
+    ]
+   },
+   "B_new_in_l9": false
+  },
+  {
+   "type": "shorting_items",
+   "desc": "短路了两个不同网络的项目 (网络 DS320_STRAP_B_ADDR1_7-0 和 GND)",
+   "A": "走线 [DS320_STRAP_B_ADDR1_7-0] (In2.Cu), 长度: 15.5721 mm",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR1_7-0",
+    "layer": "In2.Cu",
+    "start": [
+     93.4,
+     51.06
+    ],
+    "end": [
+     108.94,
+     50.06
+    ],
+    "len": 15.5721
+   },
+   "A_new_in_l9": true,
+   "B": "过孔 [GND] (F.Cu - B.Cu)",
+   "B_obj": {
+    "net": "GND",
+    "layers": "F.Cu B.Cu",
+    "at": [
+     99.85,
+     50.755
+    ]
+   },
+   "B_new_in_l9": false
+  },
+  {
+   "type": "shorting_items",
+   "desc": "短路了两个不同网络的项目 (网络 DS320_STRAP_B_ADDR1_7-0 和 GND)",
+   "A": "走线 [DS320_STRAP_B_ADDR1_7-0] (In2.Cu), 长度: 15.5721 mm",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR1_7-0",
+    "layer": "In2.Cu",
+    "start": [
+     93.4,
+     51.06
+    ],
+    "end": [
+     108.94,
+     50.06
+    ],
+    "len": 15.5721
+   },
+   "A_new_in_l9": true,
+   "B": "过孔 [GND] (F.Cu - B.Cu)",
+   "B_obj": {
+    "net": "GND",
+    "layers": "F.Cu B.Cu",
+    "at": [
+     101.05,
+     50.755
+    ]
+   },
+   "B_new_in_l9": false
+  },
+  {
+   "type": "shorting_items",
+   "desc": "短路了两个不同网络的项目 (网络 DS320_STRAP_B_ADDR1_7-0 和 GND)",
+   "A": "走线 [DS320_STRAP_B_ADDR1_7-0] (In2.Cu), 长度: 15.5721 mm",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR1_7-0",
+    "layer": "In2.Cu",
+    "start": [
+     93.4,
+     51.06
+    ],
+    "end": [
+     108.94,
+     50.06
+    ],
+    "len": 15.5721
+   },
+   "A_new_in_l9": true,
+   "B": "过孔 [GND] (F.Cu - B.Cu)",
+   "B_obj": {
+    "net": "GND",
+    "layers": "F.Cu B.Cu",
+    "at": [
+     96.25,
+     50.755
+    ]
+   },
+   "B_new_in_l9": false
+  },
+  {
+   "type": "shorting_items",
+   "desc": "短路了两个不同网络的项目 (网络 DS320_STRAP_B_ADDR1_7-0 和 GND)",
+   "A": "走线 [DS320_STRAP_B_ADDR1_7-0] (In2.Cu), 长度: 15.5721 mm",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR1_7-0",
+    "layer": "In2.Cu",
+    "start": [
+     93.4,
+     51.06
+    ],
+    "end": [
+     108.94,
+     50.06
+    ],
+    "len": 15.5721
+   },
+   "A_new_in_l9": true,
+   "B": "过孔 [GND] (F.Cu - B.Cu)",
+   "B_obj": {
+    "net": "GND",
+    "layers": "F.Cu B.Cu",
+    "at": [
+     95.05,
+     50.755
+    ]
+   },
+   "B_new_in_l9": false
+  },
+  {
+   "type": "shorting_items",
+   "desc": "短路了两个不同网络的项目 (网络 GND 和 DS320_STRAP_B_ADDR1_7-0)",
+   "A": "过孔 [GND] (F.Cu - B.Cu)",
+   "A_obj": {
+    "net": "GND",
+    "layers": "F.Cu B.Cu",
+    "at": [
+     103.4,
+     50.505
+    ]
+   },
+   "A_new_in_l9": false,
+   "B": "走线 [DS320_STRAP_B_ADDR1_7-0] (In2.Cu), 长度: 15.5721 mm",
+   "B_obj": {
+    "net": "DS320_STRAP_B_ADDR1_7-0",
+    "layer": "In2.Cu",
+    "start": [
+     93.4,
+     51.06
+    ],
+    "end": [
+     108.94,
+     50.06
+    ],
+    "len": 15.5721
+   },
+   "B_new_in_l9": true
+  },
+  {
+   "type": "tracks_crossing",
+   "desc": "Tracks crossing",
+   "A": "走线 [DS320_STRAP_B_ADDR1_7-0] (In2.Cu), 长度: 9.7712 mm",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR1_7-0",
+    "layer": "In2.Cu",
+    "start": [
+     83.66,
+     50.28
+    ],
+    "end": [
+     93.4,
+     51.06
+    ],
+    "len": 9.7712
+   },
+   "A_new_in_l9": true,
+   "B": "走线 [PCIE_UP0_N] (In2.Cu), 长度: 13.4200 mm",
+   "B_obj": {
+    "net": "PCIE_UP0_N",
+    "layer": "In2.Cu",
+    "start": [
+     84.8,
+     50.58
+    ],
+    "end": [
+     84.8,
+     37.16
+    ],
+    "len": 13.42
+   },
+   "B_new_in_l9": false
+  },
+  {
+   "type": "tracks_crossing",
+   "desc": "Tracks crossing",
+   "A": "走线 [DS320_STRAP_B_ADDR1_15-8] (In2.Cu), 长度: 5.7000 mm",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR1_15-8",
+    "layer": "In2.Cu",
+    "start": [
+     97.8,
+     57.9
+    ],
+    "end": [
+     103.5,
+     57.9
+    ],
+    "len": 5.7
+   },
+   "A_new_in_l9": false,
+   "B": "走线 [DS320_STRAP_B_ADDR1_7-0] (In2.Cu), 长度: 13.8474 mm",
+   "B_obj": {
+    "net": "DS320_STRAP_B_ADDR1_7-0",
+    "layer": "In2.Cu",
+    "start": [
+     110.26,
+     51.66
+    ],
+    "end": [
+     99.84,
+     60.78
+    ],
+    "len": 13.8474
+   },
+   "B_new_in_l9": true
+  },
+  {
+   "type": "tracks_crossing",
+   "desc": "Tracks crossing",
+   "A": "走线 [PCIE_UP2_P] (In2.Cu), 长度: 5.3600 mm",
+   "A_obj": {
+    "net": "PCIE_UP2_P",
+    "layer": "In2.Cu",
+    "start": [
+     87.2,
+     50.58
+    ],
+    "end": [
+     87.2,
+     45.22
+    ],
+    "len": 5.36
+   },
+   "A_new_in_l9": false,
+   "B": "走线 [DS320_STRAP_B_ADDR1_7-0] (In2.Cu), 长度: 9.7712 mm",
+   "B_obj": {
+    "net": "DS320_STRAP_B_ADDR1_7-0",
+    "layer": "In2.Cu",
+    "start": [
+     83.66,
+     50.28
+    ],
+    "end": [
+     93.4,
+     51.06
+    ],
+    "len": 9.7712
+   },
+   "B_new_in_l9": true
+  }
+ ],
+ "stale_fill_conflicts": [
+  {
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1750 mm; 实际 0.0631 mm)",
+   "A": "过孔 [I2C1_SDA] (F.Cu - B.Cu)",
+   "A_obj": {
+    "net": "I2C1_SDA",
+    "layers": "In5.Cu B.Cu",
+    "at": [
+     92.54,
+     51.86
+    ]
+   },
+   "A_new_in_l9": true,
+   "B": "F.Cu 上 U6 的焊盘 BT29 [PCIE_DN_OUT6_N_MCIO]",
+   "B_obj": null,
+   "B_new_in_l9": null
+  },
+  {
+   "type": "clearance",
+   "desc": "间距违规 (填充区 间距 0.2000 mm; 实际 0.0000 mm)",
+   "A": "过孔 [DS320_STRAP_B_ADDR0_15-8] (F.Cu - B.Cu)",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR0_15-8",
+    "layers": "F.Cu B.Cu",
+    "at": [
+     92.98,
+     48.06
+    ]
+   },
+   "A_new_in_l9": true,
+   "B": "填充区[GND]在 In1.Cu 上, 优先级 0",
+   "B_obj": null,
+   "B_new_in_l9": null
+  },
+  {
+   "type": "clearance",
+   "desc": "间距违规 (填充区 间距 0.2000 mm; 实际 0.0000 mm)",
+   "A": "过孔 [I2C1_SDA] (F.Cu - B.Cu)",
+   "A_obj": {
+    "net": "I2C1_SDA",
+    "layers": "In5.Cu B.Cu",
+    "at": [
+     92.54,
+     51.86
+    ]
+   },
+   "A_new_in_l9": true,
+   "B": "填充区[GND]在 In1.Cu 上, 优先级 0",
+   "B_obj": null,
+   "B_new_in_l9": null
+  },
+  {
+   "type": "clearance",
+   "desc": "间距违规 (填充区 间距 0.2000 mm; 实际 0.0000 mm)",
+   "A": "过孔 [DS320_STRAP_B_ADDR0_15-8] (F.Cu - B.Cu)",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR0_15-8",
+    "layers": "F.Cu B.Cu",
+    "at": [
+     92.98,
+     48.06
+    ]
+   },
+   "A_new_in_l9": true,
+   "B": "填充区[GND]在 In3.Cu 上, 优先级 0",
+   "B_obj": null,
+   "B_new_in_l9": null
+  },
+  {
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.2000 mm; 实际 0.0000 mm)",
+   "A": "过孔 [DS320_STRAP_B_ADDR0_15-8] (F.Cu - B.Cu)",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR0_15-8",
+    "layers": "F.Cu B.Cu",
+    "at": [
+     92.98,
+     48.06
+    ]
+   },
+   "A_new_in_l9": true,
+   "B": "填充区[P3V3]在 In4.Cu 上, 优先级 0",
+   "B_obj": null,
+   "B_new_in_l9": null
+  },
+  {
+   "type": "clearance",
+   "desc": "间距违规 (填充区 间距 0.2000 mm; 实际 0.0000 mm)",
+   "A": "过孔 [I2C1_SDA] (F.Cu - B.Cu)",
+   "A_obj": {
+    "net": "I2C1_SDA",
+    "layers": "In5.Cu B.Cu",
+    "at": [
+     92.54,
+     51.86
+    ]
+   },
+   "A_new_in_l9": true,
+   "B": "填充区[GND]在 In3.Cu 上, 优先级 0",
+   "B_obj": null,
+   "B_new_in_l9": null
+  },
+  {
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.2000 mm; 实际 0.0000 mm)",
+   "A": "过孔 [I2C1_SDA] (F.Cu - B.Cu)",
+   "A_obj": {
+    "net": "I2C1_SDA",
+    "layers": "In5.Cu B.Cu",
+    "at": [
+     92.54,
+     51.86
+    ]
+   },
+   "A_new_in_l9": true,
+   "B": "填充区[P3V3]在 In4.Cu 上, 优先级 0",
+   "B_obj": null,
+   "B_new_in_l9": null
+  },
+  {
+   "type": "clearance",
+   "desc": "间距违规 (填充区 间距 0.2000 mm; 实际 0.0000 mm)",
+   "A": "过孔 [DS320_STRAP_B_ADDR0_15-8] (F.Cu - B.Cu)",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR0_15-8",
+    "layers": "F.Cu B.Cu",
+    "at": [
+     92.98,
+     48.06
+    ]
+   },
+   "A_new_in_l9": true,
+   "B": "填充区[GND]在 In6.Cu 上, 优先级 0",
+   "B_obj": null,
+   "B_new_in_l9": null
+  },
+  {
+   "type": "clearance",
+   "desc": "间距违规 (填充区 间距 0.2000 mm; 实际 0.0000 mm)",
+   "A": "过孔 [I2C1_SDA] (F.Cu - B.Cu)",
+   "A_obj": {
+    "net": "I2C1_SDA",
+    "layers": "In5.Cu B.Cu",
+    "at": [
+     92.54,
+     51.86
+    ]
+   },
+   "A_new_in_l9": true,
+   "B": "填充区[GND]在 In6.Cu 上, 优先级 0",
+   "B_obj": null,
+   "B_new_in_l9": null
+  },
+  {
+   "type": "clearance",
+   "desc": "间距违规 ( 间距 0.1000 mm; 实际 0.0415 mm)",
+   "A": "走线 [DS320_STRAP_B_ADDR1_7-0] (In2.Cu), 长度: 2.0742 mm",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR1_7-0",
+    "layer": "In2.Cu",
+    "start": [
+     108.94,
+     50.06
+    ],
+    "end": [
+     110.26,
+     51.66
+    ],
+    "len": 2.0742
+   },
+   "A_new_in_l9": true,
+   "B": "走线 [DS320_STRAP_B_ADDR1_15-8] (In2.Cu), 长度: 5.6732 mm",
+   "B_obj": {
+    "net": "DS320_STRAP_B_ADDR1_15-8",
+    "layer": "In2.Cu",
+    "start": [
+     109.8889,
+     51.5111
+    ],
+    "end": [
+     104.2157,
+     51.5111
+    ],
+    "len": 5.6732
+   },
+   "B_new_in_l9": false
+  },
+  {
+   "type": "hole_clearance",
+   "desc": "孔间距违规 (<电路板配置> 中的 \"孔\" 约束 间距 0.2500 mm; 实际 0.0000 mm)",
+   "A": "过孔 [DS320_STRAP_B_ADDR0_15-8] (F.Cu - B.Cu)",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR0_15-8",
+    "layers": "F.Cu B.Cu",
+    "at": [
+     92.98,
+     48.06
+    ]
+   },
+   "A_new_in_l9": true,
+   "B": "填充区[GND]在 In1.Cu 上, 优先级 0",
+   "B_obj": null,
+   "B_new_in_l9": null
+  },
+  {
+   "type": "hole_clearance",
+   "desc": "孔间距违规 (<电路板配置> 中的 \"孔\" 约束 间距 0.2500 mm; 实际 0.0000 mm)",
+   "A": "过孔 [I2C1_SDA] (F.Cu - B.Cu)",
+   "A_obj": {
+    "net": "I2C1_SDA",
+    "layers": "In5.Cu B.Cu",
+    "at": [
+     92.54,
+     51.86
+    ]
+   },
+   "A_new_in_l9": true,
+   "B": "填充区[GND]在 In1.Cu 上, 优先级 0",
+   "B_obj": null,
+   "B_new_in_l9": null
+  },
+  {
+   "type": "hole_clearance",
+   "desc": "孔间距违规 (<电路板配置> 中的 \"孔\" 约束 间距 0.2500 mm; 实际 0.0000 mm)",
+   "A": "过孔 [DS320_STRAP_B_ADDR0_15-8] (F.Cu - B.Cu)",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR0_15-8",
+    "layers": "F.Cu B.Cu",
+    "at": [
+     92.98,
+     48.06
+    ]
+   },
+   "A_new_in_l9": true,
+   "B": "填充区[GND]在 In3.Cu 上, 优先级 0",
+   "B_obj": null,
+   "B_new_in_l9": null
+  },
+  {
+   "type": "hole_clearance",
+   "desc": "孔间距违规 (<电路板配置> 中的 \"孔\" 约束 间距 0.2500 mm; 实际 0.0000 mm)",
+   "A": "过孔 [DS320_STRAP_B_ADDR0_15-8] (F.Cu - B.Cu)",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR0_15-8",
+    "layers": "F.Cu B.Cu",
+    "at": [
+     92.98,
+     48.06
+    ]
+   },
+   "A_new_in_l9": true,
+   "B": "填充区[P3V3]在 In4.Cu 上, 优先级 0",
+   "B_obj": null,
+   "B_new_in_l9": null
+  },
+  {
+   "type": "hole_clearance",
+   "desc": "孔间距违规 (<电路板配置> 中的 \"孔\" 约束 间距 0.2500 mm; 实际 0.0000 mm)",
+   "A": "过孔 [I2C1_SDA] (F.Cu - B.Cu)",
+   "A_obj": {
+    "net": "I2C1_SDA",
+    "layers": "In5.Cu B.Cu",
+    "at": [
+     92.54,
+     51.86
+    ]
+   },
+   "A_new_in_l9": true,
+   "B": "填充区[GND]在 In3.Cu 上, 优先级 0",
+   "B_obj": null,
+   "B_new_in_l9": null
+  },
+  {
+   "type": "hole_clearance",
+   "desc": "孔间距违规 (<电路板配置> 中的 \"孔\" 约束 间距 0.2500 mm; 实际 0.0000 mm)",
+   "A": "过孔 [DS320_STRAP_B_ADDR0_15-8] (F.Cu - B.Cu)",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR0_15-8",
+    "layers": "F.Cu B.Cu",
+    "at": [
+     92.98,
+     48.06
+    ]
+   },
+   "A_new_in_l9": true,
+   "B": "填充区[GND]在 In6.Cu 上, 优先级 0",
+   "B_obj": null,
+   "B_new_in_l9": null
+  },
+  {
+   "type": "hole_clearance",
+   "desc": "孔间距违规 (<电路板配置> 中的 \"孔\" 约束 间距 0.2500 mm; 实际 0.0000 mm)",
+   "A": "过孔 [I2C1_SDA] (F.Cu - B.Cu)",
+   "A_obj": {
+    "net": "I2C1_SDA",
+    "layers": "In5.Cu B.Cu",
+    "at": [
+     92.54,
+     51.86
+    ]
+   },
+   "A_new_in_l9": true,
+   "B": "填充区[P3V3]在 In4.Cu 上, 优先级 0",
+   "B_obj": null,
+   "B_new_in_l9": null
+  },
+  {
+   "type": "hole_clearance",
+   "desc": "孔间距违规 (<电路板配置> 中的 \"孔\" 约束 间距 0.2500 mm; 实际 0.0000 mm)",
+   "A": "过孔 [I2C1_SDA] (F.Cu - B.Cu)",
+   "A_obj": {
+    "net": "I2C1_SDA",
+    "layers": "In5.Cu B.Cu",
+    "at": [
+     92.54,
+     51.86
+    ]
+   },
+   "A_new_in_l9": true,
+   "B": "填充区[GND]在 In6.Cu 上, 优先级 0",
+   "B_obj": null,
+   "B_new_in_l9": null
+  },
+  {
+   "type": "shorting_items",
+   "desc": "短路了两个不同网络的项目 (网络 PCIE_UP1_N 和 DS320_STRAP_B_ADDR1_7-0)",
+   "A": "F.Cu - In2.Cu 上的盲孔 [PCIE_UP1_N]",
+   "A_obj": {
+    "net": "PCIE_UP1_N",
+    "layers": "F.Cu In2.Cu",
+    "at": [
+     86.0,
+     50.58
+    ]
+   },
+   "A_new_in_l9": false,
+   "B": "走线 [DS320_STRAP_B_ADDR1_7-0] (In2.Cu), 长度: 9.7712 mm",
+   "B_obj": {
+    "net": "DS320_STRAP_B_ADDR1_7-0",
+    "layer": "In2.Cu",
+    "start": [
+     83.66,
+     50.28
+    ],
+    "end": [
+     93.4,
+     51.06
+    ],
+    "len": 9.7712
+   },
+   "B_new_in_l9": true
+  },
+  {
+   "type": "shorting_items",
+   "desc": "短路了两个不同网络的项目 (网络 DS320_STRAP_B_ADDR1_7-0 和 PCIE_UP0_N)",
+   "A": "走线 [DS320_STRAP_B_ADDR1_7-0] (In2.Cu), 长度: 9.7712 mm",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR1_7-0",
+    "layer": "In2.Cu",
+    "start": [
+     83.66,
+     50.28
+    ],
+    "end": [
+     93.4,
+     51.06
+    ],
+    "len": 9.7712
+   },
+   "A_new_in_l9": true,
+   "B": "F.Cu - In2.Cu 上的盲孔 [PCIE_UP0_N]",
+   "B_obj": {
+    "net": "PCIE_UP0_N",
+    "layers": "F.Cu In2.Cu",
+    "at": [
+     84.8,
+     50.58
+    ]
+   },
+   "B_new_in_l9": false
+  },
+  {
+   "type": "shorting_items",
+   "desc": "短路了两个不同网络的项目 (网络 I2C1_SDA 和 DS320_STRAP_B_ADDR1_7-0)",
+   "A": "过孔 [I2C1_SDA] (F.Cu - B.Cu)",
+   "A_obj": {
+    "net": "I2C1_SDA",
+    "layers": "In5.Cu B.Cu",
+    "at": [
+     92.54,
+     51.86
+    ]
+   },
+   "A_new_in_l9": true,
+   "B": "走线 [DS320_STRAP_B_ADDR1_7-0] (In2.Cu), 长度: 8.4000 mm",
+   "B_obj": {
+    "net": "DS320_STRAP_B_ADDR1_7-0",
+    "layer": "In2.Cu",
+    "start": [
+     84.55,
+     51.8796
+    ],
+    "end": [
+     92.95,
+     51.8796
+    ],
+    "len": 8.4
+   },
+   "B_new_in_l9": false
+  },
+  {
+   "type": "tracks_crossing",
+   "desc": "Tracks crossing",
+   "A": "走线 [DS320_STRAP_B_ADDR1_7-0] (In2.Cu), 长度: 9.7712 mm",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR1_7-0",
+    "layer": "In2.Cu",
+    "start": [
+     83.66,
+     50.28
+    ],
+    "end": [
+     93.4,
+     51.06
+    ],
+    "len": 9.7712
+   },
+   "A_new_in_l9": true,
+   "B": "走线 [PCIE_UP1_N] (In2.Cu), 长度: 14.4900 mm",
+   "B_obj": {
+    "net": "PCIE_UP1_N",
+    "layer": "In2.Cu",
+    "start": [
+     86.0,
+     50.58
+    ],
+    "end": [
+     86.0,
+     36.09
+    ],
+    "len": 14.49
+   },
+   "B_new_in_l9": false
+  },
+  {
+   "type": "tracks_crossing",
+   "desc": "Tracks crossing",
+   "A": "走线 [DS320_STRAP_B_ADDR0_15-8] (B.Cu), 长度: 1.6122 mm",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR0_15-8",
+    "layer": "B.Cu",
+    "start": [
+     96.2,
+     52.56
+    ],
+    "end": [
+     95.06,
+     51.42
+    ],
+    "len": 1.6122
+   },
+   "A_new_in_l9": true,
+   "B": "走线 [I2C1_SDA] (B.Cu), 长度: 9.6800 mm",
+   "B_obj": {
+    "net": "I2C1_SDA",
+    "layer": "B.Cu",
+    "start": [
+     102.48,
+     52.12
+    ],
+    "end": [
+     92.8,
+     52.12
+    ],
+    "len": 9.68
+   },
+   "B_new_in_l9": true
+  },
+  {
+   "type": "tracks_crossing",
+   "desc": "Tracks crossing",
+   "A": "走线 [DS320_STRAP_B_ADDR1_15-8] (In2.Cu), 长度: 9.0353 mm",
+   "A_obj": {
+    "net": "DS320_STRAP_B_ADDR1_15-8",
+    "layer": "In2.Cu",
+    "start": [
+     103.5,
+     57.9
+    ],
+    "end": [
+     109.8889,
+     51.5111
+    ],
+    "len": 9.0353
+   },
+   "A_new_in_l9": false,
+   "B": "走线 [DS320_STRAP_B_ADDR1_7-0] (In2.Cu), 长度: 13.8474 mm",
+   "B_obj": {
+    "net": "DS320_STRAP_B_ADDR1_7-0",
+    "layer": "In2.Cu",
+    "start": [
+     110.26,
+     51.66
+    ],
+    "end": [
+     99.84,
+     60.78
+    ],
+    "len": 13.8474
+   },
+   "B_new_in_l9": true
+  }
+ ],
+ "non45_segments": [
+  {
+   "uuid": "9135a302-d204-51bc-be89-728dbb4ef3f3",
+   "net": "DS320_STRAP_B_ADDR1_7-0",
+   "layer": "In2.Cu",
+   "start": [
+    83.66,
+    50.28
+   ],
+   "end": [
+    93.4,
+    51.06
+   ],
+   "len_mm": 9.7712,
+   "angle_deg": 4.579,
+   "new_in_l9": true
+  },
+  {
+   "uuid": "36f39a62-53d5-5e8b-ac3d-55bfd2b607fe",
+   "net": "DS320_STRAP_B_ADDR1_7-0",
+   "layer": "In2.Cu",
+   "start": [
+    93.4,
+    51.06
+   ],
+   "end": [
+    108.94,
+    50.06
+   ],
+   "len_mm": 15.5721,
+   "angle_deg": 176.318,
+   "new_in_l9": true
+  },
+  {
+   "uuid": "1c91d21e-afd0-5052-8c90-eb4a6a63803b",
+   "net": "DS320_STRAP_B_ADDR1_7-0",
+   "layer": "In2.Cu",
+   "start": [
+    108.94,
+    50.06
+   ],
+   "end": [
+    110.26,
+    51.66
+   ],
+   "len_mm": 2.0742,
+   "angle_deg": 50.477,
+   "new_in_l9": true
+  },
+  {
+   "uuid": "ee5e408e-41fa-5297-833d-5e900ef3a87d",
+   "net": "DS320_STRAP_B_ADDR1_7-0",
+   "layer": "In2.Cu",
+   "start": [
+    110.26,
+    51.66
+   ],
+   "end": [
+    99.84,
+    60.78
+   ],
+   "len_mm": 13.8474,
+   "angle_deg": 138.806,
+   "new_in_l9": true
+  },
+  {
+   "uuid": "8404eb3a-83d6-51ff-abf1-047723948eea",
+   "net": "DS320_STRAP_B_ADDR0_15-8",
+   "layer": "F.Cu",
+   "start": [
+    105.08,
+    51.54
+   ],
+   "end": [
+    105.12,
+    51.3
+   ],
+   "len_mm": 0.2433,
+   "angle_deg": 99.462,
+   "new_in_l9": true
+  },
+  {
+   "uuid": "bb00ecfb-2c3a-5d96-b93c-06bd7cb833b2",
+   "net": "DS320_STRAP_B_ADDR0_15-8",
+   "layer": "F.Cu",
+   "start": [
+    105.12,
+    49.86
+   ],
+   "end": [
+    103.86,
+    48.7
+   ],
+   "len_mm": 1.7127,
+   "angle_deg": 42.634,
+   "new_in_l9": true
+  },
+  {
+   "uuid": "c5ce85d2-ab2b-5048-aa22-b1c71c505d70",
+   "net": "DS320_STRAP_B_ADDR0_15-8",
+   "layer": "F.Cu",
+   "start": [
+    103.86,
+    48.7
+   ],
+   "end": [
+    98.3,
+    48.68
+   ],
+   "len_mm": 5.56,
+   "angle_deg": 0.206,
+   "new_in_l9": true
+  },
+  {
+   "uuid": "e0b5ce17-4790-532d-8762-128bf17735e4",
+   "net": "DS320_STRAP_B_ADDR0_15-8",
+   "layer": "B.Cu",
+   "start": [
+    103.14,
+    54.26
+   ],
+   "end": [
+    102.32,
+    53.52
+   ],
+   "len_mm": 1.1045,
+   "angle_deg": 42.064,
+   "new_in_l9": true
+  },
+  {
+   "uuid": "01b66748-fc16-5465-9bcc-40e3aa422442",
+   "net": "DS320_STRAP_B_ADDR0_15-8",
+   "layer": "B.Cu",
+   "start": [
+    97.92,
+    53.52
+   ],
+   "end": [
+    97.06,
+    52.62
+   ],
+   "len_mm": 1.2448,
+   "angle_deg": 46.302,
+   "new_in_l9": true
+  },
+  {
+   "uuid": "13a01fd2-f028-5d69-ad19-051a7ac2ad33",
+   "net": "DS320_STRAP_B_ADDR0_15-8",
+   "layer": "B.Cu",
+   "start": [
+    97.06,
+    52.62
+   ],
+   "end": [
+    96.2,
+    52.56
+   ],
+   "len_mm": 0.8621,
+   "angle_deg": 3.991,
+   "new_in_l9": true
+  },
+  {
+   "uuid": "807aeaff-fe00-5ec9-8f0b-1a72768c2978",
+   "net": "DS320_STRAP_B_ADDR0_15-8",
+   "layer": "B.Cu",
+   "start": [
+    94.08,
+    51.26
+   ],
+   "end": [
+    93.98,
+    51.04
+   ],
+   "len_mm": 0.2417,
+   "angle_deg": 65.556,
+   "new_in_l9": true
+  }
+ ],
+ "culprit_objects_new_in_l9": [
+  {
+   "net": "DS320_STRAP_B_ADDR1_7-0",
+   "layer": "In2.Cu",
+   "geom": 15.5721,
+   "uuid": [
+    "36f39a62-53d5-5e8b-ac3d-55bfd2b607fe"
+   ]
+  },
+  {
+   "net": "DS320_STRAP_B_ADDR1_7-0",
+   "layer": "In2.Cu",
+   "geom": 9.7712,
+   "uuid": [
+    "9135a302-d204-51bc-be89-728dbb4ef3f3"
+   ]
+  },
+  {
+   "net": "DS320_STRAP_B_ADDR0_15-8",
+   "layer": "B.Cu",
+   "geom": 0.2417,
+   "uuid": [
+    "807aeaff-fe00-5ec9-8f0b-1a72768c2978"
+   ]
+  },
+  {
+   "net": "I2C1_SDA",
+   "layer": "B.Cu",
+   "geom": 0.3677,
+   "uuid": [
+    "1b311414-470a-51a1-bf04-e4676107ba10"
+   ]
+  },
+  {
+   "net": "I2C1_SDA",
+   "layer": "In5.Cu B.Cu",
+   "geom": "via@[92.54, 51.86]",
+   "uuid": [
+    "4fca1071-0b78-504d-96c4-f67a44d5eb44"
+   ]
+  },
+  {
+   "net": "DS320_STRAP_B_ADDR0_15-8",
+   "layer": "B.Cu",
+   "geom": 1.1045,
+   "uuid": [
+    "e0b5ce17-4790-532d-8762-128bf17735e4"
+   ]
+  },
+  {
+   "net": "DS320_STRAP_B_ADDR1_7-0",
+   "layer": "In2.Cu",
+   "geom": 13.8474,
+   "uuid": [
+    "ee5e408e-41fa-5297-833d-5e900ef3a87d"
+   ]
+  },
+  {
+   "net": "DS320_STRAP_B_ADDR0_15-8",
+   "layer": "F.Cu",
+   "geom": 1.7127,
+   "uuid": [
+    "bb00ecfb-2c3a-5d96-b93c-06bd7cb833b2"
+   ]
+  },
+  {
+   "net": "DS320_STRAP_B_ADDR0_15-8",
+   "layer": "B.Cu",
+   "geom": 0.8621,
+   "uuid": [
+    "13a01fd2-f028-5d69-ad19-051a7ac2ad33"
+   ]
+  }
+ ],
+ "repairity": {
+  "clusters": [
+   {
+    "id": "C1",
+    "n_genuine": 20,
+    "culprit": "`DS320_STRAP_B_ADDR1_7-0` In2 4 段（uuid 9135a302/36f39a62/1c91d21e/ee5e408e）+ `DS320_STRAP_B_ADDR0_15-8` In2 侧",
+    "action": "改走/让位：避 `PCIE_UP0_N/1_N/2_P/3_P/4_N/5_N`（In2 走线 + F.Cu→In2 盲孔）与 `ADDR1_15-8`",
+    "class": "L2 几何"
+   },
+   {
+    "id": "C2",
+    "n_genuine": 5,
+    "culprit": "`I2C1_SDA` via（uuid 见件）+ B.Cu stub（4eb7ffcb）",
+    "action": "移 via + 改 B.Cu stub：避 `PCIE_DN_OUT7_P_MCIO`(B.Cu 26b8261c) 与 U6.`BT29`",
+    "class": "L2 几何"
+   },
+   {
+    "id": "C3",
+    "n_genuine": 13,
+    "culprit": "`DS320_STRAP_B_ADDR0_15-8` F/B.Cu stub（8404eb3a/bb00ecfb/c5ce85d2/e0b5ce17/01b66748/13a01fd2/807aeaff/via c055112a）",
+    "action": "移 F/B.Cu stub 与 via：避 `DN_OUT7_N_MCIO`(B.Cu) · `P3V3` via · `GND` via",
+    "class": "L2 几何"
+   },
+   {
+    "id": "C0",
+    "n_genuine": 0,
+    "culprit": "全板 18 区铺铜",
+    "action": "**落搬迁后回填铺铜**（消除 21 处 stale_fill）",
+    "class": "落地程序（非几何）"
+   }
+  ],
+  "施工队问答": "**不能直接连**（见 R410 human_sentence）；修复目标集 = 本件 `culprit_objects_new_in_l9` 所列（`new_in_l9=true` 且出现在真冲突中者），**不动** l8 既有铜。",
+  "审批": "#K2-142 §四 禁烙板在效 ⇒ 修复+重落须**监理放行**（PENDING_RULINGS v62 已请裁）；受审板锚变更连带 SPEC rev-55 board_sha16 声明 ×3 + P4 派生模型指纹重锚。",
+  "未做": "未生成 l9′、未改施加器、未做任何变体重跑/参数扫描（#K2-142 §四）。"
+ },
+ "anchors": {
+  "board_l9": "77aaa63fe016b450",
+  "board_l8": "7a5c89913d6e5d0a",
+  "criteria": "rev=6 MATCH",
+  "frozen4": "4/4 未动"
+ },
+ "not_asked": [
+  "不请求 owner（未触 L1）· 未改受审板/pro/生成器/SPEC/原理图/真源/criteria/**· 未派 WORKER · 未烙板 · 未放宽 DRC 下限"
+ ]
+}
