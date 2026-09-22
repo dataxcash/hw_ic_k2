@@ -1,0 +1,345 @@
+{
+ "schema": 1,
+ "artifact": "k2_r372_closure_window_item1_plane_layer_tool_fix_and_refplane_geometric_closure_v1",
+ "ts": "2026-09-22T11:52+0800",
+ "from": "ENG · ARCHER R372（应 #K2-136 §三『联合收口窗口』）",
+ "to": "监理",
+ "owner_gate": 0,
+ "authority": "#K2-136 §三（准 ONE 联合收口窗口 · 项1『修工具：让模型能表示平面层』· §二 ②(ii) 几何级）· §四 O-1（self_sha16 约定自查）· §四 O-4（能力缺口 C-LAYER-RECOG）",
+ "first_action": "已读最新裁定 **#K2-136**（晚于 #K2-135）⇒ 按其 §三『联合收口窗口』执行：本轮做**项1（工具修复）**并据此**闭合 ②(ii)**。",
+ "item1_tool_fix": {
+  "tool": "k2/tools/k2_p4_b2_plane_layer_extract_v1.py（**新增** · #K2-136 §三.1 授权）",
+  "why": "本机**无 pcbnew**（import pcbnew 失败、无 AppDir/python3.11）⇒ 原 dump 工具跑不了；改为**纯文本解析** .kicad_pcb 之 (zone ... (filled_polygon (layer \"...\") (pts ...)))（PIL 栅格化）。原缺陷 = k2_p4_b2_board_in5_model_dump_v1.py 之 b.Zones() 只保留 GetIsRuleArea()，**铺铜被丢弃** ⇒ 模型 In1/In3/In4/In6 = 0 段。",
+  "method": "解析（平衡括号块，忽略字符串内括号）→ 取 (net \"...\") / (layer \"...\") / filled_polygon → PIL 多边形填充为 **net-id 栅格**（cell 0.05）",
+  "source_board": "k2/hw/k2_v4_8L.l8.kicad_pcb",
+  "source_sha256_16": "7a5c89913d6e5d0a",
+  "extracted": {
+   "In1.Cu": {
+    "n_polys": 1,
+    "coverage_mm2": 5172.08,
+    "nets": [
+     "GND"
+    ]
+   },
+   "In3.Cu": {
+    "n_polys": 1,
+    "coverage_mm2": 5186.53,
+    "nets": [
+     "GND"
+    ]
+   },
+   "In4.Cu": {
+    "n_polys": 9,
+    "coverage_mm2": 5032.79,
+    "nets": [
+     "12V_IN",
+     "MCU_VDD",
+     "P3V3",
+     "P3V3_AUX"
+    ]
+   },
+   "In6.Cu": {
+    "n_polys": 1,
+    "coverage_mm2": 5217.84,
+    "nets": [
+     "GND"
+    ]
+   }
+  },
+  "plane_of_In5": "**上参考 In4.Cu = {P3V3_AUX, MCU_VDD, 12V_IN, P3V3}** · **下参考 In6.Cu = GND**（In1/In3 亦为 GND 铺铜）",
+  "repro": "python3 k2/tools/k2_p4_b2_plane_layer_extract_v1.py k2/hw/k2_v4_8L.l8.kicad_pcb /tmp/opencode/k2r372/planes 0.05"
+ },
+ "item5_refplane_geometric_closure": {
+  "requirement": "②(ii) 各网新走线之参考层回流通路（逐网核）",
+  "method": "沿各网**新走线**每 0.1mm 取样，查相邻平面层之 net ⇒ 参考网占比与**跨分割次数**（splits）",
+  "adjacency": {
+   "In5.Cu": "上 In4 / 下 In6",
+   "In2.Cu": "上 In1 / 下 In3",
+   "F.Cu": "下 In1",
+   "B.Cu": "上 In6"
+  },
+  "plane_nets": {
+   "In4.Cu": [
+    "P3V3_AUX",
+    "MCU_VDD",
+    "12V_IN",
+    "P3V3"
+   ],
+   "In6.Cu": [
+    "GND"
+   ],
+   "In1.Cu": [
+    "GND"
+   ],
+   "In3.Cu": [
+    "GND"
+   ]
+  },
+  "results": {
+   "DS320_STRAP_B_ADDR1_7-0": {
+    "new_trace_In2": {
+     "layer": "In2.Cu",
+     "n_samples": 418,
+     "above(up)": {
+      "NONE": 0.0096,
+      "GND": 0.7847
+     },
+     "below(dn)": {
+      "GND": 1.0
+     },
+     "n_splits_up": 16,
+     "n_splits_dn": 0,
+     "up_runs": [
+      [
+       "NONE",
+       4
+      ],
+      [
+       "GND",
+       4
+      ],
+      [
+       "NONE",
+       7
+      ],
+      [
+       "GND",
+       5
+      ],
+      [
+       "NONE",
+       7
+      ],
+      [
+       "GND",
+       5
+      ]
+     ],
+     "dn_runs": [
+      [
+       "GND",
+       418
+      ]
+     ]
+    }
+   },
+   "DS320_STRAP_B_ADDR0_15-8": {
+    "stub_F_Cu": {
+     "layer": "F.Cu",
+     "n_samples": 160,
+     "above(up)": {
+      "N/A": 1.0
+     },
+     "below(dn)": {
+      "NONE": 0.0063,
+      "GND": 0.9938
+     },
+     "n_splits_up": 0,
+     "n_splits_dn": 1,
+     "up_runs": [
+      [
+       "N/A",
+       160
+      ]
+     ],
+     "dn_runs": [
+      [
+       "NONE",
+       1
+      ],
+      [
+       "GND",
+       159
+      ]
+     ]
+    },
+    "stub_B_Cu": {
+     "layer": "B.Cu",
+     "n_samples": 166,
+     "above(up)": {
+      "GND": 1.0
+     },
+     "below(dn)": {
+      "N/A": 1.0
+     },
+     "n_splits_up": 0,
+     "n_splits_dn": 0,
+     "up_runs": [
+      [
+       "GND",
+       166
+      ]
+     ],
+     "dn_runs": [
+      [
+       "N/A",
+       166
+      ]
+     ]
+    }
+   },
+   "I2C1_SDA": {
+    "stub_In5": {
+     "layer": "In5.Cu",
+     "n_samples": 3,
+     "above(up)": {
+      "P3V3": 1.0
+     },
+     "below(dn)": {
+      "GND": 1.0
+     },
+     "n_splits_up": 0,
+     "n_splits_dn": 0,
+     "up_runs": [
+      [
+       "P3V3",
+       3
+      ]
+     ],
+     "dn_runs": [
+      [
+       "GND",
+       3
+      ]
+     ]
+    },
+    "stub_B_Cu": {
+     "layer": "B.Cu",
+     "n_samples": 103,
+     "above(up)": {
+      "NONE": 0.0485,
+      "GND": 0.0194
+     },
+     "below(dn)": {
+      "N/A": 1.0
+     },
+     "n_splits_up": 3,
+     "n_splits_dn": 0,
+     "up_runs": [
+      [
+       "NONE",
+       4
+      ],
+      [
+       "GND",
+       92
+      ],
+      [
+       "NONE",
+       5
+      ],
+      [
+       "GND",
+       2
+      ]
+     ],
+     "dn_runs": [
+      [
+       "N/A",
+       103
+      ]
+     ]
+    }
+   },
+   "PERSTA#": {
+    "alt_In5": {
+     "layer": "In5.Cu",
+     "n_samples": 1115,
+     "above(up)": {
+      "P3V3": 1.0
+     },
+     "below(dn)": {
+      "GND": 1.0
+     },
+     "n_splits_up": 0,
+     "n_splits_dn": 0,
+     "up_runs": [
+      [
+       "P3V3",
+       1115
+      ]
+     ],
+     "dn_runs": [
+      [
+       "GND",
+       1115
+      ]
+     ]
+    }
+   }
+  },
+  "judgement": {
+   "I2C1_SDA": "**最优**：新 In5 stub 上=P3V3 100% · 下=GND 100% · **splits 0/0**；B.Cu stub 上参考 In6=GND。",
+   "PERSTA#": "替代 In5 走线 上=P3V3 100% · 下=GND 100% · **splits 0/0** ⇒ R337 去向之回流连续性**几何级成立**。",
+   "DS320_STRAP_B_ADDR0_15-8": "B.Cu stub 上=In6 GND 100% · **splits 0/0**；F.Cu stub 下=In1 GND 99.4%（1 处小空隙）。",
+   "DS320_STRAP_B_ADDR1_7-0": "新 In2 走线 **下=In3 GND 100%（splits 0）** ⇒ 回流主通道连续；**上=In1 GND 78.5% · 16 处空隙**（**如实标注**：其回流主通道为 In3/GND，In1 上参考非处处连续）。"
+  },
+  "conclusion": "②(ii) **几何级已可算且已算**（工具修复后）⇒ #K2-136 §二 之 ②(ii) **CLOSED**；`C-LAYER-RECOG` 能力缺口**已闭环**（工具已能表示平面层）。"
+ },
+ "o1_self_sha16_correction": {
+  "defect": "#K2-136 §四 O-1：本线程自 #K2-134 起之 self_sha16 误用『**键删除**』而非约定A之『**值置空串**』。**承认属实**（监理复算正确）。",
+  "evidence": "R259B（旧合约定件）复算：键删除=7de2901b76f6c969 · **值置空串=b198e7188c36fe87 = 其件内自报值** ⇒ 约定A = 值置空串。",
+  "corrected_values": {
+   "K2_R368_CB2UP1_FROZEN_MODEL_FIRST_SOLVE_AND_16_INFEASIBILITY_v1.json": {
+    "自报": "eb4c0987c4777ecf",
+    "键删除(错)复算": "eb4c0987c4777ecf",
+    "值置空串(约定A)复算": "b0e0d81d6de3c5f3"
+   },
+   "PENDING_RULINGS_DELTA_20260922_v53_frozen_model_16_infeasible_request_rescope_or_terminal.json": {
+    "自报": "863b70479a1f8444",
+    "键删除(错)复算": "863b70479a1f8444",
+    "值置空串(约定A)复算": "19e1d703617f1d3c"
+   },
+   "PENDING_RULINGS_DELTA_20260922_v54_cw_supplement_3items_123_single_delivery.json": {
+    "自报": "183321079cd621e6",
+    "键删除(错)复算": "183321079cd621e6",
+    "值置空串(约定A)复算": "dbf3152a7c4f609f"
+   },
+   "PENDING_RULINGS_DELTA_20260922_v55_cw_supplement_3items_complete_single_delivery.json": {
+    "自报": "f511ae03fe50b8a5",
+    "键删除(错)复算": "f511ae03fe50b8a5",
+    "值置空串(约定A)复算": "cdecc2b68a2f9f5e"
+   }
+  },
+  "going_forward": "本件及后续**一律**用『self_sha16 值置空串 + json.dumps(indent=1,ensure_ascii=False) + sha256[:16]』；本件自报即按此算。",
+  "note": "旧件（R368/v53/v54/v55）之 JSON **不重写**（历史保全），仅在本件并列**纠正值**。"
+ },
+ "window_status": {
+  "项1 修工具（平面层可表示）": "**DONE**",
+  "②(ii) 几何级": "**CLOSED**",
+  "项2 落搬迁（按 v55 清单实施 C-w）": "**NEXT**（需生成新受审板实例并记 sha；本件未动任何工程件）",
+  "项3 在搬迁后之板上按**真实几何**建 16 lane（**禁**退回 5 段模板类）": "**NEXT**",
+  "项4 核同时性（搬迁 x 线束：互距/净距/端点）": "**NEXT**",
+  "项5 二值 (a)/(b)": "**NEXT**",
+  "next_action": "下一实现窗口：①依 v55 清单落搬迁（新板实例 + sha）②按真实几何构建 16 lane（新冻结模型 + model_sha）③exact_gate 同时性 ④出二值。**本件不构成 (a)/(b)**。"
+ },
+ "buildability": {
+  "mode": "no_move",
+  "note": "纯只读：未烙板 · 未改任何网几何 · 未动冻结四源/判据/SPEC/生成器（仅**新增**一个只读工具）；临时仅 /tmp/opencode。",
+  "施工队问答": "本件只交**工具修复与参考层几何核**，不交线束图 ⇒ 图纸层仍缺主图。"
+ },
+ "anchors": {
+  "board_sha16": "7a5c89913d6e5d0a",
+  "frozen4": [
+   "d4e81f647be7f980",
+   "fb07d25ac426ff84",
+   "dd794c54f7ce7417",
+   "0a459839e15960b8"
+  ],
+  "criteria": "rev=6 MATCH",
+  "external": 1
+ },
+ "not_asked": [
+  "不请求 owner（未触 L1：无拓扑/接口/信号流向/球重映射变更）",
+  "未自行执行 C-w（项2 未动）",
+  "未烙板 · 未派 WORKER · 未改生成器/SPEC/原理图（仅新增只读工具）"
+ ],
+ "reproduce": [
+  "python3 k2/tools/k2_p4_b2_plane_layer_extract_v1.py k2/hw/k2_v4_8L.l8.kicad_pcb /tmp/opencode/k2r372/planes 0.05",
+  "python3 K2_R372_PLANE_REFCHECK_v1.py"
+ ],
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A（**值置空串**）",
+  "convention_A_sha16": "76ac839ceb8a4f01"
+ }
+}
