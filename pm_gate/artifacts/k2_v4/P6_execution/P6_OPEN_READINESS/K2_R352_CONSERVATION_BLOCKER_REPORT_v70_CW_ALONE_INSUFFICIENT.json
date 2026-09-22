@@ -1,0 +1,45 @@
+{
+ "schema": 1,
+ "artifact": "k2_r352_conservation_blocker_report_v70_cw_alone_insufficient",
+ "ts": "2026-09-22T08:40+0800",
+ "to": "监理",
+ "from": "ENG · ARCHER",
+ "nature": "《守恒级卡点报告 v70》（承 v69）—— **C-w 条件下按 v67 规格构造仍仅 3/16** ⇒ **C-w 单独不足；C-* 仍是必需**",
+ "anchors": {
+  "board_sha16": "7a5c89913d6e5d0a",
+  "frozen4": [
+   "d4e81f647be7f980",
+   "fb07d25ac426ff84",
+   "dd794c54f7ce7417",
+   "0a459839e15960b8"
+  ],
+  "criteria": "rev=6 MATCH"
+ },
+ "runs": [
+  {
+   "id": "C-w A",
+   "setup": "movable=可腾挪族(18 网) 置入 build_base · 巴士 waypoint · 层距 0.45 · 排除半径 P",
+   "placed": "2/16",
+   "gate": "pitch 1 · clr 3 · min_clr -0.3696（**口径不一致**：exact_gate 未给 movable 集 ⇒ 计入了待腾挪铜）"
+  },
+  {
+   "id": "C-w B",
+   "setup": "同上 + 层距 **0.55**（= P + 2·cell√2 + ε）· 排除半径 P+2·cell·√2 · **exact_gate 同给 movable 集（口径一致）**",
+   "placed": "3/16（T0_N 55.3 · T1_P 59.1 · T6_P 124.0mm）",
+   "gate": "pitch 3 · min_gap 0.0 · clr 0 · min_clr 1.065 · ep 0",
+   "failure_modes": "『端点』（waypoint/锚被已布 lane 之排除带覆盖）· 『wp』（waypoint 落于排除带）"
+  }
+ ],
+ "verdict": {
+  "判": "**C-w 释放了空间（v69）但不产生见证**：C-w 条件下 v67 规格构造仅 **3/16** ⇒ **C-w 单独不足，(i) C-* 之重排感知联合指派仍为必需**；且**顺序贪心 + 硬排除**在层距/排除半径贴 P 时反复受**网格余量**之累（0.45 层距余量 15µm < cell 0.02）。",
+  "honesty": "两次 C-w 条件跑皆**未得见证**，如实记录；不冒充。"
+ },
+ "exits": {
+  "建议": "**(i)+(ii) 联合**：①批 C-w（释放 A 侧重排带 · `PERSTA#` 首选 + `ref_plane_continuity`）②派 C-* **一次实现**：**互距感知候选生成**（非顺序贪心/非硬排除）+ 联合指派（连续几何层）⇒ 目标 `exact_gate` 互距 0 ∧ 净距 0 ∧ 端点 0 + `buildability`"
+ },
+ "buildability_field": "只读探测：未烙板 · 未改生成器/SPEC/原理图 · 未改任何网几何 ⇒ 不动证明成立；不产出施工图（缺解）。",
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "02da011e7c3e0791"
+ }
+}
