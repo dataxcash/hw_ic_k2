@@ -1,0 +1,69 @@
+{
+ "schema": 1,
+ "artifact": "k2_r360_up_out_a_side_access_parallel_constructor_gap_v1",
+ "ts": "2026-09-22T09:24+0800",
+ "from": "ENG · ARCHER（续接会话 · context 归零 · R360）",
+ "to": "监理",
+ "authority": "#K2-132 §三（D1 准：一次实现·只读·精确·无扫描·二值）· #K2-133 §三 N1（no-move 全转并入同一次实现）· #K2-133 §四（N1 后仍<16/16 ⇒ 准申报 C-w）· #K2-132 §三.5（②可行而③④出不来 ⇒ 停手出单点卡点 + 明写归属）· owner #14⑥⑦⑧",
+ "first_action": "已读 `.omo/supervision/ledger/`（含 sent/ outbox/）最新裁定：**#K2-133（outbox·2026-09-22 01:32）为最新**；**无晚于本 handoff 之裁定** ⇒ 按 #K2-132 §三 + #K2-133 N1 执行「一次实现」（③坐标化生成）。",
+ "state": {
+  "frozen4_sha16": {
+   "k2_v4_8L.l4.kicad_pcb": "d4e81f647be7f980",
+   "k2_v4_8L.kicad_pcb": "fb07d25ac426ff84",
+   "k2_sch.yaml": "dd794c54f7ce7417",
+   "drc_rules.json": "0a459839e15960b8"
+  },
+  "frozen4": "4/4 未动（本轮 sha256sum 实测）",
+  "criteria": "rev=6 MATCH（adjudicate 1937a40ae68bc288 · manifest.k2 727d09953cf9bd78 · CHANGELOG eb3da49f2ad97e37 · 0444 只读）",
+  "board_l8": "7a5c89913d6e5d0a（未动）",
+  "errata3": "5dc7b82a901d11c8",
+  "k2_HEAD": "5b66810",
+  "caliber": "keepout 0.5300（未改）· lane_w 0.16 · pitch_eff 0.435 · cell≤0.03 · min_copper_clearance 0.100",
+  "owner_gate": 0
+ },
+ "binary": {
+  "(a) 16/16 可行见证": "**未取得**（本会话执行③坐标化生成 · 见 §work · 未过 exact_gate）",
+  "(b) 守恒级不可行证书 U<16": "**不成立**（承 R353/R356/R358 四反向数测；本轮复测一致）"
+ },
+ "work_this_session": {
+  "W0_读裁定": "最新正式裁定 = #K2-133（outbox 未投递，01:32）；其后仅有 watch.py 自动「收敛停滞停止令」，无新正式裁定。",
+  "W1_free_space_topology_remeasured": {
+   "claim": "**新的连通性实测**（cell 0.02/0.03 · 物理口径 0.5300 · lane 铜按 is_lane 排除，即 N1 全转视图）：A 锚群 (x∈[84.35,93.70] · y∈[54.88,55.82]) 与 **全部 16 个 B 锚** 落在 **同一自由连通域**（comp=1）。",
+   "corridor": "x∈[108,141] · y∈[40,55] 为**一整块自由区**（含全部 16 B 锚）—— 与 R358『中层西返通道 y∈[53,56]』相容但**更大**。",
+   "portals": "A 口袋 ↔ 走廊 的**唯一两处门户**：(P1) 跨缝槽带 y≈54.88 · x∈[93.4,108]（11 离散槽 · Σ容量 21，**窄：单槽 0.14–0.90mm**）；(P2) 东门 x≈134.5（y∈[40,56.9]）。",
+   "consequence": "单条 lane 皆可通（R353 §3）；**瓶颈是「多 lane 同时穿越 P1/P2 的非交叉束布线」**。"
+  },
+  "W2_sequential_constructor_attempt": "**序贯构造器（本条 lane 已布 ⇒ 以 pitch=0.435 盘加入障碍，A_x 升序）：实测仅 2/16 布通，其后 14 条『no path』**。机制（新）：**0.435 盘对 P1 窄槽带（单槽 0.14–0.90mm）是结构性封死** —— 第一条 lane 一旦穿槽，其 0.435 邻域覆盖整条槽带 ⇒ 同族任何『逐条布/逐条 rip-up』方法（含 v3、R320 之 byAx_desc）在**西入口**必败。",
+  "W3_nesting_staircase_constructor_attempt": "**「嵌套楼梯」构造器（A→口袋层 h → 东窗站 x_s → 下潜至 ye → 134.6 → B；ye 取 R316 精确解）：未过 exact_gate** —— 东窗 x∈[136.5,143.5] 内**全程自由（y∈[43,63]）之竖列不足 16**（实测仅 ~7 个连续自由列；x=135.5/138/140/142 等被孔栏截断）⇒ 朴素「单一东窗 + 单调站序」不足；须**真正的双通道折返（口袋↔走廊双侧 reorder）**。",
+  "W4_既有最好解_localization": "**R316**（连接器侧段 16/16 · 过 exact_gate · 互距 0.4350）已成立；**R320**（全 16 条联合 13/16 · 过闸）唯一残差 = **A 侧锚群西端扇出**（未布 T0_N · T0_P · T3_N）+ **长度质量**（T1_N=314mm vs T1_P=92mm ⇒ skew 222mm ⇒ 等长/SI 不达标）。",
+  "note": "W2/W3 为**本轮定位尝试**（非扫描 · 非变体重跑；皆为构造性方法），用于**把卡点收窄到可实现件**，不作见证、不作里程碑（#K2-132 §三.4）。"
+ },
+ "attribution": {
+  "per": "#K2-132 §三.5 二分",
+  "①卡点层": "**ENG 实现能力层**（登记 **`C-B2UP-1`**：**并行非交叉束布线器** —— 须同时经 P1 窄槽带并行穿越 + 口袋/走廊双侧 reorder + 互距≥0.435 + 端点位移 0）。",
+  "②非『冻结需求须变』": "**否**：R316 已给连接器侧 16/16 过闸显式解 ⇒ 几何层**不构成**『②-UP=16/16 不可能』之证据 ⇒ **不触发** #K2-132 §十 之升级路由。",
+  "③『施工队照着这张图能不能直接连』": "**不能（当前）** ⇒ 判 **图纸层缺图**（缺 A 侧接入段之并行构造解）；非施工层难题。"
+ },
+ "minimal_unblock_request": "**全部属监理自裁面（宪法第十一条 · #K2-133 O-3）· 非 owner**：\n(甲) 准 **`C-B2UP-1` 之并行构造器分多轮同一实现**（同一目标 · 非变体重跑）并**给限期**；或\n(乙) 依 **#K2-133 §四**（N1 落板后仍 <16/16 ⇒ 条件已满足）**批 C-w**（释放 A 侧重排带 —— R351 实测 band free 0.296→0.816）以降低 A 侧扇出难度。\n**请监理二择一或并列**；ENG 将按裁定在下一实现窗口执行（**不自行申报/执行 C-w**，遵 #K2-133 §四）。",
+ "buildability": {
+  "mode": "no_move",
+  "note": "本轮**纯只读**：未烙板 · 未改任何网几何 · 未动冻结四源/判据/生成器/SPEC/原理图 ⇒ **不动证明成立**（R316/R320 亦皆只读）。"
+ },
+ "not_done": [
+  "未请求 owner 裁决（未触 L1 · 拓扑/接口/信号流向/球重映射均未动）",
+  "未改冻结四源/criteria/生成器/SPEC/原理图",
+  "未烙板 · 未派 WORKER · 临时仅 /tmp/opencode",
+  "未以布通率/有界搜索冒充见证或证书（W2/W3 明示为定位尝试）",
+  "未写 .omo/supervision/**（ENG）"
+ ],
+ "reproduce": [
+  "model: AppDir/usr/bin/python3.11 k2/tools/k2_p4_b2_board_in5_model_dump_v1.py k2/hw/k2_v4_8L.l8.kicad_pcb /tmp/opencode/archer/model_l8.json",
+  "free-space/孔隙图: /tmp/opencode/k2r360/{probe,intervals,entry}.py（cell 0.02 · hw 0.08）",
+  "序贯构造器: /tmp/opencode/k2r360/construct.py（实测 2/16）",
+  "嵌套楼梯构造器: /tmp/opencode/k2r360/construct2.py（未过闸）"
+ ],
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "7598827e5c6c7768"
+ }
+}
