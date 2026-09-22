@@ -1,0 +1,77 @@
+{
+ "artifact": "k2_r386_item3_corridor_order_evolution_and_span_census_v1",
+ "board": "k2/hw/k2_v4_8L.l9.kicad_pcb",
+ "board_sha16": "77aaa63fe016b450",
+ "boundary": "只读 · 未烙板 · 未改冻结四源/criteria/生成器/SPEC · 未派 WORKER · 不充绿。",
+ "caliber": {
+  "cell_mm": 0.03,
+  "hw_mm": 0.08,
+  "layer": "In5.Cu",
+  "pitch_mm": 0.435
+ },
+ "capability_gap": {
+  "desc": "非交叉端口序型 U<16 严格证书需要『端口环 + 洞群生成元』级不变量（mapping class group / braid type）；本项目模型类（栅格最短路 + exact_gate）结构上算不了。",
+  "id": "C-PORTORDER",
+  "kind": "能力/工具缺口（非 owner · 可限期补器）",
+  "note": "登记 · 不阻塞本阶段其余可动项",
+  "requested_by": "ENG"
+ },
+ "finding_1_order_is_rigid_in_corridor": {
+  "cuts_mm": [
+   96,
+   100,
+   104,
+   108,
+   112,
+   116,
+   120,
+   124,
+   127
+  ],
+  "order_y_asc_all_cuts": [
+   2,
+   15,
+   14,
+   13,
+   12,
+   11,
+   10,
+   9,
+   8,
+   7,
+   5,
+   4,
+   3
+  ],
+  "reading": "束序在走廊全程 x∈[96,127] **恒定不变**（= a_rank 降序之旋转 · rank2 居南端=seam）；至 x=130 才改变（进入 B 簇扇入）。⇒ **winding/rotation 发生在 A 簇出口（x<96），不在走廊**；走廊内为**刚性嵌套束**。"
+ },
+ "finding_2_corridor_not_binding": {
+  "per_cut_capacity": {
+   "x102": 78,
+   "x105": 75,
+   "x110": 81,
+   "x115": 70,
+   "x120": 85,
+   "x125": 87,
+   "x127": 89
+  },
+  "reading": "走廊各切面自由区间容量 **70–89 ≫ 16**（自由总宽 29–37mm）⇒ **走廊不是约束**；亦再证 R383 O-2『容量型 (b) 不可得』。"
+ },
+ "finding_3_binding_is_A_cluster_nested_fanout": {
+  "reading": "⇒ **约束 = A 簇出口之嵌套扇出**（唯一显著出口=北；束断面在该处只坐得下 13 条：实测缺 rank 0/1/6）。rank0(x=84.35) 在保 ≥0.435 于 rank1 之带内北向仅至 y≈57.55（R383 O-3）；rank1/rank6 因嵌套槽位被邻带占用而不可入。",
+  "residual_for_b": "残余为**拓扑不变量**问题：『嵌套族（逆序+绕墙 winding）能否坐满 16 条』——需**映射类群/辫型**不变量计算（端口环 + 各锚 keepout 洞之生成元），本模型类**不具备**。"
+ },
+ "from": "ENG · ARCHER",
+ "method": "取 R383 gate-clean 13 条见证；测其折线在各**竖向切面**之穿越序（按 y 升序=南→北）；并测各切面之自由区间容量 Σ(⌊w/0.435⌋+1)。",
+ "model_sha16": "84f19701dfc1db31",
+ "next": "依 #K2-136 §三 预声明之条件升级路由 ⇒ 交**监理**判『冻结需求 ②-UP=16/16 是否须变』（监理自裁面 · 宪法第十一条）；ENG 备 (i)/(ii) 两条续推（见 ledger R385 todo）。本件不自行触 owner 路由。",
+ "purpose": "P2 余项（R385 todo 支路 i 之定量前置）：定位**约束究竟在走廊还是在 A 簇出口**。",
+ "schema": 1,
+ "to": "监理",
+ "ts": "2026-09-22T12:01:34.928737+08:00",
+ "verdict": {
+  "(a)": "未取得（N=13/16 · gate-clean 子集）",
+  "(b)": "未建立（容量型已排除；端口序型=序类可在 13 条上实现，判据不排除 16 ⇒ 需不变量；本模型类不具备 · C-PORTORDER）",
+  "stage": "P4 收口窗口 项3 · fail-closed 未越阶段"
+ }
+}
