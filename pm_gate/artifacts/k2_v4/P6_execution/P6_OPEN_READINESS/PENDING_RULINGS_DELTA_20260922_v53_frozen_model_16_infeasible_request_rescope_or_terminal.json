@@ -1,0 +1,39 @@
+{
+ "schema": 1,
+ "artifact": "pending_rulings_delta_20260922_v53_frozen_model_16_infeasible_request_rescope_or_terminal",
+ "ts": "2026-09-22T10:18+0800",
+ "from": "ENG · ARCHER R369（应 #K2-134 §二窗口之收尾）",
+ "to": "监理",
+ "authority": "#K2-134 §二.5（求解日志已补）· §二.7（终局条款：本轮仍无 (a)/(b) ⇒ 不再续授同类窗口，转 §三 (乙) C-w）· §二.6（禁改模型 ⇒ 重划须监理裁定）· 宪法第十一条（放行范围/判据语义澄清=监理自裁面）",
+ "owner_gate": 0,
+ "fact": "(甲) 窗口之**实际求解**已完成（R368 · 件在库 · commit 3ca360a）：**(A)** 冻结模型内 **16/16 构造性不可行**（`a_rank 0` = `PCIE_UP_OUT0_N_J2` 可行 t 集仅 {56.75,56.80,56.85}，由 (7) 递减 + (2) 0.435 得 `t_rank1 ≤ 56.415 < 56.60` 下界 ⇒ 无含 lane0 之 ≥2 条解）；**(B)** exact 单调链 DP 上界 **7/16**（两 sense、两分辨率一致；机件校验 all-True=16）；**(C)** 见证重建 7 条但 `exact_gate` 违例（互距 4 · 净距 1）⇒ 不主张见证。⇒ **(a) 未得 · (b) 不成立**（7/16 只是该模型类上界；R320 同板已 13/16 过闸）。",
+ "why_not_variant_rerun": "模型逐字节取自 R365 `frozen_model.json`（model_sha16 `82eb35c856d7a704`）；求解脚本即作者本人之算子化 `solve_frozen.py` 之模板。**零改模型 · 零参数扫描 · 零工具更换**；两 sense 与两分辨率属**冻结模型自身之离散化/取向**。",
+ "requested_ruling": [
+  "(甲′) **准**：将 `C-B2UP-1` 之决策空间**重划**为「真实几何之一般单层阶梯」（栅格自由路径 + 联合非交叉 —— 即已含 13/16 之类），并**再授一次实现窗口**（须先冻结并记**新** `model_sha`；强止损同 #K2-134 §二.7）。",
+  "(乙′) 或依 #K2-134 §二.7 **终局条款**：确认 (甲) 类不再续授，改以 **C-w 清单路径（v52）+ 联合设计** 为主轴（v52 之补件范围由监理圈定）。",
+  "两案皆属**监理自裁面**（放行范围 / 模型语义 / 差异定性），**ENG 不请求 owner、不自行改模型**。"
+ ],
+ "caveat_宪法十三": "R368 只交**上界与不可行性**（不交线束图）⇒ **图纸层仍缺图**；`buildability.mode = no_move`（纯只读）。",
+ "anchors": {
+  "board_sha16": "7a5c89913d6e5d0a",
+  "frozen4": [
+   "d4e81f647be7f980",
+   "fb07d25ac426ff84",
+   "dd794c54f7ce7417",
+   "0a459839e15960b8"
+  ],
+  "criteria": "rev=6 MATCH",
+  "external": 1,
+  "artifacts": [
+   "K2_R368_CB2UP1_FROZEN_MODEL_FIRST_SOLVE_AND_16_INFEASIBILITY_v1.json"
+  ]
+ },
+ "not_asked": [
+  "不请求 owner（未触 L1：无拓扑/接口/信号流向/球重映射之变更请求）",
+  "不自行改模型 / 不自行执行 C-w / 未烙板 / 未派 WORKER / 未写 .omo/supervision/**"
+ ],
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "863b70479a1f8444"
+ }
+}
