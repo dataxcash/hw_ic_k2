@@ -1,0 +1,90 @@
+{
+ "schema": 1,
+ "artifact": "k2_r421_up_out_corridor_layer_registry_conflict_in2_frozen_spec_vs_in5_rulings_v1",
+ "ts": "2026-09-22T23:29:19+08:00",
+ "from": "ENG · ARCHER（续接会话 · 应监理『按已批准计划推进当前阶段 · fail-closed』）",
+ "to": "监理",
+ "owner_gate": 0,
+ "authority": "监理自动续推（阶段门 fail-closed）· **owner #14⑦**（口径/权威类先交监理）· 宪法第十一条（**冻结集变更 = owner**）· 逐字出处复核",
+ "nature": "**只读取证件**：②-UP 要件卡（逐字出处）+ 发现**在册文档级冲突**：**冻结 SPEC rev-55 把 J2 走廊（含 `PCIE_UP_OUT0-7_J2`）指派 `In2.Cu`（F→In2→F · ≤2 孔）**，而**监理 ②-UP 闸文本反复作 `F→In5→F`**。**ENG 不自裁谁为准**。",
+ "requirement_card": [
+  {
+   "clause": "②-UP 网集",
+   "quote": "`PCIE_UP_OUT` 16/16 车道",
+   "source": "监理 #K2-73 §八 · #K2-130 §七 · #K2-132 §七（文本）",
+   "class": "监理裁定"
+  },
+  {
+   "clause": "②-UP 过孔预算",
+   "quote": "**≤2 via**",
+   "source": "同上 + **机判** `k2/tools/k2_layout_quality_check_v1.py` B2 行（`via_by_net`，匹配 `PCIE_(DN|UP)_OUT|PCIE_REFCLK`）",
+   "class": "**机判维（已在册）**"
+  },
+  {
+   "clause": "②-UP 走廊层（监理文本）",
+   "quote": "**长走零改层 `F→In5→F`**",
+   "source": "监理 #K2-73 §八 · #K2-130 §七 · #K2-132 §七 · #K2-133 §一（『先删尽本 16 `PCIE_UP_OUT*` 网自身之 **In5** 旧铜』）",
+   "class": "监理裁定（**文本**）"
+  },
+  {
+   "clause": "②-UP 走廊层（冻结 SPEC）",
+   "quote": "constraints.j2_escape_topology.rule = 『2026-08-19 8 层定案: J2 双列焊盘墙 0.6 pitch/0.35 高 → **UP_OUT 16 网经 In2 单内层走廊 (F→In2→F 单次换层)**, 不再走 B.Cu』；outer_basis = 『8 层（LID REV6）：**In2 独立走廊容纳全部 UP_OUT**』",
+   "source": "**冻结 SPEC rev-55**（`964101b19015f6d7`）· `constraints.j2_escape_topology`",
+   "class": "**冻结源**"
+  },
+  {
+   "clause": "②-UP 走廊层（冻结 SPEC · layer_plan）",
+   "quote": "layer_plan.j2_escape_nets.semantics = 『东走廊(J2) nets = PCIE_DN0-7 (A_PER 带, VIA_IN2->In2 east) + **PCIE_UP_OUT0-7_J2 (B_PET 带, VIA_IN2->In2 east)**; dogbone/via coords L3 open』· `in2_width_mm = 0.205`",
+   "source": "**冻结 SPEC rev-55** · `layer_plan`",
+   "class": "**冻结源**"
+  },
+  {
+   "clause": "②-UP 换层语义（冻结 SPEC · 过孔）",
+   "quote": "vias.high_speed.basis = 『… 每线 **≤2 过孔 = 单次换层 (F→In2→F)**，每对差分 4 过孔』",
+   "source": "**冻结 SPEC rev-55** · `vias.high_speed`",
+   "class": "**冻结源**"
+  },
+  {
+   "clause": "束间 0.435",
+   "quote": "只管束间；对内归 SPEC 自有配对规则 ≥0.175 + DRC",
+   "source": "**#K2-143 §二**（口径钉死）",
+   "class": "监理裁定（已钉死）"
+  },
+  {
+   "clause": "端点/球位位移",
+   "quote": "端点/球位位移 **0**",
+   "source": "#K2-133 §一 · #K2-73 §八",
+   "class": "监理裁定"
+  }
+ ],
+ "conflict": {
+  "statement": "**同一 ②-UP 目标之『长走层』在两处在册文档中相反**：**冻结 SPEC rev-55 = `In2`**（且声明 8 层定案、宽度 0.205mm、F→In2→F）；**监理闸文本 = `In5`**（F→In5→F，且 #K2-133 令『先删尽本 16 网自身之 **In5** 旧铜』）。",
+  "has_the_spec_ever_been_amended_to_In5": "**否** —— 全 SPEC 检索：`j2_escape_topology` 仅于 rev-7 更动 `outer_basis`（B.Cu 角色 CO-73 更正），**保留『In2 独立走廊容纳全部 UP_OUT』**；无任何 rev 卡将 UP_OUT 走廊改为 In5。",
+  "what_the_machine_actually_enforces": "`k2_layout_quality_check_v1.py` B2 行**只数 via**（`via_by_net` / `hs_hist` / `max_via`）——**全文无 In2/In5** ⇒ **『走廊层』条款无任何机判**。",
+  "board_reality": "l9 现板 16 网逐网 **F→In2→In5→B（4 孔）**（R416/R419）——与 SPEC 自述之『既有 U6↔J2 范式：F.Cu 逃逸 → F→In2 → In2 竖降 → In2→In5 → In5 横贯 → …』一致 ⇒ **既非纯 In2(F→In2→F) 亦非纯 In5(F→In5→F)**。"
+ },
+ "why_this_matters_now": [
+  "**owner 待决选项『放宽「孔数/层数」一条』之语义取决于本冲突**：若以**冻结 SPEC（In2）**为准 ⇒ 被放宽的是『In2 走廊 · F→In2→F』；若以**监理闸文本（In5）**为准 ⇒ 被放宽的是『In5 长走 · F→In5→F』。两者对既有布线/搬迁清单之含义**不同**。",
+  "**若以 SPEC（In2）为准** ⇒ 本轮及既往之整条 **In5 车道程序**（In5 走廊普查/容量证书 R393–R398、R416 束间实测、以及**为腾空 In5 而做之 v55 搬迁**）其**目标层可能偏靶** —— 属**须立即澄清**项（非事后返工）。",
+  "**若以监理闸（In5）为准** ⇒ 冻结 SPEC `constraints.j2_escape_topology` / `layer_plan.j2_escape_nets` / `vias.high_speed.basis` 三处**滞后** ⇒ 须 SPEC 版本 bump（**冻结集变更 ⇒ 第十一条 = owner**）。",
+  "**机判缺口**：走廊层无条件判 ⇒ 即便强行以 In5 布线，亦无任何在册判据会拦/放（**属检查覆盖缺口**，非新齿）。"
+ ],
+ "requested_ruling": [
+  "**Q1（权威）**：②-UP 之『长走层』以**冻结 SPEC（In2 · F→In2→F）** 为准，抑或**监理闸文本（In5 · F→In5→F）**为准？",
+  "**Q2（路径）**：若 Q1 = In5 ⇒ 请监理**明示冻结 SPEC 三处滞后之处置**（须 SPEC 版本 bump ⇒ 依第十一条**升 owner**，或监理判为『声明性回填』不属冻结集变更）；若 Q1 = In2 ⇒ 请监理明示**本项是否须重开目标层**（届时 In5 车道程序与 v55 搬迁之定位须一并重判）。",
+  "**Q3（覆盖）**：走廊层**无条件判**（`k2_layout_quality_check_v1.py` 只数 via）——是否登记为**检查覆盖缺口**（比照 C-17；**非新增检查齿**，仅登记既有条款未被机判）。",
+  "**ENG 声明**：**不自裁**、不据此改任何件；本件为**事实呈报 + 出处卡**（不请求 owner 直呈；若 Q2 触发冻结集变更，请监理依第十一条处理）。"
+ ],
+ "anchors": {
+  "frozen_spec_rev55": "964101b19015f6d7",
+  "drc_rules": "0a459839e15960b8",
+  "board_l9": "77aaa63fe016b450",
+  "criteria": "rev=6 MATCH",
+  "frozen4": "4/4 未动",
+  "checker": "k2/tools/k2_layout_quality_check_v1.py（B2 = via 计数；无层）"
+ },
+ "not_asked": [
+  "未改任何件/判据 · 未烙板 · 未派 WORKER · 未启新法 · 未新增检查齿（Q3 仅请求登记既有条款之覆盖缺口）"
+ ],
+ "computation": "**零**（纯只读取证/检索）"
+}
