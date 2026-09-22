@@ -1,0 +1,38 @@
+{
+ "schema": 1,
+ "artifact": "pending_rulings_delta_20260922_v65_l9_delta_revert_option_zero_design",
+ "ts": "2026-09-22T23:53:05",
+ "ts_note": "机取时钟写入",
+ "from": "ENG · ARCHER R424（应 handoff R423 §8.4 · 只读核证）",
+ "to": "监理",
+ "owner_gate": 0,
+ "authority": "**#K2-142 §四**（准只读残余）· **owner #14⑥/⑧** · **#K2-143 §三/§四**（甲分支其价 ≈ 零返工 · 含「修底图」）· 宪法第十一/十三条",
+ "supplement_to": "`PENDING_RULINGS_DELTA_20260922_v62_l9_relocation_drc_defect_disposition.json`（**同题补件 · 不新开题 · 不重复呈报 owner**）",
+ "trigger": "**新事实（把 v62 之处置选项从 2 条扩为 3 条，并下修『修底图』成本）**：l9 与 l8 之**全部差异 = 铜上那一差集**（切除两板所有 `(segment…)/(via…)` 块后**逐字节相同** · sha256[:16] 皆 `c05784bee336c30f`）= **增 303 线段 + 2 过孔 / 删 27 线段 + 4 过孔**（增集**全 0.100mm 宽**），且**删集 = R331 在册 neck-window 清单逐网命中、零外溢**、**R411 全部 culprit uuid ⊆ 增集**。",
+ "supporting_facts": [
+  "**归因闭环**：l9 之 59 error / 11 非 45° / 0.100 宽漂移 / 最小铜间距 FAIL **无例外**出自该差集；**l8 同会话·同仪器·同 pro 实测 error=0**（204 warning · unconn 0）。⇒ **回退差集后板几何 ≡ l8 ⇒ error=0/非45°=0 成立 by construction（零设计）**。",
+  "**搬迁之唯一目的**（R331 · #K2-136 §三）= 腾 In5 窄颈（x∈[93,112]×y∈[44,58]）给**16 lane 程序**；而 16/16 lane **恰为 owner 正在取舍的那一条要求**（②-UP 封顶口径）。",
+  "**搬迁不动 ②-UP 16 网**：差集 4 网（`PERSTA#` / `DS320_STRAP_B_ADDR1_7-0` / `DS320_STRAP_B_ADDR0_15-8` / `I2C1_SDA`）皆非 `PCIE_UP_OUT*_J2` ⇒ 回退**不触** ②-UP 16 网之 In5 铜（与 R414 impact envelope 一致）。",
+  "**前向修（保留搬迁）之 C1 缺图**：`DS320_STRAP_B_ADDR1_7-0` In2 4 段须**另择路径避开 PCIE_UP In2 束 = 重新布线**；在册件只有「删」清单、**无『改后』目标几何** ⇒ 按宪法第十三条属**图纸层缺图**，非施工项。"
+ ],
+ "why_decision_relevant": "#K2-143 §三 把 owner『甲（放宽一条）』标价 ≈ **零返工**（剩「修底图 + 一次正式复检」）。本件表明：**若 C-w 搬迁无需保留，则『修底图』= 确定性回退（零设计 · 零工时 · by construction）**；**只有『必须保留搬迁』时**才付 C1 重新布线之**真设计成本**。二者相差一个设计窗口。",
+ "requested_ruling": [
+  "**Q1（走廊/搬迁处置 · 监理自裁面）**：owner 若裁「甲」⇒ **C-w 搬迁是否仍需保留**？不需 ⇒ 请裁『受审板回 `l8`（或等价确定性回退）+ 同步重做 SPEC 声明性回填/派生指纹重锚』；需 ⇒ 见 Q2。",
+  "**Q2（放行范围）**：若保留搬迁 ⇒ C1/C2/C3 之**目标几何由谁产出**？（ENG 未获批不得改设计内容；宪法第一条：监理不替 ENG 写方案 ⇒ 请指定方案件授权范围与窗口。）",
+  "**Q3（口径）**：`C-PRO-L9`（l9 无同批 pro）正式口径请钉死（本件 A/B 依 R410 先例以 l8 pro 代跑 · 读数与在册 R410 逐类一致）。",
+  "**ENG 声明**：未修复/未烙板/未构造任何新板实例；**不自裁**；**不请求 owner 直呈**（owner 项已在途 #K2-142，不重复呈报）。"
+ ],
+ "anchors": {
+  "board_l8": "7a5c89913d6e5d0a",
+  "board_l9": "77aaa63fe016b450",
+  "criteria": "rev=6 MATCH",
+  "frozen4": "4/4 未动",
+  "r424": "见 .sha16.txt",
+  "r411": "6cb38c2c53d6bef0",
+  "r331": "1a51ba6abf46bddd"
+ },
+ "computation": "只读：pcbnew LoadBoard 对象级差集（2 法互证）· 文件级切块逐字节比对 · kicad-cli DRC A/B（同 pro）",
+ "not_asked": [
+  "未改任何件/判据/生成器/SPEC/原理图 · 未烙板 · 未派 WORKER · 未新增检查齿 · 未写 `.omo/supervision/**`"
+ ]
+}

@@ -1,0 +1,275 @@
+{
+ "schema": 1,
+ "artifact": "k2_r424_l9_delta_exact_and_deterministic_revert_buildability_v1",
+ "ts": "2026-09-22T23:52:46",
+ "from": "ENG · ARCHER（续接会话 · context 归零 · 承 handoff R423）",
+ "to": "监理",
+ "owner_gate": 0,
+ "authority": "**#K2-142 §四**（准 P4 残余只读测量 · 禁自启新法/变体/参数扫描/派工/烙板）· **owner #14⑥**（不 park：无本阶段可动项 ⇒ 找活/造活）· **owner ⑧**（工程成果须附可施工性 + 搬迁清单）· **#K2-143 §四**（甲分支含「修底图」）· **handoff R423 §8.4**（裁前只读残余）· 宪法第十三/十一条",
+ "first_action": "已读 `.omo/supervision/ledger/`（含 `sent/`、`outbox/`）全部 `K2-RULING-*` ⇒ **最新 = #K2-144（2026-09-22T23:45，R421 三问全自裁 · owner 项 0）· 无更晚裁定 · 无 owner 回件** ⇒ 未越其复工单；本轮做 handoff §8.4 明文允许之**只读残余**（择其对本阶段仍是硬前置者：修底图之「动到哪」）。",
+ "purpose": "把 l9 缺陷从「59 error/38 真冲突」（error 级）下钻到 **整板文件级差集**（对象级、逐字节可复核），从而回答 #K2-143 §三「甲分支 ≈ 零返工（剩修底图）」里**修底图到底要不要设计**：给出**确定性、零设计**的回退路径（若成立）与其**可施工性/搬迁清单**；对**不可零设计**的部分如实判「图纸层缺图」。",
+ "nature": "**只读核证**（未修复 · 未烙板 · 未生成任何新板实例 · 未改变审板/pro/生成器/SPEC/原理图/冻结四源/`criteria/**` · 未派 WORKER）。",
+ "anchors": {
+  "frozen4": "4/4 未动（l4 `d4e81f647be7f980` · 基板 `fb07d25ac426ff84` · sch `dd794c54f7ce7417` · rules `0a459839e15960b8`）",
+  "criteria": "rev=6 MATCH（`manifest.k2.yaml 727d09953cf9bd78` · `adjudicate.py 1937a40ae68bc288` · 只读）",
+  "board_l8": "7a5c89913d6e5d0a",
+  "board_l9": "77aaa63fe016b450",
+  "pro": "k2_v4_8L.l8.kicad_pro c009058005829f09（l9 无同批 pro · C-PRO-L9）",
+  "nets": "k2_sch.errata-3.yaml 5dc7b82a901d11c8",
+  "instrument": "AppDir/bin/kicad-cli 10.0.5（DRC）· AppDir/bin/python3.11 pcbnew 10.0.5（LoadBoard 只读）",
+  "k2_head": "2526dd6（R422）"
+ },
+ "method": {
+  "board_diff": "pcbnew `LoadBoard` 只读对拍：逐 track/via 取 (net,layer,width,start,end / net,x,y,drill,layers) 多重集，l8 与 l9 相减 ⇒ 增/删集",
+  "structure_diff": "逐 footprint/pad/zone(outline+priority+filled 标志 §)/drawing/边框 比对 ⇒ 判差集是否**只**落在铜上",
+  "file_level": "把两板原文之**全部 `(segment …)` 与 `(via …)` 块整体切除**后逐字节比对（含所有 zone 块、含铺铜 fill）",
+  "drc_ab": "同会话 · 同仪器 · **同 pro**（l8 pro 复制入受控 work-dir）分别对 l8/l9 跑 `kicad-cli pcb drc --severity-all` ⇒ A/B",
+  "crosscheck": "R411 之 culprit uuid / non45 uuid 与本次「增集 uuid」比子集；R331 neck-window 清单与本此「删集」逐网比数"
+ },
+ "key_findings": [
+  "**F1（差集=铜，逐字节可证）**：切除全部 `(segment…)/(via…)` 块后，l8 与 l9 文本**逐字节相同**（余部 sha256[:16] 皆 `c05784bee336c30f` · 各 1,118,129 bytes）⇒ **l8→l9 之全部差异 = 线段/过孔**，footprint/pad/zone(含铺铜 fill)/drawing/边框**一字节未改**。",
+  "**F2（差集恰为搬迁产物）**：增 **303 线段 + 2 过孔**、删 **27 线段 + 4 过孔**；**增集 305 个对象全部宽度 0.100mm**（l8 同网为 0.200）⇒ = R420 所记「303 段 0.10」之**全集**。",
+  "**F3（删集 = R331 清单逐项命中）**：逐网删除数 vs R331 neck-window 清单 —— `PERSTA#` 13/13 段·0 孔；`DS320_STRAP_B_ADDR1_7-0` 11/11 段·**2/2 孔**；`I2C1_SDA` 3/3 段·**1/1 孔**；`DS320_STRAP_B_ADDR0_15-8` 0/0 段·**1/1 孔** ⇒ **删集 = 已授权之 C-w 搬迁删除集，零外溢**。",
+  "**F4（增集包含全部肇事对象）**：R411 之 9 个 culprit uuid **⊆** 增集（missing=0）；11 段非 45° uuid **⊆** 增集（missing=0）⇒ 结构性归因成立：**l9 之 59 error / 11 非 45° / 0.100 宽漂移 / 最小铜间距 FAIL，全部源自这一个差集**。",
+  "**F5（同会话独立 DRC A/B）**：**l8 = 0 error**（204 warning · unconn 0）· **l9 = 59 error**（shorting 19 · tracks_crossing 6 · clearance 21 · hole_clearance 13 · 208 warning · unconn 0）—— 与在册 R410 逐类同。",
+  "**F6（搬迁之唯一目的 = 腾 In5 窄颈给 16 lane）**：R331 定性 4 网之 neck-window（x∈[93,112]×y∈[44,58]）In5 铜为「候选 lane 阻塞物」（零候选 lane 8/16→0/16）；#K2-136 §三 之联合收口窗口 = ①修工具 ②落搬迁 ③**建 16 lane** ④核同时性 ⇒ **C-w 搬迁存在的理由就是 16/16 lane 程序**。",
+  "**F7（搬迁不动 ②-UP 16 网）**：差集 4 网 = `PERSTA#` / `DS320_STRAP_B_ADDR1_7-0` / `DS320_STRAP_B_ADDR0_15-8` / `I2C1_SDA`，**皆非** `PCIE_UP_OUT*_J2` ⇒ ②-UP 16 网之 In5 铜在 l8/l9 **逐字节同**（与 R414 之 impact envelope 一致）。"
+ ],
+ "delta_census": {
+  "tracks": {
+   "l8": 5180,
+   "l9": 5456,
+   "added": 303,
+   "removed": 27,
+   "added_by_net_layer_width": [
+    {
+     "key": "PERSTA#/In5.Cu/0.1",
+     "n": 278
+    },
+    {
+     "key": "DS320_STRAP_B_ADDR0_15-8/B.Cu/0.1",
+     "n": 11
+    },
+    {
+     "key": "DS320_STRAP_B_ADDR0_15-8/F.Cu/0.1",
+     "n": 7
+    },
+    {
+     "key": "DS320_STRAP_B_ADDR1_7-0/In2.Cu/0.1",
+     "n": 4
+    },
+    {
+     "key": "I2C1_SDA/B.Cu/0.1",
+     "n": 2
+    },
+    {
+     "key": "I2C1_SDA/In5.Cu/0.1",
+     "n": 1
+    }
+   ],
+   "removed_by_net_layer_width": [
+    {
+     "key": "PERSTA#/In5.Cu/0.2",
+     "n": 13
+    },
+    {
+     "key": "DS320_STRAP_B_ADDR1_7-0/In5.Cu/0.2",
+     "n": 11
+    },
+    {
+     "key": "I2C1_SDA/In5.Cu/0.2",
+     "n": 3
+    }
+   ],
+   "added_all_width_mm": 0.1
+  },
+  "vias": {
+   "l8": 734,
+   "l9": 732,
+   "added": [
+    {
+     "uuid": "c055112a-f55c-59ef-bf59-6a5f018e28c3",
+     "net": "DS320_STRAP_B_ADDR0_15-8",
+     "x": 92.98,
+     "y": 48.06,
+     "drill": 0.2,
+     "size": 0.35,
+     "top": "F.Cu",
+     "bot": "B.Cu"
+    },
+    {
+     "uuid": "4fca1071-0b78-504d-96c4-f67a44d5eb44",
+     "net": "I2C1_SDA",
+     "x": 92.54,
+     "y": 51.86,
+     "drill": 0.2,
+     "size": 0.35,
+     "top": "F.Cu",
+     "bot": "B.Cu"
+    }
+   ],
+   "removed": [
+    {
+     "uuid": "6425df6d-6de6-53ae-8479-68da0c8edc0a",
+     "net": "I2C1_SDA",
+     "x": 102.5,
+     "y": 52.1375,
+     "drill": 0.2,
+     "size": 0.35,
+     "top": "In5.Cu",
+     "bot": "B.Cu"
+    },
+    {
+     "uuid": "9a40207a-7a0b-5c99-8e28-01a72a29604a",
+     "net": "DS320_STRAP_B_ADDR1_7-0",
+     "x": 106.75,
+     "y": 55.4796,
+     "drill": 0.2,
+     "size": 0.35,
+     "top": "In2.Cu",
+     "bot": "In5.Cu"
+    },
+    {
+     "uuid": "d6df6dea-01c1-5aaf-ab1a-3ab7f1580092",
+     "net": "DS320_STRAP_B_ADDR1_7-0",
+     "x": 103.05,
+     "y": 51.8796,
+     "drill": 0.2,
+     "size": 0.35,
+     "top": "In2.Cu",
+     "bot": "In5.Cu"
+    },
+    {
+     "uuid": "36977850-7105-5153-9113-92f144cc972d",
+     "net": "DS320_STRAP_B_ADDR0_15-8",
+     "x": 105.125,
+     "y": 52.09,
+     "drill": 0.2,
+     "size": 0.35,
+     "top": "F.Cu",
+     "bot": "B.Cu"
+    }
+   ]
+  },
+  "added_bbox_mm_per_net": {
+   "DS320_STRAP_B_ADDR1_7-0": [
+    83.66,
+    50.06,
+    110.26,
+    60.78
+   ],
+   "DS320_STRAP_B_ADDR0_15-8": [
+    92.98,
+    48.06,
+    105.12,
+    54.26
+   ],
+   "I2C1_SDA": [
+    92.52,
+    51.84,
+    102.48,
+    52.12
+   ],
+   "PERSTA#": [
+    83.8,
+    50.06,
+    117.9,
+    55.6
+   ]
+  },
+  "R331_crosscheck": {
+   "DS320_STRAP_B_ADDR1_7-0": {
+    "r331_neck_seg": 11,
+    "removed_seg": 11,
+    "r331_neck_via": 2,
+    "removed_via": 2
+   },
+   "DS320_STRAP_B_ADDR0_15-8": {
+    "r331_neck_seg": 0,
+    "removed_seg": 0,
+    "r331_neck_via": 2,
+    "removed_via": 1
+   },
+   "PERSTA#": {
+    "r331_neck_seg": 13,
+    "removed_seg": 13,
+    "r331_neck_via": 6,
+    "removed_via": 0
+   },
+   "I2C1_SDA": {
+    "r331_neck_seg": 3,
+    "removed_seg": 3,
+    "r331_neck_via": 9,
+    "removed_via": 1
+   }
+  }
+ },
+ "drc_ab_same_session_same_pro": {
+  "l8": {
+   "total": 204,
+   "error": 0,
+   "warning": 204,
+   "unconnected": 0,
+   "error_by_type": {}
+  },
+  "l9": {
+   "total": 267,
+   "error": 59,
+   "warning": 208,
+   "unconnected": 0,
+   "error_by_type": {
+    "shorting_items": 19,
+    "tracks_crossing": 6,
+    "clearance": 21,
+    "hole_clearance": 13
+   }
+  },
+  "note": "l9 无同批 pro ⇒ 依 R410 先例以 l8 pro 代跑（C-PRO-L9 · 已呈报）；两板同以该 pro 跑 ⇒ A/B 可比。"
+ },
+ "verbatim_proof": {
+  "l8_non_trackvia_sha256_16": "c05784bee336c30f",
+  "l9_non_trackvia_sha256_16": "c05784bee336c30f",
+  "identical": true,
+  "bytes_l8": 1118129,
+  "bytes_l9": 1118129
+ },
+ "repair_options": [
+  {
+   "id": "R",
+   "name": "**回退（撤销 C-w 搬迁）**",
+   "shape": "删 l9 新增之 305 对象 · 放回 l8 被删之 31 对象（或等价地：受审板取 l8）",
+   "design_work": "**零设计**。F1 已证「切除线段/过孔块后两板逐字节同」⇒ 回退后板之几何与 l8 **完全相同**；而 l8 于**同会话·同仪器·同 pro** 实测 **error=0**（F5）⇒ 回退板 **error=0 / 非45=0 成立 by construction**，无须现场搜索、无须重新布线、无须改任何规则。",
+   "move_list": "网 4（`PERSTA#` 恢复 13 段/删 278 段 · `DS320_STRAP_B_ADDR1_7-0` 恢复 11 段 2 孔/删 4 段 · `DS320_STRAP_B_ADDR0_15-8` 恢复 1 孔/删 18 段 1 孔 · `I2C1_SDA` 恢复 3 段 1 孔/删 3 段 1 孔）；动到**原位**（原坐标，即 l8 位置）；**不动** l8 既有铜；**不动**平面/缝合孔/焊盘",
+   "approval": "监理（PENDING_RULINGS v62 之 l9 缺陷处置项）⇒ 若与 owner ②-UP 选择联动，随 #K2-143 §四 预声明一并落地",
+   "consequences": "受审板锚变更 ⇒ SPEC 声明性回填（board_sha16 ×3）与 P4 派生模型指纹重锚须重做；`criteria rev=7`/item11 之「l9 落 hw/」需随之改判",
+   "buildability": "**能**（施工队照此清单可直接执行：删除清单 + 恢复清单皆为**已存在之原文块**，无任何待定几何）"
+  },
+  {
+   "id": "F",
+   "name": "**前向修缺陷（保留 C-w 搬迁）**",
+   "shape": "C0 铺铜回填 18 区 · C1 消除 20 冲突（`ADDR1_7-0` In2 4 段避 `PCIE_UP0_N/1_N/2_P/3_P/4_N/5_N`）· C2 消除 5（`I2C1_SDA` via + stub）· C3 消除 13（`ADDR0_15-8` F/B stub + via）· 11 段 45° 化 · 303 段宽 0.100→网类/原宽 0.200",
+   "design_work": "**C0/45°/宽度三项 = 规则映射**（可施工）；**C1 = 重新布线**：`DS320_STRAP_B_ADDR1_7-0` 之 In2 新走线须**另择路径**以避开 PCIE_UP In2 束 —— **目标几何不存在于任何在册件**（R331 只有「删」清单、无「改后」几何）⇒ **须设计**。C2/C3 同样只有「移」的方向、无目标坐标。",
+   "move_list": "C1/C2/C3 **缺『动到哪』**（无目标坐标/无在册几何）⇒ 按 owner ⑧/宪法第十三条 **判「图纸层缺图」**，不得据以开工",
+   "approval": "须监理放行；若动设计内容（重新布线）⇒ 依「未获批不得改设计内容」红线，须先有获批之方案件 +（若属方法变更）新生产窗",
+   "buildability": "**不能**（C1/C2/C3 需现场设计 ⇒ 正是宪法第十三条所禁之「需现场搜索/兜底」）"
+  }
+ ],
+ "buildability_human_sentence": "施工队照哪张图能直接连？—— **回退图（R）：能**：清单就是「删 305 / 放回 31」，全为板上已有对象，无需任何现场判断；**前向图（F）：不能**：C1 那一簇要重新绕线，而**绕去哪没有图**。",
+ "decision_relevance": "#K2-143 §三 把 owner 之「甲（放宽一条）」标价 ≈ **零返工**（剩「修底图 + 一次正式复检」）。本件把「修底图」再下钻一层：**若 C-w 搬迁无需保留，则『修底图』= 确定性回退（零设计、零工时，by construction）**；**只有『必须保留搬迁』时，才付 C1 重新布线之设计成本**。而搬迁之唯一目的（F6）= 16/16 lane 程序 = **恰为 owner 正在取舍的那一条要求**。",
+ "open_questions_for_supervisor": [
+  "**Q1（监理自裁面 · 走廊/搬迁处置）**：owner 若裁「甲（放宽孔数/层数一条）」⇒ **C-w 搬迁是否仍需保留**？若不需 ⇒ 请裁定受审板回 `l8`（或等价之确定性回退），并同步重做 SPEC 声明性回填与派生指纹重锚；若需 ⇒ 请点名 C1 重新布线设计之归属（第二条）。",
+  "**Q2（放行范围）**：若保留搬迁，C1/C2/C3 之**目标几何由谁产出**？（ENG 未获批不得改设计内容；宪法第一条明示监理不替 ENG 写方案 ⇒ 需监理指定「方案件产出」之授权范围与窗口。）",
+  "**Q3（口径）**：`C-PRO-L9`（l9 无同批 pro）之正式口径请钉死；本件 A/B 依 R410 先例以 l8 pro 代跑，读数已与在册 R410 逐类一致。"
+ ],
+ "not_done": [
+  "未修复/未生成 l9′/未烙板/未做变体重跑与参数扫描（#K2-142 §四 禁）· 未改施加器/SPEC/原理图/生成器 · 未派 WORKER · 未写 `.omo/supervision/**`（全程只读 + `/tmp/opencode` 临时区）"
+ ],
+ "self_check": "防假：① 差集以**两种独立方法**（pcbnew 对象级 + 文件级切块逐字节）互证，结论一致；② 删集与 R331 在册清单**逐网比数**命中，未见外溢；③ DRC 用**在册仪器 + 同 pro + 同会话**跑 A/B（首次以默认规则跑得 1108 error，已识别为**口径错误**（未挂 pro）并作废，未采信）；④ 未把「by construction」冒充实测见证 —— 回退板**未构造**，其合法性由「与 l8 几何相同 + l8 实测 0 error」推得，此推理链已写明；⑤ 未越过 `criteria/`（只读）与冻结四源。",
+ "files": [
+  "K2_R424_L9_DELTA_EXACT_AND_DETERMINISTIC_REVERT_BUILDABILITY_v1.json/.md/.sha16.txt",
+  "R424_l9_delta_measure/（delta_tracks_added_303 · delta_tracks_removed_27 · delta_vias_added2_removed4 · drc_ab_l8_l9_same_pro · file_level_identity_proof · uuid_crosscheck_R411）"
+ ],
+ "not_asked": [
+  "未就拓扑/接口/信号流向/球重映射提问（无涉 · L2 自裁面）· 未直接升级 owner（owner 项已在途 #K2-142，不重复呈报）"
+ ]
+}
