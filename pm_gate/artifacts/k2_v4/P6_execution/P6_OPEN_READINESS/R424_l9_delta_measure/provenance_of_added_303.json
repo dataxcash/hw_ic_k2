@@ -1,0 +1,41 @@
+{
+ "method": "静态重建：按施加器 K2_R373_CW_RELOCATION_APPLIER_v1.py 之 ADD 段代码，从其四个输入件重建 305 个新增对象，与磁盘差集逐条比 (net,layer,width,start,end)",
+ "inputs": [
+  {
+   "file": "k2/pm_gate/artifacts/.../K2_R337_CW_PERSTA_DESTINATION_ROUTE_v1.json",
+   "in_repo": true,
+   "net": "PERSTA#",
+   "layer": "In5.Cu",
+   "segments": 278
+  },
+  {
+   "file": "/tmp/opencode/k2r135/stubs.json (netA_in2_direct.polyline_simplified)",
+   "in_repo": false,
+   "net": "DS320_STRAP_B_ADDR1_7-0",
+   "layer": "In2.Cu",
+   "segments": 4
+  },
+  {
+   "file": "/tmp/opencode/k2r135b/final_reloc.json (netB.stub_top/bot_polyline)",
+   "in_repo": false,
+   "net": "DS320_STRAP_B_ADDR0_15-8",
+   "layer": "F.Cu/B.Cu",
+   "segments": 18
+  },
+  {
+   "file": "/tmp/opencode/k2r135b/nc_fixed.json (stub_top/bot_polyline)",
+   "in_repo": false,
+   "net": "I2C1_SDA",
+   "layer": "In5.Cu/B.Cu",
+   "segments": 3
+  }
+ ],
+ "reconstructed_total": 303,
+ "exact_match_on_disk": true,
+ "verdict": "**303/303 逐条命中** ⇒ 增集之来源完全可指认。但其中 **25/303 段（3 网：ADDR1_7-0 4 · ADDR0_15-8 18 · I2C1_SDA 3）之唯一来源是 `/tmp/opencode/…` 临时件**（非仓内）⇒ **l9 之这 3 网铜无法仅由仓内状态重新生成**（R413 G 系缺口之**量化坐实**）。`PERSTA#` 278 段来源在仓内（R337）。",
+ "note": "该 3 个 /tmp 件在本次核证时**仍存在**（故 l9 目前仍可复现），但 /tmp 属易失区 ⇒ 证据链不闭环；若保留搬迁，目标几何须**从仓内状态重新给出**（对应 Q2）。",
+ "added_vias": {
+  "count": 2,
+  "provenance": "施加器代码以固定 size=0.35/drill=0.2 生成，坐标取自同一批输入件（ADDR0_15-8 site / I2C1_SDA site）"
+ }
+}

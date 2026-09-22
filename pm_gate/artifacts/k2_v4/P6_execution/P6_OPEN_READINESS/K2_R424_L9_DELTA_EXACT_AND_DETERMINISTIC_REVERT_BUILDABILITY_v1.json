@@ -33,7 +33,8 @@
   "**F4（增集包含全部肇事对象）**：R411 之 9 个 culprit uuid **⊆** 增集（missing=0）；11 段非 45° uuid **⊆** 增集（missing=0）⇒ 结构性归因成立：**l9 之 59 error / 11 非 45° / 0.100 宽漂移 / 最小铜间距 FAIL，全部源自这一个差集**。",
   "**F5（同会话独立 DRC A/B）**：**l8 = 0 error**（204 warning · unconn 0）· **l9 = 59 error**（shorting 19 · tracks_crossing 6 · clearance 21 · hole_clearance 13 · 208 warning · unconn 0）—— 与在册 R410 逐类同。",
   "**F6（搬迁之唯一目的 = 腾 In5 窄颈给 16 lane）**：R331 定性 4 网之 neck-window（x∈[93,112]×y∈[44,58]）In5 铜为「候选 lane 阻塞物」（零候选 lane 8/16→0/16）；#K2-136 §三 之联合收口窗口 = ①修工具 ②落搬迁 ③**建 16 lane** ④核同时性 ⇒ **C-w 搬迁存在的理由就是 16/16 lane 程序**。",
-  "**F7（搬迁不动 ②-UP 16 网）**：差集 4 网 = `PERSTA#` / `DS320_STRAP_B_ADDR1_7-0` / `DS320_STRAP_B_ADDR0_15-8` / `I2C1_SDA`，**皆非** `PCIE_UP_OUT*_J2` ⇒ ②-UP 16 网之 In5 铜在 l8/l9 **逐字节同**（与 R414 之 impact envelope 一致）。"
+  "**F7（搬迁不动 ②-UP 16 网）**：差集 4 网 = `PERSTA#` / `DS320_STRAP_B_ADDR1_7-0` / `DS320_STRAP_B_ADDR0_15-8` / `I2C1_SDA`，**皆非** `PCIE_UP_OUT*_J2` ⇒ ②-UP 16 网之 In5 铜在 l8/l9 **逐字节同**（与 R414 之 impact envelope 一致）。",
+  "**F8（增集来源 · 25/303 段为 /tmp 临时件）**：按施加器之 ADD 代码静态重建 305 个新增对象 ⇒ 与磁盘差集 **303/303 逐条命中**；来源 = `PERSTA#` 278 段（**仓内** `K2_R337_CW_PERSTA_DESTINATION_ROUTE_v1.json`）+ **3 网 25 段（`ADDR1_7-0` 4 · `ADDR0_15-8` 18 · `I2C1_SDA` 3）之唯一来源为 `/tmp/opencode/k2r135*/**.json`（非仓内）** ⇒ **l9 之这 3 网铜无法仅由仓内状态重新生成**（R413 G 系缺口之量化坐实）。"
  ],
  "delta_census": {
   "tracks": {
@@ -267,9 +268,51 @@
  "self_check": "防假：① 差集以**两种独立方法**（pcbnew 对象级 + 文件级切块逐字节）互证，结论一致；② 删集与 R331 在册清单**逐网比数**命中，未见外溢；③ DRC 用**在册仪器 + 同 pro + 同会话**跑 A/B（首次以默认规则跑得 1108 error，已识别为**口径错误**（未挂 pro）并作废，未采信）；④ 未把「by construction」冒充实测见证 —— 回退板**未构造**，其合法性由「与 l8 几何相同 + l8 实测 0 error」推得，此推理链已写明；⑤ 未越过 `criteria/`（只读）与冻结四源。",
  "files": [
   "K2_R424_L9_DELTA_EXACT_AND_DETERMINISTIC_REVERT_BUILDABILITY_v1.json/.md/.sha16.txt",
-  "R424_l9_delta_measure/（delta_tracks_added_303 · delta_tracks_removed_27 · delta_vias_added2_removed4 · drc_ab_l8_l9_same_pro · file_level_identity_proof · uuid_crosscheck_R411）"
+  "R424_l9_delta_measure/（delta_tracks_added_303 · delta_tracks_removed_27 · delta_vias_added2_removed4 · drc_ab_l8_l9_same_pro · file_level_identity_proof · uuid_crosscheck_R411）",
+  "R424_l9_delta_measure/provenance_of_added_303.json"
  ],
  "not_asked": [
   "未就拓扑/接口/信号流向/球重映射提问（无涉 · L2 自裁面）· 未直接升级 owner（owner 项已在途 #K2-142，不重复呈报）"
- ]
+ ],
+ "provenance": {
+  "method": "静态重建：按施加器 K2_R373_CW_RELOCATION_APPLIER_v1.py 之 ADD 段代码，从其四个输入件重建 305 个新增对象，与磁盘差集逐条比 (net,layer,width,start,end)",
+  "inputs": [
+   {
+    "file": "k2/pm_gate/artifacts/.../K2_R337_CW_PERSTA_DESTINATION_ROUTE_v1.json",
+    "in_repo": true,
+    "net": "PERSTA#",
+    "layer": "In5.Cu",
+    "segments": 278
+   },
+   {
+    "file": "/tmp/opencode/k2r135/stubs.json (netA_in2_direct.polyline_simplified)",
+    "in_repo": false,
+    "net": "DS320_STRAP_B_ADDR1_7-0",
+    "layer": "In2.Cu",
+    "segments": 4
+   },
+   {
+    "file": "/tmp/opencode/k2r135b/final_reloc.json (netB.stub_top/bot_polyline)",
+    "in_repo": false,
+    "net": "DS320_STRAP_B_ADDR0_15-8",
+    "layer": "F.Cu/B.Cu",
+    "segments": 18
+   },
+   {
+    "file": "/tmp/opencode/k2r135b/nc_fixed.json (stub_top/bot_polyline)",
+    "in_repo": false,
+    "net": "I2C1_SDA",
+    "layer": "In5.Cu/B.Cu",
+    "segments": 3
+   }
+  ],
+  "reconstructed_total": 303,
+  "exact_match_on_disk": true,
+  "verdict": "**303/303 逐条命中** ⇒ 增集之来源完全可指认。但其中 **25/303 段（3 网：ADDR1_7-0 4 · ADDR0_15-8 18 · I2C1_SDA 3）之唯一来源是 `/tmp/opencode/…` 临时件**（非仓内）⇒ **l9 之这 3 网铜无法仅由仓内状态重新生成**（R413 G 系缺口之**量化坐实**）。`PERSTA#` 278 段来源在仓内（R337）。",
+  "note": "该 3 个 /tmp 件在本次核证时**仍存在**（故 l9 目前仍可复现），但 /tmp 属易失区 ⇒ 证据链不闭环；若保留搬迁，目标几何须**从仓内状态重新给出**（对应 Q2）。",
+  "added_vias": {
+   "count": 2,
+   "provenance": "施加器代码以固定 size=0.35/drill=0.2 生成，坐标取自同一批输入件（ADDR0_15-8 site / I2C1_SDA site）"
+  }
+ }
 }
