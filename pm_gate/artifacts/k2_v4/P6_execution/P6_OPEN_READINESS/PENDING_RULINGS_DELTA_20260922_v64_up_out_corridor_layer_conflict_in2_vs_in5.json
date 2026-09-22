@@ -1,0 +1,34 @@
+{
+ "schema": 1,
+ "artifact": "pending_rulings_delta_20260922_v64_up_out_corridor_layer_conflict_in2_vs_in5",
+ "ts": "2026-09-22T23:29:28+08:00",
+ "ts_note": "机取时钟写入",
+ "from": "ENG · ARCHER R421（应监理自动续推 · 只读取证）",
+ "to": "监理",
+ "owner_gate": 0,
+ "authority": "owner #14⑦（口径/权威类先交监理）· 宪法第十一条（冻结集变更=owner）· #K2-143 §三（事实补件走监理）",
+ "trigger": "**新事实（文档级冲突 · 决策前必须澄清）**：②-UP 之『长走层』两处在册文档相反 —— **冻结 SPEC rev-55 = `In2`**（`constraints.j2_escape_topology.rule`『2026-08-19 8 层定案 … UP_OUT 16 网经 **In2 单内层走廊 (F→In2→F)**』· `layer_plan.j2_escape_nets`『PCIE_UP_OUT0-7_J2 … **VIA_IN2→In2** east』· `vias.high_speed.basis`『每线 ≤2 过孔 = 单次换层 **(F→In2→F)**』）；**监理 ②-UP 闸文本 = `In5`**（#K2-73 §八 / #K2-130 §七 / #K2-132 §七『长走零改层 **F→In5→F**』· #K2-133 §一『先删尽本 16 网自身之 **In5** 旧铜』）。",
+ "supporting_facts": [
+  "SPEC 从未改为 In5：`j2_escape_topology` 仅 rev-7 改过 `outer_basis`（CO-73 B.Cu 角色更正），**保留『In2 独立走廊容纳全部 UP_OUT』**。",
+  "**机判实况**：`k2_layout_quality_check_v1.py` B2 **只数 via**（`via_by_net`/`hs_hist`/`max_via`）——全文**无 In2/In5** ⇒ 『走廊层』条款**零机判**。",
+  "**板实况**：l9 16 网逐网 **F→In2→In5→B（4 孔）**（R416/R419）⇒ 既非纯 In2 亦非纯 In5；与 SPEC 自述之『既有 U6↔J2 范式 … In2→In5→In5 横贯』一致。"
+ ],
+ "why_decision_relevant": "owner 待决之『**放宽「孔数/层数」一条**』其**语义随本冲突而变**：以 SPEC 为准 ⇒ 放『In2 · F→In2→F』；以监理闸为准 ⇒ 放『In5 · F→In5→F』。且若 **In2 为准** ⇒ 整条 **In5 车道程序**（R393–R398 容量/拓扑证书 · R416 束间实测 · **为腾空 In5 而做之 v55 搬迁**）其**目标层可能偏靶**；若 **In5 为准** ⇒ 冻结 SPEC 三处滞后 ⇒ 须版本 bump（**冻结集变更 = owner**）。",
+ "requested_ruling": [
+  "**Q1（权威）**：②-UP 长走层以**冻结 SPEC（In2 · F→In2→F）**为准，抑或**监理闸文本（In5 · F→In5→F）**为准？",
+  "**Q2（路径）**：Q1=In5 ⇒ 明示 SPEC 三处滞后之处置（版本 bump ⇒ 升 owner / 或判『声明性回填』）；Q1=In2 ⇒ 明示是否**重开目标层**（In5 程序与 v55 搬迁定位一并重判）。",
+  "**Q3（覆盖）**：走廊层**零机判** ⇒ 是否登记为**检查覆盖缺口**（比照 C-17 · **非新增检查齿**）。",
+  "**ENG 声明**：**不自裁、不改任何件**；本件为**事实呈报**（若 Q2 触发冻结集变更，依第十一条由监理处理，**不请求 owner 直呈**）。"
+ ],
+ "anchors": {
+  "frozen_spec_rev55": "964101b19015f6d7",
+  "board_l9": "77aaa63fe016b450",
+  "criteria": "rev=6 MATCH",
+  "frozen4": "4/4 未动",
+  "r421": "b68836aae57362b1"
+ },
+ "computation": "**零**（只读取证/检索）",
+ "not_asked": [
+  "未改任何件/判据 · 未烙板 · 未派 WORKER · 未新增检查齿"
+ ]
+}
