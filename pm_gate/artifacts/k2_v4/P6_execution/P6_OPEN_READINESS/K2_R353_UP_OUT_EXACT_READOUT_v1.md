@@ -1,6 +1,6 @@
 # K2 · R353 · ①-UP **精确读件 v1**（#K2-132 §三.6 授权形态）——跨缝槽枚举 · 顺序不变量 · 精确指派模型 + 求解日志 + 独立复核
 
-**件**：`K2_R353_UP_OUT_EXACT_READOUT_v1.json`（约定A `151875a3d74a2175`）· 脚本 `K2_R353_UP_OUT_EXACT_READOUT_v1.py` · 独立复核 `K2_R353_INDEPENDENT_RECHECK_v1.py`（9/9 MATCH）
+**件**：`K2_R353_UP_OUT_EXACT_READOUT_v1.json`（约定A `2a54715a597d4728`）· 脚本 `K2_R353_UP_OUT_EXACT_READOUT_v1.py` · 独立复核 `K2_R353_INDEPENDENT_RECHECK_v1.py`（9/9 MATCH）
 **只读 · 未烙板 · 未改冻结四源/判据/生成器/SPEC/原理图 · 未派 WORKER**
 
 ## 二值

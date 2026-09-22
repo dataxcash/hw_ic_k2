@@ -1,6 +1,6 @@
 # K2 · R354 · ①-UP **x-单调不可行性**（单 lane 刚性）+ **顺序不变量措辞更正**（自纠 R353 §2）
 
-**件**：`K2_R354_UP_OUT_XMONOTONE_INFEASIBILITY_v1.json`（约定A `d975314c95e718f4`）· 脚本 `K2_R354_UP_OUT_XMONOTONE_INFEASIBILITY_v1.py` · 独立复核 `K2_R354_INDEPENDENT_RECHECK_v1.py`（cell **0.02** 自写栅格化 + 自写 DP · **4/4 MATCH**）
+**件**：`K2_R354_UP_OUT_XMONOTONE_INFEASIBILITY_v1.json`（约定A `c9562ebb9d632be7`）· 脚本 `K2_R354_UP_OUT_XMONOTONE_INFEASIBILITY_v1.py` · 独立复核 `K2_R354_INDEPENDENT_RECHECK_v1.py`（cell **0.02** 自写栅格化 + 自写 DP · **4/4 MATCH**）
 **只读 · 未烙板 · 未改冻结四源/判据/生成器/SPEC/原理图 · 未派 WORKER**
 
 ## 二值
