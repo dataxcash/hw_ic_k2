@@ -1,0 +1,86 @@
+{
+ "schema": 1,
+ "artifact": "k2_r346_conservation_blocker_report_v66_two_families_structural",
+ "ts": "2026-09-22T08:29+0800",
+ "to": "监理",
+ "from": "ENG · ARCHER",
+ "nature": "《守恒级卡点报告 v66》（承 v65 · 停止令轮追加两族独立证据）· 只读 · 二值未取得",
+ "board_sha16": "7a5c89913d6e5d0a",
+ "frozen4": [
+  "d4e81f647be7f980",
+  "fb07d25ac426ff84",
+  "dd794c54f7ce7417",
+  "0a459839e15960b8"
+ ],
+ "criteria": "rev=6 MATCH (1937a40a/727d0995/eb3da49f)",
+ "binary": {
+  "(a) 可行见证": "未得（两法族皆失败 · 见 new_evidence）",
+  "(b) 守恒级不可行证书": "不成立（不新增不可行主张）"
+ },
+ "new_evidence": {
+  "single_lane_reachability": {
+   "scope": "授权 no-move 口径（仅拆自网旧铜）· cell 0.02 · 无 lane 互斥排除",
+   "result": "16/16 lane 皆可单独成路（长度 46.59-67.04mm）",
+   "implication": "连通性不是瓶颈 ⇒ C-w 对连通性并不必要（修正 R333『零候选 8/16』口径 = 笼位受限候选模型之数，非自由布线可达性）；瓶颈纯为『互距约束下的联合指派』"
+  },
+  "family1_greedy_hard_exclusion": {
+   "method": "非交叉单调扇 + 硬互距排除带（每 lane 布线时排除已布 lane，半径 P）；次序固定（非扫描）",
+   "runs": [
+    {
+     "order": "B.y 升序",
+     "cell": 0.05,
+     "anchor_reserve": "P",
+     "placed": "2/16"
+    },
+    {
+     "order": "B.y 升序",
+     "cell": 0.02,
+     "anchor_reserve": "P",
+     "placed": "2/16"
+    },
+    {
+     "order": "B.y 升序",
+     "cell": 0.02,
+     "anchor_reserve": "P+cell*sqrt2",
+     "placed": "2/16"
+    },
+    {
+     "order": "A-x 序(束序)",
+     "cell": 0.02,
+     "anchor_reserve": "P+cell*sqrt2",
+     "placed": "2/16"
+    }
+   ],
+   "failure": "前 2 lane 之 P-排除带即封死走廊 ⇒ 第 3 lane 不可达"
+  },
+  "family2_diverse_candidate_milp": {
+   "method": "多样性感知候选（每 lane 32 个 = 『过切线段 x=110 之 y_k』最短路，y_k 步距 0.5mm）+ 硬互距 MILP（scipy/HiGHS）· cell 0.03（授权上限）",
+   "result": {
+    "binaries": 512,
+    "conflict_pairs": 122880,
+    "conflict_total": 130560,
+    "conflict_ratio": "94.1%",
+    "milp_status": "0(optimal)",
+    "placed": "1/16"
+   },
+   "finding": "候选退化是结构性的（与 R328 之 93.8% 同源）：不同 lane 之最短路型候选在自由空间瓶颈段必然相汇 ⇒ 两两互斥 <P ⇒ MILP 只能取 1。切线段已按 0.5mm(>P) 分级仍 94.1% 互斥 ⇒ 非候选不够分散，而是最短路径结构本身被迫共用通道。"
+  }
+ },
+ "card_report_v66": {
+  "①哪层": "算法/实现能力层 —— 缺『互距感知之候选生成 + 联合指派』（= 重排感知）。v65 已定量：A 侧锚带高 0.940mm vs B 展开 10.200mm；本件再证两法族互补失败：硬排除（构造保证互距）⇒ 死锁（2/16）；硬 MILP over 最短路型候选 ⇒ 候选退化（1/16 · 94.1% 互斥）。所需 = 以互距为硬约束同时生成候选（列生成 / 互斥感知枚举 / SAT 位级『16 lane × 格点互斥』），非现有两族之任一。",
+  "②哪资源": "In5 走廊 · 关键 = 自由空间之瓶颈段（两 lane 之最短路必经之通道；x∈[93,112] 窄颈 + A 侧扇出/重排带 x∈[84,95]）。",
+  "③被谁占死": "未被不可动占死（16/16 单独可路 · 可腾挪他网铜 R330 收益 8/16→0/16 零候选 · 自网旧铜 no-move 可拆）。新量测：A 锚到前一 lane 最短路最小距 0.4386（高出 P 仅 3.6µm）· 相邻 A 锚保留盘缝 0.330mm < P。",
+  "④为何任何分配都不可能": "前提不成立（不主张不可行 ⇒ (b) 不成立）。反向证据：16/16 单独成路 + 割上界 67≥16 + 锚带 0.940→展开 10.200（梯度 ~0.23）⇒ 容量/连通/端点皆非瓶颈，卡点属 ENG 实现能力（所需算法未实现）。"
+ },
+ "exits": {
+  "唯一二途（皆监理自裁）": [
+   "(i) 派 C-*（一次实现）= 『互距感知候选生成 + 联合指派』；本件已把失败模式与成功条件同时定量化（互斥率 94.1% 须被打破；硬排除须避免死锁）",
+   "(ii) 批 C-w ⇒ 以 PERSTA# 首选补 ④buildability + 与 16 lane 联合设计（注意：本件已证 C-w 对连通性非必要，其价值仅在释放走廊资源）"
+  ]
+ },
+ "buildability_field": "本件只读探测/失败记录：未烙板 · 未改生成器/SPEC/原理图 · 未改任何网几何 ⇒ 不动证明成立；不产出施工图（缺解）。",
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "3721381a6b0893c3"
+ }
+}
