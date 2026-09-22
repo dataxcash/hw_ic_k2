@@ -1,0 +1,98 @@
+{
+ "schema": 1,
+ "artifact": "k2_r419_l9_full_drill_via_census_hdi_class_and_manufacturability_read_v1",
+ "ts": "2026-09-22T23:26:22+08:00",
+ "from": "ENG · ARCHER（续接会话 · 应监理『按已批准计划推进当前阶段 · fail-closed』）",
+ "to": "监理",
+ "owner_gate": 0,
+ "authority": "**R270 §一 项9**（平面/铺铜/**钻孔**前置 · l9 重测）· **owner ③/⑤**（完工 = Excellon 含 **HDI 盲埋孔**）· R270 项13 之孔系前置 · 监理自动续推（阶段门 fail-closed）",
+ "nature": "**只读普查**（受审板 l9 `77aaa63fe016b450` · 纯文本解析）。未出包 · 未烙板 · 未派工 · **未新增检查齿/判据**。",
+ "census": {
+  "vias_total": 732,
+  "via_class": {
+   "through(F.Cu–B.Cu)": 279,
+   "blind(F/B↔inner)": 363,
+   "buried(inner↔inner)": 90
+  },
+  "span_table": [
+   [
+    "F.Cu–In1.Cu",
+    171
+   ],
+   [
+    "F.Cu–In2.Cu",
+    132
+   ],
+   [
+    "In2.Cu–In5.Cu",
+    90
+   ],
+   [
+    "In5.Cu–B.Cu",
+    37
+   ],
+   [
+    "F.Cu–In5.Cu",
+    19
+   ],
+   [
+    "F.Cu–In4.Cu",
+    4
+   ],
+   [
+    "F.Cu–B.Cu",
+    279
+   ]
+  ],
+  "uniform_class": "**全部 732 支 = 钻 0.20mm / 盘 0.35mm**（单一类）",
+  "pad_holes": {
+   "total": 20,
+   "NPTH": 4,
+   "PTH": 16,
+   "drills": {
+    "3.2": 4,
+    "0.8": 16
+   }
+  },
+  "total_drill_tokens": 752,
+  "reconcile": "与 R406 文本解析之『752 drill token』**吻合** ✔"
+ },
+ "bookkeeping_correction": {
+  "was": "历史件（R376/R406 等）记 l9『孔 740』",
+  "now": "**更正：l9 有 732 支过孔**（+ 8 个 keepout 之 `(vias allowed)` / `(vias not_allowed)` 标志被文本计数 `(via` 误计）",
+  "evidence": "原文 740 个 `(via` token = **732 真过孔** + **8 keepout 标志**（逐条已核）⇒ 孔数 732；钻 token 合计 752 = 732 + 4 NPTH + 16 PTH"
+ },
+ "hdi_read": {
+  "structure": "含 **blind 363 + buried 90**（F→In1 171 · F→In2 132 · In2→In5 90 · In5→B 37 · F→In5 19 · F→In4 4）",
+  "vs_spec": "与 **SPEC rev-55** 自述一致（『板内既有孔类 0.20/0.35 · HDI 阶数≥2』· 激光微孔类 0.10/0.25 因触 DRC 下限已弃用）",
+  "vs_registered_capability": "`criteria/jlc_hdi_capability.yaml`：`blind_buried.supported=false` + FAQ『blind/buried、HDI(laser vias) 属 advanced options，**须 DFM review**』⇒ 工艺冻结 **A**（owner ①）与之一致；**该节为须随单确认之工艺前置，非本维阈值**（在册原文）",
+  "stage_count": "**不判**（『HDI 阶数』无在册机判口径 ⇒ 本件只报孔跨度结构，**不自行立齿**）"
+ },
+ "at_minimum_zero_margin": {
+  "via_drill_0.20": "= 冻结 `drc_rules.manufacturing.min_through_hole_diameter` **0.20**（余量 0）",
+  "via_diameter_0.35": "= 冻结 `min_via_diameter` **0.35**（余量 0）",
+  "annular_0.075": "= (0.35−0.20)/2 = **0.075** = 冻结 `min_annular_width` **0.075**（余量 0）",
+  "note": "**在册极限使用**（非缺陷；JLC 能力页 0.15/0.25 更宽 ⇒ 通过）——登记以供**量产风险**参考"
+ },
+ "honest_selfcheck": {
+  "candidate_finding": "过孔**钻-钻 2D 投影重叠** 1 处：edge gap **−0.0813mm** @ (84.85,56.834) `PCIE_UP_OUT0_P_J2`（In5–B 盲）↔ (84.75,56.77) `PCIE_DN0_P`（F–In2 盲）",
+  "why_NOT_a_defect": "① **l8 与 l9 完全相同**（非搬迁引入）；② **未被 DRC 报**（l8 error=0）；③ 两孔**跨度不相交**（F/In1/In2 vs In5/In6/B ⇒ **不同叠层周期**钻孔，物理不干涉）⇒ **2D 投影重叠非有效口径**。",
+  "action": "**本件不判缺陷、不据此立判据、不新增检查齿**（owner ②）；若需 hole-to-hole 机判口径，**请监理钉死**（ENG 不自造）。",
+  "purpose": "如实披露以防后续把投影重叠误读为缺陷（自检优先）"
+ },
+ "item9_status": "**R270 项9（钻孔）@l9 = 普查完成（读数级）**：孔数/孔类/跨度/单项极限均已清算；**判 PASS/FAIL 之口径**（如 HDI 阶数）未在册 ⇒ **不自判**。出包（Excellon 含 HDI 盲埋孔）之孔系读数**已备**。",
+ "remaining_must_fix": "l9 未豁免必修项仍 = **R410/R411 之 59 error**（+`track_dangling` +4）⇒ **修复前不得出包**。",
+ "stage_gate_selfcheck": "P4 未全绿 ⇒ **不出包 · 不下单 · 不越阶段**（fail-closed）；余阻见 R418 §4（owner item2 / 监理 v62 / 监理 D1 / gate 属主 rev=7）。",
+ "anchors": {
+  "board_l9": "77aaa63fe016b450",
+  "board_l8": "7a5c89913d6e5d0a",
+  "drc_rules": "0a459839e15960b8",
+  "spec_rev55": "964101b19015f6d7",
+  "jlc_hdi_capability": "见 criteria/（gate 属主 · ENG 只读）",
+  "criteria": "rev=6 MATCH",
+  "frozen4": "4/4 未动"
+ },
+ "not_asked": [
+  "未出包 · 未烙板 · 未派 WORKER · 未启新法 · 未新增检查齿/判据 · 未请求 owner（升级在途 #K2-142）"
+ ]
+}
