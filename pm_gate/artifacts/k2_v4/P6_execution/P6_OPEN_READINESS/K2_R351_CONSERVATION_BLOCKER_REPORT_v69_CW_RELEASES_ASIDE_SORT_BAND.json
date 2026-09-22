@@ -1,0 +1,43 @@
+{
+ "schema": 1,
+ "artifact": "k2_r351_conservation_blocker_report_v69_cw_releases_aside_sort_band",
+ "ts": "2026-09-22T08:37+0800",
+ "to": "监理",
+ "from": "ENG · ARCHER",
+ "nature": "《守恒级卡点报告 v69》（承 v68）—— **C-w 实测直接释放 A 侧重排带**（带内均值 **0.296 → 0.816**；y∈[53,55] → **1.000**）⇒ v68 之『C-*/C-w 非独立』得**定量证实**",
+ "anchors": {
+  "board_sha16": "7a5c89913d6e5d0a",
+  "frozen4": [
+   "d4e81f647be7f980",
+   "fb07d25ac426ff84",
+   "dd794c54f7ce7417",
+   "0a459839e15960b8"
+  ],
+  "criteria": "rev=6 MATCH"
+ },
+ "method": {
+  "how": "`build_base` 二次计算：① 现状（movable=∅）② 把**可腾挪族**（板内交集 18 网 = I2C1/2_SDA/SCL · PERSTA#/PERSTB# · PWR_BTN_ISO · DS320_STRAP_MODE · DS320_STRAP_{A,B}_ADDR{0,1}_{7-0,15-8} · GND · P3V3）置入 `movable_tracks/vias/copper` ⇒ 其铜/孔不再计入障碍",
+  "window": "x∈[80,105] · cell 0.05 · 逐 y∈1mm 带"
+ },
+ "readings_A_side_sort_band": {
+  "y49_50": "0.174 → 0.451",
+  "y50_51": "0.135 → **0.808**",
+  "y51_52": "0.365 → 0.813",
+  "y52_53": "0.299 → 0.826",
+  "y53_54": "0.349 → **1.000**",
+  "y54_55": "0.457 → **1.000**",
+  "band_mean": "**0.296 → 0.816**"
+ },
+ "verdict": {
+  "判": "**C-w 释放 A 侧重排带**（v67 引理所需之水平重排空间）—— 由 7.5–47% 提升至 45–100%（均值 29.6%→81.6%）⇒ **v68 结论定量证实：C-*（算法）与 C-w（腾挪）非独立，C-w 是 C-* 落地之前置**。",
+  "note": "本件**不主张** C-w 后即可布通（仍需 C-* 之重排感知联合指派）；仅证明**空间前提由 C-w 满足**。"
+ },
+ "exits": {
+  "建议": "**(ii) 先行 + (i) 后继**：①批 C-w（`PERSTA#` 首选，逐项具名 + `ref_plane_continuity`）②派 C-*（一次实现 · 重排感知联合指派）⇒ 目标 `exact_gate` 互距 0 ∧ 净距 0 ∧ 端点 0 + `buildability.mode=no_move`/`relocation_listed`"
+ },
+ "buildability_field": "只读普查（两次 `build_base` 重算）：未烙板 · 未改生成器/SPEC/原理图 · 未改任何网几何 ⇒ 不动证明成立。",
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "bf65bb4eeab7c891"
+ }
+}
