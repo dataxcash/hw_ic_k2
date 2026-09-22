@@ -1,0 +1,274 @@
+{
+ "artifact": "k2_r357_up_out_descent_station_assignment_determination_v1",
+ "binary": {
+  "(a)": "未得",
+  "(b)": "不成立"
+ },
+ "board_sha16": "7a5c89913d6e5d0a",
+ "buildability_field": {
+  "mode": "no_move",
+  "note": "纯只读：未改任何网几何 · 未烙板 · 未动冻结四源/判据 ⇒ 不动证明成立"
+ },
+ "consequence": "⇒ 必需件 = **非单调楼梯下潜**（西组 8 条 + 深 lane）；M1 已被排除，**禁再跑 M1 族**。",
+ "criteria": "rev=6 MATCH (1937a40ae68bc288 / 727d09953cf9bd78 / eb3da49f2ad97e37)",
+ "from": "ENG · ARCHER",
+ "frozen4": [
+  "d4e81f647be7f980",
+  "fb07d25ac426ff84",
+  "dd794c54f7ce7417",
+  "0a459839e15960b8"
+ ],
+ "model_class_M1": {
+  "definition": "每 lane：A → 立管至定阶 → band 东行 → **单点竖直下潜** x_p 至 y_B → **直水平**至 B 锚",
+  "determination": "**结构性不可行**",
+  "evidence_1_milp": {
+   "form": "16 lane × 候选列 二元指派 · 约束 每 lane 恰1列 + 每列≤1 + 互距≥0.435（窗口）",
+   "message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is None)",
+   "n_binaries": 3696,
+   "status": 2,
+   "success": false
+  },
+  "evidence_2_west_group_zero_candidates": [
+   {
+    "a_rank": 0,
+    "n_candidate_descent_columns": 0,
+    "net": "PCIE_UP_OUT0_N_J2",
+    "x_B": 127.01,
+    "x_max": null,
+    "x_min": null,
+    "y_B": 43.25
+   },
+   {
+    "a_rank": 3,
+    "n_candidate_descent_columns": 0,
+    "net": "PCIE_UP_OUT1_P_J2",
+    "x_B": 127.59,
+    "x_max": null,
+    "x_min": null,
+    "y_B": 43.85
+   },
+   {
+    "a_rank": 4,
+    "n_candidate_descent_columns": 0,
+    "net": "PCIE_UP_OUT2_N_J2",
+    "x_B": 129.33,
+    "x_max": null,
+    "x_min": null,
+    "y_B": 46.85
+   },
+   {
+    "a_rank": 7,
+    "n_candidate_descent_columns": 0,
+    "net": "PCIE_UP_OUT3_P_J2",
+    "x_B": 130.49,
+    "x_max": null,
+    "x_min": null,
+    "y_B": 47.45
+   },
+   {
+    "a_rank": 8,
+    "n_candidate_descent_columns": 0,
+    "net": "PCIE_UP_OUT4_N_J2",
+    "x_B": 131.65,
+    "x_max": null,
+    "x_min": null,
+    "y_B": 48.65
+   },
+   {
+    "a_rank": 11,
+    "n_candidate_descent_columns": 0,
+    "net": "PCIE_UP_OUT5_P_J2",
+    "x_B": 128.75,
+    "x_max": null,
+    "x_min": null,
+    "y_B": 49.25
+   },
+   {
+    "a_rank": 12,
+    "n_candidate_descent_columns": 0,
+    "net": "PCIE_UP_OUT6_N_J2",
+    "x_B": 129.91,
+    "x_max": null,
+    "x_min": null,
+    "y_B": 52.25
+   },
+   {
+    "a_rank": 15,
+    "n_candidate_descent_columns": 0,
+    "net": "PCIE_UP_OUT7_P_J2",
+    "x_B": 131.07,
+    "x_max": null,
+    "x_min": null,
+    "y_B": 52.85
+   }
+  ],
+  "evidence_3_lemma": {
+   "avail_mm": 2.99,
+   "escape": "**非单调楼梯**（先下至中间层 → 西行 → 再下）可绕开，故**不构成 U<16 证书**（(b) 仍不成立）",
+   "lane": "PCIE_UP_OUT4_P_J2（a_rank 9 · 下潜序第 7 · y_B=48.05 · x_B=140.06）",
+   "later_deep_lanes": 8,
+   "need_mm": 3.48,
+   "verdict": "M1 类中『后 8 条深 lane 须在 x>140.06 交叉 y=48.05 且互距 ≥0.435』⇒ 需 3.48mm 而板边仅余 2.99mm ⇒ **M1 类不可能**（与 MILP infeasible 独立互证）"
+  }
+ },
+ "nature": "①-UP **下潜站指派精确判定**（阴性 · 模型类 M1）+ **折返楼梯**规格 · 只读 · 二值未取得",
+ "next_step_spec": {
+  "acceptance": "exact_gate（互距0 ∧ 净距0 ∧ 端点0）+ buildability",
+  "name": "折返楼梯（staircase fold）",
+  "objects": "『下潜楼梯站序 × 中间层水平段』",
+  "requirement": "须同时满足 ㈠竖序不变量 ㈡楼梯可绕 4P 型「直水平封口」㈢互距 ≥0.435"
+ },
+ "per_lane": [
+  {
+   "a_rank": 0,
+   "n_candidate_descent_columns": 0,
+   "net": "PCIE_UP_OUT0_N_J2",
+   "x_B": 127.01,
+   "x_max": null,
+   "x_min": null,
+   "y_B": 43.25
+  },
+  {
+   "a_rank": 1,
+   "n_candidate_descent_columns": 101,
+   "net": "PCIE_UP_OUT0_P_J2",
+   "x_B": 141.22,
+   "x_max": 143.03,
+   "x_min": 136.58,
+   "y_B": 42.65
+  },
+  {
+   "a_rank": 2,
+   "n_candidate_descent_columns": 61,
+   "net": "PCIE_UP_OUT1_N_J2",
+   "x_B": 139.48,
+   "x_max": 140.09,
+   "x_min": 136.58,
+   "y_B": 43.85
+  },
+  {
+   "a_rank": 3,
+   "n_candidate_descent_columns": 0,
+   "net": "PCIE_UP_OUT1_P_J2",
+   "x_B": 127.59,
+   "x_max": null,
+   "x_min": null,
+   "y_B": 43.85
+  },
+  {
+   "a_rank": 4,
+   "n_candidate_descent_columns": 0,
+   "net": "PCIE_UP_OUT2_N_J2",
+   "x_B": 129.33,
+   "x_max": null,
+   "x_min": null,
+   "y_B": 46.85
+  },
+  {
+   "a_rank": 5,
+   "n_candidate_descent_columns": 181,
+   "net": "PCIE_UP_OUT2_P_J2",
+   "x_B": 137.16,
+   "x_max": 143.03,
+   "x_min": 135.92,
+   "y_B": 46.25
+  },
+  {
+   "a_rank": 6,
+   "n_candidate_descent_columns": 170,
+   "net": "PCIE_UP_OUT3_N_J2",
+   "x_B": 136.0,
+   "x_max": 141.83,
+   "x_min": 135.92,
+   "y_B": 47.45
+  },
+  {
+   "a_rank": 7,
+   "n_candidate_descent_columns": 0,
+   "net": "PCIE_UP_OUT3_P_J2",
+   "x_B": 130.49,
+   "x_max": null,
+   "x_min": null,
+   "y_B": 47.45
+  },
+  {
+   "a_rank": 8,
+   "n_candidate_descent_columns": 0,
+   "net": "PCIE_UP_OUT4_N_J2",
+   "x_B": 131.65,
+   "x_max": null,
+   "x_min": null,
+   "y_B": 48.65
+  },
+  {
+   "a_rank": 9,
+   "n_candidate_descent_columns": 203,
+   "net": "PCIE_UP_OUT4_P_J2",
+   "x_B": 140.06,
+   "x_max": 143.03,
+   "x_min": 135.92,
+   "y_B": 48.05
+  },
+  {
+   "a_rank": 10,
+   "n_candidate_descent_columns": 203,
+   "net": "PCIE_UP_OUT5_N_J2",
+   "x_B": 138.9,
+   "x_max": 143.03,
+   "x_min": 135.92,
+   "y_B": 49.25
+  },
+  {
+   "a_rank": 11,
+   "n_candidate_descent_columns": 0,
+   "net": "PCIE_UP_OUT5_P_J2",
+   "x_B": 128.75,
+   "x_max": null,
+   "x_min": null,
+   "y_B": 49.25
+  },
+  {
+   "a_rank": 12,
+   "n_candidate_descent_columns": 0,
+   "net": "PCIE_UP_OUT6_N_J2",
+   "x_B": 129.91,
+   "x_max": null,
+   "x_min": null,
+   "y_B": 52.25
+  },
+  {
+   "a_rank": 13,
+   "n_candidate_descent_columns": 231,
+   "net": "PCIE_UP_OUT6_P_J2",
+   "x_B": 137.74,
+   "x_max": 143.03,
+   "x_min": 135.92,
+   "y_B": 51.65
+  },
+  {
+   "a_rank": 14,
+   "n_candidate_descent_columns": 231,
+   "net": "PCIE_UP_OUT7_N_J2",
+   "x_B": 136.58,
+   "x_max": 143.03,
+   "x_min": 135.92,
+   "y_B": 52.85
+  },
+  {
+   "a_rank": 15,
+   "n_candidate_descent_columns": 0,
+   "net": "PCIE_UP_OUT7_P_J2",
+   "x_B": 131.07,
+   "x_max": null,
+   "x_min": null,
+   "y_B": 52.85
+  }
+ ],
+ "schema": 1,
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "f5e783b95cf3363d"
+ },
+ "to": "监理",
+ "ts": "2026-09-22T09:32+0800"
+}
