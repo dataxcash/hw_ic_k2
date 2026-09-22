@@ -1,0 +1,79 @@
+{
+ "artifact": "k2_r389_item3_method_space_exhaustion_and_ceiling_census_v1",
+ "ask_supervisor": "请监理判『冻结需求 ②-UP=16/16 是否须变』（#K2-136 §三 预声明路由 · 监理自裁面 · 宪法第十一条）。ENG 备 (i)/(ii) 两条续推，一见裁即可续：(i) 维持 16/16 ⇒ 补器 C-PORTORDER（端口环+洞群生成元不变量）出非交叉端口序型 U<16 严格证书，或改非单层手段（**改层/加孔 = 拓扑 L1** ⇒ 须监理批）；(ii) 准 ②-UP 降为具名 N（13/16 + 具名豁免/去程变更）⇒ 续 **项4 同时性 exact_gate** ⇒ 项5 二值收尾。",
+ "binary": {
+  "(a)": "未取得（N=13/16 · 已布 13 条 gate-clean）",
+  "(b)": "未建立（容量型：直线族切面 66/162 ≫ 16 ⇒ 不可得 R383 O-2；端口序型：所需 B 序类=降序之旋转，已在 13 条实现 ⇒ 判据不排除 R385；不变量型：缺器 C-PORTORDER R386）"
+ },
+ "board": "k2/hw/k2_v4_8L.l9.kicad_pcb",
+ "board_sha16": "77aaa63fe016b450",
+ "boundary": "只读 · 未烙板 · 未改冻结四源/criteria/生成器/SPEC · 未派 WORKER · 不充绿。",
+ "caliber": {
+  "cell_mm": 0.03,
+  "endpoints": "fixed",
+  "hw_mm": 0.08,
+  "layer": "In5.Cu",
+  "pitch_mm": 0.435
+ },
+ "ceiling": {
+  "gate_clean": true,
+  "structural_reason": "① A 簇**唯一显著出口=北**（南向仅 x≈83.5–85 窄口，在其余 15 锚 ±0.435 禁入下不可用）；② 束在走廊 x∈[96,127] **刚性**（winding 在 A 簇出口完成）；走廊容量 70–89 ≫ 16 ⇒ 走廊非约束；③ ⇒ 约束 = **A 簇出口之嵌套扇出断面**：本几何只坐得 13 条（缺 rank0/1/6）；④ 最西锚 rank0 在保 ≥0.435 于 rank1 之带内，北向自由仅至 y≈57.55 ⇒ 无法担任束之最外（最高）位。",
+  "value": "13/16"
+ },
+ "census": [
+  {
+   "best": "13/16",
+   "method": "序贯最短路 + 有限 rip-up（R320 范式）",
+   "note": "Ax_desc 最优；rip_up 11/16；已布皆过闸",
+   "variants": "6 种结构序（R322 表）"
+  },
+  {
+   "best": "13/16",
+   "method": "束式有序多商品流（本器 R383 · a_rank 降序=内→外 · 硬印）",
+   "note": "失败集恒 {T3_N,T0_P,T0_N}；min gap 0.4383–0.4562；净距 0；端点 0",
+   "variants": "wall=P / P+0.015 / P+0.02"
+  },
+  {
+   "best": "2/16",
+   "method": "a_rank 升序（外→内）",
+   "note": "最内先布 ⇒ 最短路横扫，其余全灭",
+   "variants": "wall 同上"
+  },
+  {
+   "best": "13/16",
+   "method": "走廊 clearance-aware 代价（spread）",
+   "note": "加散布代价不升反降（≤13）",
+   "variants": "λ∈{0.5,1,1.5,2,3,4} × R∈{0.75,0.8,1.0,1.5,2.5}"
+  },
+  {
+   "best": "未收敛（pitch 违例 89→59 递减不归零）",
+   "method": "negotiated-congestion 软斥（全 lane 联合迭代）",
+   "note": "软斥法在本几何不收敛至 0 违例",
+   "variants": "20 迭代 · λ 递增"
+  },
+  {
+   "best": "13/13/12/11",
+   "method": "绕墙 winding 南北分裂（R384）",
+   "note": "即使强制最西 lane 南绕仍不可布 ⇒ 南窄口不可用",
+   "variants": "南组 m=1,2,3,4（域限 y≤55.90）"
+  },
+  {
+   "best": "2/16",
+   "method": "端口序旋转（R387）",
+   "note": "seam 车道先布 ⇒ 最短路横扫 ⇒ 余者全灭",
+   "variants": "[0,15,…,1] / [0,1,15,…] / [0,1,2,15,…] / [0,1,2,3,15,…]"
+  },
+  {
+   "best": "2/16",
+   "method": "构造型 seam 贴墙 + hug（R388）",
+   "note": "seam 自西须横穿 A 簇上方 ⇒ 封死其余 15 条北出口（几何不可行）",
+   "variants": "hug∈{0,1.0,2.5} · rank0 走廊限 y≤57.6"
+  }
+ ],
+ "from": "ENG · ARCHER",
+ "model_sha16": "84f19701dfc1db31",
+ "purpose": "项3 求解方法空间之**穷尽普查**（证据包）——为监理 P3 判『冻结需求 ②-UP=16/16 是否须变』提供可直接署名之依据。",
+ "schema": 1,
+ "to": "监理",
+ "ts": "2026-09-22T12:09:18.939824+08:00"
+}
