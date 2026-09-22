@@ -1,0 +1,134 @@
+{
+ "artifact": "k2_r383_item3_joint_solve_ordered_mcf_v1",
+ "binary": "既无 (a) 亦无 (b) ⇒ 报卡点交监理（不冒充见证 · 不冒充上界）",
+ "board": "k2/hw/k2_v4_8L.l9.kicad_pcb",
+ "board_sha16": "77aaa63fe016b450",
+ "buildability": {
+  "mode": "relocation_listed",
+  "note": "已布 13 条本身过 exact_gate（互距/净距/端点 0），但**非 16/16** ⇒ 不构成 (a) 见证；未布 lane 之坐标缺 ⇒ 全板图纸层缺图。",
+  "施工队问答": "不能——本件只给出 13/16 条坐标（余 3 条无坐标）⇒ 图纸层缺图，不作里程碑、不得开工"
+ },
+ "caliber": {
+  "cell_mm": 0.03,
+  "hw_mm": 0.08,
+  "lane_w_mm": 0.16,
+  "layer": "In5.Cu",
+  "pitch_mm": 0.435,
+  "wall_mm": 0.455
+ },
+ "diagnostics": [
+  {
+   "len_mm": 47.049,
+   "net": "PCIE_UP_OUT7_P_J2",
+   "reason": "routed"
+  },
+  {
+   "len_mm": 48.492,
+   "net": "PCIE_UP_OUT7_N_J2",
+   "reason": "routed"
+  },
+  {
+   "len_mm": 52.764,
+   "net": "PCIE_UP_OUT6_P_J2",
+   "reason": "routed"
+  },
+  {
+   "len_mm": 63.216,
+   "net": "PCIE_UP_OUT6_N_J2",
+   "reason": "routed"
+  },
+  {
+   "len_mm": 68.431,
+   "net": "PCIE_UP_OUT5_P_J2",
+   "reason": "routed"
+  },
+  {
+   "len_mm": 60.47,
+   "net": "PCIE_UP_OUT5_N_J2",
+   "reason": "routed"
+  },
+  {
+   "len_mm": 65.231,
+   "net": "PCIE_UP_OUT4_P_J2",
+   "reason": "routed"
+  },
+  {
+   "len_mm": 76.514,
+   "net": "PCIE_UP_OUT4_N_J2",
+   "reason": "routed"
+  },
+  {
+   "len_mm": 81.033,
+   "net": "PCIE_UP_OUT3_P_J2",
+   "reason": "routed"
+  },
+  {
+   "net": "PCIE_UP_OUT3_N_J2",
+   "reason": "endpoint_not_free"
+  },
+  {
+   "len_mm": 76.76,
+   "net": "PCIE_UP_OUT2_P_J2",
+   "reason": "routed"
+  },
+  {
+   "len_mm": 87.48,
+   "net": "PCIE_UP_OUT2_N_J2",
+   "reason": "routed"
+  },
+  {
+   "len_mm": 92.724,
+   "net": "PCIE_UP_OUT1_P_J2",
+   "reason": "routed"
+  },
+  {
+   "len_mm": 314.128,
+   "net": "PCIE_UP_OUT1_N_J2",
+   "reason": "routed"
+  },
+  {
+   "net": "PCIE_UP_OUT0_P_J2",
+   "reason": "disconnected"
+  },
+  {
+   "net": "PCIE_UP_OUT0_N_J2",
+   "reason": "disconnected"
+  }
+ ],
+ "failed": [
+  "PCIE_UP_OUT3_N_J2",
+  "PCIE_UP_OUT0_P_J2",
+  "PCIE_UP_OUT0_N_J2"
+ ],
+ "from": "ENG · ARCHER",
+ "gate": {
+  "clearance_min_mm": -0.0,
+  "endpoint_max_dev_mm": 0.0,
+  "lane_pitch_min_gap_mm": 0.4562,
+  "lane_pitch_min_pair": [
+   "PCIE_UP_OUT6_N_J2",
+   "PCIE_UP_OUT6_P_J2"
+  ],
+  "lane_pitch_req_mm": 0.435,
+  "n_clearance_viol": 0,
+  "n_lane_pitch_viol": 0
+ },
+ "gate_pass_on_routed_subset": false,
+ "input_provenance": {
+  "anchor_json": "/tmp/opencode/k2r376/anchor_table.json",
+  "frozen_anchor_sha16": "e6bb322818cd95cb",
+  "frozen_raster_sha16": "e1ba05e38e3b61f9",
+  "model_json": "/tmp/opencode/archer/model_l8.json",
+  "note": "冻结栅格 e1ba05e38e3b61f9 无法由本机冻结模型按**闸同源**障碍语义复现（多次配准比对 mismatch≈23-33%，非配准误差）；故本器按**闸所消费之同一模型**（`build_base`）重建可行域 ⇒ 见证与闸**同源**（更严，不放松）。此为具名观察 O-1。"
+ },
+ "method": "ordered MCF · bundle-order = a_rank DESC (inner->outer) · single implementation · single run",
+ "model": "C-B2UP-1_REALGEOM_BUS_v1",
+ "model_sha16": "84f19701dfc1db31",
+ "n_lanes": 16,
+ "n_routed": 13,
+ "schema": 1,
+ "to": "监理",
+ "ts": "2026-09-22T11:46:22.157140+08:00",
+ "upper_bound_certificate": null,
+ "verdict": "NOT(a)"
+}
