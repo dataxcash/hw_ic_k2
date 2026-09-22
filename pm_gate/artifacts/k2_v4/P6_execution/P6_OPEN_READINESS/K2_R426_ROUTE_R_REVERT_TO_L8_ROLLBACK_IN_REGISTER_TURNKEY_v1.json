@@ -82,5 +82,7 @@
  ],
  "files": [
   "K2_R426_ROUTE_R_REVERT_TO_L8_ROLLBACK_IN_REGISTER_TURNKEY_v1.json/.md/.sha16.txt"
- ]
+ ],
+ "R401_D1_under_route_R": "**路线 R 下 R401 正式闸与 D1 前置均不适用** —— R401 为『②-UP 16 lane』预登记**一次性**仪器（消费**每 lane 折线**）；R417 §D1 之缺口（全仓无『板→每网 In5 折线』抽取件）**依该仪器而生**。路线 R 不建 lane（owner 甲 已放宽该条）⇒ **无 lane 折线可消费 ⇒ D1 不触**；其正式见证改由**在册仪器**组成：① `criteria/adjudicate.py` rev=6 十九维 ② `kicad-cli pcb drc`（error=0）③ DFM 逐项（R425）④ 16 网逐网孔数/端点（R416/R419 已具读数）。⇒ **路线 R 不引入任何新仪器/新口径**，且**绕开** R417 §D1 与 R401 之停等。",
+ "R401_D1_note": "此非『新法』：四项全部为在册仪器/在册判据之只读调用；未新增检查齿、未改 `criteria/`。"
 }

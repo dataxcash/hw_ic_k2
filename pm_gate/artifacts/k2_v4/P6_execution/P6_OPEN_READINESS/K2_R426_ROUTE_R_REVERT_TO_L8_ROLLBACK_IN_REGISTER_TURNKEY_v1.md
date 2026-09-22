@@ -36,8 +36,16 @@
 - **rev-54 无板声明**（无卡、无 `board_sha16`）⇒ 回退后板声明由 **rev-53（`7a5c8991` = l8）** 承接，**无悬空声明**。
 - **SPEC 内 l9 声明点 = 4 处**：`_spec_rev_55.board_sha16` · `board_file` · 及 `updated_board_sha16_declarations` 之 3 项（`keepout_geometry` / `pd.zone_defs.board_realized_zones` / `mounting_holes`），皆 `7a5c8991 → 77aaa63f`。
 
+## 4b. 路线 R 下 **R401 正式闸与 D1 前置均不适用**
+R401 是『②-UP 16 lane』之**预登记一次性仪器**（消费**每 lane 折线**）；R417 §D1 之缺口（全仓无『板→每网 In5 折线』抽取件）**正是因该仪器而生**。路线 R **不建 lane**（owner 甲 已放宽该条）⇒ **无 lane 折线可消费 ⇒ D1 不触**、R401 不须跑。其正式见证改由**在册仪器**组成：
+1. `criteria/adjudicate.py` **rev=6** 十九维（只读调用）
+2. `kicad-cli pcb drc`（**error=0**）
+3. DFM 逐项（**R425**）
+4. 16 网逐网孔数/端点（R416/R419 已具读数）
+⇒ **路线 R 不引入任何新仪器/新口径**，并**绕开** R417 §D1 与 R401 之停等。
+
 ## 5. 声明
 本件**不主张**路线 R 为唯一/首选解 —— 它是**成本最低**（零设计）的一条；路线 F（保留搬迁）仍待 Q2 指定设计归属。**裁定权在监理**（走廊/搬迁处置 = 监理自裁面 · owner #14⑦）。
 
 ---
-—— ENG（ARCHER）· 2026-09-22T23:57 · 只读 · owner 闸口 0 · sha16 `4df6c5e63dd15ac8`
+—— ENG（ARCHER）· 2026-09-22T23:57 · 只读 · owner 闸口 0 · sha16 `099a18b39e275269`
