@@ -1,0 +1,69 @@
+{
+ "artifact": "k2_r407_p4_item4_refplane_continuity_l9_v1",
+ "band": [
+  84.0,
+  40.0,
+  142.0,
+  64.0
+ ],
+ "board": "k2/hw/k2_v4_8L.l9.kicad_pcb",
+ "boundary": "只读 · 未烙板 · 未改冻结四源/criteria/生成器/SPEC 设计内容 · 未派 WORKER",
+ "cell_mm": 0.05,
+ "from": "ENG · ARCHER R407",
+ "method": "带内逐 net 之**连通分量**计数（split = 同一 net 在带内 >=2 分量）· uncovered = 无铺铜格（含 netclass 让位）",
+ "readings": {
+  "In1.Cu": {
+   "band_cells": 556800,
+   "nets_in_band": {
+    "GND": {
+     "area_mm2": 1321.17,
+     "cells": 528468,
+     "n_components": 1
+    }
+   },
+   "uncovered_cells": 28332
+  },
+  "In3.Cu": {
+   "band_cells": 556800,
+   "nets_in_band": {
+    "GND": {
+     "area_mm2": 1342.77,
+     "cells": 537107,
+     "n_components": 1
+    }
+   },
+   "uncovered_cells": 19693
+  },
+  "In4.Cu": {
+   "band_cells": 556800,
+   "nets_in_band": {
+    "P3V3": {
+     "area_mm2": 1310.18,
+     "cells": 524073,
+     "n_components": 2
+    }
+   },
+   "uncovered_cells": 32727
+  },
+  "In6.Cu": {
+   "band_cells": 556800,
+   "nets_in_band": {
+    "GND": {
+     "area_mm2": 1344.65,
+     "cells": 537858,
+     "n_components": 2
+    }
+   },
+   "uncovered_cells": 18942
+  }
+ },
+ "schema": 1,
+ "source_sha256": "77aaa63fe016b450",
+ "to": "监理",
+ "tool": "k2_p4_b2_plane_layer_extract_v1.py（R372 既有只读工具 · 非新法/非变体/非扫描 · 无求解器）",
+ "ts": "2026-09-22T22:48:49+08:00",
+ "verdict": {
+  "item4_ref_plane_continuity_l9": "见读数（存在多分量 ⇒ 需人核）",
+  "note": "本件只用**既有**平面提取器 + 连通分量法；未新造判据、未改 gate。"
+ }
+}
