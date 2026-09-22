@@ -1,0 +1,90 @@
+{
+ "schema": 1,
+ "artifact": "k2_r376_closure_window_item2_landed_l9_spec_rev55_v1",
+ "ts": "2026-09-22T11:05+0800",
+ "from": "ENG · ARCHER R376（应 #K2-137 §二 (甲) 方案驱动落地）",
+ "to": "监理",
+ "owner_gate": 0,
+ "authority": "#K2-137 §二 (甲) 准（方案驱动落地 · 沿用 l8 落库范式 · 版本 bump 新件 · 同批提交）· §四 O-2/O-3/O-4",
+ "landed": {
+  "commit": "e828332",
+  "board": "k2/hw/k2_v4_8L.l9.kicad_pcb",
+  "board_sha16": "77aaa63fe016b450",
+  "spec": "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-55.json",
+  "spec_sha16": "964101b19015f6d7",
+  "pointer": "pm_gate/project.yaml: spec_name→rev-55 · board_path→l9",
+  "gate": "`PCB 变更 1 项对应 SPEC 变更 1 项: ['SPEC_k2_v4.spec-rev-55.json']` ⇒ **自然满足**（未用 --no-verify）",
+  "from_board": "k2_v4_8L.l8.kicad_pcb 7a5c89913d6e5d0a（**逐字节未动**）"
+ },
+ "applier_determinism_fix": {
+  "was": "uuid4 ⇒ 每次运行产物不同（不可复现）",
+  "now": "uuid5(固定命名空间, 对象自身坐标/网/层) ⇒ **两次运行逐字节同**（已实测）",
+  "why": "#K2-137 §二 项1 要求『**确定性**施加器』；非迭代调参，属正确性修复。",
+  "file": "K2_R373_CW_RELOCATION_APPLIER_v1.py"
+ },
+ "spec_declaration_only": {
+  "changed": [
+   "_spec_rev_55 卡（新）",
+   "spec_version 1.1.spec-rev-49 → 1.1.spec-rev-55（版本标签=声明）",
+   "board_sha16 声明 ×3：keepout_geometry · pd.zone_defs.board_realized_zones · mounting_holes（7a5c8991… → 77aaa63f…）"
+  ],
+  "unchanged": "rev-1..54 **逐字节不改** · **零**设计约束字段改动（网类/走线区/间距/线宽/层规划/keepout 几何/原理图/生成器逻辑）",
+  "fail_closed": "其它『语义=受审板实测值』之标量（zone/via 计数等）归属未证 ⇒ **按约束处理、不动**（依 #K2-137 §二）"
+ },
+ "o4_readonly_finding": {
+  "item": "project.yaml::board_path 是否被下游消费",
+  "method": "只读 grep `_shared/eda_core/pipeline/checks.py`",
+  "result": "**未发现 `board_path` 被该门禁消费**（门禁只用 staged 文件与 `_is_spec_change`）⇒ 该指针为**滞后声明**",
+  "action": "随本次**合法** project.yaml 变更**一并校正** l7→l9（不单独授权 · 已留痕于 commit message）"
+ },
+ "o3_compliance": {
+  "ts": "本件 ts 为**机取时钟**（未手填）",
+  "note": "#K2-137 §四 O-3：回件时间戳须机取 ⇒ 本件起每件先 `date` 取值"
+ },
+ "o2_compliance": {
+  "note": "#K2-137 §四 O-2：撞自建质量门 ⇒ **先翻自家在册范式**（本次即 l8 落库范式 `c83d77f`）再上报；本轮按此办理，未再提『豁免门禁』类选项"
+ },
+ "verification": {
+  "board_objects": "段 5456 · 孔 740（l8: 5180 / 742）",
+  "target_nets_in_neck": {
+   "DS320_STRAP_B_ADDR1_7-0": "In5段0 · 孔0",
+   "DS320_STRAP_B_ADDR0_15-8": "In5段0 · 孔0",
+   "I2C1_SDA": "In5段0 · 孔0",
+   "PERSTA#": "改走 R337 低位直走（仍过窗占窄带）"
+  },
+  "paren_balance": 0,
+  "not_done": "本机无 pcbnew ⇒ 未做 KiCad 全量 LoadBoard/DRC（需在有 KiCad 处补）"
+ },
+ "window_status": {
+  "项1 修工具": "DONE（R372）",
+  "②(ii) 几何级": "CLOSED（R372）",
+  "项2 落搬迁": "**DONE（本件 · l9 + rev-55 已入库）**",
+  "项3 在 l9 上按真实几何建 16 lane（新冻结模型 · 禁 5 段模板类）": "NEXT（输入已备：后-C-w In5 自由域 spec sha16 c852536f4e6db2f8）",
+  "项4 同时性核 · 项5 二值": "NEXT"
+ },
+ "anchors": {
+  "board_l9_sha16": "77aaa63fe016b450",
+  "board_l8_sha16": "7a5c89913d6e5d0a",
+  "frozen4": [
+   "d4e81f647be7f980",
+   "fb07d25ac426ff84",
+   "dd794c54f7ce7417",
+   "0a459839e15960b8"
+  ],
+  "criteria": "rev=6 MATCH",
+  "external": 1
+ },
+ "buildability": {
+  "mode": "relocation_listed",
+  "note": "l9 已合法入库（板+SPEC 同批）；未烙板（未回写 l8/冻结件）。",
+  "施工队问答": "**搬迁件已可施工**（清单+板实例齐）；**线束主图仍缺** ⇒ 全板图纸层仍缺主图。"
+ },
+ "not_asked": [
+  "不请求 owner（未触 L1）",
+  "未用 --no-verify · 未改设计约束/原理图/生成器逻辑 · 未派 WORKER · 未做变体重跑"
+ ],
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A（值置空串）",
+  "convention_A_sha16": "9f9fb1f5647a3e74"
+ }
+}
