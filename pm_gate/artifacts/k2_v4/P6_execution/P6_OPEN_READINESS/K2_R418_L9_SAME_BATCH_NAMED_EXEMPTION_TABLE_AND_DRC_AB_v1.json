@@ -1,0 +1,145 @@
+{
+ "schema": 1,
+ "artifact": "k2_r418_l9_same_batch_named_exemption_table_and_drc_ab_v1",
+ "ts": "2026-09-22T23:24:58+08:00",
+ "from": "ENG · ARCHER（续接会话 · 应监理『按已批准计划推进当前阶段 · fail-closed』）",
+ "to": "监理",
+ "owner_gate": 0,
+ "authority": "**R270 §一 项3**（②-DN `#K2-73` 具名豁免 EX-1 ✓ · **l9 同批豁免表**）· #K2-73 §五/§O-4（l9 = 基线 + **具名豁免表** + rev=7 同笔）· #K2-67（courtyard 2 对具名豁免）· 监理自动续推（阶段门 fail-closed）",
+ "nature": "**只读取证件**：把**在册具名豁免**逐条落到**现行受审板 l9（77aaa63fe016b450）**上做现值清算，并出 **l8↔l9 DRC A/B**（同会话 · 同仪器）。未改任何件 · 未出包 · 未烙板。",
+ "board_l9": "77aaa63fe016b450",
+ "exemption_table": [
+  {
+   "id": "EX-1",
+   "ruling": "#K2-73 Q1（准 · 具名豁免）",
+   "scope": "`PCIE_DN_OUT{0..7}_{P,N}_MCIO` × **16**",
+   "ground": "U6 侧 F.Cu 唯一可达穴 = 460 格/18.4mm² · 现行判据下锚位容量 **14 < 16** ⇒『≤2 孔/线 · 全 In5』**守恒级联合不可满足**",
+   "exempted_clause": "『≤2 via/线』⇒ 允许 **4 孔/线**（恢复 l8 既有拓扑）",
+   "l9_reading": "**逐网 4 孔**（16/16 一致 · 分布 {'4': 16}）",
+   "status": "**deviation PRESENT ⇒ 豁免生效** ✅"
+  },
+  {
+   "id": "#K2-67 族",
+   "ruling": "#K2-67（准 · 具名豁免 · 限 2 对）",
+   "scope": "courtyard『零重叠』× `U1↔J9` / `U1↔J13`",
+   "ground": "x 向被板框锁死 · y 向被冻结接口位锁死 ⇒ 联合不可满足",
+   "l9_reading": "l9 DRC: `courtyards_overlap` = **0** · `missing_courtyard` = **54**（本板 54 件无 courtyard 图形）",
+   "status": "**deviation NOT present（休眠）** —— 现板无 courtyard 重叠项；⚠ **lineage 差异**：#K2-67 之实测板为 `/tmp/opencode/l9`（`39b58aa1…` lineage · total 270 · overlap 2），**非**现行 landed l9（`77aaa63f`）⇒ 该豁免于 rev=7『齿化维』落地时**须按现行板重核**"
+  },
+  {
+   "id": "DRC-warning 9 类",
+   "ruling": "`criteria/manifest.k2.yaml` rev=6（在册 disposition）",
+   "scope": "`missing_courtyard` · `lib_footprint_mismatch` · `silk_over_copper` · `silk_overlap` · `silk_edge_clearance` · `track_dangling` · `track_not_centered_on_via` · `via_dangling` · `copper_sliver`",
+   "l9_reading": "l9 出现**恰为此 9 类**（未登记类型 **0/9** —— 判定器 `drc_warning_dispositions` OK）",
+   "status": "**在册 · 合规** ✅"
+  }
+ ],
+ "not_exempted_must_fix": {
+  "drc_errors_l9": 59,
+  "breakdown": {
+   "clearance": 21,
+   "shorting_items": 19,
+   "hole_clearance": 13,
+   "tracks_crossing": 6
+  },
+  "new_warning_delta": "`track_dangling` l8 1 → **l9 5**（**+4** · 落搬迁新增悬空端；其余 8 类 warning 逐类同）",
+  "statement": "**上述 59 error + 4 新增 track_dangling 无任何在册豁免覆盖** ⇒ 属 R410/R411 之『项2 落搬迁落地缺陷』；**修复前不得出包/不得据以过 P4**。"
+ },
+ "drc_ab_table_same_session": {
+  "instrument": "kicad-cli 10.0.5（`AppDir`）· 同 pro（`c009058005829f09`）· 同 work-dir 结构",
+  "rows": [
+   {
+    "type": "error/clearance",
+    "l8": 0,
+    "l9": 21
+   },
+   {
+    "type": "error/hole_clearance",
+    "l8": 0,
+    "l9": 13
+   },
+   {
+    "type": "error/shorting_items",
+    "l8": 0,
+    "l9": 19
+   },
+   {
+    "type": "error/tracks_crossing",
+    "l8": 0,
+    "l9": 6
+   },
+   {
+    "type": "warning/missing_courtyard",
+    "l8": 54,
+    "l9": 54
+   },
+   {
+    "type": "warning/silk_over_copper",
+    "l8": 37,
+    "l9": 37
+   },
+   {
+    "type": "warning/track_not_centered_on_via",
+    "l8": 34,
+    "l9": 34
+   },
+   {
+    "type": "warning/lib_footprint_mismatch",
+    "l8": 20,
+    "l9": 20
+   },
+   {
+    "type": "warning/silk_overlap",
+    "l8": 15,
+    "l9": 15
+   },
+   {
+    "type": "warning/via_dangling",
+    "l8": 6,
+    "l9": 6
+   },
+   {
+    "type": "warning/track_dangling",
+    "l8": 1,
+    "l9": 5
+   },
+   {
+    "type": "warning/silk_edge_clearance",
+    "l8": 2,
+    "l9": 2
+   },
+   {
+    "type": "warning/copper_sliver",
+    "l8": 1,
+    "l9": 1
+   },
+   {
+    "type": "unconnected",
+    "l8": 0,
+    "l9": 0
+   }
+  ],
+  "conclusion": "**error 面 l8 = 0 / l9 = 59**；**warning 面除 `track_dangling` +4 外逐类相同** ⇒ 落搬迁之差异**完全可归因**（承接 R410/R411）。"
+ },
+ "p4_item3_status": "**本件 = R270 §一 项3（②-DN EX-1 · l9 同批豁免表）之清算完成**：在册豁免逐条落到现行 l9 现值（EX-1 生效 · #K2-67 族休眠且须按现行板重核 · 9 类 warning 合规）。",
+ "stage_gate_selfcheck": {
+  "P4_全绿": "**否**（fail-closed ⇒ **不出包 · 不下单 · 不越阶段**）",
+  "remaining_blockers": [
+   "① **item2 ②-UP** = owner（#K2-142 在途 · 两选项已带成本标价 · R416/v63）",
+   "② **l9 底图 59 error 落地缺陷** = 监理（`PENDING_RULINGS_DELTA_20260922_v62` 处置：(i) 修+重落 或 (ii) 并入 owner 决策）",
+   "③ **D1**（正式闸输入抽取） = 监理钉死（R417 §D1）",
+   "④ **item10 `criteria` rev=7** = **gate 属主**（非 ENG 写域）",
+   "⑤ item13 出包/DFM = **依赖 ①–④**（P4 未全绿不下单）"
+  ]
+ },
+ "anchors": {
+  "board_l9": "77aaa63fe016b450",
+  "board_l8": "7a5c89913d6e5d0a",
+  "pro": "c009058005829f09",
+  "criteria": "rev=6 MATCH（只读）",
+  "frozen4": "4/4 未动"
+ },
+ "not_asked": [
+  "未出包 · 未烙板 · 未派 WORKER · 未启新法 · 未改任何件/判据 · 不新开 owner 项（升级已在途 #K2-142）"
+ ]
+}
