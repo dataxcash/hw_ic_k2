@@ -1,0 +1,34 @@
+{
+ "schema": 1,
+ "artifact": "pending_rulings_delta_20260922_v56_cw_relocation_implementation_path_blocked_by_gate",
+ "ts": "2026-09-22T12:22+0800",
+ "from": "ENG · ARCHER R374（应 #K2-136 §三 项2）",
+ "to": "监理",
+ "owner_gate": 0,
+ "authority": "#K2-136 §三 项2（落搬迁）· §五（未获批不得改生成器/SPEC/原理图）· 宪法第九条（冲突即停机）· 第十一条（放行范围/工具路径 = 监理自裁面）",
+ "fact": "项2『落搬迁』已按 v55 清单**做出来**（l9 提案 · 三网颈内 In5 段/孔清零 · 自检合格 · sha16 05d7db3c183496bd），但 **k2 pre-commit 门禁拒绝**：『PCB 产物变更 hw/k2_v4_8L.l9.kicad_pcb 无对应 SPEC 变更 — 必须先修订 SPEC (SPEC_*.json / artifacts/L3/*.json) 再重建, **禁止直改 PCB**』。",
+ "conflict": "项2 要求『实施』搬迁，而门禁要求『不得直改 PCB、须先修订 SPEC 再重建』；#K2-136 §五 又禁止 ENG 未获批改 SPEC ⇒ **ENG 无可授权路径**。",
+ "eng_action": "依宪法第九条**停机不绕行**（未用 --no-verify · 未改 SPEC/生成器 · 未回写 l8）；提案仅存 /tmp；l8 与冻结四源逐字节未动。",
+ "requested_ruling": [
+  "请**自裁**项2 之实施路径（放行范围/工具路径 · 非 owner）：(甲) **SPEC 驱动路径** —— 准依 C-w 清单修订对应 `SPEC_*.json` / `artifacts/L3/*.json` 并由**生成器重建**受审板实例；(乙) **实例编辑路径** —— 准『l9 = l8 + v55 清单』之受裁直改，并明示门禁 carve-out 与留痕要求。",
+  "并请裁：若走 (甲)，SPEC 修订之**授权范围**（哪些字段/哪些网）与**门禁回填方式**。"
+ ],
+ "anchors": {
+  "board_l8_sha16": "7a5c89913d6e5d0a",
+  "frozen4": [
+   "d4e81f647be7f980",
+   "fb07d25ac426ff84",
+   "dd794c54f7ce7417",
+   "0a459839e15960b8"
+  ],
+  "criteria": "rev=6 MATCH"
+ },
+ "not_asked": [
+  "不请求 owner",
+  "未绕门禁 · 未派 WORKER"
+ ],
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A（值置空串）",
+  "convention_A_sha16": "01b544a7cbc30f75"
+ }
+}
