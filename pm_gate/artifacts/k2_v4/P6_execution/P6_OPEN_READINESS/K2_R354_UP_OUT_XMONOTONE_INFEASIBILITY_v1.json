@@ -1,0 +1,390 @@
+{
+ "artifact": "k2_r354_up_out_xmonotone_infeasibility_v1",
+ "binary": {
+  "(a) 16/16 见证": "未得",
+  "(b) U<16 严格证书": "不成立"
+ },
+ "board_sha16": "7a5c89913d6e5d0a",
+ "buildability_field": {
+  "mode": "no_move",
+  "note": "纯只读：未改任何网几何 · 未烙板 · 未动冻结四源/判据 ⇒ 不动证明成立"
+ },
+ "caliber": {
+  "cell": 0.03,
+  "keepout": "0.5300(未改)",
+  "lane_w": 0.16,
+  "pitch_eff": 0.435
+ },
+ "consequence_for_next_step": "下一构造必须**显式含折返**（东带巴士 → 过孔墙缺口/东端折返 → 西区配锚），且 8 条西组之折返口为**共享窄资源** ⇒ 联合指派须以『折返口槽位 + 西返水平层』为决策对象（互距感知）。",
+ "criteria": "rev=6 MATCH (1937a40ae68bc288 / 727d09953cf9bd78 / eb3da49f2ad97e37)",
+ "from": "ENG · ARCHER",
+ "frozen4": [
+  "d4e81f647be7f980",
+  "fb07d25ac426ff84",
+  "dd794c54f7ce7417",
+  "0a459839e15960b8"
+ ],
+ "nature": "①-UP **x-单调不可行性**（单 lane 刚性读件）+ **顺序不变量措辞更正**（自纠 R353 §2）· 只读 · 二值未取得",
+ "per_lane": [
+  {
+   "A": [
+    84.35,
+    55.723
+   ],
+   "B": [
+    127.01,
+    43.25
+   ],
+   "a_rank": 0,
+   "net": "PCIE_UP_OUT0_N_J2",
+   "x_monotone_feasible": false,
+   "x_monotone_len_mm": null
+  },
+  {
+   "A": [
+    84.85,
+    54.88
+   ],
+   "B": [
+    141.22,
+    42.65
+   ],
+   "a_rank": 1,
+   "net": "PCIE_UP_OUT0_P_J2",
+   "x_monotone_feasible": true,
+   "x_monotone_len_mm": 66.92
+  },
+  {
+   "A": [
+    85.5,
+    55.823
+   ],
+   "B": [
+    139.48,
+    43.85
+   ],
+   "a_rank": 2,
+   "net": "PCIE_UP_OUT1_N_J2",
+   "x_monotone_feasible": true,
+   "x_monotone_len_mm": 63.94
+  },
+  {
+   "A": [
+    86.05,
+    54.88
+   ],
+   "B": [
+    127.59,
+    43.85
+   ],
+   "a_rank": 3,
+   "net": "PCIE_UP_OUT1_P_J2",
+   "x_monotone_feasible": false,
+   "x_monotone_len_mm": null
+  },
+  {
+   "A": [
+    86.7,
+    55.823
+   ],
+   "B": [
+    129.33,
+    46.85
+   ],
+   "a_rank": 4,
+   "net": "PCIE_UP_OUT2_N_J2",
+   "x_monotone_feasible": false,
+   "x_monotone_len_mm": null
+  },
+  {
+   "A": [
+    87.25,
+    54.88
+   ],
+   "B": [
+    137.16,
+    46.25
+   ],
+   "a_rank": 5,
+   "net": "PCIE_UP_OUT2_P_J2",
+   "x_monotone_feasible": true,
+   "x_monotone_len_mm": 59.24
+  },
+  {
+   "A": [
+    87.9,
+    55.823
+   ],
+   "B": [
+    136.0,
+    47.45
+   ],
+   "a_rank": 6,
+   "net": "PCIE_UP_OUT3_N_J2",
+   "x_monotone_feasible": true,
+   "x_monotone_len_mm": 56.5
+  },
+  {
+   "A": [
+    88.45,
+    54.88
+   ],
+   "B": [
+    130.49,
+    47.45
+   ],
+   "a_rank": 7,
+   "net": "PCIE_UP_OUT3_P_J2",
+   "x_monotone_feasible": false,
+   "x_monotone_len_mm": null
+  },
+  {
+   "A": [
+    89.1,
+    55.823
+   ],
+   "B": [
+    131.65,
+    48.65
+   ],
+   "a_rank": 8,
+   "net": "PCIE_UP_OUT4_N_J2",
+   "x_monotone_feasible": false,
+   "x_monotone_len_mm": null
+  },
+  {
+   "A": [
+    89.65,
+    54.88
+   ],
+   "B": [
+    140.06,
+    48.05
+   ],
+   "a_rank": 9,
+   "net": "PCIE_UP_OUT4_P_J2",
+   "x_monotone_feasible": true,
+   "x_monotone_len_mm": 56.24
+  },
+  {
+   "A": [
+    90.3,
+    55.823
+   ],
+   "B": [
+    138.9,
+    49.25
+   ],
+   "a_rank": 10,
+   "net": "PCIE_UP_OUT5_N_J2",
+   "x_monotone_feasible": true,
+   "x_monotone_len_mm": 53.51
+  },
+  {
+   "A": [
+    90.85,
+    54.88
+   ],
+   "B": [
+    128.75,
+    49.25
+   ],
+   "a_rank": 11,
+   "net": "PCIE_UP_OUT5_P_J2",
+   "x_monotone_feasible": false,
+   "x_monotone_len_mm": null
+  },
+  {
+   "A": [
+    91.5,
+    55.823
+   ],
+   "B": [
+    129.91,
+    52.25
+   ],
+   "a_rank": 12,
+   "net": "PCIE_UP_OUT6_N_J2",
+   "x_monotone_feasible": false,
+   "x_monotone_len_mm": null
+  },
+  {
+   "A": [
+    92.05,
+    54.88
+   ],
+   "B": [
+    137.74,
+    51.65
+   ],
+   "a_rank": 13,
+   "net": "PCIE_UP_OUT6_P_J2",
+   "x_monotone_feasible": true,
+   "x_monotone_len_mm": 49.28
+  },
+  {
+   "A": [
+    92.7,
+    55.823
+   ],
+   "B": [
+    136.58,
+    52.85
+   ],
+   "a_rank": 14,
+   "net": "PCIE_UP_OUT7_N_J2",
+   "x_monotone_feasible": true,
+   "x_monotone_len_mm": 46.54
+  },
+  {
+   "A": [
+    93.7,
+    55.13
+   ],
+   "B": [
+    131.07,
+    52.85
+   ],
+   "a_rank": 15,
+   "net": "PCIE_UP_OUT7_P_J2",
+   "x_monotone_feasible": false,
+   "x_monotone_len_mm": null
+  }
+ ],
+ "schema": 1,
+ "self_correction": {
+  "corrected": "【T1′】①**在飞（未落）lane** 保持 a_rank 竖序（a_rank 小者 y 大）——由立管序 + 不可交叉强制；②**落位 lane 之水平段恒在在飞 lane 之下**；③**下潜序（x 升序）= 阶升序**（= a_rank 降序）⇒ 最低阶 lane 先落（x 最小）。",
+  "impact": "R353 §5/§6 之推理（下潜序、v67 类反例 6P×6N）**基于 ①③**，**不受影响**；仅§2 之全局措辞更正。",
+  "issue": "原文『于任意竖切上 a_rank 小者恒在其上』过强：折返 lane 会**两次**穿越同一竖切（东行支 + 西返支），故『任意竖切』之 y 序当按**支**计，不能作全局量。",
+  "target": "K2_R353_UP_OUT_EXACT_READOUT_v1 §2『顺序不变量』措辞"
+ },
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "d975314c95e718f4"
+ },
+ "theorem_x_monotone": {
+  "claim": "【x-单调不可行性】8/16 条 lane **不存在** x-单调（x 非减）自由通路（单 lane · 无障碍互斥；纯几何/障碍刚性）",
+  "independent_of_pitch": "该结论**不含** lane-lane 互距假设 ⇒ 为**单 lane 刚性**，与指派/联合优化无关。",
+  "semantics": "⇒ 每条西组 lane 之路径**必须东行越过其自身 B 锚**（至 x≳136 之折返区）再西返 ⇒ **必然非 x-单调**（折返），且其西返必经 x≈134 之过孔墙缺口。",
+  "set_identity": "无 x-单调通路之集合 == B 锚位于**过孔墙以西**（x_B < 134）之 8 条 lane：['PCIE_UP_OUT0_N_J2', 'PCIE_UP_OUT1_P_J2', 'PCIE_UP_OUT2_N_J2', 'PCIE_UP_OUT3_P_J2', 'PCIE_UP_OUT4_N_J2', 'PCIE_UP_OUT5_P_J2', 'PCIE_UP_OUT6_N_J2', 'PCIE_UP_OUT7_P_J2']；其余 8 条（x_B≥136）皆存在。",
+  "why_families_failed": "①R348 巴士 waypoint / R345–R346 硬排除贪心 / R346『最短路候选 MILP』诸族都建立在**单调或近单调候选**上 ⇒ 与本刚性结构冲突；②8 条西组 lane 之最短路径**全部汇聚于同一折返口**（过孔墙缺口，宽 0.3–1.0mm/段）⇒ 候选退化（R346 实测互斥 94.1%）之源。"
+ },
+ "to": "监理",
+ "ts": "2026-09-22T11:40+0800",
+ "west_group": {
+  "anchors_B_x_lt_134": [
+   {
+    "A": [
+     84.35,
+     55.723
+    ],
+    "B": [
+     127.01,
+     43.25
+    ],
+    "a_rank": 0,
+    "net": "PCIE_UP_OUT0_N_J2",
+    "x_monotone_feasible": false,
+    "x_monotone_len_mm": null
+   },
+   {
+    "A": [
+     86.05,
+     54.88
+    ],
+    "B": [
+     127.59,
+     43.85
+    ],
+    "a_rank": 3,
+    "net": "PCIE_UP_OUT1_P_J2",
+    "x_monotone_feasible": false,
+    "x_monotone_len_mm": null
+   },
+   {
+    "A": [
+     86.7,
+     55.823
+    ],
+    "B": [
+     129.33,
+     46.85
+    ],
+    "a_rank": 4,
+    "net": "PCIE_UP_OUT2_N_J2",
+    "x_monotone_feasible": false,
+    "x_monotone_len_mm": null
+   },
+   {
+    "A": [
+     88.45,
+     54.88
+    ],
+    "B": [
+     130.49,
+     47.45
+    ],
+    "a_rank": 7,
+    "net": "PCIE_UP_OUT3_P_J2",
+    "x_monotone_feasible": false,
+    "x_monotone_len_mm": null
+   },
+   {
+    "A": [
+     89.1,
+     55.823
+    ],
+    "B": [
+     131.65,
+     48.65
+    ],
+    "a_rank": 8,
+    "net": "PCIE_UP_OUT4_N_J2",
+    "x_monotone_feasible": false,
+    "x_monotone_len_mm": null
+   },
+   {
+    "A": [
+     90.85,
+     54.88
+    ],
+    "B": [
+     128.75,
+     49.25
+    ],
+    "a_rank": 11,
+    "net": "PCIE_UP_OUT5_P_J2",
+    "x_monotone_feasible": false,
+    "x_monotone_len_mm": null
+   },
+   {
+    "A": [
+     91.5,
+     55.823
+    ],
+    "B": [
+     129.91,
+     52.25
+    ],
+    "a_rank": 12,
+    "net": "PCIE_UP_OUT6_N_J2",
+    "x_monotone_feasible": false,
+    "x_monotone_len_mm": null
+   },
+   {
+    "A": [
+     93.7,
+     55.13
+    ],
+    "B": [
+     131.07,
+     52.85
+    ],
+    "a_rank": 15,
+    "net": "PCIE_UP_OUT7_P_J2",
+    "x_monotone_feasible": false,
+    "x_monotone_len_mm": null
+   }
+  ]
+ }
+}
