@@ -1,0 +1,68 @@
+{
+ "schema": 1,
+ "artifact": "pending_rulings_delta_20260922_v62_l9_relocation_drc_defect_disposition",
+ "ts": "2026-09-22T22:56:44+08:00",
+ "ts_note": "机取时钟写入",
+ "from": "ENG · ARCHER R410（续接会话 · 应 #K2-142 §四『可做 P4 残余门项只读测量』）",
+ "to": "监理",
+ "owner_gate": 0,
+ "authority": "#K2-142 §四（准 P4 残余门项只读测量 · 禁新法/变体/扫描/派工/烙板）· R270 §一 项1/项4/项9（l9 同口径重跑）· handoff R409 §4/§8.4 · #K2-137 §二(甲)（落搬迁在册范式）",
+ "trigger": "**新事实**：复原在册仪器（KiCad 10.0.5 / pcbnew）后首跑 l9 之 19 维标准调用 ⇒ **16 OK / 3 FAIL**（l8 对照 19 OK / 0 FAIL）⇒ **当前受审板 l9（77aaa63fe016b450）未过 P4 标准调用门，且含真短路**。此系 #K2-137 已准「项2 落搬迁」之**落地实现缺陷**，非需求问题、非判据问题。",
+ "finding_summary": {
+  "board": "k2/hw/k2_v4_8L.l9.kicad_pcb 77aaa63fe016b450",
+  "control_board": "k2/hw/k2_v4_8L.l8.kicad_pcb 7a5c89913d6e5d0a（19 OK / 0 FAIL · error=0）",
+  "fails": [
+   {
+    "check": "non45_segments",
+    "l9": "11/5456",
+    "l8": "0/5180"
+   },
+   {
+    "check": "drc_errors",
+    "l9": "error=59（clearance 21 · shorting_items 19 · hole_clearance 13 · tracks_crossing 6）",
+    "l8": "error=0"
+   },
+   {
+    "check": "density_and_clearance",
+    "l9": "最小铜间距 None（<0.100；T=0.100 ⇒ 16 违规，最紧 0.0390mm）",
+    "l8": "[0.100,0.105]"
+   }
+  ],
+  "refill_attribution": "铺铜回填（18 区）后 error 59→38 ⇒ **21 处 = 陈旧铺铜假违例（落搬迁后未回填）**；**38 处 = 真几何冲突**",
+  "true_conflict_clusters": [
+   "C1 `ADDR1_7-0`(In2) × `PCIE_UP0_N/1_N/2_P/3_P/4_N/5_N`(In2 + F.Cu→In2 盲孔)（crossing/shorting，20）",
+   "C2 `I2C1_SDA` via+B.Cu stub × `PCIE_DN_OUT7_P_MCIO`(B.Cu) + U6.`BT29`（5）",
+   "C3 `ADDR0_15-8`(F/B.Cu) × `DN_OUT7_N`(B.Cu) · `P3V3`/`GND` 过孔（13）"
+  ],
+  "attribution": "全部落在 #K2-137 项2 落搬迁新生/改动之铜（DS320 两条 strap 网 + I2C1_SDA）⇒ 落地实现缺陷",
+  "human_sentence": "施工队照这张图不能直接连（3 簇真短路/交叉 + 21 处陈旧铺铜假短路 + 11 段非 45°）"
+ },
+ "requested_ruling": [
+  "**请裁定『落地缺陷之处置』**（监理自裁域 · L2 几何）：",
+  "(i) **准 ENG 以确定性修复重落 l9′** = ①落搬迁后回填铺铜（18 区）· ②改走 `ADDR1_7-0` In2 4 段以避 `PCIE_UP*` In2 束 · ③移 `I2C1_SDA` via + 改其 B.Cu stub · ④移 `ADDR0_15-8` F/B.Cu stub · ⑤11 段 45° 化；按 **#K2-137 §二(甲)** 版本 bump 新件 + 同批 SPEC 声明回填（board_sha16 声明 ×3）+ 同批提交，并重锚 P4 派生模型指纹；",
+  "(ii) **或并入 owner ②-UP 决策后一并处置**（若监理判受审板锚应待 owner 分叉后再定）。",
+  "**并请核**：(甲)『l9 落件未含同批 `.kicad_pro`（口径缺口 C-PRO-L9）』之口径钉死（新 pro / 或明示沿用 l8 pro `c009058005829f09`）；(乙) 本件是否应触发 **C-17/缺口登记**（『落搬迁施加器未回填铺铜 + 未做 DRC 自检』= 前次落地之流程缺口，非新检查齿）。",
+  "**ENG 声明**：本轮**未请求 owner**（未触 L1：无拓扑/接口/信号流向/球重映射）· 修复属 L2；且 #K2-142 §四『禁烙板』在效 ⇒ 未施工，仅列修复清单。"
+ ],
+ "eng_action": "不 park（owner #14⑥）：裁前**续做只读归属分析**（修复坐标清单 / 逐段 uuid-坐标表）与 P4 残余其他项；**不启新法**（无修复实现、无变体、无参数扫描）· **不烙板** · 未派 WORKER · 未绕门禁 · 未改真源/criteria/生成器/SPEC。",
+ "anchors": {
+  "board_l9_sha16": "77aaa63fe016b450",
+  "board_l8_sha16": "7a5c89913d6e5d0a",
+  "spec_rev55": "964101b19015f6d7",
+  "pro_used": "c009058005829f09",
+  "criteria": "rev=6 MATCH（只读 · 独立复算）",
+  "frozen4": [
+   "d4e81f647be7f980",
+   "fb07d25ac426ff84",
+   "dd794c54f7ce7417",
+   "0a459839e15960b8"
+  ],
+  "bundle_sha16": {
+   "MANIFEST.md": "4596ca3052c4af23",
+   "verdict_19dim_rev6_board_l9_77aaa63f.json": "a5686489ea54b5f8"
+  }
+ },
+ "not_asked": [
+  "不请求 owner（未触 L1）· 未改冻结四源/criteria/生成器/SPEC 设计内容/原理图 · 未派 WORKER · 未以 HOLD 结案 · 未放宽 DRC 下限 · 未以变绿缩口径（如实上报 3 FAIL）"
+ ]
+}

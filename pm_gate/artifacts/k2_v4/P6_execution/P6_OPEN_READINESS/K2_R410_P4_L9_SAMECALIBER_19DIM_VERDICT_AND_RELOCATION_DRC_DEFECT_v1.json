@@ -1,0 +1,369 @@
+{
+ "schema": 1,
+ "artifact": "k2_r410_p4_l9_same_caliber_19dim_verdict_and_relocation_drc_defect_v1",
+ "ts": "2026-09-22T22:56:26+08:00",
+ "from": "ENG · ARCHER（续接会话 · context 归零）",
+ "to": "监理",
+ "owner_gate": 0,
+ "first_action": "已读 .omo/supervision/ledger/ 之全部 K2-RULING-*（含 sent/ 与 outbox/）：**最新 = #K2-142**（v2 未成=合法终局 · 触发器成立 ⇒ 升 owner『改冻结集』· ENG 停手待裁），**无晚于 #K2-142 之裁定、无 owner 回件** ⇒ 未越 #K2-142 §四（禁自启新法/变体/参数扫描 · 禁派工/烙板）。本轮只做 #K2-142 §四**明文允许**之『P4 残余门项之只读测量』——即 R270 §一 项1（19 维判定器 @l9 同口径重跑）· 项4（ref_plane_continuity @l9）· 项9（平面/铺铜/钻孔 @l9）。",
+ "authority": "#K2-142 §四（准 P4 残余门项只读测量）· R270《R4 复测闸就绪度 v2》§一 项1/项4/项9（『l9 同口径重跑』）· handoff R409 §4/§8.4 · #K2-137 §二(甲)（落搬迁之在册范式）",
+ "toolchain_restored": {
+  "why": "R376 自陈『本机无 pcbnew ⇒ 未做 KiCad 全量 LoadBoard/DRC（需在有 KiCad 处补）』⇒ l9 从未跑过在册 19 维标准调用。本轮复原**在册仪器环境**（非新法）：`AppDir/bin/kicad-cli` 10.0.5 · `AppDir/bin/python3.11` pcbnew 10.0.5（AppDir = 机内既有 KiCad 10.0.5 AppImage 解包，历史 l7/l8 在册册即用此仪器）",
+  "instruments_sha16": {
+   "k2_w8_footprint_audit_v1.py": "75404d706413d546",
+   "measure_pads_within_outline.py": "1b177638cde3cd55",
+   "measure_ref_plane_continuity.py": "7a3cc545c1447b04",
+   "measure_density_and_clearance.py": "ff763e6865bac843",
+   "measure_min_clearance_drc.py": "4386efde7451bf8e",
+   "measure_non_antipad_gap.py": "2f5591352c5974d3"
+  }
+ },
+ "anchors": {
+  "board_l9": "k2/hw/k2_v4_8L.l9.kicad_pcb · 77aaa63fe016b450",
+  "pro_used": "k2/hw/k2_v4_8L.l8.kicad_pro · c009058005829f09（**如实**：l9 落件未含同批 pro；搬迁不改规则 ⇒ 沿用 l8 pro ⇒ 属口径缺口 C-PRO-L9，见 §口径缺口）",
+  "board_l8_control": "k2/hw/k2_v4_8L.l8.kicad_pcb · 7a5c89913d6e5d0a",
+  "spec": "L3/SPEC_k2_v4.spec-rev-55.json · 964101b19015f6d7（声明性回填 · #K2-137 §二(甲)）",
+  "nets": "k2/hw/data/k2_sch.errata-3.yaml · 5dc7b82a901d11c8",
+  "criteria_rev6": "COUNTERSIGNED · manifest.k2.yaml 727d09953cf9bd78 · adjudicate.py 1937a40ae68bc288 · CHANGELOG eb3da49f2ad97e37（ENG 独立复算 = MATCH）",
+  "frozen_4of4": "未动（d4e81f647be7f980 · fb07d25ac426ff84 · dd794c54f7ce7417 · 0a459839e15960b8）"
+ },
+ "verdict_l9": {
+  "instrument": "criteria/adjudicate.py（在册判定器 · ENG 只读调用）+ kicad-cli 10.0.5 DRC（全新 work-dir）",
+  "passed": false,
+  "n_pass": 16,
+  "n_fail": 3,
+  "n_dims": 19,
+  "board_sha16": "77aaa63fe016b450",
+  "fails": [
+   {
+    "check": "non45_segments",
+    "detail": "非 45° 段 11/5456",
+    "l8": "0/5180"
+   },
+   {
+    "check": "drc_errors",
+    "detail": "DRC error=59（违规总 233 · unconnected 0）：clearance 21 · shorting_items 19 · hole_clearance 13 · tracks_crossing 6",
+    "l8": "error=0（总 170 全 warning）"
+   },
+   {
+    "check": "density_and_clearance",
+    "detail": "最小铜间距 None（须 ≥0.1）mm；密度[10mm/frame_origin] 峰 7（≤8）· 横带 0.07586 · 孔环 0.075 · pad 到边 0.38",
+    "l8": "[0.100,0.105] ⇒ OK"
+   }
+  ],
+  "oks_key": [
+   {
+    "check": "zone_filled",
+    "detail": "铜区（有网非 keepout）已填充 10/10；keepout 规则区 8 另计"
+   },
+   {
+    "check": "drill_count",
+    "detail": "NPTH=4（应 ≥4）PTH=16"
+   },
+   {
+    "check": "ref_plane_continuity",
+    "detail": "口径 non_antipad_gap==0 @R=0.5mm：non_antipad_gap = 0.0 mm²（antipad 20.9552 / split_or_cutout 0.0 / keepout 0.0062）；平面层 ['In1.Cu','In3.Cu','In4.Cu','In6.Cu']；V3 名义全长覆盖 3795/3795（信息项）"
+   },
+   {
+    "check": "pads_within_outline",
+    "detail": "AABB 0 · 接口件(P3-4) 0 · 真外框多边形 0（676 pad · inset 0.3）"
+   },
+   {
+    "check": "lib_electrical_level",
+    "detail": "电气级差异 0（原 2 · B 口径豁免 2）+ 仅 pad 名差异 0（原 1 · 非电气无号 F.Paste 豁免 1）"
+   },
+   {
+    "check": "unconnected_zero",
+    "detail": "unconnected_items = 0"
+   },
+   {
+    "check": "other_ok",
+    "detail": "device_has_pads · rule_severity_manifest · net_declared_realized · pin_map_complete · refdes_sets_equal · pipeline_present · drc_warning_dispositions · fp_lib_table_present · keepout_active · verdict_schema 全 OK"
+   }
+  ],
+  "l8_control_verdict": "19 OK / 0 FAIL（在册册 k2/pm_gate/artifacts/k2_v4/L4/E3-standard-call-l8-20260921/verdict_19dim_rev6_board_l8_7a5c8991.json · passed=True）"
+ },
+ "min_clearance_bracket": {
+  "caliber": "DRC bracket（仅上调 min_clearance/netclass clearance 到 T · 仓库 pro 未动）",
+  "l9": {
+   "table": [
+    {
+     "T": 0.1,
+     "v": 16
+    },
+    {
+     "T": 0.105,
+     "v": 22
+    },
+    {
+     "T": 0.11,
+     "v": 22
+    },
+    {
+     "T": 0.12,
+     "v": 26
+    },
+    {
+     "T": 0.15,
+     "v": 37
+    },
+    {
+     "T": 0.2,
+     "v": 259
+    }
+   ],
+   "max_zero": null,
+   "first_violating": 0.1,
+   "bracket": [
+    null,
+    0.1
+   ]
+  },
+  "l8_control": {
+   "table": [
+    {
+     "T": 0.1,
+     "v": 0
+    },
+    {
+     "T": 0.105,
+     "v": 6
+    },
+    {
+     "T": 0.11,
+     "v": 6
+    },
+    {
+     "T": 0.12,
+     "v": 9
+    },
+    {
+     "T": 0.15,
+     "v": 16
+    },
+    {
+     "T": 0.2,
+     "v": 233
+    }
+   ],
+   "bracket": [
+    0.1,
+    0.105
+   ]
+  },
+  "tightest_l9": [
+   "ADDR1_7-0(In2) ↔ GND via = 0.0390mm",
+   "I2C1_SDA(B.Cu) ↔ PCIE_DN_OUT7_P_MCIO via = 0.0405mm",
+   "ADDR1_15-8(In2) ↔ ADDR1_7-0(In2) = 0.0415mm"
+  ],
+  "tightest_l8": "R28 pad1 [SWCLK_BOOT0] ↔ NRST(F.Cu) track（T=0.100 无违规）"
+ },
+ "zone_refill_attribution": {
+  "method": "对 l9 **副本**（/tmp/opencode/k2r410/refill/l9_refilled.kicad_pcb）以 pcbnew `ZONE_FILLER` 回填 18 区后复跑 DRC（**仅 /tmp · 未入库**）",
+  "table": {
+   "clearance": [
+    21,
+    14
+   ],
+   "hole_clearance": [
+    13,
+    5
+   ],
+   "shorting_items": [
+    19,
+    16
+   ],
+   "tracks_crossing": [
+    6,
+    3
+   ],
+   "error_total": [
+    59,
+    38
+   ]
+  },
+  "判": "**21 处 = 陈旧铺铜假违例**（= 落搬迁后**未回填铺铜** ⇒ 落地程序缺陷）；**38 处 = 真几何冲突**（与铺铜无关）",
+  "consequence": "**l9 之落地既非几何合格、亦非『已填铜』终态** ⇒ 不可作可制造件"
+ },
+ "l8_to_l9_census": {
+  "method": "只读文本解析（段/孔按 (net,layer) 计数；非 45° 段按角度 mod 180 判）",
+  "segments_total": [
+   5180,
+   5456
+  ],
+  "vias_total": [
+   742,
+   740
+  ],
+  "delta_by_net_layer": {
+   "PERSTA#@In5": [
+    59,
+    324
+   ],
+   "DS320_STRAP_B_ADDR0_15-8@B.Cu": [
+    24,
+    35
+   ],
+   "DS320_STRAP_B_ADDR0_15-8@F.Cu": [
+    7,
+    14
+   ],
+   "DS320_STRAP_B_ADDR1_7-0@In5": [
+    11,
+    0
+   ],
+   "DS320_STRAP_B_ADDR1_7-0@In2": [
+    18,
+    22
+   ],
+   "I2C1_SDA@B.Cu": [
+    103,
+    105
+   ],
+   "I2C1_SDA@In5": [
+    47,
+    45
+   ]
+  },
+  "non45_l9": {
+   "n": 11,
+   "nets": {
+    "DS320_STRAP_B_ADDR1_7-0@In2": [
+     "83.66,50.28→93.4,51.06 (4.58°)",
+     "93.4,51.06→108.94,50.06 (176.32°)",
+     "108.94,50.06→110.26,51.66 (50.48°)",
+     "110.26,51.66→99.84,60.78 (138.81°)"
+    ],
+    "DS320_STRAP_B_ADDR0_15-8@F.Cu": 3,
+    "DS320_STRAP_B_ADDR0_15-8@B.Cu": 4
+   }
+  }
+ },
+ "true_conflict_clusters": [
+  {
+   "id": "C1",
+   "objects": [
+    "DS320_STRAP_B_ADDR1_7-0 (In2.Cu, 2.0742/9.7712/13.8474/15.5721mm · uuid 9135a302-d204-51bc-be89-728dbb4ef3f3 等)",
+    "PCIE_UP0_N/1_N/2_P/3_P/4_N/5_N (In2.Cu 走线 + F.Cu→In2 盲孔)",
+    "DS320_STRAP_B_ADDR1_15-8 (In2.Cu)"
+   ],
+   "types": [
+    "tracks_crossing",
+    "shorting_items",
+    "clearance"
+   ],
+   "n_after_refill": 20,
+   "x_range": "83.7–110.3"
+  },
+  {
+   "id": "C2",
+   "objects": [
+    "I2C1_SDA via (F.Cu–B.Cu) + B.Cu stub (0.3677/9.68mm)",
+    "PCIE_DN_OUT7_P_MCIO (B.Cu 17.846mm)",
+    "U6 pad BT29 [PCIE_DN_OUT6_N_MCIO] (F.Cu)"
+   ],
+   "types": [
+    "shorting_items",
+    "clearance",
+    "hole_clearance"
+   ],
+   "n_after_refill": 5
+  },
+  {
+   "id": "C3",
+   "objects": [
+    "DS320_STRAP_B_ADDR0_15-8 (B.Cu/F.Cu stubs)",
+    "PCIE_DN_OUT7_N_MCIO (B.Cu 7.7188mm)",
+    "P3V3 via (F.Cu→In4 盲孔)",
+    "GND via (F.Cu–B.Cu)"
+   ],
+   "types": [
+    "clearance",
+    "hole_clearance"
+   ],
+   "n_after_refill": 13
+  }
+ ],
+ "root_cause_statement": "l9 之 3 条 FAIL 与 59 处 error **全部落在 #K2-137 已准之『项2 落搬迁』（K2_R373_CW_RELOCATION_APPLIER_v1 → R376 入库 l9）所新生/改动之铜**（DS320 两条 strap 网 + I2C1_SDA）；**l8（搬迁前）同仪器 0 error / 19 OK** ⇒ 属**落地实现缺陷**，非需求问题、非判据问题。**未判**『清单几何不可行』vs『施加器几何不足』（未做修复尝试 · #K2-142 §四 禁烙板/禁新法）——此二分之判属**待监理裁**。",
+ "human_sentence": "「施工队照这张图能不能直接连？」→ **不能**：3 簇**真短路/交叉**（strap ↔ PCIE_UP In2 束 · I2C1_SDA via ↔ DN_OUT7 B.Cu · strap0 ↔ P3V3/GND 过孔）+ 21 处**陈旧铺铜**假短路 + 11 段非 45° ⇒ **图纸层缺图，且板层有短路缺陷**。",
+ "buildability": {
+  "mode": "repair_listed（修复清单已列 · **未施工**）",
+  "list": [
+   {
+    "n": 1,
+    "action": "落搬迁后**必须回填铺铜**（ZONE_FILLER · 18 区）",
+    "why": "消除 21 处陈旧铺铜假违例",
+    "who": "属 #K2-137 项2 落地之必要步骤"
+   },
+   {
+    "n": 2,
+    "action": "改走 `DS320_STRAP_B_ADDR1_7-0` In2 之 4 段（22.0742/9.7712/13.8474/15.5721mm）",
+    "to": "避开 `PCIE_UP*` In2 束与 F.Cu→In2 盲孔",
+    "who": "监理（L2）放行"
+   },
+   {
+    "n": 3,
+    "action": "移 `I2C1_SDA` via（F.Cu–B.Cu）+ 改其 B.Cu stub",
+    "to": "避开 `PCIE_DN_OUT7_P_MCIO` B.Cu 与 U6.`BT29`",
+    "who": "监理（L2）放行"
+   },
+   {
+    "n": 4,
+    "action": "移 `DS320_STRAP_B_ADDR0_15-8` F/B.Cu stub",
+    "to": "避开 `PCIE_DN_OUT7_N_MCIO` B.Cu · `P3V3`/`GND` 过孔",
+    "who": "监理（L2）放行"
+   },
+   {
+    "n": 5,
+    "action": "11 段 **45° 化**",
+    "to": "满足 non45=0 判据",
+    "who": "监理（L2）放行"
+   }
+  ],
+  "blocker": "#K2-142 §四 **禁烙板在效** ⇒ 重落（新受审板 revision + 同批 SPEC 声明回填）**须监理放行**；且受审板锚变更将连带 SPEC rev-55 之 board_sha16 声明 ×3 与 P4 派生模型指纹。",
+  "施工队问答": "见 human_sentence —— **不能直接连**（须先按上表修复并重落）"
+ },
+ "口径缺口": [
+  {
+   "id": "C-PRO-L9",
+   "detail": "l9 落件未含同批 `.kicad_pro`；本轮以 l8 pro 代跑。因搬迁不改规则（pro 未变），规则口径等价；但**在册范式要求『板+pro 同批』**（l8 册：pro c009058005829f09）⇒ 建议监理钉死 l9′ 同批 pro 之口径（新 pro 或明示沿用 l8 pro）。",
+   "severity": "low（不影响本轮三 FAIL 之结论：三 FAIL 皆几何/铺铜，与规则值无关）"
+  }
+ ],
+ "p4_residual_status": {
+  "item1_19dim_rerun_at_l9": "**DONE** → 16 OK / 3 FAIL（原挂账『未重跑』）",
+  "item4_ref_plane_continuity_at_l9": "**DONE** → non_antipad_gap 0.0 mm²（在册口径·与 l8 同）⇒ **PASS**",
+  "item9_plane_pour_drill_at_l9": "**DONE（部分）** → zone_filled 10/10 · drill NPTH=4/PTH=16 · 平面覆盖/strict 3176/3795=83.689%（= l8 同值）⇒ 该三项 OK；但 **min_copper_clearance FAIL**",
+  "item5_length_matching": "未动（②-UP 侧阈值仍待具名 · 见 R408 自纠）",
+  "item2_②UP_16of16": "**owner 项 1（#K2-142 · LEGAL-ESCALATION: frozen-set）· 未动**"
+ },
+ "not_asked": [
+  "不请求 owner（未触 L1：无拓扑/接口/信号流向/球重映射变更；本轮缺陷之修复属 L2 几何）",
+  "未用 --no-verify · 未改受审板/pro/生成器/SPEC/原理图/真源/criteria/**· 未派 WORKER · 未做变体重跑/参数扫描 · **未烙板**（回填件仅落 /tmp）"
+ ],
+ "bans_kept": [
+  "冻结四源 4/4 未动",
+  "criteria/ 只读（独立复算 = rev=6 MATCH）",
+  "临时仅 /tmp/opencode",
+  "未写 .omo/supervision/**",
+  "未放松 DRC 下限（本轮为**发现违规**，非放宽）",
+  "未以变绿缩口径（上报 FAIL 而非掩盖）"
+ ],
+ "artifacts": {
+  "bundle": "k2/pm_gate/artifacts/k2_v4/L4/E3-standard-call-l9-20260922/（MANIFEST.md + 10 测量/判定件）",
+  "sha16": {
+   "MANIFEST.md": "4596ca3052c4af23",
+   "verdict_19dim_rev6_board_l9_77aaa63f.json": "a5686489ea54b5f8",
+   "min_clearance_drc_board_l9_77aaa63f.json": "e8b425ffc34eb96f",
+   "min_clearance_drc_control_board_l8_7a5c8991.json": "944c4add6a8bf518",
+   "drc_raw_board_l9_77aaa63f.json": "35359bac5f470364",
+   "w8_audit_board_l9_77aaa63f.json": "d5058364372522f8",
+   "pads_within_outline_board_l9_77aaa63f.json": "c3da758fb71a7dde",
+   "ref_plane_continuity_board_l9_77aaa63f.json": "9b3c7340c9c36953",
+   "refplane_nonantipad_board_l9_77aaa63f.json": "baf8510d620a9143",
+   "density_board_l9_77aaa63f.json": "eceb795a73ef81b2",
+   "measure_raw_board_l9_77aaa63f.json": "b3b4c17fd991845b"
+  }
+ },
+ "next_step_proposal": "见同批 `PENDING_RULINGS_DELTA_20260922_v62_l9_relocation_drc_defect_disposition.json`：请监理裁定**落地缺陷之处置**（(i) 放行确定性修复并重落 l9′（含回填 + 3 簇修复 + 45° 化）并按 #K2-137 §二(甲) 版本 bump 同批提交；或 (ii) 并入 owner ②-UP 决策后一并处置）。ENG 不 park：裁前续做只读归属分析（修复坐标清单）与 item5 ②-UP 阈值具名之外的残余测量。"
+}
