@@ -1,0 +1,71 @@
+{
+ "schema": 1,
+ "artifact": "pending_rulings_delta_20260922_v61_v2_not_achieved_auto_escalation",
+ "ts": "2026-09-22T14:17:26+08:00",
+ "ts_note": "机取时钟写入",
+ "from": "ENG · ARCHER R402（应 #K2-141 §五 准 v2）",
+ "to": "监理",
+ "owner_gate": 0,
+ "authority": "#K2-141 §五（准 v2 · 10 硬条件 · 判据跑前登记）· §五.6（二值 + 卡点归类）· §六（**v2 不成 ⇒ 自动触发升 owner**）· §七（禁自启新法 · 禁 HOLD 结案）",
+ "trigger": "**#K2-141 §六 自动触发器**：v2 出『不成』⇒ 窗口无条件收口 ⇒ 监理即刻升 owner（ENG 不自启、不停等结案，仅停手待裁）。",
+ "preregistration_honored": {
+  "R401": "K2_R401_V2_CRITERIA_PREREGISTRATION_v1.json（跑前落件 · sha16 1300a0d7c1cca174）",
+  "PASS_rule": "n_lane_pitch_viol==0 ∧ n_clearance_viol==0 ∧ endpoint_max_dev_mm==0（exact_gate · 全 16 条）",
+  "classification_rule": "CAP_exit < 16 ⇒ (I) 冻结约束级；CAP_exit >= 16 ⇒ (II) 能力级"
+ },
+ "v2_outcome": {
+  "one_implementation_one_run": true,
+  "single_layer": true,
+  "n_vias": 0,
+  "endpoint_max_dev_mm": 0.0,
+  "gate_verdict_summary": {
+   "n_lane_pitch_viol": 2,
+   "n_clearance_viol": 35,
+   "clearance_min_mm": -0.43
+  },
+  "binary": {
+   "(a)": "**未取得**",
+   "(b)": "未建立（#K2-141 未准 (b) 路）"
+  },
+  "named_blocker": {
+   "geometric_quantity": "障碍净距 min −0.43mm（其余读数见件）",
+   "minimal_repro": "16 条折线坐标全在件内 routes；复跑 exact_gate 得同读数。"
+  },
+  "cardpoint_classification": "**(II) 本器算法不够（能力级）**",
+  "classification_evidence": {
+   "CAP_exit": 230,
+   "y_cut": 56.423,
+   "rule_applied": "230 >= 16 ⇒ (II)",
+   "reading": "器件出口（簇北缘上方 0.6mm）自由域可承载 **230** ≫ 16 ⇒ **出口不是约束**；本器（一遍直接投影之 5 点折线）**不够** ⇒ 属**能力级**。"
+  }
+ },
+ "bookkeeping": {
+  "board": "k2/hw/k2_v4_8L.l9.kicad_pcb",
+  "board_sha16_scriptcomputed": "77aaa63fe016b450",
+  "board_matches_declared": true,
+  "base_model_file_sha16": "c42731c4258ae691",
+  "patch": "P_l8_to_l9_in5_neck_removal（24 段/4 孔）",
+  "derived_model_fingerprint_scriptcomputed": "d34362c4847ad9ba"
+ },
+ "requested_ruling": [
+  "**依 #K2-141 §六 自动路由**：请监理**即刻主动升 owner**，判『冻结需求 ②-UP=16/16 是否须变』（含是否准 >2 via / 换层 / 界面 / 配对，或降为具名 N（含具名豁免））。",
+  "并请核：判据跑前登记（R401）之执行、单层/0 via/端点 0 之合规、以及归类 (II)（依跑前登记规则、CAP_exit=230）。"
+ ],
+ "eng_action": "ENG **停手待裁**（#K2-141 §六）：**不启新法**（无 v3 · 无变体 · 无参数扫描 · 无普查充件）· **不以 HOLD 结案**（本件即回报）· 未绕门禁 · 未派 WORKER · 未烙板。",
+ "anchors": {
+  "board_l9_sha16": "77aaa63fe016b450",
+  "model_derived": "d34362c4847ad9ba",
+  "frozen4": [
+   "d4e81f647be7f980",
+   "fb07d25ac426ff84",
+   "dd794c54f7ce7417",
+   "0a459839e15960b8"
+  ],
+  "criteria": "rev=6 MATCH（只读）"
+ },
+ "not_asked": [
+  "不自行升 owner（依 §六 由监理主动）",
+  "未绕门禁 · 未改冻结四源/criteria/生成器/SPEC 设计内容 · 未派 WORKER · 未烙板",
+  "self_sha16 不提供（承 #K2-136 O-1）"
+ ]
+}

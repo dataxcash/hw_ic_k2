@@ -1,0 +1,433 @@
+{
+ "artifact": "k2_r402_constructor_v2_obstacle_aware_v1",
+ "authority": "#K2-141 §四（判甲）· §五（准 v2 · 10 硬条件）· §五.5（判据已由 R401 跑前登记）",
+ "bookkeeping": {
+  "base_model_file_sha16": "c42731c4258ae691",
+  "board": "k2/hw/k2_v4_8L.l9.kicad_pcb",
+  "board_matches_declared": true,
+  "board_sha16_scriptcomputed": "77aaa63fe016b450",
+  "derived_model_fingerprint_scriptcomputed": "d34362c4847ad9ba",
+  "patch": "P_l8_to_l9_in5_neck_removal（24 段/4 孔）"
+ },
+ "boundary": "只读 · 未烙板 · 未改冻结四源/criteria/生成器/SPEC 设计内容 · 未派 WORKER · 0 via · 未换层",
+ "cap_exit_preregistered": {
+  "cap_exit": 230,
+  "n_free_intervals": 13,
+  "rule": "cap<16 ⇒ (I) 冻结约束级；cap>=16 ⇒ (II) 能力级",
+  "y_cut": 56.423
+ },
+ "constructiveness_declaration": {
+  "no_backtracking": true,
+  "no_cost_comparison": true,
+  "no_enumeration_of_candidate_sets": true,
+  "no_iterate_to_convergence": true,
+  "operation": "直接投影（固定半径 1.0mm · 同距取西/东）",
+  "passes": 1
+ },
+ "from": "ENG · ARCHER R402",
+ "gate_verdict": {
+  "clearance_min_mm": -0.43,
+  "clearance_violations": [
+   [
+    "PCIE_UP_OUT0_N_J2",
+    "I2C1_SDA",
+    "seg",
+    -0.205
+   ],
+   [
+    "PCIE_UP_OUT0_N_J2",
+    "GND",
+    "via",
+    -0.206
+   ],
+   [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP6_N",
+    "seg",
+    -0.3318
+   ],
+   [
+    "PCIE_UP_OUT0_P_J2",
+    "P3V3",
+    "via",
+    -0.38
+   ],
+   [
+    "PCIE_UP_OUT0_P_J2",
+    "",
+    "pad",
+    -0.235
+   ],
+   [
+    "PCIE_UP_OUT1_N_J2",
+    "I2C1_SDA",
+    "seg",
+    -0.155
+   ],
+   [
+    "PCIE_UP_OUT1_N_J2",
+    "P3V3",
+    "via",
+    -0.355
+   ],
+   [
+    "PCIE_UP_OUT1_P_J2",
+    "PCIE_UP6_N",
+    "seg",
+    -0.2953
+   ],
+   [
+    "PCIE_UP_OUT1_P_J2",
+    "GND",
+    "via",
+    -0.405
+   ],
+   [
+    "PCIE_UP_OUT2_N_J2",
+    "I2C1_SDA",
+    "seg",
+    -0.155
+   ],
+   [
+    "PCIE_UP_OUT2_N_J2",
+    "P3V3",
+    "via",
+    -0.355
+   ],
+   [
+    "PCIE_UP_OUT2_N_J2",
+    "",
+    "pad",
+    -0.23
+   ],
+   [
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP6_N",
+    "seg",
+    -0.3292
+   ],
+   [
+    "PCIE_UP_OUT2_P_J2",
+    "GND",
+    "via",
+    -0.43
+   ],
+   [
+    "PCIE_UP_OUT2_P_J2",
+    "",
+    "pad",
+    -0.23
+   ],
+   [
+    "PCIE_UP_OUT3_N_J2",
+    "I2C1_SDA",
+    "seg",
+    -0.155
+   ],
+   [
+    "PCIE_UP_OUT3_N_J2",
+    "P3V3",
+    "via",
+    -0.355
+   ],
+   [
+    "PCIE_UP_OUT3_P_J2",
+    "PCIE_UP6_N",
+    "seg",
+    -0.3044
+   ],
+   [
+    "PCIE_UP_OUT3_P_J2",
+    "GND",
+    "via",
+    -0.405
+   ],
+   [
+    "PCIE_UP_OUT4_N_J2",
+    "I2C1_SDA",
+    "seg",
+    -0.155
+   ]
+  ],
+  "endpoint_max_dev_mm": 0.0,
+  "lane_pitch_min_gap_mm": 0.01,
+  "lane_pitch_min_pair": [
+   "PCIE_UP_OUT2_P_J2",
+   "PCIE_UP_OUT7_N_J2"
+  ],
+  "lane_pitch_req_mm": 0.435,
+  "lane_pitch_violations": [
+   [
+    "PCIE_UP_OUT2_N_J2",
+    "PCIE_UP_OUT6_N_J2",
+    0.19
+   ],
+   [
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT7_N_J2",
+    0.01
+   ]
+  ],
+  "n_clearance_viol": 35,
+  "n_lane_pitch_viol": 2,
+  "n_obs": {
+   "pad": 20,
+   "seg": 1048,
+   "via": 343
+  },
+  "per_lane": {
+   "PCIE_UP_OUT0_N_J2": {
+    "blocker": "GND",
+    "margin_min_mm": -0.206
+   },
+   "PCIE_UP_OUT0_P_J2": {
+    "blocker": "P3V3",
+    "margin_min_mm": -0.38
+   },
+   "PCIE_UP_OUT1_N_J2": {
+    "blocker": "P3V3",
+    "margin_min_mm": -0.355
+   },
+   "PCIE_UP_OUT1_P_J2": {
+    "blocker": "GND",
+    "margin_min_mm": -0.405
+   },
+   "PCIE_UP_OUT2_N_J2": {
+    "blocker": "P3V3",
+    "margin_min_mm": -0.355
+   },
+   "PCIE_UP_OUT2_P_J2": {
+    "blocker": "GND",
+    "margin_min_mm": -0.43
+   },
+   "PCIE_UP_OUT3_N_J2": {
+    "blocker": "P3V3",
+    "margin_min_mm": -0.355
+   },
+   "PCIE_UP_OUT3_P_J2": {
+    "blocker": "GND",
+    "margin_min_mm": -0.405
+   },
+   "PCIE_UP_OUT4_N_J2": {
+    "blocker": "P3V3",
+    "margin_min_mm": -0.355
+   },
+   "PCIE_UP_OUT4_P_J2": {
+    "blocker": "P3V3",
+    "margin_min_mm": -0.43
+   },
+   "PCIE_UP_OUT5_N_J2": {
+    "blocker": "P3V3",
+    "margin_min_mm": -0.355
+   },
+   "PCIE_UP_OUT5_P_J2": {
+    "blocker": "P3V3",
+    "margin_min_mm": -0.43
+   },
+   "PCIE_UP_OUT6_N_J2": {
+    "blocker": "GND",
+    "margin_min_mm": -0.38
+   },
+   "PCIE_UP_OUT6_P_J2": {
+    "blocker": "GND",
+    "margin_min_mm": -0.405
+   },
+   "PCIE_UP_OUT7_N_J2": {
+    "blocker": "P3V3",
+    "margin_min_mm": -0.355
+   },
+   "PCIE_UP_OUT7_P_J2": {
+    "blocker": "PCIE_UP7_N",
+    "margin_min_mm": -0.38
+   }
+  }
+ },
+ "o2_o3_window_run_declaration": {
+  "same_frozen_model_iteration": [
+   "R383",
+   "R397",
+   "R398",
+   "R399",
+   "R401",
+   "R402（v2 · 终局）"
+  ],
+  "survey_only": [
+   "R386",
+   "R389",
+   "R393",
+   "R394",
+   "R395",
+   "R396",
+   "R400"
+  ],
+  "this_artifact": "v2 构造性出图 · 一次实现 · 一次运行 · 终局（无 v3）",
+  "variant_reruns_registered": [
+   "R384",
+   "R387",
+   "R388"
+  ]
+ },
+ "projections": {
+  "PCIE_UP_OUT0_N_J2": {
+   "dA_mm": 0.0,
+   "dB_mm": 0.0,
+   "ok": false
+  },
+  "PCIE_UP_OUT0_P_J2": {
+   "dA_mm": 0.0,
+   "dB_mm": 0.0,
+   "ok": false
+  },
+  "PCIE_UP_OUT1_N_J2": {
+   "dA_mm": 0.0,
+   "dB_mm": 0.0,
+   "ok": false
+  },
+  "PCIE_UP_OUT1_P_J2": {
+   "dA_mm": 0.0,
+   "dB_mm": 0.45,
+   "ok": false
+  },
+  "PCIE_UP_OUT2_N_J2": {
+   "dA_mm": 0.0,
+   "dB_mm": 0.0,
+   "ok": false
+  },
+  "PCIE_UP_OUT2_P_J2": {
+   "dA_mm": 0.0,
+   "dB_mm": -0.57,
+   "ok": false
+  },
+  "PCIE_UP_OUT3_N_J2": {
+   "dA_mm": 0.0,
+   "dB_mm": -0.3,
+   "ok": false
+  },
+  "PCIE_UP_OUT3_P_J2": {
+   "dA_mm": 0.0,
+   "dB_mm": -0.36,
+   "ok": false
+  },
+  "PCIE_UP_OUT4_N_J2": {
+   "dA_mm": 0.0,
+   "dB_mm": 0.33,
+   "ok": false
+  },
+  "PCIE_UP_OUT4_P_J2": {
+   "dA_mm": 0.0,
+   "dB_mm": 0.0,
+   "ok": false
+  },
+  "PCIE_UP_OUT5_N_J2": {
+   "dA_mm": 0.0,
+   "dB_mm": 0.0,
+   "ok": false
+  },
+  "PCIE_UP_OUT5_P_J2": {
+   "dA_mm": 0.0,
+   "dB_mm": 0.0,
+   "ok": false
+  },
+  "PCIE_UP_OUT6_N_J2": {
+   "dA_mm": 0.0,
+   "dB_mm": -0.39,
+   "ok": false
+  },
+  "PCIE_UP_OUT6_P_J2": {
+   "dA_mm": 0.0,
+   "dB_mm": 0.0,
+   "ok": false
+  },
+  "PCIE_UP_OUT7_N_J2": {
+   "dA_mm": 0.0,
+   "dB_mm": 0.0,
+   "ok": false
+  },
+  "PCIE_UP_OUT7_P_J2": {
+   "dA_mm": 0.0,
+   "dB_mm": 0.0,
+   "ok": false
+  }
+ },
+ "schema": 1,
+ "single_layer": {
+  "endpoint_disp": 0.0,
+  "layer": "In5.Cu",
+  "n_vias": 0,
+  "note": "无换层/无加孔 ⇒ 合 §五.2"
+ },
+ "slots": {
+  "band_y0_mm": 33.175,
+  "corridor_free_width_mm": 22.32,
+  "corridor_order_ranks_south_to_north": [
+   0,
+   3,
+   11,
+   4,
+   12,
+   7,
+   15,
+   8,
+   6,
+   14,
+   5,
+   13,
+   10,
+   2,
+   9,
+   1
+  ],
+  "corridor_x": 110.0,
+  "slot_pitch_mm": 0.45
+ },
+ "to": "监理",
+ "verdict": {
+  "cardpoint_classification": "(II) 本器算法不够（能力级）",
+  "escalation_auto": "依 #K2-141 §六：v2 不成 ⇒ 窗口无条件收口 ⇒ 监理即刻升 owner（ENG 停手待裁）。",
+  "named_blocker": {
+   "clearance_min_mm": -0.43,
+   "first_clearance": [
+    [
+     "PCIE_UP_OUT0_N_J2",
+     "I2C1_SDA",
+     "seg",
+     -0.205
+    ],
+    [
+     "PCIE_UP_OUT0_N_J2",
+     "GND",
+     "via",
+     -0.206
+    ],
+    [
+     "PCIE_UP_OUT0_P_J2",
+     "PCIE_UP6_N",
+     "seg",
+     -0.3318
+    ],
+    [
+     "PCIE_UP_OUT0_P_J2",
+     "P3V3",
+     "via",
+     -0.38
+    ]
+   ],
+   "first_pitch": [
+    [
+     "PCIE_UP_OUT2_N_J2",
+     "PCIE_UP_OUT6_N_J2",
+     0.19
+    ],
+    [
+     "PCIE_UP_OUT2_P_J2",
+     "PCIE_UP_OUT7_N_J2",
+     0.01
+    ]
+   ],
+   "minimal_repro": "16 条折线坐标全在件内 routes；复跑 exact_gate 同读数。",
+   "n_clearance_viol": 35,
+   "n_lane_pitch_viol": 2
+  },
+  "result": "**(a) 未取得**（v2 未过闸）· (b) 未建立"
+ }
+}
