@@ -97,13 +97,13 @@ for k in range(len(_pp)-1):
     p=tuple(_pp[k]); q=tuple(_pp[k+1])
     if math.dist(p,q)>1e-6: seg('PERSTA#','In5.Cu',p,q,0.1)
 print('to add:',len(ADD))
-def uu(): return str(uuid.uuid5(uuid.NAMESPACE_URL,'k2r372:'+str(uuid.uuid4())))
+def uu(*parts): return str(uuid.uuid5(uuid.NAMESPACE_DNS,'k2-r373-cw-relocation:'+'|'.join(str(x) for x in parts)))
 def fmt_seg(net,layer,p,q,w):
     return ('\t(segment\n\t\t(start %s %s)\n\t\t(end %s %s)\n\t\t(width %s)\n\t\t(layer "%s")\n\t\t(net "%s")\n\t\t(uuid "%s")\n\t)\n'
-            %(p[0],p[1],q[0],q[1],w,layer,net,uu()))
+            %(p[0],p[1],q[0],q[1],w,layer,net,uu('seg',net,layer,p[0],p[1],q[0],q[1])))
 def fmt_via(net,pt,lp,size,drill):
     return ('\t(via\n\t\t(at %s %s)\n\t\t(size %s)\n\t\t(drill %s)\n\t\t(layers "%s" "%s")\n\t\t(net "%s")\n\t\t(uuid "%s")\n\t)\n'
-            %(pt[0],pt[1],size,drill,lp[0],lp[1],net,uu()))
+            %(pt[0],pt[1],size,drill,lp[0],lp[1],net,uu('via',net,lp[0],lp[1],pt[0],pt[1])))
 # ---- 执行：先收集删除区间，再重建文本 ----
 i,_=[b[0] for b in segB][0],None
 segs_range=(min(i for i,j,o in SEG), max(j for i,j,o in SEG))
