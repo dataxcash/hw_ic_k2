@@ -1,0 +1,91 @@
+{
+ "artifact": "k2_r391_item3_local_obstacle_relocation_whatif_v1",
+ "binary": {
+  "(a)": "未取得",
+  "(b)": "未建立（本件=对 (i-c) 之否证 + 对 R390 U≤15 之旁证 · 非严格证书）"
+ },
+ "board": "k2/hw/k2_v4_8L.l9.kicad_pcb",
+ "board_sha16": "77aaa63fe016b450",
+ "boundary": "只读（what-if 仅在内存/`/tmp` 内模拟，**未改板/未改任何模型原件**）· 未改冻结四源/criteria/生成器/SPEC · 未派 WORKER · 不充绿。",
+ "caliber": {
+  "cell_mm": 0.03,
+  "hw_mm": 0.08,
+  "layer": "In5.Cu",
+  "pitch_mm": 0.435
+ },
+ "conclusion": "**局部搬迁该障碍未带来任何改善** ⇒ rank0 之不可布**不是**单一局部障碍所致，而是 **拓扑性（嵌套/Jordan）**：rank0 若为束之最外(北) ⇒ 束顶须 ≥62.7 而其走廊封顶；rank0 若不在最外 ⇒ 其东行段必与东侧各 lane 之北出竖段相交。⇒ **任何局部 clearance / 单点搬迁都解锁不了 16/16**（这也反向支持 R390 之 U≤15 结构性论证）。",
+ "from": "ENG · ARCHER",
+ "implication_for_supervisor": {
+  "note": "(i-c)『局部腾挪』路径**已被实测排除**；若维持 ②-UP=16/16，只余**接口/层**级变更（非局部）：",
+  "options": [
+   {
+    "desc": "改 A→B 配对/球重映射（信号流向/接口）—— 属 **L1** ⇒ 依指令 #14 须 owner",
+    "opt": "L1-A"
+   },
+   {
+    "desc": "准 1–3 条 lane 以**换层+过孔**完成（含过孔与对层回流核）⇒ 属层/拓扑 **L1** ⇒ 须 owner",
+    "opt": "L1-B"
+   },
+   {
+    "desc": "准 ②-UP 降为具名 N（13/16 + 具名豁免）⇒ 监理自裁 ⇒ 续项4/项5（**无需 owner**）",
+    "opt": "(ii)"
+   }
+  ]
+ },
+ "model_sha16": "84f19701dfc1db31",
+ "purpose": "为监理 (i-c)『局部腾挪是否解锁 16/16』提供实测数据——避免批准无效的 L1 变更。",
+ "schema": 1,
+ "step1_identification": {
+  "found_obstacle": {
+   "net": "DS320_STRAP_A_ADDR0_7-0",
+   "objects": [
+    {
+     "kind": "In5 seg",
+     "p1": [
+      83.11,
+      56.79
+     ],
+     "p2": [
+      84.21,
+      57.89
+     ],
+     "r": 0.1
+    },
+    {
+     "kind": "In5 seg",
+     "note": "x≈84.21 之**竖直走线**(y 57.89–63.89)——正卡在 rank0 北向走廊",
+     "p1": [
+      84.21,
+      57.89
+     ],
+     "p2": [
+      84.21,
+      63.89
+     ],
+     "r": 0.1
+    },
+    {
+     "at": [
+      84.21,
+      63.89
+     ],
+     "kind": "In5 via",
+     "r": 0.175
+    }
+   ]
+  },
+  "question": "rank0（UP_OUT0_N · 最西锚 x=84.35）北向自由为何止于 y≈57.55？",
+  "reading": "rank0 北向走廊 (x≈84.4) 由该网之**In5 竖直段 + 孔**封堵 ⇒ 天然候选『局部搬迁标的』。"
+ },
+ "step2_whatif": {
+  "action": "**模拟**：把该网 x∈[83,85.5] × y∈[56.5,65] 之 In5 段/孔全部移出 In5（= 视作改层搬迁），重算障碍与自由域，再以 R383 同一降序束式求解器单跑。",
+  "baseline": "13/16 · fails {T3_N, T0_P, T0_N}",
+  "removed": {
+   "in5_segs": 2,
+   "in5_vias": 1
+  },
+  "whatif_result": "**13/16 · fails 完全相同** {T3_N, T0_P, T0_N}"
+ },
+ "to": "监理",
+ "ts": "2026-09-22T12:13:28.411526+08:00"
+}
