@@ -1,0 +1,112 @@
+{
+ "schema": 1,
+ "artifact": "k2_r429_branch_a_one_shot_execution_bundle_preloaded_v1",
+ "ts": "2026-09-23T00:23:03",
+ "from": "ENG · ARCHER（续接会话 · 承 handoff R423）",
+ "to": "监理",
+ "owner_gate": 0,
+ "authority": "**#K2-145**（裁定①②③④⑤⑥ + 指令1–4）· #K2-143 §四（预声明自动放行）· #K2-136 §三 · #K2-137 §二(甲)（落库范式）· #K2-38 §二（交付锚冻结·勿重建）· R426（在册 rollback）· R427/R428（包=有效交付候选）· owner #14⑥",
+ "first_action": "已读 **#K2-145**（`outbox/k2-145-…-owner-zero-v1.md`）全文 —— 最新裁定，晚于 #K2-144 ⇒ 优先；无更晚者、无 owner 回件。",
+ "compliance": "**判词遵从（零执行）**：裁定① 明令 owner 回件前**停手待裁维持（含回退之执行）**；指令1 同。⇒ 本件**未执行任何生产动作**：**未删 l9 · 未改 `pm_gate/project.yaml` · 未建/删任何 SPEC 件 · 未跑 R401 正式闸 · 未出包 · 未烙板 · 未派工 · 未启新法/变体/扫描**。仅做**只读预装**（把甲分支压成一次到位，免 owner 回件后再找手续）。",
+ "headline": "**甲分支（owner 裁「放宽」）已整装待发**：执行单 = **5 步同笔 + 1 次正式复核**；其中第③步（规范文字对齐）之**逐字节草案已在 `/tmp` 备好**（sha16 `48933863ef621510` · 与 rev-54 仅 **3 个字段**不同 · 量化值零触碰），落库时「复制—核 sha—提交」即可，**无须再设计、无须再请示**（承 #K2-145 裁定①/④、#K2-143 §四）。",
+ "branch_A_execution_order": [
+  {
+   "n": 1,
+   "act": "`pm_gate/project.yaml`：`board_path` → `hw/k2_v4_8L.l8.kicad_pcb`",
+   "state_now": "= `hw/k2_v4_8L.l9.kicad_pcb`"
+  },
+  {
+   "n": 2,
+   "act": "删 `hw/k2_v4_8L.l9.kicad_pcb`（`77aaa63fe016b450`）",
+   "state_now": "在库"
+  },
+  {
+   "n": 3,
+   "act": "删旧 `SPEC_k2_v4.spec-rev-55.json`（`964101b19015f6d7` · l9 声明卡）**并**以 rev-54（`f3a48b866983c8db`）为底建新 `SPEC_k2_v4.spec-rev-55.json`（草案 sha16 `48933863ef621510` · **仅三处文字**）",
+   "state_now": "旧 rev-55 在库"
+  },
+  {
+   "n": 4,
+   "act": "`pm_gate/project.yaml::spec_name` → `SPEC_k2_v4.spec-rev-55.json`（**新件**）",
+   "state_now": "现指旧 rev-55"
+  },
+  {
+   "n": 5,
+   "act": "P4 派生模型指纹**重锚**（R414 范式；现行 l9 指纹 `d34362c4847ad9ba` · **O-1 禁引 `84f19701dfc31`**）",
+   "state_now": "l9 锚"
+  },
+  {
+   "n": 6,
+   "act": "**同笔提交**（门禁：任何 `.kicad_pcb` 变更须同批含 SPEC 变更 → 1–5 不可拆）",
+   "state_now": "—"
+  },
+  {
+   "n": 7,
+   "act": "**正式复核（验收·非重做）**：R401 正式闸 + `criteria` rev=6 十九维 + `kicad-cli` DRC + DFM 随包重跑（#K2-143 §四 预声明已放行）；**默认不重出包**，仅当复核发现包/板不符 ⇒ 同在册生成器重出（裁定⑥）",
+   "state_now": "未跑"
+  }
+ ],
+ "text_alignment_draft": {
+  "base": "`SPEC_k2_v4.spec-rev-54.json` `f3a48b866983c8db`（**rev-54/rev-55 于该三处逐字节相同** ⇒ 与「删 rev-55 / 留 rev-54」相容）",
+  "draft": "`/tmp/opencode/r429/SPEC_k2_v4.spec-rev-55.NEW.json` · sha16 **`48933863ef621510`** · **未落库**（依判词仅随回退同笔落）",
+  "changed_paths": [
+   ".vias.high_speed.basis",
+   ".constraints.j2_escape_topology.outer_basis",
+   ".constraints.j2_escape_topology.rule"
+  ],
+  "n_changed": 3,
+  "diffs": [
+   {
+    "path": "constraints.j2_escape_topology.rule",
+    "old": "2026-08-19 8 层定案: J2 双列焊盘墙 0.6 pitch/0.35 高 → UP_OUT 16 网经 In2 单内层走廊 (F→In2→F 单次换层), 不再走 B.Cu",
+    "new": "2026-08-19 8 层定案: J2 双列焊盘墙 0.6 pitch/0.35 高 → UP_OUT 16 网经 In5 单内层走廊 (F→In5→F 单次换层), 不再走 B.Cu",
+    "n_subst": 2,
+    "note": "仅 In2→In5（含链 (F→In2→F)→(F→In5→F)）；量化值零触碰"
+   },
+   {
+    "path": "constraints.j2_escape_topology.outer_basis",
+    "old": "8 层（LID REV6）：In2 独立走廊容纳全部 UP_OUT；B.Cu 为**高速信号层**（dn 带逃逸/落段，REV6 下由 In6=GND 参考、阻抗可控）。CO-73 更正：原文『B.Cu 释放给低速 (2026-08-19 用户裁决)』与 LID.1/REV6 事实矛盾；低速网归属见 layer_plan。",
+    "new": "8 层（LID REV6）：In5 独立走廊容纳全部 UP_OUT；B.Cu 为**高速信号层**（dn 带逃逸/落段，REV6 下由 In6=GND 参考、阻抗可控）。CO-73 更正：原文『B.Cu 释放给低速 (2026-08-19 用户裁决)』与 LID.1/REV6 事实矛盾；低速网归属见 layer_plan。",
+    "n_subst": 1,
+    "note": "仅 In2→In5（含链 (F→In2→F)→(F→In5→F)）；量化值零触碰"
+   },
+   {
+    "path": "vias.high_speed.basis",
+    "old": "2026-08-16 PM 裁决: 取消 0 过孔绝对限制, 受控过孔 + JLC 背钻消除残桩; 每线 ≤2 过孔 = 单次换层 (F→In2→F), 每对差分 4 过孔",
+    "new": "2026-08-16 PM 裁决: 取消 0 过孔绝对限制, 受控过孔 + JLC 背钻消除残桩; 每线 ≤2 过孔 = 单次换层 (F→In5→F), 每对差分 4 过孔",
+    "n_subst": 1,
+    "note": "仅 In2→In5（含链 (F→In2→F)→(F→In5→F)）；量化值零触碰"
+   }
+  ],
+  "verification": "以 rev-54 为底全字段拍平比对 ⇒ **仅 3 条路径不同**（= 判词 ④ 所指三处）· 量化值（`in2_width_mm 0.205` / `vias.std` / `max_per_line` / `impedance` / `stackup` / 各计数）**逐字节同**",
+  "candidate_4th_site": "`layer_plan.j2_escape_nets.semantics` **未纳入**（#K2-145 ④ 明示「三处文字」）"
+ },
+ "pre_landing_confirmations": [
+  {
+   "item": "新规范件编号",
+   "fact": "判词 ④：「编号顺延**删除后**之最大号」。删 rev-55 后最大 = **rev-54** ⇒ 新件 = **rev-55**（与所删件**同名、异内容**）。",
+   "action": "本件按**字面**起草。若监理本意是 rev-56，请于落库前**一句话**改（否则按 rev-55 落）。"
+  },
+  {
+   "item": "新件是否附 rev 卡 / 受审板声明",
+   "fact": "rev-54 **无** `_spec_rev_54` 卡、**无** `board_sha16`；草案承其形态 ⇒ 新件亦不带 ⇒ **生效之板声明仍由 rev-53（`7a5c8991` = l8）承接**（无悬空声明）。",
+   "action": "本件按「仅三处文字」起草、**未加**任何卡/声明（判词 ④ 明示「仅」与「禁触量化值」）。若监理要求新件附声明卡，属一行增补，请一句话指定。"
+  },
+  {
+   "item": "对齐后之语义残留（**重要**）",
+   "fact": "对齐后三处仍述「**单次换层（F→In5→F）/ ≤2 过孔**」，而 as-built = **F→In2→In5→B（4 孔）**（R426 §4d 实测 16/16）。若 owner 裁**甲**（放宽孔数/层数），该条之**措辞/量化**是否须随甲另改写？",
+   "action": "判词 ④ 明令**禁触任何量化值** ⇒ 本件**不自行扩面**。请监理于 owner 回件时一并指定（若须改写，属另一笔授权）。"
+  }
+ ],
+ "branch_B": "裁定②：owner 裁「维持」⇒ **不动在制品**，随 owner 重开之生产窗令产出方案（监理零新增授权）。**无动作即合规。**",
+ "directive_4_ack": "#K2-144 指令3（缺陷登记 C-DOC-LAYER-CLAUSE）已由监理补落台账（#K2-145 指令4）⇒ **ENG 无动作**。",
+ "self_check": [
+  "未执行任何生产动作（见 `compliance`）；本件为**待命执行包**，非执行。",
+  "草案在 `/tmp`，**仓内 SPEC 目录零写入**；未改 `criteria/`（rev=6 MATCH）/生成器/原理图。",
+  "未把「草案就绪」写成「已落库」；未把「包=有效交付候选」写成「已交付」（裁定⑤ 明示需**一次正式复核**）。",
+  "三条落库前确认项均为**一行事实 + 一行动作**，不重复请示分支决策。"
+ ],
+ "files": [
+  "K2_R429_BRANCH_A_ONE_SHOT_EXECUTION_BUNDLE_PRELOADED_v1.json/.md/.sha16.txt"
+ ]
+}
