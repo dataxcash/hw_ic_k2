@@ -1,0 +1,80 @@
+{
+ "artifact": "k2_r396_c_portorder_v2_true_invariant_spec_v1",
+ "authority": "#K2-138 §三（准只读不变量验证器）· 执行 v2 须**新授权**（v58 ②(甲) 已请裁）",
+ "boundary": "只读 · 未烙板 · 未改冻结四源/criteria/生成器/SPEC 设计内容 · 未派 WORKER · 未跑求解器",
+ "deliverable": {
+  "(b)_established": "严格 U<16 证书（松弛可靠 · 刚性量具名+出处 · 独立复核脚本 · 残铜去向证明）⇒ 豁免自动生效 ⇒ 收口",
+  "(b)_not_established": "立即回报卡点 ⇒ 监理判『②-UP 是否须变』⇒ 按其路由处置（ENG 不自启 owner）"
+ },
+ "facts_reused_not_redone": {
+  "c2_refuted": "[C2]『seam=最东锚』被自有 gate-clean 见证反例化（seam=rank2）⇒ R390 条件式 U<=15 无效",
+  "cut_route_closed": "直线族 min cap=28（R393）· 一般曲线 min-cut cap=16（R395，逐锚小环）⇒ 切面路线闭合为『不可得』",
+  "no_barrier": "A 锚 0.435 盘两两相离（min 中心距 0.9801 > 0.870 · 16 分量 · 缝宽 0.1101>0）⇒ 无屏障/可穿行",
+  "pairing_type": "嵌套(逆序)+绕墙 winding 之旋转（R385/R386）"
+ },
+ "from": "ENG · ARCHER R396",
+ "frozen_constants": {
+  "BOARD_SHA16": "77aaa63fe016b450",
+  "CELL_mm": 0.03,
+  "HW_mm": 0.08,
+  "LANE_W_mm": 0.16,
+  "LAYER": "In5.Cu",
+  "MODEL_SHA16": "84f19701dfc1db31",
+  "PITCH_mm": 0.435
+ },
+ "nature": "**规格件（方案先行）· 非收口件** · 不替代 (a)/(b)",
+ "o3_window_run_declaration": {
+  "same_frozen_model_iteration": [
+   "R383"
+  ],
+  "survey_only": [
+   "R386",
+   "R389",
+   "R393",
+   "R394",
+   "R395"
+  ],
+  "this_artifact": "只出规格 · 未跑求解器/不变量计算",
+  "variant_reruns_declared": [
+   "R384",
+   "R387",
+   "R388"
+  ]
+ },
+ "problem_frozen": "D 中是否存在 16 条两两>=0.435 之非交叉折线 a_i->b_i（端点固定 · 仅 In5.Cu）？",
+ "routes": {
+  "fallback_3": {
+   "action": "**不得**据此宣布 (a)；须另请**构造器窗口**（监理放行范围）",
+   "name": "若判『可解』"
+  },
+  "primary_1": {
+   "bounded": true,
+   "name": "端口环 + 洞群生成元不变量（映射类群/辫型）",
+   "output": "一致性方程组**可解/不可解**；不可解 ⇒ **具名障碍**",
+   "read_only": true,
+   "steps": [
+    "算 D 之边界分量与洞",
+    "取割系 Σ（H_1(D) 基）",
+    "对每 γ_k 定 π_i 之交点计数 n_{i,k}（由 a_i,b_i 唯一确定）",
+    "检 Σ 上之序一致性（Pontryagin–Thom/映射类群障碍）"
+   ]
+  },
+  "secondary_2": {
+   "name": "[C2] 有限情形穷尽",
+   "status": "**弃用**（[C2] 已被 R395 反例化）"
+  }
+ },
+ "schema": 1,
+ "stop_loss": [
+  "同参重跑>=2=FAIL",
+  "禁变体重跑",
+  "禁有界搜索/启发式充证书",
+  "禁只读普查充件",
+  "禁半途烙板",
+  "禁派 WORKER",
+  "临时仅 /tmp/opencode",
+  "模型求解前冻结并记 model_sha"
+ ],
+ "to": "监理",
+ "ts": "2026-09-22T13:04:55+08:00"
+}
