@@ -1,0 +1,1370 @@
+{
+ "board_l8": "7a5c89913d6e5d0a",
+ "board_l9": "77aaa63fe016b450",
+ "nets": [
+  "PCIE_UP_OUT0_P_J2",
+  "PCIE_UP_OUT0_N_J2",
+  "PCIE_UP_OUT1_P_J2",
+  "PCIE_UP_OUT1_N_J2",
+  "PCIE_UP_OUT2_P_J2",
+  "PCIE_UP_OUT2_N_J2",
+  "PCIE_UP_OUT3_P_J2",
+  "PCIE_UP_OUT3_N_J2",
+  "PCIE_UP_OUT4_P_J2",
+  "PCIE_UP_OUT4_N_J2",
+  "PCIE_UP_OUT5_P_J2",
+  "PCIE_UP_OUT5_N_J2",
+  "PCIE_UP_OUT6_P_J2",
+  "PCIE_UP_OUT6_N_J2",
+  "PCIE_UP_OUT7_P_J2",
+  "PCIE_UP_OUT7_N_J2"
+ ],
+ "identical_l8_vs_l9": [
+  "PCIE_UP_OUT0_P_J2",
+  "PCIE_UP_OUT0_N_J2",
+  "PCIE_UP_OUT1_P_J2",
+  "PCIE_UP_OUT1_N_J2",
+  "PCIE_UP_OUT2_P_J2",
+  "PCIE_UP_OUT2_N_J2",
+  "PCIE_UP_OUT3_P_J2",
+  "PCIE_UP_OUT3_N_J2",
+  "PCIE_UP_OUT4_P_J2",
+  "PCIE_UP_OUT4_N_J2",
+  "PCIE_UP_OUT5_P_J2",
+  "PCIE_UP_OUT5_N_J2",
+  "PCIE_UP_OUT6_P_J2",
+  "PCIE_UP_OUT6_N_J2",
+  "PCIE_UP_OUT7_P_J2",
+  "PCIE_UP_OUT7_N_J2"
+ ],
+ "n_identical": 16,
+ "frozen_clause": "#K2-133 §一 / #K2-130 §七：②-UP 16 网 = 单层长走 + **≤2 孔**",
+ "measured": {
+  "per_net_n_vias": [
+   4
+  ],
+  "spans_seen": [
+   "F.Cu-B.Cu",
+   "F.Cu-In2.Cu",
+   "In2.Cu-In5.Cu",
+   "In5.Cu-B.Cu"
+  ],
+  "verdict": "**16/16 网各 4 孔 · 跨层 F→In2→In5→B ⇒ 违反冻结『≤2 孔 / 单层长走』**（与 l9 逐对象相同）"
+ },
+ "l8": {
+  "PCIE_UP_OUT0_P_J2": {
+   "n_vias": 4,
+   "spans": [
+    "F.Cu-B.Cu",
+    "F.Cu-In2.Cu",
+    "In2.Cu-In5.Cu",
+    "In5.Cu-B.Cu"
+   ],
+   "vias": [
+    [
+     84.85,
+     54.88,
+     "F.Cu",
+     "B.Cu"
+    ],
+    [
+     84.85,
+     56.834,
+     "In5.Cu",
+     "B.Cu"
+    ],
+    [
+     141.22,
+     42.65,
+     "F.Cu",
+     "In2.Cu"
+    ],
+    [
+     141.22,
+     56.834,
+     "In2.Cu",
+     "In5.Cu"
+    ]
+   ],
+   "seg_by_layer": {
+    "F.Cu": 18,
+    "B.Cu": 1,
+    "In2.Cu": 1,
+    "In5.Cu": 1
+   }
+  },
+  "PCIE_UP_OUT0_N_J2": {
+   "n_vias": 4,
+   "spans": [
+    "F.Cu-B.Cu",
+    "F.Cu-In2.Cu",
+    "In2.Cu-In5.Cu",
+    "In5.Cu-B.Cu"
+   ],
+   "vias": [
+    [
+     84.35,
+     55.723,
+     "F.Cu",
+     "B.Cu"
+    ],
+    [
+     84.35,
+     56.334,
+     "In5.Cu",
+     "B.Cu"
+    ],
+    [
+     127.01,
+     43.25,
+     "F.Cu",
+     "In2.Cu"
+    ],
+    [
+     127.01,
+     56.334,
+     "In2.Cu",
+     "In5.Cu"
+    ]
+   ],
+   "seg_by_layer": {
+    "F.Cu": 18,
+    "B.Cu": 1,
+    "In2.Cu": 1,
+    "In5.Cu": 109
+   }
+  },
+  "PCIE_UP_OUT1_P_J2": {
+   "n_vias": 4,
+   "spans": [
+    "F.Cu-B.Cu",
+    "F.Cu-In2.Cu",
+    "In2.Cu-In5.Cu",
+    "In5.Cu-B.Cu"
+   ],
+   "vias": [
+    [
+     86.05,
+     54.88,
+     "F.Cu",
+     "B.Cu"
+    ],
+    [
+     86.05,
+     57.783,
+     "In5.Cu",
+     "B.Cu"
+    ],
+    [
+     127.59,
+     43.85,
+     "F.Cu",
+     "In2.Cu"
+    ],
+    [
+     127.59,
+     57.783,
+     "In2.Cu",
+     "In5.Cu"
+    ]
+   ],
+   "seg_by_layer": {
+    "F.Cu": 18,
+    "B.Cu": 1,
+    "In2.Cu": 1,
+    "In5.Cu": 78
+   }
+  },
+  "PCIE_UP_OUT1_N_J2": {
+   "n_vias": 4,
+   "spans": [
+    "F.Cu-B.Cu",
+    "F.Cu-In2.Cu",
+    "In2.Cu-In5.Cu",
+    "In5.Cu-B.Cu"
+   ],
+   "vias": [
+    [
+     85.5,
+     55.823,
+     "F.Cu",
+     "B.Cu"
+    ],
+    [
+     85.5,
+     58.283,
+     "In5.Cu",
+     "B.Cu"
+    ],
+    [
+     139.48,
+     43.85,
+     "F.Cu",
+     "In2.Cu"
+    ],
+    [
+     139.48,
+     58.283,
+     "In2.Cu",
+     "In5.Cu"
+    ]
+   ],
+   "seg_by_layer": {
+    "F.Cu": 15,
+    "B.Cu": 1,
+    "In2.Cu": 1,
+    "In5.Cu": 1
+   }
+  },
+  "PCIE_UP_OUT2_P_J2": {
+   "n_vias": 4,
+   "spans": [
+    "F.Cu-B.Cu",
+    "F.Cu-In2.Cu",
+    "In2.Cu-In5.Cu",
+    "In5.Cu-B.Cu"
+   ],
+   "vias": [
+    [
+     87.25,
+     54.88,
+     "F.Cu",
+     "B.Cu"
+    ],
+    [
+     87.25,
+     59.732,
+     "In5.Cu",
+     "B.Cu"
+    ],
+    [
+     137.16,
+     46.25,
+     "F.Cu",
+     "In2.Cu"
+    ],
+    [
+     137.16,
+     59.732,
+     "In2.Cu",
+     "In5.Cu"
+    ]
+   ],
+   "seg_by_layer": {
+    "F.Cu": 18,
+    "B.Cu": 1,
+    "In2.Cu": 1,
+    "In5.Cu": 1
+   }
+  },
+  "PCIE_UP_OUT2_N_J2": {
+   "n_vias": 4,
+   "spans": [
+    "F.Cu-B.Cu",
+    "F.Cu-In2.Cu",
+    "In2.Cu-In5.Cu",
+    "In5.Cu-B.Cu"
+   ],
+   "vias": [
+    [
+     86.7,
+     55.823,
+     "F.Cu",
+     "B.Cu"
+    ],
+    [
+     86.7,
+     59.232,
+     "In5.Cu",
+     "B.Cu"
+    ],
+    [
+     129.33,
+     46.85,
+     "F.Cu",
+     "In2.Cu"
+    ],
+    [
+     129.33,
+     59.232,
+     "In2.Cu",
+     "In5.Cu"
+    ]
+   ],
+   "seg_by_layer": {
+    "F.Cu": 15,
+    "B.Cu": 1,
+    "In2.Cu": 1,
+    "In5.Cu": 57
+   }
+  },
+  "PCIE_UP_OUT3_P_J2": {
+   "n_vias": 4,
+   "spans": [
+    "F.Cu-B.Cu",
+    "F.Cu-In2.Cu",
+    "In2.Cu-In5.Cu",
+    "In5.Cu-B.Cu"
+   ],
+   "vias": [
+    [
+     88.45,
+     54.88,
+     "F.Cu",
+     "B.Cu"
+    ],
+    [
+     88.45,
+     60.681,
+     "In5.Cu",
+     "B.Cu"
+    ],
+    [
+     130.49,
+     47.45,
+     "F.Cu",
+     "In2.Cu"
+    ],
+    [
+     130.49,
+     60.681,
+     "In2.Cu",
+     "In5.Cu"
+    ]
+   ],
+   "seg_by_layer": {
+    "F.Cu": 18,
+    "B.Cu": 1,
+    "In2.Cu": 1,
+    "In5.Cu": 36
+   }
+  },
+  "PCIE_UP_OUT3_N_J2": {
+   "n_vias": 4,
+   "spans": [
+    "F.Cu-B.Cu",
+    "F.Cu-In2.Cu",
+    "In2.Cu-In5.Cu",
+    "In5.Cu-B.Cu"
+   ],
+   "vias": [
+    [
+     87.9,
+     55.823,
+     "F.Cu",
+     "B.Cu"
+    ],
+    [
+     87.9,
+     61.181,
+     "In5.Cu",
+     "B.Cu"
+    ],
+    [
+     136.0,
+     47.45,
+     "F.Cu",
+     "In2.Cu"
+    ],
+    [
+     136.0,
+     61.181,
+     "In2.Cu",
+     "In5.Cu"
+    ]
+   ],
+   "seg_by_layer": {
+    "F.Cu": 5,
+    "B.Cu": 1,
+    "In2.Cu": 1,
+    "In5.Cu": 1
+   }
+  },
+  "PCIE_UP_OUT4_P_J2": {
+   "n_vias": 4,
+   "spans": [
+    "F.Cu-B.Cu",
+    "F.Cu-In2.Cu",
+    "In2.Cu-In5.Cu",
+    "In5.Cu-B.Cu"
+   ],
+   "vias": [
+    [
+     89.65,
+     54.88,
+     "F.Cu",
+     "B.Cu"
+    ],
+    [
+     89.65,
+     62.63,
+     "In5.Cu",
+     "B.Cu"
+    ],
+    [
+     140.06,
+     48.05,
+     "F.Cu",
+     "In2.Cu"
+    ],
+    [
+     140.06,
+     62.63,
+     "In2.Cu",
+     "In5.Cu"
+    ]
+   ],
+   "seg_by_layer": {
+    "F.Cu": 18,
+    "B.Cu": 1,
+    "In2.Cu": 1,
+    "In5.Cu": 1
+   }
+  },
+  "PCIE_UP_OUT4_N_J2": {
+   "n_vias": 4,
+   "spans": [
+    "F.Cu-B.Cu",
+    "F.Cu-In2.Cu",
+    "In2.Cu-In5.Cu",
+    "In5.Cu-B.Cu"
+   ],
+   "vias": [
+    [
+     89.1,
+     55.823,
+     "F.Cu",
+     "B.Cu"
+    ],
+    [
+     89.1,
+     62.13,
+     "In5.Cu",
+     "B.Cu"
+    ],
+    [
+     131.65,
+     48.65,
+     "F.Cu",
+     "In2.Cu"
+    ],
+    [
+     131.65,
+     62.13,
+     "In2.Cu",
+     "In5.Cu"
+    ]
+   ],
+   "seg_by_layer": {
+    "F.Cu": 5,
+    "B.Cu": 1,
+    "In2.Cu": 1,
+    "In5.Cu": 90
+   }
+  },
+  "PCIE_UP_OUT5_P_J2": {
+   "n_vias": 4,
+   "spans": [
+    "F.Cu-B.Cu",
+    "F.Cu-In2.Cu",
+    "In2.Cu-In5.Cu",
+    "In5.Cu-B.Cu"
+   ],
+   "vias": [
+    [
+     90.85,
+     54.88,
+     "F.Cu",
+     "B.Cu"
+    ],
+    [
+     90.85,
+     63.579,
+     "In5.Cu",
+     "B.Cu"
+    ],
+    [
+     128.75,
+     49.25,
+     "F.Cu",
+     "In2.Cu"
+    ],
+    [
+     128.75,
+     63.579,
+     "In2.Cu",
+     "In5.Cu"
+    ]
+   ],
+   "seg_by_layer": {
+    "F.Cu": 18,
+    "B.Cu": 1,
+    "In2.Cu": 1,
+    "In5.Cu": 72
+   }
+  },
+  "PCIE_UP_OUT5_N_J2": {
+   "n_vias": 4,
+   "spans": [
+    "F.Cu-B.Cu",
+    "F.Cu-In2.Cu",
+    "In2.Cu-In5.Cu",
+    "In5.Cu-B.Cu"
+   ],
+   "vias": [
+    [
+     90.3,
+     55.823,
+     "F.Cu",
+     "B.Cu"
+    ],
+    [
+     90.3,
+     64.079,
+     "In5.Cu",
+     "B.Cu"
+    ],
+    [
+     138.9,
+     49.25,
+     "F.Cu",
+     "In2.Cu"
+    ],
+    [
+     138.9,
+     64.079,
+     "In2.Cu",
+     "In5.Cu"
+    ]
+   ],
+   "seg_by_layer": {
+    "F.Cu": 15,
+    "B.Cu": 1,
+    "In2.Cu": 1,
+    "In5.Cu": 1
+   }
+  },
+  "PCIE_UP_OUT6_P_J2": {
+   "n_vias": 4,
+   "spans": [
+    "F.Cu-B.Cu",
+    "F.Cu-In2.Cu",
+    "In2.Cu-In5.Cu",
+    "In5.Cu-B.Cu"
+   ],
+   "vias": [
+    [
+     92.05,
+     54.88,
+     "F.Cu",
+     "B.Cu"
+    ],
+    [
+     92.05,
+     65.528,
+     "In5.Cu",
+     "B.Cu"
+    ],
+    [
+     137.74,
+     51.65,
+     "F.Cu",
+     "In2.Cu"
+    ],
+    [
+     137.74,
+     65.528,
+     "In2.Cu",
+     "In5.Cu"
+    ]
+   ],
+   "seg_by_layer": {
+    "F.Cu": 18,
+    "B.Cu": 1,
+    "In2.Cu": 1,
+    "In5.Cu": 1
+   }
+  },
+  "PCIE_UP_OUT6_N_J2": {
+   "n_vias": 4,
+   "spans": [
+    "F.Cu-B.Cu",
+    "F.Cu-In2.Cu",
+    "In2.Cu-In5.Cu",
+    "In5.Cu-B.Cu"
+   ],
+   "vias": [
+    [
+     91.5,
+     55.823,
+     "F.Cu",
+     "B.Cu"
+    ],
+    [
+     91.5,
+     65.028,
+     "In5.Cu",
+     "B.Cu"
+    ],
+    [
+     129.91,
+     52.25,
+     "F.Cu",
+     "In2.Cu"
+    ],
+    [
+     129.91,
+     65.028,
+     "In2.Cu",
+     "In5.Cu"
+    ]
+   ],
+   "seg_by_layer": {
+    "F.Cu": 15,
+    "B.Cu": 1,
+    "In2.Cu": 1,
+    "In5.Cu": 66
+   }
+  },
+  "PCIE_UP_OUT7_P_J2": {
+   "n_vias": 4,
+   "spans": [
+    "F.Cu-B.Cu",
+    "F.Cu-In2.Cu",
+    "In2.Cu-In5.Cu",
+    "In5.Cu-B.Cu"
+   ],
+   "vias": [
+    [
+     93.7,
+     55.13,
+     "F.Cu",
+     "B.Cu"
+    ],
+    [
+     93.7,
+     66.477,
+     "In5.Cu",
+     "B.Cu"
+    ],
+    [
+     131.07,
+     52.85,
+     "F.Cu",
+     "In2.Cu"
+    ],
+    [
+     131.07,
+     66.477,
+     "In2.Cu",
+     "In5.Cu"
+    ]
+   ],
+   "seg_by_layer": {
+    "F.Cu": 15,
+    "B.Cu": 1,
+    "In2.Cu": 1,
+    "In5.Cu": 48
+   }
+  },
+  "PCIE_UP_OUT7_N_J2": {
+   "n_vias": 4,
+   "spans": [
+    "F.Cu-B.Cu",
+    "F.Cu-In2.Cu",
+    "In2.Cu-In5.Cu",
+    "In5.Cu-B.Cu"
+   ],
+   "vias": [
+    [
+     92.7,
+     55.823,
+     "F.Cu",
+     "B.Cu"
+    ],
+    [
+     92.7,
+     66.977,
+     "In5.Cu",
+     "B.Cu"
+    ],
+    [
+     136.58,
+     52.85,
+     "F.Cu",
+     "In2.Cu"
+    ],
+    [
+     136.58,
+     66.977,
+     "In2.Cu",
+     "In5.Cu"
+    ]
+   ],
+   "seg_by_layer": {
+    "F.Cu": 15,
+    "B.Cu": 1,
+    "In2.Cu": 1,
+    "In5.Cu": 1
+   }
+  }
+ },
+ "l9": {
+  "PCIE_UP_OUT0_P_J2": {
+   "n_vias": 4,
+   "spans": [
+    "F.Cu-B.Cu",
+    "F.Cu-In2.Cu",
+    "In2.Cu-In5.Cu",
+    "In5.Cu-B.Cu"
+   ],
+   "vias": [
+    [
+     84.85,
+     54.88,
+     "F.Cu",
+     "B.Cu"
+    ],
+    [
+     84.85,
+     56.834,
+     "In5.Cu",
+     "B.Cu"
+    ],
+    [
+     141.22,
+     42.65,
+     "F.Cu",
+     "In2.Cu"
+    ],
+    [
+     141.22,
+     56.834,
+     "In2.Cu",
+     "In5.Cu"
+    ]
+   ],
+   "seg_by_layer": {
+    "F.Cu": 18,
+    "B.Cu": 1,
+    "In2.Cu": 1,
+    "In5.Cu": 1
+   }
+  },
+  "PCIE_UP_OUT0_N_J2": {
+   "n_vias": 4,
+   "spans": [
+    "F.Cu-B.Cu",
+    "F.Cu-In2.Cu",
+    "In2.Cu-In5.Cu",
+    "In5.Cu-B.Cu"
+   ],
+   "vias": [
+    [
+     84.35,
+     55.723,
+     "F.Cu",
+     "B.Cu"
+    ],
+    [
+     84.35,
+     56.334,
+     "In5.Cu",
+     "B.Cu"
+    ],
+    [
+     127.01,
+     43.25,
+     "F.Cu",
+     "In2.Cu"
+    ],
+    [
+     127.01,
+     56.334,
+     "In2.Cu",
+     "In5.Cu"
+    ]
+   ],
+   "seg_by_layer": {
+    "F.Cu": 18,
+    "B.Cu": 1,
+    "In2.Cu": 1,
+    "In5.Cu": 109
+   }
+  },
+  "PCIE_UP_OUT1_P_J2": {
+   "n_vias": 4,
+   "spans": [
+    "F.Cu-B.Cu",
+    "F.Cu-In2.Cu",
+    "In2.Cu-In5.Cu",
+    "In5.Cu-B.Cu"
+   ],
+   "vias": [
+    [
+     86.05,
+     54.88,
+     "F.Cu",
+     "B.Cu"
+    ],
+    [
+     86.05,
+     57.783,
+     "In5.Cu",
+     "B.Cu"
+    ],
+    [
+     127.59,
+     43.85,
+     "F.Cu",
+     "In2.Cu"
+    ],
+    [
+     127.59,
+     57.783,
+     "In2.Cu",
+     "In5.Cu"
+    ]
+   ],
+   "seg_by_layer": {
+    "F.Cu": 18,
+    "B.Cu": 1,
+    "In2.Cu": 1,
+    "In5.Cu": 78
+   }
+  },
+  "PCIE_UP_OUT1_N_J2": {
+   "n_vias": 4,
+   "spans": [
+    "F.Cu-B.Cu",
+    "F.Cu-In2.Cu",
+    "In2.Cu-In5.Cu",
+    "In5.Cu-B.Cu"
+   ],
+   "vias": [
+    [
+     85.5,
+     55.823,
+     "F.Cu",
+     "B.Cu"
+    ],
+    [
+     85.5,
+     58.283,
+     "In5.Cu",
+     "B.Cu"
+    ],
+    [
+     139.48,
+     43.85,
+     "F.Cu",
+     "In2.Cu"
+    ],
+    [
+     139.48,
+     58.283,
+     "In2.Cu",
+     "In5.Cu"
+    ]
+   ],
+   "seg_by_layer": {
+    "F.Cu": 15,
+    "B.Cu": 1,
+    "In2.Cu": 1,
+    "In5.Cu": 1
+   }
+  },
+  "PCIE_UP_OUT2_P_J2": {
+   "n_vias": 4,
+   "spans": [
+    "F.Cu-B.Cu",
+    "F.Cu-In2.Cu",
+    "In2.Cu-In5.Cu",
+    "In5.Cu-B.Cu"
+   ],
+   "vias": [
+    [
+     87.25,
+     54.88,
+     "F.Cu",
+     "B.Cu"
+    ],
+    [
+     87.25,
+     59.732,
+     "In5.Cu",
+     "B.Cu"
+    ],
+    [
+     137.16,
+     46.25,
+     "F.Cu",
+     "In2.Cu"
+    ],
+    [
+     137.16,
+     59.732,
+     "In2.Cu",
+     "In5.Cu"
+    ]
+   ],
+   "seg_by_layer": {
+    "F.Cu": 18,
+    "B.Cu": 1,
+    "In2.Cu": 1,
+    "In5.Cu": 1
+   }
+  },
+  "PCIE_UP_OUT2_N_J2": {
+   "n_vias": 4,
+   "spans": [
+    "F.Cu-B.Cu",
+    "F.Cu-In2.Cu",
+    "In2.Cu-In5.Cu",
+    "In5.Cu-B.Cu"
+   ],
+   "vias": [
+    [
+     86.7,
+     55.823,
+     "F.Cu",
+     "B.Cu"
+    ],
+    [
+     86.7,
+     59.232,
+     "In5.Cu",
+     "B.Cu"
+    ],
+    [
+     129.33,
+     46.85,
+     "F.Cu",
+     "In2.Cu"
+    ],
+    [
+     129.33,
+     59.232,
+     "In2.Cu",
+     "In5.Cu"
+    ]
+   ],
+   "seg_by_layer": {
+    "F.Cu": 15,
+    "B.Cu": 1,
+    "In2.Cu": 1,
+    "In5.Cu": 57
+   }
+  },
+  "PCIE_UP_OUT3_P_J2": {
+   "n_vias": 4,
+   "spans": [
+    "F.Cu-B.Cu",
+    "F.Cu-In2.Cu",
+    "In2.Cu-In5.Cu",
+    "In5.Cu-B.Cu"
+   ],
+   "vias": [
+    [
+     88.45,
+     54.88,
+     "F.Cu",
+     "B.Cu"
+    ],
+    [
+     88.45,
+     60.681,
+     "In5.Cu",
+     "B.Cu"
+    ],
+    [
+     130.49,
+     47.45,
+     "F.Cu",
+     "In2.Cu"
+    ],
+    [
+     130.49,
+     60.681,
+     "In2.Cu",
+     "In5.Cu"
+    ]
+   ],
+   "seg_by_layer": {
+    "F.Cu": 18,
+    "B.Cu": 1,
+    "In2.Cu": 1,
+    "In5.Cu": 36
+   }
+  },
+  "PCIE_UP_OUT3_N_J2": {
+   "n_vias": 4,
+   "spans": [
+    "F.Cu-B.Cu",
+    "F.Cu-In2.Cu",
+    "In2.Cu-In5.Cu",
+    "In5.Cu-B.Cu"
+   ],
+   "vias": [
+    [
+     87.9,
+     55.823,
+     "F.Cu",
+     "B.Cu"
+    ],
+    [
+     87.9,
+     61.181,
+     "In5.Cu",
+     "B.Cu"
+    ],
+    [
+     136.0,
+     47.45,
+     "F.Cu",
+     "In2.Cu"
+    ],
+    [
+     136.0,
+     61.181,
+     "In2.Cu",
+     "In5.Cu"
+    ]
+   ],
+   "seg_by_layer": {
+    "F.Cu": 5,
+    "B.Cu": 1,
+    "In2.Cu": 1,
+    "In5.Cu": 1
+   }
+  },
+  "PCIE_UP_OUT4_P_J2": {
+   "n_vias": 4,
+   "spans": [
+    "F.Cu-B.Cu",
+    "F.Cu-In2.Cu",
+    "In2.Cu-In5.Cu",
+    "In5.Cu-B.Cu"
+   ],
+   "vias": [
+    [
+     89.65,
+     54.88,
+     "F.Cu",
+     "B.Cu"
+    ],
+    [
+     89.65,
+     62.63,
+     "In5.Cu",
+     "B.Cu"
+    ],
+    [
+     140.06,
+     48.05,
+     "F.Cu",
+     "In2.Cu"
+    ],
+    [
+     140.06,
+     62.63,
+     "In2.Cu",
+     "In5.Cu"
+    ]
+   ],
+   "seg_by_layer": {
+    "F.Cu": 18,
+    "B.Cu": 1,
+    "In2.Cu": 1,
+    "In5.Cu": 1
+   }
+  },
+  "PCIE_UP_OUT4_N_J2": {
+   "n_vias": 4,
+   "spans": [
+    "F.Cu-B.Cu",
+    "F.Cu-In2.Cu",
+    "In2.Cu-In5.Cu",
+    "In5.Cu-B.Cu"
+   ],
+   "vias": [
+    [
+     89.1,
+     55.823,
+     "F.Cu",
+     "B.Cu"
+    ],
+    [
+     89.1,
+     62.13,
+     "In5.Cu",
+     "B.Cu"
+    ],
+    [
+     131.65,
+     48.65,
+     "F.Cu",
+     "In2.Cu"
+    ],
+    [
+     131.65,
+     62.13,
+     "In2.Cu",
+     "In5.Cu"
+    ]
+   ],
+   "seg_by_layer": {
+    "F.Cu": 5,
+    "B.Cu": 1,
+    "In2.Cu": 1,
+    "In5.Cu": 90
+   }
+  },
+  "PCIE_UP_OUT5_P_J2": {
+   "n_vias": 4,
+   "spans": [
+    "F.Cu-B.Cu",
+    "F.Cu-In2.Cu",
+    "In2.Cu-In5.Cu",
+    "In5.Cu-B.Cu"
+   ],
+   "vias": [
+    [
+     90.85,
+     54.88,
+     "F.Cu",
+     "B.Cu"
+    ],
+    [
+     90.85,
+     63.579,
+     "In5.Cu",
+     "B.Cu"
+    ],
+    [
+     128.75,
+     49.25,
+     "F.Cu",
+     "In2.Cu"
+    ],
+    [
+     128.75,
+     63.579,
+     "In2.Cu",
+     "In5.Cu"
+    ]
+   ],
+   "seg_by_layer": {
+    "F.Cu": 18,
+    "B.Cu": 1,
+    "In2.Cu": 1,
+    "In5.Cu": 72
+   }
+  },
+  "PCIE_UP_OUT5_N_J2": {
+   "n_vias": 4,
+   "spans": [
+    "F.Cu-B.Cu",
+    "F.Cu-In2.Cu",
+    "In2.Cu-In5.Cu",
+    "In5.Cu-B.Cu"
+   ],
+   "vias": [
+    [
+     90.3,
+     55.823,
+     "F.Cu",
+     "B.Cu"
+    ],
+    [
+     90.3,
+     64.079,
+     "In5.Cu",
+     "B.Cu"
+    ],
+    [
+     138.9,
+     49.25,
+     "F.Cu",
+     "In2.Cu"
+    ],
+    [
+     138.9,
+     64.079,
+     "In2.Cu",
+     "In5.Cu"
+    ]
+   ],
+   "seg_by_layer": {
+    "F.Cu": 15,
+    "B.Cu": 1,
+    "In2.Cu": 1,
+    "In5.Cu": 1
+   }
+  },
+  "PCIE_UP_OUT6_P_J2": {
+   "n_vias": 4,
+   "spans": [
+    "F.Cu-B.Cu",
+    "F.Cu-In2.Cu",
+    "In2.Cu-In5.Cu",
+    "In5.Cu-B.Cu"
+   ],
+   "vias": [
+    [
+     92.05,
+     54.88,
+     "F.Cu",
+     "B.Cu"
+    ],
+    [
+     92.05,
+     65.528,
+     "In5.Cu",
+     "B.Cu"
+    ],
+    [
+     137.74,
+     51.65,
+     "F.Cu",
+     "In2.Cu"
+    ],
+    [
+     137.74,
+     65.528,
+     "In2.Cu",
+     "In5.Cu"
+    ]
+   ],
+   "seg_by_layer": {
+    "F.Cu": 18,
+    "B.Cu": 1,
+    "In2.Cu": 1,
+    "In5.Cu": 1
+   }
+  },
+  "PCIE_UP_OUT6_N_J2": {
+   "n_vias": 4,
+   "spans": [
+    "F.Cu-B.Cu",
+    "F.Cu-In2.Cu",
+    "In2.Cu-In5.Cu",
+    "In5.Cu-B.Cu"
+   ],
+   "vias": [
+    [
+     91.5,
+     55.823,
+     "F.Cu",
+     "B.Cu"
+    ],
+    [
+     91.5,
+     65.028,
+     "In5.Cu",
+     "B.Cu"
+    ],
+    [
+     129.91,
+     52.25,
+     "F.Cu",
+     "In2.Cu"
+    ],
+    [
+     129.91,
+     65.028,
+     "In2.Cu",
+     "In5.Cu"
+    ]
+   ],
+   "seg_by_layer": {
+    "F.Cu": 15,
+    "B.Cu": 1,
+    "In2.Cu": 1,
+    "In5.Cu": 66
+   }
+  },
+  "PCIE_UP_OUT7_P_J2": {
+   "n_vias": 4,
+   "spans": [
+    "F.Cu-B.Cu",
+    "F.Cu-In2.Cu",
+    "In2.Cu-In5.Cu",
+    "In5.Cu-B.Cu"
+   ],
+   "vias": [
+    [
+     93.7,
+     55.13,
+     "F.Cu",
+     "B.Cu"
+    ],
+    [
+     93.7,
+     66.477,
+     "In5.Cu",
+     "B.Cu"
+    ],
+    [
+     131.07,
+     52.85,
+     "F.Cu",
+     "In2.Cu"
+    ],
+    [
+     131.07,
+     66.477,
+     "In2.Cu",
+     "In5.Cu"
+    ]
+   ],
+   "seg_by_layer": {
+    "F.Cu": 15,
+    "B.Cu": 1,
+    "In2.Cu": 1,
+    "In5.Cu": 48
+   }
+  },
+  "PCIE_UP_OUT7_N_J2": {
+   "n_vias": 4,
+   "spans": [
+    "F.Cu-B.Cu",
+    "F.Cu-In2.Cu",
+    "In2.Cu-In5.Cu",
+    "In5.Cu-B.Cu"
+   ],
+   "vias": [
+    [
+     92.7,
+     55.823,
+     "F.Cu",
+     "B.Cu"
+    ],
+    [
+     92.7,
+     66.977,
+     "In5.Cu",
+     "B.Cu"
+    ],
+    [
+     136.58,
+     52.85,
+     "F.Cu",
+     "In2.Cu"
+    ],
+    [
+     136.58,
+     66.977,
+     "In2.Cu",
+     "In5.Cu"
+    ]
+   ],
+   "seg_by_layer": {
+    "F.Cu": 15,
+    "B.Cu": 1,
+    "In2.Cu": 1,
+    "In5.Cu": 1
+   }
+  }
+ }
+}
