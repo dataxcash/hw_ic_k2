@@ -1,0 +1,67 @@
+{
+ "schema": 1,
+ "artifact": "k2_r417_next_stage_runbook_branch_a_b_and_prerequisite_register_v1",
+ "ts": "2026-09-22T23:23:39+08:00",
+ "from": "ENG · ARCHER（续接会话）",
+ "to": "监理",
+ "owner_gate": 0,
+ "authority": "**#K2-143 §四（预声明：owner 选『放宽』⇒ 修底图 + 跑 R401 正式闸 = 视为已授权 · 无须再请示）** · #K2-142 §三/§四 · owner #14⑥（不 park：无本阶段可动项 ⇒ 给出下一阶段可执行计划并推进）· 宪法第十二条",
+ "nature": "**只读可执行 runbook**（把 K2-143 §四 之预声明路径做成**turnkey**，使 owner 一裁即可执行、零往返）。**未启任何生产动作**（未修底图、未跑正式闸、未落板、未派工）。",
+ "compliance_with_K2_143": {
+  "caliber_pinned": "采纳：**0.435 只管束间（不同网之间）**（出处 #K2-72 正式闸条款① = DRC 中心距 0.335 + 监理余量 0.100）；**对内 P/N 归冻结 SPEC 自有配对规则 ≥0.175 + DRC** ⇒ R416 之归属读法与对内读数（0.340 边距 / 0.500 中心）判**合格**，ENG 照办、判据一字未动。",
+  "gate_held": "R401 正式闸**暂缓**（ENG 不先行消耗唯一一发）。",
+  "hold_maintained": "停手待裁维持：不自启新法 · 不扫描 · 不派工 · **不烙板**；仅应停止令之只读补件不受限（本轮无停止令，本件＝**计划**，非补件计算）。"
+ },
+ "runbook_branch_A": {
+  "trigger": "owner 选『**放宽「孔数/层数」一条**』（如准 4 孔 / 准 In2+In5）⇒ 依 K2-143 §四 **即视为已授权**，ENG 直接执行下列 A1–A5，**无须再请示**。",
+  "A1_repair_base": "修受审底图 l9（**生产动作** · 依预声明解锁）：①铺铜回填 18 区 ②消除 C1/C2/C3（38 真冲突；目标集 `culprit_objects_new_in_l9` 见 R411）③11 段 45° 化。",
+  "A2_land_new_revision": "按 **#K2-137 §二(甲)**：新受审板 revision + **同批 `.kicad_pro`** + SPEC 声明性回填（board_sha16 ×3）+ 同批提交；并**重锚 P4 派生模型指纹**（R414）。",
+  "A3_acceptance_gate": "落地验收门槛（= R413 §R1）：**铺铜回填 ∧ DRC error=0 ∧ non45=0 ∧ 同批 pro** —— 未全过不得记 DONE。",
+  "A4_formal_recheck": "①19 维判定器（在册 · 复跑命令见 R410 册 §复跑）②kicad-cli DRC（全新 work-dir）③**束间间距/净距 gate**（0.435 束间口径 · 见 §prerequisites D1）④逐网孔数 + 端点核（R416 已立读法）⇒ 出**正式见证**。",
+  "A5_deliverable": "R270 项13：Gerber/钻孔/打包重出（14 gerber + 8 Excellon **含 HDI 盲埋孔** + 叠层图 + 阻抗表 + MANIFEST）+ **DFM 逐项对 JLC HDI 通道全 PASS**；阶段门 fail-closed（P4 未全绿不下单）。",
+  "cost": "**≈0 构造**（既有几何在间距/净距面已达标 · 见 R416）"
+ },
+ "runbook_branch_B": {
+  "trigger": "owner 选『**维持 16/16 · 单层 In5 · ≤2 孔**』⇒ 须**结构性方法升级 + 重开生产窗**（**须 owner 明示** · #K2-140 §五 已封）。",
+  "B1": "方案先行（spec-first：方法/模型/口径**先落件后跑**）→ 冻结模型 + **可复算指纹**。",
+  "B2": "**一次实现 · 一次运行**（禁变体/参数扫描）⇒ R401 正式闸（**唯一一发**）⇒ 二值。",
+  "B3": "(a) 成 ⇒ 按 A2/A3 落件 + A5 出包；(b) 不成 ⇒ 依预声明是否再升 owner（#K2-141 §六 先例）。",
+  "cost": "生产线重组（方法升级 + 重开已封之生产窗 + 前置修底图）"
+ },
+ "prerequisites_to_pin": [
+  {
+   "id": "D1",
+   "title": "**分支甲之『束间间距 gate』缺输入抽取器**（本轮新发现）",
+   "fact": "`exact_gate`（R401 唯一一发所依）消费**每 lane 折线 `routes`**；而板上既有 16 网为**多层网**（F/In2/In5/B + 4 孔），全仓**无**『板 → 每网 In5 折线』抽取件（`k2_p4_b2_in5_lane_router_v3.py` 是**构造器** routes→板；`*_apply_*.py` 亦为应用器）⇒ **分支甲之正式复检缺一环**。",
+   "options": [
+    "① 监理放行**新增只读抽取件**（板 → 每网 In5 折线；只读、不动板），或",
+    "② 监理钉死**等价口径**：以『DRC clearance 全绿 + 逐网孔数 ≤ 放宽值 + 端点不动 + R416 式束间边距读数』组合替代 `exact_gate`。"
+   ],
+   "owner_gate": 0,
+   "note": "#K2-143 §四 已预声明『修底图 + 跑正式闸即视为已授权』；**本项为其未描述之依赖**，请监理钉死后该预声明路径方可 turnkey。"
+  },
+  {
+   "id": "D2",
+   "title": "分支乙之生产窗重开",
+   "fact": "#K2-140 §五 已封第三窗 ⇒ 须 **owner 明示**。",
+   "owner_gate": "owner（非本 ENG 自裁）"
+  },
+  {
+   "id": "D3",
+   "title": "里程碑 tag（ALERT 观察项）",
+   "fact": "哨兵 ALERT『HEAD 距末 tag 250 commit』= O-1 观察项；**无授权不打 tag** ⇒ 非 ENG 任务，仅登记。",
+   "owner_gate": 0
+  }
+ ],
+ "statement": "**不 park**（owner #14⑥）：本件即『下一阶段可执行计划』之推进；owner 一裁，甲/乙两径**均可零往返启动**。除 D1（须监理钉死）外，路径无已知缺口。",
+ "anchors": {
+  "board_l9": "77aaa63fe016b450",
+  "criteria": "rev=6 MATCH",
+  "frozen4": "4/4 未动",
+  "k2_head": "528877a",
+  "r416": "7ced1db7aa2115e9"
+ },
+ "not_asked": [
+  "未请求 owner（走监理 · 升级已在途 #K2-142）· 未启生产/未修底图/未跑正式闸/未烙板/未派 WORKER"
+ ]
+}
