@@ -1,0 +1,101 @@
+{
+ "schema": 1,
+ "artifact": "k2_r344_delivery_excellon_hdi_span_semantics_and_drill_reproducibility_v1",
+ "ts": "2026-09-22T07:59+0800",
+ "to": "监理",
+ "from": "ENG · ARCHER",
+ "nature": "交付包 **Excellon/HDI 盲埋孔语义核**（owner #14③「Excellon 钻孔含 HDI 盲埋孔」）+ **独立重跑一致**（只读）",
+ "anchors": {
+  "delivery_package": "k2/pm_gate/artifacts/k2_v4/L6/jlc_package_l8r3/02_drill_excellon",
+  "board_sha16": "7a5c89913d6e5d0a",
+  "frozen4": [
+   "d4e81f647be7f980",
+   "fb07d25ac426ff84",
+   "dd794c54f7ce7417",
+   "0a459839e15960b8"
+  ],
+  "census_source": "06_rulings/jlc_dfm_hdi_l8.json → as_built.via_type_census"
+ },
+ "span_semantics": {
+  "方法": "逐 span 之 `.drl` 计『`^X` 孔行』数，与包内 via_type_census 逐项比对",
+  "per_span": [
+   {
+    "file": "-front-in1.drl",
+    "span": "F.Cu->In1.Cu",
+    "holes": 171,
+    "census": 171,
+    "match": true
+   },
+   {
+    "file": "-front-in2.drl",
+    "span": "F.Cu->In2.Cu",
+    "holes": 132,
+    "census": 132,
+    "match": true
+   },
+   {
+    "file": "-front-in4.drl",
+    "span": "F.Cu->In4.Cu",
+    "holes": 4,
+    "census": 4,
+    "match": true
+   },
+   {
+    "file": "-front-in5.drl",
+    "span": "F.Cu->In5.Cu",
+    "holes": 19,
+    "census": 19,
+    "match": true
+   },
+   {
+    "file": "-in2-in5.drl",
+    "span": "In2.Cu->In5.Cu",
+    "holes": 92,
+    "census": 92,
+    "match": true
+   },
+   {
+    "file": "-back-in5.drl",
+    "span": "In5.Cu->B.Cu",
+    "holes": 37,
+    "census": 37,
+    "match": true
+   },
+   {
+    "file": ".drl(合并)",
+    "span": "through 279 + PTH 16 + NPTH 4",
+    "holes": 299,
+    "census": 299,
+    "match": true
+   }
+  ],
+  "totals": {
+   "blind_buried_sum": 455,
+   "n_non_through_vias(census)": 455,
+   "through(census)": 279,
+   "pth": 16,
+   "npth": 4,
+   "combined_file_holes": 299,
+   "n_vias(census)": 734,
+   "drill_total(manifest)": 754,
+   "check": "455==455 ∧ 279+16+4==299 ∧ 734+16+4==754 ⇒ 一致"
+  }
+ },
+ "reproducibility": {
+  "方法": "同板同参独立重跑 `kicad-cli pcb export drill`（/tmp）⇒ 与交付包**逐字节比对**（仅剥 `;` 注释行 + 日期归一化）",
+  "result": "**7/7 Excellon 逐字节一致**（-front-in1/-in2/-in4/-in5/-in2-in5/-back-in5/合并 `.drl`）",
+  "note": "drill_map.svg 与 drill_report.txt 经项目名+日期归一化后亦一致（差异仅内嵌工程名 `…l8` vs `…l8.mask02`）",
+  "scope": "同版本工具链之**独立重跑**（非同工具链交叉验证）"
+ },
+ "mask_fix_neutrality_extension": {
+  "claim": "DFM 处置 (ii)（`pad_to_mask_clearance 0.05→0.02`）**对钻孔输出亦中性**",
+  "evidence": "l8 原板 与 0.02 变体 之 **7/7 Excellon 逐字节相同**，drill_map.svg / drill_report.txt 归一化后相同 ⇒ 该修法在**全部输出类**（8 铜层 + 2 丝印 + 边框 + **7 钻孔件**）中**仅 F.Mask/B.Mask 变更**",
+  "mask_gerber_note": "F.Mask/B.Mask 之 Gerber **多边形分解整体重算**（行级差异 F 94.9% / B 59.7%）—— 系阻焊坝消失致开窗连片之**预期**结果，非扩散性改动；图层归属不变（仅 Mask 层）"
+ },
+ "buildability_field": "本件只读核验（交付包件 + /tmp 重跑）：**未重建/未覆盖旧包 · 未烙板 · 未改 `criteria/`/生成器/SPEC/原理图 · 未动任何板上对象** ⇒ 不动证明成立。",
+ "owner_gate": 0,
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "7b42cbd6f2839a1d"
+ }
+}
