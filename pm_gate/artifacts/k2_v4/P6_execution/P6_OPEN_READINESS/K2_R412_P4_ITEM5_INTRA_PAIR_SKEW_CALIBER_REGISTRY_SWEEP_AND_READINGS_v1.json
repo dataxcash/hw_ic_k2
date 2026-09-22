@@ -1,0 +1,334 @@
+{
+ "schema": 1,
+ "artifact": "k2_r412_p4_item5_intra_pair_skew_caliber_registry_sweep_and_readings_v1",
+ "ts": "2026-09-22T22:58:41+08:00",
+ "from": "ENG · ARCHER（续接会话 · 应 #K2-142 §四 只读残余）",
+ "to": "监理",
+ "owner_gate": 0,
+ "authority": "#K2-142 §四（准只读残余测量）· R270 §一 项5（『等长（In5 N/P skew）· l9 同口径重测 + 阈值具名』）· R408（自纠件）· owner #14⑦（**口径澄清 = 监理自裁项**）",
+ "purpose": "闭合 R270 项5 之『阈值具名』子项：在**冻结在册源**内普查『对内等长阈值』及其**辖域选择器**，并以**在册口径**给出 l9 读数（只报读数，不自定阈值、不改判据）。",
+ "registry_sweep": {
+  "sources_swept": [
+   "`_shared/eda_core/drc_rules.json`（冻结四源之一）",
+   "`k2/pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-55.json`（受审 SPEC）",
+   "`criteria/manifest.k2.yaml`（判据 rev=6）"
+  ],
+  "unique_threshold_found": {
+   "value_mm": 0.15,
+   "fields": [
+    "drc_rules.json :: diff_pair.intra_pair_skew_mm = 0.15（+ description『等长 <0.15mm』· diff_pair.enabled=true）",
+    "SPEC rev-55 :: net_classes.PCIe85.intra_pair_skew_mm = 0.15",
+    "SPEC rev-55 :: REFCLK-ECS-001『须 P 侧幂绕补偿至 intra_pair_skew_mm <= 0.15』（**主体=PCIE_REFCLK0/1**，与 R408 自纠一致）"
+   ],
+   "selector": {
+    "net_prefix": "PCIE",
+    "pair_suffix": [
+     "_P",
+     "_N"
+    ],
+    "source_line": "drc_rules.json :: diff_pair"
+   },
+   "judge_dim": "**不存在**（criteria 19 维内无『对内等长』维）⇒ 本项属**计划/R270 项**，非判定器维"
+  }
+ },
+ "net_name_cross_check": {
+  "board_l9_two_families": {
+   "A_in_scope_by_suffix": [
+    "PCIE_UP0_P",
+    "PCIE_UP0_N",
+    "…",
+    "PCIE_UP7_P",
+    "PCIE_UP7_N"
+   ],
+   "B_B2UP_named": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT0_N_J2",
+    "…",
+    "PCIE_UP_OUT7_P_J2",
+    "PCIE_UP_OUT7_N_J2"
+   ]
+  },
+  "finding": "②-UP 之 16 条（handoff §7 具名 = `PCIE_UP_OUT<N>_{P,N}_J2`）**满足 prefix『PCIE』** 但**不满足 suffix『_P/_N』**（尾为 `_J2`）⇒ 按**字面 selector 不在辖域**；而同族 `PCIE_UP<N>_{P,N}`（16 条）**满足 suffix** ⇒ 在辖域。",
+  "register_self_inconsistency": "同册 `drc_rules.json::diff_pair.gap_check` 之举例即用 `PCIE_UP1 P/N`（= 家族 A 之名）⇒ 册内选择器与举例**自指不一致**（家族 A 满足 selector；家族 B 才是《整改计划》项5 之被测族）",
+  "plan_side": "R270 §一 项5 明载基线『max **6.002mm@pair4**』⇒ 该基线**只在家族 B（OUT_J2）之 In5-only 口径下可复算**（见下 readings）⇒ 计划侧实际把家族 B 视作项5 主体"
+ },
+ "readings_l9_same_caliber": {
+  "method": "只读文本解析：按网汇总段长（`(segment)` 之 start/end 欧氏长），分**两层口径**：①全层（Σ 全板各层）②**In5-only**（仅 `In5.Cu`）；l8 同法对照",
+  "family_A_PCIE_UPn": {
+   "selector": "**在**辖域（suffix _P/_N）",
+   "l9_max_in5_only_skew_mm": 1.72,
+   "l9_max_all_layer_skew_mm": 0.0216,
+   "l8": "与 l9 逐位同（搬迁未动）",
+   "note": "故『全层口径』≤0.0216 ⇒ 端到端已等长；『In5-only 口径』最大 1.72（pair6）"
+  },
+  "family_B_PCIE_UP_OUTn_J2": {
+   "selector": "**不在**辖域（尾 _J2）",
+   "l9_max_in5_only_skew_mm": 6.0017,
+   "l9_max_all_layer_skew_mm": 0.6135,
+   "l8": "与 l9 逐位同（搬迁未动）",
+   "note": "**In5-only 6.0017mm @pair4 = R270/R259 在册基线 6.002mm@pair4 之精确复算** ⇒ 证实：在册基线之口径 = **家族 B × In5-only**"
+  },
+  "detail": {
+   "l8_B_in5": {
+    "label": "l8 B OUT_J2",
+    "max_in5_skew_mm": 6.0017,
+    "max_all_skew_mm": 0.6135,
+    "pairs": [
+     {
+      "pair": "0",
+      "in5_P": 56.37,
+      "in5_N": 59.1956,
+      "in5_abs_skew_mm": 2.8256,
+      "all_P": 79.1437,
+      "all_N": 78.9256,
+      "all_abs_skew_mm": 0.2181
+     },
+     {
+      "pair": "1",
+      "in5_P": 53.5586,
+      "in5_N": 53.98,
+      "in5_abs_skew_mm": 0.4214,
+      "all_P": 75.8702,
+      "all_N": 75.7566,
+      "all_abs_skew_mm": 0.1137
+     },
+     {
+      "pair": "2",
+      "in5_P": 49.91,
+      "in5_N": 51.2738,
+      "in5_abs_skew_mm": 1.3638,
+      "all_P": 70.8197,
+      "all_N": 70.7883,
+      "all_abs_skew_mm": 0.0313
+     },
+     {
+      "pair": "3",
+      "in5_P": 47.1619,
+      "in5_N": 48.1,
+      "in5_abs_skew_mm": 0.9381,
+      "all_P": 68.7696,
+      "all_N": 68.5926,
+      "all_abs_skew_mm": 0.177
+     },
+     {
+      "pair": "4",
+      "in5_P": 50.41,
+      "in5_N": 56.4117,
+      "in5_abs_skew_mm": 6.0017,
+      "all_P": 78.2157,
+      "all_N": 77.6022,
+      "all_abs_skew_mm": 0.6135
+     },
+     {
+      "pair": "5",
+      "in5_P": 48.6936,
+      "in5_N": 48.6,
+      "in5_abs_skew_mm": 0.0936,
+      "all_P": 76.0373,
+      "all_N": 75.9886,
+      "all_abs_skew_mm": 0.0487
+     },
+     {
+      "pair": "6",
+      "in5_P": 45.69,
+      "in5_N": 48.0843,
+      "in5_abs_skew_mm": 2.3943,
+      "all_P": 73.3717,
+      "all_N": 73.2108,
+      "all_abs_skew_mm": 0.1609
+     },
+     {
+      "pair": "7",
+      "in5_P": 44.2086,
+      "in5_N": 43.88,
+      "in5_abs_skew_mm": 0.3286,
+      "all_P": 71.1662,
+      "all_N": 71.1446,
+      "all_abs_skew_mm": 0.0216
+     }
+    ]
+   },
+   "l9_B_in5": {
+    "label": "l9 B OUT_J2",
+    "max_in5_skew_mm": 6.0017,
+    "max_all_skew_mm": 0.6135,
+    "pairs": [
+     {
+      "pair": "0",
+      "in5_P": 56.37,
+      "in5_N": 59.1956,
+      "in5_abs_skew_mm": 2.8256,
+      "all_P": 79.1437,
+      "all_N": 78.9256,
+      "all_abs_skew_mm": 0.2181
+     },
+     {
+      "pair": "1",
+      "in5_P": 53.5586,
+      "in5_N": 53.98,
+      "in5_abs_skew_mm": 0.4214,
+      "all_P": 75.8702,
+      "all_N": 75.7566,
+      "all_abs_skew_mm": 0.1137
+     },
+     {
+      "pair": "2",
+      "in5_P": 49.91,
+      "in5_N": 51.2738,
+      "in5_abs_skew_mm": 1.3638,
+      "all_P": 70.8197,
+      "all_N": 70.7883,
+      "all_abs_skew_mm": 0.0313
+     },
+     {
+      "pair": "3",
+      "in5_P": 47.1619,
+      "in5_N": 48.1,
+      "in5_abs_skew_mm": 0.9381,
+      "all_P": 68.7696,
+      "all_N": 68.5926,
+      "all_abs_skew_mm": 0.177
+     },
+     {
+      "pair": "4",
+      "in5_P": 50.41,
+      "in5_N": 56.4117,
+      "in5_abs_skew_mm": 6.0017,
+      "all_P": 78.2157,
+      "all_N": 77.6022,
+      "all_abs_skew_mm": 0.6135
+     },
+     {
+      "pair": "5",
+      "in5_P": 48.6936,
+      "in5_N": 48.6,
+      "in5_abs_skew_mm": 0.0936,
+      "all_P": 76.0373,
+      "all_N": 75.9886,
+      "all_abs_skew_mm": 0.0487
+     },
+     {
+      "pair": "6",
+      "in5_P": 45.69,
+      "in5_N": 48.0843,
+      "in5_abs_skew_mm": 2.3943,
+      "all_P": 73.3717,
+      "all_N": 73.2108,
+      "all_abs_skew_mm": 0.1609
+     },
+     {
+      "pair": "7",
+      "in5_P": 44.2086,
+      "in5_N": 43.88,
+      "in5_abs_skew_mm": 0.3286,
+      "all_P": 71.1662,
+      "all_N": 71.1446,
+      "all_abs_skew_mm": 0.0216
+     }
+    ]
+   },
+   "l9_A_in5": {
+    "label": "l9 A UPn",
+    "max_in5_skew_mm": 1.72,
+    "max_all_skew_mm": 0.0216,
+    "pairs": [
+     {
+      "pair": "0",
+      "in5_P": 21.2924,
+      "in5_N": 20.2,
+      "in5_abs_skew_mm": 1.0924,
+      "all_P": 45.7373,
+      "all_N": 45.7235,
+      "all_abs_skew_mm": 0.0138
+     },
+     {
+      "pair": "1",
+      "in5_P": 24.3,
+      "in5_N": 24.4,
+      "in5_abs_skew_mm": 0.1,
+      "all_P": 49.6888,
+      "all_N": 49.675,
+      "all_abs_skew_mm": 0.0138
+     },
+     {
+      "pair": "2",
+      "in5_P": 28.0,
+      "in5_N": 29.1,
+      "in5_abs_skew_mm": 1.1,
+      "all_P": 54.0206,
+      "all_N": 54.042,
+      "all_abs_skew_mm": 0.0214
+     },
+     {
+      "pair": "3",
+      "in5_P": 34.4076,
+      "in5_N": 34.5,
+      "in5_abs_skew_mm": 0.0924,
+      "all_P": 60.7826,
+      "all_N": 60.7964,
+      "all_abs_skew_mm": 0.0138
+     },
+     {
+      "pair": "4",
+      "in5_P": 54.41,
+      "in5_N": 53.8176,
+      "in5_abs_skew_mm": 0.5924,
+      "all_P": 59.1164,
+      "all_N": 59.1026,
+      "all_abs_skew_mm": 0.0138
+     },
+     {
+      "pair": "5",
+      "in5_P": 52.74,
+      "in5_N": 52.1476,
+      "in5_abs_skew_mm": 0.5924,
+      "all_P": 56.3764,
+      "all_N": 56.3626,
+      "all_abs_skew_mm": 0.0138
+     },
+     {
+      "pair": "6",
+      "in5_P": 46.92,
+      "in5_N": 48.64,
+      "in5_abs_skew_mm": 1.72,
+      "all_P": 50.6857,
+      "all_N": 50.6857,
+      "all_abs_skew_mm": 0.0
+     },
+     {
+      "pair": "7",
+      "in5_P": 45.35,
+      "in5_N": 45.5287,
+      "in5_abs_skew_mm": 0.1787,
+      "all_P": 47.9043,
+      "all_N": 47.9258,
+      "all_abs_skew_mm": 0.0216
+     }
+    ]
+   }
+  }
+ },
+ "judgement": "**不自行判 PASS/FAIL、不自定/调阈值、不改判据**（R408 自纠精神）。仅陈述：(a) 若监理判『0.15mm 适用于家族 B（②-UP）且口径=In5-only』⇒ l9 现值 **6.0017mm ≫ 0.15 ⇒ FAIL**（且该值 = 既有逃逸布线读数，终态 16 线束落定后须重测）；(b) 若判『口径=全层』⇒ l9 家族 B = 0.6135mm ⇒ 仍超 0.15 ⇒ FAIL；(c) 若判『0.15 仅辖家族 A』⇒ 家族 A 全层 0.0216（≤0.15，PASS）；In5-only 1.72（若采 In5-only 则 FAIL）。**任一读法下『未具名』皆为口径缺口**。",
+ "caliber_requests_to_supervisor": [
+  "Q1（辖域）：`drc_rules.json::diff_pair` 之 **selector** 是 **suffix 字面**（_P/_N 结尾）还是 **substring**（含 _P/_N）？若不改 selector，②-UP 16 条（`PCIE_UP_OUT*_*_J2`）字面**不在辖域**；而 R270 项5 之基线却测的是它们 ⇒ **请钉死**。",
+  "Q2（口径）：『对内等长』判据之度量 = **端到端总长差** 还是 **In5-only 差**？（R270 项5 标题与基线皆指 **In5-only**；而一般差分对语义应为端到端总长差 —— 两者对 l9 家族 A 给出 0.0216 vs 1.72 之 80× 差异。）",
+  "Q3（族）：项5 之『②-UP 16 条』是否**仅**指 `PCIE_UP_OUT<N>_{P,N}_J2`（家族 B），抑或**两族各 16 条全计**？",
+  "**均属 owner #14⑦『口径澄清 = 监理自裁』** ⇒ ENG 不自裁、不改判据、不代填阈值。"
+ ],
+ "buildability": "(不涉几何动作：本件纯读数/册证)；**未动任何对象**（无搬迁清单需求 —— owner ⑧：本件不作『可行/见证』类成果，不据以开工）。",
+ "artifacts": {
+  "readings_json": "/tmp/opencode/k2r410/up_pair_skew_in5.json（工作副本 · 未入库）",
+  "in_register_baseline_match": "R270 §一 项5『6.002mm@pair4』= 本件 family B In5-only 6.0017mm @pair4（**逐位复算一致**）"
+ },
+ "anchors": {
+  "board_l9": "77aaa63fe016b450",
+  "board_l8": "7a5c89913d6e5d0a",
+  "drc_rules": "0a459839e15960b8",
+  "spec_rev55": "964101b19015f6d7",
+  "criteria": "rev=6 MATCH",
+  "frozen4": "4/4 未动"
+ },
+ "not_asked": [
+  "不请求 owner（口径澄清属监理自裁 · #14⑦）· 未改判据/阈值/真源/受审板 · 未派 WORKER · 未烙板 · 不缩口径"
+ ]
+}
