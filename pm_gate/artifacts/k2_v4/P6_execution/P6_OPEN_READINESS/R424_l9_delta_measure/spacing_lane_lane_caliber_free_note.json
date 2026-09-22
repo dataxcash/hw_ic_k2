@@ -1,0 +1,19 @@
+{
+ "claim": "**束间（lane↔lane = 16 网 `PCIE_UP_OUT*_J2` 互距）面：l8 与 l9 等价（caliber-free）** —— 由 F1/F7：16 网之 In5 铜在两板**逐字节相同** ⇒ **任何**距离度量下两板同值 ⇒ R416 所记 `inter_pair_min edge 0.4491 / center 0.6091 @ OUT0_P|OUT1_P` **在 l8 上同为 0.4491**。",
+ "empirical_check": {
+  "caliber": "本件自定（全 In5 对象 · 段/孔 · 边距=中心距−半宽和）· **非正式口径**",
+  "l9_inter_pair_min": {
+   "edge": 0.245,
+   "center": 0.5,
+   "at": "PCIE_UP_OUT5_P_J2|PCIE_UP_OUT5_N_J2"
+  },
+  "l8_inter_pair_min": {
+   "edge": 0.245,
+   "center": 0.5,
+   "at": "PCIE_UP_OUT5_P_J2|PCIE_UP_OUT5_N_J2"
+  },
+  "identical": true
+ },
+ "honest_boundary": "lane↔**非 lane** 面（l9 之 `0.2531` @ OUT0_N×PERSTA#）在 l8/l9 **不同**（l8 颈内有 PERSTA#/straps 铜）：欲在 l8 上复现该面读数须**先钉死口径**（R417 §D1 未放行）。**本件不报该面读数、不以自定口径充正式读数**（C-12 不得为变绿缩/换口径）；亦**不裁**『0.435 是否亦管 lane↔非lane』（R416 按 0.175 判 · #K2-143 措辞可两读 ⇒ 口径归属监理）。",
+ "consequence": "**R416 之『间距面 PASS』之 l8 类比 = 成立且 caliber-free**（同一批对象）；故『回退到 l8』在**束间面**不减分。剩余待钉者唯 lane↔非lane 之口径与 l8 上之读数（交监理 D1）。"
+}

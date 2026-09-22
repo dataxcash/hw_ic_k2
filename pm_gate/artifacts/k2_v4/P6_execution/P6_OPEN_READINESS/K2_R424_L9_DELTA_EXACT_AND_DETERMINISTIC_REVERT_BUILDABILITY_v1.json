@@ -34,7 +34,8 @@
   "**F5（同会话独立 DRC A/B）**：**l8 = 0 error**（204 warning · unconn 0）· **l9 = 59 error**（shorting 19 · tracks_crossing 6 · clearance 21 · hole_clearance 13 · 208 warning · unconn 0）—— 与在册 R410 逐类同。",
   "**F6（搬迁之唯一目的 = 腾 In5 窄颈给 16 lane）**：R331 定性 4 网之 neck-window（x∈[93,112]×y∈[44,58]）In5 铜为「候选 lane 阻塞物」（零候选 lane 8/16→0/16）；#K2-136 §三 之联合收口窗口 = ①修工具 ②落搬迁 ③**建 16 lane** ④核同时性 ⇒ **C-w 搬迁存在的理由就是 16/16 lane 程序**。",
   "**F7（搬迁不动 ②-UP 16 网）**：差集 4 网 = `PERSTA#` / `DS320_STRAP_B_ADDR1_7-0` / `DS320_STRAP_B_ADDR0_15-8` / `I2C1_SDA`，**皆非** `PCIE_UP_OUT*_J2` ⇒ ②-UP 16 网之 In5 铜在 l8/l9 **逐字节同**（与 R414 之 impact envelope 一致）。",
-  "**F8（增集来源 · 25/303 段为 /tmp 临时件）**：按施加器之 ADD 代码静态重建 305 个新增对象 ⇒ 与磁盘差集 **303/303 逐条命中**；来源 = `PERSTA#` 278 段（**仓内** `K2_R337_CW_PERSTA_DESTINATION_ROUTE_v1.json`）+ **3 网 25 段（`ADDR1_7-0` 4 · `ADDR0_15-8` 18 · `I2C1_SDA` 3）之唯一来源为 `/tmp/opencode/k2r135*/**.json`（非仓内）** ⇒ **l9 之这 3 网铜无法仅由仓内状态重新生成**（R413 G 系缺口之量化坐实）。"
+  "**F8（增集来源 · 25/303 段为 /tmp 临时件）**：按施加器之 ADD 代码静态重建 305 个新增对象 ⇒ 与磁盘差集 **303/303 逐条命中**；来源 = `PERSTA#` 278 段（**仓内** `K2_R337_CW_PERSTA_DESTINATION_ROUTE_v1.json`）+ **3 网 25 段（`ADDR1_7-0` 4 · `ADDR0_15-8` 18 · `I2C1_SDA` 3）之唯一来源为 `/tmp/opencode/k2r135*/**.json`（非仓内）** ⇒ **l9 之这 3 网铜无法仅由仓内状态重新生成**（R413 G 系缺口之量化坐实）。",
+  "**F9（束间面 l8≡l9 · caliber-free）**：16 网 In5 铜两板**逐字节同** ⇒ **任何**口径下束间（lane↔lane）读数相同 ⇒ R416 之 `0.4491` **在 l8 上同值**；故『回退到 l8』在束间面**不减分**。lane↔非lane 面两板不同 ⇒ 其口径未钉死（D1），**本件不报该面读数**（C-12）。"
  ],
  "delta_census": {
   "tracks": {
@@ -269,7 +270,8 @@
  "files": [
   "K2_R424_L9_DELTA_EXACT_AND_DETERMINISTIC_REVERT_BUILDABILITY_v1.json/.md/.sha16.txt",
   "R424_l9_delta_measure/（delta_tracks_added_303 · delta_tracks_removed_27 · delta_vias_added2_removed4 · drc_ab_l8_l9_same_pro · file_level_identity_proof · uuid_crosscheck_R411）",
-  "R424_l9_delta_measure/provenance_of_added_303.json"
+  "R424_l9_delta_measure/provenance_of_added_303.json",
+  "R424_l9_delta_measure/spacing_lane_lane_caliber_free_note.json"
  ],
  "not_asked": [
   "未就拓扑/接口/信号流向/球重映射提问（无涉 · L2 自裁面）· 未直接升级 owner（owner 项已在途 #K2-142，不重复呈报）"
