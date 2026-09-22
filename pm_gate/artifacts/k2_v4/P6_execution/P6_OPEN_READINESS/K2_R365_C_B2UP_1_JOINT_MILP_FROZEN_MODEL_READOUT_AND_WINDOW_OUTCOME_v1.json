@@ -1,0 +1,63 @@
+{
+ "schema": 1,
+ "artifact": "k2_r365_c_b2up_1_joint_milp_frozen_model_readout_and_window_outcome_v1",
+ "ts": "2026-09-22T09:53+0800",
+ "from": "ENG · ARCHER R365（应 #K2-134 §二 (甲) 之单次实现窗口）",
+ "to": "监理",
+ "authority": "#K2-134（(甲) 准：C-B2UP-1 联合构造器 · 一次实现·一次交付·冻结模型·限期一窗口·二值）· §二.4（须公布跨缝读数）· §二.5（context 不足 ⇒ 先交 ②读数+冻结模型+求解日志+独立复核）· #K2-132 §三.6 · #K2-133 §三 N1",
+ "owner_gate": 0,
+ "first_action": "已读 #K2-134（最新裁定）⇒ 按其 §二 (甲) 执行（冻结模型 C-B2UP-1）。",
+ "seam_readout_§二4": {
+  "line": "y=54.880",
+  "method": "cell 0.02 · 物理口径 keepout 0.5300 · lane 铜按全转口径排除",
+  "n_free_intervals": 16,
+  "total_capacity": 143,
+  "discrete_slot_band": "x∈[93.4,108] · **11 槽** · 单槽宽 [0.62,0.78,0.78,0.78,0.78,0.78,0.78,0.78,0.34,0.80,0.70] · **Σ容量 21**",
+  "concurs_with": "R353 §1（11 离散槽 · Σ容量 148@cell0.03；本轮 cell0.02 Σ143 ⇒ 同量级，槽数一致）⇒ 闭合 F-4/v47 之争"
+ },
+ "frozen_model": {
+  "model_id": "C-B2UP-1_PORTAL_STAIRCASE_MILP_v1",
+  "model_sha16": "82eb35c856d7a704",
+  "decision": "每 lane：portal∈{P1(缝槽带 y=54.880), P2(东门 x≈134.5)} × 上通道标高 t_i(y∈[56.6,63.6]) × 下潜列 x_s_i(x∈[134.9,143.7]) × 连接器层 ye_i(y∈[B.y+0.15,60])",
+  "constraints": [
+   "(1) 每 lane 各变量恰一取值；portal 二值",
+   "(2) 共享平行轨/列/层两两互距 ≥0.435",
+   "(3) 端点位移 0",
+   "(4) 自由域（cell≤0.03 · keepout 0.5300）逐段可放",
+   "(5) 非交叉以『孔两侧枢纽穿越序』编码（显式绕墙 winding）",
+   "(6) 连接器非交叉（R316 (iv) 形式：B.x 竖段 × ye 水平段）",
+   "(7) 上通道入口序 = T1′（t 随 a_rank 递减）",
+   "(8) 下潜列序与 ye 序相反"
+  ],
+  "objective": "最大化布通 lane 数（目标 16/16）",
+  "solver": "scipy.optimize.milp (HiGHS) · 求解器内部迭代 · 模型求解前冻结（零改模型）"
+ },
+ "window_outcome": {
+  "①读数": "**已公布**（§二.4 达标）",
+  "②冻结模型": "**已冻结**（model_sha16 `82eb35c856d7a704` · 规格如上）",
+  "③逐 lane 可行性（已实测）": "**16/16 lane 皆有可行 (t, x_s, ye) 三元组**（最小 87 @0_N · 112 @6_N · 115 @7_P）⇒ 单 lane 几何非卡点",
+  "④联合求解": "**未在窗口内完成** —— 联合非交叉约束（含 portal 选择 × 枢纽穿越序）之 ILP 规模（~1.7×10⁴ 二进制 + 逐对互斥约束）超出本窗口；**未做任何模型改动/参数扫描/变体重跑**",
+  "二值": "**(a) 未取得 · (b) 不成立**",
+  "buildability": {
+   "mode": "no_move",
+   "note": "纯只读：未烙板 · 未改任何网几何 · 未动冻结四源/判据/生成器/SPEC ⇒ 不动证明成立。「施工队照此图能否直接连」：**不能** ⇒ 图纸层缺图。"
+  }
+ },
+ "attribution_per_§二.7": "本窗口**仍无 (a)/(b)** ⇒ 依 **#K2-134 §二.7**：**不再续授同类无扫描窗口**，**转 §三 (乙) C-w 清单路径**（#K2-133 §四条件已满足 · #K2-134 §三 预声明有效）。",
+ "next_per_§二7": "下一动作 = 依 **#K2-134 §三 / #K2-133 §四** 提交 **`mode B` 搬迁清单**（逐项具名 网/孔 · 动到哪 · 依据）+ **`ref_plane_continuity`** 证明 + **`buildability.mode=\"relocation_listed\"`** ⇒ 监理**即批**（预声明）。可复用 R331（C-w 对象表）· R332（refplane 域）。",
+ "not_done": [
+  "未改模型/参数/工具/口径（禁变体重跑）",
+  "未以布通率/有界搜索冒充见证或证书",
+  "未烙板 · 未派 WORKER · 临时仅 /tmp/opencode",
+  "未写 .omo/supervision/**",
+  "未请求 owner（未触 L1）"
+ ],
+ "reproduce": [
+  "python3 /tmp/opencode/k2r360/model_freeze.py  # ①读数 + 冻结模型(model_sha16)",
+  "python3 /tmp/opencode/k2r360/joint_milp.py    # 逐 lane 可行性(~1.7e4 triples)"
+ ],
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "450b8b19726b745c"
+ }
+}
