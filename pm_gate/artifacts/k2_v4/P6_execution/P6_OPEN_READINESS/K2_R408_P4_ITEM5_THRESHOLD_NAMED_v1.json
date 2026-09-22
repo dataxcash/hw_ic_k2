@@ -1,0 +1,46 @@
+{
+ "SELF_CORRECTION": {
+  "action": "**不改判据、不自造阈值**；请监理/owner 就 ②-UP 对内等长阈值**具名**（属口径/判据语义 = 监理职权，或改冻结需求 = owner）。",
+  "consequence": "该阈值**是否**同样适用于 `PCIE_UP_OUT*` 16 条（②-UP）**未由册证** ⇒ 本件**不得**将其当作 ②-UP 之判据。",
+  "finding": "**自纠**：查册所得 `0.15mm` 阈值之**具名主体**为 `PCIE_REFCLK0/1`（**对内等长**）——见证据片段（如『须 P 侧幂绕补偿至 intra_pair_skew_mm <= 0.15』）。",
+  "net_effect": "item5『阈值待具名』子项**并未闭合**（②-UP 侧阈值仍**未具名**）；本件只登记『REFCLK 对内 = 0.15mm』这一**册证事实**，并**如实撤回**先前对 ②-UP 的适用推断。"
+ },
+ "artifact": "k2_r408_p4_item5_threshold_named_from_frozen_spec_v1",
+ "boundary": "只读 · 零改 · 未烙板 · 未改冻结四源/criteria/生成器/SPEC 设计内容 · 未派 WORKER",
+ "from": "ENG · ARCHER R408",
+ "honest_verdict": {
+  "judgment": "**不作 PASS/FAIL 判**（且阈值主体为 REFCLK · 见 SELF_CORRECTION）",
+  "not_claimed": "不以 6.0017 > 0.15 判 FAIL（终态未定）· 不缩口径（C-12）",
+  "what_this_closes": "**未闭合**（自纠后）：只登记册证事实『REFCLK 对内 ≤0.15mm』；②-UP 侧阈值**仍待具名**。"
+ },
+ "l9_reading_mm": {
+  "max_in5_inpair_skew_mm": 6.0017,
+  "source": "R406（只读文本解析 · In5 长走长度差）"
+ },
+ "nature": "P4 门项 item5 之**阈值具名**（**取自冻结件 · 非自造**）+ l9 读数对照",
+ "o2_o3_window_run_declaration": {
+  "this_artifact": "只读查册 + 读数对照 · 无求解器/新法/变体/扫描",
+  "variant_reruns_registered": [
+   "R384",
+   "R387",
+   "R388"
+  ]
+ },
+ "schema": 1,
+ "threshold_source": {
+  "evidence_snippets": [
+   "N 增 ~2.4mm(REFCLK0)/~8.0mm(REFCLK1) ⇒ 须 P 侧幂绕补偿至 intra_pair_skew_mm <= 0.15",
+   " 10）**：对 `PCIE_REFCLK0/1` 两对 4 条链做**设计层重派生**为 0/45/90°，含**对内等长修复**；守恒闸 = 85Ω±10%（宽/叠层不变）· 对内 ≤0.15 · 逃逸不退化 · 非 45°=0。",
+   "45° 锯齿 21.637 + 直段细密调长 0.981」⇒ 净 −1.041mm（仍在对内 ≤0.15 之内，且使对内等长由 **1.1046 → 0.0000**）。",
+   "**对内等长（冻结 18 对口径）**：0.0787 → **0.0788**（≤0.15）。全命名对（含 `_MCIO`/`_J2"
+  ],
+  "files": [
+   "k2/pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-55.json",
+   "_shared/eda_core/drc_rules.json"
+  ],
+  "frozen_threshold_mm": 0.15,
+  "statement": "**阈值 = 0.15mm**（对内等长）· 逐字取自冻结 SPEC rev-55 与 drc_rules.json ⇒ **非自造、非改判据**。"
+ },
+ "to": "监理",
+ "ts": "2026-09-22T22:49:28+08:00"
+}
