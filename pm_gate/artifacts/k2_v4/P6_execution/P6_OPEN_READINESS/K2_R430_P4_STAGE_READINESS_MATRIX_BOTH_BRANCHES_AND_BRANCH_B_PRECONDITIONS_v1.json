@@ -1,0 +1,131 @@
+{
+ "schema": 1,
+ "artifact": "k2_r430_p4_stage_readiness_matrix_both_branches_and_branch_b_preconditions_v1",
+ "ts": "2026-09-23T00:24:49",
+ "from": "ENG · ARCHER（续接会话 · 承 handoff R423）",
+ "to": "监理",
+ "owner_gate": 0,
+ "authority": "**#K2-145**（裁定①②④⑤⑥ · 指令1–4）· **#K2-142 §四**（停手令）· #K2-143 §四 · #K2-136 §二/§三 · #K2-137 §二(甲) · R417（分支 runbook）· R424–R429 · owner #14⑥（找活/造活）",
+ "first_action": "已读 **#K2-145**（最新 · 无更晚裁定 · 无 owner 回件）⇒ 指令1 停手维持 ⇒ 本件**零生产动作**，仅只读索引预装。",
+ "nature": "**只读就绪度矩阵 + 乙分支前置清单**（**索引件 · 非里程碑 · 非见证 · 未新增检查齿 · 未改任何件**）。承 #K2-136『只读普查不充件』——本件**不充任何阶段判定**。",
+ "headline": "**两条分支的「还差什么」已并排摆好**：甲侧（owner 放宽）**仅差一次正式复核**（板上 DRC=0 · DFM 0 FAIL · 交付包已在册且可复现）；乙侧（owner 维持）**差一整套**：合法底板 + 修工具(C-LAYER-REC) + D1 抽取件 + 真建 16 lane（设计）+ 新板 + 重出包 —— 且**全部须 owner 重开生产窗**方可动。",
+ "stage_chain": {
+  "P0_P3": "过",
+  "P4": "**HOLDS**",
+  "P5": "PENDING_EXTERNAL（商务/外部）",
+  "P6": "CLOSED",
+  "越阶段禁区": "**P4 未全绿 ⇒ 不出包/不下单/不越阶段**（fail-closed）· owner ④：下单/报价/交期属商务，不列 ENG 阻塞项"
+ },
+ "matrix": [
+  {
+   "req": "① 判据 rev=6 十九维",
+   "branch_A_revert_l8": "**l8 = 19 OK / 0 FAIL**（在册 E3-standard-call-l8「errata-3」净表）；本会话 DRC **error=0** 复核",
+   "branch_B_keep": "需在**新板**上重跑到 19/19",
+   "owner_of_gap": "ENG"
+  },
+  {
+   "req": "② **②-UP 16/16（≤2 孔 · 单层长走）**",
+   "branch_A_revert_l8": "**须 owner 放宽该条**（实测：16 网各 **4 孔** F→In2→In5→B，两版逐对象同）",
+   "branch_B_keep": "须**真建 16 lane**（设计）+ 新板",
+   "owner_of_gap": "**owner** → 后 ENG"
+  },
+  {
+   "req": "③ ②-DN 具名豁免 **EX-1**（#K2-73：≤2 孔缓至 4）",
+   "branch_A_revert_l8": "**deviation 在 ⇒ 豁免生效**（实测 DN_OUT*_MCIO 16 网各 **4 孔**，l8/l9 逐网同）",
+   "branch_B_keep": "同（豁免随网）",
+   "owner_of_gap": "监理（已裁）"
+  },
+  {
+   "req": "④ ref_plane_continuity",
+   "branch_A_revert_l8": "@l8 = **0.0 mm²**（R410）",
+   "branch_B_keep": "需重测",
+   "owner_of_gap": "ENG"
+  },
+  {
+   "req": "⑤ 等长（In5 N/P skew）",
+   "branch_A_revert_l8": "**口径未具名**（R412：在册 selector 与尾 `_J2` 网不符）⇒ 监理口径 · **两分支同**",
+   "branch_B_keep": "同",
+   "owner_of_gap": "**监理**"
+  },
+  {
+   "req": "⑥ 3W / 85Ω",
+   "branch_A_revert_l8": "3W @l8 ✓（min 0.500 ≥ 0.480）；85Ω = **P5 外部**（阻抗券）",
+   "branch_B_keep": "同",
+   "owner_of_gap": "外部"
+  },
+  {
+   "req": "⑦ 平面/铺铜/钻孔前置",
+   "branch_A_revert_l8": "@l8 全 PASS",
+   "branch_B_keep": "需重做",
+   "owner_of_gap": "ENG"
+  },
+  {
+   "req": "⑧ `criteria` rev=7",
+   "branch_A_revert_l8": "gate 属主 `ic_hw_gate`；**回退后其「l9 落库硬前置」须重判**",
+   "branch_B_keep": "gate 属主",
+   "owner_of_gap": "**gate 属主**"
+  },
+  {
+   "req": "⑨ 受审板落 `hw/`",
+   "branch_A_revert_l8": "**l8 已在库 ⇒ 自动满足**（回退仅为指针/删除动作）",
+   "branch_B_keep": "需落**新板**",
+   "owner_of_gap": "ENG"
+  },
+  {
+   "req": "⑩ SPEC 声明",
+   "branch_A_revert_l8": "**新 rev-55**（以 rev-54 为底 + **仅三处文字** · 草案 sha16 `48933863ef621510` 已备）",
+   "branch_B_keep": "rev-56（承 rev-55）",
+   "owner_of_gap": "监理（已裁落点）"
+  },
+  {
+   "req": "⑪ Gerber/钻孔/打包 + DFM 逐项",
+   "branch_A_revert_l8": "**`l8r3` 包已在册**：DFM **16 PASS / 1 ACCEPT / 0 FAIL** · 校验 **55/55** · 本会话复现 **14/14 + 15/15** ⇒ **仅差一次正式复核**",
+   "branch_B_keep": "须**随新板重出**（含新 DFM/叠层/阻抗）",
+   "owner_of_gap": "ENG（正式复核须放行）"
+  },
+  {
+   "req": "⑫ P5 打样",
+   "branch_A_revert_l8": "商务/外部（owner ④：非 ENG 任务）",
+   "branch_B_keep": "同",
+   "owner_of_gap": "外部"
+  },
+  {
+   "req": "⑬ **R417 §D1** 抽取件（板→每网折线）",
+   "branch_A_revert_l8": "**不适用**（不建 lane ⇒ 无折线可消费）",
+   "branch_B_keep": "**需要**（R401 `exact_gate` 消费每 lane 折线）",
+   "owner_of_gap": "**监理**（放行新抽取件或钉等价口径）"
+  },
+  {
+   "req": "⑭ **C-LAYER-REC**（模型须能表示平面层）",
+   "branch_A_revert_l8": "**不适用**",
+   "branch_B_keep": "**需要**（#K2-136 §二：修工具 + 记新 `model_sha` = ②(ii) 几何核之前提）",
+   "owner_of_gap": "ENG（窗内）+ 监理"
+  },
+  {
+   "req": "⑮ **②-UP (b)** 严格不可行证书",
+   "branch_A_revert_l8": "**不适用**（若裁甲）",
+   "branch_B_keep": "**需要**（真实几何上 U<16 严格证书 · 禁以模型类上界冒充）",
+   "owner_of_gap": "ENG（窗内）· 终局二值"
+  }
+ ],
+ "branch_B_precondition_order": [
+  "**0 · owner 明示重开生产窗**（#K2-142 选项2 · 无条件不得动工 · 裁定②：授权随窗令而来）",
+  "**1 · 修工具（C-LAYER-REC）**：让模型能表示平面层（补 parser/铺铜）· **求解前冻结并记新 `model_sha`**、全程零改（#K2-136 §二）",
+  "**2 · 先有一块合法底板**：现行 l9 非法（59 error）⇒ 依 R426 回退（=确定性·零设计）或另修；**底板 legality 为窗内硬前置**",
+  "**3 · 方案先行（spec-first）**：口径/判据/方案件先落 · 禁边做边改",
+  "**4 · 一次实现 · 一次运行**（#K2-132 §三 · 禁同参重跑 ≥2 · 禁变体/参数扫描）",
+  "**5 · R401 正式闸 = 唯一一发**（预登记一次性仪器）⇒ **二值**：合法 16/16 见证 + `buildability`，或真实几何上严格 U<16 证书",
+  "**6 · 越包/交付**：随新板重出 Gerber/钻孔/叠层/阻抗 + 重跑 DFM"
+ ],
+ "not_a_milestone": "**本件不构成阶段判定、不构成见证、不主张 P4 已过**。仅把「两条分支各自还差什么、谁属主」并排呈上，供监理在 owner 回件后**一次判定**（承 #K2-145「两条分支的执行程序预装到位 · 无二次往返」）。",
+ "self_check": [
+  "零生产动作（未删 l9/未改 project.yaml/未建删 SPEC/未跑正式闸/未出包/未烙板/未派工）。",
+  "新增读数仅两项：DN_OUT*_MCIO 与 UP_OUT*_J2 之逐网孔数（l8/l9 各 16 网 · 各 4 孔 · 逐网相同）⇒ 支撑 ②/③ 两行之『两版同』。",
+  "未新增检查齿 · 未改 `criteria/`（rev=6 MATCH）· 未改 SPEC/生成器/原理图。",
+  "**未**把『甲侧仅差一次复核』写成『P4 已过』；**未**把本索引写成里程碑。"
+ ],
+ "files": [
+  "K2_R430_P4_STAGE_READINESS_MATRIX_BOTH_BRANCHES_AND_BRANCH_B_PRECONDITIONS_v1.json/.md/.sha16.txt",
+  "R430_readiness_measure/ex1_and_up16_via_counts.json"
+ ]
+}
