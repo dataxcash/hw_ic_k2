@@ -1,0 +1,65 @@
+{
+ "schema": 1,
+ "artifact": "k2_r373_closure_window_item2_cw_relocation_blocked_by_pcb_spec_gate_v1",
+ "ts": "2026-09-22T12:20+0800",
+ "from": "ENG · ARCHER R373（应 #K2-136 §三『联合收口窗口』项2）",
+ "to": "监理",
+ "owner_gate": 0,
+ "authority": "#K2-136 §三 项2（落搬迁：按 v55 清单实施 C-w 搬迁）· 全局 AGENTS.md/宪法第九条（**冲突即停机**）· 项目 pre-commit 门禁（PCB↔SPEC）",
+ "first_action": "已读最新裁定 #K2-136 ⇒ 执行项2『落搬迁』。",
+ "what_i_did": {
+  "step": "文本级 S-expr 编辑：l8 → 新实例 l9，按 v55 清单实施 C-w 搬迁（不改 l8/冻结四源）",
+  "deleted": "ADDR1_7-0: 11 段窗内 In5 铜 + 2 枚 In2↔In5 孔 · ADDR0_15-8: 1 枚窗内贯通孔 · I2C1_SDA: 3 段窗内 In5 铜 + 1 枚 In5↔B.Cu 孔 · PERSTA#: 13 段窗内缠结 In5 铜",
+  "added": "ADDR1_7-0: In2 替代走线 · ADDR0_15-8: 新孔 (92.98,48.06) + F.Cu/B.Cu stub · I2C1_SDA: 新孔 (92.54,51.86) + In5/B.Cu stub · PERSTA#: R337 坐标化低位直走走线",
+  "delta": "segments 5180→5456 · vias 742→740",
+  "self_verification": "括号平衡 0 · 对象差分一致 · **三网颈内 In5 段与跨 In5 孔皆 = 0**（PERSTA# 改为低位直走，仍过窗但占窄带）",
+  "proposal_sha16": "05d7db3c183496bd（**提案** · 仅存 /tmp/opencode/k2r373/，**未入库**）",
+  "applier": "K2_R373_CW_RELOCATION_APPLIER_v1.py（可复跑生成提案）· K2_R373_L9_VERIFY_v1.py（复核）"
+ },
+ "blocking_finding": {
+  "gate": "k2 pre-commit：`[pipeline:pre-commit] 全局 PCB↔SPEC 对应检查`",
+  "message": "PCB 产物变更 ['hw/k2_v4_8L.l9.kicad_pcb'] 无对应 SPEC 变更 — 必须先修订 SPEC (SPEC_*.json / artifacts/L3/*.json) 再重建, 禁止直改 PCB",
+  "verdict": "✗ PCB↔SPEC 对应未通过 — **拒绝提交**",
+  "conflict": "**#K2-136 §三 项2（『落搬迁』= 实施 C-w 搬迁）** 与 **项目门禁（禁止直改 PCB · 须先修订 SPEC 再重建）** 直接冲突；且 #K2-136 §五 明列『**未获批不得改生成器/SPEC/原理图**』⇒ ENG **无权限**自行改 SPEC 以满足门禁。",
+  "eng_action": "依**宪法第九条（冲突即停机）**：**停手 · 不绕门禁**（未用 `--no-verify`、未手改 SPEC、未回写 l8/冻结件）· 提案件移至 /tmp 保留。",
+  "no_harm": "l8 与冻结四源**逐字节未动**（复核：`7a5c89913d6e5d0a` / `d4e81f647be7f980` / `fb07d25ac426ff84` / `dd794c54f7ce7417` / `0a459839e15960b8`）；工作树未留 PCB 变更。"
+ },
+ "requested_ruling": [
+  "请监理**自裁**项2 之**实施路径**（属放行范围/工具路径 = 监理自裁面 · 非 owner）：**(甲) SPEC 驱动路径** —— 准 ENG 依 C-w 清单**修订对应 SPEC**（`SPEC_*.json` / `artifacts/L3/*.json`）并**由生成器重建**板实例（符合门禁原意）；或 **(乙) 实例编辑路径** —— 准本次『l9 = l8 + v55 清单』之**受裁直改**（并明示门禁之 carve-out 范围与留痕要求）。",
+  "两案皆不改冻结四源；ENG 均不请求 owner。"
+ ],
+ "side_finding": {
+  "note": "项目门禁本身工作正常且有价值 —— 本件即其拦下『直改 PCB』之实测证据（第三条第零写复核逻辑之下，ENG 自证）。"
+ },
+ "buildability": {
+  "mode": "no_move",
+  "note": "本轮**无 PCB 落件**（门禁已拒）· 未烙板 · 未改任何工程件 · 临时仅 /tmp/opencode。",
+  "施工队问答": "**不能** —— 搬迁尚未合法落件（路径待裁）；线束主图亦未出 ⇒ 图纸层缺件。"
+ },
+ "anchors": {
+  "board_l8_sha16": "7a5c89913d6e5d0a",
+  "frozen4": [
+   "d4e81f647be7f980",
+   "fb07d25ac426ff84",
+   "dd794c54f7ce7417",
+   "0a459839e15960b8"
+  ],
+  "criteria": "rev=6 MATCH",
+  "external": 1,
+  "prev": "K2_R372_CLOSURE_WINDOW_ITEM1_PLANE_TOOL_FIX_AND_REFPLANE_GEOMETRIC_CLOSURE_v1（项1 DONE · ②(ii) CLOSED）"
+ },
+ "window_status": {
+  "项1 修工具": "DONE（R372）",
+  "②(ii) 几何级": "CLOSED（R372）",
+  "项2 落搬迁": "**BLOCKED — 门禁拒『直改 PCB』· 待监理裁路径（甲/乙）**",
+  "项3/4/5（建 16 lane · 同时性 · 二值）": "NEXT（依赖项2）"
+ },
+ "not_asked": [
+  "不请求 owner（未触 L1）",
+  "未绕门禁（未用 --no-verify）· 未改 SPEC/生成器/原理图/判据 · 未派 WORKER"
+ ],
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A（值置空串）",
+  "convention_A_sha16": "078dfc777a03c6a8"
+ }
+}
