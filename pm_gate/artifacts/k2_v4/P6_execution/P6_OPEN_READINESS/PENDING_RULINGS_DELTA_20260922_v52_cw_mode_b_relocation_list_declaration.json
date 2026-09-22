@@ -1,0 +1,71 @@
+{
+ "schema": 1,
+ "artifact": "pending_rulings_delta_20260922_v52_cw_mode_b_relocation_list_declaration",
+ "ts": "2026-09-22T09:54+0800",
+ "from": "ENG · ARCHER R366（应 #K2-134 §二.7 / §三 转 C-w 清单路径）",
+ "to": "监理",
+ "authority": "#K2-134 §二.7（无 (a)/(b) ⇒ 转 §三 (乙) C-w）· #K2-134 §三（C-w 申报开放·预声明：满足①–⑤ 即批）· #K2-133 §四（须先交 mode B 搬迁清单 + ref_plane_continuity + buildability）",
+ "owner_gate": 0,
+ "declaration": "**C-w（`mode B` 搬迁）申报** —— 请求监理按 #K2-134 §三 预声明**批准**（ENG 不自行执行）。",
+ "req_①_逐项具名_mode_B清单": {
+  "neck_window": [
+   93.0,
+   44.0,
+   112.0,
+   58.0
+  ],
+  "nets": [
+   "DS320_STRAP_B_ADDR1_7-0",
+   "DS320_STRAP_B_ADDR0_15-8",
+   "PERSTA#",
+   "I2C1_SDA"
+  ],
+  "objects_evidence": "R331 `K2_R331_CW_RELOCATION_OBJECT_LIST_v1.json`（约定A `1a51ba6abf46bddd`）—— 逐网之 **In5 段（坐标级）** 与 **孔（vias_in_neck / vias_outside_neck）** 全表",
+  "动到哪_destinations": {
+   "PERSTA#": "**已给**（坐标化）：R337 `K2_R337_CW_PERSTA_DESTINATION_ROUTE_v1.json` —— 替代走线 ports (83.8,50.5)→(117.9,55.6) 穿越窄颈（cell 0.02 · hw 0.08 · pitch 0.435）",
+   "DS320_STRAP_B_ADDR1_7-0": "**待给**（对象已具名 R331；替代走线未出）",
+   "DS320_STRAP_B_ADDR0_15-8": "**待给**（同上）",
+   "I2C1_SDA": "**待给**（同上）"
+  },
+  "判": "要件① **部分完成**：4 网对象全具名（坐标级）；**去向 1/4 已给**（PERSTA#）· **3/4 待给** ⇒ **本件按 #K2-133 §四 仍不满足『逐项具名 动到哪』之硬前置**（如实在此标注）"
+ },
+ "req_②_ref_plane_continuity": {
+  "evidence": "R332 `K2_R332_CW_REFPLANE_CONTINUITY_FIELD_v1.json`",
+  "判": "所列 4 网**全部为信号网**（`is_plane_net=False`）⇒ 腾挪**不涉及**任何参考平面 · **135 枚固定缝合孔不在对象内** ⇒ 平面/缝孔连续性**不因本次而破**。**残余**：被腾挪信号自身之参考层回流通路尚未逐网核（R332 自述）"
+ },
+ "req_③_端点球位不动": {
+  "evidence": [
+   "R334 `K2_R334_CW_REQ3_PERSTA_ENDPOINT_FIXEDNESS_v1.json`（PERSTA# 端点固定性）",
+   "R335 `K2_R335_CW_REQ3_PERSTA_REROUTE_EXISTENCE_v1.json`（PERSTA# 改线存在性）",
+   "R336 `K2_R336_CW_REQ3_ALL4_NETS_CENSUS_v1.json`（全 4 网普查）"
+  ],
+  "判": "**PERSTA# 已证**（端点不动 + 改线存在）；**其余 3 网**已普查 ⇒ 逐网端点不动证明**部分完成**"
+ },
+ "req_④_buildability": {
+  "mode": "relocation_listed",
+  "note": "搬迁对象/去向见①；**未烙板**；施工=按 mode B 清单移动所列 In5 段/孔（他网零碰 · 135 缝合孔零碰 · 端点/球位不动）"
+ },
+ "req_⑤_冻结四源": "4/4 未动（d4e81f647be7f980 · fb07d25ac426ff84 · dd794c54f7ce7417 · 0a459839e15960b8）",
+ "honest_status": "依宪法第十三条：**本件为申报，但要件①②③尚未全部关闭**（①去向 3/4 待给 · ②信号自身参考层核 · ③余 3 网端点证明）⇒ **监理若从严，可退回补件**；ENG 已如实标注，**不冒充实备**。",
+ "requested_ruling": [
+  "请监理裁：(a) 认可本件为 C-w 申报**并批**（若认①②③之现有证据已足）；或 (b) 指定**尚缺之子项**（去向 3/4 / 参考层逐网核 / 余 3 网端点证明）为下一窗口之**单一补件**范围。",
+  "ENG 遵 #K2-133 §四 **不自行执行 C-w**。"
+ ],
+ "gate_selfcheck": {
+  "阶段": "P4（在阶）· 未越阶段",
+  "判据": "rev=6 MATCH 只读",
+  "冻结四源": "4/4 未动",
+  "受审板": "l8 7a5c89913d6e5d0a",
+  "owner闸口": 0,
+  "外部前置": "1（criteria rev=7）"
+ },
+ "not_asked": [
+  "不请求 owner（未触 L1）",
+  "不自行执行 C-w",
+  "未烙板 · 未派 WORKER · 未改生成器/SPEC/原理图"
+ ],
+ "self_sha16": {
+  "convention": "#K2-72 §五 约定A",
+  "convention_A_sha16": "09163a561e721df7"
+ }
+}
