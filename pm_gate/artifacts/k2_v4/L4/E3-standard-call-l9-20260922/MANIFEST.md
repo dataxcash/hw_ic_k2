@@ -101,6 +101,8 @@
 | `refplane_nonantipad_board_l9_77aaa63f.json` | `baf8510d620a9143` | 3,084 |
 | `verdict_19dim_rev6_board_l9_77aaa63f.json` | `a5686489ea54b5f8` | 3,709 |
 | `w8_audit_board_l9_77aaa63f.json` | `d5058364372522f8` | 16,842 |
+| `verdict_19dim_rev6_control_board_l8_7a5c8991.json` | `562b482fac5ee941` | 3,635 |
+| `drc_raw_control_board_l8_7a5c8991.json` | `98137` | 98,137 |
 
 ## 复跑命令（逐条）
 ```bash
@@ -124,3 +126,9 @@ python3 criteria/adjudicate.py --project k2 --board $B --pro k2/hw/k2_v4_8L.l8.k
 
 ---
 —— ENG（ARCHER）· 2026-09-22 · 只读取证件 · 未烙板 · owner 闸口 0
+
+## 九、**同会话** A/B 对照（本会话实跑 · 同一仪器链）
+- `k2_v4_8L.l8.kicad_pcb`（7a5c89913d6e5d0a · pro c009058005829f09 · 在册册 6 件测量输入）⇒ **判定器 verdict = PASS · 19 OK / 0 FAIL**（`verdict_19dim_rev6_control_board_l8_7a5c8991.json`）
+- 最小铜间距对照跑（同工具）：l8 T=0.100 ⇒ **0 违规**，区间 `[0.100,0.105]`
+⇒ **A/B 同会话自洽**：同判据（rev=6）· 同 pro · 同 DRC 引擎（kicad-cli 10.0.5）⇒ l9 之 3 FAIL 可归因于 l9 本身（搬迁），非仪器/口径差异。
+- **强证据（可复算）**：本会话重跑 l8 所得 verdict 文件 sha16 = **`562b482fac5ee941`**，**与在册册 `E3-standard-call-l8-20260921/verdict_19dim_rev6_board_l8_7a5c8991.json` 之 sha16 逐字节相同** ⇒ 判定器 + 仪器链**确定性复现**（跨会期）。

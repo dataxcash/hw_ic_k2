@@ -1,0 +1,90 @@
+{
+ "schema": 1,
+ "artifact": "k2_r413_relocation_landing_pipeline_gap_audit_v1",
+ "ts": "2026-09-22T22:59:42+08:00",
+ "from": "ENG · ARCHER（续接会话 · 应 #K2-142 §四 只读）",
+ "to": "监理",
+ "owner_gate": 0,
+ "authority": "#K2-142 §四（准只读残余）· R410/R411 之延伸 · owner #14⑦（**过程/口径类裁定先交监理**）· 宪法第十三条（可施工性）",
+ "purpose": "对已发生之 **#K2-137 项2 落搬迁**（R373 施加器 → R376 入库 l9）做**只读流程审计**：定位 l9 之 59 error/11 非 45° 之**流程成因**，供监理钉死落地验收范式与登记过程缺口。**未改任何代码/板/SPEC**。",
+ "audited_artifacts": {
+  "applier": "K2_R373_CW_RELOCATION_APPLIER_v1.py（124 行 · 文本补丁器）",
+  "catalog": "PENDING_RULINGS_DELTA_20260922_v55_cw_supplement_3items_complete_single_delivery.json（清单 = 3 项目的地/几何，含 item1 `added.polyline` 4 顶点、item2 stub polylines）",
+  "landing_selfreport": "K2_R376_CLOSURE_WINDOW_ITEM2_LANDED_L9_SPEC_REV55_v1.json（`landed` l9 77aaa63fe016b450 + `window_status 项2 = DONE` + `verification.not_done` 自陈）"
+ },
+ "evidence": {
+  "applier_is_text_only": {
+   "grep_counts": {
+    "pcbnew": 0,
+    "LoadBoard": 0,
+    "SaveBoard": 0,
+    "ZONE_FILLER": 0,
+    "fill": 0,
+    "drc": 0,
+    "DRC": 0,
+    "45": 0
+   },
+   "reading": "施加器**无** `pcbnew` / `LoadBoard` / `SaveBoard` / `ZONE_FILLER` / 任何 `drc` 调用 / 任何角度处理 ⇒ 它是**纯文本块删除+追加**（`blocks/parse_seg/parse_via/fmt_seg/fmt_via` + `uuid5` 确定性 id），**结构上不可能**回填铺铜或做 KiCad 侧自检。"
+  },
+  "catalog_geometry_is_what_landed": {
+   "item1": "`DS320_STRAP_B_ADDR1_7-0` 转层 In5→In2 · `added.polyline` = [(83.66,50.28),(93.4,51.06),(108.94,50.06),(110.26,51.66),(99.84,60.78)] ⇒ **与 R411 登记之 4 条非 45° 段（4.58°/176.32°/50.48°/138.81°）逐点一致** ⇒ 非 45° 源自**清单本身**，非施加器失真。",
+   "item2": "`DS320_STRAP_B_ADDR0_15-8` 贯通孔搬迁 + F/B 双侧 stub polylines ⇒ 与 R411 之 C3 肇事段一致。",
+   "item3": "I2C1_SDA（fix/port 几何）⇒ 与 R411 之 C2 一致。"
+  },
+  "pre_disclosed_gaps": {
+   "v55_model_limitation": "『受审板模型 `segs` 之 In1/In3/In4/In6 = **0 段**（平面铺铜未入模型）⇒ 逐网回流通路之几何核无法由本模型计算（如实标注）』",
+   "r376_not_done": "『本机无 pcbnew ⇒ 未做 KiCad 全量 LoadBoard/DRC（需在有 KiCad 处补）』",
+   "r376_window_status": "`项2 落搬迁 = DONE（本件 · l9 + rev-55 已入库）`"
+  },
+  "conflict_evidence": "R410/R411：l9 标准调用 **16 OK / 3 FAIL**（59 error · 11 非 45°）；回填后 38 真冲突；**59/59 至少一端为 `new_in_l9` 对象**；l8 同会话对照 = **PASS 19/0**（且本会话重跑 l8 verdict sha16 `562b482fac5ee941` **逐字节等于在册册** ⇒ 仪器链确定性，非口径漂移）。"
+ },
+ "gaps": [
+  {
+   "id": "G1",
+   "name": "落地未回填铺铜",
+   "fact": "施加器为文本补丁器（无 `ZONE_FILLER`）；l9 之 fill 为搬迁前状态 ⇒ 回填后 59→38 ⇒ **21 处假违例**",
+   "class": "程序（落地非终态）"
+  },
+  {
+   "id": "G2",
+   "name": "清单/施加器未对**既有铜**做冲突校验",
+   "fact": "清单几何在既有板上产生 **38 处真冲突**（含 `tracks_crossing` 3 · `shorting_items` 16）",
+   "class": "几何校验缺口"
+  },
+  {
+   "id": "G3",
+   "name": "清单几何含**非 45°**（11 段）",
+   "fact": "判据 `non45_segments` 要求 0；清单 polylines 为任意角（4.58°…176.32°），施加器无角度归一",
+   "class": "判据合规缺口"
+  },
+  {
+   "id": "G4",
+   "name": "『落地完成』判定**未含 KiCad 侧验收**",
+   "fact": "R376 自陈『未做 KiCad 全量 LoadBoard/DRC（需在有 KiCad 处补）』，同件却记 `项2 = DONE` ⇒ 缺『回填 + DRC error=0 + non45=0 + 同批 pro』之验收门槛",
+   "class": "验收口径缺口"
+  },
+  {
+   "id": "G5",
+   "name": "环境缺口（当时）",
+   "fact": "当时 ENG 环境无 pcbnew（R372/R376 具名）⇒ KiCad 侧自检**结构性不可为**；本会话已复原（AppDir kicad 10.0.5）⇒ 该环境缺口**已闭**",
+   "class": "环境（已被本会话闭环）"
+  }
+ ],
+ "recommended_remedy_to_supervisor": [
+  "**R1**：钉死『落搬迁落地验收清单』= ①铺铜回填（ZONE_FILLER）②kicad-cli DRC **error=0** ③`non45_segments=0` ④**同批 `.kicad_pro`** ⑤上述四项之读数入册；未全过 **不得记 DONE**。",
+  "**R2**：登记过程缺口 **G2/G3/G4**（建议比照 `C-17`/`C-LAYER-RECOG` 入 `CAPABILITY-GAP-LEDGER`），并说明其为**前次落地之流程缺口**，非本轮新增检查齿（owner ②『禁新增检查齿』不冲突 —— 本项为**既有判据之落地验收**，非新判据）。",
+  "**R3**：与 `PENDING_RULINGS_DELTA_20260922_v62`（l9 落地缺陷处置）**合并裁定**：若采『修复+重落 l9′』，其上列 R1 清单即为该次重落之**验收门槛**。",
+  "**R4（可选）**：清单/施加器若再用于任何落搬迁，须先补『对既有铜之冲突校验 + 45° 归一』（属**工具正确性**修复，非新法；仍需监理放行后再动代码）。"
+ ],
+ "owner_gate_selfcheck": "**不触 L1**（无拓扑/接口/信号流向/球重映射变更）⇒ 不请 owner；G1–G5 全属**过程/口径/工具正确性** ⇒ 交监理自裁（#14⑦）。",
+ "anchors": {
+  "board_l9": "77aaa63fe016b450",
+  "board_l8": "7a5c89913d6e5d0a",
+  "applier_sha16": "bc454aad281f20d4",
+  "criteria": "rev=6 MATCH",
+  "frozen4": "4/4 未动"
+ },
+ "not_asked": [
+  "未改施加器/清单/受审板/pro/SPEC/生成器/criteria/**· 未派 WORKER · 未烙板 · 未启新法"
+ ]
+}
