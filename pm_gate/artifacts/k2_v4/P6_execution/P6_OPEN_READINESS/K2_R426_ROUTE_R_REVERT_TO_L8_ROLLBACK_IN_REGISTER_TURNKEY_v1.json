@@ -84,5 +84,6 @@
   "K2_R426_ROUTE_R_REVERT_TO_L8_ROLLBACK_IN_REGISTER_TURNKEY_v1.json/.md/.sha16.txt"
  ],
  "R401_D1_under_route_R": "**路线 R 下 R401 正式闸与 D1 前置均不适用** —— R401 为『②-UP 16 lane』预登记**一次性**仪器（消费**每 lane 折线**）；R417 §D1 之缺口（全仓无『板→每网 In5 折线』抽取件）**依该仪器而生**。路线 R 不建 lane（owner 甲 已放宽该条）⇒ **无 lane 折线可消费 ⇒ D1 不触**；其正式见证改由**在册仪器**组成：① `criteria/adjudicate.py` rev=6 十九维 ② `kicad-cli pcb drc`（error=0）③ DFM 逐项（R425）④ 16 网逐网孔数/端点（R416/R419 已具读数）。⇒ **路线 R 不引入任何新仪器/新口径**，且**绕开** R417 §D1 与 R401 之停等。",
- "R401_D1_note": "此非『新法』：四项全部为在册仪器/在册判据之只读调用；未新增检查齿、未改 `criteria/`。"
+ "R401_D1_note": "此非『新法』：四项全部为在册仪器/在册判据之只读调用；未新增检查齿、未改 `criteria/`。",
+ "rev56_interaction": "**与 #K2-144 指令2（rev-56 三处文字对齐）之交互（请监理裁 Q1 时一并指示）**：那三处滞后文字（`constraints.j2_escape_topology.rule` / `.outer_basis` / `vias.high_speed.basis`，候选第 4 处 `layer_plan.j2_escape_nets.semantics`）位于 SPEC 之 **constraints 段**，**非** rev-55 之声明性回填卡 ⇒ 它们**同样存在于 rev-54**。故：路线 R 若按 rev-55 自身 `rollback`（**删 rev-55 · `spec_name` 回 rev-54 · 不建新 rev**）落地，则**下一次『同笔落库』并不是 rev-56**（rev-56 属 rev-55 之后继编号）⇒ #K2-144 指令2『rev-56 随下次同笔落库对齐三处文字』之**落点须重定**：宜改为『**回退落库后之新 rev 再对齐三处文字**』（或与回退同笔建新 rev 兼做对齐）。**本条不自行决定落点**，请监理并入 Q1 指示。"
 }
