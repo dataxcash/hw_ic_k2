@@ -1,0 +1,174 @@
+{
+ "artifact": "k2_r406_p4_l9_samebatch_remeasure_items4569_v1",
+ "authority": "R270《R4 闸就绪度》items 4/5/6/9『l9 同批重测』· 阶段门 fail-closed · #K2-142 §四（禁新法/变体/扫描 —— 本件皆无）",
+ "board": "k2/hw/k2_v4_8L.l9.kicad_pcb",
+ "board_sha16": "77aaa63fe016b450",
+ "boundary": "只读 · 未烙板 · 未改冻结四源/criteria/生成器/SPEC 设计内容 · 未派 WORKER · 未跑求解器",
+ "from": "ENG · ARCHER R406",
+ "item3_l9_exemption_table": {
+  "status": "**待 owner/监理 圈定具名集后落表**（承 #K2-142 升 owner）· 未自行预设 N"
+ },
+ "item4_ref_plane_continuity": {
+  "reason": "需平面层连续性工具（R372 平面提取器）· 未跑 ⇒ 如实登记为 P4 残余项，不冒充",
+  "status": "**未测（本轮）**"
+ },
+ "item5_length_matching_skew_mm": {
+  "l8_baseline_max_skew_mm": 6.002,
+  "max_skew_mm": 6.0017,
+  "per_pair": {
+   "pair0": 2.8256,
+   "pair1": 0.4214,
+   "pair2": 1.3638,
+   "pair3": 0.9381,
+   "pair4": 6.0017,
+   "pair5": 0.0936,
+   "pair6": 2.3943,
+   "pair7": 0.3286
+  },
+  "threshold": "**未具名**（承 R270 item5 待『阈值具名』）· 本件只报读数，不自定阈值"
+ },
+ "item6_3W_min_center_to_center_mm": {
+  "3W_threshold_mm": 0.48,
+  "min_mm": 0.5,
+  "pair": [
+   "PCIE_UP_OUT5_N_J2",
+   "PCIE_UP_OUT5_P_J2"
+  ],
+  "verdict": "PASS"
+ },
+ "item9_precondition_census": {
+  "n_drill_tokens": 752,
+  "n_zone_objects": 0,
+  "note": "平面/铺铜/钻孔『前置』之全量核需平面工具；本件只报板面存在性读数（如实标注不完整）"
+ },
+ "o2_o3_window_run_declaration": {
+  "same_frozen_model_iteration": [
+   "R383",
+   "R397",
+   "R398",
+   "R399",
+   "R401",
+   "R402"
+  ],
+  "this_artifact": "R406 = P4 门项 l9 同批测量（只读文本解析 · 无求解器 · 无新法 · 无参数扫描）",
+  "variant_reruns_registered": [
+   "R384",
+   "R387",
+   "R388"
+  ]
+ },
+ "p4_gate_state": {
+  "hard_blocker": "②-UP=16/16 二值（(a) 未取得 / (b) 未建立）· 已升 owner（#K2-142 · owner 项 1）",
+  "still_open": [
+   "item4（ref plane continuity @l9 · 未测）",
+   "item5 阈值具名",
+   "item9 全量核",
+   "item2 ②-UP（owner）"
+  ],
+  "this_artifact_closes": [
+   "item6（3W @l9 读数）",
+   "item5（skew @l9 读数 · 阈值待具名）",
+   "item9（存在性读数 · 不完整）"
+  ]
+ },
+ "per_net_l9": {
+  "PCIE_UP_OUT0_N_J2": {
+   "len_f_mm": 6.035,
+   "len_in5_mm": 59.1956,
+   "n_in5_seg": 109,
+   "n_via": 4
+  },
+  "PCIE_UP_OUT0_P_J2": {
+   "len_f_mm": 6.6357,
+   "len_in5_mm": 56.37,
+   "n_in5_seg": 1,
+   "n_via": 4
+  },
+  "PCIE_UP_OUT1_N_J2": {
+   "len_f_mm": 4.8836,
+   "len_in5_mm": 53.98,
+   "n_in5_seg": 1,
+   "n_via": 4
+  },
+  "PCIE_UP_OUT1_P_J2": {
+   "len_f_mm": 5.4757,
+   "len_in5_mm": 53.5586,
+   "n_in5_seg": 78,
+   "n_via": 4
+  },
+  "PCIE_UP_OUT2_N_J2": {
+   "len_f_mm": 3.7236,
+   "len_in5_mm": 51.2738,
+   "n_in5_seg": 57,
+   "n_via": 4
+  },
+  "PCIE_UP_OUT2_P_J2": {
+   "len_f_mm": 2.5757,
+   "len_in5_mm": 49.91,
+   "n_in5_seg": 1,
+   "n_via": 4
+  },
+  "PCIE_UP_OUT3_N_J2": {
+   "len_f_mm": 1.4036,
+   "len_in5_mm": 48.1,
+   "n_in5_seg": 1,
+   "n_via": 4
+  },
+  "PCIE_UP_OUT3_P_J2": {
+   "len_f_mm": 2.5757,
+   "len_in5_mm": 47.1619,
+   "n_in5_seg": 36,
+   "n_via": 4
+  },
+  "PCIE_UP_OUT4_N_J2": {
+   "len_f_mm": 1.4036,
+   "len_in5_mm": 56.4117,
+   "n_in5_seg": 90,
+   "n_via": 4
+  },
+  "PCIE_UP_OUT4_P_J2": {
+   "len_f_mm": 5.4757,
+   "len_in5_mm": 50.41,
+   "n_in5_seg": 1,
+   "n_via": 4
+  },
+  "PCIE_UP_OUT5_N_J2": {
+   "len_f_mm": 4.3036,
+   "len_in5_mm": 48.6,
+   "n_in5_seg": 1,
+   "n_via": 4
+  },
+  "PCIE_UP_OUT5_P_J2": {
+   "len_f_mm": 4.3157,
+   "len_in5_mm": 48.6936,
+   "n_in5_seg": 72,
+   "n_via": 4
+  },
+  "PCIE_UP_OUT6_N_J2": {
+   "len_f_mm": 3.1436,
+   "len_in5_mm": 48.0843,
+   "n_in5_seg": 66,
+   "n_via": 4
+  },
+  "PCIE_UP_OUT6_P_J2": {
+   "len_f_mm": 3.1557,
+   "len_in5_mm": 45.69,
+   "n_in5_seg": 1,
+   "n_via": 4
+  },
+  "PCIE_UP_OUT7_N_J2": {
+   "len_f_mm": 1.9836,
+   "len_in5_mm": 43.88,
+   "n_in5_seg": 1,
+   "n_via": 4
+  },
+  "PCIE_UP_OUT7_P_J2": {
+   "len_f_mm": 1.9836,
+   "len_in5_mm": 44.2086,
+   "n_in5_seg": 48,
+   "n_via": 4
+  }
+ },
+ "schema": 1,
+ "to": "监理"
+}
