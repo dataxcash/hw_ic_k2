@@ -1,0 +1,86 @@
+{
+ "schema": 1,
+ "artifact": "k2_r426_route_r_revert_to_l8_rollback_in_register_turnkey_v1",
+ "ts": "2026-09-22T23:57:09",
+ "from": "ENG · ARCHER（续接会话 · 承 handoff R423）",
+ "to": "监理",
+ "owner_gate": 0,
+ "authority": "owner #14⑥（不 park：给出下一阶段可执行计划并推进）· owner ⑧（可施工性）· #K2-142 §四（只读残余）· #K2-136 §三/§二 · TAG_POLICY（#K2-56）· handoff R423 §8.4",
+ "first_action": "已读 `.omo/supervision/ledger/`（含 `sent/`/`outbox/`）全部 `K2-RULING-*` ⇒ 最新 **#K2-144** · 无更晚裁定 · 无 owner 回件（v65 待裁）。",
+ "nature": "**只读 turnkey 普查**（未删件 · 未改 project.yaml · 未出包 · 未烙板）。",
+ "purpose": "R424 证明「回退到 l8」是**零设计**的合法路径；本件回答「**回退怎么落地、由谁、按哪条在册程序**」——以免裁定到位时还要现找手续（#K2-137 O-2 教训：撞门先翻在册范式）。",
+ "headline": "**回退路径无需新板、无需新设计，且其落地程序已由冻结 SPEC rev-55 自身之 `rollback` 字段在册写明。** 受审板 l8 已在库、铺铜已填、已过 rev=6 判据 19/19 与 DRC error=0。⇒ 监理一旦裁「不保留 C-w 搬迁」，即可一笔同批落库。",
+ "in_register_rollback": {
+  "source": "`SPEC_k2_v4.spec-rev-55.json` → `_spec_rev_55.rollback`（原文）",
+  "text": "删除本文件并把 pm_gate/project.yaml 之 spec_name 指回 SPEC_k2_v4.spec-rev-54.json；l9 删除即可（l8 未动）"
+ },
+ "turnkey": [
+  {
+   "n": 1,
+   "act": "裁定「C-w 搬迁不保留」（= owner 甲 或 监理走廊/搬迁处置）",
+   "owner": "owner 或 监理",
+   "state": "待（v65 Q1）"
+  },
+  {
+   "n": 2,
+   "act": "`pm_gate/project.yaml`：`board_path` → `hw/k2_v4_8L.l8.kicad_pcb`；`spec_name` → `SPEC_k2_v4.spec-rev-54.json`",
+   "owner": "ENG（放行后）",
+   "state": "现值 = `hw/k2_v4_8L.l9.kicad_pcb` / `SPEC_k2_v4.spec-rev-55.json`（只读核对）"
+  },
+  {
+   "n": 3,
+   "act": "删 `hw/k2_v4_8L.l9.kicad_pcb`（或移出 `hw/` 留证）",
+   "owner": "ENG（放行后）",
+   "state": "l9 在库 `77aaa63fe016b450`"
+  },
+  {
+   "n": 4,
+   "act": "SPEC rev-55 件删除（或 bump 新 rev 重声明 l8）；**门禁**：任何 `.kicad_pcb` 变更须同批含 SPEC 变更（`_shared/eda_core/pipeline/checks.py`）⇒ **2/3/4 必须同笔**",
+   "owner": "ENG（放行后）",
+   "state": "rev-55 = `964101b19015f6d7`"
+  },
+  {
+   "n": 5,
+   "act": "P4 派生模型指纹重锚（R414 范式）",
+   "owner": "ENG",
+   "state": "l9 现行 = `d34362c4847ad9ba`（**O-1：禁引 `84f19701dfc1db31`**）"
+  },
+  {
+   "n": 6,
+   "act": "`criteria` rev=7 之内容与『l9 落库硬前置』是否随之重判",
+   "owner": "gate 属主 `ic_hw_gate`",
+   "state": "未落（rev=6 MATCH）"
+  },
+  {
+   "n": 7,
+   "act": "Gerber/Excellon/MANIFEST 随包重出 + DFM 重跑（R270 项13 · owner ③）",
+   "owner": "ENG（放行后）",
+   "state": "未做（管道就绪 · 在册 14 gerber + 8 Excellon 含 HDI）"
+  },
+  {
+   "n": 8,
+   "act": "里程碑 tag（TAG_POLICY §2/§3）+ push 至 `0 0`",
+   "owner": "ENG",
+   "state": "本会话已 push `0 0`（#K2-56）；tag 待回退落库时打"
+  }
+ ],
+ "acceptance_after_revert": [
+  "判据 **rev=6** 对 l8 = **19 OK / 0 FAIL**（在册 E3-standard-call-l8 `7a5c8991`）",
+  "DRC **error=0**（本会话同仪器同 pro 实测 · 204 warning · unconn 0）",
+  "DFM 逐项 **全 PASS**（R425）",
+  "束间面 **≡ l9**（R424 F9 · caliber-free ⇒ R416 之 `0.4491` 在 l8 同值）",
+  "16 网 ②-UP 在 l8 即 **F→In2→In5→B（4 孔）** ⇒ 与 owner 甲「放宽孔数/层数」相容"
+ ],
+ "readonly_corrections": [
+  "**O-4 已不复现（更正登记）**：#K2-137 O-4 记 `pm_gate/project.yaml::board_path` 滞后指 `l7`；**现值 = `hw/k2_v4_8L.l9.kicad_pcb`**（与 rev-55 同批）⇒ 该项已随 rev-55 落库一并修正。",
+  "**rev-54 无板声明**：`_spec_rev_54` 无卡、无 `board_sha16` ⇒ 回退后板声明由 **rev-53（`7a5c8991` = l8）** 承接，**无悬空声明**。",
+  "**SPEC 内 l9 声明点 = 4 处**：`_spec_rev_55.board_sha16` · `board_file` · 及 `updated_board_sha16_declarations` 之 3 项（`keepout_geometry` / `pd.zone_defs.board_realized_zones` / `mounting_holes`），皆为 `7a5c8991 → 77aaa63f`。"
+ ],
+ "conditional_note": "本件**不主张**路线 R 为唯一/首选解 —— 它是**成本最低**的一条（零设计）；路线 F（保留搬迁）仍待 Q2 指定设计归属。**裁定权在监理**（走廊/搬迁处置 = 监理自裁面）。",
+ "not_done": [
+  "未删 l9 · 未改 `project.yaml` · 未改 SPEC/生成器/原理图 · 未出包 · 未烙板 · 未派 WORKER · 未写 `.omo/supervision/**`"
+ ],
+ "files": [
+  "K2_R426_ROUTE_R_REVERT_TO_L8_ROLLBACK_IN_REGISTER_TURNKEY_v1.json/.md/.sha16.txt"
+ ]
+}
