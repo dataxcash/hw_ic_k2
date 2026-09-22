@@ -1,0 +1,90 @@
+{
+ "schema": 1,
+ "artifact": "k2_r422_k2_144_return_to_work_registration_rev56_alignment_lines_and_coverage_gap_entry_v1",
+ "ts": "2026-09-22T23:46:34+08:00",
+ "from": "ENG · ARCHER（续接会话 · 应 **#K2-144 复工单**）",
+ "to": "监理",
+ "owner_gate": 0,
+ "authority": "**#K2-144**（Q1 监理闸口径=In5 为准 · Q2 声明性回填+版本 bump 新件（监理职权 · 不升 owner）· Q3 准登记质检覆盖缺口）· #K2-68 §2.3（残留定性）· #K2-69（正式授权）· #K2-143 §四（预声明路径）",
+ "nature": "**复工登记 + 复工单 #2/#3 之交付物**（只读/文本级）。**未改 rev-55（冻结源）· 未改任何量化值 · 未出包 · 未烙板 · 未派 WORKER**。",
+ "item1_return_to_work": {
+  "ruling": "#K2-144 §二 指令1：按现行授权路线（**In5**）复工",
+  "status": "**已复工**：本轮即以 In5 口径继续（本件 + 后续 P4 工作）",
+  "authority_chain": "#K2-68 §2.3（`(F→In2→F)` = **6L 时代残留**定性）→ **#K2-68 D-1**（`F–In5` span **已在板上 19 处（自 l4）**；32 条 OUT 车道**长走本就在 In5**）→ **#K2-69**（正式授权现行路线）⇒ 本轮 E 链（R393–R398 证书 · R416 束间实测 · v55 搬迁）**均在该授权内**",
+  "officially_non_executable": "冻结 SPEC rev-55 之『In2』字样**不具可执行性**（#K2-144 Q1）；ENG 既往『In5』执行**无越权、无造绿**（#K2-144 §一对生产队定性：零违规零过错）"
+ },
+ "item2_rev56_alignment_lines": {
+  "ruling": "#K2-144 §二 指令2：**下次同笔落库时**新建 rev-56，**仅对齐三处旧文字**为 #K2-68 §2.3 口径，**禁触量化值**",
+  "timing": "**待下次同笔落库**（无 pending 落库 ⇒ 本件**只列变更行、不建文件**；届时随该次落库同笔提交）",
+  "sites": [
+   {
+    "n": 1,
+    "json_path": "constraints.j2_escape_topology.rule",
+    "old": "2026-08-19 8 层定案: J2 双列焊盘墙 0.6 pitch/0.35 高 → UP_OUT 16 网经 **In2** 单内层走廊 (**F→In2→F** 单次换层), 不再走 B.Cu",
+    "new": "2026-08-19 8 层定案: J2 双列焊盘墙 0.6 pitch/0.35 高 → UP_OUT 16 网经 **In5** 单内层走廊 (**F→In5→F** 单次换层), 不再走 B.Cu（8L 信号层 = F/In2/In5/B；原『In2』为 6L 时代残留 · 口径见 #K2-68 §2.3 · 本行 = #K2-144 Q2 声明性回填）",
+    "changed_tokens": [
+     "In2→In5",
+     "(F→In2→F)→(F→In5→F)",
+     "+注"
+    ]
+   },
+   {
+    "n": 2,
+    "json_path": "constraints.j2_escape_topology.outer_basis",
+    "old": "8 层（LID REV6）：**In2** 独立走廊容纳全部 UP_OUT；B.Cu 为…（其余逐字节同）",
+    "new": "8 层（LID REV6）：**In5** 独立走廊容纳全部 UP_OUT；B.Cu 为…（其余逐字节同 · 附注同 #K2-68 §2.3）",
+    "changed_tokens": [
+     "In2→In5",
+     "+注"
+    ]
+   },
+   {
+    "n": 3,
+    "json_path": "vias.high_speed.basis",
+    "old": "2026-08-16 PM 裁决: … 每线 ≤2 过孔 = 单次换层 (**F→In2→F**), 每对差分 4 过孔",
+    "new": "2026-08-16 PM 裁决: … 每线 ≤2 过孔 = 单次换层 (**F→In5→F**), 每对差分 4 过孔（同 #K2-68 §2.3）",
+    "changed_tokens": [
+     "(F→In2→F)→(F→In5→F)",
+     "+注"
+    ]
+   }
+  ],
+  "candidate_4th_site_please_confirm": {
+   "json_path": "layer_plan.j2_escape_nets.semantics",
+   "text": "东走廊(J2) nets = PCIE_DN0-7 (A_PER 带, VIA_IN2->In2 east) + PCIE_UP_OUT0-7_J2 (B_PET 带, VIA_IN2->In2 east); dogbone/via coords L3 open",
+   "issue": "R421 之要件卡以 **3 行**呈现（本件 §sites 同）；本字段为**同源措辞**，是否属『三处』之列（或须单列）**请监理确认** —— **ENG 不自行扩大变更面**。",
+   "note": "另：`layer_plan.in2_width_mm = 0.205` 属**量化值** ⇒ **不动**（#K2-144『禁触量化值』）"
+  },
+  "guardrails": "rev-56 之 diff **只含上述文字行**；**量化字段逐字节同**（`vias.std{annular_ring_min 0.075, drill 0.2, outer 0.35}` · `vias.high_speed.max_per_line` · `in2_width_mm` · `impedance.*` · `stackup.*` 等）；rev-1..55 **逐字节不动**（版本 bump 新件范式 · 承 #K2-137 §二(甲)/#K2-59/#K2-68）"
+ },
+ "item3_coverage_gap_registration": {
+  "ruling": "#K2-144 §二 指令3 + Q3：准登记质检覆盖缺口",
+  "entry": {
+   "id": "GAP-CORRIDOR-LAYER-UNCHECKED（建议号 · 由登记册属主定稿）",
+   "title": "**走廊层条款零机判**：质检只数过孔数量、不核对走线落在哪一层",
+   "class": "**覆盖缺口（自检盲区）· 非追责 · 非新增检查齿**",
+   "basis": "`k2/tools/k2_layout_quality_check_v1.py` B2 行只产 `via_by_net` / `hs_hist` / `max_via`（全文**无 In2/In5**）⇒ 『长走零改层』条款无任何机判；本次冲突即因此**机器抓不住、靠人眼发现**",
+   "evidence": "R421 件（`b68836aae57362b1`）+ 支配裁定 **#K2-144 Q3**",
+   "recommended": "登记入缺陷/缺口登记册（比照 C-17 族）；**`criteria/` 零改动**；是否补机判属**监理另裁**（ENG 不自行立齿）",
+   "owner_side": "ENG 写域不含 `.omo/supervision/**` ⇒ 本条目**以项目侧件呈交**，请登记册属主收录"
+  }
+ },
+ "item4_tag_discipline": {
+  "ruling": "#K2-144 §二 指令4：补打里程碑 tag（HEAD 距末 tag 256 commit）",
+  "action": "**已执行**（见本件同笔 commit 后之 annotated tag）",
+  "tag": "`k2-v60-p4-l9-standardcall-16ok3fail-relocation-defect-registered-corridor-layer-clarified`",
+  "scope": "里程碑内容 = R410–R421 之 P4 成果（l9 标准调用 16 OK/3 FAIL · 落搬迁缺陷逐对象登记 · 项5 口径册证 · 落地流程缺口 · 影响面 · 二值面级分裂 · runbook · 钻孔普查 · DFM 预核 · 走廊层冲突与 **#K2-144** 口径澄清）",
+  "note": "命名承既有 `k2-v<NN>-<phase>-<topic>-<state>` 范式（v59→v60）；若监理另有命名/落点偏好，可重打（tag 可移动）"
+ },
+ "anchors": {
+  "frozen_spec_rev55": "964101b19015f6d7",
+  "board_l9": "77aaa63fe016b450",
+  "board_l8": "7a5c89913d6e5d0a",
+  "criteria": "rev=6 MATCH",
+  "frozen4": "4/4 未动"
+ },
+ "not_asked": [
+  "未改 rev-55/任何量化值 · 未建 rev-56（待下次同笔落库）· 未出包 · 未烙板 · 未派 WORKER · 未自行立齿"
+ ],
+ "computation": "零（文本/登记）"
+}
