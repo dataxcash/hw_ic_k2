@@ -1,0 +1,504 @@
+{
+ "artifact": "k2_r399_final_window_constructor_and_bookkeeping_fix_v1",
+ "authority": "#K2-140 §三（准（甲）末次收口窗 · 出图工具 · 硬条件）· §三.2（先补正记账）",
+ "bookkeeping_fix": {
+  "base_model_canonical_sha16_scriptcomputed": "f5865bdd6879723d",
+  "base_model_file": "/tmp/opencode/archer/model_l8.json",
+  "base_model_file_sha16_scriptcomputed": "c42731c4258ae691",
+  "base_model_selfdeclared_board": "k2/hw/k2_v4_8L.l8.kicad_pcb",
+  "caveat_prev_defect": "旧件（R383..R397）之 model_sha16=84f19701dfc1db31 **全仓无脚本可复算**且模型自述 board=l8 ⇒ 本件**予以补正**并如实登记。",
+  "derived_model_fingerprint_scriptcomputed_sha16": "d34362c4847ad9ba",
+  "input_board": "k2/hw/k2_v4_8L.l9.kicad_pcb",
+  "input_board_matches_declared": true,
+  "input_board_sha16_scriptcomputed": "77aaa63fe016b450",
+  "patch_attached": {
+   "cw_nets": [
+    "DS320_STRAP_B_ADDR1_7-0",
+    "DS320_STRAP_B_ADDR0_15-8",
+    "PERSTA#",
+    "I2C1_SDA"
+   ],
+   "id": "P_l8_to_l9_in5_neck_removal",
+   "model_patch": "_is_lane_patched=True（lane 网自身铜不计入障碍）",
+   "n_removed_seg": 24,
+   "n_removed_via": 4,
+   "neck_window": [
+    93.0,
+    44.0,
+    112.0,
+    58.0
+   ],
+   "rationale": "l9 = l8 + C-w v55 搬迁（neck 内 In5 段/孔移除）· 依 R394 文本差分",
+   "removed_in5_segments": [
+    [
+     103.9,
+     50.4,
+     103.9,
+     50.2,
+     "PERSTA#"
+    ],
+    [
+     94.5,
+     50.0,
+     94.0,
+     50.5,
+     "PERSTA#"
+    ],
+    [
+     103.6,
+     50.0,
+     94.5,
+     50.0,
+     "PERSTA#"
+    ],
+    [
+     103.7,
+     50.1,
+     103.6,
+     50.0,
+     "PERSTA#"
+    ],
+    [
+     105.4,
+     51.6,
+     105.1,
+     51.6,
+     "PERSTA#"
+    ],
+    [
+     103.8,
+     50.1,
+     103.7,
+     50.1,
+     "PERSTA#"
+    ],
+    [
+     105.1,
+     51.6,
+     103.9,
+     50.4,
+     "PERSTA#"
+    ],
+    [
+     105.6,
+     51.8,
+     105.4,
+     51.6,
+     "PERSTA#"
+    ],
+    [
+     103.9,
+     50.2,
+     103.8,
+     50.1,
+     "PERSTA#"
+    ],
+    [
+     108.6,
+     55.6,
+     105.6,
+     52.6,
+     "PERSTA#"
+    ],
+    [
+     105.6,
+     52.6,
+     105.6,
+     51.8,
+     "PERSTA#"
+    ],
+    [
+     93.1,
+     51.8375,
+     93.4,
+     52.1375,
+     "I2C1_SDA"
+    ],
+    [
+     93.4,
+     52.1375,
+     102.5,
+     52.1375,
+     "I2C1_SDA"
+    ],
+    [
+     104.05,
+     52.1796,
+     104.15,
+     52.2796,
+     "DS320_STRAP_B_ADDR1_7-0"
+    ],
+    [
+     105.25,
+     54.2796,
+     105.55,
+     54.2796,
+     "DS320_STRAP_B_ADDR1_7-0"
+    ],
+    [
+     103.05,
+     51.8796,
+     103.45,
+     51.8796,
+     "DS320_STRAP_B_ADDR1_7-0"
+    ],
+    [
+     103.45,
+     51.8796,
+     103.55,
+     51.9796,
+     "DS320_STRAP_B_ADDR1_7-0"
+    ],
+    [
+     105.55,
+     54.2796,
+     106.75,
+     55.4796,
+     "DS320_STRAP_B_ADDR1_7-0"
+    ],
+    [
+     104.15,
+     53.1796,
+     105.25,
+     54.2796,
+     "DS320_STRAP_B_ADDR1_7-0"
+    ],
+    [
+     104.05,
+     52.0796,
+     104.05,
+     52.1796,
+     "DS320_STRAP_B_ADDR1_7-0"
+    ],
+    [
+     103.85,
+     51.9796,
+     103.95,
+     52.0796,
+     "DS320_STRAP_B_ADDR1_7-0"
+    ],
+    [
+     103.55,
+     51.9796,
+     103.85,
+     51.9796,
+     "DS320_STRAP_B_ADDR1_7-0"
+    ],
+    [
+     103.95,
+     52.0796,
+     104.05,
+     52.0796,
+     "DS320_STRAP_B_ADDR1_7-0"
+    ],
+    [
+     104.15,
+     52.2796,
+     104.15,
+     53.1796,
+     "DS320_STRAP_B_ADDR1_7-0"
+    ]
+   ],
+   "removed_in5_vias": [
+    [
+     102.5,
+     52.1375,
+     "I2C1_SDA"
+    ],
+    [
+     106.75,
+     55.4796,
+     "DS320_STRAP_B_ADDR1_7-0"
+    ],
+    [
+     103.05,
+     51.8796,
+     "DS320_STRAP_B_ADDR1_7-0"
+    ],
+    [
+     105.125,
+     52.09,
+     "DS320_STRAP_B_ADDR0_15-8"
+    ]
+   ]
+  },
+  "prev_board_l8_sha16": "7a5c89913d6e5d0a",
+  "statement": "**计算输入板 = 件上所写受审板（l9）**：经补丁 P（l8→l9 之 In5 neck 移除）达成；指纹**全部由脚本实算**。"
+ },
+ "boundary": "只读 · 未烙板 · 未改冻结四源/criteria/生成器/SPEC 设计内容 · 未派 WORKER · 未跑求解器",
+ "constructor": {
+  "band_y_mm": [
+   32.95,
+   40.15
+  ],
+  "corridor_free_width_mm": 22.32,
+  "corridor_order_ranks_south_to_north": [
+   0,
+   3,
+   11,
+   4,
+   12,
+   7,
+   15,
+   8,
+   6,
+   14,
+   5,
+   13,
+   10,
+   2,
+   9,
+   1
+  ],
+  "corridor_x": 110.0,
+  "method": "构造性 3 段折线（非搜索 · 确定性 · 无参数扫描）",
+  "slot_pitch_mm": 0.45,
+  "slots_need_mm": 7.2
+ },
+ "from": "ENG · ARCHER R399",
+ "gate_verdict": {
+  "clearance_min_mm": -0.43,
+  "clearance_violations": [
+   [
+    "PCIE_UP_OUT0_N_J2",
+    "I2C1_SDA",
+    "seg",
+    -0.205
+   ],
+   [
+    "PCIE_UP_OUT0_N_J2",
+    "GND",
+    "via",
+    -0.206
+   ],
+   [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP6_N",
+    "seg",
+    -0.3318
+   ],
+   [
+    "PCIE_UP_OUT0_P_J2",
+    "P3V3",
+    "via",
+    -0.38
+   ],
+   [
+    "PCIE_UP_OUT0_P_J2",
+    "",
+    "pad",
+    -0.235
+   ],
+   [
+    "PCIE_UP_OUT1_N_J2",
+    "I2C1_SDA",
+    "seg",
+    -0.155
+   ],
+   [
+    "PCIE_UP_OUT1_N_J2",
+    "P3V3",
+    "via",
+    -0.355
+   ],
+   [
+    "PCIE_UP_OUT1_P_J2",
+    "PCIE_UP6_N",
+    "seg",
+    -0.2953
+   ],
+   [
+    "PCIE_UP_OUT1_P_J2",
+    "GND",
+    "via",
+    -0.42
+   ],
+   [
+    "PCIE_UP_OUT2_N_J2",
+    "I2C1_SDA",
+    "seg",
+    -0.155
+   ],
+   [
+    "PCIE_UP_OUT2_N_J2",
+    "P3V3",
+    "via",
+    -0.355
+   ],
+   [
+    "PCIE_UP_OUT2_N_J2",
+    "",
+    "pad",
+    -0.23
+   ],
+   [
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP6_N",
+    "seg",
+    -0.3292
+   ],
+   [
+    "PCIE_UP_OUT2_P_J2",
+    "GND",
+    "via",
+    -0.43
+   ],
+   [
+    "PCIE_UP_OUT2_P_J2",
+    "",
+    "pad",
+    -0.23
+   ],
+   [
+    "PCIE_UP_OUT3_N_J2",
+    "I2C1_SDA",
+    "seg",
+    -0.155
+   ],
+   [
+    "PCIE_UP_OUT3_N_J2",
+    "P3V3",
+    "via",
+    -0.355
+   ],
+   [
+    "PCIE_UP_OUT3_P_J2",
+    "PCIE_UP6_N",
+    "seg",
+    -0.3044
+   ],
+   [
+    "PCIE_UP_OUT3_P_J2",
+    "GND",
+    "via",
+    -0.405
+   ],
+   [
+    "PCIE_UP_OUT4_N_J2",
+    "I2C1_SDA",
+    "seg",
+    -0.155
+   ]
+  ],
+  "endpoint_max_dev_mm": 0.0,
+  "lane_pitch_min_gap_mm": 0.45,
+  "lane_pitch_min_pair": [
+   "PCIE_UP_OUT0_P_J2",
+   "PCIE_UP_OUT4_P_J2"
+  ],
+  "lane_pitch_req_mm": 0.435,
+  "lane_pitch_violations": [],
+  "n_clearance_viol": 35,
+  "n_lane_pitch_viol": 0,
+  "n_obs": {
+   "pad": 20,
+   "seg": 1048,
+   "via": 343
+  },
+  "per_lane": {
+   "PCIE_UP_OUT0_N_J2": {
+    "blocker": "GND",
+    "margin_min_mm": -0.206
+   },
+   "PCIE_UP_OUT0_P_J2": {
+    "blocker": "P3V3",
+    "margin_min_mm": -0.38
+   },
+   "PCIE_UP_OUT1_N_J2": {
+    "blocker": "P3V3",
+    "margin_min_mm": -0.355
+   },
+   "PCIE_UP_OUT1_P_J2": {
+    "blocker": "GND",
+    "margin_min_mm": -0.42
+   },
+   "PCIE_UP_OUT2_N_J2": {
+    "blocker": "P3V3",
+    "margin_min_mm": -0.355
+   },
+   "PCIE_UP_OUT2_P_J2": {
+    "blocker": "GND",
+    "margin_min_mm": -0.43
+   },
+   "PCIE_UP_OUT3_N_J2": {
+    "blocker": "P3V3",
+    "margin_min_mm": -0.355
+   },
+   "PCIE_UP_OUT3_P_J2": {
+    "blocker": "GND",
+    "margin_min_mm": -0.405
+   },
+   "PCIE_UP_OUT4_N_J2": {
+    "blocker": "P3V3",
+    "margin_min_mm": -0.355
+   },
+   "PCIE_UP_OUT4_P_J2": {
+    "blocker": "P3V3",
+    "margin_min_mm": -0.43
+   },
+   "PCIE_UP_OUT5_N_J2": {
+    "blocker": "P3V3",
+    "margin_min_mm": -0.355
+   },
+   "PCIE_UP_OUT5_P_J2": {
+    "blocker": "P3V3",
+    "margin_min_mm": -0.43
+   },
+   "PCIE_UP_OUT6_N_J2": {
+    "blocker": "GND",
+    "margin_min_mm": -0.38
+   },
+   "PCIE_UP_OUT6_P_J2": {
+    "blocker": "GND",
+    "margin_min_mm": -0.405
+   },
+   "PCIE_UP_OUT7_N_J2": {
+    "blocker": "P3V3",
+    "margin_min_mm": -0.355
+   },
+   "PCIE_UP_OUT7_P_J2": {
+    "blocker": "PCIE_UP7_N",
+    "margin_min_mm": -0.38
+   }
+  }
+ },
+ "o2_o3_window_run_declaration": {
+  "same_frozen_model_iteration": [
+   "R383",
+   "R397",
+   "R398",
+   "R399（本件：构造器 · 一次实现 · 一次运行）"
+  ],
+  "survey_only": [
+   "R386",
+   "R389",
+   "R393",
+   "R394",
+   "R395",
+   "R396"
+  ],
+  "this_artifact": "构造性几何生成（一次）＋权威闸验收 · 未跑求解器",
+  "variant_reruns_registered": [
+   "R384",
+   "R387",
+   "R388"
+  ]
+ },
+ "schema": 1,
+ "to": "监理",
+ "verdict": {
+  "honest": "本件**不**以构造失败冒充『摆不下』之证明（#K2-140 §三.3 禁有界搜索充证据）；须由监理按 §三.5『不成』支处置。",
+  "named_blocker": {
+   "first_clearance_violation": [
+    "PCIE_UP_OUT0_N_J2",
+    "I2C1_SDA",
+    "seg",
+    -0.205
+   ],
+   "first_pitch_violation": null,
+   "geometric_quantity": "lane-lane 中心距 / 障碍净距（见上两条 · 逐条具名）",
+   "minimal_repro": "本件为纯构造：16 条折线坐标全部落件（routes）· 逐条可复跑 exact_gate。"
+  },
+  "result": "**(a) 未取得**（构造性子集未过闸）· (b) 未建立"
+ }
+}

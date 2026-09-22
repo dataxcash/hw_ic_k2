@@ -1,0 +1,102 @@
+{
+ "schema": 1,
+ "artifact": "pending_rulings_delta_20260922_v60_final_window_constructor_outcome_and_bookkeeping_fixed",
+ "ts": "2026-09-22T13:44:50+08:00",
+ "ts_note": "机取时钟写入",
+ "from": "ENG · ARCHER R399（应 #K2-140 §三 末次收口窗）",
+ "to": "监理",
+ "owner_gate": 0,
+ "authority": "#K2-140 §三（准（甲）末次收口窗 · 出图工具 · 硬条件）· §三.2（先补正记账）· §三.5（二值：成/不成）· §五（若本窗仍不能闭合 ⇒ 监理即刻主动升 owner）",
+ "delivered": {
+  "bookkeeping_fixed": {
+   "input_board": "k2/hw/k2_v4_8L.l9.kicad_pcb",
+   "input_board_sha16_scriptcomputed": "77aaa63fe016b450",
+   "input_board_matches_declared_board": true,
+   "base_model_file": "/tmp/opencode/archer/model_l8.json",
+   "base_model_file_sha16_scriptcomputed": "c42731c4258ae691",
+   "base_model_selfdeclared_board": "k2/hw/k2_v4_8L.l8.kicad_pcb",
+   "derived_model_fingerprint_scriptcomputed_sha16": "d34362c4847ad9ba",
+   "patch_attached": "P_l8_to_l9_in5_neck_removal（移除 C-w 具名网 neck 内 In5：**24 段 + 4 孔**；补丁清单逐项落件）",
+   "statement": "**计算输入板 = 件上所写受审板（l9）**（经补丁 P）· 全部指纹**由脚本实算** ⇒ 满足 §三.2/O-3。"
+  },
+  "constructor_outcome": {
+   "method": "构造性 3 段折线（A->(x_A,y_slot)->(x_B,y_slot)->B · 槽序 = B 焊盘 x 升序）· 一次实现 · 一次运行 · 无参数扫描/无搜索",
+   "corridor_free_width_mm": 22.32,
+   "slots_need_mm": 7.2,
+   "gate": {
+    "n_lane_pitch_viol": 0,
+    "n_clearance_viol": 35,
+    "clearance_min_mm": -0.43,
+    "endpoint_max_dev_mm": 0.0
+   },
+   "reading": "**束层（走廊/槽位）空间充裕且 pitch 0 违例**（再证 R386『走廊非约束』）；**卡点 = 端子扇出腿**（x=锚位 / x=焊盘位之竖直段）撞 SoC 逃逸铜。"
+  }
+ },
+ "binary": {
+  "(a)": "**未取得**（构造性子集未过闸：35 条净距违例）",
+  "(b)": "未建立"
+ },
+ "named_blocker": {
+  "which_lanes": {
+   "PCIE_UP_OUT0_N_J2": 2,
+   "PCIE_UP_OUT0_P_J2": 3,
+   "PCIE_UP_OUT1_N_J2": 2,
+   "PCIE_UP_OUT1_P_J2": 2,
+   "PCIE_UP_OUT2_N_J2": 3,
+   "PCIE_UP_OUT2_P_J2": 3,
+   "PCIE_UP_OUT3_N_J2": 2,
+   "PCIE_UP_OUT3_P_J2": 2,
+   "PCIE_UP_OUT4_N_J2": 1
+  },
+  "geometric_quantity": "障碍净距（= hw + max(0.175, req)）最小值 **-0.43mm**（违例 35 处）",
+  "first_violations": [
+   [
+    "PCIE_UP_OUT0_N_J2",
+    "I2C1_SDA",
+    "seg",
+    -0.205
+   ],
+   [
+    "PCIE_UP_OUT0_N_J2",
+    "GND",
+    "via",
+    -0.206
+   ],
+   [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP6_N",
+    "seg",
+    -0.3318
+   ],
+   [
+    "PCIE_UP_OUT0_P_J2",
+    "P3V3",
+    "via",
+    -0.38
+   ]
+  ],
+  "minimal_repro": "16 条折线坐标全在件内 `gate_verdict`/routes；复跑 exact_gate 即得同读数。"
+ },
+ "honest_scope": "本件**不**以构造失败冒充『摆不下』之证明（§三.3 禁有界搜索充证据）；亦**未**取得 (a)。⇒ 依 §三.5『不成』支：具名障碍已交 ⇒ **回报**。",
+ "requested_ruling": [
+  "① 依 #K2-140 §三.5『不成』支与 §五：请监理核『方法确已尽』后**按预声明路由处置**（ENG 不自启 owner）。",
+  "② 请核 §三.2/O-3 **记账补正**是否达标（输入板一致 + 可复算指纹 + 补丁清单）。",
+  "③ 若监理认为**束层已通、仅端子扇出腿需障碍感知整形**（本件已定位到该处）⇒ 请裁是否属『方法未尽的构造精化』（属监理放行范围）。"
+ ],
+ "eng_action": "ENG 未 park · 未自升 owner · 未绕门禁 · 未派 WORKER · 未烙板。",
+ "anchors": {
+  "board_l9_sha16": "77aaa63fe016b450",
+  "frozen4": [
+   "d4e81f647be7f980",
+   "fb07d25ac426ff84",
+   "dd794c54f7ce7417",
+   "0a459839e15960b8"
+  ],
+  "criteria": "rev=6 MATCH"
+ },
+ "not_asked": [
+  "不请求 owner（依 §五 由监理主动处置）",
+  "未绕门禁 · 未改冻结四源/criteria/生成器/SPEC 设计内容 · 未派 WORKER · 未烙板",
+  "self_sha16 不提供（承 #K2-136 O-1）⇒ 以文件 sha256 留痕"
+ ]
+}
