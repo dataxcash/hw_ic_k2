@@ -1,0 +1,70 @@
+{
+ "schema": 1,
+ "artifact": "k2_r435_structured_channel_slot_encoding_spec_for_disposition_v1",
+ "ts": "2026-09-23T18:28:05",
+ "from": "ENG · ARCHER",
+ "to": "监理",
+ "owner_gate": 0,
+ "authority": "**#K2-147 §三**（暴力迭代 ≥2 ⇒ 停线 + **升级「生产方式」议题** ⇒ 生产方式 = 监理自裁面）· owner #14⑥（不 park：给出下一阶段可执行计划）· **#K2-146 §一**（问题类别 = 通道分配 · 解的形态 = **每对线分到哪条道/哪层/几个孔的一次性指派**）· R401 预登记口径",
+ "first_action": "已读 #K2-147（最新）；本件系 R434 自报停线后之**决策支持件**（不实现、不求解、不启新法于生产面）。",
+ "nature": "**只读规格件**：把 R434 技术诊断所指之编码形态写成**可授权的规格**，供监理就「生产方式」议题一次裁定。**未实现、未对真实实例建模、未运行求解器**（承 R434 承诺）。",
+ "headline": "**结构化编码规格（截面槽位 + nesting 单调）= 百级变量、秒级问题**：把『自由格点流』（113,280 布尔 · 900s 未闭合）换成 #K2-146 §一字面形态（每网指派 南通道层位 / 东端口槽位 / 北区层位），**非交叉由单调约束直接保证**，规模降 100 倍。**是否准用由监理具名**（生产方式变更非 ENG 自决）。",
+ "spec": {
+  "decision_variables": [
+   "每网 n：南通道 y 层位 `s_n ∈ S`（S = 南通道自由 y 层位集 · 步距 0.435）",
+   "每网 n：东端口 x 槽位 `e_n ∈ E`（E = 端口自由 x 槽位集 · 步距 0.435 · 实测 17 槽，R433）",
+   "每网 n：北区 y 层位 `t_n ∈ T`（T = 北区自由 y 层位集 · 步距 0.435）",
+   "每网 n：两侧引线走向（A 锚→首槽、末槽→B 锚；**确定性生成**，非决策）"
+  ],
+  "constraints": [
+   "**(i) nesting 单调（非交叉之充分条件)**：按 A 锚 x 升序 ⇒ `s` 序、`e` 序、`t` 序**同向单调**（R260 §六 P-1『最西 A 锚 → 最外/最深通道层』之形式化）",
+   "**(ii) 端口唯一**：`e_n` 两两不同（17 槽 ≥ 16 网）",
+   "**(iii) 束间中心距 ≥ 0.435**：由槽位步距 0.435 + 单调结构**由构造满足**（相邻网差异恰 ≥0.435）",
+   "**(iv) 逐段净距（对非 lane 障碍）**：对每个候选槽位/引线，用**确定性几何预计算**判定是否满足 `hw + eff(net)` 与 `HOLE_CLR`（障碍场 = 非 lane In5 铜/孔/盘 · 与在册闸同口径）；不满足者**从该网之候选域中剔除**",
+   "**(v) 端点位移 0**：折线首末点 = 锚点（引线确定性生成 ⇒ `endpoint_max_dev_mm == 0`）"
+  ],
+  "objective": "可行即可（可选：最小化总长）",
+  "expected_size": "16 × (|S|+|E|+|T|) ≈ 16 × (27+17+16) ≈ **960 决策变量** ⇒ 小实例（R432 已验 ms 级工具面）",
+  "two_products": "不变：**图纸规格**（每网 车道/层/过孔数）+ **求解证书**（SAT 模型件 / UNSAT 证明）",
+  "acceptance": "不变：R401 预登记口径 `n_lane_pitch_viol==0 ∧ n_clearance_viol==0 ∧ endpoint_max_dev_mm==0`（全 16 条）",
+  "soundness_note": "结构化形态下『非交叉』由单调约束**保证**（非事后抽样），故 pairwise 面不再依赖搜索；**残余风险 = 引线段**（A/B 侧短引线）—— 须以预计算候选域 + 闸复核双重把关。"
+ },
+ "why_this_is_the_right_form": "#K2-146 §一 原文即『**每对线分到哪条道/哪层/几个孔的一次性指派**』；R260 §六 P-1 亦已具名『**洋葱层构造**』为所需能力；R433 已实测出 3 组截面槽位（端口 7.60mm⇒17 槽 · 南通道 10.05mm · x=140 竖向 24.0mm）⇒ 规格所需数据**全部在册**。",
+ "preconditions_for_eng_to_proceed": [
+  "**① 生产方式具名（必需）**：监理核准编码形态 = 本文之**结构化（截面槽位 + nesting 单调）**编码（承 #K2-147 §三 之『生产方式』议题）。",
+  "**② 一次性口径（必需）**：明确『新窗口 = 新一次性』，或本次 UNKNOWN 是否计入既有一次（#K2-146 §四#1『一个窗口、一次求解』）。",
+  "**③ 两分支口径（可选）**：结构化编码若判 UNSAT ⇒ 证书即合法交付（#K2-147 §三 已明示）；是否须同时附『UNSAT 之下一步』建议，请监理具名。"
+ ],
+ "frozen_and_untouched": "冻结四源 **4/4 未动** · `criteria/` rev=6 未动 · 未改在册工具/生成器/SPEC/原理图/判据 · 未派 WORKER · 未运行求解器（承 R434 自停承诺）。",
+ "data_sources": {
+  "R260_census": {
+   "path": "/home/fila/jqdDev_2025/ic_hw/k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/K2_R260_UP_OUT_IN5_CORRIDOR_STRUCTURE_AND_CAPACITY_CENSUS.json",
+   "raw_sha256_16": "5e5ce7e5f021ab45"
+  },
+  "R401_prereg": {
+   "path": "/home/fila/jqdDev_2025/ic_hw/k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/K2_R401_V2_CRITERIA_PREREGISTRATION_v1.json",
+   "raw_sha256_16": "1300a0d7c1cca174"
+  },
+  "R433_window_record": {
+   "path": "/home/fila/jqdDev_2025/ic_hw/k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/K2_R433_A_BRANCH_WINDOW_STEP1_REVERT_DONE_STEP2_CALIBRATED_v1.json",
+   "raw_sha256_16": "4c92237847bd5fb0"
+  },
+  "R434_outcome": {
+   "path": "/home/fila/jqdDev_2025/ic_hw/k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/K2_R434_A_BRANCH_WINDOW_STEP2_OUTCOME_NO_CERTIFICATE_AND_REDLINE_SELFREPORT_v1.json",
+   "raw_sha256_16": "2ca87f98a0c1c665"
+  },
+  "model_l8_dump": {
+   "path": null,
+   "raw_sha256_16": null
+  }
+ },
+ "self_check": [
+  "**未**实现、**未**对真实实例建模、**未**运行任何求解器 —— 本件纯规格。",
+  "**未**预判 SAT/UNSAT（不把『形态更好』写成『必然可行』）。",
+  "**未**自决生产方式（明列三项前置，请监理具名）。",
+  "**未**新造判据（验收仍 R401 预登记）· 未改任何仓内件（除本件）。"
+ ],
+ "files": [
+  "K2_R435_STRUCTURED_CHANNEL_SLOT_ENCODING_SPEC_FOR_DISPOSITION_v1.json/.md/.sha16.txt"
+ ]
+}
