@@ -1,0 +1,31 @@
+variables { name: "z0" domain: [0, 3] }
+variables { name: "z1" domain: [0, 3] }
+variables { name: "z2" domain: [0, 3] }
+variables { name: "z3" domain: [0, 3] }
+variables { name: "a_z0_eq_z1" domain: [0, 1] }
+variables { name: "a_z2_eq_z3" domain: [0, 1] }
+constraints {
+  all_diff {
+    exprs { vars: [0] coeffs: [1] }
+    exprs { vars: [1] coeffs: [1] }
+    exprs { vars: [2] coeffs: [1] }
+    exprs { vars: [3] coeffs: [1] }
+  }
+}
+constraints {
+  enforcement_literal: [4]
+  linear {
+    vars: [0, 1]
+    coeffs: [1, -1]
+    domain: [0, 0]
+  }
+}
+constraints {
+  enforcement_literal: [5]
+  linear {
+    vars: [2, 3]
+    coeffs: [1, -1]
+    domain: [0, 0]
+  }
+}
+assumptions: [4, 5]

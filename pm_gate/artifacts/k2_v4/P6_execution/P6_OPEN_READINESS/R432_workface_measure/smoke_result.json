@@ -1,0 +1,30 @@
+{
+ "python": "3.10.12",
+ "ortools": "9.15.6755",
+ "SAT": {
+  "status": "OPTIMAL",
+  "wall_ms": 7.5,
+  "assign": {
+   "p0": 0,
+   "p1": 2,
+   "p2": 1,
+   "p3": 3
+  },
+  "cert_model_file": "sat_model.textproto",
+  "cert_model_bytes": 464
+ },
+ "UNSAT": {
+  "status": "INFEASIBLE",
+  "wall_ms": 1.8,
+  "is_proven_infeasible": true,
+  "unsat_core": [
+   "a_z0_eq_z1"
+  ],
+  "cert_model_file": "unsat_model.textproto",
+  "proof_stats": {
+   "num_conflicts": 0,
+   "num_branches": 40,
+   "solve_log_lines": 0
+  }
+ }
+}
