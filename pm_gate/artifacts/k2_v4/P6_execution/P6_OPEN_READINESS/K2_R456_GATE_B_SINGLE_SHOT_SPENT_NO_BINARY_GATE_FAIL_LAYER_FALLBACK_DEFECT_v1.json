@@ -1,0 +1,38 @@
+{
+ "schema": 1,
+ "artifact": "k2_r456_gate_b_single_shot_spent_no_binary_gate_fail_layer_fallback_defect_v1",
+ "ts": "2026-09-24T00:37:59",
+ "from": "ENG · ARCHER",
+ "to": "监理",
+ "owner_gate": 0,
+ "authority": "**#K2-156**（gate (a) 验收通过 · 放行 gate (b) · 单发纪律 · 不过闸即出不可行证书）· #K2-155 §四.3 · #K2-154 §四② · R401 预登记口径（rev=6）",
+ "headline": "**gate (b) 单发已耗，未出二值**：全量求解**恰好一次**（`OPTIMAL @0.1s`）但**在册闸未过** ⇒ 非交付、非里程碑；且**非不可行**（SAT）⇒ 亦无不可行证书可出。**单发纪律已守（未重跑）**；请监理处置后续。",
+ "run_record": {
+  "calls_total_this_item": 1,
+  "wall_s": 0.1,
+  "status": "OPTIMAL",
+  "model_sha16": "4228d8088c9c9c41",
+  "domain": "每线允许值表 432 个 (seat,layer) 组合 · seats=18 · layers=24 · Validate OK"
+ },
+ "gate": {
+  "lane_pitch_min_gap_mm": 0.0,
+  "n_lane_pitch_viol": 120,
+  "clearance_min_mm": 0.09,
+  "n_clearance_viol": 0,
+  "endpoint_max_dev_mm": 0.0,
+  "pass": false,
+  "read": "**障碍净距 OK（+0.09）· 端点精确（0.0000）· 仅「线对线 ≥0.435」未过（120 处、最小 0.00 ⇒ 车道完全重合）**"
+ },
+ "root_cause": "**路径生成器的「兜底」破坏了分层纪律**：当「按指定层」的 BFS 不成功时，我回退到**全自由格点**求路 ⇒ 该回退**忽略所分配的层** ⇒ 不同层的线可能得到**同一批节点** ⇒ 束间最小间距 **0.00**、120 处违例。⇒ 『分离性由构造保证』**因此未成立**（形对、实现的一个分支错）。",
+ "correct_fix_one_line": "**去掉兜底**：路径**只能**在「所分配层」内生成；生成不出的 `(seat,layer)` 组合**从允许值表剔除**（域过滤），而**不是**用兜底路径代替。⇒ 分层纪律成立 ⇒ AllDifferent(seat)+AllDifferent(layer) 之「分离性由构造保证」方为真。**单发纪律下我不自行重跑。**",
+ "no_binary_statement": "本件**未产出**：① 图纸规格（因解不合规）② 求解证书（模型 SAT，**非**不可行）③ 不可行证书（不适用）。⇒ 按 #K2-156 §二.3/#K2-155 §四.3c 之适用条件，**无证可出**；据实呈报，**不删约束、不改参、不重跑**。",
+ "requested": [
+  "① 请监理就「**去兜底 + 严格域过滤**」之一行修正**是否准予再作一次**（原因为**实现分支缺陷**，非改模型/约束/参数；请监理裁定其是否属『一次』范畴）；",
+  "② 若不准 ⇒ 请按 #K2-155 §四.4/#K2-156 §二.5 处置（升级「ENG 生产方式不达标」或另指路径）。",
+  "③ 附：本轮**未触碰**冻结四源/criteria/生成器/SPEC；**未重跑**（单发纪律守）。"
+ ],
+ "frozen": "冻结四源 4/4 未动 · criteria/ rev=6 未动 · 未改在册工具/生成器/SPEC 设计/原理图 · 未派 WORKER · 未烙板。",
+ "files": [
+  "K2_R456_GATE_B_SINGLE_SHOT_SPENT_NO_BINARY_GATE_FAIL_LAYER_FALLBACK_DEFECT_v1.json/.md/.sha16.txt"
+ ]
+}
