@@ -1,0 +1,95 @@
+{
+ "schema": 1,
+ "artifact": "k2_r468_v2_feasibility_selfcheck_16of16_nonempty_evidence_v1",
+ "ts": "2026-09-24T05:12:17",
+ "from": "ENG · ARCHER",
+ "to": "监理",
+ "owner_gate": 0,
+ "authority": "**R466 v2 规格自设「可核自检计划」**（全路径逐段域非空 ∧ 全局容量对账）· **#K2-164 §四.2.c**（评审格加「全路径域非空 ∧ 全局指派存在性」）· R467 自纠（L3 参数化修正后复算）",
+ "headline": "**v2 自设评审格 (2) 有据通过**：修正 L3 参数化（`(p,s,n)`：自 `SY(s)` 竖穿至 `NY(n)`）与 L1 起点核后复算 ⇒ **16/16 网全路径逐段域非空**（逐网可用组合 10⁴–10⁵ 量级 · 合计 **3,738,626** · 21.1s · 确定性几何 · **未驱动求解器**）⇒ 与 R465（2 网域空）形成**同法对照**，证「锚侧出入交求解器」确为该 2 网域空之解药。",
+ "method": "逐腿可行性表合成：L1 竖降(colIn,s) · L2 南横(colIn,s,seat) · **L3 竖穿(seat,s,n)** · L4 北横(colOut,n,seat) · L5 竖升(colOut,n)；采样 0.2175；判据 = 在册 `build_base` 非 lane 障碍栅格；出口列候选 = B 侧西段 120–134；**未驱动求解器**",
+ "result": {
+  "all_nonempty": true,
+  "lanes_nonempty": 16,
+  "total_combos": 3738626,
+  "per_lane": {
+   "PCIE_UP_OUT0_N_J2": {
+    "exists": true,
+    "n_combos": 204350
+   },
+   "PCIE_UP_OUT0_P_J2": {
+    "exists": true,
+    "n_combos": 128028
+   },
+   "PCIE_UP_OUT1_N_J2": {
+    "exists": true,
+    "n_combos": 204350
+   },
+   "PCIE_UP_OUT1_P_J2": {
+    "exists": true,
+    "n_combos": 152090
+   },
+   "PCIE_UP_OUT2_N_J2": {
+    "exists": true,
+    "n_combos": 233630
+   },
+   "PCIE_UP_OUT2_P_J2": {
+    "exists": true,
+    "n_combos": 178422
+   },
+   "PCIE_UP_OUT3_N_J2": {
+    "exists": true,
+    "n_combos": 253150
+   },
+   "PCIE_UP_OUT3_P_J2": {
+    "exists": true,
+    "n_combos": 188410
+   },
+   "PCIE_UP_OUT4_N_J2": {
+    "exists": true,
+    "n_combos": 282430
+   },
+   "PCIE_UP_OUT4_P_J2": {
+    "exists": true,
+    "n_combos": 188410
+   },
+   "PCIE_UP_OUT5_N_J2": {
+    "exists": true,
+    "n_combos": 311710
+   },
+   "PCIE_UP_OUT5_P_J2": {
+    "exists": true,
+    "n_combos": 231994
+   },
+   "PCIE_UP_OUT6_N_J2": {
+    "exists": true,
+    "n_combos": 311710
+   },
+   "PCIE_UP_OUT6_P_J2": {
+    "exists": true,
+    "n_combos": 246522
+   },
+   "PCIE_UP_OUT7_N_J2": {
+    "exists": true,
+    "n_combos": 311710
+   },
+   "PCIE_UP_OUT7_P_J2": {
+    "exists": true,
+    "n_combos": 311710
+   }
+  },
+  "wall_s": 21.1
+ },
+ "capacity_reconciliation": {
+  "port_columns": "实测 17–18 槽 ≥ 16 ⇒ AllDifferent(seat) 可满足",
+  "band_rows": "南/北带可用行 ≥16（各 24 候选）⇒ AllDifferent(srow/nrow) 可满足",
+  "corridor_columns": "锚侧下潜/上行列候选 28 / 9 ⇒ AllDifferent(colIn/colOut) 可满足",
+  "note": "评审格 (3)「全局指派存在性」之**容量对账**于此具据；其**充分性**仍由一次全量受证求解终裁（跑不通 ⇒ 含核不可行证书）"
+ },
+ "r467_correction": "R467 之「全 0」读数系**我自身分解缺陷**（L3 误参数化）所致，**已作废**；本件为修正后复算结果，**同法可复现**。",
+ "sequence_unchanged": "① 重设计评审 PASS → ② 一次实现 → ③ 一次见证（三证 + 负控①–⑥）→ ④ 一次全量受证（两件 + 可施工性字段）→ ⑤ 在册闸 rev=6 全条三项全 0；跑不通 ⇒ 含核不可行证书；**额度 1 未耗**。",
+ "frozen": "冻结四源 4/4 未动 · criteria/ rev=6 未动 · 未改代码/在册工具/生成器/SPEC 设计/原理图 · 未派 WORKER · 未启全量。",
+ "files": [
+  "K2_R468_V2_FEASIBILITY_SELFCHECK_16of16_NONEMPTY_EVIDENCE_v1.json/.md/.sha16.txt"
+ ]
+}
