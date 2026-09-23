@@ -2629,7 +2629,7 @@
   "j2_escape_topology": {
    "inner_col_x": 132.65,
    "inner_escape": "内列焊盘直接向左水平逃逸进入走廊 (F.Cu)",
-   "outer_basis": "8 层（LID REV6）：In2 独立走廊容纳全部 UP_OUT；B.Cu 为**高速信号层**（dn 带逃逸/落段，REV6 下由 In6=GND 参考、阻抗可控）。CO-73 更正：原文『B.Cu 释放给低速 (2026-08-19 用户裁决)』与 LID.1/REV6 事实矛盾；低速网归属见 layer_plan。",
+   "outer_basis": "8 层（LID REV6）：In5 独立走廊容纳全部 UP_OUT；B.Cu 为**高速信号层**（dn 带逃逸/落段，REV6 下由 In6=GND 参考、阻抗可控）。CO-73 更正：原文『B.Cu 释放给低速 (2026-08-19 用户裁决)』与 LID.1/REV6 事实矛盾；低速网归属见 layer_plan。",
    "outer_bot_y": 65.5,
    "outer_col_x": 135.0,
    "outer_escape": "外列焊盘右侧绕行至 In2 走廊 (v25 求解器分配 vx∈[131.7,136.0] 区)",
@@ -2639,7 +2639,7 @@
     42.6,
     64.8
    ],
-   "rule": "2026-08-19 8 层定案: J2 双列焊盘墙 0.6 pitch/0.35 高 → UP_OUT 16 网经 In2 单内层走廊 (F→In2→F 单次换层), 不再走 B.Cu",
+   "rule": "2026-08-19 8 层定案: J2 双列焊盘墙 0.6 pitch/0.35 高 → UP_OUT 16 网经 In5 单内层走廊 (F→In5→F 单次换层), 不再走 B.Cu",
    "wall_topology": "SlimSAS 74pin 双列 0.6 pitch, 列距 2.35mm"
   },
   "m3_keepout_mm": 3.0,
@@ -18011,7 +18011,7 @@
    },
    "board_realized_zones": {
     "basis": "受审板实测（board_sha16=dae8dc8d48ff5b81）+ 监理 #K2-23 §二-4「以板为准」裁定 + §二-1 Z4 权威源（真源 → SPEC → 板；板为本文输入层的实测来源）",
-    "board_sha16": "77aaa63fe016b450",
+    "board_sha16": "7a5c89913d6e5d0a",
     "count": 10,
     "zones": [
      {
@@ -18692,7 +18692,7 @@
   }
  },
  "source": "L2_STRUCTURE_v1.0.md (v1.2) + prereq_closure.md + ECN-004",
- "spec_version": "1.1.spec-rev-55",
+ "spec_version": "1.1.spec-rev-49",
  "stackup": {
   "B.Cu": "signal (PCIe + escape)",
   "F.Cu": "signal (PCIe + escape)",
@@ -18784,7 +18784,7 @@
  "vias": {
   "high_speed": {
    "back_drill": true,
-   "basis": "2026-08-16 PM 裁决: 取消 0 过孔绝对限制, 受控过孔 + JLC 背钻消除残桩; 每线 ≤2 过孔 = 单次换层 (F→In2→F), 每对差分 4 过孔",
+   "basis": "2026-08-16 PM 裁决: 取消 0 过孔绝对限制, 受控过孔 + JLC 背钻消除残桩; 每线 ≤2 过孔 = 单次换层 (F→In5→F), 每对差分 4 过孔",
    "gnd_stitch_via": true,
    "max_per_line": {
     "bandX_escape_In2": 4,
@@ -20037,7 +20037,7 @@
  },
  "keepout_geometry": {
   "basis": "受审板实测（board_sha16=dae8dc8d48ff5b81）+ 监理 #K2-23 §二-4「以板为准」裁定 + §二-1 Z4 权威源（真源 → SPEC → 板；板为本文输入层的实测来源）",
-  "board_sha16": "77aaa63fe016b450",
+  "board_sha16": "7a5c89913d6e5d0a",
   "count": 8,
   "ko7_disposition": {
    "board_has_standalone_zone": false,
@@ -20926,7 +20926,7 @@
  },
  "mounting_holes": {
   "basis": "受审板实测（board_sha16=dae8dc8d48ff5b81）+ 监理 #K2-23 §二-4「以板为准」裁定 + §二-1 Z4 权威源（真源 → SPEC → 板；板为本文输入层的实测来源）",
-  "board_sha16": "77aaa63fe016b450",
+  "board_sha16": "7a5c89913d6e5d0a",
   "count": 4,
   "np_thru_hole": {
    "drill_mm": 3.2,
@@ -21126,30 +21126,5 @@
    "pd.zone_defs.board_realized_zones": "c5a7df90aadb66e0 → 7a5c89913d6e5d0a"
   },
   "scope_note": "**仅**记录新板 board_sha16 + 依据；rev-52 → rev-53 除上述 3 处 board_sha16 声明与本卡外**零差异**（无几何/网表/口径变更 —— 本 rev 实质变更在网表 pin 映射(errata-3)与符号层，几何未动）。"
- },
- "_spec_rev_55": {
-  "card": "SPEC-REV-55（受审板 l9 记录 · C-w 搬迁落件）",
-  "at": "2026-09-22",
-  "authority": "监理 #K2-137 §二 (甲) 准：**方案驱动落地**（沿用 l8 落库范式 · 版本 bump 新件 · 同批提交）· 宪法第四条（版本 bump 新文件）",
-  "scope_note": "**仅声明性回填**：本 rev 只记录新受审板 l9 之 `board_sha16` 声明（3 处）+ 版本标签 + 本卡。**不改任何设计约束字段**（网类/走线区/间距/线宽/层规划/keepout 几何/原理图/生成器逻辑 一律不动）；旧 rev(1..54) **逐字节不改**。",
-  "board_sha16": "77aaa63fe016b450",
-  "board_file": "k2/hw/k2_v4_8L.l9.kicad_pcb",
-  "board_from": "k2_v4_8L.l8.kicad_pcb (7a5c89913d6e5d0a)",
-  "updated_board_sha16_declarations": {
-   "keepout_geometry": "7a5c89913d6e5d0a → 77aaa63fe016b450",
-   "pd.zone_defs.board_realized_zones": "7a5c89913d6e5d0a → 77aaa63fe016b450",
-   "mounting_holes": "7a5c89913d6e5d0a → 77aaa63fe016b450"
-  },
-  "declaration_only_extra": [
-   "spec_version: 1.1.spec-rev-49 → 1.1.spec-rev-55（版本标签 = 声明）"
-  ],
-  "not_touched": "其它 `语义=受审板实测值` 之标量（如 zone/via 计数）**保持原值** —— 其『声明 vs 约束』归属未证 ⇒ 依 #K2-137 §二 fail-closed **按约束处理、不动**。",
-  "basis": [
-   "#K2-136 §三 项2（落搬迁 · 已授权内容）",
-   "#K2-137 §二 (甲)（落件路径 = 方案驱动落地）",
-   "K2_R373_CW_RELOCATION_APPLIER_v1.py（确定性施加器 · 两次运行逐字节同）",
-   "v55 搬迁清单（①③ 达成 · ②(i) 守恒级 CLOSED · ②(ii) 几何级 R372 CLOSED）"
-  ],
-  "rollback": "删除本文件并把 pm_gate/project.yaml 之 spec_name 指回 SPEC_k2_v4.spec-rev-54.json；l9 删除即可（l8 未动）"
  }
 }
