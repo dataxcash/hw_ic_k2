@@ -66,6 +66,31 @@ A 分支工作面**已就绪、证书双形式实测可用**（ortools 9.15.6755
 ④ 落**两产物**（图纸规格 + 求解证书）
 ⑤ 按 **R401 预登记口径**验收（`1300a0d7c1cca174` · exact_gate 全 16 条）
 
+## 6b. **`exact_gate` 接口契约**（验收闸之**输入** = 窗口成败关键 · 只读摘录 `k2/tools/k2_p4_b2_in5_lane_router_v3.py` `98ad53eb958d67a5`）
+**入口**：`exact_gate(model, routes, anchors, layer, hw, movable_tracks, movable_vias, pitch, movable_copper=frozenset())`（行 265）
+
+| 输入键 | 契约 |
+|---|---|
+| `model` | In5 模型 dump（`segs`/`pads`/`vias`/`bbox`/`layers`/`design`/`board`）· 由**在册** `k2/tools/k2_p4_b2_board_in5_model_dump_v1.py` 从受审板重生成（确定性） |
+| `routes` | **每网一条折线**：`routes[net] = {"pts": [[x,y], …]}` —— **这就是『图纸规格』本身** |
+| `anchors` | `lane_anchors(model)`（可经 `--a-sites/--b-sites` 覆盖；端点即由它核） |
+| `layer` | `"In5.Cu"`（单层硬条件） |
+| `hw` | 半线宽 = `lane_w/2` = 0.16/2 = **0.080** |
+| `pitch_eff` | `pitch + margin` = 0.335 + 0.100 = **0.435**（= #K2-143 钉死之束间口径） |
+| `movable` | 本窗口 `movable_tracks/vias/copper = 空`（**不动他人铜** ⇒ 障碍场 = 除 16 lane 外全部） |
+
+**闸内口径**：`EFF_MIN = 0.175` · `HOLE_CLR = 0.25`（行 31–32）
+**PASS**：`n_lane_pitch_viol==0 ∧ n_clearance_viol==0 ∧ endpoint_max_dev_mm==0`（**全 16 条**）—— 即 R401 预登记 `1300a0d7c1cca174` 之『互距0 ∧ 净距0 ∧ 端点0』
+**返回**：`lane_pitch_min_gap_mm` · `lane_pitch_min_pair` · `n_lane_pitch_viol(+violations)` · `clearance_min_mm` · `n_clearance_viol(+violations)` · `endpoint_max_dev_mm` · `per_lane{net:{margin_min_mm,blocker}}` · `n_obs{seg,via,pad}`
+
+**设计含义**：
+- **求解器只需产出「每网折线点列」** ⇒ 一次求解之产物**即闸可直接消费之物** ⇒ 施工=连连看（承教令 §二）
+- **不需**求解器产出铜/Gerber/层叠 ⇒ 消除『出图后再对不上闸』之返工源
+- 障碍场定义 = 模型内 **非 lane 且非 movable** 之 In5 走线 + 过孔 + 焊盘 ⇒ 与 R260 F-2『真墙』一致（缝合孔场 + `PERSTA#` In5 带 + 连接器通孔列）
+- **端点**由 `anchors` 之 A/B 位核（`endpoint_max_dev_mm`）⇒ CP-SAT 之端点变量须**逐网钉死**为 anchor 点（承 R401 硬条件④ 端点位移 0）
+
+**⇒ 一次性窗口之含义**：⇒ **一次求解**须直接产出「闸-ready 折线」：模型里把 `pitch_eff=0.435`、`EFF_MIN=0.175`、`HOLE_CLR=0.25`、`hw=0.080`、端点 anchor 一并编码为约束，使 gate 三项**由构造满足**（而非跑完再修）。
+
 ## 7. 阶段门
 **停手令维持**（#K2-145 指令1）：owner 回件前**禁一切生产动作** ⇒ 本件**不执行** ①–⑤；owner 选 A（维持）⇒ 上表生效；owner 选 B（放宽）⇒ 本件自然失效（#K2-146 首段）。
 
@@ -75,4 +100,4 @@ A 分支工作面**已就绪、证书双形式实测可用**（ortools 9.15.6755
 - **未**把『工作面就绪』写成『已求解/已得证』；验收仍用 **R401 在册预登记**、未新造判据、未新增齿
 
 ---
-—— ENG（ARCHER）· 2026-09-23T16:56 · 工作面就绪（未求解）· owner 闸口 0 · sha16 `6a7842f88cce4466`
+—— ENG（ARCHER）· 2026-09-23T16:56 · 工作面就绪（未求解）· owner 闸口 0 · sha16 `297686e6308ae44c`

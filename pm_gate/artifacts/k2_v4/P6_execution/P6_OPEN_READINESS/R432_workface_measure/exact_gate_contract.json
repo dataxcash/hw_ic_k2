@@ -1,0 +1,28 @@
+{
+ "source_file": "k2/tools/k2_p4_b2_in5_lane_router_v3.py",
+ "raw_sha256_16": "98ad53eb958d67a5",
+ "entry": "`exact_gate(model, routes, anchors, layer, hw, movable_tracks, movable_vias, pitch, movable_copper=frozenset())`（行 265）",
+ "input_contract": {
+  "model": "In5 模型 dump（`segs`/`pads`/`vias`/`bbox`/`layers`/`design`/`board`）· 由**在册** `k2/tools/k2_p4_b2_board_in5_model_dump_v1.py` 从受审板重生成（确定性）",
+  "routes": "**每网一条折线**：`routes[net] = {\"pts\": [[x,y], …]}` —— **这就是『图纸规格』本身**",
+  "anchors": "`lane_anchors(model)`（可经 `--a-sites/--b-sites` 覆盖；端点即由它核）",
+  "layer": "`\"In5.Cu\"`（单层硬条件）",
+  "hw": "半线宽 = `lane_w/2` = 0.16/2 = **0.080**",
+  "pitch_eff": "`pitch + margin` = 0.335 + 0.100 = **0.435**（= #K2-143 钉死之束间口径）",
+  "movable": "本窗口 `movable_tracks/vias/copper = 空`（**不动他人铜** ⇒ 障碍场 = 除 16 lane 外全部）"
+ },
+ "calibers_in_gate": {
+  "EFF_MIN": 0.175,
+  "HOLE_CLR": 0.25,
+  "note": "行 31–32；lane-vs-障碍按 `req(net)`/`eff(net)` + 半宽计余量"
+ },
+ "pass_criteria": "`n_lane_pitch_viol==0 ∧ n_clearance_viol==0 ∧ endpoint_max_dev_mm==0`（**全 16 条**）—— 即 R401 预登记 `1300a0d7c1cca174` 之『互距0 ∧ 净距0 ∧ 端点0』",
+ "outputs": "`lane_pitch_min_gap_mm` · `lane_pitch_min_pair` · `n_lane_pitch_viol(+violations)` · `clearance_min_mm` · `n_clearance_viol(+violations)` · `endpoint_max_dev_mm` · `per_lane{net:{margin_min_mm,blocker}}` · `n_obs{seg,via,pad}`",
+ "design_meaning": [
+  "**求解器只需产出「每网折线点列」** ⇒ 一次求解之产物**即闸可直接消费之物** ⇒ 施工=连连看（承教令 §二）",
+  "**不需**求解器产出铜/Gerber/层叠 ⇒ 消除『出图后再对不上闸』之返工源",
+  "障碍场定义 = 模型内 **非 lane 且非 movable** 之 In5 走线 + 过孔 + 焊盘 ⇒ 与 R260 F-2『真墙』一致（缝合孔场 + `PERSTA#` In5 带 + 连接器通孔列）",
+  "**端点**由 `anchors` 之 A/B 位核（`endpoint_max_dev_mm`）⇒ CP-SAT 之端点变量须**逐网钉死**为 anchor 点（承 R401 硬条件④ 端点位移 0）"
+ ],
+ "one_shot_implication": "⇒ **一次求解**须直接产出「闸-ready 折线」：模型里把 `pitch_eff=0.435`、`EFF_MIN=0.175`、`HOLE_CLR=0.25`、`hw=0.080`、端点 anchor 一并编码为约束，使 gate 三项**由构造满足**（而非跑完再修）。"
+}
