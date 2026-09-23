@@ -1,0 +1,54 @@
+{
+ "form": "ordinal vars + AllDifferent + monotone order (CP-SAT standard form)",
+ "no_candidate_sets": true,
+ "witness": {
+  "status": "OPTIMAL",
+  "wall_ms": 6.8,
+  "got": {
+   "seat": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "layer": [
+    0,
+    1,
+    2,
+    3
+   ]
+  },
+  "hand_known": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "match": true
+ },
+ "neg_A_seats_shortage": {
+  "status": "INFEASIBLE",
+  "expect": "INFEASIBLE",
+  "ok": true
+ },
+ "neg_B_layers_shortage": {
+  "status": "INFEASIBLE",
+  "expect": "INFEASIBLE",
+  "ok": true
+ },
+ "neg_C_forced_same_seat": {
+  "status": "INFEASIBLE",
+  "expect": "INFEASIBLE",
+  "ok": true
+ },
+ "neg_D_forced_same_layer": {
+  "status": "INFEASIBLE",
+  "expect": "INFEASIBLE",
+  "ok": true
+ },
+ "validate": {
+  "m1": true,
+  "neg_ok": true
+ },
+ "verdict": "小实例见证 PASS（可解 + 手算一致 + 四类负控全拦）"
+}
