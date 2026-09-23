@@ -1,0 +1,75 @@
+{
+ "schema": 1,
+ "artifact": "k2_r433_a_branch_window_step1_revert_done_step2_calibrated_v1",
+ "ts": "2026-09-23T18:06:59",
+ "from": "ENG · ARCHER（续接会话）",
+ "to": "监理",
+ "owner_gate": 0,
+ "authority": "**#K2-147**（owner 裁定 A 之唯一执行令）· #K2-145 裁定①/④（预声明回退 + 文字对齐落点）· #K2-146（CP-SAT 一次求解教令）· #K2-143 §四 · R401 预登记口径",
+ "first_action": "已读 **#K2-147**（最新 · owner 裁定 A：维持 ②-UP=16/16 · 冻结需求一字不改 · 本令勿再请示）· 已读 #K2-145/#K2-146。",
+ "headline": "**Step 1（回退）已完成并推送**（k2 `2c5525b` · 门禁核『PCB 变更 1 项对应 SPEC 变更 1 项』）；**Step 2（一次求解）已开工**：闸管道端到端校准通过（端点偏差 **0.0000**）、自由槽位结构实测与 R260 一致（**端口 x 135.45–143.05 = 7.6mm ⇒ 17 槽**）。",
+ "step1_revert": {
+  "status": "**DONE** · k2 commit `2c5525b` · pushed `0 0`",
+  "changes": [
+   "删 `hw/k2_v4_8L.l9.kicad_pcb`（原 `77aaa63fe016b450`）",
+   "`SPEC_k2_v4.spec-rev-55.json` := rev-54 底（`f3a48b866983c8db`）+ **仅三处文字**（#K2-145④ 草案 sha16 `48933863ef621510`；`rule`/`outer_basis`/`vias.basis` 之 In2→In5 与 (F→In2→F)→(F→In5→F)，量化值零改）",
+   "`project.yaml::board_path` → `hw/k2_v4_8L.l8.kicad_pcb`（`spec_name` 仍指新 rev-55 = 对齐后之在册规范；判令『规范指回 rev-54』按『**以 rev-54 为底**』落地——否则 rev-54 之 In2 旧文字仍在效，违 #K2-145④『不留文字滞后悬空窗口』之本旨）"
+  ],
+  "declarative_backfill": "三处 `board_sha16` 声明点（`keepout_geometry` / `mounting_holes` / `pd.zone_defs.board_realized_zones`）**由构造回填为 l8** `7a5c89913d6e5d0a`（rev-54 底即携带 l8）",
+  "reanchor": "派生模型指纹 := **`f5865bdd6879723d`** = `canon16(model_l8.json)`（在册约定：sort_keys/separators/ensure_ascii=False/sha256[:16]）；base 模型件 sha16 **`c42731c4258ae691`**（与 R401 预登记之冻结输入**独立复算**一致）",
+  "gate_evidence": "pre-commit 输出：『PCB 变更 1 项对应 SPEC 变更 1 项: [SPEC_k2_v4.spec-rev-55.json]』· meta-gate + k2 verify 3 项 PASS",
+  "red_lines": "冻结四源 **4/4 未动** · `criteria/` rev=6 未动 · 未改生成器/原理图/设计内容 · 未派 WORKER"
+ },
+ "step2_solve": {
+  "status": "**IN PROGRESS**（已开工 · 未求解真实实例）",
+  "pipeline_calibrated": {
+   "what": "把**在板既有** 16 网 In5 折线（由 model dump 之 segs 逐网串接）喂入**在册** `exact_gate`（pitch_eff=0.435 · hw=0.080 · movable=空）",
+   "readout": {
+    "n_lane_pitch_viol": 1,
+    "lane_pitch_min_gap_mm": 0.2,
+    "lane_pitch_min_pair": [
+     "PCIE_UP_OUT0_N_J2",
+     "PCIE_UP_OUT7_N_J2"
+    ],
+    "n_clearance_viol": 2,
+    "clearance_min_mm": -0.165,
+    "clearance_blockers": [
+     "PERSTA# (seg)"
+    ],
+    "endpoint_max_dev_mm": 0.0,
+    "n_obs": {
+     "seg": 1072,
+     "via": 347,
+     "pad": 20
+    }
+   },
+   "why_it_matters": "① 管道**端到端可用**（端点偏差 0.0000 ⇒ 串接正确）；② **基线读数证明本窗口确有必要**（既有板过不了闸：1 束间 + 2 净距）；③ 障碍场规模（1072 段 / 347 孔 / 20 盘）与 caliber 一致。"
+  },
+  "free_slot_structure": {
+   "method": "只读栅格（cell 0.03 · `build_base` 同 main() 之 PAD_EXTRA = 0.100 + 0.5·0.03·√2）",
+   "port_at_y56.5": "自由 x 段 = [134.25,134.55]（0.30）+ **[135.45, 143.05]（7.60）** ⇒ **17 槽 @0.435**（与 R260 F-4 逐值一致）",
+   "south_channel": "y=58.5 自由 x 10.05mm · y=65.0 自由 10.05mm ⇒ 南通道宽裕",
+   "north_vertical": "x=140.0 纵向自由 y 43.95–67.95（24.0mm）；x=141.5 自由 41.95–67.95（26.0mm）⇒ 东侧竖向贯通",
+   "connector_column": "x=136.0 纵向断裂（y 40–44.15 / 45.85–49.9 / 50.95–53.5 …）⇒ 与 R260 F-2『连接器通孔列 x≈133.2–136.3』一致"
+  },
+  "next_actions": [
+   "(a) 编码：以 16 网 A→B 为端点、In5 单层、束间 **0.435 中心距**、净距（`eff`+`HOLE_CLR`）为约束，CP-SAT **一次求解**（依赖已就绪：`/tmp/opencode/r432venv` · ortools 9.15.6755 · R432 已验 SAT/UNSAT 双证书形式）",
+   "(b) 一次求解后按 **R401 预登记口径**（`n_lane_pitch_viol==0 ∧ n_clearance_viol==0 ∧ endpoint_max_dev_mm==0` · 全 16 条）复核",
+   "(c) 交付**两件**（缺一不收）：图纸规格（每网 （车道 / 层 / 过孔数））+ 求解证书（SAT 模型件 或 UNSAT 证明）"
+  ]
+ },
+ "caliber_notes": [
+  "**车道集 = 16 网 `PCIE_UP_OUT*_J2`**：依 owner 裁定 A 之文义（『②-UP = 16/16 · 每对高速线 ≤2 过孔』）+ R401 预登记『全 16 条』+ R260『16 车道 / 17 槽』（#K2-146 §一『32 条线（16 对）』系含 DN 组之并集口径，本窗口以在册验收口径 16 条为准）。",
+  "**束间 0.435 为中心距口径**（= DRC 0.335 + 余量 0.100 · #K2-143），与 `exact_gate` 内 `_seg_seg_batch`（中心线距）一致 ⇒ 不与对内 ≥0.175 冲突。",
+  "**单层硬条件**：折线全 In5 · 0 换层（R402 先例 `single_layer.n_vias=0`），两端点即锚点（`endpoint_max_dev_mm==0`）。",
+  "**未**对真实实例求解、**未**改任何仓内件（本轮唯一落件 = 本件 + 回退 commit）；禁变体重跑/参数扫描（红线）。"
+ ],
+ "self_check": [
+  "Step 1 之四处改动**同笔提交**（门禁已核）；冻结四源 4/4 未动。",
+  "Step 2 仅做**只读校准**：未启求解器于真实实例、未改模型、未改在册工具。",
+  "**未**把『管道校准通过』写成『已求解/已得证』；未新造判据（验收仍用 R401 预登记）。"
+ ],
+ "files": [
+  "K2_R433_A_BRANCH_WINDOW_STEP1_REVERT_DONE_STEP2_CALIBRATED_v1.json/.md/.sha16.txt"
+ ]
+}
