@@ -1,0 +1,144 @@
+{
+ "artifact": "k2_r523_witness_zonestruct_v2",
+ "ts": "2026-09-24T23:49:29",
+ "authority": "supervisor stop-order (binary demanded: feasible witness OR conservation-grade infeasibility certificate; no clarification/tool-bump rounds) + #K2-189 sec.3.4 (constructive family ratified, non-quota)",
+ "solve_calls": 0,
+ "method": "stage-structured deterministic construction: In5 comb stub -> In4 mid (via-to-via) -> In5 pad stub, with hard per-layer declaration-set reservation; all-In5 lanes tried first",
+ "orders": {
+  "sp_desc": {
+   "n_routed": 2,
+   "stalls": [
+    {
+     "lane": "PCIE_UP_OUT2_P_J2",
+     "rank": 2,
+     "res0": 219,
+     "res1": 203
+    }
+   ],
+   "modes": {
+    "PCIE_UP_OUT0_P_J2": "structured",
+    "PCIE_UP_OUT1_N_J2": "all_In5"
+   }
+  },
+  "sp_asc": {
+   "n_routed": 2,
+   "stalls": [
+    {
+     "lane": "PCIE_UP_OUT5_P_J2",
+     "rank": 2,
+     "res0": 166,
+     "res1": 111
+    }
+   ],
+   "modes": {
+    "PCIE_UP_OUT7_P_J2": "structured",
+    "PCIE_UP_OUT6_N_J2": "all_In5"
+   }
+  },
+  "Bx_desc": {
+   "n_routed": 3,
+   "stalls": [
+    {
+     "lane": "PCIE_UP_OUT5_N_J2",
+     "rank": 3,
+     "res0": 413,
+     "res1": 203
+    }
+   ],
+   "modes": {
+    "PCIE_UP_OUT0_P_J2": "structured",
+    "PCIE_UP_OUT4_P_J2": "all_In5",
+    "PCIE_UP_OUT1_N_J2": "all_In5"
+   }
+  },
+  "Bx_asc": {
+   "n_routed": 2,
+   "stalls": [
+    {
+     "lane": "PCIE_UP_OUT5_P_J2",
+     "rank": 2,
+     "res0": 228,
+     "res1": 165
+    }
+   ],
+   "modes": {
+    "PCIE_UP_OUT0_N_J2": "structured",
+    "PCIE_UP_OUT1_P_J2": "all_In5"
+   }
+  },
+  "Ax_asc": {
+   "n_routed": 2,
+   "stalls": [
+    {
+     "lane": "PCIE_UP_OUT1_N_J2",
+     "rank": 2,
+     "res0": 236,
+     "res1": 165
+    }
+   ],
+   "modes": {
+    "PCIE_UP_OUT0_N_J2": "structured",
+    "PCIE_UP_OUT0_P_J2": "all_In5"
+   }
+  },
+  "west_first": {
+   "n_routed": 3,
+   "stalls": [
+    {
+     "lane": "PCIE_UP_OUT3_P_J2",
+     "rank": 3,
+     "res0": 487,
+     "res1": 165
+    }
+   ],
+   "modes": {
+    "PCIE_UP_OUT0_N_J2": "structured",
+    "PCIE_UP_OUT1_P_J2": "all_In5",
+    "PCIE_UP_OUT2_N_J2": "all_In5"
+   }
+  },
+  "east_first": {
+   "n_routed": 2,
+   "stalls": [
+    {
+     "lane": "PCIE_UP_OUT2_P_J2",
+     "rank": 2,
+     "res0": 219,
+     "res1": 203
+    }
+   ],
+   "modes": {
+    "PCIE_UP_OUT0_P_J2": "structured",
+    "PCIE_UP_OUT1_N_J2": "all_In5"
+   }
+  }
+ },
+ "lanes": [
+  "PCIE_UP_OUT0_N_J2",
+  "PCIE_UP_OUT0_P_J2",
+  "PCIE_UP_OUT1_N_J2",
+  "PCIE_UP_OUT1_P_J2",
+  "PCIE_UP_OUT2_N_J2",
+  "PCIE_UP_OUT2_P_J2",
+  "PCIE_UP_OUT3_N_J2",
+  "PCIE_UP_OUT3_P_J2",
+  "PCIE_UP_OUT4_N_J2",
+  "PCIE_UP_OUT4_P_J2",
+  "PCIE_UP_OUT5_N_J2",
+  "PCIE_UP_OUT5_P_J2",
+  "PCIE_UP_OUT6_N_J2",
+  "PCIE_UP_OUT6_P_J2",
+  "PCIE_UP_OUT7_N_J2",
+  "PCIE_UP_OUT7_P_J2"
+ ],
+ "best_order": "Bx_desc",
+ "best_n_routed": 3,
+ "best_stalls": [
+  {
+   "lane": "PCIE_UP_OUT5_N_J2",
+   "rank": 3,
+   "res0": 413,
+   "res1": 203
+  }
+ ]
+}
