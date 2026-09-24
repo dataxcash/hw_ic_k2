@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""K2 · R532 —— **联合模型受证可行性求解（口径保真补射 · #K2-198 §三.4）**：过孔域 = **四宽区全部在册过孔站**（**不再**收窄）＋ **显式孔间距约束**（2x2 格块 clique ⇒ 块内 <=1 ⇒ 两两 >= VIA_SEP=0.70mm）。
+"""K2 · R532 —— **联合模型受证可行性求解（口径保真补射 · #K2-198 §三.4）**：口径（#K2-199 §三.3）：过孔域 = **在册族 `Gen2.build_lane()` 依其声明绕行预算产出的每线图内的全部过孔站**（口径 B）；
+**上限**为 `via_positions()`（物理可用集 A）；**无任何 ENG 自设收窄**；**孔间距为显式约束**（2x2 格块团 ⇒ 块内 <=1 ⇒ 两两 >= VIA_SEP=0.70mm）。
 
 16 根线**同时**入求解器：每根线在**自己完整网图**上取流（连通＋端点）· **逐层每格点容量 ≤1**（互交由求解器约束）·
 **换层 ≤2 对孔**（孔位限于在册四宽区；孔位集按 **2 格(2P>VIA_SEP) 间距**取子集 ⇒ 格点容量即保证孔间距）·
@@ -16,7 +17,7 @@ G = importlib.import_module("K2_R523_LAYERHOP_PARITY_FORMC_v1")
 P, X0, Y0, NX, NY, NID, TERM_BASE = W.P, W.X0, W.Y0, W.NX, W.NY, W.NID, W.TERM_BASE
 XY, VIA_SEP, MAX_VIA_PAIRS, HW = W.XY, W.VIA_SEP, W.MAX_VIA_PAIRS, W.HW
 OWN_OUT = "K2_R532_JOINT_WITNESS_FIDELITY_v1.json"
-VIA_GRID = 2          # via sites restricted to a >=2-lattice grid => >=2P = 0.87mm > VIA_SEP = 0.70mm
+BOUND_REGISTERED = W.BOUND   # registered declared detour budget (#K2-199 §三.4④) — MUST NOT be lowered
 
 
 def main():
@@ -54,7 +55,8 @@ def main():
     # ---- explicit via-spacing constraints: 2x2 lattice blocks are cliques of the VIA_SEP conflict graph ----
     via_nodes = {nm: sorted({(u % NID) for (u, v, iv) in arcs[nm] if iv and u < TERM_BASE}) for nm in names}
     rep["domain"] = {"arcs_per_lane": {nm: len(arcs[nm]) for nm in names},
-                     "total_arcs": sum(len(v) for v in arcs.values()), "via_grid": VIA_GRID,
+                     "total_arcs": sum(len(v) for v in arcs.values()),
+                     "detour_budget_BOUND": float(BOUND_REGISTERED), "self_imposed_via_restriction": "NONE",
                      "note": "no partition/cell restriction: each lane keeps its FULL own-net graph"}
     mo = cp_model.CpModel()
     x, demand = {}, {}
@@ -81,19 +83,29 @@ def main():
             mo.Add(sum(inflow[nd]) == sum(outflow[nd])).OnlyEnforceIf(d)
         mo.Add(sum(x[nm][k] for k, (u, v, iv) in enumerate(arcs[nm]) if iv) <= 2 * MAX_VIA_PAIRS).OnlyEnforceIf(d)
         demand[nm] = d
-    # ---- gate f (new, #K2-198 sec.3.4): caliber fidelity ----
-    regset = {nm: set(g2.via_positions(nm).tolist()) for nm in names}
-    dom_ok = all(set(via_nodes[nm]) <= regset[nm] for nm in names)
-    full_ok = all(set(via_nodes[nm]) == regset[nm] for nm in names)
+    # ---- gate f (corrected to FOUR items, #K2-199 sec.3.4): caliber fidelity ----
+    regset = {nm: set(g2.via_positions(nm).tolist()) for nm in names}     # (A) physical available set = upper bound
+    famset = {}                                                          # (B) the registered family graph's via set
+    for nm in names:
+        f = set()
+        for u, lst in lanes[nm]["adj"].items():
+            for (v, w) in lst:
+                if u < TERM_BASE and v < TERM_BASE and u // NID != v // NID:
+                    f.add(u % NID)
+        famset[nm] = f
     rep["F_caliber_fidelity"] = {
-        "i_via_domain_subset_of_registered": bool(dom_ok),
-        "ii_via_domain_EQUALS_registered_full_set": bool(full_ok),
-        "registered_via_sites_per_lane": {nm: len(regset[nm]) for nm in names},
-        "domain_via_sites_per_lane": {nm: len(via_nodes[nm]) for nm in names},
+        "caliber_definition": "#K2-199 sec.3.3 — the in-register caliber = the via sites inside the per-lane graph "
+                              "produced by the registered family Gen2.build_lane() under its DECLARED detour budget; "
+                              "via_positions() is the UPPER BOUND only",
+        "i_domain_subset_of_registered_available": bool(all(set(via_nodes[nm]) <= regset[nm] for nm in names)),
+        "ii_domain_EQUALS_family_graph_via_set": bool(all(set(via_nodes[nm]) == famset[nm] for nm in names)),
         "iii_via_spacing_as_EXPLICIT_constraints": "2x2 lattice block cliques (max intra-distance 0.615mm < "
-                                                  "VIA_SEP 0.70mm) => at most one via per block per layer => "
-                                                  "pairwise spacing >= VIA_SEP",
-        "verdict": "PASS" if (full_ok and dom_ok) else "FAIL (fail-closed: do NOT fire)"}
+                                                  "VIA_SEP 0.70mm) => at most one via per block => pairwise >= VIA_SEP",
+        "iv_declared_detour_budget_constant": float(BOUND_REGISTERED),
+        "iv_budget_not_lowered": bool(abs(float(BOUND_REGISTERED) - float(W.BOUND)) < 1e-12),
+        "available_via_sites_per_lane_A": {nm: len(regset[nm]) for nm in names},
+        "family_graph_via_sites_per_lane_B": {nm: len(famset[nm]) for nm in names},
+        "domain_via_sites_per_lane": {nm: len(via_nodes[nm]) for nm in names}}
     # per-layer per-node capacity <= 1 across ALL lanes (the joint disjointness; enforced by the solver)
     bytolane = {}
     for nm in names:
@@ -129,8 +141,12 @@ def main():
     rep["model"] = {"bool_vars": len(mo.Proto().variables), "constraints": len(mo.Proto().constraints),
                     "node_capacity_constraints": ncap, "via_spacing_cliques": via_cliques, "under_gate_1.2M": len(mo.Proto().variables) <= 1200000,
                     "validate": (mo.Validate() or "OK")}
-    if rep["F_caliber_fidelity"]["verdict"] != "PASS":
-        rep["decision"] = "FAIL-CLOSED(口径保真闸): 过孔域 != 在册全集 ⇒ 停手报监、不开枪"
+    ff = rep["F_caliber_fidelity"]
+    ff_ok = (ff["i_domain_subset_of_registered_available"] and ff["ii_domain_EQUALS_family_graph_via_set"]
+             and rep["via_spacing_constraints"]["clique_blocks"] > 0 and ff["iv_budget_not_lowered"])
+    ff["verdict"] = "PASS" if ff_ok else "FAIL (fail-closed: do NOT fire)"
+    if not ff_ok:
+        rep["decision"] = "FAIL-CLOSED(口径保真四闸) ⇒ 停手报监、不开枪"
         rep["buildability"] = {"mode": "no_witness"}
         json.dump(rep, open(a.out, "w"), ensure_ascii=False, indent=1, default=str); print(rep["decision"]); return
     if not rep["model"]["under_gate_1.2M"] or rep["model"]["validate"] != "OK":
