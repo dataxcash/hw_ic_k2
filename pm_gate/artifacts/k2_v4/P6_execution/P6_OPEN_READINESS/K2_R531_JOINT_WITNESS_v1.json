@@ -1,0 +1,48 @@
+{
+ "artifact": "k2_r531_joint_witness_v1",
+ "ts": "2026-09-25T03:39:29",
+ "authority": "#K2-197 sec.3.4 (joint exact feasibility model: 16 lanes simultaneously) + sec.5 (the carried-over single certified solve) + sec.3.6 (buildability/no_witness field mandatory)",
+ "write_protection": "guard_out (own output name only)",
+ "solve_calls": 1,
+ "domain": {
+  "arcs_per_lane": {
+   "PCIE_UP_OUT0_N_J2": 67437,
+   "PCIE_UP_OUT0_P_J2": 68994,
+   "PCIE_UP_OUT1_N_J2": 68637,
+   "PCIE_UP_OUT1_P_J2": 67653,
+   "PCIE_UP_OUT2_N_J2": 70978,
+   "PCIE_UP_OUT2_P_J2": 67690,
+   "PCIE_UP_OUT3_N_J2": 67318,
+   "PCIE_UP_OUT3_P_J2": 71804,
+   "PCIE_UP_OUT4_N_J2": 72748,
+   "PCIE_UP_OUT4_P_J2": 67869,
+   "PCIE_UP_OUT5_N_J2": 67474,
+   "PCIE_UP_OUT5_P_J2": 65775,
+   "PCIE_UP_OUT6_N_J2": 66404,
+   "PCIE_UP_OUT6_P_J2": 66725,
+   "PCIE_UP_OUT7_N_J2": 66038,
+   "PCIE_UP_OUT7_P_J2": 66215
+  },
+  "total_arcs": 1089759,
+  "via_grid": 2,
+  "note": "no partition/cell restriction: each lane keeps its FULL own-net graph"
+ },
+ "model": {
+  "bool_vars": 1089776,
+  "constraints": 203817,
+  "node_capacity_constraints": 13891,
+  "under_gate_1.2M": true,
+  "validate": "OK"
+ },
+ "solve": {
+  "status": "INFEASIBLE",
+  "wall_s": 922.5
+ },
+ "unsat_core": [],
+ "buildability": {
+  "mode": "no_witness",
+  "note": "受证可行性求解 UNSAT ⇒ 非空核见 unsat_core"
+ },
+ "decision": "NON-TERMINAL: 联合受证求解 **UNSAT** ⇒ 非空核 0 条（请监理按前提逐条机核非绑定后另件升 frozen-set）",
+ "elapsed_s": 953.1
+}
