@@ -1,0 +1,117 @@
+{
+ "artifact": "k2_r523_swapwork_audit_v1",
+ "ts": "2026-09-24T23:36:28",
+ "authority": "supervisor stop-order (binary demanded) — quantify the 'payable re-ordering events' resource (R515 sec.1 named it as the binding resource but never counted it); read-only, Solve() 0",
+ "solve_calls": 0,
+ "A_side_order_by_Ax": [
+  "PCIE_UP_OUT0_N_J2",
+  "PCIE_UP_OUT0_P_J2",
+  "PCIE_UP_OUT1_N_J2",
+  "PCIE_UP_OUT1_P_J2",
+  "PCIE_UP_OUT2_N_J2",
+  "PCIE_UP_OUT2_P_J2",
+  "PCIE_UP_OUT3_N_J2",
+  "PCIE_UP_OUT3_P_J2",
+  "PCIE_UP_OUT4_N_J2",
+  "PCIE_UP_OUT4_P_J2",
+  "PCIE_UP_OUT5_N_J2",
+  "PCIE_UP_OUT5_P_J2",
+  "PCIE_UP_OUT6_N_J2",
+  "PCIE_UP_OUT6_P_J2",
+  "PCIE_UP_OUT7_N_J2",
+  "PCIE_UP_OUT7_P_J2"
+ ],
+ "B_side_order_by_B_col_row": [
+  "PCIE_UP_OUT0_N_J2",
+  "PCIE_UP_OUT1_P_J2",
+  "PCIE_UP_OUT5_P_J2",
+  "PCIE_UP_OUT2_N_J2",
+  "PCIE_UP_OUT6_N_J2",
+  "PCIE_UP_OUT3_P_J2",
+  "PCIE_UP_OUT7_P_J2",
+  "PCIE_UP_OUT4_N_J2",
+  "PCIE_UP_OUT3_N_J2",
+  "PCIE_UP_OUT7_N_J2",
+  "PCIE_UP_OUT2_P_J2",
+  "PCIE_UP_OUT6_P_J2",
+  "PCIE_UP_OUT5_N_J2",
+  "PCIE_UP_OUT1_N_J2",
+  "PCIE_UP_OUT4_P_J2",
+  "PCIE_UP_OUT0_P_J2"
+ ],
+ "n_pairs": 120,
+ "n_order_inversions_A_vs_B": 58,
+ "inversion_pairs_first10": [
+  [
+   "PCIE_UP_OUT0_P_J2",
+   "PCIE_UP_OUT1_N_J2"
+  ],
+  [
+   "PCIE_UP_OUT0_P_J2",
+   "PCIE_UP_OUT1_P_J2"
+  ],
+  [
+   "PCIE_UP_OUT0_P_J2",
+   "PCIE_UP_OUT2_N_J2"
+  ],
+  [
+   "PCIE_UP_OUT0_P_J2",
+   "PCIE_UP_OUT2_P_J2"
+  ],
+  [
+   "PCIE_UP_OUT0_P_J2",
+   "PCIE_UP_OUT3_N_J2"
+  ],
+  [
+   "PCIE_UP_OUT0_P_J2",
+   "PCIE_UP_OUT3_P_J2"
+  ],
+  [
+   "PCIE_UP_OUT0_P_J2",
+   "PCIE_UP_OUT4_N_J2"
+  ],
+  [
+   "PCIE_UP_OUT0_P_J2",
+   "PCIE_UP_OUT4_P_J2"
+  ],
+  [
+   "PCIE_UP_OUT0_P_J2",
+   "PCIE_UP_OUT5_N_J2"
+  ],
+  [
+   "PCIE_UP_OUT0_P_J2",
+   "PCIE_UP_OUT5_P_J2"
+  ]
+ ],
+ "inversions_per_lane": {
+  "PCIE_UP_OUT0_P_J2": 14,
+  "PCIE_UP_OUT1_N_J2": 13,
+  "PCIE_UP_OUT2_P_J2": 9,
+  "PCIE_UP_OUT5_P_J2": 9,
+  "PCIE_UP_OUT7_P_J2": 9,
+  "PCIE_UP_OUT3_N_J2": 8,
+  "PCIE_UP_OUT5_N_J2": 8,
+  "PCIE_UP_OUT6_N_J2": 8,
+  "PCIE_UP_OUT4_N_J2": 7,
+  "PCIE_UP_OUT4_P_J2": 7,
+  "PCIE_UP_OUT7_N_J2": 7,
+  "PCIE_UP_OUT3_P_J2": 6,
+  "PCIE_UP_OUT6_P_J2": 6,
+  "PCIE_UP_OUT2_N_J2": 3,
+  "PCIE_UP_OUT1_P_J2": 2,
+  "PCIE_UP_OUT0_N_J2": 0
+ },
+ "registered_funnel_capacity": {
+  "cut": "cols 113-135 (east gate funnel)",
+  "In5": 10,
+  "In4": 12,
+  "two_layer_total": 22,
+  "demand": 16,
+  "slack": 6,
+  "source": "K2_R515_CONSERVATION_MEASURE_v1.json"
+ },
+ "reading": "the identity pairing imposes 58 pairwise order inversions between the A-side (comb) order and the B-side (pad) order; the mandatory funnel has 22 two-layer slots vs 16 lanes (slack +6); the wide zones can host far more than 58 payable swap events => NO counting certificate over width OR over swap events exists",
+ "why_no_certificate": "a swap (order inversion) is payable by ONE lane taking a via pair inside a zone; a single via-pair excursion can pay MANY inversions at once, so 'swap events' are not a conservation-grade consumable; and raw width at every mandatory passage >= demand (+6 at the tightest) => any counting certificate is provably unavailable",
+ "boundaries": "read-only; Solve() 0; no model/parameter/board/SPEC/tools/criteria change; no WORKER",
+ "buildability": "NOT-APPLICABLE (audit only; nothing moved)"
+}

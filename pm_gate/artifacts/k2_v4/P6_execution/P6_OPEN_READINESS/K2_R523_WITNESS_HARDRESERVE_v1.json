@@ -1,0 +1,372 @@
+{
+ "artifact": "k2_r523_witness_hardreserve_v1",
+ "ts": "2026-09-24T23:35:21",
+ "authority": "supervisor stop-order (convergence stall; must produce a binary: feasible witness OR conservation-grade infeasibility certificate; no more clarification/tool-bump rounds) + #K2-189 sec.3.4 (constructive witness family ratified, non-quota)",
+ "solve_calls": 0,
+ "method": "deterministic sequential constructive routing with HARD declaration-set reservation on the registered two-layer graph; every order is a legal-witness candidate if it completes 16/16",
+ "orders": {
+  "by_sp_desc": {
+   "n_routed": 1,
+   "order": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT3_N_J2",
+    "PCIE_UP_OUT5_N_J2",
+    "PCIE_UP_OUT0_N_J2",
+    "PCIE_UP_OUT6_P_J2",
+    "PCIE_UP_OUT1_P_J2",
+    "PCIE_UP_OUT2_N_J2",
+    "PCIE_UP_OUT3_P_J2",
+    "PCIE_UP_OUT4_N_J2",
+    "PCIE_UP_OUT7_N_J2",
+    "PCIE_UP_OUT5_P_J2",
+    "PCIE_UP_OUT6_N_J2",
+    "PCIE_UP_OUT7_P_J2"
+   ],
+   "stall": {
+    "lane": "PCIE_UP_OUT1_N_J2",
+    "rank": 1,
+    "stats": {
+     "reached": false,
+     "expanded": 12113,
+     "blocked": {
+      "claim_1": 468,
+      "via_occupied": 28,
+      "claim_0": 76,
+      "via_sep": 1
+     },
+     "dist_mm": null
+    },
+    "free_nodes_hint": 12113,
+    "res0": 45,
+    "res1": 165
+   }
+  },
+  "by_sp_asc": {
+   "n_routed": 5,
+   "order": [
+    "PCIE_UP_OUT7_P_J2",
+    "PCIE_UP_OUT6_N_J2",
+    "PCIE_UP_OUT5_P_J2",
+    "PCIE_UP_OUT7_N_J2",
+    "PCIE_UP_OUT4_N_J2",
+    "PCIE_UP_OUT3_P_J2",
+    "PCIE_UP_OUT2_N_J2",
+    "PCIE_UP_OUT1_P_J2",
+    "PCIE_UP_OUT6_P_J2",
+    "PCIE_UP_OUT0_N_J2",
+    "PCIE_UP_OUT5_N_J2",
+    "PCIE_UP_OUT3_N_J2",
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT0_P_J2"
+   ],
+   "stall": {
+    "lane": "PCIE_UP_OUT3_P_J2",
+    "rank": 5,
+    "stats": {
+     "reached": false,
+     "expanded": 61,
+     "blocked": {
+      "claim_1": 2,
+      "claim_0": 1
+     },
+     "dist_mm": null
+    },
+    "free_nodes_hint": 61,
+    "res0": 230,
+    "res1": 467
+   }
+  },
+  "by_difficulty_desc": {
+   "n_routed": 1,
+   "order": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT5_N_J2",
+    "PCIE_UP_OUT3_N_J2",
+    "PCIE_UP_OUT6_P_J2",
+    "PCIE_UP_OUT7_N_J2",
+    "PCIE_UP_OUT0_N_J2",
+    "PCIE_UP_OUT2_N_J2",
+    "PCIE_UP_OUT4_N_J2",
+    "PCIE_UP_OUT3_P_J2",
+    "PCIE_UP_OUT1_P_J2",
+    "PCIE_UP_OUT6_N_J2",
+    "PCIE_UP_OUT7_P_J2",
+    "PCIE_UP_OUT5_P_J2"
+   ],
+   "stall": {
+    "lane": "PCIE_UP_OUT1_N_J2",
+    "rank": 1,
+    "stats": {
+     "reached": false,
+     "expanded": 12113,
+     "blocked": {
+      "claim_1": 468,
+      "via_occupied": 28,
+      "claim_0": 76,
+      "via_sep": 1
+     },
+     "dist_mm": null
+    },
+    "free_nodes_hint": 12113,
+    "res0": 45,
+    "res1": 165
+   }
+  },
+  "by_Bx_desc": {
+   "n_routed": 2,
+   "order": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT5_N_J2",
+    "PCIE_UP_OUT6_P_J2",
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT7_N_J2",
+    "PCIE_UP_OUT3_N_J2",
+    "PCIE_UP_OUT4_N_J2",
+    "PCIE_UP_OUT7_P_J2",
+    "PCIE_UP_OUT3_P_J2",
+    "PCIE_UP_OUT6_N_J2",
+    "PCIE_UP_OUT2_N_J2",
+    "PCIE_UP_OUT5_P_J2",
+    "PCIE_UP_OUT1_P_J2",
+    "PCIE_UP_OUT0_N_J2"
+   ],
+   "stall": {
+    "lane": "PCIE_UP_OUT1_N_J2",
+    "rank": 2,
+    "stats": {
+     "reached": false,
+     "expanded": 11937,
+     "blocked": {
+      "claim_1": 611,
+      "claim_0": 176,
+      "via_sep": 9,
+      "via_occupied": 57
+     },
+     "dist_mm": null
+    },
+    "free_nodes_hint": 11937,
+    "res0": 106,
+    "res1": 278
+   }
+  },
+  "by_Bx_asc": {
+   "n_routed": 5,
+   "order": [
+    "PCIE_UP_OUT0_N_J2",
+    "PCIE_UP_OUT1_P_J2",
+    "PCIE_UP_OUT5_P_J2",
+    "PCIE_UP_OUT2_N_J2",
+    "PCIE_UP_OUT6_N_J2",
+    "PCIE_UP_OUT3_P_J2",
+    "PCIE_UP_OUT7_P_J2",
+    "PCIE_UP_OUT4_N_J2",
+    "PCIE_UP_OUT3_N_J2",
+    "PCIE_UP_OUT7_N_J2",
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT6_P_J2",
+    "PCIE_UP_OUT5_N_J2",
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT0_P_J2"
+   ],
+   "stall": {
+    "lane": "PCIE_UP_OUT3_P_J2",
+    "rank": 5,
+    "stats": {
+     "reached": false,
+     "expanded": 34,
+     "blocked": {
+      "claim_0": 8,
+      "claim_1": 2
+     },
+     "dist_mm": null
+    },
+    "free_nodes_hint": 34,
+    "res0": 276,
+    "res1": 514
+   }
+  },
+  "by_Ax_asc": {
+   "n_routed": 2,
+   "order": [
+    "PCIE_UP_OUT0_N_J2",
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT1_P_J2",
+    "PCIE_UP_OUT2_N_J2",
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT3_N_J2",
+    "PCIE_UP_OUT3_P_J2",
+    "PCIE_UP_OUT4_N_J2",
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT5_N_J2",
+    "PCIE_UP_OUT5_P_J2",
+    "PCIE_UP_OUT6_N_J2",
+    "PCIE_UP_OUT6_P_J2",
+    "PCIE_UP_OUT7_N_J2",
+    "PCIE_UP_OUT7_P_J2"
+   ],
+   "stall": {
+    "lane": "PCIE_UP_OUT1_N_J2",
+    "rank": 2,
+    "stats": {
+     "reached": false,
+     "expanded": 11933,
+     "blocked": {
+      "claim_0": 119,
+      "claim_1": 803,
+      "via_occupied": 62,
+      "via_sep": 2
+     },
+     "dist_mm": null
+    },
+    "free_nodes_hint": 11933,
+    "res0": 93,
+    "res1": 290
+   }
+  },
+  "by_Ax_desc": {
+   "n_routed": 4,
+   "order": [
+    "PCIE_UP_OUT7_P_J2",
+    "PCIE_UP_OUT7_N_J2",
+    "PCIE_UP_OUT6_P_J2",
+    "PCIE_UP_OUT6_N_J2",
+    "PCIE_UP_OUT5_P_J2",
+    "PCIE_UP_OUT5_N_J2",
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT4_N_J2",
+    "PCIE_UP_OUT3_P_J2",
+    "PCIE_UP_OUT3_N_J2",
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT2_N_J2",
+    "PCIE_UP_OUT1_P_J2",
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT0_N_J2"
+   ],
+   "stall": {
+    "lane": "PCIE_UP_OUT5_P_J2",
+    "rank": 4,
+    "stats": {
+     "reached": false,
+     "expanded": 66,
+     "blocked": {
+      "claim_0": 5,
+      "claim_1": 2
+     },
+     "dist_mm": null
+    },
+    "free_nodes_hint": 66,
+    "res0": 206,
+    "res1": 340
+   }
+  },
+  "west_first": {
+   "n_routed": 5,
+   "order": [
+    "PCIE_UP_OUT0_N_J2",
+    "PCIE_UP_OUT1_P_J2",
+    "PCIE_UP_OUT2_N_J2",
+    "PCIE_UP_OUT3_P_J2",
+    "PCIE_UP_OUT4_N_J2",
+    "PCIE_UP_OUT5_P_J2",
+    "PCIE_UP_OUT6_N_J2",
+    "PCIE_UP_OUT7_P_J2",
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT3_N_J2",
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT5_N_J2",
+    "PCIE_UP_OUT6_P_J2",
+    "PCIE_UP_OUT7_N_J2"
+   ],
+   "stall": {
+    "lane": "PCIE_UP_OUT5_P_J2",
+    "rank": 5,
+    "stats": {
+     "reached": false,
+     "expanded": 15,
+     "blocked": {
+      "claim_0": 8,
+      "claim_1": 6
+     },
+     "dist_mm": null
+    },
+    "free_nodes_hint": 15,
+    "res0": 288,
+    "res1": 537
+   }
+  },
+  "east_first": {
+   "n_routed": 1,
+   "order": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT3_N_J2",
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT5_N_J2",
+    "PCIE_UP_OUT6_P_J2",
+    "PCIE_UP_OUT7_N_J2",
+    "PCIE_UP_OUT0_N_J2",
+    "PCIE_UP_OUT1_P_J2",
+    "PCIE_UP_OUT2_N_J2",
+    "PCIE_UP_OUT3_P_J2",
+    "PCIE_UP_OUT4_N_J2",
+    "PCIE_UP_OUT5_P_J2",
+    "PCIE_UP_OUT6_N_J2",
+    "PCIE_UP_OUT7_P_J2"
+   ],
+   "stall": {
+    "lane": "PCIE_UP_OUT1_N_J2",
+    "rank": 1,
+    "stats": {
+     "reached": false,
+     "expanded": 12113,
+     "blocked": {
+      "claim_1": 468,
+      "via_occupied": 28,
+      "claim_0": 76,
+      "via_sep": 1
+     },
+     "dist_mm": null
+    },
+    "free_nodes_hint": 12113,
+    "res0": 45,
+    "res1": 165
+   }
+  }
+ },
+ "lanes": [
+  "PCIE_UP_OUT0_N_J2",
+  "PCIE_UP_OUT0_P_J2",
+  "PCIE_UP_OUT1_N_J2",
+  "PCIE_UP_OUT1_P_J2",
+  "PCIE_UP_OUT2_N_J2",
+  "PCIE_UP_OUT2_P_J2",
+  "PCIE_UP_OUT3_N_J2",
+  "PCIE_UP_OUT3_P_J2",
+  "PCIE_UP_OUT4_N_J2",
+  "PCIE_UP_OUT4_P_J2",
+  "PCIE_UP_OUT5_N_J2",
+  "PCIE_UP_OUT5_P_J2",
+  "PCIE_UP_OUT6_N_J2",
+  "PCIE_UP_OUT6_P_J2",
+  "PCIE_UP_OUT7_N_J2",
+  "PCIE_UP_OUT7_P_J2"
+ ],
+ "best_order": "by_sp_asc",
+ "best_n_routed": 5
+}
