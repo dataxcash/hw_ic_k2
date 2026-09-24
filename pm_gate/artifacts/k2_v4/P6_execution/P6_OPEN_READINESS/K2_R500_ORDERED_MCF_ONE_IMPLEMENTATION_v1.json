@@ -1,0 +1,102 @@
+{
+ "artifact": "k2_r500_ordered_mcf_one_implementation_v1",
+ "ts": "2026-09-24T13:47:04",
+ "authority": "#K2-178 §四 方法教令#4（换范式：次序/连续位置）· 一次实现窗 · #K2-177 §一/§三 · #K2-175 §四.5",
+ "paradigm": "lattice multi-commodity flow with linear mutual-exclusion + local clearance constraints (no candidate table, no AddForbiddenAssignments)",
+ "preexisting_gates": {
+  "golden_regression": {
+   "status": "OPTIMAL",
+   "answer": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "expected": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "pass": true
+  },
+  "nc1_endpoint_off_grid": {
+   "endpoint_max_dev_mm": 0.0707,
+   "detected": true
+  },
+  "nc3_forced_single_seat_must_be_infeasible": {
+   "status": "INFEASIBLE",
+   "detected": true
+  },
+  "gate_soundness_overlap_must_fail": {
+   "n_lane_pitch_viol": 1,
+   "lane_pitch_min_gap_mm": 0.0,
+   "detected": true
+  },
+  "r495_gate_soundness_vs_R494": {
+   "n_lane_pitch_viol": 30,
+   "lane_pitch_min_gap_mm": 0.0264,
+   "n_clearance_viol": 13,
+   "detected": true
+  },
+  "all_pass": true
+ },
+ "graph": {
+  "lanes": 16,
+  "arcs_per_lane": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "len_bound": [
+   2298850577,
+   2298850577,
+   2298850577,
+   2298850577,
+   2298850577,
+   2298850577,
+   2298850577,
+   2298850577,
+   2298850577,
+   2298850577,
+   2298850577,
+   2298850577,
+   2298850577,
+   2298850577,
+   2298850577,
+   2298850577
+  ],
+  "note": "arcs pruned to nodes lying on some A->B legal path"
+ },
+ "model": {
+  "bool_vars": 1,
+  "constraints": 16,
+  "cell_clearance_constraints": 0,
+  "validate": "OK"
+ },
+ "preconditions_all_green": true,
+ "solve": {
+  "status": "OPTIMAL",
+  "wall_s": 0.0,
+  "quota_consumed": 1
+ },
+ "render": {
+  "paths_extracted": 0,
+  "all_extracted": false
+ },
+ "decision": "NON-TERMINAL: 路径提取不全",
+ "elapsed_s": 10.7
+}
