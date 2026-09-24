@@ -1,0 +1,147 @@
+{
+ "artifact": "k2_r504_joint_mcf_cp_sat_v1",
+ "ts": "2026-09-24T14:30:43",
+ "authority": "#K2-179 §四《方法教令 #5》(联合定位/有序多商品流族) · 一次实现窗(唯一) · §三.6 恰一次受证求解",
+ "paradigm": "two-channel decomposition + anisotropic two-tier lattice + joint multi-commodity flow (node-declaration capacity 1, linear), solved once by CP-SAT",
+ "preexisting_gates": {
+  "golden_regression": {
+   "status": "OPTIMAL",
+   "answer": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "expected": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "pass": true
+  },
+  "nc1_endpoint_off_grid": {
+   "endpoint_max_dev_mm": 0.0707,
+   "detected": true
+  },
+  "nc3_forced_single_seat_must_be_infeasible": {
+   "status": "INFEASIBLE",
+   "detected": true
+  },
+  "gate_soundness_overlap_must_fail": {
+   "n_lane_pitch_viol": 1,
+   "lane_pitch_min_gap_mm": 0.0,
+   "detected": true
+  },
+  "r495_gate_soundness_vs_R494": {
+   "n_lane_pitch_viol": 30,
+   "lane_pitch_min_gap_mm": 0.0264,
+   "n_clearance_viol": 13,
+   "detected": true
+  },
+  "all_pass": true
+ },
+ "selfcheck_soundness": {
+  "pairs": 6105,
+  "missed": 0,
+  "pass": true,
+  "examples": [],
+  "criterion": "no missed conflict: true closest distance < P  =>  declaration sets intersect"
+ },
+ "preconditions_all_green": true,
+ "tier": {
+  "coarse_nodes": 1374,
+  "wide_nodes": 5045,
+  "free_nodes": 7416
+ },
+ "lane_group": {
+  "PCIE_UP_OUT0_N_J2": "west",
+  "PCIE_UP_OUT0_P_J2": "east",
+  "PCIE_UP_OUT1_N_J2": "east",
+  "PCIE_UP_OUT1_P_J2": "west",
+  "PCIE_UP_OUT2_N_J2": "west",
+  "PCIE_UP_OUT2_P_J2": "east",
+  "PCIE_UP_OUT3_N_J2": "east",
+  "PCIE_UP_OUT3_P_J2": "west",
+  "PCIE_UP_OUT4_N_J2": "west",
+  "PCIE_UP_OUT4_P_J2": "east",
+  "PCIE_UP_OUT5_N_J2": "east",
+  "PCIE_UP_OUT5_P_J2": "west",
+  "PCIE_UP_OUT6_N_J2": "west",
+  "PCIE_UP_OUT6_P_J2": "east",
+  "PCIE_UP_OUT7_N_J2": "east",
+  "PCIE_UP_OUT7_P_J2": "west"
+ },
+ "graph": {
+  "candidate_arcs_per_lane": [
+   14542,
+   8597,
+   8608,
+   14547,
+   14551,
+   8607,
+   8612,
+   14544,
+   14552,
+   8607,
+   8611,
+   14551,
+   14552,
+   8610,
+   8609,
+   14544
+  ],
+  "pruned_directed_arcs_per_lane": [
+   24966,
+   15246,
+   15266,
+   24482,
+   23336,
+   15264,
+   15274,
+   22010,
+   20964,
+   15268,
+   15272,
+   21818,
+   20432,
+   15270,
+   15064,
+   19538
+  ],
+  "total_pruned_directed_arcs": 299470,
+  "shortest_path_mm": {
+   "PCIE_UP_OUT0_N_J2": 73.862,
+   "PCIE_UP_OUT0_P_J2": 73.533,
+   "PCIE_UP_OUT1_N_J2": 71.327,
+   "PCIE_UP_OUT1_P_J2": 70.817,
+   "PCIE_UP_OUT2_N_J2": 67.201,
+   "PCIE_UP_OUT2_P_J2": 66.436,
+   "PCIE_UP_OUT3_N_J2": 63.795,
+   "PCIE_UP_OUT3_P_J2": 63.286,
+   "PCIE_UP_OUT4_N_J2": 60.21,
+   "PCIE_UP_OUT4_P_J2": 61.801,
+   "PCIE_UP_OUT5_N_J2": 59.16,
+   "PCIE_UP_OUT5_P_J2": 59.955,
+   "PCIE_UP_OUT6_N_J2": 56.593,
+   "PCIE_UP_OUT6_P_J2": 53.834,
+   "PCIE_UP_OUT7_N_J2": 51.193,
+   "PCIE_UP_OUT7_P_J2": 53.728
+  }
+ },
+ "model": {
+  "bool_vars": 299470,
+  "constraints": 67715,
+  "clearance_constraints": 11825,
+  "validate": "OK",
+  "bound_factor": 1.6
+ },
+ "solve": {
+  "status": "INFEASIBLE",
+  "wall_s": 4.3,
+  "quota_consumed": 1,
+  "solve_calls": 1
+ },
+ "decision": "NON-TERMINAL: solver=INFEASIBLE（保守模型下未找到可行解；不作不可行主张）",
+ "elapsed_s": 23.0
+}
