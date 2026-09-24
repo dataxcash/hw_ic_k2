@@ -1,0 +1,151 @@
+{
+ "artifact": "k2_r524_prime_channel_selfcheck_v1",
+ "ts": "2026-09-25T01:11:56",
+ "authority": "#K2-192 sec.3.3.a (read-only fidelity self-check BEFORE any solve) · quota 0 · Solve() 0",
+ "boundaries": "Solve() 0 calls; read-only; no board/SPEC/generator/criteria writes; frozen four untouched",
+ "C_structure_capacity": {
+  "comb_order_by_Ax": [
+   "PCIE_UP_OUT0_N_J2",
+   "PCIE_UP_OUT0_P_J2",
+   "PCIE_UP_OUT1_N_J2",
+   "PCIE_UP_OUT1_P_J2",
+   "PCIE_UP_OUT2_N_J2",
+   "PCIE_UP_OUT2_P_J2",
+   "PCIE_UP_OUT3_N_J2",
+   "PCIE_UP_OUT3_P_J2",
+   "PCIE_UP_OUT4_N_J2",
+   "PCIE_UP_OUT4_P_J2",
+   "PCIE_UP_OUT5_N_J2",
+   "PCIE_UP_OUT5_P_J2",
+   "PCIE_UP_OUT6_N_J2",
+   "PCIE_UP_OUT6_P_J2",
+   "PCIE_UP_OUT7_N_J2",
+   "PCIE_UP_OUT7_P_J2"
+  ],
+  "pad_order_by_Bx": [
+   "PCIE_UP_OUT0_N_J2",
+   "PCIE_UP_OUT1_P_J2",
+   "PCIE_UP_OUT5_P_J2",
+   "PCIE_UP_OUT2_N_J2",
+   "PCIE_UP_OUT6_N_J2",
+   "PCIE_UP_OUT3_P_J2",
+   "PCIE_UP_OUT7_P_J2",
+   "PCIE_UP_OUT4_N_J2",
+   "PCIE_UP_OUT3_N_J2",
+   "PCIE_UP_OUT7_N_J2",
+   "PCIE_UP_OUT2_P_J2",
+   "PCIE_UP_OUT6_P_J2",
+   "PCIE_UP_OUT5_N_J2",
+   "PCIE_UP_OUT1_N_J2",
+   "PCIE_UP_OUT4_P_J2",
+   "PCIE_UP_OUT0_P_J2"
+  ],
+  "required_permutation_pad_rank_in_comb_order": [
+   0,
+   15,
+   13,
+   1,
+   3,
+   10,
+   8,
+   5,
+   7,
+   14,
+   12,
+   2,
+   4,
+   11,
+   9,
+   6
+  ],
+  "inversions": 58,
+  "longest_decreasing_subsequence": 6,
+  "min_order_preserving_layers_needed": 6,
+  "registered_layers": 2,
+  "max_via_pairs_per_lane": 2,
+  "reading": "two layers, and same-layer lanes cannot cross (crossing = clearance violation), so each layer must preserve its lanes' relative order => the comb->pad permutation must be a union of <=2 increasing subsequences; by Dilworth that is possible iff L(pi) <= 2. L(pi)>=3 => NO witness can exist inside the '<=1 In4 excursion per lane' family",
+  "verdict_is_certificate": false,
+  "why_not_certificate": "a witness could still exist if a lane uses MORE layer changes than the registered <=2 via pairs; so this is a NAMED STRUCTURAL LEAD (is the via budget / layer-change count the binding resource?), NOT a design-level certificate (#K2-192 sec.3.3.a)"
+ },
+ "A_restriction_selfproof": {
+  "channel_nodes_subset_of_own_eligible_per_layer": true,
+  "channels_pairwise_disjoint_partition": true,
+  "R_BAND_steps": 3,
+  "channel_sizes": {
+   "PCIE_UP_OUT0_N_J2": {
+    "In5": 1016,
+    "In4": 1059
+   },
+   "PCIE_UP_OUT0_P_J2": {
+    "In5": 694,
+    "In4": 739
+   },
+   "PCIE_UP_OUT1_N_J2": {
+    "In5": 206,
+    "In4": 208
+   },
+   "PCIE_UP_OUT1_P_J2": {
+    "In5": 197,
+    "In4": 203
+   },
+   "PCIE_UP_OUT2_N_J2": {
+    "In5": 104,
+    "In4": 106
+   },
+   "PCIE_UP_OUT2_P_J2": {
+    "In5": 269,
+    "In4": 269
+   },
+   "PCIE_UP_OUT3_N_J2": {
+    "In5": 134,
+    "In4": 134
+   },
+   "PCIE_UP_OUT3_P_J2": {
+    "In5": 109,
+    "In4": 109
+   },
+   "PCIE_UP_OUT4_N_J2": {
+    "In5": 114,
+    "In4": 114
+   },
+   "PCIE_UP_OUT4_P_J2": {
+    "In5": 151,
+    "In4": 151
+   },
+   "PCIE_UP_OUT5_N_J2": {
+    "In5": 96,
+    "In4": 96
+   },
+   "PCIE_UP_OUT5_P_J2": {
+    "In5": 195,
+    "In4": 195
+   },
+   "PCIE_UP_OUT6_N_J2": {
+    "In5": 72,
+    "In4": 72
+   },
+   "PCIE_UP_OUT6_P_J2": {
+    "In5": 148,
+    "In4": 146
+   },
+   "PCIE_UP_OUT7_N_J2": {
+    "In5": 91,
+    "In4": 89
+   },
+   "PCIE_UP_OUT7_P_J2": {
+    "In5": 71,
+    "In4": 71
+   }
+  },
+  "argument": "channel = own-eligible nodes within an L1 band of the lane's backbone, greedily claimed in the registered declared order => (A1) subset holds by construction, (A2) disjointness holds by construction. Therefore any 16 channel-paths are pairwise node-disjoint on each layer; by T3 (K2_R513_DECISIVE_TRIAGE: the node-disjoint encoding is bit-for-bit equal to the registered exact_gate ruler) the registered per-layer exact_gate + gate_vias then PASS.",
+  "so": "SAT => genuine legal witness (signable); no-SAT => CHANNEL-LEVEL (weaker) infeasibility, NOT a certificate",
+  "machine_check_verdict": "PASS"
+ },
+ "B_formC_premises": {
+  "module": "K2_R523_FORMC_PREMISE_CHECKS_v1",
+  "rerun": "see its own JSON; re-executed here read-only",
+  "note": "form C is used ONLY as a witness-must-satisfy predicate, never as a master hard constraint (R512 deviation D2: redundant order linking causes spurious infeasibility)"
+ },
+ "decision": "SELF-CHECK DONE (read-only, Solve() 0): restriction/partition = PASS; structural lead: inversions=58, L(pi)=6 (registered layers=2)",
+ "elapsed_s": 83.5
+}
