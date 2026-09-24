@@ -1,0 +1,241 @@
+{
+ "artifact": "k2_r508_joint_mcf_scoped_abc_v1",
+ "ts": "2026-09-24T14:42:54",
+ "authority": "#K2-179 §四《方法教令 #5》(联合定位/有序多商品流族) · 一次实现窗(唯一) · §三.6 恰一次受证求解",
+ "paradigm": "two-channel decomposition + anisotropic two-tier lattice + joint multi-commodity flow (node-declaration capacity 1, linear), solved once by CP-SAT",
+ "preexisting_gates": {
+  "golden_regression": {
+   "status": "OPTIMAL",
+   "answer": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "expected": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "pass": true
+  },
+  "nc1_endpoint_off_grid": {
+   "endpoint_max_dev_mm": 0.0707,
+   "detected": true
+  },
+  "nc3_forced_single_seat_must_be_infeasible": {
+   "status": "INFEASIBLE",
+   "detected": true
+  },
+  "gate_soundness_overlap_must_fail": {
+   "n_lane_pitch_viol": 1,
+   "lane_pitch_min_gap_mm": 0.0,
+   "detected": true
+  },
+  "r495_gate_soundness_vs_R494": {
+   "n_lane_pitch_viol": 30,
+   "lane_pitch_min_gap_mm": 0.0264,
+   "n_clearance_viol": 13,
+   "detected": true
+  },
+  "all_pass": true
+ },
+ "selfcheck_soundness": {
+  "pairs": 6105,
+  "missed": 0,
+  "pass": true,
+  "examples": [],
+  "criterion": "no missed conflict: true closest distance < P  =>  declaration sets intersect"
+ },
+ "preconditions_all_green": true,
+ "tier": {
+  "coarse_nodes": 1374,
+  "wide_nodes": 5045,
+  "free_nodes": 7416
+ },
+ "lane_group": {
+  "PCIE_UP_OUT0_N_J2": "west",
+  "PCIE_UP_OUT0_P_J2": "east",
+  "PCIE_UP_OUT1_N_J2": "east",
+  "PCIE_UP_OUT1_P_J2": "west",
+  "PCIE_UP_OUT2_N_J2": "west",
+  "PCIE_UP_OUT2_P_J2": "east",
+  "PCIE_UP_OUT3_N_J2": "east",
+  "PCIE_UP_OUT3_P_J2": "west",
+  "PCIE_UP_OUT4_N_J2": "west",
+  "PCIE_UP_OUT4_P_J2": "east",
+  "PCIE_UP_OUT5_N_J2": "east",
+  "PCIE_UP_OUT5_P_J2": "west",
+  "PCIE_UP_OUT6_N_J2": "west",
+  "PCIE_UP_OUT6_P_J2": "east",
+  "PCIE_UP_OUT7_N_J2": "east",
+  "PCIE_UP_OUT7_P_J2": "west"
+ },
+ "graph": {
+  "candidate_arcs_per_lane": [
+   15823,
+   8597,
+   8608,
+   15828,
+   15832,
+   8607,
+   8612,
+   15825,
+   15833,
+   8607,
+   8611,
+   15832,
+   15833,
+   8610,
+   8609,
+   15825
+  ],
+  "pruned_directed_arcs_per_lane": [
+   27528,
+   15246,
+   15266,
+   27044,
+   25898,
+   15264,
+   15274,
+   24572,
+   23526,
+   15268,
+   15272,
+   24380,
+   22994,
+   15270,
+   15064,
+   22094
+  ],
+  "total_pruned_directed_arcs": 319960,
+  "shortest_path_mm": {
+   "PCIE_UP_OUT0_N_J2": 73.862,
+   "PCIE_UP_OUT0_P_J2": 73.533,
+   "PCIE_UP_OUT1_N_J2": 71.327,
+   "PCIE_UP_OUT1_P_J2": 70.817,
+   "PCIE_UP_OUT2_N_J2": 67.201,
+   "PCIE_UP_OUT2_P_J2": 66.436,
+   "PCIE_UP_OUT3_N_J2": 63.795,
+   "PCIE_UP_OUT3_P_J2": 63.286,
+   "PCIE_UP_OUT4_N_J2": 60.21,
+   "PCIE_UP_OUT4_P_J2": 61.801,
+   "PCIE_UP_OUT5_N_J2": 59.16,
+   "PCIE_UP_OUT5_P_J2": 59.955,
+   "PCIE_UP_OUT6_N_J2": 56.593,
+   "PCIE_UP_OUT6_P_J2": 53.834,
+   "PCIE_UP_OUT7_N_J2": 51.193,
+   "PCIE_UP_OUT7_P_J2": 53.728
+  }
+ },
+ "order_vars": {
+  "gate_cols": [
+   115,
+   116,
+   117,
+   118,
+   119,
+   120,
+   121,
+   122,
+   123,
+   124,
+   125,
+   126,
+   127,
+   128,
+   129,
+   130,
+   131,
+   132,
+   133,
+   134,
+   135
+  ],
+  "yard_rows": [
+   38,
+   39,
+   40,
+   41,
+   42,
+   43,
+   44,
+   45,
+   46,
+   47,
+   48,
+   49,
+   50,
+   51,
+   52,
+   53,
+   54,
+   55,
+   56,
+   57
+  ],
+  "gaps": [
+   7,
+   11,
+   12,
+   13,
+   15,
+   24,
+   25,
+   28
+  ],
+  "lane_order_by_Ax": [
+   "PCIE_UP_OUT0_N_J2",
+   "PCIE_UP_OUT0_P_J2",
+   "PCIE_UP_OUT1_N_J2",
+   "PCIE_UP_OUT1_P_J2",
+   "PCIE_UP_OUT2_N_J2",
+   "PCIE_UP_OUT2_P_J2",
+   "PCIE_UP_OUT3_N_J2",
+   "PCIE_UP_OUT3_P_J2",
+   "PCIE_UP_OUT4_N_J2",
+   "PCIE_UP_OUT4_P_J2",
+   "PCIE_UP_OUT5_N_J2",
+   "PCIE_UP_OUT5_P_J2",
+   "PCIE_UP_OUT6_N_J2",
+   "PCIE_UP_OUT6_P_J2",
+   "PCIE_UP_OUT7_N_J2",
+   "PCIE_UP_OUT7_P_J2"
+  ],
+  "west_order": [
+   "PCIE_UP_OUT0_N_J2",
+   "PCIE_UP_OUT1_P_J2",
+   "PCIE_UP_OUT2_N_J2",
+   "PCIE_UP_OUT3_P_J2",
+   "PCIE_UP_OUT4_N_J2",
+   "PCIE_UP_OUT5_P_J2",
+   "PCIE_UP_OUT6_N_J2",
+   "PCIE_UP_OUT7_P_J2"
+  ],
+  "order_constraints": 86
+ },
+ "model": {
+  "bool_vars": 320684,
+  "constraints": 124531,
+  "clearance_constraints": 64045,
+  "assumption_groups": [
+   "clearance_exact_per_lane",
+   "order_gate_columns",
+   "order_yard_rows",
+   "order_wall_gaps"
+  ],
+  "validate": "OK",
+  "bound_factor": 1.6
+ },
+ "unsat_core_sufficient": [],
+ "solve": {
+  "status": "INFEASIBLE",
+  "wall_s": 4.9,
+  "quota_consumed": 1,
+  "solve_calls": 1
+ },
+ "decision": "NON-TERMINAL: solver=INFEASIBLE（保守模型下未找到可行解；不作不可行主张）",
+ "elapsed_s": 29.2,
+ "note": "reading of the #K2-181 sec.3.6 window (changes a/b/c only); the R504 json path was overwritten by the copied script default -- R504 readings are preserved in K2_R504_JOINT_MCF_RESULT_AND_DEFECTS_v1.md and the ledger"
+}
