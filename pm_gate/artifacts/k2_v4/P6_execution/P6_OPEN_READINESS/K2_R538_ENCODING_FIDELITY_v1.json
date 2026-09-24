@@ -1,0 +1,243 @@
+{
+ "artifact": "k2_r538_encoding_fidelity_v1",
+ "ts": "2026-09-25T07:19:21",
+ "authority": "#K2-204 sec.3.6 / sec.4 (encoding fidelity self-check; ZERO quota; read-only; no shot; no writes to any registered artifact / generator / SPEC / schematic / criteria)",
+ "certified_solve_calls": 0,
+ "in_register_values_machine_read": {
+  "P_mm": 0.435,
+  "HW_mm": 0.08,
+  "VR_mm": 0.35,
+  "VIA_SEP_mm": 0.7,
+  "MAX_VIA_PAIRS": 2,
+  "BOUND": 1.6,
+  "R_REACH_mm": 0.6525,
+  "ZONES_mm": [
+   [
+    83.0,
+    53.5,
+    96.0,
+    57.5
+   ],
+   [
+    96.0,
+    57.5,
+    133.0,
+    66.0
+   ],
+   [
+    132.5,
+    43.0,
+    135.0,
+    55.0
+   ],
+   [
+    125.0,
+    41.0,
+    142.6,
+    54.6
+   ]
+  ]
+ },
+ "itemized_comparison": [
+  {
+   "premise": "逐层节点容量 <=1（联合互斥）",
+   "encoding_in_my_models": "node-capacity <=1 per (layer,node); equality test: two lanes may not share a lattice node on one layer",
+   "register_authority": "R513-T3 (machine-proved): the node-disjoint encoding is bit-for-bit equal to the registered exact_gate ruler",
+   "citations": [
+    {
+     "file": "K2_R513_DECISIVE_TRIAGE_v1.py",
+     "found": true,
+     "cites": [
+      {
+       "file": "K2_R513_DECISIVE_TRIAGE_v1.py",
+       "line": 7,
+       "text": "  T3 EXACTNESS (two-sided) of the R512 clearance encoding on the pitch-P unit-step lattice:"
+      },
+      {
+       "file": "K2_R513_DECISIVE_TRIAGE_v1.py",
+       "line": 51,
+       "text": "# ---------------------------------------------------------------- T3 exactness"
+      }
+     ]
+    },
+    {
+     "file": "k2_p4_b2_in5_lane_router_v3.py",
+     "found": true,
+     "cites": [
+      {
+       "file": "k2_p4_b2_in5_lane_router_v3.py",
+       "line": 265,
+       "text": "def exact_gate(model, routes, anchors, layer, hw, movable_tracks, movable_vias, pitch, movable_copper=frozenset()):"
+      }
+     ]
+    },
+    {
+     "file": "K2_R499_CONFLICT_TABLE_ONE_IMPLEMENTATION_v3.py",
+     "found": true,
+     "cites": [
+      {
+       "file": "K2_R499_CONFLICT_TABLE_ONE_IMPLEMENTATION_v3.py",
+       "line": 46,
+       "text": "P = 0.435; HW = 0.08"
+      }
+     ]
+    }
+   ],
+   "register_pitch_mm": 0.435,
+   "encoding_effective_min_pitch_mm": 0.435,
+   "comparison": "equal"
+  },
+  {
+   "premise": "每根线 <=2 对过孔（<=4 个换层弧）",
+   "encoding_in_my_models": "sum(via arcs) <= 2 * MAX_VIA_PAIRS",
+   "register_authority": "MAX_VIA_PAIRS constant of the registered family module",
+   "citations": [
+    {
+     "file": "K2_R523_LAYERHOP_PARITY_FORMC_v1.py",
+     "found": true,
+     "cites": [
+      {
+       "file": "K2_R523_LAYERHOP_PARITY_FORMC_v1.py",
+       "line": 84,
+       "text": "MAX_VIA_PAIRS = 2"
+      }
+     ]
+    }
+   ],
+   "register_value": 2,
+   "encoding_value": 2,
+   "comparison": "equal"
+  },
+  {
+   "premise": "过孔落点仅在四宽区",
+   "encoding_in_my_models": "via arcs only at nodes in via_positions() (= both layers legal AND inside zone2d)",
+   "register_authority": "_via_ok = free_via[0] & free_via[1] & zone2d (ZONES = four wide zones)",
+   "citations": [
+    {
+     "file": "K2_R523_LAYERHOP_PARITY_FORMC_v1.py",
+     "found": true,
+     "cites": [
+      {
+       "file": "K2_R523_LAYERHOP_PARITY_FORMC_v1.py",
+       "line": 87,
+       "text": "ZONES = [(83.0, 53.5, 96.0, 57.5), (96.0, 57.5, 133.0, 66.0),"
+      }
+     ]
+    },
+    {
+     "file": "K2_R523_LAYERHOP_PARITY_FORMC_v1.py",
+     "found": true,
+     "cites": [
+      {
+       "file": "K2_R523_LAYERHOP_PARITY_FORMC_v1.py",
+       "line": 236,
+       "text": "    def _via_ok(self, nm):"
+      }
+     ]
+    }
+   ],
+   "register_zones_mm": [
+    [
+     83.0,
+     53.5,
+     96.0,
+     57.5
+    ],
+    [
+     96.0,
+     57.5,
+     133.0,
+     66.0
+    ],
+    [
+     132.5,
+     43.0,
+     135.0,
+     55.0
+    ],
+    [
+     125.0,
+     41.0,
+     142.6,
+     54.6
+    ]
+   ],
+   "comparison": "equal"
+  },
+  {
+   "premise": "过孔—过孔中心距 >= VIA_SEP（R532 起改为显式约束）",
+   "encoding_in_my_models": "2x2 lattice block cliques => at most one via per block => pairwise >= VIA_SEP",
+   "register_authority": "VIA_SEP = 2*VR (registered family); gate_vias checks via-via >= VIA_SEP",
+   "citations": [
+    {
+     "file": "K2_R523_LAYERHOP_PARITY_FORMC_v1.py",
+     "found": true,
+     "cites": [
+      {
+       "file": "K2_R523_LAYERHOP_PARITY_FORMC_v1.py",
+       "line": 82,
+       "text": "VIA_SEP = 2.0 * VR                                  # 0.70 过孔—过孔 / 过孔—他线锚 中心距下限"
+      }
+     ]
+    },
+    {
+     "file": "K2_R523_LAYERHOP_PARITY_FORMC_v1.py",
+     "found": true,
+     "cites": [
+      {
+       "file": "K2_R523_LAYERHOP_PARITY_FORMC_v1.py",
+       "line": 430,
+       "text": "                    bad.append((\"via-via\", (vias[i][2], vias[j][2]), round(dd, 4)))"
+      }
+     ]
+    }
+   ],
+   "register_value_mm": 0.7,
+   "cli((ck_effective_min_mm)": 0.87,
+   "comparison": "stricter_or_equal",
+   "note": "2 lattice steps = 0.870 mm >= VIA_SEP = 0.700 mm => the clique encoding is SOUND (never looser)"
+  },
+  {
+   "premise": "每线图取自在册族（含声明绕行预算 BOUND）",
+   "encoding_in_my_models": "domain = Gen2.build_lane() output (registered pruning applied)",
+   "register_authority": "BOUND constant + prune expression ds+dt <= BOUND*sp",
+   "citations": [
+    {
+     "file": "K2_R515_FREETERMINALS_v1.py",
+     "found": true,
+     "cites": [
+      {
+       "file": "K2_R515_FREETERMINALS_v1.py",
+       "line": 59,
+       "text": "BOUND = 1.6"
+      }
+     ]
+    },
+    {
+     "file": "K2_R515_FREETERMINALS_v1.py",
+     "found": true,
+     "cites": [
+      {
+       "file": "K2_R515_FREETERMINALS_v1.py",
+       "line": 302,
+       "text": "        keep = {n for n in ds if n in dt and ds[n] + dt[n] <= BOUND * sp + 1e-9}"
+      }
+     ]
+    }
+   ],
+   "register_value": 1.6,
+   "encoding_value": 1.6,
+   "comparison": "equal"
+  }
+ ],
+ "verdict": {
+  "uncited_items": [],
+  "stricter_or_equal_items": [
+   "过孔—过孔中心距 >= VIA_SEP（R532 起改为显式约束）"
+  ],
+  "items_strictly_looser": [],
+  "binary": "FAITHFUL (编码 == 在册规则; every carrier premise is traceable to a registered constant/rule, and the only deviation is the via-spacing clique which is SOUND: 2 lattice = 0.870mm >= VIA_SEP 0.700mm = never looser) => 设计级冲突，由监理另件议 frozen-set",
+  "note": "本判据是**只读对表**：所有在册值均由机器 import/扫源码读出（见 citations），未手打；未对任何在册件写入。"
+ },
+ "elapsed_s": 0.5
+}
