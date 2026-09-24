@@ -1,0 +1,140 @@
+{
+ "artifact": "k2_r514_encoding_defect_proof_v1",
+ "ts": "2026-09-24T20:55:03",
+ "authority": "diagnostic attribution of the R514 INFEASIBLE reading (read-only; Solve() 0 calls; quota 0)",
+ "claim": "R512/R514 clearance constraint `sum(others) + M*y <= M` uses y = sum(endpoint arcs) (a COUNT, not a 0/1 indicator); a lane PASSING a node contributes 2 => the constraint is identically false.",
+ "minimal_instance": {
+  "config_legal_A_through_B_away(yB=0)": {
+   "r512_defective_form": "INFEASIBLE",
+   "indicator_form": "OPTIMAL",
+   "verdict": "defective form WRONGLY infeasible (false negative); indicator form correctly SAT"
+  },
+  "config_illegal_A_through_B_shadows(yB=1)": {
+   "r512_defective_form": "INFEASIBLE",
+   "indicator_form": "INFEASIBLE",
+   "verdict": "both correctly infeasible"
+  },
+  "decision": "R512/R514 净距约束的线性实现（y=sum(endpoint arcs)，M=|others|+1）把「车道穿过 r」判成 y=2 ⇒ sum(others)+M*y<=M 恒假 ⇒ **连合法配置都被判不可行**；指示式（y ∈ {0,1}）给出正确判据。"
+ },
+ "structural_count": {
+  "l1_scope": "full",
+  "lanes": 16,
+  "directed_arcs": 1152658,
+  "clearance_constraints": 191053,
+  "structurally_unsatisfiable": 187309,
+  "frac_bad": 0.9804,
+  "endpoint_count_histogram": {
+   "13": 73914,
+   "12": 83103,
+   "11": 4152,
+   "10": 5910,
+   "8": 10995,
+   "4": 1099,
+   "6": 5316,
+   "7": 424,
+   "9": 1968,
+   "2": 280,
+   "3": 66,
+   "5": 82
+  },
+  "examples": [
+   {
+    "layer": "In4.Cu",
+    "node_ij": [
+     110,
+     17
+    ],
+    "lane": "PCIE_UP_OUT4_N_J2",
+    "endpoint_arcs": 13,
+    "other_shadow_arcs": 30,
+    "lhs_forced": 433,
+    "rhs": 31
+   },
+   {
+    "layer": "In4.Cu",
+    "node_ij": [
+     45,
+     41
+    ],
+    "lane": "PCIE_UP_OUT0_N_J2",
+    "endpoint_arcs": 13,
+    "other_shadow_arcs": 120,
+    "lhs_forced": 1693,
+    "rhs": 121
+   },
+   {
+    "layer": "In4.Cu",
+    "node_ij": [
+     45,
+     41
+    ],
+    "lane": "PCIE_UP_OUT0_P_J2",
+    "endpoint_arcs": 13,
+    "other_shadow_arcs": 120,
+    "lhs_forced": 1693,
+    "rhs": 121
+   },
+   {
+    "layer": "In4.Cu",
+    "node_ij": [
+     45,
+     41
+    ],
+    "lane": "PCIE_UP_OUT1_N_J2",
+    "endpoint_arcs": 13,
+    "other_shadow_arcs": 120,
+    "lhs_forced": 1693,
+    "rhs": 121
+   },
+   {
+    "layer": "In4.Cu",
+    "node_ij": [
+     45,
+     41
+    ],
+    "lane": "PCIE_UP_OUT1_P_J2",
+    "endpoint_arcs": 13,
+    "other_shadow_arcs": 120,
+    "lhs_forced": 1693,
+    "rhs": 121
+   },
+   {
+    "layer": "In4.Cu",
+    "node_ij": [
+     45,
+     41
+    ],
+    "lane": "PCIE_UP_OUT2_N_J2",
+    "endpoint_arcs": 13,
+    "other_shadow_arcs": 120,
+    "lhs_forced": 1693,
+    "rhs": 121
+   },
+   {
+    "layer": "In4.Cu",
+    "node_ij": [
+     45,
+     41
+    ],
+    "lane": "PCIE_UP_OUT2_P_J2",
+    "endpoint_arcs": 13,
+    "other_shadow_arcs": 120,
+    "lhs_forced": 1693,
+    "rhs": 121
+   },
+   {
+    "layer": "In4.Cu",
+    "node_ij": [
+     45,
+     41
+    ],
+    "lane": "PCIE_UP_OUT3_N_J2",
+    "endpoint_arcs": 13,
+    "other_shadow_arcs": 120,
+    "lhs_forced": 1693,
+    "rhs": 121
+   }
+  ],
+  "elapsed_s": 24.3
+ }
+}

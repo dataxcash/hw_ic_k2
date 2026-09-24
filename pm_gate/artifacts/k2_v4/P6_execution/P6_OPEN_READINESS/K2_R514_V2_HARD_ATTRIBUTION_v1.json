@@ -1,0 +1,42 @@
+{
+ "artifact": "k2_r514_v2_hard_attribution_v1",
+ "ts": "2026-09-24T21:07:38",
+ "authority": "attribution of the v2 INFEASIBLE (empty assumption core) -- read-only; Solve() 0 calls",
+ "question": "on the SAME pruned 2-layer graph, with the prescribed identity pairing RELAXED, how many pairwise node-disjoint lanes fit (node capacity 1 per node per layer)?",
+ "n_via_arcs_per_lane": [
+  5080,
+  5362,
+  5366,
+  5094,
+  5332,
+  5360,
+  5370,
+  5348,
+  5366,
+  5364,
+  5364,
+  5088,
+  5092,
+  5368,
+  5368,
+  5104
+ ],
+ "with_via_arcs": {
+  "n_nodes": 13897,
+  "n_arcs": 84974,
+  "n_via_arcs": 5738,
+  "pairing_free_max_node_disjoint_paths": 16,
+  "cut_nodes_sample": [],
+  "n_cut_nodes": 0
+ },
+ "without_via_arcs_in5_only": {
+  "n_nodes": 13897,
+  "n_arcs": 79236,
+  "n_via_arcs": 5738,
+  "pairing_free_max_node_disjoint_paths": 16,
+  "cut_nodes_sample": [],
+  "n_cut_nodes": 0
+ },
+ "verdict": "capacity >= 16 => the wall is the PRESCRIBED IDENTITY PAIRING (multi-commodity), not capacity",
+ "elapsed_s": 23.0
+}

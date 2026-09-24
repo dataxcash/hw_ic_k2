@@ -1,0 +1,183 @@
+{
+ "artifact": "k2_r514_layerhop_joint_mcf_v1",
+ "ts": "2026-09-24T20:56:52",
+ "authority": "handoff-K2-514 sec.0 (monitor stop-order reply => one implementation window) · quota 1 · exactly one Solve()",
+ "paradigm": "two-layer joint MCF (In5 + In4) with the R512 exact per-layer clearance encoding; layer changes only via <=2 via pairs per lane, via sites restricted to the 4 registered wide zones; cross-layer crossing legal",
+ "deviations": {
+  "D1": "In4 scope = full (full=all free nodes / zones=4 wide boxes only)",
+  "D2": "R512 explicit order vars (gate cols / yard rows / wall gaps) NOT added: T3 proved the clearance encoding pair-exactly equals the registered ruler, so they are redundant for legality, and they would spuriously forbid a lane being on In4 at a gate/yard/gap node (linking requires an In5 arc to end there)",
+  "D3": "SE region convention (east lanes excluded from NW maze) applied on In5 only"
+ },
+ "params": {
+  "P": 0.435,
+  "HW": 0.08,
+  "VIA_R": 0.175,
+  "VIA_DRILL": 0.1,
+  "VR": 0.35,
+  "VIA_SEP": 0.7,
+  "VIA_LANE": 0.43,
+  "MAX_VIA_PAIRS": 2,
+  "BOUND": 1.6,
+  "zones": [
+   [
+    83.0,
+    53.5,
+    96.0,
+    57.5
+   ],
+   [
+    96.0,
+    57.5,
+    133.0,
+    66.0
+   ],
+   [
+    132.5,
+    43.0,
+    135.0,
+    55.0
+   ],
+   [
+    125.0,
+    41.0,
+    142.6,
+    54.6
+   ]
+  ]
+ },
+ "preexisting_gates": {
+  "golden_regression": {
+   "status": "OPTIMAL",
+   "answer": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "expected": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "pass": true
+  },
+  "nc1_endpoint_off_grid": {
+   "endpoint_max_dev_mm": 0.0707,
+   "detected": true
+  },
+  "nc3_forced_single_seat_must_be_infeasible": {
+   "status": "INFEASIBLE",
+   "detected": true
+  },
+  "gate_soundness_overlap_must_fail": {
+   "n_lane_pitch_viol": 1,
+   "lane_pitch_min_gap_mm": 0.0,
+   "detected": true
+  },
+  "r495_gate_soundness_vs_R494": {
+   "n_lane_pitch_viol": 30,
+   "lane_pitch_min_gap_mm": 0.0264,
+   "n_clearance_viol": 13,
+   "detected": true
+  },
+  "all_pass": true
+ },
+ "selfcheck_soundness": {
+  "pairs": 6105,
+  "missed": 0,
+  "pass": true,
+  "examples": [],
+  "criterion": "no missed conflict: true closest distance < P  =>  declaration sets intersect"
+ },
+ "preconditions_all_green": true,
+ "graph": {
+  "lattice": [
+   138,
+   65
+  ],
+  "l1_scope": "full",
+  "pruned_directed_arcs_per_lane": [
+   71156,
+   73034,
+   72688,
+   71152,
+   74800,
+   71652,
+   71292,
+   75888,
+   76872,
+   71878,
+   71468,
+   69474,
+   70520,
+   70740,
+   70020,
+   70024
+  ],
+  "total_pruned_directed_arcs": 1152658,
+  "via_arcs": 84426,
+  "shortest_path_mm": {
+   "PCIE_UP_OUT0_N_J2": 48.576,
+   "PCIE_UP_OUT0_P_J2": 63.037,
+   "PCIE_UP_OUT1_N_J2": 59.961,
+   "PCIE_UP_OUT1_P_J2": 47.271,
+   "PCIE_UP_OUT2_N_J2": 47.135,
+   "PCIE_UP_OUT2_P_J2": 55.07,
+   "PCIE_UP_OUT3_N_J2": 52.79,
+   "PCIE_UP_OUT3_P_J2": 46.7,
+   "PCIE_UP_OUT4_N_J2": 46.234,
+   "PCIE_UP_OUT4_P_J2": 54.784,
+   "PCIE_UP_OUT5_N_J2": 52.143,
+   "PCIE_UP_OUT5_P_J2": 41.629,
+   "PCIE_UP_OUT6_N_J2": 40.877,
+   "PCIE_UP_OUT6_P_J2": 48.558,
+   "PCIE_UP_OUT7_N_J2": 45.917,
+   "PCIE_UP_OUT7_P_J2": 39.752
+  },
+  "kept_nodes_per_lane": [
+   11712,
+   12446,
+   12366,
+   11702,
+   12298,
+   12180,
+   12110,
+   12488,
+   12644,
+   12221,
+   12139,
+   11399,
+   11578,
+   12011,
+   11875,
+   11491
+  ]
+ },
+ "scale": {
+  "bool_vars_estimate": 1152659,
+  "gate": 1200000,
+  "under_gate": true,
+  "via_arcs_subset_of_arcs": 84426
+ },
+ "model": {
+  "bool_vars": 1152659,
+  "constraints": 450405,
+  "clearance_constraints": 191053,
+  "ncons_other": 259320,
+  "assumption_groups": [
+   "clearance_exact_per_layer"
+  ],
+  "validate": "OK",
+  "via_sep_pairs_constrained": 28294
+ },
+ "unsat_core_sufficient": [],
+ "solve": {
+  "status": "INFEASIBLE",
+  "wall_s": 108.8,
+  "quota_consumed": 1,
+  "solve_calls": 1
+ },
+ "decision": "NON-TERMINAL: solver=INFEASIBLE（保守双层模型下未找到可行解；不作板级不可能主张）",
+ "elapsed_s": 166.0
+}

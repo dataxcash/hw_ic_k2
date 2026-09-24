@@ -1,0 +1,23 @@
+  free(In5)=7416 free(In4)=8258 zone=3238 via-any=2869
+{
+ "model": {
+  "bool_vars": 1152659,
+  "constraints": 450405,
+  "clearance_constraints": 191053,
+  "ncons_other": 259320,
+  "assumption_groups": [
+   "clearance_exact_per_layer"
+  ],
+  "validate": "OK",
+  "via_sep_pairs_constrained": 28294
+ },
+ "solve": {
+  "status": "INFEASIBLE",
+  "wall_s": 67.8,
+  "quota_consumed": 1,
+  "solve_calls": 1
+ },
+ "decision": "NON-TERMINAL: solver=INFEASIBLE（保守双层模型下未找到可行解；不作板级不可能主张）",
+ "elapsed_s": 128.6
+}
+WROTE K2_R514_LAYERHOP_JOINT_MCF_v1.json
