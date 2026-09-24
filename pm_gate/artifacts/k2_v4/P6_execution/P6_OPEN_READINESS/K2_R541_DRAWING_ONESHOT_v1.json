@@ -1,0 +1,38 @@
+{
+ "artifact": "k2_r541_drawing_oneshot_v1",
+ "ts": "2026-09-25T07:59:11",
+ "authority": "#K2-206 sec.3.2-4 (the ONE authorised scheme-layer shot; fixed inputs from R540; no retry)",
+ "certified_solve_calls": 0,
+ "method": "deterministic construction: per-lane leg-by-leg Dijkstra through the FIXED waypoint chain with hard claim reservation, <=2 via pairs, via-via >= VIA_SEP",
+ "source_spec": "K2_R540_CORRIDOR_SPEC_v1.json",
+ "partial": true,
+ "n_routed": 2,
+ "failed_lanes": [
+  "PCIE_UP_OUT0_N_J2",
+  "PCIE_UP_OUT1_N_J2",
+  "PCIE_UP_OUT1_P_J2",
+  "PCIE_UP_OUT2_N_J2",
+  "PCIE_UP_OUT2_P_J2",
+  "PCIE_UP_OUT3_N_J2",
+  "PCIE_UP_OUT3_P_J2",
+  "PCIE_UP_OUT4_N_J2",
+  "PCIE_UP_OUT4_P_J2",
+  "PCIE_UP_OUT5_N_J2",
+  "PCIE_UP_OUT5_P_J2",
+  "PCIE_UP_OUT6_N_J2",
+  "PCIE_UP_OUT6_P_J2",
+  "PCIE_UP_OUT7_P_J2"
+ ],
+ "first_failure": {
+  "stage": "leg_5_pad_run",
+  "from": 7438,
+  "to": 7438,
+  "legs_ok": 4
+ },
+ "decision": "NO DETERMINATE DRAWING (construction stopped; per K2-206 sec.3.5: STOP, no retry)",
+ "buildability": {
+  "mode": "no_witness",
+  "note": "不完整 ⇒ 无搬迁清单"
+ },
+ "elapsed_s": 32.2
+}
