@@ -1,0 +1,1124 @@
+{
+ "artifact": "k2_r540_corridor_spec_v1",
+ "ts": "2026-09-25T07:55:02",
+ "authority": "#K2-206 sec.3.2-4: fixed inputs for the ONE authorised scheme-layer solve (extraction only; ZERO solves; no writes to any registered artifact)",
+ "certified_solve_calls": 0,
+ "source_master": "K2_R529_WOVEN_COMPLETE_MASTER_v1.json",
+ "P_mm": 0.435,
+ "lattice": {
+  "X0": 84.0,
+  "Y0": 41.0,
+  "NX": 138,
+  "NY": 65
+ },
+ "sections": {
+  "col33": 33,
+  "col60": 60,
+  "wall_col": 114,
+  "gate_row": 36
+ },
+ "per_lane": {
+  "PCIE_UP_OUT0_N_J2": {
+   "group": "west",
+   "waypoints": [
+    {
+     "kind": "A_anchor",
+     "xy_mm": [
+      84.35,
+      55.723
+     ]
+    },
+    {
+     "kind": "In5_entrance",
+     "node": 164,
+     "xy_mm": [
+      84.87,
+      55.79
+     ],
+     "dist_mm": 0.5243
+    },
+    {
+     "kind": "col33",
+     "node": 2198,
+     "xy_mm": [
+      98.355,
+      64.055
+     ]
+    },
+    {
+     "kind": "col60",
+     "node": 3954,
+     "xy_mm": [
+      110.1,
+      64.49
+     ]
+    },
+    {
+     "kind": "exit_wall_gap",
+     "node": 7438,
+     "xy_mm": [
+      133.59,
+      53.18
+     ]
+    },
+    {
+     "kind": "pad_run",
+     "node": 7438,
+     "xy_mm": [
+      133.59,
+      53.18
+     ]
+    },
+    {
+     "kind": "B_anchor",
+     "xy_mm": [
+      127.01,
+      43.25
+     ]
+    }
+   ],
+   "schedule": {
+    "stations_on_In4": [],
+    "start_station": null,
+    "end_station": null
+   },
+   "n_waypoints": 7
+  },
+  "PCIE_UP_OUT0_P_J2": {
+   "group": "east",
+   "waypoints": [
+    {
+     "kind": "A_anchor",
+     "xy_mm": [
+      84.85,
+      54.88
+     ]
+    },
+    {
+     "kind": "DIVE_via",
+     "node": 162,
+     "xy_mm": [
+      84.87,
+      54.92
+     ],
+     "dist_mm": 0.0447
+    },
+    {
+     "kind": "col33",
+     "node": 2186,
+     "xy_mm": [
+      98.355,
+      58.835
+     ]
+    },
+    {
+     "kind": "col60",
+     "node": 3948,
+     "xy_mm": [
+      110.1,
+      61.88
+     ]
+    },
+    {
+     "kind": "exit_gate_col",
+     "node": 8291,
+     "xy_mm": [
+      139.245,
+      56.66
+     ]
+    },
+    {
+     "kind": "pad_run",
+     "node": 8616,
+     "xy_mm": [
+      141.22,
+      56.66
+     ]
+    },
+    {
+     "kind": "B_anchor",
+     "xy_mm": [
+      141.22,
+      42.65
+     ]
+    }
+   ],
+   "schedule": {
+    "stations_on_In4": [
+     "COMB",
+     "BELT",
+     "WALL"
+    ],
+    "start_station": "COMB",
+    "end_station": "WALL"
+   },
+   "n_waypoints": 7
+  },
+  "PCIE_UP_OUT1_N_J2": {
+   "group": "east",
+   "waypoints": [
+    {
+     "kind": "A_anchor",
+     "xy_mm": [
+      85.5,
+      55.823
+     ]
+    },
+    {
+     "kind": "In5_entrance",
+     "node": 294,
+     "xy_mm": [
+      85.74,
+      55.79
+     ],
+     "dist_mm": 0.2423
+    },
+    {
+     "kind": "col33",
+     "node": 2188,
+     "xy_mm": [
+      98.355,
+      59.705
+     ]
+    },
+    {
+     "kind": "col60",
+     "node": 3946,
+     "xy_mm": [
+      110.1,
+      61.01
+     ]
+    },
+    {
+     "kind": "exit_gate_col",
+     "node": 8681,
+     "xy_mm": [
+      141.855,
+      56.66
+     ]
+    },
+    {
+     "kind": "pad_run",
+     "node": 8356,
+     "xy_mm": [
+      139.48,
+      56.66
+     ]
+    },
+    {
+     "kind": "B_anchor",
+     "xy_mm": [
+      139.48,
+      43.85
+     ]
+    }
+   ],
+   "schedule": {
+    "stations_on_In4": [
+     "FIELD"
+    ],
+    "start_station": "FIELD",
+    "end_station": "FIELD"
+   },
+   "n_waypoints": 7
+  },
+  "PCIE_UP_OUT1_P_J2": {
+   "group": "west",
+   "waypoints": [
+    {
+     "kind": "A_anchor",
+     "xy_mm": [
+      86.05,
+      54.88
+     ]
+    },
+    {
+     "kind": "In5_entrance",
+     "node": 357,
+     "xy_mm": [
+      86.175,
+      54.92
+     ],
+     "dist_mm": 0.1312
+    },
+    {
+     "kind": "col33",
+     "node": 2180,
+     "xy_mm": [
+      98.355,
+      56.225
+     ]
+    },
+    {
+     "kind": "col60",
+     "node": 3940,
+     "xy_mm": [
+      110.1,
+      58.4
+     ]
+    },
+    {
+     "kind": "exit_wall_gap",
+     "node": 7421,
+     "xy_mm": [
+      133.59,
+      45.785
+     ]
+    },
+    {
+     "kind": "pad_run",
+     "node": 7421,
+     "xy_mm": [
+      133.59,
+      45.785
+     ]
+    },
+    {
+     "kind": "B_anchor",
+     "xy_mm": [
+      127.59,
+      43.85
+     ]
+    }
+   ],
+   "schedule": {
+    "stations_on_In4": [],
+    "start_station": null,
+    "end_station": null
+   },
+   "n_waypoints": 7
+  },
+  "PCIE_UP_OUT2_N_J2": {
+   "group": "west",
+   "waypoints": [
+    {
+     "kind": "A_anchor",
+     "xy_mm": [
+      86.7,
+      55.823
+     ]
+    },
+    {
+     "kind": "In5_entrance",
+     "node": 424,
+     "xy_mm": [
+      86.61,
+      55.79
+     ],
+     "dist_mm": 0.0959
+    },
+    {
+     "kind": "col33",
+     "node": 2186,
+     "xy_mm": [
+      98.355,
+      58.835
+     ]
+    },
+    {
+     "kind": "col60",
+     "node": 3942,
+     "xy_mm": [
+      110.1,
+      59.27
+     ]
+    },
+    {
+     "kind": "exit_wall_gap",
+     "node": 7423,
+     "xy_mm": [
+      133.59,
+      46.655
+     ]
+    },
+    {
+     "kind": "pad_run",
+     "node": 7423,
+     "xy_mm": [
+      133.59,
+      46.655
+     ]
+    },
+    {
+     "kind": "B_anchor",
+     "xy_mm": [
+      129.33,
+      46.85
+     ]
+    }
+   ],
+   "schedule": {
+    "stations_on_In4": [],
+    "start_station": null,
+    "end_station": null
+   },
+   "n_waypoints": 7
+  },
+  "PCIE_UP_OUT2_P_J2": {
+   "group": "east",
+   "waypoints": [
+    {
+     "kind": "A_anchor",
+     "xy_mm": [
+      87.25,
+      54.88
+     ]
+    },
+    {
+     "kind": "DIVE_via",
+     "node": 487,
+     "xy_mm": [
+      87.045,
+      54.92
+     ],
+     "dist_mm": 0.2089
+    },
+    {
+     "kind": "col33",
+     "node": 2202,
+     "xy_mm": [
+      98.355,
+      65.795
+     ]
+    },
+    {
+     "kind": "col60",
+     "node": 3956,
+     "xy_mm": [
+      110.1,
+      65.36
+     ]
+    },
+    {
+     "kind": "exit_gate_col",
+     "node": 8161,
+     "xy_mm": [
+      138.375,
+      56.66
+     ]
+    },
+    {
+     "kind": "pad_run",
+     "node": 7966,
+     "xy_mm": [
+      137.16,
+      56.66
+     ]
+    },
+    {
+     "kind": "B_anchor",
+     "xy_mm": [
+      137.16,
+      46.25
+     ]
+    }
+   ],
+   "schedule": {
+    "stations_on_In4": [
+     "COMB",
+     "BELT"
+    ],
+    "start_station": "COMB",
+    "end_station": "BELT"
+   },
+   "n_waypoints": 7
+  },
+  "PCIE_UP_OUT3_N_J2": {
+   "group": "east",
+   "waypoints": [
+    {
+     "kind": "A_anchor",
+     "xy_mm": [
+      87.9,
+      55.823
+     ]
+    },
+    {
+     "kind": "In5_entrance",
+     "node": 619,
+     "xy_mm": [
+      87.915,
+      55.79
+     ],
+     "dist_mm": 0.0362
+    },
+    {
+     "kind": "col33",
+     "node": 2178,
+     "xy_mm": [
+      98.355,
+      55.355
+     ]
+    },
+    {
+     "kind": "col60",
+     "node": 3954,
+     "xy_mm": [
+      110.1,
+      64.49
+     ]
+    },
+    {
+     "kind": "exit_gate_col",
+     "node": 8551,
+     "xy_mm": [
+      140.985,
+      56.66
+     ]
+    },
+    {
+     "kind": "pad_run",
+     "node": 7836,
+     "xy_mm": [
+      136.0,
+      56.66
+     ]
+    },
+    {
+     "kind": "B_anchor",
+     "xy_mm": [
+      136.0,
+      47.45
+     ]
+    }
+   ],
+   "schedule": {
+    "stations_on_In4": [
+     "BELT"
+    ],
+    "start_station": "BELT",
+    "end_station": "BELT"
+   },
+   "n_waypoints": 7
+  },
+  "PCIE_UP_OUT3_P_J2": {
+   "group": "west",
+   "waypoints": [
+    {
+     "kind": "A_anchor",
+     "xy_mm": [
+      88.45,
+      54.88
+     ]
+    },
+    {
+     "kind": "In5_entrance",
+     "node": 682,
+     "xy_mm": [
+      88.35,
+      54.92
+     ],
+     "dist_mm": 0.1077
+    },
+    {
+     "kind": "col33",
+     "node": 2176,
+     "xy_mm": [
+      98.355,
+      54.485
+     ]
+    },
+    {
+     "kind": "col60",
+     "node": 3938,
+     "xy_mm": [
+      110.1,
+      57.53
+     ]
+    },
+    {
+     "kind": "exit_wall_gap",
+     "node": 7417,
+     "xy_mm": [
+      133.59,
+      44.045
+     ]
+    },
+    {
+     "kind": "pad_run",
+     "node": 7417,
+     "xy_mm": [
+      133.59,
+      44.045
+     ]
+    },
+    {
+     "kind": "B_anchor",
+     "xy_mm": [
+      130.49,
+      47.45
+     ]
+    }
+   ],
+   "schedule": {
+    "stations_on_In4": [],
+    "start_station": null,
+    "end_station": null
+   },
+   "n_waypoints": 7
+  },
+  "PCIE_UP_OUT4_N_J2": {
+   "group": "west",
+   "waypoints": [
+    {
+     "kind": "A_anchor",
+     "xy_mm": [
+      89.1,
+      55.823
+     ]
+    },
+    {
+     "kind": "In5_entrance",
+     "node": 814,
+     "xy_mm": [
+      89.22,
+      55.79
+     ],
+     "dist_mm": 0.1245
+    },
+    {
+     "kind": "col33",
+     "node": 2190,
+     "xy_mm": [
+      98.355,
+      60.575
+     ]
+    },
+    {
+     "kind": "col60",
+     "node": 3950,
+     "xy_mm": [
+      110.1,
+      62.75
+     ]
+    },
+    {
+     "kind": "exit_wall_gap",
+     "node": 7434,
+     "xy_mm": [
+      133.59,
+      51.44
+     ]
+    },
+    {
+     "kind": "pad_run",
+     "node": 7434,
+     "xy_mm": [
+      133.59,
+      51.44
+     ]
+    },
+    {
+     "kind": "B_anchor",
+     "xy_mm": [
+      131.65,
+      48.65
+     ]
+    }
+   ],
+   "schedule": {
+    "stations_on_In4": [],
+    "start_station": null,
+    "end_station": null
+   },
+   "n_waypoints": 7
+  },
+  "PCIE_UP_OUT4_P_J2": {
+   "group": "east",
+   "waypoints": [
+    {
+     "kind": "A_anchor",
+     "xy_mm": [
+      89.65,
+      54.88
+     ]
+    },
+    {
+     "kind": "DIVE_via",
+     "node": 877,
+     "xy_mm": [
+      89.655,
+      54.92
+     ],
+     "dist_mm": 0.0403
+    },
+    {
+     "kind": "col33",
+     "node": 2190,
+     "xy_mm": [
+      98.355,
+      60.575
+     ]
+    },
+    {
+     "kind": "col60",
+     "node": 3956,
+     "xy_mm": [
+      110.1,
+      65.36
+     ]
+    },
+    {
+     "kind": "exit_gate_col",
+     "node": 7771,
+     "xy_mm": [
+      135.765,
+      56.66
+     ]
+    },
+    {
+     "kind": "pad_run",
+     "node": 8421,
+     "xy_mm": [
+      140.06,
+      56.66
+     ]
+    },
+    {
+     "kind": "B_anchor",
+     "xy_mm": [
+      140.06,
+      48.05
+     ]
+    }
+   ],
+   "schedule": {
+    "stations_on_In4": [
+     "COMB",
+     "BELT"
+    ],
+    "start_station": "COMB",
+    "end_station": "BELT"
+   },
+   "n_waypoints": 7
+  },
+  "PCIE_UP_OUT5_N_J2": {
+   "group": "east",
+   "waypoints": [
+    {
+     "kind": "A_anchor",
+     "xy_mm": [
+      90.3,
+      55.823
+     ]
+    },
+    {
+     "kind": "In5_entrance",
+     "node": 944,
+     "xy_mm": [
+      90.09,
+      55.79
+     ],
+     "dist_mm": 0.2126
+    },
+    {
+     "kind": "col33",
+     "node": 2192,
+     "xy_mm": [
+      98.355,
+      61.445
+     ]
+    },
+    {
+     "kind": "col60",
+     "node": 3956,
+     "xy_mm": [
+      110.1,
+      65.36
+     ]
+    },
+    {
+     "kind": "exit_gate_col",
+     "node": 7641,
+     "xy_mm": [
+      134.895,
+      56.66
+     ]
+    },
+    {
+     "kind": "pad_run",
+     "node": 8226,
+     "xy_mm": [
+      138.9,
+      56.66
+     ]
+    },
+    {
+     "kind": "B_anchor",
+     "xy_mm": [
+      138.9,
+      49.25
+     ]
+    }
+   ],
+   "schedule": {
+    "stations_on_In4": [
+     "BELT"
+    ],
+    "start_station": "BELT",
+    "end_station": "BELT"
+   },
+   "n_waypoints": 7
+  },
+  "PCIE_UP_OUT5_P_J2": {
+   "group": "west",
+   "waypoints": [
+    {
+     "kind": "A_anchor",
+     "xy_mm": [
+      90.85,
+      54.88
+     ]
+    },
+    {
+     "kind": "DIVE_via",
+     "node": 1072,
+     "xy_mm": [
+      90.96,
+      54.92
+     ],
+     "dist_mm": 0.117
+    },
+    {
+     "kind": "col33",
+     "node": 2202,
+     "xy_mm": [
+      98.355,
+      65.795
+     ]
+    },
+    {
+     "kind": "col60",
+     "node": 3944,
+     "xy_mm": [
+      110.1,
+      60.14
+     ]
+    },
+    {
+     "kind": "exit_wall_gap",
+     "node": 7425,
+     "xy_mm": [
+      133.59,
+      47.525
+     ]
+    },
+    {
+     "kind": "pad_run",
+     "node": 7425,
+     "xy_mm": [
+      133.59,
+      47.525
+     ]
+    },
+    {
+     "kind": "B_anchor",
+     "xy_mm": [
+      128.75,
+      49.25
+     ]
+    }
+   ],
+   "schedule": {
+    "stations_on_In4": [
+     "COMB"
+    ],
+    "start_station": "COMB",
+    "end_station": "COMB"
+   },
+   "n_waypoints": 7
+  },
+  "PCIE_UP_OUT6_N_J2": {
+   "group": "west",
+   "waypoints": [
+    {
+     "kind": "A_anchor",
+     "xy_mm": [
+      91.5,
+      55.823
+     ]
+    },
+    {
+     "kind": "In5_entrance",
+     "node": 1139,
+     "xy_mm": [
+      91.395,
+      55.79
+     ],
+     "dist_mm": 0.1101
+    },
+    {
+     "kind": "col33",
+     "node": 2184,
+     "xy_mm": [
+      98.355,
+      57.965
+     ]
+    },
+    {
+     "kind": "col60",
+     "node": 3956,
+     "xy_mm": [
+      110.1,
+      65.36
+     ]
+    },
+    {
+     "kind": "exit_wall_gap",
+     "node": 7434,
+     "xy_mm": [
+      133.59,
+      51.44
+     ]
+    },
+    {
+     "kind": "pad_run",
+     "node": 7434,
+     "xy_mm": [
+      133.59,
+      51.44
+     ]
+    },
+    {
+     "kind": "B_anchor",
+     "xy_mm": [
+      129.91,
+      52.25
+     ]
+    }
+   ],
+   "schedule": {
+    "stations_on_In4": [
+     "BELT",
+     "WALL"
+    ],
+    "start_station": "BELT",
+    "end_station": "WALL"
+   },
+   "n_waypoints": 7
+  },
+  "PCIE_UP_OUT6_P_J2": {
+   "group": "east",
+   "waypoints": [
+    {
+     "kind": "A_anchor",
+     "xy_mm": [
+      92.05,
+      54.88
+     ]
+    },
+    {
+     "kind": "DIVE_via",
+     "node": 1267,
+     "xy_mm": [
+      92.265,
+      54.92
+     ],
+     "dist_mm": 0.2187
+    },
+    {
+     "kind": "col33",
+     "node": 2200,
+     "xy_mm": [
+      98.355,
+      64.925
+     ]
+    },
+    {
+     "kind": "col60",
+     "node": 3948,
+     "xy_mm": [
+      110.1,
+      61.88
+     ]
+    },
+    {
+     "kind": "exit_gate_col",
+     "node": 7511,
+     "xy_mm": [
+      134.025,
+      56.66
+     ]
+    },
+    {
+     "kind": "pad_run",
+     "node": 8096,
+     "xy_mm": [
+      137.74,
+      56.66
+     ]
+    },
+    {
+     "kind": "B_anchor",
+     "xy_mm": [
+      137.74,
+      51.65
+     ]
+    }
+   ],
+   "schedule": {
+    "stations_on_In4": [
+     "COMB"
+    ],
+    "start_station": "COMB",
+    "end_station": "COMB"
+   },
+   "n_waypoints": 7
+  },
+  "PCIE_UP_OUT7_N_J2": {
+   "group": "east",
+   "waypoints": [
+    {
+     "kind": "A_anchor",
+     "xy_mm": [
+      92.7,
+      55.823
+     ]
+    },
+    {
+     "kind": "In5_entrance",
+     "node": 1334,
+     "xy_mm": [
+      92.7,
+      55.79
+     ],
+     "dist_mm": 0.033
+    },
+    {
+     "kind": "col33",
+     "node": 2194,
+     "xy_mm": [
+      98.355,
+      62.315
+     ]
+    },
+    {
+     "kind": "col60",
+     "node": 3952,
+     "xy_mm": [
+      110.1,
+      63.62
+     ]
+    },
+    {
+     "kind": "exit_gate_col",
+     "node": 8811,
+     "xy_mm": [
+      142.725,
+      56.66
+     ]
+    },
+    {
+     "kind": "pad_run",
+     "node": 7901,
+     "xy_mm": [
+      136.58,
+      56.66
+     ]
+    },
+    {
+     "kind": "B_anchor",
+     "xy_mm": [
+      136.58,
+      52.85
+     ]
+    }
+   ],
+   "schedule": {
+    "stations_on_In4": [],
+    "start_station": null,
+    "end_station": null
+   },
+   "n_waypoints": 7
+  },
+  "PCIE_UP_OUT7_P_J2": {
+   "group": "west",
+   "waypoints": [
+    {
+     "kind": "A_anchor",
+     "xy_mm": [
+      93.7,
+      55.13
+     ]
+    },
+    {
+     "kind": "In5_entrance",
+     "node": 1462,
+     "xy_mm": [
+      93.57,
+      54.92
+     ],
+     "dist_mm": 0.247
+    },
+    {
+     "kind": "col33",
+     "node": 2200,
+     "xy_mm": [
+      98.355,
+      64.925
+     ]
+    },
+    {
+     "kind": "col60",
+     "node": 3956,
+     "xy_mm": [
+      110.1,
+      65.36
+     ]
+    },
+    {
+     "kind": "exit_wall_gap",
+     "node": 7425,
+     "xy_mm": [
+      133.59,
+      47.525
+     ]
+    },
+    {
+     "kind": "pad_run",
+     "node": 7425,
+     "xy_mm": [
+      133.59,
+      47.525
+     ]
+    },
+    {
+     "kind": "B_anchor",
+     "xy_mm": [
+      131.07,
+      52.85
+     ]
+    }
+   ],
+   "schedule": {
+    "stations_on_In4": [
+     "WALL"
+    ],
+    "start_station": "WALL",
+    "end_station": "WALL"
+   },
+   "n_waypoints": 7
+  }
+ },
+ "handoff_to_the_one_solve": {
+  "task": "per-lane per-segment determinate lattice path through the fixed waypoint chain above",
+  "fixed_inputs": [
+   "entrance action",
+   "col33/col60/exit section slots",
+   "time table (In4 stations)"
+  ],
+  "must_not": [
+   "re-run the old free-degree models (proved infeasible)",
+   "change any fixed input",
+   "retry after failure (K2-206 sec.3.5)"
+  ],
+  "acceptance": [
+   "per-lane zero-freedom drawing",
+   "conservation audit",
+   "buildability",
+   "two artefacts (raw solve product with fail-loud log on disk + derived drawing)",
+   "committed inside the k2 repo with a hash (K2-206 sec.3.6)"
+  ]
+ },
+ "elapsed_s": 31.9
+}
