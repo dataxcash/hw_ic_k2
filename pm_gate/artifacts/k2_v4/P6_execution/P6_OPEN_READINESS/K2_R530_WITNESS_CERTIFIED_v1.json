@@ -1,0 +1,185 @@
+{
+ "artifact": "k2_r530_witness_certified_v1",
+ "ts": "2026-09-25T03:19:18",
+ "authority": "#K2-196 sec.3.3-5 (witness MUST come from a certified feasibility solve on the registered lattice/gate model: 16/16 witness OR non-empty unsat core; gate f upgraded to model SUFFICIENCY; one newly granted solve)",
+ "solve_calls": 0,
+ "source_master": "K2_R529_WOVEN_COMPLETE_MASTER_v1.json",
+ "cells": {
+  "R_BAND": 3,
+  "cell_nodes": {
+   "PCIE_UP_OUT0_N_J2": {
+    "In5": 1242,
+    "In4": 1270
+   },
+   "PCIE_UP_OUT0_P_J2": {
+    "In5": 895,
+    "In4": 905
+   },
+   "PCIE_UP_OUT1_N_J2": {
+    "In5": 174,
+    "In4": 174
+   },
+   "PCIE_UP_OUT1_P_J2": {
+    "In5": 672,
+    "In4": 702
+   },
+   "PCIE_UP_OUT2_N_J2": {
+    "In5": 80,
+    "In4": 83
+   },
+   "PCIE_UP_OUT2_P_J2": {
+    "In5": 435,
+    "In4": 432
+   },
+   "PCIE_UP_OUT3_N_J2": {
+    "In5": 54,
+    "In4": 54
+   },
+   "PCIE_UP_OUT3_P_J2": {
+    "In5": 182,
+    "In4": 197
+   },
+   "PCIE_UP_OUT4_N_J2": {
+    "In5": 126,
+    "In4": 132
+   },
+   "PCIE_UP_OUT4_P_J2": {
+    "In5": 10,
+    "In4": 10
+   },
+   "PCIE_UP_OUT5_N_J2": {
+    "In5": 7,
+    "In4": 7
+   },
+   "PCIE_UP_OUT5_P_J2": {
+    "In5": 12,
+    "In4": 12
+   },
+   "PCIE_UP_OUT6_N_J2": {
+    "In5": 7,
+    "In4": 7
+   },
+   "PCIE_UP_OUT6_P_J2": {
+    "In5": 8,
+    "In4": 8
+   },
+   "PCIE_UP_OUT7_N_J2": {
+    "In5": 19,
+    "In4": 19
+   },
+   "PCIE_UP_OUT7_P_J2": {
+    "In5": 7,
+    "In4": 7
+   }
+  },
+  "cell_arcs": {
+   "PCIE_UP_OUT0_N_J2": 15029,
+   "PCIE_UP_OUT0_P_J2": 10162,
+   "PCIE_UP_OUT1_N_J2": 1533,
+   "PCIE_UP_OUT1_P_J2": 7181,
+   "PCIE_UP_OUT2_N_J2": 581,
+   "PCIE_UP_OUT2_P_J2": 4431,
+   "PCIE_UP_OUT3_N_J2": 238,
+   "PCIE_UP_OUT3_P_J2": 1468,
+   "PCIE_UP_OUT4_N_J2": 1115,
+   "PCIE_UP_OUT4_P_J2": 45,
+   "PCIE_UP_OUT5_N_J2": 41,
+   "PCIE_UP_OUT5_P_J2": 43,
+   "PCIE_UP_OUT6_N_J2": 45,
+   "PCIE_UP_OUT6_P_J2": 52,
+   "PCIE_UP_OUT7_N_J2": 69,
+   "PCIE_UP_OUT7_P_J2": 41
+  }
+ },
+ "F_model_sufficiency": {
+  "i_cells_subset_of_own_registered_legal_per_layer": true,
+  "ii_cells_pairwise_disjoint_per_layer": true,
+  "iii_every_lane_connected_inside_its_own_cell_within_via_budget": "1/16",
+  "per_lane": {
+   "PCIE_UP_OUT0_N_J2": {
+    "cell_connects_src_to_snk_within_via_budget": true,
+    "min_via_arcs": 2,
+    "cell_arcs": 15029
+   },
+   "PCIE_UP_OUT0_P_J2": {
+    "cell_connects_src_to_snk_within_via_budget": false,
+    "min_via_arcs": null,
+    "cell_arcs": 10162
+   },
+   "PCIE_UP_OUT1_N_J2": {
+    "cell_connects_src_to_snk_within_via_budget": false,
+    "min_via_arcs": null,
+    "cell_arcs": 1533
+   },
+   "PCIE_UP_OUT1_P_J2": {
+    "cell_connects_src_to_snk_within_via_budget": false,
+    "min_via_arcs": null,
+    "cell_arcs": 7181
+   },
+   "PCIE_UP_OUT2_N_J2": {
+    "cell_connects_src_to_snk_within_via_budget": false,
+    "min_via_arcs": null,
+    "cell_arcs": 581
+   },
+   "PCIE_UP_OUT2_P_J2": {
+    "cell_connects_src_to_snk_within_via_budget": false,
+    "min_via_arcs": null,
+    "cell_arcs": 4431
+   },
+   "PCIE_UP_OUT3_N_J2": {
+    "cell_connects_src_to_snk_within_via_budget": false,
+    "min_via_arcs": null,
+    "cell_arcs": 238
+   },
+   "PCIE_UP_OUT3_P_J2": {
+    "cell_connects_src_to_snk_within_via_budget": false,
+    "min_via_arcs": null,
+    "cell_arcs": 1468
+   },
+   "PCIE_UP_OUT4_N_J2": {
+    "cell_connects_src_to_snk_within_via_budget": false,
+    "min_via_arcs": null,
+    "cell_arcs": 1115
+   },
+   "PCIE_UP_OUT4_P_J2": {
+    "cell_connects_src_to_snk_within_via_budget": false,
+    "min_via_arcs": null,
+    "cell_arcs": 45
+   },
+   "PCIE_UP_OUT5_N_J2": {
+    "cell_connects_src_to_snk_within_via_budget": false,
+    "min_via_arcs": null,
+    "cell_arcs": 41
+   },
+   "PCIE_UP_OUT5_P_J2": {
+    "cell_connects_src_to_snk_within_via_budget": false,
+    "min_via_arcs": null,
+    "cell_arcs": 43
+   },
+   "PCIE_UP_OUT6_N_J2": {
+    "cell_connects_src_to_snk_within_via_budget": false,
+    "min_via_arcs": null,
+    "cell_arcs": 45
+   },
+   "PCIE_UP_OUT6_P_J2": {
+    "cell_connects_src_to_snk_within_via_budget": false,
+    "min_via_arcs": null,
+    "cell_arcs": 52
+   },
+   "PCIE_UP_OUT7_N_J2": {
+    "cell_connects_src_to_snk_within_via_budget": false,
+    "min_via_arcs": null,
+    "cell_arcs": 69
+   },
+   "PCIE_UP_OUT7_P_J2": {
+    "cell_connects_src_to_snk_within_via_budget": false,
+    "min_via_arcs": null,
+    "cell_arcs": 41
+   }
+  },
+  "so": "if all three hold, the certified solve on these variables MUST return 16/16 paths on the registered lattice; if any lane's cell is insufficient => fail-closed, do NOT spend the shot",
+  "verdict": "FAIL"
+ },
+ "decision": "FAIL-CLOSED(闸 f 充分性): 下列线在自己格胞内不可达 ⇒ 不花那一枪（先修格胞构造）: ['PCIE_UP_OUT0_P_J2', 'PCIE_UP_OUT1_N_J2', 'PCIE_UP_OUT1_P_J2', 'PCIE_UP_OUT2_N_J2', 'PCIE_UP_OUT2_P_J2', 'PCIE_UP_OUT3_N_J2', 'PCIE_UP_OUT3_P_J2', 'PCIE_UP_OUT4_N_J2', 'PCIE_UP_OUT4_P_J2', 'PCIE_UP_OUT5_N_J2', 'PCIE_UP_OUT5_P_J2', 'PCIE_UP_OUT6_N_J2', 'PCIE_UP_OUT6_P_J2', 'PCIE_UP_OUT7_N_J2', 'PCIE_UP_OUT7_P_J2']",
+ "elapsed_s": 22.4
+}
