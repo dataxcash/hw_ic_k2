@@ -1,0 +1,106 @@
+{
+ "artifact": "k2_r535_core_premise_map_v1",
+ "ts": "2026-09-25T06:15:56",
+ "authority": "#K2-202 sec.3.3 (approved read-only premise attribution, 0 quota) + sec.4 item (i)-(iii)",
+ "certified_solve_calls": 0,
+ "i_core_premise_mapping": {
+  "subset": [
+   "PCIE_UP_OUT0_P_J2",
+   "PCIE_UP_OUT1_N_J2",
+   "PCIE_UP_OUT4_P_J2",
+   "PCIE_UP_OUT2_P_J2"
+  ],
+  "status": "INFEASIBLE",
+  "wall_s": 11.7,
+  "core_raw": [
+   289274,
+   289277,
+   289278
+  ],
+  "mapping_by_variable_index": {
+   "289274": "dem_PCIE_UP_OUT0_P_J2",
+   "289277": "dem_PCIE_UP_OUT4_P_J2",
+   "289278": "dem_PCIE_UP_OUT2_P_J2"
+  },
+  "mapping_by_assumption_position": {
+   "289274": "UNMAPPED",
+   "289277": "UNMAPPED",
+   "289278": "UNMAPPED"
+  },
+  "premise_class": "DEMAND assumption(s) of the named lanes (the only assumptions in this model)",
+  "unmapped_items": []
+ },
+ "ii_leave_one_out_3subsets": [
+  {
+   "dropped": "PCIE_UP_OUT0_P_J2",
+   "subset": [
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT2_P_J2"
+   ],
+   "status": "OPTIMAL",
+   "wall_s": 8.3,
+   "core_size": 0
+  },
+  {
+   "dropped": "PCIE_UP_OUT1_N_J2",
+   "subset": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT2_P_J2"
+   ],
+   "status": "INFEASIBLE",
+   "wall_s": 8.7,
+   "core_size": 3
+  },
+  {
+   "dropped": "PCIE_UP_OUT4_P_J2",
+   "subset": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT2_P_J2"
+   ],
+   "status": "OPTIMAL",
+   "wall_s": 9.4,
+   "core_size": 0
+  },
+  {
+   "dropped": "PCIE_UP_OUT2_P_J2",
+   "subset": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT4_P_J2"
+   ],
+   "status": "OPTIMAL",
+   "wall_s": 9.4,
+   "core_size": 0
+  }
+ ],
+ "iii_conservation_first_order": {
+  "pairwise_shared_nodes": {
+   "PCIE_UP_OUT0_P_J2|PCIE_UP_OUT1_N_J2": 7641,
+   "PCIE_UP_OUT0_P_J2|PCIE_UP_OUT4_P_J2": 7490,
+   "PCIE_UP_OUT0_P_J2|PCIE_UP_OUT2_P_J2": 7487,
+   "PCIE_UP_OUT1_N_J2|PCIE_UP_OUT4_P_J2": 7479,
+   "PCIE_UP_OUT1_N_J2|PCIE_UP_OUT2_P_J2": 7487,
+   "PCIE_UP_OUT4_P_J2|PCIE_UP_OUT2_P_J2": 7445
+  },
+  "union_legal_nodes": 7749,
+  "reading": "4 线共享格点规模极大（见 pairwise_shared_nodes）⇒ 冲突**不是**（没地方），属**多线联合占用**问题；逐前提判定需在此基础上做**该区断面容量 vs 4 线需求的守恒级核对**。",
+  "binary_verdict_so_far": "4-way conflict already appears at 3 lanes => inspect that triple"
+ },
+ "iv_minimal_relaxation_candidates": {
+  "note": "candidate premise relaxations to put to the supervisor (NOT self-applied)",
+  "candidates": [
+   "raise the per-lane via budget (2 via pairs) only for this 4-lane set (authorised? in-register MAX_VIA_PAIRS=2)",
+   "widen the allowed via zone set for these lanes (in-register: four wide zones)",
+   "allow re-pairing / re-slotting the 4 lanes' section slots (the R529 complete-master decisions)"
+  ]
+ },
+ "verdict": {
+  "all_three_subsets_routable": false,
+  "class": "joint-4way-or-triple",
+  "gate_A": "STOP (report to supervisor)"
+ },
+ "elapsed_s": 83.5
+}
