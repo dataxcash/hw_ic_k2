@@ -1,0 +1,33 @@
+{
+ "artifact": "k2_r513_class_scope_probe_v1",
+ "ts": "2026-09-24T20:36:39",
+ "authority": "#K2-183 sec.3.5 (read-only) · handoff-K2-513 sec.0",
+ "boundaries": "Solve() 0 calls; quota 0; read-only max-flow; no model/board/tool edits",
+ "runs": {
+  "class_pure=True_west=True": {
+   "n_lanes": 8,
+   "max_flow": 8,
+   "union_nodes": 6487,
+   "arcs": 173907
+  },
+  "class_pure=True_west=False": {
+   "n_lanes": 8,
+   "max_flow": 8,
+   "union_nodes": 6012,
+   "arcs": 160908
+  },
+  "class_pure=False_west=True": {
+   "n_lanes": 8,
+   "max_flow": 8,
+   "union_nodes": 6487,
+   "arcs": 173907
+  },
+  "class_pure=False_west=False": {
+   "n_lanes": 8,
+   "max_flow": 8,
+   "union_nodes": 6012,
+   "arcs": 160908
+  }
+ },
+ "verdict": "each class reaches its own 8/8 even with the class-pure region convention, so the self-declared two-channel convention is NOT the binding resource (pairing-free); the binding structure remains the prescribed IDENTITY pairing."
+}
