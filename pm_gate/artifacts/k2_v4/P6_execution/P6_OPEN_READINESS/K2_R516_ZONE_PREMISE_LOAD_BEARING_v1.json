@@ -1,0 +1,208 @@
+{
+ "artifact": "k2_r516_zone_premise_load_bearing_v1",
+ "ts": "2026-09-24T22:13:28",
+ "authority": "#K2-187 sec.3.6 / sec.4.5 (design-level infeasibility requires a non-empty core AND each premise machine-shown non-binding) · R515 sec.5 pending lever decision (jia/yi/bing)",
+ "question": "Is lever-YI's extra premise (In4 restricted to the 4 registered wide zones) LOAD-BEARING? If yes, a lever-YI UNSAT is a self-inflicted sandbox verdict, NOT a design certificate.",
+ "method": "registered Gen2(full|zones) free-node rasters; per cut, count of nodes where a lane centre may sit = side-by-side capacity of that cut (upper bound; conservative contiguous-run also reported)",
+ "demand_lanes": 16,
+ "lattice": [
+  138,
+  65
+ ],
+ "P_mm": 0.435,
+ "origin_mm": [
+  84.0,
+  41.0
+ ],
+ "wall_col": {
+  "col": 114,
+  "x_mm": 133.59
+ },
+ "free_nodes": {
+  "In5": 7416,
+  "In4_full": 8258,
+  "In4_zones": 8258,
+  "subset_ok": true,
+  "In4_stripped_by_zones": 0
+ },
+ "zone_boxes": [
+  {
+   "id": 0,
+   "box": [
+    83.0,
+    53.5,
+    96.0,
+    57.5
+   ]
+  },
+  {
+   "id": 1,
+   "box": [
+    96.0,
+    57.5,
+    133.0,
+    66.0
+   ]
+  },
+  {
+   "id": 2,
+   "box": [
+    132.5,
+    43.0,
+    135.0,
+    55.0
+   ]
+  },
+  {
+   "id": 3,
+   "box": [
+    125.0,
+    41.0,
+    142.6,
+    54.6
+   ]
+  }
+ ],
+ "cuts": {
+  "comb_exit_cols_0_33": {
+   "section": "comb_exit_cols_0_33|full",
+   "axis": "col",
+   "cols_or_rows": [
+    0,
+    33
+   ],
+   "In5_min": 21,
+   "In4_min": 53,
+   "sum_min_at_same_cut": 77,
+   "cuts_where_sum_lt_16": [],
+   "cuts_where_sum_lt_8": [],
+   "cuts_where_sum_lt_16_zones_variant": [],
+   "zones_min_sum": 77,
+   "zones_minus_full_min": 0,
+   "LOAD_BEARING_at_this_section": false
+  },
+  "mid_cols_34_112": {
+   "section": "mid_cols_34_112|full",
+   "axis": "col",
+   "cols_or_rows": [
+    34,
+    112
+   ],
+   "In5_min": 44,
+   "In4_min": 50,
+   "sum_min_at_same_cut": 94,
+   "cuts_where_sum_lt_16": [],
+   "cuts_where_sum_lt_8": [],
+   "cuts_where_sum_lt_16_zones_variant": [],
+   "zones_min_sum": 94,
+   "zones_minus_full_min": 0,
+   "LOAD_BEARING_at_this_section": false
+  },
+  "gate_funnel_cols_113_135": {
+   "section": "gate_funnel_cols_113_135|full",
+   "axis": "col",
+   "cols_or_rows": [
+    113,
+    135
+   ],
+   "In5_min": 31,
+   "In4_min": 32,
+   "sum_min_at_same_cut": 63,
+   "cuts_where_sum_lt_16": [],
+   "cuts_where_sum_lt_8": [],
+   "cuts_where_sum_lt_16_zones_variant": [],
+   "zones_min_sum": 63,
+   "zones_minus_full_min": 0,
+   "LOAD_BEARING_at_this_section": false
+  },
+  "pad_field_cols_113_137": {
+   "section": "pad_field_cols_113_137|full",
+   "axis": "col",
+   "cols_or_rows": [
+    113,
+    137
+   ],
+   "In5_min": 0,
+   "In4_min": 0,
+   "sum_min_at_same_cut": 0,
+   "cuts_where_sum_lt_16": [
+    136,
+    137
+   ],
+   "cuts_where_sum_lt_8": [
+    136,
+    137
+   ],
+   "cuts_where_sum_lt_16_zones_variant": [
+    136,
+    137
+   ],
+   "zones_min_sum": 0,
+   "zones_minus_full_min": 0,
+   "LOAD_BEARING_at_this_section": true
+  }
+ },
+ "wall_column_detail": {
+  "full": {
+   "In5_longest_run": 10,
+   "In4_longest_run": 12,
+   "In4_free_nodes": 32,
+   "sum_runs": 22
+  },
+  "zones": {
+   "In5_longest_run": 10,
+   "In4_longest_run": 12,
+   "In4_free_nodes": 32,
+   "sum_runs": 22
+  }
+ },
+ "wall_column_in_zones": [
+  2,
+  3
+ ],
+ "load_bearing_columns": {
+  "n_columns": 0,
+  "cols": [],
+  "x_mm_range": null,
+  "in_zones": {},
+  "same_test_with_conservative_run_metric": {
+   "n_columns": 0,
+   "cols": []
+  }
+ },
+ "independent_evidence_shortest_path_inflation_mm": {
+  "full_total_arcs": 1153097,
+  "zones_total_arcs": 799250,
+  "per_lane_delta_mm": {
+   "PCIE_UP_OUT0_N_J2": 25.424,
+   "PCIE_UP_OUT0_P_J2": 10.813,
+   "PCIE_UP_OUT1_N_J2": 11.844,
+   "PCIE_UP_OUT1_P_J2": 23.449,
+   "PCIE_UP_OUT2_N_J2": 20.348,
+   "PCIE_UP_OUT2_P_J2": 11.632,
+   "PCIE_UP_OUT3_N_J2": 11.226,
+   "PCIE_UP_OUT3_P_J2": 16.887,
+   "PCIE_UP_OUT4_N_J2": 14.146,
+   "PCIE_UP_OUT4_P_J2": 7.266,
+   "PCIE_UP_OUT5_N_J2": 7.289,
+   "PCIE_UP_OUT5_P_J2": 18.424,
+   "PCIE_UP_OUT6_N_J2": 16.167,
+   "PCIE_UP_OUT6_P_J2": 5.505,
+   "PCIE_UP_OUT7_N_J2": 5.566,
+   "PCIE_UP_OUT7_P_J2": 14.362
+  },
+  "min_delta_mm": 5.505,
+  "max_delta_mm": 25.424,
+  "mean_delta_mm": 13.772,
+  "note": "source artifacts: K2_R515_BUILDONLY.json (full, 1,153,103 bool) / K2_R514_BUILDONLY_ZONES.json (zones, 799,251 bool) - both Solve()-free build-only runs"
+ },
+ "verdict": {
+  "lever_YI_premise_load_bearing": true,
+  "statement": "乙相对甲多出的前提「In4 只出现在四个在册宽区」**承重**：存在必过割，其 full 容量 >= 16 而 zones 容量 < 16，且乙模型的逐线最短路径相对甲整体上涨（见 independent_evidence）",
+  "consequence_for_pending_decision": "⇒ 乙的 UNSAT **不能被当作**设计级不可行证书（#K2-187 §四.⑤ 要求前提逐条非绑定）；乙仅可作为 **SAT-only 探测**（解得即里程碑，解不出不结案）",
+  "still_open": "本器只判「前提是否承重」，不产出可行见证；二值仍需一次受权求解（本窗额度已用尽）"
+ },
+ "boundaries": "read-only; Solve() 0 calls; no model built by this instrument beyond the two registered free-node rasters; nothing edited; frozen four sources untouched",
+ "buildability": "NOT-APPLICABLE (premise-bind audit for a pending supervisor decision; no construction/feasibility claim; no object moved)",
+ "elapsed_s": 41.0
+}
