@@ -1,0 +1,27 @@
+  free(In5)=7416 free(In4)=8258 zone=3238 via-any=2869
+{
+ "model": {
+  "bool_vars": 1153103,
+  "constraints": 450504,
+  "clearance_constraints": 191086,
+  "ncons_other": 259386,
+  "assumption_groups": [
+   "node_capacity",
+   "via_pair_cap",
+   "via_separation",
+   "length_bound",
+   "clearance_exact_per_layer"
+  ],
+  "validate": "OK",
+  "via_sep_pairs_constrained": 28294
+ },
+ "solve": {
+  "status": "UNKNOWN",
+  "wall_s": 1501.2,
+  "quota_consumed": 1,
+  "solve_calls": 1
+ },
+ "decision": "NON-TERMINAL: solver=UNKNOWN（保守双层模型下未找到可行解；不作板级不可能主张）",
+ "elapsed_s": 1560.5
+}
+WROTE K2_R515_FREETERMINALS_v1.json
