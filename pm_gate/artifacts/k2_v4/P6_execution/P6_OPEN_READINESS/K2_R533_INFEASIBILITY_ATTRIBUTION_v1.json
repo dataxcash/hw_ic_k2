@@ -1,0 +1,39 @@
+{
+ "artifact": "k2_r533_infeasibility_attribution_v1",
+ "ts": "2026-09-25T05:49:42",
+ "authority": "#K2-200 sec.4 item (a)+(b)+(c) attribution gate; ZERO certified quota (diagnostics only)",
+ "certified_solve_calls": 0,
+ "calibrations": {
+  "a_sat_calibration": {
+   "status": "OPTIMAL",
+   "x1": 1,
+   "x2": 1,
+   "core": []
+  },
+  "b_unsat_calibration_presolve_on": {
+   "status": "INFEASIBLE",
+   "core_size": 2,
+   "core": [
+    "2",
+    "3"
+   ],
+   "verdict": "PASS(non-empty core)"
+  },
+  "b_unsat_calibration_presolve_off": {
+   "status": "INFEASIBLE",
+   "core_size": 2,
+   "core": [
+    "2",
+    "3"
+   ],
+   "verdict": "PASS(non-empty core)"
+  }
+ },
+ "real_model": {
+  "bool_vars": 1153114,
+  "constraints": 206665,
+  "node_capacity": 13891,
+  "total_arcs": 1153097
+ },
+ "partial": true
+}

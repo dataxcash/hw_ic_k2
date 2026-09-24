@@ -1,0 +1,136 @@
+{
+ "artifact": "k2_r534_p2_joint_probe_v1",
+ "ts": "2026-09-25T05:54:59",
+ "authority": "#K2-201 sec.4 item (c) layered probes; ZERO certified quota; fail-loud required",
+ "certified_solve_calls": 0,
+ "top_shared_pairs": [
+  {
+   "shared_nodes": 7641,
+   "lanes": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT1_N_J2"
+   ]
+  },
+  {
+   "shared_nodes": 7490,
+   "lanes": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT4_P_J2"
+   ]
+  },
+  {
+   "shared_nodes": 7487,
+   "lanes": [
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT2_P_J2"
+   ]
+  },
+  {
+   "shared_nodes": 7487,
+   "lanes": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT2_P_J2"
+   ]
+  },
+  {
+   "shared_nodes": 7479,
+   "lanes": [
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT4_P_J2"
+   ]
+  }
+ ],
+ "partial": true,
+ "probes_k": [
+  {
+   "k": 2,
+   "subset": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT1_N_J2"
+   ],
+   "vars": 145678,
+   "cap_cons": 12452,
+   "status": "OPTIMAL",
+   "wall_s": 5.1,
+   "core_size": 0,
+   "core": []
+  },
+  {
+   "k": 3,
+   "subset": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT4_P_J2"
+   ],
+   "vars": 217568,
+   "cap_cons": 12474,
+   "status": "OPTIMAL",
+   "wall_s": 8.2,
+   "core_size": 0,
+   "core": []
+  },
+  {
+   "k": 4,
+   "subset": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT2_P_J2"
+   ],
+   "vars": 289279,
+   "cap_cons": 12492,
+   "status": "INFEASIBLE",
+   "wall_s": 11.3,
+   "core_size": 3,
+   "core": [
+    "289274",
+    "289277",
+    "289278"
+   ],
+   "presolve_off": {
+    "status": "INFEASIBLE",
+    "wall_s": 4.1,
+    "core_size": 3,
+    "core": [
+     "289274",
+     "289277",
+     "289278"
+    ]
+   }
+  }
+ ],
+ "C_localization": {
+  "smallest_subset_with_NONEMPTY_core": {
+   "k": 4,
+   "subset": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT2_P_J2"
+   ],
+   "vars": 289279,
+   "cap_cons": 12492,
+   "status": "INFEASIBLE",
+   "wall_s": 11.3,
+   "core_size": 3,
+   "core": [
+    "289274",
+    "289277",
+    "289278"
+   ],
+   "presolve_off": {
+    "status": "INFEASIBLE",
+    "wall_s": 4.1,
+    "core_size": 3,
+    "core": [
+     "289274",
+     "289277",
+     "289278"
+    ]
+   }
+  },
+  "reading": "若小规模联合子集给出**非空核** ⇒ 取核机制在真实约束上可用 ⇒ 全模型空核归因于**规模/取核路径**（修法：关预解或分层取核，**非**改编码）；若连小子集也给不出核 ⇒ 归因于**编码/取核接线**。",
+  "verdict": "NONEMPTY CORE OBTAINED => attribution = extraction-path/scale (fix extraction, not encoding)"
+ },
+ "elapsed_s": 56.2
+}

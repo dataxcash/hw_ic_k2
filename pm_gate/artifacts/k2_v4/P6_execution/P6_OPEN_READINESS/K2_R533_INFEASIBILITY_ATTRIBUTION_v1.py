@@ -82,6 +82,7 @@ def main():
            "authority": "#K2-200 sec.4 item (a)+(b)+(c) attribution gate; ZERO certified quota (diagnostics only)",
            "certified_solve_calls": 0}
     rep["calibrations"] = tiny_models()
+    print("[stage] calibrations done:", json.dumps(rep["calibrations"], ensure_ascii=False)[:400], flush=True)
     g2 = W.Gen2(json.load(open("/tmp/opencode/archer/model_l8.json")), l1scope="full")
     names = list(g2.names); lanes = {nm: g2.build_lane(nm) for nm in names}
     mo, x, dem, arcs, ncap = real_model(g2, names, lanes)
@@ -91,6 +92,7 @@ def main():
     # P0: baseline — all demands OFF (hard constraints must be trivially satisfiable)
     s = cp_model.CpSolver(); s.parameters.max_time_in_seconds = 90
     st = s.Solve(mo)
+    print("[stage] P0 all-demands-off:", s.StatusName(st), flush=True)
     probes["P0_all_demands_off"] = {"status": s.StatusName(st),
                                     "reading": "hard/base constraint set is consistent (no demand enforced)"}
     # P1: each lane ALONE => should be SAT (per-lane feasibility)
@@ -114,6 +116,12 @@ def main():
         st1 = s1.Solve(m1)
         if st1 not in (cp_model.OPTIMAL, cp_model.FEASIBLE):
             alone_bad.append({"lane": nm, "status": s1.StatusName(st1), "vars": len(m1.Proto().variables)})
+    print("[stage] P1 per-lane submodels done; not_sat =", alone_bad, flush=True)
+    # fail-loud guarantee (#K2-201 sec.3.4 i): write the readings obtained so far BEFORE the P2 stage, so a
+    # silent death in P2 can never again leave us with "no reading at all".
+    rep["partial"] = True
+    json.dump(rep, open(a.out, "w"), ensure_ascii=False, indent=1, default=str)
+    print("[stage] partial artifact written (calibrations + P0 + P1)", flush=True)
     probes["P1_each_lane_alone"] = {"n_lanes": len(names), "not_sat": alone_bad,
                                     "reading": "every lane is individually routable inside the full model" if not alone_bad
                                                else "some lane is infeasible even alone => hard constraints/encoding suspect"}
@@ -175,6 +183,7 @@ def main():
         r_on = probe_subset(subset, True)
         r_off = None
         res_p2.append({"k": len(subset), "presolve_on": r_on, "presolve_off": r_off})
+        print("[stage] P2 k=%d subset=%s status=%s core=%d" % (len(subset), subset, r_on["status"], r_on["core_size"]), flush=True)
     probes["P2_joint_subsets"] = res_p2
     rep["probes"] = probes
     # ---- (c) localization verdict ----
@@ -202,4 +211,12 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except SystemExit:
+        raise
+    except Exception as _e:                      # fail-loud (#K2-201 sec.3.4 i): never exit 0 without a reading
+        import traceback
+        traceback.print_exc()
+        print('FAIL_LOUD: {"error": %r}' % (str(_e),), flush=True)
+        sys.exit(3)
