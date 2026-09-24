@@ -1,0 +1,202 @@
+{
+ "artifact": "k2_r497_conflict_table_family_audit_v1",
+ "ts": "2026-09-24T12:03:37",
+ "authority": "#K2-177 §一/§三 · #K2-176 §四.4/§四.5 · 单遍纪律 #K2-175 §四.5 · owner ⑥",
+ "route_prescribed": "候选族(每网×18位子×全带窗,确定性生成) → 全体候选两两真最近点距 → <0.435 记冲突 → 逐网对 AddForbiddenAssignments → 合流 → 一次受证求解",
+ "verdict": "STEP1-CANDIDATE-FAMILY-NOT-DONE (no solve run, quota 1 sealed)",
+ "geometry": {
+  "E_slots": 18,
+  "E_x": [
+   135.33,
+   135.765,
+   136.2,
+   136.635,
+   137.07,
+   137.505,
+   137.94,
+   138.375,
+   138.81,
+   139.245,
+   139.68,
+   140.115,
+   140.55,
+   140.985,
+   141.42,
+   141.855,
+   142.29,
+   142.725
+  ],
+  "Srows": [
+   57.095,
+   57.53,
+   57.965,
+   58.4,
+   58.835,
+   59.27,
+   59.705,
+   60.14,
+   60.575,
+   61.01,
+   61.445,
+   61.88,
+   62.315,
+   62.75,
+   63.185,
+   63.62,
+   64.055,
+   64.49,
+   64.925,
+   65.36,
+   65.795,
+   66.23,
+   66.665,
+   67.1
+  ],
+  "Nrows_n": 34,
+  "free_nodes": 7080,
+  "lattice": [
+   138,
+   65
+  ]
+ },
+ "F5_gate_crossing_blindspot": {
+  "seg_a": [
+   [
+    0,
+    0
+   ],
+   [
+    1,
+    1
+   ]
+  ],
+  "seg_b": [
+   [
+    0,
+    1
+   ],
+   [
+    1,
+    0
+   ]
+  ],
+  "true_min_mm": 0.0,
+  "exact_gate_seg_seg_batch": 0.7071067811865476,
+  "blindspot": true,
+  "note": "_seg_seg_batch = 4 端点-段距之最小值；两段**真相交**时为 0，本核却 >0 ⇒ 在册要求级闸可放过真穿越"
+ },
+ "F6_anchor_proximity": {
+  "min_interlane_anchor_dist_mm": 0.8345,
+  "pair": [
+   "PCIE_UP_OUT0_N_J2/B",
+   "PCIE_UP_OUT1_P_J2/B"
+  ],
+  "required_centerline_clearance_mm": 0.43,
+  "anchor_violation": false
+ },
+ "F1_family_A_R450s31_allowedset": {
+  "counts": {
+   "PCIE_UP_OUT0_N_J2": 0,
+   "PCIE_UP_OUT0_P_J2": 23,
+   "PCIE_UP_OUT1_N_J2": 26,
+   "PCIE_UP_OUT1_P_J2": 0,
+   "PCIE_UP_OUT2_N_J2": 0,
+   "PCIE_UP_OUT2_P_J2": 35,
+   "PCIE_UP_OUT3_N_J2": 38,
+   "PCIE_UP_OUT3_P_J2": 0,
+   "PCIE_UP_OUT4_N_J2": 0,
+   "PCIE_UP_OUT4_P_J2": 47,
+   "PCIE_UP_OUT5_N_J2": 50,
+   "PCIE_UP_OUT5_P_J2": 0,
+   "PCIE_UP_OUT6_N_J2": 0,
+   "PCIE_UP_OUT6_P_J2": 36,
+   "PCIE_UP_OUT7_N_J2": 36,
+   "PCIE_UP_OUT7_P_J2": 0
+  },
+  "total": 291,
+  "empty_nets": [
+   "PCIE_UP_OUT0_N_J2",
+   "PCIE_UP_OUT1_P_J2",
+   "PCIE_UP_OUT2_N_J2",
+   "PCIE_UP_OUT3_P_J2",
+   "PCIE_UP_OUT4_N_J2",
+   "PCIE_UP_OUT5_P_J2",
+   "PCIE_UP_OUT6_N_J2",
+   "PCIE_UP_OUT7_P_J2"
+  ],
+  "finding": "带窗洋葱 allowed-set（不含门行/门列/锚区东向逃逸带）⇒ 半数车道候选域=空 ⇒ AddExactlyOne([]) ⇒ 假 INFEASIBLE（族伪影）"
+ },
+ "F2_family_B_plus_gaterow_gatecol": {
+  "counts": {
+   "PCIE_UP_OUT0_N_J2": 52,
+   "PCIE_UP_OUT0_P_J2": 78,
+   "PCIE_UP_OUT1_N_J2": 95,
+   "PCIE_UP_OUT1_P_J2": 146,
+   "PCIE_UP_OUT2_N_J2": 199,
+   "PCIE_UP_OUT2_P_J2": 157,
+   "PCIE_UP_OUT3_N_J2": 156,
+   "PCIE_UP_OUT3_P_J2": 232,
+   "PCIE_UP_OUT4_N_J2": 156,
+   "PCIE_UP_OUT4_P_J2": 242,
+   "PCIE_UP_OUT5_N_J2": 227,
+   "PCIE_UP_OUT5_P_J2": 369,
+   "PCIE_UP_OUT6_N_J2": 129,
+   "PCIE_UP_OUT6_P_J2": 216,
+   "PCIE_UP_OUT7_N_J2": 216,
+   "PCIE_UP_OUT7_P_J2": 292
+  },
+  "total": 2962,
+  "empty_nets": [],
+  "finding": "补门行/门列后 16/16 非空，但全体候选皆共享瓶颈行 36-39 ⇒ 冲突表 99.85% 为精确相交/共点（族无分层）"
+ },
+ "F2b_conflict_table_readings": {
+  "source": "conflicts2（V-B 族 · 1571 候选 · 真最近点距 + 真穿越判定）",
+  "net_pairs_with_conflicts": 120,
+  "forbidden_pairs_total": 1112133,
+  "at_zero_distance": 1110490,
+  "in_0_0.435": 1643,
+  "zero_share": 0.99852,
+  "finding": "99.85% 冲突=距离 0（相交/共点）⇒ 族无分层、几乎任意两候选互斥 ⇒ 求解结果必为族伪影，不得据以判不可行"
+ },
+ "F3_family_D_seat_nested_staircase": {
+  "counts": {
+   "PCIE_UP_OUT0_N_J2": 24,
+   "PCIE_UP_OUT0_P_J2": 0,
+   "PCIE_UP_OUT1_N_J2": 27,
+   "PCIE_UP_OUT1_P_J2": 0,
+   "PCIE_UP_OUT2_N_J2": 8,
+   "PCIE_UP_OUT2_P_J2": 0,
+   "PCIE_UP_OUT3_N_J2": 41,
+   "PCIE_UP_OUT3_P_J2": 0,
+   "PCIE_UP_OUT4_N_J2": 38,
+   "PCIE_UP_OUT4_P_J2": 74,
+   "PCIE_UP_OUT5_N_J2": 68,
+   "PCIE_UP_OUT5_P_J2": 0,
+   "PCIE_UP_OUT6_N_J2": 41,
+   "PCIE_UP_OUT6_P_J2": 104,
+   "PCIE_UP_OUT7_N_J2": 93,
+   "PCIE_UP_OUT7_P_J2": 46
+  },
+  "total": 564,
+  "empty_nets": [
+   "PCIE_UP_OUT0_P_J2",
+   "PCIE_UP_OUT1_P_J2",
+   "PCIE_UP_OUT2_P_J2",
+   "PCIE_UP_OUT3_P_J2",
+   "PCIE_UP_OUT5_P_J2"
+  ],
+  "finding": "闭式阶梯（南深按席分层·北行窗扫·他车道锚 keepout 入栅）后仍有车道候选域=空：北区可行走廊（行 7 / 行 25）被他车道 B 锚 keepout 切断、且绕行需多于一次折角 ⇒ 单折线阶梯族表达力不足"
+ },
+ "elapsed_s": 125.0,
+ "next_action": {
+  "step": "补全候选族（step-1）后，再走 #K2-177 §一 step2-4 与一次受证求解",
+  "concrete": [
+   "生成器改『可绕行』形态：多折角/短 BFS 段（非单阶梯），允许在行 7 / 行 25 等北区走廊内绕锚 keepout",
+   "以每网『非空域』为 step-1 硬闸（本件即该闸之负结果）",
+   "冲突表用真最近点距 + 真穿越（真穿越 ⇒ 0）——不得用 _seg_seg_batch 单独判据",
+   "族规模上限 ~150 候选/网（120 网对 × 150² ≈ 2.7M 几何预算 · 分钟级）",
+   "前置全绿后一次受证求解（额度 1）"
+  ],
+  "quota": "受证全量求解额度 1：**未耗**（本件未跑求解器）"
+ }
+}
