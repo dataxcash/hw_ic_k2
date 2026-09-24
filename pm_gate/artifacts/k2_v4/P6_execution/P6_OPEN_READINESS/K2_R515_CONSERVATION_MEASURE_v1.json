@@ -1,0 +1,235 @@
+{
+ "artifact": "k2_r515_conservation_measure_v1",
+ "ts": "2026-09-24T21:55:12",
+ "authority": "monitor convergence-stall stop-order (must produce a binary OR a conservation-grade blocker report: which layer / which resource / who monopolises it / why no allocation)",
+ "method": "per-layer registered obstacle raster (build_base); for each straight cut, longest contiguous free run in PITCH-P cells = max lanes that can cross side by side (cell pitch == P)",
+ "P_mm": 0.435,
+ "layers": {},
+ "cut_vertical_comb_exit_cols0_33": {
+  "per_col_lanes": {
+   "0": {
+    "In5.Cu": 9,
+    "In4.Cu": 30
+   },
+   "1": {
+    "In5.Cu": 9,
+    "In4.Cu": 27
+   },
+   "2": {
+    "In5.Cu": 28,
+    "In4.Cu": 29
+   },
+   "3": {
+    "In5.Cu": 29,
+    "In4.Cu": 32
+   },
+   "4": {
+    "In5.Cu": 29,
+    "In4.Cu": 34
+   },
+   "5": {
+    "In5.Cu": 29,
+    "In4.Cu": 34
+   },
+   "6": {
+    "In5.Cu": 29,
+    "In4.Cu": 34
+   },
+   "7": {
+    "In5.Cu": 29,
+    "In4.Cu": 34
+   },
+   "8": {
+    "In5.Cu": 29,
+    "In4.Cu": 34
+   },
+   "9": {
+    "In5.Cu": 29,
+    "In4.Cu": 34
+   },
+   "10": {
+    "In5.Cu": 29,
+    "In4.Cu": 34
+   },
+   "11": {
+    "In5.Cu": 29,
+    "In4.Cu": 34
+   },
+   "12": {
+    "In5.Cu": 29,
+    "In4.Cu": 34
+   },
+   "13": {
+    "In5.Cu": 29,
+    "In4.Cu": 34
+   },
+   "14": {
+    "In5.Cu": 29,
+    "In4.Cu": 34
+   },
+   "15": {
+    "In5.Cu": 29,
+    "In4.Cu": 34
+   },
+   "16": {
+    "In5.Cu": 29,
+    "In4.Cu": 34
+   },
+   "17": {
+    "In5.Cu": 29,
+    "In4.Cu": 34
+   },
+   "18": {
+    "In5.Cu": 31,
+    "In4.Cu": 34
+   },
+   "19": {
+    "In5.Cu": 31,
+    "In4.Cu": 34
+   },
+   "20": {
+    "In5.Cu": 31,
+    "In4.Cu": 34
+   },
+   "21": {
+    "In5.Cu": 29,
+    "In4.Cu": 32
+   },
+   "22": {
+    "In5.Cu": 30,
+    "In4.Cu": 33
+   },
+   "23": {
+    "In5.Cu": 30,
+    "In4.Cu": 33
+   },
+   "24": {
+    "In5.Cu": 29,
+    "In4.Cu": 22
+   },
+   "25": {
+    "In5.Cu": 31,
+    "In4.Cu": 23
+   },
+   "26": {
+    "In5.Cu": 29,
+    "In4.Cu": 32
+   },
+   "27": {
+    "In5.Cu": 30,
+    "In4.Cu": 33
+   },
+   "28": {
+    "In5.Cu": 31,
+    "In4.Cu": 34
+   },
+   "29": {
+    "In5.Cu": 29,
+    "In4.Cu": 32
+   },
+   "30": {
+    "In5.Cu": 30,
+    "In4.Cu": 33
+   },
+   "31": {
+    "In5.Cu": 29,
+    "In4.Cu": 33
+   },
+   "32": {
+    "In5.Cu": 28,
+    "In4.Cu": 32
+   },
+   "33": {
+    "In5.Cu": 30,
+    "In4.Cu": 34
+   }
+  },
+  "min_over_cols": {
+   "In5.Cu": 9,
+   "In4.Cu": 22
+  }
+ },
+ "cut_vertical_mid_cols34_112": {
+  "min_over_cols": {
+   "In5.Cu": 26,
+   "In4.Cu": 29
+  }
+ },
+ "cut_vertical_gate_cols113_135": {
+  "min_over_cols": {
+   "In5.Cu": 10,
+   "In4.Cu": 12
+  }
+ },
+ "cut_horizontal_gate_band_rows30_38": {
+  "min_over_rows": {
+   "In5.Cu": 45,
+   "In4.Cu": 60
+  }
+ },
+ "wall_column_free_runs": {
+  "In5.Cu": [
+   5,
+   1,
+   3,
+   1,
+   1,
+   2,
+   1,
+   2,
+   1,
+   2,
+   1,
+   10,
+   1
+  ],
+  "In4.Cu": [
+   5,
+   1,
+   3,
+   1,
+   1,
+   2,
+   1,
+   2,
+   1,
+   2,
+   1,
+   12
+  ]
+ },
+ "wall_gaps": {
+  "col": 114,
+  "x_mm": 133.59
+ },
+ "mandatory_passages_vs_demand": {
+  "comb_exit_min_lanes": {
+   "In5": 9,
+   "In4": 22,
+   "sum_two_layers": 31,
+   "demand_all_16": 16,
+   "slack": 15
+  },
+  "gate_funnel_min_lanes": {
+   "In5": 10,
+   "In4": 12,
+   "sum_two_layers": 22,
+   "demand_all_16": 16,
+   "slack": 6
+  },
+  "wall_gap_count": {
+   "In5": 13,
+   "In4": 12,
+   "demand_west_group": 8
+  }
+ },
+ "verdict_fields": {
+  "which_layer": "缺口**不在某一层**：绑定点是「规定身份配对 × 跨层可解性」；窄段（梳齿出口 / 东门 / 墙洞）才是无法支付换序的地方 —— 见 mandatory_passages_vs_demand",
+  "which_resource": "资源 = **可支付的换序事件**（= 宽区内 ≥1 个格点间距的横向余量，且与过孔站点**联合**可用），不是面积、不是总宽度",
+  "monopolised_by": "被**设计自己的 16 根线**占住：每个必过断面上 16 根必须同时通过，而该断面两层合计容量见 slack 一栏（余量即「可借来换序」的上限）",
+  "why_no_allocation": "**本件不断言**任何分配不可能（见 report §四：模型是保守抽象 ⇒ UNSAT 不是证书；R513-T4 已证所有直线割 ≥66 ⇒ 无宽度型证书）"
+ },
+ "boundaries": "read-only; Solve() 0 calls; nothing edited; frozen four sources untouched",
+ "buildability": "NOT-APPLICABLE (capacity measurement for a blocker report; no construction claim)",
+ "elapsed_s": 19.3
+}
