@@ -1,0 +1,154 @@
+{
+ "artifact": "k2_r501_channel_ordered_construction_v1",
+ "ts": "2026-09-24T14:00:05",
+ "authority": "#K2-178 §四 方法教令#4（次序＋连续位置/有序范式）· 一次实现窗 · #K2-177 §一/§三 · #K2-175 §四.5",
+ "paradigm": "ordered sequential construction on the free lattice (domain = free arcs, NOT a candidate family); node capacity 1 + within-cell 5 linear clearance patterns",
+ "preexisting_gates": {
+  "golden_regression": {
+   "status": "OPTIMAL",
+   "answer": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "expected": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "pass": true
+  },
+  "nc1_endpoint_off_grid": {
+   "endpoint_max_dev_mm": 0.0707,
+   "detected": true
+  },
+  "nc3_forced_single_seat_must_be_infeasible": {
+   "status": "INFEASIBLE",
+   "detected": true
+  },
+  "gate_soundness_overlap_must_fail": {
+   "n_lane_pitch_viol": 1,
+   "lane_pitch_min_gap_mm": 0.0,
+   "detected": true
+  },
+  "r495_gate_soundness_vs_R494": {
+   "n_lane_pitch_viol": 30,
+   "lane_pitch_min_gap_mm": 0.0264,
+   "n_clearance_viol": 13,
+   "detected": true
+  },
+  "all_pass": true
+ },
+ "preconditions_all_green": true,
+ "lane_order": [
+  "PCIE_UP_OUT3_P_J2",
+  "PCIE_UP_OUT0_P_J2",
+  "PCIE_UP_OUT0_N_J2",
+  "PCIE_UP_OUT1_N_J2",
+  "PCIE_UP_OUT1_P_J2",
+  "PCIE_UP_OUT5_N_J2",
+  "PCIE_UP_OUT6_N_J2",
+  "PCIE_UP_OUT7_P_J2",
+  "PCIE_UP_OUT7_N_J2",
+  "PCIE_UP_OUT2_P_J2",
+  "PCIE_UP_OUT5_P_J2",
+  "PCIE_UP_OUT2_N_J2",
+  "PCIE_UP_OUT3_N_J2",
+  "PCIE_UP_OUT4_N_J2",
+  "PCIE_UP_OUT6_P_J2",
+  "PCIE_UP_OUT4_P_J2"
+ ],
+ "construction": {
+  "feasible_all": false,
+  "routed": 2,
+  "n_lanes": 16,
+  "per_lane": [
+   {
+    "nm": "PCIE_UP_OUT3_P_J2",
+    "routed": true,
+    "n_pts": 24,
+    "len_mm": 63.641
+   },
+   {
+    "nm": "PCIE_UP_OUT0_P_J2",
+    "routed": false,
+    "reason": "no legal path in residual graph"
+   },
+   {
+    "nm": "PCIE_UP_OUT0_N_J2",
+    "routed": true,
+    "n_pts": 30,
+    "len_mm": 77.4
+   },
+   {
+    "nm": "PCIE_UP_OUT1_N_J2",
+    "routed": false,
+    "reason": "no legal path in residual graph"
+   },
+   {
+    "nm": "PCIE_UP_OUT1_P_J2",
+    "routed": false,
+    "reason": "no legal path in residual graph"
+   },
+   {
+    "nm": "PCIE_UP_OUT5_N_J2",
+    "routed": false,
+    "reason": "no legal path in residual graph"
+   },
+   {
+    "nm": "PCIE_UP_OUT6_N_J2",
+    "routed": false,
+    "reason": "no legal path in residual graph"
+   },
+   {
+    "nm": "PCIE_UP_OUT7_P_J2",
+    "routed": false,
+    "reason": "no legal path in residual graph"
+   },
+   {
+    "nm": "PCIE_UP_OUT7_N_J2",
+    "routed": false,
+    "reason": "no legal path in residual graph"
+   },
+   {
+    "nm": "PCIE_UP_OUT2_P_J2",
+    "routed": false,
+    "reason": "no legal path in residual graph"
+   },
+   {
+    "nm": "PCIE_UP_OUT5_P_J2",
+    "routed": false,
+    "reason": "no legal path in residual graph"
+   },
+   {
+    "nm": "PCIE_UP_OUT2_N_J2",
+    "routed": false,
+    "reason": "no legal path in residual graph"
+   },
+   {
+    "nm": "PCIE_UP_OUT3_N_J2",
+    "routed": false,
+    "reason": "no legal path in residual graph"
+   },
+   {
+    "nm": "PCIE_UP_OUT4_N_J2",
+    "routed": false,
+    "reason": "no legal path in residual graph"
+   },
+   {
+    "nm": "PCIE_UP_OUT6_P_J2",
+    "routed": false,
+    "reason": "no legal path in residual graph"
+   },
+   {
+    "nm": "PCIE_UP_OUT4_P_J2",
+    "routed": false,
+    "reason": "no legal path in residual graph"
+   }
+  ]
+ },
+ "decision": "NON-TERMINAL: 构造未覆盖全部车道（无终局主张；顺序构造不完备 ⇒ 不构成不可行证据）",
+ "elapsed_s": 10.5
+}
