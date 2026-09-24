@@ -1,0 +1,186 @@
+{
+ "artifact": "k2_r498_conflict_table_one_implementation_v2",
+ "ts": "2026-09-24T13:34:19",
+ "authority": "监理停止令(红线·命令重复) · 宪法第八章第8条 · #K2-177 §一/§三 · #K2-176 §四.4/§四.5 · #K2-175 §四.5",
+ "spec": "HANDOFF-K2-497-STOPORDER-ONE-IMPLEMENTATION.md §0（七点）· K2_R497_PLAN_HUMAN_PATH_v1.md §四",
+ "PRE_DEVIATION": {
+  "from": "handoff §0.1「搜索栅再膨胀 PAD_EXTRA + 0.31」",
+  "to": "搜索栅只加离散化/折角安全量 EPS=0.03；线段级净空改由「逐段在册尺复核」保证（§0.7 明文）",
+  "measured_reason": "registered 尺 16/16 可达；再 +0.4312 后 6/16 网节点级不可达（0_P/1_P/2_P/3_P/4_P/5_P/6_P 中 6 个）",
+  "soundness": "逐段在册尺复核 >= 在册 exact_gate 同尺 ⇒ 所有交出折线按构造过在册要求级闸；无假合格面"
+ },
+ "geometry": {
+  "lattice": [
+   138,
+   65
+  ],
+  "free_nodes": 7416,
+  "gate_slots": 18,
+  "gate_x": [
+   135.33,
+   135.765,
+   136.2,
+   136.635,
+   137.07,
+   137.505,
+   137.94,
+   138.375,
+   138.81,
+   139.245,
+   139.68,
+   140.115,
+   140.55,
+   140.985,
+   141.42,
+   141.855,
+   142.29,
+   142.725
+  ],
+  "lattice_edges": 26441
+ },
+ "preexisting_gates": {
+  "golden_regression": {
+   "status": "OPTIMAL",
+   "answer": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "expected": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "pass": true
+  },
+  "nc1_endpoint_off_grid": {
+   "endpoint_max_dev_mm": 0.0707,
+   "detected": true
+  },
+  "nc3_forced_single_seat_must_be_infeasible": {
+   "status": "INFEASIBLE",
+   "detected": true
+  },
+  "gate_soundness_overlap_must_fail": {
+   "n_lane_pitch_viol": 1,
+   "lane_pitch_min_gap_mm": 0.0,
+   "detected": true
+  },
+  "r495_gate_soundness_vs_R494": {
+   "n_lane_pitch_viol": 30,
+   "lane_pitch_min_gap_mm": 0.0264,
+   "n_clearance_viol": 13,
+   "detected": true
+  },
+  "all_pass": true
+ },
+ "family": {
+  "counts": {
+   "PCIE_UP_OUT0_N_J2": 16,
+   "PCIE_UP_OUT0_P_J2": 18,
+   "PCIE_UP_OUT1_N_J2": 21,
+   "PCIE_UP_OUT1_P_J2": 24,
+   "PCIE_UP_OUT2_N_J2": 26,
+   "PCIE_UP_OUT2_P_J2": 25,
+   "PCIE_UP_OUT3_N_J2": 22,
+   "PCIE_UP_OUT3_P_J2": 22,
+   "PCIE_UP_OUT4_N_J2": 22,
+   "PCIE_UP_OUT4_P_J2": 20,
+   "PCIE_UP_OUT5_N_J2": 20,
+   "PCIE_UP_OUT5_P_J2": 25,
+   "PCIE_UP_OUT6_N_J2": 22,
+   "PCIE_UP_OUT6_P_J2": 11,
+   "PCIE_UP_OUT7_N_J2": 9,
+   "PCIE_UP_OUT7_P_J2": 11
+  },
+  "total": 314,
+  "empty_nets": [],
+  "per_net_cap": "~150 (handoff §0.4)",
+  "t_s": 14.1,
+  "params": {
+   "LW": 6,
+   "DE": [
+    0
+   ],
+   "MVALS": [
+    7,
+    25
+   ],
+   "MAXJ": 16,
+   "EPS": 0.03
+  }
+ },
+ "segment_ruler_check": {
+  "candidates": 314,
+  "fail": 0,
+  "examples": [],
+  "pass": true
+ },
+ "conflict_table": {
+  "forbidden_pairs": 38544,
+  "net_pairs_with_conflicts": 119,
+  "at_zero_distance": 36994,
+  "zero_share": 0.9598,
+  "t_s": 4.0,
+  "criterion": "true closest-point distance + true crossing(=>0)"
+ },
+ "family_feasibility_screen": {
+  "zero_compatible_pairs": 68,
+  "total_net_pairs": 120,
+  "examples": [
+   [
+    "PCIE_UP_OUT0_N_J2",
+    "PCIE_UP_OUT0_P_J2",
+    16,
+    18
+   ],
+   [
+    "PCIE_UP_OUT0_N_J2",
+    "PCIE_UP_OUT1_N_J2",
+    16,
+    21
+   ],
+   [
+    "PCIE_UP_OUT0_N_J2",
+    "PCIE_UP_OUT2_P_J2",
+    16,
+    25
+   ],
+   [
+    "PCIE_UP_OUT0_N_J2",
+    "PCIE_UP_OUT3_N_J2",
+    16,
+    22
+   ],
+   [
+    "PCIE_UP_OUT0_N_J2",
+    "PCIE_UP_OUT4_P_J2",
+    16,
+    20
+   ],
+   [
+    "PCIE_UP_OUT0_N_J2",
+    "PCIE_UP_OUT5_N_J2",
+    16,
+    20
+   ]
+  ],
+  "meaning": "任一零相容网对 ⇒ 该族必无可行指派（与求解器无关）"
+ },
+ "model": {
+  "vars": 314,
+  "slot_mutex": 18,
+  "forbidden_clauses": 38544,
+  "validate": "OK",
+  "sha16": "da36c67e02dcb05c"
+ },
+ "preconditions_all_green": true,
+ "solve": {
+  "status": "NOT-RUN",
+  "quota_consumed": 0
+ },
+ "decision": "STOP-BEFORE-SOLVE: 族级可行性筛未过（零相容网对 68 对） ⇒ 不开跑 · 受证额度 1 未耗（#K2-175 §四.5）",
+ "elapsed_s": 22.5
+}
