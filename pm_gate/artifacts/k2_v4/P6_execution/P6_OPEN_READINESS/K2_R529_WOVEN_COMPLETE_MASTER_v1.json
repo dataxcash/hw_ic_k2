@@ -1,0 +1,1357 @@
+{
+ "artifact": "k2_r529_woven_complete_master_v1",
+ "ts": "2026-09-25T02:37:29",
+ "authority": "#K2-195 sec.3.3 (complete internalization) + sec.3.5 gates a-e,f + sec.3.4 (one new solve)",
+ "solve_calls": 1,
+ "position_sets": {
+  "sets": {
+   "col33": [
+    29,
+    31,
+    33,
+    35,
+    37,
+    39,
+    41,
+    43,
+    45,
+    47,
+    49,
+    51,
+    53,
+    55,
+    57
+   ],
+   "col60": [
+    38,
+    40,
+    42,
+    44,
+    46,
+    48,
+    50,
+    52,
+    54,
+    56
+   ],
+   "exit_west": [
+    7,
+    11,
+    13,
+    15,
+    24,
+    28
+   ],
+   "exit_east": [
+    115,
+    117,
+    119,
+    121,
+    123,
+    125,
+    127,
+    129,
+    131,
+    133,
+    135
+   ]
+  },
+  "P_mm": 0.435,
+  "min_pitch_steps": 2,
+  "rule": "same-layer lanes at one section must be >= 2 lattice (2P) apart in the transverse direction; hence every set is a >=2-pitch subset (claim-compatible)"
+ },
+ "packing_capacity": {
+  "rule": "cap[t]=floor(span_perp[t]/(2P))+1",
+  "cap_per_station": {
+   "COMB": 11,
+   "BELT": 10,
+   "WALL": 14,
+   "FIELD": 16
+  }
+ },
+ "section_slot_candidates": {
+  "PCIE_UP_OUT0_N_J2": {
+   "col33": [
+    31,
+    33,
+    35,
+    37,
+    39,
+    41,
+    43,
+    45,
+    47,
+    49,
+    51,
+    53,
+    55,
+    57
+   ],
+   "col60": [
+    38,
+    40,
+    42,
+    44,
+    46,
+    48,
+    50,
+    52,
+    54,
+    56
+   ],
+   "exit": [
+    7,
+    11,
+    13,
+    15,
+    24,
+    28
+   ]
+  },
+  "PCIE_UP_OUT0_P_J2": {
+   "col33": [
+    31,
+    33,
+    35,
+    37,
+    39,
+    41,
+    43,
+    45,
+    47,
+    49,
+    51,
+    53,
+    55,
+    57
+   ],
+   "col60": [
+    38,
+    40,
+    42,
+    44,
+    46,
+    48,
+    50,
+    52,
+    54,
+    56
+   ],
+   "exit": [
+    115,
+    117,
+    119,
+    121,
+    123,
+    125,
+    127,
+    129,
+    131,
+    133,
+    135
+   ]
+  },
+  "PCIE_UP_OUT1_N_J2": {
+   "col33": [
+    31,
+    33,
+    35,
+    37,
+    39,
+    41,
+    43,
+    45,
+    47,
+    49,
+    51,
+    53,
+    55,
+    57
+   ],
+   "col60": [
+    38,
+    40,
+    42,
+    44,
+    46,
+    48,
+    50,
+    52,
+    54,
+    56
+   ],
+   "exit": [
+    115,
+    117,
+    119,
+    121,
+    123,
+    125,
+    127,
+    129,
+    131,
+    133,
+    135
+   ]
+  },
+  "PCIE_UP_OUT1_P_J2": {
+   "col33": [
+    31,
+    33,
+    35,
+    37,
+    39,
+    41,
+    43,
+    45,
+    47,
+    49,
+    51,
+    53,
+    55,
+    57
+   ],
+   "col60": [
+    38,
+    40,
+    42,
+    44,
+    46,
+    48,
+    50,
+    52,
+    54,
+    56
+   ],
+   "exit": [
+    7,
+    11,
+    13,
+    15,
+    24,
+    28
+   ]
+  },
+  "PCIE_UP_OUT2_N_J2": {
+   "col33": [
+    31,
+    33,
+    35,
+    37,
+    39,
+    41,
+    43,
+    45,
+    47,
+    49,
+    51,
+    53,
+    55,
+    57
+   ],
+   "col60": [
+    38,
+    40,
+    42,
+    44,
+    46,
+    48,
+    50,
+    52,
+    54,
+    56
+   ],
+   "exit": [
+    7,
+    11,
+    13,
+    15,
+    24,
+    28
+   ]
+  },
+  "PCIE_UP_OUT2_P_J2": {
+   "col33": [
+    31,
+    33,
+    35,
+    37,
+    39,
+    41,
+    43,
+    45,
+    47,
+    49,
+    51,
+    53,
+    55,
+    57
+   ],
+   "col60": [
+    38,
+    40,
+    42,
+    44,
+    46,
+    48,
+    50,
+    52,
+    54,
+    56
+   ],
+   "exit": [
+    115,
+    117,
+    119,
+    121,
+    123,
+    125,
+    127,
+    129,
+    131,
+    133,
+    135
+   ]
+  },
+  "PCIE_UP_OUT3_N_J2": {
+   "col33": [
+    31,
+    33,
+    35,
+    37,
+    39,
+    41,
+    43,
+    45,
+    47,
+    49,
+    51,
+    53,
+    55,
+    57
+   ],
+   "col60": [
+    38,
+    40,
+    42,
+    44,
+    46,
+    48,
+    50,
+    52,
+    54,
+    56
+   ],
+   "exit": [
+    115,
+    117,
+    119,
+    121,
+    123,
+    125,
+    127,
+    129,
+    131,
+    133,
+    135
+   ]
+  },
+  "PCIE_UP_OUT3_P_J2": {
+   "col33": [
+    31,
+    33,
+    35,
+    37,
+    39,
+    41,
+    43,
+    45,
+    47,
+    49,
+    51,
+    53,
+    55,
+    57
+   ],
+   "col60": [
+    38,
+    40,
+    42,
+    44,
+    46,
+    48,
+    50,
+    52,
+    54,
+    56
+   ],
+   "exit": [
+    7,
+    11,
+    13,
+    15,
+    24,
+    28
+   ]
+  },
+  "PCIE_UP_OUT4_N_J2": {
+   "col33": [
+    31,
+    33,
+    35,
+    37,
+    39,
+    41,
+    43,
+    45,
+    47,
+    49,
+    51,
+    53,
+    55,
+    57
+   ],
+   "col60": [
+    38,
+    40,
+    42,
+    44,
+    46,
+    48,
+    50,
+    52,
+    54,
+    56
+   ],
+   "exit": [
+    7,
+    11,
+    13,
+    15,
+    24,
+    28
+   ]
+  },
+  "PCIE_UP_OUT4_P_J2": {
+   "col33": [
+    31,
+    33,
+    35,
+    37,
+    39,
+    41,
+    43,
+    45,
+    47,
+    49,
+    51,
+    53,
+    55,
+    57
+   ],
+   "col60": [
+    38,
+    40,
+    42,
+    44,
+    46,
+    48,
+    50,
+    52,
+    54,
+    56
+   ],
+   "exit": [
+    115,
+    117,
+    119,
+    121,
+    123,
+    125,
+    127,
+    129,
+    131,
+    133,
+    135
+   ]
+  },
+  "PCIE_UP_OUT5_N_J2": {
+   "col33": [
+    31,
+    33,
+    35,
+    37,
+    39,
+    41,
+    43,
+    45,
+    47,
+    49,
+    51,
+    53,
+    55,
+    57
+   ],
+   "col60": [
+    38,
+    40,
+    42,
+    44,
+    46,
+    48,
+    50,
+    52,
+    54,
+    56
+   ],
+   "exit": [
+    115,
+    117,
+    119,
+    121,
+    123,
+    125,
+    127,
+    129,
+    131,
+    133,
+    135
+   ]
+  },
+  "PCIE_UP_OUT5_P_J2": {
+   "col33": [
+    31,
+    33,
+    35,
+    37,
+    39,
+    41,
+    43,
+    45,
+    47,
+    49,
+    51,
+    53,
+    55,
+    57
+   ],
+   "col60": [
+    38,
+    40,
+    42,
+    44,
+    46,
+    48,
+    50,
+    52,
+    54,
+    56
+   ],
+   "exit": [
+    7,
+    11,
+    13,
+    15,
+    24,
+    28
+   ]
+  },
+  "PCIE_UP_OUT6_N_J2": {
+   "col33": [
+    31,
+    33,
+    35,
+    37,
+    39,
+    41,
+    43,
+    45,
+    47,
+    49,
+    51,
+    53,
+    55,
+    57
+   ],
+   "col60": [
+    38,
+    40,
+    42,
+    44,
+    46,
+    48,
+    50,
+    52,
+    54,
+    56
+   ],
+   "exit": [
+    7,
+    11,
+    13,
+    15,
+    24,
+    28
+   ]
+  },
+  "PCIE_UP_OUT6_P_J2": {
+   "col33": [
+    31,
+    33,
+    35,
+    37,
+    39,
+    41,
+    43,
+    45,
+    47,
+    49,
+    51,
+    53,
+    55,
+    57
+   ],
+   "col60": [
+    38,
+    40,
+    42,
+    44,
+    46,
+    48,
+    50,
+    52,
+    54,
+    56
+   ],
+   "exit": [
+    115,
+    117,
+    119,
+    121,
+    123,
+    125,
+    127,
+    129,
+    131,
+    133,
+    135
+   ]
+  },
+  "PCIE_UP_OUT7_N_J2": {
+   "col33": [
+    31,
+    33,
+    35,
+    37,
+    39,
+    41,
+    43,
+    45,
+    47,
+    49,
+    51,
+    53,
+    55,
+    57
+   ],
+   "col60": [
+    38,
+    40,
+    42,
+    44,
+    46,
+    48,
+    50,
+    52,
+    54,
+    56
+   ],
+   "exit": [
+    115,
+    117,
+    119,
+    121,
+    123,
+    125,
+    127,
+    129,
+    131,
+    133,
+    135
+   ]
+  },
+  "PCIE_UP_OUT7_P_J2": {
+   "col33": [
+    31,
+    33,
+    35,
+    37,
+    39,
+    41,
+    43,
+    45,
+    47,
+    49,
+    51,
+    53,
+    55,
+    57
+   ],
+   "col60": [
+    38,
+    40,
+    42,
+    44,
+    46,
+    48,
+    50,
+    52,
+    54,
+    56
+   ],
+   "exit": [
+    7,
+    11,
+    13,
+    15,
+    24,
+    28
+   ]
+  }
+ },
+ "entrance_candidates": {
+  "PCIE_UP_OUT0_N_J2": {
+   "n_actions": 7,
+   "In5_cols": [
+    2
+   ],
+   "dive_sites": [
+    99,
+    34,
+    33,
+    100,
+    165,
+    101
+   ]
+  },
+  "PCIE_UP_OUT0_P_J2": {
+   "n_actions": 4,
+   "In5_cols": [
+    2,
+    3
+   ],
+   "dive_sites": [
+    162,
+    227
+   ]
+  },
+  "PCIE_UP_OUT1_N_J2": {
+   "n_actions": 9,
+   "In5_cols": [
+    3,
+    4,
+    2
+   ],
+   "dive_sites": [
+    229,
+    294,
+    230,
+    295,
+    231,
+    296
+   ]
+  },
+  "PCIE_UP_OUT1_P_J2": {
+   "n_actions": 5,
+   "In5_cols": [
+    5,
+    4,
+    6
+   ],
+   "dive_sites": [
+    357,
+    292
+   ]
+  },
+  "PCIE_UP_OUT2_N_J2": {
+   "n_actions": 9,
+   "In5_cols": [
+    6,
+    7,
+    5
+   ],
+   "dive_sites": [
+    424,
+    489,
+    425,
+    423,
+    490,
+    360
+   ]
+  },
+  "PCIE_UP_OUT2_P_J2": {
+   "n_actions": 5,
+   "In5_cols": [
+    7,
+    8,
+    6
+   ],
+   "dive_sites": [
+    487,
+    552
+   ]
+  },
+  "PCIE_UP_OUT3_N_J2": {
+   "n_actions": 9,
+   "In5_cols": [
+    9,
+    8,
+    10
+   ],
+   "dive_sites": [
+    619,
+    620,
+    554,
+    684,
+    555,
+    685
+   ]
+  },
+  "PCIE_UP_OUT3_P_J2": {
+   "n_actions": 5,
+   "In5_cols": [
+    10,
+    11,
+    9
+   ],
+   "dive_sites": [
+    682,
+    747
+   ]
+  },
+  "PCIE_UP_OUT4_N_J2": {
+   "n_actions": 9,
+   "In5_cols": [
+    12,
+    11,
+    13
+   ],
+   "dive_sites": [
+    814,
+    749,
+    815,
+    750,
+    880,
+    816
+   ]
+  },
+  "PCIE_UP_OUT4_P_J2": {
+   "n_actions": 6,
+   "In5_cols": [
+    13,
+    12,
+    14
+   ],
+   "dive_sites": [
+    877,
+    812,
+    942
+   ]
+  },
+  "PCIE_UP_OUT5_N_J2": {
+   "n_actions": 9,
+   "In5_cols": [
+    14,
+    15,
+    13
+   ],
+   "dive_sites": [
+    944,
+    1009,
+    945,
+    1010,
+    946,
+    1011
+   ]
+  },
+  "PCIE_UP_OUT5_P_J2": {
+   "n_actions": 5,
+   "In5_cols": [
+    16,
+    15,
+    17
+   ],
+   "dive_sites": [
+    1072,
+    1007
+   ]
+  },
+  "PCIE_UP_OUT6_N_J2": {
+   "n_actions": 9,
+   "In5_cols": [
+    17,
+    18,
+    16
+   ],
+   "dive_sites": [
+    1139,
+    1204,
+    1140,
+    1205,
+    1075,
+    1141
+   ]
+  },
+  "PCIE_UP_OUT6_P_J2": {
+   "n_actions": 5,
+   "In5_cols": [
+    19,
+    18,
+    20
+   ],
+   "dive_sites": [
+    1267,
+    1202
+   ]
+  },
+  "PCIE_UP_OUT7_N_J2": {
+   "n_actions": 9,
+   "In5_cols": [
+    20,
+    19,
+    21
+   ],
+   "dive_sites": [
+    1334,
+    1335,
+    1269,
+    1399,
+    1333,
+    1270
+   ]
+  },
+  "PCIE_UP_OUT7_P_J2": {
+   "n_actions": 9,
+   "In5_cols": [
+    22,
+    23,
+    21
+   ],
+   "dive_sites": [
+    1463,
+    1528,
+    1464,
+    1529,
+    1593,
+    1594
+   ]
+  }
+ },
+ "entrance_conflicts": 153,
+ "formC_interval_order_constraints": {
+  "n_constraints": 296,
+  "pairs": [
+   [
+    "col33",
+    "col60"
+   ],
+   [
+    "col60",
+    "exit"
+   ]
+  ],
+  "rule": "same layer across a co-axial adjacent section pair => order must not flip (registered form-C caliber, R523 sec.2)"
+ },
+ "master_model": {
+  "bool_vars": 4824,
+  "constraints": 15811,
+  "under_gate": true,
+  "scale_gate": 1200000,
+  "validate": "OK"
+ },
+ "A_fidelity_selfcheck": {
+  "all_entrance_actions_own_legal_and_registered_via_sites": true,
+  "verdict": "PASS"
+ },
+ "F_decision_completeness": {
+  "binding_decision_families": [
+   {
+    "family": "layer occupancy per station (time table, <=1 In4 excursion)",
+    "master_var": "start/end/on4[lane][station]",
+    "previously_implicit_at": "R525/R526",
+    "now": "master variable"
+   },
+   {
+    "family": "entrance action (In5 descent column / dive via site)",
+    "master_var": "act[lane][k]",
+    "previously_implicit_at": "R526",
+    "now": "master variable (internalized in R528)"
+   },
+   {
+    "family": "slot at section col33 (comb fan-out)",
+    "master_var": "s_col33[lane]",
+    "previously_implicit_at": "routing stage",
+    "now": "master variable (>=2P position set)"
+   },
+   {
+    "family": "slot at section col60 (belt/east run row)",
+    "master_var": "s_col60[lane]",
+    "previously_implicit_at": "routing stage",
+    "now": "master variable (>=2P position set)"
+   },
+   {
+    "family": "interval order between co-axial adjacent sections (form C)",
+    "master_var": "ltA/ltB + conditional eq",
+    "previously_implicit_at": "routing stage",
+    "now": "master constraint (registered caliber)"
+   },
+   {
+    "family": "slot at the exit section (gate column east / wall gap west)",
+    "master_var": "s_exit[lane]",
+    "previously_implicit_at": "routing stage",
+    "now": "master variable (>=2P position set)"
+   },
+   {
+    "family": "pad-side order (row30)",
+    "master_var": "FIXED (true anchors)",
+    "previously_implicit_at": "-",
+    "now": "not a decision (geometric fact)"
+   },
+   {
+    "family": "inversion layer-separation (58 pairs)",
+    "master_var": "sepneed/sep per pair",
+    "previously_implicit_at": "R525",
+    "now": "master constraint (necessary condition)"
+   }
+  ],
+  "closure_argument": "every transverse position a lane occupies is chosen at a section whose position set has >=2P pitch, and same-layer lanes at a section are all-different => at every section the same-layer corridors are claim-compatible (>=2P apart). The remaining freedom is the intra-cell path shape only, which is (a) confined to the lane's own registered-legal graph and (b) cross-lane harmless. Gate d's registered gates still fail-closed.",
+  "residual_intra_lane_freedom": "path shape inside the lane's own cell (own-net legal, no cross-lane effect)",
+  "position_sets_are_>=2P_pitched": true,
+  "calibration": {
+   "source": "K2_R528_WOVEN_ENTRANCE_MASTER_v1.json",
+   "registered_instance_reachable": true,
+   "entrance_DIVE_lanes": 5,
+   "note": "the registered R528 instance is used as a PRE-SOLVE calibration sample: its entrance actions must be pairwise claim-compatible (machine check below)",
+   "pairwise_claim_conflicts_in_registered_instance": 0,
+   "verdict": "PASS"
+  },
+  "verdict": "PASS (closed)"
+ },
+ "build_only": true,
+ "solve": {
+  "status": "OPTIMAL",
+  "wall_s": 152.0,
+  "objective": 100521
+ },
+ "schedule": {
+  "PCIE_UP_OUT0_N_J2": {
+   "stations_on_In4": [],
+   "start_station": null,
+   "end_station": null
+  },
+  "PCIE_UP_OUT0_P_J2": {
+   "stations_on_In4": [
+    "COMB",
+    "BELT",
+    "WALL"
+   ],
+   "start_station": "COMB",
+   "end_station": "WALL"
+  },
+  "PCIE_UP_OUT1_N_J2": {
+   "stations_on_In4": [
+    "FIELD"
+   ],
+   "start_station": "FIELD",
+   "end_station": "FIELD"
+  },
+  "PCIE_UP_OUT1_P_J2": {
+   "stations_on_In4": [],
+   "start_station": null,
+   "end_station": null
+  },
+  "PCIE_UP_OUT2_N_J2": {
+   "stations_on_In4": [],
+   "start_station": null,
+   "end_station": null
+  },
+  "PCIE_UP_OUT2_P_J2": {
+   "stations_on_In4": [
+    "COMB",
+    "BELT"
+   ],
+   "start_station": "COMB",
+   "end_station": "BELT"
+  },
+  "PCIE_UP_OUT3_N_J2": {
+   "stations_on_In4": [
+    "BELT"
+   ],
+   "start_station": "BELT",
+   "end_station": "BELT"
+  },
+  "PCIE_UP_OUT3_P_J2": {
+   "stations_on_In4": [],
+   "start_station": null,
+   "end_station": null
+  },
+  "PCIE_UP_OUT4_N_J2": {
+   "stations_on_In4": [],
+   "start_station": null,
+   "end_station": null
+  },
+  "PCIE_UP_OUT4_P_J2": {
+   "stations_on_In4": [
+    "COMB",
+    "BELT"
+   ],
+   "start_station": "COMB",
+   "end_station": "BELT"
+  },
+  "PCIE_UP_OUT5_N_J2": {
+   "stations_on_In4": [
+    "BELT"
+   ],
+   "start_station": "BELT",
+   "end_station": "BELT"
+  },
+  "PCIE_UP_OUT5_P_J2": {
+   "stations_on_In4": [
+    "COMB"
+   ],
+   "start_station": "COMB",
+   "end_station": "COMB"
+  },
+  "PCIE_UP_OUT6_N_J2": {
+   "stations_on_In4": [
+    "BELT",
+    "WALL"
+   ],
+   "start_station": "BELT",
+   "end_station": "WALL"
+  },
+  "PCIE_UP_OUT6_P_J2": {
+   "stations_on_In4": [
+    "COMB"
+   ],
+   "start_station": "COMB",
+   "end_station": "COMB"
+  },
+  "PCIE_UP_OUT7_N_J2": {
+   "stations_on_In4": [],
+   "start_station": null,
+   "end_station": null
+  },
+  "PCIE_UP_OUT7_P_J2": {
+   "stations_on_In4": [
+    "WALL"
+   ],
+   "start_station": "WALL",
+   "end_station": "WALL"
+  }
+ },
+ "entrance_actions": {
+  "PCIE_UP_OUT0_N_J2": {
+   "kind": "In5",
+   "col": 2,
+   "node": 164,
+   "dist": 0.5243,
+   "via": null
+  },
+  "PCIE_UP_OUT0_P_J2": {
+   "kind": "DIVE",
+   "col": 2,
+   "node": 162,
+   "dist": 0.0447,
+   "via": 162
+  },
+  "PCIE_UP_OUT1_N_J2": {
+   "kind": "In5",
+   "col": 4,
+   "node": 294,
+   "dist": 0.2423,
+   "via": null
+  },
+  "PCIE_UP_OUT1_P_J2": {
+   "kind": "In5",
+   "col": 5,
+   "node": 357,
+   "dist": 0.1312,
+   "via": null
+  },
+  "PCIE_UP_OUT2_N_J2": {
+   "kind": "In5",
+   "col": 6,
+   "node": 424,
+   "dist": 0.0959,
+   "via": null
+  },
+  "PCIE_UP_OUT2_P_J2": {
+   "kind": "DIVE",
+   "col": 7,
+   "node": 487,
+   "dist": 0.2089,
+   "via": 487
+  },
+  "PCIE_UP_OUT3_N_J2": {
+   "kind": "In5",
+   "col": 9,
+   "node": 619,
+   "dist": 0.0362,
+   "via": null
+  },
+  "PCIE_UP_OUT3_P_J2": {
+   "kind": "In5",
+   "col": 10,
+   "node": 682,
+   "dist": 0.1077,
+   "via": null
+  },
+  "PCIE_UP_OUT4_N_J2": {
+   "kind": "In5",
+   "col": 12,
+   "node": 814,
+   "dist": 0.1245,
+   "via": null
+  },
+  "PCIE_UP_OUT4_P_J2": {
+   "kind": "DIVE",
+   "col": 13,
+   "node": 877,
+   "dist": 0.0403,
+   "via": 877
+  },
+  "PCIE_UP_OUT5_N_J2": {
+   "kind": "In5",
+   "col": 14,
+   "node": 944,
+   "dist": 0.2126,
+   "via": null
+  },
+  "PCIE_UP_OUT5_P_J2": {
+   "kind": "DIVE",
+   "col": 16,
+   "node": 1072,
+   "dist": 0.117,
+   "via": 1072
+  },
+  "PCIE_UP_OUT6_N_J2": {
+   "kind": "In5",
+   "col": 17,
+   "node": 1139,
+   "dist": 0.1101,
+   "via": null
+  },
+  "PCIE_UP_OUT6_P_J2": {
+   "kind": "DIVE",
+   "col": 19,
+   "node": 1267,
+   "dist": 0.2187,
+   "via": 1267
+  },
+  "PCIE_UP_OUT7_N_J2": {
+   "kind": "In5",
+   "col": 20,
+   "node": 1334,
+   "dist": 0.033,
+   "via": null
+  },
+  "PCIE_UP_OUT7_P_J2": {
+   "kind": "In5",
+   "col": 22,
+   "node": 1462,
+   "dist": 0.247,
+   "via": null
+  }
+ },
+ "section_slots": {
+  "PCIE_UP_OUT0_N_J2": {
+   "col33": 53,
+   "col60": 54,
+   "exit": 28
+  },
+  "PCIE_UP_OUT0_P_J2": {
+   "col33": 41,
+   "col60": 48,
+   "exit": 127
+  },
+  "PCIE_UP_OUT1_N_J2": {
+   "col33": 43,
+   "col60": 46,
+   "exit": 133
+  },
+  "PCIE_UP_OUT1_P_J2": {
+   "col33": 35,
+   "col60": 40,
+   "exit": 11
+  },
+  "PCIE_UP_OUT2_N_J2": {
+   "col33": 41,
+   "col60": 42,
+   "exit": 13
+  },
+  "PCIE_UP_OUT2_P_J2": {
+   "col33": 57,
+   "col60": 56,
+   "exit": 125
+  },
+  "PCIE_UP_OUT3_N_J2": {
+   "col33": 33,
+   "col60": 54,
+   "exit": 131
+  },
+  "PCIE_UP_OUT3_P_J2": {
+   "col33": 31,
+   "col60": 38,
+   "exit": 7
+  },
+  "PCIE_UP_OUT4_N_J2": {
+   "col33": 45,
+   "col60": 50,
+   "exit": 24
+  },
+  "PCIE_UP_OUT4_P_J2": {
+   "col33": 45,
+   "col60": 56,
+   "exit": 119
+  },
+  "PCIE_UP_OUT5_N_J2": {
+   "col33": 47,
+   "col60": 56,
+   "exit": 117
+  },
+  "PCIE_UP_OUT5_P_J2": {
+   "col33": 57,
+   "col60": 44,
+   "exit": 15
+  },
+  "PCIE_UP_OUT6_N_J2": {
+   "col33": 39,
+   "col60": 56,
+   "exit": 24
+  },
+  "PCIE_UP_OUT6_P_J2": {
+   "col33": 55,
+   "col60": 48,
+   "exit": 115
+  },
+  "PCIE_UP_OUT7_N_J2": {
+   "col33": 49,
+   "col60": 52,
+   "exit": 135
+  },
+  "PCIE_UP_OUT7_P_J2": {
+   "col33": 55,
+   "col60": 56,
+   "exit": 15
+  }
+ },
+ "lanes_on_In4_per_station": {
+  "COMB": 5,
+  "BELT": 6,
+  "WALL": 3,
+  "FIELD": 1
+ },
+ "decision": "COMPLETE MASTER SAT（恰一次受证求解 OPTIMAL · wall=152.0s）：时刻表+入口+三断面槽位+反序分离 全部满足",
+ "elapsed_s": 172.4
+}
