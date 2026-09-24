@@ -1,0 +1,799 @@
+{
+ "artifact": "k2_r526_woven_witness_v1",
+ "ts": "2026-09-25T01:48:45",
+ "authority": "#K2-193 sec.3.5 gates d/e (registered signature) + sec.3.4 (order computed by the scheme)",
+ "schedule_source": "K2_R526_WOVEN_SCHEDULE_v1.json",
+ "schedule_authority": {
+  "status": "OPTIMAL",
+  "wall_s": 217.3,
+  "objective": 1004
+ },
+ "method": "per-lane sectioned backbone routing on the lane's OWN registered 2-layer graph with hard declaration-set reservation; layer preference from the solved time table; deterministic lane-sequence family (construction, NOT a certified solve)",
+ "certified_solve_calls_in_this_artifact": 0,
+ "boundaries": "no board/SPEC/generator/criteria writes",
+ "slots_from_scheme": {
+  "PCIE_UP_OUT0_N_J2": {
+   "yard_row": 53,
+   "gap": 7
+  },
+  "PCIE_UP_OUT0_P_J2": {
+   "yard_row": 52,
+   "gate_col": 122
+  },
+  "PCIE_UP_OUT1_N_J2": {
+   "yard_row": 51,
+   "gate_col": 120
+  },
+  "PCIE_UP_OUT1_P_J2": {
+   "yard_row": 50,
+   "gap": 11
+  },
+  "PCIE_UP_OUT2_N_J2": {
+   "yard_row": 49,
+   "gap": 13
+  },
+  "PCIE_UP_OUT2_P_J2": {
+   "yard_row": 48,
+   "gate_col": 117
+  },
+  "PCIE_UP_OUT3_N_J2": {
+   "yard_row": 47,
+   "gate_col": 115
+  },
+  "PCIE_UP_OUT3_P_J2": {
+   "yard_row": 46,
+   "gap": 24
+  },
+  "PCIE_UP_OUT4_N_J2": {
+   "yard_row": 45,
+   "gap": 28
+  },
+  "PCIE_UP_OUT4_P_J2": {
+   "yard_row": 44,
+   "gate_col": 121
+  },
+  "PCIE_UP_OUT5_N_J2": {
+   "yard_row": 43,
+   "gate_col": 119
+  },
+  "PCIE_UP_OUT5_P_J2": {
+   "yard_row": 42,
+   "gap": 12
+  },
+  "PCIE_UP_OUT6_N_J2": {
+   "yard_row": 41,
+   "gap": 15
+  },
+  "PCIE_UP_OUT6_P_J2": {
+   "yard_row": 40,
+   "gate_col": 118
+  },
+  "PCIE_UP_OUT7_N_J2": {
+   "yard_row": 39,
+   "gate_col": 116
+  },
+  "PCIE_UP_OUT7_P_J2": {
+   "yard_row": 38,
+   "gap": 25
+  }
+ },
+ "descent_slots_from_scheme": {
+  "PCIE_UP_OUT0_N_J2": {
+   "col": 1,
+   "want_layer": 0,
+   "group": "In5_at_COMB"
+  },
+  "PCIE_UP_OUT0_P_J2": {
+   "col": 3,
+   "want_layer": 0,
+   "group": "In5_at_COMB"
+  },
+  "PCIE_UP_OUT1_N_J2": {
+   "col": 0,
+   "want_layer": 1,
+   "group": "In4_at_COMB"
+  },
+  "PCIE_UP_OUT1_P_J2": {
+   "col": 5,
+   "want_layer": 0,
+   "group": "In5_at_COMB"
+  },
+  "PCIE_UP_OUT2_N_J2": {
+   "col": 7,
+   "want_layer": 0,
+   "group": "In5_at_COMB"
+  },
+  "PCIE_UP_OUT2_P_J2": {
+   "col": 2,
+   "want_layer": 1,
+   "group": "In4_at_COMB"
+  },
+  "PCIE_UP_OUT3_N_J2": {
+   "col": 9,
+   "want_layer": 0,
+   "group": "In5_at_COMB"
+  },
+  "PCIE_UP_OUT3_P_J2": {
+   "col": 11,
+   "want_layer": 0,
+   "group": "In5_at_COMB"
+  },
+  "PCIE_UP_OUT4_N_J2": {
+   "col": 13,
+   "want_layer": 0,
+   "group": "In5_at_COMB"
+  },
+  "PCIE_UP_OUT4_P_J2": {
+   "col": 4,
+   "want_layer": 1,
+   "group": "In4_at_COMB"
+  },
+  "PCIE_UP_OUT5_N_J2": {
+   "col": 6,
+   "want_layer": 1,
+   "group": "In4_at_COMB"
+  },
+  "PCIE_UP_OUT5_P_J2": {
+   "col": 15,
+   "want_layer": 0,
+   "group": "In5_at_COMB"
+  },
+  "PCIE_UP_OUT6_N_J2": {
+   "col": 17,
+   "want_layer": 0,
+   "group": "In5_at_COMB"
+  },
+  "PCIE_UP_OUT6_P_J2": {
+   "col": 19,
+   "want_layer": 0,
+   "group": "In5_at_COMB"
+  },
+  "PCIE_UP_OUT7_N_J2": {
+   "col": 8,
+   "want_layer": 1,
+   "group": "In4_at_COMB"
+  },
+  "PCIE_UP_OUT7_P_J2": {
+   "col": 21,
+   "want_layer": 0,
+   "group": "In5_at_COMB"
+  }
+ },
+ "descent_slot_rule": "layer = solved time table at COMB; column = 2-lattice-spaced within the group (1,3,5,... for the In5 group; 0,2,4,... for the In4 group) => parallel descent corridors stay >= 2P apart; NOT the abolished written declared order",
+ "orders": {
+  "sched_in4_first_ax": {
+   "n_routed": 3,
+   "stall": {
+    "lane": "PCIE_UP_OUT1_P_J2",
+    "rank": 3,
+    "diag": {
+     "stage": "dijkstra",
+     "stats": {
+      "blocked": {
+       "claim_0": 7
+      },
+      "reached": false,
+      "blocked_detail": [
+       [
+        "claim_0",
+        0,
+        85.74,
+        54.485,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        85.74,
+        54.92,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        85.74,
+        55.355,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        86.175,
+        54.485,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        86.175,
+        54.92,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        86.175,
+        55.355,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        86.61,
+        54.92,
+        0
+       ]
+      ]
+     }
+    },
+    "res0": 399,
+    "res1": 203
+   }
+  },
+  "sched_in5_first_ax": {
+   "n_routed": 3,
+   "stall": {
+    "lane": "PCIE_UP_OUT1_P_J2",
+    "rank": 3,
+    "diag": {
+     "stage": "dijkstra",
+     "stats": {
+      "blocked": {
+       "claim_0": 7
+      },
+      "reached": false,
+      "blocked_detail": [
+       [
+        "claim_0",
+        0,
+        85.74,
+        54.485,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        85.74,
+        54.92,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        85.74,
+        55.355,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        86.175,
+        54.485,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        86.175,
+        54.92,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        86.175,
+        55.355,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        86.61,
+        54.92,
+        0
+       ]
+      ]
+     }
+    },
+    "res0": 399,
+    "res1": 203
+   }
+  },
+  "sched_in4_first_pad": {
+   "n_routed": 5,
+   "stall": {
+    "lane": "PCIE_UP_OUT3_P_J2",
+    "rank": 5,
+    "diag": {
+     "stage": "dijkstra",
+     "stats": {
+      "blocked": {
+       "claim_0": 8,
+       "claim_1": 1
+      },
+      "reached": false,
+      "blocked_detail": [
+       [
+        "claim_0",
+        0,
+        88.35,
+        55.355,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        88.785,
+        55.355,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        88.785,
+        55.355,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        87.915,
+        55.355,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        89.22,
+        55.355,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        88.35,
+        55.355,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        88.35,
+        55.355,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        87.48,
+        55.355,
+        0
+       ],
+       [
+        "claim_1",
+        1,
+        91.395,
+        55.355,
+        0
+       ]
+      ]
+     }
+    },
+    "res0": 327,
+    "res1": 471
+   }
+  },
+  "ax_asc": {
+   "n_routed": 3,
+   "stall": {
+    "lane": "PCIE_UP_OUT1_P_J2",
+    "rank": 3,
+    "diag": {
+     "stage": "dijkstra",
+     "stats": {
+      "blocked": {
+       "claim_0": 7
+      },
+      "reached": false,
+      "blocked_detail": [
+       [
+        "claim_0",
+        0,
+        85.74,
+        54.485,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        85.74,
+        54.92,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        85.74,
+        55.355,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        86.175,
+        54.485,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        86.175,
+        54.92,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        86.175,
+        55.355,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        86.61,
+        54.92,
+        0
+       ]
+      ]
+     }
+    },
+    "res0": 399,
+    "res1": 203
+   }
+  },
+  "pad_asc": {
+   "n_routed": 5,
+   "stall": {
+    "lane": "PCIE_UP_OUT3_P_J2",
+    "rank": 5,
+    "diag": {
+     "stage": "dijkstra",
+     "stats": {
+      "blocked": {
+       "claim_0": 8,
+       "claim_1": 1
+      },
+      "reached": false,
+      "blocked_detail": [
+       [
+        "claim_0",
+        0,
+        88.35,
+        55.355,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        88.785,
+        55.355,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        88.785,
+        55.355,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        87.915,
+        55.355,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        89.22,
+        55.355,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        88.35,
+        55.355,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        88.35,
+        55.355,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        87.48,
+        55.355,
+        0
+       ],
+       [
+        "claim_1",
+        1,
+        91.395,
+        55.355,
+        0
+       ]
+      ]
+     }
+    },
+    "res0": 327,
+    "res1": 471
+   }
+  },
+  "ax_desc": {
+   "n_routed": 4,
+   "stall": {
+    "lane": "PCIE_UP_OUT5_P_J2",
+    "rank": 4,
+    "diag": {
+     "stage": "dijkstra",
+     "stats": {
+      "blocked": {
+       "claim_0": 5,
+       "claim_1": 2
+      },
+      "reached": false,
+      "blocked_detail": [
+       [
+        "claim_0",
+        0,
+        91.83,
+        55.355,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        91.395,
+        54.92,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        92.7,
+        54.92,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        93.57,
+        55.79,
+        0
+       ],
+       [
+        "claim_0",
+        0,
+        92.265,
+        55.355,
+        0
+       ],
+       [
+        "claim_1",
+        1,
+        92.7,
+        55.355,
+        0
+       ],
+       [
+        "claim_1",
+        1,
+        92.7,
+        54.92,
+        0
+       ]
+      ]
+     }
+    },
+    "res0": 232,
+    "res1": 333
+   }
+  }
+ },
+ "best_order": "sched_in4_first_pad",
+ "best_n_routed": 5,
+ "named_stall": {
+  "lane": "PCIE_UP_OUT3_P_J2",
+  "rank": 5,
+  "diag": {
+   "stage": "dijkstra",
+   "stats": {
+    "blocked": {
+     "claim_0": 8,
+     "claim_1": 1
+    },
+    "reached": false,
+    "blocked_detail": [
+     [
+      "claim_0",
+      0,
+      88.35,
+      55.355,
+      0
+     ],
+     [
+      "claim_0",
+      0,
+      88.785,
+      55.355,
+      0
+     ],
+     [
+      "claim_0",
+      0,
+      88.785,
+      55.355,
+      0
+     ],
+     [
+      "claim_0",
+      0,
+      87.915,
+      55.355,
+      0
+     ],
+     [
+      "claim_0",
+      0,
+      89.22,
+      55.355,
+      0
+     ],
+     [
+      "claim_0",
+      0,
+      88.35,
+      55.355,
+      0
+     ],
+     [
+      "claim_0",
+      0,
+      88.35,
+      55.355,
+      0
+     ],
+     [
+      "claim_0",
+      0,
+      87.48,
+      55.355,
+      0
+     ],
+     [
+      "claim_1",
+      1,
+      91.395,
+      55.355,
+      0
+     ]
+    ]
+   }
+  },
+  "res0": 327,
+  "res1": 471
+ },
+ "access_band_analysis": {
+  "rule": "natural descent corridor of a lane = the In5 segment (A.x, A.y) -> (A.x, yard_row_y); its declaration claim = all lattice nodes within P of that segment; two lanes conflict iff their claims share a node. Exact max claim-disjoint set computed by brute force over 2^16.",
+  "conflict_edges_among_16_natural_descents": 8,
+  "max_claim_disjoint_natural_descents_In5": 10,
+  "witness_set": [
+   "PCIE_UP_OUT0_N_J2",
+   "PCIE_UP_OUT1_N_J2",
+   "PCIE_UP_OUT2_N_J2",
+   "PCIE_UP_OUT3_N_J2",
+   "PCIE_UP_OUT3_P_J2",
+   "PCIE_UP_OUT4_P_J2",
+   "PCIE_UP_OUT5_N_J2",
+   "PCIE_UP_OUT6_N_J2",
+   "PCIE_UP_OUT7_N_J2",
+   "PCIE_UP_OUT7_P_J2"
+  ],
+  "reading": "an In5 parallel corridor needs >= 2 lattice steps (2P = 0.870 mm) of axis separation at the node-claim level, while the registered A-anchor pitch along x is 0.5-1.5 lattice; respacing all 16 to 2-lattice pitch needs ~32 columns but the anchor span holds ~21.5 => at most 10 lanes can leave the comb on In5 within the anchor span, and the remaining >=6 must reach In4 through a legal via INSIDE the band, without crossing already-claimed band nodes."
+ },
+ "named_conclusion": {
+  "gate_a_fidelity_selfcheck": "PASS",
+  "gate_b_build_only": "GREEN (538 bool / 1266 constraints / Validate OK)",
+  "gate_c_single_certified_solve": {
+   "status": "OPTIMAL",
+   "wall_s": 217.3,
+   "objective": 1004
+  },
+  "gate_d_registered_signature": "NOT REACHED (no 16/16 routing)",
+  "gate_e_buildability": "no_move (no witness => no relocation list)",
+  "what_was_achieved": "the woven schedule itself is SAT/OPTIMAL: the packing (COMB 5 / BELT 6 lanes on In4), the 58 inversion separations and the <=1-excursion time tables are mutually feasible => the scheduling/packing layer is NOT the blocker any more",
+  "what_blocks": "the residual blocker is the COMB ACCESS BAND (first ~1-2 mm from the A anchors): the registered free-access legs are In5-only (no via at the anchor), and the node-claim rule forces >= 2-lattice (2P) axis separation between parallel same-layer corridors, while the registered anchor pitch is 0.5-1.5 lattice => at most the value in access_band_analysis can leave on In5, and the rest must dive to In4 through a via inside the band",
+  "per_rule_closure": "#K2-193 sec.3.6: named conclusion + STOP and report to the supervisor; no self-selected method change / no budget extension / no new window",
+  "best_routing": {
+   "order": "sched_in4_first_pad",
+   "n_routed": 5,
+   "of": 16,
+   "residual_frontier_arcs": {
+    "claim_0": 8,
+    "claim_1": 1
+   },
+   "blocked_positions_sample": [
+    [
+     "claim_0",
+     0,
+     88.35,
+     55.355,
+     0
+    ],
+    [
+     "claim_0",
+     0,
+     88.785,
+     55.355,
+     0
+    ],
+    [
+     "claim_0",
+     0,
+     88.785,
+     55.355,
+     0
+    ],
+    [
+     "claim_0",
+     0,
+     87.915,
+     55.355,
+     0
+    ],
+    [
+     "claim_0",
+     0,
+     89.22,
+     55.355,
+     0
+    ],
+    [
+     "claim_0",
+     0,
+     88.35,
+     55.355,
+     0
+    ],
+    [
+     "claim_0",
+     0,
+     88.35,
+     55.355,
+     0
+    ],
+    [
+     "claim_0",
+     0,
+     87.48,
+     55.355,
+     0
+    ]
+   ]
+  }
+ },
+ "decision": "NO WITNESS (named conclusion, #K2-193 sec.3.6): woven schedule = OPTIMAL/SAT, but the construction routes at most 5/16; blocker machine-localized to the COMB access band (residual frontier only {'claim_0': 8, 'claim_1': 1} arcs). Stop and report to the supervisor.",
+ "buildability": {
+  "mode": "no_move",
+  "note": "无见证 ⇒ 无搬迁清单；本件不构成里程碑"
+ },
+ "certified_quota": "CONSUMED (1 solve, OPTIMAL)",
+ "elapsed_s": 26.9
+}

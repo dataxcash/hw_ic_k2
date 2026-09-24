@@ -1,0 +1,256 @@
+{
+ "artifact": "k2_r526_woven_schedule_v1",
+ "ts": "2026-09-25T01:40:08",
+ "authority": "#K2-193 sec.3.2-3 (woven bing-prime instance fix approved, NOT a method switch; same window, same single certified solve) + #K2-192 sec.3.3 a-e hard gates",
+ "stations": [
+  "COMB",
+  "BELT",
+  "WALL",
+  "FIELD"
+ ],
+ "solve_calls": 1,
+ "packing_capacity": {
+  "rule": "cap[t] = floor(span_perp[t] / (2P)) + 1   (declaration band of a track is 2P wide; parallel tracks need >= 2P axis separation)",
+  "P_mm": 0.435,
+  "spans_mm": {
+   "COMB(anchor x)": 9.35,
+   "BELT(y)": 8.5,
+   "WALL(y)": 12.0,
+   "FIELD(y)": 13.600000000000001
+  },
+  "cap_In5": {
+   "COMB": 11,
+   "BELT": 10,
+   "WALL": 14,
+   "FIELD": 16
+  },
+  "cap_In4": {
+   "COMB": 11,
+   "BELT": 10,
+   "WALL": 14,
+   "FIELD": 16
+  },
+  "derived": {
+   "min_lanes_on_In4_COMB": 5,
+   "min_lanes_on_In4_BELT": 6
+  }
+ },
+ "A_fidelity_selfcheck": {
+  "routing_graph_subset_of_own_registered_legal_per_layer": true,
+  "disjointness_mechanism": "hard declaration-set reservation (each committed lane's claim is removed from later lanes' graphs) => node-disjoint by construction, machine-checked in the route artifact (gate d runs the registered exact_gate + gate_vias anyway)",
+  "so": "schedule SAT => any completed routing is a genuine legal witness; schedule UNSAT => SCHEDULE-LEVEL (weaker) infeasibility, NOT a design-level certificate (#K2-192 sec.3.3.a)",
+  "per_lane_graph_nodes_per_layer": {
+   "PCIE_UP_OUT0_N_J2": {
+    "0": 5162,
+    "1": 6563
+   },
+   "PCIE_UP_OUT0_P_J2": {
+    "0": 4728,
+    "1": 7712
+   },
+   "PCIE_UP_OUT1_N_J2": {
+    "0": 4721,
+    "1": 7638
+   },
+   "PCIE_UP_OUT1_P_J2": {
+    "0": 5185,
+    "1": 6570
+   },
+   "PCIE_UP_OUT2_N_J2": {
+    "0": 5446,
+    "1": 6881
+   },
+   "PCIE_UP_OUT2_P_J2": {
+    "0": 4701,
+    "1": 7486
+   },
+   "PCIE_UP_OUT3_N_J2": {
+    "0": 4691,
+    "1": 7425
+   },
+   "PCIE_UP_OUT3_P_J2": {
+    "0": 5537,
+    "1": 6935
+   },
+   "PCIE_UP_OUT4_N_J2": {
+    "0": 5587,
+    "1": 7040
+   },
+   "PCIE_UP_OUT4_P_J2": {
+    "0": 4729,
+    "1": 7491
+   },
+   "PCIE_UP_OUT5_N_J2": {
+    "0": 4723,
+    "1": 7419
+   },
+   "PCIE_UP_OUT5_P_J2": {
+    "0": 5021,
+    "1": 6396
+   },
+   "PCIE_UP_OUT6_N_J2": {
+    "0": 5055,
+    "1": 6469
+   },
+   "PCIE_UP_OUT6_P_J2": {
+    "0": 4722,
+    "1": 7289
+   },
+   "PCIE_UP_OUT7_N_J2": {
+    "0": 4702,
+    "1": 7178
+   },
+   "PCIE_UP_OUT7_P_J2": {
+    "0": 5065,
+    "1": 6427
+   }
+  },
+  "verdict": "PASS"
+ },
+ "master_model": {
+  "bool_vars": 538,
+  "constraints": 1266,
+  "inversion_pairs": 58,
+  "scale_gate": 1200000,
+  "under_gate": true,
+  "validate": "OK",
+  "objective": "min 100*#excursions + total_excursion_stations"
+ },
+ "build_only": true,
+ "solve": {
+  "status": "OPTIMAL",
+  "wall_s": 217.3,
+  "objective": 1004
+ },
+ "schedule": {
+  "PCIE_UP_OUT0_N_J2": {
+   "stations_on_In4": [],
+   "start_station": null,
+   "end_station": null,
+   "uses_excursion": false
+  },
+  "PCIE_UP_OUT0_P_J2": {
+   "stations_on_In4": [
+    "WALL"
+   ],
+   "start_station": "WALL",
+   "end_station": "WALL",
+   "uses_excursion": true
+  },
+  "PCIE_UP_OUT1_N_J2": {
+   "stations_on_In4": [
+    "COMB"
+   ],
+   "start_station": "COMB",
+   "end_station": "COMB",
+   "uses_excursion": true
+  },
+  "PCIE_UP_OUT1_P_J2": {
+   "stations_on_In4": [],
+   "start_station": null,
+   "end_station": null,
+   "uses_excursion": false
+  },
+  "PCIE_UP_OUT2_N_J2": {
+   "stations_on_In4": [],
+   "start_station": null,
+   "end_station": null,
+   "uses_excursion": false
+  },
+  "PCIE_UP_OUT2_P_J2": {
+   "stations_on_In4": [
+    "COMB",
+    "BELT"
+   ],
+   "start_station": "COMB",
+   "end_station": "BELT",
+   "uses_excursion": true
+  },
+  "PCIE_UP_OUT3_N_J2": {
+   "stations_on_In4": [
+    "FIELD"
+   ],
+   "start_station": "FIELD",
+   "end_station": "FIELD",
+   "uses_excursion": true
+  },
+  "PCIE_UP_OUT3_P_J2": {
+   "stations_on_In4": [],
+   "start_station": null,
+   "end_station": null,
+   "uses_excursion": false
+  },
+  "PCIE_UP_OUT4_N_J2": {
+   "stations_on_In4": [],
+   "start_station": null,
+   "end_station": null,
+   "uses_excursion": false
+  },
+  "PCIE_UP_OUT4_P_J2": {
+   "stations_on_In4": [
+    "COMB"
+   ],
+   "start_station": "COMB",
+   "end_station": "COMB",
+   "uses_excursion": true
+  },
+  "PCIE_UP_OUT5_N_J2": {
+   "stations_on_In4": [
+    "COMB",
+    "BELT"
+   ],
+   "start_station": "COMB",
+   "end_station": "BELT",
+   "uses_excursion": true
+  },
+  "PCIE_UP_OUT5_P_J2": {
+   "stations_on_In4": [
+    "BELT"
+   ],
+   "start_station": "BELT",
+   "end_station": "BELT",
+   "uses_excursion": true
+  },
+  "PCIE_UP_OUT6_N_J2": {
+   "stations_on_In4": [
+    "BELT"
+   ],
+   "start_station": "BELT",
+   "end_station": "BELT",
+   "uses_excursion": true
+  },
+  "PCIE_UP_OUT6_P_J2": {
+   "stations_on_In4": [],
+   "start_station": null,
+   "end_station": null,
+   "uses_excursion": false
+  },
+  "PCIE_UP_OUT7_N_J2": {
+   "stations_on_In4": [
+    "COMB",
+    "BELT",
+    "WALL"
+   ],
+   "start_station": "COMB",
+   "end_station": "WALL",
+   "uses_excursion": true
+  },
+  "PCIE_UP_OUT7_P_J2": {
+   "stations_on_In4": [
+    "BELT"
+   ],
+   "start_station": "BELT",
+   "end_station": "BELT",
+   "uses_excursion": true
+  }
+ },
+ "inversions_separated": 58,
+ "lanes_on_In4_per_station": {
+  "COMB": 5,
+  "BELT": 6,
+  "WALL": 2,
+  "FIELD": 1
+ },
+ "decision": "SCHEDULE SAT（恰一次受证求解 OPTIMAL · wall=217.3s）：打包+时刻表+反序分离 全部满足 ⇒ 交路由件执行",
+ "elapsed_s": 239.7
+}
