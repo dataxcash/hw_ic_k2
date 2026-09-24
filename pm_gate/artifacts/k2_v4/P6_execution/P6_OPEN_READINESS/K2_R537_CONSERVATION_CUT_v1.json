@@ -1,0 +1,91 @@
+{
+ "artifact": "k2_r537_conservation_cut_v1",
+ "ts": "2026-09-25T06:48:02",
+ "authority": "#K2-203 sec.3.4 / sec.4 (closed-form conservation audit + cut certificate; ZERO quota; counting only, NO solver)",
+ "certified_solve_calls": 0,
+ "triple": [
+  "PCIE_UP_OUT0_P_J2",
+  "PCIE_UP_OUT4_P_J2",
+  "PCIE_UP_OUT2_P_J2"
+ ],
+ "anchors_lattice": {
+  "PCIE_UP_OUT0_P_J2": {
+   "A": [
+    2,
+    32
+   ],
+   "B": [
+    132,
+    4
+   ]
+  },
+  "PCIE_UP_OUT4_P_J2": {
+   "A": [
+    13,
+    32
+   ],
+   "B": [
+    129,
+    16
+   ]
+  },
+  "PCIE_UP_OUT2_P_J2": {
+   "A": [
+    7,
+    32
+   ],
+   "B": [
+    122,
+    12
+   ]
+  }
+ },
+ "n_cuts_checked": 156,
+ "tightest_cut": {
+  "axis": "col",
+  "index": 114,
+  "separated_lanes": [
+   "PCIE_UP_OUT0_P_J2",
+   "PCIE_UP_OUT4_P_J2",
+   "PCIE_UP_OUT2_P_J2"
+  ],
+  "demand": 3,
+  "capacity_upper_bound": 40,
+  "slack": 37,
+  "positions": {
+   "L0_n_positions": 31,
+   "L1_n_positions": 32
+  }
+ },
+ "cut_certificates_of_wall": [],
+ "verdict": {
+  "hard_wall_certificate_found": false,
+  "binary": "NO single-cut wall found => TENSION DIRECTION (movable/reroutable): all 156 lattice cuts have capacity_upper_bound >= demand",
+  "note": "capacity_upper_bound is an UPPER bound (real capacity <= it), so wall evidence is sound; the absence of a single-cut wall does NOT by itself prove routability (multi-cut/joint effects), it only rules out the single-cut conservation wall and points to the tension class.",
+  "min_slack_over_cuts": {
+   "axis": "col",
+   "index": 114,
+   "separated_lanes": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT2_P_J2"
+   ],
+   "demand": 3,
+   "capacity_upper_bound": 40,
+   "slack": 37,
+   "positions": {
+    "L0_n_positions": 31,
+    "L1_n_positions": 32
+   }
+  }
+ },
+ "minimal_relaxation_candidates": {
+  "note": "for the supervisor only (NOT self-applied); in-register authorisations must be cited",
+  "candidates": [
+   "per-lane via budget (in-register MAX_VIA_PAIRS = 2) raised for this triple",
+   "the section slots of the R529 complete master for these lanes slid/reselected",
+   "the allowed via-zone set (in-register: the four wide zones) widened for this triple"
+  ]
+ },
+ "elapsed_s": 26.7
+}
