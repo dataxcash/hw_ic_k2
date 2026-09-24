@@ -1,0 +1,13 @@
+  free(In5)=7416 free(In4)=8258 zone=3238 via-any=2869
+Traceback (most recent call last):
+  File "/home/fila/jqdDev_2025/ic_hw/k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/K2_R517_WITNESS_SEARCH_TWOLAYER_v3.py", line 256, in <module>
+    gv = W.gate_vias(model, all_vias, lane_polys, g2.an)
+  File "/home/fila/jqdDev_2025/ic_hw/k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/K2_R515_FREETERMINALS_v1.py", line 380, in gate_vias
+    mg = _seg_rect_dists(np.stack([V[:, None, :], V[:, None, :]], 1), PB2) - VR - PR2[None, :]
+  File "/home/fila/jqdDev_2025/ic_hw/k2/tools/k2_p4_b2_in5_lane_router_v3.py", line 261, in _seg_rect_dists
+    out[:, j] = _seg_seg_batch(segs, segs_rect).min(axis=1)
+  File "/home/fila/jqdDev_2025/ic_hw/k2/tools/k2_p4_b2_in5_lane_router_v3.py", line 234, in _seg_seg_batch
+    d = _pt_seg_pts(A[:, 0, :], B[:, 0, :], B[:, 1, :])
+  File "/home/fila/jqdDev_2025/ic_hw/k2/tools/k2_p4_b2_in5_lane_router_v3.py", line 248, in _pt_seg_pts
+    proj = A[None, :, :] + t[:, :, None] * d[None, :, :]
+ValueError: operands could not be broadcast together with shapes (50,1,1,4) (1,4,2) 

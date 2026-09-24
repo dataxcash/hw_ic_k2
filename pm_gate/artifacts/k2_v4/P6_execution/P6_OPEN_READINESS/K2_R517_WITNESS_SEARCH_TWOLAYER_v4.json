@@ -1,0 +1,665 @@
+{
+ "artifact": "k2_r517_witness_search_twolayer_v4",
+ "ts": "2026-09-24T22:28:28",
+ "authority": "monitor convergence-stall stop-order (must produce a binary: feasible witness OR a conservation-grade infeasibility certificate; a clarification round / tool bump is banned)",
+ "method": "deterministic constructive routing on the REGISTERED 2-layer graph (Gen2 full = faithful lever 甲): priority order + rip-up-and-reroute; conflicts use the registered declaration-set semantics; every produced path is re-verified by the registered exact_gate (per layer) + gate_vias + endpoint deviation + per-lane via count",
+ "solve_calls": 0,
+ "params": {
+  "P": 0.435,
+  "HW": 0.08,
+  "VIA_SEP": 0.7,
+  "VIA_LANE": 0.43,
+  "MAX_VIA_PAIRS": 2,
+  "BOUND": 1.6,
+  "l1scope": "full"
+ },
+ "lanes_built": 16,
+ "lanes_without_legs": [],
+ "order_first_pass": [
+  "U7_P_J2",
+  "U0_P_J2",
+  "U5_P_J2",
+  "U6_N_J2",
+  "U1_P_J2",
+  "U6_P_J2",
+  "U5_N_J2",
+  "U2_P_J2",
+  "U2_N_J2",
+  "U1_N_J2",
+  "U3_P_J2",
+  "U4_N_J2",
+  "U0_N_J2",
+  "U7_N_J2",
+  "U3_N_J2",
+  "U4_P_J2"
+ ],
+ "search_log": [
+  {
+   "it": 0,
+   "routed": 16,
+   "total_conflicts": 579,
+   "top_pairs": [
+    [
+     [
+      "PCIE_UP_OUT0_P_J2",
+      "PCIE_UP_OUT2_P_J2"
+     ],
+     58
+    ],
+    [
+     [
+      "PCIE_UP_OUT1_P_J2",
+      "PCIE_UP_OUT3_P_J2"
+     ],
+     40
+    ],
+    [
+     [
+      "PCIE_UP_OUT3_P_J2",
+      "PCIE_UP_OUT5_P_J2"
+     ],
+     34
+    ]
+   ]
+  },
+  {
+   "it": 1,
+   "routed": 16,
+   "total_conflicts": 786,
+   "top_pairs": [
+    [
+     [
+      "PCIE_UP_OUT0_P_J2",
+      "PCIE_UP_OUT4_P_J2"
+     ],
+     62
+    ],
+    [
+     [
+      "PCIE_UP_OUT0_P_J2",
+      "PCIE_UP_OUT2_P_J2"
+     ],
+     62
+    ],
+    [
+     [
+      "PCIE_UP_OUT1_P_J2",
+      "PCIE_UP_OUT3_P_J2"
+     ],
+     44
+    ]
+   ]
+  },
+  {
+   "it": 2,
+   "routed": 16,
+   "total_conflicts": 739,
+   "top_pairs": [
+    [
+     [
+      "PCIE_UP_OUT1_P_J2",
+      "PCIE_UP_OUT2_P_J2"
+     ],
+     52
+    ],
+    [
+     [
+      "PCIE_UP_OUT0_P_J2",
+      "PCIE_UP_OUT3_P_J2"
+     ],
+     52
+    ],
+    [
+     [
+      "PCIE_UP_OUT0_N_J2",
+      "PCIE_UP_OUT5_N_J2"
+     ],
+     24
+    ]
+   ]
+  },
+  {
+   "it": 3,
+   "routed": 16,
+   "total_conflicts": 759,
+   "top_pairs": [
+    [
+     [
+      "PCIE_UP_OUT0_P_J2",
+      "PCIE_UP_OUT3_P_J2"
+     ],
+     64
+    ],
+    [
+     [
+      "PCIE_UP_OUT1_P_J2",
+      "PCIE_UP_OUT2_P_J2"
+     ],
+     59
+    ],
+    [
+     [
+      "PCIE_UP_OUT1_P_J2",
+      "PCIE_UP_OUT6_P_J2"
+     ],
+     45
+    ]
+   ]
+  },
+  {
+   "it": 4,
+   "routed": 16,
+   "total_conflicts": 838,
+   "top_pairs": [
+    [
+     [
+      "PCIE_UP_OUT0_P_J2",
+      "PCIE_UP_OUT5_P_J2"
+     ],
+     90
+    ],
+    [
+     [
+      "PCIE_UP_OUT0_P_J2",
+      "PCIE_UP_OUT3_P_J2"
+     ],
+     55
+    ],
+    [
+     [
+      "PCIE_UP_OUT1_P_J2",
+      "PCIE_UP_OUT2_P_J2"
+     ],
+     35
+    ]
+   ]
+  },
+  {
+   "it": 5,
+   "routed": 16,
+   "total_conflicts": 672,
+   "top_pairs": [
+    [
+     [
+      "PCIE_UP_OUT0_P_J2",
+      "PCIE_UP_OUT2_P_J2"
+     ],
+     62
+    ],
+    [
+     [
+      "PCIE_UP_OUT3_P_J2",
+      "PCIE_UP_OUT5_P_J2"
+     ],
+     50
+    ],
+    [
+     [
+      "PCIE_UP_OUT1_P_J2",
+      "PCIE_UP_OUT3_P_J2"
+     ],
+     39
+    ]
+   ]
+  },
+  {
+   "it": 6,
+   "routed": 16,
+   "total_conflicts": 548,
+   "top_pairs": [
+    [
+     [
+      "PCIE_UP_OUT0_P_J2",
+      "PCIE_UP_OUT4_P_J2"
+     ],
+     80
+    ],
+    [
+     [
+      "PCIE_UP_OUT0_P_J2",
+      "PCIE_UP_OUT2_P_J2"
+     ],
+     58
+    ],
+    [
+     [
+      "PCIE_UP_OUT3_P_J2",
+      "PCIE_UP_OUT5_P_J2"
+     ],
+     47
+    ]
+   ]
+  },
+  {
+   "it": 7,
+   "routed": 16,
+   "total_conflicts": 576,
+   "top_pairs": [
+    [
+     [
+      "PCIE_UP_OUT0_P_J2",
+      "PCIE_UP_OUT1_P_J2"
+     ],
+     91
+    ],
+    [
+     [
+      "PCIE_UP_OUT2_P_J2",
+      "PCIE_UP_OUT3_P_J2"
+     ],
+     39
+    ],
+    [
+     [
+      "PCIE_UP_OUT3_P_J2",
+      "PCIE_UP_OUT5_P_J2"
+     ],
+     38
+    ]
+   ]
+  },
+  {
+   "it": 8,
+   "routed": 16,
+   "total_conflicts": 585,
+   "top_pairs": [
+    [
+     [
+      "PCIE_UP_OUT0_P_J2",
+      "PCIE_UP_OUT1_P_J2"
+     ],
+     78
+    ],
+    [
+     [
+      "PCIE_UP_OUT0_P_J2",
+      "PCIE_UP_OUT2_P_J2"
+     ],
+     41
+    ],
+    [
+     [
+      "PCIE_UP_OUT3_P_J2",
+      "PCIE_UP_OUT5_P_J2"
+     ],
+     39
+    ]
+   ]
+  },
+  {
+   "it": 9,
+   "routed": 16,
+   "total_conflicts": 572,
+   "top_pairs": [
+    [
+     [
+      "PCIE_UP_OUT0_P_J2",
+      "PCIE_UP_OUT1_P_J2"
+     ],
+     90
+    ],
+    [
+     [
+      "PCIE_UP_OUT2_P_J2",
+      "PCIE_UP_OUT3_P_J2"
+     ],
+     40
+    ],
+    [
+     [
+      "PCIE_UP_OUT3_P_J2",
+      "PCIE_UP_OUT5_P_J2"
+     ],
+     30
+    ]
+   ]
+  },
+  {
+   "it": 10,
+   "routed": 16,
+   "total_conflicts": 540,
+   "top_pairs": [
+    [
+     [
+      "PCIE_UP_OUT0_P_J2",
+      "PCIE_UP_OUT3_P_J2"
+     ],
+     88
+    ],
+    [
+     [
+      "PCIE_UP_OUT1_P_J2",
+      "PCIE_UP_OUT2_P_J2"
+     ],
+     51
+    ],
+    [
+     [
+      "PCIE_UP_OUT3_P_J2",
+      "PCIE_UP_OUT4_P_J2"
+     ],
+     33
+    ]
+   ]
+  },
+  {
+   "it": 11,
+   "routed": 16,
+   "total_conflicts": 512,
+   "top_pairs": [
+    [
+     [
+      "PCIE_UP_OUT0_P_J2",
+      "PCIE_UP_OUT2_P_J2"
+     ],
+     58
+    ],
+    [
+     [
+      "PCIE_UP_OUT1_P_J2",
+      "PCIE_UP_OUT3_P_J2"
+     ],
+     46
+    ],
+    [
+     [
+      "PCIE_UP_OUT4_P_J2",
+      "PCIE_UP_OUT7_P_J2"
+     ],
+     36
+    ]
+   ]
+  },
+  {
+   "it": 12,
+   "routed": 16,
+   "total_conflicts": 557,
+   "top_pairs": [
+    [
+     [
+      "PCIE_UP_OUT0_P_J2",
+      "PCIE_UP_OUT2_P_J2"
+     ],
+     58
+    ],
+    [
+     [
+      "PCIE_UP_OUT1_P_J2",
+      "PCIE_UP_OUT3_P_J2"
+     ],
+     56
+    ],
+    [
+     [
+      "PCIE_UP_OUT3_P_J2",
+      "PCIE_UP_OUT5_P_J2"
+     ],
+     37
+    ]
+   ]
+  },
+  {
+   "it": 13,
+   "routed": 16,
+   "total_conflicts": 635,
+   "top_pairs": [
+    [
+     [
+      "PCIE_UP_OUT0_P_J2",
+      "PCIE_UP_OUT2_P_J2"
+     ],
+     77
+    ],
+    [
+     [
+      "PCIE_UP_OUT1_P_J2",
+      "PCIE_UP_OUT3_P_J2"
+     ],
+     70
+    ],
+    [
+     [
+      "PCIE_UP_OUT3_P_J2",
+      "PCIE_UP_OUT5_P_J2"
+     ],
+     28
+    ]
+   ]
+  },
+  {
+   "it": 14,
+   "routed": 16,
+   "total_conflicts": 644,
+   "top_pairs": [
+    [
+     [
+      "PCIE_UP_OUT1_P_J2",
+      "PCIE_UP_OUT2_P_J2"
+     ],
+     58
+    ],
+    [
+     [
+      "PCIE_UP_OUT0_P_J2",
+      "PCIE_UP_OUT3_P_J2"
+     ],
+     54
+    ],
+    [
+     [
+      "PCIE_UP_OUT0_P_J2",
+      "PCIE_UP_OUT1_P_J2"
+     ],
+     39
+    ]
+   ]
+  },
+  {
+   "it": 15,
+   "routed": 16,
+   "total_conflicts": 528,
+   "top_pairs": [
+    [
+     [
+      "PCIE_UP_OUT0_P_J2",
+      "PCIE_UP_OUT3_P_J2"
+     ],
+     78
+    ],
+    [
+     [
+      "PCIE_UP_OUT1_P_J2",
+      "PCIE_UP_OUT2_P_J2"
+     ],
+     49
+    ],
+    [
+     [
+      "PCIE_UP_OUT2_P_J2",
+      "PCIE_UP_OUT3_P_J2"
+     ],
+     30
+    ]
+   ]
+  },
+  {
+   "it": 16,
+   "routed": 16,
+   "total_conflicts": 665,
+   "top_pairs": [
+    [
+     [
+      "PCIE_UP_OUT0_P_J2",
+      "PCIE_UP_OUT3_P_J2"
+     ],
+     72
+    ],
+    [
+     [
+      "PCIE_UP_OUT3_N_J2",
+      "PCIE_UP_OUT7_N_J2"
+     ],
+     51
+    ],
+    [
+     [
+      "PCIE_UP_OUT4_P_J2",
+      "PCIE_UP_OUT5_P_J2"
+     ],
+     42
+    ]
+   ]
+  },
+  {
+   "it": 17,
+   "routed": 16,
+   "total_conflicts": 540,
+   "top_pairs": [
+    [
+     [
+      "PCIE_UP_OUT0_P_J2",
+      "PCIE_UP_OUT1_P_J2"
+     ],
+     58
+    ],
+    [
+     [
+      "PCIE_UP_OUT3_P_J2",
+      "PCIE_UP_OUT4_P_J2"
+     ],
+     52
+    ],
+    [
+     [
+      "PCIE_UP_OUT2_P_J2",
+      "PCIE_UP_OUT3_P_J2"
+     ],
+     38
+    ]
+   ]
+  }
+ ],
+ "placed": 16,
+ "best_iteration": 11,
+ "min_total_conflicts": 512,
+ "search_elapsed_s": 52.4,
+ "gate_per_layer": {
+  "In5.Cu": {
+   "n_lane_pitch_viol": 10,
+   "lane_pitch_min_gap_mm": 0.0,
+   "n_clearance_viol": 0,
+   "clearance_min_mm": 0.0491
+  },
+  "In4.Cu": {
+   "n_lane_pitch_viol": 14,
+   "lane_pitch_min_gap_mm": 0.0,
+   "n_clearance_viol": 0,
+   "clearance_min_mm": 0.03
+  }
+ },
+ "gate_crash": {
+  "gate_vias": {
+   "error": "ValueError: operands could not be broadcast together with shapes (50,1,1,4) (1,4,2) ",
+   "trace_tail": [
+    "  File \"/home/fila/jqdDev_2025/ic_hw/k2/tools/k2_p4_b2_in5_lane_router_v3.py\", line 248, in _pt_seg_pts",
+    "    proj = A[None, :, :] + t[:, :, None] * d[None, :, :]",
+    "ValueError: operands could not be broadcast together with shapes (50,1,1,4) (1,4,2)"
+   ]
+  }
+ },
+ "gate_vias": {
+  "n_via_viol": null,
+  "error": "ValueError: operands could not be broadcast together with shapes (50,1,1,4) (1,4,2) ",
+  "trace_tail": [
+   "  File \"/home/fila/jqdDev_2025/ic_hw/k2/tools/k2_p4_b2_in5_lane_router_v3.py\", line 248, in _pt_seg_pts",
+   "    proj = A[None, :, :] + t[:, :, None] * d[None, :, :]",
+   "ValueError: operands could not be broadcast together with shapes (50,1,1,4) (1,4,2)"
+  ]
+ },
+ "endpoint_max_dev_mm": 0.0,
+ "vias_per_lane": {
+  "PCIE_UP_OUT4_N_J2": 4,
+  "PCIE_UP_OUT3_P_J2": 2,
+  "PCIE_UP_OUT0_P_J2": 2,
+  "PCIE_UP_OUT1_N_J2": 4,
+  "PCIE_UP_OUT2_N_J2": 4,
+  "PCIE_UP_OUT4_P_J2": 4,
+  "PCIE_UP_OUT2_P_J2": 2,
+  "PCIE_UP_OUT5_N_J2": 4,
+  "PCIE_UP_OUT3_N_J2": 2,
+  "PCIE_UP_OUT6_P_J2": 2,
+  "PCIE_UP_OUT7_N_J2": 4,
+  "PCIE_UP_OUT1_P_J2": 2,
+  "PCIE_UP_OUT0_N_J2": 4,
+  "PCIE_UP_OUT6_N_J2": 4,
+  "PCIE_UP_OUT7_P_J2": 2,
+  "PCIE_UP_OUT5_P_J2": 4
+ },
+ "per_lane_len_mm": {
+  "PCIE_UP_OUT4_N_J2": 61.013,
+  "PCIE_UP_OUT3_P_J2": 49.812,
+  "PCIE_UP_OUT0_P_J2": 84.96,
+  "PCIE_UP_OUT1_N_J2": 83.454,
+  "PCIE_UP_OUT2_N_J2": 51.631,
+  "PCIE_UP_OUT4_P_J2": 63.931,
+  "PCIE_UP_OUT2_P_J2": 57.983,
+  "PCIE_UP_OUT5_N_J2": 64.253,
+  "PCIE_UP_OUT3_N_J2": 69.604,
+  "PCIE_UP_OUT6_P_J2": 51.879,
+  "PCIE_UP_OUT7_N_J2": 59.201,
+  "PCIE_UP_OUT1_P_J2": 52.598,
+  "PCIE_UP_OUT0_N_J2": 72.595,
+  "PCIE_UP_OUT6_N_J2": 44.468,
+  "PCIE_UP_OUT7_P_J2": 40.602,
+  "PCIE_UP_OUT5_P_J2": 44.718
+ },
+ "requirement_level_gate": "FAIL",
+ "decision": "NON-TERMINAL: 构造解已得 16/16，但独立核 FAIL（gate_crash={\"gate_vias\": {\"error\": \"ValueError: operands could not be broadcast together with shapes (50,1,1,4) (1,4,2) \", \"trace_tail\": [\"  File \\\"/home/fila/jqdDev_2025/ic_hw/k2/tools/k2_p4_b2_in5_lane_router_, gate={\"In5.Cu\": {\"n_lane_pitch_viol\": 10, \"lane_pitch_min_gap_mm\": 0.0, \"n_clearance_viol\": 0, \"clearance_min_mm\": 0.0491}, \"In4.Cu\": {\"n_lane_pitch_viol\": 14, \"lane_pitch_min_gap_mm\": 0.0, \"n_clearance_vi）",
+ "boundaries": "Solve() 0 calls; no model parameter changed; no paradigm switch (same registered graph, constructive instead of CP-SAT); board/SPEC/tools/criteria untouched; frozen four 4/4",
+ "buildability": "PENDING the registered gates in this same artifact (a witness is only a milestone if exact_gate + gate_vias + endpoint + via-count all pass; otherwise NOT-APPLICABLE)",
+ "elapsed_s": 75.8,
+ "correction_20260924_v4a": "append-only correction of registered_gate_availability: the crash is in W.gate_vias() (cross-layer / via-vs-lane batch geometry, k2_p4_b2_in5_lane_router_v3._pt_seg_pts); the per-layer exact_gate() DID run and returned its violations (see gate_per_layer). Corrected statement: 'gate_vias() is currently unusable at full size; exact_gate() works'.",
+ "registered_gate_availability": "BLOCKER (new this window): the registered cross-layer/via acceptance gate gate_vias() crashes on a full-size rendering (numpy broadcast ValueError in k2_p4_b2_in5_lane_router_v3._pt_seg_pts; shapes (50,1,1,4) vs (1,4,2)). The per-layer exact_gate() does run and reports violations. Since gate_vias() is part of the registered acceptance chain, even a perfect witness could not be CERTIFIED until that tool path is repaired -> named process blocker, reported, not worked around.",
+ "constructive_attempts": {
+  "A_greedy_plus_ripup_v1": {
+   "lanes_placed": [
+    4,
+    4,
+    5,
+    4,
+    3,
+    4
+   ],
+   "passes": 6,
+   "outcome": "saturates far below 16/16"
+  },
+  "B_negotiated_congestion_v4": {
+   "iterations": 18,
+   "lanes_routed_each_iteration": 16,
+   "residual_clearance_conflicts_per_iteration": [
+    579,
+    786,
+    739,
+    759,
+    838,
+    672,
+    548,
+    576,
+    585,
+    572,
+    540,
+    512,
+    557,
+    635,
+    644,
+    528,
+    665,
+    540
+   ],
+   "best_iteration": 11,
+   "best_residual_conflicts": 512,
+   "registered_exact_gate_on_best": "FAIL (In5: 10 lane-pitch violations; see gate_per_layer)",
+   "outcome": "no projection of the construction onto the registered clearance semantics; NOT a proof of infeasibility (heuristic failure is not an obstruction certificate)"
+  }
+ }
+}
