@@ -1,6 +1,6 @@
 {
  "artifact": "k2_r524_prime_channel_selfcheck_v1",
- "ts": "2026-09-25T01:11:56",
+ "ts": "2026-09-25T01:16:23",
  "authority": "#K2-192 sec.3.3.a (read-only fidelity self-check BEFORE any solve) · quota 0 · Solve() 0",
  "boundaries": "Solve() 0 calls; read-only; no board/SPEC/generator/criteria writes; frozen four untouched",
  "C_structure_capacity": {
@@ -142,10 +142,17 @@
   "machine_check_verdict": "PASS"
  },
  "B_formC_premises": {
-  "module": "K2_R523_FORMC_PREMISE_CHECKS_v1",
-  "rerun": "see its own JSON; re-executed here read-only",
+  "source_artifact": "K2_R523_FORMC_PREMISE_CHECKS_v1.json (read-only; NOT imported, see comment)",
+  "verdict": "PREMISES HOLD: no free-access leg touches/crosses any of the four cut lines (min distance 0.4350 mm >= R_REACH 0.6525 mm), so counting crossings on lattice arcs only is complete",
+  "legs_never_touch_any_cut": true,
+  "min_leg_dist_mm_all_lanes": {
+   "col_110.1": 16.095,
+   "col_133.59": 1.74,
+   "row_56.66": 0.435,
+   "row_54.05": 0.435
+  },
   "note": "form C is used ONLY as a witness-must-satisfy predicate, never as a master hard constraint (R512 deviation D2: redundant order linking causes spurious infeasibility)"
  },
  "decision": "SELF-CHECK DONE (read-only, Solve() 0): restriction/partition = PASS; structural lead: inversions=58, L(pi)=6 (registered layers=2)",
- "elapsed_s": 83.5
+ "elapsed_s": 21.8
 }

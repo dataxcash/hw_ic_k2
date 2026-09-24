@@ -182,18 +182,21 @@ def main():
         "machine_check_verdict": "PASS" if (subset_ok and disjoint) else "FAIL",
     }
 
-    # ---------- (B) form-C premises (re-run the registered premise module) ----------
+    # ---------- (B) form-C premises: READ the registered premise artifact, do NOT import it ----------
+    # SELF-CAUGHT SIDE EFFECT (2026-09-25): `K2_R523_FORMC_PREMISE_CHECKS_v1` has NO `if __name__=="__main__"`
+    # guard => importing it re-executes and REWRITES its registered JSON (only `ts` changes). Importing it here
+    # would violate this file's read-only claim, so we only READ the stored artifact and never import it.
     try:
-        pc = importlib.import_module("K2_R523_FORMC_PREMISE_CHECKS_v1")
-        rep["B_formC_premises"] = {"module": "K2_R523_FORMC_PREMISE_CHECKS_v1",
-                                   "rerun": "see its own JSON; re-executed here read-only",
-                                   "note": ("form C is used ONLY as a witness-must-satisfy predicate, never as a "
-                                            "master hard constraint (R512 deviation D2: redundant order linking "
-                                            "causes spurious infeasibility)")}
-        if hasattr(pc, "main"):
-            import io, contextlib
+        pj = os.path.join(HERE, "K2_R523_FORMC_PREMISE_CHECKS_v1.json")
+        pc = json.load(open(pj))
+        rep["B_formC_premises"] = {
+            "source_artifact": "K2_R523_FORMC_PREMISE_CHECKS_v1.json (read-only; NOT imported, see comment)",
+            "verdict": pc.get("verdict"), "legs_never_touch_any_cut": pc.get("legs_never_touch_any_cut"),
+            "min_leg_dist_mm_all_lanes": pc.get("min_leg_dist_mm_all_lanes"),
+            "note": ("form C is used ONLY as a witness-must-satisfy predicate, never as a master hard constraint "
+                     "(R512 deviation D2: redundant order linking causes spurious infeasibility)")}
     except Exception as e:
-        rep["B_formC_premises"] = {"module_load": "FAILED: %s" % e}
+        rep["B_formC_premises"] = {"read": "FAILED: %s" % e}
 
     rep["decision"] = ("SELF-CHECK DONE (read-only, Solve() 0): restriction/partition = %s; "
                        "structural lead: inversions=%d, L(pi)=%d (registered layers=2)"
