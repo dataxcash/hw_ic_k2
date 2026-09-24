@@ -1,0 +1,42 @@
+{
+ "artifact": "k2_r523_witness_negotiated_struct_v3",
+ "ts": "2026-09-25T00:14:00",
+ "authority": "supervisor stop-order (binary required; no clarification/tool-bump rounds) + #K2-189 sec.3.4 (constructive witness family ratified, non-quota)",
+ "solve_calls": 0,
+ "method": "structure-biased PathFinder negotiation: strong penalty on In5 mid-corridor nodes (outside the four registered wide zones) forces every lane to change layer only inside zones; history/occupancy costs spread the declaration bands; runs until 0 conflicts",
+ "n_iter_budget": 900,
+ "params": {
+  "PEN": 40.0,
+  "HPEN": 25.0,
+  "VPEN": 60.0,
+  "STRUCT": 6.0
+ },
+ "runs": {
+  "sp_desc": {
+   "best_conflicts_plus_viol": 84,
+   "best_conf": 84,
+   "best_viol": 0,
+   "elapsed_s": 700.7
+  },
+  "sp_asc": {
+   "best_conflicts_plus_viol": 92,
+   "best_conf": 92,
+   "best_viol": 0,
+   "elapsed_s": 700.9
+  },
+  "Bx_desc": {
+   "best_conflicts_plus_viol": 91,
+   "best_conf": 90,
+   "best_viol": 1,
+   "elapsed_s": 700.3
+  },
+  "difficulty": {
+   "best_conflicts_plus_viol": 79,
+   "best_conf": 79,
+   "best_viol": 0,
+   "elapsed_s": 702.1
+  }
+ },
+ "best_conflicts_plus_viol": 79,
+ "witness_found": false
+}
