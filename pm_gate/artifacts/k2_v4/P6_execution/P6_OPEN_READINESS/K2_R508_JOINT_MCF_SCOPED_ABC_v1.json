@@ -1,6 +1,6 @@
 {
- "artifact": "k2_r508_joint_mcf_scoped_abc_v1",
- "ts": "2026-09-24T14:42:54",
+ "artifact": "k2_r504_joint_mcf_cp_sat_v1",
+ "ts": "2026-09-24T14:48:39",
  "authority": "#K2-179 §四《方法教令 #5》(联合定位/有序多商品流族) · 一次实现窗(唯一) · §三.6 恰一次受证求解",
  "paradigm": "two-channel decomposition + anisotropic two-tier lattice + joint multi-commodity flow (node-declaration capacity 1, linear), solved once by CP-SAT",
  "preexisting_gates": {
@@ -129,113 +129,181 @@
    "PCIE_UP_OUT7_P_J2": 53.728
   }
  },
- "order_vars": {
-  "gate_cols": [
-   115,
-   116,
-   117,
-   118,
-   119,
-   120,
-   121,
-   122,
-   123,
-   124,
-   125,
-   126,
-   127,
-   128,
-   129,
-   130,
-   131,
-   132,
-   133,
-   134,
-   135
+ "skeleton_triage": {
+  "per_lane": [
+   {
+    "nm": "PCIE_UP_OUT0_N_J2",
+    "src_out_arcs": 6,
+    "snk_in_arcs": 5,
+    "shortest_hops": 101,
+    "arc_count_bound": 276,
+    "bound_ok": true
+   },
+   {
+    "nm": "PCIE_UP_OUT0_P_J2",
+    "src_out_arcs": 4,
+    "snk_in_arcs": 6,
+    "shortest_hops": 110,
+    "arc_count_bound": 275,
+    "bound_ok": true
+   },
+   {
+    "nm": "PCIE_UP_OUT1_N_J2",
+    "src_out_arcs": 6,
+    "snk_in_arcs": 5,
+    "shortest_hops": 97,
+    "arc_count_bound": 267,
+    "bound_ok": true
+   },
+   {
+    "nm": "PCIE_UP_OUT1_P_J2",
+    "src_out_arcs": 6,
+    "snk_in_arcs": 5,
+    "shortest_hops": 105,
+    "arc_count_bound": 265,
+    "bound_ok": true
+   },
+   {
+    "nm": "PCIE_UP_OUT2_N_J2",
+    "src_out_arcs": 6,
+    "snk_in_arcs": 6,
+    "shortest_hops": 92,
+    "arc_count_bound": 252,
+    "bound_ok": true
+   },
+   {
+    "nm": "PCIE_UP_OUT2_P_J2",
+    "src_out_arcs": 6,
+    "snk_in_arcs": 6,
+    "shortest_hops": 97,
+    "arc_count_bound": 249,
+    "bound_ok": true
+   },
+   {
+    "nm": "PCIE_UP_OUT3_N_J2",
+    "src_out_arcs": 6,
+    "snk_in_arcs": 6,
+    "shortest_hops": 86,
+    "arc_count_bound": 239,
+    "bound_ok": true
+   },
+   {
+    "nm": "PCIE_UP_OUT3_P_J2",
+    "src_out_arcs": 6,
+    "snk_in_arcs": 5,
+    "shortest_hops": 91,
+    "arc_count_bound": 237,
+    "bound_ok": true
+   },
+   {
+    "nm": "PCIE_UP_OUT4_N_J2",
+    "src_out_arcs": 6,
+    "snk_in_arcs": 6,
+    "shortest_hops": 81,
+    "arc_count_bound": 226,
+    "bound_ok": true
+   },
+   {
+    "nm": "PCIE_UP_OUT4_P_J2",
+    "src_out_arcs": 6,
+    "snk_in_arcs": 6,
+    "shortest_hops": 88,
+    "arc_count_bound": 232,
+    "bound_ok": true
+   },
+   {
+    "nm": "PCIE_UP_OUT5_N_J2",
+    "src_out_arcs": 6,
+    "snk_in_arcs": 6,
+    "shortest_hops": 80,
+    "arc_count_bound": 222,
+    "bound_ok": true
+   },
+   {
+    "nm": "PCIE_UP_OUT5_P_J2",
+    "src_out_arcs": 6,
+    "snk_in_arcs": 6,
+    "shortest_hops": 85,
+    "arc_count_bound": 225,
+    "bound_ok": true
+   },
+   {
+    "nm": "PCIE_UP_OUT6_N_J2",
+    "src_out_arcs": 6,
+    "snk_in_arcs": 6,
+    "shortest_hops": 78,
+    "arc_count_bound": 213,
+    "bound_ok": true
+   },
+   {
+    "nm": "PCIE_UP_OUT6_P_J2",
+    "src_out_arcs": 6,
+    "snk_in_arcs": 6,
+    "shortest_hops": 73,
+    "arc_count_bound": 203,
+    "bound_ok": true
+   },
+   {
+    "nm": "PCIE_UP_OUT7_N_J2",
+    "src_out_arcs": 6,
+    "snk_in_arcs": 6,
+    "shortest_hops": 68,
+    "arc_count_bound": 193,
+    "bound_ok": true
+   },
+   {
+    "nm": "PCIE_UP_OUT7_P_J2",
+    "src_out_arcs": 3,
+    "snk_in_arcs": 6,
+    "shortest_hops": 75,
+    "arc_count_bound": 202,
+    "bound_ok": true
+   }
   ],
-  "yard_rows": [
-   38,
-   39,
-   40,
-   41,
-   42,
-   43,
-   44,
-   45,
-   46,
-   47,
-   48,
-   49,
-   50,
-   51,
-   52,
-   53,
-   54,
-   55,
-   56,
-   57
+  "verdict": "SKELETON CAPACITY < 16 => the discrete-node skeleton itself is infeasible (a MODEL infeasibility core; NOT a board infeasibility claim)",
+  "bottleneck_cut_nodes_col_row": [
+   [
+    119,
+    39
+   ],
+   [
+    119,
+    40
+   ],
+   [
+    122,
+    43
+   ],
+   [
+    122,
+    44
+   ],
+   [
+    126,
+    43
+   ],
+   [
+    126,
+    44
+   ],
+   [
+    130,
+    43
+   ],
+   [
+    130,
+    44
+   ],
+   [
+    133,
+    61
+   ],
+   [
+    133,
+    62
+   ]
   ],
-  "gaps": [
-   7,
-   11,
-   12,
-   13,
-   15,
-   24,
-   25,
-   28
-  ],
-  "lane_order_by_Ax": [
-   "PCIE_UP_OUT0_N_J2",
-   "PCIE_UP_OUT0_P_J2",
-   "PCIE_UP_OUT1_N_J2",
-   "PCIE_UP_OUT1_P_J2",
-   "PCIE_UP_OUT2_N_J2",
-   "PCIE_UP_OUT2_P_J2",
-   "PCIE_UP_OUT3_N_J2",
-   "PCIE_UP_OUT3_P_J2",
-   "PCIE_UP_OUT4_N_J2",
-   "PCIE_UP_OUT4_P_J2",
-   "PCIE_UP_OUT5_N_J2",
-   "PCIE_UP_OUT5_P_J2",
-   "PCIE_UP_OUT6_N_J2",
-   "PCIE_UP_OUT6_P_J2",
-   "PCIE_UP_OUT7_N_J2",
-   "PCIE_UP_OUT7_P_J2"
-  ],
-  "west_order": [
-   "PCIE_UP_OUT0_N_J2",
-   "PCIE_UP_OUT1_P_J2",
-   "PCIE_UP_OUT2_N_J2",
-   "PCIE_UP_OUT3_P_J2",
-   "PCIE_UP_OUT4_N_J2",
-   "PCIE_UP_OUT5_P_J2",
-   "PCIE_UP_OUT6_N_J2",
-   "PCIE_UP_OUT7_P_J2"
-  ],
-  "order_constraints": 86
+  "union_max_node_disjoint_paths_src_to_snk": 10
  },
- "model": {
-  "bool_vars": 320684,
-  "constraints": 124531,
-  "clearance_constraints": 64045,
-  "assumption_groups": [
-   "clearance_exact_per_lane",
-   "order_gate_columns",
-   "order_yard_rows",
-   "order_wall_gaps"
-  ],
-  "validate": "OK",
-  "bound_factor": 1.6
- },
- "unsat_core_sufficient": [],
- "solve": {
-  "status": "INFEASIBLE",
-  "wall_s": 4.9,
-  "quota_consumed": 1,
-  "solve_calls": 1
- },
- "decision": "NON-TERMINAL: solver=INFEASIBLE（保守模型下未找到可行解；不作不可行主张）",
- "elapsed_s": 29.2,
- "note": "reading of the #K2-181 sec.3.6 window (changes a/b/c only); the R504 json path was overwritten by the copied script default -- R504 readings are preserved in K2_R504_JOINT_MCF_RESULT_AND_DEFECTS_v1.md and the ledger"
+ "decision": "TRIAGE-ONLY (read-only; no Solve(); no quota consumed)"
 }

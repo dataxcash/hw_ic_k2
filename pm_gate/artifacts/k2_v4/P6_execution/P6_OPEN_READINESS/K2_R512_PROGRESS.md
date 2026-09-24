@@ -1,0 +1,2 @@
+- [20:18:45] t=1 proc=alive log=0B json=no
+- [20:19:40] t=2 proc=exited log=636B json=yes

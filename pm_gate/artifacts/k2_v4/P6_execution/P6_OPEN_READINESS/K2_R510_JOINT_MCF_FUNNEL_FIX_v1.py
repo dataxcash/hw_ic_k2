@@ -115,7 +115,7 @@ def main():
     ap.add_argument("--triage", action="store_true")
     ap.add_argument("--out", default=None)
     a = ap.parse_args()
-    out = a.out or os.path.join(HERE, "K2_R508_JOINT_MCF_SCOPED_ABC_v1.json")
+    out = a.out or os.path.join(HERE, "K2_R510_JOINT_MCF_FUNNEL_FIX_v1.json")
     t00 = time.time()
     model = json.load(open(a.model))
     rep = {"artifact": "k2_r504_joint_mcf_cp_sat_v1", "ts": time.strftime("%Y-%m-%dT%H:%M:%S"),
@@ -139,7 +139,10 @@ def main():
             if free[i, j] and free[i - 2:i + 3, j - 2:j + 3].all():
                 wide[i, j] = True
     band = np.zeros((NX, NY), bool)
-    band[:, 37:] = wide[:, 37:]            # x-coarsening only south of the gate (rows >= 37) where lanes travel east
+    # R510 FIX (my own coarsening rule, located by the R509 triage): coarsen ONLY the west/middle yard.
+    # The east end (columns >=113) is the northbound FUNNEL into the east gate -- all 16 lanes must pass it,
+    # so it keeps FINE pitch (otherwise only ~10 columns survive and the skeleton cannot hold 16 lanes).
+    band[:113, 37:] = wide[:113, 37:]
     coarse = np.zeros((NX, NY), bool)
     coarse[0::2, :] = band[0::2, :]
     excl = band.copy(); excl[0::2, :] = False    # odd-x nodes inside the band are removed from the model

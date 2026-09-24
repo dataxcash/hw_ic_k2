@@ -1,0 +1,121 @@
+{
+ "artifact": "k2_r513_decisive_triage_v1",
+ "ts": "2026-09-24T20:33:13",
+ "authority": "#K2-183 sec.3.5 (read-only; no Solve) · handoff-K2-513 sec.0",
+ "boundaries": "Solve() 0 calls; quota 0; frozen four sources 4/4 untouched; criteria rev=6; read-only graph/geometry algorithms (exhaustive enumeration, max-flow, 1-D packing)",
+ "t3_clearance_encoding_exactness": {
+  "window": "7x7 lattice, all 8 unit directions",
+  "n_arcs": 156,
+  "n_pairs": 12090,
+  "n_true_conflict_seg_seg_lt_P": 1408,
+  "n_model_blocked": 1408,
+  "n_unsound_true_conflict_allowed_by_model": 0,
+  "n_over_strict_legal_pair_blocked_by_model": 0,
+  "unsound_examples": [],
+  "over_strict_examples": [],
+  "verdict": "EXACT (no miss, no over-constraint) => replacing the node-counted shadow by the registered exact_gate predicate is a bit-for-bit no-op; handoff branch (B) is VOID and no certified solve is owed to it."
+ },
+ "t4_continuous_cut_bound": {
+  "free_space_dilation_used_px": 2,
+  "scan_step_mm": 0.05,
+  "worst_cut": {
+   "coord_mm": 113.6,
+   "axis": "V",
+   "n_lanes_that_must_cross": 16,
+   "capacity_upper_bound": 66,
+   "slack": 50
+  },
+  "verdict": "no straight cut can certify impossibility: capacity exceeds the 16-lane demand everywhere by a wide margin (min slack = 50)"
+ },
+ "t5_union_claim_disjoint_flow": {
+  "n_union_nodes": 6546,
+  "n_arcs": 177210,
+  "max_flow": 16,
+  "demand": 16,
+  "min_cut_empty": true,
+  "witness_pairs": [
+   [
+    "src0",
+    "snk2"
+   ],
+   [
+    "src1",
+    "snk9"
+   ],
+   [
+    "src2",
+    "snk5"
+   ],
+   [
+    "src3",
+    "snk3"
+   ],
+   [
+    "src4",
+    "snk1"
+   ],
+   [
+    "src5",
+    "snk10"
+   ],
+   [
+    "src6",
+    "snk0"
+   ],
+   [
+    "src7",
+    "snk7"
+   ],
+   [
+    "src8",
+    "snk6"
+   ],
+   [
+    "src9",
+    "snk13"
+   ],
+   [
+    "src10",
+    "snk4"
+   ],
+   [
+    "src11",
+    "snk14"
+   ],
+   [
+    "src12",
+    "snk11"
+   ],
+   [
+    "src13",
+    "snk12"
+   ],
+   [
+    "src14",
+    "snk8"
+   ],
+   [
+    "src15",
+    "snk15"
+   ]
+  ],
+  "witness_identity_pairs": 3,
+  "witness_note": "pairing-free relaxation realises a PERMUTED matching (3/16 identity), i.e. 16 disjoint lanes fit the exact clearance+keepout+budget constraints only when the snk assignment may be permuted."
+ },
+ "t6_budget_sensitivity": {
+  "pruned_1p6x": 16,
+  "unpruned": 16,
+  "verdict": "the 16 disjoint lanes survive the 1.6x detour budget, so the self-declared budget is not the binding resource for the pairing-free relaxation"
+ },
+ "t7_subset_hall_screening": {
+  "all16": 16,
+  "violations": {
+   "size_1": 0,
+   "size_2": 0,
+   "size_3": 0
+  },
+  "verdict": "no Hall-type subset obstruction up to the tested size (screening only; the identity pairing's multi-commodity obstruction is not decided by this test)"
+ },
+ "elapsed_s": 81.9,
+ "decision": "(B) VOID by exactness (no-op); (A)-WLOG refuted by site/lattice audit; binding structure = prescribed IDENTITY PAIRING (multi-commodity), not capacity."
+}
