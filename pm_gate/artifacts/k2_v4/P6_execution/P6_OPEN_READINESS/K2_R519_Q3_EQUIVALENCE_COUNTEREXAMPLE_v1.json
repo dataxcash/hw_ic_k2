@@ -1,0 +1,166 @@
+{
+ "artifact": "k2_r519_q3_equivalence_counterexample_v1",
+ "ts": "2026-09-24T22:34:32",
+ "authority": "#K2-189 §四 step-1 (must machine-show whether lever 丙's encoding has the SAME solution set as the design)",
+ "solve_calls": 0,
+ "question": "Can a LEGAL two-layer configuration have two lanes BOTH on In5 at a registered narrow cut yet in inverted order relative to the declared A-anchor-x order (the swap having been paid earlier in a wide zone via In4)? If yes => the naive R499 monotone constraint forbids a legal solution => NOT same-solution-set => a 丙-UNSAT could not be booked as a design certificate.",
+ "configuration": {
+  "W1_anchor": [
+   84.6,
+   55.823
+  ],
+  "W2_anchor": [
+   85.8,
+   55.823
+  ],
+  "W1_In5_polyline": [
+   [
+    84.6,
+    55.823
+   ],
+   [
+    84.6,
+    60.0
+   ],
+   [
+    100.0,
+    60.0
+   ],
+   [
+    130.0,
+    60.0
+   ]
+  ],
+  "W2_In5_pre": [
+   [
+    85.8,
+    55.823
+   ],
+   [
+    85.8,
+    59.13
+   ]
+  ],
+  "W2_via1": [
+   86.4,
+   60.87
+  ],
+  "W2_In4_run": [
+   [
+    86.4,
+    60.87
+   ],
+   [
+    82.4,
+    60.87
+   ]
+  ],
+  "W2_via2": [
+   82.4,
+   60.87
+  ]
+ },
+ "machine_checks": {
+  "vias_in_registered_zones": {
+   "via1": [],
+   "via2": [],
+   "pass": false
+  },
+  "via_to_via_sep_mm": {
+   "value": 4.0,
+   "need": 0.7,
+   "pass": true
+  },
+  "via_to_other_lane_track_mm": {
+   "via1_min": 1.9992,
+   "via2_min": 2.3658,
+   "need": 0.43,
+   "pass": true
+  },
+  "In5_declaration_sets_disjoint": {
+   "n_viol": 2,
+   "pass": false,
+   "first": [
+    [
+     "In5",
+     [
+      [
+       84.6,
+       55.823
+      ],
+      [
+       84.6,
+       60.0
+      ]
+     ],
+     [
+      [
+       85.8,
+       59.13
+      ],
+      [
+       82.4,
+       60.87
+      ]
+     ]
+    ],
+    [
+     "In5",
+     [
+      [
+       84.6,
+       60.0
+      ],
+      [
+       100.0,
+       60.0
+      ]
+     ],
+     [
+      [
+       85.8,
+       59.13
+      ],
+      [
+       82.4,
+       60.87
+      ]
+     ]
+    ]
+   ]
+  },
+  "In4_run_isolated": {
+   "pass": true,
+   "note": "the board has ZERO In4 tracks (model dump: segs['In4.Cu'] = 0); the run only has to clear the two of its own vias and pth holes, none present in the band"
+  },
+  "via_pairs_le_2": {
+   "W1": 0,
+   "W2": 1,
+   "pass": true
+  }
+ },
+ "all_legality_checks_pass": false,
+ "order_at_the_gate_cut": {
+  "W1_column_x": 130.0,
+  "W2_column_x": 82.4,
+  "declared_order": [
+   "W1(anchor_x=84.60)",
+   "W2(anchor_x=85.80)"
+  ],
+  "order_at_cut_west_to_east": [
+   "W2",
+   "W1"
+  ],
+  "inverted": true,
+  "both_on_In5_at_cut": true,
+  "note": "the swap was paid by W2's single via pair inside the registered south-band wide zone (zone b) while the In4 layer is empty - exactly the 'order swap in a wide area' the handoff/design sanctions"
+ },
+ "verdict": {
+  "Q3": "NON-EQUIVALENT (counterexample found and legal by every registered legality check)",
+  "meaning": "R499's unconditional monotone order constraint (declared A-anchor-x order) FORBIDS this legal configuration => the naive port's solution set is a PROPER SUBSET of the design's => per #K2-189 §四 its UNSAT may NOT be used for any design-level conclusion (same defect class for which lever 乙 was rejected).",
+  "consequence": "the ordered single certified solve must NOT be spent on the naive port. Lever 丙 has to be implemented in the FAITHFUL form (swap-accounting / parity order variables: per-section rank + 'a rank inversion between adjacent sections requires a via arc in that interval'), which is implied by per-layer declaration-set exclusivity and therefore has the SAME solution set while still making 'which lane goes first / where it swaps' an explicit machine variable.",
+  "certified_quota": "UNSPENT (deliberately): burning it on the naive port would recreate the rejected-乙 trap"
+ },
+ "boundaries": "read-only; Solve() 0; no model/parameter change; board/SPEC/tools/criteria untouched; frozen four 4/4; no WORKER; no .omo/supervision writes; construction stop-line maintained",
+ "buildability": "NOT-APPLICABLE (encoding-equivalence counterexample; no construction/feasibility claim)"
+}

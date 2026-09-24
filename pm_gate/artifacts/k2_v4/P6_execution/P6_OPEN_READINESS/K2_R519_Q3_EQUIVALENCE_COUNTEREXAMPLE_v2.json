@@ -1,0 +1,95 @@
+{
+ "artifact": "k2_r519_q3_equivalence_counterexample_v2",
+ "ts": "2026-09-24T22:35:07",
+ "authority": "#K2-189 §四 step-1 (machine-show whether lever 丙's encoding has the SAME solution set as the design)",
+ "solve_calls": 0,
+ "supersedes": "v1 (its draft geometry was judged ILLEGAL by the registered rule itself - kept archived)",
+ "counterexample_configuration": {
+  "W1_anchor_x": 84.6,
+  "W2_anchor_x": 85.8,
+  "declared_order": [
+   "W1",
+   "W2"
+  ],
+  "W1_In5_polyline": [
+   [
+    84.6,
+    55.823
+   ],
+   [
+    84.6,
+    59.0
+   ],
+   [
+    125.0,
+    59.0
+   ],
+   [
+    125.0,
+    36.5
+   ]
+  ],
+  "W2_In5_polyline": [
+   [
+    85.8,
+    55.823
+   ],
+   [
+    85.8,
+    58.0
+   ],
+   [
+    120.0,
+    58.0
+   ],
+   [
+    120.0,
+    36.5
+   ]
+  ],
+  "layers_used": [
+   "In5.Cu only"
+  ],
+  "vias": 0
+ },
+ "machine_checks": {
+  "In5_declaration_set_conflicts": {
+   "n_viol": 0,
+   "pass": true,
+   "first": []
+  },
+  "min_true_seg_seg_distance_mm": {
+   "value": 1.0,
+   "required_P_mm": 0.435,
+   "pass": true
+  },
+  "both_on_In5_at_the_gate_cut_row36": true,
+  "via_pairs_per_lane": {
+   "W1": 0,
+   "W2": 0
+  },
+  "in_zone_requirement": "NOT APPLICABLE (no vias at all)"
+ },
+ "order_at_the_gate_cut": {
+  "W1_column_x": 125.0,
+  "W2_column_x": 120.0,
+  "order_west_to_east_at_cut": [
+   "W2",
+   "W1"
+  ],
+  "declared_order": [
+   "W1(anchor_x=84.60)",
+   "W2(anchor_x=85.80)"
+  ],
+  "inverted": true
+ },
+ "all_legality_checks_pass": true,
+ "verdict": {
+  "Q3": "NON-EQUIVALENT (counterexample found; legal by the registered declaration-set rule itself, with zero vias)",
+  "meaning": "R499's unconditional monotone order constraint (declared A-anchor-x order) forbids a legal configuration => the naive port's solution set is a PROPER SUBSET of the design's set => per #K2-189 §四 its UNSAT may NOT be used for any design-level conclusion (the same defect class for which lever 乙 was rejected).",
+  "consequence": "do NOT spend the single certified solve on the naive port. Lever 丙 must be implemented in the FAITHFUL form: swap-accounting / parity order variables (per-section rank + 'a rank inversion between adjacent sections requires a via arc in that interval'), which IS implied by per-layer declaration-set exclusivity => same solution set, while still making 'which lane goes first / where it swaps' an explicit machine variable.",
+  "certified_quota": "UNSPENT (deliberately) - burning it here would recreate the rejected-乙 trap"
+ },
+ "boundaries": "read-only; Solve() 0; no model/parameter change; board/SPEC/tools/criteria untouched; frozen four 4/4; no WORKER; no .omo/supervision writes; construction stop-line maintained",
+ "buildability": "NOT-APPLICABLE (encoding-equivalence counterexample; no construction/feasibility claim)"
+}
