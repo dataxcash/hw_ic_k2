@@ -1,0 +1,8487 @@
+{
+ "artifact": "k2_r525_voronoi_channel_skeleton_v1",
+ "ts": "2026-09-25T01:25:37",
+ "authority": "HANDOFF-K2-525 sec.3 (W-3) · read-only skeleton · Solve() 0",
+ "boundaries": "Solve() 0 calls; read-only; no board/SPEC/generator/criteria writes",
+ "claim_class": "read-only structural artifact (NOT a witness, NOT a certificate)",
+ "solve_calls": 0,
+ "C_yard_order_planarity_check": {
+  "convention": "descent column = A.x (R524 backbone) · east run at the lane's yard row · In5 planarity",
+  "registered_ascent_assignment": {
+   "row_of": {
+    "PCIE_UP_OUT0_N_J2": 38,
+    "PCIE_UP_OUT0_P_J2": 39,
+    "PCIE_UP_OUT1_N_J2": 40,
+    "PCIE_UP_OUT1_P_J2": 41,
+    "PCIE_UP_OUT2_N_J2": 42,
+    "PCIE_UP_OUT2_P_J2": 43,
+    "PCIE_UP_OUT3_N_J2": 44,
+    "PCIE_UP_OUT3_P_J2": 45,
+    "PCIE_UP_OUT4_N_J2": 46,
+    "PCIE_UP_OUT4_P_J2": 47,
+    "PCIE_UP_OUT5_N_J2": 48,
+    "PCIE_UP_OUT5_P_J2": 49,
+    "PCIE_UP_OUT6_N_J2": 50,
+    "PCIE_UP_OUT6_P_J2": 51,
+    "PCIE_UP_OUT7_N_J2": 52,
+    "PCIE_UP_OUT7_P_J2": 53
+   },
+   "blocking_pairs": 120,
+   "of_total_pairs": 120
+  },
+  "reversed_descent_assignment": {
+   "row_of": {
+    "PCIE_UP_OUT0_N_J2": 53,
+    "PCIE_UP_OUT0_P_J2": 52,
+    "PCIE_UP_OUT1_N_J2": 51,
+    "PCIE_UP_OUT1_P_J2": 50,
+    "PCIE_UP_OUT2_N_J2": 49,
+    "PCIE_UP_OUT2_P_J2": 48,
+    "PCIE_UP_OUT3_N_J2": 47,
+    "PCIE_UP_OUT3_P_J2": 46,
+    "PCIE_UP_OUT4_N_J2": 45,
+    "PCIE_UP_OUT4_P_J2": 44,
+    "PCIE_UP_OUT5_N_J2": 43,
+    "PCIE_UP_OUT5_P_J2": 42,
+    "PCIE_UP_OUT6_N_J2": 41,
+    "PCIE_UP_OUT6_P_J2": 40,
+    "PCIE_UP_OUT7_N_J2": 39,
+    "PCIE_UP_OUT7_P_J2": 38
+   },
+   "blocking_pairs": 0
+  },
+  "reading": "Descent columns keep their declared left-to-right order (planarity forces this); then a lane's east run is blocked by every later lane whose descent row is below its own row. The registered assignment (declared order -> ASCENDING rows) therefore blocks on ALL pairs; the nested (DESCENDING) assignment blocks on NONE. This is the machine-readable cause of the 15/16 'A-side reach' failures below, and it is an In5-layer planarity statement only: whether an In4 excursion (vias are legal in all four wide zones, incl. COMB/BELT) launders a given crossing is exactly the woven time-table question (named structural lead, NOT a certificate).",
+  "claim_class": "named_structural_lead (NOT a design-level certificate)"
+ },
+ "variants": {
+  "V_pure_voronoi": {
+   "band_steps": 0,
+   "station_action_sets": {
+    "PCIE_UP_OUT0_N_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 17,
+      "BELT": 34,
+      "WALL": 13,
+      "FIELD": 234
+     }
+    },
+    "PCIE_UP_OUT0_P_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 4,
+      "BELT": 52,
+      "FIELD": 121
+     }
+    },
+    "PCIE_UP_OUT1_N_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 8,
+      "BELT": 61,
+      "FIELD": 108
+     }
+    },
+    "PCIE_UP_OUT1_P_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 4,
+      "BELT": 38,
+      "WALL": 6,
+      "FIELD": 69
+     }
+    },
+    "PCIE_UP_OUT2_N_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 6,
+      "BELT": 43,
+      "WALL": 6,
+      "FIELD": 20
+     }
+    },
+    "PCIE_UP_OUT2_P_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 6,
+      "BELT": 71,
+      "FIELD": 51
+     }
+    },
+    "PCIE_UP_OUT3_N_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 6,
+      "BELT": 71,
+      "WALL": 15,
+      "FIELD": 40
+     }
+    },
+    "PCIE_UP_OUT3_P_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 4,
+      "BELT": 44,
+      "WALL": 5,
+      "FIELD": 23
+     }
+    },
+    "PCIE_UP_OUT4_N_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 8,
+      "BELT": 50,
+      "WALL": 10,
+      "FIELD": 62
+     }
+    },
+    "PCIE_UP_OUT4_P_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 5,
+      "BELT": 78,
+      "FIELD": 34
+     }
+    },
+    "PCIE_UP_OUT5_N_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 8,
+      "BELT": 79,
+      "FIELD": 25
+     }
+    },
+    "PCIE_UP_OUT5_P_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 4,
+      "BELT": 53,
+      "WALL": 9,
+      "FIELD": 78
+     }
+    },
+    "PCIE_UP_OUT6_N_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 5,
+      "BELT": 59,
+      "WALL": 6,
+      "FIELD": 26
+     }
+    },
+    "PCIE_UP_OUT6_P_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 6,
+      "BELT": 78,
+      "FIELD": 17
+     }
+    },
+    "PCIE_UP_OUT7_N_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 9,
+      "BELT": 650,
+      "FIELD": 6
+     }
+    },
+    "PCIE_UP_OUT7_P_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 20,
+      "BELT": 226,
+      "WALL": 10,
+      "FIELD": 22
+     }
+    }
+   },
+   "A1_subset_of_own_eligible_per_layer": true,
+   "A2_pairwise_disjoint_per_layer": true,
+   "machine_check_verdict": "PASS",
+   "In5_nodes_total": 7416,
+   "In4_nodes_total": 8258,
+   "lanes_single_component_In5": 0,
+   "lanes_single_component_In4": 0,
+   "lanes_A_reach_includes_BELT_In5_only": 1,
+   "lanes_A_reach_includes_BELT_both": 1,
+   "lanes_A_reach_includes_FIELD_both": 1,
+   "per_lane": {
+    "PCIE_UP_OUT0_N_J2": {
+     "In5": {
+      "channel_nodes": 2059,
+      "components": 25,
+      "largest_component": 1765,
+      "via_capable_nodes_in_channel": 298,
+      "top_components": [
+       {
+        "size": 1765,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         37,
+         120
+        ],
+        "row_span": [
+         0,
+         32
+        ]
+       },
+       {
+        "size": 265,
+        "zones": [
+         "BELT",
+         "COMB"
+        ],
+        "col_span": [
+         0,
+         67
+        ],
+        "row_span": [
+         29,
+         38
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [],
+        "col_span": [
+         35,
+         37
+        ],
+        "row_span": [
+         24,
+         24
+        ]
+       },
+       {
+        "size": 2,
+        "zones": [],
+        "col_span": [
+         38,
+         39
+        ],
+        "row_span": [
+         24,
+         24
+        ]
+       },
+       {
+        "size": 2,
+        "zones": [],
+        "col_span": [
+         39,
+         40
+        ],
+        "row_span": [
+         28,
+         29
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 2170,
+      "components": 12,
+      "largest_component": 2125,
+      "via_capable_nodes_in_channel": 298,
+      "top_components": [
+       {
+        "size": 2125,
+        "zones": [
+         "BELT",
+         "COMB",
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         0,
+         120
+        ],
+        "row_span": [
+         0,
+         39
+        ]
+       },
+       {
+        "size": 33,
+        "zones": [],
+        "col_span": [
+         33,
+         43
+        ],
+        "row_span": [
+         24,
+         27
+        ]
+       },
+       {
+        "size": 2,
+        "zones": [],
+        "col_span": [
+         39,
+         40
+        ],
+        "row_span": [
+         28,
+         29
+        ]
+       },
+       {
+        "size": 2,
+        "zones": [],
+        "col_span": [
+         42,
+         43
+        ],
+        "row_span": [
+         28,
+         29
+        ]
+       },
+       {
+        "size": 1,
+        "zones": [],
+        "col_span": [
+         0,
+         0
+        ],
+        "row_span": [
+         40,
+         40
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "BELT",
+       "COMB",
+       "FIELD",
+       "WALL"
+      ],
+      "In5_plus_In4_zones": [
+       "BELT",
+       "COMB",
+       "FIELD",
+       "WALL"
+      ],
+      "A_zone_channel_nodes_In5": 20,
+      "reach_nodes_In5": 2030,
+      "reach_nodes_both": 2131
+     }
+    },
+    "PCIE_UP_OUT0_P_J2": {
+     "In5": {
+      "channel_nodes": 692,
+      "components": 24,
+      "largest_component": 509,
+      "via_capable_nodes_in_channel": 177,
+      "top_components": [
+       {
+        "size": 509,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         115,
+         135
+        ],
+        "row_span": [
+         0,
+         62
+        ]
+       },
+       {
+        "size": 65,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         2,
+         63
+        ],
+        "row_span": [
+         38,
+         40
+        ]
+       },
+       {
+        "size": 36,
+        "zones": [],
+        "col_span": [
+         0,
+         3
+        ],
+        "row_span": [
+         0,
+         8
+        ]
+       },
+       {
+        "size": 19,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         75,
+         84
+        ],
+        "row_span": [
+         36,
+         38
+        ]
+       },
+       {
+        "size": 12,
+        "zones": [],
+        "col_span": [
+         90,
+         100
+        ],
+        "row_span": [
+         36,
+         37
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 794,
+      "components": 19,
+      "largest_component": 525,
+      "via_capable_nodes_in_channel": 177,
+      "top_components": [
+       {
+        "size": 525,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         115,
+         135
+        ],
+        "row_span": [
+         0,
+         64
+        ]
+       },
+       {
+        "size": 110,
+        "zones": [],
+        "col_span": [
+         0,
+         3
+        ],
+        "row_span": [
+         0,
+         27
+        ]
+       },
+       {
+        "size": 72,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         0,
+         63
+        ],
+        "row_span": [
+         38,
+         43
+        ]
+       },
+       {
+        "size": 46,
+        "zones": [],
+        "col_span": [
+         90,
+         113
+        ],
+        "row_span": [
+         33,
+         37
+        ]
+       },
+       {
+        "size": 19,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         75,
+         84
+        ],
+        "row_span": [
+         36,
+         38
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 11,
+      "reach_nodes_In5": 11,
+      "reach_nodes_both": 11
+     }
+    },
+    "PCIE_UP_OUT1_N_J2": {
+     "In5": {
+      "channel_nodes": 227,
+      "components": 12,
+      "largest_component": 122,
+      "via_capable_nodes_in_channel": 177,
+      "top_components": [
+       {
+        "size": 122,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         121,
+         129
+        ],
+        "row_span": [
+         0,
+         35
+        ]
+       },
+       {
+        "size": 62,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         2,
+         61
+        ],
+        "row_span": [
+         40,
+         42
+        ]
+       },
+       {
+        "size": 11,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         73,
+         80
+        ],
+        "row_span": [
+         39,
+         40
+        ]
+       },
+       {
+        "size": 8,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         3,
+         4
+        ],
+        "row_span": [
+         34,
+         37
+        ]
+       },
+       {
+        "size": 7,
+        "zones": [],
+        "col_span": [
+         100,
+         106
+        ],
+        "row_span": [
+         37,
+         37
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 231,
+      "components": 11,
+      "largest_component": 122,
+      "via_capable_nodes_in_channel": 177,
+      "top_components": [
+       {
+        "size": 122,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         121,
+         129
+        ],
+        "row_span": [
+         0,
+         35
+        ]
+       },
+       {
+        "size": 67,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         0,
+         61
+        ],
+        "row_span": [
+         40,
+         45
+        ]
+       },
+       {
+        "size": 11,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         73,
+         80
+        ],
+        "row_span": [
+         39,
+         40
+        ]
+       },
+       {
+        "size": 8,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         3,
+         4
+        ],
+        "row_span": [
+         34,
+         37
+        ]
+       },
+       {
+        "size": 7,
+        "zones": [],
+        "col_span": [
+         100,
+         106
+        ],
+        "row_span": [
+         37,
+         37
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 8,
+      "reach_nodes_In5": 8,
+      "reach_nodes_both": 8
+     }
+    },
+    "PCIE_UP_OUT1_P_J2": {
+     "In5": {
+      "channel_nodes": 264,
+      "components": 15,
+      "largest_component": 70,
+      "via_capable_nodes_in_channel": 117,
+      "top_components": [
+       {
+        "size": 70,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         74,
+         105
+        ],
+        "row_span": [
+         15,
+         32
+        ]
+       },
+       {
+        "size": 67,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         2,
+         60
+        ],
+        "row_span": [
+         41,
+         46
+        ]
+       },
+       {
+        "size": 60,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         94,
+         118
+        ],
+        "row_span": [
+         5,
+         12
+        ]
+       },
+       {
+        "size": 27,
+        "zones": [],
+        "col_span": [
+         4,
+         6
+        ],
+        "row_span": [
+         0,
+         8
+        ]
+       },
+       {
+        "size": 15,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         64,
+         71
+        ],
+        "row_span": [
+         35,
+         39
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 327,
+      "components": 11,
+      "largest_component": 93,
+      "via_capable_nodes_in_channel": 117,
+      "top_components": [
+       {
+        "size": 93,
+        "zones": [
+         "BELT",
+         "FIELD"
+        ],
+        "col_span": [
+         64,
+         105
+        ],
+        "row_span": [
+         15,
+         39
+        ]
+       },
+       {
+        "size": 82,
+        "zones": [],
+        "col_span": [
+         4,
+         6
+        ],
+        "row_span": [
+         0,
+         27
+        ]
+       },
+       {
+        "size": 75,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         0,
+         60
+        ],
+        "row_span": [
+         41,
+         49
+        ]
+       },
+       {
+        "size": 60,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         94,
+         118
+        ],
+        "row_span": [
+         5,
+         12
+        ]
+       },
+       {
+        "size": 9,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         4,
+         6
+        ],
+        "row_span": [
+         31,
+         34
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 13,
+      "reach_nodes_In5": 14,
+      "reach_nodes_both": 14
+     }
+    },
+    "PCIE_UP_OUT2_N_J2": {
+     "In5": {
+      "channel_nodes": 147,
+      "components": 10,
+      "largest_component": 85,
+      "via_capable_nodes_in_channel": 75,
+      "top_components": [
+       {
+        "size": 85,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         2,
+         74
+        ],
+        "row_span": [
+         35,
+         48
+        ]
+       },
+       {
+        "size": 34,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         78,
+         101
+        ],
+        "row_span": [
+         19,
+         32
+        ]
+       },
+       {
+        "size": 9,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         104,
+         108
+        ],
+        "row_span": [
+         12,
+         14
+        ]
+       },
+       {
+        "size": 7,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         111,
+         117
+        ],
+        "row_span": [
+         12,
+         12
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         108,
+         111
+        ],
+        "row_span": [
+         14,
+         15
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 156,
+      "components": 10,
+      "largest_component": 127,
+      "via_capable_nodes_in_channel": 75,
+      "top_components": [
+       {
+        "size": 127,
+        "zones": [
+         "BELT",
+         "FIELD"
+        ],
+        "col_span": [
+         0,
+         101
+        ],
+        "row_span": [
+         19,
+         50
+        ]
+       },
+       {
+        "size": 9,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         104,
+         108
+        ],
+        "row_span": [
+         12,
+         14
+        ]
+       },
+       {
+        "size": 7,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         111,
+         117
+        ],
+        "row_span": [
+         12,
+         12
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         108,
+         111
+        ],
+        "row_span": [
+         14,
+         15
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         6,
+         7
+        ],
+        "row_span": [
+         33,
+         35
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 6,
+      "reach_nodes_In5": 6,
+      "reach_nodes_both": 6
+     }
+    },
+    "PCIE_UP_OUT2_P_J2": {
+     "In5": {
+      "channel_nodes": 226,
+      "components": 22,
+      "largest_component": 79,
+      "via_capable_nodes_in_channel": 128,
+      "top_components": [
+       {
+        "size": 79,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         2,
+         64
+        ],
+        "row_span": [
+         42,
+         52
+        ]
+       },
+       {
+        "size": 63,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         119,
+         124
+        ],
+        "row_span": [
+         9,
+         26
+        ]
+       },
+       {
+        "size": 18,
+        "zones": [],
+        "col_span": [
+         7,
+         8
+        ],
+        "row_span": [
+         0,
+         8
+        ]
+       },
+       {
+        "size": 14,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         68,
+         78
+        ],
+        "row_span": [
+         40,
+         42
+        ]
+       },
+       {
+        "size": 8,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         83,
+         89
+        ],
+        "row_span": [
+         39,
+         40
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 258,
+      "components": 23,
+      "largest_component": 81,
+      "via_capable_nodes_in_channel": 128,
+      "top_components": [
+       {
+        "size": 81,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         1,
+         64
+        ],
+        "row_span": [
+         42,
+         52
+        ]
+       },
+       {
+        "size": 63,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         119,
+         124
+        ],
+        "row_span": [
+         9,
+         26
+        ]
+       },
+       {
+        "size": 31,
+        "zones": [],
+        "col_span": [
+         7,
+         8
+        ],
+        "row_span": [
+         11,
+         26
+        ]
+       },
+       {
+        "size": 18,
+        "zones": [],
+        "col_span": [
+         7,
+         8
+        ],
+        "row_span": [
+         0,
+         8
+        ]
+       },
+       {
+        "size": 14,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         68,
+         78
+        ],
+        "row_span": [
+         40,
+         42
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 12,
+      "reach_nodes_In5": 12,
+      "reach_nodes_both": 12
+     }
+    },
+    "PCIE_UP_OUT3_N_J2": {
+     "In5": {
+      "channel_nodes": 198,
+      "components": 18,
+      "largest_component": 68,
+      "via_capable_nodes_in_channel": 132,
+      "top_components": [
+       {
+        "size": 68,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         2,
+         61
+        ],
+        "row_span": [
+         44,
+         53
+        ]
+       },
+       {
+        "size": 39,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         116,
+         120
+        ],
+        "row_span": [
+         12,
+         22
+        ]
+       },
+       {
+        "size": 22,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         117,
+         120
+        ],
+        "row_span": [
+         23,
+         29
+        ]
+       },
+       {
+        "size": 21,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         116,
+         120
+        ],
+        "row_span": [
+         30,
+         35
+        ]
+       },
+       {
+        "size": 13,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         65,
+         74
+        ],
+        "row_span": [
+         42,
+         44
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 200,
+      "components": 18,
+      "largest_component": 68,
+      "via_capable_nodes_in_channel": 132,
+      "top_components": [
+       {
+        "size": 68,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         2,
+         61
+        ],
+        "row_span": [
+         44,
+         53
+        ]
+       },
+       {
+        "size": 39,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         116,
+         120
+        ],
+        "row_span": [
+         12,
+         22
+        ]
+       },
+       {
+        "size": 22,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         117,
+         120
+        ],
+        "row_span": [
+         23,
+         29
+        ]
+       },
+       {
+        "size": 21,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         116,
+         120
+        ],
+        "row_span": [
+         30,
+         35
+        ]
+       },
+       {
+        "size": 13,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         65,
+         74
+        ],
+        "row_span": [
+         42,
+         44
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 7,
+      "reach_nodes_In5": 7,
+      "reach_nodes_both": 7
+     }
+    },
+    "PCIE_UP_OUT3_P_J2": {
+     "In5": {
+      "channel_nodes": 225,
+      "components": 16,
+      "largest_component": 82,
+      "via_capable_nodes_in_channel": 76,
+      "top_components": [
+       {
+        "size": 82,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         2,
+         60
+        ],
+        "row_span": [
+         45,
+         58
+        ]
+       },
+       {
+        "size": 42,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         79,
+         102
+        ],
+        "row_span": [
+         20,
+         33
+        ]
+       },
+       {
+        "size": 34,
+        "zones": [],
+        "col_span": [
+         9,
+         11
+        ],
+        "row_span": [
+         0,
+         11
+        ]
+       },
+       {
+        "size": 16,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         104,
+         109
+        ],
+        "row_span": [
+         13,
+         19
+        ]
+       },
+       {
+        "size": 11,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         72,
+         78
+        ],
+        "row_span": [
+         35,
+         38
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 273,
+      "components": 13,
+      "largest_component": 87,
+      "via_capable_nodes_in_channel": 76,
+      "top_components": [
+       {
+        "size": 87,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         0,
+         60
+        ],
+        "row_span": [
+         45,
+         58
+        ]
+       },
+       {
+        "size": 80,
+        "zones": [],
+        "col_span": [
+         9,
+         11
+        ],
+        "row_span": [
+         0,
+         27
+        ]
+       },
+       {
+        "size": 56,
+        "zones": [
+         "BELT",
+         "FIELD"
+        ],
+        "col_span": [
+         72,
+         102
+        ],
+        "row_span": [
+         20,
+         38
+        ]
+       },
+       {
+        "size": 16,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         104,
+         109
+        ],
+        "row_span": [
+         13,
+         19
+        ]
+       },
+       {
+        "size": 10,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         62,
+         70
+        ],
+        "row_span": [
+         39,
+         44
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 11,
+      "reach_nodes_In5": 11,
+      "reach_nodes_both": 11
+     }
+    },
+    "PCIE_UP_OUT4_N_J2": {
+     "In5": {
+      "channel_nodes": 232,
+      "components": 10,
+      "largest_component": 74,
+      "via_capable_nodes_in_channel": 130,
+      "top_components": [
+       {
+        "size": 74,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         4,
+         65
+        ],
+        "row_span": [
+         43,
+         56
+        ]
+       },
+       {
+        "size": 72,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         82,
+         102
+        ],
+        "row_span": [
+         22,
+         33
+        ]
+       },
+       {
+        "size": 47,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         104,
+         114
+        ],
+        "row_span": [
+         15,
+         22
+        ]
+       },
+       {
+        "size": 15,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         74,
+         84
+        ],
+        "row_span": [
+         35,
+         38
+        ]
+       },
+       {
+        "size": 8,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         67,
+         72
+        ],
+        "row_span": [
+         39,
+         42
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 239,
+      "components": 9,
+      "largest_component": 94,
+      "via_capable_nodes_in_channel": 130,
+      "top_components": [
+       {
+        "size": 94,
+        "zones": [
+         "BELT",
+         "FIELD"
+        ],
+        "col_span": [
+         74,
+         102
+        ],
+        "row_span": [
+         22,
+         38
+        ]
+       },
+       {
+        "size": 74,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         4,
+         65
+        ],
+        "row_span": [
+         43,
+         56
+        ]
+       },
+       {
+        "size": 47,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         104,
+         114
+        ],
+        "row_span": [
+         15,
+         22
+        ]
+       },
+       {
+        "size": 8,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         67,
+         72
+        ],
+        "row_span": [
+         39,
+         42
+        ]
+       },
+       {
+        "size": 8,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         11,
+         12
+        ],
+        "row_span": [
+         34,
+         37
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 8,
+      "reach_nodes_In5": 8,
+      "reach_nodes_both": 8
+     }
+    },
+    "PCIE_UP_OUT4_P_J2": {
+     "In5": {
+      "channel_nodes": 232,
+      "components": 19,
+      "largest_component": 94,
+      "via_capable_nodes_in_channel": 117,
+      "top_components": [
+       {
+        "size": 94,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         3,
+         67
+        ],
+        "row_span": [
+         45,
+         59
+        ]
+       },
+       {
+        "size": 41,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         128,
+         130
+        ],
+        "row_span": [
+         15,
+         35
+        ]
+       },
+       {
+        "size": 33,
+        "zones": [],
+        "col_span": [
+         12,
+         14
+        ],
+        "row_span": [
+         0,
+         11
+        ]
+       },
+       {
+        "size": 15,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         85,
+         98
+        ],
+        "row_span": [
+         40,
+         42
+        ]
+       },
+       {
+        "size": 11,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         74,
+         83
+        ],
+        "row_span": [
+         43,
+         44
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 273,
+      "components": 16,
+      "largest_component": 103,
+      "via_capable_nodes_in_channel": 117,
+      "top_components": [
+       {
+        "size": 103,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         1,
+         67
+        ],
+        "row_span": [
+         45,
+         62
+        ]
+       },
+       {
+        "size": 41,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         128,
+         130
+        ],
+        "row_span": [
+         15,
+         35
+        ]
+       },
+       {
+        "size": 40,
+        "zones": [],
+        "col_span": [
+         12,
+         14
+        ],
+        "row_span": [
+         14,
+         27
+        ]
+       },
+       {
+        "size": 34,
+        "zones": [],
+        "col_span": [
+         12,
+         14
+        ],
+        "row_span": [
+         0,
+         12
+        ]
+       },
+       {
+        "size": 15,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         85,
+         98
+        ],
+        "row_span": [
+         40,
+         42
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 13,
+      "reach_nodes_In5": 13,
+      "reach_nodes_both": 13
+     }
+    },
+    "PCIE_UP_OUT5_N_J2": {
+     "In5": {
+      "channel_nodes": 150,
+      "components": 10,
+      "largest_component": 58,
+      "via_capable_nodes_in_channel": 112,
+      "top_components": [
+       {
+        "size": 58,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         9,
+         61
+        ],
+        "row_span": [
+         48,
+         55
+        ]
+       },
+       {
+        "size": 36,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         125,
+         127
+        ],
+        "row_span": [
+         17,
+         35
+        ]
+       },
+       {
+        "size": 26,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         80,
+         102
+        ],
+        "row_span": [
+         40,
+         45
+        ]
+       },
+       {
+        "size": 11,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         68,
+         76
+        ],
+        "row_span": [
+         45,
+         47
+        ]
+       },
+       {
+        "size": 8,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         14,
+         15
+        ],
+        "row_span": [
+         34,
+         37
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 152,
+      "components": 11,
+      "largest_component": 58,
+      "via_capable_nodes_in_channel": 112,
+      "top_components": [
+       {
+        "size": 58,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         9,
+         61
+        ],
+        "row_span": [
+         48,
+         55
+        ]
+       },
+       {
+        "size": 36,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         125,
+         127
+        ],
+        "row_span": [
+         17,
+         35
+        ]
+       },
+       {
+        "size": 26,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         80,
+         102
+        ],
+        "row_span": [
+         40,
+         45
+        ]
+       },
+       {
+        "size": 11,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         68,
+         76
+        ],
+        "row_span": [
+         45,
+         47
+        ]
+       },
+       {
+        "size": 8,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         14,
+         15
+        ],
+        "row_span": [
+         34,
+         37
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 8,
+      "reach_nodes_In5": 8,
+      "reach_nodes_both": 8
+     }
+    },
+    "PCIE_UP_OUT5_P_J2": {
+     "In5": {
+      "channel_nodes": 283,
+      "components": 22,
+      "largest_component": 105,
+      "via_capable_nodes_in_channel": 144,
+      "top_components": [
+       {
+        "size": 105,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         89,
+         116
+        ],
+        "row_span": [
+         21,
+         33
+        ]
+       },
+       {
+        "size": 79,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         7,
+         64
+        ],
+        "row_span": [
+         47,
+         59
+        ]
+       },
+       {
+        "size": 32,
+        "zones": [],
+        "col_span": [
+         15,
+         17
+        ],
+        "row_span": [
+         1,
+         13
+        ]
+       },
+       {
+        "size": 16,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         84,
+         91
+        ],
+        "row_span": [
+         35,
+         38
+        ]
+       },
+       {
+        "size": 10,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         67,
+         75
+        ],
+        "row_span": [
+         42,
+         46
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 328,
+      "components": 17,
+      "largest_component": 128,
+      "via_capable_nodes_in_channel": 144,
+      "top_components": [
+       {
+        "size": 128,
+        "zones": [
+         "BELT",
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         84,
+         116
+        ],
+        "row_span": [
+         21,
+         38
+        ]
+       },
+       {
+        "size": 96,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         4,
+         64
+        ],
+        "row_span": [
+         47,
+         64
+        ]
+       },
+       {
+        "size": 33,
+        "zones": [],
+        "col_span": [
+         15,
+         17
+        ],
+        "row_span": [
+         1,
+         14
+        ]
+       },
+       {
+        "size": 32,
+        "zones": [],
+        "col_span": [
+         15,
+         17
+        ],
+        "row_span": [
+         16,
+         27
+        ]
+       },
+       {
+        "size": 10,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         67,
+         75
+        ],
+        "row_span": [
+         42,
+         46
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 12,
+      "reach_nodes_In5": 12,
+      "reach_nodes_both": 12
+     }
+    },
+    "PCIE_UP_OUT6_N_J2": {
+     "In5": {
+      "channel_nodes": 145,
+      "components": 11,
+      "largest_component": 67,
+      "via_capable_nodes_in_channel": 96,
+      "top_components": [
+       {
+        "size": 67,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         11,
+         69
+        ],
+        "row_span": [
+         46,
+         58
+        ]
+       },
+       {
+        "size": 23,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         104,
+         116
+        ],
+        "row_span": [
+         25,
+         27
+        ]
+       },
+       {
+        "size": 22,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         96,
+         107
+        ],
+        "row_span": [
+         28,
+         33
+        ]
+       },
+       {
+        "size": 13,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         75,
+         86
+        ],
+        "row_span": [
+         38,
+         43
+        ]
+       },
+       {
+        "size": 10,
+        "zones": [],
+        "col_span": [
+         88,
+         95
+        ],
+        "row_span": [
+         35,
+         37
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 151,
+      "components": 10,
+      "largest_component": 67,
+      "via_capable_nodes_in_channel": 96,
+      "top_components": [
+       {
+        "size": 67,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         11,
+         69
+        ],
+        "row_span": [
+         46,
+         58
+        ]
+       },
+       {
+        "size": 36,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         88,
+         107
+        ],
+        "row_span": [
+         28,
+         37
+        ]
+       },
+       {
+        "size": 23,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         104,
+         116
+        ],
+        "row_span": [
+         25,
+         27
+        ]
+       },
+       {
+        "size": 13,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         75,
+         86
+        ],
+        "row_span": [
+         38,
+         43
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         17,
+         18
+        ],
+        "row_span": [
+         33,
+         35
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 6,
+      "reach_nodes_In5": 6,
+      "reach_nodes_both": 6
+     }
+    },
+    "PCIE_UP_OUT6_P_J2": {
+     "In5": {
+      "channel_nodes": 271,
+      "components": 17,
+      "largest_component": 106,
+      "via_capable_nodes_in_channel": 101,
+      "top_components": [
+       {
+        "size": 106,
+        "zones": [],
+        "col_span": [
+         18,
+         25
+        ],
+        "row_span": [
+         0,
+         18
+        ]
+       },
+       {
+        "size": 75,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         12,
+         68
+        ],
+        "row_span": [
+         48,
+         59
+        ]
+       },
+       {
+        "size": 25,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         75,
+         97
+        ],
+        "row_span": [
+         42,
+         47
+        ]
+       },
+       {
+        "size": 25,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         123,
+         124
+        ],
+        "row_span": [
+         23,
+         35
+        ]
+       },
+       {
+        "size": 8,
+        "zones": [],
+        "col_span": [
+         18,
+         21
+        ],
+        "row_span": [
+         23,
+         24
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 304,
+      "components": 14,
+      "largest_component": 106,
+      "via_capable_nodes_in_channel": 101,
+      "top_components": [
+       {
+        "size": 106,
+        "zones": [],
+        "col_span": [
+         18,
+         25
+        ],
+        "row_span": [
+         0,
+         18
+        ]
+       },
+       {
+        "size": 92,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         8,
+         68
+        ],
+        "row_span": [
+         48,
+         64
+        ]
+       },
+       {
+        "size": 29,
+        "zones": [],
+        "col_span": [
+         18,
+         21
+        ],
+        "row_span": [
+         19,
+         27
+        ]
+       },
+       {
+        "size": 25,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         75,
+         97
+        ],
+        "row_span": [
+         42,
+         47
+        ]
+       },
+       {
+        "size": 25,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         123,
+         124
+        ],
+        "row_span": [
+         23,
+         35
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 14,
+      "reach_nodes_In5": 14,
+      "reach_nodes_both": 14
+     }
+    },
+    "PCIE_UP_OUT7_N_J2": {
+     "In5": {
+      "channel_nodes": 1216,
+      "components": 12,
+      "largest_component": 1139,
+      "via_capable_nodes_in_channel": 665,
+      "top_components": [
+       {
+        "size": 1139,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         15,
+         125
+        ],
+        "row_span": [
+         37,
+         62
+        ]
+       },
+       {
+        "size": 52,
+        "zones": [],
+        "col_span": [
+         74,
+         125
+        ],
+        "row_span": [
+         64,
+         64
+        ]
+       },
+       {
+        "size": 9,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         19,
+         21
+        ],
+        "row_span": [
+         33,
+         37
+        ]
+       },
+       {
+        "size": 6,
+        "zones": [],
+        "col_span": [
+         11,
+         16
+        ],
+        "row_span": [
+         64,
+         64
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         120,
+         121
+        ],
+        "row_span": [
+         27,
+         28
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 1322,
+      "components": 10,
+      "largest_component": 1303,
+      "via_capable_nodes_in_channel": 665,
+      "top_components": [
+       {
+        "size": 1303,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         11,
+         125
+        ],
+        "row_span": [
+         37,
+         64
+        ]
+       },
+       {
+        "size": 9,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         19,
+         21
+        ],
+        "row_span": [
+         33,
+         37
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         120,
+         121
+        ],
+        "row_span": [
+         27,
+         28
+        ]
+       },
+       {
+        "size": 1,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         121,
+         121
+        ],
+        "row_span": [
+         29,
+         29
+        ]
+       },
+       {
+        "size": 1,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         121,
+         121
+        ],
+        "row_span": [
+         30,
+         30
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 9,
+      "reach_nodes_In5": 9,
+      "reach_nodes_both": 9
+     }
+    },
+    "PCIE_UP_OUT7_P_J2": {
+     "In5": {
+      "channel_nodes": 849,
+      "components": 30,
+      "largest_component": 398,
+      "via_capable_nodes_in_channel": 278,
+      "top_components": [
+       {
+        "size": 398,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         18,
+         68
+        ],
+        "row_span": [
+         52,
+         61
+        ]
+       },
+       {
+        "size": 287,
+        "zones": [],
+        "col_span": [
+         23,
+         42
+        ],
+        "row_span": [
+         0,
+         19
+        ]
+       },
+       {
+        "size": 64,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         100,
+         116
+        ],
+        "row_span": [
+         27,
+         34
+        ]
+       },
+       {
+        "size": 27,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         21,
+         28
+        ],
+        "row_span": [
+         31,
+         37
+        ]
+       },
+       {
+        "size": 16,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         69,
+         79
+        ],
+        "row_span": [
+         44,
+         49
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 1080,
+      "components": 16,
+      "largest_component": 588,
+      "via_capable_nodes_in_channel": 278,
+      "top_components": [
+       {
+        "size": 588,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         17,
+         69
+        ],
+        "row_span": [
+         52,
+         64
+        ]
+       },
+       {
+        "size": 351,
+        "zones": [],
+        "col_span": [
+         22,
+         42
+        ],
+        "row_span": [
+         0,
+         27
+        ]
+       },
+       {
+        "size": 79,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         94,
+         116
+        ],
+        "row_span": [
+         27,
+         36
+        ]
+       },
+       {
+        "size": 27,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         21,
+         28
+        ],
+        "row_span": [
+         31,
+         37
+        ]
+       },
+       {
+        "size": 16,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         69,
+         79
+        ],
+        "row_span": [
+         44,
+         49
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 28,
+      "reach_nodes_In5": 30,
+      "reach_nodes_both": 30
+     }
+    }
+   }
+  },
+  "V_inter_band3": {
+   "band_steps": 3,
+   "station_action_sets": {
+    "PCIE_UP_OUT0_N_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 16,
+      "BELT": 34,
+      "WALL": 13,
+      "FIELD": 132
+     }
+    },
+    "PCIE_UP_OUT0_P_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 4,
+      "BELT": 52,
+      "FIELD": 120
+     }
+    },
+    "PCIE_UP_OUT1_N_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 8,
+      "BELT": 61,
+      "FIELD": 83
+     }
+    },
+    "PCIE_UP_OUT1_P_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 4,
+      "BELT": 38,
+      "WALL": 6,
+      "FIELD": 64
+     }
+    },
+    "PCIE_UP_OUT2_N_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 6,
+      "BELT": 43,
+      "WALL": 6,
+      "FIELD": 20
+     }
+    },
+    "PCIE_UP_OUT2_P_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 6,
+      "BELT": 71,
+      "FIELD": 50
+     }
+    },
+    "PCIE_UP_OUT3_N_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 6,
+      "BELT": 71,
+      "WALL": 13,
+      "FIELD": 40
+     }
+    },
+    "PCIE_UP_OUT3_P_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 4,
+      "BELT": 44,
+      "WALL": 5,
+      "FIELD": 23
+     }
+    },
+    "PCIE_UP_OUT4_N_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 8,
+      "BELT": 50,
+      "WALL": 10,
+      "FIELD": 62
+     }
+    },
+    "PCIE_UP_OUT4_P_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 5,
+      "BELT": 78,
+      "FIELD": 34
+     }
+    },
+    "PCIE_UP_OUT5_N_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 8,
+      "BELT": 79,
+      "FIELD": 25
+     }
+    },
+    "PCIE_UP_OUT5_P_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 4,
+      "BELT": 53,
+      "WALL": 9,
+      "FIELD": 78
+     }
+    },
+    "PCIE_UP_OUT6_N_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 5,
+      "BELT": 59,
+      "WALL": 6,
+      "FIELD": 26
+     }
+    },
+    "PCIE_UP_OUT6_P_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 6,
+      "BELT": 78,
+      "FIELD": 17
+     }
+    },
+    "PCIE_UP_OUT7_N_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 9,
+      "BELT": 253,
+      "FIELD": 6
+     }
+    },
+    "PCIE_UP_OUT7_P_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 17,
+      "BELT": 184,
+      "WALL": 11,
+      "FIELD": 22
+     }
+    }
+   },
+   "A1_subset_of_own_eligible_per_layer": true,
+   "A2_pairwise_disjoint_per_layer": true,
+   "machine_check_verdict": "PASS",
+   "In5_nodes_total": 3667,
+   "In4_nodes_total": 3761,
+   "lanes_single_component_In5": 0,
+   "lanes_single_component_In4": 0,
+   "lanes_A_reach_includes_BELT_In5_only": 1,
+   "lanes_A_reach_includes_BELT_both": 1,
+   "lanes_A_reach_includes_FIELD_both": 1,
+   "per_lane": {
+    "PCIE_UP_OUT0_N_J2": {
+     "In5": {
+      "channel_nodes": 562,
+      "components": 3,
+      "largest_component": 236,
+      "via_capable_nodes_in_channel": 195,
+      "top_components": [
+       {
+        "size": 236,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         62,
+         103
+        ],
+        "row_span": [
+         12,
+         32
+        ]
+       },
+       {
+        "size": 196,
+        "zones": [
+         "BELT",
+         "COMB"
+        ],
+        "col_span": [
+         0,
+         67
+        ],
+        "row_span": [
+         33,
+         38
+        ]
+       },
+       {
+        "size": 130,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         96,
+         117
+        ],
+        "row_span": [
+         2,
+         10
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 587,
+      "components": 3,
+      "largest_component": 456,
+      "via_capable_nodes_in_channel": 195,
+      "top_components": [
+       {
+        "size": 456,
+        "zones": [
+         "BELT",
+         "COMB",
+         "FIELD"
+        ],
+        "col_span": [
+         0,
+         103
+        ],
+        "row_span": [
+         12,
+         39
+        ]
+       },
+       {
+        "size": 130,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         96,
+         117
+        ],
+        "row_span": [
+         2,
+         10
+        ]
+       },
+       {
+        "size": 1,
+        "zones": [],
+        "col_span": [
+         0,
+         0
+        ],
+        "row_span": [
+         40,
+         40
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "BELT",
+       "COMB",
+       "FIELD"
+      ],
+      "In5_plus_In4_zones": [
+       "BELT",
+       "COMB",
+       "FIELD"
+      ],
+      "A_zone_channel_nodes_In5": 19,
+      "reach_nodes_In5": 432,
+      "reach_nodes_both": 458
+     }
+    },
+    "PCIE_UP_OUT0_P_J2": {
+     "In5": {
+      "channel_nodes": 366,
+      "components": 16,
+      "largest_component": 241,
+      "via_capable_nodes_in_channel": 176,
+      "top_components": [
+       {
+        "size": 241,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         115,
+         135
+        ],
+        "row_span": [
+         1,
+         39
+        ]
+       },
+       {
+        "size": 65,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         2,
+         63
+        ],
+        "row_span": [
+         38,
+         40
+        ]
+       },
+       {
+        "size": 19,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         75,
+         84
+        ],
+        "row_span": [
+         36,
+         38
+        ]
+       },
+       {
+        "size": 12,
+        "zones": [],
+        "col_span": [
+         90,
+         100
+        ],
+        "row_span": [
+         36,
+         37
+        ]
+       },
+       {
+        "size": 10,
+        "zones": [],
+        "col_span": [
+         107,
+         113
+        ],
+        "row_span": [
+         33,
+         34
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 396,
+      "components": 15,
+      "largest_component": 241,
+      "via_capable_nodes_in_channel": 176,
+      "top_components": [
+       {
+        "size": 241,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         115,
+         135
+        ],
+        "row_span": [
+         1,
+         39
+        ]
+       },
+       {
+        "size": 71,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         0,
+         63
+        ],
+        "row_span": [
+         38,
+         42
+        ]
+       },
+       {
+        "size": 46,
+        "zones": [],
+        "col_span": [
+         90,
+         113
+        ],
+        "row_span": [
+         33,
+         37
+        ]
+       },
+       {
+        "size": 19,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         75,
+         84
+        ],
+        "row_span": [
+         36,
+         38
+        ]
+       },
+       {
+        "size": 7,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         1,
+         3
+        ],
+        "row_span": [
+         31,
+         34
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 11,
+      "reach_nodes_In5": 11,
+      "reach_nodes_both": 11
+     }
+    },
+    "PCIE_UP_OUT1_N_J2": {
+     "In5": {
+      "channel_nodes": 202,
+      "components": 12,
+      "largest_component": 97,
+      "via_capable_nodes_in_channel": 152,
+      "top_components": [
+       {
+        "size": 97,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         125,
+         129
+        ],
+        "row_span": [
+         4,
+         35
+        ]
+       },
+       {
+        "size": 62,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         2,
+         61
+        ],
+        "row_span": [
+         40,
+         42
+        ]
+       },
+       {
+        "size": 11,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         73,
+         80
+        ],
+        "row_span": [
+         39,
+         40
+        ]
+       },
+       {
+        "size": 8,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         3,
+         4
+        ],
+        "row_span": [
+         34,
+         37
+        ]
+       },
+       {
+        "size": 7,
+        "zones": [],
+        "col_span": [
+         100,
+         106
+        ],
+        "row_span": [
+         37,
+         37
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 204,
+      "components": 11,
+      "largest_component": 97,
+      "via_capable_nodes_in_channel": 152,
+      "top_components": [
+       {
+        "size": 97,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         125,
+         129
+        ],
+        "row_span": [
+         4,
+         35
+        ]
+       },
+       {
+        "size": 65,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         0,
+         61
+        ],
+        "row_span": [
+         40,
+         43
+        ]
+       },
+       {
+        "size": 11,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         73,
+         80
+        ],
+        "row_span": [
+         39,
+         40
+        ]
+       },
+       {
+        "size": 8,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         3,
+         4
+        ],
+        "row_span": [
+         34,
+         37
+        ]
+       },
+       {
+        "size": 7,
+        "zones": [],
+        "col_span": [
+         100,
+         106
+        ],
+        "row_span": [
+         37,
+         37
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 8,
+      "reach_nodes_In5": 8,
+      "reach_nodes_both": 8
+     }
+    },
+    "PCIE_UP_OUT1_P_J2": {
+     "In5": {
+      "channel_nodes": 219,
+      "components": 11,
+      "largest_component": 70,
+      "via_capable_nodes_in_channel": 112,
+      "top_components": [
+       {
+        "size": 70,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         74,
+         105
+        ],
+        "row_span": [
+         15,
+         32
+        ]
+       },
+       {
+        "size": 64,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         2,
+         60
+        ],
+        "row_span": [
+         41,
+         44
+        ]
+       },
+       {
+        "size": 54,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         97,
+         117
+        ],
+        "row_span": [
+         5,
+         12
+        ]
+       },
+       {
+        "size": 15,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         64,
+         71
+        ],
+        "row_span": [
+         35,
+         39
+        ]
+       },
+       {
+        "size": 9,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         4,
+         6
+        ],
+        "row_span": [
+         31,
+         34
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 227,
+      "components": 10,
+      "largest_component": 93,
+      "via_capable_nodes_in_channel": 112,
+      "top_components": [
+       {
+        "size": 93,
+        "zones": [
+         "BELT",
+         "FIELD"
+        ],
+        "col_span": [
+         64,
+         105
+        ],
+        "row_span": [
+         15,
+         39
+        ]
+       },
+       {
+        "size": 64,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         2,
+         60
+        ],
+        "row_span": [
+         41,
+         44
+        ]
+       },
+       {
+        "size": 54,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         97,
+         117
+        ],
+        "row_span": [
+         5,
+         12
+        ]
+       },
+       {
+        "size": 9,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         4,
+         6
+        ],
+        "row_span": [
+         31,
+         34
+        ]
+       },
+       {
+        "size": 2,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         108,
+         109
+        ],
+        "row_span": [
+         14,
+         14
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 13,
+      "reach_nodes_In5": 13,
+      "reach_nodes_both": 13
+     }
+    },
+    "PCIE_UP_OUT2_N_J2": {
+     "In5": {
+      "channel_nodes": 143,
+      "components": 10,
+      "largest_component": 81,
+      "via_capable_nodes_in_channel": 75,
+      "top_components": [
+       {
+        "size": 81,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         3,
+         74
+        ],
+        "row_span": [
+         35,
+         45
+        ]
+       },
+       {
+        "size": 34,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         78,
+         101
+        ],
+        "row_span": [
+         19,
+         32
+        ]
+       },
+       {
+        "size": 9,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         104,
+         108
+        ],
+        "row_span": [
+         12,
+         14
+        ]
+       },
+       {
+        "size": 7,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         111,
+         117
+        ],
+        "row_span": [
+         12,
+         12
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         108,
+         111
+        ],
+        "row_span": [
+         14,
+         15
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 149,
+      "components": 9,
+      "largest_component": 121,
+      "via_capable_nodes_in_channel": 75,
+      "top_components": [
+       {
+        "size": 121,
+        "zones": [
+         "BELT",
+         "FIELD"
+        ],
+        "col_span": [
+         3,
+         101
+        ],
+        "row_span": [
+         19,
+         45
+        ]
+       },
+       {
+        "size": 9,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         104,
+         108
+        ],
+        "row_span": [
+         12,
+         14
+        ]
+       },
+       {
+        "size": 7,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         111,
+         117
+        ],
+        "row_span": [
+         12,
+         12
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         108,
+         111
+        ],
+        "row_span": [
+         14,
+         15
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         6,
+         7
+        ],
+        "row_span": [
+         33,
+         35
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 6,
+      "reach_nodes_In5": 6,
+      "reach_nodes_both": 6
+     }
+    },
+    "PCIE_UP_OUT2_P_J2": {
+     "In5": {
+      "channel_nodes": 188,
+      "components": 19,
+      "largest_component": 67,
+      "via_capable_nodes_in_channel": 127,
+      "top_components": [
+       {
+        "size": 67,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         4,
+         64
+        ],
+        "row_span": [
+         42,
+         46
+        ]
+       },
+       {
+        "size": 64,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         119,
+         124
+        ],
+        "row_span": [
+         9,
+         26
+        ]
+       },
+       {
+        "size": 14,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         68,
+         78
+        ],
+        "row_span": [
+         40,
+         42
+        ]
+       },
+       {
+        "size": 8,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         83,
+         89
+        ],
+        "row_span": [
+         39,
+         40
+        ]
+       },
+       {
+        "size": 6,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         97,
+         102
+        ],
+        "row_span": [
+         38,
+         38
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 188,
+      "components": 19,
+      "largest_component": 67,
+      "via_capable_nodes_in_channel": 127,
+      "top_components": [
+       {
+        "size": 67,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         4,
+         64
+        ],
+        "row_span": [
+         42,
+         46
+        ]
+       },
+       {
+        "size": 64,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         119,
+         124
+        ],
+        "row_span": [
+         9,
+         26
+        ]
+       },
+       {
+        "size": 14,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         68,
+         78
+        ],
+        "row_span": [
+         40,
+         42
+        ]
+       },
+       {
+        "size": 8,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         83,
+         89
+        ],
+        "row_span": [
+         39,
+         40
+        ]
+       },
+       {
+        "size": 6,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         97,
+         102
+        ],
+        "row_span": [
+         38,
+         38
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 12,
+      "reach_nodes_In5": 12,
+      "reach_nodes_both": 12
+     }
+    },
+    "PCIE_UP_OUT3_N_J2": {
+     "In5": {
+      "channel_nodes": 183,
+      "components": 19,
+      "largest_component": 60,
+      "via_capable_nodes_in_channel": 130,
+      "top_components": [
+       {
+        "size": 60,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         6,
+         61
+        ],
+        "row_span": [
+         44,
+         47
+        ]
+       },
+       {
+        "size": 33,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         117,
+         120
+        ],
+        "row_span": [
+         12,
+         21
+        ]
+       },
+       {
+        "size": 22,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         117,
+         120
+        ],
+        "row_span": [
+         23,
+         29
+        ]
+       },
+       {
+        "size": 19,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         117,
+         120
+        ],
+        "row_span": [
+         30,
+         35
+        ]
+       },
+       {
+        "size": 13,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         65,
+         74
+        ],
+        "row_span": [
+         42,
+         44
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 183,
+      "components": 19,
+      "largest_component": 60,
+      "via_capable_nodes_in_channel": 130,
+      "top_components": [
+       {
+        "size": 60,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         6,
+         61
+        ],
+        "row_span": [
+         44,
+         47
+        ]
+       },
+       {
+        "size": 33,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         117,
+         120
+        ],
+        "row_span": [
+         12,
+         21
+        ]
+       },
+       {
+        "size": 22,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         117,
+         120
+        ],
+        "row_span": [
+         23,
+         29
+        ]
+       },
+       {
+        "size": 19,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         117,
+         120
+        ],
+        "row_span": [
+         30,
+         35
+        ]
+       },
+       {
+        "size": 13,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         65,
+         74
+        ],
+        "row_span": [
+         42,
+         44
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 7,
+      "reach_nodes_In5": 7,
+      "reach_nodes_both": 7
+     }
+    },
+    "PCIE_UP_OUT3_P_J2": {
+     "In5": {
+      "channel_nodes": 158,
+      "components": 11,
+      "largest_component": 58,
+      "via_capable_nodes_in_channel": 76,
+      "top_components": [
+       {
+        "size": 58,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         7,
+         60
+        ],
+        "row_span": [
+         45,
+         48
+        ]
+       },
+       {
+        "size": 42,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         79,
+         102
+        ],
+        "row_span": [
+         20,
+         33
+        ]
+       },
+       {
+        "size": 16,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         104,
+         109
+        ],
+        "row_span": [
+         13,
+         19
+        ]
+       },
+       {
+        "size": 11,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         72,
+         78
+        ],
+        "row_span": [
+         35,
+         38
+        ]
+       },
+       {
+        "size": 10,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         62,
+         70
+        ],
+        "row_span": [
+         39,
+         44
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 161,
+      "components": 10,
+      "largest_component": 58,
+      "via_capable_nodes_in_channel": 76,
+      "top_components": [
+       {
+        "size": 58,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         7,
+         60
+        ],
+        "row_span": [
+         45,
+         48
+        ]
+       },
+       {
+        "size": 56,
+        "zones": [
+         "BELT",
+         "FIELD"
+        ],
+        "col_span": [
+         72,
+         102
+        ],
+        "row_span": [
+         20,
+         38
+        ]
+       },
+       {
+        "size": 16,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         104,
+         109
+        ],
+        "row_span": [
+         13,
+         19
+        ]
+       },
+       {
+        "size": 10,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         62,
+         70
+        ],
+        "row_span": [
+         39,
+         44
+        ]
+       },
+       {
+        "size": 8,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         9,
+         11
+        ],
+        "row_span": [
+         31,
+         33
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 11,
+      "reach_nodes_In5": 11,
+      "reach_nodes_both": 11
+     }
+    },
+    "PCIE_UP_OUT4_N_J2": {
+     "In5": {
+      "channel_nodes": 220,
+      "components": 10,
+      "largest_component": 72,
+      "via_capable_nodes_in_channel": 130,
+      "top_components": [
+       {
+        "size": 72,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         82,
+         102
+        ],
+        "row_span": [
+         22,
+         33
+        ]
+       },
+       {
+        "size": 64,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         9,
+         65
+        ],
+        "row_span": [
+         43,
+         49
+        ]
+       },
+       {
+        "size": 47,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         104,
+         114
+        ],
+        "row_span": [
+         15,
+         22
+        ]
+       },
+       {
+        "size": 15,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         74,
+         84
+        ],
+        "row_span": [
+         35,
+         38
+        ]
+       },
+       {
+        "size": 8,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         67,
+         72
+        ],
+        "row_span": [
+         39,
+         42
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 227,
+      "components": 9,
+      "largest_component": 94,
+      "via_capable_nodes_in_channel": 130,
+      "top_components": [
+       {
+        "size": 94,
+        "zones": [
+         "BELT",
+         "FIELD"
+        ],
+        "col_span": [
+         74,
+         102
+        ],
+        "row_span": [
+         22,
+         38
+        ]
+       },
+       {
+        "size": 64,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         9,
+         65
+        ],
+        "row_span": [
+         43,
+         49
+        ]
+       },
+       {
+        "size": 47,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         104,
+         114
+        ],
+        "row_span": [
+         15,
+         22
+        ]
+       },
+       {
+        "size": 8,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         67,
+         72
+        ],
+        "row_span": [
+         39,
+         42
+        ]
+       },
+       {
+        "size": 8,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         11,
+         12
+        ],
+        "row_span": [
+         34,
+         37
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 8,
+      "reach_nodes_In5": 8,
+      "reach_nodes_both": 8
+     }
+    },
+    "PCIE_UP_OUT4_P_J2": {
+     "In5": {
+      "channel_nodes": 156,
+      "components": 12,
+      "largest_component": 66,
+      "via_capable_nodes_in_channel": 117,
+      "top_components": [
+       {
+        "size": 66,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         10,
+         67
+        ],
+        "row_span": [
+         45,
+         50
+        ]
+       },
+       {
+        "size": 41,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         128,
+         130
+        ],
+        "row_span": [
+         15,
+         35
+        ]
+       },
+       {
+        "size": 15,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         85,
+         98
+        ],
+        "row_span": [
+         40,
+         42
+        ]
+       },
+       {
+        "size": 11,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         74,
+         83
+        ],
+        "row_span": [
+         43,
+         44
+        ]
+       },
+       {
+        "size": 10,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         12,
+         14
+        ],
+        "row_span": [
+         31,
+         34
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 156,
+      "components": 12,
+      "largest_component": 66,
+      "via_capable_nodes_in_channel": 117,
+      "top_components": [
+       {
+        "size": 66,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         10,
+         67
+        ],
+        "row_span": [
+         45,
+         50
+        ]
+       },
+       {
+        "size": 41,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         128,
+         130
+        ],
+        "row_span": [
+         15,
+         35
+        ]
+       },
+       {
+        "size": 15,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         85,
+         98
+        ],
+        "row_span": [
+         40,
+         42
+        ]
+       },
+       {
+        "size": 11,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         74,
+         83
+        ],
+        "row_span": [
+         43,
+         44
+        ]
+       },
+       {
+        "size": 10,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         12,
+         14
+        ],
+        "row_span": [
+         31,
+         34
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 13,
+      "reach_nodes_In5": 13,
+      "reach_nodes_both": 13
+     }
+    },
+    "PCIE_UP_OUT5_N_J2": {
+     "In5": {
+      "channel_nodes": 143,
+      "components": 9,
+      "largest_component": 54,
+      "via_capable_nodes_in_channel": 112,
+      "top_components": [
+       {
+        "size": 54,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         11,
+         61
+        ],
+        "row_span": [
+         48,
+         51
+        ]
+       },
+       {
+        "size": 36,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         125,
+         127
+        ],
+        "row_span": [
+         17,
+         35
+        ]
+       },
+       {
+        "size": 26,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         80,
+         102
+        ],
+        "row_span": [
+         40,
+         45
+        ]
+       },
+       {
+        "size": 11,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         68,
+         76
+        ],
+        "row_span": [
+         45,
+         47
+        ]
+       },
+       {
+        "size": 8,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         14,
+         15
+        ],
+        "row_span": [
+         34,
+         37
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 143,
+      "components": 9,
+      "largest_component": 54,
+      "via_capable_nodes_in_channel": 112,
+      "top_components": [
+       {
+        "size": 54,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         11,
+         61
+        ],
+        "row_span": [
+         48,
+         51
+        ]
+       },
+       {
+        "size": 36,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         125,
+         127
+        ],
+        "row_span": [
+         17,
+         35
+        ]
+       },
+       {
+        "size": 26,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         80,
+         102
+        ],
+        "row_span": [
+         40,
+         45
+        ]
+       },
+       {
+        "size": 11,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         68,
+         76
+        ],
+        "row_span": [
+         45,
+         47
+        ]
+       },
+       {
+        "size": 8,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         14,
+         15
+        ],
+        "row_span": [
+         34,
+         37
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 8,
+      "reach_nodes_In5": 8,
+      "reach_nodes_both": 8
+     }
+    },
+    "PCIE_UP_OUT5_P_J2": {
+     "In5": {
+      "channel_nodes": 215,
+      "components": 14,
+      "largest_component": 105,
+      "via_capable_nodes_in_channel": 144,
+      "top_components": [
+       {
+        "size": 105,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         89,
+         116
+        ],
+        "row_span": [
+         21,
+         33
+        ]
+       },
+       {
+        "size": 57,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         13,
+         64
+        ],
+        "row_span": [
+         47,
+         52
+        ]
+       },
+       {
+        "size": 16,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         84,
+         91
+        ],
+        "row_span": [
+         35,
+         38
+        ]
+       },
+       {
+        "size": 10,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         67,
+         75
+        ],
+        "row_span": [
+         42,
+         46
+        ]
+       },
+       {
+        "size": 9,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         15,
+         17
+        ],
+        "row_span": [
+         31,
+         34
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 222,
+      "components": 13,
+      "largest_component": 128,
+      "via_capable_nodes_in_channel": 144,
+      "top_components": [
+       {
+        "size": 128,
+        "zones": [
+         "BELT",
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         84,
+         116
+        ],
+        "row_span": [
+         21,
+         38
+        ]
+       },
+       {
+        "size": 57,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         13,
+         64
+        ],
+        "row_span": [
+         47,
+         52
+        ]
+       },
+       {
+        "size": 10,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         67,
+         75
+        ],
+        "row_span": [
+         42,
+         46
+        ]
+       },
+       {
+        "size": 9,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         15,
+         17
+        ],
+        "row_span": [
+         31,
+         34
+        ]
+       },
+       {
+        "size": 5,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         78,
+         82
+        ],
+        "row_span": [
+         39,
+         40
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 12,
+      "reach_nodes_In5": 12,
+      "reach_nodes_both": 12
+     }
+    },
+    "PCIE_UP_OUT6_N_J2": {
+     "In5": {
+      "channel_nodes": 137,
+      "components": 9,
+      "largest_component": 61,
+      "via_capable_nodes_in_channel": 96,
+      "top_components": [
+       {
+        "size": 61,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         14,
+         69
+        ],
+        "row_span": [
+         46,
+         53
+        ]
+       },
+       {
+        "size": 23,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         104,
+         116
+        ],
+        "row_span": [
+         25,
+         27
+        ]
+       },
+       {
+        "size": 22,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         96,
+         107
+        ],
+        "row_span": [
+         28,
+         33
+        ]
+       },
+       {
+        "size": 13,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         75,
+         86
+        ],
+        "row_span": [
+         38,
+         43
+        ]
+       },
+       {
+        "size": 10,
+        "zones": [],
+        "col_span": [
+         88,
+         95
+        ],
+        "row_span": [
+         35,
+         37
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 141,
+      "components": 8,
+      "largest_component": 61,
+      "via_capable_nodes_in_channel": 96,
+      "top_components": [
+       {
+        "size": 61,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         14,
+         69
+        ],
+        "row_span": [
+         46,
+         53
+        ]
+       },
+       {
+        "size": 36,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         88,
+         107
+        ],
+        "row_span": [
+         28,
+         37
+        ]
+       },
+       {
+        "size": 23,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         104,
+         116
+        ],
+        "row_span": [
+         25,
+         27
+        ]
+       },
+       {
+        "size": 13,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         75,
+         86
+        ],
+        "row_span": [
+         38,
+         43
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         17,
+         18
+        ],
+        "row_span": [
+         33,
+         35
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 6,
+      "reach_nodes_In5": 6,
+      "reach_nodes_both": 6
+     }
+    },
+    "PCIE_UP_OUT6_P_J2": {
+     "In5": {
+      "channel_nodes": 137,
+      "components": 11,
+      "largest_component": 61,
+      "via_capable_nodes_in_channel": 101,
+      "top_components": [
+       {
+        "size": 61,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         16,
+         68
+        ],
+        "row_span": [
+         48,
+         54
+        ]
+       },
+       {
+        "size": 25,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         75,
+         97
+        ],
+        "row_span": [
+         42,
+         47
+        ]
+       },
+       {
+        "size": 25,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         123,
+         124
+        ],
+        "row_span": [
+         23,
+         35
+        ]
+       },
+       {
+        "size": 8,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         18,
+         20
+        ],
+        "row_span": [
+         31,
+         33
+        ]
+       },
+       {
+        "size": 6,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         18,
+         19
+        ],
+        "row_span": [
+         35,
+         37
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 137,
+      "components": 11,
+      "largest_component": 61,
+      "via_capable_nodes_in_channel": 101,
+      "top_components": [
+       {
+        "size": 61,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         16,
+         68
+        ],
+        "row_span": [
+         48,
+         54
+        ]
+       },
+       {
+        "size": 25,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         75,
+         97
+        ],
+        "row_span": [
+         42,
+         47
+        ]
+       },
+       {
+        "size": 25,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         123,
+         124
+        ],
+        "row_span": [
+         23,
+         35
+        ]
+       },
+       {
+        "size": 8,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         18,
+         20
+        ],
+        "row_span": [
+         31,
+         33
+        ]
+       },
+       {
+        "size": 6,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         18,
+         19
+        ],
+        "row_span": [
+         35,
+         37
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 14,
+      "reach_nodes_In5": 14,
+      "reach_nodes_both": 14
+     }
+    },
+    "PCIE_UP_OUT7_N_J2": {
+     "In5": {
+      "channel_nodes": 325,
+      "components": 10,
+      "largest_component": 306,
+      "via_capable_nodes_in_channel": 268,
+      "top_components": [
+       {
+        "size": 306,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         17,
+         123
+        ],
+        "row_span": [
+         37,
+         55
+        ]
+       },
+       {
+        "size": 9,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         19,
+         21
+        ],
+        "row_span": [
+         33,
+         37
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         120,
+         121
+        ],
+        "row_span": [
+         27,
+         28
+        ]
+       },
+       {
+        "size": 1,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         121,
+         121
+        ],
+        "row_span": [
+         29,
+         29
+        ]
+       },
+       {
+        "size": 1,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         121,
+         121
+        ],
+        "row_span": [
+         30,
+         30
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 325,
+      "components": 10,
+      "largest_component": 306,
+      "via_capable_nodes_in_channel": 268,
+      "top_components": [
+       {
+        "size": 306,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         17,
+         123
+        ],
+        "row_span": [
+         37,
+         55
+        ]
+       },
+       {
+        "size": 9,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         19,
+         21
+        ],
+        "row_span": [
+         33,
+         37
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         120,
+         121
+        ],
+        "row_span": [
+         27,
+         28
+        ]
+       },
+       {
+        "size": 1,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         121,
+         121
+        ],
+        "row_span": [
+         29,
+         29
+        ]
+       },
+       {
+        "size": 1,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         121,
+         121
+        ],
+        "row_span": [
+         30,
+         30
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 9,
+      "reach_nodes_In5": 9,
+      "reach_nodes_both": 9
+     }
+    },
+    "PCIE_UP_OUT7_P_J2": {
+     "In5": {
+      "channel_nodes": 313,
+      "components": 13,
+      "largest_component": 186,
+      "via_capable_nodes_in_channel": 234,
+      "top_components": [
+       {
+        "size": 186,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         19,
+         66
+        ],
+        "row_span": [
+         52,
+         56
+        ]
+       },
+       {
+        "size": 64,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         100,
+         116
+        ],
+        "row_span": [
+         27,
+         34
+        ]
+       },
+       {
+        "size": 21,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         21,
+         25
+        ],
+        "row_span": [
+         32,
+         37
+        ]
+       },
+       {
+        "size": 16,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         69,
+         79
+        ],
+        "row_span": [
+         44,
+         49
+        ]
+       },
+       {
+        "size": 9,
+        "zones": [],
+        "col_span": [
+         94,
+         99
+        ],
+        "row_span": [
+         35,
+         36
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 315,
+      "components": 12,
+      "largest_component": 182,
+      "via_capable_nodes_in_channel": 234,
+      "top_components": [
+       {
+        "size": 182,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         19,
+         66
+        ],
+        "row_span": [
+         52,
+         56
+        ]
+       },
+       {
+        "size": 79,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         94,
+         116
+        ],
+        "row_span": [
+         27,
+         36
+        ]
+       },
+       {
+        "size": 21,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         21,
+         25
+        ],
+        "row_span": [
+         32,
+         37
+        ]
+       },
+       {
+        "size": 16,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         69,
+         79
+        ],
+        "row_span": [
+         44,
+         49
+        ]
+       },
+       {
+        "size": 7,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         82,
+         88
+        ],
+        "row_span": [
+         40,
+         42
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 24,
+      "reach_nodes_In5": 24,
+      "reach_nodes_both": 24
+     }
+    }
+   }
+  },
+  "G_greedy_declared_band3": {
+   "band_steps": 3,
+   "station_action_sets": {
+    "PCIE_UP_OUT0_N_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 65,
+      "BELT": 156,
+      "WALL": 22,
+      "FIELD": 203
+     }
+    },
+    "PCIE_UP_OUT0_P_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 2,
+      "BELT": 200,
+      "FIELD": 155
+     }
+    },
+    "PCIE_UP_OUT1_N_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 3,
+      "BELT": 64,
+      "FIELD": 95
+     }
+    },
+    "PCIE_UP_OUT1_P_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 2,
+      "BELT": 36,
+      "WALL": 13,
+      "FIELD": 46
+     }
+    },
+    "PCIE_UP_OUT2_N_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 3,
+      "BELT": 38,
+      "WALL": 3,
+      "FIELD": 18
+     }
+    },
+    "PCIE_UP_OUT2_P_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 2,
+      "BELT": 117,
+      "FIELD": 84
+     }
+    },
+    "PCIE_UP_OUT3_N_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 4,
+      "BELT": 66,
+      "WALL": 11,
+      "FIELD": 17
+     }
+    },
+    "PCIE_UP_OUT3_P_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 2,
+      "BELT": 36,
+      "WALL": 1,
+      "FIELD": 29
+     }
+    },
+    "PCIE_UP_OUT4_N_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 3,
+      "BELT": 39,
+      "WALL": 4,
+      "FIELD": 33
+     }
+    },
+    "PCIE_UP_OUT4_P_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 3,
+      "BELT": 121,
+      "FIELD": 3
+     }
+    },
+    "PCIE_UP_OUT5_N_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 3,
+      "BELT": 68,
+      "FIELD": 4
+     }
+    },
+    "PCIE_UP_OUT5_P_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 2,
+      "BELT": 38,
+      "WALL": 18,
+      "FIELD": 74
+     }
+    },
+    "PCIE_UP_OUT6_N_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 3,
+      "BELT": 41,
+      "WALL": 2,
+      "FIELD": 6
+     }
+    },
+    "PCIE_UP_OUT6_P_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 2,
+      "BELT": 121,
+      "FIELD": 4
+     }
+    },
+    "PCIE_UP_OUT7_N_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 4,
+      "BELT": 68,
+      "FIELD": 3
+     }
+    },
+    "PCIE_UP_OUT7_P_J2": {
+     "via_capable_channel_nodes_per_zone": {
+      "COMB": 6,
+      "BELT": 39,
+      "WALL": 5,
+      "FIELD": 3
+     }
+    }
+   },
+   "A1_subset_of_own_eligible_per_layer": true,
+   "A2_pairwise_disjoint_per_layer": true,
+   "machine_check_verdict": "PASS",
+   "In5_nodes_total": 3667,
+   "In4_nodes_total": 3761,
+   "lanes_single_component_In5": 0,
+   "lanes_single_component_In4": 0,
+   "lanes_A_reach_includes_BELT_In5_only": 1,
+   "lanes_A_reach_includes_BELT_both": 1,
+   "lanes_A_reach_includes_FIELD_both": 1,
+   "per_lane": {
+    "PCIE_UP_OUT0_N_J2": {
+     "In5": {
+      "channel_nodes": 1016,
+      "components": 4,
+      "largest_component": 533,
+      "via_capable_nodes_in_channel": 446,
+      "top_components": [
+       {
+        "size": 533,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         62,
+         117
+        ],
+        "row_span": [
+         2,
+         32
+        ]
+       },
+       {
+        "size": 480,
+        "zones": [
+         "BELT",
+         "COMB"
+        ],
+        "col_span": [
+         0,
+         74
+        ],
+        "row_span": [
+         33,
+         41
+        ]
+       },
+       {
+        "size": 2,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         3,
+         4
+        ],
+        "row_span": [
+         31,
+         31
+        ]
+       },
+       {
+        "size": 1,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         107,
+         107
+        ],
+        "row_span": [
+         16,
+         16
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 1059,
+      "components": 3,
+      "largest_component": 1056,
+      "via_capable_nodes_in_channel": 446,
+      "top_components": [
+       {
+        "size": 1056,
+        "zones": [
+         "BELT",
+         "COMB",
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         0,
+         117
+        ],
+        "row_span": [
+         2,
+         41
+        ]
+       },
+       {
+        "size": 2,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         3,
+         4
+        ],
+        "row_span": [
+         31,
+         31
+        ]
+       },
+       {
+        "size": 1,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         107,
+         107
+        ],
+        "row_span": [
+         16,
+         16
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "BELT",
+       "COMB",
+       "FIELD",
+       "WALL"
+      ],
+      "In5_plus_In4_zones": [
+       "BELT",
+       "COMB",
+       "FIELD",
+       "WALL"
+      ],
+      "A_zone_channel_nodes_In5": 86,
+      "reach_nodes_In5": 1015,
+      "reach_nodes_both": 1060
+     }
+    },
+    "PCIE_UP_OUT0_P_J2": {
+     "In5": {
+      "channel_nodes": 694,
+      "components": 9,
+      "largest_component": 661,
+      "via_capable_nodes_in_channel": 357,
+      "top_components": [
+       {
+        "size": 661,
+        "zones": [
+         "BELT",
+         "FIELD"
+        ],
+        "col_span": [
+         2,
+         135
+        ],
+        "row_span": [
+         1,
+         42
+        ]
+       },
+       {
+        "size": 24,
+        "zones": [],
+        "col_span": [
+         101,
+         113
+        ],
+        "row_span": [
+         33,
+         34
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         1,
+         3
+        ],
+        "row_span": [
+         32,
+         32
+        ]
+       },
+       {
+        "size": 1,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         0,
+         0
+        ],
+        "row_span": [
+         29,
+         29
+        ]
+       },
+       {
+        "size": 1,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         5,
+         5
+        ],
+        "row_span": [
+         29,
+         29
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 739,
+      "components": 7,
+      "largest_component": 731,
+      "via_capable_nodes_in_channel": 357,
+      "top_components": [
+       {
+        "size": 731,
+        "zones": [
+         "BELT",
+         "FIELD"
+        ],
+        "col_span": [
+         0,
+         135
+        ],
+        "row_span": [
+         1,
+         42
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         1,
+         3
+        ],
+        "row_span": [
+         32,
+         32
+        ]
+       },
+       {
+        "size": 1,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         0,
+         0
+        ],
+        "row_span": [
+         29,
+         29
+        ]
+       },
+       {
+        "size": 1,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         5,
+         5
+        ],
+        "row_span": [
+         29,
+         29
+        ]
+       },
+       {
+        "size": 1,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         5,
+         5
+        ],
+        "row_span": [
+         33,
+         33
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 7,
+      "reach_nodes_In5": 7,
+      "reach_nodes_both": 7
+     }
+    },
+    "PCIE_UP_OUT1_N_J2": {
+     "In5": {
+      "channel_nodes": 206,
+      "components": 10,
+      "largest_component": 109,
+      "via_capable_nodes_in_channel": 162,
+      "top_components": [
+       {
+        "size": 109,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         125,
+         128
+        ],
+        "row_span": [
+         4,
+         32
+        ]
+       },
+       {
+        "size": 69,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         2,
+         70
+        ],
+        "row_span": [
+         43,
+         43
+        ]
+       },
+       {
+        "size": 12,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         73,
+         84
+        ],
+        "row_span": [
+         42,
+         42
+        ]
+       },
+       {
+        "size": 6,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         92,
+         97
+        ],
+        "row_span": [
+         41,
+         41
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         109,
+         111
+        ],
+        "row_span": [
+         40,
+         40
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 208,
+      "components": 10,
+      "largest_component": 109,
+      "via_capable_nodes_in_channel": 162,
+      "top_components": [
+       {
+        "size": 109,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         125,
+         128
+        ],
+        "row_span": [
+         4,
+         32
+        ]
+       },
+       {
+        "size": 71,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         0,
+         70
+        ],
+        "row_span": [
+         43,
+         43
+        ]
+       },
+       {
+        "size": 12,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         73,
+         84
+        ],
+        "row_span": [
+         42,
+         42
+        ]
+       },
+       {
+        "size": 6,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         92,
+         97
+        ],
+        "row_span": [
+         41,
+         41
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         109,
+         111
+        ],
+        "row_span": [
+         40,
+         40
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 6,
+      "reach_nodes_In5": 6,
+      "reach_nodes_both": 6
+     }
+    },
+    "PCIE_UP_OUT1_P_J2": {
+     "In5": {
+      "channel_nodes": 197,
+      "components": 6,
+      "largest_component": 125,
+      "via_capable_nodes_in_channel": 97,
+      "top_components": [
+       {
+        "size": 125,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         79,
+         117
+        ],
+        "row_span": [
+         11,
+         33
+        ]
+       },
+       {
+        "size": 62,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         2,
+         63
+        ],
+        "row_span": [
+         44,
+         44
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         100,
+         101
+        ],
+        "row_span": [
+         6,
+         7
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         4,
+         5
+        ],
+        "row_span": [
+         31,
+         32
+        ]
+       },
+       {
+        "size": 2,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         7,
+         8
+        ],
+        "row_span": [
+         33,
+         33
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 203,
+      "components": 6,
+      "largest_component": 131,
+      "via_capable_nodes_in_channel": 97,
+      "top_components": [
+       {
+        "size": 131,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         77,
+         117
+        ],
+        "row_span": [
+         11,
+         34
+        ]
+       },
+       {
+        "size": 62,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         2,
+         63
+        ],
+        "row_span": [
+         44,
+         44
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         100,
+         101
+        ],
+        "row_span": [
+         6,
+         7
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         4,
+         5
+        ],
+        "row_span": [
+         31,
+         32
+        ]
+       },
+       {
+        "size": 2,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         7,
+         8
+        ],
+        "row_span": [
+         33,
+         33
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 5,
+      "reach_nodes_In5": 5,
+      "reach_nodes_both": 5
+     }
+    },
+    "PCIE_UP_OUT2_N_J2": {
+     "In5": {
+      "channel_nodes": 104,
+      "components": 8,
+      "largest_component": 63,
+      "via_capable_nodes_in_channel": 62,
+      "top_components": [
+       {
+        "size": 63,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         3,
+         65
+        ],
+        "row_span": [
+         44,
+         45
+        ]
+       },
+       {
+        "size": 29,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         85,
+         113
+        ],
+        "row_span": [
+         17,
+         33
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         104,
+         105
+        ],
+        "row_span": [
+         13,
+         14
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         6,
+         7
+        ],
+        "row_span": [
+         34,
+         35
+        ]
+       },
+       {
+        "size": 2,
+        "zones": [
+         "WALL"
+        ],
+        "col_span": [
+         116,
+         117
+        ],
+        "row_span": [
+         15,
+         16
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 106,
+      "components": 8,
+      "largest_component": 63,
+      "via_capable_nodes_in_channel": 62,
+      "top_components": [
+       {
+        "size": 63,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         3,
+         65
+        ],
+        "row_span": [
+         44,
+         45
+        ]
+       },
+       {
+        "size": 31,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         83,
+         113
+        ],
+        "row_span": [
+         17,
+         34
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         104,
+         105
+        ],
+        "row_span": [
+         13,
+         14
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         6,
+         7
+        ],
+        "row_span": [
+         34,
+         35
+        ]
+       },
+       {
+        "size": 2,
+        "zones": [
+         "WALL"
+        ],
+        "col_span": [
+         116,
+         117
+        ],
+        "row_span": [
+         15,
+         16
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 6,
+      "reach_nodes_In5": 6,
+      "reach_nodes_both": 6
+     }
+    },
+    "PCIE_UP_OUT2_P_J2": {
+     "In5": {
+      "channel_nodes": 269,
+      "components": 5,
+      "largest_component": 140,
+      "via_capable_nodes_in_channel": 203,
+      "top_components": [
+       {
+        "size": 140,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         4,
+         107
+        ],
+        "row_span": [
+         41,
+         46
+        ]
+       },
+       {
+        "size": 120,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         119,
+         124
+        ],
+        "row_span": [
+         9,
+         32
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         7,
+         8
+        ],
+        "row_span": [
+         31,
+         32
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         112,
+         115
+        ],
+        "row_span": [
+         40,
+         40
+        ]
+       },
+       {
+        "size": 1,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         10,
+         10
+        ],
+        "row_span": [
+         33,
+         33
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 269,
+      "components": 5,
+      "largest_component": 140,
+      "via_capable_nodes_in_channel": 203,
+      "top_components": [
+       {
+        "size": 140,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         4,
+         107
+        ],
+        "row_span": [
+         41,
+         46
+        ]
+       },
+       {
+        "size": 120,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         119,
+         124
+        ],
+        "row_span": [
+         9,
+         32
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         7,
+         8
+        ],
+        "row_span": [
+         31,
+         32
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         112,
+         115
+        ],
+        "row_span": [
+         40,
+         40
+        ]
+       },
+       {
+        "size": 1,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         10,
+         10
+        ],
+        "row_span": [
+         33,
+         33
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 5,
+      "reach_nodes_In5": 5,
+      "reach_nodes_both": 5
+     }
+    },
+    "PCIE_UP_OUT3_N_J2": {
+     "In5": {
+      "channel_nodes": 134,
+      "components": 17,
+      "largest_component": 61,
+      "via_capable_nodes_in_channel": 98,
+      "top_components": [
+       {
+        "size": 61,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         6,
+         66
+        ],
+        "row_span": [
+         47,
+         47
+        ]
+       },
+       {
+        "size": 16,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         117,
+         120
+        ],
+        "row_span": [
+         13,
+         20
+        ]
+       },
+       {
+        "size": 11,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         117,
+         118
+        ],
+        "row_span": [
+         23,
+         28
+        ]
+       },
+       {
+        "size": 6,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         8,
+         12
+        ],
+        "row_span": [
+         33,
+         35
+        ]
+       },
+       {
+        "size": 6,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         68,
+         73
+        ],
+        "row_span": [
+         46,
+         46
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 134,
+      "components": 17,
+      "largest_component": 61,
+      "via_capable_nodes_in_channel": 98,
+      "top_components": [
+       {
+        "size": 61,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         6,
+         66
+        ],
+        "row_span": [
+         47,
+         47
+        ]
+       },
+       {
+        "size": 16,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         117,
+         120
+        ],
+        "row_span": [
+         13,
+         20
+        ]
+       },
+       {
+        "size": 11,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         117,
+         118
+        ],
+        "row_span": [
+         23,
+         28
+        ]
+       },
+       {
+        "size": 6,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         8,
+         12
+        ],
+        "row_span": [
+         33,
+         35
+        ]
+       },
+       {
+        "size": 6,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         68,
+         73
+        ],
+        "row_span": [
+         46,
+         46
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 8,
+      "reach_nodes_In5": 8,
+      "reach_nodes_both": 8
+     }
+    },
+    "PCIE_UP_OUT3_P_J2": {
+     "In5": {
+      "channel_nodes": 109,
+      "components": 7,
+      "largest_component": 57,
+      "via_capable_nodes_in_channel": 68,
+      "top_components": [
+       {
+        "size": 57,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         7,
+         63
+        ],
+        "row_span": [
+         48,
+         48
+        ]
+       },
+       {
+        "size": 43,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         86,
+         113
+        ],
+        "row_span": [
+         18,
+         33
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         10,
+         11
+        ],
+        "row_span": [
+         31,
+         32
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         106,
+         107
+        ],
+        "row_span": [
+         14,
+         15
+        ]
+       },
+       {
+        "size": 1,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         13,
+         13
+        ],
+        "row_span": [
+         33,
+         33
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 109,
+      "components": 7,
+      "largest_component": 57,
+      "via_capable_nodes_in_channel": 68,
+      "top_components": [
+       {
+        "size": 57,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         7,
+         63
+        ],
+        "row_span": [
+         48,
+         48
+        ]
+       },
+       {
+        "size": 43,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         86,
+         113
+        ],
+        "row_span": [
+         18,
+         33
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         10,
+         11
+        ],
+        "row_span": [
+         31,
+         32
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         106,
+         107
+        ],
+        "row_span": [
+         14,
+         15
+        ]
+       },
+       {
+        "size": 1,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         13,
+         13
+        ],
+        "row_span": [
+         33,
+         33
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 5,
+      "reach_nodes_In5": 5,
+      "reach_nodes_both": 5
+     }
+    },
+    "PCIE_UP_OUT4_N_J2": {
+     "In5": {
+      "channel_nodes": 114,
+      "components": 9,
+      "largest_component": 57,
+      "via_capable_nodes_in_channel": 79,
+      "top_components": [
+       {
+        "size": 57,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         9,
+         65
+        ],
+        "row_span": [
+         48,
+         49
+        ]
+       },
+       {
+        "size": 43,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         90,
+         114
+        ],
+        "row_span": [
+         19,
+         33
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         109,
+         110
+        ],
+        "row_span": [
+         17,
+         18
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         11,
+         12
+        ],
+        "row_span": [
+         34,
+         35
+        ]
+       },
+       {
+        "size": 2,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         14,
+         15
+        ],
+        "row_span": [
+         31,
+         31
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 114,
+      "components": 9,
+      "largest_component": 57,
+      "via_capable_nodes_in_channel": 79,
+      "top_components": [
+       {
+        "size": 57,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         9,
+         65
+        ],
+        "row_span": [
+         48,
+         49
+        ]
+       },
+       {
+        "size": 43,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         90,
+         114
+        ],
+        "row_span": [
+         19,
+         33
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         109,
+         110
+        ],
+        "row_span": [
+         17,
+         18
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         11,
+         12
+        ],
+        "row_span": [
+         34,
+         35
+        ]
+       },
+       {
+        "size": 2,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         14,
+         15
+        ],
+        "row_span": [
+         31,
+         31
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 7,
+      "reach_nodes_In5": 7,
+      "reach_nodes_both": 7
+     }
+    },
+    "PCIE_UP_OUT4_P_J2": {
+     "In5": {
+      "channel_nodes": 151,
+      "components": 7,
+      "largest_component": 137,
+      "via_capable_nodes_in_channel": 127,
+      "top_components": [
+       {
+        "size": 137,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         10,
+         108
+        ],
+        "row_span": [
+         42,
+         50
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         12,
+         14
+        ],
+        "row_span": [
+         31,
+         32
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         111,
+         113
+        ],
+        "row_span": [
+         41,
+         41
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         128,
+         129
+        ],
+        "row_span": [
+         16,
+         17
+        ]
+       },
+       {
+        "size": 2,
+        "zones": [],
+        "col_span": [
+         118,
+         119
+        ],
+        "row_span": [
+         40,
+         40
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 151,
+      "components": 7,
+      "largest_component": 137,
+      "via_capable_nodes_in_channel": 127,
+      "top_components": [
+       {
+        "size": 137,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         10,
+         108
+        ],
+        "row_span": [
+         42,
+         50
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         12,
+         14
+        ],
+        "row_span": [
+         31,
+         32
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         111,
+         113
+        ],
+        "row_span": [
+         41,
+         41
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         128,
+         129
+        ],
+        "row_span": [
+         16,
+         17
+        ]
+       },
+       {
+        "size": 2,
+        "zones": [],
+        "col_span": [
+         118,
+         119
+        ],
+        "row_span": [
+         40,
+         40
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 6,
+      "reach_nodes_In5": 6,
+      "reach_nodes_both": 6
+     }
+    },
+    "PCIE_UP_OUT5_N_J2": {
+     "In5": {
+      "channel_nodes": 96,
+      "components": 15,
+      "largest_component": 60,
+      "via_capable_nodes_in_channel": 75,
+      "top_components": [
+       {
+        "size": 60,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         11,
+         70
+        ],
+        "row_span": [
+         50,
+         51
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         126,
+         127
+        ],
+        "row_span": [
+         18,
+         20
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         77,
+         80
+        ],
+        "row_span": [
+         48,
+         48
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         72,
+         75
+        ],
+        "row_span": [
+         49,
+         49
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         82,
+         85
+        ],
+        "row_span": [
+         47,
+         47
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 96,
+      "components": 15,
+      "largest_component": 60,
+      "via_capable_nodes_in_channel": 75,
+      "top_components": [
+       {
+        "size": 60,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         11,
+         70
+        ],
+        "row_span": [
+         50,
+         51
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         126,
+         127
+        ],
+        "row_span": [
+         18,
+         20
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         77,
+         80
+        ],
+        "row_span": [
+         48,
+         48
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         72,
+         75
+        ],
+        "row_span": [
+         49,
+         49
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         82,
+         85
+        ],
+        "row_span": [
+         47,
+         47
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 6,
+      "reach_nodes_In5": 6,
+      "reach_nodes_both": 6
+     }
+    },
+    "PCIE_UP_OUT5_P_J2": {
+     "In5": {
+      "channel_nodes": 195,
+      "components": 8,
+      "largest_component": 131,
+      "via_capable_nodes_in_channel": 132,
+      "top_components": [
+       {
+        "size": 131,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         92,
+         116
+        ],
+        "row_span": [
+         22,
+         33
+        ]
+       },
+       {
+        "size": 52,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         13,
+         64
+        ],
+        "row_span": [
+         52,
+         52
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         102,
+         103
+        ],
+        "row_span": [
+         18,
+         20
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         15,
+         16
+        ],
+        "row_span": [
+         31,
+         32
+        ]
+       },
+       {
+        "size": 2,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         18,
+         19
+        ],
+        "row_span": [
+         33,
+         33
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 195,
+      "components": 8,
+      "largest_component": 131,
+      "via_capable_nodes_in_channel": 132,
+      "top_components": [
+       {
+        "size": 131,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         92,
+         116
+        ],
+        "row_span": [
+         22,
+         33
+        ]
+       },
+       {
+        "size": 52,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         13,
+         64
+        ],
+        "row_span": [
+         52,
+         52
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         102,
+         103
+        ],
+        "row_span": [
+         18,
+         20
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         15,
+         16
+        ],
+        "row_span": [
+         31,
+         32
+        ]
+       },
+       {
+        "size": 2,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         18,
+         19
+        ],
+        "row_span": [
+         33,
+         33
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 5,
+      "reach_nodes_In5": 5,
+      "reach_nodes_both": 5
+     }
+    },
+    "PCIE_UP_OUT6_N_J2": {
+     "In5": {
+      "channel_nodes": 72,
+      "components": 8,
+      "largest_component": 55,
+      "via_capable_nodes_in_channel": 52,
+      "top_components": [
+       {
+        "size": 55,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         14,
+         68
+        ],
+        "row_span": [
+         51,
+         53
+        ]
+       },
+       {
+        "size": 6,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         108,
+         113
+        ],
+        "row_span": [
+         30,
+         32
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         105,
+         106
+        ],
+        "row_span": [
+         25,
+         26
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         17,
+         18
+        ],
+        "row_span": [
+         34,
+         35
+        ]
+       },
+       {
+        "size": 1,
+        "zones": [
+         "WALL"
+        ],
+        "col_span": [
+         116,
+         116
+        ],
+        "row_span": [
+         28,
+         28
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 72,
+      "components": 8,
+      "largest_component": 55,
+      "via_capable_nodes_in_channel": 52,
+      "top_components": [
+       {
+        "size": 55,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         14,
+         68
+        ],
+        "row_span": [
+         51,
+         53
+        ]
+       },
+       {
+        "size": 6,
+        "zones": [
+         "FIELD",
+         "WALL"
+        ],
+        "col_span": [
+         108,
+         113
+        ],
+        "row_span": [
+         30,
+         32
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         105,
+         106
+        ],
+        "row_span": [
+         25,
+         26
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         17,
+         18
+        ],
+        "row_span": [
+         34,
+         35
+        ]
+       },
+       {
+        "size": 1,
+        "zones": [
+         "WALL"
+        ],
+        "col_span": [
+         116,
+         116
+        ],
+        "row_span": [
+         28,
+         28
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 6,
+      "reach_nodes_In5": 6,
+      "reach_nodes_both": 6
+     }
+    },
+    "PCIE_UP_OUT6_P_J2": {
+     "In5": {
+      "channel_nodes": 148,
+      "components": 9,
+      "largest_component": 131,
+      "via_capable_nodes_in_channel": 127,
+      "top_components": [
+       {
+        "size": 131,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         16,
+         109
+        ],
+        "row_span": [
+         43,
+         54
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         18,
+         19
+        ],
+        "row_span": [
+         31,
+         32
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         123,
+         124
+        ],
+        "row_span": [
+         24,
+         25
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         111,
+         113
+        ],
+        "row_span": [
+         42,
+         42
+        ]
+       },
+       {
+        "size": 2,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         21,
+         22
+        ],
+        "row_span": [
+         33,
+         34
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 146,
+      "components": 10,
+      "largest_component": 121,
+      "via_capable_nodes_in_channel": 127,
+      "top_components": [
+       {
+        "size": 121,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         26,
+         109
+        ],
+        "row_span": [
+         43,
+         54
+        ]
+       },
+       {
+        "size": 8,
+        "zones": [],
+        "col_span": [
+         16,
+         23
+        ],
+        "row_span": [
+         54,
+         54
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         18,
+         19
+        ],
+        "row_span": [
+         31,
+         32
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         123,
+         124
+        ],
+        "row_span": [
+         24,
+         25
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         111,
+         113
+        ],
+        "row_span": [
+         42,
+         42
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 8,
+      "reach_nodes_In5": 8,
+      "reach_nodes_both": 8
+     }
+    },
+    "PCIE_UP_OUT7_N_J2": {
+     "In5": {
+      "channel_nodes": 91,
+      "components": 18,
+      "largest_component": 48,
+      "via_capable_nodes_in_channel": 75,
+      "top_components": [
+       {
+        "size": 48,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         17,
+         64
+        ],
+        "row_span": [
+         55,
+         55
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         19,
+         21
+        ],
+        "row_span": [
+         34,
+         35
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         78,
+         80
+        ],
+        "row_span": [
+         51,
+         51
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         86,
+         88
+        ],
+        "row_span": [
+         49,
+         49
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         70,
+         72
+        ],
+        "row_span": [
+         53,
+         53
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 89,
+      "components": 19,
+      "largest_component": 39,
+      "via_capable_nodes_in_channel": 75,
+      "top_components": [
+       {
+        "size": 39,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         26,
+         64
+        ],
+        "row_span": [
+         55,
+         55
+        ]
+       },
+       {
+        "size": 7,
+        "zones": [],
+        "col_span": [
+         17,
+         23
+        ],
+        "row_span": [
+         55,
+         55
+        ]
+       },
+       {
+        "size": 4,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         19,
+         21
+        ],
+        "row_span": [
+         34,
+         35
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         78,
+         80
+        ],
+        "row_span": [
+         51,
+         51
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         86,
+         88
+        ],
+        "row_span": [
+         49,
+         49
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 5,
+      "reach_nodes_In5": 5,
+      "reach_nodes_both": 5
+     }
+    },
+    "PCIE_UP_OUT7_P_J2": {
+     "In5": {
+      "channel_nodes": 71,
+      "components": 7,
+      "largest_component": 48,
+      "via_capable_nodes_in_channel": 53,
+      "top_components": [
+       {
+        "size": 48,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         19,
+         66
+        ],
+        "row_span": [
+         55,
+         56
+        ]
+       },
+       {
+        "size": 9,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         22,
+         25
+        ],
+        "row_span": [
+         32,
+         34
+        ]
+       },
+       {
+        "size": 6,
+        "zones": [
+         "WALL"
+        ],
+        "col_span": [
+         110,
+         113
+        ],
+        "row_span": [
+         31,
+         32
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         108,
+         109
+        ],
+        "row_span": [
+         27,
+         28
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "WALL"
+        ],
+        "col_span": [
+         115,
+         116
+        ],
+        "row_span": [
+         30,
+         31
+        ]
+       }
+      ]
+     },
+     "In4": {
+      "channel_nodes": 71,
+      "components": 7,
+      "largest_component": 48,
+      "via_capable_nodes_in_channel": 53,
+      "top_components": [
+       {
+        "size": 48,
+        "zones": [
+         "BELT"
+        ],
+        "col_span": [
+         19,
+         66
+        ],
+        "row_span": [
+         55,
+         56
+        ]
+       },
+       {
+        "size": 9,
+        "zones": [
+         "COMB"
+        ],
+        "col_span": [
+         22,
+         25
+        ],
+        "row_span": [
+         32,
+         34
+        ]
+       },
+       {
+        "size": 6,
+        "zones": [
+         "WALL"
+        ],
+        "col_span": [
+         110,
+         113
+        ],
+        "row_span": [
+         31,
+         32
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "FIELD"
+        ],
+        "col_span": [
+         108,
+         109
+        ],
+        "row_span": [
+         27,
+         28
+        ]
+       },
+       {
+        "size": 3,
+        "zones": [
+         "WALL"
+        ],
+        "col_span": [
+         115,
+         116
+        ],
+        "row_span": [
+         30,
+         31
+        ]
+       }
+      ]
+     },
+     "A_side_reach": {
+      "In5_only_zones": [
+       "COMB"
+      ],
+      "In5_plus_In4_zones": [
+       "COMB"
+      ],
+      "A_zone_channel_nodes_In5": 10,
+      "reach_nodes_In5": 10,
+      "reach_nodes_both": 10
+     }
+    }
+   }
+  }
+ },
+ "decision": "SKELETON DONE (read-only, Solve() 0) | V_pure_voronoi: A1=P A2=P In5single=0/16 reach_BELT(both)=1/16 reach_FIELD(both)=1/16 || V_inter_band3: A1=P A2=P In5single=0/16 reach_BELT(both)=1/16 reach_FIELD(both)=1/16 || G_greedy_declared_band3: A1=P A2=P In5single=0/16 reach_BELT(both)=1/16 reach_FIELD(both)=1/16",
+ "elapsed_s": 19.6
+}

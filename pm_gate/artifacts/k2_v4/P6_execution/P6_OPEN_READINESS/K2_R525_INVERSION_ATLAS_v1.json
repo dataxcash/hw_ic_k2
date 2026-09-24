@@ -1,0 +1,2568 @@
+{
+ "artifact": "k2_r525_inversion_atlas_v1",
+ "ts": "2026-09-25T01:26:00",
+ "authority": "HANDOFF-K2-525 sec.3 (W-2) · read-only, zero-quota prep",
+ "boundaries": "Solve() 0 calls; no board/SPEC/generator/criteria writes; no .omo/supervision writes",
+ "claim_class": "named_structural_lead (NOT a design-level certificate)",
+ "zones_mm": {
+  "COMB": [
+   83.0,
+   53.5,
+   96.0,
+   57.5
+  ],
+  "BELT": [
+   96.0,
+   57.5,
+   133.0,
+   66.0
+  ],
+  "WALL": [
+   132.5,
+   43.0,
+   135.0,
+   55.0
+  ],
+  "FIELD": [
+   125.0,
+   41.0,
+   142.6,
+   54.6
+  ]
+ },
+ "permutation": {
+  "comb_order_by_Ax": [
+   "PCIE_UP_OUT0_N_J2",
+   "PCIE_UP_OUT0_P_J2",
+   "PCIE_UP_OUT1_N_J2",
+   "PCIE_UP_OUT1_P_J2",
+   "PCIE_UP_OUT2_N_J2",
+   "PCIE_UP_OUT2_P_J2",
+   "PCIE_UP_OUT3_N_J2",
+   "PCIE_UP_OUT3_P_J2",
+   "PCIE_UP_OUT4_N_J2",
+   "PCIE_UP_OUT4_P_J2",
+   "PCIE_UP_OUT5_N_J2",
+   "PCIE_UP_OUT5_P_J2",
+   "PCIE_UP_OUT6_N_J2",
+   "PCIE_UP_OUT6_P_J2",
+   "PCIE_UP_OUT7_N_J2",
+   "PCIE_UP_OUT7_P_J2"
+  ],
+  "pad_order_by_Bx": [
+   "PCIE_UP_OUT0_N_J2",
+   "PCIE_UP_OUT1_P_J2",
+   "PCIE_UP_OUT5_P_J2",
+   "PCIE_UP_OUT2_N_J2",
+   "PCIE_UP_OUT6_N_J2",
+   "PCIE_UP_OUT3_P_J2",
+   "PCIE_UP_OUT7_P_J2",
+   "PCIE_UP_OUT4_N_J2",
+   "PCIE_UP_OUT3_N_J2",
+   "PCIE_UP_OUT7_N_J2",
+   "PCIE_UP_OUT2_P_J2",
+   "PCIE_UP_OUT6_P_J2",
+   "PCIE_UP_OUT5_N_J2",
+   "PCIE_UP_OUT1_N_J2",
+   "PCIE_UP_OUT4_P_J2",
+   "PCIE_UP_OUT0_P_J2"
+  ],
+  "pi_pad_rank_in_comb_order": [
+   0,
+   15,
+   13,
+   1,
+   3,
+   10,
+   8,
+   5,
+   7,
+   14,
+   12,
+   2,
+   4,
+   11,
+   9,
+   6
+  ],
+  "inversions": 58,
+  "LIS": 6,
+  "LDS": 6,
+  "min_order_preserving_groups": 6,
+  "registered_layers": 2,
+  "registered_max_via_pairs_per_lane": 2,
+  "level_reading": "LDS(pi)=6 > registered layers=2 => the permutation cannot be a union of 2 order-preserving groups; however this bound applies ONLY to the 'each lane stays on one layer' reading. A lane that makes an In4 excursion is absent from its In5 order inside that axial interval, so SEQUENCED excursions can realise reversals that a fixed 2-way layer split cannot (the naive 'L(pi) <= #layers' lemma is REFUTED, see HANDOFF-K2-525 sec.1)."
+ },
+ "inversion_detail": [
+  {
+   "pair": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT1_N_J2"
+   ],
+   "comb_ranks": [
+    1,
+    2
+   ],
+   "pad_ranks": [
+    15,
+    13
+   ],
+   "groups": [
+    0,
+    1
+   ],
+   "group_kind": "east/east",
+   "x_overlap_window_mm": [
+    85.5,
+    139.48
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    141.22,
+    139.48
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT1_P_J2"
+   ],
+   "comb_ranks": [
+    1,
+    3
+   ],
+   "pad_ranks": [
+    15,
+    1
+   ],
+   "groups": [
+    0,
+    2
+   ],
+   "group_kind": "east/west",
+   "x_overlap_window_mm": [
+    86.05,
+    127.59
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    141.22,
+    127.59
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT2_N_J2"
+   ],
+   "comb_ranks": [
+    1,
+    4
+   ],
+   "pad_ranks": [
+    15,
+    3
+   ],
+   "groups": [
+    0,
+    2
+   ],
+   "group_kind": "east/west",
+   "x_overlap_window_mm": [
+    86.7,
+    129.33
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    141.22,
+    129.33
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT2_P_J2"
+   ],
+   "comb_ranks": [
+    1,
+    5
+   ],
+   "pad_ranks": [
+    15,
+    10
+   ],
+   "groups": [
+    0,
+    2
+   ],
+   "group_kind": "east/east",
+   "x_overlap_window_mm": [
+    87.25,
+    137.16
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    141.22,
+    137.16
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT3_N_J2"
+   ],
+   "comb_ranks": [
+    1,
+    6
+   ],
+   "pad_ranks": [
+    15,
+    8
+   ],
+   "groups": [
+    0,
+    3
+   ],
+   "group_kind": "east/east",
+   "x_overlap_window_mm": [
+    87.9,
+    136.0
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    141.22,
+    136.0
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT3_P_J2"
+   ],
+   "comb_ranks": [
+    1,
+    7
+   ],
+   "pad_ranks": [
+    15,
+    5
+   ],
+   "groups": [
+    0,
+    4
+   ],
+   "group_kind": "east/west",
+   "x_overlap_window_mm": [
+    88.45,
+    130.49
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    141.22,
+    130.49
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT4_N_J2"
+   ],
+   "comb_ranks": [
+    1,
+    8
+   ],
+   "pad_ranks": [
+    15,
+    7
+   ],
+   "groups": [
+    0,
+    4
+   ],
+   "group_kind": "east/west",
+   "x_overlap_window_mm": [
+    89.1,
+    131.65
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    141.22,
+    131.65
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT4_P_J2"
+   ],
+   "comb_ranks": [
+    1,
+    9
+   ],
+   "pad_ranks": [
+    15,
+    14
+   ],
+   "groups": [
+    0,
+    1
+   ],
+   "group_kind": "east/east",
+   "x_overlap_window_mm": [
+    89.65,
+    140.06
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    141.22,
+    140.06
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT5_N_J2"
+   ],
+   "comb_ranks": [
+    1,
+    10
+   ],
+   "pad_ranks": [
+    15,
+    12
+   ],
+   "groups": [
+    0,
+    2
+   ],
+   "group_kind": "east/east",
+   "x_overlap_window_mm": [
+    90.3,
+    138.9
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    141.22,
+    138.9
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT5_P_J2"
+   ],
+   "comb_ranks": [
+    1,
+    11
+   ],
+   "pad_ranks": [
+    15,
+    2
+   ],
+   "groups": [
+    0,
+    5
+   ],
+   "group_kind": "east/west",
+   "x_overlap_window_mm": [
+    90.85,
+    128.75
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    141.22,
+    128.75
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT6_N_J2"
+   ],
+   "comb_ranks": [
+    1,
+    12
+   ],
+   "pad_ranks": [
+    15,
+    4
+   ],
+   "groups": [
+    0,
+    5
+   ],
+   "group_kind": "east/west",
+   "x_overlap_window_mm": [
+    91.5,
+    129.91
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    141.22,
+    129.91
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT6_P_J2"
+   ],
+   "comb_ranks": [
+    1,
+    13
+   ],
+   "pad_ranks": [
+    15,
+    11
+   ],
+   "groups": [
+    0,
+    3
+   ],
+   "group_kind": "east/east",
+   "x_overlap_window_mm": [
+    92.05,
+    137.74
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    141.22,
+    137.74
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT7_N_J2"
+   ],
+   "comb_ranks": [
+    1,
+    14
+   ],
+   "pad_ranks": [
+    15,
+    9
+   ],
+   "groups": [
+    0,
+    4
+   ],
+   "group_kind": "east/east",
+   "x_overlap_window_mm": [
+    92.7,
+    136.58
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    141.22,
+    136.58
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT7_P_J2"
+   ],
+   "comb_ranks": [
+    1,
+    15
+   ],
+   "pad_ranks": [
+    15,
+    6
+   ],
+   "groups": [
+    0,
+    5
+   ],
+   "group_kind": "east/west",
+   "x_overlap_window_mm": [
+    93.7,
+    131.07
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    141.22,
+    131.07
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT1_P_J2"
+   ],
+   "comb_ranks": [
+    2,
+    3
+   ],
+   "pad_ranks": [
+    13,
+    1
+   ],
+   "groups": [
+    1,
+    2
+   ],
+   "group_kind": "east/west",
+   "x_overlap_window_mm": [
+    86.05,
+    127.59
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    139.48,
+    127.59
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT2_N_J2"
+   ],
+   "comb_ranks": [
+    2,
+    4
+   ],
+   "pad_ranks": [
+    13,
+    3
+   ],
+   "groups": [
+    1,
+    2
+   ],
+   "group_kind": "east/west",
+   "x_overlap_window_mm": [
+    86.7,
+    129.33
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    139.48,
+    129.33
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT2_P_J2"
+   ],
+   "comb_ranks": [
+    2,
+    5
+   ],
+   "pad_ranks": [
+    13,
+    10
+   ],
+   "groups": [
+    1,
+    2
+   ],
+   "group_kind": "east/east",
+   "x_overlap_window_mm": [
+    87.25,
+    137.16
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    139.48,
+    137.16
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT3_N_J2"
+   ],
+   "comb_ranks": [
+    2,
+    6
+   ],
+   "pad_ranks": [
+    13,
+    8
+   ],
+   "groups": [
+    1,
+    3
+   ],
+   "group_kind": "east/east",
+   "x_overlap_window_mm": [
+    87.9,
+    136.0
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    139.48,
+    136.0
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT3_P_J2"
+   ],
+   "comb_ranks": [
+    2,
+    7
+   ],
+   "pad_ranks": [
+    13,
+    5
+   ],
+   "groups": [
+    1,
+    4
+   ],
+   "group_kind": "east/west",
+   "x_overlap_window_mm": [
+    88.45,
+    130.49
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    139.48,
+    130.49
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT4_N_J2"
+   ],
+   "comb_ranks": [
+    2,
+    8
+   ],
+   "pad_ranks": [
+    13,
+    7
+   ],
+   "groups": [
+    1,
+    4
+   ],
+   "group_kind": "east/west",
+   "x_overlap_window_mm": [
+    89.1,
+    131.65
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    139.48,
+    131.65
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT5_N_J2"
+   ],
+   "comb_ranks": [
+    2,
+    10
+   ],
+   "pad_ranks": [
+    13,
+    12
+   ],
+   "groups": [
+    1,
+    2
+   ],
+   "group_kind": "east/east",
+   "x_overlap_window_mm": [
+    90.3,
+    138.9
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    139.48,
+    138.9
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT5_P_J2"
+   ],
+   "comb_ranks": [
+    2,
+    11
+   ],
+   "pad_ranks": [
+    13,
+    2
+   ],
+   "groups": [
+    1,
+    5
+   ],
+   "group_kind": "east/west",
+   "x_overlap_window_mm": [
+    90.85,
+    128.75
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    139.48,
+    128.75
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT6_N_J2"
+   ],
+   "comb_ranks": [
+    2,
+    12
+   ],
+   "pad_ranks": [
+    13,
+    4
+   ],
+   "groups": [
+    1,
+    5
+   ],
+   "group_kind": "east/west",
+   "x_overlap_window_mm": [
+    91.5,
+    129.91
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    139.48,
+    129.91
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT6_P_J2"
+   ],
+   "comb_ranks": [
+    2,
+    13
+   ],
+   "pad_ranks": [
+    13,
+    11
+   ],
+   "groups": [
+    1,
+    3
+   ],
+   "group_kind": "east/east",
+   "x_overlap_window_mm": [
+    92.05,
+    137.74
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    139.48,
+    137.74
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT7_N_J2"
+   ],
+   "comb_ranks": [
+    2,
+    14
+   ],
+   "pad_ranks": [
+    13,
+    9
+   ],
+   "groups": [
+    1,
+    4
+   ],
+   "group_kind": "east/east",
+   "x_overlap_window_mm": [
+    92.7,
+    136.58
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    139.48,
+    136.58
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT7_P_J2"
+   ],
+   "comb_ranks": [
+    2,
+    15
+   ],
+   "pad_ranks": [
+    13,
+    6
+   ],
+   "groups": [
+    1,
+    5
+   ],
+   "group_kind": "east/west",
+   "x_overlap_window_mm": [
+    93.7,
+    131.07
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    139.48,
+    131.07
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT2_N_J2",
+    "PCIE_UP_OUT5_P_J2"
+   ],
+   "comb_ranks": [
+    4,
+    11
+   ],
+   "pad_ranks": [
+    3,
+    2
+   ],
+   "groups": [
+    2,
+    5
+   ],
+   "group_kind": "west/west",
+   "x_overlap_window_mm": [
+    90.85,
+    128.75
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    129.33,
+    128.75
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT3_N_J2"
+   ],
+   "comb_ranks": [
+    5,
+    6
+   ],
+   "pad_ranks": [
+    10,
+    8
+   ],
+   "groups": [
+    2,
+    3
+   ],
+   "group_kind": "east/east",
+   "x_overlap_window_mm": [
+    87.9,
+    136.0
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    137.16,
+    136.0
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT3_P_J2"
+   ],
+   "comb_ranks": [
+    5,
+    7
+   ],
+   "pad_ranks": [
+    10,
+    5
+   ],
+   "groups": [
+    2,
+    4
+   ],
+   "group_kind": "east/west",
+   "x_overlap_window_mm": [
+    88.45,
+    130.49
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    137.16,
+    130.49
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT4_N_J2"
+   ],
+   "comb_ranks": [
+    5,
+    8
+   ],
+   "pad_ranks": [
+    10,
+    7
+   ],
+   "groups": [
+    2,
+    4
+   ],
+   "group_kind": "east/west",
+   "x_overlap_window_mm": [
+    89.1,
+    131.65
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    137.16,
+    131.65
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT5_P_J2"
+   ],
+   "comb_ranks": [
+    5,
+    11
+   ],
+   "pad_ranks": [
+    10,
+    2
+   ],
+   "groups": [
+    2,
+    5
+   ],
+   "group_kind": "east/west",
+   "x_overlap_window_mm": [
+    90.85,
+    128.75
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    137.16,
+    128.75
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT6_N_J2"
+   ],
+   "comb_ranks": [
+    5,
+    12
+   ],
+   "pad_ranks": [
+    10,
+    4
+   ],
+   "groups": [
+    2,
+    5
+   ],
+   "group_kind": "east/west",
+   "x_overlap_window_mm": [
+    91.5,
+    129.91
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    137.16,
+    129.91
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT7_N_J2"
+   ],
+   "comb_ranks": [
+    5,
+    14
+   ],
+   "pad_ranks": [
+    10,
+    9
+   ],
+   "groups": [
+    2,
+    4
+   ],
+   "group_kind": "east/east",
+   "x_overlap_window_mm": [
+    92.7,
+    136.58
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    137.16,
+    136.58
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT7_P_J2"
+   ],
+   "comb_ranks": [
+    5,
+    15
+   ],
+   "pad_ranks": [
+    10,
+    6
+   ],
+   "groups": [
+    2,
+    5
+   ],
+   "group_kind": "east/west",
+   "x_overlap_window_mm": [
+    93.7,
+    131.07
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    137.16,
+    131.07
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT3_N_J2",
+    "PCIE_UP_OUT3_P_J2"
+   ],
+   "comb_ranks": [
+    6,
+    7
+   ],
+   "pad_ranks": [
+    8,
+    5
+   ],
+   "groups": [
+    3,
+    4
+   ],
+   "group_kind": "east/west",
+   "x_overlap_window_mm": [
+    88.45,
+    130.49
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    136.0,
+    130.49
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT3_N_J2",
+    "PCIE_UP_OUT4_N_J2"
+   ],
+   "comb_ranks": [
+    6,
+    8
+   ],
+   "pad_ranks": [
+    8,
+    7
+   ],
+   "groups": [
+    3,
+    4
+   ],
+   "group_kind": "east/west",
+   "x_overlap_window_mm": [
+    89.1,
+    131.65
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    136.0,
+    131.65
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT3_N_J2",
+    "PCIE_UP_OUT5_P_J2"
+   ],
+   "comb_ranks": [
+    6,
+    11
+   ],
+   "pad_ranks": [
+    8,
+    2
+   ],
+   "groups": [
+    3,
+    5
+   ],
+   "group_kind": "east/west",
+   "x_overlap_window_mm": [
+    90.85,
+    128.75
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    136.0,
+    128.75
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT3_N_J2",
+    "PCIE_UP_OUT6_N_J2"
+   ],
+   "comb_ranks": [
+    6,
+    12
+   ],
+   "pad_ranks": [
+    8,
+    4
+   ],
+   "groups": [
+    3,
+    5
+   ],
+   "group_kind": "east/west",
+   "x_overlap_window_mm": [
+    91.5,
+    129.91
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    136.0,
+    129.91
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT3_N_J2",
+    "PCIE_UP_OUT7_P_J2"
+   ],
+   "comb_ranks": [
+    6,
+    15
+   ],
+   "pad_ranks": [
+    8,
+    6
+   ],
+   "groups": [
+    3,
+    5
+   ],
+   "group_kind": "east/west",
+   "x_overlap_window_mm": [
+    93.7,
+    131.07
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    136.0,
+    131.07
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT3_P_J2",
+    "PCIE_UP_OUT5_P_J2"
+   ],
+   "comb_ranks": [
+    7,
+    11
+   ],
+   "pad_ranks": [
+    5,
+    2
+   ],
+   "groups": [
+    4,
+    5
+   ],
+   "group_kind": "west/west",
+   "x_overlap_window_mm": [
+    90.85,
+    128.75
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    130.49,
+    128.75
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT3_P_J2",
+    "PCIE_UP_OUT6_N_J2"
+   ],
+   "comb_ranks": [
+    7,
+    12
+   ],
+   "pad_ranks": [
+    5,
+    4
+   ],
+   "groups": [
+    4,
+    5
+   ],
+   "group_kind": "west/west",
+   "x_overlap_window_mm": [
+    91.5,
+    129.91
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    130.49,
+    129.91
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT4_N_J2",
+    "PCIE_UP_OUT5_P_J2"
+   ],
+   "comb_ranks": [
+    8,
+    11
+   ],
+   "pad_ranks": [
+    7,
+    2
+   ],
+   "groups": [
+    4,
+    5
+   ],
+   "group_kind": "west/west",
+   "x_overlap_window_mm": [
+    90.85,
+    128.75
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    131.65,
+    128.75
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT4_N_J2",
+    "PCIE_UP_OUT6_N_J2"
+   ],
+   "comb_ranks": [
+    8,
+    12
+   ],
+   "pad_ranks": [
+    7,
+    4
+   ],
+   "groups": [
+    4,
+    5
+   ],
+   "group_kind": "west/west",
+   "x_overlap_window_mm": [
+    91.5,
+    129.91
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    131.65,
+    129.91
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT4_N_J2",
+    "PCIE_UP_OUT7_P_J2"
+   ],
+   "comb_ranks": [
+    8,
+    15
+   ],
+   "pad_ranks": [
+    7,
+    6
+   ],
+   "groups": [
+    4,
+    5
+   ],
+   "group_kind": "west/west",
+   "x_overlap_window_mm": [
+    93.7,
+    131.07
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    131.65,
+    131.07
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT5_N_J2"
+   ],
+   "comb_ranks": [
+    9,
+    10
+   ],
+   "pad_ranks": [
+    14,
+    12
+   ],
+   "groups": [
+    1,
+    2
+   ],
+   "group_kind": "east/east",
+   "x_overlap_window_mm": [
+    90.3,
+    138.9
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    140.06,
+    138.9
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT5_P_J2"
+   ],
+   "comb_ranks": [
+    9,
+    11
+   ],
+   "pad_ranks": [
+    14,
+    2
+   ],
+   "groups": [
+    1,
+    5
+   ],
+   "group_kind": "east/west",
+   "x_overlap_window_mm": [
+    90.85,
+    128.75
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    140.06,
+    128.75
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT6_N_J2"
+   ],
+   "comb_ranks": [
+    9,
+    12
+   ],
+   "pad_ranks": [
+    14,
+    4
+   ],
+   "groups": [
+    1,
+    5
+   ],
+   "group_kind": "east/west",
+   "x_overlap_window_mm": [
+    91.5,
+    129.91
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    140.06,
+    129.91
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT6_P_J2"
+   ],
+   "comb_ranks": [
+    9,
+    13
+   ],
+   "pad_ranks": [
+    14,
+    11
+   ],
+   "groups": [
+    1,
+    3
+   ],
+   "group_kind": "east/east",
+   "x_overlap_window_mm": [
+    92.05,
+    137.74
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    140.06,
+    137.74
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT7_N_J2"
+   ],
+   "comb_ranks": [
+    9,
+    14
+   ],
+   "pad_ranks": [
+    14,
+    9
+   ],
+   "groups": [
+    1,
+    4
+   ],
+   "group_kind": "east/east",
+   "x_overlap_window_mm": [
+    92.7,
+    136.58
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    140.06,
+    136.58
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT7_P_J2"
+   ],
+   "comb_ranks": [
+    9,
+    15
+   ],
+   "pad_ranks": [
+    14,
+    6
+   ],
+   "groups": [
+    1,
+    5
+   ],
+   "group_kind": "east/west",
+   "x_overlap_window_mm": [
+    93.7,
+    131.07
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    140.06,
+    131.07
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT5_N_J2",
+    "PCIE_UP_OUT5_P_J2"
+   ],
+   "comb_ranks": [
+    10,
+    11
+   ],
+   "pad_ranks": [
+    12,
+    2
+   ],
+   "groups": [
+    2,
+    5
+   ],
+   "group_kind": "east/west",
+   "x_overlap_window_mm": [
+    90.85,
+    128.75
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    138.9,
+    128.75
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT5_N_J2",
+    "PCIE_UP_OUT6_N_J2"
+   ],
+   "comb_ranks": [
+    10,
+    12
+   ],
+   "pad_ranks": [
+    12,
+    4
+   ],
+   "groups": [
+    2,
+    5
+   ],
+   "group_kind": "east/west",
+   "x_overlap_window_mm": [
+    91.5,
+    129.91
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    138.9,
+    129.91
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT5_N_J2",
+    "PCIE_UP_OUT6_P_J2"
+   ],
+   "comb_ranks": [
+    10,
+    13
+   ],
+   "pad_ranks": [
+    12,
+    11
+   ],
+   "groups": [
+    2,
+    3
+   ],
+   "group_kind": "east/east",
+   "x_overlap_window_mm": [
+    92.05,
+    137.74
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    138.9,
+    137.74
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT5_N_J2",
+    "PCIE_UP_OUT7_N_J2"
+   ],
+   "comb_ranks": [
+    10,
+    14
+   ],
+   "pad_ranks": [
+    12,
+    9
+   ],
+   "groups": [
+    2,
+    4
+   ],
+   "group_kind": "east/east",
+   "x_overlap_window_mm": [
+    92.7,
+    136.58
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    138.9,
+    136.58
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT5_N_J2",
+    "PCIE_UP_OUT7_P_J2"
+   ],
+   "comb_ranks": [
+    10,
+    15
+   ],
+   "pad_ranks": [
+    12,
+    6
+   ],
+   "groups": [
+    2,
+    5
+   ],
+   "group_kind": "east/west",
+   "x_overlap_window_mm": [
+    93.7,
+    131.07
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    138.9,
+    131.07
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT6_P_J2",
+    "PCIE_UP_OUT7_N_J2"
+   ],
+   "comb_ranks": [
+    13,
+    14
+   ],
+   "pad_ranks": [
+    11,
+    9
+   ],
+   "groups": [
+    3,
+    4
+   ],
+   "group_kind": "east/east",
+   "x_overlap_window_mm": [
+    92.7,
+    136.58
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    137.74,
+    136.58
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT6_P_J2",
+    "PCIE_UP_OUT7_P_J2"
+   ],
+   "comb_ranks": [
+    13,
+    15
+   ],
+   "pad_ranks": [
+    11,
+    6
+   ],
+   "groups": [
+    3,
+    5
+   ],
+   "group_kind": "east/west",
+   "x_overlap_window_mm": [
+    93.7,
+    131.07
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    137.74,
+    131.07
+   ]
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT7_N_J2",
+    "PCIE_UP_OUT7_P_J2"
+   ],
+   "comb_ranks": [
+    14,
+    15
+   ],
+   "pad_ranks": [
+    9,
+    6
+   ],
+   "groups": [
+    4,
+    5
+   ],
+   "group_kind": "east/west",
+   "x_overlap_window_mm": [
+    93.7,
+    131.07
+   ],
+   "zones_intersecting_window": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "window_has_via_station": true,
+   "pad_x_mm": [
+    136.58,
+    131.07
+   ]
+  }
+ ],
+ "inversion_summary": {
+  "total": 58,
+  "by_group_kind": {
+   "east/east": 20,
+   "east/west": 32,
+   "west/west": 6
+  },
+  "with_via_station_in_window": 58,
+  "without_via_station_in_window": 0,
+  "lead": "每对反序 ⇒ 该对中至少一方的**同一轴向位置上**不得与另一方同层存活（编织条件）；过孔对只能落在在册四宽区内 ⇒ 窗内无宽区的对**无法由窗内打孔解**（named structural lead，非证书）"
+ },
+ "min_inc_cover_groups": {
+  "count": 6,
+  "groups_by_lane": [
+   [
+    "PCIE_UP_OUT0_N_J2",
+    "PCIE_UP_OUT0_P_J2"
+   ],
+   [
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT4_P_J2"
+   ],
+   [
+    "PCIE_UP_OUT1_P_J2",
+    "PCIE_UP_OUT2_N_J2",
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT5_N_J2"
+   ],
+   [
+    "PCIE_UP_OUT3_N_J2",
+    "PCIE_UP_OUT6_P_J2"
+   ],
+   [
+    "PCIE_UP_OUT3_P_J2",
+    "PCIE_UP_OUT4_N_J2",
+    "PCIE_UP_OUT7_N_J2"
+   ],
+   [
+    "PCIE_UP_OUT5_P_J2",
+    "PCIE_UP_OUT6_N_J2",
+    "PCIE_UP_OUT7_P_J2"
+   ]
+  ],
+  "reading": "同一保序组内的线可**同时**停留在同一层（组内相对序不变）；不同组之间必须靠**层或时刻**分离 ⇒ 若某站只有 2 层可用，则至多 2 组可在该站同时活跃 ⇒ 其余组必须在该站**换走**：受 = 每根线 ≤2 对孔（= ≤1 段 In4 行程）约束。"
+ },
+ "per_lane_excursion_pressure": {
+  "PCIE_UP_OUT0_N_J2": {
+   "group_id": 0,
+   "peers_in_same_group": 1,
+   "distinct_other_groups": 5
+  },
+  "PCIE_UP_OUT0_P_J2": {
+   "group_id": 0,
+   "peers_in_same_group": 1,
+   "distinct_other_groups": 5
+  },
+  "PCIE_UP_OUT1_N_J2": {
+   "group_id": 1,
+   "peers_in_same_group": 1,
+   "distinct_other_groups": 5
+  },
+  "PCIE_UP_OUT1_P_J2": {
+   "group_id": 2,
+   "peers_in_same_group": 3,
+   "distinct_other_groups": 5
+  },
+  "PCIE_UP_OUT2_N_J2": {
+   "group_id": 2,
+   "peers_in_same_group": 3,
+   "distinct_other_groups": 5
+  },
+  "PCIE_UP_OUT2_P_J2": {
+   "group_id": 2,
+   "peers_in_same_group": 3,
+   "distinct_other_groups": 5
+  },
+  "PCIE_UP_OUT3_N_J2": {
+   "group_id": 3,
+   "peers_in_same_group": 1,
+   "distinct_other_groups": 5
+  },
+  "PCIE_UP_OUT3_P_J2": {
+   "group_id": 4,
+   "peers_in_same_group": 2,
+   "distinct_other_groups": 5
+  },
+  "PCIE_UP_OUT4_N_J2": {
+   "group_id": 4,
+   "peers_in_same_group": 2,
+   "distinct_other_groups": 5
+  },
+  "PCIE_UP_OUT4_P_J2": {
+   "group_id": 1,
+   "peers_in_same_group": 1,
+   "distinct_other_groups": 5
+  },
+  "PCIE_UP_OUT5_N_J2": {
+   "group_id": 2,
+   "peers_in_same_group": 3,
+   "distinct_other_groups": 5
+  },
+  "PCIE_UP_OUT5_P_J2": {
+   "group_id": 5,
+   "peers_in_same_group": 2,
+   "distinct_other_groups": 5
+  },
+  "PCIE_UP_OUT6_N_J2": {
+   "group_id": 5,
+   "peers_in_same_group": 2,
+   "distinct_other_groups": 5
+  },
+  "PCIE_UP_OUT6_P_J2": {
+   "group_id": 3,
+   "peers_in_same_group": 1,
+   "distinct_other_groups": 5
+  },
+  "PCIE_UP_OUT7_N_J2": {
+   "group_id": 4,
+   "peers_in_same_group": 2,
+   "distinct_other_groups": 5
+  },
+  "PCIE_UP_OUT7_P_J2": {
+   "group_id": 5,
+   "peers_in_same_group": 2,
+   "distinct_other_groups": 5
+  }
+ },
+ "lane_table": {
+  "PCIE_UP_OUT0_N_J2": {
+   "comb_rank": 0,
+   "pad_rank": 0,
+   "group_id": 0,
+   "A_anchor_mm": [
+    84.35,
+    55.723
+   ],
+   "B_anchor_mm": [
+    127.01,
+    43.25
+   ],
+   "group": "west",
+   "A_in_zone": [
+    "COMB"
+   ],
+   "B_in_zone": [
+    "FIELD"
+   ],
+   "own_nodes": {
+    "In5": 7310,
+    "In4": 8152
+   },
+   "via_capable_nodes": 2681
+  },
+  "PCIE_UP_OUT0_P_J2": {
+   "comb_rank": 1,
+   "pad_rank": 15,
+   "group_id": 0,
+   "A_anchor_mm": [
+    84.85,
+    54.88
+   ],
+   "B_anchor_mm": [
+    141.22,
+    42.65
+   ],
+   "group": "east",
+   "A_in_zone": [
+    "COMB"
+   ],
+   "B_in_zone": [
+    "FIELD"
+   ],
+   "own_nodes": {
+    "In5": 7311,
+    "In4": 8153
+   },
+   "via_capable_nodes": 2681
+  },
+  "PCIE_UP_OUT1_N_J2": {
+   "comb_rank": 2,
+   "pad_rank": 13,
+   "group_id": 1,
+   "A_anchor_mm": [
+    85.5,
+    55.823
+   ],
+   "B_anchor_mm": [
+    139.48,
+    43.85
+   ],
+   "group": "east",
+   "A_in_zone": [
+    "COMB"
+   ],
+   "B_in_zone": [
+    "FIELD"
+   ],
+   "own_nodes": {
+    "In5": 7311,
+    "In4": 8153
+   },
+   "via_capable_nodes": 2683
+  },
+  "PCIE_UP_OUT1_P_J2": {
+   "comb_rank": 3,
+   "pad_rank": 1,
+   "group_id": 2,
+   "A_anchor_mm": [
+    86.05,
+    54.88
+   ],
+   "B_anchor_mm": [
+    127.59,
+    43.85
+   ],
+   "group": "west",
+   "A_in_zone": [
+    "COMB"
+   ],
+   "B_in_zone": [
+    "FIELD"
+   ],
+   "own_nodes": {
+    "In5": 7311,
+    "In4": 8153
+   },
+   "via_capable_nodes": 2678
+  },
+  "PCIE_UP_OUT2_N_J2": {
+   "comb_rank": 4,
+   "pad_rank": 3,
+   "group_id": 2,
+   "A_anchor_mm": [
+    86.7,
+    55.823
+   ],
+   "B_anchor_mm": [
+    129.33,
+    46.85
+   ],
+   "group": "west",
+   "A_in_zone": [
+    "COMB"
+   ],
+   "B_in_zone": [
+    "FIELD"
+   ],
+   "own_nodes": {
+    "In5": 7311,
+    "In4": 8153
+   },
+   "via_capable_nodes": 2685
+  },
+  "PCIE_UP_OUT2_P_J2": {
+   "comb_rank": 5,
+   "pad_rank": 10,
+   "group_id": 2,
+   "A_anchor_mm": [
+    87.25,
+    54.88
+   ],
+   "B_anchor_mm": [
+    137.16,
+    46.25
+   ],
+   "group": "east",
+   "A_in_zone": [
+    "COMB"
+   ],
+   "B_in_zone": [
+    "FIELD"
+   ],
+   "own_nodes": {
+    "In5": 7311,
+    "In4": 8153
+   },
+   "via_capable_nodes": 2680
+  },
+  "PCIE_UP_OUT3_N_J2": {
+   "comb_rank": 6,
+   "pad_rank": 8,
+   "group_id": 3,
+   "A_anchor_mm": [
+    87.9,
+    55.823
+   ],
+   "B_anchor_mm": [
+    136.0,
+    47.45
+   ],
+   "group": "east",
+   "A_in_zone": [
+    "COMB"
+   ],
+   "B_in_zone": [
+    "FIELD"
+   ],
+   "own_nodes": {
+    "In5": 7312,
+    "In4": 8154
+   },
+   "via_capable_nodes": 2685
+  },
+  "PCIE_UP_OUT3_P_J2": {
+   "comb_rank": 7,
+   "pad_rank": 5,
+   "group_id": 4,
+   "A_anchor_mm": [
+    88.45,
+    54.88
+   ],
+   "B_anchor_mm": [
+    130.49,
+    47.45
+   ],
+   "group": "west",
+   "A_in_zone": [
+    "COMB"
+   ],
+   "B_in_zone": [
+    "FIELD"
+   ],
+   "own_nodes": {
+    "In5": 7310,
+    "In4": 8152
+   },
+   "via_capable_nodes": 2679
+  },
+  "PCIE_UP_OUT4_N_J2": {
+   "comb_rank": 8,
+   "pad_rank": 7,
+   "group_id": 4,
+   "A_anchor_mm": [
+    89.1,
+    55.823
+   ],
+   "B_anchor_mm": [
+    131.65,
+    48.65
+   ],
+   "group": "west",
+   "A_in_zone": [
+    "COMB"
+   ],
+   "B_in_zone": [
+    "FIELD"
+   ],
+   "own_nodes": {
+    "In5": 7311,
+    "In4": 8153
+   },
+   "via_capable_nodes": 2687
+  },
+  "PCIE_UP_OUT4_P_J2": {
+   "comb_rank": 9,
+   "pad_rank": 14,
+   "group_id": 1,
+   "A_anchor_mm": [
+    89.65,
+    54.88
+   ],
+   "B_anchor_mm": [
+    140.06,
+    48.05
+   ],
+   "group": "east",
+   "A_in_zone": [
+    "COMB"
+   ],
+   "B_in_zone": [
+    "FIELD"
+   ],
+   "own_nodes": {
+    "In5": 7311,
+    "In4": 8153
+   },
+   "via_capable_nodes": 2682
+  },
+  "PCIE_UP_OUT5_N_J2": {
+   "comb_rank": 10,
+   "pad_rank": 12,
+   "group_id": 2,
+   "A_anchor_mm": [
+    90.3,
+    55.823
+   ],
+   "B_anchor_mm": [
+    138.9,
+    49.25
+   ],
+   "group": "east",
+   "A_in_zone": [
+    "COMB"
+   ],
+   "B_in_zone": [
+    "FIELD"
+   ],
+   "own_nodes": {
+    "In5": 7311,
+    "In4": 8153
+   },
+   "via_capable_nodes": 2682
+  },
+  "PCIE_UP_OUT5_P_J2": {
+   "comb_rank": 11,
+   "pad_rank": 2,
+   "group_id": 5,
+   "A_anchor_mm": [
+    90.85,
+    54.88
+   ],
+   "B_anchor_mm": [
+    128.75,
+    49.25
+   ],
+   "group": "west",
+   "A_in_zone": [
+    "COMB"
+   ],
+   "B_in_zone": [
+    "FIELD"
+   ],
+   "own_nodes": {
+    "In5": 7311,
+    "In4": 8153
+   },
+   "via_capable_nodes": 2681
+  },
+  "PCIE_UP_OUT6_N_J2": {
+   "comb_rank": 12,
+   "pad_rank": 4,
+   "group_id": 5,
+   "A_anchor_mm": [
+    91.5,
+    55.823
+   ],
+   "B_anchor_mm": [
+    129.91,
+    52.25
+   ],
+   "group": "west",
+   "A_in_zone": [
+    "COMB"
+   ],
+   "B_in_zone": [
+    "FIELD"
+   ],
+   "own_nodes": {
+    "In5": 7311,
+    "In4": 8153
+   },
+   "via_capable_nodes": 2683
+  },
+  "PCIE_UP_OUT6_P_J2": {
+   "comb_rank": 13,
+   "pad_rank": 11,
+   "group_id": 3,
+   "A_anchor_mm": [
+    92.05,
+    54.88
+   ],
+   "B_anchor_mm": [
+    137.74,
+    51.65
+   ],
+   "group": "east",
+   "A_in_zone": [
+    "COMB"
+   ],
+   "B_in_zone": [
+    "FIELD"
+   ],
+   "own_nodes": {
+    "In5": 7312,
+    "In4": 8154
+   },
+   "via_capable_nodes": 2684
+  },
+  "PCIE_UP_OUT7_N_J2": {
+   "comb_rank": 14,
+   "pad_rank": 9,
+   "group_id": 4,
+   "A_anchor_mm": [
+    92.7,
+    55.823
+   ],
+   "B_anchor_mm": [
+    136.58,
+    52.85
+   ],
+   "group": "east",
+   "A_in_zone": [
+    "COMB"
+   ],
+   "B_in_zone": [
+    "FIELD"
+   ],
+   "own_nodes": {
+    "In5": 7311,
+    "In4": 8153
+   },
+   "via_capable_nodes": 2686
+  },
+  "PCIE_UP_OUT7_P_J2": {
+   "comb_rank": 15,
+   "pad_rank": 6,
+   "group_id": 5,
+   "A_anchor_mm": [
+    93.7,
+    55.13
+   ],
+   "B_anchor_mm": [
+    131.07,
+    52.85
+   ],
+   "group": "west",
+   "A_in_zone": [
+    "COMB"
+   ],
+   "B_in_zone": [
+    "FIELD"
+   ],
+   "own_nodes": {
+    "In5": 7311,
+    "In4": 8153
+   },
+   "via_capable_nodes": 2682
+  }
+ },
+ "artifacts": {
+  "json": "K2_R525_INVERSION_ATLAS_v1.json",
+  "svg": "K2_R525_INVERSION_ATLAS_v1.svg"
+ },
+ "decision": "ATLAS DONE (read-only, Solve() 0): pi inversions=58, LDS=6 (>2), min order-preserving groups=6; pairs with no wide-zone in their x-overlap window=0",
+ "solve_calls": 0,
+ "elapsed_s": 22.1
+}

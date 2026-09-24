@@ -1,0 +1,1145 @@
+{
+ "artifact": "k2_r525_woven_master_buildonly_v1",
+ "ts": "2026-09-25T01:21:56",
+ "authority": "HANDOFF-K2-525 sec.3 (W-1) · build-only · Solve() hard-refused",
+ "authorization_status": "woven variant AWAITING supervisor one-word ruling (#K2-192 sec.3.4)",
+ "boundaries": "Solve() 0 calls (and refused by design); no board/SPEC/generator/criteria writes",
+ "solve_calls": 0,
+ "station_grid": {
+  "definition": "station = (wide-zone, axial lattice coordinate) of a lane's via-capable node",
+  "zones_mm": {
+   "COMB": [
+    83.0,
+    53.5,
+    96.0,
+    57.5
+   ],
+   "BELT": [
+    96.0,
+    57.5,
+    133.0,
+    66.0
+   ],
+   "WALL": [
+    132.5,
+    43.0,
+    135.0,
+    55.0
+   ],
+   "FIELD": [
+    125.0,
+    41.0,
+    142.6,
+    54.6
+   ]
+  },
+  "fine_stations_per_lane": {
+   "PCIE_UP_OUT0_N_J2": 151,
+   "PCIE_UP_OUT0_P_J2": 150,
+   "PCIE_UP_OUT1_N_J2": 150,
+   "PCIE_UP_OUT1_P_J2": 150,
+   "PCIE_UP_OUT2_N_J2": 150,
+   "PCIE_UP_OUT2_P_J2": 150,
+   "PCIE_UP_OUT3_N_J2": 150,
+   "PCIE_UP_OUT3_P_J2": 150,
+   "PCIE_UP_OUT4_N_J2": 150,
+   "PCIE_UP_OUT4_P_J2": 150,
+   "PCIE_UP_OUT5_N_J2": 150,
+   "PCIE_UP_OUT5_P_J2": 150,
+   "PCIE_UP_OUT6_N_J2": 150,
+   "PCIE_UP_OUT6_P_J2": 150,
+   "PCIE_UP_OUT7_N_J2": 150,
+   "PCIE_UP_OUT7_P_J2": 150
+  },
+  "fine_stations_total": 2401,
+  "fine_shared_stations": 150,
+  "coarse_stations_per_lane": {
+   "PCIE_UP_OUT0_N_J2": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "PCIE_UP_OUT0_P_J2": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "PCIE_UP_OUT1_N_J2": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "PCIE_UP_OUT1_P_J2": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "PCIE_UP_OUT2_N_J2": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "PCIE_UP_OUT2_P_J2": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "PCIE_UP_OUT3_N_J2": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "PCIE_UP_OUT3_P_J2": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "PCIE_UP_OUT4_N_J2": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "PCIE_UP_OUT4_P_J2": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "PCIE_UP_OUT5_N_J2": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "PCIE_UP_OUT5_P_J2": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "PCIE_UP_OUT6_N_J2": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "PCIE_UP_OUT6_P_J2": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "PCIE_UP_OUT7_N_J2": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "PCIE_UP_OUT7_P_J2": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ]
+  },
+  "coarse_station_count": 4,
+  "fine_max_lanes_per_station": 16
+ },
+ "coarse_master": {
+  "station_granularity": "zone-level (4 stations: COMB<BELT<WALL<FIELD)",
+  "slot_bool_vars": 552,
+  "timetable_bool_vars": 192,
+  "weave_separation_bool_vars": 194,
+  "bool_vars_total": 938,
+  "constraints_total": 1170,
+  "scale_gate": 1200000,
+  "under_gate": true,
+  "validate": "OK",
+  "objective": "min sum_i (up_station - down_station)",
+  "decision": "BUILD-ONLY GREEN (规模闸 + Validate 过 · Solve() 0)"
+ },
+ "fine_master_estimate": {
+  "station_granularity": "lattice-level (per-lane via-capable stations, deduped by axial coordinate)",
+  "stations_per_lane_total": 2401,
+  "shared_stations": 150,
+  "dn_up_bool_vars": 4802,
+  "on4_bool_vars": 2401,
+  "weave_bool_vars": 6144,
+  "bool_vars_estimate": 13899,
+  "constraints_estimate": 15901,
+  "note": "analytic estimate (not instantiated in this window); fine grid is ~19x the coarse station count"
+ },
+ "readings": {
+  "inversions": 58,
+  "inv_pairs_with_fine_shared_station_in_window": 58,
+  "inv_pairs_with_coarse_station_in_window": 58,
+  "station_counts_in_window_fine_min_avg_max": [
+   86,
+   105.9,
+   147
+  ],
+  "encode_class": "necessary-condition relaxation (SAT still needs subproblems + registered gates; UNSAT's design-level meaning requires the fidelity self-check first)",
+  "claim_class": "spec + scale estimate only · NO conclusion, NO certificate, NO witness"
+ },
+ "inversion_with_windows": [
+  {
+   "pair": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT1_N_J2"
+   ],
+   "window_mm": [
+    85.5,
+    139.48
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 147
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT1_P_J2"
+   ],
+   "window_mm": [
+    86.05,
+    127.59
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 96
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT2_N_J2"
+   ],
+   "window_mm": [
+    86.7,
+    129.33
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 98
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT2_P_J2"
+   ],
+   "window_mm": [
+    87.25,
+    137.16
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 143
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT3_N_J2"
+   ],
+   "window_mm": [
+    87.9,
+    136.0
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 142
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT3_P_J2"
+   ],
+   "window_mm": [
+    88.45,
+    130.49
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 96
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT4_N_J2"
+   ],
+   "window_mm": [
+    89.1,
+    131.65
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 98
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT4_P_J2"
+   ],
+   "window_mm": [
+    89.65,
+    140.06
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 138
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT5_N_J2"
+   ],
+   "window_mm": [
+    90.3,
+    138.9
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 136
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT5_P_J2"
+   ],
+   "window_mm": [
+    90.85,
+    128.75
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 87
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT6_N_J2"
+   ],
+   "window_mm": [
+    91.5,
+    129.91
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 88
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT6_P_J2"
+   ],
+   "window_mm": [
+    92.05,
+    137.74
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 132
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT7_N_J2"
+   ],
+   "window_mm": [
+    92.7,
+    136.58
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 131
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT0_P_J2",
+    "PCIE_UP_OUT7_P_J2"
+   ],
+   "window_mm": [
+    93.7,
+    131.07
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 86
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT1_P_J2"
+   ],
+   "window_mm": [
+    86.05,
+    127.59
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 96
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT2_N_J2"
+   ],
+   "window_mm": [
+    86.7,
+    129.33
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 98
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT2_P_J2"
+   ],
+   "window_mm": [
+    87.25,
+    137.16
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 143
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT3_N_J2"
+   ],
+   "window_mm": [
+    87.9,
+    136.0
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 142
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT3_P_J2"
+   ],
+   "window_mm": [
+    88.45,
+    130.49
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 96
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT4_N_J2"
+   ],
+   "window_mm": [
+    89.1,
+    131.65
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 98
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT5_N_J2"
+   ],
+   "window_mm": [
+    90.3,
+    138.9
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 136
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT5_P_J2"
+   ],
+   "window_mm": [
+    90.85,
+    128.75
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 87
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT6_N_J2"
+   ],
+   "window_mm": [
+    91.5,
+    129.91
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 88
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT6_P_J2"
+   ],
+   "window_mm": [
+    92.05,
+    137.74
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 132
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT7_N_J2"
+   ],
+   "window_mm": [
+    92.7,
+    136.58
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 131
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT1_N_J2",
+    "PCIE_UP_OUT7_P_J2"
+   ],
+   "window_mm": [
+    93.7,
+    131.07
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 86
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT2_N_J2",
+    "PCIE_UP_OUT5_P_J2"
+   ],
+   "window_mm": [
+    90.85,
+    128.75
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 87
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT3_N_J2"
+   ],
+   "window_mm": [
+    87.9,
+    136.0
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 142
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT3_P_J2"
+   ],
+   "window_mm": [
+    88.45,
+    130.49
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 96
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT4_N_J2"
+   ],
+   "window_mm": [
+    89.1,
+    131.65
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 98
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT5_P_J2"
+   ],
+   "window_mm": [
+    90.85,
+    128.75
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 87
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT6_N_J2"
+   ],
+   "window_mm": [
+    91.5,
+    129.91
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 88
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT7_N_J2"
+   ],
+   "window_mm": [
+    92.7,
+    136.58
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 131
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT2_P_J2",
+    "PCIE_UP_OUT7_P_J2"
+   ],
+   "window_mm": [
+    93.7,
+    131.07
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 86
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT3_N_J2",
+    "PCIE_UP_OUT3_P_J2"
+   ],
+   "window_mm": [
+    88.45,
+    130.49
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 96
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT3_N_J2",
+    "PCIE_UP_OUT4_N_J2"
+   ],
+   "window_mm": [
+    89.1,
+    131.65
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 98
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT3_N_J2",
+    "PCIE_UP_OUT5_P_J2"
+   ],
+   "window_mm": [
+    90.85,
+    128.75
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 87
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT3_N_J2",
+    "PCIE_UP_OUT6_N_J2"
+   ],
+   "window_mm": [
+    91.5,
+    129.91
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 88
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT3_N_J2",
+    "PCIE_UP_OUT7_P_J2"
+   ],
+   "window_mm": [
+    93.7,
+    131.07
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 86
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT3_P_J2",
+    "PCIE_UP_OUT5_P_J2"
+   ],
+   "window_mm": [
+    90.85,
+    128.75
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 87
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT3_P_J2",
+    "PCIE_UP_OUT6_N_J2"
+   ],
+   "window_mm": [
+    91.5,
+    129.91
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 88
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT4_N_J2",
+    "PCIE_UP_OUT5_P_J2"
+   ],
+   "window_mm": [
+    90.85,
+    128.75
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 87
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT4_N_J2",
+    "PCIE_UP_OUT6_N_J2"
+   ],
+   "window_mm": [
+    91.5,
+    129.91
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 88
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT4_N_J2",
+    "PCIE_UP_OUT7_P_J2"
+   ],
+   "window_mm": [
+    93.7,
+    131.07
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 86
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT5_N_J2"
+   ],
+   "window_mm": [
+    90.3,
+    138.9
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 136
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT5_P_J2"
+   ],
+   "window_mm": [
+    90.85,
+    128.75
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 87
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT6_N_J2"
+   ],
+   "window_mm": [
+    91.5,
+    129.91
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 88
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT6_P_J2"
+   ],
+   "window_mm": [
+    92.05,
+    137.74
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 132
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT7_N_J2"
+   ],
+   "window_mm": [
+    92.7,
+    136.58
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 131
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT4_P_J2",
+    "PCIE_UP_OUT7_P_J2"
+   ],
+   "window_mm": [
+    93.7,
+    131.07
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 86
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT5_N_J2",
+    "PCIE_UP_OUT5_P_J2"
+   ],
+   "window_mm": [
+    90.85,
+    128.75
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 87
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT5_N_J2",
+    "PCIE_UP_OUT6_N_J2"
+   ],
+   "window_mm": [
+    91.5,
+    129.91
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 88
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT5_N_J2",
+    "PCIE_UP_OUT6_P_J2"
+   ],
+   "window_mm": [
+    92.05,
+    137.74
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 132
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT5_N_J2",
+    "PCIE_UP_OUT7_N_J2"
+   ],
+   "window_mm": [
+    92.7,
+    136.58
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 131
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT5_N_J2",
+    "PCIE_UP_OUT7_P_J2"
+   ],
+   "window_mm": [
+    93.7,
+    131.07
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 86
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT6_P_J2",
+    "PCIE_UP_OUT7_N_J2"
+   ],
+   "window_mm": [
+    92.7,
+    136.58
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "WALL",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 131
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT6_P_J2",
+    "PCIE_UP_OUT7_P_J2"
+   ],
+   "window_mm": [
+    93.7,
+    131.07
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 86
+  },
+  {
+   "pair": [
+    "PCIE_UP_OUT7_N_J2",
+    "PCIE_UP_OUT7_P_J2"
+   ],
+   "window_mm": [
+    93.7,
+    131.07
+   ],
+   "zones": [
+    "COMB",
+    "BELT",
+    "FIELD"
+   ],
+   "fine_shared_stations_in_window": 86
+  }
+ ],
+ "decision": "WOVEN MASTER SPEC + SCALE ESTIMATE DONE (build-only, Solve() 0, --solve REFUSED): coarse=938 bool / 1170 cons · fine-estimate=13899 bool / 15901 cons · awaiting supervisor word",
+ "elapsed_s": 19.6
+}
