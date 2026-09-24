@@ -1,0 +1,109 @@
+{
+ "artifact": "k2_r523_literal_formc_counterexample_v1",
+ "ts": "2026-09-24T22:56:03",
+ "authority": "HANDOFF-K2-522 sec.0 (implement form C) + its own 'ning qian wu lan' clause; #K2-189 sec.4 step-1 (a lever whose solution set differs from the design may not be used for any design-level UNSAT conclusion)",
+ "solve_calls": 0,
+ "target": "HANDOFF literal form C: yard rows (col 60, rows 38..57) vs wall-gap rows (col 114, rows 7,11,12,13,15,24,25,28), rank = row",
+ "a_polyline": [
+  [
+   86.175,
+   55.79
+  ],
+  [
+   86.175,
+   58.835
+  ],
+  [
+   136.2,
+   58.835
+  ],
+  [
+   136.2,
+   44.045
+  ],
+  [
+   127.5,
+   44.045
+  ]
+ ],
+ "b_polyline": [
+  [
+   88.35,
+   55.79
+  ],
+  [
+   88.35,
+   57.53
+  ],
+  [
+   135.32999999999998,
+   57.53
+  ],
+  [
+   135.32999999999998,
+   51.875
+  ],
+  [
+   127.5,
+   51.875
+  ]
+ ],
+ "a_route": "A-anchor near comb (col 5,row 34) -> north -> belt row 41 -> east -> descend col 120 -> field row 7 -> west across col 114 (wall-gap row 7) -> B-anchor",
+ "b_route": "A-anchor near comb (col 10,row 34) -> north -> belt row 38 -> east -> descend col 118 -> field row 25 -> west across col 114 (wall-gap row 25) -> B-anchor",
+ "machine_checks": {
+  "declaration_set_nodes_a": 177,
+  "declaration_set_nodes_b": 144,
+  "declaration_set_intersection": 0,
+  "intersection_first": [],
+  "declaration_sets_disjoint": true,
+  "min_true_seg_seg_distance_mm": 0.87,
+  "required_P_mm": 0.435,
+  "declaration_rule_pass": true,
+  "vias": 0,
+  "layers_used": [
+   "In5.Cu only"
+  ]
+ },
+ "order_at_sections": [
+  {
+   "section": "col 60 (yard, rows 38..57)",
+   "crossings_in_section_rows": {
+    "a": [
+     41.0
+    ],
+    "b": [
+     38.0
+    ]
+   }
+  },
+  {
+   "section": "col 114 (wall-gap rows)",
+   "crossings_in_section_rows": {
+    "a": [
+     7.0
+    ],
+    "b": [
+     25.0
+    ]
+   }
+  }
+ ],
+ "rank_inversion": {
+  "col60_rank": {
+   "a": 41.0,
+   "b": 38.0
+  },
+  "col114_gap_rank": {
+   "a": 7.0,
+   "b": 25.0
+  },
+  "sign_at_col60": 1,
+  "sign_at_col114": -1,
+  "inverted": true,
+  "via_arcs_in_interval_x60_x114": 0
+ },
+ "verdict": "NON-IMPLIED => the literal form is NOT faithful (solution set proper subset of the design): a legal, zero-via, all-In5 pair realises a rank inversion between the yard rows and the wall-gap rows => per #K2-189 sec.4 its UNSAT may NOT be used for any design-level conclusion; per HANDOFF sec.0 ('ning qian wu lan') that interval definition must be dropped/corrected",
+ "correction_used": "R523 uses instead the corridor-adjacent, same-strip sections: V = col 60 <-> col 114 (rank = row, interval x in (x60,x114)), H = row 36 (southbound gate) <-> row 30 (pad-field entry row, rank = col, interval y in (y30,y36)); see K2_R523_PARITY_FORMC_v1.py",
+ "boundaries": "read-only geometry + registered declaration predicate; Solve() 0; no model/parameter/board/SPEC/tools/criteria change; no WORKER; no .omo/supervision writes",
+ "buildability": "NOT-APPLICABLE (fidelity counterexample; no construction/feasibility claim; nothing moved)"
+}

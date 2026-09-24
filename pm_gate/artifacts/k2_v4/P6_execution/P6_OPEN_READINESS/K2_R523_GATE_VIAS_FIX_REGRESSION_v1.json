@@ -1,0 +1,43 @@
+{
+ "artifact": "k2_r523_gate_vias_fix_regression_v1",
+ "ts": "2026-09-24T22:57:27",
+ "authority": "HANDOFF-K2-522 sec.1 'gate_vias() full-size crash is the signing prerequisite; a gate fix must be a new version number plus regression criteria'",
+ "solve_calls": 0,
+ "defect": "numpy broadcast ValueError in gate_vias via-vs-pad term (shape (n,2,1,2) vs (n,2,2))",
+ "fix": "np.stack([V, V], 1) => (n,2,2) degenerate segments",
+ "pad_probe": {
+  "net": "",
+  "cx": 26.1,
+  "cy": 75.6
+ },
+ "far_probe": [
+  97.05,
+  67.535
+ ],
+ "R1_scale_50_vias": {
+  "raised": false,
+  "n_vias": 50,
+  "n_via_viol": 44,
+  "pass": true
+ },
+ "R2_via_inside_pad_must_flag": {
+  "n_via_viol": 2,
+  "kinds": [
+   "via-obstacle-pad",
+   "via-obstacle-pad"
+  ],
+  "pad_flagged": true,
+  "pass": true
+ },
+ "R3_far_via_clean": {
+  "n_via_viol": 1,
+  "kinds": [
+   "via-obstacle-seg"
+  ],
+  "pass": true
+ },
+ "all_pass": true,
+ "verdict": "FIXED (R1/R2/R3 pass)",
+ "boundaries": "read-only; Solve() 0; no model/parameter/board/SPEC/tools/criteria change; no WORKER; no supervision writes",
+ "buildability": "NOT-APPLICABLE (gate regression; no construction/feasibility claim; nothing moved)"
+}

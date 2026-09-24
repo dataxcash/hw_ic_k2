@@ -1,0 +1,335 @@
+{
+ "artifact": "k2_r523_parity_formc_v1",
+ "ts": "2026-09-24T23:01:03",
+ "authority": "handoff-K2-514 sec.0 (monitor stop-order reply => one implementation window) · quota 1 · exactly one Solve()",
+ "paradigm": "two-layer joint MCF (In5 + In4) with the R512 exact per-layer clearance encoding; layer changes only via <=2 via pairs per lane, via sites restricted to the 4 registered wide zones; cross-layer crossing legal",
+ "deviations": {
+  "D1": "In4 scope = full (full=all free nodes / zones=4 wide boxes only)",
+  "D2": "R512 explicit order vars (gate cols / yard rows / wall gaps) NOT added: T3 proved the clearance encoding pair-exactly equals the registered ruler, so they are redundant for legality, and they would spuriously forbid a lane being on In4 at a gate/yard/gap node (linking requires an In5 arc to end there)",
+  "D3": "SE region convention (east lanes excluded from NW maze) applied on In5 only"
+ },
+ "params": {
+  "P": 0.435,
+  "HW": 0.08,
+  "VIA_R": 0.175,
+  "VIA_DRILL": 0.1,
+  "VR": 0.35,
+  "VIA_SEP": 0.7,
+  "VIA_LANE": 0.43,
+  "MAX_VIA_PAIRS": 2,
+  "BOUND": 1.6,
+  "zones": [
+   [
+    83.0,
+    53.5,
+    96.0,
+    57.5
+   ],
+   [
+    96.0,
+    57.5,
+    133.0,
+    66.0
+   ],
+   [
+    132.5,
+    43.0,
+    135.0,
+    55.0
+   ],
+   [
+    125.0,
+    41.0,
+    142.6,
+    54.6
+   ]
+  ]
+ },
+ "preexisting_gates": {
+  "golden_regression": {
+   "status": "OPTIMAL",
+   "answer": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "expected": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "pass": true
+  },
+  "nc1_endpoint_off_grid": {
+   "endpoint_max_dev_mm": 0.0707,
+   "detected": true
+  },
+  "nc3_forced_single_seat_must_be_infeasible": {
+   "status": "INFEASIBLE",
+   "detected": true
+  },
+  "gate_soundness_overlap_must_fail": {
+   "n_lane_pitch_viol": 1,
+   "lane_pitch_min_gap_mm": 0.0,
+   "detected": true
+  },
+  "r495_gate_soundness_vs_R494": {
+   "n_lane_pitch_viol": 30,
+   "lane_pitch_min_gap_mm": 0.0264,
+   "n_clearance_viol": 13,
+   "detected": true
+  },
+  "all_pass": true
+ },
+ "selfcheck_soundness": {
+  "pairs": 6105,
+  "missed": 0,
+  "pass": true,
+  "examples": [],
+  "criterion": "no missed conflict: true closest distance < P  =>  declaration sets intersect"
+ },
+ "preconditions_all_green": true,
+ "graph": {
+  "free_access_legs_per_lane": [
+   15,
+   12,
+   11,
+   13,
+   14,
+   14,
+   16,
+   14,
+   12,
+   17,
+   14,
+   15,
+   14,
+   11,
+   16,
+   13
+  ],
+  "R_REACH_mm": 0.6525,
+  "lattice": [
+   138,
+   65
+  ],
+  "l1_scope": "full",
+  "pruned_directed_arcs_per_lane": [
+   71243,
+   73014,
+   72661,
+   71489,
+   74982,
+   71710,
+   71344,
+   75812,
+   76774,
+   71889,
+   71496,
+   69601,
+   70214,
+   70749,
+   70064,
+   70055
+  ],
+  "total_pruned_directed_arcs": 1153097,
+  "via_arcs": 84436,
+  "shortest_path_mm": {
+   "PCIE_UP_OUT0_N_J2": 48.593,
+   "PCIE_UP_OUT0_P_J2": 62.875,
+   "PCIE_UP_OUT1_N_J2": 59.638,
+   "PCIE_UP_OUT1_P_J2": 47.523,
+   "PCIE_UP_OUT2_N_J2": 47.008,
+   "PCIE_UP_OUT2_P_J2": 54.959,
+   "PCIE_UP_OUT3_N_J2": 52.724,
+   "PCIE_UP_OUT3_P_J2": 46.554,
+   "PCIE_UP_OUT4_N_J2": 46.219,
+   "PCIE_UP_OUT4_P_J2": 54.689,
+   "PCIE_UP_OUT5_N_J2": 52.026,
+   "PCIE_UP_OUT5_P_J2": 41.686,
+   "PCIE_UP_OUT6_N_J2": 40.581,
+   "PCIE_UP_OUT6_P_J2": 48.484,
+   "PCIE_UP_OUT7_N_J2": 45.782,
+   "PCIE_UP_OUT7_P_J2": 39.521
+  },
+  "kept_nodes_per_lane": [
+   11727,
+   12442,
+   12361,
+   11757,
+   12329,
+   12189,
+   12118,
+   12474,
+   12629,
+   12222,
+   12144,
+   11419,
+   11526,
+   12013,
+   11882,
+   11494
+  ]
+ },
+ "scale": {
+  "bool_vars_estimate": 1153098,
+  "gate": 1200000,
+  "under_gate": true,
+  "via_arcs_subset_of_arcs": 84436
+ },
+ "form_c": {
+  "families": {
+   "V": {
+    "cuts": [
+     [
+      "col",
+      60,
+      0
+     ],
+     [
+      "col",
+      114,
+      0
+     ]
+    ],
+    "extra_uniqueness_cuts": [],
+    "interval": [
+     "col",
+     60,
+     114
+    ],
+    "pairs_constrained": 120,
+    "lanes_with_any_A_crossing": 16,
+    "lanes_with_any_B_crossing": 16,
+    "crossing_options_A_per_lane": [
+     26,
+     26,
+     26,
+     26,
+     26,
+     26,
+     26,
+     26,
+     26,
+     26,
+     26,
+     26,
+     26,
+     26,
+     26,
+     26
+    ],
+    "crossing_options_B_per_lane": [
+     18,
+     29,
+     29,
+     18,
+     19,
+     29,
+     29,
+     22,
+     25,
+     29,
+     29,
+     18,
+     23,
+     29,
+     29,
+     23
+    ],
+    "via_arcs_in_interval_total": 48122
+   },
+   "H": {
+    "cuts": [
+     [
+      "row",
+      36,
+      -1
+     ],
+     [
+      "row",
+      30,
+      0
+     ]
+    ],
+    "extra_uniqueness_cuts": [
+     [
+      "row",
+      36,
+      1
+     ]
+    ],
+    "interval": [
+     "row",
+     30,
+     36
+    ],
+    "pairs_constrained": 120,
+    "lanes_with_any_A_crossing": 16,
+    "lanes_with_any_B_crossing": 16,
+    "crossing_options_A_per_lane": [
+     110,
+     117,
+     117,
+     111,
+     116,
+     117,
+     117,
+     117,
+     118,
+     117,
+     118,
+     112,
+     114,
+     117,
+     117,
+     116
+    ],
+    "crossing_options_B_per_lane": [
+     65,
+     18,
+     18,
+     66,
+     70,
+     18,
+     18,
+     70,
+     69,
+     18,
+     18,
+     61,
+     62,
+     18,
+     18,
+     64
+    ],
+    "via_arcs_in_interval_total": 1820
+   }
+  },
+  "n_pairs": 240,
+  "n_constraints": 68659,
+  "n_booleans": 28931,
+  "sections_corrected_vs_handoff_literal": "V: col 60 <-> col 114 (rank=row); H: row 36 (southbound gate) <-> row 30 (pad-entry row, rank=col). The handoff-literal pairing (yard rows vs wall-gap rows) is machine-refuted as NON-IMPLIED (K2_R523_LITERAL_FORMC_COUNTEREXAMPLE_v1.json) and is therefore NOT used (handoff sec.0: ning qian wu lan).",
+  "factored_by": "R523 patch of the read-only R515 model; R515 itself unchanged"
+ },
+ "model": {
+  "bool_vars": 1182035,
+  "constraints": 518763,
+  "clearance_constraints": 191086,
+  "ncons_other": 259386,
+  "assumption_groups": [
+   "node_capacity",
+   "via_pair_cap",
+   "via_separation",
+   "length_bound",
+   "clearance_exact_per_layer",
+   "parity_form_C"
+  ],
+  "validate": "OK",
+  "via_sep_pairs_constrained": 28294
+ },
+ "decision": "BUILD-ONLY（模型建好 · Validate OK · Solve() 0 次 · 额度未耗）",
+ "elapsed_s": 59.8
+}
