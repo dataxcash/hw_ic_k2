@@ -1,0 +1,88 @@
+{
+ "artifact": "k2_r532_joint_witness_fidelity_v1",
+ "ts": "2026-09-25T04:10:28",
+ "authority": "#K2-197 sec.3.4 (joint exact feasibility model: 16 lanes simultaneously) + sec.5 (the carried-over single certified solve) + sec.3.6 (buildability/no_witness field mandatory)",
+ "write_protection": "guard_out (own output name only)",
+ "solve_calls": 0,
+ "domain": {
+  "arcs_per_lane": {
+   "PCIE_UP_OUT0_N_J2": 71243,
+   "PCIE_UP_OUT0_P_J2": 73014,
+   "PCIE_UP_OUT1_N_J2": 72661,
+   "PCIE_UP_OUT1_P_J2": 71489,
+   "PCIE_UP_OUT2_N_J2": 74982,
+   "PCIE_UP_OUT2_P_J2": 71710,
+   "PCIE_UP_OUT3_N_J2": 71344,
+   "PCIE_UP_OUT3_P_J2": 75812,
+   "PCIE_UP_OUT4_N_J2": 76774,
+   "PCIE_UP_OUT4_P_J2": 71889,
+   "PCIE_UP_OUT5_N_J2": 71496,
+   "PCIE_UP_OUT5_P_J2": 69601,
+   "PCIE_UP_OUT6_N_J2": 70214,
+   "PCIE_UP_OUT6_P_J2": 70749,
+   "PCIE_UP_OUT7_N_J2": 70064,
+   "PCIE_UP_OUT7_P_J2": 70055
+  },
+  "total_arcs": 1153097,
+  "via_grid": 2,
+  "note": "no partition/cell restriction: each lane keeps its FULL own-net graph"
+ },
+ "F_caliber_fidelity": {
+  "i_via_domain_subset_of_registered": true,
+  "ii_via_domain_EQUALS_registered_full_set": false,
+  "registered_via_sites_per_lane": {
+   "PCIE_UP_OUT0_N_J2": 2681,
+   "PCIE_UP_OUT0_P_J2": 2681,
+   "PCIE_UP_OUT1_N_J2": 2683,
+   "PCIE_UP_OUT1_P_J2": 2678,
+   "PCIE_UP_OUT2_N_J2": 2685,
+   "PCIE_UP_OUT2_P_J2": 2680,
+   "PCIE_UP_OUT3_N_J2": 2685,
+   "PCIE_UP_OUT3_P_J2": 2679,
+   "PCIE_UP_OUT4_N_J2": 2687,
+   "PCIE_UP_OUT4_P_J2": 2682,
+   "PCIE_UP_OUT5_N_J2": 2682,
+   "PCIE_UP_OUT5_P_J2": 2681,
+   "PCIE_UP_OUT6_N_J2": 2683,
+   "PCIE_UP_OUT6_P_J2": 2684,
+   "PCIE_UP_OUT7_N_J2": 2686,
+   "PCIE_UP_OUT7_P_J2": 2682
+  },
+  "domain_via_sites_per_lane": {
+   "PCIE_UP_OUT0_N_J2": 2539,
+   "PCIE_UP_OUT0_P_J2": 2681,
+   "PCIE_UP_OUT1_N_J2": 2683,
+   "PCIE_UP_OUT1_P_J2": 2558,
+   "PCIE_UP_OUT2_N_J2": 2668,
+   "PCIE_UP_OUT2_P_J2": 2680,
+   "PCIE_UP_OUT3_N_J2": 2685,
+   "PCIE_UP_OUT3_P_J2": 2674,
+   "PCIE_UP_OUT4_N_J2": 2683,
+   "PCIE_UP_OUT4_P_J2": 2682,
+   "PCIE_UP_OUT5_N_J2": 2682,
+   "PCIE_UP_OUT5_P_J2": 2547,
+   "PCIE_UP_OUT6_N_J2": 2534,
+   "PCIE_UP_OUT6_P_J2": 2684,
+   "PCIE_UP_OUT7_N_J2": 2685,
+   "PCIE_UP_OUT7_P_J2": 2553
+  },
+  "iii_via_spacing_as_EXPLICIT_constraints": "2x2 lattice block cliques (max intra-distance 0.615mm < VIA_SEP 0.70mm) => at most one via per block per layer => pairwise spacing >= VIA_SEP",
+  "verdict": "FAIL (fail-closed: do NOT fire)"
+ },
+ "via_spacing_constraints": {
+  "clique_blocks": 770,
+  "rule": "per (layer-less) 2x2 lattice block at most one via across all lanes"
+ },
+ "model": {
+  "bool_vars": 1195332,
+  "constraints": 334089,
+  "node_capacity_constraints": 13891,
+  "via_spacing_cliques": 770,
+  "under_gate_1.2M": true,
+  "validate": "OK"
+ },
+ "decision": "FAIL-CLOSED(口径保真闸): 过孔域 != 在册全集 ⇒ 停手报监、不开枪",
+ "buildability": {
+  "mode": "no_witness"
+ }
+}
