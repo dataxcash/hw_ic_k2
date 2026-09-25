@@ -1,0 +1,1588 @@
+{
+ "artifact": "k2_r544_pregate_domain_audit_v1",
+ "ts": "2026-09-25T10:50:06",
+ "authority": "#K2-211 sec.3.3 pre-gates (i) domain completeness + (ii) chain connectivity; ZERO quota; no shot",
+ "solve_calls": 0,
+ "R_BAND": 3,
+ "per_lane": {
+  "PCIE_UP_OUT0_N_J2": {
+   "n_waypoints": 7,
+   "points": [
+    {
+     "idx": 0,
+     "node": "TERMINAL",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 1,
+     "node": 164,
+     "kind": "In5_entrance",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 2,
+     "node": 2198,
+     "kind": "col33",
+     "in_own_graph": true,
+     "in_band": false
+    },
+    {
+     "idx": 3,
+     "node": 3954,
+     "kind": "col60",
+     "in_own_graph": true,
+     "in_band": false
+    },
+    {
+     "idx": 4,
+     "node": 7438,
+     "kind": "exit_wall_gap",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 5,
+     "node": 7438,
+     "kind": "pad_run",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 6,
+     "node": "TERMINAL",
+     "in_own_graph": true,
+     "in_band": true
+    }
+   ],
+   "chains": [
+    {
+     "seg": 0,
+     "from": 17940,
+     "to": 164,
+     "reachable": true
+    },
+    {
+     "seg": 1,
+     "from": 164,
+     "to": 2198,
+     "reachable": true
+    },
+    {
+     "seg": 2,
+     "from": 2198,
+     "to": 3954,
+     "reachable": true
+    },
+    {
+     "seg": 3,
+     "from": 3954,
+     "to": 7438,
+     "reachable": true
+    },
+    {
+     "seg": 4,
+     "reachable": true,
+     "note": "coincident"
+    },
+    {
+     "seg": 5,
+     "from": 7438,
+     "to": 17941,
+     "reachable": true
+    }
+   ]
+  },
+  "PCIE_UP_OUT0_P_J2": {
+   "n_waypoints": 7,
+   "points": [
+    {
+     "idx": 0,
+     "node": "TERMINAL",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 1,
+     "node": 162,
+     "kind": "DIVE_via",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 2,
+     "node": 2186,
+     "kind": "col33",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 3,
+     "node": 3948,
+     "kind": "col60",
+     "in_own_graph": true,
+     "in_band": false
+    },
+    {
+     "idx": 4,
+     "node": 8291,
+     "kind": "exit_gate_col",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 5,
+     "node": 8616,
+     "kind": "pad_run",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 6,
+     "node": "TERMINAL",
+     "in_own_graph": true,
+     "in_band": true
+    }
+   ],
+   "chains": [
+    {
+     "seg": 0,
+     "from": 17942,
+     "to": 162,
+     "reachable": true
+    },
+    {
+     "seg": 1,
+     "from": 162,
+     "to": 2186,
+     "reachable": false
+    },
+    {
+     "seg": 2,
+     "from": 2186,
+     "to": 3948,
+     "reachable": true
+    },
+    {
+     "seg": 3,
+     "from": 3948,
+     "to": 8291,
+     "reachable": true
+    },
+    {
+     "seg": 4,
+     "from": 8291,
+     "to": 8616,
+     "reachable": true
+    },
+    {
+     "seg": 5,
+     "from": 8616,
+     "to": 17943,
+     "reachable": true
+    }
+   ]
+  },
+  "PCIE_UP_OUT1_N_J2": {
+   "n_waypoints": 7,
+   "points": [
+    {
+     "idx": 0,
+     "node": "TERMINAL",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 1,
+     "node": 294,
+     "kind": "In5_entrance",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 2,
+     "node": 2188,
+     "kind": "col33",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 3,
+     "node": 3946,
+     "kind": "col60",
+     "in_own_graph": true,
+     "in_band": false
+    },
+    {
+     "idx": 4,
+     "node": 8681,
+     "kind": "exit_gate_col",
+     "in_own_graph": true,
+     "in_band": false
+    },
+    {
+     "idx": 5,
+     "node": 8356,
+     "kind": "pad_run",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 6,
+     "node": "TERMINAL",
+     "in_own_graph": true,
+     "in_band": true
+    }
+   ],
+   "chains": [
+    {
+     "seg": 0,
+     "from": 17944,
+     "to": 294,
+     "reachable": true
+    },
+    {
+     "seg": 1,
+     "from": 294,
+     "to": 2188,
+     "reachable": true
+    },
+    {
+     "seg": 2,
+     "from": 2188,
+     "to": 3946,
+     "reachable": true
+    },
+    {
+     "seg": 3,
+     "from": 3946,
+     "to": 8681,
+     "reachable": true
+    },
+    {
+     "seg": 4,
+     "from": 8681,
+     "to": 8356,
+     "reachable": true
+    },
+    {
+     "seg": 5,
+     "from": 8356,
+     "to": 17945,
+     "reachable": true
+    }
+   ]
+  },
+  "PCIE_UP_OUT1_P_J2": {
+   "n_waypoints": 7,
+   "points": [
+    {
+     "idx": 0,
+     "node": "TERMINAL",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 1,
+     "node": 357,
+     "kind": "In5_entrance",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 2,
+     "node": 2180,
+     "kind": "col33",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 3,
+     "node": 3940,
+     "kind": "col60",
+     "in_own_graph": true,
+     "in_band": false
+    },
+    {
+     "idx": 4,
+     "node": 7421,
+     "kind": "exit_wall_gap",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 5,
+     "node": 7421,
+     "kind": "pad_run",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 6,
+     "node": "TERMINAL",
+     "in_own_graph": true,
+     "in_band": true
+    }
+   ],
+   "chains": [
+    {
+     "seg": 0,
+     "from": 17946,
+     "to": 357,
+     "reachable": true
+    },
+    {
+     "seg": 1,
+     "from": 357,
+     "to": 2180,
+     "reachable": true
+    },
+    {
+     "seg": 2,
+     "from": 2180,
+     "to": 3940,
+     "reachable": true
+    },
+    {
+     "seg": 3,
+     "from": 3940,
+     "to": 7421,
+     "reachable": true
+    },
+    {
+     "seg": 4,
+     "reachable": true,
+     "note": "coincident"
+    },
+    {
+     "seg": 5,
+     "from": 7421,
+     "to": 17947,
+     "reachable": true
+    }
+   ]
+  },
+  "PCIE_UP_OUT2_N_J2": {
+   "n_waypoints": 7,
+   "points": [
+    {
+     "idx": 0,
+     "node": "TERMINAL",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 1,
+     "node": 424,
+     "kind": "In5_entrance",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 2,
+     "node": 2186,
+     "kind": "col33",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 3,
+     "node": 3942,
+     "kind": "col60",
+     "in_own_graph": true,
+     "in_band": false
+    },
+    {
+     "idx": 4,
+     "node": 7423,
+     "kind": "exit_wall_gap",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 5,
+     "node": 7423,
+     "kind": "pad_run",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 6,
+     "node": "TERMINAL",
+     "in_own_graph": true,
+     "in_band": true
+    }
+   ],
+   "chains": [
+    {
+     "seg": 0,
+     "from": 17948,
+     "to": 424,
+     "reachable": true
+    },
+    {
+     "seg": 1,
+     "from": 424,
+     "to": 2186,
+     "reachable": true
+    },
+    {
+     "seg": 2,
+     "from": 2186,
+     "to": 3942,
+     "reachable": true
+    },
+    {
+     "seg": 3,
+     "from": 3942,
+     "to": 7423,
+     "reachable": true
+    },
+    {
+     "seg": 4,
+     "reachable": true,
+     "note": "coincident"
+    },
+    {
+     "seg": 5,
+     "from": 7423,
+     "to": 17949,
+     "reachable": true
+    }
+   ]
+  },
+  "PCIE_UP_OUT2_P_J2": {
+   "n_waypoints": 7,
+   "points": [
+    {
+     "idx": 0,
+     "node": "TERMINAL",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 1,
+     "node": 487,
+     "kind": "DIVE_via",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 2,
+     "node": 2202,
+     "kind": "col33",
+     "in_own_graph": true,
+     "in_band": false
+    },
+    {
+     "idx": 3,
+     "node": 3956,
+     "kind": "col60",
+     "in_own_graph": true,
+     "in_band": false
+    },
+    {
+     "idx": 4,
+     "node": 8161,
+     "kind": "exit_gate_col",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 5,
+     "node": 7966,
+     "kind": "pad_run",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 6,
+     "node": "TERMINAL",
+     "in_own_graph": true,
+     "in_band": true
+    }
+   ],
+   "chains": [
+    {
+     "seg": 0,
+     "from": 17950,
+     "to": 487,
+     "reachable": true
+    },
+    {
+     "seg": 1,
+     "from": 487,
+     "to": 2202,
+     "reachable": false
+    },
+    {
+     "seg": 2,
+     "from": 2202,
+     "to": 3956,
+     "reachable": true
+    },
+    {
+     "seg": 3,
+     "from": 3956,
+     "to": 8161,
+     "reachable": true
+    },
+    {
+     "seg": 4,
+     "from": 8161,
+     "to": 7966,
+     "reachable": true
+    },
+    {
+     "seg": 5,
+     "from": 7966,
+     "to": 17951,
+     "reachable": true
+    }
+   ]
+  },
+  "PCIE_UP_OUT3_N_J2": {
+   "n_waypoints": 7,
+   "points": [
+    {
+     "idx": 0,
+     "node": "TERMINAL",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 1,
+     "node": 619,
+     "kind": "In5_entrance",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 2,
+     "node": 2178,
+     "kind": "col33",
+     "in_own_graph": true,
+     "in_band": false
+    },
+    {
+     "idx": 3,
+     "node": 3954,
+     "kind": "col60",
+     "in_own_graph": true,
+     "in_band": false
+    },
+    {
+     "idx": 4,
+     "node": 8551,
+     "kind": "exit_gate_col",
+     "in_own_graph": true,
+     "in_band": false
+    },
+    {
+     "idx": 5,
+     "node": 7836,
+     "kind": "pad_run",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 6,
+     "node": "TERMINAL",
+     "in_own_graph": true,
+     "in_band": true
+    }
+   ],
+   "chains": [
+    {
+     "seg": 0,
+     "from": 17952,
+     "to": 619,
+     "reachable": true
+    },
+    {
+     "seg": 1,
+     "from": 619,
+     "to": 2178,
+     "reachable": true
+    },
+    {
+     "seg": 2,
+     "from": 2178,
+     "to": 3954,
+     "reachable": true
+    },
+    {
+     "seg": 3,
+     "from": 3954,
+     "to": 8551,
+     "reachable": true
+    },
+    {
+     "seg": 4,
+     "from": 8551,
+     "to": 7836,
+     "reachable": true
+    },
+    {
+     "seg": 5,
+     "from": 7836,
+     "to": 17953,
+     "reachable": true
+    }
+   ]
+  },
+  "PCIE_UP_OUT3_P_J2": {
+   "n_waypoints": 7,
+   "points": [
+    {
+     "idx": 0,
+     "node": "TERMINAL",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 1,
+     "node": 682,
+     "kind": "In5_entrance",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 2,
+     "node": 2176,
+     "kind": "col33",
+     "in_own_graph": true,
+     "in_band": false
+    },
+    {
+     "idx": 3,
+     "node": 3938,
+     "kind": "col60",
+     "in_own_graph": true,
+     "in_band": false
+    },
+    {
+     "idx": 4,
+     "node": 7417,
+     "kind": "exit_wall_gap",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 5,
+     "node": 7417,
+     "kind": "pad_run",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 6,
+     "node": "TERMINAL",
+     "in_own_graph": true,
+     "in_band": true
+    }
+   ],
+   "chains": [
+    {
+     "seg": 0,
+     "from": 17954,
+     "to": 682,
+     "reachable": true
+    },
+    {
+     "seg": 1,
+     "from": 682,
+     "to": 2176,
+     "reachable": true
+    },
+    {
+     "seg": 2,
+     "from": 2176,
+     "to": 3938,
+     "reachable": true
+    },
+    {
+     "seg": 3,
+     "from": 3938,
+     "to": 7417,
+     "reachable": true
+    },
+    {
+     "seg": 4,
+     "reachable": true,
+     "note": "coincident"
+    },
+    {
+     "seg": 5,
+     "from": 7417,
+     "to": 17955,
+     "reachable": true
+    }
+   ]
+  },
+  "PCIE_UP_OUT4_N_J2": {
+   "n_waypoints": 7,
+   "points": [
+    {
+     "idx": 0,
+     "node": "TERMINAL",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 1,
+     "node": 814,
+     "kind": "In5_entrance",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 2,
+     "node": 2190,
+     "kind": "col33",
+     "in_own_graph": true,
+     "in_band": false
+    },
+    {
+     "idx": 3,
+     "node": 3950,
+     "kind": "col60",
+     "in_own_graph": true,
+     "in_band": false
+    },
+    {
+     "idx": 4,
+     "node": 7434,
+     "kind": "exit_wall_gap",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 5,
+     "node": 7434,
+     "kind": "pad_run",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 6,
+     "node": "TERMINAL",
+     "in_own_graph": true,
+     "in_band": true
+    }
+   ],
+   "chains": [
+    {
+     "seg": 0,
+     "from": 17956,
+     "to": 814,
+     "reachable": true
+    },
+    {
+     "seg": 1,
+     "from": 814,
+     "to": 2190,
+     "reachable": true
+    },
+    {
+     "seg": 2,
+     "from": 2190,
+     "to": 3950,
+     "reachable": true
+    },
+    {
+     "seg": 3,
+     "from": 3950,
+     "to": 7434,
+     "reachable": true
+    },
+    {
+     "seg": 4,
+     "reachable": true,
+     "note": "coincident"
+    },
+    {
+     "seg": 5,
+     "from": 7434,
+     "to": 17957,
+     "reachable": true
+    }
+   ]
+  },
+  "PCIE_UP_OUT4_P_J2": {
+   "n_waypoints": 7,
+   "points": [
+    {
+     "idx": 0,
+     "node": "TERMINAL",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 1,
+     "node": 877,
+     "kind": "DIVE_via",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 2,
+     "node": 2190,
+     "kind": "col33",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 3,
+     "node": 3956,
+     "kind": "col60",
+     "in_own_graph": true,
+     "in_band": false
+    },
+    {
+     "idx": 4,
+     "node": 7771,
+     "kind": "exit_gate_col",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 5,
+     "node": 8421,
+     "kind": "pad_run",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 6,
+     "node": "TERMINAL",
+     "in_own_graph": true,
+     "in_band": true
+    }
+   ],
+   "chains": [
+    {
+     "seg": 0,
+     "from": 17958,
+     "to": 877,
+     "reachable": true
+    },
+    {
+     "seg": 1,
+     "from": 877,
+     "to": 2190,
+     "reachable": false
+    },
+    {
+     "seg": 2,
+     "from": 2190,
+     "to": 3956,
+     "reachable": true
+    },
+    {
+     "seg": 3,
+     "from": 3956,
+     "to": 7771,
+     "reachable": true
+    },
+    {
+     "seg": 4,
+     "from": 7771,
+     "to": 8421,
+     "reachable": true
+    },
+    {
+     "seg": 5,
+     "from": 8421,
+     "to": 17959,
+     "reachable": true
+    }
+   ]
+  },
+  "PCIE_UP_OUT5_N_J2": {
+   "n_waypoints": 7,
+   "points": [
+    {
+     "idx": 0,
+     "node": "TERMINAL",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 1,
+     "node": 944,
+     "kind": "In5_entrance",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 2,
+     "node": 2192,
+     "kind": "col33",
+     "in_own_graph": true,
+     "in_band": false
+    },
+    {
+     "idx": 3,
+     "node": 3956,
+     "kind": "col60",
+     "in_own_graph": true,
+     "in_band": false
+    },
+    {
+     "idx": 4,
+     "node": 7641,
+     "kind": "exit_gate_col",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 5,
+     "node": 8226,
+     "kind": "pad_run",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 6,
+     "node": "TERMINAL",
+     "in_own_graph": true,
+     "in_band": true
+    }
+   ],
+   "chains": [
+    {
+     "seg": 0,
+     "from": 17960,
+     "to": 944,
+     "reachable": true
+    },
+    {
+     "seg": 1,
+     "from": 944,
+     "to": 2192,
+     "reachable": true
+    },
+    {
+     "seg": 2,
+     "from": 2192,
+     "to": 3956,
+     "reachable": true
+    },
+    {
+     "seg": 3,
+     "from": 3956,
+     "to": 7641,
+     "reachable": false
+    },
+    {
+     "seg": 4,
+     "from": 7641,
+     "to": 8226,
+     "reachable": true
+    },
+    {
+     "seg": 5,
+     "from": 8226,
+     "to": 17961,
+     "reachable": true
+    }
+   ]
+  },
+  "PCIE_UP_OUT5_P_J2": {
+   "n_waypoints": 7,
+   "points": [
+    {
+     "idx": 0,
+     "node": "TERMINAL",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 1,
+     "node": 1072,
+     "kind": "DIVE_via",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 2,
+     "node": 2202,
+     "kind": "col33",
+     "in_own_graph": true,
+     "in_band": false
+    },
+    {
+     "idx": 3,
+     "node": 3944,
+     "kind": "col60",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 4,
+     "node": 7425,
+     "kind": "exit_wall_gap",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 5,
+     "node": 7425,
+     "kind": "pad_run",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 6,
+     "node": "TERMINAL",
+     "in_own_graph": true,
+     "in_band": true
+    }
+   ],
+   "chains": [
+    {
+     "seg": 0,
+     "from": 17962,
+     "to": 1072,
+     "reachable": true
+    },
+    {
+     "seg": 1,
+     "from": 1072,
+     "to": 2202,
+     "reachable": false
+    },
+    {
+     "seg": 2,
+     "from": 2202,
+     "to": 3944,
+     "reachable": true
+    },
+    {
+     "seg": 3,
+     "from": 3944,
+     "to": 7425,
+     "reachable": true
+    },
+    {
+     "seg": 4,
+     "reachable": true,
+     "note": "coincident"
+    },
+    {
+     "seg": 5,
+     "from": 7425,
+     "to": 17963,
+     "reachable": true
+    }
+   ]
+  },
+  "PCIE_UP_OUT6_N_J2": {
+   "n_waypoints": 7,
+   "points": [
+    {
+     "idx": 0,
+     "node": "TERMINAL",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 1,
+     "node": 1139,
+     "kind": "In5_entrance",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 2,
+     "node": 2184,
+     "kind": "col33",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 3,
+     "node": 3956,
+     "kind": "col60",
+     "in_own_graph": true,
+     "in_band": false
+    },
+    {
+     "idx": 4,
+     "node": 7434,
+     "kind": "exit_wall_gap",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 5,
+     "node": 7434,
+     "kind": "pad_run",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 6,
+     "node": "TERMINAL",
+     "in_own_graph": true,
+     "in_band": true
+    }
+   ],
+   "chains": [
+    {
+     "seg": 0,
+     "from": 17964,
+     "to": 1139,
+     "reachable": true
+    },
+    {
+     "seg": 1,
+     "from": 1139,
+     "to": 2184,
+     "reachable": true
+    },
+    {
+     "seg": 2,
+     "from": 2184,
+     "to": 3956,
+     "reachable": true
+    },
+    {
+     "seg": 3,
+     "from": 3956,
+     "to": 7434,
+     "reachable": true
+    },
+    {
+     "seg": 4,
+     "reachable": true,
+     "note": "coincident"
+    },
+    {
+     "seg": 5,
+     "from": 7434,
+     "to": 17965,
+     "reachable": true
+    }
+   ]
+  },
+  "PCIE_UP_OUT6_P_J2": {
+   "n_waypoints": 7,
+   "points": [
+    {
+     "idx": 0,
+     "node": "TERMINAL",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 1,
+     "node": 1267,
+     "kind": "DIVE_via",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 2,
+     "node": 2200,
+     "kind": "col33",
+     "in_own_graph": true,
+     "in_band": false
+    },
+    {
+     "idx": 3,
+     "node": 3948,
+     "kind": "col60",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 4,
+     "node": 7511,
+     "kind": "exit_gate_col",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 5,
+     "node": 8096,
+     "kind": "pad_run",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 6,
+     "node": "TERMINAL",
+     "in_own_graph": true,
+     "in_band": true
+    }
+   ],
+   "chains": [
+    {
+     "seg": 0,
+     "from": 17966,
+     "to": 1267,
+     "reachable": true
+    },
+    {
+     "seg": 1,
+     "from": 1267,
+     "to": 2200,
+     "reachable": true
+    },
+    {
+     "seg": 2,
+     "from": 2200,
+     "to": 3948,
+     "reachable": true
+    },
+    {
+     "seg": 3,
+     "from": 3948,
+     "to": 7511,
+     "reachable": false
+    },
+    {
+     "seg": 4,
+     "from": 7511,
+     "to": 8096,
+     "reachable": true
+    },
+    {
+     "seg": 5,
+     "from": 8096,
+     "to": 17967,
+     "reachable": true
+    }
+   ]
+  },
+  "PCIE_UP_OUT7_N_J2": {
+   "n_waypoints": 7,
+   "points": [
+    {
+     "idx": 0,
+     "node": "TERMINAL",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 1,
+     "node": 1334,
+     "kind": "In5_entrance",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 2,
+     "node": 2194,
+     "kind": "col33",
+     "in_own_graph": true,
+     "in_band": false
+    },
+    {
+     "idx": 3,
+     "node": 3952,
+     "kind": "col60",
+     "in_own_graph": true,
+     "in_band": false
+    },
+    {
+     "idx": 4,
+     "node": 8811,
+     "kind": "exit_gate_col",
+     "in_own_graph": true,
+     "in_band": false
+    },
+    {
+     "idx": 5,
+     "node": 7901,
+     "kind": "pad_run",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 6,
+     "node": "TERMINAL",
+     "in_own_graph": true,
+     "in_band": true
+    }
+   ],
+   "chains": [
+    {
+     "seg": 0,
+     "from": 17968,
+     "to": 1334,
+     "reachable": true
+    },
+    {
+     "seg": 1,
+     "from": 1334,
+     "to": 2194,
+     "reachable": true
+    },
+    {
+     "seg": 2,
+     "from": 2194,
+     "to": 3952,
+     "reachable": true
+    },
+    {
+     "seg": 3,
+     "from": 3952,
+     "to": 8811,
+     "reachable": true
+    },
+    {
+     "seg": 4,
+     "from": 8811,
+     "to": 7901,
+     "reachable": true
+    },
+    {
+     "seg": 5,
+     "from": 7901,
+     "to": 17969,
+     "reachable": true
+    }
+   ]
+  },
+  "PCIE_UP_OUT7_P_J2": {
+   "n_waypoints": 7,
+   "points": [
+    {
+     "idx": 0,
+     "node": "TERMINAL",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 1,
+     "node": 1462,
+     "kind": "In5_entrance",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 2,
+     "node": 2200,
+     "kind": "col33",
+     "in_own_graph": true,
+     "in_band": false
+    },
+    {
+     "idx": 3,
+     "node": 3956,
+     "kind": "col60",
+     "in_own_graph": true,
+     "in_band": false
+    },
+    {
+     "idx": 4,
+     "node": 7425,
+     "kind": "exit_wall_gap",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 5,
+     "node": 7425,
+     "kind": "pad_run",
+     "in_own_graph": true,
+     "in_band": true
+    },
+    {
+     "idx": 6,
+     "node": "TERMINAL",
+     "in_own_graph": true,
+     "in_band": true
+    }
+   ],
+   "chains": [
+    {
+     "seg": 0,
+     "from": 17970,
+     "to": 1462,
+     "reachable": true
+    },
+    {
+     "seg": 1,
+     "from": 1462,
+     "to": 2200,
+     "reachable": true
+    },
+    {
+     "seg": 2,
+     "from": 2200,
+     "to": 3956,
+     "reachable": true
+    },
+    {
+     "seg": 3,
+     "from": 3956,
+     "to": 7425,
+     "reachable": true
+    },
+    {
+     "seg": 4,
+     "reachable": true,
+     "note": "coincident"
+    },
+    {
+     "seg": 5,
+     "from": 7425,
+     "to": 17971,
+     "reachable": true
+    }
+   ]
+  }
+ },
+ "summary": {
+  "lanes": 16,
+  "n_bad_points": 27,
+  "n_bad_chains": 6,
+  "bad_points": [
+   {
+    "lane": "PCIE_UP_OUT0_N_J2",
+    "idx": 2,
+    "node": 2198,
+    "kind": "col33",
+    "in_own_graph": true,
+    "in_band": false
+   },
+   {
+    "lane": "PCIE_UP_OUT0_N_J2",
+    "idx": 3,
+    "node": 3954,
+    "kind": "col60",
+    "in_own_graph": true,
+    "in_band": false
+   },
+   {
+    "lane": "PCIE_UP_OUT0_P_J2",
+    "idx": 3,
+    "node": 3948,
+    "kind": "col60",
+    "in_own_graph": true,
+    "in_band": false
+   },
+   {
+    "lane": "PCIE_UP_OUT1_N_J2",
+    "idx": 3,
+    "node": 3946,
+    "kind": "col60",
+    "in_own_graph": true,
+    "in_band": false
+   },
+   {
+    "lane": "PCIE_UP_OUT1_N_J2",
+    "idx": 4,
+    "node": 8681,
+    "kind": "exit_gate_col",
+    "in_own_graph": true,
+    "in_band": false
+   },
+   {
+    "lane": "PCIE_UP_OUT1_P_J2",
+    "idx": 3,
+    "node": 3940,
+    "kind": "col60",
+    "in_own_graph": true,
+    "in_band": false
+   },
+   {
+    "lane": "PCIE_UP_OUT2_N_J2",
+    "idx": 3,
+    "node": 3942,
+    "kind": "col60",
+    "in_own_graph": true,
+    "in_band": false
+   },
+   {
+    "lane": "PCIE_UP_OUT2_P_J2",
+    "idx": 2,
+    "node": 2202,
+    "kind": "col33",
+    "in_own_graph": true,
+    "in_band": false
+   },
+   {
+    "lane": "PCIE_UP_OUT2_P_J2",
+    "idx": 3,
+    "node": 3956,
+    "kind": "col60",
+    "in_own_graph": true,
+    "in_band": false
+   },
+   {
+    "lane": "PCIE_UP_OUT3_N_J2",
+    "idx": 2,
+    "node": 2178,
+    "kind": "col33",
+    "in_own_graph": true,
+    "in_band": false
+   },
+   {
+    "lane": "PCIE_UP_OUT3_N_J2",
+    "idx": 3,
+    "node": 3954,
+    "kind": "col60",
+    "in_own_graph": true,
+    "in_band": false
+   },
+   {
+    "lane": "PCIE_UP_OUT3_N_J2",
+    "idx": 4,
+    "node": 8551,
+    "kind": "exit_gate_col",
+    "in_own_graph": true,
+    "in_band": false
+   }
+  ],
+  "bad_chains": [
+   {
+    "lane": "PCIE_UP_OUT0_P_J2",
+    "seg": 1,
+    "from": 162,
+    "to": 2186
+   },
+   {
+    "lane": "PCIE_UP_OUT2_P_J2",
+    "seg": 1,
+    "from": 487,
+    "to": 2202
+   },
+   {
+    "lane": "PCIE_UP_OUT4_P_J2",
+    "seg": 1,
+    "from": 877,
+    "to": 2190
+   },
+   {
+    "lane": "PCIE_UP_OUT5_N_J2",
+    "seg": 3,
+    "from": 3956,
+    "to": 7641
+   },
+   {
+    "lane": "PCIE_UP_OUT5_P_J2",
+    "seg": 1,
+    "from": 1072,
+    "to": 2202
+   },
+   {
+    "lane": "PCIE_UP_OUT6_P_J2",
+    "seg": 3,
+    "from": 3948,
+    "to": 7511
+   }
+  ]
+ },
+ "gate_verdicts": {
+  "i_domain_completeness": "FAIL",
+  "ii_chain_connectivity": "FAIL"
+ },
+ "diagnosis": "若 i/ii 有 FAIL ⇒ 即 R543 0.2s INFEASIBLE 的装置级根因（域过滤/带限制把固定航点或航段排除）⇒ 按 #K2-211 §三.3 修域（域 = 带 ∪ 固定航点/航段）后复检至全过，方许开枪",
+ "elapsed_s": 32.1
+}
