@@ -421,6 +421,11 @@ def main():
         log("OWNER-ITEMS: 0"); return 0
     log("[mark] A: entrance census done")
     # ---------- 组装 chain".split("\n")[0])
+    # ---------- 第二张表：断面间转移「深南 U」（本次唯一实现；D 递增 · E 递减 ⇒ 不穿入口梯子） ----------
+    XFER = {}
+    for L in (0, 1):
+        for k, nm in enumerate(pi[L]):
+            XFER[nm] = {"D": 54 + k, "E": 70 - k}
     # ---------- 组装 chain（入口声明格点 + 三段断面 + 踢腿/落 B）----------
     def node_of(tag, v, east):
         if tag == "col33": return 33 * NY + v
@@ -446,6 +451,15 @@ def main():
         else:
             fails.append({"lane": nm, "diag": "no_entrance_corridor"})
         items.append(("wp", node_of("col33", slot[nm]["col33"], east), L0))
+        # 断面间转移（第二张表）：沿自己 F 行回到自己梯顶 → 沿自己梯列下到专属深行 → 东行 → 专属东列上行到 col60 行
+        tf = XFER.get(nm)
+        if tf is not None:
+            Wc = slot[nm]["W"]; srow = slot[nm]["col33"]
+            ret_row = 33 if srow == 31 else srow
+            items.append(("wp", Wc * NY + ret_row, L0))
+            items.append(("wp", Wc * NY + tf["D"], L0))
+            items.append(("wp", tf["E"] * NY + tf["D"], L0))
+            items.append(("wp", tf["E"] * NY + slot[nm]["col60"], L0))
         items.append(("wp", node_of("col60", slot[nm]["col60"], east), L1))
         item_exit = node_of("exit", slot[nm]["exit"], east)
         items.append(("wp", item_exit, L2))
