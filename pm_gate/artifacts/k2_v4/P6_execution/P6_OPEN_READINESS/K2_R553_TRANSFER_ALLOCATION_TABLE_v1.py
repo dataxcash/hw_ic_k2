@@ -44,9 +44,10 @@ def main():
     # ---- 构造式定序指派（单遍；取用即登记）----
     X, tbl = {}, []
     for L in (0, 1):
-        # 分配律（机核推导，见件内 checks）：D 递减、E 递减 —— 与"下潜列 W 递减 / col60 行 t 递增"成对错开
-        free_rows = list(range(64, 53, -1))        # 深行候选（南场），降序取用 ⇒ 早线更深
-        free_cols = list(range(70, 59, -1))        # 东列候选（腰带东侧），降序取用 ⇒ 早线更东
+        # 分配律（机核推导 · R553 v2）：D 递增、E 递增且 E<=59（东行带终点在 col60 西侧 ⇒ 收尾腿向东）
+        # 机核：此序下 (1)下潜腿×他线东行 (2)上行腿×他线东行 (3)收尾腿×他线上行腿 三族同时不冲
+        free_rows = list(range(54, 65))            # 深行候选，升序取用
+        free_cols = list(range(45, 60))            # 东列候选 45..59，升序取用
         for k, nm in enumerate(pi[L]):
             Wc = slot[nm]["W"]; srow = slot[nm]["col33"]; trow = slot[nm]["col60"]
             T = 33 if srow == 31 else srow
@@ -65,7 +66,7 @@ def main():
         c += [(Wc, r) for r in range(T + 1, D + 1)]
         c += [(cc, D) for cc in range(Wc + 1, E + 1)]
         c += [(E, r) for r in range(D - 1, t - 1, -1)]
-        c += [(cc, t) for cc in range(E - 1, 59, -1)]
+        c += [(cc, t) for cc in range(E + 1, 61)]   # 收尾腿：自 E 向东到 col60
         # 入口走廊（取自 R550 表，逐格已在册核过）
         e = [tuple(int(v) for v in s.split(",")) for s in ent_tab[nm]["corridor_cells"]]
         legs[nm] = {"entrance": e, "transfer": c}
