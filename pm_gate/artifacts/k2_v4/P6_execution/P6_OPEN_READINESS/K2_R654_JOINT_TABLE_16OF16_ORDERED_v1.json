@@ -1,0 +1,706 @@
+{
+ "artifact": "k2_r654_joint_table_16of16_ordered_v1",
+ "ts": "2026-09-26T01:50:25",
+ "authority": "#K2-250 sec.3/5: RETURNED-TO-DRAWING-LAYER re-determination: the APPROACH segment of EVERY lane is now inside the model (no lower bounds), and the 4th hard key (same-layer same-cell mutual exclusion) is enforced STRICTLY with NO relaxation. Method: product-first (#K2-250 sec.5.2, REF-CASE-LIBRARY sec.A) - ordered/ladder escape so lanes do not cross. Prior: R646 - lever(iii) generalised to EVERY lane that needs a layer change whose registered exit is not via-legal (OUT0_P and OUT7_P alike): the REGISTERED exit is kept and only the layer change moves onto the lane own pad walk; all rows self-certified. Route model = the committed R638 chain + R610 structural gate. Conservation machine-verified with the gate's own keys (slot / descent column / exit) PLUS pairwise-disjoint footprints. OUT0_P per lever(iii). Every conclusion in the doc is a field here.",
+ "supersedes": [
+  "K2_R642_JOINT_TABLE_16OF16_v1.json (98f10ef8a405c506)",
+  "K2_R644_JOINT_TABLE_16OF16_v2.json (e38ccde9d4a85254) - doc claimed conservation OK while its own fields were false/2 (owned)",
+  "R644 generator development run A (2/16, model too rigid; never submitted)"
+ ],
+ "construction_runs": 1,
+ "generator": "K2_R644_JOINT_TABLE_16OF16_v2.py",
+ "exit_legality_facts": {
+  "OUT0_N_J2": {
+   "exit_cell": [
+    114,
+    28
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT0_P_J2": {
+   "exit_cell": [
+    127,
+    36
+   ],
+   "exit_layer": 1,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": true
+  },
+  "OUT1_N_J2": {
+   "exit_cell": [
+    133,
+    36
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT1_P_J2": {
+   "exit_cell": [
+    114,
+    11
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT2_N_J2": {
+   "exit_cell": [
+    114,
+    13
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT2_P_J2": {
+   "exit_cell": [
+    125,
+    36
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT3_N_J2": {
+   "exit_cell": [
+    131,
+    36
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT3_P_J2": {
+   "exit_cell": [
+    114,
+    7
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT4_N_J2": {
+   "exit_cell": [
+    114,
+    24
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": true,
+   "needs_layer_change": false
+  },
+  "OUT4_P_J2": {
+   "exit_cell": [
+    119,
+    36
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT5_N_J2": {
+   "exit_cell": [
+    117,
+    36
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT5_P_J2": {
+   "exit_cell": [
+    114,
+    15
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT6_N_J2": {
+   "exit_cell": [
+    114,
+    12
+   ],
+   "exit_layer": 1,
+   "free_on_exit_layer": true,
+   "via_legal": true,
+   "needs_layer_change": true
+  },
+  "OUT6_P_J2": {
+   "exit_cell": [
+    115,
+    36
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT7_N_J2": {
+   "exit_cell": [
+    135,
+    36
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT7_P_J2": {
+   "exit_cell": [
+    114,
+    19
+   ],
+   "exit_layer": 1,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": true
+  }
+ },
+ "conservation": {
+  "col60_slots_distinct": true,
+  "descent_columns_distinct": true,
+  "exit_cells_distinct": true,
+  "pairwise_disjoint_footprints": true,
+  "footprint_overlaps": {},
+  "capacity_certificate": {
+   "slots": 12,
+   "lanes": 16,
+   "descent_columns_distinct": 12,
+   "full_span_rows_available_per_lane": "13-15 (R601/R641)",
+   "descent_columns_available_per_lane": ">=50 (cols 61..137 with free run)"
+  },
+  "FOURTH_KEY_physical_disjoint": true
+ },
+ "per_lane": {
+  "OUT3_P_J2": {
+   "tail_layer": 0,
+   "H": 47,
+   "col60_slot": [
+    60,
+    47
+   ],
+   "col60_layer": 0,
+   "descent_column": 130,
+   "Y": 7,
+   "east_strip": false,
+   "exit_cell": [
+    114,
+    7
+   ],
+   "exit_layer": 0,
+   "n_footprint_cells": 111,
+   "self_certified": true,
+   "exit_is_registered": true,
+   "cells_free_verified": true,
+   "footprint_overlap_allowed": false,
+   "lever_iii": null
+  },
+  "OUT1_P_J2": {
+   "tail_layer": 1,
+   "H": 39,
+   "col60_slot": [
+    60,
+    39
+   ],
+   "col60_layer": 0,
+   "descent_column": 130,
+   "Y": 11,
+   "east_strip": false,
+   "exit_cell": [
+    114,
+    11
+   ],
+   "exit_layer": 0,
+   "n_footprint_cells": 99,
+   "self_certified": true,
+   "exit_is_registered": true,
+   "cells_free_verified": true,
+   "footprint_overlap_allowed": false,
+   "lever_iii": null
+  },
+  "OUT2_N_J2": {
+   "tail_layer": 1,
+   "H": 43,
+   "col60_slot": [
+    60,
+    43
+   ],
+   "col60_layer": 0,
+   "descent_column": 131,
+   "Y": 13,
+   "east_strip": false,
+   "exit_cell": [
+    114,
+    13
+   ],
+   "exit_layer": 0,
+   "n_footprint_cells": 102,
+   "self_certified": true,
+   "exit_is_registered": true,
+   "cells_free_verified": true,
+   "footprint_overlap_allowed": false,
+   "lever_iii": null
+  },
+  "OUT5_P_J2": {
+   "tail_layer": 0,
+   "H": 46,
+   "col60_slot": [
+    60,
+    46
+   ],
+   "col60_layer": 0,
+   "descent_column": 122,
+   "Y": 15,
+   "east_strip": false,
+   "exit_cell": [
+    114,
+    15
+   ],
+   "exit_layer": 0,
+   "n_footprint_cells": 94,
+   "self_certified": true,
+   "exit_is_registered": true,
+   "cells_free_verified": true,
+   "footprint_overlap_allowed": false,
+   "lever_iii": null
+  },
+  "OUT4_N_J2": {
+   "tail_layer": 0,
+   "H": 50,
+   "col60_slot": [
+    60,
+    50
+   ],
+   "col60_layer": 0,
+   "descent_column": 131,
+   "Y": 24,
+   "east_strip": false,
+   "exit_cell": [
+    114,
+    24
+   ],
+   "exit_layer": 0,
+   "n_footprint_cells": 98,
+   "self_certified": true,
+   "exit_is_registered": true,
+   "cells_free_verified": true,
+   "footprint_overlap_allowed": false,
+   "lever_iii": null
+  },
+  "OUT0_N_J2": {
+   "tail_layer": 0,
+   "H": 40,
+   "col60_slot": [
+    60,
+    40
+   ],
+   "col60_layer": 0,
+   "descent_column": 120,
+   "Y": 28,
+   "east_strip": false,
+   "exit_cell": [
+    114,
+    28
+   ],
+   "exit_layer": 0,
+   "n_footprint_cells": 73,
+   "self_certified": true,
+   "exit_is_registered": true,
+   "cells_free_verified": true,
+   "footprint_overlap_allowed": false,
+   "lever_iii": null
+  },
+  "OUT6_P_J2": {
+   "tail_layer": 0,
+   "H": 53,
+   "col60_slot": [
+    60,
+    53
+   ],
+   "col60_layer": 0,
+   "descent_column": 132,
+   "Y": 36,
+   "east_strip": true,
+   "exit_cell": [
+    115,
+    36
+   ],
+   "exit_layer": 0,
+   "n_footprint_cells": 90,
+   "self_certified": true,
+   "exit_is_registered": true,
+   "cells_free_verified": true,
+   "footprint_overlap_allowed": false,
+   "lever_iii": null
+  },
+  "OUT5_N_J2": {
+   "tail_layer": 0,
+   "H": 43,
+   "col60_slot": [
+    60,
+    43
+   ],
+   "col60_layer": 1,
+   "descent_column": 121,
+   "Y": 36,
+   "east_strip": true,
+   "exit_cell": [
+    117,
+    36
+   ],
+   "exit_layer": 0,
+   "n_footprint_cells": 69,
+   "self_certified": true,
+   "exit_is_registered": true,
+   "cells_free_verified": true,
+   "footprint_overlap_allowed": false,
+   "lever_iii": null
+  },
+  "OUT4_P_J2": {
+   "tail_layer": 1,
+   "H": 53,
+   "col60_slot": [
+    60,
+    53
+   ],
+   "col60_layer": 1,
+   "descent_column": 132,
+   "Y": 36,
+   "east_strip": true,
+   "exit_cell": [
+    119,
+    36
+   ],
+   "exit_layer": 0,
+   "n_footprint_cells": 90,
+   "self_certified": true,
+   "exit_is_registered": true,
+   "cells_free_verified": true,
+   "footprint_overlap_allowed": false,
+   "lever_iii": null
+  },
+  "OUT2_P_J2": {
+   "tail_layer": 1,
+   "H": 57,
+   "col60_slot": [
+    60,
+    57
+   ],
+   "col60_layer": 1,
+   "descent_column": 133,
+   "Y": 36,
+   "east_strip": true,
+   "exit_cell": [
+    125,
+    36
+   ],
+   "exit_layer": 0,
+   "n_footprint_cells": 95,
+   "self_certified": true,
+   "exit_is_registered": true,
+   "cells_free_verified": true,
+   "footprint_overlap_allowed": false,
+   "lever_iii": null
+  },
+  "OUT1_N_J2": {
+   "tail_layer": 0,
+   "H": 59,
+   "col60_slot": [
+    60,
+    59
+   ],
+   "col60_layer": 0,
+   "descent_column": 133,
+   "Y": 36,
+   "east_strip": true,
+   "exit_cell": [
+    133,
+    36
+   ],
+   "exit_layer": 0,
+   "n_footprint_cells": 98,
+   "self_certified": true,
+   "exit_is_registered": true,
+   "cells_free_verified": true,
+   "footprint_overlap_allowed": false,
+   "lever_iii": null
+  },
+  "OUT7_N_J2": {
+   "tail_layer": 1,
+   "H": 58,
+   "col60_slot": [
+    60,
+    58
+   ],
+   "col60_layer": 0,
+   "descent_column": 134,
+   "Y": 36,
+   "east_strip": true,
+   "exit_cell": [
+    135,
+    36
+   ],
+   "exit_layer": 0,
+   "n_footprint_cells": 99,
+   "self_certified": true,
+   "exit_is_registered": true,
+   "cells_free_verified": true,
+   "footprint_overlap_allowed": false,
+   "lever_iii": null
+  }
+ },
+ "unassigned": [
+  "OUT6_N_J2",
+  "OUT7_P_J2",
+  "OUT0_P_J2",
+  "OUT3_N_J2"
+ ],
+ "execution_count": 1,
+ "failure_cause_classification_for_this_run": "method_refinement_ordering",
+ "failure_cause_classification": {
+  "code_defect": 0,
+  "parameter_only": 0
+ },
+ "method": "product-first ordered ladder escape: lanes assigned in EXIT ORDER (the product fans out in pin order), monotone (H,Xt) per layer, approach segment inside the model, strict 4th key",
+ "prior": "R652 (33e1e9264d8f952c): 13/16 with 4 keys green; this run is a METHOD refinement (ordering), not a parameter change",
+ "prior_executions": "8 (R644/R646 window; all were code-defect iterations, none submitted - classified by #K2-250 sec.4)",
+ "relaxed_overlap_lanes": [],
+ "determined": 12,
+ "of": 16,
+ "buildability": {
+  "mode": "relocation_listed",
+  "relocations": [
+   {
+    "lane": "OUT3_P_J2",
+    "from_H_Xt": [
+     57,
+     122
+    ],
+    "to_H_descent": [
+     47,
+     130
+    ],
+    "from_exit": [
+     114,
+     7
+    ],
+    "to_exit": [
+     114,
+     7
+    ]
+   },
+   {
+    "lane": "OUT2_N_J2",
+    "from_H_Xt": [
+     43,
+     130
+    ],
+    "to_H_descent": [
+     43,
+     131
+    ],
+    "from_exit": [
+     114,
+     13
+    ],
+    "to_exit": [
+     114,
+     13
+    ]
+   },
+   {
+    "lane": "OUT5_P_J2",
+    "from_H_Xt": [
+     50,
+     122
+    ],
+    "to_H_descent": [
+     46,
+     122
+    ],
+    "from_exit": [
+     114,
+     15
+    ],
+    "to_exit": [
+     114,
+     15
+    ]
+   },
+   {
+    "lane": "OUT4_N_J2",
+    "from_H_Xt": [
+     55,
+     122
+    ],
+    "to_H_descent": [
+     50,
+     131
+    ],
+    "from_exit": [
+     114,
+     24
+    ],
+    "to_exit": [
+     114,
+     24
+    ]
+   },
+   {
+    "lane": "OUT0_N_J2",
+    "from_H_Xt": [
+     47,
+     117
+    ],
+    "to_H_descent": [
+     40,
+     120
+    ],
+    "from_exit": [
+     114,
+     28
+    ],
+    "to_exit": [
+     114,
+     28
+    ]
+   },
+   {
+    "lane": "OUT6_P_J2",
+    "from_H_Xt": [
+     53,
+     61
+    ],
+    "to_H_descent": [
+     53,
+     132
+    ],
+    "from_exit": [
+     115,
+     36
+    ],
+    "to_exit": [
+     115,
+     36
+    ]
+   },
+   {
+    "lane": "OUT5_N_J2",
+    "from_H_Xt": [
+     51,
+     61
+    ],
+    "to_H_descent": [
+     43,
+     121
+    ],
+    "from_exit": [
+     117,
+     36
+    ],
+    "to_exit": [
+     117,
+     36
+    ]
+   },
+   {
+    "lane": "OUT4_P_J2",
+    "from_H_Xt": [
+     53,
+     61
+    ],
+    "to_H_descent": [
+     53,
+     132
+    ],
+    "from_exit": [
+     119,
+     36
+    ],
+    "to_exit": [
+     119,
+     36
+    ]
+   },
+   {
+    "lane": "OUT2_P_J2",
+    "from_H_Xt": [
+     57,
+     61
+    ],
+    "to_H_descent": [
+     57,
+     133
+    ],
+    "from_exit": [
+     125,
+     36
+    ],
+    "to_exit": [
+     125,
+     36
+    ]
+   },
+   {
+    "lane": "OUT1_N_J2",
+    "from_H_Xt": [
+     59,
+     61
+    ],
+    "to_H_descent": [
+     59,
+     133
+    ],
+    "from_exit": [
+     133,
+     36
+    ],
+    "to_exit": [
+     133,
+     36
+    ]
+   },
+   {
+    "lane": "OUT7_N_J2",
+    "from_H_Xt": [
+     45,
+     61
+    ],
+    "to_H_descent": [
+     58,
+     134
+    ],
+    "from_exit": [
+     135,
+     36
+    ],
+    "to_exit": [
+     135,
+     36
+    ]
+   }
+  ]
+ },
+ "verification": {
+  "all_lanes_assigned": false,
+  "conservation_pass": false,
+  "all_footprint_cells_free": true
+ },
+ "elapsed_s": 29.5,
+ "artifact_hash16": "d2d3d6081a2670f1"
+}
