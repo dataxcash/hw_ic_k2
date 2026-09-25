@@ -78,7 +78,7 @@ R548b 轨道带拉直线（第 1 根线即被挡）· **R548c 根因取证（本
 **R548c/R548d 均未落盘改任何在册件**（R548d 的修复是**内存 monkey-patch**，日志与 JSON 为证）·
 未改冻结四源（4/4 MATCH）· 未改 R540/R529/criteria · 未写 `.omo/supervision/**` · 停线维持 · 交付板锚未改。
 
-**产物**：`K2_R548c_REGISTERED_GRAPH_VERTICAL_EDGE_DEFECT_v1.{py,json}`（hash `a…`，见件）·
+**产物**：`K2_R548c_REGISTERED_GRAPH_VERTICAL_EDGE_DEFECT_v1.{py,json}`（hash `0e27384f2de117b4`）·
 `K2_R548d_DEFECT_CORRECTED_DRAWING_v1.{py,json}`（hash `92766fc19e7c71d5`）·
 `K2_R548b_HUMAN_TRACK_DRAWING_v1.{py,json}`（hash `531a420f0c69ed49`）·
 `K2_R548_R540_CHAIN_INFEASIBILITY_CERTIFICATE_v1.{py,json}`（hash `d2974c3e3af6b44d`）·
