@@ -1,0 +1,100 @@
+{
+ "artifact": "k2_r629_joint_v6",
+ "ts": "2026-09-25T22:28:40",
+ "authority": "#K2-239 sec.3.4 joint table V6: JOINTLY re-choose H (from the lane's full-span rows, extending the entrance descent) and the wall-east descent column; NO drawing",
+ "construction_runs": 0,
+ "conservation": "3 lanes vs R601 full-span rows + F3 wall-east columns (120-135, rows 36-59) => capacity >= demand",
+ "buildability": {
+  "mode": "no_move"
+ },
+ "product_reference": "PEX88096 baseboard (SBR.zip bifurcation); per-lane copied-from-product-where column",
+ "per_lane": {
+  "OUT0_P_J2": {
+   "H": 59,
+   "full_rows": [
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59
+   ],
+   "verdict": "NO_JOINT_COLUMN"
+  },
+  "OUT6_N_J2": {
+   "H": 47,
+   "full_rows": [
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47
+   ],
+   "verdict": "NO_JOINT_COLUMN"
+  },
+  "OUT7_P_J2": {
+   "H_joint": 40,
+   "Xe_wall_east": 122,
+   "tail_layer": 0,
+   "exit": [
+    114,
+    19
+   ],
+   "exit_layer": 1,
+   "structure": "entrance descent extended to H_joint -> row H_joint across to wall-east column Xe -> descend Xe -> exit approach",
+   "verdict": "PASS"
+  }
+ },
+ "summary": {
+  "PASS": 1,
+  "FAIL": 2
+ },
+ "artifact_hash16": "cbca4e1e54b64dac"
+}
