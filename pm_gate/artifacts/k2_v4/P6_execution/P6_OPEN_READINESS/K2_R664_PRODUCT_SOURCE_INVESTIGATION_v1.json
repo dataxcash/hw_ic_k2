@@ -1,0 +1,45 @@
+{
+ "artifact": "k2_r664_product_source_investigation_v1",
+ "ts": "2026-09-26T02:15:50",
+ "authority": "#K2-252 sec.4 (product investigation order): AI+WEB first, NO-LOGIN path mandatory; if confirmed unavailable => carry evidence, STOP and report. No owner account/token operation is pre-authorised.",
+ "construction_runs": 0,
+ "drawings": 0,
+ "target": "the editable DESIGN SOURCE of the same-chip reference (REF-CASE-LIBRARY sec.A: oshwhub project eda_nrhnxjzuv/pex88096-pcie4-switch-gpu-basepl, GPL 3.0)",
+ "no_login_probe_log": [
+  {
+   "probe": "project page HTML",
+   "url": "https://oshwhub.com/eda_nrhnxjzuv/pex88096-pcie4-switch-gpu-basepl",
+   "result": "HTTP 200 / 865,826 B"
+  },
+  {
+   "probe": "design-source links in the page (regex on .epro/.epcb/.kicad*/gerber/.zip)",
+   "result": "ONLY 1 zip found: image.lceda.cn/oshwhub/project/attachments/4c382b1bb55d43858eb452ff0c7ef339.zip (= the pre-configured SBR firmware config, 17,096 B). NO schematic/PCB/gerber source link."
+  },
+  {
+   "probe": "page-internal download endpoints /download/<id>?preview=false (13 distinct ids extracted)",
+   "urls": "fs-web-stream.jlc.com/fs-web-stream/file-operation/download/<id>?preview=false",
+   "result": "ALL 13 probed: HTTP 404 / text-html - and in the page these are 'selectedIconUrl' (project icon/preview streams), not design files"
+  },
+  {
+   "probe": "attachment set reachable without login",
+   "result": "11 PDFs (datasheets/clock/connector/reset) + SBR.zip + 146 render images (image.lceda.cn/oshwhub/pullImage/*) - all HTTP 200"
+  }
+ ],
+ "conclusion": {
+  "editable_design_source": "NOT OBTAINABLE WITHOUT LOGIN (confirmed)",
+  "evidence": [
+   "zero schematic/PCB/gerber links exist anywhere in the project page",
+   "the clone/editable-source API was already machine-recorded in REF-CASE-LIBRARY sec.A v2.1 as returning 104001 (not authenticated)",
+   "the only project-attachment zip is the firmware config, not a design source"
+  ],
+  "available_without_login": "project page + 11 PDFs + SBR firmware config + 146 renders"
+ },
+ "per_order_disposition": "carry evidence and STOP (no owner account/token operation attempted; none pre-authorised by #K2-252 sec.3.3)",
+ "impact_on_the_drawing_layer": "#K2-252 sec.3.3(i) allows the deterministic constructive CHANNEL ALLOCATION only as 'the product structure landed on this board', each bundle carrying product-comparison evidence. Without the editable source, that comparison can only cite: (a) the render observations (R633: one bundle per connector, straight long run, s-bend only at the pad field, one layer change at the breakout, bundles merely must not overlap), (b) the SBR grouping artifact (532709807b07a16f) as configuration-side evidence. Cell-accurate copying of the product's actual channel geometry is NOT possible without the source.",
+ "one_line_request": "choose: (alpha) accept the render/REF structural blueprint as the comparison basis for the (i) allocator, or (beta) escalate to the owner for the editable source (per #K2-252 sec.5 upgrade plan 1: LEGAL-ESCALATION owner-system)?",
+ "push": {
+  "k2_rc": 0
+ },
+ "owner_items": 0,
+ "artifact_hash16": "9cec205b1ee398c7"
+}
