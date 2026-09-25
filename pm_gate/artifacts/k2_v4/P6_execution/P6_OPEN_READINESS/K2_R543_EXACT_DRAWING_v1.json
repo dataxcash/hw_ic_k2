@@ -1,0 +1,30 @@
+{
+ "artifact": "k2_r543_exact_drawing_v1",
+ "ts": "2026-09-25T10:33:26",
+ "authority": "#K2-210 sec.3.5 / sec.4 (exact method, ONE shot, R540 fixed inputs immutable)",
+ "solve_calls": 1,
+ "model": {
+  "bool_vars": 234582,
+  "constraints": 64941,
+  "node_capacity": 8926,
+  "via_cliques": 539,
+  "R_BAND": 3,
+  "validate": "OK",
+  "under_1.2M": true,
+  "segments_per_lane": {
+   "PCIE_UP_OUT0_N_J2": 6,
+   "PCIE_UP_OUT0_P_J2": 6,
+   "PCIE_UP_OUT1_N_J2": 6
+  },
+  "arcs_total": 234581
+ },
+ "solve": {
+  "status": "INFEASIBLE",
+  "wall_s": 0.2
+ },
+ "decision": "NO DRAWING: 精确求解 INFEASIBLE（无 (甲)，且非守恒级硬墙 ⇒ 不构成 (乙)）",
+ "buildability": {
+  "mode": "no_witness"
+ },
+ "elapsed_s": 40.7
+}
