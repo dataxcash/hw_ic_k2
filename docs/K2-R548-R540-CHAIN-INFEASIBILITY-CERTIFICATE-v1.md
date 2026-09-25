@@ -50,7 +50,7 @@ R540 把"同槽位不同层"的两条西侧线的 `pad_run` 都落在**同一层
 | ③ 守恒核算 | 承 R537：156 割无墙（最紧 col114 上界 40 vs 需求 3，余 +37）⇒ 非守恒级 |
 | ④ `buildability` | `no_witness`（固定输入下无合法逐线施工图；重推件=候选修复，尚未验证为图） |
 | ⑤ 构造过程原始日志（fail-loud） | `/tmp/opencode/r548/r548_certificate.log`（含每一次迭代的 overuse/viasep/fail 读数） |
-| ⑥ 机器 hash | artifact 内 `artifact_hash16 = fe5abad2c9f5eb77`；输入 hash：R540 spec / R529 master / model_l8 |
+| ⑥ 机器 hash | artifact 内 `artifact_hash16 = d2974c3e3af6b44d`；输入 hash：R540 spec / R529 master / model_l8 |
 
 **L2 槽位重推（本件自裁 · 件内给出完整 assignment）**：45 处格位移动；验证 = **node-injective 0 冲突 · 序一致 0 翻转（form C + 入口扇 + 东侧焊盘接近序）· 预路由闸 PASS**。
 **联合安放**读数：定序构造 ＋ 冲突回溯（协商式 rip-up & reroute，PathFinder 型；零配额）：`routed 16/16 · overuse 375~620 未收敛 · viasep 0` ⇒ **诚实结论：重推后的链通过了路点级闸，但线间安放仍未收敛 ⇒ 尚非可制造图纸**（残余重叠已定位在入口带 / 东侧焊盘带）。

@@ -647,9 +647,14 @@ def main():
     rep["conservation_audit"] = {"source": "K2_R537_CONSERVATION_CUT_v1.json",
                                  "reading": "156 在册格点割全量计数：无容量墙（最紧 col114 上界 40 vs 需求 3，余 +37）",
                                  "note": "本卡点非守恒级；是固定路点层（node 冲突）"}
-    rep["artifact_hash16"] = sha16({k: rep[k] for k in rep if k != "artifact_hash16"})
     rep["elapsed_s"] = round(time.time() - t0, 1)
     rep["fail_loud_log"] = LOGF
+    # machine hash of the FINAL artifact content (artifact_hash16 excluded), reproducible from the JSON file:
+    #   h = sha256(json.dumps({k:v for k,v in json.load(f).items() if k!='artifact_hash16'},
+    #                          ensure_ascii=False, indent=1, default=str))[:16]
+    _body = json.dumps({k: v for k, v in rep.items() if k != "artifact_hash16"},
+                       ensure_ascii=False, indent=1, default=str)
+    rep["artifact_hash16"] = hashlib.sha256(_body.encode()).hexdigest()[:16]
     json.dump(rep, open(a.out, "w"), ensure_ascii=False, indent=1, default=str)
     log("WROTE %s" % a.out)
     log("OWNER-ITEMS: 0")
