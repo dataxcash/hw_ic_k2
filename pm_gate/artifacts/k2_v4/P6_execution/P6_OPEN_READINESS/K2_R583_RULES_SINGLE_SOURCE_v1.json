@@ -1,0 +1,8 @@
+{
+ "R1_stage_rows": "cut the tail vertical span [Y..H] at the machine-verified FULL-SPAN rows (cols 61..114 free on layer 0); always include H-1 and Y",
+ "R2_bisect": "if a stage's needed span > available contiguous free run on every candidate column, bisect it (mid = a - ceil(need/2)) and recurse (R580 law)",
+ "R3_column_by_exit": "order candidate columns by |c - exit_column|; take the first column satisfying BOTH the horizontal run on the cut row and the vertical run inside the stage (R582 law)",
+ "R4_final_leg": "the LAST stage's column is restricted: EAST group -> cols >=115 (wall-east, so the lane lands east of the wall at row 36 and the final run to (exitc,36) is short); WEST group -> cols <=113 then the final run to (114,exit_row); the final run is dimensioned like any stage: available >= needed",
+ "R5_no_trial": "columns/bands are DERIVED by R1-R4; trying +/-N to make it pass is forbidden",
+ "R6_enforced_gate": "this script refuses to emit a complete verdict if any lane fails dimensioning (fail-closed)"
+}
