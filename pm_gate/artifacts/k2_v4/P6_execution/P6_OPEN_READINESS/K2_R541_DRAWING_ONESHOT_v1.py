@@ -64,6 +64,8 @@ def main():
         return set(spec["per_lane"][nm]["schedule"]["stations_on_In4"])
 
     def dijk(nm, src, dst, res0, res1, vias, nv0):
+        if src == dst:                     # K2-210 sec.3.6 defect fix: a zero-length leg is trivially satisfiable
+            return [src], nv0
         adj = lanes[nm]["adj"]; w4 = want4(nm)
         dist = {src: 0.0}; nv = {src: nv0}; prev = {}; pq = [(0.0, src)]
         while pq:
