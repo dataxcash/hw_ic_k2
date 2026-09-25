@@ -1,6 +1,6 @@
 {
  "artifact": "k2_r544_pregate_domain_audit_v1",
- "ts": "2026-09-25T10:53:24",
+ "ts": "2026-09-25T10:54:30",
  "authority": "#K2-211 sec.3.3 pre-gates (i) domain completeness + (ii) chain connectivity; ZERO quota; no shot",
  "solve_calls": 0,
  "R_BAND": 3,
@@ -156,7 +156,7 @@
      "seg": 1,
      "from": 162,
      "to": 2186,
-     "reachable": false
+     "reachable": true
     },
     {
      "seg": 2,
@@ -514,7 +514,7 @@
      "seg": 1,
      "from": 487,
      "to": 2202,
-     "reachable": false
+     "reachable": true
     },
     {
      "seg": 2,
@@ -872,7 +872,7 @@
      "seg": 1,
      "from": 877,
      "to": 2190,
-     "reachable": false
+     "reachable": true
     },
     {
      "seg": 2,
@@ -974,7 +974,7 @@
      "seg": 3,
      "from": 3956,
      "to": 7641,
-     "reachable": false
+     "reachable": true
     },
     {
      "seg": 4,
@@ -1052,7 +1052,7 @@
      "seg": 1,
      "from": 1072,
      "to": 2202,
-     "reachable": false
+     "reachable": true
     },
     {
      "seg": 2,
@@ -1242,7 +1242,7 @@
      "seg": 3,
      "from": 3948,
      "to": 7511,
-     "reachable": false
+     "reachable": true
     },
     {
      "seg": 4,
@@ -1441,51 +1441,14 @@
  "summary": {
   "lanes": 16,
   "n_bad_points": 0,
-  "n_bad_chains": 6,
+  "n_bad_chains": 0,
   "bad_points": [],
-  "bad_chains": [
-   {
-    "lane": "PCIE_UP_OUT0_P_J2",
-    "seg": 1,
-    "from": 162,
-    "to": 2186
-   },
-   {
-    "lane": "PCIE_UP_OUT2_P_J2",
-    "seg": 1,
-    "from": 487,
-    "to": 2202
-   },
-   {
-    "lane": "PCIE_UP_OUT4_P_J2",
-    "seg": 1,
-    "from": 877,
-    "to": 2190
-   },
-   {
-    "lane": "PCIE_UP_OUT5_N_J2",
-    "seg": 3,
-    "from": 3956,
-    "to": 7641
-   },
-   {
-    "lane": "PCIE_UP_OUT5_P_J2",
-    "seg": 1,
-    "from": 1072,
-    "to": 2202
-   },
-   {
-    "lane": "PCIE_UP_OUT6_P_J2",
-    "seg": 3,
-    "from": 3948,
-    "to": 7511
-   }
-  ]
+  "bad_chains": []
  },
  "gate_verdicts": {
   "i_domain_completeness": "PASS",
-  "ii_chain_connectivity": "FAIL"
+  "ii_chain_connectivity": "PASS"
  },
  "diagnosis": "若 i/ii 有 FAIL ⇒ 即 R543 0.2s INFEASIBLE 的装置级根因（域过滤/带限制把固定航点或航段排除）⇒ 按 #K2-211 §三.3 修域（域 = 带 ∪ 固定航点/航段）后复检至全过，方许开枪",
- "elapsed_s": 34.6
+ "elapsed_s": 37.7
 }

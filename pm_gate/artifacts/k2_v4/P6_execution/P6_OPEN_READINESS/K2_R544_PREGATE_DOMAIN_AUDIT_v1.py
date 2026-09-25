@@ -66,11 +66,38 @@ def main():
             src, dst = chain[s], chain[s + 1]
             if src == dst:
                 row["chains"].append({"seg": s, "reachable": True, "note": "coincident"}); continue
+            # K2-212 sec.3.3: domain = band UNION the (dilated) shortest-path corridor between the two
+            # fixed waypoints, so a DETOUR (the R519-class lesson) is inside the domain => chain is connected.
+            sp = set()
+            full = collections.defaultdict(set)
+            for u, lst in lanes[nm]["adj"].items():
+                for (v, _w) in lst:
+                    full[u].add(v); full[v].add(u)
+            prev = {src: None}; dq = collections.deque([src])
+            while dq:
+                x = dq.popleft()
+                if x == dst:
+                    break
+                for y in full[x]:
+                    if y not in prev:
+                        prev[y] = x; dq.append(y)
+            if dst in prev:
+                x = dst
+                while x is not None:
+                    if x < TERM_BASE:
+                        i0, j0 = (x % NID) // NY, (x % NID) % NY
+                        for di in range(-RB, RB + 1):
+                            for dj in range(-RB, RB + 1):
+                                u2, v2 = i0 + di, j0 + dj
+                                if 0 <= u2 < NX and 0 <= v2 < NY:
+                                    sp.add(u2 * NY + v2)
+                    x = prev[x]
             adj = collections.defaultdict(set)
             for u, lst in lanes[nm]["adj"].items():
                 for (v, _w) in lst:
                     fu = (u < TERM_BASE and u in fixed_set); fv = (v < TERM_BASE and v in fixed_set)
-                    if not ((fu or fv) or (in_band(src, dst, u) and in_band(src, dst, v))):
+                    su = (u < TERM_BASE and (u % NID) in sp); sv = (v < TERM_BASE and (v % NID) in sp)
+                    if not ((fu or fv or su or sv) or (in_band(src, dst, u) and in_band(src, dst, v))):
                         continue
                     adj[u].add(v); adj[v].add(u)
             seen = {src}; st = [src]
