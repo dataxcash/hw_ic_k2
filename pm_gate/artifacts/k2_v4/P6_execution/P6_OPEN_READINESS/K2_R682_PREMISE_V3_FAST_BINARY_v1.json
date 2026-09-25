@@ -1,0 +1,40 @@
+{
+ "artifact": "k2_r682_premise_v3_fast_binary_v1",
+ "ts": "2026-09-26T04:07:06",
+ "authority": "#K2-257(A): premise revision v3 (register the in-register TWO-STAGE descent route right, R580/R603 precedent) + ONE bounded full-model run with the tool-efficiency fix (bitmask footprints + MRV + forward checking + conflict-directed backjumping). Zero parameter search; node budget 400k; timebox 1500s; fail-loud.",
+ "premise_revision_v3": {
+  "artifact": "K2_R682_PREMISE_V3... (bumped new file; frozen four sources untouched)",
+  "one_line_death_cause": "the wall-adjacent approach is registered single-file (one column, col 113): two lanes are forced onto the same cell",
+  "proven_facts": [
+   "UNSAT core {OUT6_N,OUT7_P} size 2, re-verified (R668 620258beeba029fe)",
+   "mandatory cell (L1,113,19) for both lanes (905/905 candidate pairs clash)",
+   "calibration: the pair becomes SAT under a two-stage descent (R672 nodes=2, R680 nodes=12)"
+  ],
+  "route_right": "two-stage descent slot -> row H -> down Xa -> jog along row Rm -> down Xb -> approach; Rm from R601 row segments",
+  "in_register_precedent": "R580 law / R603 (OUT0_N = H47 Xa117 Rm36 Xb116)"
+ },
+ "construction_runs": 1,
+ "drawings": 0,
+ "calibration_pair_sat": true,
+ "solve": {
+  "ok": false,
+  "nodes": 4,
+  "budget_hit": false,
+  "lanes": 16
+ },
+ "per_lane": {},
+ "relocations": [],
+ "unassigned": [],
+ "conservation": {
+  "N/A": "no allocation certified in this run",
+  "col60_slots_distinct": null,
+  "descent_columns_distinct": null,
+  "exit_cells_distinct": null,
+  "FOURTH_KEY_physical_disjoint": null
+ },
+ "buildability": {
+  "mode": "no_witness"
+ },
+ "elapsed_s": 42.9,
+ "artifact_hash16": "383d8461232246f1"
+}
