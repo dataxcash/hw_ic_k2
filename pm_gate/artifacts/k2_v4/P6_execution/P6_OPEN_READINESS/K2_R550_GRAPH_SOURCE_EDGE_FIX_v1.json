@@ -1,0 +1,41 @@
+{
+ "artifact": "k2_r550_graph_source_edge_fix_v1",
+ "ts": "2026-09-25T13:48:48",
+ "authority": "#K2-217 sec.3.3(1): land the one-line graph-source fix as a NEW version file",
+ "files_touched_in_registered_set": "NONE (this is an additive new-version file)",
+ "fix": {
+  "target": "K2_R499_CONFLICT_TABLE_ONE_IMPLEMENTATION_v3.Gen._build_edges (in-memory only)",
+  "was": "m2 = aa < ba",
+  "now": "m2 = (aa < ba) | ((aa == ba) & (ab < bb))",
+  "class": "undirected-edge de-duplication compared only the column index -> dropped both vertical families (dc=0)"
+ },
+ "evidence_in_registered_model": {
+  "registered_edges": 26441,
+  "registered_histogram": {
+   "1,0": 8905,
+   "1,1": 17536
+  },
+  "vertical_edges_present": 0
+ },
+ "evidence_after_fix": {
+  "edges": 35273,
+  "histogram": {
+   "0,1": 8832,
+   "1,0": 8905,
+   "1,1": 17536
+  },
+  "vertical_edges_present": 8832,
+  "recovered_vertical_edges": 8832
+ },
+ "lateral_arcs_out0_n_after_fix": 93256,
+ "frozen_four": {
+  "SPEC": "0bd52ed48e720b8c",
+  "page_manifest": "a8ef3ea8ecff99d7",
+  "PCB": "fb07d25ac426ff84",
+  "rules": "0a459839e15960b8",
+  "verdict": "4/4 MATCH"
+ },
+ "elapsed_s": 45.0,
+ "fail_loud_log": "/tmp/opencode/r550/graph_fix.log",
+ "artifact_hash16": "3622361c6165cb5d"
+}
