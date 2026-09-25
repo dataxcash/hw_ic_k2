@@ -1,0 +1,165 @@
+{
+ "artifact": "k2_r698_groupreg_binary_v1",
+ "ts": "2026-09-26T06:57:03",
+ "authority": "#K2-262 (LAST method change): PRODUCT PARADIGM landed as a GROUPED, ORDERED, CANONICAL registration - one geometry per lane (no search), groups ordered by connector/exit position (G_east by exit column; G_west by wall-gap row), canonical descent column = R599 longest-free-run (layer-distinct, group-ordered), two-stage jog available (R580/R603), group-ordered approach, registered exits kept, lever(iii) via-site where a layer change is needed. PRE-GATE (domain collapse): 1 route per lane vs the R696 baseline ~208k => collapse ~2e5x (five orders).",
+ "group_structure": {
+  "G_east_by_exit_col": [
+   "OUT6_P_J2",
+   "OUT5_N_J2",
+   "OUT4_P_J2",
+   "OUT2_P_J2",
+   "OUT0_P_J2",
+   "OUT3_N_J2",
+   "OUT1_N_J2",
+   "OUT7_N_J2"
+  ],
+  "G_west_by_gap_row": [
+   "OUT3_P_J2",
+   "OUT1_P_J2",
+   "OUT6_N_J2",
+   "OUT2_N_J2",
+   "OUT5_P_J2",
+   "OUT7_P_J2",
+   "OUT4_N_J2",
+   "OUT0_N_J2"
+  ]
+ },
+ "domain_collapse": {
+  "R696_baseline_per_lane": "~208,000",
+  "now_per_lane": 1,
+  "factor": "~2e5 (five orders of magnitude)"
+ },
+ "construction_runs": 1,
+ "drawings": 0,
+ "per_lane": {
+  "OUT6_P_J2": {
+   "H": 53,
+   "descent_column": 120,
+   "tail_layer": 0,
+   "exit_cell": [
+    115,
+    36
+   ],
+   "exit_layer": 0,
+   "lever_iii": null,
+   "n_cells": 78
+  },
+  "OUT4_P_J2": {
+   "H": 53,
+   "descent_column": 120,
+   "tail_layer": 1,
+   "exit_cell": [
+    119,
+    36
+   ],
+   "exit_layer": 0,
+   "lever_iii": null,
+   "n_cells": 78
+  },
+  "OUT2_P_J2": {
+   "H": 57,
+   "descent_column": 125,
+   "tail_layer": 0,
+   "exit_cell": [
+    125,
+    36
+   ],
+   "exit_layer": 0,
+   "lever_iii": null,
+   "n_cells": 88
+  },
+  "OUT0_P_J2": {
+   "H": 59,
+   "descent_column": 127,
+   "tail_layer": 0,
+   "exit_cell": [
+    127,
+    36
+   ],
+   "exit_layer": 1,
+   "lever_iii": {
+    "keep_exit": [
+     127,
+     36
+    ],
+    "via_cell": [
+     132,
+     31
+    ]
+   },
+   "n_cells": 102
+  },
+  "OUT3_N_J2": {
+   "H": 55,
+   "descent_column": 132,
+   "tail_layer": 1,
+   "exit_cell": [
+    131,
+    36
+   ],
+   "exit_layer": 0,
+   "lever_iii": null,
+   "n_cells": 92
+  },
+  "OUT1_N_J2": {
+   "H": 59,
+   "descent_column": 133,
+   "tail_layer": 1,
+   "exit_cell": [
+    133,
+    36
+   ],
+   "exit_layer": 0,
+   "lever_iii": null,
+   "n_cells": 98
+  },
+  "OUT1_P_J2": {
+   "H": 39,
+   "descent_column": 113,
+   "tail_layer": 1,
+   "exit_cell": [
+    114,
+    11
+   ],
+   "exit_layer": 0,
+   "lever_iii": null,
+   "n_cells": 84
+  },
+  "OUT4_N_J2": {
+   "H": 55,
+   "descent_column": 122,
+   "tail_layer": 0,
+   "exit_cell": [
+    114,
+    24
+   ],
+   "exit_layer": 0,
+   "lever_iii": null,
+   "n_cells": 94
+  }
+ },
+ "unresolved": [
+  "OUT5_N_J2",
+  "OUT7_N_J2",
+  "OUT3_P_J2",
+  "OUT6_N_J2",
+  "OUT2_N_J2",
+  "OUT5_P_J2",
+  "OUT7_P_J2",
+  "OUT0_N_J2"
+ ],
+ "conservation": {
+  "col60_slots_distinct": true,
+  "descent_columns_distinct": true,
+  "exit_cells_distinct": true,
+  "FOURTH_KEY_physical_disjoint": true,
+  "n_cells_total": 714
+ },
+ "buildability": {
+  "mode": "relocation_listed",
+  "note": "canonical routes; lever(iii) rows listed in per_lane"
+ },
+ "binary": "PARTIAL_or_NAMED",
+ "elapsed_s": 29.1,
+ "artifact_hash16": "406a91da6925db2b"
+}
