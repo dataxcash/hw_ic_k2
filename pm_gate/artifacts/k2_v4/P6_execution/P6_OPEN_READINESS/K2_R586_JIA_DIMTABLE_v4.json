@@ -1,0 +1,2657 @@
+{
+ "artifact": "k2_r586_jia_dimtable_v4",
+ "ts": "2026-09-25T17:38:23",
+ "authority": "#K2-226 JIA stage: single-source rules + complete 16/16 dimension table incl. final leg; zero construction runs; enforced gate",
+ "rules_file": "K2_R583_RULES_SINGLE_SOURCE_v1.json",
+ "rules": {
+  "R1_stage_rows": "cut the tail vertical span [Y..H] at the machine-verified FULL-SPAN rows (cols 61..114 free on layer 0); always include H-1 and Y",
+  "R2_bisect": "if a stage's needed span > available contiguous free run on every candidate column, bisect it (mid = a - ceil(need/2)) and recurse (R580 law)",
+  "R3_column_by_exit": "order candidate columns by |c - exit_column|; take the first column satisfying BOTH the horizontal run on the cut row and the vertical run inside the stage (R582 law)",
+  "R4_final_leg": "EAST: last-stage column >=115 (wall-east) then a short final run to (exitc,36) on layer 0. WEST (R4-west-prime): the last hop is a REGISTERED LEG - SPEC waypoint exit_wall_gap/pad_run are registered node ids reached by a declared leg, not lattice cells; so the leg is dimensioned by checking that a registered terminal leg of the lane lands on row Y at col >=110 (available) vs the 1-cell hop from (113,Y) (needed). Rule-derived; no trials.",
+  "R5_no_trial": "columns/bands are DERIVED by R1-R4; trying +/-N to make it pass is forbidden",
+  "R6_enforced_gate": "this script refuses to emit a complete verdict if any lane fails dimensioning (fail-closed)"
+ },
+ "construction_runs": 0,
+ "drawings": 0,
+ "trials": 0,
+ "per_lane": {
+  "PCIE_UP_OUT0_N_J2": {
+   "L": 0,
+   "H": 59,
+   "Y": 7,
+   "east": false,
+   "Econ": 114,
+   "n_stages": 15,
+   "stages": [
+    {
+     "from_row": 58,
+     "to_row": 55,
+     "cut_row": 58,
+     "column": 111,
+     "horizontal_span": 51,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 55,
+     "to_row": 54,
+     "cut_row": 55,
+     "column": 113,
+     "horizontal_span": 2,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 54,
+     "to_row": 53,
+     "cut_row": 54,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 53,
+     "to_row": 50,
+     "cut_row": 53,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 50,
+     "to_row": 47,
+     "cut_row": 50,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 47,
+     "to_row": 46,
+     "cut_row": 47,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 46,
+     "to_row": 43,
+     "cut_row": 46,
+     "column": 112,
+     "horizontal_span": 1,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 43,
+     "to_row": 40,
+     "cut_row": 43,
+     "column": 113,
+     "horizontal_span": 1,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 40,
+     "to_row": 39,
+     "cut_row": 40,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 39,
+     "to_row": 35,
+     "cut_row": 39,
+     "column": 100,
+     "horizontal_span": 13,
+     "vertical_needed": 4,
+     "vertical_available": 4,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 35,
+     "to_row": 34,
+     "verdict": "NO_COLUMN"
+    },
+    {
+     "from_row": 34,
+     "to_row": 33,
+     "cut_row": 34,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 33,
+     "to_row": 31,
+     "cut_row": 33,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 2,
+     "vertical_available": 2,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 31,
+     "to_row": 23,
+     "cut_row": 31,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 8,
+     "vertical_available": 8,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 23,
+     "to_row": 7,
+     "cut_row": 23,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 16,
+     "vertical_available": 16,
+     "verdict": "PASS",
+     "final_leg": true
+    }
+   ],
+   "verdict": "FAIL"
+  },
+  "PCIE_UP_OUT0_P_J2": {
+   "L": 1,
+   "H": 59,
+   "Y": 36,
+   "east": true,
+   "Econ": 115,
+   "n_stages": 13,
+   "stages": [
+    {
+     "from_row": 58,
+     "to_row": 57,
+     "cut_row": 58,
+     "column": 113,
+     "horizontal_span": 53,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 57,
+     "to_row": 56,
+     "cut_row": 57,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 56,
+     "to_row": 55,
+     "cut_row": 56,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 55,
+     "to_row": 54,
+     "cut_row": 55,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 54,
+     "to_row": 53,
+     "cut_row": 54,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 53,
+     "to_row": 50,
+     "cut_row": 53,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 50,
+     "to_row": 47,
+     "cut_row": 50,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 47,
+     "to_row": 46,
+     "cut_row": 47,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 46,
+     "to_row": 43,
+     "cut_row": 46,
+     "column": 112,
+     "horizontal_span": 1,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 43,
+     "to_row": 40,
+     "cut_row": 43,
+     "column": 113,
+     "horizontal_span": 1,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 40,
+     "to_row": 39,
+     "cut_row": 40,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 39,
+     "to_row": 36,
+     "cut_row": 39,
+     "column": 117,
+     "horizontal_span": 4,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": true
+    },
+    {
+     "cut_row": 36,
+     "column_econ": 115,
+     "horizontal_span": 2,
+     "final_run": true,
+     "needed": 2,
+     "available": 2,
+     "verdict": "PASS",
+     "exit_layer": 1
+    }
+   ],
+   "verdict": "PASS"
+  },
+  "PCIE_UP_OUT1_N_J2": {
+   "L": 0,
+   "H": 59,
+   "Y": 36,
+   "east": true,
+   "Econ": 115,
+   "n_stages": 13,
+   "stages": [
+    {
+     "from_row": 58,
+     "to_row": 57,
+     "cut_row": 58,
+     "column": 113,
+     "horizontal_span": 53,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 57,
+     "to_row": 56,
+     "cut_row": 57,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 56,
+     "to_row": 55,
+     "cut_row": 56,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 55,
+     "to_row": 54,
+     "cut_row": 55,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 54,
+     "to_row": 53,
+     "cut_row": 54,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 53,
+     "to_row": 50,
+     "cut_row": 53,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 50,
+     "to_row": 47,
+     "cut_row": 50,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 47,
+     "to_row": 46,
+     "cut_row": 47,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 46,
+     "to_row": 43,
+     "cut_row": 46,
+     "column": 112,
+     "horizontal_span": 1,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 43,
+     "to_row": 40,
+     "cut_row": 43,
+     "column": 113,
+     "horizontal_span": 1,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 40,
+     "to_row": 39,
+     "cut_row": 40,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 39,
+     "to_row": 36,
+     "cut_row": 39,
+     "column": 117,
+     "horizontal_span": 4,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": true
+    },
+    {
+     "cut_row": 36,
+     "column_econ": 115,
+     "horizontal_span": 2,
+     "final_run": true,
+     "needed": 2,
+     "available": 2,
+     "verdict": "PASS",
+     "exit_layer": 0
+    }
+   ],
+   "verdict": "PASS"
+  },
+  "PCIE_UP_OUT1_P_J2": {
+   "L": 0,
+   "H": 59,
+   "Y": 11,
+   "east": false,
+   "Econ": 114,
+   "n_stages": 16,
+   "stages": [
+    {
+     "from_row": 58,
+     "to_row": 56,
+     "cut_row": 58,
+     "column": 112,
+     "horizontal_span": 52,
+     "vertical_needed": 2,
+     "vertical_available": 2,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 56,
+     "to_row": 55,
+     "cut_row": 56,
+     "column": 113,
+     "horizontal_span": 1,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 55,
+     "to_row": 54,
+     "cut_row": 55,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 54,
+     "to_row": 53,
+     "cut_row": 54,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 53,
+     "to_row": 50,
+     "cut_row": 53,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 50,
+     "to_row": 47,
+     "cut_row": 50,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 47,
+     "to_row": 46,
+     "cut_row": 47,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 46,
+     "to_row": 43,
+     "cut_row": 46,
+     "column": 112,
+     "horizontal_span": 1,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 43,
+     "to_row": 40,
+     "cut_row": 43,
+     "column": 113,
+     "horizontal_span": 1,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 40,
+     "to_row": 39,
+     "cut_row": 40,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 39,
+     "to_row": 35,
+     "cut_row": 39,
+     "column": 100,
+     "horizontal_span": 13,
+     "vertical_needed": 4,
+     "vertical_available": 4,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 35,
+     "to_row": 34,
+     "verdict": "NO_COLUMN"
+    },
+    {
+     "from_row": 34,
+     "to_row": 33,
+     "cut_row": 34,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 33,
+     "to_row": 32,
+     "cut_row": 33,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 32,
+     "to_row": 25,
+     "cut_row": 32,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 7,
+     "vertical_available": 7,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 25,
+     "to_row": 11,
+     "cut_row": 25,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 14,
+     "vertical_available": 14,
+     "verdict": "PASS",
+     "final_leg": true
+    }
+   ],
+   "verdict": "FAIL"
+  },
+  "PCIE_UP_OUT2_N_J2": {
+   "L": 0,
+   "H": 59,
+   "Y": 12,
+   "east": false,
+   "Econ": 114,
+   "n_stages": 17,
+   "stages": [
+    {
+     "from_row": 58,
+     "to_row": 57,
+     "cut_row": 58,
+     "column": 113,
+     "horizontal_span": 53,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 57,
+     "to_row": 56,
+     "cut_row": 57,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 56,
+     "to_row": 55,
+     "cut_row": 56,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 55,
+     "to_row": 54,
+     "cut_row": 55,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 54,
+     "to_row": 53,
+     "cut_row": 54,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 53,
+     "to_row": 50,
+     "cut_row": 53,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 50,
+     "to_row": 47,
+     "cut_row": 50,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 47,
+     "to_row": 46,
+     "cut_row": 47,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 46,
+     "to_row": 43,
+     "cut_row": 46,
+     "column": 112,
+     "horizontal_span": 1,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 43,
+     "to_row": 40,
+     "cut_row": 43,
+     "column": 113,
+     "horizontal_span": 1,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 40,
+     "to_row": 39,
+     "cut_row": 40,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 39,
+     "to_row": 35,
+     "cut_row": 39,
+     "column": 100,
+     "horizontal_span": 13,
+     "vertical_needed": 4,
+     "vertical_available": 4,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 35,
+     "to_row": 34,
+     "verdict": "NO_COLUMN"
+    },
+    {
+     "from_row": 34,
+     "to_row": 33,
+     "cut_row": 34,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 33,
+     "to_row": 32,
+     "cut_row": 33,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 32,
+     "to_row": 25,
+     "cut_row": 32,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 7,
+     "vertical_available": 7,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 25,
+     "to_row": 12,
+     "cut_row": 25,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 13,
+     "vertical_available": 13,
+     "verdict": "PASS",
+     "final_leg": true
+    }
+   ],
+   "verdict": "FAIL"
+  },
+  "PCIE_UP_OUT2_P_J2": {
+   "L": 1,
+   "H": 59,
+   "Y": 36,
+   "east": true,
+   "Econ": 116,
+   "n_stages": 13,
+   "stages": [
+    {
+     "from_row": 58,
+     "to_row": 57,
+     "cut_row": 58,
+     "column": 113,
+     "horizontal_span": 53,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 57,
+     "to_row": 56,
+     "cut_row": 57,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 56,
+     "to_row": 55,
+     "cut_row": 56,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 55,
+     "to_row": 54,
+     "cut_row": 55,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 54,
+     "to_row": 53,
+     "cut_row": 54,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 53,
+     "to_row": 50,
+     "cut_row": 53,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 50,
+     "to_row": 47,
+     "cut_row": 50,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 47,
+     "to_row": 46,
+     "cut_row": 47,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 46,
+     "to_row": 43,
+     "cut_row": 46,
+     "column": 112,
+     "horizontal_span": 1,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 43,
+     "to_row": 40,
+     "cut_row": 43,
+     "column": 113,
+     "horizontal_span": 1,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 40,
+     "to_row": 39,
+     "cut_row": 40,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 39,
+     "to_row": 36,
+     "cut_row": 39,
+     "column": 117,
+     "horizontal_span": 4,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": true
+    },
+    {
+     "cut_row": 36,
+     "column_econ": 116,
+     "horizontal_span": 1,
+     "final_run": true,
+     "needed": 1,
+     "available": 1,
+     "verdict": "PASS",
+     "exit_layer": 0
+    }
+   ],
+   "verdict": "PASS"
+  },
+  "PCIE_UP_OUT3_N_J2": {
+   "L": 0,
+   "H": 59,
+   "Y": 36,
+   "east": true,
+   "Econ": 117,
+   "n_stages": 13,
+   "stages": [
+    {
+     "from_row": 58,
+     "to_row": 57,
+     "cut_row": 58,
+     "column": 113,
+     "horizontal_span": 53,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 57,
+     "to_row": 56,
+     "cut_row": 57,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 56,
+     "to_row": 55,
+     "cut_row": 56,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 55,
+     "to_row": 54,
+     "cut_row": 55,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 54,
+     "to_row": 53,
+     "cut_row": 54,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 53,
+     "to_row": 50,
+     "cut_row": 53,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 50,
+     "to_row": 47,
+     "cut_row": 50,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 47,
+     "to_row": 46,
+     "cut_row": 47,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 46,
+     "to_row": 43,
+     "cut_row": 46,
+     "column": 112,
+     "horizontal_span": 1,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 43,
+     "to_row": 40,
+     "cut_row": 43,
+     "column": 113,
+     "horizontal_span": 1,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 40,
+     "to_row": 39,
+     "cut_row": 40,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 39,
+     "to_row": 36,
+     "cut_row": 39,
+     "column": 117,
+     "horizontal_span": 4,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": true
+    },
+    {
+     "cut_row": 36,
+     "column_econ": 117,
+     "horizontal_span": 0,
+     "final_run": true,
+     "needed": 0,
+     "available": 0,
+     "verdict": "PASS",
+     "exit_layer": 0
+    }
+   ],
+   "verdict": "PASS"
+  },
+  "PCIE_UP_OUT3_P_J2": {
+   "L": 0,
+   "H": 59,
+   "Y": 15,
+   "east": false,
+   "Econ": 114,
+   "n_stages": 17,
+   "stages": [
+    {
+     "from_row": 58,
+     "to_row": 57,
+     "cut_row": 58,
+     "column": 113,
+     "horizontal_span": 53,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 57,
+     "to_row": 56,
+     "cut_row": 57,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 56,
+     "to_row": 55,
+     "cut_row": 56,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 55,
+     "to_row": 54,
+     "cut_row": 55,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 54,
+     "to_row": 53,
+     "cut_row": 54,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 53,
+     "to_row": 50,
+     "cut_row": 53,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 50,
+     "to_row": 47,
+     "cut_row": 50,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 47,
+     "to_row": 46,
+     "cut_row": 47,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 46,
+     "to_row": 43,
+     "cut_row": 46,
+     "column": 112,
+     "horizontal_span": 1,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 43,
+     "to_row": 40,
+     "cut_row": 43,
+     "column": 113,
+     "horizontal_span": 1,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 40,
+     "to_row": 39,
+     "cut_row": 40,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 39,
+     "to_row": 36,
+     "cut_row": 39,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 36,
+     "to_row": 35,
+     "verdict": "NO_COLUMN"
+    },
+    {
+     "from_row": 35,
+     "to_row": 34,
+     "verdict": "NO_COLUMN"
+    },
+    {
+     "from_row": 34,
+     "to_row": 33,
+     "cut_row": 34,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 33,
+     "to_row": 27,
+     "cut_row": 33,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 6,
+     "vertical_available": 6,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 27,
+     "to_row": 15,
+     "cut_row": 27,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 12,
+     "vertical_available": 12,
+     "verdict": "PASS",
+     "final_leg": true
+    }
+   ],
+   "verdict": "FAIL"
+  },
+  "PCIE_UP_OUT4_N_J2": {
+   "L": 0,
+   "H": 59,
+   "Y": 13,
+   "east": false,
+   "Econ": 114,
+   "n_stages": 17,
+   "stages": [
+    {
+     "from_row": 58,
+     "to_row": 57,
+     "cut_row": 58,
+     "column": 113,
+     "horizontal_span": 53,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 57,
+     "to_row": 56,
+     "cut_row": 57,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 56,
+     "to_row": 55,
+     "cut_row": 56,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 55,
+     "to_row": 54,
+     "cut_row": 55,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 54,
+     "to_row": 53,
+     "cut_row": 54,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 53,
+     "to_row": 50,
+     "cut_row": 53,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 50,
+     "to_row": 47,
+     "cut_row": 50,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 47,
+     "to_row": 46,
+     "cut_row": 47,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 46,
+     "to_row": 43,
+     "cut_row": 46,
+     "column": 112,
+     "horizontal_span": 1,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 43,
+     "to_row": 40,
+     "cut_row": 43,
+     "column": 113,
+     "horizontal_span": 1,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 40,
+     "to_row": 39,
+     "cut_row": 40,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 39,
+     "to_row": 35,
+     "cut_row": 39,
+     "column": 100,
+     "horizontal_span": 13,
+     "vertical_needed": 4,
+     "vertical_available": 4,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 35,
+     "to_row": 34,
+     "verdict": "NO_COLUMN"
+    },
+    {
+     "from_row": 34,
+     "to_row": 33,
+     "cut_row": 34,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 33,
+     "to_row": 32,
+     "cut_row": 33,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 32,
+     "to_row": 26,
+     "cut_row": 32,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 6,
+     "vertical_available": 6,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 26,
+     "to_row": 13,
+     "cut_row": 26,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 13,
+     "vertical_available": 13,
+     "verdict": "PASS",
+     "final_leg": true
+    }
+   ],
+   "verdict": "FAIL"
+  },
+  "PCIE_UP_OUT4_P_J2": {
+   "L": 1,
+   "H": 59,
+   "Y": 36,
+   "east": true,
+   "Econ": 118,
+   "n_stages": 13,
+   "stages": [
+    {
+     "from_row": 58,
+     "to_row": 57,
+     "cut_row": 58,
+     "column": 113,
+     "horizontal_span": 53,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 57,
+     "to_row": 56,
+     "cut_row": 57,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 56,
+     "to_row": 55,
+     "cut_row": 56,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 55,
+     "to_row": 54,
+     "cut_row": 55,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 54,
+     "to_row": 53,
+     "cut_row": 54,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 53,
+     "to_row": 50,
+     "cut_row": 53,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 50,
+     "to_row": 47,
+     "cut_row": 50,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 47,
+     "to_row": 46,
+     "cut_row": 47,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 46,
+     "to_row": 43,
+     "cut_row": 46,
+     "column": 112,
+     "horizontal_span": 1,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 43,
+     "to_row": 40,
+     "cut_row": 43,
+     "column": 113,
+     "horizontal_span": 1,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 40,
+     "to_row": 39,
+     "cut_row": 40,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 39,
+     "to_row": 36,
+     "cut_row": 39,
+     "column": 117,
+     "horizontal_span": 4,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": true
+    },
+    {
+     "cut_row": 36,
+     "column_econ": 118,
+     "horizontal_span": 1,
+     "final_run": true,
+     "needed": 1,
+     "available": 1,
+     "verdict": "PASS",
+     "exit_layer": 0
+    }
+   ],
+   "verdict": "PASS"
+  },
+  "PCIE_UP_OUT5_N_J2": {
+   "L": 0,
+   "H": 59,
+   "Y": 36,
+   "east": true,
+   "Econ": 119,
+   "n_stages": 13,
+   "stages": [
+    {
+     "from_row": 58,
+     "to_row": 57,
+     "cut_row": 58,
+     "column": 113,
+     "horizontal_span": 53,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 57,
+     "to_row": 56,
+     "cut_row": 57,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 56,
+     "to_row": 55,
+     "cut_row": 56,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 55,
+     "to_row": 54,
+     "cut_row": 55,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 54,
+     "to_row": 53,
+     "cut_row": 54,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 53,
+     "to_row": 50,
+     "cut_row": 53,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 50,
+     "to_row": 47,
+     "cut_row": 50,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 47,
+     "to_row": 46,
+     "cut_row": 47,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 46,
+     "to_row": 43,
+     "cut_row": 46,
+     "column": 112,
+     "horizontal_span": 1,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 43,
+     "to_row": 40,
+     "cut_row": 43,
+     "column": 113,
+     "horizontal_span": 1,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 40,
+     "to_row": 39,
+     "cut_row": 40,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 39,
+     "to_row": 36,
+     "cut_row": 39,
+     "column": 120,
+     "horizontal_span": 7,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": true
+    },
+    {
+     "cut_row": 36,
+     "column_econ": 119,
+     "horizontal_span": 1,
+     "final_run": true,
+     "needed": 1,
+     "available": 1,
+     "verdict": "PASS",
+     "exit_layer": 0
+    }
+   ],
+   "verdict": "PASS"
+  },
+  "PCIE_UP_OUT5_P_J2": {
+   "L": 1,
+   "H": 59,
+   "Y": 24,
+   "east": false,
+   "Econ": 114,
+   "n_stages": 16,
+   "stages": [
+    {
+     "from_row": 58,
+     "to_row": 57,
+     "cut_row": 58,
+     "column": 113,
+     "horizontal_span": 53,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 57,
+     "to_row": 56,
+     "cut_row": 57,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 56,
+     "to_row": 55,
+     "cut_row": 56,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 55,
+     "to_row": 54,
+     "cut_row": 55,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 54,
+     "to_row": 53,
+     "cut_row": 54,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 53,
+     "to_row": 50,
+     "cut_row": 53,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 50,
+     "to_row": 47,
+     "cut_row": 50,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 47,
+     "to_row": 46,
+     "cut_row": 47,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 46,
+     "to_row": 43,
+     "cut_row": 46,
+     "column": 112,
+     "horizontal_span": 1,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 43,
+     "to_row": 40,
+     "cut_row": 43,
+     "column": 113,
+     "horizontal_span": 1,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 40,
+     "to_row": 39,
+     "cut_row": 40,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 39,
+     "to_row": 35,
+     "cut_row": 39,
+     "column": 100,
+     "horizontal_span": 13,
+     "vertical_needed": 4,
+     "vertical_available": 4,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 35,
+     "to_row": 34,
+     "verdict": "NO_COLUMN"
+    },
+    {
+     "from_row": 34,
+     "to_row": 33,
+     "cut_row": 34,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 33,
+     "to_row": 31,
+     "cut_row": 33,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 2,
+     "vertical_available": 2,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 31,
+     "to_row": 24,
+     "cut_row": 31,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 7,
+     "vertical_available": 7,
+     "verdict": "PASS",
+     "final_leg": true
+    }
+   ],
+   "verdict": "FAIL"
+  },
+  "PCIE_UP_OUT6_N_J2": {
+   "L": 0,
+   "H": 59,
+   "Y": 25,
+   "east": false,
+   "Econ": 114,
+   "n_stages": 16,
+   "stages": [
+    {
+     "from_row": 58,
+     "to_row": 57,
+     "cut_row": 58,
+     "column": 113,
+     "horizontal_span": 53,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 57,
+     "to_row": 56,
+     "cut_row": 57,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 56,
+     "to_row": 55,
+     "cut_row": 56,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 55,
+     "to_row": 54,
+     "cut_row": 55,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 54,
+     "to_row": 53,
+     "cut_row": 54,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 53,
+     "to_row": 50,
+     "cut_row": 53,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 50,
+     "to_row": 47,
+     "cut_row": 50,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 47,
+     "to_row": 46,
+     "cut_row": 47,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 46,
+     "to_row": 43,
+     "cut_row": 46,
+     "column": 112,
+     "horizontal_span": 1,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 43,
+     "to_row": 40,
+     "cut_row": 43,
+     "column": 113,
+     "horizontal_span": 1,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 40,
+     "to_row": 39,
+     "cut_row": 40,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 39,
+     "to_row": 35,
+     "cut_row": 39,
+     "column": 100,
+     "horizontal_span": 13,
+     "vertical_needed": 4,
+     "vertical_available": 4,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 35,
+     "to_row": 34,
+     "verdict": "NO_COLUMN"
+    },
+    {
+     "from_row": 34,
+     "to_row": 33,
+     "cut_row": 34,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 33,
+     "to_row": 32,
+     "cut_row": 33,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 32,
+     "to_row": 25,
+     "cut_row": 32,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 7,
+     "vertical_available": 7,
+     "verdict": "PASS",
+     "final_leg": true
+    }
+   ],
+   "verdict": "FAIL"
+  },
+  "PCIE_UP_OUT6_P_J2": {
+   "L": 1,
+   "H": 53,
+   "Y": 36,
+   "east": true,
+   "Econ": 125,
+   "n_stages": 8,
+   "stages": [
+    {
+     "from_row": 52,
+     "to_row": 50,
+     "cut_row": 52,
+     "column": 113,
+     "horizontal_span": 53,
+     "vertical_needed": 2,
+     "vertical_available": 2,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 50,
+     "to_row": 47,
+     "cut_row": 50,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 47,
+     "to_row": 46,
+     "cut_row": 47,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 46,
+     "to_row": 43,
+     "cut_row": 46,
+     "column": 112,
+     "horizontal_span": 1,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 43,
+     "to_row": 40,
+     "cut_row": 43,
+     "column": 113,
+     "horizontal_span": 1,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 40,
+     "to_row": 39,
+     "cut_row": 40,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 39,
+     "to_row": 36,
+     "cut_row": 39,
+     "column": 125,
+     "horizontal_span": 12,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": true
+    },
+    {
+     "cut_row": 36,
+     "column_econ": 125,
+     "horizontal_span": 0,
+     "final_run": true,
+     "needed": 0,
+     "available": 0,
+     "verdict": "PASS",
+     "exit_layer": 0
+    }
+   ],
+   "verdict": "PASS"
+  },
+  "PCIE_UP_OUT7_N_J2": {
+   "L": 0,
+   "H": 59,
+   "Y": 36,
+   "east": true,
+   "Econ": 123,
+   "n_stages": 13,
+   "stages": [
+    {
+     "from_row": 58,
+     "to_row": 57,
+     "cut_row": 58,
+     "column": 113,
+     "horizontal_span": 53,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 57,
+     "to_row": 56,
+     "cut_row": 57,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 56,
+     "to_row": 55,
+     "cut_row": 56,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 55,
+     "to_row": 54,
+     "cut_row": 55,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 54,
+     "to_row": 53,
+     "cut_row": 54,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 53,
+     "to_row": 50,
+     "cut_row": 53,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 50,
+     "to_row": 47,
+     "cut_row": 50,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 47,
+     "to_row": 46,
+     "cut_row": 47,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 46,
+     "to_row": 43,
+     "cut_row": 46,
+     "column": 112,
+     "horizontal_span": 1,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 43,
+     "to_row": 40,
+     "cut_row": 43,
+     "column": 113,
+     "horizontal_span": 1,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 40,
+     "to_row": 39,
+     "cut_row": 40,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 39,
+     "to_row": 36,
+     "cut_row": 39,
+     "column": 123,
+     "horizontal_span": 10,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": true
+    },
+    {
+     "cut_row": 36,
+     "column_econ": 123,
+     "horizontal_span": 0,
+     "final_run": true,
+     "needed": 0,
+     "available": 0,
+     "verdict": "PASS",
+     "exit_layer": 0
+    }
+   ],
+   "verdict": "PASS"
+  },
+  "PCIE_UP_OUT7_P_J2": {
+   "L": 0,
+   "H": 59,
+   "Y": 28,
+   "east": false,
+   "Econ": 114,
+   "n_stages": 16,
+   "stages": [
+    {
+     "from_row": 58,
+     "to_row": 57,
+     "cut_row": 58,
+     "column": 113,
+     "horizontal_span": 53,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 57,
+     "to_row": 56,
+     "cut_row": 57,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 56,
+     "to_row": 55,
+     "cut_row": 56,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 55,
+     "to_row": 54,
+     "cut_row": 55,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 54,
+     "to_row": 53,
+     "cut_row": 54,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 53,
+     "to_row": 50,
+     "cut_row": 53,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 50,
+     "to_row": 47,
+     "cut_row": 50,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 47,
+     "to_row": 46,
+     "cut_row": 47,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 46,
+     "to_row": 43,
+     "cut_row": 46,
+     "column": 112,
+     "horizontal_span": 1,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 43,
+     "to_row": 40,
+     "cut_row": 43,
+     "column": 113,
+     "horizontal_span": 1,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 40,
+     "to_row": 39,
+     "cut_row": 40,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 39,
+     "to_row": 36,
+     "cut_row": 39,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 3,
+     "vertical_available": 3,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 36,
+     "to_row": 35,
+     "verdict": "NO_COLUMN"
+    },
+    {
+     "from_row": 35,
+     "to_row": 34,
+     "verdict": "NO_COLUMN"
+    },
+    {
+     "from_row": 34,
+     "to_row": 33,
+     "cut_row": 34,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 1,
+     "vertical_available": 1,
+     "verdict": "PASS",
+     "final_leg": false
+    },
+    {
+     "from_row": 33,
+     "to_row": 28,
+     "cut_row": 33,
+     "column": 113,
+     "horizontal_span": 0,
+     "vertical_needed": 5,
+     "vertical_available": 5,
+     "verdict": "PASS",
+     "final_leg": true
+    }
+   ],
+   "verdict": "FAIL"
+  }
+ },
+ "summary": {
+  "n_lanes": 16,
+  "PASS": 8,
+  "FAIL": 8
+ },
+ "buildability": {
+  "mode": "no_move",
+  "note": "route uses only free in-register cells; no registered object moved; NO construction run in this stage"
+ },
+ "complete_verdict": "INCOMPLETE (fail-closed: not emitted as complete)",
+ "artifact_hash16": "08c03d8baa80aec8"
+}
