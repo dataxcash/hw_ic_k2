@@ -1,0 +1,307 @@
+{
+ "artifact": "k2_r564_premise_v2_complete_drawing_v1",
+ "ts": "2026-09-25T15:06:19",
+ "authority": "#K2-220 sec.3.3(b)(c) + #K2-219 sec.5: constructive take-and-register on premise v2, ONE drawing pass, no solver, no rerun",
+ "l2_self_ruled": {
+  "layer_split": "KEEP master 11/5 COMB split (L=on4(nm,0)); R561's 8/8 was required only by the nesting law, which is an artifact of c-increasing. Correction: the entrance fan-out is pairwise disjoint iff d up, R down, c DOWN => no nesting law, no layer re-issue, and no extra vias.",
+  "order": "d up / R down / c down (entrance); c down / b down / E up / t up (north-bus transfer); bus rows 24..37 disjoint from tail rows 38..49",
+  "col60_row": "re-derived per COMB layer (distinct, increasing in pi) because the tail leg is drawn on the COMB layer; R550's col60 rows were distinct only per (BELT-layer, west/east) group",
+  "vias": "route on the COMB layer; layer changes only at registered col60/exit/pad nodes (<=2 pairs/lane)"
+ },
+ "solve_calls": 0,
+ "runs": 1,
+ "backtracking_search": 0,
+ "pregate": {
+  "(i)_cells_legal": {
+   "verdict": "PASS",
+   "n": 0,
+   "sample": []
+  },
+  "(ii)_arcs_axis_aligned": {
+   "verdict": "PASS",
+   "n": 0,
+   "sample": []
+  },
+  "(iii)_same_layer_pairwise_disjoint": {
+   "verdict": "PASS",
+   "n": 0,
+   "sample": []
+  }
+ },
+ "assignment_incomplete": [
+  {
+   "lane": "PCIE_UP_OUT2_N_J2",
+   "L": 0,
+   "resource": "c/b/E/t",
+   "d": 6,
+   "H": 50,
+   "note": "no clash-free (c,b,E,t) in the declared domains under either tier"
+  },
+  {
+   "lane": "PCIE_UP_OUT3_N_J2",
+   "L": 0,
+   "resource": "c/b/E/t",
+   "d": 9,
+   "H": 49,
+   "note": "no clash-free (c,b,E,t) in the declared domains under either tier"
+  },
+  {
+   "lane": "PCIE_UP_OUT4_N_J2",
+   "L": 0,
+   "resource": "c/b/E/t",
+   "d": 12,
+   "H": 48,
+   "note": "no clash-free (c,b,E,t) in the declared domains under either tier"
+  },
+  {
+   "lane": "PCIE_UP_OUT3_P_J2",
+   "L": 0,
+   "resource": "c/b/E/t",
+   "d": 13,
+   "H": 47,
+   "note": "no clash-free (c,b,E,t) in the declared domains under either tier"
+  },
+  {
+   "lane": "PCIE_UP_OUT5_N_J2",
+   "L": 0,
+   "resource": "c/b/E/t",
+   "d": 14,
+   "H": 46,
+   "note": "no clash-free (c,b,E,t) in the declared domains under either tier"
+  },
+  {
+   "lane": "PCIE_UP_OUT6_N_J2",
+   "L": 0,
+   "resource": "c/b/E/t",
+   "d": 17,
+   "H": 45,
+   "note": "no clash-free (c,b,E,t) in the declared domains under either tier"
+  },
+  {
+   "lane": "PCIE_UP_OUT7_N_J2",
+   "L": 0,
+   "resource": "c/b/E/t",
+   "d": 20,
+   "H": 44,
+   "note": "no clash-free (c,b,E,t) in the declared domains under either tier"
+  },
+  {
+   "lane": "PCIE_UP_OUT7_P_J2",
+   "L": 0,
+   "resource": "c/b/E/t",
+   "d": 22,
+   "H": 43,
+   "note": "no clash-free (c,b,E,t) in the declared domains under either tier"
+  },
+  {
+   "lane": "PCIE_UP_OUT5_P_J2",
+   "L": 1,
+   "resource": "c/b/E/t",
+   "d": 16,
+   "H": 50,
+   "note": "no clash-free (c,b,E,t) in the declared domains under either tier"
+  },
+  {
+   "lane": "PCIE_UP_OUT6_P_J2",
+   "L": 1,
+   "resource": "c/b/E/t",
+   "d": 24,
+   "H": 49,
+   "note": "no clash-free (c,b,E,t) in the declared domains under either tier"
+  }
+ ],
+ "channel_table": {
+  "PCIE_UP_OUT0_N_J2": {
+   "L": 0,
+   "d": 2,
+   "top": 34,
+   "H": 53,
+   "c": 52,
+   "b": 37,
+   "E": 61,
+   "t": 38,
+   "col60": 38,
+   "exit": 7,
+   "col60_layer": 0
+  },
+  "PCIE_UP_OUT1_N_J2": {
+   "L": 0,
+   "d": 3,
+   "top": 34,
+   "H": 52,
+   "c": 51,
+   "b": 36,
+   "E": 62,
+   "t": 39,
+   "col60": 39,
+   "exit": 115,
+   "col60_layer": 0
+  },
+  "PCIE_UP_OUT1_P_J2": {
+   "L": 0,
+   "d": 5,
+   "top": 33,
+   "H": 51,
+   "c": 50,
+   "b": 35,
+   "E": 63,
+   "t": 40,
+   "col60": 40,
+   "exit": 11,
+   "col60_layer": 0
+  },
+  "PCIE_UP_OUT0_P_J2": {
+   "L": 1,
+   "d": 2,
+   "top": 33,
+   "H": 53,
+   "c": 52,
+   "b": 37,
+   "E": 61,
+   "t": 38,
+   "col60": 38,
+   "exit": 115,
+   "col60_layer": 1
+  },
+  "PCIE_UP_OUT2_P_J2": {
+   "L": 1,
+   "d": 5,
+   "top": 33,
+   "H": 52,
+   "c": 51,
+   "b": 36,
+   "E": 62,
+   "t": 39,
+   "col60": 39,
+   "exit": 116,
+   "col60_layer": 1
+  },
+  "PCIE_UP_OUT4_P_J2": {
+   "L": 1,
+   "d": 13,
+   "top": 33,
+   "H": 51,
+   "c": 50,
+   "b": 35,
+   "E": 63,
+   "t": 40,
+   "col60": 41,
+   "exit": 118,
+   "col60_layer": 1
+  }
+ },
+ "entrance_fanout_table": {
+  "PCIE_UP_OUT0_N_J2": {
+   "n_prefix_cells": 20,
+   "belt_row": 53,
+   "riser_col": 52
+  },
+  "PCIE_UP_OUT1_N_J2": {
+   "n_prefix_cells": 19,
+   "belt_row": 52,
+   "riser_col": 51
+  },
+  "PCIE_UP_OUT1_P_J2": {
+   "n_prefix_cells": 19,
+   "belt_row": 51,
+   "riser_col": 50
+  },
+  "PCIE_UP_OUT0_P_J2": {
+   "n_prefix_cells": 21,
+   "belt_row": 53,
+   "riser_col": 52
+  },
+  "PCIE_UP_OUT2_P_J2": {
+   "n_prefix_cells": 22,
+   "belt_row": 52,
+   "riser_col": 51
+  },
+  "PCIE_UP_OUT4_P_J2": {
+   "n_prefix_cells": 19,
+   "belt_row": 51,
+   "riser_col": 50
+  }
+ },
+ "conservation_audit": {
+  "capacity_vs_demand": {
+   "L0": {
+    "lanes": 11,
+    "belt_rows_used": [
+     53,
+     52,
+     51
+    ],
+    "section_cols_used": [
+     52,
+     51,
+     50
+    ],
+    "bus_rows_used": [
+     37,
+     36,
+     35
+    ],
+    "east_cols_used": [
+     61,
+     62,
+     63
+    ],
+    "tail_rows_used": [
+     38,
+     39,
+     40
+    ],
+    "distinct_ok": true
+   },
+   "L1": {
+    "lanes": 5,
+    "belt_rows_used": [
+     53,
+     52,
+     51
+    ],
+    "section_cols_used": [
+     52,
+     51,
+     50
+    ],
+    "bus_rows_used": [
+     37,
+     36,
+     35
+    ],
+    "east_cols_used": [
+     61,
+     62,
+     63
+    ],
+    "tail_rows_used": [
+     38,
+     39,
+     40
+    ],
+    "distinct_ok": true
+   }
+  },
+  "board_free_bands_machine_verified": "rows 38..53 free across cols 2..52 for every lane (belt); rows 36..56 free across cols 60..80 (tail); east cols 61..75 free for rows 36..50",
+  "reading": "per-layer demand = #lanes; supplies: belt rows{38..53}=16, section cols{42..52}=11, bus rows{24..37}=14, east cols{61..75}=15, tail rows{38..49}=12 => capacity >= demand",
+  "note": "no registered object moved (the route is drawn on free in-register cells only)"
+ },
+ "decision": "ONE-SHOT CONSTRUCTION DID NOT COMPLETE: diagnostic only, NO drawing, NO rerun (per #K2-220 sec.4). fail=10 ill=0 nonarc=0 clash=0",
+ "one_sentence_cause": "assignment/joint pre-gate FAIL: resource exhausted for 10 lane(s): ['OUT2_N_J2', 'OUT3_N_J2', 'OUT4_N_J2', 'OUT3_P_J2', 'OUT5_N_J2', 'OUT6_N_J2', 'OUT7_N_J2', 'OUT7_P_J2', 'OUT5_P_J2', 'OUT6_P_J2']",
+ "buildability": {
+  "mode": "no_witness",
+  "note": "pre-gate FAIL; see pregate/diagnostic"
+ },
+ "frozen_four": {
+  "SPEC": "0bd52ed48e720b8c",
+  "page_manifest": "a8ef3ea8ecff99d7",
+  "PCB": "fb07d25ac426ff84",
+  "rules": "0a459839e15960b8",
+  "verdict": "4/4 MATCH"
+ },
+ "elapsed_s": 29.4,
+ "fail_loud_log": "/tmp/opencode/r564/oneshot.log",
+ "owner_items": 0,
+ "artifact_hash16": "86991b14d029af27"
+}
