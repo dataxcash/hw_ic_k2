@@ -1,0 +1,773 @@
+{
+ "artifact": "k2_r548_r540_chain_infeasibility_certificate_v1",
+ "ts": "2026-09-25T12:39:05",
+ "authority": "#K2-215 (换台令, execute #K2-213 sec.4 verbatim) -> execute constructive drawing; ZERO certified quota",
+ "solve_calls": 0,
+ "certified_solve_calls": 0,
+ "input_hashes": {
+  "R540_spec": "29225790367c897a",
+  "R529_master": "44a4e1280bf8d8ed",
+  "model_l8": "c42731c4258ae691"
+ },
+ "environment_note": "this container has no ortools; a documented import shim is used ONLY to import the registered generator (Gen2 never calls cp_model). No install, no generator edit.",
+ "certificate_fixed_input": {
+  "literal_all_In5": {
+   "n_colliding_node_layer": 9,
+   "max_multiplicity": 5,
+   "layers_available": 2,
+   "witnesses": [
+    {
+     "layer": 0,
+     "node": 3956,
+     "col": 60,
+     "row": 56,
+     "n_lanes": 5,
+     "lanes": [
+      "PCIE_UP_OUT2_P_J2",
+      "PCIE_UP_OUT4_P_J2",
+      "PCIE_UP_OUT5_N_J2",
+      "PCIE_UP_OUT6_N_J2",
+      "PCIE_UP_OUT7_P_J2"
+     ]
+    },
+    {
+     "layer": 0,
+     "node": 3954,
+     "col": 60,
+     "row": 54,
+     "n_lanes": 2,
+     "lanes": [
+      "PCIE_UP_OUT0_N_J2",
+      "PCIE_UP_OUT3_N_J2"
+     ]
+    },
+    {
+     "layer": 0,
+     "node": 2186,
+     "col": 33,
+     "row": 41,
+     "n_lanes": 2,
+     "lanes": [
+      "PCIE_UP_OUT0_P_J2",
+      "PCIE_UP_OUT2_N_J2"
+     ]
+    },
+    {
+     "layer": 0,
+     "node": 3948,
+     "col": 60,
+     "row": 48,
+     "n_lanes": 2,
+     "lanes": [
+      "PCIE_UP_OUT0_P_J2",
+      "PCIE_UP_OUT6_P_J2"
+     ]
+    },
+    {
+     "layer": 0,
+     "node": 2202,
+     "col": 33,
+     "row": 57,
+     "n_lanes": 2,
+     "lanes": [
+      "PCIE_UP_OUT2_P_J2",
+      "PCIE_UP_OUT5_P_J2"
+     ]
+    },
+    {
+     "layer": 0,
+     "node": 2190,
+     "col": 33,
+     "row": 45,
+     "n_lanes": 2,
+     "lanes": [
+      "PCIE_UP_OUT4_N_J2",
+      "PCIE_UP_OUT4_P_J2"
+     ]
+    },
+    {
+     "layer": 0,
+     "node": 7434,
+     "col": 114,
+     "row": 24,
+     "n_lanes": 2,
+     "lanes": [
+      "PCIE_UP_OUT4_N_J2",
+      "PCIE_UP_OUT6_N_J2"
+     ]
+    },
+    {
+     "layer": 0,
+     "node": 7425,
+     "col": 114,
+     "row": 15,
+     "n_lanes": 2,
+     "lanes": [
+      "PCIE_UP_OUT5_P_J2",
+      "PCIE_UP_OUT7_P_J2"
+     ]
+    }
+   ],
+   "verdict": "INFEASIBLE"
+  },
+  "schedule_aware": {
+   "n_colliding_node_layer": 4,
+   "max_multiplicity": 4,
+   "layers_available": 2,
+   "witnesses": [
+    {
+     "layer": 1,
+     "node": 3956,
+     "col": 60,
+     "row": 56,
+     "n_lanes": 4,
+     "lanes": [
+      "PCIE_UP_OUT2_P_J2",
+      "PCIE_UP_OUT4_P_J2",
+      "PCIE_UP_OUT5_N_J2",
+      "PCIE_UP_OUT6_N_J2"
+     ]
+    },
+    {
+     "layer": 1,
+     "node": 2202,
+     "col": 33,
+     "row": 57,
+     "n_lanes": 2,
+     "lanes": [
+      "PCIE_UP_OUT2_P_J2",
+      "PCIE_UP_OUT5_P_J2"
+     ]
+    },
+    {
+     "layer": 0,
+     "node": 7434,
+     "col": 114,
+     "row": 24,
+     "n_lanes": 2,
+     "lanes": [
+      "PCIE_UP_OUT4_N_J2",
+      "PCIE_UP_OUT6_N_J2"
+     ]
+    },
+    {
+     "layer": 0,
+     "node": 7425,
+     "col": 114,
+     "row": 15,
+     "n_lanes": 2,
+     "lanes": [
+      "PCIE_UP_OUT5_P_J2",
+      "PCIE_UP_OUT7_P_J2"
+     ]
+    }
+   ],
+   "verdict": "INFEASIBLE"
+  }
+ },
+ "r529_upstream_defect": {
+  "per_section_layer_duplicate_slots": [
+   {
+    "section": "col33",
+    "layer": 1,
+    "slot": 57,
+    "n_lanes": 2,
+    "lanes": [
+     "PCIE_UP_OUT2_P_J2",
+     "PCIE_UP_OUT5_P_J2"
+    ]
+   },
+   {
+    "section": "col60",
+    "layer": 1,
+    "slot": 56,
+    "n_lanes": 4,
+    "lanes": [
+     "PCIE_UP_OUT2_P_J2",
+     "PCIE_UP_OUT4_P_J2",
+     "PCIE_UP_OUT5_N_J2",
+     "PCIE_UP_OUT6_N_J2"
+    ]
+   }
+  ],
+  "n_duplicate_slots": 2,
+  "encoding_gap": {
+   "r529_constraint_as_written": "mo.Add(on4[i][t] + on4[j][t] != 0)  # same slot => NOT both on In5",
+   "r529_comment_intent": "same transverse slot at this section => they must not be on the same layer there",
+   "defect": "written form forbids only (In5,In5); it ALLOWS (In4,In4) => two/四 lanes may legally share one In4 lattice node; the intended per-(section,layer) all-different is NOT enforced",
+   "consequence": "an unrealizable slot assignment was certified OPTIMAL by R529 and mechanically extracted into R540 as a FIXED input => every downstream joint model (R534/R535/R543) is UNSAT at the waypoints, not in the routing between them",
+   "minimal_repair": "re-derive section_slots so that per (section, layer) all lanes have DISTINCT transverse positions (and jointly with fan order + form-C order consistency); L2 scope (slot/corridor)"
+  }
+ },
+ "domain_definition": {
+  "k": 4,
+  "construction": "per lane per segment: k diverse shortest paths inside (band ∩ own graph) ∪ fixed waypoints ∪ dilated(R<=3) shortest corridor; union of nodes/arcs",
+  "per_lane": {
+   "PCIE_UP_OUT0_N_J2": {
+    "n_nodes_union": 533,
+    "n_arcs_union": 551
+   },
+   "PCIE_UP_OUT0_P_J2": {
+    "n_nodes_union": 586,
+    "n_arcs_union": 611
+   },
+   "PCIE_UP_OUT1_N_J2": {
+    "n_nodes_union": 612,
+    "n_arcs_union": 650
+   },
+   "PCIE_UP_OUT1_P_J2": {
+    "n_nodes_union": 443,
+    "n_arcs_union": 468
+   },
+   "PCIE_UP_OUT2_N_J2": {
+    "n_nodes_union": 444,
+    "n_arcs_union": 476
+   },
+   "PCIE_UP_OUT2_P_J2": {
+    "n_nodes_union": 571,
+    "n_arcs_union": 600
+   },
+   "PCIE_UP_OUT3_N_J2": {
+    "n_nodes_union": 559,
+    "n_arcs_union": 608
+   },
+   "PCIE_UP_OUT3_P_J2": {
+    "n_nodes_union": 402,
+    "n_arcs_union": 442
+   },
+   "PCIE_UP_OUT4_N_J2": {
+    "n_nodes_union": 420,
+    "n_arcs_union": 437
+   },
+   "PCIE_UP_OUT4_P_J2": {
+    "n_nodes_union": 506,
+    "n_arcs_union": 540
+   },
+   "PCIE_UP_OUT5_N_J2": {
+    "n_nodes_union": 493,
+    "n_arcs_union": 524
+   },
+   "PCIE_UP_OUT5_P_J2": {
+    "n_nodes_union": 440,
+    "n_arcs_union": 488
+   },
+   "PCIE_UP_OUT6_N_J2": {
+    "n_nodes_union": 400,
+    "n_arcs_union": 429
+   },
+   "PCIE_UP_OUT6_P_J2": {
+    "n_nodes_union": 482,
+    "n_arcs_union": 515
+   },
+   "PCIE_UP_OUT7_N_J2": {
+    "n_nodes_union": 493,
+    "n_arcs_union": 556
+   },
+   "PCIE_UP_OUT7_P_J2": {
+    "n_nodes_union": 446,
+    "n_arcs_union": 465
+   }
+  },
+  "total_bool_vars": 8360,
+  "gate": 1200000,
+  "under_gate": true
+ },
+ "pre_routing_fixed_chain": {
+  "verdict": "INFEASIBLE",
+  "n_collisions": 9,
+  "max_multiplicity": 5,
+  "witnesses": [
+   {
+    "layer": 0,
+    "node": 3956,
+    "col": 60,
+    "row": 56,
+    "lanes": [
+     "PCIE_UP_OUT2_P_J2",
+     "PCIE_UP_OUT4_P_J2",
+     "PCIE_UP_OUT5_N_J2",
+     "PCIE_UP_OUT6_N_J2",
+     "PCIE_UP_OUT7_P_J2"
+    ]
+   },
+   {
+    "layer": 0,
+    "node": 3954,
+    "col": 60,
+    "row": 54,
+    "lanes": [
+     "PCIE_UP_OUT0_N_J2",
+     "PCIE_UP_OUT3_N_J2"
+    ]
+   },
+   {
+    "layer": 0,
+    "node": 2186,
+    "col": 33,
+    "row": 41,
+    "lanes": [
+     "PCIE_UP_OUT0_P_J2",
+     "PCIE_UP_OUT2_N_J2"
+    ]
+   },
+   {
+    "layer": 0,
+    "node": 3948,
+    "col": 60,
+    "row": 48,
+    "lanes": [
+     "PCIE_UP_OUT0_P_J2",
+     "PCIE_UP_OUT6_P_J2"
+    ]
+   },
+   {
+    "layer": 0,
+    "node": 2202,
+    "col": 33,
+    "row": 57,
+    "lanes": [
+     "PCIE_UP_OUT2_P_J2",
+     "PCIE_UP_OUT5_P_J2"
+    ]
+   },
+   {
+    "layer": 0,
+    "node": 2190,
+    "col": 33,
+    "row": 45,
+    "lanes": [
+     "PCIE_UP_OUT4_N_J2",
+     "PCIE_UP_OUT4_P_J2"
+    ]
+   },
+   {
+    "layer": 0,
+    "node": 7434,
+    "col": 114,
+    "row": 24,
+    "lanes": [
+     "PCIE_UP_OUT4_N_J2",
+     "PCIE_UP_OUT6_N_J2"
+    ]
+   },
+   {
+    "layer": 0,
+    "node": 7425,
+    "col": 114,
+    "row": 15,
+    "lanes": [
+     "PCIE_UP_OUT5_P_J2",
+     "PCIE_UP_OUT7_P_J2"
+    ]
+   }
+  ]
+ },
+ "l2_slot_repair": {
+  "movements": [
+   {
+    "lane": "PCIE_UP_OUT0_N_J2",
+    "section": "col33",
+    "from": 53,
+    "to": 31
+   },
+   {
+    "lane": "PCIE_UP_OUT1_N_J2",
+    "section": "col33",
+    "from": 43,
+    "to": 33
+   },
+   {
+    "lane": "PCIE_UP_OUT1_P_J2",
+    "section": "col33",
+    "from": 35,
+    "to": 34
+   },
+   {
+    "lane": "PCIE_UP_OUT2_N_J2",
+    "section": "col33",
+    "from": 41,
+    "to": 35
+   },
+   {
+    "lane": "PCIE_UP_OUT3_N_J2",
+    "section": "col33",
+    "from": 33,
+    "to": 36
+   },
+   {
+    "lane": "PCIE_UP_OUT3_P_J2",
+    "section": "col33",
+    "from": 31,
+    "to": 37
+   },
+   {
+    "lane": "PCIE_UP_OUT4_N_J2",
+    "section": "col33",
+    "from": 45,
+    "to": 38
+   },
+   {
+    "lane": "PCIE_UP_OUT5_N_J2",
+    "section": "col33",
+    "from": 47,
+    "to": 39
+   },
+   {
+    "lane": "PCIE_UP_OUT6_N_J2",
+    "section": "col33",
+    "from": 39,
+    "to": 40
+   },
+   {
+    "lane": "PCIE_UP_OUT7_N_J2",
+    "section": "col33",
+    "from": 49,
+    "to": 41
+   },
+   {
+    "lane": "PCIE_UP_OUT7_P_J2",
+    "section": "col33",
+    "from": 55,
+    "to": 42
+   },
+   {
+    "lane": "PCIE_UP_OUT0_P_J2",
+    "section": "col33",
+    "from": 41,
+    "to": 31
+   },
+   {
+    "lane": "PCIE_UP_OUT2_P_J2",
+    "section": "col33",
+    "from": 57,
+    "to": 32
+   },
+   {
+    "lane": "PCIE_UP_OUT4_P_J2",
+    "section": "col33",
+    "from": 45,
+    "to": 33
+   },
+   {
+    "lane": "PCIE_UP_OUT5_P_J2",
+    "section": "col33",
+    "from": 57,
+    "to": 34
+   },
+   {
+    "lane": "PCIE_UP_OUT6_P_J2",
+    "section": "col33",
+    "from": 55,
+    "to": 35
+   },
+   {
+    "lane": "PCIE_UP_OUT0_N_J2",
+    "section": "col60",
+    "from": 54,
+    "to": 38
+   },
+   {
+    "lane": "PCIE_UP_OUT1_N_J2",
+    "section": "col60",
+    "from": 46,
+    "to": 39
+   },
+   {
+    "lane": "PCIE_UP_OUT2_N_J2",
+    "section": "col60",
+    "from": 42,
+    "to": 41
+   },
+   {
+    "lane": "PCIE_UP_OUT3_P_J2",
+    "section": "col60",
+    "from": 38,
+    "to": 42
+   },
+   {
+    "lane": "PCIE_UP_OUT4_N_J2",
+    "section": "col60",
+    "from": 50,
+    "to": 43
+   },
+   {
+    "lane": "PCIE_UP_OUT6_P_J2",
+    "section": "col60",
+    "from": 48,
+    "to": 45
+   },
+   {
+    "lane": "PCIE_UP_OUT7_N_J2",
+    "section": "col60",
+    "from": 52,
+    "to": 46
+   },
+   {
+    "lane": "PCIE_UP_OUT7_P_J2",
+    "section": "col60",
+    "from": 56,
+    "to": 47
+   },
+   {
+    "lane": "PCIE_UP_OUT0_P_J2",
+    "section": "col60",
+    "from": 48,
+    "to": 38
+   },
+   {
+    "lane": "PCIE_UP_OUT2_P_J2",
+    "section": "col60",
+    "from": 56,
+    "to": 39
+   },
+   {
+    "lane": "PCIE_UP_OUT3_N_J2",
+    "section": "col60",
+    "from": 54,
+    "to": 40
+   },
+   {
+    "lane": "PCIE_UP_OUT4_P_J2",
+    "section": "col60",
+    "from": 56,
+    "to": 41
+   },
+   {
+    "lane": "PCIE_UP_OUT5_N_J2",
+    "section": "col60",
+    "from": 56,
+    "to": 42
+   },
+   {
+    "lane": "PCIE_UP_OUT6_N_J2",
+    "section": "col60",
+    "from": 56,
+    "to": 43
+   },
+   {
+    "lane": "PCIE_UP_OUT0_N_J2",
+    "section": "exit",
+    "from": 28,
+    "to": 7
+   },
+   {
+    "lane": "PCIE_UP_OUT2_N_J2",
+    "section": "exit",
+    "from": 13,
+    "to": 12
+   },
+   {
+    "lane": "PCIE_UP_OUT3_P_J2",
+    "section": "exit",
+    "from": 7,
+    "to": 13
+   },
+   {
+    "lane": "PCIE_UP_OUT4_N_J2",
+    "section": "exit",
+    "from": 24,
+    "to": 15
+   },
+   {
+    "lane": "PCIE_UP_OUT5_P_J2",
+    "section": "exit",
+    "from": 15,
+    "to": 24
+   },
+   {
+    "lane": "PCIE_UP_OUT6_N_J2",
+    "section": "exit",
+    "from": 24,
+    "to": 25
+   },
+   {
+    "lane": "PCIE_UP_OUT7_P_J2",
+    "section": "exit",
+    "from": 15,
+    "to": 28
+   },
+   {
+    "lane": "PCIE_UP_OUT0_P_J2",
+    "section": "exit",
+    "from": 127,
+    "to": 115
+   },
+   {
+    "lane": "PCIE_UP_OUT3_N_J2",
+    "section": "exit",
+    "from": 131,
+    "to": 115
+   },
+   {
+    "lane": "PCIE_UP_OUT7_N_J2",
+    "section": "exit",
+    "from": 135,
+    "to": 116
+   },
+   {
+    "lane": "PCIE_UP_OUT2_P_J2",
+    "section": "exit",
+    "from": 125,
+    "to": 117
+   },
+   {
+    "lane": "PCIE_UP_OUT6_P_J2",
+    "section": "exit",
+    "from": 115,
+    "to": 118
+   },
+   {
+    "lane": "PCIE_UP_OUT5_N_J2",
+    "section": "exit",
+    "from": 117,
+    "to": 119
+   },
+   {
+    "lane": "PCIE_UP_OUT1_N_J2",
+    "section": "exit",
+    "from": 133,
+    "to": 123
+   },
+   {
+    "lane": "PCIE_UP_OUT4_P_J2",
+    "section": "exit",
+    "from": 119,
+    "to": 125
+   }
+  ],
+  "n_movements": 45,
+  "post_repair_node_layer_collisions": 0,
+  "collisions": [],
+  "order_consistency_flips": 0,
+  "flips": [],
+  "verdict": "PASS",
+  "assignment": {
+   "PCIE_UP_OUT0_N_J2": {
+    "col33": 31,
+    "col60": 38,
+    "exit": 7
+   },
+   "PCIE_UP_OUT0_P_J2": {
+    "col33": 31,
+    "col60": 38,
+    "exit": 115
+   },
+   "PCIE_UP_OUT1_N_J2": {
+    "col33": 33,
+    "col60": 39,
+    "exit": 123
+   },
+   "PCIE_UP_OUT1_P_J2": {
+    "col33": 34,
+    "col60": 40,
+    "exit": 11
+   },
+   "PCIE_UP_OUT2_N_J2": {
+    "col33": 35,
+    "col60": 41,
+    "exit": 12
+   },
+   "PCIE_UP_OUT2_P_J2": {
+    "col33": 32,
+    "col60": 39,
+    "exit": 117
+   },
+   "PCIE_UP_OUT3_N_J2": {
+    "col33": 36,
+    "col60": 40,
+    "exit": 115
+   },
+   "PCIE_UP_OUT3_P_J2": {
+    "col33": 37,
+    "col60": 42,
+    "exit": 13
+   },
+   "PCIE_UP_OUT4_N_J2": {
+    "col33": 38,
+    "col60": 43,
+    "exit": 15
+   },
+   "PCIE_UP_OUT4_P_J2": {
+    "col33": 33,
+    "col60": 41,
+    "exit": 125
+   },
+   "PCIE_UP_OUT5_N_J2": {
+    "col33": 39,
+    "col60": 42,
+    "exit": 119
+   },
+   "PCIE_UP_OUT5_P_J2": {
+    "col33": 34,
+    "col60": 44,
+    "exit": 24
+   },
+   "PCIE_UP_OUT6_N_J2": {
+    "col33": 40,
+    "col60": 43,
+    "exit": 25
+   },
+   "PCIE_UP_OUT6_P_J2": {
+    "col33": 35,
+    "col60": 45,
+    "exit": 118
+   },
+   "PCIE_UP_OUT7_N_J2": {
+    "col33": 41,
+    "col60": 46,
+    "exit": 116
+   },
+   "PCIE_UP_OUT7_P_J2": {
+    "col33": 42,
+    "col60": 47,
+    "exit": 28
+   }
+  }
+ },
+ "pre_routing_repaired_chain": {
+  "verdict": "PASS",
+  "n_collisions": 0,
+  "max_multiplicity": 1,
+  "witnesses": []
+ },
+ "constructive_attempt_repaired_chain": {
+  "routed": 16,
+  "overuse": 375,
+  "viasep_viol": 0,
+  "converged": false,
+  "best_iteration": 3,
+  "n_lanes": 16,
+  "verdict": "16/16 网布通但残余重叠 ⇒ 尚非有效图纸（需联立序一致的重推）"
+ },
+ "decision": "NO DRAWING UNDER THE FIXED R540 INPUT — certified pre-routing (node-pigeonhole: 5 lanes forced through one lattice node; only 2 layers). The #K2-213 sec.4 k-alternatives mandate cannot fix this: the infeasibility is AT the fixed waypoints, not between them. Upstream root cause = R529 section_slots are not node-injective per layer (encoder gap on4[i]+on4[j]!=0). L2 repair (node-injective slots) passes pre-routing; constructive construction then routes 16/16 nets but does not yet converge to a legal drawing -> NEXT: joint re-derivation of slots WITH fan/form-C order consistency (L2).",
+ "buildability": {
+  "mode": "no_witness",
+  "why": "no legal per-lane drawing exists under the fixed R540 chain (pre-routing pigeonhole); a candidate fix (L2 node-injective slot re-derivation) is provided but not yet a verified drawing",
+  "relocation_list_required_before_construction": [
+   "PCIE_UP_OUT0_N_J2",
+   "PCIE_UP_OUT0_P_J2",
+   "PCIE_UP_OUT1_N_J2",
+   "PCIE_UP_OUT1_P_J2",
+   "PCIE_UP_OUT2_N_J2",
+   "PCIE_UP_OUT2_P_J2",
+   "PCIE_UP_OUT3_N_J2",
+   "PCIE_UP_OUT3_P_J2",
+   "PCIE_UP_OUT4_N_J2",
+   "PCIE_UP_OUT4_P_J2",
+   "PCIE_UP_OUT5_N_J2",
+   "PCIE_UP_OUT5_P_J2",
+   "PCIE_UP_OUT6_N_J2",
+   "PCIE_UP_OUT6_P_J2",
+   "PCIE_UP_OUT7_N_J2",
+   "PCIE_UP_OUT7_P_J2"
+  ]
+ },
+ "conservation_audit": {
+  "source": "K2_R537_CONSERVATION_CUT_v1.json",
+  "reading": "156 在册格点割全量计数：无容量墙（最紧 col114 上界 40 vs 需求 3，余 +37）",
+  "note": "本卡点非守恒级；是固定路点层（node 冲突）"
+ },
+ "artifact_hash16": "908b20306d89aa7b",
+ "elapsed_s": 307.6,
+ "fail_loud_log": "/tmp/opencode/r548/r548_certificate.log"
+}
