@@ -1,0 +1,869 @@
+{
+ "artifact": "k2_r574_structured_tail_complete_drawing_v1",
+ "ts": "2026-09-25T15:55:15",
+ "authority": "#K2-223 fused window attempt 2: H coupled with the tail (S2∩S4 same row) + 2-stage staircase fallback; ONE table, ONE drawing pass",
+ "selfcheck_on_known_good_lanes": {
+  "lanes": [
+   "PCIE_UP_OUT0_N_J2",
+   "PCIE_UP_OUT0_P_J2"
+  ],
+  "allocated": {
+   "PCIE_UP_OUT0_N_J2": false,
+   "PCIE_UP_OUT0_P_J2": false
+  },
+  "verdict": "FAIL(tool-or-template)"
+ },
+ "solve_calls": 0,
+ "runs": 1,
+ "backtracking_search": 0,
+ "pregate": {
+  "(i)_cells_legal": {
+   "verdict": "PASS",
+   "n": 0,
+   "sample": []
+  },
+  "(ii)_registered_arcs": {
+   "verdict": "FAIL",
+   "n": 3,
+   "sample": [
+    {
+     "lane": "PCIE_UP_OUT1_N_J2",
+     "u": [
+      120,
+      59
+     ],
+     "v": [
+      120,
+      37
+     ],
+     "seg": "tail"
+    },
+    {
+     "lane": "PCIE_UP_OUT1_N_J2",
+     "u": [
+      120,
+      58
+     ],
+     "v": [
+      119,
+      36
+     ],
+     "seg": "tail"
+    },
+    {
+     "lane": "PCIE_UP_OUT3_N_J2",
+     "u": [
+      117,
+      47
+     ],
+     "v": [
+      117,
+      37
+     ],
+     "seg": "tail"
+    }
+   ]
+  },
+  "(iii)_pairwise_disjoint": {
+   "verdict": "PASS",
+   "n": 0,
+   "sample": []
+  },
+  "(iv)_capacity": {
+   "verdict": "PASS"
+  }
+ },
+ "assignment_incomplete": [
+  {
+   "lane": "PCIE_UP_OUT0_N_J2",
+   "L": 0,
+   "d": 2,
+   "Y": 7,
+   "east": false,
+   "resource": "coupled H/X tail"
+  },
+  {
+   "lane": "PCIE_UP_OUT1_P_J2",
+   "L": 0,
+   "d": 5,
+   "Y": 11,
+   "east": false,
+   "resource": "coupled H/X tail"
+  },
+  {
+   "lane": "PCIE_UP_OUT2_N_J2",
+   "L": 0,
+   "d": 6,
+   "Y": 12,
+   "east": false,
+   "resource": "coupled H/X tail"
+  },
+  {
+   "lane": "PCIE_UP_OUT4_N_J2",
+   "L": 0,
+   "d": 12,
+   "Y": 13,
+   "east": false,
+   "resource": "coupled H/X tail"
+  },
+  {
+   "lane": "PCIE_UP_OUT3_P_J2",
+   "L": 0,
+   "d": 13,
+   "Y": 15,
+   "east": false,
+   "resource": "coupled H/X tail"
+  },
+  {
+   "lane": "PCIE_UP_OUT5_N_J2",
+   "L": 0,
+   "d": 14,
+   "Y": 36,
+   "east": true,
+   "resource": "coupled H/X tail"
+  },
+  {
+   "lane": "PCIE_UP_OUT6_N_J2",
+   "L": 0,
+   "d": 17,
+   "Y": 25,
+   "east": false,
+   "resource": "coupled H/X tail"
+  },
+  {
+   "lane": "PCIE_UP_OUT7_N_J2",
+   "L": 0,
+   "d": 20,
+   "Y": 36,
+   "east": true,
+   "resource": "coupled H/X tail"
+  },
+  {
+   "lane": "PCIE_UP_OUT7_P_J2",
+   "L": 0,
+   "d": 22,
+   "Y": 28,
+   "east": false,
+   "resource": "coupled H/X tail"
+  },
+  {
+   "lane": "PCIE_UP_OUT0_P_J2",
+   "L": 1,
+   "d": 2,
+   "Y": 36,
+   "east": true,
+   "resource": "coupled H/X tail"
+  },
+  {
+   "lane": "PCIE_UP_OUT2_P_J2",
+   "L": 1,
+   "d": 5,
+   "Y": 36,
+   "east": true,
+   "resource": "coupled H/X tail"
+  },
+  {
+   "lane": "PCIE_UP_OUT4_P_J2",
+   "L": 1,
+   "d": 13,
+   "Y": 36,
+   "east": true,
+   "resource": "coupled H/X tail"
+  },
+  {
+   "lane": "PCIE_UP_OUT5_P_J2",
+   "L": 1,
+   "d": 16,
+   "Y": 24,
+   "east": false,
+   "resource": "coupled H/X tail"
+  },
+  {
+   "lane": "PCIE_UP_OUT6_P_J2",
+   "L": 1,
+   "d": 24,
+   "Y": 36,
+   "east": true,
+   "resource": "coupled H/X tail"
+  }
+ ],
+ "conservation_audit": {
+  "capacity_vs_demand": {
+   "L0": {
+    "need": 11,
+    "assigned": 2,
+    "rows": [
+     59,
+     47
+    ],
+    "rows_distinct": true
+   },
+   "L1": {
+    "need": 5,
+    "assigned": 0,
+    "rows": [],
+    "rows_distinct": true
+   }
+  }
+ },
+ "channel_table": {
+  "PCIE_UP_OUT1_N_J2": {
+   "L": 0,
+   "d": 3,
+   "H": 59,
+   "col60_layer": 0,
+   "exit": 115
+  },
+  "PCIE_UP_OUT3_N_J2": {
+   "L": 0,
+   "d": 9,
+   "H": 47,
+   "col60_layer": 1,
+   "exit": 117
+  }
+ },
+ "tail_table": {
+  "PCIE_UP_OUT1_N_J2": {
+   "X": 120,
+   "cells": [
+    [
+     61,
+     59
+    ],
+    [
+     62,
+     59
+    ],
+    [
+     63,
+     59
+    ],
+    [
+     64,
+     59
+    ],
+    [
+     65,
+     59
+    ],
+    [
+     66,
+     59
+    ],
+    [
+     67,
+     59
+    ],
+    [
+     68,
+     59
+    ],
+    [
+     69,
+     59
+    ],
+    [
+     70,
+     59
+    ],
+    [
+     71,
+     59
+    ],
+    [
+     72,
+     59
+    ],
+    [
+     73,
+     59
+    ],
+    [
+     74,
+     59
+    ],
+    [
+     75,
+     59
+    ],
+    [
+     76,
+     59
+    ],
+    [
+     77,
+     59
+    ],
+    [
+     78,
+     59
+    ],
+    [
+     79,
+     59
+    ],
+    [
+     80,
+     59
+    ],
+    [
+     81,
+     59
+    ],
+    [
+     82,
+     59
+    ],
+    [
+     83,
+     59
+    ],
+    [
+     84,
+     59
+    ],
+    [
+     85,
+     59
+    ],
+    [
+     86,
+     59
+    ],
+    [
+     87,
+     59
+    ],
+    [
+     88,
+     59
+    ],
+    [
+     89,
+     59
+    ],
+    [
+     90,
+     59
+    ],
+    [
+     91,
+     59
+    ],
+    [
+     92,
+     59
+    ],
+    [
+     93,
+     59
+    ],
+    [
+     94,
+     59
+    ],
+    [
+     95,
+     59
+    ],
+    [
+     96,
+     59
+    ],
+    [
+     97,
+     59
+    ],
+    [
+     98,
+     59
+    ],
+    [
+     99,
+     59
+    ],
+    [
+     100,
+     59
+    ],
+    [
+     101,
+     59
+    ],
+    [
+     102,
+     59
+    ],
+    [
+     103,
+     59
+    ],
+    [
+     104,
+     59
+    ],
+    [
+     105,
+     59
+    ],
+    [
+     106,
+     59
+    ],
+    [
+     107,
+     59
+    ],
+    [
+     108,
+     59
+    ],
+    [
+     109,
+     59
+    ],
+    [
+     110,
+     59
+    ],
+    [
+     111,
+     59
+    ],
+    [
+     112,
+     59
+    ],
+    [
+     113,
+     59
+    ],
+    [
+     114,
+     59
+    ],
+    [
+     115,
+     59
+    ],
+    [
+     116,
+     59
+    ],
+    [
+     117,
+     59
+    ],
+    [
+     118,
+     59
+    ],
+    [
+     119,
+     59
+    ],
+    [
+     120,
+     59
+    ],
+    [
+     120,
+     37
+    ],
+    [
+     120,
+     38
+    ],
+    [
+     120,
+     39
+    ],
+    [
+     120,
+     40
+    ],
+    [
+     120,
+     41
+    ],
+    [
+     120,
+     42
+    ],
+    [
+     120,
+     43
+    ],
+    [
+     120,
+     44
+    ],
+    [
+     120,
+     45
+    ],
+    [
+     120,
+     46
+    ],
+    [
+     120,
+     47
+    ],
+    [
+     120,
+     48
+    ],
+    [
+     120,
+     49
+    ],
+    [
+     120,
+     50
+    ],
+    [
+     120,
+     51
+    ],
+    [
+     120,
+     52
+    ],
+    [
+     120,
+     53
+    ],
+    [
+     120,
+     54
+    ],
+    [
+     120,
+     55
+    ],
+    [
+     120,
+     56
+    ],
+    [
+     120,
+     57
+    ],
+    [
+     120,
+     58
+    ],
+    [
+     119,
+     36
+    ],
+    [
+     118,
+     36
+    ],
+    [
+     117,
+     36
+    ],
+    [
+     116,
+     36
+    ],
+    [
+     115,
+     36
+    ]
+   ]
+  },
+  "PCIE_UP_OUT3_N_J2": {
+   "X": 117,
+   "cells": [
+    [
+     61,
+     47
+    ],
+    [
+     62,
+     47
+    ],
+    [
+     63,
+     47
+    ],
+    [
+     64,
+     47
+    ],
+    [
+     65,
+     47
+    ],
+    [
+     66,
+     47
+    ],
+    [
+     67,
+     47
+    ],
+    [
+     68,
+     47
+    ],
+    [
+     69,
+     47
+    ],
+    [
+     70,
+     47
+    ],
+    [
+     71,
+     47
+    ],
+    [
+     72,
+     47
+    ],
+    [
+     73,
+     47
+    ],
+    [
+     74,
+     47
+    ],
+    [
+     75,
+     47
+    ],
+    [
+     76,
+     47
+    ],
+    [
+     77,
+     47
+    ],
+    [
+     78,
+     47
+    ],
+    [
+     79,
+     47
+    ],
+    [
+     80,
+     47
+    ],
+    [
+     81,
+     47
+    ],
+    [
+     82,
+     47
+    ],
+    [
+     83,
+     47
+    ],
+    [
+     84,
+     47
+    ],
+    [
+     85,
+     47
+    ],
+    [
+     86,
+     47
+    ],
+    [
+     87,
+     47
+    ],
+    [
+     88,
+     47
+    ],
+    [
+     89,
+     47
+    ],
+    [
+     90,
+     47
+    ],
+    [
+     91,
+     47
+    ],
+    [
+     92,
+     47
+    ],
+    [
+     93,
+     47
+    ],
+    [
+     94,
+     47
+    ],
+    [
+     95,
+     47
+    ],
+    [
+     96,
+     47
+    ],
+    [
+     97,
+     47
+    ],
+    [
+     98,
+     47
+    ],
+    [
+     99,
+     47
+    ],
+    [
+     100,
+     47
+    ],
+    [
+     101,
+     47
+    ],
+    [
+     102,
+     47
+    ],
+    [
+     103,
+     47
+    ],
+    [
+     104,
+     47
+    ],
+    [
+     105,
+     47
+    ],
+    [
+     106,
+     47
+    ],
+    [
+     107,
+     47
+    ],
+    [
+     108,
+     47
+    ],
+    [
+     109,
+     47
+    ],
+    [
+     110,
+     47
+    ],
+    [
+     111,
+     47
+    ],
+    [
+     112,
+     47
+    ],
+    [
+     113,
+     47
+    ],
+    [
+     114,
+     47
+    ],
+    [
+     115,
+     47
+    ],
+    [
+     116,
+     47
+    ],
+    [
+     117,
+     47
+    ],
+    [
+     117,
+     37
+    ],
+    [
+     117,
+     38
+    ],
+    [
+     117,
+     39
+    ],
+    [
+     117,
+     40
+    ],
+    [
+     117,
+     41
+    ],
+    [
+     117,
+     42
+    ],
+    [
+     117,
+     43
+    ],
+    [
+     117,
+     44
+    ],
+    [
+     117,
+     45
+    ],
+    [
+     117,
+     46
+    ]
+   ]
+  }
+ },
+ "decision": "FUSED COUPLED ALLOCATION FAIL: named diagnostic only (binary 甲), NO drawing",
+ "buildability": {
+  "mode": "no_witness",
+  "note": "pre-gate FAIL"
+ },
+ "frozen_four": {
+  "SPEC": "0bd52ed48e720b8c",
+  "page_manifest": "a8ef3ea8ecff99d7",
+  "PCB": "fb07d25ac426ff84",
+  "rules": "0a459839e15960b8",
+  "verdict": "4/4 MATCH"
+ },
+ "elapsed_s": 30.8,
+ "fail_loud_log": "/tmp/opencode/r574/oneshot.log",
+ "owner_items": 0,
+ "artifact_hash16": "56f2c2e2149abf1d"
+}
