@@ -1,0 +1,70 @@
+{
+ "artifact": "k2_r548b_human_track_drawing_v1",
+ "ts": "2026-09-25T12:47:52",
+ "authority": "supervisor stop-order (red-line: repeated commands) -> back to Plan, human path, ONE implementation",
+ "method": "allocate one track per lane per layer at each cross-section (L2 re-derived slots), then draw each lane as a straight track-band path between consecutive fixed waypoints; single pass, deterministic, hard reservation, NO negotiation, NO backtracking, NO rerun",
+ "declared_margins": {
+  "row_M_R": 2,
+  "col_M_C": 4
+ },
+ "solve_calls": 0,
+ "l2_slot_repair": {
+  "verdict": "PASS",
+  "n_movements": 45
+ },
+ "track_layout": {
+  "order": [
+   "PCIE_UP_OUT0_N_J2",
+   "PCIE_UP_OUT0_P_J2",
+   "PCIE_UP_OUT1_N_J2",
+   "PCIE_UP_OUT1_P_J2",
+   "PCIE_UP_OUT2_N_J2",
+   "PCIE_UP_OUT2_P_J2",
+   "PCIE_UP_OUT3_N_J2",
+   "PCIE_UP_OUT3_P_J2",
+   "PCIE_UP_OUT4_N_J2",
+   "PCIE_UP_OUT4_P_J2",
+   "PCIE_UP_OUT5_N_J2",
+   "PCIE_UP_OUT5_P_J2",
+   "PCIE_UP_OUT6_N_J2",
+   "PCIE_UP_OUT6_P_J2",
+   "PCIE_UP_OUT7_N_J2",
+   "PCIE_UP_OUT7_P_J2"
+  ],
+  "n_drawn": 0
+ },
+ "first_blocker": {
+  "lane": "PCIE_UP_OUT0_N_J2",
+  "segment_index": 2,
+  "kind": "wp",
+  "from": 164,
+  "from_col_row": [
+   2,
+   34
+  ],
+  "to": 2176,
+  "to_col_row": [
+   33,
+   31
+  ],
+  "band": [
+   2,
+   34,
+   33,
+   31
+  ],
+  "n_committed_blockers_in_band": 0
+ },
+ "decision": "ONE-SHOT HUMAN METHOD DID NOT COMPLETE 16/16. First blocker recorded above; per the stop-order NO parameter change / NO rerun is performed.",
+ "buildability": {
+  "mode": "no_witness",
+  "note": "blocked; see first_blocker"
+ },
+ "conservation_audit": {
+  "source": "K2_R537_CONSERVATION_CUT_v1.json",
+  "reading": "156 割无墙，最紧余 +37"
+ },
+ "elapsed_s": 22.1,
+ "fail_loud_log": "/tmp/opencode/r548/r548b_track.log",
+ "artifact_hash16": "531a420f0c69ed49"
+}
