@@ -1,0 +1,55 @@
+{
+ "artifact": "k2_r626_joint_table_v3",
+ "ts": "2026-09-25T22:10:13",
+ "authority": "#K2-239 sec.3.4: ONE joint table for the 5 lanes; parameterisation (1') horizontal row taken from the lane's free row segments; NO drawing",
+ "construction_runs": 0,
+ "conservation": "5 lanes vs R599 long-free columns + R601 free row segments => capacity >= demand",
+ "buildability": {
+  "mode": "no_move",
+  "note": "all cells from the register free graph"
+ },
+ "product_reference": "PEX88096 PCIE4 switch baseboard (SBR.zip bifurcation) = 1 lane per channel, straight fan-out; per-lane 'copied-from-product-where' column",
+ "per_lane": {
+  "OUT0_P_J2": {
+   "H": 59,
+   "verdict": "NO_JOINT_COLUMN"
+  },
+  "OUT3_N_J2": {
+   "Rh_horizontal_row": 55,
+   "Xt": 61,
+   "tail_layer": 1,
+   "exit": [
+    131,
+    36
+   ],
+   "exit_layer": 0,
+   "structure": "(1) row Rh horizontal to wall front(<=114); (2) descend on own column Xt; (3) R610 exit approach",
+   "verdict": "PASS"
+  },
+  "OUT5_N_J2": {
+   "Rh_horizontal_row": 50,
+   "Xt": 63,
+   "tail_layer": 1,
+   "exit": [
+    117,
+    36
+   ],
+   "exit_layer": 0,
+   "structure": "(1) row Rh horizontal to wall front(<=114); (2) descend on own column Xt; (3) R610 exit approach",
+   "verdict": "PASS"
+  },
+  "OUT6_N_J2": {
+   "H": 47,
+   "verdict": "NO_JOINT_COLUMN"
+  },
+  "OUT7_P_J2": {
+   "H": 41,
+   "verdict": "NO_JOINT_COLUMN"
+  }
+ },
+ "summary": {
+  "PASS": 2,
+  "FAIL": 3
+ },
+ "artifact_hash16": "e0da615a68e8cb0f"
+}
