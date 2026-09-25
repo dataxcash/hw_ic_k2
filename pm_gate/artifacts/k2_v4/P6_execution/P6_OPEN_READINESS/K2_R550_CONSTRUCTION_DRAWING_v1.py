@@ -112,19 +112,23 @@ def draw_declared(g2, master, spec, names, lanes, chain):
     diag = None
 
     def band(u, v):
-        """track band for the segment (u->v): rows between the endpoint rows, interpolated by column, +-M_R."""
-        if u >= TERM_BASE or v >= TERM_BASE: return None          # terminal legs: unrestricted
+        """declared corridor for the segment (u->v):
+        - entrance / short declared steps: the axis-aligned rectangle spanned by the two cells (+-6 rows/cols);
+        - long section-to-section transfers (|dcol|+|drow| > 25): free shortest path inside the open belt/field
+          (band = None), i.e. the declared order + hard reservation govern, exactly as for the terminal legs."""
+        if u >= TERM_BASE or v >= TERM_BASE: return None
         cu, ru = rc(u % NID); cv, rv = rc(v % NID)
+        if abs(cu - cv) + abs(ru - rv) > 25: return None
         return (cu, ru, cv, rv)
 
     def in_band(nd, B):
         if B is None or nd >= TERM_BASE: return True
         cu, ru, cv, rv = B
         c, r = rc(nd % NID)
-        if c < min(cu, cv) - M_C or c > max(cu, cv) + M_C: return False
+        if c < min(cu, cv) - 6 or c > max(cu, cv) + 6: return False
         # R550 declared corridor: between two declared waypoints the lane's corridor is the
         # axis-aligned RECTANGLE spanned by them (rows +-1), not a thin interpolated diagonal band.
-        lo, hi = min(ru, rv) - 1, max(ru, rv) + 1
+        lo, hi = min(ru, rv) - 6, max(ru, rv) + 6
         return lo - 1e-9 <= r <= hi + 1e-9
 
     for nm in order:
@@ -148,7 +152,8 @@ def draw_declared(g2, master, spec, names, lanes, chain):
                     if is_via(u, v):
                         # R550 fix: layer changes happen ONLY at declared chain vias (schedule fidelity);
                         # the BFS must not invent extra vias inside a same-layer segment.
-                        if not (u == cur and v == tgt): continue
+                        _need_change = (cur < TERM_BASE and tgt < TERM_BASE and cur // NID != tgt // NID)
+                        if not ((u == cur and v == tgt) or _need_change): continue
                         p = u % NID
                         if vc.get(u, 0) >= MAXV: continue
                         if u not in (cur,) and not in_band(u, B): continue

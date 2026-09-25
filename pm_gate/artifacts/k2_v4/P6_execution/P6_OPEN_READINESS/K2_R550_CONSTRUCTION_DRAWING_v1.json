@@ -1,6 +1,6 @@
 {
  "artifact": "k2_r550_construction_drawing_v1",
- "ts": "2026-09-25T13:48:27",
+ "ts": "2026-09-25T13:54:00",
  "authority": "#K2-217 sec.3/4: scheme-layer regression item = complete construction drawing; one shot, ordered, no search",
  "solve_calls": 0,
  "runs": 1,
@@ -1246,26 +1246,26 @@
   "verdict": "4/4 MATCH"
  },
  "first_blocker": {
-  "lane": "PCIE_UP_OUT0_P_J2",
-  "segment_index": 102,
-  "kind": "B",
-  "from": 16481,
+  "lane": "PCIE_UP_OUT1_N_J2",
+  "segment_index": 77,
+  "kind": "wp",
+  "from": 2830,
   "from_col_row": [
-   115,
-   36
+   43,
+   35
   ],
-  "to": 8616,
+  "to": 2829,
   "to_col_row": [
-   132,
-   36
+   43,
+   34
   ],
   "band": [
-   115,
-   36,
-   132,
-   36
+   43,
+   35,
+   43,
+   34
   ],
-  "n_committed_blockers_in_band": 4
+  "n_committed_blockers_in_band": 27
  },
  "decision": "ONE-SHOT DECLARED-CORRIDOR DRAWING DID NOT COMPLETE: first blocker recorded; NO rerun (per #K2-217 sec.3.5)",
  "buildability": {
@@ -1277,7 +1277,7 @@
   "reading": "156 割无墙，最紧余 +37",
   "capacity_vs_demand": "入口扇出各线独占下钻列/腰带行/上升列（d,H,W 三列均一一不重复），容量=11/11 (L0) 与 5/5 (L1) ≥ 需求"
  },
- "elapsed_s": 29.3,
+ "elapsed_s": 30.4,
  "fail_loud_log": "/tmp/opencode/r550/r550.log",
- "artifact_hash16": "025fc91de16963c4"
+ "artifact_hash16": "5f4939421442cccf"
 }
