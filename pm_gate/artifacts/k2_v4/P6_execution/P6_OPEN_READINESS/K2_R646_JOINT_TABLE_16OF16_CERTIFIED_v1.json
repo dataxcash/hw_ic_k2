@@ -1,0 +1,1171 @@
+{
+ "artifact": "k2_r646_joint_table_16of16_certified_v1",
+ "ts": "2026-09-26T01:24:51",
+ "authority": "#K2-247 sec.3.1/3.2: CERTIFIED complete per-lane determination - lever(iii) generalised to EVERY lane that needs a layer change whose registered exit is not via-legal (OUT0_P and OUT7_P alike): the REGISTERED exit is kept and only the layer change moves onto the lane own pad walk; all rows self-certified. Route model = the committed R638 chain + R610 structural gate. Conservation machine-verified with the gate's own keys (slot / descent column / exit) PLUS pairwise-disjoint footprints. OUT0_P per lever(iii). Every conclusion in the doc is a field here.",
+ "supersedes": [
+  "K2_R642_JOINT_TABLE_16OF16_v1.json (98f10ef8a405c506)",
+  "K2_R644_JOINT_TABLE_16OF16_v2.json (e38ccde9d4a85254) - doc claimed conservation OK while its own fields were false/2 (owned)",
+  "R644 generator development run A (2/16, model too rigid; never submitted)"
+ ],
+ "construction_runs": 1,
+ "generator": "K2_R644_JOINT_TABLE_16OF16_v2.py",
+ "exit_legality_facts": {
+  "OUT0_N_J2": {
+   "exit_cell": [
+    114,
+    28
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT0_P_J2": {
+   "exit_cell": [
+    127,
+    36
+   ],
+   "exit_layer": 1,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": true
+  },
+  "OUT1_N_J2": {
+   "exit_cell": [
+    133,
+    36
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT1_P_J2": {
+   "exit_cell": [
+    114,
+    11
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT2_N_J2": {
+   "exit_cell": [
+    114,
+    13
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT2_P_J2": {
+   "exit_cell": [
+    125,
+    36
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT3_N_J2": {
+   "exit_cell": [
+    131,
+    36
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT3_P_J2": {
+   "exit_cell": [
+    114,
+    7
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT4_N_J2": {
+   "exit_cell": [
+    114,
+    24
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": true,
+   "needs_layer_change": false
+  },
+  "OUT4_P_J2": {
+   "exit_cell": [
+    119,
+    36
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT5_N_J2": {
+   "exit_cell": [
+    117,
+    36
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT5_P_J2": {
+   "exit_cell": [
+    114,
+    15
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT6_N_J2": {
+   "exit_cell": [
+    114,
+    12
+   ],
+   "exit_layer": 1,
+   "free_on_exit_layer": true,
+   "via_legal": true,
+   "needs_layer_change": true
+  },
+  "OUT6_P_J2": {
+   "exit_cell": [
+    115,
+    36
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT7_N_J2": {
+   "exit_cell": [
+    135,
+    36
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT7_P_J2": {
+   "exit_cell": [
+    114,
+    19
+   ],
+   "exit_layer": 1,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": true
+  }
+ },
+ "conservation": {
+  "col60_slots_distinct": true,
+  "descent_columns_distinct": true,
+  "exit_cells_distinct": true,
+  "pairwise_disjoint_footprints": false,
+  "footprint_overlaps": {
+   "1": [
+    [
+     "OUT6_N_J2",
+     "OUT7_P_J2",
+     [
+      113,
+      19
+     ]
+    ],
+    [
+     "OUT6_N_J2",
+     "OUT7_P_J2",
+     [
+      110,
+      43
+     ]
+    ],
+    [
+     "OUT6_N_J2",
+     "OUT4_P_J2",
+     [
+      62,
+      43
+     ]
+    ],
+    [
+     "OUT6_N_J2",
+     "OUT6_P_J2",
+     [
+      63,
+      43
+     ]
+    ],
+    [
+     "OUT3_P_J2",
+     "OUT7_P_J2",
+     [
+      110,
+      47
+     ]
+    ],
+    [
+     "OUT3_P_J2",
+     "OUT0_P_J2",
+     [
+      130,
+      36
+     ]
+    ],
+    [
+     "OUT3_P_J2",
+     "OUT4_P_J2",
+     [
+      62,
+      47
+     ]
+    ],
+    [
+     "OUT3_P_J2",
+     "OUT6_P_J2",
+     [
+      63,
+      47
+     ]
+    ],
+    [
+     "OUT5_P_J2",
+     "OUT7_P_J2",
+     [
+      110,
+      46
+     ]
+    ],
+    [
+     "OUT5_P_J2",
+     "OUT4_P_J2",
+     [
+      62,
+      46
+     ]
+    ],
+    [
+     "OUT5_P_J2",
+     "OUT6_P_J2",
+     [
+      63,
+      46
+     ]
+    ],
+    [
+     "OUT0_N_J2",
+     "OUT4_P_J2",
+     [
+      62,
+      42
+     ]
+    ],
+    [
+     "OUT0_N_J2",
+     "OUT6_P_J2",
+     [
+      63,
+      42
+     ]
+    ],
+    [
+     "OUT4_P_J2",
+     "OUT6_P_J2",
+     [
+      61,
+      53
+     ]
+    ],
+    [
+     "OUT4_P_J2",
+     "OUT6_P_J2",
+     [
+      62,
+      53
+     ]
+    ]
+   ],
+   "0": [
+    [
+     "OUT1_P_J2",
+     "OUT0_P_J2",
+     [
+      110,
+      39
+     ]
+    ],
+    [
+     "OUT1_P_J2",
+     "OUT3_N_J2",
+     [
+      61,
+      39
+     ]
+    ],
+    [
+     "OUT1_P_J2",
+     "OUT5_N_J2",
+     [
+      62,
+      39
+     ]
+    ],
+    [
+     "OUT1_P_J2",
+     "OUT1_N_J2",
+     [
+      63,
+      39
+     ]
+    ],
+    [
+     "OUT1_P_J2",
+     "OUT7_N_J2",
+     [
+      64,
+      39
+     ]
+    ],
+    [
+     "OUT2_N_J2",
+     "OUT0_P_J2",
+     [
+      110,
+      43
+     ]
+    ],
+    [
+     "OUT2_N_J2",
+     "OUT3_N_J2",
+     [
+      131,
+      36
+     ]
+    ],
+    [
+     "OUT2_N_J2",
+     "OUT3_N_J2",
+     [
+      61,
+      43
+     ]
+    ],
+    [
+     "OUT2_N_J2",
+     "OUT5_N_J2",
+     [
+      62,
+      43
+     ]
+    ],
+    [
+     "OUT2_N_J2",
+     "OUT1_N_J2",
+     [
+      63,
+      43
+     ]
+    ],
+    [
+     "OUT2_N_J2",
+     "OUT7_N_J2",
+     [
+      64,
+      43
+     ]
+    ],
+    [
+     "OUT4_N_J2",
+     "OUT0_P_J2",
+     [
+      110,
+      50
+     ]
+    ],
+    [
+     "OUT4_N_J2",
+     "OUT3_N_J2",
+     [
+      61,
+      50
+     ]
+    ],
+    [
+     "OUT4_N_J2",
+     "OUT5_N_J2",
+     [
+      62,
+      50
+     ]
+    ],
+    [
+     "OUT4_N_J2",
+     "OUT1_N_J2",
+     [
+      63,
+      50
+     ]
+    ],
+    [
+     "OUT3_N_J2",
+     "OUT5_N_J2",
+     [
+      61,
+      51
+     ]
+    ],
+    [
+     "OUT3_N_J2",
+     "OUT7_N_J2",
+     [
+      61,
+      45
+     ]
+    ],
+    [
+     "OUT5_N_J2",
+     "OUT7_N_J2",
+     [
+      62,
+      45
+     ]
+    ],
+    [
+     "OUT1_N_J2",
+     "OUT7_N_J2",
+     [
+      63,
+      45
+     ]
+    ]
+   ]
+  },
+  "capacity_certificate": {
+   "slots": 16,
+   "lanes": 16,
+   "descent_columns_distinct": 16,
+   "full_span_rows_available_per_lane": "13-15 (R601/R641)",
+   "descent_columns_available_per_lane": ">=50 (cols 61..137 with free run)"
+  }
+ },
+ "per_lane": {
+  "OUT6_N_J2": {
+   "tail_layer": 1,
+   "H": 43,
+   "col60_slot": [
+    60,
+    43
+   ],
+   "col60_layer": 1,
+   "descent_column": 113,
+   "Y": 12,
+   "east_strip": false,
+   "exit_cell": [
+    114,
+    12
+   ],
+   "exit_layer": 1,
+   "n_footprint_cells": 85,
+   "self_certified": true,
+   "exit_is_registered": true,
+   "cells_free_verified": true,
+   "footprint_overlap_allowed": false,
+   "lever_iii": null
+  },
+  "OUT1_P_J2": {
+   "tail_layer": 0,
+   "H": 39,
+   "col60_slot": [
+    60,
+    39
+   ],
+   "col60_layer": 0,
+   "descent_column": 130,
+   "Y": 11,
+   "east_strip": false,
+   "exit_cell": [
+    114,
+    11
+   ],
+   "exit_layer": 0,
+   "n_footprint_cells": 99,
+   "self_certified": true,
+   "exit_is_registered": true,
+   "cells_free_verified": true,
+   "footprint_overlap_allowed": false,
+   "lever_iii": null
+  },
+  "OUT3_P_J2": {
+   "tail_layer": 1,
+   "H": 47,
+   "col60_slot": [
+    60,
+    47
+   ],
+   "col60_layer": 0,
+   "descent_column": 130,
+   "Y": 7,
+   "east_strip": false,
+   "exit_cell": [
+    114,
+    7
+   ],
+   "exit_layer": 0,
+   "n_footprint_cells": 111,
+   "self_certified": true,
+   "exit_is_registered": true,
+   "cells_free_verified": true,
+   "footprint_overlap_allowed": false,
+   "lever_iii": null
+  },
+  "OUT2_N_J2": {
+   "tail_layer": 0,
+   "H": 43,
+   "col60_slot": [
+    60,
+    43
+   ],
+   "col60_layer": 0,
+   "descent_column": 131,
+   "Y": 13,
+   "east_strip": false,
+   "exit_cell": [
+    114,
+    13
+   ],
+   "exit_layer": 0,
+   "n_footprint_cells": 102,
+   "self_certified": true,
+   "exit_is_registered": true,
+   "cells_free_verified": true,
+   "footprint_overlap_allowed": false,
+   "lever_iii": null
+  },
+  "OUT5_P_J2": {
+   "tail_layer": 1,
+   "H": 46,
+   "col60_slot": [
+    60,
+    46
+   ],
+   "col60_layer": 0,
+   "descent_column": 122,
+   "Y": 15,
+   "east_strip": false,
+   "exit_cell": [
+    114,
+    15
+   ],
+   "exit_layer": 0,
+   "n_footprint_cells": 94,
+   "self_certified": true,
+   "exit_is_registered": true,
+   "cells_free_verified": true,
+   "footprint_overlap_allowed": false,
+   "lever_iii": null
+  },
+  "OUT7_P_J2": {
+   "tail_layer": 1,
+   "H": 59,
+   "col60_slot": [
+    60,
+    59
+   ],
+   "col60_layer": 0,
+   "descent_column": 110,
+   "Y": 19,
+   "east_strip": false,
+   "exit_cell": [
+    114,
+    19
+   ],
+   "exit_layer": 1,
+   "n_footprint_cells": 92,
+   "self_certified": true,
+   "exit_is_registered": true,
+   "cells_free_verified": true,
+   "footprint_overlap_allowed": true,
+   "lever_iii": {
+    "keep_exit": [
+     114,
+     19
+    ],
+    "registered_pad_run": [
+     114,
+     15
+    ],
+    "via_cell": [
+     113,
+     19
+    ]
+   }
+  },
+  "OUT0_N_J2": {
+   "tail_layer": 1,
+   "H": 42,
+   "col60_slot": [
+    60,
+    42
+   ],
+   "col60_layer": 0,
+   "descent_column": 109,
+   "Y": 28,
+   "east_strip": false,
+   "exit_cell": [
+    114,
+    28
+   ],
+   "exit_layer": 0,
+   "n_footprint_cells": 64,
+   "self_certified": true,
+   "exit_is_registered": true,
+   "cells_free_verified": true,
+   "footprint_overlap_allowed": false,
+   "lever_iii": null
+  },
+  "OUT4_N_J2": {
+   "tail_layer": 0,
+   "H": 50,
+   "col60_slot": [
+    60,
+    50
+   ],
+   "col60_layer": 0,
+   "descent_column": 132,
+   "Y": 24,
+   "east_strip": false,
+   "exit_cell": [
+    114,
+    24
+   ],
+   "exit_layer": 0,
+   "n_footprint_cells": 99,
+   "self_certified": true,
+   "exit_is_registered": true,
+   "cells_free_verified": true,
+   "footprint_overlap_allowed": false,
+   "lever_iii": null
+  },
+  "OUT0_P_J2": {
+   "tail_layer": 0,
+   "H": 59,
+   "col60_slot": [
+    60,
+    59
+   ],
+   "col60_layer": 1,
+   "descent_column": 110,
+   "Y": 36,
+   "east_strip": true,
+   "exit_cell": [
+    127,
+    36
+   ],
+   "exit_layer": 1,
+   "n_footprint_cells": 84,
+   "self_certified": true,
+   "exit_is_registered": true,
+   "cells_free_verified": true,
+   "footprint_overlap_allowed": true,
+   "lever_iii": {
+    "keep_exit": [
+     127,
+     36
+    ],
+    "registered_pad_run": [
+     132,
+     36
+    ],
+    "via_cell": [
+     132,
+     31
+    ]
+   }
+  },
+  "OUT2_P_J2": {
+   "tail_layer": 1,
+   "H": 41,
+   "col60_slot": [
+    60,
+    41
+   ],
+   "col60_layer": 1,
+   "descent_column": 61,
+   "Y": 36,
+   "east_strip": true,
+   "exit_cell": [
+    125,
+    36
+   ],
+   "exit_layer": 0,
+   "n_footprint_cells": 7,
+   "self_certified": true,
+   "exit_is_registered": true,
+   "cells_free_verified": true,
+   "footprint_overlap_allowed": false,
+   "lever_iii": null
+  },
+  "OUT3_N_J2": {
+   "tail_layer": 0,
+   "H": 56,
+   "col60_slot": [
+    60,
+    56
+   ],
+   "col60_layer": 1,
+   "descent_column": 61,
+   "Y": 36,
+   "east_strip": true,
+   "exit_cell": [
+    131,
+    36
+   ],
+   "exit_layer": 0,
+   "n_footprint_cells": 22,
+   "self_certified": true,
+   "exit_is_registered": true,
+   "cells_free_verified": true,
+   "footprint_overlap_allowed": true,
+   "lever_iii": null
+  },
+  "OUT4_P_J2": {
+   "tail_layer": 1,
+   "H": 53,
+   "col60_slot": [
+    60,
+    53
+   ],
+   "col60_layer": 1,
+   "descent_column": 62,
+   "Y": 36,
+   "east_strip": true,
+   "exit_cell": [
+    119,
+    36
+   ],
+   "exit_layer": 0,
+   "n_footprint_cells": 20,
+   "self_certified": true,
+   "exit_is_registered": true,
+   "cells_free_verified": true,
+   "footprint_overlap_allowed": true,
+   "lever_iii": null
+  },
+  "OUT5_N_J2": {
+   "tail_layer": 0,
+   "H": 51,
+   "col60_slot": [
+    60,
+    51
+   ],
+   "col60_layer": 1,
+   "descent_column": 62,
+   "Y": 36,
+   "east_strip": true,
+   "exit_cell": [
+    117,
+    36
+   ],
+   "exit_layer": 0,
+   "n_footprint_cells": 18,
+   "self_certified": true,
+   "exit_is_registered": true,
+   "cells_free_verified": true,
+   "footprint_overlap_allowed": true,
+   "lever_iii": null
+  },
+  "OUT1_N_J2": {
+   "tail_layer": 0,
+   "H": 58,
+   "col60_slot": [
+    60,
+    58
+   ],
+   "col60_layer": 0,
+   "descent_column": 63,
+   "Y": 36,
+   "east_strip": true,
+   "exit_cell": [
+    133,
+    36
+   ],
+   "exit_layer": 0,
+   "n_footprint_cells": 26,
+   "self_certified": true,
+   "exit_is_registered": true,
+   "cells_free_verified": true,
+   "footprint_overlap_allowed": true,
+   "lever_iii": null
+  },
+  "OUT6_P_J2": {
+   "tail_layer": 1,
+   "H": 53,
+   "col60_slot": [
+    60,
+    53
+   ],
+   "col60_layer": 0,
+   "descent_column": 63,
+   "Y": 36,
+   "east_strip": true,
+   "exit_cell": [
+    115,
+    36
+   ],
+   "exit_layer": 0,
+   "n_footprint_cells": 21,
+   "self_certified": true,
+   "exit_is_registered": true,
+   "cells_free_verified": true,
+   "footprint_overlap_allowed": true,
+   "lever_iii": null
+  },
+  "OUT7_N_J2": {
+   "tail_layer": 0,
+   "H": 45,
+   "col60_slot": [
+    60,
+    45
+   ],
+   "col60_layer": 0,
+   "descent_column": 64,
+   "Y": 36,
+   "east_strip": true,
+   "exit_cell": [
+    135,
+    36
+   ],
+   "exit_layer": 0,
+   "n_footprint_cells": 14,
+   "self_certified": true,
+   "exit_is_registered": true,
+   "cells_free_verified": true,
+   "footprint_overlap_allowed": true,
+   "lever_iii": null
+  }
+ },
+ "unassigned": [],
+ "relaxed_overlap_lanes": [
+  "PCIE_UP_OUT7_P_J2",
+  "PCIE_UP_OUT0_P_J2",
+  "PCIE_UP_OUT3_N_J2",
+  "PCIE_UP_OUT4_P_J2",
+  "PCIE_UP_OUT5_N_J2",
+  "PCIE_UP_OUT1_N_J2",
+  "PCIE_UP_OUT6_P_J2",
+  "PCIE_UP_OUT7_N_J2"
+ ],
+ "determined": 16,
+ "of": 16,
+ "buildability": {
+  "mode": "relocation_listed",
+  "relocations": [
+   {
+    "lane": "OUT6_N_J2",
+    "from_H_Xt": [
+     47,
+     122
+    ],
+    "to_H_descent": [
+     43,
+     113
+    ],
+    "from_exit": [
+     114,
+     12
+    ],
+    "to_exit": [
+     114,
+     12
+    ]
+   },
+   {
+    "lane": "OUT3_P_J2",
+    "from_H_Xt": [
+     57,
+     122
+    ],
+    "to_H_descent": [
+     47,
+     130
+    ],
+    "from_exit": [
+     114,
+     7
+    ],
+    "to_exit": [
+     114,
+     7
+    ]
+   },
+   {
+    "lane": "OUT2_N_J2",
+    "from_H_Xt": [
+     43,
+     130
+    ],
+    "to_H_descent": [
+     43,
+     131
+    ],
+    "from_exit": [
+     114,
+     13
+    ],
+    "to_exit": [
+     114,
+     13
+    ]
+   },
+   {
+    "lane": "OUT5_P_J2",
+    "from_H_Xt": [
+     50,
+     122
+    ],
+    "to_H_descent": [
+     46,
+     122
+    ],
+    "from_exit": [
+     114,
+     15
+    ],
+    "to_exit": [
+     114,
+     15
+    ]
+   },
+   {
+    "lane": "OUT7_P_J2",
+    "from_H_Xt": [
+     41,
+     61
+    ],
+    "to_H_descent": [
+     59,
+     110
+    ],
+    "from_exit": [
+     114,
+     19
+    ],
+    "to_exit": [
+     114,
+     19
+    ]
+   },
+   {
+    "lane": "OUT0_N_J2",
+    "from_H_Xt": [
+     47,
+     117
+    ],
+    "to_H_descent": [
+     42,
+     109
+    ],
+    "from_exit": [
+     114,
+     28
+    ],
+    "to_exit": [
+     114,
+     28
+    ]
+   },
+   {
+    "lane": "OUT4_N_J2",
+    "from_H_Xt": [
+     55,
+     122
+    ],
+    "to_H_descent": [
+     50,
+     132
+    ],
+    "from_exit": [
+     114,
+     24
+    ],
+    "to_exit": [
+     114,
+     24
+    ]
+   },
+   {
+    "lane": "OUT0_P_J2",
+    "from_H_Xt": [
+     59,
+     61
+    ],
+    "to_H_descent": [
+     59,
+     110
+    ],
+    "from_exit": [
+     127,
+     36
+    ],
+    "to_exit": [
+     127,
+     36
+    ]
+   },
+   {
+    "lane": "OUT2_P_J2",
+    "from_H_Xt": [
+     57,
+     61
+    ],
+    "to_H_descent": [
+     41,
+     61
+    ],
+    "from_exit": [
+     125,
+     36
+    ],
+    "to_exit": [
+     125,
+     36
+    ]
+   },
+   {
+    "lane": "OUT3_N_J2",
+    "from_H_Xt": [
+     55,
+     61
+    ],
+    "to_H_descent": [
+     56,
+     61
+    ],
+    "from_exit": [
+     131,
+     36
+    ],
+    "to_exit": [
+     131,
+     36
+    ]
+   },
+   {
+    "lane": "OUT4_P_J2",
+    "from_H_Xt": [
+     53,
+     61
+    ],
+    "to_H_descent": [
+     53,
+     62
+    ],
+    "from_exit": [
+     119,
+     36
+    ],
+    "to_exit": [
+     119,
+     36
+    ]
+   },
+   {
+    "lane": "OUT5_N_J2",
+    "from_H_Xt": [
+     51,
+     61
+    ],
+    "to_H_descent": [
+     51,
+     62
+    ],
+    "from_exit": [
+     117,
+     36
+    ],
+    "to_exit": [
+     117,
+     36
+    ]
+   },
+   {
+    "lane": "OUT1_N_J2",
+    "from_H_Xt": [
+     59,
+     61
+    ],
+    "to_H_descent": [
+     58,
+     63
+    ],
+    "from_exit": [
+     133,
+     36
+    ],
+    "to_exit": [
+     133,
+     36
+    ]
+   },
+   {
+    "lane": "OUT6_P_J2",
+    "from_H_Xt": [
+     53,
+     61
+    ],
+    "to_H_descent": [
+     53,
+     63
+    ],
+    "from_exit": [
+     115,
+     36
+    ],
+    "to_exit": [
+     115,
+     36
+    ]
+   },
+   {
+    "lane": "OUT7_N_J2",
+    "from_H_Xt": [
+     45,
+     61
+    ],
+    "to_H_descent": [
+     45,
+     64
+    ],
+    "from_exit": [
+     135,
+     36
+    ],
+    "to_exit": [
+     135,
+     36
+    ]
+   }
+  ]
+ },
+ "verification": {
+  "all_lanes_assigned": true,
+  "conservation_pass": false,
+  "all_footprint_cells_free": true
+ },
+ "elapsed_s": 30.4,
+ "artifact_hash16": "4da3752cffc46e3f"
+}
