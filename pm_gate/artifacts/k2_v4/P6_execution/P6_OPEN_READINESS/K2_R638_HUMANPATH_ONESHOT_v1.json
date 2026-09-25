@@ -1,0 +1,88 @@
+{
+ "artifact": "k2_r638_humanpath_oneshot_v1",
+ "ts": "2026-09-26T00:28:57",
+ "authority": "STOP-ORDER (command repetition) -> back to Plan, human-engineer path, ONE implementation: (1) declare the registered SPEC entrance layer transition for every lane that needs one (R620 keyed it on belt_layer==1 and consumed only DIVE_via => the lanes whose SPEC transition is In5_entrance were left undeclared); (2) the self-added exit-slot >=2 pre-filter is already withdrawn (#K2-242 sec.3.4(1a)) - the drawing pre-filters stay off, the registered gates are the sole judge. ONE pass, no parameter search, no re-run.",
+ "construction_runs": 1,
+ "n_drawn": 13,
+ "blocked": {
+  "OUT0_P_J2": {
+   "lane": "PCIE_UP_OUT0_P_J2",
+   "segment_index": 8,
+   "kind": "?",
+   "from": 17261,
+   "from_col_row": [
+    127,
+    36
+   ],
+   "to": 17943,
+   "to_col_row": null,
+   "band": null,
+   "n_committed_blockers_in_band": 0
+  },
+  "OUT6_N_J2": {
+   "lane": "PCIE_UP_OUT6_N_J2",
+   "segment_index": 7,
+   "kind": "wp",
+   "from": 16882,
+   "from_col_row": [
+    121,
+    47
+   ],
+   "to": 7977,
+   "to_col_row": [
+    122,
+    47
+   ],
+   "band": [
+    121,
+    47,
+    122,
+    47
+   ],
+   "n_committed_blockers_in_band": 0
+  },
+  "OUT7_P_J2": {
+   "lane": "PCIE_UP_OUT7_P_J2",
+   "segment_index": 3,
+   "kind": "wp",
+   "from": 4006,
+   "from_col_row": [
+    61,
+    41
+   ],
+   "to": 3985,
+   "to_col_row": [
+    61,
+    20
+   ],
+   "band": [
+    61,
+    41,
+    61,
+    20
+   ],
+   "n_committed_blockers_in_band": 0
+  }
+ },
+ "entrance_declared": {
+  "PCIE_UP_OUT0_N_J2": "not-needed",
+  "PCIE_UP_OUT0_P_J2": "DIVE_via(belt1)",
+  "PCIE_UP_OUT1_N_J2": "not-needed",
+  "PCIE_UP_OUT1_P_J2": "not-needed",
+  "PCIE_UP_OUT2_N_J2": "not-needed",
+  "PCIE_UP_OUT2_P_J2": "DIVE_via(belt1)",
+  "PCIE_UP_OUT3_N_J2": "In5_entrance(belt0,col60_1) node=619",
+  "PCIE_UP_OUT3_P_J2": "not-needed",
+  "PCIE_UP_OUT4_N_J2": "not-needed",
+  "PCIE_UP_OUT4_P_J2": "DIVE_via(belt1)",
+  "PCIE_UP_OUT5_N_J2": "In5_entrance(belt0,col60_1) node=944",
+  "PCIE_UP_OUT5_P_J2": "DIVE_via(belt1)",
+  "PCIE_UP_OUT6_N_J2": "In5_entrance(belt0,col60_1) node=1139",
+  "PCIE_UP_OUT6_P_J2": "DIVE_via(belt1)",
+  "PCIE_UP_OUT7_N_J2": "not-needed",
+  "PCIE_UP_OUT7_P_J2": "not-needed"
+ },
+ "decision": "BLOCKED lanes=['OUT0_P_J2', 'OUT6_N_J2', 'OUT7_P_J2']",
+ "elapsed_s": 34.4,
+ "artifact_hash16": "3351549ec9d19349"
+}
