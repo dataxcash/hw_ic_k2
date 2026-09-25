@@ -1,0 +1,116 @@
+{
+ "artifact": "k2_r706_base_plus_solve_v1",
+ "ts": "2026-09-26T07:40:43",
+ "authority": "#K2-265: canonical base (R698 rule over all lanes, machine-verified disjoint) + EXACT streaming solve of the REMAINING lanes over their full v3-prime domains => merge => certified 16/16; calibration gate machine-enforced per sec.3.5; prior:: STREAMING domain generation (generate->filter vs fixed-13->keep survivors; no full materialisation) + MRV + forward checking; deterministic, one run, fail-loud.",
+ "construction_runs": 1,
+ "drawings": 0,
+ "base": {
+  "lanes": 8,
+  "cells": 713,
+  "base_routes": {
+   "OUT6_P_J2": {
+    "H": null,
+    "Xt": 120,
+    "tail_layer": 0
+   },
+   "OUT4_P_J2": {
+    "H": null,
+    "Xt": 120,
+    "tail_layer": 1
+   },
+   "OUT2_P_J2": {
+    "H": null,
+    "Xt": 125,
+    "tail_layer": 0
+   },
+   "OUT0_P_J2": {
+    "H": null,
+    "Xt": 127,
+    "tail_layer": 0
+   },
+   "OUT3_N_J2": {
+    "H": null,
+    "Xt": 132,
+    "tail_layer": 1
+   },
+   "OUT1_N_J2": {
+    "H": null,
+    "Xt": 133,
+    "tail_layer": 1
+   },
+   "OUT1_P_J2": {
+    "H": null,
+    "Xt": 113,
+    "tail_layer": 1
+   },
+   "OUT4_N_J2": {
+    "H": null,
+    "Xt": 122,
+    "tail_layer": 0
+   }
+  },
+  "calibration_gate": "PASS (machine-enforced)",
+  "base_lanes": [
+   "OUT6_P_J2",
+   "OUT4_P_J2",
+   "OUT2_P_J2",
+   "OUT0_P_J2",
+   "OUT3_N_J2",
+   "OUT1_N_J2",
+   "OUT1_P_J2",
+   "OUT4_N_J2"
+  ]
+ },
+ "fixed13_cells": 713,
+ "stream_stats": {
+  "OUT0_N_J2": {
+   "generated": null,
+   "survivors": 0
+  },
+  "OUT2_N_J2": {
+   "generated": null,
+   "survivors": 0
+  },
+  "OUT3_P_J2": {
+   "generated": null,
+   "survivors": 0
+  },
+  "OUT5_N_J2": {
+   "generated": null,
+   "survivors": 3947
+  },
+  "OUT5_P_J2": {
+   "generated": null,
+   "survivors": 0
+  },
+  "OUT6_N_J2": {
+   "generated": null,
+   "survivors": 0
+  },
+  "OUT7_N_J2": {
+   "generated": null,
+   "survivors": 0
+  },
+  "OUT7_P_J2": {
+   "generated": null,
+   "survivors": 0
+  }
+ },
+ "sub_model": {
+  "lanes": [
+   "OUT0_N_J2",
+   "OUT2_N_J2",
+   "OUT3_P_J2",
+   "OUT5_N_J2",
+   "OUT5_P_J2",
+   "OUT6_N_J2",
+   "OUT7_N_J2",
+   "OUT7_P_J2"
+  ],
+  "sat": false,
+  "nodes": 0
+ },
+ "witness": {},
+ "elapsed_s": 48.8,
+ "artifact_hash16": "ffe0b158bc3b9c2d"
+}
