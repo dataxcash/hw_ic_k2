@@ -1,0 +1,369 @@
+{
+ "artifact": "k2_r615_final_drawing_v1",
+ "ts": "2026-09-25T20:12:33",
+ "authority": "#K2-222: premise v3 (S2) -> three gates (registered-arc criterion, R568 fix) -> ONE complete drawing (tail included) -> registered gates; no solver, no rerun",
+ "r567_defect_fixed": "M-ENG-CHECKER-OVERSTRICT removed (R568)",
+ "r568_defect_fixed": "M-ENG-UNIT-LABEL(2nd): wp entries given node ids instead of positions -> every L=1 wp became a terminal. R569 passes positions (R550 caliber) + adds a fail-loud unit guard. Premise v3 unchanged; no parameter changed; ONE construction run this window",
+ "premise_v3": "k2/docs/K2-R567-PREMISE-REVISION-v3.md",
+ "solve_calls": 0,
+ "runs": 1,
+ "backtracking_search": 0,
+ "premise_assertion_gate": {
+  "E1_c_decreasing": "K2_R566_CORRECTED_CENSUS_v2.json (riser_cols empty; In5 north band rows 24..34 blocked, 225 cells/lane)",
+  "E2_no_nesting_law": "follows from E1; R561 conclusion void",
+  "E3_keep_11_5": "R566 + R564 six-lane three-gate PASS",
+  "E4_north_bus_void": "K2_R564_PREMISE_V2_COMPLETE_DRAWING_v1.json (fail=10/16) + K2_R564_BLOCKER_ATTRIBUTION_v1.json"
+ },
+ "conservation_audit": {
+  "capacity_vs_demand": {
+   "L0": {
+    "lanes_need": 11,
+    "lanes_assigned": 11,
+    "belt_rows_used": [
+     59,
+     58,
+     57,
+     56,
+     55,
+     54,
+     53,
+     52,
+     51,
+     50,
+     49
+    ],
+    "rows_distinct": true,
+    "desc_cols_used": [
+     2,
+     3,
+     5,
+     6,
+     9,
+     12,
+     13,
+     14,
+     17,
+     20,
+     22
+    ]
+   },
+   "L1": {
+    "lanes_need": 5,
+    "lanes_assigned": 5,
+    "belt_rows_used": [
+     59,
+     58,
+     57,
+     56,
+     53
+    ],
+    "rows_distinct": true,
+    "desc_cols_used": [
+     2,
+     5,
+     13,
+     16,
+     24
+    ]
+   }
+  },
+  "supply": "In5: 22 free rows on [d,60] (R566); In4: 20 free rows; demand 11/5 => positive margin",
+  "col60_row_rule": "col60 slot row = the lane's belt row H (distinct per layer, decreasing in pi)"
+ },
+ "pregate": {
+  "(i)_cells_legal": {
+   "verdict": "PASS",
+   "n": 0,
+   "sample": []
+  },
+  "(ii)_registered_arcs": {
+   "verdict": "PASS",
+   "n": 0,
+   "sample": []
+  },
+  "(iii)_same_layer_pairwise_disjoint": {
+   "verdict": "PASS",
+   "n": 0,
+   "sample": []
+  },
+  "(iv)_capacity": {
+   "verdict": "PASS"
+  }
+ },
+ "assignment_incomplete": [],
+ "channel_table": {
+  "PCIE_UP_OUT0_N_J2": {
+   "L": 0,
+   "d": 2,
+   "top": 34,
+   "H": 59,
+   "col60_row": 59,
+   "col60_layer": 0,
+   "exit": 7
+  },
+  "PCIE_UP_OUT1_N_J2": {
+   "L": 0,
+   "d": 3,
+   "top": 34,
+   "H": 58,
+   "col60_row": 58,
+   "col60_layer": 0,
+   "exit": 115
+  },
+  "PCIE_UP_OUT1_P_J2": {
+   "L": 0,
+   "d": 5,
+   "top": 33,
+   "H": 57,
+   "col60_row": 57,
+   "col60_layer": 0,
+   "exit": 11
+  },
+  "PCIE_UP_OUT2_N_J2": {
+   "L": 0,
+   "d": 6,
+   "top": 34,
+   "H": 56,
+   "col60_row": 56,
+   "col60_layer": 0,
+   "exit": 12
+  },
+  "PCIE_UP_OUT3_N_J2": {
+   "L": 0,
+   "d": 9,
+   "top": 34,
+   "H": 55,
+   "col60_row": 55,
+   "col60_layer": 1,
+   "exit": 117
+  },
+  "PCIE_UP_OUT4_N_J2": {
+   "L": 0,
+   "d": 12,
+   "top": 34,
+   "H": 54,
+   "col60_row": 54,
+   "col60_layer": 0,
+   "exit": 13
+  },
+  "PCIE_UP_OUT3_P_J2": {
+   "L": 0,
+   "d": 13,
+   "top": 33,
+   "H": 53,
+   "col60_row": 53,
+   "col60_layer": 0,
+   "exit": 15
+  },
+  "PCIE_UP_OUT5_N_J2": {
+   "L": 0,
+   "d": 14,
+   "top": 34,
+   "H": 52,
+   "col60_row": 52,
+   "col60_layer": 1,
+   "exit": 119
+  },
+  "PCIE_UP_OUT6_N_J2": {
+   "L": 0,
+   "d": 17,
+   "top": 34,
+   "H": 51,
+   "col60_row": 51,
+   "col60_layer": 1,
+   "exit": 25
+  },
+  "PCIE_UP_OUT7_N_J2": {
+   "L": 0,
+   "d": 20,
+   "top": 34,
+   "H": 50,
+   "col60_row": 50,
+   "col60_layer": 0,
+   "exit": 123
+  },
+  "PCIE_UP_OUT7_P_J2": {
+   "L": 0,
+   "d": 22,
+   "top": 33,
+   "H": 49,
+   "col60_row": 49,
+   "col60_layer": 0,
+   "exit": 28
+  },
+  "PCIE_UP_OUT0_P_J2": {
+   "L": 1,
+   "d": 2,
+   "top": 33,
+   "H": 59,
+   "col60_row": 59,
+   "col60_layer": 1,
+   "exit": 115
+  },
+  "PCIE_UP_OUT2_P_J2": {
+   "L": 1,
+   "d": 5,
+   "top": 33,
+   "H": 58,
+   "col60_row": 58,
+   "col60_layer": 1,
+   "exit": 116
+  },
+  "PCIE_UP_OUT4_P_J2": {
+   "L": 1,
+   "d": 13,
+   "top": 33,
+   "H": 57,
+   "col60_row": 57,
+   "col60_layer": 1,
+   "exit": 118
+  },
+  "PCIE_UP_OUT5_P_J2": {
+   "L": 1,
+   "d": 16,
+   "top": 33,
+   "H": 56,
+   "col60_row": 56,
+   "col60_layer": 0,
+   "exit": 24
+  },
+  "PCIE_UP_OUT6_P_J2": {
+   "L": 1,
+   "d": 24,
+   "top": 33,
+   "H": 53,
+   "col60_row": 53,
+   "col60_layer": 0,
+   "exit": 125
+  }
+ },
+ "entrance_fanout_table": {
+  "PCIE_UP_OUT0_N_J2": {
+   "n_pocket": 0,
+   "belt_row": 59,
+   "riser_col": "n/a (S2: no riser)"
+  },
+  "PCIE_UP_OUT1_N_J2": {
+   "n_pocket": 0,
+   "belt_row": 58,
+   "riser_col": "n/a (S2: no riser)"
+  },
+  "PCIE_UP_OUT1_P_J2": {
+   "n_pocket": 0,
+   "belt_row": 57,
+   "riser_col": "n/a (S2: no riser)"
+  },
+  "PCIE_UP_OUT2_N_J2": {
+   "n_pocket": 0,
+   "belt_row": 56,
+   "riser_col": "n/a (S2: no riser)"
+  },
+  "PCIE_UP_OUT3_N_J2": {
+   "n_pocket": 0,
+   "belt_row": 55,
+   "riser_col": "n/a (S2: no riser)"
+  },
+  "PCIE_UP_OUT4_N_J2": {
+   "n_pocket": 0,
+   "belt_row": 54,
+   "riser_col": "n/a (S2: no riser)"
+  },
+  "PCIE_UP_OUT3_P_J2": {
+   "n_pocket": 2,
+   "belt_row": 53,
+   "riser_col": "n/a (S2: no riser)"
+  },
+  "PCIE_UP_OUT5_N_J2": {
+   "n_pocket": 0,
+   "belt_row": 52,
+   "riser_col": "n/a (S2: no riser)"
+  },
+  "PCIE_UP_OUT6_N_J2": {
+   "n_pocket": 0,
+   "belt_row": 51,
+   "riser_col": "n/a (S2: no riser)"
+  },
+  "PCIE_UP_OUT7_N_J2": {
+   "n_pocket": 0,
+   "belt_row": 50,
+   "riser_col": "n/a (S2: no riser)"
+  },
+  "PCIE_UP_OUT7_P_J2": {
+   "n_pocket": 0,
+   "belt_row": 49,
+   "riser_col": "n/a (S2: no riser)"
+  },
+  "PCIE_UP_OUT0_P_J2": {
+   "n_pocket": 0,
+   "belt_row": 59,
+   "riser_col": "n/a (S2: no riser)"
+  },
+  "PCIE_UP_OUT2_P_J2": {
+   "n_pocket": 2,
+   "belt_row": 58,
+   "riser_col": "n/a (S2: no riser)"
+  },
+  "PCIE_UP_OUT4_P_J2": {
+   "n_pocket": 0,
+   "belt_row": 57,
+   "riser_col": "n/a (S2: no riser)"
+  },
+  "PCIE_UP_OUT5_P_J2": {
+   "n_pocket": 0,
+   "belt_row": 56,
+   "riser_col": "n/a (S2: no riser)"
+  },
+  "PCIE_UP_OUT6_P_J2": {
+   "n_pocket": 5,
+   "belt_row": 53,
+   "riser_col": "n/a (S2: no riser)"
+  }
+ },
+ "one_sentence_cause": "blocked at lane PCIE_UP_OUT1_N_J2 seg 89 ([128, 36] -> None), 4 committed blockers in band",
+ "proven_facts": [
+  "R564 (premise v2, one shot): 6/16 lanes assigned and their three gates PASS",
+  "attribution: riser_cols empty; In5 rows 24..34 blocked at cols 42..80 (225 cells/lane)",
+  "S2 capacity: 16 distinct rows exist on In5 across [d,60] (22 available) => positive margin"
+ ],
+ "unit_check": {
+  "rule": "wp id nd is a POSITION; node id = L*NID+nd must be < TERM_BASE",
+  "verdict": "PASS",
+  "n": 0,
+  "sample": []
+ },
+ "unit_declaration": {
+  "grid_position": "pos = col*NY + row",
+  "node_id": "L*NID + pos",
+  "chain_convention": "('wp', pos, L) / ('via', pos, L) ; only terminals use ids >= TERM_BASE (A/B entries)"
+ },
+ "first_blocker": {
+  "lane": "PCIE_UP_OUT1_N_J2",
+  "segment_index": 89,
+  "kind": "B",
+  "from": 17326,
+  "from_col_row": [
+   128,
+   36
+  ],
+  "to": 17945,
+  "to_col_row": null,
+  "band": null,
+  "n_committed_blockers_in_band": 4
+ },
+ "decision": "ONE-SHOT DRAW BLOCKED (tail included in this same pass): named diagnostic only, NO rerun",
+ "buildability": {
+  "mode": "no_witness",
+  "note": "single-pass blocked; see first_blocker"
+ },
+ "frozen_four": {
+  "SPEC": "0bd52ed48e720b8c",
+  "page_manifest": "a8ef3ea8ecff99d7",
+  "PCB": "fb07d25ac426ff84",
+  "rules": "0a459839e15960b8",
+  "verdict": "4/4 MATCH"
+ },
+ "elapsed_s": 29.6,
+ "fail_loud_log": "/tmp/opencode/r615/draw.log",
+ "owner_items": 0,
+ "artifact_hash16": "a825841e2ac14c02"
+}
