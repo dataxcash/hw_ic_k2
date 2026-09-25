@@ -1,0 +1,471 @@
+{
+ "artifact": "k2_r662_joint_table_16of16_gateband_v2",
+ "ts": "2026-09-26T02:11:20",
+ "authority": "#K2-250 sec.3/5: RETURNED-TO-DRAWING-LAYER re-determination: the APPROACH segment of EVERY lane is now inside the model (no lower bounds), and the 4th hard key (same-layer same-cell mutual exclusion) is enforced STRICTLY with NO relaxation. Method: product-first (#K2-250 sec.5.2, REF-CASE-LIBRARY sec.A) - ordered/ladder escape so lanes do not cross. Prior: R646 - lever(iii) generalised to EVERY lane that needs a layer change whose registered exit is not via-legal (OUT0_P and OUT7_P alike): the REGISTERED exit is kept and only the layer change moves onto the lane own pad walk; all rows self-certified. Route model = the committed R638 chain + R610 structural gate. Conservation machine-verified with the gate's own keys (slot / descent column / exit) PLUS pairwise-disjoint footprints. OUT0_P per lever(iii). Every conclusion in the doc is a field here.",
+ "supersedes": [
+  "K2_R642_JOINT_TABLE_16OF16_v1.json (98f10ef8a405c506)",
+  "K2_R644_JOINT_TABLE_16OF16_v2.json (e38ccde9d4a85254) - doc claimed conservation OK while its own fields were false/2 (owned)",
+  "R644 generator development run A (2/16, model too rigid; never submitted)"
+ ],
+ "construction_runs": 1,
+ "generator": "K2_R644_JOINT_TABLE_16OF16_v2.py",
+ "exit_legality_facts": {
+  "OUT0_N_J2": {
+   "exit_cell": [
+    114,
+    28
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT0_P_J2": {
+   "exit_cell": [
+    127,
+    36
+   ],
+   "exit_layer": 1,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": true
+  },
+  "OUT1_N_J2": {
+   "exit_cell": [
+    133,
+    36
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT1_P_J2": {
+   "exit_cell": [
+    114,
+    11
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT2_N_J2": {
+   "exit_cell": [
+    114,
+    13
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT2_P_J2": {
+   "exit_cell": [
+    125,
+    36
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT3_N_J2": {
+   "exit_cell": [
+    131,
+    36
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT3_P_J2": {
+   "exit_cell": [
+    114,
+    7
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT4_N_J2": {
+   "exit_cell": [
+    114,
+    24
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": true,
+   "needs_layer_change": false
+  },
+  "OUT4_P_J2": {
+   "exit_cell": [
+    119,
+    36
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT5_N_J2": {
+   "exit_cell": [
+    117,
+    36
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT5_P_J2": {
+   "exit_cell": [
+    114,
+    15
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT6_N_J2": {
+   "exit_cell": [
+    114,
+    12
+   ],
+   "exit_layer": 1,
+   "free_on_exit_layer": true,
+   "via_legal": true,
+   "needs_layer_change": true
+  },
+  "OUT6_P_J2": {
+   "exit_cell": [
+    115,
+    36
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT7_N_J2": {
+   "exit_cell": [
+    135,
+    36
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT7_P_J2": {
+   "exit_cell": [
+    114,
+    19
+   ],
+   "exit_layer": 1,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": true
+  }
+ },
+ "conservation": {
+  "col60_slots_distinct": true,
+  "descent_columns_distinct": true,
+  "exit_cells_distinct": true,
+  "pairwise_disjoint_footprints": true,
+  "footprint_overlaps": {},
+  "capacity_certificate": {
+   "slots": 6,
+   "lanes": 16,
+   "descent_columns_distinct": 6,
+   "full_span_rows_available_per_lane": "13-15 (R601/R641)",
+   "descent_columns_available_per_lane": ">=50 (cols 61..137 with free run)"
+  },
+  "FOURTH_KEY_physical_disjoint": true
+ },
+ "per_lane": {
+  "OUT5_N_J2": {
+   "tail_layer": 1,
+   "H": 51,
+   "col60_slot": [
+    60,
+    51
+   ],
+   "col60_layer": 1,
+   "descent_column": 61,
+   "Y": 36,
+   "east_strip": true,
+   "exit_cell": [
+    117,
+    36
+   ],
+   "exit_layer": 0,
+   "n_footprint_cells": 74,
+   "self_certified": true,
+   "exit_is_registered": true,
+   "cells_free_verified": true,
+   "footprint_overlap_allowed": false,
+   "lever_iii": null
+  },
+  "OUT3_P_J2": {
+   "tail_layer": 0,
+   "H": 47,
+   "col60_slot": [
+    60,
+    47
+   ],
+   "col60_layer": 0,
+   "descent_column": 130,
+   "Y": 7,
+   "east_strip": false,
+   "exit_cell": [
+    114,
+    7
+   ],
+   "exit_layer": 0,
+   "n_footprint_cells": 111,
+   "self_certified": true,
+   "exit_is_registered": true,
+   "cells_free_verified": true,
+   "footprint_overlap_allowed": false,
+   "lever_iii": null
+  },
+  "OUT2_N_J2": {
+   "tail_layer": 0,
+   "H": 43,
+   "col60_slot": [
+    60,
+    43
+   ],
+   "col60_layer": 0,
+   "descent_column": 122,
+   "Y": 13,
+   "east_strip": false,
+   "exit_cell": [
+    114,
+    13
+   ],
+   "exit_layer": 0,
+   "n_footprint_cells": 93,
+   "self_certified": true,
+   "exit_is_registered": true,
+   "cells_free_verified": true,
+   "footprint_overlap_allowed": false,
+   "lever_iii": null
+  },
+  "OUT7_P_J2": {
+   "tail_layer": 1,
+   "H": 56,
+   "col60_slot": [
+    60,
+    56
+   ],
+   "col60_layer": 0,
+   "descent_column": 122,
+   "Y": 19,
+   "east_strip": false,
+   "exit_cell": [
+    114,
+    19
+   ],
+   "exit_layer": 1,
+   "n_footprint_cells": 101,
+   "self_certified": true,
+   "exit_is_registered": true,
+   "cells_free_verified": true,
+   "footprint_overlap_allowed": false,
+   "lever_iii": {
+    "keep_exit": [
+     114,
+     19
+    ],
+    "registered_pad_run": [
+     114,
+     15
+    ],
+    "via_cell": [
+     113,
+     19
+    ]
+   }
+  },
+  "OUT4_N_J2": {
+   "tail_layer": 1,
+   "H": 57,
+   "col60_slot": [
+    60,
+    57
+   ],
+   "col60_layer": 0,
+   "descent_column": 125,
+   "Y": 24,
+   "east_strip": false,
+   "exit_cell": [
+    114,
+    24
+   ],
+   "exit_layer": 0,
+   "n_footprint_cells": 99,
+   "self_certified": true,
+   "exit_is_registered": true,
+   "cells_free_verified": true,
+   "footprint_overlap_allowed": false,
+   "lever_iii": null
+  },
+  "OUT0_N_J2": {
+   "tail_layer": 0,
+   "H": 46,
+   "col60_slot": [
+    60,
+    46
+   ],
+   "col60_layer": 0,
+   "descent_column": 123,
+   "Y": 28,
+   "east_strip": false,
+   "exit_cell": [
+    114,
+    28
+   ],
+   "exit_layer": 0,
+   "n_footprint_cells": 82,
+   "self_certified": true,
+   "exit_is_registered": true,
+   "cells_free_verified": true,
+   "footprint_overlap_allowed": false,
+   "lever_iii": null
+  }
+ },
+ "unassigned": [
+  "OUT6_P_J2",
+  "OUT4_P_J2",
+  "OUT2_P_J2",
+  "OUT0_P_J2",
+  "OUT3_N_J2",
+  "OUT1_N_J2",
+  "OUT7_N_J2",
+  "OUT1_P_J2",
+  "OUT6_N_J2",
+  "OUT5_P_J2"
+ ],
+ "execution_count": 1,
+ "failure_cause_classification": {
+  "code_defect": 0,
+  "parameter_only": 0
+ },
+ "method": "product-first ordered/ladder escape (monotone (H,Xt) per layer) + approach segment inside the model + strict 4th key",
+ "prior_executions": "8 (R644/R646 window; all were code-defect iterations, none submitted - classified by #K2-250 sec.4)",
+ "relaxed_overlap_lanes": [],
+ "determined": 6,
+ "of": 16,
+ "buildability": {
+  "mode": "relocation_listed",
+  "relocations": [
+   {
+    "lane": "OUT3_P_J2",
+    "from_H_Xt": [
+     57,
+     122
+    ],
+    "to_H_descent": [
+     47,
+     130
+    ],
+    "from_exit": [
+     114,
+     7
+    ],
+    "to_exit": [
+     114,
+     7
+    ]
+   },
+   {
+    "lane": "OUT2_N_J2",
+    "from_H_Xt": [
+     43,
+     130
+    ],
+    "to_H_descent": [
+     43,
+     122
+    ],
+    "from_exit": [
+     114,
+     13
+    ],
+    "to_exit": [
+     114,
+     13
+    ]
+   },
+   {
+    "lane": "OUT7_P_J2",
+    "from_H_Xt": [
+     41,
+     61
+    ],
+    "to_H_descent": [
+     56,
+     122
+    ],
+    "from_exit": [
+     114,
+     19
+    ],
+    "to_exit": [
+     114,
+     19
+    ]
+   },
+   {
+    "lane": "OUT4_N_J2",
+    "from_H_Xt": [
+     55,
+     122
+    ],
+    "to_H_descent": [
+     57,
+     125
+    ],
+    "from_exit": [
+     114,
+     24
+    ],
+    "to_exit": [
+     114,
+     24
+    ]
+   },
+   {
+    "lane": "OUT0_N_J2",
+    "from_H_Xt": [
+     47,
+     117
+    ],
+    "to_H_descent": [
+     46,
+     123
+    ],
+    "from_exit": [
+     114,
+     28
+    ],
+    "to_exit": [
+     114,
+     28
+    ]
+   }
+  ]
+ },
+ "verification": {
+  "all_lanes_assigned": false,
+  "conservation_pass": false,
+  "all_footprint_cells_free": true
+ },
+ "elapsed_s": 30.2,
+ "artifact_hash16": "9262c651385e186c"
+}
