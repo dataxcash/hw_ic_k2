@@ -1,0 +1,65 @@
+{
+ "artifact": "k2_r634_exit_rule_provenance_v1",
+ "ts": "2026-09-26T00:24:00",
+ "authority": "#K2-242 sec.3.4 item (2): one-page READ-ONLY, ZERO-COMPUTATION provenance audit of the exit-spacing rule. Four columns per rule: name / source / frozen? / relation to the other in-register gates.",
+ "construction_runs": 0,
+ "audited_rule": "'exit slot must be >=2 lattice cells (Manhattan) from every other lane's exit slot'  (R613 sec.2 / R632 sec.1 rule (a))",
+ "sources_checked": [
+  {
+   "source": "k2/criteria/ (ic_hw_gate, read-only)",
+   "result": "no via/exit/spacing rule. jlc_hdi_capability.yaml has via_hole_to_hole 0.2mm, min_via_diameter 0.25mm, copper_edge_clearance 0.2mm; manifest.k2.yaml density_and_clearance = 10mm-cell footprint density + min_copper_clearance >= 0.100mm. NONE concerns exit slots."
+  },
+  {
+   "source": "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json (FROZEN 0bd52ed48e720b8c)",
+   "result": "no exit-spacing rule. vias.std = drill 0.2 / outer 0.35 / annular_ring_min 0.075; high_speed = max 2 vias per line. corridors[] declares the EAST_CHIP_TO_J2 band tracks_y (In2.Cu) only."
+  },
+  {
+   "source": "pm_gate/artifacts/k2_v4/L2/route_model_config.json",
+   "result": "no exit/via spacing rule (channel_alloc escape_check uses via_jogs_x/y, keepout 0.37, half_track 0.1025 - none is an exit-slot spacing)."
+  },
+  {
+   "source": "_shared/eda_core/drc_rules.json (FROZEN 0a459839e15960b8)",
+   "result": "HAS via rules, but NOT an exit-slot rule: clearance.via_via (copper edge, required = max(netclass)=0.175mm for PCIe85), hole_clearance.min=0.25mm (drill edge to copper edge). geometry_translation: via/via centre distance >= required + (od1+od2)/2."
+  },
+  {
+   "source": "in-register gate code (K2_R548b_HUMAN_TRACK_DRAWING_v1.gate -> K2_R523_LAYERHOP_PARITY_FORMC_v1.gate_vias)",
+   "result": "gate_vias judges VIAS only: via-vs-obstacle seg (>= VR+seg_r+hw), via-vs-obstacle via, via-vs-pad, via-vs-OTHER-LANE-TRACK (>= VR+hw), via-via different nets (>= VIA_SEP), via-vs-other-lane A/B anchors. It contains NO exit-slot term."
+  },
+  {
+   "source": "K2_R515_FREETERMINALS_v1.py lines 60-62 (model family constants)",
+   "result": "VIA_R, VIA_DRILL = 0.175, 0.1 ; VR = max(VIA_R+0.175, VIA_DRILL+HOLE_CLR) = 0.35 ; VIA_SEP = 2.0*VR = 0.70mm. => VIA_SEP is a DERIVED family constant (2x a max-of-two-derived radius), not a written rule."
+  },
+  {
+   "source": "K2_R610_FINAL_SELF_CONSISTENT_TABLE_v1.py (dedup gate)",
+   "result": "the only registered-style gate over exit cells requires exit_cell to be DISTINCT (no distance term at all)."
+  }
+ ],
+ "audit_verdict": {
+  "rule": "exit slot >=2 Manhattan cells",
+  "provenance": "ENG-derived proxy",
+  "chain_of_custody": "VIA_SEP=0.7mm (derived family constant) -> /P=0.435 = 1.61 -> rounded up to '>=2 cells' by the ENG in R613 sec.2 -> reused as an exit-slot gate in R613/R632. The supervisor's #K2-234 sec.3.3(a) wording ('reassign to a cell >=2 apart from the neighbouring lane') inherited the ENG's own number; #K2-234 sec.3.4(a) had used '>=2' for VIA positions, a different object.",
+  "frozen_point": "NO - absent from criteria/, SPEC_k2_v4.json, route_model_config.json and the frozen drc_rules.json",
+  "relation_to_in_register_gates": "OBJECT MISMATCH + NOT FAITHFUL. (i) The in-register gates (gate_vias / exact_gate) judge vias and per-layer track pitch; they do not judge exit cells. (ii) As a proxy the >=2 Manhattan test is not equivalent to what gate_vias measures: the diagonal neighbour (1,1) passes >=2 but is 0.615mm < VIA_SEP 0.70mm, while some cells rejected by >=2 are legal under the frozen clearance. It is simultaneously too loose and too strict.",
+  "classification": "(1a) self-added / derived PRE-FILTER PROXY, NOT an in-register rule body",
+  "consequence": "per #K2-242 sec.3.4(1a) the constraint is WITHDRAWN; the sole physical judge for exit/DRAWING legality is the in-register gate set (gate_vias + exact_gate + endpoints + <=2 via pairs). The distinct-exit-cell requirement stays (physical necessity: two nets may not share copper at the same cell on the same layer)."
+ },
+ "preserved_in_register": [
+  {
+   "rule": "via-via copper-edge clearance >= 0.175mm (PCIe85) / hole clearance >= 0.25mm",
+   "source": "_shared/eda_core/drc_rules.json",
+   "frozen": true
+  },
+  {
+   "rule": "VIA_SEP = 0.70mm via-via centre distance",
+   "source": "gate_vias (in-register gate), constant from K2_R515 family",
+   "frozen": false,
+   "note": "kept as-is; applies to VIAS, not to exit cells"
+  },
+  {
+   "rule": "exit cells distinct per (cell, layer)",
+   "source": "R610 dedup gate + physical necessity; SPEC exit nodes are per-lane",
+   "frozen": false
+  }
+ ],
+ "artifact_hash16": "2c5ca21f0f4f3796"
+}

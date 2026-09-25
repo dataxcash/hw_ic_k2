@@ -1,0 +1,581 @@
+{
+ "artifact": "k2_r635_exit_candidate_census_v1",
+ "ts": "2026-09-26T00:23:15",
+ "authority": "#K2-242 sec.3.4/5: evidence for the exit-slot rule provenance audit. READ-ONLY; no drawing; no new joint-table version",
+ "construction_runs": 0,
+ "question": "is R632's 'exit candidate set = EMPTY' reproducible under the in-register reading?",
+ "free_cell_semantics": "node present in the lane's routing graph on the layer it is placed on (R610/R620 convention: iterate the adj keys, u<TERM, u//NID==layer). node = layer*NID + col*NY + row",
+ "rules_expanded": {
+  "A": "exit cell free on the lane's own exit layer",
+  "B": "A and cell != every other lane's exit cell (R610 dedup gate: distinct)",
+  "C": "B and Manhattan >= 2 from every other lane's exit cell  <-- the rule R632 declared as 'the released rule'",
+  "D": "C and via-legal for this lane (g2._via_ok: free on BOTH layers AND inside a registered wide ZONE AND outside keepouts)",
+  "E": "A counting with the FULL node set (adj keys + values) instead of adj keys only (robustness check)"
+ },
+ "per_lane": {
+  "PCIE_UP_OUT0_P_J2": {
+   "exit_layer": 1,
+   "current_exit": [
+    127,
+    36
+   ],
+   "A_n_free_on_own_exit_layer": 7820,
+   "B_n_plus_distinct": 7805,
+   "C_n_plus_manhattan_ge2": 7771,
+   "D_n_plus_via_legal": 2669,
+   "E_n_full_node_set_on_own_exit_layer": 7820,
+   "current_exit_free_on_own_exit_layer": true,
+   "current_exit_via_legal": false,
+   "R632_declared_rule_is_C_expected_empty": false
+  },
+  "PCIE_UP_OUT6_N_J2": {
+   "exit_layer": 1,
+   "current_exit": [
+    114,
+    12
+   ],
+   "A_n_free_on_own_exit_layer": 6758,
+   "B_n_plus_distinct": 6745,
+   "C_n_plus_manhattan_ge2": 6714,
+   "D_n_plus_via_legal": 2544,
+   "E_n_full_node_set_on_own_exit_layer": 6758,
+   "current_exit_free_on_own_exit_layer": true,
+   "current_exit_via_legal": true,
+   "R632_declared_rule_is_C_expected_empty": false
+  }
+ },
+ "recorded_failure_loci": {
+  "R620": {
+   "OUT0_P_J2": {
+    "segment_index": 8,
+    "kind": "?",
+    "from": 17261,
+    "from_col_row": [
+     127,
+     36
+    ],
+    "to": 17943,
+    "to_col_row": null
+   },
+   "OUT3_N_J2": {
+    "segment_index": 1,
+    "kind": "wp",
+    "from": 17952,
+    "from_col_row": null,
+    "to": 12925,
+    "to_col_row": [
+     60,
+     55
+    ]
+   },
+   "OUT5_N_J2": {
+    "segment_index": 1,
+    "kind": "wp",
+    "from": 17960,
+    "from_col_row": null,
+    "to": 12921,
+    "to_col_row": [
+     60,
+     51
+    ]
+   },
+   "OUT6_N_J2": {
+    "segment_index": 1,
+    "kind": "wp",
+    "from": 17964,
+    "from_col_row": null,
+    "to": 12917,
+    "to_col_row": [
+     60,
+     47
+    ]
+   },
+   "OUT7_P_J2": {
+    "segment_index": 3,
+    "kind": "wp",
+    "from": 4006,
+    "from_col_row": [
+     61,
+     41
+    ],
+    "to": 3985,
+    "to_col_row": [
+     61,
+     20
+    ]
+   }
+  },
+  "R622": {
+   "OUT0_P_J2": {
+    "segment_index": 7,
+    "kind": "?",
+    "from": 17261,
+    "from_col_row": [
+     127,
+     36
+    ],
+    "to": 17943,
+    "to_col_row": null
+   },
+   "OUT3_N_J2": {
+    "segment_index": 1,
+    "kind": "wp",
+    "from": 17952,
+    "from_col_row": null,
+    "to": 12925,
+    "to_col_row": [
+     60,
+     55
+    ]
+   },
+   "OUT5_N_J2": {
+    "segment_index": 1,
+    "kind": "wp",
+    "from": 17960,
+    "from_col_row": null,
+    "to": 12921,
+    "to_col_row": [
+     60,
+     51
+    ]
+   },
+   "OUT6_N_J2": {
+    "segment_index": 1,
+    "kind": "wp",
+    "from": 17964,
+    "from_col_row": null,
+    "to": 12917,
+    "to_col_row": [
+     60,
+     47
+    ]
+   },
+   "OUT7_P_J2": {
+    "segment_index": 2,
+    "kind": "wp",
+    "from": 3941,
+    "from_col_row": [
+     60,
+     41
+    ],
+    "to": 3985,
+    "to_col_row": [
+     61,
+     20
+    ]
+   }
+  }
+ },
+ "per_lane_blocker_diagnosis": {
+  "note": "machine-read, read-only. R620's chain builder declares the entrance layer transition ONLY when r613 belt_layer==1 (and then it looks for a spec DIVE_via). Lanes whose spec transition is declared as In5_entrance therefore get NO entrance transition in the chain. The 3 lanes blocked at segment 1 are exactly the lanes with belt_layer==0 AND col60_layer==1.",
+  "lanes_blocked_at_segment_1": [
+   "OUT3_N_J2",
+   "OUT5_N_J2",
+   "OUT6_N_J2"
+  ],
+  "condition_belt0_col60layer1": [
+   "OUT3_N_J2",
+   "OUT5_N_J2",
+   "OUT6_N_J2"
+  ],
+  "per_lane": {
+   "OUT0_N_J2": {
+    "spec_on_In4": [],
+    "spec_start": null,
+    "spec_end": null,
+    "spec_waypoint_kinds": [
+     "A_anchor",
+     "In5_entrance",
+     "col33",
+     "col60",
+     "exit_wall_gap",
+     "pad_run",
+     "B_anchor"
+    ],
+    "spec_declares_entrance_transition": true,
+    "spec_entrance_kind": "In5_entrance",
+    "r613_belt_layer": 0,
+    "r613_col60_layer": 0,
+    "r613_exit_layer": 0,
+    "r620_first_blocked_segment_index": null,
+    "r620_blocked_to_col_row": null,
+    "r620_drawn": true
+   },
+   "OUT0_P_J2": {
+    "spec_on_In4": [
+     "COMB",
+     "BELT",
+     "WALL"
+    ],
+    "spec_start": "COMB",
+    "spec_end": "WALL",
+    "spec_waypoint_kinds": [
+     "A_anchor",
+     "DIVE_via",
+     "col33",
+     "col60",
+     "exit_gate_col",
+     "pad_run",
+     "B_anchor"
+    ],
+    "spec_declares_entrance_transition": true,
+    "spec_entrance_kind": "DIVE_via",
+    "r613_belt_layer": 1,
+    "r613_col60_layer": 1,
+    "r613_exit_layer": 1,
+    "r620_first_blocked_segment_index": 8,
+    "r620_blocked_to_col_row": null,
+    "r620_drawn": false
+   },
+   "OUT1_N_J2": {
+    "spec_on_In4": [
+     "FIELD"
+    ],
+    "spec_start": "FIELD",
+    "spec_end": "FIELD",
+    "spec_waypoint_kinds": [
+     "A_anchor",
+     "In5_entrance",
+     "col33",
+     "col60",
+     "exit_gate_col",
+     "pad_run",
+     "B_anchor"
+    ],
+    "spec_declares_entrance_transition": true,
+    "spec_entrance_kind": "In5_entrance",
+    "r613_belt_layer": 0,
+    "r613_col60_layer": 0,
+    "r613_exit_layer": 0,
+    "r620_first_blocked_segment_index": null,
+    "r620_blocked_to_col_row": null,
+    "r620_drawn": true
+   },
+   "OUT1_P_J2": {
+    "spec_on_In4": [],
+    "spec_start": null,
+    "spec_end": null,
+    "spec_waypoint_kinds": [
+     "A_anchor",
+     "In5_entrance",
+     "col33",
+     "col60",
+     "exit_wall_gap",
+     "pad_run",
+     "B_anchor"
+    ],
+    "spec_declares_entrance_transition": true,
+    "spec_entrance_kind": "In5_entrance",
+    "r613_belt_layer": 0,
+    "r613_col60_layer": 0,
+    "r613_exit_layer": 0,
+    "r620_first_blocked_segment_index": null,
+    "r620_blocked_to_col_row": null,
+    "r620_drawn": true
+   },
+   "OUT2_N_J2": {
+    "spec_on_In4": [],
+    "spec_start": null,
+    "spec_end": null,
+    "spec_waypoint_kinds": [
+     "A_anchor",
+     "In5_entrance",
+     "col33",
+     "col60",
+     "exit_wall_gap",
+     "pad_run",
+     "B_anchor"
+    ],
+    "spec_declares_entrance_transition": true,
+    "spec_entrance_kind": "In5_entrance",
+    "r613_belt_layer": 0,
+    "r613_col60_layer": 0,
+    "r613_exit_layer": 0,
+    "r620_first_blocked_segment_index": null,
+    "r620_blocked_to_col_row": null,
+    "r620_drawn": true
+   },
+   "OUT2_P_J2": {
+    "spec_on_In4": [
+     "COMB",
+     "BELT"
+    ],
+    "spec_start": "COMB",
+    "spec_end": "BELT",
+    "spec_waypoint_kinds": [
+     "A_anchor",
+     "DIVE_via",
+     "col33",
+     "col60",
+     "exit_gate_col",
+     "pad_run",
+     "B_anchor"
+    ],
+    "spec_declares_entrance_transition": true,
+    "spec_entrance_kind": "DIVE_via",
+    "r613_belt_layer": 1,
+    "r613_col60_layer": 1,
+    "r613_exit_layer": 0,
+    "r620_first_blocked_segment_index": null,
+    "r620_blocked_to_col_row": null,
+    "r620_drawn": true
+   },
+   "OUT3_N_J2": {
+    "spec_on_In4": [
+     "BELT"
+    ],
+    "spec_start": "BELT",
+    "spec_end": "BELT",
+    "spec_waypoint_kinds": [
+     "A_anchor",
+     "In5_entrance",
+     "col33",
+     "col60",
+     "exit_gate_col",
+     "pad_run",
+     "B_anchor"
+    ],
+    "spec_declares_entrance_transition": true,
+    "spec_entrance_kind": "In5_entrance",
+    "r613_belt_layer": 0,
+    "r613_col60_layer": 1,
+    "r613_exit_layer": 0,
+    "r620_first_blocked_segment_index": 1,
+    "r620_blocked_to_col_row": [
+     60,
+     55
+    ],
+    "r620_drawn": false
+   },
+   "OUT3_P_J2": {
+    "spec_on_In4": [],
+    "spec_start": null,
+    "spec_end": null,
+    "spec_waypoint_kinds": [
+     "A_anchor",
+     "In5_entrance",
+     "col33",
+     "col60",
+     "exit_wall_gap",
+     "pad_run",
+     "B_anchor"
+    ],
+    "spec_declares_entrance_transition": true,
+    "spec_entrance_kind": "In5_entrance",
+    "r613_belt_layer": 0,
+    "r613_col60_layer": 0,
+    "r613_exit_layer": 0,
+    "r620_first_blocked_segment_index": null,
+    "r620_blocked_to_col_row": null,
+    "r620_drawn": true
+   },
+   "OUT4_N_J2": {
+    "spec_on_In4": [],
+    "spec_start": null,
+    "spec_end": null,
+    "spec_waypoint_kinds": [
+     "A_anchor",
+     "In5_entrance",
+     "col33",
+     "col60",
+     "exit_wall_gap",
+     "pad_run",
+     "B_anchor"
+    ],
+    "spec_declares_entrance_transition": true,
+    "spec_entrance_kind": "In5_entrance",
+    "r613_belt_layer": 0,
+    "r613_col60_layer": 0,
+    "r613_exit_layer": 0,
+    "r620_first_blocked_segment_index": null,
+    "r620_blocked_to_col_row": null,
+    "r620_drawn": true
+   },
+   "OUT4_P_J2": {
+    "spec_on_In4": [
+     "COMB",
+     "BELT"
+    ],
+    "spec_start": "COMB",
+    "spec_end": "BELT",
+    "spec_waypoint_kinds": [
+     "A_anchor",
+     "DIVE_via",
+     "col33",
+     "col60",
+     "exit_gate_col",
+     "pad_run",
+     "B_anchor"
+    ],
+    "spec_declares_entrance_transition": true,
+    "spec_entrance_kind": "DIVE_via",
+    "r613_belt_layer": 1,
+    "r613_col60_layer": 1,
+    "r613_exit_layer": 0,
+    "r620_first_blocked_segment_index": null,
+    "r620_blocked_to_col_row": null,
+    "r620_drawn": true
+   },
+   "OUT5_N_J2": {
+    "spec_on_In4": [
+     "BELT"
+    ],
+    "spec_start": "BELT",
+    "spec_end": "BELT",
+    "spec_waypoint_kinds": [
+     "A_anchor",
+     "In5_entrance",
+     "col33",
+     "col60",
+     "exit_gate_col",
+     "pad_run",
+     "B_anchor"
+    ],
+    "spec_declares_entrance_transition": true,
+    "spec_entrance_kind": "In5_entrance",
+    "r613_belt_layer": 0,
+    "r613_col60_layer": 1,
+    "r613_exit_layer": 0,
+    "r620_first_blocked_segment_index": 1,
+    "r620_blocked_to_col_row": [
+     60,
+     51
+    ],
+    "r620_drawn": false
+   },
+   "OUT5_P_J2": {
+    "spec_on_In4": [
+     "COMB"
+    ],
+    "spec_start": "COMB",
+    "spec_end": "COMB",
+    "spec_waypoint_kinds": [
+     "A_anchor",
+     "DIVE_via",
+     "col33",
+     "col60",
+     "exit_wall_gap",
+     "pad_run",
+     "B_anchor"
+    ],
+    "spec_declares_entrance_transition": true,
+    "spec_entrance_kind": "DIVE_via",
+    "r613_belt_layer": 1,
+    "r613_col60_layer": 0,
+    "r613_exit_layer": 0,
+    "r620_first_blocked_segment_index": null,
+    "r620_blocked_to_col_row": null,
+    "r620_drawn": true
+   },
+   "OUT6_N_J2": {
+    "spec_on_In4": [
+     "BELT",
+     "WALL"
+    ],
+    "spec_start": "BELT",
+    "spec_end": "WALL",
+    "spec_waypoint_kinds": [
+     "A_anchor",
+     "In5_entrance",
+     "col33",
+     "col60",
+     "exit_wall_gap",
+     "pad_run",
+     "B_anchor"
+    ],
+    "spec_declares_entrance_transition": true,
+    "spec_entrance_kind": "In5_entrance",
+    "r613_belt_layer": 0,
+    "r613_col60_layer": 1,
+    "r613_exit_layer": 1,
+    "r620_first_blocked_segment_index": 1,
+    "r620_blocked_to_col_row": [
+     60,
+     47
+    ],
+    "r620_drawn": false
+   },
+   "OUT6_P_J2": {
+    "spec_on_In4": [
+     "COMB"
+    ],
+    "spec_start": "COMB",
+    "spec_end": "COMB",
+    "spec_waypoint_kinds": [
+     "A_anchor",
+     "DIVE_via",
+     "col33",
+     "col60",
+     "exit_gate_col",
+     "pad_run",
+     "B_anchor"
+    ],
+    "spec_declares_entrance_transition": true,
+    "spec_entrance_kind": "DIVE_via",
+    "r613_belt_layer": 1,
+    "r613_col60_layer": 0,
+    "r613_exit_layer": 0,
+    "r620_first_blocked_segment_index": null,
+    "r620_blocked_to_col_row": null,
+    "r620_drawn": true
+   },
+   "OUT7_N_J2": {
+    "spec_on_In4": [],
+    "spec_start": null,
+    "spec_end": null,
+    "spec_waypoint_kinds": [
+     "A_anchor",
+     "In5_entrance",
+     "col33",
+     "col60",
+     "exit_gate_col",
+     "pad_run",
+     "B_anchor"
+    ],
+    "spec_declares_entrance_transition": true,
+    "spec_entrance_kind": "In5_entrance",
+    "r613_belt_layer": 0,
+    "r613_col60_layer": 0,
+    "r613_exit_layer": 0,
+    "r620_first_blocked_segment_index": null,
+    "r620_blocked_to_col_row": null,
+    "r620_drawn": true
+   },
+   "OUT7_P_J2": {
+    "spec_on_In4": [
+     "WALL"
+    ],
+    "spec_start": "WALL",
+    "spec_end": "WALL",
+    "spec_waypoint_kinds": [
+     "A_anchor",
+     "In5_entrance",
+     "col33",
+     "col60",
+     "exit_wall_gap",
+     "pad_run",
+     "B_anchor"
+    ],
+    "spec_declares_entrance_transition": true,
+    "spec_entrance_kind": "In5_entrance",
+    "r613_belt_layer": 0,
+    "r613_col60_layer": 0,
+    "r613_exit_layer": 1,
+    "r620_first_blocked_segment_index": 3,
+    "r620_blocked_to_col_row": [
+     61,
+     20
+    ],
+    "r620_drawn": false
+   }
+  }
+ },
+ "generator_versioning_finding": {
+  "claim": "the joint-table window's ONLY deliverable (R624-R632) has no committed generator",
+  "evidence": "no K2_R63*/K2_R62[4-9]*.py exists in this directory; only .json (+ docs). The R620/R622/R623 scripted windows DO have .py.",
+  "consequence": "the joint determination's numbers are hash-pinned but NOT independently re-runnable from the repo"
+ },
+ "reading": "Under rules A/B/C/D the exit-slot candidate set for BOTH lanes is LARGE, not empty. R632's 'candidate set = EMPTY' is therefore not reproducible under the in-register reading (free on own exit layer, distinct, even with the self-added >=2 rule, even restricting to via-legal cells). The emptiness must come from a further, narrower, self-imposed candidate definition inside the (uncommitted) R632 script.",
+ "elapsed_s": 30.7,
+ "artifact_hash16": "a2c265bff57664e4"
+}

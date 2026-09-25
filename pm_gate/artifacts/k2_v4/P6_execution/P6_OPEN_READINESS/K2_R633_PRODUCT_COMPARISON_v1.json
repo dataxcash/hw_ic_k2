@@ -1,0 +1,68 @@
+{
+ "artifact": "k2_r633_product_comparison_v1",
+ "ts": "2026-09-26T00:24:00",
+ "authority": "#K2-242 sec.5 item (1): the MANDATORY product-comparison deliverable (2nd article). Read the staged product renders (/tmp/opencode/sup241_renders/, fetched by the supervisor per #K2-241 sec.3.5(b)); produce copy-what / apply-how, NOT 'already read'.",
+ "construction_runs": 0,
+ "reference_case": "library A / same chip PEX88096 - two boards by DESIGN:OLDMONSTER: (i) PEX88096-AIC-GEN4-10SLIMSAS-EVM Ver1.0 (10x SlimSAS '2S1525', upstream x16 gold-finger edge); (ii) PEX88096 GPUBoard GEN4 5CEM EVM Ver1.0 (4x PCIe slot + 5CEM SlimSAS). Both are the SAME silicon as K2's switch.",
+ "assets_read": [
+  {
+   "file": "8c14b7d05ac14cfab6ad533d18c1ddf6.jpg",
+   "what": "silkscreen-layer render of the 10-SlimSAS AIC: the trace fan-out from the central switch to all 10 connectors is directly visible"
+  },
+  {
+   "file": "9c9094d13a8a42989f71f800916d51e4.jpg",
+   "what": "back side of the family board: radial bundle fan-out from the BGA to the board edge"
+  },
+  {
+   "file": "93aeb0d852054d94ab9670e7c225608e.jpg",
+   "what": "back side of the 5CEM board: bundle fan-out with s-bends only in the last few mm"
+  },
+  {
+   "file": "7ba032e276b74d6abdc9faee3c5187ff.jpg",
+   "what": "both family boards side by side (AIC + GPUBoard)"
+  },
+  {
+   "file": "3a6ad3c60e134810b6838404475a54fa.jpg",
+   "what": "5CEM board front: switch under heatsink, connectors on the perimeter"
+  },
+  {
+   "file": "c83d76d22c104d3bb6e6d7f03cb6b280.jpg",
+   "what": "drill/copper plot: connector pin fields + BGA ball field"
+  },
+  {
+   "file": "46c3b1554d6e40e281b672ba2f899e3b.jpg|5b8c69982df041ba953619eca2f5b87a.jpg|9f5e7214587849b9aeee5947e627e5b7.jpg",
+   "what": "PCIe topology + SBR/STRAP bifurcation tables (5x16 / 2x8 / 4x4 / 8x2 / 16x1; STN0..STN5) => topology, not layout"
+  },
+  {
+   "file": "427f7c2071ea4e13b8e9b222bd83b0b9.jpg|8ef2131180b04716a0e15f9be533ea91.jpg|e73e69a7331640b58971730518d601e9.jpg|ebe6e90bf945411d87e02bf7de36eb66.jpg|5e5821effe3244d099fd2870e3105cce.jpg|2178016b8b874413949879e8f5905f57.jpg|4c19347b80504d6594fbba4da89c89dc.jpg",
+   "what": "tool screenshots / bench photos - no layout information"
+  }
+ ],
+ "observed_layout_facts": [
+  "The switch package sits at the board centre; the fan-out is a set of BUNDLES of straight parallel traces running from the BGA to each connector.",
+  "Every connector owns its own bundle at a uniform pitch; bundles are separated by wide gaps. There is no shared single-file corridor and no cross-section slot scheduling anywhere on the board.",
+  "The only bends in a bundle are shallow s-bends inside the last few mm, where the bundle expands into the connector's pad field. The long run is straight.",
+  "Each connector leg carries its OWN layer change at the breakout radius (via clustered next to the ball field), not deferred to a distant shared row.",
+  "Bifurcation (5x16/10x8/20x4/40x2/80x1) in the product is a CHIP-CONFIGURATION (SBR/STRAP) property, not a routing shape."
+ ],
+ "copy_what_apply_how": [
+  {
+   "observe": "one bundle per connector, uniform pitch, straight long run, s-bend only at the pad field",
+   "apply": "K2 tail = one channel per lane, straight from the belt to the lane's own pad field. Lane pitch is the bundle pitch, not a shared grid row."
+  },
+  {
+   "observe": "no shared single-file cross-section; bundles simply do not overlap",
+   "apply": "the exit-slot rule is NON-OVERLAP (distinct cell per layer). The product shows no >=2-cell spacing rule between exits."
+  },
+  {
+   "observe": "the layer change happens at the breakout (a via beside the ball field), early and on the lane's own column",
+   "apply": "declare the lane's entrance layer transition explicitly (K2's own SPEC already declares it: In5_entrance for OUT3_N/OUT5_N/OUT6_N, DIVE_via for the COMB-start lanes)."
+  },
+  {
+   "observe": "the connector's entry column is the connector's own fan-out column",
+   "apply": "for OUT0_P (east, B pad at ~col 131 / row 4): enter the pad field on the lane's own column. K2's 'gate row 36' is K2-internal and has no product counterpart; the product reaches the connector directly, not via a shared row then a 33-row traverse."
+  }
+ ],
+ "named_conclusion": "The product gives exactly one rule for the stuck lanes' tail: per-lane straight channel + one layer change at the breakout + non-overlap. It gives NO support for an exit-slot >=2 spacing rule, and NO support for deferring the layer change away from the lane's own column. This is independent, product-side corroboration of the rule-provenance audit (R634).",
+ "artifact_hash16": "650ba8eaa824a4de"
+}
