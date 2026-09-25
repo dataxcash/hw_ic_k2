@@ -1,0 +1,4954 @@
+{
+ "artifact": "k2_r642_joint_table_16of16_v1",
+ "ts": "2026-09-26T00:44:09",
+ "authority": "#K2-243 sec.3.5/5 SOLE deliverable: drawing-layer ONE joint determination (exit-cell reassignment judged by the registered gates only + entrance-transition declaration copying the registered SPEC node). Generator shipped. ONE constructive run, no intermediate versions, no parameter trial.",
+ "construction_runs": 1,
+ "generator": "K2_R642_JOINT_TABLE_16OF16_v1.py",
+ "rules": {
+  "exit_cell": "free on its exit layer AND (via-legal iff exit_layer != B-leg layer) AND distinct from the other 15 exits; the self-added >=2 pre-filter is WITHDRAWN (#K2-243 sec.3.5)",
+  "entrance_transition": "declared iff the registered SPEC carries an entrance node (DIVE_via / In5_entrance) and the lane's col60 slot is on a different layer than its A-leg layer",
+  "tail": "single declared layer per lane (no undeclared layer changes); row run and descent on that layer; ONE layer change only at the exit cell"
+ },
+ "per_lane": {
+  "OUT0_N_J2": {
+   "source": "R613/R638 (already drawn)",
+   "east": false,
+   "belt_layer": 0,
+   "col60_layer": 0,
+   "col60_slot": [
+    60,
+    47
+   ],
+   "H": 47,
+   "Xt": 117,
+   "two_stage": [
+    47,
+    117,
+    36,
+    116
+   ],
+   "exit_cell": [
+    114,
+    28
+   ],
+   "exit_layer": 0,
+   "entrance_transition": null,
+   "via_pairs": 1,
+   "determined": true
+  },
+  "OUT1_N_J2": {
+   "source": "R613/R638 (already drawn)",
+   "east": true,
+   "belt_layer": 0,
+   "col60_layer": 0,
+   "col60_slot": [
+    60,
+    59
+   ],
+   "H": 59,
+   "Xt": 61,
+   "two_stage": null,
+   "exit_cell": [
+    133,
+    36
+   ],
+   "exit_layer": 0,
+   "entrance_transition": null,
+   "via_pairs": 1,
+   "determined": true
+  },
+  "OUT1_P_J2": {
+   "source": "R613/R638 (already drawn)",
+   "east": false,
+   "belt_layer": 0,
+   "col60_layer": 0,
+   "col60_slot": [
+    60,
+    39
+   ],
+   "H": 39,
+   "Xt": 130,
+   "two_stage": null,
+   "exit_cell": [
+    114,
+    11
+   ],
+   "exit_layer": 0,
+   "entrance_transition": null,
+   "via_pairs": 1,
+   "determined": true
+  },
+  "OUT2_N_J2": {
+   "source": "R613/R638 (already drawn)",
+   "east": false,
+   "belt_layer": 0,
+   "col60_layer": 0,
+   "col60_slot": [
+    60,
+    43
+   ],
+   "H": 43,
+   "Xt": 130,
+   "two_stage": null,
+   "exit_cell": [
+    114,
+    13
+   ],
+   "exit_layer": 0,
+   "entrance_transition": null,
+   "via_pairs": 1,
+   "determined": true
+  },
+  "OUT2_P_J2": {
+   "source": "R613/R638 (already drawn)",
+   "east": true,
+   "belt_layer": 1,
+   "col60_layer": 1,
+   "col60_slot": [
+    60,
+    57
+   ],
+   "H": 57,
+   "Xt": 61,
+   "two_stage": null,
+   "exit_cell": [
+    125,
+    36
+   ],
+   "exit_layer": 0,
+   "entrance_transition": "DIVE_via",
+   "via_pairs": 1,
+   "determined": true
+  },
+  "OUT3_N_J2": {
+   "source": "R613/R638 (already drawn)",
+   "east": true,
+   "belt_layer": 0,
+   "col60_layer": 1,
+   "col60_slot": [
+    60,
+    55
+   ],
+   "H": 55,
+   "Xt": 61,
+   "two_stage": null,
+   "exit_cell": [
+    131,
+    36
+   ],
+   "exit_layer": 0,
+   "entrance_transition": "In5_entrance",
+   "via_pairs": 1,
+   "determined": true
+  },
+  "OUT3_P_J2": {
+   "source": "R613/R638 (already drawn)",
+   "east": false,
+   "belt_layer": 0,
+   "col60_layer": 0,
+   "col60_slot": [
+    60,
+    57
+   ],
+   "H": 57,
+   "Xt": 122,
+   "two_stage": null,
+   "exit_cell": [
+    114,
+    7
+   ],
+   "exit_layer": 0,
+   "entrance_transition": null,
+   "via_pairs": 1,
+   "determined": true
+  },
+  "OUT4_N_J2": {
+   "source": "R613/R638 (already drawn)",
+   "east": false,
+   "belt_layer": 0,
+   "col60_layer": 0,
+   "col60_slot": [
+    60,
+    55
+   ],
+   "H": 55,
+   "Xt": 122,
+   "two_stage": null,
+   "exit_cell": [
+    114,
+    24
+   ],
+   "exit_layer": 0,
+   "entrance_transition": null,
+   "via_pairs": 1,
+   "determined": true
+  },
+  "OUT4_P_J2": {
+   "source": "R613/R638 (already drawn)",
+   "east": true,
+   "belt_layer": 1,
+   "col60_layer": 1,
+   "col60_slot": [
+    60,
+    53
+   ],
+   "H": 53,
+   "Xt": 61,
+   "two_stage": null,
+   "exit_cell": [
+    119,
+    36
+   ],
+   "exit_layer": 0,
+   "entrance_transition": "DIVE_via",
+   "via_pairs": 1,
+   "determined": true
+  },
+  "OUT5_N_J2": {
+   "source": "R613/R638 (already drawn)",
+   "east": true,
+   "belt_layer": 0,
+   "col60_layer": 1,
+   "col60_slot": [
+    60,
+    51
+   ],
+   "H": 51,
+   "Xt": 61,
+   "two_stage": null,
+   "exit_cell": [
+    117,
+    36
+   ],
+   "exit_layer": 0,
+   "entrance_transition": "In5_entrance",
+   "via_pairs": 1,
+   "determined": true
+  },
+  "OUT5_P_J2": {
+   "source": "R613/R638 (already drawn)",
+   "east": false,
+   "belt_layer": 1,
+   "col60_layer": 0,
+   "col60_slot": [
+    60,
+    50
+   ],
+   "H": 50,
+   "Xt": 122,
+   "two_stage": null,
+   "exit_cell": [
+    114,
+    15
+   ],
+   "exit_layer": 0,
+   "entrance_transition": "DIVE_via",
+   "via_pairs": 1,
+   "determined": true
+  },
+  "OUT6_P_J2": {
+   "source": "R613/R638 (already drawn)",
+   "east": true,
+   "belt_layer": 1,
+   "col60_layer": 0,
+   "col60_slot": [
+    60,
+    53
+   ],
+   "H": 53,
+   "Xt": 61,
+   "two_stage": null,
+   "exit_cell": [
+    115,
+    36
+   ],
+   "exit_layer": 0,
+   "entrance_transition": "DIVE_via",
+   "via_pairs": 1,
+   "determined": true
+  },
+  "OUT7_N_J2": {
+   "source": "R613/R638 (already drawn)",
+   "east": true,
+   "belt_layer": 0,
+   "col60_layer": 0,
+   "col60_slot": [
+    60,
+    45
+   ],
+   "H": 45,
+   "Xt": 61,
+   "two_stage": null,
+   "exit_cell": [
+    135,
+    36
+   ],
+   "exit_layer": 0,
+   "entrance_transition": null,
+   "via_pairs": 1,
+   "determined": true
+  },
+  "OUT0_P_J2": {
+   "source": "R642 one joint determination",
+   "east": true,
+   "belt_layer": 1,
+   "col60_layer": 1,
+   "col60_slot": [
+    60,
+    59
+   ],
+   "H": 59,
+   "descent_column": 110,
+   "tail_layer": 1,
+   "exit_cell": [
+    110,
+    31
+   ],
+   "exit_layer": 1,
+   "entrance_transition": "DIVE_via",
+   "via_pairs": 1,
+   "row_run_cells": [
+    [
+     61,
+     59
+    ],
+    [
+     62,
+     59
+    ],
+    [
+     63,
+     59
+    ],
+    [
+     "...",
+     59
+    ],
+    [
+     110,
+     59
+    ]
+   ],
+   "descent_cells": [
+    [
+     110,
+     31
+    ],
+    [
+     110,
+     32
+    ],
+    [
+     110,
+     33
+    ],
+    [
+     "...",
+     null
+    ],
+    [
+     110,
+     58
+    ]
+   ],
+   "determined": true
+  },
+  "OUT6_N_J2": {
+   "source": "R642 one joint determination",
+   "east": false,
+   "belt_layer": 0,
+   "col60_layer": 1,
+   "col60_slot": [
+    60,
+    43
+   ],
+   "H": 43,
+   "descent_column": 113,
+   "tail_layer": 1,
+   "exit_cell": [
+    114,
+    12
+   ],
+   "exit_layer": 1,
+   "entrance_transition": "In5_entrance",
+   "via_pairs": 1,
+   "row_run_cells": [
+    [
+     61,
+     43
+    ],
+    [
+     62,
+     43
+    ],
+    [
+     63,
+     43
+    ],
+    [
+     "...",
+     43
+    ],
+    [
+     113,
+     43
+    ]
+   ],
+   "descent_cells": [
+    [
+     113,
+     13
+    ],
+    [
+     113,
+     14
+    ],
+    [
+     113,
+     15
+    ],
+    [
+     "...",
+     null
+    ],
+    [
+     113,
+     42
+    ]
+   ],
+   "determined": true
+  },
+  "OUT7_P_J2": {
+   "source": "R642 one joint determination",
+   "east": false,
+   "belt_layer": 0,
+   "col60_layer": 0,
+   "col60_slot": [
+    60,
+    59
+   ],
+   "H": 59,
+   "descent_column": 110,
+   "tail_layer": 1,
+   "exit_cell": [
+    113,
+    19
+   ],
+   "exit_layer": 1,
+   "entrance_transition": null,
+   "via_pairs": 1,
+   "row_run_cells": [
+    [
+     61,
+     59
+    ],
+    [
+     62,
+     59
+    ],
+    [
+     63,
+     59
+    ],
+    [
+     "...",
+     59
+    ],
+    [
+     110,
+     59
+    ]
+   ],
+   "descent_cells": [
+    [
+     110,
+     20
+    ],
+    [
+     110,
+     21
+    ],
+    [
+     110,
+     22
+    ],
+    [
+     "...",
+     null
+    ],
+    [
+     110,
+     58
+    ]
+   ],
+   "determined": true
+  }
+ },
+ "relocations": [
+  {
+   "lane": "OUT0_P_J2",
+   "from_exit": [
+    127,
+    36
+   ],
+   "to_exit": [
+    110,
+    31
+   ],
+   "from_Xt": 61,
+   "to_descent_column": 110,
+   "from_H": 59,
+   "to_H": 59,
+   "tail_layer": 1
+  },
+  {
+   "lane": "OUT6_N_J2",
+   "from_exit": [
+    114,
+    12
+   ],
+   "to_exit": [
+    114,
+    12
+   ],
+   "from_Xt": 122,
+   "to_descent_column": 113,
+   "from_H": 47,
+   "to_H": 43,
+   "tail_layer": 1
+  },
+  {
+   "lane": "OUT7_P_J2",
+   "from_exit": [
+    114,
+    19
+   ],
+   "to_exit": [
+    113,
+    19
+   ],
+   "from_Xt": 61,
+   "to_descent_column": 110,
+   "from_H": 41,
+   "to_H": 59,
+   "tail_layer": 1
+  }
+ ],
+ "diag": {
+  "OUT0_P_J2": {
+   "belt_layer": 1,
+   "col60_layer": 1,
+   "exit_layer": 1,
+   "Y": 36,
+   "need_via_at_exit": true,
+   "tried": [
+    {
+     "t": 0,
+     "n_full_rows": 13,
+     "full_rows": [
+      59,
+      58,
+      57,
+      56,
+      55,
+      54,
+      53,
+      50
+     ]
+    },
+    {
+     "t": 1,
+     "n_full_rows": 13,
+     "full_rows": [
+      59,
+      58,
+      57,
+      56,
+      55,
+      54,
+      53,
+      50
+     ]
+    }
+   ],
+   "fails": [
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 114,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 113,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 112,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 111,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 110,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 109,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 108,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 107,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 106,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 105,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 104,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 103,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 102,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 101,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 100,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 99,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 98,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 97,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 96,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 95,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 94,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 93,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 92,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 91,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 90,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 89,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 88,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 87,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 86,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 85,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 84,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 83,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 82,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 81,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 80,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 79,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 78,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 77,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 76,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 75,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 74,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 73,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 72,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 71,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 70,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 69,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 68,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 67,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 66,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 65,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 64,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 63,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 62,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 59,
+     "Ct": 61,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 114,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 113,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 112,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 111,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 110,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 109,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 108,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 107,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 106,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 105,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 104,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 103,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 102,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 101,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 100,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 99,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 98,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 97,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 96,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 95,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 94,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 93,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 92,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 91,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 90,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 89,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 88,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 87,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 86,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 85,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 84,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 83,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 82,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 81,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 80,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 79,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 78,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 77,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 76,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 75,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 74,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 73,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 72,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 71,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 70,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 69,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 68,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 67,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 66,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 65,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 64,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 63,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 62,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 58,
+     "Ct": 61,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 114,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 113,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 112,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 111,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 110,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 109,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 108,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 107,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 106,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 105,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 104,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 103,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 102,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 101,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 100,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 99,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 98,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 97,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 96,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 95,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 94,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 93,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 92,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 91,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 90,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 89,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 88,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 87,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 86,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 85,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 84,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 83,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 82,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 81,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 80,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 79,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 78,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 77,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 76,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 75,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 74,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 73,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 72,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 71,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 70,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 69,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 68,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 67,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 66,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 65,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 64,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 63,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 62,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 57,
+     "Ct": 61,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 114,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 113,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 112,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 111,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 110,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 109,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 108,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 107,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 106,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 105,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 104,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 103,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 102,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 101,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 100,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 99,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 98,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 97,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 96,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 95,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 94,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 93,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 92,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 91,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 90,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 89,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 88,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 87,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 86,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 85,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 84,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 83,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 82,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 81,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 80,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 79,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 78,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 77,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 76,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 75,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 74,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 73,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 72,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 71,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 70,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 69,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 68,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 67,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 66,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 65,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 64,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 63,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 62,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 56,
+     "Ct": 61,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 114,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 113,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 112,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 111,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 110,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 109,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 108,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 107,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 106,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 105,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 104,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 103,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 102,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 101,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 100,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 99,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 98,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 97,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 96,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 95,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 94,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 93,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 92,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 91,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 90,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 89,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 88,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 87,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 86,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 85,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 84,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 83,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 82,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 81,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 80,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 79,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 78,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 77,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 76,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 75,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 74,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 73,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 72,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 71,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 70,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 69,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 68,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 67,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 66,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 65,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 64,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 63,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 62,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 55,
+     "Ct": 61,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 114,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 113,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 112,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 111,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 110,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 109,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 108,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 107,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 106,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 105,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 104,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 103,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 102,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 101,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 100,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 99,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 98,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 97,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 96,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 95,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 94,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 93,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 92,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 91,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 90,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 89,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 88,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 87,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 86,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 85,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 84,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 83,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 82,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 81,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 80,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 79,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 78,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 77,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 76,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 75,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 74,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 73,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 72,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 71,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 70,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 69,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 68,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 67,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 66,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 65,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 64,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 63,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 62,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 54,
+     "Ct": 61,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 114,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 113,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 112,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 111,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 110,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 109,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 108,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 107,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 106,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 105,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 104,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 103,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 102,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 101,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 100,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 99,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 98,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 97,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 96,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 95,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 94,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 93,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 92,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 91,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 90,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 89,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 88,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 87,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 86,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 85,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 84,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 83,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 82,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 81,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 80,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 79,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 78,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 77,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 76,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 75,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 74,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 73,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 72,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 71,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 70,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 69,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 68,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 67,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 66,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 65,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 64,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 63,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 62,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 53,
+     "Ct": 61,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 114,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 113,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 112,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 111,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 110,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 109,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 108,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 107,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 106,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 105,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 104,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 103,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 102,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 101,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 100,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 99,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 98,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 97,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 96,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 95,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 94,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 93,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 92,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 91,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 90,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 89,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 88,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 87,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 86,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 85,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 84,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 83,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 82,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 81,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 80,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 79,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 78,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 77,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 76,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 75,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 74,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 73,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 72,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 71,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 70,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 69,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 68,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 67,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 66,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 65,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 64,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 63,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 62,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 50,
+     "Ct": 61,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 114,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 113,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 112,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 111,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 110,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 109,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 108,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 107,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 106,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 105,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 104,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 103,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 102,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 101,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 100,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 99,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 98,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 97,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 96,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 95,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 94,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 93,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 92,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 91,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 90,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 89,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 88,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 87,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 86,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 85,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 84,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 83,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 82,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 81,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 80,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 79,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 78,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 77,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 76,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 75,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 74,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 73,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 72,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 71,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 70,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 69,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 68,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 67,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 66,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 65,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 64,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 63,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 62,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 47,
+     "Ct": 61,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 114,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 113,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 112,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 111,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 110,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 109,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 108,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 107,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 106,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 105,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 104,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 103,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 102,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 101,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 100,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 99,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 98,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 97,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 96,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 95,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 94,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 93,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 92,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 91,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 90,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 89,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 88,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 87,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 86,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 85,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 84,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 83,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 82,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 81,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 80,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 79,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 78,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 77,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 76,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 75,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 74,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 73,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 72,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 71,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 70,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 69,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 68,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 67,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 66,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 65,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 64,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 63,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 62,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 46,
+     "Ct": 61,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 114,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 113,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 112,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 111,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 110,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 109,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 108,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 107,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 106,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 105,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 104,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 103,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 102,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 101,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 100,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 99,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 98,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 97,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 96,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 95,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 94,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 93,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 92,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 91,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 90,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 89,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 88,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 87,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 86,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 85,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 84,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 83,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 82,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 81,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 80,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 79,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 78,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 77,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 76,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 75,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 74,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 73,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 72,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 71,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 70,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 69,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 68,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 67,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 66,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 65,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 64,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 63,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 62,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 43,
+     "Ct": 61,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 114,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 113,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 112,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 111,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 110,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 109,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 108,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 107,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 106,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 105,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 104,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 103,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 102,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 101,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 100,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 99,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 98,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 97,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 96,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 95,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 94,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 93,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 92,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 91,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 90,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 89,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 88,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 87,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 86,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 85,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 84,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 83,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 82,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 81,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 80,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 79,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 78,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 77,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 76,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 75,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 74,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 73,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 72,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 71,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 70,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 69,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 68,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 67,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 66,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 65,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 64,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 63,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 62,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 40,
+     "Ct": 61,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 114,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 113,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 112,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 111,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 110,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 109,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 108,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 107,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 106,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 105,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 104,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 103,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 102,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 101,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 100,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 99,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 98,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 97,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 96,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 95,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 94,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 93,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 92,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 91,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 90,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 89,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 88,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 87,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 86,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 85,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 84,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 83,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 82,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 81,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 80,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 79,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 78,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 77,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 76,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 75,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 74,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 73,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 72,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 71,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 70,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 69,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 68,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 67,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 66,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 65,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 64,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 63,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 62,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 0,
+     "H": 39,
+     "Ct": 61,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 1,
+     "H": 59,
+     "Ct": 114,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 1,
+     "H": 59,
+     "Ct": 113,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 1,
+     "H": 59,
+     "Ct": 112,
+     "reason": "no exit candidate on this column"
+    },
+    {
+     "t": 1,
+     "H": 59,
+     "Ct": 111,
+     "reason": "no exit candidate on this column"
+    }
+   ]
+  },
+  "OUT6_N_J2": {
+   "belt_layer": 0,
+   "col60_layer": 1,
+   "exit_layer": 1,
+   "Y": 12,
+   "need_via_at_exit": true,
+   "tried": [
+    {
+     "t": 0,
+     "n_full_rows": 13,
+     "full_rows": [
+      59,
+      58,
+      57,
+      56,
+      55,
+      54,
+      53,
+      50
+     ]
+    },
+    {
+     "t": 1,
+     "n_full_rows": 15,
+     "full_rows": [
+      59,
+      58,
+      57,
+      56,
+      55,
+      54,
+      53,
+      50
+     ]
+    }
+   ]
+  },
+  "OUT7_P_J2": {
+   "belt_layer": 0,
+   "col60_layer": 0,
+   "exit_layer": 1,
+   "Y": 19,
+   "need_via_at_exit": true,
+   "tried": [
+    {
+     "t": 0,
+     "n_full_rows": 13,
+     "full_rows": [
+      59,
+      58,
+      57,
+      56,
+      55,
+      54,
+      53,
+      50
+     ]
+    },
+    {
+     "t": 1,
+     "n_full_rows": 15,
+     "full_rows": [
+      59,
+      58,
+      57,
+      56,
+      55,
+      54,
+      53,
+      50
+     ]
+    }
+   ]
+  }
+ },
+ "summary": {
+  "determined": 16,
+  "of": 16,
+  "relocations": 3
+ },
+ "conservation": {
+  "col60_slots_distinct": false,
+  "descent_columns_max_load": 2,
+  "exit_cells_distinct": true,
+  "note": "capacity >= demand: full-span rows (14-17 per lane per layer, R601/R641) vs 1 row per lane; wall-east/descent columns free-run >= span; exit cells distinct 16/16"
+ },
+ "buildability": {
+  "mode": "relocation_listed",
+  "relocations": [
+   {
+    "lane": "OUT0_P_J2",
+    "from_exit": [
+     127,
+     36
+    ],
+    "to_exit": [
+     110,
+     31
+    ],
+    "from_Xt": 61,
+    "to_descent_column": 110,
+    "from_H": 59,
+    "to_H": 59,
+    "tail_layer": 1
+   },
+   {
+    "lane": "OUT6_N_J2",
+    "from_exit": [
+     114,
+     12
+    ],
+    "to_exit": [
+     114,
+     12
+    ],
+    "from_Xt": 122,
+    "to_descent_column": 113,
+    "from_H": 47,
+    "to_H": 43,
+    "tail_layer": 1
+   },
+   {
+    "lane": "OUT7_P_J2",
+    "from_exit": [
+     114,
+     19
+    ],
+    "to_exit": [
+     113,
+     19
+    ],
+    "from_Xt": 61,
+    "to_descent_column": 110,
+    "from_H": 41,
+    "to_H": 59,
+    "tail_layer": 1
+   }
+  ]
+ },
+ "elapsed_s": 29.0,
+ "artifact_hash16": "98f10ef8a405c506"
+}
