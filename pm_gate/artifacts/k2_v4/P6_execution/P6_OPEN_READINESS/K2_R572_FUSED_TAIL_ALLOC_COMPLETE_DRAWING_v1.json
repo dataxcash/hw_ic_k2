@@ -1,0 +1,686 @@
+{
+ "artifact": "k2_r572_fused_tail_alloc_complete_drawing_v1",
+ "selfcheck_on_known_good_lanes": {
+  "lanes": [
+   "PCIE_UP_OUT0_N_J2",
+   "PCIE_UP_OUT0_P_J2"
+  ],
+  "tail_allocated": {
+   "PCIE_UP_OUT0_N_J2": false,
+   "PCIE_UP_OUT0_P_J2": false
+  },
+  "verdict": "FAIL(tool)"
+ },
+ "ts": "2026-09-25T15:46:55",
+ "authority": "#K2-223 fused window: U1/U2 census + premise v4 + three gates + ONE complete drawing (tail included)",
+ "solve_calls": 0,
+ "runs": 1,
+ "backtracking_search": 0,
+ "tail_law": "T1 row H -> T2 dedicated column X -> T3 row Y (36 east / exit_row west) on layer 0",
+ "census_U1_U2": {
+  "U1_west_dedicated_columns_used": {},
+  "U2_east_columns_used": {
+   "PCIE_UP_OUT1_N_J2": 120
+  },
+  "east_cols_distinct": true,
+  "west_cols_distinct": true
+ },
+ "pregate": {
+  "(i)_cells_legal": {
+   "verdict": "PASS",
+   "n": 0,
+   "sample": []
+  },
+  "(ii)_registered_arcs": {
+   "verdict": "FAIL",
+   "n": 2,
+   "sample": [
+    {
+     "lane": "PCIE_UP_OUT1_N_J2",
+     "u": [
+      120,
+      58
+     ],
+     "v": [
+      120,
+      37
+     ],
+     "seg": "tail"
+    },
+    {
+     "lane": "PCIE_UP_OUT1_N_J2",
+     "u": [
+      120,
+      57
+     ],
+     "v": [
+      119,
+      36
+     ],
+     "seg": "tail"
+    }
+   ]
+  },
+  "(iii)_pairwise_disjoint": {
+   "verdict": "PASS",
+   "n": 0,
+   "sample": []
+  },
+  "(iv)_capacity": {
+   "verdict": "PASS"
+  }
+ },
+ "assignment_incomplete": [
+  {
+   "lane": "PCIE_UP_OUT0_N_J2",
+   "resource": "tail (X,cells)",
+   "Y": 7,
+   "H": 59,
+   "east": false
+  },
+  {
+   "lane": "PCIE_UP_OUT1_P_J2",
+   "resource": "tail (X,cells)",
+   "Y": 11,
+   "H": 57,
+   "east": false
+  },
+  {
+   "lane": "PCIE_UP_OUT2_N_J2",
+   "resource": "tail (X,cells)",
+   "Y": 12,
+   "H": 56,
+   "east": false
+  },
+  {
+   "lane": "PCIE_UP_OUT3_N_J2",
+   "resource": "tail (X,cells)",
+   "Y": 36,
+   "H": 55,
+   "east": true
+  },
+  {
+   "lane": "PCIE_UP_OUT4_N_J2",
+   "resource": "tail (X,cells)",
+   "Y": 13,
+   "H": 54,
+   "east": false
+  },
+  {
+   "lane": "PCIE_UP_OUT3_P_J2",
+   "resource": "tail (X,cells)",
+   "Y": 15,
+   "H": 53,
+   "east": false
+  },
+  {
+   "lane": "PCIE_UP_OUT5_N_J2",
+   "resource": "tail (X,cells)",
+   "Y": 36,
+   "H": 52,
+   "east": true
+  },
+  {
+   "lane": "PCIE_UP_OUT6_N_J2",
+   "resource": "tail (X,cells)",
+   "Y": 25,
+   "H": 51,
+   "east": false
+  },
+  {
+   "lane": "PCIE_UP_OUT7_N_J2",
+   "resource": "tail (X,cells)",
+   "Y": 36,
+   "H": 50,
+   "east": true
+  },
+  {
+   "lane": "PCIE_UP_OUT7_P_J2",
+   "resource": "tail (X,cells)",
+   "Y": 28,
+   "H": 49,
+   "east": false
+  },
+  {
+   "lane": "PCIE_UP_OUT0_P_J2",
+   "resource": "via cell (60,H) on layer 0"
+  },
+  {
+   "lane": "PCIE_UP_OUT2_P_J2",
+   "resource": "via cell (60,H) on layer 0"
+  },
+  {
+   "lane": "PCIE_UP_OUT4_P_J2",
+   "resource": "via cell (60,H) on layer 0"
+  },
+  {
+   "lane": "PCIE_UP_OUT5_P_J2",
+   "resource": "via cell (60,H) on layer 0"
+  },
+  {
+   "lane": "PCIE_UP_OUT6_P_J2",
+   "resource": "via cell (60,H) on layer 0"
+  }
+ ],
+ "channel_table": {
+  "PCIE_UP_OUT0_N_J2": {
+   "L": 0,
+   "d": 2,
+   "H": 59,
+   "col60_layer": 0,
+   "exit": 7
+  },
+  "PCIE_UP_OUT1_N_J2": {
+   "L": 0,
+   "d": 3,
+   "H": 58,
+   "col60_layer": 0,
+   "exit": 115
+  },
+  "PCIE_UP_OUT1_P_J2": {
+   "L": 0,
+   "d": 5,
+   "H": 57,
+   "col60_layer": 0,
+   "exit": 11
+  },
+  "PCIE_UP_OUT2_N_J2": {
+   "L": 0,
+   "d": 6,
+   "H": 56,
+   "col60_layer": 0,
+   "exit": 12
+  },
+  "PCIE_UP_OUT3_N_J2": {
+   "L": 0,
+   "d": 9,
+   "H": 55,
+   "col60_layer": 1,
+   "exit": 117
+  },
+  "PCIE_UP_OUT4_N_J2": {
+   "L": 0,
+   "d": 12,
+   "H": 54,
+   "col60_layer": 0,
+   "exit": 13
+  },
+  "PCIE_UP_OUT3_P_J2": {
+   "L": 0,
+   "d": 13,
+   "H": 53,
+   "col60_layer": 0,
+   "exit": 15
+  },
+  "PCIE_UP_OUT5_N_J2": {
+   "L": 0,
+   "d": 14,
+   "H": 52,
+   "col60_layer": 1,
+   "exit": 119
+  },
+  "PCIE_UP_OUT6_N_J2": {
+   "L": 0,
+   "d": 17,
+   "H": 51,
+   "col60_layer": 1,
+   "exit": 25
+  },
+  "PCIE_UP_OUT7_N_J2": {
+   "L": 0,
+   "d": 20,
+   "H": 50,
+   "col60_layer": 0,
+   "exit": 123
+  },
+  "PCIE_UP_OUT7_P_J2": {
+   "L": 0,
+   "d": 22,
+   "H": 49,
+   "col60_layer": 0,
+   "exit": 28
+  },
+  "PCIE_UP_OUT0_P_J2": {
+   "L": 1,
+   "d": 2,
+   "H": 59,
+   "col60_layer": 1,
+   "exit": 115
+  },
+  "PCIE_UP_OUT2_P_J2": {
+   "L": 1,
+   "d": 5,
+   "H": 58,
+   "col60_layer": 1,
+   "exit": 116
+  },
+  "PCIE_UP_OUT4_P_J2": {
+   "L": 1,
+   "d": 13,
+   "H": 57,
+   "col60_layer": 1,
+   "exit": 118
+  },
+  "PCIE_UP_OUT5_P_J2": {
+   "L": 1,
+   "d": 16,
+   "H": 56,
+   "col60_layer": 0,
+   "exit": 24
+  },
+  "PCIE_UP_OUT6_P_J2": {
+   "L": 1,
+   "d": 24,
+   "H": 53,
+   "col60_layer": 0,
+   "exit": 125
+  }
+ },
+ "tail_table": {
+  "PCIE_UP_OUT1_N_J2": {
+   "X": 120,
+   "Y": 36,
+   "cells": [
+    [
+     61,
+     58
+    ],
+    [
+     62,
+     58
+    ],
+    [
+     63,
+     58
+    ],
+    [
+     64,
+     58
+    ],
+    [
+     65,
+     58
+    ],
+    [
+     66,
+     58
+    ],
+    [
+     67,
+     58
+    ],
+    [
+     68,
+     58
+    ],
+    [
+     69,
+     58
+    ],
+    [
+     70,
+     58
+    ],
+    [
+     71,
+     58
+    ],
+    [
+     72,
+     58
+    ],
+    [
+     73,
+     58
+    ],
+    [
+     74,
+     58
+    ],
+    [
+     75,
+     58
+    ],
+    [
+     76,
+     58
+    ],
+    [
+     77,
+     58
+    ],
+    [
+     78,
+     58
+    ],
+    [
+     79,
+     58
+    ],
+    [
+     80,
+     58
+    ],
+    [
+     81,
+     58
+    ],
+    [
+     82,
+     58
+    ],
+    [
+     83,
+     58
+    ],
+    [
+     84,
+     58
+    ],
+    [
+     85,
+     58
+    ],
+    [
+     86,
+     58
+    ],
+    [
+     87,
+     58
+    ],
+    [
+     88,
+     58
+    ],
+    [
+     89,
+     58
+    ],
+    [
+     90,
+     58
+    ],
+    [
+     91,
+     58
+    ],
+    [
+     92,
+     58
+    ],
+    [
+     93,
+     58
+    ],
+    [
+     94,
+     58
+    ],
+    [
+     95,
+     58
+    ],
+    [
+     96,
+     58
+    ],
+    [
+     97,
+     58
+    ],
+    [
+     98,
+     58
+    ],
+    [
+     99,
+     58
+    ],
+    [
+     100,
+     58
+    ],
+    [
+     101,
+     58
+    ],
+    [
+     102,
+     58
+    ],
+    [
+     103,
+     58
+    ],
+    [
+     104,
+     58
+    ],
+    [
+     105,
+     58
+    ],
+    [
+     106,
+     58
+    ],
+    [
+     107,
+     58
+    ],
+    [
+     108,
+     58
+    ],
+    [
+     109,
+     58
+    ],
+    [
+     110,
+     58
+    ],
+    [
+     111,
+     58
+    ],
+    [
+     112,
+     58
+    ],
+    [
+     113,
+     58
+    ],
+    [
+     114,
+     58
+    ],
+    [
+     115,
+     58
+    ],
+    [
+     116,
+     58
+    ],
+    [
+     117,
+     58
+    ],
+    [
+     118,
+     58
+    ],
+    [
+     119,
+     58
+    ],
+    [
+     120,
+     58
+    ],
+    [
+     120,
+     37
+    ],
+    [
+     120,
+     38
+    ],
+    [
+     120,
+     39
+    ],
+    [
+     120,
+     40
+    ],
+    [
+     120,
+     41
+    ],
+    [
+     120,
+     42
+    ],
+    [
+     120,
+     43
+    ],
+    [
+     120,
+     44
+    ],
+    [
+     120,
+     45
+    ],
+    [
+     120,
+     46
+    ],
+    [
+     120,
+     47
+    ],
+    [
+     120,
+     48
+    ],
+    [
+     120,
+     49
+    ],
+    [
+     120,
+     50
+    ],
+    [
+     120,
+     51
+    ],
+    [
+     120,
+     52
+    ],
+    [
+     120,
+     53
+    ],
+    [
+     120,
+     54
+    ],
+    [
+     120,
+     55
+    ],
+    [
+     120,
+     56
+    ],
+    [
+     120,
+     57
+    ],
+    [
+     119,
+     36
+    ],
+    [
+     118,
+     36
+    ],
+    [
+     117,
+     36
+    ],
+    [
+     116,
+     36
+    ],
+    [
+     115,
+     36
+    ]
+   ],
+   "exit_cell": [
+    115,
+    36
+   ]
+  }
+ },
+ "conservation_audit": {
+  "capacity_vs_demand": {
+   "L0": {
+    "need": 11,
+    "assigned": 11,
+    "rows": [
+     59,
+     58,
+     57,
+     56,
+     55,
+     54,
+     53,
+     52,
+     51,
+     50,
+     49
+    ],
+    "rows_distinct": true
+   },
+   "L1": {
+    "need": 5,
+    "assigned": 5,
+    "rows": [
+     59,
+     58,
+     57,
+     56,
+     53
+    ],
+    "rows_distinct": true
+   }
+  },
+  "tail_supply": "east group: cols 120-135 free rows 36-59 (F3) => 16 >= 8; west group: dedicated column X in 61-113 with rows [exit_row,H] free (U1 verified in this same command by the take-and-register)"
+ },
+ "decision": "FUSED ALLOCATION FAIL: named diagnostic only (binary 甲), NO drawing, NO rerun",
+ "buildability": {
+  "mode": "no_witness",
+  "note": "pre-gate FAIL"
+ },
+ "frozen_four": {
+  "SPEC": "0bd52ed48e720b8c",
+  "page_manifest": "a8ef3ea8ecff99d7",
+  "PCB": "fb07d25ac426ff84",
+  "rules": "0a459839e15960b8",
+  "verdict": "4/4 MATCH"
+ },
+ "elapsed_s": 29.3,
+ "fail_loud_log": "/tmp/opencode/r572/oneshot.log",
+ "owner_items": 0,
+ "artifact_hash16": "a69cc61b9110c0fb"
+}
