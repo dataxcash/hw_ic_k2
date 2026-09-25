@@ -1,0 +1,346 @@
+{
+ "artifact": "k2_r549_entrance_fanout_admissibility_v1",
+ "frozen_four": {
+  "SPEC": "0bd52ed48e720b8c",
+  "page_manifest": "a8ef3ea8ecff99d7",
+  "PCB": "fb07d25ac426ff84",
+  "rules": "0a459839e15960b8",
+  "verdict": "4/4 MATCH",
+  "board_anchor_sha16": "fb07d25ac426ff84"
+ },
+ "ts": "2026-09-25T13:28:09",
+ "authority": "handoff k2-handoff-20260925-k2245 §3 (entrance fan-out channel table -> one shot); §3.3 allows: if a lane still cannot be drawn, record the diagnostic and escalate by name.",
+ "scope": "entrance fan-out only (A pad -> col33 terminal). Full route col33->col60->exit->B not attempted.",
+ "solve_calls": 0,
+ "search_calls": 0,
+ "entry_law": "R548c vertical-edge defect fixed IN MEMORY ONLY (registered files untouched); frozen four sources 4/4",
+ "layer_partition": {
+  "L0_In5": [
+   "PCIE_UP_OUT0_N_J2",
+   "PCIE_UP_OUT1_N_J2",
+   "PCIE_UP_OUT1_P_J2",
+   "PCIE_UP_OUT2_N_J2",
+   "PCIE_UP_OUT3_N_J2",
+   "PCIE_UP_OUT3_P_J2",
+   "PCIE_UP_OUT4_N_J2",
+   "PCIE_UP_OUT5_N_J2",
+   "PCIE_UP_OUT6_N_J2",
+   "PCIE_UP_OUT7_N_J2",
+   "PCIE_UP_OUT7_P_J2"
+  ],
+  "L1_In4": [
+   "PCIE_UP_OUT0_P_J2",
+   "PCIE_UP_OUT2_P_J2",
+   "PCIE_UP_OUT4_P_J2",
+   "PCIE_UP_OUT5_P_J2",
+   "PCIE_UP_OUT6_P_J2"
+  ]
+ },
+ "current_L2_col33": {
+  "PCIE_UP_OUT0_N_J2": 31,
+  "PCIE_UP_OUT0_P_J2": 31,
+  "PCIE_UP_OUT1_N_J2": 33,
+  "PCIE_UP_OUT1_P_J2": 34,
+  "PCIE_UP_OUT2_N_J2": 35,
+  "PCIE_UP_OUT2_P_J2": 32,
+  "PCIE_UP_OUT3_N_J2": 36,
+  "PCIE_UP_OUT3_P_J2": 37,
+  "PCIE_UP_OUT4_N_J2": 38,
+  "PCIE_UP_OUT4_P_J2": 33,
+  "PCIE_UP_OUT5_N_J2": 39,
+  "PCIE_UP_OUT5_P_J2": 34,
+  "PCIE_UP_OUT6_N_J2": 40,
+  "PCIE_UP_OUT6_P_J2": 35,
+  "PCIE_UP_OUT7_N_J2": 41,
+  "PCIE_UP_OUT7_P_J2": 42
+ },
+ "lemma1_terminal_trio": {
+  "layer": "L1",
+  "lanes": {
+   "slot31": "PCIE_UP_OUT0_P_J2",
+   "slot32": "PCIE_UP_OUT2_P_J2",
+   "slot33": "PCIE_UP_OUT4_P_J2"
+  },
+  "current_col33": {
+   "PCIE_UP_OUT0_P_J2": 31,
+   "PCIE_UP_OUT2_P_J2": 32,
+   "PCIE_UP_OUT4_P_J2": 33,
+   "PCIE_UP_OUT5_P_J2": 34,
+   "PCIE_UP_OUT6_P_J2": 35
+  },
+  "columns_occupied_by_other_terminals": [
+   33
+  ],
+  "portals_cell_level": {
+   "31": [
+    "c33r32",
+    "c34r32"
+   ],
+   "32": [
+    "c34r32",
+    "c34r33",
+    "c32r33"
+   ],
+   "33": [
+    "c34r33",
+    "c34r34",
+    "c32r33",
+    "c33r34",
+    "c32r34"
+   ]
+  },
+  "diagonal_steps_into_c33r32": [
+   {
+    "step": "c32r33->c33r32",
+    "claim_has_c33r33": true,
+    "pitch_violations_vs_c33r33": [
+     {
+      "terminal": "c33r33",
+      "dist_mm": 0.3076
+     }
+    ],
+    "verdict": "ILLEGAL"
+   },
+   {
+    "step": "c34r33->c33r32",
+    "claim_has_c33r33": true,
+    "pitch_violations_vs_c33r33": [
+     {
+      "terminal": "c33r33",
+      "dist_mm": 0.3076
+     }
+    ],
+    "verdict": "ILLEGAL"
+   }
+  ],
+  "argument": [
+   "c33r31 has exactly two doors: c33r32 and c34r32.",
+   "c33r32's doors are c34r32,c34r33,c32r33,c33r31,c33r33 ; c33r31 and c33r33 are other lanes' terminals,",
+   "  and both diagonals into c33r32 (from c32r33 or c34r33) come within 0.3075 mm of c33r33 < pitch 0.435 mm -> illegal.",
+   "=> the slot-32 lane must use c34r32 ; then the slot-31 lane has no door left (c33r32 is the slot-32 lane's own terminal cell,",
+   "   c34r32 is its through-cell) -> the three terminals cannot coexist on ONE layer."
+  ],
+  "verdict": "INFEASIBLE (machine-checked)"
+ },
+ "lemma2_terminal31_access": {
+  "lane": "PCIE_UP_OUT0_N_J2",
+  "layer": 0,
+  "occupied_other_terminals": [
+   "c33r32",
+   "c33r33",
+   "c33r34",
+   "c33r35",
+   "c33r36",
+   "c33r37",
+   "c33r38",
+   "c33r39",
+   "c33r40",
+   "c33r41",
+   "c33r42"
+  ],
+  "window": {
+   "cols": [
+    28,
+    41
+   ],
+   "rows": [
+    28,
+    45
+   ]
+  },
+  "local_reachable_cells": 184,
+  "must_pass_cells_cut": [
+   "c34r32"
+  ],
+  "entry_columns": [
+   34
+  ],
+  "verdict": "terminal 31's access is channelled through column(s) [34]"
+ },
+ "lemma3_repaired_scheme": {
+  "repaired_terminal_rows": {
+   "L0": [
+    31,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43
+   ],
+   "L1": [
+    31,
+    34,
+    35,
+    36,
+    37
+   ]
+  },
+  "descent_table": {
+   "PCIE_UP_OUT0_N_J2": {
+    "col": 2,
+    "top": 33,
+    "layer": 0
+   },
+   "PCIE_UP_OUT0_P_J2": {
+    "col": 2,
+    "top": 33,
+    "layer": 1
+   },
+   "PCIE_UP_OUT1_N_J2": {
+    "col": 3,
+    "top": 33,
+    "layer": 0
+   },
+   "PCIE_UP_OUT1_P_J2": {
+    "col": 5,
+    "top": 33,
+    "layer": 0
+   },
+   "PCIE_UP_OUT2_N_J2": {
+    "col": 6,
+    "top": 33,
+    "layer": 0
+   },
+   "PCIE_UP_OUT2_P_J2": {
+    "col": 5,
+    "top": 33,
+    "layer": 1
+   },
+   "PCIE_UP_OUT3_N_J2": {
+    "col": 9,
+    "top": 33,
+    "layer": 0
+   },
+   "PCIE_UP_OUT3_P_J2": {
+    "col": 13,
+    "top": 33,
+    "layer": 0
+   },
+   "PCIE_UP_OUT4_N_J2": {
+    "col": 12,
+    "top": 33,
+    "layer": 0
+   },
+   "PCIE_UP_OUT4_P_J2": {
+    "col": 13,
+    "top": 33,
+    "layer": 1
+   },
+   "PCIE_UP_OUT5_N_J2": {
+    "col": 14,
+    "top": 33,
+    "layer": 0
+   },
+   "PCIE_UP_OUT5_P_J2": {
+    "col": 16,
+    "top": 33,
+    "layer": 1
+   },
+   "PCIE_UP_OUT6_N_J2": {
+    "col": 17,
+    "top": 33,
+    "layer": 0
+   },
+   "PCIE_UP_OUT6_P_J2": {
+    "col": 22,
+    "top": 34,
+    "layer": 1
+   },
+   "PCIE_UP_OUT7_N_J2": {
+    "col": 20,
+    "top": 33,
+    "layer": 0
+   },
+   "PCIE_UP_OUT7_P_J2": {
+    "col": 22,
+    "top": 33,
+    "layer": 0
+   }
+  },
+  "rule": "order by A.x; descent column = nearest legal own-pocket channel (distinct); east run row H strictly decreasing in the descent-column order; riser column W strictly decreasing, all W>=34; terminal-31 lane runs its final approach on row 33 via c33r33->c33r32->c33r31 (requires rows 32/33 to be free terminals)",
+  "note": "analytic status: with d strictly increasing, H and W strictly decreasing in d and all risers >=34, all pairwise constraint families (descent vs east-run, east-run vs riser, riser vs final-run) are satisfied; the open item is a *legal* strictly-increasing descent-column assignment (pocket channels run out after col 25 for the two easternmost lanes, and belt columns can only be reached by an east run that would cross the earlier lanes' descents)."
+ },
+ "decision": "R548's L2 col33 assignment is NOT entrance-admissible: (lemma1) the layer-1 rows {31,32,33} cannot coexist; (lemma2) terminal 31's access is channelled through column [34]. A repaired terminal set is proposed ([31, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43] / [31, 34, 35, 36, 37]) with the constructive scheme of lemma3; full witness requires the L2 re-derivation to be landed together with col60/exit rows (order consistency) - i.e. the entrance channel table must be written AGAINST a re-derived L2, not against R548's.",
+ "blocker_report": {
+  "tried": [
+   "R548 L2 slot repair (45 movements, PASS against its own model) - not entrance-aware",
+   "R548b 'track-band straight line' - blocked inside the interp. band",
+   "R548c/R548d registered-graph vertical-edge fix (8832 edges) - still blocked, external occupancy 0",
+   "R549 read-only lattice census + local path/cut/pitch analysis (this artifact)"
+  ],
+  "why_not": [
+   "L2 col33 rows were derived for 'one line per (section,layer)' only; they did not model terminal ACCESS.",
+   "row 31's access on a layer is a 2-door bottleneck (c33r32 / c34r32); with row 33 also a terminal, the diagonals into c33r32 are illegal at pitch 0.435 (measured 0.3075 mm) -> rows 31 and 32 cannot both be used.",
+   "the remaining rows must then be fed by risers >= col 34 in the descending order, and terminal 31 then needs the *smallest* riser column while the ordering forces it to be the largest."
+  ],
+  "gap_layer": "L2 (col33 terminal rows x COMB layer schedule) - self-裁 range (owner policy #14-1: layer assignment is L2), NOT design-level infeasibility and NOT a harness defect.",
+  "diagnostic_where": {
+   "slot31": "PCIE_UP_OUT0_P_J2",
+   "slot32": "PCIE_UP_OUT2_P_J2",
+   "slot33": "PCIE_UP_OUT4_P_J2"
+  }
+ },
+ "next": "1) re-derive L2 for the col33 section: per layer choose an entrance-admissible terminal-row set (necessary conditions: no {31,32,33} on one layer; row 33 must be free on the layer that carries row 31), and re-derive col60/exit rows with the same order; 2) then write the entrance channel table (d, H, W per lane) and run the ONE-shot draw + exact_gate/gate_vias/endpoints/<=2 via pairs.",
+ "buildability": {
+  "mode": "relocation_listed",
+  "relocation_list": [
+   {
+    "what": "col33 terminal rows",
+    "from": {
+     "PCIE_UP_OUT0_N_J2": 31,
+     "PCIE_UP_OUT0_P_J2": 31,
+     "PCIE_UP_OUT1_N_J2": 33,
+     "PCIE_UP_OUT1_P_J2": 34,
+     "PCIE_UP_OUT2_N_J2": 35,
+     "PCIE_UP_OUT2_P_J2": 32,
+     "PCIE_UP_OUT3_N_J2": 36,
+     "PCIE_UP_OUT3_P_J2": 37,
+     "PCIE_UP_OUT4_N_J2": 38,
+     "PCIE_UP_OUT4_P_J2": 33,
+     "PCIE_UP_OUT5_N_J2": 39,
+     "PCIE_UP_OUT5_P_J2": 34,
+     "PCIE_UP_OUT6_N_J2": 40,
+     "PCIE_UP_OUT6_P_J2": 35,
+     "PCIE_UP_OUT7_N_J2": 41,
+     "PCIE_UP_OUT7_P_J2": 42
+    },
+    "to": {
+     "L0": [
+      31,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43
+     ],
+     "L1": [
+      31,
+      34,
+      35,
+      36,
+      37
+     ]
+    }
+   },
+   {
+    "what": "col60/exit rows + COMB layer schedule",
+    "from": "R529/R540 frozen",
+    "to": "to be re-derived (order-consistent) with item 1"
+   }
+  ],
+  "note": "entrance fan-out relocation only; no object in the registered set is moved by this artifact (read-only)"
+ },
+ "elapsed_s": 29.4,
+ "fail_loud_log": "/tmp/opencode/r549/r549b.log",
+ "artifact_hash16": "c12802b5c77e5462"
+}
