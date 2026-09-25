@@ -1,0 +1,79 @@
+{
+ "artifact": "k2_r625_joint_table_twoseg_v1",
+ "ts": "2026-09-25T22:05:12",
+ "authority": "#K2-239 sec.3.4 sole deliverable: ONE joint table for the 5 lanes; TWO-SEGMENT structure; NO drawing",
+ "construction_runs": 0,
+ "conservation": "5 lanes vs R599 long-free columns (>=2 spacing on the same tail layer) + R601 rows 39/40/43 (68-75 col runs) => capacity >= demand",
+ "buildability": {
+  "mode": "no_move",
+  "note": "all cells from the register free graph; no registered object moved"
+ },
+ "product_reference": "PEX88096 PCIE4 switch baseboard (SBR.zip bifurcation) = 1 lane per channel, straight fan-out, no scheduling; per-lane 'copied-from-product-where' column: this lane's two-segment tail follows the product's straight channel breakout",
+ "per_lane": {
+  "OUT0_P_J2": {
+   "H": 59,
+   "Xt_two_segment": null,
+   "tail_layer": 1,
+   "exit": [
+    127,
+    36
+   ],
+   "exit_layer": 1,
+   "structure": "(1) row H -> wall front(<=114); (2) descend on own column Xt; (3) R610 exit approach",
+   "verdict": "NO_JOINT_COLUMN"
+  },
+  "OUT3_N_J2": {
+   "H": 55,
+   "Xt_two_segment": 61,
+   "tail_layer": 1,
+   "exit": [
+    131,
+    36
+   ],
+   "exit_layer": 0,
+   "structure": "(1) row H -> wall front(<=114); (2) descend on own column Xt; (3) R610 exit approach",
+   "verdict": "PASS"
+  },
+  "OUT5_N_J2": {
+   "H": 51,
+   "Xt_two_segment": 63,
+   "tail_layer": 1,
+   "exit": [
+    117,
+    36
+   ],
+   "exit_layer": 0,
+   "structure": "(1) row H -> wall front(<=114); (2) descend on own column Xt; (3) R610 exit approach",
+   "verdict": "PASS"
+  },
+  "OUT6_N_J2": {
+   "H": 47,
+   "Xt_two_segment": null,
+   "tail_layer": 1,
+   "exit": [
+    114,
+    12
+   ],
+   "exit_layer": 1,
+   "structure": "(1) row H -> wall front(<=114); (2) descend on own column Xt; (3) R610 exit approach",
+   "verdict": "NO_JOINT_COLUMN"
+  },
+  "OUT7_P_J2": {
+   "H": 41,
+   "Xt_two_segment": null,
+   "tail_layer": 0,
+   "exit": [
+    114,
+    19
+   ],
+   "exit_layer": 1,
+   "structure": "(1) row H -> wall front(<=114); (2) descend on own column Xt; (3) R610 exit approach",
+   "verdict": "NO_JOINT_COLUMN"
+  }
+ },
+ "summary": {
+  "PASS": 2,
+  "FAIL": 3
+ },
+ "artifact_hash16": "66b7b1b06caf3ac8"
+}
