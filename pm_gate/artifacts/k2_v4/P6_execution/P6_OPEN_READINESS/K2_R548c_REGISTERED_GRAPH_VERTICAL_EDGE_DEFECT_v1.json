@@ -1,0 +1,94 @@
+{
+ "artifact": "k2_r548c_registered_graph_vertical_edge_defect_v1",
+ "ts": "2026-09-25T12:52:11",
+ "authority": "stop-order response: back to Plan + machine root-cause probe (read-only, one run, no search)",
+ "source": "K2_R498_CONFLICT_TABLE_ONE_IMPLEMENTATION_v2._build_edges (line 'm2 = aa < ba') inherited by K2_R499_..._v3 -> K2_R512 -> K2_R515 Gen2 -> every joint/construction model",
+ "registered_edge_histogram": {
+  "1,0": 8905,
+  "1,1": 17536
+ },
+ "intended_undirected_dedupe_histogram": {
+  "0,1": 8832,
+  "1,0": 8905,
+  "1,1": 17536
+ },
+ "vertical_pairs_intended": 8832,
+ "vertical_pairs_present_in_registered": 0,
+ "defect": "the de-dup filter 'm2 = aa < ba' compares only the COLUMN index, so both vertical families (delta_col = 0, delta_row = +-1) satisfy aa == ba and are DROPPED ENTIRELY; the edge set keeps only the east (1,0) and diagonal (1,1) families.",
+ "one_line_fix": "m2 = (aa < ba) | ((aa == ba) & (ab < bb))",
+ "consequence": "no lane graph in the registered model can move between two nodes in the SAME column; every 'descend in your own entrance column' step (R529 entrance actions; any human fan-out plan) is impossible; northbound progress needs west+north compensation. Hence earlier infeasibility /blocked readings are artifacts of a broken graph and MUST be recomputed.",
+ "per_lane_vertical_edges": {
+  "PCIE_UP_OUT0_N_J2": {
+   "same_col_adjacent_legal_pairs": 6769,
+   "same_col_edges_in_graph": 0
+  },
+  "PCIE_UP_OUT0_P_J2": {
+   "same_col_adjacent_legal_pairs": 6767,
+   "same_col_edges_in_graph": 0
+  },
+  "PCIE_UP_OUT1_N_J2": {
+   "same_col_adjacent_legal_pairs": 6771,
+   "same_col_edges_in_graph": 0
+  },
+  "PCIE_UP_OUT1_P_J2": {
+   "same_col_adjacent_legal_pairs": 6770,
+   "same_col_edges_in_graph": 0
+  },
+  "PCIE_UP_OUT2_N_J2": {
+   "same_col_adjacent_legal_pairs": 6771,
+   "same_col_edges_in_graph": 0
+  },
+  "PCIE_UP_OUT2_P_J2": {
+   "same_col_adjacent_legal_pairs": 6769,
+   "same_col_edges_in_graph": 0
+  },
+  "PCIE_UP_OUT3_N_J2": {
+   "same_col_adjacent_legal_pairs": 6773,
+   "same_col_edges_in_graph": 0
+  },
+  "PCIE_UP_OUT3_P_J2": {
+   "same_col_adjacent_legal_pairs": 6768,
+   "same_col_edges_in_graph": 0
+  },
+  "PCIE_UP_OUT4_N_J2": {
+   "same_col_adjacent_legal_pairs": 6771,
+   "same_col_edges_in_graph": 0
+  },
+  "PCIE_UP_OUT4_P_J2": {
+   "same_col_adjacent_legal_pairs": 6771,
+   "same_col_edges_in_graph": 0
+  },
+  "PCIE_UP_OUT5_N_J2": {
+   "same_col_adjacent_legal_pairs": 6771,
+   "same_col_edges_in_graph": 0
+  },
+  "PCIE_UP_OUT5_P_J2": {
+   "same_col_adjacent_legal_pairs": 6770,
+   "same_col_edges_in_graph": 0
+  },
+  "PCIE_UP_OUT6_N_J2": {
+   "same_col_adjacent_legal_pairs": 6771,
+   "same_col_edges_in_graph": 0
+  },
+  "PCIE_UP_OUT6_P_J2": {
+   "same_col_adjacent_legal_pairs": 6770,
+   "same_col_edges_in_graph": 0
+  },
+  "PCIE_UP_OUT7_N_J2": {
+   "same_col_adjacent_legal_pairs": 6772,
+   "same_col_edges_in_graph": 0
+  },
+  "PCIE_UP_OUT7_P_J2": {
+   "same_col_adjacent_legal_pairs": 6769,
+   "same_col_edges_in_graph": 0
+  }
+ },
+ "all_lanes_have_zero_vertical_edges": true,
+ "buildability": {
+  "mode": "no_witness_until_fixed",
+  "note": "no drawing verdict is valid on the registered graph; fix the edge enumeration, re-run the pre-gates, then draw"
+ },
+ "elapsed_s": 22.2,
+ "fail_loud_log": "/tmp/opencode/r548/r548c_edge_defect.log",
+ "artifact_hash16": "0e27384f2de117b4"
+}

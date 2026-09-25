@@ -1,0 +1,57 @@
+{
+ "artifact": "k2_r548d_defect_corrected_drawing_v1",
+ "ts": "2026-09-25T12:53:06",
+ "authority": "stop-order response: ONE implementation after Plan; defect-corrected registered graph",
+ "defect_fix": {
+  "file_fixed_in_memory_only": "K2_R499_CONFLICT_TABLE_ONE_IMPLEMENTATION_v3.Gen._build_edges",
+  "was": "m2 = aa < ba",
+  "now": "m2 = (aa < ba) | ((aa == ba) & (ab < bb))",
+  "evidence": "K2_R548c_..._VERTICAL_EDGE_DEFECT_v1.json (8832 vertical edges were missing)",
+  "registered_files_touched": "NONE (monkey-patch in memory)"
+ },
+ "method": "identical to R548b: allocate one track per lane per cross-section (L2 re-derived slots), then draw straight track-band paths; single pass, deterministic, hard reservation, no negotiation",
+ "declared_margins": {
+  "row_M_R": 2,
+  "col_M_C": 4
+ },
+ "solve_calls": 0,
+ "vertical_edges_in_lane_graphs_after_fix": 147340,
+ "l2_slot_repair": {
+  "verdict": "PASS",
+  "n_movements": 45
+ },
+ "first_blocker": {
+  "lane": "PCIE_UP_OUT0_N_J2",
+  "segment_index": 2,
+  "kind": "wp",
+  "from": 164,
+  "from_col_row": [
+   2,
+   34
+  ],
+  "to": 2176,
+  "to_col_row": [
+   33,
+   31
+  ],
+  "band": [
+   2,
+   34,
+   33,
+   31
+  ],
+  "n_committed_blockers_in_band": 0
+ },
+ "decision": "STILL BLOCKED after the defect fix -- first blocker recorded; per the stop order NO parameter change and NO rerun.",
+ "buildability": {
+  "mode": "no_witness",
+  "note": "blocked; see first_blocker"
+ },
+ "conservation_audit": {
+  "source": "K2_R537_CONSERVATION_CUT_v1.json",
+  "reading": "156 割无墙，最紧余 +37"
+ },
+ "elapsed_s": 29.2,
+ "fail_loud_log": "/tmp/opencode/r548/r548d_corrected.log",
+ "artifact_hash16": "92766fc19e7c71d5"
+}
