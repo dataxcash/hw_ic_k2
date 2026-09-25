@@ -1,0 +1,369 @@
+{
+ "artifact": "k2_r670_premise_rev2_allocation_v1",
+ "ts": "2026-09-26T02:48:18",
+ "authority": "#K2-250 sec.3/5: RETURNED-TO-DRAWING-LAYER re-determination: the APPROACH segment of EVERY lane is now inside the model (no lower bounds), and the 4th hard key (same-layer same-cell mutual exclusion) is enforced STRICTLY with NO relaxation. Method: product-first (#K2-250 sec.5.2, REF-CASE-LIBRARY sec.A) - ordered/ladder escape so lanes do not cross. Prior: R646 - lever(iii) generalised to EVERY lane that needs a layer change whose registered exit is not via-legal (OUT0_P and OUT7_P alike): the REGISTERED exit is kept and only the layer change moves onto the lane own pad walk; all rows self-certified. Route model = the committed R638 chain + R610 structural gate. Conservation machine-verified with the gate's own keys (slot / descent column / exit) PLUS pairwise-disjoint footprints. OUT0_P per lever(iii). Every conclusion in the doc is a field here.",
+ "supersedes": [
+  "K2_R642_JOINT_TABLE_16OF16_v1.json (98f10ef8a405c506)",
+  "K2_R644_JOINT_TABLE_16OF16_v2.json (e38ccde9d4a85254) - doc claimed conservation OK while its own fields were false/2 (owned)",
+  "R644 generator development run A (2/16, model too rigid; never submitted)"
+ ],
+ "construction_runs": 1,
+ "generator": "K2_R644_JOINT_TABLE_16OF16_v2.py",
+ "exit_legality_facts": {
+  "OUT0_N_J2": {
+   "exit_cell": [
+    114,
+    28
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT0_P_J2": {
+   "exit_cell": [
+    127,
+    36
+   ],
+   "exit_layer": 1,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": true
+  },
+  "OUT1_N_J2": {
+   "exit_cell": [
+    133,
+    36
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT1_P_J2": {
+   "exit_cell": [
+    114,
+    11
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT2_N_J2": {
+   "exit_cell": [
+    114,
+    13
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT2_P_J2": {
+   "exit_cell": [
+    125,
+    36
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT3_N_J2": {
+   "exit_cell": [
+    131,
+    36
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT3_P_J2": {
+   "exit_cell": [
+    114,
+    7
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT4_N_J2": {
+   "exit_cell": [
+    114,
+    24
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": true,
+   "needs_layer_change": false
+  },
+  "OUT4_P_J2": {
+   "exit_cell": [
+    119,
+    36
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT5_N_J2": {
+   "exit_cell": [
+    117,
+    36
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT5_P_J2": {
+   "exit_cell": [
+    114,
+    15
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT6_N_J2": {
+   "exit_cell": [
+    114,
+    12
+   ],
+   "exit_layer": 1,
+   "free_on_exit_layer": true,
+   "via_legal": true,
+   "needs_layer_change": true
+  },
+  "OUT6_P_J2": {
+   "exit_cell": [
+    115,
+    36
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT7_N_J2": {
+   "exit_cell": [
+    135,
+    36
+   ],
+   "exit_layer": 0,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": false
+  },
+  "OUT7_P_J2": {
+   "exit_cell": [
+    114,
+    19
+   ],
+   "exit_layer": 1,
+   "free_on_exit_layer": true,
+   "via_legal": false,
+   "needs_layer_change": true
+  }
+ },
+ "conservation": {
+  "N/A": "UNSAT - no allocation exists; proxy and physical keys are vacuous and are reported as null to avoid 'a tidier file than reality'",
+  "col60_slots_distinct": null,
+  "descent_columns_distinct": null,
+  "exit_cells_distinct": null,
+  "FOURTH_KEY_physical_disjoint": null,
+  "footprint_overlaps": {}
+ },
+ "per_lane": {},
+ "unassigned": [
+  "OUT0_N_J2",
+  "OUT0_P_J2",
+  "OUT1_N_J2",
+  "OUT1_P_J2",
+  "OUT2_N_J2",
+  "OUT2_P_J2",
+  "OUT3_N_J2",
+  "OUT3_P_J2",
+  "OUT4_N_J2",
+  "OUT4_P_J2",
+  "OUT5_N_J2",
+  "OUT5_P_J2",
+  "OUT6_N_J2",
+  "OUT6_P_J2",
+  "OUT7_N_J2",
+  "OUT7_P_J2"
+ ],
+ "solve": {
+  "ok": false,
+  "nodes_full": null,
+  "budget_hit": false,
+  "budget": 4000000,
+  "certificate": {
+   "unsat_core": [
+    "PCIE_UP_OUT6_N_J2",
+    "PCIE_UP_OUT7_P_J2"
+   ],
+   "core_size": 2,
+   "reverified_unsat_by_rerun": true
+  },
+  "binding_analysis": {
+   "OUT6_N_J2": {
+    "n_candidates": 5,
+    "mandatory_cells": [
+     [
+      1,
+      [
+       113,
+       12
+      ]
+     ],
+     [
+      1,
+      [
+       113,
+       13
+      ]
+     ],
+     [
+      1,
+      [
+       113,
+       14
+      ]
+     ],
+     [
+      1,
+      [
+       113,
+       15
+      ]
+     ],
+     [
+      1,
+      [
+       113,
+       16
+      ]
+     ],
+     [
+      1,
+      [
+       113,
+       17
+      ]
+     ],
+     [
+      1,
+      [
+       113,
+       18
+      ]
+     ],
+     [
+      1,
+      [
+       113,
+       19
+      ]
+     ]
+    ]
+   },
+   "OUT7_P_J2": {
+    "n_candidates": 181,
+    "mandatory_cells": [
+     [
+      1,
+      [
+       113,
+       19
+      ]
+     ],
+     [
+      1,
+      [
+       114,
+       19
+      ]
+     ]
+    ]
+   },
+   "dominant_clash_cells": [
+    [
+     [
+      1,
+      113,
+      19
+     ],
+     905
+    ],
+    [
+     [
+      1,
+      113,
+      39
+     ],
+     60
+    ],
+    [
+     [
+      1,
+      113,
+      40
+     ],
+     44
+    ]
+   ]
+  },
+  "calibration": {
+   "small_sat": {
+    "lanes": [
+     "OUT6_N",
+     "OUT5_P"
+    ],
+    "ok": false,
+    "nodes": null
+   },
+   "toy_unsat_exercised": true
+  }
+ },
+ "method": "PREMISE REVISION v2 (#K2-255 sec.3.3a: wall-gap exit re-registered as a +-2-row BAND; L2) + the SAME CSPT exact allocation (MRV + forward checking + backtracking); zero parameter search; calibration on the conflict pair FIRST",
+ "execution_count": 1,
+ "failure_cause_classification": {
+  "code_defect": 0,
+  "parameter_only": 0
+ },
+ "prior_executions": "8 (R644/R646 window; all were code-defect iterations, none submitted - classified by #K2-250 sec.4)",
+ "determined": 0,
+ "of": 16,
+ "buildability": {
+  "mode": "no_witness",
+  "note": "UNSAT certificate delivered instead"
+ },
+ "verification": {
+  "all_lanes_assigned": false,
+  "conservation_pass": false,
+  "all_footprint_cells_free": true
+ },
+ "elapsed_s": 32.4,
+ "execution_record": {
+  "solve_executions_this_artifact": 1,
+  "prior_window_solve_executions": 4,
+  "prior_window_code_defect_aborts": 3,
+  "classification": {
+   "code_defect": 3,
+   "parameter_only": 0
+  },
+  "note": "R668's artifact carried a machine field contradicting its doc (execution_count=1/code_defect=0 vs 4 executions with 3 code-defect aborts) - #K2-255 sec.3.6 required the fix; TRUE accounting is now machine-consistent (all 4 prior runs were the SAME deterministic solve; the 3 aborts were in my reporting stage, zero parameter changes)"
+ },
+ "product_three_questions": {
+  "1_same_chip_product": "YES - REF-CASE-LIBRARY sec.A: oshwhub open-source PEX88096 double-card (AIC + GPU baseboard), GPL 3.0",
+  "2_copyable_artifact": "YES (registered, no-login): project page HTTP 200/865826B; SBR config zip 200/17096B; 146 renders (18 read by the ENG); 11 datasheet PDFs",
+  "3_diff_list": "DIRECTLY COPIED (render-measured, R633 rules): one bundle per connector / long straight run / one layer change at the breakout / bundles merely must not overlap (this last rule IS the machine-verified 4th hard key). REGISTERED-GEOMETRY DIFFERENCE (the pinned item, now revised): the wall-gap approaches were registered SINGLE-FILE through one column (113); the product enters the connector field through a BAND, side by side. The revision therefore re-registers the wall-gap exit as a +-2-row BAND (scheme-layer exit-right widening, no board change). Evidence grade = render observation + registered SBR grouping, NOT cell-accurate source (R664)."
+ },
+ "artifact_hash16": "0af9c528717fc694"
+}
