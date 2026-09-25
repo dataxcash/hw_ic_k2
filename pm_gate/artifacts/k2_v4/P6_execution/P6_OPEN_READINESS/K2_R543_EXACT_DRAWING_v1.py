@@ -43,24 +43,56 @@ def main():
             else:
                 ax, ay = xy_of(src); bx, by = xy_of(dst)
                 keep = None
-            cand = []
-            for (u, v, w) in [(uu, vv, 1 if (uu < TERM_BASE and vv < TERM_BASE and uu // NID != vv // NID) else 0)
-                              for uu, lst in lanes[nm]["adj"].items() for (vv, _w) in lst]:
-                if u >= TERM_BASE or v >= TERM_BASE:
-                    cand.append((u, v, w)); continue
-                A = xy_of(src) if src < TERM_BASE else None
-                # band: node must lie within L1 band of the straight line src->dst (segments between fixed waypoints)
+            # K2-212 K2-211 sec.3.3 FIXED domain (same rule as the passing calibration R545):
+            # band UNION fixed waypoints UNION dilated shortest-path corridor between the two waypoints.
+            sp = set()
+            full = collections.defaultdict(set)
+            for u, lst in lanes[nm]["adj"].items():
+                for (v, _w) in lst:
+                    full[u].add(v); full[v].add(u)
+            prev = {src: None}; dq = collections.deque([src])
+            while dq:
+                x = dq.popleft()
+                if x == dst:
+                    break
+                for y in full[x]:
+                    if y not in prev:
+                        prev[y] = x; dq.append(y)
+            if dst in prev:
+                x = dst
+                while x is not None:
+                    if x < TERM_BASE:
+                        i0, j0 = (x % NID) // NY, (x % NID) % NY
+                        for di in range(-1, 2):
+                            for dj in range(-1, 2):
+                                u2, v2 = i0 + di, j0 + dj
+                                if 0 <= u2 < NX and 0 <= v2 < NY:
+                                    sp.add(u2 * NY + v2)
+                    x = prev[x]
+            fixedset = set(x for x in chain if x < TERM_BASE)
+            if src < TERM_BASE and dst < TERM_BASE:
                 sx, sy = xy_of(src); tx, ty = xy_of(dst)
-                px, py = xy_of(v)
-                dx, dy = tx - sx, ty - sy
-                L2 = dx * dx + dy * dy
+            else:
+                sx = sy = tx = ty = 0.0
+
+            def band_ok(nd):
+                if nd >= TERM_BASE or src >= TERM_BASE or dst >= TERM_BASE:
+                    return True
+                px, py = xy_of(nd); dx, dy = tx - sx, ty - sy; L2 = dx * dx + dy * dy
                 if L2 <= 0:
                     d = math.hypot(px - sx, py - sy)
                 else:
                     t = max(0.0, min(1.0, ((px - sx) * dx + (py - sy) * dy) / L2))
                     d = math.hypot(px - (sx + t * dx), py - (sy + t * dy))
-                if d <= (RB * P) + 1e-9:
-                    cand.append((u, v, w))
+                return d <= RB * P + 1e-9
+            cand = []
+            for u, lst in lanes[nm]["adj"].items():
+                for (v, _w) in lst:
+                    iv = 1 if (u < TERM_BASE and v < TERM_BASE and u // NID != v // NID) else 0
+                    adm = ((u < TERM_BASE and (u in fixedset or (u % NID) in sp)) or
+                           (v < TERM_BASE and (v in fixedset or (v % NID) in sp)))
+                    if adm:
+                        cand.append((u, v, iv))
             seg_arcs[nm].append(cand)
         laneseg[nm] = [[mo.NewBoolVar("x_%s_%d_%d" % (nm.replace("-", "_"), s, k)) for k in range(len(c))]
                        for s, c in enumerate(seg_arcs[nm])]
