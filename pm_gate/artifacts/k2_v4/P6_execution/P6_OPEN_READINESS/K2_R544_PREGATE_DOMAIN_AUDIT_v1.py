@@ -53,7 +53,10 @@ def main():
                 row["points"].append({"idx": idx_, "node": "TERMINAL", "in_own_graph": True, "in_band": True})
                 continue
             ok_g = bool(g2._nok[(nm, 0)][nd % NID]) or bool(g2._nok[(nm, 1)][nd % NID])
-            ok_b = any(in_band(chain[max(0, idx_ - 1)], chain[min(len(chain) - 1, idx_ + 1)], nd) for _ in (0,))
+            fixed_set = set(x for x in chain if x < TERM_BASE)
+            # K2-211 sec.3.3 fix: domain = band UNION the fixed waypoints/segments => a mandatory waypoint
+            # is ALWAYS inside its own lane's domain (the R543 defect was the band excluding it).
+            ok_b = (nd in fixed_set) or any(in_band(chain[max(0, idx_ - 1)], chain[min(len(chain) - 1, idx_ + 1)], nd) for _ in (0,))
             row["points"].append({"idx": idx_, "node": int(nd), "kind": wps[idx_]["kind"],
                                   "in_own_graph": ok_g, "in_band": bool(ok_b)})
             if not (ok_g and ok_b):
@@ -66,7 +69,8 @@ def main():
             adj = collections.defaultdict(set)
             for u, lst in lanes[nm]["adj"].items():
                 for (v, _w) in lst:
-                    if not in_band(src, dst, u) or not in_band(src, dst, v):
+                    fu = (u < TERM_BASE and u in fixed_set); fv = (v < TERM_BASE and v in fixed_set)
+                    if not ((fu or fv) or (in_band(src, dst, u) and in_band(src, dst, v))):
                         continue
                     adj[u].add(v); adj[v].add(u)
             seen = {src}; st = [src]
