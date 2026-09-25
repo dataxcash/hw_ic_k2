@@ -1,0 +1,66 @@
+{
+ "artifact": "k2_r692_stream_submodel_v1",
+ "ts": "2026-09-26T05:14:33",
+ "authority": "#K2-259 (c) small-case calibration: STREAMING domain generation (generate->filter vs fixed-13->keep survivors; no full materialisation) + MRV + forward checking; deterministic, one run, fail-loud.",
+ "construction_runs": 1,
+ "drawings": 0,
+ "fixed13_cells": 538,
+ "stream_stats": {
+  "OUT5_P_J2": {
+   "generated": null,
+   "survivors": 15545
+  },
+  "OUT7_N_J2": {
+   "generated": null,
+   "survivors": 210008
+  },
+  "OUT7_P_J2": {
+   "generated": null,
+   "survivors": 71245
+  }
+ },
+ "sub_model": {
+  "lanes": [
+   "OUT5_P",
+   "OUT7_N",
+   "OUT7_P"
+  ],
+  "sat": true,
+  "nodes": 3
+ },
+ "witness": {
+  "OUT5_P_J2": {
+   "H": 50,
+   "Xa": 122,
+   "Rm": null,
+   "Xb": 122,
+   "tail_layer": 0,
+   "kind": "single",
+   "n_cells": 98
+  },
+  "OUT7_N_J2": {
+   "H": 58,
+   "Xa": 135,
+   "Rm": null,
+   "Xb": 135,
+   "tail_layer": 0,
+   "kind": "single",
+   "n_cells": 99
+  },
+  "OUT7_P_J2": {
+   "H": 59,
+   "Xa": 110,
+   "Rm": null,
+   "Xb": 110,
+   "tail_layer": 1,
+   "kind": "single",
+   "n_cells": 96
+  },
+  "_cell_check": {
+   "pairwise_disjoint": true,
+   "note": "enforced by the solver"
+  }
+ },
+ "elapsed_s": 61.3,
+ "artifact_hash16": "a180c5871506bcdb"
+}
