@@ -23,6 +23,8 @@ P,X0,Y0=W.P,W.X0,W.Y0; ST=["COMB","BELT","WALL","FIELD"]
 def main():
     open(LOGF,"w").close(); t0=time.time()
     g2=W.Gen2(json.load(open(MODEL)),l1scope="full"); names=list(g2.names)
+    _only=os.environ.get("K2_ONLY")
+    if _only: names=[n for n in names if n in _only.split(",")]; log("[SELFTEST] restricted to %s"%names)
     master=json.load(open(os.path.join(HERE,"K2_R529_WOVEN_COMPLETE_MASTER_v1.json")))
     spec=json.load(open(os.path.join(HERE,"K2_R540_CORRIDOR_SPEC_v1.json")))
     ent_tab=json.load(open(os.path.join(HERE,"K2_R550_CONSTRUCTION_DRAWING_v1.json")))["entrance_channel_table"]
@@ -91,9 +93,9 @@ def main():
                             wps.append(q)
                     if not bad and wps: pick=(H,Xt,wps); break
 
-                fail.append({"lane":nm,"L":L,"d":d,"Y":Y,"east":east,"resource":"corridor tail waypoints"}); continue
             if pick is None:
-                fail.append({"lane":nm,"L":L,"d":d,"Y":Y,"east":east,"resource":"corridor tail waypoints"}); continue
+                fail.append({"lane":nm,"L":L,"d":d,"Y":Y,"east":east,"resource":"corridor tail waypoints"})
+                continue
             H,Xt,wps=pick
             cells=[(60,H)]+wps
             mid=list(pocket)+[(d,r) for r in range(top,H+1)]+[(x,H) for x in range(d+1,61)]
@@ -127,12 +129,12 @@ def main():
                 if v not in aset[nm].get(u,()) and u not in aset[nm].get(v,()): nonarc.append({"lane":nm,"u":list(a),"v":list(b2),"seg":"mid"})
         # tail cells are CORRIDOR waypoints: the drawer fills them deterministically inside the
         # declared rectangle bands with hard reservation; per-cell legality is verified by exact_gate
-    allc={nm:set(T[nm]["mids"])|set(T[nm]["tail"]["cells"]) for nm in T}
+    allc={nm:{(T[nm]["L"],c,r) for (c,r) in T[nm]["mids"]}|{(0,c,r) for (c,r) in T[nm]["tail"]["cells"]} for nm in T}
     gg=[n for n in names if n in T]
     for i,a in enumerate(gg):
         for b2 in gg[i+1:]:
             inter=allc[a]&allc[b2]
-            if inter: clash.append({"a":a,"b":b2,"n":len(inter),"cells":sorted("%d,%d"%z for z in inter)[:5]})
+            if inter: clash.append({"a":a,"b":b2,"n":len(inter),"cells":sorted("L%d:%d,%d"%z for z in inter)[:5]})
     cap={}
     for L in (0,1):
         ggl=[n for n in pi[L] if n in T]
