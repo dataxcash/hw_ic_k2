@@ -1,0 +1,40 @@
+{
+ "artifact": "k2_l1_a_fanout_paradigm_rule_v1",
+ "ts": "2026-09-26T22:45:49",
+ "status": "ENG-OWNED RULE v1, derived by the ENG from its OWN observation of Fig 4-1 / Fig 4-2 (#K2-292 sec.3.2)",
+ "evidence": [
+  "REF-DS320PR1601EVM-Fig4-1-TopLayer.png (observed: U1 at board centre; two long edge connectors P2 top / P3 bottom; traces radiate from U1 toward both edges in a fan, no visible crossing)",
+  "REF-DS320PR1601EVM-Fig4-2-BottomLayer.png (observed: same centre U1; a symmetric bow-tie/hourglass fan-out; the bundle is narrow at U1 and wide at the connectors; the two halves look like mirror images; the fan-out itself carries no layer-change structures; P/N traces run as pairs)"
+ ],
+ "rules": [
+  {
+   "id": "R1",
+   "text": "the device sits at the centre; the 16 lanes leave it as ONE bundle and split into TWO half-bundles, one per edge connector",
+   "evidence": "Fig 4-1/4-2 centre U1 + two edge connectors"
+  },
+  {
+   "id": "R2",
+   "text": "within each half the PHYSICAL trace order is PRESERVED from the device to the connector (flow-through, monotone, no crossing)",
+   "evidence": "Fig 4-2 bow-tie fan-out, no crossing visible"
+  },
+  {
+   "id": "R3",
+   "text": "the two halves are MIRROR images about the group axis (the reverse in the vendor channel tables is a REGISTER/channel-INDEX reversal, not a physical trace reversal)",
+   "evidence": "Fig 4-2 mirrored halves + SNLA425A Table 1-2/1-3 numbering"
+  },
+  {
+   "id": "R4",
+   "text": "the fan-out itself carries NO layer change; it is an in-plane radial spread",
+   "evidence": "Fig 4-2 shows a complete fan-out; no via structures inside the fan-out"
+  },
+  {
+   "id": "R5",
+   "text": "P/N run as a pair with matched geometry",
+   "evidence": "Fig 4-2 paired traces"
+  }
+ ],
+ "unreadable": [
+  "the exact via/layer-change positions at the device breakout are NOT resolvable at this render scale (logged as unreadable, not guessed)"
+ ],
+ "applied_rule": "R2 (physical order preserved) with the physical order taken as the REGISTERED ENTRANCE CHANNEL column d (device-side), monotone within each connector half"
+}
