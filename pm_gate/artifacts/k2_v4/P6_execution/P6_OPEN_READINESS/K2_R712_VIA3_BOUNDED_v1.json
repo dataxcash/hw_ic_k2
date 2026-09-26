@@ -1,0 +1,34 @@
+{
+ "artifact": "k2_r712_via3_bounded_v1",
+ "ts": "2026-09-26T08:25:42",
+ "authority": "#K2-267(gamma-1): bounded exact determination relaxing ONLY the via-pair count for the 3 problem lanes (<=3 pairs); the other 13 keep <=2; deterministic lexicographic Dijkstra (switch count, steps) over the lane's free graph avoiding the R652 13's realised cells; single-variable declaration; one run; fail-loud.",
+ "construction_runs": 1,
+ "drawings": 0,
+ "base": {
+  "lanes": 6,
+  "cells": 516
+ },
+ "relaxed_lanes": [
+  "OUT0_P_J2",
+  "OUT4_N_J2",
+  "OUT7_P_J2"
+ ],
+ "gamma1": {
+  "sat": false,
+  "paths": {
+   "OUT0_P_J2": {
+    "len": 93,
+    "switches": 0
+   },
+   "OUT4_N_J2": {
+    "len": 94,
+    "switches": 0
+   }
+  }
+ },
+ "binary": "UNSAT_or_no_path",
+ "conservation": {},
+ "buildability": {},
+ "elapsed_s": 28.9,
+ "artifact_hash16": "1af49d393fc453af"
+}
