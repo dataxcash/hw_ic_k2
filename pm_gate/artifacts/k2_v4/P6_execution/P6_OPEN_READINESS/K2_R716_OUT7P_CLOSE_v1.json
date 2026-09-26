@@ -1,0 +1,38 @@
+{
+ "artifact": "k2_r716_out7p_close_v1",
+ "ts": "2026-09-26T08:56:26",
+ "authority": "#K2-269: STEP1 single-lane full enumeration of OUT7_P at <=3/<=4/<=5 via pairs on the frozen 15-lane base; STEP2 (if needed) yield-and-rearrange = pick the lane with the LEAST overlap with OUT7_P's blocked cells and re-solve (that lane + OUT7_P). base_ref=K2_BASE13_FROZEN_v1 (+ the two gamma-1 paths). One run per step; deterministic; fail-loud.",
+ "construction_runs": 1,
+ "drawings": 0,
+ "base_ref": "K2_BASE13_FROZEN_v1",
+ "base15": {
+  "lanes": 15,
+  "cells": 1399
+ },
+ "step1_enumeration": {
+  "3": {
+   "path": false,
+   "mid_switches": null,
+   "cells": 0
+  },
+  "4": {
+   "path": true,
+   "mid_switches": 3,
+   "cells": 80
+  },
+  "5": {
+   "path": true,
+   "mid_switches": 3,
+   "cells": 80
+  }
+ },
+ "si_gate": {
+  "rule": "SPEC vias.high_speed.max_per_line",
+  "value": 2,
+  "note": "a <=4-or-more pair route exceeds the registered per-line via limit"
+ },
+ "step2": null,
+ "binary": "SAT_16of16_via4_if_SI_pass",
+ "elapsed_s": 29.3,
+ "artifact_hash16": "5c02dd9afb19e130"
+}
