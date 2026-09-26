@@ -1,0 +1,79 @@
+{
+ "artifact": "k2_conservation_level_blocker_report_v1",
+ "ts": "2026-09-26T13:19:09",
+ "authority": "stop order: convergence stall ~80 rounds without a binary",
+ "binary_availability": {
+  "feasibility_witness": "NOT obtainable under the current registration (R732 7/16; R730 49/49; R652 13/16 ceiling)",
+  "conservation_level_infeasibility_certificate": "MACHINE-PROVED NOT OBTAINABLE for this problem: R537 hard_wall_certificate_found=false, all 156 lattice cuts have capacity_upper_bound >= demand => no single-cut wall; the only in-register core (R668) is SINGLE-STAGE, not the 16-lane joint",
+  "conclusion": "neither binary is obtainable => this conservation-level blocker report is issued as ordered"
+ },
+ "which_layer": [
+  "L1 escape band row 36 cols 115-135",
+  "L0 wall-gap approach rows 7-28",
+  "descent corridors cols 114-137 on both layers",
+  "via cells couples the two layers"
+ ],
+ "which_resource": {
+  "not_area": "R537: tightest section capacity 40 vs demand 3 (+37 margin) => no area shortage",
+  "binding": "ordered reachability of the 16 REGISTERED exit gates on 2 layers (a non-crossing / order constraint), multiplied by the REGISTERED via budget (13 lanes <=2 pairs, 3 lanes <=3 pairs) which forbids using extra layer changes to resolve crossings"
+ },
+ "who_occupies_it": [
+  {
+   "cells": "L1 row36 cols117-127",
+   "lane": "OUT0_P"
+  },
+  {
+   "cells": "L1 row36 cols128-131",
+   "lanes": [
+    "OUT7_P",
+    "OUT6_N",
+    "OUT2_N",
+    "OUT3_P"
+   ]
+  },
+  {
+   "cells": "L0 col120 rows29-43",
+   "lane": "OUT0_N"
+  },
+  {
+   "cells": "L0 col117 rows36-40",
+   "lane": "OUT5_N"
+  },
+  {
+   "cells": "L0 (118,43)",
+   "lane": "OUT0_N"
+  },
+  {
+   "cells": "L0 col122 / col123",
+   "lanes": [
+    "OUT5_P",
+    "OUT2_P"
+   ]
+  }
+ ],
+ "why_no_allocation_is_possible": {
+  "machine_proven": [
+   "six construction families <=13/16 (R652)",
+   "UNSAT relative to the 13-lane base (R708)",
+   "whole-version bundle with exit gates strictly fixed = 7/16 (R732)",
+   "single-row / +-1 patching refused in all 49 declared candidates (R730)",
+   "NO conservation-level cut certificate exists (R537 156/156)"
+  ],
+  "NOT_proven": "a global conservation-level / UNSAT hard core for the 16-lane joint allocation under the current registration",
+  "forbidden": "stating NOT-proven as PROVEN"
+ },
+ "only_two_exits": {
+  "A": "owner approves the grouped-mirror exit-registration revision (L1) => a feasibility witness becomes plausible in 2-3 windows",
+  "B": "keep the registration and close as design-level infeasible - first obtain the hard core (see K2_L1_B_HARDCORE_SPEC_v1.json) or have the owner accept the declared-construct-exhaustion wording"
+ },
+ "discipline": {
+  "registration_or_spec_modified": false,
+  "drawn": false,
+  "gerber": false,
+  "p5": false,
+  "order": false,
+  "worker": false,
+  "in_register_files_touched": false,
+  "frozen_four": "4/4 MATCH"
+ }
+}
