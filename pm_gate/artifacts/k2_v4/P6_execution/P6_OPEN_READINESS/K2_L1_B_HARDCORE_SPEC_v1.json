@@ -1,0 +1,22 @@
+{
+ "artifact": "k2_l1_b_hardcore_spec_v1",
+ "ts": "2026-09-26T12:50:54",
+ "status": "SPEC - read-only; produces NOTHING until a window is authorised",
+ "goal": "produce (or fail to produce) a CONSERVATION-LEVEL / UNSAT HARD CORE for the full 16-lane joint determination UNDER THE CURRENT FROZEN EXIT REGISTRATION",
+ "one_bounded_experiment": {
+  "inputs": [
+   "the in-register exit gates (unchanged)",
+   "the in-register per-lane legal cell sets",
+   "the registered budgets (13 lanes <=2 via-pairs, 3 relaxed <=3)"
+  ],
+  "decision": "joint 16-commodity disjoint-path feasibility under the registered exits",
+  "method_class": "certificate-first: try to exhibit a CONSERVATION-LEVEL cut (a cut whose capacity_upper_bound < demand) over the (cell,layer) lattice, exactly as R537 did for the single-stage case; if such a cut exists it IS the hard core",
+  "boundedness": "one run; no parameter trial; deterministic",
+  "expected_outputs": {
+   "SAT": "would contradict the 7/16 finding => re-examine (this itself would be a major result)",
+   "UNSAT_with_cut": "the hard core: cut definition + capacity_upper_bound + demand + per-source arithmetic (machine-checkable)",
+   "no_cut_found": "then the hard core is NOT a capacity argument => the closure must rest on construct-exhaustion strength (owner must accept the wording)"
+  }
+ },
+ "note": "this spec answers the open item recorded in K2_L1_B_INFEASIBILITY_EVIDENCE_INDEX_v1.json -> evidence_strength_calibration.NOT_proven"
+}

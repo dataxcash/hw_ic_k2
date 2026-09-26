@@ -1,0 +1,43 @@
+{
+ "artifact": "k2_l1_a_revision_artifact_scaffold_v1",
+ "ts": "2026-09-26T12:50:54",
+ "status": "SCAFFOLD - read-only; the revision artifact is produced ONLY after the owner approves branch A",
+ "artifact_kind": "SPEC-derived, version-bumped NEW file (originals never modified)",
+ "fields": [
+  "artifact",
+  "ts",
+  "authority (owner A approval)",
+  "supersedes_entry (the registered exit semantics entry, cited by id)",
+  "per_lane_exit_registration[16] {lane, group, pn_pair, old_gate, new_gate, mirror_axis, wall_gap_id, delta_col, delta_row}",
+  "invariants_verified {16/16, pad_to_pad, connector, bga_balls, wall_gap_physical_openings=0}",
+  "frozen_four_distance[4] {name, path, sha16, expected, match}",
+  "artifact_hash16"
+ ],
+ "frozen_four_distance_template": [
+  {
+   "name": "SPEC",
+   "path": "k2/pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json",
+   "sha16": "0bd52ed48e720b8c",
+   "expected": "0bd52ed48e720b8c"
+  },
+  {
+   "name": "manifest",
+   "path": "k2/pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_s1_page_manifest.json",
+   "sha16": "a8ef3ea8ecff99d7",
+   "expected": "a8ef3ea8ecff99d7"
+  },
+  {
+   "name": "PCB",
+   "path": "k2/k2_v4_8L.kicad_pcb",
+   "sha16": "fb07d25ac426ff84",
+   "expected": "fb07d25ac426ff84"
+  },
+  {
+   "name": "rules",
+   "path": "_shared/eda_core/drc_rules.json",
+   "sha16": "0a459839e15960b8",
+   "expected": "0a459839e15960b8"
+  }
+ ],
+ "hard_boundary": "if the mirrored registration cannot land without moving a wall-gap physical opening => STOP and report"
+}
