@@ -1,0 +1,60 @@
+{
+ "artifact": "k2_closure_b_frozen_set_proposal_v1",
+ "ts": "2026-09-26T23:04:34",
+ "authority": "#K2-294 sec.2 (confirmed: issue the B-branch closure item) + #K2-280 sec.3.B",
+ "conclusion": "under the current frozen exit registration / the in-register envelope (<=21 col, <=29 row) / the tried reference-paradigm family (flow-through line card, bifurcation riser), a 16/16 K2 construction drawing is DESIGN-LEVEL UNREACHABLE",
+ "evidence_summary": {
+  "R537_no_capacity_wall": "156/156 cuts have capacity_upper_bound >= demand; hard_wall_certificate_found=false",
+  "R545_R533_single_lane": "all 16 lanes individually drawable",
+  "R652_family_ceiling": "13/16",
+  "R708_relative_base_unsat": "13 fixed + 3 free => UNSAT relative to that base",
+  "R730_single_row_patch": "49/49 candidates refused",
+  "branches": {
+   "v2": "8/16",
+   "v3": "8/16 (envelope fully consumed)",
+   "v4": "7/16",
+   "v5": "8/16",
+   "v5b": "5/16"
+  },
+  "references": {
+   "flow_through_line_card": "board-type mismatch",
+   "bifurcation_riser": "class match but the distinguishing mechanism (corner via clusters / multi-segment layer changes) is blocked by the in-register via budget"
+  }
+ },
+ "evidence_strength": {
+  "proven": "the 12 machine-checked items, including that NO capacity-level cut exists (R537)",
+  "NOT_proven": "a conservation-level / UNSAT hard core for unreachability under the current registration - and R537 machine-proves such a cut cannot be constructed",
+  "strength": "declared-construct / envelope / reference-paradigm exhaustion + no capacity-level cut (NOT a conservation-level proof)",
+  "forbidden": "presenting this closure as a conservation-level proof"
+ },
+ "frozen_set_change_proposal": {
+  "what": "revise the wall-gap opening set to complete the mirror pairs (W 7-28, 11-24; E 115-135, 117-133, 119-131, 125-125) by adding 5 missing positions (W rows 23/22/20/16; E col 123)",
+  "invariants_unchanged": [
+   "16/16 demand",
+   "pad-to-pad",
+   "connector",
+   "BGA balls"
+  ],
+  "conservation_accounting": "re-run the R537 method (156 cuts) on the revised set to show no capacity wall is introduced",
+  "pre_verification_plan": {
+   "P-a": "run ONE certification with the revised registration (domain 1, zero search) - no physical change",
+   "P-b": "all pass (with witness) => THEN request the opening revision; blocked => the proposal is withdrawn",
+   "P-c": "no physical opening is touched before P-b passes and the owner approves"
+  }
+ },
+ "owner_options": {
+  "A_prime": "approve the wall-gap set revision (with the pre-verification plan) - registration/opening change only; 16/16 demand, interface, connector, balls unchanged",
+  "B_prime": "accept the unreachable conclusion - close K2 at this stage and move to requirement/interface changes",
+  "eng_recommendation": "A_prime (prove in-model first, then touch the board; withdraw if unprovable) - space has margin (+37), every lane is individually drawable, the bottleneck is only the gate registration layout"
+ },
+ "discipline": {
+  "zero_runs": true,
+  "no_drawing": true,
+  "no_spec_bump": true,
+  "no_worker": true,
+  "physical_body_untouched": true,
+  "in_register_files_modified": false,
+  "frozen_four": "4/4 MATCH"
+ },
+ "phase": "awaiting supervisor review, then the supervisor escalates to the owner (frozen-set)"
+}
