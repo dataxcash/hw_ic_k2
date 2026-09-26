@@ -1,0 +1,413 @@
+{
+ "artifact": "k2_l1_a_exit_registration_remap_table_v1",
+ "ts": "2026-09-26T12:46:18",
+ "status": "SKELETON - read-only; NO coordinate solving, NO drawing; to be filled ONLY after the owner approves branch A",
+ "authority": "#K2-280 sec.3-A (recommended branch) + #K2-281 sec.2.3 (make-work order)",
+ "what_changes": "ONLY the semantics of which registered wall-gap each lane passes through (east group re-determined as a GROUPED MIRROR)",
+ "what_does_not_change": [
+  "16/16 demand",
+  "pad-to-pad interface",
+  "connector",
+  "BGA ball mapping",
+  "signal flow",
+  "wall-gap physical openings (no move / no add / no delete)"
+ ],
+ "frozen_sources": {
+  "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.json": "0bd52ed48e720b8c"
+ },
+ "pending_owner_decision": "A = approve the grouped-mirror exit-registration revision (delivered as a NEW version-bumped SPEC derived artifact; originals untouched)",
+ "downstream_chain_if_approved": [
+  "1. exit-registration revision artifact (version bump + per-source distance accounting)",
+  "2. ONE certified 16/16 table (whole-version bundle; 4 hard keys + layer-pair key + via/approach columns)",
+  "3. supervisor acceptance",
+  "4. ONE 16-lane redraw + merged collision check (0 conflicts)",
+  "5. M2 closure + B-segment construction order"
+ ],
+ "hard_boundary_fail_closed": "if the mirrored registration cannot land WITHOUT moving a wall-gap physical opening => STOP and report (back to the L1 topic)",
+ "rows": [
+  {
+   "lane": "OUT0_N_J2",
+   "group": "W(wall-gap col-114)",
+   "pn_pair": "OUT0",
+   "gate_registered": {
+    "cell": [
+     114,
+     28
+    ],
+    "layer": 0,
+    "wall_gap_id": "gap@114,28"
+   },
+   "mirror_partner": "OUT0_P_J2",
+   "product_reference": "REF-CASE-LIBRARY sec.A.1 (PEX88096 baseboard) + R633 three rules",
+   "delta_col_row": "PENDING OWNER APPROVAL (in-register R710 reading: up to 21 cols / 29 rows per P/N pair)",
+   "gate_mirrored_new": "PENDING OWNER APPROVAL",
+   "invariants": [
+    "16/16 demand",
+    "pad-to-pad",
+    "connector",
+    "BGA balls",
+    "wall-gap physical opening (no move/add/delete)"
+   ]
+  },
+  {
+   "lane": "OUT0_P_J2",
+   "group": "E(row-36)",
+   "pn_pair": "OUT0",
+   "gate_registered": {
+    "cell": [
+     127,
+     36
+    ],
+    "layer": 1,
+    "wall_gap_id": "gap@127,36"
+   },
+   "mirror_partner": "OUT0_N_J2",
+   "product_reference": "REF-CASE-LIBRARY sec.A.1 (PEX88096 baseboard) + R633 three rules",
+   "delta_col_row": "PENDING OWNER APPROVAL (in-register R710 reading: up to 21 cols / 29 rows per P/N pair)",
+   "gate_mirrored_new": "PENDING OWNER APPROVAL",
+   "invariants": [
+    "16/16 demand",
+    "pad-to-pad",
+    "connector",
+    "BGA balls",
+    "wall-gap physical opening (no move/add/delete)"
+   ]
+  },
+  {
+   "lane": "OUT1_N_J2",
+   "group": "E(row-36)",
+   "pn_pair": "OUT1",
+   "gate_registered": {
+    "cell": [
+     133,
+     36
+    ],
+    "layer": 0,
+    "wall_gap_id": "gap@133,36"
+   },
+   "mirror_partner": "OUT1_P_J2",
+   "product_reference": "REF-CASE-LIBRARY sec.A.1 (PEX88096 baseboard) + R633 three rules",
+   "delta_col_row": "PENDING OWNER APPROVAL (in-register R710 reading: up to 21 cols / 29 rows per P/N pair)",
+   "gate_mirrored_new": "PENDING OWNER APPROVAL",
+   "invariants": [
+    "16/16 demand",
+    "pad-to-pad",
+    "connector",
+    "BGA balls",
+    "wall-gap physical opening (no move/add/delete)"
+   ]
+  },
+  {
+   "lane": "OUT1_P_J2",
+   "group": "W(wall-gap col-114)",
+   "pn_pair": "OUT1",
+   "gate_registered": {
+    "cell": [
+     114,
+     11
+    ],
+    "layer": 0,
+    "wall_gap_id": "gap@114,11"
+   },
+   "mirror_partner": "OUT1_N_J2",
+   "product_reference": "REF-CASE-LIBRARY sec.A.1 (PEX88096 baseboard) + R633 three rules",
+   "delta_col_row": "PENDING OWNER APPROVAL (in-register R710 reading: up to 21 cols / 29 rows per P/N pair)",
+   "gate_mirrored_new": "PENDING OWNER APPROVAL",
+   "invariants": [
+    "16/16 demand",
+    "pad-to-pad",
+    "connector",
+    "BGA balls",
+    "wall-gap physical opening (no move/add/delete)"
+   ]
+  },
+  {
+   "lane": "OUT2_N_J2",
+   "group": "W(wall-gap col-114)",
+   "pn_pair": "OUT2",
+   "gate_registered": {
+    "cell": [
+     114,
+     13
+    ],
+    "layer": 0,
+    "wall_gap_id": "gap@114,13"
+   },
+   "mirror_partner": "OUT2_P_J2",
+   "product_reference": "REF-CASE-LIBRARY sec.A.1 (PEX88096 baseboard) + R633 three rules",
+   "delta_col_row": "PENDING OWNER APPROVAL (in-register R710 reading: up to 21 cols / 29 rows per P/N pair)",
+   "gate_mirrored_new": "PENDING OWNER APPROVAL",
+   "invariants": [
+    "16/16 demand",
+    "pad-to-pad",
+    "connector",
+    "BGA balls",
+    "wall-gap physical opening (no move/add/delete)"
+   ]
+  },
+  {
+   "lane": "OUT2_P_J2",
+   "group": "E(row-36)",
+   "pn_pair": "OUT2",
+   "gate_registered": {
+    "cell": [
+     125,
+     36
+    ],
+    "layer": 0,
+    "wall_gap_id": "gap@125,36"
+   },
+   "mirror_partner": "OUT2_N_J2",
+   "product_reference": "REF-CASE-LIBRARY sec.A.1 (PEX88096 baseboard) + R633 three rules",
+   "delta_col_row": "PENDING OWNER APPROVAL (in-register R710 reading: up to 21 cols / 29 rows per P/N pair)",
+   "gate_mirrored_new": "PENDING OWNER APPROVAL",
+   "invariants": [
+    "16/16 demand",
+    "pad-to-pad",
+    "connector",
+    "BGA balls",
+    "wall-gap physical opening (no move/add/delete)"
+   ]
+  },
+  {
+   "lane": "OUT3_N_J2",
+   "group": "E(row-36)",
+   "pn_pair": "OUT3",
+   "gate_registered": {
+    "cell": [
+     131,
+     36
+    ],
+    "layer": 0,
+    "wall_gap_id": "gap@131,36"
+   },
+   "mirror_partner": "OUT3_P_J2",
+   "product_reference": "REF-CASE-LIBRARY sec.A.1 (PEX88096 baseboard) + R633 three rules",
+   "delta_col_row": "PENDING OWNER APPROVAL (in-register R710 reading: up to 21 cols / 29 rows per P/N pair)",
+   "gate_mirrored_new": "PENDING OWNER APPROVAL",
+   "invariants": [
+    "16/16 demand",
+    "pad-to-pad",
+    "connector",
+    "BGA balls",
+    "wall-gap physical opening (no move/add/delete)"
+   ]
+  },
+  {
+   "lane": "OUT3_P_J2",
+   "group": "W(wall-gap col-114)",
+   "pn_pair": "OUT3",
+   "gate_registered": {
+    "cell": [
+     114,
+     7
+    ],
+    "layer": 0,
+    "wall_gap_id": "gap@114,7"
+   },
+   "mirror_partner": "OUT3_N_J2",
+   "product_reference": "REF-CASE-LIBRARY sec.A.1 (PEX88096 baseboard) + R633 three rules",
+   "delta_col_row": "PENDING OWNER APPROVAL (in-register R710 reading: up to 21 cols / 29 rows per P/N pair)",
+   "gate_mirrored_new": "PENDING OWNER APPROVAL",
+   "invariants": [
+    "16/16 demand",
+    "pad-to-pad",
+    "connector",
+    "BGA balls",
+    "wall-gap physical opening (no move/add/delete)"
+   ]
+  },
+  {
+   "lane": "OUT4_N_J2",
+   "group": "W(wall-gap col-114)",
+   "pn_pair": "OUT4",
+   "gate_registered": {
+    "cell": [
+     114,
+     24
+    ],
+    "layer": 0,
+    "wall_gap_id": "gap@114,24"
+   },
+   "mirror_partner": "OUT4_P_J2",
+   "product_reference": "REF-CASE-LIBRARY sec.A.1 (PEX88096 baseboard) + R633 three rules",
+   "delta_col_row": "PENDING OWNER APPROVAL (in-register R710 reading: up to 21 cols / 29 rows per P/N pair)",
+   "gate_mirrored_new": "PENDING OWNER APPROVAL",
+   "invariants": [
+    "16/16 demand",
+    "pad-to-pad",
+    "connector",
+    "BGA balls",
+    "wall-gap physical opening (no move/add/delete)"
+   ]
+  },
+  {
+   "lane": "OUT4_P_J2",
+   "group": "E(row-36)",
+   "pn_pair": "OUT4",
+   "gate_registered": {
+    "cell": [
+     119,
+     36
+    ],
+    "layer": 0,
+    "wall_gap_id": "gap@119,36"
+   },
+   "mirror_partner": "OUT4_N_J2",
+   "product_reference": "REF-CASE-LIBRARY sec.A.1 (PEX88096 baseboard) + R633 three rules",
+   "delta_col_row": "PENDING OWNER APPROVAL (in-register R710 reading: up to 21 cols / 29 rows per P/N pair)",
+   "gate_mirrored_new": "PENDING OWNER APPROVAL",
+   "invariants": [
+    "16/16 demand",
+    "pad-to-pad",
+    "connector",
+    "BGA balls",
+    "wall-gap physical opening (no move/add/delete)"
+   ]
+  },
+  {
+   "lane": "OUT5_N_J2",
+   "group": "E(row-36)",
+   "pn_pair": "OUT5",
+   "gate_registered": {
+    "cell": [
+     117,
+     36
+    ],
+    "layer": 0,
+    "wall_gap_id": "gap@117,36"
+   },
+   "mirror_partner": "OUT5_P_J2",
+   "product_reference": "REF-CASE-LIBRARY sec.A.1 (PEX88096 baseboard) + R633 three rules",
+   "delta_col_row": "PENDING OWNER APPROVAL (in-register R710 reading: up to 21 cols / 29 rows per P/N pair)",
+   "gate_mirrored_new": "PENDING OWNER APPROVAL",
+   "invariants": [
+    "16/16 demand",
+    "pad-to-pad",
+    "connector",
+    "BGA balls",
+    "wall-gap physical opening (no move/add/delete)"
+   ]
+  },
+  {
+   "lane": "OUT5_P_J2",
+   "group": "W(wall-gap col-114)",
+   "pn_pair": "OUT5",
+   "gate_registered": {
+    "cell": [
+     114,
+     15
+    ],
+    "layer": 0,
+    "wall_gap_id": "gap@114,15"
+   },
+   "mirror_partner": "OUT5_N_J2",
+   "product_reference": "REF-CASE-LIBRARY sec.A.1 (PEX88096 baseboard) + R633 three rules",
+   "delta_col_row": "PENDING OWNER APPROVAL (in-register R710 reading: up to 21 cols / 29 rows per P/N pair)",
+   "gate_mirrored_new": "PENDING OWNER APPROVAL",
+   "invariants": [
+    "16/16 demand",
+    "pad-to-pad",
+    "connector",
+    "BGA balls",
+    "wall-gap physical opening (no move/add/delete)"
+   ]
+  },
+  {
+   "lane": "OUT6_N_J2",
+   "group": "W(wall-gap col-114)",
+   "pn_pair": "OUT6",
+   "gate_registered": {
+    "cell": [
+     114,
+     12
+    ],
+    "layer": 1,
+    "wall_gap_id": "gap@114,12"
+   },
+   "mirror_partner": "OUT6_P_J2",
+   "product_reference": "REF-CASE-LIBRARY sec.A.1 (PEX88096 baseboard) + R633 three rules",
+   "delta_col_row": "PENDING OWNER APPROVAL (in-register R710 reading: up to 21 cols / 29 rows per P/N pair)",
+   "gate_mirrored_new": "PENDING OWNER APPROVAL",
+   "invariants": [
+    "16/16 demand",
+    "pad-to-pad",
+    "connector",
+    "BGA balls",
+    "wall-gap physical opening (no move/add/delete)"
+   ]
+  },
+  {
+   "lane": "OUT6_P_J2",
+   "group": "E(row-36)",
+   "pn_pair": "OUT6",
+   "gate_registered": {
+    "cell": [
+     115,
+     36
+    ],
+    "layer": 0,
+    "wall_gap_id": "gap@115,36"
+   },
+   "mirror_partner": "OUT6_N_J2",
+   "product_reference": "REF-CASE-LIBRARY sec.A.1 (PEX88096 baseboard) + R633 three rules",
+   "delta_col_row": "PENDING OWNER APPROVAL (in-register R710 reading: up to 21 cols / 29 rows per P/N pair)",
+   "gate_mirrored_new": "PENDING OWNER APPROVAL",
+   "invariants": [
+    "16/16 demand",
+    "pad-to-pad",
+    "connector",
+    "BGA balls",
+    "wall-gap physical opening (no move/add/delete)"
+   ]
+  },
+  {
+   "lane": "OUT7_N_J2",
+   "group": "E(row-36)",
+   "pn_pair": "OUT7",
+   "gate_registered": {
+    "cell": [
+     135,
+     36
+    ],
+    "layer": 0,
+    "wall_gap_id": "gap@135,36"
+   },
+   "mirror_partner": "OUT7_P_J2",
+   "product_reference": "REF-CASE-LIBRARY sec.A.1 (PEX88096 baseboard) + R633 three rules",
+   "delta_col_row": "PENDING OWNER APPROVAL (in-register R710 reading: up to 21 cols / 29 rows per P/N pair)",
+   "gate_mirrored_new": "PENDING OWNER APPROVAL",
+   "invariants": [
+    "16/16 demand",
+    "pad-to-pad",
+    "connector",
+    "BGA balls",
+    "wall-gap physical opening (no move/add/delete)"
+   ]
+  },
+  {
+   "lane": "OUT7_P_J2",
+   "group": "W(wall-gap col-114)",
+   "pn_pair": "OUT7",
+   "gate_registered": {
+    "cell": [
+     114,
+     19
+    ],
+    "layer": 1,
+    "wall_gap_id": "gap@114,19"
+   },
+   "mirror_partner": "OUT7_N_J2",
+   "product_reference": "REF-CASE-LIBRARY sec.A.1 (PEX88096 baseboard) + R633 three rules",
+   "delta_col_row": "PENDING OWNER APPROVAL (in-register R710 reading: up to 21 cols / 29 rows per P/N pair)",
+   "gate_mirrored_new": "PENDING OWNER APPROVAL",
+   "invariants": [
+    "16/16 demand",
+    "pad-to-pad",
+    "connector",
+    "BGA balls",
+    "wall-gap physical opening (no move/add/delete)"
+   ]
+  }
+ ]
+}

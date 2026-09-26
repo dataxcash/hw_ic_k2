@@ -1,0 +1,76 @@
+{
+ "artifact": "k2_l1_b_infeasibility_evidence_index_v1",
+ "ts": "2026-09-26T12:46:18",
+ "status": "SKELETON - read-only; the closure is NOT declared here",
+ "proposition": "UNDER the currently frozen exit registration (which registered wall gap each lane passes through), a 16/16 K2 construction drawing is DESIGN-LEVEL INFEASIBLE.",
+ "evidence_chain": [
+  {
+   "n": 1,
+   "name": "conservation (no capacity wall)",
+   "file": "K2_R537_CONSERVATION_CUT_v1.json",
+   "sha16": "3f2fcb7f5c46ab0e",
+   "verified_reading": "hard_wall_certificate_found = false; all 156 lattice cuts have capacity_upper_bound >= demand",
+   "refutes": "NOT a space problem"
+  },
+  {
+   "n": 2,
+   "name": "single-lane level",
+   "file": "K2_R545_SINGLE_LANE_CALIB_v1.json (+ K2_R533_INFEASIBILITY_ATTRIBUTION_v1.json)",
+   "sha16": "57a645fec4f9a8d3",
+   "verified_reading": "per-lane calibrations in register (each lane drawable on its own)",
+   "refutes": "NOT a single-lane defect"
+  },
+  {
+   "n": 3,
+   "name": "construction family (6 variants, four keys)",
+   "file": "K2_R652_JOINT_TABLE_16OF16_PHYSICAL_v1.json",
+   "sha16": "72b302be89bf35c8",
+   "verified_reading": "determined = 13 / 16 (best construction family)",
+   "refutes": "NOT a lack of variants"
+  },
+  {
+   "n": 4,
+   "name": "true core (after the filter fix)",
+   "file": "K2_R708_R652BASE_PLUS3_v1.json",
+   "sha16": "aaad7d120bdc6a51",
+   "verified_reading": "binary = PARTIAL_or_NAMED; 13 fixed + 3 free => UNSAT RELATIVE TO THAT BASE (not global)",
+   "refutes": "the 13 drawn lanes really block the 3"
+  },
+  {
+   "n": 5,
+   "name": "whole-version bundle (exit gates strictly fixed)",
+   "file": "K2_R732_BUNDLE_REASSIGNMENT_v1.json",
+   "sha16": "36a89cff024dec60",
+   "verified_reading": "7/16 assigned, 0 conflicts, exit gates fixed",
+   "refutes": "NOT a per-line / per-row adjustment problem"
+  },
+  {
+   "n": 6,
+   "name": "product comparison (same-chip product)",
+   "file": "K2_R633_PRODUCT_COMPARISON_v1.json",
+   "sha16": "338493838c13005d",
+   "verified_reading": "product uses GROUPED MIRROR exits (one group one geometry); our rows are per-lane independent",
+   "refutes": "the registration semantics differ systematically from the industry paradigm"
+  },
+  {
+   "n": 7,
+   "name": "registration conflict (machine)",
+   "file": "K2_R696_FASTPRUNED_BINARY_v1.py + K2_R696_solve.log (R710 finding is in the ledger/git log; no standalone artifact file)",
+   "sha16": "62e46253ad5ddaab",
+   "verified_reading": "the 8 P/N pairs registered exits are NOT mirror-symmetric (delta up to 21 cols / 29 rows); mirroring would relocate EXIT physical features",
+   "refutes": "the revision touches the registered/frozen exit semantics"
+  }
+ ],
+ "evidence_strength_calibration": {
+  "proven": "under the DECLARED construct families (six construction variants + the whole-version bundle) 16/16 was NOT reached; and R708 gives an UNSAT RELATIVE to the 13-lane base (NOT a global core)",
+  "NOT_proven": "a conservation-level / UNSAT HARD CORE for the FULL 16-lane joint determination under the current registration has NOT been produced",
+  "closure_requires": "either (i) produce the hard core first (one bounded joint determination under the current registration), or (ii) the owner explicitly accepts the closure at the declared-construct-exhaustion strength",
+  "forbidden": "writing NOT-proven as PROVEN (this skeleton keeps the split explicit)"
+ },
+ "conclusion_wording_template": "(to be finalised by the owner) under the frozen exit registration, the K2 16/16 construction drawing is design-level infeasible at strength <declared-construct-exhaustion | hard-core>; the project therefore moves to an owner decision (change the requirement / change the interface / accept the conclusion).",
+ "closure_deliverable": [
+  "proposition + evidence chain (above) + strength split",
+  "no frozen file modified; conclusion lands as a k2/docs item with a hash",
+  "explicit follow-up options for the owner"
+ ]
+}
