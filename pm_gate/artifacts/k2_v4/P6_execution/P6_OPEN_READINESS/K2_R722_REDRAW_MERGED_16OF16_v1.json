@@ -1,0 +1,2851 @@
+{
+ "artifact": "k2_r722_redraw_merged_16of16_v1",
+ "ts": "2026-09-26T10:12:26",
+ "authority": "#K2-271 sec.3.6 / sec.6.4: ONE 16-lane redraw + merged-board 0-conflict check; zero freedom, zero search, zero parameter trial",
+ "source": {
+  "file": "K2_R720_PREMISE_MINRIP_16OF16_v1.json",
+  "hash16": "f1484569c37b19fc",
+  "base_ref": "K2_BASE13_FROZEN_v1",
+  "binary": "SAT_16of16"
+ },
+ "construction_runs": 1,
+ "drawings": 1,
+ "gerber_exported": false,
+ "p5": false,
+ "order": false,
+ "merged_board": {
+  "lanes": 16,
+  "cells_distinct": 1479,
+  "conflicts": [],
+  "FOURTH_KEY_merged_0_conflict": true
+ },
+ "identity_with_source": {
+  "row_for_row_cell_identity": true,
+  "failures": []
+ },
+ "endpoints": {
+  "all_slot_and_exit_present": true,
+  "failures": []
+ },
+ "accounting": {
+  "cells_raw_from_delivered_rows": 1479,
+  "cells_raw_by_len(footprint)": 1479,
+  "cells_distinct": 1479,
+  "raw_equals_distinct": true,
+  "source_frozen_self_repeat_cells": [
+   [
+    "OUT2_P_J2",
+    0,
+    [
+     125,
+     36
+    ]
+   ],
+   [
+    "OUT3_N_J2",
+    0,
+    [
+     131,
+     36
+    ]
+   ],
+   [
+    "OUT5_N_J2",
+    0,
+    [
+     117,
+     36
+    ]
+   ],
+   [
+    "OUT1_N_J2",
+    0,
+    [
+     133,
+     36
+    ]
+   ]
+  ],
+  "reconciliation": "1479 (deduplicated inventory) + 4 (self-repeat cells still carried from the source frozen lists) = 1483 = R720 cells_raw (1483)"
+ },
+ "single_walk_audit": {
+  "rows_complete": 5,
+  "of": 16,
+  "per_row": {
+   "OUT0_N_J2": {
+    "chain_len": 75,
+    "unstitched_segments": 1,
+    "chain_end": [
+     0,
+     [
+      114,
+      28
+     ]
+    ],
+    "reaches_exit": true,
+    "missing_connector_cells_n": 6,
+    "missing_connector_cells": [
+     [
+      0,
+      [
+       119,
+       29
+      ]
+     ],
+     [
+      0,
+      [
+       118,
+       29
+      ]
+     ],
+     [
+      0,
+      [
+       117,
+       29
+      ]
+     ],
+     [
+      0,
+      [
+       116,
+       29
+      ]
+     ],
+     [
+      0,
+      [
+       115,
+       29
+      ]
+     ],
+     [
+      0,
+      [
+       114,
+       29
+      ]
+     ]
+    ],
+    "gap_cells_not_in_inventory": [
+     [
+      0,
+      [
+       119,
+       29
+      ]
+     ],
+     [
+      0,
+      [
+       118,
+       29
+      ]
+     ],
+     [
+      0,
+      [
+       117,
+       29
+      ]
+     ],
+     [
+      0,
+      [
+       116,
+       29
+      ]
+     ],
+     [
+      0,
+      [
+       115,
+       29
+      ]
+     ],
+     [
+      0,
+      [
+       114,
+       29
+      ]
+     ]
+    ]
+   },
+   "OUT0_P_J2": {
+    "chain_len": 93,
+    "unstitched_segments": 0,
+    "chain_end": [
+     1,
+     [
+      127,
+      36
+     ]
+    ],
+    "reaches_exit": true,
+    "missing_connector_cells_n": 0,
+    "missing_connector_cells": [],
+    "gap_cells_not_in_inventory": []
+   },
+   "OUT1_N_J2": {
+    "chain_len": 97,
+    "unstitched_segments": 0,
+    "chain_end": [
+     0,
+     [
+      133,
+      36
+     ]
+    ],
+    "reaches_exit": true,
+    "missing_connector_cells_n": 0,
+    "missing_connector_cells": [],
+    "gap_cells_not_in_inventory": []
+   },
+   "OUT1_P_J2": {
+    "chain_len": 84,
+    "unstitched_segments": 1,
+    "chain_end": [
+     0,
+     [
+      114,
+      11
+     ]
+    ],
+    "reaches_exit": true,
+    "missing_connector_cells_n": 2,
+    "missing_connector_cells": [
+     [
+      1,
+      [
+       60,
+       39
+      ]
+     ],
+     [
+      0,
+      [
+       114,
+       11
+      ]
+     ]
+    ],
+    "gap_cells_not_in_inventory": [
+     [
+      1,
+      [
+       60,
+       39
+      ]
+     ]
+    ]
+   },
+   "OUT2_N_J2": {
+    "chain_len": 104,
+    "unstitched_segments": 1,
+    "chain_end": [
+     0,
+     [
+      114,
+      13
+     ]
+    ],
+    "reaches_exit": true,
+    "missing_connector_cells_n": 18,
+    "missing_connector_cells": [
+     [
+      1,
+      [
+       60,
+       46
+      ]
+     ],
+     [
+      0,
+      [
+       130,
+       14
+      ]
+     ],
+     [
+      0,
+      [
+       129,
+       14
+      ]
+     ],
+     [
+      0,
+      [
+       128,
+       14
+      ]
+     ],
+     [
+      0,
+      [
+       127,
+       14
+      ]
+     ],
+     [
+      0,
+      [
+       126,
+       14
+      ]
+     ],
+     [
+      0,
+      [
+       125,
+       14
+      ]
+     ],
+     [
+      0,
+      [
+       124,
+       14
+      ]
+     ],
+     [
+      0,
+      [
+       123,
+       14
+      ]
+     ],
+     [
+      0,
+      [
+       122,
+       14
+      ]
+     ],
+     [
+      0,
+      [
+       121,
+       14
+      ]
+     ],
+     [
+      0,
+      [
+       120,
+       14
+      ]
+     ],
+     [
+      0,
+      [
+       119,
+       14
+      ]
+     ],
+     [
+      0,
+      [
+       118,
+       14
+      ]
+     ],
+     [
+      0,
+      [
+       117,
+       14
+      ]
+     ],
+     [
+      0,
+      [
+       116,
+       14
+      ]
+     ],
+     [
+      0,
+      [
+       115,
+       14
+      ]
+     ],
+     [
+      0,
+      [
+       114,
+       14
+      ]
+     ]
+    ],
+    "gap_cells_not_in_inventory": [
+     [
+      1,
+      [
+       60,
+       46
+      ]
+     ],
+     [
+      0,
+      [
+       130,
+       14
+      ]
+     ],
+     [
+      0,
+      [
+       129,
+       14
+      ]
+     ],
+     [
+      0,
+      [
+       128,
+       14
+      ]
+     ],
+     [
+      0,
+      [
+       127,
+       14
+      ]
+     ],
+     [
+      0,
+      [
+       126,
+       14
+      ]
+     ],
+     [
+      0,
+      [
+       125,
+       14
+      ]
+     ],
+     [
+      0,
+      [
+       124,
+       14
+      ]
+     ],
+     [
+      0,
+      [
+       123,
+       14
+      ]
+     ],
+     [
+      0,
+      [
+       122,
+       14
+      ]
+     ],
+     [
+      0,
+      [
+       121,
+       14
+      ]
+     ],
+     [
+      0,
+      [
+       120,
+       14
+      ]
+     ],
+     [
+      0,
+      [
+       119,
+       14
+      ]
+     ],
+     [
+      0,
+      [
+       118,
+       14
+      ]
+     ],
+     [
+      0,
+      [
+       117,
+       14
+      ]
+     ],
+     [
+      0,
+      [
+       116,
+       14
+      ]
+     ],
+     [
+      0,
+      [
+       115,
+       14
+      ]
+     ],
+     [
+      0,
+      [
+       114,
+       14
+      ]
+     ]
+    ]
+   },
+   "OUT2_P_J2": {
+    "chain_len": 88,
+    "unstitched_segments": 0,
+    "chain_end": [
+     0,
+     [
+      125,
+      36
+     ]
+    ],
+    "reaches_exit": true,
+    "missing_connector_cells_n": 1,
+    "missing_connector_cells": [
+     [
+      0,
+      [
+       60,
+       57
+      ]
+     ]
+    ],
+    "gap_cells_not_in_inventory": [
+     [
+      0,
+      [
+       60,
+       57
+      ]
+     ]
+    ]
+   },
+   "OUT3_N_J2": {
+    "chain_len": 95,
+    "unstitched_segments": 0,
+    "chain_end": [
+     0,
+     [
+      131,
+      36
+     ]
+    ],
+    "reaches_exit": true,
+    "missing_connector_cells_n": 1,
+    "missing_connector_cells": [
+     [
+      0,
+      [
+       60,
+       58
+      ]
+     ]
+    ],
+    "gap_cells_not_in_inventory": [
+     [
+      0,
+      [
+       60,
+       58
+      ]
+     ]
+    ]
+   },
+   "OUT3_P_J2": {
+    "chain_len": 112,
+    "unstitched_segments": 1,
+    "chain_end": [
+     0,
+     [
+      114,
+      7
+     ]
+    ],
+    "reaches_exit": true,
+    "missing_connector_cells_n": 19,
+    "missing_connector_cells": [
+     [
+      1,
+      [
+       60,
+       47
+      ]
+     ],
+     [
+      0,
+      [
+       131,
+       8
+      ]
+     ],
+     [
+      0,
+      [
+       130,
+       8
+      ]
+     ],
+     [
+      0,
+      [
+       129,
+       8
+      ]
+     ],
+     [
+      0,
+      [
+       128,
+       8
+      ]
+     ],
+     [
+      0,
+      [
+       127,
+       8
+      ]
+     ],
+     [
+      0,
+      [
+       126,
+       8
+      ]
+     ],
+     [
+      0,
+      [
+       125,
+       8
+      ]
+     ],
+     [
+      0,
+      [
+       124,
+       8
+      ]
+     ],
+     [
+      0,
+      [
+       123,
+       8
+      ]
+     ],
+     [
+      0,
+      [
+       122,
+       8
+      ]
+     ],
+     [
+      0,
+      [
+       121,
+       8
+      ]
+     ],
+     [
+      0,
+      [
+       120,
+       8
+      ]
+     ],
+     [
+      0,
+      [
+       119,
+       8
+      ]
+     ],
+     [
+      0,
+      [
+       118,
+       8
+      ]
+     ],
+     [
+      0,
+      [
+       117,
+       8
+      ]
+     ],
+     [
+      0,
+      [
+       116,
+       8
+      ]
+     ],
+     [
+      0,
+      [
+       115,
+       8
+      ]
+     ],
+     [
+      0,
+      [
+       114,
+       8
+      ]
+     ]
+    ],
+    "gap_cells_not_in_inventory": [
+     [
+      1,
+      [
+       60,
+       47
+      ]
+     ],
+     [
+      0,
+      [
+       131,
+       8
+      ]
+     ],
+     [
+      0,
+      [
+       130,
+       8
+      ]
+     ],
+     [
+      0,
+      [
+       129,
+       8
+      ]
+     ],
+     [
+      0,
+      [
+       128,
+       8
+      ]
+     ],
+     [
+      0,
+      [
+       127,
+       8
+      ]
+     ],
+     [
+      0,
+      [
+       126,
+       8
+      ]
+     ],
+     [
+      0,
+      [
+       125,
+       8
+      ]
+     ],
+     [
+      0,
+      [
+       124,
+       8
+      ]
+     ],
+     [
+      0,
+      [
+       123,
+       8
+      ]
+     ],
+     [
+      0,
+      [
+       122,
+       8
+      ]
+     ],
+     [
+      0,
+      [
+       121,
+       8
+      ]
+     ],
+     [
+      0,
+      [
+       120,
+       8
+      ]
+     ],
+     [
+      0,
+      [
+       119,
+       8
+      ]
+     ],
+     [
+      0,
+      [
+       118,
+       8
+      ]
+     ],
+     [
+      0,
+      [
+       117,
+       8
+      ]
+     ],
+     [
+      0,
+      [
+       116,
+       8
+      ]
+     ],
+     [
+      0,
+      [
+       115,
+       8
+      ]
+     ],
+     [
+      0,
+      [
+       114,
+       8
+      ]
+     ]
+    ]
+   },
+   "OUT4_N_J2": {
+    "chain_len": 90,
+    "unstitched_segments": 0,
+    "chain_end": [
+     0,
+     [
+      114,
+      24
+     ]
+    ],
+    "reaches_exit": true,
+    "missing_connector_cells_n": 0,
+    "missing_connector_cells": [],
+    "gap_cells_not_in_inventory": []
+   },
+   "OUT4_P_J2": {
+    "chain_len": 73,
+    "unstitched_segments": 1,
+    "chain_end": [
+     0,
+     [
+      119,
+      36
+     ]
+    ],
+    "reaches_exit": true,
+    "missing_connector_cells_n": 3,
+    "missing_connector_cells": [
+     [
+      0,
+      [
+       60,
+       47
+      ]
+     ],
+     [
+      0,
+      [
+       120,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       119,
+       37
+      ]
+     ]
+    ],
+    "gap_cells_not_in_inventory": [
+     [
+      0,
+      [
+       60,
+       47
+      ]
+     ],
+     [
+      0,
+      [
+       120,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       119,
+       37
+      ]
+     ]
+    ]
+   },
+   "OUT5_N_J2": {
+    "chain_len": 63,
+    "unstitched_segments": 0,
+    "chain_end": [
+     0,
+     [
+      117,
+      36
+     ]
+    ],
+    "reaches_exit": true,
+    "missing_connector_cells_n": 1,
+    "missing_connector_cells": [
+     [
+      0,
+      [
+       60,
+       40
+      ]
+     ]
+    ],
+    "gap_cells_not_in_inventory": [
+     [
+      0,
+      [
+       60,
+       40
+      ]
+     ]
+    ]
+   },
+   "OUT5_P_J2": {
+    "chain_len": 97,
+    "unstitched_segments": 1,
+    "chain_end": [
+     0,
+     [
+      114,
+      15
+     ]
+    ],
+    "reaches_exit": true,
+    "missing_connector_cells_n": 8,
+    "missing_connector_cells": [
+     [
+      0,
+      [
+       121,
+       16
+      ]
+     ],
+     [
+      0,
+      [
+       120,
+       16
+      ]
+     ],
+     [
+      0,
+      [
+       119,
+       16
+      ]
+     ],
+     [
+      0,
+      [
+       118,
+       16
+      ]
+     ],
+     [
+      0,
+      [
+       117,
+       16
+      ]
+     ],
+     [
+      0,
+      [
+       116,
+       16
+      ]
+     ],
+     [
+      0,
+      [
+       115,
+       16
+      ]
+     ],
+     [
+      0,
+      [
+       114,
+       16
+      ]
+     ]
+    ],
+    "gap_cells_not_in_inventory": [
+     [
+      0,
+      [
+       121,
+       16
+      ]
+     ],
+     [
+      0,
+      [
+       120,
+       16
+      ]
+     ],
+     [
+      0,
+      [
+       119,
+       16
+      ]
+     ],
+     [
+      0,
+      [
+       118,
+       16
+      ]
+     ],
+     [
+      0,
+      [
+       117,
+       16
+      ]
+     ],
+     [
+      0,
+      [
+       116,
+       16
+      ]
+     ],
+     [
+      0,
+      [
+       115,
+       16
+      ]
+     ],
+     [
+      0,
+      [
+       114,
+       16
+      ]
+     ]
+    ]
+   },
+   "OUT6_N_J2": {
+    "chain_len": 116,
+    "unstitched_segments": 0,
+    "chain_end": [
+     1,
+     [
+      114,
+      12
+     ]
+    ],
+    "reaches_exit": true,
+    "missing_connector_cells_n": 0,
+    "missing_connector_cells": [],
+    "gap_cells_not_in_inventory": []
+   },
+   "OUT6_P_J2": {
+    "chain_len": 90,
+    "unstitched_segments": 1,
+    "chain_end": [
+     0,
+     [
+      115,
+      36
+     ]
+    ],
+    "reaches_exit": true,
+    "missing_connector_cells_n": 19,
+    "missing_connector_cells": [
+     [
+      1,
+      [
+       60,
+       53
+      ]
+     ],
+     [
+      0,
+      [
+       132,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       131,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       130,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       129,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       128,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       127,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       126,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       125,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       124,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       123,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       122,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       121,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       120,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       119,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       118,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       117,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       116,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       115,
+       37
+      ]
+     ]
+    ],
+    "gap_cells_not_in_inventory": [
+     [
+      1,
+      [
+       60,
+       53
+      ]
+     ],
+     [
+      0,
+      [
+       132,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       131,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       130,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       129,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       128,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       127,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       126,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       125,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       124,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       123,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       122,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       121,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       120,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       119,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       118,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       117,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       116,
+       37
+      ]
+     ],
+     [
+      0,
+      [
+       115,
+       37
+      ]
+     ]
+    ]
+   },
+   "OUT7_N_J2": {
+    "chain_len": 95,
+    "unstitched_segments": 1,
+    "chain_end": [
+     0,
+     [
+      135,
+      36
+     ]
+    ],
+    "reaches_exit": true,
+    "missing_connector_cells_n": 2,
+    "missing_connector_cells": [
+     [
+      1,
+      [
+       60,
+       54
+      ]
+     ],
+     [
+      0,
+      [
+       135,
+       36
+      ]
+     ]
+    ],
+    "gap_cells_not_in_inventory": [
+     [
+      1,
+      [
+       60,
+       54
+      ]
+     ]
+    ]
+   },
+   "OUT7_P_J2": {
+    "chain_len": 108,
+    "unstitched_segments": 0,
+    "chain_end": [
+     1,
+     [
+      114,
+      19
+     ]
+    ],
+    "reaches_exit": true,
+    "missing_connector_cells_n": 0,
+    "missing_connector_cells": [],
+    "gap_cells_not_in_inventory": []
+   }
+  },
+  "note": "the R720 row inventories are cell SETS recorded as segment concatenations; the audit stitches them deterministically into one chain and NAMES any cell missing to close the walk. Missing cells are a DISCREPANCY LIST, never filled in."
+ },
+ "segments": {
+  "OUT0_N_J2": {
+   "n_cells": 76,
+   "n_segments": 4,
+   "n_bends": 0,
+   "segment_lens": [
+    54,
+    1,
+    6,
+    15
+   ],
+   "segment_ends": [
+    [
+     [
+      60,
+      43
+     ],
+     [
+      113,
+      43
+     ]
+    ],
+    [
+     [
+      114,
+      28
+     ],
+     [
+      114,
+      28
+     ]
+    ],
+    [
+     [
+      114,
+      43
+     ],
+     [
+      119,
+      43
+     ]
+    ],
+    [
+     [
+      120,
+      29
+     ],
+     [
+      120,
+      43
+     ]
+    ]
+   ]
+  },
+  "OUT0_P_J2": {
+   "n_cells": 93,
+   "n_segments": 1,
+   "n_bends": 8,
+   "segment_lens": [
+    93
+   ],
+   "segment_ends": [
+    [
+     [
+      60,
+      59
+     ],
+     [
+      127,
+      36
+     ]
+    ]
+   ]
+  },
+  "OUT1_N_J2": {
+   "n_cells": 97,
+   "n_segments": 3,
+   "n_bends": 0,
+   "segment_lens": [
+    72,
+    24,
+    1
+   ],
+   "segment_ends": [
+    [
+     [
+      60,
+      59
+     ],
+     [
+      131,
+      59
+     ]
+    ],
+    [
+     [
+      132,
+      36
+     ],
+     [
+      132,
+      59
+     ]
+    ],
+    [
+     [
+      133,
+      36
+     ],
+     [
+      133,
+      36
+     ]
+    ]
+   ]
+  },
+  "OUT1_P_J2": {
+   "n_cells": 84,
+   "n_segments": 5,
+   "n_bends": 0,
+   "segment_lens": [
+    1,
+    1,
+    40,
+    29,
+    13
+   ],
+   "segment_ends": [
+    [
+     [
+      60,
+      39
+     ],
+     [
+      60,
+      39
+     ]
+    ],
+    [
+     [
+      114,
+      11
+     ],
+     [
+      114,
+      11
+     ]
+    ],
+    [
+     [
+      61,
+      39
+     ],
+     [
+      100,
+      39
+     ]
+    ],
+    [
+     [
+      101,
+      11
+     ],
+     [
+      101,
+      39
+     ]
+    ],
+    [
+     [
+      102,
+      11
+     ],
+     [
+      114,
+      11
+     ]
+    ]
+   ]
+  },
+  "OUT2_N_J2": {
+   "n_cells": 104,
+   "n_segments": 4,
+   "n_bends": 0,
+   "segment_lens": [
+    1,
+    1,
+    69,
+    33
+   ],
+   "segment_ends": [
+    [
+     [
+      60,
+      46
+     ],
+     [
+      60,
+      46
+     ]
+    ],
+    [
+     [
+      114,
+      13
+     ],
+     [
+      114,
+      13
+     ]
+    ],
+    [
+     [
+      61,
+      46
+     ],
+     [
+      129,
+      46
+     ]
+    ],
+    [
+     [
+      130,
+      14
+     ],
+     [
+      130,
+      46
+     ]
+    ]
+   ]
+  },
+  "OUT2_P_J2": {
+   "n_cells": 87,
+   "n_segments": 4,
+   "n_bends": 0,
+   "segment_lens": [
+    62,
+    22,
+    2,
+    1
+   ],
+   "segment_ends": [
+    [
+     [
+      61,
+      57
+     ],
+     [
+      122,
+      57
+     ]
+    ],
+    [
+     [
+      123,
+      36
+     ],
+     [
+      123,
+      57
+     ]
+    ],
+    [
+     [
+      124,
+      36
+     ],
+     [
+      125,
+      36
+     ]
+    ],
+    [
+     [
+      60,
+      57
+     ],
+     [
+      60,
+      57
+     ]
+    ]
+   ]
+  },
+  "OUT3_N_J2": {
+   "n_cells": 94,
+   "n_segments": 4,
+   "n_bends": 0,
+   "segment_lens": [
+    65,
+    23,
+    5,
+    1
+   ],
+   "segment_ends": [
+    [
+     [
+      61,
+      58
+     ],
+     [
+      125,
+      58
+     ]
+    ],
+    [
+     [
+      126,
+      36
+     ],
+     [
+      126,
+      58
+     ]
+    ],
+    [
+     [
+      127,
+      36
+     ],
+     [
+      131,
+      36
+     ]
+    ],
+    [
+     [
+      60,
+      58
+     ],
+     [
+      60,
+      58
+     ]
+    ]
+   ]
+  },
+  "OUT3_P_J2": {
+   "n_cells": 112,
+   "n_segments": 4,
+   "n_bends": 0,
+   "segment_lens": [
+    1,
+    1,
+    70,
+    40
+   ],
+   "segment_ends": [
+    [
+     [
+      60,
+      47
+     ],
+     [
+      60,
+      47
+     ]
+    ],
+    [
+     [
+      114,
+      7
+     ],
+     [
+      114,
+      7
+     ]
+    ],
+    [
+     [
+      61,
+      47
+     ],
+     [
+      130,
+      47
+     ]
+    ],
+    [
+     [
+      131,
+      8
+     ],
+     [
+      131,
+      47
+     ]
+    ]
+   ]
+  },
+  "OUT4_N_J2": {
+   "n_cells": 90,
+   "n_segments": 7,
+   "n_bends": 0,
+   "segment_lens": [
+    19,
+    1,
+    1,
+    42,
+    3,
+    14,
+    10
+   ],
+   "segment_ends": [
+    [
+     [
+      59,
+      37
+     ],
+     [
+      59,
+      55
+     ]
+    ],
+    [
+     [
+      60,
+      37
+     ],
+     [
+      60,
+      37
+     ]
+    ],
+    [
+     [
+      60,
+      55
+     ],
+     [
+      60,
+      55
+     ]
+    ],
+    [
+     [
+      61,
+      37
+     ],
+     [
+      102,
+      37
+     ]
+    ],
+    [
+     [
+      112,
+      24
+     ],
+     [
+      114,
+      24
+     ]
+    ],
+    [
+     [
+      102,
+      24
+     ],
+     [
+      102,
+      37
+     ]
+    ],
+    [
+     [
+      103,
+      24
+     ],
+     [
+      112,
+      24
+     ]
+    ]
+   ]
+  },
+  "OUT4_P_J2": {
+   "n_cells": 73,
+   "n_segments": 5,
+   "n_bends": 0,
+   "segment_lens": [
+    58,
+    1,
+    2,
+    11,
+    1
+   ],
+   "segment_ends": [
+    [
+     [
+      61,
+      47
+     ],
+     [
+      118,
+      47
+     ]
+    ],
+    [
+     [
+      119,
+      36
+     ],
+     [
+      119,
+      36
+     ]
+    ],
+    [
+     [
+      119,
+      47
+     ],
+     [
+      120,
+      47
+     ]
+    ],
+    [
+     [
+      121,
+      37
+     ],
+     [
+      121,
+      47
+     ]
+    ],
+    [
+     [
+      60,
+      47
+     ],
+     [
+      60,
+      47
+     ]
+    ]
+   ]
+  },
+  "OUT5_N_J2": {
+   "n_cells": 62,
+   "n_segments": 3,
+   "n_bends": 0,
+   "segment_lens": [
+    56,
+    5,
+    1
+   ],
+   "segment_ends": [
+    [
+     [
+      61,
+      40
+     ],
+     [
+      116,
+      40
+     ]
+    ],
+    [
+     [
+      117,
+      36
+     ],
+     [
+      117,
+      40
+     ]
+    ],
+    [
+     [
+      60,
+      40
+     ],
+     [
+      60,
+      40
+     ]
+    ]
+   ]
+  },
+  "OUT5_P_J2": {
+   "n_cells": 98,
+   "n_segments": 4,
+   "n_bends": 0,
+   "segment_lens": [
+    54,
+    1,
+    8,
+    35
+   ],
+   "segment_ends": [
+    [
+     [
+      60,
+      50
+     ],
+     [
+      113,
+      50
+     ]
+    ],
+    [
+     [
+      114,
+      15
+     ],
+     [
+      114,
+      15
+     ]
+    ],
+    [
+     [
+      114,
+      50
+     ],
+     [
+      121,
+      50
+     ]
+    ],
+    [
+     [
+      122,
+      16
+     ],
+     [
+      122,
+      50
+     ]
+    ]
+   ]
+  },
+  "OUT6_N_J2": {
+   "n_cells": 116,
+   "n_segments": 1,
+   "n_bends": 17,
+   "segment_lens": [
+    116
+   ],
+   "segment_ends": [
+    [
+     [
+      60,
+      43
+     ],
+     [
+      114,
+      12
+     ]
+    ]
+   ]
+  },
+  "OUT6_P_J2": {
+   "n_cells": 90,
+   "n_segments": 4,
+   "n_bends": 0,
+   "segment_lens": [
+    1,
+    1,
+    71,
+    17
+   ],
+   "segment_ends": [
+    [
+     [
+      60,
+      53
+     ],
+     [
+      60,
+      53
+     ]
+    ],
+    [
+     [
+      115,
+      36
+     ],
+     [
+      115,
+      36
+     ]
+    ],
+    [
+     [
+      61,
+      53
+     ],
+     [
+      131,
+      53
+     ]
+    ],
+    [
+     [
+      132,
+      37
+     ],
+     [
+      132,
+      53
+     ]
+    ]
+   ]
+  },
+  "OUT7_N_J2": {
+   "n_cells": 95,
+   "n_segments": 5,
+   "n_bends": 0,
+   "segment_lens": [
+    1,
+    1,
+    72,
+    19,
+    2
+   ],
+   "segment_ends": [
+    [
+     [
+      60,
+      54
+     ],
+     [
+      60,
+      54
+     ]
+    ],
+    [
+     [
+      135,
+      36
+     ],
+     [
+      135,
+      36
+     ]
+    ],
+    [
+     [
+      61,
+      54
+     ],
+     [
+      132,
+      54
+     ]
+    ],
+    [
+     [
+      133,
+      36
+     ],
+     [
+      133,
+      54
+     ]
+    ],
+    [
+     [
+      134,
+      36
+     ],
+     [
+      135,
+      36
+     ]
+    ]
+   ]
+  },
+  "OUT7_P_J2": {
+   "n_cells": 108,
+   "n_segments": 1,
+   "n_bends": 15,
+   "segment_lens": [
+    108
+   ],
+   "segment_ends": [
+    [
+     [
+      60,
+      41
+     ],
+     [
+      114,
+      19
+     ]
+    ]
+   ]
+  }
+ },
+ "bounce_to_drawing_layer": {
+  "required": true,
+  "rows": [
+   "OUT0_N_J2",
+   "OUT1_P_J2",
+   "OUT2_N_J2",
+   "OUT2_P_J2",
+   "OUT3_N_J2",
+   "OUT3_P_J2",
+   "OUT4_P_J2",
+   "OUT5_N_J2",
+   "OUT5_P_J2",
+   "OUT6_P_J2",
+   "OUT7_N_J2"
+  ],
+  "rows_complete": 5,
+  "of": 16,
+  "total_missing_connector_cells": 80,
+  "missing_by_row": {
+   "OUT0_N_J2": [
+    [
+     0,
+     [
+      119,
+      29
+     ]
+    ],
+    [
+     0,
+     [
+      118,
+      29
+     ]
+    ],
+    [
+     0,
+     [
+      117,
+      29
+     ]
+    ],
+    [
+     0,
+     [
+      116,
+      29
+     ]
+    ],
+    [
+     0,
+     [
+      115,
+      29
+     ]
+    ],
+    [
+     0,
+     [
+      114,
+      29
+     ]
+    ]
+   ],
+   "OUT1_P_J2": [
+    [
+     1,
+     [
+      60,
+      39
+     ]
+    ],
+    [
+     0,
+     [
+      114,
+      11
+     ]
+    ]
+   ],
+   "OUT2_N_J2": [
+    [
+     1,
+     [
+      60,
+      46
+     ]
+    ],
+    [
+     0,
+     [
+      130,
+      14
+     ]
+    ],
+    [
+     0,
+     [
+      129,
+      14
+     ]
+    ],
+    [
+     0,
+     [
+      128,
+      14
+     ]
+    ],
+    [
+     0,
+     [
+      127,
+      14
+     ]
+    ],
+    [
+     0,
+     [
+      126,
+      14
+     ]
+    ],
+    [
+     0,
+     [
+      125,
+      14
+     ]
+    ],
+    [
+     0,
+     [
+      124,
+      14
+     ]
+    ],
+    [
+     0,
+     [
+      123,
+      14
+     ]
+    ],
+    [
+     0,
+     [
+      122,
+      14
+     ]
+    ],
+    [
+     0,
+     [
+      121,
+      14
+     ]
+    ],
+    [
+     0,
+     [
+      120,
+      14
+     ]
+    ],
+    [
+     0,
+     [
+      119,
+      14
+     ]
+    ],
+    [
+     0,
+     [
+      118,
+      14
+     ]
+    ],
+    [
+     0,
+     [
+      117,
+      14
+     ]
+    ],
+    [
+     0,
+     [
+      116,
+      14
+     ]
+    ],
+    [
+     0,
+     [
+      115,
+      14
+     ]
+    ],
+    [
+     0,
+     [
+      114,
+      14
+     ]
+    ]
+   ],
+   "OUT2_P_J2": [
+    [
+     0,
+     [
+      60,
+      57
+     ]
+    ]
+   ],
+   "OUT3_N_J2": [
+    [
+     0,
+     [
+      60,
+      58
+     ]
+    ]
+   ],
+   "OUT3_P_J2": [
+    [
+     1,
+     [
+      60,
+      47
+     ]
+    ],
+    [
+     0,
+     [
+      131,
+      8
+     ]
+    ],
+    [
+     0,
+     [
+      130,
+      8
+     ]
+    ],
+    [
+     0,
+     [
+      129,
+      8
+     ]
+    ],
+    [
+     0,
+     [
+      128,
+      8
+     ]
+    ],
+    [
+     0,
+     [
+      127,
+      8
+     ]
+    ],
+    [
+     0,
+     [
+      126,
+      8
+     ]
+    ],
+    [
+     0,
+     [
+      125,
+      8
+     ]
+    ],
+    [
+     0,
+     [
+      124,
+      8
+     ]
+    ],
+    [
+     0,
+     [
+      123,
+      8
+     ]
+    ],
+    [
+     0,
+     [
+      122,
+      8
+     ]
+    ],
+    [
+     0,
+     [
+      121,
+      8
+     ]
+    ],
+    [
+     0,
+     [
+      120,
+      8
+     ]
+    ],
+    [
+     0,
+     [
+      119,
+      8
+     ]
+    ],
+    [
+     0,
+     [
+      118,
+      8
+     ]
+    ],
+    [
+     0,
+     [
+      117,
+      8
+     ]
+    ],
+    [
+     0,
+     [
+      116,
+      8
+     ]
+    ],
+    [
+     0,
+     [
+      115,
+      8
+     ]
+    ],
+    [
+     0,
+     [
+      114,
+      8
+     ]
+    ]
+   ],
+   "OUT4_P_J2": [
+    [
+     0,
+     [
+      60,
+      47
+     ]
+    ],
+    [
+     0,
+     [
+      120,
+      37
+     ]
+    ],
+    [
+     0,
+     [
+      119,
+      37
+     ]
+    ]
+   ],
+   "OUT5_N_J2": [
+    [
+     0,
+     [
+      60,
+      40
+     ]
+    ]
+   ],
+   "OUT5_P_J2": [
+    [
+     0,
+     [
+      121,
+      16
+     ]
+    ],
+    [
+     0,
+     [
+      120,
+      16
+     ]
+    ],
+    [
+     0,
+     [
+      119,
+      16
+     ]
+    ],
+    [
+     0,
+     [
+      118,
+      16
+     ]
+    ],
+    [
+     0,
+     [
+      117,
+      16
+     ]
+    ],
+    [
+     0,
+     [
+      116,
+      16
+     ]
+    ],
+    [
+     0,
+     [
+      115,
+      16
+     ]
+    ],
+    [
+     0,
+     [
+      114,
+      16
+     ]
+    ]
+   ],
+   "OUT6_P_J2": [
+    [
+     1,
+     [
+      60,
+      53
+     ]
+    ],
+    [
+     0,
+     [
+      132,
+      37
+     ]
+    ],
+    [
+     0,
+     [
+      131,
+      37
+     ]
+    ],
+    [
+     0,
+     [
+      130,
+      37
+     ]
+    ],
+    [
+     0,
+     [
+      129,
+      37
+     ]
+    ],
+    [
+     0,
+     [
+      128,
+      37
+     ]
+    ],
+    [
+     0,
+     [
+      127,
+      37
+     ]
+    ],
+    [
+     0,
+     [
+      126,
+      37
+     ]
+    ],
+    [
+     0,
+     [
+      125,
+      37
+     ]
+    ],
+    [
+     0,
+     [
+      124,
+      37
+     ]
+    ],
+    [
+     0,
+     [
+      123,
+      37
+     ]
+    ],
+    [
+     0,
+     [
+      122,
+      37
+     ]
+    ],
+    [
+     0,
+     [
+      121,
+      37
+     ]
+    ],
+    [
+     0,
+     [
+      120,
+      37
+     ]
+    ],
+    [
+     0,
+     [
+      119,
+      37
+     ]
+    ],
+    [
+     0,
+     [
+      118,
+      37
+     ]
+    ],
+    [
+     0,
+     [
+      117,
+      37
+     ]
+    ],
+    [
+     0,
+     [
+      116,
+      37
+     ]
+    ],
+    [
+     0,
+     [
+      115,
+      37
+     ]
+    ]
+   ],
+   "OUT7_N_J2": [
+    [
+     1,
+     [
+      60,
+      54
+     ]
+    ],
+    [
+     0,
+     [
+      135,
+      36
+     ]
+    ]
+   ]
+  },
+  "basis": "#K2-271 sec.3.6: a row that cannot be drawn as one connected line (or would need a search) is characterised as 'drawing-layer figure missing' and bounced - never patched at the construction layer."
+ },
+ "merge_gates_pass": true,
+ "verdict": "BOUNCE_DRAWING_LAYER_FIGURE_MISSING",
+ "binary": "BOUNCE_DRAWING_LAYER_FIGURE_MISSING",
+ "verdict_basis": "sec.3.6: a row that cannot be drawn as one connected line (needs cells that are not in its inventory) is characterised as 'drawing-layer figure missing' and bounced - never patched at the construction layer",
+ "elapsed_s": 0.0,
+ "artifact_hash16": "55272009d12dc985"
+}
