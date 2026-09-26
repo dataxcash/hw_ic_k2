@@ -1,0 +1,38 @@
+{
+ "artifact": "k2_l1_a_anchor_ds320pr1601_v1",
+ "ts": "2026-09-26T20:03:09",
+ "status": "ANCHOR EXTRACT (work-order step a) - machine re-runnable; primary anchor per #K2-282 sec.2.2",
+ "device": "TI DS320PR1601 (K2 main device x2 retimer; 16-lane PCIe 5.0 / CXL 2.0 linear redriver, NFBGA 8.90 x 22.80 mm)",
+ "sources": [
+  {
+   "name": "datasheet SNLS683",
+   "url": "https://www.ti.com/lit/ds/symlink/ds320pr1601.pdf",
+   "sha16": "f61599c4356edb39",
+   "bytes": 2225981
+  },
+  {
+   "name": "programming guide SNLA425A (Rev. June 2023)",
+   "url": "https://www.ti.com/lit/pdf/snla425",
+   "sha16": "28b12caada41b686",
+   "bytes": 328824
+  },
+  {
+   "name": "product page",
+   "url": "https://www.ti.com/product/DS320PR1601"
+  }
+ ],
+ "citation": {
+  "section": "SNLA425A sec.1.1 (page 3)",
+  "tables": [
+   "Table 1-2 Downstream CPU -> A-Side -> Endpoint",
+   "Table 1-3 Upstream Endpoint -> B-Side -> CPU"
+  ]
+ },
+ "vendor_paradigm_extracted": {
+  "grouping": "lanes are grouped in FOURS by the device bank / PD control pins (PD_3_0, PD_7_4, PD_11_8, PD_15_12) and by Channel Bank 0/1",
+  "downstream_Table_1_2": "lane 0..3 -> bank0 ch0..3 ; lane 4..7 -> bank1 ch4..7 ; lane 8..11 -> bank0 ch0..3 ; lane 12..15 -> bank1 ch4..7 (MONOTONE within each 4-lane group)",
+  "upstream_Table_1_3": "lane 0..3 -> bank1 ch7,6,5,4 ; lane 4..7 -> bank0 ch3,2,1,0 ; lane 8..11 -> bank1 ch7..4 ; lane 12..15 -> bank0 ch3..0 (REVERSED within each 4-lane group)",
+  "paradigm_rule": "ONE GROUP OF FOUR = ONE BUNDLE; the two sides of the same group are ORDER-REVERSED (mirrored as a structural intent, not a coordinate equation) - consistent with the downgraded PEX88096 paradigm corroboration and with #K2-283 sec.2.3 (mirror = structural intent, not a coordinate equation)"
+ },
+ "downgrade_note": "PEX88096-era material stays downgraded to paradigm corroboration (#K2-282 sec.2.2); this anchor is the PRIMARY one"
+}
