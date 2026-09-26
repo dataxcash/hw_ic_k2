@@ -1,0 +1,31 @@
+{
+ "artifact": "k2_r760_reference_applicability_precheck_v1",
+ "ts": "2026-09-26T22:57:33",
+ "authority": "#K2-293 sec.3.1 (applicability pre-check BEFORE any derivation)",
+ "reference": "SNLU301 DS320PR412-421 EVM (bifurcation riser), Fig 4-3 Layer 3 / Fig 4-4 Layer 4",
+ "observations": [
+  "nested ordered staircase bundles (outer outside, inner inside, no crossing)",
+  "corner via clusters = multi-segment layer changes per bundle",
+  "two output directions (right edge / top edge), cross-region routing with descents"
+ ],
+ "constraint_map": {
+  "two different gate sets": "class match (two output directions)",
+  "cross-region routing + descent": "class match",
+  "ordered non-crossing bundles": "class match",
+  "registered via budget (13 lanes <=2 pairs, 3 lanes <=3)": "CONFLICT - the reference implements multi-segment layer changes at corners"
+ },
+ "verdict": "PARTIAL_MATCH_MECHANISM_BLOCKED",
+ "reasoning": "the class matches (bifurcation, cross-region, two exits, ordered) but the DISTINGUISHING mechanism (corner via clusters / multi-segment layer changes) is blocked by the in-register via budget; removing that mechanism degenerates the style to the already-tested monotone ordering (v5 8/16, v5b 5/16) => no new decidable paradigm",
+ "action": "stop and report per sec.3.1 - NOT running v6 (avoiding a same-type patch run)",
+ "terminal_clause_pending": "per sec.4 the B-branch closure item (#K2-280 sec.3.B) is due; a one-line confirmation from the supervisor is requested before the ENG produces it",
+ "discipline": {
+  "vision_calls": 1,
+  "zero_derivation": true,
+  "zero_runs": true,
+  "no_drawing": true,
+  "no_spec_bump": true,
+  "no_worker": true,
+  "physical_body_untouched": true,
+  "frozen_four": "4/4 MATCH"
+ }
+}
