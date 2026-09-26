@@ -1,0 +1,470 @@
+{
+ "artifact": "k2_l1_a_exit_registration_mapping_table_v1",
+ "ts": "2026-09-26T19:57:25",
+ "status": "MACHINE-FILLED SKELETON (工单①) - read-only; NO new gate coordinate invented",
+ "authority": "#K2-282 sec.3 step-1 (new exit-registration mapping table) + sec.2.2 (primary anchor = DS320PR1601 vendor recommended layout)",
+ "anchor_status": {
+  "vendor_ds320pr1601_material_in_repo": "NOT FOUND (docs/ has R588/R589/R633/R664/R666 which are PEX88096-era product investigation; per #K2-282 sec.2.2 those are DOWNGRADED to paradigm corroboration)",
+  "consequence": "the mapping table PRIMARY ANCHOR cannot be established from the register => per sec.2.2 the ENG must obtain the vendor recommended layout (or the supervisor supplies it)"
+ },
+ "registered_wall_gap_inventory": {
+  "group_W_col114": {
+   "gate_rows": [
+    7,
+    11,
+    12,
+    13,
+    15,
+    19,
+    24,
+    28
+   ],
+   "lanes": [
+    "OUT0_N_J2",
+    "OUT1_P_J2",
+    "OUT2_N_J2",
+    "OUT3_P_J2",
+    "OUT4_N_J2",
+    "OUT5_P_J2",
+    "OUT6_N_J2",
+    "OUT7_P_J2"
+   ]
+  },
+  "group_E_row36": {
+   "gate_cols": [
+    115,
+    117,
+    119,
+    125,
+    127,
+    131,
+    133,
+    135
+   ],
+   "lanes": [
+    "OUT0_P_J2",
+    "OUT1_N_J2",
+    "OUT2_P_J2",
+    "OUT3_N_J2",
+    "OUT4_P_J2",
+    "OUT5_N_J2",
+    "OUT6_P_J2",
+    "OUT7_N_J2"
+   ]
+  }
+ },
+ "grouped_mirror_audit": {
+  "W_axis_row": 17.5,
+  "W_gates_without_a_mirror_partner_among_registered_gaps": [
+   [
+    12,
+    23.0
+   ],
+   [
+    13,
+    22.0
+   ],
+   [
+    15,
+    20.0
+   ],
+   [
+    19,
+    16.0
+   ]
+  ],
+  "E_axis_col": 125.0,
+  "E_gates_without_a_mirror_partner_among_registered_gaps": [
+   [
+    127,
+    123.0
+   ]
+  ],
+  "new_openings_implied": 5
+ },
+ "hard_boundary_hit": "an EXACT grouped-mirror re-registration on the registered openings needs 5 wall-gap positions that are NOT registered openings ([23.0, 22.0, 20.0, 16.0, 123.0]) => it would require ADDING wall-gap physical openings, which #K2-282 sec.3 forbids => STOP AND REPORT",
+ "per_lane_rows": [
+  {
+   "lane": "OUT0_N_J2",
+   "group": "W",
+   "pn_pair": "OUT0",
+   "gate_registered": {
+    "cell": [
+     114,
+     28
+    ],
+    "layer": 0,
+    "wall_gap_id": "gap@114,28"
+   },
+   "mirror_partner_gate_available": true,
+   "mirror_partner_gate_needed_if_exact": 7.0,
+   "new_gate": "WITHHELD - primary anchor (vendor recommended layout) not in register",
+   "invariants": [
+    "16/16 demand",
+    "pad-to-pad",
+    "connector",
+    "BGA balls",
+    "wall-gap physical opening unchanged"
+   ]
+  },
+  {
+   "lane": "OUT0_P_J2",
+   "group": "E",
+   "pn_pair": "OUT0",
+   "gate_registered": {
+    "cell": [
+     127,
+     36
+    ],
+    "layer": 1,
+    "wall_gap_id": "gap@127,36"
+   },
+   "mirror_partner_gate_available": false,
+   "mirror_partner_gate_needed_if_exact": 123.0,
+   "new_gate": "WITHHELD - primary anchor (vendor recommended layout) not in register",
+   "invariants": [
+    "16/16 demand",
+    "pad-to-pad",
+    "connector",
+    "BGA balls",
+    "wall-gap physical opening unchanged"
+   ]
+  },
+  {
+   "lane": "OUT1_N_J2",
+   "group": "E",
+   "pn_pair": "OUT1",
+   "gate_registered": {
+    "cell": [
+     133,
+     36
+    ],
+    "layer": 0,
+    "wall_gap_id": "gap@133,36"
+   },
+   "mirror_partner_gate_available": true,
+   "mirror_partner_gate_needed_if_exact": 117.0,
+   "new_gate": "WITHHELD - primary anchor (vendor recommended layout) not in register",
+   "invariants": [
+    "16/16 demand",
+    "pad-to-pad",
+    "connector",
+    "BGA balls",
+    "wall-gap physical opening unchanged"
+   ]
+  },
+  {
+   "lane": "OUT1_P_J2",
+   "group": "W",
+   "pn_pair": "OUT1",
+   "gate_registered": {
+    "cell": [
+     114,
+     11
+    ],
+    "layer": 0,
+    "wall_gap_id": "gap@114,11"
+   },
+   "mirror_partner_gate_available": true,
+   "mirror_partner_gate_needed_if_exact": 24.0,
+   "new_gate": "WITHHELD - primary anchor (vendor recommended layout) not in register",
+   "invariants": [
+    "16/16 demand",
+    "pad-to-pad",
+    "connector",
+    "BGA balls",
+    "wall-gap physical opening unchanged"
+   ]
+  },
+  {
+   "lane": "OUT2_N_J2",
+   "group": "W",
+   "pn_pair": "OUT2",
+   "gate_registered": {
+    "cell": [
+     114,
+     13
+    ],
+    "layer": 0,
+    "wall_gap_id": "gap@114,13"
+   },
+   "mirror_partner_gate_available": false,
+   "mirror_partner_gate_needed_if_exact": 22.0,
+   "new_gate": "WITHHELD - primary anchor (vendor recommended layout) not in register",
+   "invariants": [
+    "16/16 demand",
+    "pad-to-pad",
+    "connector",
+    "BGA balls",
+    "wall-gap physical opening unchanged"
+   ]
+  },
+  {
+   "lane": "OUT2_P_J2",
+   "group": "E",
+   "pn_pair": "OUT2",
+   "gate_registered": {
+    "cell": [
+     125,
+     36
+    ],
+    "layer": 0,
+    "wall_gap_id": "gap@125,36"
+   },
+   "mirror_partner_gate_available": true,
+   "mirror_partner_gate_needed_if_exact": 125.0,
+   "new_gate": "WITHHELD - primary anchor (vendor recommended layout) not in register",
+   "invariants": [
+    "16/16 demand",
+    "pad-to-pad",
+    "connector",
+    "BGA balls",
+    "wall-gap physical opening unchanged"
+   ]
+  },
+  {
+   "lane": "OUT3_N_J2",
+   "group": "E",
+   "pn_pair": "OUT3",
+   "gate_registered": {
+    "cell": [
+     131,
+     36
+    ],
+    "layer": 0,
+    "wall_gap_id": "gap@131,36"
+   },
+   "mirror_partner_gate_available": true,
+   "mirror_partner_gate_needed_if_exact": 119.0,
+   "new_gate": "WITHHELD - primary anchor (vendor recommended layout) not in register",
+   "invariants": [
+    "16/16 demand",
+    "pad-to-pad",
+    "connector",
+    "BGA balls",
+    "wall-gap physical opening unchanged"
+   ]
+  },
+  {
+   "lane": "OUT3_P_J2",
+   "group": "W",
+   "pn_pair": "OUT3",
+   "gate_registered": {
+    "cell": [
+     114,
+     7
+    ],
+    "layer": 0,
+    "wall_gap_id": "gap@114,7"
+   },
+   "mirror_partner_gate_available": true,
+   "mirror_partner_gate_needed_if_exact": 28.0,
+   "new_gate": "WITHHELD - primary anchor (vendor recommended layout) not in register",
+   "invariants": [
+    "16/16 demand",
+    "pad-to-pad",
+    "connector",
+    "BGA balls",
+    "wall-gap physical opening unchanged"
+   ]
+  },
+  {
+   "lane": "OUT4_N_J2",
+   "group": "W",
+   "pn_pair": "OUT4",
+   "gate_registered": {
+    "cell": [
+     114,
+     24
+    ],
+    "layer": 0,
+    "wall_gap_id": "gap@114,24"
+   },
+   "mirror_partner_gate_available": true,
+   "mirror_partner_gate_needed_if_exact": 11.0,
+   "new_gate": "WITHHELD - primary anchor (vendor recommended layout) not in register",
+   "invariants": [
+    "16/16 demand",
+    "pad-to-pad",
+    "connector",
+    "BGA balls",
+    "wall-gap physical opening unchanged"
+   ]
+  },
+  {
+   "lane": "OUT4_P_J2",
+   "group": "E",
+   "pn_pair": "OUT4",
+   "gate_registered": {
+    "cell": [
+     119,
+     36
+    ],
+    "layer": 0,
+    "wall_gap_id": "gap@119,36"
+   },
+   "mirror_partner_gate_available": true,
+   "mirror_partner_gate_needed_if_exact": 131.0,
+   "new_gate": "WITHHELD - primary anchor (vendor recommended layout) not in register",
+   "invariants": [
+    "16/16 demand",
+    "pad-to-pad",
+    "connector",
+    "BGA balls",
+    "wall-gap physical opening unchanged"
+   ]
+  },
+  {
+   "lane": "OUT5_N_J2",
+   "group": "E",
+   "pn_pair": "OUT5",
+   "gate_registered": {
+    "cell": [
+     117,
+     36
+    ],
+    "layer": 0,
+    "wall_gap_id": "gap@117,36"
+   },
+   "mirror_partner_gate_available": true,
+   "mirror_partner_gate_needed_if_exact": 133.0,
+   "new_gate": "WITHHELD - primary anchor (vendor recommended layout) not in register",
+   "invariants": [
+    "16/16 demand",
+    "pad-to-pad",
+    "connector",
+    "BGA balls",
+    "wall-gap physical opening unchanged"
+   ]
+  },
+  {
+   "lane": "OUT5_P_J2",
+   "group": "W",
+   "pn_pair": "OUT5",
+   "gate_registered": {
+    "cell": [
+     114,
+     15
+    ],
+    "layer": 0,
+    "wall_gap_id": "gap@114,15"
+   },
+   "mirror_partner_gate_available": false,
+   "mirror_partner_gate_needed_if_exact": 20.0,
+   "new_gate": "WITHHELD - primary anchor (vendor recommended layout) not in register",
+   "invariants": [
+    "16/16 demand",
+    "pad-to-pad",
+    "connector",
+    "BGA balls",
+    "wall-gap physical opening unchanged"
+   ]
+  },
+  {
+   "lane": "OUT6_N_J2",
+   "group": "W",
+   "pn_pair": "OUT6",
+   "gate_registered": {
+    "cell": [
+     114,
+     12
+    ],
+    "layer": 1,
+    "wall_gap_id": "gap@114,12"
+   },
+   "mirror_partner_gate_available": false,
+   "mirror_partner_gate_needed_if_exact": 23.0,
+   "new_gate": "WITHHELD - primary anchor (vendor recommended layout) not in register",
+   "invariants": [
+    "16/16 demand",
+    "pad-to-pad",
+    "connector",
+    "BGA balls",
+    "wall-gap physical opening unchanged"
+   ]
+  },
+  {
+   "lane": "OUT6_P_J2",
+   "group": "E",
+   "pn_pair": "OUT6",
+   "gate_registered": {
+    "cell": [
+     115,
+     36
+    ],
+    "layer": 0,
+    "wall_gap_id": "gap@115,36"
+   },
+   "mirror_partner_gate_available": true,
+   "mirror_partner_gate_needed_if_exact": 135.0,
+   "new_gate": "WITHHELD - primary anchor (vendor recommended layout) not in register",
+   "invariants": [
+    "16/16 demand",
+    "pad-to-pad",
+    "connector",
+    "BGA balls",
+    "wall-gap physical opening unchanged"
+   ]
+  },
+  {
+   "lane": "OUT7_N_J2",
+   "group": "E",
+   "pn_pair": "OUT7",
+   "gate_registered": {
+    "cell": [
+     135,
+     36
+    ],
+    "layer": 0,
+    "wall_gap_id": "gap@135,36"
+   },
+   "mirror_partner_gate_available": true,
+   "mirror_partner_gate_needed_if_exact": 115.0,
+   "new_gate": "WITHHELD - primary anchor (vendor recommended layout) not in register",
+   "invariants": [
+    "16/16 demand",
+    "pad-to-pad",
+    "connector",
+    "BGA balls",
+    "wall-gap physical opening unchanged"
+   ]
+  },
+  {
+   "lane": "OUT7_P_J2",
+   "group": "W",
+   "pn_pair": "OUT7",
+   "gate_registered": {
+    "cell": [
+     114,
+     19
+    ],
+    "layer": 1,
+    "wall_gap_id": "gap@114,19"
+   },
+   "mirror_partner_gate_available": false,
+   "mirror_partner_gate_needed_if_exact": 16.0,
+   "new_gate": "WITHHELD - primary anchor (vendor recommended layout) not in register",
+   "invariants": [
+    "16/16 demand",
+    "pad-to-pad",
+    "connector",
+    "BGA balls",
+    "wall-gap physical opening unchanged"
+   ]
+  }
+ ],
+ "invariants_verified": {
+  "16/16": true,
+  "pad_to_pad_untouched": true,
+  "connector_untouched": true,
+  "bga_balls_untouched": true,
+  "wall_gap_openings_unchanged": true
+ },
+ "downstream": [
+  "step-2 SPEC version-bump revision artifact (authority #K2-282 + vendor anchor)",
+  "step-3 one certified 16/16 table -> supervisor acceptance",
+  "step-4 one drawing pass -> M2 closure"
+ ],
+ "verdict": "STOP_AND_REPORT (hard boundary: exact grouped mirror needs new wall-gap openings; primary anchor missing)",
+ "binary": "STOP_AND_REPORT"
+}
