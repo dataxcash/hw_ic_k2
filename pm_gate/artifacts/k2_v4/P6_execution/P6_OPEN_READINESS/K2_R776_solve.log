@@ -1,0 +1,67 @@
+declared model: lanes=16 gates=21 candidates=8874 (gen 46.3s)
+gate candidate census:
+   gate (114, 7) candidates=359
+   gate (114, 11) candidates=1669
+   gate (114, 12) candidates=199
+   gate (114, 13) candidates=199
+   gate (114, 15) candidates=172
+   gate (114, 16) candidates=0
+   gate (114, 19) candidates=0
+   gate (114, 20) candidates=0
+   gate (114, 22) candidates=0
+   gate (114, 23) candidates=0
+   gate (114, 24) candidates=606
+   gate (114, 28) candidates=598
+   gate (115, 36) candidates=80
+   gate (117, 36) candidates=416
+   gate (119, 36) candidates=832
+   gate (123, 36) candidates=832
+   gate (125, 36) candidates=832
+   gate (127, 36) candidates=832
+   gate (131, 36) candidates=832
+   gate (133, 36) candidates=416
+   gate (135, 36) candidates=0
+reachable gates (15): [(114, 7), (114, 11), (114, 12), (114, 13), (114, 15), (114, 24), (114, 28), (115, 36), (117, 36), (119, 36), (123, 36), (125, 36), (127, 36), (131, 36), (133, 36)]
+declared-but-UNROUTABLE gates (6): [(114, 16), (114, 19), (114, 20), (114, 22), (114, 23), (135, 36)]
+[step0] full model status=2 (infeasible=True) 67.0s
+[step1] cell-free model status=2 (infeasible=True) -> cells in core: False
+   [gate-filter] remove (114, 7) -> status=0 keep
+   [gate-filter] remove (114, 11) -> status=0 keep
+   [gate-filter] remove (114, 12) -> status=0 keep
+   [gate-filter] remove (114, 13) -> status=0 keep
+   [gate-filter] remove (114, 15) -> status=0 keep
+   [gate-filter] remove (114, 24) -> status=0 keep
+   [gate-filter] remove (114, 28) -> status=0 keep
+   [gate-filter] remove (115, 36) -> status=0 keep
+   [gate-filter] remove (117, 36) -> status=0 keep
+   [gate-filter] remove (119, 36) -> status=0 keep
+   [gate-filter] remove (123, 36) -> status=0 keep
+   [gate-filter] remove (125, 36) -> status=0 keep
+   [gate-filter] remove (127, 36) -> status=0 keep
+   [gate-filter] remove (131, 36) -> status=0 keep
+   [gate-filter] remove (133, 36) -> status=0 keep
+[step2] minimal gate set (15): [(114, 7), (114, 11), (114, 12), (114, 13), (114, 15), (114, 24), (114, 28), (115, 36), (117, 36), (119, 36), (123, 36), (125, 36), (127, 36), (131, 36), (133, 36)] ; removed []
+   [lane-filter] remove PCIE_UP_OUT0_N_J2 -> status=0 keep
+   [lane-filter] remove PCIE_UP_OUT0_P_J2 -> status=0 keep
+   [lane-filter] remove PCIE_UP_OUT1_N_J2 -> status=0 keep
+   [lane-filter] remove PCIE_UP_OUT1_P_J2 -> status=0 keep
+   [lane-filter] remove PCIE_UP_OUT2_N_J2 -> status=0 keep
+   [lane-filter] remove PCIE_UP_OUT2_P_J2 -> status=0 keep
+   [lane-filter] remove PCIE_UP_OUT3_N_J2 -> status=0 keep
+   [lane-filter] remove PCIE_UP_OUT3_P_J2 -> status=0 keep
+   [lane-filter] remove PCIE_UP_OUT4_N_J2 -> status=0 keep
+   [lane-filter] remove PCIE_UP_OUT4_P_J2 -> status=0 keep
+   [lane-filter] remove PCIE_UP_OUT5_N_J2 -> status=0 keep
+   [lane-filter] remove PCIE_UP_OUT5_P_J2 -> status=0 keep
+   [lane-filter] remove PCIE_UP_OUT6_N_J2 -> status=0 keep
+   [lane-filter] remove PCIE_UP_OUT6_P_J2 -> status=0 keep
+   [lane-filter] remove PCIE_UP_OUT7_N_J2 -> status=0 keep
+   [lane-filter] remove PCIE_UP_OUT7_P_J2 -> status=0 keep
+[step3] minimal lane set (16): ['PCIE_UP_OUT0_N_J2', 'PCIE_UP_OUT0_P_J2', 'PCIE_UP_OUT1_N_J2', 'PCIE_UP_OUT1_P_J2', 'PCIE_UP_OUT2_N_J2', 'PCIE_UP_OUT2_P_J2', 'PCIE_UP_OUT3_N_J2', 'PCIE_UP_OUT3_P_J2', 'PCIE_UP_OUT4_N_J2', 'PCIE_UP_OUT4_P_J2', 'PCIE_UP_OUT5_N_J2', 'PCIE_UP_OUT5_P_J2', 'PCIE_UP_OUT6_N_J2', 'PCIE_UP_OUT6_P_J2', 'PCIE_UP_OUT7_N_J2', 'PCIE_UP_OUT7_P_J2'] ; removed []
+[step4] core model status=2 (infeasible=True)
+[step4] irreducibility: necessary=31 non-necessary=0 -> IRREDUCIBLE (IIS)
+[step5] routable W corridors 24, E corridors 20 ; extra-not-declared W=17 E=12
+[step6] min-extra-openings MILP status=0 obj=1.0 442.4s
+[step6] TARGETED READING: ADD 1 routable opening(s) [[114, 47]] to the 15 declared-routable set => 16/16 feasible (witness), cells 0-overlap, gates distinct
+artifact=/home/fila/jqdDev_2025/ic_hw/k2/pm_gate/artifacts/k2_v4/P6_execution/P6_OPEN_READINESS/K2_R776_MINIMAL_CORE_IIS_v1.json hash=8cf4267fa58850d6 elapsed=651.8s
+OWNER-ITEMS: 0
