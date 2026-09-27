@@ -1,0 +1,476 @@
+{
+ "artifact": "k2_r782_pb_p4_precheck",
+ "ts": "2026-09-27T15:49:41",
+ "authority": "#K2-306 sec.2 : P-b physical-opening landing + P4 board-level integration & kicad-cli DRC (fail-closed precheck)",
+ "boarding_toolchain": {
+  "kicad_cli": "/tmp/opencode/kiapp/squashfs-root/usr/bin/kicad-cli",
+  "kicad_version": "10.0.5",
+  "pcbnew": "10.0.5",
+  "note": "no pcbnew/kicad-cli on PATH; both are usable from the on-box KiCad AppImage (extracted)"
+ },
+ "board_identity": {
+  "canonical": {
+   "path": "hw/k2_v4_8L.l8.kicad_pcb",
+   "sha16": "7a5c89913d6e5d0a",
+   "tracks": 5914,
+   "zones": 18,
+   "footprints": 58,
+   "copper_layers": 8
+  },
+  "frozen_placement_only": {
+   "path": "hw/k2_v4_8L.kicad_pcb",
+   "sha16": "fb07d25ac426ff84",
+   "tracks": 0,
+   "note": "placement-only source board; 0 copper tracks"
+  }
+ },
+ "bbox_mm": [
+  22.95,
+  143.05,
+  32.95,
+  79.05
+ ],
+ "wall": {
+  "kind": "GND stitching via fence",
+  "x_mm": 133.59,
+  "n_vias": 22,
+  "y_min": 43.5,
+  "y_max": 63.3,
+  "nets": [
+   "GND",
+   "PCIE_REFCLK0_N",
+   "PCIE_REFCLK1_N",
+   "PERSTA#"
+  ]
+ },
+ "opening_census": [
+  {
+   "opening": [
+    114,
+    7
+   ],
+   "kind": "W(wall)",
+   "cell_mm": [
+    133.59,
+    44.045
+   ],
+   "nearest_fence_via": {
+    "y": 43.5,
+    "net": "GND",
+    "_pad_mm": 0.35,
+    "drill_mm": 0.2
+   },
+   "center_dist_mm": 0.545,
+   "edge_clearance_mm": 0.268,
+   "physically_open": true,
+   "model_routable": true
+  },
+  {
+   "opening": [
+    114,
+    11
+   ],
+   "kind": "W(wall)",
+   "cell_mm": [
+    133.59,
+    45.785
+   ],
+   "nearest_fence_via": {
+    "y": 46.09,
+    "net": "PCIE_REFCLK0_N",
+    "_pad_mm": 0.35,
+    "drill_mm": 0.2
+   },
+   "center_dist_mm": 0.305,
+   "edge_clearance_mm": 0.028,
+   "physically_open": false,
+   "model_routable": true
+  },
+  {
+   "opening": [
+    114,
+    12
+   ],
+   "kind": "W(wall)",
+   "cell_mm": [
+    133.59,
+    46.22
+   ],
+   "nearest_fence_via": {
+    "y": 46.09,
+    "net": "PCIE_REFCLK0_N",
+    "_pad_mm": 0.35,
+    "drill_mm": 0.2
+   },
+   "center_dist_mm": 0.13,
+   "edge_clearance_mm": -0.148,
+   "physically_open": false,
+   "model_routable": true
+  },
+  {
+   "opening": [
+    114,
+    13
+   ],
+   "kind": "W(wall)",
+   "cell_mm": [
+    133.59,
+    46.655
+   ],
+   "nearest_fence_via": {
+    "y": 47.1,
+    "net": "GND",
+    "_pad_mm": 0.35,
+    "drill_mm": 0.2
+   },
+   "center_dist_mm": 0.445,
+   "edge_clearance_mm": 0.168,
+   "physically_open": true,
+   "model_routable": true
+  },
+  {
+   "opening": [
+    114,
+    15
+   ],
+   "kind": "W(wall)",
+   "cell_mm": [
+    133.59,
+    47.525
+   ],
+   "nearest_fence_via": {
+    "y": 47.1,
+    "net": "GND",
+    "_pad_mm": 0.35,
+    "drill_mm": 0.2
+   },
+   "center_dist_mm": 0.425,
+   "edge_clearance_mm": 0.147,
+   "physically_open": true,
+   "model_routable": true
+  },
+  {
+   "opening": [
+    114,
+    16
+   ],
+   "kind": "W(wall)",
+   "cell_mm": [
+    133.59,
+    47.96
+   ],
+   "nearest_fence_via": {
+    "y": 48.3,
+    "net": "GND",
+    "_pad_mm": 0.35,
+    "drill_mm": 0.2
+   },
+   "center_dist_mm": 0.34,
+   "edge_clearance_mm": 0.062,
+   "physically_open": false,
+   "model_routable": false
+  },
+  {
+   "opening": [
+    114,
+    19
+   ],
+   "kind": "W(wall)",
+   "cell_mm": [
+    133.59,
+    49.265
+   ],
+   "nearest_fence_via": {
+    "y": 48.9,
+    "net": "GND",
+    "_pad_mm": 0.35,
+    "drill_mm": 0.2
+   },
+   "center_dist_mm": 0.365,
+   "edge_clearance_mm": 0.088,
+   "physically_open": false,
+   "model_routable": false
+  },
+  {
+   "opening": [
+    114,
+    20
+   ],
+   "kind": "W(wall)",
+   "cell_mm": [
+    133.59,
+    49.7
+   ],
+   "nearest_fence_via": {
+    "y": 50.1,
+    "net": "GND",
+    "_pad_mm": 0.35,
+    "drill_mm": 0.2
+   },
+   "center_dist_mm": 0.4,
+   "edge_clearance_mm": 0.122,
+   "physically_open": true,
+   "model_routable": false
+  },
+  {
+   "opening": [
+    114,
+    22
+   ],
+   "kind": "W(wall)",
+   "cell_mm": [
+    133.59,
+    50.57
+   ],
+   "nearest_fence_via": {
+    "y": 50.7,
+    "net": "GND",
+    "_pad_mm": 0.35,
+    "drill_mm": 0.2
+   },
+   "center_dist_mm": 0.13,
+   "edge_clearance_mm": -0.147,
+   "physically_open": false,
+   "model_routable": false
+  },
+  {
+   "opening": [
+    114,
+    23
+   ],
+   "kind": "W(wall)",
+   "cell_mm": [
+    133.59,
+    51.005
+   ],
+   "nearest_fence_via": {
+    "y": 50.7,
+    "net": "GND",
+    "_pad_mm": 0.35,
+    "drill_mm": 0.2
+   },
+   "center_dist_mm": 0.305,
+   "edge_clearance_mm": 0.027,
+   "physically_open": false,
+   "model_routable": false
+  },
+  {
+   "opening": [
+    114,
+    24
+   ],
+   "kind": "W(wall)",
+   "cell_mm": [
+    133.59,
+    51.44
+   ],
+   "nearest_fence_via": {
+    "y": 51.49,
+    "net": "PCIE_REFCLK1_N",
+    "_pad_mm": 0.35,
+    "drill_mm": 0.2
+   },
+   "center_dist_mm": 0.05,
+   "edge_clearance_mm": -0.227,
+   "physically_open": false,
+   "model_routable": true
+  },
+  {
+   "opening": [
+    114,
+    28
+   ],
+   "kind": "W(wall)",
+   "cell_mm": [
+    133.59,
+    53.18
+   ],
+   "nearest_fence_via": {
+    "y": 53.7,
+    "net": "GND",
+    "_pad_mm": 0.35,
+    "drill_mm": 0.2
+   },
+   "center_dist_mm": 0.52,
+   "edge_clearance_mm": 0.243,
+   "physically_open": true,
+   "model_routable": true
+  },
+  {
+   "opening": [
+    114,
+    47
+   ],
+   "kind": "W(wall)",
+   "cell_mm": [
+    133.59,
+    61.445
+   ],
+   "nearest_fence_via": {
+    "y": 62.1,
+    "net": "GND",
+    "_pad_mm": 0.35,
+    "drill_mm": 0.2
+   },
+   "center_dist_mm": 0.655,
+   "edge_clearance_mm": 0.378,
+   "physically_open": true,
+   "model_routable": false
+  },
+  {
+   "opening": [
+    115,
+    36
+   ],
+   "kind": "E(row36 band)",
+   "model_routable": true,
+   "note": "E group sits on the row-36 escape band, not on the GND via fence"
+  },
+  {
+   "opening": [
+    117,
+    36
+   ],
+   "kind": "E(row36 band)",
+   "model_routable": true,
+   "note": "E group sits on the row-36 escape band, not on the GND via fence"
+  },
+  {
+   "opening": [
+    119,
+    36
+   ],
+   "kind": "E(row36 band)",
+   "model_routable": true,
+   "note": "E group sits on the row-36 escape band, not on the GND via fence"
+  },
+  {
+   "opening": [
+    123,
+    36
+   ],
+   "kind": "E(row36 band)",
+   "model_routable": true,
+   "note": "E group sits on the row-36 escape band, not on the GND via fence"
+  },
+  {
+   "opening": [
+    125,
+    36
+   ],
+   "kind": "E(row36 band)",
+   "model_routable": true,
+   "note": "E group sits on the row-36 escape band, not on the GND via fence"
+  },
+  {
+   "opening": [
+    127,
+    36
+   ],
+   "kind": "E(row36 band)",
+   "model_routable": true,
+   "note": "E group sits on the row-36 escape band, not on the GND via fence"
+  },
+  {
+   "opening": [
+    131,
+    36
+   ],
+   "kind": "E(row36 band)",
+   "model_routable": true,
+   "note": "E group sits on the row-36 escape band, not on the GND via fence"
+  },
+  {
+   "opening": [
+    133,
+    36
+   ],
+   "kind": "E(row36 band)",
+   "model_routable": true,
+   "note": "E group sits on the row-36 escape band, not on the GND via fence"
+  },
+  {
+   "opening": [
+    135,
+    36
+   ],
+   "kind": "E(row36 band)",
+   "model_routable": false,
+   "note": "E group sits on the row-36 escape band, not on the GND via fence"
+  }
+ ],
+ "target_opening": {
+  "cell": [
+   114,
+   47
+  ],
+  "physically_open": true
+ },
+ "per_net_board_tracks": {
+  "PCIE_UP_OUT0_N_J2": 133,
+  "PCIE_UP_OUT0_P_J2": 25,
+  "PCIE_UP_OUT1_N_J2": 22,
+  "PCIE_UP_OUT1_P_J2": 102,
+  "PCIE_UP_OUT2_N_J2": 78,
+  "PCIE_UP_OUT2_P_J2": 25,
+  "PCIE_UP_OUT3_N_J2": 12,
+  "PCIE_UP_OUT3_P_J2": 60,
+  "PCIE_UP_OUT4_N_J2": 101,
+  "PCIE_UP_OUT4_P_J2": 25,
+  "PCIE_UP_OUT5_N_J2": 22,
+  "PCIE_UP_OUT5_P_J2": 96,
+  "PCIE_UP_OUT6_N_J2": 87,
+  "PCIE_UP_OUT6_P_J2": 25,
+  "PCIE_UP_OUT7_N_J2": 22,
+  "PCIE_UP_OUT7_P_J2": 69
+ },
+ "baseline_board_drc": {
+  "available": true,
+  "tool": "kicad-cli 10.0.5",
+  "violations_total": 170,
+  "unconnected_items": 0,
+  "by_type": {
+   "missing_courtyard": 54,
+   "silk_over_copper": 37,
+   "track_not_centered_on_via": 34,
+   "lib_footprint_mismatch": 20,
+   "silk_overlap": 15,
+   "via_dangling": 6,
+   "silk_edge_clearance": 2,
+   "track_dangling": 1,
+   "copper_sliver": 1
+  },
+  "report": "K2_R782_l8_baseline_drc.json"
+ },
+ "pb_verdict": "ZERO_PHYSICAL_BOARD_CHANGE_REQUIRED (the target opening W[114,47] already exists as a 1.8mm gap in the GND via fence; registration v2 adds a ROUTE through it, not copper geometry)",
+ "p4_named_blockers": [
+  {
+   "id": "B1",
+   "name": "baseline DRC not green",
+   "detail": "kicad-cli board DRC on the canonical l8 board = 170 violations (0 clearance, 0 unconnected); 'all-green' cannot be reached by landing 16 lanes"
+  },
+  {
+   "id": "B2",
+   "name": "access map missing",
+   "detail": "the R778 certified witness is a MID-SEGMENT (slot row60 -> gate cell); no ball<->cell / gate<->pad access segments => direct landing would create electrically-open copper"
+  },
+  {
+   "id": "B3",
+   "name": "board already fully connected",
+   "detail": "canonical l8 reports 0 unconnected items; replacing the 16 nets' routing is a REPLACEMENT whose scope (which segments) is not declared in the order"
+  }
+ ],
+ "requested_rulings": [
+  "(1) P-b 判据：确认目标口[114,47]的“物理落板”=零改动（既有空隙）？或指明“开口”的物理载体（本席侦察未见被堵载体）。",
+  "(2) P4 通过判据：是“不新增违例”还是“全清现状 170 违例”？",
+  "(3) 是否授权新增《接入映射》工序（球/焊盘↔格点）后再落线？"
+ ],
+ "construction_runs": 1,
+ "drawings": 0,
+ "gerber_exported": false,
+ "p5": false,
+ "order": false,
+ "changes_to_frozen_sources": 0,
+ "elapsed_s": 3.0,
+ "artifact_hash16": "98598a50f2c59f4d"
+}
