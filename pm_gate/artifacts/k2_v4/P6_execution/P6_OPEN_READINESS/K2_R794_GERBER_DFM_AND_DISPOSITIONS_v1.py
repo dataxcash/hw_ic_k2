@@ -10,7 +10,7 @@ import sys, os, json, hashlib, collections, subprocess, time
 K2="/home/fila/jqdDev_2025/ic_hw/k2"
 HERE=os.path.dirname(os.path.abspath(__file__))
 BRD=os.path.join(K2,"hw/k2_v4_8L.l8.kicad_pcb")
-KI=os.environ.get("KI_ROOT","/tmp/opencode/kiapp/squashfs-root"); KCLI=os.path.join(KI,"usr/bin/kicad-cli")
+KI=os.environ.get("KI_ROOT","/tmp/k2kicad/squashfs-root"); KCLI=os.path.join(KI,"usr/bin/kicad-cli")
 GDIR=os.path.join(HERE,"gerber_r794")
 OUT_DISP=os.path.join(HERE,"K2_R794_WARNING_DISPOSITIONS_v1.json")
 OUT_MAN=os.path.join(HERE,"K2_R794_GERBER_MANIFEST_v1.json")

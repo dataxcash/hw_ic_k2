@@ -12,7 +12,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 BRD = os.path.join(K2, "hw/k2_v4_8L.l8.kicad_pcb")
 OUT = os.path.join(HERE, "K2_R792_FULLCHAIN_DRAWING_FROM_BOARD_v1.json")
 DRCJ = os.path.join(HERE, "K2_R792_board_drc.json")
-KI = os.environ.get("KI_ROOT", "/tmp/opencode/kiapp/squashfs-root")
+KI = os.environ.get("KI_ROOT", "/tmp/k2kicad/squashfs-root")
 KCLI = os.path.join(KI, "usr/bin/kicad-cli")
 import pcbnew
 def mm(p): return [round(pcbnew.ToMM(p.x),3), round(pcbnew.ToMM(p.y),3)]

@@ -18,7 +18,7 @@ BRD = os.path.join(K2, "hw/k2_v4_8L.l8.kicad_pcb")
 BRD_FROZEN = os.path.join(K2, "hw/k2_v4_8L.kicad_pcb")
 OUT = os.path.join(HERE, "K2_R782_PB_P4_PRECHECK_v1.json")
 DRCJSON = os.path.join(HERE, "K2_R782_l8_baseline_drc.json")
-KI = os.environ.get("KI_APPIMAGE_ROOT", "/tmp/opencode/kiapp/squashfs-root")
+KI = os.environ.get("KI_APPIMAGE_ROOT", "/tmp/k2kicad/squashfs-root")
 KICAD_CLI = os.path.join(KI, "usr/bin/kicad-cli")
 def s16(p): return hashlib.sha256(open(p, "rb").read()).hexdigest()[:16]
 import pcbnew
