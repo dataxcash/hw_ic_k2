@@ -1,0 +1,348 @@
+{
+ "artifact": "k2_l1_a_exit_registration_revision_v2",
+ "ts": "2026-09-27T15:29:50",
+ "version": 2,
+ "supersedes": {
+  "file": "K2_L1_A_EXIT_REGISTRATION_REVISION_v1.json",
+  "sha16": "7d540276f431a90e",
+  "status_of_v1": "WITHDRAWN (P-a failed 3/16; rolled back)"
+ },
+ "authority": "#K2-303 sec.2.5(a): corrected re-registration from R776 (drop 6 dead declared openings; add 1 routable opening). Owner standing order #K2-297 (design = proven practice, prove-then-move).",
+ "basis": "R776 minimal-core IIS (16 lanes vs 15 routable openings = pigeonhole) + R776 min-extra-openings MILP (min extra = 1)",
+ "paradigm": "vendor SNLA425A sec.1.1 grouping (four-lane groups) + mirror-pair intent; filtered by ROUTABILITY (per-opening legal-candidate census)",
+ "openings_kept_routable": [
+  [
+   114,
+   7
+  ],
+  [
+   114,
+   11
+  ],
+  [
+   114,
+   12
+  ],
+  [
+   114,
+   13
+  ],
+  [
+   114,
+   15
+  ],
+  [
+   114,
+   24
+  ],
+  [
+   114,
+   28
+  ],
+  [
+   115,
+   36
+  ],
+  [
+   117,
+   36
+  ],
+  [
+   119,
+   36
+  ],
+  [
+   123,
+   36
+  ],
+  [
+   125,
+   36
+  ],
+  [
+   127,
+   36
+  ],
+  [
+   131,
+   36
+  ],
+  [
+   133,
+   36
+  ]
+ ],
+ "openings_dead_excluded": [
+  {
+   "cell": [
+    114,
+    16
+   ],
+   "reason": "0 legal candidate routes (dead hole)",
+   "was_in_v1_plan": true
+  },
+  {
+   "cell": [
+    114,
+    19
+   ],
+   "reason": "0 legal candidate routes (dead hole)",
+   "was_in_v1_plan": true
+  },
+  {
+   "cell": [
+    114,
+    20
+   ],
+   "reason": "0 legal candidate routes (dead hole)",
+   "was_in_v1_plan": true
+  },
+  {
+   "cell": [
+    114,
+    22
+   ],
+   "reason": "0 legal candidate routes (dead hole)",
+   "was_in_v1_plan": true
+  },
+  {
+   "cell": [
+    114,
+    23
+   ],
+   "reason": "0 legal candidate routes (dead hole)",
+   "was_in_v1_plan": true
+  },
+  {
+   "cell": [
+    135,
+    36
+   ],
+   "reason": "0 legal candidate routes (dead hole)",
+   "was_in_v1_plan": true
+  }
+ ],
+ "opening_added": {
+  "cell": [
+   114,
+   47
+  ],
+  "candidates": 2304,
+  "band": "W col 43-57 (preferred)",
+  "evidence": "opening used by the R776 SAT witness"
+ },
+ "routability_census": [
+  {
+   "cell": [
+    114,
+    7
+   ],
+   "candidates": 359,
+   "routable": true,
+   "in_v1": true
+  },
+  {
+   "cell": [
+    114,
+    11
+   ],
+   "candidates": 1669,
+   "routable": true,
+   "in_v1": true
+  },
+  {
+   "cell": [
+    114,
+    12
+   ],
+   "candidates": 199,
+   "routable": true,
+   "in_v1": true
+  },
+  {
+   "cell": [
+    114,
+    13
+   ],
+   "candidates": 199,
+   "routable": true,
+   "in_v1": true
+  },
+  {
+   "cell": [
+    114,
+    15
+   ],
+   "candidates": 172,
+   "routable": true,
+   "in_v1": true
+  },
+  {
+   "cell": [
+    114,
+    16
+   ],
+   "candidates": 0,
+   "routable": false,
+   "in_v1": true
+  },
+  {
+   "cell": [
+    114,
+    19
+   ],
+   "candidates": 0,
+   "routable": false,
+   "in_v1": true
+  },
+  {
+   "cell": [
+    114,
+    20
+   ],
+   "candidates": 0,
+   "routable": false,
+   "in_v1": true
+  },
+  {
+   "cell": [
+    114,
+    22
+   ],
+   "candidates": 0,
+   "routable": false,
+   "in_v1": true
+  },
+  {
+   "cell": [
+    114,
+    23
+   ],
+   "candidates": 0,
+   "routable": false,
+   "in_v1": true
+  },
+  {
+   "cell": [
+    114,
+    24
+   ],
+   "candidates": 606,
+   "routable": true,
+   "in_v1": true
+  },
+  {
+   "cell": [
+    114,
+    28
+   ],
+   "candidates": 598,
+   "routable": true,
+   "in_v1": true
+  },
+  {
+   "cell": [
+    114,
+    47
+   ],
+   "candidates": 2304,
+   "routable": true,
+   "in_v1": false
+  },
+  {
+   "cell": [
+    115,
+    36
+   ],
+   "candidates": 80,
+   "routable": true,
+   "in_v1": true
+  },
+  {
+   "cell": [
+    117,
+    36
+   ],
+   "candidates": 416,
+   "routable": true,
+   "in_v1": true
+  },
+  {
+   "cell": [
+    119,
+    36
+   ],
+   "candidates": 832,
+   "routable": true,
+   "in_v1": true
+  },
+  {
+   "cell": [
+    123,
+    36
+   ],
+   "candidates": 832,
+   "routable": true,
+   "in_v1": true
+  },
+  {
+   "cell": [
+    125,
+    36
+   ],
+   "candidates": 832,
+   "routable": true,
+   "in_v1": true
+  },
+  {
+   "cell": [
+    127,
+    36
+   ],
+   "candidates": 832,
+   "routable": true,
+   "in_v1": true
+  },
+  {
+   "cell": [
+    131,
+    36
+   ],
+   "candidates": 832,
+   "routable": true,
+   "in_v1": true
+  },
+  {
+   "cell": [
+    133,
+    36
+   ],
+   "candidates": 416,
+   "routable": true,
+   "in_v1": true
+  },
+  {
+   "cell": [
+    135,
+    36
+   ],
+   "candidates": 0,
+   "routable": false,
+   "in_v1": true
+  }
+ ],
+ "usable_openings_total": 16,
+ "declared_openings_v1": 21,
+ "physical_opening_changes": 0,
+ "planned_delta_vs_v1": {
+  "excluded_dead": 6,
+  "added_routable": 1
+ },
+ "invariants": [
+  "16/16 demand",
+  "pad-to-pad",
+  "connector",
+  "BGA balls",
+  "wall-gap opening set = registration only (board untouched)"
+ ]
+}
