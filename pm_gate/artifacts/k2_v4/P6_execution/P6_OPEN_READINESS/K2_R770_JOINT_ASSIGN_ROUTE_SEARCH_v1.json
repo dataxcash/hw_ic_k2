@@ -1,0 +1,70 @@
+{
+ "artifact": "k2_r770_joint_assign_route_search_v1",
+ "ts": "2026-09-27T14:12:41",
+ "authority": "#K2-299 sec.2 (ONE bounded-complete JOINT search: assignment x route, inside the revised mirror-complete gate set)",
+ "method": "per-lane EXHAUSTIVE candidate sets over (gate in revised set) x (layer pair) x (descent column) x (run row), legality + layer-pair only; then COMPLETE DFS with MRV + forward checking + backtracking",
+ "construction_runs": 1,
+ "drawings": 0,
+ "gerber_exported": false,
+ "p5": false,
+ "order": false,
+ "revised_gate_set": {
+  "W_rows": [
+   7,
+   11,
+   12,
+   13,
+   15,
+   16,
+   19,
+   20,
+   22,
+   23,
+   24,
+   28
+  ],
+  "E_cols": [
+   115,
+   117,
+   119,
+   123,
+   125,
+   127,
+   131,
+   133,
+   135
+  ],
+  "size": 21
+ },
+ "candidate_counts": {
+  "OUT0_N_J2": 471,
+  "OUT0_P_J2": 455,
+  "OUT1_N_J2": 535,
+  "OUT1_P_J2": 471,
+  "OUT2_N_J2": 471,
+  "OUT2_P_J2": 715,
+  "OUT3_N_J2": 585,
+  "OUT3_P_J2": 471,
+  "OUT4_N_J2": 471,
+  "OUT4_P_J2": 502,
+  "OUT5_N_J2": 515,
+  "OUT5_P_J2": 471,
+  "OUT6_N_J2": 495,
+  "OUT6_P_J2": 791,
+  "OUT7_N_J2": 957,
+  "OUT7_P_J2": 498
+ },
+ "search": {
+  "nodes": 513966,
+  "timeout": true,
+  "solved": false,
+  "time_cap_s": 2400.0
+ },
+ "binary": "SEARCH_BOUND_HIT",
+ "witness": null,
+ "registration_diff_old_to_new": null,
+ "merged_verification": null,
+ "scope_note": "candidate sets are BOUNDED (declared ranges) and the gate set is the revised mirror-complete set; solving = witness; exhausting = exhaustion-level evidence over THIS bounded joint space only",
+ "elapsed_s": 2400.0,
+ "artifact_hash16": "821f28d2333b4ce1"
+}
