@@ -1,0 +1,51 @@
+{
+ "artifact": "k2_r786_access_joint_drawing",
+ "zero_access_lanes": [],
+ "ts": "2026-09-27T16:34:06",
+ "authority": "#K2-308 (1) bounded joint access drawing (whole-board uniqueness MILP, one execution); (2) OUT6_N mid re-assignment within the registered v2 16-gate set + re-certification",
+ "construction_runs": 1,
+ "drawings": 0,
+ "gerber_exported": false,
+ "p5": false,
+ "order": false,
+ "candidates": {
+  "total": 731,
+  "by_kind": {
+   "belt": 256,
+   "in": 226,
+   "out": 249
+  },
+  "out6_belt_candidates": 16,
+  "k_alternatives": 4
+ },
+ "solver": {
+  "status": 2,
+  "obj": null,
+  "elapsed_s": 0.0
+ },
+ "binary": "UNSAT_IN_BOUNDED_CANDIDATE_SET",
+ "verdict": "NAMED_BLOCKER (bounded family): whole-board joint access selection is UNSAT within the bounded candidate family; direct probe shows OUT6_N outlet is infeasible for ALL registered gates under the 15 fixed belts => the blocker is the OUTLET CORRIDOR, not the gate choice",
+ "named_blocker": {
+  "scope": "bounded joint candidate set (k=4 alternatives/lane, OUT6 over 16 registered gates)",
+  "note": "no whole-board cell-exclusive selection of in/out(+OUT6 belt) exists within the bounded candidate family"
+ },
+ "artifact_hash16": "534d79720634f4da",
+ "direct_probe_evidence": {
+  "method": "per-lane BFS on the model lane graph (A/cell -> slot cell; gate cell -> B)",
+  "in_paths_ok": "16/16",
+  "out_paths_ok": "15/16",
+  "out_fail_lane": "OUT6_N_J2",
+  "out6_all_gates_infeasible": "from the first bounded run (32 OUT6 belt candidates = <=2/gate over all 16 registered gates): OUT6 outlet had no feasible path for ANY belt/gate candidate under the 15 fixed belts"
+ },
+ "bounded_family": {
+  "belts_per_lane": 16,
+  "belt_rule": "shortest per distinct registered gate",
+  "access_alternatives_per_group": 4,
+  "out6_gate_reassignment_allowed": true
+ },
+ "not_claimed": [
+  "this UNSAT is NOT a proof of global infeasibility",
+  "it only states: within the BOUNDED candidate family (16 belts/lane + 4 access alternatives/group) no whole-board cell-exclusive selection exists",
+  "the earlier instant-presolve UNSAT with zero access candidates (now fixed: every lane has 11-16 in and 14-16 out candidates) is recorded as a self-detected model artifact of this window"
+ ]
+}
