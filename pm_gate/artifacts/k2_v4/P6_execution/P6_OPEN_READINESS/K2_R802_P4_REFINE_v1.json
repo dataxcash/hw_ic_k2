@@ -1,0 +1,250 @@
+{
+ "artifact": "k2_r802_p4_refine",
+ "ts": "2026-09-27T18:10:24",
+ "authority": "#K2-317 : P4 refinement one-execution - 45deg chamfer + OUT4 pair length-match -> l9 + whole-board DRC (no new violations) + double-sided render",
+ "src_sha16": "7a5c89913d6e5d0a",
+ "l9_sha16": "110e846e59c1cbb6",
+ "requirement2_chamfer": {
+  "corners_chamfered": 166
+ },
+ "requirement1_length": {
+  "before": {
+   "PCIE_UP_OUT0_N_J2": 78.926,
+   "PCIE_UP_OUT0_P_J2": 79.144,
+   "PCIE_UP_OUT1_N_J2": 75.757,
+   "PCIE_UP_OUT1_P_J2": 75.87,
+   "PCIE_UP_OUT2_N_J2": 70.788,
+   "PCIE_UP_OUT2_P_J2": 70.82,
+   "PCIE_UP_OUT3_N_J2": 68.593,
+   "PCIE_UP_OUT3_P_J2": 68.77,
+   "PCIE_UP_OUT4_N_J2": 77.602,
+   "PCIE_UP_OUT4_P_J2": 78.216,
+   "PCIE_UP_OUT5_N_J2": 75.989,
+   "PCIE_UP_OUT5_P_J2": 76.037,
+   "PCIE_UP_OUT6_N_J2": 73.211,
+   "PCIE_UP_OUT6_P_J2": 73.372,
+   "PCIE_UP_OUT7_N_J2": 71.145,
+   "PCIE_UP_OUT7_P_J2": 71.166
+  },
+  "after_chamfer": {
+   "PCIE_UP_OUT0_N_J2": 77.855,
+   "PCIE_UP_OUT0_P_J2": 79.144,
+   "PCIE_UP_OUT1_N_J2": 75.757,
+   "PCIE_UP_OUT1_P_J2": 74.984,
+   "PCIE_UP_OUT2_N_J2": 70.224,
+   "PCIE_UP_OUT2_P_J2": 70.82,
+   "PCIE_UP_OUT3_N_J2": 68.593,
+   "PCIE_UP_OUT3_P_J2": 68.77,
+   "PCIE_UP_OUT4_N_J2": 76.744,
+   "PCIE_UP_OUT4_P_J2": 78.216,
+   "PCIE_UP_OUT5_N_J2": 75.989,
+   "PCIE_UP_OUT5_P_J2": 75.201,
+   "PCIE_UP_OUT6_N_J2": 72.473,
+   "PCIE_UP_OUT6_P_J2": 73.372,
+   "PCIE_UP_OUT7_N_J2": 71.145,
+   "PCIE_UP_OUT7_P_J2": 70.573
+  },
+  "final": {
+   "PCIE_UP_OUT0_N_J2": 79.144,
+   "PCIE_UP_OUT0_P_J2": 79.144,
+   "PCIE_UP_OUT1_N_J2": 75.757,
+   "PCIE_UP_OUT1_P_J2": 75.757,
+   "PCIE_UP_OUT2_N_J2": 70.82,
+   "PCIE_UP_OUT2_P_J2": 70.82,
+   "PCIE_UP_OUT3_N_J2": 68.593,
+   "PCIE_UP_OUT3_P_J2": 68.77,
+   "PCIE_UP_OUT4_N_J2": 78.216,
+   "PCIE_UP_OUT4_P_J2": 78.216,
+   "PCIE_UP_OUT5_N_J2": 75.989,
+   "PCIE_UP_OUT5_P_J2": 75.989,
+   "PCIE_UP_OUT6_N_J2": 73.372,
+   "PCIE_UP_OUT6_P_J2": 73.372,
+   "PCIE_UP_OUT7_N_J2": 71.145,
+   "PCIE_UP_OUT7_P_J2": 71.145
+  },
+  "delta_final": {
+   "OUT0": 0.0,
+   "OUT1": 0.0,
+   "OUT2": 0.0,
+   "OUT3": 0.177,
+   "OUT4": 0.0,
+   "OUT5": 0.0,
+   "OUT6": 0.0,
+   "OUT7": 0.0
+  },
+  "all_within_0p50": true,
+  "meanders": {
+   "OUT0": {
+    "shortened": "OUT0_N_J2",
+    "added_mm": 1.289,
+    "seg": {
+     "seg_mm": 13.084,
+     "layer": "In2.Cu"
+    }
+   },
+   "OUT1": {
+    "shortened": "OUT1_P_J2",
+    "added_mm": 0.773,
+    "seg": {
+     "seg_mm": 14.553,
+     "layer": "In5.Cu"
+    }
+   },
+   "OUT2": {
+    "shortened": "OUT2_N_J2",
+    "added_mm": 0.596,
+    "seg": {
+     "seg_mm": 16.987,
+     "layer": "In5.Cu"
+    }
+   },
+   "OUT4": {
+    "shortened": "OUT4_N_J2",
+    "added_mm": 1.472,
+    "seg": {
+     "seg_mm": 14.48,
+     "layer": "In5.Cu"
+    }
+   },
+   "OUT5": {
+    "shortened": "OUT5_P_J2",
+    "added_mm": 0.788,
+    "seg": {
+     "seg_mm": 14.329,
+     "layer": "In2.Cu"
+    }
+   },
+   "OUT6": {
+    "shortened": "OUT6_N_J2",
+    "added_mm": 0.899,
+    "seg": {
+     "seg_mm": 14.134,
+     "layer": "In5.Cu"
+    }
+   },
+   "OUT7": {
+    "shortened": "OUT7_P_J2",
+    "added_mm": 0.572,
+    "seg": {
+     "seg_mm": 14.918,
+     "layer": "In5.Cu"
+    }
+   }
+  }
+ },
+ "requirement3_vias": {
+  "count": 64,
+  "by_kind": {
+   "THROUGH(F-B)": 16,
+   "BLIND_BURIED(HDI)": 48
+  },
+  "conclusion": "16 THROUGH(F-B) vias carry a stub barrel in the 8-layer HDI stack -> fab decision (back-drill OR blind substitution); 48 BLIND_BURIED have no through stub -> no back-drill",
+  "model_drawing_had": "the R780 model drawing showed 5 layer-change vias; the real board carries 4 vias per lane (64 total on the 16 nets)"
+ },
+ "drc": {
+  "l9_total": 187,
+  "baseline_total": 170,
+  "new": 17,
+  "removed": 0,
+  "new_items": [
+   [
+    "clearance",
+    "error",
+    "间距违规 ( 间距 0.1750 mm; 实际 0.0260 mm)"
+   ],
+   [
+    "shorting_items",
+    "error",
+    "短路了两个不同网络的项目 (网络 PCIE_UP_OUT6_N_J2 和 PCIE_UP_OUT6_P_J2)"
+   ],
+   [
+    "clearance",
+    "error",
+    "间距违规 ( 间距 0.1750 mm; 实际 0.0540 mm)"
+   ],
+   [
+    "clearance",
+    "error",
+    "间距违规 ( 间距 0.1750 mm; 实际 0.0540 mm)"
+   ],
+   [
+    "clearance",
+    "error",
+    "间距违规 ( 间距 0.1750 mm; 实际 0.0540 mm)"
+   ],
+   [
+    "shorting_items",
+    "error",
+    "短路了两个不同网络的项目 (网络 PCIE_UP_OUT5_P_J2 和 PCIE_DN5_N)"
+   ],
+   [
+    "shorting_items",
+    "error",
+    "短路了两个不同网络的项目 (网络 PCIE_UP_OUT2_N_J2 和 PCIE_UP_OUT5_P_J2)"
+   ],
+   [
+    "clearance",
+    "error",
+    "间距违规 ( 间距 0.1750 mm; 实际 0.0260 mm)"
+   ],
+   [
+    "shorting_items",
+    "error",
+    "短路了两个不同网络的项目 (网络 PCIE_UP_OUT2_P_J2 和 PCIE_UP_OUT2_N_J2)"
+   ],
+   [
+    "tracks_crossing",
+    "error",
+    "Tracks crossing"
+   ],
+   [
+    "clearance",
+    "error",
+    "间距违规 ( 间距 0.1750 mm; 实际 0.0420 mm)"
+   ],
+   [
+    "shorting_items",
+    "error",
+    "短路了两个不同网络的项目 (网络 PCIE_UP_OUT1_N_J2 和 PCIE_UP_OUT1_P_J2)"
+   ],
+   [
+    "shorting_items",
+    "error",
+    "短路了两个不同网络的项目 (网络 PCIE_UP_OUT1_N_J2 和 PCIE_UP_OUT1_P_J2)"
+   ],
+   [
+    "shorting_items",
+    "error",
+    "短路了两个不同网络的项目 (网络 PCIE_UP_OUT1_P_J2 和 PCIE_UP_OUT1_N_J2)"
+   ],
+   [
+    "tracks_crossing",
+    "error",
+    "Tracks crossing"
+   ],
+   [
+    "shorting_items",
+    "error",
+    "短路了两个不同网络的项目 (网络 PCIE_UP_OUT0_N_J2 和 PCIE_UP_OUT1_P_J2)"
+   ],
+   [
+    "shorting_items",
+    "error",
+    "短路了两个不同网络的项目 (网络 PCIE_UP_OUT1_P_J2 和 PCIE_UP_OUT0_N_J2)"
+   ]
+  ],
+  "verdict": "NEW_VIOLATIONS"
+ },
+ "renders": {
+  "top_svg": "K2_R802_l9_top.svg",
+  "bottom_svg": "K2_R802_l9_bottom.svg",
+  "top_bytes": 315259,
+  "bottom_bytes": 93826
+ },
+ "binary": "NAMED_BLOCKER",
+ "construction_runs": 1,
+ "board_untouched": false,
+ "board_version_bump": "l8 -> l9",
+ "elapsed_s": 4.71,
+ "artifact_hash16": "e9bbd757c96733d5"
+}
