@@ -1,0 +1,782 @@
+{
+ "artifact": "k2_r800_p4_refine_precheck",
+ "ts": "2026-09-27T17:48:29",
+ "authority": "#K2-316 : P4 refinement precheck (read-only) - length re-measure, chamfer simulation, via review",
+ "board": {
+  "path": "hw/k2_v4_8L.l8.kicad_pcb",
+  "sha16": "7a5c89913d6e5d0a"
+ },
+ "length_before": {
+  "PCIE_UP_OUT0_N_J2": 78.926,
+  "PCIE_UP_OUT0_P_J2": 79.144,
+  "PCIE_UP_OUT1_N_J2": 75.757,
+  "PCIE_UP_OUT1_P_J2": 75.87,
+  "PCIE_UP_OUT2_N_J2": 70.788,
+  "PCIE_UP_OUT2_P_J2": 70.82,
+  "PCIE_UP_OUT3_N_J2": 68.593,
+  "PCIE_UP_OUT3_P_J2": 68.77,
+  "PCIE_UP_OUT4_N_J2": 77.602,
+  "PCIE_UP_OUT4_P_J2": 78.216,
+  "PCIE_UP_OUT5_N_J2": 75.989,
+  "PCIE_UP_OUT5_P_J2": 76.037,
+  "PCIE_UP_OUT6_N_J2": 73.211,
+  "PCIE_UP_OUT6_P_J2": 73.372,
+  "PCIE_UP_OUT7_N_J2": 71.145,
+  "PCIE_UP_OUT7_P_J2": 71.166
+ },
+ "pairs_before": [
+  {
+   "pair": "OUT0",
+   "N_mm": 78.926,
+   "P_mm": 79.144,
+   "delta_mm": 0.218,
+   "N_after_chamfer": 77.855,
+   "P_after_chamfer": 79.144,
+   "delta_after_chamfer": 1.289,
+   "meets_0p50": true
+  },
+  {
+   "pair": "OUT1",
+   "N_mm": 75.757,
+   "P_mm": 75.87,
+   "delta_mm": 0.113,
+   "N_after_chamfer": 75.757,
+   "P_after_chamfer": 74.984,
+   "delta_after_chamfer": 0.773,
+   "meets_0p50": true
+  },
+  {
+   "pair": "OUT2",
+   "N_mm": 70.788,
+   "P_mm": 70.82,
+   "delta_mm": 0.032,
+   "N_after_chamfer": 70.224,
+   "P_after_chamfer": 70.82,
+   "delta_after_chamfer": 0.596,
+   "meets_0p50": true
+  },
+  {
+   "pair": "OUT3",
+   "N_mm": 68.593,
+   "P_mm": 68.77,
+   "delta_mm": 0.177,
+   "N_after_chamfer": 68.593,
+   "P_after_chamfer": 68.77,
+   "delta_after_chamfer": 0.177,
+   "meets_0p50": true
+  },
+  {
+   "pair": "OUT4",
+   "N_mm": 77.602,
+   "P_mm": 78.216,
+   "delta_mm": 0.614,
+   "N_after_chamfer": 76.744,
+   "P_after_chamfer": 78.216,
+   "delta_after_chamfer": 1.472,
+   "meets_0p50": false
+  },
+  {
+   "pair": "OUT5",
+   "N_mm": 75.989,
+   "P_mm": 76.037,
+   "delta_mm": 0.048,
+   "N_after_chamfer": 75.989,
+   "P_after_chamfer": 75.201,
+   "delta_after_chamfer": 0.788,
+   "meets_0p50": true
+  },
+  {
+   "pair": "OUT6",
+   "N_mm": 73.211,
+   "P_mm": 73.372,
+   "delta_mm": 0.161,
+   "N_after_chamfer": 72.473,
+   "P_after_chamfer": 73.372,
+   "delta_after_chamfer": 0.899,
+   "meets_0p50": true
+  },
+  {
+   "pair": "OUT7",
+   "N_mm": 71.145,
+   "P_mm": 71.166,
+   "delta_mm": 0.021,
+   "N_after_chamfer": 71.145,
+   "P_after_chamfer": 70.573,
+   "delta_after_chamfer": 0.572,
+   "meets_0p50": true
+  }
+ ],
+ "length_after_chamfer": {
+  "PCIE_UP_OUT0_N_J2": 77.855,
+  "PCIE_UP_OUT0_P_J2": 79.144,
+  "PCIE_UP_OUT1_N_J2": 75.757,
+  "PCIE_UP_OUT1_P_J2": 74.984,
+  "PCIE_UP_OUT2_N_J2": 70.224,
+  "PCIE_UP_OUT2_P_J2": 70.82,
+  "PCIE_UP_OUT3_N_J2": 68.593,
+  "PCIE_UP_OUT3_P_J2": 68.77,
+  "PCIE_UP_OUT4_N_J2": 76.744,
+  "PCIE_UP_OUT4_P_J2": 78.216,
+  "PCIE_UP_OUT5_N_J2": 75.989,
+  "PCIE_UP_OUT5_P_J2": 75.201,
+  "PCIE_UP_OUT6_N_J2": 72.473,
+  "PCIE_UP_OUT6_P_J2": 73.372,
+  "PCIE_UP_OUT7_N_J2": 71.145,
+  "PCIE_UP_OUT7_P_J2": 70.573
+ },
+ "chamfers_applied": 166,
+ "finding_premise": {
+  "claimed_by_supervisor": {
+   "OUT3": "27.0 vs 52.2 (d=25.2)",
+   "OUT5": "29.1 vs 48.7 (d=19.6)"
+  },
+  "measured_in_register": {
+   "OUT3_N": 68.593,
+   "OUT3_P": 68.77,
+   "OUT5_N": 75.989,
+   "OUT5_P": 76.037
+  },
+  "verdict": "NOT REPRODUCIBLE: the in-register board copper shows intra-pair mismatch <= 0.613 mm on all pairs; only OUT4 (0.613) exceeds the 0.50 mm default. The quoted 25.2 / 19.6 mm are not supported by any in-register measurement."
+ },
+ "requirement1_pair_length": {
+  "threshold_mm": 0.5,
+  "pairs_over_threshold": [
+   "OUT4"
+  ],
+  "status": "PARTIAL: only OUT4 needs a small correction (~0.61 mm) BEFORE chamfer; chamfering changes all lengths asymmetrically and requires re-equalisation afterwards",
+  "meander_status": "NAMED_BLOCKER: the serpentine (meander) implementation is defective (smoke produced a +10 mm length increase instead of the requested +0.2 mm) -> not fit to touch the board"
+ },
+ "requirement2_chamfer": {
+  "status": "IMPLEMENTED_AND_VERIFIED (in-memory): all 90-deg corners chamfered to 45-deg, lengths correctly DECREASE",
+  "corners_chamfered": 166
+ },
+ "requirement3_via_review": {
+  "total_vias_on_target_nets": 64,
+  "by_kind": {
+   "THROUGH(F-B)": 16,
+   "BLIND_BURIED(HDI)": 48
+  },
+  "drill_mm": 0.2,
+  "conclusion": "16 THROUGH(F-B) vias carry a stub barrel in an 8-layer HDI stack -> back-drill OR blind-via substitution to be decided with the fab (JLC 工艺通道 A: HDI >=2 阶); the 48 BLIND_BURIED vias have no through stub -> no back-drill. Named item: the 16 through vias on the 16 target nets.",
+  "vias": {
+   "OUT0_N_J2": [
+    {
+     "at": [
+      84.35,
+      55.723
+     ],
+     "drill_mm": 0.2,
+     "via_type": 4,
+     "kind": "THROUGH(F-B)"
+    },
+    {
+     "at": [
+      127.01,
+      43.25
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    },
+    {
+     "at": [
+      127.01,
+      56.334
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    },
+    {
+     "at": [
+      84.35,
+      56.334
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    }
+   ],
+   "OUT0_P_J2": [
+    {
+     "at": [
+      84.85,
+      54.88
+     ],
+     "drill_mm": 0.2,
+     "via_type": 4,
+     "kind": "THROUGH(F-B)"
+    },
+    {
+     "at": [
+      141.22,
+      42.65
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    },
+    {
+     "at": [
+      141.22,
+      56.834
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    },
+    {
+     "at": [
+      84.85,
+      56.834
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    }
+   ],
+   "OUT1_N_J2": [
+    {
+     "at": [
+      85.5,
+      55.823
+     ],
+     "drill_mm": 0.2,
+     "via_type": 4,
+     "kind": "THROUGH(F-B)"
+    },
+    {
+     "at": [
+      139.48,
+      43.85
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    },
+    {
+     "at": [
+      139.48,
+      58.283
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    },
+    {
+     "at": [
+      85.5,
+      58.283
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    }
+   ],
+   "OUT1_P_J2": [
+    {
+     "at": [
+      86.05,
+      54.88
+     ],
+     "drill_mm": 0.2,
+     "via_type": 4,
+     "kind": "THROUGH(F-B)"
+    },
+    {
+     "at": [
+      127.59,
+      43.85
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    },
+    {
+     "at": [
+      127.59,
+      57.783
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    },
+    {
+     "at": [
+      86.05,
+      57.783
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    }
+   ],
+   "OUT2_N_J2": [
+    {
+     "at": [
+      129.33,
+      46.85
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    },
+    {
+     "at": [
+      86.7,
+      55.823
+     ],
+     "drill_mm": 0.2,
+     "via_type": 4,
+     "kind": "THROUGH(F-B)"
+    },
+    {
+     "at": [
+      129.33,
+      59.232
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    },
+    {
+     "at": [
+      86.7,
+      59.232
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    }
+   ],
+   "OUT2_P_J2": [
+    {
+     "at": [
+      87.25,
+      54.88
+     ],
+     "drill_mm": 0.2,
+     "via_type": 4,
+     "kind": "THROUGH(F-B)"
+    },
+    {
+     "at": [
+      137.16,
+      46.25
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    },
+    {
+     "at": [
+      137.16,
+      59.732
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    },
+    {
+     "at": [
+      87.25,
+      59.732
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    }
+   ],
+   "OUT3_N_J2": [
+    {
+     "at": [
+      136.0,
+      47.45
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    },
+    {
+     "at": [
+      87.9,
+      55.823
+     ],
+     "drill_mm": 0.2,
+     "via_type": 4,
+     "kind": "THROUGH(F-B)"
+    },
+    {
+     "at": [
+      136.0,
+      61.181
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    },
+    {
+     "at": [
+      87.9,
+      61.181
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    }
+   ],
+   "OUT3_P_J2": [
+    {
+     "at": [
+      130.49,
+      47.45
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    },
+    {
+     "at": [
+      88.45,
+      54.88
+     ],
+     "drill_mm": 0.2,
+     "via_type": 4,
+     "kind": "THROUGH(F-B)"
+    },
+    {
+     "at": [
+      130.49,
+      60.681
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    },
+    {
+     "at": [
+      88.45,
+      60.681
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    }
+   ],
+   "OUT4_N_J2": [
+    {
+     "at": [
+      89.1,
+      55.823
+     ],
+     "drill_mm": 0.2,
+     "via_type": 4,
+     "kind": "THROUGH(F-B)"
+    },
+    {
+     "at": [
+      131.65,
+      48.65
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    },
+    {
+     "at": [
+      131.65,
+      62.13
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    },
+    {
+     "at": [
+      89.1,
+      62.13
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    }
+   ],
+   "OUT4_P_J2": [
+    {
+     "at": [
+      89.65,
+      54.88
+     ],
+     "drill_mm": 0.2,
+     "via_type": 4,
+     "kind": "THROUGH(F-B)"
+    },
+    {
+     "at": [
+      140.06,
+      48.05
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    },
+    {
+     "at": [
+      140.06,
+      62.63
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    },
+    {
+     "at": [
+      89.65,
+      62.63
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    }
+   ],
+   "OUT5_N_J2": [
+    {
+     "at": [
+      90.3,
+      55.823
+     ],
+     "drill_mm": 0.2,
+     "via_type": 4,
+     "kind": "THROUGH(F-B)"
+    },
+    {
+     "at": [
+      138.9,
+      49.25
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    },
+    {
+     "at": [
+      138.9,
+      64.079
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    },
+    {
+     "at": [
+      90.3,
+      64.079
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    }
+   ],
+   "OUT5_P_J2": [
+    {
+     "at": [
+      128.75,
+      49.25
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    },
+    {
+     "at": [
+      90.85,
+      54.88
+     ],
+     "drill_mm": 0.2,
+     "via_type": 4,
+     "kind": "THROUGH(F-B)"
+    },
+    {
+     "at": [
+      128.75,
+      63.579
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    },
+    {
+     "at": [
+      90.85,
+      63.579
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    }
+   ],
+   "OUT6_N_J2": [
+    {
+     "at": [
+      129.91,
+      52.25
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    },
+    {
+     "at": [
+      91.5,
+      55.823
+     ],
+     "drill_mm": 0.2,
+     "via_type": 4,
+     "kind": "THROUGH(F-B)"
+    },
+    {
+     "at": [
+      129.91,
+      65.028
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    },
+    {
+     "at": [
+      91.5,
+      65.028
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    }
+   ],
+   "OUT6_P_J2": [
+    {
+     "at": [
+      92.05,
+      54.88
+     ],
+     "drill_mm": 0.2,
+     "via_type": 4,
+     "kind": "THROUGH(F-B)"
+    },
+    {
+     "at": [
+      137.74,
+      51.65
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    },
+    {
+     "at": [
+      137.74,
+      65.528
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    },
+    {
+     "at": [
+      92.05,
+      65.528
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    }
+   ],
+   "OUT7_N_J2": [
+    {
+     "at": [
+      136.58,
+      52.85
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    },
+    {
+     "at": [
+      92.7,
+      55.823
+     ],
+     "drill_mm": 0.2,
+     "via_type": 4,
+     "kind": "THROUGH(F-B)"
+    },
+    {
+     "at": [
+      136.58,
+      66.977
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    },
+    {
+     "at": [
+      92.7,
+      66.977
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    }
+   ],
+   "OUT7_P_J2": [
+    {
+     "at": [
+      93.7,
+      55.13
+     ],
+     "drill_mm": 0.2,
+     "via_type": 4,
+     "kind": "THROUGH(F-B)"
+    },
+    {
+     "at": [
+      131.07,
+      52.85
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    },
+    {
+     "at": [
+      131.07,
+      66.477
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    },
+    {
+     "at": [
+      93.7,
+      66.477
+     ],
+     "drill_mm": 0.2,
+     "via_type": 2,
+     "kind": "BLIND_BURIED(HDI)"
+    }
+   ]
+  }
+ },
+ "named_blockers": [
+  "B1: the supervisor-quoted 25.2/19.6 mm mismatches are NOT reproducible from the in-register board copper (bottom-up, sha-pinned); confirm before any length-matching surgery",
+  "B2: the serpentine/meander implementation is defective (see smoke evidence) -> length-matching cannot be delivered this window without a bounded method + free-space check",
+  "B3: chamfering changes lengths asymmetrically (delta_after_chamfer) -> any chamfer window must re-equalise afterwards; that ordering must be declared"
+ ],
+ "binary": "PRECHECK_NAMED_BLOCKER",
+ "construction_runs": 0,
+ "board_unchanged": true,
+ "elapsed_s": 0.46,
+ "artifact_hash16": "30541565438e8438"
+}
