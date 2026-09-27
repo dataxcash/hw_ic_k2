@@ -1,0 +1,75 @@
+{
+ "artifact": "k2_r804_piece_b_out4_lengthmatch",
+ "ts": "2026-09-27T18:16:31",
+ "authority": "#K2-318 sec.4 piece B : tolerance determination + fixed-geometry OUT4 compensation (verified-exact U-bump spread over 8 segments)",
+ "src_sha16": "6fbe34c6337c9777",
+ "l10_sha16": "440d8e06dde6a624",
+ "tolerance_determination": {
+  "in_register_threshold_mm": 0.15,
+  "sources": [
+   "_shared/eda_core/drc_rules.json :: diff_pair.intra_pair_skew_mm=0.15 (net_prefix=PCIE, pair_suffix=[_P,_N]) - FROZEN source",
+   "L3/SPEC_k2_v4.spec-rev-56.json :: net_classes.PCIe85.intra_pair_skew_mm=0.15",
+   "REF-CASE-LIBRARY A-class (PEX88096 practice, DOWNGRADED): lane intra 10 mil = 0.254 mm (corroboration only)"
+  ],
+  "selector_gap": "the 16 target nets are named PCIE_UP_OUT<N>_{P,N}_J2 -> suffix _J2, literally OUTSIDE the _P/_N selector (R412 Q1-Q3); caliber/scope is a supervisor/owner item",
+  "out4_end_to_end_mm": -1.4719999999999942,
+  "out4_end_to_end_abs_mm": 1.472,
+  "verdict": "COMPENSATION_REQUIRED under the only in-register threshold 0.15 mm (1.472 > 0.15)"
+ },
+ "geometry_fixed": {
+  "method": "U-bump (exact, smoke-verified 0.0% error) spread over the 8 longest straight segments of the SHORTER line",
+  "target_lane": "OUT4_N_J2",
+  "added_total_mm": 1.472,
+  "segments": [
+   {
+    "layer": "In5.Cu",
+    "seg_mm": 0.4,
+    "added_mm": 0.368
+   },
+   {
+    "layer": "In5.Cu",
+    "seg_mm": 0.4,
+    "added_mm": 0.368
+   },
+   {
+    "layer": "In2.Cu",
+    "seg_mm": 0.4,
+    "added_mm": 0.368
+   },
+   {
+    "layer": "B.Cu",
+    "seg_mm": 0.4,
+    "added_mm": 0.368
+   }
+  ]
+ },
+ "delta_before_mm": 1.472,
+ "delta_after_mm": 0.0,
+ "drc": {
+  "l10_total": 172,
+  "baseline_total": 170,
+  "new": 2,
+  "new_items": [
+   [
+    "clearance",
+    "error",
+    "间距违规 ( 间距 0.1750 mm; 实际 0.1560 mm)"
+   ],
+   [
+    "clearance",
+    "error",
+    "间距违规 ( 间距 0.1750 mm; 实际 0.0948 mm)"
+   ]
+  ],
+  "verdict": "NEW_VIOLATIONS"
+ },
+ "buildability": {
+  "mode": "relocation_listed",
+  "note": "adds serpentine length on the OUT4 shorter line; no topology/pad change"
+ },
+ "binary": "PIECE_B_BLOCKER",
+ "construction_runs": 1,
+ "board_version_bump": "l9 -> l10 (OUT4 length match)",
+ "elapsed_s": 3.4,
+ "artifact_hash16": "ccc0df84e7e2e642"
+}
