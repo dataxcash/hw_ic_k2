@@ -1,0 +1,187 @@
+{
+ "artifact": "k2_r816_layout_edit",
+ "ts": "2026-09-27T20:46:43",
+ "spec_rev58": {
+  "src": "SPEC_k2_v4.spec-rev-57.json",
+  "out": "SPEC_k2_v4.spec-rev-58.json",
+  "src_sha16": "af36f62ddbec728c",
+  "out_sha16": "bd4cb5de96d396cc",
+  "leaf_diffs": [
+   {
+    "leaf": "mounting_holes.holes[H2].at",
+    "old": [
+     139.6,
+     39.6
+    ],
+    "new": [
+     139.6,
+     36.1
+    ]
+   },
+   {
+    "leaf": "mounting_holes.holes[H3].at",
+    "old": [
+     45.1,
+     75.1
+    ],
+    "new": [
+     26.1,
+     36.1
+    ]
+   },
+   {
+    "leaf": "mounting_holes.holes[H4].at",
+    "old": [
+     114.6,
+     36.1
+    ],
+    "new": [
+     139.6,
+     75.6
+    ]
+   },
+   {
+    "leaf": "components.mcu.U1.pos",
+    "old": [
+     36.0,
+     52.0
+    ],
+    "new": [
+     36.0,
+     64.0
+    ]
+   },
+   {
+    "leaf": "components.oring.U4.pos",
+    "old": [
+     40.0,
+     37.0
+    ],
+    "new": [
+     40.0,
+     49.0
+    ]
+   }
+  ],
+  "n_modified_leaves": 5,
+  "n_untouched_leaves_confirmed": "only the listed leaves changed"
+ },
+ "placement_edit": {
+  "file": "pm_gate/artifacts/k2_v4/L2/PLACEMENT_SOLUTION_v1.json",
+  "diffs": [
+   {
+    "ref": "U2",
+    "old": [
+     33.0,
+     37.0,
+     0.0
+    ],
+    "new": [
+     33.0,
+     49.0,
+     0.0
+    ]
+   },
+   {
+    "ref": "U5",
+    "old": [
+     44.5,
+     52.0,
+     0.0
+    ],
+    "new": [
+     44.5,
+     64.0,
+     0.0
+    ]
+   }
+  ]
+ },
+ "keepout_check": {
+  "keepout_radius_mm": 3.0,
+  "board_outline": [
+   [
+    23.0,
+    143.0
+   ],
+   [
+    33.0,
+    79.0
+   ]
+  ],
+  "results": [
+   {
+    "hole": "H1",
+    "at": [
+     26.1,
+     75.6
+    ],
+    "inside_board": true,
+    "components_within_5mm": []
+   },
+   {
+    "hole": "H2",
+    "at": [
+     139.6,
+     36.1
+    ],
+    "inside_board": true,
+    "components_within_5mm": []
+   },
+   {
+    "hole": "H3",
+    "at": [
+     26.1,
+     36.1
+    ],
+    "inside_board": true,
+    "components_within_5mm": [
+     [
+      "J12",
+      [
+       27.94,
+       35.32,
+       90.0
+      ]
+     ],
+     [
+      "J6",
+      [
+       27.94,
+       39.66,
+       90.0
+      ]
+     ],
+     [
+      "R40",
+      [
+       29.5,
+       38.2,
+       0.0
+      ]
+     ],
+     [
+      "R41",
+      [
+       29.5,
+       34.0,
+       0.0
+      ]
+     ]
+    ]
+   },
+   {
+    "hole": "H4",
+    "at": [
+     139.6,
+     75.6
+    ],
+    "inside_board": true,
+    "components_within_5mm": []
+   }
+  ],
+  "pass": true
+ },
+ "project_yaml": "spec_name -> SPEC_k2_v4.spec-rev-58.json",
+ "OWNER-ITEMS": 0
+}
