@@ -1,0 +1,567 @@
+{
+ "artifact": "k2_r784_access_segment_precheck",
+ "ts": "2026-09-27T16:00:07",
+ "authority": "#K2-307 sec.3 : bounded access-segment drawing window (drawing only; board untouched)",
+ "coverage_declaration": {
+  "R778_R780_covers": "MID-SEGMENT only: slot cell (row 60, H) -> gate cell",
+  "NOT_covered": "ball/pad <-> slot (inlet) and gate <-> connector pad (outlet, terminal B)",
+  "C12_note": "this declaration is the new obligation required by #K2-307 sec.6 (C12)"
+ },
+ "access_individual_feasibility": {
+  "ok": 15,
+  "of": 16,
+  "failures": [
+   {
+    "lane": "OUT6_N_J2",
+    "in_ok": true,
+    "out_ok": false
+   }
+  ],
+  "per_lane": {
+   "OUT0_N_J2": {
+    "in_len": 61,
+    "out_len": 16,
+    "in_ok": true,
+    "out_ok": true
+   },
+   "OUT0_P_J2": {
+    "in_len": 73,
+    "out_len": 20,
+    "in_ok": true,
+    "out_ok": true
+   },
+   "OUT1_N_J2": {
+    "in_len": 58,
+    "out_len": 42,
+    "in_ok": true,
+    "out_ok": true
+   },
+   "OUT1_P_J2": {
+    "in_len": 56,
+    "out_len": 31,
+    "in_ok": true,
+    "out_ok": true
+   },
+   "OUT2_N_J2": {
+    "in_len": 55,
+    "out_len": 31,
+    "in_ok": true,
+    "out_ok": true
+   },
+   "OUT2_P_J2": {
+    "in_len": 55,
+    "out_len": 9,
+    "in_ok": true,
+    "out_ok": true
+   },
+   "OUT3_N_J2": {
+    "in_len": 53,
+    "out_len": 9,
+    "in_ok": true,
+    "out_ok": true
+   },
+   "OUT3_P_J2": {
+    "in_len": 51,
+    "out_len": 22,
+    "in_ok": true,
+    "out_ok": true
+   },
+   "OUT4_N_J2": {
+    "in_len": 49,
+    "out_len": 20,
+    "in_ok": true,
+    "out_ok": true
+   },
+   "OUT4_P_J2": {
+    "in_len": 48,
+    "out_len": 21,
+    "in_ok": true,
+    "out_ok": true
+   },
+   "OUT5_N_J2": {
+    "in_len": 48,
+    "out_len": 13,
+    "in_ok": true,
+    "out_ok": true
+   },
+   "OUT5_P_J2": {
+    "in_len": 45,
+    "out_len": 21,
+    "in_ok": true,
+    "out_ok": true
+   },
+   "OUT6_N_J2": {
+    "in_len": 45,
+    "out_len": null,
+    "in_ok": true,
+    "out_ok": false
+   },
+   "OUT6_P_J2": {
+    "in_len": 43,
+    "out_len": 11,
+    "in_ok": true,
+    "out_ok": true
+   },
+   "OUT7_N_J2": {
+    "in_len": 41,
+    "out_len": 8,
+    "in_ok": true,
+    "out_ok": true
+   },
+   "OUT7_P_J2": {
+    "in_len": 40,
+    "out_len": 18,
+    "in_ok": true,
+    "out_ok": true
+   }
+  }
+ },
+ "access_joint_greedy": {
+  "by_gate": {
+   "assigned": 8,
+   "failed": [
+    "OUT6_P_J2",
+    "OUT7_P_J2",
+    "OUT5_P_J2",
+    "OUT1_P_J2",
+    "OUT4_N_J2",
+    "OUT4_P_J2",
+    "OUT2_N_J2",
+    "OUT6_N_J2"
+   ]
+  },
+  "by_name": {
+   "assigned": 6,
+   "failed": [
+    "OUT2_P_J2",
+    "OUT3_N_J2",
+    "OUT3_P_J2",
+    "OUT4_N_J2",
+    "OUT4_P_J2",
+    "OUT5_N_J2",
+    "OUT5_P_J2",
+    "OUT6_N_J2",
+    "OUT6_P_J2",
+    "OUT7_P_J2"
+   ]
+  },
+  "reverse_name": {
+   "assigned": 15,
+   "failed": [
+    "OUT6_N_J2"
+   ]
+  }
+ },
+ "verdict": "NAMED_BLOCKER: access-segment assignment is a WHOLE-BOARD (cell-exclusive) problem. Individual feasibility 15/16; best declared joint order (reverse_name) reaches 15/16; single named blocker = OUT6_N outlet (gate->B) infeasible under the frozen R778 mid-segments.",
+ "fence_crossing_accounting": {
+  "source": "R782 opening_census",
+  "note": "per-gate nearest fence via / edge clearance; physical opening of the target W[114,47] already confirmed",
+  "items": [
+   {
+    "opening": [
+     114,
+     7
+    ],
+    "kind": "W(wall)",
+    "cell_mm": [
+     133.59,
+     44.045
+    ],
+    "nearest_fence_via": {
+     "y": 43.5,
+     "net": "GND",
+     "_pad_mm": 0.35,
+     "drill_mm": 0.2
+    },
+    "center_dist_mm": 0.545,
+    "edge_clearance_mm": 0.268,
+    "physically_open": true,
+    "model_routable": true
+   },
+   {
+    "opening": [
+     114,
+     11
+    ],
+    "kind": "W(wall)",
+    "cell_mm": [
+     133.59,
+     45.785
+    ],
+    "nearest_fence_via": {
+     "y": 46.09,
+     "net": "PCIE_REFCLK0_N",
+     "_pad_mm": 0.35,
+     "drill_mm": 0.2
+    },
+    "center_dist_mm": 0.305,
+    "edge_clearance_mm": 0.028,
+    "physically_open": false,
+    "model_routable": true
+   },
+   {
+    "opening": [
+     114,
+     12
+    ],
+    "kind": "W(wall)",
+    "cell_mm": [
+     133.59,
+     46.22
+    ],
+    "nearest_fence_via": {
+     "y": 46.09,
+     "net": "PCIE_REFCLK0_N",
+     "_pad_mm": 0.35,
+     "drill_mm": 0.2
+    },
+    "center_dist_mm": 0.13,
+    "edge_clearance_mm": -0.148,
+    "physically_open": false,
+    "model_routable": true
+   },
+   {
+    "opening": [
+     114,
+     13
+    ],
+    "kind": "W(wall)",
+    "cell_mm": [
+     133.59,
+     46.655
+    ],
+    "nearest_fence_via": {
+     "y": 47.1,
+     "net": "GND",
+     "_pad_mm": 0.35,
+     "drill_mm": 0.2
+    },
+    "center_dist_mm": 0.445,
+    "edge_clearance_mm": 0.168,
+    "physically_open": true,
+    "model_routable": true
+   },
+   {
+    "opening": [
+     114,
+     15
+    ],
+    "kind": "W(wall)",
+    "cell_mm": [
+     133.59,
+     47.525
+    ],
+    "nearest_fence_via": {
+     "y": 47.1,
+     "net": "GND",
+     "_pad_mm": 0.35,
+     "drill_mm": 0.2
+    },
+    "center_dist_mm": 0.425,
+    "edge_clearance_mm": 0.147,
+    "physically_open": true,
+    "model_routable": true
+   },
+   {
+    "opening": [
+     114,
+     16
+    ],
+    "kind": "W(wall)",
+    "cell_mm": [
+     133.59,
+     47.96
+    ],
+    "nearest_fence_via": {
+     "y": 48.3,
+     "net": "GND",
+     "_pad_mm": 0.35,
+     "drill_mm": 0.2
+    },
+    "center_dist_mm": 0.34,
+    "edge_clearance_mm": 0.062,
+    "physically_open": false,
+    "model_routable": false
+   },
+   {
+    "opening": [
+     114,
+     19
+    ],
+    "kind": "W(wall)",
+    "cell_mm": [
+     133.59,
+     49.265
+    ],
+    "nearest_fence_via": {
+     "y": 48.9,
+     "net": "GND",
+     "_pad_mm": 0.35,
+     "drill_mm": 0.2
+    },
+    "center_dist_mm": 0.365,
+    "edge_clearance_mm": 0.088,
+    "physically_open": false,
+    "model_routable": false
+   },
+   {
+    "opening": [
+     114,
+     20
+    ],
+    "kind": "W(wall)",
+    "cell_mm": [
+     133.59,
+     49.7
+    ],
+    "nearest_fence_via": {
+     "y": 50.1,
+     "net": "GND",
+     "_pad_mm": 0.35,
+     "drill_mm": 0.2
+    },
+    "center_dist_mm": 0.4,
+    "edge_clearance_mm": 0.122,
+    "physically_open": true,
+    "model_routable": false
+   },
+   {
+    "opening": [
+     114,
+     22
+    ],
+    "kind": "W(wall)",
+    "cell_mm": [
+     133.59,
+     50.57
+    ],
+    "nearest_fence_via": {
+     "y": 50.7,
+     "net": "GND",
+     "_pad_mm": 0.35,
+     "drill_mm": 0.2
+    },
+    "center_dist_mm": 0.13,
+    "edge_clearance_mm": -0.147,
+    "physically_open": false,
+    "model_routable": false
+   },
+   {
+    "opening": [
+     114,
+     23
+    ],
+    "kind": "W(wall)",
+    "cell_mm": [
+     133.59,
+     51.005
+    ],
+    "nearest_fence_via": {
+     "y": 50.7,
+     "net": "GND",
+     "_pad_mm": 0.35,
+     "drill_mm": 0.2
+    },
+    "center_dist_mm": 0.305,
+    "edge_clearance_mm": 0.027,
+    "physically_open": false,
+    "model_routable": false
+   },
+   {
+    "opening": [
+     114,
+     24
+    ],
+    "kind": "W(wall)",
+    "cell_mm": [
+     133.59,
+     51.44
+    ],
+    "nearest_fence_via": {
+     "y": 51.49,
+     "net": "PCIE_REFCLK1_N",
+     "_pad_mm": 0.35,
+     "drill_mm": 0.2
+    },
+    "center_dist_mm": 0.05,
+    "edge_clearance_mm": -0.227,
+    "physically_open": false,
+    "model_routable": true
+   },
+   {
+    "opening": [
+     114,
+     28
+    ],
+    "kind": "W(wall)",
+    "cell_mm": [
+     133.59,
+     53.18
+    ],
+    "nearest_fence_via": {
+     "y": 53.7,
+     "net": "GND",
+     "_pad_mm": 0.35,
+     "drill_mm": 0.2
+    },
+    "center_dist_mm": 0.52,
+    "edge_clearance_mm": 0.243,
+    "physically_open": true,
+    "model_routable": true
+   },
+   {
+    "opening": [
+     114,
+     47
+    ],
+    "kind": "W(wall)",
+    "cell_mm": [
+     133.59,
+     61.445
+    ],
+    "nearest_fence_via": {
+     "y": 62.1,
+     "net": "GND",
+     "_pad_mm": 0.35,
+     "drill_mm": 0.2
+    },
+    "center_dist_mm": 0.655,
+    "edge_clearance_mm": 0.378,
+    "physically_open": true,
+    "model_routable": false
+   }
+  ]
+ },
+ "replacement_list": {
+  "basis": "R782 per_net_board_tracks (canonical l8; board already unconnected=0)",
+  "per_net_existing_tracks": {
+   "PCIE_UP_OUT0_N_J2": 133,
+   "PCIE_UP_OUT0_P_J2": 25,
+   "PCIE_UP_OUT1_N_J2": 22,
+   "PCIE_UP_OUT1_P_J2": 102,
+   "PCIE_UP_OUT2_N_J2": 78,
+   "PCIE_UP_OUT2_P_J2": 25,
+   "PCIE_UP_OUT3_N_J2": 12,
+   "PCIE_UP_OUT3_P_J2": 60,
+   "PCIE_UP_OUT4_N_J2": 101,
+   "PCIE_UP_OUT4_P_J2": 25,
+   "PCIE_UP_OUT5_N_J2": 22,
+   "PCIE_UP_OUT5_P_J2": 96,
+   "PCIE_UP_OUT6_N_J2": 87,
+   "PCIE_UP_OUT6_P_J2": 25,
+   "PCIE_UP_OUT7_N_J2": 22,
+   "PCIE_UP_OUT7_P_J2": 69
+  },
+  "note": "P4 landing = REPLACEMENT of existing routing for these 16 nets; exact segment-level diff to be produced at the P4 window"
+ },
+ "drc_170_classification": {
+  "total": 170,
+  "by_type": {
+   "track_dangling": 1,
+   "via_dangling": 6,
+   "track_not_centered_on_via": 34,
+   "missing_courtyard": 54,
+   "silk_edge_clearance": 2,
+   "lib_footprint_mismatch": 20,
+   "silk_over_copper": 37,
+   "silk_overlap": 15,
+   "copper_sliver": 1
+  },
+  "real_defect_count": 8,
+  "real_defect_items": [
+   {
+    "type": "track_dangling",
+    "severity": "warning",
+    "description": "Track has unconnected end",
+    "items": [
+     "走线 [GND] (F.Cu), 长度: 0.7750 mm"
+    ]
+   },
+   {
+    "type": "via_dangling",
+    "severity": "warning",
+    "description": "Via is not connected or connected on only one layer",
+    "items": [
+     "过孔 [PERSTA#] (F.Cu - B.Cu)"
+    ]
+   },
+   {
+    "type": "via_dangling",
+    "severity": "warning",
+    "description": "Via is not connected or connected on only one layer",
+    "items": [
+     "过孔 [UART_TX] (F.Cu - B.Cu)"
+    ]
+   },
+   {
+    "type": "via_dangling",
+    "severity": "warning",
+    "description": "Via is not connected or connected on only one layer",
+    "items": [
+     "过孔 [SWCLK_BOOT0] (F.Cu - B.Cu)"
+    ]
+   },
+   {
+    "type": "via_dangling",
+    "severity": "warning",
+    "description": "Via is not connected or connected on only one layer",
+    "items": [
+     "过孔 [P3V3] (F.Cu - B.Cu)"
+    ]
+   },
+   {
+    "type": "via_dangling",
+    "severity": "warning",
+    "description": "Via is not connected or connected on only one layer",
+    "items": [
+     "过孔 [P3V3] (F.Cu - B.Cu)"
+    ]
+   },
+   {
+    "type": "via_dangling",
+    "severity": "warning",
+    "description": "Via is not connected or connected on only one layer",
+    "items": [
+     "过孔 [LED_A] (F.Cu - B.Cu)"
+    ]
+   },
+   {
+    "type": "copper_sliver",
+    "severity": "warning",
+    "description": "铜箔毛刺 (In4.Cu)",
+    "items": []
+   }
+  ],
+  "cosmetic_or_lib": {
+   "track_not_centered_on_via": 34,
+   "missing_courtyard": 54,
+   "silk_edge_clearance": 2,
+   "lib_footprint_mismatch": 20,
+   "silk_over_copper": 37,
+   "silk_overlap": 15
+  },
+  "rule": "#K2-307 sec.2.Q2.1: real-defect 8 must be fixed/named-exempt before the Gerber/DFM milestone; cosmetic/lib 162 go to the DFM gate"
+ },
+ "buildability": {
+  "mode": "relocation_listed",
+  "note": "access segments require a joint bounded assignment; mid-segment is frozen (R778)"
+ },
+ "requested_rulings": [
+  "授权《接入段》有界联合出图方法（例：每线生成有界备选入/出路径 + 整版唯一性 MILP）——否则接入段非逐线可解。",
+  "确认 OUT6_N 入段个体不可行（在既有 16 中段固定下）是否属需要重排中段/换门位（=L2 内可否自解请裁）。"
+ ],
+ "construction_runs": 1,
+ "drawings": 0,
+ "gerber_exported": false,
+ "p5": false,
+ "order": false,
+ "changes_to_frozen_sources": 0,
+ "board_untouched": true,
+ "elapsed_s": 29.6,
+ "artifact_hash16": "07dccf4a9df45dea",
+ "reporting_correction": {
+  "field": "verdict",
+  "reason": "wording only (the generated text said 'only [8,6,15]'); numbers unchanged",
+  "scope": "report field text only; all computed data unchanged; no solver rerun"
+ }
+}
