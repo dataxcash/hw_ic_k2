@@ -551,6 +551,16 @@ class T(unittest.TestCase):
         self.assertEqual(r["status"], "APPLIED")
         self.assertGreater(r["zones_refilled"], 0, "the batch path must actually refill zones")
 
+    def test_C36_the_judging_table_of_the_eco_is_read_row_by_row(self):
+        """C36（#K2-377 §五 F3）：执行入口的判卷必须覆盖 ECO-K2-0004 §6 **全部九行**（含 C8）。"""
+        eco = open(os.path.join("docs", "ECO", "ECO-K2-0004-reroute-engine-exam-A-prime.md"), encoding="utf-8").read()
+        rows = [r for r in ("C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9") if ("| **%s**" % r) in eco or ("| %s " % r) in eco]
+        self.assertEqual(len(rows), 9, "the ECO must carry nine rows; found %s" % rows)
+        src = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
+        for k in ("C6_outside_copper_unchanged", "C7_hs_fanout_untouched",
+                  "C8_members_inside_frame", "C9_geometric_digest"):
+            self.assertIn(k, src, "the product-path judging must emit %s" % k)
+
     def test_C34_moves_from_the_gate_board_are_read_back_verbatim(self):
         """口径对齐（#K2-375 §四.3 secondary）：逐件位移图可由**闸验过的板**读回。同板对照 ⇒ 零位移。"""
         mv, unch, miss = block.moves_from_board(REF, REF, ["U1", "U2", "U5"])

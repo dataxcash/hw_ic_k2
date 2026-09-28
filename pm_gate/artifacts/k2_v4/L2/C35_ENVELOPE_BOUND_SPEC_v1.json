@@ -1,0 +1,30 @@
+{
+ "artifact": "c35_envelope_bound_spec_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-377 sec.2.3 (the method edict): C35 = the product lacks a HARD WORK-DOMAIN BOUND; the fix is a thin wrapper that keeps the method and clamps both the rip and the re-route search to the frozen frame.",
+ "status": "SPEC (the run is deferred by one turn ON PURPOSE - the ruling's own fail-closed ordering is preflight/conservation FIRST, then exactly one run; running without the bound would burn the authorised quota on a KNOWN-FAIL path)",
+ "wrapper_design": {
+  "placement": "one thin stage AFTER the product, inside regen.relocate_relative_c17v1 - the product itself is NOT re-derived (sec.20.4: the copied method stays)",
+  "mechanism": [
+   "1. compute the base (l14) copper OUTSIDE the frozen frame as a canonical multiset (block.outside_geometry(base, frame)) - already implemented and proven (the block chain's C6 = 0 came from exactly this quantisation: block.clip_iu + the dR-segment port predicate)",
+   "2. compute the same for the product's output",
+   "3. delete from the output every outside piece that is NOT in the base multiset (the 241 added pieces)",
+   "4. re-add every base outside piece that is missing from the output (the 9 removed pieces), with its net / layer / width, using the SAME IU-exact geometry (no re-computation of the endpoints - copy them)",
+   "5. leave the in-frame work untouched (that is the method's product)"
+  ],
+  "why_it_is_a_bound_and_not_a_judge_trick": "the wrapper does not change any criterion: it makes the ENGINE respect 'work only inside the frame'. C6 stays as approved and is measured the same way.",
+  "expected_consequences_to_measure": {"C6": "must become 0 by construction (unless a crossing piece's in-frame half was also changed - to be instrumented)", 
+                                       "C1": "MAY RISE - some of the product's long out-of-frame re-routes were how it closed gaps; restoring the old outside copper can re-open them",
+                                       "C2": "MAY RISE - the restored outside copper can clash with the in-frame new copper"}
+ },
+ "alternatives_considered_and_why_rejected": [
+  {"alt": "shrink --margin", "verdict": "REFUTED by measurement (#K2-377 accepted ENG's R1016): 181 of the 241 added outside pieces lie >3mm out (max 84mm), so a search-window parameter cannot bound the work"},
+  {"alt": "post-verify only (report C6 != 0 without repairing)", "verdict": "NOT a bound - it is the current state"},
+  {"alt": "re-lay everything inside the frame (the old block chain)", "verdict": "REJECTED - that was A-prime attempts 1-3: C1 40 / C2 564, i.e. the method the ruling told us to replace"}
+ ],
+ "prerequisite_before_the_run": ["preflight P1/P1b PASS (regen.preflight)",
+                                 "conservation/capacity reading inside the frame (the routing demand vs the free space) - if it cannot be stated, STOP and do not burn the run",
+                                 "the judging must emit ALL NINE ECO rows (C1-C9) - C36 is implemented and regression-covered as of this commit"],
+ "acceptance": "A-prime's full table C1-C9 PASS, with C6 = 0 and the entry/gate/run-count evidence (entry command + C34 PASS + 1/1)",
+ "OWNER-ITEMS": 0
+}

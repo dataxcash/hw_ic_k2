@@ -1052,9 +1052,25 @@ def relocate_relative_c17v1(rect, moves, work, members, clearance=None, report_e
                            capture_output=True, timeout=7200)
     c6 = _blk.geometry_equal(_blk.outside_geometry(final, rect), _blk.outside_geometry(B0, rect))
     c7 = _blk.geometry_equal(_blk.net_geometry(final, HS_FANOUT_NETS), _blk.net_geometry(B0, HS_FANOUT_NETS))
+    # C36（#K2-377 §五 F3）：判卷必须按 ECO 锁定表**逐行**读数 —— 补上 C8（成员零越框），漏行即不受理
+    import pcbnew as _P
+    _b = _P.LoadBoard(final)
+    _want = set(members)
+    outside_members = []
+    for _fp in _b.GetFootprints():
+        if _fp.GetReference() not in _want:
+            continue
+        for _pd in _fp.Pads():
+            _pos = _pd.GetPosition()
+            _pt = [_P.ToMM(_pos.x), _P.ToMM(_pos.y)]
+            if not (rect[0] - 1e-6 <= _pt[0] <= rect[2] + 1e-6 and rect[1] - 1e-6 <= _pt[1] <= rect[3] + 1e-6):
+                outside_members.append({"ref": _fp.GetReference(), "pad": _pd.GetNumber(),
+                                        "at": [round(_pt[0], 4), round(_pt[1], 4)]})
     extra = {"C6_outside_copper_unchanged": {"diff": c6["diff"], "pass": c6["equal"],
                                              "scope": "tracks+vias outside the frozen frame (C17 v1 must not touch them)"},
              "C7_hs_fanout_untouched": {"diff": c7["diff"], "pass": c7["equal"], "nets": HS_FANOUT_NETS},
+             "C8_members_inside_frame": {"violations": outside_members, "pass": not outside_members,
+                                         "authority": "#K2-377 F3: the ECO-K2-0004 sec.6 table has NINE rows; a missing row is fail-closed"},
              "C9_geometric_digest": {"before": _blk.geometric_digest(B0)["sha256_16"],
                                      "after": _blk.geometric_digest(final)["sha256_16"], "pass": True}}
     v = _vf.judge(final, dj, B0, ref_drc, extra=extra)
