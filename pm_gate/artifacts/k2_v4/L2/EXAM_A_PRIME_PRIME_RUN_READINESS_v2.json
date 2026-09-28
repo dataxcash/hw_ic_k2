@@ -1,0 +1,38 @@
+{
+ "artifact": "k2_exam_a_doubleprime_run_readiness_v2",
+ "ts": "2026-09-29",
+ "authority": "#K2-385 sec.5: the capability window must pass (unit tests green + committed) and then the ENG applies for a new N=1 window. This is the readiness package for that application.",
+ "status": "READY_AWAITING_AUTHORISATION",
+ "capability_window_result": {
+  "a_pour_island_reconnection": {"implemented": true, "where": "regen.wipe_resolve_chain (stages pour_islands_detected -> pour_islands_repair)",
+    "determinism": "each orphan island is connected to the NEAREST SAME-NET PAD with the SAME in-region maze (--bound-rect, same floor); one shot, never a loop",
+    "regression": "test_C385_pour_island_reconnection_is_deterministic_and_wall_bounded"},
+  "b_mask_bridge_precheck": {"implemented": true, "where": "route.mask_bridge_pairs (pure) + apply_routes(..., mask_clear_mm=) fail-closed BEFORE SaveBoard; wired through the CLI (--mask-clear-mm) and the chain",
+    "clearance_basis": "DERIVED FROM THE IN-REGISTER RULE, not tuned: 2 x _shared/eda_core/drc_rules.json :: solder_mask.pad_to_mask_clearance (0.05) = 0.10 mm",
+    "regression": "test_C385_mask_bridge_precheck_is_a_pure_failclosed_guard"},
+  "tests": "SELFTEST_EXIT=0, Ran 74 tests, OK (L2/EDA_ENG_TESTS_74_v2.txt)"
+ },
+ "prerequisites_on_file": {
+  "sec20_three_questions": "L2/PRODUCT_THREE_QUESTIONS_LEDGER_v1.json :: M_ENG_POUR_MASK_AWARENESS",
+  "planning_regression_artifact": "L2/M_ENG_POUR_MASK_AWARENESS_PLAN_v1.json (sec.16.3: death cause / facts / the corrected deterministic plan / buildability)",
+  "bench_isolation": "entry sentinel + subprocess-only board work (M-ENG-TEST-STATE-ISOLATION closed)",
+  "three_fences": "additive with unit locks (rip clip / stitch forwarding / apply guard)",
+  "c2_one_ruler": "the judge uses the pinned caliber (geometry 141 vs the 168 baseline on the last run)",
+  "capacity": "L2/C1_CAPACITY_READING_v1.json (ENOUGH_SPACE, 93.5% free)",
+  "residual_work_list": "the 22 unconnected pairs named per net/endpoint in the conservation certificate"
+ },
+ "the_exact_run_when_authorised": {
+  "command": "EDA_ENG_PY=<kicad py> EDA_ENG_CLI=<kicad-cli> ./tools/eda_eng.sh exam A --run --chain wipe_resolve --from-placed /tmp/opencode/aprime_witness/mq_witness/placed.kicad_pcb --work /tmp/opencode/aprime_final_v2",
+  "runs": "1 (record run_count 1/1)",
+  "expected_chain_stages": ["M0_block_census", "1_wipe(move_parts)", "2_resolve(floor+maze, --bound-rect)",
+                            "2b_resolve_residual_second_pass", "3_refill(ZONE_FILLER + mask guard)",
+                            "3prime_pour_islands_detected", "3prime_pour_islands_repair", "M4_judge(nine rows)"],
+  "judging": "nine rows C1-C9: C1 = 0 and NO new class required; C6 = 0 and C8 mandatory; a missing row is fail-closed"
+ },
+ "outcome_contract": {"PASS": "feasible witness + C35 closes + M-ENG-POUR-MASK-AWARENESS closes",
+                      "FAIL": "stop; update the conservation certificate; a same-cause FAIL means change the MEANS (sec.17.4), not another run"},
+ "discipline": {"zero_exam_runs_in_the_capability_window": true, "quota": "A-prime and A-double-prime both spent (1/1 each)",
+                "aprime_witness_freeze": "maintained", "criterion_table": "unchanged (one millimetre)",
+                "board": "l14/rev-61 untouched; every board lives in /tmp", "frozen_four": "4/4"},
+ "OWNER-ITEMS": 0
+}

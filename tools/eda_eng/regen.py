@@ -1174,8 +1174,16 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15):
     final = os.path.join(work, "s3_refilled.kicad_pcb")
     empty = os.path.join(work, "s3_empty.json")
     json.dump([], open(empty, "w"))
+    # (b) 阻焊桥守卫的间隙 = **在册规则**派生（`solder_mask.pad_to_mask_clearance` × 2 = 两开窗相接即桥）——非手调值
+    _mclear = None
+    try:
+        _rr = json.load(open(os.path.join(ROOT, "..", "_shared", "eda_core", "drc_rules.json"), encoding="utf-8"))
+        _mclear = 2.0 * float(_rr["solder_mask"]["pad_to_mask_clearance"])
+    except Exception:                                              # noqa: BLE001
+        _mclear = None
+    _mask_args = ["--mask-clear-mm", str(_mclear)] if _mclear else []
     rc, ap = _cli("route", "--apply-batch", empty, "--board", resolved, "--out", final,
-                  "--bound-rect", ",".join(str(x) for x in rect))
+                  "--bound-rect", ",".join(str(x) for x in rect), *_mask_args)
     if rc != 0 or not os.path.isfile(final):
         return {"state": "W3_REFILL_FAILED", "chain": chain, "wipe": mp, "ledger": led_j, "apply": ap}
     # ③′ **(a) 灌注孤岛重连**（#K2-385 §五.2(a) · 加法式 · 确定性）：
