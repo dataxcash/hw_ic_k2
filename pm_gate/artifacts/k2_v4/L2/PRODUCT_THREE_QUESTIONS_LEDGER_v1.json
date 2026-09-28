@@ -27,5 +27,40 @@
   ],
   "consequence": "M3's expansion = ADD path solving (multi-pad MST + via/multi-layer) and WIRE the copyable layers (emission/oracle/polish) around it; do NOT write a new stochastic autorouter (that would violate constitution sec.20 sec.5)"
  },
- "OWNER-ITEMS": 0
+ "OWNER-ITEMS": 0,
+ "A_prime_C33_three_questions": {
+  "ts": "2026-09-29",
+  "authority": "#K2-373 sec.3.4: 'A-prime routing is a new product capability => pass the sec.20 three questions FIRST'",
+  "scope": "the capability = in-block reconnection (re-lay the damaged in-block copper + reconnect to fixed dR ports) under a PER-PART displacement map",
+  "Q1_same_kind_product_exists": {
+   "in_repo": "YES - tools/k2_reroute_affected_v2.py (C17 v1) is literally 'the local re-route after a placement change' product on this repository's chain: clip the damaged copper -> compute the islands -> MST stitch -> snap -> bounded repair -> normalise. tools/k2_route_segment_v1.py is the orchestrator around it.",
+   "external": "YES - interactive/zone-aware re-route after a component move is a standard operation in KiCad's interactive router and in commercial tools; FreeRouting-style stochastic autorouters are the opposite paradigm (rejected by #K2-365).",
+   "reading": "a same-kind product EXISTS in-repo (C17 v1) - so per sec.20.3 'search but do not copy does not count as research', the correct move was to READ C17 v1 and copy its stages, not to write a parallel MST."
+  },
+  "Q2_copyable_product_artifact": {
+   "primary_in_repo": [
+    "tools/k2_reroute_affected_v2.py (clip -> island-MST stitch -> snap -> bounded repair -> normalise) - the closest product for THIS capability",
+    "tools/k2_route_segment_v1.py (orchestration + DRC + zone fill)",
+    "tools/k2_corner_keepout_gate_v1.py (keepout oracle)"
+   ],
+   "what_the_chain_now_uses": "regen.relocate_relative_chain re-implements the reconnect as true-shape MST + `route.maze_route` inside the frame, and reuses only route.apply_routes (zone fill) - i.e. it COPIED the emission/oracle layer but NOT the C17 v1 stitch/repair layer.",
+   "reading": "the copyable artifact list is unchanged and C17 v1 remains the strongest uncopied input for A-prime."
+  },
+  "Q3_difference_list": {
+   "what_C17_v1_does_that_the_chain_does_not": [
+    "bounded repair after stitching",
+    "normalise (canonicalise) pass",
+    "CLIPS only the damaged copper instead of deleting all in-block copper (614 segments re-laid here)"
+   ],
+   "what_the_chain_does_that_C17_v1_does_not": [
+    "true-shape obstacle distances (segments / oriented rects / circles) with a fail-closed exact re-check",
+    "routing restricted to a declared action envelope / the frozen frame",
+    "per-part displacement map input",
+    "C6/C7/C8/C9 fidelity criteria"
+   ],
+   "consequence": "the next A-prime iteration should COPY C17 v1's clip/stitch/repair/normalise instead of extending the parallel implementation (sec.20.5: the custom path is only legitimate when no product is obtainable - here one IS obtainable in-repo)."
+  },
+  "process_note": "SELF-REGISTERED PROCESS MISS: #K2-373 made the three questions a PREREQUISITE for the A-prime routing window, and attempt 1 was run BEFORE this entry was written. The reading above shows the miss had a concrete cost: the in-block reconnect was implemented in parallel with an in-repo product (C17 v1) that already covers the same stage. Recorded, not hidden; the next A-prime window must start by reading and copying C17 v1.",
+  "OWNER-ITEMS": 0
+ }
 }
