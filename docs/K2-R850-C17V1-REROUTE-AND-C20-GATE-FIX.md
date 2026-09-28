@@ -35,7 +35,8 @@
 k2_reroute_affected_v2.py --board hw/k2_v4_8L.l10.kicad_pcb --moved "U5=+2.0,0" --radius 0.8 \
     --baseline-drc <l10 基线 DRC.json> --work <tmp> --out <tmp>/out.kicad_pcb --report <json>
 ```
-**复现性（诚实）**：**四项读数二次跑完全一致**（+75/−5 · 169 · 0 新增 · 未连接 0 · skew 0.0000）；**板文件字节非逐字节同** —— 差异限于 ① 裁剪新建段的 **5 个 uuid**（`pcbnew` 未开放 uuid setter）② 段序。几何同。**登记遗留**：文本级 uuid 归一化（非阻断）。
+**复现性（确定性 · C21 已闭）**：**同参两跑 ⇒ 板文件逐字节同**（`sha256[:20] = 1189185b73cb419773d3`）· 四项读数同（+75/−5 · 169 · 0 新增 · 未连接 0 · skew 0.0000）。
+手法（`--phase normalize` · 语义保序）：①按**自身几何**重写每条 `(segment)/(via)` 的 uuid（uuid5）②连续走线区**按该 uuid 排序**重写（KiCad 忽略顺序；归一化后**再次 DRC 复验** = 169 / 0 新增 / 未连接 0）。
 
 ## 三、C20 纸闸修复（#K2-338 §六 · 取「删声称」路）
 
@@ -47,8 +48,8 @@ k2_reroute_affected_v2.py --board hw/k2_v4_8L.l10.kicad_pcb --moved "U5=+2.0,0" 
 
 | 件 | sha16 |
 |---|---|
-| `tools/k2_reroute_affected_v2.py`（C17 v1） | `94e610c98fa1a7f9` |
-| `L2/C17V1/K2_R850_C17V1_REROUTE_ACCEPTANCE.json` | `0d48a5586617daad` |
+| `tools/k2_reroute_affected_v2.py`（C17 v1 · 含 C21 normalize） | `ee9a02126fcc5646` |
+| `L2/C17V1/K2_R850_C17V1_REROUTE_ACCEPTANCE.json` | `2933557a71565837` |
 | `L2/C17V1/K2_R850_C17V1_ACCEPTANCE_TABLE.json` | `2571f8b63e47dea6` |
 | `L2/SCHEME_GATE_k2_v4_8L.l10_v2.json`（C20 修复后重出） | `c79da5cba378e054` |
 | `tools/k2_placement_gate_v1.py` / `tools/k2_scheme_gate_v2.py`（删纸闸声称） | `53449c965b98a16c` / `71a971f413c8d057` |
@@ -61,7 +62,7 @@ k2_reroute_affected_v2.py --board hw/k2_v4_8L.l10.kicad_pcb --moved "U5=+2.0,0" 
 
 - **C17（M-ENG-ROUTER-REROUTE）：资产已建 · 小例回归件 PASS** ⇒ 建议**关账**（回归件 = 本窗四判据全过）。**v0 对照**：同型用例 v0 = **652 违例**（含 shorting 115 / crossing 90 / clearance 81）⇒ v1 = **0 新增**。
 - **C20（M-ENG-GATE-NOT-WIRED）：声称已删 · 登记在册**（未接线）⇒ 状态「已具名 · 待受控变更」，**不得关账**。
-- **遗留（新登记 C21）**：C17 v1 板文件**非逐字节确定**（5 个自动 uuid + 段序）⇒ 补法 = 文本级 uuid 归一化／确定性保存序；回归件 = 同参两跑**板文件字节同**。
-- **请裁**：① C17 关账是否照准；② 下一窗取 **(a) 移 J12（owner 件 #K2-338 §五 已升 · 等 owner 回）** / **(b) C21 确定性** / **(c) C17 v2 扩用**（把「移动 U1/U2/U4 簇」这类多点位移在新能力上重试，为布局框架冻结供数）。
+- **C21（本件自建自闭）**：C17 v1 板文件确定性 —— 补法 = `--phase normalize`（几何派生 uuid ＋ 走线区规范排序）；**回归件 = 同参两跑板文件逐字节同（已 PASS：`1189185b73cb419773d3`）** ⇒ **建议关账**。
+- **请裁**：① C17 关账是否照准（回归件已升级为「四判据过 ＋ 字节同」）；② C21 关账是否照准；③ 下一窗取 **(a) 移 J12**（owner 件 #K2-338 §五 已立案在册 · 等 owner 回）／ **(c) C17 v2 扩用**（把「移动 U1/U2/U4 簇」这类多点位移在新能力上重试，为布局框架冻结供数）。
 
 OWNER-ITEMS: 0

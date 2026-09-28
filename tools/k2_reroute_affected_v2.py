@@ -21,7 +21,7 @@ Usage (KiCad python):
   k2_reroute_affected_v2.py --board <in> --moved U5=+2.0,0 --baseline-drc <base.json> \
       --work <dir> --out <final.kicad_pcb> --report <json>          # orchestrator (default)
 """
-import argparse, collections, json, math, os, shutil, subprocess, sys
+import argparse, collections, hashlib, json, math, os, re, shutil, subprocess, sys, uuid
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MROUTE = os.path.join(ROOT, "tools", "k2_p4_mroute_v1.py")
@@ -78,7 +78,7 @@ def clip_keep_outside(x1, y1, x2, y2, discs):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--phase", default="all", choices=["all", "rip", "stitch", "snap", "repair", "verify"])
+    ap.add_argument("--phase", default="all", choices=["all", "rip", "stitch", "snap", "repair", "normalize", "verify"])
     ap.add_argument("--board", required=True)
     ap.add_argument("--moved", action="append", default=[])
     ap.add_argument("--radius", type=float, default=3.0)
@@ -102,6 +102,8 @@ def main():
         return phase_snap(a, P)
     if a.phase == "repair":
         return phase_repair(a, P)
+    if a.phase == "normalize":
+        return phase_normalize(a)
     return phase_verify(a, P)
 
 
@@ -537,6 +539,63 @@ def phase_repair(a, P):
     return 0 if ok else 2
 
 
+def phase_normalize(a):
+    """C21: make the saved board DETERMINISTIC (KiCad auto-generates uuids for objects created via the python API
+    and its track save order varies between processes).  Text-level, semantics-preserving:
+      * every (segment ...)/(via ...) uuid is rewritten from its own geometry (uuid5),
+      * the contiguous track region is re-emitted sorted by that uuid.
+    KiCad ignores the order; a DRC re-run afterwards re-validates the result.
+    """
+    _uuid = uuid
+    NS = _uuid.UUID("6ba7b810-9dad-11d1-80b4-00c04fd430c8")
+    txt = open(a.board, encoding="utf-8").read()
+    blocks, spans = [], []
+    for m in re.finditer(r"\t\((?:segment|via)(?: blind)?\n(?:.|\n)*?\n\t\)\n", txt):
+        b = m.group(0)
+        if b.startswith("\t(segment"):
+            s_ = re.search(r"\(start ([^\s]+) ([^\s]+)\)", b)
+            e_ = re.search(r"\(end ([^\s]+) ([^\s]+)\)", b)
+            L_ = re.search(r'\(layer "([^"]+)"\)', b)
+            N_ = re.search(r'\(net "([^"]*)"\)', b)
+            if not (s_ and e_ and L_):
+                continue
+            key = "segnorm|%s|%s|%s|%s|%s|%s" % (N_.group(1) if N_ else "", L_.group(1),
+                                                 s_.group(1), s_.group(2), e_.group(1), e_.group(2))
+        else:
+            at_ = re.search(r"\(at ([^\s]+) ([^\s]+)\)", b)
+            N_ = re.search(r'\(net "([^"]*)"\)', b)
+            Ls_ = re.search(r"\(layers ((?:\"[^\"]+\"\s*)+)\)", b)
+            if not (at_ and N_):
+                continue
+            key = "vianorm|%s|%s|%s|%s" % (N_.group(1), Ls_.group(1) if Ls_ else "", at_.group(1), at_.group(2))
+        u = str(_uuid.uuid5(NS, key))
+        b = re.sub(r'\(uuid "[0-9a-fA-F-]+"\)', '(uuid "%s")' % u, b, count=1)
+        blocks.append((u, b))
+        spans.append((m.start(), m.end()))
+    out = txt
+    if blocks:
+        gaps = "".join(txt[spans[i][1]:spans[i + 1][0]] for i in range(len(spans) - 1))
+        if gaps.strip() == "":                      # the track region is contiguous -> we may reorder it
+            region = "".join(b for _, b in sorted(blocks, key=lambda z: z[0]))
+            out = txt[:spans[0][0]] + region + txt[spans[-1][1]:]
+        else:                                        # fall back: rewrite uuids in place only
+            out, off = [], 0
+            for (u, b), (st, en) in zip(blocks, spans):
+                out.append(txt[off:st]); out.append(b); off = en
+            out.append(txt[off:])
+            out = "".join(out)
+    open(a.out, "w", encoding="utf-8").write(out)
+    pr = _pro(a)
+    if pr:
+        dst = a.out.replace(".kicad_pcb", ".kicad_pro")
+        if os.path.abspath(pr) != os.path.abspath(dst):
+            shutil.copyfile(pr, dst)
+    print(json.dumps({"phase": "normalize", "blocks": len(blocks), "reordered": True,
+                      "sha16": hashlib.sha256(out.encode()).hexdigest()[:16]}))
+    return 0
+
+
+
 def phase_verify(a, P):
     rip = json.load(open(os.path.join(a.work, "rip.json"), encoding="utf-8"))
 
@@ -654,6 +713,15 @@ def orchestrate(a):
             break
     json.dump({"rounds": rounds}, open(os.path.join(a.work, "repair_rounds.json"), "w", encoding="utf-8"),
               ensure_ascii=False, indent=1)
+    norm_out = os.path.join(a.work, os.path.basename(a.board).replace(".kicad_pcb", "_final.kicad_pcb"))
+    _run([py, SELF, "--phase", "normalize", "--board", a.out, "--work", a.work, "--out", norm_out,
+          "--stage1", stage1], "normalize")
+    shutil.copyfile(norm_out, a.out)
+    pr2 = _pro(a)
+    if pr2:
+        dst2 = a.out.replace(".kicad_pcb", ".kicad_pro")
+        if os.path.abspath(pr2) != os.path.abspath(dst2):
+            shutil.copyfile(pr2, dst2)
     _drc(a.out, os.path.join(a.work, "final_drc.json"), "drc-final")
     acc_path = os.path.join(a.work, "acceptance.json")
     _run([py, SELF, "--phase", "verify", "--board", a.board, "--work", a.work, "--out", a.out,
