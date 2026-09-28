@@ -1,0 +1,238 @@
+{
+ "artifact": "k2_w2prime_h4_fan_provenance_and_repair_spec_v1",
+ "ts": "2026-09-28",
+ "authority": "ENG diagnostic (R912). Filed under the open W2-prime window (#K2-347 sec.2 / #K2-348 sec.2) after the #K2-350 sec.3.4 window (E1) completed at R910. Read-only: no board/SPEC/generator/schematic edit.",
+ "subject": "WHY the H4 bottom-right corner cannot be cleared by the authorised chain rerun, WHERE the intruding copper comes from, and WHAT the exact next artefact is.",
+ "board": "hw/k2_v4_8L.l14.kicad_pcb",
+ "keepout_square_mm": [
+  137.9287,
+  73.9287,
+  143.9287,
+  79.9287
+ ],
+ "keepout_authority": "C21 corner-keepout gate (H4_BR centre 140.9287,76.9287, half 3.0)",
+ "intrusion_on_l14": {
+  "statement": "Exactly 4 tracks and 2 vias lie inside the H4 corner square, and they are exactly the PCIE_DN4_N / PCIE_DN5_P fan-out.",
+  "tracks": [
+   {
+    "net": "PCIE_DN4_N",
+    "layer": "In5",
+    "seg": [
+     90.05,
+     74.222,
+     139.48,
+     74.222
+    ],
+    "w_mm": 0.16
+   },
+   {
+    "net": "PCIE_DN4_N",
+    "layer": "In4",
+    "seg": [
+     139.48,
+     74.222,
+     139.48,
+     59.45
+    ],
+    "w_mm": 0.16
+   },
+   {
+    "net": "PCIE_DN5_P",
+    "layer": "In5",
+    "seg": [
+     90.75,
+     75.671,
+     138.32,
+     75.671
+    ],
+    "w_mm": 0.16
+   },
+   {
+    "net": "PCIE_DN5_P",
+    "layer": "In4",
+    "seg": [
+     138.32,
+     75.671,
+     138.32,
+     60.05
+    ],
+    "w_mm": 0.16
+   }
+  ],
+  "vias": [
+   {
+    "net": "PCIE_DN4_N",
+    "at": [
+     139.48,
+     74.222
+    ],
+    "d_mm": 0.35,
+    "span": "In4<->In5"
+   },
+   {
+    "net": "PCIE_DN5_P",
+    "at": [
+     138.32,
+     75.671
+    ],
+    "d_mm": 0.35,
+    "span": "In4<->In5"
+   }
+  ],
+  "note": "The north landings (139.480,59.450) and (138.320,60.050) are OUTSIDE the square (y < 73.9287) and are legal; it is the In4 column descending into the square and the In5 lane end that intrude."
+ },
+ "provenance": {
+  "stage1": "tools/k2_gen_v5.py emits NO DN geometry at all (grep for DN0..DN7 / PCIE_DN in that file: 0 hits).",
+  "stage2a": "tools/k2_route_segment_v1.py stage 2a applies the drawing verbatim via tools/p3_v57_l4_apply_drawing.py.",
+  "drawing_source": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_joint_assignment.json (34 pages, revision W3-CN.43)",
+  "how_selected": "p3_v57_l4_apply_drawing.py: MAIN = $STEP2/os.environ.get(L4_MAIN, m13_v57_w3_joint_assignment.json); MANIFEST = $STEP2/m13_v57_s1_page_manifest.json (the FROZEN manifest a8ef3ea8ecff99d7). L4_MAIN is an env override that points the chain at a different drawing file.",
+  "landing_rows": {
+   "J2|PCIE_DN4_N": {
+    "column_x": 139.48,
+    "landing": [
+     139.48,
+     59.45
+    ],
+    "pad": [
+     135.0,
+     59.7
+    ],
+    "page": "PCIE_DN4/input",
+    "gap_column_candidates": [
+     144.4
+    ]
+   },
+   "J2|PCIE_DN5_P": {
+    "column_x": 138.32,
+    "landing": [
+     138.32,
+     60.05
+    ],
+    "pad": [
+     135.0,
+     60.3
+    ],
+    "page": "PCIE_DN5/input",
+    "gap_column_candidates": [
+     145.0
+    ]
+   },
+   "J2|PCIE_DN6_N": {
+    "column_x": 137.16,
+    "landing": [
+     137.16,
+     63.05
+    ],
+    "pad": [
+     135.0,
+     63.3
+    ],
+    "page": "PCIE_DN6/input",
+    "gap_column_candidates": [
+     145.6
+    ]
+   },
+   "J2|PCIE_DN7_P": {
+    "column_x": 136.0,
+    "landing": [
+     136.0,
+     63.65
+    ],
+    "pad": [
+     135.0,
+     63.9
+    ],
+    "page": "PCIE_DN7/input",
+    "gap_column_candidates": [
+     146.2
+    ]
+   }
+  },
+  "lane_rows": {
+   "PCIE_DN4/input": {
+    "lane_index": 28,
+    "lane_y": 73.972,
+    "N": 74.222,
+    "P": 73.722
+   },
+   "PCIE_DN5/input": {
+    "lane_index": 29,
+    "lane_y": 75.421,
+    "N": 75.671,
+    "P": 75.171
+   },
+   "PCIE_DN6/input": {
+    "lane_index": 30,
+    "lane_y": 76.87,
+    "N": 77.12,
+    "P": 76.62
+   },
+   "PCIE_DN7/input": {
+    "lane_index": 31,
+    "lane_y": 78.319,
+    "N": 78.069,
+    "P": 78.569
+   }
+  },
+  "column_rule": "drawing method = closed_form_construction, per-layer rule R3 = gap_column_prefix_recurrence (closed-form, no search); r3_step_mm=0.6, r3_off_mm=-0.3; decision_contract.corridor_x.EAST_CHIP_TO_J2 = [105.25,132.65].",
+  "drawing_self_cert": "verdict FEASIBLE_ALL, gate_status.failed = [], 18 predicates A-CN.1a..A-CN.method all PASS. The drawing carries its own frozen_sha_check with manifest = a8ef3ea8ecff... and an inputs_sha map.",
+  "conclusion": "The intruding copper is the DN4/DN5 'input' (EAST_CHIP_TO_J2 / connector J2) lane-plan detour plus its landing column, i.e. L3 DRAWING geometry - not placement, and not anything k2_gen_v5.py can move."
+ },
+ "premise_correction": {
+  "corrected_premise": "W2PRIME_EXECUTION_SPEC_v1 E5 assumes 'the connector set changes, so the board must be regenerated, not edited'. That is true for the connectors but FALSE for the DN fan: stage 2a copies the drawing byte-for-byte, so with an unchanged drawing a full chain rerun reproduces the identical DN fan and H4 keeps FAILING.",
+  "consequence": "E6/E7 cannot reach 'C21 all-PASS' until the drawing is re-emitted. The missing step is a lane-plan re-emission (which is exactly the 'scheme-layer missing drawing' of #K2-346), and it must come BEFORE E5."
+ },
+ "repair_constraint": {
+  "rule": "For every DN input lane whose column must cross the keepout band (lane pol-y >= 73.9287) the turnaround column_x must satisfy column_x + via_radius + margin <= keepout x0.",
+  "via_diameter_mm": 0.35,
+  "via_radius_mm": 0.175,
+  "margin_mm": 0.1,
+  "x_max_allowed_mm": 137.6537,
+  "applies_to": "DN4_N (74.222), DN5_P (75.671), DN6_N (77.120), DN7_P (78.569) - the four deepest lanes.",
+  "current": {
+   "J2|PCIE_DN4_N": 139.48,
+   "J2|PCIE_DN5_P": 138.32,
+   "J2|PCIE_DN6_N": 137.16,
+   "J2|PCIE_DN7_P": 136.0
+  },
+  "verdict": {
+   "DN4_N": "VIOLATES (139.48 > 137.6537)",
+   "DN5_P": "VIOLATES (138.32 > 137.6537)",
+   "DN6_N": "clear (137.16)",
+   "DN7_P": "clear (136.00)"
+  },
+  "feasible_band_mm": [
+   135.4,
+   137.6537
+  ],
+  "band_note": "4 columns at the existing 0.58 mm pitch need 1.74 mm; the clear band is 2.25 mm wide once DN7_P is allowed to move west of 136.0, so a re-spacing exists (e.g. 135.40 / 136.15 / 136.90 / 137.65 keeps pitch 0.75 and gives DN4_N a 0.104 mm edge margin)."
+ },
+ "length_coupling": {
+  "statement": "Moving a column west shortens BOTH the In5 lane and the F.Cu landing run (landing -> pad at x=135.0), i.e. ~2x the x-shift, AND it shrinks the only place where the length-matching serpentine can live (the gap between column_x and the pad at x=135.0).",
+  "why_local_nudges_failed": "This is the mechanical reason behind the four exhausted local-push families (#K2-341/#K2-346): the corner can be cleared geometrically, but the same motion removes the length budget, so every push either broke connectivity or landed on foreign copper.",
+  "implication": "The repair is a re-solve of {lane detour + landing column + length compensation}, not a coordinate nudge, and the re-emitted drawing must re-pass its own 18 closed-form predicates."
+ },
+ "enablers_for_the_repair": {
+  "manifest_is_endpoint_based": "m13_v57_s1_page_manifest.json (FROZEN a8ef3ea8ecff99d7) contains only artifact/authority/basis/inputs_sha/n_pages/pages/tally; each page carries ENDPOINT anchors (chip pad + connector pad global coords) and no page-geometry hashes. So a fan-geometry-only re-emission that leaves every endpoint fixed keeps the frozen manifest byte-identical.",
+  "spec_rev_is_a_new_file": "project.yaml::spec_name points at SPEC_k2_v4.spec-rev-61.json; the frozen SPEC_k2_v4.json is untouched by a rev-62 file, so the H4 keepout leaf can be corrected WITHOUT touching a frozen source.",
+  "L4_MAIN_override": "the chain can be driven from a NEW drawing file via the L4_MAIN env var, so 段2a can consume the corrected drawing without overwriting the current one.",
+  "moved_chip_would_break_the_freeze": "Moving U6 would change the chip pad anchors -> new manifest -> frozen-set change. Keeping all endpoints fixed is what keeps this inside the freeze."
+ },
+ "proposed_next_window_single_action": {
+  "goal": "Re-emit the DN input lane plan so the four deepest turnaround columns satisfy column_x <= 137.6537, endpoints unchanged, length re-matched; then run the chain ONCE and judge ONCE.",
+  "steps": [
+   "(a) add the H4 corner keepout as a hard constraint to the W3 lane-plan derivation (R3) and re-emit ONLY the affected DN input pages; keep the page/endpoint structure so the frozen manifest stays valid",
+   "(b) SPEC rev-62 = H4 leaf only: at -> [140.9287,76.9287], keepout_bbox -> [137.929,73.929,143.929,79.929], K2_HOLE_KEEPOUT_H4 polygon moved atomically, stale square [111.6,33.1,117.6,39.1] repaired; per-leaf old->new + rollback card",
+   "(c) project.yaml -> spec-rev-62 / hw/k2_v4_8L.l15.kicad_pcb",
+   "(d) chain rerun ONCE (gen_v5 then route_segment --upto all, with L4_MAIN = the re-emitted drawing) -> l15",
+   "(e) judge ONCE: k2_corner_keepout_gate_v1 (four corners PASS) + kicad-cli DRC (<=168, no class up, unconnected 0) + routing diff vs l14 != 0 + skew 8/8 <= 0.15 + k2_scheme_gate_v2 P1-P7"
+  ],
+  "scope_note": "J9/J6 header governance stays DEFERRED: removing them needs a schematic symbol instance (approval-gated) and is NOT on the H4 critical path - R906 already established the corner is the DN fan at the bottom-right while those headers sit on the left edge."
+ },
+ "open_question_for_supervisor": [
+  "Is the lane-plan re-emission covered by the open W2-prime window (#K2-347 sec.2 'fan-out direction and layer assignment = ENG autonomy') - i.e. proceed - or is drawing re-emission an approval-gated act under the red line 'no generator/SPEC/schematic change without approval'?",
+  "If it is covered, authorise the bounded window above (one re-emission, one chain run, one judge)."
+ ],
+ "discipline": "Read-only this turn: no board edit, no SPEC bump, no generator edit, no schematic edit, no WORKER, no Gerber/order. Frozen four 4/4.",
+ "OWNER-ITEMS": 0
+}
