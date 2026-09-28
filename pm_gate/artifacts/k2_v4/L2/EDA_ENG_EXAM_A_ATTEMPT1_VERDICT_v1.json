@@ -1,0 +1,130 @@
+{
+ "artifact": "eda_eng_examA_attempt1_verdict_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-361 sec.3 (M1..M4 green => final exams) + sec.2.3 (the re-posed exam A scenario)",
+ "exam": "A (re-posed): left cluster U1/U2/U4/U5 translated +X by 4.000 mm",
+ "run": "eda_eng exam A --run --work /tmp/opencode/eda_eng_examA (preflight PASS first, then ONE pipeline run, then the M4 judge)",
+ "preflight": {
+  "artifact": "eda_eng_preflight",
+  "exam": "A",
+  "ok": true,
+  "P1_scenario_legality": {
+   "refs": [
+    "U1",
+    "U2",
+    "U4",
+    "U5"
+   ],
+   "delta_mm": [
+    4.0,
+    0.0
+   ],
+   "ok": true,
+   "reason": "  ✅ S1 焊盘重叠: PASS"
+  },
+  "P2_dry_run_plan": {
+   "stages": [
+    "place",
+    "gen",
+    "route",
+    "polish",
+    "drc"
+   ],
+   "commands": {
+    "gen": "python3 /home/fila/jqdDev_2025/ic_hw/k2/tools/k2_gen_v5.py",
+    "route": "/tmp/k2kicad/squashfs-root/usr/bin/python3.11 /home/fila/jqdDev_2025/ic_hw/k2/tools/k2_route_segment_v1.py --in /tmp/opencode/eda_eng_examA/stage1.kicad_pcb --out /tmp/opencode/eda_eng_examA/stage2.kicad_pcb --upto all --drc-cli /tmp/k2kicad/squashfs-root/usr/bin/kicad-cli",
+    "polish": "/tmp/k2kicad/squashfs-root/usr/bin/python3.11 /home/fila/jqdDev_2025/ic_hw/k2/tools/k2_p4_build_l9_v1.py --in /tmp/opencode/eda_eng_examA/stage2.kicad_pcb --out /tmp/opencode/eda_eng_examA/final.kicad_pcb --stages fiducial,info,edge,tp,crtyd,silk,silkfix,chamfer,pour",
+    "drc": "/tmp/k2kicad/squashfs-root/usr/bin/kicad-cli pcb drc --format json --severity-all -o /tmp/opencode/eda_eng_examA/final_drc.json /tmp/opencode/eda_eng_examA/final.kicad_pcb"
+   }
+  },
+  "inputs": {
+   "spec_name": "SPEC_k2_v4.spec-rev-61.json",
+   "drawing": "canonical m13_v57_w3_joint_assignment.json",
+   "placement_source": "pm_gate/artifacts/k2_v4/L2/PLACEMENT_SOLUTION_v1.json"
+  },
+  "input_hashes_sha16": {
+   "placement": "48b96fbafc458d12",
+   "drawing": "60cbd331836e52b7"
+  },
+  "rule": "#K2-361 sec.4 (C29): no heavy stage may run unless the pre-flight passes (fail-closed)"
+ },
+ "pipeline": "gen exit 0 -> route exit 0 (stage2 b15c63d5a8df3f00) -> polish exit 0 (chamfer 634 corners / 1268 ops, pour filled) -> drc exit 0",
+ "verdict": "FAIL (all criteria except C5)",
+ "criteria": {
+  "C1_connectivity": {
+   "unconnected": 1,
+   "pass": false
+  },
+  "C2_drc_no_new_increase": {
+   "total": 250,
+   "ref_total": 168,
+   "new_classes": [
+    "clearance",
+    "courtyards_overlap",
+    "hole_clearance",
+    "lib_footprint_issues",
+    "shorting_items",
+    "solder_mask_bridge"
+   ],
+   "pass": false
+  },
+  "C3_skew": {
+   "per_pair_mm": {
+    "0": 0.998797,
+    "1": 1.374001,
+    "2": 1.172807,
+    "3": 0.836281,
+    "4": 0.703287,
+    "5": 0.7202,
+    "6": 0.698607,
+    "7": 0.268167
+   },
+   "max_mm": 1.374001,
+   "limit_mm": 0.15,
+   "pass": false
+  },
+  "C4_chamfer_preserved": {
+   "count": 2566,
+   "ref_count": 2637,
+   "pass": false
+  },
+  "C5_routing_changed": {
+   "element_set_diff": 5530,
+   "pass": true
+  }
+ },
+ "first_order_causes": {
+  "C1 unconnected 1": "the composed pipeline leaves one net open after the moved cluster",
+  "C2 DRC 250 vs 168 with SIX new classes": "clearance, courtyards_overlap, hole_clearance, lib_footprint_issues, shorting_items, solder_mask_bridge",
+  "C2 courtyards_overlap IS A PRE-FLIGHT GAP (C29)": "the +4.000 mm translation is PAD-legal (the gen S1 check passed) but its courtyards overlap the neighbours - the pre-flight只有 pad/range 自检，没有机械/courtyard 检查 => 它放行了一个机械上非法的场景",
+  "C3 skew max 1.374 mm": "the composed pipeline does not re-tune the pair lengths for a moved cluster (l14's baseline was 0.0788)",
+  "C4 chamfer 2566 < 2637": "the polish stage's chamfer pass does not fully recover the accepted 45-degree count",
+  "C5 PASS": "the routing genuinely changed (element-set diff 5530) - so the run was not a no-op"
+ },
+ "consequence": [
+  "C29 (pre-flight) must be STRENGTHENED: P1 must also reject mechanical/courtyard-illegal placements (the new gate runs the gen stage AND a DRC on it, requiring zero courtyards_overlap/shorting/clearance)",
+  "the exam A scenario must then be shrunk until it is mechanical-legal under the strengthened gate",
+  "C1/C3/C4 are ENGINE-QUALITY failures: the composed pipeline (regen) is not the M1->M4 rewrite engine; the rewrite engine must take over for a moved cluster"
+ ],
+ "artifacts": {
+  "verdict_raw": "/home/fila/examA_verdict_clean.json (recovered from the noisy CLI stdout)",
+  "final_board": "/tmp/opencode/eda_eng_examA/final.kicad_pcb",
+  "drc": "/tmp/opencode/eda_eng_examA/final_drc.json"
+ },
+ "OWNER-ITEMS": 0,
+ "C29_closure_evidence": {
+  "requirement": "#K2-361 sec.4: the pre-flight must stop an illegal/infeasible scenario with ZERO heavy runs",
+  "strengthened_gate": "P1 (pad self-check) + P1b (NEW: gen + a DRC on the placed board, refusing on courtyards_overlap / shorting_items / clearance / hole_clearance) + P2 (dry-run plan + input hashes)",
+  "reading_on_the_re-posed_scenario": {
+   "checked": true,
+   "gen_exit": 0,
+   "mechanical_violations": {
+    "clearance": 1
+   },
+   "rule": "a placement that is pad-legal but mechanical-illegal (e.g. courtyards_overlap) must be refused here with zero heavy runs (found by exam A attempt 1)"
+  },
+  "verdict_on_the_scenario": "REFUSED by the gate (ok=False) with zero heavy runs - the +X 4.000 mm translation is pad-legal but mechanically illegal",
+  "regression_test": "tests/test_eda_eng.py::test_C29_preflight_refuses_a_mechanically_illegal_scenario (selftest 31/31 PASS)",
+  "consequence_for_the_scenario": "the exam A scenario must be shrunk until it passes the strengthened gate; the coordinate choice stays ENG-autonomous (ECO-K2-0002 will be bumped again with the self-check evidence)"
+ }
+}

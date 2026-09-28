@@ -295,6 +295,15 @@ class T(unittest.TestCase):
         self.assertEqual(cd["total_delta"], 0,
                          "apply must not perturb the board config; attribution was %r" % (cd,))
 
+    def test_C29_preflight_refuses_a_mechanically_illegal_scenario(self):
+        """C29 关闭判据（#K2-361 sec.4）：非法场景被 preflight 拦下、**零重活运行**。"""
+        from eda_eng import regen
+        pf = regen.preflight("A", "/tmp/eda_eng_selftest_pf")
+        self.assertFalse(pf["ok"], "the +X 4.000 mm scenario must be refused by the strengthened gate")
+        self.assertTrue(pf["P1_scenario_legality"]["ok"], "it is pad-legal ...")
+        self.assertTrue(pf["P1b_mechanical_legality"]["mechanical_violations"],
+                        "... but mechanically illegal (zero heavy runs spent)")
+
     def test_regen_is_implemented_and_plans_five_stages(self):
         r = regen.run(exam="A", work="/tmp/eda_eng_selftest_plan", dry=True)
         self.assertEqual(r["state"], "PLANNED")

@@ -8,7 +8,7 @@ v1 = **组合确定性管线**（全部是链内既有、确定性、无 LLM 的
 输出 = 最终板 + DRC json（供 eda_eng verify 判卷）。
 """
 from __future__ import annotations
-import json, os, subprocess, sys
+import json, os, shutil, subprocess, sys
 
 from . import shadow as shadow_mod
 
@@ -29,7 +29,9 @@ def _host():
 STAGES = ["place", "gen", "route", "polish", "drc"]
 
 EXAM_PRESET = {
-    "A": {"spec_name": None, "placement": {"refs": ["U1", "U2", "U4", "U5"], "delta_mm": [5.0, 0.0]},
+    # RE-POSED by #K2-361 sec.2.3 (ECO-K2-0002 v2): translation-only family, +X 4.000 mm (0.400 mm margin
+    # under the measured 4.400 mm bound); the old +5.000 mm scenario is refuted by the R940 certificate.
+    "A": {"spec_name": None, "placement": {"refs": ["U1", "U2", "U4", "U5"], "delta_mm": [4.0, 0.0]},
           "drawing": None},
     "B": {"spec_name": "SPEC_k2_v4.spec-rev-62.json", "placement": None,
           "drawing": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_joint_assignment_H4CLEAR_v3.json"},
@@ -54,6 +56,10 @@ def _run(cmd, env, log):
 def run_exam(exam_id, work, dry=False, log_only=True):
     preset = EXAM_PRESET[exam_id]
     os.makedirs(work, exist_ok=True)
+    pf = None if dry else preflight(exam_id, work)      # dry 路径不设闸（避免 preflight<->run 递归）
+    if (not dry) and (pf is None or not pf["ok"]):
+        return {"artifact": "eda_eng_route", "exam": exam_id, "state": "REFUSED_BY_PREFLIGHT",
+                "preflight": pf, "log": [], "rule": "C29 fail-closed: an illegal/stale scenario must not burn a run"}
     plan = {"artifact": "eda_eng_route", "exam": exam_id, "engine": "composed-deterministic-pipeline-v1",
             "stages": STAGES, "work": work, "dry_run": dry, "log": []}
     sh = shadow_mod.build(os.path.join(work, "shadow"), spec_name=preset["spec_name"],
@@ -113,6 +119,58 @@ def validate_placement(refs, delta_mm, work):
     tail = (p.stdout or p.stderr or "").strip().splitlines()
     reason = next((l for l in reversed(tail) if "写盘阻断" in l or "S1" in l), tail[-1] if tail else "")
     return {"refs": refs, "delta_mm": delta_mm, "ok": p.returncode == 0, "reason": reason[-200:]}
+
+
+def preflight(exam, work):
+    """#K2-361 sec.4 (C29 补法): 开工前置闸 —— P1 场景合法性 ＋ P2 干跑计划 ＋ 输入哈希；未过即停（不跑重活）。"""
+    import hashlib
+    preset = EXAM_PRESET.get(exam)
+    if preset is None:
+        return {"ok": False, "reason": "unknown exam"}
+    w = os.path.join(work, "preflight")
+    p1 = {"skipped": True}
+    if preset["placement"]:
+        p1 = validate_placement(preset["placement"]["refs"], preset["placement"]["delta_mm"], w + "_p1")
+    p2 = run(exam, work, dry=True)
+    inputs = {"spec_name": preset.get("spec_name") or "SPEC_k2_v4.spec-rev-61.json",
+              "drawing": preset.get("drawing") or "canonical m13_v57_w3_joint_assignment.json",
+              "placement_source": "pm_gate/artifacts/k2_v4/L2/PLACEMENT_SOLUTION_v1.json"}
+    hashes = {}
+    for k, rel in (("placement", os.path.join(ROOT, inputs["placement_source"])),
+                   ("drawing", inputs["drawing"] if preset.get("drawing") else
+                    os.path.join(ROOT, "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_joint_assignment.json"))):
+        hashes[k] = hashlib.sha256(open(rel, "rb").read()).hexdigest()[:16] if os.path.isfile(rel) else None
+    # P1' 机械/库类闸（本窗新证）：跑一次 gen（只放置）+ DRC —— 机械非法（courtyard 重叠等）场景**零重活**拦下
+    p1b = {"checked": False}
+    if preset["placement"] and p1.get("ok"):
+        gw = os.path.join(work, "p1gen")
+        shutil.rmtree(gw, ignore_errors=True)
+        os.makedirs(gw, exist_ok=True)
+        sh = shadow_mod.build(os.path.join(gw, "shadow"))
+        shadow_mod.edit_placement_at(sh["shadow_root"], preset["placement"]["refs"], preset["placement"]["delta_mm"])
+        gpcb = os.path.join(gw, "placed.kicad_pcb")
+        env = {**os.environ, "PM_GATE_PROJECT_ROOT": sh["shadow_root"], "K2_OUT_PCB": gpcb,
+               "K2_OUT_JSON": os.path.join(gw, "placed.json")}
+        rc = subprocess.run([_host(), os.path.join(ROOT, "tools", "k2_gen_v5.py")], cwd=ROOT,
+                            capture_output=True, text=True, env=_host_env(env), timeout=600).returncode
+        gj = os.path.join(gw, "placed_drc.json")
+        subprocess.run([_cli(), "pcb", "drc", "--format", "json", "--severity-all", "-o", gj, gpcb],
+                       capture_output=True, timeout=900)
+        bad = {}
+        if os.path.isfile(gj):
+            for v in json.load(open(gj, encoding="utf-8")).get("violations", []):
+                ty = v.get("type")
+                if ty in ("courtyards_overlap", "shorting_items", "clearance", "hole_clearance"):
+                    bad[ty] = bad.get(ty, 0) + 1
+        p1b = {"checked": True, "gen_exit": rc, "mechanical_violations": bad,
+               "rule": "a placement that is pad-legal but mechanical-illegal (e.g. courtyards_overlap) must be "
+                       "refused here with zero heavy runs (found by exam A attempt 1)"}
+    ok = (p1.get("ok") is True or p1.get("skipped")) and p1b.get("mechanical_violations", {}) == {} \
+        and bool(p2.get("commands")) and all(hashes.values())
+    return {"artifact": "eda_eng_preflight", "exam": exam, "ok": ok,
+            "P1_scenario_legality": p1, "P1b_mechanical_legality": p1b, "P2_dry_run_plan": {"stages": p2.get("stages"), "commands": p2.get("commands")},
+            "inputs": inputs, "input_hashes_sha16": hashes,
+            "rule": "#K2-361 sec.4 (C29): no heavy stage may run unless the pre-flight passes (fail-closed)"}
 
 
 def run(exam=None, work=None, dry=False):
