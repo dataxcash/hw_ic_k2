@@ -828,7 +828,7 @@ def relocate_block_chain(rect, delta, work, members=None, clearance=None, max_jo
 # A′（#K2-372 §二.1 / #K2-373 §三）：**逐件位移图**下的块内重连（C33）
 # M0 清册 -> 逐件位移+块内铜删除(move_parts) -> M1 端子/端口计划 -> M3 帧内重连 -> refill -> M4(C1-C9)
 # ─────────────────────────────────────────────────────────────────────────────
-def relocate_relative_chain(rect, moves, work, members, clearance=None, pitch=0.15, snap_cells=4,
+def relocate_relative_chain(rect, moves, work, members, clearance=None, pitch=0.15, snap_cells=4, repair_tries=8,
                             layers=("F.Cu", "In2.Cu", "B.Cu"), max_edges=None):
     """**A′ 块内重连一次链跑**。域 = 冻结框（所有端子都在框内/框上）；判卷 C1–C9。"""
     from . import block as _blk, route as _rt, verify as _vf
@@ -875,37 +875,76 @@ def relocate_relative_chain(rect, moves, work, members, clearance=None, pitch=0.
                   "affected_nets": nets, "n_affected": len(nets), "n_jobs": len(jobs)})
 
     obs, _bnd = _rt.obstacles_multi(os.path.join(work, "s1_moved.kicad_pcb"), set(), list(layers))
-    plans, blocked, n_edges = [], [], 0
+    plans, blocked, n_edges, repairs = [], [], 0, []
     for jb in (jobs if max_edges is None else [{"net": jb["net"], "terminals": jb["terminals"][:max_edges + 1]} for jb in jobs]):
         n = jb["net"]
         o = [x for x in obs if x.get("net") != n]
         pts = jb["terminals"]
         edges = _rt.mst_edges(pts)
         polys, vias, bad = [], [], None
+        parent = list(range(len(pts)))
+
+        def _find(x):
+            while parent[x] != x:
+                parent[x] = parent[parent[x]]; x = parent[x]
+            return x
+
+        def _try(pa, pb):
+            """一次**真形复核过的**迷宫尝试；成功返回 polys/vias，失败返回具名原因。"""
+            r_ = _rt.maze_route(pts[pa], pts[pb], list(layers), o, list(rect), pitch=pitch,
+                                via_penalty=8.0, endpoint_clear=0.0, snap_cells=snap_cells)
+            if r_["status"] != "ROUTED":
+                return None, {"edge": [pa, pb], "semantics": r_.get("semantics"), "reason": r_.get("reason")}
+            v_ = []
+            for pl in r_["polys"]:
+                v_ += _rt.poly_violations(pl["poly"], o, clearance=clear, layer=pl["layer"])
+            if v_:
+                return None, {"edge": [pa, pb], "semantics": "NOT_FOUND",
+                              "reason": "grid route violates the exact-shape clearance", "exact_violations": v_[:2]}
+            return r_, None
+
         for ia, ib, _d in edges:
             n_edges += 1
-            # 端口在 ∂R 上、端子是焊盘中心 ⇒ 起点/终点都必须**在框内**（域 = 框）
-            r = _rt.maze_route(pts[ia], pts[ib], list(layers), o, list(rect), pitch=pitch,
-                               via_penalty=8.0, endpoint_clear=0.0, snap_cells=snap_cells)
-            if r["status"] != "ROUTED":
-                bad = {"edge": [ia, ib], "semantics": r.get("semantics"), "reason": r.get("reason")}
-                break
-            viol = []
-            for pl in r["polys"]:
-                viol += _rt.poly_violations(pl["poly"], o, clearance=clear, layer=pl["layer"])
-            if viol:
-                bad = {"edge": [ia, ib], "semantics": "NOT_FOUND", "reason": "grid route violates the exact-shape clearance",
-                       "exact_violations": viol[:2]}
-                break
+            r, err = _try(ia, ib)
+            if r is None:
+                # **有界修复（bounded repair · 承 §20 三问的 C17 v1 阶段）**：该边不通 ⇒ 在同一对连通块之间
+                # 按距离取**次优端子对**再试（确定性 · 至多 repair_tries 次），命中即接上。
+                ra, rb = _find(ia), _find(ib)
+                if ra != rb:
+                    alts = []
+                    for x in range(len(pts)):
+                        if _find(x) != ra:
+                            continue
+                        for y in range(len(pts)):
+                            if _find(y) != rb:
+                                continue
+                            alts.append((math.dist(pts[x], pts[y]), x, y))
+                    alts.sort()
+                    fixed = False
+                    for _dd, x, y in alts[:repair_tries]:
+                        n_edges += 1
+                        r2, err2 = _try(x, y)
+                        if r2 is not None:
+                            r, fixed = r2, True
+                            repairs.append({"net": n, "failed_edge": [ia, ib], "repaired_edge": [x, y],
+                                            "dist_mm": round(_dd, 4)})
+                            break
+                    if not fixed:
+                        bad = err
+                        break
+                else:
+                    bad = err
+                    break
             for pl in r["polys"]:
                 polys.append({"layer": pl["layer"], "poly": pl["poly"]})
             vias += r.get("vias", [])
+            parent[_find(ia)] = _find(ib)
         if bad:
             blocked.append({"net": n, **bad})
         else:
             plans.append({"net": n, "polys": [q["poly"] for q in polys],
                           "layers": [q["layer"] for q in polys], "vias": vias})
-    chain.append({"stage": "M3_in_block_reconnect", "jobs": len(jobs), "edges_routed": n_edges,
+    chain.append({"stage": "M3_in_block_reconnect", "jobs": len(jobs), "edges_routed": n_edges, "repairs": repairs,
                   "nets_routed": len(plans), "nets_blocked": len(blocked), "blocked_named": blocked,
                   "domain": "the frozen frame (all terminals inside/on dR)", "pitch_mm": pitch,
                   "layers": list(layers),
@@ -961,7 +1000,7 @@ def relocate_relative_chain(rect, moves, work, members, clearance=None, pitch=0.
             "move_parts": {"moved": mp["n_moved"], "deleted_segments": mp["deleted_segments"],
                            "deleted_vias": mp["deleted_vias"], "outside_halves_kept": mp["outside_halves_kept"],
                            "n_ports": sum(len(v2) for v2 in mp["ports"].values())},
-            "jobs": len(jobs), "edges_routed": n_edges, "routed": len(plans), "blocked": blocked,
+            "jobs": len(jobs), "edges_routed": n_edges, "repairs": repairs, "routed": len(plans), "blocked": blocked,
             "apply": ap, "M4": v, "class_delta": delta_cls, "board": final,
             "rule": "#K2-372 sec.2.1 / #K2-373 sec.3: A-prime = per-part displacement map; in-block copper is re-laid "
                     "inside the frozen frame; judging C1-C9 with no third state"}

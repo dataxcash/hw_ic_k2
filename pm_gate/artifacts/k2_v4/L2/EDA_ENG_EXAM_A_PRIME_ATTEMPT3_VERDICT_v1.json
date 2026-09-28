@@ -1,0 +1,476 @@
+{
+ "state": "GRADED",
+ "chain": [
+  {
+   "stage": "M0_block_census",
+   "frame_ok": true,
+   "FOREIGN_INSIDE": 0,
+   "FOREIGN_PADS_INSIDE": 0,
+   "n_members": 25,
+   "digest": "1cf4d39614491ccc"
+  },
+  {
+   "cmd": "eda_eng move-parts --board /home/fila/jqdDev_2025/ic_hw/k2/hw/k2_v4_8L.l14.kicad_pcb --rect 22.95,32.95,51.5,66.5 --moves U1:1.5:1.5,J13:4.0:4.0,J9:4.0:4.0,J12:4.0:4.0,J6:4.0:4.0,E2:3.5:3.5,U2:4.0:4.0,L1:4.0:4.0,C84:4.0:4.0,U5:4.0:4.0,U4:4.0:4.0,C73:3.5:3.5,C88:4.0:4.0,C86:4.0:4.0,R40:4.0:4.0,R41:4.0:4.0,C90:1.5:1.5,C85:4.0:4.0,C87:4.0:4.0 --out /tmp/opencode/aprime_chain4/s1_moved.kicad_pcb",
+   "exit": 0
+  },
+  {
+   "stage": "M1_part_plan",
+   "members": 19,
+   "deleted_segments": 615,
+   "deleted_vias": 95,
+   "outside_halves_kept": 15,
+   "affected_nets": [
+    "12V_IN",
+    "FB_U2",
+    "GND",
+    "GPIO_LED",
+    "I2C1_SCL",
+    "I2C1_SDA",
+    "I2C2_SCL",
+    "I2C2_SDA",
+    "LED_A",
+    "MCU_VDD",
+    "NRST",
+    "P3V3",
+    "P3V3_AUX",
+    "PERSTA#",
+    "PWR_BTN_ISO",
+    "PWR_BTN_OUT",
+    "PWR_CTRL_OUT",
+    "SWCLK_BOOT0",
+    "SWDIO",
+    "SW_U2",
+    "UART_RX",
+    "UART_TX"
+   ],
+   "n_affected": 22,
+   "n_jobs": 22
+  },
+  {
+   "stage": "M3_in_block_reconnect",
+   "jobs": 22,
+   "edges_routed": 63,
+   "repairs": [],
+   "nets_routed": 18,
+   "nets_blocked": 4,
+   "blocked_named": [
+    {
+     "net": "GND",
+     "edge": [
+      16,
+      0
+     ],
+     "semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR",
+     "reason": "an endpoint lies inside foreign copper / a keepout"
+    },
+    {
+     "net": "NRST",
+     "edge": [
+      1,
+      0
+     ],
+     "semantics": "NOT_FOUND",
+     "reason": "grid route violates the exact-shape clearance",
+     "exact_violations": [
+      {
+       "obstacle": "pad@3",
+       "kind": "copper",
+       "net": "GND",
+       "min_dist_mm": 0.11,
+       "required_mm": 0.175
+      }
+     ]
+    },
+    {
+     "net": "SWCLK_BOOT0",
+     "edge": [
+      2,
+      0
+     ],
+     "semantics": "NOT_FOUND",
+     "reason": "grid route violates the exact-shape clearance",
+     "exact_violations": [
+      {
+       "obstacle": "pad@1",
+       "kind": "copper",
+       "net": "",
+       "min_dist_mm": 0.06,
+       "required_mm": 0.175
+      }
+     ]
+    },
+    {
+     "net": "SWDIO",
+     "edge": [
+      1,
+      0
+     ],
+     "semantics": "NOT_FOUND",
+     "reason": "grid route violates the exact-shape clearance",
+     "exact_violations": [
+      {
+       "obstacle": "pad@49",
+       "kind": "copper",
+       "net": "GND",
+       "min_dist_mm": 0.16,
+       "required_mm": 0.175
+      }
+     ]
+    }
+   ],
+   "domain": "the frozen frame (all terminals inside/on dR)",
+   "pitch_mm": 0.15,
+   "layers": [
+    "F.Cu",
+    "In2.Cu",
+    "B.Cu"
+   ],
+   "semantics": "a blocked edge is NOT_FOUND - never read as impossible (#K2-367 sec.2)"
+  },
+  {
+   "cmd": "eda_eng route --apply-batch /tmp/opencode/aprime_chain4/s3_routes.json --board /tmp/opencode/aprime_chain4/s1_moved.kicad_pcb --out /tmp/opencode/aprime_chain4/s4_rerouted.kicad_pcb",
+   "exit": 0
+  },
+  {
+   "stage": "step5_apply_refill",
+   "zones_refilled": 18,
+   "segments_added": 2435,
+   "vias_added": 10,
+   "status": "APPLIED"
+  },
+  {
+   "stage": "M4_judge",
+   "verdict": "FAIL",
+   "geometry_delta": 361,
+   "C6": true,
+   "C7": true,
+   "C8": true
+  }
+ ],
+ "census_summary": {
+  "frame_ok": true,
+  "FOREIGN_INSIDE": {
+   "count": 0,
+   "by_net": {}
+  },
+  "FOREIGN_PADS_INSIDE": {
+   "count": 0,
+   "refs": []
+  },
+  "members": [
+   "C73",
+   "C84",
+   "C85",
+   "C86",
+   "C87",
+   "C88",
+   "C90",
+   "D1",
+   "D2",
+   "E2",
+   "J11",
+   "J12",
+   "J13",
+   "J6",
+   "J9",
+   "L1",
+   "R1",
+   "R21",
+   "R28",
+   "R40",
+   "R41",
+   "U1",
+   "U2",
+   "U4",
+   "U5"
+  ]
+ },
+ "move_parts": {
+  "moved": 19,
+  "deleted_segments": 615,
+  "deleted_vias": 95,
+  "outside_halves_kept": 15,
+  "n_ports": 15
+ },
+ "jobs": 22,
+ "edges_routed": 63,
+ "repairs": [],
+ "routed": 18,
+ "blocked": [
+  {
+   "net": "GND",
+   "edge": [
+    16,
+    0
+   ],
+   "semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR",
+   "reason": "an endpoint lies inside foreign copper / a keepout"
+  },
+  {
+   "net": "NRST",
+   "edge": [
+    1,
+    0
+   ],
+   "semantics": "NOT_FOUND",
+   "reason": "grid route violates the exact-shape clearance",
+   "exact_violations": [
+    {
+     "obstacle": "pad@3",
+     "kind": "copper",
+     "net": "GND",
+     "min_dist_mm": 0.11,
+     "required_mm": 0.175
+    }
+   ]
+  },
+  {
+   "net": "SWCLK_BOOT0",
+   "edge": [
+    2,
+    0
+   ],
+   "semantics": "NOT_FOUND",
+   "reason": "grid route violates the exact-shape clearance",
+   "exact_violations": [
+    {
+     "obstacle": "pad@1",
+     "kind": "copper",
+     "net": "",
+     "min_dist_mm": 0.06,
+     "required_mm": 0.175
+    }
+   ]
+  },
+  {
+   "net": "SWDIO",
+   "edge": [
+    1,
+    0
+   ],
+   "semantics": "NOT_FOUND",
+   "reason": "grid route violates the exact-shape clearance",
+   "exact_violations": [
+    {
+     "obstacle": "pad@49",
+     "kind": "copper",
+     "net": "GND",
+     "min_dist_mm": 0.16,
+     "required_mm": 0.175
+    }
+   ]
+  }
+ ],
+ "apply": {
+  "artifact": "eda_eng_route_apply_batch",
+  "status": "APPLIED",
+  "nets": [
+   "12V_IN",
+   "FB_U2",
+   "GPIO_LED",
+   "I2C1_SCL",
+   "I2C1_SDA",
+   "I2C2_SCL",
+   "I2C2_SDA",
+   "LED_A",
+   "MCU_VDD",
+   "P3V3",
+   "P3V3_AUX",
+   "PERSTA#",
+   "PWR_BTN_ISO",
+   "PWR_BTN_OUT",
+   "PWR_CTRL_OUT",
+   "SW_U2",
+   "UART_RX",
+   "UART_TX"
+  ],
+  "segments_added": 2435,
+  "vias_added": 10,
+  "zones_refilled": 18,
+  "project_config_copied": [
+   ".kicad_pro"
+  ],
+  "out": "/tmp/opencode/aprime_chain4/s4_rerouted.kicad_pcb",
+  "out_sha16": "4df0162748f7267e"
+ },
+ "M4": {
+  "criteria": {
+   "C1_connectivity": {
+    "unconnected": 40,
+    "pass": false
+   },
+   "C2_drc_no_new_increase": {
+    "total": 563,
+    "ref_total": 168,
+    "new_classes": [
+     "clearance",
+     "isolated_copper",
+     "lib_footprint_issues",
+     "shorting_items",
+     "solder_mask_bridge",
+     "tracks_crossing"
+    ],
+    "pass": false
+   },
+   "C3_skew": {
+    "per_pair_mm": {
+     "0": 0.065012,
+     "1": 0.06498,
+     "2": 0.043403,
+     "3": 0.078764,
+     "4": 1.4e-05,
+     "5": 5e-06,
+     "6": 0.021576,
+     "7": 0.013805
+    },
+    "max_mm": 0.078764,
+    "limit_mm": 0.15,
+    "pass": true
+   },
+   "C4_chamfer_preserved": {
+    "count": 3425,
+    "ref_count": 2637,
+    "pass": true
+   },
+   "C5_routing_changed": {
+    "element_set_diff": 3166,
+    "pass": true
+   },
+   "C6_outside_copper_unchanged": {
+    "diff": 0,
+    "pass": true,
+    "scope": "tracks+vias outside the frozen frame"
+   },
+   "C7_hs_fanout_untouched": {
+    "diff": 0,
+    "pass": true,
+    "nets": [
+     "PCIE_DN0_P",
+     "PCIE_DN0_N",
+     "PCIE_DN1_P",
+     "PCIE_DN1_N",
+     "PCIE_DN2_P",
+     "PCIE_DN2_N",
+     "PCIE_DN3_P",
+     "PCIE_DN3_N",
+     "PCIE_DN4_P",
+     "PCIE_DN4_N",
+     "PCIE_DN5_P",
+     "PCIE_DN5_N",
+     "PCIE_DN6_P",
+     "PCIE_DN6_N",
+     "PCIE_DN7_P",
+     "PCIE_DN7_N"
+    ]
+   },
+   "C8_members_inside_frame": {
+    "violations": [],
+    "pass": true
+   },
+   "C9_geometric_digest": {
+    "before": "1cf4d39614491ccc",
+    "after": "5bf2fbc5ae64e2b8",
+    "pass": true,
+    "n5_direction": {
+     "before": {
+      "NE": 29.3,
+      "NW": 46.81,
+      "SE": 9.87,
+      "SW": 14.02
+     },
+     "after": {
+      "NE": 29.3,
+      "NW": 42.77,
+      "SE": 9.87,
+      "SW": 18.06
+     },
+     "pass": true
+    }
+   }
+  },
+  "verdict": "FAIL",
+  "thresholds_used": {
+   "drc_total": 168,
+   "chamfer_ref": 2637,
+   "skew_limit": 0.15
+  },
+  "judging_table": "L2/EDA_ENG_JUDGING_TABLE_v1.json (ECO-K2-0002/0003 sec.6)",
+  "rule": "PASS iff EVERY criterion holds (C1-C5 in-register + C6/C7 block-fidelity when a block chain is graded); None (skipped) is never a PASS (#K2-358: capability must be reproducible)"
+ },
+ "class_delta": {
+  "total_delta": 361,
+  "by_class": {
+   "clearance": {
+    "result": 207,
+    "ref": 0,
+    "delta": 207
+   },
+   "isolated_copper": {
+    "result": 3,
+    "ref": 0,
+    "delta": 3
+   },
+   "shorting_items": {
+    "result": 91,
+    "ref": 0,
+    "delta": 91
+   },
+   "silk_edge_clearance": {
+    "result": 1,
+    "ref": 2,
+    "delta": -1
+   },
+   "silk_over_copper": {
+    "result": 38,
+    "ref": 37,
+    "delta": 1
+   },
+   "solder_mask_bridge": {
+    "result": 7,
+    "ref": 0,
+    "delta": 7
+   },
+   "track_dangling": {
+    "result": 7,
+    "ref": 1,
+    "delta": 6
+   },
+   "track_not_centered_on_via": {
+    "result": 18,
+    "ref": 32,
+    "delta": -14
+   },
+   "tracks_crossing": {
+    "result": 67,
+    "ref": 0,
+    "delta": 67
+   },
+   "via_dangling": {
+    "result": 0,
+    "ref": 6,
+    "delta": -6
+   }
+  },
+  "excluded_class_rows": {
+   "lib_footprint_issues": {
+    "result": 54,
+    "ref": 0,
+    "delta": 54
+   },
+   "lib_footprint_mismatch": {
+    "result": 0,
+    "ref": 20,
+    "delta": -20
+   }
+  },
+  "excluded_classes": [
+   "lib_footprint_issues",
+   "lib_footprint_mismatch"
+  ],
+  "raw_total_delta": 395,
+  "attributed": true,
+  "rule": "#K2-361 sec.2.5: any GEOMETRY class rise must be attributed; library-resolution classes are recorded in excluded_class_rows under the pinned caliber (they are never hidden)"
+ },
+ "board": "/tmp/opencode/aprime_chain4/s4_rerouted.kicad_pcb",
+ "rule": "#K2-372 sec.2.1 / #K2-373 sec.3: A-prime = per-part displacement map; in-block copper is re-laid inside the frozen frame; judging C1-C9 with no third state"
+}
