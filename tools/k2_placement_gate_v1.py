@@ -27,7 +27,7 @@ def main():
         nc=min(corners.items(), key=lambda kv: dist(at,kv[1]))
         p3.append({"hole":r,"at":[round(at[0],2),round(at[1],2)],"nearest_corner":nc[0],"corner_dist_mm":round(dist(at,nc[1]),2),
                    "pass":dist(at,nc[1])<=3.0})
-    R["P3_mechanical"]={"source":"#K2-322 sec.3.1 four-corner symmetry + SPEC constraints.edge_copper_min 0.3","threshold_corner_mm":3.0,
+    R["P3_mechanical"]={"layer":"SCHEME","source":"#K2-322 sec.3.1 four-corner symmetry + SPEC constraints.edge_copper_min 0.3","threshold_corner_mm":3.0,
                         "holes":p3,"verdict":"PASS" if all(x["pass"] for x in p3) else "FAIL"}
     # P1 high-speed directness: per HS net, (routing length / straight U6<->J2 pad distance)
     pads=collections.defaultdict(list)
@@ -48,10 +48,10 @@ def main():
         ratio=(tr[nm]/d) if d>0 else None
         p1.append({"net":nm.replace("PCIE_UP_",""),"straight_mm":round(d,2),"route_mm":round(tr[nm],2),"offset_ratio":round(ratio,3) if ratio else None,
                    "pass":(ratio is not None and ratio<=1.6)})
-    R["P1_highspeed_directness"]={"source":"proxy threshold 1.6x straight-line (PLACEHOLDER - vendor EVM guide not parsed yet)","threshold_ratio":1.6,
+    R["P1_highspeed_directness"]={"layer":"SCHEME","source":"proxy threshold 1.6x straight-line (PLACEHOLDER - vendor EVM guide not parsed yet)","threshold_ratio":1.6,
                                   "nets":p1,"verdict":"PASS" if all(x["pass"] for x in p1) else "FAIL"}
     # P2 length budget: not in-register -> PENDING
-    R["P2_length_budget"]={"verdict":"PENDING","source":"PCIe Gen5 channel budget file NOT in register","note":"searched L3 SPEC + eda_core drc_rules: no declared per-net length budget"}
+    R["P2_length_budget"]={"layer":"SCHEME","verdict":"PENDING","source":"PCIe Gen5 channel budget file NOT in register","note":"searched L3 SPEC + eda_core drc_rules: no declared per-net length budget"}
     # P4 congestion: cross-section census (net crossings per x-section vs available routing rows)
     secs=[x for x in (30,45,60,75,90,105,120,134)]
     p4=[]
@@ -62,17 +62,18 @@ def main():
             x1,x2=mm(t.GetStart().x),mm(t.GetEnd().x)
             if (x1-xs)*(x2-xs)<0: n+=1
         p4.append({"x_mm":xs,"crossings":n})
-    R["P4_congestion"]={"source":"R537 cross-section method (capacity>=demand; per-section supply not auto-derived here)","sections":p4,
+    R["P4_congestion"]={"layer":"SCHEME","source":"R537 cross-section method (capacity>=demand; per-section supply not auto-derived here)","sections":p4,
                         "verdict":"PENDING","note":"needs the declared section supply (layer x row budget) to compute PASS/FAIL"}
     # P5 thermal: not declared
-    R["P5_thermal"]={"verdict":"PENDING","source":"no in-register thermal file (SPEC rev-59 has no thermal fields; searched: 0 hits)"}
+    R["P5_thermal"]={"layer":"CONSTRUCTION","verdict":"PENDING","source":"no in-register thermal file (SPEC rev-59 has no thermal fields; searched: 0 hits)"}
     # P6 DFM min spacing: DRC clearance (read from the last DRC json if present)
-    R["P6_dfm_min_spacing"]={"source":"_shared/eda_core/drc_rules.json (frozen four) + kicad-cli pcb drc","note":"clearance violations from the chain DRC = 0 (K2_R824_*_drc.json)","verdict":"PASS"}
+    R["P6_dfm_min_spacing"]={"layer":"CONSTRUCTION","source":"_shared/eda_core/drc_rules.json (frozen four) + kicad-cli pcb drc","note":"clearance violations from the chain DRC = 0 (K2_R824_*_drc.json)","verdict":"PASS"}
     # P7 power/GND: decoupling proximity - needs a declared cap->load mapping
-    R["P7_power_gnd"]={"verdict":"PENDING","source":"SPEC pd.decoupling exists as a string (C67_C68_C72_via_to_plane) but no per-cap target mapping is machine-readable"}
+    R["P7_power_gnd"]={"layer":"CONSTRUCTION","verdict":"PENDING","source":"SPEC pd.decoupling exists as a string (C67_C68_C72_via_to_plane) but no per-cap target mapping is machine-readable"}
     ok=[v["verdict"] for v in R.values()]
     rep={"artifact":"k2_placement_gate_v1","board":a.board,"criteria":R,
          "verdict":"PASS" if all(v=="PASS" for v in ok) else ("FAIL" if "FAIL" in ok else "PENDING"),
+         "layer_split":"P1-P4 = SCHEME (framework certificate); P5-P7 + C16 + serpentine buildability = CONSTRUCTION",
          "gate_rule":"chain entry: k2_gen_v5 / k2_route_segment refuse to run unless this gate file is PRESENT and verdict==PASS"}
     if a.out: json.dump(rep,open(a.out,"w"),ensure_ascii=False,indent=1)
     print(json.dumps({"verdict":rep["verdict"],"P1":R["P1_highspeed_directness"]["verdict"],
