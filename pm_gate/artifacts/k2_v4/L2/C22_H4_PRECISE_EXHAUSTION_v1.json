@@ -1,0 +1,20 @@
+{
+ "artifact": "k2_c22_h4_precise_exhaustion_v1",
+ "ts": "2026-09-28",
+ "authority": "#K2-345 sec.2 (W2 construction window) · #K2-343 sec.4 W2 (H4 exact corner) · C22 (precise pour polygons)",
+ "tool": "tools/k2_shift_vias_out_of_keepout_v1.py (C22 upgraded)",
+ "what_changed": "pours are now modelled as PRECISE filled polygons (GetFilledPolysList outline points; point-in-polygon + segment-vs-edge intersection + 0.30 mm grow) instead of axis-aligned bounding boxes",
+ "board": "l14-equivalent + H1/H2/H4 holes and keepout squares moved (workdir C)",
+ "rect": "137.93,73.93,143.93,79.93 (H4 corner keepout square)",
+ "result": {
+  "vias_to_move": 2,
+  "vias_moved": 0,
+  "candidates_scanned": "8 directions x 0.10 mm x up to 4.0 mm",
+  "why": "no clear position inside 4.0 mm (both vias)",
+  "verdict": "PRECISE exhaustion of the local-push method family (the pour test is exact, not a bbox approximation)"
+ },
+ "control_run": "the same board refilled without the push gives items_not_allowed 4 (the 2 vias + 2 track pieces inside the new keepout) - i.e. leaving H4's keepout at the corner is not an option either",
+ "conclusion": "H4 needs the remaining fix path: RIP the two full In5 runs (PCIE_DN4_N / PCIE_DN5_P) and re-route them (a dedicated whole-run pass) - the local-push family is exhausted precisely, and only ONE method family has been exhausted, so per #K2-343 sec.3 the 'infeasible' wording is NOT used; this is a named method-family exhaustion.",
+ "status": "C22 DONE (tool verified: fix + rerun) · whole-run re-route NOT yet done (next window)",
+ "OWNER-ITEMS": 0
+}

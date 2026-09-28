@@ -47,24 +47,79 @@ def main():
             bb = pd.GetBoundingBox()
             pds.append((pd.GetNetCode(), set(pd.GetLayerSet().Seq()), P.ToMM(bb.GetLeft()), P.ToMM(bb.GetTop()),
                         P.ToMM(bb.GetRight()), P.ToMM(bb.GetBottom())))
-    # copper POURS (zones) are obstacles too: a via pushed into a foreign-net pour shorts it (measured:
-    # shorting_items 3 + tracks_crossing 1 in the pre-zone attempt)
-    zn = []
+    # C22: copper POURS (zones) as PRECISE POLYGONS (not bboxes) -- a via/segment pushed into a foreign-net
+    # pour shorts it; the bbox approximation both over- and under-rejects, so use the real filled outlines.
+    zpoly = []                                   # (netcode, layer, [(x,y), ...])
     for z in b.Zones():
         try:
             znet = z.GetNetCode()
-            lay = [L for L in z.GetLayerSet().Seq()]
+            lays = [L for L in z.GetLayerSet().Seq()]
         except Exception:
             continue
-        for L in lay:
+        for L in lays:
             try:
-                bb = z.GetFilledPolysList(L).BBox()
+                pl = z.GetFilledPolysList(L)
             except Exception:
                 continue
-            if bb.GetWidth() <= 0 or bb.GetHeight() <= 0:
+            try:
+                nout = pl.OutlineCount()
+            except Exception:
                 continue
-            zn.append((znet, L, P.ToMM(bb.GetLeft()), P.ToMM(bb.GetTop()),
-                       P.ToMM(bb.GetRight()), P.ToMM(bb.GetBottom())))
+            for i in range(nout):
+                try:
+                    c = pl.COutline(i)
+                    pts = [(P.ToMM(c.CPoint(j).x), P.ToMM(c.CPoint(j).y)) for j in range(c.PointCount())]
+                except Exception:
+                    continue
+                if len(pts) >= 3:
+                    zpoly.append((znet, L, pts))
+
+    def pt_in_poly(x, y, pts):
+        inside = False
+        n = len(pts)
+        for i in range(n):
+            x1, y1 = pts[i]
+            x2, y2 = pts[(i + 1) % n]
+            if (y1 > y) != (y2 > y):
+                xin = (x2 - x1) * (y - y1) / (y2 - y1) + x1
+                if x < xin:
+                    inside = not inside
+        return inside
+
+    def _ccw(a, b_, c):
+        return (c[1] - a[1]) * (b_[0] - a[0]) - (b_[1] - a[1]) * (c[0] - a[0])
+
+    def seg_int(a, b_, c, d_):
+        return (_ccw(a, b_, c) > 0) != (_ccw(a, b_, d_) > 0) and (_ccw(c, d_, a) > 0) != (_ccw(c, d_, b_) > 0)
+
+    def poly_hit(nc, span, x1, y1, x2, y2=None, grow=0.0):
+        """True iff the point/segment touches (or comes within grow of) a foreign-net pour polygon."""
+        for (zn2, zL, pts) in zpoly:
+            if zn2 == nc or zL not in span:
+                continue
+            if x2 is None:
+                if pt_in_poly(x1, y1, pts):
+                    return True
+                # distance to the outline
+                for i in range(len(pts)):
+                    px, py = pts[i]
+                    qx, qy = pts[(i + 1) % len(pts)]
+                    if d_pt_seg(x1, y1, px, py, qx, qy) < grow:
+                        return True
+                continue
+            for (px, py) in ((x1, y1), (x2, y2)):
+                if pt_in_poly(px, py, pts):
+                    return True
+            for i in range(len(pts)):
+                px, py = pts[i]
+                qx, qy = pts[(i + 1) % len(pts)]
+                if seg_int((x1, y1), (x2, y2), (px, py), (qx, qy)):
+                    return True
+                if min(d_pt_seg(x1, y1, px, py, qx, qy), d_pt_seg(x2, y2, px, py, qx, qy),
+                       d_pt_seg(px, py, x1, y1, x2, y2), d_pt_seg(qx, qy, x1, y1, x2, y2)) < grow:
+                    return True
+        return False
+
     X0, X1, Y0, Y1 = [P.ToMM(v) for v in (b.GetBoardEdgesBoundingBox().GetLeft(),
                                           b.GetBoardEdgesBoundingBox().GetRight(),
                                           b.GetBoardEdgesBoundingBox().GetTop(),
@@ -131,20 +186,13 @@ def main():
             dy = max(by0 - ny, 0, ny - by1)
             if math.hypot(dx, dy) - r < CLR:
                 return False
-        for (zn2, zL, zx0, zy0, zx1, zy1) in zn:
-            if zn2 == nc or zL not in span:
-                continue
-            if zx0 - CLR <= nx <= zx1 + CLR and zy0 - CLR <= ny <= zy1 + CLR:
-                return False
+        if poly_hit(nc, span, nx, ny, None, grow=CLR):
+            return False
         for (ax, ay) in attach:
             if not seg_clear(nc, span, nx, ny, ax, ay):
                 return False
-            for (zn2, zL, zx0, zy0, zx1, zy1) in zn:
-                if zn2 == nc or zL not in span:
-                    continue
-                for (px, py) in ((nx, ny), (ax, ay)):
-                    if zx0 - CLR <= px <= zx1 + CLR and zy0 - CLR <= py <= zy1 + CLR:
-                        return False
+            if poly_hit(nc, span, nx, ny, ax, ay, grow=CLR):
+                return False
         return True
 
     moves, reattached, scanned = [], 0, 0
