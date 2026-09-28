@@ -1,0 +1,105 @@
+{
+ "artifact": "k2_exam_a_doubleprime_conservation_certificate_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-383 sec.3.4: the authorised window FAILED => stop + produce the CONSERVATION-LEVEL certificate naming layer / resource / occupant / why no allocation is possible, and return the case to the planning layer.",
+ "verdict": "INFEASIBLE_WITHIN_THE_FROZEN_MEANS (not a capacity wall - a TOOL-POLICY wall)",
+ "run": {
+  "entry": "eda_eng exam A --run --chain wipe_resolve",
+  "run_count": "1/1",
+  "state": "GRADED",
+  "verdict": "FAIL",
+  "artifact": "L2/EDA_ENG_EXAM_A_DOUBLEPRIME_ATTEMPT2_VERDICT_v1.json"
+ },
+ "the_nine_rows": {
+  "C1_unconnected": 22,
+  "C2_geometry_total_vs_ref": "141 vs 148",
+  "C2_new_classes": [
+   "isolated_copper",
+   "solder_mask_bridge"
+  ],
+  "C2_excluded_new_classes": [
+   "lib_footprint_issues"
+  ],
+  "C3": "PASS",
+  "C4": 2751,
+  "C5": 1524,
+  "C6": 0,
+  "C7": 0,
+  "C9": "reported",
+  "geometry_class_delta": -7
+ },
+ "class_detail": {
+  "isolated_copper": {
+   "result": 3,
+   "ref": 0,
+   "delta": 3
+  },
+  "silk_edge_clearance": {
+   "result": 1,
+   "ref": 2,
+   "delta": -1
+  },
+  "silk_over_copper": {
+   "result": 35,
+   "ref": 37,
+   "delta": -2
+  },
+  "silk_overlap": {
+   "result": 14,
+   "ref": 15,
+   "delta": -1
+  },
+  "solder_mask_bridge": {
+   "result": 2,
+   "ref": 0,
+   "delta": 2
+  },
+  "track_dangling": {
+   "result": 12,
+   "ref": 1,
+   "delta": 11
+  },
+  "track_not_centered_on_via": {
+   "result": 19,
+   "ref": 32,
+   "delta": -13
+  },
+  "via_dangling": {
+   "result": 0,
+   "ref": 6,
+   "delta": -6
+  }
+ },
+ "the_four_questions": {
+  "which_layer": "the TOOL-POLICY layer (the in-register stitch/router's gap-closing policy), NOT the physical layer and NOT the judgement layer.",
+  "which_resource": "the in-register tool's fixed policy. Measured: the domain's free area is 93.5% (C1_CAPACITY_READING_v1.json) => space is NOT the constraint; the second bounded pass closed only 2 of 24 gaps (24 -> 22), and the copper geometry is already BETTER than the reference (141 vs 148, delta -7), yet 2 violation CLASSES appear that the reference lacks (isolated_copper, solder_mask_bridge).",
+  "who_occupies_it": "the frozen means themselves: no parameter changes, no search, no tool upgrades, no extra passes (this window's budget was exactly one run and the code was frozen before it). Within those means the residual is not closable: the tool never 'sees' the isolated copper it leaves or the mask bridges it creates.",
+  "why_no_allocation_is_possible": "a feasible witness would require either (a) a third/further stitching strategy (forbidden: that is a parameter/strategy search, and the capacity reading already shows space is not the issue), or (b) a placement/frame change (a PLANNING-layer decision), or (c) accepting the 2 new violation classes (a JUDGEMENT-table change - explicitly forbidden by #K2-379). None of the three is inside the frozen means, so NO allocation of the current means can reach PASS."
+ },
+ "return_to_planning": {
+  "required_by": "#K2-383 sec.3.4 + constitution sec.16",
+  "options": [
+   {
+    "id": "A",
+    "what": "improve the in-register tool's stitch policy (isolated-copper/mask-bridge awareness) - an ENGINE asset change",
+    "needs": "a NEW window with its own quota; the change must be additive and regression-locked"
+   },
+   {
+    "id": "B",
+    "what": "change the placement/frame so the residual pairs do not arise",
+    "needs": "planning-layer authority (the frame/members are frozen for this exam)"
+   },
+   {
+    "id": "C",
+    "what": "accept the two new classes",
+    "needs": "a judgement-table change - FORBIDDEN (#K2-379) and not recommended"
+   }
+  ]
+ },
+ "frozen": {
+  "board": "l14/rev-61 untouched; every board lives in /tmp",
+  "frozen_four": "4/4",
+  "aprime_witness_freeze": "maintained (no further run without a new authorisation)"
+ },
+ "OWNER-ITEMS": 0
+}
