@@ -80,7 +80,9 @@ def main(argv=None):
     p = sub.add_parser("relocate-relative",
                        help="#K2-372/373: exam A-prime - per-part displacement map + in-block reconnection (C1-C9)")
     p.add_argument("--rect", required=True, help="x0,y0,x1,y1 (mm) - the frozen frame")
-    p.add_argument("--moves", required=True, help="ref:dx:dy,ref:dx:dy,... (per-part offsets)")
+    p.add_argument("--moves", default=None, help="ref:dx:dy,ref:dx:dy,... (per-part offsets)")
+    p.add_argument("--from-placed", default=None,
+                   help="take the per-part offsets FROM this board (the gate-validated gen board) - alignment")
     p.add_argument("--members", required=True, help="comma-separated member refs")
     p.add_argument("--work", required=True)
     p.add_argument("--pitch", type=float, default=0.15)
@@ -250,11 +252,17 @@ def main(argv=None):
 
     if a.cmd == "relocate-relative":
         rect = [float(v) for v in a.rect.split(",")]
-        moves = []
-        for item in [x.strip() for x in a.moves.split(",") if x.strip()]:
-            r, dx, dy = item.split(":")
-            moves.append((r, float(dx), float(dy)))
         members = [x.strip() for x in a.members.split(",") if x.strip()]
+        if a.from_placed:
+            mv, unch, miss = block_mod.moves_from_board(REF_BOARD, a.from_placed, members)
+            if miss:
+                return _emit({"artifact": "eda_eng_relocate_relative", "error": "refs missing", "missing": miss}, None, 2)
+            moves = mv
+        else:
+            moves = []
+            for item in [x.strip() for x in (a.moves or "").split(",") if x.strip()]:
+                r, dx, dy = item.split(":")
+                moves.append((r, float(dx), float(dy)))
         r = regen_mod.relocate_relative_chain(rect, moves, a.work, members, pitch=a.pitch)
         return _emit(r, a.json_out, 0 if r.get("state") == "GRADED" and (r.get("M4") or {}).get("verdict") == "PASS" else 1)
 

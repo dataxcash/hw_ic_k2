@@ -808,6 +808,26 @@ def move_parts(board, rect, moves, out):
                     "fixed ports on dR"}
 
 
+def moves_from_board(base_board, placed_board, refs, tol=0.001):
+    """**口径对齐**（#K2-375 §四.3 secondary）：把**闸所验的那块板**（gen 生成板）的摆放**逐件读回来**，
+    作为 A′ 的逐件位移图 —— 这样「链上用的放置」与「闸验过的放置」**是同一个**（同板同读数）。
+    返回 (moves, unchanged, missing)；moves=[(ref,dx,dy), ...]（|Δ|>tol 者）。"""
+    P = _P()
+    def pos(bd):
+        b = P.LoadBoard(bd)
+        return {fp.GetReference(): [P.ToMM(fp.GetPosition().x), P.ToMM(fp.GetPosition().y)]
+                for fp in b.GetFootprints()}
+    a, c = pos(base_board), pos(placed_board)
+    moves, unch, miss = [], [], []
+    for r in refs:
+        if r not in a or r not in c:
+            miss.append(r); continue
+        dx = round(c[r][0] - a[r][0], 4); dy = round(c[r][1] - a[r][1], 4)
+        (moves if (abs(dx) > tol or abs(dy) > tol) else unch).append(
+            (r, dx, dy) if (abs(dx) > tol or abs(dy) > tol) else r)
+    return moves, unch, miss
+
+
 def geometry_equal(a, b):
     """两个 canonical Counter 的多重集差（正/负/总）。"""
     plus = sum((a - b).values()); minus = sum((b - a).values())

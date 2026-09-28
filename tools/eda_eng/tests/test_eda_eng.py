@@ -551,6 +551,13 @@ class T(unittest.TestCase):
         self.assertEqual(r["status"], "APPLIED")
         self.assertGreater(r["zones_refilled"], 0, "the batch path must actually refill zones")
 
+    def test_C34_moves_from_the_gate_board_are_read_back_verbatim(self):
+        """口径对齐（#K2-375 §四.3 secondary）：逐件位移图可由**闸验过的板**读回。同板对照 ⇒ 零位移。"""
+        mv, unch, miss = block.moves_from_board(REF, REF, ["U1", "U2", "U5"])
+        self.assertEqual(mv, [], "the same board must yield zero moves")
+        self.assertEqual(sorted(unch), ["U1", "U2", "U5"])
+        self.assertEqual(miss, [])
+
     def test_C34_c17v1_product_path_argv_is_a_per_part_map(self):
         """#K2-375 §四.3「抄成品」：A′ 的 argv 必须把**逐件位移图**交给 C17 v1（多个 `--moved`），
         并按产品的**既定格式**给受损域（`x0,y0,x1,y1`，非 JSON）。"""
