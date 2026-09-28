@@ -551,6 +551,23 @@ class T(unittest.TestCase):
         self.assertEqual(r["status"], "APPLIED")
         self.assertGreater(r["zones_refilled"], 0, "the batch path must actually refill zones")
 
+    def test_K371_planning_certificate_inputs_are_reproducible(self):
+        """#K2-371：方案层证书的输入（移动/固定分类 ＋ 冲突最小距）必须可复现，且几何摘要稳定。"""
+        regs = ["C73", "C84", "C85", "C86", "C87", "C88", "C90", "D2", "E2", "J12", "J13",
+                "J6", "J9", "L1", "R40", "R41", "U1", "U2", "U4", "U5"]
+        rect = [22.95, 32.95, 46.50, 62.50]
+        mv, fx = block.classify_primitives(REF, rect, regs)
+        self.assertEqual(len(mv), 718, "the moved set of the frozen scenario must be reproducible")
+        self.assertEqual(len(fx), 7055, "the fixed set of the frozen scenario must be reproducible")
+        conf = block.clearance_conflicts(REF, rect, regs, [3.5, 3.5])
+        self.assertGreater(conf["n_conflicts_shown"], 0, "the frozen delta must collide")
+        self.assertEqual(conf["min_pair_mm"], 0.0, "the collision is a ZERO-distance overlap")
+        d1 = block.geometric_digest(REF)
+        d2 = block.geometric_digest(REF)
+        self.assertEqual(d1["sha256_16"], d2["sha256_16"], "the geometric digest must be stable")
+        self.assertEqual(d1["n_segments"], 6338)
+        self.assertEqual(d1["n_vias"], 736)
+
     def test_K371_prim_dist_is_exact_for_every_shape_pair(self):
         """#K2-371 sec.3：方案层净距冲突判定要**真形**逐对精确（线段/有向矩形/圆 全组合）。"""
         seg = {"a": [0.0, 0.0], "b": [10.0, 0.0], "half_w": 0.1}

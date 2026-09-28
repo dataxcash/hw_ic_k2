@@ -1,0 +1,364 @@
+{
+ "artifact": "k2_examA_prime_planning_regression_v1",
+ "ts": "2026-09-29",
+ "exam": "A-prime",
+ "eco": "ECO-K2-0004",
+ "authority": "#K2-372 sec.2 (exam A-prime restated). The same #K2-371 sec.3 discipline applies: a planning-layer regression artifact with a BINARY verdict, no third state.",
+ "verdict": "LEGAL_WITNESS_AVAILABLE",
+ "verdict_plain": "a gate-legal IN-BLOCK RELATIVE REARRANGEMENT of exam A-prime's region EXISTS. The frozen exam A failed because a RIGID translation was required; once the family becomes 'adjust relative positions inside the block' (the owner model's point 2), the mechanical gate admits a per-part arrangement with zero new violations. This is the (jia) branch.",
+ "element_1_cause_of_death": "(closed) the frozen exam A died because a single rigid delta forced the WHOLE block to sweep as one body into fixed copper. A-prime removes the single delta.",
+ "element_2_proven_facts": [
+  {
+   "id": "G1",
+   "claim": "an explicit per-part arrangement passes the mechanical gate",
+   "reading": {
+    "moves": [
+     {
+      "ref": "U1",
+      "delta_mm": [
+       1.5,
+       1.5
+      ]
+     },
+     {
+      "ref": "J13",
+      "delta_mm": [
+       4.0,
+       4.0
+      ]
+     },
+     {
+      "ref": "J9",
+      "delta_mm": [
+       4.0,
+       4.0
+      ]
+     },
+     {
+      "ref": "J12",
+      "delta_mm": [
+       4.0,
+       4.0
+      ]
+     },
+     {
+      "ref": "J6",
+      "delta_mm": [
+       4.0,
+       4.0
+      ]
+     },
+     {
+      "ref": "E2",
+      "delta_mm": [
+       3.5,
+       3.5
+      ]
+     },
+     {
+      "ref": "U2",
+      "delta_mm": [
+       4.0,
+       4.0
+      ]
+     },
+     {
+      "ref": "L1",
+      "delta_mm": [
+       4.0,
+       4.0
+      ]
+     },
+     {
+      "ref": "C84",
+      "delta_mm": [
+       4.0,
+       4.0
+      ]
+     },
+     {
+      "ref": "U5",
+      "delta_mm": [
+       4.0,
+       4.0
+      ]
+     },
+     {
+      "ref": "U4",
+      "delta_mm": [
+       4.0,
+       4.0
+      ]
+     },
+     {
+      "ref": "C73",
+      "delta_mm": [
+       3.5,
+       3.5
+      ]
+     },
+     {
+      "ref": "C88",
+      "delta_mm": [
+       4.0,
+       4.0
+      ]
+     },
+     {
+      "ref": "C86",
+      "delta_mm": [
+       4.0,
+       4.0
+      ]
+     },
+     {
+      "ref": "R40",
+      "delta_mm": [
+       4.0,
+       4.0
+      ]
+     },
+     {
+      "ref": "R41",
+      "delta_mm": [
+       4.0,
+       4.0
+      ]
+     },
+     {
+      "ref": "C90",
+      "delta_mm": [
+       1.5,
+       1.5
+      ]
+     },
+     {
+      "ref": "C85",
+      "delta_mm": [
+       4.0,
+       4.0
+      ]
+     },
+     {
+      "ref": "C87",
+      "delta_mm": [
+       4.0,
+       4.0
+      ]
+     }
+    ],
+    "n_moved": "19 of 25",
+    "probes": 39,
+    "gate": "baseline-relative mechanical probe (gen -> crtyd -> DRC): gen_exit 0, zero NEW courtyards_overlap / shorting_items / clearance / hole_clearance (baseline courtyards_overlap = 2)",
+    "note": "the 6 parts that do not move are already at the frame's SE edge - they simply have no admissible further step"
+   }
+  },
+  {
+   "id": "G2",
+   "claim": "the frame passes its own acceptance test with the member set the frame forces",
+   "reading": {
+    "frame": [
+     22.95,
+     32.95,
+     51.5,
+     66.5
+    ],
+    "members": 25,
+    "FOREIGN_INSIDE": 0,
+    "FOREIGN_PADS_INSIDE": 0,
+    "mech_no_net_inside": [
+     "H3"
+    ],
+    "note": "#K2-372 sec.2.1 option A applied: the 5 netted components inside the frame join the member set"
+   }
+  },
+  {
+   "id": "G3",
+   "claim": "the N5 DIRECTION is honoured, the N5 LIMIT is not reachable at this scope",
+   "reading": {
+    "N5_before_pct": {
+     "NE": 29.3,
+     "NW": 46.81,
+     "SE": 9.87,
+     "SW": 14.02
+    },
+    "N5_after_pct": {
+     "NE": 29.3,
+     "NW": 46.14,
+     "SE": 9.87,
+     "SW": 14.69
+    },
+    "limit_pct": 37.5,
+    "delta_NW_pp": -0.67,
+    "bound": {
+     "members_area_abs": {
+      "NE": 0.0,
+      "NW": 105.06,
+      "SE": 0.0,
+      "SW": 15.84
+     },
+     "NW_member_share_pct": 84.08,
+     "NW_pct_if_the_region_left_NW": 7.45,
+     "n5_achievable_by_this_region": true
+    },
+    "note": "the region owns 84.1% of the NW device area, so N5 WOULD fall to 7.45% if the region left the NW quadrant - but the frozen frame admits <=4mm SE, which keeps the region in NW (the quadrant boundary is the board centre, x=83.00/y=56.00). N5-as-a-LIMIT therefore needs either ~33mm east / +5..22mm south (outside the frame) or a board-level re-layout. ADJUDICATOR ITEM."
+   }
+  }
+ ],
+ "element_3_corrected_frame_and_delta": {
+  "status": "DELIVERED - the witness IS the corrected per-part placement",
+  "frame_rect": [
+   22.95,
+   32.95,
+   51.5,
+   66.5
+  ],
+  "members": 25,
+  "per_part_offsets_mm": [
+   {
+    "ref": "U1",
+    "delta_mm": [
+     1.5,
+     1.5
+    ]
+   },
+   {
+    "ref": "J13",
+    "delta_mm": [
+     4.0,
+     4.0
+    ]
+   },
+   {
+    "ref": "J9",
+    "delta_mm": [
+     4.0,
+     4.0
+    ]
+   },
+   {
+    "ref": "J12",
+    "delta_mm": [
+     4.0,
+     4.0
+    ]
+   },
+   {
+    "ref": "J6",
+    "delta_mm": [
+     4.0,
+     4.0
+    ]
+   },
+   {
+    "ref": "E2",
+    "delta_mm": [
+     3.5,
+     3.5
+    ]
+   },
+   {
+    "ref": "U2",
+    "delta_mm": [
+     4.0,
+     4.0
+    ]
+   },
+   {
+    "ref": "L1",
+    "delta_mm": [
+     4.0,
+     4.0
+    ]
+   },
+   {
+    "ref": "C84",
+    "delta_mm": [
+     4.0,
+     4.0
+    ]
+   },
+   {
+    "ref": "U5",
+    "delta_mm": [
+     4.0,
+     4.0
+    ]
+   },
+   {
+    "ref": "U4",
+    "delta_mm": [
+     4.0,
+     4.0
+    ]
+   },
+   {
+    "ref": "C73",
+    "delta_mm": [
+     3.5,
+     3.5
+    ]
+   },
+   {
+    "ref": "C88",
+    "delta_mm": [
+     4.0,
+     4.0
+    ]
+   },
+   {
+    "ref": "C86",
+    "delta_mm": [
+     4.0,
+     4.0
+    ]
+   },
+   {
+    "ref": "R40",
+    "delta_mm": [
+     4.0,
+     4.0
+    ]
+   },
+   {
+    "ref": "R41",
+    "delta_mm": [
+     4.0,
+     4.0
+    ]
+   },
+   {
+    "ref": "C90",
+    "delta_mm": [
+     1.5,
+     1.5
+    ]
+   },
+   {
+    "ref": "C85",
+    "delta_mm": [
+     4.0,
+     4.0
+    ]
+   },
+   {
+    "ref": "C87",
+    "delta_mm": [
+     4.0,
+     4.0
+    ]
+   }
+  ],
+  "conservation": "demand = zero NEW mechanical violations (met: 0) AND N5 <= 37.5% (NOT met: 46.14%). Capacity: the frame admits <=4mm SE per part; the N5 limit needs the region out of the NW quadrant. => legality capacity >= legality demand; N5-limit capacity < N5-limit demand."
+ },
+ "element_4_buildability": {
+  "value": "no_move_pending_per_part_routing",
+  "meaning": "the PLACEMENT is buildable (gate-legal); the COPPER is not yet built: the BLOCK chain must accept a PER-PART displacement map (step-1 classify-and-move by part, M1/M2 crossing under a per-part map) - a named engine work item, and the only reason the routing run is not part of this window."
+ },
+ "evidence_refs": {
+  "witness_probe": "regen.rearrange_probe (39 probes, 82s, kmax=8)",
+  "n5_bound": "computed over the board footprint areas",
+  "frozen_certificate": "L2/EXAM_A_PLANNING_REGRESSION_v1.json (the closed exam A)"
+ },
+ "OWNER-ITEMS": 0
+}

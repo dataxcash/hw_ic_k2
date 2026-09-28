@@ -249,6 +249,94 @@ def mech_probe(refs, delta_mm, work, tag):
     return {"gen_exit": rc, "mechanical_violations": bad}
 
 
+def mech_probe_moves(moves, work, tag, return_board=False):
+    """机械探针（gen -> crtyd -> DRC）**逐件位移**版（#K2-372 §二.1：目标相对位**逐件**由闸出）。
+    moves = [(ref, dx, dy), ...]；返回 {gen_exit, mechanical_violations, [board]}。"""
+    gw = os.path.join(work, "mq_" + tag)
+    shutil.rmtree(gw, ignore_errors=True); os.makedirs(gw, exist_ok=True)
+    sh = shadow_mod.build(os.path.join(gw, "shadow"))
+    by_ref = {}
+    for r, dx, dy in moves:
+        by_ref.setdefault((round(dx, 4), round(dy, 4)), []).append(r)
+    for (dx, dy), refs in by_ref.items():
+        shadow_mod.edit_placement_at(sh["shadow_root"], refs, [dx, dy])
+    gpcb = os.path.join(gw, "placed.kicad_pcb")
+    env = {**os.environ, "PM_GATE_PROJECT_ROOT": sh["shadow_root"], "K2_OUT_PCB": gpcb,
+           "K2_OUT_JSON": os.path.join(gw, "placed.json")}
+    rc = subprocess.run([_host(), os.path.join(ROOT, "tools", "k2_gen_v5.py")], cwd=ROOT,
+                        capture_output=True, text=True, env=_host_env(env), timeout=900).returncode
+    if rc != 0:
+        return {"gen_exit": rc, "mechanical_violations": {}, "gen_failed": True}
+    pk = os.path.join(gw, "placed_crtd.kicad_pcb")
+    subprocess.run([_py(), os.path.join(ROOT, "tools", "k2_p4_build_l9_v1.py"), "--in", gpcb, "--out", pk,
+                    "--stages", "crtyd"], capture_output=True, timeout=1800)
+    gj = os.path.join(gw, "placed_drc.json")
+    subprocess.run([_cli(), "pcb", "drc", "--format", "json", "--severity-all", "-o", gj, pk],
+                   capture_output=True, timeout=900)
+    bad = {}
+    if os.path.isfile(gj):
+        for v in json.load(open(gj, encoding="utf-8")).get("violations", []):
+            ty = v.get("type")
+            if ty in ("courtyards_overlap", "shorting_items", "clearance", "hole_clearance"):
+                bad[ty] = bad.get(ty, 0) + 1
+    out = {"gen_exit": rc, "mechanical_violations": bad}
+    if return_board:
+        out["board"] = gpcb
+    return out
+
+
+def rearrange_probe(board, rect, members, work, kmax=8, order=None, return_board=False):
+    """**A′（#K2-372 §二.1）目标相对位由闸逐件出**：N5 方向（SE，`(k*0.5, k*0.5)` 格点）· 逐件降序最大步
+    优先 · 确定性序（默认：焊盘面积降序，面积大者先动 —— N5 是**面积**均衡规则）；逐件过
+    `mech_probe_moves`（基线相对）⇒ 目标相对位 = 闸通过的逐件位移集合。"""
+    import pcbnew as P
+    bb_area = {}
+    b = P.LoadBoard(board)
+    for fp in b.GetFootprints():
+        xs, ys, ar = [], [], 0.0
+        for p in fp.Pads():
+            bx = p.GetBoundingBox()
+            x0, y0, x1, y1 = (P.ToMM(bx.GetX()), P.ToMM(bx.GetY()), P.ToMM(bx.GetRight()), P.ToMM(bx.GetBottom()))
+            xs += [x0, x1]; ys += [y0, y1]; ar += max(0.0, (x1 - x0) * (y1 - y0))
+        if xs:
+            bb_area[fp.GetReference()] = {"bbox": [min(xs), min(ys), max(xs), max(ys)], "area": ar}
+    refs = list(members)
+    if order is None:
+        order = sorted(refs, key=lambda r: (-bb_area.get(r, {"area": 0.0})["area"], r))
+    base = mech_probe_moves([], work, "base")
+    accepted, probes, rows = [], 0, []
+    for r in order:
+        got = None
+        for k in range(kmax, 0, -1):
+            d = (round(k * 0.5, 4), round(k * 0.5, 4))
+            bx = bb_area.get(r, {}).get("bbox")
+            if bx is None:
+                continue
+            if bx[0] + d[0] < rect[0] or bx[1] + d[1] < rect[1] or bx[2] + d[0] > rect[2] or bx[3] + d[1] > rect[3]:
+                continue                                   # 出框者不试（框是冻结参数）
+            trial = accepted + [(r, d[0], d[1])]
+            s = mech_probe_moves(trial, work, "p_%s_k%d" % (r, k)); probes += 1
+            nb = {x: s["mechanical_violations"].get(x, 0) - base["mechanical_violations"].get(x, 0)
+                  for x in set(base["mechanical_violations"]) | set(s["mechanical_violations"])}
+            nb = {x: v for x, v in nb.items() if v > 0}
+            if s.get("gen_exit") == 0 and not nb:
+                got = {"ref": r, "delta_mm": list(d), "k": k}
+                accepted.append((r, d[0], d[1]))
+                break
+        rows.append({"ref": r, "accepted": got})
+    if return_board:
+        s2 = mech_probe_moves(accepted, work, "witness", return_board=True)
+    else:
+        s2 = None
+    return {"artifact": "eda_eng_rearrange_probe", "board": board, "rect": list(rect), "members": refs,
+            "witness_board": (s2 or {}).get("board"),
+            "order": order, "baseline": base.get("mechanical_violations"),
+            "moves": [{"ref": r, "delta_mm": [dx, dy]} for (r, dx, dy) in accepted],
+            "n_moved": len(accepted), "n_members": len(refs), "probes": probes, "rows": rows,
+            "rule": "#K2-372 sec.2.1: the per-part target offsets come from the GATE (N5 direction, SE lattice, "
+                    "largest admissible step first, baseline-relative mechanical probe)"}
+
+
 def region_select(refs, candidates, work):
     """#K2-363 sec.2.1: 幅值**由闸选** —— 逐候选过机械探针（基线相对），取**首个合法**者。"""
     base = mech_probe(refs, [0.0, 0.0], work, "base")

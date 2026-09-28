@@ -1,0 +1,239 @@
+{
+ "artifact": "k2_examA_prime_scenario_v1",
+ "ts": "2026-09-29",
+ "exam": "A-prime",
+ "eco": "ECO-K2-0004",
+ "authority": "#K2-372 sec.2: exam A-prime is RESTATED for the BLOCK in-block RELATIVE-REARRANGEMENT family (owner BLOCK model point 2: only relative positions inside the block are adjusted). No single rigid delta.",
+ "scenario": {
+  "kind": "IN-BLOCK RELATIVE REARRANGEMENT (per-part offsets; relative positions change)",
+  "frame_rect": [
+   22.95,
+   32.95,
+   51.5,
+   66.5
+  ],
+  "frame_basis": "#K2-372 sec.2.1 (R974 sec.1.5 value); the frame ACCEPTANCE test is FOREIGN_INSIDE == 0 AND FOREIGN_PADS_INSIDE == 0",
+  "members": [
+   "C73",
+   "C84",
+   "C85",
+   "C86",
+   "C87",
+   "C88",
+   "C90",
+   "D1",
+   "D2",
+   "E2",
+   "J11",
+   "J12",
+   "J13",
+   "J6",
+   "J9",
+   "L1",
+   "R1",
+   "R21",
+   "R28",
+   "R40",
+   "R41",
+   "U1",
+   "U2",
+   "U4",
+   "U5"
+  ],
+  "n_members": 25,
+  "members_basis": "the 20 measured region parts PLUS the 5 netted components the frame contains (D1/J11/R1/R21/R28) - #K2-372 sec.2.1 option A: 'if legality requires, neighbours join the member set'. Frame acceptance re-verified with this set: PASS (FOREIGN_INSIDE 0 / FOREIGN_PADS_INSIDE 0); H3 (mounting hole, no nets) stays a board feature, never a member.",
+  "direction": "N5 (toward the emptiest quadrant, SE); NOT waived (#K2-372 sec.2.2 rejects option B)",
+  "target_derivation": "gate-driven PER PART: lattice (k*0.5, k*0.5) k=1..8, largest admissible step first, deterministic order = pad-area descending (N5 is an AREA rule), each step passing the baseline-relative mechanical probe (gen -> crtyd -> DRC)",
+  "judging": "C1-C7 (C6 outside-envelope diff 0, C7 the 16 PCIE_DN* untouched) + the canonical geometric digest in the receipt",
+  "status": "SCENARIO ESTABLISHED; the PLANNING WITNESS is delivered (see L2/EXAM_A_PRIME_PLANNING_REGRESSION_v1.json). The ROUTING run still requires the BLOCK chain to accept a PER-PART displacement map (named engine work)."
+ },
+ "witness": {
+  "moves": [
+   {
+    "ref": "U1",
+    "delta_mm": [
+     1.5,
+     1.5
+    ]
+   },
+   {
+    "ref": "J13",
+    "delta_mm": [
+     4.0,
+     4.0
+    ]
+   },
+   {
+    "ref": "J9",
+    "delta_mm": [
+     4.0,
+     4.0
+    ]
+   },
+   {
+    "ref": "J12",
+    "delta_mm": [
+     4.0,
+     4.0
+    ]
+   },
+   {
+    "ref": "J6",
+    "delta_mm": [
+     4.0,
+     4.0
+    ]
+   },
+   {
+    "ref": "E2",
+    "delta_mm": [
+     3.5,
+     3.5
+    ]
+   },
+   {
+    "ref": "U2",
+    "delta_mm": [
+     4.0,
+     4.0
+    ]
+   },
+   {
+    "ref": "L1",
+    "delta_mm": [
+     4.0,
+     4.0
+    ]
+   },
+   {
+    "ref": "C84",
+    "delta_mm": [
+     4.0,
+     4.0
+    ]
+   },
+   {
+    "ref": "U5",
+    "delta_mm": [
+     4.0,
+     4.0
+    ]
+   },
+   {
+    "ref": "U4",
+    "delta_mm": [
+     4.0,
+     4.0
+    ]
+   },
+   {
+    "ref": "C73",
+    "delta_mm": [
+     3.5,
+     3.5
+    ]
+   },
+   {
+    "ref": "C88",
+    "delta_mm": [
+     4.0,
+     4.0
+    ]
+   },
+   {
+    "ref": "C86",
+    "delta_mm": [
+     4.0,
+     4.0
+    ]
+   },
+   {
+    "ref": "R40",
+    "delta_mm": [
+     4.0,
+     4.0
+    ]
+   },
+   {
+    "ref": "R41",
+    "delta_mm": [
+     4.0,
+     4.0
+    ]
+   },
+   {
+    "ref": "C90",
+    "delta_mm": [
+     1.5,
+     1.5
+    ]
+   },
+   {
+    "ref": "C85",
+    "delta_mm": [
+     4.0,
+     4.0
+    ]
+   },
+   {
+    "ref": "C87",
+    "delta_mm": [
+     4.0,
+     4.0
+    ]
+   }
+  ],
+  "n_moved": 19,
+  "n_members": 25,
+  "probes": 39,
+  "gate_baseline": {
+   "courtyards_overlap": 2
+  },
+  "gate_result": "zero NEW mechanical violations vs baseline",
+  "frame_acceptance": {
+   "ok": true,
+   "FOREIGN_INSIDE": 0,
+   "FOREIGN_PADS_INSIDE": 0
+  }
+ },
+ "objective_reading": {
+  "N5_before": {
+   "NE": 29.3,
+   "NW": 46.81,
+   "SE": 9.87,
+   "SW": 14.02
+  },
+  "N5_after": {
+   "NE": 29.3,
+   "NW": 46.14,
+   "SE": 9.87,
+   "SW": 14.69
+  },
+  "N5_limit_pct": 37.5,
+  "delta_NW_pp": -0.67,
+  "conservation_bound": {
+   "centre": [
+    83.0,
+    56.0
+   ],
+   "quadrant_area_pct": {
+    "NE": 29.3,
+    "NW": 46.81,
+    "SE": 9.87,
+    "SW": 14.02
+   },
+   "members_area_abs": {
+    "NE": 0.0,
+    "NW": 105.06,
+    "SE": 0.0,
+    "SW": 15.84
+   },
+   "nw_member_share_pct": 84.08,
+   "nw_pct_without_member_nw_area": 7.45,
+   "n5_limit_pct": 37.5,
+   "n5_achievable_by_this_region": true
+  },
+  "finding": "the witness is LEGAL but the N5 LIMIT is NOT reached: moving <=4mm SE within the frozen frame changes NW 46.81% -> 46.14%. The bound shows the members own 84.1% of the NW area, so N5 would in principle fall to 7.45% IF the region left the NW quadrant - but that needs a displacement of ~33mm east / +5..22mm south, far outside the frozen frame. => 'N5 as a DIRECTION' is satisfied by the witness; 'N5 as a LIMIT' is NOT reachable at this scope and is an ADJUDICATOR item."
+ },
+ "OWNER-ITEMS": 0
+}
