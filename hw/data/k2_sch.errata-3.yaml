@@ -3599,12 +3599,10 @@ nets:
   - E2/SDA
   - R32/A
   I2C2_SCL:
-  - J11/EC_SCL
   - U1/I2C2_SCL
   - R33/A
   - U6/SCL
   I2C2_SDA:
-  - J11/EC_SDA
   - U1/I2C2_SDA
   - R34/A
   - U6/SDA
@@ -3692,7 +3690,6 @@ nets:
   - J4/P3V3_AUX
   - U1/3V3_AUX_SENSE
   - R1/B
-  - J11/EC_3V3
   - C90/A
   MCU_VDD:
   - U1/VDD
@@ -4165,6 +4162,7 @@ sheets:
   - ref: J11
     symbol: HEADER_4PIN_EC
     card: '2'
+    nc: [EC_SCL, EC_SDA, EC_3V3]
   - ref: R28
     symbol: R_10K
     card: both
