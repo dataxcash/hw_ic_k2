@@ -1039,11 +1039,17 @@ def relocate_relative_c17v1(rect, moves, work, members, clearance=None, report_e
     argv = c17v1_argv(B0, moves, ref_drc, os.path.join(work, "c17v1"), final, rep)
     r = subprocess.run([_py(), *argv], cwd=ROOT, capture_output=True, text=True, timeout=7200)
     chain = [{"cmd": "k2_reroute_affected_v2.py " + " ".join(argv[1:]), "exit": r.returncode}]
-    if r.returncode != 0 or not os.path.isfile(final):
+    if not os.path.isfile(final):
         return {"state": "C17V1_FAILED", "chain": chain, "exit": r.returncode, "tail": (r.stderr or r.stdout)[-400:]}
+    # 产品的自验收若不过（rc != 0），仍**按 C1–C9 判卷已产出的板**（否则无具名判定）；产品自己的 DRC 优先复用
     dj = os.path.join(work, "c17v1_drc.json")
-    subprocess.run([_cli_bin(), "pcb", "drc", "--format", "json", "--severity-all", "-o", dj, final],
-                   capture_output=True, timeout=7200)
+    prod_drc = os.path.join(work, "c17v1", "final_drc.json")
+    if not os.path.isfile(dj):
+        if os.path.isfile(prod_drc):
+            shutil.copy2(prod_drc, dj)
+        else:
+            subprocess.run([_cli_bin(), "pcb", "drc", "--format", "json", "--severity-all", "-o", dj, final],
+                           capture_output=True, timeout=7200)
     c6 = _blk.geometry_equal(_blk.outside_geometry(final, rect), _blk.outside_geometry(B0, rect))
     c7 = _blk.geometry_equal(_blk.net_geometry(final, HS_FANOUT_NETS), _blk.net_geometry(B0, HS_FANOUT_NETS))
     extra = {"C6_outside_copper_unchanged": {"diff": c6["diff"], "pass": c6["equal"],
