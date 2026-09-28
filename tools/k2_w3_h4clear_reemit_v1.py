@@ -36,7 +36,7 @@ TOL = 1e-6            # mm; 1 nm - far below any DRC/manufacturing meaning (node
 X_MAX = KEEPOUT_X0 - VIA_R - MARGIN
 # plan: net -> new column_x (uniform 0.70 pitch, deepest four east columns; all <= X_MAX, order preserved)
 PLAN = {"PCIE_DN4_N": 137.60, "PCIE_DN5_P": 136.90, "PCIE_DN6_N": 136.20, "PCIE_DN7_P": 135.50}
-PAD_WEST = 135.0     # the pad of the east column
+PAD_WEST = 135.0     # the pad of the east column (the column may land east OR west of it)
 
 
 def sha16(p):
@@ -72,12 +72,15 @@ def reemit(d):
         old_x = float(row["column_x"])
         assert abs(old_x - row["landing"][0]) < 1e-9
         assert new_x <= X_MAX + 1e-9, (net, new_x, X_MAX)
-        assert new_x > PAD_WEST, (net, new_x)
         pg = pages[page_id]
         nd = pg["nodes"][pol]
         lane_y = next(n[1] for n in nd if n[2] == "In5.Cu")
         idx = [i for i, n in enumerate(nd) if abs(n[0] - old_x) < 1e-9]
         assert idx, (net, old_x)
+        # the column may step WEST past the pad (joint solve): then the F.Cu landing run goes east and LENGTHENS.
+        # only require the In5 leg to stay long enough to reach the new column.
+        via1_x = next(n[0] for n in nd if n[2] == "In5.Cu")
+        assert new_x > via1_x + 1.0, (net, new_x, via1_x)
         old_f = d2(nd[-2], nd[-1])                        # F.Cu landing run (column top -> pad)
         new_f = math.dist((new_x, nd[-2][1]), nd[-1][:2])
         loss = (old_x - new_x) + (old_f - new_f)
@@ -203,6 +206,12 @@ def certify(src, out):
             if nm in PLAN:
                 if not (r["column_x"] <= X_MAX + 1e-9):
                     cert["columns_ok"] = False
+    # per-polarity monotone x-order (the IN-REGISTER rule: m13_v57_f13_r1_pair_coupling_v1_1 constraints.x_order_rule)
+    for pol in ("N", "P"):
+        seq = [(k, v["column_x"]) for k, v in d["layers"]["R3"]["assignment"].items()
+               if k.startswith("J2|PCIE_DN") and k.endswith("_" + pol)]
+        seq = [x for _, x in sorted(seq, key=lambda kv: kv[0])]
+        cert.setdefault("per_polarity_monotone", {})[pol] = all(seq[i] > seq[i + 1] for i in range(len(seq) - 1))
     xs = sorted([d["layers"]["R3"]["assignment"]["J2|" + n]["column_x"] for n in PLAN], reverse=True)
     cert["new_columns"] = xs
     cert["min_pitch_mm"] = round(min(xs[i] - xs[i + 1] for i in range(len(xs) - 1)), 6)
@@ -216,7 +225,12 @@ def main():
     ap.add_argument("--src", default=SRC_DEFAULT)
     ap.add_argument("--out", default=OUT_DEFAULT)
     ap.add_argument("--report", default=REP_DEFAULT)
+    ap.add_argument("--plan", default=None, help="JSON file: {net: new_column_x} (joint re-solve plan)")
+    ap.add_argument("--rule-provenance", default=None, help="rule provenance declaration (sec.3.5 gate 1)")
     a = ap.parse_args()
+    if a.plan:
+        global PLAN
+        PLAN = {k: float(v) for k, v in json.load(open(a.plan, encoding="utf-8")).items()}
     src, out = a.src, a.out
     s = load(src)
     assert s.get("status") == "EMITTED" and s.get("verdict") == "FEASIBLE_ALL", "canonical drawing not FEASIBLE_ALL"
@@ -232,12 +246,15 @@ def main():
                    "pad-east polarity of the same page restores the pair length EXACTLY by shrinking its In5 serpentine "
                    "amplitude (n_edges * sqrt(s^2+a^2) - loss); no search, no iteration, endpoints untouched."),
         "canonical_untouched": True}
+    if a.rule_provenance:
+        s["_h4clear_reemission"]["rule_provenance_declaration"] = json.load(open(a.rule_provenance, encoding="utf-8"))
     json.dump(s, open(out, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     cert = certify(src, out)
     verdict = (cert["endpoints_unchanged"] and cert["untouched_pages_identical"]
                and not cert["pair_delta_violations"]
                and all(v["equal"] for v in cert.get("touched_pair_shortening", {}).values())
-               and all(cert["no_copper_in_keepout"].values()) and cert["columns_ok"])
+               and all(cert["no_copper_in_keepout"].values()) and cert["columns_ok"]
+               and all(cert.get("per_polarity_monotone", {}).values()))
     rep_out = {"artifact": "k2_w3_h4clear_reemission_report_v1", "ts": "2026-09-28",
                "authority": "#K2-351 sec.4(a)", "source_sha16": sha16(src), "out_sha16": sha16(out),
                "verdict": "CERTIFIED" if verdict else "FAIL",

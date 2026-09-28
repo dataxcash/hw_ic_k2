@@ -1,0 +1,476 @@
+{
+ "artifact": "k2_w3_h4clear_reemission_report_v1",
+ "ts": "2026-09-28",
+ "authority": "#K2-351 sec.4(a)",
+ "source_sha16": "60cbd331836e52b7",
+ "out_sha16": "6c022e3bd9d5fbdb",
+ "verdict": "FAIL",
+ "constraint": {
+  "keepout_square": [
+   137.9287,
+   73.9287,
+   143.9287,
+   79.9287
+  ],
+  "via_radius_mm": 0.175,
+  "margin_mm": 0.1,
+  "x_max_allowed": 137.6537
+ },
+ "pairs": {
+  "J2|PCIE_DN4_N": {
+   "page": "PCIE_DN4/input",
+   "moved_pol": "N",
+   "partner_pol": "P",
+   "old_column_x": 139.48,
+   "new_column_x": 134.4,
+   "shift_mm": 5.08,
+   "old_landing_run_mm": 4.48697,
+   "new_landing_run_mm": 0.65,
+   "length_loss_mm": 8.91697,
+   "serpentine": {
+    "n_edges": 54,
+    "x_step_mm": 0.196675,
+    "amp_old_mm": 0.34,
+    "amp_new_mm": 0.114659,
+    "extra_old_mm": 10.59,
+    "extra_new_mm": 1.67303
+   },
+   "ideal_len_moved": 76.368005494,
+   "ideal_len_partner": 76.368005206
+  },
+  "J2|PCIE_DN5_P": {
+   "page": "PCIE_DN5/input",
+   "moved_pol": "P",
+   "partner_pol": "N",
+   "old_column_x": 138.32,
+   "new_column_x": 135.5,
+   "shift_mm": 2.82,
+   "old_landing_run_mm": 3.329399,
+   "new_landing_run_mm": 0.559017,
+   "length_loss_mm": 5.590382,
+   "serpentine": {
+    "n_edges": 62,
+    "x_step_mm": 0.191839,
+    "amp_old_mm": 0.34,
+    "amp_new_mm": 0.230932,
+    "extra_old_mm": 12.31,
+    "extra_new_mm": 6.719618
+   },
+   "ideal_len_moved": 80.195022489,
+   "ideal_len_partner": 80.195022902
+  },
+  "J2|PCIE_DN6_N": {
+   "page": "PCIE_DN6/input",
+   "moved_pol": "N",
+   "partner_pol": "P",
+   "old_column_x": 137.16,
+   "new_column_x": 133.4,
+   "shift_mm": 3.76,
+   "old_landing_run_mm": 2.174419,
+   "new_landing_run_mm": 1.619413,
+   "length_loss_mm": 4.315006,
+   "serpentine": {
+    "n_edges": 48,
+    "x_step_mm": 0.202762,
+    "amp_old_mm": 0.34,
+    "amp_new_mm": 0.229144,
+    "extra_old_mm": 9.269139,
+    "extra_new_mm": 4.954133
+   },
+   "ideal_len_moved": 77.639413474,
+   "ideal_len_partner": 77.660995446
+  },
+  "J2|PCIE_DN7_P": {
+   "page": "PCIE_DN7/input",
+   "moved_pol": "P",
+   "partner_pol": "N",
+   "old_column_x": 136.0,
+   "new_column_x": 134.95,
+   "shift_mm": 1.05,
+   "old_landing_run_mm": 1.030776,
+   "new_landing_run_mm": 0.254951,
+   "length_loss_mm": 1.825825,
+   "serpentine": {
+    "n_edges": 22,
+    "x_step_mm": 0.194426,
+    "amp_old_mm": 0.34,
+    "amp_new_mm": 0.239745,
+    "extra_old_mm": 4.339261,
+    "extra_new_mm": 2.513436
+   },
+   "ideal_len_moved": 77.380151163,
+   "ideal_len_partner": 77.366350047
+  }
+ },
+ "certification": {
+  "pairs_equal": [
+   {
+    "page": "PCIE_DN0/input",
+    "pol": "N",
+    "ideal_len_mm": 89.690238698
+   },
+   {
+    "page": "PCIE_DN0/input",
+    "pol": "P",
+    "ideal_len_mm": 89.625233351
+   },
+   {
+    "page": "PCIE_DN0/out_MCIO",
+    "pol": "N",
+    "ideal_len_mm": 47.404556186
+   },
+   {
+    "page": "PCIE_DN0/out_MCIO",
+    "pol": "P",
+    "ideal_len_mm": 47.455186034
+   },
+   {
+    "page": "PCIE_DN1/input",
+    "pol": "N",
+    "ideal_len_mm": 91.283600892
+   },
+   {
+    "page": "PCIE_DN1/input",
+    "pol": "P",
+    "ideal_len_mm": 91.348599531
+   },
+   {
+    "page": "PCIE_DN1/out_MCIO",
+    "pol": "N",
+    "ideal_len_mm": 55.066979757
+   },
+   {
+    "page": "PCIE_DN1/out_MCIO",
+    "pol": "P",
+    "ideal_len_mm": 55.117609605
+   },
+   {
+    "page": "PCIE_DN2/input",
+    "pol": "N",
+    "ideal_len_mm": 88.673022088
+   },
+   {
+    "page": "PCIE_DN2/input",
+    "pol": "P",
+    "ideal_len_mm": 88.629616322
+   },
+   {
+    "page": "PCIE_DN2/out_MCIO",
+    "pol": "N",
+    "ideal_len_mm": 61.284556186
+   },
+   {
+    "page": "PCIE_DN2/out_MCIO",
+    "pol": "P",
+    "ideal_len_mm": 61.335186034
+   },
+   {
+    "page": "PCIE_DN3/input",
+    "pol": "N",
+    "ideal_len_mm": 86.98996219
+   },
+   {
+    "page": "PCIE_DN3/input",
+    "pol": "P",
+    "ideal_len_mm": 87.068738248
+   },
+   {
+    "page": "PCIE_DN3/out_MCIO",
+    "pol": "N",
+    "ideal_len_mm": 68.946979757
+   },
+   {
+    "page": "PCIE_DN3/out_MCIO",
+    "pol": "P",
+    "ideal_len_mm": 68.997609605
+   },
+   {
+    "page": "PCIE_DN4/input",
+    "pol": "N",
+    "ideal_len_mm": 76.368005494
+   },
+   {
+    "page": "PCIE_DN4/input",
+    "pol": "P",
+    "ideal_len_mm": 76.368005206
+   },
+   {
+    "page": "PCIE_DN4/out_MCIO",
+    "pol": "N",
+    "ideal_len_mm": 64.668717386
+   },
+   {
+    "page": "PCIE_DN4/out_MCIO",
+    "pol": "P",
+    "ideal_len_mm": 64.831496013
+   },
+   {
+    "page": "PCIE_DN5/input",
+    "pol": "N",
+    "ideal_len_mm": 80.195022902
+   },
+   {
+    "page": "PCIE_DN5/input",
+    "pol": "P",
+    "ideal_len_mm": 80.195022489
+   },
+   {
+    "page": "PCIE_DN5/out_MCIO",
+    "pol": "N",
+    "ideal_len_mm": 61.928717386
+   },
+   {
+    "page": "PCIE_DN5/out_MCIO",
+    "pol": "P",
+    "ideal_len_mm": 62.091496013
+   },
+   {
+    "page": "PCIE_DN6/input",
+    "pol": "N",
+    "ideal_len_mm": 77.639413474
+   },
+   {
+    "page": "PCIE_DN6/input",
+    "pol": "P",
+    "ideal_len_mm": 77.660995446
+   },
+   {
+    "page": "PCIE_DN6/out_MCIO",
+    "pol": "N",
+    "ideal_len_mm": 55.588717386
+   },
+   {
+    "page": "PCIE_DN6/out_MCIO",
+    "pol": "P",
+    "ideal_len_mm": 55.751496013
+   },
+   {
+    "page": "PCIE_DN7/input",
+    "pol": "N",
+    "ideal_len_mm": 77.366350047
+   },
+   {
+    "page": "PCIE_DN7/input",
+    "pol": "P",
+    "ideal_len_mm": 77.380151163
+   },
+   {
+    "page": "PCIE_DN7/out_MCIO",
+    "pol": "N",
+    "ideal_len_mm": 74.277702387
+   },
+   {
+    "page": "PCIE_DN7/out_MCIO",
+    "pol": "P",
+    "ideal_len_mm": 74.411496013
+   },
+   {
+    "page": "PCIE_UP0/input",
+    "pol": "N",
+    "ideal_len_mm": 45.380302063
+   },
+   {
+    "page": "PCIE_UP0/input",
+    "pol": "P",
+    "ideal_len_mm": 45.39410331
+   },
+   {
+    "page": "PCIE_UP0/out_J2",
+    "pol": "N",
+    "ideal_len_mm": 78.806465359
+   },
+   {
+    "page": "PCIE_UP0/out_J2",
+    "pol": "P",
+    "ideal_len_mm": 79.024569683
+   },
+   {
+    "page": "PCIE_UP1/input",
+    "pol": "N",
+    "ideal_len_mm": 49.539279473
+   },
+   {
+    "page": "PCIE_UP1/input",
+    "pol": "P",
+    "ideal_len_mm": 49.55308102
+   },
+   {
+    "page": "PCIE_UP1/out_J2",
+    "pol": "N",
+    "ideal_len_mm": 75.659970024
+   },
+   {
+    "page": "PCIE_UP1/out_J2",
+    "pol": "P",
+    "ideal_len_mm": 75.77366076
+   },
+   {
+    "page": "PCIE_UP2/input",
+    "pol": "N",
+    "ideal_len_mm": 53.38567228
+   },
+   {
+    "page": "PCIE_UP2/input",
+    "pol": "P",
+    "ideal_len_mm": 53.382610219
+   },
+   {
+    "page": "PCIE_UP2/out_J2",
+    "pol": "N",
+    "ideal_len_mm": 70.678614341
+   },
+   {
+    "page": "PCIE_UP2/out_J2",
+    "pol": "P",
+    "ideal_len_mm": 70.709967057
+   },
+   {
+    "page": "PCIE_UP3/input",
+    "pol": "N",
+    "ideal_len_mm": 60.642341534
+   },
+   {
+    "page": "PCIE_UP3/input",
+    "pol": "P",
+    "ideal_len_mm": 60.628540322
+   },
+   {
+    "page": "PCIE_UP3/out_J2",
+    "pol": "N",
+    "ideal_len_mm": 68.519776406
+   },
+   {
+    "page": "PCIE_UP3/out_J2",
+    "pol": "P",
+    "ideal_len_mm": 68.696768815
+   },
+   {
+    "page": "PCIE_UP4/input",
+    "pol": "N",
+    "ideal_len_mm": 58.985415459
+   },
+   {
+    "page": "PCIE_UP4/input",
+    "pol": "P",
+    "ideal_len_mm": 58.999216671
+   },
+   {
+    "page": "PCIE_UP4/out_J2",
+    "pol": "N",
+    "ideal_len_mm": 77.484271928
+   },
+   {
+    "page": "PCIE_UP4/out_J2",
+    "pol": "P",
+    "ideal_len_mm": 78.09771972
+   },
+   {
+    "page": "PCIE_UP5/input",
+    "pol": "N",
+    "ideal_len_mm": 56.245415459
+   },
+   {
+    "page": "PCIE_UP5/input",
+    "pol": "P",
+    "ideal_len_mm": 56.259216671
+   },
+   {
+    "page": "PCIE_UP5/out_J2",
+    "pol": "N",
+    "ideal_len_mm": 75.893004606
+   },
+   {
+    "page": "PCIE_UP5/out_J2",
+    "pol": "P",
+    "ideal_len_mm": 75.941738206
+   },
+   {
+    "page": "PCIE_UP6/input",
+    "pol": "N",
+    "ideal_len_mm": 50.57602199
+   },
+   {
+    "page": "PCIE_UP6/input",
+    "pol": "P",
+    "ideal_len_mm": 50.576021978
+   },
+   {
+    "page": "PCIE_UP6/out_J2",
+    "pol": "N",
+    "ideal_len_mm": 73.098046408
+   },
+   {
+    "page": "PCIE_UP6/out_J2",
+    "pol": "P",
+    "ideal_len_mm": 73.258929066
+   },
+   {
+    "page": "PCIE_UP7/input",
+    "pol": "N",
+    "ideal_len_mm": 47.843598572
+   },
+   {
+    "page": "PCIE_UP7/input",
+    "pol": "P",
+    "ideal_len_mm": 47.822016483
+   },
+   {
+    "page": "PCIE_UP7/out_J2",
+    "pol": "N",
+    "ideal_len_mm": 71.060656213
+   },
+   {
+    "page": "PCIE_UP7/out_J2",
+    "pol": "P",
+    "ideal_len_mm": 71.082301393
+   }
+  ],
+  "endpoints_unchanged": true,
+  "untouched_pages_identical": true,
+  "no_copper_in_keepout": {
+   "PCIE_DN4_N": true,
+   "PCIE_DN5_P": true,
+   "PCIE_DN6_N": true,
+   "PCIE_DN7_P": true
+  },
+  "columns_ok": true,
+  "notes": [],
+  "pair_delta_violations": [],
+  "touched_pair_shortening": {
+   "PCIE_DN4/input": {
+    "dL_N": -8.916970024,
+    "dL_P": -8.916970024,
+    "equal": true
+   },
+   "PCIE_DN5/input": {
+    "dL_N": -5.590382351,
+    "dL_P": -5.590382351,
+    "equal": true
+   },
+   "PCIE_DN6/input": {
+    "dL_N": -4.315005989,
+    "dL_P": -4.315005989,
+    "equal": true
+   },
+   "PCIE_DN7/input": {
+    "dL_N": -1.825825431,
+    "dL_P": -1.825825431,
+    "equal": true
+   }
+  },
+  "per_polarity_monotone": {
+   "N": false,
+   "P": false
+  },
+  "new_columns": [
+   135.5,
+   134.95,
+   134.4,
+   133.4
+  ],
+  "min_pitch_mm": 0.55,
+  "x_max_allowed": 137.6537,
+  "via_clearance_to_keepout_mm": 2.2537
+ },
+ "OWNER-ITEMS": 0
+}

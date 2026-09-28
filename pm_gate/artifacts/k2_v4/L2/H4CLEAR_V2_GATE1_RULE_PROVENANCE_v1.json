@@ -1,0 +1,81 @@
+{
+ "artifact": "k2_h4clear_v2_gate1_rule_provenance_v1",
+ "ts": "2026-09-28",
+ "authority": "#K2-354 sec.4 window (a) joint re-solve + sec.3.5 gate 1 (rule provenance) + sec.5.1 (FAIL -> stop)",
+ "window_status": "STOPPED AT STEP (a): the joint re-emission was produced but FAILED drawing-level certification on a NEW ground (it violates an IN-REGISTER rule), so per sec.5.1 the chain run (c) and the judge (d) were NOT executed - deliberately not burning the chain run on a drawing that provably violates an in-register rule.",
+ "gate1_rule_provenance": {
+  "artifact": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_f13_r1_pair_coupling_v1_1.json (sha16 662c7839185260ae)",
+  "key": "constraints.x_order_rule",
+  "quote": "within a corridor, in R2 lane order, x must be monotone per polarity (direction fixed by W3 construction evidence; zero-crossing requirement)",
+  "declared_authority": "L2 ruling 2026-09-10 (accepted escape hatch 1: 'R1 via x-order and R2 lane order same direction' promoted to an R1 admission constraint)",
+  "classification": "IN-REGISTER (not owner, not ENG-added)",
+  "measured_meaning": "monotone PER PAD-COLUMN FAMILY in lane order: the columns landing on the x=135.0 pads must DECREASE (canonical: 142.38>141.80>141.22>140.64>139.48>138.32>137.16>136.00) and the columns landing on the x=132.65 pads must INCREASE (125.85<126.43<127.01<127.59<128.17<129.33<130.49<131.65). Both verified on the canonical drawing.",
+  "gate1_result": "the rule is IN-REGISTER => it must NOT be relaxed unilaterally, and the authorised witness DOES violate it => STOP + report"
+ },
+ "witness_and_violation": {
+  "new_columns": {
+   "PCIE_DN4_N": 134.4,
+   "PCIE_DN5_P": 135.5,
+   "PCIE_DN6_N": 133.4,
+   "PCIE_DN7_P": 134.95
+  },
+  "east_family_after": [
+   [
+    0,
+    142.38
+   ],
+   [
+    1,
+    141.8
+   ],
+   [
+    2,
+    141.22
+   ],
+   [
+    3,
+    140.64
+   ],
+   [
+    4,
+    134.4
+   ],
+   [
+    5,
+    135.5
+   ],
+   [
+    6,
+    133.4
+   ],
+   [
+    7,
+    134.95
+   ]
+  ],
+  "violation": "east family stops decreasing at lanes 4->5 (134.40 then 135.50)",
+  "otherwise_valid": [
+   "every new column <= 137.6537 (via edge clearance to the keepout 2.2537 mm)",
+   "pairwise spacing 0.55 >= 0.525",
+   "both polarities of each touched pair shorten by an identical amount (pair deltas preserved exactly)",
+   "all four keepouts constructively clear (no affected-net copper inside the H4 square)",
+   "every endpoint unchanged => frozen manifest byte-identical"
+  ]
+ },
+ "analytic_note": {
+  "statement": "Within the measured free area (x >= 133.0) NO monotone-decreasing east witness exists: monotone requires e4>e5>e6>e7 with >=0.525 steps; e7>=133.0 forces e6>=134.05 and e6 in a free span => e6>=134.19; e5>=134.715 forces e5 into [135.36,135.64] => e5>=135.36; then e4>135.885, but the measured free spans for e4 top out at 135.64.",
+  "not_claimed": "whether a monotone witness exists FURTHER WEST (between the two column families, x<133.0) is NOT established - no infeasibility claim is made."
+ },
+ "eng_self_correction": "R916's caveat 'the witness does not preserve the monotone x-order' was stated with the WRONG invariant (it compared across polarities). The in-register rule is monotone PER PAD-COLUMN FAMILY; under that correct reading the authorised witness still violates it - so the caveat stands, with the corrected reason.",
+ "artifacts": {
+  "reemitted_drawing_v2": "L3/mcio_feas_step2/m13_v57_w3_joint_assignment_H4CLEAR_v2.json (6c022e3bd9d5fbdb, CERTIFICATION FAIL - kept as evidence)",
+  "reemission_report_v2": "L2/W3_H4CLEAR_REEMISSION_REPORT_v2.json",
+  "spec_rev62": "L3/SPEC_k2_v4.spec-rev-62.json (prepared, unreferenced; project.yaml still l14/rev-61)"
+ },
+ "needs_a_ruling": [
+  "(a) authorise relaxing the IN-REGISTER x-order rule (L2 2026-09-10) for the H4 corner landing columns, or",
+  "(b) direct an alternative approach (e.g. a band west of the two column families, or a different escape architecture); in either case a NEW bounded window is required because this window's re-emission is consumed."
+ ],
+ "discipline": "one re-emission executed (failed certification => stop, chain not run); no param re-run; no SPEC/project.yaml change; no schematic edit; no board surgery; no WORKER; Gerber/order stopline; frozen four 4/4.",
+ "OWNER-ITEMS": 0
+}
