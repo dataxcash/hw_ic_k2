@@ -1,9 +1,9 @@
 """eda_eng 回归测试（#K2-358 §三：考题与判卷器＝CI 可重复执行，与 LLM 无关）。"""
-import json, os, sys, unittest
+import json, math, os, sys, unittest
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 sys.path.insert(0, os.path.join(ROOT, "tools"))
-from eda_eng import eco, exams, netplan, place, ripup, route, verify   # noqa: E402
+from eda_eng import eco, exams, netplan, place, regen, ripup, route, verify   # noqa: E402
 
 L2 = os.path.join(ROOT, "pm_gate", "artifacts", "k2_v4", "L2")
 REF = os.path.join(ROOT, verify.BASELINE_BOARD)
@@ -183,27 +183,89 @@ class T(unittest.TestCase):
         rc, r, _ = self._cli("ripup", "--board", REF, "--plan", pj, "--out", "/tmp/opencode/eda_eng_m2/nope.kicad_pcb")
         self.assertEqual(r["status"], "REFUSED_STALE_PLAN")
 
-    def test_M3_is_not_implemented_yet(self):
-        rc, r, _ = self._cli("route")
-        self.assertEqual(rc, 2)
-        self.assertEqual(r["status"], "NOT_IMPLEMENTED")
-        self.assertEqual(r["module"], "M3")
-        import contextlib, io
-        from eda_eng import cli
-        buf = io.StringIO()
-        with contextlib.redirect_stdout(buf):
-            rc = cli.main(["route"])                      # M3 subcommand
-        self.assertEqual(rc, 2)
-        self.assertIn("NOT_IMPLEMENTED", buf.getvalue())
-        # M2 is IMPLEMENTED (see its own suite); without args it must ask for args, not claim a capability
-        buf = io.StringIO()
-        with contextlib.redirect_stdout(buf):
-            rc = cli.main(["ripup"])
-        self.assertEqual(rc, 2)
-        self.assertIn("NEED_ARGS", buf.getvalue())
+    # ---------------- M3 route (#K2-360) : toy cases first ----------------
+    def test_M3_toy_1_single_net_free_space(self):
+        r = route.route_pair([0, 0], [10, 0], "F.Cu", [], net="N1")
+        self.assertEqual(r["status"], "ROUTED")
+        self.assertEqual(r["poly"][0], [0, 0])
+        self.assertEqual(r["poly"][-1], [10, 0])
+
+    def test_M3_toy_2_two_nets_respect_each_other(self):
+        a = route.route_pair([0, 0], [10, 0], "F.Cu", [], net="N1")
+        self.assertEqual(a["status"], "ROUTED")
+        obs = [{"id": "N1", "kind": "copper", "net": "N1",
+                "bbox": [min(p[0] for p in a["poly"]) - 0.1, min(p[1] for p in a["poly"]) - 0.1,
+                         max(p[0] for p in a["poly"]) + 0.1, max(p[1] for p in a["poly"]) + 0.1]}]
+        b = route.route_pair([0, 5], [10, 5], "F.Cu", obs, net="N2")
+        self.assertEqual(b["status"], "ROUTED")
+        self.assertEqual(route.poly_violations(b["poly"], obs), [], "N2 must clear N1")
+
+    def test_M3_toy_3_blocked_is_named(self):
+        wall = [{"id": "wall", "kind": "copper", "net": "X", "bbox": [4.5, -5, 5.5, 5]}]
+        r = route.route_pair([0, 0], [10, 0], "F.Cu", wall, net="N1")
+        self.assertEqual(r["status"], "BLOCKED")
+        self.assertTrue(any(v["obstacle"] == "wall" for v in r["violations"]))
+
+    def test_M3_toy_4_keepout_is_respected(self):
+        ko = [{"id": "KO", "kind": "keepout", "bbox": [4.5, -1, 5.5, 1]}]
+        r = route.route_pair([0, 0], [10, 0], "F.Cu", ko, net="N1")
+        self.assertEqual(r["status"], "BLOCKED", "a keepout across the straight line must block the trivial candidate")
+        self.assertIn("keepout", [v["kind"] for v in r["violations"]])
+
+    def test_M3_is_deterministic(self):
+        a = route.route_pair([0, 0], [9, 3], "F.Cu", [])
+        b = route.route_pair([0, 0], [9, 3], "F.Cu", [])
+        self.assertEqual(json.dumps(a, sort_keys=True), json.dumps(b, sort_keys=True))
+
+    def test_M3_region_case_on_l14_with_immediate_connectivity_check(self):
+        """区域用例：真板 l14 上挑一对**同网相邻 pad**，布一段，落板（子进程）后**即时**查连通与 DRC。"""
+        import subprocess, tempfile
+        # 障碍必须**排除待布网自身**（同网铜是它自己的，不是障碍）
+        pads = route.pads_by_net(REF, "F.Cu")
+        pick = None
+        for net in sorted(pads):
+            if net == "GND" or len(pads[net]) < 2:
+                continue
+            pts = sorted(pads[net])
+            for i in range(len(pts)):
+                for j in range(i + 1, len(pts)):
+                    if math.dist(pts[i], pts[j]) > 5.0:
+                        continue
+                    # 区域用例 = 真板上**确有可行走法**的一对（直段无违规）=> 引擎必须给出见证
+                    obs_n, _b = route.obstacles_from_board(REF, {net}, "F.Cu")
+                    if not route.poly_violations([list(pts[i]), list(pts[j])], obs_n):
+                        pick = (net, list(pts[i]), list(pts[j])); break
+                if pick:
+                    break
+            if pick:
+                break
+        self.assertIsNotNone(pick, "no same-net pad pair within 5 mm found")
+        net, p1, p2 = pick
+        obs, bounds = route.obstacles_from_board(REF, {net}, "F.Cu")
+        r = route.route_pair(p1, p2, "F.Cu", obs, bounds=bounds, net=net)
+        self.assertEqual(r["status"], "ROUTED", "region case must route: %r" % (r.get("violations"),))
+        self.assertEqual(route.poly_violations(r["ploy"] if False else r["poly"], obs), [],
+                         "the routed witness must clear every obstacle")
+        plan = os.path.join(tempfile.mkdtemp(), "plan.json")
+        json.dump(r, open(plan, "w", encoding="utf-8"), ensure_ascii=False)
+        out = os.path.join("/tmp/opencode/eda_eng_m3", "region_%s.kicad_pcb" % net)
+        os.makedirs("/tmp/opencode/eda_eng_m3", exist_ok=True)
+        rc, ap, _ = self._cli("route", "--apply", plan, "--board", REF, "--out", out)
+        self.assertEqual(rc, 0, ap)
+        self.assertGreaterEqual(ap["segments_added"], 1)
+        cli = os.environ.get("EDA_ENG_CLI", "kicad-cli")
+        sj = out + ".drc.json"
+        subprocess.run([cli, "pcb", "drc", "--format", "json", "--severity-all", "-o", sj, out],
+                       capture_output=True, timeout=1200)
+        d = json.load(open(sj, encoding="utf-8"))
+        shorts = [v for v in d.get("violations", []) if v.get("type") == "shorting_items"
+                  and net in json.dumps(v, ensure_ascii=False)]
+        self.assertEqual(shorts, [], "the added copper must not short net %s" % net)
+        un = [u for u in d.get("unconnected_items", []) if net in json.dumps(u, ensure_ascii=False)]
+        self.assertEqual(un, [], "net %s must be fully connected after the route" % net)
 
     def test_regen_is_implemented_and_plans_five_stages(self):
-        r = route.run(exam="A", work="/tmp/eda_eng_selftest_plan", dry=True)
+        r = regen.run(exam="A", work="/tmp/eda_eng_selftest_plan", dry=True)
         self.assertEqual(r["state"], "PLANNED")
         self.assertEqual(r["stages"], ["place", "gen", "route", "polish", "drc"])
         self.assertTrue(all(k in r["commands"] for k in ("gen", "route", "polish", "drc")))

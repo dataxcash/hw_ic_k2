@@ -3,7 +3,7 @@
 from __future__ import annotations
 import argparse, json, os, subprocess, sys
 
-from . import eco as eco_mod, exams as exams_mod, netplan as netplan_mod, place as place_mod, ripup as ripup_mod, route as route_mod, verify as verify_mod
+from . import eco as eco_mod, exams as exams_mod, netplan as netplan_mod, place as place_mod, regen as regen_mod, ripup as ripup_mod, route as route_mod, verify as verify_mod
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 L2 = os.path.join(ROOT, "pm_gate", "artifacts", "k2_v4", "L2")
@@ -50,7 +50,11 @@ def main(argv=None):
     p = sub.add_parser("ripup", help="M2: execute the M1 teardown plan")
     p.add_argument("--board"); p.add_argument("--plan", help="M1 netplan JSON")
     p.add_argument("--out"); p.add_argument("--dry-run", action="store_true")
-    p = sub.add_parser("route", help="M3: re-route a torn board (status)")
+    p = sub.add_parser("route", help="M3: re-route (deterministic closed-form candidate family + oracle)")
+    p.add_argument("--p1"); p.add_argument("--p2"); p.add_argument("--net", default="__route__")
+    p.add_argument("--layer", default="F.Cu"); p.add_argument("--board")
+    p.add_argument("--apply", help="apply a ROUTED plan JSON to the board")
+    p.add_argument("--out"); p.add_argument("--json-out")
     p = sub.add_parser("regen", help="composed deterministic pipeline (place->gen->route->polish->drc), shadow root")
     p.add_argument("--exam", dest="exam_id", choices=["A", "B"], default=None)
     p.add_argument("--work", default=None)
@@ -68,7 +72,7 @@ def main(argv=None):
         out = {"artifact": "eda_eng_exam", "exam": spec, "judging_table": exams_mod.JUDGING_TABLE,
                "state": "DEFINED"}
         if a.run:
-            rp = route_mod.run(exam=a.which, work=a.work or os.path.join("/tmp/opencode/eda_eng", "exam" + a.which))
+            rp = regen_mod.run(exam=a.which, work=a.work or os.path.join("/tmp/opencode/eda_eng", "exam" + a.which))
             out["route"] = rp
             if rp.get("state") == "RAN":
                 out.update(verify_mod.judge(rp["final_board"], rp["drc"], REF_BOARD, REF_DRC))
@@ -83,7 +87,7 @@ def main(argv=None):
             out["note"] = ("definition only; to grade, pass --board/--drc of the engine's output. "
                            "The engine is NOT implemented yet (see route), so the plan step is unavailable "
                            "and the exam cannot be passed today.")
-            out["engine"] = route_mod.STATUS
+            out["engine"] = regen_mod.STATUS
         return _emit(out, None, 0 if out.get("verdict") == "PASS" else 1)
 
     if a.cmd == "eco":
@@ -120,15 +124,30 @@ def main(argv=None):
         return _emit(r, None, 0 if r["status"] in ("RIPPED", "DRY_RUN_OK") else 2)
 
     if a.cmd == "route":
-        r = {"artifact": "eda_eng_route_m3",
-             "status": "NOT_IMPLEMENTED", "implemented": False, "module": "M3",
-             "order": "#K2-360 sec.2: M1 -> M2 -> M3 -> M4, one at a time; M1 lands first",
-             "contract": "torn board + constraints (keepout/copper polygons C22/clearance/45/layer choice) -> routed board; "
-                         "tests: toy single-net and two-net cases, then a region case, per-net connectivity checked immediately"}
-        return _emit(r, None, 2)
+        if a.apply:
+            plan = json.load(open(a.apply, encoding="utf-8"))
+            r = route_mod.apply_route(a.board, plan, a.out)
+            return _emit(r, None, 0)
+        if not (a.p1 and a.p2):
+            r = {"artifact": "eda_eng_route_m3", "status": "NEED_ARGS", "module": "M3",
+                 "usage": "route --p1 x,y --p2 x,y --layer F.Cu [--board PCB] [--net NAME]  |  "
+                          "route --apply plan.json --board PCB --out PCB",
+                 "scope_v1": ["deterministic closed-form candidate family (straight / L / Z, 45-degree chamfered)",
+                              "clearance+keepout oracle", "SINGLE layer", "via insertion and multi-layer are the next scope step"]}
+            return _emit(r, None, 2)
+        p1 = [float(v) for v in a.p1.split(",")]; p2 = [float(v) for v in a.p2.split(",")]
+        obs, bounds = ([], None)
+        if a.board:
+            import pcbnew as P
+            bb = P.LoadBoard(a.board).GetBoardEdgesBoundingBox()
+            obs, bounds = route_mod.obstacles_from_board(a.board, {a.net}, a.layer)
+        r = route_mod.route_pair(p1, p2, a.layer, obs, bounds=bounds, net=a.net)
+        r.update({"artifact": "eda_eng_route_m3", "module": "M3",
+                  "constraints": {"clearance_mm": route_mod.CLEAR, "bounds": bounds, "n_obstacles": len(obs)}})
+        return _emit(r, a.json_out, 0 if r["status"] == "ROUTED" else 1)
 
     if a.cmd == "regen":
-        r = route_mod.run(exam=a.exam_id, work=a.work, dry=a.dry_run)
+        r = regen_mod.run(exam=a.exam_id, work=a.work, dry=a.dry_run)
         code = 0 if r.get("state") in ("RAN", "PLANNED") else 2
         return _emit(r, None, code)
 

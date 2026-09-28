@@ -1,121 +1,202 @@
-"""route --- 重构引擎 `eda_eng route`（#K2-356 任务单 · #K2-359 下一唯一交付）。
+"""M3 · `eda_eng route` --- 重布（#K2-360 §一 M3）。
 
-v1 = **组合确定性管线**（全部是链内既有、确定性、无 LLM 的阶段；不新增搜索、不手改板）：
+合同：拆后板 + 约束（禁区 / 铜皮多边形 C22 / 间距 / 45° / 层分配）→ 布通板。
+测试顺序（§一）：**先玩具用例（单网 / 双网）→ 再区域用例**，**逐网连通即时校验**。
 
-    place(场景) → gen_v5 → route_segment --upto all → build_l9(全阶段: 倒角/铺铜/丝印…) → DRC
-
-**运行于影子工程根**（shadow.py）：真源/冻结四源/`project.yaml` **逐字节不动**；产物落工作目录。
-输出 = 最终板 + DRC json（供 eda_eng verify 判卷）。
+v1 范围（如实声明 · 逐级扩）：
+  * 核心 = **纯数据模型** `route_pair(...)`：端点 + 障碍集 + 约束 → 见证路径 ‖ 具名 BLOCKED（便于玩具用例）。
+  * 候选族 = **确定性闭式**：直段 / L(两型) / Z(两型 × 三档) ，每型再生成 **45° 倒角**变体；逐条过**间距+禁区 oracle**；
+    取**首个通过者**（零搜索 · 零随机 · 可复现）。
+  * **单层**布（层由调用方指定）；**via 插入 / 多层 = 下一步**（未实现项，不冒充）。
+  * 区域用例经 `obstacles_from_board()` 从真板取障碍（保守用**轴对齐包围盒**，含 pad/track/via + 禁区多边形）。
 """
 from __future__ import annotations
-import json, os, subprocess, sys
+import json, math, os
 
-from . import shadow as shadow_mod
-
-ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-def _py():
-    """KiCad python（有 pcbnew）；env 在**调用时**读，避免 import 期固化。"""
-    return os.environ.get("EDA_ENG_PY") or sys.executable
+CLEAR = 0.175          # 板规则实测间距下限（mm）
+BOARD_MARGIN = 0.25
 
 
-def _cli():
-    return os.environ.get("EDA_ENG_CLI", "kicad-cli")
+# ---------------------------------------------------------------- geometry
+def _seg_pt_d2(a, b, p):
+    ax, ay = a; bx, by = b; px, py = p
+    dx, dy = bx - ax, by - ay
+    L2 = dx * dx + dy * dy
+    t = 0.0 if L2 == 0 else max(0.0, min(1.0, ((px - ax) * dx + (py - ay) * dy) / L2))
+    cx, cy = ax + t * dx, ay + t * dy
+    return (px - cx) ** 2 + (py - cy) ** 2
 
 
-def _host():
-    """宿主 python（有 yaml 等常规依赖）：gen_v5 是纯 python 生成器，不需要 pcbnew。"""
-    return os.environ.get("EDA_ENG_HOST_PY", "python3")
-
-STAGES = ["place", "gen", "route", "polish", "drc"]
-
-EXAM_PRESET = {
-    "A": {"spec_name": None, "placement": {"refs": ["U1", "U2", "U4", "U5"], "delta_mm": [5.0, 0.0]},
-          "drawing": None},
-    "B": {"spec_name": "SPEC_k2_v4.spec-rev-62.json", "placement": None,
-          "drawing": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_joint_assignment_H4CLEAR_v3.json"},
-}
+def _poly_samples(poly, step=0.05):
+    out = []
+    for i in range(len(poly) - 1):
+        a, b = poly[i], poly[i + 1]
+        L = math.dist(a, b)
+        n = max(2, int(L / step) + 1)
+        for k in range(n + 1):
+            out.append((a[0] + (b[0] - a[0]) * k / n, a[1] + (b[1] - a[1]) * k / n))
+    return out
 
 
-KICAD_ENV_KEYS = ("LD_LIBRARY_PATH", "PYTHONPATH", "PYTHONHOME")
+def _box_pt_d2(bx, p):
+    x0, y0, x1, y1 = bx
+    dx = max(x0 - p[0], 0.0, p[0] - x1)
+    dy = max(y0 - p[1], 0.0, p[1] - y1)
+    return dx * dx + dy * dy
 
 
-def _host_env(env):
-    """给宿主 python（gen_v5）的干净 env：剥掉 KiCad 专属的库/路径变量（否则宿主 python 起不来）。"""
-    e = {k: v for k, v in env.items() if k not in KICAD_ENV_KEYS}
-    return e
+def poly_violations(poly, obstacles, clearance=CLEAR, step=0.05):
+    """返回 [(obstacle_id, min_dist_mm, kind)]，只含违规项（keepout 用 clearance=0 且 min_dist==0 记违规）。"""
+    bad = []
+    pts = _poly_samples(poly, step)
+    for ob in obstacles:
+        min_d2 = min(_box_pt_d2(ob["bbox"], p) for p in pts)
+        d = math.sqrt(min_d2)
+        need = 0.0 if ob.get("kind") == "keepout" else clearance
+        if d <= need + 1e-9:
+            bad.append({"obstacle": ob.get("id"), "kind": ob.get("kind"), "net": ob.get("net"),
+                        "min_dist_mm": round(d, 4), "required_mm": need})
+    return bad
 
 
-def _run(cmd, env, log):
-    p = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True, env=env, timeout=3600)
-    log.append({"cmd": " ".join(cmd), "exit": p.returncode, "tail": (p.stdout or p.stderr or "")[-400:]})
-    return p.returncode
+def _chamfer(poly, leg):
+    """把折线里的 90° 拐角切成两段 45°（leg = 切角腿长）。"""
+    if len(poly) < 3:
+        return [list(p) for p in poly]
+    out = [list(poly[0])]
+    for i in range(1, len(poly) - 1):
+        p, c, n = poly[i - 1], poly[i], poly[i + 1]
+        d1 = math.dist(p, c); d2 = math.dist(c, n)
+        leg_ = min(leg, d1 / 2, d2 / 2)
+        if leg_ <= 1e-6:
+            out.append(list(c)); continue
+        u1 = ((c[0] - p[0]) / d1, (c[1] - p[1]) / d1)
+        u2 = ((n[0] - c[0]) / d2, (n[1] - c[1]) / d2)
+        right = abs(u1[0] * u2[1] - u1[1] * u2[0]) < 1e-6      # 共线 => 不切
+        if right:
+            out.append(list(c)); continue
+        out.append([round(c[0] - u1[0] * leg_, 4), round(c[1] - u1[1] * leg_, 4)])
+        out.append([round(c[0] + u2[0] * leg_, 4), round(c[1] + u2[1] * leg_, 4)])
+    out.append(list(poly[-1]))
+    return out
 
 
-def run_exam(exam_id, work, dry=False, log_only=True):
-    preset = EXAM_PRESET[exam_id]
-    os.makedirs(work, exist_ok=True)
-    plan = {"artifact": "eda_eng_route", "exam": exam_id, "engine": "composed-deterministic-pipeline-v1",
-            "stages": STAGES, "work": work, "dry_run": dry, "log": []}
-    sh = shadow_mod.build(os.path.join(work, "shadow"), spec_name=preset["spec_name"],
-                          replace=("placement", "project_yaml") if preset["spec_name"] else ("placement",))
-    plan["shadow"] = sh
-    if preset["placement"]:
-        plan["placement_edit"] = shadow_mod.edit_placement_at(sh["shadow_root"], **preset["placement"])
-    stage1 = os.path.join(work, "stage1.kicad_pcb")
-    stage2 = os.path.join(work, "stage2.kicad_pcb")
-    final = os.path.join(work, "final.kicad_pcb")
-    env = {**os.environ, "PM_GATE_PROJECT_ROOT": sh["shadow_root"],
-           "K2_OUT_PCB": stage1, "K2_OUT_JSON": os.path.join(work, "stage1.json")}
-    if preset["drawing"]:
-        env["L4_MAIN"] = os.path.join(ROOT, preset["drawing"])
-    cmds = {
-        "gen": [_host(), os.path.join(ROOT, "tools", "k2_gen_v5.py")],
-        "route": [_py(), os.path.join(ROOT, "tools", "k2_route_segment_v1.py"), "--in", stage1,
-                  "--out", stage2, "--upto", "all", "--drc-cli", _cli()],
-        "polish": [_py(), os.path.join(ROOT, "tools", "k2_p4_build_l9_v1.py"), "--in", stage2, "--out", final,
-                   "--stages", "fiducial,info,edge,tp,crtyd,silk,silkfix,chamfer,pour"],
-        "drc": [_cli(), "pcb", "drc", "--format", "json", "--severity-all", "-o",
-                os.path.join(work, "final_drc.json"), final],
-    }
-    plan["commands"] = {k: " ".join(v) for k, v in cmds.items()}
-    if dry:
-        plan["state"] = "PLANNED"; return plan
-    for st in ("gen", "route", "polish", "drc"):
-        use_env = _host_env(env) if st == "gen" else env
-        rc = _run(cmds[st], use_env, plan["log"])
-        plan["log"][-1]["stage"] = st
-        if rc != 0:
-            plan["state"] = "FAILED_AT_" + st
-            return plan
-    plan.update({"state": "RAN", "final_board": final,
-                 "drc": os.path.join(work, "final_drc.json"),
-                 "exists": {p: os.path.isfile(p) for p in (stage1, stage2, final)}})
-    return plan
+def candidates(p, q):
+    """确定性候选族：直 / L×2 / Z×2×3档，各带 45° 切角变体。"""
+    out = []
+    base = [[list(p), list(q)]]
+    base.append([list(p), [q[0], p[1]], list(q)])
+    base.append([list(p), [p[0], q[1]], list(q)])
+    for f in (0.25, 0.5, 0.75):
+        xm = round(p[0] + (q[0] - p[0]) * f, 4); ym = round(p[1] + (q[1] - p[1]) * f, 4)
+        base.append([list(p), [xm, p[1]], [xm, q[1]], list(q)])
+        base.append([list(p), [p[0], ym], [q[0], ym], list(q)])
+    seen = set()
+    for b in base:
+        for leg in (0.0, 0.5, 1.0, 2.0):
+            poly = _chamfer(b, leg) if leg > 0 else [list(x) for x in b]
+            k = tuple(tuple(x) for x in poly)
+            if k in seen:
+                continue
+            seen.add(k)
+            out.append(poly)
+    return out
 
 
-STATUS = {"implemented": True, "engine": "composed-deterministic-pipeline-v1",
-          "entry": "route --exam A|B [--work DIR] [--dry-run]",
-          "note": "runs in a shadow project root; the real tree, project.yaml and the frozen four are never touched"}
+# ---------------------------------------------------------------- core
+def route_pair(p, q, layer, obstacles, bounds=None, clear=CLEAR, net="__route__"):
+    """核心：单网两点布。返回 ROUTED（含见证 poly）‖ BLOCKED（含最佳候选的具名违规）。"""
+    tried, best = 0, None
+    for poly in candidates(p, q):
+        tried += 1
+        bad = poly_violations(poly, obstacles, clearance=clear)
+        if bounds:
+            x0, y0, x1, y1 = bounds
+            for pt in poly:
+                if not (x0 <= pt[0] <= x1 and y0 <= pt[1] <= y1):
+                    bad.append({"obstacle": "board_bounds", "kind": "bounds", "net": None,
+                                "min_dist_mm": 0.0, "required_mm": 0.0})
+                    break
+        if not bad:
+            return {"status": "ROUTED", "net": net, "layer": layer, "poly": poly,
+                    "candidates_tried": tried, "rule": "deterministic closed-form candidate family, first valid wins"}
+        score = sum(b["min_dist_mm"] for b in bad) / len(bad)
+        if best is None or score < best["score"]:
+            best = {"score": score, "candidate": poly, "violations": bad[:4]}
+    return {"status": "BLOCKED", "net": net, "layer": layer, "candidates_tried": tried,
+            "best_candidate": best["candidate"], "violations": best["violations"],
+            "rule": "no candidate in the deterministic family cleared the constraints - named violations above"}
 
 
-def validate_placement(refs, delta_mm, work):
-    """放置可行性校验（引擎能力）：影子根 + 施加场景 + **只跑 gen_v5 的放置自检**。
-    返回 {ok, reason} —— 不布线、不产板；用于在考题场景被批准前先证明"新放置本身合法"。"""
-    import shutil
-    shutil.rmtree(work, ignore_errors=True)
-    os.makedirs(work, exist_ok=True)
-    sh = shadow_mod.build(os.path.join(work, "shadow"))
-    shadow_mod.edit_placement_at(sh["shadow_root"], refs, delta_mm)
-    env = {**os.environ, "PM_GATE_PROJECT_ROOT": sh["shadow_root"],
-           "K2_OUT_PCB": os.path.join(work, "probe.kicad_pcb"), "K2_OUT_JSON": os.path.join(work, "probe.json")}
-    p = subprocess.run([_host(), os.path.join(ROOT, "tools", "k2_gen_v5.py")], cwd=ROOT,
-                       capture_output=True, text=True, env=_host_env(env), timeout=600)
-    tail = (p.stdout or p.stderr or "").strip().splitlines()
-    reason = next((l for l in reversed(tail) if "写盘阻断" in l or "S1" in l), tail[-1] if tail else "")
-    return {"refs": refs, "delta_mm": delta_mm, "ok": p.returncode == 0, "reason": reason[-200:]}
+def obstacles_from_board(board, ignore_nets, layer, keepout_boxes=()):
+    """真板 → 障碍集（保守轴对齐包围盒）。ignore_nets = 待布网（自身旧铜已由 M2 拆掉，仍排除）。"""
+    import pcbnew as P
+    b = P.LoadBoard(board)
+    nm = {c: ni.GetNetname() for c, ni in b.GetNetInfo().NetsByNetcode().items()}
+    obs = []
+    for t in b.GetTracks():
+        name = nm.get(t.GetNetCode(), "")
+        if name in ignore_nets:
+            continue
+        layers = [b.GetLayerName(l) for l in t.GetLayerSet().Seq()] if t.GetClass() == "PCB_VIA" else [t.GetLayerName()]
+        if layer not in layers:
+            continue
+        bb = t.GetBoundingBox()
+        obs.append({"id": "track@%s" % name, "kind": "copper", "net": name,
+                    "bbox": [round(P.ToMM(bb.GetX()) - 0.0, 4), round(P.ToMM(bb.GetY()), 4),
+                             round(P.ToMM(bb.GetRight()), 4), round(P.ToMM(bb.GetBottom()), 4)]})
+    for p in b.GetPads():
+        name = nm.get(p.GetNetCode(), "")
+        if name in ignore_nets:
+            continue
+        if layer not in [b.GetLayerName(l) for l in p.GetLayerSet().Seq()]:
+            continue
+        bb = p.GetBoundingBox()
+        obs.append({"id": "pad@%s" % (p.GetNumber()), "kind": "copper", "net": name,
+                    "bbox": [round(P.ToMM(bb.GetX()), 4), round(P.ToMM(bb.GetY()), 4),
+                             round(P.ToMM(bb.GetRight()), 4), round(P.ToMM(bb.GetBottom()), 4)]})
+    for k in keepout_boxes:
+        obs.append({"id": k.get("id", "keepout"), "kind": "keepout", "net": None, "bbox": k["bbox"]})
+    eb = b.GetBoardEdgesBoundingBox()
+    bounds = [round(P.ToMM(eb.GetX()) + BOARD_MARGIN, 4), round(P.ToMM(eb.GetY()) + BOARD_MARGIN, 4),
+              round(P.ToMM(eb.GetRight()) - BOARD_MARGIN, 4), round(P.ToMM(eb.GetBottom()) - BOARD_MARGIN, 4)]
+    return obs, bounds
 
 
-def run(exam=None, work=None, dry=False):
-    if exam in EXAM_PRESET:
-        return run_exam(exam, work or os.path.join("/tmp/opencode/eda_eng", "exam" + exam), dry=dry)
-    return {"status": "NEED_EXAM", **STATUS}
+def pads_by_net(board, layer="F.Cu"):
+    """只读：{net: [(x,y), ...]}（同网多 pad 的坐标，供测试选真用例）。"""
+    import pcbnew as P
+    b = P.LoadBoard(board)
+    out = {}
+    for p in b.GetPads():
+        n = p.GetNetname()
+        if not n or layer not in [b.GetLayerName(l) for l in p.GetLayerSet().Seq()]:
+            continue
+        pos = p.GetPosition()
+        out.setdefault(n, []).append((round(P.ToMM(pos.x), 4), round(P.ToMM(pos.y), 4)))
+    return out
+
+
+def apply_route(board, plan, out, layer=None, width_mm=0.2):
+    """把 ROUTED 见证落板（**子进程专用**：改板会破坏同进程 SWIG 类型态）。"""
+    import pcbnew as P
+    b = P.LoadBoard(board)
+    layer = layer or plan["layer"]
+    LM = {n: getattr(P, n.replace(".", "_")) for n in ("F.Cu", "In1.Cu", "In2.Cu", "In3.Cu", "In4.Cu",
+                                                      "In5.Cu", "In6.Cu", "In7.Cu", "B.Cu")}
+    net = b.FindNet(plan["net"])
+    code = net.GetNetCode() if net is not None else -1
+    poly = plan["poly"]
+    added = 0
+    for i in range(len(poly) - 1):
+        t = P.PCB_TRACK(b)
+        t.SetStart(P.VECTOR2I(P.FromMM(poly[i][0]), P.FromMM(poly[i][1])))
+        t.SetEnd(P.VECTOR2I(P.FromMM(poly[i + 1][0]), P.FromMM(poly[i + 1][1])))
+        t.SetWidth(P.FromMM(width_mm))
+        t.SetLayer(LM[layer])
+        t.SetNetCode(code)
+        b.Add(t); added += 1
+    P.SaveBoard(out, b)
+    import hashlib
+    return {"artifact": "eda_eng_route_apply", "net": plan["net"], "layer": layer, "segments_added": added,
+            "width_mm": width_mm, "out": out, "out_sha16": hashlib.sha256(open(out, "rb").read()).hexdigest()[:16]}
