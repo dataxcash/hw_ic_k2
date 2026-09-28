@@ -25,6 +25,7 @@ import argparse, collections, hashlib, json, math, os, re, shutil, subprocess, s
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MROUTE = os.path.join(ROOT, "tools", "k2_p4_mroute_v1.py")
+ROUTER_FLOOR = os.path.join(ROOT, "tools", "k2_reroute_router_floor_v1.py")
 KICAD_CLI = os.environ.get("KICAD_CLI", "/tmp/k2kicad/squashfs-root/usr/bin/kicad-cli")
 HS_PAIRS = [("PCIE_UP_OUT%d_P_J2" % i, "PCIE_UP_OUT%d_N_J2" % i) for i in range(8)]
 SELF = os.path.abspath(__file__)
@@ -88,6 +89,10 @@ def main():
     ap.add_argument("--out", required=True)
     ap.add_argument("--report", default="")
     ap.add_argument("--skew-limit", type=float, default=0.15)
+    ap.add_argument("--clearance-floor", type=float, default=0.20,
+                    help="minimum inter-net copper clearance the re-router must honour; the ACCEPTANCE authority is "
+                         "kicad-cli DRC, whose project netclass default is 0.20 mm, while the frozen drc_rules.json "
+                         "model says 0.10 mm for LOW_SPEED/GND (M-ENG-CLEARANCE-MODEL-DIVERGENCE)")
     ap.add_argument("--stage1", default="")
     a = ap.parse_args()
     os.makedirs(a.work, exist_ok=True)
@@ -206,6 +211,13 @@ def phase_stitch(a, P):
     dangling/off-centre residue).  Deterministic minimal-spanning repair, bounded passes per net.
     """
     mr = _load_mroute()
+    # ACCEPTANCE AUTHORITY = kicad-cli DRC (project netclass clearance 0.20 mm).  The in-register gate uses the
+    # frozen drc_rules.json model, which says 0.10 mm for LOW_SPEED/GND (M-ENG-CLEARANCE-MODEL-DIVERGENCE);
+    # raise the gate floor so the re-router is never looser than the acceptance authority.
+    _cv = mr.cv
+    _orig_req = _cv._req
+    _FLOOR = float(getattr(a, "clearance_floor", 0.20))
+    _cv._req = lambda x, y: max(_orig_req(x, y), _FLOOR)
     rip = json.load(open(os.path.join(a.work, "rip.json"), encoding="utf-8"))
     affnets = set(rip["affected_nets"])
     b = P.LoadBoard(a.board)
@@ -684,9 +696,9 @@ def orchestrate(a):
     mroute = {"unconnected_after_rip": len(d0.get("unconnected_items", [])),
               "unconnected_after_stitch": len(d1.get("unconnected_items", [])), "skipped": not bool(d1.get("unconnected_items"))}
     if d1.get("unconnected_items"):
-        rr = _run([py, MROUTE, "--in", stitched, "--drc", dst,
+        rr = _run([py, ROUTER_FLOOR, "--in", stitched, "--drc", dst,
                    "--out", merged, "--ledger", os.path.join(a.work, "mroute_ledger.json"),
-                   "--margin", str(a.margin)], "mroute")
+                   "--margin", str(a.margin), "--floor", str(getattr(a, "clearance_floor", 0.20))], "mroute")
         mroute["stdout"] = rr.stdout.strip()[-300:]
     else:
         shutil.copyfile(stitched, merged)

@@ -247,10 +247,10 @@
   "J12": {
    "at": [
     27.94,
-    35.32,
+    42.85,
     90.0
    ],
-   "authority": "SPEC canonical 几何字段（SPEC components.pin_headers.positions.J12）；与 P4 已验证落位逐值一致"
+   "authority": "SPEC canonical 几何字段（SPEC components.pin_headers.positions.J12）+ rev-60（#K2-339 §2.1：J12 让位下移，与板 l13 一致）"
   },
   "J13": {
    "at": [
@@ -519,5 +519,27 @@
    "strap_solution_stale": 0,
    "board_only_no_input_source": 28
   }
- }
+ },
+ "_changes": [
+  {
+   "rev": "SPEC-60 / board l13",
+   "at": "2026-09-28",
+   "authority": "#K2-339 sec.2.1",
+   "leaf": {
+    "refs.J12.at": {
+     "old": [
+      27.94,
+      35.32,
+      90.0
+     ],
+     "new": [
+      27.94,
+      42.85,
+      90.0
+     ]
+    }
+   },
+   "note": "J12 (12V power input) yields down the left edge so H3 can take the top-left corner (N3/P3). Chain source kept in sync with the board (M-ENG-CHAIN-SOURCE)."
+  }
+ ]
 }
