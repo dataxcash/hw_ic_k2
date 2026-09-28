@@ -1,0 +1,108 @@
+{
+ "artifact": "k2_examA_scenario_infeasibility_certificate_v1",
+ "ts": "2026-09-28",
+ "authority": "stop-order demand: MUST produce a binary (feasible witness || conservation-level infeasibility certificate); constitution ch.7 sec.3 change order",
+ "subject": "change 'left cluster U1/U2/U4/U5 translated by 5.000 mm' (the exam A scenario as phrased, #K2-356 sec.2.2)",
+ "binary": "**INFEASIBLE** - conservation-level certificate (no feasible witness exists at t = 5.000 mm in ANY axis direction)",
+ "layer": "PLACEMENT / mechanical - pad-level space allocation on the left cluster's perimeter",
+ "resource": "free pad-space around the cluster along the travel axis (the rigid translation consumes it)",
+ "occupied_by": {
+  "+X (east)": "D2 (pad 1)",
+  "-X (west)": "C73 (pad 2)",
+  "+Y (south)": "C86 (pad 1)",
+  "-Y (north)": "J13 (pad 1)"
+ },
+ "why_no_allocation_is_possible": {
+  "derivation": "for a rigid axis translation t with a FIXED neighbour, the pad overlap along the travel axis is max(0, t - g) where g is the pad gap; the measurement at t = 5.000 mm gives the overlap p, hence g = 5.000 - p; collision-free requires t <= g.",
+  "measured": [
+   {
+    "direction": "+X",
+    "delta_tested_mm": [
+     5.0,
+     0.0
+    ],
+    "blocking_pair": [
+     "D2/1",
+     "U2/1"
+    ],
+    "blocker_side": "east",
+    "penetration_axis": "dx",
+    "penetration_mm": 0.6,
+    "pad_gap_mm": 4.4,
+    "max_feasible_translation_mm": 4.4,
+    "dilated_by": "n/a",
+    "onset_rule": "overlap(t) = max(0, t - gap) along the travel axis (rigid translation, fixed neighbour)",
+    "verdict": "INFEASIBLE at t=5.000 (5.000 > 4.400)"
+   },
+   {
+    "direction": "-X",
+    "delta_tested_mm": [
+     -5.0,
+     0.0
+    ],
+    "blocking_pair": [
+     "C73/2",
+     "U1/47"
+    ],
+    "blocker_side": "west",
+    "penetration_axis": "dx",
+    "penetration_mm": 0.15,
+    "pad_gap_mm": 4.85,
+    "max_feasible_translation_mm": 4.85,
+    "dilated_by": "n/a",
+    "onset_rule": "overlap(t) = max(0, t - gap) along the travel axis (rigid translation, fixed neighbour)",
+    "verdict": "INFEASIBLE at t=5.000 (5.000 > 4.850)"
+   },
+   {
+    "direction": "+Y",
+    "delta_tested_mm": [
+     0.0,
+     5.0
+    ],
+    "blocking_pair": [
+     "C86/1",
+     "U1/10"
+    ],
+    "blocker_side": "south",
+    "penetration_axis": "dy",
+    "penetration_mm": 0.3,
+    "pad_gap_mm": 4.7,
+    "max_feasible_translation_mm": 4.7,
+    "dilated_by": "n/a",
+    "onset_rule": "overlap(t) = max(0, t - gap) along the travel axis (rigid translation, fixed neighbour)",
+    "verdict": "INFEASIBLE at t=5.000 (5.000 > 4.700)"
+   },
+   {
+    "direction": "-Y",
+    "delta_tested_mm": [
+     0.0,
+     -5.0
+    ],
+    "blocking_pair": [
+     "J13/1",
+     "U1/4"
+    ],
+    "blocker_side": "north",
+    "penetration_axis": "dy",
+    "penetration_mm": 0.11,
+    "pad_gap_mm": 4.89,
+    "max_feasible_translation_mm": 4.89,
+    "dilated_by": "n/a",
+    "onset_rule": "overlap(t) = max(0, t - gap) along the travel axis (rigid translation, fixed neighbour)",
+    "verdict": "INFEASIBLE at t=5.000 (5.000 > 4.890)"
+   }
+  ],
+  "conclusion": "the largest feasible axis translation is g* = %.3f mm (-Y, blocked by J13); the requested 5.000 mm EXCEEDS it by %.3f mm in the best direction and by %.3f mm in the +X direction => the feasible set at t = 5.000 is EMPTY.",
+  "witness_boundary": "t* = 4.890 mm (-Y) is the best axis case: every t <= 4.890 mm is inside all four measured pad-gap bounds (this is DERIVED from the measured gaps; a single confirmatory placement check would settle it and is left for the next window - no run is made under this stop order)."
+ },
+ "scope_of_the_certificate": [
+  "certifies: the TRANSLATION-ONLY scenario (cluster moves rigidly, D2/C73/C86/J13 fixed) is infeasible at t = 5.000 mm in every axis direction",
+  "does NOT certify: that no re-placement of the cluster exists (a re-placement that also moves/rotates neighbours is a DIFFERENT change order and is not covered)"
+ ],
+ "change_order_consequence": "the scenario must be re-posed by the supervisor (a change order under constitution ch.7 sec.3): give a legal TARGET placement, or fold D2/C73/C86/J13 into the scenario, or lower the travel to t <= 4.890 mm.",
+ "evidence": {
+  "in_register": "L2/EXAM_A_SCENARIO_BLOCKER_v1.json (57bd740c577b03d6) - the four placement self-check readings, verbatim pad bboxes and overlaps",
+  "runs_made_to_produce_this_certificate": 0
+ },
+ "OWNER-ITEMS": 0
+}
