@@ -1,0 +1,111 @@
+{
+ "artifact": "k2_w2prime_execution_spec_v1",
+ "ts": "2026-09-28",
+ "authority": "#K2-348 W2-prime construction window (ordered list of #K2-347 sec.2 / R884 sec.3) - EXACT ANCHORS so the next window executes mechanically, no re-planning",
+ "anchors_verified_verbatim": {
+  "netlist_removals": {
+   "J9": {
+    "line": 4141,
+    "text": "  - ref: J9",
+    "next": "    symbol: HEADER_4PIN"
+   },
+   "J6": {
+    "line": 4159,
+    "text": "  - ref: J6",
+    "next": "    symbol: HEADER_2PIN"
+   },
+   "J11": {
+    "line": 4165,
+    "text": "  - ref: J11",
+    "next": "    symbol: HEADER_4PIN_EC"
+   }
+  },
+  "spec_leaves": {
+   "components.pin_headers.positions": [
+    "J11",
+    "J12",
+    "J13",
+    "J6",
+    "J9"
+   ],
+   "mounting_holes.holes[H4]": {
+    "at": [
+     140.8,
+     76.8
+    ],
+    "keepout_bbox": [
+     111.6,
+     33.1,
+     117.6,
+     39.1
+    ],
+    "stale": true
+   }
+  },
+  "placement_source": {
+   "J9": [
+    27.94,
+    55.96,
+    90.0
+   ],
+   "J6": [
+    27.94,
+    39.66,
+    90.0
+   ],
+   "J11": [
+    27.94,
+    65.38,
+    90.0
+   ],
+   "U6": [
+    93.8,
+    53.7,
+    90.0
+   ]
+  }
+ },
+ "edits": [
+  {
+   "id": "E1",
+   "file": "hw/data/k2_sch.errata-3.yaml",
+   "what": "DELETE the placement blocks at lines 4141 (J9), 4159 (J6), 4165 (J11) - each is 3 lines: '- ref: <X>' / 'symbol: ...' / 'card: both'",
+   "then": "ADD test points: J11 -> 3 TPs (I2C2_SCL, I2C2_SDA, P3V3_AUX); J6 -> 1 TP (PWR_CTRL_OUT); J9 -> none (net stays on the MCU side)",
+   "library_dependency": "the TP footprint must exist in hw/lib/ForgeOS.pretty (e.g. TP_1.0mm) and be added to ForgeOS.refmap.json; if absent this is a named blocker (do NOT invent a footprint)"
+  },
+  {
+   "id": "E2",
+   "file": "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-62.json (new, modification type)",
+   "what": "remove J9/J6/J11 from components.pin_headers.positions (add the TP entries); H4: at -> [140.9287,76.9287], keepout_bbox -> [137.929,73.929,143.929,79.929], and MOVE the K2_HOLE_KEEPOUT_H4 polygon with it (ATOMIC - the stale square [111.6,33.1,117.6,39.1] is repaired by the same edit)",
+   "also": "per-leaf old->new + rollback card + the U6/left-cluster leaves once the designer has chosen them"
+  },
+  {
+   "id": "E3",
+   "file": "pm_gate/artifacts/k2_v4/L2/PLACEMENT_SOLUTION_v1.json",
+   "what": "remove refs J9/J6/J11; add the TP refs; U6 micro-shift and the left-cluster re-placement leaves (ENG design choice, constrained by: the four corner squares must stay constructively copper-free)",
+   "note": "this file is the chain's SOLE coordinate source (M-ENG-CHAIN-SOURCE): SPEC and the board must agree with it"
+  },
+  {
+   "id": "E4",
+   "file": "pm_gate/project.yaml",
+   "what": "spec_name -> SPEC_k2_v4.spec-rev-62.json; board_path -> hw/k2_v4_8L.l15.kicad_pcb"
+  },
+  {
+   "id": "E5",
+   "run": "the chain ONCE (gen_v5 then route_segment --upto all) -> l15",
+   "why_once": "the connector set changes, so the board must be regenerated, not edited"
+  },
+  {
+   "id": "E6",
+   "judge": "ONCE: k2_corner_keepout_gate_v1 (all four corners PASS) + kicad-cli DRC (<=168, no class up, unconnected 0) + routing diff != 0 vs l14 (segment-level)"
+  },
+  {
+   "id": "E7",
+   "gate": "P1-P7 (k2_scheme_gate_v2) - FAIL = repair, never present"
+  }
+ ],
+ "ordering": "E1 -> E2 -> E3 -> E4 -> E5 -> E6 -> E7 (each step's failure = blocker report, no appending)",
+ "acceptance": "C21 all-PASS AND DRC <=168 with no class increased AND unconnected 0 AND routing diff != 0 AND P1-P7 all PASS",
+ "gates_honoured": "one bounded execution; no parameter sweeps; no construction-layer patching (#K2-347 sealed surgery stays sealed); frozen four untouched; no Gerber/order; no WORKER",
+ "OWNER-ITEMS": 0
+}
