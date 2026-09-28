@@ -1,0 +1,40 @@
+{
+ "artifact": "eda_eng_exam_a_doubleprime_attempt2_independent_audit_v1",
+ "ts": "2026-09-29",
+ "authority": "ENG self-falsification: independently RE-DERIVE the nine-row record from the archived board (read-only DRC + own geometry), to prove the record is artifact-backed.",
+ "verdict": "CONFIRMED - every recorded row reproduces exactly",
+ "method": "(i) a fresh kicad-cli DRC on the archived final board; (ii) counts compared with the recorded verdict; (iii) C6/C7 re-derived with block.geometry_equal; (iv) digest recomputed",
+ "result": {
+  "C1": {
+   "recorded": 22,
+   "re_derived": 22,
+   "match": true
+  },
+  "C2_geometry_total": {
+   "recorded": 141,
+   "re_derived": 141,
+   "match": true
+  },
+  "C6": {
+   "recorded": 0,
+   "re_derived": 0,
+   "match": true
+  },
+  "C7": {
+   "recorded": 0,
+   "re_derived": 0,
+   "match": true
+  },
+  "new_classes": {
+   "recorded": [
+    "isolated_copper",
+    "solder_mask_bridge"
+   ],
+   "re_derived_same": true
+  },
+  "library_rows_recorded_not_judged": 54,
+  "digest": "32ff08465e5dc080"
+ },
+ "note": "the audit also lists RESULT-side classes that are NOT new (they exist in the reference: track_dangling / not_centered_on_via / missing_courtyard / ...), which is why the new-class list is exactly two rows.",
+ "OWNER-ITEMS": 0
+}
