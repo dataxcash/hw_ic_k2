@@ -1,0 +1,177 @@
+{
+ "artifact": "k2_placement_norms_v2",
+ "ts": "2026-09-28",
+ "authority": "#K2-343 sec.4 W1 (sample learning pipeline) · supersedes PLACEMENT_NORMS_v1 as the library",
+ "charter": "OWNER-CHARTER-v2-20260928 (sample autonomy): samples are the layout-policy authority; owner untouched",
+ "inherited_norms": [
+  {
+   "id": "N1",
+   "rule": "主芯片置于板框几何中心区（|x-xc|<=0.15W 且 |y-yc|<=0.15H）",
+   "param": {
+    "centre_tol_frac": 0.15
+   },
+   "source": [
+    "corpus#1 EVM: chip CENTRE"
+   ],
+   "reverse_rule": "R-N1 不得把主芯片偏置到一边（K2: U6 x=93.8 偏右）"
+  },
+  {
+   "id": "N2",
+   "rule": "高速连接器置于单边，且该边与主芯片的扇出方向对齐",
+   "source": [
+    "corpus#1 EVM: connectors BOTTOM single edge + radial fan-out",
+    "corpus#2 riser: L->R fork"
+   ],
+   "reverse_rule": "R-N2 不得把连接器放在非扇出边（K2: J2 右缘 vs U6 扇出）"
+  },
+  {
+   "id": "N3",
+   "rule": "安装孔四角布置（每孔距其最近角 <=3.0mm），边缘留边 >=0.3mm",
+   "param": {
+    "corner_max_mm": 3.0,
+    "edge_min_mm": 0.3
+   },
+   "source": [
+    "corpus#1 EVM: holes FOUR_CORNERS",
+    "#K2-322 sec.3.1"
+   ],
+   "reverse_rule": "R-N3 不得使孔位离角（K2: 4.67/7.49/22.50/28.62）"
+  },
+  {
+   "id": "N4",
+   "rule": "外围按功能分区：电源/接口一侧、控制/存储另一侧；芯片周圈放阻容",
+   "source": [
+    "corpus#1 EVM: left power/interface + jumpers, right EEPROM/control, passives around the chip"
+   ],
+   "reverse_rule": "R-N4 不得功能混置"
+  },
+  {
+   "id": "N5",
+   "rule": "密度均衡：任一象限的器件面积占比不超全局均值的 1.5 倍；无「挤在一角」",
+   "param": {
+    "quadrant_max_ratio": 1.5
+   },
+   "source": [
+    "corpus#1 EVM: even spread"
+   ],
+   "reverse_rule": "R-N5 不得形成局部高密簇（K2: 左簇 U1/U2/U4/U5 偏上过密 · R3 FAIL）"
+  },
+  {
+   "id": "N6",
+   "rule": "高速区与低速/电源区分离（区带边界不重叠，间距 >=2.0mm）",
+   "param": {
+    "zone_gap_min_mm": 2.0
+   },
+   "source": [
+    "corpus#1 EVM: HS at the bottom edge, power/control at the sides"
+   ],
+   "reverse_rule": "R-N6 不得高低速混布（K2: R2 可疑）"
+  },
+  {
+   "id": "N7",
+   "rule": "流向自芯片扇出至连接器；同组走线并行等长，禁逆流长绕",
+   "source": [
+    "corpus#1 EVM radial fan-out",
+    "corpus#2 riser fork"
+   ],
+   "reverse_rule": "R-N7 不得逆流/长绕"
+  }
+ ],
+ "sample_derived_norms": [
+  {
+   "id": "N8",
+   "rule": "排针政策：产品卡只携带 ①主机/产品高速接口 ②电源输入 ③至多一个生产编程口；评估用配置排针/选择跳线/调试控制台**不得存在**（改测试点或删除）",
+   "param": {
+    "allowed_classes": [
+     "HOST_EDGE/HS_PRODUCT_INTERFACE",
+     "POWER_IN",
+     "PROGRAMMING(<=1)"
+    ],
+    "forbidden_classes": [
+     "CONFIG_FURNITURE (multi-position selectors, console/aux buses)"
+    ]
+   },
+   "source": {
+    "kind": "SAMPLE_DERIVED (cross-sample inventory)",
+    "citations": [
+     {
+      "sample": "SNLU300",
+      "fact": "connector-like inventory 27, 其中 CONFIG_FURNITURE 17 (63.0%)"
+     },
+     {
+      "sample": "SNLU301",
+      "fact": "connector-like inventory 34, 其中 CONFIG_FURNITURE 13 (38.2%)"
+     },
+     {
+      "sample": "SNLU273",
+      "fact": "connector-like inventory 34, 其中 CONFIG_FURNITURE 20 (58.8%)"
+     }
+    ],
+    "derivation": "三样板**每一块**都带 13–20 个配置排针（占其连接器清单 48–59%）——因为样板是**评估板**；⇒ 配置排针是评估家具，非产品必需。产品必需的交叉集 = {电源输入, 主机/产品高速接口}。"
+   },
+   "scope": "适用：**产品卡**的排针政策。样板是 EVM（评估板），其排针农场**不得**作为产品政策；交叉集（每样板皆有）才是产品必需项。",
+   "machine_check": "枚举板上连接器 → 分类 → 断言 CONFIG_FURNITURE 类 = 0（每项须有移除或改测试点的处置）"
+  },
+  {
+   "id": "N9",
+   "rule": "机械框架：安装孔四角（距角 ≤3.0mm）· 孔与其 6×6 禁区方框**原子同动**",
+   "param": {
+    "corner_max_mm": 3.0,
+    "keepout_half_mm": 3.0
+   },
+   "source": {
+    "kind": "SAMPLE_DERIVED + 规范",
+    "citations": [
+     {
+      "sample": "SNLU300 Fig 4-1/4-2 (在册)",
+      "fact": "四角安装孔"
+     },
+     {
+      "sample": "在册缺陷 M-ENG-HOLE-KEEPOUT-STALE",
+      "fact": "移动孔而禁区留守 = 静默缺陷（H2/H4 实测）"
+     }
+    ]
+   },
+   "scope": "适用：机械框架（产品级）。样板层图给孔位政策；孔-禁区耦合为本板实测教训。",
+   "machine_check": "四孔 corner_dist<=3.0 且 keepout 方框中心 == 孔位"
+  },
+  {
+   "id": "N10",
+   "rule": "密度/无农场：连接器不沿单边堆成配置列；左缘留给电源 + 产品接口",
+   "param": {
+    "max_same_edge_config_connectors": 0
+   },
+   "source": {
+    "kind": "SAMPLE_DERIVED",
+    "citations": [
+     {
+      "sample": "SNLU300/301/273",
+      "fact": "评估板把配置排针沿边排成 2–3 列；产品卡应把接口按功能分区（N4）而非成列堆叠"
+     }
+    ]
+   },
+   "scope": "适用：产品级分区/密度。评估板的成列堆叠是家具特征。",
+   "machine_check": "同一板边同功能的排针列数 ≤1（非产品接口类为 0）"
+  }
+ ],
+ "sample_facts": {
+  "per_sample_inventory_size": {
+   "SNLU300": 27,
+   "SNLU301": 34,
+   "SNLU273": 34
+  },
+  "config_furniture_counts": {
+   "SNLU300": 17,
+   "SNLU301": 13,
+   "SNLU273": 20
+  },
+  "config_furniture_fraction_pct": {
+   "SNLU300": 63.0,
+   "SNLU301": 38.2,
+   "SNLU273": 58.8
+  },
+  "records": "L2/SAMPLE_RECORDS_v1.json"
+ },
+ "next": "W2: header governance (J9 remove / J11 -> test points / J6 remove-or-testpoints; keep J2/J3/J4/J12/J13) + U1/U2/U4/U5 real re-placement (no rigid-translation proof) + H4 corner (C22 pour polygons) -> P1..P7",
+ "OWNER-ITEMS": 0
+}

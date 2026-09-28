@@ -1,0 +1,666 @@
+{
+ "artifact": "k2_sample_records_v1",
+ "ts": "2026-09-28",
+ "authority": "#K2-343 sec.2/§4 W1: sample learning pipeline (parse -> classify -> norms)",
+ "charter_scope": "samples = the legal authority for layout policy; owner is NOT asked (engineering autonomy)",
+ "samples": [
+  {
+   "id": "SNLU300",
+   "doc": "REF-SNLU300-DS320PR1601RSCEVM-UG.pdf",
+   "description": "DS320PR1601RSC-EVM (16-lane linear redriver x16 riser)",
+   "n_connector_like": 27,
+   "role_histogram": {
+    "CONFIG_FURNITURE": 17,
+    "POWER_IN": 6,
+    "PROGRAMMING": 1,
+    "UNCLASSIFIED": 3
+   },
+   "inventory": [
+    {
+     "designator": "JMP1",
+     "desc": "A_ADDR1_7-0                                    Downstream A Channels 0-7 Address1",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU300 text line 275"
+    },
+    {
+     "designator": "JMP2",
+     "desc": "A_ADDR0_7-0                                    Downstream A Channels 0-7 Address0",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU300 text line 282"
+    },
+    {
+     "designator": "JMP3",
+     "desc": "B_ADDR1_7-0                                    Upstream B Channels 0-7 Address1",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU300 text line 289"
+    },
+    {
+     "designator": "JMP4",
+     "desc": "B_ADDR0_7-0                                    Upstream B Channels 0-7 Address0",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU300 text line 296"
+    },
+    {
+     "designator": "JMP5",
+     "desc": "A_ADDR0_15-8                                   Downstream A Channels 8-15 Address0",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU300 text line 303"
+    },
+    {
+     "designator": "JMP6",
+     "desc": "A_ADDR1_15-8                                   Downstream A Channels 8-15 Address1",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU300 text line 310"
+    },
+    {
+     "designator": "JMP7",
+     "desc": "B_ADDR1_15-8                                   Upstream B Channels 8-15 Address1",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU300 text line 317"
+    },
+    {
+     "designator": "JMP8",
+     "desc": "B_ADDR0_15-8                                   Upstream B Channels 8-15 Address0",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU300 text line 324"
+    },
+    {
+     "designator": "JMP9",
+     "desc": "MODE                                          MODE Pin Configuration",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU300 text line 342"
+    },
+    {
+     "designator": "JMP10",
+     "desc": "PD_3-0                                        Power Down Control Channels 0-3",
+     "role": "POWER_IN",
+     "cite": "SNLU300 text line 349"
+    },
+    {
+     "designator": "JMP11",
+     "desc": "PD_7-4                                        Power Down Control Channels 4-7",
+     "role": "POWER_IN",
+     "cite": "SNLU300 text line 357"
+    },
+    {
+     "designator": "JMP12",
+     "desc": "PD_11-8                                       Power Down Control Channels 8-11",
+     "role": "POWER_IN",
+     "cite": "SNLU300 text line 365"
+    },
+    {
+     "designator": "JMP13",
+     "desc": "PD_15-12                                      Power Down Control Channels 12-15",
+     "role": "POWER_IN",
+     "cite": "SNLU300 text line 373"
+    },
+    {
+     "designator": "JMP14",
+     "desc": "RSVD0                                         Reserved0 Leave as N/C",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU300 text line 381"
+    },
+    {
+     "designator": "JMP15",
+     "desc": "RSVD1                                         Reserved1 Leave as N/C",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU300 text line 385"
+    },
+    {
+     "designator": "JMP16/SW1",
+     "desc": "READ_EN#                                      READ_EN# Pushbutton SW1 to force",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU300 text line 389"
+    },
+    {
+     "designator": "JMP17",
+     "desc": "I2C Adapter Select                            Select I2C Adapter to Plug into Connector P4",
+     "role": "PROGRAMMING",
+     "cite": "SNLU300 text line 394"
+    },
+    {
+     "designator": "JMP18",
+     "desc": "3.3 V VCC                                     VCC",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU300 text line 398"
+    },
+    {
+     "designator": "JMP19",
+     "desc": "12 V                                           PCIe 12 V",
+     "role": "POWER_IN",
+     "cite": "SNLU300 text line 414"
+    },
+    {
+     "designator": "JMP20",
+     "desc": "3.3 V VCC Source Select                        VCC Source",
+     "role": "POWER_IN",
+     "cite": "SNLU300 text line 418"
+    },
+    {
+     "designator": "JMP21",
+     "desc": "EEPROM Write Protect                           EEPROM WP",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU300 text line 422"
+    },
+    {
+     "designator": "JMP22",
+     "desc": "PRSNT_1 Option                                 PRSNT1_Config Option",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU300 text line 426"
+    },
+    {
+     "designator": "P4",
+     "desc": "(Note: neither Adapter is supplied with the DS320PR1601EVM-RSC).",
+     "role": "UNCLASSIFIED",
+     "cite": "SNLU300 text line 453"
+    },
+    {
+     "designator": "JMP22",
+     "desc": "1            Header 4x2                  AMP                        103322-4",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU300 text line 643"
+    },
+    {
+     "designator": "P2",
+     "desc": "1            PCIe Gen 5 Connector        Amphenol FCI               10153266-A40100LF",
+     "role": "UNCLASSIFIED",
+     "cite": "SNLU300 text line 649"
+    },
+    {
+     "designator": "P4",
+     "desc": "1            Header 5x2 0.1\" Shroud      3M                         30310-5002HB",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU300 text line 651"
+    },
+    {
+     "designator": "SW1",
+     "desc": "1            Switch - Push Button        Panasonic                   EVQ-PAD05RSwitch -",
+     "role": "UNCLASSIFIED",
+     "cite": "SNLU300 text line 732"
+    }
+   ],
+   "figures_in_register": [
+    "REF-DS320PR1601EVM-Fig4-1-TopLayer.png",
+    "REF-DS320PR1601EVM-Fig4-2-BottomLayer.png"
+   ]
+  },
+  {
+   "id": "SNLU301",
+   "doc": "SNLU301-DS320PR412-421EVM.pdf",
+   "description": "DS320PR412-421EVM (x8 redriver/switch riser)",
+   "n_connector_like": 34,
+   "role_histogram": {
+    "CONFIG_FURNITURE": 13,
+    "HOST_EDGE": 6,
+    "POWER_IN": 2,
+    "PROGRAMMING": 1,
+    "UNCLASSIFIED": 12
+   },
+   "inventory": [
+    {
+     "designator": "J1",
+     "desc": "DS320PR412-0 VCC          Pins 2-3:",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU301 text line 285"
+    },
+    {
+     "designator": "J2",
+     "desc": "DS320PR412-1 VCC          Pins 2-3:",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU301 text line 288"
+    },
+    {
+     "designator": "J3",
+     "desc": "DS320PR421-2 VCC          Pins 2-3:",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU301 text line 291"
+    },
+    {
+     "designator": "J4",
+     "desc": "DS320PR421-3 VCC          Pins 2-3:",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU301 text line 294"
+    },
+    {
+     "designator": "J5",
+     "desc": "PCIe JTAG TRST          3-4 Edge Finger to PCIe A + B",
+     "role": "HOST_EDGE",
+     "cite": "SNLU301 text line 297"
+    },
+    {
+     "designator": "J6",
+     "desc": "PCIe JTAG TCK           3-4 Edge Finger to PCIe A + B",
+     "role": "HOST_EDGE",
+     "cite": "SNLU301 text line 300"
+    },
+    {
+     "designator": "J7",
+     "desc": "PCIe TDI            3-4 Edge Finger to PCIe A + B",
+     "role": "HOST_EDGE",
+     "cite": "SNLU301 text line 303"
+    },
+    {
+     "designator": "J8",
+     "desc": "PCIe TDO             3-4 Edge Finger to PCIe A + B",
+     "role": "HOST_EDGE",
+     "cite": "SNLU301 text line 306"
+    },
+    {
+     "designator": "J9",
+     "desc": "PCIe TMS             3-4 Edge Finger to PCIe A + B",
+     "role": "HOST_EDGE",
+     "cite": "SNLU301 text line 309"
+    },
+    {
+     "designator": "J11",
+     "desc": "Board 12-V Supply        Pin 1 : Board 12V",
+     "role": "POWER_IN",
+     "cite": "SNLU301 text line 314"
+    },
+    {
+     "designator": "JMP7",
+     "desc": "MUX SEL              1-2 : PCIe Edge Finger to PCIe-B",
+     "role": "HOST_EDGE",
+     "cite": "SNLU301 text line 316"
+    },
+    {
+     "designator": "JMP8",
+     "desc": "Redriver PD           1-2 : Power Down",
+     "role": "POWER_IN",
+     "cite": "SNLU301 text line 318"
+    },
+    {
+     "designator": "JMP17",
+     "desc": "I2C Interface Sel       1-2 : USB2ANY",
+     "role": "PROGRAMMING",
+     "cite": "SNLU301 text line 320"
+    },
+    {
+     "designator": "JMP18",
+     "desc": "CLK Buffer Enable        1-2 : Disabled",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU301 text line 322"
+    },
+    {
+     "designator": "JMP19",
+     "desc": "CLK Buffer Input Sel      1-2 : CLKIN1",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU301 text line 324"
+    },
+    {
+     "designator": "JMP20",
+     "desc": "CLK Buffer Ref. Out      1-2 : Enabled",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU301 text line 326"
+    },
+    {
+     "designator": "JMP1",
+     "desc": "5-6: L2",
+     "role": "UNCLASSIFIED",
+     "cite": "SNLU301 text line 346"
+    },
+    {
+     "designator": "JMP2",
+     "desc": "5-6: L2",
+     "role": "UNCLASSIFIED",
+     "cite": "SNLU301 text line 353"
+    },
+    {
+     "designator": "JMP3",
+     "desc": "5-6: L2",
+     "role": "UNCLASSIFIED",
+     "cite": "SNLU301 text line 360"
+    },
+    {
+     "designator": "JMP4",
+     "desc": "DS320PR412_1      1-2: L0 3-4: L1 5-6: L27-8: L3 N/C: L4",
+     "role": "UNCLASSIFIED",
+     "cite": "SNLU301 text line 378"
+    },
+    {
+     "designator": "JMP5",
+     "desc": "DS320PR412_1      1-2: L0 3-4: L1 5-6: L27-8: L3 N/C: L4",
+     "role": "UNCLASSIFIED",
+     "cite": "SNLU301 text line 380"
+    },
+    {
+     "designator": "JMP6",
+     "desc": "DS320PR412_1      1-2: L0",
+     "role": "UNCLASSIFIED",
+     "cite": "SNLU301 text line 382"
+    },
+    {
+     "designator": "J24",
+     "desc": "DS320PR412_1      1-2: L0",
+     "role": "UNCLASSIFIED",
+     "cite": "SNLU301 text line 387"
+    },
+    {
+     "designator": "J25",
+     "desc": "DS320PR412_1      1-2: L0",
+     "role": "UNCLASSIFIED",
+     "cite": "SNLU301 text line 393"
+    },
+    {
+     "designator": "JMP9",
+     "desc": "DS320PR421_0       1-2: L0 3-4: L1 5-6: L27-8: L3 N/C: L4",
+     "role": "UNCLASSIFIED",
+     "cite": "SNLU301 text line 413"
+    },
+    {
+     "designator": "JMP10",
+     "desc": "DS320PR421_0 EQ1     1-2: L0 3-4: L1 5-6: L27-8: L3 N/C: L4",
+     "role": "UNCLASSIFIED",
+     "cite": "SNLU301 text line 415"
+    },
+    {
+     "designator": "JMP11",
+     "desc": "DS320PR421_0 MODE    1-2: L0 3-4: L1 5-6: L27-8: L3 N/C: L4",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU301 text line 416"
+    },
+    {
+     "designator": "J26",
+     "desc": "DS320PR421_0       1-2: L0 3-4: L1 5-6: L27-8: L3 N/C: L4 9-10: SCL",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU301 text line 417"
+    },
+    {
+     "designator": "J27",
+     "desc": "DS320PR421_0       1-2: L0 3-4: L1 5-6: L27-8: L3 N/C: L4 9-10: SDA",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU301 text line 419"
+    },
+    {
+     "designator": "JMP14",
+     "desc": "DS320PR421_1       1-2: L0 3-4: L1 5-6: L27-8: L3 N/C: L4",
+     "role": "UNCLASSIFIED",
+     "cite": "SNLU301 text line 421"
+    },
+    {
+     "designator": "JMP15",
+     "desc": "DS320PR421_1 EQ1     1-2: L0 3-4: L1 5-6: L27-8: L3 N/C: L4",
+     "role": "UNCLASSIFIED",
+     "cite": "SNLU301 text line 423"
+    },
+    {
+     "designator": "JMP16",
+     "desc": "DS320PR421_1 MODE    1-2: L0 3-4: L1 5-6: L27-8: L3 N/C: L4",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU301 text line 424"
+    },
+    {
+     "designator": "J28",
+     "desc": "DS320PR421_1       1-2: L0 3-4: L1 5-6: L27-8: L3 N/C: L4 9-10: SCL",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU301 text line 425"
+    },
+    {
+     "designator": "J29",
+     "desc": "DS320PR421_1       1-2: L0 3-4: L1 5-6: L27-8: L3 N/C: L4 9-10: SDA",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU301 text line 427"
+    }
+   ],
+   "figures_in_register": [
+    "S301_layout-20.png",
+    "S301_layout-21.png",
+    "S301_layout-22.png"
+   ]
+  },
+  {
+   "id": "SNLU273",
+   "doc": "SNLU273-DS160PR810EVM-RSC.pdf",
+   "description": "DS160PR810EVM-RSC (8-lane linear redriver x8 riser)",
+   "n_connector_like": 34,
+   "role_histogram": {
+    "CONFIG_FURNITURE": 20,
+    "POWER_IN": 5,
+    "UNCLASSIFIED": 9
+   },
+   "inventory": [
+    {
+     "designator": "J1",
+     "desc": "3x2 Header            L1: All devices set to SMBus, I2C Maseter Mode",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU273 text line 258"
+    },
+    {
+     "designator": "J2",
+     "desc": "3x2 Header",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU273 text line 264"
+    },
+    {
+     "designator": "J3",
+     "desc": "5x2 Header",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU273 text line 269"
+    },
+    {
+     "designator": "J4",
+     "desc": "3x1 Header            All devices disabled.",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU273 text line 273"
+    },
+    {
+     "designator": "J5",
+     "desc": "3x1 Header            tied to GND: I2C Access to the EEPROM enabled WP floating: I2C Access to the",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU273 text line 277"
+    },
+    {
+     "designator": "J6",
+     "desc": "2x1 Header",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU273 text line 280"
+    },
+    {
+     "designator": "J11",
+     "desc": "2x1 Header            DO NOT APPLY power if plugging the EVM into a system as the power is provided",
+     "role": "POWER_IN",
+     "cite": "SNLU273 text line 290"
+    },
+    {
+     "designator": "J12",
+     "desc": "2x1 Header            Access point to the GND reference",
+     "role": "POWER_IN",
+     "cite": "SNLU273 text line 292"
+    },
+    {
+     "designator": "J13",
+     "desc": "2x1 Header            Onboard 3.3-V output",
+     "role": "POWER_IN",
+     "cite": "SNLU273 text line 293"
+    },
+    {
+     "designator": "J14",
+     "desc": "3x2 Header           L1: –3 dB Gain Setting",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU273 text line 311"
+    },
+    {
+     "designator": "J15",
+     "desc": "12x2 Header",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU273 text line 319"
+    },
+    {
+     "designator": "J16",
+     "desc": "12x2 Header",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU273 text line 330"
+    },
+    {
+     "designator": "J17",
+     "desc": "3x1 Header           1-2 for operation in Pin Mode (default) Install shunt across pins 2-3 for operation in",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU273 text line 337"
+    },
+    {
+     "designator": "J18",
+     "desc": "3x1 Header           pins 1-2 for operation in Pin Mode (default) Install shunt across pins 2-3 for",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU273 text line 340"
+    },
+    {
+     "designator": "J19",
+     "desc": "3x1 Header           1-2 for operation in Pin Mode (default) Install shunt across pins 2-3 for operation in",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU273 text line 343"
+    },
+    {
+     "designator": "J20",
+     "desc": "3x1 Header           RX DET / SCL Dual Function Pin Provision for DS2 Device Install shunt across",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU273 text line 345"
+    },
+    {
+     "designator": "J21",
+     "desc": "3x2 Header",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU273 text line 363"
+    },
+    {
+     "designator": "J22",
+     "desc": "12x2",
+     "role": "UNCLASSIFIED",
+     "cite": "SNLU273 text line 370"
+    },
+    {
+     "designator": "J23",
+     "desc": "12x2 Header",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU273 text line 381"
+    },
+    {
+     "designator": "J24",
+     "desc": "3x1 Header           1-2 for operation in Pin Mode (default) Install shunt across pins 2-3 for operation in",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU273 text line 388"
+    },
+    {
+     "designator": "J25",
+     "desc": "3x1 Header           pins 1-2 for operation in Pin Mode (default) Install shunt across pins 2-3 for",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU273 text line 391"
+    },
+    {
+     "designator": "J26",
+     "desc": "3x1 Header           1-2 for operation in Pin Mode (default) Install shunt across pins 2-3 for operation in",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU273 text line 394"
+    },
+    {
+     "designator": "J27",
+     "desc": "3x1 Header           RX DET / SCL Dual Function Pin Provision for US2 Device Install shunt across",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU273 text line 396"
+    },
+    {
+     "designator": "J1",
+     "desc": "J6",
+     "role": "UNCLASSIFIED",
+     "cite": "SNLU273 text line 719"
+    },
+    {
+     "designator": "J2",
+     "desc": "C1",
+     "role": "UNCLASSIFIED",
+     "cite": "SNLU273 text line 733"
+    },
+    {
+     "designator": "J5",
+     "desc": "R12     249",
+     "role": "UNCLASSIFIED",
+     "cite": "SNLU273 text line 754"
+    },
+    {
+     "designator": "J31",
+     "desc": "U2C",
+     "role": "UNCLASSIFIED",
+     "cite": "SNLU273 text line 791"
+    },
+    {
+     "designator": "J11",
+     "desc": "12V+/-20%, 0.5A MAX",
+     "role": "POWER_IN",
+     "cite": "SNLU273 text line 837"
+    },
+    {
+     "designator": "J12",
+     "desc": "NC   26",
+     "role": "UNCLASSIFIED",
+     "cite": "SNLU273 text line 866"
+    },
+    {
+     "designator": "J14",
+     "desc": "9                10   R49     13.0k",
+     "role": "UNCLASSIFIED",
+     "cite": "SNLU273 text line 1407"
+    },
+    {
+     "designator": "J22",
+     "desc": "J24                                           VREG1_US1                              VREG3_US1",
+     "role": "UNCLASSIFIED",
+     "cite": "SNLU273 text line 1522"
+    },
+    {
+     "designator": "J21",
+     "desc": "15               16   R81       13.0k                 J27                                                     ",
+     "role": "UNCLASSIFIED",
+     "cite": "SNLU273 text line 1550"
+    },
+    {
+     "designator": "J3",
+     "desc": "1                     Header, 100mil, 5x2, Gold, TH              5x2 Header               TSW-105-07-G-D      ",
+     "role": "CONFIG_FURNITURE",
+     "cite": "SNLU273 text line 1983"
+    },
+    {
+     "designator": "SW1",
+     "desc": "1                     Switch, Tactile, SPST-NO, 0.05A, 12V,      SW, SPST 3.5x5 mm      PTS635SL50LFS         ",
+     "role": "POWER_IN",
+     "cite": "SNLU273 text line 2070"
+    }
+   ],
+   "figures_in_register": [
+    "S273_layout-21.png",
+    "S273_layout-22.png"
+   ]
+  }
+ ],
+ "cross_sample": {
+  "per_sample_role_counts": {
+   "SNLU300": {
+    "CONFIG_FURNITURE": 17,
+    "POWER_IN": 6,
+    "PROGRAMMING": 1,
+    "UNCLASSIFIED": 3
+   },
+   "SNLU301": {
+    "CONFIG_FURNITURE": 13,
+    "HOST_EDGE": 6,
+    "POWER_IN": 2,
+    "PROGRAMMING": 1,
+    "UNCLASSIFIED": 12
+   },
+   "SNLU273": {
+    "CONFIG_FURNITURE": 20,
+    "POWER_IN": 5,
+    "UNCLASSIFIED": 9
+   }
+  },
+  "roles_in_ALL_samples": [
+   "CONFIG_FURNITURE",
+   "POWER_IN",
+   "UNCLASSIFIED"
+  ],
+  "roles_in_SOME_samples": [
+   "HOST_EDGE",
+   "PROGRAMMING"
+  ],
+  "interpretation": "roles present in EVERY sample = product-necessary; roles present in only some = board-specific. Config jumpers/selects/debug consoles appear in every EVM because an EVM IS evaluation furniture - they are NOT product-necessary and are the M-ENG-HEADER-FARM habit."
+ },
+ "OWNER-ITEMS": 0
+}
