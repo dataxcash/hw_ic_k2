@@ -238,6 +238,38 @@ class T(unittest.TestCase):
         self.assertEqual(r["status"], "BLOCKED", "a keepout across the straight line must block the trivial candidate")
         self.assertIn("keepout", [v["kind"] for v in r["violations"]])
 
+    def test_M3v2_multipad_mst_routes_a_three_pad_net(self):
+        r = route.route_net([[0, 0], [10, 0], [10, 10]], ["F.Cu"], [], net="N1")
+        self.assertEqual(r["status"], "ROUTED")
+        self.assertEqual(len(r["mst_edges"]), 2, "a 3-pad net needs 2 MST edges")
+        self.assertEqual(len(r["segments"]), 2)
+
+    def test_M3v2_multipad_is_deterministic(self):
+        a = route.route_net([[0, 0], [10, 0], [10, 10], [0, 10]], ["F.Cu"], [])
+        b = route.route_net([[0, 0], [10, 0], [10, 10], [0, 10]], ["F.Cu"], [])
+        self.assertEqual(json.dumps(a, sort_keys=True), json.dumps(b, sort_keys=True))
+
+    def test_M3v2_multipad_names_the_blocked_edge(self):
+        wall = [{"id": "wall", "kind": "copper", "net": "X", "bbox": [4.5, -5, 5.5, 5]}]
+        r = route.route_net([[0, 0], [10, 0]], ["F.Cu"], wall, net="N1")
+        self.assertEqual(r["status"], "BLOCKED")
+        self.assertIn("blocked_edge", r)
+        self.assertTrue(r["edge_violations"])
+
+    def test_M3v2_layer_change_fallback_uses_vias(self):
+        # F.Cu 被墙挡死，但 In2 在端点有净位 ⇒ 端点各落一支 via，中间走 In2
+        wall = [{"id": "wall", "kind": "copper", "net": "X", "bbox": [4.0, -6.0, 6.0, 6.0], "layers": ["F.Cu"]}]
+        r = route.route_pair_multi([0, 0], [10, 0], ["F.Cu", "In2.Cu"], wall, net="N1")
+        self.assertEqual(r["status"], "ROUTED")
+        self.assertEqual(r["layer"], "In2.Cu")
+        self.assertEqual(len(r["vias"]), 2, "a via at each endpoint")
+
+    def test_M3v2_via_sites_must_be_clear(self):
+        blocked = [{"id": "padblock", "kind": "copper", "net": "X", "bbox": [-1.0, -0.6, 1.0, 0.6],
+                    "layers": ["F.Cu", "In2.Cu"]}]
+        r = route.route_pair_multi([0, 0], [10, 0], ["F.Cu", "In2.Cu"], blocked, net="N1")
+        self.assertEqual(r["status"], "BLOCKED", "a via site on top of foreign copper must be refused")
+
     def test_M3_is_deterministic(self):
         a = route.route_pair([0, 0], [9, 3], "F.Cu", [])
         b = route.route_pair([0, 0], [9, 3], "F.Cu", [])

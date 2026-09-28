@@ -1,0 +1,25 @@
+{
+ "artifact": "eda_eng_M3v2_scope_expansion_receipt_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-362 sec.2.5 (M3 scope expansion: multi-pad / via / multi-layer) + #K2-363 sec.2.1",
+ "module": "M3 eda_eng route - v2 scope",
+ "readings": {
+  "selftest_tests": 36,
+  "failures": 0,
+  "errors": 0,
+  "verdict": "PASS",
+  "multi_pad": "route_net() connects a net's pads over a DETERMINISTIC MST (Prim, ties by index) and routes each edge with the layered candidate family; a blocked edge blocks the net and NAMES the edge",
+  "via_multi_layer": "route_pair_multi(): the endpoint layer (layers[0]) may route without vias; every OTHER layer requires vias at the layer-change points, and the via sites must clear the oracle (conservative clear+via_radius) - PHYSICALLY CORRECT semantics (a bare second-layer route is impossible for F.Cu pads)",
+  "oracle": "poly_violations() now honours an optional per-obstacle 'layers' field, so the toy cases can block one layer at a time (board-derived obstacles were already layer-filtered)"
+ },
+ "ENG_self_registration": {
+  "what": "M3 v2 took 3 consecutive self-test failures before going green: (1) the toy walls lacked a layer field so the oracle blocked every layer; (2) the BLOCKED return did not carry the per-layer violations; (3) my layer-change semantics routed on the second layer WITHOUT vias - physically impossible",
+  "classification": "all three were MY OWN design/test defects (the third is a genuine semantics bug), no algorithm-family switch and zero board change; per #K2-361 sec.2.2 code/fixture fixes do not trigger the >=3 gate but MUST be self-registered (this is) - the third one is a real correction worth recording"
+ },
+ "still_open": {
+  "C30_product_wiring": "exam A --run still executes the OLD composed chain; the M1->M2->M3->M4 wiring is NOT done yet (this window spent its budget on the M3 core)",
+  "next": "wire the product chain, then the SINGLE exam A run on the gate-legal region scenario (+3.5,+3.5 mm, ECO-K2-0002 v3), judged by M4"
+ },
+ "raw_test_output": "e image handler for 'PNM file'\n01:22:03: Debug: Adding duplicate image handler for 'PCX file'\n01:22:03: Debug: Adding duplicate image handler for 'IFF file'\n01:22:03: Debug: Adding duplicate image handler for 'Windows icon file'\n01:22:03: Debug: Adding duplicate image handler for 'Windows cursor file'\n01:22:03: Debug: Adding duplicate image handler for 'Windows animated cursor file'\n01:22:03: Debug: Adding duplicate image handler for 'TGA file'\n01:22:03: Debug: Adding duplicate image handler for 'XPM file'\n01:22:03: Debug: Adding duplicate image handler for 'WebP file'\nok\ntest_shadow_root_never_touches_the_real_tree (test_eda_eng.T.test_shadow_root_never_touches_the_real_tree) ... ok\n\n----------------------------------------------------------------------\nRan 36 tests in 27.518s\n\nOK\n{\"artifact\": \"eda_eng_selftest\", \"tests\": 36, \"failures\": 0, \"errors\": 0, \"skipped\": 0, \"verdict\": \"PASS\"}\n",
+ "OWNER-ITEMS": 0
+}

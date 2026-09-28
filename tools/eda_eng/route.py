@@ -45,11 +45,13 @@ def _box_pt_d2(bx, p):
     return dx * dx + dy * dy
 
 
-def poly_violations(poly, obstacles, clearance=CLEAR, step=0.05):
+def poly_violations(poly, obstacles, clearance=CLEAR, step=0.05, layer=None):
     """返回 [(obstacle_id, min_dist_mm, kind)]，只含违规项（keepout 用 clearance=0 且 min_dist==0 记违规）。"""
     bad = []
     pts = _poly_samples(poly, step)
     for ob in obstacles:
+        if layer and ob.get("layers") and layer not in ob["layers"]:
+            continue
         min_d2 = min(_box_pt_d2(ob["bbox"], p) for p in pts)
         d = math.sqrt(min_d2)
         need = 0.0 if ob.get("kind") == "keepout" else clearance
@@ -109,7 +111,7 @@ def route_pair(p, q, layer, obstacles, bounds=None, clear=CLEAR, net="__route__"
     tried, best = 0, None
     for poly in candidates(p, q):
         tried += 1
-        bad = poly_violations(poly, obstacles, clearance=clear)
+        bad = poly_violations(poly, obstacles, clearance=clear, layer=layer)
         if bounds:
             x0, y0, x1, y1 = bounds
             for pt in poly:
@@ -219,3 +221,90 @@ def apply_route(board, plan, out, layer=None, width_mm=0.2):
     return {"artifact": "eda_eng_route_apply", "net": plan["net"], "layer": layer, "segments_added": added,
             "width_mm": width_mm, "zones_refilled": refilled, "project_config_copied": copied, "out": out,
             "out_sha16": hashlib.sha256(open(out, "rb").read()).hexdigest()[:16]}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# M3 v2 扩面（#K2-362 §二.5 / #K2-363）：多 pad 网（确定性 MST）＋ via/多层回退
+# 三问 Q3 的「差异项」＝**解路器**（本仓路由器是图纸驱动，只会铺已知折线）
+# ─────────────────────────────────────────────────────────────────────────────
+def mst_edges(points):
+    """确定性最小生成树（Prim · 平局按索引）—— 起点 = 索引 0（按坐标排序后）。"""
+    n = len(points)
+    if n < 2:
+        return []
+    idx = sorted(range(n), key=lambda i: (points[i][0], points[i][1]))
+    inside = [idx[0]]
+    outside = idx[1:]
+    edges = []
+    while outside:
+        best = None
+        for a in inside:
+            for b in outside:
+                d = math.dist(points[a], points[b])
+                if best is None or d < best[0] - 1e-12 or (abs(d - best[0]) < 1e-12 and (a, b) < (best[1], best[2])):
+                    best = (d, a, b)
+        d, a, b = best
+        edges.append((a, b, round(d, 4)))
+        inside.append(b)
+        outside.remove(b)
+    return edges
+
+
+def via_sites_clear(p, q, obstacles, clear=CLEAR, via_radius=0.175):
+    """via 站点是否清场（保守：站点周围 clear+via_radius 内无外网障碍）。"""
+    bad = []
+    for site, tag in ((p, "p"), (q, "q")):
+        for ob in obstacles:
+            d = math.sqrt(_box_pt_d2(ob["bbox"], site))
+            need = (0.0 if ob.get("kind") == "keepout" else clear) + (0.0 if ob.get("kind") == "keepout" else via_radius)
+            if d <= need + 1e-9:
+                bad.append({"site": tag, "obstacle": ob.get("id"), "kind": ob.get("kind"), "min_dist_mm": round(d, 4)})
+    return bad
+
+
+def route_pair_multi(p, q, layers, obstacles, bounds=None, clear=CLEAR, net="__route__"):
+    """两点布 · 多层（**物理语义修正**）：`layers[0]` = 端点所在层 ⇒ 可**无 via** 直布；
+    其余层**必须**在换层点落 via ⇒ 只走「端点上落两支 via、中间走该层」这一条确定性方案。
+    """
+    tried = []
+    r0 = route_pair(p, q, layers[0], obstacles, bounds=bounds, clear=clear, net=net)
+    tried.append({"layer": layers[0], "status": r0["status"]})
+    if r0["status"] == "ROUTED":
+        r0["vias"] = []
+        r0["layers_tried"] = tried
+        return r0
+    for L in layers[1:]:
+        bad = via_sites_clear(p, q, obstacles, clear=clear)
+        if bad:
+            tried.append({"layer": L, "status": "BLOCKED_VIA_SITES", "via_site_violations": bad})
+            continue
+        r = route_pair(p, q, L, obstacles, bounds=bounds, clear=clear, net=net)
+        tried.append({"layer": L, "status": r["status"]})
+        if r["status"] == "ROUTED":
+            r["layer"] = L
+            r["vias"] = [{"at": list(p), "layers": [layers[0], L]}, {"at": list(q), "layers": [layers[0], L]}]
+            r["layers_tried"] = tried
+            r["rule"] = "layer change requires vias: both endpoints carry a via and the middle runs on the new layer"
+            return r
+    return {"status": "BLOCKED", "net": net, "layer": layers[0], "layers_tried": tried,
+            "violations": (r0.get("violations") if isinstance(r0, dict) else None),
+            "rule": "the endpoint layer is blocked and no layer change (via at both endpoints) was legal"}
+
+
+def route_net(pads, layers, obstacles, bounds=None, clear=CLEAR, net="__route__", via_radius=0.175):
+    """**多 pad 网**：确定性 MST ⇒ 逐边布（同网铜不视为障碍）⇒ 全边通 ⇒ ROUTED（含逐边见证 ＋ 全部 via）。"""
+    pads = [list(p) for p in pads]
+    edges = mst_edges(pads)
+    segs, vias, tried = [], [], []
+    for a, b, d in edges:
+        r = route_pair_multi(pads[a], pads[b], layers, obstacles, bounds=bounds, clear=clear, net=net)
+        tried.append({"edge": [a, b], "len_mm": d, "status": r["status"]})
+        if r["status"] != "ROUTED":
+            return {"status": "BLOCKED", "net": net, "blocked_edge": [a, b], "edge_len_mm": d,
+                    "edge_violations": r.get("violations"), "edges_tried": tried,
+                    "rule": "a multi-pad net is routed over a deterministic MST; one blocked edge blocks the net"}
+        segs.append({"edge": [a, b], "layer": r["layer"], "poly": r["poly"]})
+        vias += r.get("vias", [])
+    return {"status": "ROUTED", "net": net, "mst_edges": edges, "segments": segs, "vias": vias,
+            "n_vias": len(vias), "edges_tried": tried,
+            "rule": "deterministic MST (Prim, ties by index) over the net's pads; each edge by the layered candidate family"}
