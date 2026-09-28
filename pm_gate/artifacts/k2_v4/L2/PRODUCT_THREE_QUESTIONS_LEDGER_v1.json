@@ -62,5 +62,35 @@
   },
   "process_note": "SELF-REGISTERED PROCESS MISS: #K2-373 made the three questions a PREREQUISITE for the A-prime routing window, and attempt 1 was run BEFORE this entry was written. The reading above shows the miss had a concrete cost: the in-block reconnect was implemented in parallel with an in-repo product (C17 v1) that already covers the same stage. Recorded, not hidden; the next A-prime window must start by reading and copying C17 v1.",
   "OWNER-ITEMS": 0
+ },
+ "M_ENG_POUR_MASK_AWARENESS": {
+  "ts": "2026-09-29",
+  "authority": "#K2-385 sec.5.3: sec.20 three questions are a HARD precondition for this capability window; unanswered => rejected.",
+  "scope": "the capability = (a) re-connect POUR ISLANDS orphaned by a post-move wipe+refill; (b) be AWARE of solder-mask bridges before/while landing copper",
+  "Q1_same_kind_product_exists": {
+   "in_repo": "YES (partially) - the repo already ships the pour/refill stage and its helpers: `tools/k2_p4_build_l9_v1.py --stages ...pour` (the pour rebuild used by every chain), `tools/k2_route_segment_v1.py` (the orchestrator that calls it), `tools/k2_p4_gnd_vias_v1.py` (GND via stitching for return paths), and the shared layer `_shared/eda_core/dfm_repair.py` (a DFM-repair module).",
+   "external": "YES - commercial tools re-stitch orphan pours and run mask-sliver/bridge checks as part of post-route verification; none is licence-reviewed here.",
+   "reading": "a same-kind product EXISTS in-repo (pour + DFM repair); per sec.20.3 a search without a copy is not research."
+  },
+  "Q2_copyable_product_artifact": {
+   "primary_in_repo": [
+    "tools/k2_p4_build_l9_v1.py (--stages pour: the pour rebuild; the natural place to hang an island check right after the fill)",
+    "_shared/eda_core/dfm_repair.py (DFM repair - the closest in-repo artefact for mask/sliver rules)",
+    "tools/k2_route_segment_v1.py (the orchestrator pattern: stage -> DRC -> repair -> normalise)",
+    "tools/k2_p4_gnd_vias_v1.py (the existing 'stitch a return path' precedent for the island re-connection shape)"
+   ],
+   "what_the_chain_uses_today": "wipe_resolve_chain calls the in-register floor maze and then a plain apply-batch refill - it never inspects the fill for orphan islands and never checks mask proximity before landing",
+   "reading": "the copyable artefacts are the POUR stage, the DFM-repair module and the via-stitching precedent."
+  },
+  "Q3_difference_list": {
+   "what_the_in_repo_products_do_NOT_do": [
+    "ISLAND DETECTION+RECONNECTION: the pour stage re-fills but does not check whether a filled island still touches its net's copper (the R1054 orphan occurrence)",
+    "MASK-BRIDGE PRE-CHECK: dfm_repair is a REPAIR (after the fact, board-wide); nothing refuses a landing that would create a mask bridge next to a foreign pad (the R1054 U1<->J9 occurrence)",
+    "PER-MOVE SCOPING: neither is scoped to 'only what this relocation changed'"
+   ],
+   "consequence": "the capability window should COPY the pour-stage hook and the dfm_repair rules, and ADD only (i) an island check right after the fill and (ii) a mask-proximity pre-check at the landing guard - both additive, both regression-locked. Do NOT write a new board-wide repair."
+  },
+  "process_note": "answered BEFORE the implementation (the R992 error is not repeated); the gate at the command door enforces the entry's presence.",
+  "OWNER-ITEMS": 0
  }
 }

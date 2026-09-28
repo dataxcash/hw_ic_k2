@@ -1,0 +1,124 @@
+{
+ "artifact": "m_eng_pour_mask_awareness_plan_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-385 sec.5.1: the planning-layer regression artifact (sec.16.3 minimum format) for the capability window; ZERO exam runs authorised.",
+ "element_1_cause_of_death": "the wipe+re-solve leaves TWO post-move side effects that the engine cannot see: (1) the 12V_IN pours become ORPHAN ISLANDS (isolated_copper x3) because the wipe cut their link and the refill re-filled them without re-connecting; (2) the MOVED U1 pads sit close enough to J9's PTH pads to create SOLDER-MASK BRIDGES (x2) - a placement consequence no router can remove.",
+ "element_2_proven_facts": {
+  "nine_rows": {
+   "C1_connectivity": {
+    "unconnected": 22,
+    "pass": false
+   },
+   "C2_drc_no_new_increase": {
+    "total": 141,
+    "ref_total": 148,
+    "raw_total": 195,
+    "raw_ref_total": 168,
+    "new_classes": [
+     "isolated_copper",
+     "solder_mask_bridge"
+    ],
+    "excluded_new_classes": [
+     "lib_footprint_issues"
+    ],
+    "pinned_caliber": [
+     "lib_footprint_issues",
+     "lib_footprint_mismatch"
+    ],
+    "pass": false
+   },
+   "C3_skew": {
+    "per_pair_mm": {
+     "0": 0.065012,
+     "1": 0.06498,
+     "2": 0.043403,
+     "3": 0.078764,
+     "4": 1.4e-05,
+     "5": 5e-06,
+     "6": 0.021576,
+     "7": 0.013805
+    },
+    "max_mm": 0.078764,
+    "limit_mm": 0.15,
+    "pass": true
+   },
+   "C4_chamfer_preserved": {
+    "count": 2751,
+    "ref_count": 2637,
+    "pass": true
+   },
+   "C5_routing_changed": {
+    "element_set_diff": 1524,
+    "pass": true
+   },
+   "C6_outside_copper_unchanged": {
+    "diff": 0,
+    "pass": true,
+    "scope": "tracks+vias outside the wiped block frame"
+   },
+   "C7_hs_fanout_untouched": {
+    "diff": 0,
+    "pass": true,
+    "nets": [
+     "PCIE_DN0_P",
+     "PCIE_DN0_N",
+     "PCIE_DN1_P",
+     "PCIE_DN1_N",
+     "PCIE_DN2_P",
+     "PCIE_DN2_N",
+     "PCIE_DN3_P",
+     "PCIE_DN3_N",
+     "PCIE_DN4_P",
+     "PCIE_DN4_N",
+     "PCIE_DN5_P",
+     "PCIE_DN5_N",
+     "PCIE_DN6_P",
+     "PCIE_DN6_N",
+     "PCIE_DN7_P",
+     "PCIE_DN7_N"
+    ]
+   },
+   "C9_geometric_digest": {
+    "before": "1cf4d39614491ccc",
+    "after": "32ff08465e5dc080",
+    "pass": true
+   }
+  },
+  "classes": {
+   "isolated_copper": 3,
+   "solder_mask_bridge": 2
+  },
+  "unconnected": 22,
+  "capacity": "ENOUGH_SPACE 93.5% free (L2/C1_CAPACITY_READING_v1.json)",
+  "audit": "independently re-derived and CONFIRMED (L2/EDA_ENG_EXAM_A_DOUBLEPRIME_ATTEMPT2_AUDIT_v1.json)",
+  "no_shared_fix": "the two classes do NOT share a fix: (1) engine/zone asset; (2) placement consequence"
+ },
+ "element_3_corrected_plan": {
+  "a_island_reconnection": {
+   "deterministic": "after the refill, for each filled island of net N that does not touch N's copper: connect its nearest point to the nearest point of N's copper with the SAME in-domain maze (--bound-rect) and the same floor; no search, no parameter change",
+   "hook": "immediately after the pour stage (copy the k2_p4_build_l9_v1 --stages pour call site)"
+  },
+  "b_mask_bridge_awareness": {
+   "deterministic": "a PRE-LANDING check in the landing guard: before adding copper, compute the distance from each new polygon to every FOREIGN pad's mask-opening; if it would create a bridge (per the dhf rules borrowed from _shared/eda_core/dfm_repair.py), refuse the plan and name the pad pair - fail-closed, additive, no search",
+   "note": "for the U1/J9 case no router fix exists; the guard makes the engine REFUSE rather than silently create the bridge, which forces the placement fix"
+  },
+  "c_placement_note_option_B": {
+   "what": "the move must keep pad-to-foreign-pad mask distance >= the rule (U1's moved pads vs J9 PTH pads). If the checker proves the prescribed placement is mechanically illegal, the case escalates with a certificate (sec.16)",
+   "deterministic": "a spacing predicate, not a search"
+  },
+  "all_additive": "every item is an ADDITIVE parameter/guard; no existing return/early-exit path changes (the R1036 lesson)"
+ },
+ "element_4_buildability": {
+  "value": "relocation_listed",
+  "meaning": "the placement remains legal and witnessed; the two side effects are now NAMED with deterministic handling paths"
+ },
+ "copies": {
+  "sec20_entry": "L2/PRODUCT_THREE_QUESTIONS_LEDGER_v1.json :: M_ENG_POUR_MASK_AWARENESS"
+ },
+ "frozen": {
+  "board": "l14/rev-61 untouched; every board lives in /tmp",
+  "frozen_four": "4/4",
+  "exam_quota": "A-prime and A-double-prime both spent (1/1 each); ZERO exam runs in this window; aprime_witness freeze maintained"
+ },
+ "OWNER-ITEMS": 0
+}
