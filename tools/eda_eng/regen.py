@@ -28,11 +28,21 @@ def _host():
 
 STAGES = ["place", "gen", "route", "polish", "drc"]
 
+def _exam_a_preset():
+    """考题 A 场景的**单一源** = ECO 场景件（L2/EXAM_A_REGION_SCENARIO_v1.json，ECO-K2-0002 v3）。"""
+    p_ = os.path.join(ROOT, "pm_gate", "artifacts", "k2_v4", "L2", "EXAM_A_REGION_SCENARIO_v1.json")
+    if os.path.isfile(p_):
+        s = json.load(open(p_, encoding="utf-8"))["scenario"]
+        return {"spec_name": None, "placement": {"refs": s["region_refs"], "delta_mm": s["delta_mm"]},
+                "drawing": None}
+    return {"spec_name": None, "placement": {"refs": ["U1", "U2", "U4", "U5"], "delta_mm": [4.0, 0.0]},
+            "drawing": None}
+
+
 EXAM_PRESET = {
-    # RE-POSED by #K2-361 sec.2.3 (ECO-K2-0002 v2): translation-only family, +X 4.000 mm (0.400 mm margin
-    # under the measured 4.400 mm bound); the old +5.000 mm scenario is refuted by the R940 certificate.
-    "A": {"spec_name": None, "placement": {"refs": ["U1", "U2", "U4", "U5"], "delta_mm": [4.0, 0.0]},
-          "drawing": None},
+    # RE-POSED by #K2-363 sec.2.1 (ECO-K2-0002 v3): left REGION re-placement, target gate-chosen.
+    # Loaded from the scenario artifact so the ECO remains the single source.
+    "A": _exam_a_preset(),
     "B": {"spec_name": "SPEC_k2_v4.spec-rev-62.json", "placement": None,
           "drawing": "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_joint_assignment_H4CLEAR_v3.json"},
 }
@@ -307,3 +317,88 @@ def region_candidates(board, refs, pitch_mm=0.5, kmax=8):
             "candidates": cands,
             "rule": "#K2-363 sec.2.1: the DIRECTION comes from the N5 density rule (away from the crowded quadrant, "
                     "toward the emptiest) and the MAGNITUDE is chosen by the P1 gate - never hand-picked"}
+
+
+def exam_a_chain(refs, delta_mm, work, refs_are_region=True, max_nets=None):
+    """**C30 产品接线**：#K2-362 §二.5 —— `exam A --run` 的执行路径 = **M1→M2→M3→M4**。
+    每个**改板**阶段各起一个**子进程**（CLI 自身调自身）：改板会破坏同进程 SWIG 类型态。
+    返回 {chain, stages, board, verdict...}；`chain` 即**调用链证据**。"""
+    import hashlib
+    os.makedirs(work, exist_ok=True)
+    B = os.path.join(ROOT, "hw", "k2_v4_8L.l14.kicad_pcb")
+    torn = os.path.join(work, "torn.kicad_pcb")
+    final = os.path.join(work, "rerouted.kicad_pcb")
+    plan_j = os.path.join(work, "netplan.json")
+    chain = []
+
+    def _cli(*args):
+        r = subprocess.run([os.path.join(ROOT, "tools", "eda_eng.sh"), *args], cwd=ROOT,
+                           capture_output=True, text=True, timeout=3600)
+        out = r.stdout
+        j = None
+        if "{" in out:
+            try:
+                j = json.JSONDecoder().raw_decode(out[out.index("{"):])[0]
+            except Exception:
+                j = None
+        chain.append({"cmd": "eda_eng " + " ".join(args), "exit": r.returncode})
+        return r.returncode, j
+
+    # M1
+    rc, m1 = _cli("netplan", "--board", B, "--refs", ",".join(refs), "--delta", "%s,%s" % tuple(delta_mm),
+                  "--json-out", plan_j)
+    if rc != 0 or not m1:
+        return {"state": "M1_FAILED", "chain": chain, "M1": m1}
+    nets = m1["affected_nets"]
+    if max_nets:
+        nets = nets[:max_nets]
+    # M2  —— 只拆要重布的那几条网（清单子集 ⇒ 需重算）
+    if max_nets:
+        m1 = dict(m1); m1["teardown"] = {k: v for k, v in m1["teardown"].items() if k in nets}
+        m1["affected_nets"] = nets
+        json.dump(m1, open(plan_j, "w", encoding="utf-8"), ensure_ascii=False)
+    rc, m2 = _cli("ripup", "--board", B, "--plan", plan_j, "--out", torn)
+    if rc != 0 or not m2 or m2.get("status") != "RIPPED":
+        return {"state": "M2_FAILED", "chain": chain, "M2": m2, "M1": m1}
+    # M3 —— 逐网解路（纯数据 · 本进程）+ 批量落板（子进程）
+    from . import netplan as _np, route as _rt
+    obs, bounds = _rt.obstacles_from_board(torn, set(nets), "F.Cu")
+    pads = _rt.pads_by_net(torn, "F.Cu")
+    plans, blocked = [], []
+    for n in nets:
+        if n not in pads or len(pads[n]) < 2:
+            blocked.append({"net": n, "reason": "no 2+ pads on F.Cu"}); continue
+        r = _rt.route_net(pads[n], ["F.Cu", "In2.Cu"], obs, bounds=bounds, net=n)
+        if r["status"] == "ROUTED":
+            plans.append({"net": n, "layer": None, "polys": [s["poly"] for s in r["segments"]],
+                          "vias": r.get("vias", []), "layers": [s["layer"] for s in r["segments"]]})
+        else:
+            blocked.append({"net": n, "reason": "BLOCKED", "blocked_edge": r.get("blocked_edge"),
+                            "violations": r.get("edge_violations")})
+    chain.append({"stage": "M3_route", "nets_total": len(nets), "routed": len(plans), "blocked": len(blocked)})
+    # 批量落板（子进程 · 一次改板）
+    rp = os.path.join(work, "routes.json")
+    json.dump(plans, open(rp, "w", encoding="utf-8"), ensure_ascii=False)
+    rc, m3 = _cli("route", "--apply-batch", rp, "--board", torn, "--out", final)
+    if rc != 0 or not os.path.isfile(final):
+        return {"state": "M3_APPLY_FAILED", "chain": chain, "M3": {"routed": len(plans), "blocked": blocked},
+                "M3_apply": m3, "plans_written": rp,
+                "note": "named failure: the batch apply did not produce a board (no traceback escapes the product)"}
+    # M4
+    dj = os.path.join(work, "final_drc.json")
+    subprocess.run([_cli_bin(), "pcb", "drc", "--format", "json", "--severity-all", "-o", dj, final],
+                   capture_output=True, timeout=3600)
+    if not os.path.isfile(dj):
+        return {"state": "M4_DRC_FAILED", "chain": chain, "board": final,
+                "note": "named failure: kicad-cli produced no DRC report for the rerouted board"}
+    from . import verify as _vf
+    v = _vf.judge(final, dj, B, os.path.join(ROOT, "pm_gate/artifacts/k2_v4/L2/REROUTE_EXAM_REF_L14_DRC.json"))
+    chain.append({"stage": "M4_verify", "verdict": v["verdict"]})
+    return {"state": "GRADED", "chain": chain, "M1_affected_nets": len(m1["affected_nets"]),
+            "M2_removed": (m2 or {}).get("removed"), "M3": {"routed": len(plans), "blocked": blocked},
+            "M3_apply": m3, "M4": v, "board": final,
+            "rule": "#K2-362 sec.2.5: the exam path is M1->M2->M3->M4 (the chain list is the call-chain evidence)"}
+
+
+def _cli_bin():
+    return os.environ.get("EDA_ENG_CLI", "kicad-cli")

@@ -327,14 +327,32 @@ class T(unittest.TestCase):
         self.assertEqual(cd["total_delta"], 0,
                          "apply must not perturb the board config; attribution was %r" % (cd,))
 
+    def test_C30_product_chain_runs_M1_to_M4_with_call_chain_evidence(self):
+        """C30 关闭判据：`exam A --run` 的执行路径 = M1->M2->M3->M4，且**附调用链证据**。"""
+        rc, r, _ = self._cli("exam", "A", "--run", "--chain", "product",
+                             "--work", "/tmp/eda_eng_selftest_chain", "--max-nets", "1")
+        self.assertIn(r.get("state"), ("GRADED", "M2_FAILED", "M3_APPLY_FAILED", "M4_DRC_FAILED"), r.get("state"))
+        cmds = [c.get("cmd", "") for c in r["route"]["chain"]]
+        self.assertTrue(any(c.startswith("eda_eng netplan") for c in cmds), "M1 missing from the chain")
+        self.assertTrue(any(c.startswith("eda_eng ripup") for c in cmds), "M2 missing from the chain")
+        self.assertTrue(any("M3_route" == c.get("stage") for c in r["route"]["chain"]), "M3 missing from the chain")
+        self.assertTrue(any(c.get("stage") == "M4_verify" for c in r["route"]["chain"]), "M4 missing from the chain")
+        self.assertTrue(r["route"]["chain"][0]["cmd"].startswith("eda_eng netplan"),
+                        "M1 must be the FIRST stage (order evidence)")
+        self.assertIn(r["verdict"], ("PASS", "FAIL"), "the chain must end in a named verdict")
+
     def test_C29_preflight_refuses_a_mechanically_illegal_scenario(self):
         """C29 关闭判据（#K2-361 sec.4）：非法场景被 preflight 拦下、**零重活运行**。"""
         from eda_eng import regen
-        pf = regen.preflight("A", "/tmp/eda_eng_selftest_pf")
-        self.assertFalse(pf["ok"], "the +X 4.000 mm scenario must be refused by the strengthened gate")
-        self.assertTrue(pf["P1_scenario_legality"]["ok"], "it is pad-legal ...")
-        self.assertTrue(pf["P1b_mechanical_legality"]["new_mechanical_violations"],
-                        "... but mechanically illegal (zero heavy runs spent); P1b is BASELINE-RELATIVE and the "
+        # the ORIGINAL exam-A translation (+X 4.000 mm on the bare cluster) is pad-legal but mechanically illegal:
+        # it must be refused by the gate.  (The CURRENT preset is the gate-legal REGION scenario, so probe the
+        # illegal one explicitly.)
+        sel = regen.region_select(["U1", "U2", "U4", "U5"],
+                                 [{"delta_mm": [4.0, 0.0], "k": 1}], "/tmp/eda_eng_selftest_pf")
+        self.assertFalse(sel["candidates"][0]["legal"],
+                         "the bare-cluster +X 4.000 mm translation must be refused by the mechanical gate")
+        self.assertTrue(sel["candidates"][0]["new_mechanical_violations"],
+                        "... with the violation NAMED (zero heavy runs spent); P1b is BASELINE-RELATIVE and the "
                         "probe includes the crtyd stage (both defects were found by the scenario sweep)")
 
     def test_regen_is_implemented_and_plans_five_stages(self):

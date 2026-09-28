@@ -30,6 +30,9 @@ def main(argv=None):
     p.add_argument("which", choices=["A", "B"])
     p.add_argument("--board"); p.add_argument("--drc")
     p.add_argument("--run", action="store_true", help="build with the engine then grade")
+    p.add_argument("--chain", default="product", choices=["product", "legacy"],
+                   help="product = M1->M2->M3->M4 (C30); legacy = the old composed pipeline")
+    p.add_argument("--max-nets", type=int, default=None)
     p.add_argument("--work", default=None)
     p = sub.add_parser("eco", help="validate the ECO chain form")
     p.add_argument("--json-out")
@@ -54,6 +57,7 @@ def main(argv=None):
     p.add_argument("--p1"); p.add_argument("--p2"); p.add_argument("--net", default="__route__")
     p.add_argument("--layer", default="F.Cu"); p.add_argument("--board")
     p.add_argument("--apply", help="apply a ROUTED plan JSON to the board")
+    p.add_argument("--apply-batch", help="apply a batch of ROUTED plans (list) to the board")
     p.add_argument("--out"); p.add_argument("--json-out")
     p = sub.add_parser("regen", help="composed deterministic pipeline (place->gen->route->polish->drc), shadow root")
     p.add_argument("--exam", dest="exam_id", choices=["A", "B"], default=None)
@@ -71,6 +75,20 @@ def main(argv=None):
         spec = exams_mod.EXAMS[a.which]
         out = {"artifact": "eda_eng_exam", "exam": spec, "judging_table": exams_mod.JUDGING_TABLE,
                "state": "DEFINED"}
+        if a.run and a.chain == "product":
+            preset = exams_mod.EXAMS[a.which]
+            refs = preset.get("refs") or []
+            delta = preset.get("delta_mm") or [0.0, 0.0]
+            W = a.work or os.path.join("/tmp/opencode/eda_eng", "exam" + a.which)
+            pr = regen_mod.preflight(a.which, W)
+            if not pr["ok"]:
+                return _emit({"artifact": "eda_eng_exam", "exam": a.which, "state": "REFUSED_BY_PREFLIGHT",
+                              "preflight": pr}, None, 2)
+            rp = regen_mod.exam_a_chain(refs, delta, W, max_nets=a.max_nets)
+            return _emit({"artifact": "eda_eng_exam", "exam": a.which, "preflight": pr, "route": rp,
+                          "state": rp.get("state"), "criteria": (rp.get("M4") or {}).get("criteria"),
+                          "verdict": (rp.get("M4") or {}).get("verdict")},
+                         None, 0 if (rp.get("M4") or {}).get("verdict") == "PASS" else 1)
         if a.run:
             rp = regen_mod.run(exam=a.which, work=a.work or os.path.join("/tmp/opencode/eda_eng", "exam" + a.which))
             out["route"] = rp
@@ -124,6 +142,10 @@ def main(argv=None):
         return _emit(r, None, 0 if r["status"] in ("RIPPED", "DRY_RUN_OK") else 2)
 
     if a.cmd == "route":
+        if a.apply_batch:
+            plans = json.load(open(a.apply_batch, encoding="utf-8"))
+            r = route_mod.apply_routes(a.board, plans, a.out)
+            return _emit(r, None, 0)
         if a.apply:
             plan = json.load(open(a.apply, encoding="utf-8"))
             r = route_mod.apply_route(a.board, plan, a.out)

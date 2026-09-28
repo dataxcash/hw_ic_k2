@@ -179,6 +179,46 @@ def pads_by_net(board, layer="F.Cu"):
     return out
 
 
+def apply_routes(board, plans, out, width_mm=0.2):
+    """**批量**落板（一次改板 · 子进程专用）：plans = [{net, layer, poly|segments}, ...]。"""
+    import pcbnew as P
+    b = P.LoadBoard(board)
+    LM = {n: getattr(P, n.replace(".", "_")) for n in ("F.Cu", "In1.Cu", "In2.Cu", "In3.Cu", "In4.Cu",
+                                                      "In5.Cu", "In6.Cu", "In7.Cu", "B.Cu")}
+    added, vias = 0, 0
+    for pl in plans:
+        net = b.FindNet(pl["net"])
+        code = net.GetNetCode() if net is not None else -1
+        polys = pl.get("polys") or ([pl["poly"]] if pl.get("poly") else [])
+        seg_layers = pl.get("layers") or [pl.get("layer")] * len(polys)
+        for poly, lay in zip(polys, seg_layers + ["F.Cu"] * (len(polys) - len(seg_layers))):
+            if not lay or lay not in LM:
+                return {"status": "REFUSED", "reason": "unknown layer %r for net %s" % (lay, pl["net"])}
+            for i in range(len(poly) - 1):
+                tr = P.PCB_TRACK(b)
+                tr.SetStart(P.VECTOR2I(P.FromMM(poly[i][0]), P.FromMM(poly[i][1])))
+                tr.SetEnd(P.VECTOR2I(P.FromMM(poly[i + 1][0]), P.FromMM(poly[i + 1][1])))
+                tr.SetWidth(P.FromMM(width_mm)); tr.SetLayer(LM[lay]); tr.SetNetCode(code)
+                b.Add(tr); added += 1
+        for v in pl.get("vias", []):
+            vi = P.PCB_VIA(b)
+            vi.SetPosition(P.VECTOR2I(P.FromMM(v["at"][0]), P.FromMM(v["at"][1])))
+            vi.SetWidth(P.FromMM(0.45)); vi.SetDrill(P.FromMM(0.25))
+            vi.SetLayerPair(LM[v["layers"][0]], LM[v["layers"][1]]); vi.SetNetCode(code)
+            b.Add(vi); vias += 1
+    P.SaveBoard(out, b)
+    import shutil, hashlib
+    copied = []
+    for ext in (".kicad_pro", ".kicad_dru"):
+        src = board[:-len(".kicad_pcb")] + ext if board.endswith(".kicad_pcb") else board + ext
+        if os.path.isfile(src):
+            shutil.copy2(src, out[:-len(".kicad_pcb")] + ext if out.endswith(".kicad_pcb") else out + ext)
+            copied.append(ext)
+    return {"artifact": "eda_eng_route_apply_batch", "nets": [p["net"] for p in plans],
+            "segments_added": added, "vias_added": vias, "project_config_copied": copied, "out": out,
+            "out_sha16": hashlib.sha256(open(out, "rb").read()).hexdigest()[:16]}
+
+
 def apply_route(board, plan, out, layer=None, width_mm=0.2):
     """把 ROUTED 见证落板（**子进程专用**：改板会破坏同进程 SWIG 类型态）。"""
     import pcbnew as P
