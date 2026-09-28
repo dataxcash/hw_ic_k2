@@ -377,6 +377,15 @@ class T(unittest.TestCase):
         b = route.maze_route([0, 0], [6, 0], ["F.Cu"], w, [-1, -2, 7, 2])
         self.assertEqual(json.dumps(a, sort_keys=True), json.dumps(b, sort_keys=True))
 
+    def test_maze_reports_a_named_blockage_when_the_goal_cannot_be_snapped(self):
+        """R970 fidelity fix: an unsnappable goal must be a NAMED blockage, never a crash (min(())).
+        Found by running exam A on the real board: MCU_VDD pad (31.8375,51.75) could not be snapped to a free
+        pad-layer cell, and the heuristic raised ValueError instead of reporting NOT FOUND."""
+        r = route.maze_route([0, 0], [100, 0], ["F.Cu"], [], [-1, -1, 7, 1])
+        self.assertEqual(r["status"], "BLOCKED")
+        self.assertEqual(r["semantics"], "NOT_FOUND")
+        self.assertIn("goal cell", r["reason"])
+
     def test_M3a_draw_and_review_pass_on_a_clean_toy(self):
         d = route.draw_net([[0, 0], [10, 0], [10, 10]], ["F.Cu"], [], net="N1")
         self.assertEqual(d["status"], "DRAWN")

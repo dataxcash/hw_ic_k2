@@ -1,0 +1,750 @@
+{
+ "state": "GRADED",
+ "chain": [
+  {
+   "stage": "1_move_pads",
+   "moved": [
+    {
+     "ref": "C73",
+     "from": [
+      28.0,
+      47.9
+     ],
+     "to": [
+      31.5,
+      51.4
+     ]
+    },
+    {
+     "ref": "C84",
+     "from": [
+      44.0,
+      40.0
+     ],
+     "to": [
+      47.5,
+      43.5
+     ]
+    },
+    {
+     "ref": "C85",
+     "from": [
+      29.7,
+      54.5
+     ],
+     "to": [
+      33.2,
+      58.0
+     ]
+    },
+    {
+     "ref": "C86",
+     "from": [
+      31.55,
+      58.85
+     ],
+     "to": [
+      35.05,
+      62.35
+     ]
+    },
+    {
+     "ref": "C87",
+     "from": [
+      44.0,
+      35.0
+     ],
+     "to": [
+      47.5,
+      38.5
+     ]
+    },
+    {
+     "ref": "C88",
+     "from": [
+      29.5,
+      41.5
+     ],
+     "to": [
+      33.0,
+      45.0
+     ]
+    },
+    {
+     "ref": "C90",
+     "from": [
+      30.0,
+      53.0
+     ],
+     "to": [
+      33.5,
+      56.5
+     ]
+    },
+    {
+     "ref": "D2",
+     "from": [
+      38.7,
+      34.6
+     ],
+     "to": [
+      42.2,
+      38.1
+     ]
+    },
+    {
+     "ref": "E2",
+     "from": [
+      44.0,
+      60.0
+     ],
+     "to": [
+      47.5,
+      63.5
+     ]
+    },
+    {
+     "ref": "J12",
+     "from": [
+      27.94,
+      42.85
+     ],
+     "to": [
+      31.44,
+      46.35
+     ]
+    },
+    {
+     "ref": "J13",
+     "from": [
+      27.94,
+      46.54
+     ],
+     "to": [
+      31.44,
+      50.04
+     ]
+    },
+    {
+     "ref": "J6",
+     "from": [
+      27.94,
+      39.66
+     ],
+     "to": [
+      31.44,
+      43.16
+     ]
+    },
+    {
+     "ref": "J9",
+     "from": [
+      27.94,
+      55.96
+     ],
+     "to": [
+      31.44,
+      59.46
+     ]
+    },
+    {
+     "ref": "L1",
+     "from": [
+      33.0,
+      40.2
+     ],
+     "to": [
+      36.5,
+      43.7
+     ]
+    },
+    {
+     "ref": "R40",
+     "from": [
+      29.5,
+      38.2
+     ],
+     "to": [
+      33.0,
+      41.7
+     ]
+    },
+    {
+     "ref": "R41",
+     "from": [
+      29.5,
+      34.0
+     ],
+     "to": [
+      33.0,
+      37.5
+     ]
+    },
+    {
+     "ref": "U1",
+     "from": [
+      36.0,
+      52.0
+     ],
+     "to": [
+      39.5,
+      55.5
+     ]
+    },
+    {
+     "ref": "U2",
+     "from": [
+      33.0,
+      37.0
+     ],
+     "to": [
+      36.5,
+      40.5
+     ]
+    },
+    {
+     "ref": "U4",
+     "from": [
+      40.0,
+      37.0
+     ],
+     "to": [
+      43.5,
+      40.5
+     ]
+    },
+    {
+     "ref": "U5",
+     "from": [
+      44.5,
+      52.0
+     ],
+     "to": [
+      48.0,
+      55.5
+     ]
+    }
+   ],
+   "missing": []
+  },
+  {
+   "cmd": "eda_eng netplan --board /tmp/opencode/eda_eng_examA_v1/s1_moved.kicad_pcb --refs C73,C84,C85,C86,C87,C88,C90,D2,E2,J12,J13,J6,J9,L1,R40,R41,U1,U2,U4,U5 --delta 0,0 --json-out /tmp/opencode/eda_eng_examA_v1/s2_netplan.json",
+   "exit": 0
+  },
+  {
+   "cmd": "eda_eng ripup --board /tmp/opencode/eda_eng_examA_v1/s1_moved.kicad_pcb --plan /tmp/opencode/eda_eng_examA_v1/s2_netplan.json --out /tmp/opencode/eda_eng_examA_v1/s3_torn.kicad_pcb",
+   "exit": 0
+  },
+  {
+   "stage": "4_maze_reconnect",
+   "nets_total": 21,
+   "routed": 16,
+   "blocked": 5,
+   "blocked_named": [
+    {
+     "net": "GND",
+     "edge": [
+      68,
+      0
+     ],
+     "semantics": "NOT_FOUND",
+     "reason": "no free goal cell on the pad layer (the target pad is boxed in / not snappable)"
+    },
+    {
+     "net": "MCU_VDD",
+     "edge": [
+      9,
+      0
+     ],
+     "semantics": "NOT_FOUND",
+     "reason": "no free goal cell on the pad layer (the target pad is boxed in / not snappable)"
+    },
+    {
+     "net": "P3V3",
+     "edge": [
+      45,
+      37
+     ],
+     "semantics": "NOT_FOUND",
+     "reason": "the search exhausted every reachable cell without reaching the target"
+    },
+    {
+     "net": "UART_RX",
+     "edge": [
+      1,
+      0
+     ],
+     "semantics": "NOT_FOUND",
+     "reason": "no free goal cell on the pad layer (the target pad is boxed in / not snappable)"
+    },
+    {
+     "net": "UART_TX",
+     "edge": [
+      1,
+      0
+     ],
+     "semantics": "NOT_FOUND",
+     "reason": "no free goal cell on the pad layer (the target pad is boxed in / not snappable)"
+    }
+   ],
+   "semantics": "a blocked net is NOT_FOUND - never read as impossible (model sec.2)"
+  },
+  {
+   "cmd": "eda_eng route --apply-batch /tmp/opencode/eda_eng_examA_v1/s4_routes.json --board /tmp/opencode/eda_eng_examA_v1/s3_torn.kicad_pcb --out /tmp/opencode/eda_eng_examA_v1/s5_rerouted.kicad_pcb",
+   "exit": 0
+  },
+  {
+   "stage": "6_M4_judge",
+   "verdict": "FAIL",
+   "geometry_delta": 994
+  }
+ ],
+ "step1": {
+  "artifact": "eda_eng_relocate_step1_move",
+  "moved": [
+   {
+    "ref": "C73",
+    "from": [
+     28.0,
+     47.9
+    ],
+    "to": [
+     31.5,
+     51.4
+    ]
+   },
+   {
+    "ref": "C84",
+    "from": [
+     44.0,
+     40.0
+    ],
+    "to": [
+     47.5,
+     43.5
+    ]
+   },
+   {
+    "ref": "C85",
+    "from": [
+     29.7,
+     54.5
+    ],
+    "to": [
+     33.2,
+     58.0
+    ]
+   },
+   {
+    "ref": "C86",
+    "from": [
+     31.55,
+     58.85
+    ],
+    "to": [
+     35.05,
+     62.35
+    ]
+   },
+   {
+    "ref": "C87",
+    "from": [
+     44.0,
+     35.0
+    ],
+    "to": [
+     47.5,
+     38.5
+    ]
+   },
+   {
+    "ref": "C88",
+    "from": [
+     29.5,
+     41.5
+    ],
+    "to": [
+     33.0,
+     45.0
+    ]
+   },
+   {
+    "ref": "C90",
+    "from": [
+     30.0,
+     53.0
+    ],
+    "to": [
+     33.5,
+     56.5
+    ]
+   },
+   {
+    "ref": "D2",
+    "from": [
+     38.7,
+     34.6
+    ],
+    "to": [
+     42.2,
+     38.1
+    ]
+   },
+   {
+    "ref": "E2",
+    "from": [
+     44.0,
+     60.0
+    ],
+    "to": [
+     47.5,
+     63.5
+    ]
+   },
+   {
+    "ref": "J12",
+    "from": [
+     27.94,
+     42.85
+    ],
+    "to": [
+     31.44,
+     46.35
+    ]
+   },
+   {
+    "ref": "J13",
+    "from": [
+     27.94,
+     46.54
+    ],
+    "to": [
+     31.44,
+     50.04
+    ]
+   },
+   {
+    "ref": "J6",
+    "from": [
+     27.94,
+     39.66
+    ],
+    "to": [
+     31.44,
+     43.16
+    ]
+   },
+   {
+    "ref": "J9",
+    "from": [
+     27.94,
+     55.96
+    ],
+    "to": [
+     31.44,
+     59.46
+    ]
+   },
+   {
+    "ref": "L1",
+    "from": [
+     33.0,
+     40.2
+    ],
+    "to": [
+     36.5,
+     43.7
+    ]
+   },
+   {
+    "ref": "R40",
+    "from": [
+     29.5,
+     38.2
+    ],
+    "to": [
+     33.0,
+     41.7
+    ]
+   },
+   {
+    "ref": "R41",
+    "from": [
+     29.5,
+     34.0
+    ],
+    "to": [
+     33.0,
+     37.5
+    ]
+   },
+   {
+    "ref": "U1",
+    "from": [
+     36.0,
+     52.0
+    ],
+    "to": [
+     39.5,
+     55.5
+    ]
+   },
+   {
+    "ref": "U2",
+    "from": [
+     33.0,
+     37.0
+    ],
+    "to": [
+     36.5,
+     40.5
+    ]
+   },
+   {
+    "ref": "U4",
+    "from": [
+     40.0,
+     37.0
+    ],
+    "to": [
+     43.5,
+     40.5
+    ]
+   },
+   {
+    "ref": "U5",
+    "from": [
+     44.5,
+     52.0
+    ],
+    "to": [
+     48.0,
+     55.5
+    ]
+   }
+  ],
+  "missing": [],
+  "project_config_copied": [
+   ".kicad_pro"
+  ],
+  "out": "/tmp/opencode/eda_eng_examA_v1/s1_moved.kicad_pcb",
+  "out_sha16": "d3bc2c5eb485cf3b",
+  "rule": "#K2-366 sec.2.1: step 1 is a COORDINATE TRANSFORM of the pads on the board - the old copper does not follow (that is what steps 2-4 are for)"
+ },
+ "M1_affected_nets": 21,
+ "M2_removed": {
+  "tracks": 1078,
+  "vias": 455
+ },
+ "M4_routed": 16,
+ "blocked": [
+  {
+   "net": "GND",
+   "edge": [
+    68,
+    0
+   ],
+   "semantics": "NOT_FOUND",
+   "reason": "no free goal cell on the pad layer (the target pad is boxed in / not snappable)"
+  },
+  {
+   "net": "MCU_VDD",
+   "edge": [
+    9,
+    0
+   ],
+   "semantics": "NOT_FOUND",
+   "reason": "no free goal cell on the pad layer (the target pad is boxed in / not snappable)"
+  },
+  {
+   "net": "P3V3",
+   "edge": [
+    45,
+    37
+   ],
+   "semantics": "NOT_FOUND",
+   "reason": "the search exhausted every reachable cell without reaching the target"
+  },
+  {
+   "net": "UART_RX",
+   "edge": [
+    1,
+    0
+   ],
+   "semantics": "NOT_FOUND",
+   "reason": "no free goal cell on the pad layer (the target pad is boxed in / not snappable)"
+  },
+  {
+   "net": "UART_TX",
+   "edge": [
+    1,
+    0
+   ],
+   "semantics": "NOT_FOUND",
+   "reason": "no free goal cell on the pad layer (the target pad is boxed in / not snappable)"
+  }
+ ],
+ "apply": {
+  "artifact": "eda_eng_route_apply_batch",
+  "nets": [
+   "12V_IN",
+   "FB_U2",
+   "GPIO_LED",
+   "I2C1_SCL",
+   "I2C1_SDA",
+   "I2C2_SCL",
+   "I2C2_SDA",
+   "NRST",
+   "P3V3_AUX",
+   "PERSTA#",
+   "PWR_BTN_ISO",
+   "PWR_BTN_OUT",
+   "PWR_CTRL_OUT",
+   "SWCLK_BOOT0",
+   "SWDIO",
+   "SW_U2"
+  ],
+  "segments_added": 1529,
+  "vias_added": 0,
+  "project_config_copied": [
+   ".kicad_pro"
+  ],
+  "out": "/tmp/opencode/eda_eng_examA_v1/s5_rerouted.kicad_pcb",
+  "out_sha16": "35782ac5c4ec6260"
+ },
+ "M4": {
+  "criteria": {
+   "C1_connectivity": {
+    "unconnected": 321,
+    "pass": false
+   },
+   "C2_drc_no_new_increase": {
+    "total": 1196,
+    "ref_total": 168,
+    "new_classes": [
+     "clearance",
+     "hole_clearance",
+     "isolated_copper",
+     "lib_footprint_issues",
+     "shorting_items",
+     "solder_mask_bridge",
+     "tracks_crossing"
+    ],
+    "pass": false
+   },
+   "C3_skew": {
+    "per_pair_mm": {
+     "0": 0.065012,
+     "1": 0.06498,
+     "2": 0.043403,
+     "3": 0.078764,
+     "4": 1.4e-05,
+     "5": 5e-06,
+     "6": 0.021576,
+     "7": 0.013805
+    },
+    "max_mm": 0.078764,
+    "limit_mm": 0.15,
+    "pass": true
+   },
+   "C4_chamfer_preserved": {
+    "count": 2668,
+    "ref_count": 2637,
+    "pass": true
+   },
+   "C5_routing_changed": {
+    "element_set_diff": 3061,
+    "pass": true
+   }
+  },
+  "verdict": "FAIL",
+  "thresholds_used": {
+   "drc_total": 168,
+   "chamfer_ref": 2637,
+   "skew_limit": 0.15
+  },
+  "judging_table": "L2/EDA_ENG_JUDGING_TABLE_v1.json (ECO-K2-0002/0003 sec.6)",
+  "rule": "PASS iff all five hold; None (skipped) is never a PASS (#K2-358: capability must be reproducible)"
+ },
+ "class_delta": {
+  "total_delta": 994,
+  "by_class": {
+   "clearance": {
+    "result": 82,
+    "ref": 0,
+    "delta": 82
+   },
+   "hole_clearance": {
+    "result": 34,
+    "ref": 0,
+    "delta": 34
+   },
+   "isolated_copper": {
+    "result": 8,
+    "ref": 0,
+    "delta": 8
+   },
+   "shorting_items": {
+    "result": 199,
+    "ref": 0,
+    "delta": 199
+   },
+   "silk_edge_clearance": {
+    "result": 0,
+    "ref": 2,
+    "delta": -2
+   },
+   "silk_over_copper": {
+    "result": 39,
+    "ref": 37,
+    "delta": 2
+   },
+   "solder_mask_bridge": {
+    "result": 201,
+    "ref": 0,
+    "delta": 201
+   },
+   "track_dangling": {
+    "result": 0,
+    "ref": 1,
+    "delta": -1
+   },
+   "track_not_centered_on_via": {
+    "result": 7,
+    "ref": 32,
+    "delta": -25
+   },
+   "tracks_crossing": {
+    "result": 501,
+    "ref": 0,
+    "delta": 501
+   },
+   "via_dangling": {
+    "result": 1,
+    "ref": 6,
+    "delta": -5
+   }
+  },
+  "excluded_class_rows": {
+   "lib_footprint_issues": {
+    "result": 54,
+    "ref": 0,
+    "delta": 54
+   },
+   "lib_footprint_mismatch": {
+    "result": 0,
+    "ref": 20,
+    "delta": -20
+   }
+  },
+  "excluded_classes": [
+   "lib_footprint_issues",
+   "lib_footprint_mismatch"
+  ],
+  "raw_total_delta": 1028,
+  "attributed": true,
+  "rule": "#K2-361 sec.2.5: any GEOMETRY class rise must be attributed; library-resolution classes are recorded in excluded_class_rows under the pinned caliber (they are never hidden)"
+ },
+ "board": "/tmp/opencode/eda_eng_examA_v1/s5_rerouted.kicad_pcb",
+ "rule": "#K2-366 sec.2: relocate = 1 move -> 2 M1 -> 3 M2 -> 4 maze reconnect -> 5 refill -> 6 M4 judge"
+}

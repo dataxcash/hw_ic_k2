@@ -535,6 +535,13 @@ def maze_route(p, q, layers, obstacles, bounds, pitch=0.5, clear=CLEAR, width=0.
     if not starts:
         return {"status": "BLOCKED", "reason": "no free start cell on any allowed layer",
                 "layers": list(layers), "rule": "#K2-366: the start point is boxed in"}
+    if not goals:
+        # R970-fix: the goal (q) could not be snapped to a free cell on the PAD layer, so GOAL would be empty and
+        # the heuristic would raise on min(()) - return a NAMED blockage instead (semantic discipline: NOT FOUND).
+        return {"status": "BLOCKED", "semantics": "NOT_FOUND",
+                "reason": "no free goal cell on the pad layer (the target pad is boxed in / not snappable)",
+                "layers": list(layers),
+                "rule": "#K2-367 sec.2: NOT FOUND != IMPOSSIBLE; the maze may not invent a target that is boxed in"}
     GOAL = {(L0, goals[L0][0], goals[L0][1])} if L0 in goals else set()   # 目标必须在**焊盘层**上
     dist = {}
     pq = []
