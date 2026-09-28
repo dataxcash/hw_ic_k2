@@ -57,6 +57,28 @@ def teardown_items(board, nets):
     return per
 
 
+def inventory(board):
+    """全板逐网 segment/via 清册（**只读**，供 QA/测试做逐段 diff；不涉任何改写）。"""
+    P = _pcbnew()
+    b = P.LoadBoard(board)
+    nm = {c: ni.GetNetname() for c, ni in b.GetNetInfo().NetsByNetcode().items()}
+    inv = {}
+    for t in b.GetTracks():
+        n = nm.get(t.GetNetCode(), "")
+        d = inv.setdefault(n, {"tracks": [], "vias": []})
+        if t.GetClass() == "PCB_VIA":
+            pos = t.GetPosition()
+            d["vias"].append([round(P.ToMM(pos.x), 4), round(P.ToMM(pos.y), 4)])
+        else:
+            s, e = t.GetStart(), t.GetEnd()
+            d["tracks"].append([t.GetLayerName(), round(P.ToMM(s.x), 4), round(P.ToMM(s.y), 4),
+                                round(P.ToMM(e.x), 4), round(P.ToMM(e.y), 4)])
+    for n in inv:
+        inv[n]["tracks"].sort()
+        inv[n]["vias"].sort()
+    return inv
+
+
 def moved_pads(board, refs, delta_mm):
     P = _pcbnew()
     b = P.LoadBoard(board)

@@ -44,7 +44,12 @@ def main(argv=None):
     p.add_argument("--refs", required=True)
     p.add_argument("--delta", required=True, help="dx,dy in mm")
     p.add_argument("--json-out")
-    p = sub.add_parser("ripup", help="M2: execute the teardown (status)")
+    p = sub.add_parser("dump", help="read-only per-net track/via inventory (QA/test helper)")
+    p.add_argument("--board", required=True)
+    p.add_argument("--json-out")
+    p = sub.add_parser("ripup", help="M2: execute the M1 teardown plan")
+    p.add_argument("--board"); p.add_argument("--plan", help="M1 netplan JSON")
+    p.add_argument("--out"); p.add_argument("--dry-run", action="store_true")
     p = sub.add_parser("route", help="M3: re-route a torn board (status)")
     p = sub.add_parser("regen", help="composed deterministic pipeline (place->gen->route->polish->drc), shadow root")
     p.add_argument("--exam", dest="exam_id", choices=["A", "B"], default=None)
@@ -101,9 +106,18 @@ def main(argv=None):
         r = netplan_mod.plan(a.board, refs, [dx, dy])
         return _emit(r, a.json_out, 0)
 
+    if a.cmd == "dump":
+        return _emit({"artifact": "eda_eng_dump", "board": a.board,
+                      "inventory": netplan_mod.inventory(a.board)}, a.json_out, 0)
+
     if a.cmd == "ripup":
-        r = {"artifact": "eda_eng_ripup", **ripup_mod.run()}
-        return _emit(r, None, 2)
+        if not (a.board and a.plan and a.out):
+            r = {"artifact": "eda_eng_ripup", "status": "NEED_ARGS",
+                 "usage": "ripup --board <pcb> --plan <netplan.json> --out <pcb> [--dry-run]"}
+            return _emit(r, None, 2)
+        plan = json.load(open(a.plan, encoding="utf-8"))
+        r = ripup_mod.execute(a.board, plan, a.out, dry=a.dry_run)
+        return _emit(r, None, 0 if r["status"] in ("RIPPED", "DRY_RUN_OK") else 2)
 
     if a.cmd == "route":
         r = {"artifact": "eda_eng_route_m3",

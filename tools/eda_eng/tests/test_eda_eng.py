@@ -109,8 +109,85 @@ class T(unittest.TestCase):
         cl = set(netplan.plan(REF, ["U1", "U2", "U4", "U5"], [5.0, 0.0])["affected_nets"])
         self.assertTrue(one.issubset(cl), "the cluster plan must contain the single-ref nets")
 
-    def test_M2_M3_are_not_implemented_yet(self):
-        self.assertEqual(ripup.run()["status"], "NOT_IMPLEMENTED")
+    # ---------------- M2 ripup (#K2-360) ----------------
+    # 注：删改板件会破坏同进程的 SWIG 类型态（已诊断过）=> M2 的一切**板面改写**都在**子进程**里做；
+    # 测试进程只比对 JSON（`eda_eng dump` 的只读清册 + kicad-cli 的 DRC）。
+    def _cli(self, *args):
+        import subprocess
+        k2 = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+        p = subprocess.run([os.path.join(k2, "tools", "eda_eng.sh"), *args], cwd=k2,
+                           capture_output=True, text=True, timeout=1200)
+        out = p.stdout
+        j = None
+        if "{" in out:
+            try:   # pcbnew flushes SWIG leak notices to STDOUT at exit -> decode the FIRST json value only
+                j = json.JSONDecoder().raw_decode(out[out.index("{"):])[0]
+            except Exception:
+                j = None
+        return p.returncode, j, p.stderr
+
+    def _rip(self, tmpname):
+        import tempfile
+        plan = netplan.plan(REF, ["U1"], [5.0, 0.0])
+        pj = os.path.join(tempfile.mkdtemp(), "plan.json")
+        json.dump(plan, open(pj, "w", encoding="utf-8"), ensure_ascii=False)
+        out = os.path.join("/tmp/opencode/eda_eng_m2", tmpname)
+        os.makedirs("/tmp/opencode/eda_eng_m2", exist_ok=True)
+        rc, r, _ = self._cli("ripup", "--board", REF, "--plan", pj, "--out", out)
+        self.assertEqual(rc, 0, r)
+        return plan, out, r
+
+    def test_M2_removes_exactly_the_plan_and_touches_nothing_else(self):
+        plan, out, r = self._rip("t_m2_exact.kicad_pcb")
+        self.assertEqual(r["status"], "RIPPED")
+        self.assertEqual(r["removed"], {"tracks": plan["teardown_totals"]["tracks"],
+                                        "vias": plan["teardown_totals"]["vias"]})
+        _, a, _ = self._cli("dump", "--board", REF, "--json-out", "")
+        _, b, _ = self._cli("dump", "--board", out, "--json-out", "")
+        before, after = a["inventory"], b["inventory"]
+        affected = set(plan["affected_nets"])
+        for n in set(before) | set(after):
+            if n in affected:
+                self.assertEqual(after.get(n, {"tracks": [], "vias": []}), {"tracks": [], "vias": []},
+                                 "affected net %s must be fully ripped" % n)
+            else:
+                self.assertEqual(before.get(n, {"tracks": [], "vias": []}), after.get(n, {"tracks": [], "vias": []}),
+                                 "net %s was touched but must not be" % n)
+
+    def test_M2_is_deterministic(self):
+        _, o1, r1 = self._rip("t_m2_det1.kicad_pcb")
+        _, o2, r2 = self._rip("t_m2_det2.kicad_pcb")
+        self.assertEqual(r1["out_sha16"], r2["out_sha16"])
+
+    def test_M2_unconnected_appears_only_in_affected_nets(self):
+        import re, subprocess
+        plan, out, _ = self._rip("t_m2_drc.kicad_pcb")
+        cli = os.environ.get("EDA_ENG_CLI", "kicad-cli")
+        sj = out + ".drc.json"
+        subprocess.run([cli, "pcb", "drc", "--format", "json", "--severity-all", "-o", sj, out],
+                       capture_output=True, timeout=1200)
+        un = json.load(open(sj, encoding="utf-8")).get("unconnected_items", [])
+        self.assertGreater(len(un), 0, "ripping an affected net must create disconnections")
+        allowed = set(plan["affected_nets"])
+        for u in un:
+            nets = set(re.findall(r"\[([A-Za-z0-9_+#/.-]+)\]", json.dumps(u, ensure_ascii=False)))
+            self.assertTrue(nets & allowed, "unconnected outside the affected nets: %r" % (nets,))
+
+    def test_M2_refuses_a_stale_plan(self):
+        import tempfile
+        plan = netplan.plan(REF, ["U1"], [5.0, 0.0])
+        plan["teardown"]["NOT_A_REAL_NET"] = {"tracks": [{"layer": "F.Cu", "a": [0.0, 0.0], "b": [1.0, 1.0],
+                                                         "width_mm": 0.2}], "vias": []}
+        pj = os.path.join(tempfile.mkdtemp(), "bad.json")
+        json.dump(plan, open(pj, "w", encoding="utf-8"), ensure_ascii=False)
+        rc, r, _ = self._cli("ripup", "--board", REF, "--plan", pj, "--out", "/tmp/opencode/eda_eng_m2/nope.kicad_pcb")
+        self.assertEqual(r["status"], "REFUSED_STALE_PLAN")
+
+    def test_M3_is_not_implemented_yet(self):
+        rc, r, _ = self._cli("route")
+        self.assertEqual(rc, 2)
+        self.assertEqual(r["status"], "NOT_IMPLEMENTED")
+        self.assertEqual(r["module"], "M3")
         import contextlib, io
         from eda_eng import cli
         buf = io.StringIO()
@@ -118,11 +195,12 @@ class T(unittest.TestCase):
             rc = cli.main(["route"])                      # M3 subcommand
         self.assertEqual(rc, 2)
         self.assertIn("NOT_IMPLEMENTED", buf.getvalue())
+        # M2 is IMPLEMENTED (see its own suite); without args it must ask for args, not claim a capability
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf):
-            rc = cli.main(["ripup"])                      # M2 subcommand
+            rc = cli.main(["ripup"])
         self.assertEqual(rc, 2)
-        self.assertIn("NOT_IMPLEMENTED", buf.getvalue())
+        self.assertIn("NEED_ARGS", buf.getvalue())
 
     def test_regen_is_implemented_and_plans_five_stages(self):
         r = route.run(exam="A", work="/tmp/eda_eng_selftest_plan", dry=True)

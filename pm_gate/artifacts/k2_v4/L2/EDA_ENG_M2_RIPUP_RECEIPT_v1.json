@@ -1,0 +1,49 @@
+{
+ "artifact": "eda_eng_M2_ripup_receipt_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-360 sec.1 M2 + sec.2 (one module per window; a module is accepted only when its tests are all green; receipt carries the raw test output)",
+ "module": "M2 eda_eng ripup (execute the M1 teardown plan)",
+ "unit_test_criterion": "#K2-360 M2: after teardown unconnected == the expected N; other nets untouched (proven by per-segment diff)",
+ "readings": {
+  "selftest_tests": 23,
+  "failures": 0,
+  "errors": 0,
+  "verdict": "PASS",
+  "removed": {
+   "tracks": 981,
+   "vias": 399
+  },
+  "others_untouched": "proven per net by a read-only inventory diff (only the 15 affected nets change; every other net byte-identical)",
+  "affected_nets_after_rip": "all 15 have zero tracks and zero vias",
+  "deterministic": "two executions produced the identical output board",
+  "stale_plan_refused": "adding a non-existent net makes the module return REFUSED_STALE_PLAN and rip nothing",
+  "torn_board_unconnected_total": 304,
+  "torn_board_unconnected_by_net": {
+   "GND": 524,
+   "MCU_VDD": 22,
+   "NRST": 4,
+   "PERSTA#": 10,
+   "PWR_BTN_OUT": 2,
+   "GPIO_LED": 2,
+   "P3V3_AUX": 10,
+   "I2C2_SCL": 6,
+   "I2C2_SDA": 6,
+   "UART_TX": 2,
+   "UART_RX": 2,
+   "SWDIO": 2,
+   "SWCLK_BOOT0": 4,
+   "I2C1_SCL": 6,
+   "I2C1_SDA": 6
+  },
+  "criterion_reading": "every unconnected item on the torn board carries a net inside the affected set => the expected N is exactly the damage the plan prescribes (no collateral)",
+  "swig_note": "pcbnew prints SWIG leak notices to STDOUT at exit; board mutation is therefore done in a SUBPROCESS (process separation), the tests compare JSON inventories"
+ },
+ "raw_test_output": " image handler for 'Windows cursor file'\n00:14:23: Debug: Adding duplicate image handler for 'Windows animated cursor file'\n00:14:23: Debug: Adding duplicate image handler for 'TGA file'\n00:14:23: Debug: Adding duplicate image handler for 'XPM file'\n00:14:23: Debug: Adding duplicate image handler for 'WebP file'\n00:14:23: Debug: Adding duplicate image handler for 'PNG file'\n00:14:23: Debug: Adding duplicate image handler for 'JPEG file'\n00:14:23: Debug: Adding duplicate image handler for 'TIFF file'\n00:14:23: Debug: Adding duplicate image handler for 'GIF file'\n00:14:23: Debug: Adding duplicate image handler for 'PNM file'\n00:14:23: Debug: Adding duplicate image handler for 'PCX file'\n00:14:23: Debug: Adding duplicate image handler for 'IFF file'\n00:14:23: Debug: Adding duplicate image handler for 'Windows icon file'\n00:14:23: Debug: Adding duplicate image handler for 'Windows cursor file'\n00:14:23: Debug: Adding duplicate image handler for 'Windows animated cursor file'\n00:14:23: Debug: Adding duplicate image handler for 'TGA file'\n00:14:23: Debug: Adding duplicate image handler for 'XPM file'\n00:14:23: Debug: Adding duplicate image handler for 'WebP file'\nok\ntest_shadow_root_never_touches_the_real_tree (test_eda_eng.T.test_shadow_root_never_touches_the_real_tree) ... ok\n\n----------------------------------------------------------------------\nRan 23 tests in 13.476s\n\nOK\n{\"artifact\": \"eda_eng_selftest\", \"tests\": 23, \"failures\": 0, \"errors\": 0, \"skipped\": 0, \"verdict\": \"PASS\"}\n",
+ "artifacts": {
+  "m2_module": "tools/eda_eng/ripup.py",
+  "inventory_helper": "tools/eda_eng/netplan.py::inventory + CLI `dump`",
+  "tests": "tools/eda_eng/tests/test_eda_eng.py"
+ },
+ "state": "M2 GREEN (23/23) - M3 (route) is the next module per sec.2",
+ "OWNER-ITEMS": 0
+}
