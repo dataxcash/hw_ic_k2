@@ -513,7 +513,9 @@ class T(unittest.TestCase):
         S = block.swept(rect, [3.5, 3.5])
         out = "/tmp/opencode/eda_eng/selftest_block_move.kicad_pcb"
         os.makedirs(os.path.dirname(out), exist_ok=True)
-        mv = block.move_block(REF, rect, [3.5, 3.5], out, refs=regs)
+        rc0, mv, _ = self._cli("move-block", "--board", REF, "--rect", ",".join(str(v) for v in rect),
+                               "--refs", ",".join(regs), "--delta", "3.5,3.5", "--out", out)
+        self.assertEqual(rc0, 0, "the block move must run in a SUBPROCESS (SWIG rule)")
         self.assertEqual(mv["n_members"], 20)
         self.assertEqual(mv["moved"]["cross_split"], 23)
         self.assertEqual(mv["moved"]["bridge_split"], 0)
@@ -547,7 +549,9 @@ class T(unittest.TestCase):
         现在必须真复敷铜并把 zones_refilled 写进收执。"""
         out = "/tmp/opencode/eda_eng/selftest_refill.kicad_pcb"
         os.makedirs(os.path.dirname(out), exist_ok=True)
-        r = route.apply_routes(REF, [], out)
+        plan = "/tmp/opencode/eda_eng/selftest_refill_plan.json"
+        json.dump([], open(plan, "w"))
+        rc, r, _ = self._cli("route", "--apply-batch", plan, "--board", REF, "--out", out)
         self.assertEqual(r["status"], "APPLIED")
         self.assertGreater(r["zones_refilled"], 0, "the batch path must actually refill zones")
 
@@ -762,3 +766,17 @@ class T(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+# ── 套件哨兵（#K2-380 §二 / #K2-381 §五.1）：**同进程改板＝立即具名失败**（SWIG 类型态纪律，承 R964/R1036）
+def _bench_sentinel():                                     # noqa: D401
+    def _boom(*a, **k):
+        raise AssertionError(
+            "BENCH SENTINEL: a board-mutating call ran IN THE TEST PROCESS "
+            "(use the subprocess helper `_cli`; see docs/K2-BLOCKER-REPORT-testsuite-isolation-20260929.md)")
+    route.apply_routes = _boom
+    block.move_block = _boom
+    block.move_parts = _boom
+
+
+_bench_sentinel()

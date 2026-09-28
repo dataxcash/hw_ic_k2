@@ -1157,7 +1157,8 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15):
     final = os.path.join(work, "s3_refilled.kicad_pcb")
     empty = os.path.join(work, "s3_empty.json")
     json.dump([], open(empty, "w"))
-    rc, ap = _cli("route", "--apply-batch", empty, "--board", resolved, "--out", final)
+    rc, ap = _cli("route", "--apply-batch", empty, "--board", resolved, "--out", final,
+                  "--bound-rect", ",".join(str(x) for x in rect))
     if rc != 0 or not os.path.isfile(final):
         return {"state": "W3_REFILL_FAILED", "chain": chain, "wipe": mp, "ledger": led_j, "apply": ap}
     # ④ judge：C1–C7（＋C8/C9 一并报，判据不动）

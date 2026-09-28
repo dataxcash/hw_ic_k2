@@ -103,6 +103,11 @@ def main(argv=None):
     p.add_argument("--base", required=True); p.add_argument("--in", dest="inp", required=True)
     p.add_argument("--rect", required=True); p.add_argument("--out", required=True)
     p.add_argument("--json-out")
+    p = sub.add_parser("move-block", help="(subprocess only) rigid block move + split at dR")
+    p.add_argument("--board"); p.add_argument("--rect", required=True)
+    p.add_argument("--refs", required=True, help="comma-separated members")
+    p.add_argument("--delta", required=True, help="dx,dy")
+    p.add_argument("--out", required=True); p.add_argument("--json-out")
     p = sub.add_parser("dump", help="read-only per-net track/via inventory (QA/test helper)")
     p.add_argument("--board", required=True)
     p.add_argument("--json-out")
@@ -114,6 +119,7 @@ def main(argv=None):
     p.add_argument("--layer", default="F.Cu"); p.add_argument("--board")
     p.add_argument("--apply", help="apply a ROUTED plan JSON to the board")
     p.add_argument("--apply-batch", help="apply a batch of ROUTED plans (list) to the board")
+    p.add_argument("--bound-rect", default=None, help="#K2-380: x0,y0,x1,y1 - refuse any plan that leaves it")
     p.add_argument("--out"); p.add_argument("--json-out")
     p = sub.add_parser("regen", help="composed deterministic pipeline (place->gen->route->polish->drc), shadow root")
     p.add_argument("--exam", dest="exam_id", choices=["A", "B"], default=None)
@@ -342,6 +348,13 @@ def main(argv=None):
         r = block_mod.bound_outside(a.base, a.inp, rect, a.out)
         return _emit(r, a.json_out, 0)
 
+    if a.cmd == "move-block":
+        rect = [float(v) for v in a.rect.split(",")]
+        dxa, dya = [float(v) for v in a.delta.split(",")]
+        refs = [x.strip() for x in a.refs.split(",") if x.strip()]
+        r = block_mod.move_block(a.board or REF_BOARD, rect, [dxa, dya], a.out, refs=refs)
+        return _emit(r, a.json_out, 0)
+
     if a.cmd == "dump":
         return _emit({"artifact": "eda_eng_dump", "board": a.board,
                       "inventory": netplan_mod.inventory(a.board)}, a.json_out, 0)
@@ -356,10 +369,11 @@ def main(argv=None):
         return _emit(r, None, 0 if r["status"] in ("RIPPED", "DRY_RUN_OK") else 2)
 
     if a.cmd == "route":
+        _bound = [float(v) for v in a.bound_rect.split(",")] if getattr(a, "bound_rect", None) else None
         if a.apply_batch:
             plans = json.load(open(a.apply_batch, encoding="utf-8"))
-            r = route_mod.apply_routes(a.board, plans, a.out)
-            return _emit(r, None, 0)
+            r = route_mod.apply_routes(a.board, plans, a.out, bound_rect=_bound)
+            return _emit(r, None, 0 if r.get("status") == "APPLIED" else 1)
         if a.apply:
             plan = json.load(open(a.apply, encoding="utf-8"))
             r = route_mod.apply_route(a.board, plan, a.out)
