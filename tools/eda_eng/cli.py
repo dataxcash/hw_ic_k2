@@ -47,6 +47,11 @@ def main(argv=None):
     p.add_argument("--refs", required=True)
     p.add_argument("--delta", required=True, help="dx,dy in mm")
     p.add_argument("--json-out")
+    p = sub.add_parser("relocate", help="#K2-366: relocate parts (6 steps: move -> M1 -> M2 -> maze reconnect -> refill -> M4)")
+    p.add_argument("--refs", required=True, help="comma-separated refdes (or refdes=x,y pairs to set absolute positions)")
+    p.add_argument("--delta", default=None, help="dx,dy applied to every listed ref")
+    p.add_argument("--work", required=True)
+    p.add_argument("--max-nets", type=int, default=None)
     p = sub.add_parser("dump", help="read-only per-net track/via inventory (QA/test helper)")
     p.add_argument("--board", required=True)
     p.add_argument("--json-out")
@@ -130,6 +135,26 @@ def main(argv=None):
         dx, dy = [float(v) for v in a.delta.split(",")]
         r = netplan_mod.plan(a.board, refs, [dx, dy])
         return _emit(r, a.json_out, 0)
+
+    if a.cmd == "relocate":
+        moves = []
+        for item in [x.strip() for x in a.refs.split(",") if x.strip()]:
+            if "=" in item:
+                r, xy = item.split("=")
+                moves.append((r, [float(v) for v in xy.split(":")]))
+            else:
+                moves.append((item, None))
+        if a.delta:
+            dx, dy = [float(v) for v in a.delta.split(",")]
+            if any(m[1] is None for m in moves):
+                import pcbnew as P
+                b = P.LoadBoard(os.path.join(ROOT, "hw/k2_v4_8L.l14.kicad_pcb"))
+                pos = {fp.GetReference(): [P.ToMM(fp.GetPosition().x), P.ToMM(fp.GetPosition().y)]
+                       for fp in b.GetFootprints()}
+                moves = [(r, tgt if tgt else [round(pos[r][0] + dx, 4), round(pos[r][1] + dy, 4)])
+                         for r, tgt in moves]
+        r = regen_mod.relocate_chain(moves, a.work, max_nets=a.max_nets)
+        return _emit(r, None, 0 if r.get("state") == "GRADED" and (r.get("M4") or {}).get("verdict") == "PASS" else 1)
 
     if a.cmd == "dump":
         return _emit({"artifact": "eda_eng_dump", "board": a.board,

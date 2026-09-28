@@ -413,6 +413,19 @@ class T(unittest.TestCase):
         self.assertIn("| 网 | 边 | 约定 | 层 |", md)
         self.assertIn("N1", md)
 
+    def test_K366_relocate_runs_the_six_steps_on_a_small_part(self):
+        """#K2-366 sec.2 六步一条命令：在小件上跑通（挪 pad→M1→M2→迷宫重连→复敷铜→M4），并以具名判定收尾。"""
+        rc, r, _ = self._cli("relocate", "--refs", "L1", "--delta", "0.5,0", "--work",
+                             "/tmp/eda_eng_selftest_reloc", "--max-nets", "1")
+        st = r.get("state")
+        self.assertIn(st, ("GRADED", "S2_M1_FAILED", "S3_M2_FAILED", "S5_APPLY_FAILED", "S6_DRC_FAILED"), st)
+        stages = [c.get("stage") for c in r["chain"] if c.get("stage")]
+        self.assertIn("1_move_pads", stages, "step 1 missing")
+        self.assertTrue(any(s in stages for s in ("4_maze_reconnect",)), "step 4 missing")
+        for b in (r.get("blocked") or []):
+            self.assertEqual(b.get("semantics"), "NOT_FOUND",
+                             "every blockage must carry the NOT_FOUND semantics (never 'impossible')")
+
     def test_C30_product_chain_runs_M1_to_M4_with_call_chain_evidence(self):
         """C30 关闭判据：`exam A --run` 的执行路径 = M1->M2->M3->M4，且**附调用链证据**。"""
         rc, r, _ = self._cli("exam", "A", "--run", "--chain", "product",

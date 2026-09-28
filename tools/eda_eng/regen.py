@@ -423,3 +423,132 @@ def exam_a_chain(refs, delta_mm, work, refs_are_region=True, max_nets=None):
 
 def _cli_bin():
     return os.environ.get("EDA_ENG_CLI", "kicad-cli")
+
+
+def move_footprints(board, moves, out):
+    """**步 1（§二.1）＝ 板上挪 pad（坐标变换）**：把指定器件整体移到新位置；
+    其原有铜**不跟随**（成了架空的线头）⇒ 交给 M1/M2 去拆、步 4 去重连。（子进程专用）"""
+    import pcbnew as P
+    b = P.LoadBoard(board)
+    done, missing = [], []
+    fps = {fp.GetReference(): fp for fp in b.GetFootprints()}
+    for ref, tgt in moves:
+        fp = fps.get(ref)
+        if fp is None:
+            missing.append(ref); continue
+        pos = fp.GetPosition()
+        dx = P.FromMM(tgt[0]) - pos.x
+        dy = P.FromMM(tgt[1]) - pos.y
+        fp.Move(P.VECTOR2I(dx, dy))
+        np_ = fp.GetPosition()
+        done.append({"ref": ref, "from": [round(P.ToMM(pos.x), 4), round(P.ToMM(pos.y), 4)],
+                     "to": [round(P.ToMM(np_.x), 4), round(P.ToMM(np_.y), 4)]})
+    P.SaveBoard(out, b)
+    import shutil, hashlib
+    copied = []
+    for ext in (".kicad_pro", ".kicad_dru"):
+        src = board[:-len(".kicad_pcb")] + ext if board.endswith(".kicad_pcb") else board + ext
+        if os.path.isfile(src):
+            shutil.copy2(src, out[:-len(".kicad_pcb")] + ext if out.endswith(".kicad_pcb") else out + ext)
+            copied.append(ext)
+    return {"artifact": "eda_eng_relocate_step1_move", "moved": done, "missing": missing,
+            "project_config_copied": copied, "out": out,
+            "out_sha16": hashlib.sha256(open(out, "rb").read()).hexdigest()[:16],
+            "rule": "#K2-366 sec.2.1: step 1 is a COORDINATE TRANSFORM of the pads on the board - the old copper "
+                    "does not follow (that is what steps 2-4 are for)"}
+
+
+def relocate_chain(moves, work, max_nets=None, layers=("F.Cu", "In2.Cu"), via_penalty=8.0):
+    """**`eda_eng relocate`：六步一条命令**（#K2-366 §二 · 模型 #K2-367 §三）。
+    1 挪 pad → 2 M1 重算受影响网 → 3 M2 拆失效段/孔 → 4 **迷宫重连** → 5 复敷铜 → 6 M4 判卷（DRC 增量）。"""
+    os.makedirs(work, exist_ok=True)
+    B = os.path.join(ROOT, "hw", "k2_v4_8L.l14.kicad_pcb")
+    moved = os.path.join(work, "s1_moved.kicad_pcb")
+    torn = os.path.join(work, "s3_torn.kicad_pcb")
+    final = os.path.join(work, "s5_rerouted.kicad_pcb")
+    plan_j = os.path.join(work, "s2_netplan.json")
+    chain = []
+
+    def _cli(*args):
+        r = subprocess.run([os.path.join(ROOT, "tools", "eda_eng.sh"), *args], cwd=ROOT,
+                           capture_output=True, text=True, timeout=3600)
+        out = r.stdout
+        j = None
+        if "{" in out:
+            try:
+                j = json.JSONDecoder().raw_decode(out[out.index("{"):])[0]
+            except Exception:
+                j = None
+        chain.append({"cmd": "eda_eng " + " ".join(args), "exit": r.returncode})
+        return r.returncode, j
+
+    # 步 1（本进程内执行：挪 pad 是纯几何，不读 netlist）
+    s1 = move_footprints(B, moves, moved)
+    chain.append({"stage": "1_move_pads", "moved": s1["moved"], "missing": s1["missing"]})
+    if s1["missing"]:
+        return {"state": "S1_REF_NOT_FOUND", "chain": chain, "step1": s1}
+    refs = [m[0] for m in moves]
+    d0 = [round(moves[0][1][0] - [f for f in s1["moved"] if f["ref"] == refs[0]][0]["from"][0], 4),
+          round(moves[0][1][1] - [f for f in s1["moved"] if f["ref"] == refs[0]][0]["from"][1], 4)]
+    # 步 2（M1）—— 在**挪后板**上按网表重算受影响网
+    rc, m1 = _cli("netplan", "--board", moved, "--refs", ",".join(refs), "--delta", "0,0", "--json-out", plan_j)
+    if rc != 0 or not m1:
+        return {"state": "S2_M1_FAILED", "chain": chain, "step1": s1, "M1": m1}
+    nets = m1["affected_nets"]
+    if max_nets:
+        nets = nets[:max_nets]
+        m1["teardown"] = {k: v for k, v in m1["teardown"].items() if k in nets}
+        json.dump(m1, open(plan_j, "w", encoding="utf-8"), ensure_ascii=False)
+    # 步 3（M2 拆）
+    rc, m2 = _cli("ripup", "--board", moved, "--plan", plan_j, "--out", torn)
+    if rc != 0 or not m2 or m2.get("status") != "RIPPED":
+        return {"state": "S3_M2_FAILED", "chain": chain, "step1": s1, "M1": m1, "M2": m2}
+    # 步 4（迷宫重连 · 逐网 MST 逐边 maze_route）
+    from . import route as _rt
+    obs, bounds = _rt.obstacles_from_board(torn, set(nets), layers[0])
+    pads = _rt.pads_by_net(torn, layers[0])
+    plans, blocked = [], []
+    for n in nets:
+        if n not in pads or len(pads[n]) < 2:
+            blocked.append({"net": n, "semantics": "NOT_FOUND", "reason": "no 2+ pads on the start layer"}); continue
+        pts = pads[n]
+        edges = _rt.mst_edges(pts)
+        polys, via_list, bad = [], [], None
+        for a, b, _d in edges:
+            r = _rt.maze_route(pts[a], pts[b], list(layers), obs, bounds, via_penalty=via_penalty)
+            if r["status"] != "ROUTED":
+                bad = {"edge": [a, b], "semantics": r.get("semantics"), "reason": r.get("reason")}
+                break
+            for p in r["polys"]:
+                polys.append({"layer": p["layer"], "poly": p["poly"]})
+            via_list += r.get("vias", [])
+        if bad:
+            blocked.append({"net": n, **bad})
+        else:
+            plans.append({"net": n, "polys": [p["poly"] for p in polys],
+                          "layers": [p["layer"] for p in polys], "vias": via_list})
+    chain.append({"stage": "4_maze_reconnect", "nets_total": len(nets), "routed": len(plans),
+                  "blocked": len(blocked), "blocked_named": blocked,
+                  "semantics": "a blocked net is NOT_FOUND - never read as impossible (model sec.2)"})
+    # 步 5（复敷铜＝批量落板内建 zone refill）
+    rp = os.path.join(work, "s4_routes.json")
+    json.dump(plans, open(rp, "w", encoding="utf-8"), ensure_ascii=False)
+    rc, m5 = _cli("route", "--apply-batch", rp, "--board", torn, "--out", final)
+    if rc != 0 or not os.path.isfile(final):
+        return {"state": "S5_APPLY_FAILED", "chain": chain, "step1": s1, "M1": m1, "M2": m2,
+                "M4_routed": len(plans), "blocked": blocked, "apply": m5}
+    # 步 6（M4 判卷 · DRC 增量）
+    dj = os.path.join(work, "s6_drc.json")
+    subprocess.run([_cli_bin(), "pcb", "drc", "--format", "json", "--severity-all", "-o", dj, final],
+                   capture_output=True, timeout=3600)
+    if not os.path.isfile(dj):
+        return {"state": "S6_DRC_FAILED", "chain": chain, "board": final}
+    from . import verify as _vf
+    ref_drc = os.path.join(ROOT, "pm_gate/artifacts/k2_v4/L2/REROUTE_EXAM_REF_L14_DRC.json")
+    v = _vf.judge(final, dj, B, ref_drc)
+    delta = _vf.class_delta(dj, ref_drc)
+    chain.append({"stage": "6_M4_judge", "verdict": v["verdict"], "geometry_delta": delta["total_delta"]})
+    return {"state": "GRADED", "chain": chain, "step1": s1, "M1_affected_nets": len(m1["affected_nets"]),
+            "M2_removed": m2.get("removed"), "M4_routed": len(plans), "blocked": blocked,
+            "apply": m5, "M4": v, "class_delta": delta, "board": final,
+            "rule": "#K2-366 sec.2: relocate = 1 move -> 2 M1 -> 3 M2 -> 4 maze reconnect -> 5 refill -> 6 M4 judge"}

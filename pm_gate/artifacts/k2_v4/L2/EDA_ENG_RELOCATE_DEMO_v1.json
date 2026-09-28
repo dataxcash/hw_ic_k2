@@ -1,0 +1,188 @@
+{
+ "state": "GRADED",
+ "chain": [
+  {
+   "stage": "1_move_pads",
+   "moved": [
+    {
+     "ref": "L1",
+     "from": [
+      33.0,
+      40.2
+     ],
+     "to": [
+      33.5,
+      40.2
+     ]
+    }
+   ],
+   "missing": []
+  },
+  {
+   "cmd": "eda_eng netplan --board /tmp/opencode/eda_eng_r970/s1_moved.kicad_pcb --refs L1 --delta 0,0 --json-out /tmp/opencode/eda_eng_r970/s2_netplan.json",
+   "exit": 0
+  },
+  {
+   "cmd": "eda_eng ripup --board /tmp/opencode/eda_eng_r970/s1_moved.kicad_pcb --plan /tmp/opencode/eda_eng_r970/s2_netplan.json --out /tmp/opencode/eda_eng_r970/s3_torn.kicad_pcb",
+   "exit": 0
+  },
+  {
+   "stage": "4_maze_reconnect",
+   "nets_total": 1,
+   "routed": 1,
+   "blocked": 0,
+   "blocked_named": [],
+   "semantics": "a blocked net is NOT_FOUND - never read as impossible (model sec.2)"
+  },
+  {
+   "cmd": "eda_eng route --apply-batch /tmp/opencode/eda_eng_r970/s4_routes.json --board /tmp/opencode/eda_eng_r970/s3_torn.kicad_pcb --out /tmp/opencode/eda_eng_r970/s5_rerouted.kicad_pcb",
+   "exit": 0
+  },
+  {
+   "stage": "6_M4_judge",
+   "verdict": "FAIL",
+   "geometry_delta": 8
+  }
+ ],
+ "step1": {
+  "artifact": "eda_eng_relocate_step1_move",
+  "moved": [
+   {
+    "ref": "L1",
+    "from": [
+     33.0,
+     40.2
+    ],
+    "to": [
+     33.5,
+     40.2
+    ]
+   }
+  ],
+  "missing": [],
+  "project_config_copied": [
+   ".kicad_pro"
+  ],
+  "out": "/tmp/opencode/eda_eng_r970/s1_moved.kicad_pcb",
+  "out_sha16": "c3aae94e18a5d17f",
+  "rule": "#K2-366 sec.2.1: step 1 is a COORDINATE TRANSFORM of the pads on the board - the old copper does not follow (that is what steps 2-4 are for)"
+ },
+ "M1_affected_nets": 2,
+ "M2_removed": {
+  "tracks": 23,
+  "vias": 5
+ },
+ "M4_routed": 1,
+ "blocked": [],
+ "apply": {
+  "artifact": "eda_eng_route_apply_batch",
+  "nets": [
+   "12V_IN"
+  ],
+  "segments_added": 40,
+  "vias_added": 0,
+  "project_config_copied": [
+   ".kicad_pro"
+  ],
+  "out": "/tmp/opencode/eda_eng_r970/s5_rerouted.kicad_pcb",
+  "out_sha16": "6935800744fda9b5"
+ },
+ "M4": {
+  "criteria": {
+   "C1_connectivity": {
+    "unconnected": 0,
+    "pass": true
+   },
+   "C2_drc_no_new_increase": {
+    "total": 210,
+    "ref_total": 168,
+    "new_classes": [
+     "hole_clearance",
+     "isolated_copper",
+     "lib_footprint_issues",
+     "shorting_items",
+     "solder_mask_bridge"
+    ],
+    "pass": false
+   },
+   "C3_skew": {
+    "per_pair_mm": {
+     "0": 0.065012,
+     "1": 0.06498,
+     "2": 0.043403,
+     "3": 0.078764,
+     "4": 1.4e-05,
+     "5": 5e-06,
+     "6": 0.021576,
+     "7": 0.013805
+    },
+    "max_mm": 0.078764,
+    "limit_mm": 0.15,
+    "pass": true
+   },
+   "C4_chamfer_preserved": {
+    "count": 2637,
+    "ref_count": 2637,
+    "pass": true
+   },
+   "C5_routing_changed": {
+    "element_set_diff": 66,
+    "pass": true
+   }
+  },
+  "verdict": "FAIL",
+  "thresholds_used": {
+   "drc_total": 168,
+   "chamfer_ref": 2637,
+   "skew_limit": 0.15
+  },
+  "judging_table": "L2/EDA_ENG_JUDGING_TABLE_v1.json (ECO-K2-0002/0003 sec.6)",
+  "rule": "PASS iff all five hold; None (skipped) is never a PASS (#K2-358: capability must be reproducible)"
+ },
+ "class_delta": {
+  "total_delta": 8,
+  "by_class": {
+   "hole_clearance": {
+    "result": 1,
+    "ref": 0,
+    "delta": 1
+   },
+   "isolated_copper": {
+    "result": 3,
+    "ref": 0,
+    "delta": 3
+   },
+   "shorting_items": {
+    "result": 2,
+    "ref": 0,
+    "delta": 2
+   },
+   "solder_mask_bridge": {
+    "result": 2,
+    "ref": 0,
+    "delta": 2
+   }
+  },
+  "excluded_class_rows": {
+   "lib_footprint_issues": {
+    "result": 54,
+    "ref": 0,
+    "delta": 54
+   },
+   "lib_footprint_mismatch": {
+    "result": 0,
+    "ref": 20,
+    "delta": -20
+   }
+  },
+  "excluded_classes": [
+   "lib_footprint_issues",
+   "lib_footprint_mismatch"
+  ],
+  "raw_total_delta": 42,
+  "attributed": true,
+  "rule": "#K2-361 sec.2.5: any GEOMETRY class rise must be attributed; library-resolution classes are recorded in excluded_class_rows under the pinned caliber (they are never hidden)"
+ },
+ "board": "/tmp/opencode/eda_eng_r970/s5_rerouted.kicad_pcb",
+ "rule": "#K2-366 sec.2: relocate = 1 move -> 2 M1 -> 3 M2 -> 4 maze reconnect -> 5 refill -> 6 M4 judge"
+}
