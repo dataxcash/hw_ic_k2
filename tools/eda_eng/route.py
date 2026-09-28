@@ -447,3 +447,179 @@ def drawing_markdown(drawings):
         for be in d["blocked_edges"]:
             L.append("| %s | %s | **死结** | — | — | — | — |" % (d["net"], be["edge"]))
     return "\n".join(L)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# #K2-366 · 教科书级基础算法：**迷宫布线器（Lee / A\*）**
+# 连接图形 = (层, i, j) 格点；**8 邻域**（含对角 ⇒ 45°）；**换层 = 过孔**（须先净场，计惩罚）。
+# 确定性：f 相同者按 (g, 层, i, j) 破平局；不通 ⇒ **具名阻断**（禁绕行糊弄）。
+# 间距/禁区：按 (clearance + width/2 + pitch/2) **保守膨胀**障碍后整格占用。
+# ─────────────────────────────────────────────────────────────────────────────
+def grid_of(obstacles, bounds, layer, pitch=0.5, clear=CLEAR, width=0.2, via_radius=0.175,
+            for_via=False):
+    """返回 (nx, ny, x0, y0, blocked) 的布尔网格（True=占用）。"""
+    x0b, y0b, x1b, y1b = bounds
+    nx = max(2, int((x1b - x0b) / pitch) + 1)
+    ny = max(2, int((y1b - y0b) / pitch) + 1)
+    # 索引 0..nx-1 ↔ x0b + i*pitch ≤ x1b
+    blocked = bytearray(nx * ny)
+    inflate = (0.0 if for_via else width / 2.0) + clear + pitch / 2.0
+    if for_via:
+        inflate = clear + via_radius + pitch / 2.0
+    for ob in obstacles:
+        if layer and ob.get("layers") and layer not in ob["layers"]:
+            continue
+        bx0, by0, bx1, by1 = ob["bbox"]
+        i0 = max(0, int((bx0 - inflate - x0b) / pitch) - 1)
+        i1 = min(nx - 1, int((bx1 + inflate - x0b) / pitch) + 1)
+        j0 = max(0, int((by0 - inflate - y0b) / pitch) - 1)
+        j1 = min(ny - 1, int((by1 + inflate - y0b) / pitch) + 1)
+        for i in range(i0, i1 + 1):
+            for j in range(j0, j1 + 1):
+                cx, cy = x0b + i * pitch, y0b + j * pitch
+                d = math.sqrt(_box_pt_d2(ob["bbox"], (cx, cy)))
+                if d <= inflate + 1e-9:
+                    blocked[i * ny + j] = 1
+    return {"nx": nx, "ny": ny, "x0": x0b, "y0": y0b, "pitch": pitch, "blocked": blocked}
+
+
+def _snap(g, pt, free_of=None):
+    """最近的可走格（确定性：按 (距离, i, j) 取最小）。"""
+    nx, ny, x0, y0, pitch, blk = g["nx"], g["ny"], g["x0"], g["y0"], g["pitch"], g["blocked"]
+    i0 = min(nx - 1, max(0, int(round((pt[0] - x0) / pitch))))
+    j0 = min(ny - 1, max(0, int(round((pt[1] - y0) / pitch))))
+    best, bestd = None, None
+    for rad in range(0, max(nx, ny)):
+        for i in range(max(0, i0 - rad), min(nx - 1, i0 + rad) + 1):
+            for j in range(max(0, j0 - rad), min(ny - 1, j0 + rad) + 1):
+                if max(abs(i - i0), abs(j - j0)) != rad:
+                    continue
+                if blk[i * ny + j] or (free_of and (i * ny + j) in free_of):
+                    continue
+                d = math.hypot(x0 + i * pitch - pt[0], y0 + j * pitch - pt[1])
+                if bestd is None or d < bestd - 1e-9:
+                    best, bestd = (i, j), d
+        if best and rad >= 1:
+            break
+    return best
+
+
+def maze_route(p, q, layers, obstacles, bounds, pitch=0.5, clear=CLEAR, width=0.2, via_penalty=8.0):
+    """Lee/A* 迷宫布线：p→q，可换层（过孔），8 邻域（45°）。不通 ⇒ 具名阻断。"""
+    import heapq
+    # 端点自身必须在净场里（否则不是"布线"问题，而是"目标点落在别人铜上"）
+    badpts = [{"which": w, "violations": poly_violations([[pt[0], pt[1]], [pt[0], pt[1]]], obstacles,
+                                                         clearance=clear, layer=layers[0])}
+              for w, pt in (("p", p), ("q", q))]
+    badpts = [b for b in badpts if b["violations"]]
+    if badpts:
+        return {"status": "BLOCKED", "reason": "an endpoint lies inside foreign copper / a keepout",
+                "endpoint_violations": badpts,
+                "rule": "#K2-366: the maze is not allowed to teleport an endpoint out of an obstacle"}
+    grids = {L: grid_of(obstacles, bounds, L, pitch, clear, width) for L in layers}
+    gv = {L: grid_of(obstacles, bounds, L, pitch, clear, width, for_via=True) for L in layers}
+    # **物理**：端点住在 layers[0]（焊盘所在层）⇒ 布线**必须**从 layers[0] 起、回 layers[0] 止；
+    # 任何去别的层的行程都要在换层处落 via（_path_to_polys 负责记账）。
+    L0 = layers[0]
+    starts, goals = {}, {}
+    s, t = _snap(grids[L0], p), _snap(grids[L0], q)
+    if s and math.hypot(s[0] * pitch + grids[L0]["x0"] - p[0], s[1] * pitch + grids[L0]["y0"] - p[1]) > 2 * pitch:
+        s = None
+    if t and math.hypot(t[0] * pitch + grids[L0]["x0"] - q[0], t[1] * pitch + grids[L0]["y0"] - q[1]) > 2 * pitch:
+        t = None
+    if s:
+        starts[L0] = s
+    if t:
+        goals[L0] = t
+    if not starts:
+        return {"status": "BLOCKED", "reason": "no free start cell on any allowed layer",
+                "layers": list(layers), "rule": "#K2-366: the start point is boxed in"}
+    GOAL = {(L0, goals[L0][0], goals[L0][1])} if L0 in goals else set()   # 目标必须在**焊盘层**上
+    dist = {}
+    pq = []
+    for L, s in starts.items():
+        d0 = math.hypot(s[0] - min(goals.values(), key=lambda t: abs(t[0] - s[0]) + abs(t[1] - s[1]))[0],
+                        s[1] - min(goals.values(), key=lambda t: abs(t[0] - s[0]) + abs(t[1] - s[1]))[1]) * pitch
+        dist[(L, s[0], s[1])] = 0.0
+        heapq.heappush(pq, (d0, 0.0, L, s[0], s[1]))
+    prev, seen = {}, set()
+    NEI = [(1, 0, 1.0), (-1, 0, 1.0), (0, 1, 1.0), (0, -1, 1.0),
+           (1, 1, 1.4142), (1, -1, 1.4142), (-1, 1, 1.4142), (-1, -1, 1.4142)]
+    reached = 0
+    while pq:
+        f, g_, L, i, j = heapq.heappop(pq)
+        key = (L, i, j)
+        if key in seen:
+            continue
+        seen.add(key); reached += 1
+        if (L, i, j) in GOAL:
+            # 回溯
+            path = [(L, i, j)]
+            while key in prev:
+                key = prev[key]; path.append(key)
+            path.reverse()
+            return _path_to_polys(path, grids, p, q)
+        gr = grids[L]
+        for di, dj, cost in NEI:
+            ni, nj = i + di, j + dj
+            if not (0 <= ni < gr["nx"] and 0 <= nj < gr["ny"]):
+                continue
+            if gr["blocked"][ni * gr["ny"] + nj]:
+                continue
+            if di and dj and (gr["blocked"][(i + di) * gr["ny"] + j] or gr["blocked"][i * gr["ny"] + (j + dj)]):
+                continue                                   # 禁切角
+            nk = (L, ni, nj)
+            nd = g_ + cost
+            if nd < dist.get(nk, 1e18) - 1e-9:
+                dist[nk] = nd
+                prev[nk] = key
+                h = min(math.hypot(ni - t[0], nj - t[1]) for t in goals.values()) * pitch
+                heapq.heappush(pq, (nd + h, nd, L, ni, nj))
+        # 换层（过孔）
+        for L2 in layers:
+            if L2 == L or not gv[L2]["blocked"]:
+                pass
+            if L2 == L:
+                continue
+            if gv[L]["blocked"][i * gv[L]["ny"] + j] or gv[L2]["blocked"][i * gv[L2]["ny"] + j]:
+                continue                                   # via 站点须两层的净场网格都空
+            nk = (L2, i, j)
+            nd = g_ + via_penalty
+            if nd < dist.get(nk, 1e18) - 1e-9:
+                dist[nk] = nd
+                prev[nk] = key
+                h = min(math.hypot(i - t[0], j - t[1]) for t in goals.values()) * pitch
+                heapq.heappush(pq, (nd + h, nd, L2, i, j))
+    near = None
+    for t in goals.values():
+        d = min((math.hypot(t[0] - k[1], t[1] - k[2]) for k in seen), default=None)
+        near = d if near is None else min(near, d)
+    return {"status": "BLOCKED",
+            "reason": "the maze search exhausted every reachable cell without reaching the target",
+            "layers": list(layers), "cells_expanded": reached,
+            "closest_approach_cells": near,
+            "rule": "#K2-366: an unroutable net is reported with its blockage - no fudged detour"}
+
+
+def _path_to_polys(path, grids, p, q):
+    """(层,i,j) 路径 → 逐层折线 ＋ 过孔表（端点精确接到 p/q）。"""
+    polys, vias = [], []
+    cur_layer = path[0][0]
+    cur = [list(p)]
+    for idx in range(1, len(path)):
+        L, i, j = path[idx]
+        pt = [grids[L]["x0"] + i * grids[L]["pitch"], grids[L]["y0"] + j * grids[L]["pitch"]]
+        if L != cur_layer:
+            vias.append({"at": list(pt), "layers": [cur_layer, L]})
+            cur.append(pt)
+            polys.append({"layer": cur_layer, "poly": cur})
+            cur_layer, cur = L, [list(pt)]
+        else:
+            if cur and abs(cur[-1][0] - pt[0]) < 1e-9 and abs(cur[-1][1] - pt[1]) < 1e-9:
+                continue
+            cur.append(pt)
+    cur.append(list(q))
+    polys.append({"layer": cur_layer, "poly": cur})
+    return {"status": "ROUTED", "polys": polys, "vias": vias, "layer": polys[0]["layer"],
+            "cells": len(path),
+            "rule": "#K2-366 maze router (Lee/A*): 8-neighbour (45 degrees), layer change = via, deterministic tie-break"}

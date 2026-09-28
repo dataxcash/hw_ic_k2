@@ -327,6 +327,46 @@ class T(unittest.TestCase):
         self.assertEqual(cd["total_delta"], 0,
                          "apply must not perturb the board config; attribution was %r" % (cd,))
 
+    # ---------------- #K2-366 maze router (Lee/A*) ----------------
+    def test_maze_routes_a_straight_line(self):
+        r = route.maze_route([0, 0], [6, 0], ["F.Cu"], [], [-1, -1, 7, 1])
+        self.assertEqual(r["status"], "ROUTED")
+        self.assertEqual(r["layer"], "F.Cu")
+
+    def test_maze_detours_around_a_wall_on_one_layer(self):
+        w = [{"id": "wall", "kind": "copper", "net": "X", "bbox": [2.5, -1, 3.5, 1], "layers": ["F.Cu"]}]
+        r = route.maze_route([0, 0], [6, 0], ["F.Cu"], w, [-1, -2, 7, 2])
+        self.assertEqual(r["status"], "ROUTED")
+
+    def test_maze_uses_vias_when_the_pad_layer_is_fully_crossed(self):
+        # 墙**横跨整幅**（y 方向占满板面）⇒ F.Cu 无绕行余量 ⇒ 必须换层出去再回来（2 支 via）
+        w = [{"id": "wall", "kind": "copper", "net": "X", "bbox": [2.5, -5, 3.5, 5], "layers": ["F.Cu"]}]
+        r = route.maze_route([0, 0], [6, 0], ["F.Cu", "In2.Cu"], w, [-1, -4.6, 7, 4.6])
+        self.assertEqual(r["status"], "ROUTED")
+        self.assertEqual(len(r["vias"]), 2, "must leave and come back to the pad layer")
+        self.assertEqual(r["polys"][-1]["layer"], "F.Cu", "the route must END on the pad layer")
+
+    def test_maze_refuses_an_endpoint_inside_foreign_copper(self):
+        cage = [{"id": "cage", "kind": "copper", "net": "X", "bbox": [-2, -2, 2, 2], "layers": ["F.Cu"]}]
+        r = route.maze_route([0, 0], [6, 0], ["F.Cu"], cage, [-3, -3, 7, 3])
+        self.assertEqual(r["status"], "BLOCKED")
+        self.assertIn("endpoint", r["reason"])
+
+    def test_maze_reports_a_named_blockage_when_truly_caged(self):
+        cage = [{"id": "cage", "kind": "copper", "net": "X", "bbox": [2.0, -9, 4.0, 9],
+                 "layers": ["F.Cu", "In2.Cu"]},
+                {"id": "capN", "kind": "copper", "net": "X", "bbox": [-9, 4.4, 9, 9], "layers": ["F.Cu", "In2.Cu"]},
+                {"id": "capS", "kind": "copper", "net": "X", "bbox": [-9, -9, 9, -4.4], "layers": ["F.Cu", "In2.Cu"]}]
+        r = route.maze_route([0, 0], [6, 0], ["F.Cu", "In2.Cu"], cage, [-5, -5, 7, 5])
+        self.assertEqual(r["status"], "BLOCKED")
+        self.assertIn("exhausted", r["reason"])
+
+    def test_maze_is_deterministic(self):
+        w = [{"id": "wall", "kind": "copper", "net": "X", "bbox": [2.5, -1, 3.5, 1], "layers": ["F.Cu"]}]
+        a = route.maze_route([0, 0], [6, 0], ["F.Cu"], w, [-1, -2, 7, 2])
+        b = route.maze_route([0, 0], [6, 0], ["F.Cu"], w, [-1, -2, 7, 2])
+        self.assertEqual(json.dumps(a, sort_keys=True), json.dumps(b, sort_keys=True))
+
     def test_M3a_draw_and_review_pass_on_a_clean_toy(self):
         d = route.draw_net([[0, 0], [10, 0], [10, 10]], ["F.Cu"], [], net="N1")
         self.assertEqual(d["status"], "DRAWN")
