@@ -47,6 +47,24 @@ def main():
             bb = pd.GetBoundingBox()
             pds.append((pd.GetNetCode(), set(pd.GetLayerSet().Seq()), P.ToMM(bb.GetLeft()), P.ToMM(bb.GetTop()),
                         P.ToMM(bb.GetRight()), P.ToMM(bb.GetBottom())))
+    # copper POURS (zones) are obstacles too: a via pushed into a foreign-net pour shorts it (measured:
+    # shorting_items 3 + tracks_crossing 1 in the pre-zone attempt)
+    zn = []
+    for z in b.Zones():
+        try:
+            znet = z.GetNetCode()
+            lay = [L for L in z.GetLayerSet().Seq()]
+        except Exception:
+            continue
+        for L in lay:
+            try:
+                bb = z.GetFilledPolysList(L).BBox()
+            except Exception:
+                continue
+            if bb.GetWidth() <= 0 or bb.GetHeight() <= 0:
+                continue
+            zn.append((znet, L, P.ToMM(bb.GetLeft()), P.ToMM(bb.GetTop()),
+                       P.ToMM(bb.GetRight()), P.ToMM(bb.GetBottom())))
     X0, X1, Y0, Y1 = [P.ToMM(v) for v in (b.GetBoardEdgesBoundingBox().GetLeft(),
                                           b.GetBoardEdgesBoundingBox().GetRight(),
                                           b.GetBoardEdgesBoundingBox().GetTop(),
@@ -55,7 +73,42 @@ def main():
             (0.7071, 0.7071), (-0.7071, 0.7071)]
     CLR = 0.30
 
-    def clear_at(nc, span, r, nx, ny):
+    def seg_cross(a, b_, c, d_):
+        def o(p, q, rr):
+            v = (q[0] - p[0]) * (rr[1] - p[1]) - (q[1] - p[1]) * (rr[0] - p[0])
+            return 0 if abs(v) < 1e-12 else (1 if v > 0 else -1)
+        o1, o2, o3, o4 = o(a, b_, c), o(a, b_, d_), o(c, d_, a), o(c, d_, b_)
+        return o1 != o2 and o3 != o4
+
+    def seg_clear(nc, span, x1, y1, x2, y2):
+        """True iff this segment keeps >= CLR from every other-net copper element."""
+        for (n2, L2, ax, ay, bx, by, hw) in trk:
+            if n2 == nc or L2 not in span:
+                continue
+            if seg_cross((x1, y1), (x2, y2), (ax, ay), (bx, by)):
+                return False
+            d = min(d_pt_seg(x1, y1, ax, ay, bx, by), d_pt_seg(x2, y2, ax, ay, bx, by),
+                    d_pt_seg(ax, ay, x1, y1, x2, y2), d_pt_seg(bx, by, x1, y1, x2, y2))
+            if d - hw - r0 > 0 and d - hw < CLR:
+                return False
+        for (n2, vx, vy, r2, lay2) in vs:
+            if n2 == nc or not (lay2 & span):
+                continue
+            if d_pt_seg(vx, vy, x1, y1, x2, y2) - r2 < CLR:
+                return False
+        for (n2, lay2, bx0, by0, bx1, by1) in pds:
+            if n2 == nc or not (lay2 & span):
+                continue
+            for (px, py) in ((x1, y1), (x2, y2)):
+                ddx = max(bx0 - px, 0, px - bx1)
+                ddy = max(by0 - py, 0, py - by1)
+                if math.hypot(ddx, ddy) < CLR:
+                    return False
+        return True
+
+    r0 = 0.0
+
+    def clear_at(nc, span, r, nx, ny, attach=()):
         if nx - r < X0 + 0.3 or nx + r > X1 - 0.3 or ny - r < Y0 + 0.3 or ny + r > Y1 - 0.3:
             return False
         for (rx0, ry0, rx1, ry1) in rects:
@@ -78,9 +131,43 @@ def main():
             dy = max(by0 - ny, 0, ny - by1)
             if math.hypot(dx, dy) - r < CLR:
                 return False
+        for (zn2, zL, zx0, zy0, zx1, zy1) in zn:
+            if zn2 == nc or zL not in span:
+                continue
+            if zx0 - CLR <= nx <= zx1 + CLR and zy0 - CLR <= ny <= zy1 + CLR:
+                return False
+        for (ax, ay) in attach:
+            if not seg_clear(nc, span, nx, ny, ax, ay):
+                return False
+            for (zn2, zL, zx0, zy0, zx1, zy1) in zn:
+                if zn2 == nc or zL not in span:
+                    continue
+                for (px, py) in ((nx, ny), (ax, ay)):
+                    if zx0 - CLR <= px <= zx1 + CLR and zy0 - CLR <= py <= zy1 + CLR:
+                        return False
         return True
 
     moves, reattached, scanned = [], 0, 0
+    # ONE geometry snapshot (plain floats) -- repeated SWIG getters in nested loops are unreliable
+    snap_v, snap_t = [], []
+    for t in b.GetTracks():
+        if t.GetClass() == "PCB_VIA":
+            pv = t.GetPosition()
+            snap_v.append((t, t.GetNetCode(), P.ToMM(pv.x), P.ToMM(pv.y),
+                           P.ToMM(t.GetWidth(P.F_Cu)) / 2.0, set(t.GetLayerSet().Seq())))
+        else:
+            sX, sY = t.GetStart(), t.GetEnd()
+            snap_t.append((t, t.GetNetCode(), t.GetLayer(), P.ToMM(sX.x), P.ToMM(sY.y),
+                           P.ToMM(sY.x), P.ToMM(sY.y), P.ToMM(t.GetWidth())))
+    attach_of = {}
+    for _t, nc, vx, vy, _r, _sp in snap_v:
+        ends = []
+        for _t2, nc2, L2, ax, ay, bx, by, _w in snap_t:
+            for (px, py) in ((ax, ay), (bx, by)):
+                if abs(px - vx) < 0.01 and abs(py - vy) < 0.01:
+                    other = (bx, by) if (px, py) == (ax, ay) else (ax, ay)
+                    ends.append(other)
+        attach_of[(round(vx, 4), round(vy, 4))] = ends
     for t in list(b.GetTracks()):
         if t.GetClass() != "PCB_VIA":
             continue
@@ -97,8 +184,9 @@ def main():
                 for (ux, uy) in DIRS:
                     nx, ny = x + ux * d, y + uy * d
                     scanned += 1
-                    if clear_at(nc, span, r, nx, ny):
-                        best = (round(d, 3), round(nx, 4), round(ny, 4))
+                    att = attach_of.get((round(x, 4), round(y, 4)), [])
+                    if clear_at(nc, span, r, nx, ny, att):
+                        best = (round(d, 3), round(nx, 4), round(ny, 4), len(att))
                         break
                 if best:
                     break
@@ -106,7 +194,7 @@ def main():
                 moves.append({"net": nets.get(nc, ""), "from": [round(x, 3), round(y, 3)], "to": None,
                               "why": "no clear position inside 4.0 mm"})
                 break
-            _d, nx, ny = best
+            _d, nx, ny, _na = best
             t.SetPosition(P.VECTOR2I(int(round(nx * 1e6)), int(round(ny * 1e6))))
             for s2 in b.GetTracks():
                 if s2.GetClass() == "PCB_VIA":
@@ -117,7 +205,7 @@ def main():
                         setter(P.VECTOR2I(int(round(nx * 1e6)), int(round(ny * 1e6))))
                         reattached += 1
             moves.append({"net": nets.get(nc, ""), "push_mm": _d, "from": [round(x, 3), round(y, 3)],
-                          "to": [nx, ny]})
+                          "to": [nx, ny], "attached_ends_checked": _na})
             break
     b.Save(a.out)
     pr = os.path.basename(a.board).replace(".kicad_pcb", ".kicad_pro")

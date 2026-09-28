@@ -1,0 +1,78 @@
+{
+ "artifact": "k2_h4_corner_blocker_v1",
+ "ts": "2026-09-28",
+ "authority": "#K2-341 sec.2 (authorised method (i): dedicated re-route of the trapped runs) -> sec.2.3 exhaustion clause",
+ "board": "hw/k2_v4_8L.l14.kicad_pcb",
+ "hole": "H4",
+ "hole_at": [
+  140.8,
+  76.8
+ ],
+ "corner_dist_mm": 3.18,
+ "rule_mm": 3.0,
+ "trapped": "2 high-speed vias + 4 track pieces of PCIE_DN4_N / PCIE_DN5_P (MCIO fan-out runs, In5, ~48 mm)",
+ "attempts": [
+  {
+   "id": "A",
+   "method": "rect-clip (6x6 corner keepout) + C17 v1 re-route",
+   "result": {
+    "unconnected": 3,
+    "track_dangling_delta": 2,
+    "via_dangling_delta": 2
+   }
+  },
+  {
+   "id": "B",
+   "method": "rect-clip (wider 9x9 corridor) + C17 v1 re-route",
+   "result": {
+    "unconnected": 6,
+    "track_dangling_delta": 7,
+    "via_dangling_delta": 8
+   }
+  },
+  {
+   "id": "C",
+   "method": "clearance-aware via push (attach-aware, 0.30 mm criterion, 4.0 mm bounded search, 8 directions)",
+   "result": {
+    "unconnected": 0,
+    "clearance_delta": 1,
+    "shorting_items_delta": 3,
+    "tracks_crossing_delta": 1,
+    "pushed_mm": [
+     1.8,
+     0.6
+    ],
+    "note": "the moved via lands in a FOREIGN-NET COPPER POUR; re-attached segments were checked, pours were not"
+   }
+  },
+  {
+   "id": "D",
+   "method": "as C but with the pours added to the obstacle model (bbox-conservative test)",
+   "result": {
+    "candidates_found": 0,
+    "why": "no clear position inside 4.0 mm (both vias)"
+   },
+   "caveat": "the pour test is bounding-box based (conservative): this is a NAMED EXHAUSTION of the local-push method, not a proof of geometric impossibility"
+  }
+ ],
+ "root_cause": "the bottom-right corner is a dense HS fan-out region whose inner layers carry foreign-net pours; any via placed there to vacate the keepout must clear those pours, and no such position exists within the local push envelope",
+ "fix_options": [
+  {
+   "id": "i",
+   "what": "dedicated re-route of the two In5 runs: rip the full runs and re-route with the maze router (needs precise pour polygons in the obstacle model + a stronger re-route mode)",
+   "kind": "capability step",
+   "status": "NOT DONE (budget/method)"
+  },
+  {
+   "id": "ii",
+   "what": "owner-declared deviation: H4 stays at 3.18 mm (6% over the 3.0 rule) while H1/H2/H3 sit exactly on it",
+   "kind": "owner visual acceptance",
+   "status": "AUTO-SELECTED per #K2-341 sec.2.3"
+  }
+ ],
+ "consequence_for_the_scheme_gate": {
+  "scheme_layer": "P1 PASS / P2 PASS / P3 FAIL (H4 only) / P4 PASS (complete=true)",
+  "note": "three of four corners are exactly on the rule; the framework freeze is deferred to the owner decision on this item"
+ },
+ "OWNER-ITEMS": 1
+}
