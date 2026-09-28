@@ -1,0 +1,35 @@
+{
+ "artifact": "k2_c32_exact_shape_obstacles_evidence_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-370 sec.3.3 / C32: the obstacle model must use TRUE SHAPES, not axis-aligned bounding boxes",
+ "board": "hw/k2_v4_8L.l14.kicad_pcb",
+ "change": {
+  "before": "every obstacle = axis-aligned BBOX; grid margin = width/2 + clearance + pitch/2",
+  "after": "TRACK obstacles carry their true segment (a/b) and half-width; distance = point-to-SEGMENT minus half-width. Pads/vias/keepouts remain boxes and are NAMED as the remaining approximation. The box margin formula is unchanged (backward compatible).",
+  "measured_obstacle_mix": "3400 of 4076 obstacles on F.Cu now carry a true segment",
+  "fail_closed_guard": "every routed polyline is re-checked with the true-shape oracle (poly_violations) before it may land; a violation is refused as a NAMED blockage"
+ },
+ "pitch_sweep_on_the_20_jobs_that_were_blocked_at_pitch_0.5_with_AABB_obstacles": {
+  "0.50": {"ROUTED": 5, "BLOCKED": 15},
+  "0.30": {"ROUTED": 9, "BLOCKED": 11},
+  "0.25": {"ROUTED": 10, "BLOCKED": 10},
+  "0.20": {"ROUTED": 10, "BLOCKED": 10},
+  "0.15": {"ROUTED": 9, "BLOCKED": 11},
+  "chosen": 0.25,
+  "basis": "the board's real free corridors are ~0.5mm; a 0.5mm maze pitch cannot represent them, 0.25mm can (2 cells per corridor). NOT a tuned magic number: 0.20 gives the same result and 0.15 is worse (the 2*pitch endpoint snap cap shrinks with the pitch)."
+ },
+ "exact_recheck_of_the_pitch_0.5_routes": {"routed": 5, "with_clearance_violations": 0},
+ "exam_A_effect": {
+  "attempt5_pitch_0.5_AABB": {"M3_routed": 3, "M3_jobs": 23, "C1_unconnected": 18, "C2_total": 296,
+                              "geometry_delta": 94, "artifact": "L2/EDA_ENG_EXAM_A_ATTEMPT5_BLOCK_VERDICT_v1.json"},
+  "attempt6_pitch_0.25_exact": {"M3_routed": 11, "M3_jobs": 23, "C1_unconnected": 12, "C2_total": 287,
+                                "geometry_delta": 85, "artifact": "L2/EDA_ENG_EXAM_A_ATTEMPT6_BLOCK_VERDICT_v1.json"},
+  "unchanged": "C6 diff 0, C7 diff 0 (the block fidelity criteria still hold), refill 18 zones"
+ },
+ "remaining_blockers": {
+  "aabb_false_positive_jobs": 10,
+  "note": "the 10 remaining jobs are still flagged as AABB false positives, but the flag compares against TRACK copper only; the two hard refusals are a real pad collision (the moved block's pad lands on a dR port - a genuine block/outside conflict that must be resolved by the frame or the delta, not by the router) and one genuinely tight endpoint (0.035mm).",
+  "next": "pads/vias as true shapes (oriented pad polygons) + the endpoint snap policy"
+ },
+ "OWNER-ITEMS": 0
+}

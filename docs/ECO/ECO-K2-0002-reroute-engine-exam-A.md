@@ -90,6 +90,8 @@ owner 根因判定（#K2-356 §一）：**布局调整后 ENG 没有能力重构
 | 新缺口 C32 | 障碍= AABB | 实测 18/20 受阻端点距**真实**异网铜 ≥0.175mm ⇒ 拒绝系 **AABB 假阳** ⇒ 需**真形净距 oracle** | 09-29 02:3x | ARCHER |
 | 共享层对接（缺口 ③a）| `board_model.ok=True` | 几何原语改取 `_shared/eda_core/board_model/geometry`（BBox / dist_point_segment）＋ `true_clearance_mm` 真形量距；件 `L2/EDA_ENG_EXAM_A_M0_BLOCK_CENSUS_v1.json` | 09-29 02:5x | ARCHER |
 | **复判 attempt 5**（代码修订后重立判卷出处）| 产品路径恰一次 | **GRADED／FAIL**，读数与 attempt 4 **逐项一致**（C1 18 · C2 296 · C4 2665 · C5 1271 · C6 0 · C7 0 · 3 通 20 阻 · refill 18）＋ **20 阻中 18 条机判 `aabb_false_positive`**；件 `…ATTEMPT5_BLOCK_VERDICT_v1.json` | 09-29 02:5x | ARCHER |
+| C32 v1 真形障碍 | 障碍=线段真形 | track 障碍带真端点＋半宽 ⇒ 测距用**点-线段**（箱障碍仍为 AABB，具名保留）；栅格 0.5→**0.25mm**（实测本板真形走廊 ~0.5mm）；**落板前逐条真形复核**（fail-closed） | 09-29 03:0x | ARCHER |
+| **复判 attempt 6** | 产品路径恰一次 | **GRADED／FAIL**：M3 **11/23 通**（前 3/23）· C1 **12**（前 18）· C2 **287**（前 296）· 几何增量 **85**（前 94）· C4 2769 · C5 1480 · **C6 0 · C7 0** · refill 18；件 `…ATTEMPT6_BLOCK_VERDICT_v1.json` | 09-29 03:1x | ARCHER |
 
 ## 9 对单式核对（ECO-方案-图-实物）
 变更单 **本件** ✓ ｜ 方案 §7 **草案**（引擎建时细化，须监理批）｜ 图 **未出**（方案未批）｜ 实物 **未动** ✓ —— **四单一致 = 尚不可动板**（合规）。

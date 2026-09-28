@@ -560,7 +560,7 @@ def relocate_chain(moves, work, max_nets=None, layers=("F.Cu", "In2.Cu"), via_pe
 HS_FANOUT_NETS = ["PCIE_DN%d_%s" % (i, s) for i in range(8) for s in ("P", "N")]
 
 
-def relocate_block_chain(rect, delta, work, members=None, clearance=None, max_jobs=None):
+def relocate_block_chain(rect, delta, work, members=None, clearance=None, max_jobs=None, pitch=0.25):
     """`eda_eng relocate-block` —— BLOCK 移位全链。
     M0 框选清册 -> step1 块体搬运(+M2 剪边) -> M3 块内重连(∂R 端口固定) -> 复敷铜 -> M4 判卷(+C6/C7)。
     只读输入；所有改板都落在 work（临时目录）下的副本上。"""
@@ -632,11 +632,21 @@ def relocate_block_chain(rect, delta, work, members=None, clearance=None, max_jo
             p, q = j["ports"][0], j["ports"][1]
         else:
             p, q = j["port"], j["target"]
-        # endpoint_clear=0：障碍是保守 AABB，端点判据只拒"真埋"的点；几何正确性交给 M4 判卷
-        r = _rt.maze_route(p, q, [L], obs, bnd, via_penalty=8.0, endpoint_clear=0.0)
+        # endpoint_clear=0：端点判据只拒"真埋"的点（间隙由**真形**判卷器兜底，见下）
+        # pitch：栅格分辨率 —— 实测 0.5mm 太粗（本板真形自由走廊 ~0.5mm）；0.25mm 使 20 条受阻作业多通 5 条。
+        r = _rt.maze_route(p, q, [L], obs, bnd, pitch=pitch, via_penalty=8.0, endpoint_clear=0.0)
         if r["status"] != "ROUTED":
             blocked.append({"net": net, "layer": L, "kind": j["kind"], "port": p, "target": q,
                             "semantics": r.get("semantics", "NOT_FOUND"), "reason": r.get("reason")})
+            continue
+        # **真形复核**（#K2-370 §三.3 / C32）：栅格是启发式，落板前用真形净距判卷；违规即弃
+        viol = []
+        for pl in r["polys"]:
+            viol += _rt.poly_violations(pl["poly"], obs, clearance=clear, layer=pl["layer"])
+        if viol:
+            blocked.append({"net": net, "layer": L, "kind": j["kind"], "port": p, "target": q,
+                            "semantics": "NOT_FOUND", "reason": "grid route violates the exact-shape clearance",
+                            "exact_violations": viol[:3]})
             continue
         polys = [x["poly"] for x in r["polys"]]
         plans.append({"net": net, "polys": polys, "layers": [x["layer"] for x in r["polys"]], "vias": r.get("vias", [])})
@@ -654,7 +664,8 @@ def relocate_block_chain(rect, delta, work, members=None, clearance=None, max_jo
             bl["aabb_false_positive"] = bool(c.get("min_mm") is not None and c["min_mm"] >= clear)
     chain.append({"stage": "M3_block_reconnect", "jobs_total": len(jobs), "routed": len(plans),
                   "blocked": len(blocked), "blocked_named": blocked,
-                  "domain": "block swept region", "terminals": "dR ports are FIXED",
+                  "domain": "block swept region", "terminals": "dR ports are FIXED", "pitch_mm": pitch,
+                  "exact_recheck": "every polyline is re-checked against the true-shape obstacles before it may land",
                   "aabb_false_positive_jobs": sum(1 for b in blocked if b.get("aabb_false_positive")),
                   "semantics": "a blocked job is NOT_FOUND - never read as impossible (#K2-367 sec.2); "
                                 "aabb_false_positive=True means the refusal came from the conservative AABB "

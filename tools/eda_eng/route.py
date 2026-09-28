@@ -45,6 +45,21 @@ def _box_pt_d2(bx, p):
     return dx * dx + dy * dy
 
 
+def _obstacle_dist(ob, p):
+    """点到**障碍真实形状**的距离（#K2-370 §三.3 · 缺口 C32）。
+    带 `a`/`b` 的线段障碍（真板 track）用**真形**（半宽已折入）；其余（焊盘/过孔/keepout/合成箱）
+    退回 AABB 距离（如实保留——这正是 C32 的剩余缺口）。"""
+    if "a" in ob:
+        return max(0.0, math.sqrt(_seg_pt_d2(ob["a"], ob["b"], p)) - float(ob.get("half_w", 0.0)))
+    return math.sqrt(_box_pt_d2(ob["bbox"], p))
+
+
+def _obstacle_margin(ob, clear, width, pitch, for_via=False, via_radius=0.175):
+    """格子判定余量：线段障碍的半宽已在距离里；箱障碍仍按 (宽/2 或 via 半径) 加余量（**向后兼容**）。"""
+    base = (clear + via_radius + pitch / 2.0) if for_via else (clear + pitch / 2.0)
+    return base if "a" in ob else base + (0.0 if for_via else width / 2.0)
+
+
 def poly_violations(poly, obstacles, clearance=CLEAR, step=0.05, layer=None):
     """返回 [(obstacle_id, min_dist_mm, kind)]，只含违规项（keepout 用 clearance=0 且 min_dist==0 记违规）。"""
     bad = []
@@ -52,8 +67,7 @@ def poly_violations(poly, obstacles, clearance=CLEAR, step=0.05, layer=None):
     for ob in obstacles:
         if layer and ob.get("layers") and layer not in ob["layers"]:
             continue
-        min_d2 = min(_box_pt_d2(ob["bbox"], p) for p in pts)
-        d = math.sqrt(min_d2)
+        d = min(_obstacle_dist(ob, p) for p in pts)
         need = 0.0 if ob.get("kind") == "keepout" else clearance
         if d <= need + 1e-9:
             bad.append({"obstacle": ob.get("id"), "kind": ob.get("kind"), "net": ob.get("net"),
@@ -144,7 +158,12 @@ def obstacles_from_board(board, ignore_nets, layer, keepout_boxes=()):
         if layer not in layers:
             continue
         bb = t.GetBoundingBox()
+        st, en = t.GetStart(), t.GetEnd()
         obs.append({"id": "track@%s" % name, "kind": "copper", "net": name,
+                    # **真形**（#K2-370 §三.3 / C32）：带线段端点与半宽，AABB 仅作粗筛窗
+                    "a": [round(P.ToMM(st.x), 4), round(P.ToMM(st.y), 4)],
+                    "b": [round(P.ToMM(en.x), 4), round(P.ToMM(en.y), 4)],
+                    "half_w": round(P.ToMM(t.GetWidth()) / 2.0, 4),
                     "bbox": [round(P.ToMM(bb.GetX()) - 0.0, 4), round(P.ToMM(bb.GetY()), 4),
                              round(P.ToMM(bb.GetRight()), 4), round(P.ToMM(bb.GetBottom()), 4)]})
     for p in b.GetPads():
@@ -477,12 +496,10 @@ def grid_of(obstacles, bounds, layer, pitch=0.5, clear=CLEAR, width=0.2, via_rad
     ny = max(2, int((y1b - y0b) / pitch) + 1)
     # 索引 0..nx-1 ↔ x0b + i*pitch ≤ x1b
     blocked = bytearray(nx * ny)
-    inflate = (0.0 if for_via else width / 2.0) + clear + pitch / 2.0
-    if for_via:
-        inflate = clear + via_radius + pitch / 2.0
     for ob in obstacles:
         if layer and ob.get("layers") and layer not in ob["layers"]:
             continue
+        inflate = _obstacle_margin(ob, clear, width, pitch, for_via=for_via, via_radius=via_radius)
         bx0, by0, bx1, by1 = ob["bbox"]
         i0 = max(0, int((bx0 - inflate - x0b) / pitch) - 1)
         i1 = min(nx - 1, int((bx1 + inflate - x0b) / pitch) + 1)
@@ -491,8 +508,7 @@ def grid_of(obstacles, bounds, layer, pitch=0.5, clear=CLEAR, width=0.2, via_rad
         for i in range(i0, i1 + 1):
             for j in range(j0, j1 + 1):
                 cx, cy = x0b + i * pitch, y0b + j * pitch
-                d = math.sqrt(_box_pt_d2(ob["bbox"], (cx, cy)))
-                if d <= inflate + 1e-9:
+                if _obstacle_dist(ob, (cx, cy)) <= inflate + 1e-9:
                     blocked[i * ny + j] = 1
     return {"nx": nx, "ny": ny, "x0": x0b, "y0": y0b, "pitch": pitch, "blocked": blocked}
 

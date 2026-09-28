@@ -551,6 +551,21 @@ class T(unittest.TestCase):
         self.assertEqual(r["status"], "APPLIED")
         self.assertGreater(r["zones_refilled"], 0, "the batch path must actually refill zones")
 
+    def test_K370_exact_shape_obstacles_kill_the_aabb_false_positive(self):
+        """#K2-370 sec.3.3 / C32：线段障碍用**真形**测距。
+        45 度线段的 AABB 会罩住"离铜很远"的点 => 旧模型假阳；真形模型必须放行，而真紧点仍须拒。"""
+        seg = {"id": "s", "kind": "copper", "net": "X", "a": [0.0, 0.0], "b": [10.0, 10.0],
+               "half_w": 0.1, "bbox": [0.0, 0.0, 10.0, 10.0]}
+        box = {"id": "b", "kind": "copper", "net": "X", "bbox": [0.0, 0.0, 10.0, 10.0]}
+        far = [[0.0, 10.0], [0.0, 10.0]]
+        self.assertEqual(route.poly_violations(far, [seg], clearance=0.175), [],
+                         "a point inside the AABB but far from the 45-degree segment must be CLEAR")
+        self.assertTrue(route.poly_violations(far, [box], clearance=0.175),
+                        "the AABB model still flags it - that WAS the false positive (gap C32)")
+        near = [[5.0, 5.05], [5.0, 5.05]]
+        self.assertTrue(route.poly_violations(near, [seg], clearance=0.175),
+                        "a point 0.035mm off the segment surface must still be refused")
+
     def test_K370_board_model_hookup_and_true_shape_clearance(self):
         """#K2-370 sec.3.3 (gap 3a): eda_eng's geometry primitives come from the SHARED layer
         `_shared/eda_core/board_model`; `true_clearance_mm` measures REAL segment distance, not an AABB
