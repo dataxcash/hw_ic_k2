@@ -1,0 +1,35 @@
+{
+ "artifact": "eda_eng_M1_netplan_receipt_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-360 (module decomposition; M1 -> M2 -> M3 -> M4; a module is accepted only when its tests are all green; the receipt must carry the raw test output)",
+ "module": "M1 eda_eng netplan (teardown plan)",
+ "unit_test_criterion": "#K2-360 M1: on l14, translating U1 by 5 mm => the list must match the hand/independent computation item by item (zero extra, zero missing)",
+ "readings": {
+  "selftest_tests": 19,
+  "selftest_failures": 0,
+  "selftest_errors": 0,
+  "verdict": "PASS",
+  "M1_affected_nets": 15,
+  "M1_teardown_totals": {
+   "tracks": 981,
+   "vias": 399
+  },
+  "M1_moved_pads": 49,
+  "independent_source": "hw/data/k2_sch.errata-3.yaml -> 15 nets containing U1/<pin>",
+  "board_module": "15 nets",
+  "zero_extra": true,
+  "zero_missing": true,
+  "expectation": "eda_eng_netplan_expectation_U1_v1",
+  "expectation_sha16": "728ffa1d824d1e68"
+ },
+ "raw_test_output": "ok\nok\nok\nok\nok\ntest_M2_M3_are_not_implemented_yet (test_eda_eng.T.test_M2_M3_are_not_implemented_yet) ... ok\nok\nok\ntest_docs_chain_status (test_eda_eng.T.test_docs_chain_status) ... ok\nok\ntest_eco_chain_form_complete (test_eda_eng.T.test_eco_chain_form_complete) ... ok\ntest_eco_render_generates_a_conforming_doc (test_eda_eng.T.test_eco_render_generates_a_conforming_doc) ... ok\ntest_exam_definitions (test_eda_eng.T.test_exam_definitions) ... ok\ntest_place_is_declarative_and_never_touches_a_board (test_eda_eng.T.test_place_is_declarative_and_never_touches_a_board) ... ok\ntest_placement_edit_preserves_rotation (test_eda_eng.T.test_placement_edit_preserves_rotation) ... ok\ntest_ref_artifacts_present (test_eda_eng.T.test_ref_artifacts_present) ... ok\ntest_regen_is_implemented_and_plans_five_stages (test_eda_eng.T.test_regen_is_implemented_and_plans_five_stages) ... ok\nok\ntest_shadow_root_never_touches_the_real_tree (test_eda_eng.T.test_shadow_root_never_touches_the_real_tree) ... ok\n\n----------------------------------------------------------------------\nRan 19 tests in 5.125s\n\nOK\n{\"artifact\": \"eda_eng_selftest\", \"tests\": 19, \"failures\": 0, \"errors\": 0, \"skipped\": 0, \"verdict\": \"PASS\"}\n",
+ "raw_cli_output": "   \"old\": [\n    31.8375,\n    52.25\n   ],\n   \"new\": [\n    36.8375,\n    52.25\n   ]\n  },\n  {\n   \"ref\": \"U1\",\n   \"pad\": \"8\",\n   \"net\": \"\",\n   \"old\": [\n    31.8375,\n    52.75\n   ],\n   \"new\": [\n    36.8375,\n    52.75\n   ]\n  },\n  {\n   \"ref\": \"U1\",\n   \"pad\": \"9\",\n   \"net\": \"\",\n   \"old\": [\n    31.8375,\n    53.25\n   ],\n   \"new\": [\n    36.8375,\n    53.25\n   ]\n  }\n ],\n \"n_moved_pads\": 49,\n \"touched_nets_outside_affected\": 0,\n \"rule\": \"#K2-360 M1: the list must be exact (zero extra, zero missing); nets come from the board's pad->net map and are cross-checked against the true-source netlist in the tests\"\n}\n",
+ "artifacts": {
+  "netplan_module": "tools/eda_eng/netplan.py",
+  "expectation": "L2/EDA_ENG_NETPLAN_EXPECTATION_U1_v1.json",
+  "run": "L2/EDA_ENG_M1_NETPLAN_U1_RUN_v1.json",
+  "tests": "tools/eda_eng/tests/test_eda_eng.py"
+ },
+ "state": "M1 GREEN (19/19) - M2 (ripup) is the next module per sec.2",
+ "OWNER-ITEMS": 0
+}

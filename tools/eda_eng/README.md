@@ -5,6 +5,17 @@
 
 ## 命令
 
+按 **#K2-360** 四模块分治（**M1→M2→M3→M4 逐个交付 · 模块绿一个收一个**）：
+
+| 模块 | 命令 | 输入 → 输出 | 状态 |
+|---|---|---|---|
+| **M1** | `eda_eng netplan` | 板＋放置增量 → **受影响网清单＋待拆段/孔清单** | ✅ **绿（19/19 单测）** |
+| **M2** | `eda_eng ripup` | M1 清单 → 拆后板 | ❌ 未实现（M1 已绿，下一个） |
+| **M3** | `eda_eng route` | 拆后板＋约束 → 布通板 | ❌ 未实现 |
+| **M4** | `eda_eng verify` | 布通板 → 判卷报告 | ✅ 可用（判据 C1–C5） |
+
+其余命令：
+
 | 命令 | 作用 | 状态 |
 |---|---|---|
 | `eda_eng eco` | ECO 文书链**校验**（表单字段／数字判据／受控登记） | ✅ 可用 |
@@ -23,7 +34,8 @@ k2/tools/eda_eng.sh docs
 k2/tools/eda_eng.sh verify --board <pcb> --drc <drc.json>
 k2/tools/eda_eng.sh exam A
 k2/tools/eda_eng.sh place --refs U1,U2,U4,U5 --delta 5,0
-k2/tools/eda_eng.sh route --exam B --work /tmp/opencode/eda_eng/examB
+k2/tools/eda_eng.sh netplan --board hw/k2_v4_8L.l14.kicad_pcb --refs U1 --delta 5,0
+k2/tools/eda_eng.sh regen --exam B --work <W> --dry-run
 k2/tools/eda_eng.sh exam B --run        # 建 + 判卷（CI 口径）
 k2/tools/eda_eng.sh selftest
 ```

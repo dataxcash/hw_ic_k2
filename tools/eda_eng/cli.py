@@ -3,7 +3,7 @@
 from __future__ import annotations
 import argparse, json, os, subprocess, sys
 
-from . import eco as eco_mod, exams as exams_mod, place as place_mod, route as route_mod, verify as verify_mod
+from . import eco as eco_mod, exams as exams_mod, netplan as netplan_mod, place as place_mod, ripup as ripup_mod, route as route_mod, verify as verify_mod
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 L2 = os.path.join(ROOT, "pm_gate", "artifacts", "k2_v4", "L2")
@@ -39,7 +39,14 @@ def main(argv=None):
     p.add_argument("--refs", required=True, help="comma-separated refs")
     p.add_argument("--delta", required=True, help="dx,dy in mm")
     p.add_argument("--out"); p.add_argument("--json-out")
-    p = sub.add_parser("route", help="rip-up & reroute engine (composed pipeline)")
+    p = sub.add_parser("netplan", help="M1: teardown plan (affected nets + segments/vias to remove)")
+    p.add_argument("--board", required=True)
+    p.add_argument("--refs", required=True)
+    p.add_argument("--delta", required=True, help="dx,dy in mm")
+    p.add_argument("--json-out")
+    p = sub.add_parser("ripup", help="M2: execute the teardown (status)")
+    p = sub.add_parser("route", help="M3: re-route a torn board (status)")
+    p = sub.add_parser("regen", help="composed deterministic pipeline (place->gen->route->polish->drc), shadow root")
     p.add_argument("--exam", dest="exam_id", choices=["A", "B"], default=None)
     p.add_argument("--work", default=None)
     p.add_argument("--dry-run", action="store_true")
@@ -88,7 +95,25 @@ def main(argv=None):
         r = place_mod.apply_scenario(refs, [dx, dy], out=a.out)
         return _emit(r, a.json_out, 0 if not r["missing"] else 1)
 
+    if a.cmd == "netplan":
+        refs = [x.strip() for x in a.refs.split(",") if x.strip()]
+        dx, dy = [float(v) for v in a.delta.split(",")]
+        r = netplan_mod.plan(a.board, refs, [dx, dy])
+        return _emit(r, a.json_out, 0)
+
+    if a.cmd == "ripup":
+        r = {"artifact": "eda_eng_ripup", **ripup_mod.run()}
+        return _emit(r, None, 2)
+
     if a.cmd == "route":
+        r = {"artifact": "eda_eng_route_m3",
+             "status": "NOT_IMPLEMENTED", "implemented": False, "module": "M3",
+             "order": "#K2-360 sec.2: M1 -> M2 -> M3 -> M4, one at a time; M1 lands first",
+             "contract": "torn board + constraints (keepout/copper polygons C22/clearance/45/layer choice) -> routed board; "
+                         "tests: toy single-net and two-net cases, then a region case, per-net connectivity checked immediately"}
+        return _emit(r, None, 2)
+
+    if a.cmd == "regen":
         r = route_mod.run(exam=a.exam_id, work=a.work, dry=a.dry_run)
         code = 0 if r.get("state") in ("RAN", "PLANNED") else 2
         return _emit(r, None, code)
