@@ -1,0 +1,65 @@
+{
+ "artifact": "k2_run_drawing_blocker_v4",
+ "ts": "2026-09-28",
+ "authority": "#K2-346 scheme window - ONE implementation run (text-level clip -> unmodified floored router -> judge), then stop and report (no re-run)",
+ "verdict": "FAIL on the zero-new criterion - NOT presented as the drawing (hard gate)",
+ "pipeline_executed_once": {
+  "clip": "tools/k2_text_clip_run_v1.py (TEXT-LEVEL, verified in R876) -> clipped board with 2 open ends",
+  "route": "tools/k2_reroute_router_floor_v1.py (UNMODIFIED in-register router, 0.20 mm floor, margin 6.0) -> added 2 edges / 98 segs / 5 vias / 58.36 mm / 0 blocked",
+  "judge": "kicad-cli DRC on the routed board"
+ },
+ "readings": {
+  "routed": {
+   "violations": 174,
+   "baseline_l13": 168,
+   "unconnected": 0,
+   "increases": {
+    "via_dangling": [
+     6,
+     8
+    ],
+    "track_dangling": [
+     1,
+     4
+    ],
+    "track_not_centered_on_via": [
+     32,
+     33
+    ]
+   }
+  },
+  "repair_round": {
+   "tool": "k2_reroute_affected_v2.py --phase repair (ONE round, fresh directory)",
+   "plan_included": "delete 2 vias + 3 tracks + snap endpoints",
+   "result": "REJECTED by its own accept condition (violations did not strictly decrease) -> reverted; board unchanged at 174 / 6 new / unconnected 0"
+  }
+ },
+ "POSITIVE_RESULT": {
+  "connectivity": "unconnected 0 - the router DID bridge both open ends, so the scheme idea (move the knee to x=137.555 and re-route the ascent) is NOT disproven; it produces a connected net"
+ },
+ "red_flag_recorded": {
+  "what": "the repair round's plan wanted to DELETE the two TOP vias (139.48,59.45) and (138.32,60.05)",
+  "why_that_matters": "those are the nets' legitimate top layer-change vias (F/In2/In5), NOT the trapped corner vias; a blanket 'via_dangling -> delete' rule is unsafe here (the round was rejected, so nothing was deleted)"
+ },
+ "gap_layer": {
+  "geometry": "the bridge EXISTS (unconnected 0) - not a geometric dead end",
+  "scheme": "not disproven",
+  "tool": "THE gap: at this locale the router's own output carries 6 hygiene violations and the current repair rule set cannot clear them (its delete/snap actions do not help here, and its via rule is unsafe). Missing action class: STITCH a dangling end to the nearest same-net copper through the exact gate (identified in an earlier window but never implemented)."
+ },
+ "next_single_action": {
+  "id": "S1",
+  "what": "implement the missing repair action class (exact-gate STITCH of a dangling end to the nearest same-net copper, <=1.5 mm) and/or route the ascent with a tighter target so no extra vias are needed; then ONE run in a NEW directory",
+  "note": "alternative scheme candidate (b) - keep In5 and dodge the congested stretch with a 45-degree offset - remains untried and may avoid the extra vias entirely",
+  "constraint": "one run per new directory; FAIL -> report, do not re-run"
+ },
+ "zero_side_effects": {
+  "repo_board_changed": false,
+  "spec_bumped": false,
+  "work_dirs": [
+   "/tmp/opencode/k349",
+   "/tmp/opencode/k350"
+  ],
+  "frozen_four": "4/4"
+ },
+ "OWNER-ITEMS": 0
+}
