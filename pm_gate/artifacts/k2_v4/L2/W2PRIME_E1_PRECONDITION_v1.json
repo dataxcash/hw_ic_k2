@@ -1,0 +1,85 @@
+{
+ "artifact": "k2_w2prime_e1_precondition_report_v1",
+ "ts": "2026-09-28",
+ "authority": "#K2-348 W2-prime execution spec E1 (R892) - the spec itself says: if the test-point footprint is absent it is a NAMED BLOCKER, do not invent",
+ "verdict": "E1 BLOCKED - named preconditions failed; execution NOT started (no netlist edit, no chain rerun)",
+ "check_1_testpoint_footprint": {
+  "result": "ABSENT",
+  "evidence": {
+   "ForgeOS.pretty": "24 footprints, none matching tp/test/point/pad",
+   "ForgeOS.refmap.json": "54 refs, ZERO refs starting with TP"
+  },
+  "fix": "add a test-point footprint (e.g. TP_1.0mm: 1 circular pad, no paste, no courtyard violation) to hw/lib/ForgeOS.pretty AND an entry to ForgeOS.refmap.json; the library snapshot is board-authoritative so the change must be recorded with its new hash",
+  "registered_as": "C24 (library asset gap: no test-point family in the snapshot)"
+ },
+ "check_2_single_ended_net_trap": {
+  "result": "TWO NETS WOULD BECOME SINGLE-ENDED",
+  "evidence": {
+   "PWR_CTRL_OUT": {
+    "pads": 2,
+    "refs": [
+     "J6",
+     "U5"
+    ],
+    "after_removing_J6": "1 pad (U5) - dead stub"
+   },
+   "UART_TX": {
+    "pads": 2,
+    "refs": [
+     "J9",
+     "U1"
+    ],
+    "after_removing_J9": "1 pad (U1) - dead stub"
+   },
+   "UART_RX": {
+    "pads": 2,
+    "refs": [
+     "J9",
+     "U1"
+    ],
+    "after_removing_J9": "1 pad (U1) - dead stub"
+   },
+   "I2C2_SCL": {
+    "pads": 4,
+    "refs": [
+     "J11",
+     "R33",
+     "U1",
+     "U6"
+    ],
+    "after_removing_J11": "3 pads - fine"
+   },
+   "I2C2_SDA": {
+    "pads": 4,
+    "refs": [
+     "J11",
+     "R34",
+     "U1",
+     "U6"
+    ],
+    "after_removing_J11": "3 pads - fine"
+   },
+   "P3V3_AUX": {
+    "pads": 6,
+    "refs": [
+     "C90",
+     "J11",
+     "J3",
+     "J4",
+     "R1",
+     "U1"
+    ],
+    "after_removing_J11": "5 pads - fine"
+   }
+  },
+  "consequence": "the R892 spec said 'J9 -> none (net stays on the MCU side)' - that is WRONG for UART_TX/RX and PWR_CTRL_OUT: they would be left with exactly one pad each (a dead stub). Product practice (N8: evaluation furniture -> test point) therefore requires a TP for THEM TOO."
+ },
+ "corrected_E1": {
+  "remove": "J9, J6, J11 placement blocks (netlist lines 4141/4159/4165)",
+  "add_test_points": "6 TPs: I2C2_SCL, I2C2_SDA, P3V3_AUX (the three J11 signals) + PWR_CTRL_OUT (J6) + UART_TX, UART_RX (the two J9 signals)",
+  "note": "every governed net keeps >= 2 pads: TP + the existing driver/receiver pad"
+ },
+ "next_single_action": "(1) add the TP footprint + refmap entry + snapshot hash record (C24 asset); (2) then execute E1 with SIX test points; (3) E2..E7 unchanged",
+ "gates": "zero board changes; zero netlist edits this turn; zero surgery; frozen four 4/4",
+ "OWNER-ITEMS": 0
+}
