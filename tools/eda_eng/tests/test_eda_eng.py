@@ -551,6 +551,23 @@ class T(unittest.TestCase):
         self.assertEqual(r["status"], "APPLIED")
         self.assertGreater(r["zones_refilled"], 0, "the batch path must actually refill zones")
 
+    def test_C34_c17v1_product_path_argv_is_a_per_part_map(self):
+        """#K2-375 §四.3「抄成品」：A′ 的 argv 必须把**逐件位移图**交给 C17 v1（多个 `--moved`），
+        并按产品的**既定格式**给受损域（`x0,y0,x1,y1`，非 JSON）。"""
+        moves = [("U1", 1.5, 1.5), ("J13", 4.0, 4.0), ("C87", 4.0, 4.0)]
+        argv = regen.c17v1_argv("l14.kicad_pcb", moves, "ref.json", "/tmp/w", "/tmp/o.kicad_pcb",
+                                report="/tmp/r.json", clear_rect=[22.95, 32.95, 51.5, 66.5])
+        self.assertEqual(argv[0], regen.C17V1)
+        self.assertEqual(argv.count("--moved"), 3, "the per-part displacement map must reach the product")
+        self.assertIn("U1=+1.5000,+1.5000", argv)
+        self.assertIn("J13=+4.0000,+4.0000", argv)
+        i = argv.index("--clear-rect")
+        self.assertEqual(argv[i + 1], "22.95,32.95,51.5,66.5", "clear-rect is the product's comma format")
+        self.assertIn("--baseline-drc", argv)
+        self.assertIn("--report", argv)
+        argv2 = regen.c17v1_argv("b", moves, "r", "w", "o")
+        self.assertNotIn("--clear-rect", argv2, "the damage zone is optional (the product may derive it)")
+
     def test_C34_new_capability_gate_requires_the_sec20_questions(self):
         """C34（#K2-375 §五）：新产品能力窗开跑前，§20 三问必须**在册**——闸缺即拒（不再靠人记）。"""
         import subprocess

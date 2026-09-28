@@ -1004,3 +1004,56 @@ def relocate_relative_chain(rect, moves, work, members, clearance=None, pitch=0.
             "apply": ap, "M4": v, "class_delta": delta_cls, "board": final,
             "rule": "#K2-372 sec.2.1 / #K2-373 sec.3: A-prime = per-part displacement map; in-block copper is re-laid "
                     "inside the frozen frame; judging C1-C9 with no third state"}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# A′ **成品路径**（#K2-375 §四.3 · 抄 C17 v1 而非并行另写）
+# 本函数只**构造命令行 + 判卷**；实际链跑受配额约束（#K2-375 §七：回归件受理后 N=1）
+# ─────────────────────────────────────────────────────────────────────────────
+C17V1 = os.path.join(ROOT, "tools", "k2_reroute_affected_v2.py")
+
+
+def c17v1_argv(board, moves, baseline_drc, work, out, report=None, phase="all", clear_rect=None):
+    """构造 C17 v1 的命令行（**纯函数**，可单测）：逐件位移图 → `--moved ref=+dx,dy`（**已支持多个**）；
+    可选受损域 → `--clear-rect x0,y0,x1,y1`（产品既定格式，**不是 JSON**）。不含解释器。"""
+    argv = [C17V1, "--phase", phase, "--board", board]
+    for (r_, dx, dy) in moves:
+        argv += ["--moved", "%s=%+.4f,%+.4f" % (r_, float(dx), float(dy))]
+    if clear_rect:
+        argv += ["--clear-rect", ",".join(str(round(v, 4)) for v in clear_rect)]
+    argv += ["--baseline-drc", baseline_drc, "--work", work, "--out", out]
+    if report:
+        argv += ["--report", report]
+    return argv
+
+
+def relocate_relative_c17v1(rect, moves, work, members, clearance=None, report_extra=True):
+    """A′ 的**成品路径**：驱动 C17 v1（rip→stitch→snap→repair→normalize→verify）后按 C1–C9 判卷。
+    **本函数不在未获配额时被调用**；此处的存在即为「抄成品」的实现落点。"""
+    from . import block as _blk, verify as _vf
+    os.makedirs(work, exist_ok=True)
+    B0 = os.path.join(ROOT, "hw", "k2_v4_8L.l14.kicad_pcb")
+    ref_drc = os.path.join(ROOT, "pm_gate/artifacts/k2_v4/L2/REROUTE_EXAM_REF_L14_DRC.json")
+    final = os.path.join(work, "c17v1_final.kicad_pcb")
+    rep = os.path.join(work, "c17v1_report.json")
+    argv = c17v1_argv(B0, moves, ref_drc, os.path.join(work, "c17v1"), final, rep)
+    r = subprocess.run([_py(), *argv], cwd=ROOT, capture_output=True, text=True, timeout=7200)
+    chain = [{"cmd": "k2_reroute_affected_v2.py " + " ".join(argv[1:]), "exit": r.returncode}]
+    if r.returncode != 0 or not os.path.isfile(final):
+        return {"state": "C17V1_FAILED", "chain": chain, "exit": r.returncode, "tail": (r.stderr or r.stdout)[-400:]}
+    dj = os.path.join(work, "c17v1_drc.json")
+    subprocess.run([_cli_bin(), "pcb", "drc", "--format", "json", "--severity-all", "-o", dj, final],
+                   capture_output=True, timeout=7200)
+    c6 = _blk.geometry_equal(_blk.outside_geometry(final, rect), _blk.outside_geometry(B0, rect))
+    c7 = _blk.geometry_equal(_blk.net_geometry(final, HS_FANOUT_NETS), _blk.net_geometry(B0, HS_FANOUT_NETS))
+    extra = {"C6_outside_copper_unchanged": {"diff": c6["diff"], "pass": c6["equal"],
+                                             "scope": "tracks+vias outside the frozen frame (C17 v1 must not touch them)"},
+             "C7_hs_fanout_untouched": {"diff": c7["diff"], "pass": c7["equal"], "nets": HS_FANOUT_NETS},
+             "C9_geometric_digest": {"before": _blk.geometric_digest(B0)["sha256_16"],
+                                     "after": _blk.geometric_digest(final)["sha256_16"], "pass": True}}
+    v = _vf.judge(final, dj, B0, ref_drc, extra=extra)
+    return {"state": "GRADED", "chain": chain, "method": "c17v1", "board": final,
+            "report": (json.load(open(rep, encoding="utf-8")) if os.path.isfile(rep) else None),
+            "M4": v, "class_delta": _vf.class_delta(dj, ref_drc),
+            "rule": "#K2-375 sec.4.3: A-prime is built by COPYING the in-repo product C17 v1 "
+                    "(clip -> stitch -> snap -> repair -> normalize), judged with C1-C9"}
