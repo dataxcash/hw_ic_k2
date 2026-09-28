@@ -1,0 +1,161 @@
+{
+ "artifact": "k2_relocate_corner_holes_v1",
+ "ts": "2026-09-28",
+ "authority": "#K2-340 sec.4 / #K2-339 sec.2.1: bring H1 H2 H4 onto the corner rule (ENG autonomous)",
+ "board": "hw/k2_v4_8L.l13.kicad_pcb",
+ "spec": "pm_gate/artifacts/k2_v4/L3/SPEC_k2_v4.spec-rev-60.json",
+ "board_frame": {
+  "x": [
+   22.95,
+   143.05
+  ],
+  "y": [
+   32.95,
+   79.05
+  ]
+ },
+ "inset_mm": 2.1213,
+ "reference_scope": [
+  "mechanical norm #K2-322 sec.3.1 + SPEC constraints.edge_copper_min (PRODUCT/mechanical)",
+  "in-register board geometry",
+  "TI EVM: NOT cited (#K2-339 sec.2.3)"
+ ],
+ "hole_keepout_squares": {
+  "H1": [
+   23.1,
+   72.6,
+   29.1,
+   78.6
+  ],
+  "H2": [
+   136.6,
+   36.6,
+   142.6,
+   42.6
+  ],
+  "H3": [
+   22.0713,
+   32.0713,
+   28.0713,
+   38.0713
+  ],
+  "H4": [
+   111.6,
+   33.1,
+   117.6,
+   39.1
+  ]
+ },
+ "holes": {
+  "H1": {
+   "corner": "BL",
+   "from": [
+    26.1,
+    75.6
+   ],
+   "corner_target": [
+    25.0713,
+    76.9287
+   ],
+   "chosen": [
+    25.0713,
+    76.9287
+   ],
+   "moved": true,
+   "corner_dist_mm": 3.0,
+   "edge_margin_mm": 2.1213,
+   "proof": {
+    "collisions": [],
+    "oob": [],
+    "ko": []
+   },
+   "tried_head": [
+    {
+     "inset": 2.1213,
+     "at": [
+      25.0713,
+      76.9287
+     ],
+     "corner_dist": 3.0,
+     "c16_ok": true,
+     "n_coll": 0,
+     "ko": []
+    }
+   ]
+  },
+  "H2": {
+   "corner": "TR",
+   "from": [
+    136.6,
+    35.1
+   ],
+   "corner_target": [
+    140.9287,
+    35.0713
+   ],
+   "chosen": [
+    140.9287,
+    35.0713
+   ],
+   "moved": true,
+   "corner_dist_mm": 3.0,
+   "edge_margin_mm": 2.1213,
+   "proof": {
+    "collisions": [],
+    "oob": [],
+    "ko": []
+   },
+   "tried_head": [
+    {
+     "inset": 2.1213,
+     "at": [
+      140.9287,
+      35.0713
+     ],
+     "corner_dist": 3.0,
+     "c16_ok": true,
+     "n_coll": 0,
+     "ko": []
+    }
+   ]
+  },
+  "H4": {
+   "corner": "BR",
+   "from": [
+    140.8,
+    76.8
+   ],
+   "corner_target": [
+    140.9287,
+    76.9287
+   ],
+   "chosen": [
+    140.9287,
+    76.9287
+   ],
+   "moved": true,
+   "corner_dist_mm": 3.0,
+   "edge_margin_mm": 2.1213,
+   "proof": {
+    "collisions": [],
+    "oob": [],
+    "ko": []
+   },
+   "tried_head": [
+    {
+     "inset": 2.1213,
+     "at": [
+      140.9287,
+      76.9287
+     ],
+     "corner_dist": 3.0,
+     "c16_ok": true,
+     "n_coll": 0,
+     "ko": []
+    }
+   ]
+  }
+ },
+ "verdict": "PASS",
+ "OWNER-ITEMS": 0
+}

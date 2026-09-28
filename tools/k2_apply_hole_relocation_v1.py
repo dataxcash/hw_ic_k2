@@ -31,6 +31,12 @@ def main():
         nm = z.GetZoneName()
         if nm == "K2_HOLE_KEEPOUT_%s" % ref.strip():
             bb = z.GetBoundingBox()
+            # RE-CENTRE on the hole: delta = new hole position - CURRENT keepout square centre.
+            # (a keepout square that lags behind its hole is the registered M-ENG-HOLE-KEEPOUT-STALE defect;
+            #  re-centring fixes stale squares and moves fresh ones, in one atomic edit)
+            zx = (P.ToMM(bb.GetLeft()) + P.ToMM(bb.GetRight())) / 2.0
+            zy = (P.ToMM(bb.GetTop()) + P.ToMM(bb.GetBottom())) / 2.0
+            dx, dy = nx - zx, ny - zy
             try:
                 z.Move(P.VECTOR2I(int(round(dx * 1e6)), int(round(dy * 1e6))))
                 moved_zones.append(nm)
@@ -58,7 +64,7 @@ def main():
     if os.path.exists(src_pro):
         shutil.copyfile(src_pro, a.out.replace(".kicad_pcb", ".kicad_pro"))
     print(json.dumps({"hole": ref, "from": [round(ox, 3), round(oy, 3)], "to": [nx, ny],
-                      "delta": [round(dx, 3), round(dy, 3)], "zones_moved": moved_zones, "out": a.out},
+                      "hole_delta": [round(nx - ox, 3), round(ny - oy, 3)], "zones_moved": moved_zones, "out": a.out},
                      ensure_ascii=False))
     return 0
 

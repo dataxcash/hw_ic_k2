@@ -77,11 +77,55 @@ def clip_keep_outside(x1, y1, x2, y2, discs):
     return [(ax, ay, bx, by) for (ax, ay, bx, by) in out if math.hypot(bx - ax, by - ay) >= 0.02]
 
 
+def clip_keep_outside_rect(x1, y1, x2, y2, rects):
+    """Sub-segments of (x1,y1)-(x2,y2) lying OUTSIDE every axis-aligned rect (rx0,ry0,rx1,ry1)."""
+    dx, dy = x2 - x1, y2 - y1
+    L = math.hypot(dx, dy)
+    if L < 1e-9:
+        return []
+    inside = []
+    for (rx0, ry0, rx1, ry1) in rects:
+        t0, t1 = 0.0, 1.0
+        ok = True
+        for (p0, d, lo, hi) in ((x1, dx, rx0, rx1), (y1, dy, ry0, ry1)):
+            if abs(d) < 1e-12:
+                if p0 < lo or p0 > hi:
+                    ok = False
+                    break
+            else:
+                ta, tb = (lo - p0) / d, (hi - p0) / d
+                ta, tb = min(ta, tb), max(ta, tb)
+                t0, t1 = max(t0, ta), min(t1, tb)
+        if ok and t1 > t0:
+            inside.append((t0, t1))
+    if not inside:
+        return [(x1, y1, x2, y2)]
+    inside.sort()
+    merged = []
+    for (t0, t1) in inside:
+        if merged and t0 <= merged[-1][1] + 1e-9:
+            merged[-1] = (merged[-1][0], max(merged[-1][1], t1))
+        else:
+            merged.append((t0, t1))
+    out, cur = [], 0.0
+    for (t0, t1) in merged:
+        if t0 - cur > 1e-6:
+            out.append((x1 + dx * cur, y1 + dy * cur, x1 + dx * t0, y1 + dy * t0))
+        cur = max(cur, t1)
+    if 1.0 - cur > 1e-6:
+        out.append((x1 + dx * cur, y1 + dy * cur, x2, y2))
+    return [(ax, ay, bx, by) for (ax, ay, bx, by) in out if math.hypot(bx - ax, by - ay) >= 0.02]
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--phase", default="all", choices=["all", "rip", "stitch", "snap", "repair", "normalize", "verify"])
+    ap.add_argument("--rects", default="[]", help="internal: JSON list of [x0,y0,x1,y1] passed to the rip phase")
     ap.add_argument("--board", required=True)
     ap.add_argument("--moved", action="append", default=[])
+    ap.add_argument("--clear-rect", action="append", default=[],
+                    help="x0,y0,x1,y1 -- additionally rip the copper of ANY net inside this rect (a keepout square "
+                         "that a moved hole drags with it must be vacated, then re-connected)")
     ap.add_argument("--radius", type=float, default=3.0)
     ap.add_argument("--margin", type=float, default=3.0, help="router search window (mm) around the gap")
     ap.add_argument("--baseline-drc", default="")
@@ -96,6 +140,8 @@ def main():
     ap.add_argument("--stage1", default="")
     a = ap.parse_args()
     os.makedirs(a.work, exist_ok=True)
+    if not a.moved and not a.clear_rect and a.phase in ("all", "rip"):
+        print(json.dumps({"error": "need --moved and/or --clear-rect"})); return 4
     if a.phase == "all":
         return orchestrate(a)
     P = _pcbnew()
@@ -139,6 +185,7 @@ def phase_rip(a, P):
     _mirror(a)
     b = P.LoadBoard(a.board)
     nets = {c: ni.GetNetname() for c, ni in b.GetNetInfo().NetsByNetcode().items()}
+    rects = [tuple(float(v) for v in r) for r in (json.loads(a.rects) if a.rects else [])]
     discs, aff, moved_info = [], set(), []
     for spec in a.moved:
         ref, d = spec.split("=")
@@ -156,13 +203,43 @@ def phase_rip(a, P):
             discs.append((x, y, a.radius))
         moved_info.append({"ref": ref.strip(), "d_mm": [dx, dy],
                            "nets": sorted({nets[p.GetNetCode()] for p in fp.Pads() if p.GetNetCode() > 0})})
+    # nets that live inside a clear-rect also count as affected (their copper must vacate the keepout)
+    if rects:
+        for t in b.GetTracks():
+            x1, y1 = P.ToMM(t.GetStart().x), P.ToMM(t.GetStart().y)
+            x2, y2 = P.ToMM(t.GetEnd().x), P.ToMM(t.GetEnd().y)
+            for (rx0, ry0, rx1, ry1) in rects:
+                if min(x1, x2) <= rx1 and max(x1, x2) >= rx0 and min(y1, y2) <= ry1 and max(y1, y2) >= ry0:
+                    aff.add(t.GetNetCode())
+                    break
     removed = kept = 0
     detail = []
     for t in list(b.GetTracks()):
-        if t.GetClass() == "PCB_VIA" or t.GetNetCode() not in aff:
+        if t.GetClass() == "PCB_VIA":
+            if t.GetNetCode() in aff:                      # a via inside a keepout square cannot stay
+                vx, vy = P.ToMM(t.GetPosition().x), P.ToMM(t.GetPosition().y)
+                if any(rx0 <= vx <= rx1 and ry0 <= vy <= ry1 for (rx0, ry0, rx1, ry1) in rects):
+                    b.Remove(t); removed += 1
+                    detail.append({"net": nets.get(t.GetNetCode()), "kind": "via", "at": [round(vx, 3), round(vy, 3)]})
+            continue
+        if t.GetNetCode() not in aff:
             continue
         x1, y1 = P.ToMM(t.GetStart().x), P.ToMM(t.GetStart().y)
         x2, y2 = P.ToMM(t.GetEnd().x), P.ToMM(t.GetEnd().y)
+        if rects:
+            hitr = any(min(x1, x2) <= rx1 and max(x1, x2) >= rx0 and min(y1, y2) <= ry1 and max(y1, y2) >= ry0
+                       for (rx0, ry0, rx1, ry1) in rects)
+            if hitr:
+                keep = clip_keep_outside_rect(x1, y1, x2, y2, rects)
+                lay_, nc_, w_ = t.GetLayer(), t.GetNetCode(), t.GetWidth()
+                b.Remove(t); removed += 1
+                for (ax, ay, bx, by) in keep:
+                    n = P.PCB_TRACK(b)
+                    n.SetStart(V(P, ax, ay)); n.SetEnd(V(P, bx, by)); n.SetLayer(lay_); n.SetWidth(w_); n.SetNetCode(nc_)
+                    b.Add(n); kept += 1
+                detail.append({"net": nets.get(nc_), "kind": "rect-clip", "at": [round(x1, 3), round(y1, 3)],
+                               "kept_parts": len(keep)})
+                continue
         hit = False
         for (cx, cy, r) in discs:                       # cheap filter then exact clip
             if min(math.hypot(x1 - cx, y1 - cy), math.hypot(x2 - cx, y2 - cy),
@@ -280,9 +357,17 @@ def phase_stitch(a, P):
         return min(cands, key=lambda z: z[0])
 
     def pair_dist(i1, i2):
+        """closest approach between two items as (distance, point_on_i1, point_on_i2)."""
         s1, s2 = i1[6], i2[6]
         if s1 and s2:
-            return seg_seg(*s1, *s2)
+            cands = []
+            for (px, py) in ((s1[0], s1[1]), (s1[2], s1[3])):
+                d, qx, qy = pt_seg(px, py, s2[0], s2[1], s2[2], s2[3])
+                cands.append((d, (px, py), (qx, qy)))
+            for (px, py) in ((s2[0], s2[1]), (s2[2], s2[3])):
+                d, qx, qy = pt_seg(px, py, s1[0], s1[1], s1[2], s1[3])
+                cands.append((d, (qx, qy), (px, py)))
+            return min(cands, key=lambda z: z[0])
         if s1:
             d, qx, qy = pt_seg(i2[4], i2[5], *s1)
             return d, (qx, qy), (i2[4], i2[5])
@@ -684,7 +769,10 @@ def orchestrate(a):
     py = sys.executable
     _mirror(a)
     r = _run([py, SELF, "--phase", "rip", "--board", a.board, "--work", a.work, "--out", a.out]
-             + sum([["--moved", m] for m in a.moved], []) + ["--radius", str(a.radius)], "rip")
+             + sum([["--moved", m] for m in a.moved], [])
+             + sum([["--clear-rect", x] for x in a.clear_rect], [])
+             + ["--radius", str(a.radius),
+                "--rects", json.dumps([list(map(float, x.split(","))) for x in a.clear_rect])], "rip")
     rip = json.load(open(os.path.join(a.work, "rip.json"), encoding="utf-8"))
     stage1 = rip["stage1"]
     d0 = _drc(stage1, os.path.join(a.work, "stage1_drc.json"), "drc-stage1")

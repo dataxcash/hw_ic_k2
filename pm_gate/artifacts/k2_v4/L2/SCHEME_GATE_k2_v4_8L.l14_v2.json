@@ -1,0 +1,369 @@
+{
+ "artifact": "k2_scheme_gate_v2",
+ "board": "/tmp/k2dev/k340b/l14.kicad_pcb",
+ "board_frame": {
+  "x": [
+   22.95,
+   143.05
+  ],
+  "y": [
+   32.95,
+   79.05
+  ],
+  "centre": [
+   83.0,
+   56.0
+  ]
+ },
+ "thresholds_artifact": "L2/SCHEME_GATE_THRESHOLDS_v1.json",
+ "criteria": {
+  "P1": {
+   "verdict": "PASS",
+   "source": "EXEMPLAR + MANUFACTURER_DATASHEET",
+   "citation": [
+    {
+     "doc": "TI DS320PR1601 datasheet, SNLS683 (June 2023)",
+     "section": "1.1 Features / 9.4.2 Layout Example",
+     "quoted": "Flow-through layout P2P with Intel retimer common footprint; Figure 9-7 TI PCIe Riser Card"
+    },
+    {
+     "doc": "L2/PLACEMENT_CORPUS_v1.json sample#1",
+     "section": "framework",
+     "quoted": "chip CENTRE; connectors on ONE edge aligned with the chip fan-out; RADIAL fan-out"
+    }
+   ],
+   "name": "high-speed main-path directness / flow-through structure",
+   "layer": "SCHEME",
+   "chip": "U6",
+   "chip_at": [
+    93.8,
+    53.7
+   ],
+   "hs_connectors": {
+    "J2": "east",
+    "J3": "west",
+    "J4": "west"
+   },
+   "connector_axis_y": 53.63,
+   "lateral_offset_mm": 0.07,
+   "tolerance_mm": 6.91,
+   "chip_between_connectors": true,
+   "route_over_straight_ratio_report_only": [
+    [
+     "PCIE_DN_OUT7_P_MCIO",
+     2.429
+    ],
+    [
+     "PCIE_DN_OUT7_N_MCIO",
+     2.422
+    ],
+    [
+     "PCIE_DN_OUT1_P_MCIO",
+     2.294
+    ]
+   ],
+   "note": "the 1.6x placeholder ratio is removed as a verdict (no spec/manufacturer defines it); it is reported only"
+  },
+  "P2": {
+   "verdict": "PASS",
+   "source": "PCIE_CEM_SPEC",
+   "citation": [
+    {
+     "doc": "PCI Express Card Electromechanical Specification, Rev 5.0 v1.0, 2021-06-09 (PCI-SIG)",
+     "section": "4.7.9 Differential Data Trace Propagation Delay (Add-in Card)",
+     "quoted": "The propagation delay for an Add-in Card data trace from the edge-finger to the Receiver/Transmitter must not exceed 750 ps"
+    },
+    {
+     "doc": "PCI Express Card Electromechanical Specification, Rev 5.0 v1.0, 2021-06-09 (PCI-SIG)",
+     "section": "Table 4-8 (page 59) - FR-4 scale used for the conversion",
+     "quoted": "SA = 0.35 ns - Estimates about a 2-inch trace length delta on FR-4 boards"
+    }
+   ],
+   "name": "length budget feasibility",
+   "layer": "SCHEME",
+   "threshold_mm": 108.86,
+   "max_routed_mm": 93.69,
+   "worst_nets": [
+    [
+     "PCIE_REFCLK1_N",
+     93.69
+    ],
+    [
+     "PCIE_REFCLK1_P",
+     93.64
+    ],
+    [
+     "PCIE_DN1_P",
+     91.51
+    ]
+   ],
+   "n_hs_nets": 68,
+   "derivation": "750 ps / (175 ps / 25.4 mm) = 108.86 mm"
+  },
+  "P3": {
+   "verdict": "FAIL",
+   "source": "IN_REGISTER_DOC",
+   "citation": [
+    {
+     "doc": "#K2-322 sec.3.1 (owner mechanical directive)",
+     "section": "four-corner symmetry",
+     "quoted": "H4->bottom-right; H3->top-left; H1/H2 diagonal symmetry"
+    },
+    {
+     "doc": "L3/SPEC_k2_v4.json",
+     "section": "constraints.edge_copper_min",
+     "quoted": "0.3 mm"
+    }
+   ],
+   "name": "mechanical frame (mounting holes four-corner + edge clearance)",
+   "layer": "SCHEME",
+   "thresholds": {
+    "corner_max_mm": 3.0,
+    "edge_min_mm": 0.3
+   },
+   "holes": [
+    {
+     "hole": "H1",
+     "at": [
+      25.071,
+      76.929
+     ],
+     "nearest_corner": "BL",
+     "corner_dist_mm": 3.0,
+     "edge_margin_mm": 2.12,
+     "pass": true
+    },
+    {
+     "hole": "H2",
+     "at": [
+      140.929,
+      35.071
+     ],
+     "nearest_corner": "TR",
+     "corner_dist_mm": 3.0,
+     "edge_margin_mm": 2.12,
+     "pass": true
+    },
+    {
+     "hole": "H3",
+     "at": [
+      25.071,
+      35.071
+     ],
+     "nearest_corner": "TL",
+     "corner_dist_mm": 3.0,
+     "edge_margin_mm": 2.12,
+     "pass": true
+    },
+    {
+     "hole": "H4",
+     "at": [
+      140.8,
+      76.8
+     ],
+     "nearest_corner": "BR",
+     "corner_dist_mm": 3.18,
+     "edge_margin_mm": 2.25,
+     "pass": false
+    }
+   ],
+   "worst_corner_mm": 3.18
+  },
+  "P4": {
+   "verdict": "PASS",
+   "source": "IN_REGISTER_METHOD",
+   "citation": [
+    {
+     "doc": "R537 cross-section method (in register)",
+     "section": "capacity >= demand per x-section",
+     "quoted": "cross-section method; supply/demand per section"
+    }
+   ],
+   "name": "congestion capacity (section supply >= demand)",
+   "layer": "SCHEME",
+   "hs_nets_with_tracks": 68,
+   "n_hs_nets": 68,
+   "unconnected_from_drc": 0,
+   "drc_file": "/tmp/k2dev/k340b/l14_drc.json",
+   "rule": "a completed routing for the declared HS net set exists at the declared stackup => capacity >= demand at every section (existence proof, no invented supply model)",
+   "note": "unconnected dimension needs the chain DRC report; tracks-exist = existence witness"
+  },
+  "P5": {
+   "verdict": "PASS",
+   "source": "IN_REGISTER_L2_RULING",
+   "citation": [
+    {
+     "doc": "L2_RULING_u6_thermal_mitigation_v2.md (CO-204 thermal freeze, O2)",
+     "section": "1-2",
+     "quoted": "O2 = 30x30mm Al heatsink + 1.0 C/W interface pad + ~2 m/s airflow (owner confirmed airflow); theta_JA_eff = theta_JC_top(6.5) + R_int(1.0) + theta_HS(3.5) = 11.0 C/W; Ta = 40.0 C; Tj_max = 120.0 C; four cases 91.7 / 106.0 / 103.8 / 117.0 C => all PASS (worst-case margin 3.0 C)"
+    },
+    {
+     "doc": "L2_RULING_u6_gnd_via_array_v1.md (CO-222)",
+     "section": "2",
+     "quoted": "T1: measured Tj(U6) > 117.0 C (margin < 3.0 C) OR the O2 thermal path not implemented => open a new rev whose first action is to add the U6-domain GND via array until theta_JA_eff <= 9.5 C/W (margin >= 8 C); T2: if U6-domain geometry is revised for any other reason, add the array in the same rev"
+    },
+    {
+     "doc": "TI DS320PR1601 datasheet, SNLS683 (June 2023)",
+     "section": "9.4.1 Layout Guidelines rule 5",
+     "quoted": "GND vias should be placed directly beneath the device ... improving thermal conductivity"
+    }
+   ],
+   "name": "thermal path / thermal budget",
+   "layer": "CONSTRUCTION",
+   "gnd_vias_beneath_device": 155,
+   "device": "U6",
+   "tj_budget": [
+    {
+     "case": "EQ0-2_typ",
+     "P_W": 4.7,
+     "Tj_C": 91.7,
+     "limit_C": 120.0,
+     "pass": true
+    },
+    {
+     "case": "EQ0-2_max",
+     "P_W": 6.0,
+     "Tj_C": 106.0,
+     "limit_C": 120.0,
+     "pass": true
+    },
+    {
+     "case": "EQ5-19_typ",
+     "P_W": 5.8,
+     "Tj_C": 103.8,
+     "limit_C": 120.0,
+     "pass": true
+    },
+    {
+     "case": "EQ5-19_max",
+     "P_W": 7.0,
+     "Tj_C": 117.0,
+     "limit_C": 120.0,
+     "pass": true
+    }
+   ],
+   "conditional_goal": {
+    "trigger_tj_c": 117.0,
+    "target_theta_ja_eff_c_per_w": 9.5
+   },
+   "margin_worst_C": 3.0
+  },
+  "P6": {
+   "verdict": "PASS",
+   "source": "IN_REGISTER_DOC",
+   "citation": [
+    {
+     "doc": "_shared/eda_core/drc_rules.json (frozen four sources)",
+     "section": "clearance",
+     "quoted": "declared clearance rules"
+    },
+    {
+     "doc": "criteria/jlc_hdi_capability.yaml",
+     "section": "factory capability",
+     "quoted": "JLC capability file"
+    }
+   ],
+   "name": "DFM minimum spacing",
+   "layer": "CONSTRUCTION",
+   "clearance_violations": 0,
+   "drc_file": "/tmp/k2dev/k340b/l14_drc.json",
+   "n_violations": 168,
+   "n_error": 0,
+   "n_warning": 168,
+   "type_histogram": {
+    "track_dangling": 1,
+    "via_dangling": 6,
+    "track_not_centered_on_via": 32,
+    "missing_courtyard": 54,
+    "silk_edge_clearance": 2,
+    "lib_footprint_mismatch": 20,
+    "silk_over_copper": 37,
+    "silk_overlap": 15,
+    "copper_sliver": 1
+   },
+   "thresholds": {
+    "clearance_violations_max": 0
+   }
+  },
+  "P7": {
+   "verdict": "PENDING",
+   "source": "MANUFACTURER_DATASHEET",
+   "citation": [
+    {
+     "doc": "TI DS320PR1601 datasheet, SNLS683 (June 2023)",
+     "section": "9.4.1 Layout Guidelines rule 1",
+     "quoted": "Decoupling capacitors should be placed as close to the VCC pins as possible. Placing the decoupling capacitors directly underneath the device is recommended if the board design permits."
+    }
+   ],
+   "name": "power / GND (decoupling proximity)",
+   "layer": "CONSTRUCTION",
+   "caps_inside_device_bbox": 0,
+   "nearby_caps": [
+    {
+     "ref": "C83",
+     "dist_to_device_bbox_mm": 4.21,
+     "inside": false
+    },
+    {
+     "ref": "C79",
+     "dist_to_device_bbox_mm": 3.21,
+     "inside": false
+    },
+    {
+     "ref": "C80",
+     "dist_to_device_bbox_mm": 1.21,
+     "inside": false
+    },
+    {
+     "ref": "C81",
+     "dist_to_device_bbox_mm": 2.21,
+     "inside": false
+    }
+   ],
+   "literal_check_source": "Decoupling capacitors should be placed as close to the VCC pins as possible. Placing the decoupling capacitors directly underneath the device is recommended if the board design permits.",
+   "missing_input": "a machine-readable per-cap -> power-pin mapping (SPEC pd.decoupling is a STRING) - without it the criterion cannot be turned into a verdict",
+   "note": "the datasheet's recommendation is conditional ('if the board design permits'), so 'not underneath' is a FINDING, not an automatic FAIL"
+  }
+ },
+ "scheme_layer": {
+  "criteria": [
+   "P1",
+   "P2",
+   "P3",
+   "P4"
+  ],
+  "verdicts": [
+   "PASS",
+   "PASS",
+   "FAIL",
+   "PASS"
+  ],
+  "verdict": "FAIL",
+  "complete": true,
+  "FAIL_named": [
+   "P3"
+  ]
+ },
+ "construction_layer": {
+  "criteria": [
+   "P5",
+   "P6",
+   "P7"
+  ],
+  "verdicts": [
+   "PASS",
+   "PASS",
+   "PENDING"
+  ],
+  "verdict": "PENDING",
+  "PENDING_named": [
+   "P7"
+  ]
+ },
+ "chain_entry_check": {
+  "status": "NOT_WIRED",
+  "registered_defect": "C20 / M-ENG-GATE-NOT-WIRED",
+  "note": "#K2-338 sec.6: this gate does NOT gate the chain (verified: 0 references in k2_gen_v5.py / k2_route_segment_v1.py). The former claim has been DELETED (no paper gate). Real wiring needs a generator change (approval required) and would hard-block the chain while the scheme verdict is FAIL."
+ },
+ "OWNER-ITEMS": 0
+}
