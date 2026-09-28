@@ -1,0 +1,47 @@
+{
+ "artifact": "k2_w2prime_e1_root_cause_and_rescope_v1",
+ "ts": "2026-09-28",
+ "authority": "#K2-348 W2-prime - the R904 next single action (read how the checker resolves REF/PIN) - DONE",
+ "verbatim_contract": {
+  "file": "k2/_shared/eda_core/pipeline/checks.py",
+  "function": "check_netlist_connect",
+  "lines": "115-120",
+  "code": [
+   "ref, _, pin_name = str(node).partition(\"/\")",
+   "hit = any(r == ref and (fn or \"\").startswith(pin_name) for (r, fn) in actual_pins)",
+   "return False, f\"net '{net_name}': node {ref}/{pin_name} not connected\""
+  ],
+  "also": "line 131: 'non-declared dangling: {ref}/{fn} ({net}) - not in the YAML nc whitelist'",
+  "actual_pins_source": "built from the KiCad SCHEMATIC netlist (the check shells out to eda_core/sch_gate/gate_schematic.py)"
+ },
+ "ROOT_CAUSE_CERTAIN": "REF/PIN is matched against the SCHEMATIC's instantiated pin functions, not against the YAML's own pins list and not against the pad number. My TEST_POINT exists only in the YAML + a library footprint - there is NO TEST_POINT symbol instance in the schematic - so every TP node fails regardless of how it is named. R900's schema reading was therefore not merely incomplete: it was the WRONG SOURCE (the pin contract lives in the schematic, not in the netlist YAML).",
+ "consequence_for_W2_prime": {
+  "header_governance": "REMOVING J9/J6/J11 from the YAML is caught by the same check family from the other side (a pin present in the schematic but absent from the YAML is 'non-declared dangling' unless nc-whitelisted) - so the header governance is a SCHEMATIC+netlist change, and the SCHEMATIC is approval-gated (red line: no schematic edits without approval).",
+  "hence": "E1 as written CANNOT be executed inside the current charter. Named blocker, not a defect.",
+  "BUT_the_corner_work_does_not_need_it": "the H4 corner problem is the DN4_N/DN5_P fan-out at the BOTTOM-RIGHT; J9/J6/J11 sit on the LEFT edge and are unrelated. W2-prime can proceed on the corner (U6/fan-out direction + pours) with the header governance deferred to a separately approved schematic change."
+ },
+ "rescope_proposal": [
+  {
+   "option": "A",
+   "what": "DROP the header parts of E1/E2 for now; execute only the corner work: U6/fan-out re-placement so PCIE_DN4_N/DN5_P never enter the bottom-right square + H4's hole/keepout to the corner (SPEC leaf, already specified) + zone refill",
+   "needs": "nothing new - SPEC rev-62 leaf + placement source + one chain rerun",
+   "unblocks": "C21 all-PASS + the four-corner frame"
+  },
+  {
+   "option": "B",
+   "what": "the header governance (J9/J6/J11) as a SEPARATE change request",
+   "needs": "APPROVAL to touch the schematic (or an explicit nc-whitelist mechanism)",
+   "status": "deferred, named"
+  }
+ ],
+ "recommendation": "A now, B as a separate approved item - the corner (the actual blocker of the last four windows) is independent of the header policy.",
+ "state": {
+  "netlist": "HEAD (unchanged)",
+  "refmap": "54 refs",
+  "tp_footprint": "kept but inert",
+  "boards": "l14 unchanged",
+  "frozen_four": "4/4",
+  "runs_this_turn": "read-only greps only"
+ },
+ "OWNER-ITEMS": 0
+}
