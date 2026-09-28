@@ -1,0 +1,1236 @@
+{
+ "artifact": "k2_placement_candidate_scores_v1",
+ "ts": "2026-09-28",
+ "authority": "#K2-337 window C: seven-gate + R1-R6 scheme scoring of rule-driven placement candidates",
+ "schema": "k2.placement_candidate_scores.v1",
+ "evaluator": "tools/k2_placement_candidate_eval_v1.py",
+ "board": "hw/k2_v4_8L.l10.kicad_pcb",
+ "board_frame": {
+  "x": [
+   22.95,
+   143.05
+  ],
+  "y": [
+   32.95,
+   79.05
+  ],
+  "centre": [
+   83.0,
+   56.0
+  ]
+ },
+ "candidates": [
+  {
+   "id": "C1",
+   "label": "EVM-mirrored framework (chip centred + holes four-corner + peripheral cluster re-partitioned)",
+   "norms_instantiated": [
+    "N1",
+    "N3",
+    "N4",
+    "N5",
+    "N6",
+    "N7"
+   ],
+   "criteria": {
+    "N1": {
+     "norms": [
+      "N1"
+     ],
+     "threshold": "|dx|<=0.15*W=18.02mm and |dy|<=0.15*H=6.91mm",
+     "source": [
+      "corpus#1 EVM: chip CENTRE"
+     ],
+     "chip": "U6",
+     "at": [
+      83.0,
+      56.0
+     ],
+     "centre": [
+      83.0,
+      56.0
+     ],
+     "dx_mm": 0.0,
+     "dy_mm": 0.0,
+     "verdict": "PASS"
+    },
+    "N2": {
+     "norms": [
+      "N2"
+     ],
+     "source": [
+      "corpus#1 EVM: connectors BOTTOM single edge + radial fan-out",
+      "corpus#2 riser: L->R fork"
+     ],
+     "verdict": "PENDING",
+     "hs_connectors": {
+      "J2": "east_of_chip",
+      "J3": "west_of_chip",
+      "J4": "west_of_chip"
+     },
+     "chip_to_J2_vec_mm": [
+      50.82,
+      -2.3
+     ],
+     "note": "exemplar N2 = HS connectors on ONE edge; K2 L1 fixes a 2-sided HS interface (J2 east, J3/J4 west) - structural difference (see #K2-336 sec.1 diff list) => PENDING"
+    },
+    "N3": {
+     "norms": [
+      "N3"
+     ],
+     "thresholds": {
+      "corner_max_mm": 3.0,
+      "edge_min_mm": 0.3
+     },
+     "source": [
+      "corpus#1 EVM: holes FOUR_CORNERS",
+      "#K2-322 sec.3.1"
+     ],
+     "holes": [
+      {
+       "hole": "H1",
+       "at": [
+        25.071,
+        76.929
+       ],
+       "nearest_corner": "BL",
+       "corner_dist_mm": 3.0,
+       "edge_margin_mm": 2.12,
+       "pass": true
+      },
+      {
+       "hole": "H2",
+       "at": [
+        140.929,
+        35.071
+       ],
+       "nearest_corner": "TR",
+       "corner_dist_mm": 3.0,
+       "edge_margin_mm": 2.12,
+       "pass": true
+      },
+      {
+       "hole": "H3",
+       "at": [
+        25.071,
+        35.071
+       ],
+       "nearest_corner": "TL",
+       "corner_dist_mm": 3.0,
+       "edge_margin_mm": 2.12,
+       "pass": true
+      },
+      {
+       "hole": "H4",
+       "at": [
+        140.929,
+        76.929
+       ],
+       "nearest_corner": "BR",
+       "corner_dist_mm": 3.0,
+       "edge_margin_mm": 2.12,
+       "pass": true
+      }
+     ],
+     "worst_corner_mm": 3.0,
+     "verdict": "PASS"
+    },
+    "N4": {
+     "norms": [
+      "N4"
+     ],
+     "source": [
+      "corpus#1 EVM: left power/interface + jumpers, right EEPROM/control, passives around the chip"
+     ],
+     "n_non_hs_parts": 50,
+     "left_share": 0.62,
+     "verdict": "PENDING",
+     "note": "needs a per-part functional-class map (power / interface / control / storage) which is not in register"
+    },
+    "N5": {
+     "norms": [
+      "N5"
+     ],
+     "metric": "quadrant pad-bbox area share (proxy for courtyard area; F.CrtYd empty on this board)",
+     "threshold": "max quadrant area / mean <= 1.50",
+     "source": [
+      "corpus#1 EVM: even spread"
+     ],
+     "quadrant_area_mm2": {
+      "Q1": 52.7,
+      "Q2": 2.4,
+      "Q3": 73.2,
+      "Q4": 16.1
+     },
+     "quadrant_parts": {
+      "Q3": 11,
+      "Q1": 20,
+      "Q4": 14,
+      "Q2": 5
+     },
+     "max_ratio": 2.03,
+     "verdict": "FAIL"
+    },
+    "N6": {
+     "norms": [
+      "N6"
+     ],
+     "threshold_mm": 2.0,
+     "source": [
+      "corpus#1 EVM: HS at the bottom edge, power/control at the sides"
+     ],
+     "hs_group_bbox": [
+      53.95,
+      42.73,
+      135.65,
+      64.67
+     ],
+     "low_speed_group_bbox": [
+      23.38,
+      33.68,
+      104.62,
+      69.85
+     ],
+     "verdict": "PENDING",
+     "note": "bounding-box overlap is structural on this board (chip-adjacent passives sit inside the HS box); a machine zone-gap reading needs a per-part functional-class map (not in register) - no invented threshold"
+    },
+    "N7": {
+     "norms": [
+      "N7"
+     ],
+     "source": [
+      "corpus#1 EVM radial fan-out",
+      "corpus#2 riser fork"
+     ],
+     "chip": "U6",
+     "chip_x": 83.0,
+     "west_connectors": [
+      "J3",
+      "J4"
+     ],
+     "east_connectors": [
+      "J2"
+     ],
+     "verdict": "PASS",
+     "note": "direction consistency only; the exemplar's intra-PAIR equal-length clause is a ROUTING property -> PENDING at the placement layer"
+    },
+    "C16_keepout": {
+     "gate": "C16 component-level keepout (pad-bbox pairwise, margin 0.20mm, all items at candidate positions)",
+     "n_items": 58,
+     "moved": [
+      "H1",
+      "H2",
+      "H3",
+      "H4",
+      "U1",
+      "U2",
+      "U4",
+      "U5",
+      "U6"
+     ],
+     "collision_pairs": [
+      {
+       "a": "H3",
+       "b": "J12"
+      },
+      {
+       "a": "U1",
+       "b": "J11"
+      },
+      {
+       "a": "U2",
+       "b": "J13"
+      },
+      {
+       "a": "U5",
+       "b": "E2"
+      },
+      {
+       "a": "U6",
+       "b": "C80"
+      },
+      {
+       "a": "U6",
+       "b": "C81"
+      },
+      {
+       "a": "U6",
+       "b": "R43"
+      },
+      {
+       "a": "U6",
+       "b": "R45"
+      }
+     ],
+     "n_collision_pairs": 8,
+     "n_collision_boxes": 43,
+     "out_of_board": [],
+     "n_out_of_board": 0,
+     "crux": {
+      "H3": [
+       "J12"
+      ],
+      "U1": [
+       "J11"
+      ],
+      "U2": [
+       "J13"
+      ],
+      "U5": [
+       "E2"
+      ],
+      "U6": [
+       "C80",
+       "C81",
+       "R43",
+       "R45"
+      ]
+     },
+     "verdict": "FAIL",
+     "note": "footprint-vs-footprint only; candidate tracks are NOT checked (no re-route; C17)"
+    },
+    "P1": {
+     "layer": "SCHEME",
+     "verdict": "PENDING",
+     "source": "proxy threshold 1.6x is a PLACEHOLDER (vendor EVM guide not parsed yet); the real reading needs a routed board",
+     "proxy": {
+      "main_path_straight_delta_vs_baseline_mm": 10.8,
+      "chip_to_connector_straight_mm": 50.82
+     },
+     "note": "C17 (no re-route) blocks the routed reading"
+    },
+    "P2": {
+     "layer": "SCHEME",
+     "verdict": "PENDING",
+     "source": "PCIe Gen5 channel length budget file NOT in register"
+    },
+    "P3": {
+     "layer": "SCHEME",
+     "thresholds": {
+      "corner_max_mm": 3.0,
+      "edge_min_mm": 0.3
+     },
+     "source": "#K2-322 sec.3.1",
+     "holes": [
+      {
+       "hole": "H1",
+       "at": [
+        25.071,
+        76.929
+       ],
+       "nearest_corner": "BL",
+       "corner_dist_mm": 3.0,
+       "edge_margin_mm": 2.12,
+       "pass": true
+      },
+      {
+       "hole": "H2",
+       "at": [
+        140.929,
+        35.071
+       ],
+       "nearest_corner": "TR",
+       "corner_dist_mm": 3.0,
+       "edge_margin_mm": 2.12,
+       "pass": true
+      },
+      {
+       "hole": "H3",
+       "at": [
+        25.071,
+        35.071
+       ],
+       "nearest_corner": "TL",
+       "corner_dist_mm": 3.0,
+       "edge_margin_mm": 2.12,
+       "pass": true
+      },
+      {
+       "hole": "H4",
+       "at": [
+        140.929,
+        76.929
+       ],
+       "nearest_corner": "BR",
+       "corner_dist_mm": 3.0,
+       "edge_margin_mm": 2.12,
+       "pass": true
+      }
+     ],
+     "verdict": "PASS"
+    },
+    "P4": {
+     "layer": "SCHEME",
+     "verdict": "PENDING",
+     "source": "R537 cross-section method (capacity>=demand; per-section supply not auto-derived here)",
+     "sections": [
+      {
+       "x_mm": 30,
+       "parts_spanning": 8
+      },
+      {
+       "x_mm": 45,
+       "parts_spanning": 3
+      },
+      {
+       "x_mm": 60,
+       "parts_spanning": 2
+      },
+      {
+       "x_mm": 75,
+       "parts_spanning": 1
+      },
+      {
+       "x_mm": 90,
+       "parts_spanning": 1
+      },
+      {
+       "x_mm": 105,
+       "parts_spanning": 0
+      },
+      {
+       "x_mm": 120,
+       "parts_spanning": 0
+      },
+      {
+       "x_mm": 134,
+       "parts_spanning": 1
+      }
+     ],
+     "note": "section supply (layer x row budget) not in register"
+    },
+    "P5": {
+     "layer": "CONSTRUCTION",
+     "verdict": "PENDING",
+     "source": "no in-register thermal file"
+    },
+    "P7": {
+     "layer": "CONSTRUCTION",
+     "verdict": "PENDING",
+     "source": "SPEC pd.decoupling is a string; no machine-readable cap->load map"
+    }
+   },
+   "FAIL": [
+    "N5",
+    "C16_keepout"
+   ],
+   "PENDING": [
+    "N2",
+    "N4",
+    "N6",
+    "P1",
+    "P2",
+    "P4",
+    "P5",
+    "P7"
+   ],
+   "verdict": "FAIL",
+   "freezable": false,
+   "freeze_blocker": "SCHEME gate incomplete: P1/P2/P4/P5/P7 PENDING (thresholds/sources not in register) => no candidate can be frozen (fail-closed)"
+  },
+  {
+   "id": "C2",
+   "label": "Holes-first minimal (chip and cluster kept; mounting holes instantiated four-corner)",
+   "norms_instantiated": [
+    "N3"
+   ],
+   "criteria": {
+    "N1": {
+     "norms": [
+      "N1"
+     ],
+     "threshold": "|dx|<=0.15*W=18.02mm and |dy|<=0.15*H=6.91mm",
+     "source": [
+      "corpus#1 EVM: chip CENTRE"
+     ],
+     "chip": "U6",
+     "at": [
+      93.8,
+      53.7
+     ],
+     "centre": [
+      83.0,
+      56.0
+     ],
+     "dx_mm": 10.8,
+     "dy_mm": -2.3,
+     "verdict": "PASS"
+    },
+    "N2": {
+     "norms": [
+      "N2"
+     ],
+     "source": [
+      "corpus#1 EVM: connectors BOTTOM single edge + radial fan-out",
+      "corpus#2 riser: L->R fork"
+     ],
+     "verdict": "PENDING",
+     "hs_connectors": {
+      "J2": "east_of_chip",
+      "J3": "west_of_chip",
+      "J4": "west_of_chip"
+     },
+     "chip_to_J2_vec_mm": [
+      40.02,
+      0.0
+     ],
+     "note": "exemplar N2 = HS connectors on ONE edge; K2 L1 fixes a 2-sided HS interface (J2 east, J3/J4 west) - structural difference (see #K2-336 sec.1 diff list) => PENDING"
+    },
+    "N3": {
+     "norms": [
+      "N3"
+     ],
+     "thresholds": {
+      "corner_max_mm": 3.0,
+      "edge_min_mm": 0.3
+     },
+     "source": [
+      "corpus#1 EVM: holes FOUR_CORNERS",
+      "#K2-322 sec.3.1"
+     ],
+     "holes": [
+      {
+       "hole": "H1",
+       "at": [
+        25.071,
+        76.929
+       ],
+       "nearest_corner": "BL",
+       "corner_dist_mm": 3.0,
+       "edge_margin_mm": 2.12,
+       "pass": true
+      },
+      {
+       "hole": "H2",
+       "at": [
+        140.929,
+        35.071
+       ],
+       "nearest_corner": "TR",
+       "corner_dist_mm": 3.0,
+       "edge_margin_mm": 2.12,
+       "pass": true
+      },
+      {
+       "hole": "H3",
+       "at": [
+        25.071,
+        35.071
+       ],
+       "nearest_corner": "TL",
+       "corner_dist_mm": 3.0,
+       "edge_margin_mm": 2.12,
+       "pass": true
+      },
+      {
+       "hole": "H4",
+       "at": [
+        140.929,
+        76.929
+       ],
+       "nearest_corner": "BR",
+       "corner_dist_mm": 3.0,
+       "edge_margin_mm": 2.12,
+       "pass": true
+      }
+     ],
+     "worst_corner_mm": 3.0,
+     "verdict": "PASS"
+    },
+    "N4": {
+     "norms": [
+      "N4"
+     ],
+     "source": [
+      "corpus#1 EVM: left power/interface + jumpers, right EEPROM/control, passives around the chip"
+     ],
+     "n_non_hs_parts": 50,
+     "left_share": 0.62,
+     "verdict": "PENDING",
+     "note": "needs a per-part functional-class map (power / interface / control / storage) which is not in register"
+    },
+    "N5": {
+     "norms": [
+      "N5"
+     ],
+     "metric": "quadrant pad-bbox area share (proxy for courtyard area; F.CrtYd empty on this board)",
+     "threshold": "max quadrant area / mean <= 1.50",
+     "source": [
+      "corpus#1 EVM: even spread"
+     ],
+     "quadrant_area_mm2": {
+      "Q1": 106.7,
+      "Q2": 2.4,
+      "Q3": 19.2,
+      "Q4": 16.1
+     },
+     "quadrant_parts": {
+      "Q1": 22,
+      "Q4": 14,
+      "Q2": 5,
+      "Q3": 9
+     },
+     "max_ratio": 2.95,
+     "verdict": "FAIL"
+    },
+    "N6": {
+     "norms": [
+      "N6"
+     ],
+     "threshold_mm": 2.0,
+     "source": [
+      "corpus#1 EVM: HS at the bottom edge, power/control at the sides"
+     ],
+     "hs_group_bbox": [
+      53.95,
+      42.73,
+      135.65,
+      64.67
+     ],
+     "low_speed_group_bbox": [
+      23.38,
+      33.68,
+      104.62,
+      69.85
+     ],
+     "verdict": "PENDING",
+     "note": "bounding-box overlap is structural on this board (chip-adjacent passives sit inside the HS box); a machine zone-gap reading needs a per-part functional-class map (not in register) - no invented threshold"
+    },
+    "N7": {
+     "norms": [
+      "N7"
+     ],
+     "source": [
+      "corpus#1 EVM radial fan-out",
+      "corpus#2 riser fork"
+     ],
+     "chip": "U6",
+     "chip_x": 93.8,
+     "west_connectors": [
+      "J3",
+      "J4"
+     ],
+     "east_connectors": [
+      "J2"
+     ],
+     "verdict": "PASS",
+     "note": "direction consistency only; the exemplar's intra-PAIR equal-length clause is a ROUTING property -> PENDING at the placement layer"
+    },
+    "C16_keepout": {
+     "gate": "C16 component-level keepout (pad-bbox pairwise, margin 0.20mm, all items at candidate positions)",
+     "n_items": 58,
+     "moved": [
+      "H1",
+      "H2",
+      "H3",
+      "H4"
+     ],
+     "collision_pairs": [
+      {
+       "a": "H3",
+       "b": "J12"
+      }
+     ],
+     "n_collision_pairs": 1,
+     "n_collision_boxes": 1,
+     "out_of_board": [],
+     "n_out_of_board": 0,
+     "crux": {
+      "H3": [
+       "J12"
+      ]
+     },
+     "verdict": "FAIL",
+     "note": "footprint-vs-footprint only; candidate tracks are NOT checked (no re-route; C17)"
+    },
+    "P1": {
+     "layer": "SCHEME",
+     "verdict": "PENDING",
+     "source": "proxy threshold 1.6x is a PLACEHOLDER (vendor EVM guide not parsed yet); the real reading needs a routed board",
+     "proxy": {
+      "main_path_straight_delta_vs_baseline_mm": -0.0,
+      "chip_to_connector_straight_mm": 40.02
+     },
+     "note": "C17 (no re-route) blocks the routed reading"
+    },
+    "P2": {
+     "layer": "SCHEME",
+     "verdict": "PENDING",
+     "source": "PCIe Gen5 channel length budget file NOT in register"
+    },
+    "P3": {
+     "layer": "SCHEME",
+     "thresholds": {
+      "corner_max_mm": 3.0,
+      "edge_min_mm": 0.3
+     },
+     "source": "#K2-322 sec.3.1",
+     "holes": [
+      {
+       "hole": "H1",
+       "at": [
+        25.071,
+        76.929
+       ],
+       "nearest_corner": "BL",
+       "corner_dist_mm": 3.0,
+       "edge_margin_mm": 2.12,
+       "pass": true
+      },
+      {
+       "hole": "H2",
+       "at": [
+        140.929,
+        35.071
+       ],
+       "nearest_corner": "TR",
+       "corner_dist_mm": 3.0,
+       "edge_margin_mm": 2.12,
+       "pass": true
+      },
+      {
+       "hole": "H3",
+       "at": [
+        25.071,
+        35.071
+       ],
+       "nearest_corner": "TL",
+       "corner_dist_mm": 3.0,
+       "edge_margin_mm": 2.12,
+       "pass": true
+      },
+      {
+       "hole": "H4",
+       "at": [
+        140.929,
+        76.929
+       ],
+       "nearest_corner": "BR",
+       "corner_dist_mm": 3.0,
+       "edge_margin_mm": 2.12,
+       "pass": true
+      }
+     ],
+     "verdict": "PASS"
+    },
+    "P4": {
+     "layer": "SCHEME",
+     "verdict": "PENDING",
+     "source": "R537 cross-section method (capacity>=demand; per-section supply not auto-derived here)",
+     "sections": [
+      {
+       "x_mm": 30,
+       "parts_spanning": 8
+      },
+      {
+       "x_mm": 45,
+       "parts_spanning": 3
+      },
+      {
+       "x_mm": 60,
+       "parts_spanning": 2
+      },
+      {
+       "x_mm": 75,
+       "parts_spanning": 0
+      },
+      {
+       "x_mm": 90,
+       "parts_spanning": 1
+      },
+      {
+       "x_mm": 105,
+       "parts_spanning": 0
+      },
+      {
+       "x_mm": 120,
+       "parts_spanning": 0
+      },
+      {
+       "x_mm": 134,
+       "parts_spanning": 1
+      }
+     ],
+     "note": "section supply (layer x row budget) not in register"
+    },
+    "P5": {
+     "layer": "CONSTRUCTION",
+     "verdict": "PENDING",
+     "source": "no in-register thermal file"
+    },
+    "P7": {
+     "layer": "CONSTRUCTION",
+     "verdict": "PENDING",
+     "source": "SPEC pd.decoupling is a string; no machine-readable cap->load map"
+    }
+   },
+   "FAIL": [
+    "N5",
+    "C16_keepout"
+   ],
+   "PENDING": [
+    "N2",
+    "N4",
+    "N6",
+    "P1",
+    "P2",
+    "P4",
+    "P5",
+    "P7"
+   ],
+   "verdict": "FAIL",
+   "freezable": false,
+   "freeze_blocker": "SCHEME gate incomplete: P1/P2/P4/P5/P7 PENDING (thresholds/sources not in register) => no candidate can be frozen (fail-closed)"
+  },
+  {
+   "id": "C3",
+   "label": "Chip-centred + machine-proven-feasible hole set (l12 measured) + cluster kept",
+   "norms_instantiated": [
+    "N1"
+   ],
+   "criteria": {
+    "N1": {
+     "norms": [
+      "N1"
+     ],
+     "threshold": "|dx|<=0.15*W=18.02mm and |dy|<=0.15*H=6.91mm",
+     "source": [
+      "corpus#1 EVM: chip CENTRE"
+     ],
+     "chip": "U6",
+     "at": [
+      83.0,
+      56.0
+     ],
+     "centre": [
+      83.0,
+      56.0
+     ],
+     "dx_mm": 0.0,
+     "dy_mm": 0.0,
+     "verdict": "PASS"
+    },
+    "N2": {
+     "norms": [
+      "N2"
+     ],
+     "source": [
+      "corpus#1 EVM: connectors BOTTOM single edge + radial fan-out",
+      "corpus#2 riser: L->R fork"
+     ],
+     "verdict": "PENDING",
+     "hs_connectors": {
+      "J2": "east_of_chip",
+      "J3": "west_of_chip",
+      "J4": "west_of_chip"
+     },
+     "chip_to_J2_vec_mm": [
+      50.82,
+      -2.3
+     ],
+     "note": "exemplar N2 = HS connectors on ONE edge; K2 L1 fixes a 2-sided HS interface (J2 east, J3/J4 west) - structural difference (see #K2-336 sec.1 diff list) => PENDING"
+    },
+    "N3": {
+     "norms": [
+      "N3"
+     ],
+     "thresholds": {
+      "corner_max_mm": 3.0,
+      "edge_min_mm": 0.3
+     },
+     "source": [
+      "corpus#1 EVM: holes FOUR_CORNERS",
+      "#K2-322 sec.3.1"
+     ],
+     "holes": [
+      {
+       "hole": "H1",
+       "at": [
+        26.1,
+        75.6
+       ],
+       "nearest_corner": "BL",
+       "corner_dist_mm": 4.67,
+       "edge_margin_mm": 3.15,
+       "pass": false
+      },
+      {
+       "hole": "H2",
+       "at": [
+        136.6,
+        35.1
+       ],
+       "nearest_corner": "TR",
+       "corner_dist_mm": 6.8,
+       "edge_margin_mm": 2.15,
+       "pass": false
+      },
+      {
+       "hole": "H3",
+       "at": [
+        45.1,
+        75.1
+       ],
+       "nearest_corner": "BL",
+       "corner_dist_mm": 22.5,
+       "edge_margin_mm": 3.95,
+       "pass": false
+      },
+      {
+       "hole": "H4",
+       "at": [
+        140.8,
+        76.8
+       ],
+       "nearest_corner": "BR",
+       "corner_dist_mm": 3.18,
+       "edge_margin_mm": 2.25,
+       "pass": false
+      }
+     ],
+     "worst_corner_mm": 22.5,
+     "verdict": "FAIL"
+    },
+    "N4": {
+     "norms": [
+      "N4"
+     ],
+     "source": [
+      "corpus#1 EVM: left power/interface + jumpers, right EEPROM/control, passives around the chip"
+     ],
+     "n_non_hs_parts": 50,
+     "left_share": 0.62,
+     "verdict": "PENDING",
+     "note": "needs a per-part functional-class map (power / interface / control / storage) which is not in register"
+    },
+    "N5": {
+     "norms": [
+      "N5"
+     ],
+     "metric": "quadrant pad-bbox area share (proxy for courtyard area; F.CrtYd empty on this board)",
+     "threshold": "max quadrant area / mean <= 1.50",
+     "source": [
+      "corpus#1 EVM: even spread"
+     ],
+     "quadrant_area_mm2": {
+      "Q1": 106.7,
+      "Q2": 2.4,
+      "Q3": 19.2,
+      "Q4": 16.1
+     },
+     "quadrant_parts": {
+      "Q1": 22,
+      "Q4": 14,
+      "Q2": 5,
+      "Q3": 9
+     },
+     "max_ratio": 2.95,
+     "verdict": "FAIL"
+    },
+    "N6": {
+     "norms": [
+      "N6"
+     ],
+     "threshold_mm": 2.0,
+     "source": [
+      "corpus#1 EVM: HS at the bottom edge, power/control at the sides"
+     ],
+     "hs_group_bbox": [
+      53.95,
+      42.73,
+      135.65,
+      64.67
+     ],
+     "low_speed_group_bbox": [
+      23.38,
+      33.68,
+      104.62,
+      69.85
+     ],
+     "verdict": "PENDING",
+     "note": "bounding-box overlap is structural on this board (chip-adjacent passives sit inside the HS box); a machine zone-gap reading needs a per-part functional-class map (not in register) - no invented threshold"
+    },
+    "N7": {
+     "norms": [
+      "N7"
+     ],
+     "source": [
+      "corpus#1 EVM radial fan-out",
+      "corpus#2 riser fork"
+     ],
+     "chip": "U6",
+     "chip_x": 83.0,
+     "west_connectors": [
+      "J3",
+      "J4"
+     ],
+     "east_connectors": [
+      "J2"
+     ],
+     "verdict": "PASS",
+     "note": "direction consistency only; the exemplar's intra-PAIR equal-length clause is a ROUTING property -> PENDING at the placement layer"
+    },
+    "C16_keepout": {
+     "gate": "C16 component-level keepout (pad-bbox pairwise, margin 0.20mm, all items at candidate positions)",
+     "n_items": 58,
+     "moved": [
+      "H2",
+      "H4",
+      "U6"
+     ],
+     "collision_pairs": [
+      {
+       "a": "U6",
+       "b": "C80"
+      },
+      {
+       "a": "U6",
+       "b": "C81"
+      },
+      {
+       "a": "U6",
+       "b": "R43"
+      },
+      {
+       "a": "U6",
+       "b": "R45"
+      }
+     ],
+     "n_collision_pairs": 4,
+     "n_collision_boxes": 35,
+     "out_of_board": [],
+     "n_out_of_board": 0,
+     "crux": {
+      "U6": [
+       "C80",
+       "C81",
+       "R43",
+       "R45"
+      ]
+     },
+     "verdict": "FAIL",
+     "note": "footprint-vs-footprint only; candidate tracks are NOT checked (no re-route; C17)"
+    },
+    "P1": {
+     "layer": "SCHEME",
+     "verdict": "PENDING",
+     "source": "proxy threshold 1.6x is a PLACEHOLDER (vendor EVM guide not parsed yet); the real reading needs a routed board",
+     "proxy": {
+      "main_path_straight_delta_vs_baseline_mm": 10.8,
+      "chip_to_connector_straight_mm": 50.82
+     },
+     "note": "C17 (no re-route) blocks the routed reading"
+    },
+    "P2": {
+     "layer": "SCHEME",
+     "verdict": "PENDING",
+     "source": "PCIe Gen5 channel length budget file NOT in register"
+    },
+    "P3": {
+     "layer": "SCHEME",
+     "thresholds": {
+      "corner_max_mm": 3.0,
+      "edge_min_mm": 0.3
+     },
+     "source": "#K2-322 sec.3.1",
+     "holes": [
+      {
+       "hole": "H1",
+       "at": [
+        26.1,
+        75.6
+       ],
+       "nearest_corner": "BL",
+       "corner_dist_mm": 4.67,
+       "edge_margin_mm": 3.15,
+       "pass": false
+      },
+      {
+       "hole": "H2",
+       "at": [
+        136.6,
+        35.1
+       ],
+       "nearest_corner": "TR",
+       "corner_dist_mm": 6.8,
+       "edge_margin_mm": 2.15,
+       "pass": false
+      },
+      {
+       "hole": "H3",
+       "at": [
+        45.1,
+        75.1
+       ],
+       "nearest_corner": "BL",
+       "corner_dist_mm": 22.5,
+       "edge_margin_mm": 3.95,
+       "pass": false
+      },
+      {
+       "hole": "H4",
+       "at": [
+        140.8,
+        76.8
+       ],
+       "nearest_corner": "BR",
+       "corner_dist_mm": 3.18,
+       "edge_margin_mm": 2.25,
+       "pass": false
+      }
+     ],
+     "verdict": "FAIL"
+    },
+    "P4": {
+     "layer": "SCHEME",
+     "verdict": "PENDING",
+     "source": "R537 cross-section method (capacity>=demand; per-section supply not auto-derived here)",
+     "sections": [
+      {
+       "x_mm": 30,
+       "parts_spanning": 8
+      },
+      {
+       "x_mm": 45,
+       "parts_spanning": 3
+      },
+      {
+       "x_mm": 60,
+       "parts_spanning": 2
+      },
+      {
+       "x_mm": 75,
+       "parts_spanning": 1
+      },
+      {
+       "x_mm": 90,
+       "parts_spanning": 1
+      },
+      {
+       "x_mm": 105,
+       "parts_spanning": 0
+      },
+      {
+       "x_mm": 120,
+       "parts_spanning": 0
+      },
+      {
+       "x_mm": 134,
+       "parts_spanning": 1
+      }
+     ],
+     "note": "section supply (layer x row budget) not in register"
+    },
+    "P5": {
+     "layer": "CONSTRUCTION",
+     "verdict": "PENDING",
+     "source": "no in-register thermal file"
+    },
+    "P7": {
+     "layer": "CONSTRUCTION",
+     "verdict": "PENDING",
+     "source": "SPEC pd.decoupling is a string; no machine-readable cap->load map"
+    }
+   },
+   "FAIL": [
+    "N3",
+    "N5",
+    "C16_keepout",
+    "P3"
+   ],
+   "PENDING": [
+    "N2",
+    "N4",
+    "N6",
+    "P1",
+    "P2",
+    "P4",
+    "P5",
+    "P7"
+   ],
+   "verdict": "FAIL",
+   "freezable": false,
+   "freeze_blocker": "SCHEME gate incomplete: P1/P2/P4/P5/P7 PENDING (thresholds/sources not in register) => no candidate can be frozen (fail-closed)"
+  }
+ ],
+ "cross_candidate_findings": [
+  {
+   "candidate": "C1",
+   "moved": "H3",
+   "blocked_by": "J12",
+   "blocker_class": "LEFT_PIN_HEADER_COLUMN"
+  },
+  {
+   "candidate": "C1",
+   "moved": "U1",
+   "blocked_by": "J11",
+   "blocker_class": "LEFT_PIN_HEADER_COLUMN"
+  },
+  {
+   "candidate": "C1",
+   "moved": "U2",
+   "blocked_by": "J13",
+   "blocker_class": "LEFT_PIN_HEADER_COLUMN"
+  },
+  {
+   "candidate": "C1",
+   "moved": "U5",
+   "blocked_by": "E2",
+   "blocker_class": "OTHER"
+  },
+  {
+   "candidate": "C1",
+   "moved": "U6",
+   "blocked_by": "C80",
+   "blocker_class": "CHIP_PERIPHERY_PASSIVE"
+  },
+  {
+   "candidate": "C1",
+   "moved": "U6",
+   "blocked_by": "C81",
+   "blocker_class": "CHIP_PERIPHERY_PASSIVE"
+  },
+  {
+   "candidate": "C1",
+   "moved": "U6",
+   "blocked_by": "R43",
+   "blocker_class": "CHIP_PERIPHERY_PASSIVE"
+  },
+  {
+   "candidate": "C1",
+   "moved": "U6",
+   "blocked_by": "R45",
+   "blocker_class": "CHIP_PERIPHERY_PASSIVE"
+  },
+  {
+   "candidate": "C2",
+   "moved": "H3",
+   "blocked_by": "J12",
+   "blocker_class": "LEFT_PIN_HEADER_COLUMN"
+  },
+  {
+   "candidate": "C3",
+   "moved": "U6",
+   "blocked_by": "C80",
+   "blocker_class": "CHIP_PERIPHERY_PASSIVE"
+  },
+  {
+   "candidate": "C3",
+   "moved": "U6",
+   "blocked_by": "C81",
+   "blocker_class": "CHIP_PERIPHERY_PASSIVE"
+  },
+  {
+   "candidate": "C3",
+   "moved": "U6",
+   "blocked_by": "R43",
+   "blocker_class": "CHIP_PERIPHERY_PASSIVE"
+  },
+  {
+   "candidate": "C3",
+   "moved": "U6",
+   "blocked_by": "R45",
+   "blocker_class": "CHIP_PERIPHERY_PASSIVE"
+  }
+ ],
+ "scheme_gate_status": "INCOMPLETE (P1/P2/P4/P5/P7 PENDING) => fail-closed: no candidate freezable"
+}

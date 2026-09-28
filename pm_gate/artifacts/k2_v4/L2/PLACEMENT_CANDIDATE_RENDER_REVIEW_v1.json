@@ -1,0 +1,165 @@
+{
+ "artifact": "k2_placement_candidate_render_review_v1",
+ "ts": "2026-09-28",
+ "authority": "#K2-337 window C: asset-5 R1-R6 render review executed on every candidate",
+ "asset": "docs/K2-PROC-ASSET-5-SCHEME-LAYOUT-RENDER-REVIEW-CHECKLIST.md",
+ "method": "kicad-cli pcb render --side top (10.0.5) on a /tmp copy of the as-built board with the candidate placement drawn on; reviewed by direct image inspection (asset-5 '视觉模型逐轮自动跑'). Tracks on the copy are the AS-BUILT ones (placement-only artefact) -> R5 (routing) stays 不可辨/PENDING as in R838.",
+ "renders": {
+  "baseline_l10": "pm_gate/artifacts/k2_v4/L2/render/PLACEMENT_baseline_l10_top.png",
+  "C1": "pm_gate/artifacts/k2_v4/L2/render/PLACEMENT_C1_top.png",
+  "C2": "pm_gate/artifacts/k2_v4/L2/render/PLACEMENT_C2_top.png",
+  "C3": "pm_gate/artifacts/k2_v4/L2/render/PLACEMENT_C3_top.png"
+ },
+ "reviews": [
+  {
+   "id": "baseline_l10",
+   "kind": "REFERENCE (not a candidate)",
+   "R": {
+    "R1": {
+     "verdict": "FAIL",
+     "source": "machine",
+     "note": "P1 (routed, #K2-336): worst 1.81 > 1.6; chip 93.8 vs board centre 83.0 (off-centre right)"
+    },
+    "R2": {
+     "verdict": "可疑",
+     "source": "visual",
+     "note": "high-speed region (U6 + J2, right half) is directly adjacent to the low-speed cluster (U1/U2/U4/U5 + the left pin-header column) with no separation band"
+    },
+    "R3": {
+     "verdict": "FAIL",
+     "source": "machine+visual",
+     "note": "N5 quadrant pad-area ratio 2.95 (Q1 top-left overloaded) - matches owner 'left low-speed zone dense toward the top'"
+    },
+    "R4": {
+     "verdict": "FAIL",
+     "source": "machine+visual",
+     "note": "P3 holes: H1 4.67 / H2 7.49 / H3 22.50 / H4 28.62 mm from the nearest corner (all > 3.0)"
+    },
+    "R5": {
+     "verdict": "不可辨",
+     "source": "visual",
+     "note": "routing not readable on the render (needs a flow diagram / P1 quantification)"
+    },
+    "R6": {
+     "verdict": "PASS",
+     "source": "machine",
+     "note": "no footprint overlap; board DRC 170 = baseline, 0 new"
+    }
+   }
+  },
+  {
+   "id": "C1",
+   "kind": "CANDIDATE",
+   "R": {
+    "R1": {
+     "verdict": "可疑",
+     "source": "machine+visual",
+     "note": "chip centred (83.0,56.0) per the exemplar; main-path straight length 40.0 -> 50.82mm (+10.8); the routed P1 cannot be read while C17 (re-route) is open"
+    },
+    "R2": {
+     "verdict": "可疑",
+     "source": "visual",
+     "note": "centring the chip moves the high-speed device INTO the middle of the low-speed field; interleaving becomes worse, not better"
+    },
+    "R3": {
+     "verdict": "FAIL",
+     "source": "machine+visual",
+     "note": "N5 ratio 2.03 (>1.5): the cluster translate improves Q1 106.7->52.7mm2 but pushes Q3 to 73.2mm2"
+    },
+    "R4": {
+     "verdict": "PASS",
+     "source": "machine",
+     "note": "four-corner holes, 3.00mm from each corner, 2.12mm edge margin (P3 PASS)"
+    },
+    "R5": {
+     "verdict": "不可辨",
+     "source": "visual",
+     "note": "same as baseline"
+    },
+    "R6": {
+     "verdict": "FAIL",
+     "source": "machine",
+     "note": "C16 8 named collision pairs: H3<->J12, U1<->J11, U2<->J13, U5<->E2, U6<->{C80,C81,R43,R45}"
+    }
+   }
+  },
+  {
+   "id": "C2",
+   "kind": "CANDIDATE",
+   "R": {
+    "R1": {
+     "verdict": "可疑",
+     "source": "machine+visual",
+     "note": "chip left at (93.8,53.7); P1 not readable (C17)"
+    },
+    "R2": {
+     "verdict": "可疑",
+     "source": "visual",
+     "note": "unchanged from baseline"
+    },
+    "R3": {
+     "verdict": "FAIL",
+     "source": "machine+visual",
+     "note": "N5 ratio 2.95 (unchanged; the cluster was not moved)"
+    },
+    "R4": {
+     "verdict": "PASS",
+     "source": "machine+visual",
+     "note": "four-corner holes visible on the render; 3.00mm corner distance"
+    },
+    "R5": {
+     "verdict": "不可辨",
+     "source": "visual",
+     "note": "same as baseline"
+    },
+    "R6": {
+     "verdict": "FAIL",
+     "source": "machine",
+     "note": "C16: exactly ONE collision pair H3<->J12 (1 pad box) - the single geometric blocker for the four-corner pattern"
+    }
+   }
+  },
+  {
+   "id": "C3",
+   "kind": "CANDIDATE",
+   "R": {
+    "R1": {
+     "verdict": "可疑",
+     "source": "machine+visual",
+     "note": "chip centred; same +10.8mm main-path effect as C1"
+    },
+    "R2": {
+     "verdict": "可疑",
+     "source": "visual",
+     "note": "same as C1"
+    },
+    "R3": {
+     "verdict": "FAIL",
+     "source": "machine+visual",
+     "note": "N5 ratio 2.95"
+    },
+    "R4": {
+     "verdict": "FAIL",
+     "source": "machine+visual",
+     "note": "l12 measured holes: H1 4.67 / H2 6.80 / H3 22.50 / H4 3.18 (all > 3.0)"
+    },
+    "R5": {
+     "verdict": "不可辨",
+     "source": "visual",
+     "note": "same as baseline"
+    },
+    "R6": {
+     "verdict": "FAIL",
+     "source": "machine",
+     "note": "C16 4 pairs: U6<->{C80,C81,R43,R45} (centring lands the BGA on its own periphery passives)"
+    }
+   }
+  }
+ ],
+ "conclusion": {
+  "checklist_all_pass": false,
+  "reason": "no candidate clears R1-R6: R3 FAILs in all (N5 ratio 2.03-2.95 > 1.5); R6 FAILs in all (C16); R1/R2 可疑 in all; R5 不可辨 in all (routing); C2 uniquely clears R4 (four-corner) but then fails R6 on the single H3<->J12 pair",
+  "freeze": "NOT freezable (asset-5: 清单全过 = the only freeze condition; #K2-336: scheme gate also P1/P2/P4/P5/P7 PENDING)"
+ },
+ "OWNER-ITEMS": 0
+}
