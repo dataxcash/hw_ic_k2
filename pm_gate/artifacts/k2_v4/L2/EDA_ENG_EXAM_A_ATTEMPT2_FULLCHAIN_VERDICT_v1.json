@@ -1,0 +1,346 @@
+{
+ "artifact": "eda_eng_examA_attempt2_fullchain_verdict_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-364 sec.4.2 (after wiring, run the exam EXACTLY ONCE on the gate-legal region scenario, judged by M4)",
+ "exam": "A (re-posed region re-placement, delta +3.5/+3.5 mm, 20 measured refs, ECO-K2-0002 v3)",
+ "execution_path": "M1 -> M2 -> M3 -> M4 (product chain, --chain product)",
+ "call_chain_evidence": [
+  {
+   "cmd": "eda_eng netplan --board /home/fila/jqdDev_2025/ic_hw/k2/hw/k2_v4_8L.l14.kicad_pcb --refs C73,C84,C85,C86,C87,C88,C90,D2,E2,J12,J13,J6,J9,L1,R40,R41,U1,U2,U4,U5 --delta 3.5,3.5 --json-out /tmp/opencode/eda_eng_examA_full/netplan.json",
+   "exit": 0
+  },
+  {
+   "cmd": "eda_eng ripup --board /home/fila/jqdDev_2025/ic_hw/k2/hw/k2_v4_8L.l14.kicad_pcb --plan /tmp/opencode/eda_eng_examA_full/netplan.json --out /tmp/opencode/eda_eng_examA_full/torn.kicad_pcb",
+   "exit": 0
+  },
+  {
+   "stage": "M3_route",
+   "nets_total": 21,
+   "routed": 13,
+   "blocked": 8
+  },
+  {
+   "cmd": "eda_eng route --apply-batch /tmp/opencode/eda_eng_examA_full/routes.json --board /tmp/opencode/eda_eng_examA_full/torn.kicad_pcb --out /tmp/opencode/eda_eng_examA_full/rerouted.kicad_pcb",
+   "exit": 0
+  },
+  {
+   "stage": "M4_verify",
+   "verdict": "FAIL"
+  }
+ ],
+ "preflight_r": true,
+ "readings": {
+  "M1_affected_nets": 21,
+  "M2_ripped": {
+   "tracks": 1078,
+   "vias": 455
+  },
+  "M3_routed": 13,
+  "M3_blocked": 8,
+  "M3_apply": {
+   "artifact": "eda_eng_route_apply_batch",
+   "nets": [
+    "12V_IN",
+    "FB_U2",
+    "GPIO_LED",
+    "I2C1_SDA",
+    "MCU_VDD",
+    "PWR_BTN_ISO",
+    "PWR_BTN_OUT",
+    "PWR_CTRL_OUT",
+    "SWCLK_BOOT0",
+    "SWDIO",
+    "SW_U2",
+    "UART_RX",
+    "UART_TX"
+   ],
+   "segments_added": 54,
+   "vias_added": 0,
+   "project_config_copied": [
+    ".kicad_pro"
+   ],
+   "out": "/tmp/opencode/eda_eng_examA_full/rerouted.kicad_pcb",
+   "out_sha16": "60f8d3d43232ae2f"
+  },
+  "M4_verdict": "FAIL"
+ },
+ "criteria": {
+  "C1_connectivity": {
+   "unconnected": 329,
+   "pass": false
+  },
+  "C2_drc_no_new_increase": {
+   "total": 260,
+   "ref_total": 168,
+   "new_classes": [
+    "clearance",
+    "isolated_copper",
+    "lib_footprint_issues",
+    "shorting_items",
+    "solder_mask_bridge",
+    "tracks_crossing"
+   ],
+   "pass": false
+  },
+  "C3_skew": {
+   "per_pair_mm": {
+    "0": 0.065012,
+    "1": 0.06498,
+    "2": 0.043403,
+    "3": 0.078764,
+    "4": 1.4e-05,
+    "5": 5e-06,
+    "6": 0.021576,
+    "7": 0.013805
+   },
+   "max_mm": 0.078764,
+   "limit_mm": 0.15,
+   "pass": true
+  },
+  "C4_chamfer_preserved": {
+   "count": 2224,
+   "ref_count": 2637,
+   "pass": false
+  },
+  "C5_routing_changed": {
+   "element_set_diff": 1582,
+   "pass": true
+  }
+ },
+ "named_followups": {
+  "C1_connectivity": "FAIL 329 unconnected - direct consequence of 8 of 21 nets being BLOCKED (named below)",
+  "C2_drc": "FAIL 260 vs 168 with six new classes (clearance, isolated_copper, lib_footprint_issues, shorting_items, solder_mask_bridge, tracks_crossing)",
+  "C3_skew": "PASS (max 0.0788 <= 0.15; the DN pairs are outside the affected set so their lengths are untouched)",
+  "C4_chamfer": "FAIL 2224 < 2637 - REGISTERED as a follow-up window target per #K2-362 sec.2.5 (the product chain has no chamfer-recovery stage for a moved region)",
+  "C5_routing_changed": "PASS (element-set diff 1582 - the routing genuinely changed, no no-op)"
+ },
+ "blocked_nets": [
+  {
+   "net": "GND",
+   "reason": "BLOCKED",
+   "blocked_edge": [
+    1,
+    2
+   ],
+   "violations": [
+    {
+     "obstacle": "pad@4",
+     "kind": "copper",
+     "net": "",
+     "min_dist_mm": 0.0,
+     "required_mm": 0.175
+    },
+    {
+     "obstacle": "pad@5",
+     "kind": "copper",
+     "net": "",
+     "min_dist_mm": 0.0,
+     "required_mm": 0.175
+    }
+   ]
+  },
+  {
+   "net": "I2C1_SCL",
+   "reason": "BLOCKED",
+   "blocked_edge": [
+    3,
+    1
+   ],
+   "violations": [
+    {
+     "obstacle": "track@DS320_STRAP_B_ADDR0_7-0",
+     "kind": "copper",
+     "net": "DS320_STRAP_B_ADDR0_7-0",
+     "min_dist_mm": 0.0,
+     "required_mm": 0.175
+    },
+    {
+     "obstacle": "track@DS320_STRAP_B_ADDR0_7-0",
+     "kind": "copper",
+     "net": "DS320_STRAP_B_ADDR0_7-0",
+     "min_dist_mm": 0.0,
+     "required_mm": 0.175
+    },
+    {
+     "obstacle": "track@DS320_STRAP_B_ADDR0_7-0",
+     "kind": "copper",
+     "net": "DS320_STRAP_B_ADDR0_7-0",
+     "min_dist_mm": 0.0,
+     "required_mm": 0.175
+    },
+    {
+     "obstacle": "track@DS320_STRAP_B_ADDR0_7-0",
+     "kind": "copper",
+     "net": "DS320_STRAP_B_ADDR0_7-0",
+     "min_dist_mm": 0.0,
+     "required_mm": 0.175
+    }
+   ]
+  },
+  {
+   "net": "I2C2_SCL",
+   "reason": "BLOCKED",
+   "blocked_edge": [
+    3,
+    2
+   ],
+   "violations": [
+    {
+     "obstacle": "track@PCIE_REFCLK1_P",
+     "kind": "copper",
+     "net": "PCIE_REFCLK1_P",
+     "min_dist_mm": 0.0,
+     "required_mm": 0.175
+    },
+    {
+     "obstacle": "track@PCIE_REFCLK1_N",
+     "kind": "copper",
+     "net": "PCIE_REFCLK1_N",
+     "min_dist_mm": 0.0,
+     "required_mm": 0.175
+    }
+   ]
+  },
+  {
+   "net": "I2C2_SDA",
+   "reason": "BLOCKED",
+   "blocked_edge": [
+    2,
+    3
+   ],
+   "violations": [
+    {
+     "obstacle": "track@PCIE_REFCLK1_P",
+     "kind": "copper",
+     "net": "PCIE_REFCLK1_P",
+     "min_dist_mm": 0.0,
+     "required_mm": 0.175
+    },
+    {
+     "obstacle": "track@PCIE_REFCLK1_N",
+     "kind": "copper",
+     "net": "PCIE_REFCLK1_N",
+     "min_dist_mm": 0.0,
+     "required_mm": 0.175
+    }
+   ]
+  },
+  {
+   "net": "NRST",
+   "reason": "BLOCKED",
+   "blocked_edge": [
+    0,
+    1
+   ],
+   "violations": [
+    {
+     "obstacle": "pad@9",
+     "kind": "copper",
+     "net": "",
+     "min_dist_mm": 0.0,
+     "required_mm": 0.175
+    }
+   ]
+  },
+  {
+   "net": "P3V3",
+   "reason": "BLOCKED",
+   "blocked_edge": [
+    45,
+    37
+   ],
+   "violations": [
+    {
+     "obstacle": "track@PCIE_REFCLK0_P",
+     "kind": "copper",
+     "net": "PCIE_REFCLK0_P",
+     "min_dist_mm": 0.0,
+     "required_mm": 0.175
+    },
+    {
+     "obstacle": "track@PCIE_REFCLK0_N",
+     "kind": "copper",
+     "net": "PCIE_REFCLK0_N",
+     "min_dist_mm": 0.0,
+     "required_mm": 0.175
+    },
+    {
+     "obstacle": "track@PCIE_UP1_P",
+     "kind": "copper",
+     "net": "PCIE_UP1_P",
+     "min_dist_mm": 0.0,
+     "required_mm": 0.175
+    },
+    {
+     "obstacle": "track@PCIE_UP1_P",
+     "kind": "copper",
+     "net": "PCIE_UP1_P",
+     "min_dist_mm": 0.0,
+     "required_mm": 0.175
+    }
+   ]
+  },
+  {
+   "net": "P3V3_AUX",
+   "reason": "BLOCKED",
+   "blocked_edge": [
+    5,
+    4
+   ],
+   "violations": [
+    {
+     "obstacle": "track@PCIE_REFCLK0_P",
+     "kind": "copper",
+     "net": "PCIE_REFCLK0_P",
+     "min_dist_mm": 0.0,
+     "required_mm": 0.175
+    },
+    {
+     "obstacle": "track@PCIE_REFCLK0_N",
+     "kind": "copper",
+     "net": "PCIE_REFCLK0_N",
+     "min_dist_mm": 0.0,
+     "required_mm": 0.175
+    },
+    {
+     "obstacle": "pad@B9",
+     "kind": "copper",
+     "net": "",
+     "min_dist_mm": 0.0,
+     "required_mm": 0.175
+    },
+    {
+     "obstacle": "pad@B12",
+     "kind": "copper",
+     "net": "",
+     "min_dist_mm": 0.0,
+     "required_mm": 0.175
+    }
+   ]
+  },
+  {
+   "net": "PERSTA#",
+   "reason": "BLOCKED",
+   "blocked_edge": [
+    0,
+    2
+   ],
+   "violations": [
+    {
+     "obstacle": "pad@26",
+     "kind": "copper",
+     "net": "",
+     "min_dist_mm": 0.0,
+     "required_mm": 0.175
+    }
+   ]
+  }
+ ],
+ "meaning": "The product chain now RUNS the exam end to end and reports a named verdict; the engine's routing capability is still insufficient: 8 of 21 affected nets could not be re-routed, which shows up as 329 unconnected items and new DRC classes, and the accepted chamfer count is not recovered. The verdict is a NAMED FAIL, not a silent or fabricated pass.",
+ "next_targets": [
+  "extend M3's solver for the 8 blocked nets (deeper layer use / more deterministic candidate families / rip-up scope)",
+  "add a chamfer-recovery stage to the product chain for a moved region (C4)",
+  "then the exam is re-run EXACTLY ONCE"
+ ],
+ "OWNER-ITEMS": 0
+}
