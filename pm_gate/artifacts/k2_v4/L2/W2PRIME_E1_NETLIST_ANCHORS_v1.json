@@ -60,11 +60,9 @@
   "note": "E1 adds 6 TP refs -> n_refs 60; the entries must use the SAME ref names as the netlist replacements above"
  },
  "remaining_unknown_named": {
-  "id": "U1",
-  "what": "the schema of a symbol entry under 'symbols:' (line 14)",
-  "evidence": "my probe grep for '^  - name: ' under symbols returned NOTHING, so the symbols block uses a different key/indent than I assumed",
-  "rule": "DO NOT GUESS - read the symbols block first (bounded read-only step), then write the TP symbol (footprint ForgeOS:TP_1.0mm, one pin) consistent with that schema",
-  "why_it_matters": "the generator's parse_yaml() builds the ref->symbol->footprint map from symbols + sheets.placements; a malformed symbol entry breaks the chain (and the repo's own verify gates)"
+  "id": "NONE",
+  "what": "E1 is now FULLY specified (schema resolved); no unknown left",
+  "note": "the only remaining risk is YAML validity of the PWR_CTRL_OUT deletion (flagged) and that the repo's four pre-commit gates are the oracle"
  },
  "edit_plan_E1": {
   "parts": [
@@ -76,5 +74,23 @@
   "verification_available": "the repo's own pre-commit gates (project_sch_coverage / sch_structural / netlist_connect / bom_consistent) run on every commit and will catch a malformed netlist edit - that is the built-in oracle for E1"
  },
  "gates": "zero edits this turn; zero surgery; frozen four 4/4; the footprint asset (R896) stays inert until this edit",
- "OWNER-ITEMS": 0
+ "OWNER-ITEMS": 0,
+ "symbols_schema_RESOLVED": {
+  "structure": "symbols: is a LIST at column 0: '- name: <SYM>' then 2-space keys ref_prefix/value/footprint (+ optional body_width/pin_pitch) and 'pins:' mapping side -> list of [pin_name, pad_number, direction, net_class]",
+  "evidence": "read lines 14-60 of hw/data/k2_sch.errata-3.yaml: '- name: MCIO_4i' / 'ref_prefix: J' / 'value: ...' / 'footprint: ForgeOS:...' / 'pins: right: - - TX0_P / - 4 / - OUTPUT / - DIFF_PAIR_TX'",
+  "consequence": "my earlier probe ('^  - name: ') missed it because the list entries are at COLUMN 0, not indented",
+  "nets_reference_pins_BY_NAME": "nets entries look like 'REF/PINNAME' (e.g. J11/EC_SCL), so the TP pin must be NAMED explicitly; using the quoted string \"1\" keeps the net anchors 'TPn/1' valid"
+ },
+ "TP_templates": {
+  "symbol_to_append_under_symbols": "- name: TEST_POINT\n  ref_prefix: TP\n  value: TP_1.0mm\n  footprint: ForgeOS:TP_1.0mm\n  pins:\n    right:\n    - - \"1\"\n      - 1\n      - PASSIVE\n      - LOW_SPEED",
+  "placement_template_under_sheets_placements": "- ref: TP_EC_SCL\n  symbol: TEST_POINT\n  card: both",
+  "six_refs": [
+   "TP_EC_SCL",
+   "TP_EC_SDA",
+   "TP_EC_3V3",
+   "TP_PWR_BTN",
+   "TP_UART_TX",
+   "TP_UART_RX"
+  ]
+ }
 }
