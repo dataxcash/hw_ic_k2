@@ -1,0 +1,81 @@
+{
+ "artifact": "eda_eng_examA_scenario_blocker_v1",
+ "ts": "2026-09-28",
+ "authority": "#K2-359 (next deliverable = eda_eng route, graded by exams A/B); #K2-356 sec.2.2 exam A",
+ "finding": "EXAM A's scenario as phrased ('left cluster U1/U2/U4/U5 translated 5 mm') cannot be posed on the current board: a 5.000 mm translation is PLACEMENT-BLOCKED in all four axis directions - the cluster is boxed in by its neighbours.",
+ "measurement": {
+  "tool": "eda_eng route.validate_placement (shadow root + gen_v5 placement self-check; no routing, no board)",
+  "results": [
+   {
+    "refs": [
+     "U1",
+     "U2",
+     "U4",
+     "U5"
+    ],
+    "delta_mm": [
+     5.0,
+     0.0
+    ],
+    "ok": false,
+    "reason": "❌ 写盘阻断 (fail-fast): [S1 PAD_OVERLAP] D2/1 (35.450,33.700)-(37.950,35.500) 与 U2/1 (35.750,34.645)-(36.350,35.545) 重叠 dx=0.600 dy=0.855 (容差 0.01)"
+   },
+   {
+    "refs": [
+     "U1",
+     "U2",
+     "U4",
+     "U5"
+    ],
+    "delta_mm": [
+     -5.0,
+     0.0
+    ],
+    "ok": false,
+    "reason": "❌ 写盘阻断 (fail-fast): [S1 PAD_OVERLAP] C73/2 (28.150,47.550)-(28.750,48.250) 与 U1/47 (28.600,47.100)-(28.900,48.575) 重叠 dx=0.150 dy=0.700 (容差 0.01)"
+   },
+   {
+    "refs": [
+     "U1",
+     "U2",
+     "U4",
+     "U5"
+    ],
+    "delta_mm": [
+     0.0,
+     5.0
+    ],
+    "ok": false,
+    "reason": "❌ 写盘阻断 (fail-fast): [S1 PAD_OVERLAP] C86/1 (30.800,58.500)-(31.400,59.200) 与 U1/10 (31.100,58.600)-(32.575,58.900) 重叠 dx=0.300 dy=0.300 (容差 0.01)"
+   },
+   {
+    "refs": [
+     "U1",
+     "U2",
+     "U4",
+     "U5"
+    ],
+    "delta_mm": [
+     0.0,
+     -5.0
+    ],
+    "ok": false,
+    "reason": "❌ 写盘阻断 (fail-fast): [S1 PAD_OVERLAP] J13/1 (31.000,45.790)-(32.500,47.290) 与 U1/4 (31.100,45.600)-(32.575,45.900) 重叠 dx=1.400 dy=0.110 (容差 0.01)"
+   }
+  ]
+ },
+ "blocking_parts": {
+  "+5X": "D2/1 vs U2/1 (pad overlap)",
+  "-5X": "C73/2 vs U1/47",
+  "+5Y": "C86/1 vs U1/10",
+  "-5Y": "J13/1 vs U1/4"
+ },
+ "consequence": [
+  "exam A needs a SUPERVISOR-AUTHORED target placement (a real placement, not a naive translation), or",
+  "the 5 mm figure and/or the neighbourhood (the blocking parts) must be part of the scenario, or",
+  "exam A is redefined to a placement that the supervisor approves"
+ ],
+ "engine_behaviour": "the engine fail-fasts at the PLACEMENT gate with a named overlap - it never silently routes an invalid placement (this is a feature, and the first thing the pipeline proved)",
+ "exam_B": "unaffected (its scenario is the H4 SPEC leaf rev-62 + the re-emitted drawing; no placement change) - first run launched this turn",
+ "OWNER-ITEMS": 0
+}

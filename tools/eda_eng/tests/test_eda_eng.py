@@ -74,10 +74,31 @@ class T(unittest.TestCase):
         self.assertFalse(r["board_touched"])
         self.assertEqual(r["delta_mm"], [5.0, 0.0])
 
-    def test_route_reports_capability_absent(self):
-        r = route.run()
-        self.assertEqual(r["status"], "NOT_IMPLEMENTED")
-        self.assertFalse(r["implemented"])
+    def test_route_is_implemented_and_plans_five_stages(self):
+        r = route.run(exam="A", work="/tmp/opencode/eda_eng/selftest_plan", dry=True)
+        self.assertEqual(r["state"], "PLANNED")
+        self.assertEqual(r["stages"], ["place", "gen", "route", "polish", "drc"])
+        self.assertTrue(all(k in r["commands"] for k in ("gen", "route", "polish", "drc")))
+
+    def test_shadow_root_never_touches_the_real_tree(self):
+        from eda_eng import shadow
+        import shutil
+        w = "/tmp/opencode/eda_eng/selftest_shadow"
+        shutil.rmtree(w, ignore_errors=True)
+        sh = shadow.build(w + "/shadow")
+        r = shadow.edit_placement_at(sh["shadow_root"], ["U1"], [1.0, 0.0])
+        self.assertTrue(r["real_source_untouched"])
+        self.assertTrue(os.path.islink(os.path.join(sh["shadow_root"], "pm_gate/artifacts/k2_v4/L3"))
+                        or os.path.isdir(os.path.join(sh["shadow_root"], "pm_gate/artifacts/k2_v4/L3")))
+
+    def test_placement_edit_preserves_rotation(self):
+        from eda_eng import shadow
+        import shutil
+        w = "/tmp/opencode/eda_eng/selftest_shadow2"
+        shutil.rmtree(w, ignore_errors=True)
+        sh = shadow.build(w + "/shadow")
+        r = shadow.edit_placement_at(sh["shadow_root"], ["U1"], [1.0, 0.0])
+        self.assertTrue(all(len(m["new"]) >= 3 for m in r["moves"]), "at must keep (x,y,rot,...)")
 
 
 if __name__ == "__main__":

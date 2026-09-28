@@ -26,9 +26,11 @@ def main(argv=None):
     p.add_argument("--ref", default=REF_BOARD); p.add_argument("--ref-drc", default=REF_DRC)
     p.add_argument("--json-out"); p.add_argument("--no-touch-l1", action="store_true",
                                                  help="(always true: verify never writes a board)")
-    p = sub.add_parser("exam", help="run an exam's regression definition")
+    p = sub.add_parser("exam", help="run an exam's regression (definition, or --run to build+grade)")
     p.add_argument("which", choices=["A", "B"])
     p.add_argument("--board"); p.add_argument("--drc")
+    p.add_argument("--run", action="store_true", help="build with the engine then grade")
+    p.add_argument("--work", default=None)
     p = sub.add_parser("eco", help="validate the ECO chain form")
     p.add_argument("--json-out")
     p = sub.add_parser("docs", help="document-chain status (#K2-357 five links)")
@@ -37,8 +39,10 @@ def main(argv=None):
     p.add_argument("--refs", required=True, help="comma-separated refs")
     p.add_argument("--delta", required=True, help="dx,dy in mm")
     p.add_argument("--out"); p.add_argument("--json-out")
-    p = sub.add_parser("route", help="rip-up & reroute engine (status)")
+    p = sub.add_parser("route", help="rip-up & reroute engine (composed pipeline)")
     p.add_argument("--exam", dest="exam_id", choices=["A", "B"], default=None)
+    p.add_argument("--work", default=None)
+    p.add_argument("--dry-run", action="store_true")
     p = sub.add_parser("selftest", help="run the regression test suite (CI entry)")
     a = ap.parse_args(argv)
 
@@ -51,6 +55,15 @@ def main(argv=None):
         spec = exams_mod.EXAMS[a.which]
         out = {"artifact": "eda_eng_exam", "exam": spec, "judging_table": exams_mod.JUDGING_TABLE,
                "state": "DEFINED"}
+        if a.run:
+            rp = route_mod.run(exam=a.which, work=a.work or os.path.join("/tmp/opencode/eda_eng", "exam" + a.which))
+            out["route"] = rp
+            if rp.get("state") == "RAN":
+                out.update(verify_mod.judge(rp["final_board"], rp["drc"], REF_BOARD, REF_DRC))
+                out["state"] = "GRADED"
+            else:
+                out["state"] = "BUILD_" + str(rp.get("state"))
+            return _emit(out, None, 0 if out.get("verdict") == "PASS" else 1)
         if a.board and a.drc:
             out.update(verify_mod.judge(a.board, a.drc, REF_BOARD, REF_DRC))
             out["state"] = "GRADED"
@@ -76,8 +89,9 @@ def main(argv=None):
         return _emit(r, a.json_out, 0 if not r["missing"] else 1)
 
     if a.cmd == "route":
-        r = {"artifact": "eda_eng_route", **route_mod.run(exam=a.exam_id)}
-        return _emit(r, None, 2)          # explicit non-zero: the capability does not exist yet
+        r = route_mod.run(exam=a.exam_id, work=a.work, dry=a.dry_run)
+        code = 0 if r.get("state") in ("RAN", "PLANNED") else 2
+        return _emit(r, None, code)
 
     if a.cmd == "selftest":
         # in-process so it also works under a frozen/packaged KiCad python (no PYTHONPATH games)

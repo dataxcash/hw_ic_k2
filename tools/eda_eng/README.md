@@ -23,7 +23,8 @@ k2/tools/eda_eng.sh docs
 k2/tools/eda_eng.sh verify --board <pcb> --drc <drc.json>
 k2/tools/eda_eng.sh exam A
 k2/tools/eda_eng.sh place --refs U1,U2,U4,U5 --delta 5,0
-k2/tools/eda_eng.sh route --exam B        # 退出码 2：能力不存在
+k2/tools/eda_eng.sh route --exam B --work /tmp/opencode/eda_eng/examB
+k2/tools/eda_eng.sh exam B --run        # 建 + 判卷（CI 口径）
 k2/tools/eda_eng.sh selftest
 ```
 

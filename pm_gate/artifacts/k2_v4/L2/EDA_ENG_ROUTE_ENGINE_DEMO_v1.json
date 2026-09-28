@@ -1,0 +1,221 @@
+{
+ "artifact": "eda_eng_route_engine_demo_v1",
+ "ts": "2026-09-28",
+ "authority": "#K2-359 (next deliverable = eda_eng route; graded by exams A/B)",
+ "llm_free": true,
+ "engine": "composed-deterministic-pipeline-v1: place -> gen_v5 -> route_segment --upto all -> k2_p4_build_l9(all stages) -> kicad-cli DRC, inside a SHADOW project root",
+ "runs": [
+  {
+   "cmd": "eda_eng route --exam A --work /tmp/opencode/eda_eng/planA --dry-run",
+   "exit": 0,
+   "json": {
+    "artifact": "eda_eng_route",
+    "exam": "A",
+    "engine": "composed-deterministic-pipeline-v1",
+    "stages": [
+     "place",
+     "gen",
+     "route",
+     "polish",
+     "drc"
+    ],
+    "work": "/tmp/opencode/eda_eng/planA",
+    "dry_run": true,
+    "log": [],
+    "shadow": {
+     "shadow_root": "/tmp/opencode/eda_eng/planA/shadow",
+     "spec_name": null,
+     "replaced": [
+      "placement"
+     ],
+     "placement": "/tmp/opencode/eda_eng/planA/shadow/pm_gate/artifacts/k2_v4/L2/PLACEMENT_SOLUTION_v1.json"
+    },
+    "placement_edit": {
+     "placement_file": "/tmp/opencode/eda_eng/planA/shadow/pm_gate/artifacts/k2_v4/L2/PLACEMENT_SOLUTION_v1.json",
+     "refs": [
+      "U1",
+      "U2",
+      "U4",
+      "U5"
+     ],
+     "delta_mm": [
+      5.0,
+      0.0
+     ],
+     "moves": [
+      {
+       "ref": "U1",
+       "old": [
+        36.0,
+        52.0,
+        0.0
+       ],
+       "new": [
+        41.0,
+        52.0,
+        0.0
+       ]
+      },
+      {
+       "ref": "U2",
+       "old": [
+        33.0,
+        37.0,
+        0.0
+       ],
+       "new": [
+        38.0,
+        37.0,
+        0.0
+       ]
+      },
+      {
+       "ref": "U4",
+       "old": [
+        40.0,
+        37.0,
+        0.0
+       ],
+       "new": [
+        45.0,
+        37.0,
+        0.0
+       ]
+      },
+      {
+       "ref": "U5",
+       "old": [
+        44.5,
+        52.0,
+        0.0
+       ],
+       "new": [
+        49.5,
+        52.0,
+        0.0
+       ]
+      }
+     ],
+     "real_source_untouched": true
+    },
+    "commands": {
+     "gen": "python3 /home/fila/jqdDev_2025/ic_hw/k2/tools/k2_gen_v5.py",
+     "route": "/tmp/k2kicad/squashfs-root/usr/bin/python3.11 /home/fila/jqdDev_2025/ic_hw/k2/tools/k2_route_segment_v1.py --in /tmp/opencode/eda_eng/planA/stage1.kicad_pcb --out /tmp/opencode/eda_eng/planA/stage2.kicad_pcb --upto all --drc-cli /tmp/k2kicad/squashfs-root/usr/bin/kicad-cli",
+     "polish": "/tmp/k2kicad/squashfs-root/usr/bin/python3.11 /home/fila/jqdDev_2025/ic_hw/k2/tools/k2_p4_build_l9_v1.py --in /tmp/opencode/eda_eng/planA/stage2.kicad_pcb --out /tmp/opencode/eda_eng/planA/final.kicad_pcb --stages fiducial,info,edge,tp,crtyd,silk,silkfix,chamfer,pour",
+     "drc": "/tmp/k2kicad/squashfs-root/usr/bin/kicad-cli pcb drc --format json --severity-all -o /tmp/opencode/eda_eng/planA/final_drc.json /tmp/opencode/eda_eng/planA/final.kicad_pcb"
+    },
+    "state": "PLANNED"
+   },
+   "stdout_tail": null
+  },
+  {
+   "cmd": "eda_eng route --exam B --work /tmp/opencode/eda_eng/planB --dry-run",
+   "exit": 0,
+   "json": {
+    "artifact": "eda_eng_route",
+    "exam": "B",
+    "engine": "composed-deterministic-pipeline-v1",
+    "stages": [
+     "place",
+     "gen",
+     "route",
+     "polish",
+     "drc"
+    ],
+    "work": "/tmp/opencode/eda_eng/planB",
+    "dry_run": true,
+    "log": [],
+    "shadow": {
+     "shadow_root": "/tmp/opencode/eda_eng/planB/shadow",
+     "spec_name": "SPEC_k2_v4.spec-rev-62.json",
+     "replaced": [
+      "placement",
+      "project_yaml"
+     ],
+     "placement": "/tmp/opencode/eda_eng/planB/shadow/pm_gate/artifacts/k2_v4/L2/PLACEMENT_SOLUTION_v1.json"
+    },
+    "commands": {
+     "gen": "python3 /home/fila/jqdDev_2025/ic_hw/k2/tools/k2_gen_v5.py",
+     "route": "/tmp/k2kicad/squashfs-root/usr/bin/python3.11 /home/fila/jqdDev_2025/ic_hw/k2/tools/k2_route_segment_v1.py --in /tmp/opencode/eda_eng/planB/stage1.kicad_pcb --out /tmp/opencode/eda_eng/planB/stage2.kicad_pcb --upto all --drc-cli /tmp/k2kicad/squashfs-root/usr/bin/kicad-cli",
+     "polish": "/tmp/k2kicad/squashfs-root/usr/bin/python3.11 /home/fila/jqdDev_2025/ic_hw/k2/tools/k2_p4_build_l9_v1.py --in /tmp/opencode/eda_eng/planB/stage2.kicad_pcb --out /tmp/opencode/eda_eng/planB/final.kicad_pcb --stages fiducial,info,edge,tp,crtyd,silk,silkfix,chamfer,pour",
+     "drc": "/tmp/k2kicad/squashfs-root/usr/bin/kicad-cli pcb drc --format json --severity-all -o /tmp/opencode/eda_eng/planB/final_drc.json /tmp/opencode/eda_eng/planB/final.kicad_pcb"
+    },
+    "state": "PLANNED"
+   },
+   "stdout_tail": null
+  },
+  {
+   "cmd": "eda_eng selftest",
+   "exit": 0,
+   "json": {
+    "artifact": "eda_eng_selftest",
+    "tests": 13,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "verdict": "PASS"
+   },
+   "stdout_tail": null
+  }
+ ],
+ "exam_A_scenario_blocker": [
+  {
+   "refs": [
+    "U1",
+    "U2",
+    "U4",
+    "U5"
+   ],
+   "delta_mm": [
+    5.0,
+    0.0
+   ],
+   "ok": false,
+   "reason": "❌ 写盘阻断 (fail-fast): [S1 PAD_OVERLAP] D2/1 (35.450,33.700)-(37.950,35.500) 与 U2/1 (35.750,34.645)-(36.350,35.545) 重叠 dx=0.600 dy=0.855 (容差 0.01)"
+  },
+  {
+   "refs": [
+    "U1",
+    "U2",
+    "U4",
+    "U5"
+   ],
+   "delta_mm": [
+    -5.0,
+    0.0
+   ],
+   "ok": false,
+   "reason": "❌ 写盘阻断 (fail-fast): [S1 PAD_OVERLAP] C73/2 (28.150,47.550)-(28.750,48.250) 与 U1/47 (28.600,47.100)-(28.900,48.575) 重叠 dx=0.150 dy=0.700 (容差 0.01)"
+  },
+  {
+   "refs": [
+    "U1",
+    "U2",
+    "U4",
+    "U5"
+   ],
+   "delta_mm": [
+    0.0,
+    5.0
+   ],
+   "ok": false,
+   "reason": "❌ 写盘阻断 (fail-fast): [S1 PAD_OVERLAP] C86/1 (30.800,58.500)-(31.400,59.200) 与 U1/10 (31.100,58.600)-(32.575,58.900) 重叠 dx=0.300 dy=0.300 (容差 0.01)"
+  },
+  {
+   "refs": [
+    "U1",
+    "U2",
+    "U4",
+    "U5"
+   ],
+   "delta_mm": [
+    0.0,
+    -5.0
+   ],
+   "ok": false,
+   "reason": "❌ 写盘阻断 (fail-fast): [S1 PAD_OVERLAP] J13/1 (31.000,45.790)-(32.500,47.290) 与 U1/4 (31.100,45.600)-(32.575,45.900) 重叠 dx=1.400 dy=0.110 (容差 0.01)"
+  }
+ ],
+ "exam_B_full_run": "NOT COMPLETED THIS WINDOW (background run reaped; output empty, no processes). Re-run: eda_eng exam B --run --work /tmp/opencode/eda_eng/examB",
+ "OWNER-ITEMS": 0
+}
