@@ -83,6 +83,8 @@ def main(argv=None):
     p.add_argument("--moves", default=None, help="ref:dx:dy,ref:dx:dy,... (per-part offsets)")
     p.add_argument("--from-placed", default=None,
                    help="take the per-part offsets FROM this board (the gate-validated gen board) - alignment")
+    p.add_argument("--capability", default="A_prime_C33_three_questions",
+                   help="C34 sec.20 gate: the ledger capability id this window must have answered")
     p.add_argument("--members", required=True, help="comma-separated member refs")
     p.add_argument("--work", required=True)
     p.add_argument("--pitch", type=float, default=0.15)
@@ -251,6 +253,17 @@ def main(argv=None):
         return _emit(r, a.json_out, 0 if r["conflicts"]["n_conflicts_shown"] == 0 else 1)
 
     if a.cmd == "relocate-relative":
+        # C34 机闸（#K2-375 §五）：**新能力窗开跑前**必须先有三问；缺即拒跑（不再靠人记）
+        import importlib.util
+        _spec = importlib.util.spec_from_file_location(
+            "k2_new_capability_gate_v1", os.path.join(ROOT, "tools", "k2_new_capability_gate_v1.py"))
+        _g = importlib.util.module_from_spec(_spec); _spec.loader.exec_module(_g)
+        gr = _g.check(a.capability)
+        if gr["verdict"] != "PASS":
+            return _emit({"artifact": "eda_eng_relocate_relative", "state": "REFUSED_BY_SEC20_GATE",
+                          "gate": gr,
+                          "rule": "#K2-375 sec.5 (C34): a new-capability window may not open until the ledger carries "
+                                  "the sec.20 three questions"}, a.json_out, 2)
         rect = [float(v) for v in a.rect.split(",")]
         members = [x.strip() for x in a.members.split(",") if x.strip()]
         if a.from_placed:

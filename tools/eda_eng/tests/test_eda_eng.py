@@ -558,6 +558,15 @@ class T(unittest.TestCase):
         self.assertEqual(sorted(unch), ["U1", "U2", "U5"])
         self.assertEqual(miss, [])
 
+    def test_C34_new_capability_command_refuses_without_the_sec20_entry(self):
+        """C34 **机闸**（#K2-375 §五）：新能力命令在缺少三问时**拒跑**（exit 2 · 具名 REFUSED）。"""
+        rc, r, _ = self._cli("relocate-relative", "--rect", "0,0,1,1", "--members", "U1",
+                             "--moves", "U1:1:1", "--work", "/tmp/eda_eng_selftest_sec20",
+                             "--capability", "capability_without_a_ledger_entry")
+        self.assertEqual(rc, 2, "the sec.20 gate must refuse BEFORE any work")
+        self.assertEqual(r["state"], "REFUSED_BY_SEC20_GATE")
+        self.assertEqual(r["gate"]["verdict"], "REFUSED")
+
     def test_C34_c17v1_product_path_argv_is_a_per_part_map(self):
         """#K2-375 §四.3「抄成品」：A′ 的 argv 必须把**逐件位移图**交给 C17 v1（多个 `--moved`），
         并按产品的**既定格式**给受损域（`x0,y0,x1,y1`，非 JSON）。"""
