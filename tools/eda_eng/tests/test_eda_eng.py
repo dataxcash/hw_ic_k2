@@ -551,6 +551,19 @@ class T(unittest.TestCase):
         self.assertEqual(r["status"], "APPLIED")
         self.assertGreater(r["zones_refilled"], 0, "the batch path must actually refill zones")
 
+    def test_C35_the_maze_wall_keeps_every_polyline_inside_the_declared_domain(self):
+        """C35（#K2-377 §二.3 · 「框界墙」）：把**框**作为迷宫域传入时，**任何**折线点都不得越出框。
+        这是「界下在源头」的可证形式（对比：事后恢复框外铜会撕开连通性 · R1020 实测 C1 14->17）。"""
+        rect = [0.0, 0.0, 6.0, 6.0]                      # 玩具域：保证有解，专测「墙」性质
+        r = route.maze_route([0.5, 0.5], [5.5, 5.5], ["F.Cu"], [], rect, pitch=0.5, endpoint_clear=0.0)
+        self.assertEqual(r["status"], "ROUTED", "a route inside the frame must exist")
+        for pl in r["polys"]:
+            for (x, y) in pl["poly"]:
+                self.assertGreaterEqual(x, rect[0] - 1e-6)
+                self.assertLessEqual(x, rect[2] + 1e-6)
+                self.assertGreaterEqual(y, rect[1] - 1e-6)
+                self.assertLessEqual(y, rect[3] + 1e-6)
+
     def test_C36_the_judging_table_of_the_eco_is_read_row_by_row(self):
         """C36（#K2-377 §五 F3）：执行入口的判卷必须覆盖 ECO-K2-0004 §6 **全部九行**（含 C8）。"""
         eco = open(os.path.join("docs", "ECO", "ECO-K2-0004-reroute-engine-exam-A-prime.md"), encoding="utf-8").read()
