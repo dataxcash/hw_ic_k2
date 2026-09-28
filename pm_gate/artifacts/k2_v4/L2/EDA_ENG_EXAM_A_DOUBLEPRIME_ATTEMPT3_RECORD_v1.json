@@ -1,0 +1,119 @@
+{
+ "artifact": "k2_exam_a_doubleprime_attempt3_record_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-387 sec.2: exam A-double-prime run 1/1 (the #K2-385 sec.5 capability window's run).",
+ "run": {
+  "entry": "eda_eng exam A --run --chain wipe_resolve",
+  "command": "./tools/eda_eng.sh exam A --run --chain wipe_resolve --from-placed /tmp/opencode/aprime_witness/mq_witness/placed.kicad_pcb --work /tmp/opencode/aprime_final_v2",
+  "run_count": "1/1",
+  "state": "GRADED",
+  "verdict": "FAIL",
+  "work_dir": "/tmp/opencode/aprime_final_v2",
+  "final_board": "/tmp/opencode/aprime_final_v2/s3b_fixed.kicad_pcb",
+  "final_board_sha256_16": "26c89d95d4ac3737",
+  "wipe": {
+   "deleted_segments": 615,
+   "deleted_vias": 95,
+   "outside_halves_kept": 15,
+   "n_ports": 15
+  },
+  "verdict_artifact": "L2/EDA_ENG_EXAM_A_DOUBLEPRIME_ATTEMPT3_VERDICT_v1.json"
+ },
+ "entry_gate_fact": {
+  "note": "FACT (not a violation): the CLI's wipe_resolve branch does NOT invoke the C34 sec.20 gate; only the c17v1 branch does (tools/eda_eng/cli.py). #K2-387 did not require the gate for the A-double-prime chain, but per the C30 criterion ('the gate must guard the door actually used') this entry is an ungated door - reported for the supervisor.",
+  "c34_gate_on_this_entry": "NOT INVOKED"
+ },
+ "pre_run_defect_self_registered": {
+  "what": "the #K2-385 sec.5.2 capability (a) pour-island re-connection had NEVER executed: its first real invocation crashed with `NameError: name '_pcbnew' is not defined` (regen.py wipe_resolve_chain), and the SAME branch also referenced the never-imported `collections`.",
+  "evidence": "first attempt: stdout 0 bytes, exit 1; traceback: regen.py:1203 P2 = _pcbnew(); a scope-aware AST scan of the whole module found exactly {_pcbnew:1203, collections:1205} in wipe_resolve_chain",
+  "why_the_regression_missed_it": "test_C385_pour_island_reconnection_* is a SOURCE-STRING test (asserts substrings exist) - it never executes the branch, so it could not see a runtime NameError (the same blind-spot class as C36).",
+  "fix": "ADDITIVE, no method change: (i) add `collections` to the module import line; (ii) replace the undefined `_pcbnew()` call with the repo-convention inline `import pcbnew as P2`.",
+  "regression_added": "test_C385_the_island_branch_reads_no_undefined_names - a scope-aware AST undefined-name guard over wipe_resolve_chain (verified: FAILS on the pre-fix code, PASSES on the fix).",
+  "run_accounting": "the crashed attempt produced NO product (0-byte stdout, no verdict) => per #K2-377 sec.4.2 / #K2-361 sec.2 it is self-registered and does NOT consume the run; the authorised 1/1 was then executed once and produced the graded verdict below."
+ },
+ "the_nine_rows": {
+  "C1_unconnected": 22,
+  "C1_pass": false,
+  "C2_total_vs_ref": "143 vs 148",
+  "C2_raw_total_vs_ref": "197 vs 168",
+  "C2_new_classes": [
+   "isolated_copper",
+   "solder_mask_bridge"
+  ],
+  "C2_excluded_new_classes": [
+   "lib_footprint_issues"
+  ],
+  "C2_pass": false,
+  "C3": {
+   "pass": true,
+   "max_mm": 0.078764,
+   "limit_mm": 0.15
+  },
+  "C4": {
+   "pass": true,
+   "count": 2779,
+   "ref": 2637
+  },
+  "C5": {
+   "pass": true,
+   "element_set_diff": 1545
+  },
+  "C6": {
+   "pass": true,
+   "diff": 0
+  },
+  "C7": {
+   "pass": true,
+   "diff": 0
+  },
+  "C8": "*** MISSING - NOT EMITTED ***",
+  "C9": {
+   "before": "1cf4d39614491ccc",
+   "after": "663bbf5675c9c3ab",
+   "pass": true
+  },
+  "geometry_class_delta": -5
+ },
+ "c8_missing_defect": {
+  "finding": "the A-double-prime chain's judge emits 8 rows (C1-C7, C9); the ECO-locked table requires NINE (C8 = every member's final position inside the frame).",
+  "root_cause": "`C8_members_inside_frame` is computed in regen.relocate_block_chain (lines 981, 1093) but NOT in regen.wipe_resolve_chain (the authorised chain).",
+  "fail_closed": "per #K2-383 sec.3.3 and #K2-385 sec.5.4, a missing row = fail-closed => this receipt is NOT a valid nine-row verdict.",
+  "why_C36_regressed": "the C36 test (test_C36_the_judging_table_of_the_eco_is_read_row_by_row) greps the WHOLE regen.py file for 'C8_members_inside_frame' - it finds it in the OTHER function and passes, while the authorised chain lacks it. Same blind-spot class as the NameError above.",
+  "not_fixed_in_this_window": "FAIL => stop (per the outcome contract); this is reported for the supervisor's decision."
+ },
+ "capability_window_measured_effect": {
+  "a_pour_island_reconnection": {
+   "stages": [
+    {
+     "stage": "pour_islands_detected",
+     "n": 3
+    },
+    {
+     "stage": "pour_islands_repair",
+     "planned": 2,
+     "of": 3
+    }
+   ],
+   "result": "detected 3 isolated islands, planned 2 re-connections, applied them; the FINAL DRC still reports 3 x isolated_copper (all 12V_IN zones on In4.Cu) => C2 class NOT moved."
+  },
+  "b_mask_bridge_precheck": {
+   "fired": false,
+   "result": "the apply was not refused; the FINAL DRC still reports 2 x solder_mask_bridge = U1 pads 11/12 [PERSTA#] vs J9 PTH pad 1 [UART_TX].",
+   "why_it_cannot_see_them": "the guard compares NEW COPPER points vs FOREIGN PADS; the observed violation is PAD-to-PAD (no copper involved) => a structural mismatch (the guard targets the wrong geometry for this case)."
+  },
+  "net": "neither new capability moved the two failing classes; C1 stays 22 and C2 keeps {isolated_copper, solder_mask_bridge}; geometry 141 (attempt 2) -> 143 (now)."
+ },
+ "attribution": {
+  "wall": "NOT capacity (C1_CAPACITY_READING_v1.json: 93.5% free), NOT the criteria; it is (i) the in-register tool's zone/port stitch policy and (ii) a placement consequence (moved U1 pads vs J9 pad spacing).",
+  "same_cause_as_attempt2": true,
+  "required": "sec.17.4: change the MEANS, not the goal; no further run of the same means."
+ },
+ "independent_audit_finding": {
+  "where": "tools/eda_eng/regen.py :: exam_a_chain (the product/legacy A chain function)",
+  "what": "reads undefined names `rp` (line 491/494) and `blocked` (lines 493/507) - the same defect class as the fixed NameError. Pre-existing (not introduced by this window).",
+  "reachability": "exam A currently routes through relocate_block_chain (EXAMS['A'] carries a block_frame), so exam_a_chain is not hit for exam A; it IS the fallback for exam B's product chain.",
+  "action_in_this_window": "NOT fixed (out of the authorised scope; fail-closed => report, do not self-authorise an unrelated edit).",
+  "proposed_minimal_fix": "initialise `blocked = []` and define the plans file path `rp` before the M3 apply (mirror relocate_block_chain's `rp = os.path.join(work,...)` + json.dump)."
+ },
+ "OWNER-ITEMS": 0
+}

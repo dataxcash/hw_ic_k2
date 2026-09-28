@@ -1,0 +1,181 @@
+{
+ "artifact": "k2_exam_a_doubleprime_conservation_certificate_v2",
+ "ts": "2026-09-29",
+ "authority": "#K2-383 sec.3.4 (v1) + #K2-385 sec.5 / #K2-387: after the capability window's authorised run, the residual must be re-attributed and the certificate updated.",
+ "verdict": "INFEASIBLE_WITHIN_THE_FROZEN_MEANS (still a TOOL-POLICY + PLACEMENT wall - NOT capacity, NOT the criteria)",
+ "run": {
+  "entry": "eda_eng exam A --run --chain wipe_resolve",
+  "run_count": "1/1",
+  "state": "GRADED",
+  "verdict": "FAIL",
+  "artifact": "L2/EDA_ENG_EXAM_A_DOUBLEPRIME_ATTEMPT3_VERDICT_v1.json",
+  "record": "L2/EDA_ENG_EXAM_A_DOUBLEPRIME_ATTEMPT3_RECORD_v1.json"
+ },
+ "the_nine_rows": {
+  "C1_unconnected": 22,
+  "C2_geometry_total_vs_ref": "143 vs 148",
+  "C2_new_classes": [
+   "isolated_copper",
+   "solder_mask_bridge"
+  ],
+  "C2_excluded_new_classes": [
+   "lib_footprint_issues"
+  ],
+  "C3": "PASS",
+  "C4": 2779,
+  "C5": 1545,
+  "C6": 0,
+  "C7": 0,
+  "C8": "*** MISSING (fail-closed: this receipt is not a valid nine-row verdict; C36 recurrence) ***",
+  "C9": "reported",
+  "geometry_class_delta": -5
+ },
+ "class_detail": {
+  "isolated_copper": {
+   "result": 3,
+   "ref": 0,
+   "delta": 3
+  },
+  "silk_edge_clearance": {
+   "result": 1,
+   "ref": 2,
+   "delta": -1
+  },
+  "silk_over_copper": {
+   "result": 35,
+   "ref": 37,
+   "delta": -2
+  },
+  "silk_overlap": {
+   "result": 14,
+   "ref": 15,
+   "delta": -1
+  },
+  "solder_mask_bridge": {
+   "result": 2,
+   "ref": 0,
+   "delta": 2
+  },
+  "track_dangling": {
+   "result": 12,
+   "ref": 1,
+   "delta": 11
+  },
+  "track_not_centered_on_via": {
+   "result": 19,
+   "ref": 32,
+   "delta": -13
+  },
+  "via_dangling": {
+   "result": 0,
+   "ref": 6,
+   "delta": -6
+  }
+ },
+ "the_four_questions": {
+  "which_layer": "(i) the TOOL-POLICY layer (in-register stitch/zone/port policy) AND (ii) the PLACEMENT layer (moved U1 pads vs J9 pad spacing). NOT the physical layer and NOT the judgement layer.",
+  "which_resource": "the in-register tool's fixed policy AND the frozen per-part displacement map. Measured: 93.5% free domain area (space is NOT the constraint); the 22 gaps are all blocked as no-free-start-node (16) / no-free-goal-node (6), i.e. the maze cannot place an endpoint cell at these stubs.",
+  "who_occupies_it": "the frozen means themselves: no parameter change, no search, no extra passes, and - newly shown - the two ADDED capabilities are inert on this case. Within the frozen means the residual is not closable.",
+  "why_no_allocation_is_possible": "a PASS would need either a port/stitch-policy change (means change), a placement/frame change (planning), or accepting the 2 classes (judgement change - FORBIDDEN #K2-379). None is inside the frozen means => no allocation of the present means reaches PASS."
+ },
+ "return_to_planning": {
+  "required_by": "#K2-383 sec.3.4 + constitution sec.16",
+  "options": [
+   {
+    "id": "A",
+    "what": "improve the in-register tool's stitch policy (isolated-copper/mask-bridge awareness) - an ENGINE asset change",
+    "needs": "a NEW window with its own quota; the change must be additive and regression-locked"
+   },
+   {
+    "id": "B",
+    "what": "change the placement/frame so the residual pairs do not arise",
+    "needs": "planning-layer authority (the frame/members are frozen for this exam)"
+   },
+   {
+    "id": "C",
+    "what": "accept the two new classes",
+    "needs": "a judgement-table change - FORBIDDEN (#K2-379) and not recommended"
+   }
+  ],
+  "updated_by": "#K2-387: option A was TRIED (the capability window) and was ineffective on the actual geometry; option B (placement) is now the live lever plus a port-aware stitch re-scope. Option C stays FORBIDDEN."
+ },
+ "frozen": {
+  "board": "l14/rev-61 untouched; every board lives in /tmp",
+  "frozen_four": "4/4",
+  "aprime_witness_freeze": "maintained (no further run without a new authorisation)"
+ },
+ "OWNER-ITEMS": 0,
+ "authorisation_crossing_note": "#K2-384 authorised the R1052 readiness package's run 1/1; that authorised run had ALREADY been executed under #K2-383's identical authorisation (R1054, run_count 1/1) - the two rulings crossed. Per #K2-384 sec.2's own rule ('FAIL => stop + attribute; a second self-run is forbidden'), NO second run is made: this certificate IS the attribution required on FAIL. Awaiting the supervisor's choice among options A / B / C.",
+ "residual_classes_named": {
+  "source": "the authorised run's own DRC (/tmp/opencode/aprime_final/s4_drc.json) - READ-ONLY parse",
+  "isolated_copper_3": {
+   "items": [
+    "fill zone [12V_IN] on In4.Cu priority 102 @ (25.025, 40.379) x2",
+    "fill zone [12V_IN] on In4.Cu priority 200 @ (24.600, 34.900)"
+   ],
+   "meaning": "the 12V_IN POURS became orphaned islands after the wipe+refill: their link to the net's copper was cut and the refill left them isolated",
+   "layer": "ENG asset layer (zone/fill handling) -> OPTION A territory"
+  },
+  "solder_mask_bridge_2": {
+   "items": [
+    "U1 pad 11 [PERSTA#] @ (33.337, 55.750) <-> J9 PTH pad 1 [UART_TX] @ (31.750, 55.960)",
+    "U1 pad 12 [PERSTA#] @ (33.337, 56.250) <-> J9 PTH pad 1 [UART_TX] @ (31.750, 55.960)"
+   ],
+   "meaning": "the MOVED U1's pads now sit close enough to J9's PTH pads that the SOLDER MASK bridges - a PLACEMENT consequence of the rearrangement, not a routing artefact",
+   "layer": "planning/placement layer (pad-to-pad spacing after the move) -> OPTION B territory (or a mask/DFM rule matter)"
+  },
+  "consequence_for_the_decision": "the two residual classes do NOT share a fix: isolated_copper is an engine (zone/refill) asset fix; solder_mask_bridge is a placement-consequence that no router can remove. So a NEW WINDOW should be scoped as: A (zone-orphan handling, additive + regression) PLUS a planning note for the U1/J9 pad spacing; option C stays forbidden."
+ },
+ "residual_unconnected_named": {
+  "source": "the authorised run's own DRC - READ-ONLY parse",
+  "n": 22,
+  "endpoint_kinds": {
+   "via": 5,
+   "track": 19,
+   "pad": 18,
+   "other": 2
+  },
+  "by_net": {
+   "GND": 2,
+   "MCU_VDD": 4,
+   "NRST": 4,
+   "PERSTA#": 2,
+   "PWR_BTN_OUT": 2,
+   "GPIO_LED": 2,
+   "P3V3_AUX": 8,
+   "I2C2_SCL": 2,
+   "I2C2_SDA": 4,
+   "I2C1_SCL": 4,
+   "I2C1_SDA": 6,
+   "P3V3": 2,
+   "PWR_BTN_ISO": 2
+  },
+  "sample_pairs": [
+   "过孔 [GND] (F.Cu - B.Cu) <-> 走线 [GND] (F.Cu), 长度: 0.1000 mm",
+   "走线 [MCU_VDD] (F.Cu), 长度: 0.100 <-> F.Cu - In2.Cu 上的盲孔 [MCU_VDD]",
+   "走线 [MCU_VDD] (F.Cu), 长度: 0.775 <-> F.Cu - In2.Cu 上的盲孔 [MCU_VDD]",
+   "F.Cu 上 C73 的焊盘 1 [NRST] <-> F.Cu 上 U1 的焊盘 10 [NRST]",
+   "走线 [NRST] (F.Cu), 长度: 0.1414 m <-> F.Cu 上 C73 的焊盘 1 [NRST]",
+   "走线 [PERSTA#] (In5.Cu), 长度: 0.2 <-> 走线 [PERSTA#] (F.Cu), 长度: 1.979",
+   "走线 [PWR_BTN_OUT] (In2.Cu), 长度: <-> F.Cu 上 U1 的焊盘 13 [PWR_BTN_OUT]",
+   "F.Cu 上 U1 的焊盘 14 [GPIO_LED] <-> F.Cu 上 R21 的焊盘 1 [GPIO_LED]"
+  ],
+  "meaning": "the 22 residual ratnest links are the exact target list for the next window's fix; they are nearest-neighbour pairs (pad/track/via endpoints), not open regions - consistent with R1048's diagnosis on the 24-item predecessor"
+ },
+ "supersedes": "L2/EDA_ENG_EXAM_A_DOUBLEPRIME_CONSERVATION_CERTIFICATE_v1.json (kept on file)",
+ "capability_window_result": {
+  "authority": "#K2-385 sec.5.2: two additive, regression-locked capabilities were built for this window.",
+  "a_pour_island_reconnection": "DETECTED 3 islands, PLANNED 2 re-connections, APPLIED them - FINAL DRC still shows 3 x isolated_copper (12V_IN on In4.Cu) => class UNMOVED.",
+  "b_mask_bridge_precheck": "did NOT fire (apply not refused); FINAL DRC still shows 2 x solder_mask_bridge (U1 pads 11/12 vs J9 PTH pad 1) - these are PAD-to-PAD, while the guard compares NEW COPPER vs FOREIGN PADS => structurally cannot see this case.",
+  "net": "the window's two capabilities moved NOTHING on the two failing classes (C1 22 -> 22; C2 classes identical; geometry 141 -> 143)."
+ },
+ "means_change_recommended": {
+  "required_by": "sec.17.4 (same cause FAIL => change the MEANS, not the goal)",
+  "proposal_for_supervisor": [
+   "B/placement: the 2 solder_mask_bridge are pad-to-pad (U1 pads 11/12 vs J9 pad 1). A deterministic spacing constraint at the placement layer (do not land a moved pad within mask clearance of a foreign pad) removes this class; no router can.",
+   "A-revised/ports: the 22 unconnected are all blocked at the ENDPOINT (no-free-start/goal-node) on the cut stubs/ports. Re-scope the in-domain stitch so the wiped block's boundary stubs are handed to the maze AS PORTS (legal endpoints), rather than re-deriving goals across the block.",
+   "the two do NOT share a fix (carried over from v1); both are needed for C1=0 and C2-clean."
+  ],
+  "not_authorised_here": "no new run is requested or made in this window."
+ }
+}

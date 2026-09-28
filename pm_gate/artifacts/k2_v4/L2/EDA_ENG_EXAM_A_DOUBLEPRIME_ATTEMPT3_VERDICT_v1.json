@@ -1,0 +1,1401 @@
+{
+ "artifact": "eda_eng_exam",
+ "exam": "A",
+ "chain": "wipe_resolve",
+ "entry": "eda_eng exam A --run --chain wipe_resolve",
+ "run_count": "1/1",
+ "route": {
+  "state": "GRADED",
+  "chain": [
+   {
+    "cmd": "eda_eng move-parts --board /home/fila/jqdDev_2025/ic_hw/k2/hw/k2_v4_8L.l14.kicad_pcb --rect 22.95,32.95,51.5,66.5 --moves C73:3.5:3.5,C84:4.0:4.0,C85:4.0:4.0,C86:4.0:4.0,C87:4.0:4.0,C88:4.0:4.0,C90:1.5:1.5,E2:3.5:3.5,L1:4.0:4.0,R40:4.0:4.0,R41:4.0:4.0,U1:1.5:1.5,U2:4.0:4.0,U4:4.0:4.0,U5:4.0:4.0 --out /tmp/opencode/aprime_final_v2/s1_wiped.kicad_pcb",
+    "exit": 0
+   },
+   {
+    "cmd": "kicad-cli pcb drc --format json --severity-all -o s1_wiped_drc.json s1_wiped.kicad_pcb",
+    "exit": 0
+   },
+   {
+    "cmd": "python3.11 k2_reroute_router_floor_v1.py --in s1_wiped.kicad_pcb --drc s1_wiped_drc.json --out s2_resolved.kicad_pcb --ledger s2_ledger.json --margin 3.0 --floor 0.20 --bound-rect 22.95,32.95,51.5,66.5",
+    "exit": 0
+   },
+   {
+    "cmd": "kicad-cli pcb drc --format json --severity-all -o s2_resolved_drc.json s2_resolved.kicad_pcb",
+    "exit": 0
+   },
+   {
+    "stage": "resolve_residual_before",
+    "unconnected": 24
+   },
+   {
+    "cmd": "python3.11 k2_reroute_router_floor_v1.py --in s2_resolved.kicad_pcb --drc s2_resolved_drc.json --out s2b_resolved.kicad_pcb --ledger s2b_ledger.json --margin 3.0 --floor 0.20 --bound-rect 22.95,32.95,51.5,66.5",
+    "exit": 0
+   },
+   {
+    "stage": "resolve_residual_second_pass",
+    "out": "/tmp/opencode/aprime_final_v2/s2b_resolved.kicad_pcb",
+    "ledger": {
+     "stage": "M15",
+     "edges": 24,
+     "added": [
+      {
+       "net": "MCU_VDD",
+       "dist": 8.098,
+       "segs": 21,
+       "vias": 0,
+       "len": 10.7782,
+       "via_xy": [],
+       "layers": [
+        "In2.Cu"
+       ]
+      },
+      {
+       "net": "MCU_VDD",
+       "dist": 17.902,
+       "segs": 18,
+       "vias": 1,
+       "len": 18.9907,
+       "via_xy": [
+        [
+         44.0,
+         40.05
+        ]
+       ],
+       "layers": [
+        "F.Cu",
+        "In2.Cu"
+       ]
+      }
+     ],
+     "blocked": [
+      {
+       "net": "NRST",
+       "dist": 4.478,
+       "why": "no-free-goal-node"
+      },
+      {
+       "net": "P3V3_AUX",
+       "dist": 5.582,
+       "why": "no-free-start-node"
+      },
+      {
+       "net": "I2C1_SDA",
+       "dist": 5.979,
+       "why": "no-free-goal-node"
+      },
+      {
+       "net": "PERSTA#",
+       "dist": 6.198,
+       "why": "no-free-start-node"
+      },
+      {
+       "net": "P3V3_AUX",
+       "dist": 8.871,
+       "why": "no-free-start-node"
+      },
+      {
+       "net": "GND",
+       "dist": 9.839,
+       "why": "no-free-start-node"
+      },
+      {
+       "net": "MCU_VDD",
+       "dist": 9.995,
+       "why": "no-free-start-node"
+      },
+      {
+       "net": "MCU_VDD",
+       "dist": 10.852,
+       "why": "no-free-start-node"
+      },
+      {
+       "net": "P3V3_AUX",
+       "dist": 12.948,
+       "why": "no-free-start-node"
+      },
+      {
+       "net": "GPIO_LED",
+       "dist": 13.196,
+       "why": "no-free-start-node"
+      },
+      {
+       "net": "I2C2_SDA",
+       "dist": 13.689,
+       "why": "no-free-start-node"
+      },
+      {
+       "net": "PWR_BTN_ISO",
+       "dist": 19.318,
+       "why": "no-free-start-node"
+      },
+      {
+       "net": "I2C2_SDA",
+       "dist": 20.376,
+       "why": "no-free-goal-node"
+      },
+      {
+       "net": "I2C1_SCL",
+       "dist": 20.509,
+       "why": "no-free-start-node"
+      },
+      {
+       "net": "NRST",
+       "dist": 24.334,
+       "why": "no-free-start-node"
+      },
+      {
+       "net": "P3V3_AUX",
+       "dist": 27.108,
+       "why": "no-free-start-node"
+      },
+      {
+       "net": "PWR_BTN_OUT",
+       "dist": 27.651,
+       "why": "no-free-start-node"
+      },
+      {
+       "net": "I2C2_SCL",
+       "dist": 44.137,
+       "why": "no-free-start-node"
+      },
+      {
+       "net": "P3V3",
+       "dist": 48.777,
+       "why": "no-free-goal-node"
+      },
+      {
+       "net": "I2C1_SDA",
+       "dist": 83.35,
+       "why": "no-free-goal-node"
+      },
+      {
+       "net": "I2C1_SCL",
+       "dist": 83.587,
+       "why": "no-free-goal-node"
+      },
+      {
+       "net": "I2C1_SDA",
+       "dist": 100.478,
+       "why": "no-free-start-node"
+      }
+     ],
+     "summary": {
+      "added": 2,
+      "blocked": 22,
+      "segs": 39,
+      "vias": 1,
+      "len": 29.7689,
+      "reasons": {
+       "no-free-goal-node": 6,
+       "no-free-start-node": 16
+      }
+     }
+    }
+   },
+   {
+    "cmd": "eda_eng route --apply-batch /tmp/opencode/aprime_final_v2/s3_empty.json --board /tmp/opencode/aprime_final_v2/s2b_resolved.kicad_pcb --out /tmp/opencode/aprime_final_v2/s3_refilled.kicad_pcb --bound-rect 22.95,32.95,51.5,66.5 --mask-clear-mm 0.1",
+    "exit": 0
+   },
+   {
+    "cmd": "kicad-cli pcb drc --format json --severity-all -o s3_refill_drc.json s3_refilled.kicad_pcb",
+    "exit": 0
+   },
+   {
+    "stage": "pour_islands_detected",
+    "n": 3
+   },
+   {
+    "stage": "pour_islands_repair",
+    "planned": 2,
+    "of": 3
+   },
+   {
+    "cmd": "eda_eng route --apply-batch /tmp/opencode/aprime_final_v2/s3b_islands.json --board /tmp/opencode/aprime_final_v2/s3_refilled.kicad_pcb --out /tmp/opencode/aprime_final_v2/s3b_fixed.kicad_pcb --bound-rect 22.95,32.95,51.5,66.5",
+    "exit": 0
+   },
+   {
+    "cmd": "kicad-cli pcb drc --format json --severity-all -o s4_drc.json s3b_fixed.kicad_pcb",
+    "exit": 0
+   },
+   {
+    "stage": "M4_judge",
+    "verdict": "FAIL",
+    "geometry_delta": -5
+   }
+  ],
+  "method": "wipe_resolve",
+  "wipe": {
+   "deleted_segments": 615,
+   "deleted_vias": 95,
+   "outside_halves_kept": 15,
+   "n_ports": 15
+  },
+  "resolve_ledger": {
+   "stage": "M15",
+   "edges": 80,
+   "added": [
+    {
+     "net": "GND",
+     "dist": 0.5,
+     "segs": 1,
+     "vias": 0,
+     "len": 0.5,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "GND",
+     "dist": 0.5,
+     "segs": 1,
+     "vias": 0,
+     "len": 0.5,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "GND",
+     "dist": 0.5,
+     "segs": 1,
+     "vias": 0,
+     "len": 0.5,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "GND",
+     "dist": 0.5,
+     "segs": 1,
+     "vias": 0,
+     "len": 0.5,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "GND",
+     "dist": 0.5,
+     "segs": 1,
+     "vias": 0,
+     "len": 0.5,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "GND",
+     "dist": 0.5,
+     "segs": 1,
+     "vias": 0,
+     "len": 0.5,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "PERSTA#",
+     "dist": 0.5,
+     "segs": 1,
+     "vias": 0,
+     "len": 0.5,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "GND",
+     "dist": 0.775,
+     "segs": 1,
+     "vias": 0,
+     "len": 0.5,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "P3V3_AUX",
+     "dist": 0.775,
+     "segs": 3,
+     "vias": 0,
+     "len": 0.5414,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "FB_U2",
+     "dist": 1.184,
+     "segs": 6,
+     "vias": 0,
+     "len": 1.2485,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "GND",
+     "dist": 1.27,
+     "segs": 1,
+     "vias": 0,
+     "len": 1.3,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "GND",
+     "dist": 1.396,
+     "segs": 5,
+     "vias": 0,
+     "len": 1.4828,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "12V_IN",
+     "dist": 1.57,
+     "segs": 6,
+     "vias": 0,
+     "len": 1.6728,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "GND",
+     "dist": 1.666,
+     "segs": 5,
+     "vias": 0,
+     "len": 2.0071,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "GND",
+     "dist": 2.0,
+     "segs": 5,
+     "vias": 0,
+     "len": 3.8828,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "GND",
+     "dist": 2.54,
+     "segs": 3,
+     "vias": 0,
+     "len": 2.9971,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "GND",
+     "dist": 2.584,
+     "segs": 3,
+     "vias": 0,
+     "len": 2.8142,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "GND",
+     "dist": 2.729,
+     "segs": 12,
+     "vias": 0,
+     "len": 2.8142,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "LED_A",
+     "dist": 3.0,
+     "segs": 2,
+     "vias": 2,
+     "len": 3.0,
+     "via_xy": [
+      [
+       46.35,
+       66.5
+      ],
+      [
+       48.95,
+       66.5
+      ]
+     ],
+     "layers": [
+      "F.Cu",
+      "In2.Cu"
+     ]
+    },
+    {
+     "net": "PERSTA#",
+     "dist": 3.124,
+     "segs": 6,
+     "vias": 0,
+     "len": 3.4042,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "GND",
+     "dist": 3.162,
+     "segs": 10,
+     "vias": 0,
+     "len": 3.3456,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "12V_IN",
+     "dist": 3.167,
+     "segs": 16,
+     "vias": 0,
+     "len": 3.6142,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "P3V3",
+     "dist": 3.195,
+     "segs": 4,
+     "vias": 0,
+     "len": 3.2698,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "GND",
+     "dist": 3.28,
+     "segs": 12,
+     "vias": 0,
+     "len": 3.6042,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "GND",
+     "dist": 3.811,
+     "segs": 8,
+     "vias": 0,
+     "len": 3.9941,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "GND",
+     "dist": 3.895,
+     "segs": 10,
+     "vias": 0,
+     "len": 4.2385,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "GND",
+     "dist": 3.912,
+     "segs": 5,
+     "vias": 0,
+     "len": 4.7728,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "12V_IN",
+     "dist": 3.957,
+     "segs": 6,
+     "vias": 0,
+     "len": 4.077,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "GND",
+     "dist": 3.989,
+     "segs": 10,
+     "vias": 0,
+     "len": 5.5485,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "dist": 4.102,
+     "segs": 26,
+     "vias": 2,
+     "len": 4.4385,
+     "via_xy": [
+      [
+       45.65,
+       62.795
+      ],
+      [
+       49.45,
+       61.595
+      ]
+     ],
+     "layers": [
+      "F.Cu",
+      "In2.Cu"
+     ]
+    },
+    {
+     "net": "GND",
+     "dist": 4.17,
+     "segs": 7,
+     "vias": 0,
+     "len": 4.3243,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "GND",
+     "dist": 4.17,
+     "segs": 7,
+     "vias": 0,
+     "len": 4.3243,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "GND",
+     "dist": 4.17,
+     "segs": 5,
+     "vias": 0,
+     "len": 4.3243,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "FB_U2",
+     "dist": 4.178,
+     "segs": 18,
+     "vias": 0,
+     "len": 4.5284,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "I2C1_SDA",
+     "dist": 4.245,
+     "segs": 16,
+     "vias": 1,
+     "len": 4.4284,
+     "via_xy": [
+      [
+       49.45,
+       65.405
+      ]
+     ],
+     "layers": [
+      "B.Cu",
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "dist": 4.475,
+     "segs": 23,
+     "vias": 2,
+     "len": 4.8556,
+     "via_xy": [
+      [
+       34.05,
+       58.5
+      ],
+      [
+       35.15,
+       62.9
+      ]
+     ],
+     "layers": [
+      "F.Cu",
+      "In2.Cu"
+     ]
+    },
+    {
+     "net": "12V_IN",
+     "dist": 4.666,
+     "segs": 12,
+     "vias": 0,
+     "len": 4.9184,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "GND",
+     "dist": 4.75,
+     "segs": 3,
+     "vias": 0,
+     "len": 4.9598,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "GND",
+     "dist": 4.946,
+     "segs": 24,
+     "vias": 0,
+     "len": 5.4698,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "GND",
+     "dist": 4.976,
+     "segs": 30,
+     "vias": 0,
+     "len": 5.4042,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "GND",
+     "dist": 5.094,
+     "segs": 16,
+     "vias": 0,
+     "len": 5.5184,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "GND",
+     "dist": 5.251,
+     "segs": 24,
+     "vias": 2,
+     "len": 5.5556,
+     "via_xy": [
+      [
+       35.05,
+       40.765
+      ],
+      [
+       33.95,
+       45.465
+      ]
+     ],
+     "layers": [
+      "F.Cu",
+      "In2.Cu"
+     ]
+    },
+    {
+     "net": "SW_U2",
+     "dist": 5.928,
+     "segs": 23,
+     "vias": 2,
+     "len": 6.3426,
+     "via_xy": [
+      [
+       35.55,
+       39.595
+      ],
+      [
+       38.05,
+       44.195
+      ]
+     ],
+     "layers": [
+      "F.Cu",
+      "In2.Cu"
+     ]
+    },
+    {
+     "net": "P3V3",
+     "dist": 6.002,
+     "segs": 16,
+     "vias": 2,
+     "len": 6.2899,
+     "via_xy": [
+      [
+       38.29,
+       42.9
+      ],
+      [
+       32.99,
+       42.2
+      ]
+     ],
+     "layers": [
+      "F.Cu",
+      "In5.Cu"
+     ]
+    },
+    {
+     "net": "P3V3",
+     "dist": 6.076,
+     "segs": 9,
+     "vias": 0,
+     "len": 6.4142,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "SW_U2",
+     "dist": 7.22,
+     "segs": 12,
+     "vias": 0,
+     "len": 7.564,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "P3V3",
+     "dist": 8.457,
+     "segs": 16,
+     "vias": 0,
+     "len": 10.5497,
+     "via_xy": [],
+     "layers": [
+      "F.Cu"
+     ]
+    },
+    {
+     "net": "MCU_VDD",
+     "dist": 9.598,
+     "segs": 29,
+     "vias": 2,
+     "len": 12.1184,
+     "via_xy": [
+      [
+       31.65,
+       53.65
+      ],
+      [
+       34.25,
+       53.25
+      ]
+     ],
+     "layers": [
+      "F.Cu",
+      "In2.Cu"
+     ]
+    },
+    {
+     "net": "UART_TX",
+     "dist": 10.059,
+     "segs": 21,
+     "vias": 2,
+     "len": 12.5799,
+     "via_xy": [
+      [
+       32.15,
+       55.25
+      ],
+      [
+       42.55,
+       54.25
+      ]
+     ],
+     "layers": [
+      "F.Cu",
+      "In2.Cu"
+     ]
+    },
+    {
+     "net": "SWDIO",
+     "dist": 10.975,
+     "segs": 24,
+     "vias": 2,
+     "len": 11.8468,
+     "via_xy": [
+      [
+       35.65,
+       48.14
+      ],
+      [
+       40.75,
+       51.24
+      ]
+     ],
+     "layers": [
+      "F.Cu",
+      "In2.Cu"
+     ]
+    },
+    {
+     "net": "I2C2_SCL",
+     "dist": 12.663,
+     "segs": 27,
+     "vias": 2,
+     "len": 13.7752,
+     "via_xy": [
+      [
+       36.01,
+       61.763
+      ],
+      [
+       29.91,
+       65.062
+      ]
+     ],
+     "layers": [
+      "F.Cu",
+      "In5.Cu"
+     ]
+    },
+    {
+     "net": "UART_RX",
+     "dist": 12.86,
+     "segs": 42,
+     "vias": 2,
+     "len": 13.8255,
+     "via_xy": [
+      [
+       30.91,
+       55.15
+      ],
+      [
+       40.71,
+       52.75
+      ]
+     ],
+     "layers": [
+      "F.Cu",
+      "In2.Cu"
+     ]
+    },
+    {
+     "net": "SWCLK_BOOT0",
+     "dist": 12.861,
+     "segs": 15,
+     "vias": 2,
+     "len": 13.2794,
+     "via_xy": [
+      [
+       47.562,
+       44.9
+      ],
+      [
+       50.062,
+       41.0
+      ]
+     ],
+     "layers": [
+      "F.Cu",
+      "In2.Cu"
+     ]
+    },
+    {
+     "net": "SWCLK_BOOT0",
+     "dist": 13.145,
+     "segs": 57,
+     "vias": 2,
+     "len": 14.2397,
+     "via_xy": [
+      [
+       34.21,
+       48.74
+      ],
+      [
+       41.61,
+       50.64
+      ]
+     ],
+     "layers": [
+      "F.Cu",
+      "In5.Cu"
+     ]
+    },
+    {
+     "net": "PERSTA#",
+     "dist": 22.032,
+     "segs": 41,
+     "vias": 2,
+     "len": 25.0907,
+     "via_xy": [
+      [
+       45.438,
+       41.2
+      ],
+      [
+       33.437,
+       55.9
+      ]
+     ],
+     "layers": [
+      "F.Cu",
+      "In5.Cu"
+     ]
+    },
+    {
+     "net": "PWR_CTRL_OUT",
+     "dist": 26.855,
+     "segs": 33,
+     "vias": 3,
+     "len": 27.7245,
+     "via_xy": [
+      [
+       33.71,
+       44.16
+      ],
+      [
+       41.51,
+       50.06
+      ],
+      [
+       49.81,
+       56.86
+      ]
+     ],
+     "layers": [
+      "F.Cu",
+      "In2.Cu",
+      "In5.Cu"
+     ]
+    }
+   ],
+   "blocked": [
+    {
+     "net": "NRST",
+     "dist": 4.478,
+     "why": "no-free-goal-node"
+    },
+    {
+     "net": "GND",
+     "dist": 4.775,
+     "why": "no-free-start-node"
+    },
+    {
+     "net": "MCU_VDD",
+     "dist": 5.298,
+     "why": "no-free-start-node"
+    },
+    {
+     "net": "P3V3_AUX",
+     "dist": 5.582,
+     "why": "no-free-start-node"
+    },
+    {
+     "net": "I2C1_SDA",
+     "dist": 5.979,
+     "why": "no-free-goal-node"
+    },
+    {
+     "net": "PERSTA#",
+     "dist": 6.198,
+     "why": "no-free-start-node"
+    },
+    {
+     "net": "MCU_VDD",
+     "dist": 8.143,
+     "why": "no-free-goal-node"
+    },
+    {
+     "net": "P3V3_AUX",
+     "dist": 8.418,
+     "why": "no-free-goal-node"
+    },
+    {
+     "net": "MCU_VDD",
+     "dist": 9.995,
+     "why": "no-free-start-node"
+    },
+    {
+     "net": "P3V3_AUX",
+     "dist": 12.948,
+     "why": "no-free-start-node"
+    },
+    {
+     "net": "GPIO_LED",
+     "dist": 13.196,
+     "why": "no-free-start-node"
+    },
+    {
+     "net": "I2C2_SDA",
+     "dist": 13.689,
+     "why": "no-free-start-node"
+    },
+    {
+     "net": "MCU_VDD",
+     "dist": 16.968,
+     "why": "no-free-start-node"
+    },
+    {
+     "net": "PWR_BTN_ISO",
+     "dist": 19.318,
+     "why": "no-free-start-node"
+    },
+    {
+     "net": "I2C2_SDA",
+     "dist": 20.376,
+     "why": "no-free-goal-node"
+    },
+    {
+     "net": "I2C1_SCL",
+     "dist": 20.509,
+     "why": "no-free-start-node"
+    },
+    {
+     "net": "NRST",
+     "dist": 24.334,
+     "why": "no-free-start-node"
+    },
+    {
+     "net": "P3V3_AUX",
+     "dist": 27.108,
+     "why": "no-free-start-node"
+    },
+    {
+     "net": "PWR_BTN_OUT",
+     "dist": 27.651,
+     "why": "no-free-start-node"
+    },
+    {
+     "net": "I2C2_SCL",
+     "dist": 44.137,
+     "why": "no-free-start-node"
+    },
+    {
+     "net": "P3V3",
+     "dist": 45.777,
+     "why": "no-free-start-node"
+    },
+    {
+     "net": "I2C1_SDA",
+     "dist": 83.35,
+     "why": "no-free-goal-node"
+    },
+    {
+     "net": "I2C1_SCL",
+     "dist": 83.587,
+     "why": "no-free-goal-node"
+    },
+    {
+     "net": "I2C1_SDA",
+     "dist": 100.478,
+     "why": "no-free-start-node"
+    }
+   ],
+   "summary": {
+    "added": 56,
+    "blocked": 24,
+    "segs": 722,
+    "vias": 32,
+    "len": 312.3203,
+    "reasons": {
+     "no-free-goal-node": 7,
+     "no-free-start-node": 17
+    }
+   }
+  },
+  "apply": {
+   "artifact": "eda_eng_route_apply_batch",
+   "status": "APPLIED",
+   "nets": [],
+   "segments_added": 0,
+   "vias_added": 0,
+   "zones_refilled": 18,
+   "project_config_copied": [
+    ".kicad_pro"
+   ],
+   "out": "/tmp/opencode/aprime_final_v2/s3_refilled.kicad_pcb",
+   "out_sha16": "5387ceda501237ca"
+  },
+  "M4": {
+   "criteria": {
+    "C1_connectivity": {
+     "unconnected": 22,
+     "pass": false
+    },
+    "C2_drc_no_new_increase": {
+     "total": 143,
+     "ref_total": 148,
+     "raw_total": 197,
+     "raw_ref_total": 168,
+     "new_classes": [
+      "isolated_copper",
+      "solder_mask_bridge"
+     ],
+     "excluded_new_classes": [
+      "lib_footprint_issues"
+     ],
+     "pinned_caliber": [
+      "lib_footprint_issues",
+      "lib_footprint_mismatch"
+     ],
+     "pass": false
+    },
+    "C3_skew": {
+     "per_pair_mm": {
+      "0": 0.065012,
+      "1": 0.06498,
+      "2": 0.043403,
+      "3": 0.078764,
+      "4": 1.4e-05,
+      "5": 5e-06,
+      "6": 0.021576,
+      "7": 0.013805
+     },
+     "max_mm": 0.078764,
+     "limit_mm": 0.15,
+     "pass": true
+    },
+    "C4_chamfer_preserved": {
+     "count": 2779,
+     "ref_count": 2637,
+     "pass": true
+    },
+    "C5_routing_changed": {
+     "element_set_diff": 1545,
+     "pass": true
+    },
+    "C6_outside_copper_unchanged": {
+     "diff": 0,
+     "pass": true,
+     "scope": "tracks+vias outside the wiped block frame"
+    },
+    "C7_hs_fanout_untouched": {
+     "diff": 0,
+     "pass": true,
+     "nets": [
+      "PCIE_DN0_P",
+      "PCIE_DN0_N",
+      "PCIE_DN1_P",
+      "PCIE_DN1_N",
+      "PCIE_DN2_P",
+      "PCIE_DN2_N",
+      "PCIE_DN3_P",
+      "PCIE_DN3_N",
+      "PCIE_DN4_P",
+      "PCIE_DN4_N",
+      "PCIE_DN5_P",
+      "PCIE_DN5_N",
+      "PCIE_DN6_P",
+      "PCIE_DN6_N",
+      "PCIE_DN7_P",
+      "PCIE_DN7_N"
+     ]
+    },
+    "C9_geometric_digest": {
+     "before": "1cf4d39614491ccc",
+     "after": "663bbf5675c9c3ab",
+     "pass": true
+    }
+   },
+   "verdict": "FAIL",
+   "thresholds_used": {
+    "drc_total": 168,
+    "chamfer_ref": 2637,
+    "skew_limit": 0.15
+   },
+   "judging_table": "L2/EDA_ENG_JUDGING_TABLE_v1.json (ECO-K2-0002/0003 sec.6)",
+   "rule": "PASS iff EVERY criterion holds (C1-C5 in-register + C6/C7 block-fidelity when a block chain is graded); None (skipped) is never a PASS (#K2-358: capability must be reproducible)"
+  },
+  "class_delta": {
+   "total_delta": -5,
+   "by_class": {
+    "isolated_copper": {
+     "result": 3,
+     "ref": 0,
+     "delta": 3
+    },
+    "silk_edge_clearance": {
+     "result": 1,
+     "ref": 2,
+     "delta": -1
+    },
+    "silk_over_copper": {
+     "result": 35,
+     "ref": 37,
+     "delta": -2
+    },
+    "silk_overlap": {
+     "result": 14,
+     "ref": 15,
+     "delta": -1
+    },
+    "solder_mask_bridge": {
+     "result": 2,
+     "ref": 0,
+     "delta": 2
+    },
+    "track_dangling": {
+     "result": 14,
+     "ref": 1,
+     "delta": 13
+    },
+    "track_not_centered_on_via": {
+     "result": 19,
+     "ref": 32,
+     "delta": -13
+    },
+    "via_dangling": {
+     "result": 0,
+     "ref": 6,
+     "delta": -6
+    }
+   },
+   "excluded_class_rows": {
+    "lib_footprint_issues": {
+     "result": 54,
+     "ref": 0,
+     "delta": 54
+    },
+    "lib_footprint_mismatch": {
+     "result": 0,
+     "ref": 20,
+     "delta": -20
+    }
+   },
+   "excluded_classes": [
+    "lib_footprint_issues",
+    "lib_footprint_mismatch"
+   ],
+   "raw_total_delta": 29,
+   "attributed": true,
+   "rule": "#K2-361 sec.2.5: any GEOMETRY class rise must be attributed; library-resolution classes are recorded in excluded_class_rows under the pinned caliber (they are never hidden)"
+  },
+  "board": "/tmp/opencode/aprime_final_v2/s3b_fixed.kicad_pcb",
+  "rule": "#K2-379: exam A-prime-prime = wipe everything intersecting R (one predicate, no taxonomy) -> re-resolve the in-block nets with the IN-REGISTER standard flow inside the domain R (the bound is passed to the maze, never repaired afterwards) -> refill -> judge C1-C7"
+ },
+ "state": "GRADED",
+ "criteria": {
+  "C1_connectivity": {
+   "unconnected": 22,
+   "pass": false
+  },
+  "C2_drc_no_new_increase": {
+   "total": 143,
+   "ref_total": 148,
+   "raw_total": 197,
+   "raw_ref_total": 168,
+   "new_classes": [
+    "isolated_copper",
+    "solder_mask_bridge"
+   ],
+   "excluded_new_classes": [
+    "lib_footprint_issues"
+   ],
+   "pinned_caliber": [
+    "lib_footprint_issues",
+    "lib_footprint_mismatch"
+   ],
+   "pass": false
+  },
+  "C3_skew": {
+   "per_pair_mm": {
+    "0": 0.065012,
+    "1": 0.06498,
+    "2": 0.043403,
+    "3": 0.078764,
+    "4": 1.4e-05,
+    "5": 5e-06,
+    "6": 0.021576,
+    "7": 0.013805
+   },
+   "max_mm": 0.078764,
+   "limit_mm": 0.15,
+   "pass": true
+  },
+  "C4_chamfer_preserved": {
+   "count": 2779,
+   "ref_count": 2637,
+   "pass": true
+  },
+  "C5_routing_changed": {
+   "element_set_diff": 1545,
+   "pass": true
+  },
+  "C6_outside_copper_unchanged": {
+   "diff": 0,
+   "pass": true,
+   "scope": "tracks+vias outside the wiped block frame"
+  },
+  "C7_hs_fanout_untouched": {
+   "diff": 0,
+   "pass": true,
+   "nets": [
+    "PCIE_DN0_P",
+    "PCIE_DN0_N",
+    "PCIE_DN1_P",
+    "PCIE_DN1_N",
+    "PCIE_DN2_P",
+    "PCIE_DN2_N",
+    "PCIE_DN3_P",
+    "PCIE_DN3_N",
+    "PCIE_DN4_P",
+    "PCIE_DN4_N",
+    "PCIE_DN5_P",
+    "PCIE_DN5_N",
+    "PCIE_DN6_P",
+    "PCIE_DN6_N",
+    "PCIE_DN7_P",
+    "PCIE_DN7_N"
+   ]
+  },
+  "C9_geometric_digest": {
+   "before": "1cf4d39614491ccc",
+   "after": "663bbf5675c9c3ab",
+   "pass": true
+  }
+ },
+ "verdict": "FAIL"
+}
