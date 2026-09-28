@@ -1,0 +1,28 @@
+{
+ "artifact": "k2_w2prime_e1_blocker_v1",
+ "ts": "2026-09-28",
+ "authority": "#K2-348 W2-prime E1 - the repo's own gate rejected the edit; per the discipline I stopped, restored consistency and filed this report instead of iterating",
+ "gate_finding_verbatim": [
+  "网 'I2C2_SCL': 节点 TP_EC_SCL/1 未连接 (KiCad 判定该引脚不在本网)",
+  "网 'I2C2_SDA': 节点 TP_EC_SDA/1 未连接",
+  "网 'PWR_CTRL_OUT': 节点 TP_PWR_BTN/1 未连接",
+  "网 'UART_TX': 节点 TP_UART_TX/1 未连接",
+  "网 'UART_RX': 节点 TP_UART_RX/1 未连接",
+  "网 'P3V3_AUX': 节点 TP_EC_3V3/1 未连接",
+  "[pipeline:pre-commit] ✗ verify 未通过 — 拒绝提交"
+ ],
+ "meaning": "the pin reference 'TPn/1' does NOT resolve to a pad of the TEST_POINT placement: the symbol's pin entry (' - - \"1\"' / pad 1) and/or the placement block are not in the schema the checker expects. My R900 schema reading was therefore INCOMPLETE - the netlist LIST format was right but the pin resolution path is not.",
+ "self_correction_disclosed": {
+  "commit": "6e58e8b",
+  "what": "its message claimed E1 was executed, but the netlist script had aborted on an assertion BEFORE writing the YAML - so only the refmap change landed. That was an unfounded claim (M-ENG-CLAIM-ARTIFACT-MISMATCH pattern). It is now corrected: the refmap TP entries are reverted in this commit, so the library snapshot and the netlist are consistent again (54 refs each)."
+ },
+ "state_after_this_commit": {
+  "netlist": "unmodified (no TPs)",
+  "refmap": "n_refs 54 (TP entries removed)",
+  "tp_footprint_file": "hw/lib/ForgeOS.pretty/TP_1.0mm.kicad_mod kept (inert - nothing references it)",
+  "boards": "l14 unchanged",
+  "frozen_four": "4/4"
+ },
+ "next_single_action": "read how the CHECKER resolves REF/PIN (the netlist readers under k2/_shared/pm_gate or the repo's verify scripts) and derive the exact pin-reference contract for a one-pin part; then re-attempt E1 ONCE with that contract (or, if the contract forbids one-pin parts, name it and pick the alternative: keep J9/J6 and convert only J11)",
+ "OWNER-ITEMS": 0
+}
