@@ -1,0 +1,48 @@
+{
+ "artifact": "k2_text_clip_verification_v1",
+ "ts": "2026-09-28",
+ "authority": "#K2-346 scheme window - text-level clip (new method family, pcbnew object API removed from the mutation path)",
+ "tool": "tools/k2_text_clip_run_v1.py",
+ "input_copy_only": true,
+ "repo_board_touched": false,
+ "verified_by": "INDEPENDENT TEXT INSPECTION (pure s-expression parsing, no pcbnew) - the tool's own unit_check formula was wrong, so the independent check is the authority",
+ "clip_actions_applied": {
+  "per_line": [
+   "rewrite the horizontal run: (end 139.48/138.32 y) -> (end 137.555 y)",
+   "delete the trapped corner via",
+   "delete the vertical ascent"
+  ],
+  "n_lines": 2,
+  "actions": 6
+ },
+ "independent_readings": {
+  "blocks_in": 7074,
+  "blocks_out": 7070,
+  "delta": -4,
+  "segments_now_ending_at_x_137.555": 2,
+  "trapped_vias_removed": 2,
+  "vertical_ascent_segments_removed": 2,
+  "removed_blocks": 6,
+  "added_blocks": 2,
+  "check": "removed == exactly the 6 touched blocks; added == exactly the 2 rewritten horizontals => NO other block changed"
+ },
+ "LAYER_FACTS_CORRECTED_by_the_text": {
+  "horizontal_run_layer": "In5.Cu (NOT B.Cu as I had recorded via a layer-id constant)",
+  "vertical_ascent_layer": "In2.Cu",
+  "trapped_via_span": "In2.Cu <-> In5.Cu (a blind via, NOT B.Cu)",
+  "note": "the board TEXT is authoritative; my earlier 'B.Cu' reading came from pcbnew's layer-id constant (§R870 D1 family)"
+ },
+ "tool_defect_found_not_fixed_this_window": {
+  "id": "unit_check_formula",
+  "detail": "expected_touched computed as 2 x n_trapped (4) but the plan has 3 actions per trapped via (6) => ok=False despite a correct clip",
+  "why_not_fixed": "one run per work directory (self-imposed rule); the defect is cosmetic (an assertion formula, not the clip) and is recorded here instead of re-running"
+ },
+ "next_single_action": "ONE run: feed the text-clipped board + its kicad-cli DRC to the unmodified floored router (tools/k2_reroute_router_floor_v1.py) so it bridges the two open ends per line, then judge once with kicad-cli DRC (<=168, no class up, unconnected 0). New work directory (one per attempt). If FAIL -> file a blocker report, do not re-run.",
+ "zero_side_effects": {
+  "board_changed": false,
+  "spec_bumped": false,
+  "input_was_a_copy": true,
+  "frozen_four": "4/4"
+ },
+ "OWNER-ITEMS": 0
+}
