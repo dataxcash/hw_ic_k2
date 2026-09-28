@@ -1,0 +1,95 @@
+{
+ "artifact": "k2_placement_norms_v1",
+ "ts": "2026-09-28",
+ "authority": "#K2-337 window B: extract placement norms from PLACEMENT_CORPUS_v1; each norm carries its corpus reference; owner negatives become reverse rules",
+ "corpus_ref": "L2/PLACEMENT_CORPUS_v1.json (sha16 0ccebd75a5a04434)",
+ "norms": [
+  {
+   "id": "N1",
+   "rule": "主芯片置于板框几何中心区（|x-xc|<=0.15W 且 |y-yc|<=0.15H）",
+   "param": {
+    "centre_tol_frac": 0.15
+   },
+   "source": [
+    "corpus#1 EVM: chip CENTRE"
+   ],
+   "reverse_rule": "R-N1 不得把主芯片偏置到一边（K2: U6 x=93.8 偏右）"
+  },
+  {
+   "id": "N2",
+   "rule": "高速连接器置于单边，且该边与主芯片的扇出方向对齐",
+   "source": [
+    "corpus#1 EVM: connectors BOTTOM single edge + radial fan-out",
+    "corpus#2 riser: L->R fork"
+   ],
+   "reverse_rule": "R-N2 不得把连接器放在非扇出边（K2: J2 右缘 vs U6 扇出）"
+  },
+  {
+   "id": "N3",
+   "rule": "安装孔四角布置（每孔距其最近角 <=3.0mm），边缘留边 >=0.3mm",
+   "param": {
+    "corner_max_mm": 3.0,
+    "edge_min_mm": 0.3
+   },
+   "source": [
+    "corpus#1 EVM: holes FOUR_CORNERS",
+    "#K2-322 sec.3.1"
+   ],
+   "reverse_rule": "R-N3 不得使孔位离角（K2: 4.67/7.49/22.50/28.62）"
+  },
+  {
+   "id": "N4",
+   "rule": "外围按功能分区：电源/接口一侧、控制/存储另一侧；芯片周圈放阻容",
+   "source": [
+    "corpus#1 EVM: left power/interface + jumpers, right EEPROM/control, passives around the chip"
+   ],
+   "reverse_rule": "R-N4 不得功能混置"
+  },
+  {
+   "id": "N5",
+   "rule": "密度均衡：任一象限的器件面积占比不超全局均值的 1.5 倍；无「挤在一角」",
+   "param": {
+    "quadrant_max_ratio": 1.5
+   },
+   "source": [
+    "corpus#1 EVM: even spread"
+   ],
+   "reverse_rule": "R-N5 不得形成局部高密簇（K2: 左簇 U1/U2/U4/U5 偏上过密 · R3 FAIL）"
+  },
+  {
+   "id": "N6",
+   "rule": "高速区与低速/电源区分离（区带边界不重叠，间距 >=2.0mm）",
+   "param": {
+    "zone_gap_min_mm": 2.0
+   },
+   "source": [
+    "corpus#1 EVM: HS at the bottom edge, power/control at the sides"
+   ],
+   "reverse_rule": "R-N6 不得高低速混布（K2: R2 可疑）"
+  },
+  {
+   "id": "N7",
+   "rule": "流向自芯片扇出至连接器；同组走线并行等长，禁逆流长绕",
+   "source": [
+    "corpus#1 EVM radial fan-out",
+    "corpus#2 riser fork"
+   ],
+   "reverse_rule": "R-N7 不得逆流/长绕"
+  }
+ ],
+ "derivation": {
+  "from": "PLACEMENT_CORPUS_v1.json",
+  "positive_samples": 2,
+  "negative_record": 1,
+  "owner_findings_mapped": [
+   "U1/U2/U4 position -> N4/N5",
+   "left low-speed dense/high -> N5/N6",
+   "holes not four-corner -> N3"
+  ]
+ },
+ "open": [
+  "per-class passive spacing (cap-to-pin) statistics still not extracted (needs UG assembly pages)",
+  "N5 quadrant metric needs the courtyard areas of all parts (C16 asset available)"
+ ],
+ "OWNER-ITEMS": 0
+}
