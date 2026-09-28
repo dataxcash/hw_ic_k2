@@ -85,10 +85,13 @@ def main(argv=None):
                 return _emit({"artifact": "eda_eng_exam", "exam": a.which, "state": "REFUSED_BY_PREFLIGHT",
                               "preflight": pr}, None, 2)
             rp = regen_mod.exam_a_chain(refs, delta, W, max_nets=a.max_nets)
-            return _emit({"artifact": "eda_eng_exam", "exam": a.which, "preflight": pr, "route": rp,
-                          "state": rp.get("state"), "criteria": (rp.get("M4") or {}).get("criteria"),
-                          "verdict": (rp.get("M4") or {}).get("verdict")},
-                         None, 0 if (rp.get("M4") or {}).get("verdict") == "PASS" else 1)
+            graded = bool(rp.get("M4"))
+            v = (rp.get("M4") or {}).get("verdict") or ("FAIL" if str(rp.get("state", "")).endswith("FAILED") else None)
+            out = {"artifact": "eda_eng_exam", "exam": a.which, "preflight": pr, "route": rp,
+                   "state": rp.get("state"), "criteria": (rp.get("M4") or {}).get("criteria"), "verdict": v}
+            if not graded:
+                out["blocked_at"] = rp.get("state")          # 链条未能到 M4 ⇒ 具名 FAIL（不许 None 静默）
+            return _emit(out, None, 0 if v == "PASS" else 1)
         if a.run:
             rp = regen_mod.run(exam=a.which, work=a.work or os.path.join("/tmp/opencode/eda_eng", "exam" + a.which))
             out["route"] = rp

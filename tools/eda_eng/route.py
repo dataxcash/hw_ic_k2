@@ -348,3 +348,102 @@ def route_net(pads, layers, obstacles, bounds=None, clear=CLEAR, net="__route__"
     return {"status": "ROUTED", "net": net, "mst_edges": edges, "segments": segs, "vias": vias,
             "n_vias": len(vias), "edges_tried": tried,
             "rule": "deterministic MST (Prim, ties by index) over the net's pads; each edge by the layered candidate family"}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# M3a · 施工图生成 ＋ 评审闸（#K2-365 §二：AI 画图 · 机器描线 · 机器判卷）
+# 图 = 逐网「拓扑(MST)/走廊/层/过孔」计划 ＋ 每边的**约定编号**（样板规律），人机皆可读；
+# 评审闸 = 图**先过**下列五项，M3b（照图执行）**无批图不许落板**。
+# ─────────────────────────────────────────────────────────────────────────────
+CONVENTION_LADDER = ["straight", "L-x", "L-y", "Z-x", "Z-y", "chamfer-0.5", "chamfer-1.0",
+                     "chamfer-2.0"]          # 约定序（可读 · 固定 · 非搜索：先直后折再切角）
+
+
+def _convention_of(poly):
+    n = len(poly)
+    bends = [abs((poly[i][0] - poly[i - 1][0]) * (poly[i + 1][1] - poly[i][1])
+                 - (poly[i][1] - poly[i - 1][1]) * (poly[i + 1][0] - poly[i][0])) < 1e-9
+             for i in range(1, n - 1)]
+    if n == 2:
+        return "straight"
+    if n == 3:
+        return "L"
+    if n == 4:
+        return "Z"
+    return "chamfer(%d pts)" % n
+
+
+def bends_are_45_or_90(poly, tol=0.02):
+    """45° 工艺：每段折角只能是 0/45/90/135（即方向向量成 45° 的整数倍）。"""
+    for i in range(1, len(poly) - 1):
+        for a, b in (((poly[i - 1], poly[i])), ((poly[i], poly[i + 1]))):
+            dx, dy = b[0] - a[0], b[1] - a[1]
+            L = math.hypot(dx, dy)
+            if L < 1e-9:
+                continue
+            ang = math.degrees(math.atan2(dy, dx)) % 45.0
+            if min(ang, 45.0 - ang) > tol:
+                return False
+    return True
+
+
+def draw_net(pads, layers, obstacles, bounds=None, clear=CLEAR, net="__route__"):
+    """出**单网施工图**：拓扑(MST) + 每边 {约定 · 层 · 折线 · 过孔} + 走廊(包围盒)。"""
+    pads = [list(p) for p in pads]
+    edges = mst_edges(pads)
+    rows, blocked = [], []
+    for a, b, d in edges:
+        r = route_pair_multi(pads[a], pads[b], layers, obstacles, bounds=bounds, clear=clear, net=net)
+        if r["status"] != "ROUTED":
+            blocked.append({"edge": [a, b], "violations": (r.get("violations") or [])[:2],
+                            "via_sites": r.get("layers_tried")})
+            continue
+        xs = [pt[0] for pt in r["poly"]]; ys = [pt[1] for pt in r["poly"]]
+        rows.append({"edge": [a, b], "edge_len_mm": d, "convention": _convention_of(r["poly"]),
+                     "layer": r["layer"], "poly": r["poly"],
+                     "vias": [{"at": list(v["at"]), "layers": list(v["layers"])} for v in r.get("vias", [])],
+                     "corridor_bbox": [round(min(xs), 3), round(min(ys), 3), round(max(xs), 3), round(max(ys), 3)]})
+    return {"net": net, "pads": pads, "mst_edges": edges, "edges": rows, "blocked_edges": blocked,
+            "status": "DRAWN" if not blocked else "DEAD_END(部分边不可出图 ⇒ 需兜底求解器 → 必走评审)",
+            "rule": "#K2-365 sec.2 M3a: the drawing comes from the sample-convention ladder (topology=MST, "
+                    "corridor=declared bbox, layer=declared per edge, vias=declared) - NOT from a geometric crawl"}
+
+
+def review_drawing(drawing, obstacles, clear=CLEAR, layers_allowed=("F.Cu", "In2.Cu")):
+    """**评审闸**（人机皆可读）：逐边核 端点/层/45°/净距/走廊 ⇒ PASS ‖ FAIL(具名行)。M3b 无过闸之图不许落板。"""
+    rows, ok = [], True
+    for ed in drawing["edges"]:
+        poly, lay = ed["poly"], ed["layer"]
+        checks = {
+            "endpoints_match": math.dist(poly[0], drawing["pads"][ed["edge"][0]]) < 1e-6 and
+                               math.dist(poly[-1], drawing["pads"][ed["edge"][1]]) < 1e-6,
+            "layer_declared": lay in layers_allowed,
+            "bends_45_or_90": bends_are_45_or_90(poly),
+            "oracle_clear": not poly_violations(poly, obstacles, clearance=clear, layer=lay),
+            "corridor_declared": bool(ed.get("corridor_bbox")),
+        }
+        if not all(checks.values()):
+            ok = False
+        rows.append({"net": drawing["net"], "edge": ed["edge"], "convention": ed["convention"],
+                     "layer": lay, **checks})
+    for be in drawing["blocked_edges"]:
+        ok = False
+        rows.append({"net": drawing["net"], "edge": be["edge"], "convention": None, "layer": None,
+                     "endpoints_match": None, "layer_declared": None, "bends_45_or_90": None,
+                     "oracle_clear": False, "corridor_declared": None, "blocked": True})
+    return {"net": drawing["net"], "rows": rows, "verdict": "PASS" if ok else "FAIL",
+            "rule": "#K2-365 sec.2: the drawing must pass review (endpoints / declared layer / 45-degree convention / "
+                    "clearance oracle / declared corridor) BEFORE the executor may lay copper"}
+
+
+def drawing_markdown(drawings):
+    """人可读版（评审用）。"""
+    L = ["| 网 | 边 | 约定 | 层 | 折点数 | 过孔 | 走廊包围盒 |", "|---|---|---|---|---|---|---|"]
+    for d in drawings:
+        for ed in d["edges"]:
+            L.append("| %s | %s | %s | %s | %d | %d | %s |" % (
+                d["net"], ed["edge"], ed["convention"], ed["layer"], len(ed["poly"]),
+                len(ed["vias"]), ed["corridor_bbox"]))
+        for be in d["blocked_edges"]:
+            L.append("| %s | %s | **死结** | — | — | — | — |" % (d["net"], be["edge"]))
+    return "\n".join(L)

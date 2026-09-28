@@ -327,15 +327,53 @@ class T(unittest.TestCase):
         self.assertEqual(cd["total_delta"], 0,
                          "apply must not perturb the board config; attribution was %r" % (cd,))
 
+    def test_M3a_draw_and_review_pass_on_a_clean_toy(self):
+        d = route.draw_net([[0, 0], [10, 0], [10, 10]], ["F.Cu"], [], net="N1")
+        self.assertEqual(d["status"], "DRAWN")
+        r = route.review_drawing(d, [])
+        self.assertEqual(r["verdict"], "PASS", r["rows"])
+        self.assertTrue(all(row.get("bends_45_or_90") for row in r["rows"]))
+
+    def test_M3a_review_rejects_a_non_45_bend(self):
+        d = route.draw_net([[0, 0], [10, 0]], ["F.Cu"], [], net="N1")
+        d["edges"][0]["poly"] = [[0, 0], [5, 1], [10, 0]]           # 30° 级折角 ⇒ 违 45° 约定
+        r = route.review_drawing(d, [])
+        self.assertEqual(r["verdict"], "FAIL")
+        self.assertFalse(r["rows"][0]["bends_45_or_90"])
+
+    def test_M3a_review_rejects_an_undeclared_layer(self):
+        d = route.draw_net([[0, 0], [10, 0]], ["F.Cu"], [], net="N1")
+        d["edges"][0]["layer"] = "In7.Cu"
+        self.assertEqual(route.review_drawing(d, [])["verdict"], "FAIL")
+
+    def test_M3a_review_rejects_an_undeclared_corridor(self):
+        d = route.draw_net([[0, 0], [10, 0]], ["F.Cu"], [], net="N1")
+        d["edges"][0]["corridor_bbox"] = None
+        self.assertEqual(route.review_drawing(d, [])["verdict"], "FAIL")
+
+    def test_M3a_dead_end_is_marked_for_the_fallback_solver(self):
+        wall = [{"id": "wall", "kind": "copper", "net": "X", "bbox": [4.0, -6.0, 6.0, 6.0], "layers": ["F.Cu", "In2.Cu"]}]
+        d = route.draw_net([[0, 0], [10, 0]], ["F.Cu"], wall, net="N1")
+        self.assertIn("DEAD_END", d["status"])
+        self.assertEqual(route.review_drawing(d, wall)["verdict"], "FAIL")
+
+    def test_M3a_markdown_is_human_readable(self):
+        d = route.draw_net([[0, 0], [10, 0]], ["F.Cu"], [], net="N1")
+        md = route.drawing_markdown([d])
+        self.assertIn("| 网 | 边 | 约定 | 层 |", md)
+        self.assertIn("N1", md)
+
     def test_C30_product_chain_runs_M1_to_M4_with_call_chain_evidence(self):
         """C30 关闭判据：`exam A --run` 的执行路径 = M1->M2->M3->M4，且**附调用链证据**。"""
         rc, r, _ = self._cli("exam", "A", "--run", "--chain", "product",
                              "--work", "/tmp/eda_eng_selftest_chain", "--max-nets", "1")
-        self.assertIn(r.get("state"), ("GRADED", "M2_FAILED", "M3_APPLY_FAILED", "M4_DRC_FAILED"), r.get("state"))
+        self.assertIn(r.get("state"), ("GRADED", "M2_FAILED", "M3_PLAN_REVIEW_FAILED",
+                                       "M3_APPLY_FAILED", "M4_DRC_FAILED"), r.get("state"))
         cmds = [c.get("cmd", "") for c in r["route"]["chain"]]
         self.assertTrue(any(c.startswith("eda_eng netplan") for c in cmds), "M1 missing from the chain")
         self.assertTrue(any(c.startswith("eda_eng ripup") for c in cmds), "M2 missing from the chain")
-        self.assertTrue(any("M3_route" == c.get("stage") for c in r["route"]["chain"]), "M3 missing from the chain")
+        self.assertTrue(any(c.get("stage") in ("M3a_draw_review", "M3b_execute") for c in r["route"]["chain"]),
+                        "M3 (M3a draw+review or M3b execute) missing from the chain")
         self.assertTrue(any(c.get("stage") == "M4_verify" for c in r["route"]["chain"]), "M4 missing from the chain")
         self.assertTrue(r["route"]["chain"][0]["cmd"].startswith("eda_eng netplan"),
                         "M1 must be the FIRST stage (order evidence)")

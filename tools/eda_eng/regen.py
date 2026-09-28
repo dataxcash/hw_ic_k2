@@ -8,7 +8,7 @@ v1 = **组合确定性管线**（全部是链内既有、确定性、无 LLM 的
 输出 = 最终板 + DRC json（供 eda_eng verify 判卷）。
 """
 from __future__ import annotations
-import json, os, shutil, subprocess, sys
+import json, math, os, shutil, subprocess, sys
 
 from . import shadow as shadow_mod
 
@@ -360,25 +360,46 @@ def exam_a_chain(refs, delta_mm, work, refs_are_region=True, max_nets=None):
     rc, m2 = _cli("ripup", "--board", B, "--plan", plan_j, "--out", torn)
     if rc != 0 or not m2 or m2.get("status") != "RIPPED":
         return {"state": "M2_FAILED", "chain": chain, "M2": m2, "M1": m1}
-    # M3 —— 逐网解路（纯数据 · 本进程）+ 批量落板（子进程）
+    # M3a —— 出图（样板约定阶梯）＋ **评审闸**；死结 ⇒ 兜底求解器 ⇒ 其输出**必再过评审**（禁静默执行）
     from . import netplan as _np, route as _rt
     obs, bounds = _rt.obstacles_from_board(torn, set(nets), "F.Cu")
     pads = _rt.pads_by_net(torn, "F.Cu")
-    plans, blocked = [], []
+    drawings, fallback_used, review_rows = [], [], []
     for n in nets:
         if n not in pads or len(pads[n]) < 2:
-            blocked.append({"net": n, "reason": "no 2+ pads on F.Cu"}); continue
-        r = _rt.route_net(pads[n], ["F.Cu", "In2.Cu"], obs, bounds=bounds, net=n)
-        if r["status"] == "ROUTED":
-            plans.append({"net": n, "layer": None, "polys": [s["poly"] for s in r["segments"]],
-                          "vias": r.get("vias", []), "layers": [s["layer"] for s in r["segments"]]})
-        else:
-            blocked.append({"net": n, "reason": "BLOCKED", "blocked_edge": r.get("blocked_edge"),
-                            "violations": r.get("edge_violations")})
-    chain.append({"stage": "M3_route", "nets_total": len(nets), "routed": len(plans), "blocked": len(blocked)})
-    # 批量落板（子进程 · 一次改板）
-    rp = os.path.join(work, "routes.json")
-    json.dump(plans, open(rp, "w", encoding="utf-8"), ensure_ascii=False)
+            review_rows.append({"net": n, "verdict": "FAIL", "reason": "no 2+ pads on F.Cu"}); continue
+        d = _rt.draw_net(pads[n], ["F.Cu", "In2.Cu"], obs, bounds=bounds, net=n)
+        if d["blocked_edges"]:
+            fb = _rt.route_net(pads[n], ["F.Cu", "In2.Cu"], obs, bounds=bounds, net=n)   # 兜底（建议图）
+            if fb["status"] == "ROUTED":
+                fallback_used.append(n)
+                xs = [pt[0] for pt in [pt for s in fb["segments"] for pt in s["poly"]]]
+                ys = [pt[1] for pt in [pt for s in fb["segments"] for pt in s["poly"]]]
+                d = {"net": n, "pads": pads[n], "mst_edges": fb["mst_edges"],
+                     "edges": [{"edge": s["edge"], "layer": s["layer"], "poly": s["poly"],
+                                "vias": [v for v in fb.get("vias", []) if math.dist(v["at"], s["poly"][0]) < 1e-6
+                                         or math.dist(v["at"], s["poly"][-1]) < 1e-6],
+                                "convention": "FALLBACK(建议图)", "edge_len_mm": 0.0,
+                                "corridor_bbox": [round(min(xs), 3), round(min(ys), 3), round(max(xs), 3), round(max(ys), 3)]}
+                               for s in fb["segments"]],
+                     "blocked_edges": [], "status": "DRAWN_FALLBACK",
+                     "rule": "#K2-365 sec.2: fallback-solver output is a SUGGESTED drawing and must pass review"}
+        rv = _rt.review_drawing(d, obs)
+        review_rows.append({"net": n, "verdict": rv["verdict"], "status": d["status"],
+                            "failed_rows": [r for r in rv["rows"] if r.get("oracle_clear") is False]})
+        if rv["verdict"] == "PASS":
+            drawings.append(d)
+    plan_md = os.path.join(work, "drawing_review.md")
+    open(plan_md, "w", encoding="utf-8").write(_rt.drawing_markdown(drawings) + "\n")
+    plans = [{"net": d["net"], "layer": None, "polys": [e["poly"] for e in d["edges"]],
+              "layers": [e["layer"] for e in d["edges"]], "vias": [v for e in d["edges"] for v in e["vias"]]}
+             for d in drawings]
+    chain.append({"stage": "M3a_draw_review", "nets_total": len(nets), "review_pass": len(drawings),
+                  "review_fail": len(review_rows) - len(drawings), "fallback_used": fallback_used,
+                  "review_rows": review_rows, "drawing_md": plan_md})
+    if not drawings:
+        return {"state": "M3_PLAN_REVIEW_FAILED", "chain": chain, "review_rows": review_rows,
+                "note": "no net produced a review-passing drawing - nothing may be laid (M3b refuses without an approved drawing)"}
     rc, m3 = _cli("route", "--apply-batch", rp, "--board", torn, "--out", final)
     if rc != 0 or not os.path.isfile(final):
         return {"state": "M3_APPLY_FAILED", "chain": chain, "M3": {"routed": len(plans), "blocked": blocked},
