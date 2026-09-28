@@ -1,0 +1,278 @@
+{
+ "artifact": "eda_eng_cli_demo_v1",
+ "ts": "2026-09-28",
+ "authority": "#K2-358 (product = eda_eng; ARCHER = developer; board changes only via this CLI)",
+ "llm_free": true,
+ "runs": [
+  {
+   "cmd": "eda_eng selftest",
+   "exit": 0,
+   "json": {
+    "artifact": "eda_eng_selftest",
+    "tests": 11,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "verdict": "PASS"
+   }
+  },
+  {
+   "cmd": "eda_eng eco",
+   "exit": 0,
+   "json": {
+    "artifact": "eda_eng_eco_check",
+    "skeleton": {
+     "README.md": true,
+     "_TEMPLATE-ECO.md": true,
+     "REGISTER.md": true
+    },
+    "ecos": [
+     {
+      "eco": "ECO-K2-0001-header-governance.md",
+      "complete": true,
+      "missing": [],
+      "registered": true
+     },
+     {
+      "eco": "ECO-K2-0002-reroute-engine-exam-A.md",
+      "complete": true,
+      "missing": [],
+      "registered": true
+     },
+     {
+      "eco": "ECO-K2-0003-reroute-engine-exam-B.md",
+      "complete": true,
+      "missing": [],
+      "registered": true
+     }
+    ],
+    "verdict": "PASS",
+    "rule": "#K2-357 sec.2: form complete + registered is a precondition for a board change"
+   }
+  },
+  {
+   "cmd": "eda_eng docs",
+   "exit": 0,
+   "json": {
+    "artifact": "eda_eng_docs_chain_status",
+    "skeleton": {
+     "README.md": true,
+     "_TEMPLATE-ECO.md": true,
+     "REGISTER.md": true
+    },
+    "rows": [
+     {
+      "eco": "ECO-K2-0001-header-governance.md",
+      "form_complete": true,
+      "has_plan_sec7": true,
+      "has_drawing": null,
+      "has_records_sec8": true,
+      "board_drawn": false
+     },
+     {
+      "eco": "ECO-K2-0002-reroute-engine-exam-A.md",
+      "form_complete": true,
+      "has_plan_sec7": true,
+      "has_drawing": null,
+      "has_records_sec8": true,
+      "board_drawn": false
+     },
+     {
+      "eco": "ECO-K2-0003-reroute-engine-exam-B.md",
+      "form_complete": true,
+      "has_plan_sec7": true,
+      "has_drawing": null,
+      "has_records_sec8": true,
+      "board_drawn": false
+     }
+    ],
+    "verdict": "PASS",
+    "rule": "#K2-357: any missing/inconsistent link = stopline; DRAFT additionally blocks the drawing stage"
+   }
+  },
+  {
+   "cmd": "eda_eng verify --board hw/k2_v4_8L.l15-H4CLEAR-attempt2-FAILED.kicad_pcb --drc pm_gate/artifacts/k2_v4/L2/H4CLEAR_ATTEMPT2_L15_DRC.json",
+   "exit": 1,
+   "json": {
+    "artifact": "eda_eng_verify",
+    "board": "hw/k2_v4_8L.l15-H4CLEAR-attempt2-FAILED.kicad_pcb",
+    "ref": "/home/fila/jqdDev_2025/ic_hw/k2/hw/k2_v4_8L.l14.kicad_pcb",
+    "criteria": {
+     "C1_connectivity": {
+      "unconnected": 1,
+      "pass": false
+     },
+     "C2_drc_no_new_increase": {
+      "total": 196,
+      "ref_total": 168,
+      "new_classes": [
+       "clearance",
+       "hole_clearance",
+       "shorting_items",
+       "solder_mask_bridge"
+      ],
+      "pass": false
+     },
+     "C3_skew": {
+      "per_pair_mm": {
+       "0": 0.065012,
+       "1": 0.06498,
+       "2": 0.043403,
+       "3": 0.078764,
+       "4": 3.4e-05,
+       "5": 6e-06,
+       "6": 0.021612,
+       "7": 0.013792
+      },
+      "max_mm": 0.078764,
+      "limit_mm": 0.15,
+      "pass": true
+     },
+     "C4_chamfer_preserved": {
+      "count": 1999,
+      "ref_count": 2637,
+      "pass": false
+     },
+     "C5_routing_changed": {
+      "element_set_diff": 4110,
+      "pass": true
+     }
+    },
+    "verdict": "FAIL",
+    "rule": "PASS iff all five hold; None (skipped) is never a PASS (#K2-358: capability must be reproducible)"
+   }
+  },
+  {
+   "cmd": "eda_eng exam B",
+   "exit": 1,
+   "json": {
+    "artifact": "eda_eng_exam",
+    "exam": {
+     "id": "B",
+     "scenario": "H4 lands exactly in its corner [140.9287,76.9287] (SPEC rev-62)",
+     "refs": [
+      "H4"
+     ],
+     "reuse": "place + route (local rip-up)",
+     "affected_nets": [
+      "PCIE_DN4_N",
+      "PCIE_DN4_P",
+      "PCIE_DN5_N",
+      "PCIE_DN5_P",
+      "PCIE_DN6_N",
+      "PCIE_DN6_P",
+      "PCIE_DN7_N",
+      "PCIE_DN7_P"
+     ],
+     "occupants": [
+      "PCIE_UP_OUT1_N_J2",
+      "PCIE_UP_OUT2_P_J2",
+      "PCIE_UP_OUT3_N_J2",
+      "PCIE_UP_OUT4_P_J2",
+      "PCIE_UP_OUT5_N_J2",
+      "PCIE_UP_OUT6_P_J2",
+      "PCIE_UP_OUT7_N_J2",
+      "J2_pad_grid"
+     ]
+    },
+    "judging_table": {
+     "C1": "unconnected == 0",
+     "C2": "DRC total <= 168 and no new class",
+     "C3": "max per-pair copper-length delta <= 0.15 mm",
+     "C4": "45-degree segments >= 2637",
+     "C5": "segment-level element-set difference != 0",
+     "C6(B only)": "C21 four corners all PASS"
+    },
+    "state": "DEFINED",
+    "note": "definition only; to grade, pass --board/--drc of the engine's output. The engine is NOT implemented yet (see route), so the plan step is unavailable and the exam cannot be passed today.",
+    "engine": {
+     "implemented": false,
+     "reason": "rip-up & reroute engine not built yet (#K2-356 work order)",
+     "exams": [
+      "A",
+      "B"
+     ],
+     "entry": "route --exam A|B --in <board> --out <board>",
+     "note": "until it can pass exam A/B the board may not be changed (#K2-356 sec.2.4 / #K2-358 sec.3)"
+    }
+   }
+  },
+  {
+   "cmd": "eda_eng place --refs U1,U2,U4,U5 --delta 5,0",
+   "exit": 0,
+   "json": {
+    "artifact": "eda_eng_place_scenario",
+    "source": "pm_gate/artifacts/k2_v4/L2/PLACEMENT_SOLUTION_v1.json",
+    "refs": [
+     "U1",
+     "U2",
+     "U4",
+     "U5"
+    ],
+    "delta_mm": [
+     5.0,
+     0.0
+    ],
+    "moved": [
+     {
+      "ref": "U1",
+      "at": [
+       41.0,
+       52.0
+      ]
+     },
+     {
+      "ref": "U2",
+      "at": [
+       38.0,
+       37.0
+      ]
+     },
+     {
+      "ref": "U4",
+      "at": [
+       45.0,
+       37.0
+      ]
+     },
+     {
+      "ref": "U5",
+      "at": [
+       49.5,
+       52.0
+      ]
+     }
+    ],
+    "missing": [],
+    "board_touched": false,
+    "note": "declarative only; a board is produced by route (engine), never by hand"
+   }
+  },
+  {
+   "cmd": "eda_eng route --exam B",
+   "exit": 2,
+   "json": {
+    "artifact": "eda_eng_route",
+    "status": "NOT_IMPLEMENTED",
+    "implemented": false,
+    "reason": "rip-up & reroute engine not built yet (#K2-356 work order)",
+    "exams": [
+     "A",
+     "B"
+    ],
+    "entry": "route --exam A|B --in <board> --out <board>",
+    "note": "until it can pass exam A/B the board may not be changed (#K2-356 sec.2.4 / #K2-358 sec.3)"
+   }
+  }
+ ],
+ "expected_exit_codes": {
+  "selftest": 0,
+  "eco": 0,
+  "docs": 0,
+  "verify": 1,
+  "exam": 1,
+  "place": 0,
+  "route": 2
+ },
+ "OWNER-ITEMS": 0
+}
