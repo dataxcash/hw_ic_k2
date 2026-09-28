@@ -593,6 +593,14 @@ def relocate_block_chain(rect, delta, work, members=None, clearance=None, max_jo
                   "FOREIGN_PADS_INSIDE": cen["FOREIGN_PADS_INSIDE"]["count"],
                   "n_members": cen["n_members"], "n_N_star": cen["n_N_star"],
                   "totals_N_star": cen["totals_N_star"], "swept": cen["swept"]})
+    # M1 = 块内拆线/重连计划（三分法清册的**可执行输出**：块内段沿用 · 穿边段切分 · 块外零触碰）
+    chain.append({"stage": "M1_block_plan", "affected_nets": cen["N_star"],
+                  "teardown_crossing_segments": cen["totals_N_star"]["trk_cross"],
+                  "in_block_kept_segments": cen["totals_N_star"]["trk_in"],
+                  "outside_untouched_segments": cen["totals_N_star"]["trk_out"],
+                  "outside_untouched_vias": cen["totals_N_star"]["via_out"],
+                  "rule": "#K2-369: only the crossing lines are reconnected; in-block copper travels with the block; "
+                          "outside copper is never listed for teardown"})
     if not cen["frame_ok"]:
         return {"state": "M0_FRAME_REJECTED", "chain": chain, "census": cen,
                 "rule": "#K2-369 sec.4: a frame is only admissible when FOREIGN_INSIDE == 0 AND "
@@ -601,8 +609,9 @@ def relocate_block_chain(rect, delta, work, members=None, clearance=None, max_jo
     # ── step ①（含 M2 剪边）：块体刚性搬运 + 穿边切分（块外半段保留 = 固定端口）
     moved = os.path.join(work, "s1_moved.kicad_pcb")
     mv = _blk.move_block(B0, rect, delta, moved, refs=members)
-    chain.append({"stage": "1_move_block", "members": mv["moved"], "n_members": mv["n_members"],
-                  "jobs": mv["n_jobs"]})
+    chain.append({"stage": "M2_block_pass", "realises": "step 1 (pads + in-block copper rigidly translated) AND "
+                                                       "M2 (crossing lines split at dR)",
+                  "moved": mv["moved"], "n_members": mv["n_members"], "jobs": mv["n_jobs"]})
     if clear != _rt.CLEAR:                                         # 保持与 census 同口径
         pass
 
@@ -635,7 +644,7 @@ def relocate_block_chain(rect, delta, work, members=None, clearance=None, max_jo
             xs = [pt[0] for pt in pl]; ys = [pt[1] for pt in pl]
             extra_obs.append({"id": "newroute@%s" % net, "kind": "copper", "net": net,
                               "bbox": [min(xs), min(ys), max(xs), max(ys)], "layer": L})
-    chain.append({"stage": "3_block_reconnect", "jobs_total": len(jobs), "routed": len(plans),
+    chain.append({"stage": "M3_block_reconnect", "jobs_total": len(jobs), "routed": len(plans),
                   "blocked": len(blocked), "blocked_named": blocked,
                   "domain": "block swept region", "terminals": "dR ports are FIXED",
                   "semantics": "a blocked job is NOT_FOUND - never read as impossible (#K2-367 sec.2)"})
@@ -648,7 +657,7 @@ def relocate_block_chain(rect, delta, work, members=None, clearance=None, max_jo
     if rc != 0 or not ap or not os.path.isfile(final):
         return {"state": "S5_APPLY_FAILED", "chain": chain, "census": cen, "move": mv,
                 "routed": len(plans), "blocked": blocked, "apply": ap}
-    chain.append({"stage": "5_apply_refill", "zones_refilled": ap.get("zones_refilled"),
+    chain.append({"stage": "step5_apply_refill", "zones_refilled": ap.get("zones_refilled"),
                   "segments_added": ap.get("segments_added"), "status": ap.get("status")})
 
     # ── 保真判据 C6/C7（在 M4 判卷里当判据用）
@@ -667,7 +676,8 @@ def relocate_block_chain(rect, delta, work, members=None, clearance=None, max_jo
     ref_drc = os.path.join(ROOT, "pm_gate/artifacts/k2_v4/L2/REROUTE_EXAM_REF_L14_DRC.json")
     v = _vf.judge(final, dj, B0, ref_drc, extra=extra)
     delta_cls = _vf.class_delta(dj, ref_drc)
-    chain.append({"stage": "6_M4_judge", "verdict": v["verdict"], "geometry_delta": delta_cls["total_delta"],
+    chain.append({"stage": "M4_judge", "judging_table": "ECO-K2-0002 sec.6 (C1-C5 + C6/C7)",
+                  "verdict": v["verdict"], "geometry_delta": delta_cls["total_delta"],
                   "C6": c6["equal"], "C7": c7["equal"]})
     return {"state": "GRADED", "chain": chain, "census_summary": {
                 "frame_ok": cen["frame_ok"], "FOREIGN_INSIDE": cen["FOREIGN_INSIDE"],

@@ -84,7 +84,7 @@ owner 根因判定（#K2-356 §一）：**布局调整后 ENG 没有能力重构
 | 六步命令 | `relocate` 可用 | 交付 R970：挪 pad→M1→M2→迷宫重连→复敷铜→M4（单件实证 1/1 routed；selftest 51/51）| 09-29 02:0x | ARCHER |
 | 考题 attempt 3 | 全链一次 | **GRADED／FAIL**：C1 321 断 · C2 1196（7 新类）· C3 PASS · C4 2668 PASS · C5 3061 PASS；21 网 16 通 5 **具名**阻 | 09-29 02:1x | ARCHER |
 | 保真缺陷自登 | 崩溃→具名 | 跑真题抓出 `maze_route` 目标点不可吸附时 `min(())` **崩溃** ⇒ 修为**具名 `NOT_FOUND`** ＋ 回归件（selftest 52/52）；属**代码修正**（非改参重跑）| 09-29 02:1x | ARCHER |
-| BLOCK 四步 | 全链一次 | **GRADED／FAIL**：C1 断 18 · C2 296（6 新类）· C3 PASS · C4 2679 PASS · C5 1336 PASS · **C6 PASS（diff 0）· C7 PASS（diff 0）**；21 作业 3 通 20 **具名**阻 | 09-29 02:3x | ARCHER |
+| BLOCK 全链（**产品路径** `exam A --run --chain product`）| 恰一次 | **GRADED／FAIL**：C1 断 18 · C2 296（6 新类）· C3 PASS · C4 2665 PASS · C5 1271 PASS · **C6 PASS（diff 0）· C7 PASS（diff 0）**；23 作业 3 通 20 **具名**阻 · 复敷铜 18 zone · 件 `L2/EDA_ENG_EXAM_A_ATTEMPT4_BLOCK_VERDICT_v1.json` | 09-29 02:4x | ARCHER |
 | 复敷铜真接线 | `zones_refilled` | 批路径补 `ZONE_FILLER` ⇒ **18 个 zone 真灌**（此前是空操作）＋ 回归件 | 09-29 02:3x | ARCHER |
 | via 棱柱 | span 逐层 | `maze_route` 换层改核 **span 内每一层**（缺口 C31）＋ 回归件（In1.Cu 全墙 ⇒ BLOCKED） | 09-29 02:3x | ARCHER |
 | 新缺口 C32 | 障碍= AABB | 实测 18/20 受阻端点距**真实**异网铜 ≥0.175mm ⇒ 拒绝系 **AABB 假阳** ⇒ 需**真形净距 oracle** | 09-29 02:3x | ARCHER |

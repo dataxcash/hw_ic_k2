@@ -16,9 +16,14 @@ def _exam_a():
     """考题 A 的**单一源** = ECO 场景件（#K2-363 sec.2.1 / ECO-K2-0002 v3）。"""
     if _os.path.isfile(_SCEN):
         s = _json.load(open(_SCEN, encoding="utf-8"))["scenario"]
-        return {"id": "A", "scenario": "REGION re-placement (cluster + measured neighbours) by %s mm" % (s["delta_mm"],),
-                "refs": s["region_refs"], "delta_mm": s["delta_mm"], "reuse": "M1->M2->M3->M4",
-                "affected_nets": 21, "source": "L2/EXAM_A_REGION_SCENARIO_v1.json"}
+        out = {"id": "A", "scenario": "REGION re-placement (cluster + measured neighbours) by %s mm" % (s["delta_mm"],),
+               "refs": s["region_refs"], "delta_mm": s["delta_mm"], "reuse": "M0->M1/M2(block)->M3->M4",
+               "affected_nets": 21, "source": "L2/EXAM_A_REGION_SCENARIO_v1.json"}
+        bf = _json.load(open(_SCEN, encoding="utf-8")).get("block_frame_v1")   # 单一源：框在场景件里
+        if bf:
+            out["block_frame"] = bf["rect"]
+            out["block_frame_evidence"] = bf.get("evidence")
+        return out
     return {"id": "A", "scenario": "translate U1/U2/U4/U5 by +4.000 mm in X (stale fallback)",
             "refs": ["U1", "U2", "U4", "U5"], "delta_mm": [4.0, 0.0], "reuse": "place + route", "affected_nets": 21}
 

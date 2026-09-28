@@ -106,7 +106,12 @@ def main(argv=None):
             if not pr["ok"]:
                 return _emit({"artifact": "eda_eng_exam", "exam": a.which, "state": "REFUSED_BY_PREFLIGHT",
                               "preflight": pr}, None, 2)
-            rp = regen_mod.exam_a_chain(refs, delta, W, max_nets=a.max_nets)
+            if a.which == "A" and preset.get("block_frame"):
+                # #K2-369 sec.4 + C30: exam A's product chain IS the BLOCK chain (M0 census -> M1/M2 block
+                # pass -> M3 in-block reconnect -> refill -> M4). The scenario frame comes from the ECO artifact.
+                rp = regen_mod.relocate_block_chain(preset["block_frame"], delta, W, members=refs)
+            else:
+                rp = regen_mod.exam_a_chain(refs, delta, W, max_nets=a.max_nets)
             graded = bool(rp.get("M4"))
             v = (rp.get("M4") or {}).get("verdict") or ("FAIL" if str(rp.get("state", "")).endswith("FAILED") else None)
             out = {"artifact": "eda_eng_exam", "exam": a.which, "preflight": pr, "route": rp,

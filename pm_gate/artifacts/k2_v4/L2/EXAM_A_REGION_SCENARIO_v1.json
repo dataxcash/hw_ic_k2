@@ -172,5 +172,33 @@
  ],
  "n_affected_nets_if_M1_runs": 21,
  "status": "SCENARIO ESTABLISHED AND GATE-LEGAL. The heavy exam run is NOT made: the ruling's exam path requires the product chain M1->M2->M3->M4, which is not wired yet (C30) and whose M3 v1 cannot re-route multi-pad nets (the declared scope gap). Those two are the remaining work before the single exam run.",
- "OWNER-ITEMS": 0
+ "OWNER-ITEMS": 0,
+ "block_frame_v1": {
+  "rect": [
+   22.95,
+   32.95,
+   46.5,
+   62.5
+  ],
+  "authority": "#K2-369 sec.3.4 + ENG technical correction (R976): the approved [22.95,32.95,51.50,66.50] fails the model's own frame acceptance (5 netted components swallowed, N* 22->30 incl. 8 PCIe, sweep x 55.0 > HS 53.02)",
+  "acceptance": {
+   "FOREIGN_INSIDE": 0,
+   "FOREIGN_PADS_INSIDE": 0,
+   "rule": "frame acceptance test in eda_eng block"
+  },
+  "hard_bounds": {
+   "x_max_lt": 48.05,
+   "basis": "J4 pad y_min",
+   "y_max_lt": 63.95
+  },
+  "members": 20,
+  "n_N_star": 22,
+  "swept": [
+   22.95,
+   32.95,
+   50.0,
+   66.0
+  ],
+  "evidence": "L2/BLOCK_MODEL_MACHINE_EVIDENCE_v1.json"
+ }
 }
