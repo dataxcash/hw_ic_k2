@@ -63,6 +63,21 @@
     "chain_runs_consumed": "1/1",
     "incident": "a first invocation fell through to the legacy composer because of a guard bug in the new branch; it was detected and KILLED with no verdict and no board product, so it is NOT counted as a run. The authorised run then produced the board and crashed only at the JSON emission (--json-out bug, fixed in the same commit); the C1-C9 verdict was re-derived READ-ONLY from the produced board + the product's own final DRC, so the chain was still run exactly once."
    }
+  },
+  {
+   "id": "Q5",
+   "fact": "option C is REFUTED as a route to C6=0 (measured, read-only)",
+   "reading": {
+    "added_outside_pieces": 241,
+    "distance_profile_mm": {
+     "<=0.5": 12,
+     "<=1.5": 27,
+     "<=3": 21,
+     ">3": 181
+    },
+    "max_outward_mm": 84.05,
+    "meaning": "181 of the 241 new outside pieces sit MORE THAN 3mm outside the frame and the furthest is 84mm out - i.e. the product lays long new runs on the affected nets far from the block, so shrinking --margin (which only bounds the search window around each gap) cannot bring the C6 delta to 0. Option C can shave the <=1.5mm band only."
+   }
   }
  ],
  "element_3_corrected_plan": {
@@ -77,14 +92,15 @@
    "cost": "weakens an approved criterion (#K2-372 sec.2.3) => supervisor only",
    "verdict_from_evidence": "the 250 delta is confined to AFFECTED nets (I2C1_SDA/PERSTA#/MCU_VDD/I2C2_SDA/PWR_BTN_OUT) - i.e. it is explainable as 'affected-net work', not as collateral damage"
   },
-  "recommendation": "order of preference: C (products own bounds; no licence) as the first attempt in a NEW authorised window, measured against C1/C6; then A (a hard frame bound inside the product; needs the supervisor's licence) if C cannot reach C6=0; B (restating C6) only as a criterion-scope ruling by the supervisor.",
+  "recommendation": "(1) the supervisor rules the interface: A (hard bound; licence) or B (restate C6 to 'unaffected nets only'); (2) then ONE new authorised window runs A-prime with that decision, closing C1 together with C6; (3) option C is retained only as a band-shrinker, not as the fix.",
   "residual_c1": "C1=14 must be closed by the SAME decision's implementation (the product's own acceptance line requires unconnected == 0), otherwise the next run fails again.",
   "option_C_use_the_products_own_bounds": {
    "what": "bound the product's work scope with its EXISTING parameters, NO product change and NO licence: (i) `--radius` is already the damage radius around the moved parts (a bounded rip); (ii) `--margin` is passed straight to the in-register maze (tools/k2_p4_mroute_v1.py), whose docstring says the search window = 'the two gap endpoints' bbox expanded by --margin, clamped to the board' => a smaller --margin (e.g. 1.0-1.5mm instead of the 3.0mm default) keeps the stitch/repair copper tight around each gap instead of wandering.",
    "reading": "READ-ONLY code survey (no run): tools/k2_reroute_affected_v2.py lines 130/774/789 + tools/k2_p4_mroute_v1.py line 13. Registered as a FACT, not as a result - the effect on C6/C1 has NOT been measured.",
    "limit_it_does_not_guarantee_C6": "C6 is strict ('copper outside the frame must be unchanged'), and a gap whose two endpoints straddle dR will still put its window band just outside the frame; so option C can SHRINK the C6 delta but may not reach 0.",
    "cost": "zero licence (existing parameters); risk = a tighter window can leave some gaps unroutable (C1 may rise)."
-  }
+  },
+  "option_C_refuted": "MEASURED: 181/241 of the new outside pieces are >3mm out (max 84mm) => option C cannot reach C6=0; the real choice is A (a hard frame bound inside the product - needs the supervisor's licence, and will likely raise C1 because those long re-routes are how the net was reconnected) or B (restate C6's scope - a criterion-scope ruling)."
  },
  "element_4_buildability": {
   "value": "relocation_listed",
