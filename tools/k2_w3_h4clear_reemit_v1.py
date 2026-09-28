@@ -206,12 +206,20 @@ def certify(src, out):
             if nm in PLAN:
                 if not (r["column_x"] <= X_MAX + 1e-9):
                     cert["columns_ok"] = False
-    # per-polarity monotone x-order (the IN-REGISTER rule: m13_v57_f13_r1_pair_coupling_v1_1 constraints.x_order_rule)
-    for pol in ("N", "P"):
-        seq = [(k, v["column_x"]) for k, v in d["layers"]["R3"]["assignment"].items()
-               if k.startswith("J2|PCIE_DN") and k.endswith("_" + pol)]
+    # IN-REGISTER rule (m13_v57_f13_r1_pair_coupling_v1_1 constraints.x_order_rule): monotone PER PAD-COLUMN
+    # FAMILY in lane order - the columns landing on the x=135.0 pads must DECREASE, the ones landing on the
+    # x=132.65 pads must INCREASE.  (Grouping by polarity N/P is WRONG: it mixes the two families.)
+    rows_a = d["layers"]["R3"]["assignment"]
+    fam = {}
+    for k, v in rows_a.items():
+        if not k.startswith("J2|PCIE_DN"):
+            continue
+        fam.setdefault(round(v["pad"][0], 3), []).append((k, v["column_x"]))
+    for px, seq in fam.items():
         seq = [x for _, x in sorted(seq, key=lambda kv: kv[0])]
-        cert.setdefault("per_polarity_monotone", {})[pol] = all(seq[i] > seq[i + 1] for i in range(len(seq) - 1))
+        want_desc = px == 135.0
+        ok = all((seq[i] > seq[i + 1]) if want_desc else (seq[i] < seq[i + 1]) for i in range(len(seq) - 1))
+        cert.setdefault("per_pad_family_monotone", {})["pad_x=%.2f" % px] = {"seq": seq, "descending": want_desc, "ok": ok}
     xs = sorted([d["layers"]["R3"]["assignment"]["J2|" + n]["column_x"] for n in PLAN], reverse=True)
     cert["new_columns"] = xs
     cert["min_pitch_mm"] = round(min(xs[i] - xs[i + 1] for i in range(len(xs) - 1)), 6)
@@ -254,7 +262,7 @@ def main():
                and not cert["pair_delta_violations"]
                and all(v["equal"] for v in cert.get("touched_pair_shortening", {}).values())
                and all(cert["no_copper_in_keepout"].values()) and cert["columns_ok"]
-               and all(cert.get("per_polarity_monotone", {}).values()))
+               and all(v["ok"] for v in cert.get("per_pad_family_monotone", {}).values()))
     rep_out = {"artifact": "k2_w3_h4clear_reemission_report_v1", "ts": "2026-09-28",
                "authority": "#K2-351 sec.4(a)", "source_sha16": sha16(src), "out_sha16": sha16(out),
                "verdict": "CERTIFIED" if verdict else "FAIL",

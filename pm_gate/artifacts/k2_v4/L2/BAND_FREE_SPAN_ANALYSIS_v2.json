@@ -1,0 +1,107 @@
+{
+ "artifact": "k2_band_free_span_v1",
+ "ts": "2026-09-28",
+ "board": "hw/k2_v4_8L.l14.kicad_pcb",
+ "authority": "asset built after the R914 judge failure (#K2-351 window; #K2-352 C26/C27 follow-up)",
+ "method": "per foreign In2 item: blocked x-interval [x-(r+clearance), x+(r+clearance)] over its y-extent; a candidate is blocked iff the interval contains x AND the y-extent overlaps the corridor",
+ "limits": "In2-layer geometry only - a real DRC must still confirm F.Cu / In5 / pour effects",
+ "constraint": {
+  "x_max": 137.6537,
+  "clearance_mm": 0.175,
+  "via_radius_mm": 0.175,
+  "track_radius_mm": 0.08,
+  "min_pitch_mm": 0.525
+ },
+ "n_foreign_items": 74,
+ "nets": {
+  "PCIE_DN4_N": {
+   "corridor_y": [
+    59.45,
+    74.222
+   ],
+   "pad": [
+    135.0,
+    59.7
+   ],
+   "free_x_spans_le_xmax": [
+    [
+     132.01,
+     132.29
+    ],
+    [
+     134.19,
+     134.64
+    ],
+    [
+     135.36,
+     135.64
+    ]
+   ]
+  },
+  "PCIE_DN5_P": {
+   "corridor_y": [
+    60.05,
+    75.671
+   ],
+   "pad": [
+    135.0,
+    60.3
+   ],
+   "free_x_spans_le_xmax": [
+    [
+     132.01,
+     132.29
+    ],
+    [
+     134.19,
+     134.64
+    ],
+    [
+     135.36,
+     135.64
+    ]
+   ]
+  },
+  "PCIE_DN6_N": {
+   "corridor_y": [
+    63.05,
+    77.12
+   ],
+   "pad": [
+    135.0,
+    63.3
+   ],
+   "free_x_spans_le_xmax": [
+    [
+     132.01,
+     133.48
+    ],
+    [
+     134.19,
+     135.64
+    ],
+    [
+     136.94,
+     137.39
+    ]
+   ]
+  },
+  "PCIE_DN7_P": {
+   "corridor_y": [
+    63.65,
+    78.569
+   ],
+   "pad": [
+    135.0,
+    63.9
+   ],
+   "free_x_spans_le_xmax": [
+    [
+     132.01,
+     136.23
+    ]
+   ]
+  }
+ },
+ "OWNER-ITEMS": 0
+}

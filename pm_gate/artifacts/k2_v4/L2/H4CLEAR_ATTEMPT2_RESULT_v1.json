@@ -1,0 +1,76 @@
+{
+ "artifact": "k2_h4clear_attempt2_result_v1",
+ "ts": "2026-09-28",
+ "authority": "#K2-355 sec.2.4 bounded window (candidate C preferred)",
+ "step1_strip_reading": {
+  "tool": "k2_band_free_span_v1.py",
+  "xmin": 131.2,
+  "verdict": "FREE",
+  "free_spans_min": 132.01,
+  "artifact": "L2/BAND_FREE_SPAN_ANALYSIS_v2.json"
+ },
+ "step2_reemission": {
+  "drawing": "L3/mcio_feas_step2/m13_v57_w3_joint_assignment_H4CLEAR_v3.json",
+  "sha16": "1d8beb3a04a6efaa",
+  "certification": "CERTIFIED",
+  "plan": {
+   "PCIE_DN4_N": 135.5,
+   "PCIE_DN5_P": 134.4,
+   "PCIE_DN6_N": 133.0,
+   "PCIE_DN7_P": 132.2
+  },
+  "in_register_rule_satisfied": true,
+  "via_clearance_to_keepout_mm": 2.2537,
+  "min_pitch_mm": 0.8
+ },
+ "step3_chain_run": {
+  "l15_sha16": "8c6085414be92bc0",
+  "zones_filled": "10/10"
+ },
+ "step4_judge": {
+  "c21_corner_keepout": "PASS_ALL_FOUR",
+  "drc": {
+   "l15": 196,
+   "baseline_l14": 168,
+   "verdict": "FAIL",
+   "new_or_raised": {
+    "shorting_items": 4,
+    "clearance": 7,
+    "hole_clearance": 7,
+    "solder_mask_bridge": 9,
+    "copper_sliver": 1
+   }
+  },
+  "unconnected": {
+   "l15": 1,
+   "required": 0,
+   "verdict": "FAIL"
+  },
+  "verdict": "FAIL"
+ },
+ "root_cause": {
+  "statement": "every new hard error is a moved landing column/via colliding with J2's OWN F.Cu pad grid at the landing y-band.",
+  "named_collisions": {
+   "PCIE_DN7_P": "J2 pad 69 (PCIE_DN6_P) - hole clearance 0.0000 mm (on top)",
+   "PCIE_DN6_N": "J2 pad 67 (GND) - 0.075 mm",
+   "PCIE_DN5_P": "J2 pad 58 (PCIE_DN4_N) - 0.0725 mm",
+   "PCIE_DN4_N": "J2 pad 56 (GND) - 0.075 mm"
+  }
+ },
+ "new_structural_fact": "the right-edge column x is occupied by THREE classes, not two: (1) the down-lane columns (In2), (2) the up-lane columns/vias (In2), and (3) J2's pad grid (F.Cu, two columns x approx 132.65 / 135.0 across the whole landing y-band). Under the existing escape architecture the set of column x satisfying 'corner clear (x <= 137.6537)' AND 'clear of all three' is EMPTY in this window's measurement. This is the concrete origin of #K2-355 sec.2.3 (B) 're-plan the escape architecture' - an architecture problem, not a coordinate problem.",
+ "capability_gap_C29": "the R915 band analyser covers In2 only (its own stated limit). It yields a NECESSARY condition, not a sufficient one; this window judged FREE from it while the real DRC judged FAIL. Closure: fold F.Cu pads/tracks and In5 into the occupancy model, or mandate DRC-in-the-loop in planning; regression = the next planning window's DRC verdict agrees with its planning verdict.",
+ "window_outcome": "2nd same-cause FAIL for the H4 landing => per #K2-355 sec.2.5 the means must change (B); ENG does not attempt B unilaterally.",
+ "rollback": {
+  "project_yaml": "restored to l14 / rev-61",
+  "l15": "kept as hw/k2_v4_8L.l15-H4CLEAR-attempt2-FAILED.kicad_pcb (8c6085414be92bc0)",
+  "chain_temp": "removed from hw/"
+ },
+ "artifacts": {
+  "report": "docs/K2-R924-H4CLEAR-ATTEMPT2-JUDGE-FAIL-J2-PAD-GRID-NAMED.md",
+  "drc": "L2/H4CLEAR_ATTEMPT2_L15_DRC.json",
+  "c21": "L2/H4CLEAR_ATTEMPT2_L15_C21.json",
+  "reemission_report": "L2/W3_H4CLEAR_REEMISSION_REPORT_v3.json",
+  "band_v2": "L2/BAND_FREE_SPAN_ANALYSIS_v2.json"
+ },
+ "OWNER-ITEMS": 0
+}
