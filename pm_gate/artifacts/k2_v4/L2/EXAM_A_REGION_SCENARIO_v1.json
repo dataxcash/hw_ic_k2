@@ -1,0 +1,176 @@
+{
+ "artifact": "k2_examA_region_scenario_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-363 sec.2.1 (option B: left REGION re-placement; the target comes from the P1 gate per the N-series norms, never hand-picked)",
+ "scenario": {
+  "kind": "REGION re-placement (cluster + measured neighbours move together)",
+  "delta_mm": [
+   3.5,
+   3.5
+  ],
+  "region_refs": [
+   "C73",
+   "C84",
+   "C85",
+   "C86",
+   "C87",
+   "C88",
+   "C90",
+   "D2",
+   "E2",
+   "J12",
+   "J13",
+   "J6",
+   "J9",
+   "L1",
+   "R40",
+   "R41",
+   "U1",
+   "U2",
+   "U4",
+   "U5"
+  ],
+  "n_region_refs": 20,
+  "region_margin_mm": 2.0,
+  "region_rule": "the region is MEASURED: seed parts plus every footprint touched by the seed bbox grown by margin"
+ },
+ "target_derivation": {
+  "direction": "N5 density rule: NW quadrant holds 46.81% of the device area vs the 37.5% limit (N5 VIOLATED); the emptiest quadrant is SE (9.87%) => the direction is toward SE, i.e. (+X,+Y)",
+  "density": {
+   "quadrant_area_pct": {
+    "NE": 29.3,
+    "NW": 46.81,
+    "SE": 9.87,
+    "SW": 14.02
+   },
+   "crowded": "NW",
+   "emptiest": "SE",
+   "N5_limit_pct": 37.5,
+   "N5_violated": true,
+   "rule": "N5 (inherited): no quadrant's device-area fraction may exceed 1.5x the global mean"
+  },
+  "lattice": "0.5 mm steps, k=1..8 along the N5 direction",
+  "magnitude": "SELECTED BY THE GATE: (3.5,3.5) mm is the only legal lattice point (the other seven are rejected by gen self-check)",
+  "gate": {
+   "baseline": {
+    "courtyards_overlap": 2
+   },
+   "candidates": [
+    {
+     "delta_mm": [
+      0.5,
+      0.5
+     ],
+     "legal": false,
+     "new_mechanical_violations": {},
+     "gen_exit": 1
+    },
+    {
+     "delta_mm": [
+      1.0,
+      1.0
+     ],
+     "legal": false,
+     "new_mechanical_violations": {},
+     "gen_exit": 1
+    },
+    {
+     "delta_mm": [
+      1.5,
+      1.5
+     ],
+     "legal": false,
+     "new_mechanical_violations": {},
+     "gen_exit": 1
+    },
+    {
+     "delta_mm": [
+      2.0,
+      2.0
+     ],
+     "legal": false,
+     "new_mechanical_violations": {},
+     "gen_exit": 1
+    },
+    {
+     "delta_mm": [
+      2.5,
+      2.5
+     ],
+     "legal": false,
+     "new_mechanical_violations": {},
+     "gen_exit": 1
+    },
+    {
+     "delta_mm": [
+      3.0,
+      3.0
+     ],
+     "legal": false,
+     "new_mechanical_violations": {},
+     "gen_exit": 1
+    },
+    {
+     "delta_mm": [
+      3.5,
+      3.5
+     ],
+     "legal": true,
+     "new_mechanical_violations": {},
+     "gen_exit": 0
+    },
+    {
+     "delta_mm": [
+      4.0,
+      4.0
+     ],
+     "legal": false,
+     "new_mechanical_violations": {},
+     "gen_exit": 1
+    }
+   ],
+   "first_legal": {
+    "delta_mm": [
+     3.5,
+     3.5
+    ],
+    "legal": true,
+    "new_mechanical_violations": {},
+    "gen_exit": 0
+   },
+   "n_legal": 1,
+   "rule": "#K2-363 sec.2.1: the magnitude is CHOSEN BY THE GATE (first legal lattice point), never hand-picked"
+  }
+ },
+ "N_norms_used": {
+  "N5": "density balance (direction)",
+  "N4/N10": "functional zoning (the left edge stays for power/interfaces)",
+  "N3/N9": "edge margin + hole keepout (enforced by the P1b probe)"
+ },
+ "affected_nets_if_M1_runs": [
+  "12V_IN",
+  "FB_U2",
+  "GND",
+  "GPIO_LED",
+  "I2C1_SCL",
+  "I2C1_SDA",
+  "I2C2_SCL",
+  "I2C2_SDA",
+  "MCU_VDD",
+  "NRST",
+  "P3V3",
+  "P3V3_AUX",
+  "PERSTA#",
+  "PWR_BTN_ISO",
+  "PWR_BTN_OUT",
+  "PWR_CTRL_OUT",
+  "SWCLK_BOOT0",
+  "SWDIO",
+  "SW_U2",
+  "UART_RX",
+  "UART_TX"
+ ],
+ "n_affected_nets_if_M1_runs": 21,
+ "status": "SCENARIO ESTABLISHED AND GATE-LEGAL. The heavy exam run is NOT made: the ruling's exam path requires the product chain M1->M2->M3->M4, which is not wired yet (C30) and whose M3 v1 cannot re-route multi-pad nets (the declared scope gap). Those two are the remaining work before the single exam run.",
+ "OWNER-ITEMS": 0
+}

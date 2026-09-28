@@ -189,3 +189,121 @@ def run(exam=None, work=None, dry=False):
     if exam in EXAM_PRESET:
         return run_exam(exam, work or os.path.join("/tmp/opencode/eda_eng", "exam" + exam), dry=dry)
     return {"status": "NEED_EXAM", **STATUS}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 区域重放置生成器（#K2-363 §二.1）：目标**由规矩出**（区域=实测 · 方向=N5 密度规则 · 幅值=闸选）
+# ─────────────────────────────────────────────────────────────────────────────
+def _dev_area(b):
+    import pcbnew as P
+    out = {}
+    for fp in b.GetFootprints():
+        xs, ys, ar = [], [], 0.0
+        for p in fp.Pads():
+            bb = p.GetBoundingBox()
+            x0, y0 = P.ToMM(bb.GetX()), P.ToMM(bb.GetY())
+            x1, y1 = P.ToMM(bb.GetRight()), P.ToMM(bb.GetBottom())
+            xs += [x0, x1]; ys += [y0, y1]; ar += (x1 - x0) * (y1 - y0)
+        if xs:
+            out[fp.GetReference()] = {"bbox": [min(xs), min(ys), max(xs), max(ys)], "area": ar}
+    return out
+
+
+def mech_probe(refs, delta_mm, work, tag):
+    """机械探针（gen -> crtyd -> DRC），**基线相对**用。返回 {mechanical_violations}。"""
+    gw = os.path.join(work, "mp_" + tag)
+    shutil.rmtree(gw, ignore_errors=True); os.makedirs(gw, exist_ok=True)
+    sh = shadow_mod.build(os.path.join(gw, "shadow"))
+    if list(delta_mm) != [0.0, 0.0]:
+        shadow_mod.edit_placement_at(sh["shadow_root"], refs, delta_mm)
+    gpcb = os.path.join(gw, "placed.kicad_pcb")
+    env = {**os.environ, "PM_GATE_PROJECT_ROOT": sh["shadow_root"], "K2_OUT_PCB": gpcb,
+           "K2_OUT_JSON": os.path.join(gw, "placed.json")}
+    rc = subprocess.run([_host(), os.path.join(ROOT, "tools", "k2_gen_v5.py")], cwd=ROOT,
+                        capture_output=True, text=True, env=_host_env(env), timeout=900).returncode
+    if rc != 0:
+        tail = ""
+        return {"gen_exit": rc, "mechanical_violations": {}, "gen_failed": True}
+    pk = os.path.join(gw, "placed_crtd.kicad_pcb")
+    subprocess.run([_py(), os.path.join(ROOT, "tools", "k2_p4_build_l9_v1.py"), "--in", gpcb, "--out", pk,
+                    "--stages", "crtyd"], capture_output=True, timeout=1800)
+    gj = os.path.join(gw, "placed_drc.json")
+    subprocess.run([_cli(), "pcb", "drc", "--format", "json", "--severity-all", "-o", gj, pk],
+                   capture_output=True, timeout=900)
+    bad = {}
+    if os.path.isfile(gj):
+        for v in json.load(open(gj, encoding="utf-8")).get("violations", []):
+            ty = v.get("type")
+            if ty in ("courtyards_overlap", "shorting_items", "clearance", "hole_clearance"):
+                bad[ty] = bad.get(ty, 0) + 1
+    return {"gen_exit": rc, "mechanical_violations": bad}
+
+
+def region_select(refs, candidates, work):
+    """#K2-363 sec.2.1: 幅值**由闸选** —— 逐候选过机械探针（基线相对），取**首个合法**者。"""
+    base = mech_probe(refs, [0.0, 0.0], work, "base")
+    rows, first = [], None
+    for c in candidates:
+        s = mech_probe(refs, c["delta_mm"], work, "k%d" % c["k"])
+        newbad = {k: s["mechanical_violations"].get(k, 0) - base["mechanical_violations"].get(k, 0)
+                  for k in set(base["mechanical_violations"]) | set(s["mechanical_violations"])}
+        newbad = {k: v for k, v in newbad.items() if v > 0}
+        ok = (not s.get("gen_failed")) and not newbad
+        rows.append({"delta_mm": c["delta_mm"], "legal": ok, "new_mechanical_violations": newbad,
+                     "gen_exit": s["gen_exit"]})
+        if ok and first is None:
+            first = rows[-1]
+    return {"baseline": base["mechanical_violations"], "candidates": rows, "first_legal": first,
+            "n_legal": sum(1 for r in rows if r["legal"]),
+            "rule": "#K2-363 sec.2.1: the magnitude is CHOSEN BY THE GATE (first legal lattice point), never hand-picked"}
+
+
+def region_of(board, refs, margin_mm=2.0):
+    """实测区域 = 种子器件 ＋ 其(扩 margin 的)包围盒所触及的一切器件（**不手列**）。"""
+    import pcbnew as P
+    b = P.LoadBoard(board)
+    dev = _dev_area(b)
+    seed = [r for r in refs if r in dev]
+    if not seed:
+        return {"region": [], "seed": refs, "rule": "no seed footprints found"}
+    x0 = min(dev[r]["bbox"][0] for r in seed); y0 = min(dev[r]["bbox"][1] for r in seed)
+    x1 = max(dev[r]["bbox"][2] for r in seed); y1 = max(dev[r]["bbox"][3] for r in seed)
+    win = [x0 - margin_mm, y0 - margin_mm, x1 + margin_mm, y1 + margin_mm]
+    reg = sorted(r for r, v in dev.items()
+                 if not (v["bbox"][2] < win[0] or v["bbox"][0] > win[2] or v["bbox"][3] < win[1] or v["bbox"][1] > win[3]))
+    return {"region": reg, "seed": seed, "window": [round(v, 3) for v in win],
+            "rule": "the region is MEASURED: seed parts plus every footprint touched by the seed bbox grown by margin"}
+
+
+def density_quadrants(board):
+    """N5 密度均衡：逐象限器件「焊盘面积占比」，找最挤象限与其对角（最空）。"""
+    import pcbnew as P
+    b = P.LoadBoard(board)
+    dev = _dev_area(b)
+    eb = b.GetBoardEdgesBoundingBox()
+    bx0, by0 = P.ToMM(eb.GetX()), P.ToMM(eb.GetY())
+    cx, cy = bx0 + P.ToMM(eb.GetWidth()) / 2, by0 + P.ToMM(eb.GetHeight()) / 2
+    q = {"NE": 0.0, "NW": 0.0, "SE": 0.0, "SW": 0.0}
+    for r, v in dev.items():
+        mx, my = (v["bbox"][0] + v["bbox"][2]) / 2, (v["bbox"][1] + v["bbox"][3]) / 2
+        k = ("N" if my < cy else "S") + ("E" if mx > cx else "W")
+        q[k] += v["area"]
+    tot = sum(q.values()) or 1.0
+    frac = {k: round(v / tot * 100, 2) for k, v in q.items()}
+    crowded = max(frac, key=lambda k: frac[k]); empty = min(frac, key=lambda k: frac[k])
+    mean = 100.0 / 4
+    return {"quadrant_area_pct": frac, "crowded": crowded, "emptiest": empty,
+            "N5_limit_pct": round(mean * 1.5, 2), "N5_violated": frac[crowded] > mean * 1.5,
+            "rule": "N5 (inherited): no quadrant's device-area fraction may exceed 1.5x the global mean"}
+
+
+def region_candidates(board, refs, pitch_mm=0.5, kmax=8):
+    """方向 = **N5 规则**（背离最挤象限、朝最空象限）；幅值 = 闸选（pitch×k 格点，k=1..kmax）。"""
+    d = density_quadrants(board)
+    dx = (1 if "E" in d["emptiest"] else -1) if ("E" in d["emptiest"] or "W" in d["emptiest"]) else 0
+    dy = (1 if "S" in d["emptiest"] else -1) if ("S" in d["emptiest"] or "N" in d["emptiest"]) else 0
+    cands = [{"delta_mm": [round(dx * pitch_mm * k, 3), round(dy * pitch_mm * k, 3)], "k": k} for k in range(1, kmax + 1)]
+    return {"density": d, "direction": [dx, dy], "pitch_mm": pitch_mm,
+            "candidates": cands,
+            "rule": "#K2-363 sec.2.1: the DIRECTION comes from the N5 density rule (away from the crowded quadrant, "
+                    "toward the emptiest) and the MAGNITUDE is chosen by the P1 gate - never hand-picked"}
