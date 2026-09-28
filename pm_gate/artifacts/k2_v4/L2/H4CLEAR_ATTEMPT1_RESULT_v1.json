@@ -1,0 +1,81 @@
+{
+ "artifact": "k2_h4clear_attempt1_result_v1",
+ "ts": "2026-09-28",
+ "authority": "#K2-351 sec.4 (bounded window: re-emit -> rev-62 -> chain run once -> judge once)",
+ "window_steps_executed": [
+  "a) lane-plan re-emission: tools/k2_w3_h4clear_reemit_v1.py -> m13_v57_w3_joint_assignment_H4CLEAR_v1.json (CERTIFIED at drawing level)",
+  "b) SPEC rev-62 (H4 leaf only) declared: tools/k2_spec_rev62_declare_v1.py",
+  "c) chain source sync (project.yaml -> rev-62/l15) + chain run ONCE (gen_v5 then route_segment --upto all with L4_MAIN)",
+  "d) judge ONCE"
+ ],
+ "judge_results": {
+  "c21_corner_keepout": {
+   "verdict": "PASS_ALL_FOUR",
+   "detail": "H3_TL/H2_TR/H1_BL/H4_BR all PASS - the H4 corner IS constructively clear",
+   "evidence": "L2/H4CLEAR_ATTEMPT1_L15_C21.json (structural goal of the window ACHIEVED)"
+  },
+  "routing_diff_vs_l14": {
+   "verdict": "PASS",
+   "detail": "segment-level set differs: 2532 elements only in l14, 1279 only in l15 (#K2-332 hard gate satisfied)"
+  },
+  "unconnected": {
+   "verdict": "PASS",
+   "detail": "kicad-cli DRC unconnected_items = 0; schematic_parity = 0"
+  },
+  "skew_proxy": {
+   "verdict": "PASS",
+   "detail": "per-pair copper-length delta (this turn's own proxy, not the certified metric): l14 = l15 = [0.0650,0.0650,0.0434,0.0788,0.0000,0.0000,0.0216,0.0138]; max 0.0788 <= 0.15. The re-emission preserved every pair delta exactly."
+  },
+  "drc_vs_baseline": {
+   "verdict": "FAIL",
+   "detail": "l15 = 182 violations vs l14 baseline 168, WITH NEW CLASSES: shorting_items 3, clearance 8, hole_clearance 1, hole_to_hole 1, copper_sliver 1 (plus track_dangling 2 / via_dangling 5 differing by lineage)",
+   "evidence": "L2/H4CLEAR_ATTEMPT1_L15_DRC.json"
+  }
+ },
+ "verdict": "FAIL (drc_vs_baseline) -> per #K2-351 sec.5.1 the window STOPS and returns to the scheme layer; no param re-run",
+ "root_cause_of_the_failure": {
+  "statement": "The chosen new column_x values (137.60/136.90/136.20/135.50) collide with the UPLINK landing columns/vias (PCIE_UP_OUT*_J2), which occupy the same right-edge In2 x-band.",
+  "measured_occupancy_of_the_band_x_135_139.6_on_l14": {
+   "dn_input_columns": {
+    "136.000": "PCIE_DN7_P",
+    "137.160": "PCIE_DN6_N",
+    "138.320": "PCIE_DN5_P",
+    "139.480": "PCIE_DN4_N"
+   },
+   "up_output_columns_or_vias": {
+    "135.000": "GND/PERSTB# vias (y 60.9-64.5)",
+    "136.000": "PCIE_UP_OUT3_N_J2",
+    "136.580": "PCIE_UP_OUT7_N_J2 (y 66.977)",
+    "137.160": "PCIE_UP_OUT2_P_J2 (y 59.732)",
+    "137.740": "PCIE_UP_OUT6_P_J2 (y 65.528)",
+    "138.900": "PCIE_UP_OUT5_N_J2 (y 64.079)",
+    "139.480": "PCIE_UP_OUT1_N_J2 (y 58.283)"
+   },
+   "reading": "the whole band sits on a 0.58 mm x-grid shared by the DN input columns (every second line) and the UP output columns/vias (the lines in between): the sub-band [135.4,137.65] that R912 treated as free is in fact consumed by the UP lines at 135.0 / 136.58 / 137.16."
+  },
+  "consequence": "A DN-only re-spacing cannot use the sub-band immediately west of the pads. The repair must be solved JOINTLY over the DN input AND UP output landing columns (or use the strip west of the x=135.0 line, or change the escape architecture) - i.e. it is a drawing-layer re-solve of the #K2-347 frame-first kind, not a column nudge."
+ },
+ "ENG_self_correction": {
+  "what": "R912 sec.4 asserted a feasible re-spacing band [135.4,137.6537] (4 columns at 0.58 pitch). This attempt MACHINE-FALSIFIES that specific plan: the band is occupied by the uplink landing columns/vias.",
+  "retained": "R912's constraint (column_x <= 137.6537), its provenance finding (the drawing, not the placement, carries the DN fan) and its E5 premise correction all stand."
+ },
+ "buildability_sec13": {
+  "answer": "NO - the construction crew cannot be given a straight-line drawing from this attempt: the drawing-level plan is self-consistent (pair deltas exactly preserved, keepout clear) but it shorts against the uplink landing columns, so the joint solve is still missing.",
+  "named_gap": "DRAWING-LAYER JOINT SOLVE REQUIRED: {DN input + UP output landing columns} on the right-edge x-band."
+ },
+ "rollback": {
+  "executed": true,
+  "project_yaml": "board_path=hw/k2_v4_8L.l14.kicad_pcb, spec_name=SPEC_k2_v4.spec-rev-61.json (restored)",
+  "l15": "kept as labelled evidence: hw/k2_v4_8L.l15-H4CLEAR-attempt1-FAILED.kicad_pcb",
+  "chain_temp_artifacts": "removed from hw/ (rebuilt by any future chain run)"
+ },
+ "artifacts": {
+  "reemitted_drawing": "L3/mcio_feas_step2/m13_v57_w3_joint_assignment_H4CLEAR_v1.json",
+  "reemission_report": "L2/W3_H4CLEAR_REEMISSION_REPORT_v1.json",
+  "spec_rev62": "L3/SPEC_k2_v4.spec-rev-62.json",
+  "l15_drc": "L2/H4CLEAR_ATTEMPT1_L15_DRC.json",
+  "l15_c21": "L2/H4CLEAR_ATTEMPT1_L15_C21.json"
+ },
+ "discipline": "one re-emission / one chain run / one judge (sec.5.1 respected); no param re-run; no schematic edit; no board surgery; no WORKER; Gerber/order stopped; frozen four 4/4.",
+ "OWNER-ITEMS": 0
+}

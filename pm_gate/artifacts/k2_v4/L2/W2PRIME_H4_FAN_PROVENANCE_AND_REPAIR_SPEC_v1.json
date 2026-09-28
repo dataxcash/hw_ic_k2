@@ -16,47 +16,51 @@
   "tracks": [
    {
     "net": "PCIE_DN4_N",
-    "layer": "In5",
+    "layer": "In5.Cu",
     "seg": [
      90.05,
      74.222,
      139.48,
      74.222
     ],
-    "w_mm": 0.16
+    "w_mm": 0.16,
+    "layer_was_mislabeled": "In5"
    },
    {
     "net": "PCIE_DN4_N",
-    "layer": "In4",
+    "layer": "In2.Cu",
     "seg": [
      139.48,
      74.222,
      139.48,
      59.45
     ],
-    "w_mm": 0.16
+    "w_mm": 0.16,
+    "layer_was_mislabeled": "In4"
    },
    {
     "net": "PCIE_DN5_P",
-    "layer": "In5",
+    "layer": "In5.Cu",
     "seg": [
      90.75,
      75.671,
      138.32,
      75.671
     ],
-    "w_mm": 0.16
+    "w_mm": 0.16,
+    "layer_was_mislabeled": "In5"
    },
    {
     "net": "PCIE_DN5_P",
-    "layer": "In4",
+    "layer": "In2.Cu",
     "seg": [
      138.32,
      75.671,
      138.32,
      60.05
     ],
-    "w_mm": 0.16
+    "w_mm": 0.16,
+    "layer_was_mislabeled": "In4"
    }
   ],
   "vias": [
@@ -67,7 +71,8 @@
      74.222
     ],
     "d_mm": 0.35,
-    "span": "In4<->In5"
+    "span": "In2.Cu<->In5.Cu",
+    "span_was_mislabeled": "In4<->In5"
    },
    {
     "net": "PCIE_DN5_P",
@@ -76,10 +81,12 @@
      75.671
     ],
     "d_mm": 0.35,
-    "span": "In4<->In5"
+    "span": "In2.Cu<->In5.Cu",
+    "span_was_mislabeled": "In4<->In5"
    }
   ],
-  "note": "The north landings (139.480,59.450) and (138.320,60.050) are OUTSIDE the square (y < 73.9287) and are legal; it is the In4 column descending into the square and the In5 lane end that intrude."
+  "note": "The north landings (139.480,59.450) and (138.320,60.050) are OUTSIDE the square (y < 73.9287) and are legal; it is the In2.Cu column descending into the square and the In5 lane end that intrude.",
+  "layer_correction": "#K2-351 sec.6 named erratum: the column runs on In2.Cu (not In4) and the corner via spans In2.Cu<->In5.Cu (not In4<->In5); the In5.Cu horizontal leg was already correct. Geometry and every numeric conclusion are unaffected. Verified against the board layer table in this turn."
  },
  "provenance": {
   "stage1": "tools/k2_gen_v5.py emits NO DN geometry at all (grep for DN0..DN7 / PCIE_DN in that file: 0 hits).",
@@ -234,5 +241,14 @@
   "If it is covered, authorise the bounded window above (one re-emission, one chain run, one judge)."
  ],
  "discipline": "Read-only this turn: no board edit, no SPEC bump, no generator edit, no schematic edit, no WORKER, no Gerber/order. Frozen four 4/4.",
- "OWNER-ITEMS": 0
+ "OWNER-ITEMS": 0,
+ "_label_correction": {
+  "authority": "#K2-351 sec.6",
+  "at": "2026-09-28",
+  "was": {
+   "json_sha16": "65fd960c64c34240",
+   "md_sha16": "db8dfd0127a9dee0"
+  },
+  "what": "In4 -> In2.Cu (column) and In4<->In5 -> In2.Cu<->In5 (via span); geometry untouched"
+ }
 }
