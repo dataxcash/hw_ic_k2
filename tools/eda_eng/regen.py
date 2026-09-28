@@ -1178,6 +1178,60 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15):
                   "--bound-rect", ",".join(str(x) for x in rect))
     if rc != 0 or not os.path.isfile(final):
         return {"state": "W3_REFILL_FAILED", "chain": chain, "wipe": mp, "ledger": led_j, "apply": ap}
+    # ③′ **(a) 灌注孤岛重连**（#K2-385 §五.2(a) · 加法式 · 确定性）：
+    # 复铜后若 DRC 报 `isolated_copper`（填充岛不再搭在网铜上），把**每个孤岛**就近连回**同网最近焊盘** ——
+    # 用**同一件**域内迷宫（同 `--bound-rect` · 同 floor），**一次**、**不循环**、**不搜索**。
+    dz = os.path.join(work, "s3_refill_drc.json")
+    _raw([_cli_bin(), "pcb", "drc", "--format", "json", "--severity-all", "-o", dz, final])
+    iso = []
+    if os.path.isfile(dz):
+        try:
+            iso = [v for v in json.load(open(dz, encoding="utf-8")).get("violations", [])
+                   if v.get("type") == "isolated_copper"]
+        except Exception:                                          # noqa: BLE001
+            iso = []
+    chain.append({"stage": "pour_islands_detected", "n": len(iso)})
+    if iso:
+        P2 = _pcbnew()
+        bb2 = P2.LoadBoard(final)
+        pads_by_net = collections.defaultdict(list)
+        for fp in bb2.GetFootprints():
+            for pd in fp.Pads():
+                n_ = pd.GetNetname()
+                if n_:
+                    pos = pd.GetPosition()
+                    pads_by_net[n_].append([P2.ToMM(pos.x), P2.ToMM(pos.y)])
+        obs_i, _bnd_i = _rt.obstacles_multi(final, set(), ["F.Cu"])
+        fix_plans = []
+        for v in iso:
+            its = v.get("items") or []
+            if not its:
+                continue
+            desc = its[0].get("description", "")
+            netv = None
+            mm2 = __import__("re").search(r"\[([^\]]+)\]", desc)
+            if mm2:
+                netv = mm2.group(1)
+            if netv not in pads_by_net:
+                continue
+            pt = [its[0]["pos"]["x"], its[0]["pos"]["y"]]
+            tgt = min(pads_by_net[netv], key=lambda q: (q[0] - pt[0]) ** 2 + (q[1] - pt[1]) ** 2)
+            oo = [x for x in obs_i if x.get("net") != netv]
+            rr2 = _rt.maze_route(pt, tgt, ["F.Cu"], oo, list(rect), pitch=0.15, via_penalty=8.0,
+                                 endpoint_clear=0.0, snap_cells=4)
+            if rr2["status"] == "ROUTED":
+                fix_plans.append({"net": netv, "polys": [q["poly"] for q in rr2["polys"]],
+                                  "layers": [q["layer"] for q in rr2["polys"]], "vias": rr2.get("vias", [])})
+        chain.append({"stage": "pour_islands_repair", "planned": len(fix_plans), "of": len(iso)})
+        if fix_plans:
+            fp2 = os.path.join(work, "s3b_islands.json")
+            json.dump(fix_plans, open(fp2, "w", encoding="utf-8"), ensure_ascii=False)
+            fixed2 = os.path.join(work, "s3b_fixed.kicad_pcb")
+            rc3, ap3 = _cli("route", "--apply-batch", fp2, "--board", final, "--out", fixed2,
+                            "--bound-rect", ",".join(str(x) for x in rect))
+            if rc3 == 0 and os.path.isfile(fixed2):
+                final = fixed2
+
     # ④ judge：C1–C7（＋C8/C9 一并报，判据不动）
     dj = os.path.join(work, "s4_drc.json")
     _raw([_cli_bin(), "pcb", "drc", "--format", "json", "--severity-all", "-o", dj, final])

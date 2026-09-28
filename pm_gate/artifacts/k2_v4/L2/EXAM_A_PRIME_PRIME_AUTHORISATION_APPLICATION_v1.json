@@ -70,5 +70,34 @@
   ],
   "candidate_fix": "ONE bounded SECOND STITCH PASS over the RESIDUAL DRC (same in-register maze, same --bound-rect R, same floor) - i.e. hand the *remaining* unconnected list back to the same tool once. Deterministic, bounded (one extra pass), no parameter search: the tool's own loop already does exactly this shape internally; the run simply needs the residual list re-fed.",
   "why_this_is_not_a_parameter_trial": "it changes WHICH LIST is fed (the residual DRC), not any parameter of the router; the capacity reading already proved the space is sufficient (93.5% free)."
+ },
+ "application_v2_after_capability_window": {
+  "ts": "2026-09-29",
+  "authority": "#K2-385 sec.5.5: once the capability window passes (unit tests green + committed), the ENG APPLIES for a new N=1 exam window (applying is not self-running).",
+  "capability_added": {
+   "a_pour_island_reconnection": {
+    "what": "after the refill the chain detects `isolated_copper` and connects each orphan island back to the NEAREST PAD OF THE SAME NET with the SAME in-region maze (--bound-rect, same floor), ONE shot (never a loop), deterministic (nearest pad + same maze)",
+    "regression": "test_C385_pour_island_reconnection_is_deterministic_and_wall_bounded"
+   },
+   "b_mask_bridge_precheck": {
+    "what": "`route.mask_bridge_pairs` (pure) + an ADDITIVE landing guard `apply_routes(..., mask_clear_mm=)`: copper that would bridge the mask to a FOREIGN pad is REFUSED (named pad pair) before SaveBoard",
+    "regression": "test_C385_mask_bridge_precheck_is_a_pure_failclosed_guard"
+   }
+  },
+  "tests": "SELFTEST_EXIT=0, Ran 74 tests, OK, 74/74 PASS (L2/EDA_ENG_TESTS_74_v1.txt)",
+  "sec20": "already answered (L2/PRODUCT_THREE_QUESTIONS_LEDGER_v1.json :: M_ENG_POUR_MASK_AWARENESS) - the copyable artefacts are the pour stage, dfm_repair, the via-stitching precedent",
+  "planning_artifact": "L2/M_ENG_POUR_MASK_AWARENESS_PLAN_v1.json",
+  "request": {
+   "exam": "A-double-prime (wipe+resolve, now with the two capability additions)",
+   "runs_requested": "1 (exactly one; run_count 1/1)",
+   "command": "eda_eng exam A --run --chain wipe_resolve --from-placed <gate board>",
+   "judging": "the nine rows C1-C9 (C1=0 and no new class required; C6=0 and C8 mandatory; a missing row is fail-closed)"
+  },
+  "outcome_contract": {
+   "PASS": "feasible witness + C35 closes + M-ENG-POUR-MASK-AWARENESS closes",
+   "FAIL": "stop; update the conservation certificate; a same-cause FAIL => change means (#17.4), not another run"
+  },
+  "zero_exam_runs_this_window": true,
+  "OWNER-ITEMS": 0
  }
 }

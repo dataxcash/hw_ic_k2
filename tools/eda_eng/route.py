@@ -245,7 +245,20 @@ def pads_by_net(board, layer="F.Cu"):
     return out
 
 
-def apply_routes(board, plans, out, width_mm=0.2, bound_rect=None):
+def mask_bridge_pairs(points, foreign_pads, clear_mm):
+    """**(b) 阻焊桥预检（纯函数）**：新铜折线点到**异网焊盘**的最近距离 < clear_mm ⇒ 记为风险对。
+    `foreign_pads` = [(ref, pad, x, y)]（mm）。返回 [(point, ref, pad, dist_mm)]（确定性）。"""
+    out = []
+    for q in points:
+        for (ref, pad, px, py) in foreign_pads:
+            d = math.hypot(q[0] - px, q[1] - py)
+            if d < clear_mm - 1e-9:
+                out.append({"point": [round(q[0], 4), round(q[1], 4)], "ref": ref, "pad": pad,
+                            "dist_mm": round(d, 4), "required_mm": clear_mm})
+    return out
+
+
+def apply_routes(board, plans, out, width_mm=0.2, bound_rect=None, mask_clear_mm=None):
     """**批量**落板（一次改板 · 子进程专用）：plans = [{net, layer, poly|segments}, ...]。
     `bound_rect`（#K2-380 §二.3 收尾道 · **新增可选参数，默认不改老行为**）：落板前**框外坐标检查** ——
     任何折线/过孔越出声明域 ⇒ **fail-closed 拒收并具名**，绝不落板。"""
@@ -268,6 +281,28 @@ def apply_routes(board, plans, out, width_mm=0.2, bound_rect=None):
     b = P.LoadBoard(board)
     LM = {n: getattr(P, n.replace(".", "_")) for n in ("F.Cu", "In1.Cu", "In2.Cu", "In3.Cu", "In4.Cu",
                                                       "In5.Cu", "In6.Cu", "In7.Cu", "B.Cu")}
+    if mask_clear_mm:
+        # (b) **阻焊桥预检**（#K2-385 §五.2）：落铜前，新铜与**异网焊盘**太近 ⇒ fail-closed 具名拒收
+        # （对"挪位后焊盘太近"这类后果，引擎**拒绝**而不是默默造桥 —— 逼出放置层修正）
+        _pads = []
+        for _fp in b.GetFootprints():
+            for _pd in _fp.Pads():
+                _n = _pd.GetNetname()
+                _pos = _pd.GetPosition()
+                _pads.append((_fp.GetReference(), _pd.GetNumber(), _n,
+                              P.ToMM(_pos.x), P.ToMM(_pos.y)))
+        for _pl in plans:
+            _pts = []
+            for _poly in (_pl.get("polys") or ([_pl["poly"]] if _pl.get("poly") else [])):
+                _pts += [list(_q) for _q in _poly]
+            _pts += [list(_v["at"]) for _v in (_pl.get("vias") or [])]
+            _f = [(r_, p_, x_, y_) for (r_, p_, n_, x_, y_) in _pads if n_ != _pl.get("net")]
+            _risk = mask_bridge_pairs(_pts, [(r_, p_, x_, y_) for (r_, p_, x_, y_) in _f], mask_clear_mm)
+            if _risk:
+                return {"artifact": "eda_eng_route_apply_batch", "status": "REFUSED_MASK_BRIDGE_RISK",
+                        "net": _pl.get("net"), "risk": _risk[:3],
+                        "rule": "#K2-385 sec.5.2(b): the landing guard refuses copper that would bridge the "
+                                "solder mask to a foreign pad (fail-closed; the placement, not the router, must change)"}
     added, vias = 0, 0
     for pl in plans:
         net = b.FindNet(pl["net"])

@@ -590,6 +590,31 @@ class T(unittest.TestCase):
         self.assertLess(seg.index("REFUSED_OUT_OF_BOUND"), seg.index("P.SaveBoard"),
                         "the check must run BEFORE the board is saved (fail-closed)")
 
+    def test_C385_mask_bridge_precheck_is_a_pure_failclosed_guard(self):
+        """#K2-385 §五.2(b)：阻焊桥预检 = **纯函数** ＋ **落铜前 fail-closed 拒收**（加法参数，默认不改行为）。"""
+        risk = route.mask_bridge_pairs([[0.0, 0.0], [1.0, 0.0]], [("U1", "11", 0.30, 0.0)], 0.5)
+        self.assertEqual(len(risk), 1)
+        self.assertEqual(risk[0]["ref"], "U1")
+        self.assertLess(risk[0]["dist_mm"], 0.5)
+        self.assertEqual(route.mask_bridge_pairs([[0.0, 0.0]], [("U1", "11", 5.0, 0.0)], 0.5), [],
+                         "a far pad must not be flagged")
+        src = open(os.path.join("tools", "eda_eng", "route.py"), encoding="utf-8").read()
+        seg = src[src.index("def apply_routes("):src.index("def apply_route(")]
+        self.assertIn("mask_clear_mm=None", seg, "the guard must be an ADDITIVE optional parameter")
+        self.assertIn("REFUSED_MASK_BRIDGE_RISK", seg)
+        self.assertLess(seg.index("REFUSED_MASK_BRIDGE_RISK"), seg.index("P.SaveBoard"),
+                        "the pre-check must run BEFORE the board is saved")
+
+    def test_C385_pour_island_reconnection_is_deterministic_and_wall_bounded(self):
+        """#K2-385 §五.2(a)：灌注孤岛重连 —— 复铜后检 `isolated_copper`，每个孤岛**就近连回同网最近焊盘**，
+        用**同一件**域内迷宫（带 `--bound-rect`）· **一次**（非循环）· **确定性**（最近焊盘＋同一迷宫）。"""
+        src = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
+        seg = src[src.index("def wipe_resolve_chain("):]
+        for k in ("pour_islands_detected", "pour_islands_repair", "isolated_copper",
+                  "--bound-rect", "key=lambda q:"):
+            self.assertIn(k, seg, "the island path must contain %s" % k)
+        self.assertEqual(seg.count("pour_islands_repair"), 1, "exactly ONE repair pass (never a loop)")
+
     def test_C382_the_residual_second_stitch_is_bounded_and_wall_bounded(self):
         """#K2-382 §二.2：残余二次缝合＝**喂残余清单给同一件工具**（同墙），**只多跑一趟**（不循环/不搜参）。"""
         src = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
