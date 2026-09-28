@@ -16,6 +16,41 @@ SKEW_LIMIT = 0.15
 BASELINE_BOARD = "hw/k2_v4_8L.l14.kicad_pcb"
 BASELINE_DRC_TOTAL = 168
 BASELINE_CHAMFER = 2637
+_TABLE = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+                      "pm_gate", "artifacts", "k2_v4", "L2", "EDA_ENG_JUDGING_TABLE_v1.json")
+
+
+def judging_table(path=None):
+    """判卷表的**唯一源** = ECO-K2-0002/0003 §6（#K2-361 §二.4）。"""
+    p_ = path or _TABLE
+    if os.path.isfile(p_):
+        return json.load(open(p_, encoding="utf-8"))
+    return {"thresholds": {"C1_connectivity": {"value": 0},
+                           "C2_drc_no_new_increase": {"value": BASELINE_DRC_TOTAL},
+                           "C3_skew": {"value": SKEW_LIMIT},
+                           "C4_chamfer_preserved": {"value": BASELINE_CHAMFER},
+                           "C5_routing_changed": {"value": ">0"}}}
+
+
+def class_delta(result_drc, ref_drc, exclude=None):
+    """**类别级** DRC 差（M3 残留的具名归因工具）：逐类 delta ＋ 总数 delta。"""
+    r = drc_classes(result_drc)["classes"]
+    b = drc_classes(ref_drc)["classes"]
+    if exclude is None:
+        exclude = judging_table()["thresholds"]["C2_drc_no_new_increase"].get("excluded_classes", [])
+    rows, excl = {}, {}
+    for k in sorted(set(r) | set(b)):
+        dd = r.get(k, 0) - b.get(k, 0)
+        if not dd:
+            continue
+        (excl if k in exclude else rows)[k] = {"result": r.get(k, 0), "ref": b.get(k, 0), "delta": dd}
+    geo_result = sum(v for k, v in r.items() if k not in exclude)
+    geo_ref = sum(v for k, v in b.items() if k not in exclude)
+    return {"total_delta": geo_result - geo_ref, "by_class": rows, "excluded_class_rows": excl,
+            "excluded_classes": list(exclude), "raw_total_delta": sum(r.values()) - sum(b.values()),
+            "attributed": bool(rows) or (geo_result != geo_ref),
+            "rule": "#K2-361 sec.2.5: any GEOMETRY class rise must be attributed; library-resolution classes are "
+                    "recorded in excluded_class_rows under the pinned caliber (they are never hidden)"}
 
 
 def drc_classes(j):
@@ -52,7 +87,11 @@ def geometry(path):
 
 
 def judge(board, drc_json, ref_board, ref_drc_json,
-          drc_total=BASELINE_DRC_TOTAL, chamfer_ref=BASELINE_CHAMFER, skew_limit=SKEW_LIMIT):
+          drc_total=None, chamfer_ref=None, skew_limit=None, table=None):
+    tbl = judging_table(table)["thresholds"]
+    drc_total = tbl["C2_drc_no_new_increase"]["value"] if drc_total is None else drc_total
+    chamfer_ref = tbl["C4_chamfer_preserved"]["value"] if chamfer_ref is None else chamfer_ref
+    skew_limit = tbl["C3_skew"]["value"] if skew_limit is None else skew_limit
     d, r = drc_classes(drc_json), drc_classes(ref_drc_json)
     g, gr = geometry(board), geometry(ref_board)
     new_classes = sorted(k for k in d["classes"] if k not in r["classes"])
@@ -77,5 +116,7 @@ def judge(board, drc_json, ref_board, ref_drc_json,
         out["C5_routing_changed"] = {"element_set_diff": diff, "pass": diff > 0}
     vals = [v["pass"] for v in out.values()]
     verdict = "FAIL" if any(v is False for v in vals) else ("INCOMPLETE" if any(v is None for v in vals) else "PASS")
-    return {"criteria": out, "verdict": verdict,
+    return {"criteria": out, "verdict": verdict, "thresholds_used": {
+                "drc_total": drc_total, "chamfer_ref": chamfer_ref, "skew_limit": skew_limit},
+            "judging_table": "L2/EDA_ENG_JUDGING_TABLE_v1.json (ECO-K2-0002/0003 sec.6)",
             "rule": "PASS iff all five hold; None (skipped) is never a PASS (#K2-358: capability must be reproducible)"}

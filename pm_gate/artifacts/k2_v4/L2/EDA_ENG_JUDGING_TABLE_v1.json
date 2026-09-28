@@ -1,0 +1,52 @@
+{
+ "artifact": "eda_eng_judging_table_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-361 sec.2.4: the judge takes the ECO-K2-0002/0003 sec.6 judging table as its SOLE SOURCE; #K2-360 sec.1 M4",
+ "source": {
+  "eco_0002": "docs/ECO/ECO-K2-0002-reroute-engine-exam-A.md sec.6",
+  "eco_0003": "docs/ECO/ECO-K2-0003-reroute-engine-exam-B.md sec.6",
+  "absorbed_instrument": "L2/REROUTE_ENGINE_EXAM_SPEC_v1.json (b2d87bc118555520) + tools/k2_reroute_exam_v1.py (37c7364a4c803e88, the R926 gate)",
+  "absorbed_checklist": "pm_gate/artifacts/k2_v4/P6_execution/INSTRUMENT_SELFCHECK.json :: checklist_consistency (the closest in-register checklist: 10 rows)",
+  "note_no_file_named_checklist_check": "the supervisor's text said 'reuse the existing checklist_check'; no in-register artifact carries that name (searched) - M4 therefore IMPLEMENTS the checklist and records this absorption instead of pretending to reuse a file that does not exist"
+ },
+ "thresholds": {
+  "C1_connectivity": {
+   "machine": "kicad-cli DRC unconnected_items == 0",
+   "value": 0
+  },
+  "C2_drc_no_new_increase": {
+   "machine": "total <= baseline AND no class present above the baseline class set",
+   "value": 168,
+   "baseline_artifact": "L2/REROUTE_EXAM_REF_L14_DRC.json",
+   "excluded_classes": [
+    "lib_footprint_issues",
+    "lib_footprint_mismatch"
+   ],
+   "exclusion_basis": {
+    "measured": "running kicad-cli on a probe board OUTSIDE the project directory makes the footprint libraries unresolvable, so the SAME library warnings swap class: lib_footprint_mismatch 20 (reference, in-project) -> lib_footprint_issues 54 (probe, /tmp); every other class is identical (M3 residual attribution, #K2-361 sec.2.5)",
+    "why_excluded": "these two classes report LIBRARY CONSISTENCY (a property of the DRC runner's library resolution), not copper geometry; they are RECORDED, never hidden",
+    "all_other_classes": "must match the baseline exactly (no rise)"
+   }
+  },
+  "C3_skew": {
+   "machine": "max per-pair copper-length delta <= limit",
+   "value": 0.15,
+   "unit": "mm",
+   "source": "_shared/eda_core/drc_rules.json intra_pair_skew_mm"
+  },
+  "C4_chamfer_preserved": {
+   "machine": "count of 45-degree segments >= baseline",
+   "value": 2637,
+   "C4_threshold_unification": "#K2-356 sec.2.2 says 'chamfer 166 preserved'; 166 is the OPERATION count applied by the L9 build (k2_p4_build_l9_v1 --stages chamfer), while 2637 is the measurable RESULT on l14 (45-degree segment count). ONE threshold, ONE machine form: 45-degree segment count >= 2637. The 166 figure is retained only as the provenance of that number and is NOT a second threshold."
+  },
+  "C5_routing_changed": {
+   "machine": "segment-level element-set difference vs the reference != 0",
+   "value": ">0"
+  }
+ },
+ "exam_extras": {
+  "exam_B": "plus C21 four-corner keepout all PASS (tools/k2_corner_keepout_gate_v1.py)"
+ },
+ "rule": "PASS iff every criterion holds; a skipped criterion (missing tooling) is never a PASS",
+ "OWNER-ITEMS": 0
+}

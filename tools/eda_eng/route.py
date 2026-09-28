@@ -196,7 +196,26 @@ def apply_route(board, plan, out, layer=None, width_mm=0.2):
         t.SetLayer(LM[layer])
         t.SetNetCode(code)
         b.Add(t); added += 1
+    # 铺铜重灌：否则落板会把既有 zone 填充态带偏（M3 具名残留 168->202 的首要嫌疑）
+    zones = b.Zones()
+    refilled = 0
+    if len(zones):
+        try:
+            P.ZONE_FILLER(b).Fill(zones)
+            refilled = len(zones)
+        except Exception:                                     # noqa: BLE001
+            refilled = -1
     P.SaveBoard(out, b)
+    # 传导工程配置（.kicad_pro / .kicad_dru）：否则 DRC 的**库类口径**漂移
+    # （实测：lib_footprint_issues +54 / lib_footprint_mismatch -20 ⇒ 总数 +34 假升）
+    import shutil
+    copied = []
+    for ext in (".kicad_pro", ".kicad_dru"):
+        src = board[:-len(".kicad_pcb")] + ext if board.endswith(".kicad_pcb") else board + ext
+        if os.path.isfile(src):
+            shutil.copy2(src, out[:-len(".kicad_pcb")] + ext if out.endswith(".kicad_pcb") else out + ext)
+            copied.append(ext)
     import hashlib
     return {"artifact": "eda_eng_route_apply", "net": plan["net"], "layer": layer, "segments_added": added,
-            "width_mm": width_mm, "out": out, "out_sha16": hashlib.sha256(open(out, "rb").read()).hexdigest()[:16]}
+            "width_mm": width_mm, "zones_refilled": refilled, "project_config_copied": copied, "out": out,
+            "out_sha16": hashlib.sha256(open(out, "rb").read()).hexdigest()[:16]}

@@ -183,6 +183,32 @@ class T(unittest.TestCase):
         rc, r, _ = self._cli("ripup", "--board", REF, "--plan", pj, "--out", "/tmp/opencode/eda_eng_m2/nope.kicad_pcb")
         self.assertEqual(r["status"], "REFUSED_STALE_PLAN")
 
+    # ---------------- M4 verify (#K2-360 / #K2-361) ----------------
+    def test_M4_judging_table_is_the_sole_source_and_matches_the_ECOs(self):
+        import re
+        tbl = verify.judging_table()
+        self.assertEqual(tbl["thresholds"]["C2_drc_no_new_increase"]["value"], 168)
+        self.assertEqual(tbl["thresholds"]["C3_skew"]["value"], 0.15)
+        self.assertEqual(tbl["thresholds"]["C4_chamfer_preserved"]["value"], 2637)
+        self.assertIn("C4_threshold_unification", tbl["thresholds"]["C4_chamfer_preserved"])
+        ecc = open(os.path.join(ROOT, "docs", "ECO", "ECO-K2-0002-reroute-engine-exam-A.md"), encoding="utf-8").read()
+        sec6 = ecc[ecc.index("## 6 验收判据"):ecc.index("## 6b")]
+        self.assertIn("168", sec6); self.assertIn("0.15", sec6); self.assertIn("2637", sec6)
+        self.assertIn("C5", sec6)
+        # judge() must consume the table (thresholds_used echoes it)
+        r = verify.judge(REF, REF_DRC, REF, REF_DRC)
+        self.assertEqual(r["thresholds_used"]["chamfer_ref"], 2637)
+        self.assertEqual(r["thresholds_used"]["drc_total"], 168)
+
+    def test_M4_class_delta_attributes_every_rise(self):
+        r = verify.class_delta(REF_DRC, REF_DRC)
+        self.assertEqual(r["total_delta"], 0)
+        self.assertEqual(r["by_class"], {})
+        if os.path.isfile(A1_DRC):
+            d = verify.class_delta(A1_DRC, REF_DRC)
+            self.assertGreater(d["total_delta"], 0)
+            self.assertTrue(d["by_class"], "a rise must be attributed class by class")
+
     # ---------------- M3 route (#K2-360) : toy cases first ----------------
     def test_M3_toy_1_single_net_free_space(self):
         r = route.route_pair([0, 0], [10, 0], "F.Cu", [], net="N1")
@@ -263,6 +289,11 @@ class T(unittest.TestCase):
         self.assertEqual(shorts, [], "the added copper must not short net %s" % net)
         un = [u for u in d.get("unconnected_items", []) if net in json.dumps(u, ensure_ascii=False)]
         self.assertEqual(un, [], "net %s must be fully connected after the route" % net)
+        # #K2-361 sec.2.5: the board-level rise must be attributed AND resolved (the apply step must not
+        # perturb the board beyond the added segments - the engine fix is to carry the project config)
+        cd = verify.class_delta(sj, REF_DRC)
+        self.assertEqual(cd["total_delta"], 0,
+                         "apply must not perturb the board config; attribution was %r" % (cd,))
 
     def test_regen_is_implemented_and_plans_five_stages(self):
         r = regen.run(exam="A", work="/tmp/eda_eng_selftest_plan", dry=True)
