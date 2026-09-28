@@ -1,0 +1,55 @@
+{
+ "artifact": "k2_stitch_action_patch_spec_v1",
+ "ts": "2026-09-28",
+ "authority": "#K2-346 scheme window · Plan step 2 (R880): add the missing exact-gate STITCH action + non-trapped-via protection",
+ "why_not_applied_this_turn": "my patch anchors did not match verbatim; per the stop-order discipline I did NOT iterate on the patch (no blind re-patch). The target file is UNCHANGED (verified: no 'keepvia', git clean).",
+ "target_file": "tools/k2_reroute_affected_v2.py",
+ "anchors_verbatim": {
+  "plan_section_line": 481,
+  "plan_section_text": "    b = P.LoadBoard(a.board)",
+  "track_dangling_branch_line": 574,
+  "track_dangling_branch_text": "        elif v[\"type\"] == \"track_dangling\":",
+  "apply_section_line": 613,
+  "apply_section_text": "        if act[\"act\"] in (\"delvia\", \"deltrack\"):"
+ },
+ "changes": [
+  {
+   "id": "P1",
+   "what": "protect pre-existing vias",
+   "where": "phase_repair, plan section (anchor 481)",
+   "how": "build protected = {uuid of every via in --stage1}; in the via_dangling branch, if the uuid is in protected emit {'act':'keepvia'} instead of {'act':'delvia'}",
+   "why": "R878 measured the plan wanting to delete the nets' legitimate TOP vias (139.48,59.45)/(138.32,60.05)"
+  },
+  {
+   "id": "P2",
+   "what": "new action class STITCH",
+   "where": "phase_repair, the track_dangling branch (anchor 574)",
+   "how": "locate the flagged free end; search same-net track ENDPOINTS within 0.02..1.5 mm; if found emit {'act':'stitch','uuid','end','to':[x,y]} else fall back to the existing deletion",
+   "why": "the residue classes observed (track_dangling/via_dangling/not_centered) are end-disconnection problems; deleting is a blunt instrument that can fragment the net"
+  },
+  {
+   "id": "P3",
+   "what": "apply the two new actions",
+   "where": "the apply loop (anchor 613)",
+   "how": "'keepvia' -> pass; 'stitch' -> move the flagged end to 'to'; keep the exact gate + the DRC-verified accept/revert (a round is accepted only if the violation count strictly decreases AND unconnected stays 0)"
+  }
+ ],
+ "acceptance_of_the_patch": "static: the three anchors matched verbatim; the new action ids appear in both the planner and the applier. functional: the next single run (below) must show violations <= 168 with no class increased and unconnected 0.",
+ "next_single_run_after_the_patch": {
+  "input": "the text-clipped board (regenerate it inside the SAME new directory with tools/k2_text_clip_run_v1.py - no reference to old experiment directories)",
+  "steps": [
+   "run the unmodified floored router ONCE on the clipped board",
+   "run ONE repair round with the patched action set",
+   "kicad-cli DRC ONCE: <=168, no class up, unconnected 0"
+  ],
+  "on_pass": "freeze the point list as the drawing and present it",
+  "on_fail": "hand in a blocker report; do NOT append another action"
+ },
+ "discipline": {
+  "runs_this_turn": 0,
+  "file_unchanged": true,
+  "no_old_experiment_dir_referenced": true,
+  "frozen_four": "4/4"
+ },
+ "OWNER-ITEMS": 0
+}
