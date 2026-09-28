@@ -30,7 +30,7 @@ def main(argv=None):
     p.add_argument("which", choices=["A", "B"])
     p.add_argument("--board"); p.add_argument("--drc")
     p.add_argument("--run", action="store_true", help="build with the engine then grade")
-    p.add_argument("--chain", default="product", choices=["product", "legacy", "c17v1"],
+    p.add_argument("--chain", default="product", choices=["product", "legacy", "c17v1", "wipe_resolve"],
                    help="product = the BLOCK chain; c17v1 = COPY the in-repo product (A-prime's authorised method, "
                         "guarded by the C34 sec.20 gate); legacy = the old composed pipeline")
     p.add_argument("--capability", default="A_prime_C33_three_questions",
@@ -131,7 +131,7 @@ def main(argv=None):
         spec = exams_mod.EXAMS[a.which]
         out = {"artifact": "eda_eng_exam", "exam": spec, "judging_table": exams_mod.JUDGING_TABLE,
                "state": "DEFINED"}
-        if a.run and a.chain in ("product", "c17v1"):
+        if a.run and a.chain in ("product", "c17v1", "wipe_resolve"):
             preset = exams_mod.EXAMS[a.which]
             refs = preset.get("refs") or []
             delta = preset.get("delta_mm") or [0.0, 0.0]
@@ -140,6 +140,21 @@ def main(argv=None):
             if not pr["ok"]:
                 return _emit({"artifact": "eda_eng_exam", "exam": a.which, "state": "REFUSED_BY_PREFLIGHT",
                               "preflight": pr}, None, 2)
+            if a.chain == "wipe_resolve":
+                aps = json.load(open(os.path.join(L2, "EXAM_A_PRIME_SCENARIO_v1.json"), encoding="utf-8"))
+                rect = aps["scenario"]["frame_rect"]; members = aps["scenario"]["members"]
+                if a.from_placed:
+                    mvv, unch, miss = block_mod.moves_from_board(REF_BOARD, a.from_placed, members)
+                    if miss:
+                        return _emit({"artifact": "eda_eng_exam", "state": "MISSING_REFS", "missing": miss}, None, 2)
+                else:
+                    mvv = [(m["ref"], m["delta_mm"][0], m["delta_mm"][1]) for m in aps["witness"]["moves"]]
+                rp = regen_mod.wipe_resolve_chain(rect, mvv, W, members)
+                out = {"artifact": "eda_eng_exam", "exam": a.which, "chain": "wipe_resolve",
+                       "entry": "eda_eng exam A --run --chain wipe_resolve", "run_count": "1/1",
+                       "route": rp, "state": rp.get("state"), "criteria": (rp.get("M4") or {}).get("criteria"),
+                       "verdict": (rp.get("M4") or {}).get("verdict")}
+                return _emit(out, None, 0 if out["verdict"] == "PASS" else 1)
             if a.chain == "c17v1":
                 # A′ 的**授权路径**（#K2-376 §四.3）：抄仓内成品 C17 v1；先过 C34 闸（守**实际开跑的门**）
                 import importlib.util

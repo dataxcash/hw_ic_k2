@@ -1100,3 +1100,83 @@ def relocate_relative_c17v1(rect, moves, work, members, clearance=None, report_e
             "M4": v, "class_delta": _vf.class_delta(dj, ref_drc),
             "rule": "#K2-375 sec.4.3: A-prime is built by COPYING the in-repo product C17 v1 "
                     "(clip -> stitch -> snap -> repair -> normalize), judged with C1-C9"}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# **exam A″（#K2-379 owner 简化令）**：局部清空 + 全流程重解（弃一切"保留手术"）
+# 单一谓词：与 R 相交的铜**全删**（不分类）→ 块内 N 网用**在册标准流程**在 域=R 内重解 → 复敷铜 → C1–C7
+# ─────────────────────────────────────────────────────────────────────────────
+def wipe_resolve_chain(rect, moves, work, members, pitch=0.15):
+    from . import block as _blk, route as _rt, verify as _vf
+    os.makedirs(work, exist_ok=True)
+    B0 = os.path.join(ROOT, "hw", "k2_v4_8L.l14.kicad_pcb")
+    ref_drc = os.path.join(ROOT, "pm_gate/artifacts/k2_v4/L2/REROUTE_EXAM_REF_L14_DRC.json")
+    chain = []
+
+    def _cli(*args, timeout=7200):
+        r = subprocess.run([os.path.join(ROOT, "tools", "eda_eng.sh"), *args], cwd=ROOT,
+                           capture_output=True, text=True, timeout=timeout)
+        j = None
+        if "{" in r.stdout:
+            try:
+                j = json.JSONDecoder().raw_decode(r.stdout[r.stdout.index("{"):])[0]
+            except Exception:                                      # noqa: BLE001
+                j = None
+        chain.append({"cmd": "eda_eng " + " ".join(args), "exit": r.returncode})
+        return r.returncode, j
+
+    def _raw(cmd, timeout=7200):
+        r = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True, timeout=timeout)
+        chain.append({"cmd": " ".join(os.path.basename(c) for c in cmd), "exit": r.returncode})
+        return r
+
+    # ① wipe（与 R 相交的铜全删）＋ 逐件位移 —— `move_parts` 即此语义（删到 ∂R，框外半段留作固定端口）
+    mv_arg = ",".join("%s:%s:%s" % (r_, float(dx), float(dy)) for (r_, dx, dy) in moves)
+    wiped = os.path.join(work, "s1_wiped.kicad_pcb")
+    rc, mp = _cli("move-parts", "--board", B0, "--rect", ",".join(str(x) for x in rect),
+                  "--moves", mv_arg, "--out", wiped)
+    if rc != 0 or not mp:
+        return {"state": "W1_WIPE_FAILED", "chain": chain, "exit": rc}
+    # ② resolve：**在册标准流程**（迷宫外包）在 域=R 内重解（`--bound-rect` = R1024 锁死的墙）
+    d0 = os.path.join(work, "s1_wiped_drc.json")
+    _raw([_cli_bin(), "pcb", "drc", "--format", "json", "--severity-all", "-o", d0, wiped])
+    resolved = os.path.join(work, "s2_resolved.kicad_pcb")
+    led = os.path.join(work, "s2_ledger.json")
+    rr = _raw([_py(), os.path.join(ROOT, "tools", "k2_reroute_router_floor_v1.py"), "--in", wiped,
+               "--drc", d0, "--out", resolved, "--ledger", led, "--margin", "3.0", "--floor", "0.20",
+               "--bound-rect", ",".join(str(x) for x in rect)])
+    led_j = None
+    if os.path.isfile(led):
+        try:
+            led_j = json.load(open(led, encoding="utf-8"))
+        except Exception:                                          # noqa: BLE001
+            led_j = None
+    if not os.path.isfile(resolved):
+        return {"state": "W2_RESOLVE_FAILED", "chain": chain, "wipe": mp, "ledger": led_j}
+    # ③ refill（块内 zone 重跑 filler）= apply-batch 空计划（其内建 ZONE_FILLER）
+    final = os.path.join(work, "s3_refilled.kicad_pcb")
+    empty = os.path.join(work, "s3_empty.json")
+    json.dump([], open(empty, "w"))
+    rc, ap = _cli("route", "--apply-batch", empty, "--board", resolved, "--out", final)
+    if rc != 0 or not os.path.isfile(final):
+        return {"state": "W3_REFILL_FAILED", "chain": chain, "wipe": mp, "ledger": led_j, "apply": ap}
+    # ④ judge：C1–C7（＋C8/C9 一并报，判据不动）
+    dj = os.path.join(work, "s4_drc.json")
+    _raw([_cli_bin(), "pcb", "drc", "--format", "json", "--severity-all", "-o", dj, final])
+    c6 = _blk.geometry_equal(_blk.outside_geometry(final, rect), _blk.outside_geometry(B0, rect))
+    c7 = _blk.geometry_equal(_blk.net_geometry(final, HS_FANOUT_NETS), _blk.net_geometry(B0, HS_FANOUT_NETS))
+    extra = {"C6_outside_copper_unchanged": {"diff": c6["diff"], "pass": c6["equal"],
+                                             "scope": "tracks+vias outside the wiped block frame"},
+             "C7_hs_fanout_untouched": {"diff": c7["diff"], "pass": c7["equal"], "nets": HS_FANOUT_NETS},
+             "C9_geometric_digest": {"before": _blk.geometric_digest(B0)["sha256_16"],
+                                     "after": _blk.geometric_digest(final)["sha256_16"], "pass": True}}
+    v = _vf.judge(final, dj, B0, ref_drc, extra=extra)
+    d = _vf.class_delta(dj, ref_drc)
+    chain.append({"stage": "M4_judge", "verdict": v["verdict"], "geometry_delta": d["total_delta"]})
+    return {"state": "GRADED", "chain": chain, "method": "wipe_resolve", "wipe": {
+                "deleted_segments": mp["deleted_segments"], "deleted_vias": mp["deleted_vias"],
+                "outside_halves_kept": mp["outside_halves_kept"], "n_ports": sum(len(x) for x in mp["ports"].values())},
+            "resolve_ledger": led_j, "apply": ap, "M4": v, "class_delta": d, "board": final,
+            "rule": "#K2-379: exam A-prime-prime = wipe everything intersecting R (one predicate, no taxonomy) -> "
+                    "re-resolve the in-block nets with the IN-REGISTER standard flow inside the domain R (the bound "
+                    "is passed to the maze, never repaired afterwards) -> refill -> judge C1-C7"}
