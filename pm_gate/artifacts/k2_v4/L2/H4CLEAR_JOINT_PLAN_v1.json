@@ -1,0 +1,52 @@
+{
+ "artifact": "k2_h4clear_joint_plan_v1",
+ "ts": "2026-09-28",
+ "authority": "stop-order blocker report (#K2-346 sec.3 plain-language format); plan only, NOT executed",
+ "plain_language": {
+  "1_signal": "the two right-bottom downstream PCIe lanes leave the mid-board redriver on In2, dive to the bottom channel band, run ~48 mm east on In5, turn around near the right edge, climb back north on In2, and land on their J2 pads at y 59.5/60.3; a serpentine on the partner lane equalises each pair.",
+  "2_blocker": "the H4 mounting hole's 3 mm keepout (6x6) contains the turnaround/column (x=139.48/138.32 vs required <=137.6537); the strip immediately west of the J2 pads is already fully occupied by the UPLINK landing columns/vias (PCIE_UP_OUT*_J2) which alternate with the downstream lanes on one shared 0.58 mm x grid - so 'move the downstream lanes only' cannot work.",
+  "3_human_solution": "re-assign the whole right-edge column grid in one go, counting the uplink columns, letting the downstream columns step into the measured free slots (including west of them), and re-tune the two serpentines; i.e. re-do the column grid, do not nudge lanes."
+ },
+ "witness_not_emitted": {
+  "PCIE_DN4_N": 134.4,
+  "PCIE_DN5_P": 135.5,
+  "PCIE_DN6_N": 133.4,
+  "PCIE_DN7_P": 134.95,
+  "x_max_allowed": 137.6537,
+  "min_pairwise_spacing_mm": 0.55,
+  "min_required_mm": 0.525,
+  "length_closure": {
+   "PCIE_DN4_N": {
+    "capacity": 10.59,
+    "loss": 8.917
+   },
+   "PCIE_DN5_P": {
+    "capacity": 12.31,
+    "loss": 5.59
+   },
+   "PCIE_DN6_N": {
+    "capacity": 9.269,
+    "loss": 4.315
+   },
+   "PCIE_DN7_P": {
+    "capacity": 4.339,
+    "loss": 1.826
+   }
+  },
+  "named_caveats": [
+   "does NOT preserve the drawing's monotone x-order rule -> the R3 order rule must be relaxed",
+   "F.Cu / In5 / pour effects still require a real DRC"
+  ]
+ },
+ "attempts": {
+  "1": "6x6 clip + C17 reroute -> unconnected 3",
+  "2": "9x9 -> unconnected 6",
+  "3": "clearance-aware via push -> foreign copper (gap+1/short+3/cross+1)",
+  "4": "C22 exact pour polygon -> no clean position within 4 mm",
+  "5": "R914: DN-only re-spacing into [135.4,137.65] -> hits the uplink columns -> DRC 182 vs 168, 6 new classes incl. 3 shorts"
+ },
+ "why_they_fail": "1-4 are local surgery on existing copper (the corner conflict is a downstream symptom of placement/frame); 5 solved only the downstream lanes and ignored the uplink columns sharing the same x grid.",
+ "gap_layer": "SCHEME / DRAWING layer: ONE joint re-solve (downstream input + uplink output landing columns together + serpentine re-tune + relaxed R3 order) then ONE bounded chain run + ONE judge. Not a construction-layer problem.",
+ "execution_required": "a NEW bounded window authorized by the supervisor (#K2-347 sec.2 frame-first re-placement): re-emit drawing -> SPEC rev-62 (already prepared) -> project.yaml -> chain run once -> judge once; any FAIL = stop + report, no parameter re-run.",
+ "OWNER-ITEMS": 0
+}
