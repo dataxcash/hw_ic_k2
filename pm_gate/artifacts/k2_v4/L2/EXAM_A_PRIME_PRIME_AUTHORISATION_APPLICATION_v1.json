@@ -1,0 +1,28 @@
+{
+ "artifact": "k2_exam_a_doubleprime_authorisation_application_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-382 sec.2.3: after the bench is repaired and the three fences are re-installed green, APPLY for a new exam authorisation. Applying is not self-running.",
+ "request": {"exam": "A-double-prime (wipe + resolve)", "commands": ["eda_eng exam A --run --chain wipe_resolve --from-placed <gate board>"],
+             "runs_requested": "1 (exactly one; run_count evidence 1/1)", "judging": "the nine rows C1-C9 (C6=0 and C8 required; a missing row is fail-closed)"},
+ "preconditions_met": {
+  "bench_repaired": {"finding": "M-ENG-TEST-STATE-ISOLATION", "fix": "entry sentinel + subprocess-only board work (R1044)",
+                     "evidence": "SELFTEST_EXIT=0, 71/71 PASS with the sentinel installed (L2/EDA_ENG_TESTS_71_v2.txt)"},
+  "three_fences_installed": {"rip_clip": "block.clip_iu, cut points ON dR (R1020)",
+                             "stitch": "the product forwards --bound-rect to k2_reroute_router_floor_v1.py -> mr.WALL_RECT (R1026)",
+                             "apply": "route.apply_routes(..., bound_rect=None) refuses BEFORE SaveBoard; CLI --bound-rect wired; wipe_resolve refill passes the frame (R1040/R1044)",
+                             "unit_tests": ["rip clip-IU source lock", "stitch-forwarding lock", "apply-guard source lock (refusal before SaveBoard)", "C2 pinned-caliber lock"]},
+  "calibre_aligned": {"what": "judge's C2 uses the SAME pinned caliber as class_delta", "reading": "geometry 141 vs the 168 baseline (the 54 library rows are recorded, not judged)", "threshold": "unchanged"},
+  "capacity_reading": {"artifact": "L2/C1_CAPACITY_READING_v1.json", "binary": "ENOUGH_SPACE - free area is 93.5% of the frame",
+                       "meaning": "the residual 24 unconnected items are a TERMINAL/STITCH-POLICY problem, not a space wall"}
+ },
+ "what_will_be_done_inside_the_window": [
+  "1. ONE terminal/stitch-policy fix (wire the remaining gaps' terminals; the capacity is already proven sufficient) - no search, no parameter trials, no tool upgrades",
+  "2. exactly ONE run of the entry above",
+  "3. the nine-row judging (C1-C9) with the C34 gate hit at that entry and the run-count recorded as 1/1"
+ ],
+ "outcome_contract": {"if_PASS": "feasible witness delivered; C35 closes",
+                      "if_FAIL": "stop; produce the CONSERVATION-LEVEL infeasibility certificate naming layer / resource / occupant / why no allocation is possible (per #K2-381 and the standing convergence rule)"},
+ "frozen": {"aprime_witness_freeze": "maintained (#K2-380)", "board": "l14/rev-61 untouched; every board lives in /tmp",
+            "frozen_four": "4/4 (SPEC 0bd52ed48e720b8c / manifest a8ef3ea8ecff99d7 / PCB fb07d25ac426ff84 / rules 0a459839e15960b8)"},
+ "OWNER-ITEMS": 0
+}
