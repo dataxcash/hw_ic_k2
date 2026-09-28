@@ -87,7 +87,7 @@ def geometry(path):
 
 
 def judge(board, drc_json, ref_board, ref_drc_json,
-          drc_total=None, chamfer_ref=None, skew_limit=None, table=None):
+          drc_total=None, chamfer_ref=None, skew_limit=None, table=None, extra=None):
     tbl = judging_table(table)["thresholds"]
     drc_total = tbl["C2_drc_no_new_increase"]["value"] if drc_total is None else drc_total
     chamfer_ref = tbl["C4_chamfer_preserved"]["value"] if chamfer_ref is None else chamfer_ref
@@ -114,9 +114,14 @@ def judge(board, drc_json, ref_board, ref_drc_json,
                                        "pass": g["chamfer_45deg"] >= chamfer_ref}
         diff = sum(1 for k in g["elems"] if k not in gr["elems"]) + sum(1 for k in gr["elems"] if k not in g["elems"])
         out["C5_routing_changed"] = {"element_set_diff": diff, "pass": diff > 0}
+    # BLOCK 保真判据（#K2-369 §三.3，已批入 ECO-K2-0002 §6）：由调用方（block 链）算好传入。
+    if extra:
+        for k in sorted(extra):
+            out[k] = extra[k]
     vals = [v["pass"] for v in out.values()]
     verdict = "FAIL" if any(v is False for v in vals) else ("INCOMPLETE" if any(v is None for v in vals) else "PASS")
     return {"criteria": out, "verdict": verdict, "thresholds_used": {
                 "drc_total": drc_total, "chamfer_ref": chamfer_ref, "skew_limit": skew_limit},
             "judging_table": "L2/EDA_ENG_JUDGING_TABLE_v1.json (ECO-K2-0002/0003 sec.6)",
-            "rule": "PASS iff all five hold; None (skipped) is never a PASS (#K2-358: capability must be reproducible)"}
+            "rule": "PASS iff EVERY criterion holds (C1-C5 in-register + C6/C7 block-fidelity when a block chain is "
+                    "graded); None (skipped) is never a PASS (#K2-358: capability must be reproducible)"}

@@ -1,0 +1,267 @@
+{
+ "artifact": "k2_block_model_machine_evidence_v2",
+ "ts": "2026-09-29",
+ "board": "hw/k2_v4_8L.l14.kicad_pcb",
+ "authority": "#K2-369 sec.3/4 (approved BLOCK plan): implementation evidence",
+ "frame_acceptance": {
+  "tight_corrected": {
+   "rect": [
+    22.95,
+    32.95,
+    46.5,
+    62.5
+   ],
+   "frame_ok": true,
+   "FOREIGN_INSIDE": {
+    "count": 0,
+    "by_net": {}
+   },
+   "FOREIGN_PADS_INSIDE": {
+    "count": 0,
+    "refs": []
+   },
+   "n_members": 20,
+   "mech_no_net_inside": [
+    "H3"
+   ],
+   "n_N_star": 22,
+   "extra_by_inflation": [
+    "LED_A"
+   ],
+   "totals_N_star": {
+    "trk_in": 503,
+    "trk_cross": 23,
+    "trk_out": 552,
+    "via_in": 86,
+    "via_out": 369
+   },
+   "swept": [
+    22.95,
+    32.95,
+    50.0,
+    66.0
+   ]
+  },
+  "loose_approved": {
+   "rect": [
+    22.95,
+    32.95,
+    51.5,
+    66.5
+   ],
+   "frame_ok": false,
+   "FOREIGN_INSIDE": {
+    "count": 0,
+    "by_net": {}
+   },
+   "FOREIGN_PADS_INSIDE": {
+    "count": 5,
+    "refs": [
+     "D1",
+     "J11",
+     "R1",
+     "R21",
+     "R28"
+    ]
+   },
+   "n_members": 20,
+   "mech_no_net_inside": [
+    "H3"
+   ],
+   "n_N_star": 30,
+   "extra_by_inflation": [
+    "PCIE_DN_OUT3_N_MCIO",
+    "PCIE_DN_OUT3_P_MCIO",
+    "PCIE_DN_OUT4_N_MCIO",
+    "PCIE_DN_OUT4_P_MCIO",
+    "PCIE_UP3_N",
+    "PCIE_UP3_P",
+    "PCIE_UP4_N",
+    "PCIE_UP4_P"
+   ],
+   "totals_N_star": {
+    "trk_in": 600,
+    "trk_cross": 15,
+    "trk_out": 468,
+    "via_in": 95,
+    "via_out": 361
+   },
+   "swept": [
+    22.95,
+    32.95,
+    55.0,
+    70.0
+   ]
+  },
+  "rule": "FOREIGN_INSIDE == 0 AND FOREIGN_PADS_INSIDE == 0",
+  "finding": "the approved loose frame swallows 5 netted components (D1,J11,R1,R21,R28), inflates N* 22->30 (including 8 PCIe nets) and its own sweep reaches x=55.0 > the HS copper at 53.02; the corrected tight frame has FOREIGN_*==0, members=20, N*=22, sweep x<=50.0",
+  "hard_bounds": {
+   "x_max_lt": 48.05,
+   "basis": "J4 pad y_min",
+   "y_max_lt": 63.95
+  }
+ },
+ "move_block": {
+  "members": 20,
+  "segments_translated": 503,
+  "vias_translated": 86,
+  "crossing_split": 23,
+  "bridge_split": 0,
+  "outside_halves_kept": 23,
+  "jobs": 23,
+  "rule": "a job is exactly port -> port+delta (a pure delta gap at dR)"
+ },
+ "fidelity": {
+  "C6_outside_swept_unchanged": true,
+  "C7_hs_fanout_untouched": true,
+  "control_outside_R_differs": true,
+  "note": "C6 must be taken over the SWEPT region, not R: the in-block copper legitimately moves out of R"
+ },
+ "maze_endpoint_false_positives": {
+  "blocked_jobs": 20,
+  "clear_of_real_foreign_copper": 18,
+  "rows": [
+   {
+    "net": "GND",
+    "layer": "F.Cu",
+    "min_dist_to_real_foreign_copper_mm": 0.835,
+    "clear_of_real_copper": true,
+    "maze_verdict_semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR"
+   },
+   {
+    "net": "MCU_VDD",
+    "layer": "F.Cu",
+    "min_dist_to_real_foreign_copper_mm": 0.7,
+    "clear_of_real_copper": true,
+    "maze_verdict_semantics": "NOT_FOUND"
+   },
+   {
+    "net": "NRST",
+    "layer": "F.Cu",
+    "min_dist_to_real_foreign_copper_mm": 0.035,
+    "clear_of_real_copper": false,
+    "maze_verdict_semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR"
+   },
+   {
+    "net": "PERSTA#",
+    "layer": "F.Cu",
+    "min_dist_to_real_foreign_copper_mm": 0.15,
+    "clear_of_real_copper": false,
+    "maze_verdict_semantics": "NOT_FOUND"
+   },
+   {
+    "net": "PWR_BTN_OUT",
+    "layer": "In2.Cu",
+    "min_dist_to_real_foreign_copper_mm": 0.8,
+    "clear_of_real_copper": true,
+    "maze_verdict_semantics": "NOT_FOUND"
+   },
+   {
+    "net": "GPIO_LED",
+    "layer": "F.Cu",
+    "min_dist_to_real_foreign_copper_mm": 0.672,
+    "clear_of_real_copper": true,
+    "maze_verdict_semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR"
+   },
+   {
+    "net": "P3V3_AUX",
+    "layer": "B.Cu",
+    "min_dist_to_real_foreign_copper_mm": 8.243,
+    "clear_of_real_copper": true,
+    "maze_verdict_semantics": "NOT_FOUND"
+   },
+   {
+    "net": "I2C2_SCL",
+    "layer": "F.Cu",
+    "min_dist_to_real_foreign_copper_mm": 0.2,
+    "clear_of_real_copper": true,
+    "maze_verdict_semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR"
+   },
+   {
+    "net": "I2C2_SCL",
+    "layer": "In2.Cu",
+    "min_dist_to_real_foreign_copper_mm": 0.636,
+    "clear_of_real_copper": true,
+    "maze_verdict_semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR"
+   },
+   {
+    "net": "I2C2_SDA",
+    "layer": "In2.Cu",
+    "min_dist_to_real_foreign_copper_mm": 0.951,
+    "clear_of_real_copper": true,
+    "maze_verdict_semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR"
+   },
+   {
+    "net": "I2C2_SDA",
+    "layer": "In2.Cu",
+    "min_dist_to_real_foreign_copper_mm": 0.636,
+    "clear_of_real_copper": true,
+    "maze_verdict_semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR"
+   },
+   {
+    "net": "UART_TX",
+    "layer": "B.Cu",
+    "min_dist_to_real_foreign_copper_mm": 0.713,
+    "clear_of_real_copper": true,
+    "maze_verdict_semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR"
+   },
+   {
+    "net": "SWCLK_BOOT0",
+    "layer": "F.Cu",
+    "min_dist_to_real_foreign_copper_mm": 0.35,
+    "clear_of_real_copper": true,
+    "maze_verdict_semantics": "NOT_FOUND"
+   },
+   {
+    "net": "SWCLK_BOOT0",
+    "layer": "F.Cu",
+    "min_dist_to_real_foreign_copper_mm": 0.587,
+    "clear_of_real_copper": true,
+    "maze_verdict_semantics": "NOT_FOUND"
+   },
+   {
+    "net": "I2C1_SCL",
+    "layer": "F.Cu",
+    "min_dist_to_real_foreign_copper_mm": 0.898,
+    "clear_of_real_copper": true,
+    "maze_verdict_semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR"
+   },
+   {
+    "net": "I2C1_SDA",
+    "layer": "F.Cu",
+    "min_dist_to_real_foreign_copper_mm": 1.326,
+    "clear_of_real_copper": true,
+    "maze_verdict_semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR"
+   },
+   {
+    "net": "I2C1_SDA",
+    "layer": "F.Cu",
+    "min_dist_to_real_foreign_copper_mm": 0.61,
+    "clear_of_real_copper": true,
+    "maze_verdict_semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR"
+   },
+   {
+    "net": "I2C1_SDA",
+    "layer": "B.Cu",
+    "min_dist_to_real_foreign_copper_mm": 1.27,
+    "clear_of_real_copper": true,
+    "maze_verdict_semantics": "NOT_FOUND"
+   },
+   {
+    "net": "I2C1_SDA",
+    "layer": "B.Cu",
+    "min_dist_to_real_foreign_copper_mm": 0.424,
+    "clear_of_real_copper": true,
+    "maze_verdict_semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR"
+   },
+   {
+    "net": "PWR_BTN_ISO",
+    "layer": "B.Cu",
+    "min_dist_to_real_foreign_copper_mm": 1.125,
+    "clear_of_real_copper": true,
+    "maze_verdict_semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR"
+   }
+  ],
+  "finding": "the obstacle model is axis-aligned bounding boxes, so an endpoint can be strictly inside a foreign AABB while being >=0.175mm clear of the real copper; 18/20 blocked endpoints are clear => the reconnect refusals are AABB false positives (new engine gap: a true-shape clearance oracle)"
+ }
+}

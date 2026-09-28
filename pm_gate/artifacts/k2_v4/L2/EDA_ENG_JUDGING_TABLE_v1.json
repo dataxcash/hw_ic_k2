@@ -42,11 +42,24 @@
   "C5_routing_changed": {
    "machine": "segment-level element-set difference vs the reference != 0",
    "value": ">0"
+  },
+  "C6_outside_copper_unchanged": {
+   "machine": "the multiset of track/via copper geometry OUTSIDE the swept region bbox(R u R+delta) is EXACTLY unchanged (canonical, 1um quantization)",
+   "value": 0,
+   "scope": "tracks+vias (routed copper); zone fill is governed by the refill step and by C2",
+   "authority": "#K2-369 sec.3.3 (approved; ECO-K2-0002 sec.6)",
+   "note": "clipping is exact for the board's 45/90 degree geometry; the comparison is quantized at 1um to absorb IU rounding"
+  },
+  "C7_hs_fanout_untouched": {
+   "machine": "the multiset of copper geometry of the named HS fanout nets (PCIE_DN0..DN7 _P/_N, 16 nets) is EXACTLY unchanged",
+   "value": 0,
+   "nets": "PCIE_DN0..7_P/N (J2 -> U6), listed in ECO-K2-0002 sec.6b",
+   "authority": "#K2-369 sec.3.3 (approved; ECO-K2-0002 sec.6)"
   }
  },
  "exam_extras": {
   "exam_B": "plus C21 four-corner keepout all PASS (tools/k2_corner_keepout_gate_v1.py)"
  },
- "rule": "PASS iff every criterion holds; a skipped criterion (missing tooling) is never a PASS",
+ "rule": "PASS iff every criterion holds (C1-C7 for a block chain); a skipped criterion (missing tooling) is never a PASS",
  "OWNER-ITEMS": 0
 }

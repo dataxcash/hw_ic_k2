@@ -206,6 +206,18 @@ def apply_routes(board, plans, out, width_mm=0.2):
             vi.SetWidth(P.FromMM(0.45)); vi.SetDrill(P.FromMM(0.25))
             vi.SetLayerPair(LM[v["layers"][0]], LM[v["layers"][1]]); vi.SetNetCode(code)
             b.Add(vi); vias += 1
+    # 复敷铜（#K2-366 sec.2 step 5 · #K2-369 sec.3.2/4）：**批路径此前从未调用 ZONE_FILLER**
+    # => 「复敷铜」是空操作。此处真接线；失败即具名返回（fail-closed）。
+    zones = b.Zones()
+    refilled = 0
+    if len(zones):
+        try:
+            P.ZONE_FILLER(b).Fill(zones)
+            refilled = len(zones)
+        except Exception as e:                                 # noqa: BLE001
+            return {"artifact": "eda_eng_route_apply_batch", "status": "REFILL_FAILED",
+                    "reason": "ZONE_FILLER raised: %s" % e, "nets": [p["net"] for p in plans],
+                    "segments_added": added, "vias_added": vias, "zones_refilled": -1}
     P.SaveBoard(out, b)
     import shutil, hashlib
     copied = []
@@ -214,8 +226,10 @@ def apply_routes(board, plans, out, width_mm=0.2):
         if os.path.isfile(src):
             shutil.copy2(src, out[:-len(".kicad_pcb")] + ext if out.endswith(".kicad_pcb") else out + ext)
             copied.append(ext)
-    return {"artifact": "eda_eng_route_apply_batch", "nets": [p["net"] for p in plans],
-            "segments_added": added, "vias_added": vias, "project_config_copied": copied, "out": out,
+    return {"artifact": "eda_eng_route_apply_batch", "status": "APPLIED",
+            "nets": [p["net"] for p in plans],
+            "segments_added": added, "vias_added": vias, "zones_refilled": refilled,
+            "project_config_copied": copied, "out": out,
             "out_sha16": hashlib.sha256(open(out, "rb").read()).hexdigest()[:16]}
 
 
@@ -504,12 +518,16 @@ def _snap(g, pt, free_of=None):
     return best
 
 
-def maze_route(p, q, layers, obstacles, bounds, pitch=0.5, clear=CLEAR, width=0.2, via_penalty=8.0):
-    """Lee/A* 迷宫布线：p→q，可换层（过孔），8 邻域（45°）。不通 ⇒ 具名阻断。"""
+def maze_route(p, q, layers, obstacles, bounds, pitch=0.5, clear=CLEAR, width=0.2, via_penalty=8.0,
+               endpoint_clear=None):
+    """Lee/A* 迷宫布线：p→q，可换层（过孔），8 邻域（45°）。不通 ⇒ 具名阻断。
+    endpoint_clear：端点"埋在别人铜里"判据所用间隙（默认 = clear）。障碍是**保守 AABB**，
+    故块内重连把端点判据放宽到 0（只拒"真的埋在别人铜里"的点）——正确性由健全判卷器 M4 兜底。"""
     import heapq
+    ec = clear if endpoint_clear is None else endpoint_clear
     # 端点自身必须在净场里（否则不是"布线"问题，而是"目标点落在别人铜上"）
     badpts = [{"which": w, "violations": poly_violations([[pt[0], pt[1]], [pt[0], pt[1]]], obstacles,
-                                                         clearance=clear, layer=layers[0])}
+                                                         clearance=ec, layer=layers[0])}
               for w, pt in (("p", p), ("q", q))]
     badpts = [b for b in badpts if b["violations"]]
     if badpts:
@@ -583,14 +601,16 @@ def maze_route(p, q, layers, obstacles, bounds, pitch=0.5, clear=CLEAR, width=0.
                 prev[nk] = key
                 h = min(math.hypot(ni - t[0], nj - t[1]) for t in goals.values()) * pitch
                 heapq.heappush(pq, (nd + h, nd, L, ni, nj))
-        # 换层（过孔）
+        # 换层（过孔）—— **棱柱语义**（#K2-369 sec.3 / gap C31）：via 必须穿透 span 内**每一层**，
+        # 而不是只查两端层；跨 >2 层的 via（如 F.Cu->In4.Cu 途经 In1/In2/In3）此前漏检。
+        iL = layers.index(L)
         for L2 in layers:
-            if L2 == L or not gv[L2]["blocked"]:
-                pass
             if L2 == L:
                 continue
-            if gv[L]["blocked"][i * gv[L]["ny"] + j] or gv[L2]["blocked"][i * gv[L2]["ny"] + j]:
-                continue                                   # via 站点须两层的净场网格都空
+            iL2 = layers.index(L2)
+            lo, hi = (iL, iL2) if iL < iL2 else (iL2, iL)
+            if any(gv[layers[k]]["blocked"][i * gv[layers[k]]["ny"] + j] for k in range(lo, hi + 1)):
+                continue                                   # via 站点须 span 内每一层净场网格都空
             nk = (L2, i, j)
             nd = g_ + via_penalty
             if nd < dist.get(nk, 1e18) - 1e-9:

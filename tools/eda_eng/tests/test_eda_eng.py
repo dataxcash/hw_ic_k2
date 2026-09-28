@@ -3,7 +3,7 @@ import json, math, os, sys, unittest
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 sys.path.insert(0, os.path.join(ROOT, "tools"))
-from eda_eng import eco, exams, netplan, place, regen, ripup, route, verify   # noqa: E402
+from eda_eng import block, eco, exams, netplan, place, regen, ripup, route, verify   # noqa: E402
 
 L2 = os.path.join(ROOT, "pm_gate", "artifacts", "k2_v4", "L2")
 REF = os.path.join(ROOT, verify.BASELINE_BOARD)
@@ -487,6 +487,82 @@ class T(unittest.TestCase):
         self.assertTrue(r["real_source_untouched"])
         self.assertTrue(os.path.islink(os.path.join(sh["shadow_root"], "pm_gate/artifacts/k2_v4/L3"))
                         or os.path.isdir(os.path.join(sh["shadow_root"], "pm_gate/artifacts/k2_v4/L3")))
+
+    # ---------------- #K2-369 BLOCK relocation model ----------------
+    def test_K369_frame_acceptance_rejects_foreign_pads_inside(self):
+        """框接受判据（#K2-369 sec.4）：**框内不得多出有网器件**。实测：批准用的松框会吞 5 个器件，
+        并把 N* 从 22 撑到 30（含 8 条 PCIe）⇒ 该框在模型上不成立；收紧框 FOREIGN_* == 0。"""
+        regs = ["C73", "C84", "C85", "C86", "C87", "C88", "C90", "D2", "E2", "J12", "J13",
+                "J6", "J9", "L1", "R40", "R41", "U1", "U2", "U4", "U5"]
+        tight = block.census(REF, [22.95, 32.95, 46.50, 62.50], [3.5, 3.5], members=regs)
+        self.assertTrue(tight["frame_ok"], "tight frame must be admissible")
+        self.assertEqual(tight["FOREIGN_INSIDE"]["count"], 0)
+        self.assertEqual(tight["FOREIGN_PADS_INSIDE"]["count"], 0)
+        self.assertEqual(tight["n_members"], 20)
+        self.assertEqual(tight["mech_no_net_inside"], ["H3"], "the mounting hole is a board feature, never a member")
+        loose = block.census(REF, [22.95, 32.95, 51.50, 66.50], [3.5, 3.5], members=regs)
+        self.assertFalse(loose["frame_ok"], "the loose frame swallows extra netted components")
+        self.assertEqual(sorted(loose["FOREIGN_PADS_INSIDE"]["refs"]), ["D1", "J11", "R1", "R21", "R28"])
+        self.assertGreater(loose["n_N_star"], tight["n_N_star"])
+
+    def test_K369_block_move_preserves_outside_copper_and_hs_fanout(self):
+        """C6/C7 的**本体**：块体搬运后，扫过区之外的铜与 16 条 PCIe 扇出必须**逐段零改动**。
+        控制项：换用 R（块内框）做比较时必须**不等**（块铜确实搬出去了）⇒ 判据非空转。"""
+        regs = ["C73", "C84", "C85", "C86", "C87", "C88", "C90", "D2", "E2", "J12", "J13",
+                "J6", "J9", "L1", "R40", "R41", "U1", "U2", "U4", "U5"]
+        rect = [22.95, 32.95, 46.50, 62.50]
+        S = block.swept(rect, [3.5, 3.5])
+        out = "/tmp/opencode/eda_eng/selftest_block_move.kicad_pcb"
+        os.makedirs(os.path.dirname(out), exist_ok=True)
+        mv = block.move_block(REF, rect, [3.5, 3.5], out, refs=regs)
+        self.assertEqual(mv["n_members"], 20)
+        self.assertEqual(mv["moved"]["cross_split"], 23)
+        self.assertEqual(mv["moved"]["bridge_split"], 0)
+        self.assertEqual(mv["n_jobs"], 23)
+        for j in mv["jobs"]:                                    # 作业缺口 = 精确的 Δ
+            self.assertAlmostEqual(j["target"][0] - j["port"][0], 3.5, places=6)
+            self.assertAlmostEqual(j["target"][1] - j["port"][1], 3.5, places=6)
+        self.assertTrue(block.geometry_equal(block.outside_geometry(out, S),
+                                             block.outside_geometry(REF, S))["equal"],
+                        "C6: copper outside the swept region must be bit-identical")
+        self.assertTrue(block.geometry_equal(block.net_geometry(out, regen.HS_FANOUT_NETS),
+                                             block.net_geometry(REF, regen.HS_FANOUT_NETS))["equal"],
+                        "C7: the 16 PCIe fanout nets must be untouched")
+        self.assertFalse(block.geometry_equal(block.outside_geometry(out, rect),
+                                              block.outside_geometry(REF, rect))["equal"],
+                         "control: the in-block copper really did move out of R")
+
+    def test_K369_maze_via_prism_checks_every_layer_in_span(self):
+        """缺口 C31（#K2-369）：via 必须穿透 span 内**每一层**。只查两端层时，跨层 via 会穿过中间层的墙。"""
+        wall = [{"id": "wF", "kind": "copper", "net": "X", "bbox": [2.5, -6, 3.5, 6], "layers": ["F.Cu"]},
+                {"id": "w1", "kind": "copper", "net": "X", "bbox": [-1, -6, 7, 6], "layers": ["In1.Cu"]}]
+        r = route.maze_route([0, 0], [6, 0], ["F.Cu", "In1.Cu", "In2.Cu"], wall, [-1, -4.6, 7, 4.6])
+        self.assertEqual(r["status"], "BLOCKED",
+                         "a via F.Cu->In2.Cu may not cross a wall on In1.Cu (prism span)")
+        r2 = route.maze_route([0, 0], [6, 0], ["F.Cu", "In2.Cu"], wall, [-1, -4.6, 7, 4.6])
+        self.assertEqual(r2["status"], "ROUTED",
+                         "without In1.Cu in the stack the same geometry is routable")
+
+    def test_K369_apply_batch_refills_zones(self):
+        """#K2-369 sec.3.2：`route --apply-batch` 此前**从不调用** ZONE_FILLER（第 5 步是空操作）。
+        现在必须真复敷铜并把 zones_refilled 写进收执。"""
+        out = "/tmp/opencode/eda_eng/selftest_refill.kicad_pcb"
+        os.makedirs(os.path.dirname(out), exist_ok=True)
+        r = route.apply_routes(REF, [], out)
+        self.assertEqual(r["status"], "APPLIED")
+        self.assertGreater(r["zones_refilled"], 0, "the batch path must actually refill zones")
+
+    def test_K369_judge_accepts_and_enforces_C6_C7(self):
+        """C6/C7 入判卷：extra 判据必须出现在 criteria 里，且 pass=False 会把 verdict 拉成 FAIL。"""
+        refdrc = os.path.join("pm_gate/artifacts/k2_v4/L2/REROUTE_EXAM_REF_L14_DRC.json")
+        ok = verify.judge(REF, refdrc, REF, refdrc,
+                          extra={"C6_outside_copper_unchanged": {"diff": 0, "pass": True},
+                                 "C7_hs_fanout_untouched": {"diff": 0, "pass": True}})
+        self.assertIn("C6_outside_copper_unchanged", ok["criteria"])
+        self.assertIn("C7_hs_fanout_untouched", ok["criteria"])
+        bad = verify.judge(REF, refdrc, REF, refdrc,
+                           extra={"C6_outside_copper_unchanged": {"diff": 3, "pass": False}})
+        self.assertEqual(bad["verdict"], "FAIL")
 
     def test_placement_edit_preserves_rotation(self):
         from eda_eng import shadow

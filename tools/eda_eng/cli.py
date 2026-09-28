@@ -3,7 +3,7 @@
 from __future__ import annotations
 import argparse, json, os, subprocess, sys
 
-from . import eco as eco_mod, exams as exams_mod, netplan as netplan_mod, place as place_mod, regen as regen_mod, ripup as ripup_mod, route as route_mod, verify as verify_mod
+from . import block as block_mod, eco as eco_mod, exams as exams_mod, netplan as netplan_mod, place as place_mod, regen as regen_mod, ripup as ripup_mod, route as route_mod, verify as verify_mod
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 L2 = os.path.join(ROOT, "pm_gate", "artifacts", "k2_v4", "L2")
@@ -52,6 +52,23 @@ def main(argv=None):
     p.add_argument("--delta", default=None, help="dx,dy applied to every listed ref")
     p.add_argument("--work", required=True)
     p.add_argument("--max-nets", type=int, default=None)
+    p = sub.add_parser("block", help="M0: BLOCK census (frame -> three-way class census -> N* inflated predicate)")
+    p.add_argument("--board"); p.add_argument("--rect", help="x0,y0,x1,y1 (mm)")
+    p.add_argument("--refs", default=None, help="declared block members (comma-separated)")
+    p.add_argument("--margin", type=float, default=0.5, help="margin when the frame is derived from refs")
+    p.add_argument("--delta", default="0,0", help="dx,dy (mm) - used for swept + N*")
+    p.add_argument("--clearance", type=float, default=None)
+    p.add_argument("--json-out")
+    p = sub.add_parser("relocate-block",
+                       help="#K2-369: BLOCK relocation (M0 census -> move_block(+M2 clip) -> M3 in-block reconnect -> refill -> M4)")
+    p.add_argument("--rect", help="x0,y0,x1,y1 (mm)")
+    p.add_argument("--refs", default=None, help="declared block members (comma-separated)")
+    p.add_argument("--margin", type=float, default=0.5)
+    p.add_argument("--delta", required=True, help="dx,dy in mm")
+    p.add_argument("--work", required=True)
+    p.add_argument("--clearance", type=float, default=None)
+    p.add_argument("--max-jobs", type=int, default=None)
+    p.add_argument("--json-out")
     p = sub.add_parser("dump", help="read-only per-net track/via inventory (QA/test helper)")
     p.add_argument("--board", required=True)
     p.add_argument("--json-out")
@@ -155,6 +172,36 @@ def main(argv=None):
                          for r, tgt in moves]
         r = regen_mod.relocate_chain(moves, a.work, max_nets=a.max_nets)
         return _emit(r, None, 0 if r.get("state") == "GRADED" and (r.get("M4") or {}).get("verdict") == "PASS" else 1)
+
+    if a.cmd == "block":
+        from . import route as _rt
+        board = a.board or REF_BOARD
+        members = [x.strip() for x in a.refs.split(",") if x.strip()] if a.refs else None
+        rect = [float(v) for v in a.rect.split(",")] if a.rect else None
+        if rect is None:
+            pb = block_mod.pad_rect(board, members)
+            if pb is None:
+                return _emit({"artifact": "eda_eng_block", "error": "no pads for the given refs"}, a.json_out, 2)
+            rect = block_mod.inflate(pb, a.margin)
+        dx, dy = [float(v) for v in a.delta.split(",")]
+        clear = a.clearance if a.clearance is not None else _rt.CLEAR
+        r = block_mod.census(board, rect, [dx, dy], clearance=clear, members=members)
+        return _emit(r, a.json_out, 0 if r["frame_ok"] else 1)
+
+    if a.cmd == "relocate-block":
+        from . import route as _rt
+        members = [x.strip() for x in a.refs.split(",") if x.strip()] if a.refs else None
+        rect = [float(v) for v in a.rect.split(",")] if a.rect else None
+        if rect is None:
+            pb = block_mod.pad_rect(REF_BOARD, members)
+            if pb is None:
+                return _emit({"artifact": "eda_eng_relocate_block", "error": "no pads for the given refs"}, None, 2)
+            rect = block_mod.inflate(pb, a.margin)
+        dx, dy = [float(v) for v in a.delta.split(",")]
+        clear = a.clearance if a.clearance is not None else _rt.CLEAR
+        r = regen_mod.relocate_block_chain(rect, [dx, dy], a.work, members=members,
+                                           clearance=clear, max_jobs=a.max_jobs)
+        return _emit(r, a.json_out, 0 if r.get("state") == "GRADED" and (r.get("M4") or {}).get("verdict") == "PASS" else 1)
 
     if a.cmd == "dump":
         return _emit({"artifact": "eda_eng_dump", "board": a.board,

@@ -19,6 +19,8 @@
 | 命令 | 作用 | 状态 |
 |---|---|---|
 | **`eda_eng relocate`** | **器件重定位六步一条命令**（#K2-366）：1 挪 pad → 2 M1 → 3 M2 → 4 迷宫重连 → 5 复敷铜 → 6 M4 判卷 | ✅ 可用（`EDA_ENG_RELOCATE_DEMO_v1.json`） |
+| **`eda_eng block`** | **BLOCK 框选清册**（#K2-369）：框 → 三分法（块内/穿边/块外）＋ `N*`（**膨胀式**谓词）＋ **框接受判据**（`FOREIGN_INSIDE / FOREIGN_PADS_INSIDE == 0`） | ✅ 可用 |
+| **`eda_eng relocate-block`** | **BLOCK 移位全链**（#K2-369）：M0 清册 → 块体刚性搬运（＋穿边切分，块外半段＝固定端口）→ 块内重连 → 复敷铜 → M4（C1–C5 ＋ **C6 块外零改动 / C7 HS 零触碰**） | ✅ 可用（attempt 4 已判卷） |
 | `eda_eng eco` | ECO 文书链**校验**（表单字段／数字判据／受控登记） | ✅ 可用 |
 | `eda_eng docs` | 文档链（ECO-方案-图-记录**五环**）状态 | ✅ 可用 |
 | `eda_eng verify` | **判卷**：C1 连通 · C2 DRC 零新增 · C3 等长 · C4 倒角保留 · C5 走线真变 | ✅ 可用 |
@@ -38,6 +40,8 @@ k2/tools/eda_eng.sh exam A
 k2/tools/eda_eng.sh place --refs U1,U2,U4,U5 --delta 5,0
 k2/tools/eda_eng.sh netplan --board hw/k2_v4_8L.l14.kicad_pcb --refs U1 --delta 5,0
 k2/tools/eda_eng.sh relocate --refs L1 --delta 0.5,0 --work /tmp/... --max-nets 1   # 六步一条命令
+k2/tools/eda_eng.sh block --rect 22.95,32.95,46.50,62.50 --refs U1,U2 --delta 3.5,3.5      # 只读清册
+k2/tools/eda_eng.sh relocate-block --rect 22.95,32.95,46.50,62.50 --delta 3.5,3.5 --work <W>
 k2/tools/eda_eng.sh regen --exam B --work <W> --dry-run
 k2/tools/eda_eng.sh exam B --run        # 建 + 判卷（CI 口径）
 k2/tools/eda_eng.sh selftest
