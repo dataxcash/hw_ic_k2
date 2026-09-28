@@ -361,6 +361,16 @@ class T(unittest.TestCase):
         self.assertEqual(r["status"], "BLOCKED")
         self.assertIn("exhausted", r["reason"])
 
+    def test_maze_semantics_is_NOT_FOUND_never_IMPOSSIBLE(self):
+        """#K2-367 sec.2 语义纪律：搜索失败只能说"未找到"；"不存在"须另出不可行证书。"""
+        cage = [{"id": "cage", "kind": "copper", "net": "X", "bbox": [2.0, -9, 4.0, 9], "layers": ["F.Cu", "In2.Cu"]},
+                {"id": "capN", "kind": "copper", "net": "X", "bbox": [-9, 4.4, 9, 9], "layers": ["F.Cu", "In2.Cu"]},
+                {"id": "capS", "kind": "copper", "net": "X", "bbox": [-9, -9, 9, -4.4], "layers": ["F.Cu", "In2.Cu"]}]
+        r = route.maze_route([0, 0], [6, 0], ["F.Cu", "In2.Cu"], cage, [-5, -5, 7, 5])
+        self.assertEqual(r["status"], "BLOCKED")
+        self.assertEqual(r["semantics"], "NOT_FOUND")
+        self.assertIn("never as IMPOSSIBLE", r["semantics_rule"])
+
     def test_maze_is_deterministic(self):
         w = [{"id": "wall", "kind": "copper", "net": "X", "bbox": [2.5, -1, 3.5, 1], "layers": ["F.Cu"]}]
         a = route.maze_route([0, 0], [6, 0], ["F.Cu"], w, [-1, -2, 7, 2])

@@ -513,7 +513,8 @@ def maze_route(p, q, layers, obstacles, bounds, pitch=0.5, clear=CLEAR, width=0.
               for w, pt in (("p", p), ("q", q))]
     badpts = [b for b in badpts if b["violations"]]
     if badpts:
-        return {"status": "BLOCKED", "reason": "an endpoint lies inside foreign copper / a keepout",
+        return {"status": "BLOCKED", "semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR",
+                "reason": "an endpoint lies inside foreign copper / a keepout",
                 "endpoint_violations": badpts,
                 "rule": "#K2-366: the maze is not allowed to teleport an endpoint out of an obstacle"}
     grids = {L: grid_of(obstacles, bounds, L, pitch, clear, width) for L in layers}
@@ -595,10 +596,13 @@ def maze_route(p, q, layers, obstacles, bounds, pitch=0.5, clear=CLEAR, width=0.
         d = min((math.hypot(t[0] - k[1], t[1] - k[2]) for k in seen), default=None)
         near = d if near is None else min(near, d)
     return {"status": "BLOCKED",
-            "reason": "the maze search exhausted every reachable cell without reaching the target",
+            "semantics": "NOT_FOUND",           # 语义纪律（#K2-367 §二）：**未找到 ≠ 不存在**
+            "semantics_rule": "this result must be read as NOT FOUND, never as IMPOSSIBLE; an impossibility claim "
+                              "requires an infeasibility certificate on a bounded instance",
+            "reason": "the search exhausted every reachable cell without reaching the target",
             "layers": list(layers), "cells_expanded": reached,
             "closest_approach_cells": near,
-            "rule": "#K2-366: an unroutable net is reported with its blockage - no fudged detour"}
+            "rule": "#K2-366/#K2-367: an unroutable net is reported with its blockage - no fudged detour"}
 
 
 def _path_to_polys(path, grids, p, q):

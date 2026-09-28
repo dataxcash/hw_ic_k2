@@ -1,0 +1,76 @@
+{
+ "artifact": "k2_relocation_model_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-367 (owner's fundamental challenge accepted: NO appeal to authority - the model and the correctness source are declared here; any algorithm deviating from this model is rejected)",
+ "state_space": {
+  "board": "B = (L, {O_l}, N, T)",
+  "L": "the 8 copper layers",
+  "O_l": "on layer l, the FORBIDDEN DOMAIN: hole keepouts, foreign-net copper plus the clearance band delta, and illegal via sites; a closed planar set per layer",
+  "N": "the net set; each net n has a terminal set P(n) (its pads) - CONNECTIVITY IS TOPOLOGICAL (a hypergraph edge) and is NOT changed by moving parts; only the terminal coordinates change",
+  "T": "the existing copper geometry (segments/vias) with net attribution"
+ },
+ "move_operator": {
+  "signature": "move(C, Delta)",
+  "steps": [
+   {
+    "id": 1,
+    "name": "placement feasibility",
+    "decidability": "DECIDABLE (geometric predicate)",
+    "predicate": "the new pad positions enter no forbidden domain, no other part's courtyard, and stay inside the board edge",
+    "implemented": "P1 + P1b gate (R952/R954)"
+   },
+   {
+    "id": 2,
+    "name": "damage set D(C,Delta) subset of T",
+    "decidability": "DECIDABLE",
+    "predicate": "segments whose endpoint references a moved pad UNION segments intersecting the new footprint",
+    "implemented": "M1 netplan + M2 ripup (green)"
+   },
+   {
+    "id": 3,
+    "name": "re-implementation problem (CORE)",
+    "decidability": "NP-hard in general (multi-terminal disjoint paths)",
+    "statement": "after removing D, for every damaged net n find R'(n) inside the free space F_l = l minus (O_l UNION the other nets' implementations UNION the clearance halo), connecting P(n) with multi-terminal paths on the OCTILINEAR GRID, vias allowed only at legal via sites",
+    "implemented": "heuristic search: eda_eng route.maze_route (Lee/A* on the octilinear grid over F_l; layer change = via at legal sites) - NO completeness guarantee"
+   }
+  ]
+ },
+ "algorithm_derivation": [
+  {
+   "question": "placement feasible?",
+   "decidability": "DECIDABLE (polynomial)",
+   "algorithm": "P1+P1b gate"
+  },
+  {
+   "question": "damage set?",
+   "decidability": "DECIDABLE",
+   "algorithm": "M1/M2"
+  },
+  {
+   "question": "does a re-implementation EXIST?",
+   "decidability": "NP-hard in general - no tool has a general fast exact solution",
+   "algorithm": "heuristic: octilinear-grid A*/Lee with layer choice and rip-up retry; NO completeness guarantee"
+  }
+ ],
+ "correctness_source": {
+  "principle": "commercial EDA has no general guaranteed algorithm either; their correctness also comes from CHECKERS (DRC/LVS), not from the router. Appeal to authority is rejected.",
+  "sources": [
+   "(1) a SOUND JUDGE: M4 - any candidate implementation can be decided right/wrong",
+   "(2) THE EXAMS: bounded instances with known reference answers, so the heuristic's completeness is TESTABLE",
+   "(3) SEMANTIC DISCIPLINE: a search result of 'no path found' MUST be read as NOT FOUND, never as IMPOSSIBLE; an impossibility claim requires an infeasibility certificate on a bounded instance"
+  ],
+  "enforced_in_code": "route.maze_route returns status BLOCKED with semantics=NOT_FOUND (never 'impossible'); the wording is locked by a unit test (test_maze_semantics_is_NOT_FOUND_never_IMPOSSIBLE)"
+ },
+ "implementation_map": {
+  "eda_eng relocate": {
+   "step_1": "shadow project root + gen_v5 (placement only; the real tree is never touched)",
+   "step_2": "M1 netplan (damage set)",
+   "step_3": "M2 ripup",
+   "step_4": "maze_route (heuristic search per this model; built in R966)",
+   "step_5": "zone refill (apply_routes)",
+   "step_6": "M4 verify (judge)"
+  },
+  "rule": "any algorithm that deviates from this model is rejected; this file is the reference"
+ },
+ "OWNER-ITEMS": 0
+}
