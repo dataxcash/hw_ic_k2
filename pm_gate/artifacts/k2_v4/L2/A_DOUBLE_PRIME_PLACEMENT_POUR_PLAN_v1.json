@@ -1,0 +1,63 @@
+{
+ "artifact": "k2_a_double_prime_placement_pour_plan_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-388 sec.7.1: after the third same-means FAIL (A-prime R1028 / A-double-prime attempt2 R1054 / attempt3 R1072) the MEANS change (sec.17.4, target unchanged) and the case returns to the PLANNING layer. This is the sec.16.3 four-element planning artifact.",
+ "supersedes_scope": "the previous capability window (#K2-385 sec.5.2: after-the-fact island re-connection + a NEW-COPPER-vs-foreign-pad mask pre-check) - both proved inert on the actual geometry (R1072).",
+ "death_cause_one_line": "A-double-prime cannot PASS because BOTH residual classes are INHERITED/STRUCTURAL, not routing gaps: the 2 solder_mask_bridge exist in the DECLARED placement BEFORE any routing (a PAD-to-PAD mask-dam violation no router can touch), and the 3 isolated_copper are orphan 12V_IN fills that the after-the-fact repair could not remove - so a router-side patch can never close them.",
+ "proven_facts": [
+  "C1 unconnected = 22, unchanged across attempt2 and attempt3 (R1054 / R1072); the maze blocks them as no-free-start-node (16) / no-free-goal-node (6).",
+  "C2 keeps exactly two new classes {isolated_copper x3, solder_mask_bridge x2}; geometry 141 (att2) -> 143 (att3) vs the 148 reference.",
+  "MACHINE PROOF (read-only, this window): the DECLARED placement board /tmp/opencode/aprime_witness/mq_witness/placed.kicad_pcb ALREADY reports the SAME 2 solder_mask_bridge (U1 pads 11/12 [PERSTA#] vs J9 PTH pad 1 [UART_TX]) with ZERO routing - so the bridge is a PLACEMENT consequence, not a routing artefact.",
+  "GEOMETRY: J9.1 is a 1.5x1.5 PTH pad (drill 0.8) at (31.75, 55.96). After the declared move, U1.11 is a 1.475x0.3 pad at (33.3375, 55.75) and U1.12 at (33.3375, 56.25): in X the U1.11 right edge (32.6) and the J9.1 left edge (32.5) are 0.10 mm apart, and they now SHARE the y-band => with the in-register solder_mask.pad_to_mask_clearance 0.05 mm the two mask openings TOUCH (dam gap 0.10 = 2x0.05) => solder_mask_bridge. In the l14 reference the same pads are 0.81 mm apart in Y => no bridge (ref count 0).",
+  "C8 (members zero-beyond-frame) = 0 on BOTH the witness board and the attempt3 final board (measured this window with the frame [22.95,32.95,51.50,66.50] and the 25 members) => the missing C8 row would have been PASS; attempt3 FAILs on C1/C2 only.",
+  "the #K2-385 sec.5.2 disposition was measurably inert: the island stage DETECTED 3 / PLANNED 2 and the final board still reported 3 x isolated_copper; the mask guard never fired because it compares NEW COPPER points vs FOREIGN PADS while the real violation is PAD-to-PAD.",
+  "capacity is NOT the wall (L2/C1_CAPACITY_READING_v1.json: 93.5% free) and the CRITERIA are NOT the wall (C1=22 and the two classes are real, per the independent audit R1062)."
+ ],
+ "corrected_complete_plan": {
+  "edge_i_mask_bridge": {
+   "layer": "PLACEMENT (a consequence of the per-part displacement map) - NOT the router.",
+   "finding": "INHERITED: the declared placement already violates the C2 no-new-class lock, so within an exam that FIXES the placement (A-double-prime reads it back from the witness board) no routing can remove it.",
+   "branch_A_placement_negotiable_deterministic": {
+    "rule": "consume the in-register rule `_shared/eda_core/drc_rules.json :: solder_mask.pad_to_mask_clearance` (0.05mm) in the PLACEMENT gate: a declared displacement is ADMISSIBLE only if, for every moved pad, the mask-opening gap to every foreign-net pad is >= 0 (equivalently centre/edge separation >= the pad mask-dam). Otherwise the displacement is REFUSED (fail-closed). Deterministic test of a GIVEN map - no search, no trial.",
+    "copyable": [
+     "tools/k2_p3_place_solver_v1.py (the placement layer)",
+     "_shared/eda_core/drc_rules.json :: solder_mask",
+     "_shared/eda_core/dfm_repair.py (mask rules)"
+    ]
+   },
+   "branch_B_placement_fixed": "if the placement is FIXED (as in A-double-prime), the declared map is DFM-illegal and the C2 lock is UNREACHABLE by construction => carry this to OWNER via the conservation certificate (frozen-set), per #K2-388 sec.6.4.",
+   "explicitly_forbidden": "do NOT 'adjust parameters' or 'search' a placement or a mask number; the dam value comes from the in-register rule."
+  },
+  "edge_ii_pour_islands": {
+   "layer": "TOOL / POUR stage (a post-wipe refill consequence).",
+   "deterministic_path": [
+    "step 1: refill the in-frame zones with the in-register pour stage (`tools/k2_p4_build_l9_v1.py --stages pour`; ZONE_FILLER).",
+    "step 2: re-run kicad-cli DRC and READ `isolated_copper`.",
+    "step 3: dispose of each orphan fill island DETERMINISTICALLY (delete the named zone's fill island) - l14 ships every zone with (island_removal_mode 0)=always-remove and k2_gen_v5.py emits the same, so removal is the in-register semantic.",
+    "step 4: re-check; if ANY isolated_copper remains => REFUSE the board (fail-closed) - 'no island' is a LANDING PRECONDITION, never repaired after the fact."
+   ],
+   "copyable": [
+    "tools/k2_p4_build_l9_v1.py (pour stage)",
+    "_shared/eda_core/dfm_repair.py",
+    "tools/k2_gen_v5.py (island_removal_mode emission)"
+   ],
+   "explicitly_forbidden": "no after-the-fact 're-connect the island to the nearest pad' pass (that was #K2-385's inert attempt); no parameter tuning."
+  },
+  "edge_iii_ports": {
+   "layer": "TOOL / maze goal definition.",
+   "deterministic_path": "hand the frame-cut STUBS in as legal PORTS (the maze start/goal set = the reduced pads + the ∂R stubs), instead of re-deriving goals across the block; the 22 residuals are all blocked at the ENDPOINT (no-free-start/goal-node).",
+   "copyable": [
+    "tools/k2_reroute_router_floor_v1.py (the in-domain maze) + the ∂R real-segment port test from ECO-K2-0004 sec.6d (attempt 2 of the A-prime chain: 'port criterion on the actual ∂R segment' + 'integer-domain clip_iu' reached C6 diff 0)."
+   ]
+  },
+  "judging": "the nine ECO rows C1-C9 must be enumerated on the ACTUAL chain path (#K2-388 sec.7.2, implemented this window: verify.LOCKED_EXAM_ROWS + required_rows fail-closed)."
+ },
+ "buildability": "relocation_listed",
+ "buildability_note": "the placement is witnessed (the from-placed board records all 25 members; C8=0 measured) and the copper is regenerated by the in-register pour/maze; nothing here requires a new board edit outside the declared frame.",
+ "regressions_required": [
+  "edge_i: a placement-admissibility regression (a given map with a mask-dam violation => REFUSED; determinism)",
+  "edge_ii: a 'no isolated_copper after refill, else REFUSE' regression (fail-closed)",
+  "edge_iii: a port-goal regression (the ∂R stubs are legal goals)"
+ ],
+ "OWNER-ITEMS": 0
+}
