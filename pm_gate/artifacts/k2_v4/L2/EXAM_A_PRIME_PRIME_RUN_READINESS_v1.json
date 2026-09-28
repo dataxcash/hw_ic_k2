@@ -1,0 +1,37 @@
+{
+ "artifact": "k2_exam_a_doubleprime_run_readiness_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-382 sec.2: bench repaired -> three fences re-installed (additive) -> apply for a new exam authorisation (applying is not self-running). This artifact is the PRE-RUN READINESS PACKAGE: every precondition with its evidence, plus the exact command to execute the moment the authorisation lands.",
+ "status": "READY_AWAITING_AUTHORISATION",
+ "preconditions": [
+  {"id": "P1", "requirement": "test bench repaired (subprocess isolation + entry sentinel); defect registered",
+   "status": "DONE", "evidence": ["SELFTEST_EXIT=0, Ran 72 tests, OK (L2/EDA_ENG_TESTS_72_v1.txt)",
+                                  "the sentinel fails fast on any in-process board mutation (test module)",
+                                  "M-ENG-TEST-STATE-ISOLATION registered (docs/K2-BLOCKER-REPORT-testsuite-isolation-20260929.md)"]},
+  {"id": "P2", "requirement": "the three fences are in as ADDITIVE parameters, each with a unit lock",
+   "status": "DONE", "evidence": ["RIP clip: block.clip_iu (cut points ON dR) + source lock (R1020)",
+                                  "STITCH: the product forwards --bound-rect to k2_reroute_router_floor_v1.py -> mr.WALL_RECT + lock (R1026)",
+                                  "APPLY: route.apply_routes(..., bound_rect=None) refuses BEFORE SaveBoard; CLI wired; wipe_resolve refill passes the frame + lock (R1040/R1044)"]},
+  {"id": "P3", "requirement": "one ruler for C2",
+   "status": "DONE", "evidence": ["verify.judge uses the pinned caliber from the judging table; geometry 141 vs the 168 baseline; the 54 library rows are recorded, never hidden; threshold unchanged (R1040)"]},
+  {"id": "P4", "requirement": "capacity reading (read-only, zero quota)",
+   "status": "DONE", "evidence": ["L2/C1_CAPACITY_READING_v1.json: free area 93.5% of the frame => ENOUGH_SPACE; the residual is a TERMINAL/STITCH-POLICY problem"]},
+  {"id": "P5", "requirement": "the window's single fix implemented as a BOUNDED second stitch (no loop, no params)",
+   "status": "DONE", "evidence": ["regen.wipe_resolve_chain: named stages resolve_residual_before -> resolve_residual_second_pass (if u1:), same maze, same --bound-rect, own ledger (R1050)",
+                                  "regression: test_C382_the_residual_second_stitch_is_bounded_and_wall_bounded"]},
+  {"id": "P6", "requirement": "the exam authorisation is APPLIED for (applying != self-running)",
+   "status": "SUBMITTED", "evidence": ["L2/EXAM_A_PRIME_PRIME_AUTHORISATION_APPLICATION_v1.json (the request, the preconditions, the outcome contract)",
+                                        "L2/EXAM_A_PRIME_PRIME_AUTHORISATION_APPLICATION_v1.json :: residual_diagnosis_readonly (the 24 pairs characterised: pad<->pad inside + port bridges at dR)"]}
+ ],
+ "the_exact_run_when_authorised": {
+  "command": "EDA_ENG_PY=<kicad py> EDA_ENG_CLI=<kicad-cli> ./tools/eda_eng.sh exam A --run --chain wipe_resolve --from-placed /tmp/opencode/aprime_witness/mq_witness/placed.kicad_pcb --work /tmp/opencode/aprime_final",
+  "runs": "1 (record run_count 1/1)", "judging": "the nine rows C1-C9 (C6=0 and C8 required; a missing row is fail-closed)",
+  "expected_chain_stages": ["M0_block_census", "1_wipe(move_parts)", "2_resolve(floor+maze, --bound-rect)", "2b_resolve_residual_second_pass", "3_refill(ZONE_FILLER)", "M4_judge(nine rows)"],
+  "evidence_to_report": ["the entry command", "the C34 gate line (if that chain uses it)", "run_count 1/1", "the nine-row table", "the geometric digest before/after"]
+ },
+ "outcome_contract": {"PASS": "feasible witness + C35 closes", "FAIL": "stop; produce the conservation-level infeasibility certificate naming layer / resource / occupant / why no allocation is possible"},
+ "frozen": {"board": "l14/rev-61 untouched; every board lives in /tmp",
+            "frozen_four": "4/4 (SPEC 0bd52ed48e720b8c / manifest a8ef3ea8ecff99d7 / PCB fb07d25ac426ff84 / rules 0a459839e15960b8)",
+            "aprime_witness_freeze": "maintained"},
+ "OWNER-ITEMS": 0
+}
