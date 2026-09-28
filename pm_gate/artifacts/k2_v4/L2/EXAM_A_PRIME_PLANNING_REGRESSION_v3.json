@@ -1,0 +1,46 @@
+{
+ "artifact": "k2_examA_prime_planning_regression_v3",
+ "ts": "2026-09-29",
+ "exam": "A-prime",
+ "authority": "#K2-376 sec.4.3: the authorised A-prime run (N=1) FAILED => STOP and return to this PLANNING layer. This artifact is the required regression deliverable (sec.16.3 four elements).",
+ "verdict": "PLAN_REQUIRED_CRITERION_SCOPE_INTERFACE",
+ "element_1_cause_of_death": "the authorised run used the RIGHT method (COPY the in-repo product C17 v1) and it improved every burden metric by a large factor (C1 40->14, C2 564->249, geometry class delta 362->47), but A-prime still FAILS on C6: the product ADDS new copper OUTSIDE the frozen frame (241 pieces added, 9 removed, measured), because its re-route phase works on the AFFECTED NETS' full extent rather than inside the block. So C1->0 and C6=0 are in tension under a straight copy: the product has no notion of 'block'.",
+ "element_2_proven_facts": [
+  {"id": "Q1", "fact": "the product path beats the parallel block re-lay on every burden metric",
+   "reading": {"C1_unconnected": {"block_chain": 40, "product_c17v1": 14},
+               "C2_total_vs_168": {"block_chain": 564, "product_c17v1": 249},
+               "new_classes": {"block_chain": 7, "product_c17v1": 4},
+               "geometry_class_delta": {"block_chain": 362, "product_c17v1": 47}}},
+  {"id": "Q2", "fact": "C6 fails because the RE-ROUTE (not the rip) leaves the frame",
+   "reading": {"outside_frame_added": 241, "outside_frame_removed": 9,
+               "top_added": {"B.Cu/I2C1_SDA": 100, "In5.Cu/PERSTA#": 26, "F.Cu/I2C1_SDA": 24, "F.Cu/MCU_VDD": 17},
+               "note": "C17 v1 clips the rip at its damage zone (its own docstring), so the C6 delta is dominated by NEW copper laid by the stitch/repair phases outside the frame - i.e. a ROUTER-SCOPE property, not a rip-scope one"}},
+  {"id": "Q3", "fact": "the product's own acceptance also failed",
+   "reading": {"line": "routing diff != 0, ZERO NEW violations vs baseline, skew 8/8 <= 0.15, unconnected == 0",
+               "measured": {"unconnected": 14, "new_violations_vs_baseline": 249}},
+   "note": "so the residual C1=14 is NOT a judging artefact of ours - the product itself cannot close it with its current parameters"},
+  {"id": "Q4", "fact": "the run-count ledger",
+   "reading": {"authorised": "N=1", "chain_runs_consumed": "1/1",
+               "incident": "a first invocation fell through to the legacy composer because of a guard bug in the new branch; it was detected and KILLED with no verdict and no board product, so it is NOT counted as a run. The authorised run then produced the board and crashed only at the JSON emission (--json-out bug, fixed in the same commit); the C1-C9 verdict was re-derived READ-ONLY from the produced board + the product's own final DRC, so the chain was still run exactly once."}}
+ ],
+ "element_3_corrected_plan": {
+  "the_interface_question": "A-prime's criterion set (in particular C6 = 'no copper outside the frozen frame may change') and the product's method ('re-route the affected nets') are not currently compatible. ONE of the two must be corrected - and ONLY the supervisor may choose (a criterion is judgement semantics).",
+  "option_A_restrict_the_product_work_scope": {
+   "what": "bound the product's ROUTER SEARCH to the frozen frame (a new bound parameter - the existing `--radius`/`--margin` are the damage radius and the search window around a gap, not a hard block bound), so new copper cannot leave the frame",
+   "cost": "touches the in-register product tools/k2_reroute_affected_v2.py => needs the supervisor's licence; may raise C1 (a gap that could only be closed by leaving the frame would become unroutable)",
+   "verdict_from_evidence": "unknown until run - do NOT guess"},
+  "option_B_restate_C6_for_the_product_path": {
+   "what": "keep C6 only for the BLOCK chain and define the product path's fidelity criterion as 'the 16 PCIE_DN* nets untouched + the frames-outside copper may change ONLY where an affected net is re-routed' (i.e. C6 becomes 'no UNRELATED net's outside copper changes')",
+   "cost": "weakens an approved criterion (#K2-372 sec.2.3) => supervisor only",
+   "verdict_from_evidence": "the 250 delta is confined to AFFECTED nets (I2C1_SDA/PERSTA#/MCU_VDD/I2C2_SDA/PWR_BTN_OUT) - i.e. it is explainable as 'affected-net work', not as collateral damage"},
+  "recommendation": "prefer option A as the ENGINE's default (the block boundary is the whole point of the BLOCK model), and offer option B only if the supervisor judges that A-prime's C6 must be scoped to unaffected nets. Either way the next A-prime attempt must be a NEW authorised window (this one's N=1 is spent).",
+  "residual_c1": "C1=14 must be closed by the SAME decision's implementation (the product's own acceptance line requires unconnected == 0), otherwise the next run fails again."
+ },
+ "element_4_buildability": {"value": "relocation_listed",
+   "meaning": "the placement is legal and witnessed; the copper build is proven feasible (the product path got within 14 unconnected and 4 new DRC classes) but its scope must be reconciled with C6 first."},
+ "evidence_refs": {"authorised_run": "L2/EDA_ENG_EXAM_A_PRIME_C17V1_ATTEMPT1_VERDICT_v1.json",
+                   "prior_plan": "L2/EXAM_A_PRIME_PLANNING_REGRESSION_v2.json",
+                   "three_questions": "L2/PRODUCT_THREE_QUESTIONS_LEDGER_v1.json :: A_prime_C33_three_questions",
+                   "product": "tools/k2_reroute_affected_v2.py"},
+ "OWNER-ITEMS": 0
+}
