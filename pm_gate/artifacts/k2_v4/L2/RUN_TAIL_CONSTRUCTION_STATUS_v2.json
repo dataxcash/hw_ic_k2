@@ -1,0 +1,78 @@
+{
+ "artifact": "k2_run_drawing_construction_status_v2",
+ "ts": "2026-09-28",
+ "authority": "#K2-346 (bounded scheme window) - status of the determinate-drawing construction",
+ "verdict": "NOT COMPLETE (hard gate: FAIL = 回修, 不呈)",
+ "produced_this_window": {
+  "determinate_layer_change_x": {
+   "value": 137.555,
+   "derivation": "keepout_x0 - (via_r+clearance_floor) = 137.93-(0.175+0.20)",
+   "note": "single value per line, no search"
+  },
+  "topology_confirmed_by_diagnostic": {
+   "PCIE_DN4_N": {
+    "trapped_corner_via": [
+     139.48,
+     74.222
+    ],
+    "span": [
+     0,
+     4,
+     6
+    ],
+    "legs": {
+     "B_Cu_horizontal": "(90.05,74.222)->(139.48,74.222) - 49.4 mm",
+     "In5_vertical_ascent": "(139.48,74.222)->(139.48,59.45) - 14.8 mm"
+    },
+    "ALSO_have_a_TOP_via": [
+     139.48,
+     59.45
+    ],
+    "note": "NOT trapped (y=59.45 << 73.93); must NOT be touched"
+   },
+   "PCIE_DN5_P": {
+    "trapped_corner_via": [
+     138.32,
+     75.671
+    ],
+    "span": [
+     0,
+     4,
+     6
+    ],
+    "legs": {
+     "B_Cu_horizontal": "(90.75,75.671)->(138.32,75.671) - 47.6 mm",
+     "In5_vertical_ascent": "(138.32,75.671)->(138.32,60.05) - 15.6 mm"
+    },
+    "ALSO_have_a_TOP_via": [
+     138.32,
+     60.05
+    ],
+    "note": "NOT trapped"
+   }
+  }
+ },
+ "defects_found_and_fixed_with_diagnosis_first": [
+  {
+   "id": "D1",
+   "symptom": "P.B_Cu constant != the board's layer id for a B.Cu segment",
+   "diagnosis": "pcbnew copper constants are F=0,B=2,In5=12 while the segments carry other ids; the layer test silently failed",
+   "fix": "classify the two legs by ORIENTATION (|dx|>|dy| = horizontal)"
+  },
+  {
+   "id": "D2",
+   "symptom": "far=None (no horizontal leg found for the chosen via)",
+   "diagnosis": "the trapped-via filter tested only x>=KX0, so it picked the net's TOP via at y=59.45 (outside the keepout) whose legs are a 0.06 mm F.Cu stub + the vertical",
+   "fix": "filter on BOTH x>=KX0 AND y>=73.93 (inside the keepout square)"
+  },
+  {
+   "id": "D3",
+   "symptom": "TypeError: 'SwigPyObject' object is not iterable at GetTracks()",
+   "diagnosis": "importing the maze-router module into the same process as board mutation corrupts pcbnew's SWIG type state (same family as the earlier in-process rip-up corruption)",
+   "fix": "PROCESS SPLIT - mutate the board in one process, import the router in another (exactly what tools/k2_reroute_affected_v2.py already does: rip/stitch/snap/repair each run as its own process)"
+  }
+ ],
+ "next_single_action": "split k2_construct_run_drawing_v1.py into two phases (phase clip = pcbnew only; phase route = router only, reading the clipped board + a DRC report), then: clip the B.Cu run at x=137.555 -> delete the trapped corner via -> construct the In5 ascent with the exact gate (0.20 floor) -> freeze the points -> kicad-cli DRC (<=168, no class up, unconnected 0)",
+ "discipline": "3 defects, each DIAGNOSED BEFORE any change (no blind re-runs); zero board changes; zero SPEC bumps; the tool is committed as WIP with this status",
+ "OWNER-ITEMS": 0
+}
