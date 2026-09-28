@@ -828,6 +828,70 @@ def moves_from_board(base_board, placed_board, refs, tol=0.001):
     return moves, unch, miss
 
 
+def bound_outside(base_board, final_board, rect, out):
+    """**C35 薄封装**（#K2-377 §二.3）：框外铜**恢复为原板逐点几何**。
+    **两趟分离**（改板会破坏同进程 SWIG 态，承 R964）：先只读原板把"沾框外"的基元取成**纯数据**，
+    再加载并改写产物板。框内作业不动 ⇒ C6 按构造为 0。"""
+    P = _P()
+    def read_outside(bd):
+        b = P.LoadBoard(bd)
+        nets = {c: ni.GetNetname() for c, ni in b.GetNetInfo().NetsByNetcode().items()}
+        segs, vias = [], []
+        for t in b.GetTracks():
+            if t.GetClass() == "PCB_VIA":
+                pos = t.GetPosition()
+                if pt_in((P.ToMM(pos.x), P.ToMM(pos.y)), rect):
+                    continue
+                lset = list(t.GetLayerSet().Seq())
+                l1, l2 = lset[0], lset[-1]
+                vias.append({"x": pos.x, "y": pos.y, "drill": t.GetDrill(),
+                             "l1": l1, "l2": l2, "net": nets.get(t.GetNetCode(), ""),
+                             "w": t.GetWidth(l1)})
+                continue
+            st, en = t.GetStart(), t.GetEnd()
+            a = [P.ToMM(st.x), P.ToMM(st.y)]; z = [P.ToMM(en.x), P.ToMM(en.y)]
+            if not _seg_inside_parts(a, z, rect)[1]:
+                continue                                    # 全在框内：不动
+            segs.append({"x1": st.x, "y1": st.y, "x2": en.x, "y2": en.y, "layer": t.GetLayer(),
+                         "w": t.GetWidth(), "net": nets.get(t.GetNetCode(), "")})
+        return segs, vias
+
+    keep_segs, keep_vias = read_outside(base_board)          # ① 只读（纯数据）
+    fb = P.LoadBoard(final_board)                            # ② 再改写产物板
+    netmap = {n.GetNetname(): n.GetNetCode() for n in fb.GetNetsByName().values()}
+    removed = added = 0
+    for t in list(fb.GetTracks()):
+        if t.GetClass() == "PCB_VIA":
+            pos = t.GetPosition()
+            if not pt_in((P.ToMM(pos.x), P.ToMM(pos.y)), rect):
+                fb.Remove(t); removed += 1
+            continue
+        st, en = t.GetStart(), t.GetEnd()
+        if _seg_inside_parts([P.ToMM(st.x), P.ToMM(st.y)], [P.ToMM(en.x), P.ToMM(en.y)], rect)[1]:
+            fb.Remove(t); removed += 1
+    for d in keep_segs:
+        tr = P.PCB_TRACK(fb)
+        tr.SetStart(P.VECTOR2I(d["x1"], d["y1"])); tr.SetEnd(P.VECTOR2I(d["x2"], d["y2"]))
+        tr.SetWidth(d["w"]); tr.SetLayer(d["layer"]); tr.SetNetCode(netmap.get(d["net"], -1))
+        fb.Add(tr); added += 1
+    for d in keep_vias:
+        vi = P.PCB_VIA(fb)
+        vi.SetPosition(P.VECTOR2I(d["x"], d["y"])); vi.SetWidth(d["w"]); vi.SetDrill(d["drill"])
+        vi.SetLayerPair(d["l1"], d["l2"]); vi.SetNetCode(netmap.get(d["net"], -1))
+        fb.Add(vi); added += 1
+    P.SaveBoard(out, fb)
+    import shutil
+    for ext in (".kicad_pro", ".kicad_dru"):
+        src = final_board[:-len(".kicad_pcb")] + ext if final_board.endswith(".kicad_pcb") else final_board + ext
+        if os.path.isfile(src):
+            shutil.copy2(src, out[:-len(".kicad_pcb")] + ext if out.endswith(".kicad_pcb") else out + ext)
+    return {"artifact": "eda_eng_bound_outside", "base": base_board, "final": final_board, "out": out,
+            "removed_outside_tracks": removed, "restored_outside_tracks": added, "rect": list(rect),
+            "out_sha16": hashlib.sha256(open(out, "rb").read()).hexdigest()[:16],
+            "rule": "#K2-377 sec.2.3 (C35): a thin wrapper that clamps the work domain - the copied method keeps "
+                    "its in-frame work; the outside copper is restored to the base geometry point for point"}
+
+
 def geometry_equal(a, b):
     """两个 canonical Counter 的多重集差（正/负/总）。"""
     plus = sum((a - b).values()); minus = sum((b - a).values())

@@ -99,6 +99,10 @@ def main(argv=None):
     p.add_argument("--moves", required=True, help="ref:dx:dy,ref:dx:dy,...")
     p.add_argument("--out", required=True)
     p.add_argument("--json-out")
+    p = sub.add_parser("bound-outside", help="(subprocess only) C35: restore the outside-frame copper to the base geometry")
+    p.add_argument("--base", required=True); p.add_argument("--in", dest="inp", required=True)
+    p.add_argument("--rect", required=True); p.add_argument("--out", required=True)
+    p.add_argument("--json-out")
     p = sub.add_parser("dump", help="read-only per-net track/via inventory (QA/test helper)")
     p.add_argument("--board", required=True)
     p.add_argument("--json-out")
@@ -316,6 +320,11 @@ def main(argv=None):
             r_, dx, dy = item.split(":")
             moves.append((r_, float(dx), float(dy)))
         r = block_mod.move_parts(a.board or REF_BOARD, rect, moves, a.out)
+        return _emit(r, a.json_out, 0)
+
+    if a.cmd == "bound-outside":
+        rect = [float(v) for v in a.rect.split(",")]
+        r = block_mod.bound_outside(a.base, a.inp, rect, a.out)
         return _emit(r, a.json_out, 0)
 
     if a.cmd == "dump":

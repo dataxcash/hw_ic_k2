@@ -1027,7 +1027,7 @@ def c17v1_argv(board, moves, baseline_drc, work, out, report=None, phase="all", 
     return argv
 
 
-def relocate_relative_c17v1(rect, moves, work, members, clearance=None, report_extra=True):
+def relocate_relative_c17v1(rect, moves, work, members, clearance=None, report_extra=True, bound=True):
     """A′ 的**成品路径**：驱动 C17 v1（rip→stitch→snap→repair→normalize→verify）后按 C1–C9 判卷。
     **本函数不在未获配额时被调用**；此处的存在即为「抄成品」的实现落点。"""
     from . import block as _blk, verify as _vf
@@ -1041,6 +1041,23 @@ def relocate_relative_c17v1(rect, moves, work, members, clearance=None, report_e
     chain = [{"cmd": "k2_reroute_affected_v2.py " + " ".join(argv[1:]), "exit": r.returncode}]
     if not os.path.isfile(final):
         return {"state": "C17V1_FAILED", "chain": chain, "exit": r.returncode, "tail": (r.stderr or r.stdout)[-400:]}
+    # **C35 框界**（#K2-377 §二.3）：薄封装 —— 框外铜恢复为原板逐点几何（框内作业保留）
+    bounded = final
+    bnd_out = None
+    if bound:
+        bounded = os.path.join(work, "c17v1_bounded.kicad_pcb")
+        br = subprocess.run([os.path.join(ROOT, "tools", "eda_eng.sh"), "bound-outside", "--base", B0,
+                             "--in", final, "--rect", ",".join(str(x) for x in rect), "--out", bounded],
+                            cwd=ROOT, capture_output=True, text=True, timeout=3600)
+        chain.append({"stage": "C35_bound_outside", "exit": br.returncode,
+                      "stdout": br.stdout.strip()[-300:] if br.stdout else ""})
+        if br.returncode != 0 or not os.path.isfile(bounded):
+            return {"state": "C35_BOUND_FAILED", "chain": chain, "exit": br.returncode}
+        try:
+            bnd_out = json.JSONDecoder().raw_decode(br.stdout[br.stdout.index("{"):])[0]
+        except Exception:                                          # noqa: BLE001
+            bnd_out = None
+        final = bounded
     # 产品的自验收若不过（rc != 0），仍**按 C1–C9 判卷已产出的板**（否则无具名判定）；产品自己的 DRC 优先复用
     dj = os.path.join(work, "c17v1_drc.json")
     prod_drc = os.path.join(work, "c17v1", "final_drc.json")
@@ -1074,7 +1091,7 @@ def relocate_relative_c17v1(rect, moves, work, members, clearance=None, report_e
              "C9_geometric_digest": {"before": _blk.geometric_digest(B0)["sha256_16"],
                                      "after": _blk.geometric_digest(final)["sha256_16"], "pass": True}}
     v = _vf.judge(final, dj, B0, ref_drc, extra=extra)
-    return {"state": "GRADED", "chain": chain, "method": "c17v1", "board": final,
+    return {"state": "GRADED", "chain": chain, "method": "c17v1", "bound": bnd_out, "board": final,
             "report": (json.load(open(rep, encoding="utf-8")) if os.path.isfile(rep) else None),
             "M4": v, "class_delta": _vf.class_delta(dj, ref_drc),
             "rule": "#K2-375 sec.4.3: A-prime is built by COPYING the in-repo product C17 v1 "

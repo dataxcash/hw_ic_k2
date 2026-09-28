@@ -1,0 +1,190 @@
+{
+ "artifact": "eda_eng_exam_A_prime_c17v1_bounded_attempt1",
+ "ts": "2026-09-29",
+ "entry": "eda_eng exam A --run --chain c17v1 --from-placed <gate board>",
+ "run_count": "1/1",
+ "method": "C17 v1 (copied) + C35 thin bound (outside copper restored to the base geometry)",
+ "gate": "C34 PASS",
+ "board": "/tmp/opencode/aprime_c17v1c/bounded.kicad_pcb",
+ "M4": {
+  "criteria": {
+   "C1_connectivity": {
+    "unconnected": 17,
+    "pass": false
+   },
+   "C2_drc_no_new_increase": {
+    "total": 1237,
+    "ref_total": 168,
+    "new_classes": [
+     "clearance",
+     "copper_edge_clearance",
+     "hole_clearance",
+     "hole_to_hole",
+     "lib_footprint_issues",
+     "shorting_items",
+     "solder_mask_bridge",
+     "tracks_crossing"
+    ],
+    "pass": false
+   },
+   "C3_skew": {
+    "per_pair_mm": {
+     "0": 0.065012,
+     "1": 0.06498,
+     "2": 0.043403,
+     "3": 0.078764,
+     "4": 1.4e-05,
+     "5": 5e-06,
+     "6": 0.021576,
+     "7": 0.013805
+    },
+    "max_mm": 0.078764,
+    "limit_mm": 0.15,
+    "pass": true
+   },
+   "C4_chamfer_preserved": {
+    "count": 2919,
+    "ref_count": 2637,
+    "pass": true
+   },
+   "C5_routing_changed": {
+    "element_set_diff": 1787,
+    "pass": true
+   },
+   "C6_outside_copper_unchanged": {
+    "diff": 0,
+    "pass": true,
+    "scope": "outside the frozen frame (C35 bound)"
+   },
+   "C7_hs_fanout_untouched": {
+    "diff": 0,
+    "pass": true,
+    "nets": [
+     "PCIE_DN0_P",
+     "PCIE_DN0_N",
+     "PCIE_DN1_P",
+     "PCIE_DN1_N",
+     "PCIE_DN2_P",
+     "PCIE_DN2_N",
+     "PCIE_DN3_P",
+     "PCIE_DN3_N",
+     "PCIE_DN4_P",
+     "PCIE_DN4_N",
+     "PCIE_DN5_P",
+     "PCIE_DN5_N",
+     "PCIE_DN6_P",
+     "PCIE_DN6_N",
+     "PCIE_DN7_P",
+     "PCIE_DN7_N"
+    ]
+   },
+   "C8_members_inside_frame": {
+    "violations": [],
+    "pass": true
+   },
+   "C9_geometric_digest": {
+    "before": "1cf4d39614491ccc",
+    "after": "9005e379bb1e7f2f",
+    "pass": true
+   }
+  },
+  "verdict": "FAIL",
+  "thresholds_used": {
+   "drc_total": 168,
+   "chamfer_ref": 2637,
+   "skew_limit": 0.15
+  },
+  "judging_table": "L2/EDA_ENG_JUDGING_TABLE_v1.json (ECO-K2-0002/0003 sec.6)",
+  "rule": "PASS iff EVERY criterion holds (C1-C5 in-register + C6/C7 block-fidelity when a block chain is graded); None (skipped) is never a PASS (#K2-358: capability must be reproducible)"
+ },
+ "class_delta": {
+  "total_delta": 1035,
+  "by_class": {
+   "clearance": {
+    "result": 501,
+    "ref": 0,
+    "delta": 501
+   },
+   "copper_edge_clearance": {
+    "result": 4,
+    "ref": 0,
+    "delta": 4
+   },
+   "hole_clearance": {
+    "result": 199,
+    "ref": 0,
+    "delta": 199
+   },
+   "hole_to_hole": {
+    "result": 2,
+    "ref": 0,
+    "delta": 2
+   },
+   "shorting_items": {
+    "result": 199,
+    "ref": 0,
+    "delta": 199
+   },
+   "silk_edge_clearance": {
+    "result": 1,
+    "ref": 2,
+    "delta": -1
+   },
+   "silk_over_copper": {
+    "result": 35,
+    "ref": 37,
+    "delta": -2
+   },
+   "silk_overlap": {
+    "result": 14,
+    "ref": 15,
+    "delta": -1
+   },
+   "solder_mask_bridge": {
+    "result": 22,
+    "ref": 0,
+    "delta": 22
+   },
+   "track_dangling": {
+    "result": 28,
+    "ref": 1,
+    "delta": 27
+   },
+   "track_not_centered_on_via": {
+    "result": 92,
+    "ref": 32,
+    "delta": 60
+   },
+   "tracks_crossing": {
+    "result": 2,
+    "ref": 0,
+    "delta": 2
+   },
+   "via_dangling": {
+    "result": 29,
+    "ref": 6,
+    "delta": 23
+   }
+  },
+  "excluded_class_rows": {
+   "lib_footprint_issues": {
+    "result": 54,
+    "ref": 0,
+    "delta": 54
+   },
+   "lib_footprint_mismatch": {
+    "result": 0,
+    "ref": 20,
+    "delta": -20
+   }
+  },
+  "excluded_classes": [
+   "lib_footprint_issues",
+   "lib_footprint_mismatch"
+  ],
+  "raw_total_delta": 1069,
+  "attributed": true,
+  "rule": "#K2-361 sec.2.5: any GEOMETRY class rise must be attributed; library-resolution classes are recorded in excluded_class_rows under the pinned caliber (they are never hidden)"
+ },
+ "note": "the product ran ONCE; its board is the deliverable. The C35 bound stage then failed on a vby API defect (GetLayerPair) and was fixed in the same commit; the bound + DRC + nine-row judging were applied to the produced board afterwards (READ-ONLY post-processing, NOT a second run)."
+}
