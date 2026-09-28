@@ -1,0 +1,120 @@
+{
+ "artifact": "k2_w2_header_governance_decision_v1",
+ "ts": "2026-09-28",
+ "authority": "#K2-344 sec.3.1 + #K2-343 sec.4 W2 (样本自治 · 不再呈 owner) · norm N8 (L2/PLACEMENT_NORMS_v2.json c4cd0297c959e00e)",
+ "basis": "N8 机证：三块在册样板各带 13–20 个配置排针（占其连接器清单 38.2–63.0%）——样板是评估板 ⇒ 配置排针=评估家具，非产品必需。交叉集={电源输入, 主机/产品高速接口}。",
+ "current_inventory": {
+  "kept": [
+   {
+    "ref": "J2",
+    "role": "HOST_EDGE / 产品接口",
+    "nets": "PCIE_UP_OUT0..7 / DN0..7 / REFCLK / I2C1"
+   },
+   {
+    "ref": "J3",
+    "role": "PRODUCT_HS (MCIO)",
+    "nets": "PCIE_DN_OUT0..3 / DP0..3"
+   },
+   {
+    "ref": "J4",
+    "role": "PRODUCT_HS (MCIO)",
+    "nets": "PCIE_DN_OUT4..7 / DP4..7"
+   },
+   {
+    "ref": "J12",
+    "role": "POWER_IN",
+    "nets": "12V_IN"
+   },
+   {
+    "ref": "J13",
+    "role": "PROGRAMMING (生产编程, 唯一一个)",
+    "nets": "SWDIO / SWCLK_BOOT0"
+   }
+  ],
+  "governed": [
+   {
+    "ref": "J9",
+    "nets": [
+     "UART_TX",
+     "UART_RX",
+     "MCU_VDD"
+    ],
+    "decision": "REMOVE",
+    "why": "带外 UART 控制台 = 评估家具（N8 forbidden）",
+    "consequence": "UART 网保留在 CPU 侧，仅移除排针；改测试点为本件默认（见 testpoint_plan）"
+   },
+   {
+    "ref": "J11",
+    "nets": [
+     "I2C2_SCL",
+     "I2C2_SDA",
+     "P3V3_AUX"
+    ],
+    "decision": "CONVERT_TO_TESTPOINTS",
+    "why": "辅助 I2C/SMBus 头 = 评估家具（N8 forbidden）；保留可测性",
+    "consequence": "J11 footprint → 3 个测试点（TP）"
+   },
+   {
+    "ref": "J6",
+    "nets": [
+     "PWR_CTRL_OUT"
+    ],
+    "decision": "REMOVE",
+    "why": "PWR_CTRL_OUT 无产品功能识别 = 评估家具（N8 forbidden）",
+    "consequence": "PWR_CTRL_OUT 网保留，仅移除排针；如需可测则 1 个测试点"
+   }
+  ]
+ },
+ "testpoint_plan": {
+  "J11": [
+   "I2C2_SCL",
+   "I2C2_SDA",
+   "P3V3_AUX"
+  ],
+  "J6": [
+   "PWR_CTRL_OUT"
+  ],
+  "J9": [
+   "UART_TX",
+   "UART_RX"
+  ],
+  "footprint": "1.0mm 圆测试点（库内测试点封装），位于原排针位附近，不新增连接器类",
+  "note": "测试点不计入 N8 的 connector 类（无配合件、无插拔）；须过 P6 DFM 最小间距"
+ },
+ "edits_required_for_the_next_window": [
+  {
+   "file": "hw/data/k2_sch.errata-3.yaml (nets_yaml)",
+   "edit": "移除 J9/J11/J6 的 placements（J11 → 3 个 TP，J6 → 1 个 TP）",
+   "note": "J9 无替代"
+  },
+  {
+   "file": "L3/SPEC_k2_v4.spec-rev-62.json",
+   "edit": "删除 components.pin_headers.positions 的 J9/J11/J6（新增 TP 位）；逐 leaf 旧→新 ＋ 回滚卡"
+  },
+  {
+   "file": "L2/PLACEMENT_SOLUTION_v1.json",
+   "edit": "删除 J9/J11/J6 的 refs；新增 TP refs（M-ENG-CHAIN-SOURCE 三方一致）"
+  },
+  {
+   "file": "hw/k2_v4_8L.l15.kicad_pcb",
+   "edit": "由链重跑产出（非本地编辑：连接器集变化 ⇒ 布线必须重跑）"
+  }
+ ],
+ "gates_after_the_edit": [
+  "方案闸 P1–P7（FAIL 即回修，禁呈）",
+  "C17 真实重布（走线 diff 非零）",
+  "板级 DRC ≤168 新增 0",
+  "45° 倒角保留",
+  "等长 8/8 = 0.0000 复证",
+  "R1–R6 逐项附渲染所见",
+  "样板对照证书",
+  "监理四查（含 owner 历史批评闭环）"
+ ],
+ "risk_named": [
+  "移除连接器会改变网表的 refs 集 ⇒ 链重跑（非本地编辑）",
+  "J9/J11/J6 的网仍存在于 CPU 侧：须确认无 dangling/单一端（P6 会抓）",
+  "测试点封装须在 ForgeOS 库内或新增库件（新增库件 = 库快照变更，须记录 hash）"
+ ],
+ "status": "DECISION RECORDED · board-level edit NOT yet applied (budget) - next window's first action",
+ "OWNER-ITEMS": 0
+}
