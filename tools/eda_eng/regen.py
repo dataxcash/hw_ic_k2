@@ -1153,6 +1153,23 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15):
             led_j = None
     if not os.path.isfile(resolved):
         return {"state": "W2_RESOLVE_FAILED", "chain": chain, "wipe": mp, "ledger": led_j}
+    # ②′ **残余二次缝合（一次有界）**（#K2-382 §二.2 · R1048 定性）：把**残余的未接清单**再喂**同一件**工具
+    # （同迷宫 · 同 `--bound-rect R` · 同 floor）——**喂清单 ≠ 改参数**；只多跑一趟，不循环、不搜索。
+    d1 = os.path.join(work, "s2_resolved_drc.json")
+    _raw([_cli_bin(), "pcb", "drc", "--format", "json", "--severity-all", "-o", d1, resolved])
+    u1 = len(json.load(open(d1, encoding="utf-8")).get("unconnected_items", [])) if os.path.isfile(d1) else 0
+    chain.append({"stage": "resolve_residual_before", "unconnected": u1})
+    if u1:
+        second = os.path.join(work, "s2b_resolved.kicad_pcb")
+        led2 = os.path.join(work, "s2b_ledger.json")
+        _raw([_py(), os.path.join(ROOT, "tools", "k2_reroute_router_floor_v1.py"), "--in", resolved,
+              "--drc", d1, "--out", second, "--ledger", led2, "--margin", "3.0", "--floor", "0.20",
+              "--bound-rect", ",".join(str(x) for x in rect)])
+        if os.path.isfile(second):
+            resolved = second
+            chain.append({"stage": "resolve_residual_second_pass", "out": second,
+                          "ledger": (json.load(open(led2, encoding="utf-8")) if os.path.isfile(led2) else None)})
+
     # ③ refill（块内 zone 重跑 filler）= apply-batch 空计划（其内建 ZONE_FILLER）
     final = os.path.join(work, "s3_refilled.kicad_pcb")
     empty = os.path.join(work, "s3_empty.json")

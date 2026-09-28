@@ -590,6 +590,16 @@ class T(unittest.TestCase):
         self.assertLess(seg.index("REFUSED_OUT_OF_BOUND"), seg.index("P.SaveBoard"),
                         "the check must run BEFORE the board is saved (fail-closed)")
 
+    def test_C382_the_residual_second_stitch_is_bounded_and_wall_bounded(self):
+        """#K2-382 §二.2：残余二次缝合＝**喂残余清单给同一件工具**（同墙），**只多跑一趟**（不循环/不搜参）。"""
+        src = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
+        seg = src[src.index("def wipe_resolve_chain("):]
+        self.assertIn("resolve_residual_second_pass", seg, "the second pass must be present and NAMED")
+        self.assertIn("--bound-rect", seg, "the second pass must keep the in-loop wall")
+        self.assertIn("if u1:", seg, "the second pass must be conditional (only when gaps remain)")
+        self.assertIn("resolve_residual_before", seg, "the residual DRC must be read first")
+        self.assertIn("led2", seg, "the second pass must keep its own ledger")
+
     def test_C381_C2_uses_the_same_pinned_caliber_as_class_delta(self):
         """#K2-381 §五.2：C2 与 class_delta **同一把尺** —— 库解析类只记录、不判 FAIL；阈值不动。"""
         src = open(os.path.join("tools", "eda_eng", "verify.py"), encoding="utf-8").read()
