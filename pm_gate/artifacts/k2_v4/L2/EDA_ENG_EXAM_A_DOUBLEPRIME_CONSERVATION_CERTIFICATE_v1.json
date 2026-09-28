@@ -122,5 +122,41 @@
    "layer": "planning/placement layer (pad-to-pad spacing after the move) -> OPTION B territory (or a mask/DFM rule matter)"
   },
   "consequence_for_the_decision": "the two residual classes do NOT share a fix: isolated_copper is an engine (zone/refill) asset fix; solder_mask_bridge is a placement-consequence that no router can remove. So a NEW WINDOW should be scoped as: A (zone-orphan handling, additive + regression) PLUS a planning note for the U1/J9 pad spacing; option C stays forbidden."
+ },
+ "residual_unconnected_named": {
+  "source": "the authorised run's own DRC - READ-ONLY parse",
+  "n": 22,
+  "endpoint_kinds": {
+   "via": 5,
+   "track": 19,
+   "pad": 18,
+   "other": 2
+  },
+  "by_net": {
+   "GND": 2,
+   "MCU_VDD": 4,
+   "NRST": 4,
+   "PERSTA#": 2,
+   "PWR_BTN_OUT": 2,
+   "GPIO_LED": 2,
+   "P3V3_AUX": 8,
+   "I2C2_SCL": 2,
+   "I2C2_SDA": 4,
+   "I2C1_SCL": 4,
+   "I2C1_SDA": 6,
+   "P3V3": 2,
+   "PWR_BTN_ISO": 2
+  },
+  "sample_pairs": [
+   "过孔 [GND] (F.Cu - B.Cu) <-> 走线 [GND] (F.Cu), 长度: 0.1000 mm",
+   "走线 [MCU_VDD] (F.Cu), 长度: 0.100 <-> F.Cu - In2.Cu 上的盲孔 [MCU_VDD]",
+   "走线 [MCU_VDD] (F.Cu), 长度: 0.775 <-> F.Cu - In2.Cu 上的盲孔 [MCU_VDD]",
+   "F.Cu 上 C73 的焊盘 1 [NRST] <-> F.Cu 上 U1 的焊盘 10 [NRST]",
+   "走线 [NRST] (F.Cu), 长度: 0.1414 m <-> F.Cu 上 C73 的焊盘 1 [NRST]",
+   "走线 [PERSTA#] (In5.Cu), 长度: 0.2 <-> 走线 [PERSTA#] (F.Cu), 长度: 1.979",
+   "走线 [PWR_BTN_OUT] (In2.Cu), 长度: <-> F.Cu 上 U1 的焊盘 13 [PWR_BTN_OUT]",
+   "F.Cu 上 U1 的焊盘 14 [GPIO_LED] <-> F.Cu 上 R21 的焊盘 1 [GPIO_LED]"
+  ],
+  "meaning": "the 22 residual ratnest links are the exact target list for the next window's fix; they are nearest-neighbour pairs (pad/track/via endpoints), not open regions - consistent with R1048's diagnosis on the 24-item predecessor"
  }
 }
