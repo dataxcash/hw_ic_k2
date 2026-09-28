@@ -822,3 +822,146 @@ def relocate_block_chain(rect, delta, work, members=None, clearance=None, max_jo
             "apply": ap, "M4": v, "class_delta": delta_cls, "board": final,
             "rule": "#K2-369 sec.4: relocate-block = M0 census -> step1 move_block(+M2 clip) -> M3 reconnect "
                     "inside the block domain (dR ports fixed) -> refill -> M4 (C1-C5 + C6/C7)"}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# A′（#K2-372 §二.1 / #K2-373 §三）：**逐件位移图**下的块内重连（C33）
+# M0 清册 -> 逐件位移+块内铜删除(move_parts) -> M1 端子/端口计划 -> M3 帧内重连 -> refill -> M4(C1-C9)
+# ─────────────────────────────────────────────────────────────────────────────
+def relocate_relative_chain(rect, moves, work, members, clearance=None, pitch=0.15, snap_cells=4,
+                            layers=("F.Cu", "In2.Cu", "B.Cu"), max_edges=None):
+    """**A′ 块内重连一次链跑**。域 = 冻结框（所有端子都在框内/框上）；判卷 C1–C9。"""
+    from . import block as _blk, route as _rt, verify as _vf
+    os.makedirs(work, exist_ok=True)
+    B0 = os.path.join(ROOT, "hw", "k2_v4_8L.l14.kicad_pcb")
+    clear = _rt.CLEAR if clearance is None else clearance
+    chain = []
+
+    def _cli(*args):
+        r = subprocess.run([os.path.join(ROOT, "tools", "eda_eng.sh"), *args], cwd=ROOT,
+                           capture_output=True, text=True, timeout=7200)
+        out = r.stdout
+        j = None
+        if "{" in out:
+            try:
+                j = json.JSONDecoder().raw_decode(out[out.index("{"):])[0]
+            except Exception:                                      # noqa: BLE001
+                j = None
+        chain.append({"cmd": "eda_eng " + " ".join(args), "exit": r.returncode})
+        return r.returncode, j
+
+    cen = _blk.census(B0, rect, [0.0, 0.0], clearance=clear, members=members)
+    chain.append({"stage": "M0_block_census", "frame_ok": cen["frame_ok"],
+                  "FOREIGN_INSIDE": cen["FOREIGN_INSIDE"]["count"],
+                  "FOREIGN_PADS_INSIDE": cen["FOREIGN_PADS_INSIDE"]["count"],
+                  "n_members": cen["n_members"], "digest": _blk.geometric_digest(B0)["sha256_16"]})
+    if not cen["frame_ok"]:
+        return {"state": "M0_FRAME_REJECTED", "chain": chain, "census": cen}
+
+    # 改板函数（Add/Remove）会破坏同进程 SWIG 类型态 ⇒ 一律走**子进程**（承 R964/`move_block` 的同族纪律）
+    mv_arg = ",".join("%s:%s:%s" % (r_, float(dx), float(dy)) for (r_, dx, dy) in moves)
+    rc, mp = _cli("move-parts", "--board", B0, "--rect", ",".join(str(x) for x in rect),
+                  "--moves", mv_arg, "--out", os.path.join(work, "s1_moved.kicad_pcb"))
+    if rc != 0 or not mp:
+        return {"state": "S1_MOVE_PARTS_FAILED", "chain": chain, "exit": rc}
+    nets = sorted(set(mp["ports"]) | set(mp["pads_in"]))
+    jobs = []
+    for n in nets:
+        term = [list(p) for p in mp["pads_in"].get(n, [])] + [list(p) for p in mp["ports"].get(n, [])]
+        if len(term) >= 2:
+            jobs.append({"net": n, "terminals": term})
+    chain.append({"stage": "M1_part_plan", "members": mp["n_moved"], "deleted_segments": mp["deleted_segments"],
+                  "deleted_vias": mp["deleted_vias"], "outside_halves_kept": mp["outside_halves_kept"],
+                  "affected_nets": nets, "n_affected": len(nets), "n_jobs": len(jobs)})
+
+    obs, _bnd = _rt.obstacles_multi(os.path.join(work, "s1_moved.kicad_pcb"), set(), list(layers))
+    plans, blocked, n_edges = [], [], 0
+    for jb in (jobs if max_edges is None else [{"net": jb["net"], "terminals": jb["terminals"][:max_edges + 1]} for jb in jobs]):
+        n = jb["net"]
+        o = [x for x in obs if x.get("net") != n]
+        pts = jb["terminals"]
+        edges = _rt.mst_edges(pts)
+        polys, vias, bad = [], [], None
+        for ia, ib, _d in edges:
+            n_edges += 1
+            # 端口在 ∂R 上、端子是焊盘中心 ⇒ 起点/终点都必须**在框内**（域 = 框）
+            r = _rt.maze_route(pts[ia], pts[ib], list(layers), o, list(rect), pitch=pitch,
+                               via_penalty=8.0, endpoint_clear=0.0, snap_cells=snap_cells)
+            if r["status"] != "ROUTED":
+                bad = {"edge": [ia, ib], "semantics": r.get("semantics"), "reason": r.get("reason")}
+                break
+            viol = []
+            for pl in r["polys"]:
+                viol += _rt.poly_violations(pl["poly"], o, clearance=clear, layer=pl["layer"])
+            if viol:
+                bad = {"edge": [ia, ib], "semantics": "NOT_FOUND", "reason": "grid route violates the exact-shape clearance",
+                       "exact_violations": viol[:2]}
+                break
+            for pl in r["polys"]:
+                polys.append({"layer": pl["layer"], "poly": pl["poly"]})
+            vias += r.get("vias", [])
+        if bad:
+            blocked.append({"net": n, **bad})
+        else:
+            plans.append({"net": n, "polys": [q["poly"] for q in polys],
+                          "layers": [q["layer"] for q in polys], "vias": vias})
+    chain.append({"stage": "M3_in_block_reconnect", "jobs": len(jobs), "edges_routed": n_edges,
+                  "nets_routed": len(plans), "nets_blocked": len(blocked), "blocked_named": blocked,
+                  "domain": "the frozen frame (all terminals inside/on dR)", "pitch_mm": pitch,
+                  "layers": list(layers),
+                  "semantics": "a blocked edge is NOT_FOUND - never read as impossible (#K2-367 sec.2)"})
+
+    rp = os.path.join(work, "s3_routes.json")
+    json.dump(plans, open(rp, "w", encoding="utf-8"), ensure_ascii=False)
+    final = os.path.join(work, "s4_rerouted.kicad_pcb")
+    rc, ap = _cli("route", "--apply-batch", rp, "--board", os.path.join(work, "s1_moved.kicad_pcb"), "--out", final)
+    if rc != 0 or not ap or not os.path.isfile(final):
+        return {"state": "S5_APPLY_FAILED", "chain": chain, "move_parts": mp, "blocked": blocked, "apply": ap}
+    chain.append({"stage": "step5_apply_refill", "zones_refilled": ap.get("zones_refilled"),
+                  "segments_added": ap.get("segments_added"), "vias_added": ap.get("vias_added"), "status": ap.get("status")})
+
+    c6 = _blk.geometry_equal(_blk.outside_geometry(final, rect), _blk.outside_geometry(B0, rect))
+    c7 = _blk.geometry_equal(_blk.net_geometry(final, HS_FANOUT_NETS), _blk.net_geometry(B0, HS_FANOUT_NETS))
+    inside = []
+    import pcbnew as P
+    bb2 = P.LoadBoard(final)
+    want = set(members)
+    for fp in bb2.GetFootprints():
+        if fp.GetReference() not in want:
+            continue
+        for p in fp.Pads():
+            pos = p.GetPosition()
+            pt = [P.ToMM(pos.x), P.ToMM(pos.y)]
+            if not (rect[0] - 1e-6 <= pt[0] <= rect[2] + 1e-6 and rect[1] - 1e-6 <= pt[1] <= rect[3] + 1e-6):
+                inside.append({"ref": fp.GetReference(), "pad": p.GetNumber(), "at": [round(pt[0], 4), round(pt[1], 4)]})
+    # 密度方向（N5 作"方向"：NW 分量不得上升）
+    n5_before = density_quadrants(B0); n5_after = density_quadrants(final)
+    extra = {"C6_outside_copper_unchanged": {"diff": c6["diff"], "pass": c6["equal"],
+                                             "scope": "tracks+vias outside the frozen frame"},
+             "C7_hs_fanout_untouched": {"diff": c7["diff"], "pass": c7["equal"], "nets": HS_FANOUT_NETS},
+             "C8_members_inside_frame": {"violations": inside, "pass": not inside},
+             "C9_geometric_digest": {"before": _blk.geometric_digest(B0)["sha256_16"],
+                                     "after": _blk.geometric_digest(final)["sha256_16"], "pass": True,
+                                     "n5_direction": {"before": n5_before["quadrant_area_pct"],
+                                                      "after": n5_after["quadrant_area_pct"],
+                                                      "pass": n5_after["quadrant_area_pct"]["NW"] <= n5_before["quadrant_area_pct"]["NW"]}}}
+    dj = os.path.join(work, "s5_drc.json")
+    subprocess.run([_cli_bin(), "pcb", "drc", "--format", "json", "--severity-all", "-o", dj, final],
+                   capture_output=True, timeout=7200)
+    if not os.path.isfile(dj):
+        return {"state": "S6_DRC_FAILED", "chain": chain, "board": final}
+    ref_drc = os.path.join(ROOT, "pm_gate/artifacts/k2_v4/L2/REROUTE_EXAM_REF_L14_DRC.json")
+    v = _vf.judge(final, dj, B0, ref_drc, extra=extra)
+    delta_cls = _vf.class_delta(dj, ref_drc)
+    chain.append({"stage": "M4_judge", "verdict": v["verdict"], "geometry_delta": delta_cls["total_delta"],
+                  "C6": c6["equal"], "C7": c7["equal"], "C8": not inside})
+    return {"state": "GRADED", "chain": chain, "census_summary": {
+                "frame_ok": cen["frame_ok"], "FOREIGN_INSIDE": cen["FOREIGN_INSIDE"],
+                "FOREIGN_PADS_INSIDE": cen["FOREIGN_PADS_INSIDE"], "members": cen["members"]},
+            "move_parts": {"moved": mp["n_moved"], "deleted_segments": mp["deleted_segments"],
+                           "deleted_vias": mp["deleted_vias"], "outside_halves_kept": mp["outside_halves_kept"],
+                           "n_ports": sum(len(v2) for v2 in mp["ports"].values())},
+            "jobs": len(jobs), "edges_routed": n_edges, "routed": len(plans), "blocked": blocked,
+            "apply": ap, "M4": v, "class_delta": delta_cls, "board": final,
+            "rule": "#K2-372 sec.2.1 / #K2-373 sec.3: A-prime = per-part displacement map; in-block copper is re-laid "
+                    "inside the frozen frame; judging C1-C9 with no third state"}

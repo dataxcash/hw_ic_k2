@@ -551,6 +551,16 @@ class T(unittest.TestCase):
         self.assertEqual(r["status"], "APPLIED")
         self.assertGreater(r["zones_refilled"], 0, "the batch path must actually refill zones")
 
+    def test_K372_multi_layer_obstacles_are_layer_tagged(self):
+        """A′/C33：多层 maze 的障碍必须**带 layers 标记**（否则某一层的障碍会污染其它层）。"""
+        obs, bnd = route.obstacles_multi(REF, set(), ["F.Cu", "B.Cu"])
+        self.assertTrue(obs, "obstacles must be produced")
+        self.assertTrue(all(o.get("layers") and len(o["layers"]) == 1 for o in obs),
+                        "every obstacle must carry exactly one layer tag")
+        layers = {o["layers"][0] for o in obs}
+        self.assertEqual(layers, {"F.Cu", "B.Cu"})
+        self.assertEqual(len(bnd), 4)
+
     def test_K371_planning_certificate_inputs_are_reproducible(self):
         """#K2-371：方案层证书的输入（移动/固定分类 ＋ 冲突最小距）必须可复现，且几何摘要稳定。"""
         regs = ["C73", "C84", "C85", "C86", "C87", "C88", "C90", "D2", "E2", "J12", "J13",

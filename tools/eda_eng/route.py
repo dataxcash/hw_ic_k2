@@ -219,6 +219,18 @@ def obstacles_from_board(board, ignore_nets, layer, keepout_boxes=()):
     return obs, bounds
 
 
+def obstacles_multi(board, ignore_nets, layers, keepout_boxes=()):
+    """多层障碍（**带 layers 标记**，供多层 maze 用）——逐层取真形后合并。"""
+    obs = []
+    for L in layers:
+        for ob in obstacles_from_board(board, ignore_nets, L, keepout_boxes)[0]:
+            o = dict(ob)
+            o["layers"] = [L]
+            obs.append(o)
+    bnd = obstacles_from_board(board, ignore_nets, layers[0], keepout_boxes)[1]
+    return obs, bnd
+
+
 def pads_by_net(board, layer="F.Cu"):
     """只读：{net: [(x,y), ...]}（同网多 pad 的坐标，供测试选真用例）。"""
     import pcbnew as P

@@ -77,6 +77,19 @@ def main(argv=None):
     p.add_argument("--clearance", type=float, default=None)
     p.add_argument("--digest", action="store_true", help="also report the canonical geometric digest")
     p.add_argument("--json-out")
+    p = sub.add_parser("relocate-relative",
+                       help="#K2-372/373: exam A-prime - per-part displacement map + in-block reconnection (C1-C9)")
+    p.add_argument("--rect", required=True, help="x0,y0,x1,y1 (mm) - the frozen frame")
+    p.add_argument("--moves", required=True, help="ref:dx:dy,ref:dx:dy,... (per-part offsets)")
+    p.add_argument("--members", required=True, help="comma-separated member refs")
+    p.add_argument("--work", required=True)
+    p.add_argument("--pitch", type=float, default=0.15)
+    p.add_argument("--json-out")
+    p = sub.add_parser("move-parts", help="(subprocess only) per-part move + in-block copper re-lay preparation")
+    p.add_argument("--board"); p.add_argument("--rect", required=True)
+    p.add_argument("--moves", required=True, help="ref:dx:dy,ref:dx:dy,...")
+    p.add_argument("--out", required=True)
+    p.add_argument("--json-out")
     p = sub.add_parser("dump", help="read-only per-net track/via inventory (QA/test helper)")
     p.add_argument("--board", required=True)
     p.add_argument("--json-out")
@@ -234,6 +247,25 @@ def main(argv=None):
              "rule": "#K2-371 sec.3: a rigid block translation must not push moved copper into FIXED foreign copper; "
                      "a conflict here is a PLANNING defect (frame/delta), not a routing failure"}
         return _emit(r, a.json_out, 0 if r["conflicts"]["n_conflicts_shown"] == 0 else 1)
+
+    if a.cmd == "relocate-relative":
+        rect = [float(v) for v in a.rect.split(",")]
+        moves = []
+        for item in [x.strip() for x in a.moves.split(",") if x.strip()]:
+            r, dx, dy = item.split(":")
+            moves.append((r, float(dx), float(dy)))
+        members = [x.strip() for x in a.members.split(",") if x.strip()]
+        r = regen_mod.relocate_relative_chain(rect, moves, a.work, members, pitch=a.pitch)
+        return _emit(r, a.json_out, 0 if r.get("state") == "GRADED" and (r.get("M4") or {}).get("verdict") == "PASS" else 1)
+
+    if a.cmd == "move-parts":
+        rect = [float(v) for v in a.rect.split(",")]
+        moves = []
+        for item in [x.strip() for x in a.moves.split(",") if x.strip()]:
+            r_, dx, dy = item.split(":")
+            moves.append((r_, float(dx), float(dy)))
+        r = block_mod.move_parts(a.board or REF_BOARD, rect, moves, a.out)
+        return _emit(r, a.json_out, 0)
 
     if a.cmd == "dump":
         return _emit({"artifact": "eda_eng_dump", "board": a.board,

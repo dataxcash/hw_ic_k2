@@ -679,6 +679,91 @@ def geometric_digest(board, nd=3):
             "rule": "canonical geometric digest over (net, layer, quantized geometry, width); byte-level SHA is NOT a criterion"}
 
 
+def move_parts(board, rect, moves, out):
+    """**A′（#K2-372 §二.1）逐件位移 ＋ 块内铜重铺**：
+      · 成员 footprint 按**各自** Δ 移动（pad 随动）；
+      · 块内铜（两端在 rect 内）与**穿边线的块内半段** ⇒ **删除**（相对重排后不可整块平移 ⇒ 必须重连）；
+      · 穿边线的**块外半段** ⇒ 原地**逐点原样**保留（固定端口），记 `port`。
+    返回 {ports: {net:[pt]}, pads_in: {net:[[x,y]]}, deleted_*, moved}。子进程专用。"""
+    P = _P()
+    b = P.LoadBoard(board)
+    nets_map = {c: ni.GetNetname() for c, ni in b.GetNetInfo().NetsByNetcode().items()}
+    mmap = {r: (float(dx), float(dy)) for (r, dx, dy) in moves}
+    ports = collections.defaultdict(list)
+    port_layer = collections.defaultdict(list)
+    to_rm, to_add = [], []
+    del_seg = del_via = 0
+    for t in list(b.GetTracks()):
+        net = nets_map.get(t.GetNetCode(), "")
+        if t.GetClass() == "PCB_VIA":
+            pos = t.GetPosition()
+            xx, yy = P.ToMM(pos.x), P.ToMM(pos.y)
+            if pt_in((xx, yy), rect):
+                to_rm.append(t); del_via += 1
+            continue
+        st, en = t.GetStart(), t.GetEnd()
+        a = [P.ToMM(st.x), P.ToMM(st.y)]
+        z = [P.ToMM(en.x), P.ToMM(en.y)]
+        hw = round(P.ToMM(t.GetWidth()) / 2.0, 4)
+        lay, wid, code = t.GetLayer(), t.GetWidth(), t.GetNetCode()
+        ins, outs = _seg_inside_parts(a, z, rect)
+        if not ins:
+            continue                                            # 块外：零触碰
+        to_rm.append(t)
+        del_seg += len(ins)
+        for (p, q) in outs:
+            if (p[0] - q[0]) ** 2 + (p[1] - q[1]) ** 2 > 1e-16:
+                to_add.append({"code": code, "layer": lay, "width": wid, "a": p, "b": q})
+                ports[net].append([round(p[0], 4), round(p[1], 4)])
+                ports[net].append([round(q[0], 4), round(q[1], 4)])
+                port_layer[net].append(b.GetLayerName(lay))
+    for d in to_add:
+        tr = P.PCB_TRACK(b)
+        tr.SetStart(P.VECTOR2I(P.FromMM(d["a"][0]), P.FromMM(d["a"][1])))
+        tr.SetEnd(P.VECTOR2I(P.FromMM(d["b"][0]), P.FromMM(d["b"][1])))
+        tr.SetWidth(d["width"]); tr.SetLayer(d["layer"]); tr.SetNetCode(d["code"])
+        b.Add(tr)
+    for t in to_rm:
+        b.Remove(t)
+    moved = []
+    for fp in b.GetFootprints():
+        d = mmap.get(fp.GetReference())
+        if not d:
+            continue
+        fp.Move(P.VECTOR2I(P.FromMM(d[0]), P.FromMM(d[1])))
+        moved.append({"ref": fp.GetReference(), "delta_mm": [d[0], d[1]]})
+    pads_in = collections.defaultdict(list)
+    for fp in b.GetFootprints():
+        for p in fp.Pads():
+            n = p.GetNetname()
+            pos = p.GetPosition()
+            pt = (P.ToMM(pos.x), P.ToMM(pos.y))
+            if n and pt_in(pt, rect):
+                pads_in[n].append([round(pt[0], 4), round(pt[1], 4)])
+    P.SaveBoard(out, b)
+    copied = []
+    for ext in (".kicad_pro", ".kicad_dru"):
+        src = board[:-len(".kicad_pcb")] + ext if board.endswith(".kicad_pcb") else board + ext
+        if os.path.isfile(src):
+            shutil.copy2(src, out[:-len(".kicad_pcb")] + ext if out.endswith(".kicad_pcb") else out + ext)
+            copied.append(ext)
+    # 端口去重（同一穿边线的两端只留落在 ∂R 上的那个）
+    def on_boundary(p):
+        return (abs(p[0] - rect[0]) < 1e-6 or abs(p[0] - rect[2]) < 1e-6
+                or abs(p[1] - rect[1]) < 1e-6 or abs(p[1] - rect[3]) < 1e-6)
+    ports = {n: sorted({tuple(p) for p in pts if on_boundary(p)}) for n, pts in ports.items()}
+    ports = {n: [list(p) for p in v] for n, v in ports.items() if v}
+    return {"artifact": "eda_eng_move_parts", "board": board, "out": out, "rect": list(rect),
+            "moved": moved, "n_moved": len(moved),
+            "deleted_segments": del_seg, "deleted_vias": del_via, "outside_halves_kept": len(to_add),
+            "ports": ports, "pads_in": {n: v for n, v in pads_in.items()}, "port_layers": {k: sorted(set(v)) for k, v in port_layer.items()},
+            "project_config_copied": copied,
+            "out_sha16": hashlib.sha256(open(out, "rb").read()).hexdigest()[:16],
+            "rule": "#K2-372 sec.2.1: A-prime = per-part offsets; the in-block copper CANNOT be rigidly translated "
+                    "(relative positions changed) so it is RE-LAID; the outside halves of crossing lines stay put as "
+                    "fixed ports on dR"}
+
+
 def geometry_equal(a, b):
     """两个 canonical Counter 的多重集差（正/负/总）。"""
     plus = sum((a - b).values()); minus = sum((b - a).values())
