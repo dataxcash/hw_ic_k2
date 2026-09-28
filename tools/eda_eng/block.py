@@ -368,7 +368,7 @@ def outside_geometry(board, rect, nd=3):
     c = read_copper(board)
     out = collections.Counter()
     for s in c["segments"]:
-        _, outs = _seg_inside_parts(s["a"], s["b"], rect)
+        _, outs = clip_iu(s["a"], s["b"], rect)
         for (p, q) in outs:
             if (p[0] - q[0]) ** 2 + (p[1] - q[1]) ** 2 <= 1e-16:
                 continue
@@ -457,6 +457,47 @@ def true_clearance_for_jobs(board, jobs):
 # 问题层级：**框/位移怎么定**（方案层），不是"怎么布线"（施工层）。
 # 判定：把**块内铜（含成员焊盘）**按 Δ 平移后，与**块外固定铜**（异网）逐对量**真形**净距；
 #       任何一对 < clearance ⇒ 该 Δ 在冻结框下**净距冲突**（该冲突布线器无法修 —— 它是"方案"错了）。
+
+
+IU = 1000000.0
+
+
+def clip_iu(a, b, rect, tol_iu=1):
+    """**IU（纳米）整数域**切分：与写板/读板同一量化 ⇒ 「块外半段」在前后两板上**逐点一致**（C6 的取整来源）。
+    rect 允许 tol_iu 的边界容差（端点恰在 ∂R 上时不重复切）。返回 (inside, outside) 两组 (p,q)（mm 浮点）。"""
+    def to_iu(v):
+        return [int(round(v[0] * IU)), int(round(v[1] * IU))]
+    A, B = to_iu(a), to_iu(b)
+    r = [int(round(rect[0] * IU)) - tol_iu, int(round(rect[1] * IU)) - tol_iu,
+         int(round(rect[2] * IU)) + tol_iu, int(round(rect[3] * IU)) + tol_iu]
+    dx, dy = B[0] - A[0], B[1] - A[1]
+    t0, t1 = 0.0, 1.0
+    for pp, qq in ((-dx, A[0] - r[0]), (dx, r[2] - A[0]), (-dy, A[1] - r[1]), (dy, r[3] - A[1])):
+        if pp == 0:
+            if qq < 0:
+                return [], [(a, b)]
+        else:
+            t = qq / pp
+            if pp < 0:
+                if t > t1:
+                    return [], [(a, b)]
+                if t > t0:
+                    t0 = t
+            else:
+                if t < t0:
+                    return [], [(a, b)]
+                if t < t1:
+                    t1 = t
+    def at(t):
+        return [int(round(A[0] + t * dx)) / IU, int(round(A[1] + t * dy)) / IU]
+    pin, pout = at(t0), at(t1)
+    ins = [(pin, pout)] if (t1 - t0) * math.hypot(dx, dy) > 1.0 else []
+    outs = []
+    if t0 > 1e-9:
+        outs.append((a, pin))
+    if t1 < 1 - 1e-9:
+        outs.append((pout, b))
+    return ins, outs
 
 
 def _pt_seg_d2(a, b, p):
@@ -706,7 +747,7 @@ def move_parts(board, rect, moves, out):
         z = [P.ToMM(en.x), P.ToMM(en.y)]
         hw = round(P.ToMM(t.GetWidth()) / 2.0, 4)
         lay, wid, code = t.GetLayer(), t.GetWidth(), t.GetNetCode()
-        ins, outs = _seg_inside_parts(a, z, rect)
+        ins, outs = clip_iu(a, z, rect)                          # IU 整数域切分（C6 取整来源的对齐）
         if not ins:
             continue                                            # 块外：零触碰
         to_rm.append(t)
@@ -749,8 +790,11 @@ def move_parts(board, rect, moves, out):
             copied.append(ext)
     # 端口去重（同一穿边线的两端只留落在 ∂R 上的那个）
     def on_boundary(p):
-        return (abs(p[0] - rect[0]) < 1e-6 or abs(p[0] - rect[2]) < 1e-6
-                or abs(p[1] - rect[1]) < 1e-6 or abs(p[1] - rect[3]) < 1e-6)
+        """**在 ∂R 的实际线段上**（不是它所在的无限直线）——否则角外的远端会被误当端口（A′ attempt1 的真缺陷）。"""
+        eps = 1e-6
+        on_x = (abs(p[0] - rect[0]) < eps or abs(p[0] - rect[2]) < eps) and (rect[1] - eps <= p[1] <= rect[3] + eps)
+        on_y = (abs(p[1] - rect[1]) < eps or abs(p[1] - rect[3]) < eps) and (rect[0] - eps <= p[0] <= rect[2] + eps)
+        return bool(on_x or on_y)
     ports = {n: sorted({tuple(p) for p in pts if on_boundary(p)}) for n, pts in ports.items()}
     ports = {n: [list(p) for p in v] for n, v in ports.items() if v}
     return {"artifact": "eda_eng_move_parts", "board": board, "out": out, "rect": list(rect),
