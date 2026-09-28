@@ -140,21 +140,23 @@ def preflight(exam, work):
                    ("drawing", inputs["drawing"] if preset.get("drawing") else
                     os.path.join(ROOT, "pm_gate/artifacts/k2_v4/L3/mcio_feas_step2/m13_v57_w3_joint_assignment.json"))):
         hashes[k] = hashlib.sha256(open(rel, "rb").read()).hexdigest()[:16] if os.path.isfile(rel) else None
-    # P1' 机械/库类闸（本窗新证）：跑一次 gen（只放置）+ DRC —— 机械非法（courtyard 重叠等）场景**零重活**拦下
-    p1b = {"checked": False}
-    if preset["placement"] and p1.get("ok"):
-        gw = os.path.join(work, "p1gen")
-        shutil.rmtree(gw, ignore_errors=True)
-        os.makedirs(gw, exist_ok=True)
+    # P1' 机械闸（本窗两次修正）：**基线相对**（不是绝对零）+ **含 crtyd 探针**（courtyard 重叠只在 crtyd 趟后出现）
+    def _mech_probe(delta_mm, tag):
+        gw = os.path.join(work, "p1b_" + tag)
+        shutil.rmtree(gw, ignore_errors=True); os.makedirs(gw, exist_ok=True)
         sh = shadow_mod.build(os.path.join(gw, "shadow"))
-        shadow_mod.edit_placement_at(sh["shadow_root"], preset["placement"]["refs"], preset["placement"]["delta_mm"])
+        if delta_mm != [0.0, 0.0]:
+            shadow_mod.edit_placement_at(sh["shadow_root"], preset["placement"]["refs"], delta_mm)
         gpcb = os.path.join(gw, "placed.kicad_pcb")
         env = {**os.environ, "PM_GATE_PROJECT_ROOT": sh["shadow_root"], "K2_OUT_PCB": gpcb,
                "K2_OUT_JSON": os.path.join(gw, "placed.json")}
         rc = subprocess.run([_host(), os.path.join(ROOT, "tools", "k2_gen_v5.py")], cwd=ROOT,
-                            capture_output=True, text=True, env=_host_env(env), timeout=600).returncode
+                            capture_output=True, text=True, env=_host_env(env), timeout=900).returncode
+        pk = os.path.join(gw, "placed_crtd.kicad_pcb")
+        subprocess.run([_py(), os.path.join(ROOT, "tools", "k2_p4_build_l9_v1.py"), "--in", gpcb,
+                        "--out", pk, "--stages", "crtyd"], capture_output=True, timeout=1800)
         gj = os.path.join(gw, "placed_drc.json")
-        subprocess.run([_cli(), "pcb", "drc", "--format", "json", "--severity-all", "-o", gj, gpcb],
+        subprocess.run([_cli(), "pcb", "drc", "--format", "json", "--severity-all", "-o", gj, pk],
                        capture_output=True, timeout=900)
         bad = {}
         if os.path.isfile(gj):
@@ -162,10 +164,20 @@ def preflight(exam, work):
                 ty = v.get("type")
                 if ty in ("courtyards_overlap", "shorting_items", "clearance", "hole_clearance"):
                     bad[ty] = bad.get(ty, 0) + 1
-        p1b = {"checked": True, "gen_exit": rc, "mechanical_violations": bad,
-               "rule": "a placement that is pad-legal but mechanical-illegal (e.g. courtyards_overlap) must be "
-                       "refused here with zero heavy runs (found by exam A attempt 1)"}
-    ok = (p1.get("ok") is True or p1.get("skipped")) and p1b.get("mechanical_violations", {}) == {} \
+        return {"gen_exit": rc, "mechanical_violations": bad}
+
+    p1b = {"checked": False}
+    if preset["placement"] and p1.get("ok"):
+        base = _mech_probe([0.0, 0.0], "base")
+        scen = _mech_probe(list(preset["placement"]["delta_mm"]), "scen")
+        new_bad = {k: scen["mechanical_violations"].get(k, 0) - base["mechanical_violations"].get(k, 0)
+                   for k in set(base["mechanical_violations"]) | set(scen["mechanical_violations"])}
+        new_bad = {k: v for k, v in new_bad.items() if v > 0}
+        p1b = {"checked": True, "baseline": base, "scenario": scen, "new_mechanical_violations": new_bad,
+               "rule": "BASELINE-RELATIVE (the baseline's own mechanical warnings are not the scenario's fault) and "
+                       "the probe includes the crtyd stage, because courtyard overlaps only appear after it "
+                       "(both defects found by the scenario sweep in this window)"}
+    ok = (p1.get("ok") is True or p1.get("skipped")) and p1b.get("new_mechanical_violations", {}) == {} \
         and bool(p2.get("commands")) and all(hashes.values())
     return {"artifact": "eda_eng_preflight", "exam": exam, "ok": ok,
             "P1_scenario_legality": p1, "P1b_mechanical_legality": p1b, "P2_dry_run_plan": {"stages": p2.get("stages"), "commands": p2.get("commands")},

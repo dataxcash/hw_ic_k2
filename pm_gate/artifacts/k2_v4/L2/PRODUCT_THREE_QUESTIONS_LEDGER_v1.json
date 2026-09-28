@@ -1,0 +1,31 @@
+{
+ "artifact": "k2_product_three_questions_ledger_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-362 sec.2.5 (hard precondition: answer the product three questions BEFORE implementing) + constitution sec.20",
+ "Q1_same_kind_product_exists": {
+  "in_repo": "YES - this repository already ships deterministic routers on the live chain: tools/k2_route_segment_v1.py is an orchestrator (canonicalise -> DRC -> route -> zone fill) that dispatches a router family (ROUTERS table: k2_p4_gnd_vias_v1, k2_p4_converge_v1, ...); in exam A attempt 1 it produced the whole board (stage2 b15c63d5a8df3f00)",
+  "external": "YES - the industry solves exactly this (KiCad interactive router, FreeRouting, commercial autorouters), but those are interactive or stochastic and none has been licence-reviewed here",
+  "reading": "a product is available both in-repo and in the industry; the in-repo one is the strongest input because it is already on the live chain"
+ },
+ "Q2_copyable_product_artifact": {
+  "primary_in_repo": [
+   "tools/k2_route_segment_v1.py (orchestration + router dispatch + DRC + zone fill)",
+   "tools/k2_corner_keepout_gate_v1.py (keepout oracle, C21)",
+   "tools/k2_reroute_affected_v2.py (C17 v1: clip -> island-MST stitch -> snap -> bounded repair -> normalise)",
+   "tools/k2_p4_build_l9_v1.py --stages chamfer,pour (45-degree + pour)"
+  ],
+  "reference_library": "REF-CASE-LIBRARY: NOT FOUND in this repo at the referenced path (searched docs/ and the tree) - recorded rather than pretended; the fallback input is the in-repo product above",
+  "reading": "the emission/oracle/polish layers ARE copyable in-repo products; M3 must COPY those, not reinvent them"
+ },
+ "Q3_difference_list": {
+  "what_the_in_repo_products_do_NOT_do": [
+   "PATH SOLVING: the chain's routers are DRAWING-DRIVEN - they lay a KNOWN polyline from the W3 joint assignment; they never solve a path for a torn net",
+   "MULTI-PAD: no deterministic pad-set connection (MST) exists",
+   "VIA / MULTI-LAYER: no layer-change insertion for a blocked pair (M3 v1 is single-layer, declared)",
+   "LENGTH RE-TUNING for a MOVED cluster (C3)",
+   "CHAMFER RECOVERY for a MOVED cluster (C4)"
+  ],
+  "consequence": "M3's expansion = ADD path solving (multi-pad MST + via/multi-layer) and WIRE the copyable layers (emission/oracle/polish) around it; do NOT write a new stochastic autorouter (that would violate constitution sec.20 sec.5)"
+ },
+ "OWNER-ITEMS": 0
+}

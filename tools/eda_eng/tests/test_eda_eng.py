@@ -301,8 +301,9 @@ class T(unittest.TestCase):
         pf = regen.preflight("A", "/tmp/eda_eng_selftest_pf")
         self.assertFalse(pf["ok"], "the +X 4.000 mm scenario must be refused by the strengthened gate")
         self.assertTrue(pf["P1_scenario_legality"]["ok"], "it is pad-legal ...")
-        self.assertTrue(pf["P1b_mechanical_legality"]["mechanical_violations"],
-                        "... but mechanically illegal (zero heavy runs spent)")
+        self.assertTrue(pf["P1b_mechanical_legality"]["new_mechanical_violations"],
+                        "... but mechanically illegal (zero heavy runs spent); P1b is BASELINE-RELATIVE and the "
+                        "probe includes the crtyd stage (both defects were found by the scenario sweep)")
 
     def test_regen_is_implemented_and_plans_five_stages(self):
         r = regen.run(exam="A", work="/tmp/eda_eng_selftest_plan", dry=True)

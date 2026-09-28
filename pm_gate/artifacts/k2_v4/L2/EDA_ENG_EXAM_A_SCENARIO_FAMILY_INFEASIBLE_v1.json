@@ -1,0 +1,87 @@
+{
+ "artifact": "eda_eng_examA_scenario_family_infeasible_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-362 sec.2.5 hard precondition (P1 + P1b must PASS before the exam run)",
+ "window_outcome": "STOPPED: the window's hard precondition cannot be satisfied - the exam A scenario family (translate the left cluster) has NO mechanically-legal non-trivial magnitude in +X. The heavy exam run was therefore NOT made (the ruling forbids it), and M3's scope expansion was NOT started.",
+ "findings": {
+  "F1_P1b_had_two_real_defects_both_fixed": [
+   "absolute-zero requirement -> false rejection (the BASELINE placement already carries courtyards_overlap 2); fixed to BASELINE-RELATIVE",
+   "the probe ran only gen -> BLIND to courtyards_overlap, which only appears after the crtyd polish stage; fixed to run gen -> crtyd -> DRC"
+  ],
+  "F2_probe_is_clean": "a 0.5 mm edit changes ONLY the four scenario refs (zero unexpected changes) => the probe does not perturb the rest of the placement",
+  "F3_the_translation_family_is_mechanically_illegal_at_every_tested_magnitude": {
+   "4.0": {
+    "ok": false,
+    "new_mech": {
+     "clearance": 1
+    },
+    "base": {
+     "courtyards_overlap": 2
+    },
+    "scen": {
+     "clearance": 1,
+     "courtyards_overlap": 1
+    }
+   },
+   "2.0": {
+    "ok": false,
+    "new_mech": {
+     "clearance": 1
+    },
+    "base": {
+     "courtyards_overlap": 2
+    },
+    "scen": {
+     "clearance": 1,
+     "courtyards_overlap": 1
+    }
+   },
+   "1.0": {
+    "ok": false,
+    "new_mech": {
+     "clearance": 1
+    },
+    "base": {
+     "courtyards_overlap": 2
+    },
+    "scen": {
+     "clearance": 1,
+     "courtyards_overlap": 1
+    }
+   },
+   "0.5": {
+    "ok": false,
+    "new_mech": {
+     "clearance": 1
+    },
+    "base": {
+     "courtyards_overlap": 2
+    },
+    "scen": {
+     "clearance": 1,
+     "courtyards_overlap": 1
+    }
+   }
+  },
+  "F3_reading": "even +X 0.5 mm creates a NEW clearance violation => the cluster is hemmed in by COPPER (not just pads) on the +X side, so no non-trivial translation in that direction is mechanically legal; the earlier pad-based bound (4.400 mm) was therefore not the binding constraint"
+ },
+ "consequence_for_the_ruling": {
+  "the_precondition": "P1 + P1b can only pass with a legal scenario; the translate-the-cluster family cannot deliver one in +X",
+  "options_needing_a_ruling": [
+   "A) relax 'non-trivial' to a very small translation and test whether a sub-0.5 mm move is clearance-legal (C5 would still hold) - weakest form of 'a real re-placement'",
+   "B) re-pose the exam to a DIFFERENT family: fold the blocking neighbours (D2/C73/C86/J13 and/or the copper in the way) into the change - explicitly a DIFFERENT change order that must be named (the ruling already says silent scope expansion is forbidden)",
+   "C) re-pose the exam to move the cluster into a region that is copper-free (a 'lift and place' scenario rather than a translation)",
+   "D) the supervisor authors the target placement (the ruling said coordinates are ENG-autonomous, but every ENG-chosen translation is now shown mechanically illegal)"
+  ]
+ },
+ "what_is_ready_for_the_next_window": [
+  "the product three-questions ledger (L2/PRODUCT_THREE_QUESTIONS_LEDGER_v1.json)",
+  "P1b fixed (baseline-relative + crtyd probe)",
+  "the sweep evidence that the translation family is a dead end"
+ ],
+ "artifacts": {
+  "sweep": "/home/fila/scen_sweep2.json",
+  "diff_probe": "/home/fila/diffprobe.json"
+ },
+ "OWNER-ITEMS": 0
+}
