@@ -1013,7 +1013,7 @@ def relocate_relative_chain(rect, moves, work, members, clearance=None, pitch=0.
 C17V1 = os.path.join(ROOT, "tools", "k2_reroute_affected_v2.py")
 
 
-def c17v1_argv(board, moves, baseline_drc, work, out, report=None, phase="all", clear_rect=None):
+def c17v1_argv(board, moves, baseline_drc, work, out, report=None, phase="all", clear_rect=None, bound_rect=None):
     """构造 C17 v1 的命令行（**纯函数**，可单测）：逐件位移图 → `--moved ref=+dx,dy`（**已支持多个**）；
     可选受损域 → `--clear-rect x0,y0,x1,y1`（产品既定格式，**不是 JSON**）。不含解释器。"""
     argv = [C17V1, "--phase", phase, "--board", board]
@@ -1021,13 +1021,15 @@ def c17v1_argv(board, moves, baseline_drc, work, out, report=None, phase="all", 
         argv += ["--moved", "%s=%+.4f,%+.4f" % (r_, float(dx), float(dy))]
     if clear_rect:
         argv += ["--clear-rect", ",".join(str(round(v, 4)) for v in clear_rect)]
+    if bound_rect:                                     # C35：把作业域交给**搜索环路**（非事后恢复）
+        argv += ["--bound-rect", ",".join(str(round(v, 4)) for v in bound_rect)]
     argv += ["--baseline-drc", baseline_drc, "--work", work, "--out", out]
     if report:
         argv += ["--report", report]
     return argv
 
 
-def relocate_relative_c17v1(rect, moves, work, members, clearance=None, report_extra=True, bound=True):
+def relocate_relative_c17v1(rect, moves, work, members, clearance=None, report_extra=True, bound=False):
     """A′ 的**成品路径**：驱动 C17 v1（rip→stitch→snap→repair→normalize→verify）后按 C1–C9 判卷。
     **本函数不在未获配额时被调用**；此处的存在即为「抄成品」的实现落点。"""
     from . import block as _blk, verify as _vf
@@ -1036,7 +1038,9 @@ def relocate_relative_c17v1(rect, moves, work, members, clearance=None, report_e
     ref_drc = os.path.join(ROOT, "pm_gate/artifacts/k2_v4/L2/REROUTE_EXAM_REF_L14_DRC.json")
     final = os.path.join(work, "c17v1_final.kicad_pcb")
     rep = os.path.join(work, "c17v1_report.json")
-    argv = c17v1_argv(B0, moves, ref_drc, os.path.join(work, "c17v1"), final, rep)
+    # **C35 环路内框界**（#K2-378 §三.1）：框**传给产品的迷宫**（越界格不可选）；**不做**事后恢复
+    argv = c17v1_argv(B0, moves, ref_drc, os.path.join(work, "c17v1"), final, rep, clear_rect=None,
+                      bound_rect=list(rect))
     r = subprocess.run([_py(), *argv], cwd=ROOT, capture_output=True, text=True, timeout=7200)
     chain = [{"cmd": "k2_reroute_affected_v2.py " + " ".join(argv[1:]), "exit": r.returncode}]
     if not os.path.isfile(final):

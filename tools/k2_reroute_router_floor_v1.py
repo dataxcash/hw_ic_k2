@@ -25,6 +25,9 @@ def main():
     ap.add_argument("--margin", type=float, default=3.0)
     ap.add_argument("--floor", type=float, default=0.20)
     ap.add_argument("--only-net", default=None)
+    ap.add_argument("--bound-rect", dest="bound_rect", default=None,
+                    help="C35 in-loop wall x0,y0,x1,y1 (mm) - set on the maze module so out-of-domain cells "
+                         "are never selectable (forwarded, not repaired afterwards)")
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
     sp = importlib.util.spec_from_file_location("k2mrfloor", MROUTE)
@@ -32,6 +35,8 @@ def main():
     cv = mr.cv
     orig = cv._req
     cv._req = lambda x, y: max(orig(x, y), a.floor)
+    if a.bound_rect:                                  # C35：把域作为**搜索约束**注入（不改迷宫本体）
+        mr.WALL_RECT = tuple(float(v) for v in a.bound_rect.split(","))
     s = mr.run(a.src, a.drc, a.out, a.ledger, a.margin, a.only_net, a.dry_run, "dist_asc", None)
     print(json_dumps(s))
     return 0

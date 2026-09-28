@@ -1,0 +1,271 @@
+{
+ "artifact": "eda_eng_exam",
+ "exam": "A",
+ "chain": "c17v1",
+ "gate": {
+  "artifact": "k2_new_capability_gate_v1",
+  "capability": "A_prime_C33_three_questions",
+  "ledger": "/home/fila/jqdDev_2025/ic_hw/k2/pm_gate/artifacts/k2_v4/L2/PRODUCT_THREE_QUESTIONS_LEDGER_v1.json",
+  "missing": [],
+  "verdict": "PASS",
+  "rule": "#K2-375 sec.5 (C34): a new-capability window may not open until the ledger carries the sec.20 three questions for it (same-kind product / copyable artifact / difference list)",
+  "copyable_artifacts": [
+   "tools/k2_reroute_affected_v2.py (clip -> island-MST stitch -> snap -> bounded repair -> normalise) - the closest product for THIS capability",
+   "tools/k2_route_segment_v1.py (orchestration + DRC + zone fill)",
+   "tools/k2_corner_keepout_gate_v1.py (keepout oracle)"
+  ]
+ },
+ "entry": "eda_eng exam A --run --chain c17v1",
+ "run_count": "1/1",
+ "route": {
+  "state": "GRADED",
+  "chain": [
+   {
+    "cmd": "k2_reroute_affected_v2.py --phase all --board /home/fila/jqdDev_2025/ic_hw/k2/hw/k2_v4_8L.l14.kicad_pcb --moved C73=+3.5000,+3.5000 --moved C84=+4.0000,+4.0000 --moved C85=+4.0000,+4.0000 --moved C86=+4.0000,+4.0000 --moved C87=+4.0000,+4.0000 --moved C88=+4.0000,+4.0000 --moved C90=+1.5000,+1.5000 --moved E2=+3.5000,+3.5000 --moved L1=+4.0000,+4.0000 --moved R40=+4.0000,+4.0000 --moved R41=+4.0000,+4.0000 --moved U1=+1.5000,+1.5000 --moved U2=+4.0000,+4.0000 --moved U4=+4.0000,+4.0000 --moved U5=+4.0000,+4.0000 --bound-rect 22.95,32.95,51.5,66.5 --baseline-drc /home/fila/jqdDev_2025/ic_hw/k2/pm_gate/artifacts/k2_v4/L2/REROUTE_EXAM_REF_L14_DRC.json --work /tmp/opencode/aprime_wall2/c17v1 --out /tmp/opencode/aprime_wall2/c17v1_final.kicad_pcb --report /tmp/opencode/aprime_wall2/c17v1_report.json",
+    "exit": 1
+   }
+  ],
+  "method": "c17v1",
+  "bound": null,
+  "board": "/tmp/opencode/aprime_wall2/c17v1_final.kicad_pcb",
+  "report": null,
+  "M4": {
+   "criteria": {
+    "C1_connectivity": {
+     "unconnected": 22,
+     "pass": false
+    },
+    "C2_drc_no_new_increase": {
+     "total": 248,
+     "ref_total": 168,
+     "new_classes": [
+      "clearance",
+      "hole_clearance",
+      "lib_footprint_issues",
+      "solder_mask_bridge"
+     ],
+     "pass": false
+    },
+    "C3_skew": {
+     "per_pair_mm": {
+      "0": 0.065012,
+      "1": 0.06498,
+      "2": 0.043403,
+      "3": 0.078764,
+      "4": 1.4e-05,
+      "5": 5e-06,
+      "6": 0.021576,
+      "7": 0.013805
+     },
+     "max_mm": 0.078764,
+     "limit_mm": 0.15,
+     "pass": true
+    },
+    "C4_chamfer_preserved": {
+     "count": 2863,
+     "ref_count": 2637,
+     "pass": true
+    },
+    "C5_routing_changed": {
+     "element_set_diff": 1712,
+     "pass": true
+    },
+    "C6_outside_copper_unchanged": {
+     "diff": 69,
+     "pass": false,
+     "scope": "tracks+vias outside the frozen frame (C17 v1 must not touch them)"
+    },
+    "C7_hs_fanout_untouched": {
+     "diff": 0,
+     "pass": true,
+     "nets": [
+      "PCIE_DN0_P",
+      "PCIE_DN0_N",
+      "PCIE_DN1_P",
+      "PCIE_DN1_N",
+      "PCIE_DN2_P",
+      "PCIE_DN2_N",
+      "PCIE_DN3_P",
+      "PCIE_DN3_N",
+      "PCIE_DN4_P",
+      "PCIE_DN4_N",
+      "PCIE_DN5_P",
+      "PCIE_DN5_N",
+      "PCIE_DN6_P",
+      "PCIE_DN6_N",
+      "PCIE_DN7_P",
+      "PCIE_DN7_N"
+     ]
+    },
+    "C8_members_inside_frame": {
+     "violations": [],
+     "pass": true,
+     "authority": "#K2-377 F3: the ECO-K2-0004 sec.6 table has NINE rows; a missing row is fail-closed"
+    },
+    "C9_geometric_digest": {
+     "before": "1cf4d39614491ccc",
+     "after": "5f25461872d59cf0",
+     "pass": true
+    }
+   },
+   "verdict": "FAIL",
+   "thresholds_used": {
+    "drc_total": 168,
+    "chamfer_ref": 2637,
+    "skew_limit": 0.15
+   },
+   "judging_table": "L2/EDA_ENG_JUDGING_TABLE_v1.json (ECO-K2-0002/0003 sec.6)",
+   "rule": "PASS iff EVERY criterion holds (C1-C5 in-register + C6/C7 block-fidelity when a block chain is graded); None (skipped) is never a PASS (#K2-358: capability must be reproducible)"
+  },
+  "class_delta": {
+   "total_delta": 46,
+   "by_class": {
+    "clearance": {
+     "result": 9,
+     "ref": 0,
+     "delta": 9
+    },
+    "hole_clearance": {
+     "result": 11,
+     "ref": 0,
+     "delta": 11
+    },
+    "silk_edge_clearance": {
+     "result": 1,
+     "ref": 2,
+     "delta": -1
+    },
+    "silk_over_copper": {
+     "result": 35,
+     "ref": 37,
+     "delta": -2
+    },
+    "silk_overlap": {
+     "result": 14,
+     "ref": 15,
+     "delta": -1
+    },
+    "solder_mask_bridge": {
+     "result": 2,
+     "ref": 0,
+     "delta": 2
+    },
+    "track_dangling": {
+     "result": 22,
+     "ref": 1,
+     "delta": 21
+    },
+    "track_not_centered_on_via": {
+     "result": 16,
+     "ref": 32,
+     "delta": -16
+    },
+    "via_dangling": {
+     "result": 29,
+     "ref": 6,
+     "delta": 23
+    }
+   },
+   "excluded_class_rows": {
+    "lib_footprint_issues": {
+     "result": 54,
+     "ref": 0,
+     "delta": 54
+    },
+    "lib_footprint_mismatch": {
+     "result": 0,
+     "ref": 20,
+     "delta": -20
+    }
+   },
+   "excluded_classes": [
+    "lib_footprint_issues",
+    "lib_footprint_mismatch"
+   ],
+   "raw_total_delta": 80,
+   "attributed": true,
+   "rule": "#K2-361 sec.2.5: any GEOMETRY class rise must be attributed; library-resolution classes are recorded in excluded_class_rows under the pinned caliber (they are never hidden)"
+  },
+  "rule": "#K2-375 sec.4.3: A-prime is built by COPYING the in-repo product C17 v1 (clip -> stitch -> snap -> repair -> normalize), judged with C1-C9"
+ },
+ "state": "GRADED",
+ "criteria": {
+  "C1_connectivity": {
+   "unconnected": 22,
+   "pass": false
+  },
+  "C2_drc_no_new_increase": {
+   "total": 248,
+   "ref_total": 168,
+   "new_classes": [
+    "clearance",
+    "hole_clearance",
+    "lib_footprint_issues",
+    "solder_mask_bridge"
+   ],
+   "pass": false
+  },
+  "C3_skew": {
+   "per_pair_mm": {
+    "0": 0.065012,
+    "1": 0.06498,
+    "2": 0.043403,
+    "3": 0.078764,
+    "4": 1.4e-05,
+    "5": 5e-06,
+    "6": 0.021576,
+    "7": 0.013805
+   },
+   "max_mm": 0.078764,
+   "limit_mm": 0.15,
+   "pass": true
+  },
+  "C4_chamfer_preserved": {
+   "count": 2863,
+   "ref_count": 2637,
+   "pass": true
+  },
+  "C5_routing_changed": {
+   "element_set_diff": 1712,
+   "pass": true
+  },
+  "C6_outside_copper_unchanged": {
+   "diff": 69,
+   "pass": false,
+   "scope": "tracks+vias outside the frozen frame (C17 v1 must not touch them)"
+  },
+  "C7_hs_fanout_untouched": {
+   "diff": 0,
+   "pass": true,
+   "nets": [
+    "PCIE_DN0_P",
+    "PCIE_DN0_N",
+    "PCIE_DN1_P",
+    "PCIE_DN1_N",
+    "PCIE_DN2_P",
+    "PCIE_DN2_N",
+    "PCIE_DN3_P",
+    "PCIE_DN3_N",
+    "PCIE_DN4_P",
+    "PCIE_DN4_N",
+    "PCIE_DN5_P",
+    "PCIE_DN5_N",
+    "PCIE_DN6_P",
+    "PCIE_DN6_N",
+    "PCIE_DN7_P",
+    "PCIE_DN7_N"
+   ]
+  },
+  "C8_members_inside_frame": {
+   "violations": [],
+   "pass": true,
+   "authority": "#K2-377 F3: the ECO-K2-0004 sec.6 table has NINE rows; a missing row is fail-closed"
+  },
+  "C9_geometric_digest": {
+   "before": "1cf4d39614491ccc",
+   "after": "5f25461872d59cf0",
+   "pass": true
+  }
+ },
+ "verdict": "FAIL"
+}
