@@ -1,0 +1,116 @@
+{
+ "artifact": "k2_run_tail_drawing_v1_STATUS",
+ "ts": "2026-09-28",
+ "authority": "#K2-346 (one bounded SCHEME window: determinate drawing for PCIE_DN4_N / PCIE_DN5_P)",
+ "verdict": "NOT COMPLETE - drawing not yet determinate-and-verified (hard gate: FAIL = 回修, 不呈)",
+ "new_proven_fact_Topology": {
+  "note": "the earlier plan assumed a single straight run; the register reveals TWO legs per line:",
+  "PCIE_DN4_N": {
+   "B_Cu_horizontal_run": {
+    "from": [
+     90.05,
+     74.222
+    ],
+    "to": [
+     139.48,
+     74.222
+    ],
+    "len_mm": 49.43,
+    "layer": "B.Cu",
+    "w": 0.16
+   },
+   "In5_vertical_ascent": {
+    "from": [
+     139.48,
+     74.222
+    ],
+    "to": [
+     139.48,
+     59.45
+    ],
+    "len_mm": 14.77,
+    "layer": "In5.Cu",
+    "w": 0.16
+   },
+   "corner_via_at": [
+    139.48,
+    74.222
+   ]
+  },
+  "PCIE_DN5_P": {
+   "B_Cu_horizontal_run": {
+    "from": [
+     90.75,
+     75.671
+    ],
+    "to": [
+     138.32,
+     75.671
+    ],
+    "len_mm": 47.57,
+    "layer": "B.Cu",
+    "w": 0.16
+   },
+   "In5_vertical_ascent": {
+    "from": [
+     138.32,
+     75.671
+    ],
+    "to": [
+     138.32,
+     60.05
+    ],
+    "len_mm": 15.62,
+    "layer": "In5.Cu",
+    "w": 0.16
+   },
+   "corner_via_at": [
+    138.32,
+    75.671
+   ]
+  }
+ },
+ "derived_new_via_x": {
+  "value": 137.555,
+  "derivation": "keepout_x0 - (via_r + clearance_floor) = 137.93 - (0.175 + 0.20)",
+  "note": "single determinate value per line (NO search) - this part of the drawing IS determinate"
+ },
+ "construction_attempts_machine_judged": [
+  {
+   "id": "T1",
+   "what": "move the corner via alone to x=137.555 (legs untouched)",
+   "drc_total": 196,
+   "baseline": 168,
+   "unconnected": 0,
+   "increases": {
+    "hole_clearance": 12,
+    "shorting_items": 2,
+    "items_not_allowed": 5,
+    "clearance": 7,
+    "tracks_crossing": 2
+   },
+   "why": "the vertical In5 ascent and the B.Cu run no longer meet the via"
+  },
+  {
+   "id": "T2",
+   "what": "rigidly translate both legs by dx=-1.93mm (determinate, no search)",
+   "drc_total": 201,
+   "baseline": 168,
+   "unconnected": 2,
+   "increases": {
+    "clearance": 9,
+    "items_not_allowed": 5
+   },
+   "why": "the shifted vertical column is occupied by other-net copper"
+  }
+ ],
+ "conclusion": "the fix is NOT a translation: the vertical In5 ascent must be RE-ROUTED through the column (the column is occupied). Producing that path = a maze-router construction on the scheme layer (allowed: the scheme step CONSTRUCTS the path and freezes the points; the construction step then replays them). Two of two determinate translations are machine-FAIL, so per the hard gate the drawing is NOT presented as complete.",
+ "next_bounded_step": "run the exact-gate maze router (0.20 floor + C22 pour polygons) to construct: (a) the B.Cu horizontal run ending at x=137.555, (b) the vertical ascent at x=137.555 from the run up to the connector-side endpoint, then freeze the resulting point list as the drawing's per-line `tail_points` + `legs`; verify with kicad-cli DRC (<=168, no class up, unconnected 0).",
+ "capability_C21": {
+  "registered_by": "#K2-346 sec.6",
+  "asset": "add the mechanical corner-keepout (four 6x6 squares + their foreign-net pours) to the scheme gate P1-P7 / generator S1-S8",
+  "close_when": "next layout item emits a per-corner keepout PASS reading"
+ },
+ "discipline": "zero board changes; zero SPEC bumps; tool written + smoke-run; no parameter sweep (the two attempts are DIFFERENT method constructions, both recorded, both FAIL, no repeat)",
+ "OWNER-ITEMS": 0
+}
