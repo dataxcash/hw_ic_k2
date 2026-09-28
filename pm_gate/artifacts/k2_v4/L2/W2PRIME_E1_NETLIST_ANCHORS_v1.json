@@ -1,0 +1,80 @@
+{
+ "artifact": "k2_w2prime_e1_netlist_anchors_v1",
+ "ts": "2026-09-28",
+ "authority": "#K2-348 W2-prime E1 (netlist half) - verbatim anchors so the edit is mechanical",
+ "netlist_schema": {
+  "file": "hw/data/k2_sch.errata-3.yaml",
+  "sha16": "5dc7b82a901d11c8",
+  "top_level_keys": {
+   "symbols": 14,
+   "nets": 3386,
+   "sheets": 3974,
+   "strap_intents": 4273,
+   "links": 4342
+  },
+  "placements_live_under": "sheets[].placements (verified earlier: J9@4141 / J6@4159 / J11@4165)"
+ },
+ "net_anchors_verbatim": {
+  "I2C2_SCL": {
+   "net_line": 3601,
+   "remove_line": 3602,
+   "remove_text": "  - J11/EC_SCL",
+   "replace_with": "  - TP_EC_SCL/1"
+  },
+  "I2C2_SDA": {
+   "net_line": 3606,
+   "remove_line": 3607,
+   "remove_text": "  - J11/EC_SDA",
+   "replace_with": "  - TP_EC_SDA/1"
+  },
+  "PWR_CTRL_OUT": {
+   "net_line": 3627,
+   "remove_line": 3629,
+   "remove_text": "  - J6/PWR_BTN#",
+   "WARNING": "this is the LAST entry of its block (next line 3630 starts GPIO_LED) - delete the line, keep the YAML valid",
+   "replace_with": "  - TP_PWR_BTN/1"
+  },
+  "UART_TX": {
+   "net_line": 3636,
+   "remove_line": 3638,
+   "remove_text": "  - J9/TX",
+   "replace_with": "  - TP_UART_TX/1"
+  },
+  "UART_RX": {
+   "net_line": 3639,
+   "remove_line": 3641,
+   "remove_text": "  - J9/RX",
+   "replace_with": "  - TP_UART_RX/1"
+  },
+  "P3V3_AUX": {
+   "net_line": 3690,
+   "remove_line": 3695,
+   "remove_text": "  - J11/EC_3V3",
+   "replace_with": "  - TP_EC_3V3/1"
+  }
+ },
+ "refmap": {
+  "file": "hw/lib/ForgeOS.refmap.json",
+  "n_refs": 54,
+  "lib": "ForgeOS.pretty",
+  "note": "E1 adds 6 TP refs -> n_refs 60; the entries must use the SAME ref names as the netlist replacements above"
+ },
+ "remaining_unknown_named": {
+  "id": "U1",
+  "what": "the schema of a symbol entry under 'symbols:' (line 14)",
+  "evidence": "my probe grep for '^  - name: ' under symbols returned NOTHING, so the symbols block uses a different key/indent than I assumed",
+  "rule": "DO NOT GUESS - read the symbols block first (bounded read-only step), then write the TP symbol (footprint ForgeOS:TP_1.0mm, one pin) consistent with that schema",
+  "why_it_matters": "the generator's parse_yaml() builds the ref->symbol->footprint map from symbols + sheets.placements; a malformed symbol entry breaks the chain (and the repo's own verify gates)"
+ },
+ "edit_plan_E1": {
+  "parts": [
+   "(a) sheets.placements: delete J9/J6/J11 blocks, add 6 TP placements (ref/symbol/card)",
+   "(b) nets: the six replacements above (pin ref -> TPn/1)",
+   "(c) symbols: add the TP symbol once U1 is resolved",
+   "(d) refmap: add the 6 TP refs -> TP_1.0mm"
+  ],
+  "verification_available": "the repo's own pre-commit gates (project_sch_coverage / sch_structural / netlist_connect / bom_consistent) run on every commit and will catch a malformed netlist edit - that is the built-in oracle for E1"
+ },
+ "gates": "zero edits this turn; zero surgery; frozen four 4/4; the footprint asset (R896) stays inert until this edit",
+ "OWNER-ITEMS": 0
+}
