@@ -1,0 +1,127 @@
+{
+ "artifact": "k2_frames_first_census_v1",
+ "ts": "2026-09-28",
+ "board": "hw/k2_v4_8L.l14.kicad_pcb",
+ "authority": "#K2-348 W2' step 1: frames layer (four corner 6x6 squares as HARD placement inputs) + the constructive criterion baseline",
+ "constructive_criterion": "each square must contain NO copper and NO hole BY CONSTRUCTION (not sculpted); measured here as: tracks/vias/pads/zone-fill hits == 0",
+ "squares": {
+  "H3_TL": {
+   "centre": [
+    25.0713,
+    35.0713
+   ],
+   "bbox": [
+    22.071,
+    32.071,
+    28.071,
+    38.071
+   ],
+   "tracks_in": {},
+   "vias_in": {},
+   "pads_in": {},
+   "zone_fill_net_hits": {
+    "GND": 30,
+    "MCU_VDD": 2,
+    "12V_IN": 7
+   },
+   "holes_in": [
+    "H3"
+   ],
+   "constructive_PASS": false
+  },
+  "H2_TR": {
+   "centre": [
+    140.9287,
+    35.0713
+   ],
+   "bbox": [
+    137.929,
+    32.071,
+    143.929,
+    38.071
+   ],
+   "tracks_in": {},
+   "vias_in": {},
+   "pads_in": {},
+   "zone_fill_net_hits": {
+    "GND": 30,
+    "P3V3": 10
+   },
+   "holes_in": [
+    "H2"
+   ],
+   "constructive_PASS": false
+  },
+  "H1_BL": {
+   "centre": [
+    25.0713,
+    76.9287
+   ],
+   "bbox": [
+    22.071,
+    73.929,
+    28.071,
+    79.929
+   ],
+   "tracks_in": {},
+   "vias_in": {},
+   "pads_in": {},
+   "zone_fill_net_hits": {
+    "GND": 27,
+    "MCU_VDD": 9
+   },
+   "holes_in": [
+    "H1"
+   ],
+   "constructive_PASS": false
+  },
+  "H4_BR": {
+   "centre": [
+    140.9287,
+    76.9287
+   ],
+   "bbox": [
+    137.929,
+    73.929,
+    143.929,
+    79.929
+   ],
+   "tracks_in": {
+    "PCIE_DN4_N": 2,
+    "PCIE_DN5_P": 2
+   },
+   "vias_in": {
+    "PCIE_DN4_N": 1,
+    "PCIE_DN5_P": 1
+   },
+   "pads_in": {},
+   "zone_fill_net_hits": {
+    "GND": 30,
+    "P3V3": 10
+   },
+   "holes_in": [
+    "H4"
+   ],
+   "constructive_PASS": false
+  }
+ },
+ "summary": {
+  "passing": [],
+  "failing": [
+   "H3_TL",
+   "H2_TR",
+   "H1_BL",
+   "H4_BR"
+  ],
+  "square_convention": "bbox = [x0, y0, x1, y1]; hit test uses x0<=x<=x1 and y0<=y<=y1 (R884 fix: the first version mis-indexed the bbox)",
+  "note": "H4's square is measured at its frames-first TARGET position; today's board has H4 at (140.8,76.8) so its own keepout square is elsewhere (M-ENG-HOLE-KEEPOUT-STALE, H4 branch)"
+ },
+ "OWNER-ITEMS": 0,
+ "crisp_findings": {
+  "1_three_corners_have_NO_routed_copper": "H3_TL / H2_TR / H1_BL each contain 0 tracks, 0 vias, 0 pads - only copper POURS (GND/MCU_VDD/P3V3/12V_IN fills). So three of four corners need NO re-route at all: enforcing the hole keepout at pour time (the keepout already says copperpour not_allowed -> a zone REFILL with the keepout in place) should vacate them by construction.",
+  "2_H4_is_the_ONLY_corner_with_routed_copper": "exactly 2 tracks + 2 vias, and the nets are exactly PCIE_DN4_N (2) and PCIE_DN5_P (2) - the two lanes this whole episode has been about. Nothing else lives there.",
+  "3_holes_are_already_at_the_corner_positions": "H3/H2/H1 landed in l14 and H4 (140.8,76.8) falls inside its frames-first square; the mechanical frame is therefore nearly in place - the work left is the COPPER, and for H4 that means the FAN-OUT DIRECTION, not surgery.",
+  "4_hence_W2_prime_is_smaller_than_it_looked": "frames-first: (a) refill the zones with the four keepouts in force (constructive pour exclusion) for the three clean corners; (b) re-plan the DN4_N/DN5_P escape direction at the PLACEMENT level so the bottom-right corner is never routed into; (c) then all four squares pass constructively."
+ },
+ "method_note": "census = point-in-polygon sampling of every filled zone outline (0.5 mm grid) + segment sampling (0.05 mm) for tracks + exact tests for vias/pads/holes; read-only"
+}
