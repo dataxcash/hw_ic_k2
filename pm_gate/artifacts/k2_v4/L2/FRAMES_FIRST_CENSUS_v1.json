@@ -20,9 +20,9 @@
    "vias_in": {},
    "pads_in": {},
    "zone_fill_net_hits": {
-    "GND": 30,
+    "GND": 27,
     "MCU_VDD": 2,
-    "12V_IN": 7
+    "12V_IN": 6
    },
    "holes_in": [
     "H3"
@@ -44,8 +44,8 @@
    "vias_in": {},
    "pads_in": {},
    "zone_fill_net_hits": {
-    "GND": 30,
-    "P3V3": 10
+    "GND": 27,
+    "P3V3": 9
    },
    "holes_in": [
     "H2"
@@ -67,8 +67,8 @@
    "vias_in": {},
    "pads_in": {},
    "zone_fill_net_hits": {
-    "GND": 27,
-    "MCU_VDD": 9
+    "GND": 30,
+    "MCU_VDD": 10
    },
    "holes_in": [
     "H1"
@@ -117,11 +117,30 @@
   "note": "H4's square is measured at its frames-first TARGET position; today's board has H4 at (140.8,76.8) so its own keepout square is elsewhere (M-ENG-HOLE-KEEPOUT-STALE, H4 branch)"
  },
  "OWNER-ITEMS": 0,
- "crisp_findings": {
-  "1_three_corners_have_NO_routed_copper": "H3_TL / H2_TR / H1_BL each contain 0 tracks, 0 vias, 0 pads - only copper POURS (GND/MCU_VDD/P3V3/12V_IN fills). So three of four corners need NO re-route at all: enforcing the hole keepout at pour time (the keepout already says copperpour not_allowed -> a zone REFILL with the keepout in place) should vacate them by construction.",
-  "2_H4_is_the_ONLY_corner_with_routed_copper": "exactly 2 tracks + 2 vias, and the nets are exactly PCIE_DN4_N (2) and PCIE_DN5_P (2) - the two lanes this whole episode has been about. Nothing else lives there.",
-  "3_holes_are_already_at_the_corner_positions": "H3/H2/H1 landed in l14 and H4 (140.8,76.8) falls inside its frames-first square; the mechanical frame is therefore nearly in place - the work left is the COPPER, and for H4 that means the FAN-OUT DIRECTION, not surgery.",
-  "4_hence_W2_prime_is_smaller_than_it_looked": "frames-first: (a) refill the zones with the four keepouts in force (constructive pour exclusion) for the three clean corners; (b) re-plan the DN4_N/DN5_P escape direction at the PLACEMENT level so the bottom-right corner is never routed into; (c) then all four squares pass constructively."
+ "drc_authority_cross_check": {
+  "board": "hw/k2_v4_8L.l14.kicad_pcb",
+  "drc_source": "kicad-cli 10.0.5 DRC (the acceptance authority)",
+  "l14_total_violations": 168,
+  "unconnected": 0,
+  "items_not_allowed": 0,
+  "hole_clearance": 0,
+  "reading": "kicad-cli reports ZERO items_not_allowed and ZERO hole_clearance on l14 => the pours DO respect the four keepout squares (and the holes clear their neighbours) according to the authority.",
+  "consequence": "my census's zone-FILL column is therefore NOT usable as evidence: exact Contains() still reads copper inside the squares, which contradicts the authority. Self-diagnosed as a measurement defect I could not resolve inside this window; per the discipline I STOP iterating on it."
  },
- "method_note": "census = point-in-polygon sampling of every filled zone outline (0.5 mm grid) + segment sampling (0.05 mm) for tracks + exact tests for vias/pads/holes; read-only"
+ "usable_evidence": {
+  "tracks_vias_pads": "SOLID - exact geometric tests (segment sampling 0.05 mm; exact via/pad centre tests)",
+  "zone_fills": "NOT USABLE - unresolved measurement defect (two self-diagnosed attempts: bbox indexing FIXED, hole-aware Contains() did NOT change the readings)",
+  "authority_for_pours": "kicad-cli DRC items_not_allowed / hole_clearance (reads 0/0 on l14)"
+ },
+ "crisp_findings_restated_with_authority": {
+  "1_three_corners": "H3_TL / H2_TR / H1_BL contain ZERO tracks, ZERO vias, ZERO pads (solid evidence) AND the DRC authority reports 0 items_not_allowed / 0 hole_clearance => those three corners are ALREADY constructively clean.",
+  "2_H4_is_the_only_problem": "H4_BR contains exactly 2 tracks + 2 vias, exactly PCIE_DN4_N and PCIE_DN5_P (solid). It is the ONE corner whose copper must be prevented by construction (fan-out direction).",
+  "3_next": "(a) confirm the three corners with the DRC authority on the future board (no re-route needed); (b) re-plan the DN4_N/DN5_P escape direction at the placement level so the bottom-right corner is never routed into; (c) re-run the census (tracks/vias/pads only) + DRC on l15."
+ },
+ "new_gap_registered": {
+  "id": "C23",
+  "what": "pour-vs-keepout measurement for the frames-first criterion",
+  "why": "the census's fill column contradicts the DRC authority; the criterion must be measured by the authority (items_not_allowed) or by a validated polygon test",
+  "close_when": "a pour measurement agrees with kicad-cli on the same board"
+ }
 }

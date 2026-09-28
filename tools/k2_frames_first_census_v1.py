@@ -55,11 +55,10 @@ def main():
                 pl = z.GetFilledPolysList(L)
             except Exception:
                 continue
-            for i in range(pl.OutlineCount()):
-                c = pl.COutline(i)
-                pts = [(P.ToMM(c.CPoint(j).x), P.ToMM(c.CPoint(j).y)) for j in range(c.PointCount())]
-                if len(pts) >= 3:
-                    fills.append((zn, L, pts))
+            # NOTE: a pour with a keepout is ONE outer outline PLUS inner contours ("holes").  Testing only the
+            # outer contour reports copper where there is none (diagnosed).  Keep the polyset handle and let KiCad
+            # answer exactly with Contains(), which accounts for holes.
+            fills.append((zn, L, pl))
     res = {"artifact": "k2_frames_first_census_v1", "ts": "2026-09-28", "board": a.board,
            "authority": "#K2-348 W2' step 1: frames layer (four corner 6x6 squares as HARD placement inputs) + the "
                         "constructive criterion baseline",
@@ -93,12 +92,16 @@ def main():
                 if x0 <= x <= x1_ and y0 <= y <= y1_:
                     pad[fp.GetReference()] = pad.get(fp.GetReference(), 0) + 1
         fl = {}
-        for (zn, L, pts) in fills:
+        for (zn, L, pl) in fills:
             gx = x0
             while gx <= x1_:
                 gy = y0
                 while gy <= y1_:
-                    if pt_in_poly(gx, gy, pts):
+                    try:
+                        hit = pl.Contains(P.VECTOR2I(int(round(gx * 1e6)), int(round(gy * 1e6))))
+                    except Exception:
+                        hit = False
+                    if hit:
                         nm2 = nets.get(zn, "")
                         fl[nm2] = fl.get(nm2, 0) + 1
                         break
