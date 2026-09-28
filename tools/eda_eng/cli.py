@@ -18,6 +18,21 @@ def _emit(o, path=None, code=0):
     return code
 
 
+# #K2-388 sec.7.3: the C34 (sec.20) prerequisite gate must guard the door ACTUALLY used. Extracted so
+# every gated chain hits the SAME check. Per-chain default capability id:
+DEFAULT_GATE_CAPABILITY = {"c17v1": "A_prime_C33_three_questions",
+                           "wipe_resolve": "A_double_prime_placement_pour"}
+
+
+def _sec20_gate(capability):
+    """C34（#K2-375 §五）§20 前置闸：新能力窗口开跑前，账册须载该能力的 §20 三问。"""
+    import importlib.util
+    _path = os.path.join(ROOT, "tools", "k2_new_capability_gate_v1.py")
+    _spec = importlib.util.spec_from_file_location("k2_new_capability_gate_v1", _path)
+    _g = importlib.util.module_from_spec(_spec); _spec.loader.exec_module(_g)
+    return _g.check(capability)
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(prog="eda_eng", description="#K2-358 product CLI (LLM-free)")
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -33,8 +48,9 @@ def main(argv=None):
     p.add_argument("--chain", default="product", choices=["product", "legacy", "c17v1", "wipe_resolve"],
                    help="product = the BLOCK chain; c17v1 = COPY the in-repo product (A-prime's authorised method, "
                         "guarded by the C34 sec.20 gate); legacy = the old composed pipeline")
-    p.add_argument("--capability", default="A_prime_C33_three_questions",
-                   help="C34 gate capability id (only the c17v1 chain uses it)")
+    p.add_argument("--capability", default=None,
+                   help="C34 gate capability id (defaults per chain: c17v1 -> A_prime_C33_three_questions; "
+                        "wipe_resolve -> A_double_prime_placement_pour)")
     p.add_argument("--from-placed", default=None,
                    help="c17v1: read the per-part map back from this (gate-validated) board - step-1 alignment")
     p.add_argument("--max-nets", type=int, default=None)
@@ -144,6 +160,13 @@ def main(argv=None):
             refs = preset.get("refs") or []
             delta = preset.get("delta_mm") or [0.0, 0.0]
             W = a.work or os.path.join("/tmp/opencode/eda_eng", "exam" + a.which)
+            # C34 §20 前置闸（#K2-388 §七.3）：守**实际开跑的那道门** —— c17v1 与 wipe_resolve 开跑前先过此闸
+            gate = None
+            if a.chain in DEFAULT_GATE_CAPABILITY:
+                gate = _sec20_gate(a.capability or DEFAULT_GATE_CAPABILITY[a.chain])
+                if gate["verdict"] != "PASS":
+                    return _emit({"artifact": "eda_eng_exam", "exam": a.which, "chain": a.chain,
+                                  "state": "REFUSED_BY_SEC20_GATE", "gate": gate}, None, 2)
             pr = regen_mod.preflight(a.which, W)
             if not pr["ok"]:
                 return _emit({"artifact": "eda_eng_exam", "exam": a.which, "state": "REFUSED_BY_PREFLIGHT",
@@ -160,19 +183,13 @@ def main(argv=None):
                 rp = regen_mod.wipe_resolve_chain(rect, mvv, W, members)
                 out = {"artifact": "eda_eng_exam", "exam": a.which, "chain": "wipe_resolve",
                        "entry": "eda_eng exam A --run --chain wipe_resolve", "run_count": "1/1",
+                       "gate": gate,
                        "route": rp, "state": rp.get("state"), "criteria": (rp.get("M4") or {}).get("criteria"),
                        "verdict": (rp.get("M4") or {}).get("verdict")}
                 return _emit(out, None, 0 if out["verdict"] == "PASS" else 1)
             if a.chain == "c17v1":
-                # A′ 的**授权路径**（#K2-376 §四.3）：抄仓内成品 C17 v1；先过 C34 闸（守**实际开跑的门**）
-                import importlib.util
-                _spec = importlib.util.spec_from_file_location(
-                    "k2_new_capability_gate_v1", os.path.join(ROOT, "tools", "k2_new_capability_gate_v1.py"))
-                _g = importlib.util.module_from_spec(_spec); _spec.loader.exec_module(_g)
-                gr = _g.check(a.capability)
-                if gr["verdict"] != "PASS":
-                    return _emit({"artifact": "eda_eng_exam", "exam": a.which, "state": "REFUSED_BY_SEC20_GATE",
-                                  "gate": gr}, None, 2)
+                # A′ 的**授权路径**（#K2-376 §四.3）：抄仓内成品 C17 v1；C34 闸已在入口处命中（见上）
+                gr = gate
                 aps = json.load(open(os.path.join(L2, "EXAM_A_PRIME_SCENARIO_v1.json"), encoding="utf-8"))
                 rect = aps["scenario"]["frame_rect"]
                 members = aps["scenario"]["members"]

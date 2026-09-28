@@ -793,13 +793,30 @@ def relocate_block_chain(rect, delta, work, members=None, clearance=None, max_jo
             hy0 = min(hy0, v["at"][1]); hy1 = max(hy1, v["at"][1])
     hs_bbox = [round(hx0, 4), round(hy0, 4), round(hx1, 4), round(hy1, 4)]
     hs_ok = (hx0 > ENV[2]) or (hx1 < ENV[0]) or (hy0 > ENV[3]) or (hy1 < ENV[1])   # 包络与 HS 铜不相交
+    # C36（#K2-388 §七.2）：本链亦须在**实际执行的路径**上逐行读数 —— 补 C8（成员零越框）/ C9（几何摘要）
+    _inside = []
+    import pcbnew as _P
+    _bb = _P.LoadBoard(final)
+    _want = set(cen["members"])
+    for _fp in _bb.GetFootprints():
+        if _fp.GetReference() not in _want:
+            continue
+        for _pd in _fp.Pads():
+            _pos = _pd.GetPosition(); _pt = [_P.ToMM(_pos.x), _P.ToMM(_pos.y)]
+            if not (rect[0] - 1e-6 <= _pt[0] <= rect[2] + 1e-6 and rect[1] - 1e-6 <= _pt[1] <= rect[3] + 1e-6):
+                _inside.append({"ref": _fp.GetReference(), "pad": _pd.GetNumber(),
+                                "at": [round(_pt[0], 4), round(_pt[1], 4)]})
     extra = {"C6_outside_copper_unchanged": {"diff": c6["diff"], "pass": c6["equal"], "envelope": ENV,
                                              "envelope_margin_mm": envelope_margin,
                                              "hs_clear": hs_ok,
                                              "scope": "tracks+vias outside the declared action envelope"},
              "C6_guard_hs_outside_envelope": {"pass": hs_ok, "envelope": ENV, "hs_copper_bbox": hs_bbox,
                                               "rule": "the declared action envelope must not reach the HS fanout copper"},
-             "C7_hs_fanout_untouched": {"diff": c7["diff"], "pass": c7["equal"], "nets": HS_FANOUT_NETS}}
+             "C7_hs_fanout_untouched": {"diff": c7["diff"], "pass": c7["equal"], "nets": HS_FANOUT_NETS},
+             "C8_members_inside_frame": {"violations": _inside, "pass": not _inside,
+                                         "authority": "#K2-388 sec.7.2: every exam chain path must enumerate the ECO nine rows"},
+             "C9_geometric_digest": {"before": _blk.geometric_digest(B0)["sha256_16"],
+                                     "after": _blk.geometric_digest(final)["sha256_16"], "pass": True}}
 
     # ── M4：DRC + 判卷（C1–C5 + C6/C7）
     dj = os.path.join(work, "s5_drc.json")
@@ -808,7 +825,7 @@ def relocate_block_chain(rect, delta, work, members=None, clearance=None, max_jo
     if not os.path.isfile(dj):
         return {"state": "S6_DRC_FAILED", "chain": chain, "census": cen, "move": mv, "board": final}
     ref_drc = os.path.join(ROOT, "pm_gate/artifacts/k2_v4/L2/REROUTE_EXAM_REF_L14_DRC.json")
-    v = _vf.judge(final, dj, B0, ref_drc, extra=extra)
+    v = _vf.judge(final, dj, B0, ref_drc, extra=extra, required_rows=_vf.LOCKED_EXAM_ROWS)
     delta_cls = _vf.class_delta(dj, ref_drc)
     chain.append({"stage": "M4_judge", "judging_table": "ECO-K2-0002 sec.6 (C1-C5 + C6/C7)",
                   "verdict": v["verdict"], "geometry_delta": delta_cls["total_delta"],
@@ -990,7 +1007,7 @@ def relocate_relative_chain(rect, moves, work, members, clearance=None, pitch=0.
     if not os.path.isfile(dj):
         return {"state": "S6_DRC_FAILED", "chain": chain, "board": final}
     ref_drc = os.path.join(ROOT, "pm_gate/artifacts/k2_v4/L2/REROUTE_EXAM_REF_L14_DRC.json")
-    v = _vf.judge(final, dj, B0, ref_drc, extra=extra)
+    v = _vf.judge(final, dj, B0, ref_drc, extra=extra, required_rows=_vf.LOCKED_EXAM_ROWS)
     delta_cls = _vf.class_delta(dj, ref_drc)
     chain.append({"stage": "M4_judge", "verdict": v["verdict"], "geometry_delta": delta_cls["total_delta"],
                   "C6": c6["equal"], "C7": c7["equal"], "C8": not inside})
@@ -1094,7 +1111,7 @@ def relocate_relative_c17v1(rect, moves, work, members, clearance=None, report_e
                                          "authority": "#K2-377 F3: the ECO-K2-0004 sec.6 table has NINE rows; a missing row is fail-closed"},
              "C9_geometric_digest": {"before": _blk.geometric_digest(B0)["sha256_16"],
                                      "after": _blk.geometric_digest(final)["sha256_16"], "pass": True}}
-    v = _vf.judge(final, dj, B0, ref_drc, extra=extra)
+    v = _vf.judge(final, dj, B0, ref_drc, extra=extra, required_rows=_vf.LOCKED_EXAM_ROWS)
     return {"state": "GRADED", "chain": chain, "method": "c17v1", "bound": bnd_out, "board": final,
             "report": (json.load(open(rep, encoding="utf-8")) if os.path.isfile(rep) else None),
             "M4": v, "class_delta": _vf.class_delta(dj, ref_drc),
@@ -1245,14 +1262,30 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15):
     _raw([_cli_bin(), "pcb", "drc", "--format", "json", "--severity-all", "-o", dj, final])
     c6 = _blk.geometry_equal(_blk.outside_geometry(final, rect), _blk.outside_geometry(B0, rect))
     c7 = _blk.geometry_equal(_blk.net_geometry(final, HS_FANOUT_NETS), _blk.net_geometry(B0, HS_FANOUT_NETS))
+    # C36（#K2-388 §七.2）：A″ 链必须在**实际执行的路径**上逐行读数 —— 补 C8（成员零越框）
+    _inside = []
+    import pcbnew as _P
+    _bb = _P.LoadBoard(final)
+    _want = set(members)
+    for _fp in _bb.GetFootprints():
+        if _fp.GetReference() not in _want:
+            continue
+        for _pd in _fp.Pads():
+            _pos = _pd.GetPosition(); _pt = [_P.ToMM(_pos.x), _P.ToMM(_pos.y)]
+            if not (rect[0] - 1e-6 <= _pt[0] <= rect[2] + 1e-6 and rect[1] - 1e-6 <= _pt[1] <= rect[3] + 1e-6):
+                _inside.append({"ref": _fp.GetReference(), "pad": _pd.GetNumber(),
+                                "at": [round(_pt[0], 4), round(_pt[1], 4)]})
     extra = {"C6_outside_copper_unchanged": {"diff": c6["diff"], "pass": c6["equal"],
                                              "scope": "tracks+vias outside the wiped block frame"},
              "C7_hs_fanout_untouched": {"diff": c7["diff"], "pass": c7["equal"], "nets": HS_FANOUT_NETS},
+             "C8_members_inside_frame": {"violations": _inside, "pass": not _inside,
+                                         "authority": "#K2-388 sec.7.2: the A-double-prime chain must read all nine ECO rows"},
              "C9_geometric_digest": {"before": _blk.geometric_digest(B0)["sha256_16"],
                                      "after": _blk.geometric_digest(final)["sha256_16"], "pass": True}}
-    v = _vf.judge(final, dj, B0, ref_drc, extra=extra)
+    v = _vf.judge(final, dj, B0, ref_drc, extra=extra, required_rows=_vf.LOCKED_EXAM_ROWS)
     d = _vf.class_delta(dj, ref_drc)
-    chain.append({"stage": "M4_judge", "verdict": v["verdict"], "geometry_delta": d["total_delta"]})
+    chain.append({"stage": "M4_judge", "verdict": v["verdict"], "geometry_delta": d["total_delta"],
+                          "C8": not _inside})
     return {"state": "GRADED", "chain": chain, "method": "wipe_resolve", "wipe": {
                 "deleted_segments": mp["deleted_segments"], "deleted_vias": mp["deleted_vias"],
                 "outside_halves_kept": mp["outside_halves_kept"], "n_ports": sum(len(x) for x in mp["ports"].values())},

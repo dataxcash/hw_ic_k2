@@ -685,15 +685,64 @@ class T(unittest.TestCase):
         self.assertIn('not new_classes', seg, "the pass condition must use the caliber-filtered classes")
         self.assertIn('"excluded_new_classes": excluded_new', seg, "excluded classes must be REPORTED, never hidden")
 
-    def test_C36_the_judging_table_of_the_eco_is_read_row_by_row(self):
-        """C36（#K2-377 §五 F3）：执行入口的判卷必须覆盖 ECO-K2-0004 §6 **全部九行**（含 C8）。"""
+    def test_C36_the_eco_table_is_a_nine_row_lock(self):
+        """C36（#K2-377 F3 / #K2-388 §五）：ECO-K2-0004 §6 的判卷表是**九行锁**。"""
         eco = open(os.path.join("docs", "ECO", "ECO-K2-0004-reroute-engine-exam-A-prime.md"), encoding="utf-8").read()
-        rows = [r for r in ("C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9") if ("| **%s**" % r) in eco or ("| %s " % r) in eco]
+        rows = [r for r in ("C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9")
+                if ("| **%s**" % r) in eco or ("| %s " % r) in eco]
         self.assertEqual(len(rows), 9, "the ECO must carry nine rows; found %s" % rows)
+
+    def test_C36_each_exam_chain_path_enumerates_the_nine_rows(self):
+        """C36 复发修正（#K2-388 §七.2）：判卷必须在**实际执行的链路径**上逐行读数 ——
+        不是整文件 grep（旧测试因别处含 `C8` 字样而**误绿**）。逐链用 AST 取**函数段**断言：
+        C6/C7/C8/C9 四行在**该链自己**的路径上产出，且判卷调用带 `required_rows`（缺行 ⇒ fail-closed）。"""
+        import ast
         src = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
-        for k in ("C6_outside_copper_unchanged", "C7_hs_fanout_untouched",
-                  "C8_members_inside_frame", "C9_geometric_digest"):
-            self.assertIn(k, src, "the product-path judging must emit %s" % k)
+        tree = ast.parse(src)
+        needed = ("C6_outside_copper_unchanged", "C7_hs_fanout_untouched",
+                  "C8_members_inside_frame", "C9_geometric_digest")
+        for name in ("relocate_block_chain", "relocate_relative_chain",
+                     "relocate_relative_c17v1", "wipe_resolve_chain"):
+            fn = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == name)
+            seg = "\n".join(src.splitlines()[fn.lineno - 1:fn.end_lineno])
+            self.assertIn("_vf.judge(", seg, "%s must grade" % name)
+            for k in needed:
+                self.assertIn(k, seg, "%s must emit %s on its OWN path" % (name, k))
+            self.assertIn("required_rows=_vf.LOCKED_EXAM_ROWS", seg,
+                          "%s must pass required_rows (missing row => fail-closed)" % name)
+
+    def test_C36_a_missing_row_is_fail_closed_at_runtime(self):
+        """运行期回归（先 RED 后 GREEN）：给了 required_rows 时，缺行 ⇒ verdict=FAIL 且 missing 列出该行。"""
+        r = verify.judge(REF, REF_DRC, REF, REF_DRC, required_rows=verify.LOCKED_EXAM_ROWS)
+        self.assertEqual(r["verdict"], "FAIL")
+        self.assertIn("C8_members_inside_frame", r["rows_completeness"]["missing"])
+        extra = {"C6_outside_copper_unchanged": {"diff": 0, "pass": True},
+                 "C7_hs_fanout_untouched": {"diff": 0, "pass": True},
+                 "C8_members_inside_frame": {"violations": [], "pass": True},
+                 "C9_geometric_digest": {"pass": True}}
+        r2 = verify.judge(REF, REF_DRC, REF, REF_DRC, extra=extra, required_rows=verify.LOCKED_EXAM_ROWS)
+        self.assertEqual(r2["rows_completeness"]["missing"], [])
+        self.assertEqual(len(r2["criteria"]), 9)
+        r3 = verify.judge(REF, REF_DRC, REF, REF_DRC)   # legacy call unchanged
+        self.assertNotIn("rows_completeness", r3)
+
+    def test_C34_the_gate_guards_the_wipe_resolve_entry(self):
+        """#K2-388 §七.3：C34 §20 闸须守**实际开跑的那道门** —— wipe_resolve 入口也须先过闸。"""
+        import importlib.util
+        src = open(os.path.join("tools", "eda_eng", "cli.py"), encoding="utf-8").read()
+        self.assertIn('"wipe_resolve": "A_double_prime_placement_pour"', src,
+                      "the wipe_resolve entry must declare its gate capability")
+        self.assertIn("REFUSED_BY_SEC20_GATE", src)
+        self.assertLess(src.index("_sec20_gate(a.capability or DEFAULT_GATE_CAPABILITY"),
+                        src.index("regen_mod.preflight(a.which, W)"),
+                        "the sec.20 gate must bite BEFORE the run starts")
+        led = json.load(open(os.path.join(L2, "PRODUCT_THREE_QUESTIONS_LEDGER_v1.json"), encoding="utf-8"))
+        self.assertIn("A_double_prime_placement_pour", led)
+        spec = importlib.util.spec_from_file_location(
+            "k2_new_capability_gate_v1", os.path.join("tools", "k2_new_capability_gate_v1.py"))
+        g = importlib.util.module_from_spec(spec); spec.loader.exec_module(g)
+        self.assertEqual(g.check("A_double_prime_placement_pour")["verdict"], "PASS")
+        self.assertEqual(g.check("__no_such_capability__")["verdict"], "REFUSED")
 
     def test_C34_moves_from_the_gate_board_are_read_back_verbatim(self):
         """口径对齐（#K2-375 §四.3 secondary）：逐件位移图可由**闸验过的板**读回。同板对照 ⇒ 零位移。"""

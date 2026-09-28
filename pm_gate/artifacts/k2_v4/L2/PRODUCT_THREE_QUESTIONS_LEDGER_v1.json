@@ -92,5 +92,38 @@
   },
   "process_note": "answered BEFORE the implementation (the R992 error is not repeated); the gate at the command door enforces the entry's presence.",
   "OWNER-ITEMS": 0
+ },
+ "A_double_prime_placement_pour": {
+  "ts": "2026-09-29",
+  "authority": "#K2-388 sec.7.3/7.4: the C34 sec.20 gate is now wired onto the wipe_resolve entry; this entry is its prerequisite (the two edges the A-double-prime route must handle).",
+  "scope": "the capability under test by `exam A --run --chain wipe_resolve` = (i) handle a POST-MOVE PAD-to-PAD solder-mask bridge as a PLACEMENT consequence, (ii) handle POUR ISLANDS left by the post-move wipe+refill - as deterministic, non-search edges.",
+  "Q1_same_kind_product_exists": {
+   "in_repo": "YES - (a) the pour stage `tools/k2_p4_build_l9_v1.py --stages pour` rebuilds zones; (b) the shared DFM module `_shared/eda_core/dfm_repair.py` carries mask/sliver repair rules; (c) the in-register rule `_shared/eda_core/drc_rules.json :: solder_mask.pad_to_mask_clearance` (0.05mm) already defines the mask dam (2x = 0.10mm); (d) `tools/k2_p3_place_solver_v1.py` is the placement layer where a pad-spacing constraint belongs; (e) `kicad-cli pcb drc` ALREADY DETECTS both `isolated_copper` and `solder_mask_bridge` - detection exists, only the handling is missing.",
+   "external": "reading (not licence-reviewed here): post-route refactoring tools treat a pad-to-pad mask bridge as a PLACEMENT/DFM violation that is sent BACK to placement (or blocked by a minimum solder-mask dam/web width rule), and they dispose of orphaned pours either by removing islands or by stitching them to the net; fabs publish a minimum mask-dam width as a DFM rule.",
+   "reading": "a same-kind product EXISTS in-repo for BOTH edges (pour stage + DFM repair + the mask-dam rule + the placement solver); per sec.20.3 'a search without a copy is not research'."
+  },
+  "Q2_copyable_product_artifact": {
+   "primary_in_repo": [
+    "_shared/eda_core/dfm_repair.py (mask/sliver DFM repair - copy its RULES, not its board-wide sweep)",
+    "tools/k2_p4_build_l9_v1.py --stages pour (the pour rebuild; the place to hang a 'no island' post-condition)",
+    "_shared/eda_core/drc_rules.json :: solder_mask.pad_to_mask_clearance (the mask-dam number: 2x0.05 = 0.10mm)",
+    "tools/k2_p3_place_solver_v1.py (the placement layer - where a pad-to-foreign-pad mask-spacing constraint belongs)",
+    "tools/k2_reroute_router_floor_v1.py (the in-domain maze - the place to hand the cut stubs in as legal PORTS)"
+   ],
+   "what_the_chain_uses_today": "wipe_resolve_chain calls `move-parts` (one predicate, no taxonomy), the in-register maze with `--bound-rect`, a plain apply-batch refill, and a bounded second stitch - it never constrains the placement against the mask rule, never asserts 'no island' before landing, and derives goals across the block instead of using the cut stubs as ports.",
+   "reference_library": "/home/fila/jqdDev_2025/ic_hw/.omo/supervision/ledger/REF-CASE-LIBRARY.md (read-only; ENG must not edit the supervisor ledger). NOTE: the library's A/A1 entries are same-CHIP ROUTING products (PEX88096 / TI DS320PR1601) - they do NOT cover DFM/pour handling, so this capability's copyables are the in-repo artefacts above.",
+   "reading": "copy the MASK-DAM rule and the PLACEMENT layer (edge i) and the POUR stage + its island post-condition (edge ii); add only the missing constraints."
+  },
+  "Q3_difference_list": {
+   "what_the_in_repo_products_do_NOT_do": [
+    "PLACEMENT MASK CONSTRAINT: `k2_p3_place_solver_v1.py` does NOT consume `solder_mask.pad_to_mask_clearance`, so a moved pad may land inside a FOREIGN pad's mask dam (the exact U1 pad 11/12 <-> J9 pad 1 case: a PAD-to-PAD bridge with NO copper involved - a router cannot see or fix it).",
+    "POUR ISLAND POST-CONDITION: the pour stage re-fills but does NOT assert 'every filled island still touches its net' as a LANDING PRECONDITION; the earlier attempt re-connected islands AFTER the fact and still left 3.",
+    "PER-MOVE SCOPING: `dfm_repair.py` is a board-wide after-the-fact REPAIR, not a constraint scoped to what this relocation changed.",
+    "PORT AWARENESS: the maze takes goals as pads and re-derives them across the block; it does not treat the frame-cut stubs as legal PORTS (the 22 residuals are all no-free-start/goal-node)."
+   ],
+   "consequence": "the fix must be a PLANNING/PLACEMENT constraint (deterministic mask-spacing) plus a POUR landing post-condition (refill then require no island, fail-closed) plus PORT-aware goals - three ADDITIVE edges, each regression-locked, NO board-wide repair and NO parameter search (sec.17.4 means-change, target unchanged)."
+  },
+  "process_note": "answered before the window opens; the wired gate (DEFAULT_GATE_CAPABILITY[wipe_resolve]) enforces its presence at the command door.",
+  "OWNER-ITEMS": 0
  }
 }

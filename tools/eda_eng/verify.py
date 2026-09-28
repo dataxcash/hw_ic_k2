@@ -16,6 +16,12 @@ SKEW_LIMIT = 0.15
 BASELINE_BOARD = "hw/k2_v4_8L.l14.kicad_pcb"
 BASELINE_DRC_TOTAL = 168
 BASELINE_CHAMFER = 2637
+# #K2-388 sec.7.2 (C36 recurrence): the ECO-K2-0004 sec.6 exam table is a NINE-ROW LOCK, and a chain must
+# enumerate EVERY row ON ITS ACTUAL EXECUTED PATH. A missing row is fail-closed - never a silent PASS.
+# The C6-slip happened because the old regression grepped the WHOLE file (C8 lived in another function).
+LOCKED_EXAM_ROWS = ("C1_connectivity", "C2_drc_no_new_increase", "C3_skew", "C4_chamfer_preserved",
+                    "C5_routing_changed", "C6_outside_copper_unchanged", "C7_hs_fanout_untouched",
+                    "C8_members_inside_frame", "C9_geometric_digest")
 _TABLE = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
                       "pm_gate", "artifacts", "k2_v4", "L2", "EDA_ENG_JUDGING_TABLE_v1.json")
 
@@ -87,7 +93,8 @@ def geometry(path):
 
 
 def judge(board, drc_json, ref_board, ref_drc_json,
-          drc_total=None, chamfer_ref=None, skew_limit=None, table=None, extra=None):
+          drc_total=None, chamfer_ref=None, skew_limit=None, table=None, extra=None,
+          required_rows=None):
     tbl = judging_table(table)["thresholds"]
     drc_total = tbl["C2_drc_no_new_increase"]["value"] if drc_total is None else drc_total
     chamfer_ref = tbl["C4_chamfer_preserved"]["value"] if chamfer_ref is None else chamfer_ref
@@ -131,8 +138,19 @@ def judge(board, drc_json, ref_board, ref_drc_json,
             out[k] = extra[k]
     vals = [v["pass"] for v in out.values()]
     verdict = "FAIL" if any(v is False for v in vals) else ("INCOMPLETE" if any(v is None for v in vals) else "PASS")
-    return {"criteria": out, "verdict": verdict, "thresholds_used": {
-                "drc_total": drc_total, "chamfer_ref": chamfer_ref, "skew_limit": skew_limit},
-            "judging_table": "L2/EDA_ENG_JUDGING_TABLE_v1.json (ECO-K2-0002/0003 sec.6)",
-            "rule": "PASS iff EVERY criterion holds (C1-C5 in-register + C6/C7 block-fidelity when a block chain is "
-                    "graded); None (skipped) is never a PASS (#K2-358: capability must be reproducible)"}
+    res = {"criteria": out, "verdict": verdict, "thresholds_used": {
+               "drc_total": drc_total, "chamfer_ref": chamfer_ref, "skew_limit": skew_limit},
+           "judging_table": "L2/EDA_ENG_JUDGING_TABLE_v1.json (ECO-K2-0002/0003 sec.6)",
+           "rule": "PASS iff EVERY criterion holds (C1-C5 in-register + C6/C7 block-fidelity when a block chain is "
+                   "graded); None (skipped) is never a PASS (#K2-358: capability must be reproducible)"}
+    # #K2-388 sec.7.2：判卷必须按锁定表在**实际执行的链路径**上逐行读数；缺行 = fail-closed（绝不当 PASS）
+    if required_rows is not None:
+        missing = [k for k in required_rows if k not in out]
+        res["rows_completeness"] = {"required": list(required_rows),
+                                    "present": [k for k in required_rows if k in out],
+                                    "missing": missing, "verdict_failclosed": bool(missing)}
+        if missing:
+            res["verdict"] = "FAIL"
+            res["rule"] += (" | #K2-388 sec.7.2: a MISSING required row is fail-closed => FAIL (missing: %s)"
+                            % ", ".join(missing))
+    return res
