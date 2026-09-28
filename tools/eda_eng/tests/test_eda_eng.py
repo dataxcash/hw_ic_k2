@@ -576,6 +576,26 @@ class T(unittest.TestCase):
         self.assertIn('"--bound-rect", str(a.bound_rect)', prod, "the product must FORWARD the wall to the maze")
         self.assertNotIn("bound_outside(", prod, "the product must not rely on a post-hoc restore")
 
+    def test_C380_the_apply_stage_refuses_a_plan_that_leaves_the_domain(self):
+        """#K2-380 §二.3（收尾道）：落板前框外检查 —— **新增可选参数、默认不改老行为**；
+        越域计划 fail-closed 拒收且**在 SaveBoard 之前**返回（代码级锁 · 改板调用不在测试进程内）。"""
+        src = open(os.path.join("tools", "eda_eng", "route.py"), encoding="utf-8").read()
+        seg = src[src.index("def apply_routes("):src.index("def apply_route(")]
+        self.assertIn("bound_rect=None", seg, "the domain must be an ADDITIVE optional parameter")
+        self.assertIn("REFUSED_OUT_OF_BOUND", seg)
+        self.assertLess(seg.index("REFUSED_OUT_OF_BOUND"), seg.index("P.SaveBoard"),
+                        "the check must run BEFORE the board is saved (fail-closed)")
+
+    def test_C381_C2_uses_the_same_pinned_caliber_as_class_delta(self):
+        """#K2-381 §五.2：C2 与 class_delta **同一把尺** —— 库解析类只记录、不判 FAIL；阈值不动。"""
+        src = open(os.path.join("tools", "eda_eng", "verify.py"), encoding="utf-8").read()
+        seg = src[src.index("def judge("):]
+        self.assertIn('tbl["C2_drc_no_new_increase"].get("excluded_classes"', seg,
+                      "the judge must read the pinned caliber from the table")
+        self.assertIn('geo_total = sum(v for k, v in d["classes"].items() if k not in excl)', seg)
+        self.assertIn('not new_classes', seg, "the pass condition must use the caliber-filtered classes")
+        self.assertIn('"excluded_new_classes": excluded_new', seg, "excluded classes must be REPORTED, never hidden")
+
     def test_C36_the_judging_table_of_the_eco_is_read_row_by_row(self):
         """C36（#K2-377 §五 F3）：执行入口的判卷必须覆盖 ECO-K2-0004 §6 **全部九行**（含 C8）。"""
         eco = open(os.path.join("docs", "ECO", "ECO-K2-0004-reroute-engine-exam-A-prime.md"), encoding="utf-8").read()

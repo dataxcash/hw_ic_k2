@@ -245,9 +245,26 @@ def pads_by_net(board, layer="F.Cu"):
     return out
 
 
-def apply_routes(board, plans, out, width_mm=0.2):
-    """**批量**落板（一次改板 · 子进程专用）：plans = [{net, layer, poly|segments}, ...]。"""
+def apply_routes(board, plans, out, width_mm=0.2, bound_rect=None):
+    """**批量**落板（一次改板 · 子进程专用）：plans = [{net, layer, poly|segments}, ...]。
+    `bound_rect`（#K2-380 §二.3 收尾道 · **新增可选参数，默认不改老行为**）：落板前**框外坐标检查** ——
+    任何折线/过孔越出声明域 ⇒ **fail-closed 拒收并具名**，绝不落板。"""
     import pcbnew as P
+    if bound_rect:
+        _x0, _y0, _x1, _y1 = [float(v) for v in bound_rect]
+        _eps = 1e-6
+        for _pl in plans:
+            _pts = []
+            for _poly in (_pl.get("polys") or ([_pl["poly"]] if _pl.get("poly") else [])):
+                _pts += [list(_q) for _q in _poly]
+            _pts += [list(_v["at"]) for _v in (_pl.get("vias") or [])]
+            for _q in _pts:
+                if not (_x0 - _eps <= _q[0] <= _x1 + _eps and _y0 - _eps <= _q[1] <= _y1 + _eps):
+                    return {"artifact": "eda_eng_route_apply_batch", "status": "REFUSED_OUT_OF_BOUND",
+                            "net": _pl.get("net"), "point": [round(_q[0], 4), round(_q[1], 4)],
+                            "bound_rect": [_x0, _y0, _x1, _y1],
+                            "rule": "#K2-380 sec.2.3: the work domain is a HARD bound - a plan that leaves it "
+                                    "must never land (fail-closed)"}
     b = P.LoadBoard(board)
     LM = {n: getattr(P, n.replace(".", "_")) for n in ("F.Cu", "In1.Cu", "In2.Cu", "In3.Cu", "In4.Cu",
                                                       "In5.Cu", "In6.Cu", "In7.Cu", "B.Cu")}

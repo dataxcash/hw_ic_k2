@@ -94,10 +94,21 @@ def judge(board, drc_json, ref_board, ref_drc_json,
     skew_limit = tbl["C3_skew"]["value"] if skew_limit is None else skew_limit
     d, r = drc_classes(drc_json), drc_classes(ref_drc_json)
     g, gr = geometry(board), geometry(ref_board)
-    new_classes = sorted(k for k in d["classes"] if k not in r["classes"])
+    # **C2 口径对齐**（#K2-381 §五.2 · 判据语义澄清 · 同一判据同一把尺）：
+    # `class_delta` 已按 pinned caliber 把库解析类只记录不判 FAIL ⇒ judge 的 C2 必须用**同一把尺**
+    # （否则同一条判据在两处给出不同结论：几何 195-54 与总 195）。**判据阈值不动**（≤168 · 不长新类）。
+    excl = set(tbl["C2_drc_no_new_increase"].get("excluded_classes", []))
+    geo_total = sum(v for k, v in d["classes"].items() if k not in excl)
+    geo_ref_total = sum(v for k, v in r["classes"].items() if k not in excl)
+    new_classes = sorted(k for k in d["classes"] if k not in r["classes"] and k not in excl)
+    excluded_new = sorted(k for k in d["classes"] if k not in r["classes"] and k in excl)
     out = {"C1_connectivity": {"unconnected": d["unconnected"], "pass": d["unconnected"] == 0},
-           "C2_drc_no_new_increase": {"total": d["total"], "ref_total": r["total"], "new_classes": new_classes,
-                                      "pass": d["total"] <= drc_total and not new_classes}}
+           "C2_drc_no_new_increase": {"total": geo_total, "ref_total": geo_ref_total,
+                                      "raw_total": d["total"], "raw_ref_total": r["total"],
+                                      "new_classes": new_classes,
+                                      "excluded_new_classes": excluded_new,
+                                      "pinned_caliber": sorted(excl),
+                                      "pass": geo_total <= drc_total and not new_classes}}
     if "skipped" in g or "skipped" in gr:
         out["C3_skew"] = {"skipped": (g.get("skipped") or gr.get("skipped")), "pass": None}
         out["C4_chamfer_preserved"] = {"skipped": True, "pass": None}
