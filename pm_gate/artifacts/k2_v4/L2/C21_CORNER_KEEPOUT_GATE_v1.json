@@ -1,0 +1,105 @@
+{
+ "artifact": "k2_corner_keepout_gate_v1",
+ "ts": "2026-09-28",
+ "authority": "C21 (#K2-346 sec.6, asset ordered after the H4 episode): mechanical corner-keepout gate",
+ "criterion": "per corner: 0 tracks AND 0 vias AND 0 pads (exact tests) AND 0 kicad-cli items_not_allowed for that keepout zone (pour authority)",
+ "measurement_policy": {
+  "tracks_vias_pads": "exact (segment sampling 0.05 mm; exact via/pad centre tests)",
+  "pours": "NOT my polygon code (C23: my reading contradicted the authority) - the kicad-cli items_not_allowed count per zone name is the authority"
+ },
+ "board": "hw/k2_v4_8L.l14.kicad_pcb",
+ "drc": "/tmp/k2dev/k340b/l14_drc.json",
+ "corners": {
+  "H3_TL": {
+   "hole_ref": "H3",
+   "centre": [
+    25.0713,
+    35.0713
+   ],
+   "bbox": [
+    22.071,
+    32.071,
+    28.071,
+    38.071
+   ],
+   "tracks_in": {},
+   "vias_in": {},
+   "pads_in": {},
+   "authority_items_not_allowed": 0,
+   "verdict": "PASS"
+  },
+  "H2_TR": {
+   "hole_ref": "H2",
+   "centre": [
+    140.9287,
+    35.0713
+   ],
+   "bbox": [
+    137.929,
+    32.071,
+    143.929,
+    38.071
+   ],
+   "tracks_in": {},
+   "vias_in": {},
+   "pads_in": {},
+   "authority_items_not_allowed": 0,
+   "verdict": "PASS"
+  },
+  "H1_BL": {
+   "hole_ref": "H1",
+   "centre": [
+    25.0713,
+    76.9287
+   ],
+   "bbox": [
+    22.071,
+    73.929,
+    28.071,
+    79.929
+   ],
+   "tracks_in": {},
+   "vias_in": {},
+   "pads_in": {},
+   "authority_items_not_allowed": 0,
+   "verdict": "PASS"
+  },
+  "H4_BR": {
+   "hole_ref": "H4",
+   "centre": [
+    140.9287,
+    76.9287
+   ],
+   "bbox": [
+    137.929,
+    73.929,
+    143.929,
+    79.929
+   ],
+   "tracks_in": {
+    "PCIE_DN4_N": 2,
+    "PCIE_DN5_P": 2
+   },
+   "vias_in": {
+    "PCIE_DN4_N": 1,
+    "PCIE_DN5_P": 1
+   },
+   "pads_in": {},
+   "authority_items_not_allowed": 0,
+   "verdict": "FAIL"
+  }
+ },
+ "OWNER-ITEMS": 0,
+ "summary": {
+  "PASS": [
+   "H3_TL",
+   "H2_TR",
+   "H1_BL"
+  ],
+  "FAIL": [
+   "H4_BR"
+  ],
+  "gate_verdict": "FAIL",
+  "scheme_gate_integration": "P8_mechanical_corner_keepout (SCHEME layer) - add to k2_scheme_gate_v2"
+ }
+}
