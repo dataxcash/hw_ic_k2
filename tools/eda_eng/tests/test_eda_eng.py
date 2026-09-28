@@ -374,7 +374,13 @@ class T(unittest.TestCase):
         self.assertTrue(any(c.startswith("eda_eng ripup") for c in cmds), "M2 missing from the chain")
         self.assertTrue(any(c.get("stage") in ("M3a_draw_review", "M3b_execute") for c in r["route"]["chain"]),
                         "M3 (M3a draw+review or M3b execute) missing from the chain")
-        self.assertTrue(any(c.get("stage") == "M4_verify" for c in r["route"]["chain"]), "M4 missing from the chain")
+        # M4 is reached only if some drawing passed the plan review; a chain that stops earlier must instead
+        # carry a NAMED state (M3_PLAN_REVIEW_FAILED / M2_FAILED / ...) - a silent stop is what is forbidden.
+        if r.get("state") == "GRADED":
+            self.assertTrue(any(c.get("stage") == "M4_verify" for c in r["route"]["chain"]), "M4 missing from the chain")
+        else:
+            self.assertTrue(str(r.get("state", "")).endswith("FAILED"),
+                            "a chain that cannot reach M4 must stop with a NAMED failure")
         self.assertTrue(r["route"]["chain"][0]["cmd"].startswith("eda_eng netplan"),
                         "M1 must be the FIRST stage (order evidence)")
         self.assertIn(r["verdict"], ("PASS", "FAIL"), "the chain must end in a named verdict")
