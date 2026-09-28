@@ -494,6 +494,7 @@ class T(unittest.TestCase):
                 "J6", "J9", "L1", "R40", "R41", "U1", "U2", "U4", "U5"]
         tight = block.census(REF, [22.95, 32.95, 46.50, 62.50], [3.5, 3.5], members=regs)
         self.assertTrue(tight["frame_ok"], "tight frame must be admissible")
+        self.assertTrue(tight["board_model"]["ok"], "the census must run on the shared board_model layer")
         self.assertEqual(tight["FOREIGN_INSIDE"]["count"], 0)
         self.assertEqual(tight["FOREIGN_PADS_INSIDE"]["count"], 0)
         self.assertEqual(tight["n_members"], 20)
@@ -549,6 +550,32 @@ class T(unittest.TestCase):
         r = route.apply_routes(REF, [], out)
         self.assertEqual(r["status"], "APPLIED")
         self.assertGreater(r["zones_refilled"], 0, "the batch path must actually refill zones")
+
+    def test_K370_board_model_hookup_and_true_shape_clearance(self):
+        """#K2-370 sec.3.3 (gap 3a): eda_eng's geometry primitives come from the SHARED layer
+        `_shared/eda_core/board_model`; `true_clearance_mm` measures REAL segment distance, not an AABB
+        (a point sitting on its own track must read ~0; excluding its own net it must be > 0)."""
+        self.assertTrue(block.BOARD_MODEL, "eda_eng must consume the shared board_model geometry")
+        self.assertIn("_shared/eda_core/board_model/geometry.py", block.BOARD_MODEL_MODULE)
+        import pcbnew as P
+        b = P.LoadBoard(REF)
+        nets = {c: ni.GetNetname() for c, ni in b.GetNetInfo().NetsByNetcode().items()}
+        pick = None
+        for t in b.GetTracks():
+            if t.GetClass() == "PCB_VIA" or t.GetLayerName() != "F.Cu":
+                continue
+            n = nets.get(t.GetNetCode(), "")
+            if n and n != "GND":
+                s_, e_ = t.GetStart(), t.GetEnd()
+                pick = (n, t.GetLayerName(),
+                        ((P.ToMM(s_.x) + P.ToMM(e_.x)) / 2.0, (P.ToMM(s_.y) + P.ToMM(e_.y)) / 2.0))
+                break
+        self.assertIsNotNone(pick, "need one F.Cu track to sample")
+        n, lay, mid = pick
+        on_own = block.true_clearance_mm(REF, lay, "__nobody__", [mid])["clearance_mm"][0]["min_mm"]
+        off_own = block.true_clearance_mm(REF, lay, n, [mid])["clearance_mm"][0]["min_mm"]
+        self.assertLessEqual(on_own, 1e-3, "a point on its own track must measure ~0")
+        self.assertGreater(off_own, 0.0, "excluding its own net, the nearest foreign copper is > 0")
 
     def test_K369_judge_accepts_and_enforces_C6_C7(self):
         """C6/C7 入判卷：extra 判据必须出现在 criteria 里，且 pass=False 会把 verdict 拉成 FAIL。"""

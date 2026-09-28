@@ -19,9 +19,24 @@
 本模块只做几何与账，不做布线；重连在 M3（`route.maze_route`）。
 """
 from __future__ import annotations
-import collections, hashlib, os, shutil
+import collections, hashlib, os, shutil, sys
 
 CLEAR = 0.175
+
+# ── 共享域层对接（#K2-370 §三.3 · 缺口 ③a）：几何原语一律取自 `_shared/eda_core/board_model`。
+# 取不到时退回本模块的等价实现（纯 stdlib），但**census 会如实报告 `board_model.ok`**。
+_SHARED = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "_shared")
+if _SHARED not in sys.path:
+    sys.path.insert(0, _SHARED)
+try:                                                                    # pragma: no cover - env dependent
+    from eda_core.board_model.geometry import BBox as _BBox, Segment as _Segment, dist_point_segment as _dps
+    import eda_core.board_model.geometry as _bm_geom
+    BOARD_MODEL = True
+    BOARD_MODEL_MODULE = _bm_geom.__file__
+except Exception:                                                        # noqa: BLE001
+    _BBox = _Segment = _dps = None
+    BOARD_MODEL = False
+    BOARD_MODEL_MODULE = None
 
 
 def _P():
@@ -30,8 +45,14 @@ def _P():
 
 
 # ─────────────────────────────── 几何（mm float；rect = [x0,y0,x1,y1]） ───────────────────────────────
+def bbox(rect):
+    """rect(list) -> 共享层 BBox（取不到时退回 4 元组）。"""
+    return _BBox(rect[0], rect[1], rect[2], rect[3]) if BOARD_MODEL else tuple(rect)
+
+
 def inflate(rect, m):
-    return [rect[0] - m, rect[1] - m, rect[2] + m, rect[3] + m]
+    b = bbox(rect).inflate(m)
+    return [b.x0, b.y0, b.x1, b.y1]
 
 
 def union(a, b):
@@ -44,7 +65,7 @@ def swept(rect, delta):
 
 
 def pt_in(p, rect):
-    return rect[0] <= p[0] <= rect[2] and rect[1] <= p[1] <= rect[3]
+    return bbox(rect).contains(p[0], p[1])
 
 
 def clip_interval(a, b, rect):
@@ -250,6 +271,8 @@ def census(board, rect, delta, clearance=CLEAR, members=None):
         "frame_ok": sum(foreign.values()) == 0 and len(ins["foreign_pads"]) == 0,
         "totals_all_nets": {k: T[k] for k in ("trk_in", "trk_cross", "trk_out", "via_in", "via_out")},
         "totals_N_star": nstar_tot,
+        "board_model": {"ok": BOARD_MODEL, "module": BOARD_MODEL_MODULE,
+                        "authority": "#K2-370 sec.3.3 (gap 3a): geometry primitives come from the shared layer"},
         "rule": "#K2-369 sec.4: N* = {pad in R} union {copper ∩ (swept (+) clearance)} - an INFLATED predicate "
                 "(rule, not an empirical guard value); frame acceptance: FOREIGN_INSIDE == 0 AND "
                 "FOREIGN_PADS_INSIDE == 0 (no extra netted component may sit inside the frame)",
@@ -368,6 +391,65 @@ def net_geometry(board, nets, nd=3):
     for v in c["vias"]:
         if v["net"] in want:
             out[(v["net"], "VIA", round(v["at"][0], nd), round(v["at"][1], nd), v["drill"])] += 1
+    return out
+
+
+def true_clearance_mm(board, layer, exclude_net, points):
+    """**真形**净距（#K2-370 §三.3 对接 ＋ 缺口 C32 的第一步）：
+    用 `eda_core.board_model.geometry.dist_point_segment`（共享层）量「点到**异网真实线段**」的最短距离。
+    范围：该层上的 track 段（**真形**）；via 按点、pad 未纳入（仍是 AABB 近似）——如实报告 scope。"""
+    P = _P()
+    b = P.LoadBoard(board)
+    nets = {c: ni.GetNetname() for c, ni in b.GetNetInfo().NetsByNetcode().items()}
+    segs = []
+    for t in b.GetTracks():
+        if t.GetClass() == "PCB_VIA":
+            continue
+        n = nets.get(t.GetNetCode(), "")
+        if n == exclude_net or t.GetLayerName() != layer:
+            continue
+        s, e = t.GetStart(), t.GetEnd()
+        segs.append((n, P.ToMM(s.x), P.ToMM(s.y), P.ToMM(e.x), P.ToMM(e.y)))
+    out = []
+    for p in points:
+        best, who = None, None
+        for (n, x1, y1, x2, y2) in segs:
+            d = _dps(p[0], p[1], x1, y1, x2, y2)
+            if best is None or d < best:
+                best, who = d, n
+        out.append({"point": [round(p[0], 4), round(p[1], 4)], "min_mm": None if best is None else round(best, 4),
+                    "nearest_net": who})
+    return {"scope": "foreign track segments on the layer (true shapes); pads/vias still AABB/point",
+            "clearance_mm": out}
+
+
+def true_clearance_for_jobs(board, jobs):
+    """批量真形净距（一次读板）：对每个作业，量其端点对**异网真实线段**的最短距离。
+    用途：把 M3 的 `BLOCKED` 逐条分类为「真紧」还是「AABB 假阳」（缺口 C32 的机证）。"""
+    P = _P()
+    b = P.LoadBoard(board)
+    nets = {c: ni.GetNetname() for c, ni in b.GetNetInfo().NetsByNetcode().items()}
+    by_layer = collections.defaultdict(list)
+    for t in b.GetTracks():
+        if t.GetClass() == "PCB_VIA":
+            continue
+        s, e = t.GetStart(), t.GetEnd()
+        by_layer[t.GetLayerName()].append((nets.get(t.GetNetCode(), ""), P.ToMM(s.x), P.ToMM(s.y),
+                                           P.ToMM(e.x), P.ToMM(e.y)))
+    out = []
+    for j in jobs:
+        L, ex = j["layer"], j["net"]
+        pts = [j["port"], j["target"]] if j.get("kind") == "cross" else j.get("ports", [])
+        best, who = None, None
+        for (n, x1, y1, x2, y2) in by_layer.get(L, []):
+            if n == ex:
+                continue
+            for p in pts:
+                d = _dps(p[0], p[1], x1, y1, x2, y2)
+                if best is None or d < best:
+                    best, who = d, n
+        out.append({"net": ex, "layer": L, "min_mm": None if best is None else round(best, 4),
+                    "nearest_net": who})
     return out
 
 

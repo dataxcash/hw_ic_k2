@@ -644,10 +644,21 @@ def relocate_block_chain(rect, delta, work, members=None, clearance=None, max_jo
             xs = [pt[0] for pt in pl]; ys = [pt[1] for pt in pl]
             extra_obs.append({"id": "newroute@%s" % net, "kind": "copper", "net": net,
                               "bbox": [min(xs), min(ys), max(xs), max(ys)], "layer": L})
+    # BLOCKED 逐条**分类**（缺口 C32）：真紧 vs AABB 假阳（对真实异网线段量距）
+    if blocked:
+        cl = {c["net"] + "|" + c["layer"]: c for c in _blk.true_clearance_for_jobs(moved, blocked)}
+        for bl in blocked:
+            c = cl.get(bl["net"] + "|" + bl["layer"], {})
+            bl["true_endpoint_clearance_mm"] = c.get("min_mm")
+            bl["nearest_foreign_net"] = c.get("nearest_net")
+            bl["aabb_false_positive"] = bool(c.get("min_mm") is not None and c["min_mm"] >= clear)
     chain.append({"stage": "M3_block_reconnect", "jobs_total": len(jobs), "routed": len(plans),
                   "blocked": len(blocked), "blocked_named": blocked,
                   "domain": "block swept region", "terminals": "dR ports are FIXED",
-                  "semantics": "a blocked job is NOT_FOUND - never read as impossible (#K2-367 sec.2)"})
+                  "aabb_false_positive_jobs": sum(1 for b in blocked if b.get("aabb_false_positive")),
+                  "semantics": "a blocked job is NOT_FOUND - never read as impossible (#K2-367 sec.2); "
+                                "aabb_false_positive=True means the refusal came from the conservative AABB "
+                                "obstacle model, not from real copper (gap C32)"})
 
     # ── step ⑤：落板 + 复敷铜（apply_routes 现真调 ZONE_FILLER）
     rp = os.path.join(work, "s3_routes.json")

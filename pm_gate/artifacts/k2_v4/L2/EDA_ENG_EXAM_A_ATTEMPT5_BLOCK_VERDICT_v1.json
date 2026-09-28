@@ -1,0 +1,1241 @@
+{
+ "artifact": "eda_eng_exam",
+ "exam": "A",
+ "preflight": {
+  "artifact": "eda_eng_preflight",
+  "exam": "A",
+  "ok": true,
+  "P1_scenario_legality": {
+   "refs": [
+    "C73",
+    "C84",
+    "C85",
+    "C86",
+    "C87",
+    "C88",
+    "C90",
+    "D2",
+    "E2",
+    "J12",
+    "J13",
+    "J6",
+    "J9",
+    "L1",
+    "R40",
+    "R41",
+    "U1",
+    "U2",
+    "U4",
+    "U5"
+   ],
+   "delta_mm": [
+    3.5,
+    3.5
+   ],
+   "ok": true,
+   "reason": "  ✅ S1 焊盘重叠: PASS"
+  },
+  "P1b_mechanical_legality": {
+   "checked": true,
+   "baseline": {
+    "gen_exit": 0,
+    "mechanical_violations": {
+     "courtyards_overlap": 2
+    }
+   },
+   "scenario": {
+    "gen_exit": 0,
+    "mechanical_violations": {}
+   },
+   "new_mechanical_violations": {},
+   "rule": "BASELINE-RELATIVE (the baseline's own mechanical warnings are not the scenario's fault) and the probe includes the crtyd stage, because courtyard overlaps only appear after it (both defects found by the scenario sweep in this window)"
+  },
+  "P2_dry_run_plan": {
+   "stages": [
+    "place",
+    "gen",
+    "route",
+    "polish",
+    "drc"
+   ],
+   "commands": {
+    "gen": "python3 /home/fila/jqdDev_2025/ic_hw/k2/tools/k2_gen_v5.py",
+    "route": "/tmp/k2kicad/squashfs-root/usr/bin/python3.11 /home/fila/jqdDev_2025/ic_hw/k2/tools/k2_route_segment_v1.py --in /tmp/opencode/examA_official_r980/stage1.kicad_pcb --out /tmp/opencode/examA_official_r980/stage2.kicad_pcb --upto all --drc-cli /tmp/k2kicad/squashfs-root/usr/bin/kicad-cli",
+    "polish": "/tmp/k2kicad/squashfs-root/usr/bin/python3.11 /home/fila/jqdDev_2025/ic_hw/k2/tools/k2_p4_build_l9_v1.py --in /tmp/opencode/examA_official_r980/stage2.kicad_pcb --out /tmp/opencode/examA_official_r980/final.kicad_pcb --stages fiducial,info,edge,tp,crtyd,silk,silkfix,chamfer,pour",
+    "drc": "/tmp/k2kicad/squashfs-root/usr/bin/kicad-cli pcb drc --format json --severity-all -o /tmp/opencode/examA_official_r980/final_drc.json /tmp/opencode/examA_official_r980/final.kicad_pcb"
+   }
+  },
+  "inputs": {
+   "spec_name": "SPEC_k2_v4.spec-rev-61.json",
+   "drawing": "canonical m13_v57_w3_joint_assignment.json",
+   "placement_source": "pm_gate/artifacts/k2_v4/L2/PLACEMENT_SOLUTION_v1.json"
+  },
+  "input_hashes_sha16": {
+   "placement": "48b96fbafc458d12",
+   "drawing": "60cbd331836e52b7"
+  },
+  "rule": "#K2-361 sec.4 (C29): no heavy stage may run unless the pre-flight passes (fail-closed)"
+ },
+ "route": {
+  "state": "GRADED",
+  "chain": [
+   {
+    "stage": "M0_block_census",
+    "frame_ok": true,
+    "FOREIGN_INSIDE": 0,
+    "FOREIGN_PADS_INSIDE": 0,
+    "n_members": 20,
+    "n_N_star": 22,
+    "totals_N_star": {
+     "trk_in": 503,
+     "trk_cross": 23,
+     "trk_out": 552,
+     "via_in": 86,
+     "via_out": 369
+    },
+    "swept": [
+     22.95,
+     32.95,
+     50.0,
+     66.0
+    ]
+   },
+   {
+    "stage": "M1_block_plan",
+    "affected_nets": [
+     "12V_IN",
+     "FB_U2",
+     "GND",
+     "GPIO_LED",
+     "I2C1_SCL",
+     "I2C1_SDA",
+     "I2C2_SCL",
+     "I2C2_SDA",
+     "LED_A",
+     "MCU_VDD",
+     "NRST",
+     "P3V3",
+     "P3V3_AUX",
+     "PERSTA#",
+     "PWR_BTN_ISO",
+     "PWR_BTN_OUT",
+     "PWR_CTRL_OUT",
+     "SWCLK_BOOT0",
+     "SWDIO",
+     "SW_U2",
+     "UART_RX",
+     "UART_TX"
+    ],
+    "teardown_crossing_segments": 23,
+    "in_block_kept_segments": 503,
+    "outside_untouched_segments": 552,
+    "outside_untouched_vias": 369,
+    "rule": "#K2-369: only the crossing lines are reconnected; in-block copper travels with the block; outside copper is never listed for teardown"
+   },
+   {
+    "stage": "M2_block_pass",
+    "realises": "step 1 (pads + in-block copper rigidly translated) AND M2 (crossing lines split at dR)",
+    "moved": {
+     "segments": 503,
+     "vias": 86,
+     "cross_split": 23,
+     "bridge_split": 0,
+     "outside_kept": 23
+    },
+    "n_members": 20,
+    "jobs": 23
+   },
+   {
+    "stage": "M3_block_reconnect",
+    "jobs_total": 23,
+    "routed": 3,
+    "blocked": 20,
+    "blocked_named": [
+     {
+      "net": "GND",
+      "layer": "F.Cu",
+      "kind": "cross",
+      "port": [
+       46.5,
+       59.365
+      ],
+      "target": [
+       50.0,
+       62.865
+      ],
+      "semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR",
+      "reason": "an endpoint lies inside foreign copper / a keepout",
+      "true_endpoint_clearance_mm": 0.835,
+      "nearest_foreign_net": "I2C2_SCL",
+      "aabb_false_positive": true
+     },
+     {
+      "net": "MCU_VDD",
+      "layer": "F.Cu",
+      "kind": "cross",
+      "port": [
+       46.4,
+       38.2
+      ],
+      "target": [
+       49.9,
+       41.7
+      ],
+      "semantics": "NOT_FOUND",
+      "reason": "the search exhausted every reachable cell without reaching the target",
+      "true_endpoint_clearance_mm": 0.7,
+      "nearest_foreign_net": "SWCLK_BOOT0",
+      "aabb_false_positive": true
+     },
+     {
+      "net": "NRST",
+      "layer": "F.Cu",
+      "kind": "cross",
+      "port": [
+       46.5,
+       40.65
+      ],
+      "target": [
+       50.0,
+       44.15
+      ],
+      "semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR",
+      "reason": "an endpoint lies inside foreign copper / a keepout",
+      "true_endpoint_clearance_mm": 0.0354,
+      "nearest_foreign_net": "MCU_VDD",
+      "aabb_false_positive": false
+     },
+     {
+      "net": "PERSTA#",
+      "layer": "F.Cu",
+      "kind": "cross",
+      "port": [
+       43.65,
+       37.0
+      ],
+      "target": [
+       47.15,
+       40.5
+      ],
+      "semantics": "NOT_FOUND",
+      "reason": "the search exhausted every reachable cell without reaching the target",
+      "true_endpoint_clearance_mm": 0.15,
+      "nearest_foreign_net": "NRST",
+      "aabb_false_positive": false
+     },
+     {
+      "net": "PWR_BTN_OUT",
+      "layer": "In2.Cu",
+      "kind": "cross",
+      "port": [
+       46.5,
+       43.7
+      ],
+      "target": [
+       50.0,
+       47.2
+      ],
+      "semantics": "NOT_FOUND",
+      "reason": "no free start cell on any allowed layer",
+      "true_endpoint_clearance_mm": 0.8,
+      "nearest_foreign_net": "PERSTA#",
+      "aabb_false_positive": true
+     },
+     {
+      "net": "GPIO_LED",
+      "layer": "F.Cu",
+      "kind": "cross",
+      "port": [
+       33.75,
+       62.5
+      ],
+      "target": [
+       37.25,
+       66.0
+      ],
+      "semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR",
+      "reason": "an endpoint lies inside foreign copper / a keepout",
+      "true_endpoint_clearance_mm": 0.6718,
+      "nearest_foreign_net": "MCU_VDD",
+      "aabb_false_positive": true
+     },
+     {
+      "net": "P3V3_AUX",
+      "layer": "B.Cu",
+      "kind": "cross",
+      "port": [
+       24.13,
+       62.5
+      ],
+      "target": [
+       27.63,
+       66.0
+      ],
+      "semantics": "NOT_FOUND",
+      "reason": "no free goal cell on the pad layer (the target pad is boxed in / not snappable)",
+      "true_endpoint_clearance_mm": 8.2435,
+      "nearest_foreign_net": "UART_RX",
+      "aabb_false_positive": true
+     },
+     {
+      "net": "I2C2_SCL",
+      "layer": "F.Cu",
+      "kind": "cross",
+      "port": [
+       46.5,
+       56.6
+      ],
+      "target": [
+       50.0,
+       60.1
+      ],
+      "semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR",
+      "reason": "an endpoint lies inside foreign copper / a keepout",
+      "true_endpoint_clearance_mm": 0.2,
+      "nearest_foreign_net": "GND",
+      "aabb_false_positive": true
+     },
+     {
+      "net": "I2C2_SCL",
+      "layer": "In2.Cu",
+      "kind": "cross",
+      "port": [
+       31.6,
+       62.5
+      ],
+      "target": [
+       35.1,
+       66.0
+      ],
+      "semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR",
+      "reason": "an endpoint lies inside foreign copper / a keepout",
+      "true_endpoint_clearance_mm": 0.6364,
+      "nearest_foreign_net": "I2C2_SDA",
+      "aabb_false_positive": true
+     },
+     {
+      "net": "I2C2_SDA",
+      "layer": "In2.Cu",
+      "kind": "cross",
+      "port": [
+       38.25,
+       55.4625
+      ],
+      "target": [
+       41.75,
+       58.9625
+      ],
+      "semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR",
+      "reason": "an endpoint lies inside foreign copper / a keepout",
+      "true_endpoint_clearance_mm": 0.6364,
+      "nearest_foreign_net": "I2C2_SCL",
+      "aabb_false_positive": true
+     },
+     {
+      "net": "I2C2_SDA",
+      "layer": "In2.Cu",
+      "kind": "cross",
+      "port": [
+       30.7,
+       62.5
+      ],
+      "target": [
+       34.2,
+       66.0
+      ],
+      "semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR",
+      "reason": "an endpoint lies inside foreign copper / a keepout",
+      "true_endpoint_clearance_mm": 0.6364,
+      "nearest_foreign_net": "I2C2_SCL",
+      "aabb_false_positive": true
+     },
+     {
+      "net": "UART_TX",
+      "layer": "B.Cu",
+      "kind": "cross",
+      "port": [
+       39.9875,
+       52.75
+      ],
+      "target": [
+       43.4875,
+       56.25
+      ],
+      "semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR",
+      "reason": "an endpoint lies inside foreign copper / a keepout",
+      "true_endpoint_clearance_mm": 0.7125,
+      "nearest_foreign_net": "I2C1_SCL",
+      "aabb_false_positive": true
+     },
+     {
+      "net": "SWCLK_BOOT0",
+      "layer": "F.Cu",
+      "kind": "cross",
+      "port": [
+       46.25,
+       41.0
+      ],
+      "target": [
+       49.75,
+       44.5
+      ],
+      "semantics": "NOT_FOUND",
+      "reason": "the search exhausted every reachable cell without reaching the target",
+      "true_endpoint_clearance_mm": 0.5875,
+      "nearest_foreign_net": "P3V3",
+      "aabb_false_positive": true
+     },
+     {
+      "net": "SWCLK_BOOT0",
+      "layer": "F.Cu",
+      "kind": "cross",
+      "port": [
+       46.5,
+       42.9125
+      ],
+      "target": [
+       50.0,
+       46.4125
+      ],
+      "semantics": "NOT_FOUND",
+      "reason": "the search exhausted every reachable cell without reaching the target",
+      "true_endpoint_clearance_mm": 0.5875,
+      "nearest_foreign_net": "P3V3",
+      "aabb_false_positive": true
+     },
+     {
+      "net": "I2C1_SCL",
+      "layer": "F.Cu",
+      "kind": "cross",
+      "port": [
+       46.5,
+       61.185
+      ],
+      "target": [
+       50.0,
+       64.685
+      ],
+      "semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR",
+      "reason": "an endpoint lies inside foreign copper / a keepout",
+      "true_endpoint_clearance_mm": 0.898,
+      "nearest_foreign_net": "I2C1_SDA",
+      "aabb_false_positive": true
+     },
+     {
+      "net": "I2C1_SDA",
+      "layer": "F.Cu",
+      "kind": "cross",
+      "port": [
+       46.5,
+       48.0375
+      ],
+      "target": [
+       50.0,
+       51.5375
+      ],
+      "semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR",
+      "reason": "an endpoint lies inside foreign copper / a keepout",
+      "true_endpoint_clearance_mm": 0.6105,
+      "nearest_foreign_net": "LED_A",
+      "aabb_false_positive": true
+     },
+     {
+      "net": "I2C1_SDA",
+      "layer": "F.Cu",
+      "kind": "cross",
+      "port": [
+       46.5,
+       62.455
+      ],
+      "target": [
+       50.0,
+       65.955
+      ],
+      "semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR",
+      "reason": "an endpoint lies inside foreign copper / a keepout",
+      "true_endpoint_clearance_mm": 0.6105,
+      "nearest_foreign_net": "LED_A",
+      "aabb_false_positive": true
+     },
+     {
+      "net": "I2C1_SDA",
+      "layer": "B.Cu",
+      "kind": "cross",
+      "port": [
+       45.95,
+       61.905
+      ],
+      "target": [
+       49.45,
+       65.405
+      ],
+      "semantics": "NOT_FOUND",
+      "reason": "the search exhausted every reachable cell without reaching the target",
+      "true_endpoint_clearance_mm": 0.4243,
+      "nearest_foreign_net": "PWR_CTRL_OUT",
+      "aabb_false_positive": true
+     },
+     {
+      "net": "I2C1_SDA",
+      "layer": "B.Cu",
+      "kind": "cross",
+      "port": [
+       46.5,
+       56.2
+      ],
+      "target": [
+       50.0,
+       59.7
+      ],
+      "semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR",
+      "reason": "an endpoint lies inside foreign copper / a keepout",
+      "true_endpoint_clearance_mm": 0.4243,
+      "nearest_foreign_net": "PWR_CTRL_OUT",
+      "aabb_false_positive": true
+     },
+     {
+      "net": "PWR_BTN_ISO",
+      "layer": "B.Cu",
+      "kind": "cross",
+      "port": [
+       46.5,
+       47.8
+      ],
+      "target": [
+       50.0,
+       51.3
+      ],
+      "semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR",
+      "reason": "an endpoint lies inside foreign copper / a keepout",
+      "true_endpoint_clearance_mm": 1.1253,
+      "nearest_foreign_net": "I2C1_SDA",
+      "aabb_false_positive": true
+     }
+    ],
+    "domain": "block swept region",
+    "terminals": "dR ports are FIXED",
+    "aabb_false_positive_jobs": 18,
+    "semantics": "a blocked job is NOT_FOUND - never read as impossible (#K2-367 sec.2); aabb_false_positive=True means the refusal came from the conservative AABB obstacle model, not from real copper (gap C32)"
+   },
+   {
+    "cmd": "eda_eng route --apply-batch /tmp/opencode/examA_official_r980/s3_routes.json --board /tmp/opencode/examA_official_r980/s1_moved.kicad_pcb --out /tmp/opencode/examA_official_r980/s4_rerouted.kicad_pcb",
+    "exit": 0
+   },
+   {
+    "stage": "step5_apply_refill",
+    "zones_refilled": 18,
+    "segments_added": 24,
+    "status": "APPLIED"
+   },
+   {
+    "stage": "M4_judge",
+    "judging_table": "ECO-K2-0002 sec.6 (C1-C5 + C6/C7)",
+    "verdict": "FAIL",
+    "geometry_delta": 94,
+    "C6": true,
+    "C7": true
+   }
+  ],
+  "census_summary": {
+   "frame_ok": true,
+   "FOREIGN_INSIDE": {
+    "count": 0,
+    "by_net": {}
+   },
+   "FOREIGN_PADS_INSIDE": {
+    "count": 0,
+    "refs": []
+   },
+   "members": [
+    "C73",
+    "C84",
+    "C85",
+    "C86",
+    "C87",
+    "C88",
+    "C90",
+    "D2",
+    "E2",
+    "J12",
+    "J13",
+    "J6",
+    "J9",
+    "L1",
+    "R40",
+    "R41",
+    "U1",
+    "U2",
+    "U4",
+    "U5"
+   ],
+   "mech_no_net_inside": [
+    "H3"
+   ],
+   "N_star": [
+    "12V_IN",
+    "FB_U2",
+    "GND",
+    "GPIO_LED",
+    "I2C1_SCL",
+    "I2C1_SDA",
+    "I2C2_SCL",
+    "I2C2_SDA",
+    "LED_A",
+    "MCU_VDD",
+    "NRST",
+    "P3V3",
+    "P3V3_AUX",
+    "PERSTA#",
+    "PWR_BTN_ISO",
+    "PWR_BTN_OUT",
+    "PWR_CTRL_OUT",
+    "SWCLK_BOOT0",
+    "SWDIO",
+    "SW_U2",
+    "UART_RX",
+    "UART_TX"
+   ],
+   "totals_N_star": {
+    "trk_in": 503,
+    "trk_cross": 23,
+    "trk_out": 552,
+    "via_in": 86,
+    "via_out": 369
+   },
+   "swept": [
+    22.95,
+    32.95,
+    50.0,
+    66.0
+   ]
+  },
+  "move": {
+   "segments": 503,
+   "vias": 86,
+   "cross_split": 23,
+   "bridge_split": 0,
+   "outside_kept": 23
+  },
+  "jobs_total": 23,
+  "routed": 3,
+  "blocked": [
+   {
+    "net": "GND",
+    "layer": "F.Cu",
+    "kind": "cross",
+    "port": [
+     46.5,
+     59.365
+    ],
+    "target": [
+     50.0,
+     62.865
+    ],
+    "semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR",
+    "reason": "an endpoint lies inside foreign copper / a keepout",
+    "true_endpoint_clearance_mm": 0.835,
+    "nearest_foreign_net": "I2C2_SCL",
+    "aabb_false_positive": true
+   },
+   {
+    "net": "MCU_VDD",
+    "layer": "F.Cu",
+    "kind": "cross",
+    "port": [
+     46.4,
+     38.2
+    ],
+    "target": [
+     49.9,
+     41.7
+    ],
+    "semantics": "NOT_FOUND",
+    "reason": "the search exhausted every reachable cell without reaching the target",
+    "true_endpoint_clearance_mm": 0.7,
+    "nearest_foreign_net": "SWCLK_BOOT0",
+    "aabb_false_positive": true
+   },
+   {
+    "net": "NRST",
+    "layer": "F.Cu",
+    "kind": "cross",
+    "port": [
+     46.5,
+     40.65
+    ],
+    "target": [
+     50.0,
+     44.15
+    ],
+    "semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR",
+    "reason": "an endpoint lies inside foreign copper / a keepout",
+    "true_endpoint_clearance_mm": 0.0354,
+    "nearest_foreign_net": "MCU_VDD",
+    "aabb_false_positive": false
+   },
+   {
+    "net": "PERSTA#",
+    "layer": "F.Cu",
+    "kind": "cross",
+    "port": [
+     43.65,
+     37.0
+    ],
+    "target": [
+     47.15,
+     40.5
+    ],
+    "semantics": "NOT_FOUND",
+    "reason": "the search exhausted every reachable cell without reaching the target",
+    "true_endpoint_clearance_mm": 0.15,
+    "nearest_foreign_net": "NRST",
+    "aabb_false_positive": false
+   },
+   {
+    "net": "PWR_BTN_OUT",
+    "layer": "In2.Cu",
+    "kind": "cross",
+    "port": [
+     46.5,
+     43.7
+    ],
+    "target": [
+     50.0,
+     47.2
+    ],
+    "semantics": "NOT_FOUND",
+    "reason": "no free start cell on any allowed layer",
+    "true_endpoint_clearance_mm": 0.8,
+    "nearest_foreign_net": "PERSTA#",
+    "aabb_false_positive": true
+   },
+   {
+    "net": "GPIO_LED",
+    "layer": "F.Cu",
+    "kind": "cross",
+    "port": [
+     33.75,
+     62.5
+    ],
+    "target": [
+     37.25,
+     66.0
+    ],
+    "semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR",
+    "reason": "an endpoint lies inside foreign copper / a keepout",
+    "true_endpoint_clearance_mm": 0.6718,
+    "nearest_foreign_net": "MCU_VDD",
+    "aabb_false_positive": true
+   },
+   {
+    "net": "P3V3_AUX",
+    "layer": "B.Cu",
+    "kind": "cross",
+    "port": [
+     24.13,
+     62.5
+    ],
+    "target": [
+     27.63,
+     66.0
+    ],
+    "semantics": "NOT_FOUND",
+    "reason": "no free goal cell on the pad layer (the target pad is boxed in / not snappable)",
+    "true_endpoint_clearance_mm": 8.2435,
+    "nearest_foreign_net": "UART_RX",
+    "aabb_false_positive": true
+   },
+   {
+    "net": "I2C2_SCL",
+    "layer": "F.Cu",
+    "kind": "cross",
+    "port": [
+     46.5,
+     56.6
+    ],
+    "target": [
+     50.0,
+     60.1
+    ],
+    "semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR",
+    "reason": "an endpoint lies inside foreign copper / a keepout",
+    "true_endpoint_clearance_mm": 0.2,
+    "nearest_foreign_net": "GND",
+    "aabb_false_positive": true
+   },
+   {
+    "net": "I2C2_SCL",
+    "layer": "In2.Cu",
+    "kind": "cross",
+    "port": [
+     31.6,
+     62.5
+    ],
+    "target": [
+     35.1,
+     66.0
+    ],
+    "semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR",
+    "reason": "an endpoint lies inside foreign copper / a keepout",
+    "true_endpoint_clearance_mm": 0.6364,
+    "nearest_foreign_net": "I2C2_SDA",
+    "aabb_false_positive": true
+   },
+   {
+    "net": "I2C2_SDA",
+    "layer": "In2.Cu",
+    "kind": "cross",
+    "port": [
+     38.25,
+     55.4625
+    ],
+    "target": [
+     41.75,
+     58.9625
+    ],
+    "semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR",
+    "reason": "an endpoint lies inside foreign copper / a keepout",
+    "true_endpoint_clearance_mm": 0.6364,
+    "nearest_foreign_net": "I2C2_SCL",
+    "aabb_false_positive": true
+   },
+   {
+    "net": "I2C2_SDA",
+    "layer": "In2.Cu",
+    "kind": "cross",
+    "port": [
+     30.7,
+     62.5
+    ],
+    "target": [
+     34.2,
+     66.0
+    ],
+    "semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR",
+    "reason": "an endpoint lies inside foreign copper / a keepout",
+    "true_endpoint_clearance_mm": 0.6364,
+    "nearest_foreign_net": "I2C2_SCL",
+    "aabb_false_positive": true
+   },
+   {
+    "net": "UART_TX",
+    "layer": "B.Cu",
+    "kind": "cross",
+    "port": [
+     39.9875,
+     52.75
+    ],
+    "target": [
+     43.4875,
+     56.25
+    ],
+    "semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR",
+    "reason": "an endpoint lies inside foreign copper / a keepout",
+    "true_endpoint_clearance_mm": 0.7125,
+    "nearest_foreign_net": "I2C1_SCL",
+    "aabb_false_positive": true
+   },
+   {
+    "net": "SWCLK_BOOT0",
+    "layer": "F.Cu",
+    "kind": "cross",
+    "port": [
+     46.25,
+     41.0
+    ],
+    "target": [
+     49.75,
+     44.5
+    ],
+    "semantics": "NOT_FOUND",
+    "reason": "the search exhausted every reachable cell without reaching the target",
+    "true_endpoint_clearance_mm": 0.5875,
+    "nearest_foreign_net": "P3V3",
+    "aabb_false_positive": true
+   },
+   {
+    "net": "SWCLK_BOOT0",
+    "layer": "F.Cu",
+    "kind": "cross",
+    "port": [
+     46.5,
+     42.9125
+    ],
+    "target": [
+     50.0,
+     46.4125
+    ],
+    "semantics": "NOT_FOUND",
+    "reason": "the search exhausted every reachable cell without reaching the target",
+    "true_endpoint_clearance_mm": 0.5875,
+    "nearest_foreign_net": "P3V3",
+    "aabb_false_positive": true
+   },
+   {
+    "net": "I2C1_SCL",
+    "layer": "F.Cu",
+    "kind": "cross",
+    "port": [
+     46.5,
+     61.185
+    ],
+    "target": [
+     50.0,
+     64.685
+    ],
+    "semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR",
+    "reason": "an endpoint lies inside foreign copper / a keepout",
+    "true_endpoint_clearance_mm": 0.898,
+    "nearest_foreign_net": "I2C1_SDA",
+    "aabb_false_positive": true
+   },
+   {
+    "net": "I2C1_SDA",
+    "layer": "F.Cu",
+    "kind": "cross",
+    "port": [
+     46.5,
+     48.0375
+    ],
+    "target": [
+     50.0,
+     51.5375
+    ],
+    "semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR",
+    "reason": "an endpoint lies inside foreign copper / a keepout",
+    "true_endpoint_clearance_mm": 0.6105,
+    "nearest_foreign_net": "LED_A",
+    "aabb_false_positive": true
+   },
+   {
+    "net": "I2C1_SDA",
+    "layer": "F.Cu",
+    "kind": "cross",
+    "port": [
+     46.5,
+     62.455
+    ],
+    "target": [
+     50.0,
+     65.955
+    ],
+    "semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR",
+    "reason": "an endpoint lies inside foreign copper / a keepout",
+    "true_endpoint_clearance_mm": 0.6105,
+    "nearest_foreign_net": "LED_A",
+    "aabb_false_positive": true
+   },
+   {
+    "net": "I2C1_SDA",
+    "layer": "B.Cu",
+    "kind": "cross",
+    "port": [
+     45.95,
+     61.905
+    ],
+    "target": [
+     49.45,
+     65.405
+    ],
+    "semantics": "NOT_FOUND",
+    "reason": "the search exhausted every reachable cell without reaching the target",
+    "true_endpoint_clearance_mm": 0.4243,
+    "nearest_foreign_net": "PWR_CTRL_OUT",
+    "aabb_false_positive": true
+   },
+   {
+    "net": "I2C1_SDA",
+    "layer": "B.Cu",
+    "kind": "cross",
+    "port": [
+     46.5,
+     56.2
+    ],
+    "target": [
+     50.0,
+     59.7
+    ],
+    "semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR",
+    "reason": "an endpoint lies inside foreign copper / a keepout",
+    "true_endpoint_clearance_mm": 0.4243,
+    "nearest_foreign_net": "PWR_CTRL_OUT",
+    "aabb_false_positive": true
+   },
+   {
+    "net": "PWR_BTN_ISO",
+    "layer": "B.Cu",
+    "kind": "cross",
+    "port": [
+     46.5,
+     47.8
+    ],
+    "target": [
+     50.0,
+     51.3
+    ],
+    "semantics": "DECIDABLE_INFEASIBLE_FOR_THIS_PAIR",
+    "reason": "an endpoint lies inside foreign copper / a keepout",
+    "true_endpoint_clearance_mm": 1.1253,
+    "nearest_foreign_net": "I2C1_SDA",
+    "aabb_false_positive": true
+   }
+  ],
+  "apply": {
+   "artifact": "eda_eng_route_apply_batch",
+   "status": "APPLIED",
+   "nets": [
+    "GND",
+    "P3V3_AUX",
+    "UART_TX"
+   ],
+   "segments_added": 24,
+   "vias_added": 0,
+   "zones_refilled": 18,
+   "project_config_copied": [
+    ".kicad_pro"
+   ],
+   "out": "/tmp/opencode/examA_official_r980/s4_rerouted.kicad_pcb",
+   "out_sha16": "0e8034e04dd81016"
+  },
+  "M4": {
+   "criteria": {
+    "C1_connectivity": {
+     "unconnected": 18,
+     "pass": false
+    },
+    "C2_drc_no_new_increase": {
+     "total": 296,
+     "ref_total": 168,
+     "new_classes": [
+      "clearance",
+      "isolated_copper",
+      "lib_footprint_issues",
+      "shorting_items",
+      "solder_mask_bridge",
+      "tracks_crossing"
+     ],
+     "pass": false
+    },
+    "C3_skew": {
+     "per_pair_mm": {
+      "0": 0.065012,
+      "1": 0.06498,
+      "2": 0.043403,
+      "3": 0.078764,
+      "4": 1.4e-05,
+      "5": 5e-06,
+      "6": 0.021576,
+      "7": 0.013805
+     },
+     "max_mm": 0.078764,
+     "limit_mm": 0.15,
+     "pass": true
+    },
+    "C4_chamfer_preserved": {
+     "count": 2665,
+     "ref_count": 2637,
+     "pass": true
+    },
+    "C5_routing_changed": {
+     "element_set_diff": 1271,
+     "pass": true
+    },
+    "C6_outside_copper_unchanged": {
+     "diff": 0,
+     "pass": true,
+     "swept": [
+      22.95,
+      32.95,
+      50.0,
+      66.0
+     ],
+     "scope": "tracks+vias outside the swept region"
+    },
+    "C7_hs_fanout_untouched": {
+     "diff": 0,
+     "pass": true,
+     "nets": [
+      "PCIE_DN0_P",
+      "PCIE_DN0_N",
+      "PCIE_DN1_P",
+      "PCIE_DN1_N",
+      "PCIE_DN2_P",
+      "PCIE_DN2_N",
+      "PCIE_DN3_P",
+      "PCIE_DN3_N",
+      "PCIE_DN4_P",
+      "PCIE_DN4_N",
+      "PCIE_DN5_P",
+      "PCIE_DN5_N",
+      "PCIE_DN6_P",
+      "PCIE_DN6_N",
+      "PCIE_DN7_P",
+      "PCIE_DN7_N"
+     ]
+    }
+   },
+   "verdict": "FAIL",
+   "thresholds_used": {
+    "drc_total": 168,
+    "chamfer_ref": 2637,
+    "skew_limit": 0.15
+   },
+   "judging_table": "L2/EDA_ENG_JUDGING_TABLE_v1.json (ECO-K2-0002/0003 sec.6)",
+   "rule": "PASS iff EVERY criterion holds (C1-C5 in-register + C6/C7 block-fidelity when a block chain is graded); None (skipped) is never a PASS (#K2-358: capability must be reproducible)"
+  },
+  "class_delta": {
+   "total_delta": 94,
+   "by_class": {
+    "clearance": {
+     "result": 19,
+     "ref": 0,
+     "delta": 19
+    },
+    "isolated_copper": {
+     "result": 3,
+     "ref": 0,
+     "delta": 3
+    },
+    "shorting_items": {
+     "result": 16,
+     "ref": 0,
+     "delta": 16
+    },
+    "silk_edge_clearance": {
+     "result": 0,
+     "ref": 2,
+     "delta": -2
+    },
+    "silk_over_copper": {
+     "result": 39,
+     "ref": 37,
+     "delta": 2
+    },
+    "solder_mask_bridge": {
+     "result": 12,
+     "ref": 0,
+     "delta": 12
+    },
+    "track_dangling": {
+     "result": 33,
+     "ref": 1,
+     "delta": 32
+    },
+    "track_not_centered_on_via": {
+     "result": 33,
+     "ref": 32,
+     "delta": 1
+    },
+    "tracks_crossing": {
+     "result": 8,
+     "ref": 0,
+     "delta": 8
+    },
+    "via_dangling": {
+     "result": 9,
+     "ref": 6,
+     "delta": 3
+    }
+   },
+   "excluded_class_rows": {
+    "lib_footprint_issues": {
+     "result": 54,
+     "ref": 0,
+     "delta": 54
+    },
+    "lib_footprint_mismatch": {
+     "result": 0,
+     "ref": 20,
+     "delta": -20
+    }
+   },
+   "excluded_classes": [
+    "lib_footprint_issues",
+    "lib_footprint_mismatch"
+   ],
+   "raw_total_delta": 128,
+   "attributed": true,
+   "rule": "#K2-361 sec.2.5: any GEOMETRY class rise must be attributed; library-resolution classes are recorded in excluded_class_rows under the pinned caliber (they are never hidden)"
+  },
+  "board": "/tmp/opencode/examA_official_r980/s4_rerouted.kicad_pcb",
+  "rule": "#K2-369 sec.4: relocate-block = M0 census -> step1 move_block(+M2 clip) -> M3 reconnect inside the block domain (dR ports fixed) -> refill -> M4 (C1-C5 + C6/C7)"
+ },
+ "state": "GRADED",
+ "criteria": {
+  "C1_connectivity": {
+   "unconnected": 18,
+   "pass": false
+  },
+  "C2_drc_no_new_increase": {
+   "total": 296,
+   "ref_total": 168,
+   "new_classes": [
+    "clearance",
+    "isolated_copper",
+    "lib_footprint_issues",
+    "shorting_items",
+    "solder_mask_bridge",
+    "tracks_crossing"
+   ],
+   "pass": false
+  },
+  "C3_skew": {
+   "per_pair_mm": {
+    "0": 0.065012,
+    "1": 0.06498,
+    "2": 0.043403,
+    "3": 0.078764,
+    "4": 1.4e-05,
+    "5": 5e-06,
+    "6": 0.021576,
+    "7": 0.013805
+   },
+   "max_mm": 0.078764,
+   "limit_mm": 0.15,
+   "pass": true
+  },
+  "C4_chamfer_preserved": {
+   "count": 2665,
+   "ref_count": 2637,
+   "pass": true
+  },
+  "C5_routing_changed": {
+   "element_set_diff": 1271,
+   "pass": true
+  },
+  "C6_outside_copper_unchanged": {
+   "diff": 0,
+   "pass": true,
+   "swept": [
+    22.95,
+    32.95,
+    50.0,
+    66.0
+   ],
+   "scope": "tracks+vias outside the swept region"
+  },
+  "C7_hs_fanout_untouched": {
+   "diff": 0,
+   "pass": true,
+   "nets": [
+    "PCIE_DN0_P",
+    "PCIE_DN0_N",
+    "PCIE_DN1_P",
+    "PCIE_DN1_N",
+    "PCIE_DN2_P",
+    "PCIE_DN2_N",
+    "PCIE_DN3_P",
+    "PCIE_DN3_N",
+    "PCIE_DN4_P",
+    "PCIE_DN4_N",
+    "PCIE_DN5_P",
+    "PCIE_DN5_N",
+    "PCIE_DN6_P",
+    "PCIE_DN6_N",
+    "PCIE_DN7_P",
+    "PCIE_DN7_N"
+   ]
+  }
+ },
+ "verdict": "FAIL"
+}
