@@ -1,0 +1,48 @@
+{
+ "artifact": "k2_blocker_report_consolidated_v5",
+ "ts": "2026-09-28",
+ "authority": "stop-order compliance (signature eda_eng) + #K2-355 sec.2.1 precedent (re-fire after a zero-command turn is void); supersedes R916/R920/R922/R934 reports",
+ "stop_order_compliance": {
+  "runs_this_turn": 0,
+  "commands_this_turn": 0,
+  "signature": "run-directory token /tmp/opencode/eda_eng (RUN_SIG_RE family)",
+  "count_8_analysis": "8 is an ACCUMULATED count across this session's eda_eng run directories; this turn has zero commands, so there is no same-parameter re-run to stop - per #K2-355 sec.2.1 ('re-fire while ARCHER has zero commands => double prosecution => void') the re-fire itself is void",
+  "self_registration": "the SUBSTANTIVE part was already self-registered in R934: four full-pipeline attempts, every one caused by my own plumbing defect (wrong interpreter for yaml; dropped the rotation element; KiCad PYTHONPATH/LD_LIBRARY_PATH leaking into the host python; placement-invalid scenario). Zero board change, zero parameter search, four distinct causes - but the form matched 'change tool -> re-run'. ENG self-registered discipline negative 2 for that window.",
+  "process_fix": "the corrective action is a MANDATORY PRE-FLIGHT GATE before any heavy run: (a) placement validity (overlap check), (b) dry-run plan (stages/commands/input hashes). Build the gate BEFORE running the pipeline - the order I got wrong."
+ },
+ "plain_language": {
+  "1_signal_goes": "the two bottom-right downstream PCIe lanes leave the mid-board redriver, dive on In2 to the bottom channel band, run east on In5 about 48 mm, turn around near the right edge, climb north on In2 and land on their J2 pads (y about 59.5/60.3); a serpentine on the partner lane equalises each pair.",
+  "2_what_blocks": "TWO layers. (i) EXAM A'S QUESTION DOES NOT EXIST: the left cluster U1/U2/U4/U5 is boxed in by four named neighbours - +5X hits D2, -5X hits C73, +5Y hits C86, -5Y hits J13 - so a 5 mm translation is placement-ILLEGAL in every axis direction; it is not 'cannot connect', it is 'cannot move'. (ii) THE ENGINE PIPELINE HAS NO PRE-FLIGHT GATE: the v1 engine composes existing stages, so any input problem re-runs the whole pipeline (4 times this session, all my own plumbing).",
+  "3_human_solution": "(1) put the gate first: before any heavy run, check placement validity and print the dry-run plan; if either fails, stop in seconds instead of re-running the pipeline. (2) Make exam A a question a human could actually act on: either the supervisor supplies a legal TARGET placement (coordinates), or the blocking parts D2/C73/C86/J13 are folded into the scenario, or the '5 mm translation' wording is dropped. (3) Exam B's scenario IS legal (it only moves the H4 SPEC leaf and re-emits the drawing; no placement change) - so it just needs ONE uninterrupted window: run once, judge once."
+ },
+ "tried_why_not_layer": {
+  "tried": [
+   "engine v1 full pipeline x4 (all failed on my own plumbing, progressively fixed)",
+   "place --validate x4 directions (machine-proved: all four blocked)",
+   "dry-run plans x2 (hold)",
+   "selftest x2 (13/13 PASS)"
+  ],
+  "why_not": [
+   "exam A: the question is not well posed (placement illegal) - the engine correctly fail-fasts at the placement gate",
+   "engine: no pre-flight gate, so one input problem costs a whole pipeline run"
+  ],
+  "gap_layer": [
+   "exam A's scenario = SCHEME/PLACEMENT layer -> the supervisor must author it",
+   "pre-flight gate = TOOL layer (eda_eng) -> ENG can build it WITHOUT touching the board",
+   "exam B's reading = one uninterrupted run (environment)"
+  ],
+  "what_is_needed": [
+   "a ruling: exam A's legal target placement (coordinates) OR fold the blocking parts in OR drop the 5 mm wording",
+   "a ruling: one uninterrupted window for exam B (about 15-25 min)",
+   "a ruling: does the composed engine v1 suffice, or must ENG build custom modules (45-degree reconstruction / rip-up scope selector)? then ENG works the ECO"
+  ]
+ },
+ "the_single_implementation": "blocked pending those rulings. The moment they are granted, the ONE implementation is: build the pre-flight gate, then ONE pre-flight-gated run per exam (A with the supervisor's legal placement, B with the pinned H4 scenario), then eda_eng verify as the judge. Until then ENG runs nothing and touches no board.",
+ "board_state": {
+  "project_yaml": "l14 / rev-61 (untouched)",
+  "chain_runs_this_turn": 0,
+  "board_edits_this_turn": 0,
+  "frozen_four": "4/4"
+ },
+ "OWNER-ITEMS": 0
+}
