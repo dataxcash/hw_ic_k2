@@ -102,5 +102,25 @@
   "aprime_witness_freeze": "maintained (no further run without a new authorisation)"
  },
  "OWNER-ITEMS": 0,
- "authorisation_crossing_note": "#K2-384 authorised the R1052 readiness package's run 1/1; that authorised run had ALREADY been executed under #K2-383's identical authorisation (R1054, run_count 1/1) - the two rulings crossed. Per #K2-384 sec.2's own rule ('FAIL => stop + attribute; a second self-run is forbidden'), NO second run is made: this certificate IS the attribution required on FAIL. Awaiting the supervisor's choice among options A / B / C."
+ "authorisation_crossing_note": "#K2-384 authorised the R1052 readiness package's run 1/1; that authorised run had ALREADY been executed under #K2-383's identical authorisation (R1054, run_count 1/1) - the two rulings crossed. Per #K2-384 sec.2's own rule ('FAIL => stop + attribute; a second self-run is forbidden'), NO second run is made: this certificate IS the attribution required on FAIL. Awaiting the supervisor's choice among options A / B / C.",
+ "residual_classes_named": {
+  "source": "the authorised run's own DRC (/tmp/opencode/aprime_final/s4_drc.json) - READ-ONLY parse",
+  "isolated_copper_3": {
+   "items": [
+    "fill zone [12V_IN] on In4.Cu priority 102 @ (25.025, 40.379) x2",
+    "fill zone [12V_IN] on In4.Cu priority 200 @ (24.600, 34.900)"
+   ],
+   "meaning": "the 12V_IN POURS became orphaned islands after the wipe+refill: their link to the net's copper was cut and the refill left them isolated",
+   "layer": "ENG asset layer (zone/fill handling) -> OPTION A territory"
+  },
+  "solder_mask_bridge_2": {
+   "items": [
+    "U1 pad 11 [PERSTA#] @ (33.337, 55.750) <-> J9 PTH pad 1 [UART_TX] @ (31.750, 55.960)",
+    "U1 pad 12 [PERSTA#] @ (33.337, 56.250) <-> J9 PTH pad 1 [UART_TX] @ (31.750, 55.960)"
+   ],
+   "meaning": "the MOVED U1's pads now sit close enough to J9's PTH pads that the SOLDER MASK bridges - a PLACEMENT consequence of the rearrangement, not a routing artefact",
+   "layer": "planning/placement layer (pad-to-pad spacing after the move) -> OPTION B territory (or a mask/DFM rule matter)"
+  },
+  "consequence_for_the_decision": "the two residual classes do NOT share a fix: isolated_copper is an engine (zone/refill) asset fix; solder_mask_bridge is a placement-consequence that no router can remove. So a NEW WINDOW should be scoped as: A (zone-orphan handling, additive + regression) PLUS a planning note for the U1/J9 pad spacing; option C stays forbidden."
+ }
 }
