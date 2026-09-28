@@ -1,0 +1,440 @@
+{
+ "artifact": "k2_reroute_affected_v2",
+ "ts": "2026-09-28",
+ "board_in": "hw/k2_v4_8L.l10.kicad_pcb",
+ "board_out": "/tmp/k2dev/c17final/out.kicad_pcb",
+ "phase_helpers": {
+  "rip": "phase rip",
+  "router": "tools/k2_p4_mroute_v1.py (exact gate)",
+  "snap": "phase snap",
+  "verify": "phase verify"
+ },
+ "rip_up": {
+  "affected_nets": [
+   "GND",
+   "PWR_BTN_ISO",
+   "PWR_CTRL_OUT"
+  ],
+  "moves": [
+   {
+    "ref": "U5",
+    "d_mm": [
+     2.0,
+     0.0
+    ],
+    "nets": [
+     "GND",
+     "PWR_BTN_ISO",
+     "PWR_CTRL_OUT"
+    ]
+   }
+  ],
+  "tracks_removed": 5,
+  "parts_kept": 5
+ },
+ "stitch": {
+  "added": [
+   {
+    "net": "GND",
+    "dist_mm": 0.402,
+    "segs": 3,
+    "vias": 0,
+    "len_mm": 0.441
+   },
+   {
+    "net": "GND",
+    "dist_mm": 0.411,
+    "segs": 1,
+    "vias": 0,
+    "len_mm": 0.424
+   },
+   {
+    "net": "GND",
+    "dist_mm": 0.419,
+    "segs": 1,
+    "vias": 0,
+    "len_mm": 0.424
+   },
+   {
+    "net": "GND",
+    "dist_mm": 0.457,
+    "segs": 1,
+    "vias": 0,
+    "len_mm": 0.5
+   },
+   {
+    "net": "PWR_BTN_ISO",
+    "dist_mm": 0.8,
+    "segs": 1,
+    "vias": 1,
+    "len_mm": 0.849
+   },
+   {
+    "net": "PWR_BTN_ISO",
+    "dist_mm": 1.414,
+    "segs": 5,
+    "vias": 0,
+    "len_mm": 1.983
+   },
+   {
+    "net": "PWR_CTRL_OUT",
+    "dist_mm": 1.252,
+    "segs": 8,
+    "vias": 1,
+    "len_mm": 2.249
+   }
+  ],
+  "blocked": [
+   {
+    "net": "GND",
+    "dist": 0.48,
+    "why": "no-free-start-node",
+    "tried": [
+     {
+      "dist": 0.48,
+      "why": "no-free-start-node"
+     },
+     {
+      "dist": 0.48,
+      "why": "no-free-start-node"
+     },
+     {
+      "dist": 0.484,
+      "why": "no-free-goal-node"
+     },
+     {
+      "dist": 0.484,
+      "why": "no-free-goal-node"
+     },
+     {
+      "dist": 0.487,
+      "why": "no-free-start-node"
+     },
+     {
+      "dist": 0.487,
+      "why": "no-free-start-node"
+     }
+    ]
+   },
+   {
+    "net": "PWR_CTRL_OUT",
+    "dist": 0.0,
+    "why": "no-free-goal-node",
+    "tried": [
+     {
+      "dist": 0.0,
+      "why": "no-free-start-node"
+     },
+     {
+      "dist": 0.0,
+      "why": "no-free-start-node"
+     },
+     {
+      "dist": 0.141,
+      "why": "no-free-goal-node"
+     },
+     {
+      "dist": 0.141,
+      "why": "no-free-goal-node"
+     },
+     {
+      "dist": 0.51,
+      "why": "no-free-goal-node"
+     },
+     {
+      "dist": 0.51,
+      "why": "no-free-goal-node"
+     }
+    ]
+   }
+  ]
+ },
+ "repair_rounds": [
+  {
+   "board_in": "/tmp/k2dev/c17final/out.kicad_pcb",
+   "violations_before": 171,
+   "new_before": 3,
+   "types_before": [
+    "track_not_centered_on_via",
+    "via_dangling"
+   ],
+   "plan": [
+    {
+     "act": "delvia",
+     "uuid": "4a2ebc40-9ed9-5ecf-813f-714eeae8e27b",
+     "at": [
+      43.2,
+      51.1
+     ]
+    },
+    {
+     "act": "delvia",
+     "uuid": "817a1ca0-171b-5a73-a05c-bb4574fe553a",
+     "at": [
+      45.8,
+      52.9
+     ]
+    },
+    {
+     "act": "snap",
+     "uuid": "904af138-0cc8-5c23-94e3-adc9c2194908",
+     "end": "e",
+     "to": [
+      43.8,
+      50.534315
+     ]
+    }
+   ],
+   "applied": 3,
+   "violations_after": 170,
+   "new_after": 2,
+   "unconnected_after": 0,
+   "action": "accepted"
+  },
+  {
+   "board_in": "/tmp/k2dev/c17final/out.kicad_pcb",
+   "violations_before": 171,
+   "new_before": 3,
+   "types_before": [
+    "track_not_centered_on_via",
+    "via_dangling"
+   ],
+   "plan": [
+    {
+     "act": "delvia",
+     "uuid": "4a2ebc40-9ed9-5ecf-813f-714eeae8e27b",
+     "at": [
+      43.2,
+      51.1
+     ]
+    },
+    {
+     "act": "delvia",
+     "uuid": "817a1ca0-171b-5a73-a05c-bb4574fe553a",
+     "at": [
+      45.8,
+      52.9
+     ]
+    },
+    {
+     "act": "snap",
+     "uuid": "904af138-0cc8-5c23-94e3-adc9c2194908",
+     "end": "e",
+     "to": [
+      43.8,
+      50.534315
+     ]
+    }
+   ],
+   "applied": 3,
+   "violations_after": 170,
+   "new_after": 2,
+   "unconnected_after": 0,
+   "action": "accepted"
+  },
+  {
+   "board_in": "/tmp/k2dev/c17final/out.kicad_pcb",
+   "violations_before": 170,
+   "new_before": 2,
+   "types_before": [
+    "track_dangling",
+    "track_not_centered_on_via"
+   ],
+   "plan": [
+    {
+     "act": "deltrack",
+     "uuid": "0f190a6a-ece0-5fb2-be6d-e3692e803d94",
+     "at": [
+      45.7,
+      52.8
+     ]
+    },
+    {
+     "act": "snap",
+     "uuid": "904af138-0cc8-5c23-94e3-adc9c2194908",
+     "end": "e",
+     "to": [
+      43.8,
+      50.534315
+     ]
+    }
+   ],
+   "applied": 2,
+   "violations_after": 169,
+   "new_after": 1,
+   "unconnected_after": 0,
+   "action": "accepted"
+  },
+  {
+   "board_in": "/tmp/k2dev/c17final/out.kicad_pcb",
+   "violations_before": 170,
+   "new_before": 2,
+   "types_before": [
+    "track_dangling",
+    "track_not_centered_on_via"
+   ],
+   "plan": [
+    {
+     "act": "deltrack",
+     "uuid": "0f190a6a-ece0-5fb2-be6d-e3692e803d94",
+     "at": [
+      45.7,
+      52.8
+     ]
+    },
+    {
+     "act": "snap",
+     "uuid": "904af138-0cc8-5c23-94e3-adc9c2194908",
+     "end": "e",
+     "to": [
+      43.8,
+      50.534315
+     ]
+    }
+   ],
+   "applied": 2,
+   "violations_after": 169,
+   "new_after": 1,
+   "unconnected_after": 0,
+   "action": "accepted"
+  }
+ ],
+ "mroute": {
+  "unconnected_after_rip": 7,
+  "unconnected_after_stitch": 4,
+  "skipped": false,
+  "stdout": "{\"added\": 4, \"blocked\": 0, \"segs\": 52, \"vias\": 2, \"len\": 29.4032, \"reasons\": {}}"
+ },
+ "acceptance": {
+  "routing_diff_nonzero": true,
+  "routing_diff_added": 75,
+  "routing_diff_deleted": 5,
+  "drc_total": 169,
+  "drc_baseline_total": 170,
+  "drc_zero_new": true,
+  "drc_types_increased": {},
+  "drc_per_type": {
+   "copper_sliver": {
+    "baseline": 1,
+    "final": 1,
+    "delta": 0
+   },
+   "lib_footprint_mismatch": {
+    "baseline": 20,
+    "final": 20,
+    "delta": 0
+   },
+   "missing_courtyard": {
+    "baseline": 54,
+    "final": 54,
+    "delta": 0
+   },
+   "silk_edge_clearance": {
+    "baseline": 2,
+    "final": 2,
+    "delta": 0
+   },
+   "silk_over_copper": {
+    "baseline": 37,
+    "final": 37,
+    "delta": 0
+   },
+   "silk_overlap": {
+    "baseline": 15,
+    "final": 15,
+    "delta": 0
+   },
+   "track_dangling": {
+    "baseline": 1,
+    "final": 1,
+    "delta": 0
+   },
+   "track_not_centered_on_via": {
+    "baseline": 34,
+    "final": 33,
+    "delta": -1
+   },
+   "via_dangling": {
+    "baseline": 6,
+    "final": 6,
+    "delta": 0
+   }
+  },
+  "drc_identity_new": [
+   {
+    "type": "track_not_centered_on_via",
+    "sev": "warning",
+    "desc": "Track endpoint not centered on via"
+   }
+  ],
+  "drc_identity_removed": [
+   {
+    "type": "track_not_centered_on_via",
+    "desc": "Track endpoint not centered on via"
+   }
+  ],
+  "drc_identity_note": "identity diff is text-sensitive (a description embeds the track length); the per-TYPE table is the criterion",
+  "unconnected": 0,
+  "skew_8of8_pass": true,
+  "skews": [
+   {
+    "pair": "OUT0",
+    "len_P_mm": 79.144,
+    "len_N_mm": 79.144,
+    "skew_mm": 0.0,
+    "pass": true
+   },
+   {
+    "pair": "OUT1",
+    "len_P_mm": 75.757,
+    "len_N_mm": 75.757,
+    "skew_mm": 0.0,
+    "pass": true
+   },
+   {
+    "pair": "OUT2",
+    "len_P_mm": 70.82,
+    "len_N_mm": 70.82,
+    "skew_mm": 0.0,
+    "pass": true
+   },
+   {
+    "pair": "OUT3",
+    "len_P_mm": 68.77,
+    "len_N_mm": 68.77,
+    "skew_mm": 0.0,
+    "pass": true
+   },
+   {
+    "pair": "OUT4",
+    "len_P_mm": 78.216,
+    "len_N_mm": 78.216,
+    "skew_mm": 0.0,
+    "pass": true
+   },
+   {
+    "pair": "OUT5",
+    "len_P_mm": 75.989,
+    "len_N_mm": 75.989,
+    "skew_mm": 0.0,
+    "pass": true
+   },
+   {
+    "pair": "OUT6",
+    "len_P_mm": 73.372,
+    "len_N_mm": 73.372,
+    "skew_mm": 0.0,
+    "pass": true
+   },
+   {
+    "pair": "OUT7",
+    "len_P_mm": 71.145,
+    "len_N_mm": 71.145,
+    "skew_mm": 0.0,
+    "pass": true
+   }
+  ],
+  "PASS": true
+ },
+ "OWNER-ITEMS": 0
+}

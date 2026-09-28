@@ -300,8 +300,8 @@
    "caps_inside_device_bbox": 0,
    "nearby_caps": [
     {
-     "ref": "C80",
-     "dist_to_device_bbox_mm": 1.21,
+     "ref": "C79",
+     "dist_to_device_bbox_mm": 3.21,
      "inside": false
     },
     {
@@ -315,8 +315,8 @@
      "inside": false
     },
     {
-     "ref": "C79",
-     "dist_to_device_bbox_mm": 3.21,
+     "ref": "C80",
+     "dist_to_device_bbox_mm": 1.21,
      "inside": false
     }
    ],
@@ -360,6 +360,10 @@
    "P7"
   ]
  },
- "gate_rule": "chain entry: k2_gen_v5 / k2_route_segment refuse to run unless the scheme-layer certificate is PRESENT and verdict==PASS",
+ "chain_entry_check": {
+  "status": "NOT_WIRED",
+  "registered_defect": "C20 / M-ENG-GATE-NOT-WIRED",
+  "note": "#K2-338 sec.6: this gate does NOT gate the chain (verified: 0 references in k2_gen_v5.py / k2_route_segment_v1.py). The former claim has been DELETED (no paper gate). Real wiring needs a generator change (approval required) and would hard-block the chain while the scheme verdict is FAIL."
+ },
  "OWNER-ITEMS": 0
 }

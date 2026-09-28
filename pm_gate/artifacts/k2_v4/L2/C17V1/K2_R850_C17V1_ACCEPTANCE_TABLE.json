@@ -1,0 +1,131 @@
+{
+ "routing_diff_nonzero": true,
+ "routing_diff_added": 75,
+ "routing_diff_deleted": 5,
+ "drc_total": 169,
+ "drc_baseline_total": 170,
+ "drc_zero_new": true,
+ "drc_types_increased": {},
+ "drc_per_type": {
+  "copper_sliver": {
+   "baseline": 1,
+   "final": 1,
+   "delta": 0
+  },
+  "lib_footprint_mismatch": {
+   "baseline": 20,
+   "final": 20,
+   "delta": 0
+  },
+  "missing_courtyard": {
+   "baseline": 54,
+   "final": 54,
+   "delta": 0
+  },
+  "silk_edge_clearance": {
+   "baseline": 2,
+   "final": 2,
+   "delta": 0
+  },
+  "silk_over_copper": {
+   "baseline": 37,
+   "final": 37,
+   "delta": 0
+  },
+  "silk_overlap": {
+   "baseline": 15,
+   "final": 15,
+   "delta": 0
+  },
+  "track_dangling": {
+   "baseline": 1,
+   "final": 1,
+   "delta": 0
+  },
+  "track_not_centered_on_via": {
+   "baseline": 34,
+   "final": 33,
+   "delta": -1
+  },
+  "via_dangling": {
+   "baseline": 6,
+   "final": 6,
+   "delta": 0
+  }
+ },
+ "drc_identity_new": [
+  {
+   "type": "track_not_centered_on_via",
+   "sev": "warning",
+   "desc": "Track endpoint not centered on via"
+  }
+ ],
+ "drc_identity_removed": [
+  {
+   "type": "track_not_centered_on_via",
+   "desc": "Track endpoint not centered on via"
+  }
+ ],
+ "drc_identity_note": "identity diff is text-sensitive (a description embeds the track length); the per-TYPE table is the criterion",
+ "unconnected": 0,
+ "skew_8of8_pass": true,
+ "skews": [
+  {
+   "pair": "OUT0",
+   "len_P_mm": 79.144,
+   "len_N_mm": 79.144,
+   "skew_mm": 0.0,
+   "pass": true
+  },
+  {
+   "pair": "OUT1",
+   "len_P_mm": 75.757,
+   "len_N_mm": 75.757,
+   "skew_mm": 0.0,
+   "pass": true
+  },
+  {
+   "pair": "OUT2",
+   "len_P_mm": 70.82,
+   "len_N_mm": 70.82,
+   "skew_mm": 0.0,
+   "pass": true
+  },
+  {
+   "pair": "OUT3",
+   "len_P_mm": 68.77,
+   "len_N_mm": 68.77,
+   "skew_mm": 0.0,
+   "pass": true
+  },
+  {
+   "pair": "OUT4",
+   "len_P_mm": 78.216,
+   "len_N_mm": 78.216,
+   "skew_mm": 0.0,
+   "pass": true
+  },
+  {
+   "pair": "OUT5",
+   "len_P_mm": 75.989,
+   "len_N_mm": 75.989,
+   "skew_mm": 0.0,
+   "pass": true
+  },
+  {
+   "pair": "OUT6",
+   "len_P_mm": 73.372,
+   "len_N_mm": 73.372,
+   "skew_mm": 0.0,
+   "pass": true
+  },
+  {
+   "pair": "OUT7",
+   "len_P_mm": 71.145,
+   "len_N_mm": 71.145,
+   "skew_mm": 0.0,
+   "pass": true
+  }
+ ],
+ "PASS": true
+}

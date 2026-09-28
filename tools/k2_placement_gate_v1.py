@@ -74,7 +74,11 @@ def main():
     rep={"artifact":"k2_placement_gate_v1","board":a.board,"criteria":R,
          "verdict":"PASS" if all(v=="PASS" for v in ok) else ("FAIL" if "FAIL" in ok else "PENDING"),
          "layer_split":"P1-P4 = SCHEME (framework certificate); P5-P7 + C16 + serpentine buildability = CONSTRUCTION",
-         "gate_rule":"chain entry: k2_gen_v5 / k2_route_segment refuse to run unless this gate file is PRESENT and verdict==PASS"}
+         "chain_entry_check":{"status":"NOT_WIRED","registered_defect":"C20 / M-ENG-GATE-NOT-WIRED",
+            "note":"#K2-338 sec.6: this artifact does NOT gate k2_gen_v5 / k2_route_segment (verified: 0 references there). "
+                   "The earlier 'chain entry: ... refuse to run unless PASS' claim was a PAPER GATE and has been DELETED. "
+                   "Real wiring would hard-block the chain while the scheme verdict is FAIL and needs a generator change "
+                   "(approval required) - deferred to a supervised change."}}
     if a.out: json.dump(rep,open(a.out,"w"),ensure_ascii=False,indent=1)
     print(json.dumps({"verdict":rep["verdict"],"P1":R["P1_highspeed_directness"]["verdict"],
                       "P2":R["P2_length_budget"]["verdict"],"P3":R["P3_mechanical"]["verdict"],

@@ -219,7 +219,11 @@ def main():
            "construction_layer": {"criteria": ["P5", "P6", "P7"], "verdicts": construction,
                                   "verdict": "PASS" if all(v == "PASS" for v in construction) else ("FAIL" if "FAIL" in construction else "PENDING"),
                                   "PENDING_named": [k for k in ("P5", "P6", "P7") if R[k]["verdict"] == "PENDING"]},
-           "gate_rule": "chain entry: k2_gen_v5 / k2_route_segment refuse to run unless the scheme-layer certificate is PRESENT and verdict==PASS",
+           "chain_entry_check": {"status": "NOT_WIRED", "registered_defect": "C20 / M-ENG-GATE-NOT-WIRED",
+                                 "note": "#K2-338 sec.6: this gate does NOT gate the chain (verified: 0 references in "
+                                         "k2_gen_v5.py / k2_route_segment_v1.py). The former claim has been DELETED "
+                                         "(no paper gate). Real wiring needs a generator change (approval required) and "
+                                         "would hard-block the chain while the scheme verdict is FAIL."},
            "OWNER-ITEMS": 0}
     out = a.out or os.path.join(L2, "SCHEME_GATE_%s_v2.json" % os.path.basename(a.board).replace(".kicad_pcb", ""))
     json.dump(rep, open(out, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
