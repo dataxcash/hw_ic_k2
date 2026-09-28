@@ -8,7 +8,7 @@ v1 = **组合确定性管线**（全部是链内既有、确定性、无 LLM 的
 输出 = 最终板 + DRC json（供 eda_eng verify 判卷）。
 """
 from __future__ import annotations
-import json, math, os, shutil, subprocess, sys
+import collections, json, math, os, shutil, subprocess, sys
 
 from . import shadow as shadow_mod
 
@@ -1200,7 +1200,7 @@ def wipe_resolve_chain(rect, moves, work, members, pitch=0.15):
             iso = []
     chain.append({"stage": "pour_islands_detected", "n": len(iso)})
     if iso:
-        P2 = _pcbnew()
+        import pcbnew as P2
         bb2 = P2.LoadBoard(final)
         pads_by_net = collections.defaultdict(list)
         for fp in bb2.GetFootprints():

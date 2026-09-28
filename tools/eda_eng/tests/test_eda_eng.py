@@ -615,6 +615,56 @@ class T(unittest.TestCase):
             self.assertIn(k, seg, "the island path must contain %s" % k)
         self.assertEqual(seg.count("pour_islands_repair"), 1, "exactly ONE repair pass (never a loop)")
 
+    def test_C385_the_island_branch_reads_no_undefined_names(self):
+        """#K2-387（R1064-R1068 的孤岛重连分支**首次实跑即崩**）：`NameError: _pcbnew`
+        —— 同一分支里 `collections` 也未导入。旧的 C385 回归只做**源码字符串**检查，
+        挡不住运行期未定义名（这正是它 74/74 全绿却仍崩的盲区）。本测试用 AST 做
+        **作用域感知**的名字解析：孤岛分支读到的每个裸名必须在内建／模块级绑定／函数内
+        绑定／形参之一，否则失败。"""
+        import ast, builtins
+        src = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
+        tree = ast.parse(src)
+
+        def scope_nodes(body):
+            stack = list(body)
+            while stack:
+                n = stack.pop()
+                yield n
+                if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef, ast.Lambda)):
+                    continue                     # nested defs are their own scope
+                stack.extend(ast.iter_child_nodes(n))
+
+        def scope_bound(body):
+            out = set()
+            for n in scope_nodes(body):
+                if isinstance(n, ast.Import):
+                    out.update((a.asname or a.name).split(".")[0] for a in n.names)
+                elif isinstance(n, ast.ImportFrom):
+                    out.update(a.asname or a.name for a in n.names)
+                elif isinstance(n, ast.ExceptHandler):
+                    if isinstance(n.name, str) and n.name:
+                        out.add(n.name)
+                elif isinstance(n, ast.arg):
+                    out.add(n.arg)
+                elif isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+                    out.add(n.name)
+                elif isinstance(n, ast.Name) and isinstance(n.ctx, (ast.Store, ast.Del)):
+                    out.add(n.id)
+            return out
+
+        mod = set(dir(builtins)) | scope_bound(tree.body)
+        fn = next(n for n in tree.body
+                  if isinstance(n, ast.FunctionDef) and n.name == "wipe_resolve_chain")
+        bound = scope_bound(fn.body) | {a.arg for a in fn.args.args + fn.args.kwonlyargs + fn.args.posonlyargs}
+        if fn.args.vararg:
+            bound.add(fn.args.vararg.arg)
+        if fn.args.kwarg:
+            bound.add(fn.args.kwarg.arg)
+        bad = sorted({n.id for n in scope_nodes(fn.body)
+                      if isinstance(n, ast.Name) and isinstance(n.ctx, ast.Load)
+                      and n.id not in mod and n.id not in bound})
+        self.assertEqual(bad, [], "the island branch must not read undefined names: %s" % bad)
+
     def test_C382_the_residual_second_stitch_is_bounded_and_wall_bounded(self):
         """#K2-382 §二.2：残余二次缝合＝**喂残余清单给同一件工具**（同墙），**只多跑一趟**（不循环/不搜参）。"""
         src = open(os.path.join("tools", "eda_eng", "regen.py"), encoding="utf-8").read()
