@@ -1,0 +1,96 @@
+{
+ "artifact": "k2_reroute_engine_exam_spec_v1",
+ "ts": "2026-09-28",
+ "authority": "#K2-356 sec.2 (rip-up & reroute engine project; criteria first; fail => no board work)",
+ "engine_contract_sec21": {
+  "input": [
+   "new placement",
+   "constraints: layer assignment / 45-degree rule / length match for 8 pairs / clearance / four-corner keepout / copper-pour polygons"
+  ],
+  "output": [
+   "fully connected",
+   "DRC zero new",
+   "accepted chamfers and length match preserved"
+  ]
+ },
+ "exams_sec22": {
+  "A": {
+   "scenario": "left cluster U1/U2/U4/U5 translated by exactly +5.000 mm in X (direction is a scenario parameter; the criteria are direction-agnostic)",
+   "then": "the engine re-routes the affected nets"
+  },
+  "B": {
+   "scenario": "H4 leaf moved to the exact corner (at -> [140.9287,76.9287], keepout -> [137.929,73.929,143.929,79.929]) - SPEC rev-62 is already prepared for this",
+   "then": "the engine performs a LOCAL rip-up & reroute",
+   "note": "H4 is thereby converted from a stumbling block into an engine exam question (the ruling's intent)"
+  }
+ },
+ "criteria_sec21_22_same_five_for_both": {
+  "C1_connectivity": {
+   "test": "kicad-cli DRC unconnected_items == 0",
+   "proxy_note": "machine proxy for '16/16 fully connected'"
+  },
+  "C2_drc_no_new_increase": {
+   "test": "total <= reference total AND the class set adds no new class",
+   "reference": "l14 = 168"
+  },
+  "C3_skew": {
+   "test": "max per-pair copper-length skew <= 0.15 mm",
+   "source": "_shared/eda_core/drc_rules.json intra_pair_skew_mm"
+  },
+  "C4_chamfer_preserved": {
+   "test": "45-degree segment count >= reference count",
+   "reference": "l14 = 2637 (the accepted 166 chamfer operations are reflected in this count; >= is the machine-checkable form)"
+  },
+  "C5_routing_changed": {
+   "test": "segment-level element set difference vs the reference is NON-ZERO",
+   "why": "a no-op is not a re-route (#K2-332)"
+  }
+ },
+ "verdict_rule": "PASS iff all five hold; the tool cannot be talked past (a criterion that cannot fail cannot grade - see the self-grade sanity below)",
+ "priors_sec23": [
+  "W1 sample-pattern library N1-N10 (L2/PLACEMENT_NORMS_v2.json)",
+  "in-register sample fanout/escape structures: m13_v57_f13_r1_pair_coupling_v1_1 (pair coupling, dist_min 0.525, stagger_min 0.38, pad-column-family monotone x-order)",
+  "the three-occupant finding from R924 (down-lane columns + up-lane columns + J2 pad grid share one x-band)"
+ ],
+ "baseline_grading_this_turn": {
+  "harness": "tools/k2_reroute_exam_v1.py",
+  "sanity_selfgrade_l14": {
+   "verdict": "FAIL",
+   "failing": [
+    "C5_routing_changed"
+   ],
+   "meaning": "the harness can fail a no-op => the criteria bite"
+  },
+  "attempt1_R914_l15": {
+   "verdict": "FAIL",
+   "failing": [
+    "C2_drc_no_new_increase (182>168, 5 new classes)",
+    "C4_chamfer_preserved (2007<2637)"
+   ],
+   "note": "C1/C3/C5 pass - the failure is DRC + chamfer loss"
+  },
+  "attempt2_R924_l15": {
+   "verdict": "FAIL",
+   "failing": [
+    "C1_connectivity (1 unconnected)",
+    "C2_drc_no_new_increase (196>168, 4 new classes)",
+    "C4_chamfer_preserved (1999<2637)"
+   ]
+  },
+  "conclusion": "CAPABILITY DOES NOT EXIST (machine-graded on both recorded attempts): the present means can move a layout but cannot re-construct - it breaks connectivity, adds DRC classes, and destroys ~640 of the accepted 45-degree segments."
+ },
+ "gating_sec24": "fail the exam => no board work / no further 'infeasible' claims / no placement construction windows; only the engine may be worked on (method-family switches registered honestly).",
+ "transitional_discipline_sec3_compliance": {
+  "board_changes": "none this turn (read-only grading of recorded artefacts + one reference DRC)",
+  "placement_windows": "SUSPENDED - left cluster / U6 / header board-level: all suspended; H4 suspended until exam B",
+  "allowed": "constructive safe changes only (netlist/governance class)"
+ },
+ "engine_status": "NOT BUILT. This turn delivers the ordered FIRST step (criteria first) + the machine-graded proof that the capability is absent. The engine project (method families, rip-up scope, 45-degree reconstruction, pair re-tuning against the three-occupant band) follows.",
+ "artefacts": {
+  "harness": "tools/k2_reroute_exam_v1.py",
+  "sanity": "L2/REROUTE_EXAM_SANITY_l14_v1.json",
+  "attempt1": "L2/REROUTE_EXAM_ATTEMPT1_v1.json",
+  "attempt2": "L2/REROUTE_EXAM_ATTEMPT2_v1.json"
+ },
+ "OWNER-ITEMS": 0
+}

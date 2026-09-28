@@ -1,0 +1,56 @@
+{
+ "artifact": "k2_reroute_exam_v1",
+ "ts": "2026-09-28",
+ "exam": "EXAM B analogue (H4 re-route attempt 2)",
+ "authority": "#K2-356 sec.2 (rip-up & reroute engine, criteria first, fail => no board work)",
+ "criteria_source": "sec.2.1/2.2; skew limit = project intra_pair_skew_mm",
+ "note": "C1 is the machine proxy for '16/16 fully connected' (kicad-cli unconnected == 0)",
+ "result": {
+  "board": "hw/k2_v4_8L.l15-H4CLEAR-attempt2-FAILED.kicad_pcb",
+  "ref": "hw/k2_v4_8L.l14.kicad_pcb",
+  "criteria": {
+   "C1_connectivity": {
+    "unconnected": 1,
+    "pass": false
+   },
+   "C2_drc_no_new_increase": {
+    "total": 196,
+    "ref_total": 168,
+    "new_classes": [
+     "clearance",
+     "hole_clearance",
+     "shorting_items",
+     "solder_mask_bridge"
+    ],
+    "pass": false
+   },
+   "C3_skew": {
+    "per_pair_mm": {
+     "0": 0.065012,
+     "1": 0.06498,
+     "2": 0.043403,
+     "3": 0.078764,
+     "4": 3.4e-05,
+     "5": 6e-06,
+     "6": 0.021612,
+     "7": 0.013792
+    },
+    "max_mm": 0.078764,
+    "limit_mm": 0.15,
+    "pass": true
+   },
+   "C4_chamfer_preserved": {
+    "count": 1999,
+    "ref_count": 2637,
+    "pass": false
+   },
+   "C5_routing_changed": {
+    "elements_only_in_result": 1417,
+    "only_in_ref": 2693,
+    "pass": true
+   }
+  },
+  "verdict": "FAIL"
+ },
+ "OWNER-ITEMS": 0
+}
