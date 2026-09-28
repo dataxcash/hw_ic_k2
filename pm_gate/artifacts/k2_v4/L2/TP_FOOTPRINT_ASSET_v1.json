@@ -1,0 +1,31 @@
+{
+ "artifact": "k2_tp_footprint_asset_v1",
+ "ts": "2026-09-28",
+ "authority": "#K2-348 W2-prime E1 precondition fix (C24: the library had NO test-point family)",
+ "file": "hw/lib/ForgeOS.pretty/TP_1.0mm.kicad_mod",
+ "sha16": "2647d83f7166140c",
+ "design": {
+  "pad": "single circular SMD pad 1.0 mm on F.Cu + F.Mask, solder_mask_margin 0.05",
+  "no_paste": "deliberately no F.Paste - a probe target is not a solder joint",
+  "courtyard": "F.CrtYd 1.6 x 1.6 mm (verified recognised: GetCourtyard bbox = 1.69 x 1.69 incl. line width)"
+ },
+ "verification": {
+  "loader": "pcbnew.FootprintLoad('hw/lib/ForgeOS.pretty','TP_1.0mm') -> OK",
+  "pads": "1 x ('1', 1.0 mm, 1.0 mm, mask 0x3 = F.Cu+F.Mask)",
+  "courtyard": "PCB_SHAPE x4 on layer 31 (F.CrtYd); bbox 1.69 x 1.69",
+  "will_not_add_warnings": "unlike the existing library members (measured: C_0402_1005Metric__1 courtyard = 0.00 x 0.00, which is why the board carries 54 missing_courtyard warnings), this footprint HAS a courtyard"
+ },
+ "minor_note": {
+  "dialect": "the library uses (version 20260206) + (generator_version \"10.0\"); my file carries (version 20240108). FootprintLoad accepts it, but the next window should align the version header when it wires the refmap entry."
+ },
+ "inert_until": {
+  "step": "the refmap entry + the netlist TP refs are added (E1); this file alone changes no chain behaviour - the 24 existing footprints are byte-untouched"
+ },
+ "next_steps": [
+  "add TP refs to ForgeOS.refmap.json (ref -> 'TP_1.0mm')",
+  "execute E1 with SIX test points (I2C2_SCL/SDA/P3V3_AUX + PWR_CTRL_OUT + UART_TX/RX)",
+  "E2..E7 unchanged"
+ ],
+ "gates": "existing 24 library footprints untouched; no SPEC/generator/schematic edit; no board change; frozen four 4/4",
+ "OWNER-ITEMS": 0
+}
