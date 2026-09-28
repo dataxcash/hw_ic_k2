@@ -1,0 +1,847 @@
+{
+ "lattice": "delta = k*0.5*(ux,uy), k=1..8",
+ "by_direction": {
+  "SE(+X+Y)": [
+   {
+    "k": 1,
+    "delta": [
+     0.5,
+     0.5
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.145,
+    "min_pair": {
+     "moved_net": "MCU_VDD",
+     "fixed_net": "GND"
+    }
+   },
+   {
+    "k": 2,
+    "delta": [
+     1.0,
+     1.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0,
+    "min_pair": {
+     "moved_net": "I2C1_SCL",
+     "fixed_net": "I2C1_SDA"
+    }
+   },
+   {
+    "k": 3,
+    "delta": [
+     1.5,
+     1.5
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0,
+    "min_pair": {
+     "moved_net": "I2C1_SCL",
+     "fixed_net": "I2C1_SDA"
+    }
+   },
+   {
+    "k": 4,
+    "delta": [
+     2.0,
+     2.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0,
+    "min_pair": {
+     "moved_net": "GND",
+     "fixed_net": "PERSTA#"
+    }
+   },
+   {
+    "k": 5,
+    "delta": [
+     2.5,
+     2.5
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.15,
+    "min_pair": {
+     "moved_net": "GND",
+     "fixed_net": "PERSTA#"
+    }
+   },
+   {
+    "k": 6,
+    "delta": [
+     3.0,
+     3.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0,
+    "min_pair": {
+     "moved_net": "PERSTA#",
+     "fixed_net": "MCU_VDD"
+    }
+   },
+   {
+    "k": 7,
+    "delta": [
+     3.5,
+     3.5
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0,
+    "min_pair": {
+     "moved_net": "PERSTA#",
+     "fixed_net": "MCU_VDD"
+    }
+   },
+   {
+    "k": 8,
+    "delta": [
+     4.0,
+     4.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0414,
+    "min_pair": {
+     "moved_net": "PERSTA#",
+     "fixed_net": "MCU_VDD"
+    }
+   }
+  ],
+  "E(+X)": [
+   {
+    "k": 1,
+    "delta": [
+     0.5,
+     0.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0,
+    "min_pair": {
+     "moved_net": "I2C1_SDA",
+     "fixed_net": "I2C1_SCL"
+    }
+   },
+   {
+    "k": 2,
+    "delta": [
+     1.0,
+     0.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0,
+    "min_pair": {
+     "moved_net": "I2C1_SDA",
+     "fixed_net": "I2C1_SCL"
+    }
+   },
+   {
+    "k": 3,
+    "delta": [
+     1.5,
+     0.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0,
+    "min_pair": {
+     "moved_net": "I2C1_SDA",
+     "fixed_net": "I2C1_SCL"
+    }
+   },
+   {
+    "k": 4,
+    "delta": [
+     2.0,
+     0.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0,
+    "min_pair": {
+     "moved_net": "I2C1_SDA",
+     "fixed_net": "I2C1_SCL"
+    }
+   },
+   {
+    "k": 5,
+    "delta": [
+     2.5,
+     0.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0,
+    "min_pair": {
+     "moved_net": "MCU_VDD",
+     "fixed_net": "I2C1_SDA"
+    }
+   },
+   {
+    "k": 6,
+    "delta": [
+     3.0,
+     0.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0,
+    "min_pair": {
+     "moved_net": "GND",
+     "fixed_net": "I2C1_SDA"
+    }
+   },
+   {
+    "k": 7,
+    "delta": [
+     3.5,
+     0.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0,
+    "min_pair": {
+     "moved_net": "GND",
+     "fixed_net": "I2C1_SDA"
+    }
+   },
+   {
+    "k": 8,
+    "delta": [
+     4.0,
+     0.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.05,
+    "min_pair": {
+     "moved_net": "MCU_VDD",
+     "fixed_net": "GND"
+    }
+   }
+  ],
+  "S(+Y)": [
+   {
+    "k": 1,
+    "delta": [
+     0.0,
+     0.5
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0,
+    "min_pair": {
+     "moved_net": "NRST",
+     "fixed_net": "SWCLK_BOOT0"
+    }
+   },
+   {
+    "k": 2,
+    "delta": [
+     0.0,
+     1.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.15,
+    "min_pair": {
+     "moved_net": "I2C1_SCL",
+     "fixed_net": "I2C1_SDA"
+    }
+   },
+   {
+    "k": 3,
+    "delta": [
+     0.0,
+     1.5
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.15,
+    "min_pair": {
+     "moved_net": "I2C1_SCL",
+     "fixed_net": "I2C1_SDA"
+    }
+   },
+   {
+    "k": 4,
+    "delta": [
+     0.0,
+     2.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.15,
+    "min_pair": {
+     "moved_net": "I2C1_SCL",
+     "fixed_net": "I2C1_SDA"
+    }
+   },
+   {
+    "k": 5,
+    "delta": [
+     0.0,
+     2.5
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.085,
+    "min_pair": {
+     "moved_net": "MCU_VDD",
+     "fixed_net": "GND"
+    }
+   },
+   {
+    "k": 6,
+    "delta": [
+     0.0,
+     3.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0,
+    "min_pair": {
+     "moved_net": "MCU_VDD",
+     "fixed_net": "GND"
+    }
+   },
+   {
+    "k": 7,
+    "delta": [
+     0.0,
+     3.5
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0,
+    "min_pair": {
+     "moved_net": "MCU_VDD",
+     "fixed_net": "GND"
+    }
+   },
+   {
+    "k": 8,
+    "delta": [
+     0.0,
+     4.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0,
+    "min_pair": {
+     "moved_net": "MCU_VDD",
+     "fixed_net": "GND"
+    }
+   }
+  ],
+  "NW(-X-Y)": [
+   {
+    "k": 1,
+    "delta": [
+     -0.5,
+     -0.5
+    ],
+    "conflict": false,
+    "min_pair_mm": 0.3099,
+    "min_pair": {
+     "moved_net": "I2C2_SCL",
+     "fixed_net": "I2C1_SDA"
+    }
+   },
+   {
+    "k": 2,
+    "delta": [
+     -1.0,
+     -1.0
+    ],
+    "conflict": false,
+    "min_pair_mm": null,
+    "min_pair": null
+   },
+   {
+    "k": 3,
+    "delta": [
+     -1.5,
+     -1.5
+    ],
+    "conflict": false,
+    "min_pair_mm": null,
+    "min_pair": null
+   },
+   {
+    "k": 4,
+    "delta": [
+     -2.0,
+     -2.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0487,
+    "min_pair": {
+     "moved_net": "P3V3",
+     "fixed_net": ""
+    }
+   },
+   {
+    "k": 5,
+    "delta": [
+     -2.5,
+     -2.5
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0,
+    "min_pair": {
+     "moved_net": "P3V3",
+     "fixed_net": ""
+    }
+   },
+   {
+    "k": 6,
+    "delta": [
+     -3.0,
+     -3.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0,
+    "min_pair": {
+     "moved_net": "P3V3",
+     "fixed_net": ""
+    }
+   },
+   {
+    "k": 7,
+    "delta": [
+     -3.5,
+     -3.5
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0,
+    "min_pair": {
+     "moved_net": "P3V3",
+     "fixed_net": ""
+    }
+   },
+   {
+    "k": 8,
+    "delta": [
+     -4.0,
+     -4.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0,
+    "min_pair": {
+     "moved_net": "P3V3",
+     "fixed_net": ""
+    }
+   }
+  ],
+  "W(-X)": [
+   {
+    "k": 1,
+    "delta": [
+     -0.5,
+     0.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.1182,
+    "min_pair": {
+     "moved_net": "UART_TX",
+     "fixed_net": "I2C2_SDA"
+    }
+   },
+   {
+    "k": 2,
+    "delta": [
+     -1.0,
+     0.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0,
+    "min_pair": {
+     "moved_net": "I2C2_SCL",
+     "fixed_net": "I2C2_SDA"
+    }
+   },
+   {
+    "k": 3,
+    "delta": [
+     -1.5,
+     0.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0375,
+    "min_pair": {
+     "moved_net": "UART_TX",
+     "fixed_net": "I2C2_SDA"
+    }
+   },
+   {
+    "k": 4,
+    "delta": [
+     -2.0,
+     0.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0487,
+    "min_pair": {
+     "moved_net": "FB_U2",
+     "fixed_net": ""
+    }
+   },
+   {
+    "k": 5,
+    "delta": [
+     -2.5,
+     0.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0,
+    "min_pair": {
+     "moved_net": "FB_U2",
+     "fixed_net": ""
+    }
+   },
+   {
+    "k": 6,
+    "delta": [
+     -3.0,
+     0.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0,
+    "min_pair": {
+     "moved_net": "FB_U2",
+     "fixed_net": ""
+    }
+   },
+   {
+    "k": 7,
+    "delta": [
+     -3.5,
+     0.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0,
+    "min_pair": {
+     "moved_net": "FB_U2",
+     "fixed_net": ""
+    }
+   },
+   {
+    "k": 8,
+    "delta": [
+     -4.0,
+     0.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0,
+    "min_pair": {
+     "moved_net": "FB_U2",
+     "fixed_net": ""
+    }
+   }
+  ],
+  "N(-Y)": [
+   {
+    "k": 1,
+    "delta": [
+     0.0,
+     -0.5
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.15,
+    "min_pair": {
+     "moved_net": "I2C1_SDA",
+     "fixed_net": "I2C1_SCL"
+    }
+   },
+   {
+    "k": 2,
+    "delta": [
+     0.0,
+     -1.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.15,
+    "min_pair": {
+     "moved_net": "I2C1_SDA",
+     "fixed_net": "I2C1_SCL"
+    }
+   },
+   {
+    "k": 3,
+    "delta": [
+     0.0,
+     -1.5
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.15,
+    "min_pair": {
+     "moved_net": "I2C1_SCL",
+     "fixed_net": "GND"
+    }
+   },
+   {
+    "k": 4,
+    "delta": [
+     0.0,
+     -2.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.1657,
+    "min_pair": {
+     "moved_net": "I2C1_SDA",
+     "fixed_net": "GND"
+    }
+   },
+   {
+    "k": 5,
+    "delta": [
+     0.0,
+     -2.5
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.15,
+    "min_pair": {
+     "moved_net": "I2C1_SDA",
+     "fixed_net": "GND"
+    }
+   },
+   {
+    "k": 6,
+    "delta": [
+     0.0,
+     -3.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.1502,
+    "min_pair": {
+     "moved_net": "I2C1_SDA",
+     "fixed_net": "GND"
+    }
+   },
+   {
+    "k": 7,
+    "delta": [
+     0.0,
+     -3.5
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.1641,
+    "min_pair": {
+     "moved_net": "I2C1_SCL",
+     "fixed_net": "I2C2_SCL"
+    }
+   },
+   {
+    "k": 8,
+    "delta": [
+     0.0,
+     -4.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.15,
+    "min_pair": {
+     "moved_net": "I2C1_SCL",
+     "fixed_net": "I2C2_SCL"
+    }
+   }
+  ],
+  "NE(+X-Y)": [
+   {
+    "k": 1,
+    "delta": [
+     0.5,
+     -0.5
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0,
+    "min_pair": {
+     "moved_net": "I2C1_SDA",
+     "fixed_net": "I2C1_SCL"
+    }
+   },
+   {
+    "k": 2,
+    "delta": [
+     1.0,
+     -1.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0,
+    "min_pair": {
+     "moved_net": "I2C1_SDA",
+     "fixed_net": "I2C1_SCL"
+    }
+   },
+   {
+    "k": 3,
+    "delta": [
+     1.5,
+     -1.5
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0,
+    "min_pair": {
+     "moved_net": "GND",
+     "fixed_net": "I2C1_SDA"
+    }
+   },
+   {
+    "k": 4,
+    "delta": [
+     2.0,
+     -2.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0662,
+    "min_pair": {
+     "moved_net": "I2C1_SCL",
+     "fixed_net": "I2C1_SDA"
+    }
+   },
+   {
+    "k": 5,
+    "delta": [
+     2.5,
+     -2.5
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0,
+    "min_pair": {
+     "moved_net": "I2C1_SCL",
+     "fixed_net": "I2C1_SDA"
+    }
+   },
+   {
+    "k": 6,
+    "delta": [
+     3.0,
+     -3.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0874,
+    "min_pair": {
+     "moved_net": "I2C1_SCL",
+     "fixed_net": "I2C1_SDA"
+    }
+   },
+   {
+    "k": 7,
+    "delta": [
+     3.5,
+     -3.5
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0,
+    "min_pair": {
+     "moved_net": "I2C1_SCL",
+     "fixed_net": "I2C2_SCL"
+    }
+   },
+   {
+    "k": 8,
+    "delta": [
+     4.0,
+     -4.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.05,
+    "min_pair": {
+     "moved_net": "GND",
+     "fixed_net": "I2C2_SCL"
+    }
+   }
+  ],
+  "SW(-X+Y)": [
+   {
+    "k": 1,
+    "delta": [
+     -0.5,
+     0.5
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0,
+    "min_pair": {
+     "moved_net": "UART_TX",
+     "fixed_net": "I2C2_SDA"
+    }
+   },
+   {
+    "k": 2,
+    "delta": [
+     -1.0,
+     1.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0,
+    "min_pair": {
+     "moved_net": "UART_TX",
+     "fixed_net": "I2C2_SDA"
+    }
+   },
+   {
+    "k": 3,
+    "delta": [
+     -1.5,
+     1.5
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0375,
+    "min_pair": {
+     "moved_net": "UART_TX",
+     "fixed_net": "I2C2_SDA"
+    }
+   },
+   {
+    "k": 4,
+    "delta": [
+     -2.0,
+     2.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0487,
+    "min_pair": {
+     "moved_net": "FB_U2",
+     "fixed_net": ""
+    }
+   },
+   {
+    "k": 5,
+    "delta": [
+     -2.5,
+     2.5
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0,
+    "min_pair": {
+     "moved_net": "FB_U2",
+     "fixed_net": ""
+    }
+   },
+   {
+    "k": 6,
+    "delta": [
+     -3.0,
+     3.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0087,
+    "min_pair": {
+     "moved_net": "FB_U2",
+     "fixed_net": ""
+    }
+   },
+   {
+    "k": 7,
+    "delta": [
+     -3.5,
+     3.5
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0,
+    "min_pair": {
+     "moved_net": "MCU_VDD",
+     "fixed_net": "I2C2_SDA"
+    }
+   },
+   {
+    "k": 8,
+    "delta": [
+     -4.0,
+     4.0
+    ],
+    "conflict": true,
+    "min_pair_mm": 0.0,
+    "min_pair": {
+     "moved_net": "GND",
+     "fixed_net": "I2C2_SDA"
+    }
+   }
+  ]
+ }
+}

@@ -551,6 +551,23 @@ class T(unittest.TestCase):
         self.assertEqual(r["status"], "APPLIED")
         self.assertGreater(r["zones_refilled"], 0, "the batch path must actually refill zones")
 
+    def test_K371_prim_dist_is_exact_for_every_shape_pair(self):
+        """#K2-371 sec.3：方案层净距冲突判定要**真形**逐对精确（线段/有向矩形/圆 全组合）。"""
+        seg = {"a": [0.0, 0.0], "b": [10.0, 0.0], "half_w": 0.1}
+        seg2 = {"a": [0.0, 2.0], "b": [10.0, 2.0], "half_w": 0.1}
+        rect = {"rect": {"cx": 5.0, "cy": 3.0, "sx": 2.0, "sy": 1.0, "rot": 0.0}}
+        rect2 = {"rect": {"cx": 5.0, "cy": -3.0, "sx": 2.0, "sy": 1.0, "rot": 0.0}}
+        circ = {"center": [5.0, 3.0], "radius": 0.5}
+        circ0 = {"center": [5.0, -2.0], "radius": 0.0}
+        self.assertAlmostEqual(block.prim_dist(seg, circ0), 1.9, places=6)      # seg vs circle
+        self.assertAlmostEqual(block.prim_dist(seg, rect), 2.4, places=6)       # seg vs rect
+        self.assertAlmostEqual(block.prim_dist({"center": [5.0, -2.0], "radius": 0.5}, rect), 4.0, places=6)
+        self.assertAlmostEqual(block.prim_dist(circ0, circ), 4.5, places=6)     # circle vs circle
+        self.assertAlmostEqual(block.prim_dist(rect, rect2), 5.0, places=6)     # rect vs rect
+        self.assertAlmostEqual(block.prim_dist(seg, seg2), 1.8, places=6)       # seg vs seg
+        self.assertEqual(block.prim_dist({"center": [5.0, 3.0], "radius": 0.5}, rect), 0.0,
+                         "a circle inside a rect is a hard conflict")
+
     def test_K370_exact_shape_obstacles_kill_the_aabb_false_positive(self):
         """#K2-370 sec.3.3 / C32：线段障碍用**真形**测距。
         45 度线段的 AABB 会罩住"离铜很远"的点 => 旧模型假阳；真形模型必须放行，而真紧点仍须拒。"""

@@ -1,0 +1,55 @@
+{
+ "artifact": "k2_examA_planning_regression_v1",
+ "ts": "2026-09-29",
+ "authority": "#K2-371 sec.3: the current blockage is a PLANNING-LAYER missing drawing (sec.16). This is the required regression artifact (sec.16.3 four elements) and it MUST carry a binary verdict.",
+ "scenario_frozen": {
+  "members": ["C73","C84","C85","C86","C87","C88","C90","D2","E2","J12","J13","J6","J9","L1","R40","R41","U1","U2","U4","U5"],
+  "rect": [22.95, 32.95, 46.50, 62.50],
+  "delta_mm": [3.5, 3.5],
+  "note": "#K2-371 sec.2: the frame correction is ratified and the scenario (members / frame / delta) is FROZEN. Nothing here changes it."
+ },
+ "verdict": "INFEASIBLE_BOUNDED",
+ "verdict_plain": "the frozen scenario cannot be satisfied by ANY rigid translation of the block: the placement gate admits exactly ONE lattice point (3.5,3.5) and that point makes the moved copper overlap fixed foreign copper. This is a PLANNING defect (how the frame/delta are chosen), not a routing-capability defect.",
+ "baseline_geometric_digest": {"board": "hw/k2_v4_8L.l14.kicad_pcb", "sha256_16": "1cf4d39614491ccc", "n_segments": 6338, "n_vias": 736,
+   "rule": "#K2-371 sec.5: byte SHA is not a criterion; this canonical geometric digest is. Same board, two computations -> identical."},
+ "element_1_cause_of_death": "After a rigid translation the moved block copper sweeps into the band R+delta\\R, where the OUTSIDE (fixed) copper and the fixed dR ports live. A rigid motion therefore drives moved copper into fixed foreign copper for every gate-legal delta.",
+ "element_2_proven_facts": [
+  {"id": "F1", "claim": "at the frozen delta the moved set overlaps fixed foreign copper",
+   "reading": {"n_moved_primitives": 718, "n_fixed_primitives": 7055, "min_pair_mm": 0.0,
+               "min_pair": {"moved_net": "PERSTA#", "fixed_net": "MCU_VDD"}, "conflicts_shown": 12,
+               "example": "moved PERSTA# copper at (46.95,38.25) touches fixed MCU_VDD copper (dist 0.0000mm)",
+               "also": "a moved GND pad (U5/2) lands on the I2C2_SCL dR port - the same conflict, seen as a pad-on-port"}},
+  {"id": "F2", "claim": "EVERY SE lattice point (the rule-derived direction) conflicts",
+   "reading": {"direction": "SE (+X,+Y), lattice delta = k*0.5*(1,1), k=1..8",
+               "conflict_free": 0, "of": 8,
+               "per_k_min_pair_mm": {"0.5": 0.145, "1.0": 0.0, "1.5": 0.0, "2.0": 0.0, "2.5": 0.15, "3.0": 0.0, "3.5": 0.0, "4.0": 0.0414}}},
+  {"id": "F3", "claim": "the PLACEMENT gate admits exactly one of those 8 points, and it is the conflicting one",
+   "reading": {"gate": "regen.region_select (P1 physical placement self-check, in-register)", "n_legal": 1,
+               "legal": [[3.5, 3.5]], "all_others_gen_exit": 1}},
+  {"id": "F4", "claim": "wider scan: only NW (-X,-Y) translations are ever conflict-free, and they violate the N5 direction rule",
+   "reading": {"scanned": "8 directions x k=1..8 = 64 candidates", "conflict_free": 3,
+               "conflict_free_set": [[-0.5,-0.5], [-1.0,-1.0], [-1.5,-1.5]],
+               "note": "NW moves the region INTO the crowded quadrant (N5 VIOLATED), so it is not an admissible answer"}},
+  {"id": "F5", "claim": "the conflicts are not a routing-capability failure",
+   "reading": {"engine_state": "true-shape obstacles (segments / oriented rects / circles) + fail-closed exact re-check; exam A attempt 7 reconnects 14 of 23 joints",
+               "blocked_examples": ["GND F.Cu", "MCU_VDD F.Cu", "I2C1_SDA F.Cu"],
+               "note": "the remaining blocked joints include ports/targets that lie inside fixed foreign copper; no router can fix that, because the PLAN put them there"}}
+ ],
+ "element_3_corrected_frame_and_delta": {
+  "status": "NOT APPLICABLE TO THIS SCENARIO - a correction would change the frozen members/frame/delta and therefore requires a NEW EXAM NUMBER (#K2-371 sec.2: 禁原地挪靶)",
+  "proposal_for_the_next_exam_issue": [
+   {"option": "A", "change": "allow the CONFLICTING neighbours into the change set (the block's member set grows)", "conservation": "capacity: the moved set must have zero clearance conflicts against the fixed set => demand = the conflicting neighbour nets must be re-routable; measured: the conflicting pairs are few and named (PERSTA#/MCU_VDD, GND/PERSTA#, I2C1_SCL/I2C1_SDA, MCU_VDD/GND per direction/k)"},
+   {"option": "B", "change": "use a delta that is conflict-free but rule-inadmissible (NW k=1..3), i.e. relax N5", "conservation": "capacity: conflict-free by measurement (3/64); demand: N5 direction rule must be waived by the adjudicator"},
+   {"option": "C", "change": "keep the frame but forbid the rigid-translation family (require relative rearrangement inside the block)", "conservation": "demand: the in-block copper must then be re-laid, not translated; capacity: the block area must host the re-laid copper - not measured yet"}
+  ]
+ },
+ "element_4_buildability": {"value": "relocation_listed",
+   "meaning": "the relocation cannot be built from the frozen drawing: the drawing itself (frame + delta) must be corrected first, and that correction is an adjudicator item because the scenario is frozen."},
+ "evidence_refs": {
+  "lattice_scan": "this artifact, element_2 F2/F4 (delta_scan2.json)",
+  "placement_gate": "regen.region_select re-run (independently verified: n_legal=1 -> (3.5,3.5))",
+  "conflict_engine": "eda_eng block.clearance_conflicts (true-shape pairwise distances over 718 moved x 7055 fixed primitives, bucketed)",
+  "exam_A_attempt7": "L2/EDA_ENG_EXAM_A_ATTEMPT7_BLOCK_VERDICT_v1.json (7d42648e16acd0c2)"
+ },
+ "OWNER-ITEMS": 0
+}

@@ -69,6 +69,14 @@ def main(argv=None):
     p.add_argument("--clearance", type=float, default=None)
     p.add_argument("--max-jobs", type=int, default=None)
     p.add_argument("--json-out")
+    p = sub.add_parser("block-check",
+                       help="#K2-371: PLANNING-layer check - does a rigid block translation collide with fixed copper?")
+    p.add_argument("--board"); p.add_argument("--rect", help="x0,y0,x1,y1 (mm)")
+    p.add_argument("--refs", default=None, help="declared block members (comma-separated)")
+    p.add_argument("--delta", required=True, help="dx,dy in mm")
+    p.add_argument("--clearance", type=float, default=None)
+    p.add_argument("--digest", action="store_true", help="also report the canonical geometric digest")
+    p.add_argument("--json-out")
     p = sub.add_parser("dump", help="read-only per-net track/via inventory (QA/test helper)")
     p.add_argument("--board", required=True)
     p.add_argument("--json-out")
@@ -207,6 +215,25 @@ def main(argv=None):
         r = regen_mod.relocate_block_chain(rect, [dx, dy], a.work, members=members,
                                            clearance=clear, max_jobs=a.max_jobs)
         return _emit(r, a.json_out, 0 if r.get("state") == "GRADED" and (r.get("M4") or {}).get("verdict") == "PASS" else 1)
+
+    if a.cmd == "block-check":
+        from . import route as _rt
+        board = a.board or REF_BOARD
+        members = [x.strip() for x in a.refs.split(",") if x.strip()] if a.refs else None
+        rect = [float(v) for v in a.rect.split(",")] if a.rect else None
+        if rect is None:
+            pb = block_mod.pad_rect(board, members)
+            if pb is None:
+                return _emit({"artifact": "eda_eng_block_check", "error": "no pads for the given refs"}, a.json_out, 2)
+            rect = block_mod.inflate(pb, 0.5)
+        dx, dy = [float(v) for v in a.delta.split(",")]
+        clear = a.clearance if a.clearance is not None else _rt.CLEAR
+        r = {"artifact": "eda_eng_block_check", "board": board, "rect": rect, "members": members,
+             "digest": block_mod.geometric_digest(board) if a.digest else None,
+             "conflicts": block_mod.clearance_conflicts(board, rect, members, [dx, dy], clearance=clear),
+             "rule": "#K2-371 sec.3: a rigid block translation must not push moved copper into FIXED foreign copper; "
+                     "a conflict here is a PLANNING defect (frame/delta), not a routing failure"}
+        return _emit(r, a.json_out, 0 if r["conflicts"]["n_conflicts_shown"] == 0 else 1)
 
     if a.cmd == "dump":
         return _emit({"artifact": "eda_eng_dump", "board": a.board,

@@ -19,7 +19,7 @@
 本模块只做几何与账，不做布线；重连在 M3（`route.maze_route`）。
 """
 from __future__ import annotations
-import collections, hashlib, os, shutil, sys
+import collections, hashlib, json, math, os, shutil, sys
 
 CLEAR = 0.175
 
@@ -451,6 +451,232 @@ def true_clearance_for_jobs(board, jobs):
         out.append({"net": ex, "layer": L, "min_mm": None if best is None else round(best, 4),
                     "nearest_net": who})
     return out
+
+
+# ─────────────────────── 方案层：刚体平移的**净距冲突**判定（#K2-371 §三 · §16 方案层回归件） ───────────────────────
+# 问题层级：**框/位移怎么定**（方案层），不是"怎么布线"（施工层）。
+# 判定：把**块内铜（含成员焊盘）**按 Δ 平移后，与**块外固定铜**（异网）逐对量**真形**净距；
+#       任何一对 < clearance ⇒ 该 Δ 在冻结框下**净距冲突**（该冲突布线器无法修 —— 它是"方案"错了）。
+
+
+def _pt_seg_d2(a, b, p):
+    """点到线段距离平方（本模块自足，不依赖 route）。"""
+    ax, ay = a
+    bx, by = b
+    dx, dy = bx - ax, by - ay
+    L2 = dx * dx + dy * dy
+    t = 0.0 if L2 == 0 else max(0.0, min(1.0, ((p[0] - ax) * dx + (p[1] - ay) * dy) / L2))
+    cx, cy = ax + t * dx, ay + t * dy
+    return (p[0] - cx) ** 2 + (p[1] - cy) ** 2
+
+
+def _seg_seg_d(a1, a2, b1, b2):
+    """两线段最短距离（精确）。"""
+    def d_pt_seg(p, a, b):
+        return math.sqrt(_pt_seg_d2(a, b, p))
+    # 相交 => 0
+    def cross(o, p, q):
+        return (p[0] - o[0]) * (q[1] - o[1]) - (p[1] - o[1]) * (q[0] - o[0])
+    d1, d2 = cross(b1, b2, a1), cross(b1, b2, a2)
+    d3, d4 = cross(a1, a2, b1), cross(a1, a2, b2)
+    if ((d1 > 0) != (d2 > 0)) and ((d3 > 0) != (d4 > 0)):
+        return 0.0
+    return min(d_pt_seg(a1, b1, b2), d_pt_seg(a2, b1, b2), d_pt_seg(b1, a1, a2), d_pt_seg(b2, a1, a2))
+
+
+def _pt_rect_d(p, r):
+    """点到**有向矩形**（cx,cy,sx,sy,rot）的距离（精确）。"""
+    th = math.radians(r.get("rot", 0.0))
+    dx, dy = p[0] - r["cx"], p[1] - r["cy"]
+    c, sn = math.cos(-th), math.sin(-th)
+    lx, ly = dx * c - dy * sn, dx * sn + dy * c
+    ex = max(abs(lx) - r["sx"] / 2.0, 0.0)
+    ey = max(abs(ly) - r["sy"] / 2.0, 0.0)
+    return math.hypot(ex, ey)
+
+
+def _rect_corners(r):
+    th = math.radians(r.get("rot", 0.0))
+    c, sn = math.cos(th), math.sin(th)
+    hx, hy = r["sx"] / 2.0, r["sy"] / 2.0
+    return [(r["cx"] + c * ux - sn * uy, r["cy"] + sn * ux + c * uy)
+            for (ux, uy) in ((-hx, -hy), (hx, -hy), (hx, hy), (-hx, hy))]
+
+
+def _seg_rect_d(a, b, r):
+    if _pt_rect_d(a, r) <= 1e-9 or _pt_rect_d(b, r) <= 1e-9:
+        return 0.0
+    cs = _rect_corners(r)
+    return min(_seg_seg_d(a, b, cs[i], cs[(i + 1) % 4]) for i in range(4))
+
+
+def _rect_rect_d(r1, r2):
+    c1, c2 = _rect_corners(r1), _rect_corners(r2)
+    if any(_pt_rect_d(p, r2) <= 1e-9 for p in c1) or any(_pt_rect_d(p, r1) <= 1e-9 for p in c2):
+        return 0.0
+    return min(_seg_seg_d(c1[i], c1[(i + 1) % 4], c2[j], c2[(j + 1) % 4]) for i in range(4) for j in range(4))
+
+
+def prim_dist(p1, p2):
+    """任意两个**真形**基元的最短距离（seg: a/b/half_w · rect: rect · circle: center/radius）。"""
+    t1 = "seg" if "a" in p1 else ("rect" if "rect" in p1 else "circle")
+    t2 = "seg" if "a" in p2 else ("rect" if "rect" in p2 else "circle")
+
+    def base(t1, q1, t2, q2):
+        if t1 == "seg" and t2 == "seg":
+            return _seg_seg_d(q1["a"], q1["b"], q2["a"], q2["b"])
+        if t1 == "seg" and t2 == "rect":
+            return _seg_rect_d(q1["a"], q1["b"], q2["rect"])
+        if t1 == "rect" and t2 == "seg":
+            return _seg_rect_d(q2["a"], q2["b"], q1["rect"])
+        if t1 == "rect" and t2 == "rect":
+            return _rect_rect_d(q1["rect"], q2["rect"])
+        if t1 == "circle" and t2 == "circle":
+            return math.hypot(q1["center"][0] - q2["center"][0], q1["center"][1] - q2["center"][1])
+        if t1 == "circle" and t2 == "seg":
+            return math.sqrt(_pt_seg_d2(q2["a"], q2["b"], q1["center"]))
+        if t1 == "seg" and t2 == "circle":
+            return math.sqrt(_pt_seg_d2(q1["a"], q1["b"], q2["center"]))
+        if t1 == "circle" and t2 == "rect":
+            return _pt_rect_d(q1["center"], q2["rect"])
+        if t1 == "rect" and t2 == "circle":
+            return _pt_rect_d(q2["center"], q1["rect"])
+        raise ValueError("unknown primitive pair %s/%s" % (t1, t2))
+
+    d = base(t1, p1, t2, p2)
+    r = p1.get("half_w", 0.0) + p2.get("half_w", 0.0)
+    if t1 == "circle":
+        r += p1.get("radius", 0.0)
+    if t2 == "circle":
+        r += p2.get("radius", 0.0)
+    return max(0.0, d - r)
+
+
+def _translate(p, delta):
+    q = dict(p)
+    if "a" in p:
+        q["a"] = [p["a"][0] + delta[0], p["a"][1] + delta[1]]
+        q["b"] = [p["b"][0] + delta[0], p["b"][1] + delta[1]]
+        q["bbox"] = [p["bbox"][0] + delta[0], p["bbox"][1] + delta[1],
+                     p["bbox"][2] + delta[0], p["bbox"][3] + delta[1]]
+    elif "rect" in p:
+        q["rect"] = dict(p["rect"]); q["rect"]["cx"] += delta[0]; q["rect"]["cy"] += delta[1]
+        q["bbox"] = [p["bbox"][0] + delta[0], p["bbox"][1] + delta[1],
+                     p["bbox"][2] + delta[0], p["bbox"][3] + delta[1]]
+    else:
+        q["center"] = [p["center"][0] + delta[0], p["center"][1] + delta[1]]
+        q["bbox"] = [p["bbox"][0] + delta[0], p["bbox"][1] + delta[1],
+                     p["bbox"][2] + delta[0], p["bbox"][3] + delta[1]]
+    return q
+
+
+def _pad_prim(p, P):
+    bb = p.GetBoundingBox()
+    own = {"kind": "copper", "net": p.GetNetname(),
+           "bbox": [round(P.ToMM(bb.GetX()), 4), round(P.ToMM(bb.GetY()), 4),
+                    round(P.ToMM(bb.GetRight()), 4), round(P.ToMM(bb.GetBottom()), 4)]}
+    try:
+        sz, pc = p.GetSize(), p.GetPosition()
+        own["rect"] = {"cx": round(P.ToMM(pc.x), 4), "cy": round(P.ToMM(pc.y), 4),
+                       "sx": round(P.ToMM(sz.x), 4), "sy": round(P.ToMM(sz.y), 4),
+                       "rot": round(p.GetOrientationDegrees(), 3)}
+    except Exception:                                          # noqa: BLE001
+        pass
+    return own
+
+
+def classify_primitives(board, rect, members):
+    """按 BLOCK 分类产出 (moved@Δ=0, fixed) 两组**真形**基元（含成员焊盘）。"""
+    P = _P()
+    b = P.LoadBoard(board)
+    nets = {c: ni.GetNetname() for c, ni in b.GetNetInfo().NetsByNetcode().items()}
+    mem = set(members or [])
+    moved, fixed = [], []
+    for fp in b.GetFootprints():
+        tgt = moved if fp.GetReference() in mem else fixed
+        for p in fp.Pads():
+            tgt.append(_pad_prim(p, P))
+    for t in b.GetTracks():
+        net = nets.get(t.GetNetCode(), "")
+        if t.GetClass() == "PCB_VIA":
+            vp = t.GetPosition(); bb = t.GetBoundingBox()
+            pr = {"kind": "copper", "net": net,
+                  "center": [round(P.ToMM(vp.x), 4), round(P.ToMM(vp.y), 4)],
+                  "radius": round(P.ToMM(t.GetWidth()) / 2.0, 4),
+                  "bbox": [round(P.ToMM(bb.GetX()), 4), round(P.ToMM(bb.GetY()), 4),
+                           round(P.ToMM(bb.GetRight()), 4), round(P.ToMM(bb.GetBottom()), 4)]}
+            (moved if pt_in(pr["center"], rect) else fixed).append(pr)
+            continue
+        st, en = t.GetStart(), t.GetEnd()
+        a = [round(P.ToMM(st.x), 4), round(P.ToMM(st.y), 4)]
+        z = [round(P.ToMM(en.x), 4), round(P.ToMM(en.y), 4)]
+        hw = round(P.ToMM(t.GetWidth()) / 2.0, 4)
+        def mk(p, q):
+            return {"kind": "copper", "net": net, "a": p, "b": q, "half_w": hw,
+                    "bbox": [min(p[0], q[0]), min(p[1], q[1]), max(p[0], q[0]), max(p[1], q[1])]}
+        ins, outs = _seg_inside_parts(a, z, rect)
+        if ins and not outs:
+            moved.append(mk(ins[0][0], ins[0][1]))
+            continue
+        for (p, q) in outs:
+            if (p[0] - q[0]) ** 2 + (p[1] - q[1]) ** 2 > 1e-16:
+                fixed.append(mk(p, q))
+        if not ins:
+            continue
+        if pt_in(a, rect) or pt_in(z, rect):
+            moved.append(mk(ins[0][0], ins[0][1]))
+        # 桥的块内中段会被删除（非移动）⇒ 不计入任一侧
+    return moved, fixed
+
+
+def clearance_conflicts(board, rect, members, delta, clearance=CLEAR, cap=12, cell=1.0):
+    """按 Δ 平移**块内铜**，与**异网固定铜**逐对真形量距；返回具名冲突清单（方案层读数）。"""
+    moved, fixed = classify_primitives(board, rect, members)
+    buckets = collections.defaultdict(list)
+    for f in fixed:
+        bb = f["bbox"]
+        for i in range(int(bb[0] // cell), int(bb[2] // cell) + 1):
+            for j in range(int(bb[1] // cell), int(bb[3] // cell) + 1):
+                buckets[(i, j)].append(f)
+    conf, best = [], None
+    for m0 in moved:
+        m = _translate(m0, delta)
+        bb = m["bbox"]
+        cand = []
+        for i in range(int((bb[0] - clearance) // cell), int((bb[2] + clearance) // cell) + 1):
+            for j in range(int((bb[1] - clearance) // cell), int((bb[3] + clearance) // cell) + 1):
+                cand += buckets.get((i, j), [])
+        for f in cand:
+            if f["net"] == m["net"]:
+                continue
+            d = prim_dist(m, f)
+            if best is None or d < best[0]:
+                best = (d, m["net"], f["net"])
+            if d < clearance - 1e-9:
+                if len(conf) < cap:
+                    conf.append({"moved_net": m["net"], "fixed_net": f["net"], "dist_mm": round(d, 4),
+                                 "at": [round(bb[0], 3), round(bb[1], 3)]})
+                if len(conf) >= cap:
+                    break
+        if len(conf) >= cap:
+            break
+    return {"delta_mm": [round(delta[0], 3), round(delta[1], 3)], "n_moved": len(moved), "n_fixed": len(fixed),
+            "conflicts": conf, "n_conflicts_shown": len(conf), "min_pair_mm": None if best is None else round(best[0], 4),
+            "min_pair": None if best is None else {"moved_net": best[1], "fixed_net": best[2]},
+            "clearance_mm": clearance}
+
+
+def geometric_digest(board, nd=3):
+    """**规范几何摘要**（#K2-371 §五）：对几何（非字节）做 canonical 量化后取 SHA256 ⇒ 同几何必同摘要。"""
+    c = read_copper(board)
+    segs = sorted((s["net"], s["layer"], round(s["width"], nd)) + tuple(round(v, nd) for v in _canon(s["a"], s["b"]))
+                  for s in c["segments"])
+    vias = sorted((v["net"], "VIA", round(v["drill"], nd), round(v["at"][0], nd), round(v["at"][1], nd))
+                  for v in c["vias"])
+    h = hashlib.sha256(json.dumps({"segments": segs, "vias": vias, "nd": nd},
+                                  ensure_ascii=False, sort_keys=True).encode("utf-8")).hexdigest()
+    return {"sha256_16": h[:16], "n_segments": len(segs), "n_vias": len(vias), "nd": nd,
+            "rule": "canonical geometric digest over (net, layer, quantized geometry, width); byte-level SHA is NOT a criterion"}
 
 
 def geometry_equal(a, b):
