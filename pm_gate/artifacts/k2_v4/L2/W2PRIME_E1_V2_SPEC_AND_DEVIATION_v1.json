@@ -1,0 +1,52 @@
+{
+ "artifact": "k2_w2prime_e1_v2_spec_and_deviation_v1",
+ "ts": "2026-09-28",
+ "authority": "#K2-350 sec.3.4 (one bounded re-drawing window) - the contract is RESOLVED in R906, so this is the one-shot path + the named deviation the ruling requires if one-pin parts are not expressible",
+ "contract_RESOLVED": {
+  "forward": "every YAML node REF/PIN must match a pin that EXISTS IN THE SCHEMATIC (match = schematic pin function startswith the YAML pin name) - checks.py:115-121",
+  "reverse": "every schematic pin that is NOT in the YAML must be declared nc in the placement block ('sheets[].placements[].nc') - checks.py:123-133",
+  "CONSEQUENCE": "a TEST POINT has NO schematic symbol instance => it can never satisfy the forward assertion => ONE-PIN PARTS ARE NOT EXPRESSIBLE by a netlist-only edit. R906 said this; this artifact acts on it."
+ },
+ "E1_v2_netlist_only": {
+  "schematic_edits": "NONE (the schematic is approval-gated and is NOT touched)",
+  "scope": "J11 ONLY - which is exactly the no-TP alternative the ruling pre-authorised (keep J9/J6)",
+  "why_J11_is_safe_without_TPs": "R894 pad census: removing J11 leaves I2C2_SCL 3 pads, I2C2_SDA 3 pads, P3V3_AUX 5 pads - no net becomes single-ended, so NO test point is needed",
+  "edits": [
+   {
+    "file": "hw/data/k2_sch.errata-3.yaml",
+    "what": "nets: delete '- J11/EC_SCL' (line 3602), '- J11/EC_SDA' (3607), '- J11/EC_3V3' (3695)",
+    "and": "the J11 placement block gains '    nc: [EC_SCL, EC_SDA, EC_3V3]' (plus every other J11 pin that the YAML nets no longer carry) so the REVERSE assertion is satisfied"
+   },
+   {
+    "file": "hw/lib/ForgeOS.refmap.json",
+    "what": "NO CHANGE (no TPs are added in this path)"
+   }
+  ],
+  "not_touched": "J9 and J6 keep their placements and their nets (UART_TX/RX and PWR_CTRL_OUT stay connected, 2 pads each) - their governance is DEFERRED because it needs test points, i.e. a schematic-capable change"
+ },
+ "deviation_declaration_required_by_the_ruling": {
+  "what_is_deviated": "the header governance lands for J11 only; J9 (UART) and J6 (PWR_CTRL_OUT) are DEFERRED rather than removed",
+  "why": "removing J9/J6 leaves each of their nets with exactly ONE pad (R894 census: PWR_CTRL_OUT {J6,U5}, UART_TX {J9,U1}, UART_RX {J9,U1}); converting them to test points requires a schematic symbol instance, and one-pin parts are not expressible netlist-only (contract above) - so the choice is between (a) deferring them or (b) an approval-gated schematic change",
+  "how_the_goal_is_still_met": "N8's header policy targets EVALUATION FURNITURE; J11 (auxiliary I2C/SMBus) is the clearest such item and it is governed now. J9/J6 remain evaluation headers temporarily; the policy goal is not abandoned, it is sequenced.",
+  "evidence": "R894 pad census + R906 verbatim contract read; both in register",
+  "no_owner_item": "per #K2-341 sec.2.3 pattern and #K2-350 sec.3.4: layout/header governance is a supervisor-ruled autonomous item, NOT a frozen-set change and NOT an owner item"
+ },
+ "one_shot_execution": {
+  "steps": [
+   "apply the two edits above (YAML only)",
+   "run the claim<->artifact verbatim check BEFORE committing (C25: the commit message may only assert what the diff shows)",
+   "commit (the repo's four gates are the oracle)",
+   "verify: gates PASS + refmap/netlist consistency + a claim-artifact assertion"
+  ],
+  "if_the_gates_reject": "STOP and file a report (no iteration) - that behaviour is now the default procedure per #K2-350 sec.3.6"
+ },
+ "state_now": {
+  "netlist": "HEAD (unchanged)",
+  "refmap": "54 refs",
+  "tp_footprint": "kept but inert (C24 stays open as a spare part, named)",
+  "boards": "l14 unchanged",
+  "frozen_four": "4/4",
+  "runs_this_turn": "none (artifact authored from the R906 read)"
+ },
+ "OWNER-ITEMS": 0
+}
