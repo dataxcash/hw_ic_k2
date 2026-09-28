@@ -46,18 +46,34 @@ def _box_pt_d2(bx, p):
 
 
 def _obstacle_dist(ob, p):
-    """点到**障碍真实形状**的距离（#K2-370 §三.3 · 缺口 C32）。
-    带 `a`/`b` 的线段障碍（真板 track）用**真形**（半宽已折入）；其余（焊盘/过孔/keepout/合成箱）
-    退回 AABB 距离（如实保留——这正是 C32 的剩余缺口）。"""
+    """点到**障碍真实形状**的距离（#K2-370 §三.3 · 缺口 C32 · v2 补焊盘/过孔）。
+      · `a`/`b`（track 线段）→ 点-线段距离减半宽
+      · `center`/`radius`（via 圆）→ 点到圆心减半径
+      · `rect`（**有向**焊盘矩形）→ 旋转到局部系后的精确矩形距离（中心对称 ⇒ 旋转符号无关）
+      · 其余（keepout / 合成箱 / 无法真形化的焊盘）→ AABB 距离（具名保留）
+    """
     if "a" in ob:
         return max(0.0, math.sqrt(_seg_pt_d2(ob["a"], ob["b"], p)) - float(ob.get("half_w", 0.0)))
+    if "center" in ob:
+        return max(0.0, math.hypot(p[0] - ob["center"][0], p[1] - ob["center"][1]) - float(ob["radius"]))
+    if "rect" in ob:
+        r = ob["rect"]
+        th = math.radians(r.get("rot", 0.0))
+        dx, dy = p[0] - r["cx"], p[1] - r["cy"]
+        c, sn = math.cos(-th), math.sin(-th)
+        lx, ly = dx * c - dy * sn, dx * sn + dy * c
+        ex = max(abs(lx) - r["sx"] / 2.0, 0.0)
+        ey = max(abs(ly) - r["sy"] / 2.0, 0.0)
+        return math.hypot(ex, ey)
     return math.sqrt(_box_pt_d2(ob["bbox"], p))
 
 
 def _obstacle_margin(ob, clear, width, pitch, for_via=False, via_radius=0.175):
-    """格子判定余量：线段障碍的半宽已在距离里；箱障碍仍按 (宽/2 或 via 半径) 加余量（**向后兼容**）。"""
+    """格子判定余量：**真形**障碍（线段/圆/有向矩形）的铜体已在距离里 ⇒ 只加 (间隙＋半格)；
+    纯箱障碍仍按旧式 (宽/2 或 via 半径) 加余量（**向后兼容**，合成用例零改动）。"""
     base = (clear + via_radius + pitch / 2.0) if for_via else (clear + pitch / 2.0)
-    return base if "a" in ob else base + (0.0 if for_via else width / 2.0)
+    true_shape = ("a" in ob) or ("center" in ob) or ("rect" in ob)
+    return base if true_shape else base + (0.0 if for_via else width / 2.0)
 
 
 def poly_violations(poly, obstacles, clearance=CLEAR, step=0.05, layer=None):
@@ -158,6 +174,14 @@ def obstacles_from_board(board, ignore_nets, layer, keepout_boxes=()):
         if layer not in layers:
             continue
         bb = t.GetBoundingBox()
+        if t.GetClass() == "PCB_VIA":                      # 过孔 = 圆（真形）
+            vp = t.GetPosition()
+            obs.append({"id": "via@%s" % name, "kind": "copper", "net": name,
+                        "center": [round(P.ToMM(vp.x), 4), round(P.ToMM(vp.y), 4)],
+                        "radius": round(P.ToMM(t.GetWidth()) / 2.0, 4),
+                        "bbox": [round(P.ToMM(bb.GetX()), 4), round(P.ToMM(bb.GetY()), 4),
+                                 round(P.ToMM(bb.GetRight()), 4), round(P.ToMM(bb.GetBottom()), 4)]})
+            continue
         st, en = t.GetStart(), t.GetEnd()
         obs.append({"id": "track@%s" % name, "kind": "copper", "net": name,
                     # **真形**（#K2-370 §三.3 / C32）：带线段端点与半宽，AABB 仅作粗筛窗
@@ -173,9 +197,20 @@ def obstacles_from_board(board, ignore_nets, layer, keepout_boxes=()):
         if layer not in [b.GetLayerName(l) for l in p.GetLayerSet().Seq()]:
             continue
         bb = p.GetBoundingBox()
-        obs.append({"id": "pad@%s" % (p.GetNumber()), "kind": "copper", "net": name,
-                    "bbox": [round(P.ToMM(bb.GetX()), 4), round(P.ToMM(bb.GetY()), 4),
-                             round(P.ToMM(bb.GetRight()), 4), round(P.ToMM(bb.GetBottom()), 4)]})
+        own = {"id": "pad@%s" % (p.GetNumber()), "kind": "copper", "net": name,
+               "bbox": [round(P.ToMM(bb.GetX()), 4), round(P.ToMM(bb.GetY()), 4),
+                        round(P.ToMM(bb.GetRight()), 4), round(P.ToMM(bb.GetBottom()), 4)]}
+        # 焊盘 = **有向矩形**（真形 · C32 v2）；圆形/矩形/椭圆/圆角矩形均可（矩形是其余形状的外包，
+        # 保守成立；CUSTOM/TRAPEZOID 等退回 AABB 具名保留）
+        try:
+            sz = p.GetSize()
+            pc = p.GetPosition()
+            own["rect"] = {"cx": round(P.ToMM(pc.x), 4), "cy": round(P.ToMM(pc.y), 4),
+                           "sx": round(P.ToMM(sz.x), 4), "sy": round(P.ToMM(sz.y), 4),
+                           "rot": round(p.GetOrientationDegrees(), 3)}
+        except Exception:                                              # noqa: BLE001
+            pass
+        obs.append(own)
     for k in keepout_boxes:
         obs.append({"id": k.get("id", "keepout"), "kind": "keepout", "net": None, "bbox": k["bbox"]})
     eb = b.GetBoardEdgesBoundingBox()
@@ -535,7 +570,7 @@ def _snap(g, pt, free_of=None):
 
 
 def maze_route(p, q, layers, obstacles, bounds, pitch=0.5, clear=CLEAR, width=0.2, via_penalty=8.0,
-               endpoint_clear=None):
+               endpoint_clear=None, snap_cells=2):
     """Lee/A* 迷宫布线：p→q，可换层（过孔），8 邻域（45°）。不通 ⇒ 具名阻断。
     endpoint_clear：端点"埋在别人铜里"判据所用间隙（默认 = clear）。障碍是**保守 AABB**，
     故块内重连把端点判据放宽到 0（只拒"真的埋在别人铜里"的点）——正确性由健全判卷器 M4 兜底。"""
@@ -558,9 +593,10 @@ def maze_route(p, q, layers, obstacles, bounds, pitch=0.5, clear=CLEAR, width=0.
     L0 = layers[0]
     starts, goals = {}, {}
     s, t = _snap(grids[L0], p), _snap(grids[L0], q)
-    if s and math.hypot(s[0] * pitch + grids[L0]["x0"] - p[0], s[1] * pitch + grids[L0]["y0"] - p[1]) > 2 * pitch:
+    cap = snap_cells * pitch
+    if s and math.hypot(s[0] * pitch + grids[L0]["x0"] - p[0], s[1] * pitch + grids[L0]["y0"] - p[1]) > cap:
         s = None
-    if t and math.hypot(t[0] * pitch + grids[L0]["x0"] - q[0], t[1] * pitch + grids[L0]["y0"] - q[1]) > 2 * pitch:
+    if t and math.hypot(t[0] * pitch + grids[L0]["x0"] - q[0], t[1] * pitch + grids[L0]["y0"] - q[1]) > cap:
         t = None
     if s:
         starts[L0] = s

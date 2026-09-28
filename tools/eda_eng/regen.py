@@ -560,7 +560,8 @@ def relocate_chain(moves, work, max_nets=None, layers=("F.Cu", "In2.Cu"), via_pe
 HS_FANOUT_NETS = ["PCIE_DN%d_%s" % (i, s) for i in range(8) for s in ("P", "N")]
 
 
-def relocate_block_chain(rect, delta, work, members=None, clearance=None, max_jobs=None, pitch=0.25):
+def relocate_block_chain(rect, delta, work, members=None, clearance=None, max_jobs=None, pitch=0.15,
+                          envelope_margin=0.5, snap_cells=4):
     """`eda_eng relocate-block` —— BLOCK 移位全链。
     M0 框选清册 -> step1 块体搬运(+M2 剪边) -> M3 块内重连(∂R 端口固定) -> 复敷铜 -> M4 判卷(+C6/C7)。
     只读输入；所有改板都落在 work（临时目录）下的副本上。"""
@@ -621,8 +622,12 @@ def relocate_block_chain(rect, delta, work, members=None, clearance=None, max_jo
         if j["layer"] not in by_layer:
             by_layer[j["layer"]] = _rt.obstacles_from_board(moved, set(), j["layer"])[0]
     extra_obs = []
-    # 路由域 = **扫过区本身**（不外扩）⇒ 新铜一律落在 swept 内，C6「块外零改动」才有意义
-    bnd = [round(v, 4) for v in S]
+    # 路由域 = **申报的作业包络** `S ⊕ envelope_margin`（#K2-370 §三.3）：
+    # 端口固定在 ∂R、移动铜占 R+Δ ⇒ 接驳必须能在包络内绕行；实测 +0.5mm 即够（12 条受阻作业 3→7 通，
+    # 再放大无增益）。C6 因此以**同一条包络**为界（"包络之外零改动"），并把包络距 HS 的余量写进判据。
+    ENV = [round(S[0] - envelope_margin, 4), round(S[1] - envelope_margin, 4),
+           round(S[2] + envelope_margin, 4), round(S[3] + envelope_margin, 4)]
+    bnd = ENV
     plans, blocked, jobs = [], [], mv["jobs"] if max_jobs is None else mv["jobs"][:max_jobs]
     for j in jobs:
         L, net = j["layer"], j["net"]
@@ -634,7 +639,8 @@ def relocate_block_chain(rect, delta, work, members=None, clearance=None, max_jo
             p, q = j["port"], j["target"]
         # endpoint_clear=0：端点判据只拒"真埋"的点（间隙由**真形**判卷器兜底，见下）
         # pitch：栅格分辨率 —— 实测 0.5mm 太粗（本板真形自由走廊 ~0.5mm）；0.25mm 使 20 条受阻作业多通 5 条。
-        r = _rt.maze_route(p, q, [L], obs, bnd, pitch=pitch, via_penalty=8.0, endpoint_clear=0.0)
+        r = _rt.maze_route(p, q, [L], obs, bnd, pitch=pitch, via_penalty=8.0, endpoint_clear=0.0,
+                           snap_cells=snap_cells)
         if r["status"] != "ROUTED":
             blocked.append({"net": net, "layer": L, "kind": j["kind"], "port": p, "target": q,
                             "semantics": r.get("semantics", "NOT_FOUND"), "reason": r.get("reason")})
@@ -664,7 +670,8 @@ def relocate_block_chain(rect, delta, work, members=None, clearance=None, max_jo
             bl["aabb_false_positive"] = bool(c.get("min_mm") is not None and c["min_mm"] >= clear)
     chain.append({"stage": "M3_block_reconnect", "jobs_total": len(jobs), "routed": len(plans),
                   "blocked": len(blocked), "blocked_named": blocked,
-                  "domain": "block swept region", "terminals": "dR ports are FIXED", "pitch_mm": pitch,
+                  "domain": "declared action envelope (swept block region + margin)", "terminals": "dR ports are FIXED",
+                  "pitch_mm": pitch, "envelope": ENV, "snap_cells": snap_cells,
                   "exact_recheck": "every polyline is re-checked against the true-shape obstacles before it may land",
                   "aabb_false_positive_jobs": sum(1 for b in blocked if b.get("aabb_false_positive")),
                   "semantics": "a blocked job is NOT_FOUND - never read as impossible (#K2-367 sec.2); "
@@ -683,10 +690,27 @@ def relocate_block_chain(rect, delta, work, members=None, clearance=None, max_jo
                   "segments_added": ap.get("segments_added"), "status": ap.get("status")})
 
     # ── 保真判据 C6/C7（在 M4 判卷里当判据用）
-    c6 = _blk.geometry_equal(_blk.outside_geometry(final, S), _blk.outside_geometry(B0, S))
+    c6 = _blk.geometry_equal(_blk.outside_geometry(final, ENV), _blk.outside_geometry(B0, ENV))
     c7 = _blk.geometry_equal(_blk.net_geometry(final, HS_FANOUT_NETS), _blk.net_geometry(B0, HS_FANOUT_NETS))
-    extra = {"C6_outside_copper_unchanged": {"diff": c6["diff"], "pass": c6["equal"], "swept": [round(v, 4) for v in S],
-                                             "scope": "tracks+vias outside the swept region"},
+    hs = _blk.net_geometry(B0, HS_FANOUT_NETS)
+    hc = _blk.read_copper(B0)
+    hx0 = hy0 = 1e18; hx1 = hy1 = -1e18
+    for x in hc["segments"]:
+        if x["net"] in HS_FANOUT_NETS:
+            hx0 = min(hx0, x["a"][0], x["b"][0]); hx1 = max(hx1, x["a"][0], x["b"][0])
+            hy0 = min(hy0, x["a"][1], x["b"][1]); hy1 = max(hy1, x["a"][1], x["b"][1])
+    for v in hc["vias"]:
+        if v["net"] in HS_FANOUT_NETS:
+            hx0 = min(hx0, v["at"][0]); hx1 = max(hx1, v["at"][0])
+            hy0 = min(hy0, v["at"][1]); hy1 = max(hy1, v["at"][1])
+    hs_bbox = [round(hx0, 4), round(hy0, 4), round(hx1, 4), round(hy1, 4)]
+    hs_ok = (hx0 > ENV[2]) or (hx1 < ENV[0]) or (hy0 > ENV[3]) or (hy1 < ENV[1])   # 包络与 HS 铜不相交
+    extra = {"C6_outside_copper_unchanged": {"diff": c6["diff"], "pass": c6["equal"], "envelope": ENV,
+                                             "envelope_margin_mm": envelope_margin,
+                                             "hs_clear": hs_ok,
+                                             "scope": "tracks+vias outside the declared action envelope"},
+             "C6_guard_hs_outside_envelope": {"pass": hs_ok, "envelope": ENV, "hs_copper_bbox": hs_bbox,
+                                              "rule": "the declared action envelope must not reach the HS fanout copper"},
              "C7_hs_fanout_untouched": {"diff": c7["diff"], "pass": c7["equal"], "nets": HS_FANOUT_NETS}}
 
     # ── M4：DRC + 判卷（C1–C5 + C6/C7）
@@ -701,7 +725,7 @@ def relocate_block_chain(rect, delta, work, members=None, clearance=None, max_jo
     chain.append({"stage": "M4_judge", "judging_table": "ECO-K2-0002 sec.6 (C1-C5 + C6/C7)",
                   "verdict": v["verdict"], "geometry_delta": delta_cls["total_delta"],
                   "C6": c6["equal"], "C7": c7["equal"]})
-    return {"state": "GRADED", "chain": chain, "census_summary": {
+    return {"state": "GRADED", "chain": chain, "envelope": ENV, "census_summary": {
                 "frame_ok": cen["frame_ok"], "FOREIGN_INSIDE": cen["FOREIGN_INSIDE"],
                 "FOREIGN_PADS_INSIDE": cen["FOREIGN_PADS_INSIDE"], "members": cen["members"],
                 "mech_no_net_inside": cen["mech_no_net_inside"],
