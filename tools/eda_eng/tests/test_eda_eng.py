@@ -564,6 +564,18 @@ class T(unittest.TestCase):
                 self.assertGreaterEqual(y, rect[1] - 1e-6)
                 self.assertLessEqual(y, rect[3] + 1e-6)
 
+    def test_C35_the_wall_is_wired_into_the_search_loop_not_patched_afterwards(self):
+        """C35（#K2-378 §三.1）：框界必须**下在搜索环路**（迷宫域约束），**不得事后恢复**。
+        本回归锁住接线：迷宫有 `--bound-rect` 且把域外格封死；产品只**转发**该参数（不改方法）。"""
+        maze = open(os.path.join("tools", "k2_p4_mroute_v1.py"), encoding="utf-8").read()
+        prod = open(os.path.join("tools", "k2_reroute_affected_v2.py"), encoding="utf-8").read()
+        self.assertIn("WALL_RECT", maze, "the maze must carry the in-loop wall")
+        self.assertIn("--bound-rect", maze, "the maze must expose the wall as a CLI parameter")
+        self.assertIn("bb2[i * self.ny + j] = 1", maze, "the wall must BLOCK cells outside the domain")
+        self.assertIn("--bound-rect", prod, "the product must accept the wall")
+        self.assertIn('"--bound-rect", str(a.bound_rect)', prod, "the product must FORWARD the wall to the maze")
+        self.assertNotIn("bound_outside(", prod, "the product must not rely on a post-hoc restore")
+
     def test_C36_the_judging_table_of_the_eco_is_read_row_by_row(self):
         """C36（#K2-377 §五 F3）：执行入口的判卷必须覆盖 ECO-K2-0004 §6 **全部九行**（含 C8）。"""
         eco = open(os.path.join("docs", "ECO", "ECO-K2-0004-reroute-engine-exam-A-prime.md"), encoding="utf-8").read()

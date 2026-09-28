@@ -185,6 +185,11 @@ def node_in_island(ctx, find, comp, net, layer, x, y, tol=0.06):
 
 
 # ─────────────────────── 栅格（剪枝） ───────────────────────
+# **C35 环路内框界**（#K2-378 §三.1）：把作业域**作为搜索约束**传入 —— 域外格一律不可选。
+# 事后恢复框外铜已被实测否决（R1020：得 C6=0 但坏连通 C1 14->17 · C2 249->1237）；界必须下在**搜索环路里**。
+WALL_RECT = None          # (x0, y0, x1, y1) mm；None = 不设界
+
+
 class Grid:
     def __init__(self, ctx, net, step, x0, y0, x1, y1, margin=0.0):
         self.step = step; self.x0, self.y0 = x0, y0; self.margin = margin
@@ -194,6 +199,16 @@ class Grid:
         self.vb = {}
         import time as _t; _t0 = _t.time()
         self._mark(ctx, net)
+        if WALL_RECT:                                     # 界内可走；界外（含边界外一格）一律封死
+            wx0, wy0, wx1, wy1 = WALL_RECT
+            for L in LAYERS:
+                bb2 = self.bad[L]
+                for i in range(self.nx):
+                    px = self.x0 + i * self.step
+                    out_x = (px < wx0 - 1e-9) or (px > wx1 + 1e-9)
+                    for j in range(self.ny):
+                        if out_x or (self.y0 + j * self.step < wy0 - 1e-9) or (self.y0 + j * self.step > wy1 + 1e-9):
+                            bb2[i * self.ny + j] = 1
         if os.environ.get("K2MR_DBG"):
             sys.stderr.write("[grid] step=%.2f %dx%d cells=%d mark=%.1fs\n" %
                              (step, self.nx, self.ny, self.nx * self.ny, _t.time() - _t0))
@@ -776,11 +791,16 @@ def main(argv=None):
     ap.add_argument("--only-net"); ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--order", default="dist_asc", choices=["dist_asc", "dist_desc", "hard", "list"])
     ap.add_argument("--order-list", dest="order_list")
+    ap.add_argument("--bound-rect", dest="bound_rect", default=None,
+                    help="C35 in-loop work-domain wall: x0,y0,x1,y1 (mm) - cells outside are NOT selectable")
     a = ap.parse_args(argv)
     if a.fill:
         return _fill(a.fill[0], a.fill[1])
     if not (a.src and a.drc and a.out and a.ledger):
         ap.error("--in/--drc/--out/--ledger 必填")
+    global WALL_RECT
+    if a.bound_rect:
+        WALL_RECT = tuple(float(v) for v in a.bound_rect.split(","))
     print(json.dumps(run(a.src, a.drc, a.out, a.ledger, a.margin, a.only_net, a.dry_run,
                          a.order, a.order_list), ensure_ascii=False))
     return 0

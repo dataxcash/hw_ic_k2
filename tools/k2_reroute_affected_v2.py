@@ -133,6 +133,9 @@ def main():
     ap.add_argument("--out", required=True)
     ap.add_argument("--report", default="")
     ap.add_argument("--skew-limit", type=float, default=0.15)
+    ap.add_argument("--bound-rect", dest="bound_rect", default=None,
+                    help="C35 (#K2-378): in-loop work-domain wall x0,y0,x1,y1 (mm) - forwarded to the maze, "
+                         "so cells outside the declared domain are never selected (NOT a post-hoc restore)")
     ap.add_argument("--clearance-floor", type=float, default=0.20,
                     help="minimum inter-net copper clearance the re-router must honour; the ACCEPTANCE authority is "
                          "kicad-cli DRC, whose project netclass default is 0.20 mm, while the frozen drc_rules.json "
@@ -786,7 +789,8 @@ def orchestrate(a):
     if d1.get("unconnected_items"):
         rr = _run([py, ROUTER_FLOOR, "--in", stitched, "--drc", dst,
                    "--out", merged, "--ledger", os.path.join(a.work, "mroute_ledger.json"),
-                   "--margin", str(a.margin), "--floor", str(getattr(a, "clearance_floor", 0.20))], "mroute")
+                   "--margin", str(a.margin), "--floor", str(getattr(a, "clearance_floor", 0.20))]
+                  + (["--bound-rect", str(a.bound_rect)] if getattr(a, "bound_rect", None) else []), "mroute")
         mroute["stdout"] = rr.stdout.strip()[-300:]
     else:
         shutil.copyfile(stitched, merged)
