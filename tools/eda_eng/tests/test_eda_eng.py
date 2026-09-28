@@ -551,6 +551,20 @@ class T(unittest.TestCase):
         self.assertEqual(r["status"], "APPLIED")
         self.assertGreater(r["zones_refilled"], 0, "the batch path must actually refill zones")
 
+    def test_C34_new_capability_gate_requires_the_sec20_questions(self):
+        """C34（#K2-375 §五）：新产品能力窗开跑前，§20 三问必须**在册**——闸缺即拒（不再靠人记）。"""
+        import subprocess
+        k2 = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+        gate = os.path.join(k2, "tools", "k2_new_capability_gate_v1.py")
+        ok = subprocess.run([sys.executable, gate, "--capability", "A_prime_C33_three_questions"],
+                            capture_output=True, text=True)
+        self.assertEqual(ok.returncode, 0, ok.stdout)
+        self.assertEqual(json.loads(ok.stdout)["verdict"], "PASS")
+        bad = subprocess.run([sys.executable, gate, "--capability", "no_such_capability"],
+                             capture_output=True, text=True)
+        self.assertEqual(bad.returncode, 1, bad.stdout)
+        self.assertEqual(json.loads(bad.stdout)["verdict"], "REFUSED")
+
     def test_K372_multi_layer_obstacles_are_layer_tagged(self):
         """A′/C33：多层 maze 的障碍必须**带 layers 标记**（否则某一层的障碍会污染其它层）。"""
         obs, bnd = route.obstacles_multi(REF, set(), ["F.Cu", "B.Cu"])
