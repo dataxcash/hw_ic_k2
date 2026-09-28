@@ -1,0 +1,61 @@
+{
+ "artifact": "k2_run_drawing_blocker_v3",
+ "ts": "2026-09-28",
+ "authority": "#K2-346 scheme window - obligation to file a blocker report instead of iterating (stop order + self-imposed one-run-per-directory rule)",
+ "verdict": "FAIL - ONE run, three cascading failures, iteration STOPPED, no re-run performed",
+ "run": {
+  "work_dir": "/tmp/opencode/k347",
+  "commands": 1,
+  "chain": [
+   "phase clamp: parent mirror -> spawn clip subprocess -> spawn router subprocess -> DRC"
+  ]
+ },
+ "failures": [
+  {
+   "id": "F1",
+   "where": "clip subprocess",
+   "symptom": "AttributeError: 'SwigPyObject' object has no attribute 'x' at t.GetPosition()",
+   "detail": "LoadBoard() and GetTracks() succeeded, t.GetClass() succeeded, but the per-item proxy was a RAW SwigPyObject - i.e. the SWIG type registry was already broken in a FRESH subprocess, before any mutation and before any router import",
+   "note": "this is the same family as D3 (R870) but it now appears WITHOUT the router import - so the earlier root-cause attribution (router import) is INSUFFICIENT"
+  },
+  {
+   "id": "F2",
+   "where": "router subprocess",
+   "symptom": "AttributeError: 'NoneType' object has no attribute 'GetFootprints' (f3.Ctx)",
+   "detail": "cascade: the clip phase crashed before writing clipped.kicad_pcb, so the router loaded a missing file (LoadBoard -> None)"
+  },
+  {
+   "id": "F3",
+   "where": "judge",
+   "symptom": "FileNotFoundError final_drc.json",
+   "detail": "cascade of F2 (no routed board to judge)"
+  }
+ ],
+ "root_cause_assessment": {
+  "certain": "F2/F3 are pure cascades - they prove nothing about geometry",
+  "uncertain": "F1: pcbnew's SWIG proxies were untyped in a fresh process on a board that other tools read successfully minutes earlier in the same environment; I did NOT establish whether it is (a) environment/invocation order, (b) a board-file quirk, or (c) a real environment regression. NO further runs were made to find out (stop order)."
+ },
+ "gap_layer": {
+  "geometry": "n/a - F1 is not a geometric result",
+  "scheme": "n/a - the design (knee at x=137.555 + ascent re-route) is neither proven nor disproven",
+  "tool": "THE gap: this tool chain mutates the board through pcbnew's object API and it is fragile under this environment. mroute itself avoids that - it emits changes as TEXT blocks inserted into the saved file.",
+  "discipline": "honoured: one run, then stop + report (no parameter sweep, no second run in the same directory)"
+ },
+ "proposed_next_single_method": {
+  "what": "TEXT-LEVEL clip phase (no pcbnew mutation, no SWIG object API)",
+  "how": [
+   "parse the board's s-expression text to locate: the trapped via block (at x>=137.93 and y>=73.93), the B.Cu horizontal segment block attached to it, the In5 vertical segment block attached to it",
+   "rewrite the horizontal segment's (end ...) to x=137.555; DELETE the via block and the vertical block (text)",
+   "then the router (its own process, unmodified) bridges the two open ends; DRC judges"
+  ],
+  "why_this_is_a_different_method_family": "it removes pcbnew's object API from the mutation path entirely (the same technique the in-register router already uses to emit copper)",
+  "precondition": "ONE further run only after the text-level parser is written and unit-checked on a COPY (no board in the repo touched)"
+ },
+ "zero_side_effects": {
+  "board_changed": false,
+  "spec_bumped": false,
+  "work_dir": "/tmp/opencode/k347 (scratch)",
+  "frozen_four": "4/4"
+ },
+ "OWNER-ITEMS": 0
+}
