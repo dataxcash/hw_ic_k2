@@ -1,0 +1,133 @@
+{
+ "artifact": "k2_placement_corpus_v1",
+ "ts": "2026-09-28",
+ "authority": "#K2-337 window A (M-ENG-PLACEMENT-LEARNING-MISSING): parse samples -> structured placement records",
+ "schema": "devices[{ref_class,X_mm,Y_mm,zone,orientation,note}] + framework{chip,connectors,holes,zones,flow} per sample",
+ "samples": [
+  {
+   "id": "TI_DS320PR1601_EVM",
+   "kind": "POSITIVE",
+   "source": "REF-SNLU300-DS320PR1601RSCEVM-UG.pdf + REF-DS320PR1601EVM-Fig4-1-TopLayer.png (in-register)",
+   "observation_method": "vision (-p vision) on the top assembly layer; observe-only",
+   "framework": {
+    "chip": {
+     "class": "DS320PR1601 BGA",
+     "pos": "CENTRE",
+     "orientation": "long axis per board"
+    },
+    "connectors": {
+     "edge": "BOTTOM (single edge)",
+     "form": "horizontal long strip"
+    },
+    "holes": {
+     "pattern": "FOUR_CORNERS"
+    },
+    "zones": {
+     "left": "power/interface + jumpers JMP1-4",
+     "right": "EEPROM/control (I2C)",
+     "around_chip": "passives"
+    },
+    "flow": "RADIAL fan-out from U1 to the BOTTOM high-speed connectors",
+    "notes": "clear image, no unidentifiable regions"
+   },
+   "norms_hint": [
+    "chip centred",
+    "HS connectors on ONE edge aligned with the chip fan-out",
+    "holes four-corner",
+    "peripheral left/right partitioning"
+   ]
+  },
+  {
+   "id": "TI_DS320PR412-421_RISER_EVM",
+   "kind": "POSITIVE",
+   "source": "SNLU301-DS320PR412-421EVM.pdf + S301_layout-20/21/22.png (in-register; COPPER layers)",
+   "observation_method": "vision on layer-20 copper; observe-only",
+   "framework": {
+    "chip": {
+     "class": "redriver/switch devices",
+     "pos": "PARTIAL: chips around the mid-right; exact count unidentifiable on a copper layer"
+    },
+    "connectors": {
+     "edge": "RIGHT side (per the reference class)",
+     "form": "two PCIe connectors (fork)"
+    },
+    "holes": {
+     "pattern": "NOT four-corner on this layer (3 circles seen bottom-right)",
+     "caveat": "copper-layer image; assembly placement NOT fully determinable"
+    },
+    "zones": {
+     "left": "power",
+     "centre": "clock/oscillator",
+     "rest": "mixed"
+    },
+    "flow": "LEFT -> RIGHT with a fork"
+   },
+   "norms_hint": [
+    "fork (x8 -> 2 x x4) flow L->R",
+    "power left",
+    "clock centre"
+   ],
+   "corpus_limit": "LAYER IMAGES ARE COPPER LAYERS -> assembly-level placement records are PARTIAL; needs the UG assembly drawing pages for a full record (next window)"
+  },
+  {
+   "id": "K2_OLD_LAYOUT",
+   "kind": "NEGATIVE (owner-annotated)",
+   "source": "k2/hw/k2_v4_8L.l10.kicad_pcb (as-built) + k2_placement_gate_v1 reading + R838 vision review",
+   "framework": {
+    "chip": {
+     "ref": "U6",
+     "pos_mm": [
+      93.8,
+      53.7
+     ],
+     "assessment": "OFF-CENTRE (right side)"
+    },
+    "connectors": {
+     "ref": "J2",
+     "edge": "RIGHT"
+    },
+    "holes": {
+     "H1": [
+      26.1,
+      75.6
+     ],
+     "H2": [
+      139.6,
+      39.6
+     ],
+     "H3": [
+      45.1,
+      75.1
+     ],
+     "H4": [
+      114.6,
+      36.1
+     ],
+     "assessment": "NOT four-corner (corner distances 4.67/7.49/22.50/28.62 mm)"
+    },
+    "zones": {
+     "left_cluster": "U1/U2/U4/U5 dense and high (R3 FAIL)",
+     "assessment": "high/low-speed mixed; density unbalanced"
+    },
+    "flow": "right-side convergence into J2"
+   },
+   "owner_findings": [
+    "U1/U2/U4 position wrong",
+    "left low-speed zone too dense/too high",
+    "mounting holes not four-corner"
+   ],
+   "reverse_rules": [
+    "DO NOT leave the main chip off-centre",
+    "DO NOT place the HS connectors on a non-fan-out edge",
+    "DO NOT leave holes off the four corners",
+    "DO NOT allow a dense peripheral cluster in one corner",
+    "DO NOT mix high/low-speed zones"
+   ]
+  }
+ ],
+ "gaps": [
+  "assembly-layer drawings for sample 2 (UG pages) not parsed yet",
+  "per-class passives spacing statistics not yet extracted"
+ ],
+ "OWNER-ITEMS": 0
+}
